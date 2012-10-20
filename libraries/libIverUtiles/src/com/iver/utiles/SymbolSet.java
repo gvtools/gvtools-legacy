@@ -42,16 +42,17 @@ package com.iver.utiles;
 
 /**
  * Conjunto de símbolos
- *
+ * 
  * @author Fernando González Cortés
  */
 public interface SymbolSet {
-    /**
-     * Devuelve true si el caracter c está en el conjunto
-     *
-     * @param c caracter
-     *
-     * @return true si está en el conjunto y false en caso contrario
-     */
-    public boolean contains(char c);
+	/**
+	 * Devuelve true si el caracter c está en el conjunto
+	 * 
+	 * @param c
+	 *            caracter
+	 * 
+	 * @return true si está en el conjunto y false en caso contrario
+	 */
+	public boolean contains(char c);
 }

@@ -44,13 +44,13 @@ import org.gvsig.raster.datastruct.persistence.ColorTableLibraryPersistence;
 import com.iver.andami.PluginServices;
 
 /**
- * Creates a JComboBox where the user has the option to select different
- * colors.
- *
+ * Creates a JComboBox where the user has the option to select different colors.
+ * 
  * @autor jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class JComboBoxColorScheme extends JComboBox {
-	private String palettesPath = com.iver.andami.Launcher.getAppHomeDir() + "ColorSchemes";
+	private String palettesPath = com.iver.andami.Launcher.getAppHomeDir()
+			+ "ColorSchemes";
 	private boolean interpolated = false;
 	private ArrayList fileList = new ArrayList();
 
@@ -61,28 +61,28 @@ public class JComboBoxColorScheme extends JComboBox {
 				ArrayList aux = (ArrayList) o;
 				setToolTipText((String) aux.get(0));
 			} else {
-				setToolTipText(PluginServices.getText(this, "select_a_color_scheme"));
+				setToolTipText(PluginServices.getText(this,
+						"select_a_color_scheme"));
 			}
 		}
 	};
+
 	/**
 	 * Constructor method
-	 *
+	 * 
 	 * @param interpolateValues
 	 */
 	public JComboBoxColorScheme(boolean interpolateValues) {
 		super();
 		interpolated = interpolateValues;
 		setPreferredSize(new Dimension(150, 20));
-		ArrayList fileList = ColorTableLibraryPersistence.getPaletteFileList(palettesPath);
-
+		ArrayList fileList = ColorTableLibraryPersistence
+				.getPaletteFileList(palettesPath);
 
 		for (int i = 0; i < fileList.size(); i++) {
 			ArrayList paletteItems = new ArrayList();
 			String paletteName = ColorTableLibraryPersistence.loadPalette(
-					palettesPath,
-					(String) fileList.get(i),
-					paletteItems);
+					palettesPath, (String) fileList.get(i), paletteItems);
 
 			if (paletteItems.size() <= 0)
 				continue;
@@ -100,27 +100,34 @@ public class JComboBoxColorScheme extends JComboBox {
 		}
 		addActionListener(innerActionUpdateTooltip);
 		setRenderer(new ListCellRenderer() {
-			public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+			public Component getListCellRendererComponent(JList list,
+					Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
 				ArrayList array = (ArrayList) value;
 
-				ColorSchemeItemPainter paintItem = new ColorSchemeItemPainter((String) array.get(0), (ColorTablePaint) array.get(1), isSelected);
+				ColorSchemeItemPainter paintItem = new ColorSchemeItemPainter(
+						(String) array.get(0), (ColorTablePaint) array.get(1),
+						isSelected);
 				paintItem.setPreferredSize(getPreferredSize());
 				return (Component) paintItem;
 			}
 		});
 
 	}
+
 	/**
 	 * Returns an array composed with the selected colors
+	 * 
 	 * @return
 	 */
 	public ColorItem[] getSelectedColors() {
 		Object o = getSelectedItem();
 
-		if (o == null) return null;
+		if (o == null)
+			return null;
 
 		ColorTable ct = ((ColorTablePaint) ((ArrayList) o).get(1)).colorTable;
-		return (ColorItem[]) ct.getColorItems().toArray(new ColorItem[0]) ;
+		return (ColorItem[]) ct.getColorItems().toArray(new ColorItem[0]);
 	}
 
 	public void setSelectedColors(ColorItem[] colors) {
@@ -130,8 +137,7 @@ public class JComboBoxColorScheme extends JComboBox {
 		if (colors == null) {
 			setSelectedIndex(0);
 			return;
-		}
-		else {
+		} else {
 
 			for (int i = 0; i < getItemCount(); i++) {
 				fileList.add(getItemAt(i));
@@ -140,33 +146,35 @@ public class JComboBoxColorScheme extends JComboBox {
 			for (int i = 0; i < fileList.size(); i++) {
 				Object o = fileList.get(i);
 				ColorTable ct = ((ColorTablePaint) ((ArrayList) o).get(1)).colorTable;
-				ColorItem[] myColors = (ColorItem[]) ct.getColorItems().toArray(new ColorItem[0]) ;
+				ColorItem[] myColors = (ColorItem[]) ct.getColorItems()
+						.toArray(new ColorItem[0]);
 
 				boolean isEqual = true;
-				if(myColors.length == colors.length) {
+				if (myColors.length == colors.length) {
 					for (int j = 0; isEqual && j < myColors.length; j++) {
 						Color c1 = myColors[j].getColor();
 						Color c2 = colors[j].getColor();
-						isEqual = c1.getRGB() == c2.getRGB() && c1.getAlpha() == c2.getAlpha();
+						isEqual = c1.getRGB() == c2.getRGB()
+								&& c1.getAlpha() == c2.getAlpha();
 					}
-					if(isEqual) {
+					if (isEqual) {
 						setSelectedIndex(i);
 						repaint();
 						return;
 					}
 				}
 			}
-			if(getItemCount()> 0)
+			if (getItemCount() > 0)
 				setSelectedItem(0);
 		}
 
 	}
 
 	/**
-	 *
-	 * Class to paint a color palette in a box. It can be indicated if the palette
-	 * is selected and if it is painted with interpolations
-	 *
+	 * 
+	 * Class to paint a color palette in a box. It can be indicated if the
+	 * palette is selected and if it is painted with interpolations
+	 * 
 	 * @version 30/07/2007
 	 * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
 	 */
@@ -175,7 +183,7 @@ public class JComboBoxColorScheme extends JComboBox {
 
 		/**
 		 * Build a ColorTablePaint with a color table (parameter or the method)
-		 *
+		 * 
 		 * @param colorTable
 		 */
 		public ColorTablePaint(ColorTable colorTable) {
@@ -183,65 +191,30 @@ public class JComboBoxColorScheme extends JComboBox {
 		}
 
 		/**
-		 * Defines if the values are interpolated between them or not.
-		 *
-		 * @param value
-		 */
-		public void setInterpolated(boolean value) {
-			colorTable.setInterpolated(value);
-		}
-
-		/**
-		 * Obtains the color array of the color palette
-		 *
-		 * @return
-		 */
-		public ArrayList getColorItems() {
-			return colorTable.getColorItems();
-		}
-
-		/**
-		 * Obtains the ColorTable
-		 * @return
-		 */
-		public ColorTable getColorTable() {
-			return colorTable;
-		}
-
-		/**
-		 * Specifies the colors of the color table, defining it the values are
-		 * interpolated and if the palette will be compressed or not.
-		 *
-		 * @param value
-		 * @param interpolated
-		 * @param compress
-		 */
-		public void setColorItems(ArrayList value, boolean interpolated, boolean compress) {
-			colorTable.createPaletteFromColorItems(value, compress);
-			setInterpolated(interpolated);
-		}
-
-		/**
 		 * Method to paint the color table
-		 *
+		 * 
 		 * @param g
 		 * @param isSelected
 		 */
 		public void paint(Graphics2D g, boolean isSelected, Rectangle bounds) {
 			Rectangle area = bounds;
-			area.y=0;
-			area.x=0;
+			area.y = 0;
+			area.x = 0;
 			int x1 = area.x;
 			int x2 = area.x + area.width - 1;
 
-			if (colorTable.getColorItems().size()>=1) {
-				double min = ((ColorItem) colorTable.getColorItems().get(0)).getValue();
-				double max = ((ColorItem) colorTable.getColorItems().get(colorTable.getColorItems().size()-1)).getValue();
+			if (colorTable.getColorItems().size() >= 1) {
+				double min = ((ColorItem) colorTable.getColorItems().get(0))
+						.getValue();
+				double max = ((ColorItem) colorTable.getColorItems().get(
+						colorTable.getColorItems().size() - 1)).getValue();
 				for (int i = area.x; i < (area.x + area.width); i++) {
-					double pos = min + (((max - min) * (i - area.x)) / (area.width - 2));
+					double pos = min
+							+ (((max - min) * (i - area.x)) / (area.width - 2));
 
 					byte[] col3 = colorTable.getRGBAByBand(pos);
-					g.setColor(new Color(col3[0] & 0xff, col3[1] & 0xff, col3[2] & 0xff));
+					g.setColor(new Color(col3[0] & 0xff, col3[1] & 0xff,
+							col3[2] & 0xff));
 					g.drawLine(i, area.y, i, area.y + area.height);
 				}
 			} else {
@@ -260,14 +233,16 @@ public class JComboBoxColorScheme extends JComboBox {
 		private static final long serialVersionUID = -6448740563809113949L;
 		private boolean isSelected = false;
 		private ColorTablePaint colorTablePaint = null;
+
 		/**
 		 * Constructor method
-		 *
+		 * 
 		 * @param name
 		 * @param colorTablePaint
 		 * @param isSelected
 		 */
-		public ColorSchemeItemPainter(String name, ColorTablePaint colorTablePaint, boolean isSelected) {
+		public ColorSchemeItemPainter(String name,
+				ColorTablePaint colorTablePaint, boolean isSelected) {
 			super();
 			this.colorTablePaint = colorTablePaint;
 			this.isSelected = isSelected;
@@ -279,7 +254,8 @@ public class JComboBoxColorScheme extends JComboBox {
 			if (isSelected) {
 				Color color1 = new Color(89, 153, 229);
 				Color color2 = new Color(31, 92, 207);
-				g2.setPaint(new GradientPaint(0, 1, color1, 0, getHeight() - 1, color2, false));
+				g2.setPaint(new GradientPaint(0, 1, color1, 0, getHeight() - 1,
+						color2, false));
 				g2.fillRect(0, 1, getWidth(), getHeight() - 1);
 				g2.setColor(new Color(61, 123, 218));
 				g2.drawLine(0, 0, getWidth(), 0);

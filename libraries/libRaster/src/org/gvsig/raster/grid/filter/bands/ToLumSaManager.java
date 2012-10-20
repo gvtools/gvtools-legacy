@@ -27,15 +27,16 @@ import org.gvsig.raster.grid.filter.RasterFilter;
 import org.gvsig.raster.grid.filter.RasterFilterList;
 import org.gvsig.raster.grid.filter.RasterFilterListManager;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
+
 /**
  * Gestor del filtro de Tono, Saturación y Brillo
- *
+ * 
  * @version 04/12/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
-public class ToLumSaManager  implements IRasterFilterListManager {
+public class ToLumSaManager implements IRasterFilterListManager {
 
-	protected RasterFilterList	filterList = null;
+	protected RasterFilterList filterList = null;
 
 	/**
 	 * Registra ToLumSaManager en los puntos de extension de RasterFilter
@@ -46,9 +47,8 @@ public class ToLumSaManager  implements IRasterFilterListManager {
 	}
 
 	/**
-	 * Constructor.
-	 * Asigna la lista de filtros y el managener global.
-	 *
+	 * Constructor. Asigna la lista de filtros y el managener global.
+	 * 
 	 * @param filterListManager
 	 */
 	public ToLumSaManager(RasterFilterListManager filterListManager) {
@@ -56,13 +56,17 @@ public class ToLumSaManager  implements IRasterFilterListManager {
 	}
 
 	/**
-	 * Añade un filtro de control de Tono, Saturación y Brillo a la lista de filtros.
- * @throws FilterTypeException 
+	 * Añade un filtro de control de Tono, Saturación y Brillo a la lista de
+	 * filtros.
+	 * 
+	 * @throws FilterTypeException
 	 */
-	public void addToLumSaFilter(double hue, double luminosity, double saturation, int[] renderBands) throws FilterTypeException {
+	public void addToLumSaFilter(double hue, double luminosity,
+			double saturation, int[] renderBands) throws FilterTypeException {
 		RasterFilter filter = new ToLumSaByteFilter();
 
-		// Cuando el filtro esta creado, tomamos los valores y lo añadimos a la pila
+		// Cuando el filtro esta creado, tomamos los valores y lo añadimos a la
+		// pila
 		if (filter != null) {
 			filter.addParam("hue", new Double(hue));
 			filter.addParam("luminosity", new Double(luminosity));
@@ -74,7 +78,10 @@ public class ToLumSaManager  implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList()
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList
+	 * ()
 	 */
 	public ArrayList getRasterFilterList() {
 		ArrayList filters = new ArrayList();
@@ -84,28 +91,37 @@ public class ToLumSaManager  implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#addFilter(java.lang.Class, org.gvsig.raster.dataset.Params)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.IRasterFilterListManager#addFilter(java.
+	 * lang.Class, org.gvsig.raster.dataset.Params)
 	 */
-	public void addFilter(Class classFilter, Params params) throws FilterTypeException {
+	public void addFilter(Class classFilter, Params params)
+			throws FilterTypeException {
 		if (classFilter.equals(ToLumSaFilter.class)) {
 			double hue = 0, saturation = 0, luminosity = 0;
 			int[] renderBands = { 0, 1, 2 };
-			
+
 			for (int i = 0; i < params.getNumParams(); i++) {
-				if (params.getParam(i).id.equals("RenderBands") && 
-						params.getParam(i).defaultValue instanceof String) {
-					String[] bands = new String((String) params.getParam(i).defaultValue).split(" ");
+				if (params.getParam(i).id.equals("RenderBands")
+						&& params.getParam(i).defaultValue instanceof String) {
+					String[] bands = new String(
+							(String) params.getParam(i).defaultValue)
+							.split(" ");
 					renderBands[0] = new Integer(bands[0]).intValue();
 					renderBands[1] = new Integer(bands[1]).intValue();
 					renderBands[2] = new Integer(bands[2]).intValue();
 					continue;
 				}
-				if (params.getParam(i).id.equals("hue")) 
-					hue = ((Double) params.getParam(i).defaultValue).doubleValue();
-				if (params.getParam(i).id.equals("saturation")) 
-					saturation = ((Double) params.getParam(i).defaultValue).doubleValue();
-				if (params.getParam(i).id.equals("luminosity")) 
-					luminosity = ((Double) params.getParam(i).defaultValue).doubleValue();
+				if (params.getParam(i).id.equals("hue"))
+					hue = ((Double) params.getParam(i).defaultValue)
+							.doubleValue();
+				if (params.getParam(i).id.equals("saturation"))
+					saturation = ((Double) params.getParam(i).defaultValue)
+							.doubleValue();
+				if (params.getParam(i).id.equals("luminosity"))
+					luminosity = ((Double) params.getParam(i).defaultValue)
+							.doubleValue();
 
 			}
 			addToLumSaFilter(hue, luminosity, saturation, renderBands);
@@ -114,17 +130,24 @@ public class ToLumSaManager  implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#createFilterListFromStrings(java.util.ArrayList, java.lang.String, int)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#
+	 * createFilterListFromStrings(java.util.ArrayList, java.lang.String, int)
 	 */
-	public int createFilterListFromStrings(ArrayList filters, String fil, int filteri) {
+	public int createFilterListFromStrings(ArrayList filters, String fil,
+			int filteri) {
 		return filteri;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#getStringsFromFilterList(java.util.ArrayList, org.gvsig.raster.grid.filter.RasterFilter)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#
+	 * getStringsFromFilterList(java.util.ArrayList,
+	 * org.gvsig.raster.grid.filter.RasterFilter)
 	 */
-	public ArrayList getStringsFromFilterList(ArrayList filterList, RasterFilter rf) {
+	public ArrayList getStringsFromFilterList(ArrayList filterList,
+			RasterFilter rf) {
 		return filterList;
 	}
 }

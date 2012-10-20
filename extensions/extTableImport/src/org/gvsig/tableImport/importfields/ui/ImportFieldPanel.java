@@ -24,7 +24,8 @@ import org.gvsig.tableImport.importfields.ImportFieldParams.FielToImport;
 
 import com.iver.andami.PluginServices;
 
-public class ImportFieldPanel extends JWizardPanel implements PropertyChangeListener, ActionListener {
+public class ImportFieldPanel extends JWizardPanel implements
+		PropertyChangeListener, ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel pLista = null;
@@ -40,11 +41,11 @@ public class ImportFieldPanel extends JWizardPanel implements PropertyChangeList
 	private GridBagConstraints pLista_gbContraints;
 	private ArrayList fields = new ArrayList();
 
-
 	/**
 	 * This is the default constructor
 	 */
-	public ImportFieldPanel(JWizardComponents wizardComponents, ImportFieldParams params) {
+	public ImportFieldPanel(JWizardComponents wizardComponents,
+			ImportFieldParams params) {
 		super(wizardComponents);
 		initialize();
 		this.params = params;
@@ -59,7 +60,7 @@ public class ImportFieldPanel extends JWizardPanel implements PropertyChangeList
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
@@ -90,7 +91,7 @@ public class ImportFieldPanel extends JWizardPanel implements PropertyChangeList
 
 	/**
 	 * This method initializes lLista
-	 *
+	 * 
 	 * @return javax.swing.JList
 	 */
 	private JPanel getLLista() {
@@ -102,8 +103,8 @@ public class ImportFieldPanel extends JWizardPanel implements PropertyChangeList
 			pLista_gbContraints.anchor = GridBagConstraints.FIRST_LINE_START;
 			pLista_gbContraints.fill = GridBagConstraints.HORIZONTAL;
 			pLista_gbContraints.weightx = 1;
-			pLista_gbContraints.gridx=1;
-//			pLista_gbContraints.gridy=GridBagConstraints.REMAINDER;
+			pLista_gbContraints.gridx = 1;
+			// pLista_gbContraints.gridy=GridBagConstraints.REMAINDER;
 
 		}
 		return pLista;
@@ -111,15 +112,15 @@ public class ImportFieldPanel extends JWizardPanel implements PropertyChangeList
 
 	/**
 	 * This method initializes pButtons
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPButtons() {
 		if (pButtons == null) {
 			lblMessage = new JLabel();
-			if (this.params == null){
+			if (this.params == null) {
 				lblMessage.setText("Message");
-			} else{
+			} else {
 				lblMessage.setText(" ");
 			}
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
@@ -152,13 +153,13 @@ public class ImportFieldPanel extends JWizardPanel implements PropertyChangeList
 
 	/**
 	 * This method initializes bAll
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getBAll() {
 		if (bAll == null) {
 			bAll = new JButton();
-			bAll.setText(PluginServices.getText(null,"select_all"));
+			bAll.setText(PluginServices.getText(null, "select_all"));
 			bAll.setActionCommand("all");
 			bAll.setName("all");
 			bAll.addActionListener(this);
@@ -168,13 +169,13 @@ public class ImportFieldPanel extends JWizardPanel implements PropertyChangeList
 
 	/**
 	 * This method initializes bNone
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getBNone() {
 		if (bNone == null) {
 			bNone = new JButton();
-			bNone.setText(PluginServices.getText(null,"clear_selection"));
+			bNone.setText(PluginServices.getText(null, "clear_selection"));
 			bNone.setActionCommand("none");
 			bNone.setName("none");
 			bNone.addActionListener(this);
@@ -184,7 +185,7 @@ public class ImportFieldPanel extends JWizardPanel implements PropertyChangeList
 
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getJScrollPane() {
@@ -195,33 +196,32 @@ public class ImportFieldPanel extends JWizardPanel implements PropertyChangeList
 		return jScrollPane;
 	}
 
-
 	public void update() {
-		try{
-			if (this.updating){
+		try {
+			if (this.updating) {
 				return;
 			}
-			this.updating= true;
-			if (this.params == null){
+			this.updating = true;
+			if (this.params == null) {
 				return;
 			}
 			ArrayList fieldsToImport = this.params.getFieldsToImport();
-			if (fieldsToImport == null){
+			if (fieldsToImport == null) {
 				this.getLLista().removeAll();
 				return;
 			}
 			this.fillList(fieldsToImport);
 
-			if (this.params.isValid()){
+			if (this.params.isValid()) {
 				this.setFinishButtonEnabled(true);
 				this.lblMessage.setText(" ");
-			}else{
+			} else {
 				this.setFinishButtonEnabled(false);
 				this.lblMessage.setText(params.getValidationMsg());
 			}
 			super.update();
 		} finally {
-			this.updating=false;
+			this.updating = false;
 		}
 	}
 
@@ -229,23 +229,23 @@ public class ImportFieldPanel extends JWizardPanel implements PropertyChangeList
 		FielToImport fieldDef;
 		FieldPanel fieldElement;
 		int i;
-		for (i=0;i<fieldsToImport.size();i++){
+		for (i = 0; i < fieldsToImport.size(); i++) {
 			fieldDef = (FielToImport) fieldsToImport.get(i);
-			if (this.fields.size()> i){
+			if (this.fields.size() > i) {
 				fieldElement = (FieldPanel) this.fields.get(i);
-			} else{
+			} else {
 				fieldElement = this.addNewFieldPanel();
 			}
 			fieldElement.setToImpor(fieldDef.toImport);
 			fieldElement.setSourceField(fieldDef.originalFieldName);
 			fieldElement.setTargetFieldName(fieldDef.fieldNameToUse);
 		}
-		for (i=this.fields.size()-1;i>=fieldsToImport.size();i--){
-			fieldElement= (FieldPanel) this.fields.remove(i);;
+		for (i = this.fields.size() - 1; i >= fieldsToImport.size(); i--) {
+			fieldElement = (FieldPanel) this.fields.remove(i);
+			;
 			fieldElement.removeFrom(this.getLLista());
 		}
 	}
-
 
 	private FieldPanel addNewFieldPanel() {
 		FieldPanel fieldElement = new FieldPanel();
@@ -257,23 +257,26 @@ public class ImportFieldPanel extends JWizardPanel implements PropertyChangeList
 	}
 
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (this.updating){
+		if (this.updating) {
 			return;
 		}
-		if (!(evt.getSource() instanceof FieldPanel)){
+		if (!(evt.getSource() instanceof FieldPanel)) {
 			return;
 		}
 		String srcField = ((FieldPanel) evt.getSource()).getSourceField();
 		Iterator iter = this.params.getFieldsToImport().iterator();
-		while (iter.hasNext()){
+		while (iter.hasNext()) {
 			FielToImport field = (FielToImport) iter.next();
-			if (field.originalFieldName.equals(srcField)){
-				if (evt.getPropertyName().equals("toImport")){
-					field.toImport = ((Boolean)evt.getNewValue()).booleanValue();
-//					System.out.println("set to " +field.toImport +" toImpor of "+ srcField);
-				} else if (evt.getPropertyName().equals("targetFieldName")){
+			if (field.originalFieldName.equals(srcField)) {
+				if (evt.getPropertyName().equals("toImport")) {
+					field.toImport = ((Boolean) evt.getNewValue())
+							.booleanValue();
+					// System.out.println("set to " +field.toImport
+					// +" toImpor of "+ srcField);
+				} else if (evt.getPropertyName().equals("targetFieldName")) {
 					field.fieldNameToUse = (String) evt.getNewValue();
-//					System.out.println("set to " +field.fieldNameToUse +" nameToUse of "+ srcField);
+					// System.out.println("set to " +field.fieldNameToUse
+					// +" nameToUse of "+ srcField);
 				}
 				break;
 			}
@@ -283,15 +286,16 @@ public class ImportFieldPanel extends JWizardPanel implements PropertyChangeList
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		boolean toImpor=false;
-		if (e.getActionCommand().equals(this.getBAll().getActionCommand())){
-			toImpor=true;
-		} else if (e.getActionCommand().equals(this.getBNone().getActionCommand())){
-			toImpor=false;
+		boolean toImpor = false;
+		if (e.getActionCommand().equals(this.getBAll().getActionCommand())) {
+			toImpor = true;
+		} else if (e.getActionCommand().equals(
+				this.getBNone().getActionCommand())) {
+			toImpor = false;
 		}
 		Iterator iter = this.params.getFieldsToImport().iterator();
-		while (iter.hasNext()){
-			((FielToImport)iter.next()).toImport=toImpor;
+		while (iter.hasNext()) {
+			((FielToImport) iter.next()).toImport = toImpor;
 		}
 		this.update();
 	}

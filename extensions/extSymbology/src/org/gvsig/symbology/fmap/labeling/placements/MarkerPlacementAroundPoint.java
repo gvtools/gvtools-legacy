@@ -58,13 +58,17 @@ import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelLocationMetrics;
 import com.iver.utiles.swing.threads.Cancellable;
 
 public class MarkerPlacementAroundPoint implements ILabelPlacement {
-//	private static final MarkerCenteredAtPoint pos = new MarkerCenteredAtPoint();
+	// private static final MarkerCenteredAtPoint pos = new
+	// MarkerCenteredAtPoint();
 	private static final MarkerPlacementOnPoint pos = new MarkerPlacementOnPoint();
 
-	public ArrayList<LabelLocationMetrics> guess(LabelClass lc, IGeometry geom, IPlacementConstraints placementConstraints, double cartographicSymbolSize, Cancellable cancel, ViewPort vp) {
-	if (cancel.isCanceled()) return CannotPlaceLabel.NO_PLACES;
+	public ArrayList<LabelLocationMetrics> guess(LabelClass lc, IGeometry geom,
+			IPlacementConstraints placementConstraints,
+			double cartographicSymbolSize, Cancellable cancel, ViewPort vp) {
+		if (cancel.isCanceled())
+			return CannotPlaceLabel.NO_PLACES;
 
-	FShape shp = FConverter.transformToInts(geom, vp.getAffineTransform());
+		FShape shp = FConverter.transformToInts(geom, vp.getAffineTransform());
 
 		if (placementConstraints instanceof PointPlacementConstraints) {
 			PointPlacementConstraints ppc = (PointPlacementConstraints) placementConstraints;
@@ -77,8 +81,8 @@ public class MarkerPlacementAroundPoint implements ILabelPlacement {
 				ArrayList<LabelLocationMetrics> normalPreference = new ArrayList<LabelLocationMetrics>();
 				ArrayList<LabelLocationMetrics> lowPreference = new ArrayList<LabelLocationMetrics>();
 				Rectangle bounds = lc.getBounds();
-				double width = bounds.getWidth()*.5; // + 2; //¿por qué el +2?
-				double heigth = bounds.getHeight()*.5;
+				double width = bounds.getWidth() * .5; // + 2; //¿por qué el +2?
+				double heigth = bounds.getHeight() * .5;
 
 				double offsetX = 0, offsetY = 0;
 				for (int i = 0; i < preferredPositions.length; i++) {
@@ -123,75 +127,84 @@ public class MarkerPlacementAroundPoint implements ILabelPlacement {
 						break;
 
 					}
-//					// xOffset
-//					switch (i % 3) {
-//					case 0:
-//						// left
-//						offsetX = -width;
-//						break;
-//					case 2:
-//						// rigth
-//						offsetX = width;
-//						break;
-//					case 1:
-//					default:
-//						// horizontally centered
-//						offsetX = 0;
-//						break;
-//
-//					}
-//
-//					switch (i / 3) {
-//					case 0:
-//						// top
-//						offsetY = -heigth;
-//						break;
-//					case 2:
-//						// below
-//						offsetY = heigth;
-//						break;
-//					case 1:
-//					default:
-//						// vertically centered
-//						offsetY = 0;
-//						break;
-//
-//					}
-					FPoint2D aux = new FPoint2D(p.getX() + offsetX, p.getY()+offsetY);
+					// // xOffset
+					// switch (i % 3) {
+					// case 0:
+					// // left
+					// offsetX = -width;
+					// break;
+					// case 2:
+					// // rigth
+					// offsetX = width;
+					// break;
+					// case 1:
+					// default:
+					// // horizontally centered
+					// offsetX = 0;
+					// break;
+					//
+					// }
+					//
+					// switch (i / 3) {
+					// case 0:
+					// // top
+					// offsetY = -heigth;
+					// break;
+					// case 2:
+					// // below
+					// offsetY = heigth;
+					// break;
+					// case 1:
+					// default:
+					// // vertically centered
+					// offsetY = 0;
+					// break;
+					//
+					// }
+					FPoint2D aux = new FPoint2D(p.getX() + offsetX, p.getY()
+							+ offsetY);
 
-					IGeometry g=ShapeFactory.createPoint2D(aux);
+					IGeometry g = ShapeFactory.createPoint2D(aux);
 					try {
-							g.transform(vp.getAffineTransform().createInverse());
-						} catch (NoninvertibleTransformException e) {
-							e.printStackTrace();
-						}
+						g.transform(vp.getAffineTransform().createInverse());
+					} catch (NoninvertibleTransformException e) {
+						e.printStackTrace();
+					}
 
 					switch (preferredPositions[i]) {
 					case PointLabelPositioneer.FORBIDDEN:
 						break;
 					case PointLabelPositioneer.PREFERENCE_HIGH:
-						highPreference.addAll(
-								pos.guess(lc, g, placementConstraints, cartographicSymbolSize, cancel,vp));
+						highPreference.addAll(pos.guess(lc, g,
+								placementConstraints, cartographicSymbolSize,
+								cancel, vp));
 						break;
 					case PointLabelPositioneer.PREFERENCE_NORMAL:
 
-						normalPreference.addAll(
-								pos.guess(lc, g, placementConstraints, cartographicSymbolSize, cancel,vp));
+						normalPreference.addAll(pos.guess(lc, g,
+								placementConstraints, cartographicSymbolSize,
+								cancel, vp));
 						break;
 					case PointLabelPositioneer.PREFERENCE_LOW:
-						lowPreference.addAll(
-								pos.guess(lc, g, placementConstraints, cartographicSymbolSize, cancel,vp));
+						lowPreference.addAll(pos.guess(lc, g,
+								placementConstraints, cartographicSymbolSize,
+								cancel, vp));
 						break;
 
 					default:
-						throw new Error("unrecognised label position preference value: "+preferredPositions[i]);
+						throw new Error(
+								"unrecognised label position preference value: "
+										+ preferredPositions[i]);
 					}
 				}
 
 				ArrayList<LabelLocationMetrics> guessed = new ArrayList<LabelLocationMetrics>();
-				for (int j = 0; j < highPreference.size(); j++)		guessed.add(highPreference.get(j));
-				for (int j = 0; j < normalPreference.size(); j++)	guessed.add(normalPreference.get(j));
-				for (int j = 0; j < lowPreference.size(); j++)		guessed.add(lowPreference.get(j));
+				for (int j = 0; j < highPreference.size(); j++)
+					guessed.add(highPreference.get(j));
+				for (int j = 0; j < normalPreference.size(); j++)
+					guessed.add(normalPreference.get(j));
+				for (int j = 0; j < lowPreference.size(); j++)
+					guessed.add(lowPreference.get(j));
 				return guessed;
 			}
 		}
@@ -199,16 +212,21 @@ public class MarkerPlacementAroundPoint implements ILabelPlacement {
 		return CannotPlaceLabel.NO_PLACES;
 	}
 
-
-
 	public boolean isSuitableFor(IPlacementConstraints placementConstraints,
 			int shapeType) {
-		if ((shapeType%FShape.Z) == FShape.POINT || (shapeType%FShape.Z) == FShape.MULTIPOINT) {// TODO (09/01/08) is this correct? if not fix it also in PlacementManager, PlacementProperties
+		if ((shapeType % FShape.Z) == FShape.POINT
+				|| (shapeType % FShape.Z) == FShape.MULTIPOINT) {// TODO
+																	// (09/01/08)
+																	// is this
+																	// correct?
+																	// if not
+																	// fix it
+																	// also in
+																	// PlacementManager,
+																	// PlacementProperties
 			return placementConstraints.isAroundThePoint();
 		}
 		return false;
 	}
-
-
 
 }

@@ -4,7 +4,6 @@ import java.util.Hashtable;
 
 import javax.xml.namespace.QName;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -68,142 +67,141 @@ import javax.xml.namespace.QName;
  */
 
 /************************************************************
- * class < Geometries >										*
- * It contains the standard tags specified in GML 2.x		*
- * Also, it has functions to parse geometry tags.			*
- * This class help us with the "gml" namespace.				*
- * 															*
- * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)	*
+ * class < Geometries > * It contains the standard tags specified in GML 2.x *
+ * Also, it has functions to parse geometry tags. * This class help us with the
+ * "gml" namespace. * *
+ * 
+ * @author Carlos Sánchez Periñán (sanchez_carper@gva.es) *
  ************************************************************/
-public class GMLGeometries{
-	//It has all the drawable geometries
+public class GMLGeometries {
+	// It has all the drawable geometries
 	private static Hashtable gmlTags = new Hashtable();
-	//It has all the tags of GML that it specifies a feature
-	//private static Hashtable features = new Hashtable();
-	
-	static{
-		//complex geometry elements
-		gmlTags.put("_Geometry","");
-		gmlTags.put("_GeometryCollection","");
-		gmlTags.put("geometryMember","");
-		gmlTags.put("pointMember","");
-		gmlTags.put("lineStringMember","");
-		gmlTags.put("polygonMember","");
-		gmlTags.put("outerBoundaryIs","");
-		gmlTags.put("innerBoundaryIs","");
-		//primitive geometry elements
-		gmlTags.put("Point","");
-		gmlTags.put("LineString","");
-		gmlTags.put("LinearRing","");
-		gmlTags.put("Polygon","");
-		gmlTags.put("Box","");
-		//aggregate geometry elements
-		gmlTags.put("MultiGeometry","");
-		gmlTags.put("MultiPoint","");
-		gmlTags.put("MultiLineString","");
-		gmlTags.put("MultiPolygon","");
-		//coordinate elements
-		gmlTags.put("coord","");
-		gmlTags.put("X","");
-		gmlTags.put("Y","");
-		gmlTags.put("Z","");
-		gmlTags.put("coordinates","");
-		//this attribute gives the location where an element is defined
-		gmlTags.put("remoteSchema","");
-		//features
-		gmlTags.put("_Feature","");
-		gmlTags.put("_FeatureCollection","");
-		gmlTags.put("featureMember","");
-		//some basic geometric properties of features
-		gmlTags.put("_geometryProperty","");
-		gmlTags.put("geometryProperty","");
-		gmlTags.put("boundedBy","");
-		gmlTags.put("pointProperty","");
-		gmlTags.put("polygonProperty","");
-		gmlTags.put("lineStringProperty","");
-		gmlTags.put("multiPointProperty","");
-		gmlTags.put("multiLineStringProperty","");
-		gmlTags.put("multiPolygonProperty","");
-		gmlTags.put("multiGeometryProperty","");
-		//common aliases for geometry properties
-		gmlTags.put("location","");
-		gmlTags.put("centerOf","");
-		gmlTags.put("position","");
-		gmlTags.put("extentOf","");
-		gmlTags.put("coverage","");
-		gmlTags.put("edgeOf","");
-		gmlTags.put("centerLineOf","");
-		gmlTags.put("multiLocation","");
-		gmlTags.put("multiCenterOf","");
-		gmlTags.put("multiPosition","");
-		gmlTags.put("multiCenterLineOf","");
-		gmlTags.put("multiEdgeOf","");
-		gmlTags.put("multiCoverage","");
-		gmlTags.put("multiExtentOf","");
-		//common feature descriptors
-		gmlTags.put("description","");
-		gmlTags.put("name","");
-	
+	// It has all the tags of GML that it specifies a feature
+	// private static Hashtable features = new Hashtable();
+
+	static {
+		// complex geometry elements
+		gmlTags.put("_Geometry", "");
+		gmlTags.put("_GeometryCollection", "");
+		gmlTags.put("geometryMember", "");
+		gmlTags.put("pointMember", "");
+		gmlTags.put("lineStringMember", "");
+		gmlTags.put("polygonMember", "");
+		gmlTags.put("outerBoundaryIs", "");
+		gmlTags.put("innerBoundaryIs", "");
+		// primitive geometry elements
+		gmlTags.put("Point", "");
+		gmlTags.put("LineString", "");
+		gmlTags.put("LinearRing", "");
+		gmlTags.put("Polygon", "");
+		gmlTags.put("Box", "");
+		// aggregate geometry elements
+		gmlTags.put("MultiGeometry", "");
+		gmlTags.put("MultiPoint", "");
+		gmlTags.put("MultiLineString", "");
+		gmlTags.put("MultiPolygon", "");
+		// coordinate elements
+		gmlTags.put("coord", "");
+		gmlTags.put("X", "");
+		gmlTags.put("Y", "");
+		gmlTags.put("Z", "");
+		gmlTags.put("coordinates", "");
+		// this attribute gives the location where an element is defined
+		gmlTags.put("remoteSchema", "");
+		// features
+		gmlTags.put("_Feature", "");
+		gmlTags.put("_FeatureCollection", "");
+		gmlTags.put("featureMember", "");
+		// some basic geometric properties of features
+		gmlTags.put("_geometryProperty", "");
+		gmlTags.put("geometryProperty", "");
+		gmlTags.put("boundedBy", "");
+		gmlTags.put("pointProperty", "");
+		gmlTags.put("polygonProperty", "");
+		gmlTags.put("lineStringProperty", "");
+		gmlTags.put("multiPointProperty", "");
+		gmlTags.put("multiLineStringProperty", "");
+		gmlTags.put("multiPolygonProperty", "");
+		gmlTags.put("multiGeometryProperty", "");
+		// common aliases for geometry properties
+		gmlTags.put("location", "");
+		gmlTags.put("centerOf", "");
+		gmlTags.put("position", "");
+		gmlTags.put("extentOf", "");
+		gmlTags.put("coverage", "");
+		gmlTags.put("edgeOf", "");
+		gmlTags.put("centerLineOf", "");
+		gmlTags.put("multiLocation", "");
+		gmlTags.put("multiCenterOf", "");
+		gmlTags.put("multiPosition", "");
+		gmlTags.put("multiCenterLineOf", "");
+		gmlTags.put("multiEdgeOf", "");
+		gmlTags.put("multiCoverage", "");
+		gmlTags.put("multiExtentOf", "");
+		// common feature descriptors
+		gmlTags.put("description", "");
+		gmlTags.put("name", "");
+
 		/**********************************************************
 		 * Added geometries for GML 3 SFP(Simple Feature Profile) *
 		 **********************************************************/
-		gmlTags.put("MultiPoint","");
-		gmlTags.put("MultiCurve","");
-		gmlTags.put("MultiSurface","");
-		gmlTags.put("pointMember","");
-		gmlTags.put("surfaceMember","");
-		gmlTags.put("Curve","");
-		gmlTags.put("segments","");
-		gmlTags.put("curveMember","");
-		gmlTags.put("LineStringSegment","");
-		gmlTags.put("patches","");
-		gmlTags.put("PolygonPatch","");
-		gmlTags.put("Surface","");
-		gmlTags.put("Polygon","");
-		gmlTags.put("exterior","");
-		gmlTags.put("interior","");
-		gmlTags.put("LinearRing","");
-		gmlTags.put("Point","");
-		gmlTags.put("LineString","");
-		gmlTags.put("pos","");
-		gmlTags.put("posList","");
-		gmlTags.put("Envelope","");
-		gmlTags.put("boundedBy","");
-		gmlTags.put("description","");
-		gmlTags.put("name","");
-		gmlTags.put("curveProperty","");
-		gmlTags.put("surfaceProperty","");
-		gmlTags.put("multiCurveProperty","");
-		gmlTags.put("multiSurfaceProperty","");
-	
+		gmlTags.put("MultiPoint", "");
+		gmlTags.put("MultiCurve", "");
+		gmlTags.put("MultiSurface", "");
+		gmlTags.put("pointMember", "");
+		gmlTags.put("surfaceMember", "");
+		gmlTags.put("Curve", "");
+		gmlTags.put("segments", "");
+		gmlTags.put("curveMember", "");
+		gmlTags.put("LineStringSegment", "");
+		gmlTags.put("patches", "");
+		gmlTags.put("PolygonPatch", "");
+		gmlTags.put("Surface", "");
+		gmlTags.put("Polygon", "");
+		gmlTags.put("exterior", "");
+		gmlTags.put("interior", "");
+		gmlTags.put("LinearRing", "");
+		gmlTags.put("Point", "");
+		gmlTags.put("LineString", "");
+		gmlTags.put("pos", "");
+		gmlTags.put("posList", "");
+		gmlTags.put("Envelope", "");
+		gmlTags.put("boundedBy", "");
+		gmlTags.put("description", "");
+		gmlTags.put("name", "");
+		gmlTags.put("curveProperty", "");
+		gmlTags.put("surfaceProperty", "");
+		gmlTags.put("multiCurveProperty", "");
+		gmlTags.put("multiSurfaceProperty", "");
+
 	}
 
 	private QName tag;
-	
+
 	/**
-	 * It search a tag in the geometry hashtable
-	 * 	-if it isn't, then returns false.
-	 * 	-else it is a GML 2.x stardard geometry and return true
-	 * @return 
+	 * It search a tag in the geometry hashtable -if it isn't, then returns
+	 * false. -else it is a GML 2.x stardard geometry and return true
+	 * 
+	 * @return
 	 * 
 	 * @return boolean
 	 **/
-	public static boolean isGeometryGML(QName tag){
-		return (gmlTags.get(tag.getLocalPart())!=null);
+	public static boolean isGeometryGML(QName tag) {
+		return (gmlTags.get(tag.getLocalPart()) != null);
 	}
-	
+
 	/**
 	 * Return if the tag is a geometry
+	 * 
 	 * @param tag
-	 * XML tag to compare
-	 * @return 
-	 * true if the tag is a geometry
+	 *            XML tag to compare
+	 * @return true if the tag is a geometry
 	 */
-	public static boolean isGML(QName tag){
-		if (tag.getNamespaceURI() != null){
-				 if(tag.getNamespaceURI().equals(GMLTags.GML_NAMESPACE_URI))
-					return isGeometryGML(tag);
-		}		
+	public static boolean isGML(QName tag) {
+		if (tag.getNamespaceURI() != null) {
+			if (tag.getNamespaceURI().equals(GMLTags.GML_NAMESPACE_URI))
+				return isGeometryGML(tag);
+		}
 		return false;
 	}
 }

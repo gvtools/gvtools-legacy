@@ -48,26 +48,27 @@ import org.apache.log4j.Logger;
 
 import com.iver.cit.gvsig.fmap.drivers.db.utils.ConnectionWithParams;
 
-
 /**
  * Utility class used to manage the connection tree.
+ * 
  * @author jldominguez
- *
+ * 
  */
 public class VectorialDBConnectionTreeLeaf extends DefaultMutableTreeNode {
-    private static Logger logger = Logger.getLogger(VectorialDBConnectionTreeLeaf.class.getName());
-    private ConnectionWithParams connwp;
+	private static Logger logger = Logger
+			.getLogger(VectorialDBConnectionTreeLeaf.class.getName());
+	private ConnectionWithParams connwp;
 
-    public VectorialDBConnectionTreeLeaf(ConnectionWithParams cwp) {
-        connwp = cwp;
-        setAllowsChildren(false);
-    }
+	public VectorialDBConnectionTreeLeaf(ConnectionWithParams cwp) {
+		connwp = cwp;
+		setAllowsChildren(false);
+	}
 
-    public String toString() {
-        return connwp.toString();
-    }
+	public String toString() {
+		return connwp.toString();
+	}
 
-    public ConnectionWithParams getConnectionWithParams() {
-        return connwp;
-    }
+	public ConnectionWithParams getConnectionWithParams() {
+		return connwp;
+	}
 }

@@ -41,10 +41,8 @@
 package com.iver.cit.gvsig.fmap.edition.fieldmanagers;
 
 public interface FieldCommand {
-//	final public static int ADD = 1;
-//	final public static int REMOVE = 2;
-//	final public static int RENAME = 3;
-//	int getType();
+	// final public static int ADD = 1;
+	// final public static int REMOVE = 2;
+	// final public static int RENAME = 3;
+	// int getType();
 }
-
-

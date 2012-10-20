@@ -6,15 +6,14 @@ package com.hardcode.gdbms.engine.instruction;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.Value;
 
-
 /**
  * Adaptador
- *
+ * 
  * @author Fernando González Cortés
  */
 public class LValueTermAdapter extends AbstractExpression {
-	//	private DataSource[] tables;
-	//private DataSource source;
+	// private DataSource[] tables;
+	// private DataSource source;
 	private Field field = null;
 
 	/**
@@ -35,32 +34,34 @@ public class LValueTermAdapter extends AbstractExpression {
 	 */
 	public Value evaluate(long row) throws EvaluationException {
 		try {
-            return getField().evaluateExpression(row);
-        } catch (ReadDriverException e) {
-            throw new EvaluationException();
-        } catch (SemanticException e) {
-            throw new EvaluationException();
-        }
+			return getField().evaluateExpression(row);
+		} catch (ReadDriverException e) {
+			throw new EvaluationException();
+		} catch (SemanticException e) {
+			throw new EvaluationException();
+		}
 	}
 
 	/**
 	 * Obtiene el campo al que referencia este adaptador
-	 *
+	 * 
 	 * @return Field
-	 * @throws AmbiguousFieldNameException Si hay varios campos con el mismo
-	 * 		   nombre y no se especificó la tabla
-	 * @throws FieldNotFoundException Si no hay ningún campo con ese nombre
-	 * @throws SemanticException Si existe algún error semántico en la
-	 * 		   instrucción
-	 * @throws ReadDriverException TODO
+	 * @throws AmbiguousFieldNameException
+	 *             Si hay varios campos con el mismo nombre y no se especificó
+	 *             la tabla
+	 * @throws FieldNotFoundException
+	 *             Si no hay ningún campo con ese nombre
+	 * @throws SemanticException
+	 *             Si existe algún error semántico en la instrucción
+	 * @throws ReadDriverException
+	 *             TODO
 	 */
-	private Field getField()
-		throws AmbiguousFieldNameException, FieldNotFoundException,
-			SemanticException, ReadDriverException {
+	private Field getField() throws AmbiguousFieldNameException,
+			FieldNotFoundException, SemanticException, ReadDriverException {
 		if (field == null) {
 			field = FieldFactory.createField(getInstructionContext()
-												 .getFromTables(),
-					getFieldName(), getInstructionContext().getDs());
+					.getFromTables(), getFieldName(), getInstructionContext()
+					.getDs());
 		}
 
 		return field;

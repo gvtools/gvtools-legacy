@@ -42,104 +42,120 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: IProgressMonitorIF.java 4483 2006-03-20 16:04:21Z azabala $
-* $Log$
-* Revision 1.2  2006-03-20 16:04:11  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/03/14 19:23:42  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: IProgressMonitorIF.java 4483 2006-03-20 16:04:21Z azabala $
+ * $Log$
+ * Revision 1.2  2006-03-20 16:04:11  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/03/14 19:23:42  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.utiles.swing.threads;
+
 /**
- * IProgressMonitorIF must be all classes which
- * monitors the process of a long costly task.
- * <br>
- * It is designed to monitor defined tasks (those
- * which we know what number of steps have) and 
- * undefined tasks.
- * <br>
- * It must has associated a GUI component to show
- * progress of the task (usually a Progress Bar and
- * a cancel button).
+ * IProgressMonitorIF must be all classes which monitors the process of a long
+ * costly task. <br>
+ * It is designed to monitor defined tasks (those which we know what number of
+ * steps have) and undefined tasks. <br>
+ * It must has associated a GUI component to show progress of the task (usually
+ * a Progress Bar and a cancel button).
  * 
  * @author azabala
- *
+ * 
  */
 public interface IProgressMonitorIF {
 	/**
-	 * sets initial step number of the task
-	 * monitored
+	 * sets initial step number of the task monitored
+	 * 
 	 * @param step
 	 */
 	public void setInitialStep(int step);
+
 	/**
-	 * sets final step number of the task
-	 * monitored
+	 * sets final step number of the task monitored
+	 * 
 	 * @param step
 	 */
 	public void setLastStep(int step);
+
 	/**
-	 * sets current step number of the task
-	 * monitored
+	 * sets current step number of the task monitored
+	 * 
 	 * @param step
 	 */
 	public void setCurrentStep(int step);
+
 	public int getInitialStep();
+
 	public int getLastStep();
+
 	public int getCurrentStep();
+
 	/**
-	 * Sets if the monitored task is defined (known
-	 * number of steps) or undefined (unknown)
+	 * Sets if the monitored task is defined (known number of steps) or
+	 * undefined (unknown)
+	 * 
 	 * @param indeterminated
 	 */
 	public void setIndeterminated(boolean indeterminated);
+
 	public boolean isIndeterminated();
+
 	/**
-	 * Sets if the progress bar associated to monitor
-	 * must draw a complementary text to progress bar
+	 * Sets if the progress bar associated to monitor must draw a complementary
+	 * text to progress bar
+	 * 
 	 * @param stringDrawed
 	 */
 	public void setBarStringDrawed(boolean stringDrawed);
+
 	/**
 	 * Sets complementary text to progress bar.
+	 * 
 	 * @param barString
 	 */
 	public void setBarString(String barString);
+
 	/**
 	 * Set main text of GUI component
+	 * 
 	 * @param text
 	 */
 	public void setMainTitleLabel(String text);
+
 	public void setNote(String note);
+
 	/**
 	 * Sends cancel message to monitored task.
-	 *
+	 * 
 	 */
 	public void cancel();
+
 	/**
 	 * Returns if has received cancel message
+	 * 
 	 * @return
 	 */
 	public boolean isCanceled();
+
 	/**
 	 * Says if associated task is running in background
-	 *
+	 * 
 	 */
-//	public void taskInBackground();
+	// public void taskInBackground();
 	/**
 	 * Closes associated GUI component
-	 *
+	 * 
 	 */
 	public void close();
+
 	/**
 	 * Sets associated gui component visible
-	 *
+	 * 
 	 */
 	public void open();
-	
-}
 
+}

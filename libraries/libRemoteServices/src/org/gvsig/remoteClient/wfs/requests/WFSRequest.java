@@ -3,16 +3,13 @@ package org.gvsig.remoteClient.wfs.requests;
 import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
 
 import org.gvsig.remoteClient.utils.Utilities;
 import org.gvsig.remoteClient.wfs.WFSOperation;
 import org.gvsig.remoteClient.wfs.WFSProtocolHandler;
-import org.gvsig.remoteClient.wfs.WFSServiceInformation;
 import org.gvsig.remoteClient.wfs.WFSStatus;
-import org.gvsig.remoteClient.wfs.exceptions.WFSGetFeatureException;
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
@@ -66,7 +63,7 @@ import org.gvsig.remoteClient.wfs.exceptions.WFSGetFeatureException;
 public abstract class WFSRequest {
 	protected WFSStatus status = null;
 	protected WFSProtocolHandler protocolHandler = null;
-			
+
 	public WFSRequest(WFSStatus status, WFSProtocolHandler protocolHandler) {
 		super();
 		this.status = status;
@@ -75,92 +72,103 @@ public abstract class WFSRequest {
 
 	/**
 	 * Send a request to the server.
-	 * @return
-	 * The server reply
-	 * @throws IOException 
-	 * @throws UnknownHostException 
-	 * @throws ConnectException 
+	 * 
+	 * @return The server reply
+	 * @throws IOException
+	 * @throws UnknownHostException
+	 * @throws ConnectException
 	 */
-	public File sendRequest() throws ConnectException, UnknownHostException, IOException{
-		//if exists an online resource for the GET operation
-		String onlineResource = protocolHandler.getServiceInformation().getOnlineResource(getOperationCode(), WFSOperation.PROTOCOL_GET);
-		if (onlineResource != null){
+	public File sendRequest() throws ConnectException, UnknownHostException,
+			IOException {
+		// if exists an online resource for the GET operation
+		String onlineResource = protocolHandler.getServiceInformation()
+				.getOnlineResource(getOperationCode(),
+						WFSOperation.PROTOCOL_GET);
+		if (onlineResource != null) {
 			String symbol = getSymbol(onlineResource);
 			onlineResource = onlineResource + symbol;
 			return sendHttpGetRequest(onlineResource);
 		}
-		//if exists an online resource for the POST operation
-		onlineResource =  protocolHandler.getServiceInformation().getOnlineResource(getOperationCode(), WFSOperation.PROTOCOL_POST);
-		if (onlineResource != null){
+		// if exists an online resource for the POST operation
+		onlineResource = protocolHandler.getServiceInformation()
+				.getOnlineResource(getOperationCode(),
+						WFSOperation.PROTOCOL_POST);
+		if (onlineResource != null) {
 			return sendHttpPostRequest(onlineResource);
 		}
-		//If the online resource doesn't exist, it tries with the server URL and GET
+		// If the online resource doesn't exist, it tries with the server URL
+		// and GET
 		onlineResource = protocolHandler.getHost();
 		String symbol = getSymbol(onlineResource);
 		onlineResource = onlineResource + symbol;
 		return sendHttpGetRequest(onlineResource);
 	}
-	
+
 	protected abstract String getHttpGetRequest(String onlineResource);
-	
+
 	protected abstract String getHttpPostRequest(String onlineResource);
-	
+
 	protected abstract String getTempFilePrefix();
-	
+
 	protected abstract int getOperationCode();
-	
+
 	protected abstract String getSchemaLocation();
-	
+
 	protected abstract boolean isDeleted();
-	
+
 	/**
 	 * Send a Http request using the get protocol
+	 * 
 	 * @param onlineResource
 	 * @return
 	 * @throws ConnectException
 	 * @throws UnknownHostException
 	 * @throws IOException
 	 */
-	private File sendHttpGetRequest(String onlineResource) throws ConnectException, UnknownHostException, IOException{
+	private File sendHttpGetRequest(String onlineResource)
+			throws ConnectException, UnknownHostException, IOException {
 		URL url = new URL(getHttpGetRequest(onlineResource));
-		if (isDeleted()){
+		if (isDeleted()) {
 			Utilities.removeURL(url);
 		}
-		return Utilities.downloadFile(url, getTempFilePrefix(), null);		
+		return Utilities.downloadFile(url, getTempFilePrefix(), null);
 	}
-	
+
 	/**
 	 * Send a Http request using the post protocol
+	 * 
 	 * @param onlineResource
 	 * @return
 	 * @throws ConnectException
 	 * @throws UnknownHostException
 	 * @throws IOException
 	 */
-	private File sendHttpPostRequest(String onlineResource) throws ConnectException, UnknownHostException, IOException{
+	private File sendHttpPostRequest(String onlineResource)
+			throws ConnectException, UnknownHostException, IOException {
 		URL url = new URL(onlineResource);
 		String data = getHttpPostRequest(onlineResource);
-		if (isDeleted()){
-			Utilities.removeURL(url+data);
+		if (isDeleted()) {
+			Utilities.removeURL(url + data);
 		}
-		return Utilities.downloadFile(url, data, getTempFilePrefix(), null);		
+		return Utilities.downloadFile(url, data, getTempFilePrefix(), null);
 	}
-	
+
 	/**
-	 * Just for not repeat code. Gets the correct separator according 
-	 * to the server URL
+	 * Just for not repeat code. Gets the correct separator according to the
+	 * server URL
+	 * 
 	 * @param h
 	 * @return
 	 */
 	protected static String getSymbol(String h) {
 		String symbol;
-		if (h.indexOf("?")==-1) 
+		if (h.indexOf("?") == -1)
 			symbol = "?";
-		else if (h.indexOf("?")!=h.length()-1)
+		else if (h.indexOf("?") != h.length() - 1)
 			symbol = "&";
 		else
 			symbol = "";
 		return symbol;
-	}  
-	
+	}
+
 }

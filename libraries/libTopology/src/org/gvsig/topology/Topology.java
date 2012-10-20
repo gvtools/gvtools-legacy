@@ -188,7 +188,7 @@ public class Topology extends FLayers implements ITopologyStatus,
 	 * Map that relates a FLyrVect of the Topology with its rank (weight when we
 	 * are going to snap many coordinates)
 	 */
-//	private Map<FLyrVect, XYZLayerRank> layerRanks;
+	// private Map<FLyrVect, XYZLayerRank> layerRanks;
 
 	/**
 	 * Numerical identifier for rules of a topology
@@ -216,9 +216,9 @@ public class Topology extends FLayers implements ITopologyStatus,
 		int newStatus;
 		int prevStatus;
 	}
-	
-	public Topology(){
-		this(null, null );
+
+	public Topology() {
+		this(null, null);
 	}
 
 	/**
@@ -239,7 +239,7 @@ public class Topology extends FLayers implements ITopologyStatus,
 		rules = new ArrayList<ITopologyRule>();
 		clusterToleranceRules = new ArrayList<MustBeLargerThanClusterTolerance>();
 		dirtyZones = new ArrayList<Rectangle2D>();
-//		layerRanks = new HashMap<FLyrVect, XYZLayerRank>();
+		// layerRanks = new HashMap<FLyrVect, XYZLayerRank>();
 
 		statusListeners = new ArrayList<ITopologyStatusListener>();
 		// This listener updates the icon status returneb by this kind of layer
@@ -422,24 +422,23 @@ public class Topology extends FLayers implements ITopologyStatus,
 		if (!(layer instanceof FLyrVect))
 			throw new WrongLyrForTopologyException(
 					"Intentando añadir capa no vectorial a una topologia");
-		if(this.layers.contains(layer))
+		if (this.layers.contains(layer))
 			return;
-		if(layer.getMapContext() != null){
+		if (layer.getMapContext() != null) {
 			layer.getMapContext().beginAtomicEvent();
 		}
-		
-		FLayers oldParentLayer  = layer.getParentLayer();
-		if(oldParentLayer != null)
+
+		FLayers oldParentLayer = layer.getParentLayer();
+		if (oldParentLayer != null)
 			oldParentLayer.removeLayer(layer);
 		layer.setParentLayer(null);
 		super.addLayer(pos, layer);
-		if(layer.getMapContext() != null)
-		{
+		if (layer.getMapContext() != null) {
 			layer.getMapContext().endAtomicEvent();
 			layer.getMapContext().invalidate();
 		}
-		
-//		setRank((FLyrVect) layer, 1, 1);
+
+		// setRank((FLyrVect) layer, 1, 1);
 
 		int shapeType = -1;
 		try {
@@ -473,7 +472,7 @@ public class Topology extends FLayers implements ITopologyStatus,
 				// addDirtyZone(ruleScope);
 				// si habia errores, la reevaluacion haria que se repitiesen
 				resetStatus();
-//				this.errorContainer.clear();
+				// this.errorContainer.clear();
 			}
 			rule.setTopologyErrorContainer(this);
 			clusterToleranceRules.add(rule);
@@ -517,7 +516,7 @@ public class Topology extends FLayers implements ITopologyStatus,
 								IGeometry geom;
 								try {
 									geom = vea.getShape(numRow);
-									if (geom != null){
+									if (geom != null) {
 										dirtyZones.add(geom.getBounds2D());
 									}
 								} catch (ExpansionFileReadException e1) {
@@ -556,7 +555,7 @@ public class Topology extends FLayers implements ITopologyStatus,
 
 				public void drawValueChanged(LayerEvent e) {
 					// TODO Auto-generated method stub
-					
+
 				}
 			});
 
@@ -587,14 +586,14 @@ public class Topology extends FLayers implements ITopologyStatus,
 	 * @param zRank
 	 *            importante of this layer coordinates in z plane
 	 */
-//	public void setRank(FLyrVect lyr, int xyRank, int zRank) {
-//		XYZLayerRank rank = new XYZLayerRank(lyr.getName(), xyRank, zRank);
-//		layerRanks.put(lyr, rank);
-//	}
+	// public void setRank(FLyrVect lyr, int xyRank, int zRank) {
+	// XYZLayerRank rank = new XYZLayerRank(lyr.getName(), xyRank, zRank);
+	// layerRanks.put(lyr, rank);
+	// }
 
-//	public XYZLayerRank getRank(FLyrVect lyr) {
-//		return layerRanks.get(lyr);
-//	}
+	// public XYZLayerRank getRank(FLyrVect lyr) {
+	// return layerRanks.get(lyr);
+	// }
 
 	/**
 	 * Adds a layer to the topology. If the topology has been validated, changes
@@ -603,7 +602,7 @@ public class Topology extends FLayers implements ITopologyStatus,
 	 */
 	public void addLayer(FLyrVect layer, int xyRank, int zRank) {
 		this.addLayer(layer);
-//		setRank(layer, xyRank, zRank);
+		// setRank(layer, xyRank, zRank);
 	}
 
 	/**
@@ -617,7 +616,7 @@ public class Topology extends FLayers implements ITopologyStatus,
 	 * 
 	 */
 	public void removeLayer(FLayer lyr) throws CancelationException {
-//		super.removeLayer(lyr);//bug detectado por Eustaquio
+		// super.removeLayer(lyr);//bug detectado por Eustaquio
 		callLayerRemoving(LayerCollectionEvent.createLayerRemovingEvent(lyr));
 
 		super.removeLayer(lyr);
@@ -652,7 +651,7 @@ public class Topology extends FLayers implements ITopologyStatus,
 		}// while
 
 		this.errorContainer.removeErrorsByLayer((FLyrVect) lyr);
-//		this.layerRanks.remove(lyr);
+		// this.layerRanks.remove(lyr);
 		this.updateDirtyZones();
 		callLayerRemoved(LayerCollectionEvent.createLayerRemovedEvent(lyr));
 	}
@@ -851,7 +850,8 @@ public class Topology extends FLayers implements ITopologyStatus,
 				if (progressMonitor != null) {
 					if (progressMonitor.isCanceled()/*
 													 * ||
-													 * progressMonitor.isFinished()
+													 * progressMonitor.isFinished
+													 * ()
 													 */) {
 						resetStatus();
 						return;
@@ -879,7 +879,8 @@ public class Topology extends FLayers implements ITopologyStatus,
 				if (progressMonitor != null) {
 					if (progressMonitor.isCanceled()/*
 													 * ||
-													 * progressMonitor.isFinished()
+													 * progressMonitor.isFinished
+													 * ()
 													 */) {
 						resetStatus();
 						return;
@@ -937,11 +938,13 @@ public class Topology extends FLayers implements ITopologyStatus,
 				if (progressMonitor != null) {
 					if (progressMonitor.isCanceled()/*
 													 * ||
-													 * progressMonitor.isFinished()
+													 * progressMonitor.isFinished
+													 * ()
 													 */) {
-						//TODO Si se cancela la validacion de una topologia con 
-						//estado VALIDADO CON ERRORES, NO SE DEBE LLAMAR A RESETSTATUS!!!
-						//LO QUE HAY QUE HACER ES RESTAURAR EL ESTADO PREVIO
+						// TODO Si se cancela la validacion de una topologia con
+						// estado VALIDADO CON ERRORES, NO SE DEBE LLAMAR A
+						// RESETSTATUS!!!
+						// LO QUE HAY QUE HACER ES RESTAURAR EL ESTADO PREVIO
 						resetStatus();
 						return;
 					}
@@ -973,7 +976,8 @@ public class Topology extends FLayers implements ITopologyStatus,
 				if (progressMonitor != null) {
 					if (progressMonitor.isCanceled()/*
 													 * ||
-													 * progressMonitor.isFinished()
+													 * progressMonitor.isFinished
+													 * ()
 													 */) {
 						resetStatus();
 						return;
@@ -1133,7 +1137,9 @@ public class Topology extends FLayers implements ITopologyStatus,
 	}
 
 	/*
-	 * @see org.gvsig.topology.ITopologyErrorContainer#addTopologyError(org.gvsig.topology.TopologyError)
+	 * @see
+	 * org.gvsig.topology.ITopologyErrorContainer#addTopologyError(org.gvsig
+	 * .topology.TopologyError)
 	 */
 
 	public void addTopologyError(TopologyError topologyError) {
@@ -1179,8 +1185,8 @@ public class Topology extends FLayers implements ITopologyStatus,
 
 	public List<TopologyError> getTopologyErrorsByRule(String ruleName,
 			CoordinateReferenceSystem desiredCrs, boolean includeExceptions) {
-		return errorContainer.getTopologyErrorsByRule(ruleName,
-				desiredCrs, includeExceptions);
+		return errorContainer.getTopologyErrorsByRule(ruleName, desiredCrs,
+				includeExceptions);
 	}
 
 	public List<TopologyError> getTopologyErrorsByShapeType(int shapeType,
@@ -1195,8 +1201,7 @@ public class Topology extends FLayers implements ITopologyStatus,
 	 */
 	public List<TopologyError> getTopologyErrors(String ruleName,
 			int shapeType, FLyrVect sourceLayer,
-			CoordinateReferenceSystem desiredCrs,
-			boolean includeExceptions) {
+			CoordinateReferenceSystem desiredCrs, boolean includeExceptions) {
 		return errorContainer.getTopologyErrors(ruleName, shapeType,
 				sourceLayer, desiredCrs, includeExceptions);
 	}
@@ -1227,7 +1232,7 @@ public class Topology extends FLayers implements ITopologyStatus,
 	public XMLEntity getXMLEntity() throws XMLException {
 		boolean errorLayerExists = this.errorLayer != null;
 		FLayer errorLayerCopy = null;
-		if(errorLayerExists){
+		if (errorLayerExists) {
 			errorLayerCopy = this.errorLayer;
 			super.removeLayer(this.errorLayer);
 		}
@@ -1249,13 +1254,13 @@ public class Topology extends FLayers implements ITopologyStatus,
 			xml.addChild(rule.getXMLEntity());
 		}
 
-//		int numberOfClusterRules = clusterToleranceRules.size();
-//		xml.putProperty("numberOfClusterRules", numberOfClusterRules);
-//		for (int i = 0; i < numberOfClusterRules; i++) {
-//			MustBeLargerThanClusterTolerance rule = clusterToleranceRules
-//					.get(i);
-//			xml.addChild(rule.getXMLEntity());
-//		}
+		// int numberOfClusterRules = clusterToleranceRules.size();
+		// xml.putProperty("numberOfClusterRules", numberOfClusterRules);
+		// for (int i = 0; i < numberOfClusterRules; i++) {
+		// MustBeLargerThanClusterTolerance rule = clusterToleranceRules
+		// .get(i);
+		// xml.addChild(rule.getXMLEntity());
+		// }
 
 		int numberOfDirtyZones = dirtyZones.size();
 		xml.putProperty("numberOfDirtyZones", numberOfDirtyZones);
@@ -1275,30 +1280,31 @@ public class Topology extends FLayers implements ITopologyStatus,
 
 		XMLEntity errorContainerXML = errorContainer.getXMLEntity();
 		xml.addChild(errorContainerXML);
-		
+
 		xml.putProperty("errorLayerExists", errorLayerExists);
 		xml.putProperty("nextRuleFid", ruleId);
-		
-		if(errorLayerExists){
+
+		if (errorLayerExists) {
 			this.errorLayer = errorLayerCopy;
 			try {
-				if(((FLyrVect)errorLayer).getSource().getShapeCount() > 0)
+				if (((FLyrVect) errorLayer).getSource().getShapeCount() > 0)
 					super.addLayer(this.layers.size(), this.errorLayer);
 			} catch (ReadDriverException e) {
 				e.printStackTrace();
-			}	
-			
+			}
+
 		}
 
-//		Collection<XYZLayerRank> ranksVal = layerRanks.values();
-//		int numberOfRanks = ranksVal.size();
-//		xml.putProperty("numberOfRanks", numberOfRanks);
-//		Iterator<XYZLayerRank> xyzRankIterator = layerRanks.values().iterator();
-//		while (xyzRankIterator.hasNext()) {
-//			XYZLayerRank layerRank = xyzRankIterator.next();
-//			XMLEntity entity = layerRank.getXMLEntity();
-//			xml.addChild(entity);
-//		}
+		// Collection<XYZLayerRank> ranksVal = layerRanks.values();
+		// int numberOfRanks = ranksVal.size();
+		// xml.putProperty("numberOfRanks", numberOfRanks);
+		// Iterator<XYZLayerRank> xyzRankIterator =
+		// layerRanks.values().iterator();
+		// while (xyzRankIterator.hasNext()) {
+		// XYZLayerRank layerRank = xyzRankIterator.next();
+		// XMLEntity entity = layerRank.getXMLEntity();
+		// xml.addChild(entity);
+		// }
 		return xml;
 	}
 
@@ -1326,11 +1332,11 @@ public class Topology extends FLayers implements ITopologyStatus,
 		if (xml.contains("maxNumberOfErrors")) {
 			this.maxNumberOfErrors = xml.getIntProperty("maxNumberOfErrors");
 		}
-		
+
 		if (xml.contains("nextRuleFid")) {
 			this.ruleId = xml.getIntProperty("nextRuleFid");
 		}
-	
+
 		boolean errorLayerExists = false;
 		if (xml.contains("errorLayerExists")) {
 			errorLayerExists = xml.getBooleanProperty("errorLayerExists");
@@ -1342,21 +1348,22 @@ public class Topology extends FLayers implements ITopologyStatus,
 				XMLEntity ruleXML = xml.getChild(childrenCount++);
 				ITopologyRule rule = TopologyRuleFactory.createFromXML(this,
 						ruleXML);
-				
+
 				this.rules.add(rule);
 			}
 		}
 
-//		if (xml.contains("numberOfClusterRules")) {
-//			int numberOfClusterRules = xml
-//					.getIntProperty("numberOfClusterRules");
-//			for (int i = 0; i < numberOfClusterRules; i++) {
-//				XMLEntity ruleXML = xml.getChild(childrenCount++);
-//				MustBeLargerThanClusterTolerance rule = (MustBeLargerThanClusterTolerance) TopologyRuleFactory
-//						.createFromXML(this, ruleXML);
-//				this.clusterToleranceRules.add(rule);
-//			}
-//		}
+		// if (xml.contains("numberOfClusterRules")) {
+		// int numberOfClusterRules = xml
+		// .getIntProperty("numberOfClusterRules");
+		// for (int i = 0; i < numberOfClusterRules; i++) {
+		// XMLEntity ruleXML = xml.getChild(childrenCount++);
+		// MustBeLargerThanClusterTolerance rule =
+		// (MustBeLargerThanClusterTolerance) TopologyRuleFactory
+		// .createFromXML(this, ruleXML);
+		// this.clusterToleranceRules.add(rule);
+		// }
+		// }
 
 		if (xml.contains("numberOfDirtyZones")) {
 			int numberOfDirtyZones = xml.getIntProperty("numberOfDirtyZones");
@@ -1376,30 +1383,29 @@ public class Topology extends FLayers implements ITopologyStatus,
 		if (errorContainerXML != null) {
 			this.errorContainer = TopologyPersister
 					.createErrorContainerFromXML(this, errorContainerXML);
-			if(errorLayerExists)
-			{
+			if (errorLayerExists) {
 				setErrorLyr();
 				updateErrorLyr();
-			}	
+			}
 		}
-		
-		//finally, we set error container instance for all rules
-		for(ITopologyRule r:rules){
-			r.setTopologyErrorContainer(errorContainer);
-		}
-		
-		for(ITopologyRule r:clusterToleranceRules){
+
+		// finally, we set error container instance for all rules
+		for (ITopologyRule r : rules) {
 			r.setTopologyErrorContainer(errorContainer);
 		}
 
-//		if (xml.contains("numberOfRanks")) {
-//			int numberOfRanks = xml.getIntProperty("numberOfRanks");
-//			for (int i = 0; i < numberOfRanks; i++) {
-//				XMLEntity xmlRank = xml.getChild(childrenCount++);
-//				XYZLayerRank rank = new XYZLayerRank();
-//				rank.setXMLEntity(xmlRank);
-//			}
-//		}
+		for (ITopologyRule r : clusterToleranceRules) {
+			r.setTopologyErrorContainer(errorContainer);
+		}
+
+		// if (xml.contains("numberOfRanks")) {
+		// int numberOfRanks = xml.getIntProperty("numberOfRanks");
+		// for (int i = 0; i < numberOfRanks; i++) {
+		// XMLEntity xmlRank = xml.getChild(childrenCount++);
+		// XYZLayerRank rank = new XYZLayerRank();
+		// rank.setXMLEntity(xmlRank);
+		// }
+		// }
 	}
 
 	public int getNumberOfExceptions() {
@@ -1415,7 +1421,7 @@ public class Topology extends FLayers implements ITopologyStatus,
 	}
 
 	public ITopologyErrorContainer getErrorContainer() {
-		return (ITopologyErrorContainer) this.errorContainer/*.clone()*/;
+		return (ITopologyErrorContainer) this.errorContainer/* .clone() */;
 	}
 
 	public FLayer getErrorLayer() {
@@ -1455,13 +1461,13 @@ public class Topology extends FLayers implements ITopologyStatus,
 		this.statusListeners = statusListeners;
 	}
 
-//	public void setLayerRanks(Map<FLyrVect, XYZLayerRank> layerRanks) {
-//		this.layerRanks = layerRanks;
-//	}
+	// public void setLayerRanks(Map<FLyrVect, XYZLayerRank> layerRanks) {
+	// this.layerRanks = layerRanks;
+	// }
 
 	public Object clone() {
-		Topology newTopology = new Topology(super.getMapContext(), super
-				.getParentLayer());
+		Topology newTopology = new Topology(super.getMapContext(),
+				super.getParentLayer());
 		try {
 			Topology.copyProperties(this, newTopology);
 		} catch (Exception e) {
@@ -1470,55 +1476,59 @@ public class Topology extends FLayers implements ITopologyStatus,
 		return newTopology;
 	}
 
-	public static void copyProperties(Topology from, Topology to) throws Exception {
+	public static void copyProperties(Topology from, Topology to)
+			throws Exception {
 		to.setMapContext(from.getMapContext());
 		to.setParentLayer(from.getParentLayer());
 		to.setClusterTolerance(from.getClusterTolerance());
-		
+
 		to.clusterToleranceRules.clear();
 		to.layers = new ArrayList<FLayer>();
 		List layers = from.layers;
 		for (int i = 0; i < layers.size(); i++) {
 			FLyrVect lyrVect = (FLyrVect) layers.get(i);
-			if(lyrVect != from.errorLayer)//we skip error layer to avoid creating cluster tol rules
+			if (lyrVect != from.errorLayer)// we skip error layer to avoid
+											// creating cluster tol rules
 				to.addLayer(lyrVect);
 		}
-		
-//		List lyrsCollectionListener = from.getLayerCollectionListeners();
-//	    for(int i = 0; i < lyrsCollectionListener.size(); i++){
-//	    	LayerCollectionListener listener = (LayerCollectionListener) lyrsCollectionListener.get(i);
-//	    	
-//	    	if(listener instanceof UpdateTopologyInTocLayerCollectionListener){
-//	    		UpdateTopologyInTocLayerCollectionListener updateToc =
-//	    			(UpdateTopologyInTocLayerCollectionListener) listener;
-//	    		updateToc.setTopology(to);
-//	    	}
-//	    	to.addLayerCollectionListener((LayerCollectionListener) lyrsCollectionListener.get(i));
-//	    }
-	    
-	    
+
+		// List lyrsCollectionListener = from.getLayerCollectionListeners();
+		// for(int i = 0; i < lyrsCollectionListener.size(); i++){
+		// LayerCollectionListener listener = (LayerCollectionListener)
+		// lyrsCollectionListener.get(i);
+		//
+		// if(listener instanceof UpdateTopologyInTocLayerCollectionListener){
+		// UpdateTopologyInTocLayerCollectionListener updateToc =
+		// (UpdateTopologyInTocLayerCollectionListener) listener;
+		// updateToc.setTopology(to);
+		// }
+		// to.addLayerCollectionListener((LayerCollectionListener)
+		// lyrsCollectionListener.get(i));
+		// }
+
 		to.setTocStatusImage(from.getTocStatusImage());
 		to.setName(from.getName());
 		to.setStatus(from.getStatus());
 		to.setMaxNumberOfErrors(from.getMaxNumberOfErrors());
-		
+
 		to.setRules(from.rules);
-		
+
 		to.setDirtyZones(from.dirtyZones);
-		
-//		to.setStatusListeners(from.statusListeners);
-		
-//		to.setLayerRanks(from.layerRanks);
-		
+
+		// to.setStatusListeners(from.statusListeners);
+
+		// to.setLayerRanks(from.layerRanks);
+
 		to.ruleId = from.ruleId;
-		
-		to.setErrorContainer((ITopologyErrorContainer) from.getErrorContainer().clone());
-		
-		to.errorLayer = to.errorContainer.getAsFMapLayer(from.errorLayer.getName(), from.errorLayer.getCrs());
-		
+
+		to.setErrorContainer((ITopologyErrorContainer) from.getErrorContainer()
+				.clone());
+
+		to.errorLayer = to.errorContainer.getAsFMapLayer(
+				from.errorLayer.getName(), from.errorLayer.getCrs());
+
 		to.updateErrorLyr();
 
-		
 	}
 
 	public FLyrVect getAsFMapLayer(String name, CoordinateReferenceSystem crs) {
@@ -1527,7 +1537,6 @@ public class Topology extends FLayers implements ITopologyStatus,
 
 	/*
 	 * Implementation of ITopologyErrorContanier
-	 * 
 	 */
 	public Topology getTopology() {
 		return this;
@@ -1539,43 +1548,44 @@ public class Topology extends FLayers implements ITopologyStatus,
 
 	public void removeError(TopologyError topologyError) {
 		this.errorContainer.removeError(topologyError);
-		
+
 		Rectangle2D rect = topologyError.getGeometry().getBounds2D();
 		removeDirtyZone(rect);
 		if (status == VALIDATED_WITH_DIRTY_ZONES) {
 			if (dirtyZones.size() == 0)
 				setStatus(VALIDATED);
 		} else if (status == VALIDATED_WITH_ERRORS) {
-			if (getNumberOfErrors() == getNumberOfExceptions() || getNumberOfErrors() == 0)
+			if (getNumberOfErrors() == getNumberOfExceptions()
+					|| getNumberOfErrors() == 0)
 				setStatus(VALIDATED);
 		}
 	}
-	
-	public List<LayerCollectionListener> getLayerCollectionListeners(){
+
+	public List<LayerCollectionListener> getLayerCollectionListeners() {
 		return layerCollectionListeners;
 	}
 
 	public void updateErrorLyr() {
 		MapContext mapContext = getMapContext();
-		if(mapContext != null){
+		if (mapContext != null) {
 			mapContext.beginAtomicEvent();
 		}
 		FLayer previousErrorLyr = super.getLayer(name + "_error");
-		if(previousErrorLyr != null)
+		if (previousErrorLyr != null)
 			super.removeLayer(previousErrorLyr);
-	
+
 		try {
-			if(((FLyrVect)errorLayer).getSource().getShapeCount() > 0){
+			if (((FLyrVect) errorLayer).getSource().getShapeCount() > 0) {
 				super.addLayer(this.layers.size(), this.errorLayer);
-				if(mapContext != null){
+				if (mapContext != null) {
 					mapContext.getLayers().removeLayer(this);
 					mapContext.getLayers().addLayer(this);
 				}
 			}
 		} catch (ReadDriverException e) {
 			e.printStackTrace();
-		}	
-		if(mapContext != null){
+		}
+		if (mapContext != null) {
 			mapContext.endAtomicEvent();
 		}
 	}

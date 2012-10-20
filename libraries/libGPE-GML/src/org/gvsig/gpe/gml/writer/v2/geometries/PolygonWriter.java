@@ -74,6 +74,7 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
 /**
  * It writes a gml:PolygonType object. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;Polygon gid="_877789"&gt;
@@ -85,35 +86,42 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  * &lt;/Polygon&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class PolygonWriter extends GeometryWriter{
-	
+public class PolygonWriter extends GeometryWriter {
+
 	/**
 	 * It writes a gml:Polygon init tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param id
-	 * Geometry ID
+	 *            Geometry ID
 	 * @param coords
-	 * A coordinates sequence
+	 *            A coordinates sequence
 	 * @param srs
-	 * Spatial reference system
+	 *            Spatial reference system
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor handler, String id, 
-			ICoordinateSequence coords, String srs) throws IOException{
+	public void start(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler, String id,
+			ICoordinateSequence coords, String srs) throws IOException {
 		super.start(writer, handler, id, srs);
-		handler.getProfile().getOuterBoundaryIsWriter().start(writer, handler, coords);
+		handler.getProfile().getOuterBoundaryIsWriter()
+				.start(writer, handler, coords);
 		handler.getProfile().getOuterBoundaryIsWriter().end(writer, handler);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.v2.geometries.GeometriesWriter#getGeometryName()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.v2.geometries.GeometriesWriter#getGeometryName()
 	 */
 	public String getGeometryName() {
 		return GMLTags.GML_POLYGON.getLocalPart();

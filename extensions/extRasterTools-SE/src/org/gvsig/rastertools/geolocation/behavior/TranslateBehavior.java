@@ -39,46 +39,50 @@ import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener;
+
 /**
- * Comportamiento que se aplica a la herramienta de translate. El cursor del ratón cambiará cuando
- * se encuentre en la zona interior al raster, permitiendo el deformar la imagen al pinchar y
- * arrastrar.
- *
+ * Comportamiento que se aplica a la herramienta de translate. El cursor del
+ * ratón cambiará cuando se encuentre en la zona interior al raster, permitiendo
+ * el deformar la imagen al pinchar y arrastrar.
+ * 
  * Nacho Brodin (nachobrodin@gmail.com)
  */
 public class TranslateBehavior extends TransformationBehavior {
 
-	private final Image handCursor =PluginServices.getIconTheme().get("hand-icon").getImage();
+	private final Image handCursor = PluginServices.getIconTheme()
+			.get("hand-icon").getImage();
 
-	private Cursor                         cur = null;
-	private boolean                        isMoveable = false;
+	private Cursor cur = null;
+	private boolean isMoveable = false;
 
 	/**
-	 * Variable booleana que está a true si el cursor por defecto está
-	 * activo y a false si hay otro.
+	 * Variable booleana que está a true si el cursor por defecto está activo y
+	 * a false si hay otro.
 	 */
-	private boolean 						defaultCursorActive = true;
+	private boolean defaultCursorActive = true;
 
 	/**
 	 * Puntos de inicio y final para el arrastre de la imagen.
 	 */
-	private Point2D 						ptoIni = null;
-	private Point2D 						ptoFin = null;
+	private Point2D ptoIni = null;
+	private Point2D ptoFin = null;
 
 	/**
 	 * Crea un nuevo RectangleBehavior.
-	 *
-	 * @param zili listener.
+	 * 
+	 * @param zili
+	 *            listener.
 	 */
-	public TranslateBehavior(GeoRasterBehavior grb, Cursor cur, ITransformIO windowIO) {
+	public TranslateBehavior(GeoRasterBehavior grb, Cursor cur,
+			ITransformIO windowIO) {
 		grBehavior = grb;
 		defaultCursor = cur;
 		this.trIO = windowIO;
 	}
 
 	/**
-	 * Coloca el cursor del ratón con el icono adecuado cuando entra dentro de la
-	 * imagen.
+	 * Coloca el cursor del ratón con el icono adecuado cuando entra dentro de
+	 * la imagen.
 	 */
 	public boolean mouseMoved(MouseEvent e) throws BehaviorException {
 
@@ -95,8 +99,9 @@ public class TranslateBehavior extends TransformationBehavior {
 
 			try {
 				if (lyr.isInside(pto)) {
-					grBehavior.getMapControl().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(handCursor,
-							new Point(16, 16), ""));
+					grBehavior.getMapControl().setCursor(
+							Toolkit.getDefaultToolkit().createCustomCursor(
+									handCursor, new Point(16, 16), ""));
 					defaultCursorActive = false;
 					setActiveTool(true);
 					return true;
@@ -113,7 +118,7 @@ public class TranslateBehavior extends TransformationBehavior {
 			} catch (IndexOutOfBoundsException e1) {
 				e1.printStackTrace();
 			}
-		} catch(ClassCastException exc){
+		} catch (ClassCastException exc) {
 			RasterToolsUtil.messageBoxError("error_capa_puntos", this, exc);
 		}
 		setActiveTool(false);
@@ -128,8 +133,8 @@ public class TranslateBehavior extends TransformationBehavior {
 	}
 
 	/**
-	 * Si no está activo el cursor por defecto capturamos el punto
-	 * seleccionado en coordenadas del mundo real.
+	 * Si no está activo el cursor por defecto capturamos el punto seleccionado
+	 * en coordenadas del mundo real.
 	 */
 	public void mousePressed(MouseEvent e) throws BehaviorException {
 		if (e.getButton() == MouseEvent.BUTTON1 && !defaultCursorActive) {
@@ -139,7 +144,8 @@ public class TranslateBehavior extends TransformationBehavior {
 			if (lyr == null)
 				return;
 
-			ViewPort vp = grBehavior.getMapControl().getMapContext().getViewPort();
+			ViewPort vp = grBehavior.getMapControl().getMapContext()
+					.getViewPort();
 			ptoIni = vp.toMapPoint(e.getPoint());
 
 			isMoveable = true;
@@ -147,32 +153,33 @@ public class TranslateBehavior extends TransformationBehavior {
 	}
 
 	/**
-	 *  Cuando soltamos el botón del ratón desplazamos la imagen a la posición
-	 * de destino calculando el extent nuevamente.
+	 * Cuando soltamos el botón del ratón desplazamos la imagen a la posición de
+	 * destino calculando el extent nuevamente.
 	 */
 	public void mouseReleased(MouseEvent e) throws BehaviorException {
 		if (!isActiveTool())
 			return;
-		if (e.getButton() == MouseEvent.BUTTON1 && isMoveable){
+		if (e.getButton() == MouseEvent.BUTTON1 && isMoveable) {
 			FLyrRasterSE lyr = grBehavior.getLayer();
 			if (lyr == null)
 				return;
 
-			ViewPort vp = grBehavior.getMapControl().getMapContext().getViewPort();
+			ViewPort vp = grBehavior.getMapControl().getMapContext()
+					.getViewPort();
 			ptoFin = vp.toMapPoint(e.getPoint());
 
-			//Asignamos la nueva matriz de transformación a la capa
+			// Asignamos la nueva matriz de transformación a la capa
 			AffineTransform atOld = lyr.getAffineTransform();
 			AffineTransform atNew = null;
 
 			double distX = ptoFin.getX() - ptoIni.getX();
 			double distY = ptoFin.getY() - ptoIni.getY();
 
-			//La nueva matriz de transformación es la vieja más la distancia desplazada
+			// La nueva matriz de transformación es la vieja más la distancia
+			// desplazada
 			atNew = new AffineTransform(atOld.getScaleX(), atOld.getShearY(),
-										atOld.getShearX(), atOld.getScaleY(),
-										atOld.getTranslateX() + distX,
-										atOld.getTranslateY() + distY);
+					atOld.getShearX(), atOld.getScaleY(), atOld.getTranslateX()
+							+ distX, atOld.getTranslateY() + distY);
 			lyr.setAffineTransform(atNew);
 
 			grBehavior.getMapControl().getMapContext().invalidate();
@@ -188,16 +195,19 @@ public class TranslateBehavior extends TransformationBehavior {
 	 * donde la movemos.
 	 * </P>
 	 * <P>
-	 * Para dibujar el marco alrededor del raster hacemos lo mismo que para pintar el raster
-	 * rotado. En realidad dibujamos un cuadrado y luego le aplicamos las transformaciones necesarias
-	 * para que se vea con la misma forma del raster al que representa.
+	 * Para dibujar el marco alrededor del raster hacemos lo mismo que para
+	 * pintar el raster rotado. En realidad dibujamos un cuadrado y luego le
+	 * aplicamos las transformaciones necesarias para que se vea con la misma
+	 * forma del raster al que representa.
 	 * </P>
 	 */
 	public void paintComponent(Graphics g) {
 		if (isMoveable && lyr != null && ptoFin != null && ptoIni != null) {
 			try {
-				ViewPort vp = grBehavior.getMapControl().getMapContext().getViewPort();
-				AffineTransform at = (AffineTransform)lyr.getAffineTransform().clone();
+				ViewPort vp = grBehavior.getMapControl().getMapContext()
+						.getViewPort();
+				AffineTransform at = (AffineTransform) lyr.getAffineTransform()
+						.clone();
 				at.preConcatenate(vp.getAffineTransform());
 				Extent ext = lyr.getFullRasterExtent();
 
@@ -211,21 +221,27 @@ public class TranslateBehavior extends TransformationBehavior {
 
 				double distX = ptoFin.getX() - ptoIni.getX();
 				double distY = ptoFin.getY() - ptoIni.getY();
-				Point2D d = new Point2D.Double(ext.getULX() + distX, ext.getULY() + distY);
+				Point2D d = new Point2D.Double(ext.getULX() + distX,
+						ext.getULY() + distY);
 				vp.getAffineTransform().transform(d, d);
 				at.inverseTransform(d, d);
 
-				//Giramos el graphics se dibuja y se vuelve a dejar como estaba
-				((Graphics2D)g).transform(at);
+				// Giramos el graphics se dibuja y se vuelve a dejar como estaba
+				((Graphics2D) g).transform(at);
 				g.setColor(rectangleColor);
-				AlphaComposite alpha = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f);
-				((Graphics2D)g).setComposite(alpha);
-				g.fillRect((int)pt.getX() + (int)d.getX(), (int)pt.getY() + (int)d.getY(), (int)size.getX(), (int)size.getY());
-				((Graphics2D)g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-				g.drawRect((int)pt.getX() + (int)d.getX(), (int)pt.getY() + (int)d.getY(), (int)size.getX(), (int)size.getY());
-				((Graphics2D)g).transform(at.createInverse());
+				AlphaComposite alpha = AlphaComposite.getInstance(
+						AlphaComposite.SRC_OVER, 0.1f);
+				((Graphics2D) g).setComposite(alpha);
+				g.fillRect((int) pt.getX() + (int) d.getX(), (int) pt.getY()
+						+ (int) d.getY(), (int) size.getX(), (int) size.getY());
+				((Graphics2D) g).setComposite(AlphaComposite.getInstance(
+						AlphaComposite.SRC_OVER, 1.0f));
+				g.drawRect((int) pt.getX() + (int) d.getX(), (int) pt.getY()
+						+ (int) d.getY(), (int) size.getX(), (int) size.getY());
+				((Graphics2D) g).transform(at.createInverse());
 			} catch (NoninvertibleTransformException e1) {
-				RasterToolsUtil.messageBoxError("error_transformacion1", this, e1);
+				RasterToolsUtil.messageBoxError("error_transformacion1", this,
+						e1);
 			}
 		}
 	}
@@ -238,10 +254,11 @@ public class TranslateBehavior extends TransformationBehavior {
 		if (!isActiveTool())
 			return;
 		if (isMoveable) {
-			ViewPort vp = grBehavior.getMapControl().getMapContext().getViewPort();
+			ViewPort vp = grBehavior.getMapControl().getMapContext()
+					.getViewPort();
 			ptoFin = vp.toMapPoint(e.getPoint());
 
-			//Asignación de las coordenadas temporales al dialogo
+			// Asignación de las coordenadas temporales al dialogo
 			assignTransformToDialog();
 
 			grBehavior.getMapControl().repaint();
@@ -256,15 +273,17 @@ public class TranslateBehavior extends TransformationBehavior {
 		double distX = ptoFin.getX() - ptoIni.getX();
 		double distY = ptoFin.getY() - ptoIni.getY();
 		AffineTransform atOld = grBehavior.getLayer().getAffineTransform();
-		//La nueva matriz de transformación es la vieja más la distancia desplazada
+		// La nueva matriz de transformación es la vieja más la distancia
+		// desplazada
 		atNew = new AffineTransform(atOld.getScaleX(), atOld.getShearY(),
-									atOld.getShearX(), atOld.getScaleY(),
-									atOld.getTranslateX() + distX,
-									atOld.getTranslateY() + distY);
+				atOld.getShearX(), atOld.getScaleY(), atOld.getTranslateX()
+						+ distX, atOld.getTranslateY() + distY);
 		trIO.loadTransform(atNew);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#getListener()
 	 */
 	public ToolListener getListener() {

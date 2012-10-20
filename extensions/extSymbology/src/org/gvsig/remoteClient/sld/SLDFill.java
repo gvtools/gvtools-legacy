@@ -45,17 +45,20 @@ import java.awt.Color;
 import org.gvsig.remoteClient.sld.filterEncoding.FExpression;
 
 import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
+
 /**
- * Implements the Fill element of an SLD implementation specification.<p>
- * The Fill element specifies how the area of the geometry will be filled.
- * There are two types of fills, solid-color and repeated GraphicFill. The repeated 
- * graphic fill is selected only if the GraphicFill element is present. If the Fill
- * element is omitted from its parent element, then no fill will be rendered. The 
- * GraphicFill and CssParameter elements are discussed in conjunction with the 
- * Stroke element in Section 11.1.3. Here, the CssParameter names are �fill� 
- * instead of �stroke� and �fill-opacity� instead of �stroke-opacity�. None of the
- * other CssParameters in Stroke are available for filling and the default value
- * for the fill color in this context is 50% gray (value �#808080�).
+ * Implements the Fill element of an SLD implementation specification.
+ * <p>
+ * The Fill element specifies how the area of the geometry will be filled. There
+ * are two types of fills, solid-color and repeated GraphicFill. The repeated
+ * graphic fill is selected only if the GraphicFill element is present. If the
+ * Fill element is omitted from its parent element, then no fill will be
+ * rendered. The GraphicFill and CssParameter elements are discussed in
+ * conjunction with the Stroke element in Section 11.1.3. Here, the CssParameter
+ * names are �fill� instead of �stroke� and �fill-opacity� instead
+ * of �stroke-opacity�. None of the other CssParameters in Stroke are
+ * available for filling and the default value for the fill color in this
+ * context is 50% gray (value �#808080�).
  * 
  * @see SLDFill
  * @see http://portal.opengeospatial.org/files/?artifact_id=1188
@@ -68,39 +71,48 @@ public abstract class SLDFill implements ISLDFeatures {
 	protected FExpression expressionColor = new FExpression();
 	protected FExpression expressionOpacity = new FExpression();
 	String cad;
-	
-	
+
 	public SLDGraphic getFillGraphic() {
 		return fillGraphic;
 	}
+
 	public void setFillGraphic(SLDGraphic fillGraphic) {
 		this.fillGraphic = fillGraphic;
 	}
+
 	public FExpression getExpressionColor() {
 		return expressionColor;
 	}
+
 	public void setExpressionColor(FExpression expressionColor) {
 		this.expressionColor = expressionColor;
 	}
+
 	public FExpression getExpressionOpacity() {
 		return expressionOpacity;
 	}
+
 	public void setExpressionOpacity(FExpression expressionOpacity) {
 		this.expressionOpacity = expressionOpacity;
 	}
+
 	public String getCad() {
 		return cad;
 	}
+
 	public void setCad(String cad) {
 		this.cad = cad;
-	} 
+	}
 
-	public float getFillOpacity(){
+	public float getFillOpacity() {
 		return Float.valueOf(expressionOpacity.getLiteral());
 	}
-	public Color getFillColor() throws NumberFormatException, LegendDriverException{
+
+	public Color getFillColor() throws NumberFormatException,
+			LegendDriverException {
 		if (this.getExpressionColor().getLiteral() != null)
-			return SLDUtils.convertHexStringToColor(this.expressionColor.getLiteral());
+			return SLDUtils.convertHexStringToColor(this.expressionColor
+					.getLiteral());
 		return null;
 	}
 }

@@ -1,6 +1,5 @@
 package org.gvsig.selectionTools.tools;
 
-
 /* gvSIG. Geographic Information System of the Valencian Government
  *
  * Copyright (C) 2007-2008 Infrastructures and Transports Department
@@ -47,10 +46,12 @@ import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Events.MeasureEvent;
 import com.iver.cit.gvsig.fmap.tools.Listeners.CircleListener;
 
-
 /**
- * <p>Listener that selects all features of the active, available and vector layers which intersect with the defined
- *  circle area in the associated {@link MapControl MapControl} object.</p>
+ * <p>
+ * Listener that selects all features of the active, available and vector layers
+ * which intersect with the defined circle area in the associated
+ * {@link MapControl MapControl} object.
+ * </p>
  * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
@@ -58,14 +59,16 @@ public class CircleSelectionListener implements CircleListener {
 	/**
 	 * The image to display when the cursor is active.
 	 */
-	private final Image img = new ImageIcon(this.getClass().getResource("images/circle-cursor-icon.png")).getImage(); 
+	private final Image img = new ImageIcon(this.getClass().getResource(
+			"images/circle-cursor-icon.png")).getImage();
 
 	/**
 	 * The cursor used to work with this tool listener.
 	 * 
 	 * @see #getCursor()
 	 */
-	private Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(img, new Point(16, 16), "");
+	private Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(img,
+			new Point(16, 16), "");
 
 	/**
 	 * Reference to the <code>MapControl</code> object that uses.
@@ -73,9 +76,12 @@ public class CircleSelectionListener implements CircleListener {
 	private MapControl mapCtrl;
 
 	/**
-	 * <p>Creates a new listener for selecting circular areas.</p>
-	 *
-	 * @param mc the <code>MapControl</code> object where the measures are made 
+	 * <p>
+	 * Creates a new listener for selecting circular areas.
+	 * </p>
+	 * 
+	 * @param mc
+	 *            the <code>MapControl</code> object where the measures are made
 	 */
 	public CircleSelectionListener(MapControl mc) {
 		this.mapCtrl = mc;
@@ -83,17 +89,25 @@ public class CircleSelectionListener implements CircleListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.CircleListener#circle(com.iver.cit.gvsig.fmap.tools.Events.MeasureEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.CircleListener#circle(com.iver
+	 * .cit.gvsig.fmap.tools.Events.MeasureEvent)
 	 */
 	public void circle(MeasureEvent event) throws BehaviorException {
 		if (event.getEvent().getID() == MouseEvent.MOUSE_RELEASED) {
-			FLayer[] activeLayers = mapCtrl.getMapContext().getLayers().getActives();
-	
+			FLayer[] activeLayers = mapCtrl.getMapContext().getLayers()
+					.getActives();
+
 			FLayer layer;
 			FLyrVect lyrVect;
-	
-			Point2D.Double center = new Point2D.Double(event.getXs()[0].doubleValue(), event.getYs()[0].doubleValue());
-			Point2D.Double point2 = new Point2D.Double(event.getXs()[1].doubleValue(), event.getYs()[1].doubleValue());
+
+			Point2D.Double center = new Point2D.Double(
+					event.getXs()[0].doubleValue(),
+					event.getYs()[0].doubleValue());
+			Point2D.Double point2 = new Point2D.Double(
+					event.getXs()[1].doubleValue(),
+					event.getYs()[1].doubleValue());
 
 			double radius = center.distance(point2);
 			IGeometry geom = ShapeFactory.createCircle(center, radius);
@@ -101,23 +115,36 @@ public class CircleSelectionListener implements CircleListener {
 			double flatness;
 
 			// Creates the geometry
-			// If the scale is < 500 -> approximates the circle with a polyline with more points, as many as
+			// If the scale is < 500 -> approximates the circle with a polyline
+			// with more points, as many as
 			// smaller would be the scale
 			if (mapCtrl.getMapContext().getScaleView() < 500) {
 				GeneralPathX gP = new GeneralPathX();
-				flatness = mapCtrl.getMapContext().getScaleView() * FConverter.FLATNESS / (500 * 2); // The number 2 forces to create the double of points 
+				flatness = mapCtrl.getMapContext().getScaleView()
+						* FConverter.FLATNESS / (500 * 2); // The number 2
+															// forces to create
+															// the double of
+															// points
 				gP.append(geom.getPathIterator(null, flatness), true);
 				geom = ShapeFactory.createPolygon2D(gP);
-			}
-			else {
+			} else {
 				// Bigger scale -> Smaller flatness
 				GeneralPathX gP = new GeneralPathX();
-				flatness = FConverter.FLATNESS / (mapCtrl.getMapContext().getScaleView() * 2); // *2 to reduce the number of lines of the polygon
+				flatness = FConverter.FLATNESS
+						/ (mapCtrl.getMapContext().getScaleView() * 2); // *2 to
+																		// reduce
+																		// the
+																		// number
+																		// of
+																		// lines
+																		// of
+																		// the
+																		// polygon
 				gP.append(geom.getPathIterator(null, flatness), true);
 				geom = ShapeFactory.createPolygon2D(gP);
 			}
 
-	        FBitSet newBitSet, oldBitSet;
+			FBitSet newBitSet, oldBitSet;
 
 			for (int i = 0; i < activeLayers.length; i++) {
 				layer = activeLayers[i];
@@ -126,18 +153,27 @@ public class CircleSelectionListener implements CircleListener {
 					lyrVect = (FLyrVect) layer;
 
 					try {
-						oldBitSet = lyrVect.getSource().getRecordset().getSelection();
+						oldBitSet = lyrVect.getSource().getRecordset()
+								.getSelection();
 
-						newBitSet = lyrVect.queryByShape(geom, DefaultStrategy.INTERSECTS);
+						newBitSet = lyrVect.queryByShape(geom,
+								DefaultStrategy.INTERSECTS);
 
-		                if (event.getEvent().isControlDown())
-		                    newBitSet.xor(oldBitSet);
+						if (event.getEvent().isControlDown())
+							newBitSet.xor(oldBitSet);
 
-		                lyrVect.getRecordset().setSelection(newBitSet);
+						lyrVect.getRecordset().setSelection(newBitSet);
 					} catch (com.vividsolutions.jts.geom.TopologyException topEx) {
-						NotificationManager.showMessageError(PluginServices.getText(null, "Failed_selecting_geometries_by_circle_topology_exception_explanation"), topEx);
+						NotificationManager
+								.showMessageError(
+										PluginServices
+												.getText(null,
+														"Failed_selecting_geometries_by_circle_topology_exception_explanation"),
+										topEx);
 					} catch (Exception ex) {
-						NotificationManager.showMessageError(PluginServices.getText(null, "Failed_selecting_geometries"), ex);
+						NotificationManager.showMessageError(PluginServices
+								.getText(null, "Failed_selecting_geometries"),
+								ex);
 					}
 				}
 			}
@@ -146,6 +182,7 @@ public class CircleSelectionListener implements CircleListener {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#getCursor()
 	 */
 	public Cursor getCursor() {
@@ -154,6 +191,7 @@ public class CircleSelectionListener implements CircleListener {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#cancelDrawing()
 	 */
 	public boolean cancelDrawing() {

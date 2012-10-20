@@ -1,6 +1,5 @@
 package com.vividsolutions.jts.operation;
 
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -11,11 +10,10 @@ public class JtsTests {
 	public static Test suite() {
 		TestSuite suite = new TestSuite(
 				"Test for com.iver.cit.gvsig.fmap.topology");
-		//$JUnit-BEGIN$
+		// $JUnit-BEGIN$
 		suite.addTestSuite(SnappingOverlayOperationTest.class);
-		//$JUnit-END$
+		// $JUnit-END$
 		return suite;
 	}
 
 }
-

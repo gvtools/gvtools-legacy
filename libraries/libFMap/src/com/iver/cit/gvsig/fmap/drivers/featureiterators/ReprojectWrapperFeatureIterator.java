@@ -42,17 +42,17 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: ReprojectWrapperFeatureIterator.java 23921 2008-10-14 13:43:30Z vcaballero $
-* $Log$
-* Revision 1.2  2007-09-19 16:25:04  jaume
-* ReadExpansionFileException removed from this context
-*
-* Revision 1.1  2007/06/07 11:49:28  azabala
-* first version in cvs
-*
-*
-*/
+ *
+ * $Id: ReprojectWrapperFeatureIterator.java 23921 2008-10-14 13:43:30Z vcaballero $
+ * $Log$
+ * Revision 1.2  2007-09-19 16:25:04  jaume
+ * ReadExpansionFileException removed from this context
+ *
+ * Revision 1.1  2007/06/07 11:49:28  azabala
+ * first version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.drivers.featureiterators;
 
 import org.cresques.cts.ProjectionUtils;
@@ -65,13 +65,12 @@ import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
 
 /**
- * FeatureIterator for drivers that can not reproject
- * features
+ * FeatureIterator for drivers that can not reproject features
+ * 
  * @author azabala
- *
+ * 
  */
-public class ReprojectWrapperFeatureIterator implements IFeatureIterator{
-
+public class ReprojectWrapperFeatureIterator implements IFeatureIterator {
 
 	IFeatureIterator featureIterator;
 	protected CoordinateReferenceSystem sourceCrs;
@@ -100,23 +99,23 @@ public class ReprojectWrapperFeatureIterator implements IFeatureIterator{
 	}
 
 	/**
-	 *
-	 * Checks if must reproject the given geom
-	 * and reprojects it if true
+	 * 
+	 * Checks if must reproject the given geom and reprojects it if true
+	 * 
 	 * @param geom
-	 *
-	 * TODO Esto es igual que DefaultFeatureIterator. Esta clase
-	 * no extiende de la anterior porque esta clase no quiere saber nada
-	 * del origen de datos (ReadableVectorial). Refactorizar y crear una
-	 * clase abstracta intermedia entre ambas
+	 * 
+	 *            TODO Esto es igual que DefaultFeatureIterator. Esta clase no
+	 *            extiende de la anterior porque esta clase no quiere saber nada
+	 *            del origen de datos (ReadableVectorial). Refactorizar y crear
+	 *            una clase abstracta intermedia entre ambas
 	 */
-	protected void reprojectIfNecessary(IGeometry geom){
+	protected void reprojectIfNecessary(IGeometry geom) {
 		if (this.targetCrs != null && this.sourceCrs != null
-				&& !this.targetCrs.getName().equals(this.sourceCrs.getName())){
-			MathTransform trans = ProjectionUtils.getCrsTransform(sourceCrs,  targetCrs);
+				&& !this.targetCrs.getName().equals(this.sourceCrs.getName())) {
+			MathTransform trans = ProjectionUtils.getCrsTransform(sourceCrs,
+					targetCrs);
 			geom.reProject(trans);
 		}
 	}
 
 }
-

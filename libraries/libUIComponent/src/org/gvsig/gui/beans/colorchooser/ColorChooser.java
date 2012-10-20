@@ -30,8 +30,9 @@ import javax.swing.JPanel;
 import org.gvsig.gui.beans.checkslidertext.CheckColorSliderTextContainer;
 import org.gvsig.gui.beans.doubleslider.DoubleSliderEvent;
 import org.gvsig.gui.beans.doubleslider.DoubleSliderListener;
+
 /**
- *
+ * 
  * @version 03/08/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
@@ -40,9 +41,9 @@ public class ColorChooser extends JPanel implements DoubleSliderListener {
 
 	private ArrayList<ColorChooserListener> actionCommandListeners = new ArrayList<ColorChooserListener>();
 
-	private CheckColorSliderTextContainer sliderRed   = null;
+	private CheckColorSliderTextContainer sliderRed = null;
 	private CheckColorSliderTextContainer sliderGreen = null;
-	private CheckColorSliderTextContainer sliderBlue  = null;
+	private CheckColorSliderTextContainer sliderBlue = null;
 	private CheckColorSliderTextContainer sliderAlpha = null;
 
 	public ColorChooser() {
@@ -99,19 +100,38 @@ public class ColorChooser extends JPanel implements DoubleSliderListener {
 	}
 
 	private void updateColors() {
-		sliderRed.setColor1(new Color(0, sliderGreen.getValue(), sliderBlue.getValue(), sliderAlpha.getValue()), false);
-		sliderRed.setColor2(new Color(255, sliderGreen.getValue(), sliderBlue.getValue(), sliderAlpha.getValue()), true);
-		sliderGreen.setColor1(new Color(sliderRed.getValue(), 0, sliderBlue.getValue(), sliderAlpha.getValue()), false);
-		sliderGreen.setColor2(new Color(sliderRed.getValue(), 255, sliderBlue.getValue(), sliderAlpha.getValue()), true);
-		sliderBlue.setColor1(new Color(sliderRed.getValue(), sliderGreen.getValue(), 0, sliderAlpha.getValue()), false);
-		sliderBlue.setColor2(new Color(sliderRed.getValue(), sliderGreen.getValue(), 255, sliderAlpha.getValue()), true);
-		sliderAlpha.setColor1(new Color(sliderRed.getValue(), sliderGreen.getValue(), sliderBlue.getValue(), 0), false);
-		sliderAlpha.setColor2(new Color(sliderRed.getValue(), sliderGreen.getValue(), sliderBlue.getValue(), 255), true);
+		sliderRed.setColor1(
+				new Color(0, sliderGreen.getValue(), sliderBlue.getValue(),
+						sliderAlpha.getValue()), false);
+		sliderRed.setColor2(
+				new Color(255, sliderGreen.getValue(), sliderBlue.getValue(),
+						sliderAlpha.getValue()), true);
+		sliderGreen.setColor1(
+				new Color(sliderRed.getValue(), 0, sliderBlue.getValue(),
+						sliderAlpha.getValue()), false);
+		sliderGreen.setColor2(
+				new Color(sliderRed.getValue(), 255, sliderBlue.getValue(),
+						sliderAlpha.getValue()), true);
+		sliderBlue.setColor1(
+				new Color(sliderRed.getValue(), sliderGreen.getValue(), 0,
+						sliderAlpha.getValue()), false);
+		sliderBlue.setColor2(
+				new Color(sliderRed.getValue(), sliderGreen.getValue(), 255,
+						sliderAlpha.getValue()), true);
+		sliderAlpha.setColor1(
+				new Color(sliderRed.getValue(), sliderGreen.getValue(),
+						sliderBlue.getValue(), 0), false);
+		sliderAlpha.setColor2(
+				new Color(sliderRed.getValue(), sliderGreen.getValue(),
+						sliderBlue.getValue(), 255), true);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.doubleslider.DoubleSliderListener#actionValueDragged(org.gvsig.gui.beans.doubleslider.DoubleSliderEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.doubleslider.DoubleSliderListener#actionValueDragged
+	 * (org.gvsig.gui.beans.doubleslider.DoubleSliderEvent)
 	 */
 	public void actionValueDragged(DoubleSliderEvent e) {
 		updateColors();
@@ -119,7 +139,8 @@ public class ColorChooser extends JPanel implements DoubleSliderListener {
 	}
 
 	public Color getColor() {
-		return new Color(sliderRed.getValue(), sliderGreen.getValue(), sliderBlue.getValue(), sliderAlpha.getValue());
+		return new Color(sliderRed.getValue(), sliderGreen.getValue(),
+				sliderBlue.getValue(), sliderAlpha.getValue());
 	}
 
 	public void setColor(Color value) {
@@ -132,6 +153,7 @@ public class ColorChooser extends JPanel implements DoubleSliderListener {
 
 	/**
 	 * Añadir un listener a la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void addValueChangedListener(ColorChooserListener listener) {
@@ -139,7 +161,9 @@ public class ColorChooser extends JPanel implements DoubleSliderListener {
 			actionCommandListeners.add(listener);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.JComponent#setEnabled(boolean)
 	 */
 	public void setEnabled(boolean enabled) {
@@ -152,18 +176,19 @@ public class ColorChooser extends JPanel implements DoubleSliderListener {
 
 	/**
 	 * Borrar un listener de la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void removeValueChangedListener(ColorChooserListener listener) {
 		actionCommandListeners.remove(listener);
 	}
 
-
 	/**
 	 * Dispara el evento del cambio del control
 	 */
 	protected void callChangeValue() {
-		Iterator<ColorChooserListener> acIterator = actionCommandListeners.iterator();
+		Iterator<ColorChooserListener> acIterator = actionCommandListeners
+				.iterator();
 		while (acIterator.hasNext()) {
 			ColorChooserListener listener = acIterator.next();
 			listener.actionValueChanged(new EventObject(this));
@@ -174,7 +199,8 @@ public class ColorChooser extends JPanel implements DoubleSliderListener {
 	 * Dispara el evento del cambio del control
 	 */
 	protected void callDraggedValue() {
-		Iterator<ColorChooserListener> acIterator = actionCommandListeners.iterator();
+		Iterator<ColorChooserListener> acIterator = actionCommandListeners
+				.iterator();
 		while (acIterator.hasNext()) {
 			ColorChooserListener listener = acIterator.next();
 			listener.actionValueDragged(new EventObject(this));

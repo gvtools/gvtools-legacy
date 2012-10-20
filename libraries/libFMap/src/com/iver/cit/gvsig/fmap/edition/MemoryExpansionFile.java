@@ -49,50 +49,45 @@ import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileWriteException;
 import com.iver.cit.gvsig.exceptions.expansionfile.OpenExpansionFileException;
 import com.iver.cit.gvsig.fmap.core.IRow;
 
-
 /**
  * Implementación en memoria de ExpansionFile.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class MemoryExpansionFile implements ExpansionFile {
 	ArrayList rows = new ArrayList();
 	EditableAdapter edAdapter;
 
-	private MemoryExpansionFile() {
-		// private makes sure nobody calls this
-	}
-	
-	private class InternalRow
-	{
+	private class InternalRow {
 		private IRowEdited row;
 		private int indexInternalFields;
-		public InternalRow(IRowEdited row, int indexInternalFields)
-		{
+
+		public InternalRow(IRowEdited row, int indexInternalFields) {
 			this.row = row;
 			this.indexInternalFields = indexInternalFields;
 		}
+
 		public int getIndexInternalFields() {
 			return indexInternalFields;
 		}
+
 		public IRowEdited getRow() {
 			return row;
 		}
 	}
 
-	public MemoryExpansionFile(EditableAdapter edAdapter)
-	{
+	public MemoryExpansionFile(EditableAdapter edAdapter) {
 		this.edAdapter = edAdapter;
 	}
 
-	//BitSet invalidRows = new BitSet();
+	// BitSet invalidRows = new BitSet();
 	/**
 	 * @see com.iver.cit.gvsig.fmap.edition.ExpansionFile#addRow(IRow, int)
 	 */
-	public int addRow(IRow row, int status, int indexInternalFields) throws ExpansionFileWriteException {
+	public int addRow(IRow row, int status, int indexInternalFields)
+			throws ExpansionFileWriteException {
 		int newIndex = rows.size();
-		IRowEdited edRow = new DefaultRowEdited(row,
-				status, newIndex);
+		IRowEdited edRow = new DefaultRowEdited(row, status, newIndex);
 		InternalRow iRow = new InternalRow(edRow, indexInternalFields);
 		rows.add(iRow);
 
@@ -100,52 +95,51 @@ public class MemoryExpansionFile implements ExpansionFile {
 	}
 
 	/**
-	 * @see com.iver.cit.gvsig.fmap.edition.ExpansionFile#modifyRow(int,
-	 * 		IRow)
+	 * @see com.iver.cit.gvsig.fmap.edition.ExpansionFile#modifyRow(int, IRow)
 	 */
-//	public int modifyRow(int index, IRow row, int indexInternalFields) throws IOException {
-//		/*if (invalidRows.get(index)) {
-//			throw new RuntimeException(
-//				"Se ha intentado modificar una geometría que ha sido borrada anteriormente");
-//		}
-//*/
-//		//invalidateRow(index);
-//		IRowEdited edRow = new DefaultRowEdited(row,
-//				IRowEdited.STATUS_MODIFIED, index);
-//
-//		InternalRow iRow = new InternalRow(edRow, indexInternalFields);
-//		rows.add(iRow);
-//
-//
-//		return rows.size() - 1;
-//	}
+	// public int modifyRow(int index, IRow row, int indexInternalFields) throws
+	// IOException {
+	// /*if (invalidRows.get(index)) {
+	// throw new RuntimeException(
+	// "Se ha intentado modificar una geometría que ha sido borrada anteriormente");
+	// }
+	// */
+	// //invalidateRow(index);
+	// IRowEdited edRow = new DefaultRowEdited(row,
+	// IRowEdited.STATUS_MODIFIED, index);
+	//
+	// InternalRow iRow = new InternalRow(edRow, indexInternalFields);
+	// rows.add(iRow);
+	//
+	//
+	// return rows.size() - 1;
+	// }
 
-	public int modifyRow(int index, IRow row, int indexInternalFields) throws ExpansionFileWriteException {
-		  /*if (invalidRows.get(index)) {
-		   throw new RuntimeException(
-		    "Se ha intentado modificar una geometría que ha sido borrada anteriormente");
-		  }
-		*/
-		  //invalidateRow(index);
-		  InternalRow iOldRow = (InternalRow) rows.get(index);
-		  IRowEdited edRow = new DefaultRowEdited(row,
-		    iOldRow.getRow().getStatus(), index);
+	public int modifyRow(int index, IRow row, int indexInternalFields)
+			throws ExpansionFileWriteException {
+		/*
+		 * if (invalidRows.get(index)) { throw new RuntimeException(
+		 * "Se ha intentado modificar una geometría que ha sido borrada anteriormente"
+		 * ); }
+		 */
+		// invalidateRow(index);
+		InternalRow iOldRow = (InternalRow) rows.get(index);
+		IRowEdited edRow = new DefaultRowEdited(row, iOldRow.getRow()
+				.getStatus(), index);
 
-		  InternalRow iRow = new InternalRow(edRow, indexInternalFields);
-		  rows.add(iRow);
+		InternalRow iRow = new InternalRow(edRow, indexInternalFields);
+		rows.add(iRow);
 
-
-		  return rows.size() - 1;
-		 }
+		return rows.size() - 1;
+	}
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.edition.ExpansionFile#getRow(int)
 	 */
 	public IRowEdited getRow(int index) throws ExpansionFileReadException {
-		/*if (invalidRows.get(index)) {
-			return null;
-		}
-*/
+		/*
+		 * if (invalidRows.get(index)) { return null; }
+		 */
 		InternalRow iRow = (InternalRow) rows.get(index);
 		int indexInternalFields = iRow.getIndexInternalFields();
 		return edAdapter.createExternalRow(iRow.getRow(), indexInternalFields);
@@ -155,48 +149,42 @@ public class MemoryExpansionFile implements ExpansionFile {
 	/**
 	 * @see com.iver.cit.gvsig.fmap.edition.ExpansionFile#invalidateRow(int)
 	 */
-	/*public void invalidateRow(int index) {
-		invalidRows.set(index, true);
-	}
-*/
+	/*
+	 * public void invalidateRow(int index) { invalidRows.set(index, true); }
+	 */
 	/**
 	 * @see com.iver.cit.gvsig.fmap.edition.ExpansionFile#compact()
 	 */
 	public void compact(HashMap relations) {
-	/*	ArrayList geoAux = new ArrayList();
-		Iterator iter = relations.keySet().iterator();
-		HashMap aux = new HashMap();
-		int n = 0;
-
-		while (iter.hasNext()) {
-			Integer virtualIndex = (Integer) iter.next();
-			Integer expansionIndex = (Integer) relations.get(virtualIndex);
-
-			if (!invalidRows.get(expansionIndex.intValue())){
-				geoAux.add(rows.get(expansionIndex.intValue()));
-				aux.put(new Integer(n), new Integer(geoAux.size()-1));
-				n++;
-			}
-		}
-
-		invalidRows.clear();
-		rows = geoAux;
-		relations.clear();
-		relations.putAll(aux);
-*/
+		/*
+		 * ArrayList geoAux = new ArrayList(); Iterator iter =
+		 * relations.keySet().iterator(); HashMap aux = new HashMap(); int n =
+		 * 0;
+		 * 
+		 * while (iter.hasNext()) { Integer virtualIndex = (Integer)
+		 * iter.next(); Integer expansionIndex = (Integer)
+		 * relations.get(virtualIndex);
+		 * 
+		 * if (!invalidRows.get(expansionIndex.intValue())){
+		 * geoAux.add(rows.get(expansionIndex.intValue())); aux.put(new
+		 * Integer(n), new Integer(geoAux.size()-1)); n++; } }
+		 * 
+		 * invalidRows.clear(); rows = geoAux; relations.clear();
+		 * relations.putAll(aux);
+		 */
 
 	}
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.edition.ExpansionFile#getRowCount()
 	 */
-	/*public int getRowCount() {
-		return rows.size() - invalidRows.cardinality();
-	}
-*/
+	/*
+	 * public int getRowCount() { return rows.size() -
+	 * invalidRows.cardinality(); }
+	 */
 	public void deleteLastRow() {
-		//invalidRows.set(rows.size()-1,false);
-		rows.remove(rows.size()-1);
+		// invalidRows.set(rows.size()-1,false);
+		rows.remove(rows.size() - 1);
 
 	}
 
@@ -214,16 +202,17 @@ public class MemoryExpansionFile implements ExpansionFile {
 		return rows.size();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.edition.ExpansionFile#validateRow(int)
 	 */
-	/*public void validateRow(int previousExpansionFileIndex) {
-		invalidRows.set(previousExpansionFileIndex, false);
-	}
-
-	public BitSet getInvalidRows() {
-		return invalidRows;
-	}*/
+	/*
+	 * public void validateRow(int previousExpansionFileIndex) {
+	 * invalidRows.set(previousExpansionFileIndex, false); }
+	 * 
+	 * public BitSet getInvalidRows() { return invalidRows; }
+	 */
 }
 
 // [eiel-gestion-excepciones]

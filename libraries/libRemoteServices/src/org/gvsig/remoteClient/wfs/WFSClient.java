@@ -77,138 +77,142 @@ import org.gvsig.remoteClient.wms.ICancellable;
  *
  */
 /**
- * Represents the class the with the necessary logic to connect to a 
- * OGCWFS and interpretate the data 
+ * Represents the class the with the necessary logic to connect to a OGCWFS and
+ * interpretate the data
+ * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class WFSClient extends RemoteClient{
+public class WFSClient extends RemoteClient {
 	private WFSProtocolHandler handler;
-		
+
 	/**
-	 * Constructor.
-	 * the parameter host, indicates the WFS host to connect.
-	 * @throws ConnectException,IOException 
-	 *
-	 */
-	public WFSClient(String host) throws ConnectException,IOException {
-		setHost(host);
-		
-		try {        	
-			handler = WFSProtocolHandlerFactory.negotiate(host);
-			handler.setHost(host);        
-		} catch(ConnectException conE) {
-			conE.printStackTrace();
-			throw conE; 
-		} catch(IOException ioE) {
-			ioE.printStackTrace();
-			throw ioE; 
-		} catch(Exception e) {
-			e.printStackTrace();       	
-		} 
-	}
-	
-	/**
-	 * Every OGC Web Service (OWS), including a Web Feature Service,
-	 * must have the ability to describe its capabilities by returning
-	 * service metadata in response to a GetCapabilities request.
-	 * @param status
-	 * WFS client status. Contains all the information to create
-	 * the query
-	 */
-	public void getCapabilities(WFSStatus status, boolean override, ICancellable cancel)throws WFSException {
-		handler.getCapabilities(status,override,cancel);		
-	}
-	
-	/**
-	 * The function of the DescribeFeatureType operation is to 
-	 * generate a schema description of feature types serviced 
-	 * by a WFS implementation. The schema descriptions define 
-	 * how a WFS implementation expects feature instances to 
-	 * be encoded on input (via Insert and Update requests) 
-	 * and how feature instances will be generated on output 
-	 * (in response to GetFeature and GetGmlObject requests). 
-	 * @param status
-	 * WFS client status. Contains all the information to create
-	 * the query
-	 */
-	public void describeFeatureType(WFSStatus status, boolean override, ICancellable cancel)throws WFSException {
-		handler.describeFeatureType(status,override,cancel);		
-	}
-	
-	/**
-	 * The GetFeature operation allows retrieval of features from a 
-	 * web feature service. A GetFeature request is processed by
-	 * a WFS and when the value of the outputFormat attribute is 
-	 * set to text/gml a GML instance document, containing the 
-	 * result set, is returned to the client.
-	 * @param status
-	 * WFS client status. Contains all the information to create
-	 * the query
-	 * @return File
-	 * GML File
-	 */
-	public File getFeature(WFSStatus status, boolean override, ICancellable cancel) throws WFSException{
-		return handler.getFeature(status,override,cancel);
-	}
-	
-	/**
-	 * The Transaction operation is used to describe data transformation 
-	 * operations that are to be applied to web accessible feature 
-	 * instances. A web feature service may process a Transaction 
-	 * operation directly or possibly translate it into the language 
-	 * of a target datastore to which it is connected and then have the
-	 * datastore execute the transaction. When the transaction has been 
-	 * completed, a web feature service will generate an XML response 
-	 * document indicating the completion status of the transaction.
-	 * @param status
-	 * WFS client status. Contains all the information to create
-	 * the query
-	 */
-	public void transaction(WFSStatus status, boolean override, ICancellable cancel) throws WFSException{
-		handler.transaction(status,override,cancel);
-	}
-	
-	/**
-	 * Web connections are inherently stateless. As a consequence 
-	 * of this, the semantics of serializable transactions are not 
-	 * preserved. To understand the issue, consider an update operation.
-	 * The client fetches a feature instance. The feature is then 
-	 * modified on the client side, and submitted back to the database 
-	 * via a Transaction request for update. Serializability is lost 
-	 * since there is nothing to guarantee that while the feature was 
-	 * being modified on the client side, another client did not come 
-	 * along and update that same feature in the database.
-	 * One way to ensure serializability is to require that access to
-	 * data be done in a mutually exclusive manner; that is while one 
-	 * transaction accesses a data item, no other transaction can modify 
-	 * the same data item. This can be accomplished by using locks that 
-	 * control access to the data.
-	 * The purpose of the LockFeature operation is to expose a long 
-	 * term feature locking mechanism to ensure consistency. The lock
-	 * is considered long term because network latency would make 
-	 * feature locks last relatively longer than native commercial 
-	 * database locks.
-	 * The LockFeature operation is optional and does not need to be 
-	 * implemented for a WFS implementation to conform to this 
-	 * specification. If a WFS implements the LockFeature operation, 
-	 * this fact must be advertised in the capabilities document
-	 * @param status
-	 */
-	public void lockFeature(WFSStatus status, boolean override, ICancellable cancel)throws WFSException {
-		handler.lockFeature(status,override,cancel);
-	}
-	
-	
-	/**
-	 * <p>Checks the connection to de remote WFS and requests its 
-	 * capabilities.</p>
+	 * Constructor. the parameter host, indicates the WFS host to connect.
+	 * 
+	 * @throws ConnectException
+	 *             ,IOException
 	 * 
 	 */
-	public boolean connect(boolean override,ICancellable cancel) 
-	{
+	public WFSClient(String host) throws ConnectException, IOException {
+		setHost(host);
+
+		try {
+			handler = WFSProtocolHandlerFactory.negotiate(host);
+			handler.setHost(host);
+		} catch (ConnectException conE) {
+			conE.printStackTrace();
+			throw conE;
+		} catch (IOException ioE) {
+			ioE.printStackTrace();
+			throw ioE;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Every OGC Web Service (OWS), including a Web Feature Service, must have
+	 * the ability to describe its capabilities by returning service metadata in
+	 * response to a GetCapabilities request.
+	 * 
+	 * @param status
+	 *            WFS client status. Contains all the information to create the
+	 *            query
+	 */
+	public void getCapabilities(WFSStatus status, boolean override,
+			ICancellable cancel) throws WFSException {
+		handler.getCapabilities(status, override, cancel);
+	}
+
+	/**
+	 * The function of the DescribeFeatureType operation is to generate a schema
+	 * description of feature types serviced by a WFS implementation. The schema
+	 * descriptions define how a WFS implementation expects feature instances to
+	 * be encoded on input (via Insert and Update requests) and how feature
+	 * instances will be generated on output (in response to GetFeature and
+	 * GetGmlObject requests).
+	 * 
+	 * @param status
+	 *            WFS client status. Contains all the information to create the
+	 *            query
+	 */
+	public void describeFeatureType(WFSStatus status, boolean override,
+			ICancellable cancel) throws WFSException {
+		handler.describeFeatureType(status, override, cancel);
+	}
+
+	/**
+	 * The GetFeature operation allows retrieval of features from a web feature
+	 * service. A GetFeature request is processed by a WFS and when the value of
+	 * the outputFormat attribute is set to text/gml a GML instance document,
+	 * containing the result set, is returned to the client.
+	 * 
+	 * @param status
+	 *            WFS client status. Contains all the information to create the
+	 *            query
+	 * @return File GML File
+	 */
+	public File getFeature(WFSStatus status, boolean override,
+			ICancellable cancel) throws WFSException {
+		return handler.getFeature(status, override, cancel);
+	}
+
+	/**
+	 * The Transaction operation is used to describe data transformation
+	 * operations that are to be applied to web accessible feature instances. A
+	 * web feature service may process a Transaction operation directly or
+	 * possibly translate it into the language of a target datastore to which it
+	 * is connected and then have the datastore execute the transaction. When
+	 * the transaction has been completed, a web feature service will generate
+	 * an XML response document indicating the completion status of the
+	 * transaction.
+	 * 
+	 * @param status
+	 *            WFS client status. Contains all the information to create the
+	 *            query
+	 */
+	public void transaction(WFSStatus status, boolean override,
+			ICancellable cancel) throws WFSException {
+		handler.transaction(status, override, cancel);
+	}
+
+	/**
+	 * Web connections are inherently stateless. As a consequence of this, the
+	 * semantics of serializable transactions are not preserved. To understand
+	 * the issue, consider an update operation. The client fetches a feature
+	 * instance. The feature is then modified on the client side, and submitted
+	 * back to the database via a Transaction request for update.
+	 * Serializability is lost since there is nothing to guarantee that while
+	 * the feature was being modified on the client side, another client did not
+	 * come along and update that same feature in the database. One way to
+	 * ensure serializability is to require that access to data be done in a
+	 * mutually exclusive manner; that is while one transaction accesses a data
+	 * item, no other transaction can modify the same data item. This can be
+	 * accomplished by using locks that control access to the data. The purpose
+	 * of the LockFeature operation is to expose a long term feature locking
+	 * mechanism to ensure consistency. The lock is considered long term because
+	 * network latency would make feature locks last relatively longer than
+	 * native commercial database locks. The LockFeature operation is optional
+	 * and does not need to be implemented for a WFS implementation to conform
+	 * to this specification. If a WFS implements the LockFeature operation,
+	 * this fact must be advertised in the capabilities document
+	 * 
+	 * @param status
+	 */
+	public void lockFeature(WFSStatus status, boolean override,
+			ICancellable cancel) throws WFSException {
+		handler.lockFeature(status, override, cancel);
+	}
+
+	/**
+	 * <p>
+	 * Checks the connection to de remote WFS and requests its capabilities.
+	 * </p>
+	 * 
+	 */
+	public boolean connect(boolean override, ICancellable cancel) {
 		try {
 			if (handler == null) {
-				if (getHost().trim().length() > 0) {                   
+				if (getHost().trim().length() > 0) {
 					handler = WFSProtocolHandlerFactory.negotiate(getHost());
 					handler.setHost(getHost());
 				} else {
@@ -216,53 +220,56 @@ public class WFSClient extends RemoteClient{
 					return false;
 				}
 			}
-			getCapabilities(null,override,cancel);			
-			
+			getCapabilities(null, override, cancel);
+
 			return true;
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
-	 * @see org.gvsig.remoteClient.RemoteClient#connect(org.gvsig.remoteClient.wms.ICancellable)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.RemoteClient#connect(org.gvsig.remoteClient.wms
+	 * .ICancellable)
 	 */
 	public boolean connect(ICancellable cancel) {
 		return connect(false, cancel);
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.remoteClient.RemoteClient#close()
 	 */
 	public void close() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	 public String getVersion()
-	 {
-		 return handler.getVersion();
-	 }	 
-	 
-	 /**
-     * Gets the Service information included in the Capabilities
-     */
-    
-    public WFSServiceInformation getServiceInformation(){
-        return handler.getServiceInformation();  
-    }
-    
-    /**
-     * Returns the features list
-     * @return
-     */
-    public Hashtable getFeatures()
-    {
-        return handler.getFeatures();  
-    }	
-	
+
+	public String getVersion() {
+		return handler.getVersion();
+	}
+
+	/**
+	 * Gets the Service information included in the Capabilities
+	 */
+
+	public WFSServiceInformation getServiceInformation() {
+		return handler.getServiceInformation();
+	}
+
+	/**
+	 * Returns the features list
+	 * 
+	 * @return
+	 */
+	public Hashtable getFeatures() {
+		return handler.getFeatures();
+	}
+
 }

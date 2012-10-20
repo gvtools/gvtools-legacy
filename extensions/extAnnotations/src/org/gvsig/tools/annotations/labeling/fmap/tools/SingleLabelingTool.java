@@ -95,15 +95,16 @@ import com.iver.cit.gvsig.fmap.tools.Listeners.PointListener;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 
 /**
- *
+ * 
  * SingleLabelingTool.java
- *
- *
+ * 
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Mar 3, 2008
  * @author Cesar Martinez Izquierdo <cesar.martinez@iver.es> Oct 2008
  */
-public class SingleLabelingTool implements PointListener, PropertyChangeListener {
-	private MapControl mc ;
+public class SingleLabelingTool implements PointListener,
+		PropertyChangeListener {
+	private MapControl mc;
 	private Annotation_Layer targetLayer = null;
 	private SingleLabelingToolUI ui = null;
 	public static String TOOLNAME = "single-labeling";
@@ -115,16 +116,19 @@ public class SingleLabelingTool implements PointListener, PropertyChangeListener
 	public SingleLabelingTool(MapControl mc, SingleLabelingToolUI toolUI) {
 		this.mc = mc;
 		initLayerListener();
-		if (this.ui==null) {
+		if (this.ui == null) {
 			this.ui = toolUI;
-			toolUI.addPropertyChangeListener(SingleLabelingToolUI.TOOL_CLOSED_PROP, this);
-			toolUI.addPropertyChangeListener(SingleLabelingToolUI.TARGET_LAYER_CHANGED_PROP, this);
+			toolUI.addPropertyChangeListener(
+					SingleLabelingToolUI.TOOL_CLOSED_PROP, this);
+			toolUI.addPropertyChangeListener(
+					SingleLabelingToolUI.TARGET_LAYER_CHANGED_PROP, this);
 		}
 	}
 
 	private void initLayerListener() {
 		layerListener = new LayerColListener();
-		mc.getMapContext().getLayers().addLayerCollectionListener(layerListener);
+		mc.getMapContext().getLayers()
+				.addLayerCollectionListener(layerListener);
 	}
 
 	public Annotation_Layer getTargetLayer() {
@@ -136,61 +140,73 @@ public class SingleLabelingTool implements PointListener, PropertyChangeListener
 	}
 
 	public Cursor getCursor() {
-		final ImageIcon img = PluginServices.getIconTheme().get("single-labeling-tool");
-		Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(img.getImage(),
-				new Point(img.getIconWidth()-4, img.getIconHeight()-1), "");
+		final ImageIcon img = PluginServices.getIconTheme().get(
+				"single-labeling-tool");
+		Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(
+				img.getImage(),
+				new Point(img.getIconWidth() - 4, img.getIconHeight() - 1), "");
 
 		return cur;
 	}
 
 	public void point(PointEvent event) throws BehaviorException {
-		if (getTargetLayer()==null) {
+		if (getTargetLayer() == null) {
 			return;
 		}
 		FLayer[] activeLayers = mc.getMapContext().getLayers().getActives();
-        if (activeLayers.length==0) {
-        	return;
-        }
+		if (activeLayers.length == 0) {
+			return;
+		}
 
-        Point2D screenPoint = event.getPoint();
-        Point2D mapPoint = mc.getViewPort().toMapPoint((int) screenPoint.getX(), (int) screenPoint.getY());
+		Point2D screenPoint = event.getPoint();
+		Point2D mapPoint = mc.getViewPort().toMapPoint(
+				(int) screenPoint.getX(), (int) screenPoint.getY());
 
-        BitSet bitset = null;
-        int i=0;
-        do { // iterate on the layers until we find a clicked feature on any of the layers
-        	if (activeLayers[i] instanceof FLyrVect) {
-        		FLyrVect layer = (FLyrVect) activeLayers[i];
-        		try {
-        			int currentTol=minTolerance;
-        			do {
-        				double tol = mc.getViewPort().toMapDistance(currentTol);
-        				bitset = layer.queryByPoint(mapPoint, tol);
-        			}
-        			while (bitset.isEmpty() && (++currentTol<=maxTolerance));
-        			if (!bitset.isEmpty()) {
-        				for (int featIndex = bitset.nextSetBit(0); featIndex != -1; featIndex = bitset.nextSetBit(featIndex + 1)) {
-        					// TODO reproyectar de coordenadas de la vista a coordenadas de la capa de anotaciones
-        					IGeometry geom = ShapeFactory.createPoint2D(mapPoint.getX(), mapPoint.getY());
-        					Object prop = layer.getProperty(ConfigLabelingExpression.PROPERTYNAME);
-        					if (prop!=null && prop instanceof String) {
-        						addToAnnotLayer(geom, getLabel(layer, (String) prop, featIndex));
-        					}
-        				}
-        			}
+		BitSet bitset = null;
+		int i = 0;
+		do { // iterate on the layers until we find a clicked feature on any of
+				// the layers
+			if (activeLayers[i] instanceof FLyrVect) {
+				FLyrVect layer = (FLyrVect) activeLayers[i];
+				try {
+					int currentTol = minTolerance;
+					do {
+						double tol = mc.getViewPort().toMapDistance(currentTol);
+						bitset = layer.queryByPoint(mapPoint, tol);
+					} while (bitset.isEmpty() && (++currentTol <= maxTolerance));
+					if (!bitset.isEmpty()) {
+						for (int featIndex = bitset.nextSetBit(0); featIndex != -1; featIndex = bitset
+								.nextSetBit(featIndex + 1)) {
+							// TODO reproyectar de coordenadas de la vista a
+							// coordenadas de la capa de anotaciones
+							IGeometry geom = ShapeFactory.createPoint2D(
+									mapPoint.getX(), mapPoint.getY());
+							Object prop = layer
+									.getProperty(ConfigLabelingExpression.PROPERTYNAME);
+							if (prop != null && prop instanceof String) {
+								addToAnnotLayer(
+										geom,
+										getLabel(layer, (String) prop,
+												featIndex));
+							}
+						}
+					}
 
+				} catch (ReadDriverException e) {
+					PluginServices.getLogger().error(e.getMessage(), e);
+				} catch (VisitorException e) {
+					PluginServices.getLogger().error(e.getMessage(), e);
+				}
+			}
+			i++;
+		} while (i < activeLayers.length
+				&& (bitset == null || bitset.isEmpty())); // iterate on the
+															// layers until we
+															// find a clicked
+															// feature on any of
+															// the layers
 
-        		} catch (ReadDriverException e) {
-        			PluginServices.getLogger().error(e.getMessage(), e);
-        		} catch (VisitorException e) {
-        			PluginServices.getLogger().error(e.getMessage(), e);
-        		}
-        	}
-        	i++;
-        }
-        while(i<activeLayers.length
-        		&& (bitset==null || bitset.isEmpty())); // iterate on the layers until we find a clicked feature on any of the layers
-
-        ui.activateWindow();
+		ui.activateWindow();
 	}
 
 	private String getLabel(FLyrVect layer, String strExpr, int featIndex) {
@@ -200,32 +216,30 @@ public class SingleLabelingTool implements PointListener, PropertyChangeListener
 
 			String[] fieldNames = layer.getRecordset().getFieldNames();
 			Hashtable<String, Value> symbol_table = new Hashtable<String, Value>();
-			for (int i=0; i<fieldNames.length; i++) {
+			for (int i = 0; i < fieldNames.length; i++) {
 				symbol_table.put(fieldNames[i], values[i]);
 			}
 			LabelExpressionParser p = new LabelExpressionParser(
-					new StringReader(strExpr),symbol_table);
+					new StringReader(strExpr), symbol_table);
 			p.LabelExpression();
 			Expression expr = (Expression) p.getStack().pop();
 			Object labelContents;
 
-				labelContents = expr.evaluate();
-				String[] texts;
-				if (String[].class.equals(labelContents.getClass())) {
-					texts = (String[]) labelContents;
-				} else {
-					texts = new String[] { labelContents.toString() };
-				}
-				StringBuilder builder = new StringBuilder();
-				for (int i=0; i<texts.length; i++) {
-					builder.append(texts[i]);
-				}
-				return builder.toString();
-		}
-		catch (ExpressionException e) {
+			labelContents = expr.evaluate();
+			String[] texts;
+			if (String[].class.equals(labelContents.getClass())) {
+				texts = (String[]) labelContents;
+			} else {
+				texts = new String[] { labelContents.toString() };
+			}
+			StringBuilder builder = new StringBuilder();
+			for (int i = 0; i < texts.length; i++) {
+				builder.append(texts[i]);
+			}
+			return builder.toString();
+		} catch (ExpressionException e) {
 			PluginServices.getLogger().error(e.getMessage(), e);
-		}
-		catch (ReadDriverException e) {
+		} catch (ReadDriverException e) {
 			PluginServices.getLogger().error(e.getMessage(), e);
 		} catch (ParseException e) {
 			PluginServices.getLogger().error(e.getMessage(), e);
@@ -239,24 +253,24 @@ public class SingleLabelingTool implements PointListener, PropertyChangeListener
 			VectorialEditableAdapter vea = startEdition(target);
 			String[] fields = target.getRecordset().getFieldNames();
 			Value[] values = new Value[fields.length];
-			for (int i=0; i<fields.length; i++) {
+			for (int i = 0; i < fields.length; i++) {
 				if (fields[i].equalsIgnoreCase("Text")) {
 					values[i] = ValueFactory.createValue(labelText);
-				}
-				else if (fields[i].equalsIgnoreCase("TypeFont")) {
-					values[i] = ValueFactory.createValue(ui.getTextPropertiesPanel().getFontType());
-				}
-				else if (fields[i].equalsIgnoreCase("StyleFont")) {
-					values[i] = ValueFactory.createValue(ui.getTextPropertiesPanel().getFontStyle());
-				}
-				else if (fields[i].equalsIgnoreCase("Color")) {
-					values[i] = ValueFactory.createValue(ui.getTextPropertiesPanel().getColor().getRGB());
-				}
-				else if (fields[i].equalsIgnoreCase("Height")) {
-					values[i] = ValueFactory.createValue(ui.getTextPropertiesPanel().getTextHeight());
-				}
-				else if (fields[i].equalsIgnoreCase("Rotate")) {
-					values[i] = ValueFactory.createValue(ui.getTextPropertiesPanel().getRotation());
+				} else if (fields[i].equalsIgnoreCase("TypeFont")) {
+					values[i] = ValueFactory.createValue(ui
+							.getTextPropertiesPanel().getFontType());
+				} else if (fields[i].equalsIgnoreCase("StyleFont")) {
+					values[i] = ValueFactory.createValue(ui
+							.getTextPropertiesPanel().getFontStyle());
+				} else if (fields[i].equalsIgnoreCase("Color")) {
+					values[i] = ValueFactory.createValue(ui
+							.getTextPropertiesPanel().getColor().getRGB());
+				} else if (fields[i].equalsIgnoreCase("Height")) {
+					values[i] = ValueFactory.createValue(ui
+							.getTextPropertiesPanel().getTextHeight());
+				} else if (fields[i].equalsIgnoreCase("Rotate")) {
+					values[i] = ValueFactory.createValue(ui
+							.getTextPropertiesPanel().getRotation());
 				}
 
 			}
@@ -286,9 +300,10 @@ public class SingleLabelingTool implements PointListener, PropertyChangeListener
 		return false;
 	}
 
-	protected VectorialEditableAdapter startEdition(FLyrVect lyr) throws StartEditionLayerException {
+	protected VectorialEditableAdapter startEdition(FLyrVect lyr)
+			throws StartEditionLayerException {
 		if (!lyr.isEditing()) {
-			if (drawingCache==null) {
+			if (drawingCache == null) {
 				drawingCache = new AnnotationsDrawer();
 			}
 			drawingCache.setTargetLayer(getTargetLayer());
@@ -298,15 +313,19 @@ public class SingleLabelingTool implements PointListener, PropertyChangeListener
 		}
 		if (lyr.getSource() instanceof VectorialEditableAdapter) {
 			return (VectorialEditableAdapter) lyr.getSource();
-		}
-		else throw new StartEditionLayerException("Layer source is not VectorialEditableAdapter", new RuntimeException());
+		} else
+			throw new StartEditionLayerException(
+					"Layer source is not VectorialEditableAdapter",
+					new RuntimeException());
 	}
 
 	protected void stopEdition(FLyrVect lyr) {
-		if (lyr!=null && lyr.isEditing()) {
-			mc.getMapContext().setMapContextDrawerClass(null); // set default drawer
+		if (lyr != null && lyr.isEditing()) {
+			mc.getMapContext().setMapContextDrawerClass(null); // set default
+																// drawer
 			if (lyr.getSource() instanceof VectorialEditableAdapter) {
-				VectorialEditableAdapter vea = (VectorialEditableAdapter) lyr.getSource();
+				VectorialEditableAdapter vea = (VectorialEditableAdapter) lyr
+						.getSource();
 				ISpatialWriter writer = (ISpatialWriter) vea.getWriter();
 				ILayerDefinition lyrDef;
 				try {
@@ -327,11 +346,17 @@ public class SingleLabelingTool implements PointListener, PropertyChangeListener
 		}
 	}
 
-	protected void addFeature(VectorialEditableAdapter layer, IGeometry geom, Value[] values) throws DriverIOException, IOException, ExpansionFileWriteException, ValidateRowException, ReadDriverException {
+	protected void addFeature(VectorialEditableAdapter layer, IGeometry geom,
+			Value[] values) throws DriverIOException, IOException,
+			ExpansionFileWriteException, ValidateRowException,
+			ReadDriverException {
 		addFeature(layer, geom, values, "AddLabel");
 	}
 
-	protected void addFeature(VectorialEditableAdapter layer, IGeometry geom, Value[] values, String comment) throws DriverIOException, IOException, ExpansionFileWriteException, ValidateRowException, ReadDriverException {
+	protected void addFeature(VectorialEditableAdapter layer, IGeometry geom,
+			Value[] values, String comment) throws DriverIOException,
+			IOException, ExpansionFileWriteException, ValidateRowException,
+			ReadDriverException {
 		mc.getMapContext().beginAtomicEvent();
 		String newFID = layer.getNewFID();
 		DefaultFeature df = new DefaultFeature(geom, values, newFID);
@@ -343,32 +368,38 @@ public class SingleLabelingTool implements PointListener, PropertyChangeListener
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getSource() instanceof SingleLabelingToolUI) {
 			SingleLabelingToolUI ui = (SingleLabelingToolUI) evt.getSource();
-			if (evt.getPropertyName().equals(SingleLabelingToolUI.TOOL_CLOSED_PROP)) {
+			if (evt.getPropertyName().equals(
+					SingleLabelingToolUI.TOOL_CLOSED_PROP)) {
 				// tool windows was closed, save edits now
 				Annotation_Layer layer = getTargetLayer();
 				stopEdition(layer);
 				Object model = ui.getWindowModel();
 				if (model instanceof BaseView) {
 					BaseView view = (BaseView) model;
-					PluginServices.getMDIManager().getWindowInfo(view).setSelectedTool("zoomIn");
-					if (PluginServices.getMDIManager().getActiveWindow()==view) {
+					PluginServices.getMDIManager().getWindowInfo(view)
+							.setSelectedTool("zoomIn");
+					if (PluginServices.getMDIManager().getActiveWindow() == view) {
 						// if view is active, then setSelectedTool is not enough
 						mc.setTool("zoomIn");
-						SelectableToolBar[] toolbars = PluginServices.getMainFrame().getToolbars();
+						SelectableToolBar[] toolbars = PluginServices
+								.getMainFrame().getToolbars();
 
-						for (int i=0; i<toolbars.length; i++) {
-							if (toolbars[i].getName().equals(PluginServices.getText(this, "View_Tools"))) {
+						for (int i = 0; i < toolbars.length; i++) {
+							if (toolbars[i].getName().equals(
+									PluginServices.getText(this, "View_Tools"))) {
 								toolbars[i].setSelectedTool("ZOOM_IN");
 								break;
 							}
 						}
 					}
 				}
-			}
-			else if (evt.getPropertyName().equals(SingleLabelingToolUI.TARGET_LAYER_CHANGED_PROP)){
-				stopEdition(this.targetLayer); // stop edition just in case we were editing the old target layer
+			} else if (evt.getPropertyName().equals(
+					SingleLabelingToolUI.TARGET_LAYER_CHANGED_PROP)) {
+				stopEdition(this.targetLayer); // stop edition just in case we
+												// were editing the old target
+												// layer
 				this.targetLayer = ui.getTargetLayer();
-				if (drawingCache!=null) {
+				if (drawingCache != null) {
 					drawingCache.setTargetLayer(this.getTargetLayer());
 				}
 			}
@@ -381,7 +412,8 @@ public class SingleLabelingTool implements PointListener, PropertyChangeListener
 
 		}
 
-		public void layerAdding(LayerCollectionEvent e) throws CancelationException {
+		public void layerAdding(LayerCollectionEvent e)
+				throws CancelationException {
 			// TODO Auto-generated method stub
 
 		}
@@ -391,7 +423,8 @@ public class SingleLabelingTool implements PointListener, PropertyChangeListener
 
 		}
 
-		public void layerMoving(LayerPositionEvent e) throws CancelationException {
+		public void layerMoving(LayerPositionEvent e)
+				throws CancelationException {
 			// TODO Auto-generated method stub
 
 		}
@@ -404,12 +437,12 @@ public class SingleLabelingTool implements PointListener, PropertyChangeListener
 		public void layerRemoving(LayerCollectionEvent e)
 				throws CancelationException {
 			try {
-				if (e.getAffectedLayer()==getTargetLayer()) {
+				if (e.getAffectedLayer() == getTargetLayer()) {
 					setTargetLayer(null);
 					ui.setTargetLayer(null);
 				}
-			}
-			catch (Exception ex) { // ensure we don't disturb the removal process
+			} catch (Exception ex) { // ensure we don't disturb the removal
+										// process
 				PluginServices.getLogger().error(ex.getMessage(), ex);
 			}
 

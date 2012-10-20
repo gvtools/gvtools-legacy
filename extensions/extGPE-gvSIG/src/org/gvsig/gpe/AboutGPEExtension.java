@@ -54,18 +54,18 @@ import com.iver.cit.gvsig.gui.panels.FPanelAbout;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class AboutGPEExtension extends Extension{
+public class AboutGPEExtension extends Extension {
 
 	public void postInitialize() {
-		About about=(About)PluginServices.getExtension(About.class);
-		FPanelAbout panelAbout=about.getAboutPanel();
-		java.net.URL aboutURL = this.getClass().getResource(
-				"/about.htm");
-		panelAbout.addAboutUrl(PluginServices.getText(this,"GPE"),aboutURL);
+		About about = (About) PluginServices.getExtension(About.class);
+		FPanelAbout panelAbout = about.getAboutPanel();
+		java.net.URL aboutURL = this.getClass().getResource("/about.htm");
+		panelAbout.addAboutUrl(PluginServices.getText(this, "GPE"), aboutURL);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String actionCommand) {
@@ -75,6 +75,7 @@ public class AboutGPEExtension extends Extension{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
@@ -84,6 +85,7 @@ public class AboutGPEExtension extends Extension{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
@@ -93,6 +95,7 @@ public class AboutGPEExtension extends Extension{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {

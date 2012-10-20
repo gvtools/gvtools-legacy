@@ -98,19 +98,17 @@ import com.iver.cit.gvsig.fmap.core.symbols.IFillSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.ILineSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.MultiLayerFillSymbol;
-import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.rendering.VectorialUniqueValueLegend;
 import com.iver.utiles.StringUtilities;
 import com.iver.utiles.XMLEntity;
 
-
 /**
- *
+ * 
  * Implements a legend where the magnitudes of a specific area of the map are
  * represented by the density of the points that are distributed in the surface.
- *
- *
- * @author  jaume dominguez faus - jaume.dominguez@iver.es
+ * 
+ * 
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class DotDensityLegend extends VectorialUniqueValueLegend {
 
@@ -123,23 +121,25 @@ public class DotDensityLegend extends VectorialUniqueValueLegend {
 	@Override
 	public ISymbol getSymbolByValue(Value key) {
 		MultiLayerFillSymbol sym = (MultiLayerFillSymbol) getDefaultSymbol();
-		DotDensityFillSymbol densitySym = (DotDensityFillSymbol) sym.getLayer(DOT_DENSITY_LAYER_INDEX);
-		densitySym.setDotCount((int) (((NumericValue) key).doubleValue()/dotValue));
+		DotDensityFillSymbol densitySym = (DotDensityFillSymbol) sym
+				.getLayer(DOT_DENSITY_LAYER_INDEX);
+		densitySym
+				.setDotCount((int) (((NumericValue) key).doubleValue() / dotValue));
 		return sym;
 	}
 
 	@Override
 	public ISymbol getSymbolByFeature(IFeature feat) {
-//		return getSymbolByValue(feat.getAttribute(
-//				FLyrVect.forTestOnlyVariableUseIterators_REMOVE_THIS_FIELD
-//				? 0 :fieldId));
+		// return getSymbolByValue(feat.getAttribute(
+		// FLyrVect.forTestOnlyVariableUseIterators_REMOVE_THIS_FIELD
+		// ? 0 :fieldId));
 
 		return getSymbolByValue(feat.getAttribute(0));
 	}
 
 	/**
 	 * Establishes the value for the dot used in the dot density legend
-	 *
+	 * 
 	 * @param dotValue
 	 */
 	public void setDotValue(double dotValue) {
@@ -147,9 +147,11 @@ public class DotDensityLegend extends VectorialUniqueValueLegend {
 	}
 
 	/**
-	 * <p>Returns an XML entity with all needed information about the class to de-serialize
-	 *  and create instances of it.</p>
-	 *
+	 * <p>
+	 * Returns an XML entity with all needed information about the class to
+	 * de-serialize and create instances of it.
+	 * </p>
+	 * 
 	 * @return the XML entity of the class that persists
 	 */
 	@Override
@@ -158,46 +160,52 @@ public class DotDensityLegend extends VectorialUniqueValueLegend {
 		xml.putProperty("className", getClass().getName());
 		xml.putProperty("dotValue", dotValue);
 		xml.putProperty("fieldName", getClassifyingFieldNames());
-		xml.putProperty("dotColor",StringUtilities.color2String(getDotColor()));
-		xml.putProperty("bgColor",StringUtilities.color2String(getBGColor()));
+		xml.putProperty("dotColor", StringUtilities.color2String(getDotColor()));
+		xml.putProperty("bgColor", StringUtilities.color2String(getBGColor()));
 		xml.addChild(getDefaultSymbol().getXMLEntity());
 		return xml;
 	}
 
 	/**
-	 * <p>Sets an XML entity with all needed information about the class to de-serialize
-	 *  and create instances of it.</p>
-	 *
-	 * @param xml the XML entity of the class that persists
+	 * <p>
+	 * Sets an XML entity with all needed information about the class to
+	 * de-serialize and create instances of it.
+	 * </p>
+	 * 
+	 * @param xml
+	 *            the XML entity of the class that persists
 	 */
 	@Override
 	public void setXMLEntity(XMLEntity xml) {
 		dotValue = xml.getDoubleProperty("dotValue");
 		setClassifyingFieldNames(xml.getStringArrayProperty("fieldName"));
-		setDefaultSymbol(SymbologyFactory.createSymbolFromXML(xml.getChild(0), null));
-		if(xml.contains("dotColor"))
-			setDotColor(StringUtilities.string2Color(xml.getStringProperty("dotColor")));
-		if(xml.contains("bgColor"))
-			setBGColor(StringUtilities.string2Color(xml.getStringProperty("bgColor")));
+		setDefaultSymbol(SymbologyFactory.createSymbolFromXML(xml.getChild(0),
+				null));
+		if (xml.contains("dotColor"))
+			setDotColor(StringUtilities.string2Color(xml
+					.getStringProperty("dotColor")));
+		if (xml.contains("bgColor"))
+			setBGColor(StringUtilities.string2Color(xml
+					.getStringProperty("bgColor")));
 	}
 
 	/**
 	 * Returns the outline
-	 *
+	 * 
 	 * @return
 	 */
 	public ILineSymbol getOutline() {
 		// defined by the SimpleFillSymbol layer
 		ISymbol symbol = getDefaultSymbol();
-		if (!(symbol instanceof IFillSymbol)){
+		if (!(symbol instanceof IFillSymbol)) {
 			return null;
 		}
 		IFillSymbol fillsym = (IFillSymbol) symbol;
-		if (fillsym instanceof MultiLayerFillSymbol){
-			fillsym = (IFillSymbol) ((MultiLayerFillSymbol) fillsym).
-			getLayer(SIMPLE_FILL_LAYER_INDEX);
+		if (fillsym instanceof MultiLayerFillSymbol) {
+			fillsym = (IFillSymbol) ((MultiLayerFillSymbol) fillsym)
+					.getLayer(SIMPLE_FILL_LAYER_INDEX);
 		}
-		if (fillsym == null){
+		if (fillsym == null) {
 			return null;
 		}
 
@@ -206,30 +214,33 @@ public class DotDensityLegend extends VectorialUniqueValueLegend {
 
 	/**
 	 * Returns the color for the dot used in the dot density legend.
+	 * 
 	 * @return
 	 */
 	public Color getDotColor() {
-//		try {
-//			// defined by the DotDensitySymbol layer
-//			DotDensityFillSymbol sym = (DotDensityFillSymbol) ((MultiLayerFillSymbol) getDefaultSymbol()).
-//			getLayer(DOT_DENSITY_LAYER_INDEX);
-//			return sym.getDotColor();
-//		} catch (NullPointerException npE) {
-//			return null;
-//		}
+		// try {
+		// // defined by the DotDensitySymbol layer
+		// DotDensityFillSymbol sym = (DotDensityFillSymbol)
+		// ((MultiLayerFillSymbol) getDefaultSymbol()).
+		// getLayer(DOT_DENSITY_LAYER_INDEX);
+		// return sym.getDotColor();
+		// } catch (NullPointerException npE) {
+		// return null;
+		// }
 		return dotColor;
 	}
 
-
 	/**
 	 * Sets the color for the dot used in the dot density legend.
+	 * 
 	 * @return
 	 */
-	public void setDotColor(Color color){
+	public void setDotColor(Color color) {
 
-//		DotDensityFillSymbol sym = (DotDensityFillSymbol) ((MultiLayerFillSymbol) getDefaultSymbol()).
-//		getLayer(DOT_DENSITY_LAYER_INDEX);
-//		sym.setDotColor(color);
+		// DotDensityFillSymbol sym = (DotDensityFillSymbol)
+		// ((MultiLayerFillSymbol) getDefaultSymbol()).
+		// getLayer(DOT_DENSITY_LAYER_INDEX);
+		// sym.setDotColor(color);
 
 		this.dotColor = color;
 
@@ -237,29 +248,34 @@ public class DotDensityLegend extends VectorialUniqueValueLegend {
 
 	/**
 	 * Obtains the background color for the dot density legend
+	 * 
 	 * @return
 	 */
 	public Color getBGColor() {
-//		try {
-//			// defined by the SimpleFillSymbol layer
-//			IFillSymbol symbol = (IFillSymbol) ((MultiLayerFillSymbol) getDefaultSymbol()).
-//			getLayer(SIMPLE_FILL_LAYER_INDEX);
-//			return symbol.getFillColor();
-//		} catch (NullPointerException npE) {
-//			return null;
-//		}
+		// try {
+		// // defined by the SimpleFillSymbol layer
+		// IFillSymbol symbol = (IFillSymbol) ((MultiLayerFillSymbol)
+		// getDefaultSymbol()).
+		// getLayer(SIMPLE_FILL_LAYER_INDEX);
+		// return symbol.getFillColor();
+		// } catch (NullPointerException npE) {
+		// return null;
+		// }
 		return backgroundColor;
 	}
 
 	/**
 	 * Sets the background color for the dot density legend
+	 * 
 	 * @return
 	 */
 	public void setBGColor(Color color) {
 		this.backgroundColor = color;
 	}
+
 	/**
 	 * Returns the value for the dot that is used in the dot density legend
+	 * 
 	 * @return
 	 */
 	public double getDotValue() {
@@ -270,30 +286,32 @@ public class DotDensityLegend extends VectorialUniqueValueLegend {
 			return 0;
 		}
 	}
+
 	/**
 	 * Obtains the size of the dot that is used in the dot density legend
+	 * 
 	 * @return
 	 */
 	public double getDotSize() {
 
 		// defined by the SimpleFillSymbol layer
 		ISymbol symbol = getDefaultSymbol();
-		if (symbol == null){
+		if (symbol == null) {
 			return -1;
 		}
-		if (symbol instanceof DotDensityFillSymbol){
-			return ((DotDensityFillSymbol)symbol).getDotSize();
+		if (symbol instanceof DotDensityFillSymbol) {
+			return ((DotDensityFillSymbol) symbol).getDotSize();
 		}
-		if (!(symbol instanceof IFillSymbol)){
+		if (!(symbol instanceof IFillSymbol)) {
 			return -1;
 		}
 		IFillSymbol fillsym = (IFillSymbol) symbol;
-		if (fillsym instanceof MultiLayerFillSymbol){
-			fillsym = (DotDensityFillSymbol) ((MultiLayerFillSymbol) fillsym).
-			getLayer(DOT_DENSITY_LAYER_INDEX);
+		if (fillsym instanceof MultiLayerFillSymbol) {
+			fillsym = (DotDensityFillSymbol) ((MultiLayerFillSymbol) fillsym)
+					.getLayer(DOT_DENSITY_LAYER_INDEX);
 		}
-		if (fillsym instanceof DotDensityFillSymbol){
-			return ((DotDensityFillSymbol)fillsym).getDotSize();
+		if (fillsym instanceof DotDensityFillSymbol) {
+			return ((DotDensityFillSymbol) fillsym).getDotSize();
 		}
 		return -1;
 
@@ -304,8 +322,8 @@ public class DotDensityLegend extends VectorialUniqueValueLegend {
 	 */
 	public void setDotSize(double value) {
 
-		DotDensityFillSymbol sym = (DotDensityFillSymbol) ((MultiLayerFillSymbol) getDefaultSymbol()).
-		getLayer(DOT_DENSITY_LAYER_INDEX);
+		DotDensityFillSymbol sym = (DotDensityFillSymbol) ((MultiLayerFillSymbol) getDefaultSymbol())
+				.getLayer(DOT_DENSITY_LAYER_INDEX);
 		sym.setDotSize(value);
 
 	}

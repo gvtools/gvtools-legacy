@@ -61,23 +61,26 @@ import org.gvsig.gpe.xml.stream.XmlStreamException;
 public interface IGmlCoordinatesIterator extends ICoordinateIterator {
 
 	/**
-	 * It initializes a coordinates iterator and put the 
-	 * parsing pointer in the specified tag 
+	 * It initializes a coordinates iterator and put the parsing pointer in the
+	 * specified tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
 	 * @param lastTag
-	 * The last tag
+	 *            The last tag
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public void initialize(IXmlStreamReader parser,GPEDefaultGmlParser handler,QName lastTag) throws XmlStreamException, IOException;
-	
+	public void initialize(IXmlStreamReader parser,
+			GPEDefaultGmlParser handler, QName lastTag)
+			throws XmlStreamException, IOException;
+
 	/**
-	 * This method advances the stream reader until the last
-	 * tag of the coordinates iterator.
+	 * This method advances the stream reader until the last tag of the
+	 * coordinates iterator.
 	 */
-	public void parseAll()throws XmlStreamException;
+	public void parseAll() throws XmlStreamException;
 }

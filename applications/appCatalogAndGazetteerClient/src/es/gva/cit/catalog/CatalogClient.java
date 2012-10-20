@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.catalog;
+
 import com.iver.utiles.swing.jcomboServer.ServerData;
 
 import es.gva.cit.catalog.drivers.AbstractCatalogServiceDriver;
@@ -48,53 +48,62 @@ import es.gva.cit.catalog.drivers.ICatalogServiceDriver;
 import es.gva.cit.catalog.querys.CatalogQuery;
 
 /**
- * This class represents a catalogClient. It must be created to
- * use the catalog service
+ * This class represents a catalogClient. It must be created to use the catalog
+ * service
+ * 
  * @author Jorge Piera Llodra (piera_jor@gva.es)
  */
-public class CatalogClient extends DiscoveryServiceClient{
-	
+public class CatalogClient extends DiscoveryServiceClient {
+
 	/**
 	 * Constructor
+	 * 
 	 * @param sUri
-	 * The URI typed by the user
+	 *            The URI typed by the user
 	 * @param database
-	 * The selected database
+	 *            The selected database
 	 * @param driver
-	 * The selected catalog driver
+	 *            The selected catalog driver
 	 */
-	public CatalogClient(String sUri, String database, ICatalogServiceDriver driver) {        
-		super(sUri,driver);			
-	} 
+	public CatalogClient(String sUri, String database,
+			ICatalogServiceDriver driver) {
+		super(sUri, driver);
+	}
 
 	/**
 	 * @return Node array with the retrieved records
-	 * @param query It contains the values to do the query (title="XXX",abstract="YYY",...)
-	 * @param firstRecord Number of the first record to retrieve
+	 * @param query
+	 *            It contains the values to do the query
+	 *            (title="XXX",abstract="YYY",...)
+	 * @param firstRecord
+	 *            Number of the first record to retrieve
 	 */
-	public GetRecordsReply getRecords(CatalogQuery query, int firstRecord) {        
-		return ((ICatalogServiceDriver)getDriver()).getRecords(getUri(),query,firstRecord);
-	} 
+	public GetRecordsReply getRecords(CatalogQuery query, int firstRecord) {
+		return ((ICatalogServiceDriver) getDriver()).getRecords(getUri(),
+				query, firstRecord);
+	}
 
 	/**
 	 * This method is used to create a new Query
-	 * @return 
+	 * 
+	 * @return
 	 */
-	public CatalogQuery createNewQuery() {        
-		return new CatalogQuery();   
-	}	
-	
+	public CatalogQuery createNewQuery() {
+		return new CatalogQuery();
+	}
+
 	/**
 	 * @return the serverData
 	 */
 	public ServerData getServerData() {
-		return ((AbstractCatalogServiceDriver)getDriver()).getServerData();
+		return ((AbstractCatalogServiceDriver) getDriver()).getServerData();
 	}
 
 	/**
-	 * @param serverData the serverData to set
+	 * @param serverData
+	 *            the serverData to set
 	 */
 	public void setServerData(ServerData serverData) {
-		((AbstractCatalogServiceDriver)getDriver()).setServerData(serverData);
+		((AbstractCatalogServiceDriver) getDriver()).setServerData(serverData);
 	}
 }

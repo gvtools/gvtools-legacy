@@ -21,16 +21,16 @@ package org.gvsig.raster.dataset;
 /**
  * Excepción que se lanza cuando se está intentando generar un mosaico con
  * datasets no validos. Esto puede ocurrir por distintos motivos como, que no
- * sean contiguos los extends, que no sea posible formar una matriz de NXM, que no 
- * tengan igual tamaño de pixel, etc...
+ * sean contiguos los extends, que no sea posible formar una matriz de NXM, que
+ * no tengan igual tamaño de pixel, etc...
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public class MosaicNotValidException extends Exception{
+public class MosaicNotValidException extends Exception {
 	private static final long serialVersionUID = 7401956202923548194L;
 
-	public MosaicNotValidException(String msg){
+	public MosaicNotValidException(String msg) {
 		super(msg);
 	}
 }

@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.gazetteer.ui.showresults;
+
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -59,136 +59,173 @@ import es.gva.cit.gazetteer.querys.GazetteerQuery;
  */
 public class ShowResultsDialog extends JDialog implements WindowListener {
 
-/**
+	/**
  * 
  * 
  */
-    int recordsByPage;
+	int recordsByPage;
 
-/**
- * <p></p>
- * 
- * 
- */
-    protected es.gva.cit.gazetteer.ui.showresults.ShowResultsDialogPanel showResultsDialogPanel = null;
+	/**
+	 * <p>
+	 * </p>
+	 * 
+	 * 
+	 */
+	protected es.gva.cit.gazetteer.ui.showresults.ShowResultsDialogPanel showResultsDialogPanel = null;
 
-/**
- * Crea un nuevo ShowResultsDialog.
- * @param client Gazetteer Client
- * @param features The found features
- */
-    public  ShowResultsDialog(GazetteerClient client, Feature[] features, int recordsByPage,GazetteerQuery query) {        
-        super();
-        this.recordsByPage = recordsByPage;
-        initialize(client,features,query);
-    } 
+	/**
+	 * Crea un nuevo ShowResultsDialog.
+	 * 
+	 * @param client
+	 *            Gazetteer Client
+	 * @param features
+	 *            The found features
+	 */
+	public ShowResultsDialog(GazetteerClient client, Feature[] features,
+			int recordsByPage, GazetteerQuery query) {
+		super();
+		this.recordsByPage = recordsByPage;
+		initialize(client, features, query);
+	}
 
-/**
- * This method initializes jDialog
- * 
- * 
- * @param gazetteerClient 
- * @param features 
- */
-    private void initialize(es.gva.cit.gazetteer.GazetteerClient gazetteerClient, Feature[] features, GazetteerQuery query) {        
-        Frames.centerFrame(this, 420, 257);
-        this.setSize(new Dimension(420, 257));
-        this.setTitle("Cliente Gazetteer");
-        ShowResultsDialogPanel panel = new ShowResultsDialogPanel(gazetteerClient,
-                features, recordsByPage, query);
-        panel.setParent(this);
-        getContentPane().add(panel);
-        this.setVisible(true);
-    } 
-/* (non-Javadoc)
-     * @see java.awt.event.WindowListener#windowActivated(java.awt.event.WindowEvent)
-     */
+	/**
+	 * This method initializes jDialog
+	 * 
+	 * 
+	 * @param gazetteerClient
+	 * @param features
+	 */
+	private void initialize(
+			es.gva.cit.gazetteer.GazetteerClient gazetteerClient,
+			Feature[] features, GazetteerQuery query) {
+		Frames.centerFrame(this, 420, 257);
+		this.setSize(new Dimension(420, 257));
+		this.setTitle("Cliente Gazetteer");
+		ShowResultsDialogPanel panel = new ShowResultsDialogPanel(
+				gazetteerClient, features, recordsByPage, query);
+		panel.setParent(this);
+		getContentPane().add(panel);
+		this.setVisible(true);
+	}
 
-/**
- * 
- * 
- * 
- * @param e 
- */
-    public void windowActivated(WindowEvent e) {        
-        // TODO Auto-generated method stub
-    } 
-/* (non-Javadoc)
-     * @see java.awt.event.WindowListener#windowClosed(java.awt.event.WindowEvent)
-     */
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowActivated(java.awt.event.WindowEvent)
+	 */
 
-/**
- * 
- * 
- * 
- * @param e 
- */
-    public void windowClosed(WindowEvent e) {        
-        // TODO Auto-generated method stub
-    } 
-/* (non-Javadoc)
-     * @see java.awt.event.WindowListener#windowClosing(java.awt.event.WindowEvent)
-     */
+	/**
+	 * 
+	 * 
+	 * 
+	 * @param e
+	 */
+	public void windowActivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+	}
 
-/**
- * 
- * 
- * 
- * @param e 
- */
-    public void windowClosing(WindowEvent e) {        
-        // TODO Auto-generated method stub
-    } 
-/* (non-Javadoc)
-     * @see java.awt.event.WindowListener#windowDeactivated(java.awt.event.WindowEvent)
-     */
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowClosed(java.awt.event.WindowEvent)
+	 */
 
-/**
- * 
- * 
- * 
- * @param e 
- */
-    public void windowDeactivated(WindowEvent e) {        
-        // TODO Auto-generated method stub
-    } 
-/* (non-Javadoc)
-     * @see java.awt.event.WindowListener#windowDeiconified(java.awt.event.WindowEvent)
-     */
+	/**
+	 * 
+	 * 
+	 * 
+	 * @param e
+	 */
+	public void windowClosed(WindowEvent e) {
+		// TODO Auto-generated method stub
+	}
 
-/**
- * 
- * 
- * 
- * @param e 
- */
-    public void windowDeiconified(WindowEvent e) {        
-        // TODO Auto-generated method stub
-    } 
-/* (non-Javadoc)
-     * @see java.awt.event.WindowListener#windowIconified(java.awt.event.WindowEvent)
-     */
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowClosing(java.awt.event.WindowEvent)
+	 */
 
-/**
- * 
- * 
- * 
- * @param e 
- */
-    public void windowIconified(WindowEvent e) {        
-        // TODO Auto-generated method stub
-    } 
-/* (non-Javadoc)
-     * @see java.awt.event.WindowListener#windowOpened(java.awt.event.WindowEvent)
-     */
+	/**
+	 * 
+	 * 
+	 * 
+	 * @param e
+	 */
+	public void windowClosing(WindowEvent e) {
+		// TODO Auto-generated method stub
+	}
 
-/**
- * 
- * 
- * 
- * @param e 
- */
-    public void windowOpened(WindowEvent e) {        
-        // TODO Auto-generated method stub
-    } 
- }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowDeactivated(java.awt.event.WindowEvent
+	 * )
+	 */
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * @param e
+	 */
+	public void windowDeactivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowDeiconified(java.awt.event.WindowEvent
+	 * )
+	 */
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * @param e
+	 */
+	public void windowDeiconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowIconified(java.awt.event.WindowEvent)
+	 */
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * @param e
+	 */
+	public void windowIconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowOpened(java.awt.event.WindowEvent)
+	 */
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * @param e
+	 */
+	public void windowOpened(WindowEvent e) {
+		// TODO Auto-generated method stub
+	}
+}

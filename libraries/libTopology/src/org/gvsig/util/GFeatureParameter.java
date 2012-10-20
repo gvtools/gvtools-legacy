@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.util;
 
 import java.lang.reflect.Field;
@@ -53,19 +53,22 @@ import java.util.List;
 
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
+
 /**
  * A parameter of type 'IFeature'.
  * 
  * It receives a list of FLyrVect where we can fetch this feature.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class GFeatureParameter extends GParameter {
 
 	private List<FLyrVect> featureContainers;
+
 	/**
-	 * Constructor. It receives a feature container in adition to the rest of GParameter
-	 * attributes.
+	 * Constructor. It receives a feature container in adition to the rest of
+	 * GParameter attributes.
 	 * 
 	 * @param paramName
 	 * @param paramType
@@ -73,37 +76,32 @@ public class GFeatureParameter extends GParameter {
 	 * @param parentReference
 	 * @param featureContainer
 	 */
-	public GFeatureParameter(String paramName, 
-							 Class paramType,
-							 Object defaultValue, 
-							 Object parentReference,
-							 List<FLyrVect> featureContainers) {
+	public GFeatureParameter(String paramName, Class paramType,
+			Object defaultValue, Object parentReference,
+			List<FLyrVect> featureContainers) {
 		super(paramName, FEATURE_PARAM_TYPES, defaultValue, parentReference);
-		
+
 		this.featureContainers = featureContainers;
 	}
 
-	
 	public void setValue(Object obj) {
-	
-			Field field;
-			try {
-				field = parentReference.getClass().getDeclaredField(paramName);
-				 field.setAccessible(true);
-				 if(! (obj instanceof IFeature))
-					field.set(parentReference, defaultValue);
-				 else
-					field.set(parentReference, obj);
-			} catch (Exception e) {
-				e.printStackTrace();
-			} 
-	}
 
+		Field field;
+		try {
+			field = parentReference.getClass().getDeclaredField(paramName);
+			field.setAccessible(true);
+			if (!(obj instanceof IFeature))
+				field.set(parentReference, defaultValue);
+			else
+				field.set(parentReference, obj);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	public List<FLyrVect> getFeatureContainer() {
 		return featureContainers;
 	}
-
 
 	public void setFeatureContainer(List<FLyrVect> featureContainers) {
 		this.featureContainers = featureContainers;

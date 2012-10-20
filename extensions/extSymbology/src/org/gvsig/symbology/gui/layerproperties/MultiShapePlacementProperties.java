@@ -55,36 +55,41 @@ import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.IPlacementConstraints;
 
-public class MultiShapePlacementProperties extends JPanel implements IPlacementProperties {
+public class MultiShapePlacementProperties extends JPanel implements
+		IPlacementProperties {
 	private static final long serialVersionUID = 2935114466845029008L;
 	private PlacementProperties pointProperties;
 	private PlacementProperties lineProperties;
 	private PlacementProperties polygonProperties;
 	private DuplicateLayersMode dupMode;
-	
-	
-	public MultiShapePlacementProperties(MultiShapePlacementConstraints constraints) throws ReadDriverException {
-		constraints = (MultiShapePlacementConstraints) ((constraints != null) ?
-				PlacementManager.createPlacementConstraints(constraints.getXMLEntity())	:
-				PlacementManager.createPlacementConstraints(FShape.MULTI));
-		
+
+	public MultiShapePlacementProperties(
+			MultiShapePlacementConstraints constraints)
+			throws ReadDriverException {
+		constraints = (MultiShapePlacementConstraints) ((constraints != null) ? PlacementManager
+				.createPlacementConstraints(constraints.getXMLEntity())
+				: PlacementManager.createPlacementConstraints(FShape.MULTI));
+
 		this.pointProperties = new PlacementProperties(
-				constraints.getPointConstraints(), FShape.POINT, getDuplicatesMode());
+				constraints.getPointConstraints(), FShape.POINT,
+				getDuplicatesMode());
 		this.lineProperties = new PlacementProperties(
-				constraints.getLineConstraints(), FShape.LINE, getDuplicatesMode());
+				constraints.getLineConstraints(), FShape.LINE,
+				getDuplicatesMode());
 		this.polygonProperties = new PlacementProperties(
-				constraints.getPolygonConstraints(), FShape.POLYGON, getDuplicatesMode());
+				constraints.getPolygonConstraints(), FShape.POLYGON,
+				getDuplicatesMode());
 		initialize();
 	}
-	
+
 	private DuplicateLayersMode getDuplicatesMode() {
 		if (dupMode == null) {
 			dupMode = new DuplicateLayersMode();
 		}
 		return dupMode;
 	}
-	
-	private void initialize() { 
+
+	private void initialize() {
 		setLayout(new BorderLayout());
 		JPanel aux = new JPanel(new BorderLayout());
 		JTabbedPane p = new JTabbedPane();
@@ -102,20 +107,19 @@ public class MultiShapePlacementProperties extends JPanel implements IPlacementP
 				pointProperties.getPlacementConstraints(),
 				lineProperties.getPlacementConstraints(),
 				polygonProperties.getPlacementConstraints());
-				
+
 	}
-	
+
 	public WindowInfo getWindowInfo() {
 		return pointProperties.getWindowInfo();
 	}
-	
+
 	public Object getWindowProfile() {
 		return pointProperties.getWindowProfile();
 	}
-	
-	
+
 	public void actionPerformed(ActionEvent e) {
-		boolean okPressed = "OK".equals(e.getActionCommand()); 
+		boolean okPressed = "OK".equals(e.getActionCommand());
 		boolean cancelPressed = "CANCEL".equals(e.getActionCommand());
 		if (okPressed || cancelPressed) {
 			if (okPressed) {
@@ -125,13 +129,13 @@ public class MultiShapePlacementProperties extends JPanel implements IPlacementP
 			}
 
 			if ("CANCEL".equals(e.getActionCommand())) {
-				pointProperties.constraints   = pointProperties.oldConstraints;
-				lineProperties.constraints    = lineProperties.oldConstraints;
+				pointProperties.constraints = pointProperties.oldConstraints;
+				lineProperties.constraints = lineProperties.oldConstraints;
 				polygonProperties.constraints = polygonProperties.oldConstraints;
 			}
-			
+
 			PluginServices.getMDIManager().closeWindow(this);
-			
+
 			return;
 		}
 	}

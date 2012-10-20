@@ -11,22 +11,24 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.utiles.extensionPoints.ExtensionPoint;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
-public class ManagerRegistry{
+public class ManagerRegistry {
 	public static final String EXTENSIONPOINTNAME = "hyperlink.layer.manager";
 	private ExtensionPoint extensionPoint;
 	/**
-	 * We will cache the proper manager for each class, so that we don't calculate the right one everytime.
-	 * This assumes that no manager will be added after extensions' initialize() method, otherwise the
-	 * cached values will be incorrect.
+	 * We will cache the proper manager for each class, so that we don't
+	 * calculate the right one everytime. This assumes that no manager will be
+	 * added after extensions' initialize() method, otherwise the cached values
+	 * will be incorrect.
 	 */
 	private HashMap<Class, String> cachedManagers;
 	/**
 	 * We will also cache the unmanaged layers (layers without managers).
 	 */
 	private HashSet<Class> cachedUnmanagedLayers;
-	
+
 	public ManagerRegistry() {
-		extensionPoint = new ExtensionPoint(EXTENSIONPOINTNAME, "Registers ILinkToolManagers that are able to manage specific layer types.");
+		extensionPoint = new ExtensionPoint(EXTENSIONPOINTNAME,
+				"Registers ILinkToolManagers that are able to manage specific layer types.");
 		ExtensionPointsSingleton.getInstance().put(extensionPoint);
 		cachedManagers = new HashMap<Class, String>();
 		cachedUnmanagedLayers = new HashSet<Class>();
@@ -37,20 +39,22 @@ public class ManagerRegistry{
 			throw new RuntimeException("Interfaces are not supported");
 		}
 		if (!ILinkLayerManager.class.isAssignableFrom(manager)) {
-			throw new RuntimeException("Managers must be of type ILinkLayerManager");
+			throw new RuntimeException(
+					"Managers must be of type ILinkLayerManager");
 		}
-		extensionPoint.put(layerType.getName(),  manager);
+		extensionPoint.put(layerType.getName(), manager);
 	}
 
-	public ILinkLayerManager get(FLayer layer) throws ClassNotFoundException, InstantiationException,
-			IllegalAccessException, IncompatibleLayerException {
+	public ILinkLayerManager get(FLayer layer) throws ClassNotFoundException,
+			InstantiationException, IllegalAccessException,
+			IncompatibleLayerException {
 		if (cachedManagers.containsKey(layer.getClass())) {
 			String layerType = cachedManagers.get(layer.getClass());
-			ILinkLayerManager manager = (ILinkLayerManager) extensionPoint.create(layerType);
+			ILinkLayerManager manager = (ILinkLayerManager) extensionPoint
+					.create(layerType);
 			manager.setLayer(layer);
 			return manager;
-		}
-		else if (cachedUnmanagedLayers.contains(layer.getClass())) {
+		} else if (cachedUnmanagedLayers.contains(layer.getClass())) {
 			return null;
 		}
 		// search for proper manager for this class
@@ -64,22 +68,21 @@ public class ManagerRegistry{
 			}
 		}
 		if (!classList.isEmpty()) {
-			ILinkLayerManager manager = (ILinkLayerManager) extensionPoint.create(classList.first().getName());
+			ILinkLayerManager manager = (ILinkLayerManager) extensionPoint
+					.create(classList.first().getName());
 			cachedManagers.put(layer.getClass(), classList.first().getName());
 			manager.setLayer(layer);
 			return manager;
-		}
-		else {
+		} else {
 			cachedUnmanagedLayers.add(layer.getClass());
 			return null;
 		}
 	}
 
-	public boolean hasManager(FLayer layer){
+	public boolean hasManager(FLayer layer) {
 		if (cachedManagers.containsKey(layer.getClass())) {
 			return true;
-		}
-		else if (cachedUnmanagedLayers.contains(layer.getClass())) {
+		} else if (cachedUnmanagedLayers.contains(layer.getClass())) {
 			return false;
 		}
 		Iterator<String> iterator = extensionPoint.keySet().iterator();
@@ -91,8 +94,7 @@ public class ManagerRegistry{
 					// there is a manager for this layer class
 					return true;
 				}
-			}
-			catch (ClassNotFoundException ex) {
+			} catch (ClassNotFoundException ex) {
 				PluginServices.getLogger().error(ex);
 			}
 		}
@@ -107,10 +109,9 @@ public class ManagerRegistry{
 				return 0;
 			if (class1.isAssignableFrom(class2)) {
 				return 1;
-			}
-			else {
+			} else {
 				return -1;
 			}
-		}	
+		}
 	}
 }

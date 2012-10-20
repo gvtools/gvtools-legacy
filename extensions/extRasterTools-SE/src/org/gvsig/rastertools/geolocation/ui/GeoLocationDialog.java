@@ -44,23 +44,24 @@ import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
  * 
  * @version 30/07/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public class GeoLocationDialog extends JPanel implements IWindow, IWindowListener, ITransformIO {
+public class GeoLocationDialog extends JPanel implements IWindow,
+		IWindowListener, ITransformIO {
 	private static final long serialVersionUID = 7362459094802955247L;
-	private GeoLocationPanel  geolocationPanel = null;
+	private GeoLocationPanel geolocationPanel = null;
 
 	/**
 	 * Posición de la ventana en X y en Y
 	 */
-	private int               posWindowX       = 0;
-	private int               posWindowY       = 0;
+	private int posWindowX = 0;
+	private int posWindowY = 0;
 
-	private int               widthWindow      = 272;
-	private int               heightWindow     = 155;
+	private int widthWindow = 272;
+	private int heightWindow = 155;
 
-	private String            lastTool         = null;
-	private BaseView          view             = null;
+	private String lastTool = null;
+	private BaseView view = null;
 
 	/**
 	 * Constructor
@@ -68,13 +69,13 @@ public class GeoLocationDialog extends JPanel implements IWindow, IWindowListene
 	public GeoLocationDialog() {
 		BorderLayout bl = new BorderLayout(5, 5);
 		this.setLayout(bl);
-		
+
 		this.add(getGeoLocationPanel());
 	}
-	
+
 	/**
 	 * Constructor. Asigna la capa raster.
-	 *
+	 * 
 	 */
 	public GeoLocationDialog(FLyrRasterSE lyr, ViewPort vp, BaseView view) {
 		this.view = view;
@@ -84,111 +85,127 @@ public class GeoLocationDialog extends JPanel implements IWindow, IWindowListene
 		this.add(getGeoLocationPanel());
 		getGeoLocationPanel().setParams(lyr, vp);
 	}
-	
+
 	/**
 	 * Obtiene la vista asociada a este dialogo
+	 * 
 	 * @return BaseView
 	 */
 	public BaseView getAssociateView() {
 		return view;
 	}
-	
+
 	/**
 	 * Asigna la posición de la ventana
-	 * @param x Posición en X
-	 * @param y Posición en Y
+	 * 
+	 * @param x
+	 *            Posición en X
+	 * @param y
+	 *            Posición en Y
 	 */
 	public void setPosition(int x, int y) {
 		this.posWindowX = x;
 		this.posWindowY = y;
 	}
-	
+
 	/**
 	 * Obtiene el tamaño de la ventana
+	 * 
 	 * @return
 	 */
 	public Dimension getSizeWindow() {
 		return new Dimension(widthWindow, heightWindow);
 	}
-	
+
 	/**
 	 * Referencia la capa que esté seleccionada
-	 *
+	 * 
 	 */
 	private void loadLayer(ViewPort vp) {
-		if(getGeoLocationPanel().getLayer() != null)
+		if (getGeoLocationPanel().getLayer() != null)
 			return;
-		//Este código es para poder lanzar la funcionalidad desde la barra de herramientas y no desde el TOC
-		FLayers flyrs = getGeoLocationPanel().getMapCtrl().getMapContext().getLayers();
+		// Este código es para poder lanzar la funcionalidad desde la barra de
+		// herramientas y no desde el TOC
+		FLayers flyrs = getGeoLocationPanel().getMapCtrl().getMapContext()
+				.getLayers();
 		FLayer[] actives = flyrs.getActives();
 		for (int i = 0; i < actives.length; i++) {
-			if(actives[i] instanceof FLyrRasterSE) {
-				getGeoLocationPanel().setParams(((FLyrRasterSE)actives[i]), vp);
+			if (actives[i] instanceof FLyrRasterSE) {
+				getGeoLocationPanel()
+						.setParams(((FLyrRasterSE) actives[i]), vp);
 				break;
 			}
 		}
 	}
-	
+
 	/**
 	 * Acciones de inicialización
-	 *
+	 * 
 	 */
 	public void init(MapControl mapCtrl) {
 		geolocationPanel.setMapCtrl(mapCtrl);
 		lastTool = mapCtrl.getCurrentTool();
 		loadLayer(mapCtrl.getViewPort());
 		FLyrRasterSE lyr = getGeoLocationPanel().getLayer();
-		if(lyr != null) {
+		if (lyr != null) {
 			lyr.getAffineTransformHistorical().clear();
 			lyr.getAffineTransformHistorical().add(lyr.getAffineTransform());
 			loadTransform(lyr.getAffineTransform());
 		}
 		activeButtons();
 	}
-	
+
 	/**
 	 * Carga los parámetros en el dialogo a partir de la capa
-	 * @param lyr Capa raster
+	 * 
+	 * @param lyr
+	 *            Capa raster
 	 */
 	public void loadTransform(AffineTransform at) {
 		geolocationPanel.loadTransform(at);
 	}
-	
+
 	/**
-	 * Activa o desactiva los botones de transformación anterior y siguiente dependiendo
-	 * del estado de la lista de transformaciones.
+	 * Activa o desactiva los botones de transformación anterior y siguiente
+	 * dependiendo del estado de la lista de transformaciones.
+	 * 
 	 * @return
 	 */
 	public void applyTransformation() {
 		geolocationPanel.setModify(true);
-		geolocationPanel.activeButtons();	
+		geolocationPanel.activeButtons();
 	}
+
 	/**
 	 * Obtiene el panel con el histograma
+	 * 
 	 * @return HistogramPanel
 	 */
-	public GeoLocationPanel getGeoLocationPanel(){
-		if (geolocationPanel == null) 
+	public GeoLocationPanel getGeoLocationPanel() {
+		if (geolocationPanel == null)
 			geolocationPanel = new GeoLocationPanel(this);
-		
+
 		return geolocationPanel;
 	}
 
 	/**
-	 * Activa o desactiva los botones de transformación anterior y siguiente dependiendo
-	 * del estado de la lista de transformaciones.
+	 * Activa o desactiva los botones de transformación anterior y siguiente
+	 * dependiendo del estado de la lista de transformaciones.
+	 * 
 	 * @return
 	 */
 	public void activeButtons() {
 		getGeoLocationPanel().activeButtons();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindow#getWindowInfo()
 	 */
 	public WindowInfo getWindowInfo() {
-		WindowInfo m_viewinfo=new WindowInfo(WindowInfo.MODELESSDIALOG | WindowInfo.RESIZABLE);
+		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODELESSDIALOG
+				| WindowInfo.RESIZABLE);
 		m_viewinfo.setHeight(heightWindow);
 		m_viewinfo.setWidth(widthWindow);
 		m_viewinfo.setX(posWindowX);
@@ -197,16 +214,18 @@ public class GeoLocationDialog extends JPanel implements IWindow, IWindowListene
 	}
 
 	/**
-	 * Asigna el último tool seleccionado antes de abrir el diálogo para 
+	 * Asigna el último tool seleccionado antes de abrir el diálogo para
 	 * restaurarlo cuando se cierre este.
+	 * 
 	 * @param tool
 	 */
 	public void setLastTool(String tool) {
 		this.lastTool = tool;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindowListener#windowActivated()
 	 */
 	public void windowActivated() {
@@ -214,28 +233,36 @@ public class GeoLocationDialog extends JPanel implements IWindow, IWindowListene
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindowListener#windowClosed()
 	 */
 	public void windowClosed() {
-		//Se consulta si se desean salvar los cambios
-		if(geolocationPanel.getModify()) {
-			if(RasterToolsUtil.messageBoxYesOrNot(PluginServices.getText(this,"aviso_salir_salvando"), geolocationPanel)) {
+		// Se consulta si se desean salvar los cambios
+		if (geolocationPanel.getModify()) {
+			if (RasterToolsUtil.messageBoxYesOrNot(
+					PluginServices.getText(this, "aviso_salir_salvando"),
+					geolocationPanel)) {
 				try {
 					geolocationPanel.getLayer().saveGeoToRmf();
 				} catch (RmfSerializerException e1) {
-					RasterToolsUtil.messageBoxError(PluginServices.getText(this,"error_salvando_rmf"), geolocationPanel, e1);
+					RasterToolsUtil.messageBoxError(
+							PluginServices.getText(this, "error_salvando_rmf"),
+							geolocationPanel, e1);
 				}
 			}
 			geolocationPanel.setModify(false);
 		}
-		
-		//Restauramos la tool que había antes de de activar la actual
-		if(lastTool != null)
+
+		// Restauramos la tool que había antes de de activar la actual
+		if (lastTool != null)
 			getGeoLocationPanel().getMapCtrl().setTool(lastTool);
-		
-		//TODO: Si queremos usar la funcionalidad de geolocalización desde la barra de herramientas deberemos 
-		//, al cerrar la ventana, asignar la capa raster de GeoRasterBehevior a null ya que sino se aplicarán las
-		//transformaciones sobre la última capa que se abrió desde el menú del TOC
+
+		// TODO: Si queremos usar la funcionalidad de geolocalización desde la
+		// barra de herramientas deberemos
+		// , al cerrar la ventana, asignar la capa raster de GeoRasterBehevior a
+		// null ya que sino se aplicarán las
+		// transformaciones sobre la última capa que se abrió desde el menú del
+		// TOC
 	}
 
 	public Object getWindowProfile() {

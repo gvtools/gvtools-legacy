@@ -2,21 +2,21 @@ package com.iver.cit.gvsig.fmap.core;
 
 /**
  * Static fields with all the tags included in an SLD
+ * 
  * @author laura
  */
-public class SLDTags
-{
-	public final static String SLD_ROOT="StyledLayerDescriptor";
-	public final static String VERSION_ATTR="version";
-	public final static String VERSION_1_0_0="1.0.0";
-	public final static String NAMEDLAYER="NamedLayer";
-	public final static String NAME="Name";
-	public final static String TITLE ="Title";
-	public final static String ABSTRACT ="Abstract";
-	public final static String USERSTYLE ="UserStyle";
-	public final static String FEATURETYPESTYLE ="FeatureTypeStyle";
-	public final static String FEATURETYPENAME ="FeatureTypeName";
-	public final static String SEMANTICTYPEIDENTIFIER="SemanticTypeIdentifier";
+public class SLDTags {
+	public final static String SLD_ROOT = "StyledLayerDescriptor";
+	public final static String VERSION_ATTR = "version";
+	public final static String VERSION_1_0_0 = "1.0.0";
+	public final static String NAMEDLAYER = "NamedLayer";
+	public final static String NAME = "Name";
+	public final static String TITLE = "Title";
+	public final static String ABSTRACT = "Abstract";
+	public final static String USERSTYLE = "UserStyle";
+	public final static String FEATURETYPESTYLE = "FeatureTypeStyle";
+	public final static String FEATURETYPENAME = "FeatureTypeName";
+	public final static String SEMANTICTYPEIDENTIFIER = "SemanticTypeIdentifier";
 	public final static String RULE = "Rule";
 	public final static String FILTER = "Filter";
 
@@ -33,7 +33,7 @@ public class SLDTags
 	public static final String PROPERTYNAME = "PropertyName";
 
 	public final static String EQUALS = "Equals";
-	public final static String DISJOINT= "Disjoint";
+	public final static String DISJOINT = "Disjoint";
 	public final static String INTERSECTS = "Intersects";
 	public final static String TOUCHES = "Touches";
 	public final static String CROSSES = "Corsses";

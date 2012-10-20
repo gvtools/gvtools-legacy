@@ -39,29 +39,29 @@
  *   dac@iver.es
  */
 package org.gvsig.remoteClient.sld;
+
 /**
  * Tags for SLD
- *
+ * 
  * @see http://portal.opengeospatial.org/files/?artifact_id=1188
- *
+ * 
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
-public class SLDTags
-{
-	public final static String SLD_ROOT="StyledLayerDescriptor";
-	public final static String VERSION_ATTR="version";
+public class SLDTags {
+	public final static String SLD_ROOT = "StyledLayerDescriptor";
+	public final static String VERSION_ATTR = "version";
 
-	public final static String NAMEDLAYER="NamedLayer";
-	public final static String USERDEFINEDLAYER="UserLayer";
-	public final static String NAME="Name";
-	public final static String TITLE ="Title";
-	public final static String ABSTRACT ="Abstract";
-	public final static String USERSTYLE ="UserStyle";
-	public final static String NAMEDSTYLE ="NamedStyle";
-	public final static String FEATURETYPESTYLE ="FeatureTypeStyle";
-	public final static String FEATURETYPENAME ="FeatureTypeName";
+	public final static String NAMEDLAYER = "NamedLayer";
+	public final static String USERDEFINEDLAYER = "UserLayer";
+	public final static String NAME = "Name";
+	public final static String TITLE = "Title";
+	public final static String ABSTRACT = "Abstract";
+	public final static String USERSTYLE = "UserStyle";
+	public final static String NAMEDSTYLE = "NamedStyle";
+	public final static String FEATURETYPESTYLE = "FeatureTypeStyle";
+	public final static String FEATURETYPENAME = "FeatureTypeName";
 	public final static String FEATURETYPECONSTRAINT = "FeatureTypeConstraint";
-	public final static String SEMANTICTYPEIDENTIFIER="SemanticTypeIdentifier";
+	public final static String SEMANTICTYPEIDENTIFIER = "SemanticTypeIdentifier";
 	public final static String RULE = "Rule";
 	public final static String FILTER = "Filter";
 
@@ -78,7 +78,10 @@ public class SLDTags
 	public static final String CSSPARAMETER = "CssParameter";
 	public static final String NAME_ATTR = "name";
 
-	public static final String NAME_ATTR_VERSAL = "Name";//Ppara compatibilizar leyendas generadas con la 1.1.2
+	public static final String NAME_ATTR_VERSAL = "Name";// Ppara compatibilizar
+															// leyendas
+															// generadas con la
+															// 1.1.2
 
 	public static final String FILL = "Fill";
 	public static final String FILL_ATTR = "fill";
@@ -88,7 +91,6 @@ public class SLDTags
 	public static final String STROKE_ATTR = "stroke";
 	public static final String STROKE_WIDTH_ATTR = "stroke-width";
 	public static final String STROKE_OPACITY_ATTR = "stroke-opacity";
-
 
 	public static final String SIZE = "Size";
 	public static final String ROTATION = "Rotation";
@@ -147,21 +149,18 @@ public class SLDTags
 	public static final String REMOTE_OWS = "RemoteOWS";
 	public static final String SERVICE = "Service";
 	public static final String ONLINE_RESOURCE = "OnlineResource";
-	public final static String XLINK_HREF ="xlink:href";
+	public final static String XLINK_HREF = "xlink:href";
 
 	public static final String EXTENT = "Extent";
 	public static final String VALUE = "Value";
 	public static final String CSSPARAMETER_WIDTH = "CssParameter name=\"Stroke-width\"";
-	public static final String PROPERTY_NAME =  "PropertyName";
+	public static final String PROPERTY_NAME = "PropertyName";
 	public static final String FUNCTION = "Function";
-
 
 	public static final String SQUARE = "square";
 	public static final String CIRCLE = "circle";
 	public static final String TRIANGLE = "triangle";
 	public static final String STAR = "star";
 	public static final String CROSS = "cross";
-
-
 
 }

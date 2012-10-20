@@ -71,87 +71,98 @@ public class Feature {
 	private Bbox bbox = null;
 	private ArrayList metaDataList = new ArrayList();
 	private Time time;
-	
+
 	/**
 	 * @return the geometry
 	 */
 	public Geometry getGeometry() {
 		return geometry;
 	}
+
 	/**
-	 * @param geometry the geometry to set
+	 * @param geometry
+	 *            the geometry to set
 	 */
 	public void setGeometry(Geometry geometry) {
 		this.geometry = geometry;
 	}
-	
+
 	/**
-	 * @param geometry the geometry to set
+	 * @param geometry
+	 *            the geometry to set
 	 */
 	public void setGeometry(Object geometry) {
-		if (geometry instanceof Geometry){
-			this.geometry = (Geometry)geometry;
+		if (geometry instanceof Geometry) {
+			this.geometry = (Geometry) geometry;
 		}
 	}
-	
+
 	/**
 	 * @return the id
 	 */
 	public String getId() {
 		return id;
 	}
+
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	public void setId(String id) {
 		this.id = id;
 	}
+
 	/**
 	 * @return the name
 	 */
 	public String getName() {
 		return name;
 	}
+
 	/**
-	 * @param name the name to set
+	 * @param name
+	 *            the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	/**
 	 * @return the elements
 	 */
 	public ArrayList getElements() {
 		return elements;
 	}
-		
+
 	/**
 	 * @return the element at position i
 	 * @param i
-	 * Element position
+	 *            Element position
 	 */
 	public Element getElementAt(int i) {
-		return (Element)elements.get(i);
+		return (Element) elements.get(i);
 	}
-	
+
 	/**
 	 * Adds a new element
+	 * 
 	 * @param layer
 	 */
-	public void addElement(Element element){
+	public void addElement(Element element) {
 		elements.add(element);
 	}
-	
+
 	/**
 	 * Adds a new element
+	 * 
 	 * @param layer
 	 */
-	public void addElement(Object element){
-		if (element instanceof Element){
+	public void addElement(Object element) {
+		if (element instanceof Element) {
 			elements.add(element);
 		}
 	}
-	
+
 	/**
 	 * @return the bbox
 	 */
@@ -160,30 +171,32 @@ public class Feature {
 	}
 
 	/**
-	 * @param bbox the bbox to set
+	 * @param bbox
+	 *            the bbox to set
 	 */
 	public void setBbox(Bbox bbox) {
 		this.bbox = bbox;
 	}
-	
+
 	/**
-	 * @param bbox the bbox to set
+	 * @param bbox
+	 *            the bbox to set
 	 */
 	public void setBbox(Object bbox) {
-		if (bbox instanceof Bbox){
-			this.bbox = (Bbox)bbox;
+		if (bbox instanceof Bbox) {
+			this.bbox = (Bbox) bbox;
 		}
 	}
-	
+
 	public void addMetadata(Object metadata) {
-		if (metadata instanceof MetaData){
+		if (metadata instanceof MetaData) {
 			metaDataList.add(metadata);
 		}
 	}
-	
+
 	public void addTime(Object time) {
-		if (time instanceof Time){
-			this.time=(Time)time;
+		if (time instanceof Time) {
+			this.time = (Time) time;
 		}
 	}
 }

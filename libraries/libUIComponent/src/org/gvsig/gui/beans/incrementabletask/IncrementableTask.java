@@ -41,24 +41,25 @@ import org.gvsig.gui.beans.progresspanel.ProgressPanel;
  * <code>IncrementableTask</code>. Es un dialogo que contiene un ProgressPanel.
  * Se ejecuta bajo un Thread y va consultando a un objeto de tipo IIncrementable
  * para modificar sus valores.
- *
+ * 
  * @version 20/08/2008
- *
+ * 
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class IncrementableTask implements Runnable, ButtonsPanelListener {
-	IIncrementable                            iIncrementable         = null;
-	private volatile ProgressPanel            progressPanel          = null;
-	private volatile Thread                   blinker                = null;
-	private boolean                           threadSuspended        = false;
-	private boolean                           ended                  = false;
-	private boolean                           askOnCancel            = true;
-	private ArrayList<IncrementableListener>  actionCommandListeners = new ArrayList<IncrementableListener>();
-	private boolean                           bDoCallListeners       = true;
-	static private int                        eventId                = Integer.MIN_VALUE;
-	
+	IIncrementable iIncrementable = null;
+	private volatile ProgressPanel progressPanel = null;
+	private volatile Thread blinker = null;
+	private boolean threadSuspended = false;
+	private boolean ended = false;
+	private boolean askOnCancel = true;
+	private ArrayList<IncrementableListener> actionCommandListeners = new ArrayList<IncrementableListener>();
+	private boolean bDoCallListeners = true;
+	static private int eventId = Integer.MIN_VALUE;
+
 	/**
 	 * Constructor del IncrementableTask.
+	 * 
 	 * @param incrementable
 	 */
 	public IncrementableTask(IIncrementable incrementable, ProgressPanel dialog) {
@@ -66,9 +67,10 @@ public class IncrementableTask implements Runnable, ButtonsPanelListener {
 		progressPanel = dialog;
 		configureProgressPanel();
 	}
-	
+
 	/**
 	 * Constructor del IncrementableTask.
+	 * 
 	 * @param incrementable
 	 */
 	public IncrementableTask(IIncrementable incrementable) {
@@ -91,13 +93,13 @@ public class IncrementableTask implements Runnable, ButtonsPanelListener {
 	public void stop() {
 		ended = true;
 	}
-	
+
 	/**
 	 * Este thread va leyendo el porcentaje hasta que se completa el histograma.
 	 */
 	public synchronized void run() {
-//		while (!ended && (iIncrementable.getPercent() <= 100)) {
-		while (! ended) {
+		// while (!ended && (iIncrementable.getPercent() <= 100)) {
+		while (!ended) {
 			try {
 				getProgressPanel().setLabel(iIncrementable.getLabel());
 				getProgressPanel().setPercent(iIncrementable.getPercent());
@@ -111,7 +113,7 @@ public class IncrementableTask implements Runnable, ButtonsPanelListener {
 			} catch (InterruptedException e) {
 			}
 		}
-		
+
 		// Forces to refresh the log with the last changes
 		getProgressPanel().setLog(iIncrementable.getLog());
 	}
@@ -122,7 +124,8 @@ public class IncrementableTask implements Runnable, ButtonsPanelListener {
 	 */
 	public void processFinalize() {
 		stop();
-		while (isAlive());
+		while (isAlive())
+			;
 		hide();
 	}
 
@@ -134,17 +137,18 @@ public class IncrementableTask implements Runnable, ButtonsPanelListener {
 		progressPanel = null;
 		blinker = null;
 	}
-	
+
 	/**
 	 * Ocultar la ventana
 	 */
 	public void hideWindow() {
-//		getProgressPanel().dispose();
+		// getProgressPanel().dispose();
 		getProgressPanel().setVisible(false);
 	}
 
 	/**
 	 * Devuelve un booleano indicando si esta activa la ventana.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isAlive() {
@@ -165,6 +169,7 @@ public class IncrementableTask implements Runnable, ButtonsPanelListener {
 
 	/**
 	 * Devuelve el componente ProgressPanel de la ventana incrementable.
+	 * 
 	 * @return ProgressPanel
 	 */
 	public ProgressPanel getProgressPanel() {
@@ -173,17 +178,21 @@ public class IncrementableTask implements Runnable, ButtonsPanelListener {
 		}
 		return progressPanel;
 	}
-	
+
 	protected void configureProgressPanel() {
 		getProgressPanel().setAlwaysOnTop(true);
 		getProgressPanel().addButtonPressedListener(this);
-		
-		// Must ask if user wants to cancel the process, avoid closing the dialog
-		getProgressPanel().setDefaultCloseOperation( JDialog.DO_NOTHING_ON_CLOSE );
+
+		// Must ask if user wants to cancel the process, avoid closing the
+		// dialog
+		getProgressPanel()
+				.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		getProgressPanel().addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				// Simulates an event like the produced pressing the cancel button of the associated progress panel
-				actionButtonPressed(new ButtonsPanelEvent(getProgressPanel(), ButtonsPanel.BUTTON_CANCEL));				
+				// Simulates an event like the produced pressing the cancel
+				// button of the associated progress panel
+				actionButtonPressed(new ButtonsPanelEvent(getProgressPanel(),
+						ButtonsPanel.BUTTON_CANCEL));
 			}
 		});
 	}
@@ -191,19 +200,21 @@ public class IncrementableTask implements Runnable, ButtonsPanelListener {
 	private void callActionCommandListeners(int actions) {
 		if (!bDoCallListeners)
 			return;
-		Iterator<IncrementableListener> acIterator = actionCommandListeners.iterator();
+		Iterator<IncrementableListener> acIterator = actionCommandListeners
+				.iterator();
 		while (acIterator.hasNext()) {
-			IncrementableListener listener = (IncrementableListener) acIterator.next();
+			IncrementableListener listener = (IncrementableListener) acIterator
+					.next();
 			switch (actions) {
-				case IncrementableEvent.RESUMED:
-					listener.actionResumed(new IncrementableEvent(this));
-					break;
-				case IncrementableEvent.SUSPENDED:
-					listener.actionSuspended(new IncrementableEvent(this));
-					break;
-				case IncrementableEvent.CANCELED:
-					listener.actionCanceled(new IncrementableEvent(this));
-					break;
+			case IncrementableEvent.RESUMED:
+				listener.actionResumed(new IncrementableEvent(this));
+				break;
+			case IncrementableEvent.SUSPENDED:
+				listener.actionSuspended(new IncrementableEvent(this));
+				break;
+			case IncrementableEvent.CANCELED:
+				listener.actionCanceled(new IncrementableEvent(this));
+				break;
 			}
 		}
 		eventId++;
@@ -212,7 +223,7 @@ public class IncrementableTask implements Runnable, ButtonsPanelListener {
 	/**
 	 * Añadir el manejador de eventos para atender las peticiones de start,
 	 * stop...
-	 *
+	 * 
 	 * @param listener
 	 */
 	public void addIncrementableListener(IncrementableListener listener) {
@@ -222,6 +233,7 @@ public class IncrementableTask implements Runnable, ButtonsPanelListener {
 
 	/**
 	 * Borrar un manejador de eventos.
+	 * 
 	 * @param listener
 	 */
 	public void removeIncrementableListener(IncrementableListener listener) {
@@ -229,9 +241,9 @@ public class IncrementableTask implements Runnable, ButtonsPanelListener {
 	}
 
 	/**
-	 * Definir si queremos que confirme al usuario si realmente desea cancelar el
-	 * proceso
-	 *
+	 * Definir si queremos que confirme al usuario si realmente desea cancelar
+	 * el proceso
+	 * 
 	 * @param value
 	 */
 	public void setAskCancel(boolean value) {
@@ -243,88 +255,95 @@ public class IncrementableTask implements Runnable, ButtonsPanelListener {
 	 */
 	public void actionButtonPressed(ButtonsPanelEvent e) {
 		switch (e.getButton()) {
-			case ButtonsPanel.BUTTON_CANCEL:
-				boolean cancelled = true;
-				if (askOnCancel) {
-					if (! iIncrementable.isCancelable()) {
-						JOptionPane.showMessageDialog(null, Messages.getText("The_process_cant_be_cancelled"), Messages.getText("Information"), JOptionPane.INFORMATION_MESSAGE);
-						return;
-					}
-
-					/* Pauses the process */
-					if (iIncrementable.isPausable()) {
-						try {
-							callActionCommandListeners(IncrementableEvent.SUSPENDED);
-						}
-						catch (Exception iex) {
-							Logger.getLogger(IncrementableTask.class).error(iex);
-							JOptionPane.showMessageDialog(null, Messages.getText("Failed_pausing_the_process"), Messages.getText("Error"), JOptionPane.ERROR_MESSAGE);
-						}
-					}
-	
-					/* Asks user to cancel or not the process */
-					cancelled = false;
-					String string1 = Messages.getText("Yes");
-					String string2 = Messages.getText("No");
-					Object[] options = { string1, string2 };
-					int answer = JOptionPane.showOptionDialog(getProgressPanel(), Messages
-							.getText("msg_cancel_incrementable"), Messages
-							.getText("title_cancel_incrementable"),
-							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-							options, string1);
-					if (answer == JOptionPane.YES_OPTION) {
-						cancelled = true;
-
-						/* Continues the process */
-						try {
-							if (iIncrementable.isPausable())
-								callActionCommandListeners(IncrementableEvent.RESUMED);
-						} catch (Exception e2) {
-							Logger.getLogger(IncrementableTask.class).error(e2);
-							Messages.getText("Failed_resuming_the_process");
-						}
-					}
-					else {
-						/* Continues the process */
-						try {
-							if (iIncrementable.isPausable())
-								callActionCommandListeners(IncrementableEvent.RESUMED);
-						} catch (Exception e2) {
-							Logger.getLogger(IncrementableTask.class).error(e2);
-							Messages.getText("Failed_resuming_the_process");
-						}
-					}
+		case ButtonsPanel.BUTTON_CANCEL:
+			boolean cancelled = true;
+			if (askOnCancel) {
+				if (!iIncrementable.isCancelable()) {
+					JOptionPane.showMessageDialog(null,
+							Messages.getText("The_process_cant_be_cancelled"),
+							Messages.getText("Information"),
+							JOptionPane.INFORMATION_MESSAGE);
+					return;
 				}
-				if (cancelled) {
-//					ended = true;
-					// Will wait the process to finish and notify this to stop
-					callActionCommandListeners(IncrementableEvent.CANCELED);
-				}
-				break;
-			case ButtonsPanel.BUTTON_PAUSE:
-				threadSuspended = true;
 
-				/* Pauses the associated process */
-				try {
-					if (! iIncrementable.isPausable()) {
-						JOptionPane.showMessageDialog(null, Messages.getText("The_process_cant_be_paused"), Messages.getText("Information"), JOptionPane.INFORMATION_MESSAGE);
-					}
-					else {
+				/* Pauses the process */
+				if (iIncrementable.isPausable()) {
+					try {
 						callActionCommandListeners(IncrementableEvent.SUSPENDED);
+					} catch (Exception iex) {
+						Logger.getLogger(IncrementableTask.class).error(iex);
+						JOptionPane.showMessageDialog(null,
+								Messages.getText("Failed_pausing_the_process"),
+								Messages.getText("Error"),
+								JOptionPane.ERROR_MESSAGE);
 					}
 				}
-				catch (Exception iex) {
-					Logger.getLogger(IncrementableTask.class).error(iex);
-					JOptionPane.showMessageDialog(null, Messages.getText("Failed_pausing_the_process"), Messages.getText("Error"), JOptionPane.ERROR_MESSAGE);
+
+				/* Asks user to cancel or not the process */
+				cancelled = false;
+				String string1 = Messages.getText("Yes");
+				String string2 = Messages.getText("No");
+				Object[] options = { string1, string2 };
+				int answer = JOptionPane.showOptionDialog(getProgressPanel(),
+						Messages.getText("msg_cancel_incrementable"),
+						Messages.getText("title_cancel_incrementable"),
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE, null, options, string1);
+				if (answer == JOptionPane.YES_OPTION) {
+					cancelled = true;
+
+					/* Continues the process */
+					try {
+						if (iIncrementable.isPausable())
+							callActionCommandListeners(IncrementableEvent.RESUMED);
+					} catch (Exception e2) {
+						Logger.getLogger(IncrementableTask.class).error(e2);
+						Messages.getText("Failed_resuming_the_process");
+					}
+				} else {
+					/* Continues the process */
+					try {
+						if (iIncrementable.isPausable())
+							callActionCommandListeners(IncrementableEvent.RESUMED);
+					} catch (Exception e2) {
+						Logger.getLogger(IncrementableTask.class).error(e2);
+						Messages.getText("Failed_resuming_the_process");
+					}
 				}
+			}
+			if (cancelled) {
+				// ended = true;
+				// Will wait the process to finish and notify this to stop
+				callActionCommandListeners(IncrementableEvent.CANCELED);
+			}
+			break;
+		case ButtonsPanel.BUTTON_PAUSE:
+			threadSuspended = true;
 
-				break;
-			case ButtonsPanel.BUTTON_RESTART:
-				threadSuspended = false;
+			/* Pauses the associated process */
+			try {
+				if (!iIncrementable.isPausable()) {
+					JOptionPane.showMessageDialog(null,
+							Messages.getText("The_process_cant_be_paused"),
+							Messages.getText("Information"),
+							JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					callActionCommandListeners(IncrementableEvent.SUSPENDED);
+				}
+			} catch (Exception iex) {
+				Logger.getLogger(IncrementableTask.class).error(iex);
+				JOptionPane.showMessageDialog(null,
+						Messages.getText("Failed_pausing_the_process"),
+						Messages.getText("Error"), JOptionPane.ERROR_MESSAGE);
+			}
 
-				/* Resumes the associated process */
-				callActionCommandListeners(IncrementableEvent.RESUMED);
-				break;
+			break;
+		case ButtonsPanel.BUTTON_RESTART:
+			threadSuspended = false;
+
+			/* Resumes the associated process */
+			callActionCommandListeners(IncrementableEvent.RESUMED);
+			break;
 		}
 	}
 

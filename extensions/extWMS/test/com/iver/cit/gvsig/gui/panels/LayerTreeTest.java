@@ -72,31 +72,29 @@ package com.iver.cit.gvsig.gui.panels;
  * 
  */
 
-
 /**
  * LayerTree test.
  * 
  * @author jaume
- *
+ * 
  */
 public class LayerTreeTest {
-    static String[] texts = new String[] {
-    "Release 2 of the WMS Global Mosaic, a seamless mosaic of Landsat7 scenes.\n"+
-    "Spatial resolution is 0.5 second for the pan band, 1 second for the visual and near-IR bands and 2 second for the thermal bands\n"+
-    "Use this layer to request individual grayscale bands. The default styles may have gamma, sharpening and saturation filters applied.\n"+
-    "The grayscale styles have no extra processing applied, and will return the image data as stored on the server.\n"+
-    "The source dataset is part of the NASA Scientific Data Purchase, and contains scenes acquired in 1999-2003.\n"+
-    "    This layer provides pan-sharpened images, where the pan band is used for the image brightness regardless of the color combination requested."      
-    
-    ,
+	static String[] texts = new String[] {
+			"Release 2 of the WMS Global Mosaic, a seamless mosaic of Landsat7 scenes.\n"
+					+ "Spatial resolution is 0.5 second for the pan band, 1 second for the visual and near-IR bands and 2 second for the thermal bands\n"
+					+ "Use this layer to request individual grayscale bands. The default styles may have gamma, sharpening and saturation filters applied.\n"
+					+ "The grayscale styles have no extra processing applied, and will return the image data as stored on the server.\n"
+					+ "The source dataset is part of the NASA Scientific Data Purchase, and contains scenes acquired in 1999-2003.\n"
+					+ "    This layer provides pan-sharpened images, where the pan band is used for the image brightness regardless of the color combination requested."
 
-    "Release 2 of the WMS Global Mosaic, a seamless mosaic of Landsat7 scenes. Spatial resolution is 0.5 second for the pan band, 1 second for the visual and near-IR bands and 2 second for the thermal bands Use this layer to request individual grayscale bands. The default styles may have gamma, sharpening and saturation filters applied.     The grayscale styles have no extra processing applied, and will return the image data as stored on the server.    The source dataset is part of the NASA Scientific Data Purchase, and contains scenes acquired in 1999-2003.        This layer provides pan-sharpened images, where the pan band is used for the image brightness regardless of the color combination requested."
-    };
-    
-    public static void main(String args[]){       
-        for (int i = 0; i < texts.length; i++) {
-            System.out.println(LayerTree.format(texts[i], 80));
-        }
-    }
-    
+			,
+
+			"Release 2 of the WMS Global Mosaic, a seamless mosaic of Landsat7 scenes. Spatial resolution is 0.5 second for the pan band, 1 second for the visual and near-IR bands and 2 second for the thermal bands Use this layer to request individual grayscale bands. The default styles may have gamma, sharpening and saturation filters applied.     The grayscale styles have no extra processing applied, and will return the image data as stored on the server.    The source dataset is part of the NASA Scientific Data Purchase, and contains scenes acquired in 1999-2003.        This layer provides pan-sharpened images, where the pan band is used for the image brightness regardless of the color combination requested." };
+
+	public static void main(String args[]) {
+		for (int i = 0; i < texts.length; i++) {
+			System.out.println(LayerTree.format(texts[i], 80));
+		}
+	}
+
 }

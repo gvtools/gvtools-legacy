@@ -60,23 +60,30 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class PointTypeBinding extends org.gvsig.gpe.gml.parser.v2.geometries.PointTypeBinding {
+public class PointTypeBinding extends
+		org.gvsig.gpe.gml.parser.v2.geometries.PointTypeBinding {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.bindings.v2.geometries.PointTypeBinding#parseTag(org.xmlpull.v1.XmlPullParser, org.gvsig.gpe.gml.GPEDefaultGmlParser, java.lang.String, java.lang.String, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.bindings.v2.geometries.PointTypeBinding#parseTag(org
+	 * .xmlpull.v1.XmlPullParser, org.gvsig.gpe.gml.GPEDefaultGmlParser,
+	 * java.lang.String, java.lang.String, java.lang.String)
 	 */
-	protected Object parseTag(IXmlStreamReader parser,GPEDefaultGmlParser handler, QName tag, String id, String srsName) throws XmlStreamException, IOException{
+	protected Object parseTag(IXmlStreamReader parser,
+			GPEDefaultGmlParser handler, QName tag, String id, String srsName)
+			throws XmlStreamException, IOException {
 		Object point = super.parseTag(parser, handler, tag, id, srsName);
-		if (point != null){
+		if (point != null) {
 			return point;
 		}
-		if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_POS)){
-			PosTypeIterator coordinatesIteartor = handler.getProfile().getPosTypeBinding();
-			coordinatesIteartor.initialize(parser, handler,GMLTags.GML_POINT);
+		if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_POS)) {
+			PosTypeIterator coordinatesIteartor = handler.getProfile()
+					.getPosTypeBinding();
+			coordinatesIteartor.initialize(parser, handler, GMLTags.GML_POINT);
 			point = handler.getContentHandler().startPoint(id,
-					coordinatesIteartor,
-					srsName);
+					coordinatesIteartor, srsName);
 		}
 		return point;
 	}

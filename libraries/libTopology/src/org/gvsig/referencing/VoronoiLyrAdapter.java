@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.referencing;
 
 import java.awt.geom.Point2D;
@@ -57,7 +57,7 @@ import org.gvsig.jts.voronoi.VoronoiAndTinInputLyr;
 
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
-public class VoronoiLyrAdapter extends LineLyrAdapter{
+public class VoronoiLyrAdapter extends LineLyrAdapter {
 
 	public VoronoiLyrAdapter(VoronoiAndTinInputLyr messLayer) {
 		try {
@@ -65,17 +65,17 @@ public class VoronoiLyrAdapter extends LineLyrAdapter{
 		} catch (BaseException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
-	public void setLayer(FLyrVect lyr) throws BaseException{
-		if(! (lyr instanceof VoronoiAndTinInputLyr))
+
+	public void setLayer(FLyrVect lyr) throws BaseException {
+		if (!(lyr instanceof VoronoiAndTinInputLyr))
 			throw new IllegalArgumentException("VoronoiAndTinInputLyr required");
 		this.lineLyr = (VoronoiAndTinInputLyr) lyr;
 	}
 
 	public MappedPosition get(int index) {
-		Point2D point = ((VoronoiAndTinInputLyr)lineLyr).getPoint(index);
+		Point2D point = ((VoronoiAndTinInputLyr) lineLyr).getPoint(index);
 		DirectPosition2D source = new DirectPosition2D(point);
 		return new MappedPosition(source, source.clone());
 	}

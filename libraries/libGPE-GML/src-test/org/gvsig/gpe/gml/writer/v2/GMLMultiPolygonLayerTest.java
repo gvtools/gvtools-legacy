@@ -72,6 +72,7 @@ import org.gvsig.gpe.writer.GPEMultiPolygonLayerTest;
 public class GMLMultiPolygonLayerTest extends GPEMultiPolygonLayerTest {
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEParserClass()
 	 */
 	public Class getGPEParserClass() {
@@ -80,6 +81,7 @@ public class GMLMultiPolygonLayerTest extends GPEMultiPolygonLayerTest {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEWriterHandlerClass()
 	 */
 	public Class getGPEWriterHandlerClass() {

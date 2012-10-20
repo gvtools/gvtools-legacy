@@ -8,13 +8,12 @@ import com.hardcode.gdbms.engine.data.persistence.MementoException;
 import com.hardcode.gdbms.engine.data.persistence.OperationLayerMemento;
 import com.hardcode.gdbms.engine.values.Value;
 
-
 /**
  * Clase que representa el producto cartesiano de dos o más tablas. El
- * almacenamiento de dicha tabla se realiza en las propias tablas sobre las
- * que se opera, haciendo los cálculos en cada acceso para saber en qué tabla
- * y en qué posición de la tabla se encuentra el dato buscado
- *
+ * almacenamiento de dicha tabla se realiza en las propias tablas sobre las que
+ * se opera, haciendo los cálculos en cada acceso para saber en qué tabla y en
+ * qué posición de la tabla se encuentra el dato buscado
+ * 
  * @author Fernando González Cortés
  */
 public class PDataSource extends OperationDataSource {
@@ -24,8 +23,9 @@ public class PDataSource extends OperationDataSource {
 
 	/**
 	 * Creates a new PDataSource object.
-	 *
-	 * @param tables Array de tablas que forman el producto
+	 * 
+	 * @param tables
+	 *            Array de tablas que forman el producto
 	 */
 	public PDataSource(DataSource[] tables) {
 		this.tables = tables;
@@ -34,11 +34,13 @@ public class PDataSource extends OperationDataSource {
 	/**
 	 * Dado un índice de campo en la tabla producto, devuelve el índice en la
 	 * tabla operando a la cual pertenence el campo
-	 *
-	 * @param fieldId Índice en la tabla producto
-	 *
+	 * 
+	 * @param fieldId
+	 *            Índice en la tabla producto
+	 * 
 	 * @return Índice en la tabla operando
-	 * @throws ReadDriverException TODO
+	 * @throws ReadDriverException
+	 *             TODO
 	 */
 	private int getFieldIndex(int fieldId) throws ReadDriverException {
 		int table = 0;
@@ -54,11 +56,13 @@ public class PDataSource extends OperationDataSource {
 	/**
 	 * Dado un índice de campo en la tabla producto, devuelve el índice en el
 	 * array de tablas de la tabla operando que contiene dicho campo
-	 *
-	 * @param fieldId índice del campo en la tabla producto
-	 *
+	 * 
+	 * @param fieldId
+	 *            índice del campo en la tabla producto
+	 * 
 	 * @return índice de la tabla en el array de tablas
-	 * @throws ReadDriverException TODO
+	 * @throws ReadDriverException
+	 *             TODO
 	 */
 	private int getTableIndexByFieldId(int fieldId) throws ReadDriverException {
 		int table = 0;
@@ -74,18 +78,22 @@ public class PDataSource extends OperationDataSource {
 	/**
 	 * Devuelve la fila de la tabla operando con índice tableIndex que contiene
 	 * la información de la fila rowIndex en la tabla producto
-	 *
-	 * @param rowIndex fila en la tabla producto a la que se quiere acceder
-	 * @param tableIndex Índice de la tabla
-	 *
+	 * 
+	 * @param rowIndex
+	 *            fila en la tabla producto a la que se quiere acceder
+	 * @param tableIndex
+	 *            Índice de la tabla
+	 * 
 	 * @return fila en la tabla operando de índice tableIndex que se quiere
-	 * 		   acceder
-	 * @throws ReadDriverException TODO
-	 * @throws ArrayIndexOutOfBoundsException Si la fila que se pide (rowIndex)
-	 * 		   supera el número de filas de la tabla producto
+	 *         acceder
+	 * @throws ReadDriverException
+	 *             TODO
+	 * @throws ArrayIndexOutOfBoundsException
+	 *             Si la fila que se pide (rowIndex) supera el número de filas
+	 *             de la tabla producto
 	 */
 	private long getTableRowIndexByTablePosition(long rowIndex, int tableIndex)
-		throws ReadDriverException {
+			throws ReadDriverException {
 		if (rowIndex >= tablesArity) {
 			throw new ArrayIndexOutOfBoundsException();
 		}
@@ -105,19 +113,20 @@ public class PDataSource extends OperationDataSource {
 	 * @see com.hardcode.gdbms.data.DataSource#getFieldName(int)
 	 */
 	public String getFieldName(int fieldId) throws ReadDriverException {
-		return tables[getTableIndexByFieldId(fieldId)].getFieldName(getFieldIndex(
-				fieldId));
+		return tables[getTableIndexByFieldId(fieldId)]
+				.getFieldName(getFieldIndex(fieldId));
 	}
 
 	/**
 	 * @see com.hardcode.gdbms.data.DataSource#getIntFieldValue(int, int)
 	 */
 	public Value getFieldValue(long rowIndex, int fieldId)
-		throws ReadDriverException {
+			throws ReadDriverException {
 		int tableIndex = getTableIndexByFieldId(fieldId);
 
-		return tables[tableIndex].getFieldValue(getTableRowIndexByTablePosition(
-				rowIndex, tableIndex), getFieldIndex(fieldId));
+		return tables[tableIndex].getFieldValue(
+				getTableRowIndexByTablePosition(rowIndex, tableIndex),
+				getFieldIndex(fieldId));
 	}
 
 	/**

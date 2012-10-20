@@ -53,27 +53,27 @@ import com.iver.cit.gvsig.fmap.core.v02.FSymbol;
 import com.iver.cit.gvsig.fmap.layers.XMLException;
 import com.iver.utiles.XMLEntity;
 
-
 /**
  * Implements a legend composed by single symbols.
  * 
- * @author   Vicente Caballero Navarro
+ * @author Vicente Caballero Navarro
  */
 public class SingleSymbolLegend extends AbstractLegend implements IVectorLegend {
 	private ISymbol defaultSymbol;
-    private int shapeType = FShape.POLYGON; // Por defecto, tipo pol�gono
+	private int shapeType = FShape.POLYGON; // Por defecto, tipo pol�gono
 	private ZSort zSort;
 
 	/**
-	 * Constructor method 
+	 * Constructor method
 	 */
-	public SingleSymbolLegend() {	}
-
+	public SingleSymbolLegend() {
+	}
 
 	/**
 	 * Convenience fast constructor.
-	 *
-	 * @param style S�mbolo.
+	 * 
+	 * @param style
+	 *            S�mbolo.
 	 */
 	public SingleSymbolLegend(ISymbol style) {
 		defaultSymbol = style;
@@ -90,28 +90,27 @@ public class SingleSymbolLegend extends AbstractLegend implements IVectorLegend 
 	}
 
 	public void setDefaultSymbol(ISymbol s) {
-		if (s == null) throw new NullPointerException("Default symbol cannot be null");
+		if (s == null)
+			throw new NullPointerException("Default symbol cannot be null");
 		setShapeType(s.getSymbolType());
 		ISymbol old = defaultSymbol;
 		defaultSymbol = s;
 		fireDefaultSymbolChangedEvent(new SymbolLegendEvent(old, s));
 	}
 
-
 	public ISymbol getSymbol(int recordIndex) {
 		return defaultSymbol;
 	}
 
 	public ISymbol getDefaultSymbol() {
-		if(defaultSymbol==null)
-			defaultSymbol=SymbologyFactory.createDefaultFillSymbol();
+		if (defaultSymbol == null)
+			defaultSymbol = SymbologyFactory.createDefaultFillSymbol();
 		return defaultSymbol;
 	}
 
-
 	public XMLEntity getXMLEntity() {
 		XMLEntity xml = new XMLEntity();
-		xml.putProperty("className",this.getClass().getName());
+		xml.putProperty("className", this.getClass().getName());
 		xml.addChild(defaultSymbol.getXMLEntity());
 
 		if (zSort != null) {
@@ -128,9 +127,10 @@ public class SingleSymbolLegend extends AbstractLegend implements IVectorLegend 
 	}
 
 	public void setXMLEntity(XMLEntity xml) {
-        ISymbol auxSym = SymbologyFactory.createSymbolFromXML(xml.getChild(0), null);
+		ISymbol auxSym = SymbologyFactory.createSymbolFromXML(xml.getChild(0),
+				null);
 		setDefaultSymbol(auxSym);
-		
+
 		XMLEntity zSortXML = xml.firstChild("id", "zSort");
 		if (zSortXML != null) {
 			zSort = new ZSort(this);
@@ -138,11 +138,9 @@ public class SingleSymbolLegend extends AbstractLegend implements IVectorLegend 
 		}
 	}
 
-
 	public ILegend cloneLegend() throws XMLException {
 		return (ILegend) LegendFactory.createFromXML(getXMLEntity());
 	}
-
 
 	public void setDataSource(DataSource ds) {
 		// No hacemos nada, no lo vamos a usar
@@ -154,35 +152,33 @@ public class SingleSymbolLegend extends AbstractLegend implements IVectorLegend 
 
 	public void setShapeType(int shapeType) {
 		if (this.shapeType != shapeType) {
-			defaultSymbol = SymbologyFactory.createDefaultSymbolByShapeType(shapeType);
+			defaultSymbol = SymbologyFactory
+					.createDefaultSymbolByShapeType(shapeType);
 			this.shapeType = shapeType;
 		}
 	}
 
-
-
-    public ISymbol getSymbolByFeature(IFeature feat) {
-        return defaultSymbol;
-    }
+	public ISymbol getSymbolByFeature(IFeature feat) {
+		return defaultSymbol;
+	}
 
 	public void useDefaultSymbol(boolean b) {
 		// TODO Auto-generated method stub
 	}
 
-    public String[] getUsedFields() {
-        return new String[0];
-    }
+	public String[] getUsedFields() {
+		return new String[0];
+	}
 
-    public boolean isUseDefaultSymbol() {
-    	return true;
+	public boolean isUseDefaultSymbol() {
+		return true;
 
-    }
+	}
 
+	public ZSort getZSort() {
+		return zSort;
 
-    public ZSort getZSort() {
-    	return zSort;
-
-    }
+	}
 
 	public void setZSort(ZSort zSort) {
 		if (zSort == null) {
@@ -192,14 +188,12 @@ public class SingleSymbolLegend extends AbstractLegend implements IVectorLegend 
 		addLegendListener(zSort);
 	}
 
-
-
 	public String getClassName() {
 		return getClass().getName();
 	}
 
-    public boolean isSuitableForShapeType(int shapeType) {
+	public boolean isSuitableForShapeType(int shapeType) {
 		return getShapeType() == shapeType;
-	} 
+	}
 
 }

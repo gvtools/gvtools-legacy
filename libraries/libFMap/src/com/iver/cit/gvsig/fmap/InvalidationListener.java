@@ -42,12 +42,11 @@ package com.iver.cit.gvsig.fmap;
 
 /**
  * Interfaz que recibe el evento invalid. Deberán implementar los elementos de
- * la interfaz que se quieran actualizar cuando se produzca un cambio en el
- * FMap
+ * la interfaz que se quieran actualizar cuando se produzca un cambio en el FMap
  */
 public interface InvalidationListener {
 	/**
-	 * Método invocado cuando se produce un cambio en FMap que  afecta a la
+	 * Método invocado cuando se produce un cambio en FMap que afecta a la
 	 * representación del mapa
 	 */
 	public void invalid();

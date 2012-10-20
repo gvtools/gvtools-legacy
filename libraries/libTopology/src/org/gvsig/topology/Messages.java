@@ -42,56 +42,61 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: Messages.java 14154 2007-09-27 19:14:16Z azabala $
-* $Log: Messages.java,v $
-* Revision 1.1  2007/09/19 09:05:06  azabala
-* first version in cvs
-*
-*
-*/
+ *
+ * $Id: Messages.java 14154 2007-09-27 19:14:16Z azabala $
+ * $Log: Messages.java,v $
+ * Revision 1.1  2007/09/19 09:05:06  azabala
+ * first version in cvs
+ *
+ *
+ */
 package org.gvsig.topology;
+
 import java.util.Locale;
 
 /**
-* Bridge class to provide internationalization services to the library.
-* It uses the gvsig-i18n library as a backend, and includes its
-* necessary initialization.
-* 
-* @author azabala, based in Cesar Martinez Izquierdo's work.
-*
-*/
+ * Bridge class to provide internationalization services to the library. It uses
+ * the gvsig-i18n library as a backend, and includes its necessary
+ * initialization.
+ * 
+ * @author azabala, based in Cesar Martinez Izquierdo's work.
+ * 
+ */
 public class Messages {
 	/**
 	 * Whether the class has been initialized
 	 */
 	private static boolean isInitialized = false;
-	
+
 	/**
 	 * The name of the Java package containing this class
 	 */
-	private static final String packageName = Messages.class.getPackage().getName();
-	
+	private static final String packageName = Messages.class.getPackage()
+			.getName();
+
 	/**
 	 * Loads the translations in the dictionary. It initializes the backend
 	 * gvsig-i18n library
-	 *
+	 * 
 	 */
 	private static void init() {
 		if (!org.gvsig.i18n.Messages.hasLocales()) {
 			org.gvsig.i18n.Messages.addLocale(Locale.getDefault());
 		}
-		org.gvsig.i18n.Messages.addResourceFamily(packageName+".resources.translations.text", Messages.class.getClassLoader(), packageName);
+		org.gvsig.i18n.Messages.addResourceFamily(packageName
+				+ ".resources.translations.text",
+				Messages.class.getClassLoader(), packageName);
 	}
-	
+
 	/**
 	 * Gets the translation associated with the provided translation key.
 	 * 
-	 * @param key The translation key which identifies the target text
+	 * @param key
+	 *            The translation key which identifies the target text
 	 * @return The translation associated with the provided translation key.
 	 */
 	public static String getText(String key) {
-		if (isInitialized==false) {
+		if (isInitialized == false) {
 			init();
 			isInitialized = true;
 		}

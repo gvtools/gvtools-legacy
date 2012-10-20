@@ -47,15 +47,17 @@ import org.gvsig.rastertools.histogram.HistogramPanelListener;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
+
 /**
  * <code>HistogramPanel</code>. Interfaz de usuario para la representación de
  * histogramas.
- *
+ * 
  * @version 20/03/2007
  * @author Diego Guerrero (diego.guerrero@uclm.es)
  * @author BorSanZa - Borja Sanchez Zamorano (borja.sanchez@iver.es)
  */
-public class HistogramPanel extends DefaultButtonsPanel implements ButtonsPanelListener {
+public class HistogramPanel extends DefaultButtonsPanel implements
+		ButtonsPanelListener {
 	private static final long serialVersionUID = 2772897994667886753L;
 
 	/**
@@ -66,49 +68,52 @@ public class HistogramPanel extends DefaultButtonsPanel implements ButtonsPanelL
 	/**
 	 * Array para la seleccion del origen
 	 */
-	private ArrayList              comboSource            = new ArrayList();
+	private ArrayList comboSource = new ArrayList();
 
 	/**
 	 * Variable para controlar si se dispararan los eventos del panel, si es la
 	 * primera vez no tiene porque disparar eventos.
 	 */
-	public boolean                 panelInizialited       = false;
+	public boolean panelInizialited = false;
 
 	/**
 	 * Componentes graficos
 	 */
-	private JComboBox              comboBoxSource         = null;
-	private JComboBox              comboBoxType           = null;
-	private JButton                bTable                 = null;
-	private JPanel                 panelNorth             = null;
-	private JPanel                 panelSouth             = null;
-	private JButton                buttonShowAll          = null;
-	private JButton                buttonClean            = null;
-	private JTable                 jTableBands            = null;
-	private JCheckBox              checkBoxDeleteEdges    = null;
-	private JCheckBox              checkBoxRGB            = null;
-	private TableContainer         tableContainer         = null;
-	private GraphicContainer       graphicContainer       = null;
+	private JComboBox comboBoxSource = null;
+	private JComboBox comboBoxType = null;
+	private JButton bTable = null;
+	private JPanel panelNorth = null;
+	private JPanel panelSouth = null;
+	private JButton buttonShowAll = null;
+	private JButton buttonClean = null;
+	private JTable jTableBands = null;
+	private JCheckBox checkBoxDeleteEdges = null;
+	private JCheckBox checkBoxRGB = null;
+	private TableContainer tableContainer = null;
+	private GraphicContainer graphicContainer = null;
 
 	/**
 	 * Tipo de dato de la petición. Si la petición del histograma es de la vista
 	 * el tipo de dato será byte aunque la imagen sea de 16 bits. Si la petición
-	 * es de los datos reales de la imagen entonces el tipo de dato de la petición
-	 * coincide con el tipo de datos de la imagen.
+	 * es de los datos reales de la imagen entonces el tipo de dato de la
+	 * petición coincide con el tipo de datos de la imagen.
 	 */
-	private int                    dataType               = IBuffer.TYPE_BYTE;
+	private int dataType = IBuffer.TYPE_BYTE;
 
 	/**
 	 * Crea un dialogo para los histogramas.
-	 *
+	 * 
 	 */
 	public HistogramPanel() {
 		super(ButtonsPanel.BUTTONS_NONE);
 		this.getButtonsPanel().addHideDetails();
 		this.getButtonsPanel().addSeeDetails();
-		this.getButtonsPanel().getButton(ButtonsPanel.BUTTON_SEEDETAILS).setVisible(false);
-		this.getButtonsPanel().getButton(ButtonsPanel.BUTTON_SEEDETAILS).setText(PluginServices.getText(this, "mostrar_estadisticas"));
-		this.getButtonsPanel().getButton(ButtonsPanel.BUTTON_HIDEDETAILS).setText(PluginServices.getText(this, "ocultar_estadisticas"));
+		this.getButtonsPanel().getButton(ButtonsPanel.BUTTON_SEEDETAILS)
+				.setVisible(false);
+		this.getButtonsPanel().getButton(ButtonsPanel.BUTTON_SEEDETAILS)
+				.setText(PluginServices.getText(this, "mostrar_estadisticas"));
+		this.getButtonsPanel().getButton(ButtonsPanel.BUTTON_HIDEDETAILS)
+				.setText(PluginServices.getText(this, "ocultar_estadisticas"));
 		this.getButtonsPanel().addClose();
 		this.addButtonPressedListener(this);
 		histogramPanelListener = getHistogramPanelListener();
@@ -117,7 +122,7 @@ public class HistogramPanel extends DefaultButtonsPanel implements ButtonsPanelL
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 */
 	private void initialize() {
 		this.setLayout(new BorderLayout(5, 5));
@@ -136,10 +141,14 @@ public class HistogramPanel extends DefaultButtonsPanel implements ButtonsPanelL
 	/**
 	 * Asigna una fuente de datos de un histograma. Hay dos tipos de fuentes de
 	 * datos, la de los datos visualizados y la del dataset. Ambas deben ser
-	 * objetos IHistogramable aunquela primera sea un buffer de datos y la segunda
-	 * un Dataset.
-	 * @param source Fuente de datos del histograma.
-	 * @param name Etiqueta que aparece en el combo para el cambio de fuente de datos
+	 * objetos IHistogramable aunquela primera sea un buffer de datos y la
+	 * segunda un Dataset.
+	 * 
+	 * @param source
+	 *            Fuente de datos del histograma.
+	 * @param name
+	 *            Etiqueta que aparece en el combo para el cambio de fuente de
+	 *            datos
 	 */
 	private void setHistogramableSource(IHistogramable source, String name) {
 		getHistogramPanelListener().eventsEnabled = false;
@@ -155,25 +164,31 @@ public class HistogramPanel extends DefaultButtonsPanel implements ButtonsPanelL
 		getHistogramPanelListener().eventsEnabled = false;
 		getComboBoxSource().removeAllItems();
 		for (int i = 0; i < getComboSource().size(); i++) {
-			getComboBoxSource().addItem(((ArrayList) getComboSource().get(i)).get(1));
+			getComboBoxSource().addItem(
+					((ArrayList) getComboSource().get(i)).get(1));
 		}
 		getHistogramPanelListener().eventsEnabled = panelInizialited;
 	}
 
 	/**
-	 * Asigna la capa para obtener las fuentes de datos tanto del
-	 * datasource como de la visualización.
-	 * @param lyr Capa
+	 * Asigna la capa para obtener las fuentes de datos tanto del datasource
+	 * como de la visualización.
+	 * 
+	 * @param lyr
+	 *            Capa
 	 */
 	public void setLayer(FLyrRasterSE lyr) throws Exception {
-		setHistogramableSource(((FLyrRasterSE) lyr).getRender().getLastRenderBuffer(), PluginServices.getText(this, "datos_visualizados"));
-		setHistogramableSource(((FLyrRasterSE) lyr).getDataSource(), PluginServices.getText(this, "imagen_completa"));
+		setHistogramableSource(((FLyrRasterSE) lyr).getRender()
+				.getLastRenderBuffer(), PluginServices.getText(this,
+				"datos_visualizados"));
+		setHistogramableSource(((FLyrRasterSE) lyr).getDataSource(),
+				PluginServices.getText(this, "imagen_completa"));
 		getHistogramPanelListener().setLayer(lyr);
 	}
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	public GraphicContainer getGraphicContainer() {
@@ -185,7 +200,7 @@ public class HistogramPanel extends DefaultButtonsPanel implements ButtonsPanelL
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPanelSouth() {
@@ -195,11 +210,13 @@ public class HistogramPanel extends DefaultButtonsPanel implements ButtonsPanelL
 			panelSouth.add(getTableContainer(), BorderLayout.CENTER);
 
 			JPanel jPanel2 = new JPanel();
-			jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.Y_AXIS));
+			jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2,
+					javax.swing.BoxLayout.Y_AXIS));
 			jPanel2.add(getBCreateTable());
 			jPanel2.add(getCheckBoxDeleteEdges());
 			jPanel2.add(getCheckBoxRGB());
-			jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+			jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5,
+					5, 5));
 
 			panelSouth.add(jPanel2, BorderLayout.EAST);
 		}
@@ -208,7 +225,8 @@ public class HistogramPanel extends DefaultButtonsPanel implements ButtonsPanelL
 
 	public JCheckBox getCheckBoxDeleteEdges() {
 		if (checkBoxDeleteEdges == null) {
-			checkBoxDeleteEdges = new JCheckBox(PluginServices.getText(this, "eliminar_extremos"));
+			checkBoxDeleteEdges = new JCheckBox(PluginServices.getText(this,
+					"eliminar_extremos"));
 			checkBoxDeleteEdges.addActionListener(histogramPanelListener);
 		}
 		return checkBoxDeleteEdges;
@@ -224,11 +242,17 @@ public class HistogramPanel extends DefaultButtonsPanel implements ButtonsPanelL
 
 	/**
 	 * Obtiene la tabla de estadisticas
+	 * 
 	 * @return
 	 */
-	private TableContainer getTableContainer(){
+	private TableContainer getTableContainer() {
 		if (tableContainer == null) {
-			String[] columnNames = { PluginServices.getText(this, "banda"), PluginServices.getText(this, "minimo"), PluginServices.getText(this, "maximo"), PluginServices.getText(this, "media"), PluginServices.getText(this, "mediana"), PluginServices.getText(this, "npixeles") };
+			String[] columnNames = { PluginServices.getText(this, "banda"),
+					PluginServices.getText(this, "minimo"),
+					PluginServices.getText(this, "maximo"),
+					PluginServices.getText(this, "media"),
+					PluginServices.getText(this, "mediana"),
+					PluginServices.getText(this, "npixeles") };
 			int[] columnWidths = { 50, 65, 65, 65, 65, 115 };
 			tableContainer = new TableContainer(columnNames, columnWidths);
 			tableContainer.setPreferredSize(new Dimension(0, 90));
@@ -248,11 +272,13 @@ public class HistogramPanel extends DefaultButtonsPanel implements ButtonsPanelL
 
 	/**
 	 * Devuelve el boton de mostrar todas las bandas
+	 * 
 	 * @return JButton
 	 */
 	public JButton getButtonShowAll() {
 		if (buttonShowAll == null) {
-			buttonShowAll = new JButton(PluginServices.getText(this, "boton_mostrar"));
+			buttonShowAll = new JButton(PluginServices.getText(this,
+					"boton_mostrar"));
 			buttonShowAll.addActionListener(getHistogramPanelListener());
 		}
 		return buttonShowAll;
@@ -260,11 +286,13 @@ public class HistogramPanel extends DefaultButtonsPanel implements ButtonsPanelL
 
 	/**
 	 * Devuelve el boton de limpiar las bandas
+	 * 
 	 * @return JButton
 	 */
 	public JButton getButtonClean() {
 		if (buttonClean == null) {
-			buttonClean = new JButton(PluginServices.getText(this, "boton_limpiar"));
+			buttonClean = new JButton(PluginServices.getText(this,
+					"boton_limpiar"));
 			buttonClean.addActionListener(getHistogramPanelListener());
 		}
 		return buttonClean;
@@ -272,7 +300,7 @@ public class HistogramPanel extends DefaultButtonsPanel implements ButtonsPanelL
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPanelNorth() {
@@ -282,7 +310,7 @@ public class HistogramPanel extends DefaultButtonsPanel implements ButtonsPanelL
 			JPanel jPanel4 = new JPanel();
 			java.awt.GridBagConstraints gridBagConstraints;
 
-			jScrollPane1.setPreferredSize(new java.awt.Dimension(120,65));
+			jScrollPane1.setPreferredSize(new java.awt.Dimension(120, 65));
 			jScrollPane1.setViewportView(getJTableBands());
 
 			panelNorth.setLayout(new BorderLayout());
@@ -290,7 +318,8 @@ public class HistogramPanel extends DefaultButtonsPanel implements ButtonsPanelL
 			panelNorth.add(jScrollPane1, BorderLayout.EAST);
 
 			jPanel4.setLayout(new java.awt.GridBagLayout());
-			JLabel jLabel1 = new JLabel(PluginServices.getText(this, "origen")+":");
+			JLabel jLabel1 = new JLabel(PluginServices.getText(this, "origen")
+					+ ":");
 			gridBagConstraints = new java.awt.GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.gridy = 0;
@@ -298,7 +327,8 @@ public class HistogramPanel extends DefaultButtonsPanel implements ButtonsPanelL
 			gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
 			jPanel4.add(jLabel1, gridBagConstraints);
 
-			JLabel jLabel2 = new JLabel(PluginServices.getText(this, "tipo")+":");
+			JLabel jLabel2 = new JLabel(PluginServices.getText(this, "tipo")
+					+ ":");
 			gridBagConstraints = new java.awt.GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.gridy = 1;
@@ -336,12 +366,14 @@ public class HistogramPanel extends DefaultButtonsPanel implements ButtonsPanelL
 	}
 
 	/**
-	 * Obtiene el combo con la selección de tipo de histograma, acumulado/no acumulado
+	 * Obtiene el combo con la selección de tipo de histograma, acumulado/no
+	 * acumulado
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	public JComboBox getComboBoxType() {
 		if (comboBoxType == null) {
-			String lista [] = { "normal", "accumulated", "logaritmic" };
+			String lista[] = { "normal", "accumulated", "logaritmic" };
 			for (int i = 0; i < lista.length; i++)
 				lista[i] = PluginServices.getText(this, lista[i]);
 			comboBoxType = new JComboBox(lista);
@@ -352,22 +384,24 @@ public class HistogramPanel extends DefaultButtonsPanel implements ButtonsPanelL
 	}
 
 	/**
-	 * Obtiene el combo con la selección de la fuente de datos en el calculo del histograma,
-	 * datos de la vista, datos reales con el extent de la vista e imagen completa.
+	 * Obtiene el combo con la selección de la fuente de datos en el calculo del
+	 * histograma, datos de la vista, datos reales con el extent de la vista e
+	 * imagen completa.
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	public JComboBox getComboBoxSource() {
 		if (comboBoxSource == null) {
 			comboBoxSource = new JComboBox();
 			comboBoxSource.addActionListener(getHistogramPanelListener());
-			comboBoxSource.setPreferredSize(new java.awt.Dimension(150,25));
+			comboBoxSource.setPreferredSize(new java.awt.Dimension(150, 25));
 		}
 		return comboBoxSource;
 	}
 
 	/**
 	 * This method initializes jButton
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	public JButton getBCreateTable() {
@@ -377,24 +411,27 @@ public class HistogramPanel extends DefaultButtonsPanel implements ButtonsPanelL
 			bTable.setText(PluginServices.getText(this, "crear_tabla"));
 			bTable.setName("bTable");
 			bTable.addActionListener(getHistogramPanelListener());
-			bTable.setPreferredSize(new java.awt.Dimension(150,25));
+			bTable.setPreferredSize(new java.awt.Dimension(150, 25));
 		}
 		return bTable;
 	}
 
 	/**
 	 * This method initializes jComboBox
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	public JTable getJTableBands() {
 		getHistogramPanelListener().eventsEnabled = false;
 		if (jTableBands == null) {
 			jTableBands = new JTable();
-			jTableBands.setModel(new javax.swing.table.DefaultTableModel(new Object[][] {}, new String[] { " ", PluginServices.getText(this, "bandas") }) {
+			jTableBands.setModel(new javax.swing.table.DefaultTableModel(
+					new Object[][] {}, new String[] { " ",
+							PluginServices.getText(this, "bandas") }) {
 				private static final long serialVersionUID = 0L;
-				Class[]                   types            = new Class[] { java.lang.Boolean.class, java.lang.String.class };
-				boolean[]                 canEdit          = new boolean[] { true, false };
+				Class[] types = new Class[] { java.lang.Boolean.class,
+						java.lang.String.class };
+				boolean[] canEdit = new boolean[] { true, false };
 
 				public Class getColumnClass(int columnIndex) {
 					return types[columnIndex];
@@ -414,24 +451,30 @@ public class HistogramPanel extends DefaultButtonsPanel implements ButtonsPanelL
 
 	/**
 	 * Asigna el número de bandas al combobox
-	 *
-	 * @param bands Número de bandas de la imagen
+	 * 
+	 * @param bands
+	 *            Número de bandas de la imagen
 	 */
 	private void setBands(int bands, boolean initValue) {
 		getHistogramPanelListener().eventsEnabled = false;
 
 		((DefaultTableModel) getJTableBands().getModel()).setRowCount(0);
 		for (int i = 0; i < bands; i++) {
-			((DefaultTableModel) getJTableBands().getModel()).addRow(new Object[] { new Boolean(initValue), PluginServices.getText(this, "band") + " " + String.valueOf(i) });
+			((DefaultTableModel) getJTableBands().getModel())
+					.addRow(new Object[] {
+							new Boolean(initValue),
+							PluginServices.getText(this, "band") + " "
+									+ String.valueOf(i) });
 		}
 		getHistogramPanelListener().eventsEnabled = panelInizialited;
 	}
 
 	/**
 	 * Asigna la estadistica a la tabla
+	 * 
 	 * @param stat
 	 */
-	public void setStatistic(double[][] stat){
+	public void setStatistic(double[][] stat) {
 		try {
 			getTableContainer().removeAllRows();
 			if (stat == null)
@@ -440,36 +483,42 @@ public class HistogramPanel extends DefaultButtonsPanel implements ButtonsPanelL
 				Object[] list = new Object[stat.length + 1];
 				list[0] = new Integer(iBand);
 				for (int iStat = 1; iStat <= stat.length; iStat++)
-					list[iStat] = new Double(MathUtils.format(new Double(stat[iStat - 1][iBand]).doubleValue(), 3));
+					list[iStat] = new Double(MathUtils.format(new Double(
+							stat[iStat - 1][iBand]).doubleValue(), 3));
 
 				getTableContainer().addRow(list);
 				list = null;
 			}
 		} catch (NotInitializeException e) {
-			NotificationManager.addError("Error al eliminar las filas de la tabla", e);
+			NotificationManager.addError(
+					"Error al eliminar las filas de la tabla", e);
 		}
 	}
 
 	/**
-	 * Resetea el control de bandas del panel con los valores RGB para
-	 * cuando se está haciendo el histograma de la visualización en
-	 * vez del histograma con los datos
-	 *
+	 * Resetea el control de bandas del panel con los valores RGB para cuando se
+	 * está haciendo el histograma de la visualización en vez del histograma con
+	 * los datos
+	 * 
 	 */
-	public void setRGBInBandList(boolean initValue){
+	public void setRGBInBandList(boolean initValue) {
 		getHistogramPanelListener().eventsEnabled = false;
 
 		((DefaultTableModel) getJTableBands().getModel()).setRowCount(0);
-		((DefaultTableModel) getJTableBands().getModel()).addRow(new Object[] { new Boolean(initValue), "R"});
-		((DefaultTableModel) getJTableBands().getModel()).addRow(new Object[] { new Boolean(initValue), "G"});
-		((DefaultTableModel) getJTableBands().getModel()).addRow(new Object[] { new Boolean(initValue), "B"});
+		((DefaultTableModel) getJTableBands().getModel()).addRow(new Object[] {
+				new Boolean(initValue), "R" });
+		((DefaultTableModel) getJTableBands().getModel()).addRow(new Object[] {
+				new Boolean(initValue), "G" });
+		((DefaultTableModel) getJTableBands().getModel()).addRow(new Object[] {
+				new Boolean(initValue), "B" });
 
 		getHistogramPanelListener().eventsEnabled = panelInizialited;
 	}
 
 	/**
-	 * Obtiene el valor del control izquierdo en el rango 0-100. Los controles dan
-	 * un rango en tanto por cien 0-100.
+	 * Obtiene el valor del control izquierdo en el rango 0-100. Los controles
+	 * dan un rango en tanto por cien 0-100.
+	 * 
 	 * @return Valor del control de la izquierda
 	 */
 	public double getBoxValueX1() {
@@ -479,6 +528,7 @@ public class HistogramPanel extends DefaultButtonsPanel implements ButtonsPanelL
 	/**
 	 * Obtiene el valor del control derecha en el rango 0-100. Los controles dan
 	 * un rango en tanto por cien 0-100.
+	 * 
 	 * @return Valor del control de la derecha
 	 */
 	public double getBoxValueX2() {
@@ -498,8 +548,10 @@ public class HistogramPanel extends DefaultButtonsPanel implements ButtonsPanelL
 			return;
 		}
 
-		//En caso de que el histograma se monte a partir de los datos de la vista ponemos RGB en el combo
-		int bandCount = getHistogramPanelListener().getLastHistogram().getNumBands();
+		// En caso de que el histograma se monte a partir de los datos de la
+		// vista ponemos RGB en el combo
+		int bandCount = getHistogramPanelListener().getLastHistogram()
+				.getNumBands();
 		if ((getComboBoxSource().getSelectedIndex() == 0) && (bandCount == 3)) {
 			setRGBInBandList(initValue);
 		} else {
@@ -513,6 +565,7 @@ public class HistogramPanel extends DefaultButtonsPanel implements ButtonsPanelL
 
 	/**
 	 * Asigna el tipo de dato de la capa
+	 * 
 	 * @param dataType
 	 */
 	public void setDataType(int dataType) {
@@ -521,6 +574,7 @@ public class HistogramPanel extends DefaultButtonsPanel implements ButtonsPanelL
 
 	/**
 	 * Obtiene el tipo de dato de la capa
+	 * 
 	 * @param dataType
 	 */
 	public int getDataType() {
@@ -529,16 +583,20 @@ public class HistogramPanel extends DefaultButtonsPanel implements ButtonsPanelL
 
 	public void actionButtonPressed(ButtonsPanelEvent e) {
 		switch (e.getButton()) {
-			case ButtonsPanel.BUTTON_HIDEDETAILS:
-				this.getButtonsPanel().getButton(ButtonsPanel.BUTTON_HIDEDETAILS).setVisible(false);
-				this.getButtonsPanel().getButton(ButtonsPanel.BUTTON_SEEDETAILS).setVisible(true);
-				panelSouth.setVisible(false);
-				break;
-			case ButtonsPanel.BUTTON_SEEDETAILS:
-				this.getButtonsPanel().getButton(ButtonsPanel.BUTTON_HIDEDETAILS).setVisible(true);
-				this.getButtonsPanel().getButton(ButtonsPanel.BUTTON_SEEDETAILS).setVisible(false);
-				panelSouth.setVisible(true);
-				break;
+		case ButtonsPanel.BUTTON_HIDEDETAILS:
+			this.getButtonsPanel().getButton(ButtonsPanel.BUTTON_HIDEDETAILS)
+					.setVisible(false);
+			this.getButtonsPanel().getButton(ButtonsPanel.BUTTON_SEEDETAILS)
+					.setVisible(true);
+			panelSouth.setVisible(false);
+			break;
+		case ButtonsPanel.BUTTON_SEEDETAILS:
+			this.getButtonsPanel().getButton(ButtonsPanel.BUTTON_HIDEDETAILS)
+					.setVisible(true);
+			this.getButtonsPanel().getButton(ButtonsPanel.BUTTON_SEEDETAILS)
+					.setVisible(false);
+			panelSouth.setVisible(true);
+			break;
 		}
 	}
 }

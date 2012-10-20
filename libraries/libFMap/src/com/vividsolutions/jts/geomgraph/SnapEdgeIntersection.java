@@ -42,63 +42,65 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: SnapEdgeIntersection.java 10627 2007-03-06 17:10:21Z caballero $
-* $Log$
-* Revision 1.2  2007-03-06 17:08:55  caballero
-* Exceptions
-*
-* Revision 1.1  2006/12/04 19:30:23  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/10/17 18:25:53  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/10/05 19:20:57  azabala
-* first version in cvs
-*
-* Revision 1.1  2006/10/02 19:06:39  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: SnapEdgeIntersection.java 10627 2007-03-06 17:10:21Z caballero $
+ * $Log$
+ * Revision 1.2  2007-03-06 17:08:55  caballero
+ * Exceptions
+ *
+ * Revision 1.1  2006/12/04 19:30:23  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/10/17 18:25:53  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/10/05 19:20:57  azabala
+ * first version in cvs
+ *
+ * Revision 1.1  2006/10/02 19:06:39  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.vividsolutions.jts.geomgraph;
 
 import com.vividsolutions.jts.geom.Coordinate;
 
 public class SnapEdgeIntersection extends EdgeIntersection {
-	
-	
-	  public SnapEdgeIntersection(Coordinate coord, int segmentIndex, double dist) {
-		  super(coord, segmentIndex, dist);
-	  }
 
-	  public int compareTo(Object obj)
-	  {
-	    SnapEdgeIntersection other = (SnapEdgeIntersection) obj;
-	    return compare(other.segmentIndex, other.dist);
-	  }
-	  /**
-	   * @return -1 this EdgeIntersection is located before the argument location
-	   * @return 0 this EdgeIntersection is at the argument location
-	   * @return 1 this EdgeIntersection is located after the argument location
-	   */
-	  public int compare(int segmentIndex, double dist)
-	  {
-		  //TODO VER SI METER DISTANCIA DE SNAP
-	    if (this.segmentIndex < segmentIndex) return -1;
-	    if (this.segmentIndex > segmentIndex) return 1;
-	    if (this.dist < dist) return -1;
-	    if (this.dist > dist) return 1;
-	    return 0;
-	  }
+	public SnapEdgeIntersection(Coordinate coord, int segmentIndex, double dist) {
+		super(coord, segmentIndex, dist);
+	}
 
-	  public boolean isEndPoint(int maxSegmentIndex)
-	  {
-		  //TODO VER SI METER DISTANCIA DE SNAP
-	    if (segmentIndex == 0 && dist == 0.0) return true;
-	    if (segmentIndex == maxSegmentIndex) return true;
-	    return false;
-	  }
+	public int compareTo(Object obj) {
+		SnapEdgeIntersection other = (SnapEdgeIntersection) obj;
+		return compare(other.segmentIndex, other.dist);
+	}
+
+	/**
+	 * @return -1 this EdgeIntersection is located before the argument location
+	 * @return 0 this EdgeIntersection is at the argument location
+	 * @return 1 this EdgeIntersection is located after the argument location
+	 */
+	public int compare(int segmentIndex, double dist) {
+		// TODO VER SI METER DISTANCIA DE SNAP
+		if (this.segmentIndex < segmentIndex)
+			return -1;
+		if (this.segmentIndex > segmentIndex)
+			return 1;
+		if (this.dist < dist)
+			return -1;
+		if (this.dist > dist)
+			return 1;
+		return 0;
+	}
+
+	public boolean isEndPoint(int maxSegmentIndex) {
+		// TODO VER SI METER DISTANCIA DE SNAP
+		if (segmentIndex == 0 && dist == 0.0)
+			return true;
+		if (segmentIndex == maxSegmentIndex)
+			return true;
+		return false;
+	}
 }
-

@@ -4,8 +4,8 @@ import java.util.HashMap;
 
 public class PostgresReservedWords {
 	private static HashMap<String, Boolean> reserverdWords = new HashMap<String, Boolean>();
-	
-	static{
+
+	static {
 		Boolean bol = true;
 		reserverdWords.put("ADD", bol);
 		reserverdWords.put("ALL", bol);
@@ -61,7 +61,7 @@ public class PostgresReservedWords {
 		reserverdWords.put("LOCAL", bol);
 		reserverdWords.put("NAMES", bol);
 		reserverdWords.put("NATIONAL", bol);
-		reserverdWords.put("NATURAL", bol); 
+		reserverdWords.put("NATURAL", bol);
 		reserverdWords.put("NCHAR", bol);
 		reserverdWords.put("NO", bol);
 		reserverdWords.put("NOT", bol);
@@ -145,8 +145,8 @@ public class PostgresReservedWords {
 		reserverdWords.put("VACUUM", bol);
 		reserverdWords.put("VERBOSE", bol);
 	}
-	
-	public static boolean isReserved(String word){
+
+	public static boolean isReserved(String word) {
 		return reserverdWords.containsKey(word.toUpperCase());
 	}
 }

@@ -22,9 +22,10 @@ import java.awt.Color;
 
 import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
+
 /**
  * Componente tabla
- *
+ * 
  * @version 27/06/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
@@ -32,7 +33,8 @@ public class TableColorModel extends DefaultTableModel implements IModel {
 	private static final long serialVersionUID = 5126848457976272945L;
 
 	boolean[] canEdit = new boolean[] { true, true, false, true, false, true };
-	Class[]   types   = new Class[] { JButton.class, String.class, String.class, Double.class, Double.class, JButton.class };
+	Class[] types = new Class[] { JButton.class, String.class, String.class,
+			Double.class, Double.class, JButton.class };
 
 	public TableColorModel(String[] columnNames) {
 		super(new Object[0][6], columnNames);
@@ -40,6 +42,7 @@ public class TableColorModel extends DefaultTableModel implements IModel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.table.models.IModel#getNewLine()
 	 */
 	public Object[] getNewLine() {
@@ -49,22 +52,24 @@ public class TableColorModel extends DefaultTableModel implements IModel {
 			valor = (Double) getValueAt(this.getRowCount() - 1, 3);
 			color = (Color) getValueAt(this.getRowCount() - 1, 0);
 		}
-		return new Object[] {color, "", "", valor, null, "255"};
+		return new Object[] { color, "", "", valor, null, "255" };
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.table.AbstractTableModel#getColumnClass(int)
 	 */
 	public Class getColumnClass(int columnIndex) {
-		return types [columnIndex];
+		return types[columnIndex];
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.table.DefaultTableModel#isCellEditable(int, int)
 	 */
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		return canEdit [columnIndex];
+		return canEdit[columnIndex];
 	}
 }

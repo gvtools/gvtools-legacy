@@ -33,23 +33,24 @@ import org.gvsig.gui.beans.datainput.DataInputContainer;
 import org.gvsig.raster.buffer.BufferInterpolation;
 
 import com.iver.andami.PluginServices;
+
 /**
  * <code>ResolutionPanel</code> sirve para controlar las redimensiones por
  * interpolación
- *
+ * 
  * @version 17/04/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class ClippingResolutionPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 2570616093263451091L;
-	private JPanel             pButtons       = null;
-	private DataInputContainer cCellSize      = null;
-	private DataInputContainer cHeight        = null;
-	private DataInputContainer cWidth         = null;
-	private JRadioButton       rSize          = null;
-	private JRadioButton       rWidthH        = null;
-	private JComboBox          cInterpolation = null;
-	private JButton            buttonRestore  = null;
+	private JPanel pButtons = null;
+	private DataInputContainer cCellSize = null;
+	private DataInputContainer cHeight = null;
+	private DataInputContainer cWidth = null;
+	private JRadioButton rSize = null;
+	private JRadioButton rWidthH = null;
+	private JComboBox cInterpolation = null;
+	private JButton buttonRestore = null;
 
 	/**
 	 * This is the default constructor
@@ -60,6 +61,7 @@ public class ClippingResolutionPanel extends JPanel implements ActionListener {
 
 	/**
 	 * This method initializes this
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
@@ -131,6 +133,7 @@ public class ClippingResolutionPanel extends JPanel implements ActionListener {
 
 	/**
 	 * This method initializes jPanel1
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	public DataInputContainer getCCellSize() {
@@ -143,6 +146,7 @@ public class ClippingResolutionPanel extends JPanel implements ActionListener {
 
 	/**
 	 * This method initializes jPanel2
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	public DataInputContainer getCHeight() {
@@ -152,16 +156,18 @@ public class ClippingResolutionPanel extends JPanel implements ActionListener {
 		}
 		return cHeight;
 	}
-	
+
 	public JButton getButtonRestore() {
 		if (buttonRestore == null) {
-			buttonRestore = new JButton(PluginServices.getText(this, "restablecer"));
+			buttonRestore = new JButton(PluginServices.getText(this,
+					"restablecer"));
 		}
 		return buttonRestore;
 	}
 
 	/**
 	 * This method initializes jPanel
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	public DataInputContainer getCWidth() {
@@ -174,13 +180,15 @@ public class ClippingResolutionPanel extends JPanel implements ActionListener {
 
 	/**
 	 * This method initializes jPanel
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPButtons() {
 		if (pButtons == null) {
 			pButtons = new JPanel();
 			pButtons.setLayout(new java.awt.GridBagLayout());
-			pButtons.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.gray, 1));
+			pButtons.setBorder(javax.swing.BorderFactory.createLineBorder(
+					java.awt.Color.gray, 1));
 
 			GridBagConstraints gridBagConstraints;
 			gridBagConstraints = new java.awt.GridBagConstraints();
@@ -201,36 +209,43 @@ public class ClippingResolutionPanel extends JPanel implements ActionListener {
 
 	/**
 	 * This method initializes jRadioButton
+	 * 
 	 * @return javax.swing.JRadioButton
 	 */
 	private JRadioButton getRSize() {
 		if (rSize == null) {
-			rSize = new JRadioButton(PluginServices.getText(this, "tamanyo_celda"));
+			rSize = new JRadioButton(PluginServices.getText(this,
+					"tamanyo_celda"));
 		}
 		return rSize;
 	}
 
 	/**
 	 * This method initializes jRadioButton1
+	 * 
 	 * @return javax.swing.JRadioButton
 	 */
 	private JRadioButton getRWidthH() {
 		if (rWidthH == null) {
-			rWidthH = new JRadioButton(PluginServices.getText(this, "ancho_x_alto"));
+			rWidthH = new JRadioButton(PluginServices.getText(this,
+					"ancho_x_alto"));
 		}
 		return rWidthH;
 	}
 
 	/**
 	 * This method initializes jComboBox
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getJComboBox() {
 		if (cInterpolation == null) {
 			cInterpolation = new JComboBox();
-			cInterpolation.addItem(PluginServices.getText(this, "vecino_+_proximo"));
+			cInterpolation.addItem(PluginServices.getText(this,
+					"vecino_+_proximo"));
 			cInterpolation.addItem(PluginServices.getText(this, "bilinear"));
-			cInterpolation.addItem(PluginServices.getText(this, "distancia_inversa"));
+			cInterpolation.addItem(PluginServices.getText(this,
+					"distancia_inversa"));
 			cInterpolation.addItem(PluginServices.getText(this, "b_splines"));
 			// cInterpolation.addItem(PluginServices.getText(this, "bicubico"));
 		}
@@ -238,21 +253,22 @@ public class ClippingResolutionPanel extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Obtiene el valor correspondiente al método de interpolación seleccionado en
-	 * el JComboBox
+	 * Obtiene el valor correspondiente al método de interpolación seleccionado
+	 * en el JComboBox
+	 * 
 	 * @return Método de interpolación interpretable con las variables definidas
 	 *         en BufferInterpolation.
 	 */
 	public int getSelectedInterpolationMethod() {
 		switch (getJComboBox().getSelectedIndex()) {
-			case 0:
-				return BufferInterpolation.INTERPOLATION_NearestNeighbour;
-			case 1:
-				return BufferInterpolation.INTERPOLATION_Bilinear;
-			case 2:
-				return BufferInterpolation.INTERPOLATION_InverseDistance;
-			case 3:
-				return BufferInterpolation.INTERPOLATION_BSpline;
+		case 0:
+			return BufferInterpolation.INTERPOLATION_NearestNeighbour;
+		case 1:
+			return BufferInterpolation.INTERPOLATION_Bilinear;
+		case 2:
+			return BufferInterpolation.INTERPOLATION_InverseDistance;
+		case 3:
+			return BufferInterpolation.INTERPOLATION_BSpline;
 		}
 		return BufferInterpolation.INTERPOLATION_Undefined;
 	}
@@ -261,13 +277,17 @@ public class ClippingResolutionPanel extends JPanel implements ActionListener {
 	 * Asigna el valor del campo "tamaño de celda" a partir del double que lo
 	 * representa y con el número de decimales que se especifica en el parámetro
 	 * dec
-	 * @param cellSize Tamaño de celda en double
-	 * @param dec Número de decimales
+	 * 
+	 * @param cellSize
+	 *            Tamaño de celda en double
+	 * @param dec
+	 *            Número de decimales
 	 */
 	public void setCellSizeText(double cellSize, int dec) {
 		int indexPoint = String.valueOf(cellSize).indexOf('.');
 		try {
-			cCellSize.setValue(String.valueOf(cellSize).substring(0, indexPoint + dec));
+			cCellSize.setValue(String.valueOf(cellSize).substring(0,
+					indexPoint + dec));
 		} catch (StringIndexOutOfBoundsException ex) {
 			cCellSize.setValue(String.valueOf(cellSize));
 		} catch (NumberFormatException ex) {
@@ -278,13 +298,17 @@ public class ClippingResolutionPanel extends JPanel implements ActionListener {
 	/**
 	 * Asigna el valor del campo "Ancho" a partir del double que lo representa y
 	 * con el número de decimales que se especifica en el parámetro dec
-	 * @param width Ancho
-	 * @param dec Número de decimales
+	 * 
+	 * @param width
+	 *            Ancho
+	 * @param dec
+	 *            Número de decimales
 	 */
 	public void setWidthText(double width, int dec) {
 		int indexPoint = String.valueOf(width).indexOf('.');
 		try {
-			cWidth.setValue(String.valueOf(width).substring(0, indexPoint + dec));
+			cWidth.setValue(String.valueOf(width)
+					.substring(0, indexPoint + dec));
 		} catch (StringIndexOutOfBoundsException ex) {
 			cWidth.setValue(String.valueOf(width));
 		} catch (NumberFormatException ex) {
@@ -295,13 +319,17 @@ public class ClippingResolutionPanel extends JPanel implements ActionListener {
 	/**
 	 * Asigna el valor del campo "Alto" a partir del double que lo representa y
 	 * con el número de decimales que se especifica en el parámetro dec
-	 * @param height Alto
-	 * @param dec Número de decimales
+	 * 
+	 * @param height
+	 *            Alto
+	 * @param dec
+	 *            Número de decimales
 	 */
 	public void setHeightText(double height, int dec) {
 		int indexPoint = String.valueOf(height).indexOf('.');
 		try {
-			cHeight.setValue(String.valueOf(height).substring(0, indexPoint + dec));
+			cHeight.setValue(String.valueOf(height).substring(0,
+					indexPoint + dec));
 		} catch (StringIndexOutOfBoundsException ex) {
 			cHeight.setValue(String.valueOf(height));
 		} catch (NumberFormatException ex) {
@@ -311,6 +339,7 @@ public class ClippingResolutionPanel extends JPanel implements ActionListener {
 
 	/**
 	 * Devuelve el valor del campo "tamaño de celda"
+	 * 
 	 * @return
 	 */
 	public double getCellSizeText() {
@@ -319,6 +348,7 @@ public class ClippingResolutionPanel extends JPanel implements ActionListener {
 
 	/**
 	 * Devuelve el valor del campo "tamaño de celda"
+	 * 
 	 * @return
 	 */
 	public double getWidthText() {
@@ -327,6 +357,7 @@ public class ClippingResolutionPanel extends JPanel implements ActionListener {
 
 	/**
 	 * Devuelve el valor del campo "tamaño de celda"
+	 * 
 	 * @return
 	 */
 	public double getHeightText() {
@@ -335,6 +366,7 @@ public class ClippingResolutionPanel extends JPanel implements ActionListener {
 
 	/**
 	 * Devuelve los valores de Alto x Acho de la resolución espacial
+	 * 
 	 * @return
 	 */
 	public String[] getWidthHeight() {
@@ -344,6 +376,7 @@ public class ClippingResolutionPanel extends JPanel implements ActionListener {
 
 	/**
 	 * Devuelve el metodo de interpolacion.
+	 * 
 	 * @return
 	 */
 	public String getInterpolation() {
@@ -352,7 +385,9 @@ public class ClippingResolutionPanel extends JPanel implements ActionListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == getRSize()) {

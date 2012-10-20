@@ -55,47 +55,56 @@ import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
+
 /**
  * Extensión para el cálculo de Componentes Principales.
  * 
  * @author Diego Guerrero Sevilla (diego.guerrero@uclm.es)
  */
-public class PrincipalComponentsExtension extends Extension implements IGenericToolBarMenuItem {
+public class PrincipalComponentsExtension extends Extension implements
+		IGenericToolBarMenuItem {
 	private static final double NODATA = -99999999999999.;
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
-//	PrincipalComponentListManager.register();
-		ExtensionPoint extensionPoint = ExtensionPoint.getExtensionPoint("GenericToolBarMenu");
+		// PrincipalComponentListManager.register();
+		ExtensionPoint extensionPoint = ExtensionPoint
+				.getExtensionPoint("GenericToolBarMenu");
 		extensionPoint.register("PrincipalComponents", this);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String actionCommand) {
-		if (actionCommand.equals("principal_components")){
-			com.iver.andami.ui.mdiManager.IWindow activeWindow = PluginServices.getMDIManager().getActiveWindow();
-			
-			//si la ventana activa es de tipo Vista 
+		if (actionCommand.equals("principal_components")) {
+			com.iver.andami.ui.mdiManager.IWindow activeWindow = PluginServices
+					.getMDIManager().getActiveWindow();
+
+			// si la ventana activa es de tipo Vista
 			if (activeWindow instanceof View) {
-				PrincipalComponentPanel pcPanel = new PrincipalComponentPanel ((View)activeWindow);
+				PrincipalComponentPanel pcPanel = new PrincipalComponentPanel(
+						(View) activeWindow);
 				PluginServices.getMDIManager().addWindow(pcPanel);
-				
+
 			}
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (f == null) {
 			return false;
 		}
@@ -113,10 +122,12 @@ public class PrincipalComponentsExtension extends Extension implements IGenericT
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (f == null) {
 			return false;
 		}
@@ -129,8 +140,9 @@ public class PrincipalComponentsExtension extends Extension implements IGenericT
 			return false;
 		}
 	}
-	
-	private static double covariance(double[] xx, double x, double[] yy, double y) {
+
+	private static double covariance(double[] xx, double x, double[] yy,
+			double y) {
 		double dSum = 0;
 		int iValues = 0;
 
@@ -147,7 +159,8 @@ public class PrincipalComponentsExtension extends Extension implements IGenericT
 		}
 	}
 
-	private static double covariance(byte[][] xx, double x, byte[][] yy, double y) {
+	private static double covariance(byte[][] xx, double x, byte[][] yy,
+			double y) {
 		double dSum = 0;
 		int iValues = 0;
 
@@ -168,15 +181,18 @@ public class PrincipalComponentsExtension extends Extension implements IGenericT
 
 	/**
 	 * Covariance of two 1D arrays of doubles, xx and yy
+	 * 
 	 * @param xx
 	 * @param yy
 	 * @return
 	 */
-	public static double covariance(byte[][] xx, byte[][] yy){
+	public static double covariance(byte[][] xx, byte[][] yy) {
 		int nx = xx.length;
 		int ny = xx[0].length;
 		if (nx != yy.length)
-			throw new IllegalArgumentException("length of x variable array, " + nx + " and length of y array, " + yy.length + " are different");
+			throw new IllegalArgumentException("length of x variable array, "
+					+ nx + " and length of y array, " + yy.length
+					+ " are different");
 
 		double sumx = 0.0D, meanx = 0.0D;
 		double sumy = 0.0D, meany = 0.0D;
@@ -198,7 +214,11 @@ public class PrincipalComponentsExtension extends Extension implements IGenericT
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#execute(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * org.gvsig.raster.gui.IGenericToolBarMenuItem#execute(com.iver.cit.gvsig
+	 * .project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public void execute(ITocItem item, FLayer[] selectedItems) {
 		this.execute("principal_components");
@@ -206,6 +226,7 @@ public class PrincipalComponentsExtension extends Extension implements IGenericT
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getGroup()
 	 */
 	public String getGroup() {
@@ -214,6 +235,7 @@ public class PrincipalComponentsExtension extends Extension implements IGenericT
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getIcon()
 	 */
 	public Icon getIcon() {
@@ -222,6 +244,7 @@ public class PrincipalComponentsExtension extends Extension implements IGenericT
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getOrder()
 	 */
 	public int getOrder() {
@@ -230,6 +253,7 @@ public class PrincipalComponentsExtension extends Extension implements IGenericT
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getText()
 	 */
 	public String getText() {
@@ -238,7 +262,11 @@ public class PrincipalComponentsExtension extends Extension implements IGenericT
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * org.gvsig.raster.gui.IGenericToolBarMenuItem#isEnabled(com.iver.cit.gvsig
+	 * .project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -255,7 +283,11 @@ public class PrincipalComponentsExtension extends Extension implements IGenericT
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * org.gvsig.raster.gui.IGenericToolBarMenuItem#isVisible(com.iver.cit.gvsig
+	 * .project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -263,12 +295,13 @@ public class PrincipalComponentsExtension extends Extension implements IGenericT
 
 		if (!(selectedItems[0] instanceof FLyrRasterSE))
 			return false;
-		
+
 		return true;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getGroupOrder()
 	 */
 	public int getGroupOrder() {

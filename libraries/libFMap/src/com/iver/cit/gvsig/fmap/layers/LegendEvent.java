@@ -43,36 +43,46 @@ package com.iver.cit.gvsig.fmap.layers;
 import com.iver.cit.gvsig.fmap.FMapEvent;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.ClassifiableVectorial;
 
-
-
 /**
- * <p><code>LegendEvent</code> represents an event produced at a legend in a layer.</p>
+ * <p>
+ * <code>LegendEvent</code> represents an event produced at a legend in a layer.
+ * </p>
  * 
  * @see FMapEvent
  */
 public class LegendEvent extends FMapEvent {
 	/**
-	 * <p>Identifies this event as a change of the value of a legend.</p>
+	 * <p>
+	 * Identifies this event as a change of the value of a legend.
+	 * </p>
 	 */
 	public static final int LEGEND_VALUE_CHANGED = 200;
 
 	/**
-	 * <p>Identifies this event as a change of the symbol of a legend.</p>
+	 * <p>
+	 * Identifies this event as a change of the symbol of a legend.
+	 * </p>
 	 */
 	public static final int LEGEND_SYMBOL_CHANGED = 201;
 
 	/**
-	 * <p>Identifies this event as a legend interval change.</p>
+	 * <p>
+	 * Identifies this event as a legend interval change.
+	 * </p>
 	 */
 	public static final int LEGEND_INTERVAL_CHANGED = 202;
 
 	/**
-	 * <p>Identifies this event as a clear of a legend.</p>
+	 * <p>
+	 * Identifies this event as a clear of a legend.
+	 * </p>
 	 */
 	public static final int LEGEND_CLEARED = 203;
 
 	/**
-	 * <p>Identifies this event as a change on the classification of a legend.</p>
+	 * <p>
+	 * Identifies this event as a change on the classification of a legend.
+	 * </p>
 	 */
 	public static final int LEGEND_CLASSIFICATION_CHANGED = 204;
 
@@ -85,8 +95,11 @@ public class LegendEvent extends FMapEvent {
 	private ClassifiableVectorial layer;
 
 	/**
-	 * <p>Returns the layer of the legend where the event was produced, as a classifiable and vector layer.</p>
-	 *
+	 * <p>
+	 * Returns the layer of the legend where the event was produced, as a
+	 * classifiable and vector layer.
+	 * </p>
+	 * 
 	 * @return the layer where the event was produced, as classifiable vector
 	 * 
 	 * @see #setLayer(ClassifiableVectorial)
@@ -96,9 +109,13 @@ public class LegendEvent extends FMapEvent {
 	}
 
 	/**
-	 * <p>Sets the layer of the legend where the event was produced, as a classifiable and vector layer.</p>
-	 *
-	 * @param layer the layer where the event was produced, as classifiable vector
+	 * <p>
+	 * Sets the layer of the legend where the event was produced, as a
+	 * classifiable and vector layer.
+	 * </p>
+	 * 
+	 * @param layer
+	 *            the layer where the event was produced, as classifiable vector
 	 * 
 	 * @see #getLayer()
 	 */

@@ -43,7 +43,6 @@ package com.iver.cit.gvsig.fmap.layers.layerOperations;
 import com.iver.cit.gvsig.fmap.layers.FBitSet;
 import com.iver.cit.gvsig.fmap.layers.SelectionListener;
 
-
 /**
  * Interfaz que implementan las capas en las cuales se puede realizar una
  * selección.
@@ -52,7 +51,7 @@ public interface Selectable {
 	/**
 	 * Establece la selección de la capa. No lanza ninún evento, ya que se
 	 * lanzan manualmente mediante el método fireSelectionEvents
-	 *
+	 * 
 	 * @param selection
 	 */
 	void setSelection(FBitSet selection);
@@ -60,9 +59,10 @@ public interface Selectable {
 	/**
 	 * Devuelve true si el índice que se pasa como parámetro corresponde a un
 	 * registro seleccionado y false en caso contrario
-	 *
-	 * @param index Índice.
-	 *
+	 * 
+	 * @param index
+	 *            Índice.
+	 * 
 	 * @return True si esta seleccionado.
 	 */
 	boolean isSelected(int index);
@@ -76,7 +76,7 @@ public interface Selectable {
 	/**
 	 * Obtiene el bitset que contiene la información de los registros
 	 * seleccionados de la capa
-	 *
+	 * 
 	 * @return BitSet con los índices de los elementos seleccionados.
 	 */
 	FBitSet getSelection();
@@ -91,15 +91,17 @@ public interface Selectable {
 
 	/**
 	 * Añade un listener de selección a la capa
-	 *
-	 * @param listener listener que se quiere añadir
+	 * 
+	 * @param listener
+	 *            listener que se quiere añadir
 	 */
 	public void addSelectionListener(SelectionListener listener);
 
 	/**
 	 * Elimina un listener de selección de la capa
-	 *
-	 * @param listener listener que se quiere eliminar
+	 * 
+	 * @param listener
+	 *            listener que se quiere eliminar
 	 */
 	public void removeSelectionListener(SelectionListener listener);
 }

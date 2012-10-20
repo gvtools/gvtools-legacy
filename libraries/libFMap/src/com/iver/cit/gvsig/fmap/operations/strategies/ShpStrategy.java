@@ -92,7 +92,7 @@ public class ShpStrategy extends DefaultStrategy {
 
 	/**
 	 * Crea una ShpStrategy.
-	 *
+	 * 
 	 * @param capa
 	 */
 	public ShpStrategy(FLayer capa) {
@@ -109,7 +109,8 @@ public class ShpStrategy extends DefaultStrategy {
 			FLyrVect lyr = (FLyrVect) getCapa();
 			ReadableVectorial adapter = lyr.getSource();
 			if (adapter.getShapeCount() <= 0) {
-//				logger.info("Layer:" + getCapa().getName() + " sin registros");
+				// logger.info("Layer:" + getCapa().getName() +
+				// " sin registros");
 				return;
 			}
 
@@ -126,9 +127,9 @@ public class ShpStrategy extends DefaultStrategy {
 			// logger.debug("adapter.start() -> Layer:" + getCapa().getName());
 			adapter.start();
 			IGeometry geom;
-//			if (adapter.getShapeCount() > 0) {
-//				geom = adapter.getShape(0);
-//			}
+			// if (adapter.getShapeCount() > 0) {
+			// geom = adapter.getShape(0);
+			// }
 			IVectorLegend l = (IVectorLegend) ((ClassifiableVectorial) lyr)
 					.getLegend();
 
@@ -143,8 +144,8 @@ public class ShpStrategy extends DefaultStrategy {
 
 					/*
 					 * Style2D pointSymbol = symbs[i].getPointStyle2D(); if
-					 * (pointSymbol instanceof MarkStyle2D) { MarkStyle2D mrk2D =
-					 * (MarkStyle2D) pointSymbol; rSym =
+					 * (pointSymbol instanceof MarkStyle2D) { MarkStyle2D mrk2D
+					 * = (MarkStyle2D) pointSymbol; rSym =
 					 * viewPort.toMapDistance(mrk2D.getSize()); if (maxRSym <
 					 * rSym) maxRSym = rSym; }
 					 */
@@ -181,7 +182,7 @@ public class ShpStrategy extends DefaultStrategy {
 			sc = adapter.getShapeCount();
 			// if (lyr.getSpatialIndex() != null) AZABALA
 			// long t11 = System.currentTimeMillis();
-			ISpatialIndex isi=lyr.getISpatialIndex();
+			ISpatialIndex isi = lyr.getISpatialIndex();
 			if (isi != null) {
 				if (isSpatialIndexNecessary(extent)) {
 					lstIndexes = isi.query(extent);
@@ -210,15 +211,19 @@ public class ShpStrategy extends DefaultStrategy {
 			SpatialCache cache = lyr.getSpatialCache();
 			int i;
 
-			//En OS X con renderer Quartz (JRE<6), mezclar setRGB con dibujado geometrico en mismo BufferedImage
-			//provoca ralentizaci—n brutal. Lo evitamos separando los setRGB en otro BufferedImage y juntandolos luego.
-			boolean MAC_OS_X = System.getProperty("os.name").toLowerCase().startsWith("mac os x");
+			// En OS X con renderer Quartz (JRE<6), mezclar setRGB con dibujado
+			// geometrico en mismo BufferedImage
+			// provoca ralentizaci—n brutal. Lo evitamos separando los setRGB en
+			// otro BufferedImage y juntandolos luego.
+			boolean MAC_OS_X = System.getProperty("os.name").toLowerCase()
+					.startsWith("mac os x");
 			BufferedImage auxBI = null;
 			if (MAC_OS_X) {
-				auxBI = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
+				auxBI = new BufferedImage(image.getWidth(), image.getHeight(),
+						image.getType());
 			}
 
-			double dist1pixel=viewPort.getDist1pixel();
+			double dist1pixel = viewPort.getDist1pixel();
 			for (int aux = 0; aux < sc; aux++) {
 
 				// Salimos si alguien cancela
@@ -235,19 +240,17 @@ public class ShpStrategy extends DefaultStrategy {
 					i = aux;
 				}
 
-
 				if (getCapa().isEditing())
-					bounds=adapter.getShape(i).getBounds2D();
+					bounds = adapter.getShape(i).getBounds2D();
 				else
 					bounds = shapeBounds.getShapeBounds(i);
 
-				if (bounds==null)
+				if (bounds == null)
 					continue;
 
 				if (trans != null) {
 					bounds = ProjectionUtils.transform(bounds, trans);
 				}
-
 
 				if (XRectangle2D.intersectInclusive(extent, bounds)) {
 					ISymbol symbol = l.getSymbol(i);
@@ -259,11 +262,12 @@ public class ShpStrategy extends DefaultStrategy {
 						symbol = symbol.getSymbolForSelection();
 					}
 
-					boolean bPoint = ((shapeBounds.getShapeType(i) == FShape.POINT) ||
-													(shapeBounds.getShapeType(i) == (FShape.POINT | FShape.Z)));
+					boolean bPoint = ((shapeBounds.getShapeType(i) == FShape.POINT) || (shapeBounds
+							.getShapeType(i) == (FShape.POINT | FShape.Z)));
 
-					boolean draw = bPoint		|| ((bounds.getHeight() > dist1pixel) || (bounds
-							.getWidth() > dist1pixel));
+					boolean draw = bPoint
+							|| ((bounds.getHeight() > dist1pixel) || (bounds
+									.getWidth() > dist1pixel));
 					if (draw) {
 						geom = adapter.getShape(i);
 
@@ -271,8 +275,7 @@ public class ShpStrategy extends DefaultStrategy {
 						// geom = ShapeFactory.createPolygon2D(new
 						// GeneralPathX(bounds));
 
-
-						//JMVIVO: OJO, No colnamos siempre porque
+						// JMVIVO: OJO, No colnamos siempre porque
 						// el FGeometry.drawInt (a diferencia del
 						// FGeometry.draw) clona siempre la geometria
 						// antes de pintarla (para transforma a enteros)
@@ -287,7 +290,6 @@ public class ShpStrategy extends DefaultStrategy {
 								cache.insert(bounds, geom);
 							}
 						}
-
 
 						// FJP: CAMBIO: Sabemos que vamos a dibujar sobre una
 						// imagen, con coordenadas enteras, así
@@ -305,8 +307,8 @@ public class ShpStrategy extends DefaultStrategy {
 
 					} else {
 
-						Point2D.Double pOrig = new Point2D.Double(bounds
-								.getMinX(), bounds.getMinY());
+						Point2D.Double pOrig = new Point2D.Double(
+								bounds.getMinX(), bounds.getMinY());
 						Point2D pDest, pDest2;
 
 						pDest = viewPort.getAffineTransform().transform(pOrig,
@@ -320,9 +322,11 @@ public class ShpStrategy extends DefaultStrategy {
 						if ((pixX > 0) && (pixX < image.getWidth())) {
 							if ((pixY > 0) && (pixY < image.getHeight())) {
 								if (MAC_OS_X) {
-									auxBI.setRGB(pixX, pixY, symbol.getOnePointRgb());
+									auxBI.setRGB(pixX, pixY,
+											symbol.getOnePointRgb());
 								} else {
-									image.setRGB(pixX, pixY, symbol.getOnePointRgb());
+									image.setRGB(pixX, pixY,
+											symbol.getOnePointRgb());
 								}
 							}
 						}
@@ -331,7 +335,7 @@ public class ShpStrategy extends DefaultStrategy {
 			}
 
 			if (MAC_OS_X) {
-				g.drawImage(auxBI,0,0,null);
+				g.drawImage(auxBI, 0, 0, null);
 			}
 
 			// logger.debug("getCapa().getRecordset().stop()");
@@ -343,50 +347,50 @@ public class ShpStrategy extends DefaultStrategy {
 
 			// System.out.println(t2 - t1);
 		} catch (ExpansionFileReadException e) {
-			throw new ReadDriverException(getCapa().getName(),e);
+			throw new ReadDriverException(getCapa().getName(), e);
 		} catch (InitializeDriverException e) {
-			throw new ReadDriverException(getCapa().getName(),e);
+			throw new ReadDriverException(getCapa().getName(), e);
 		} catch (NoninvertibleTransformException e) {
-			throw new ReadDriverException(getCapa().getName(),e);
+			throw new ReadDriverException(getCapa().getName(), e);
 		}
 	}
 
 	/**
 	 * Método utilizado para dibujar sobre el graphics que se pasa como
 	 * parámetro, pensado para utilizarse para imprimir.
-	 *
+	 * 
 	 * @param g
 	 *            Graphics2D
 	 * @param viewPort
 	 *            ViewPort.
 	 * @param cancel
 	 */
-	public void print(Graphics2D g, ViewPort viewPort, Cancellable cancel, PrintRequestAttributeSet printProperties)
+	public void print(Graphics2D g, ViewPort viewPort, Cancellable cancel,
+			PrintRequestAttributeSet printProperties)
 			throws ReadDriverException {
 		// super.draw(null, g, viewPort, cancel); // Quiero ejecutar el draw del
 		// padre, que es el que va sin acelaración!!
 		try {
 			FLyrVect lyr = (FLyrVect) getCapa();
 			ReadableVectorial adapter = lyr.getSource();
-			int shapeCount=adapter.getShapeCount();
+			int shapeCount = adapter.getShapeCount();
 			if (shapeCount <= 0) {
-//				logger.info("Layer:" + getCapa().getName() + " sin registros");
+				// logger.info("Layer:" + getCapa().getName() +
+				// " sin registros");
 				return;
 			}
-
 
 			SelectableDataSource selectable = lyr.getRecordset();
 			MathTransform trans = lyr.getCrsTransform();
 			BitSet bitSet = selectable.getSelection();
-			//BoundedShapes shapeBounds = (BoundedShapes) adapter.getDriver();
-			VectorialDriver driver = adapter
-					.getDriver();
+			// BoundedShapes shapeBounds = (BoundedShapes) adapter.getDriver();
+			VectorialDriver driver = adapter.getDriver();
 			adapter.start();
 			IGeometry geom;
 
-//			if (shapeCount > 0) {
-//				geom = adapter.getShape(0);
-//			}
+			// if (shapeCount > 0) {
+			// geom = adapter.getShape(0);
+			// }
 			IVectorLegend l = (IVectorLegend) ((ClassifiableVectorial) lyr)
 					.getLegend();
 
@@ -411,7 +415,7 @@ public class ShpStrategy extends DefaultStrategy {
 			}
 
 			List lstIndexes = null;
-			ISpatialIndex isi=lyr.getISpatialIndex();
+			ISpatialIndex isi = lyr.getISpatialIndex();
 			boolean bUseSpatialIndex = false;
 			if (isi != null) {
 				if (isSpatialIndexNecessary(extent)) {
@@ -437,7 +441,7 @@ public class ShpStrategy extends DefaultStrategy {
 					i = aux;
 				}
 
-				bounds = ((BoundedShapes)driver).getShapeBounds(i);
+				bounds = ((BoundedShapes) driver).getShapeBounds(i);
 
 				if (trans != null) {
 					bounds = ProjectionUtils.transform(bounds, trans);
@@ -451,7 +455,8 @@ public class ShpStrategy extends DefaultStrategy {
 						symbol = symbol.getSymbolForSelection();
 					}
 
-					//boolean bPoint = (shapeBounds.getShapeType(i) == FShape.POINT);
+					// boolean bPoint = (shapeBounds.getShapeType(i) ==
+					// FShape.POINT);
 
 					geom = driver.getShape(i);
 
@@ -461,9 +466,10 @@ public class ShpStrategy extends DefaultStrategy {
 
 					// JMVIVO: Clonamos siempre que sea necesario y no
 					// solo si hay que reproyectar. Porque el FGeometry.draw
-					// va a aplicar la transformacion sobre la geometria original
-						if (bMustClone)
-							geom = geom.cloneGeometry();
+					// va a aplicar la transformacion sobre la geometria
+					// original
+					if (bMustClone)
+						geom = geom.cloneGeometry();
 
 					if (trans != null) {
 						geom.reProject(trans);
@@ -479,11 +485,11 @@ public class ShpStrategy extends DefaultStrategy {
 			adapter.stop();
 
 		} catch (ExpansionFileReadException e) {
-			throw new ReadDriverException(getCapa().getName(),e);
+			throw new ReadDriverException(getCapa().getName(), e);
 		} catch (InitializeDriverException e) {
-			throw new ReadDriverException(getCapa().getName(),e);
+			throw new ReadDriverException(getCapa().getName(), e);
 		} catch (NoninvertibleTransformException e) {
-			throw new ReadDriverException(getCapa().getName(),e);
+			throw new ReadDriverException(getCapa().getName(), e);
 		}
 	}
 
@@ -494,12 +500,14 @@ public class ShpStrategy extends DefaultStrategy {
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.operations.strategies.Strategy#queryByShape(com.iver.cit.gvsig.fmap.core.IGeometry,
-	 *      int)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.operations.strategies.Strategy#queryByShape(com
+	 * .iver.cit.gvsig.fmap.core.IGeometry, int)
 	 */
 	public FBitSet queryByShape(IGeometry g, int relationship,
-			CancellableMonitorable cancel) throws ReadDriverException, VisitorException {
+			CancellableMonitorable cancel) throws ReadDriverException,
+			VisitorException {
 		// Si hay un índice espacial, lo usamos para hacer el query.
 		FLyrVect lyr = (FLyrVect) capa;
 		// if (lyr.getSpatialIndex() == null) AZABALA
@@ -528,7 +536,7 @@ public class ShpStrategy extends DefaultStrategy {
 				idRec = (Integer) lstRecs.get(i);
 				index = idRec.intValue();
 				IGeometry geom = va.getShape(index);
-				if(geom == null)
+				if (geom == null)
 					continue;
 				if (trans != null) {
 					geom.reProject(trans);
@@ -544,8 +552,8 @@ public class ShpStrategy extends DefaultStrategy {
 
 				case CROSSES:
 					m = jtsShape.relate(jtsGeom);
-					if (m.isCrosses(jtsGeom.getDimension(), jtsShape
-							.getDimension())) {
+					if (m.isCrosses(jtsGeom.getDimension(),
+							jtsShape.getDimension())) {
 						bitset.set(index, true);
 					}
 					break;
@@ -560,8 +568,8 @@ public class ShpStrategy extends DefaultStrategy {
 
 				case EQUALS:
 					m = jtsShape.relate(jtsGeom);
-					if (m.isEquals(jtsGeom.getDimension(), jtsShape
-							.getDimension())) {
+					if (m.isEquals(jtsGeom.getDimension(),
+							jtsShape.getDimension())) {
 						bitset.set(index, true);
 					}
 					break;
@@ -575,8 +583,8 @@ public class ShpStrategy extends DefaultStrategy {
 
 				case OVERLAPS:
 					m = jtsShape.relate(jtsGeom);
-					if (m.isOverlaps(jtsGeom.getDimension(), jtsShape
-							.getDimension())) {
+					if (m.isOverlaps(jtsGeom.getDimension(),
+							jtsShape.getDimension())) {
 						bitset.set(index, true);
 					}
 
@@ -584,8 +592,8 @@ public class ShpStrategy extends DefaultStrategy {
 
 				case TOUCHES:
 					m = jtsShape.relate(jtsGeom);
-					if (m.isTouches(jtsGeom.getDimension(), jtsShape
-							.getDimension())) {
+					if (m.isTouches(jtsGeom.getDimension(),
+							jtsShape.getDimension())) {
 						bitset.set(index, true);
 					}
 
@@ -602,13 +610,13 @@ public class ShpStrategy extends DefaultStrategy {
 			}
 			va.stop();
 		} catch (ExpansionFileReadException e) {
-			throw new ReadDriverException(getCapa().getName(),e);
+			throw new ReadDriverException(getCapa().getName(), e);
 		} catch (InitializeDriverException e) {
-			throw new ReadDriverException(getCapa().getName(),e);
+			throw new ReadDriverException(getCapa().getName(), e);
 		}
 		long t2 = System.currentTimeMillis();
-//		logger.info("queryByShape optimizado sobre la capa " + lyr.getName()
-//				+ ". " + (t2 - t1) + " mseg.");
+		// logger.info("queryByShape optimizado sobre la capa " + lyr.getName()
+		// + ". " + (t2 - t1) + " mseg.");
 		return bitset;
 	}
 
@@ -647,7 +655,7 @@ public class ShpStrategy extends DefaultStrategy {
 				idRec = (Integer) lstRecs.get(i);
 				index = idRec.intValue();
 				IGeometry geom = va.getShape(index);
-				if(geom == null)//azabala
+				if (geom == null)// azabala
 					continue;
 				if (trans != null) {
 					if (bMustClone)
@@ -659,28 +667,31 @@ public class ShpStrategy extends DefaultStrategy {
 			}
 			va.stop();
 		} catch (ExpansionFileReadException e) {
-			throw new ReadDriverException(getCapa().getName(),e);
+			throw new ReadDriverException(getCapa().getName(), e);
 		} catch (InitializeDriverException e) {
-			throw new ReadDriverException(getCapa().getName(),e);
+			throw new ReadDriverException(getCapa().getName(), e);
 		}
 		return bitset;
 
 	}
 
 	public void process(FeatureVisitor visitor, Rectangle2D rectangle)
-			throws ReadDriverException, ExpansionFileReadException, VisitorException {
+			throws ReadDriverException, ExpansionFileReadException,
+			VisitorException {
 		process(visitor, rectangle, null);
 	}
 
 	/**
 	 * Processes (by calling visitor.process() method) only those features of
 	 * the vectorial layer associated which intersects given rectangle2d.
+	 * 
 	 * @throws ExpansionFileReadException
-	 *
+	 * 
 	 */
 
 	public void process(FeatureVisitor visitor, Rectangle2D rectangle,
-			CancellableMonitorable cancel) throws ReadDriverException, ExpansionFileReadException, VisitorException {
+			CancellableMonitorable cancel) throws ReadDriverException,
+			ExpansionFileReadException, VisitorException {
 		if (visitor.start(capa)) {
 			FLyrVect lyr = (FLyrVect) capa;
 			// if we dont have spatial index or...
@@ -689,10 +700,10 @@ public class ShpStrategy extends DefaultStrategy {
 				return;
 			}
 			// if spatial index is not worthy
-				if (!isSpatialIndexNecessary(rectangle)) {
-					super.process(visitor, rectangle, cancel);
-					return;
-				}
+			if (!isSpatialIndexNecessary(rectangle)) {
+				super.process(visitor, rectangle, cancel);
+				return;
+			}
 
 			ReadableVectorial va = lyr.getSource();
 			MathTransform trans = lyr.getCrsTransform();
@@ -700,51 +711,53 @@ public class ShpStrategy extends DefaultStrategy {
 			List lstRecs = lyr.getISpatialIndex().query(bounds);
 			Integer idRec;
 			int index;
-				try {
-					va.start();
-				}catch (InitializeDriverException e) {
-					throw new ReadDriverException(getCapa().getName(),e);
+			try {
+				va.start();
+			} catch (InitializeDriverException e) {
+				throw new ReadDriverException(getCapa().getName(), e);
+			}
+			DriverAttributes attr = va.getDriverAttributes();
+			boolean bMustClone = false;
+			if (attr != null) {
+				if (attr.isLoadedInMemory()) {
+					bMustClone = attr.isLoadedInMemory();
 				}
-				DriverAttributes attr = va.getDriverAttributes();
-				boolean bMustClone = false;
-				if (attr != null) {
-					if (attr.isLoadedInMemory()) {
-						bMustClone = attr.isLoadedInMemory();
-					}
-				}
+			}
 
-				for (int i = 0; i < lstRecs.size(); i++) {
-					if (cancel != null) {
-						cancel.reportStep();
-					}
-					if (verifyCancelation(cancel, visitor))
-						return;
-					idRec = (Integer) lstRecs.get(i);
-					index = idRec.intValue();
-					IGeometry geom = va.getShape(index);
-					if(geom == null)//azabala
-						continue;
-					if (trans != null) {
-						if (bMustClone)
-							geom = geom.cloneGeometry();
-						geom.reProject(trans);
-					}
-					if (geom.intersects(rectangle))
-						visitor.visit(geom, index);
-				}// for
-				va.stop();
+			for (int i = 0; i < lstRecs.size(); i++) {
+				if (cancel != null) {
+					cancel.reportStep();
+				}
+				if (verifyCancelation(cancel, visitor))
+					return;
+				idRec = (Integer) lstRecs.get(i);
+				index = idRec.intValue();
+				IGeometry geom = va.getShape(index);
+				if (geom == null)// azabala
+					continue;
+				if (trans != null) {
+					if (bMustClone)
+						geom = geom.cloneGeometry();
+					geom.reProject(trans);
+				}
+				if (geom.intersects(rectangle))
+					visitor.visit(geom, index);
+			}// for
+			va.stop();
 
 		}// if visitor.start
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.operations.strategies.Strategy#queryByPoint(java.awt.geom.Point2D,
-	 *      double)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.operations.strategies.Strategy#queryByPoint(java
+	 * .awt.geom.Point2D, double)
 	 */
 	public FBitSet queryByPoint(Point2D p, double tolerance,
-			CancellableMonitorable cancel) throws ReadDriverException, VisitorException {
+			CancellableMonitorable cancel) throws ReadDriverException,
+			VisitorException {
 		// TODO: OJO!!!!. Está implementado como un rectangulo.
 		// Lo correcto debería ser calculando las distancias reales
 		// es decir, con un círculo.

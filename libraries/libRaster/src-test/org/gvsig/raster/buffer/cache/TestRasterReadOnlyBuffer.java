@@ -39,30 +39,31 @@ import org.gvsig.raster.dataset.RasterDataset;
 import org.gvsig.raster.dataset.io.RasterDriverException;
 
 /**
- * Test para la prueba de buffer de solo lectura.
- * Genera una imagen con las bandas alteradas usando un buffer de solo lectura.
+ * Test para la prueba de buffer de solo lectura. Genera una imagen con las
+ * bandas alteradas usando un buffer de solo lectura.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class TestRasterReadOnlyBuffer extends TestCase {
 	private IBuffer buf = null;
 	private String baseDir = "./test-images/";
-	private String path = baseDir + "03AUG23153350-M2AS-000000122423_01_P001-BROWSE.jpg";
-		
+	private String path = baseDir
+			+ "03AUG23153350-M2AS-000000122423_01_P001-BROWSE.jpg";
+
 	static {
 		RasterLibrary.wakeUp();
 	}
-	
+
 	public void start() {
 		this.setUp();
 		this.testStack();
 	}
-	
+
 	public void setUp() {
 		System.err.println("TestRasterReadOnlyHugeBuffer running...");
-		
-		//Cargamos un buffer sin cachear
-		
+
+		// Cargamos un buffer sin cachear
+
 		RasterDataset f = null;
 		try {
 			f = RasterDataset.open(null, path);
@@ -71,15 +72,16 @@ public class TestRasterReadOnlyBuffer extends TestCase {
 		} catch (RasterDriverException e) {
 			e.printStackTrace();
 		}
-		//Reducimos el tamaño de la caché para poder trabajar con un volumen de datos reducido
+		// Reducimos el tamaño de la caché para poder trabajar con un volumen de
+		// datos reducido
 		long cacheSize = RasterLibrary.cacheSize;
 		double pageSize = RasterLibrary.pageSize;
 		RasterLibrary.cacheSize = 1;
 		RasterLibrary.pageSize = 0.2;
-		
+
 		BufferFactory ds = new BufferFactory(f);
 		ds.setReadOnly(true);
-		int[] drawableBands = {2, 1, 0};
+		int[] drawableBands = { 2, 1, 0 };
 		ds.setDrawableBands(drawableBands);
 		try {
 			ds.setAreaOfInterest(0, 0, f.getWidth(), f.getHeight());
@@ -91,38 +93,40 @@ public class TestRasterReadOnlyBuffer extends TestCase {
 			e.printStackTrace();
 		}
 		buf = ds.getRasterBuf();
-		
+
 		try {
 			WriterBufferServer writerBufferServer = new WriterBufferServer(buf);
-			GeoRasterWriter grw = GeoRasterWriter.getWriter(writerBufferServer, "/tmp/out.tif",
-					buf.getBandCount(), f.getAffineTransform(), buf.getWidth(),
-					buf.getHeight(), buf.getDataType(), GeoRasterWriter.getWriter("/tmp/out.tif").getParams(), null);
+			GeoRasterWriter grw = GeoRasterWriter
+					.getWriter(writerBufferServer, "/tmp/out.tif", buf
+							.getBandCount(), f.getAffineTransform(), buf
+							.getWidth(), buf.getHeight(), buf.getDataType(),
+							GeoRasterWriter.getWriter("/tmp/out.tif")
+									.getParams(), null);
 			grw.dataWrite();
 			grw.writeClose();
-		} catch(NotSupportedExtensionException e) {
+		} catch (NotSupportedExtensionException e) {
 
-		} catch(RasterDriverException e) {
+		} catch (RasterDriverException e) {
 
-		} catch(InterruptedException e) {
+		} catch (InterruptedException e) {
 
-		} catch(IOException e) {
+		} catch (IOException e) {
 
 		}
-		
+
 		RasterLibrary.cacheSize = cacheSize;
 		RasterLibrary.pageSize = pageSize;
 	}
-	
-	public void testStack(){
-		/*for (int iBand = 0; iBand < buf.getBandCount(); iBand++)
-			for (int iRow = 0; iRow < buf.getHeight(); iRow++) 
-				for (int iCol = 0; iCol < buf.getWidth(); iCol++) {
-					byte a = buf.getElemByte(iRow, iCol, iBand);
-					byte b = bufCache.getElemByte(iRow, iCol, iBand);
-					//if(a != b)
-						//System.out.println(iRow + " " + iCol + " " + a + " " + b);
-					assertEquals(a, b);
-				}*/
+
+	public void testStack() {
+		/*
+		 * for (int iBand = 0; iBand < buf.getBandCount(); iBand++) for (int
+		 * iRow = 0; iRow < buf.getHeight(); iRow++) for (int iCol = 0; iCol <
+		 * buf.getWidth(); iCol++) { byte a = buf.getElemByte(iRow, iCol,
+		 * iBand); byte b = bufCache.getElemByte(iRow, iCol, iBand); //if(a !=
+		 * b) //System.out.println(iRow + " " + iCol + " " + a + " " + b);
+		 * assertEquals(a, b); }
+		 */
 	}
 
 }

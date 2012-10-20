@@ -51,119 +51,152 @@ import javax.swing.text.JTextComponent;
  */
 
 /**
- * This class has a method which adds the necessary listeners for convert a JTextComponent to another which can be configurated
- *   its 'text visible positions when isn't edited' behaviour: left positions, right positions or like JTextComponent (doesn't change text visible positions)
+ * This class has a method which adds the necessary listeners for convert a
+ * JTextComponent to another which can be configurated its 'text visible
+ * positions when isn't edited' behaviour: left positions, right positions or
+ * like JTextComponent (doesn't change text visible positions)
  * 
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
 public class SpecificCaretPositionListeners {
 	/**
-	 * Adds three listeners to a JTextComponent component:
-	 *  - A FocusListener -> if this component loses its focus -> set caret position to 0
-	 *  - A DocumentListener -> if this component doesn't have the focus and its caret position has changed -> set caret position to 0
-	 *  - A CaretListener -> sometimes DocumentListener doesn't take effect, but this listener does
+	 * Adds three listeners to a JTextComponent component: - A FocusListener ->
+	 * if this component loses its focus -> set caret position to 0 - A
+	 * DocumentListener -> if this component doesn't have the focus and its
+	 * caret position has changed -> set caret position to 0 - A CaretListener
+	 * -> sometimes DocumentListener doesn't take effect, but this listener does
+	 * 
 	 * @param component
 	 */
 	public static void setListeners(final JTextComponent component) {
 		// The Focus Listener
 		component.addFocusListener(new FocusAdapter() {
 			/*
-			 *  (non-Javadoc)
-			 * @see java.awt.event.FocusListener#focusLost(java.awt.event.FocusEvent)
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.FocusListener#focusLost(java.awt.event.FocusEvent)
 			 */
 			public void focusLost(FocusEvent e) {
-				switch (((ISpecificCaretPosition)component).getCaretPositionMode()) {
+				switch (((ISpecificCaretPosition) component)
+						.getCaretPositionMode()) {
+				case ISpecificCaretPosition.LEFT_POSITIONS:
+					(component).setCaretPosition(0);
+					break;
+				case ISpecificCaretPosition.RIGHT_POSITIONS:
+					(component).setCaretPosition(component.getDocument()
+							.getLength());
+					break;
+				case ISpecificCaretPosition.LIKE_JTEXTCOMPONENT: // Do nothing
+					break;
+				}
+			}
+		});
+
+		// The Document Listener
+		component.getDocument().addDocumentListener(new DocumentListener() {
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * javax.swing.event.DocumentListener#changedUpdate(javax.swing.
+			 * event.DocumentEvent)
+			 */
+			public void changedUpdate(DocumentEvent e) {
+				if (!component.isFocusOwner()) {
+					switch (((ISpecificCaretPosition) component)
+							.getCaretPositionMode()) {
 					case ISpecificCaretPosition.LEFT_POSITIONS:
 						(component).setCaretPosition(0);
 						break;
 					case ISpecificCaretPosition.RIGHT_POSITIONS:
-						(component).setCaretPosition(component.getDocument().getLength());
+						(component).setCaretPosition(component.getDocument()
+								.getLength());
 						break;
-					case ISpecificCaretPosition.LIKE_JTEXTCOMPONENT: // Do nothing
+					case ISpecificCaretPosition.LIKE_JTEXTCOMPONENT: // Do
+																		// nothing
 						break;
-				}
-			}
-		});
-		
-		// The Document Listener
-		component.getDocument().addDocumentListener(new DocumentListener() {
-			/*
-			 *  (non-Javadoc)
-			 * @see javax.swing.event.DocumentListener#changedUpdate(javax.swing.event.DocumentEvent)
-			 */
-			public void changedUpdate(DocumentEvent e) {				
-				if (!component.isFocusOwner()) {
-					switch (((ISpecificCaretPosition)component).getCaretPositionMode()) {
-						case ISpecificCaretPosition.LEFT_POSITIONS:
-							(component).setCaretPosition(0);
-							break;
-						case ISpecificCaretPosition.RIGHT_POSITIONS:
-							(component).setCaretPosition(component.getDocument().getLength());
-							break;
-						case ISpecificCaretPosition.LIKE_JTEXTCOMPONENT: // Do nothing
-							break;
 					}
 				}
 			}
 
 			/*
-			 *  (non-Javadoc)
-			 * @see javax.swing.event.DocumentListener#insertUpdate(javax.swing.event.DocumentEvent)
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * javax.swing.event.DocumentListener#insertUpdate(javax.swing.event
+			 * .DocumentEvent)
 			 */
 			public void insertUpdate(DocumentEvent e) {
 				if (!component.isFocusOwner()) {
-					switch (((ISpecificCaretPosition)component).getCaretPositionMode()) {
-						case ISpecificCaretPosition.LEFT_POSITIONS:
-							(component).setCaretPosition(0);
-							break;
-						case ISpecificCaretPosition.RIGHT_POSITIONS:
-							(component).setCaretPosition(component.getDocument().getLength());
-							break;
-						case ISpecificCaretPosition.LIKE_JTEXTCOMPONENT: // Do nothing
-							break;
+					switch (((ISpecificCaretPosition) component)
+							.getCaretPositionMode()) {
+					case ISpecificCaretPosition.LEFT_POSITIONS:
+						(component).setCaretPosition(0);
+						break;
+					case ISpecificCaretPosition.RIGHT_POSITIONS:
+						(component).setCaretPosition(component.getDocument()
+								.getLength());
+						break;
+					case ISpecificCaretPosition.LIKE_JTEXTCOMPONENT: // Do
+																		// nothing
+						break;
 					}
 				}
 			}
 
 			/*
-			 *  (non-Javadoc)
-			 * @see javax.swing.event.DocumentListener#removeUpdate(javax.swing.event.DocumentEvent)
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * javax.swing.event.DocumentListener#removeUpdate(javax.swing.event
+			 * .DocumentEvent)
 			 */
 			public void removeUpdate(DocumentEvent e) {
 				if (!component.isFocusOwner()) {
-					switch (((ISpecificCaretPosition)component).getCaretPositionMode()) {
-						case ISpecificCaretPosition.LEFT_POSITIONS:
-							(component).setCaretPosition(0);
-							break;
-						case ISpecificCaretPosition.RIGHT_POSITIONS:
-							(component).setCaretPosition(component.getDocument().getLength());
-							break;
-						case ISpecificCaretPosition.LIKE_JTEXTCOMPONENT: // Do nothing
-							break;
+					switch (((ISpecificCaretPosition) component)
+							.getCaretPositionMode()) {
+					case ISpecificCaretPosition.LEFT_POSITIONS:
+						(component).setCaretPosition(0);
+						break;
+					case ISpecificCaretPosition.RIGHT_POSITIONS:
+						(component).setCaretPosition(component.getDocument()
+								.getLength());
+						break;
+					case ISpecificCaretPosition.LIKE_JTEXTCOMPONENT: // Do
+																		// nothing
+						break;
 					}
 				}
-			}			
+			}
 		});
 
 		// The Caret Listener
 		component.addCaretListener(new CaretListener() {
 			/*
-			 *  (non-Javadoc)
-			 * @see javax.swing.event.CaretListener#caretUpdate(javax.swing.event.CaretEvent)
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * javax.swing.event.CaretListener#caretUpdate(javax.swing.event
+			 * .CaretEvent)
 			 */
-			public void caretUpdate(CaretEvent e) {				
+			public void caretUpdate(CaretEvent e) {
 				if (!component.isFocusOwner()) {
-					switch (((ISpecificCaretPosition)component).getCaretPositionMode()) {
-						case ISpecificCaretPosition.LEFT_POSITIONS:
-							if ((component).getCaretPosition() != 0)
-								(component).setCaretPosition(0);
-							break;
-						case ISpecificCaretPosition.RIGHT_POSITIONS:
-							if ((component).getCaretPosition() != component.getDocument().getLength())
-							(component).setCaretPosition(component.getDocument().getLength());
-							break;
-						case ISpecificCaretPosition.LIKE_JTEXTCOMPONENT: // Do nothing
-							break;
+					switch (((ISpecificCaretPosition) component)
+							.getCaretPositionMode()) {
+					case ISpecificCaretPosition.LEFT_POSITIONS:
+						if ((component).getCaretPosition() != 0)
+							(component).setCaretPosition(0);
+						break;
+					case ISpecificCaretPosition.RIGHT_POSITIONS:
+						if ((component).getCaretPosition() != component
+								.getDocument().getLength())
+							(component).setCaretPosition(component
+									.getDocument().getLength());
+						break;
+					case ISpecificCaretPosition.LIKE_JTEXTCOMPONENT: // Do
+																		// nothing
+						break;
 					}
 				}
 			}

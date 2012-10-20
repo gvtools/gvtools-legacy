@@ -5,10 +5,11 @@ package com.iver.cit.gvsig.exceptions.layers;
  */
 public class XMLLayerException extends LoadLayerException {
 
-	public XMLLayerException(String l,Throwable exception) {
-		super(l,exception);
+	public XMLLayerException(String l, Throwable exception) {
+		super(l, exception);
 		init();
 	}
+
 	/**
 	 *
 	 */

@@ -62,12 +62,11 @@ import org.gvsig.exceptions.ListBaseException;
 /**
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  */
-//***********************************
+// ***********************************
 // PARA WARNINGS YA VEREMOS SI SE USA
-//***********************************
-public class GMLExceptionList extends ListBaseException{
+// ***********************************
+public class GMLExceptionList extends ListBaseException {
 
-	
 	/**
 	 * 
 	 */

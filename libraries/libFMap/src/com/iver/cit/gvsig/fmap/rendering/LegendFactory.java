@@ -47,19 +47,19 @@ import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
 import com.iver.cit.gvsig.fmap.layers.XMLException;
 import com.iver.utiles.XMLEntity;
 
-
 /**
  * Clase factoria de las diferentes leyendas.
- *
+ * 
  * @author Fernando González Cortés
  */
 public class LegendFactory {
 	/**
 	 * Crea un objeto renderer de símbolo único con las características que se
 	 * pasan como parámetro
-	 *
-	 * @param shapeType Tipo de shape.
-	 *
+	 * 
+	 * @param shapeType
+	 *            Tipo de shape.
+	 * 
 	 * @return VectorialLegend.
 	 */
 	public static IVectorLegend createSingleSymbolLegend(int shapeType) {
@@ -122,41 +122,44 @@ public class LegendFactory {
 	/**
 	 * Crea un objeto VectorialUniqueValueLegend vacío, dispuesto para cargar
 	 * símbolos
-	 *
-	 * @param shapeType Tipo de shape.
-	 *
+	 * 
+	 * @param shapeType
+	 *            Tipo de shape.
+	 * 
 	 * @return VectorialUniqueValueLegend.
 	 */
 	public static VectorialUniqueValueLegend createVectorialUniqueValueLegend(
-		int shapeType) {
+			int shapeType) {
 		return new VectorialUniqueValueLegend(shapeType);
 	}
 
 	/**
 	 * Crea un objeto VectorialIntervalLegend vacío, dispuesto para cargar
 	 * símbolos
-	 *
-	 * @param shapeType tipo de shape.
-	 *
+	 * 
+	 * @param shapeType
+	 *            tipo de shape.
+	 * 
 	 * @return VectorialIntervalLegend
 	 */
 	public static VectorialIntervalLegend createVectorialIntervalLegend(
-		int shapeType) {
+			int shapeType) {
 		return new VectorialIntervalLegend(shapeType);
 	}
 
 	/**
 	 * Crea un renderer con la información contenida en el objeto XMLEntity
-	 *
-	 * @param xml XMLEntity.
-	 *
+	 * 
+	 * @param xml
+	 *            XMLEntity.
+	 * 
 	 * @return VectorialLegend
-	 *
+	 * 
 	 * @throws XMLException
 	 */
 	public static IVectorLegend createFromXML03(XMLEntity xml)
-		throws XMLException {
-		//TODO Implementar bien
+			throws XMLException {
+		// TODO Implementar bien
 		try {
 			IVectorLegend vl = null;
 			Class clase = Class.forName(xml.getStringProperty("className"));
@@ -175,16 +178,17 @@ public class LegendFactory {
 
 	/**
 	 * Crea un renderer con la información contenida en el objeto XMLEntity
-	 *
-	 * @param xml XMLEntity.
-	 *
+	 * 
+	 * @param xml
+	 *            XMLEntity.
+	 * 
 	 * @return VectorialLegend
-	 *
+	 * 
 	 * @throws XMLException
 	 */
 	public static IVectorLegend createFromXML(XMLEntity xml)
-		throws XMLException {
-		//TODO Implementar bien
+			throws XMLException {
+		// TODO Implementar bien
 		try {
 			IVectorLegend vl = null;
 			Class clase = Class.forName(xml.getStringProperty("className"));
@@ -203,16 +207,17 @@ public class LegendFactory {
 
 	/**
 	 * Clona la leyenda.
-	 *
-	 * @param l VectorialLegend a clonar.
-	 *
+	 * 
+	 * @param l
+	 *            VectorialLegend a clonar.
+	 * 
 	 * @return VectorialLegend cloando.
-	 *
+	 * 
 	 * @throws XMLException
 	 * @throws DriverException
 	 */
 	public static IVectorLegend cloneLegend(IVectorLegend l)
-		throws XMLException, DriverException {
+			throws XMLException, DriverException {
 		return createFromXML(l.getXMLEntity());
 	}
 }

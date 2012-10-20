@@ -62,10 +62,9 @@ import com.iver.cit.gvsig.project.documents.layout.fframes.gui.JPRotation;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 import com.iver.utiles.GenericFileFilter;
 
-
 /**
  * Dialogo para añadir una imagen al Layout.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FFramePictureDialog extends JPanel implements IFFrameDialog {
@@ -86,14 +85,15 @@ public class FFramePictureDialog extends JPanel implements IFFrameDialog {
 	private boolean isAcepted = false;
 	private JPRotation pRotation = null;
 	private String path;
-	private FFramePicture newFFramePicture=null;
-
+	private FFramePicture newFFramePicture = null;
 
 	/**
 	 * This is the default constructor
-	 *
-	 * @param layout Referencia al Layout.
-	 * @param fframe Referencia al fframe de imagen.
+	 * 
+	 * @param layout
+	 *            Referencia al Layout.
+	 * @param fframe
+	 *            Referencia al fframe de imagen.
 	 */
 	public FFramePictureDialog(Layout layout, FFramePicture fframe) {
 		super();
@@ -104,8 +104,9 @@ public class FFramePictureDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * Inserta el rectángulo que ocupará el fframe de imagen.
-	 *
-	 * @param r Rectángulo.
+	 * 
+	 * @param r
+	 *            Rectángulo.
 	 */
 	public void setRectangle(Rectangle2D r) {
 		rect.setRect(r);
@@ -123,7 +124,7 @@ public class FFramePictureDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes jContentPane
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private javax.swing.JPanel getJContentPane() {
@@ -149,7 +150,7 @@ public class FFramePictureDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes lFichero
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLFichero() {
@@ -165,7 +166,7 @@ public class FFramePictureDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes tFichero
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private javax.swing.JTextField getTFichero() {
@@ -184,7 +185,7 @@ public class FFramePictureDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes bExaminar
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBExaminar() {
@@ -196,43 +197,48 @@ public class FFramePictureDialog extends JPanel implements IFFrameDialog {
 			bExaminar.setPreferredSize(new java.awt.Dimension(88, 23));
 			bExaminar.addActionListener(new java.awt.event.ActionListener() {
 
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						JFileChooser jfc = new JFileChooser();
-						
-						jfc.setAcceptAllFileFilterUsed(false);
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					JFileChooser jfc = new JFileChooser();
 
-						String[] extensions = {
-								"jpeg", "jpg", "gif", "png", "bmp", "svg"
-							};
-		
-						jfc.addChoosableFileFilter(new GenericFileFilter
-								(new String[] {"jpg","jpeg"}, PluginServices.getText(this, "jpg")));
+					jfc.setAcceptAllFileFilterUsed(false);
 
-						jfc.addChoosableFileFilter(new GenericFileFilter
-								(new String[] {"gif"}, PluginServices.getText(this, "Ficheros_GIF")));
+					String[] extensions = { "jpeg", "jpg", "gif", "png", "bmp",
+							"svg" };
 
-						jfc.addChoosableFileFilter(new GenericFileFilter
-								(new String[] {"png"}, PluginServices.getText(this, "png")));
-						
-						jfc.addChoosableFileFilter(new GenericFileFilter
-								(new String[] {"bmp"}, PluginServices.getText(this, "bmp")));
-						
-						jfc.addChoosableFileFilter(new GenericFileFilter
-								(new String[] {"svg"}, PluginServices.getText(this, "Ficheros_SVG")));
-						
-						jfc.addChoosableFileFilter(new GenericFileFilter
-								(extensions, PluginServices.getText(this, "todos_soportados")));
-						
-						if (jfc.showOpenDialog(
-									(Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
-							File file = jfc.getSelectedFile();
-							namefile = file.getName();
-							getTFichero().setText(file.getAbsolutePath());
-							path=file.getAbsolutePath();
-//							fframepicture.setPath(file.getAbsolutePath());
-						}
+					jfc.addChoosableFileFilter(new GenericFileFilter(
+							new String[] { "jpg", "jpeg" }, PluginServices
+									.getText(this, "jpg")));
+
+					jfc.addChoosableFileFilter(new GenericFileFilter(
+							new String[] { "gif" }, PluginServices.getText(
+									this, "Ficheros_GIF")));
+
+					jfc.addChoosableFileFilter(new GenericFileFilter(
+							new String[] { "png" }, PluginServices.getText(
+									this, "png")));
+
+					jfc.addChoosableFileFilter(new GenericFileFilter(
+							new String[] { "bmp" }, PluginServices.getText(
+									this, "bmp")));
+
+					jfc.addChoosableFileFilter(new GenericFileFilter(
+							new String[] { "svg" }, PluginServices.getText(
+									this, "Ficheros_SVG")));
+
+					jfc.addChoosableFileFilter(new GenericFileFilter(
+							extensions, PluginServices.getText(this,
+									"todos_soportados")));
+
+					if (jfc.showOpenDialog((Component) PluginServices
+							.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
+						File file = jfc.getSelectedFile();
+						namefile = file.getName();
+						getTFichero().setText(file.getAbsolutePath());
+						path = file.getAbsolutePath();
+						// fframepicture.setPath(file.getAbsolutePath());
 					}
-				});
+				}
+			});
 		}
 
 		return bExaminar;
@@ -240,8 +246,9 @@ public class FFramePictureDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * Inserta el path al TFichero.
-	 *
-	 * @param val path del fichero.
+	 * 
+	 * @param val
+	 *            path del fichero.
 	 */
 	public void setText(String val) {
 		getTFichero().setText(val);
@@ -249,14 +256,15 @@ public class FFramePictureDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes lVisualizacion
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLVisualizacion() {
 		if (lVisualizacion == null) {
 			lVisualizacion = new javax.swing.JLabel();
 			lVisualizacion.setBounds(9, 62, 105, 20);
-			lVisualizacion.setText(PluginServices.getText(this, "visualizacion"));
+			lVisualizacion.setText(PluginServices
+					.getText(this, "visualizacion"));
 			lVisualizacion.setVisible(false);
 		}
 
@@ -265,14 +273,15 @@ public class FFramePictureDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes cbVisualizacion
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private javax.swing.JComboBox getCbVisualizacion() {
 		if (cbVisualizacion == null) {
 			cbVisualizacion = new javax.swing.JComboBox();
 			cbVisualizacion.setSize(245, 20);
-			cbVisualizacion.addItem(PluginServices.getText(this, "cuando_activo"));
+			cbVisualizacion.addItem(PluginServices.getText(this,
+					"cuando_activo"));
 			cbVisualizacion.addItem(PluginServices.getText(this, "siempre"));
 			cbVisualizacion.setSelectedIndex(fframepicture.getViewing());
 			cbVisualizacion.setPreferredSize(new java.awt.Dimension(200, 20));
@@ -286,7 +295,7 @@ public class FFramePictureDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes lCalidad
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLCalidad() {
@@ -294,7 +303,7 @@ public class FFramePictureDialog extends JPanel implements IFFrameDialog {
 			lCalidad = new javax.swing.JLabel();
 			lCalidad.setSize(103, 20);
 			lCalidad.setText(PluginServices.getText(this, "calidad"));
-			lCalidad.setPreferredSize(new java.awt.Dimension(73,16));
+			lCalidad.setPreferredSize(new java.awt.Dimension(73, 16));
 			lCalidad.setLocation(10, 35);
 		}
 
@@ -303,7 +312,7 @@ public class FFramePictureDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes cbCalidad
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private javax.swing.JComboBox getCbCalidad() {
@@ -322,7 +331,7 @@ public class FFramePictureDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes bAceptar
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBAceptar() {
@@ -333,43 +342,48 @@ public class FFramePictureDialog extends JPanel implements IFFrameDialog {
 			bAceptar.setLocation(70, 89);
 			bAceptar.addActionListener(new java.awt.event.ActionListener() {
 
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-					    Dimension dimension = null;
-						try {
-						    // ImageIcon imageIcon = new ImageIcon(getTFichero().getText());
-						    dimension = fframepicture.getBound(getTFichero().getText());
-						} catch (Exception ex) {
-							NotificationManager.addError("Excepción :", ex);
-						}
-						newFFramePicture=(FFramePicture)fframepicture.cloneFFrame(m_layout);
-						if (path==null)
-							path=getTFichero().getText();
-						newFFramePicture.setPath(path);
-						newFFramePicture.setViewing(getCbVisualizacion()
-													 .getSelectedIndex());
-						newFFramePicture.setQuality(getCbCalidad()
-													 .getSelectedIndex());
-
-						if (namefile != null) {
-							newFFramePicture.setName(namefile);
-						}
-						// Ajustamos la relación de aspecto a la altura.
-						double ratio = (float) (dimension.getWidth()) / (float) (dimension.getHeight());
-
-						double newWidth = rect.getHeight() * ratio;
-						Rectangle2D.Double rAdjust = new Rectangle2D.Double(
-						        rect.getMinX(), rect.getMinY(),
-						        newWidth, rect.getHeight());
-				        rect = rAdjust;
-
-						newFFramePicture.setBoundBox(FLayoutUtilities.toSheetRect(
-								rect, m_layout.getLayoutControl().getAT()));
-						newFFramePicture.setRotation(getPRotation().getRotation());
-						PluginServices.getMDIManager().closeWindow(FFramePictureDialog.this);
-						//m_layout.refresh();
-						isAcepted = true;
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					Dimension dimension = null;
+					try {
+						// ImageIcon imageIcon = new
+						// ImageIcon(getTFichero().getText());
+						dimension = fframepicture.getBound(getTFichero()
+								.getText());
+					} catch (Exception ex) {
+						NotificationManager.addError("Excepción :", ex);
 					}
-				});
+					newFFramePicture = (FFramePicture) fframepicture
+							.cloneFFrame(m_layout);
+					if (path == null)
+						path = getTFichero().getText();
+					newFFramePicture.setPath(path);
+					newFFramePicture.setViewing(getCbVisualizacion()
+							.getSelectedIndex());
+					newFFramePicture.setQuality(getCbCalidad()
+							.getSelectedIndex());
+
+					if (namefile != null) {
+						newFFramePicture.setName(namefile);
+					}
+					// Ajustamos la relación de aspecto a la altura.
+					double ratio = (float) (dimension.getWidth())
+							/ (float) (dimension.getHeight());
+
+					double newWidth = rect.getHeight() * ratio;
+					Rectangle2D.Double rAdjust = new Rectangle2D.Double(rect
+							.getMinX(), rect.getMinY(), newWidth, rect
+							.getHeight());
+					rect = rAdjust;
+
+					newFFramePicture.setBoundBox(FLayoutUtilities.toSheetRect(
+							rect, m_layout.getLayoutControl().getAT()));
+					newFFramePicture.setRotation(getPRotation().getRotation());
+					PluginServices.getMDIManager().closeWindow(
+							FFramePictureDialog.this);
+					// m_layout.refresh();
+					isAcepted = true;
+				}
+			});
 		}
 
 		return bAceptar;
@@ -377,7 +391,7 @@ public class FFramePictureDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes bCancelar
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBCancelar() {
@@ -387,17 +401,20 @@ public class FFramePictureDialog extends JPanel implements IFFrameDialog {
 			bCancelar.setText(PluginServices.getText(this, "Cancelar"));
 			bCancelar.setLocation(219, 89);
 			bCancelar.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						newFFramePicture=null;
-						PluginServices.getMDIManager().closeWindow(FFramePictureDialog.this);
-					}
-				});
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					newFFramePicture = null;
+					PluginServices.getMDIManager().closeWindow(
+							FFramePictureDialog.this);
+				}
+			});
 		}
 
 		return bCancelar;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.mdiApp.ui.MDIManager.View#getViewInfo()
 	 */
 	public WindowInfo getWindowInfo() {
@@ -423,7 +440,7 @@ public class FFramePictureDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes pRotation
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPRotation getPRotation() {
@@ -441,4 +458,4 @@ public class FFramePictureDialog extends JPanel implements IFFrameDialog {
 	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

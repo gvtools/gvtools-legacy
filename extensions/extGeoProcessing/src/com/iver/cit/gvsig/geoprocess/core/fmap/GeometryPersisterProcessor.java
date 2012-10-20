@@ -42,44 +42,44 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: GeometryPersisterProcessor.java 10626 2007-03-06 16:55:54Z caballero $
-* $Log$
-* Revision 1.4  2007-03-06 16:47:58  caballero
-* Exceptions
-*
-* Revision 1.3  2006/06/29 07:33:57  fjp
-* Cambios ISchemaManager y IFieldManager por terminar
-*
-* Revision 1.2  2006/05/31 09:10:12  fjp
-* Ubicación de IWriter
-*
-* Revision 1.1  2006/05/24 21:12:16  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.4  2006/05/01 19:10:09  azabala
-* comentario
-*
-* Revision 1.3  2006/03/14 18:32:46  fjp
-* Cambio con LayerDefinition para que sea compatible con la definición de tablas también.
-*
-* Revision 1.2  2006/02/26 20:54:52  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/02/17 16:33:25  azabala
-* *** empty log message ***
-*
-* Revision 1.3  2006/02/13 17:52:45  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/02/12 21:02:58  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/02/09 16:00:36  azabala
-* First version in CVS
-*
-*
-*/
+ *
+ * $Id: GeometryPersisterProcessor.java 10626 2007-03-06 16:55:54Z caballero $
+ * $Log$
+ * Revision 1.4  2007-03-06 16:47:58  caballero
+ * Exceptions
+ *
+ * Revision 1.3  2006/06/29 07:33:57  fjp
+ * Cambios ISchemaManager y IFieldManager por terminar
+ *
+ * Revision 1.2  2006/05/31 09:10:12  fjp
+ * Ubicación de IWriter
+ *
+ * Revision 1.1  2006/05/24 21:12:16  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.4  2006/05/01 19:10:09  azabala
+ * comentario
+ *
+ * Revision 1.3  2006/03/14 18:32:46  fjp
+ * Cambio con LayerDefinition para que sea compatible con la definición de tablas también.
+ *
+ * Revision 1.2  2006/02/26 20:54:52  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/02/17 16:33:25  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.3  2006/02/13 17:52:45  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/02/12 21:02:58  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/02/09 16:00:36  azabala
+ * First version in CVS
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core.fmap;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -94,13 +94,15 @@ import com.iver.cit.gvsig.fmap.edition.IRowEdited;
 import com.iver.cit.gvsig.fmap.edition.ISchemaManager;
 import com.iver.cit.gvsig.fmap.edition.IWriter;
 import com.vividsolutions.jts.geom.Geometry;
+
 /**
- * Persists individual buffer results in a persistent data
- * store
+ * Persists individual buffer results in a persistent data store
+ * 
  * @author azabala
- *
+ * 
  */
-public class GeometryPersisterProcessor implements GeoprocessingResultsProcessor {
+public class GeometryPersisterProcessor implements
+		GeoprocessingResultsProcessor {
 	protected ITableDefinition layerDefinition;
 	protected ISchemaManager schemaManager;
 	protected IWriter writer;
@@ -108,26 +110,26 @@ public class GeometryPersisterProcessor implements GeoprocessingResultsProcessor
 	private long numProcessed = 0;
 
 	public GeometryPersisterProcessor(ITableDefinition layerDefinition,
-									ISchemaManager schemaManager,
-									IWriter writer) throws SchemaEditionException, VisitorException{
+			ISchemaManager schemaManager, IWriter writer)
+			throws SchemaEditionException, VisitorException {
 		this.layerDefinition = layerDefinition;
 		this.schemaManager = schemaManager;
 		this.writer = writer;
 		this.schemaManager.createSchema(layerDefinition);
 		this.writer.preProcess();
 	}
-	//FIXME usar el atributo INDEX para leer del recordset atributos
-	public void processJtsGeometry(Geometry g, int index) throws VisitorException, ReadDriverException {
+
+	// FIXME usar el atributo INDEX para leer del recordset atributos
+	public void processJtsGeometry(Geometry g, int index)
+			throws VisitorException, ReadDriverException {
 		IGeometry fmapBuffer = FConverter.jts_to_igeometry(g);
 		Object[] attrs = new Object[1];
 		attrs[0] = new Long(numProcessed++);
-		IFeature feature = FeatureFactory.createFeature(attrs,
-				fmapBuffer,
+		IFeature feature = FeatureFactory.createFeature(attrs, fmapBuffer,
 				layerDefinition);
-		DefaultRowEdited editedFeature = new
-					DefaultRowEdited(feature,
-					IRowEdited.STATUS_ADDED, (int)numProcessed);
-			writer.process(editedFeature);
+		DefaultRowEdited editedFeature = new DefaultRowEdited(feature,
+				IRowEdited.STATUS_ADDED, (int) numProcessed);
+		writer.process(editedFeature);
 	}
 
 	public void finish() throws VisitorException {
@@ -135,11 +137,9 @@ public class GeometryPersisterProcessor implements GeoprocessingResultsProcessor
 	}
 
 	public void processFeature(IFeature feature) throws VisitorException {
-		DefaultRowEdited editedFeature = new
-					DefaultRowEdited(feature,
-					IRowEdited.STATUS_ADDED, (int)numProcessed);
+		DefaultRowEdited editedFeature = new DefaultRowEdited(feature,
+				IRowEdited.STATUS_ADDED, (int) numProcessed);
 		writer.process(editedFeature);
 	}
 
 }
-

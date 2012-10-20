@@ -44,78 +44,78 @@ import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.Value;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public class DefaultExpressionDataSource implements ExpressionDataSource {
-    private SelectableDataSource tabla = null;
+	private SelectableDataSource tabla = null;
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param table DOCUMENT ME!
-     */
-    public void setTable(SelectableDataSource table) {
-        this.tabla = table;
-    }
-    public void start() throws ReadDriverException
-    {
-        tabla.start();
-    }
-    public void stop() throws ReadDriverException
-    {
-        tabla.stop();
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param table
+	 *            DOCUMENT ME!
+	 */
+	public void setTable(SelectableDataSource table) {
+		this.tabla = table;
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param idField
-     *
-     * @return
-     * @throws FilterException
-     */
-    public String getFieldName(int idField) throws FilterException { 
-        try {
-    		return tabla.getFieldName(idField);
+	public void start() throws ReadDriverException {
+		tabla.start();
+	}
+
+	public void stop() throws ReadDriverException {
+		tabla.stop();
+	}
+
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param idField
+	 * 
+	 * @return
+	 * @throws FilterException
+	 */
+	public String getFieldName(int idField) throws FilterException {
+		try {
+			return tabla.getFieldName(idField);
 		} catch (ReadDriverException e) {
 			throw new FilterException();
 		}
-		
-    }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return
-     * @throws FilterException
-     */
-    public int getFieldCount() throws FilterException {
-        try {
+	}
+
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return
+	 * @throws FilterException
+	 */
+	public int getFieldCount() throws FilterException {
+		try {
 			return tabla.getFieldCount();
 		} catch (ReadDriverException e) {
 			throw new FilterException();
 		}
-    }
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param field
-     *
-     * @return
-     * @throws FilterException
-     */
-    public Value getFieldValue(int row, int field) throws FilterException {
-    	try {
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param field
+	 * 
+	 * @return
+	 * @throws FilterException
+	 */
+	public Value getFieldValue(int row, int field) throws FilterException {
+		try {
 			return tabla.getFieldValue(row, field);
 		} catch (ReadDriverException e) {
 			throw new FilterException();
 		}
-    }
+	}
 
 	/**
 	 * @see com.iver.cit.gvsig.gui.filter.ExpressionDataSource#getRowCount()
@@ -135,6 +135,7 @@ public class DefaultExpressionDataSource implements ExpressionDataSource {
 	public String getDataSourceName() {
 		return tabla.getName();
 	}
+
 	public String getFieldAlias(int idField) throws FilterException {
 		return tabla.getFieldAlias(idField);
 	}

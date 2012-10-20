@@ -61,20 +61,20 @@ public class GPEFeature {
 	private Value id = null;
 	private String name = null;
 	private String typeName = null;
-	
+
 	public GPEFeature(Value id, String name, String typeName) {
 		this();
-		if ((id == null) || (id.toString() == null)){
+		if ((id == null) || (id.toString() == null)) {
 			this.id = ValueFactory.createValue(String.valueOf(idFeature));
 			idFeature++;
-		}else{
+		} else {
 			this.id = id;
 		}
 		this.name = name;
-		this.typeName = typeName;		
-	}	
+		this.typeName = typeName;
+	}
 
-	public GPEFeature(){
+	public GPEFeature() {
 		elements = new LinkedHashMap();
 	}
 
@@ -86,7 +86,8 @@ public class GPEFeature {
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	public void setId(Value id) {
 		this.id = id;
@@ -100,7 +101,8 @@ public class GPEFeature {
 	}
 
 	/**
-	 * @param geometry the geometry to set
+	 * @param geometry
+	 *            the geometry to set
 	 */
 	public void setGeometry(GPEGeometry geometry) {
 		this.geometry = geometry;
@@ -114,18 +116,20 @@ public class GPEFeature {
 	}
 
 	/**
-	 * @param elements the elements to set
+	 * @param elements
+	 *            the elements to set
 	 */
 	public void setElements(LinkedHashMap elements) {
 		this.elements = elements;
 	}
-	
+
 	/**
 	 * It adds a new element
+	 * 
 	 * @param element
-	 * The element to add
+	 *            The element to add
 	 */
-	public void addElement(GPEElement element){
+	public void addElement(GPEElement element) {
 		elements.put(element.getName(), element);
 	}
 
@@ -142,11 +146,11 @@ public class GPEFeature {
 	public String getTypeName() {
 		return typeName;
 	}
-	
+
 	/**
 	 * Initialize the feature id
 	 */
-	public static void initIdFeature(){
+	public static void initIdFeature() {
 		idFeature = 0;
 	}
 }

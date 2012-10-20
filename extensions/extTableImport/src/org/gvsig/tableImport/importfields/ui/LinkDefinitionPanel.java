@@ -20,7 +20,6 @@ import jwizardcomponent.JWizardPanel;
 import org.gvsig.tableImport.importfields.ImportFieldParams;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
-import com.hardcode.gdbms.engine.data.driver.DriverException;
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.cit.gvsig.ProjectExtension;
@@ -28,7 +27,7 @@ import com.iver.cit.gvsig.project.Project;
 import com.iver.cit.gvsig.project.documents.table.ProjectTable;
 import com.iver.cit.gvsig.project.documents.table.ProjectTableFactory;
 
-public class LinkDefinitionPanel extends JWizardPanel implements ItemListener{
+public class LinkDefinitionPanel extends JWizardPanel implements ItemListener {
 
 	private static final long serialVersionUID = 1L;
 	private JLabel lblTable = null;
@@ -43,8 +42,6 @@ public class LinkDefinitionPanel extends JWizardPanel implements ItemListener{
 	private JLabel lblMessage = null;
 	private JLabel lblSpace = null;
 
-
-
 	private ImportFieldParams params = null;
 	private DefaultComboBoxModel cbTable_model;
 	private DefaultComboBoxModel cbTableLinkField_model;
@@ -53,18 +50,16 @@ public class LinkDefinitionPanel extends JWizardPanel implements ItemListener{
 	private boolean updating;
 	private JLabel lblSpace2;
 
-
 	/**
 	 * This is the default constructor
 	 */
-	public LinkDefinitionPanel(JWizardComponents wizardComponents, ImportFieldParams params) {
+	public LinkDefinitionPanel(JWizardComponents wizardComponents,
+			ImportFieldParams params) {
 		super(wizardComponents);
 		this.params = params;
 		initialize();
 		this.update();
 	}
-
-
 
 	public LinkDefinitionPanel() {
 		super(null);
@@ -72,57 +67,56 @@ public class LinkDefinitionPanel extends JWizardPanel implements ItemListener{
 	}
 
 	public void update() {
-		if (this.updating){
+		if (this.updating) {
 			return;
 		}
-		this.updating= true;
-		try{
-			if (this.params == null){
-				this.updating=false;
+		this.updating = true;
+		try {
+			if (this.params == null) {
+				this.updating = false;
 				return;
 			}
 
-			this.fillFieldsInComboModel(this.cbTableLinkField_model,this.params.getTableFieldList());
-			this.cbTableLinkField_model.setSelectedItem(this.params.getTableField());
+			this.fillFieldsInComboModel(this.cbTableLinkField_model,
+					this.params.getTableFieldList());
+			this.cbTableLinkField_model.setSelectedItem(this.params
+					.getTableField());
 
-			this.fillFieldsInComboModel(this.cbLinkFieldTableToImport_model,this.params.getTableToImportFieldList());
-			this.cbLinkFieldTableToImport_model.setSelectedItem(this.params.getTableToImportField());
+			this.fillFieldsInComboModel(this.cbLinkFieldTableToImport_model,
+					this.params.getTableToImportFieldList());
+			this.cbLinkFieldTableToImport_model.setSelectedItem(this.params
+					.getTableToImportField());
 
-			if (this.params.isValidLinkParams()){
+			if (this.params.isValidLinkParams()) {
 				this.lblMessage.setText(" ");
 				this.setNextButtonEnabled(true);
 				this.setFinishButtonEnabled(this.params.isValid());
-			} else{
+			} else {
 				this.lblMessage.setText(params.getValidationMsg());
 				this.setNextButtonEnabled(false);
 				this.setFinishButtonEnabled(false);
 			}
 			super.update();
 		} finally {
-			this.updating=false;
+			this.updating = false;
 		}
 	}
 
-
-
-	private void fillFieldsInComboModel(
-			DefaultComboBoxModel model,
+	private void fillFieldsInComboModel(DefaultComboBoxModel model,
 			ArrayList fieldList) {
 		model.removeAllElements();
-		if (fieldList == null){
+		if (fieldList == null) {
 			return;
 		}
 		Iterator iter = fieldList.iterator();
-		while (iter.hasNext()){
+		while (iter.hasNext()) {
 			model.addElement(iter.next());
 		}
 	}
 
-
-
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
@@ -131,7 +125,7 @@ public class LinkDefinitionPanel extends JWizardPanel implements ItemListener{
 		gridBagConstraints10.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints10.anchor = GridBagConstraints.SOUTHWEST;
 		gridBagConstraints10.gridy = 0;
-		gridBagConstraints10.fill =GridBagConstraints.VERTICAL;
+		gridBagConstraints10.fill = GridBagConstraints.VERTICAL;
 		gridBagConstraints10.weighty = 1.0;
 
 		GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
@@ -139,16 +133,16 @@ public class LinkDefinitionPanel extends JWizardPanel implements ItemListener{
 		gridBagConstraints9.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints9.anchor = GridBagConstraints.SOUTHWEST;
 		gridBagConstraints9.gridy = 5;
-		gridBagConstraints9.fill =GridBagConstraints.VERTICAL;
+		gridBagConstraints9.fill = GridBagConstraints.VERTICAL;
 		gridBagConstraints9.weighty = 1.0;
 		GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 		gridBagConstraints8.gridx = 0;
 		gridBagConstraints8.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints8.anchor = GridBagConstraints.SOUTHWEST;
 		gridBagConstraints8.gridy = 6;
-		gridBagConstraints8.fill =GridBagConstraints.HORIZONTAL;
+		gridBagConstraints8.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints8.weightx = 1;
-		gridBagConstraints8.gridwidth=2;
+		gridBagConstraints8.gridwidth = 2;
 		GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
 		gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints7.gridy = 4;
@@ -162,7 +156,8 @@ public class LinkDefinitionPanel extends JWizardPanel implements ItemListener{
 		gridBagConstraints6.anchor = GridBagConstraints.NORTHEAST;
 		gridBagConstraints6.gridy = 4;
 		lblLinkFieldTableToImport = new JLabel();
-		lblLinkFieldTableToImport.setText(PluginServices.getText(null,"link_field_table_to_import"));
+		lblLinkFieldTableToImport.setText(PluginServices.getText(null,
+				"link_field_table_to_import"));
 		GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 		gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints5.gridy = 3;
@@ -176,7 +171,8 @@ public class LinkDefinitionPanel extends JWizardPanel implements ItemListener{
 		gridBagConstraints4.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints4.gridy = 3;
 		lblTableToImport = new JLabel();
-		lblTableToImport.setText(PluginServices.getText(null,"table_to_import"));
+		lblTableToImport.setText(PluginServices
+				.getText(null, "table_to_import"));
 		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 		gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints3.gridy = 2;
@@ -190,7 +186,8 @@ public class LinkDefinitionPanel extends JWizardPanel implements ItemListener{
 		gridBagConstraints2.anchor = GridBagConstraints.NORTHEAST;
 		gridBagConstraints2.gridy = 2;
 		lblTableLinkField = new JLabel();
-		lblTableLinkField.setText(PluginServices.getText(null,"link_field_of_table"));
+		lblTableLinkField.setText(PluginServices.getText(null,
+				"link_field_of_table"));
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 		gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints1.gridy = 1;
@@ -204,12 +201,11 @@ public class LinkDefinitionPanel extends JWizardPanel implements ItemListener{
 		gridBagConstraints.anchor = GridBagConstraints.NORTHEAST;
 		gridBagConstraints.gridy = 1;
 		lblTable = new JLabel();
-		lblTable.setText(PluginServices.getText(null,"table"));
+		lblTable.setText(PluginServices.getText(null, "table"));
 
 		lblMessage = new JLabel();
 		lblSpace = new JLabel();
 		lblSpace2 = new JLabel();
-
 
 		this.setSize(400, 300);
 		this.setLayout(new GridBagLayout());
@@ -230,20 +226,20 @@ public class LinkDefinitionPanel extends JWizardPanel implements ItemListener{
 
 	/**
 	 * This method initializes cbTable
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getCbTable() {
 		if (cbTable == null) {
 			cbTable = new JComboBox();
 			this.cbTable_model = new DefaultComboBoxModel();
-			if (this.params.isLockTable()){
+			if (this.params.isLockTable()) {
 				this.cbTable_model.addElement(params.getTable().getName());
 				this.cbTable.setEditable(false);
 				cbTable.setModel(this.cbTable_model);
 				this.cbTable.setSelectedIndex(0);
 				this.cbTable.setEditable(false);
-			} else{
+			} else {
 				this.fillProjectTableComboModel(this.cbTable_model);
 				cbTable.addItemListener(this);
 				cbTable.setModel(this.cbTable_model);
@@ -253,22 +249,24 @@ public class LinkDefinitionPanel extends JWizardPanel implements ItemListener{
 		return cbTable;
 	}
 
-	private void fillProjectTableComboModel(DefaultComboBoxModel model){
-		Project project = ((ProjectExtension)PluginServices.getExtension(ProjectExtension.class)).getProject();
-		List ptables= project.getDocumentsByType(ProjectTableFactory.registerName);
+	private void fillProjectTableComboModel(DefaultComboBoxModel model) {
+		Project project = ((ProjectExtension) PluginServices
+				.getExtension(ProjectExtension.class)).getProject();
+		List ptables = project
+				.getDocumentsByType(ProjectTableFactory.registerName);
 
 		Iterator iter = ptables.iterator();
 		ProjectTable ptable;
-		while (iter.hasNext()){
+		while (iter.hasNext()) {
 			ptable = (ProjectTable) iter.next();
-			model.addElement( new ComboElement(ptable,ptable.getName()));
+			model.addElement(new ComboElement(ptable, ptable.getName()));
 		}
 
 	}
 
 	/**
 	 * This method initializes cbTableLinkField
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getCbTableLinkField() {
@@ -284,7 +282,7 @@ public class LinkDefinitionPanel extends JWizardPanel implements ItemListener{
 
 	/**
 	 * This method initializes cbTableToImport
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getCbTableToImport() {
@@ -301,7 +299,7 @@ public class LinkDefinitionPanel extends JWizardPanel implements ItemListener{
 
 	/**
 	 * This method initializes cbLinkFieldTableToImport
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getCbLinkFieldTableToImport() {
@@ -319,59 +317,57 @@ public class LinkDefinitionPanel extends JWizardPanel implements ItemListener{
 		private String description;
 		private Object value;
 
-		public ComboElement(Object value,String description){
+		public ComboElement(Object value, String description) {
 			this.value = value;
-			this.description=description;
+			this.description = description;
 		}
 
 		public String toString() {
 			return this.description;
 		}
 
-		public Object getValue(){
+		public Object getValue() {
 			return this.value;
 		}
-
-
 
 	}
 
 	public void itemStateChanged(ItemEvent e) {
-		if (this.updating){
+		if (this.updating) {
 			return;
 		}
-		if (e.getStateChange() == ItemEvent.DESELECTED){
+		if (e.getStateChange() == ItemEvent.DESELECTED) {
 			return;
 		}
 		Object src = e.getSource();
 
 		ComboElement element = null;
-		String strElement=null;
-		try{
+		String strElement = null;
+		try {
 			element = (ComboElement) e.getItem();
-		} catch (ClassCastException ex){
-			strElement= (String) e.getItem();
+		} catch (ClassCastException ex) {
+			strElement = (String) e.getItem();
 		}
-		if (src == this.cbTable){
-			if (this.params.isLockTable()){
+		if (src == this.cbTable) {
+			if (this.params.isLockTable()) {
 				return;
 			}
 			try {
-				this.params.setTable((ProjectTable)element.getValue());
+				this.params.setTable((ProjectTable) element.getValue());
 			} catch (ReadDriverException e1) {
 				NotificationManager.addError(e1);
 			}
-		} else if (src == this.cbTableLinkField){
-			this.params.setTableField((String)strElement);
+		} else if (src == this.cbTableLinkField) {
+			this.params.setTableField((String) strElement);
 
-		} else if (src == this.cbTableToImport){
+		} else if (src == this.cbTableToImport) {
 			try {
-				this.params.setTableToImport((ProjectTable)element.getValue());
+				this.params.setTableToImport((ProjectTable) element.getValue());
 			} catch (ReadDriverException e1) {
 				NotificationManager.addError(e1);
 			}
 
-		} else if (src == this.cbLinkFieldTableToImport){
+		} else if (src == this.cbLinkFieldTableToImport) {
 			this.params.setTableToImportField(strElement);
 		}
 		this.update();

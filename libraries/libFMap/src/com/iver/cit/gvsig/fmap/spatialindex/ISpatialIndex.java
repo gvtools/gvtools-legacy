@@ -42,17 +42,17 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: ISpatialIndex.java 5098 2006-05-08 15:44:03Z azabala $
-* $Log$
-* Revision 1.2  2006-05-08 15:44:03  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/05/01 18:38:41  azabala
-* primera version en cvs del api de indices espaciales
-*
-*
-*/
+ *
+ * $Id: ISpatialIndex.java 5098 2006-05-08 15:44:03Z azabala $
+ * $Log$
+ * Revision 1.2  2006-05-08 15:44:03  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/05/01 18:38:41  azabala
+ * primera version en cvs del api de indices espaciales
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.spatialindex;
 
 import java.awt.geom.Rectangle2D;
@@ -60,35 +60,33 @@ import java.util.List;
 
 /**
  * gvSIG spatial index
+ * 
  * @author azabala
- *
+ * 
  */
 public interface ISpatialIndex {
 	/**
-	 * Returns a list of objects spatially indexed
-	 * covered by specified rect.
-	 * Usually this list will have Integer objects
-	 * (pointers to a place where the object information
-	 * 	is saved)
+	 * Returns a list of objects spatially indexed covered by specified rect.
+	 * Usually this list will have Integer objects (pointers to a place where
+	 * the object information is saved)
+	 * 
 	 * @param rect
 	 * @return
 	 */
 	public List query(Rectangle2D rect);
-	
+
 	/**
 	 * @param rect
 	 * @param index
 	 */
 	public void insert(Rectangle2D rect, int index);
+
 	/**
 	 * 
 	 * @param rect
 	 * @param index
 	 */
 	public void delete(Rectangle2D rect, int index);
-	
-	//TODO Hacer un overwrite and update
+
+	// TODO Hacer un overwrite and update
 }
-
-
-

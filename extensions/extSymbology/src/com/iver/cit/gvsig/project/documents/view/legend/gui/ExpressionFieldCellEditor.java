@@ -51,10 +51,11 @@ import javax.swing.table.TableCellEditor;
 /**
  * Cell Editor for expressions. It controls the edition events in an expression
  * column of the table
- *
+ * 
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
-public class ExpressionFieldCellEditor extends JTextField implements TableCellEditor {
+public class ExpressionFieldCellEditor extends JTextField implements
+		TableCellEditor {
 
 	private static final long serialVersionUID = 1L;
 
@@ -62,7 +63,8 @@ public class ExpressionFieldCellEditor extends JTextField implements TableCellEd
 
 	}
 
-	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+	public Component getTableCellEditorComponent(JTable table, Object value,
+			boolean isSelected, int row, int column) {
 
 		return null;
 	}

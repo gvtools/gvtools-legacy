@@ -40,7 +40,6 @@
  */
 package com.iver.cit.gvsig.fmap.rendering;
 
-
 /**
  * Interfaz con los eventos que puede realizar una leyenda.
  */
@@ -48,13 +47,14 @@ public interface LegendContentsChangedListener {
 	/**
 	 * Invocado cuando se cambia en el legend el símbolo por defecto. Si
 	 * cualquiera de los listeners devuelve false, el cambio no se realiza
-	 *
-	 * @param e SymbolLegendEvent
-	 *
+	 * 
+	 * @param e
+	 *            SymbolLegendEvent
+	 * 
 	 * @return True si ha sido correcto.
 	 */
 	boolean symbolChanged(SymbolLegendEvent e);
 
 	void legendCleared(LegendClearEvent event);
-	
+
 }

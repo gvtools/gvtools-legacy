@@ -39,24 +39,25 @@ import com.iver.andami.PluginServices;
  * Panel para la selección de directorios.
  * 
  * 13/05/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class SelectDirectoryPanel extends JPanel implements ActionListener {
-	private static final long  serialVersionUID     = 1L;
-	private JTextField         directoryTextField   = null;
-	private JLabel             jLabelDirectory      = null;
-	private JButton            jBChooseDirectory    = null;
-	
+	private static final long serialVersionUID = 1L;
+	private JTextField directoryTextField = null;
+	private JLabel jLabelDirectory = null;
+	private JButton jBChooseDirectory = null;
+
 	/**
-	 * Constructor. 
-	 * Inicializa los componentes gráficos
+	 * Constructor. Inicializa los componentes gráficos
 	 */
 	public SelectDirectoryPanel() {
 		init();
 	}
-	
+
 	/**
 	 * This method initializes jPNameFile
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private void init() {
@@ -80,62 +81,73 @@ public class SelectDirectoryPanel extends JPanel implements ActionListener {
 
 		getJBChooseDirectory().addActionListener(this);
 	}
-	
+
 	/**
 	 * Obtiene el botón de asignación de directorio
+	 * 
 	 * @return JButton
 	 */
 	private JButton getJBChooseDirectory() {
 		if (jBChooseDirectory == null) {
-			jBChooseDirectory = new JButton(PluginServices.getText(this, "cambiar_ruta"));
+			jBChooseDirectory = new JButton(PluginServices.getText(this,
+					"cambiar_ruta"));
 			jBChooseDirectory.setEnabled(false);
 		}
 		return jBChooseDirectory;
 	}
-	
+
 	/**
 	 * Obtiene la etiqueta con la ruta
+	 * 
 	 * @return JLabel
 	 */
 	private JLabel getJLabelDirectory() {
 		if (jLabelDirectory == null) {
-			jLabelDirectory = new JLabel(PluginServices.getText(this, "ruta") + ":");
+			jLabelDirectory = new JLabel(PluginServices.getText(this, "ruta")
+					+ ":");
 			jLabelDirectory.setEnabled(false);
 		}
 		return jLabelDirectory;
 	}
-	
+
 	/**
 	 * Obtiene el campo de texto con la ruta de directorio
+	 * 
 	 * @return JTextField
 	 */
 	public JTextField getDirectoryTextField() {
-		if (directoryTextField  == null) {
+		if (directoryTextField == null) {
 			directoryTextField = new JTextField();
-			directoryTextField.setText(JFileChooser.getLastPath(this.getClass().getName(), (File) null).toString());
+			directoryTextField.setText(JFileChooser.getLastPath(
+					this.getClass().getName(), (File) null).toString());
 			directoryTextField.setEditable(false);
 			directoryTextField.setEnabled(false);
-			directoryTextField.setPreferredSize(new Dimension(200, directoryTextField.getPreferredSize().height));
+			directoryTextField.setPreferredSize(new Dimension(200,
+					directoryTextField.getPreferredSize().height));
 		}
 		return directoryTextField;
 	}
-	
+
 	/**
 	 * Accion que sucede cuando se pulsa el boton de cambiar directorio
 	 */
 	public void actionPerformed(ActionEvent e) {
-		JFileChooser chooser = new JFileChooser(this.getClass().getName(), new File(getDirectoryTextField().getText()));
+		JFileChooser chooser = new JFileChooser(this.getClass().getName(),
+				new File(getDirectoryTextField().getText()));
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		chooser.setDialogTitle(PluginServices.getText(this, "seleccionar_directorio"));
+		chooser.setDialogTitle(PluginServices.getText(this,
+				"seleccionar_directorio"));
 
 		if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
-			getDirectoryTextField().setText(chooser.getSelectedFile().toString());
+			getDirectoryTextField().setText(
+					chooser.getSelectedFile().toString());
 		else
 			chooser.setLastPath(new File(getDirectoryTextField().getText()));
 	}
-	
+
 	/**
 	 * Obtiene la ruta al directorio.
+	 * 
 	 * @return String
 	 */
 	public String getPath() {

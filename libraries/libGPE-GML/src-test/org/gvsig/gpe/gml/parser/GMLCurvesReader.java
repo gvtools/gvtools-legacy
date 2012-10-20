@@ -49,32 +49,35 @@ import java.util.ArrayList;
 import org.gvsig.gpe.containers.Layer;
 
 public class GMLCurvesReader extends GMLReaderBaseTest {
-		
-		/*
-		 * (non-Javadoc)
-		 * @see org.gvsig.gpe.parser.GPEReaderBaseTest#getFile()
-		 */
-		public String getFile() {
-			return "testdata/GML-curves.gml";
-		}
 
-		/*
-		 * (non-Javadoc)
-		 * @see org.gvsig.gpe.gml.parser.GMLReaderBaseTest#hasSchema()
-		 */
-		public boolean hasSchema() {
-			// TODO Auto-generated method stub
-			return false;
-		}
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.gpe.parser.GPEReaderBaseTest#getFile()
+	 */
+	public String getFile() {
+		return "testdata/GML-curves.gml";
+	}
 
-		/*
-		 * (non-Javadoc)
-		 * @see org.gvsig.gpe.parser.GPEReaderBaseTest#makeAsserts()
-		 */
-		public void makeAsserts() {
-			assertEquals(1, getLayers().length);
-			Layer layer = getLayers()[0];
-			ArrayList features = layer.getFeatures();
-			assertEquals(1, features.size());
-		}
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.gpe.gml.parser.GMLReaderBaseTest#hasSchema()
+	 */
+	public boolean hasSchema() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.gpe.parser.GPEReaderBaseTest#makeAsserts()
+	 */
+	public void makeAsserts() {
+		assertEquals(1, getLayers().length);
+		Layer layer = getLayers()[0];
+		ArrayList features = layer.getFeatures();
+		assertEquals(1, features.size());
+	}
 }

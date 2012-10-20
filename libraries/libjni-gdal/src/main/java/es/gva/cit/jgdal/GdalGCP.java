@@ -17,118 +17,138 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
  */
 package es.gva.cit.jgdal;
+
 /**
- * Contiene las funcionalidades necesarias para el acceso a los
- * elementos de un dataset de gdal correspondiente a una imágen 
+ * Contiene las funcionalidades necesarias para el acceso a los elementos de un
+ * dataset de gdal correspondiente a una imágen
  * 
- * @author Nacho Brodin <brodin_ign@gva.es>.<BR> Equipo de desarrollo gvSIG.<BR> http://www.gvsig.gva.es
+ * @author Nacho Brodin <brodin_ign@gva.es>.<BR>
+ *         Equipo de desarrollo gvSIG.<BR>
+ *         http://www.gvsig.gva.es
  * @link http://www.gvsig.gva.es
  */
-public class GdalGCP extends JNIBase{
+public class GdalGCP extends JNIBase {
 
 	private native long GdalGCPNat();
-	private native long GdalGCPPointsNat(	double pixelXGCP, 
-											double pixelYGCP,
-											double mapXGCP,
-											double mapYGCP,
-											double mapZGCP);
+
+	private native long GdalGCPPointsNat(double pixelXGCP, double pixelYGCP,
+			double mapXGCP, double mapYGCP, double mapZGCP);
+
 	private native void FreeGdalGCPNat();
-	
-	private String id; 			//identificador 
-	private String info;		//información
-	private double pixelXGCP;	/** Pixel (x) location of GCP on raster */
-	private double pixelYGCP;	/** Line (y) location of GCP on raster */
-	private double mapXGCP;		/** X position of GCP in georeferenced space */
-	private double mapYGCP; 	/** Y position of GCP in georeferenced space */
-	private double mapZGCP;		/** Elevation of GCP, or zero if not known */
-		
+
+	private String id; // identificador
+	private String info; // información
+	private double pixelXGCP;
+	/** Pixel (x) location of GCP on raster */
+	private double pixelYGCP;
+	/** Line (y) location of GCP on raster */
+	private double mapXGCP;
+	/** X position of GCP in georeferenced space */
+	private double mapYGCP;
+	/** Y position of GCP in georeferenced space */
+	private double mapZGCP;
+
+	/** Elevation of GCP, or zero if not known */
+
 	/**
 	 * Constructor
 	 */
-	public GdalGCP(){
+	public GdalGCP() {
 		cPtr = this.GdalGCPNat();
 	}
-	
+
 	/**
 	 * Constructor
+	 * 
 	 * @param pixelXGCP
 	 * @param pixelYGCP
 	 * @param mapXGCP
 	 * @param mapYGCP
 	 * @param mapZGCP
 	 */
-	public GdalGCP(	double pixelXGCP, 
-					double pixelYGCP,
-					double mapXGCP,
-					double mapYGCP,
-					double mapZGCP){
-		this.pixelXGCP = pixelXGCP;  
+	public GdalGCP(double pixelXGCP, double pixelYGCP, double mapXGCP,
+			double mapYGCP, double mapZGCP) {
+		this.pixelXGCP = pixelXGCP;
 		this.pixelYGCP = pixelYGCP;
-		this.mapXGCP = mapXGCP; 
+		this.mapXGCP = mapXGCP;
 		this.mapYGCP = mapYGCP;
 		this.mapZGCP = mapYGCP;
 	}
-	
-	protected void finalize(){
-		
+
+	protected void finalize() {
+
 	}
-	
+
 	/**
 	 * @return Returns the mapXGCP.
 	 */
 	public double getMapXGCP() {
 		return mapXGCP;
 	}
+
 	/**
-	 * @param mapXGCP The mapXGCP to set.
+	 * @param mapXGCP
+	 *            The mapXGCP to set.
 	 */
 	public void setMapXGCP(double mapXGCP) {
 		this.mapXGCP = mapXGCP;
 	}
+
 	/**
 	 * @return Returns the mapYGCP.
 	 */
 	public double getMapYGCP() {
 		return mapYGCP;
 	}
+
 	/**
-	 * @param mapYGCP The mapYGCP to set.
+	 * @param mapYGCP
+	 *            The mapYGCP to set.
 	 */
 	public void setMapYGCP(double mapYGCP) {
 		this.mapYGCP = mapYGCP;
 	}
+
 	/**
 	 * @return Returns the mapZGCP.
 	 */
 	public double getMapZGCP() {
 		return mapZGCP;
 	}
+
 	/**
-	 * @param mapZGCP The mapZGCP to set.
+	 * @param mapZGCP
+	 *            The mapZGCP to set.
 	 */
 	public void setMapZGCP(double mapZGCP) {
 		this.mapZGCP = mapZGCP;
 	}
+
 	/**
 	 * @return Returns the pixelXGCP.
 	 */
 	public double getPixelXGCP() {
 		return pixelXGCP;
 	}
+
 	/**
-	 * @param pixelXGCP The pixelXGCP to set.
+	 * @param pixelXGCP
+	 *            The pixelXGCP to set.
 	 */
 	public void setPixelXGCP(double pixelXGCP) {
 		this.pixelXGCP = pixelXGCP;
 	}
+
 	/**
 	 * @return Returns the pixelYGCP.
 	 */
 	public double getPixelYGCP() {
 		return pixelYGCP;
 	}
+
 	/**
-	 * @param pixelYGCP The pixelYGCP to set.
+	 * @param pixelYGCP
+	 *            The pixelYGCP to set.
 	 */
 	public void setPixelYGCP(double pixelYGCP) {
 		this.pixelYGCP = pixelYGCP;

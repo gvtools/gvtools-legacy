@@ -33,19 +33,21 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.IWindowListener;
 import com.iver.andami.ui.mdiManager.WindowInfo;
+
 /**
  * Dialogo de opciones de sobre la proyección de la capa raster y la vista.
- *
+ * 
  * @version 07/04/2008
  * @author Nacho Brodin nachobrodin@gmail.com
  */
-public class RasterProjectionActionsDialog extends JPanel implements IWindow, IWindowListener, ActionListener {
-	private static final long            serialVersionUID = 6954391896451933337L;
-	private RasterProjectionActionsPanel panel            = null;
-	private Point                        posWindow        = null;
-	private int                          widthWindow      = 390;
-	private int                          heightWindow     = 250;
-	private FLyrRasterSE                 lyr              = null;
+public class RasterProjectionActionsDialog extends JPanel implements IWindow,
+		IWindowListener, ActionListener {
+	private static final long serialVersionUID = 6954391896451933337L;
+	private RasterProjectionActionsPanel panel = null;
+	private Point posWindow = null;
+	private int widthWindow = 390;
+	private int heightWindow = 250;
+	private FLyrRasterSE lyr = null;
 
 	/**
 	 * Constructor.
@@ -57,19 +59,24 @@ public class RasterProjectionActionsDialog extends JPanel implements IWindow, IW
 		bl.setVgap(2);
 		setLayout(bl);
 		add(getRasterProjectionActionsPanel(), BorderLayout.CENTER);
-		getRasterProjectionActionsPanel().getButtonsPanel().getButton(ButtonsPanel.BUTTON_ACCEPT).addActionListener(this);
-		getRasterProjectionActionsPanel().getButtonsPanel().getButton(ButtonsPanel.BUTTON_CANCEL).addActionListener(this);
-		getRasterProjectionActionsPanel().getCheckOption().addActionListener(this);
+		getRasterProjectionActionsPanel().getButtonsPanel()
+				.getButton(ButtonsPanel.BUTTON_ACCEPT).addActionListener(this);
+		getRasterProjectionActionsPanel().getButtonsPanel()
+				.getButton(ButtonsPanel.BUTTON_CANCEL).addActionListener(this);
+		getRasterProjectionActionsPanel().getCheckOption().addActionListener(
+				this);
 		posWindow = RasterToolsUtil.iwindowPosition(widthWindow, heightWindow);
 		PluginServices.getMDIManager().addWindow(this);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindow#getWindowInfo()
 	 */
 	public WindowInfo getWindowInfo() {
-		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODALDIALOG | WindowInfo.RESIZABLE | WindowInfo.MAXIMIZABLE);
+		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODALDIALOG
+				| WindowInfo.RESIZABLE | WindowInfo.MAXIMIZABLE);
 		m_viewinfo.setTitle(PluginServices.getText(this, "options"));
 		m_viewinfo.setHeight(heightWindow);
 		m_viewinfo.setWidth(widthWindow);
@@ -82,6 +89,7 @@ public class RasterProjectionActionsDialog extends JPanel implements IWindow, IW
 
 	/**
 	 * Obtiene el panel con las opciones de proyección
+	 * 
 	 * @return RasterProjectionActionsPanel
 	 */
 	public RasterProjectionActionsPanel getRasterProjectionActionsPanel() {
@@ -93,8 +101,9 @@ public class RasterProjectionActionsDialog extends JPanel implements IWindow, IW
 
 	/**
 	 * Obtiene la selección del panel
-	 * @return entero con la selección. Esta representada por las constantes de la
-	 *         clase RasterReprojectionPanel.
+	 * 
+	 * @return entero con la selección. Esta representada por las constantes de
+	 *         la clase RasterReprojectionPanel.
 	 */
 	public int getSelection() {
 		return getRasterProjectionActionsPanel().getSelection();
@@ -102,19 +111,24 @@ public class RasterProjectionActionsDialog extends JPanel implements IWindow, IW
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == getRasterProjectionActionsPanel().getCheckOption()) {
-			RasterProjectionActionsPanel.selectAllFiles = getRasterProjectionActionsPanel().getCheckOption().isSelected();
+			RasterProjectionActionsPanel.selectAllFiles = getRasterProjectionActionsPanel()
+					.getCheckOption().isSelected();
 			return;
 		}
 		PluginServices.getMDIManager().closeWindow(this);
 	}
 
-	public void windowClosed() {}
+	public void windowClosed() {
+	}
 
-	public void windowActivated() {}
+	public void windowActivated() {
+	}
 
 	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;

@@ -50,39 +50,40 @@ import com.iver.cit.gvsig.gui.cad.tools.SelectionCADTool;
 
 /**
  * Extensión que gestiona la herramienta de seleccionar.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class SelectionGeometryExtension extends Extension {
 
 	private MapControl mapControl;
-	private  SelectionCADTool selection;
+	private SelectionCADTool selection;
 
 	/**
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
-		selection=new SelectionCADTool();
+		selection = new SelectionCADTool();
 		CADExtension.addCADTool("_selection", selection);
-		
+
 		registerIcons();
 	}
 
-	private void registerIcons(){
+	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"edition-geometry-select",
-				this.getClass().getClassLoader().getResource("images/SelCAD.png")
-			);
-		
+				this.getClass().getClassLoader()
+						.getResource("images/SelCAD.png"));
+
 	}
+
 	/**
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String s) {
 		CADExtension.initFocus();
 		if (s.equals("_selection")) {
-        	CADExtension.setCADTool("_selection",true);
-        }
+			CADExtension.setCADTool("_selection", true);
+		}
 		CADExtension.getEditionManager().setMapControl(mapControl);
 		CADExtension.getCADToolAdapter().configureMenu();
 	}
@@ -91,13 +92,14 @@ public class SelectionGeometryExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
-		if (CADExtension.getEditionManager().getActiveLayerEdited()==null)
+		if (CADExtension.getEditionManager().getActiveLayerEdited() == null)
 			return false;
-		FLyrVect lv=(FLyrVect)CADExtension.getEditionManager().getActiveLayerEdited().getLayer();
+		FLyrVect lv = (FLyrVect) CADExtension.getEditionManager()
+				.getActiveLayerEdited().getLayer();
 		try {
 			return selection.isApplicable(lv.getShapeType());
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 		return false;
 	}
@@ -106,7 +108,7 @@ public class SelectionGeometryExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE){
+		if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE) {
 			return true;
 		}
 		return false;

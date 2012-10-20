@@ -41,31 +41,34 @@
 package com.iver.cit.gvsig.project.documents.view;
 
 /**
- * Interfaz invocada por el FPanelExtentSelector cuando el usuario ha seleccionado al
- * menos un elemento y pulsa el botón aceptar
- *
+ * Interfaz invocada por el FPanelExtentSelector cuando el usuario ha
+ * seleccionado al menos un elemento y pulsa el botón aceptar
+ * 
  * @author $author$
  * @version $Revision: 7304 $
  */
 public interface ListSelectorListener {
-    /**
-     * Método invocado cuando el usuario pulsa aceptar y hay algo seleccionado
-     *
-     * @param indices Array con los índices de los elementos seleccionados
-     */
-    public void indexesSelected(int[] indices);
+	/**
+	 * Método invocado cuando el usuario pulsa aceptar y hay algo seleccionado
+	 * 
+	 * @param indices
+	 *            Array con los índices de los elementos seleccionados
+	 */
+	public void indexesSelected(int[] indices);
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param indices DOCUMENT ME!
-     */
-    public void indexesRemoved(int[] indices);
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param indices
+	 *            DOCUMENT ME!
+	 */
+	public void indexesRemoved(int[] indices);
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param name DOCUMENT ME!
-     */
-    public void newElement(String name);
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param name
+	 *            DOCUMENT ME!
+	 */
+	public void newElement(String name);
 }

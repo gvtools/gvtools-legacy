@@ -7,10 +7,9 @@ import com.hardcode.gdbms.engine.data.persistence.MementoException;
 import com.hardcode.gdbms.engine.data.persistence.OperationLayerMemento;
 import com.hardcode.gdbms.engine.values.Value;
 
-
 /**
  * DataSource que hace la union de dos datasources
- *
+ * 
  * @author Fernando González Cortés
  */
 public class UnionDataSource extends OperationDataSource {
@@ -19,9 +18,11 @@ public class UnionDataSource extends OperationDataSource {
 
 	/**
 	 * Creates a new UnionDataSource object.
-	 *
-	 * @param ds1 Primera tabla de la union
-	 * @param ds2 Segunda tabla de la union
+	 * 
+	 * @param ds1
+	 *            Primera tabla de la union
+	 * @param ds2
+	 *            Segunda tabla de la union
 	 */
 	public UnionDataSource(DataSource ds1, DataSource ds2) {
 		dataSource1 = ds1;
@@ -60,10 +61,10 @@ public class UnionDataSource extends OperationDataSource {
 
 	/**
 	 * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getFieldValue(long,
-	 * 		int)
+	 *      int)
 	 */
 	public Value getFieldValue(long rowIndex, int fieldId)
-		throws ReadDriverException {
+			throws ReadDriverException {
 		long tamTabla1 = dataSource1.getRowCount();
 
 		if (rowIndex < tamTabla1) {
@@ -105,8 +106,8 @@ public class UnionDataSource extends OperationDataSource {
 	 * @see com.hardcode.gdbms.engine.data.DataSource#getMemento()
 	 */
 	public Memento getMemento() throws MementoException {
-		return new OperationLayerMemento(getName(),
-			new Memento[] { dataSource1.getMemento(), dataSource2.getMemento() }, getSQL());
+		return new OperationLayerMemento(getName(), new Memento[] {
+				dataSource1.getMemento(), dataSource2.getMemento() }, getSQL());
 	}
 
 	public int getFieldWidth(int i) throws ReadDriverException {

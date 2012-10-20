@@ -73,82 +73,85 @@ import com.iver.cit.gvsig.fmap.core.FShape;
  */
 /**
  * Types conversor from GML to gvSIG
+ * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
 public class GMLTypesConversor {
-		/**	
-		 * From gvSIG types to xlink types used in GML 
-		 * @param gmlType
-		 * @return
-		 */
-	 public static String gvSIGToXlinkTypes(int type){
-		 switch (type) {
-		 case Types.BIT:
-			 return "xs:boolean";
-		 case Types.TINYINT:
-			 return "xs:integer";
-		 case Types.SMALLINT:
-			 return "xs:integer";
-		 case Types.INTEGER:
-			 return "xs:double";
-		 case Types.BIGINT: 
-			 return "xs:integer";
-		 case Types.FLOAT:
-			 return "xs:float";
-		 case Types.REAL:
-			 return "xs:double";
-		 case Types.DOUBLE:
-			 return "xs:double";
-		 case Types.NUMERIC:
-			 return "xs:integer";
-		 case Types.DECIMAL:
-			 return "xs:float";
-		 case Types.CHAR:
-			 return "xs:string";
-		 case Types.VARCHAR:
-			 return "xs:string";
-		 case Types.LONGVARCHAR: 
-			 return "xs:string";
-		 case Types.DATE:
-			 return "xs:string";
-		 case Types.TIME:
-			 return "xs:string";
-		 case Types.TIMESTAMP:
-			 return "xs:string";
-		 case Types.BINARY:
-			 return "xs:boolean";
-		 case Types.VARBINARY:
-			 return "xs:string";
-		 case Types.LONGVARBINARY:
-			 return "xs:string";
-		 case Types.NULL:
-			 return "xs:string";
-		 case Types.OTHER:
-			 return "xs:string";
-		 case Types.BOOLEAN:
-			 return "xs:boolean";
-         default:
-        	 return "xs:string";        
-		 }
-	 }
-	 
-		/**	
-		 * From gvSIG to GML types
-		 * @param gmlType
-		 * @return
-		 */
-	 public static String gvSIGToGMLTypes(int type){
-		 switch (type) {
-         case FShape.LINE:
-        	 return "gml:MultiLineStringPropertyType";
-         case FShape.POINT:
-           	 return "gml:PointPropertyType";
-         case FShape.MULTIPOINT:
-        	 return "gml:MultiPointPropertyType";
-         case FShape.POLYGON:
-        	 return "gml:MultiPolygonPropertyType";
-         default:
-        	 return "gml:GeometryPropertyType";        
-		 }        	
-	 }	
+	/**
+	 * From gvSIG types to xlink types used in GML
+	 * 
+	 * @param gmlType
+	 * @return
+	 */
+	public static String gvSIGToXlinkTypes(int type) {
+		switch (type) {
+		case Types.BIT:
+			return "xs:boolean";
+		case Types.TINYINT:
+			return "xs:integer";
+		case Types.SMALLINT:
+			return "xs:integer";
+		case Types.INTEGER:
+			return "xs:double";
+		case Types.BIGINT:
+			return "xs:integer";
+		case Types.FLOAT:
+			return "xs:float";
+		case Types.REAL:
+			return "xs:double";
+		case Types.DOUBLE:
+			return "xs:double";
+		case Types.NUMERIC:
+			return "xs:integer";
+		case Types.DECIMAL:
+			return "xs:float";
+		case Types.CHAR:
+			return "xs:string";
+		case Types.VARCHAR:
+			return "xs:string";
+		case Types.LONGVARCHAR:
+			return "xs:string";
+		case Types.DATE:
+			return "xs:string";
+		case Types.TIME:
+			return "xs:string";
+		case Types.TIMESTAMP:
+			return "xs:string";
+		case Types.BINARY:
+			return "xs:boolean";
+		case Types.VARBINARY:
+			return "xs:string";
+		case Types.LONGVARBINARY:
+			return "xs:string";
+		case Types.NULL:
+			return "xs:string";
+		case Types.OTHER:
+			return "xs:string";
+		case Types.BOOLEAN:
+			return "xs:boolean";
+		default:
+			return "xs:string";
+		}
+	}
+
+	/**
+	 * From gvSIG to GML types
+	 * 
+	 * @param gmlType
+	 * @return
+	 */
+	public static String gvSIGToGMLTypes(int type) {
+		switch (type) {
+		case FShape.LINE:
+			return "gml:MultiLineStringPropertyType";
+		case FShape.POINT:
+			return "gml:PointPropertyType";
+		case FShape.MULTIPOINT:
+			return "gml:MultiPointPropertyType";
+		case FShape.POLYGON:
+			return "gml:MultiPolygonPropertyType";
+		default:
+			return "gml:GeometryPropertyType";
+		}
+	}
 }

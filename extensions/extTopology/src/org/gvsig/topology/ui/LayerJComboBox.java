@@ -55,7 +55,6 @@ import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.LayersIterator;
 
-
 /**
  * JComboBox to show the layers of a FLayers instance.
  * 
@@ -64,12 +63,11 @@ import com.iver.cit.gvsig.fmap.layers.LayersIterator;
  * 
  * @author Alvaro Zabala
  * 
- * TODO Si FLayer.toString() devuelve el resultado de FLayer.getName() la clase
- * se puede simplificar muchisimo
+ *         TODO Si FLayer.toString() devuelve el resultado de FLayer.getName()
+ *         la clase se puede simplificar muchisimo
  * 
  */
- public class LayerJComboBox extends JComboBox {
- 
+public class LayerJComboBox extends JComboBox {
 
 	private static final long serialVersionUID = 4417161682529079817L;
 
@@ -135,8 +133,8 @@ import com.iver.cit.gvsig.fmap.layers.LayersIterator;
 	public FLayer getSelectedLayer() {
 		return layers.getLayer((String) getSelectedItem());
 	}
-	
-	public void setLayers(FLayers layers){
+
+	public void setLayers(FLayers layers) {
 		this.layers = layers;
 		this.removeAllItems();
 		initialize();

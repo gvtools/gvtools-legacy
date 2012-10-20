@@ -61,9 +61,10 @@ import org.gvsig.gpe.writer.warnings.GPEPolygonAutomaticallyClosedTest;
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class GMLPolygonAutomaticallyClosedTest extends
-	GPEPolygonAutomaticallyClosedTest {
+		GPEPolygonAutomaticallyClosedTest {
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEParserClass()
 	 */
 	public Class getGPEParserClass() {
@@ -72,6 +73,7 @@ public class GMLPolygonAutomaticallyClosedTest extends
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEWriterHandlerClass()
 	 */
 	public Class getGPEWriterHandlerClass() {

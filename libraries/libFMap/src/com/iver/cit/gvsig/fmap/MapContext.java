@@ -87,10 +87,14 @@ import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.threads.Cancellable;
 
 /**
- * <p>The <code>MapContext</code> class represents the model and a part of the control and view around graphical layers
- * used by {@link MapControl MapControl}.</p>
- *
- * <p>An instance of <code>MapContext</code> is made up with:
+ * <p>
+ * The <code>MapContext</code> class represents the model and a part of the
+ * control and view around graphical layers used by {@link MapControl
+ * MapControl}.
+ * </p>
+ * 
+ * <p>
+ * An instance of <code>MapContext</code> is made up with:
  * <ul>
  * <li>a hierarchy of {@link FLayers FLayers} nodes
  * <li>a {@link GraphicLayer GraphicLayer} layer
@@ -102,137 +106,179 @@ import com.iver.utiles.swing.threads.Cancellable;
  * <li>some {@link ErrorListener ErrorListener}s
  * </ul>
  * </p>
- *
+ * 
  * @author Fernando González Cortés
  */
 public class MapContext {
 	/**
-	 * <p>Defines the value which a unit of a distance measurement must be divided to obtain its equivalent <b>in meters</b>.</p>
-	 *
-	 * <p><b><i>Conversion values of distance measurements:</i></b>
-	 * <ul>
-	 *  <li><code>MapContext.CHANGEM[0]</code>: kilometer
-	 *  <li><code>MapContext.CHANGEM[1]</code>: meter
-	 *  <li><code>MapContext.CHANGEM[2]</code>: centimeter
-	 *  <li><code>MapContext.CHANGEM[3]</code>: millimeter
-	 *  <li><code>MapContext.CHANGEM[4]</code>: international statute mile
-	 *  <li><code>MapContext.CHANGEM[5]</code>: yard
-	 *  <li><code>MapContext.CHANGEM[6]</code>: foot
-	 *  <li><code>MapContext.CHANGEM[7]</code>: inch
-	 *  <li><code>MapContext.CHANGEM[8]</code>: grade
-	 * </ul>
-	 *
-	 * <p><h3>Examples:</h3>
-	 * <pre>1 international statute mile / MapContext.CHANGEM[4] = X meters</pre>
-	 * <pre>1 kilometer / MapContext.CHANGEM[0] = X meters</pre>
-	 * <pre>1 grade / MapContext.CHANGEM[8] = X meters</pre>
+	 * <p>
+	 * Defines the value which a unit of a distance measurement must be divided
+	 * to obtain its equivalent <b>in meters</b>.
 	 * </p>
-	 *
-	 * <p><h3>Grade conversion value: <code>MapContext.CHANGEM[8]</code></h3>
-	 * The value of <code>MapContext.CHANGEM[8]</code> represents the meters of a straight line between two
-	 *  points on the Earth surface that are 1 grade far each other of the center of the Earth. This value has been calculated using
-	 *  a radius approximated of R<sub>Earth</sub>=6.37846082678100774672e6 meters, according these equations:
-	 * <pre>D = 2 * (sin (1)) * R<sub>Earth</sub></pre>
-	 * <pre>MapContext.CHANGEM[8] = 1 / D</pre>
+	 * 
+	 * <p>
+	 * <b><i>Conversion values of distance measurements:</i></b>
+	 * <ul>
+	 * <li><code>MapContext.CHANGEM[0]</code>: kilometer
+	 * <li><code>MapContext.CHANGEM[1]</code>: meter
+	 * <li><code>MapContext.CHANGEM[2]</code>: centimeter
+	 * <li><code>MapContext.CHANGEM[3]</code>: millimeter
+	 * <li><code>MapContext.CHANGEM[4]</code>: international statute mile
+	 * <li><code>MapContext.CHANGEM[5]</code>: yard
+	 * <li><code>MapContext.CHANGEM[6]</code>: foot
+	 * <li><code>MapContext.CHANGEM[7]</code>: inch
+	 * <li><code>MapContext.CHANGEM[8]</code>: grade
+	 * </ul>
+	 * 
+	 * <p>
+	 * <h3>Examples:</h3>
+	 * 
+	 * <pre>
+	 * 1 international statute mile / MapContext.CHANGEM[4] = X meters
+	 * </pre>
+	 * 
+	 * <pre>
+	 * 1 kilometer / MapContext.CHANGEM[0] = X meters
+	 * </pre>
+	 * 
+	 * <pre>
+	 * 1 grade / MapContext.CHANGEM[8] = X meters
+	 * </pre>
+	 * 
+	 * </p>
+	 * 
+	 * <p>
+	 * <h3>Grade conversion value: <code>MapContext.CHANGEM[8]</code></h3>
+	 * The value of <code>MapContext.CHANGEM[8]</code> represents the meters of
+	 * a straight line between two points on the Earth surface that are 1 grade
+	 * far each other of the center of the Earth. This value has been calculated
+	 * using a radius approximated of R<sub>Earth</sub>=6.37846082678100774672e6
+	 * meters, according these equations:
+	 * 
+	 * <pre>
+	 * D = 2 * (sin (1)) * R<sub>Earth</sub>
+	 * </pre>
+	 * 
+	 * <pre>
+	 * MapContext.CHANGEM[8] = 1 / D
+	 * </pre>
+	 * 
 	 * <h4>Explanation:</h4>
-	 * We get an isosceles triangle with the center of the Earth and the 2 points on the surface. This triangle can be divided into
-	 * two rectangle triangles. We know two values, the angle of 1 grade, that will be 0.50 grades in each triangle, and the Earth radius that
-	 * is the hypotenuse. Then we apply trigonometry and get the distance <i>D</i> between both points on the Earth surface.</p>
-	 * <p>Now we only must invert that value to obtain <code>MapContext.CHANGEM[8]</code>.</p>
-	 *@deprecated use getDistanceTrans2Meter()
+	 * We get an isosceles triangle with the center of the Earth and the 2
+	 * points on the surface. This triangle can be divided into two rectangle
+	 * triangles. We know two values, the angle of 1 grade, that will be 0.50
+	 * grades in each triangle, and the Earth radius that is the hypotenuse.
+	 * Then we apply trigonometry and get the distance <i>D</i> between both
+	 * points on the Earth surface.
+	 * </p>
+	 * <p>
+	 * Now we only must invert that value to obtain
+	 * <code>MapContext.CHANGEM[8]</code>.
+	 * </p>
+	 * 
+	 * @deprecated use getDistanceTrans2Meter()
 	 */
 	public static final double[] CHANGEM = { 1000, 1, 0.01, 0.001, 1609.344,
-			0.9144, 0.3048, 0.0254, 1/8.983152841195214E-6 };
+			0.9144, 0.3048, 0.0254, 1 / 8.983152841195214E-6 };
 
+	public static ArrayList AREANAMES = new ArrayList();
+	public static ArrayList AREAABBR = new ArrayList();
+	public static ArrayList AREATRANS2METER = new ArrayList();
 
-	public static ArrayList AREANAMES=new ArrayList();
-	public static ArrayList AREAABBR=new ArrayList();
-	public static ArrayList AREATRANS2METER=new ArrayList();
+	public static ArrayList DISTANCENAMES = new ArrayList();
+	public static ArrayList DISTANCEABBR = new ArrayList();
+	public static ArrayList DISTANCETRANS2METER = new ArrayList();
 
-	public static ArrayList DISTANCENAMES=new ArrayList();
-	public static ArrayList DISTANCEABBR=new ArrayList();
-	public static ArrayList DISTANCETRANS2METER=new ArrayList();
+	static {
+		MapContext.addDistanceUnit("Kilometros", "Km", 1000);
+		MapContext.addDistanceUnit("Metros", "m", 1);
+		MapContext.addDistanceUnit("Centimetros", "cm", 0.01);
+		MapContext.addDistanceUnit("Milimetros", "mm", 0.001);
+		MapContext.addDistanceUnit("Millas", "mi", 1609.344);
+		MapContext.addDistanceUnit("Yardas", "Ya", 0.9144);
+		MapContext.addDistanceUnit("Pies", "ft", 0.3048);
+		MapContext.addDistanceUnit("Pulgadas", "inche", 0.0254);
+		MapContext.addDistanceUnit("Grados", "º", 1 / 8.983152841195214E-6);
 
-	static{
-		MapContext.addDistanceUnit("Kilometros","Km",1000);
-    	MapContext.addDistanceUnit("Metros","m",1);
-    	MapContext.addDistanceUnit("Centimetros","cm",0.01);
-    	MapContext.addDistanceUnit("Milimetros","mm",0.001);
-    	MapContext.addDistanceUnit("Millas","mi",1609.344);
-    	MapContext.addDistanceUnit("Yardas","Ya",0.9144);
-    	MapContext.addDistanceUnit("Pies","ft",0.3048);
-    	MapContext.addDistanceUnit("Pulgadas","inche",0.0254);
-    	MapContext.addDistanceUnit("Grados","º",1/8.983152841195214E-6);
+		MapContext.addAreaUnit("Kilometros", "Km", true, 1000);
+		MapContext.addAreaUnit("Metros", "m", true, 1);
+		MapContext.addAreaUnit("Centimetros", "cm", true, 0.01);
+		MapContext.addAreaUnit("Milimetros", "mm", true, 0.001);
+		MapContext.addAreaUnit("Millas", "mi", true, 1609.344);
+		MapContext.addAreaUnit("Yardas", "Ya", true, 0.9144);
+		MapContext.addAreaUnit("Pies", "ft", true, 0.3048);
+		MapContext.addAreaUnit("Pulgadas", "inche", true, 0.0254);
+		MapContext.addAreaUnit("Grados", "º", true, 1 / 8.983152841195214E-6);
 
-    	MapContext.addAreaUnit("Kilometros","Km",true,1000);
-    	MapContext.addAreaUnit("Metros","m",true,1);
-    	MapContext.addAreaUnit("Centimetros","cm",true,0.01);
-    	MapContext.addAreaUnit("Milimetros","mm",true,0.001);
-    	MapContext.addAreaUnit("Millas","mi",true,1609.344);
-    	MapContext.addAreaUnit("Yardas","Ya",true,0.9144);
-    	MapContext.addAreaUnit("Pies","ft",true,0.3048);
-    	MapContext.addAreaUnit("Pulgadas","inche",true,0.0254);
-    	MapContext.addAreaUnit("Grados","º",true,1/8.983152841195214E-6);
+	}
 
-
-    }
-
-
-
-	public static void addAreaUnit(String name, String abbr,boolean isLinear,double trans2meter){
-		if (!AREANAMES.contains(name)){
+	public static void addAreaUnit(String name, String abbr, boolean isLinear,
+			double trans2meter) {
+		if (!AREANAMES.contains(name)) {
 			AREANAMES.add(name);
-			String pow="";
+			String pow = "";
 			if (isLinear)
-				pow=String.valueOf((char)178);
-			AREAABBR.add(abbr+pow);
+				pow = String.valueOf((char) 178);
+			AREAABBR.add(abbr + pow);
 			AREATRANS2METER.add(new Double(trans2meter));
 		}
 	}
-	public static String[] getAreaNames(){
-		return (String[])AREANAMES.toArray(new String[0]);
+
+	public static String[] getAreaNames() {
+		return (String[]) AREANAMES.toArray(new String[0]);
 	}
-	public static String[] getAreaAbbr(){
-		return (String[])AREAABBR.toArray(new String[0]);
+
+	public static String[] getAreaAbbr() {
+		return (String[]) AREAABBR.toArray(new String[0]);
 	}
-	public static double[] getAreaTrans2Meter(){
-		int size=AREATRANS2METER.size();
-		double[] trans2meters=new double[size];
+
+	public static double[] getAreaTrans2Meter() {
+		int size = AREATRANS2METER.size();
+		double[] trans2meters = new double[size];
 		for (int i = 0; i < size; i++) {
-			trans2meters[i]=((Double)AREATRANS2METER.get(i)).doubleValue();
+			trans2meters[i] = ((Double) AREATRANS2METER.get(i)).doubleValue();
 		}
 		return trans2meters;
 	}
+
 	public static String getOfLinear(int i) {
-		if (((String)AREAABBR.get(i)).toLowerCase().endsWith(String.valueOf((char)178))){
-			return String.valueOf((char)178);
+		if (((String) AREAABBR.get(i)).toLowerCase().endsWith(
+				String.valueOf((char) 178))) {
+			return String.valueOf((char) 178);
 		}
 		return "";
 	}
-	public static void addDistanceUnit(String name, String abbr,double trans2meter){
-		if (!DISTANCENAMES.contains(name)){
+
+	public static void addDistanceUnit(String name, String abbr,
+			double trans2meter) {
+		if (!DISTANCENAMES.contains(name)) {
 			DISTANCENAMES.add(name);
 			DISTANCEABBR.add(abbr);
 			DISTANCETRANS2METER.add(new Double(trans2meter));
 		}
 	}
-	public static String[] getDistanceNames(){
-		return (String[])DISTANCENAMES.toArray(new String[0]);
+
+	public static String[] getDistanceNames() {
+		return (String[]) DISTANCENAMES.toArray(new String[0]);
 	}
-	public static String[] getDistanceAbbr(){
-		return (String[])DISTANCEABBR.toArray(new String[0]);
+
+	public static String[] getDistanceAbbr() {
+		return (String[]) DISTANCEABBR.toArray(new String[0]);
 	}
-	public static double[] getDistanceTrans2Meter(){
-		int size=DISTANCETRANS2METER.size();
-		double[] trans2meters=new double[size];
+
+	public static double[] getDistanceTrans2Meter() {
+		int size = DISTANCETRANS2METER.size();
+		double[] trans2meters = new double[size];
 		for (int i = 0; i < size; i++) {
-			trans2meters[i]=((Double)DISTANCETRANS2METER.get(i)).doubleValue();
+			trans2meters[i] = ((Double) DISTANCETRANS2METER.get(i))
+					.doubleValue();
 		}
 		return trans2meters;
 	}
-	public static int getDistancePosition(String s){
+
+	public static int getDistancePosition(String s) {
 		for (int i = 0; i < DISTANCENAMES.size(); i++) {
-			if (DISTANCENAMES.get(i).equals(s)){
+			if (DISTANCENAMES.get(i).equals(s)) {
 				return i;
 			}
 		}
@@ -240,58 +286,98 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Defines the value which a unit of a distance measurement must be divided to obtain its equivalent <b>in centimeters</b>.</p>
-	 *
-	 * <p><b><i>Conversion values of distance measurements:</i></b>
-	 * <ul>
-	 *  <li><code>MapContext.CHANGE[0]</code>: kilometer
-	 *  <li><code>MapContext.CHANGE[1]</code>: meter
-	 *  <li><code>MapContext.CHANGE[2]</code>: centimeter
-	 *  <li><code>MapContext.CHANGE[3]</code>: millimeter
-	 *  <li><code>MapContext.CHANGE[4]</code>: international statute mile
-	 *  <li><code>MapContext.CHANGE[5]</code>: yard
-	 *  <li><code>MapContext.CHANGE[6]</code>: foot
-	 *  <li><code>MapContext.CHANGE[7]</code>: inch
-	 *  <li><code>MapContext.CHANGE[8]</code>: grade
-	 * </ul>
-	 *
-	 * <p><h3>Examples:</h3>
-	 * <pre>1 international statute mile / MapContext.CHANGE[4] = X centimeters</pre>
-	 * <pre>1 kilometer / MapContext.CHANGE[0] = X centimeters</pre>
-	 * <pre>1 grade / MapContext.CHANGE[8] = X centimeters</pre>
+	 * <p>
+	 * Defines the value which a unit of a distance measurement must be divided
+	 * to obtain its equivalent <b>in centimeters</b>.
 	 * </p>
-	 *
-	 * <p><h3>Grade conversion value: <code>MapContext.CHANGE[8]</code></h3>
-	 * The value of <code>MapContext.CHANGE[8]</code> represents the centimeters of a straight line between two
-	 *  points on the Earth surface that are 1 grade far each other of the center of the Earth. This value has been calculated using
-	 *  a radius approximated of R<sub>Earth</sub>=6.37846082678100774672e6 meters, according these equations:
-	 * <pre>D = 2 * (sin (1)) * R<sub>Earth</sub></pre>
-	 * <pre>MapContext.CHANGE[8] = 1 / D</pre>
+	 * 
+	 * <p>
+	 * <b><i>Conversion values of distance measurements:</i></b>
+	 * <ul>
+	 * <li><code>MapContext.CHANGE[0]</code>: kilometer
+	 * <li><code>MapContext.CHANGE[1]</code>: meter
+	 * <li><code>MapContext.CHANGE[2]</code>: centimeter
+	 * <li><code>MapContext.CHANGE[3]</code>: millimeter
+	 * <li><code>MapContext.CHANGE[4]</code>: international statute mile
+	 * <li><code>MapContext.CHANGE[5]</code>: yard
+	 * <li><code>MapContext.CHANGE[6]</code>: foot
+	 * <li><code>MapContext.CHANGE[7]</code>: inch
+	 * <li><code>MapContext.CHANGE[8]</code>: grade
+	 * </ul>
+	 * 
+	 * <p>
+	 * <h3>Examples:</h3>
+	 * 
+	 * <pre>
+	 * 1 international statute mile / MapContext.CHANGE[4] = X centimeters
+	 * </pre>
+	 * 
+	 * <pre>
+	 * 1 kilometer / MapContext.CHANGE[0] = X centimeters
+	 * </pre>
+	 * 
+	 * <pre>
+	 * 1 grade / MapContext.CHANGE[8] = X centimeters
+	 * </pre>
+	 * 
+	 * </p>
+	 * 
+	 * <p>
+	 * <h3>Grade conversion value: <code>MapContext.CHANGE[8]</code></h3>
+	 * The value of <code>MapContext.CHANGE[8]</code> represents the centimeters
+	 * of a straight line between two points on the Earth surface that are 1
+	 * grade far each other of the center of the Earth. This value has been
+	 * calculated using a radius approximated of
+	 * R<sub>Earth</sub>=6.37846082678100774672e6 meters, according these
+	 * equations:
+	 * 
+	 * <pre>
+	 * D = 2 * (sin (1)) * R<sub>Earth</sub>
+	 * </pre>
+	 * 
+	 * <pre>
+	 * MapContext.CHANGE[8] = 1 / D
+	 * </pre>
+	 * 
 	 * <h4>Explanation:</h4>
-	 * We get an isosceles triangle with the center of the Earth and the 2 points on the surface. This triangle can be divided into
-	 * two rectangle triangles. We know two values, the angle of 1 grade, that will be 0.50 grades in each triangle, and the Earth radius that
-	 * is the hypotenuse. Then we apply trigonometry and get the distance <i>D</i> between both points on the Earth surface.</p>
-	 * <p>Now we only must invert that value to obtain <code>MapContext.CHANGE[8]</code>.</p>
+	 * We get an isosceles triangle with the center of the Earth and the 2
+	 * points on the surface. This triangle can be divided into two rectangle
+	 * triangles. We know two values, the angle of 1 grade, that will be 0.50
+	 * grades in each triangle, and the Earth radius that is the hypotenuse.
+	 * Then we apply trigonometry and get the distance <i>D</i> between both
+	 * points on the Earth surface.
+	 * </p>
+	 * <p>
+	 * Now we only must invert that value to obtain
+	 * <code>MapContext.CHANGE[8]</code>.
+	 * </p>
+	 * 
 	 * @deprecated use getDistanceTrans2Meter() * 100
 	 */
 	public static final double[] CHANGE = { 100000, 100, 1, 0.1, 160934.4,
-			91.44, 30.48, 2.54, 1/8.983152841195214E-4 };
+			91.44, 30.48, 2.54, 1 / 8.983152841195214E-4 };
 
-	/* Do not alter the order and the values of this array, if you need append values.*/
-	/**
-	 * <p>Gets the name of all distance measurements supported by <code>MapContext</code>.</p>
+	/*
+	 * Do not alter the order and the values of this array, if you need append
+	 * values.
 	 */
-//	public static final String[] NAMES= {
-//		Messages.getString("Kilometros"),
-//		Messages.getString("Metros"),
-//		Messages.getString("Centimetros"),
-//		Messages.getString("Milimetros"),
-//		Messages.getString("Millas"),
-//		Messages.getString("Yardas"),
-//		Messages.getString("Pies"),
-//		Messages.getString("Pulgadas"),
-//		Messages.getString("Grados"),
-//	};
+	/**
+	 * <p>
+	 * Gets the name of all distance measurements supported by
+	 * <code>MapContext</code>.
+	 * </p>
+	 */
+	// public static final String[] NAMES= {
+	// Messages.getString("Kilometros"),
+	// Messages.getString("Metros"),
+	// Messages.getString("Centimetros"),
+	// Messages.getString("Milimetros"),
+	// Messages.getString("Millas"),
+	// Messages.getString("Yardas"),
+	// Messages.getString("Pies"),
+	// Messages.getString("Pulgadas"),
+	// Messages.getString("Grados"),
+	// };
 
 	public static final int EQUALS = 0;
 
@@ -311,7 +397,7 @@ public class MapContext {
 
 	/**
 	 * A hierarchy of {@link FLayers FLayers} nodes.
-	 *
+	 * 
 	 * @see #getLayers()
 	 * @see #print(Graphics2D, double, PrintRequestAttributeSet)
 	 */
@@ -319,7 +405,7 @@ public class MapContext {
 
 	/**
 	 * A layer with graphical items: geometries and symbols.
-	 *
+	 * 
 	 * @see #getGraphicsLayer()
 	 * @see #setGraphicsLayer(GraphicLayer)
 	 * @see #drawGraphics(BufferedImage, Graphics2D, Cancellable, double)
@@ -329,7 +415,7 @@ public class MapContext {
 
 	/**
 	 * Information for draw layers in a view.
-	 *
+	 * 
 	 * @see #getViewPort()
 	 * @see #setViewPort(ViewPort)
 	 */
@@ -338,8 +424,9 @@ public class MapContext {
 	// private ArrayList invalidationListeners = new ArrayList();
 
 	/**
-	 * Array list with all {@link LegendListener LegendListener} registered to this map.
-	 *
+	 * Array list with all {@link LegendListener LegendListener} registered to
+	 * this map.
+	 * 
 	 * @see #addLayerListener(LegendListener)
 	 * @see #removeLayerListener(LegendListener)
 	 * @see #callLegendChanged()
@@ -347,8 +434,9 @@ public class MapContext {
 	private ArrayList legendListeners = new ArrayList();
 
 	/**
-	 * Array list with all {@link LayerDrawingListener LayerDrawingListener} registered to this map.
-	 *
+	 * Array list with all {@link LayerDrawingListener LayerDrawingListener}
+	 * registered to this map.
+	 * 
 	 * @see #addLayerDrawingListener(LayerDrawingListener)
 	 * @see #removeLayerDrawListener(LayerDrawingListener)
 	 * @see #fireLayerDrawingEvent(LayerDrawEvent)
@@ -356,17 +444,19 @@ public class MapContext {
 	private ArrayList layerDrawingListeners = new ArrayList();
 
 	/**
-	 * <p>Buffer that is used to store and eject events produced on this map:
+	 * <p>
+	 * Buffer that is used to store and eject events produced on this map:
 	 * <ul>
-	 *  <li>Layer collection events.
-	 *  <li>View port events.
-	 *  <li>Atomic events.
-	 *  <li>Layer events.
-	 *  <li>Legend events on a {@link Classificable Classificable} layer.
-	 *  <li>Selection events on an {@link AlphanumericData AlphanumericData} data layer.
+	 * <li>Layer collection events.
+	 * <li>View port events.
+	 * <li>Atomic events.
+	 * <li>Layer events.
+	 * <li>Legend events on a {@link Classificable Classificable} layer.
+	 * <li>Selection events on an {@link AlphanumericData AlphanumericData} data
+	 * layer.
 	 * </ul>
 	 * </p>
-	 *
+	 * 
 	 * @see #addAtomicEventListener(AtomicEventListener)
 	 * @see #removeAtomicEventListener(AtomicEventListener)
 	 * @see #beginAtomicEvent()
@@ -381,7 +471,7 @@ public class MapContext {
 
 	/**
 	 * List with information of all errors produced on all layers.
-	 *
+	 * 
 	 * @see #addLayerError(String)
 	 * @see #getLayersError()
 	 * @see #clearErrors()
@@ -389,8 +479,9 @@ public class MapContext {
 	private ArrayList layersError = new ArrayList();
 
 	/**
-	 * Array list with all {@link ErrorListener ErrorListener} registered to this map.
-	 *
+	 * Array list with all {@link ErrorListener ErrorListener} registered to
+	 * this map.
+	 * 
 	 * @see #addErrorListener(ErrorListener)
 	 * @see #removeErrorListener(LegendListener)
 	 * @see #callNewErrorEvent(ErrorEvent)
@@ -398,38 +489,46 @@ public class MapContext {
 	 */
 	private ArrayList errorListeners = new ArrayList();
 
-
-
 	// public static ResourceBundle myResourceBundle =
 	// ResourceBundle.getBundle("FMap");
 
 	/**
-	 * <p>Default <i>zoom in</i> factor.</p>
-	 * <p>Doing a <i>zoom in</i> operation, decreases the focal distance and increases the eyesight angle to the surface. This allows view an smaller
-	 * area but with the items bigger.</p>
+	 * <p>
+	 * Default <i>zoom in</i> factor.
+	 * </p>
+	 * <p>
+	 * Doing a <i>zoom in</i> operation, decreases the focal distance and
+	 * increases the eyesight angle to the surface. This allows view an smaller
+	 * area but with the items bigger.
+	 * </p>
 	 */
-	public static double ZOOMINFACTOR=2;
+	public static double ZOOMINFACTOR = 2;
 
 	/**
-	 * <p>Default <i>zoom out</i> factor.</p>
-	 * <p>Doing a <i>zoom out</i> operation, increases the focal distance and decreases the eyesight angle to the surface. This allows view a bigger
-	 * area but with the items smaller.</p>
+	 * <p>
+	 * Default <i>zoom out</i> factor.
+	 * </p>
+	 * <p>
+	 * Doing a <i>zoom out</i> operation, increases the focal distance and
+	 * decreases the eyesight angle to the surface. This allows view a bigger
+	 * area but with the items smaller.
+	 * </p>
 	 */
-	public static double ZOOMOUTFACTOR=0.5;
+	public static double ZOOMOUTFACTOR = 0.5;
 
 	/**
-	 * 	 * Draw version of the context. It's used for know when de componend has
+	 * * Draw version of the context. It's used for know when de componend has
 	 * changed any visualization property
-	 *
-	 *  @see getDrawVersion
-	 *  @see updateDrawVersion
+	 * 
+	 * @see getDrawVersion
+	 * @see updateDrawVersion
 	 */
-	private long drawVersion= 0L;
+	private long drawVersion = 0L;
 
 	/**
 	 * Object to Manage Draw of MapContext
 	 */
-	private MapContextDrawer mapContextDrawer= null;
+	private MapContextDrawer mapContextDrawer = null;
 
 	/**
 	 * Object to Manage Draw of MapContext
@@ -438,14 +537,17 @@ public class MapContext {
 	private Class defaultMapContextDrawerClass = DefaultMapContextDrawer.class;
 
 	/**
-	 * <p>Color used to represent the selections.</p>
+	 * <p>
+	 * Color used to represent the selections.
+	 * </p>
 	 */
 	private static Color selectionColor = Color.YELLOW;
 
-
 	/**
-	 * <p>Gets the color used to represent the selections.</p>
-	 *
+	 * <p>
+	 * Gets the color used to represent the selections.
+	 * </p>
+	 * 
 	 * @return color used to represent the selections
 	 */
 	public static Color getSelectionColor() {
@@ -453,22 +555,29 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Sets the color used to represent the selections.</p>
-	 *
-	 * @param selectionColor color used to represent the selections
+	 * <p>
+	 * Sets the color used to represent the selections.
+	 * </p>
+	 * 
+	 * @param selectionColor
+	 *            color used to represent the selections
 	 */
 	public static void setSelectionColor(Color selectionColor) {
 		MapContext.selectionColor = selectionColor;
 	}
 
 	/**
-	 * <p>Creates a new map context with the drawing information defined in the view port argument, and
-	 *  without layers.</p>
-	 *
-	 * @param vp information for drawing the layers of this map in the available rectangular area according a projection
+	 * <p>
+	 * Creates a new map context with the drawing information defined in the
+	 * view port argument, and without layers.
+	 * </p>
+	 * 
+	 * @param vp
+	 *            information for drawing the layers of this map in the
+	 *            available rectangular area according a projection
 	 */
 	public MapContext(ViewPort vp) {
-		this.layers = new FLayers();//(this,null);
+		this.layers = new FLayers();// (this,null);
 		this.layers.setMapContext(this);
 
 		layerEventListener = new LayerEventListener();
@@ -480,10 +589,17 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Creates a new map context with the layers and the drawing information defined in the view port arguments.</p>
-	 *
-	 * @param fLayers the initial hierarchy of nodes of layers that this map will have
-	 * @param vp information for drawing the layers of this map in the available rectangular area according a projection
+	 * <p>
+	 * Creates a new map context with the layers and the drawing information
+	 * defined in the view port arguments.
+	 * </p>
+	 * 
+	 * @param fLayers
+	 *            the initial hierarchy of nodes of layers that this map will
+	 *            have
+	 * @param vp
+	 *            information for drawing the layers of this map in the
+	 *            available rectangular area according a projection
 	 */
 	public MapContext(FLayers fLayers, ViewPort vp) {
 		this.layers = fLayers;
@@ -496,28 +612,39 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Reports to all driver error listeners registered of a bundle of driver exceptions caused in the same map atomic transaction.</p>
-	 *
-	 * @param introductoryText introductory text specified by developer. If <code>null</code>, use ""
-	 * @param driverExceptions list with a bundle of driver exceptions caught during an atomic event
-	 *
+	 * <p>
+	 * Reports to all driver error listeners registered of a bundle of driver
+	 * exceptions caused in the same map atomic transaction.
+	 * </p>
+	 * 
+	 * @param introductoryText
+	 *            introductory text specified by developer. If <code>null</code>
+	 *            , use ""
+	 * @param driverExceptions
+	 *            list with a bundle of driver exceptions caught during an
+	 *            atomic event
+	 * 
 	 * @see #addErrorListener(ErrorListener)
 	 * @see #removeErrorListener(LegendListener)
 	 * @see #callNewErrorEvent(ErrorEvent)
 	 */
 	public synchronized void reportDriverExceptions(String introductoryText,
-													List driverExceptions){
+			List driverExceptions) {
 		for (int i = 0; i < errorListeners.size(); i++) {
-			((ErrorListener) errorListeners.get(i)).
-				reportDriverExceptions(introductoryText, driverExceptions);
+			((ErrorListener) errorListeners.get(i)).reportDriverExceptions(
+					introductoryText, driverExceptions);
 		}
 	}
 
 	/**
-	 * <p>Adds the specified legend listener (if didn't exist) to receive legend events from this map.</p>
-	 *
-	 * @param listener the legend listener
-	 *
+	 * <p>
+	 * Adds the specified legend listener (if didn't exist) to receive legend
+	 * events from this map.
+	 * </p>
+	 * 
+	 * @param listener
+	 *            the legend listener
+	 * 
 	 * @see #removeLayerListener(LegendListener)
 	 * @see #callLegendChanged()
 	 */
@@ -525,17 +652,22 @@ public class MapContext {
 		if (!legendListeners.contains(listener))
 			legendListeners.add(listener);
 	}
+
 	// SUGERENCIA DE PABLO
-	//	public void addLegendListener(LegendListener listener) {
-	//		if (!legendListeners.contains(listener))
-	//			legendListeners.add(listener);
-	//	}
+	// public void addLegendListener(LegendListener listener) {
+	// if (!legendListeners.contains(listener))
+	// legendListeners.add(listener);
+	// }
 
 	/**
-	 * <p>Adds the specified layer drawing listener to catch and handle drawing events from layers of this map.</p>
-	 *
-	 * @param listener the listener to add
-	 *
+	 * <p>
+	 * Adds the specified layer drawing listener to catch and handle drawing
+	 * events from layers of this map.
+	 * </p>
+	 * 
+	 * @param listener
+	 *            the listener to add
+	 * 
 	 * @see #removeLayerDrawListener(LayerDrawingListener)
 	 * @see #fireLayerDrawingEvent(LayerDrawEvent)
 	 */
@@ -544,10 +676,13 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Removes the specified layer drawing listener from this map.</p>
-	 *
-	 * @param listener the listener to remove
-	 *
+	 * <p>
+	 * Removes the specified layer drawing listener from this map.
+	 * </p>
+	 * 
+	 * @param listener
+	 *            the listener to remove
+	 * 
 	 * @see #addLayerDrawingListener(LayerDrawingListener)
 	 * @see #fireLayerDrawingEvent(LayerDrawEvent)
 	 */
@@ -556,10 +691,13 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Adds the specified error listener to receive error events from this map.</p>
-	 *
-	 * @param listener the listener to add
-	 *
+	 * <p>
+	 * Adds the specified error listener to receive error events from this map.
+	 * </p>
+	 * 
+	 * @param listener
+	 *            the listener to add
+	 * 
 	 * @see #removeErrorListener(LegendListener)
 	 * @see #callNewErrorEvent(ErrorEvent)
 	 * @see #reportDriverExceptions(String, List)
@@ -569,10 +707,13 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Removes the specified error listener from this map.</p>
-	 *
-	 * @param listener the listener to remove
-	 *
+	 * <p>
+	 * Removes the specified error listener from this map.
+	 * </p>
+	 * 
+	 * @param listener
+	 *            the listener to remove
+	 * 
 	 * @see #addErrorListener(ErrorListener)
 	 * @see #callNewErrorEvent(ErrorEvent)
 	 * @see #reportDriverExceptions(String, List)
@@ -582,14 +723,19 @@ public class MapContext {
 	}
 
 	// SUGERENCIA DE PABLO:
-	//public void removeErrorListener(ErrorListener listener) {
-	//	errorListeners.remove(listener);
-	//}
+	// public void removeErrorListener(ErrorListener listener) {
+	// errorListeners.remove(listener);
+	// }
 
 	/**
-	 * <p>Notifies to all legend listeners registered, that one legend has changed.</p>
-	 * <p>This method must be called only if it's wanted to reflect a legend change.</p>
-	 *
+	 * <p>
+	 * Notifies to all legend listeners registered, that one legend has changed.
+	 * </p>
+	 * <p>
+	 * This method must be called only if it's wanted to reflect a legend
+	 * change.
+	 * </p>
+	 * 
 	 * @see #addLayerListener(LegendListener)
 	 * @see #removeLayerListener(LegendListener)
 	 */
@@ -601,42 +747,49 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Fires a layer drawing event to all {@link LayerDrawingListener LayerDrawingListener} listeners registered,
-	 *  distinguishing the kind of event.</p>
-	 *
-	 * @param e the event
-	 *
+	 * <p>
+	 * Fires a layer drawing event to all {@link LayerDrawingListener
+	 * LayerDrawingListener} listeners registered, distinguishing the kind of
+	 * event.
+	 * </p>
+	 * 
+	 * @param e
+	 *            the event
+	 * 
 	 * @see #addLayerDrawingListener(LayerDrawingListener)
 	 * @see #removeLayerDrawListener(LayerDrawingListener)
 	 */
 	public synchronized void fireLayerDrawingEvent(LayerDrawEvent e) {
-		for (int i = 0; i < layerDrawingListeners.size(); i++)
-		{
-			LayerDrawingListener listener = (LayerDrawingListener) layerDrawingListeners.get(i);
-			switch (e.getEventType())
-			{
-				case LayerDrawEvent.LAYER_BEFORE_DRAW:
-					listener.beforeLayerDraw(e);
-					break;
-				case LayerDrawEvent.LAYER_AFTER_DRAW:
-					listener.afterLayerDraw(e);
-					break;
-				case LayerDrawEvent.GRAPHICLAYER_BEFORE_DRAW:
-					listener.beforeGraphicLayerDraw(e);
-					break;
-				case LayerDrawEvent.GRAPHICLAYER_AFTER_DRAW:
-					listener.afterLayerGraphicDraw(e);
-					break;
+		for (int i = 0; i < layerDrawingListeners.size(); i++) {
+			LayerDrawingListener listener = (LayerDrawingListener) layerDrawingListeners
+					.get(i);
+			switch (e.getEventType()) {
+			case LayerDrawEvent.LAYER_BEFORE_DRAW:
+				listener.beforeLayerDraw(e);
+				break;
+			case LayerDrawEvent.LAYER_AFTER_DRAW:
+				listener.afterLayerDraw(e);
+				break;
+			case LayerDrawEvent.GRAPHICLAYER_BEFORE_DRAW:
+				listener.beforeGraphicLayerDraw(e);
+				break;
+			case LayerDrawEvent.GRAPHICLAYER_AFTER_DRAW:
+				listener.afterLayerGraphicDraw(e);
+				break;
 			}
 		}
 		// getLayers().moveTo(0,0);
 	}
 
 	/**
-	 * <p>Notifies to all error listeners registered, that one error has been produced.</p>
-	 *
-	 * @param e the event with information of the error
-	 *
+	 * <p>
+	 * Notifies to all error listeners registered, that one error has been
+	 * produced.
+	 * </p>
+	 * 
+	 * @param e
+	 *            the event with information of the error
+	 * 
 	 * @see #addErrorListener(ErrorListener)
 	 * @see #removeErrorListener(LegendListener)
 	 * @see #reportDriverExceptions(String, List)
@@ -650,10 +803,13 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Removes the specified layer listener from this map.</p>
-	 *
-	 * @param listener the listener to remove
-	 *
+	 * <p>
+	 * Removes the specified layer listener from this map.
+	 * </p>
+	 * 
+	 * @param listener
+	 *            the listener to remove
+	 * 
 	 * @see #addLayerListener(LegendListener)
 	 * @see #callLegendChanged()
 	 */
@@ -663,12 +819,15 @@ public class MapContext {
 
 	// SUGERENCIA DE PABLO:
 	// public void removeLegendListener(LegendListener listener) {
-	// 	legendListeners.remove(listener);
+	// legendListeners.remove(listener);
 	// }
 
 	/**
-	 * <p>Returns the hierarchy of {@link FLayers FLayers} nodes stored in this map.</p>
-	 *
+	 * <p>
+	 * Returns the hierarchy of {@link FLayers FLayers} nodes stored in this
+	 * map.
+	 * </p>
+	 * 
 	 * @return the hierarchy of nodes of layers stored in this map
 	 */
 	public FLayers getLayers() {
@@ -676,9 +835,13 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Draws the visible layers of this map according its view port, on the image parameter.</p>
-	 *
-	 * @param b image with an accessible buffer of image data
+	 * <p>
+	 * Draws the visible layers of this map according its view port, on the
+	 * image parameter.
+	 * </p>
+	 * 
+	 * @param b
+	 *            image with an accessible buffer of image data
 	 */
 	public void drawLabels(BufferedImage b) {
 	}
@@ -692,19 +855,32 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Prints the layers of this map using the {@link Graphics2D Graphics2D} argument, that usually is
-	 * the {@link Graphics Graphics} of the printer.</p>
-	 *
-	 * @param g for rendering 2-dimensional shapes, text and images on the Java(tm) platform
-	 * @param scale the scale of the view. Must be between {@linkplain FLayer#getMinScale()} and {@linkplain FLayer#getMaxScale()}.
-	 * @param properties a set with the settings to be applied to a whole print job and to all the documents in the print job
-	 *
-	 * @throws ReadDriverException if fails reading with driver.
-	 *
-	 * @see FLayers#print(Graphics2D, ViewPort, Cancellable, double, PrintRequestAttributeSet)
-	 * @see GraphicLayer#draw(BufferedImage, Graphics2D, ViewPort, Cancellable, double)
+	 * <p>
+	 * Prints the layers of this map using the {@link Graphics2D Graphics2D}
+	 * argument, that usually is the {@link Graphics Graphics} of the printer.
+	 * </p>
+	 * 
+	 * @param g
+	 *            for rendering 2-dimensional shapes, text and images on the
+	 *            Java(tm) platform
+	 * @param scale
+	 *            the scale of the view. Must be between
+	 *            {@linkplain FLayer#getMinScale()} and
+	 *            {@linkplain FLayer#getMaxScale()}.
+	 * @param properties
+	 *            a set with the settings to be applied to a whole print job and
+	 *            to all the documents in the print job
+	 * 
+	 * @throws ReadDriverException
+	 *             if fails reading with driver.
+	 * 
+	 * @see FLayers#print(Graphics2D, ViewPort, Cancellable, double,
+	 *      PrintRequestAttributeSet)
+	 * @see GraphicLayer#draw(BufferedImage, Graphics2D, ViewPort, Cancellable,
+	 *      double)
 	 */
-	public void print(Graphics2D g, double scale, PrintRequestAttributeSet properties) throws ReadDriverException {
+	public void print(Graphics2D g, double scale,
+			PrintRequestAttributeSet properties) throws ReadDriverException {
 		RenderingHints renderHints = new RenderingHints(
 				RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
@@ -722,16 +898,23 @@ public class MapContext {
 
 			}
 		};
-		this.getMapContextDrawer().print(this.layers, g, cancel, scale,properties);
+		this.getMapContextDrawer().print(this.layers, g, cancel, scale,
+				properties);
 		tracLayer.draw(null, g, viewPort, cancel, scale);
 	}
 
 	/**
-	 * <p>Returns a new <code>MapContext</code> instance with the information of the <code>vp</code> argument, and the layers of this map.</p>
-	 *
-	 * @param vp information for drawing the layers of this map in the available rectangular area according a projection
-	 *
-	 * @return a new <code>MapContext</code> instance projected by <code>vp</code>
+	 * <p>
+	 * Returns a new <code>MapContext</code> instance with the information of
+	 * the <code>vp</code> argument, and the layers of this map.
+	 * </p>
+	 * 
+	 * @param vp
+	 *            information for drawing the layers of this map in the
+	 *            available rectangular area according a projection
+	 * 
+	 * @return a new <code>MapContext</code> instance projected by
+	 *         <code>vp</code>
 	 */
 	public MapContext createNewFMap(ViewPort vp) {
 		MapContext ret = new MapContext(vp);
@@ -741,13 +924,20 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Creates a new independent <code>MapContext</code> instance, that has a clone of the layers and the view port of this one.</p>
-	 * <p>The new map will have the same data source drivers to avoid waste memory, and work faster.</p>
-	 *
+	 * <p>
+	 * Creates a new independent <code>MapContext</code> instance, that has a
+	 * clone of the layers and the view port of this one.
+	 * </p>
+	 * <p>
+	 * The new map will have the same data source drivers to avoid waste memory,
+	 * and work faster.
+	 * </p>
+	 * 
 	 * @return the new <code>MapContext</code> instance
-	 *
-	 * @throws XMLException if fails cloning the view port or a layer
-	 *
+	 * 
+	 * @throws XMLException
+	 *             if fails cloning the view port or a layer
+	 * 
 	 * @see FLayer#cloneLayer()
 	 * @see ViewPort#cloneViewPort()
 	 */
@@ -755,10 +945,9 @@ public class MapContext {
 		ViewPort vp = getViewPort().cloneViewPort();
 		FLayers antLayers = getLayers();
 		MapContext ret = new MapContext(vp);
-		FLayers aux = new FLayers();//(ret,null);
+		FLayers aux = new FLayers();// (ret,null);
 		aux.setMapContext(ret);
-		for (int i=0; i < antLayers.getLayersCount(); i++)
-		{
+		for (int i = 0; i < antLayers.getLayersCount(); i++) {
 			FLayer lyr = antLayers.getLayer(i);
 			try {
 				aux.addLayer(lyr.cloneLayer());
@@ -770,25 +959,25 @@ public class MapContext {
 			}
 		}
 		ret.layers = aux;
-        // FJP: Nuevo para que se vean los graficos                
+		// FJP: Nuevo para que se vean los graficos
 		ret.setGraphicsLayer(this.getGraphicsLayer());
-        // FJP: Fin nuevo
+		// FJP: Fin nuevo
 
-		
 		return ret;
 
-//		return createFromXML(getXMLEntity());
+		// return createFromXML(getXMLEntity());
 
 	}
 
 	/**
-	 * Like {@linkplain #cloneFMap()}, but now doesn't clone the layers, rather copies them.
-	 *
+	 * Like {@linkplain #cloneFMap()}, but now doesn't clone the layers, rather
+	 * copies them.
+	 * 
 	 * @return the new map
 	 */
 	public MapContext cloneToDraw() {
 		ViewPort vp = getViewPort().cloneViewPort();
-		MapContext mapContext=new MapContext(getLayers(),vp);
+		MapContext mapContext = new MapContext(getLayers(), vp);
 		return mapContext;
 	}
 
@@ -797,7 +986,7 @@ public class MapContext {
 	 * parametro y lanza ProjectionMismatchException si no están todas las capas
 	 * de este FMap en la misma proyección. Lanza un ChildNotAllowedException si
 	 * la capa no es un FLayers y no permite hijos
-	 *
+	 * 
 	 * @param vectorial
 	 *            DOCUMENT ME!
 	 */
@@ -810,23 +999,30 @@ public class MapContext {
 	 */
 
 	/**
-	 * <p>Adds a layer to the group of layers that are at a upper level in the tree.</p>
-	 *
-	 * @param vectorial the layer to add
+	 * <p>
+	 * Adds a layer to the group of layers that are at a upper level in the
+	 * tree.
+	 * </p>
+	 * 
+	 * @param vectorial
+	 *            the layer to add
 	 */
 	public void addToTrackLayer(FLayer vectorial) {
 	}
 
 	/**
-	 * <p>Returns the scale of the view in the screen.</p>
-	 *
+	 * <p>
+	 * Returns the scale of the view in the screen.
+	 * </p>
+	 * 
 	 * @return one of this values:
-	 * <ul>
-	 * <li>the scale of the adjusted extent scale of the view in the screen
-	 * <li><code>-1</code> if there is no image
-	 * <li><code>0</code> if there is no extent defined for the image
-	 * </ul>
-	 *
+	 *         <ul>
+	 *         <li>the scale of the adjusted extent scale of the view in the
+	 *         screen
+	 *         <li><code>-1</code> if there is no image
+	 *         <li><code>0</code> if there is no extent defined for the image
+	 *         </ul>
+	 * 
 	 * @see #setScaleView(long)
 	 * @see ViewPort#getAdjustedExtent()
 	 * @see IProjection#getScale(double, double, double, double)
@@ -841,7 +1037,7 @@ public class MapContext {
 		if (viewPort.getAdjustedExtent() == null) {
 			return 0;
 		}
-		double[] trans2Meter=getDistanceTrans2Meter();
+		double[] trans2Meter = getDistanceTrans2Meter();
 		if (crs == null) {
 			double w = ((viewPort.getImageSize().getWidth() / dpi) * 2.54);
 			return (long) (viewPort.getAdjustedExtent().getWidth() / w * trans2Meter[getViewPort()
@@ -859,17 +1055,22 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Sets the new extent of the view, calculated using the scale argument.</p>
-	 * <p>Doesn't updates the scale if there isn't information about the dimension of the image or the
-	 *  adjusted extent.</p>
-	 *
-	 * @param scale the new scale for the view
-	 *
+	 * <p>
+	 * Sets the new extent of the view, calculated using the scale argument.
+	 * </p>
+	 * <p>
+	 * Doesn't updates the scale if there isn't information about the dimension
+	 * of the image or the adjusted extent.
+	 * </p>
+	 * 
+	 * @param scale
+	 *            the new scale for the view
+	 * 
 	 * @see ViewPort#setCrs(IProjection)
 	 * @see #getScaleView()
 	 */
 	public void setScaleView(long scale) {
-		//clearAllCachingImageDrawnLayers();
+		// clearAllCachingImageDrawnLayers();
 		double dpi = getScreenDPI();
 		if (viewPort.getImageSize() == null)
 			return;
@@ -877,7 +1078,7 @@ public class MapContext {
 		if (viewPort.getAdjustedExtent() == null) {
 			return;
 		}
-		double[] trans2Meter=getDistanceTrans2Meter();
+		double[] trans2Meter = getDistanceTrans2Meter();
 		Rectangle2D rec = ProjectionUtils.getExtent(
 				crs,
 				viewPort.getAdjustedExtent(), // extent
@@ -888,15 +1089,18 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Returns the screen resolution (Dots Per Inch) as it was defined by the user's preference, or
-	 * by default as it is defined in the default Toolkit.</p>
-	 *
+	 * <p>
+	 * Returns the screen resolution (Dots Per Inch) as it was defined by the
+	 * user's preference, or by default as it is defined in the default Toolkit.
+	 * </p>
+	 * 
 	 * @return double with the screen's dpi
 	 */
 	public static double getScreenDPI() {
-		Preferences prefsResolution = Preferences.userRoot().node( "gvsig.configuration.screen" );
+		Preferences prefsResolution = Preferences.userRoot().node(
+				"gvsig.configuration.screen");
 		Toolkit kit = Toolkit.getDefaultToolkit();
-		double dpi = prefsResolution.getInt("dpi",kit.getScreenResolution());
+		double dpi = prefsResolution.getInt("dpi", kit.getScreenResolution());
 		return dpi;
 	}
 
@@ -942,10 +1146,13 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Sets the new projection.</p>
-	 *
-	 * @param crs the new projection
-	 *
+	 * <p>
+	 * Sets the new projection.
+	 * </p>
+	 * 
+	 * @param crs
+	 *            the new projection
+	 * 
 	 * @see #getCrs()
 	 * @see ViewPort#setCrs(IProjection)
 	 * @see #reProject(ICoordTrans)
@@ -973,7 +1180,7 @@ public class MapContext {
 	 * (int) p.getY()); SelectByPointVisitor visitor = new
 	 * SelectByPointVisitor(); visitor.setQueriedPoint(mapPoint);
 	 * visitor.setTolerance(getViewPort().toMapDistance(3));
-	 *
+	 * 
 	 * try { layers.process(visitor); } catch (VisitException e) { throw new
 	 * RuntimeException("No se espera que SelectByPointVisitor lance esta
 	 * excepciï¿½n", e); } }
@@ -988,8 +1195,7 @@ public class MapContext {
 	 * i++) { if (actives[i] instanceof FLyrVect) { FLyrVect lyrVect =
 	 * (FLyrVect) actives[i]; FBitSet oldBitSet = lyrVect.getSelection();
 	 * FBitSet newBitSet = lyrVect.queryByRect(rect); newBitSet.xor(oldBitSet);
-	 * lyrVect.setSelection(newBitSet); } }
-	 *  }
+	 * lyrVect.setSelection(newBitSet); } } }
 	 */
 
 	/**
@@ -1024,7 +1230,7 @@ public class MapContext {
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.operations.strategies.Strategy#getSelectionBounds()
-	 *
+	 * 
 	 * @see SelectedZoomVisitor#getSelectBound()
 	 */
 	public Rectangle2D getSelectionBounds() {
@@ -1046,22 +1252,36 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Draws this map if its {@link ViewPort ViewPort} has an extent defined:<br>
+	 * <p>
+	 * Draws this map if its {@link ViewPort ViewPort} has an extent defined:<br>
 	 * <ol>
-	 * <li>Selects only the layers that have to be drawn: {@linkplain #prepareDrawing(BufferedImage, Graphics2D, double)}.
+	 * <li>Selects only the layers that have to be drawn:
+	 * {@linkplain #prepareDrawing(BufferedImage, Graphics2D, double)}.
 	 * <li>Sets quality: antialiasing by text and images, and quality rendering.
 	 * <li>Draws the layers.
 	 * <li>Fires a <code>LayerDrawEvent.GRAPHICLAYER_BEFORE_DRAW</code>.
 	 * <li>Draws the graphic layer.
 	 * <li>Fires a <code>LayerDrawEvent.GRAPHICLAYER_AFTER_DRAW</code>.
 	 * <li>Invokes the garbage collector and memory clean.
-	 * </ol></p>
-	 *
-	 * @param image buffer used sometimes instead <code>g</code> to accelerate the draw. For example, if two points are as closed that can't be distinguished, draws only one.
-	 * @param g for rendering 2-dimensional shapes, text and images on the Java(tm) platform
-	 * @param cancel shared object that determines if this layer can continue being drawn
-	 * @param scale the scale of the view. Must be between {@linkplain FLayer#getMinScale()} and {@linkplain FLayer#getMaxScale()}.
-	 * @throws ReadDriverException if fails reading with the driver.
+	 * </ol>
+	 * </p>
+	 * 
+	 * @param image
+	 *            buffer used sometimes instead <code>g</code> to accelerate the
+	 *            draw. For example, if two points are as closed that can't be
+	 *            distinguished, draws only one.
+	 * @param g
+	 *            for rendering 2-dimensional shapes, text and images on the
+	 *            Java(tm) platform
+	 * @param cancel
+	 *            shared object that determines if this layer can continue being
+	 *            drawn
+	 * @param scale
+	 *            the scale of the view. Must be between
+	 *            {@linkplain FLayer#getMinScale()} and
+	 *            {@linkplain FLayer#getMaxScale()}.
+	 * @throws ReadDriverException
+	 *             if fails reading with the driver.
 	 */
 	public void draw(BufferedImage image, Graphics2D g, Cancellable cancel,
 			double scale) throws ReadDriverException {
@@ -1075,7 +1295,7 @@ public class MapContext {
 		 * 0)) { return; }
 		 */
 
-//		prepareDrawing(image, g, scale);
+		// prepareDrawing(image, g, scale);
 
 		// Mï¿½s cï¿½lidad al texto
 		RenderingHints renderHints = new RenderingHints(
@@ -1088,22 +1308,23 @@ public class MapContext {
 		g.setRenderingHints(renderHints);
 
 		long t1 = System.currentTimeMillis();
-//		layers.draw(image, g, viewPort, cancel, scale);
+		// layers.draw(image, g, viewPort, cancel, scale);
 
 		this.getMapContextDrawer().draw(this.layers, image, g, cancel, scale);
 
-		LayerDrawEvent beforeTracLayerEvent = new LayerDrawEvent(tracLayer,
-				g, viewPort, LayerDrawEvent.GRAPHICLAYER_BEFORE_DRAW);
+		LayerDrawEvent beforeTracLayerEvent = new LayerDrawEvent(tracLayer, g,
+				viewPort, LayerDrawEvent.GRAPHICLAYER_BEFORE_DRAW);
 		fireLayerDrawingEvent(beforeTracLayerEvent);
 		tracLayer.draw(image, g, viewPort, cancel, scale);
-		LayerDrawEvent afterTracLayerEvent = new LayerDrawEvent(tracLayer,
-				g, viewPort, LayerDrawEvent.GRAPHICLAYER_AFTER_DRAW);
+		LayerDrawEvent afterTracLayerEvent = new LayerDrawEvent(tracLayer, g,
+				viewPort, LayerDrawEvent.GRAPHICLAYER_AFTER_DRAW);
 		fireLayerDrawingEvent(afterTracLayerEvent);
 
-		//layers.setDirty(false);
+		// layers.setDirty(false);
 		long t2 = System.currentTimeMillis();
-		System.err.println("Tiempo de dibujado:" + (t2 - t1) +
-				" mseg. Memoria libre:" + Runtime.getRuntime().freeMemory() / 1024  + " KB");
+		System.err.println("Tiempo de dibujado:" + (t2 - t1)
+				+ " mseg. Memoria libre:" + Runtime.getRuntime().freeMemory()
+				/ 1024 + " KB");
 		/*
 		 * g.setColor(Color.BLUE); GeneralPath shpR = new
 		 * GeneralPath(viewPort.getExtent());
@@ -1111,17 +1332,28 @@ public class MapContext {
 		 */
 		System.gc();
 	}
-	
+
 	/**
-	 * <p>Draws only the internal graphic layer using the information of the {@link ViewPort ViewPort} of this map.</p>
-	 *
-	 * @param image image used to accelerate the screen draw
-	 * @param g for rendering 2-dimensional shapes, text and images on the Java(tm) platform
-	 * @param cancel shared object that determines if this layer can continue being drawn
-	 * @param scale value that represents the scale
-	 * @throws ReadDriverException if fails reading with the driver.
-	 *
-	 * @see GraphicLayer#draw(BufferedImage, Graphics2D, ViewPort, Cancellable, double)
+	 * <p>
+	 * Draws only the internal graphic layer using the information of the
+	 * {@link ViewPort ViewPort} of this map.
+	 * </p>
+	 * 
+	 * @param image
+	 *            image used to accelerate the screen draw
+	 * @param g
+	 *            for rendering 2-dimensional shapes, text and images on the
+	 *            Java(tm) platform
+	 * @param cancel
+	 *            shared object that determines if this layer can continue being
+	 *            drawn
+	 * @param scale
+	 *            value that represents the scale
+	 * @throws ReadDriverException
+	 *             if fails reading with the driver.
+	 * 
+	 * @see GraphicLayer#draw(BufferedImage, Graphics2D, ViewPort, Cancellable,
+	 *      double)
 	 */
 	public void drawGraphics(BufferedImage image, Graphics2D g,
 			Cancellable cancel, double scale) throws ReadDriverException {
@@ -1131,20 +1363,32 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Like {@linkplain MapContext#draw(BufferedImage, Graphics2D, Cancellable, double)}, but creating
-	 *  the task as cancellable.</p>
-	 *
-	 * @param image buffer used sometimes instead <code>g</code> to accelerate the draw. For example, if two points are as closed that can't be distinguished, draws only one.
-	 * @param g for rendering 2-dimensional shapes, text and images on the Java(tm) platform
-	 * @param scale the scale of the view. Must be between {@linkplain FLayer#getMinScale()} and {@linkplain FLayer#getMaxScale()}.
-	 *
-	 * @throws ReadDriverException if the driver fails reading.
-	 *
+	 * <p>
+	 * Like
+	 * {@linkplain MapContext#draw(BufferedImage, Graphics2D, Cancellable, double)}
+	 * , but creating the task as cancellable.
+	 * </p>
+	 * 
+	 * @param image
+	 *            buffer used sometimes instead <code>g</code> to accelerate the
+	 *            draw. For example, if two points are as closed that can't be
+	 *            distinguished, draws only one.
+	 * @param g
+	 *            for rendering 2-dimensional shapes, text and images on the
+	 *            Java(tm) platform
+	 * @param scale
+	 *            the scale of the view. Must be between
+	 *            {@linkplain FLayer#getMinScale()} and
+	 *            {@linkplain FLayer#getMaxScale()}.
+	 * 
+	 * @throws ReadDriverException
+	 *             if the driver fails reading.
+	 * 
 	 * @see #draw(BufferedImage, Graphics2D, Cancellable, double)
 	 */
 	public void draw(BufferedImage image, Graphics2D g, double scale)
 			throws ReadDriverException {
-//		layers.setDirty(true);
+		// layers.setDirty(true);
 		draw(image, g, new Cancellable() {
 			/**
 			 * @see com.iver.utiles.swing.threads.Cancellable#isCanceled()
@@ -1160,12 +1404,13 @@ public class MapContext {
 		}, scale);
 	}
 
-
 	/**
-	 * <p>Gets the {@link ViewPort ViewPort} associated to this map.</p>
-	 *
+	 * <p>
+	 * Gets the {@link ViewPort ViewPort} associated to this map.
+	 * </p>
+	 * 
 	 * @return the view port
-	 *
+	 * 
 	 * @see #setViewPort(ViewPort)
 	 */
 	public ViewPort getViewPort() {
@@ -1173,13 +1418,18 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Sets a {@link ViewPort ViewPort} with the drawing information
-	 *  of this map.</p>
-	 * <p>If there was a previous view port, removes its {@link EventBuffer EventBuffer} and
-	 *  adds the new one.</p>
-	 *
-	 * @param viewPort the viewPort
-	 *
+	 * <p>
+	 * Sets a {@link ViewPort ViewPort} with the drawing information of this
+	 * map.
+	 * </p>
+	 * <p>
+	 * If there was a previous view port, removes its {@link EventBuffer
+	 * EventBuffer} and adds the new one.
+	 * </p>
+	 * 
+	 * @param viewPort
+	 *            the viewPort
+	 * 
 	 * @see #getViewPort()
 	 */
 	public void setViewPort(ViewPort viewPort) {
@@ -1187,7 +1437,7 @@ public class MapContext {
 			this.viewPort.removeViewPortListener(eventBuffer);
 		}
 
-		if (this.mapContextDrawer != null){
+		if (this.mapContextDrawer != null) {
 			this.mapContextDrawer.setViewPort(viewPort);
 		}
 
@@ -1197,21 +1447,28 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Sets the given extent to the {@link ViewPort ViewPort} and updates the view with the new zoom.</p>
-	 *
-	 * @param extent the extent of the new zoom
+	 * <p>
+	 * Sets the given extent to the {@link ViewPort ViewPort} and updates the
+	 * view with the new zoom.
+	 * </p>
+	 * 
+	 * @param extent
+	 *            the extent of the new zoom
 	 */
 	public void zoomToExtent(Rectangle2D extent) {
-		if (extent!=null)
+		if (extent != null)
 			getViewPort().setExtent(extent);
 	}
 
 	/**
-	 * <p>Returns the union of all extents of all layers of this map.</p>
-	 *
+	 * <p>
+	 * Returns the union of all extents of all layers of this map.
+	 * </p>
+	 * 
 	 * @return full extent of layers of this map
-	 * @throws ReadDriverException if the driver fails reading.
-	 *
+	 * @throws ReadDriverException
+	 *             if the driver fails reading.
+	 * 
 	 * @see FLayers#getFullExtent()
 	 */
 	public Rectangle2D getFullExtent() throws ReadDriverException {
@@ -1219,15 +1476,18 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Returns an XML entity with the name of this class as a property, and two children branches:<br>
+	 * <p>
+	 * Returns an XML entity with the name of this class as a property, and two
+	 * children branches:<br>
 	 * <ul>
 	 * <li>XML entity of the internal {@link ViewPort ViewPort}.
 	 * <li>XML entity of the internal {@link FLayers FLayers}.
 	 * </ul>
-	 *
+	 * 
 	 * @return XMLEntity the XML entity
-	 * @throws XMLException if there is any error creating the XML from the map.
-	 *
+	 * @throws XMLException
+	 *             if there is any error creating the XML from the map.
+	 * 
 	 * @see #createFromXML(XMLEntity)
 	 * @see #createFromXML03(XMLEntity)
 	 * @see ViewPort#getXMLEntity()
@@ -1243,16 +1503,20 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Creates a new <code>MapContext</code> instance from an XML entity, with
-	 *  with the data of the {@link ViewPort ViewPort} and
-	 *  {@link FLayers FLayers}.</p>
-	 *
-	 * @param xml an XML entity
-	 *
+	 * <p>
+	 * Creates a new <code>MapContext</code> instance from an XML entity, with
+	 * with the data of the {@link ViewPort ViewPort} and {@link FLayers
+	 * FLayers}.
+	 * </p>
+	 * 
+	 * @param xml
+	 *            an XML entity
+	 * 
 	 * @return the new <code>MapContext</code> instance
-	 *
-	 * @throws XMLException if there is any error creating the map from the XML.
-	 *
+	 * 
+	 * @throws XMLException
+	 *             if there is any error creating the map from the XML.
+	 * 
 	 * @see #getXMLEntity()
 	 * @see #createFromXML03(XMLEntity)
 	 * @see ViewPort#createFromXML(XMLEntity)
@@ -1267,12 +1531,16 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Adds a listener of atomic events to the internal {@link EventBuffer EventBuffer}.</p>
-	 *
-	 * @param listener the new listener
-	 *
+	 * <p>
+	 * Adds a listener of atomic events to the internal {@link EventBuffer
+	 * EventBuffer}.
+	 * </p>
+	 * 
+	 * @param listener
+	 *            the new listener
+	 * 
 	 * @return <code>true</code> if has added the listener successfully
-	 *
+	 * 
 	 * @see #removeAtomicEventListener(AtomicEventListener)
 	 * @see EventBuffer#addAtomicEventListener(AtomicEventListener)
 	 */
@@ -1281,12 +1549,16 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Removes a listener of atomic events from the internal {@link EventBuffer EventBuffer}.</p>
-	 *
-	 * @param listener the listener to remove
-	 *
-     * @return <tt>true</tt> if the list contained the specified element
-	 *
+	 * <p>
+	 * Removes a listener of atomic events from the internal {@link EventBuffer
+	 * EventBuffer}.
+	 * </p>
+	 * 
+	 * @param listener
+	 *            the listener to remove
+	 * 
+	 * @return <tt>true</tt> if the list contained the specified element
+	 * 
 	 * @see #addAtomicEventListener(AtomicEventListener)
 	 * @see EventBuffer#removeAtomicEventListener(AtomicEventListener)
 	 */
@@ -1296,7 +1568,7 @@ public class MapContext {
 
 	/**
 	 * @see EventBuffer#beginAtomicEvent()
-	 *
+	 * 
 	 * @see #endAtomicEvent()
 	 */
 	public void beginAtomicEvent() {
@@ -1305,7 +1577,7 @@ public class MapContext {
 
 	/**
 	 * @see EventBuffer#endAtomicEvent()
-	 *
+	 * 
 	 * @see #beginAtomicEvent()
 	 */
 	public void endAtomicEvent() {
@@ -1313,15 +1585,23 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>The class <code>LayerEventListener</code> implements the methods of {@link LayerCollectionListener LayerCollectionListener}
-	 *  that handles the "layer added" or "layer removed" events in a map.</p>
-	 * <p>Is designed as a listener for all layers in a {@link MapContext MapContext}.</p>
-	 *
+	 * <p>
+	 * The class <code>LayerEventListener</code> implements the methods of
+	 * {@link LayerCollectionListener LayerCollectionListener} that handles the
+	 * "layer added" or "layer removed" events in a map.
+	 * </p>
+	 * <p>
+	 * Is designed as a listener for all layers in a {@link MapContext
+	 * MapContext}.
+	 * </p>
+	 * 
 	 * @author Fernando González Cortés
 	 */
 	public class LayerEventListener implements LayerCollectionListener {
 		/*
-		 * @see com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerAdded(com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
+		 * @see
+		 * com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerAdded
+		 * (com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
 		 */
 		public void layerAdded(LayerCollectionEvent e) {
 			// Si es la primera capa, fijamos su extent al ViewPort
@@ -1343,16 +1623,23 @@ public class MapContext {
 		}
 
 		/**
-		 * <p>Registers an event buffer as a listener for all layers as argument.</p>
-		 *
-		 * <p>Each {@link FLayer FLayer} of this map must have an event buffer for all kind
-		 * of specific listeners of that layer. This method distinguish between {@link Classifiable Classifiable},
-		 * {@link AlphanumericData AlphanumericData}, and {@link FLayers FLayers} layers, and for each one,
-		 * registers, for their specific listeners, the <code>eventBuffer</code> as a listener.</p>
-		 *
-		 * @param the layer or layers
+		 * <p>
+		 * Registers an event buffer as a listener for all layers as argument.
+		 * </p>
+		 * 
+		 * <p>
+		 * Each {@link FLayer FLayer} of this map must have an event buffer for
+		 * all kind of specific listeners of that layer. This method distinguish
+		 * between {@link Classifiable Classifiable}, {@link AlphanumericData
+		 * AlphanumericData}, and {@link FLayers FLayers} layers, and for each
+		 * one, registers, for their specific listeners, the
+		 * <code>eventBuffer</code> as a listener.
+		 * </p>
+		 * 
+		 * @param the
+		 *            layer or layers
 		 */
-		private void selectionListener(FLayer lyr){
+		private void selectionListener(FLayer lyr) {
 			lyr.addLayerListener(eventBuffer);
 
 			if (lyr instanceof Classifiable) {
@@ -1361,10 +1648,10 @@ public class MapContext {
 			}
 
 			if (lyr instanceof AlphanumericData) {
-				Selectable s=null;
+				Selectable s = null;
 				try {
 					s = ((AlphanumericData) lyr).getRecordset();
-					if (s!=null) {
+					if (s != null) {
 						s.addSelectionListener(eventBuffer);
 					}
 				} catch (ReadDriverException e1) {
@@ -1372,22 +1659,27 @@ public class MapContext {
 				}
 
 			}
-			if (lyr instanceof FLayers){
-				FLayers lyrs=(FLayers)lyr;
-				for(int i=0;i<lyrs.getLayersCount();i++){
+			if (lyr instanceof FLayers) {
+				FLayers lyrs = (FLayers) lyr;
+				for (int i = 0; i < lyrs.getLayersCount(); i++) {
 					selectionListener(lyrs.getLayer(i));
 				}
 			}
 
 		}
+
 		/*
-		 * @see com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerMoved(com.iver.cit.gvsig.fmap.layers.LayerPositionEvent)
+		 * @see
+		 * com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerMoved
+		 * (com.iver.cit.gvsig.fmap.layers.LayerPositionEvent)
 		 */
 		public void layerMoved(LayerPositionEvent e) {
 		}
 
 		/*
-		 * @see com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerRemoved(com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
+		 * @see
+		 * com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerRemoved
+		 * (com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
 		 */
 		public void layerRemoved(LayerCollectionEvent e) {
 			FLayer lyr = e.getAffectedLayer();
@@ -1406,53 +1698,60 @@ public class MapContext {
 		}
 
 		/*
-		 * @see com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerAdding(com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
+		 * @see
+		 * com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerAdding
+		 * (com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
 		 */
 		public void layerAdding(LayerCollectionEvent e)
 				throws CancelationException {
-			
-	    	// before layer is added: ckeck name
-	    	FLayer lyr = e.getAffectedLayer();
-	    	String name = lyr.getName();
-	    	name = LayerNameUtils.normalizeName(name);
-	    	if (LayerNameUtils.nameExists(getLayers(), name)) {
-	    		
-	    		if (LayerNameUtils.getIndexFromName(name) != null) {
-	    			name = LayerNameUtils.removeIndex(name);
-	    		}
-	    		
-	    		long high_ind =
-	    			LayerNameUtils.findHighestIndex(getLayers(), name);
-	    		
-	    		if (high_ind == 0) {
-	    			high_ind = 2;
-	    		} else {
-	    			high_ind++;
-	    		}
-	    		
-	    		name = LayerNameUtils.composeWithIndex(name, high_ind);
-	    		lyr.setName(name);
-	    	}
+
+			// before layer is added: ckeck name
+			FLayer lyr = e.getAffectedLayer();
+			String name = lyr.getName();
+			name = LayerNameUtils.normalizeName(name);
+			if (LayerNameUtils.nameExists(getLayers(), name)) {
+
+				if (LayerNameUtils.getIndexFromName(name) != null) {
+					name = LayerNameUtils.removeIndex(name);
+				}
+
+				long high_ind = LayerNameUtils.findHighestIndex(getLayers(),
+						name);
+
+				if (high_ind == 0) {
+					high_ind = 2;
+				} else {
+					high_ind++;
+				}
+
+				name = LayerNameUtils.composeWithIndex(name, high_ind);
+				lyr.setName(name);
+			}
 
 		}
 
 		/*
-		 * @see com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerMoving(com.iver.cit.gvsig.fmap.layers.LayerPositionEvent)
+		 * @see
+		 * com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerMoving
+		 * (com.iver.cit.gvsig.fmap.layers.LayerPositionEvent)
 		 */
 		public void layerMoving(LayerPositionEvent e)
 				throws CancelationException {
 		}
 
 		/*
-		 * @see com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerRemoving(com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
+		 * @see
+		 * com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerRemoving
+		 * (com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
 		 */
 		public void layerRemoving(LayerCollectionEvent e)
 				throws CancelationException {
 		}
 
-
 		/*
-		 * @see com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#visibilityChanged(com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
+		 * @see
+		 * com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#visibilityChanged
+		 * (com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
 		 */
 		public void visibilityChanged(LayerCollectionEvent e)
 				throws CancelationException {
@@ -1460,20 +1759,25 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Adds the {@link LayerEventListener LayerEventListener} of this map to the
-	 *  collection of layers argument.</p>
-	 *
-	 * @param a collection of layers
+	 * <p>
+	 * Adds the {@link LayerEventListener LayerEventListener} of this map to the
+	 * collection of layers argument.
+	 * </p>
+	 * 
+	 * @param a
+	 *            collection of layers
 	 */
 	public void addAsCollectionListener(FLayers layers2) {
 		layers2.addLayerCollectionListener(layerEventListener);
 	}
 
 	/**
-	 * <p>Returns the internal {@link GraphicLayer GraphicLayer}.</p>
-	 *
+	 * <p>
+	 * Returns the internal {@link GraphicLayer GraphicLayer}.
+	 * </p>
+	 * 
 	 * @return the graphic layer of this map
-	 *
+	 * 
 	 * @see #setGraphicsLayer(GraphicLayer)
 	 */
 	public GraphicLayer getGraphicsLayer() {
@@ -1481,10 +1785,13 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Sets a new {@link GraphicLayer GraphicLayer} to this map.</p>
-	 *
-	 * @param graphicLayer the new graphic layer
-	 *
+	 * <p>
+	 * Sets a new {@link GraphicLayer GraphicLayer} to this map.
+	 * </p>
+	 * 
+	 * @param graphicLayer
+	 *            the new graphic layer
+	 * 
 	 * @see #getGraphicsLayer()
 	 */
 	public void setGraphicsLayer(GraphicLayer graphicLayer) {
@@ -1492,22 +1799,28 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Indicates whether some other object is "equal to" this map.</p>
-	 * <p>Returns <code>true</code> if success one of this options:
+	 * <p>
+	 * Indicates whether some other object is "equal to" this map.
+	 * </p>
+	 * <p>
+	 * Returns <code>true</code> if success one of this options:
 	 * <ul>
-	 * <li>Both objects are equal according to {@linkplain Object#equals(Object)}.
+	 * <li>Both objects are equal according to
+	 * {@linkplain Object#equals(Object)}.
 	 * <li>Both maps have the same layers.
 	 * <li>Both maps have the same number of layers and with the same name.
 	 * </ul>
 	 * </p>
-	 *
-	 * @param obj the reference object with which to compare.
-     * @return <code>true</code> if this object is the same as the <code>arg0</code> argument;  otherwise <code>false</code>.
-	 *
+	 * 
+	 * @param obj
+	 *            the reference object with which to compare.
+	 * @return <code>true</code> if this object is the same as the
+	 *         <code>arg0</code> argument; otherwise <code>false</code>.
+	 * 
 	 * @see Object#equals(Object)
 	 */
 	public boolean equals(Object arg0) {
-		if (!(arg0 instanceof MapContext)){
+		if (!(arg0 instanceof MapContext)) {
 			return false;
 		}
 		MapContext map = (MapContext) arg0;
@@ -1519,8 +1832,8 @@ public class MapContext {
 		if (map.getLayers().getLayersCount() == getLayers().getLayersCount()) {
 			for (int i = 0; i < getLayers().getLayersCount(); i++) {
 
-				if (!getLayers().getLayer(i).getName().equals(
-						map.getLayers().getLayer(i).getName())) {
+				if (!getLayers().getLayer(i).getName()
+						.equals(map.getLayers().getLayer(i).getName())) {
 					isEqual = false;
 				}
 
@@ -1532,10 +1845,13 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Registers the message of an error associated to this map.</p>
-	 *
-	 * @param stringProperty the error message
-	 *
+	 * <p>
+	 * Registers the message of an error associated to this map.
+	 * </p>
+	 * 
+	 * @param stringProperty
+	 *            the error message
+	 * 
 	 * @see #getLayersError()
 	 * @see #clearErrors()
 	 */
@@ -1544,10 +1860,12 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Gets the list with all error messages registered to this map.</p>
-	 *
+	 * <p>
+	 * Gets the list with all error messages registered to this map.
+	 * </p>
+	 * 
 	 * @return the list of errors registered to this map
-	 *
+	 * 
 	 * @see #addLayerError(String)
 	 * @see #clearErrors()
 	 */
@@ -1556,8 +1874,10 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Removes all error messages associated to this map.</p>
-	 *
+	 * <p>
+	 * Removes all error messages associated to this map.
+	 * </p>
+	 * 
 	 * @see #addLayerError(String)
 	 * @see #getLayersError()
 	 */
@@ -1566,61 +1886,72 @@ public class MapContext {
 	}
 
 	/**
-	 * <p>Creates and returns a new group of layers that belongs to this <code>MapContext</code>.</p>
-	 *
-	 * @param parent layer node in this <code>MapContexte</code> that will be the parent of the new node
+	 * <p>
+	 * Creates and returns a new group of layers that belongs to this
+	 * <code>MapContext</code>.
+	 * </p>
+	 * 
+	 * @param parent
+	 *            layer node in this <code>MapContexte</code> that will be the
+	 *            parent of the new node
 	 * @return the new layer node
 	 */
 	public FLayers getNewGroupLayer(FLayers parent) {
-		FLayers group1 = new FLayers();//(this,parent);
+		FLayers group1 = new FLayers();// (this,parent);
 		group1.setMapContext(this);
 		group1.setParentLayer(parent);
-	    return group1;
+		return group1;
 	}
-
 
 	public long getDrawVersion() {
 		return this.drawVersion;
 	}
 
-	protected void updateDrawVersion(){
+	protected void updateDrawVersion() {
 		this.drawVersion++;
 	}
 
-	public MapContextDrawer getMapContextDrawer() throws ReadDriverException{
-		if (this.mapContextDrawer == null){
+	public MapContextDrawer getMapContextDrawer() throws ReadDriverException {
+		if (this.mapContextDrawer == null) {
 			try {
-				this.mapContextDrawer = (MapContextDrawer) this.mapContextDrawerClass.getConstructor(null).newInstance(null);
+				this.mapContextDrawer = (MapContextDrawer) this.mapContextDrawerClass
+						.getConstructor(null).newInstance(null);
 				this.mapContextDrawer.setMapContext(this);
 				this.mapContextDrawer.setViewPort(viewPort);
 
 			} catch (IllegalArgumentException e) {
-				throw new ReadDriverException("Can't create MapContextDraver",e);
+				throw new ReadDriverException("Can't create MapContextDraver",
+						e);
 			} catch (SecurityException e) {
-				throw new ReadDriverException("Can't create MapContextDraver",e);
+				throw new ReadDriverException("Can't create MapContextDraver",
+						e);
 			} catch (InstantiationException e) {
-				throw new ReadDriverException("Can't create MapContextDraver",e);
+				throw new ReadDriverException("Can't create MapContextDraver",
+						e);
 			} catch (IllegalAccessException e) {
-				throw new ReadDriverException("Can't create MapContextDraver",e);
+				throw new ReadDriverException("Can't create MapContextDraver",
+						e);
 			} catch (InvocationTargetException e) {
-				throw new ReadDriverException("Can't create MapContextDraver",e);
+				throw new ReadDriverException("Can't create MapContextDraver",
+						e);
 			} catch (NoSuchMethodException e) {
-				throw new ReadDriverException("Can't create MapContextDraver",e);
+				throw new ReadDriverException("Can't create MapContextDraver",
+						e);
 			}
 		}
 
 		return this.mapContextDrawer;
 	}
 
-	public boolean setMapContextDrawerClass(Class mapContextDrawerClass){
-		if (mapContextDrawerClass == null){
+	public boolean setMapContextDrawerClass(Class mapContextDrawerClass) {
+		if (mapContextDrawerClass == null) {
 			mapContextDrawerClass = this.defaultMapContextDrawerClass;
 		}
-		if (! MapContextDrawer.class.isAssignableFrom(mapContextDrawerClass)){
+		if (!MapContextDrawer.class.isAssignableFrom(mapContextDrawerClass)) {
 			return false;
 		}
 		this.mapContextDrawerClass = mapContextDrawerClass;
-		if (this.mapContextDrawer != null){
+		if (this.mapContextDrawer != null) {
 			this.mapContextDrawer.dispose();
 			this.mapContextDrawer = null;
 		}
@@ -1628,38 +1959,41 @@ public class MapContext {
 
 	}
 
-	public void setMapContextDrawer(MapContextDrawer drawer){
-		if (this.mapContextDrawer != null){
+	public void setMapContextDrawer(MapContextDrawer drawer) {
+		if (this.mapContextDrawer != null) {
 			this.mapContextDrawer.dispose();
 			this.mapContextDrawer = null;
 		}
 		this.mapContextDrawer = drawer;
-		if (this.mapContextDrawer != null){
+		if (this.mapContextDrawer != null) {
 			this.mapContextDrawer.setMapContext(this);
 			this.mapContextDrawer.setViewPort(viewPort);
 		}
 	}
 
 	/**
-	 * <p>Returns the OrderManager. When a new layer is added to this MapContext,
-	 * the order manager will decide the right position for the
-	 * layer.</p> <p>The orderManager will only be used when adding a layer,
-	 * so it will not affect to the collection order when the user modifies the
-	 * order.</p>
-	 *
-	 * @return The configured order manager, or DefaultOrderManager in no
-	 * order manager was configured
+	 * <p>
+	 * Returns the OrderManager. When a new layer is added to this MapContext,
+	 * the order manager will decide the right position for the layer.
+	 * </p>
+	 * <p>
+	 * The orderManager will only be used when adding a layer, so it will not
+	 * affect to the collection order when the user modifies the order.
+	 * </p>
+	 * 
+	 * @return The configured order manager, or DefaultOrderManager in no order
+	 *         manager was configured
 	 */
 	public OrderManager getOrderManager() {
 		/**
 		 * Don't keep an order manager, always use a system-wide manager.
-		 *
+		 * 
 		 * In an idea scenario, we'd like to be able to configure an order
 		 * manager at different levels (system-wide, project-wide,
 		 * mapcontext-wide).
-		 *
-		 * However, gvSIG 1.9 does not provide the necessary infraestructure
-		 * to support this behaviour in a clean-way, so we don't offer this
+		 * 
+		 * However, gvSIG 1.9 does not provide the necessary infraestructure to
+		 * support this behaviour in a clean-way, so we don't offer this
 		 * behaviour at this time.
 		 */
 		return DefaultOrderManager.getDefaultOrderManager();

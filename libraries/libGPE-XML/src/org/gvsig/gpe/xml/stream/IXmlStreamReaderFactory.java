@@ -48,8 +48,8 @@ import java.io.InputStream;
  */
 public interface IXmlStreamReaderFactory {
 
-    boolean canParse(String mimeType);
+	boolean canParse(String mimeType);
 
-    IXmlStreamReader createParser(String mimeType, InputStream in) throws XmlStreamException,
-            IllegalArgumentException;
+	IXmlStreamReader createParser(String mimeType, InputStream in)
+			throws XmlStreamException, IllegalArgumentException;
 }

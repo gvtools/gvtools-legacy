@@ -6,19 +6,20 @@ import org.gvsig.gui.beans.incrementabletask.IncrementableListener;
 import org.gvsig.gui.beans.incrementabletask.IncrementableTask;
 
 public class Process implements Runnable, IIncrementable, IncrementableListener {
-	
-	private IncrementableTask		incrementableTask = null;
-	private boolean							cancel = false;
-	private volatile Thread			blinker = null;
+
+	private IncrementableTask incrementableTask = null;
+	private boolean cancel = false;
+	private volatile Thread blinker = null;
 	int i = 0;
 
 	public void run() {
-		for (i = 0; i<10000000; i++){
-			if(cancel)
+		for (i = 0; i < 10000000; i++) {
+			if (cancel)
 				return;
-			for (int j=0;j<100;j++);
+			for (int j = 0; j < 100; j++)
+				;
 		}
-				
+
 		if (incrementableTask != null)
 			incrementableTask.processFinalize();
 		System.exit(0);
@@ -26,11 +27,11 @@ public class Process implements Runnable, IIncrementable, IncrementableListener 
 
 	public void actionCanceled(IncrementableEvent e) {
 		cancel = true;
-		
+
 	}
 
 	public void actionResumed(IncrementableEvent e) {
-		
+
 	}
 
 	public void actionSuspended(IncrementableEvent e) {
@@ -58,7 +59,7 @@ public class Process implements Runnable, IIncrementable, IncrementableListener 
 	}
 
 	public int getPercent() {
-		return i/100000;
+		return i / 100000;
 	}
 
 	public String getTitle() {

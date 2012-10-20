@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.ui.util;
 
 import java.awt.Cursor;
@@ -73,41 +73,45 @@ import com.iver.cit.gvsig.fmap.tools.Listeners.PointListener;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 /**
- * PointListener which allows to select features with the mouse.
- * The selected feature is passed to a GFeatureParameter instance.
+ * PointListener which allows to select features with the mouse. The selected
+ * feature is passed to a GFeatureParameter instance.
  * 
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class FeatureSelectionListener implements PointListener {
 
 	private static final int TOLERANCE_IN_PIXELS = 3;
-	
-	private final Image img = new ImageIcon(MapControl.class.getResource("images/PointSelectCursor.gif")).getImage();
-	
-	private Cursor cursor = Toolkit.getDefaultToolkit().createCustomCursor(img, new Point(16, 16), "");
+
+	private final Image img = new ImageIcon(
+			MapControl.class.getResource("images/PointSelectCursor.gif"))
+			.getImage();
+
+	private Cursor cursor = Toolkit.getDefaultToolkit().createCustomCursor(img,
+			new Point(16, 16), "");
 
 	/**
-	 * View with the map where we are gonna to select the feature 
+	 * View with the map where we are gonna to select the feature
 	 */
 	private View view;
 	/**
 	 * Paremeter which will have the reference to the selected feature
 	 */
 	private GFeatureParameter featureParameter;
-	
+
 	private FeatureSelectionCallBack callBack;
-	
+
 	/**
 	 * Constructor
+	 * 
 	 * @param view
 	 * @param featureParameter
 	 * @param callingParent
 	 */
-	public FeatureSelectionListener(View view, 
-									GFeatureParameter featureParameter,
-									FeatureSelectionCallBack callBack) {
+	public FeatureSelectionListener(View view,
+			GFeatureParameter featureParameter,
+			FeatureSelectionCallBack callBack) {
 		super();
 		this.view = view;
 		this.featureParameter = featureParameter;
@@ -115,47 +119,53 @@ public class FeatureSelectionListener implements PointListener {
 	}
 
 	public void point(PointEvent event) throws BehaviorException {
-		
+
 		MapControl mapControl = view.getMapControl();
 		ViewPort viewPort = mapControl.getMapContext().getViewPort();
-		double tolerance = mapControl.getViewPort().toMapDistance(TOLERANCE_IN_PIXELS);
+		double tolerance = mapControl.getViewPort().toMapDistance(
+				TOLERANCE_IN_PIXELS);
 		Point2D wcPoint = viewPort.toMapPoint(event.getPoint());
 		List<IFeature> selectedFeatures = new ArrayList<IFeature>();
-		
-       
-          List<FLyrVect> containers = featureParameter.getFeatureContainer(); 
-          for(int i = 0; i < containers.size(); i++){
-        	  FLyrVect lyr =  containers.get(i);
-        	  try {
-	        	  FBitSet newBitSet = 
-	        		  lyr.queryByPoint(wcPoint, tolerance);
-	        	  FeatureBitsetIterator featureIterator = 
-	              	new FeatureBitsetIterator(newBitSet, lyr.getSource() );
-	              if(featureIterator.hasNext()){
-	              	IFeature selectedFeature = featureIterator.next();
-	              	selectedFeatures.add(selectedFeature);
-	              } //if 
-        	  } catch (Exception e) {
-                  e.printStackTrace();
-                  throw new BehaviorException("Fallo al consultar " + lyr.getName());
-              }
-          }//for
-          
-          int selectedFeaturesSize = selectedFeatures.size();
-          
-          if(selectedFeaturesSize == 0){
-        	  GUIUtil.getInstance().messageBox(PluginServices.getText(this, "No_ha_seleccionado_ningun_elemento.Se_cogera_el_elemento_por_defecto"), 
-						   PluginServices.getText(this, "Warning"));
-        	  this.featureParameter.setValue(featureParameter.getDefaultValue());
-          }else if(selectedFeaturesSize > 1){
-        	  GUIUtil.getInstance().messageBox(PluginServices.getText(this, "Debe_seleccionar_un_único_elemento"), 
-        			  						   PluginServices.getText(this, "Error"));
-        	  return;
-         }else{
-        	  this.featureParameter.setValue(selectedFeatures.get(0));
-         }
-         mapControl.setPrevTool();
-         this.callBack.featureSelected();
+
+		List<FLyrVect> containers = featureParameter.getFeatureContainer();
+		for (int i = 0; i < containers.size(); i++) {
+			FLyrVect lyr = containers.get(i);
+			try {
+				FBitSet newBitSet = lyr.queryByPoint(wcPoint, tolerance);
+				FeatureBitsetIterator featureIterator = new FeatureBitsetIterator(
+						newBitSet, lyr.getSource());
+				if (featureIterator.hasNext()) {
+					IFeature selectedFeature = featureIterator.next();
+					selectedFeatures.add(selectedFeature);
+				} // if
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new BehaviorException("Fallo al consultar "
+						+ lyr.getName());
+			}
+		}// for
+
+		int selectedFeaturesSize = selectedFeatures.size();
+
+		if (selectedFeaturesSize == 0) {
+			GUIUtil.getInstance()
+					.messageBox(
+							PluginServices
+									.getText(this,
+											"No_ha_seleccionado_ningun_elemento.Se_cogera_el_elemento_por_defecto"),
+							PluginServices.getText(this, "Warning"));
+			this.featureParameter.setValue(featureParameter.getDefaultValue());
+		} else if (selectedFeaturesSize > 1) {
+			GUIUtil.getInstance().messageBox(
+					PluginServices.getText(this,
+							"Debe_seleccionar_un_único_elemento"),
+					PluginServices.getText(this, "Error"));
+			return;
+		} else {
+			this.featureParameter.setValue(selectedFeatures.get(0));
+		}
+		mapControl.setPrevTool();
+		this.callBack.featureSelected();
 	}
 
 	public void pointDoubleClick(PointEvent event) throws BehaviorException {

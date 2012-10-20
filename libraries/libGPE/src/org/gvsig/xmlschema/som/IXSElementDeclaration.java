@@ -1,7 +1,5 @@
 package org.gvsig.xmlschema.som;
 
-
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -73,46 +71,48 @@ package org.gvsig.xmlschema.som;
  *
  */
 /**
- * This interface represents a XML schema element declaration. 
- * Example:
+ * This interface represents a XML schema element declaration. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;xs:element name="PurchaseOrder" type="PurchaseOrderType"/&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @see http://www.w3.org/TR/xmlschema-1/#cElement_Declarations
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public interface IXSElementDeclaration extends IXSComponent{
+public interface IXSElementDeclaration extends IXSComponent {
 	public static final int MAX_OCCURS_UNBOUNDED = -1;
 	public static final int MIN_OCCURS_UNBOUNDED = -1;
-	
+
 	public IXSTypeDefinition getTypeDefinition();
-	
+
 	public String getTypeName();
-	
+
 	public boolean isNillable();
-	
+
 	public int getMinOccurs();
-	
+
 	public int getMaxOccurs();
-	
+
 	public IXSElementDeclaration getSubElementByName(String name);
-	
+
 	/**
 	 * Add a new XML schema Complex type
+	 * 
 	 * @param type
-	 * See the IXSComplexType interface for possible values
+	 *            See the IXSComplexType interface for possible values
 	 * @param contentType
-	 * A complex content or a simple content
-	 * See the IXSContentType for possible values
+	 *            A complex content or a simple content See the IXSContentType
+	 *            for possible values
 	 * @param contentTypeRestriction
-	 * A extension or a restriction
-	 * @return
-	 * A xML schema complex type
+	 *            A extension or a restriction
+	 * @return A xML schema complex type
 	 */
-	public IXSComplexTypeDefinition addComplexType(String type, String contentType, String contentTypeRestriction);
+	public IXSComplexTypeDefinition addComplexType(String type,
+			String contentType, String contentTypeRestriction);
 }
-

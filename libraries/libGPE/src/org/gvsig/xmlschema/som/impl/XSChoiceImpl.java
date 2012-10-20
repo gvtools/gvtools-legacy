@@ -68,10 +68,9 @@ import org.gvsig.xmlschema.som.IXSSchema;
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class XSChoiceImpl extends XSGroupImpl implements IXSChoice {
-	
-	public XSChoiceImpl(IXSSchema schema) {
-		super(schema);		
-	}	
 
+	public XSChoiceImpl(IXSSchema schema) {
+		super(schema);
+	}
 
 }

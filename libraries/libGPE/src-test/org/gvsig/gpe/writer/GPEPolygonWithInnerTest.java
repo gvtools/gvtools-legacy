@@ -64,7 +64,7 @@ import org.gvsig.gpe.containers.Polygon;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class GPEPolygonWithInnerTest extends GPEWriterBaseTest{
+public abstract class GPEPolygonWithInnerTest extends GPEWriterBaseTest {
 	private String layerId = "l1";
 	private String layerName = "Municipallity";
 	private String layerDescription = "Polygons test layer";
@@ -93,69 +93,65 @@ public abstract class GPEPolygonWithInnerTest extends GPEWriterBaseTest{
 	private double[] polygon2X = generateRandomLinearRing();
 	private double[] polygon2Y = generateRandomLinearRing();
 	private double[] polygon2Z = generateRandomLinearRing();
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#readObjects()
 	 */
 	public void readObjects() {
 		Layer[] layers = getLayers();
-		assertEquals(layers.length, 1);		
+		assertEquals(layers.length, 1);
 		Layer layer = layers[0];
-		
+
 		assertEquals(layer.getFeatures().size(), 2);
-		//FEATURE 1
-		Feature feature1 = (Feature)layer.getFeatures().get(0);
-		GeometryAsserts.polygon((Polygon)feature1.getGeometry(), polygon1X, polygon1Y, polygon1Z);
-		Polygon inner1 = (Polygon)((Polygon)feature1.getGeometry()).getInnerBoundary().get(0);
+		// FEATURE 1
+		Feature feature1 = (Feature) layer.getFeatures().get(0);
+		GeometryAsserts.polygon((Polygon) feature1.getGeometry(), polygon1X,
+				polygon1Y, polygon1Z);
+		Polygon inner1 = (Polygon) ((Polygon) feature1.getGeometry())
+				.getInnerBoundary().get(0);
 		GeometryAsserts.polygon(inner1, inner11X, inner11Y, inner11Z);
-		Polygon inner2 = (Polygon)((Polygon)feature1.getGeometry()).getInnerBoundary().get(1);
+		Polygon inner2 = (Polygon) ((Polygon) feature1.getGeometry())
+				.getInnerBoundary().get(1);
 		GeometryAsserts.polygon(inner2, inner12X, inner12Y, inner12Z);
-	
-		//FEATURE 2
-		Feature feature2 = (Feature)layer.getFeatures().get(1);
-		GeometryAsserts.polygon((Polygon)feature2.getGeometry(), polygon2X, polygon2Y, polygon2Z);
+
+		// FEATURE 2
+		Feature feature2 = (Feature) layer.getFeatures().get(1);
+		GeometryAsserts.polygon((Polygon) feature2.getGeometry(), polygon2X,
+				polygon2Y, polygon2Z);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#writeObjects()
 	 */
 	public void writeObjects() {
 		getWriterHandler().initialize();
-		getWriterHandler().startLayer(layerId, null, layerName, layerDescription, srs);
-		getWriterHandler().startBbox(bboxId, new CoordinatesSequence(bboxX,	bboxY, bboxZ), srs);
+		getWriterHandler().startLayer(layerId, null, layerName,
+				layerDescription, srs);
+		getWriterHandler().startBbox(bboxId,
+				new CoordinatesSequence(bboxX, bboxY, bboxZ), srs);
 		getWriterHandler().endBbox();
 		getWriterHandler().startFeature(feature1Id, null, feature1Name);
-		getWriterHandler().startPolygon(polygon1Id, new CoordinatesSequence(
-				polygon1X,
-				polygon1Y,
-				polygon1Z),
-				srs);
-		getWriterHandler().startInnerBoundary(inner11Id, new CoordinatesSequence(
-				inner11X,
-				inner11Y,
-				inner11Z),
-				srs);
+		getWriterHandler().startPolygon(polygon1Id,
+				new CoordinatesSequence(polygon1X, polygon1Y, polygon1Z), srs);
+		getWriterHandler().startInnerBoundary(inner11Id,
+				new CoordinatesSequence(inner11X, inner11Y, inner11Z), srs);
 		getWriterHandler().endInnerBoundary();
-		getWriterHandler().startInnerBoundary(inner12Id, new CoordinatesSequence(
-				inner12X,
-				inner12Y,
-				inner12Z),
-				srs);
+		getWriterHandler().startInnerBoundary(inner12Id,
+				new CoordinatesSequence(inner12X, inner12Y, inner12Z), srs);
 		getWriterHandler().endInnerBoundary();
-		getWriterHandler().endPolygon();		
+		getWriterHandler().endPolygon();
 		getWriterHandler().endFeature();
 		getWriterHandler().startFeature(feature2Id, null, feature2Name);
-		getWriterHandler().startPolygon(polygon2Id, new CoordinatesSequence(
-				polygon2X,
-				polygon2Y,
-				polygon2Z),
-				srs);
-		getWriterHandler().endPolygon();		
+		getWriterHandler().startPolygon(polygon2Id,
+				new CoordinatesSequence(polygon2X, polygon2Y, polygon2Z), srs);
+		getWriterHandler().endPolygon();
 		getWriterHandler().endFeature();
 		getWriterHandler().endLayer();
-		getWriterHandler().close();		
+		getWriterHandler().close();
 	}
 
 }

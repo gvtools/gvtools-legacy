@@ -1,6 +1,5 @@
 package com.iver.cit.gvsig.graphtests;
 
-
 import java.io.File;
 
 import junit.framework.TestCase;
@@ -17,30 +16,29 @@ import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 public class TestNetworkGvTableWriter extends TestCase {
 	NetworkGvTableWriter netBuilder = new NetworkGvTableWriter();
 	FLyrVect lyr;
+
 	/*
-	 * Test method for
-	 * 'org.gvsig.graph.core.NetworkWriter.writeNetwork()'
+	 * Test method for 'org.gvsig.graph.core.NetworkWriter.writeNetwork()'
 	 */
 	public void testWriteNetwork() {
 		try {
 			long t1 = System.currentTimeMillis();
 			netBuilder.writeNetwork();
 			long t2 = System.currentTimeMillis();
-			System.out.println("Building DBF time:" + (t2-t1) + " msecs.");
+			System.out.println("Building DBF time:" + (t2 - t1) + " msecs.");
 		} catch (BaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-
 	protected void setUp() throws Exception {
 		LayerFactory
 				.setDriversPath("../_fwAndami/gvSIG/extensiones/org.gvsig/drivers");
 		CoordinateReferenceSystem crs = ProjectionUtils.getCRS("EPSG:23030");
 		File shpFile = new File("c:/ejes.shp");
-		lyr = (FLyrVect) LayerFactory.createLayer("Ejes",
-				"gvSIG shp driver", shpFile, crs);
+		lyr = (FLyrVect) LayerFactory.createLayer("Ejes", "gvSIG shp driver",
+				shpFile, crs);
 
 		String fieldType = "tipored";
 		String fieldDist = "length";
@@ -60,13 +58,10 @@ public class TestNetworkGvTableWriter extends TestCase {
 		File edgeFile = new File("c:/edges.dbf");
 		DbfWriter edgeWriter = new DbfWriter();
 		edgeWriter.setFile(edgeFile);
-		
-		
+
 		netBuilder.setEdgeWriter(edgeWriter);
 		netBuilder.setNodeWriter(nodeWriter);
-		
-		
-		
+
 	}
 
 }

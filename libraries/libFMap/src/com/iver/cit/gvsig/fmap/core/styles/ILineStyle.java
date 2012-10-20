@@ -77,52 +77,70 @@ package com.iver.cit.gvsig.fmap.core.styles;
 
 import java.awt.Stroke;
 
-
-
 /**
  * Interface that controls the properties that define the style of a line.This
- * properties are the width, stroke, offset and arrow decorator style( for example
- * if the line includes markers as an arrow to specify an orientation).
- * @author   jaume dominguez faus - jaume.dominguez@iver.es
+ * properties are the width, stroke, offset and arrow decorator style( for
+ * example if the line includes markers as an arrow to specify an orientation).
+ * 
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public interface ILineStyle extends IStyle {
 	/**
 	 * Returns the width of the line
+	 * 
 	 * @return
 	 */
 	public abstract float getLineWidth();
+
 	/**
 	 * Establishes the width of the line
-	 * @param width of the line
+	 * 
+	 * @param width
+	 *            of the line
 	 */
 	public abstract void setLineWidth(float width);
+
 	/**
 	 * Returns the stroke of the line
+	 * 
 	 * @return Stroke of the line
 	 */
 	public abstract Stroke getStroke();
+
 	/**
 	 * Sets the stroke of the line
-	 * @param stroke,stroke to be established
+	 * 
+	 * @param stroke
+	 *            ,stroke to be established
 	 */
 	public abstract void setStroke(Stroke stroke);
+
 	/**
 	 * Gets the arrow decorator style that has the line
+	 * 
 	 * @return ArrowDecoratorStyle
 	 */
 	public abstract ArrowDecoratorStyle getArrowDecorator();
+
 	/**
 	 * Sets the arrow decorator style of the line
-	 * @param arrowDecoratorStyle, ArrowDecoratorStyle
+	 * 
+	 * @param arrowDecoratorStyle
+	 *            , ArrowDecoratorStyle
 	 */
-	public abstract void setArrowDecorator(ArrowDecoratorStyle arrowDecoratorStyle);
+	public abstract void setArrowDecorator(
+			ArrowDecoratorStyle arrowDecoratorStyle);
+
 	/**
 	 * Returns the offset of the line
+	 * 
 	 * @return
 	 */
 	public abstract double getOffset();
+
 	/**
 	 * Establishes the offset of the line
+	 * 
 	 * @param offset
 	 */
 	public abstract void setOffset(double offset);

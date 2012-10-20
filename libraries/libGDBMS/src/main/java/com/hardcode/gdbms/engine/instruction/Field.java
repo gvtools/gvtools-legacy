@@ -4,13 +4,12 @@ import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.DataSource;
 import com.hardcode.gdbms.engine.values.Value;
 
-
 /**
  * Clase que representa un campo en un DataSource. La clase por sí sola no
  * identifica al campo, ya que la tabla a la que pertenece el campo viene
  * definida por un índice entero. Esto se debe a que para definir un campo es
  * necesario también un array de tablas sobre las que se aplica dicho índice.
- *
+ * 
  * @author Fernando González Cortés
  */
 public class Field extends AbstractExpression implements Expression {
@@ -22,7 +21,7 @@ public class Field extends AbstractExpression implements Expression {
 	/**
 	 * Indice de la tabla donde se encuentra el campo al que este objeto hace
 	 * referencia
-	 *
+	 * 
 	 * @return
 	 */
 	public int getDataSourceIndex() {
@@ -31,7 +30,7 @@ public class Field extends AbstractExpression implements Expression {
 
 	/**
 	 * Identificador del campo al que este objeto hace referencia
-	 *
+	 * 
 	 * @return
 	 */
 	public int getFieldId() {
@@ -41,7 +40,7 @@ public class Field extends AbstractExpression implements Expression {
 	/**
 	 * Establece el índice dentr de un array de tablas del campo al que este
 	 * objeto hace referencia
-	 *
+	 * 
 	 * @param source
 	 */
 	public void setDataSourceIndex(int source) {
@@ -50,7 +49,7 @@ public class Field extends AbstractExpression implements Expression {
 
 	/**
 	 * Establece el identificador al que este objeto hace referencia
-	 *
+	 * 
 	 * @param i
 	 */
 	public void setFieldId(int i) {
@@ -60,7 +59,7 @@ public class Field extends AbstractExpression implements Expression {
 	/**
 	 * Obtiene la colección de tablas sobre las que los índices dataSourceIndex
 	 * y fieldId son válidos
-	 *
+	 * 
 	 * @return
 	 */
 	public DataSource[] getTables() {
@@ -70,7 +69,7 @@ public class Field extends AbstractExpression implements Expression {
 	/**
 	 * Establece la colección de tablas sobre las que se definen los índices
 	 * dataSourceIndex y fieldId
-	 *
+	 * 
 	 * @param sources
 	 */
 	public void setTables(DataSource[] sources) {
@@ -80,9 +79,10 @@ public class Field extends AbstractExpression implements Expression {
 	/**
 	 * Devuelve el índice que ocupa el campo en la colección de los campos de
 	 * todas las tablas del array tables.
-	 *
+	 * 
 	 * @return Índice absoluto del campo
-	 * @throws ReadDriverException TODO
+	 * @throws ReadDriverException
+	 *             TODO
 	 */
 	public int getAbsoluteIndex() throws ReadDriverException {
 		int acum = 0;
@@ -101,16 +101,16 @@ public class Field extends AbstractExpression implements Expression {
 	 */
 	public Value evaluate(long row) throws EvaluationException {
 		try {
-            return dataSource.getFieldValue(row, getAbsoluteIndex());
-        } catch (ReadDriverException e) {
-            throw new EvaluationException();
-        }
+			return dataSource.getFieldValue(row, getAbsoluteIndex());
+		} catch (ReadDriverException e) {
+			throw new EvaluationException();
+		}
 	}
 
 	/**
-	 * Obtiene la fuente de datos sobre la que obtiene su valor este campo en
-	 * su método evaluate
-	 *
+	 * Obtiene la fuente de datos sobre la que obtiene su valor este campo en su
+	 * método evaluate
+	 * 
 	 * @return
 	 */
 	public DataSource getDataSource() {
@@ -120,7 +120,7 @@ public class Field extends AbstractExpression implements Expression {
 	/**
 	 * Establece la fuente de datos sobre la que obtiene su valor este campo en
 	 * su método evaluate
-	 *
+	 * 
 	 * @param source
 	 */
 	public void setDataSource(DataSource source) {

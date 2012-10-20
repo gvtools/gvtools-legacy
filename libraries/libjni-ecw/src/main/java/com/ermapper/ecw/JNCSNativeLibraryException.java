@@ -5,19 +5,15 @@
 
 package com.ermapper.ecw;
 
-
 // Referenced classes of package com.ermapper.ecw:
 //            JNCSException
 
-public class JNCSNativeLibraryException extends JNCSException
-{
+public class JNCSNativeLibraryException extends JNCSException {
 
-    public JNCSNativeLibraryException()
-    {
-    }
+	public JNCSNativeLibraryException() {
+	}
 
-    public JNCSNativeLibraryException(String s)
-    {
-        super(s);
-    }
+	public JNCSNativeLibraryException(String s) {
+		super(s);
+	}
 }

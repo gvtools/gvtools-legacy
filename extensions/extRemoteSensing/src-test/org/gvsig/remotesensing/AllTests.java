@@ -12,17 +12,17 @@ import org.gvsig.remotesensing.processtest.TPCStatisticProcess;
 import org.gvsig.remotesensing.processtest.TTasseledCapProcess;
 
 public class AllTests extends TestCase {
-	
+
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for extRemoteSensing");
-		//$JUnit-BEGIN$
+		// $JUnit-BEGIN$
 		suite.addTestSuite(TGridMathProcessTest.class);
 		suite.addTestSuite(TPCStatisticProcess.class);
 		suite.addTestSuite(TPCImageProcess.class);
 		suite.addTestSuite(TTasseledCapProcess.class);
 		suite.addTestSuite(TClassificationProcessTest.class);
 		suite.addTestSuite(DecisionTreesTest.class);
-		//$JUnit-END$
+		// $JUnit-END$
 		return suite;
 	}
 

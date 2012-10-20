@@ -41,11 +41,10 @@
 
 package org.gvsig.graph.core;
 
-
 public interface INetSolver {
 
 	public void setNetwork(Network net);
-	
+
 	public Network getNetwork();
 
 }

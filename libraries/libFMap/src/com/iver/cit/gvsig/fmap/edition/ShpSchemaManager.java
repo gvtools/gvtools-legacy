@@ -98,56 +98,62 @@ public class ShpSchemaManager implements ISchemaManager {
 
 	/**
 	 * Se le pasa el path absoluto al shp file. Pero creo que lo correcto sería
-	 * pasarle el path al directorio, y luego funcionar con create, remove o rename
-	 * sobre ese directorio por defecto (por hacerlo como MapObjects, creo).
+	 * pasarle el path al directorio, y luego funcionar con create, remove o
+	 * rename sobre ese directorio por defecto (por hacerlo como MapObjects,
+	 * creo).
+	 * 
 	 * @param shpPath
 	 */
-	public ShpSchemaManager(String shpPath)
-	{
+	public ShpSchemaManager(String shpPath) {
 		shpFile = new File(shpPath);
 	}
+
 	public void createSchema(ITableDefinition layerDefinition)
 			throws SchemaEditionException {
 		SHPLayerDefinition definition = (SHPLayerDefinition) layerDefinition;
 		try {
-		File shpFile = new File(definition.getShpPath());
-		ShpWriter shpWriter = (ShpWriter) LayerFactory.getWM().getWriter(
-				"Shape Writer");
-		shpWriter.setFile(shpFile);
+			File shpFile = new File(definition.getShpPath());
+			ShpWriter shpWriter = (ShpWriter) LayerFactory.getWM().getWriter(
+					"Shape Writer");
+			shpWriter.setFile(shpFile);
 
 			shpWriter.initialize(definition);
 			shpWriter.preProcess();
 		} catch (InitializeWriterException e) {
-			throw new SchemaEditionException("Shape Writer",e);
+			throw new SchemaEditionException("Shape Writer", e);
 		} catch (StartWriterVisitorException e) {
-			throw new SchemaEditionException("Shape Writer",e);
+			throw new SchemaEditionException("Shape Writer", e);
 		} catch (DriverLoadException e) {
-			throw new SchemaEditionException("Shape Writer",e);
+			throw new SchemaEditionException("Shape Writer", e);
 		}
 	}
 
 	public void removeSchema(String name) throws SchemaEditionException {
 		if (!shpFile.delete())
-			throw new SchemaEditionException("SHP",null);
+			throw new SchemaEditionException("SHP", null);
 
-		String strFichshx = shpFile.getAbsolutePath().replaceAll("\\.shp", ".shx");
+		String strFichshx = shpFile.getAbsolutePath().replaceAll("\\.shp",
+				".shx");
 		String shxPath = strFichshx.replaceAll("\\.SHP", ".SHX");
 		if (!new File(shxPath).delete())
-			throw new SchemaEditionException("SHP",null);
+			throw new SchemaEditionException("SHP", null);
 
-		String strFichDbf = shpFile.getAbsolutePath().replaceAll("\\.shp", ".dbf");
+		String strFichDbf = shpFile.getAbsolutePath().replaceAll("\\.shp",
+				".dbf");
 		String dbfPath = strFichDbf.replaceAll("\\.SHP", ".DBF");
 		if (!new File(dbfPath).delete())
-			throw new SchemaEditionException("SHP",null);
+			throw new SchemaEditionException("SHP", null);
 	}
 
 	public void renameSchema(String antName, String newName) {
-		String strFichshx = shpFile.getAbsolutePath().replaceAll("\\.shp", ".shx");
+		String strFichshx = shpFile.getAbsolutePath().replaceAll("\\.shp",
+				".shx");
 		String shxPath = strFichshx.replaceAll("\\.SHP", ".SHX");
 		File shxF = new File(shxPath);
 		shxF.renameTo(new File(antName + ".shx"));
 
-		String strFichDbf = shpFile.getAbsolutePath().replaceAll("\\.shp", ".dbf");
+		String strFichDbf = shpFile.getAbsolutePath().replaceAll("\\.shp",
+				".dbf");
 		String dbfPath = strFichDbf.replaceAll("\\.SHP", ".DBF");
 		File dbfF = new File(dbfPath);
 		dbfF.renameTo(new File(antName + ".dbf"));

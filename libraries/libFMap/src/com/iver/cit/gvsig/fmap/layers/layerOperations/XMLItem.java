@@ -6,7 +6,7 @@ import org.xml.sax.SAXException;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 
 public interface XMLItem {
-		public void parse(ContentHandler handler) throws SAXException;
-		public FLayer getLayer();
-}
+	public void parse(ContentHandler handler) throws SAXException;
 
+	public FLayer getLayer();
+}

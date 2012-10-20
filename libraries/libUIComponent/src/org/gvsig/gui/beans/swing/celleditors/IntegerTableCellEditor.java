@@ -55,36 +55,39 @@ import org.gvsig.gui.beans.swing.cellrenderers.NumberTableCellRenderer;
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class IntegerTableCellEditor implements TableCellEditor {
-	private static NumberTableCellRenderer renderer = new NumberTableCellRenderer(true, false);
+	private static NumberTableCellRenderer renderer = new NumberTableCellRenderer(
+			true, false);
 	private ArrayList listeners = new ArrayList();
 
-	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-		if (value == null) return null;
-		return renderer.getTableCellRendererComponent(table, value, isSelected, false, row, column);
+	public Component getTableCellEditorComponent(JTable table, Object value,
+			boolean isSelected, int row, int column) {
+		if (value == null)
+			return null;
+		return renderer.getTableCellRendererComponent(table, value, isSelected,
+				false, row, column);
 	}
-
 
 	public void cancelCellEditing() {
 		for (int i = 0; i < listeners.size(); i++) {
-	        CellEditorListener l = (CellEditorListener) listeners.get(i);
-	        ChangeEvent evt = new ChangeEvent(this);
-	        l.editingCanceled(evt);
-	    }
+			CellEditorListener l = (CellEditorListener) listeners.get(i);
+			ChangeEvent evt = new ChangeEvent(this);
+			l.editingCanceled(evt);
+		}
 	}
 
 	public boolean stopCellEditing() {
 		for (int i = 0; i < listeners.size(); i++) {
-            CellEditorListener l = (CellEditorListener) listeners.get(i);
-            ChangeEvent evt = new ChangeEvent(this);
-            l.editingStopped(evt);
-        }
-        return true;
+			CellEditorListener l = (CellEditorListener) listeners.get(i);
+			ChangeEvent evt = new ChangeEvent(this);
+			l.editingStopped(evt);
+		}
+		return true;
 	}
 
-
 	public Object getCellEditorValue() {
-		if (renderer!=null && renderer.getIncrementalNumberField()!=null)
-			return new Integer(renderer.getIncrementalNumberField().getInteger());
+		if (renderer != null && renderer.getIncrementalNumberField() != null)
+			return new Integer(renderer.getIncrementalNumberField()
+					.getInteger());
 		return null;
 	}
 

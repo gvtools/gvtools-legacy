@@ -40,24 +40,25 @@
  */
 package com.iver.cit.gvsig.fmap.rendering;
 
-
 /**
  * Abstract class that implements the interface for legends composed by
- * classified symbols.It will have two methods that will be executed
- * depending on the action that had been done with the legend (addition
- * of a new symbol or clear the legend).
- *
+ * classified symbols.It will have two methods that will be executed depending
+ * on the action that had been done with the legend (addition of a new symbol or
+ * clear the legend).
+ * 
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
-public abstract class AbstractClassifiedVectorLegend extends AbstractLegend implements IClassifiedVectorLegend {
+public abstract class AbstractClassifiedVectorLegend extends AbstractLegend
+		implements IClassifiedVectorLegend {
 	private String[] fieldNames;
 	private int[] fieldTypes;
 	private ZSort zSort;
 
 	/**
-	 * Looks for a change in a classified symbol of a legend. To perform
-	 * it, the Array of LegendListeners is scaned and when the corresponding
-	 * listener is true, the method is invoked and the change will be done.
+	 * Looks for a change in a classified symbol of a legend. To perform it, the
+	 * Array of LegendListeners is scaned and when the corresponding listener is
+	 * true, the method is invoked and the change will be done.
+	 * 
 	 * @param event
 	 */
 	public void fireClassifiedSymbolChangeEvent(SymbolLegendEvent event) {
@@ -66,9 +67,11 @@ public abstract class AbstractClassifiedVectorLegend extends AbstractLegend impl
 			listeners[i].symbolChanged(event);
 		}
 	}
+
 	/**
-	 * Looks for a change in a legend of classified symbols. In this case
-	 * if the specific legend is cleared.
+	 * Looks for a change in a legend of classified symbols. In this case if the
+	 * specific legend is cleared.
+	 * 
 	 * @param event
 	 */
 	public void fireLegendClearEvent(LegendClearEvent event) {
@@ -81,7 +84,6 @@ public abstract class AbstractClassifiedVectorLegend extends AbstractLegend impl
 		return fieldNames;
 	}
 
-
 	public void setClassifyingFieldNames(String[] fieldNames) {
 		this.fieldNames = fieldNames;
 	}
@@ -91,7 +93,7 @@ public abstract class AbstractClassifiedVectorLegend extends AbstractLegend impl
 	}
 
 	public void setClassifyingFieldTypes(int[] fieldTypes) {
-		this.fieldTypes =  fieldTypes;
+		this.fieldTypes = fieldTypes;
 	}
 
 	public ZSort getZSort() {
@@ -105,7 +107,6 @@ public abstract class AbstractClassifiedVectorLegend extends AbstractLegend impl
 		this.zSort = zSort;
 		addLegendListener(zSort);
 	}
-
 
 	public boolean isSuitableForShapeType(int shapeType) {
 		return getShapeType() == shapeType;

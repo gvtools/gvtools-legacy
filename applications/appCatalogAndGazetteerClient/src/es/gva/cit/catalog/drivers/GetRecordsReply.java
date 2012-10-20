@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import es.gva.cit.catalog.metadataxml.XMLNode;
 import es.gva.cit.catalog.schemas.Record;
 import es.gva.cit.catalog.schemas.RecordFactory;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -61,45 +62,47 @@ import es.gva.cit.catalog.schemas.RecordFactory;
 public class GetRecordsReply {
 	private ArrayList records = null;
 	private int numRecords = 0;
-	
-	public GetRecordsReply(int numRecords){
+
+	public GetRecordsReply(int numRecords) {
 		this.numRecords = numRecords;
 		records = new ArrayList();
 	}
-	
+
 	/**
 	 * Add a new record
+	 * 
 	 * @param record
-	 * rRecord to add
+	 *            rRecord to add
 	 */
-	public void addRecord(Record record){
+	public void addRecord(Record record) {
 		records.add(record);
 	}
-	
+
 	/**
 	 * Add a new record
+	 * 
 	 * @param uri
-	 * Server uri
+	 *            Server uri
 	 * @param node
-	 * XML node
+	 *            XML node
 	 */
-	public void addRecord(URI uri, XMLNode node){
+	public void addRecord(URI uri, XMLNode node) {
 		Record record = RecordFactory.createRecord(uri, node);
-		records.add(record);		
+		records.add(record);
 	}
-	
+
 	/**
 	 * Gets a record that it is in a concrete position
+	 * 
 	 * @param index
-	 * Record position
-	 * @return
-	 * A record
+	 *            Record position
+	 * @return A record
 	 */
-	public Record getRecordAt(int index){
-		if (index >= records.size()){
+	public Record getRecordAt(int index) {
+		if (index >= records.size()) {
 			return null;
 		}
-		return (Record)records.get(index);
+		return (Record) records.get(index);
 	}
 
 	/**
@@ -108,19 +111,20 @@ public class GetRecordsReply {
 	public int getRecordsNumber() {
 		return numRecords;
 	}
-	
+
 	/**
 	 * @return the numRecords
 	 */
 	public int getRetrievedRecordsNumber() {
 		return records.size();
 	}
-	
+
 	/**
-	 * @param numRecords the numRecords to set
+	 * @param numRecords
+	 *            the numRecords to set
 	 */
 	public void setNumRecords(int numRecords) {
 		this.numRecords = numRecords;
 	}
-	
+
 }

@@ -51,7 +51,7 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 /**
  * Extensión que gestiona la partición de geometrías en edición.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class BreakExtension extends Extension {
@@ -64,18 +64,18 @@ public class BreakExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
-		breakCADTool=new BreakCADTool();
-		CADExtension.addCADTool("_break",breakCADTool);
-		
+		breakCADTool = new BreakCADTool();
+		CADExtension.addCADTool("_break", breakCADTool);
+
 		registerIcons();
 	}
-	
-	private void registerIcons(){
+
+	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"edition-geometry-break",
-				this.getClass().getClassLoader().getResource("images/Break.png")
-			);
-		
+				this.getClass().getClassLoader()
+						.getResource("images/Break.png"));
+
 	}
 
 	/**
@@ -84,8 +84,8 @@ public class BreakExtension extends Extension {
 	public void execute(String s) {
 		CADExtension.initFocus();
 		if (s.equals("_break")) {
-        	CADExtension.setCADTool(s,true);
-        }
+			CADExtension.setCADTool(s, true);
+		}
 		CADExtension.getEditionManager().setMapControl(mapControl);
 		CADExtension.getCADToolAdapter().configureMenu();
 	}
@@ -99,19 +99,19 @@ public class BreakExtension extends Extension {
 			if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE) {
 				view = (View) PluginServices.getMDIManager().getActiveWindow();
 				mapControl = view.getMapControl();
-				EditionManager em=CADExtension.getEditionManager();
-				if (em.getActiveLayerEdited()==null)
-						return false;
-				FLyrVect lv=(FLyrVect)em.getActiveLayerEdited().getLayer();
-
-				if (lv.getRecordset().getSelection().cardinality()!=1)
+				EditionManager em = CADExtension.getEditionManager();
+				if (em.getActiveLayerEdited() == null)
 					return false;
-				if (breakCADTool.isApplicable(lv.getShapeType())){
+				FLyrVect lv = (FLyrVect) em.getActiveLayerEdited().getLayer();
+
+				if (lv.getRecordset().getSelection().cardinality() != 1)
+					return false;
+				if (breakCADTool.isApplicable(lv.getShapeType())) {
 					return true;
 				}
 			}
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 		return false;
 	}

@@ -26,18 +26,22 @@ import java.io.File;
 
 import org.gvsig.tools.backup.exceptions.BackupException;
 
-
 /**
- * <p>A tagging interface that all file backups must implement.</p>
- *
+ * <p>
+ * A tagging interface that all file backups must implement.
+ * </p>
+ * 
  * @author Jose Ignacio Yarza (jiyarza@opensistemas.com)
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public interface BackupGenerator {
 	/**
-	 * <p>Performs a backup of <code>source</code>.</p>
+	 * <p>
+	 * Performs a backup of <code>source</code>.
+	 * </p>
 	 * 
-	 * @param source the source file
+	 * @param source
+	 *            the source file
 	 */
 	public void backup(File source) throws BackupException;
 }

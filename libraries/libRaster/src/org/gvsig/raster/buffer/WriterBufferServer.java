@@ -22,37 +22,37 @@ import org.gvsig.raster.dataset.IBuffer;
 import org.gvsig.raster.dataset.IDataWriter;
 import org.gvsig.raster.process.RasterTask;
 import org.gvsig.raster.process.RasterTaskQueue;
+
 /**
  * <code>WriterBufferServer</code> sirve los datos desde un IBuffer para el
  * driver de escritura. El driver de escritura que va a volcar un
- * <code>IBuffer</code> a imagen en disco va solicitando los datos por bloques
- * a medida que va salvando los anteriores. Esta clase es la encargada de hacer
- * la división en bloques del buffer a volcar e ir sirviendolos a medida que el
- * driver pide más datos.
- * </P>
+ * <code>IBuffer</code> a imagen en disco va solicitando los datos por bloques a
+ * medida que va salvando los anteriores. Esta clase es la encargada de hacer la
+ * división en bloques del buffer a volcar e ir sirviendolos a medida que el
+ * driver pide más datos. </P>
  * <P>
- * Implementa el interfaz <code>IDataWriter</code> que es el que define
- * métodos necesarios para el driver. Además es una tarea incrementable por lo
- * que deberá implementar el interfaz <code>IIncrementable</code> para poder
- * mostrar el dialogo de incremento de tarea.
+ * Implementa el interfaz <code>IDataWriter</code> que es el que define métodos
+ * necesarios para el driver. Además es una tarea incrementable por lo que
+ * deberá implementar el interfaz <code>IIncrementable</code> para poder mostrar
+ * el dialogo de incremento de tarea.
  * </P>
- *
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  * @version 27/04/2007
  */
 public class WriterBufferServer implements IDataWriter {
-	private IBuffer      buffer      = null;
-	private IBuffer      alphaBuffer = null;
-	private int          row         = 0;
+	private IBuffer buffer = null;
+	private IBuffer alphaBuffer = null;
+	private int row = 0;
 	/**
 	 * Tamaño de bloque. Este se asignará en la primera petición
 	 */
-	private int          block       = 0;
+	private int block = 0;
 
-	private double       percent     = 0;
-	private double       increment   = 0;
-	private int          nBand       = 0;
+	private double percent = 0;
+	private double increment = 0;
+	private int nBand = 0;
 
 	/**
 	 * Crea un nuevo <code>WriterBufferServer</code>
@@ -62,6 +62,7 @@ public class WriterBufferServer implements IDataWriter {
 
 	/**
 	 * Crea un nuevo <code>WriterBufferServer</code> con el buffer de datos.
+	 * 
 	 * @param buffer
 	 */
 	public WriterBufferServer(IBuffer buffer) {
@@ -70,9 +71,11 @@ public class WriterBufferServer implements IDataWriter {
 
 	/**
 	 * Asigna el buffer de datos e inicializa variables de
+	 * 
 	 * @param buffer
-	 * @param nband Si es menor que cero sirve datos de todas las bandas. Si es
-	 * mayor que cero sirve datos de la banda indicada por el valor.
+	 * @param nband
+	 *            Si es menor que cero sirve datos de todas las bandas. Si es
+	 *            mayor que cero sirve datos de la banda indicada por el valor.
 	 */
 	public void setBuffer(IBuffer buffer, int nband) {
 		this.buffer = buffer;
@@ -85,6 +88,7 @@ public class WriterBufferServer implements IDataWriter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.IDataWriter#readARGBData(int, int, int)
 	 */
 	public int[] readARGBData(int sizeX, int sizeY, int nBand) {
@@ -93,53 +97,62 @@ public class WriterBufferServer implements IDataWriter {
 
 	/**
 	 * Acciones de inicialización para la lectura de de un bloque
-	 * @param sizeY Tamaño en Y del bloque
+	 * 
+	 * @param sizeY
+	 *            Tamaño en Y del bloque
 	 */
 	private void initRead(int sizeY) {
-		//Si es la primera linea se asigna el tamaño de bloque y el incremento
+		// Si es la primera linea se asigna el tamaño de bloque y el incremento
 		if (row == 0) {
 			block = sizeY;
-			//nblocks = (int)Math.ceil(((double) buffer.getHeight() / (double) sizeY));
+			// nblocks = (int)Math.ceil(((double) buffer.getHeight() / (double)
+			// sizeY));
 			increment = 100D / ((double) buffer.getHeight() / (double) sizeY);
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.IDataWriter#readByteData(int, int)
 	 */
-	public byte[][] readByteData(int sizeX, int sizeY) throws InterruptedException {
-		RasterTask task = RasterTaskQueue.get(Thread.currentThread().toString());
+	public byte[][] readByteData(int sizeX, int sizeY)
+			throws InterruptedException {
+		RasterTask task = RasterTaskQueue
+				.get(Thread.currentThread().toString());
 		initRead(sizeY);
 		percent += increment;
 		int len = buffer.getWidth() * sizeY;
 		int nbands = (nBand < 0) ? buffer.getBandCount() : 1;
 		byte[][] b;
-		if (alphaBuffer != null) 
+		if (alphaBuffer != null)
 			b = new byte[nbands + 1][len];
 		else
 			b = new byte[nbands][len];
-		if(nBand < 0) {
+		if (nBand < 0) {
 			for (int iBand = 0; iBand < nbands; iBand++)
 				for (int j = row; j < (row + sizeY); j++) {
 					for (int i = 0; i < buffer.getWidth(); i++)
-						b[iBand][(j % block) * buffer.getWidth() + i] = buffer.getElemByte(j, i, iBand);
-					if(task.getEvent() != null)
+						b[iBand][(j % block) * buffer.getWidth() + i] = buffer
+								.getElemByte(j, i, iBand);
+					if (task.getEvent() != null)
 						task.manageEvent(task.getEvent());
 				}
 		} else {
 			for (int j = row; j < (row + sizeY); j++) {
 				for (int i = 0; i < buffer.getWidth(); i++)
-					b[0][(j % block) * buffer.getWidth() + i] = buffer.getElemByte(j, i, nBand);
-				if(task.getEvent() != null)
+					b[0][(j % block) * buffer.getWidth() + i] = buffer
+							.getElemByte(j, i, nBand);
+				if (task.getEvent() != null)
 					task.manageEvent(task.getEvent());
 			}
 		}
 		if (alphaBuffer != null) {
 			for (int j = row; j < (row + sizeY); j++) {
-				for (int i = 0; i < alphaBuffer.getWidth(); i++) 
-					b[nbands][(j % block) * alphaBuffer.getWidth() + i] = alphaBuffer.getElemByte(j, i, 0);
-				if(task.getEvent() != null)
+				for (int i = 0; i < alphaBuffer.getWidth(); i++)
+					b[nbands][(j % block) * alphaBuffer.getWidth() + i] = alphaBuffer
+							.getElemByte(j, i, 0);
+				if (task.getEvent() != null)
 					task.manageEvent(task.getEvent());
 			}
 		}
@@ -149,28 +162,33 @@ public class WriterBufferServer implements IDataWriter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.IDataWriter#readShortData(int, int)
 	 */
-	public short[][] readShortData(int sizeX, int sizeY) throws InterruptedException {
-		RasterTask task = RasterTaskQueue.get(Thread.currentThread().toString());
+	public short[][] readShortData(int sizeX, int sizeY)
+			throws InterruptedException {
+		RasterTask task = RasterTaskQueue
+				.get(Thread.currentThread().toString());
 		initRead(sizeY);
 		percent += increment;
 		int len = buffer.getWidth() * sizeY;
 		int nbands = (nBand < 0) ? buffer.getBandCount() : 1;
 		short[][] b = new short[nbands][len];
-		if(nBand < 0) {
+		if (nBand < 0) {
 			for (int iBand = 0; iBand < nbands; iBand++)
 				for (int j = row; j < (row + sizeY); j++) {
 					for (int i = 0; i < buffer.getWidth(); i++)
-						b[iBand][(j % block) * buffer.getWidth() + i] = buffer.getElemShort(j, i, iBand);
-					if(task.getEvent() != null)
+						b[iBand][(j % block) * buffer.getWidth() + i] = buffer
+								.getElemShort(j, i, iBand);
+					if (task.getEvent() != null)
 						task.manageEvent(task.getEvent());
 				}
 		} else {
 			for (int j = row; j < (row + sizeY); j++) {
 				for (int i = 0; i < buffer.getWidth(); i++)
-					b[0][(j % block) * buffer.getWidth() + i] = buffer.getElemShort(j, i, nBand);
-				if(task.getEvent() != null)
+					b[0][(j % block) * buffer.getWidth() + i] = buffer
+							.getElemShort(j, i, nBand);
+				if (task.getEvent() != null)
 					task.manageEvent(task.getEvent());
 			}
 		}
@@ -180,28 +198,33 @@ public class WriterBufferServer implements IDataWriter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.IDataWriter#readIntData(int, int)
 	 */
-	public int[][] readIntData(int sizeX, int sizeY) throws InterruptedException {
-		RasterTask task = RasterTaskQueue.get(Thread.currentThread().toString());
+	public int[][] readIntData(int sizeX, int sizeY)
+			throws InterruptedException {
+		RasterTask task = RasterTaskQueue
+				.get(Thread.currentThread().toString());
 		initRead(sizeY);
 		percent += increment;
 		int len = buffer.getWidth() * sizeY;
 		int nbands = (nBand < 0) ? buffer.getBandCount() : 1;
 		int[][] b = new int[nbands][len];
-		if(nBand < 0) {
+		if (nBand < 0) {
 			for (int iBand = 0; iBand < buffer.getBandCount(); iBand++)
 				for (int j = row; j < (row + sizeY); j++) {
 					for (int i = 0; i < buffer.getWidth(); i++)
-						b[iBand][(j % block) * buffer.getWidth() + i] = buffer.getElemInt(j, i, iBand);
-					if(task.getEvent() != null)
+						b[iBand][(j % block) * buffer.getWidth() + i] = buffer
+								.getElemInt(j, i, iBand);
+					if (task.getEvent() != null)
 						task.manageEvent(task.getEvent());
 				}
 		} else {
 			for (int j = row; j < (row + sizeY); j++) {
 				for (int i = 0; i < buffer.getWidth(); i++)
-					b[0][(j % block) * buffer.getWidth() + i] = buffer.getElemInt(j, i, nBand);
-				if(task.getEvent() != null)
+					b[0][(j % block) * buffer.getWidth() + i] = buffer
+							.getElemInt(j, i, nBand);
+				if (task.getEvent() != null)
 					task.manageEvent(task.getEvent());
 			}
 		}
@@ -211,73 +234,84 @@ public class WriterBufferServer implements IDataWriter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.IDataWriter#readFloatData(int, int)
 	 */
-	public float[][] readFloatData(int sizeX, int sizeY) throws InterruptedException {
-		RasterTask task = RasterTaskQueue.get(Thread.currentThread().toString());
+	public float[][] readFloatData(int sizeX, int sizeY)
+			throws InterruptedException {
+		RasterTask task = RasterTaskQueue
+				.get(Thread.currentThread().toString());
 		initRead(sizeY);
 		percent += increment;
 		int len = buffer.getWidth() * sizeY;
 		int nbands = (nBand < 0) ? buffer.getBandCount() : 1;
 		float[][] b = null;
-		if (alphaBuffer != null) 
+		if (alphaBuffer != null)
 			b = new float[nbands + 1][len];
 		else
 			b = new float[nbands][len];
-		if(nBand < 0) {
+		if (nBand < 0) {
 			for (int iBand = 0; iBand < buffer.getBandCount(); iBand++)
 				for (int j = row; j < (row + sizeY); j++) {
 					for (int i = 0; i < buffer.getWidth(); i++)
-						b[iBand][(j % block) * buffer.getWidth() + i] = buffer.getElemFloat(j, i, iBand);
-					if(task.getEvent() != null)
+						b[iBand][(j % block) * buffer.getWidth() + i] = buffer
+								.getElemFloat(j, i, iBand);
+					if (task.getEvent() != null)
 						task.manageEvent(task.getEvent());
 				}
 		} else {
 			for (int j = row; j < (row + sizeY); j++) {
 				for (int i = 0; i < buffer.getWidth(); i++)
-					b[0][(j % block) * buffer.getWidth() + i] = buffer.getElemFloat(j, i, nBand);
-				if(task.getEvent() != null)
+					b[0][(j % block) * buffer.getWidth() + i] = buffer
+							.getElemFloat(j, i, nBand);
+				if (task.getEvent() != null)
 					task.manageEvent(task.getEvent());
 			}
 		}
-		
+
 		if (alphaBuffer != null) {
 			for (int j = row; j < (row + sizeY); j++) {
-				for (int i = 0; i < alphaBuffer.getWidth(); i++) 
-					b[nbands][(j % block) * alphaBuffer.getWidth() + i] = alphaBuffer.getElemByte(j, i, 0);
-				if(task.getEvent() != null)
+				for (int i = 0; i < alphaBuffer.getWidth(); i++)
+					b[nbands][(j % block) * alphaBuffer.getWidth() + i] = alphaBuffer
+							.getElemByte(j, i, 0);
+				if (task.getEvent() != null)
 					task.manageEvent(task.getEvent());
 			}
 		}
-		
+
 		row += sizeY;
 		return b;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.IDataWriter#readDoubleData(int, int)
 	 */
-	public double[][] readDoubleData(int sizeX, int sizeY) throws InterruptedException {
-		RasterTask task = RasterTaskQueue.get(Thread.currentThread().toString());
+	public double[][] readDoubleData(int sizeX, int sizeY)
+			throws InterruptedException {
+		RasterTask task = RasterTaskQueue
+				.get(Thread.currentThread().toString());
 		initRead(sizeY);
 		percent += increment;
 		int len = buffer.getWidth() * sizeY;
 		int nbands = (nBand < 0) ? buffer.getBandCount() : 1;
 		double[][] b = new double[nbands][len];
-		if(nBand < 0) {
+		if (nBand < 0) {
 			for (int iBand = 0; iBand < buffer.getBandCount(); iBand++)
 				for (int j = row; j < (row + sizeY); j++) {
 					for (int i = 0; i < buffer.getWidth(); i++)
-						b[iBand][(j % block) * buffer.getWidth() + i] = buffer.getElemDouble(j, i, iBand);
-					if(task.getEvent() != null)
+						b[iBand][(j % block) * buffer.getWidth() + i] = buffer
+								.getElemDouble(j, i, iBand);
+					if (task.getEvent() != null)
 						task.manageEvent(task.getEvent());
 				}
 		} else {
 			for (int j = row; j < (row + sizeY); j++) {
 				for (int i = 0; i < buffer.getWidth(); i++)
-					b[0][(j % block) * buffer.getWidth() + i] = buffer.getElemDouble(j, i, nBand);
-				if(task.getEvent() != null)
+					b[0][(j % block) * buffer.getWidth() + i] = buffer
+							.getElemDouble(j, i, nBand);
+				if (task.getEvent() != null)
 					task.manageEvent(task.getEvent());
 			}
 		}
@@ -287,14 +321,16 @@ public class WriterBufferServer implements IDataWriter {
 
 	/**
 	 * Obtiene el porcentaje de incremento de la lectura de datos
+	 * 
 	 * @return
 	 */
 	public int getPercent() {
-		return Math.min((int)percent, 100);
+		return Math.min((int) percent, 100);
 	}
 
 	/**
-	 * @param alphaBuffer the alphaBuffer to set
+	 * @param alphaBuffer
+	 *            the alphaBuffer to set
 	 */
 	public void setAlphaBuffer(IBuffer alphaBuffer) {
 		this.alphaBuffer = alphaBuffer;

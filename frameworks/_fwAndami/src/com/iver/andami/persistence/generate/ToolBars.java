@@ -47,8 +47,8 @@
  */
 package com.iver.andami.persistence.generate;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
 import java.util.Vector;
@@ -59,210 +59,201 @@ import org.exolab.castor.xml.Unmarshaller;
 /**
  * Class ToolBars.
  * 
- * @version $Revision: 5275 $ $Date: 2006-05-19 08:41:50 +0200 (Fri, 19 May 2006) $
+ * @version $Revision: 5275 $ $Date: 2006-05-19 08:41:50 +0200 (Fri, 19 May
+ *          2006) $
  */
 public class ToolBars implements java.io.Serializable {
 
+	// --------------------------/
+	// - Class/Member Variables -/
+	// --------------------------/
 
-      //--------------------------/
-     //- Class/Member Variables -/
-    //--------------------------/
+	/**
+	 * Field _toolBarList
+	 */
+	private java.util.Vector _toolBarList;
 
-    /**
-     * Field _toolBarList
-     */
-    private java.util.Vector _toolBarList;
+	// ----------------/
+	// - Constructors -/
+	// ----------------/
 
+	public ToolBars() {
+		super();
+		_toolBarList = new Vector();
+	} // -- com.iver.andami.persistence.generate.ToolBars()
 
-      //----------------/
-     //- Constructors -/
-    //----------------/
+	// -----------/
+	// - Methods -/
+	// -----------/
 
-    public ToolBars() {
-        super();
-        _toolBarList = new Vector();
-    } //-- com.iver.andami.persistence.generate.ToolBars()
+	/**
+	 * Method addToolBar
+	 * 
+	 * @param vToolBar
+	 */
+	public void addToolBar(com.iver.andami.persistence.generate.ToolBar vToolBar)
+			throws java.lang.IndexOutOfBoundsException {
+		_toolBarList.addElement(vToolBar);
+	} // -- void addToolBar(com.iver.andami.persistence.generate.ToolBar)
 
+	/**
+	 * Method addToolBar
+	 * 
+	 * @param index
+	 * @param vToolBar
+	 */
+	public void addToolBar(int index,
+			com.iver.andami.persistence.generate.ToolBar vToolBar)
+			throws java.lang.IndexOutOfBoundsException {
+		_toolBarList.insertElementAt(vToolBar, index);
+	} // -- void addToolBar(int, com.iver.andami.persistence.generate.ToolBar)
 
-      //-----------/
-     //- Methods -/
-    //-----------/
+	/**
+	 * Method enumerateToolBar
+	 */
+	public java.util.Enumeration enumerateToolBar() {
+		return _toolBarList.elements();
+	} // -- java.util.Enumeration enumerateToolBar()
 
-    /**
-     * Method addToolBar
-     * 
-     * @param vToolBar
-     */
-    public void addToolBar(com.iver.andami.persistence.generate.ToolBar vToolBar)
-        throws java.lang.IndexOutOfBoundsException
-    {
-        _toolBarList.addElement(vToolBar);
-    } //-- void addToolBar(com.iver.andami.persistence.generate.ToolBar) 
+	/**
+	 * Method getToolBar
+	 * 
+	 * @param index
+	 */
+	public com.iver.andami.persistence.generate.ToolBar getToolBar(int index)
+			throws java.lang.IndexOutOfBoundsException {
+		// -- check bounds for index
+		if ((index < 0) || (index > _toolBarList.size())) {
+			throw new IndexOutOfBoundsException();
+		}
 
-    /**
-     * Method addToolBar
-     * 
-     * @param index
-     * @param vToolBar
-     */
-    public void addToolBar(int index, com.iver.andami.persistence.generate.ToolBar vToolBar)
-        throws java.lang.IndexOutOfBoundsException
-    {
-        _toolBarList.insertElementAt(vToolBar, index);
-    } //-- void addToolBar(int, com.iver.andami.persistence.generate.ToolBar) 
+		return (com.iver.andami.persistence.generate.ToolBar) _toolBarList
+				.elementAt(index);
+	} // -- com.iver.andami.persistence.generate.ToolBar getToolBar(int)
 
-    /**
-     * Method enumerateToolBar
-     */
-    public java.util.Enumeration enumerateToolBar()
-    {
-        return _toolBarList.elements();
-    } //-- java.util.Enumeration enumerateToolBar() 
+	/**
+	 * Method getToolBar
+	 */
+	public com.iver.andami.persistence.generate.ToolBar[] getToolBar() {
+		int size = _toolBarList.size();
+		com.iver.andami.persistence.generate.ToolBar[] mArray = new com.iver.andami.persistence.generate.ToolBar[size];
+		for (int index = 0; index < size; index++) {
+			mArray[index] = (com.iver.andami.persistence.generate.ToolBar) _toolBarList
+					.elementAt(index);
+		}
+		return mArray;
+	} // -- com.iver.andami.persistence.generate.ToolBar[] getToolBar()
 
-    /**
-     * Method getToolBar
-     * 
-     * @param index
-     */
-    public com.iver.andami.persistence.generate.ToolBar getToolBar(int index)
-        throws java.lang.IndexOutOfBoundsException
-    {
-        //-- check bounds for index
-        if ((index < 0) || (index > _toolBarList.size())) {
-            throw new IndexOutOfBoundsException();
-        }
-        
-        return (com.iver.andami.persistence.generate.ToolBar) _toolBarList.elementAt(index);
-    } //-- com.iver.andami.persistence.generate.ToolBar getToolBar(int) 
+	/**
+	 * Method getToolBarCount
+	 */
+	public int getToolBarCount() {
+		return _toolBarList.size();
+	} // -- int getToolBarCount()
 
-    /**
-     * Method getToolBar
-     */
-    public com.iver.andami.persistence.generate.ToolBar[] getToolBar()
-    {
-        int size = _toolBarList.size();
-        com.iver.andami.persistence.generate.ToolBar[] mArray = new com.iver.andami.persistence.generate.ToolBar[size];
-        for (int index = 0; index < size; index++) {
-            mArray[index] = (com.iver.andami.persistence.generate.ToolBar) _toolBarList.elementAt(index);
-        }
-        return mArray;
-    } //-- com.iver.andami.persistence.generate.ToolBar[] getToolBar() 
+	/**
+	 * Method isValid
+	 */
+	public boolean isValid() {
+		try {
+			validate();
+		} catch (org.exolab.castor.xml.ValidationException vex) {
+			return false;
+		}
+		return true;
+	} // -- boolean isValid()
 
-    /**
-     * Method getToolBarCount
-     */
-    public int getToolBarCount()
-    {
-        return _toolBarList.size();
-    } //-- int getToolBarCount() 
+	/**
+	 * Method marshal
+	 * 
+	 * @param out
+	 */
+	public void marshal(java.io.Writer out)
+			throws org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
 
-    /**
-     * Method isValid
-     */
-    public boolean isValid()
-    {
-        try {
-            validate();
-        }
-        catch (org.exolab.castor.xml.ValidationException vex) {
-            return false;
-        }
-        return true;
-    } //-- boolean isValid() 
+		Marshaller.marshal(this, out);
+	} // -- void marshal(java.io.Writer)
 
-    /**
-     * Method marshal
-     * 
-     * @param out
-     */
-    public void marshal(java.io.Writer out)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        
-        Marshaller.marshal(this, out);
-    } //-- void marshal(java.io.Writer) 
+	/**
+	 * Method marshal
+	 * 
+	 * @param handler
+	 */
+	public void marshal(org.xml.sax.ContentHandler handler)
+			throws java.io.IOException, org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
 
-    /**
-     * Method marshal
-     * 
-     * @param handler
-     */
-    public void marshal(org.xml.sax.ContentHandler handler)
-        throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        
-        Marshaller.marshal(this, handler);
-    } //-- void marshal(org.xml.sax.ContentHandler) 
+		Marshaller.marshal(this, handler);
+	} // -- void marshal(org.xml.sax.ContentHandler)
 
-    /**
-     * Method removeAllToolBar
-     */
-    public void removeAllToolBar()
-    {
-        _toolBarList.removeAllElements();
-    } //-- void removeAllToolBar() 
+	/**
+	 * Method removeAllToolBar
+	 */
+	public void removeAllToolBar() {
+		_toolBarList.removeAllElements();
+	} // -- void removeAllToolBar()
 
-    /**
-     * Method removeToolBar
-     * 
-     * @param index
-     */
-    public com.iver.andami.persistence.generate.ToolBar removeToolBar(int index)
-    {
-        java.lang.Object obj = _toolBarList.elementAt(index);
-        _toolBarList.removeElementAt(index);
-        return (com.iver.andami.persistence.generate.ToolBar) obj;
-    } //-- com.iver.andami.persistence.generate.ToolBar removeToolBar(int) 
+	/**
+	 * Method removeToolBar
+	 * 
+	 * @param index
+	 */
+	public com.iver.andami.persistence.generate.ToolBar removeToolBar(int index) {
+		java.lang.Object obj = _toolBarList.elementAt(index);
+		_toolBarList.removeElementAt(index);
+		return (com.iver.andami.persistence.generate.ToolBar) obj;
+	} // -- com.iver.andami.persistence.generate.ToolBar removeToolBar(int)
 
-    /**
-     * Method setToolBar
-     * 
-     * @param index
-     * @param vToolBar
-     */
-    public void setToolBar(int index, com.iver.andami.persistence.generate.ToolBar vToolBar)
-        throws java.lang.IndexOutOfBoundsException
-    {
-        //-- check bounds for index
-        if ((index < 0) || (index > _toolBarList.size())) {
-            throw new IndexOutOfBoundsException();
-        }
-        _toolBarList.setElementAt(vToolBar, index);
-    } //-- void setToolBar(int, com.iver.andami.persistence.generate.ToolBar) 
+	/**
+	 * Method setToolBar
+	 * 
+	 * @param index
+	 * @param vToolBar
+	 */
+	public void setToolBar(int index,
+			com.iver.andami.persistence.generate.ToolBar vToolBar)
+			throws java.lang.IndexOutOfBoundsException {
+		// -- check bounds for index
+		if ((index < 0) || (index > _toolBarList.size())) {
+			throw new IndexOutOfBoundsException();
+		}
+		_toolBarList.setElementAt(vToolBar, index);
+	} // -- void setToolBar(int, com.iver.andami.persistence.generate.ToolBar)
 
-    /**
-     * Method setToolBar
-     * 
-     * @param toolBarArray
-     */
-    public void setToolBar(com.iver.andami.persistence.generate.ToolBar[] toolBarArray)
-    {
-        //-- copy array
-        _toolBarList.removeAllElements();
-        for (int i = 0; i < toolBarArray.length; i++) {
-            _toolBarList.addElement(toolBarArray[i]);
-        }
-    } //-- void setToolBar(com.iver.andami.persistence.generate.ToolBar) 
+	/**
+	 * Method setToolBar
+	 * 
+	 * @param toolBarArray
+	 */
+	public void setToolBar(
+			com.iver.andami.persistence.generate.ToolBar[] toolBarArray) {
+		// -- copy array
+		_toolBarList.removeAllElements();
+		for (int i = 0; i < toolBarArray.length; i++) {
+			_toolBarList.addElement(toolBarArray[i]);
+		}
+	} // -- void setToolBar(com.iver.andami.persistence.generate.ToolBar)
 
-    /**
-     * Method unmarshal
-     * 
-     * @param reader
-     */
-    public static java.lang.Object unmarshal(java.io.Reader reader)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        return (com.iver.andami.persistence.generate.ToolBars) Unmarshaller.unmarshal(com.iver.andami.persistence.generate.ToolBars.class, reader);
-    } //-- java.lang.Object unmarshal(java.io.Reader) 
+	/**
+	 * Method unmarshal
+	 * 
+	 * @param reader
+	 */
+	public static java.lang.Object unmarshal(java.io.Reader reader)
+			throws org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
+		return (com.iver.andami.persistence.generate.ToolBars) Unmarshaller
+				.unmarshal(com.iver.andami.persistence.generate.ToolBars.class,
+						reader);
+	} // -- java.lang.Object unmarshal(java.io.Reader)
 
-    /**
-     * Method validate
-     */
-    public void validate()
-        throws org.exolab.castor.xml.ValidationException
-    {
-        org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
-        validator.validate(this);
-    } //-- void validate() 
+	/**
+	 * Method validate
+	 */
+	public void validate() throws org.exolab.castor.xml.ValidationException {
+		org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
+		validator.validate(this);
+	} // -- void validate()
 
 }

@@ -42,20 +42,20 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: SpatialCache.java 5412 2006-05-24 21:15:07Z azabala $
-* $Log$
-* Revision 1.1  2006-05-24 21:12:36  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.2  2006/03/21 19:30:56  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/02/09 15:59:24  azabala
-* First version in CVS
-*
-*
-*/
+ *
+ * $Id: SpatialCache.java 5412 2006-05-24 21:15:07Z azabala $
+ * $Log$
+ * Revision 1.1  2006-05-24 21:12:36  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.2  2006/03/21 19:30:56  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/02/09 15:59:24  azabala
+ * First version in CVS
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core.util;
 
 import java.io.Serializable;
@@ -64,20 +64,22 @@ import java.util.List;
 import com.vividsolutions.jts.geom.Envelope;
 
 /**
- * Base interface to model Spatial Caches:
- * a cache which allows to retrieve objets by alphanumeric criteria
- * or by spatial criteria.
- * All cached objets must be serializable, so it could be saved to disk
- * if they havent been used recently.
+ * Base interface to model Spatial Caches: a cache which allows to retrieve
+ * objets by alphanumeric criteria or by spatial criteria. All cached objets
+ * must be serializable, so it could be saved to disk if they havent been used
+ * recently.
  * 
  * @author azabala
- *
+ * 
  */
 public interface SpatialCache {
 	public Serializable getElement(long idx);
+
 	public List getCandidatesIndexes(Envelope rect);
+
 	public void remove(Envelope rect, Serializable object);
+
 	public void put(long idx, Envelope env, Serializable object);
+
 	public List getKeys();
 }
-

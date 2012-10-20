@@ -64,9 +64,9 @@ import com.iver.utiles.XMLEntity;
 
 /**
  * Preferences page of the topology extension.
- *
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class TopologyPreferences extends AbstractPreferencePage {
 
@@ -78,7 +78,7 @@ public class TopologyPreferences extends AbstractPreferencePage {
 
 	private JSpinner generalizationFactor;
 
-	private ImageIcon icon=null;
+	private ImageIcon icon = null;
 
 	public static final String DEFAULT_TOPOLOGY_FILES_PATH = "TopologyFilesPath";
 	public static final String SMOOTH_FACTOR = "GeneralizationFactor";
@@ -87,7 +87,6 @@ public class TopologyPreferences extends AbstractPreferencePage {
 
 		addComponent(PluginServices.getText(this, "topology_files_path"),
 				topologyFilesPath = new JTextField(25));
-
 
 		SpinnerNumberModel model = new SpinnerNumberModel(1d, 0d, 100d, 0.1);
 		addComponent(PluginServices.getText(this, "generalization_factor"),
@@ -116,7 +115,7 @@ public class TopologyPreferences extends AbstractPreferencePage {
 	}
 
 	public ImageIcon getIcon() {
-		if (icon == null){
+		if (icon == null) {
 			icon = PluginServices.getIconTheme().get("create-topology");
 		}
 		return icon;
@@ -142,7 +141,7 @@ public class TopologyPreferences extends AbstractPreferencePage {
 			String path = xml.getStringProperty(DEFAULT_TOPOLOGY_FILES_PATH);
 			topologyFilesPath.setText(path);
 			GUIUtil.getInstance().setFilesDirectory(path);
-		}else{
+		} else {
 			topologyFilesPath.setText(GUIUtil.DEFAULT_TOPO_FILES_DIRECTORY);
 		}
 
@@ -150,7 +149,7 @@ public class TopologyPreferences extends AbstractPreferencePage {
 			Double factor = xml.getDoubleProperty(SMOOTH_FACTOR);
 			JtsUtil.GENERALIZATION_FACTOR = factor;
 			generalizationFactor.setValue(factor);
-		}else{
+		} else {
 			generalizationFactor.setValue(JtsUtil.GENERALIZATION_FACTOR);
 		}
 	}

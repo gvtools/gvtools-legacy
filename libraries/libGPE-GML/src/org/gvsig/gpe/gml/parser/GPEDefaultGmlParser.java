@@ -127,9 +127,11 @@ public abstract class GPEDefaultGmlParser extends GPEXmlParser {
 	}
 
 	/***********************************************************************************************
-	 * <accept> Returns true if the file is a gml file and the parser has to parse it
+	 * <accept> Returns true if the file is a gml file and the parser has to
+	 * parse it
 	 * 
-	 * @param URI uri
+	 * @param URI
+	 *            uri
 	 * @return boolean
 	 **********************************************************************************************/
 	public boolean accept(URI uri) {
@@ -144,10 +146,12 @@ public abstract class GPEDefaultGmlParser extends GPEXmlParser {
 	/***********************************************************************************************
 	 * <createInputStream> Creates an InputStream from a file.
 	 * 
-	 * @param File file
+	 * @param File
+	 *            file
 	 * @return FileInputStream
 	 **********************************************************************************************/
-	protected InputStream createInputStream(File file) throws FileNotFoundException {
+	protected InputStream createInputStream(File file)
+			throws FileNotFoundException {
 		return new FileInputStream(file);
 	}
 
@@ -157,19 +161,19 @@ public abstract class GPEDefaultGmlParser extends GPEXmlParser {
 	 * @throws XmlStreamException
 	 * @throws GPEXmlEmptyFileException
 	 **********************************************************************************************/
-	protected void initParse() throws GPEXmlEmptyFileException, XmlStreamException {
+	protected void initParse() throws GPEXmlEmptyFileException,
+			XmlStreamException {
 		// First, it gets the file parser.
 		fileParser = getParser();
 		// If the file is empty
 		if (getParser().getEventType() == IXmlStreamReader.END_DOCUMENT) {
 			throw new GPEXmlEmptyFileException();
 		}
-		try{
-			getProfile().getFeatureCollectionBinding().
-			parse(getParser(), this);		
+		try {
+			getProfile().getFeatureCollectionBinding().parse(getParser(), this);
 		} catch (IOException e) {
 			getErrorHandler().addError(e);
-		}	
+		}
 	}
 
 	public IXmlStreamReader getFileParser() {
@@ -177,7 +181,8 @@ public abstract class GPEDefaultGmlParser extends GPEXmlParser {
 	}
 
 	/***********************************************************************************************
-	 * <getNext> Gets the next tag or text token from the file. without white spaces.
+	 * <getNext> Gets the next tag or text token from the file. without white
+	 * spaces.
 	 **********************************************************************************************/
 	public void getNext() {
 		// Get next tag --> next():Method from KXML library to get next tag
@@ -189,17 +194,15 @@ public abstract class GPEDefaultGmlParser extends GPEXmlParser {
 			}
 		} catch (XmlStreamException e) {
 			// TODO Bloque catch generado automáticamente
-			System.out.println("Error en XmlPullParser al intentar obtener la siguiente etiqueta: "
-					+ e.getMessage());
-		} catch (IOException e) {
-			// TODO Bloque catch generado automáticamente
-			System.out.println("Error al leer la siguiente etiqueta en XmlPullParser: "
-					+ e.getMessage());
+			System.out
+					.println("Error en XmlPullParser al intentar obtener la siguiente etiqueta: "
+							+ e.getMessage());
 		}
 	}
 
 	/**
-	 * @param profile the profile to set
+	 * @param profile
+	 *            the profile to set
 	 */
 	protected void setProfile(IBindingProfile profile) {
 		this.profile = profile;

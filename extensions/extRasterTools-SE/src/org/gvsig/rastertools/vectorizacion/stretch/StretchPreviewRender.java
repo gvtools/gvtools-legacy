@@ -30,78 +30,88 @@ import org.gvsig.raster.hierarchy.IRasterRendering;
 import org.gvsig.raster.util.RasterToolsUtil;
 
 /**
- * Clase para el renderizado de la vista previa en la generación de
- * tramos
+ * Clase para el renderizado de la vista previa en la generación de tramos
  * 10/06/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
-public class StretchPreviewRender implements IPreviewRenderProcess  {
+public class StretchPreviewRender implements IPreviewRenderProcess {
 
-	private boolean             showPreview            = false;	
-	private FLyrRasterSE        lyr                    = null;
-	private StretchData         data                   = null;
-	
+	private boolean showPreview = false;
+	private FLyrRasterSE lyr = null;
+	private StretchData data = null;
+
 	/**
-	 * Constructor. 
+	 * Constructor.
+	 * 
 	 * @param lyr
 	 */
 	public StretchPreviewRender(FLyrRasterSE lyr, StretchData data) {
 		this.lyr = lyr;
 		this.data = data;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.beans.previewbase.IPreviewRenderProcess#process(org.gvsig.raster.hierarchy.IRasterRendering)
+	 * 
+	 * @see
+	 * org.gvsig.raster.beans.previewbase.IPreviewRenderProcess#process(org.
+	 * gvsig.raster.hierarchy.IRasterRendering)
 	 */
-	public void process(IRasterRendering rendering) throws FilterTypeException, ImageUnavailableException {
-		if(!showPreview)
-			throw new ImageUnavailableException(RasterToolsUtil.getText(this, "panel_preview_not_available"));
-		
-		if(lyr == null)
-			throw new ImageUnavailableException(RasterToolsUtil.getText(this, "preview_not_available"));
-		
+	public void process(IRasterRendering rendering) throws FilterTypeException,
+			ImageUnavailableException {
+		if (!showPreview)
+			throw new ImageUnavailableException(RasterToolsUtil.getText(this,
+					"panel_preview_not_available"));
+
+		if (lyr == null)
+			throw new ImageUnavailableException(RasterToolsUtil.getText(this,
+					"preview_not_available"));
+
 		RasterFilterList filterList = rendering.getRenderFilterList();
-		RasterFilterListManager filterManager = new RasterFilterListManager(filterList);
-		
+		RasterFilterListManager filterManager = new RasterFilterListManager(
+				filterList);
+
 		addPosterization(filterManager, rendering);
-			
+
 	}
-	
-		
+
 	/**
 	 * Añade la posterización si la opción está activa
-	 * @throws FilterTypeException 
+	 * 
+	 * @throws FilterTypeException
 	 */
-	public void addPosterization(RasterFilterListManager filterManager, IRasterRendering rendering) throws FilterTypeException {
+	public void addPosterization(RasterFilterListManager filterManager,
+			IRasterRendering rendering) throws FilterTypeException {
 
-		EnhancementStretchListManager elm = new EnhancementStretchListManager(filterManager);
+		EnhancementStretchListManager elm = new EnhancementStretchListManager(
+				filterManager);
 		LinearStretchParams leParams = new LinearStretchParams();
 
-		//Obtenemos el máximo y el mínimo para la banda
+		// Obtenemos el máximo y el mínimo para la banda
 		double min = data.getMin();
 		double max = data.getMax();
-		
+
 		double[] stretchs = data.getStretchs();
 		double distance = max - min;
-		for (int i = 0; i < stretchs.length; i++) 
+		for (int i = 0; i < stretchs.length; i++)
 			stretchs[i] = min + stretchs[i] * distance;
-		
-		//Creamos arrays de entrada y salida
+
+		// Creamos arrays de entrada y salida
 		double[] in = new double[(stretchs.length - 1) * 2 + 4];
 		int[] out = new int[(stretchs.length - 1) * 2 + 4];
 
-		//Inicializamos los valores de los extremos
+		// Inicializamos los valores de los extremos
 		in[0] = in[1] = min;
 		out[0] = out[1] = 0;
 		in[in.length - 1] = in[in.length - 2] = max;
 		out[out.length - 1] = out[out.length - 2] = 255;
 
-		//Construimos el array de salida
+		// Construimos el array de salida
 		boolean even = true;
 		out[2] = 0;
 		for (int i = 3; i < in.length - 2; i = i + 2) {
-			if(even) 
+			if (even)
 				out[i] = out[i + 1] = 255;
 			else
 				out[i] = out[i + 1] = 0;
@@ -109,12 +119,11 @@ public class StretchPreviewRender implements IPreviewRenderProcess  {
 		}
 		out[out.length - 2] = 255;
 
-		//Construimos el array de entrada
-		for (int i = 2; i < in.length - 2; i = i + 2) 
-			in[i] = in[i + 1] = stretchs[(int)(i / 2)];
-			
+		// Construimos el array de entrada
+		for (int i = 2; i < in.length - 2; i = i + 2)
+			in[i] = in[i + 1] = stretchs[(int) (i / 2)];
 
-		//Creamos y añadimos el filtro
+		// Creamos y añadimos el filtro
 		leParams.rgb = true;
 		leParams.red.stretchIn = in;
 		leParams.red.stretchOut = out;
@@ -122,16 +131,16 @@ public class StretchPreviewRender implements IPreviewRenderProcess  {
 		leParams.green.stretchOut = out;
 		leParams.blue.stretchIn = in;
 		leParams.blue.stretchOut = out;
-		elm.addEnhancedStretchFilter(leParams, 
-				lyr.getDataSource().getStatistics(), 
-				rendering.getRenderBands(), 
-				false);
+		elm.addEnhancedStretchFilter(leParams, lyr.getDataSource()
+				.getStatistics(), rendering.getRenderBands(), false);
 	}
 
 	/**
-	 * Obtiene el flag que informa de si se está mostrando la previsualización o no.
-	 * En caso de no mostrarse se lanza una excepción ImageUnavailableExcepcion con el 
-	 * mensaje "La previsualización no está disponible para este panel"
+	 * Obtiene el flag que informa de si se está mostrando la previsualización o
+	 * no. En caso de no mostrarse se lanza una excepción
+	 * ImageUnavailableExcepcion con el mensaje
+	 * "La previsualización no está disponible para este panel"
+	 * 
 	 * @return
 	 */
 	public boolean isShowPreview() {
@@ -139,9 +148,10 @@ public class StretchPreviewRender implements IPreviewRenderProcess  {
 	}
 
 	/**
-	 * Asigna el flag para mostrar u ocultar la preview. En caso de no mostrarse se lanza una 
-	 * excepción ImageUnavailableExcepcion con el mensaje "La previsualización no está disponible para
-	 * este panel"
+	 * Asigna el flag para mostrar u ocultar la preview. En caso de no mostrarse
+	 * se lanza una excepción ImageUnavailableExcepcion con el mensaje "La
+	 * previsualización no está disponible para este panel"
+	 * 
 	 * @param showPreview
 	 */
 	public void setShowPreview(boolean showPreview) {

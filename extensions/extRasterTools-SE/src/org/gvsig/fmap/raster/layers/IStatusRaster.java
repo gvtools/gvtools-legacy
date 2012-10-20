@@ -31,70 +31,86 @@ import org.gvsig.raster.hierarchy.IRasterProperties;
 import com.iver.cit.gvsig.fmap.layers.XMLException;
 import com.iver.utiles.XMLEntity;
 
-public interface IStatusRaster{
-	
+public interface IStatusRaster {
+
 	/**
 	 * Recupera en fichero XML algunas propiedades y filtros del raster
+	 * 
 	 * @param xml
 	 * @throws XMLException
 	 */
-	public void setXMLEntity(XMLEntity xml, IRasterProperties layer)throws XMLException;
-	
+	public void setXMLEntity(XMLEntity xml, IRasterProperties layer)
+			throws XMLException;
+
 	/**
 	 * Salva en fichero XML algunas propiedades y filtros de raster
+	 * 
 	 * @param xml
 	 * @throws XMLException
 	 */
-	public void getXMLEntity(XMLEntity xml, boolean loadClass, IRasterProperties layer)throws XMLException;
-	
+	public void getXMLEntity(XMLEntity xml, boolean loadClass,
+			IRasterProperties layer) throws XMLException;
+
 	/**
 	 * Aplica el estado almacenado al FLyrRaster pasado por parámetro
+	 * 
 	 * @param adapter
-	 * @throws NotSupportedExtensionException Cuando la extensión no está soportada
-	 * @throws RasterDriverException Cuando se produce un error en la lectura del fichero
+	 * @throws NotSupportedExtensionException
+	 *             Cuando la extensión no está soportada
+	 * @throws RasterDriverException
+	 *             Cuando se produce un error en la lectura del fichero
 	 */
-	public void applyStatus(FLyrRasterSE layer) throws NotSupportedExtensionException, RasterDriverException, FilterTypeException ;
-	
+	public void applyStatus(FLyrRasterSE layer)
+			throws NotSupportedExtensionException, RasterDriverException,
+			FilterTypeException;
+
 	/**
-	 * Obtiene el listado de filtros para poder montar una pila
-	 * después de la recuperación desde el XML
+	 * Obtiene el listado de filtros para poder montar una pila después de la
+	 * recuperación desde el XML
+	 * 
 	 * @return
 	 */
 	public ArrayList getFilters();
-	
+
 	/**
 	 * Obtiene el orden de renderizado de bandas cargado desde el proyecto
 	 * después de hacer un setXMLEntity
+	 * 
 	 * @return Lista de enteros con el orden de renderizado
 	 */
 	public int[] getRenderBands();
-	
+
 	/**
-	 * Obtiene la lista de filtros cargada desde el proyecto después de hacer un 
+	 * Obtiene la lista de filtros cargada desde el proyecto después de hacer un
 	 * setXMLEntity
+	 * 
 	 * @return RasterFilterList
-	 * @throws FilterTypeException 
+	 * @throws FilterTypeException
 	 */
 	public RasterFilterList getFilterList() throws FilterTypeException;
-	
+
 	/**
-	 * Obtiene el objeto de transparencia cargado desde el proyecto después de hacer un 
-	 * setXMLEntity
+	 * Obtiene el objeto de transparencia cargado desde el proyecto después de
+	 * hacer un setXMLEntity
+	 * 
 	 * @return la lista de filtros
 	 */
 	public GridTransparency getTransparency();
-	
+
 	/**
-	 * Obtiene la lista de filtros cargada desde el proyecto después de hacer un 
-	 * setXMLEntity. No construye los filtros sino que devuelve una lista de parámetros
+	 * Obtiene la lista de filtros cargada desde el proyecto después de hacer un
+	 * setXMLEntity. No construye los filtros sino que devuelve una lista de
+	 * parámetros
+	 * 
 	 * @return RasterFilterList
 	 */
 	public ArrayList getFilterArguments();
-	
+
 	/**
 	 * Obtiene el ColorTable si hay un filtro de tabla de color en la lista
+	 * 
 	 * @return ColorTable
-	 * @throws FilterTypeException 
+	 * @throws FilterTypeException
 	 */
 	public ColorTable getColorTable() throws FilterTypeException;
 }

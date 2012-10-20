@@ -48,5 +48,4 @@ import com.iver.cit.gvsig.fmap.rendering.styling.labeling.IPlacementConstraints;
 public interface IPlacementProperties extends IWindow, ActionListener {
 	public IPlacementConstraints getPlacementConstraints();
 
-	
 }

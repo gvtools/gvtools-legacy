@@ -45,10 +45,9 @@ import com.iver.cit.gvsig.project.documents.layout.LayoutContext;
 import com.iver.cit.gvsig.project.documents.layout.fframes.FFrameGroup;
 import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 
-
 /**
  * Coloca detrás de todos los fframes el fframe seleccionado.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class BehindLayoutMenuEntry extends AbstractLayoutContextMenuAction {
@@ -68,17 +67,20 @@ public class BehindLayoutMenuEntry extends AbstractLayoutContextMenuAction {
 		return PluginServices.getText(this, "colocar_detras");
 	}
 
-	public boolean isEnabled(LayoutContext layoutContext, IFFrame[] selectedFrames) {
+	public boolean isEnabled(LayoutContext layoutContext,
+			IFFrame[] selectedFrames) {
 		return true;
 	}
 
-	public boolean isVisible(LayoutContext layoutContext, IFFrame[] selectedFrames) {
-		if (selectedFrames.length==1 && !(getLayout().getLayoutControl().getGeometryAdapter().getPoints().length>0)) {
+	public boolean isVisible(LayoutContext layoutContext,
+			IFFrame[] selectedFrames) {
+		if (selectedFrames.length == 1
+				&& !(getLayout().getLayoutControl().getGeometryAdapter()
+						.getPoints().length > 0)) {
 			return true;
 		}
 		return false;
 	}
-
 
 	public void execute(LayoutContext layoutContext, IFFrame[] selectedFrames) {
 		layoutContext.getEFS().startComplexCommand();
@@ -88,13 +90,14 @@ public class BehindLayoutMenuEntry extends AbstractLayoutContextMenuAction {
 				((FFrameGroup) fframe).setAt(layoutContext.getAT());
 			}
 
-			IFFrame fframeAux=fframe.cloneFFrame(getLayout());
+			IFFrame fframeAux = fframe.cloneFFrame(getLayout());
 			fframeAux.setLevel(layoutContext.getNumBehind());
-			layoutContext.getEFS().modifyFFrame(fframe,fframeAux);
+			layoutContext.getEFS().modifyFFrame(fframe, fframeAux);
 			fframeAux.getBoundingBox(layoutContext.getAT());
 
 		}
-		layoutContext.getEFS().endComplexCommand(PluginServices.getText(this,"change_behind"));
+		layoutContext.getEFS().endComplexCommand(
+				PluginServices.getText(this, "change_behind"));
 		layoutContext.updateFFrames();
 		layoutContext.callLayoutDrawListeners();
 	}

@@ -70,124 +70,133 @@ import com.iver.utiles.extensionPoints.ExtensionPoint;
 import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
-
 //import com.iver.utiles.FPanelExtentSelector;
 
 /**
  * Extensión que controla las operaciones básicas realizadas sobre la vista.
- *
+ * 
  * @author vcn
  */
-public class ViewControls extends Extension implements IPreferenceExtension{
-	private static Logger logger = Logger.getLogger(ViewControls.class.getName());
+public class ViewControls extends Extension implements IPreferenceExtension {
+	private static Logger logger = Logger.getLogger(ViewControls.class
+			.getName());
 	private static ViewPage viewPropertiesPage = new ViewPage();
+
 	/**
 	 * @see com.iver.mdiApp.plugins.IExtension#updateUI(java.lang.String)
 	 */
 	public void execute(String s) {
-		com.iver.andami.ui.mdiManager.IWindow view = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow view = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (!(view instanceof View))
 			return;
-		View vista=(View)view;
+		View vista = (View) view;
 		IProjectView model = vista.getModel();
 		MapContext mapa = model.getMapContext();
 		MapControl mapCtrl = vista.getMapControl();
 		logger.debug("Comand : " + s);
 
-		if (s.equals("FULL") ) {
+		if (s.equals("FULL")) {
 			// mapa.beginAtomicEvent();
 			mapa.getViewPort().setExtent(mapa.getLayers().getFullExtent());
-//			mapa.clearAllCachingImageDrawnLayers();
+			// mapa.clearAllCachingImageDrawnLayers();
 			vista.repaintMap();
-			((ProjectDocument)vista.getModel()).setModified(true);
+			((ProjectDocument) vista.getModel()).setModified(true);
 			// mapa.endAtomicEvent();
-		} else if (s.equals("ENCUADRE") ) {
+		} else if (s.equals("ENCUADRE")) {
 			FPanelExtentSelector l = new FPanelExtentSelector();
 
-			ProjectExtension p = (ProjectExtension) PluginServices.getExtension(com.iver.cit.gvsig.ProjectExtension.class);
+			ProjectExtension p = (ProjectExtension) PluginServices
+					.getExtension(com.iver.cit.gvsig.ProjectExtension.class);
 			Project project = p.getProject();
-			ExtentListSelectorModel modelo = new ExtentListSelectorModel(project);
-			//ProjectExtent[] extents = project.getExtents();
+			ExtentListSelectorModel modelo = new ExtentListSelectorModel(
+					project);
+			// ProjectExtent[] extents = project.getExtents();
 			project.addPropertyChangeListener(modelo);
 			l.setModel(modelo);
 			l.addSelectionListener(new Encuadrator(project, mapa, vista));
-			((ProjectDocument)vista.getModel()).setModified(true);
+			((ProjectDocument) vista.getModel()).setModified(true);
 			PluginServices.getMDIManager().addWindow(l);
-		} else if (s.equals("CONFIG_LOCATOR") ) {
-			//Set up the map overview
-			FPanelLocConfig m_panelLoc = new FPanelLocConfig(vista.getMapOverview());
+		} else if (s.equals("CONFIG_LOCATOR")) {
+			// Set up the map overview
+			FPanelLocConfig m_panelLoc = new FPanelLocConfig(
+					vista.getMapOverview());
 			PluginServices.getMDIManager().addWindow(m_panelLoc);
 			m_panelLoc.setPreferredSize(m_panelLoc.getSize());
-			((ProjectDocument)vista.getModel()).setModified(true);
-		} else if (s.equals("PAN") ) {
+			((ProjectDocument) vista.getModel()).setModified(true);
+		} else if (s.equals("PAN")) {
 			mapCtrl.setTool("pan");
-			((ProjectDocument)vista.getModel()).setModified(true);
-		} else if (s.equals("ZOOM_IN") ) {
+			((ProjectDocument) vista.getModel()).setModified(true);
+		} else if (s.equals("ZOOM_IN")) {
 			mapCtrl.setTool("zoomIn");
-			((ProjectDocument)vista.getModel()).setModified(true);
-		} else if (s.equals("ZOOM_OUT") ) {
+			((ProjectDocument) vista.getModel()).setModified(true);
+		} else if (s.equals("ZOOM_OUT")) {
 			mapCtrl.setTool("zoomOut");
-			((ProjectDocument)vista.getModel()).setModified(true);
-		} else if (s.equals("CAPAS_VISIBLES") ) {
+			((ProjectDocument) vista.getModel()).setModified(true);
+		} else if (s.equals("CAPAS_VISIBLES")) {
 			setVisibles(true, mapa.getLayers());
-			((ProjectDocument)vista.getModel()).setModified(true);
-		} else if (s.equals("CAPAS_NOVISIBLES") ) {
+			((ProjectDocument) vista.getModel()).setModified(true);
+		} else if (s.equals("CAPAS_NOVISIBLES")) {
 			setVisibles(false, mapa.getLayers());
-			((ProjectDocument)vista.getModel()).setModified(true);
-		} else if (s.equals("CAPAS_ACTIVAS") ) {
+			((ProjectDocument) vista.getModel()).setModified(true);
+		} else if (s.equals("CAPAS_ACTIVAS")) {
 			setActives(true, mapa.getLayers());
-			((ProjectDocument)vista.getModel()).setModified(true);
-		} else if (s.equals("CAPAS_NOACTIVAS") ) {
+			((ProjectDocument) vista.getModel()).setModified(true);
+		} else if (s.equals("CAPAS_NOACTIVAS")) {
 			setActives(false, mapa.getLayers());
-			((ProjectDocument)vista.getModel()).setModified(true);
-		} else if (s.equals("SAVERASTER") ) {
+			((ProjectDocument) vista.getModel()).setModified(true);
+		} else if (s.equals("SAVERASTER")) {
 			mapCtrl.setTool("saveRaster");
-		} else if (s.equals("SELECTIMAGE") ) {
+		} else if (s.equals("SELECTIMAGE")) {
 			mapCtrl.setTool("selectImage");
-		} else if (s.equals("ACTION_ZOOM_IN") ) {
+		} else if (s.equals("ACTION_ZOOM_IN")) {
 			mapCtrl.zoomIn();
-			((ProjectDocument)vista.getModel()).setModified(true);
-		} else if (s.equals("ACTION_ZOOM_OUT") ) {
+			((ProjectDocument) vista.getModel()).setModified(true);
+		} else if (s.equals("ACTION_ZOOM_OUT")) {
 			mapCtrl.zoomOut();
-			((ProjectDocument)vista.getModel()).setModified(true);
-		} else if (s.startsWith("CHANGE_SCALE_")){
-			String scl=s.replaceAll("CHANGE_SCALE_","");
-			long scale=Long.parseLong(scl);
+			((ProjectDocument) vista.getModel()).setModified(true);
+		} else if (s.startsWith("CHANGE_SCALE_")) {
+			String scl = s.replaceAll("CHANGE_SCALE_", "");
+			long scale = Long.parseLong(scl);
 			mapa.setScaleView(scale);
-			((ProjectDocument)vista.getModel()).setModified(true);
+			((ProjectDocument) vista.getModel()).setModified(true);
 		}
 	}
 
 	/**
 	 * Pone todas las capas visibles o no visibles.
-	 *
-	 * @param visible true si que quieren poner a visibles.
-	 * @param mapa FMap sobre el que actuar.
+	 * 
+	 * @param visible
+	 *            true si que quieren poner a visibles.
+	 * @param mapa
+	 *            FMap sobre el que actuar.
 	 */
 	private void setVisibles(boolean visible, FLayers layers) {
-		int layerCount=layers.getLayersCount();
+		int layerCount = layers.getLayersCount();
 		for (int i = 0; i < layerCount; i++) {
 			FLayer layer = layers.getLayer(i);
 			layer.setVisible(visible);
-			if (layer instanceof FLayers){
-				setVisibles(visible,(FLayers)layer);
+			if (layer instanceof FLayers) {
+				setVisibles(visible, (FLayers) layer);
 			}
 		}
 	}
 
 	/**
 	 * Pone todas las capas activas o no activas.
-	 *
-	 * @param active true si que quieren poner a activas.
-	 * @param mapa FMap sobre el que actuar.
+	 * 
+	 * @param active
+	 *            true si que quieren poner a activas.
+	 * @param mapa
+	 *            FMap sobre el que actuar.
 	 */
 	private void setActives(boolean active, FLayers layers) {
-		int layerCount=layers.getLayersCount();
+		int layerCount = layers.getLayersCount();
 		for (int i = 0; i < layerCount; i++) {
 			FLayer layer = layers.getLayer(i);
 			layer.setActive(active);
-			if (layer instanceof FLayers){
-				setActives(active,(FLayers)layer);
+			if (layer instanceof FLayers) {
+				setActives(active, (FLayers) layer);
 			}
 		}
 	}
@@ -196,8 +205,8 @@ public class ViewControls extends Extension implements IPreferenceExtension{
 	 * @see com.iver.mdiApp.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-															 .getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (f == null) {
 			return false;
@@ -210,26 +219,24 @@ public class ViewControls extends Extension implements IPreferenceExtension{
 
 			return mapa.getLayers().getLayersCount() > 0;
 		}
-			return false;
+		return false;
 	}
 
 	/**
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
-		ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
-
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
 
 		if (!extensionPoints.containsKey("View_TocActions")) {
-			extensionPoints.put(
-				new ExtensionPoint(
-					"View_TocActions",
-					"Context menu options of the TOC " +
-						" in the view window "+
-						"(register instances of " +
-						"com.iver.cit.gvsig.gui.toc.AbstractTocContextMenuAction)"
-				)
-			);
+			extensionPoints
+					.put(new ExtensionPoint(
+							"View_TocActions",
+							"Context menu options of the TOC "
+									+ " in the view window "
+									+ "(register instances of "
+									+ "com.iver.cit.gvsig.gui.toc.AbstractTocContextMenuAction)"));
 		}
 
 		FPopupMenu.registerExtensionPoint();
@@ -237,46 +244,44 @@ public class ViewControls extends Extension implements IPreferenceExtension{
 		registerIcons();
 	}
 
-	private void registerIcons(){
+	private void registerIcons() {
 
 		PluginServices.getIconTheme().registerDefault(
 				"view-zoom-in",
-				this.getClass().getClassLoader().getResource("images/ZoomIn.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/ZoomIn.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"view-zoom-out",
-				this.getClass().getClassLoader().getResource("images/ZoomOut.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/ZoomOut.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"view-zoom-map-contents",
-				this.getClass().getClassLoader().getResource("images/MapContents.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/MapContents.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"view-zoom-center-in",
-				this.getClass().getClassLoader().getResource("images/zoommas.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/zoommas.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"view-zoom-center-out",
-				this.getClass().getClassLoader().getResource("images/zoommenos.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/zoommenos.png"));
 
-		PluginServices.getIconTheme().registerDefault(
-				"view-pan",
-				this.getClass().getClassLoader().getResource("images/Pan.png")
-			);
+		PluginServices.getIconTheme().registerDefault("view-pan",
+				this.getClass().getClassLoader().getResource("images/Pan.png"));
 
 		PluginServices.getIconTheme().registerDefault(
 				"view-zoom-manager",
-				this.getClass().getClassLoader().getResource("images/encuadre.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/encuadre.png"));
 	}
 
 	/**
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-		.getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (f == null) {
 			return false;
@@ -288,8 +293,9 @@ public class ViewControls extends Extension implements IPreferenceExtension{
 			MapContext mapa = model.getMapContext();
 
 			FLayers layers = mapa.getLayers();
-			for (int i=0;i<layers.getLayersCount();i++) {
-				if (layers.getLayer(i).isAvailable()) return true;
+			for (int i = 0; i < layers.getLayersCount(); i++) {
+				if (layers.getLayer(i).isAvailable())
+					return true;
 			}
 
 		}
@@ -297,8 +303,8 @@ public class ViewControls extends Extension implements IPreferenceExtension{
 	}
 
 	public IPreference[] getPreferencesPages() {
-		IPreference[] preferences=new IPreference[1];
-		preferences[0]=viewPropertiesPage;
+		IPreference[] preferences = new IPreference[1];
+		preferences[0] = viewPropertiesPage;
 		return preferences;
 	}
 }

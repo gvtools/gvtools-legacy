@@ -82,6 +82,7 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * It parses a gml:PointType object. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;Point gid="P6776"&gt;
@@ -89,63 +90,66 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  * &lt;/Point&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class PointTypeBinding extends GeometryBinding{
+public class PointTypeBinding extends GeometryBinding {
 
 	/**
 	 * It parses the gml:Point tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * A point
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return A point
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public Object parse(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
+	public Object parse(IXmlStreamReader parser, GPEDefaultGmlParser handler)
+			throws XmlStreamException, IOException {
 		boolean endFeature = false;
 		int currentTag;
-		Object point = null;		
+		Object point = null;
 
 		super.setAtributtes(parser, handler.getErrorHandler());
 
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-				point = parseTag(parser, handler, tag, id, srsName);					
-				//The parser pointer is in the </gml:Point> tag
-				if (point != null){
+				point = parseTag(parser, handler, tag, id, srsName);
+				// The parser pointer is in the </gml:Point> tag
+				if (point != null) {
 					return point;
 				}
 				break;
 			case IXmlStreamReader.END_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_POINT))
-				{
+				if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_POINT)) {
 					endFeature = true;
 					handler.getContentHandler().endPoint(point);
 				}
 				break;
-			case IXmlStreamReader.CHARACTERS:					
+			case IXmlStreamReader.CHARACTERS:
 
 				break;
 			}
-			if (!endFeature){					
+			if (!endFeature) {
 				currentTag = parser.next();
 				tag = parser.getName();
 			}
-		}			
-		return point;	
+		}
+		return point;
 	}
 
 	/**
 	 * It parses a tag
+	 * 
 	 * @param parser
 	 * @param handler
 	 * @param tag
@@ -155,25 +159,28 @@ public class PointTypeBinding extends GeometryBinding{
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	protected Object parseTag(IXmlStreamReader parser,GPEDefaultGmlParser handler, QName tag, String id, String srsName) throws XmlStreamException, IOException{
+	protected Object parseTag(IXmlStreamReader parser,
+			GPEDefaultGmlParser handler, QName tag, String id, String srsName)
+			throws XmlStreamException, IOException {
 		Object point = null;
-		//GR: esto lo agregué yo pero a ciegas, no sé si es correcto, lo comento
-		//		if(CompareUtils.compareWithNamespace(GMLTags.GML_POINT, tag)){
-		//		    parser.nextTag();
-		//		    tag = parser.getName();
-		//		}
-		if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_COORDINATES)){
-			CoordinatesTypeIterator coordinatesIterator = handler.getProfile().getCoordinatesTypeBinding();
-			coordinatesIterator.initialize(parser, handler,GMLTags.GML_POINT);
+		// GR: esto lo agregué yo pero a ciegas, no sé si es correcto, lo
+		// comento
+		// if(CompareUtils.compareWithNamespace(GMLTags.GML_POINT, tag)){
+		// parser.nextTag();
+		// tag = parser.getName();
+		// }
+		if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_COORDINATES)) {
+			CoordinatesTypeIterator coordinatesIterator = handler.getProfile()
+					.getCoordinatesTypeBinding();
+			coordinatesIterator.initialize(parser, handler, GMLTags.GML_POINT);
 			point = handler.getContentHandler().startPoint(id,
-					coordinatesIterator,
-					srsName);
-		}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_COORD)){
-			CoordTypeIterator coordinatesIterator = handler.getProfile().getCoordTypeBinding();
-			coordinatesIterator.initialize(parser, handler,GMLTags.GML_POINT);
+					coordinatesIterator, srsName);
+		} else if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_COORD)) {
+			CoordTypeIterator coordinatesIterator = handler.getProfile()
+					.getCoordTypeBinding();
+			coordinatesIterator.initialize(parser, handler, GMLTags.GML_POINT);
 			point = handler.getContentHandler().startPoint(id,
-					coordinatesIterator,
-					srsName);
+					coordinatesIterator, srsName);
 		}
 		return point;
 	}

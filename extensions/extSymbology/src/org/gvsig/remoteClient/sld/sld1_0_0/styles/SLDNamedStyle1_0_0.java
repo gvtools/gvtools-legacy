@@ -48,36 +48,37 @@ import org.gvsig.remoteClient.sld.styles.SLDNamedStyle;
 import org.xmlpull.v1.XmlPullParserException;
 
 /**
- * Implements the NamedStyle element of an SLD implementation specification (version 
- * 1.0.0).<p> 
+ * Implements the NamedStyle element of an SLD implementation specification
+ * (version 1.0.0).
+ * <p>
  * 
- * A named style, similar to a named layer, is referenced by a well-known name. A
- * particular named style only has meaning when used in conjunction with a particular
- * named layer. All available styles for each available layer are normally named in a 
- * capabilities document.
+ * A named style, similar to a named layer, is referenced by a well-known name.
+ * A particular named style only has meaning when used in conjunction with a
+ * particular named layer. All available styles for each available layer are
+ * normally named in a capabilities document.
  * 
  * @see http://portal.opengeospatial.org/files/?artifact_id=1188
  * 
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
 public class SLDNamedStyle1_0_0 extends SLDNamedStyle {
-	
+
 	/**
-	 * Parses the xml data retrieved from the SLD, it will parse the NamedStyle element</p>
+	 * Parses the xml data retrieved from the SLD, it will parse the NamedStyle
+	 * element</p>
 	 */
-	public void parse(XMLSchemaParser parser)throws IOException, XmlPullParserException {
+	public void parse(XMLSchemaParser parser) throws IOException,
+			XmlPullParserException {
 		int currentTag;
 		boolean end = false;
 
 		parser.require(XMLSchemaParser.START_TAG, null, SLDTags.NAMEDSTYLE);
 		currentTag = parser.next();
 
-		while (!end)
-		{
-			switch(currentTag)
-			{
+		while (!end) {
+			switch (currentTag) {
 			case XMLSchemaParser.START_TAG:
-				if (parser.getName().compareTo(SLDTags.NAME)==0) {
+				if (parser.getName().compareTo(SLDTags.NAME) == 0) {
 					setName(parser.nextText());
 				}
 				break;
@@ -95,12 +96,11 @@ public class SLDNamedStyle1_0_0 extends SLDNamedStyle {
 		parser.require(XMLSchemaParser.END_TAG, null, SLDTags.NAMEDSTYLE);
 
 	}
-	
 
 	@Override
 	public String toXML() {
 		// TODO Auto-generated method stub
-		throw new Error ("Not yet implemented");
+		throw new Error("Not yet implemented");
 	}
 
 }

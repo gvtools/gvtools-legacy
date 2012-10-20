@@ -1,11 +1,11 @@
 package com.hardcode.gdbms.driver.exceptions;
 
-
 public class ReloadDriverException extends ReadDriverException {
-	public ReloadDriverException(String l,Throwable exception) {
-		super(l,exception);
+	public ReloadDriverException(String l, Throwable exception) {
+		super(l, exception);
 		init();
 	}
+
 	/**
 	 *
 	 */

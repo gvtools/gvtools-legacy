@@ -43,36 +43,39 @@ package com.iver.cit.gvsig.gui.wizards;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public class WizardListenerSupport {
-    private ArrayList listeners = new ArrayList();
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param listener DOCUMENT ME!
-     */
-    public void addWizardListener(WizardListener listener) {
-        listeners.add(listener);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param listener DOCUMENT ME!
-     */
-    public void removeWizardListener(WizardListener listener) {
-        listeners.remove(listener);
-    }
+	private ArrayList listeners = new ArrayList();
 
 	/**
 	 * DOCUMENT ME!
-	 * @param finishable TODO
+	 * 
+	 * @param listener
+	 *            DOCUMENT ME!
+	 */
+	public void addWizardListener(WizardListener listener) {
+		listeners.add(listener);
+	}
+
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param listener
+	 *            DOCUMENT ME!
+	 */
+	public void removeWizardListener(WizardListener listener) {
+		listeners.remove(listener);
+	}
+
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param finishable
+	 *            TODO
 	 */
 	public void callStateChanged(boolean finishable) {
 		Iterator i = listeners.iterator();

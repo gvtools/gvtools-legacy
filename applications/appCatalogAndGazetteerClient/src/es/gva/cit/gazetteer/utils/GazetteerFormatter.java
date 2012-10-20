@@ -55,23 +55,26 @@ import org.gvsig.remoteClient.wfs.filters.ISQLExpressionFormat;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class GazetteerFormatter implements ISQLExpressionFormat{
+public class GazetteerFormatter implements ISQLExpressionFormat {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.remoteClient.wfs.filters.ISQLExpressionFormat#format(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.wfs.filters.ISQLExpressionFormat#format(java.lang
+	 * .String)
 	 */
 	public String format(String expression) {
 		return expression;
 	}
 
-	
 	/**
-	 * Creates a Filter Encoding creator that uses this
-	 * formatter to parse the SQL
+	 * Creates a Filter Encoding creator that uses this formatter to parse the
+	 * SQL
+	 * 
 	 * @return
 	 */
-	public static FilterEncoding createFilter(){
-		return new FilterEncoding(new GazetteerFormatter());				
+	public static FilterEncoding createFilter() {
+		return new FilterEncoding(new GazetteerFormatter());
 	}
 }

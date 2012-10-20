@@ -6,7 +6,6 @@ import org.gvsig.gpe.containers.GeometryAsserts;
 import org.gvsig.gpe.containers.Layer;
 import org.gvsig.gpe.containers.MultiPolygon;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -77,7 +76,7 @@ import org.gvsig.gpe.containers.MultiPolygon;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class GPEMultiPolygonLayerTest extends GPEWriterBaseTest{
+public abstract class GPEMultiPolygonLayerTest extends GPEWriterBaseTest {
 	private String layerId = "l1";
 	private String srs = "EPSG:23030";
 	private String feature1Id = "f1";
@@ -85,66 +84,62 @@ public abstract class GPEMultiPolygonLayerTest extends GPEWriterBaseTest{
 	private String polygon1Id = "p1";
 	private double[] polygon1X = generateRandomLinearRing();
 	private double[] polygon1Y = generateRandomLinearRing();
-	private double[] polygon1Z = generateRandomLinearRing();	
+	private double[] polygon1Z = generateRandomLinearRing();
 	private String polygon2Id = "p2";
 	private double[] polygon2X = generateRandomLinearRing();
 	private double[] polygon2Y = generateRandomLinearRing();
-	private double[] polygon2Z = generateRandomLinearRing();	
+	private double[] polygon2Z = generateRandomLinearRing();
 	private String polygon3Id = "p3";
 	private double[] polygon3X = generateRandomLinearRing();
 	private double[] polygon3Y = generateRandomLinearRing();
-	private double[] polygon3Z = generateRandomLinearRing();		
-	
+	private double[] polygon3Z = generateRandomLinearRing();
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#readObjects()
 	 */
 	public void readObjects() {
 		Layer[] layers = getLayers();
-		assertEquals(layers.length, 1);		
+		assertEquals(layers.length, 1);
 		Layer layer = layers[0];
-	
+
 		assertEquals(layer.getFeatures().size(), 1);
-		//FEATURE 1
-		Feature feature1 = (Feature)layer.getFeatures().get(0);
-		MultiPolygon multiPolygon = (MultiPolygon)feature1.getGeometry();
+		// FEATURE 1
+		Feature feature1 = (Feature) layer.getFeatures().get(0);
+		MultiPolygon multiPolygon = (MultiPolygon) feature1.getGeometry();
 		assertEquals(multiPolygon.getGeometries().size(), 3);
-		GeometryAsserts.polygon(multiPolygon.getMultiPolygonAt(0), polygon1X, polygon1Y, polygon1Z);
-		GeometryAsserts.polygon(multiPolygon.getMultiPolygonAt(1), polygon2X, polygon2Y, polygon2Z);
-		GeometryAsserts.polygon(multiPolygon.getMultiPolygonAt(2), polygon3X, polygon3Y, polygon3Z);
+		GeometryAsserts.polygon(multiPolygon.getMultiPolygonAt(0), polygon1X,
+				polygon1Y, polygon1Z);
+		GeometryAsserts.polygon(multiPolygon.getMultiPolygonAt(1), polygon2X,
+				polygon2Y, polygon2Z);
+		GeometryAsserts.polygon(multiPolygon.getMultiPolygonAt(2), polygon3X,
+				polygon3Y, polygon3Z);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#writeObjects()
 	 */
 	public void writeObjects() {
 		getWriterHandler().initialize();
-		getWriterHandler().startLayer(layerId, null , null , srs, null);
+		getWriterHandler().startLayer(layerId, null, null, srs, null);
 		getWriterHandler().startFeature(feature1Id, null, null);
 		getWriterHandler().startMultiPolygon(multiPolygon1Id, srs);
-		getWriterHandler().startPolygon(polygon1Id, new CoordinatesSequence(
-				polygon1X,
-				polygon1Y,
-				polygon1Z),
-				srs);		
-		getWriterHandler().endPolygon();		
-		getWriterHandler().startPolygon(polygon2Id, new CoordinatesSequence(
-				polygon2X,
-				polygon2Y,
-				polygon2Z),
-				srs);
-		getWriterHandler().endPolygon();	
-		getWriterHandler().startPolygon(polygon3Id, new CoordinatesSequence(
-				polygon3X,
-				polygon3Y,
-				polygon3Z),
-				srs);
-		getWriterHandler().endPolygon();	
+		getWriterHandler().startPolygon(polygon1Id,
+				new CoordinatesSequence(polygon1X, polygon1Y, polygon1Z), srs);
+		getWriterHandler().endPolygon();
+		getWriterHandler().startPolygon(polygon2Id,
+				new CoordinatesSequence(polygon2X, polygon2Y, polygon2Z), srs);
+		getWriterHandler().endPolygon();
+		getWriterHandler().startPolygon(polygon3Id,
+				new CoordinatesSequence(polygon3X, polygon3Y, polygon3Z), srs);
+		getWriterHandler().endPolygon();
 		getWriterHandler().endMultiPolygon();
 		getWriterHandler().endFeature();
 		getWriterHandler().endLayer();
-		getWriterHandler().close();	
+		getWriterHandler().close();
 	}
 
 }

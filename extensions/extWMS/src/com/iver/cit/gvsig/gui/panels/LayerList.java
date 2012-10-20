@@ -51,39 +51,43 @@ import org.gvsig.gui.beans.controls.dnd.JDnDList;
 import com.iver.cit.gvsig.fmap.layers.WMSLayerNode;
 
 /**
- * Class implementing a JList component adapted to the WMSLayerNode
- * needs (use it as a JList with drag'n'drop capabilities).
+ * Class implementing a JList component adapted to the WMSLayerNode needs (use
+ * it as a JList with drag'n'drop capabilities).
  * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
 public class LayerList extends JDnDList {
 	public boolean showLayerNames = false;
-	private int count = 0; 
+	private int count = 0;
+
 	public LayerList() {
 		super();
 		setCellRenderer(new MyRenderer());
 	}
-	
+
 	private class MyRenderer extends DefaultListCellRenderer {
-		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-			super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			if (value instanceof WMSLayerNode){
-                WMSLayerNode layer = (WMSLayerNode) value;
-                
-                if (!showLayerNames) {
-                	if (layer.getName() != null || layer.getName() == "") {
-                		String text = layer.toString();
-                		text = text.substring(text.indexOf(']')+2, text.length());
-                		setText(text);
-                	}
-                }
-                
-                Dimension sz  = getPreferredSize();
-                sz.setSize((sz.getWidth()+50) - (50*count), sz.getHeight());
-                setPreferredSize(sz);
-                count++;
-            }  
+		public Component getListCellRendererComponent(JList list, Object value,
+				int index, boolean isSelected, boolean cellHasFocus) {
+			super.getListCellRendererComponent(list, value, index, isSelected,
+					cellHasFocus);
+			if (value instanceof WMSLayerNode) {
+				WMSLayerNode layer = (WMSLayerNode) value;
+
+				if (!showLayerNames) {
+					if (layer.getName() != null || layer.getName() == "") {
+						String text = layer.toString();
+						text = text.substring(text.indexOf(']') + 2,
+								text.length());
+						setText(text);
+					}
+				}
+
+				Dimension sz = getPreferredSize();
+				sz.setSize((sz.getWidth() + 50) - (50 * count), sz.getHeight());
+				setPreferredSize(sz);
+				count++;
+			}
 			return this;
 		}
 	}

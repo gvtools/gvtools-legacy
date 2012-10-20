@@ -123,22 +123,23 @@ public class GenerateAdjacentPolygonCADTool extends SplitGeometryCADTool {
 			List<Geometry> lineNeighbours = new ArrayList<Geometry>();
 			List<LineString> neigboursBorders = new ArrayList<LineString>();
 
-			Rectangle2D rect = FGeometryUtil.envelopeToRectangle2D(digitizedLine
-					.getEnvelopeInternal());
+			Rectangle2D rect = FGeometryUtil
+					.envelopeToRectangle2D(digitizedLine.getEnvelopeInternal());
 
-			CoordinateReferenceSystem crs = layer.getLayer().getMapContext().getViewPort()
-					.getCrs();
+			CoordinateReferenceSystem crs = layer.getLayer().getMapContext()
+					.getViewPort().getCrs();
 			IRowEdited[] features = adapter.getFeatures(rect,
 					ProjectionUtils.getAbrev(crs));
 			for (int i = 0; i < features.length; i++) {
 				IRowEdited row = features[i];
 				IFeature feature = (IFeature) row.getLinkedRow().cloneRow();
-				Geometry jtsGeo = NewFConverter
-						.toJtsGeometry(feature.getGeometry());
-				if(jtsGeo.distance(digitizedLine) != 0)
+				Geometry jtsGeo = NewFConverter.toJtsGeometry(feature
+						.getGeometry());
+				if (jtsGeo.distance(digitizedLine) != 0)
 					continue;
 				lineNeighbours.add(jtsGeo);
-				neigboursBorders.addAll(LinearComponentExtracter.getLines(jtsGeo));
+				neigboursBorders.addAll(LinearComponentExtracter
+						.getLines(jtsGeo));
 			}
 
 			Geometry nodedLine = digitizedLine;
@@ -157,59 +158,60 @@ public class GenerateAdjacentPolygonCADTool extends SplitGeometryCADTool {
 			while (it.hasNext()) {
 				Geometry poly = (Polygon) it.next();
 				if (poly.distance(digitizedLine) == 0d) {
-					//now we check that this polygon doesnt overlap neighbours polygons
-					if(overlapsNewPolygonWithExisting(poly, lineNeighbours))
-					{	
-						Geometry difference = JtsUtil.difference(poly, lineNeighbours);
-						if(difference instanceof GeometryCollection)
-							if(((GeometryCollection)difference).isEmpty())
+					// now we check that this polygon doesnt overlap neighbours
+					// polygons
+					if (overlapsNewPolygonWithExisting(poly, lineNeighbours)) {
+						Geometry difference = JtsUtil.difference(poly,
+								lineNeighbours);
+						if (difference instanceof GeometryCollection)
+							if (((GeometryCollection) difference).isEmpty())
 								continue;
 						poly = difference;
 					}
-					
+
 					Polygon[] newPolygons = JtsUtil.extractPolygons(poly);
-					for(int j = 0; j < newPolygons.length; j++){
-						if (EnhancedPrecisionOp.intersection(newPolygons[j], digitizedLine).getDimension() == 1) {
+					for (int j = 0; j < newPolygons.length; j++) {
+						if (EnhancedPrecisionOp.intersection(newPolygons[j],
+								digitizedLine).getDimension() == 1) {
 							solution.add(newPolygons[j]);
 						}// if
-					}//for j
+					}// for j
 				}// if
 			}// while
-			
-			
 
 			// finally, we create a new feature for each new resulting polygon
 			FLyrVect editionLyr = (FLyrVect) layer.getLayer();
 			int numFields = editionLyr.getRecordset().getFieldCount();
 			Value[] newValues = new Value[numFields];
-			for(int i = 0; i < numFields; i++){
+			for (int i = 0; i < numFields; i++) {
 				newValues[i] = ValueFactory.createNullValue();
 			}
-			
-			 adapter.startComplexRow();
-			 for(int i = 0; i < solution.size(); i++){
-				 Geometry geo = solution.get(i);
-				 IGeometry igeo = NewFConverter.toFMap(geo);
-				 String newId = editionLyr.getSource().getShapeCount()+"";
-				 DefaultFeature newFeature = 
-					 new DefaultFeature(igeo, newValues, newId );
-				 adapter.doAddRow(newFeature, EditionEvent.GRAPHIC); 
-			 }
-			 adapter.endComplexRow(getName());
+
+			adapter.startComplexRow();
+			for (int i = 0; i < solution.size(); i++) {
+				Geometry geo = solution.get(i);
+				IGeometry igeo = NewFConverter.toFMap(geo);
+				String newId = editionLyr.getSource().getShapeCount() + "";
+				DefaultFeature newFeature = new DefaultFeature(igeo, newValues,
+						newId);
+				adapter.doAddRow(newFeature, EditionEvent.GRAPHIC);
+			}
+			adapter.endComplexRow(getName());
 		} catch (BaseException e) {
 			e.printStackTrace();
-		} 
-		 
+		}
+
 	}
-	
-	private boolean overlapsNewPolygonWithExisting(Geometry poly, List<Geometry> lineNeighbours){
-		for(int i = 0; i < lineNeighbours.size(); i++){
-			if(poly.overlaps(lineNeighbours.get(i)))
+
+	private boolean overlapsNewPolygonWithExisting(Geometry poly,
+			List<Geometry> lineNeighbours) {
+		for (int i = 0; i < lineNeighbours.size(); i++) {
+			if (poly.overlaps(lineNeighbours.get(i)))
 				return true;
 		}
 		return false;
 	}
-	
+
 	public String getName() {
 		return PluginServices.getText(this, ADJACENT_POLYGON_TOOL_NAME);
 	}

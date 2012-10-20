@@ -32,11 +32,12 @@ import org.gvsig.gui.beans.Messages;
 
 /**
  * Componente tabla
- *
+ * 
  * @author Nacho Brodin (brodin_ign@gva.es)
- *
+ * 
  */
-public class TableSelectorButtonColumnEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {
+public class TableSelectorButtonColumnEditor extends AbstractCellEditor
+		implements TableCellEditor, ActionListener {
 	private static final long serialVersionUID = -2028530090765546942L;
 	String currentText = "255";
 	JButton button;
@@ -51,19 +52,23 @@ public class TableSelectorButtonColumnEditor extends AbstractCellEditor implemen
 		button.setBorderPainted(false);
 
 		valueSelector = new JValueSelector();
-		dialog = JValueSelector.createDialog(button, Messages.getText("seleccion_alpha"), true, valueSelector, this, null, currentText);
+		dialog = JValueSelector.createDialog(button,
+				Messages.getText("seleccion_alpha"), true, valueSelector, this,
+				null, currentText);
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		if (EDIT.equals(e.getActionCommand())) {
 			button.setText(currentText);
-			((ValueSelector)dialog).setValue(Integer.valueOf(currentText).intValue());
+			((ValueSelector) dialog).setValue(Integer.valueOf(currentText)
+					.intValue());
 			dialog.setVisible(true);
 
 			fireEditingStopped();
 
-		}else{
-			currentText = String.valueOf((int)((ValueSelector)dialog).getValue());
+		} else {
+			currentText = String.valueOf((int) ((ValueSelector) dialog)
+					.getValue());
 			button.setText(currentText);
 		}
 	}
@@ -72,9 +77,9 @@ public class TableSelectorButtonColumnEditor extends AbstractCellEditor implemen
 		return currentText;
 	}
 
-	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected,
-															 int row, int column) {
-		currentText = (String)value;
+	public Component getTableCellEditorComponent(JTable table, Object value,
+			boolean isSelected, int row, int column) {
+		currentText = (String) value;
 		return button;
 	}
 }

@@ -5,10 +5,11 @@ package com.iver.cit.gvsig.exceptions.expansionfile;
  */
 public class OpenExpansionFileException extends ExpansionFileException {
 
-	public OpenExpansionFileException(String l,Throwable exception) {
-		super(l,exception);
+	public OpenExpansionFileException(String l, Throwable exception) {
+		super(l, exception);
 		init();
 	}
+
 	/**
 	 *
 	 */

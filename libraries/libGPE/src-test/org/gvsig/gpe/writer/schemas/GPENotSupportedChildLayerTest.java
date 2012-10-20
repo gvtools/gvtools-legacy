@@ -55,7 +55,8 @@ import org.gvsig.gpe.warnings.NotSupportedLayerWarning;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class GPENotSupportedChildLayerTest  extends GPENotSupportedSchema{
+public abstract class GPENotSupportedChildLayerTest extends
+		GPENotSupportedSchema {
 	private String layer1Id = "l1";
 	private String layer1Name = "Parent layer";
 	private String layer1Description = "This is a test of a wrong layer feature";
@@ -65,46 +66,49 @@ public abstract class GPENotSupportedChildLayerTest  extends GPENotSupportedSche
 	private String layer2Name = "Child layer";
 	private String layer2Description = "This is a test of a wrong layer feature";
 	private String layer2Srs = "EPSG:23030";
-	private String layer2XsElementName = "postal codes";	
+	private String layer2XsElementName = "postal codes";
 	private String feature1Name = "city";
 	private String feature1Id = "f1";
-	//Schema 
+	// Schema
 	private String xsFeature1Name = "river";
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#readObjects()
 	 */
 	public void readObjects() {
 		Layer[] layers = getLayers();
-		assertEquals(layers.length, 1);		
+		assertEquals(layers.length, 1);
 		Layer layer = layers[0];
-	
-		assertEquals(layer.getLayers().size(),0);
+
+		assertEquals(layer.getLayers().size(), 0);
 
 		boolean layerNotSupported = false;
-		for (int i=0 ; i<getErrorHandler().getWarningsSize() ; i++){
-			if (getErrorHandler().getWarningAt(i) instanceof NotSupportedLayerWarning){
+		for (int i = 0; i < getErrorHandler().getWarningsSize(); i++) {
+			if (getErrorHandler().getWarningAt(i) instanceof NotSupportedLayerWarning) {
 				layerNotSupported = true;
-			}			
+			}
 		}
 		assertTrue(layerNotSupported);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#writeObjects()
 	 */
 	public void writeObjects() {
 		getWriterHandler().initialize();
-		getWriterHandler().startLayer(layer1Id, null, layer1Name, layer1Description, layer1Srs);
-		getWriterHandler().startLayer(layer2Id, null, layer2Name, layer2Description, layer2Srs);
+		getWriterHandler().startLayer(layer1Id, null, layer1Name,
+				layer1Description, layer1Srs);
+		getWriterHandler().startLayer(layer2Id, null, layer2Name,
+				layer2Description, layer2Srs);
 		getWriterHandler().startFeature(feature1Id, null, feature1Name);
-		getWriterHandler().endFeature();	
+		getWriterHandler().endFeature();
 		getWriterHandler().endLayer();
 		getWriterHandler().endLayer();
-		getWriterHandler().close();	
-	}	
-	
-}
+		getWriterHandler().close();
+	}
 
+}

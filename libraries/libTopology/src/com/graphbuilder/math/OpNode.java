@@ -1,9 +1,10 @@
 package com.graphbuilder.math;
 
 /**
-A node of an expression tree that has exactly 2 children, a left child and a right child.  After the
-children are evaluated, a mathematical operation is applied and the result is returned.
-*/
+ * A node of an expression tree that has exactly 2 children, a left child and a
+ * right child. After the children are evaluated, a mathematical operation is
+ * applied and the result is returned.
+ */
 public abstract class OpNode extends Expression {
 
 	protected Expression leftChild = null;
@@ -39,7 +40,7 @@ public abstract class OpNode extends Expression {
 	}
 
 	/**
-	Returns the text symbol that represents the operation.
-	*/
+	 * Returns the text symbol that represents the operation.
+	 */
 	public abstract String getSymbol();
 }

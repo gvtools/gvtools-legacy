@@ -8,10 +8,9 @@ import javax.swing.table.AbstractTableModel;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.DataSource;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public class GDBMSTableModel extends AbstractTableModel {
@@ -25,8 +24,9 @@ public class GDBMSTableModel extends AbstractTableModel {
 
 	/**
 	 * Crea un nuevo GDBMSTableModel.
-	 *
-	 * @param ds DOCUMENT ME!
+	 * 
+	 * @param ds
+	 *            DOCUMENT ME!
 	 */
 	public GDBMSTableModel(DataSource ds) {
 		source = ds;
@@ -34,8 +34,9 @@ public class GDBMSTableModel extends AbstractTableModel {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param ds DOCUMENT ME!
+	 * 
+	 * @param ds
+	 *            DOCUMENT ME!
 	 */
 	public void setDataSource(DataSource ds) {
 		source = ds;
@@ -78,7 +79,7 @@ public class GDBMSTableModel extends AbstractTableModel {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return Returns the source.
 	 */
 	public DataSource getDataSource() {

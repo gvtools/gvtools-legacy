@@ -22,6 +22,7 @@ public class CutLayersTocMenuEntry extends AbstractTocContextMenuAction {
 	public int getGroupOrder() {
 		return 60;
 	}
+
 	public int getOrder() {
 		return 1;
 	}
@@ -31,9 +32,9 @@ public class CutLayersTocMenuEntry extends AbstractTocContextMenuAction {
 	}
 
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
-		if ( selectedItems.length >= 1 && isTocItemBranch(item)){
-			for (int i=0;i< selectedItems.length;i++) {
-				if (selectedItems[i].isEditing()){
+		if (selectedItems.length >= 1 && isTocItemBranch(item)) {
+			for (int i = 0; i < selectedItems.length; i++) {
+				if (selectedItems[i].isEditing()) {
 					return false;
 				}
 			}
@@ -42,50 +43,53 @@ public class CutLayersTocMenuEntry extends AbstractTocContextMenuAction {
 		return false;
 	}
 
-
 	public void execute(ITocItem item, FLayer[] selectedItems) {
 		XMLEntity xml = this.utiles.generateXMLCopyLayers(selectedItems);
 		if (xml == null) {
 			JOptionPane.showMessageDialog(
-					(Component)PluginServices.getMainFrame(),
-					"<html>"+PluginServices.getText(this,"No_ha_sido_posible_realizar_la_operacion")+"</html>",//Mensaje
-					PluginServices.getText(this,"cortar"),//titulo
-					JOptionPane.ERROR_MESSAGE
-					);
+					(Component) PluginServices.getMainFrame(),
+					"<html>"
+							+ PluginServices.getText(this,
+									"No_ha_sido_posible_realizar_la_operacion")
+							+ "</html>",// Mensaje
+					PluginServices.getText(this, "cortar"),// titulo
+					JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
 		String data = xml.toString();
 		if (data == null) {
 			JOptionPane.showMessageDialog(
-					(Component)PluginServices.getMainFrame(),
-					"<html>"+PluginServices.getText(this,"No_ha_sido_posible_realizar_la_operacion")+"</html>",//Mensaje
-					PluginServices.getText(this,"cortar"),//titulo
-					JOptionPane.ERROR_MESSAGE
-					);
+					(Component) PluginServices.getMainFrame(),
+					"<html>"
+							+ PluginServices.getText(this,
+									"No_ha_sido_posible_realizar_la_operacion")
+							+ "</html>",// Mensaje
+					PluginServices.getText(this, "cortar"),// titulo
+					JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
-
 		PluginServices.putInClipboard(data);
 
-
-    	int option=JOptionPane.showConfirmDialog((Component)PluginServices.getMainFrame(),PluginServices.getText(this,"desea_borrar_la_capa"));
-    	if (option!=JOptionPane.OK_OPTION) {
-    		return;
-    	}
+		int option = JOptionPane.showConfirmDialog(
+				(Component) PluginServices.getMainFrame(),
+				PluginServices.getText(this, "desea_borrar_la_capa"));
+		if (option != JOptionPane.OK_OPTION) {
+			return;
+		}
 		getMapContext().beginAtomicEvent();
 
-
-		boolean isOK =this.utiles.removeLayers(selectedItems);
+		boolean isOK = this.utiles.removeLayers(selectedItems);
 
 		getMapContext().endAtomicEvent();
 
 		if (isOK) {
 			getMapContext().invalidate();
-			Project project=((ProjectExtension)PluginServices.getExtension(ProjectExtension.class)).getProject();
+			Project project = ((ProjectExtension) PluginServices
+					.getExtension(ProjectExtension.class)).getProject();
 			project.setModified(true);
-			if (getMapContext().getLayers().getLayersCount()==0) {
+			if (getMapContext().getLayers().getLayersCount() == 0) {
 				PluginServices.getMainFrame().enableControls();
 			}
 		}

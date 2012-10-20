@@ -18,27 +18,28 @@
  */
 package org.gvsig.raster.buffer;
 
-
-
 /**
- * Interfaz que deben implementar las clases que sirven datos y tienen posibilidad
- * de consulta. 
+ * Interfaz que deben implementar las clases que sirven datos y tienen
+ * posibilidad de consulta.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public interface IQueryableRaster {	  	
+public interface IQueryableRaster {
 	/**
 	 * Consulta si una capa está siendo tileada o no
+	 * 
 	 * @return true si está siendo tileada y false si no lo está
 	 */
 	public boolean isTiled();
-	
+
 	/**
-	 * Obtiene el tamaño del tile si la capa está siendo tileada. Esta función e fundamentalmente
-	 * usada por salvar a raster donde se consulta el tamaño del tile para hacer bandas de ese ancho.
+	 * Obtiene el tamaño del tile si la capa está siendo tileada. Esta función e
+	 * fundamentalmente usada por salvar a raster donde se consulta el tamaño
+	 * del tile para hacer bandas de ese ancho.
+	 * 
 	 * @return array con dos enteros que representan el ancho y el alto del tile
 	 */
 	public int[] getTileSize();
-	
+
 }

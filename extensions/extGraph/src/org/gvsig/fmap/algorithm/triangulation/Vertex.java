@@ -39,7 +39,6 @@ public class Vertex extends Coordinate {
 
 	protected ArrayList<Integer> relatedTriIndexes;
 
-
 	public Vertex(double x, double y) {
 		super(x, y, 0.0);
 		relatedTriIndexes = new ArrayList<Integer>();
@@ -64,7 +63,7 @@ public class Vertex extends Coordinate {
 
 	public void addTriRef(int idTri) {
 		relatedTriIndexes.add(new Integer(idTri));
-		
+
 	}
 
 	public ArrayList<Integer> getRelatedTriIndexes() {

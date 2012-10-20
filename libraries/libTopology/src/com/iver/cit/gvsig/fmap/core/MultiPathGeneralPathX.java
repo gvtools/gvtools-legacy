@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.fmap.core;
 
 import com.graphbuilder.curve.MultiPath;
@@ -53,47 +53,49 @@ import com.iver.cit.gvsig.fmap.core.v02.FConverter;
 
 /**
  * GeneralPathX which could return a capi Multipath.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class MultiPathGeneralPathX extends GeneralPathX {
-	
+
 	final static int DIMENSIONS = 2;
-	
-	public MultiPath getMultiPath(){
-		return new MultiPath(DIMENSIONS){
+
+	public MultiPath getMultiPath() {
+		return new MultiPath(DIMENSIONS) {
 			public double getFlatness() {
 				return FConverter.FLATNESS;
 			}
-			
+
 			public void lineTo(double[] p) {
 				verifyCoords(p);
 				MultiPathGeneralPathX.this.lineTo(p[0], p[1]);
 			}
 
 			/**
-			Appends a point of type MOVE_TO.
-
-			@throws IllegalArgumentException If the point is null or the dimension of the point does not meet the
-			dimension requirement specified in the constructor.
-			@see #lineTo(double[])
-			*/
+			 * Appends a point of type MOVE_TO.
+			 * 
+			 * @throws IllegalArgumentException
+			 *             If the point is null or the dimension of the point
+			 *             does not meet the dimension requirement specified in
+			 *             the constructor.
+			 * @see #lineTo(double[])
+			 */
 			public void moveTo(double[] p) {
 				verifyCoords(p);
 				MultiPathGeneralPathX.this.moveTo(p[0], p[1]);
 			}
-			
-			private void verifyCoords(double[] p){
+
+			private void verifyCoords(double[] p) {
 				if (p == null)
 					throw new IllegalArgumentException("Point cannot be null.");
 
 				if (p.length < getDimension())
-					throw new IllegalArgumentException("p.length >= dimension required");
+					throw new IllegalArgumentException(
+							"p.length >= dimension required");
 			}
-			
-			
-			
+
 		};
-		
+
 	}
 }

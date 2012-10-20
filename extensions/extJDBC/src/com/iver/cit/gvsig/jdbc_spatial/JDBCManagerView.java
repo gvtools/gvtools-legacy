@@ -45,7 +45,8 @@ import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.utiles.connections.ConnectionTrans;
 
-public class JDBCManagerView extends com.iver.utiles.connections.JDBCManager implements IWindow{
+public class JDBCManagerView extends com.iver.utiles.connections.JDBCManager
+		implements IWindow {
 
 	public JDBCManagerView(ConnectionTrans[] ct) {
 		super(ct);
@@ -53,8 +54,7 @@ public class JDBCManagerView extends com.iver.utiles.connections.JDBCManager imp
 
 	public WindowInfo getWindowInfo() {
 		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODALDIALOG);
-		m_viewinfo.setTitle(PluginServices.getText(this,
-				"DBManager"));
+		m_viewinfo.setTitle(PluginServices.getText(this, "DBManager"));
 
 		return m_viewinfo;
 	}
@@ -62,4 +62,4 @@ public class JDBCManagerView extends com.iver.utiles.connections.JDBCManager imp
 	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
-	}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

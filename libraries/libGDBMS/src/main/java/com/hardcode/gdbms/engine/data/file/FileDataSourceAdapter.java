@@ -6,7 +6,6 @@ import java.sql.Types;
 import org.apache.log4j.Logger;
 
 import com.hardcode.driverManager.Driver;
-import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.gdbms.driver.exceptions.CloseDriverException;
 import com.hardcode.gdbms.driver.exceptions.OpenDriverException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -21,7 +20,7 @@ import com.hardcode.gdbms.engine.values.ValueFactory;
 
 /**
  * Adapta la interfaz FileDriver a la interfaz DataSource
- *
+ * 
  * @author Fernando González Cortés
  */
 class FileDataSourceAdapter extends AbstractFileDataSource implements
@@ -45,7 +44,7 @@ class FileDataSourceAdapter extends AbstractFileDataSource implements
 
 			sem++;
 		} catch (OpenDriverException e) {
-			throw new ReadDriverException(getName(),e);
+			throw new ReadDriverException(getName(), e);
 		}
 	}
 
@@ -59,19 +58,22 @@ class FileDataSourceAdapter extends AbstractFileDataSource implements
 			if (sem == 0) {
 				driver.close();
 			} else if (sem < 0) {
-				sem=0;
+				sem = 0;
 				driver.close();
-				Logger.getLogger(this.getClass()).debug("DataSource closed too many times  =  "+ driver.getName());
-//				throw new RuntimeException("DataSource closed too many times");
+				Logger.getLogger(this.getClass()).debug(
+						"DataSource closed too many times  =  "
+								+ driver.getName());
+				// throw new
+				// RuntimeException("DataSource closed too many times");
 			}
 		} catch (CloseDriverException e) {
-			throw new ReadDriverException(getName(),e);
+			throw new ReadDriverException(getName(), e);
 		}
 	}
 
 	/**
 	 * Asigna el driver al adaptador
-	 *
+	 * 
 	 * @param driver
 	 *            The driver to set.
 	 */
@@ -81,7 +83,7 @@ class FileDataSourceAdapter extends AbstractFileDataSource implements
 
 	/**
 	 * Sets the source information of the DataSource
-	 *
+	 * 
 	 * @param sourceInfo
 	 *            The file to set.
 	 */
@@ -168,14 +170,14 @@ class FileDataSourceAdapter extends AbstractFileDataSource implements
 	 * @see com.hardcode.gdbms.engine.data.DataSource#getDataWare(int)
 	 */
 	public DataWare getDataWare(int mode) throws ReadDriverException {
-			FileDataWare dw = FileDataSourceFactory.newDataWareInstance();
-			FileDriver driver;
-			driver = null;
-			((GDBMSDriver) driver).setDataSourceFactory(getDataSourceFactory());
-			dw.setDriver(driver);
-			dw.setDataSourceFactory(dsf);
-			dw.setSourceInfo(getSourceInfo());
-			return dw;
+		FileDataWare dw = FileDataSourceFactory.newDataWareInstance();
+		FileDriver driver;
+		driver = null;
+		((GDBMSDriver) driver).setDataSourceFactory(getDataSourceFactory());
+		dw.setDriver(driver);
+		dw.setDataSourceFactory(dsf);
+		dw.setSourceInfo(getSourceInfo());
+		return dw;
 
 	}
 
@@ -183,27 +185,27 @@ class FileDataSourceAdapter extends AbstractFileDataSource implements
 		return getReadDriver().getFieldWidth(i);
 	}
 
-    public boolean isVirtualField(int fieldId) throws ReadDriverException {
+	public boolean isVirtualField(int fieldId) throws ReadDriverException {
 		// last field is the virtual primary key
 		if (fieldId == this.getFieldCount() - 1)
 			return true;
 		return false;
-    }
+	}
 
 	public void reload() throws ReloadDriverException {
 		try {
 			sem = 0;
 			driver.close();
 
-		this.fieldCount = -1;
+			this.fieldCount = -1;
 
-		this.start();
+			this.start();
 
-		this.raiseEventReloaded();
+			this.raiseEventReloaded();
 		} catch (CloseDriverException e) {
-			throw new ReloadDriverException(getName(),e);
+			throw new ReloadDriverException(getName(), e);
 		} catch (ReadDriverException e) {
-			throw new ReloadDriverException(getName(),e);
+			throw new ReloadDriverException(getName(), e);
 		}
 
 	}

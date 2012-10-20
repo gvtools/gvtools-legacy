@@ -27,6 +27,7 @@ import junit.framework.TestCase;
 
 import org.gvsig.raster.RasterLibrary;
 import org.gvsig.raster.datastruct.Extent;
+
 /**
  * Comprueba la llamada de RasterUtilities calculateAdjustedView con un raster
  * rotado. Le pasará un extent y este tiene que ser devuelto ajustado a la
@@ -36,7 +37,7 @@ import org.gvsig.raster.datastruct.Extent;
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class TestAdjustExtentToRotateRaster extends TestCase {
-	
+
 	private int w = 870, h = 870;
 	static {
 		RasterLibrary.wakeUp();
@@ -52,12 +53,14 @@ public class TestAdjustExtentToRotateRaster extends TestCase {
 	}
 
 	public void testStack() {
-		AffineTransform at = new AffineTransform(2.4, 0.2, 0.2, -2.4, 644850.0, 4925250.0);
+		AffineTransform at = new AffineTransform(2.4, 0.2, 0.2, -2.4, 644850.0,
+				4925250.0);
 		Extent ext = new Extent(644823.3, 4925240.5, 644930.5, 4925123.6);
-		Extent e = RasterUtilities.calculateAdjustedView(ext, at, new Dimension(w, h));
-//		System.out.println("-UL=" + e.minX() + " " + e.maxY());
-//		System.out.println("-LR=" + e.maxX() + " " + e.minY());
-		
+		Extent e = RasterUtilities.calculateAdjustedView(ext, at,
+				new Dimension(w, h));
+		// System.out.println("-UL=" + e.minX() + " " + e.maxY());
+		// System.out.println("-LR=" + e.maxX() + " " + e.minY());
+
 		Point2D ul = new Point2D.Double(e.minX(), e.maxY());
 		Point2D lr = new Point2D.Double(e.maxX(), e.minY());
 
@@ -67,17 +70,18 @@ public class TestAdjustExtentToRotateRaster extends TestCase {
 		} catch (NoninvertibleTransformException exc) {
 			exc.printStackTrace();
 		}
-		
-//		System.out.println("*UL=" + ul.getX() + " " + ul.getY());
-//		System.out.println("*LR=" + lr.getX() + " " + lr.getY());
+
+		// System.out.println("*UL=" + ul.getX() + " " + ul.getY());
+		// System.out.println("*LR=" + lr.getX() + " " + lr.getY());
 
 		if (ul.getX() < 0 || ul.getY() < 0 || lr.getX() < 0 || lr.getY() < 0)
 			assertEquals(0, 1);
 
-		if (ul.getX() >= w || ul.getY() >= h || lr.getX() >= w || lr.getY() >= h)
+		if (ul.getX() >= w || ul.getY() >= h || lr.getX() >= w
+				|| lr.getY() >= h)
 			assertEquals(0, 1);
-		
-//		System.out.println("-UL=" + e.minX() + " " + e.maxY());
-//		System.out.println("-LR=" + e.maxX() + " " + e.minY());
+
+		// System.out.println("-UL=" + e.minX() + " " + e.maxY());
+		// System.out.println("-LR=" + e.maxX() + " " + e.minY());
 	}
 }

@@ -40,34 +40,40 @@ import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.gui.WizardPanel;
 import com.iver.cit.gvsig.gui.wizards.WizardListener;
 import com.iver.cit.gvsig.project.Project;
+
 /**
  * Frame del cuadro de dialogo que contendra los tabs de aperturas de ficheros
- *
+ * 
  * @version 04/09/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
-public class AddLayerDialog extends JPanel implements com.iver.andami.ui.mdiManager.IWindow {
-	static private CoordinateReferenceSystem crs           = null;
-	private JTabbedPane        jTabbedPane    = null;
-	private AcceptCancelPanel  jPanel         = null;
-	
-	private boolean            accepted       = false;
-	
-	private String             title          = PluginServices.getText(this, "add_layer");
-	private WizardListener     wizardListener = new DialogWizardListener();
+public class AddLayerDialog extends JPanel implements
+		com.iver.andami.ui.mdiManager.IWindow {
+	static private CoordinateReferenceSystem crs = null;
+	private JTabbedPane jTabbedPane = null;
+	private AcceptCancelPanel jPanel = null;
+
+	private boolean accepted = false;
+
+	private String title = PluginServices.getText(this, "add_layer");
+	private WizardListener wizardListener = new DialogWizardListener();
 
 	/**
-   * Creates a new FOpenDialog object.
-   * @param view Vista que vamos a refrescar
-   * @param mapControl MapControl que recibe la capa (te puede interesar
-   *          añadirla al principal o al Overview.
-   */
+	 * Creates a new FOpenDialog object.
+	 * 
+	 * @param view
+	 *            Vista que vamos a refrescar
+	 * @param mapControl
+	 *            MapControl que recibe la capa (te puede interesar añadirla al
+	 *            principal o al Overview.
+	 */
 	public AddLayerDialog() {
 		initialize();
 	}
 
 	/**
 	 * Constructor con un nombre de Frame
+	 * 
 	 * @param title
 	 */
 	public AddLayerDialog(String title) {
@@ -76,8 +82,8 @@ public class AddLayerDialog extends JPanel implements com.iver.andami.ui.mdiMana
 	}
 
 	/**
-   * This method initializes this
-   */
+	 * This method initializes this
+	 */
 	private void initialize() {
 		this.setLayout(new BorderLayout());
 		this.setSize(523, 385);
@@ -87,18 +93,21 @@ public class AddLayerDialog extends JPanel implements com.iver.andami.ui.mdiMana
 	}
 
 	/**
-   * This method initializes jTabbedPane
-   * @return javax.swing.JTabbedPane
-   */
+	 * This method initializes jTabbedPane
+	 * 
+	 * @return javax.swing.JTabbedPane
+	 */
 	private JTabbedPane getJTabbedPane() {
 		if (jTabbedPane == null) {
 			jTabbedPane = new JTabbedPane();
-			jTabbedPane.setBounds(0, 0, getWindowInfo().getWidth() - 10, getWindowInfo().getHeight() - 10);
+			jTabbedPane.setBounds(0, 0, getWindowInfo().getWidth() - 10,
+					getWindowInfo().getHeight() - 10);
 			jTabbedPane.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent e) {
 					JTabbedPane tabs = (JTabbedPane) e.getSource();
 					getJPanel().setOkButtonEnabled(false);
-//					getJPanel().setOkButtonEnabled(!(tabs.getSelectedComponent() instanceof WizardPanel));
+					// getJPanel().setOkButtonEnabled(!(tabs.getSelectedComponent()
+					// instanceof WizardPanel));
 				}
 			});
 		}
@@ -108,6 +117,7 @@ public class AddLayerDialog extends JPanel implements com.iver.andami.ui.mdiMana
 
 	/**
 	 * Añade en una pestaña un Jpanel con un titulo
+	 * 
 	 * @param title
 	 * @param panel
 	 */
@@ -117,6 +127,7 @@ public class AddLayerDialog extends JPanel implements com.iver.andami.ui.mdiMana
 
 	/**
 	 * Añade en una pestaña un WizardPanel con un titulo
+	 * 
 	 * @param title
 	 * @param panel
 	 */
@@ -127,6 +138,7 @@ public class AddLayerDialog extends JPanel implements com.iver.andami.ui.mdiMana
 
 	/**
 	 * Devuelve el JPanel seleccionado en las pestañas
+	 * 
 	 * @return
 	 */
 	public JPanel getSelectedTab() {
@@ -135,6 +147,7 @@ public class AddLayerDialog extends JPanel implements com.iver.andami.ui.mdiMana
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindow#getWindowInfo()
 	 */
 	public WindowInfo getWindowInfo() {
@@ -146,54 +159,66 @@ public class AddLayerDialog extends JPanel implements com.iver.andami.ui.mdiMana
 	}
 
 	/**
-   * This method initializes jPanel
-   * @return javax.swing.JPanel
-   */
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	public AcceptCancelPanel getJPanel() {
 		if (jPanel == null) {
 			ActionListener okAction = new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
+
 					// if not wizard panel, simply close
 					if (!(getSelectedTab() instanceof WizardPanel)) {
 						accepted = true;
 						if (PluginServices.getMainFrame() == null) {
-							((JDialog) (getParent().getParent().getParent().getParent())).dispose();
+							((JDialog) (getParent().getParent().getParent()
+									.getParent())).dispose();
 						} else {
-							PluginServices.getMDIManager().closeWindow((IWindow) AddLayerDialog.this);
+							PluginServices.getMDIManager().closeWindow(
+									(IWindow) AddLayerDialog.this);
 						}
 					} else {
 						// // if wizard panel, validated settings first
 						WizardPanel wp = (WizardPanel) getSelectedTab();
-						String[] invalid_layer_settings_message = wp.validateLayerSettings(); 
+						String[] invalid_layer_settings_message = wp
+								.validateLayerSettings();
 						if (invalid_layer_settings_message == null) {
 							accepted = true;
 							if (PluginServices.getMainFrame() == null) {
-								((JDialog) (getParent().getParent().getParent().getParent())).dispose();
+								((JDialog) (getParent().getParent().getParent()
+										.getParent())).dispose();
 							} else {
-								PluginServices.getMDIManager().closeWindow((IWindow) AddLayerDialog.this);
+								PluginServices.getMDIManager().closeWindow(
+										(IWindow) AddLayerDialog.this);
 							}
 						} else {
-							JOptionPane.showMessageDialog(
-									(Component) PluginServices.getMainFrame(),
-									PluginServices.getText(this, "Error_reported_check_also_restrictions") + "\n" +
-									appendStringArray(invalid_layer_settings_message),
-									PluginServices.getText(this, "panel_loading_exception"),
-									JOptionPane.ERROR_MESSAGE
-									);
+							JOptionPane
+									.showMessageDialog(
+											(Component) PluginServices
+													.getMainFrame(),
+											PluginServices
+													.getText(this,
+															"Error_reported_check_also_restrictions")
+													+ "\n"
+													+ appendStringArray(invalid_layer_settings_message),
+											PluginServices.getText(this,
+													"panel_loading_exception"),
+											JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				}
 			};
-			
-			
+
 			ActionListener cancelAction = new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					accepted = false;
 					if (PluginServices.getMainFrame() != null) {
-						PluginServices.getMDIManager().closeWindow((IWindow) AddLayerDialog.this);
+						PluginServices.getMDIManager().closeWindow(
+								(IWindow) AddLayerDialog.this);
 					} else {
-						((JDialog) (getParent().getParent().getParent().getParent())).dispose();
+						((JDialog) (getParent().getParent().getParent()
+								.getParent())).dispose();
 					}
 				}
 			};
@@ -202,24 +227,29 @@ public class AddLayerDialog extends JPanel implements com.iver.andami.ui.mdiMana
 		return jPanel;
 	}
 
-
-
-
 	/**
 	 * Listener para el Wizard de apertura de fichero
+	 * 
 	 * @version 05/09/2007
 	 * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
 	 */
 	public class DialogWizardListener implements WizardListener {
 		/*
 		 * (non-Javadoc)
-		 * @see com.iver.cit.gvsig.gui.wizards.WizardListener#error(java.lang.Exception)
+		 * 
+		 * @see
+		 * com.iver.cit.gvsig.gui.wizards.WizardListener#error(java.lang.Exception
+		 * )
 		 */
-		public void error(Exception e) {}
+		public void error(Exception e) {
+		}
 
 		/*
 		 * (non-Javadoc)
-		 * @see com.iver.cit.gvsig.gui.wizards.WizardListener#wizardStateChanged(boolean)
+		 * 
+		 * @see
+		 * com.iver.cit.gvsig.gui.wizards.WizardListener#wizardStateChanged(
+		 * boolean)
 		 */
 		public void wizardStateChanged(boolean finishable) {
 			getJPanel().setOkButtonEnabled(finishable);
@@ -228,6 +258,7 @@ public class AddLayerDialog extends JPanel implements com.iver.andami.ui.mdiMana
 
 	/**
 	 * Devuelve la ultima proyección usada
+	 * 
 	 * @return
 	 */
 	public static CoordinateReferenceSystem getLastCrs() {
@@ -238,6 +269,7 @@ public class AddLayerDialog extends JPanel implements com.iver.andami.ui.mdiMana
 
 	/**
 	 * Define la ultima proyeccion
+	 * 
 	 * @param crs
 	 */
 	public static void setLastCrs(CoordinateReferenceSystem crs) {
@@ -252,13 +284,13 @@ public class AddLayerDialog extends JPanel implements com.iver.andami.ui.mdiMana
 	public boolean isAccepted() {
 		return accepted;
 	}
-	
+
 	private String appendStringArray(String[] strarr) {
-		
+
 		String resp = "";
 		int len = strarr.length;
-		for (int i=0; i<len; i++) {
-			resp = "\n" + strarr[i] + "\n";  
+		for (int i = 0; i < len; i++) {
+			resp = "\n" + strarr[i] + "\n";
 		}
 		return resp;
 	}

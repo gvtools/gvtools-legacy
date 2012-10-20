@@ -58,13 +58,13 @@ import org.gvsig.exceptions.BaseException;
  *
  */
 /**
- * This warning is throwed when an application try to write
- * a feature that the current format doesn't supports it.
- * A feature in this case is not a "geographic feature":
- * is a detail: A layer with bbox, a leyer name... * 
+ * This warning is throwed when an application try to write a feature that the
+ * current format doesn't supports it. A feature in this case is not a
+ * "geographic feature": is a detail: A layer with bbox, a leyer name... *
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class FeatureNotSupportedWarning extends BaseException{
+public class FeatureNotSupportedWarning extends BaseException {
 	private static final long serialVersionUID = 8532995170438868404L;
 	private String feature = null;
 	private String parserName = null;
@@ -95,23 +95,23 @@ public class FeatureNotSupportedWarning extends BaseException{
 	public static final String MULTIGEOMETRYCREATION = "Create a multiGeometry";
 	/************** CURVE CREATIONS FOR GML 3 ***************/
 	public static final String MULTICURVECREATION = "Create a multiCurve";
-	public static final String CURVECREATION = "Create a Curve";	
-	/**METADATA**/
+	public static final String CURVECREATION = "Create a Curve";
+	/** METADATA **/
 	public static final String METADATACREATION = "Create metadata";
 	public static final String FEATUREWITHMETADATA = "Feature with metadata";
 	public static final String METADATAWITHCHILDREN = "Metadata with children";
-	/**TIME**/
-	public static final String TIMECREATION = "Create time";	
+	/** TIME **/
+	public static final String TIMECREATION = "Create time";
 	public static final String FEATUREWITHTIME = "Feature with time";
-	
-	public FeatureNotSupportedWarning(String feature, String parserName){
+
+	public FeatureNotSupportedWarning(String feature, String parserName) {
 		this.feature = feature;
 		this.parserName = parserName;
 		initialize();
 	}
 
-	public FeatureNotSupportedWarning(String feature){
-		this.feature = feature;	
+	public FeatureNotSupportedWarning(String feature) {
+		this.feature = feature;
 		initialize();
 	}
 
@@ -120,30 +120,30 @@ public class FeatureNotSupportedWarning extends BaseException{
 	 */
 	private void initialize() {
 		messageKey = "gpe_feature_not_supported_warning";
-		if (parserName != null){
-			formatString = "The feature '%(feature)' is not supported" +
-			" by the %(parserName) parser. It could be by two" +
-			" reasons: 1) The parser doesn't support this feature. " + 
-			" 2) The format doesn't support the feature.";
-		}else{
-			formatString = "The feature '%(feature)' is not supported" +
-			" by the consumer application."; 
+		if (parserName != null) {
+			formatString = "The feature '%(feature)' is not supported"
+					+ " by the %(parserName) parser. It could be by two"
+					+ " reasons: 1) The parser doesn't support this feature. "
+					+ " 2) The format doesn't support the feature.";
+		} else {
+			formatString = "The feature '%(feature)' is not supported"
+					+ " by the consumer application.";
 		}
 		code = serialVersionUID;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map values() {
 		Hashtable hash = new Hashtable();
 		hash.put("feature", feature);
-		if (parserName != null){
+		if (parserName != null) {
 			hash.put("parserName", parserName);
 		}
 		return hash;
 	}
-
 
 }

@@ -19,10 +19,12 @@
 package org.gvsig.raster.datastruct;
 
 import java.awt.Color;
+
 /**
- * Valor minimo para un item de una tabla de color. Este tendrá que pixel afecta,
- * nombre de esa clase, color y como estará interpolado con el siguiente.
- *
+ * Valor minimo para un item de una tabla de color. Este tendrá que pixel
+ * afecta, nombre de esa clase, color y como estará interpolado con el
+ * siguiente.
+ * 
  * @version 04/07/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
@@ -34,6 +36,7 @@ public class ColorItem implements Cloneable {
 
 	/**
 	 * Devuelve el color
+	 * 
 	 * @return
 	 */
 	public Color getColor() {
@@ -42,6 +45,7 @@ public class ColorItem implements Cloneable {
 
 	/**
 	 * Definir el color
+	 * 
 	 * @param color
 	 */
 	public void setColor(Color color) {
@@ -49,8 +53,9 @@ public class ColorItem implements Cloneable {
 	}
 
 	/**
-	 * Devuelve el valor de interpolación con el siguiente color.
-	 * Límites: 0..100
+	 * Devuelve el valor de interpolación con el siguiente color. Límites:
+	 * 0..100
+	 * 
 	 * @return
 	 */
 	public double getInterpolated() {
@@ -60,20 +65,21 @@ public class ColorItem implements Cloneable {
 	/**
 	 * Definir el valor de interpolación. Si es mayor a 100 o menor a 0 se pone
 	 * entre los valores correctos.
+	 * 
 	 * @param interpolated
 	 */
 	public void setInterpolated(double interpolated) {
 		if (interpolated > 100)
 			this.interpolated = 100;
+		else if (interpolated < 0)
+			this.interpolated = 0;
 		else
-			if (interpolated < 0)
-				this.interpolated = 0;
-			else
-				this.interpolated = interpolated;
+			this.interpolated = interpolated;
 	}
 
 	/**
 	 * Obtener en que valor estará dicho color
+	 * 
 	 * @return
 	 */
 	public double getValue() {
@@ -82,6 +88,7 @@ public class ColorItem implements Cloneable {
 
 	/**
 	 * Definir el valor del ColorItem.
+	 * 
 	 * @param value
 	 */
 	public void setValue(double value) {
@@ -92,6 +99,7 @@ public class ColorItem implements Cloneable {
 
 	/**
 	 * Devuelve el nombre de la clase
+	 * 
 	 * @return
 	 */
 	public String getNameClass() {
@@ -100,6 +108,7 @@ public class ColorItem implements Cloneable {
 
 	/**
 	 * Define el nombre de la clase
+	 * 
 	 * @param nameClass
 	 */
 	public void setNameClass(String nameClass) {
@@ -108,6 +117,7 @@ public class ColorItem implements Cloneable {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#clone()
 	 */
 	public Object clone() {
@@ -128,6 +138,7 @@ public class ColorItem implements Cloneable {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	public int hashCode() {
@@ -135,7 +146,8 @@ public class ColorItem implements Cloneable {
 		int result = 1;
 		result = PRIME * result + ((color == null) ? 0 : color.hashCode());
 		result = PRIME * result + (int) interpolated;
-		result = PRIME * result + ((nameClass == null) ? 0 : nameClass.hashCode());
+		result = PRIME * result
+				+ ((nameClass == null) ? 0 : nameClass.hashCode());
 		long temp;
 		temp = Double.doubleToLongBits(value);
 		result = PRIME * result + (int) (temp ^ (temp >>> 32));
@@ -144,6 +156,7 @@ public class ColorItem implements Cloneable {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	public boolean equals(Object obj) {
@@ -157,18 +170,17 @@ public class ColorItem implements Cloneable {
 		if (color == null) {
 			if (other.color != null)
 				return false;
-		} else
-			if (!color.equals(other.color))
-				return false;
+		} else if (!color.equals(other.color))
+			return false;
 		if (interpolated != other.interpolated)
 			return false;
 		if (nameClass == null) {
 			if (other.nameClass != null)
 				return false;
-		} else
-			if (!nameClass.equals(other.nameClass))
-				return false;
-		if (Double.doubleToLongBits(value) != Double.doubleToLongBits(other.value))
+		} else if (!nameClass.equals(other.nameClass))
+			return false;
+		if (Double.doubleToLongBits(value) != Double
+				.doubleToLongBits(other.value))
 			return false;
 		return true;
 	}

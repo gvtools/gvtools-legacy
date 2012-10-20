@@ -65,23 +65,21 @@ public class JUrlFileChooser extends JFileChooser {
 
 	FileFilter ff = new FileFilter() {
 		public boolean accept(File f) {
-			if (f.isDirectory()) return true;
+			if (f.isDirectory())
+				return true;
 			String fName = f.getAbsolutePath();
-			if (fName!=null) {
+			if (fName != null) {
 				fName = fName.toLowerCase();
-				return fName.endsWith(".png")
-				|| fName.endsWith(".gif")
-				|| fName.endsWith(".jpg")
-				|| fName.endsWith(".jpeg")
-				|| fName.endsWith(".bmp")
-				|| fName.endsWith(".svg");
+				return fName.endsWith(".png") || fName.endsWith(".gif")
+						|| fName.endsWith(".jpg") || fName.endsWith(".jpeg")
+						|| fName.endsWith(".bmp") || fName.endsWith(".svg");
 			}
 			return false;
 		}
 
 		public String getDescription() {
-			return PluginServices.getText(this, "bitmap_and_svg_image_files")+ ", " +
-			PluginServices.getText(this, "URL");
+			return PluginServices.getText(this, "bitmap_and_svg_image_files")
+					+ ", " + PluginServices.getText(this, "URL");
 		}
 	};
 
@@ -114,7 +112,6 @@ public class JUrlFileChooser extends JFileChooser {
 		public File getHomeDirectory() {
 			return root;
 		}
-
 
 		@Override
 		public File[] getRoots() {

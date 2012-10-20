@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.referencing;
 
 import java.util.List;
@@ -59,26 +59,25 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
 /**
- * Adapter class to provides mapped position links from a 
- * vectorial line layer. 
- * Caution! Its a read only MappedPositionContainer.
- * It launchs runtime exception if try to use writing operations.
+ * Adapter class to provides mapped position links from a vectorial line layer.
+ * Caution! Its a read only MappedPositionContainer. It launchs runtime
+ * exception if try to use writing operations.
  * 
  * If layer's linear geometries have more than two points, only will be
  * consideer the two first points.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class MappedPositionContainerLayerBased implements
 		MappedPositionContainer {
-	
-	
+
 	private FLyrVect lineLyr;
 	private LineLyrAdapter listOfMapped;
 	private boolean hasBeenAddedToToc = false;
-	
-	public MappedPositionContainerLayerBased(FLyrVect layer) throws BaseException{
+
+	public MappedPositionContainerLayerBased(FLyrVect layer)
+			throws BaseException {
 		this.lineLyr = layer;
 		this.listOfMapped = new LineLyrAdapter(layer);
 	}
@@ -112,7 +111,7 @@ public class MappedPositionContainerLayerBased implements
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return solution;
 	}
 

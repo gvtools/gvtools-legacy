@@ -81,240 +81,267 @@ import com.iver.cit.gvsig.project.documents.view.toolListeners.InfoListener;
 import com.iver.gvsig.centerviewpoint.CenterViewToPointExtension;
 
 /**
- * The InputCoordinatesPanel class creates a JPanel where the
- * user can input the coordinates of the point of reference
- * for center the View.
- *
+ * The InputCoordinatesPanel class creates a JPanel where the user can input the
+ * coordinates of the point of reference for center the View.
+ * 
  * @author jmorell
  */
 public class InputCoordinatesPanel extends JPanel implements IWindow {
-    private static final long serialVersionUID = 1L;
-    private JLabel labelX = null;
-    private JTextField textX = null;
-    private JLabel labelY = null;
-    private JTextField textY = null;
-    private MapControl mapControl;
-    private WindowInfo viewInfo = null;
-    private String firstCoordinate;
-    private String secondCoordinate;
-    private Point2D center;
-    private GraphicLayer lyr;
-    private ColorChooserPanel colorPanel;
+	private static final long serialVersionUID = 1L;
+	private JLabel labelX = null;
+	private JTextField textX = null;
+	private JLabel labelY = null;
+	private JTextField textY = null;
+	private MapControl mapControl;
+	private WindowInfo viewInfo = null;
+	private String firstCoordinate;
+	private String secondCoordinate;
+	private Point2D center;
+	private GraphicLayer lyr;
+	private ColorChooserPanel colorPanel;
 	private AcceptCancelPanel okCancelPanel = null;
+
 	/**
-     * This is the default constructor
-     */
-    public InputCoordinatesPanel(MapContext mapContext) {
-        super();
-        this.mapControl = new MapControl();
-        mapControl.setMapContext(mapContext);
-        lyr=mapControl.getMapContext().getGraphicsLayer();
-        initializeCoordinates();
-        initialize();
-    }
+	 * This is the default constructor
+	 */
+	public InputCoordinatesPanel(MapContext mapContext) {
+		super();
+		this.mapControl = new MapControl();
+		mapControl.setMapContext(mapContext);
+		lyr = mapControl.getMapContext().getGraphicsLayer();
+		initializeCoordinates();
+		initialize();
+	}
 
-    /**
-     * Sets the proper text for the first and second coordinate labels,
-     * depending on the kind of selected projection.
-     *
-     */
-    private void initializeCoordinates() {
-    	CoordinateReferenceSystem crs = mapControl.getCrs();
-        if (crs instanceof ProjectedCRS) {
-            firstCoordinate = "X";
-            secondCoordinate = "Y";
-        } else {
-            firstCoordinate = "Lon";
-            secondCoordinate = "Lat";
-        }
-    }
+	/**
+	 * Sets the proper text for the first and second coordinate labels,
+	 * depending on the kind of selected projection.
+	 * 
+	 */
+	private void initializeCoordinates() {
+		CoordinateReferenceSystem crs = mapControl.getCrs();
+		if (crs instanceof ProjectedCRS) {
+			firstCoordinate = "X";
+			secondCoordinate = "Y";
+		} else {
+			firstCoordinate = "Lon";
+			secondCoordinate = "Lat";
+		}
+	}
 
-    /**
-     * Move the view's extent so that the specified point gets
-     * centered.
-     *
-     * @throws Exception
-     */
-    private void zoomToCoordinates() throws Exception {
-       try{
-    	Rectangle2D oldExtent = mapControl.getViewPort().getAdjustedExtent();
-        double oldCenterX = oldExtent.getCenterX();
-        double oldCenterY = oldExtent.getCenterY();
-        double centerX = (new Double((String)textX.getText())).doubleValue();
-        double centerY = (new Double((String)textY.getText())).doubleValue();
-        center=new Point2D.Double(centerX,centerY);
-        double movX = centerX-oldCenterX;
-        double movY = centerY-oldCenterY;
-        double upperLeftCornerX = oldExtent.getMinX()+movX;
-        double upperLeftCornerY = oldExtent.getMinY()+movY;
-        double width = oldExtent.getWidth();
-        double height = oldExtent.getHeight();
-        Rectangle2D extent = new Rectangle2D.Double(upperLeftCornerX, upperLeftCornerY, width, height);
-        mapControl.getViewPort().setExtent(extent);
-       }catch (NumberFormatException e) {
-    	   throw new Exception();
-       }
+	/**
+	 * Move the view's extent so that the specified point gets centered.
+	 * 
+	 * @throws Exception
+	 */
+	private void zoomToCoordinates() throws Exception {
+		try {
+			Rectangle2D oldExtent = mapControl.getViewPort()
+					.getAdjustedExtent();
+			double oldCenterX = oldExtent.getCenterX();
+			double oldCenterY = oldExtent.getCenterY();
+			double centerX = (new Double((String) textX.getText()))
+					.doubleValue();
+			double centerY = (new Double((String) textY.getText()))
+					.doubleValue();
+			center = new Point2D.Double(centerX, centerY);
+			double movX = centerX - oldCenterX;
+			double movY = centerY - oldCenterY;
+			double upperLeftCornerX = oldExtent.getMinX() + movX;
+			double upperLeftCornerY = oldExtent.getMinY() + movY;
+			double width = oldExtent.getWidth();
+			double height = oldExtent.getHeight();
+			Rectangle2D extent = new Rectangle2D.Double(upperLeftCornerX,
+					upperLeftCornerY, width, height);
+			mapControl.getViewPort().setExtent(extent);
+		} catch (NumberFormatException e) {
+			throw new Exception();
+		}
 
-    }
+	}
 
-    /**
-     * This method initializes this
-     *
-     * @return void
-     */
-    private void initialize() {
-        labelY = new JLabel();
-        labelY.setBounds(10, 35, 28, 20);
-        labelY.setText(secondCoordinate + ":");
-        labelX = new JLabel();
-        labelX.setBounds(10, 10, 28, 20);
-        labelX.setText(firstCoordinate + ":");
-        this.setLayout(null);
-        this.setSize(307, 100);
-        this.add(labelX, null);
-        this.add(getTextX(), null);
-        this.add(labelY, null);
-        this.add(getTextY(), null);
-        this.add(getColorPanel());
-        this.add(getOkCancelPanel(), null);
-    }
+	/**
+	 * This method initializes this
+	 * 
+	 * @return void
+	 */
+	private void initialize() {
+		labelY = new JLabel();
+		labelY.setBounds(10, 35, 28, 20);
+		labelY.setText(secondCoordinate + ":");
+		labelX = new JLabel();
+		labelX.setBounds(10, 10, 28, 20);
+		labelX.setText(firstCoordinate + ":");
+		this.setLayout(null);
+		this.setSize(307, 100);
+		this.add(labelX, null);
+		this.add(getTextX(), null);
+		this.add(labelY, null);
+		this.add(getTextY(), null);
+		this.add(getColorPanel());
+		this.add(getOkCancelPanel(), null);
+	}
 
-    /**
-     * This method initializes textX
-     *
-     * @return javax.swing.JTextField
-     */
-    private JTextField getTextX() {
-    	if (textX == null) {
-    		textX = new JTextField();
-    		textX.setBounds(40, 10, 260, 20);
-    		textX.addActionListener(new java.awt.event.ActionListener() {
-    			public void actionPerformed(java.awt.event.ActionEvent e) {
-    				textX.transferFocus();
-    			}
-    		});
-    	}
-    	return textX;
-    }
+	/**
+	 * This method initializes textX
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getTextX() {
+		if (textX == null) {
+			textX = new JTextField();
+			textX.setBounds(40, 10, 260, 20);
+			textX.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					textX.transferFocus();
+				}
+			});
+		}
+		return textX;
+	}
 
-    /**
-     * This method initializes textY
-     *
-     * @return javax.swing.JTextField
-     */
-    private JTextField getTextY() {
-    	if (textY == null) {
-    		textY = new JTextField();
-    		textY.setBounds(40, 35, 260, 20);
-    		textY.addActionListener(new java.awt.event.ActionListener() {
-    			public void actionPerformed(java.awt.event.ActionEvent e) {
-    				textY.transferFocus();
-    			}
-    		});
-    	}
-    	return textY;
-    }
+	/**
+	 * This method initializes textY
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getTextY() {
+		if (textY == null) {
+			textY = new JTextField();
+			textY.setBounds(40, 35, 260, 20);
+			textY.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					textY.transferFocus();
+				}
+			});
+		}
+		return textY;
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.andami.ui.mdiManager.View#getViewInfo()
-     */
-    public WindowInfo getWindowInfo() {
-        // TODO Auto-generated method stub
-        if (viewInfo == null) {
-            viewInfo=new WindowInfo(WindowInfo.MODALDIALOG);
-            viewInfo.setTitle(PluginServices.getText(this,"Centrar_la_Vista_sobre_un_punto"));
-            viewInfo.setWidth(this.getWidth()+8);
-            viewInfo.setHeight(this.getHeight());
-        }
-        return viewInfo;
-    }
-    /**
-     * Opens the infoByPoint dialog for the selected point.
-     *
-     */
-    private void openInfo(){
-    	InfoListener infoListener=new InfoListener(mapControl);
-    	MouseEvent e=new MouseEvent((Component)(((CenterViewToPointExtension)PluginServices.getExtension(CenterViewToPointExtension.class)).getView()),MouseEvent.BUTTON1,MouseEvent.ACTION_EVENT_MASK,MouseEvent.MOUSE_CLICKED,500,400,1,true);
-    	Point2D centerPixels=mapControl.getViewPort().fromMapPoint(center.getX(),center.getY());
-    	PointEvent pe=new PointEvent(centerPixels,e);
-    	try {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.andami.ui.mdiManager.View#getViewInfo()
+	 */
+	public WindowInfo getWindowInfo() {
+		// TODO Auto-generated method stub
+		if (viewInfo == null) {
+			viewInfo = new WindowInfo(WindowInfo.MODALDIALOG);
+			viewInfo.setTitle(PluginServices.getText(this,
+					"Centrar_la_Vista_sobre_un_punto"));
+			viewInfo.setWidth(this.getWidth() + 8);
+			viewInfo.setHeight(this.getHeight());
+		}
+		return viewInfo;
+	}
+
+	/**
+	 * Opens the infoByPoint dialog for the selected point.
+	 * 
+	 */
+	private void openInfo() {
+		InfoListener infoListener = new InfoListener(mapControl);
+		MouseEvent e = new MouseEvent(
+				(Component) (((CenterViewToPointExtension) PluginServices
+						.getExtension(CenterViewToPointExtension.class))
+						.getView()), MouseEvent.BUTTON1,
+				MouseEvent.ACTION_EVENT_MASK, MouseEvent.MOUSE_CLICKED, 500,
+				400, 1, true);
+		Point2D centerPixels = mapControl.getViewPort().fromMapPoint(
+				center.getX(), center.getY());
+		PointEvent pe = new PointEvent(centerPixels, e);
+		try {
 			infoListener.point(pe);
 		} catch (BehaviorException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		if (mapControl.getMapContext().getLayers().getActives().length==0){
-			JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),PluginServices.getText(this,"no_hay_ninguna_capa_seleccionada")+" \n"+
-					PluginServices.getText(this,"debe_seleccionar_las_capas_de_las_que_quiera_obtener_informacion"));
+		if (mapControl.getMapContext().getLayers().getActives().length == 0) {
+			JOptionPane
+					.showMessageDialog(
+							(Component) PluginServices.getMainFrame(),
+							PluginServices.getText(this,
+									"no_hay_ninguna_capa_seleccionada")
+									+ " \n"
+									+ PluginServices
+											.getText(this,
+													"debe_seleccionar_las_capas_de_las_que_quiera_obtener_informacion"));
 		}
-    }
+	}
 
-    /**
-     * Draws the selected point on the view.
-     *
-     * @param color
-     */
-    private void drawPoint(Color color){
-    	CenterViewToPointExtension.COLOR=color;
-    	lyr.clearAllGraphics();
-    	ISymbol theSymbol = SymbologyFactory.createDefaultSymbolByShapeType(FShape.POINT,color);
-        int idSymbol = lyr.addSymbol(theSymbol);
-        IGeometry geom = ShapeFactory.createPoint2D(center.getX(),center.getY());
-        FGraphic theGraphic = new FGraphic(geom, idSymbol);
-        lyr.addGraphic(theGraphic);
-        mapControl.drawGraphics();
+	/**
+	 * Draws the selected point on the view.
+	 * 
+	 * @param color
+	 */
+	private void drawPoint(Color color) {
+		CenterViewToPointExtension.COLOR = color;
+		lyr.clearAllGraphics();
+		ISymbol theSymbol = SymbologyFactory.createDefaultSymbolByShapeType(
+				FShape.POINT, color);
+		int idSymbol = lyr.addSymbol(theSymbol);
+		IGeometry geom = ShapeFactory.createPoint2D(center.getX(),
+				center.getY());
+		FGraphic theGraphic = new FGraphic(geom, idSymbol);
+		lyr.addGraphic(theGraphic);
+		mapControl.drawGraphics();
 
-    }
-
+	}
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getColorPanel() {
-		if (colorPanel==null){
-		 	colorPanel=new ColorChooserPanel();
-		 	colorPanel.setAlpha(250);
-		 	colorPanel.setColor(CenterViewToPointExtension.COLOR);
-		 	colorPanel.setBounds(new java.awt.Rectangle(40,59,123,24));
+		if (colorPanel == null) {
+			colorPanel = new ColorChooserPanel();
+			colorPanel.setAlpha(250);
+			colorPanel.setColor(CenterViewToPointExtension.COLOR);
+			colorPanel.setBounds(new java.awt.Rectangle(40, 59, 123, 24));
 		}
-		 	return colorPanel;
+		return colorPanel;
 	}
 
 	/**
 	 * This method initializes okCancelPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private AcceptCancelPanel getOkCancelPanel() {
 		if (okCancelPanel == null) {
 			ActionListener okAction, cancelAction;
 			okAction = new java.awt.event.ActionListener() {
-    			public void actionPerformed(java.awt.event.ActionEvent e) {
-    				try{
-    				zoomToCoordinates();
-    				}catch (Exception e1) {
-    					JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),PluginServices.getText(this,"formato_de_numero_incorrecto"));
-    					return;
-    				}
-    				// y sale.
-                    if (PluginServices.getMainFrame() == null)
-                        ((JDialog) (getParent().getParent().getParent().getParent())).dispose();
-                    else
-                        PluginServices.getMDIManager().closeWindow(InputCoordinatesPanel.this);
-                    Preferences prefs = Preferences.userRoot().node( "gvsig.centerViewToPoint" );
-                    if( prefs.get("showInfo", "True").equalsIgnoreCase("True")){
-                    	openInfo();
-                    }
-                    drawPoint(((ColorChooserPanel)getColorPanel()).getColor());
-    			}
-    		};
-    		cancelAction = new ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try {
+						zoomToCoordinates();
+					} catch (Exception e1) {
+						JOptionPane.showMessageDialog(
+								(Component) PluginServices.getMainFrame(),
+								PluginServices.getText(this,
+										"formato_de_numero_incorrecto"));
+						return;
+					}
+					// y sale.
+					if (PluginServices.getMainFrame() == null)
+						((JDialog) (getParent().getParent().getParent()
+								.getParent())).dispose();
+					else
+						PluginServices.getMDIManager().closeWindow(
+								InputCoordinatesPanel.this);
+					Preferences prefs = Preferences.userRoot().node(
+							"gvsig.centerViewToPoint");
+					if (prefs.get("showInfo", "True").equalsIgnoreCase("True")) {
+						openInfo();
+					}
+					drawPoint(((ColorChooserPanel) getColorPanel()).getColor());
+				}
+			};
+			cancelAction = new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					closeThis();
 				}
-    		};
+			};
 			okCancelPanel = new AcceptCancelPanel(okAction, cancelAction);
 			okCancelPanel.setBounds(new java.awt.Rectangle(40, 88, 260, 30));
 		}
@@ -323,7 +350,7 @@ public class InputCoordinatesPanel extends JPanel implements IWindow {
 
 	/**
 	 * Close the window.
-	 *
+	 * 
 	 */
 	private void closeThis() {
 		PluginServices.getMDIManager().closeWindow(this);
@@ -334,5 +361,4 @@ public class InputCoordinatesPanel extends JPanel implements IWindow {
 		return WindowInfo.DIALOG_PROFILE;
 	}
 
-
-}  //  @jve:decl-index=0:visual-constraint="103,18"
+} // @jve:decl-index=0:visual-constraint="103,18"

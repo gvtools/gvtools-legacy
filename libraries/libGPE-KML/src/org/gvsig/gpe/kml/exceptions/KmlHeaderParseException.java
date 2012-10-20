@@ -70,24 +70,25 @@ import org.gvsig.exceptions.BaseException;
 public class KmlHeaderParseException extends BaseException {
 	private static final long serialVersionUID = 2601117350679974062L;
 	private File m_File = null;
-	
-	public KmlHeaderParseException() {		
-		init();		
+
+	public KmlHeaderParseException() {
+		init();
 	}
-	
+
 	public KmlHeaderParseException(Throwable exception) {
 		init();
 		initCause(exception);
 	}
-	
+
 	private void init() {
 		messageKey = "error_kml_header";
 		formatString = "Error parsing the Kml header file";
-		code = serialVersionUID;		
+		code = serialVersionUID;
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map values() {

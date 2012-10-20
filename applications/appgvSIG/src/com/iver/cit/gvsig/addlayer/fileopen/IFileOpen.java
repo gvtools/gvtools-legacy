@@ -26,10 +26,11 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.fmap.MapControl;
+
 /**
  * Interfaz que deben implementar todas aquellas extensiones que quieran
  * aparecer en un punto común del cuadro de dialogo de apertura de ficheros.
- *
+ * 
  * @version 03/09/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
@@ -40,12 +41,13 @@ public interface IFileOpen {
 	public void pre();
 
 	/**
-	 * Metodo que se invocará despues de haber aceptado los ficheros en el cuadro
-	 * de diálogo, para poder intentar configurar los parámetros de cada fichero.
-	 * Se pasa un fichero por parametro, si se devuelve null, el fichero no se
-	 * tomará en cuenta, en caso contrario, se devolverá el fichero real que se
-	 * desea tratar (puede ser distinto al fichero de entrada).
-	 *
+	 * Metodo que se invocará despues de haber aceptado los ficheros en el
+	 * cuadro de diálogo, para poder intentar configurar los parámetros de cada
+	 * fichero. Se pasa un fichero por parametro, si se devuelve null, el
+	 * fichero no se tomará en cuenta, en caso contrario, se devolverá el
+	 * fichero real que se desea tratar (puede ser distinto al fichero de
+	 * entrada).
+	 * 
 	 * @param file
 	 * @return
 	 */
@@ -56,6 +58,7 @@ public interface IFileOpen {
 	 * Metodo que se invocará al aceptar los ficheros. Se ejecuta después del
 	 * pre() y el post(), es cuando se le da definitivamente a añadir los
 	 * ficheros.
+	 * 
 	 * @param file
 	 * @param mapControl
 	 * @return
@@ -65,9 +68,10 @@ public interface IFileOpen {
 
 	/**
 	 * Devolverá todos los FileFilter que puede manejar dicha extensión
+	 * 
 	 * @return
 	 */
 	public ArrayList getFileFilter();
-	
+
 	boolean accepts(File file);
 }

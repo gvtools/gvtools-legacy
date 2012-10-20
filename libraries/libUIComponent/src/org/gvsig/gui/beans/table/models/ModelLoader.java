@@ -24,9 +24,10 @@ import java.util.ArrayList;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+
 /**
  * Cargador de Modelos
- *
+ * 
  * @author Nacho Brodin (brodin_ign@gva.es)
  */
 public class ModelLoader {
@@ -37,13 +38,13 @@ public class ModelLoader {
 			return null;
 
 		ActionListener actionListener = null;
-		if(listeners != null) {
+		if (listeners != null) {
 			for (int i = 0; i < listeners.size(); i++) {
-				if(listeners.get(i) instanceof ActionListener) 
-					actionListener = (ActionListener)listeners.get(i);
+				if (listeners.get(i) instanceof ActionListener)
+					actionListener = (ActionListener) listeners.get(i);
 			}
 		}
-		
+
 		JTable table = null;
 
 		if (model.equals("ListModel")) {
@@ -55,14 +56,14 @@ public class ModelLoader {
 			tableModel = new TreeRadioButtonModel(columnNames);
 			table = new JTable(tableModel);
 			TableColumn column = null;
-			
+
 			for (int i = 0; i < columnNames.length - 1; i++) {
 				column = table.getColumnModel().getColumn(i);
 				column.setCellRenderer(new TreeRadioButtonColumnRenderer());
 				column.setCellEditor(new TreeRadioButtonColumnEditor());
 			}
 		}
-		
+
 		if (model.equals("ARGBBandSelectorModel")) {
 			tableModel = new ARGBBandSelectorModel(columnNames);
 			table = new JTable(tableModel);
@@ -108,7 +109,8 @@ public class ModelLoader {
 
 			column = table.getColumnModel().getColumn(0);
 			column.setCellRenderer(new TableColorButtonColumnRenderer(true));
-			column.setCellEditor(new TableColorButtonColumnEditor((DefaultTableModel) tableModel, table));
+			column.setCellEditor(new TableColorButtonColumnEditor(
+					(DefaultTableModel) tableModel, table));
 
 			column = table.getColumnModel().getColumn(4);
 			column.setCellRenderer(new TableSelectorButtonColumnRenderer());
@@ -122,32 +124,35 @@ public class ModelLoader {
 
 			column = table.getColumnModel().getColumn(0);
 			column.setCellRenderer(new TableColorButtonColumnRenderer(true));
-			column.setCellEditor(new TableColorButtonColumnEditor((DefaultTableModel) tableModel, table));
+			column.setCellEditor(new TableColorButtonColumnEditor(
+					(DefaultTableModel) tableModel, table));
 
 			column = table.getColumnModel().getColumn(5);
 			column.setCellRenderer(new TableSelectorButtonColumnRenderer());
 			column.setCellEditor(new TableSelectorButtonColumnEditor());
 		}
-		
+
 		if (model.equals("ROIsTableModel")) {
 			tableModel = new ROIsTableModel(columnNames);
 			table = new JTable(tableModel);
 			TableColumn column = null;
-	
+
 			column = table.getColumnModel().getColumn(4);
 			column.setCellRenderer(new TableColorButtonColumnRenderer(true));
-			column.setCellEditor(new TableColorButtonColumnEditor((DefaultTableModel) tableModel, table));	
+			column.setCellEditor(new TableColorButtonColumnEditor(
+					(DefaultTableModel) tableModel, table));
 		}
 		if (model.equals("ProfilesTableModel")) {
 			tableModel = new ProfilesTableModel(columnNames);
 			table = new JTable(tableModel);
 			TableColumn column = null;
-	
+
 			column = table.getColumnModel().getColumn(1);
 			column.setCellRenderer(new TableColorButtonColumnRenderer(true));
-			column.setCellEditor(new TableColorButtonColumnEditor((DefaultTableModel) tableModel, table));	
+			column.setCellEditor(new TableColorButtonColumnEditor(
+					(DefaultTableModel) tableModel, table));
 		}
-		
+
 		if (model.equals("GCPModel")) {
 			tableModel = new GCPModel(columnNames);
 			table = new JTable(tableModel);
@@ -157,12 +162,13 @@ public class ModelLoader {
 			column.setCellRenderer(new CheckBoxColumnRenderer(actionListener));
 			column.setCellEditor(new CheckBoxColumnEditor());
 		}
-		
+
 		return table;
 	}
 
 	/**
 	 * Obtiene el modelo de la tabla
+	 * 
 	 * @return DefaultTableModel
 	 */
 	public DefaultTableModel getTableModel() {

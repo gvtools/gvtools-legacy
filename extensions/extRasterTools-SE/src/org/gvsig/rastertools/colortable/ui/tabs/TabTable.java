@@ -36,44 +36,50 @@ import org.gvsig.raster.datastruct.ColorItem;
 import org.gvsig.raster.datastruct.ColorTable;
 import org.gvsig.raster.util.BasePanel;
 import org.gvsig.raster.util.RasterToolsUtil;
+
 /**
  * Pestaña para definir una tabla de color en formato de tabla
- *
+ * 
  * @version 27/06/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
-public class TabTable extends BasePanel implements IColorTableUI, TableModelListener, IUserPanelInterface {
-	private static final long  serialVersionUID       = -6971866166164473789L;
-	private ArrayList          actionCommandListeners = new ArrayList();
-	private boolean            listenerEnabled        = false;
+public class TabTable extends BasePanel implements IColorTableUI,
+		TableModelListener, IUserPanelInterface {
+	private static final long serialVersionUID = -6971866166164473789L;
+	private ArrayList actionCommandListeners = new ArrayList();
+	private boolean listenerEnabled = false;
 
 	/**
 	 * Tabla de color interna que se esta utilizando actualmente
 	 */
 	private ColorTable colorTable = new ColorTable();
-	private TableContainer  tableContainer  = null;
+	private TableContainer tableContainer = null;
 
 	/**
 	 * Construye un TabTable
+	 * 
 	 * @param colorTablePanel
 	 */
 	public TabTable() {
 		init();
 		translate();
-		getTableContainer().getTable().getJTable().getModel().addTableModelListener(this);
+		getTableContainer().getTable().getJTable().getModel()
+				.addTableModelListener(this);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#init()
 	 */
 	protected void init() {
 		setLayout(new BorderLayout());
 		add(getTableContainer(), BorderLayout.CENTER);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#translate()
 	 */
 	protected void translate() {
@@ -81,8 +87,10 @@ public class TabTable extends BasePanel implements IColorTableUI, TableModelList
 
 	private TableContainer getTableContainer() {
 		if (tableContainer == null) {
-			String[] columnNames = {getText(this, "color"), getText(this, "clase"), "RGB", getText(this, "valor"), getText(this, "hasta"), getText(this, "alpha")};
-			int[] columnWidths = {55, 68, 110, 64, 71, 43};
+			String[] columnNames = { getText(this, "color"),
+					getText(this, "clase"), "RGB", getText(this, "valor"),
+					getText(this, "hasta"), getText(this, "alpha") };
+			int[] columnWidths = { 55, 68, 110, 64, 71, 43 };
 			tableContainer = new TableContainer(columnNames, columnWidths);
 			tableContainer.setModel("TableColorModel");
 			tableContainer.initialize();
@@ -103,6 +111,7 @@ public class TabTable extends BasePanel implements IColorTableUI, TableModelList
 
 	/**
 	 * Devuelve el String de un color en formato ##0, ##0, ##0
+	 * 
 	 * @param c
 	 * @return
 	 */
@@ -111,19 +120,25 @@ public class TabTable extends BasePanel implements IColorTableUI, TableModelList
 	}
 
 	/**
-	 * Añade una fila a la tabla asignando el color por parámetro. Este
-	 * color asignado será el que aparezca en el botón y en el texto RGB
+	 * Añade una fila a la tabla asignando el color por parámetro. Este color
+	 * asignado será el que aparezca en el botón y en el texto RGB
+	 * 
 	 * @param color
 	 */
-	private void addRowToTable(Color color, String name, Double fromRange, Double toRange, String alpha){
+	private void addRowToTable(Color color, String name, Double fromRange,
+			Double toRange, String alpha) {
 		try {
-			getTableContainer().addRow(new Object[] { color, name, getColorString(color), fromRange, toRange, alpha });
+			getTableContainer().addRow(
+					new Object[] { color, name, getColorString(color),
+							fromRange, toRange, alpha });
 		} catch (NotInitializeException e1) {
 		}
 	}
-	
+
 	/**
-	 * Convierte la tabla en un array de objetos para poder crear con el el objeto Palette
+	 * Convierte la tabla en un array de objetos para poder crear con el el
+	 * objeto Palette
+	 * 
 	 * @return
 	 * @throws NotInitializeException
 	 */
@@ -134,14 +149,13 @@ public class TabTable extends BasePanel implements IColorTableUI, TableModelList
 		for (int iRow = 0; iRow < jTable.getRowCount(); iRow++) {
 			Color rgb = (Color) model.getValueAt(iRow, 0);
 			ColorItem colorItem = new ColorItem();
-			colorItem.setColor(new Color(
-					rgb.getRed(),
-					rgb.getGreen(),
-					rgb.getBlue(),
-					Integer.valueOf((String) model.getValueAt(iRow, 5)).intValue()));
+			colorItem.setColor(new Color(rgb.getRed(), rgb.getGreen(), rgb
+					.getBlue(), Integer.valueOf(
+					(String) model.getValueAt(iRow, 5)).intValue()));
 
 			if (model.getValueAt(iRow, 3) != null)
-				colorItem.setValue(((Double) model.getValueAt(iRow, 3)).doubleValue());
+				colorItem.setValue(((Double) model.getValueAt(iRow, 3))
+						.doubleValue());
 
 			colorItem.setNameClass((String) model.getValueAt(iRow, 1));
 			arrayList.add(colorItem);
@@ -149,9 +163,10 @@ public class TabTable extends BasePanel implements IColorTableUI, TableModelList
 
 		return arrayList;
 	}
-	
+
 	/**
 	 * Carga inicial de los colores del panel
+	 * 
 	 * @param colorItems
 	 */
 	private void reloadItems() {
@@ -162,15 +177,20 @@ public class TabTable extends BasePanel implements IColorTableUI, TableModelList
 			ColorItem c1 = (ColorItem) colorItems.get(i);
 			Double toRange = null;
 			if ((i + 1) < colorItems.size())
-				toRange = new Double(((ColorItem) colorItems.get(i + 1)).getValue());
-			addRowToTable(c1.getColor(), c1.getNameClass(), new Double(c1.getValue()), toRange, c1.getColor().getAlpha() + "");
+				toRange = new Double(
+						((ColorItem) colorItems.get(i + 1)).getValue());
+			addRowToTable(c1.getColor(), c1.getNameClass(),
+					new Double(c1.getValue()), toRange, c1.getColor()
+							.getAlpha() + "");
 		}
 		listenerEnabled = true;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see javax.swing.event.TableModelListener#tableChanged(javax.swing.event.TableModelEvent)
+	 * 
+	 * @see javax.swing.event.TableModelListener#tableChanged(javax.swing.event.
+	 * TableModelEvent)
 	 */
 	public void tableChanged(TableModelEvent e) {
 		if (!listenerEnabled)
@@ -181,25 +201,32 @@ public class TabTable extends BasePanel implements IColorTableUI, TableModelList
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.colortable.panels.IColorTableUI#getColorTable()
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.colortable.panels.IColorTableUI#getColorTable()
 	 */
 	public ColorTable getColorTable() {
 		return colorTable;
 	}
 
-
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.colortable.panels.IColorTableUI#setColorTable(org.gvsig.raster.datastruct.ColorTable)
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.colortable.panels.IColorTableUI#setColorTable(org
+	 * .gvsig.raster.datastruct.ColorTable)
 	 */
 	public void setColorTable(ColorTable colorTable) {
 		this.colorTable = colorTable;
 		reloadItems();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.colortable.panels.IColorTableUI#addColorTableUIChangedListener(org.gvsig.rastertools.colortable.panels.ColorTableUIListener)
+	 * 
+	 * @see org.gvsig.rastertools.colortable.panels.IColorTableUI#
+	 * addColorTableUIChangedListener
+	 * (org.gvsig.rastertools.colortable.panels.ColorTableUIListener)
 	 */
 	public void addColorTableUIChangedListener(ColorTableUIListener listener) {
 		if (!actionCommandListeners.contains(listener))
@@ -208,7 +235,10 @@ public class TabTable extends BasePanel implements IColorTableUI, TableModelList
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.colortable.panels.IColorTableUI#removeColorTableUIChangedListener(org.gvsig.rastertools.colortable.panels.ColorTableUIListener)
+	 * 
+	 * @see org.gvsig.rastertools.colortable.panels.IColorTableUI#
+	 * removeColorTableUIChangedListener
+	 * (org.gvsig.rastertools.colortable.panels.ColorTableUIListener)
 	 */
 	public void removeColorTableUIChangedListener(ColorTableUIListener listener) {
 		actionCommandListeners.remove(listener);
@@ -216,18 +246,21 @@ public class TabTable extends BasePanel implements IColorTableUI, TableModelList
 
 	/**
 	 * Invoca el evento de cambio de un ColorTable
+	 * 
 	 * @param colorTable
 	 */
 	private void callColorTableUIChangedListener() {
 		Iterator acIterator = actionCommandListeners.iterator();
 		while (acIterator.hasNext()) {
-			ColorTableUIListener listener = (ColorTableUIListener) acIterator.next();
+			ColorTableUIListener listener = (ColorTableUIListener) acIterator
+					.next();
 			listener.actionColorTableUIChanged(this);
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.beans.previewbase.IUserPanelInterface#getTitle()
 	 */
 	public String getTitle() {
@@ -236,6 +269,7 @@ public class TabTable extends BasePanel implements IColorTableUI, TableModelList
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.rastertools.colortable.ui.tabs.IColorTableUI#getPanel()
 	 */
 	public JPanel getPanel() {

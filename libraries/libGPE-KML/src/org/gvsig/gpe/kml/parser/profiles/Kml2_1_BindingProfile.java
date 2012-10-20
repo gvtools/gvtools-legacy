@@ -22,7 +22,6 @@ import org.gvsig.gpe.kml.parser.v21.geometries.PolygonTypeBinding;
 import org.gvsig.gpe.kml.parser.v21.geometries.RegionBinding;
 import org.gvsig.gpe.kml.parser.v21.header.HeaderBinding;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -72,7 +71,7 @@ import org.gvsig.gpe.kml.parser.v21.header.HeaderBinding;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class Kml2_1_BindingProfile extends DefaultBindingProfile{
+public class Kml2_1_BindingProfile extends DefaultBindingProfile {
 	protected CoordinatesTypeIterator coordinatesTypeBinding = null;
 	protected DocumentBinding documentBinding = null;
 	protected DoubleBinding doubleBinding = null;
@@ -87,21 +86,22 @@ public class Kml2_1_BindingProfile extends DefaultBindingProfile{
 	protected LinearRingBinding linearRingBinding = null;
 	protected LookAtBinding lookAtBinding = null;
 	protected MetadataBinding metadataBinding = null;
-	protected MultiGeometryBinding multiGeometryBinding= null;
+	protected MultiGeometryBinding multiGeometryBinding = null;
 	protected OuterBoundaryIsBinding outerBoundaryIsBinding = null;
 	protected PlaceMarketBinding placeMarketBinding = null;
 	protected PointTypeBinding pointTypeBinding = null;
 	protected PolygonTypeBinding polygonTypeBinding = null;
 	protected RegionBinding regionBinding = null;
 	protected StyleBinding styleBinding = null;
-	
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getCoordinatesTypeBinding()
+	 * 
+	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#
+	 * getCoordinatesTypeBinding()
 	 */
 	public CoordinatesTypeIterator getCoordinatesTypeBinding() {
-		if (coordinatesTypeBinding == null){
+		if (coordinatesTypeBinding == null) {
 			coordinatesTypeBinding = new CoordinatesTypeIterator();
 		}
 		return coordinatesTypeBinding;
@@ -109,10 +109,13 @@ public class Kml2_1_BindingProfile extends DefaultBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getDocumentBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getDocumentBinding
+	 * ()
 	 */
 	public DocumentBinding getDocumentBinding() {
-		if (documentBinding == null){
+		if (documentBinding == null) {
 			documentBinding = new DocumentBinding();
 		}
 		return documentBinding;
@@ -120,10 +123,13 @@ public class Kml2_1_BindingProfile extends DefaultBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getDoubleBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getDoubleBinding
+	 * ()
 	 */
 	public DoubleBinding getDoubleBinding() {
-		if (doubleBinding == null){
+		if (doubleBinding == null) {
 			doubleBinding = new DoubleBinding();
 		}
 		return doubleBinding;
@@ -131,10 +137,13 @@ public class Kml2_1_BindingProfile extends DefaultBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getElementBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getElementBinding
+	 * ()
 	 */
 	public ElementBinding getElementBinding() {
-		if (elementBinding == null){
+		if (elementBinding == null) {
 			elementBinding = new ElementBinding();
 		}
 		return elementBinding;
@@ -142,10 +151,13 @@ public class Kml2_1_BindingProfile extends DefaultBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getFeatureBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getFeatureBinding
+	 * ()
 	 */
 	public FeatureBinding getFeatureBinding() {
-		if (featureBinding == null){
+		if (featureBinding == null) {
 			featureBinding = new FeatureBinding();
 		}
 		return featureBinding;
@@ -153,10 +165,13 @@ public class Kml2_1_BindingProfile extends DefaultBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getFolderBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getFolderBinding
+	 * ()
 	 */
 	public FolderBinding getFolderBinding() {
-		if (folderBinding == null){
+		if (folderBinding == null) {
 			folderBinding = new FolderBinding();
 		}
 		return folderBinding;
@@ -164,10 +179,13 @@ public class Kml2_1_BindingProfile extends DefaultBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getGeometryBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getGeometryBinding
+	 * ()
 	 */
 	public GeometryBinding getGeometryBinding() {
-		if (geometryBinding == null){
+		if (geometryBinding == null) {
 			geometryBinding = new GeometryBinding();
 		}
 		return geometryBinding;
@@ -175,10 +193,13 @@ public class Kml2_1_BindingProfile extends DefaultBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getHeaderBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getHeaderBinding
+	 * ()
 	 */
 	public HeaderBinding getHeaderBinding() {
-		if (headerBinding == null){
+		if (headerBinding == null) {
 			headerBinding = new HeaderBinding();
 		}
 		return headerBinding;
@@ -186,10 +207,12 @@ public class Kml2_1_BindingProfile extends DefaultBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getInnerBoundaryIsBinding()
+	 * 
+	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#
+	 * getInnerBoundaryIsBinding()
 	 */
 	public InnerBoundaryIsBinding getInnerBoundaryIsBinding() {
-		if (innerBoundaryIsBinding == null){
+		if (innerBoundaryIsBinding == null) {
 			innerBoundaryIsBinding = new InnerBoundaryIsBinding();
 		}
 		return innerBoundaryIsBinding;
@@ -197,10 +220,12 @@ public class Kml2_1_BindingProfile extends DefaultBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getLatLonAltBoxBinding()
+	 * 
+	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#
+	 * getLatLonAltBoxBinding()
 	 */
 	public LatLonAltBoxIterator getLatLonAltBoxBinding() {
-		if (latLonAltBoxBinding == null){
+		if (latLonAltBoxBinding == null) {
 			latLonAltBoxBinding = new LatLonAltBoxIterator();
 		}
 		return latLonAltBoxBinding;
@@ -208,10 +233,12 @@ public class Kml2_1_BindingProfile extends DefaultBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getLineStringTypeBinding()
+	 * 
+	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#
+	 * getLineStringTypeBinding()
 	 */
 	public LineStringTypeBinding getLineStringTypeBinding() {
-		if (lineStringTypeBinding == null){
+		if (lineStringTypeBinding == null) {
 			lineStringTypeBinding = new LineStringTypeBinding();
 		}
 		return lineStringTypeBinding;
@@ -219,10 +246,12 @@ public class Kml2_1_BindingProfile extends DefaultBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getLinearRingBinding()
+	 * 
+	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#
+	 * getLinearRingBinding()
 	 */
 	public LinearRingBinding getLinearRingBinding() {
-		if (linearRingBinding == null){
+		if (linearRingBinding == null) {
 			linearRingBinding = new LinearRingBinding();
 		}
 		return linearRingBinding;
@@ -230,10 +259,13 @@ public class Kml2_1_BindingProfile extends DefaultBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getLookAtBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getLookAtBinding
+	 * ()
 	 */
 	public LookAtBinding getLookAtBinding() {
-		if (lookAtBinding == null){
+		if (lookAtBinding == null) {
 			lookAtBinding = new LookAtBinding();
 		}
 		return lookAtBinding;
@@ -241,10 +273,13 @@ public class Kml2_1_BindingProfile extends DefaultBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getMetadataBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getMetadataBinding
+	 * ()
 	 */
 	public MetadataBinding getMetadataBinding() {
-		if (metadataBinding == null){
+		if (metadataBinding == null) {
 			metadataBinding = new MetadataBinding();
 		}
 		return metadataBinding;
@@ -252,10 +287,12 @@ public class Kml2_1_BindingProfile extends DefaultBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getMultiGeometryBinding()
+	 * 
+	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#
+	 * getMultiGeometryBinding()
 	 */
 	public MultiGeometryBinding getMultiGeometryBinding() {
-		if (multiGeometryBinding == null){
+		if (multiGeometryBinding == null) {
 			multiGeometryBinding = new MultiGeometryBinding();
 		}
 		return multiGeometryBinding;
@@ -263,10 +300,12 @@ public class Kml2_1_BindingProfile extends DefaultBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getOuterBoundaryIsBinding()
+	 * 
+	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#
+	 * getOuterBoundaryIsBinding()
 	 */
 	public OuterBoundaryIsBinding getOuterBoundaryIsBinding() {
-		if (outerBoundaryIsBinding == null){
+		if (outerBoundaryIsBinding == null) {
 			outerBoundaryIsBinding = new OuterBoundaryIsBinding();
 		}
 		return outerBoundaryIsBinding;
@@ -274,10 +313,12 @@ public class Kml2_1_BindingProfile extends DefaultBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getPlaceMarketBinding()
+	 * 
+	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#
+	 * getPlaceMarketBinding()
 	 */
 	public PlaceMarketBinding getPlaceMarketBinding() {
-		if (placeMarketBinding == null){
+		if (placeMarketBinding == null) {
 			placeMarketBinding = new PlaceMarketBinding();
 		}
 		return placeMarketBinding;
@@ -285,10 +326,12 @@ public class Kml2_1_BindingProfile extends DefaultBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getPointTypeBinding()
+	 * 
+	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#
+	 * getPointTypeBinding()
 	 */
 	public PointTypeBinding getPointTypeBinding() {
-		if (pointTypeBinding == null){
+		if (pointTypeBinding == null) {
 			pointTypeBinding = new PointTypeBinding();
 		}
 		return pointTypeBinding;
@@ -296,10 +339,12 @@ public class Kml2_1_BindingProfile extends DefaultBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getPolygonTypeBinding()
+	 * 
+	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#
+	 * getPolygonTypeBinding()
 	 */
 	public PolygonTypeBinding getPolygonTypeBinding() {
-		if (polygonTypeBinding == null){
+		if (polygonTypeBinding == null) {
 			polygonTypeBinding = new PolygonTypeBinding();
 		}
 		return polygonTypeBinding;
@@ -307,10 +352,13 @@ public class Kml2_1_BindingProfile extends DefaultBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getRegionBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getRegionBinding
+	 * ()
 	 */
 	public RegionBinding getRegionBinding() {
-		if (regionBinding == null){
+		if (regionBinding == null) {
 			regionBinding = new RegionBinding();
 		}
 		return regionBinding;
@@ -318,10 +366,13 @@ public class Kml2_1_BindingProfile extends DefaultBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getStyleBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.reader.bindings.profiles.IBindingProfile#getStyleBinding
+	 * ()
 	 */
 	public StyleBinding getStyleBinding() {
-		if (styleBinding == null){
+		if (styleBinding == null) {
 			styleBinding = new StyleBinding();
 		}
 		return styleBinding;

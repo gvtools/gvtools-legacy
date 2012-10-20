@@ -54,7 +54,7 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 /**
  * Extensión que gestiona la inserción de polígonos internos en edición.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class InternalPolygonExtension extends Extension {
@@ -67,28 +67,28 @@ public class InternalPolygonExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
-		internalpolygon=new InternalPolygonCADTool();
-       CADExtension.addCADTool("_internalpolygon",internalpolygon);
-       
-       registerIcons();
+		internalpolygon = new InternalPolygonCADTool();
+		CADExtension.addCADTool("_internalpolygon", internalpolygon);
+
+		registerIcons();
 	}
 
-	private void registerIcons(){
+	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"edition-modify-geometry-internalpolygon",
-				this.getClass().getClassLoader().getResource("images/InternalPolygon.png")
-			);
-		
+				this.getClass().getClassLoader()
+						.getResource("images/InternalPolygon.png"));
+
 	}
-	
+
 	/**
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String s) {
 		CADExtension.initFocus();
 		if (s.equals("_internalpolygon")) {
-        	CADExtension.setCADTool(s,true);
-        }
+			CADExtension.setCADTool(s, true);
+		}
 		CADExtension.getEditionManager().setMapControl(mapControl);
 		CADExtension.getCADToolAdapter().configureMenu();
 	}
@@ -102,21 +102,22 @@ public class InternalPolygonExtension extends Extension {
 			if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE) {
 				view = (View) PluginServices.getMDIManager().getActiveWindow();
 				mapControl = view.getMapControl();
-				EditionManager em=CADExtension.getEditionManager();
-				if (em.getActiveLayerEdited()==null)
+				EditionManager em = CADExtension.getEditionManager();
+				if (em.getActiveLayerEdited() == null)
 					return false;
-				VectorialLayerEdited vle=(VectorialLayerEdited)em.getActiveLayerEdited();
-				FLyrVect lv=(FLyrVect)vle.getLayer();
-				ArrayList selectedRows=vle.getSelectedRow();
-				if (selectedRows.size()<1) {
+				VectorialLayerEdited vle = (VectorialLayerEdited) em
+						.getActiveLayerEdited();
+				FLyrVect lv = (FLyrVect) vle.getLayer();
+				ArrayList selectedRows = vle.getSelectedRow();
+				if (selectedRows.size() < 1) {
 					return false;
 				}
-				if (internalpolygon.isApplicable(lv.getShapeType())){
+				if (internalpolygon.isApplicable(lv.getShapeType())) {
 					return true;
 				}
 			}
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 		return false;
 	}

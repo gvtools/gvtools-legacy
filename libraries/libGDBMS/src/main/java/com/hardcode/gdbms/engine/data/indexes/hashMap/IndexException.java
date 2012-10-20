@@ -2,7 +2,7 @@ package com.hardcode.gdbms.engine.data.indexes.hashMap;
 
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public class IndexException extends Exception {
@@ -17,7 +17,7 @@ public class IndexException extends Exception {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param message
 	 */
 	public IndexException(String message) {
@@ -28,7 +28,7 @@ public class IndexException extends Exception {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param cause
 	 */
 	public IndexException(Throwable cause) {
@@ -39,7 +39,7 @@ public class IndexException extends Exception {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param message
 	 * @param cause
 	 */

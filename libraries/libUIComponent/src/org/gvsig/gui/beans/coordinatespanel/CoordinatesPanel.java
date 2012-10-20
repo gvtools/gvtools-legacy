@@ -35,23 +35,25 @@ import javax.swing.border.TitledBorder;
 
 import org.gvsig.gui.beans.datainput.DataInputContainer;
 import org.gvsig.gui.beans.datainput.DataInputContainerListener;
+
 /**
  * 
  * @version 06/09/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
-public class CoordinatesPanel extends JPanel implements DataInputContainerListener {
-	private static final long  serialVersionUID       = 3336324382874763427L;
-	private String             pathToImages           = "images/";
-	private ArrayList          actionChangedListeners = new ArrayList();
+public class CoordinatesPanel extends JPanel implements
+		DataInputContainerListener {
+	private static final long serialVersionUID = 3336324382874763427L;
+	private String pathToImages = "images/";
+	private ArrayList actionChangedListeners = new ArrayList();
 
-	private JPanel             pCoord                 = null;
-	private JLabel             lTitulo1               = null;
-	private JLabel             lTitulo2               = null;
-	private DataInputContainer dataInputContainer11   = null;
-	private DataInputContainer dataInputContainer12   = null;
-	private DataInputContainer dataInputContainer21   = null;
-	private DataInputContainer dataInputContainer22   = null;
+	private JPanel pCoord = null;
+	private JLabel lTitulo1 = null;
+	private JLabel lTitulo2 = null;
+	private DataInputContainer dataInputContainer11 = null;
+	private DataInputContainer dataInputContainer12 = null;
+	private DataInputContainer dataInputContainer21 = null;
+	private DataInputContainer dataInputContainer22 = null;
 
 	/**
 	 * This is the default constructor
@@ -62,7 +64,7 @@ public class CoordinatesPanel extends JPanel implements DataInputContainerListen
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
@@ -72,7 +74,7 @@ public class CoordinatesPanel extends JPanel implements DataInputContainerListen
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPCoord() {
@@ -119,35 +121,36 @@ public class CoordinatesPanel extends JPanel implements DataInputContainerListen
 			gridBagConstraints.insets = new Insets(2, 2, 5, 2);
 			pCoord.add(getDataInputContainer21(), gridBagConstraints);
 
-
 			gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 2;
 			gridBagConstraints.gridy = y;
 			gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints.weightx = 1.0;
 			gridBagConstraints.insets = new Insets(2, 2, 5, 5);
-			pCoord.add(getDataInputContainer22(), gridBagConstraints);		
+			pCoord.add(getDataInputContainer22(), gridBagConstraints);
 		}
 		return pCoord;
 	}
 
-	private JLabel getLTitulo1(){
-		if (lTitulo1 == null){
-			lTitulo1 = new JLabel(new ImageIcon(getClass().getResource(pathToImages + "upleft.png")));
+	private JLabel getLTitulo1() {
+		if (lTitulo1 == null) {
+			lTitulo1 = new JLabel(new ImageIcon(getClass().getResource(
+					pathToImages + "upleft.png")));
 		}
 		return lTitulo1;
 	}
 
-	private JLabel getLTitulo2(){
-		if (lTitulo2 == null){
-			lTitulo2 = new JLabel(new ImageIcon(getClass().getResource(pathToImages + "downright.png")));
+	private JLabel getLTitulo2() {
+		if (lTitulo2 == null) {
+			lTitulo2 = new JLabel(new ImageIcon(getClass().getResource(
+					pathToImages + "downright.png")));
 		}
 		return lTitulo2;
 	}
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	public DataInputContainer getDataInputContainer11() {
@@ -161,7 +164,7 @@ public class CoordinatesPanel extends JPanel implements DataInputContainerListen
 
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	public DataInputContainer getDataInputContainer12() {
@@ -175,7 +178,7 @@ public class CoordinatesPanel extends JPanel implements DataInputContainerListen
 
 	/**
 	 * This method initializes jPanel2
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	public DataInputContainer getDataInputContainer21() {
@@ -189,7 +192,7 @@ public class CoordinatesPanel extends JPanel implements DataInputContainerListen
 
 	/**
 	 * This method initializes jPanel3
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	public DataInputContainer getDataInputContainer22() {
@@ -207,38 +210,43 @@ public class CoordinatesPanel extends JPanel implements DataInputContainerListen
 	 * @param titlePanel
 	 */
 	public void setTitlePanel(String titlePanel) {
-		getPCoord().setBorder(BorderFactory.createTitledBorder(null, titlePanel, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.PLAIN, 10), null));
+		getPCoord().setBorder(
+				BorderFactory.createTitledBorder(null, titlePanel,
+						TitledBorder.DEFAULT_JUSTIFICATION,
+						TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+								Font.PLAIN, 10), null));
 	}
 
 	/**
-	 * Devuelve los valores del panel por orden de izquierda a derecha
-	 * y de arriba a bajo.
+	 * Devuelve los valores del panel por orden de izquierda a derecha y de
+	 * arriba a bajo.
+	 * 
 	 * @return
 	 */
-	public String[] getValues(){
-		String[] values = {
-			getDataInputContainer11().getValue(),
-			getDataInputContainer12().getValue(),
-			getDataInputContainer21().getValue(),
-			getDataInputContainer22().getValue()
-		};
+	public String[] getValues() {
+		String[] values = { getDataInputContainer11().getValue(),
+				getDataInputContainer12().getValue(),
+				getDataInputContainer21().getValue(),
+				getDataInputContainer22().getValue() };
 		return values;
 	}
 
 	/**
-	 * Asigna los valores del panel por orden de izquierda a derecha
-	 * y de arriba a bajo.
+	 * Asigna los valores del panel por orden de izquierda a derecha y de arriba
+	 * a bajo.
+	 * 
 	 * @return
 	 */
-	public void setValues(String[] values){
+	public void setValues(String[] values) {
 		getDataInputContainer11().setValue(values[0]);
 		getDataInputContainer12().setValue(values[1]);
 		getDataInputContainer21().setValue(values[2]);
 		getDataInputContainer22().setValue(values[3]);
 	}
-	
+
 	/**
 	 * Añadir un listener a la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void addValueChangedListener(CoordinatesListener listener) {
@@ -248,19 +256,21 @@ public class CoordinatesPanel extends JPanel implements DataInputContainerListen
 
 	/**
 	 * Borrar un listener de la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void removeValueChangedListener(CoordinatesListener listener) {
 		actionChangedListeners.remove(listener);
 	}
-	
+
 	/**
 	 * Invocar a los eventos asociados al componente
 	 */
 	private void callValueChangedListeners(String component) {
 		Iterator acIterator = actionChangedListeners.iterator();
 		while (acIterator.hasNext()) {
-			CoordinatesListener listener = (CoordinatesListener) acIterator.next();
+			CoordinatesListener listener = (CoordinatesListener) acIterator
+					.next();
 			listener.actionValueChanged(new CoordinatesEvent(this, component));
 		}
 	}
@@ -282,52 +292,53 @@ public class CoordinatesPanel extends JPanel implements DataInputContainerListen
 			callValueChangedListeners("22");
 			return;
 		}
-  }
-	
+	}
+
 	public String getValue11() {
 		return getDataInputContainer11().getValue();
 	}
-	
+
 	public String getValue12() {
 		return getDataInputContainer12().getValue();
 	}
-	
+
 	public String getValue21() {
 		return getDataInputContainer21().getValue();
 	}
-	
+
 	public String getValue22() {
 		return getDataInputContainer22().getValue();
 	}
-	
+
 	public void setValue11(String value) {
 		getDataInputContainer11().setValue(value);
 	}
-	
+
 	public void setValue12(String value) {
 		getDataInputContainer12().setValue(value);
 	}
-	
+
 	public void setValue21(String value) {
 		getDataInputContainer21().setValue(value);
 	}
-	
+
 	public void setValue22(String value) {
 		getDataInputContainer22().setValue(value);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.JComponent#setEnabled(boolean)
 	 */
 	public void setEnabled(boolean enabled) {
-	  super.setEnabled(enabled);
-	  getPCoord().setEnabled(enabled);
-	  getLTitulo1().setEnabled(enabled);
-	  getLTitulo2().setEnabled(enabled);
-	  getDataInputContainer11().setControlEnabled(enabled);
-	  getDataInputContainer12().setControlEnabled(enabled);
-	  getDataInputContainer21().setControlEnabled(enabled);
-	  getDataInputContainer22().setControlEnabled(enabled);
-  }
+		super.setEnabled(enabled);
+		getPCoord().setEnabled(enabled);
+		getLTitulo1().setEnabled(enabled);
+		getLTitulo2().setEnabled(enabled);
+		getDataInputContainer11().setControlEnabled(enabled);
+		getDataInputContainer12().setControlEnabled(enabled);
+		getDataInputContainer21().setControlEnabled(enabled);
+		getDataInputContainer22().setControlEnabled(enabled);
+	}
 }

@@ -42,34 +42,33 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: NearestFeatureVisitor.java 10626 2007-03-06 16:55:54Z caballero $
-* $Log$
-* Revision 1.2  2007-03-06 16:47:58  caballero
-* Exceptions
-*
-* Revision 1.1  2006/06/20 18:20:45  azabala
-* first version in cvs
-*
-* Revision 1.2  2006/06/02 18:21:28  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/05/24 21:09:47  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.2  2006/03/07 21:01:33  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/03/06 19:48:39  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/03/05 19:59:47  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: NearestFeatureVisitor.java 10626 2007-03-06 16:55:54Z caballero $
+ * $Log$
+ * Revision 1.2  2007-03-06 16:47:58  caballero
+ * Exceptions
+ *
+ * Revision 1.1  2006/06/20 18:20:45  azabala
+ * first version in cvs
+ *
+ * Revision 1.2  2006/06/02 18:21:28  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/05/24 21:09:47  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.2  2006/03/07 21:01:33  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/03/06 19:48:39  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/03/05 19:59:47  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.spatialjoin.fmap;
-
 
 import com.iver.cit.gvsig.exceptions.visitors.ProcessVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.StartVisitorException;
@@ -79,47 +78,50 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.VectorialData;
 import com.iver.cit.gvsig.fmap.operations.strategies.FeatureVisitor;
 import com.vividsolutions.jts.geom.Geometry;
+
 /**
- * This Visitor looks for the nearest feature of a FLayer B
- *  to a specified feature of a FLayer A.
+ * This Visitor looks for the nearest feature of a FLayer B to a specified
+ * feature of a FLayer A.
+ * 
  * @author azabala
- *
+ * 
  */
 public class NearestFeatureVisitor implements FeatureVisitor {
-	
+
 	private Geometry queryGeometry;
 	private int solutionIndex = -1;
 	private double shortestDist = Double.MAX_VALUE;
-	
-	public NearestFeatureVisitor(Geometry geometry){
+
+	public NearestFeatureVisitor(Geometry geometry) {
 		this.queryGeometry = geometry;
 	}
-	
-	public NearestFeatureVisitor(){	
+
+	public NearestFeatureVisitor() {
 	}
-	
-	public void visit(IGeometry g, int index) throws VisitorException, ProcessVisitorException {
-		if(g == null)
+
+	public void visit(IGeometry g, int index) throws VisitorException,
+			ProcessVisitorException {
+		if (g == null)
 			return;
 		double dist = queryGeometry.distance(g.toJTSGeometry());
-		if(dist < shortestDist){
+		if (dist < shortestDist) {
 			shortestDist = dist;
 			solutionIndex = index;
-		}//if
+		}// if
 	}
-	
-	public int getNearestFeatureIndex(){
+
+	public int getNearestFeatureIndex() {
 		return solutionIndex;
 	}
-	
-	public double getShortestDist(){
+
+	public double getShortestDist() {
 		return shortestDist;
 	}
-	
-	public boolean hasFoundShortest(){
+
+	public boolean hasFoundShortest() {
 		return solutionIndex != -1;
 	}
-	
+
 	public void stop(FLayer layer) throws VisitorException {
 	}
 
@@ -129,15 +131,13 @@ public class NearestFeatureVisitor implements FeatureVisitor {
 		}
 		return false;
 	}
-	
+
 	public String getProcessDescription() {
 		return "Looking nearest geometry for a spatial join";
 	}
-
 
 	public void setQueryGeometry(Geometry queryGeometry) {
 		this.queryGeometry = queryGeometry;
 	}
 
 }
-

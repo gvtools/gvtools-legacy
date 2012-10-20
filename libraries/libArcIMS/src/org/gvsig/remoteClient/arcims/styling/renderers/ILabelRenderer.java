@@ -46,21 +46,22 @@
  */
 package org.gvsig.remoteClient.arcims.styling.renderers;
 
-
 /**
- * We will take care in this Interface only of attributes that gvSIG can use. Thus
- * we will get a TextSymbol and a rational angles (only first angle will be used).
+ * We will take care in this Interface only of attributes that gvSIG can use.
+ * Thus we will get a TextSymbol and a rational angles (only first angle will be
+ * used).
+ * 
  * @author jsanz
- *
+ * 
  */
 public interface ILabelRenderer {
-    public String getRotationalangles();
+	public String getRotationalangles();
 
-    public void setRotationalangles(String rotationalAngles);
+	public void setRotationalangles(String rotationalAngles);
 
-    public String getField();
+	public String getField();
 
-    public void setField(String mfield);
+	public void setField(String mfield);
 
-    //	public FLabel getFLabel();
+	// public FLabel getFLabel();
 }

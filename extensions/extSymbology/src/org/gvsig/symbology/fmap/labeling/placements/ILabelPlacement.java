@@ -40,11 +40,9 @@
  */
 package org.gvsig.symbology.fmap.labeling.placements;
 
-import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
 import com.iver.cit.gvsig.fmap.ViewPort;
-import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.IPlacementConstraints;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelClass;
@@ -52,21 +50,20 @@ import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelLocationMetrics;
 import com.iver.utiles.swing.threads.Cancellable;
 
 /**
- *
+ * 
  * ILabelPlacement.java
- *
- *
+ * 
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Dec 17, 2007
- *
+ * 
  */
 public interface ILabelPlacement {
 
-	boolean isSuitableFor(IPlacementConstraints placementConstraints, int shapeType);
+	boolean isSuitableFor(IPlacementConstraints placementConstraints,
+			int shapeType);
 
-	ArrayList<LabelLocationMetrics> guess(
-			LabelClass lc,
-			IGeometry geom,
+	ArrayList<LabelLocationMetrics> guess(LabelClass lc, IGeometry geom,
 			IPlacementConstraints placementConstraints,
-			double cartographicSymbolSize, Cancellable cancel,ViewPort vp) ;
+			double cartographicSymbolSize, Cancellable cancel, ViewPort vp);
 
 }

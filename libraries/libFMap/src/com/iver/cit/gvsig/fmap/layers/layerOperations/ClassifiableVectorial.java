@@ -43,21 +43,25 @@ package com.iver.cit.gvsig.fmap.layers.layerOperations;
 import com.iver.cit.gvsig.exceptions.layers.LegendLayerException;
 import com.iver.cit.gvsig.fmap.rendering.IVectorLegend;
 
-
-
 /**
- * <p>All vector layers that can be classifiable and can have associated a legend, must implement
- *  <code>ClassifiableVectorial</code>.</p>
+ * <p>
+ * All vector layers that can be classifiable and can have associated a legend,
+ * must implement <code>ClassifiableVectorial</code>.
+ * </p>
  * 
  * @see Classifiable
  */
-public interface ClassifiableVectorial extends Classifiable{
+public interface ClassifiableVectorial extends Classifiable {
 	/**
-	 * <p>Sets the layer's legend as a vector legend.</p>
-	 *
-	 * @param r the legend with vector data
-	 *
-	 * @throws LegendLayerException if fails setting the legend to this layer.
+	 * <p>
+	 * Sets the layer's legend as a vector legend.
+	 * </p>
+	 * 
+	 * @param r
+	 *            the legend with vector data
+	 * 
+	 * @throws LegendLayerException
+	 *             if fails setting the legend to this layer.
 	 */
 	void setLegend(IVectorLegend r) throws LegendLayerException;
 }

@@ -60,11 +60,11 @@ import com.iver.cit.gvsig.project.documents.view.snapping.ISnapper;
 
 /**
  * @author fjp
- *
- * Necesitamos un sitio donde estén registrados todos los snappers que
- * se pueden usar. ExtensionPoints es el sitio adecuado.
- * Este diálogo recuperará esa lista para que el usuario marque los
- * snappers con los que desea trabajar.
+ * 
+ *         Necesitamos un sitio donde estén registrados todos los snappers que
+ *         se pueden usar. ExtensionPoints es el sitio adecuado. Este diálogo
+ *         recuperará esa lista para que el usuario marque los snappers con los
+ *         que desea trabajar.
  */
 public class SnapConfig extends JPanel {
 
@@ -76,18 +76,16 @@ public class SnapConfig extends JPanel {
 	private ArrayList snappers;
 
 	/**
-	 * @author fjp
-	 * primera columna editable con un check box para habilitar/deshabilitar el snapper
-	 * segunda columna con el símbolo del snapper
-	 * tercera con el tooltip
-	 * cuarta con un botón para configurar el snapper si es necesario.
+	 * @author fjp primera columna editable con un check box para
+	 *         habilitar/deshabilitar el snapper segunda columna con el símbolo
+	 *         del snapper tercera con el tooltip cuarta con un botón para
+	 *         configurar el snapper si es necesario.
 	 */
 	class MyTableModel extends AbstractTableModel {
 
 		public ArrayList mySnappers;
 
-		public MyTableModel(ArrayList snappers)
-		{
+		public MyTableModel(ArrayList snappers) {
 			this.mySnappers = snappers;
 		}
 
@@ -107,21 +105,19 @@ public class SnapConfig extends JPanel {
 
 		public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 			ISnapper snap = (ISnapper) mySnappers.get(rowIndex);
-			switch (columnIndex)
-			{
-			case 0://CheckBox
-				snap.setEnabled(((Boolean)aValue).booleanValue());
+			switch (columnIndex) {
+			case 0:// CheckBox
+				snap.setEnabled(((Boolean) aValue).booleanValue());
 				break;
-			case 3://Prioridad
-				snap.setPriority(((Integer)aValue).intValue());
+			case 3:// Prioridad
+				snap.setPriority(((Integer) aValue).intValue());
 				break;
 			}
 		}
 
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			ISnapper snap = (ISnapper) mySnappers.get(rowIndex);
-			switch (columnIndex)
-			{
+			switch (columnIndex) {
 			case 0:
 				return new Boolean(snap.isEnabled());
 			case 1:
@@ -137,8 +133,7 @@ public class SnapConfig extends JPanel {
 		}
 
 		public Class getColumnClass(int columnIndex) {
-			switch (columnIndex)
-			{
+			switch (columnIndex) {
 			case 0:
 				return Boolean.class;
 			case 1:
@@ -154,65 +149,62 @@ public class SnapConfig extends JPanel {
 		}
 
 		public String getColumnName(int columnIndex) {
-			switch (columnIndex){
+			switch (columnIndex) {
 			case 0:
-				return PluginServices.getText(this,"aplicar");
+				return PluginServices.getText(this, "aplicar");
 			case 1:
-				return PluginServices.getText(this,"simbolo");
+				return PluginServices.getText(this, "simbolo");
 			case 2:
-				return PluginServices.getText(this,"tipo");
+				return PluginServices.getText(this, "tipo");
 			case 3:
-				return PluginServices.getText(this,"prioridad");
+				return PluginServices.getText(this, "prioridad");
 			case 4:
-				return PluginServices.getText(this,"propiedades");
+				return PluginServices.getText(this, "propiedades");
 			}
 			return null;
 		}
 
 	}
 
-	 class MyCellRenderer extends JCheckBox implements ListCellRenderer {
+	class MyCellRenderer extends JCheckBox implements ListCellRenderer {
 
-	     // This is the only method defined by ListCellRenderer.
-	     // We just reconfigure the JLabel each time we're called.
+		// This is the only method defined by ListCellRenderer.
+		// We just reconfigure the JLabel each time we're called.
 
-	     public Component getListCellRendererComponent(
-	       JList list,
-	       Object value,            // value to display
-	       int index,               // cell index
-	       boolean isSelected,      // is the cell selected
-	       boolean cellHasFocus)    // the list and the cell have the focus
-	     {
-	    	 ISnapper snapper = (ISnapper) value;
-	         String s = snapper.getToolTipText();
-	         setText(s);
+		public Component getListCellRendererComponent(JList list, Object value, // value
+																				// to
+																				// display
+				int index, // cell index
+				boolean isSelected, // is the cell selected
+				boolean cellHasFocus) // the list and the cell have the focus
+		{
+			ISnapper snapper = (ISnapper) value;
+			String s = snapper.getToolTipText();
+			setText(s);
 
-	   	   if (isSelected) {
-	             setBackground(list.getSelectionBackground());
-		       setForeground(list.getSelectionForeground());
-		   }
-	         else {
-		       setBackground(list.getBackground());
-		       setForeground(list.getForeground());
-		   }
-		   setEnabled(list.isEnabled());
-		   setFont(list.getFont());
-	         setOpaque(true);
-	         return this;
-	     }
+			if (isSelected) {
+				setBackground(list.getSelectionBackground());
+				setForeground(list.getSelectionForeground());
+			} else {
+				setBackground(list.getBackground());
+				setForeground(list.getForeground());
+			}
+			setEnabled(list.isEnabled());
+			setFont(list.getFont());
+			setOpaque(true);
+			return this;
+		}
 
 		public void doClick() {
 			super.doClick();
 			System.out.println("Click");
 		}
 
-
-	 }
-
+	}
 
 	/**
 	 * This method initializes
-	 *
+	 * 
 	 */
 	public SnapConfig() {
 		super();
@@ -221,34 +213,36 @@ public class SnapConfig extends JPanel {
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 */
 	private void initialize() {
-        this.setLayout(null);
-        this.setSize(new java.awt.Dimension(463,239));
-        this.setPreferredSize(new java.awt.Dimension(463,239));
-        this.add(getJChkBoxRefentActive(), null);
-        this.add(getJPanel(), null);
+		this.setLayout(null);
+		this.setSize(new java.awt.Dimension(463, 239));
+		this.setPreferredSize(new java.awt.Dimension(463, 239));
+		this.add(getJChkBoxRefentActive(), null);
+		this.add(getJPanel(), null);
 
 	}
 
 	/**
 	 * This method initializes jChkBoxRefentActive
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getJChkBoxRefentActive() {
 		if (jChkBoxRefentActive == null) {
 			jChkBoxRefentActive = new JCheckBox();
-			jChkBoxRefentActive.setText(PluginServices.getText(this,"object_reference_enabled"));
-			jChkBoxRefentActive.setBounds(new java.awt.Rectangle(26,10,418,23));
+			jChkBoxRefentActive.setText(PluginServices.getText(this,
+					"object_reference_enabled"));
+			jChkBoxRefentActive.setBounds(new java.awt.Rectangle(26, 10, 418,
+					23));
 		}
 		return jChkBoxRefentActive;
 	}
 
 	/**
 	 * This method initializes jListSnappers
-	 *
+	 * 
 	 * @return javax.swing.JList
 	 */
 	private JTable getJListSnappers() {
@@ -261,14 +255,14 @@ public class SnapConfig extends JPanel {
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel() {
 		if (jPanel == null) {
 			jPanel = new JPanel();
 			jPanel.setLayout(null);
-			jPanel.setBounds(new java.awt.Rectangle(19,40,423,181));
+			jPanel.setBounds(new java.awt.Rectangle(19, 40, 423, 181));
 			jPanel.add(getJScrollPane(), null);
 		}
 		return jPanel;
@@ -276,13 +270,13 @@ public class SnapConfig extends JPanel {
 
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
-			jScrollPane.setBounds(new java.awt.Rectangle(9,9,402,163));
+			jScrollPane.setBounds(new java.awt.Rectangle(9, 9, 402, 163));
 			jScrollPane.setViewportView(getJListSnappers());
 		}
 		return jScrollPane;
@@ -296,44 +290,51 @@ public class SnapConfig extends JPanel {
 		this.snappers = snappers;
 		MyTableModel listModel = new MyTableModel(snappers);
 		getJListSnappers().setModel(listModel);
-		TableColumn tc=getJListSnappers().getColumnModel().getColumn(0);
+		TableColumn tc = getJListSnappers().getColumnModel().getColumn(0);
 		setUpSymbolColumn(getJListSnappers().getColumnModel().getColumn(1));
 		setUpPropertyColumn(getJListSnappers().getColumnModel().getColumn(4));
 		getJListSnappers().setCellSelectionEnabled(false);
 		tc.setMaxWidth(40);
-        tc.setMinWidth(20);
+		tc.setMinWidth(20);
 	}
+
 	public TableModel getTableModel() {
 		return getJListSnappers().getModel();
 	}
+
 	public boolean applySnappers() {
 		return getJChkBoxRefentActive().isSelected();
 	}
 
 	public void selectSnappers(TreeMap selected) {
-		for (int i=0;i<snappers.size();i++) {
-			Boolean b=(Boolean)selected.get(snappers.get(i));
-			if (b!=null)
-				getTableModel().setValueAt(b,i,0);
+		for (int i = 0; i < snappers.size(); i++) {
+			Boolean b = (Boolean) selected.get(snappers.get(i));
+			if (b != null)
+				getTableModel().setValueAt(b, i, 0);
 			else
-				getTableModel().setValueAt(new Boolean(false),i,0);
+				getTableModel().setValueAt(new Boolean(false), i, 0);
 		}
 
 	}
+
 	public void setApplySnappers(boolean applySnappers) {
 		getJChkBoxRefentActive().setSelected(applySnappers);
 	}
+
 	public void setUpSymbolColumn(TableColumn column) {
-	    DrawSnapCellRenderer symbolCellRenderer = new DrawSnapCellRenderer(snappers);
-        column.setCellRenderer(symbolCellRenderer);
-    }
-	 public void setUpPropertyColumn(TableColumn column) {
-	        PropertySnapCellEditor propertyeditor = new PropertySnapCellEditor(snappers);
-	        column.setCellEditor(propertyeditor);
+		DrawSnapCellRenderer symbolCellRenderer = new DrawSnapCellRenderer(
+				snappers);
+		column.setCellRenderer(symbolCellRenderer);
+	}
 
-	        PropertySnapCellRenderer renderer = new PropertySnapCellRenderer(snappers);
-	        column.setCellRenderer(renderer);
-	    }
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+	public void setUpPropertyColumn(TableColumn column) {
+		PropertySnapCellEditor propertyeditor = new PropertySnapCellEditor(
+				snappers);
+		column.setCellEditor(propertyeditor);
 
+		PropertySnapCellRenderer renderer = new PropertySnapCellRenderer(
+				snappers);
+		column.setCellRenderer(renderer);
+	}
+} // @jve:decl-index=0:visual-constraint="10,10"
 

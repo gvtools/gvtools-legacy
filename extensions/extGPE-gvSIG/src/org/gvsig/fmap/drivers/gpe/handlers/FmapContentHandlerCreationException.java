@@ -54,29 +54,28 @@ import org.gvsig.exceptions.BaseException;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class FmapContentHandlerCreationException extends BaseException{
+public class FmapContentHandlerCreationException extends BaseException {
 	private static final long serialVersionUID = -6021604626521668293L;
-	
-	public FmapContentHandlerCreationException(){
+
+	public FmapContentHandlerCreationException() {
 		initialize();
 	}
-	
-	public FmapContentHandlerCreationException(Throwable e){
+
+	public FmapContentHandlerCreationException(Throwable e) {
 		initialize();
 		initCause(e);
 	}
-	
+
 	protected Map values() {
 		return new HashMap();
 	}
-	
+
 	/**
 	 * Initialize the properties
 	 */
 	private void initialize() {
 		messageKey = "gpe_lgvsig_contentHandler_error";
-		formatString = "Error creating the contentHandler for" +
-				"Fmap";
+		formatString = "Error creating the contentHandler for" + "Fmap";
 		code = serialVersionUID;
 	}
 

@@ -6,14 +6,12 @@ package com.hardcode.gdbms.engine.data.indexes;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public abstract class DiskIndexSet {

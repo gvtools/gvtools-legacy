@@ -73,48 +73,51 @@ import com.iver.andami.plugins.status.IExtensionStatus;
  *
  */
 /**
- * Extensions are the way in which plugins extend Andami. Extensions
- * can add controls to user interface (GUI) and execute some code
- * when controls are activated. Every class implementing
- * {@link IExtension} is an extension, but directly implementing
- * that interface is discouraged. The preferred way to create
- * an extension is extending this absctract class.
- *
+ * Extensions are the way in which plugins extend Andami. Extensions can add
+ * controls to user interface (GUI) and execute some code when controls are
+ * activated. Every class implementing {@link IExtension} is an extension, but
+ * directly implementing that interface is discouraged. The preferred way to
+ * create an extension is extending this absctract class.
+ * 
  * @see IExtension
- *
+ * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
 public abstract class Extension implements IExtension {
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#terminate()
 	 */
-	public void terminate(){
+	public void terminate() {
 
 	}
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#postInitialize()
 	 */
-	public void postInitialize(){
+	public void postInitialize() {
 
 	}
 
-    /*
-	 *  (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#getStatus()
 	 */
-    public IExtensionStatus getStatus() {
-    	return null;
-    }
+	public IExtensionStatus getStatus() {
+		return null;
+	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#getStatus(IExtension extension)
 	 */
 	public IExtensionStatus getStatus(IExtension extension) {
 		return extension.getStatus();
 	}
 }
-

@@ -40,32 +40,32 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: LayoutPage.java 23693 2008-10-01 16:41:48Z vcaballero $
-* $Log$
-* Revision 1.7  2006-12-20 14:41:12  caballero
-* Remodelado Layout
-*
-* Revision 1.6  2006/11/08 10:57:55  jaume
-* remove unecessary imports
-*
-* Revision 1.5  2006/10/18 07:57:47  jaume
-* *** empty log message ***
-*
-* Revision 1.4  2006/10/04 09:06:35  jaume
-* *** empty log message ***
-*
-* Revision 1.3  2006/10/04 07:23:53  jaume
-* refactored ambiguous methods and field names and added some more features for preference pages
-*
-* Revision 1.2  2006/10/03 11:12:41  jaume
-* initialize values
-*
-* Revision 1.1  2006/10/03 10:33:34  jaume
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: LayoutPage.java 23693 2008-10-01 16:41:48Z vcaballero $
+ * $Log$
+ * Revision 1.7  2006-12-20 14:41:12  caballero
+ * Remodelado Layout
+ *
+ * Revision 1.6  2006/11/08 10:57:55  jaume
+ * remove unecessary imports
+ *
+ * Revision 1.5  2006/10/18 07:57:47  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.4  2006/10/04 09:06:35  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.3  2006/10/04 07:23:53  jaume
+ * refactored ambiguous methods and field names and added some more features for preference pages
+ *
+ * Revision 1.2  2006/10/03 11:12:41  jaume
+ * initialize values
+ *
+ * Revision 1.1  2006/10/03 10:33:34  jaume
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.gui.preferencespage;
 
 import javax.swing.ImageIcon;
@@ -79,19 +79,21 @@ import com.iver.andami.preferences.StoreException;
 import com.iver.cit.gvsig.project.documents.layout.Attributes;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 import com.iver.utiles.XMLEntity;
+
 /**
  * Layout preference page where the user can establish default values for
  * <ol>
- *  <li><b>grid horizontal gap</b></li>
- *  <li><b>grid vertical gap</b></li>
- *  <li><b>show or hide grid</b></li>
- *  <li><b>adjust elements to grid</b></li>
- *  <li><b>show or hide rules</b></li>
+ * <li><b>grid horizontal gap</b></li>
+ * <li><b>grid vertical gap</b></li>
+ * <li><b>show or hide grid</b></li>
+ * <li><b>adjust elements to grid</b></li>
+ * <li><b>show or hide rules</b></li>
  * </ol>
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
-public class LayoutPage extends AbstractPreferencePage{
+public class LayoutPage extends AbstractPreferencePage {
 
 	private static final boolean FACTORY_DEFAULT_LAYOUT_ENABLE_RULES = true;
 	private static final boolean FACTORY_DEFAULT_LAYOUT_GRID_SHOW = true;
@@ -114,11 +116,11 @@ public class LayoutPage extends AbstractPreferencePage{
 	/**
 	 * Builds preference page where the user can establish default values for
 	 * <ol>
-	 *  <li><b>grid horizontal gap</b></li>
-	 *  <li><b>grid vertical gap</b></li>
-	 *  <li><b>show or hide grid</b></li>
-	 *  <li><b>adjust elements to grid</b></li>
-	 *  <li><b>show or hide rules</b></li>
+	 * <li><b>grid horizontal gap</b></li>
+	 * <li><b>grid vertical gap</b></li>
+	 * <li><b>show or hide grid</b></li>
+	 * <li><b>adjust elements to grid</b></li>
+	 * <li><b>show or hide rules</b></li>
 	 * </ol>
 	 */
 	public LayoutPage() {
@@ -127,20 +129,24 @@ public class LayoutPage extends AbstractPreferencePage{
 		icon = PluginServices.getIconTheme().get("mapa-icono");
 
 		// horizontal gap text field
-		addComponent(PluginServices.getText(this, "espaciado_horizontal"), txtHGap = new JTextField(5));
+		addComponent(PluginServices.getText(this, "espaciado_horizontal"),
+				txtHGap = new JTextField(5));
 
 		// vertical gap text field
-		addComponent(PluginServices.getText(this, "espaciado_vertical"), txtVGap = new JTextField(5));
+		addComponent(PluginServices.getText(this, "espaciado_vertical"),
+				txtVGap = new JTextField(5));
 
 		// show/hide show check
-		addComponent(chkShowGrid = new JCheckBox(PluginServices.getText(this, "visualizar_cuadricula")));
+		addComponent(chkShowGrid = new JCheckBox(PluginServices.getText(this,
+				"visualizar_cuadricula")));
 
 		// enable/disable grid
-		addComponent(chkGridEnabled = new JCheckBox(PluginServices.getText(this, "malla_activada")));
+		addComponent(chkGridEnabled = new JCheckBox(PluginServices.getText(
+				this, "malla_activada")));
 
 		// show/hide rules
-		addComponent(chkShowRules = new JCheckBox(PluginServices.getText(this, "activar_regla")));
-
+		addComponent(chkShowRules = new JCheckBox(PluginServices.getText(this,
+				"activar_regla")));
 
 	}
 
@@ -154,7 +160,8 @@ public class LayoutPage extends AbstractPreferencePage{
 			showGrid = chkShowGrid.isSelected();
 			showRules = chkShowRules.isSelected();
 		} catch (Exception e) {
-			throw new StoreException(PluginServices.getText(this, "invalid_value_for_gap"));
+			throw new StoreException(PluginServices.getText(this,
+					"invalid_value_for_gap"));
 		}
 		Layout.setDefaultShowGrid(showGrid);
 		Layout.setDefaultAdjustToGrid(gridEnabled);
@@ -184,38 +191,43 @@ public class LayoutPage extends AbstractPreferencePage{
 	public void initializeValues() {
 		PluginServices ps = PluginServices.getPluginServices(this);
 		XMLEntity xml = ps.getPersistentXML();
-		double hGap=FACTORY_DEFAULT_HORIZONTAL_GAP;
-		double vGap=FACTORY_DEFAULT_VERTICAL_GAP;
-		boolean showGrid=FACTORY_DEFAULT_LAYOUT_GRID_SHOW;
-		boolean gridEnabled=FACTORY_DEFAULT_LAYOUT_GRID_ENABLE;
-		boolean showRules=FACTORY_DEFAULT_LAYOUT_ENABLE_RULES;
+		double hGap = FACTORY_DEFAULT_HORIZONTAL_GAP;
+		double vGap = FACTORY_DEFAULT_VERTICAL_GAP;
+		boolean showGrid = FACTORY_DEFAULT_LAYOUT_GRID_SHOW;
+		boolean gridEnabled = FACTORY_DEFAULT_LAYOUT_GRID_ENABLE;
+		boolean showRules = FACTORY_DEFAULT_LAYOUT_ENABLE_RULES;
 		// horizontal gap
 		if (xml.contains(DEFAULT_LAYOUT_GRID_HORIZONTAL_GAP_KEY_NAME)) {
-			hGap=xml.getDoubleProperty(DEFAULT_LAYOUT_GRID_HORIZONTAL_GAP_KEY_NAME);
+			hGap = xml
+					.getDoubleProperty(DEFAULT_LAYOUT_GRID_HORIZONTAL_GAP_KEY_NAME);
 		}
 		txtHGap.setText(String.valueOf(hGap));
 
 		// vertical gap
 		if (xml.contains(DEFAULT_LAYOUT_GRID_VERTICAL_GAP_KEY_NAME)) {
-			vGap=xml.getDoubleProperty(DEFAULT_LAYOUT_GRID_VERTICAL_GAP_KEY_NAME);
+			vGap = xml
+					.getDoubleProperty(DEFAULT_LAYOUT_GRID_VERTICAL_GAP_KEY_NAME);
 		}
 		txtVGap.setText(String.valueOf(vGap));
 
 		// show/hide grid check
 		if (xml.contains(DEFAULT_SHOW_LAYOUT_GRID_KEY_NAME)) {
-			showGrid=xml.getBooleanProperty(DEFAULT_SHOW_LAYOUT_GRID_KEY_NAME);
+			showGrid = xml
+					.getBooleanProperty(DEFAULT_SHOW_LAYOUT_GRID_KEY_NAME);
 		}
 		chkShowGrid.setSelected(showGrid);
 
 		// enable/disable grid check
 		if (xml.contains(DEFAULT_ENABLE_LAYOUT_GRID_KEY_NAME)) {
-			gridEnabled=xml.getBooleanProperty(DEFAULT_ENABLE_LAYOUT_GRID_KEY_NAME);
+			gridEnabled = xml
+					.getBooleanProperty(DEFAULT_ENABLE_LAYOUT_GRID_KEY_NAME);
 		}
 		chkGridEnabled.setSelected(gridEnabled);
 
 		// enable/disable rules
 		if (xml.contains(DEFAULT_SHOW_LAYOUT_RULES_KEY_NAME)) {
-			showRules=xml.getBooleanProperty(DEFAULT_SHOW_LAYOUT_RULES_KEY_NAME);
+			showRules = xml
+					.getBooleanProperty(DEFAULT_SHOW_LAYOUT_RULES_KEY_NAME);
 		}
 		chkShowRules.setSelected(showRules);
 

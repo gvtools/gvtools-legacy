@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.gazetteer.drivers;
+
 import java.net.URI;
 
 import es.gva.cit.catalog.drivers.AbstractDiscoveryServiceDriver;
@@ -49,80 +49,95 @@ import es.gva.cit.gazetteer.querys.FeatureTypeAttribute;
 import es.gva.cit.gazetteer.querys.GazetteerQuery;
 
 /**
- * This class must be inherited by all the gazetteer drivers. It contains
- * the common attributes. 
+ * This class must be inherited by all the gazetteer drivers. It contains the
+ * common attributes.
+ * 
  * @author Jorge Piera Llodra (piera_jor@gva.es)
  */
-public abstract class AbstractGazetteerServiceDriver extends AbstractDiscoveryServiceDriver implements IGazetteerServiceDriver {
+public abstract class AbstractGazetteerServiceDriver extends
+		AbstractDiscoveryServiceDriver implements IGazetteerServiceDriver {
 	private FeatureType[] featureTypes;
 	private GazetteerQuery query;
-	private String projection = null;	
+	private String projection = null;
 
 	/**
 	 * @return Returns the feature.
 	 */
-	public FeatureType[] getFeatureTypes() {        
+	public FeatureType[] getFeatureTypes() {
 		return featureTypes;
-	} 
+	}
 
 	/**
-	 * @param feature The feature to set.
+	 * @param feature
+	 *            The feature to set.
 	 */
-	public void setFeatureTypes(FeatureType[] featureTypes) {        
+	public void setFeatureTypes(FeatureType[] featureTypes) {
 		this.featureTypes = featureTypes;
-	} 	
+	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.drivers.IDiscoveryServiceDriver#createQuery()
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.drivers.IDiscoveryServiceDriver#createQuery()
 	 */
-	public DiscoveryServiceQuery createQuery(){
+	public DiscoveryServiceQuery createQuery() {
 		return new GazetteerQuery();
 	}
-	
+
 	/**
 	 * @return Returns the query.
 	 */
-	public GazetteerQuery getQuery() {        
+	public GazetteerQuery getQuery() {
 		return query;
-	} 
+	}
 
 	/**
-	 * @param query The query to set.
+	 * @param query
+	 *            The query to set.
 	 */
-	public void setQuery(GazetteerQuery query) {        
+	public void setQuery(GazetteerQuery query) {
 		this.query = query;
-	}	
+	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#describeFeatureType(java.net.URI, java.lang.String)
+	 * 
+	 * @see
+	 * es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#describeFeatureType
+	 * (java.net.URI, java.lang.String)
 	 */
-	public FeatureTypeAttribute[] describeFeatureType(URI uri, String feature) {        
+	public FeatureTypeAttribute[] describeFeatureType(URI uri, String feature) {
 		return null;
-	} 	
+	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#isDescribeFeatureTypeNeeded()
+	 * 
+	 * @see es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#
+	 * isDescribeFeatureTypeNeeded()
 	 */
-	public boolean isDescribeFeatureTypeNeeded()  {        
+	public boolean isDescribeFeatureTypeNeeded() {
 		return false;
-	} 
+	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getProjection()
-	 */	 
-	public String getProjection(){
+	 */
+	public String getProjection() {
 		return projection;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#setProjection(java.lang.String)
+	 * 
+	 * @see
+	 * es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#setProjection(java
+	 * .lang.String)
 	 */
-	public void setProjection(String projection){
+	public void setProjection(String projection) {
 		this.projection = projection;
 	}
 }

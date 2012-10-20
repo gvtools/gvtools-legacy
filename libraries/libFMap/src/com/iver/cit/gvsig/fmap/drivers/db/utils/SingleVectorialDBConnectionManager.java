@@ -11,24 +11,24 @@ import com.iver.cit.gvsig.fmap.drivers.ConnectionFactory;
 import com.iver.cit.gvsig.fmap.drivers.DBException;
 import com.iver.cit.gvsig.fmap.drivers.IConnection;
 import com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver;
-import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 
 /**
  * Utility class to handle connections properly. One connection instance per
  * (db, user, gvsig session)
- *
+ * 
  * @author jldominguez
- *
+ * 
  */
 public class SingleVectorialDBConnectionManager {
 
-	private static Logger logger = Logger.getLogger(SingleVectorialDBConnectionManager.class.getName());
+	private static Logger logger = Logger
+			.getLogger(SingleVectorialDBConnectionManager.class.getName());
 	private static SingleVectorialDBConnectionManager single_instance = null;
 	private HashMap connections = new HashMap();
 
 	/**
 	 * Non-public to avoid unwanted instances.
-	 *
+	 * 
 	 */
 	protected SingleVectorialDBConnectionManager() {
 
@@ -36,7 +36,7 @@ public class SingleVectorialDBConnectionManager {
 
 	/**
 	 * Singleton model to keep single instances.
-	 *
+	 * 
 	 * @return single instance
 	 */
 	public static SingleVectorialDBConnectionManager instance() {
@@ -47,10 +47,11 @@ public class SingleVectorialDBConnectionManager {
 	}
 
 	/**
-	 * Utility metho to find a connection with its parameters
-	 * given the connection object.
-	 *
-	 * @param co the connection object
+	 * Utility metho to find a connection with its parameters given the
+	 * connection object.
+	 * 
+	 * @param co
+	 *            the connection object
 	 * @return
 	 */
 	public ConnectionWithParams findConnection(IConnection co) {
@@ -58,7 +59,8 @@ public class SingleVectorialDBConnectionManager {
 		Iterator iter = connections.keySet().iterator();
 		while (iter.hasNext()) {
 			String keyitem = (String) iter.next();
-			ConnectionWithParams cwp = (ConnectionWithParams) connections.get(keyitem);
+			ConnectionWithParams cwp = (ConnectionWithParams) connections
+					.get(keyitem);
 			if (cwp.getConnection() == co) {
 				return cwp;
 			}
@@ -66,35 +68,37 @@ public class SingleVectorialDBConnectionManager {
 		return null;
 	}
 
-
 	/**
 	 * Creates a new connection with its parameters if not created yet.
-	 *
-	 * @param _drvName driver name
-	 * @param _user user name
-	 * @param _pw password
-	 * @param _name connection name
-	 * @param _host host url
-	 * @param _port port number as string
-	 * @param _db database name
-	 * @param _connected whether or not to connect the connection
+	 * 
+	 * @param _drvName
+	 *            driver name
+	 * @param _user
+	 *            user name
+	 * @param _pw
+	 *            password
+	 * @param _name
+	 *            connection name
+	 * @param _host
+	 *            host url
+	 * @param _port
+	 *            port number as string
+	 * @param _db
+	 *            database name
+	 * @param _connected
+	 *            whether or not to connect the connection
 	 * @return the connection with parameters object
 	 * @throws SQLException
 	 */
-	public ConnectionWithParams getConnection (
-			String _drvName,
-			String _user,
-			String _pw,
-			String _name,
-			String _host,
-			String _port,
-			String _db,
-			boolean _connected
-			) throws DBException {
+	public ConnectionWithParams getConnection(String _drvName, String _user,
+			String _pw, String _name, String _host, String _port, String _db,
+			boolean _connected) throws DBException {
 
 		IVectorialDatabaseDriver drv = getInstanceFromName(_drvName);
-		if (drv==null)return null;
-		String conn_str = drv.getConnectionString(_host, _port, _db, _user, _pw);
+		if (drv == null)
+			return null;
+		String conn_str = drv
+				.getConnectionString(_host, _port, _db, _user, _pw);
 
 		String key = getConnectionKey(_drvName, _host, _db, _port, _user);
 
@@ -104,34 +108,17 @@ public class SingleVectorialDBConnectionManager {
 
 			if (_connected) {
 				IConnection new_connection = null;
-				new_connection = ConnectionFactory.createConnection(conn_str, _user, _pw);
+				new_connection = ConnectionFactory.createConnection(conn_str,
+						_user, _pw);
 
-//				new_connection.setAutoCommit(false);
+				// new_connection.setAutoCommit(false);
 
-				cwp = new ConnectionWithParams(
-						conn_str,
-						new_connection,
-						_drvName,
-						_user,
-						_pw,
-						_name,
-						_host,
-						_port,
-						_db,
-						true);
+				cwp = new ConnectionWithParams(conn_str, new_connection,
+						_drvName, _user, _pw, _name, _host, _port, _db, true);
 			} else {
 
-				cwp = new ConnectionWithParams(
-						conn_str,
-						null,
-						_drvName,
-						_user,
-						null,
-						_name,
-						_host,
-						_port,
-						_db,
-						false);
+				cwp = new ConnectionWithParams(conn_str, null, _drvName, _user,
+						null, _name, _host, _port, _db, false);
 			}
 			connections.put(key, cwp);
 		}
@@ -153,25 +140,26 @@ public class SingleVectorialDBConnectionManager {
 
 	/**
 	 * Gets available open connections.
-	 *
+	 * 
 	 * @return array of open connections with parameters
 	 */
 	public ConnectionWithParams[] getConnectedConnections() {
 		Iterator iter = connections.keySet().iterator();
-		if (!iter.hasNext()) return null;
+		if (!iter.hasNext())
+			return null;
 
 		ArrayList aux = new ArrayList();
 
 		while (iter.hasNext()) {
-			ConnectionWithParams _cwp =
-				(ConnectionWithParams) connections.get(iter.next());
+			ConnectionWithParams _cwp = (ConnectionWithParams) connections
+					.get(iter.next());
 			if (_cwp.isConnected()) {
 				aux.add(_cwp);
 			}
 		}
 
 		ConnectionWithParams[] resp = new ConnectionWithParams[aux.size()];
-		for (int i=0; i<aux.size(); i++) {
+		for (int i = 0; i < aux.size(); i++) {
 			resp[i] = (ConnectionWithParams) aux.get(i);
 		}
 		return resp;
@@ -179,23 +167,24 @@ public class SingleVectorialDBConnectionManager {
 
 	/**
 	 * Gets all available connections.
-	 *
+	 * 
 	 * @return array of all connections with parameters
 	 */
 	public ConnectionWithParams[] getAllConnections() {
 		Iterator iter = connections.keySet().iterator();
-		if (!iter.hasNext()) return null;
+		if (!iter.hasNext())
+			return null;
 
 		ArrayList aux = new ArrayList();
 
 		while (iter.hasNext()) {
-			ConnectionWithParams _cwp =
-				(ConnectionWithParams) connections.get(iter.next());
+			ConnectionWithParams _cwp = (ConnectionWithParams) connections
+					.get(iter.next());
 			aux.add(_cwp);
 		}
 
 		ConnectionWithParams[] resp = new ConnectionWithParams[aux.size()];
-		for (int i=0; i<aux.size(); i++) {
+		for (int i = 0; i < aux.size(); i++) {
 			resp[i] = (ConnectionWithParams) aux.get(i);
 		}
 		return resp;
@@ -203,8 +192,9 @@ public class SingleVectorialDBConnectionManager {
 
 	/**
 	 * Removes connection with its params.
-	 *
-	 * @param _cwp connection with params to be removed
+	 * 
+	 * @param _cwp
+	 *            connection with params to be removed
 	 */
 	private void removeConnectionWP(ConnectionWithParams _cwp) {
 
@@ -213,31 +203,33 @@ public class SingleVectorialDBConnectionManager {
 		Iterator iter = connections.keySet().iterator();
 		while (iter.hasNext()) {
 			Object key = iter.next();
-			ConnectionWithParams cwp = (ConnectionWithParams) connections.get(key);
+			ConnectionWithParams cwp = (ConnectionWithParams) connections
+					.get(key);
 			if (cwp == _cwp) {
 				keysToRemove.add(key);
 			}
 		}
-		for (int i=0; i<keysToRemove.size(); i++) {
+		for (int i = 0; i < keysToRemove.size(); i++) {
 			connections.remove(keysToRemove.get(i));
 		}
 	}
 
-
 	/**
 	 * Closes and removes a connection with params object
-	 *
+	 * 
 	 * @param _cwp
 	 * @return whether the connection was actually closed (false if the
-	 * connection was not open at the start)
+	 *         connection was not open at the start)
 	 */
 	public boolean closeAndRemove(ConnectionWithParams _cwp) {
 
 		boolean it_was_open = true;
 
 		try {
-			it_was_open = (_cwp.getConnection() != null) && (!_cwp.getConnection().isClosed());
-			if (_cwp.getConnection() != null) _cwp.getConnection().close();
+			it_was_open = (_cwp.getConnection() != null)
+					&& (!_cwp.getConnection().isClosed());
+			if (_cwp.getConnection() != null)
+				_cwp.getConnection().close();
 			removeConnectionWP(_cwp);
 		} catch (Exception se) {
 			logger.error("While closing connection: " + se.getMessage(), se);
@@ -249,7 +241,7 @@ public class SingleVectorialDBConnectionManager {
 
 	/**
 	 * Called by the extension object when gvsig terminates.
-	 *
+	 * 
 	 */
 	public void closeAllBeforeTerminate() {
 
@@ -261,7 +253,8 @@ public class SingleVectorialDBConnectionManager {
 			key = (String) iter.next();
 			cwp = (ConnectionWithParams) connections.get(key);
 
-			if (cwp.getConnection() == null) continue;
+			if (cwp.getConnection() == null)
+				continue;
 
 			try {
 				cwp.getConnection().close();
@@ -282,18 +275,21 @@ public class SingleVectorialDBConnectionManager {
 
 	/**
 	 * Gets the objects key to be used in the inner hashmap
-	 * @param _drvName driver name
-	 * @param _host host's url
-	 * @param _db database name
-	 * @param _port port number
-	 * @param _user user name
+	 * 
+	 * @param _drvName
+	 *            driver name
+	 * @param _host
+	 *            host's url
+	 * @param _db
+	 *            database name
+	 * @param _port
+	 *            port number
+	 * @param _user
+	 *            user name
 	 * @return
 	 */
-	private static String getConnectionKey(
-			String _drvName,
-			String _host,
-			String _db,
-			String _port, String _user) {
+	private static String getConnectionKey(String _drvName, String _host,
+			String _db, String _port, String _user) {
 
 		String resp = "_driver_" + _drvName.toLowerCase();
 		resp = resp + "_host_" + _host.toLowerCase();
@@ -305,16 +301,13 @@ public class SingleVectorialDBConnectionManager {
 
 	/**
 	 * Utility method to instantiate a driver given its name.
-	 *
-	 * @param drvname driver name
+	 * 
+	 * @param drvname
+	 *            driver name
 	 * @return driver instance
 	 */
 	public static IVectorialDatabaseDriver getInstanceFromName(String drvname) {
 		throw new RuntimeException("Not implemented");
 	}
-
-
-
-
 
 }

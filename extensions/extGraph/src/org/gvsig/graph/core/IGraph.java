@@ -43,24 +43,29 @@ package org.gvsig.graph.core;
 /**
  * @author fjp
  * 
- * Grafo simple que nos permitirá trabajar en el futuro con
- * ficheros en lugar de en memoria. Como se puede comprobar, su
- * modelo puede ser un arrayList, o simplemente 2 tablas.
- *
+ *         Grafo simple que nos permitirá trabajar en el futuro con ficheros en
+ *         lugar de en memoria. Como se puede comprobar, su modelo puede ser un
+ *         arrayList, o simplemente 2 tablas.
+ * 
  */
 public interface IGraph {
 	public GvNode getNodeByID(int idNode);
+
 	public GvEdge getEdgeByID(int idEdge);
+
 	public int numVertices();
+
 	public int numEdges();
-	
+
 	public EdgePair getEdgesByIdArc(int idTramo);
-	
+
 	public void addEdge(GvEdge edge);
+
 	public void addNode(GvNode node);
+
 	public void addEdgePair(int arcId, EdgePair edgePair);
+
 	public void removeEdge(int idEdge);
+
 	public void removeNode(int idNode);
 }
-
-

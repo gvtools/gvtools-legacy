@@ -48,8 +48,7 @@ package org.gvsig.remoteClient.sld.styles;
  */
 public interface ISLDStyle {
 
-	
-	public String getName() ;
+	public String getName();
 
 	public void setName(String name);
 }

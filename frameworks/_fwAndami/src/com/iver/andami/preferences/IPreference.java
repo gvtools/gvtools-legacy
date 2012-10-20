@@ -42,49 +42,56 @@ package com.iver.andami.preferences;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+
 /**
- * Interface that any entry in the application's preferences dialog must implement.
- * In addition to this interface, an abstract class is supplied to ease the addition
- * of new pages
+ * Interface that any entry in the application's preferences dialog must
+ * implement. In addition to this interface, an abstract class is supplied to
+ * ease the addition of new pages
+ * 
  * @see com.iver.andami.preferences.AbstractPreferencePage
- *
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
 public interface IPreference {
 
 	/**
 	 * Returns an identifier for this preferences page that is used to reference
 	 * it inside the Map.
-	 * @return String, you'd typically use any kind of <code>this.getClass().getName();</code>
+	 * 
+	 * @return String, you'd typically use any kind of
+	 *         <code>this.getClass().getName();</code>
 	 */
 	String getID();
 
 	/**
-	 * Returns an string containing the title of the preferences page. This string
-	 * will be shown whether in the tree entry or in the page header.
+	 * Returns an string containing the title of the preferences page. This
+	 * string will be shown whether in the tree entry or in the page header.
+	 * 
 	 * @return String, the title of the page
 	 */
 	String getTitle();
 
 	/**
-	 * The page must be contained in a JPanel and whatever to be shown will be returned
-	 * by this function.<br>
+	 * The page must be contained in a JPanel and whatever to be shown will be
+	 * returned by this function.<br>
 	 * <p>
-	 * The content is added, removed and repainted automatically upon the events received from
-	 * the mouse. So, you only have to care about the content and the functionality to make it
-	 * <br>
+	 * The content is added, removed and repainted automatically upon the events
+	 * received from the mouse. So, you only have to care about the content and
+	 * the functionality to make it <br>
 	 * </p>
 	 * having sense.
+	 * 
 	 * @return JPanel holding the contents to be shown in the page.
 	 */
 	JPanel getPanel();
 
 	/**
-	 * Returns the ID of the parent of this layer. If this method returns null, which means
-	 * that this preferences page has no parent, this is new entry in the preferences
-	 * tree, otherwise this preferences page will be hanging on the page with the ID
-	 * returned by this.
+	 * Returns the ID of the parent of this layer. If this method returns null,
+	 * which means that this preferences page has no parent, this is new entry
+	 * in the preferences tree, otherwise this preferences page will be hanging
+	 * on the page with the ID returned by this.
+	 * 
 	 * @return
 	 */
 	String getParentID();
@@ -96,30 +103,33 @@ public interface IPreference {
 
 	/**
 	 * Saves the new settings
-	 * @return <b>true</b> if the values were correctly stored, <b>false</b> otherwise.
+	 * 
+	 * @return <b>true</b> if the values were correctly stored, <b>false</b>
+	 *         otherwise.
 	 * @throws StoreException
 	 */
 	void saveValues() throws StoreException;
 
 	/**
-	 * Restores the default values of this preferences page's settings. Values are not
-	 * saved until saveValues() is executed
+	 * Restores the default values of this preferences page's settings. Values
+	 * are not saved until saveValues() is executed
 	 */
 	void initializeDefaults();
 
 	/**
-	 * Returns the image that will be shown in the header of this preferences page
+	 * Returns the image that will be shown in the header of this preferences
+	 * page
+	 * 
 	 * @return
 	 */
 	ImageIcon getIcon();
 
 	/**
-	 * Tells if this preference page has changed any value
-	 * (used for storing values when necessary)
+	 * Tells if this preference page has changed any value (used for storing
+	 * values when necessary)
+	 * 
 	 * @return <b>True</b> if any value has changed, <b>false</b> otherwise.
 	 */
 	boolean isValueChanged();
 
 }
-
-

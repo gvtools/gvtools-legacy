@@ -19,16 +19,16 @@
 package org.gvsig.raster.dataset;
 
 /**
- * Excepción cuando un fichero no se encuentra en una lista en la
- * que se está buscando y dicha falta constituye una situación de
- * error.
+ * Excepción cuando un fichero no se encuentra en una lista en la que se está
+ * buscando y dicha falta constituye una situación de error.
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public class FileNotFoundInListException extends Exception{
+public class FileNotFoundInListException extends Exception {
 	private static final long serialVersionUID = 1557651260026647067L;
 
-	public FileNotFoundInListException(String msg){
+	public FileNotFoundInListException(String msg) {
 		super(msg);
 	}
 }

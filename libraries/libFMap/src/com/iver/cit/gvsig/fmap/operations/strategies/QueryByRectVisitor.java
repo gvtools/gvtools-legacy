@@ -49,10 +49,9 @@ import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.layers.FBitSet;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 
-
 /**
  * Query by Rectangle Visitor.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class QueryByRectVisitor implements FeatureVisitor {
@@ -61,8 +60,9 @@ public class QueryByRectVisitor implements FeatureVisitor {
 
 	/**
 	 * Inserta el Rectángulo para realizar la consulta.
-	 *
-	 * @param r Rectángulo para la consulta.
+	 * 
+	 * @param r
+	 *            Rectángulo para la consulta.
 	 */
 	public void setRect(Rectangle2D r) {
 		rect = r;
@@ -70,7 +70,7 @@ public class QueryByRectVisitor implements FeatureVisitor {
 
 	/**
 	 * Devuelve un FBitSet como respuesta a la consulta.
-	 *
+	 * 
 	 * @return FBitSet con los índices de los registros de la consulta.
 	 */
 	public FBitSet getBitSet() {
@@ -79,14 +79,16 @@ public class QueryByRectVisitor implements FeatureVisitor {
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.operations.strategies.FeatureVisitor#visit(com.iver.cit.gvsig.fmap.core.IGeometry,
-	 * 		int)
+	 *      int)
 	 */
-	public void visit(IGeometry g, int index) throws VisitorException, ProcessVisitorException {
-		if (g==null)return;
+	public void visit(IGeometry g, int index) throws VisitorException,
+			ProcessVisitorException {
+		if (g == null)
+			return;
 		// Comentamos esto porque la geometry ya viene reproyectada
-		/* if (ct != null) {
-			g.reProject(ct);
-		} */
+		/*
+		 * if (ct != null) { g.reProject(ct); }
+		 */
 
 		if (g.intersects(rect)) {
 			bitset.set(index, true);

@@ -88,43 +88,41 @@ public class TestExtension extends Extension {
 	}
 
 	public void execute(String actionCommand) {
-		
+
 		View v = (View) PluginServices.getMDIManager().getActiveWindow();
 		MapContext map = v.getMapControl().getMapContext();
 		SingleLayerIterator it = new SingleLayerIterator(map.getLayers());
 		Network net = null;
-		while (it.hasNext())
-		{
+		while (it.hasNext()) {
 			FLayer aux = it.next();
 			if (!aux.isActive())
 				continue;
 			net = (Network) aux.getProperty("network");
 
-			if ( net != null)
-			{
+			if (net != null) {
 				break;
 			}
 		}
 
 		if (actionCommand.equals("TEST_TURNCOSTS")) {
 			GvFlag[] flags = net.getFlags();
-			if(flags.length == 0)
-			{
-				JOptionPane.showMessageDialog(null, "Primero carga las paradas.");
+			if (flags.length == 0) {
+				JOptionPane.showMessageDialog(null,
+						"Primero carga las paradas.");
 				return;
 			}
 			setVelocities(net);
-//					PluginServices.getMDIManager().addWindow(new RouteControlPanel(net));
+			// PluginServices.getMDIManager().addWindow(new
+			// RouteControlPanel(net));
 			JFileChooser dlg = new JFileChooser();
-			if (dlg.showSaveDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION)
-			{
-//						RandomAccessFile file = null;
-//						try {
-//							file = new RandomAccessFile(dlg.getSelectedFile(), "rw");
-//						} catch (FileNotFoundException e1) {
-//							// TODO Auto-generated catch block
-//							e1.printStackTrace();
-//						}
+			if (dlg.showSaveDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
+				// RandomAccessFile file = null;
+				// try {
+				// file = new RandomAccessFile(dlg.getSelectedFile(), "rw");
+				// } catch (FileNotFoundException e1) {
+				// // TODO Auto-generated catch block
+				// e1.printStackTrace();
+				// }
 				BufferedWriter output;
 				try {
 					calculateOdMatrix(net, flags, dlg.getSelectedFile());
@@ -136,29 +134,29 @@ public class TestExtension extends Extension {
 					e.printStackTrace();
 				}
 			} // if
-			
+
 			return;
 		}
-		
+
 		if (actionCommand.equals("ODMATRIX")) {
 			GvFlag[] flags = net.getFlags();
-			if(flags.length == 0)
-			{
-				JOptionPane.showMessageDialog(null, "Primero carga las paradas.");
+			if (flags.length == 0) {
+				JOptionPane.showMessageDialog(null,
+						"Primero carga las paradas.");
 				return;
 			}
 			setVelocities(net);
-//					PluginServices.getMDIManager().addWindow(new RouteControlPanel(net));
+			// PluginServices.getMDIManager().addWindow(new
+			// RouteControlPanel(net));
 			JFileChooser dlg = new JFileChooser();
-			if (dlg.showSaveDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION)
-			{
-//						RandomAccessFile file = null;
-//						try {
-//							file = new RandomAccessFile(dlg.getSelectedFile(), "rw");
-//						} catch (FileNotFoundException e1) {
-//							// TODO Auto-generated catch block
-//							e1.printStackTrace();
-//						}
+			if (dlg.showSaveDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
+				// RandomAccessFile file = null;
+				// try {
+				// file = new RandomAccessFile(dlg.getSelectedFile(), "rw");
+				// } catch (FileNotFoundException e1) {
+				// // TODO Auto-generated catch block
+				// e1.printStackTrace();
+				// }
 				BufferedWriter output;
 				try {
 					calculateOdMatrix(net, flags, dlg.getSelectedFile());
@@ -170,10 +168,9 @@ public class TestExtension extends Extension {
 					e.printStackTrace();
 				}
 			} // if
-			
+
 			return;
 		}
-		
 
 	}
 
@@ -181,35 +178,34 @@ public class TestExtension extends Extension {
 			throws IOException, GraphException {
 		BufferedWriter output;
 		output = new BufferedWriter(new FileWriter(file));
-//						output.setByteOrder(ByteOrder.LITTLE_ENDIAN);
+		// output.setByteOrder(ByteOrder.LITTLE_ENDIAN);
 
 		OneToManySolver solver = new OneToManySolver();
 		solver.setNetwork(net);
 		solver.putDestinationsOnNetwork(net.getFlags());
-		for (int i=0; i < flags.length; i++)
-		{
-			
+		for (int i = 0; i < flags.length; i++) {
+
 			solver.setSourceFlag(flags[i]);
 			long t1 = System.currentTimeMillis();
-			
+
 			solver.calculate();
 			long t2 = System.currentTimeMillis();
-			System.out.println("Punto " + i + " de " + flags.length + ". " + (t2-t1) + " msecs.");
+			System.out.println("Punto " + i + " de " + flags.length + ". "
+					+ (t2 - t1) + " msecs.");
 			// Escribe el resultado
 			// idNodo1 idNodo2 tiempo distancia
-			
-			for (int j=0; j < flags.length; j++)
-			{
+
+			for (int j = 0; j < flags.length; j++) {
 				long secs = Math.round(flags[j].getCost());
 				long meters = Math.round(flags[j].getAccumulatedLength());
 				String strAux = i + "\t" + j + "\t" + secs + "\t" + meters;
 				output.write(strAux);
 				output.newLine();
-				
+
 			}
 			long t3 = System.currentTimeMillis();
-			System.out.println("T. de escritura: " + (t3-t2) + " msecs.");
-			
+			System.out.println("T. de escritura: " + (t3 - t2) + " msecs.");
+
 		}
 		solver.removeDestinationsFromNetwork(net.getFlags());
 		output.flush();
@@ -217,31 +213,32 @@ public class TestExtension extends Extension {
 	}
 
 	/**
-	 * Asignamos el coste en función de un array de velocidades y el tipo de via. Las velocidades, en metros/seg
+	 * Asignamos el coste en función de un array de velocidades y el tipo de
+	 * via. Las velocidades, en metros/seg
+	 * 
 	 * @param net
 	 */
 	private void setVelocities(Network net) {
-		double[] veloKm = {120, 110, 90, 80, 70, 60, 50, 40};
+		double[] veloKm = { 120, 110, 90, 80, 70, 60, 50, 40 };
 		ArrayList veloMeters = new ArrayList();
-		for (int i=0; i<veloKm.length; i++)
-		{
+		for (int i = 0; i < veloKm.length; i++) {
 			veloMeters.add(new Double(veloKm[i] / 3.6));
 		}
-		
-		for (int i=0; i < net.getGraph().numEdges(); i++)
-		{
+
+		for (int i = 0; i < net.getGraph().numEdges(); i++) {
 			GvEdge edge = net.getGraph().getEdgeByID(i);
 			Double vel = (Double) veloMeters.get(edge.getType());
 			edge.setWeight(edge.getDistance() / vel.doubleValue()); // segundos
 		}
-		
+
 	}
 
-	private void createGraphicsFrom(Collection featureList, MapControl mapControl) {
+	private void createGraphicsFrom(Collection featureList,
+			MapControl mapControl) {
 		Iterator it = featureList.iterator();
-		GraphicLayer graphicLayer = mapControl.getMapContext().getGraphicsLayer();
-		if (idSymbolLine == -1)
-		{
+		GraphicLayer graphicLayer = mapControl.getMapContext()
+				.getGraphicsLayer();
+		if (idSymbolLine == -1) {
 			Color color = new Color(0.9f, 0.0f, 0.0f, 0.3f);
 			ILineSymbol lineSymbol = SymbologyFactory.createDefaultLineSymbol();
 			lineSymbol.setLineColor(color);
@@ -258,14 +255,17 @@ public class TestExtension extends Extension {
 
 	}
 
-	private void createGraphicsFrom(ListIterator it, MapControl mapControl) throws ReadDriverException {
-		GraphicLayer graphicLayer = mapControl.getMapContext().getGraphicsLayer();
+	private void createGraphicsFrom(ListIterator it, MapControl mapControl)
+			throws ReadDriverException {
+		GraphicLayer graphicLayer = mapControl.getMapContext()
+				.getGraphicsLayer();
 		Color color = new Color(0.5f, 0.8f, 0.0f, 0.5f);
 		ILineSymbol lineSymbol = SymbologyFactory.createDefaultLineSymbol();
 		lineSymbol.setLineColor(color);
 		lineSymbol.setLineWidth(7.0f);
 		int idSymbol = graphicLayer.addSymbol(lineSymbol);
-		VectorialAdapter va = (VectorialAdapter) solver.getNetwork().getLayer().getSource();
+		VectorialAdapter va = (VectorialAdapter) solver.getNetwork().getLayer()
+				.getSource();
 		while (it.hasNext()) {
 			FEdge edge = (FEdge) it.next();
 			IFeature feat = va.getFeature(edge.getArcID());
@@ -276,7 +276,6 @@ public class TestExtension extends Extension {
 		mapControl.drawGraphics();
 
 	}
-
 
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
@@ -289,5 +288,3 @@ public class TestExtension extends Extension {
 	}
 
 }
-
-

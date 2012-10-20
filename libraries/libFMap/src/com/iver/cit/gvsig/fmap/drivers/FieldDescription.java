@@ -56,7 +56,8 @@ public class FieldDescription {
 
 	public static int stringToType(String strType) {
 		int type = -1;
-		if (strType.equalsIgnoreCase("String") || strType.equalsIgnoreCase("Varchar"))
+		if (strType.equalsIgnoreCase("String")
+				|| strType.equalsIgnoreCase("Varchar"))
 			type = Types.VARCHAR;
 		if (strType.equalsIgnoreCase("Double"))
 			type = Types.DOUBLE;

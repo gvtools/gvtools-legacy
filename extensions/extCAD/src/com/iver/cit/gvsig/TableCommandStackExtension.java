@@ -11,7 +11,7 @@ import com.iver.cit.gvsig.project.documents.table.gui.Table;
 
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class TableCommandStackExtension extends Extension {
@@ -21,27 +21,28 @@ public class TableCommandStackExtension extends Extension {
 	public void initialize() {
 		PluginServices.getIconTheme().registerDefault(
 				"commands-stack",
-				this.getClass().getClassLoader().getResource("images/commandstack.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/commandstack.png"));
 	}
 
 	/**
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String s) {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-				.getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		Table table = (Table) f;
 		ProjectTable model = table.getModel();
 		if (s.equals("COMMANDSTACK")) {
-			CommandRecord cr=null;
+			CommandRecord cr = null;
 
-			if (model.getAssociatedTable()!=null){
-				cr=((IEditableSource)((FLyrVect)model.getAssociatedTable()).getSource()).getCommandRecord();
+			if (model.getAssociatedTable() != null) {
+				cr = ((IEditableSource) ((FLyrVect) model.getAssociatedTable())
+						.getSource()).getCommandRecord();
 				cr.addCommandListener(table);
-			}else{
-				cr=model.getModelo().getCommandRecord();
+			} else {
+				cr = model.getModelo().getCommandRecord();
 				cr.addCommandListener(table);
 			}
 			CommandStackDialog csd = new CommandStackDialog();
@@ -61,15 +62,15 @@ public class TableCommandStackExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-		.getActiveWindow();
-		if (f instanceof Table){
-		Table table = (Table) f;
-		ProjectTable model = table.getModel();
-		if (model.getModelo().isEditing())
-			return true;
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
+		if (f instanceof Table) {
+			Table table = (Table) f;
+			ProjectTable model = table.getModel();
+			if (model.getModelo().isEditing())
+				return true;
 		}
-			return false;
+		return false;
 
 	}
 }

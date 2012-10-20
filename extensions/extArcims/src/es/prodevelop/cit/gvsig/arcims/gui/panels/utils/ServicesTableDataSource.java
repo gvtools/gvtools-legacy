@@ -55,188 +55,191 @@ import org.gvsig.remoteClient.arcims.utils.ServiceInfoTags;
 
 import com.iver.andami.PluginServices;
 
-
 /**
-* This class is used to get and use the data model of the
-* available services table.
-
-* @author jldominguez
-*/
+ * This class is used to get and use the data model of the available services
+ * table.
+ * 
+ * @author jldominguez
+ */
 public class ServicesTableDataSource {
-    protected static Logger logger = Logger.getLogger(ServicesTableDataSource.class.getName());
-    private Vector colNames;
-    private Vector data; // vector of vectors
-    private String nameColString = PluginServices.getText(this, "name");
-    private String typeColString = PluginServices.getText(this,
-            "arcims_server_type_col_name");
-    private String statusColString = PluginServices.getText(this,
-            "arcims_server_status_col_name");
+	protected static Logger logger = Logger
+			.getLogger(ServicesTableDataSource.class.getName());
+	private Vector colNames;
+	private Vector data; // vector of vectors
+	private String nameColString = PluginServices.getText(this, "name");
+	private String typeColString = PluginServices.getText(this,
+			"arcims_server_type_col_name");
+	private String statusColString = PluginServices.getText(this,
+			"arcims_server_status_col_name");
 
-    /**
-    * The constructor is called with the server's URL as a parameter.
-    * Sets the columns names to "Name", "Type" and
-    * "Status" and gets the table data by sending a request to the server.
-     * @throws ArcImsException
-    */
-    public ServicesTableDataSource(URL svrURL, boolean overrride)
-        throws ArcImsException {
-        colNames = new Vector();
-        loadDataAndColNames(svrURL, overrride);
+	/**
+	 * The constructor is called with the server's URL as a parameter. Sets the
+	 * columns names to "Name", "Type" and "Status" and gets the table data by
+	 * sending a request to the server.
+	 * 
+	 * @throws ArcImsException
+	 */
+	public ServicesTableDataSource(URL svrURL, boolean overrride)
+			throws ArcImsException {
+		colNames = new Vector();
+		loadDataAndColNames(svrURL, overrride);
 
-        if (data.size() > 0) {
-            colNames.addElement(nameColString);
-            colNames.addElement(typeColString);
-            colNames.addElement(statusColString);
-        }
-    }
+		if (data.size() > 0) {
+			colNames.addElement(nameColString);
+			colNames.addElement(typeColString);
+			colNames.addElement(statusColString);
+		}
+	}
 
-    /**
-    * Gets a vector with the column names.
-    *
-    * @return the vector with the column names.
-    */
-    public Vector getColNamesVector() {
-        return colNames;
-    }
+	/**
+	 * Gets a vector with the column names.
+	 * 
+	 * @return the vector with the column names.
+	 */
+	public Vector getColNamesVector() {
+		return colNames;
+	}
 
-    /**
-    * Gets a vector with the table's data.
-    *
-    * @return the table's data is a vector of vectors
-    */
-    public Vector getDataVector() {
-        return data;
-    }
+	/**
+	 * Gets a vector with the table's data.
+	 * 
+	 * @return the table's data is a vector of vectors
+	 */
+	public Vector getDataVector() {
+		return data;
+	}
 
-    /**
-    * Sends a request to the server (ServiceName=catalog)
-    * and loads the private vectors (data and column names)
-     * @param tmpDriver
-    *
-    * @param serverURL server's URL
-     * @throws ArcImsException
-    */
-    private void loadDataAndColNames(URL serverURL, boolean override)
-        throws ArcImsException {
-        ArrayList _services = ArcImsProtocolHandler.getCatalog(serverURL,
-                override);
+	/**
+	 * Sends a request to the server (ServiceName=catalog) and loads the private
+	 * vectors (data and column names)
+	 * 
+	 * @param tmpDriver
+	 * 
+	 * @param serverURL
+	 *            server's URL
+	 * @throws ArcImsException
+	 */
+	private void loadDataAndColNames(URL serverURL, boolean override)
+			throws ArcImsException {
+		ArrayList _services = ArcImsProtocolHandler.getCatalog(serverURL,
+				override);
 
-        ArrayList services = leaveKnownServices(_services);
+		ArrayList services = leaveKnownServices(_services);
 
-        data = new Vector();
+		data = new Vector();
 
-        TreeSet auxTree = new TreeSet();
+		TreeSet auxTree = new TreeSet();
 
-        for (int i = 0; i < services.size(); i++) {
-            ArrayList item = (ArrayList) services.get(i);
-            auxTree.add(item.get(0));
-        }
+		for (int i = 0; i < services.size(); i++) {
+			ArrayList item = (ArrayList) services.get(i);
+			auxTree.add(item.get(0));
+		}
 
-        Iterator iter = auxTree.iterator();
+		Iterator iter = auxTree.iterator();
 
-        while (iter.hasNext()) {
-            String name = (String) iter.next();
-            data.add(getItemWithName(services, name));
-        }
+		while (iter.hasNext()) {
+			String name = (String) iter.next();
+			data.add(getItemWithName(services, name));
+		}
 
-        //		for (int i=0; i<services.size(); i++) {
-        //			ArrayList item = (ArrayList) services.get(i);
-        //			Vector vv = new Vector();
-        //			vv.addElement( item.get(0) );
-        //			vv.addElement( item.get(1) );
-        //			vv.addElement( item.get(2) );
-        //			// int insert = getInsertPosition(String str, data);
-        //			// data.insertElementAt(vv); //, insert);
-        //		}
-    }
+		// for (int i=0; i<services.size(); i++) {
+		// ArrayList item = (ArrayList) services.get(i);
+		// Vector vv = new Vector();
+		// vv.addElement( item.get(0) );
+		// vv.addElement( item.get(1) );
+		// vv.addElement( item.get(2) );
+		// // int insert = getInsertPosition(String str, data);
+		// // data.insertElementAt(vv); //, insert);
+		// }
+	}
 
-    private ArrayList leaveKnownServices(ArrayList list) {
-        ArrayList resp = new ArrayList();
-        ArrayList item;
-        String type;
-        String enabled;
+	private ArrayList leaveKnownServices(ArrayList list) {
+		ArrayList resp = new ArrayList();
+		ArrayList item;
+		String type;
+		String enabled;
 
-        for (int i = 0; i < list.size(); i++) {
-            item = (ArrayList) list.get(i);
-            type = (String) item.get(1);
-            enabled = (String) item.get(2);
+		for (int i = 0; i < list.size(); i++) {
+			item = (ArrayList) list.get(i);
+			type = (String) item.get(1);
+			enabled = (String) item.get(2);
 
-            if (isKnownServiceType(type) && (isEnabled(enabled))) {
-                resp.add((ArrayList) item.clone());
-            }
-        }
+			if (isKnownServiceType(type) && (isEnabled(enabled))) {
+				resp.add((ArrayList) item.clone());
+			}
+		}
 
-        return resp;
-    }
+		return resp;
+	}
 
-    private boolean isEnabled(String str) {
-        if (str.compareToIgnoreCase("enabled") == 0) {
-            return true;
-        }
+	private boolean isEnabled(String str) {
+		if (str.compareToIgnoreCase("enabled") == 0) {
+			return true;
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    private boolean isKnownServiceType(String type) {
-        if (type.compareToIgnoreCase(ServiceInfoTags.vIMAGESERVICE) == 0) {
-            return true;
-        }
+	private boolean isKnownServiceType(String type) {
+		if (type.compareToIgnoreCase(ServiceInfoTags.vIMAGESERVICE) == 0) {
+			return true;
+		}
 
-        if (type.compareToIgnoreCase(ServiceInfoTags.vFEATURESERVICE) == 0) {
-            return true;
-        }
+		if (type.compareToIgnoreCase(ServiceInfoTags.vFEATURESERVICE) == 0) {
+			return true;
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    private Vector getItemWithName(ArrayList allitems, String name) {
-        for (int i = 0; i < allitems.size(); i++) {
-            if (((String) ((ArrayList) allitems.get(i)).get(0)).compareToIgnoreCase(
-                        name) == 0) {
-                Vector vv = new Vector();
-                vv.addElement(((ArrayList) allitems.get(i)).get(0));
-                vv.addElement(((ArrayList) allitems.get(i)).get(1));
-                vv.addElement(((ArrayList) allitems.get(i)).get(2));
+	private Vector getItemWithName(ArrayList allitems, String name) {
+		for (int i = 0; i < allitems.size(); i++) {
+			if (((String) ((ArrayList) allitems.get(i)).get(0))
+					.compareToIgnoreCase(name) == 0) {
+				Vector vv = new Vector();
+				vv.addElement(((ArrayList) allitems.get(i)).get(0));
+				vv.addElement(((ArrayList) allitems.get(i)).get(1));
+				vv.addElement(((ArrayList) allitems.get(i)).get(2));
 
-                return vv;
-            }
-        }
+				return vv;
+			}
+		}
 
-        logger.error("Service name not found ");
+		logger.error("Service name not found ");
 
-        return null;
-    }
+		return null;
+	}
 
-    private int getInsertPosition(String str, Vector data) {
-        for (int i = 0; i < data.size(); i++) {
-            String aux = (String) ((ArrayList) data.get(i)).get(0);
+	private int getInsertPosition(String str, Vector data) {
+		for (int i = 0; i < data.size(); i++) {
+			String aux = (String) ((ArrayList) data.get(i)).get(0);
 
-            if (aux.compareToIgnoreCase(str) > 0) {
-                return i;
-            }
-        }
+			if (aux.compareToIgnoreCase(str) > 0) {
+				return i;
+			}
+		}
 
-        return data.size();
-    }
+		return data.size();
+	}
 
-    /**
-    * Gets the name of the <i>n</i>th column (<i>n</i> = columnIndex)
-    *
-    * @return column name
-    */
-    public String getColumnName(int columnIndex) {
-        if (columnIndex == 0) {
-            return nameColString;
-        }
+	/**
+	 * Gets the name of the <i>n</i>th column (<i>n</i> = columnIndex)
+	 * 
+	 * @return column name
+	 */
+	public String getColumnName(int columnIndex) {
+		if (columnIndex == 0) {
+			return nameColString;
+		}
 
-        if (columnIndex == 1) {
-            return typeColString;
-        }
+		if (columnIndex == 1) {
+			return typeColString;
+		}
 
-        if (columnIndex == 2) {
-            return statusColString;
-        }
+		if (columnIndex == 2) {
+			return statusColString;
+		}
 
-        return "(Columna desconocida)";
-    }
+		return "(Columna desconocida)";
+	}
 }

@@ -42,28 +42,28 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.fmap.core;
 
 /**
- * Exception launched when we try to build a JTS geometry
- * and JTS launchs an exception.
+ * Exception launched when we try to build a JTS geometry and JTS launchs an
+ * exception.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class IncorrectJtsGeometryException extends RuntimeException {
-	
+
 	private static final long serialVersionUID = 1L;
 
-	public IncorrectJtsGeometryException(Exception e){
+	public IncorrectJtsGeometryException(Exception e) {
 		super(e);
 	}
-	
-	public IncorrectJtsGeometryException(Exception e, String message){
+
+	public IncorrectJtsGeometryException(Exception e, String message) {
 		super(message, e);
 	}
 }

@@ -5,22 +5,23 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-
 /**
  * Implementación de VariableIndexSet que escribe los índices en un fichero
- *
+ * 
  * @author Fernando González Cortés
  */
-public class VariableDiskIndexSet extends DiskIndexSet
-	implements VariableIndexSet {
+public class VariableDiskIndexSet extends DiskIndexSet implements
+		VariableIndexSet {
 	private long count = 0;
 
 	/**
 	 * Añade todos los índices que se pasan como parámetro
-	 *
-	 * @param initialSet Conjunto de índices que se quieren añadir
-	 *
-	 * @throws IOException Si se produce un fallo al añadir los índices
+	 * 
+	 * @param initialSet
+	 *            Conjunto de índices que se quieren añadir
+	 * 
+	 * @throws IOException
+	 *             Si se produce un fallo al añadir los índices
 	 */
 	public void addAll(VariableIndexSet initialSet) throws IOException {
 		for (long i = 0; i < initialSet.getIndexCount(); i++) {
@@ -100,11 +101,11 @@ public class VariableDiskIndexSet extends DiskIndexSet
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
-	 *
+	 * 
 	 * @throws IOException
-	 *
+	 * 
 	 * @see com.hardcode.gdbms.engine.data.indexes.VariableIndexSet#getIndexes()
 	 */
 	public long[] getIndexes() throws IOException {

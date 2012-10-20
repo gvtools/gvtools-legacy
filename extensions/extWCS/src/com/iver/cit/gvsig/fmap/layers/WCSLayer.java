@@ -65,7 +65,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 public class WCSLayer {
-	
+
 	private String name;
 	private ArrayList srs;
 	private String title;
@@ -122,39 +122,39 @@ public class WCSLayer {
 	}
 
 	public Rectangle2D getExtent(String srs) {
-		if ( extents != null ) {
+		if (extents != null) {
 			return (Rectangle2D) extents.get(srs);
 		}
 		return null;
 	}
-	
+
 	public void addExtent(String srs, Rectangle2D extent) {
-		if ( extents == null ) extents = new Hashtable();
+		if (extents == null)
+			extents = new Hashtable();
 		extents.put(srs, extent);
 	}
 
 	public Point2D getMaxRes() {
 		return maxRes;
 	}
-	
 
 	public void setMaxRes(Point2D maxRes) {
 		this.maxRes = maxRes;
 	}
-	
-	public String toString(){
-    	String str;
-    	if (getName()==null)
-    		str = getTitle();
-    	else
-    		str = "["+getName()+"] "+getTitle();
-        return str;
-    }
+
+	public String toString() {
+		String str;
+		if (getName() == null)
+			str = getTitle();
+		else
+			str = "[" + getName() + "] " + getTitle();
+		return str;
+	}
 
 	public void setTimePositions(ArrayList timePositions) {
 		this.timePositions = timePositions;
 	}
-    
+
 	public ArrayList getTimePositions() {
 		return this.timePositions;
 	}
@@ -162,7 +162,7 @@ public class WCSLayer {
 	public String getDescription() {
 		return this.description;
 	}
-	
+
 	public void setDescription(String descr) {
 		this.description = descr;
 	}
@@ -174,13 +174,14 @@ public class WCSLayer {
 	public void setInterpolationMethods(ArrayList interpolationMethods) {
 		this.interpolationMethods = interpolationMethods;
 	}
-	
+
 	public ArrayList getInterpolationMethods() {
 		return interpolationMethods;
 	}
 
 	public void addParameter(FMapWCSParameter p) {
-		if (pList == null) pList = new ArrayList();
+		if (pList == null)
+			pList = new ArrayList();
 		pList.add(p);
 	}
 

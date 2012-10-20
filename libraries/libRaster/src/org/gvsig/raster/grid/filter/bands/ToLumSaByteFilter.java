@@ -18,31 +18,33 @@
  */
 package org.gvsig.raster.grid.filter.bands;
 
-
 /**
  * Filtro de balance de Tono, Salturación y Luminosidad
- *
+ * 
  * @version 04/12/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class ToLumSaByteFilter extends ToLumSaFilter {
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.bands.ColorTableFilter#process(int, int)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.bands.ColorTableFilter#process(int,
+	 * int)
 	 */
 	public void process(int col, int line) throws InterruptedException {
 		byte[] value = new byte[3];
-		for (int i = 0; i < renderBands.length; i++) 
-			if(renderBands[i] != -1)
+		for (int i = 0; i < renderBands.length; i++)
+			if (renderBands[i] != -1)
 				value[i] = raster.getElemByte(line, col, renderBands[i]);
-		
-		double[] hsl = colorConversion.RGBtoHSL(value[0] & 0xff, value[1] & 0xff, value[2] & 0xff);
+
+		double[] hsl = colorConversion.RGBtoHSL(value[0] & 0xff,
+				value[1] & 0xff, value[2] & 0xff);
 		hsl[0] = ((hsl[0] + hue) % 360);
 		hsl[1] = Math.max(Math.min(hsl[1] + (saturation / 100.0), 1D), 0.001);
 		hsl[2] = Math.max(Math.min(hsl[2] + (luminosity / 100.0), 1D), 0);
 		int[] rgb = colorConversion.HSLtoRGB(hsl[0], hsl[1], hsl[2]);
 		for (int band = 0; band < 3; band++)
-			value[band] = (byte)(rgb[band]);
+			value[band] = (byte) (rgb[band]);
 		rasterResult.setElemByte(line, col, value);
 	}
 }

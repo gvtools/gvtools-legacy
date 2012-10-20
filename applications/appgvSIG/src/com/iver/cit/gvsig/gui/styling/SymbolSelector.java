@@ -87,7 +87,6 @@ import org.gvsig.gui.beans.swing.JIncrementalNumberField;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
-import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.IWindowListener;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.core.CartographicSupport;
@@ -111,14 +110,15 @@ import com.iver.cit.gvsig.gui.panels.ColorChooserPanel;
 import com.iver.cit.gvsig.project.documents.view.legend.gui.ISymbolSelector;
 
 /**
- * Creates the panel where the user has the options to select a symbol.
- * Apart from the option to select one, the user will have a previsualization
- * of all the symbols stored and posibilities to modify an existing one, to create
- * a new symbol and so on.
- *
+ * Creates the panel where the user has the options to select a symbol. Apart
+ * from the option to select one, the user will have a previsualization of all
+ * the symbols stored and posibilities to modify an existing one, to create a
+ * new symbol and so on.
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
-public class SymbolSelector extends JPanel implements ISymbolSelector, ActionListener, FocusListener, IWindowListener{
+public class SymbolSelector extends JPanel implements ISymbolSelector,
+		ActionListener, FocusListener, IWindowListener {
 
 	private static final long serialVersionUID = -6405660392303659551L;
 	private JPanel jPanel = null;
@@ -156,9 +156,12 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 	private String wiTitle = null;
 
 	protected SelectorFilter sFilter = new SelectorFilter() {
-		private final IGeometry dummyPointGeom = ShapeFactory.createPoint2D(new FPoint2D());
-		private final IGeometry dummyLineGeom = ShapeFactory.createPolyline2D(new GeneralPathX());
-		private final IGeometry dummyPolygonGeom = ShapeFactory.createPolygon2D(new GeneralPathX());
+		private final IGeometry dummyPointGeom = ShapeFactory
+				.createPoint2D(new FPoint2D());
+		private final IGeometry dummyLineGeom = ShapeFactory
+				.createPolyline2D(new GeneralPathX());
+		private final IGeometry dummyPolygonGeom = ShapeFactory
+				.createPolygon2D(new GeneralPathX());
 
 		public boolean accepts(Object obj) {
 			if (obj instanceof ISymbol) {
@@ -188,29 +191,33 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 	private JComboBoxFontSizes cmbFontSize;
 	protected LibraryBrowser libraryBrowser;
 	private boolean showAcceptPanel;
+
 	/**
 	 * Constructor method
-	 *
+	 * 
 	 * @param currentElement
 	 * @param shapeType
 	 */
-	private SymbolSelector(Object currentElement, int shapeType, boolean initialize, boolean showAcceptPanel) {
+	private SymbolSelector(Object currentElement, int shapeType,
+			boolean initialize, boolean showAcceptPanel) {
 		super();
 
-		// TODO  09/08/07 check the currentElement type is suitable for the shapeType specified
+		// TODO 09/08/07 check the currentElement type is suitable for the
+		// shapeType specified
 		if (currentElement != null && currentElement instanceof ISymbol) {
 			ISymbol sym = (ISymbol) currentElement;
 			currentElement = SymbologyFactory.createSymbolFromXML(
 					sym.getXMLEntity(), "");
 			String desc = sym.getDescription();
-//			desc = " ("+PluginServices.getText(this, "current")+")";
-//			((ISymbol)currentElement).setDescription(desc);
+			// desc = " ("+PluginServices.getText(this, "current")+")";
+			// ((ISymbol)currentElement).setDescription(desc);
 		}
 
 		// for symbols MULTIPOINT is the same than POINT
-		if (shapeType == FShape.MULTIPOINT) shapeType = FShape.POINT;
+		if (shapeType == FShape.MULTIPOINT)
+			shapeType = FShape.POINT;
 
-		//Remove the M or the Z coordinate
+		// Remove the M or the Z coordinate
 		switch (shapeType) {
 		case FShape.POINT | FShape.Z:
 		case FShape.POINT | FShape.M:
@@ -228,9 +235,10 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 			this.shapeType = shapeType;
 		}
 
-//		Preferences prefs = Preferences.userRoot().node( "gvsig.foldering" );
+		// Preferences prefs = Preferences.userRoot().node( "gvsig.foldering" );
 		rootDir = new File(SymbologyFactory.SymbolLibraryPath);
-//		prefs.get("SymbolLibraryFolder", System.getProperty("user.home")+"/gvSIG/Symbols"));
+		// prefs.get("SymbolLibraryFolder",
+		// System.getProperty("user.home")+"/gvSIG/Symbols"));
 		if (!rootDir.exists())
 			rootDir.mkdir();
 		treeRootName = PluginServices.getText(this, "symbol_library");
@@ -242,42 +250,45 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 			throw new Error(e);
 		}
 
-
 	}
 
 	/**
-	 * Constructor method, it is <b>protected</b> by convenience to let StyleSelector
-	 * to invoke it, but rigorously it should be <b>private</b>.
-	 *
+	 * Constructor method, it is <b>protected</b> by convenience to let
+	 * StyleSelector to invoke it, but rigorously it should be <b>private</b>.
+	 * 
 	 * @param symbol
 	 * @param shapeType
 	 * @param filter
 	 */
-	protected SymbolSelector(Object symbol, int shapeType, SelectorFilter filter, boolean initialize) {
+	protected SymbolSelector(Object symbol, int shapeType,
+			SelectorFilter filter, boolean initialize) {
 		this(symbol, shapeType, initialize, true);
 		sFilter = filter;
 	}
 
 	/**
-	 * Constructor method, it is <b>protected</b> by convenience to let StyleSelector
-	 * to invoke it, but rigorously it should be <b>private</b>.
-	 *
+	 * Constructor method, it is <b>protected</b> by convenience to let
+	 * StyleSelector to invoke it, but rigorously it should be <b>private</b>.
+	 * 
 	 * @param symbol
 	 * @param shapeType
 	 * @param filter
 	 */
-	protected SymbolSelector(Object symbol, int shapeType, SelectorFilter filter, boolean initialize, boolean showAcceptPanel) {
+	protected SymbolSelector(Object symbol, int shapeType,
+			SelectorFilter filter, boolean initialize, boolean showAcceptPanel) {
 		this(symbol, shapeType, initialize, showAcceptPanel);
 		sFilter = filter;
 	}
 
 	/**
 	 * This method initializes this
+	 * 
 	 * @param currentElement
 	 * @throws ClassNotFoundException
-	 *
+	 * 
 	 */
-	protected void initialize(Object currentElement) throws ClassNotFoundException {
+	protected void initialize(Object currentElement)
+			throws ClassNotFoundException {
 		library = new SymbolLibrary(rootDir);
 
 		this.setLayout(new BorderLayout());
@@ -294,13 +305,13 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 		}, cancelAction = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				accepted = false;
-//				((SymbolPreviewer) jPanelPreview).setSymbol(null);
+				// ((SymbolPreviewer) jPanelPreview).setSymbol(null);
 				PluginServices.getMDIManager().closeWindow(SymbolSelector.this);
 
 			}
 		};
 
-		if(showAcceptPanel){
+		if (showAcceptPanel) {
 			okCancelPanel = new AcceptCancelPanel();
 			okCancelPanel.setOkButtonActionListener(okAction);
 			okCancelPanel.setCancelButtonActionListener(cancelAction);
@@ -318,21 +329,20 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 	}
 
 	/**
-	 * Creates a new symbol selector list model in order to allow the user
-	 * to select an existing symbol previously created.
-	 *
+	 * Creates a new symbol selector list model in order to allow the user to
+	 * select an existing symbol previously created.
+	 * 
 	 * @return listModel SymbolSelectorListModel
 	 */
 	protected SymbolSelectorListModel newListModel() {
-		SymbolSelectorListModel listModel = new SymbolSelectorListModel(
-				dir,
-				sFilter,
-				SymbolLibrary.SYMBOL_FILE_EXTENSION);
+		SymbolSelectorListModel listModel = new SymbolSelectorListModel(dir,
+				sFilter, SymbolLibrary.SYMBOL_FILE_EXTENSION);
 		return listModel;
 	}
+
 	/**
 	 * Initializes tha JNorthPanel.
-	 *
+	 * 
 	 * @return northPanel JPanel
 	 * @throws IllegalArgumentException
 	 */
@@ -359,7 +369,8 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 				text = PluginServices.getText(this, "text_symbols");
 				break;
 			default:
-				throw new IllegalArgumentException(PluginServices.getText(this, "shape_type_not_yet_supported"));
+				throw new IllegalArgumentException(PluginServices.getText(this,
+						"shape_type_not_yet_supported"));
 			}
 			northPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			lblTitle = new JLabel(text);
@@ -371,28 +382,33 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 
 	/**
 	 * This method initializes jList
-	 *
+	 * 
 	 * @return javax.swing.JList
 	 */
 	protected JList getJListSymbols() {
 		if (jListSymbols == null) {
-			jListSymbols = new JList() ;
-			jListSymbols.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+			jListSymbols = new JList();
+			jListSymbols
+					.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 			jListSymbols.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 			jListSymbols.setVisibleRowCount(-1);
 			jListSymbols.addListSelectionListener(new ListSelectionListener() {
 				public void valueChanged(ListSelectionEvent e) {
-					if (jListSymbols.getSelectedValue()!=null) {
+					if (jListSymbols.getSelectedValue() != null) {
 						ISymbol selSym = SymbologyFactory.createSymbolFromXML(
-								((ISymbol) jListSymbols.getSelectedValue()).getXMLEntity(), null);
+								((ISymbol) jListSymbols.getSelectedValue())
+										.getXMLEntity(), null);
 						setSymbol(selSym);
 						updateOptionsPanel();
 					}
 				}
 			});
 			ListCellRenderer renderer = new ListCellRenderer() {
-				private Color mySelectedBGColor = new Color(255,145,100,255);
-				public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+				private Color mySelectedBGColor = new Color(255, 145, 100, 255);
+
+				public Component getListCellRendererComponent(JList list,
+						Object value, int index, boolean isSelected,
+						boolean cellHasFocus) {
 					ISymbol sym = (ISymbol) value;
 					JPanel pnl = new JPanel();
 					BoxLayout layout = new BoxLayout(pnl, BoxLayout.Y_AXIS);
@@ -409,7 +425,8 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 					pnl.add(sp);
 					String desc = sym.getDescription();
 					if (desc == null) {
-						desc = "["+PluginServices.getText(this, "no_desc")+"]";
+						desc = "[" + PluginServices.getText(this, "no_desc")
+								+ "]";
 					}
 					JLabel lbl = new JLabel(desc);
 					lbl.setBackground(bgColor);
@@ -424,15 +441,17 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 		}
 		return jListSymbols;
 	}
+
 	/**
 	 * Updates the options panel depending on the type of symbol that the user
 	 * is controlling or using to show specific options for each one.
-	 *
+	 * 
 	 */
 	protected void updateOptionsPanel() throws IllegalArgumentException {
-		Object mySelectedElement = ((SymbolPreviewer) jPanelPreview).getSymbol();
+		Object mySelectedElement = ((SymbolPreviewer) jPanelPreview)
+				.getSymbol();
 
-//		if (mySelectedElement == null) return;
+		// if (mySelectedElement == null) return;
 		act = false; // disable events
 
 		if (mySelectedElement instanceof CartographicSupport) {
@@ -441,30 +460,29 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 			cmbReferenceSystem.setSelectedIndex(cs.getReferenceSystem());
 		}
 
-		if (mySelectedElement instanceof IMultiLayerSymbol){
-			if (((IMultiLayerSymbol)mySelectedElement).getLayerCount() == 1)
-				mySelectedElement = ((IMultiLayerSymbol)mySelectedElement).getLayer(0);
+		if (mySelectedElement instanceof IMultiLayerSymbol) {
+			if (((IMultiLayerSymbol) mySelectedElement).getLayerCount() == 1)
+				mySelectedElement = ((IMultiLayerSymbol) mySelectedElement)
+						.getLayer(0);
 		}
-
 
 		try {
 
-			jcc1.setEnabled(mySelectedElement!=null);
-			jcc2.setEnabled(mySelectedElement!=null);
+			jcc1.setEnabled(mySelectedElement != null);
+			jcc2.setEnabled(mySelectedElement != null);
 
-			if(mySelectedElement instanceof IMultiLayerSymbol){
+			if (mySelectedElement instanceof IMultiLayerSymbol) {
 				jcc1.setColor(Color.WHITE);
 				jcc2.setColor(Color.WHITE);
 				jcc1.setEnabled(false);
 				jcc2.setEnabled(false);
 			}
 
-
 			if (shapeType == FShape.POINT) {
 				IMarkerSymbol m = (IMarkerSymbol) mySelectedElement;
-				txtSize.setEnabled(m!=null);
-				txtAngle.setEnabled(m!=null);
-				if(m!=null){
+				txtSize.setEnabled(m != null);
+				txtAngle.setEnabled(m != null);
+				if (m != null) {
 					jcc1.setColor(m.getColor());
 					txtSize.setDouble(m.getSize());
 					txtAngle.setDouble(Math.toDegrees(m.getRotation()));
@@ -473,8 +491,8 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 
 			if (shapeType == FShape.LINE) {
 				ILineSymbol l = (ILineSymbol) mySelectedElement;
-				txtSize.setEnabled(l!=null);
-				if(l!=null){
+				txtSize.setEnabled(l != null);
+				if (l != null) {
 					jcc1.setColor(l.getColor());
 					jcc1.setAlpha(l.getAlpha());
 					txtSize.setDouble(l.getLineWidth());
@@ -484,11 +502,11 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 			if (shapeType == FShape.POLYGON) {
 				IFillSymbol f = (IFillSymbol) mySelectedElement;
 
-				txtWidth.setEnabled(f!=null);
-				cmbReferenceSystem.setEnabled(f!=null);
-				cmbUnits.setEnabled(f!=null);
+				txtWidth.setEnabled(f != null);
+				cmbReferenceSystem.setEnabled(f != null);
+				cmbUnits.setEnabled(f != null);
 
-				if (f!=null){
+				if (f != null) {
 					jcc1.setUseColorIsSelected(f.hasFill());
 					jcc1.setColor(f.getFillColor());
 					jcc1.setAlpha(f.getFillAlpha());
@@ -499,7 +517,7 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 						txtWidth.setDouble(outline.getLineWidth());
 					}
 
-					if(f instanceof MultiLayerFillSymbol){
+					if (f instanceof MultiLayerFillSymbol) {
 						txtWidth.setEnabled(false);
 						cmbReferenceSystem.setEnabled(false);
 						cmbUnits.setEnabled(false);
@@ -507,12 +525,10 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 				}
 			}
 
-
-
 			if (shapeType == FShape.TEXT) {
 				ITextSymbol t = (ITextSymbol) mySelectedElement;
-				cmbFontSize.setEnabled(t!=null);
-				if(t!=null){
+				cmbFontSize.setEnabled(t != null);
+				if (t != null) {
 					jcc1.setColor(t.getTextColor());
 					Double s = new Double(t.getFont().getSize());
 					cmbFontSize.setSelectedItem(s);
@@ -526,15 +542,16 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 		} catch (NullPointerException npEx) {
 			throw new IllegalArgumentException(npEx);
 		} catch (ClassCastException ccEx) {
-			NotificationManager.showMessageInfo(PluginServices.getText(this, "not_possible_modify_this_symbol_correctly"), ccEx);
+			NotificationManager.showMessageInfo(PluginServices.getText(this,
+					"not_possible_modify_this_symbol_correctly"), ccEx);
 		}
 
-		act = true;  // enable events
+		act = true; // enable events
 	}
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	protected JPanel getJEastPanel() {
@@ -543,7 +560,8 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 			jPanel.setLayout(new BorderLayout());
 			jPanel.add(getJPanelOptions(), BorderLayout.CENTER);
 			JPanel aux = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
-			aux.setBorder(BorderFactory.createTitledBorder(null, PluginServices.getText(this, "preview")));
+			aux.setBorder(BorderFactory.createTitledBorder(null,
+					PluginServices.getText(this, "preview")));
 			aux.add(getJPanelPreview());
 			jPanel.add(aux, BorderLayout.NORTH);
 
@@ -615,27 +633,33 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 * @throws ClassNotFoundException
 	 */
 	protected JScrollPane getLeftJScrollPane() throws ClassNotFoundException {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
-			jScrollPane.setPreferredSize(new java.awt.Dimension(80,130));
-			jScrollPane.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			jScrollPane.setPreferredSize(new java.awt.Dimension(80, 130));
+			jScrollPane
+					.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 			libraryBrowser = new LibraryBrowser(library);
-			libraryBrowser.addTreeSelectionListener(new TreeSelectionListener() {
-				public void valueChanged(javax.swing.event.TreeSelectionEvent e) {
-					dir = (File) ((DefaultMutableTreeNode)
-							libraryBrowser.getLastSelectedPathComponent()).getUserObject();
+			libraryBrowser
+					.addTreeSelectionListener(new TreeSelectionListener() {
+						public void valueChanged(
+								javax.swing.event.TreeSelectionEvent e) {
+							dir = (File) ((DefaultMutableTreeNode) libraryBrowser
+									.getLastSelectedPathComponent())
+									.getUserObject();
 
-					if (dir == null) return;
+							if (dir == null)
+								return;
 
-					jListSymbols.setModel(newListModel());
-//					jListSymbols.setSelectedValue(selectedElement, true);
-				}
-			});
+							jListSymbols.setModel(newListModel());
+							// jListSymbols.setSelectedValue(selectedElement,
+							// true);
+						}
+					});
 			jScrollPane.setViewportView(libraryBrowser);
 		}
 		return jScrollPane;
@@ -643,7 +667,7 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 
 	/**
 	 * This method initializes jScrollPane1
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getJScrollPane1() {
@@ -656,135 +680,162 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 
 	/**
 	 * This method initializes jPanelPreview
-	 *
+	 * 
 	 * @return javax.swing.JComponent
 	 */
 	protected JComponent getJPanelPreview() {
 		if (jPanelPreview == null) {
 			jPanelPreview = new SymbolPreviewer();
-			jPanelPreview.setPreferredSize(new java.awt.Dimension(100,100));
-			jPanelPreview.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+			jPanelPreview.setPreferredSize(new java.awt.Dimension(100, 100));
+			jPanelPreview.setBorder(javax.swing.BorderFactory
+					.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 		}
 		return jPanelPreview;
 	}
+
 	/**
 	 * This method initializes jPanelOptions
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	protected JPanel getJPanelOptions() {
 		if (jPanelOptions == null) {
 			jPanelOptions = new GridBagLayoutPanel();
-			jPanelOptions.setBorder(BorderFactory.createTitledBorder(null, PluginServices.getText(this, "options")));
-			jcc2 = new ColorChooserPanel(true,true);
+			jPanelOptions.setBorder(BorderFactory.createTitledBorder(null,
+					PluginServices.getText(this, "options")));
+			jcc2 = new ColorChooserPanel(true, true);
 			jcc2.setAlpha(255);
 			if (shapeType == FShape.POINT) {
 				jcc1 = new ColorChooserPanel(true);
 
 				jPanelOptions.addComponent(
-						PluginServices.getText(this, "color")+":", jcc1);
+						PluginServices.getText(this, "color") + ":", jcc1);
+				jPanelOptions.addComponent(PluginServices.getText(this, "size")
+						+ ":",
+						txtSize = new JIncrementalNumberField(
+								String.valueOf(3), 3, 0, Double.MAX_VALUE, 1));
 				jPanelOptions.addComponent(
-						PluginServices.getText(this, "size")+":",
-						txtSize = new JIncrementalNumberField(String.valueOf(3), 3, 0, Double.MAX_VALUE, 1));
-				jPanelOptions.addComponent(PluginServices.getText(this, "units")+":",
+						PluginServices.getText(this, "units") + ":",
 						cmbUnits = new JComboBoxUnits());
-				jPanelOptions.addComponent("",
-						cmbReferenceSystem = new JComboBoxUnitsReferenceSystem());
-				jPanelOptions.addComponent(
-						PluginServices.getText(this, "angle")+ " (" +PluginServices.getText(this, "degree")+"):",
-						txtAngle = new JIncrementalNumberField());
-
+				jPanelOptions
+						.addComponent(
+								"",
+								cmbReferenceSystem = new JComboBoxUnitsReferenceSystem());
+				jPanelOptions
+						.addComponent(PluginServices.getText(this, "angle")
+								+ " (" + PluginServices.getText(this, "degree")
+								+ "):",
+								txtAngle = new JIncrementalNumberField());
 
 			} else if (shapeType == FShape.LINE) {
 				jcc1 = new ColorChooserPanel(true);
 				jPanelOptions.addComponent(
-						PluginServices.getText(this, "color")+":", jcc1);
+						PluginServices.getText(this, "color") + ":", jcc1);
 				jPanelOptions.addComponent(
-						PluginServices.getText(this, "width")+":",
-						txtSize = new JIncrementalNumberField(String.valueOf(3), 3, 0, Double.MAX_VALUE, 1));
-				jPanelOptions.addComponent(PluginServices.getText(this, "units")+":",
+						PluginServices.getText(this, "width") + ":",
+						txtSize = new JIncrementalNumberField(
+								String.valueOf(3), 3, 0, Double.MAX_VALUE, 1));
+				jPanelOptions.addComponent(
+						PluginServices.getText(this, "units") + ":",
 						cmbUnits = new JComboBoxUnits());
-				jPanelOptions.addComponent("",
-						cmbReferenceSystem = new JComboBoxUnitsReferenceSystem());
+				jPanelOptions
+						.addComponent(
+								"",
+								cmbReferenceSystem = new JComboBoxUnitsReferenceSystem());
 
 			} else if (shapeType == FShape.POLYGON) {
 				jcc1 = new ColorChooserPanel(true, true);
 				jPanelOptions.addComponent(
-						PluginServices.getText(this, "fill_color")+":", jcc1);
+						PluginServices.getText(this, "fill_color") + ":", jcc1);
 				jPanelOptions.addComponent(
-						PluginServices.getText(this, "outline_color")+":", jcc2);
+						PluginServices.getText(this, "outline_color") + ":",
+						jcc2);
 				jPanelOptions.addComponent(
 						PluginServices.getText(this, "outline_width"),
-						txtWidth = new JIncrementalNumberField(String.valueOf(3), 3, 0, Double.MAX_VALUE, 1));
-				jPanelOptions.addComponent(PluginServices.getText(this, "units")+":",
+						txtWidth = new JIncrementalNumberField(String
+								.valueOf(3), 3, 0, Double.MAX_VALUE, 1));
+				jPanelOptions.addComponent(
+						PluginServices.getText(this, "units") + ":",
 						cmbUnits = new JComboBoxUnits());
-				jPanelOptions.addComponent("",
-						cmbReferenceSystem = new JComboBoxUnitsReferenceSystem());
+				jPanelOptions
+						.addComponent(
+								"",
+								cmbReferenceSystem = new JComboBoxUnitsReferenceSystem());
 
 			} else if (shapeType == FShape.TEXT) {
 				jcc1 = new ColorChooserPanel(true);
-				jPanelOptions.addComponent(
-						PluginServices.getText(this, "font")+":", getCmbFonts());
+				jPanelOptions.addComponent(PluginServices.getText(this, "font")
+						+ ":", getCmbFonts());
 
 				jPanelOptions.addComponent(
-						PluginServices.getText(this, "color")+":", jcc1);
-				jPanelOptions.addComponent(PluginServices.getText(this, "size")+":",
-						cmbFontSize = new JComboBoxFontSizes());
-				jPanelOptions.addComponent(PluginServices.getText(this, "units")+":",
+						PluginServices.getText(this, "color") + ":", jcc1);
+				jPanelOptions.addComponent(PluginServices.getText(this, "size")
+						+ ":", cmbFontSize = new JComboBoxFontSizes());
+				jPanelOptions.addComponent(
+						PluginServices.getText(this, "units") + ":",
 						cmbUnits = new JComboBoxUnits());
-				jPanelOptions.addComponent("",
-						cmbReferenceSystem = new JComboBoxUnitsReferenceSystem());
+				jPanelOptions
+						.addComponent(
+								"",
+								cmbReferenceSystem = new JComboBoxUnitsReferenceSystem());
 
-				JPanel aux = new JPanel(new FlowLayout(FlowLayout.LEADING,0,1));
+				JPanel aux = new JPanel(
+						new FlowLayout(FlowLayout.LEADING, 0, 1));
 				aux.add(getBtnBold());
 				aux.add(getBtnItalic());
 				aux.add(getBtnUnderlined());
 				jPanelOptions.addComponent(
-						PluginServices.getText(this, "style")+":", aux);
+						PluginServices.getText(this, "style") + ":", aux);
 
 			}
 
 			jcc1.setAlpha(255);
 
-			if (txtSize != null){
+			if (txtSize != null) {
 				txtSize.addActionListener(this);
 				txtSize.addFocusListener(this);
 			}
-			if (cmbUnits != null)			cmbUnits.addActionListener(this);
-			if (cmbReferenceSystem != null)	cmbReferenceSystem.addActionListener(this);
-			if (jcc1 != null)				jcc1.addActionListener(this);
-			if (jcc2 != null)				jcc2.addActionListener(this);
-			if (txtWidth != null)			txtWidth.addActionListener(this);
-			if (cmbFontSize != null)		cmbFontSize.addActionListener(this);
-			if (txtAngle != null)			txtAngle.addActionListener(this);
+			if (cmbUnits != null)
+				cmbUnits.addActionListener(this);
+			if (cmbReferenceSystem != null)
+				cmbReferenceSystem.addActionListener(this);
+			if (jcc1 != null)
+				jcc1.addActionListener(this);
+			if (jcc2 != null)
+				jcc2.addActionListener(this);
+			if (txtWidth != null)
+				txtWidth.addActionListener(this);
+			if (cmbFontSize != null)
+				cmbFontSize.addActionListener(this);
+			if (txtAngle != null)
+				txtAngle.addActionListener(this);
 		}
 		return jPanelOptions;
 	}
 
 	private JToggleButton getBtnUnderlined() {
 		if (btnUnderlined == null) {
-			btnUnderlined = new JToggleButton(PluginServices.getIconTheme().
-					get("underline-icon"));
+			btnUnderlined = new JToggleButton(PluginServices.getIconTheme()
+					.get("underline-icon"));
 		}
 		return btnUnderlined;
 	}
 
 	private JToggleButton getBtnItalic() {
 		if (btnItalic == null) {
-			btnItalic = new JToggleButton(PluginServices.getIconTheme().
-					get("italic-icon"));
+			btnItalic = new JToggleButton(PluginServices.getIconTheme().get(
+					"italic-icon"));
 		}
 		return btnItalic;
 	}
 
 	private JToggleButton getBtnBold() {
 		if (btnBold == null) {
-			btnBold = new JToggleButton(PluginServices.getIconTheme().
-					get("bold-icon"));
+			btnBold = new JToggleButton(PluginServices.getIconTheme().get(
+					"bold-icon"));
 		}
 		return btnBold;
 	}
-
 
 	private JComboBoxFonts getCmbFonts() {
 		if (cmbFonts == null) {
@@ -798,7 +849,7 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 			wi = new WindowInfo(WindowInfo.MODALDIALOG | WindowInfo.RESIZABLE);
 			wi.setWidth(706);
 			wi.setHeight(500);
-			if (wiTitle == null){
+			if (wiTitle == null) {
 				wi.setTitle(PluginServices.getText(this, "symbol_selector"));
 			} else {
 				wi.setTitle(wiTitle);
@@ -820,11 +871,12 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 
 	public Object getSelectedObject() {
 
-		Object mySelectedElement = ((SymbolPreviewer) jPanelPreview).getSymbol();
+		Object mySelectedElement = ((SymbolPreviewer) jPanelPreview)
+				.getSymbol();
 
 		// if this symbol only has one layer, then no multilayer is needed
 		if (mySelectedElement instanceof IMultiLayerSymbol) {
-			if (((IMultiLayerSymbol) mySelectedElement).getLayerCount()==1)
+			if (((IMultiLayerSymbol) mySelectedElement).getLayerCount() == 1)
 				return ((IMultiLayerSymbol) mySelectedElement).getLayer(0);
 		}
 
@@ -846,27 +898,28 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 	 * Invoked when the PROPERTIES button is pressed
 	 */
 	protected void propertiesPressed() {
-//		boolean state = accepted;
-//		accepted = true;
-		ISymbol mySelectedElement = ((SymbolPreviewer) jPanelPreview).getSymbol();
-		if (mySelectedElement ==null)
+		// boolean state = accepted;
+		// accepted = true;
+		ISymbol mySelectedElement = ((SymbolPreviewer) jPanelPreview)
+				.getSymbol();
+		if (mySelectedElement == null)
 			return;
 
 		ISymbol clonedSymbol = SymbologyFactory.createSymbolFromXML(
 				mySelectedElement.getXMLEntity(), null);
 
-		if(clonedSymbol instanceof IFillSymbol && txtWidth != null){
+		if (clonedSymbol instanceof IFillSymbol && txtWidth != null) {
 			IFillSymbol f = (IFillSymbol) clonedSymbol;
 			ILineSymbol outline = f.getOutline();
-			if (outline!=null)
+			if (outline != null)
 				outline.setLineWidth(txtWidth.getDouble());
 		}
 
 		if (txtSize != null) {
-			if(clonedSymbol instanceof IMarkerSymbol){
+			if (clonedSymbol instanceof IMarkerSymbol) {
 				IMarkerSymbol m = (IMarkerSymbol) clonedSymbol;
 				m.setSize(txtSize.getDouble());
-			}else if(clonedSymbol instanceof ILineSymbol) {
+			} else if (clonedSymbol instanceof ILineSymbol) {
 				ILineSymbol l = (ILineSymbol) clonedSymbol;
 				l.setLineWidth(txtSize.getDouble());
 			}
@@ -876,16 +929,16 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 		PluginServices.getMDIManager().addWindow(se);
 
 		ISymbol symbol = se.getSymbol();
-		if (symbol!=null){
+		if (symbol != null) {
 			if (symbol instanceof IMultiLayerSymbol) {
 				IMultiLayerSymbol mSym = (IMultiLayerSymbol) symbol;
 				if (mSym.getLayerCount() == 1) {
-					symbol =  mSym.getLayer(0);
+					symbol = mSym.getLayer(0);
 				}
 			}
 			setSymbol(symbol);
 		}
-//		accepted = state;
+		// accepted = state;
 	}
 
 	/**
@@ -911,23 +964,24 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 		if (getSelectedObject() == null)
 			return;
 
-
-		JFileChooser jfc = new JFileChooser("SYMBOL_SELECTOR_FILECHOOSER", rootDir);
+		JFileChooser jfc = new JFileChooser("SYMBOL_SELECTOR_FILECHOOSER",
+				rootDir);
 		javax.swing.filechooser.FileFilter ff = new javax.swing.filechooser.FileFilter() {
 			public boolean accept(File f) {
-				return f.getAbsolutePath().
-				toLowerCase().
-				endsWith(SymbolLibrary.SYMBOL_FILE_EXTENSION) || f.isDirectory();
+				return f.getAbsolutePath().toLowerCase()
+						.endsWith(SymbolLibrary.SYMBOL_FILE_EXTENSION)
+						|| f.isDirectory();
 			}
 
 			public String getDescription() {
-				return PluginServices.getText(
-						this, "gvSIG_symbol_definition_file")+ " (*.sym)";
+				return PluginServices.getText(this,
+						"gvSIG_symbol_definition_file") + " (*.sym)";
 			}
 		};
 		jfc.setFileFilter(ff);
 		JPanel accessory = new JPanel(new FlowLayout(FlowLayout.LEADING, 5, 5));
-		accessory.add(new JLabel(PluginServices.getText(this, "enter_description")));
+		accessory.add(new JLabel(PluginServices.getText(this,
+				"enter_description")));
 		JTextField txtDesc = new JTextField(25);
 		accessory.add(txtDesc);
 		jfc.setAccessory(accessory);
@@ -936,55 +990,57 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 
 			// apply description
 			String desc;
-			if (txtDesc.getText()==null || txtDesc.getText().trim().equals("")) {
+			if (txtDesc.getText() == null
+					|| txtDesc.getText().trim().equals("")) {
 				// default to file name
 				String s = targetFile.getAbsolutePath();
-				desc = s.substring(s.lastIndexOf(File.separator)+1).
-				replaceAll(SymbolLibrary.SYMBOL_FILE_EXTENSION, "");
+				desc = s.substring(s.lastIndexOf(File.separator) + 1)
+						.replaceAll(SymbolLibrary.SYMBOL_FILE_EXTENSION, "");
 			} else {
 				desc = txtDesc.getText().trim();
 			}
 			ISymbol s = (ISymbol) getSelectedObject();
 			s.setDescription(desc);
 
-
-			String symbolFileName = targetFile.getAbsolutePath().substring(
-					targetFile.getAbsolutePath().lastIndexOf(File.separator)+1,
-					targetFile.getAbsolutePath().length());
-			File targetDir = new File(targetFile.getAbsolutePath().substring(
-					0,
+			String symbolFileName = targetFile.getAbsolutePath()
+					.substring(
+							targetFile.getAbsolutePath().lastIndexOf(
+									File.separator) + 1,
+							targetFile.getAbsolutePath().length());
+			File targetDir = new File(targetFile.getAbsolutePath().substring(0,
 					targetFile.getAbsolutePath().lastIndexOf(File.separator)));
-			library.addElement(s, symbolFileName , targetDir);
+			library.addElement(s, symbolFileName, targetDir);
 			getJListSymbols().setModel(newListModel());
 
 		}
 	}
 
-
 	public void actionPerformed(ActionEvent e) {
-		if (!act) return;
-		Object selectedElement = ((SymbolPreviewer) jPanelPreview).getSymbol();//getSelectedObject();
+		if (!act)
+			return;
+		Object selectedElement = ((SymbolPreviewer) jPanelPreview).getSymbol();// getSelectedObject();
 		performActionOn(selectedElement, (JComponent) e.getSource());
 		SymbolSelector.this.repaint();
 	}
 
 	protected void performActionOn(Object selectedElement, JComponent comp) {
 
-		if (selectedElement instanceof IMultiLayerSymbol){
-			if (((IMultiLayerSymbol)selectedElement).getLayerCount() == 1)
-				selectedElement = ((IMultiLayerSymbol)selectedElement).getLayer(0);
+		if (selectedElement instanceof IMultiLayerSymbol) {
+			if (((IMultiLayerSymbol) selectedElement).getLayerCount() == 1)
+				selectedElement = ((IMultiLayerSymbol) selectedElement)
+						.getLayer(0);
 		}
 
-		if ( comp.equals(getBtnProperties()) ) {
+		if (comp.equals(getBtnProperties())) {
 			// properties pressed
 			propertiesPressed();
-		} else if ( comp.equals(getBtnNewSymbol()) ) {
+		} else if (comp.equals(getBtnNewSymbol())) {
 			// new pressed
 			newPressed();
-		} else if ( comp.equals(getBtnResetSymbol()) ) {
+		} else if (comp.equals(getBtnResetSymbol())) {
 			// reset pressed
 			resetPressed();
-		} else if ( comp.equals(getBtnSaveSymbol()) ) {
+		} else if (comp.equals(getBtnSaveSymbol())) {
 			// save pressed
 			savePressed();
 		} else if (comp.equals(jcc1)) {
@@ -992,7 +1048,6 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 				return;
 
 			Color c = jcc1.getColor();
-
 
 			if (selectedElement instanceof IMarkerSymbol) {
 				IMarkerSymbol m = (IMarkerSymbol) selectedElement;
@@ -1031,13 +1086,12 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 				return;
 			Color c = jcc2.getColor();
 
-
 			if (selectedElement instanceof IFillSymbol) {
 				IFillSymbol f = (IFillSymbol) selectedElement;
 				ILineSymbol outline = f.getOutline();
 				f.setHasOutline(jcc2.getUseColorisSelected());
 
-				if (outline!=null) {
+				if (outline != null) {
 					ILineSymbol l = (ILineSymbol) outline;
 					if (l instanceof MultiLayerLineSymbol && c != null) {
 						MultiLayerLineSymbol ml = (MultiLayerLineSymbol) l;
@@ -1075,7 +1129,7 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 			if (selectedElement instanceof IFillSymbol) {
 				IFillSymbol f = (IFillSymbol) selectedElement;
 				ILineSymbol outline = f.getOutline();
-				if (outline!=null)
+				if (outline != null)
 					outline.setLineWidth(w);
 			}
 		} else if (comp.equals(cmbFontSize)) {
@@ -1092,33 +1146,41 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 			}
 		}
 	}
-	public static ISymbolSelector createSymbolSelector(Object currSymbol, int shapeType, boolean showAcceptPanel) {
-		return createSymbolSelector(currSymbol, shapeType, null, showAcceptPanel);
+
+	public static ISymbolSelector createSymbolSelector(Object currSymbol,
+			int shapeType, boolean showAcceptPanel) {
+		return createSymbolSelector(currSymbol, shapeType, null,
+				showAcceptPanel);
 	}
-	public static ISymbolSelector createSymbolSelector(Object currSymbol, int shapeType) {
+
+	public static ISymbolSelector createSymbolSelector(Object currSymbol,
+			int shapeType) {
 		return createSymbolSelector(currSymbol, shapeType, null);
 	}
-	public static ISymbolSelector createSymbolSelector(Object currSymbol, int shapeType, SelectorFilter filter) {
+
+	public static ISymbolSelector createSymbolSelector(Object currSymbol,
+			int shapeType, SelectorFilter filter) {
 		return createSymbolSelector(currSymbol, shapeType, filter, true);
 	}
 
-	public static ISymbolSelector createSymbolSelector(Object currSymbol, int shapeType, SelectorFilter filter, boolean showAcceptPanel) {
+	public static ISymbolSelector createSymbolSelector(Object currSymbol,
+			int shapeType, SelectorFilter filter, boolean showAcceptPanel) {
 		ISymbolSelector selector = null;
 
 		// patch for backwards compatibility
-//		if (currSymbol instanceof FSymbol) {
-//		currSymbol = SymbologyFactory.deriveFSymbol((FSymbol) currSymbol);
-//		}
+		// if (currSymbol instanceof FSymbol) {
+		// currSymbol = SymbologyFactory.deriveFSymbol((FSymbol) currSymbol);
+		// }
 
-		if (filter==null)
-			selector = (shapeType == FShape.MULTI) ?
-					new MultiShapeSymbolSelector(currSymbol) :
-						new SymbolSelector(currSymbol, shapeType, true, showAcceptPanel);
-					else
-						selector = (shapeType == FShape.MULTI) ?
-								new MultiShapeSymbolSelector(currSymbol) :
-									new SymbolSelector(currSymbol, shapeType, filter, true);
-								return selector;
+		if (filter == null)
+			selector = (shapeType == FShape.MULTI) ? new MultiShapeSymbolSelector(
+					currSymbol) : new SymbolSelector(currSymbol, shapeType,
+					true, showAcceptPanel);
+		else
+			selector = (shapeType == FShape.MULTI) ? new MultiShapeSymbolSelector(
+					currSymbol) : new SymbolSelector(currSymbol, shapeType,
+					filter, true);
+		return selector;
 	}
 
 	class SillyDragNDropAction implements MouseListener, MouseMotionListener {
@@ -1126,15 +1188,21 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 		private Object selected;
 		private File sourceFolder;
 
-		public void mouseClicked(MouseEvent e) { }
-		public void mouseEntered(MouseEvent e) { }
-		public void mouseExited(MouseEvent e) { }
+		public void mouseClicked(MouseEvent e) {
+		}
+
+		public void mouseEntered(MouseEvent e) {
+		}
+
+		public void mouseExited(MouseEvent e) {
+		}
 
 		public void mousePressed(MouseEvent e) {
 			if (e.getSource().equals(getJListSymbols())) {
 				selected = getJListSymbols().getSelectedValue();
-				doDrop = selected!=null;
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) libraryBrowser.getLastSelectedPathComponent();
+				doDrop = selected != null;
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) libraryBrowser
+						.getLastSelectedPathComponent();
 				if (node.getUserObject() instanceof File) {
 					sourceFolder = (File) node.getUserObject();
 				}
@@ -1144,16 +1212,21 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 
 		public void mouseReleased(MouseEvent e) {
 			if (doDrop && e.getSource().equals(getJListSymbols())) {
-				Point p = new Point(getJListSymbols().getLocation().x-e.getPoint().x, getJListSymbols().getLocation().y+e.getPoint().y);
+				Point p = new Point(getJListSymbols().getLocation().x
+						- e.getPoint().x, getJListSymbols().getLocation().y
+						+ e.getPoint().y);
 				if (libraryBrowser.getBounds().contains(p)) {
 					File destFolder = libraryBrowser.getElementBellow(p);
 					if (destFolder != null) {
 						ISymbol sym = (ISymbol) selected;
-						int move = InputEvent.SHIFT_DOWN_MASK | InputEvent.BUTTON1_DOWN_MASK;
-//						int copy = MouseEvent.CTRL_DOWN_MASK | MouseEvent.BUTTON1_DOWN_MASK;
+						int move = InputEvent.SHIFT_DOWN_MASK
+								| InputEvent.BUTTON1_DOWN_MASK;
+						// int copy = MouseEvent.CTRL_DOWN_MASK |
+						// MouseEvent.BUTTON1_DOWN_MASK;
 
-						library.addElement(sym, sym.getDescription(), destFolder);
-						if ((e.getModifiers() & (move)) !=0) {
+						library.addElement(sym, sym.getDescription(),
+								destFolder);
+						if ((e.getModifiers() & (move)) != 0) {
 							library.removeElement(sym, sourceFolder);
 						}
 
@@ -1168,7 +1241,9 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 		public void mouseDragged(MouseEvent e) {
 			if (e.getSource().equals(getJListSymbols())) {
 
-				Point p = new Point(getJListSymbols().getLocation().x-e.getPoint().x, getJListSymbols().getLocation().y+e.getPoint().y);
+				Point p = new Point(getJListSymbols().getLocation().x
+						- e.getPoint().x, getJListSymbols().getLocation().y
+						+ e.getPoint().y);
 				if (libraryBrowser.getBounds().contains(p)) {
 					libraryBrowser.setSelectedElementBellow(p);
 				}
@@ -1186,7 +1261,7 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 	}
 
 	public void windowClosed() {
-		if(!accepted){
+		if (!accepted) {
 			((SymbolPreviewer) jPanelPreview).setSymbol(null);
 		}
 	}
@@ -1195,11 +1270,11 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 		return WindowInfo.DIALOG_PROFILE;
 	}
 
-	public void setTitle(String title){
+	public void setTitle(String title) {
 		this.wiTitle = title;
 	}
 
-	public String getTitle(){
+	public String getTitle() {
 		return this.wiTitle;
 	}
 
@@ -1209,8 +1284,9 @@ public class SymbolSelector extends JPanel implements ISymbolSelector, ActionLis
 	}
 
 	public void focusLost(FocusEvent e) {
-		if (!act) return;
-		Object selectedElement = ((SymbolPreviewer) jPanelPreview).getSymbol();//getSelectedObject();
+		if (!act)
+			return;
+		Object selectedElement = ((SymbolPreviewer) jPanelPreview).getSymbol();// getSelectedObject();
 		performActionOn(selectedElement, (JComponent) e.getSource());
 		SymbolSelector.this.repaint();
 

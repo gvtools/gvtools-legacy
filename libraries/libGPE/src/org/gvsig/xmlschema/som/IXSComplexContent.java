@@ -1,7 +1,5 @@
 package org.gvsig.xmlschema.som;
 
-
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -64,24 +62,25 @@ package org.gvsig.xmlschema.som;
  *
  */
 /**
- * This interface represents a XML schema complex content element. 
- * Example:
+ * This interface represents a XML schema complex content element. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;complexContent
  * id = ID
-  mixed = boolean
+ *   mixed = boolean
  * {any attributes with non-schema namespace . . .}&gt;
  * Content: (annotation?, (restriction | extension))
  * &lt;/complexContent&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @see http://www.w3.org/TR/xmlschema-1/#Complex_Type_Definition_details
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public interface IXSComplexContent extends IXSContentType {	
-	
-	
+public interface IXSComplexContent extends IXSContentType {
+
 }

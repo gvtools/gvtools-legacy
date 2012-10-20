@@ -67,13 +67,14 @@ import org.gvsig.xmlschema.som.IXSElementDeclaration;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class EuroRoadsSchemaReaderTest extends SchemaReaderBaseTest{
+public class EuroRoadsSchemaReaderTest extends SchemaReaderBaseTest {
 	private String targetNamespace = "http://www.euroroads.org";
 	private String linkElement = "LinkAttribute";
 	private String linkType = "LinkAttributeType";
-		
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.reader.SchemaReaderBaseTest#getFile()
 	 */
 	public String getFile() {
@@ -82,14 +83,16 @@ public class EuroRoadsSchemaReaderTest extends SchemaReaderBaseTest{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.reader.SchemaReaderBaseTest#makeAsserts()
 	 */
-	public void makeAsserts(){
-		IXSElementDeclaration element = getSchema().getElementDeclarationByName(targetNamespace, linkElement);		
+	public void makeAsserts() {
+		IXSElementDeclaration element = getSchema()
+				.getElementDeclarationByName(targetNamespace, linkElement);
 		System.out.println(element.getQName().getLocalPart());
 		assertEquals(element.getQName().getLocalPart(), linkElement);
 		assertTrue(element.getTypeDefinition() instanceof IXSComplexTypeDefinition);
-	
+
 	}
 
 }

@@ -41,9 +41,6 @@ import com.iver.cit.gvsig.fmap.edition.wfs.GMLEditionUtils;
 import com.iver.cit.gvsig.fmap.edition.wfs.WFSTLockFeaturesException;
 import com.iver.cit.gvsig.fmap.layers.WFSLayerNode;
 import com.iver.utiles.StringComparator;
-import com.iver.utiles.extensionPoints.ExtensionPoint;
-import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
-import com.sun.corba.se.spi.legacy.connection.GetEndPointInfoAgainException;
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
@@ -163,37 +160,39 @@ import com.sun.corba.se.spi.legacy.connection.GetEndPointInfoAgainException;
 /**
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class FMapWFSDriver implements WFSDriver, BoundedShapes,ObjectDriver,IWriteable{
+public class FMapWFSDriver implements WFSDriver, BoundedShapes, ObjectDriver,
+		IWriteable {
 	private WFSClient remoteServicesClient;
 	private WFSLayerNode[] featuresList;
 	private Hashtable hashFeatures;
 	private DriverAttributes attr = new DriverAttributes();
 	private GMLVectorialDriver driver = null;
 	private boolean hasGeometry = false;
-	//The GML driver to use
-	private static Class gmlDriverClass = null;   
-	//WFSTDriver
+	// The GML driver to use
+	private static Class gmlDriverClass = null;
+	// WFSTDriver
 	private FmapWFSWriter writer = null;
 	private WFSStatus status = null;
-	private boolean isWfstEditing = false;	
-	//The shape type
+	private boolean isWfstEditing = false;
+	// The shape type
 	private int shapeType = -1;
 
 	FMapWFSDriver() {
-		super();		
+		super();
 	}
 
-	//Method used to register the GML parser
-	public static void registerGmlDriver(Class clazz){
+	// Method used to register the GML parser
+	public static void registerGmlDriver(Class clazz) {
 		gmlDriverClass = clazz;
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.drivers.WFSDriver#getCapabilities(java.net.URL)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.WFSDriver#getCapabilities(java.net.URL)
 	 */
-	public void getCapabilities(URL server)
-	throws WFSDriverException {
+	public void getCapabilities(URL server) throws WFSDriverException {
 		try {
 			getClient(server).connect(null);
 		} catch (Exception e) {
@@ -202,27 +201,34 @@ public class FMapWFSDriver implements WFSDriver, BoundedShapes,ObjectDriver,IWri
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.drivers.WFSDriver#describeFeatureType(java.lang.String)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.WFSDriver#describeFeatureType(java.lang
+	 * .String)
 	 */
-	public void describeFeatureType(String featureType, String nameSpace, ICancellable cancel) throws WFSException {
-		status = new WFSStatus(featureType,nameSpace);
+	public void describeFeatureType(String featureType, String nameSpace,
+			ICancellable cancel) throws WFSException {
+		status = new WFSStatus(featureType, nameSpace);
 		remoteServicesClient.describeFeatureType(status, false, cancel);
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.drivers.WFSDriver#getFeature(org.gvsig.remoteClient.wfs.WFSStatus)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.WFSDriver#getFeature(org.gvsig.remoteClient
+	 * .wfs.WFSStatus)
 	 */
 	public void getFeature(WFSStatus wfsStatus) throws WFSException {
-		//Retrieve the file
+		// Retrieve the file
 		File file = remoteServicesClient.getFeature(wfsStatus, false, null);
 		driver = new GMLVectorialDriver();
-		//Reads the GML file
-		try {			
+		// Reads the GML file
+		try {
 			driver.open(file);
-			driver.initialize();	
-			hasGeometry = WFSUtils.getHasGeometry(featuresList,wfsStatus);
+			driver.initialize();
+			hasGeometry = WFSUtils.getHasGeometry(featuresList, wfsStatus);
 		} catch (Exception e) {
 			Logger.getLogger(getClass().getName()).error(e.getMessage());
 			throw new WFSDriverException(e);
@@ -230,36 +236,38 @@ public class FMapWFSDriver implements WFSDriver, BoundedShapes,ObjectDriver,IWri
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDriver#getShapeType()
 	 */
 	public int getShapeType() {
-		if (shapeType == -1){
-			XMLElement element = GMLEditionUtils.getGeometry(status, 
+		if (shapeType == -1) {
+			XMLElement element = GMLEditionUtils.getGeometry(status,
 					remoteServicesClient);
-			if (element != null){
+			if (element != null) {
 				String gmlType = element.getEntityType().getName();
-				if (gmlType.toLowerCase().indexOf("point") > 0){
+				if (gmlType.toLowerCase().indexOf("point") > 0) {
 					shapeType = FShape.POINT;
-				}else if (gmlType.toLowerCase().indexOf("linestring") > 0){
+				} else if (gmlType.toLowerCase().indexOf("linestring") > 0) {
 					shapeType = FShape.LINE;
-				}else if (gmlType.toLowerCase().indexOf("polygon") > 0){
+				} else if (gmlType.toLowerCase().indexOf("polygon") > 0) {
 					shapeType = FShape.POLYGON;
 				}
 			}
-			if (shapeType == -1){
-				if (getShapeCount() > 0){
+			if (shapeType == -1) {
+				if (getShapeCount() > 0) {
 					shapeType = getShapeType(0);
-				}else{
+				} else {
 					shapeType = FShape.MULTI;
-				}						
+				}
 			}
 		}
 		return shapeType;
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDriver#getShapeCount()
 	 */
 	public int getShapeCount() {
@@ -267,15 +275,18 @@ public class FMapWFSDriver implements WFSDriver, BoundedShapes,ObjectDriver,IWri
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDriver#getDriverAttributes()
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.VectorialDriver#getDriverAttributes()
 	 */
 	public DriverAttributes getDriverAttributes() {
 		return attr;
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDriver#getFullExtent()
 	 */
 	public Rectangle2D getFullExtent() {
@@ -283,32 +294,33 @@ public class FMapWFSDriver implements WFSDriver, BoundedShapes,ObjectDriver,IWri
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDriver#getShape(int)
 	 */
 	public IGeometry getShape(int index) {
-		return driver.getShape(index);		
+		return driver.getShape(index);
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.hardcode.driverManager.Driver#getName()
 	 */
 	public String getName() {
 		return "WFS Driver";
 	}
 
-
-
 	/**
 	 * Devuelve WFSClient a partir de su URL.
-	 *
-	 * @param url URL.
-	 *
+	 * 
+	 * @param url
+	 *            URL.
+	 * 
 	 * @return WMSClient.
 	 * @throws IOException
 	 * @throws ConnectException
-	 *
+	 * 
 	 * @throws UnsupportedVersionException
 	 * @throws IOException
 	 */
@@ -321,8 +333,8 @@ public class FMapWFSDriver implements WFSDriver, BoundedShapes,ObjectDriver,IWri
 
 	/**
 	 * Creates a new instance of a WFSClient.
-	 * @param
-	 * host
+	 * 
+	 * @param host
 	 * @throws IOException
 	 * @throws ConnectException
 	 */
@@ -331,16 +343,19 @@ public class FMapWFSDriver implements WFSDriver, BoundedShapes,ObjectDriver,IWri
 	}
 
 	/**
-	 * Establishes the connection to the WfS server. Connecting to a WFS is
-	 * an abstraction.<br>
+	 * Establishes the connection to the WfS server. Connecting to a WFS is an
+	 * abstraction.<br>
 	 * <p>
-	 * Actually, it sends a GetCapabilities request to read the necessary
-	 * data for building further DescribeFeatureType requests.
+	 * Actually, it sends a GetCapabilities request to read the necessary data
+	 * for building further DescribeFeatureType requests.
 	 * </p>
-	 * @throws IOException, DriverException.
+	 * 
+	 * @throws IOException
+	 *             , DriverException.
 	 */
-	public boolean connect(boolean override,ICancellable cancel) throws IOException, DriverException {
-		return remoteServicesClient.connect(override,cancel);
+	public boolean connect(boolean override, ICancellable cancel)
+			throws IOException, DriverException {
+		return remoteServicesClient.connect(override, cancel);
 	}
 
 	public boolean connect(ICancellable cancel) {
@@ -348,19 +363,21 @@ public class FMapWFSDriver implements WFSDriver, BoundedShapes,ObjectDriver,IWri
 	}
 
 	/**
-	 * Returns an array of WFSLayerNode's with the descriptors of
-	 * all features (retrieved using the getCapabilities operation)
+	 * Returns an array of WFSLayerNode's with the descriptors of all features
+	 * (retrieved using the getCapabilities operation)
+	 * 
 	 * @return WFSLayerNode[]
 	 */
-	public WFSLayerNode[] getLayerList(){
+	public WFSLayerNode[] getLayerList() {
 		if (hashFeatures == null) {
 			hashFeatures = new Hashtable();
-			Hashtable wfsFeatures  = remoteServicesClient.getFeatures();
+			Hashtable wfsFeatures = remoteServicesClient.getFeatures();
 
 			StringComparator stringComparator = new StringComparator();
 			// Set spanish rules and with case sensitive
-			Collator collator = Collator.getInstance(new Locale("es_ES"));		
-			stringComparator.setLocaleRules(stringComparator.new LocaleRules(true, collator));
+			Collator collator = Collator.getInstance(new Locale("es_ES"));
+			stringComparator.setLocaleRules(stringComparator.new LocaleRules(
+					true, collator));
 			stringComparator.setCaseSensitive(false);
 
 			ArrayList keysList = new ArrayList(wfsFeatures.keySet());
@@ -369,9 +386,9 @@ public class FMapWFSDriver implements WFSDriver, BoundedShapes,ObjectDriver,IWri
 			Iterator keys = keysList.iterator();
 			featuresList = new WFSLayerNode[wfsFeatures.size()];
 
-			for (int i=0 ; i<wfsFeatures.size() ; i++){
+			for (int i = 0; i < wfsFeatures.size(); i++) {
 				WFSLayerNode lyr = new WFSLayerNode();
-				WFSFeature feature = (WFSFeature)wfsFeatures.get(keys.next());
+				WFSFeature feature = (WFSFeature) wfsFeatures.get(keys.next());
 
 				lyr.setName(feature.getName());
 				lyr.setTitle(feature.getTitle());
@@ -390,34 +407,36 @@ public class FMapWFSDriver implements WFSDriver, BoundedShapes,ObjectDriver,IWri
 	/**
 	 * Returns all the feature information retrieved using a
 	 * describeFeatureTypeOpearion
+	 * 
 	 * @param layerName
-	 * Feature name
+	 *            Feature name
 	 * @return
 	 */
-	public WFSLayerNode getLayerInfo(String layerName,String nameSpace){
-		WFSLayerNode lyr = (WFSLayerNode)hashFeatures.get(layerName);
+	public WFSLayerNode getLayerInfo(String layerName, String nameSpace) {
+		WFSLayerNode lyr = (WFSLayerNode) hashFeatures.get(layerName);
 		try {
 			describeFeatureType(layerName, nameSpace, null);
-			WFSFeature feature = (WFSFeature) remoteServicesClient.getFeatures().get(layerName);
+			WFSFeature feature = (WFSFeature) remoteServicesClient
+					.getFeatures().get(layerName);
 			lyr.setFields(feature.getFields());
 		} catch (WFSException e) {
 			// The feature doesn't has fields
 			e.printStackTrace();
-		}		
-		return lyr;		
+		}
+		return lyr;
 	}
 
 	/**
 	 * Returns all the feature information retrieved using a
 	 * describeFeatureTypeOpearion
+	 * 
 	 * @param layerName
-	 * Feature name
+	 *            Feature name
 	 * @return
 	 */
-	public WFSLayerNode getLayerInfo(String layerName){
+	public WFSLayerNode getLayerInfo(String layerName) {
 		return getLayerInfo(layerName, null);
 	}
-
 
 	/**
 	 * @return The title of the service offered by the WMS server.
@@ -436,16 +455,16 @@ public class FMapWFSDriver implements WFSDriver, BoundedShapes,ObjectDriver,IWri
 	/**
 	 * @return the online resource
 	 */
-	public String getOnlineResource(){
+	public String getOnlineResource() {
 		WFSServiceInformation si = remoteServicesClient.getServiceInformation();
 		return si.getOnline_resource();
 	}
 
 	/**
-	 *
+	 * 
 	 * @return the host
 	 */
-	public String getHost(){
+	public String getHost() {
 		return remoteServicesClient.getHost();
 	}
 
@@ -457,7 +476,8 @@ public class FMapWFSDriver implements WFSDriver, BoundedShapes,ObjectDriver,IWri
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.WFSDriver#close()
 	 */
 	public void close() {
@@ -466,7 +486,8 @@ public class FMapWFSDriver implements WFSDriver, BoundedShapes,ObjectDriver,IWri
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.WFSDriver#open()
 	 */
 	public void open() throws DriverException {
@@ -475,7 +496,8 @@ public class FMapWFSDriver implements WFSDriver, BoundedShapes,ObjectDriver,IWri
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.hardcode.gdbms.engine.data.driver.ObjectDriver#getPrimaryKeys()
 	 */
 	public int[] getPrimaryKeys() {
@@ -483,16 +505,22 @@ public class FMapWFSDriver implements WFSDriver, BoundedShapes,ObjectDriver,IWri
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see com.hardcode.gdbms.engine.data.driver.ObjectDriver#write(com.hardcode.gdbms.engine.data.edition.DataWare)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.hardcode.gdbms.engine.data.driver.ObjectDriver#write(com.hardcode
+	 * .gdbms.engine.data.edition.DataWare)
 	 */
 	public void write(DataWare dataWare) {
 
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see com.hardcode.gdbms.engine.data.driver.GDBMSDriver#setDataSourceFactory(com.hardcode.gdbms.engine.data.DataSourceFactory)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.hardcode.gdbms.engine.data.driver.GDBMSDriver#setDataSourceFactory
+	 * (com.hardcode.gdbms.engine.data.DataSourceFactory)
 	 */
 	public void setDataSourceFactory(DataSourceFactory dsf) {
 		// TODO Auto-generated method stub
@@ -500,15 +528,18 @@ public class FMapWFSDriver implements WFSDriver, BoundedShapes,ObjectDriver,IWri
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getFieldValue(long, int)
+	 * (non-Javadoc)
+	 * 
+	 * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getFieldValue(long,
+	 * int)
 	 */
 	public Value getFieldValue(long rowIndex, int fieldId) {
 		return driver.getFieldValue(rowIndex, fieldId);
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getFieldCount()
 	 */
 	public int getFieldCount() {
@@ -516,7 +547,8 @@ public class FMapWFSDriver implements WFSDriver, BoundedShapes,ObjectDriver,IWri
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getFieldName(int)
 	 */
 	public String getFieldName(int fieldId) {
@@ -524,7 +556,8 @@ public class FMapWFSDriver implements WFSDriver, BoundedShapes,ObjectDriver,IWri
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getRowCount()
 	 */
 	public long getRowCount() {
@@ -532,7 +565,8 @@ public class FMapWFSDriver implements WFSDriver, BoundedShapes,ObjectDriver,IWri
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getFieldType(int)
 	 */
 	public int getFieldType(int i) {
@@ -540,7 +574,8 @@ public class FMapWFSDriver implements WFSDriver, BoundedShapes,ObjectDriver,IWri
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getFieldWidth(int)
 	 */
 	public int getFieldWidth(int i) {
@@ -549,7 +584,8 @@ public class FMapWFSDriver implements WFSDriver, BoundedShapes,ObjectDriver,IWri
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDriver#isWritable()
 	 */
 	public boolean isWritable() {
@@ -557,7 +593,8 @@ public class FMapWFSDriver implements WFSDriver, BoundedShapes,ObjectDriver,IWri
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.BoundedShapes#getShapeBounds(int)
 	 */
 	public Rectangle2D getShapeBounds(int index) {
@@ -565,18 +602,20 @@ public class FMapWFSDriver implements WFSDriver, BoundedShapes,ObjectDriver,IWri
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.BoundedShapes#getShapeType(int)
 	 */
 	public int getShapeType(int index) {
-		if (getShapeCount() > 0){
+		if (getShapeCount() > 0) {
 			return getShape(0).getGeometryType();
 		}
 		return FShape.MULTI;
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDriver#reload()
 	 */
 	public void reload() {
@@ -589,10 +628,11 @@ public class FMapWFSDriver implements WFSDriver, BoundedShapes,ObjectDriver,IWri
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.edition.IWriteable#getWriter()
 	 */
 	public IWriter getWriter() {
-		if (writer == null){
+		if (writer == null) {
 			writer = new FmapWFSWriter(this, isWfstEditing);
 		}
 		return writer;
@@ -613,23 +653,26 @@ public class FMapWFSDriver implements WFSDriver, BoundedShapes,ObjectDriver,IWri
 	}
 
 	/**
-	 * @param isWfstEditing the isWfstEditing to set
+	 * @param isWfstEditing
+	 *            the isWfstEditing to set
 	 */
 	public void setWfstEditing(boolean isWfstEditing) {
 		this.isWfstEditing = isWfstEditing;
-		if (writer != null){
+		if (writer != null) {
 			writer.setWfstEditing(isWfstEditing);
 		}
 	}
 
 	/**
 	 * It locks all the features
+	 * 
 	 * @param expiryTime
-	 * The maximum time to edit
-	 * @throws WFSTLockFeaturesException 
+	 *            The maximum time to edit
+	 * @throws WFSTLockFeaturesException
 	 */
-	public void lockCurrentFeatures(int expiryTime) throws WFSTLockFeaturesException{
-		((FmapWFSWriter)getWriter()).lockCurrentFeatures(expiryTime);
+	public void lockCurrentFeatures(int expiryTime)
+			throws WFSTLockFeaturesException {
+		((FmapWFSWriter) getWriter()).lockCurrentFeatures(expiryTime);
 	}
 
 	/**
@@ -642,11 +685,14 @@ public class FMapWFSDriver implements WFSDriver, BoundedShapes,ObjectDriver,IWri
 	/**
 	 * @return true if the server supports WFST
 	 */
-	public boolean isTransactional(){
-		String onlineResource = remoteServicesClient.getServiceInformation().getOnlineResource(WFSOperation.TRANSACTION);
-		if (onlineResource == null){
-			onlineResource = remoteServicesClient.getServiceInformation().getOnlineResource(WFSOperation.TRANSACTION, WFSOperation.PROTOCOL_POST);
-			if (onlineResource == null){
+	public boolean isTransactional() {
+		String onlineResource = remoteServicesClient.getServiceInformation()
+				.getOnlineResource(WFSOperation.TRANSACTION);
+		if (onlineResource == null) {
+			onlineResource = remoteServicesClient.getServiceInformation()
+					.getOnlineResource(WFSOperation.TRANSACTION,
+							WFSOperation.PROTOCOL_POST);
+			if (onlineResource == null) {
 				return false;
 			}
 		}

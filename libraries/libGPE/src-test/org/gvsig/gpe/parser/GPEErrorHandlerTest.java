@@ -1,7 +1,5 @@
 package org.gvsig.gpe.parser;
 
-
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -69,6 +67,6 @@ package org.gvsig.gpe.parser;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class GPEErrorHandlerTest extends GPEErrorHandler{
+public class GPEErrorHandlerTest extends GPEErrorHandler {
 
 }

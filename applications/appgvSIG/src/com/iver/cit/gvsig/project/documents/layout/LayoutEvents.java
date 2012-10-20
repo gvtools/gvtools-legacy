@@ -58,102 +58,103 @@ import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 import com.iver.utiles.exceptionHandling.ExceptionHandlingSupport;
 import com.iver.utiles.exceptionHandling.ExceptionListener;
 
-
 /**
  * Eventos que se realizan sobre el Layout.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LayoutEvents implements ActionListener, ComponentListener,
-    MouseMotionListener, MouseListener{
-    private Layout layout = null;
-    private ExceptionHandlingSupport exceptionHandlingSupport = new ExceptionHandlingSupport();
+		MouseMotionListener, MouseListener {
+	private Layout layout = null;
+	private ExceptionHandlingSupport exceptionHandlingSupport = new ExceptionHandlingSupport();
 
-    /**
-     * Crea un nuevo EventsHandler.
-     *
-     * @param l Referencia al Layout.
-     */
-    public LayoutEvents(Layout l) {
-        layout = l;
-    }
+	/**
+	 * Crea un nuevo EventsHandler.
+	 * 
+	 * @param l
+	 *            Referencia al Layout.
+	 */
+	public LayoutEvents(Layout l) {
+		layout = l;
+	}
 
-    /**
-     * @see java.awt.event.ComponentListener#componentHidden(java.awt.event.ComponentEvent)
-     */
-    public void componentHidden(ComponentEvent arg0) {
-    }
+	/**
+	 * @see java.awt.event.ComponentListener#componentHidden(java.awt.event.ComponentEvent)
+	 */
+	public void componentHidden(ComponentEvent arg0) {
+	}
 
-    /**
-     * @see java.awt.event.ComponentListener#componentMoved(java.awt.event.ComponentEvent)
-     */
-    public void componentMoved(ComponentEvent arg0) {
-    }
+	/**
+	 * @see java.awt.event.ComponentListener#componentMoved(java.awt.event.ComponentEvent)
+	 */
+	public void componentMoved(ComponentEvent arg0) {
+	}
 
-    /**
-     * @see java.awt.event.ComponentListener#componentResized(java.awt.event.ComponentEvent)
-     */
-    public void componentResized(ComponentEvent arg0) {
-        layout.getLayoutControl().fullRect();
-    }
+	/**
+	 * @see java.awt.event.ComponentListener#componentResized(java.awt.event.ComponentEvent)
+	 */
+	public void componentResized(ComponentEvent arg0) {
+		layout.getLayoutControl().fullRect();
+	}
 
-    /**
-     * @see java.awt.event.ComponentListener#componentShown(java.awt.event.ComponentEvent)
-     */
-    public void componentShown(ComponentEvent arg0) {
-    }
+	/**
+	 * @see java.awt.event.ComponentListener#componentShown(java.awt.event.ComponentEvent)
+	 */
+	public void componentShown(ComponentEvent arg0) {
+	}
 
-    /**
-     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-     */
-    public void actionPerformed(ActionEvent arg0) {
-        layout.repaint();
-    }
+	/**
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	public void actionPerformed(ActionEvent arg0) {
+		layout.repaint();
+	}
 
-    /**
-     * @see java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent)
-     */
-    public void mouseDragged(MouseEvent e) {
-    	if (e.getButton() != MouseEvent.BUTTON3) {
-            layout.getLayoutControl().setLastPoint();
-            layout.repaint();
-        }
-    	try {
+	/**
+	 * @see java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent)
+	 */
+	public void mouseDragged(MouseEvent e) {
+		if (e.getButton() != MouseEvent.BUTTON3) {
+			layout.getLayoutControl().setLastPoint();
+			layout.repaint();
+		}
+		try {
 			layout.getLayoutControl().getCurrentLayoutTool().mouseDragged(e);
 		} catch (BehaviorException t) {
 			throwException(t);
 		}
-	    layout.getLayoutControl().setPosition(e.getPoint());
-    }
+		layout.getLayoutControl().setPosition(e.getPoint());
+	}
 
-    /**
-     * @see java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
-     */
-    public void mouseMoved(MouseEvent e) {
-    	try {
+	/**
+	 * @see java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
+	 */
+	public void mouseMoved(MouseEvent e) {
+		try {
 			layout.getLayoutControl().getCurrentLayoutTool().mouseMoved(e);
 		} catch (BehaviorException t) {
 			throwException(t);
 		}
 		layout.getLayoutControl().setPosition(e.getPoint());
-        layout.repaint();
-    }
+		layout.repaint();
+	}
 
-    /**
-     * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
-     */
-    public void mouseClicked(MouseEvent e) {
-    	try {
+	/**
+	 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
+	 */
+	public void mouseClicked(MouseEvent e) {
+		try {
 			layout.getLayoutControl().getCurrentLayoutTool().mouseClicked(e);
 		} catch (BehaviorException t) {
 			throwException(t);
 		}
-    }
+	}
 
-    /**
+	/**
 	 * Añade un listener de tipo ExceptionListener.
-	 *
-	 * @param o ExceptionListener.
+	 * 
+	 * @param o
+	 *            ExceptionListener.
 	 */
 	public void addExceptionListener(ExceptionListener o) {
 		exceptionHandlingSupport.addExceptionListener(o);
@@ -161,9 +162,10 @@ public class LayoutEvents implements ActionListener, ComponentListener,
 
 	/**
 	 * Borra la ExceptioListener que se pasa como parámetro.
-	 *
-	 * @param o ExceptionListener.
-	 *
+	 * 
+	 * @param o
+	 *            ExceptionListener.
+	 * 
 	 * @return True si se borra correctamente.
 	 */
 	public boolean removeExceptionListener(ExceptionListener o) {
@@ -172,74 +174,75 @@ public class LayoutEvents implements ActionListener, ComponentListener,
 
 	/**
 	 * Lanza una Excepción.
-	 *
-	 * @param t Excepción.
+	 * 
+	 * @param t
+	 *            Excepción.
 	 */
 	protected void throwException(Throwable t) {
 		exceptionHandlingSupport.throwException(t);
 	}
 
 	/**
-     * @see java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent)
-     */
-    public void mouseEntered(MouseEvent e) {
-//       layout.getLayoutControl().clearMouseImage();
-       try {
+	 * @see java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent)
+	 */
+	public void mouseEntered(MouseEvent e) {
+		// layout.getLayoutControl().clearMouseImage();
+		try {
 			layout.getLayoutControl().getCurrentLayoutTool().mouseEntered(e);
 		} catch (BehaviorException t) {
 			throwException(t);
 		}
-    }
+	}
 
-    /**
-     * @see java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent)
-     */
-    public void mouseExited(MouseEvent e) {
-    	try {
+	/**
+	 * @see java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent)
+	 */
+	public void mouseExited(MouseEvent e) {
+		try {
 			layout.getLayoutControl().getCurrentLayoutTool().mouseExited(e);
 		} catch (BehaviorException t) {
 			throwException(t);
 		}
-    }
+	}
 
-    /**
-     * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
-     */
-    public void mousePressed(MouseEvent e) {
-        if (e.getButton() == MouseEvent.BUTTON1) {
-        	layout.getLayoutControl().setPointAnt();
-            layout.getLayoutControl().setFirstPoint();
-        	try {
-    			layout.getLayoutControl().getCurrentLayoutTool().mousePressed(e);
-    		} catch (BehaviorException t) {
-    			throwException(t);
-    		}
-    	} else
-    		if (e.getButton() == MouseEvent.BUTTON3) {
-    			FPopupMenu popmenu = new FPopupMenu(layout);
-				layout.add(popmenu);
-				popmenu.show(e.getComponent(), e.getX(), e.getY());
-    		}
-    }
+	/**
+	 * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
+	 */
+	public void mousePressed(MouseEvent e) {
+		if (e.getButton() == MouseEvent.BUTTON1) {
+			layout.getLayoutControl().setPointAnt();
+			layout.getLayoutControl().setFirstPoint();
+			try {
+				layout.getLayoutControl().getCurrentLayoutTool()
+						.mousePressed(e);
+			} catch (BehaviorException t) {
+				throwException(t);
+			}
+		} else if (e.getButton() == MouseEvent.BUTTON3) {
+			FPopupMenu popmenu = new FPopupMenu(layout);
+			layout.add(popmenu);
+			popmenu.show(e.getComponent(), e.getX(), e.getY());
+		}
+	}
 
-    /**
-     * @see java.awt.event.MouseListener#mouseReleassed(java.awt.event.MouseEvent)
-     */
-    public void mouseReleased(MouseEvent e) {
-        if (e.getButton() != MouseEvent.BUTTON3) {
-            layout.getLayoutControl().setLastPoint();
-        }
+	/**
+	 * @see java.awt.event.MouseListener#mouseReleassed(java.awt.event.MouseEvent)
+	 */
+	public void mouseReleased(MouseEvent e) {
+		if (e.getButton() != MouseEvent.BUTTON3) {
+			layout.getLayoutControl().setLastPoint();
+		}
 
-        if (e.getButton() == MouseEvent.BUTTON1) {
-        	try {
-    			layout.getLayoutControl().getCurrentLayoutTool().mouseReleased(e);
-    		} catch (BehaviorException t) {
-    			throwException(t);
-    		}
-            layout.getLayoutControl().setCancelDrawing(false);
-        } else if (e.getButton() == MouseEvent.BUTTON3) {
-        }
+		if (e.getButton() == MouseEvent.BUTTON1) {
+			try {
+				layout.getLayoutControl().getCurrentLayoutTool()
+						.mouseReleased(e);
+			} catch (BehaviorException t) {
+				throwException(t);
+			}
+			layout.getLayoutControl().setCancelDrawing(false);
+		} else if (e.getButton() == MouseEvent.BUTTON3) {
+		}
 
-
-    }
+	}
 }

@@ -8,8 +8,7 @@ import org.gvsig.hyperlink.AbstractHyperLinkPanel;
 
 import com.iver.andami.PluginServices;
 
-
-public class ImgFormat extends AbstractActionManager implements Serializable{
+public class ImgFormat extends AbstractActionManager implements Serializable {
 	public static final String actionCode = "Image_format";
 
 	public AbstractHyperLinkPanel createPanel(URI doc)

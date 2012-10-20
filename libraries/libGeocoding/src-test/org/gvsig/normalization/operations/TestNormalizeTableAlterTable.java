@@ -64,7 +64,6 @@ public class TestNormalizeTableAlterTable extends TestCase {
 	DBFDriver driver = null;
 	FileDataSource fiDatSource = null;
 
-
 	public void setUp() {
 
 		try {

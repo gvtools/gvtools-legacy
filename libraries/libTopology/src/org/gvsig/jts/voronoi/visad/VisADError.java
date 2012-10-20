@@ -42,15 +42,20 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.jts.voronoi.visad;
+
 public class VisADError extends Error {
 
-	  public VisADError() { super(); }
-	  public VisADError(String s) { super(s); }
-
+	public VisADError() {
+		super();
 	}
 
+	public VisADError(String s) {
+		super(s);
+	}
+
+}

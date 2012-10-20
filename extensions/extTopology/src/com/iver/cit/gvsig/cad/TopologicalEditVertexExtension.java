@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.cad;
 
 import org.gvsig.topology.Topology;
@@ -62,64 +62,62 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 /**
- * CAD Extension that edits a vertex, moving the same vertex in all the 
- * layers of a topology that shares it.
+ * CAD Extension that edits a vertex, moving the same vertex in all the layers
+ * of a topology that shares it.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class TopologicalEditVertexExtension extends Extension {
 
 	private View view;
 	private MapControl mapControl;
 	private TopologicalEditVertexCADTool cadTool;
-	
-	
+
 	public void execute(String actionCommand) {
 		CADExtension.initFocus();
 		if (actionCommand.equals(TopologicalEditVertexCADTool.COMMAND_STRING)) {
-        	CADExtension.setCADTool(TopologicalEditVertexCADTool.COMMAND_STRING, true);
-        }
+			CADExtension.setCADTool(
+					TopologicalEditVertexCADTool.COMMAND_STRING, true);
+		}
 		CADExtension.getEditionManager().setMapControl(mapControl);
 		CADExtension.getCADToolAdapter().configureMenu();
 	}
 
 	public void initialize() {
 		cadTool = new TopologicalEditVertexCADTool();
-		CADExtension.addCADTool(TopologicalEditVertexCADTool.COMMAND_STRING, cadTool);
+		CADExtension.addCADTool(TopologicalEditVertexCADTool.COMMAND_STRING,
+				cadTool);
 		registerIcons();
 	}
-	
-	private void registerIcons(){
-		PluginServices.getIconTheme().registerDefault("topological-edit-vertex",
-													   this.getClass().
-													   getClassLoader().
-													   getResource("images/topology_edit.png")
-		);
+
+	private void registerIcons() {
+		PluginServices.getIconTheme().registerDefault(
+				"topological-edit-vertex",
+				this.getClass().getClassLoader()
+						.getResource("images/topology_edit.png"));
 	}
 
 	public boolean isEnabled() {
 		try {
-			if (EditionUtilities.getEditionStatus() == 
-				EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE) {
-					this.view = (View) PluginServices.getMDIManager().getActiveWindow();
-					mapControl = view.getMapControl();
-					if (CADExtension.getEditionManager().getActiveLayerEdited() == null)
-						return false;
-					FLyrVect lv = (FLyrVect) CADExtension.
-											getEditionManager().
-											getActiveLayerEdited().
-											getLayer();
-					if (! cadTool.isApplicable(lv.getShapeType())){
-						return false;
-					}
-					
-					FLayers parentLyr = lv.getParentLayer();
-					if(!(parentLyr instanceof Topology))
-						return false;
+			if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE) {
+				this.view = (View) PluginServices.getMDIManager()
+						.getActiveWindow();
+				mapControl = view.getMapControl();
+				if (CADExtension.getEditionManager().getActiveLayerEdited() == null)
+					return false;
+				FLyrVect lv = (FLyrVect) CADExtension.getEditionManager()
+						.getActiveLayerEdited().getLayer();
+				if (!cadTool.isApplicable(lv.getShapeType())) {
+					return false;
+				}
+
+				FLayers parentLyr = lv.getParentLayer();
+				if (!(parentLyr instanceof Topology))
+					return false;
 			}
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 			return false;
 		}
 		return true;

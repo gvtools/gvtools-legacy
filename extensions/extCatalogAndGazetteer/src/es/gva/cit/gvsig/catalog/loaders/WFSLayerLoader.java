@@ -55,29 +55,27 @@ import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
 import es.gva.cit.catalog.schemas.Resource;
 
-
 /**
  * This class is used to load a WFS layer in gvSIG
  * 
  * @author Jorge Piera Llodra (piera_jor@gva.es)
  */
-public class WFSLayerLoader extends LayerLoader{
-	
-	
-	
+public class WFSLayerLoader extends LayerLoader {
+
 	public WFSLayerLoader(Resource resource) {
 		super(resource);
 	}
-	
+
 	/**
-	 * This function loads a WFS resource 
+	 * This function loads a WFS resource
+	 * 
 	 * @param host
-	 * URL where the server is located
+	 *            URL where the server is located
 	 * @param layer
-	 * Layer name
-	 * @throws LayerLoaderException 
+	 *            Layer name
+	 * @throws LayerLoaderException
 	 */
-	
+
 	public void loadLayer() throws LayerLoaderException {
 		FLayer flayer = null;
 		String host = getResource().getLinkage();
@@ -86,53 +84,56 @@ public class WFSLayerLoader extends LayerLoader{
 			flayer = createWFSLayer(host, layer);
 			addLayerToView(flayer);
 		} catch (MalformedURLException e) {
-			throw new LayerLoaderException(e.getMessage(),getWindowMessage());
+			throw new LayerLoaderException(e.getMessage(), getWindowMessage());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			throw new LayerLoaderException(e.getMessage(),getWindowMessage());
-		}		
+			throw new LayerLoaderException(e.getMessage(), getWindowMessage());
+		}
 	}
-	
-	private FLayer createWFSLayer(String host, String sLayer) throws Exception{
-		ExtensionPoint extensionPoint = (ExtensionPoint)ExtensionPointsSingleton.getInstance().get("CatalogLayers");
+
+	private FLayer createWFSLayer(String host, String sLayer) throws Exception {
+		ExtensionPoint extensionPoint = (ExtensionPoint) ExtensionPointsSingleton
+				.getInstance().get("CatalogLayers");
 		Map args = new HashMap();
-		args.put("host",host);
+		args.put("host", host);
 		String layerName[] = new String[1];
 		layerName[0] = sLayer;
-		args.put("layer",layerName);
-		args.put("user","");
-		args.put("pwd","");
-		BaseView activeView = 
-			(BaseView) PluginServices.getMDIManager().getActiveWindow();
+		args.put("layer", layerName);
+		args.put("user", "");
+		args.put("pwd", "");
+		BaseView activeView = (BaseView) PluginServices.getMDIManager()
+				.getActiveWindow();
 		args.put("projection", ProjectionUtils.getAbrev(activeView.getCrs()));
 		try {
-			return (FLayer)extensionPoint.create("OGC:WFS", args  );
-		} catch(Exception e) {
+			return (FLayer) extensionPoint.create("OGC:WFS", args);
+		} catch (Exception e) {
 			e.printStackTrace();
-			throw new LayerLoaderException(getErrorMessage(),getWindowMessage());
-		}		
+			throw new LayerLoaderException(getErrorMessage(),
+					getWindowMessage());
+		}
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see es.gva.cit.gvsig.catalogClient.loaders.LayerLoader#getErrorMessage()
 	 */
 	protected String getErrorMessage() {
-		return Messages.getText("wfsError") + ".\n" +
-		Messages.getText("server") + ": " + 
-		getResource().getLinkage() + "\n" +
-		Messages.getText("layer") + ": " +
-		getResource().getName();		
+		return Messages.getText("wfsError") + ".\n"
+				+ Messages.getText("server") + ": "
+				+ getResource().getLinkage() + "\n" + Messages.getText("layer")
+				+ ": " + getResource().getName();
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
-	 * @see es.gva.cit.gvsig.catalogClient.loaders.LayerLoader#getWindowMessage()
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * es.gva.cit.gvsig.catalogClient.loaders.LayerLoader#getWindowMessage()
 	 */
 	protected String getWindowMessage() {
 		return Messages.getText("wfsLoad");
 	}
-	
-	
+
 }

@@ -48,27 +48,28 @@ public class FNode extends DirectedSparseVertex {
 	private int idNode;
 	private double x;
 	private double y;
-	
+
 	private int numSoluc;
 	private double estimation;
 	private int status;
 	ArrayList conectors;
 	ArrayList turnCosts;
-	
+
 	public FNode(int i, double x, double y) {
 		idNode = i;
 		this.x = x;
 		this.y = y;
 	}
+
 	public int getIdNode() {
 		return idNode;
 	}
+
 	public double getX() {
 		return x;
 	}
+
 	public double getY() {
 		return y;
 	}
 }
-
-

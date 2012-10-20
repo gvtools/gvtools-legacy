@@ -1,4 +1,5 @@
 package org.gvsig.gpe.gml.parser;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -48,10 +49,11 @@ package org.gvsig.gpe.gml.parser;
 /**
  * @author Jorge Piera Llodrá (jorge.piera@iver.es)
  */
-public class GPEGml2_1_0_Parser extends GPEGml2_1_2_Parser{
-	
+public class GPEGml2_1_0_Parser extends GPEGml2_1_2_Parser {
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.GPEParser#getDescription()
 	 */
 	public String getDescription() {
@@ -60,6 +62,7 @@ public class GPEGml2_1_0_Parser extends GPEGml2_1_2_Parser{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.GPEParser#getName()
 	 */
 	public String getName() {
@@ -68,9 +71,10 @@ public class GPEGml2_1_0_Parser extends GPEGml2_1_2_Parser{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.GPEParser#getFormat()
 	 */
 	public String getFormat() {
-		return "text/xml; subtype=gml/2.1.0";		
+		return "text/xml; subtype=gml/2.1.0";
 	}
 }

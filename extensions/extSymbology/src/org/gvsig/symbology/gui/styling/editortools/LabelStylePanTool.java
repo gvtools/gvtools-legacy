@@ -61,13 +61,14 @@ import com.iver.cit.gvsig.fmap.core.styles.IStyle;
 import com.iver.cit.gvsig.gui.styling.EditorTool;
 import com.iver.cit.gvsig.gui.styling.StyleEditor;
 import com.iver.cit.gvsig.gui.styling.StylePreviewer;
+
 /**
- *
+ * 
  * SimpleLabelStylePanTool.java
- *
- *
+ * 
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Jan 7, 2008
- *
+ * 
  */
 public class LabelStylePanTool extends EditorTool {
 	private int NO_SELECTION_ON_STYLE = -1;
@@ -82,7 +83,7 @@ public class LabelStylePanTool extends EditorTool {
 	private int textFieldSelected = NO_SELECTION_ON_STYLE;
 
 	private Dimension bounds;
-	private int ownerHgap,ownerVgap;
+	private int ownerHgap, ownerVgap;
 
 	public LabelStylePanTool(JComponent owner) {
 		super(owner);
@@ -91,18 +92,20 @@ public class LabelStylePanTool extends EditorTool {
 	private void getBounds() {
 
 		bounds = ((StyleEditor) owner).getStylePreviewer().getSize();
-		ownerHgap =  ((StyleEditor) owner).getStylePreviewer().getHGap();
+		ownerHgap = ((StyleEditor) owner).getStylePreviewer().getHGap();
 		ownerVgap = ((StyleEditor) owner).getStylePreviewer().getVGap();
 
 	}
 
 	public Cursor getCursor() {
 		if (cursor == null) {
-			ImageIcon cursorImage = new ImageIcon(PluginServices.getIconTheme().get("hand-icon").getImage());
-			cursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImage.getImage(),
-					new Point(cursorImage.getIconWidth()/2,
-							cursorImage.getIconHeight()/2), //16, 16), "");
-							"");
+			ImageIcon cursorImage = new ImageIcon(PluginServices.getIconTheme()
+					.get("hand-icon").getImage());
+			cursor = Toolkit.getDefaultToolkit().createCustomCursor(
+					cursorImage.getImage(),
+					new Point(cursorImage.getIconWidth() / 2, cursorImage
+							.getIconHeight() / 2), // 16, 16), "");
+					"");
 
 		}
 		return cursor;
@@ -111,23 +114,26 @@ public class LabelStylePanTool extends EditorTool {
 	public void mousePressed(MouseEvent e) {
 		getBounds();
 		Point2D marker = style.getMarkerPoint();
-		pIni = new Point((int) (marker.getX()*(bounds.width-ownerHgap)),(int) (marker.getY()*(bounds.height-ownerVgap)));
+		pIni = new Point((int) (marker.getX() * (bounds.width - ownerHgap)),
+				(int) (marker.getY() * (bounds.height - ownerVgap)));
 		pEnd = e.getPoint();
 
-		Point selectedPoint = new Point((int) (pEnd.getX()-ownerHgap),(int) (pEnd.getY()-ownerVgap));
-		if((Math.abs(pIni.x - selectedPoint.x) < ownerHgap ) && (Math.abs(pIni.y - selectedPoint.y) < ownerVgap )){
+		Point selectedPoint = new Point((int) (pEnd.getX() - ownerHgap),
+				(int) (pEnd.getY() - ownerVgap));
+		if ((Math.abs(pIni.x - selectedPoint.x) < ownerHgap)
+				&& (Math.abs(pIni.y - selectedPoint.y) < ownerVgap)) {
 			toolSelected = MARKER_POINT_SELECTED;
 			return;
 		}
 
 		Point2D selPoint = screenPointToLabelPoint(pEnd);
 
-		for (int i = style.getTextBounds().length - 1; i >= 0 ; i--) {
+		for (int i = style.getTextBounds().length - 1; i >= 0; i--) {
 			Rectangle2D rectangle = style.getTextBounds()[i];
-			if((selPoint.getX() >= rectangle.getMinX()) &&
-					(selPoint.getX() <= rectangle.getMaxX()) &&
-					(selPoint.getY() >= rectangle.getMinY())&&
-					(selPoint.getY() <= rectangle.getMaxY())){
+			if ((selPoint.getX() >= rectangle.getMinX())
+					&& (selPoint.getX() <= rectangle.getMaxX())
+					&& (selPoint.getY() >= rectangle.getMinY())
+					&& (selPoint.getY() <= rectangle.getMaxY())) {
 				toolSelected = TEXT_FIELD_SELECTED;
 				textFieldSelected = i;
 				pIni = pEnd;
@@ -145,46 +151,59 @@ public class LabelStylePanTool extends EditorTool {
 
 	public void mouseDragged(MouseEvent e) {
 		pEnd = e.getPoint();
-		if((pEnd.getX() > bounds.width - ownerHgap) || ( pEnd.getY() > bounds.getHeight() - ownerVgap) ||
-				(pEnd.getX() < ownerHgap) || ( pEnd.getY() < ownerVgap))
+		if ((pEnd.getX() > bounds.width - ownerHgap)
+				|| (pEnd.getY() > bounds.getHeight() - ownerVgap)
+				|| (pEnd.getX() < ownerHgap) || (pEnd.getY() < ownerVgap))
 			return;
 
 		Point2D labelEndPoint = screenPointToLabelPoint(pEnd);
 
-		if(toolSelected == TEXT_FIELD_SELECTED){
-			if(textFieldSelected != NO_SELECTION_ON_STYLE){
+		if (toolSelected == TEXT_FIELD_SELECTED) {
+			if (textFieldSelected != NO_SELECTION_ON_STYLE) {
 
 				Rectangle2D rectangle = style.getTextBounds()[textFieldSelected];
 
 				Point2D labelIniPoint = screenPointToLabelPoint(pIni);
-				Point maxPoint = new Point((int)bounds.getWidth(), (int)bounds.getHeight());
+				Point maxPoint = new Point((int) bounds.getWidth(),
+						(int) bounds.getHeight());
 				Point2D labelMaxPoint = screenPointToLabelPoint(maxPoint);
 
-				Point2D labelZero = screenPointToLabelPoint(new Point(0,0));
-				double x = rectangle.getX() + labelEndPoint.getX()-labelIniPoint.getX();
-				if (x<labelZero.getX()){ x=labelZero.getX(); }
-				if ((x+rectangle.getWidth())>=labelMaxPoint.getX()) { x =  labelMaxPoint.getX()-rectangle.getWidth();}
+				Point2D labelZero = screenPointToLabelPoint(new Point(0, 0));
+				double x = rectangle.getX() + labelEndPoint.getX()
+						- labelIniPoint.getX();
+				if (x < labelZero.getX()) {
+					x = labelZero.getX();
+				}
+				if ((x + rectangle.getWidth()) >= labelMaxPoint.getX()) {
+					x = labelMaxPoint.getX() - rectangle.getWidth();
+				}
 
-				double y = rectangle.getY() + labelEndPoint.getY()-labelIniPoint.getY();
-				if (y<labelZero.getY()){ y=labelZero.getY(); }
-				if ((y+rectangle.getHeight())>=labelMaxPoint.getY()) { y =  labelMaxPoint.getY()-rectangle.getHeight();}
+				double y = rectangle.getY() + labelEndPoint.getY()
+						- labelIniPoint.getY();
+				if (y < labelZero.getY()) {
+					y = labelZero.getY();
+				}
+				if ((y + rectangle.getHeight()) >= labelMaxPoint.getY()) {
+					y = labelMaxPoint.getY() - rectangle.getHeight();
+				}
 
-				rectangle.setRect(x,
-						y,
-						rectangle.getWidth(),
+				rectangle.setRect(x, y, rectangle.getWidth(),
 						rectangle.getHeight());
-				style.setTextFieldArea(textFieldSelected,rectangle);
+				style.setTextFieldArea(textFieldSelected, rectangle);
 				pIni = pEnd;
 			}
-		}
-		else if (toolSelected == MARKER_POINT_SELECTED){
-			double xOffset = (pEnd.getX())/( bounds.getWidth()- ownerHgap );
-			double yOffset = (pEnd.getY())/( bounds.getHeight()- ownerVgap );
+		} else if (toolSelected == MARKER_POINT_SELECTED) {
+			double xOffset = (pEnd.getX()) / (bounds.getWidth() - ownerHgap);
+			double yOffset = (pEnd.getY()) / (bounds.getHeight() - ownerVgap);
 
-			if(xOffset > 1) xOffset = 1;
-			if(xOffset < 0) xOffset = 0;
-			if(yOffset > 1) yOffset = 1;
-			if(yOffset < 0) yOffset = 0;
+			if (xOffset > 1)
+				xOffset = 1;
+			if (xOffset < 0)
+				xOffset = 0;
+			if (yOffset > 1)
+				yOffset = 1;
+			if (yOffset < 0)
+				yOffset = 0;
 
 			Point2D marker = style.getMarkerPoint();
 			marker.setLocation(xOffset, yOffset);
@@ -193,8 +212,9 @@ public class LabelStylePanTool extends EditorTool {
 	}
 
 	private Point2D screenPointToLabelPoint(Point pIni) {
-		//FIXME: Esto es un parche, habría que cambiar la API de los estilos y simbolos
-		//pero mientras tanto
+		// FIXME: Esto es un parche, habría que cambiar la API de los estilos y
+		// simbolos
+		// pero mientras tanto
 		int minx = pIni.x;
 		int miny = pIni.y;
 
@@ -203,28 +223,34 @@ public class LabelStylePanTool extends EditorTool {
 
 		IStyle style = sp.getStyle();
 		Dimension backgroundBounds = null;
-		if (style instanceof SimpleLabelStyle){
-			backgroundBounds = ((SimpleLabelStyle)style).getSize();
+		if (style instanceof SimpleLabelStyle) {
+			backgroundBounds = ((SimpleLabelStyle) style).getSize();
 		}
 		Point2D p;
-		if (backgroundBounds == null){
-			p = new Point2D.Double(
-					pIni.x/(bounds.getWidth()-sp.getHGap()/2),
-					pIni.y/(bounds.getHeight()-sp.getVGap()/2));
+		if (backgroundBounds == null) {
+			p = new Point2D.Double(pIni.x
+					/ (bounds.getWidth() - sp.getHGap() / 2), pIni.y
+					/ (bounds.getHeight() - sp.getVGap() / 2));
 		} else {
 			double xOffset = 0;
 			double yOffset = 0;
 			double scale = 1;
-			if (backgroundBounds.getWidth()>backgroundBounds.getHeight()) {
-				scale = (bounds.getWidth()-sp.getHGap())/backgroundBounds.getWidth();
-				yOffset = 0.5*(bounds.getHeight()-sp.getVGap() - backgroundBounds.getHeight()*scale);
+			if (backgroundBounds.getWidth() > backgroundBounds.getHeight()) {
+				scale = (bounds.getWidth() - sp.getHGap())
+						/ backgroundBounds.getWidth();
+				yOffset = 0.5 * (bounds.getHeight() - sp.getVGap() - backgroundBounds
+						.getHeight() * scale);
 			} else {
-				scale = (bounds.getHeight()-sp.getVGap())/backgroundBounds.getHeight();
-				xOffset = 0.5*(bounds.getWidth()-sp.getHGap() - backgroundBounds.getWidth()*scale);
+				scale = (bounds.getHeight() - sp.getVGap())
+						/ backgroundBounds.getHeight();
+				xOffset = 0.5 * (bounds.getWidth() - sp.getHGap() - backgroundBounds
+						.getWidth() * scale);
 			}
 			p = new Point2D.Double(
-					((minx-(sp.getHGap()/2)-xOffset)/scale)/backgroundBounds.getWidth(),
-					((miny-(sp.getVGap()/2)-yOffset)/scale)/backgroundBounds.getHeight());
+					((minx - (sp.getHGap() / 2) - xOffset) / scale)
+							/ backgroundBounds.getWidth(), ((miny
+							- (sp.getVGap() / 2) - yOffset) / scale)
+							/ backgroundBounds.getHeight());
 		}
 		return p;
 	}
@@ -236,7 +262,8 @@ public class LabelStylePanTool extends EditorTool {
 
 	private JToggleButton getBtnPan() {
 		if (btnPan == null) {
-			btnPan = new JToggleButton(PluginServices.getIconTheme().get("hand-icon"));
+			btnPan = new JToggleButton(PluginServices.getIconTheme().get(
+					"hand-icon"));
 			btnPan.setToolTipText(PluginServices.getText(this, "offset_label"));
 			btnPan.setPreferredSize(EditorTool.SMALL_BTN_SIZE);
 			btnPan.setSize(EditorTool.SMALL_BTN_SIZE);

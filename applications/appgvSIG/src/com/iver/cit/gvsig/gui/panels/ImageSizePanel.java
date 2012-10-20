@@ -66,9 +66,12 @@ import com.iver.andami.PluginServices;
 /**
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
-public class ImageSizePanel extends JPanel implements KeyListener, MouseListener, ActionListener, FocusListener{
-	private static final Icon iconSelected = PluginServices.getIconTheme().get("chain");
-	private static final Icon iconUnselected = PluginServices.getIconTheme().get("broken-chain");
+public class ImageSizePanel extends JPanel implements KeyListener,
+		MouseListener, ActionListener, FocusListener {
+	private static final Icon iconSelected = PluginServices.getIconTheme().get(
+			"chain");
+	private static final Icon iconUnselected = PluginServices.getIconTheme()
+			.get("broken-chain");
 
 	private JIncrementalNumberField widthTxt;
 	private JIncrementalNumberField heightTxt;
@@ -79,40 +82,43 @@ public class ImageSizePanel extends JPanel implements KeyListener, MouseListener
 	private boolean locked = true;
 	private ArrayList<ActionListener> listeners = new ArrayList<ActionListener>();
 
-	public ImageSizePanel(){
+	public ImageSizePanel() {
 		super();
 		initialize();
 	}
 
-
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 */
 	private void initialize() {
 		final GridBagLayoutPanel aux = new GridBagLayoutPanel();
 		setLayout(new BorderLayout());
-		aux.addComponent(PluginServices.getText(this, "width")+":",
-				widthTxt  = new JIncrementalNumberField(null, 5, 0, Double.MAX_VALUE, 1));
-		aux.addComponent(PluginServices.getText(this, "height")+":",
-				heightTxt = new JIncrementalNumberField(null, 5, 0, Double.MAX_VALUE, 1));
+		aux.addComponent(PluginServices.getText(this, "width") + ":",
+				widthTxt = new JIncrementalNumberField(null, 5, 0,
+						Double.MAX_VALUE, 1));
+		aux.addComponent(PluginServices.getText(this, "height") + ":",
+				heightTxt = new JIncrementalNumberField(null, 5, 0,
+						Double.MAX_VALUE, 1));
 		setLayout(new BorderLayout());
 		add(aux, BorderLayout.CENTER);
 		JPanel lockPanel = new JPanel(null) {
 			private static final long serialVersionUID = -415551033800811412L;
+
 			protected void paintComponent(Graphics g) {
-				int y1 = widthTxt.getY() + widthTxt.getHeight()/2-3;
-				int y2 = heightTxt.getY() + heightTxt.getHeight()/2+3;
+				int y1 = widthTxt.getY() + widthTxt.getHeight() / 2 - 3;
+				int y2 = heightTxt.getY() + heightTxt.getHeight() / 2 + 3;
 				g.setColor(Color.DARK_GRAY);
-				g.drawLine(2, y1, getWidth()/2+2, y1);
-				g.drawLine(getWidth()/2+2, y1, getWidth()/2+2, y2);
-				g.drawLine(2, y2, getWidth()/2+2, y2);
-				lock.setBounds(3, widthTxt.getY()+13, getWidth()-2, 22);
+				g.drawLine(2, y1, getWidth() / 2 + 2, y1);
+				g.drawLine(getWidth() / 2 + 2, y1, getWidth() / 2 + 2, y2);
+				g.drawLine(2, y2, getWidth() / 2 + 2, y2);
+				lock.setBounds(3, widthTxt.getY() + 13, getWidth() - 2, 22);
 			}
 		};
 		lockPanel.setPreferredSize(new Dimension(20, 20));
 		lock = new JToggleButton() {
 			private static final long serialVersionUID = 1668046192113822412L;
+
 			protected void paintComponent(Graphics g) {
 				setIcon(isSelected() ? iconSelected : iconUnselected);
 				super.paintComponent(g);
@@ -142,10 +148,9 @@ public class ImageSizePanel extends JPanel implements KeyListener, MouseListener
 	}
 
 	public void setImageSize(Dimension sz) {
-		if(sz != null)
+		if (sz != null)
 			setImageSize(sz.getWidth(), sz.getHeight());
 	}
-
 
 	public double[] getImageDimension() {
 		double[] d = new double[2];
@@ -158,17 +163,21 @@ public class ImageSizePanel extends JPanel implements KeyListener, MouseListener
 		listeners.add(l);
 	}
 
-	public void keyPressed(KeyEvent e) { 
+	public void keyPressed(KeyEvent e) {
 		doIt();
 	}
+
 	public void keyReleased(KeyEvent e) {
 		doIt();
 	}
+
 	public void keyTyped(KeyEvent e) {
 		doIt();
 	}
+
 	public void mouseClicked(MouseEvent e) {
-		e.consume(); doIt();
+		e.consume();
+		doIt();
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -181,16 +190,16 @@ public class ImageSizePanel extends JPanel implements KeyListener, MouseListener
 			if (locked != lock.isSelected()) {
 				locked = lock.isSelected();
 				ratio = widthTxt.getDouble() / heightTxt.getDouble();
-			} else if (locked && width != widthTxt.getDouble()){
+			} else if (locked && width != widthTxt.getDouble()) {
 				width = widthTxt.getDouble();
-				height = width/ratio;
-				height = Math.round(height*100)/100;
+				height = width / ratio;
+				height = Math.round(height * 100) / 100;
 				heightTxt.setDouble(height);
 				fireActionPerformed();
 			} else if (locked && height != heightTxt.getDouble()) {
 				height = heightTxt.getDouble();
-				width = height*ratio;
-				width = Math.round(width*100)/100;
+				width = height * ratio;
+				width = Math.round(width * 100) / 100;
 				widthTxt.setDouble(width);
 				fireActionPerformed();
 
@@ -200,31 +209,32 @@ public class ImageSizePanel extends JPanel implements KeyListener, MouseListener
 		}
 	}
 
-
 	private void fireActionPerformed() {
 		for (int i = 0; i < listeners.size(); i++) {
-			((ActionListener) listeners.get(i)).actionPerformed(
-					new ActionEvent(this, 0, "IMAGE_RESIZED"));
+			((ActionListener) listeners.get(i))
+					.actionPerformed(new ActionEvent(this, 0, "IMAGE_RESIZED"));
 		}
 	}
 
+	public void mouseEntered(MouseEvent e) { /* nothing */
+	}
 
-	public void mouseEntered(MouseEvent e) { /* nothing */ }
-	public void mouseExited(MouseEvent e) { /* nothing */ }
-	public void mousePressed(MouseEvent e) {  /* nothing */ }
-	public void mouseReleased(MouseEvent e) {  /* nothing */ }
+	public void mouseExited(MouseEvent e) { /* nothing */
+	}
 
+	public void mousePressed(MouseEvent e) { /* nothing */
+	}
+
+	public void mouseReleased(MouseEvent e) { /* nothing */
+	}
 
 	public void focusGained(FocusEvent arg0) {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	public void focusLost(FocusEvent arg0) {
 		doIt();
 	}
 
-
 }
-

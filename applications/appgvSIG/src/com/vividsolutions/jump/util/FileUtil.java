@@ -1,4 +1,3 @@
-
 /*
  * The Unified Mapping Platform (JUMP) is an extensible, interactive GUI
  * for visualizing and manipulating spatial features with geometry and attributes.
@@ -45,54 +44,62 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-
 /**
  * File-related utility functions.
  */
 public class FileUtil {
-    /**
-     * Reads a text file.
-     * @param textFileName the pathname of the file to open
-     * @return the lines of the text file
-     * @throws FileNotFoundException if the text file is not found
-     * @throws IOException if the file is not found or another I/O error occurs
-     */
-    public static List getContents(String textFileName)
-        throws FileNotFoundException, IOException {
-        List contents = new ArrayList();
-        FileReader fileReader = new FileReader(textFileName);
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-        String line = bufferedReader.readLine();
+	/**
+	 * Reads a text file.
+	 * 
+	 * @param textFileName
+	 *            the pathname of the file to open
+	 * @return the lines of the text file
+	 * @throws FileNotFoundException
+	 *             if the text file is not found
+	 * @throws IOException
+	 *             if the file is not found or another I/O error occurs
+	 */
+	public static List getContents(String textFileName)
+			throws FileNotFoundException, IOException {
+		List contents = new ArrayList();
+		FileReader fileReader = new FileReader(textFileName);
+		BufferedReader bufferedReader = new BufferedReader(fileReader);
+		String line = bufferedReader.readLine();
 
-        while (line != null) {
-            contents.add(line);
-            line = bufferedReader.readLine();
-        }
+		while (line != null) {
+			contents.add(line);
+			line = bufferedReader.readLine();
+		}
 
-        return contents;
-    }
+		return contents;
+	}
 
-    /**
-     * Saves the String to a file with the given filename.
-     * @param textFileName the pathname of the file to create (or overwrite)
-     * @param contents the data to save
-     * @throws IOException if an I/O error occurs.
-     */
-    public static void setContents(String textFileName, String contents)
-        throws IOException {
-        FileWriter fileWriter = new FileWriter(textFileName, false);
-        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-        bufferedWriter.write(contents);
-        bufferedWriter.flush();
-        bufferedWriter.close();
-        fileWriter.close();
-    }
+	/**
+	 * Saves the String to a file with the given filename.
+	 * 
+	 * @param textFileName
+	 *            the pathname of the file to create (or overwrite)
+	 * @param contents
+	 *            the data to save
+	 * @throws IOException
+	 *             if an I/O error occurs.
+	 */
+	public static void setContents(String textFileName, String contents)
+			throws IOException {
+		FileWriter fileWriter = new FileWriter(textFileName, false);
+		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+		bufferedWriter.write(contents);
+		bufferedWriter.flush();
+		bufferedWriter.close();
+		fileWriter.close();
+	}
 
 	public static List getContents(InputStream inputStream) throws IOException {
 		ArrayList contents = new ArrayList();
 		InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
 		try {
-			BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+			BufferedReader bufferedReader = new BufferedReader(
+					inputStreamReader);
 			try {
 				String line = bufferedReader.readLine();
 				while (line != null) {
@@ -108,22 +115,25 @@ public class FileUtil {
 		return contents;
 	}
 
+	/**
+	 * Saves the List of Strings to a file with the given filename.
+	 * 
+	 * @param textFileName
+	 *            the pathname of the file to create (or overwrite)
+	 * @param lines
+	 *            the Strings to save as lines in the file
+	 * @throws IOException
+	 *             if an I/O error occurs.
+	 */
+	public static void setContents(String textFileName, List lines)
+			throws IOException {
+		String contents = "";
 
-    /**
-     * Saves the List of Strings to a file with the given filename.
-     * @param textFileName the pathname of the file to create (or overwrite)
-     * @param lines the Strings to save as lines in the file
-     * @throws IOException if an I/O error occurs.
-     */
-    public static void setContents(String textFileName, List lines)
-        throws IOException {
-        String contents = "";
+		for (Iterator i = lines.iterator(); i.hasNext();) {
+			String line = (String) i.next();
+			contents += (line + System.getProperty("line.separator"));
+		}
 
-        for (Iterator i = lines.iterator(); i.hasNext();) {
-            String line = (String) i.next();
-            contents += (line + System.getProperty("line.separator"));
-        }
-
-        setContents(textFileName, contents);
-    }
+		setContents(textFileName, contents);
+	}
 }

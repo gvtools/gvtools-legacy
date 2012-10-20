@@ -44,23 +44,32 @@ import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Events.MoveEvent;
 
-
 /**
- * <p>Interface for all tools that reply for a {@link MoveEvent MoveEvent} produced in the 
- *  associated {@link MapControl MapControl} object, as a consequence of a 2D drag and drop
- *  movement of the mouse.</p>
- *
+ * <p>
+ * Interface for all tools that reply for a {@link MoveEvent MoveEvent} produced
+ * in the associated {@link MapControl MapControl} object, as a consequence of a
+ * 2D drag and drop movement of the mouse.
+ * </p>
+ * 
  * @author Vicente Caballero Navarro
  */
 public interface PanListener extends ToolListener {
 	/**
-	 * <p>Called when user drags the mouse on the view.</p>
-	 * <p>Updates the extent coordinates according to the direction of the movement between
-	 *  the initial and final points of line determined by the move of the mouse.</p>
-	 *
-	 * @param event mouse event information about the initial and final positions of the movement 
-	 *
-	 * @throws BehaviorException will be thrown when fails the process of this tool
+	 * <p>
+	 * Called when user drags the mouse on the view.
+	 * </p>
+	 * <p>
+	 * Updates the extent coordinates according to the direction of the movement
+	 * between the initial and final points of line determined by the move of
+	 * the mouse.
+	 * </p>
+	 * 
+	 * @param event
+	 *            mouse event information about the initial and final positions
+	 *            of the movement
+	 * 
+	 * @throws BehaviorException
+	 *             will be thrown when fails the process of this tool
 	 */
 	public void move(MoveEvent event) throws BehaviorException;
 }

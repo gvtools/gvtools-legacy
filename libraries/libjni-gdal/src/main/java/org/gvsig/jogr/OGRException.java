@@ -23,38 +23,42 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
- 
+
 package org.gvsig.jogr;
 
 /**
- * Es generada cuando los códigos de retorno de las funciones de OGR significan que algo ha ido mal.
+ * Es generada cuando los códigos de retorno de las funciones de OGR significan
+ * que algo ha ido mal.
  * 
- * @author Nacho Brodin <brodin_ign@gva.es>.<BR> Equipo de desarrollo gvSIG.<BR> http://www.gvsig.gva.es
+ * @author Nacho Brodin <brodin_ign@gva.es>.<BR>
+ *         Equipo de desarrollo gvSIG.<BR>
+ *         http://www.gvsig.gva.es
  * @version 0.0
  * @link http://www.gvsig.gva.es
  */
 
+public class OGRException extends Exception {
 
-public class OGRException extends Exception{
-
-	OGRException(String msg){
+	OGRException(String msg) {
 		super(msg);
 	}
-	
+
 	public OGRException(int n, String msg, OGRSpatialReference ORGSpace) {
-		if(n == 1)
-			System.out.println(msg+"Insuficientes parametros para construir el dato");
-		else if(n == 2)
-			System.out.println(msg+"Insuficiente memoria para construir el dato");
-		else if(n == 3)
-			System.out.println(msg+"Geometria no soportada");
-		else if(n == 4)
-			System.out.println(msg+"Operacion no soportada");
-		else if(n == 5)
-			System.out.println(msg+"Algun dato esta corrupto");
-		else if(n == 6)
-			System.out.println(msg+"Fallo");
-		else if(n == 7)
-			System.out.println(msg+"CRS no soportado");		
+		if (n == 1)
+			System.out.println(msg
+					+ "Insuficientes parametros para construir el dato");
+		else if (n == 2)
+			System.out.println(msg
+					+ "Insuficiente memoria para construir el dato");
+		else if (n == 3)
+			System.out.println(msg + "Geometria no soportada");
+		else if (n == 4)
+			System.out.println(msg + "Operacion no soportada");
+		else if (n == 5)
+			System.out.println(msg + "Algun dato esta corrupto");
+		else if (n == 6)
+			System.out.println(msg + "Fallo");
+		else if (n == 7)
+			System.out.println(msg + "CRS no soportado");
 	}
 }

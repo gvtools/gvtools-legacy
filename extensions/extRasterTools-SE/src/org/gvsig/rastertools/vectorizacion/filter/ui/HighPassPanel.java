@@ -35,69 +35,77 @@ import org.gvsig.raster.util.RasterToolsUtil;
  * Panel con los controles del filtro de paso alto.
  * 
  * 09/06/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class HighPassPanel extends BasePanel implements ActionListener {
-	private static final long         serialVersionUID  = 1L;
-	private JCheckBox                 active            = null;
-	private CheckSliderTextContainer  radio             = null;
-	private boolean                   enabled           = true;
-	
+	private static final long serialVersionUID = 1L;
+	private JCheckBox active = null;
+	private CheckSliderTextContainer radio = null;
+	private boolean enabled = true;
+
 	/**
-	 *Inicializa componentes gráficos y traduce
+	 * Inicializa componentes gráficos y traduce
 	 */
 	public HighPassPanel() {
 		init();
 		translate();
 	}
-	
+
 	/**
 	 * Inicialización de los componentes gráficos
 	 */
 	protected void init() {
 		setLayout(new GridBagLayout());
-		setBorder(BorderFactory.createTitledBorder(null, RasterToolsUtil.getText(this, "highpassfilter"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+		setBorder(BorderFactory.createTitledBorder(null,
+				RasterToolsUtil.getText(this, "highpassfilter"),
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.weightx = 1;
 		gbc.insets = new Insets(0, 0, 0, 0);
-		
+
 		add(getActive(), gbc);
-		
+
 		gbc.gridy = 1;
 		add(getRadio(), gbc);
-		
+
 		getActive().addActionListener(this);
 		setComponentEnabled(false);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#translate()
 	 */
 	protected void translate() {
-		
+
 	}
-	
+
 	/**
-	 * Obtiene el check de activo 
+	 * Obtiene el check de activo
+	 * 
 	 * @return JCheckBox
 	 */
 	public JCheckBox getActive() {
-		if(active == null) {
+		if (active == null) {
 			active = new JCheckBox();
 			active.setSelected(false);
 		}
 		return active;
 	}
-		
+
 	/**
 	 * Obtiene la barra deslizadora con el radio del filtro de paso alto
+	 * 
 	 * @return CheckSliderTextContainer
 	 */
 	public CheckSliderTextContainer getRadio() {
-		if(radio == null)
-			radio = new CheckSliderTextContainer(0, 255, 127, false, RasterToolsUtil.getText(this, "radio"), true, false, false);
+		if (radio == null)
+			radio = new CheckSliderTextContainer(0, 255, 127, false,
+					RasterToolsUtil.getText(this, "radio"), true, false, false);
 		return radio;
 	}
 
@@ -109,13 +117,14 @@ public class HighPassPanel extends BasePanel implements ActionListener {
 	}
 
 	/**
-	 * Activa o desactiva el componente. El estado de activación y desactivación de un
-	 * componente depende de los controles que contiene. En este caso activa o desactiva
-	 * la barra de incremento.
+	 * Activa o desactiva el componente. El estado de activación y desactivación
+	 * de un componente depende de los controles que contiene. En este caso
+	 * activa o desactiva la barra de incremento.
+	 * 
 	 * @param enabled
 	 */
 	public void setComponentEnabled(boolean enabled) {
-		if(getActive().isSelected() != enabled)
+		if (getActive().isSelected() != enabled)
 			getActive().setSelected(enabled);
 		getRadio().setControlEnabled(enabled);
 		this.enabled = !enabled;

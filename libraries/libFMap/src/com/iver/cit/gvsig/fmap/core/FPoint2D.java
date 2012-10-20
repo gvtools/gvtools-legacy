@@ -52,10 +52,9 @@ import org.opengis.referencing.operation.MathTransform;
 
 import com.iver.utiles.XMLEntity;
 
-
 /**
  * Punto 2D.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FPoint2D implements FShape {
@@ -63,34 +62,42 @@ public class FPoint2D implements FShape {
 
 	/**
 	 * Crea un nuevo Point2D.
-	 *
-	 * @param x Coordenada x del punto.
-	 * @param y Coordenada y del punto.
+	 * 
+	 * @param x
+	 *            Coordenada x del punto.
+	 * @param y
+	 *            Coordenada y del punto.
 	 */
 	public FPoint2D(double x, double y) {
 		p = new Point2D.Double(x, y);
 	}
-	public FPoint2D(){
+
+	public FPoint2D() {
 
 	}
-    public FPoint2D(Point2D p) {
-        this.p = p;
-    }
 
-	private void setPoint(double x, double y){
+	public FPoint2D(Point2D p) {
+		this.p = p;
+	}
+
+	private void setPoint(double x, double y) {
 		p = new Point2D.Double(x, y);
 	}
+
 	/**
 	 * Aplica la transformación de la matriz de transformación que se pasa como
 	 * parámetro.
-	 *
-	 * @param at Matriz de transformación.
+	 * 
+	 * @param at
+	 *            Matriz de transformación.
 	 */
 	public void transform(AffineTransform at) {
 		at.transform(p, p);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.Shape#contains(double, double)
 	 */
 	public boolean contains(double x, double y) {
@@ -101,14 +108,18 @@ public class FPoint2D implements FShape {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.Shape#contains(double, double, double, double)
 	 */
 	public boolean contains(double x, double y, double w, double h) {
 		return false;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.Shape#intersects(double, double, double, double)
 	 */
 	public boolean intersects(double x, double y, double w, double h) {
@@ -117,7 +128,9 @@ public class FPoint2D implements FShape {
 		return rAux.contains(p.getX(), p.getY());
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.Shape#getBounds()
 	 */
 	public Rectangle getBounds() {
@@ -126,7 +139,7 @@ public class FPoint2D implements FShape {
 
 	/**
 	 * Devuelve la coordenada x del punto.
-	 *
+	 * 
 	 * @return Coordenada x.
 	 */
 	public double getX() {
@@ -135,50 +148,64 @@ public class FPoint2D implements FShape {
 
 	/**
 	 * Devuelve la coordenada y del punto.
-	 *
+	 * 
 	 * @return Coordenada y.
 	 */
 	public double getY() {
 		return p.getY();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.Shape#contains(java.awt.geom.Point2D)
 	 */
 	public boolean contains(Point2D p) {
 		return false;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.Shape#getBounds2D()
 	 */
 	public Rectangle2D getBounds2D() {
-		return new Rectangle2D.Double(p.getX()- 0.01, p.getY() - 0.01, 0.02, 0.02);
+		return new Rectangle2D.Double(p.getX() - 0.01, p.getY() - 0.01, 0.02,
+				0.02);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.Shape#contains(java.awt.geom.Rectangle2D)
 	 */
 	public boolean contains(Rectangle2D r) {
 		return false;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.Shape#intersects(java.awt.geom.Rectangle2D)
 	 */
 	public boolean intersects(Rectangle2D r) {
 		return r.contains(this.p);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.Shape#getPathIterator(java.awt.geom.AffineTransform)
 	 */
 	public PathIterator getPathIterator(AffineTransform at) {
 		return new FPointIterator(p, at);
 	}
 
-	/* (non-Javadoc)
-	 * @see java.awt.Shape#getPathIterator(java.awt.geom.AffineTransform, double)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.awt.Shape#getPathIterator(java.awt.geom.AffineTransform,
+	 * double)
 	 */
 	public PathIterator getPathIterator(AffineTransform at, double flatness) {
 		return new FPointIterator(p, at);
@@ -191,7 +218,9 @@ public class FPoint2D implements FShape {
 		return FShape.POINT;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.FShape#cloneFShape()
 	 */
 	public FShape cloneFShape() {
@@ -207,57 +236,70 @@ public class FPoint2D implements FShape {
 	 * @see com.iver.cit.gvsig.fmap.core.FShape#getXMLEntity()
 	 */
 	public XMLEntity getXMLEntity() {
-		XMLEntity xml=new XMLEntity();
-		xml.putProperty("x",p.getX());
-		xml.putProperty("y",p.getY());
+		XMLEntity xml = new XMLEntity();
+		xml.putProperty("x", p.getX());
+		xml.putProperty("y", p.getY());
 		return xml;
 	}
-	public void setXMLEntity(XMLEntity xml){
-		this.setPoint(xml.getDoubleProperty("x"),xml.getDoubleProperty("y"));//p=new FPoint2D(xml.getDoubleProperty("x"),xml.getDoubleProperty("y"));
+
+	public void setXMLEntity(XMLEntity xml) {
+		this.setPoint(xml.getDoubleProperty("x"), xml.getDoubleProperty("y"));// p=new
+																				// FPoint2D(xml.getDoubleProperty("x"),xml.getDoubleProperty("y"));
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.FShape#getStretchingHandlers()
 	 */
 	public Handler[] getStretchingHandlers() {
 		ArrayList handlers = new ArrayList();
-		handlers.add(new PointHandler(0,p.getX(),p.getY()));
+		handlers.add(new PointHandler(0, p.getX(), p.getY()));
 		return (Handler[]) handlers.toArray(new Handler[0]);
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.FShape#getSelectHandlers()
 	 */
 	public Handler[] getSelectHandlers() {
 		ArrayList handlers = new ArrayList();
-		handlers.add(new PointHandler(0,p.getX(),p.getY()));
+		handlers.add(new PointHandler(0, p.getX(), p.getY()));
 		return (Handler[]) handlers.toArray(new Handler[0]);
 	}
+
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @author Vicente Caballero Navarro
 	 */
-	class PointHandler extends AbstractHandler implements IFinalHandler{
+	class PointHandler extends AbstractHandler implements IFinalHandler {
 		/**
 		 * Crea un nuevo PointHandler.
-		 *
-		 * @param x DOCUMENT ME!
-		 * @param y DOCUMENT ME!
+		 * 
+		 * @param x
+		 *            DOCUMENT ME!
+		 * @param y
+		 *            DOCUMENT ME!
 		 */
-		public PointHandler(int i,double x, double y) {
+		public PointHandler(int i, double x, double y) {
 			point = new Point2D.Double(x, y);
-			index=i;
+			index = i;
 		}
 
 		/**
 		 * DOCUMENT ME!
-		 *
-		 * @param x DOCUMENT ME!
-		 * @param y DOCUMENT ME!
-		 *
+		 * 
+		 * @param x
+		 *            DOCUMENT ME!
+		 * @param y
+		 *            DOCUMENT ME!
+		 * 
 		 * @return DOCUMENT ME!
 		 */
 		public void move(double x, double y) {
-			p.setLocation(p.getX()+x,p.getY()+y);
+			p.setLocation(p.getX() + x, p.getY() + y);
 		}
 
 		/**

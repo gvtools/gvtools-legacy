@@ -38,88 +38,90 @@ import com.vividsolutions.jump.feature.FeatureCollection;
 import com.vividsolutions.jump.feature.FeatureSchema;
 
 /**
- * OpenJUMP's FeatureCollection implementation based in gvSIG's driver architecture.
+ * OpenJUMP's FeatureCollection implementation based in gvSIG's driver
+ * architecture.
  * 
  * Based in OrbisCAD project's work, adapted to work with gvSIG drivers.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class FeatureCollectionAdapter implements FeatureCollection {
 
-    private ReadableVectorial rv;
+	private ReadableVectorial rv;
 
-    public FeatureCollectionAdapter(ReadableVectorial rv) {
-        this.rv = rv;
-    }
-    
-    public FeatureSchema getFeatureSchema() {
-        return new FeatureSchemaAdapter(rv);
-    }
+	public FeatureCollectionAdapter(ReadableVectorial rv) {
+		this.rv = rv;
+	}
 
-    public Envelope getEnvelope() {
-       try {
-    	   return JtsUtil.rectangle2dToEnvelope(rv.getFullExtent());
-       } catch (ExpansionFileReadException e) {
-    	   throw new RuntimeException(e);
-       } catch (ReadDriverException e) {
+	public FeatureSchema getFeatureSchema() {
+		return new FeatureSchemaAdapter(rv);
+	}
+
+	public Envelope getEnvelope() {
+		try {
+			return JtsUtil.rectangle2dToEnvelope(rv.getFullExtent());
+		} catch (ExpansionFileReadException e) {
 			throw new RuntimeException(e);
-       }
-    }
-
-    public int size() {
-        try {
-            return (int) rv.getShapeCount();
-        } catch (ReadDriverException e) {
-        	  throw new RuntimeException(e);
+		} catch (ReadDriverException e) {
+			throw new RuntimeException(e);
 		}
-    }
+	}
 
-    public boolean isEmpty() {
-        // TODO Auto-generated method stub
-        return false;
-    }
+	public int size() {
+		try {
+			return (int) rv.getShapeCount();
+		} catch (ReadDriverException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-    public List getFeatures() {
-        return new FeatureListAdapter(rv);
-    }
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
-    public Iterator iterator() {
-        return new FeatureIterator(rv);
-    }
+	public List getFeatures() {
+		return new FeatureListAdapter(rv);
+	}
 
-    public List query(Envelope envelope) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	public Iterator iterator() {
+		return new FeatureIterator(rv);
+	}
 
-    public void add(Feature feature) {
-        // TODO Auto-generated method stub
-        
-    }
+	public List query(Envelope envelope) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    public void addAll(Collection features) {
-        // TODO Auto-generated method stub
-        
-    }
+	public void add(Feature feature) {
+		// TODO Auto-generated method stub
 
-    public void removeAll(Collection features) {
-        // TODO Auto-generated method stub
-        
-    }
+	}
 
-    public void remove(Feature feature) {
-        // TODO Auto-generated method stub
-        
-    }
+	public void addAll(Collection features) {
+		// TODO Auto-generated method stub
 
-    public void clear() {
-        // TODO Auto-generated method stub
-        
-    }
+	}
 
-    public Collection remove(Envelope env) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	public void removeAll(Collection features) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void remove(Feature feature) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void clear() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public Collection remove(Envelope env) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

@@ -61,10 +61,10 @@ import org.gvsig.xmlschema.som.IXSSimpleContent;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class XSSimpleContent extends XSContentImpl implements IXSSimpleContent{
+public class XSSimpleContent extends XSContentImpl implements IXSSimpleContent {
 
 	public XSSimpleContent(IXSSchema schema) {
-		super(schema);		
+		super(schema);
 	}
 
 }

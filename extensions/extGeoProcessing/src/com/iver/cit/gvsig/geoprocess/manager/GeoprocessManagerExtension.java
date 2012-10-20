@@ -42,38 +42,38 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: GeoprocessManagerExtension.java 24907 2008-11-10 21:36:24Z azabala $
-* $Log$
-* Revision 1.9  2006-09-20 13:40:47  caballero
-* IProjectView
-*
-* Revision 1.8  2006/09/15 10:42:54  caballero
-* extensibilidad de documentos
-*
-* Revision 1.7  2006/09/07 19:02:27  azabala
-* cached Geoprocess Manager, to remember folder status
-*
-* Revision 1.6  2006/09/07 18:54:11  azabala
-* added comments
-*
-* Revision 1.5  2006/08/29 07:56:30  cesar
-* Rename the *View* family of classes to *Window* (ie: SingletonView to SingletonWindow, ViewInfo to WindowInfo, etc)
-*
-* Revision 1.4  2006/08/29 07:13:56  cesar
-* Rename class com.iver.andami.ui.mdiManager.View to com.iver.andami.ui.mdiManager.IWindow
-*
-* Revision 1.3  2006/08/18 08:40:05  jmvivo
-* Actualizado para que el isEnabled tenga en cuenta que las capas esten 'avialable'
-*
-* Revision 1.2  2006/06/27 16:12:38  azabala
-* registration of all core geoprocesses (wizard's)
-*
-* Revision 1.1  2006/06/23 19:03:52  azabala
-* first version in cvs
-*
-*
-*/
+ *
+ * $Id: GeoprocessManagerExtension.java 24907 2008-11-10 21:36:24Z azabala $
+ * $Log$
+ * Revision 1.9  2006-09-20 13:40:47  caballero
+ * IProjectView
+ *
+ * Revision 1.8  2006/09/15 10:42:54  caballero
+ * extensibilidad de documentos
+ *
+ * Revision 1.7  2006/09/07 19:02:27  azabala
+ * cached Geoprocess Manager, to remember folder status
+ *
+ * Revision 1.6  2006/09/07 18:54:11  azabala
+ * added comments
+ *
+ * Revision 1.5  2006/08/29 07:56:30  cesar
+ * Rename the *View* family of classes to *Window* (ie: SingletonView to SingletonWindow, ViewInfo to WindowInfo, etc)
+ *
+ * Revision 1.4  2006/08/29 07:13:56  cesar
+ * Rename class com.iver.andami.ui.mdiManager.View to com.iver.andami.ui.mdiManager.IWindow
+ *
+ * Revision 1.3  2006/08/18 08:40:05  jmvivo
+ * Actualizado para que el isEnabled tenga en cuenta que las capas esten 'avialable'
+ *
+ * Revision 1.2  2006/06/27 16:12:38  azabala
+ * registration of all core geoprocesses (wizard's)
+ *
+ * Revision 1.1  2006/06/23 19:03:52  azabala
+ * first version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.manager;
 
 import com.iver.andami.PluginServices;
@@ -95,16 +95,16 @@ import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
+
 /**
- * This andami extension shows a GUI component (GeoprocessManager)
- * that allows user to launch geoprocesses, and developers to register
- * new geoprocesses in a dynamic linkage manner.
- * <br>
- * In its initialize() method it registers the basis geoprocesses
- * (buffer, clip, etc.)
- *
+ * This andami extension shows a GUI component (GeoprocessManager) that allows
+ * user to launch geoprocesses, and developers to register new geoprocesses in a
+ * dynamic linkage manner. <br>
+ * In its initialize() method it registers the basis geoprocesses (buffer, clip,
+ * etc.)
+ * 
  * @author azabala
- *
+ * 
  */
 public class GeoprocessManagerExtension extends Extension {
 
@@ -112,106 +112,94 @@ public class GeoprocessManagerExtension extends Extension {
 	 * Cached instance of geoprocess manager
 	 */
 	private GeoprocessManager gpManagerDialog = null;
+
 	/**
 	 * Register basis geoprocesses during extension initialization
 	 */
 	public void initialize() {
-		ExtensionPoints extensionPoints =
-			ExtensionPointsSingleton.getInstance();
-		extensionPoints.add("GeoprocessManager",
-				"BUFFER",
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+		extensionPoints.add("GeoprocessManager", "BUFFER",
 				BufferGeoprocessPlugin.class);
-		extensionPoints.add("GeoprocessManager",
-				"CLIP",
+		extensionPoints.add("GeoprocessManager", "CLIP",
 				ClipGeoprocessPlugin.class);
-		extensionPoints.add("GeoprocessManager",
-				"CONVEX HULL",
+		extensionPoints.add("GeoprocessManager", "CONVEX HULL",
 				ConvexHullGeoprocessPlugin.class);
-		extensionPoints.add("GeoprocessManager",
-				"DIFFERENCE",
+		extensionPoints.add("GeoprocessManager", "DIFFERENCE",
 				DifferenceGeoprocessPlugin.class);
-		extensionPoints.add("GeoprocessManager",
-				"DISSOLVE",
+		extensionPoints.add("GeoprocessManager", "DISSOLVE",
 				DissolveGeoprocessPlugin.class);
-		extensionPoints.add("GeoprocessManager",
-				"INTERSECTION",
+		extensionPoints.add("GeoprocessManager", "INTERSECTION",
 				IntersectionGeoprocessPlugin.class);
-		extensionPoints.add("GeoprocessManager",
-				"MERGE",
+		extensionPoints.add("GeoprocessManager", "MERGE",
 				MergeGeoprocessPlugin.class);
-		extensionPoints.add("GeoprocessManager",
-				"SPATIAL JOIN",
+		extensionPoints.add("GeoprocessManager", "SPATIAL JOIN",
 				SpatialJoinGeoprocessPlugin.class);
-		extensionPoints.add("GeoprocessManager",
-				"UNION",
+		extensionPoints.add("GeoprocessManager", "UNION",
 				UnionGeoprocessPlugin.class);
-		
+
 		registerIcons();
 
 	}
-	
-	private void registerIcons(){
+
+	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"gp-manager",
-				this.getClass().getClassLoader().getResource("images/gpmanager.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/gpmanager.png"));
 	}
 
 	public void execute(String actionCommand) {
-		if(actionCommand.equalsIgnoreCase("GEOPROCESSING_MANAGER")){
-			if(gpManagerDialog == null)
+		if (actionCommand.equalsIgnoreCase("GEOPROCESSING_MANAGER")) {
+			if (gpManagerDialog == null)
 				gpManagerDialog = new GeoprocessManager();
-			PluginServices.getMDIManager().
-				addWindow(gpManagerDialog);
+			PluginServices.getMDIManager().addWindow(gpManagerDialog);
 		}
 
 	}
 
 	public boolean isEnabled() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-		.getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (f == null) {
 			return false;
 		}
 		if (f instanceof View) {
 			View vista = (View) f;
 			IProjectView model = vista.getModel();
-			FLayers layers =  model.getMapContext().getLayers();
-			 SingleLayerIterator iterator = 
-			    	new SingleLayerIterator(layers);
-		    while(iterator.hasNext()){
-		    	FLayer layer = iterator.next();
-		    	if(layer instanceof FLyrVect)
-		    		return true;
-		    }//while
-		    return false;
+			FLayers layers = model.getMapContext().getLayers();
+			SingleLayerIterator iterator = new SingleLayerIterator(layers);
+			while (iterator.hasNext()) {
+				FLayer layer = iterator.next();
+				if (layer instanceof FLyrVect)
+					return true;
+			}// while
+			return false;
 		}
 		return false;
 	}
 
 	public boolean isVisible() {
-		//Meter en un geoprocessutil para todas las extensiones
-		//de geoprocessing
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-		 .getActiveWindow();
+		// Meter en un geoprocessutil para todas las extensiones
+		// de geoprocessing
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (f == null) {
-		    return false;
+			return false;
 		}
 		if (f instanceof View) {
-		    View vista = (View) f;
-		    IProjectView model = vista.getModel();
-		    FLayers layers =  model.getMapContext().getLayers();
-		    SingleLayerIterator iterator = 
-		    	new SingleLayerIterator(layers);
-		    while(iterator.hasNext()){
-		    	FLayer layer = iterator.next();
-		    	if(layer instanceof FLyrVect)
-		    		return true;
-		    }//while
-		    return false;
-		}//if
+			View vista = (View) f;
+			IProjectView model = vista.getModel();
+			FLayers layers = model.getMapContext().getLayers();
+			SingleLayerIterator iterator = new SingleLayerIterator(layers);
+			while (iterator.hasNext()) {
+				FLayer layer = iterator.next();
+				if (layer instanceof FLyrVect)
+					return true;
+			}// while
+			return false;
+		}// if
 		return false;
 	}
 
 }
-

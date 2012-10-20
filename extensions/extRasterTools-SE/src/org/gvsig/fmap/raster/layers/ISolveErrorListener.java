@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
@@ -47,53 +46,57 @@ import java.io.File;
 import com.hardcode.driverManager.Driver;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 
-
 /**
  * Interface to solve one error al layer
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public interface ISolveErrorListener {
-    /**
-     * Returns the class to string of the exception to solve.
-     *
-     * @return Class exception
-     */
-    public String getException();
+	/**
+	 * Returns the class to string of the exception to solve.
+	 * 
+	 * @return Class exception
+	 */
+	public String getException();
 
-    /**
-     * Solves the error and return the layer solved.
-     *
-     * @param layer Layer with error
-     * @param driver Driver of layer.
-     *
-     * @return Layer solved.
-     */
-    public FLayer solve(FLayer layer, Driver driver);
+	/**
+	 * Solves the error and return the layer solved.
+	 * 
+	 * @param layer
+	 *            Layer with error
+	 * @param driver
+	 *            Driver of layer.
+	 * 
+	 * @return Layer solved.
+	 */
+	public FLayer solve(FLayer layer, Driver driver);
 
-    /**
-     * Returns true if the layer has been solved.
-     *
-     * @return True if the layer has been solved.
-     */
-    public boolean isSolved();
-    
-    /**
-     * Creates a new layer
-     * @param file
-     * @return
-     */
-    public void createLayer(File file);
-    
-    /**
-     * Gets the old path to the file
-     * @return String
-     */
-    public String getPath();
-    
-    /**
-     * Gets the layer name
-     * @return
-     */
-    public String getLayerName();
+	/**
+	 * Returns true if the layer has been solved.
+	 * 
+	 * @return True if the layer has been solved.
+	 */
+	public boolean isSolved();
+
+	/**
+	 * Creates a new layer
+	 * 
+	 * @param file
+	 * @return
+	 */
+	public void createLayer(File file);
+
+	/**
+	 * Gets the old path to the file
+	 * 
+	 * @return String
+	 */
+	public String getPath();
+
+	/**
+	 * Gets the layer name
+	 * 
+	 * @return
+	 */
+	public String getLayerName();
 }

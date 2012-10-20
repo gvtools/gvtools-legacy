@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
@@ -52,17 +51,12 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 
 import javax.print.attribute.PrintRequestAttributeSet;
 
 import org.cresques.cts.ProjectionUtils;
-import org.gvsig.tools.file.PathGenerator;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 
-import com.hardcode.driverManager.Driver;
-import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.gdbms.driver.exceptions.InitializeDriverException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.driver.DriverException;
@@ -91,7 +85,6 @@ import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.ITextSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.SimpleTextSymbol;
 import com.iver.cit.gvsig.fmap.drivers.BoundedShapes;
-import com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver;
 import com.iver.cit.gvsig.fmap.edition.Annotation_EditableAdapter;
 import com.iver.cit.gvsig.fmap.edition.EditionEvent;
 import com.iver.cit.gvsig.fmap.edition.VectorialEditableAdapter;
@@ -104,10 +97,9 @@ import com.iver.cit.gvsig.fmap.spatialindex.QuadtreeJts;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.threads.Cancellable;
 
-
 /**
  * Annotation's layer.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class Annotation_Layer extends FLyrVect {
@@ -115,8 +107,10 @@ public class Annotation_Layer extends FLyrVect {
 	private int indexEditing = -1;
 	private Annotation_Legend aLegend;
 	private Strategy strategy = null;
-	private IMarkerSymbol symbolPoint = SymbologyFactory.createDefaultMarkerSymbol();
-	private final static AffineTransform ati=new AffineTransform();
+	private IMarkerSymbol symbolPoint = SymbologyFactory
+			.createDefaultMarkerSymbol();
+	private final static AffineTransform ati = new AffineTransform();
+
 	/**
 	 * Crea un nuevo FLyrAnnotation.
 	 */
@@ -126,14 +120,16 @@ public class Annotation_Layer extends FLyrVect {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param mapping DOCUMENT ME!
+	 * 
+	 * @param mapping
+	 *            DOCUMENT ME!
 	 * @throws ReadDriverException
 	 * @throws LegendLayerException
 	 * @throws DriverException
 	 * @throws FieldNotFoundException
 	 */
-	public void setMapping(Annotation_Mapping mapping) throws LegendLayerException, ReadDriverException {
+	public void setMapping(Annotation_Mapping mapping)
+			throws LegendLayerException, ReadDriverException {
 		this.mapping = mapping;
 		aLegend = new Annotation_Legend();
 		setLegend();
@@ -141,7 +137,7 @@ public class Annotation_Layer extends FLyrVect {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public Annotation_Mapping getAnnotatonMapping() {
@@ -155,7 +151,8 @@ public class Annotation_Layer extends FLyrVect {
 	 *      java.awt.Graphics2D, ISymbol)
 	 */
 	public void draw(BufferedImage image, Graphics2D g, ViewPort viewPort,
-			Cancellable cancel, double scale) throws InitializeDriverException, ReadDriverException {
+			Cancellable cancel, double scale) throws InitializeDriverException,
+			ReadDriverException {
 		if (isWithinScale(scale)) {
 			// Las que solo tienen etiquetado sin pintar el shape,
 			// no pasamos por ellas
@@ -168,7 +165,7 @@ public class Annotation_Layer extends FLyrVect {
 				g.setColor(Color.black);
 				ReadableVectorial adapter = getSource();
 				adapter.start();
-				drawAnnotations(image,g,viewPort,cancel,null);
+				drawAnnotations(image, g, viewPort, cancel, null);
 				adapter.stop();
 			}
 
@@ -177,12 +174,15 @@ public class Annotation_Layer extends FLyrVect {
 			}
 		}
 	}
-	private void drawAnnotations(BufferedImage image, Graphics2D g, ViewPort viewPort,
-			Cancellable cancel,PrintRequestAttributeSet properties) {
-		BufferedImage bi=new BufferedImage(viewPort.getImageWidth(),viewPort.getImageHeight(),BufferedImage.TYPE_INT_ARGB);
-		Graphics2D gBi=(Graphics2D)bi.getGraphics();
-		Point2D offset=viewPort.getOffset();
-		gBi.translate(-offset.getX(),-offset.getY());
+
+	private void drawAnnotations(BufferedImage image, Graphics2D g,
+			ViewPort viewPort, Cancellable cancel,
+			PrintRequestAttributeSet properties) {
+		BufferedImage bi = new BufferedImage(viewPort.getImageWidth(),
+				viewPort.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
+		Graphics2D gBi = (Graphics2D) bi.getGraphics();
+		Point2D offset = viewPort.getOffset();
+		gBi.translate(-offset.getX(), -offset.getY());
 		Annotation_Legend l = (Annotation_Legend) getLegend();
 		ITextSymbol sym = (ITextSymbol) l.getDefaultSymbol();
 
@@ -220,10 +220,11 @@ public class Annotation_Layer extends FLyrVect {
 				if (idHeightField != -1) {
 					// text size is defined in the table
 					try {
-						size = (float)(((NumericValue) vv[idHeightField]).doubleValue());
+						size = (float) (((NumericValue) vv[idHeightField])
+								.doubleValue());
 					} catch (ClassCastException ccEx) {
-						if (!NullValue.class.equals(
-								vv[idHeightField].getClass())) {
+						if (!NullValue.class.equals(vv[idHeightField]
+								.getClass())) {
 						}
 						continue;
 					}
@@ -239,8 +240,10 @@ public class Annotation_Layer extends FLyrVect {
 
 				if (idRotationField != -1) {
 					// text rotation is defined in the table
-					rotation = ((NumericValue) vv[idRotationField]).doubleValue();
-					((SimpleTextSymbol)sym).setRotation(Math.toRadians(rotation));
+					rotation = ((NumericValue) vv[idRotationField])
+							.doubleValue();
+					((SimpleTextSymbol) sym).setRotation(Math
+							.toRadians(rotation));
 				}
 
 				if (idFontColor != -1) {
@@ -273,103 +276,122 @@ public class Annotation_Layer extends FLyrVect {
 					geom.reProject(trans);
 				}
 				geom.transform(viewPort.getAffineTransform());
-				Shape shape=geom.getInternalShape();
-				FPoint2D fpPixels=null;
+				Shape shape = geom.getInternalShape();
+				FPoint2D fpPixels = null;
 				if (!(shape instanceof FPoint2D)) {
-					Rectangle2D rP=shape.getBounds2D();
-					fpPixels=new FPoint2D(rP.getX(),rP.getY());
-				}else {
-					fpPixels=(FPoint2D)shape;
+					Rectangle2D rP = shape.getBounds2D();
+					fpPixels = new FPoint2D(rP.getX(), rP.getY());
+				} else {
+					fpPixels = (FPoint2D) shape;
 				}
-				int unit=-1;
+				int unit = -1;
 
-				unit=l.getUnits();
-				boolean draw=false;
-				Rectangle2D r=getTextWrappingGeometryInPixels(unit,size,vv[idTextField].toString(),rotation,fontName, fontStyle,i,viewPort,geom).getBounds2D();
-				Rectangle2D rPixels=new Rectangle2D.Double(r.getMinX(),r.getMinY(),r.getWidth(),r.getHeight());
+				unit = l.getUnits();
+				boolean draw = false;
+				Rectangle2D r = getTextWrappingGeometryInPixels(unit, size,
+						vv[idTextField].toString(), rotation, fontName,
+						fontStyle, i, viewPort, geom).getBounds2D();
+				Rectangle2D rPixels = new Rectangle2D.Double(r.getMinX(),
+						r.getMinY(), r.getWidth(), r.getHeight());
 
-				Point2D p=new Point2D.Double(fpPixels.getX(),fpPixels.getY());
+				Point2D p = new Point2D.Double(fpPixels.getX(), fpPixels.getY());
 
-
-				if (!isEditing() && l.isAvoidOverLapping()){
-					p=getPoint(bi,rPixels,l.isDelOverLapping(), offset);
-					if (p!=null){
-						draw=true;
+				if (!isEditing() && l.isAvoidOverLapping()) {
+					p = getPoint(bi, rPixels, l.isDelOverLapping(), offset);
+					if (p != null) {
+						draw = true;
 					}
-				}else{
-					if (!isEditing() && l.isDelOverLapping()){
-						if (isOverlapping(bi,rPixels, offset)){
-							draw=true;
+				} else {
+					if (!isEditing() && l.isDelOverLapping()) {
+						if (isOverlapping(bi, rPixels, offset)) {
+							draw = true;
 						}
-					}else{
-						draw=true;
+					} else {
+						draw = true;
 					}
 				}
 				if (l.isPointVisible()) {
-					symbolPoint.draw(gBi,
-							ati,
-							fpPixels, cancel);
+					symbolPoint.draw(gBi, ati, fpPixels, cancel);
 				}
 
-				if (draw){
-					//Si el tamaño de la fuente está en unidades de mapa.
-					if (unit!=-1) {
-						((SimpleTextSymbol)l.getDefaultSymbol()).setFontSize(getTextHeightInPixels(unit, size, viewPort));
+				if (draw) {
+					// Si el tamaño de la fuente está en unidades de mapa.
+					if (unit != -1) {
+						((SimpleTextSymbol) l.getDefaultSymbol())
+								.setFontSize(getTextHeightInPixels(unit, size,
+										viewPort));
 					}
-					//Como ya hemos cambiado el tamaño a la fuente adaptándolo a píxels pasamos units = -1 ?
-					drawAnnotation(gBi,-1,this,l, p, vv[idTextField].toString(),viewPort,properties);
+					// Como ya hemos cambiado el tamaño a la fuente adaptándolo
+					// a píxels pasamos units = -1 ?
+					drawAnnotation(gBi, -1, this, l, p,
+							vv[idTextField].toString(), viewPort, properties);
 				}
 			}
-			gBi.translate(offset.getX(),offset.getY());
-			g.drawImage(bi,(int)offset.getX(),(int)offset.getY(),null);
-			System.err.println(System.currentTimeMillis()-t1+"millis");
+			gBi.translate(offset.getX(), offset.getY());
+			g.drawImage(bi, (int) offset.getX(), (int) offset.getY(), null);
+			System.err.println(System.currentTimeMillis() - t1 + "millis");
 			recordSet.stop();
 		} catch (Exception e) {
-			NotificationManager.addError(e); // TODO esto no puede estar aquí, pertenece a una capa de abtracción superior
+			NotificationManager.addError(e); // TODO esto no puede estar aquí,
+												// pertenece a una capa de
+												// abtracción superior
 		}
 	}
-	private Point2D getPoint(BufferedImage bi, Rectangle2D rec, boolean b, Point2D offset) {
-		Rectangle2D r=new Rectangle2D.Double(rec.getMinX(),rec.getMaxY(),rec.getWidth(),rec.getHeight());
-		if (isOverlapping(bi,r, offset)){
-			return new Point2D.Double(r.getX(),r.getY());
+
+	private Point2D getPoint(BufferedImage bi, Rectangle2D rec, boolean b,
+			Point2D offset) {
+		Rectangle2D r = new Rectangle2D.Double(rec.getMinX(), rec.getMaxY(),
+				rec.getWidth(), rec.getHeight());
+		if (isOverlapping(bi, r, offset)) {
+			return new Point2D.Double(r.getX(), r.getY());
 		}
-		r.setFrame(rec.getMinX(),rec.getMinY(),rec.getWidth(),rec.getHeight());
-		if (isOverlapping(bi,r, offset)){
-			return new Point2D.Double(r.getX(),r.getY());
+		r.setFrame(rec.getMinX(), rec.getMinY(), rec.getWidth(),
+				rec.getHeight());
+		if (isOverlapping(bi, r, offset)) {
+			return new Point2D.Double(r.getX(), r.getY());
 		}
-		r.setFrame(rec.getMinX()-rec.getWidth(),rec.getMaxY(),rec.getWidth(),rec.getHeight());
-		if (isOverlapping(bi,r, offset)){
-			return new Point2D.Double(r.getX(),r.getY());
+		r.setFrame(rec.getMinX() - rec.getWidth(), rec.getMaxY(),
+				rec.getWidth(), rec.getHeight());
+		if (isOverlapping(bi, r, offset)) {
+			return new Point2D.Double(r.getX(), r.getY());
 		}
-		r.setFrame(rec.getMinX()-rec.getWidth(),rec.getMinY(),rec.getWidth(),rec.getHeight());
-		if (isOverlapping(bi,r, offset)){
-			return new Point2D.Double(r.getX(),r.getY());
+		r.setFrame(rec.getMinX() - rec.getWidth(), rec.getMinY(),
+				rec.getWidth(), rec.getHeight());
+		if (isOverlapping(bi, r, offset)) {
+			return new Point2D.Double(r.getX(), r.getY());
 		}
-		r.setFrame(rec.getMinX()-rec.getWidth()/2,rec.getMaxY(),rec.getWidth(),rec.getHeight());
-		if (isOverlapping(bi,r, offset)){
-			return new Point2D.Double(r.getX(),r.getY());
+		r.setFrame(rec.getMinX() - rec.getWidth() / 2, rec.getMaxY(),
+				rec.getWidth(), rec.getHeight());
+		if (isOverlapping(bi, r, offset)) {
+			return new Point2D.Double(r.getX(), r.getY());
 		}
-		r.setFrame(rec.getMinX()-rec.getWidth()/2,rec.getMinY(),rec.getWidth(),rec.getHeight());
-		if (isOverlapping(bi,r, offset)){
-			return new Point2D.Double(r.getX(),r.getY());
+		r.setFrame(rec.getMinX() - rec.getWidth() / 2, rec.getMinY(),
+				rec.getWidth(), rec.getHeight());
+		if (isOverlapping(bi, r, offset)) {
+			return new Point2D.Double(r.getX(), r.getY());
 		}
-		r.setFrame(rec.getMinX(),(rec.getMaxY()+rec.getMinY())/2,rec.getWidth(),rec.getHeight());
-		if (isOverlapping(bi,r, offset)){
-			return new Point2D.Double(r.getX(),r.getY());
+		r.setFrame(rec.getMinX(), (rec.getMaxY() + rec.getMinY()) / 2,
+				rec.getWidth(), rec.getHeight());
+		if (isOverlapping(bi, r, offset)) {
+			return new Point2D.Double(r.getX(), r.getY());
 		}
-		if (!b){
-			return new Point2D.Double(rec.getMinX(),rec.getMaxY());
+		if (!b) {
+			return new Point2D.Double(rec.getMinX(), rec.getMaxY());
 		} else {
 			return null;
 		}
 	}
 
-	private boolean isOverlapping(BufferedImage bi, Rectangle2D rPixels, Point2D offset) {
-		for (int i=(int)(rPixels.getMinX()-offset.getX());i<rPixels.getMaxX()-offset.getX();i++){
-			for (int j=(int)(rPixels.getMinY()-offset.getY());j<rPixels.getMaxY()-offset.getY();j++){
-				if (i<0 || j<0 || bi.getWidth()<i+1 || bi.getHeight()<j+1)
+	private boolean isOverlapping(BufferedImage bi, Rectangle2D rPixels,
+			Point2D offset) {
+		for (int i = (int) (rPixels.getMinX() - offset.getX()); i < rPixels
+				.getMaxX() - offset.getX(); i++) {
+			for (int j = (int) (rPixels.getMinY() - offset.getY()); j < rPixels
+					.getMaxY() - offset.getY(); j++) {
+				if (i < 0 || j < 0 || bi.getWidth() < i + 1
+						|| bi.getHeight() < j + 1)
 					continue;
-				if (bi.getRGB(i,j)!=0){
+				if (bi.getRGB(i, j) != 0) {
 					return false;
 				}
 			}
@@ -384,7 +406,7 @@ public class Annotation_Layer extends FLyrVect {
 	 * @see com.iver.cit.gvsig.fmap.layers.LayerOperations#getFullExtent()
 	 */
 	public Rectangle2D getFullExtent() throws InitializeDriverException,
-	ReadDriverException, ExpansionFileReadException {
+			ReadDriverException, ExpansionFileReadException {
 		Rectangle2D rAux;
 		getSource().start();
 		rAux = getSource().getFullExtent();
@@ -412,18 +434,21 @@ public class Annotation_Layer extends FLyrVect {
 	 *      com.iver.utiles.swing.threads.Cancellable)
 	 */
 	public void print(Graphics2D g, ViewPort viewPort, Cancellable cancel,
-			double scale, PrintRequestAttributeSet properties) throws ReadDriverException{
+			double scale, PrintRequestAttributeSet properties)
+			throws ReadDriverException {
 		if (isVisible() && isWithinScale(scale)) {
-			drawAnnotations(null,g, viewPort, cancel, properties);
+			drawAnnotations(null, g, viewPort, cancel, properties);
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.layers.layerOperations.RandomVectorialData#queryByRect(java.awt.geom.Rectangle2D)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.layers.layerOperations.RandomVectorialData#
+	 * queryByRect(java.awt.geom.Rectangle2D)
 	 */
-	public FBitSet queryByRect(Rectangle2D rect) throws ReadDriverException, VisitorException {
+	public FBitSet queryByRect(Rectangle2D rect) throws ReadDriverException,
+			VisitorException {
 		Strategy s = StrategyManager.getStrategy(this);
 
 		return s.queryByRect(rect);
@@ -431,17 +456,21 @@ public class Annotation_Layer extends FLyrVect {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param p DOCUMENT ME!
-	 * @param tolerance DOCUMENT ME!
-	 *
+	 * 
+	 * @param p
+	 *            DOCUMENT ME!
+	 * @param tolerance
+	 *            DOCUMENT ME!
+	 * 
 	 * @return DOCUMENT ME!
 	 * @throws VisitorException
 	 * @throws ReadDriverException
-	 *
-	 * @throws DriverException DOCUMENT ME!
+	 * 
+	 * @throws DriverException
+	 *             DOCUMENT ME!
 	 */
-	public FBitSet queryByPoint(Point2D p, double tolerance) throws ReadDriverException, VisitorException {
+	public FBitSet queryByPoint(Point2D p, double tolerance)
+			throws ReadDriverException, VisitorException {
 		Strategy s = StrategyManager.getStrategy(this);
 
 		return s.queryByPoint(p, tolerance);
@@ -449,18 +478,23 @@ public class Annotation_Layer extends FLyrVect {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param g DOCUMENT ME!
-	 * @param relationship DOCUMENT ME!
-	 *
+	 * 
+	 * @param g
+	 *            DOCUMENT ME!
+	 * @param relationship
+	 *            DOCUMENT ME!
+	 * 
 	 * @return DOCUMENT ME!
 	 * @throws VisitorException
 	 * @throws ReadDriverException
-	 *
-	 * @throws DriverException DOCUMENT ME!
-	 * @throws VisitException DOCUMENT ME!
+	 * 
+	 * @throws DriverException
+	 *             DOCUMENT ME!
+	 * @throws VisitException
+	 *             DOCUMENT ME!
 	 */
-	public FBitSet queryByShape(IGeometry g, int relationship) throws ReadDriverException, VisitorException {
+	public FBitSet queryByShape(IGeometry g, int relationship)
+			throws ReadDriverException, VisitorException {
 		Strategy s = StrategyManager.getStrategy(this);
 
 		return s.queryByShape(g, relationship);
@@ -468,11 +502,11 @@ public class Annotation_Layer extends FLyrVect {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
-	 *
+	 * 
 	 * @throws XMLException
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.FLayer#getProperties()
 	 */
 	public XMLEntity getXMLEntity() throws XMLException {
@@ -485,41 +519,43 @@ public class Annotation_Layer extends FLyrVect {
 	 */
 	public void setXMLEntity(XMLEntity xml) throws XMLException {
 		throw new RuntimeException("Not supported");
-//		CoordinateReferenceSystem crs = null;
-//
-//		if (xml.contains("proj")) {
-//			crs = ProjectionUtils.getCRS(xml.getStringProperty("proj"));
-//		}
-//
-//		if (xml.contains("file")) {
-//			Driver d;
-//
-//			try {
-//				d = LayerFactory.getDM().getDriver(xml.getStringProperty(
-//						"driverName"));
-//			} catch (DriverLoadException e1) {
-//				throw new XMLException(e1);
-//			}
-//
-//			FLyrVect lv = (FLyrVect) LayerFactory.createLayer(xml.getName(),
-//					(VectorialFileDriver) d,
-//					new File(PathGenerator.getInstance().getAbsolutePath(xml.getStringProperty("file"))), crs);
-//
-//			try {
-//				this.setSource(lv.getSource());
-//				this.setRecordset(lv.getRecordset());
-//				this.setCrs(lv.getCrs());
-//				this.setLegend((IVectorLegend) lv.getLegend());
-//
-//
-//				Annotation_Mapping.addAnnotationMapping(this);
-//			} catch (ReadDriverException e) {
-//				throw new XMLException(e);
-//			} catch (LegendLayerException e) {
-//				throw new XMLException(e);
-//			}
-//		}
-//		super.setXMLEntity(xml);
+		// CoordinateReferenceSystem crs = null;
+		//
+		// if (xml.contains("proj")) {
+		// crs = ProjectionUtils.getCRS(xml.getStringProperty("proj"));
+		// }
+		//
+		// if (xml.contains("file")) {
+		// Driver d;
+		//
+		// try {
+		// d = LayerFactory.getDM().getDriver(xml.getStringProperty(
+		// "driverName"));
+		// } catch (DriverLoadException e1) {
+		// throw new XMLException(e1);
+		// }
+		//
+		// FLyrVect lv = (FLyrVect) LayerFactory.createLayer(xml.getName(),
+		// (VectorialFileDriver) d,
+		// new
+		// File(PathGenerator.getInstance().getAbsolutePath(xml.getStringProperty("file"))),
+		// crs);
+		//
+		// try {
+		// this.setSource(lv.getSource());
+		// this.setRecordset(lv.getRecordset());
+		// this.setCrs(lv.getCrs());
+		// this.setLegend((IVectorLegend) lv.getLegend());
+		//
+		//
+		// Annotation_Mapping.addAnnotationMapping(this);
+		// } catch (ReadDriverException e) {
+		// throw new XMLException(e);
+		// } catch (LegendLayerException e) {
+		// throw new XMLException(e);
+		// }
+		// }
+		// super.setXMLEntity(xml);
 	}
 
 	public Value getSymbolKey(int i) throws ReadDriverException {
@@ -534,7 +570,8 @@ public class Annotation_Layer extends FLyrVect {
 		}
 
 		if (mapping.getColumnTypeFont() != -1) {
-			Value valTypeFont = ds.getFieldValue(i, mapping.getColumnTypeFont());
+			Value valTypeFont = ds
+					.getFieldValue(i, mapping.getColumnTypeFont());
 			t = t.concat(valTypeFont.toString());
 		}
 
@@ -551,10 +588,11 @@ public class Annotation_Layer extends FLyrVect {
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.layers.layerOperations.RandomVectorialData#createIndex()
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.layers.layerOperations.RandomVectorialData#
+	 * createIndex()
 	 */
-	public void createSpatialIndex()  {
+	public void createSpatialIndex() {
 		// FJP: ESTO HABRÁ QUE CAMBIARLO. PARA LAS CAPAS SECUENCIALES, TENDREMOS
 		// QUE ACCEDER CON UN WHILE NEXT. (O mejorar lo de los FeatureVisitor
 		// para que acepten recorrer sin geometria, solo con rectangulos.
@@ -591,17 +629,19 @@ public class Annotation_Layer extends FLyrVect {
 
 			va.stop();
 		} catch (ExpansionFileReadException e) {
-			NotificationManager.addError(this.getName(),e);
+			NotificationManager.addError(this.getName(), e);
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(this.getName(),e);
+			NotificationManager.addError(this.getName(), e);
 		}
 	}
 
 	/**
 	 * DOCUMENT ME!
+	 * 
 	 * @throws ReadDriverException
-	 *
-	 * @throws DriverException DOCUMENT ME!
+	 * 
+	 * @throws DriverException
+	 *             DOCUMENT ME!
 	 */
 	public void setSelectedEditing() throws ReadDriverException {
 		FBitSet bitSet = getRecordset().getSelection();
@@ -619,7 +659,7 @@ public class Annotation_Layer extends FLyrVect {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public int getInEdition() {
@@ -628,23 +668,24 @@ public class Annotation_Layer extends FLyrVect {
 
 	protected void setLegend() throws ReadDriverException, LegendLayerException {
 		getSource().getRecordset().start();
-		if (mapping.getColumnText()!=-1) {
+		if (mapping.getColumnText() != -1) {
 			try {
-				aLegend.setFieldName(getSource().getRecordset().getFieldName(mapping.getColumnText()));
+				aLegend.setFieldName(getSource().getRecordset().getFieldName(
+						mapping.getColumnText()));
 				setLegend(aLegend);
 				getSource().getRecordset().stop();
 				return;
-			}
-			catch (IndexOutOfBoundsException ex) {
+			} catch (IndexOutOfBoundsException ex) {
 				// if mapping is -1, don't apply the legend
 			}
 		}
-		throw new ReadDriverException(getSource().getDriver().getName(), new RuntimeException("This does not seem an annotation layer"));
+		throw new ReadDriverException(getSource().getDriver().getName(),
+				new RuntimeException("This does not seem an annotation layer"));
 	}
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public Strategy getStrategy() {
@@ -653,58 +694,68 @@ public class Annotation_Layer extends FLyrVect {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param b DOCUMENT ME!
+	 * 
+	 * @param b
+	 *            DOCUMENT ME!
 	 * @throws StartEditionLayerException
-	 *
-	 * @throws EditionException DOCUMENT ME!
+	 * 
+	 * @throws EditionException
+	 *             DOCUMENT ME!
 	 */
 	public void setEditing(boolean b) throws StartEditionLayerException {
 		super.setEditing(b);
 		try {
 			if (b) {
-				Annotation_EditableAdapter aea = new Annotation_EditableAdapter(this);
+				Annotation_EditableAdapter aea = new Annotation_EditableAdapter(
+						this);
 
-				aea.setOriginalVectorialAdapter(((VectorialEditableAdapter) super.getSource()).getOriginalAdapter());
+				aea.setOriginalVectorialAdapter(((VectorialEditableAdapter) super
+						.getSource()).getOriginalAdapter());
 
-				((VectorialEditableAdapter) super.getSource()).cancelEdition(EditionEvent.GRAPHIC);
+				((VectorialEditableAdapter) super.getSource())
+						.cancelEdition(EditionEvent.GRAPHIC);
 				aea.start();
 
 				aea.setCrsTransform(getCrsTransform());
 				// CHEMA
 				aea.startEdition(EditionEvent.GRAPHIC);
 				setSource(aea);
-				getRecordset().setSelectionSupport(aea.getOriginalAdapter()
-						.getRecordset()
-						.getSelectionSupport());
+				getRecordset().setSelectionSupport(
+						aea.getOriginalAdapter().getRecordset()
+								.getSelectionSupport());
 				aea.addEditionListener(this);
 			} else {
 			}
 
 		} catch (ReadDriverException e) {
-			throw new StartEditionLayerException(this.getName(),e);
+			throw new StartEditionLayerException(this.getName(), e);
 		} catch (CancelEditingLayerException e) {
-			throw new StartEditionLayerException(this.getName(),e);
+			throw new StartEditionLayerException(this.getName(), e);
 		} catch (StartWriterVisitorException e) {
-			throw new StartEditionLayerException(this.getName(),e);
+			throw new StartEditionLayerException(this.getName(), e);
 		}
 		deleteSpatialIndex();
 	}
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param layer DOCUMENT ME!
-	 *
+	 * 
+	 * @param layer
+	 *            DOCUMENT ME!
+	 * 
 	 * @return DOCUMENT ME!
 	 * @throws ReadDriverException
-	 *
-	 * @throws DriverException DOCUMENT ME!
-	 * @throws FieldNotFoundException DOCUMENT ME!
+	 * 
+	 * @throws DriverException
+	 *             DOCUMENT ME!
+	 * @throws FieldNotFoundException
+	 *             DOCUMENT ME!
 	 */
-	public static Annotation_Layer createLayerFromVect(FLyrVect layer) throws ReadDriverException {
+	public static Annotation_Layer createLayerFromVect(FLyrVect layer)
+			throws ReadDriverException {
 		Annotation_Layer la = new Annotation_Layer();
-		FLyrVect lv=(FLyrVect)LayerFactory.createLayer(layer.getName(),layer.getSource().getDriver(),layer.getCrs());
+		FLyrVect lv = (FLyrVect) LayerFactory.createLayer(layer.getName(),
+				layer.getSource().getDriver(), layer.getCrs());
 		la.setSource(lv.getSource());
 		la.setRecordset(lv.getRecordset());
 		la.setCrs(layer.getCrs());
@@ -717,129 +768,137 @@ public class Annotation_Layer extends FLyrVect {
 	 * DOCUMENT ME!
 	 */
 	public void removingThisLayer() {
-//		super.removingThisLayer();
+		// super.removingThisLayer();
 		spatialIndex = null;
 		aLegend = null;
 		strategy = null;
 		System.gc();
 	}
 
-	public double getTextHeightInPixels(int unit, double height,ViewPort vp){
-		if (unit!=-1) {
+	public double getTextHeightInPixels(int unit, double height, ViewPort vp) {
+		if (unit != -1) {
 			double[] distanceTrans2Meter = MapContext.getDistanceTrans2Meter();
-			height = vp.fromMapDistance((int) (height)*distanceTrans2Meter[unit]/
-					distanceTrans2Meter[vp.getMapUnits()]);
+			height = vp.fromMapDistance((int) (height)
+					* distanceTrans2Meter[unit]
+					/ distanceTrans2Meter[vp.getMapUnits()]);
 		}
 		return height;
 	}
-	public IGeometry getTextWrappingGeometryInPixels(int unit,double height, String description,
-			double rotation, String type, int style, int numReg,ViewPort vp, IGeometry geom) {
 
-		Shape shapeP=geom.getInternalShape();
+	public IGeometry getTextWrappingGeometryInPixels(int unit, double height,
+			String description, double rotation, String type, int style,
+			int numReg, ViewPort vp, IGeometry geom) {
+
+		Shape shapeP = geom.getInternalShape();
 		FPoint2D p = null;
 		if (!(shapeP instanceof FPoint2D)) {
-			Rectangle2D rP=shapeP.getBounds2D();
-			p=new FPoint2D(rP.getX(),rP.getY());
-		}else {
-			p=(FPoint2D)shapeP;
+			Rectangle2D rP = shapeP.getBounds2D();
+			p = new FPoint2D(rP.getX(), rP.getY());
+		} else {
+			p = (FPoint2D) shapeP;
 		}
 
 		height = getTextHeightInPixels(unit, height, vp);
 
 		AffineTransform tx = null;
-		/* Para tamaños de fuente de letras excesivamente grandes obtenemos
-		 * shapes con todas las coordenadas a 0, por eso limitamos el tamaño
-		 * a 1000 y después reescalamos el bounds.
+		/*
+		 * Para tamaños de fuente de letras excesivamente grandes obtenemos
+		 * shapes con todas las coordenadas a 0, por eso limitamos el tamaño a
+		 * 1000 y después reescalamos el bounds.
 		 */
 		double scale = 1;
-		if (height > 1000){
-			scale = height/1000;
+		if (height > 1000) {
+			scale = height / 1000;
 			height = 1000;
 		}
-		Font font = new Font(type, style,
-				(int) (height));
-		FontRenderContext frc = new FontRenderContext(tx,
-				false, true);
-		
+		Font font = new Font(type, style, (int) (height));
+		FontRenderContext frc = new FontRenderContext(tx, false, true);
 
 		GlyphVector gv = font.createGlyphVector(frc, description);
 		Shape shape = gv.getOutline();
 
-		Rectangle2D rGeom=shape.getBounds2D();
+		Rectangle2D rGeom = shape.getBounds2D();
 
-		IGeometry geomResult = ShapeFactory.createPolygon2D(new GeneralPathX(rGeom));
+		IGeometry geomResult = ShapeFactory.createPolygon2D(new GeneralPathX(
+				rGeom));
 
 		tx = AffineTransform.getTranslateInstance(0, -rGeom.getY());
 
 		if (rotation != 0) {
-			tx.preConcatenate(AffineTransform.getRotateInstance(Math.toRadians(rotation)));
+			tx.preConcatenate(AffineTransform.getRotateInstance(Math
+					.toRadians(rotation)));
 		}
 
-		if(scale != 1){
+		if (scale != 1) {
 			tx.preConcatenate(AffineTransform.getScaleInstance(scale, scale));
 		}
-		
+
 		/*
-		 * Parche para arreglar la diferencia entre la altura de la letra y
-		 * la altura del bounds que contiene la letra impresa.
+		 * Parche para arreglar la diferencia entre la altura de la letra y la
+		 * altura del bounds que contiene la letra impresa.
 		 */
 		double boundsHeight = rGeom.getHeight();
-		double fontScale = height/boundsHeight;
+		double fontScale = height / boundsHeight;
 		tx.preConcatenate(AffineTransform.getScaleInstance(1, fontScale));
-		//Fin del parche.
-		
-		tx.preConcatenate(AffineTransform.getTranslateInstance(p.getX(), p.getY()));
+		// Fin del parche.
+
+		tx.preConcatenate(AffineTransform.getTranslateInstance(p.getX(),
+				p.getY()));
 		geomResult.transform(tx);
 
 		return geomResult;
 	}
 
-public FLayer cloneLayer() throws Exception {
+	public FLayer cloneLayer() throws Exception {
 		Annotation_Layer clonedLayer = new Annotation_Layer();
 		clonedLayer.setSource(getSource());
 		clonedLayer.setVisible(isVisible());
 		clonedLayer.setISpatialIndex(getISpatialIndex());
 		clonedLayer.setName(getName());
 		clonedLayer.setCrsTransform(getCrsTransform());
-		clonedLayer.setLegend((IVectorLegend)getLegend());
-		clonedLayer.mapping=mapping;
-		clonedLayer.aLegend=aLegend;
+		clonedLayer.setLegend((IVectorLegend) getLegend());
+		clonedLayer.mapping = mapping;
+		clonedLayer.aLegend = aLegend;
 		return clonedLayer;
 	}
-	private static void drawAnnotation(Graphics2D g2,int unit,Annotation_Layer layer,
-			Annotation_Legend legend,Point2D pAux, String text,ViewPort viewPort,PrintRequestAttributeSet properties) {
-		SimpleTextSymbol textSymbol=(SimpleTextSymbol)legend.getDefaultSymbol();
+
+	private static void drawAnnotation(Graphics2D g2, int unit,
+			Annotation_Layer layer, Annotation_Legend legend, Point2D pAux,
+			String text, ViewPort viewPort, PrintRequestAttributeSet properties) {
+		SimpleTextSymbol textSymbol = (SimpleTextSymbol) legend
+				.getDefaultSymbol();
 		textSymbol.setText(text);
-//		float x;
-//		float y;
+		// float x;
+		// float y;
 		// Las etiquetas que pongamos a nulo será porque no la queremos dibujar.
 		// Útil para cuando queramos eliminar duplicados.
 		if (text == null) {
 			return;
 		}
 
+		// FIXME: No parece que haga falta todo esto.
 
-//FIXME: No parece que haga falta todo esto.
+		// int size=textSymbol.getFont().getSize();
+		// double resolutionPrinting=0;
+		// if (unit!=-1){
+		// size=viewPort.fromMapDistance(size*MapContext.getDistanceTrans2Meter()[unit]);
+		// }
 
-//		int size=textSymbol.getFont().getSize();
-//		double resolutionPrinting=0;
-//		if (unit!=-1){
-//			size=viewPort.fromMapDistance(size*MapContext.getDistanceTrans2Meter()[unit]);
-//		}
+		// if (properties!=null){
+		// PrintQuality
+		// resolution=(PrintQuality)properties.get(PrintQuality.class);
+		// if (resolution.equals(PrintQuality.NORMAL)){
+		// resolutionPrinting=300/72;
+		// }else if (resolution.equals(PrintQuality.HIGH)){
+		// resolutionPrinting=600/72;
+		// }else if (resolution.equals(PrintQuality.DRAFT)){
+		// resolutionPrinting=72/72;
+		// }
+		// size=(int)(size*resolutionPrinting);
+		// }
 
-//		if (properties!=null){
-//			PrintQuality resolution=(PrintQuality)properties.get(PrintQuality.class);
-//			if (resolution.equals(PrintQuality.NORMAL)){
-//				resolutionPrinting=300/72;
-//			}else if (resolution.equals(PrintQuality.HIGH)){
-//				resolutionPrinting=600/72;
-//			}else if (resolution.equals(PrintQuality.DRAFT)){
-//				resolutionPrinting=72/72;
-//			}
-//			size=(int)(size*resolutionPrinting);
-//		}
-
-		textSymbol.draw(g2,viewPort.getAffineTransform(),new FPoint2D(pAux.getX(),pAux.getY()), null);
+		textSymbol.draw(g2, viewPort.getAffineTransform(),
+				new FPoint2D(pAux.getX(), pAux.getY()), null);
 
 	}
 }

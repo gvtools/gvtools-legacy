@@ -43,81 +43,82 @@
 
 package org.gvsig.remoteClient.arcims.styling.renderers;
 
+import java.util.Iterator;
+
 import org.gvsig.remoteClient.arcims.styling.symbols.SymbolUtils;
 import org.gvsig.remoteClient.arcims.utils.ServiceInfoTags;
 
-import java.util.Iterator;
+public class ValueMapLabelRenderer extends ValueMapRenderer implements
+		ILabelRenderer {
+	public static final String TAG = ServiceInfoTags.tVALUEMAPLABELRENDERER;
+	private String rotationalangles;
+	private String labelfield;
 
+	/**
+	 * @param labelField
+	 */
+	public ValueMapLabelRenderer(String labelField, String alookupField) {
+		super(alookupField);
+		this.labelfield = labelField;
+	}
 
-public class ValueMapLabelRenderer extends ValueMapRenderer
-    implements ILabelRenderer {
-    public static final String TAG = ServiceInfoTags.tVALUEMAPLABELRENDERER;
-    private String rotationalangles;
-    private String labelfield;
+	/**
+	 * Generates an XML representation of the Renderer
+	 */
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		Iterator it = values.iterator();
 
-    /**
-     * @param labelField
-     */
-    public ValueMapLabelRenderer(String labelField, String alookupField) {
-        super(alookupField);
-        this.labelfield = labelField;
-    }
+		while (it.hasNext()) {
+			sb.append(((TypeValueMap) it.next()).toString());
+		}
 
-    /**
-     * Generates an XML representation of the Renderer
-     */
-    public String toString() {
-        StringBuffer sb = new StringBuffer();
-        Iterator it = values.iterator();
+		return "<" + ValueMapLabelRenderer.TAG + " lookupField=\""
+				+ lookupField + "\"" + getParam() + "\">\r\n" + sb.toString()
+				+ "</" + ValueMapLabelRenderer.TAG + ">\r\n";
+	}
 
-        while (it.hasNext()) {
-            sb.append(((TypeValueMap) it.next()).toString());
-        }
+	private String getParam() {
+		String param = "";
 
-        return "<" + ValueMapLabelRenderer.TAG + " lookupField=\"" +
-        lookupField + "\"" + getParam() + "\">\r\n" + sb.toString() + "</" +
-        ValueMapLabelRenderer.TAG + ">\r\n";
-    }
+		if (SymbolUtils.isVoid(rotationalangles)) {
+			param += (" rotationalangles=\"" + rotationalangles + "\"");
+		}
 
-    private String getParam() {
-        String param = "";
+		if (SymbolUtils.isVoid(labelfield)) {
+			param += (" labelfield=\"" + labelfield + "\"");
+		}
 
-        if (SymbolUtils.isVoid(rotationalangles)) {
-            param += (" rotationalangles=\"" + rotationalangles + "\"");
-        }
+		return param;
+	}
 
-        if (SymbolUtils.isVoid(labelfield)) {
-            param += (" labelfield=\"" + labelfield + "\"");
-        }
+	/**
+	 * @return Returns the labelField.
+	 */
+	public String getField() {
+		return labelfield;
+	}
 
-        return param;
-    }
+	/**
+	 * @param labelField
+	 *            The labelField to set.
+	 */
+	public void setField(String labelField) {
+		this.labelfield = labelField;
+	}
 
-    /**
-     * @return Returns the labelField.
-     */
-    public String getField() {
-        return labelfield;
-    }
+	/**
+	 * @return Returns the rotationalAngles.
+	 */
+	public String getRotationalangles() {
+		return rotationalangles;
+	}
 
-    /**
-     * @param labelField The labelField to set.
-     */
-    public void setField(String labelField) {
-        this.labelfield = labelField;
-    }
-
-    /**
-     * @return Returns the rotationalAngles.
-     */
-    public String getRotationalangles() {
-        return rotationalangles;
-    }
-
-    /**
-     * @param rotationalAngles The rotationalAngles to set.
-     */
-    public void setRotationalangles(String rotationalangles) {
-        this.rotationalangles = rotationalangles;
-    }
+	/**
+	 * @param rotationalAngles
+	 *            The rotationalAngles to set.
+	 */
+	public void setRotationalangles(String rotationalangles) {
+		this.rotationalangles = rotationalangles;
+	}
 }

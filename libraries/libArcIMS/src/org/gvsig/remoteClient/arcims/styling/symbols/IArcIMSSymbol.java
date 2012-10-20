@@ -45,17 +45,18 @@ package org.gvsig.remoteClient.arcims.styling.symbols;
 
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 
-
 public interface IArcIMSSymbol {
-    /**
-     * Returns a valid ISymbol of the ArcIMS symbol representation.
-     * @return
-     */
-    public ISymbol getFSymbol();
+	/**
+	 * Returns a valid ISymbol of the ArcIMS symbol representation.
+	 * 
+	 * @return
+	 */
+	public ISymbol getFSymbol();
 
-    /**
-     * Returns a valid ArcXML representation of the object
-     * @return
-     */
-    public String toString();
+	/**
+	 * Returns a valid ArcXML representation of the object
+	 * 
+	 * @return
+	 */
+	public String toString();
 }

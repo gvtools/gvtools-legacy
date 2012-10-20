@@ -56,30 +56,34 @@ public class TestILabelingMethod extends TestCase {
 	private static ArrayList<? extends ILabelingMethod> classesToTest;
 	transient private ILabelingMethod[] methods;
 
-	
 	@SuppressWarnings("unchecked")
 	private static ArrayList getClassesToTest() {
 		if (classesToTest == null) {
-			classesToTest = new ArrayList ();
+			classesToTest = new ArrayList();
 
-			TestILabelingMethod.addLabelingMethodToTest(DefaultLabelingMethod.class);
+			TestILabelingMethod
+					.addLabelingMethodToTest(DefaultLabelingMethod.class);
 		}
 
 		return classesToTest;
 	}
 
 	/**
-	 * The main purpose of this method is to create new methods instances to be used for
-	 * other test methods.
+	 * The main purpose of this method is to create new methods instances to be
+	 * used for other test methods.
+	 * 
 	 * @return
 	 * @throws FieldNotFoundException
 	 */
-	public static ILabelingMethod[] getNewMethodInstances() throws FieldNotFoundException{
-		ILabelingMethod[] methods = new ILabelingMethod[getClassesToTest().size()];
+	public static ILabelingMethod[] getNewMethodInstances()
+			throws FieldNotFoundException {
+		ILabelingMethod[] methods = new ILabelingMethod[getClassesToTest()
+				.size()];
 		for (int i = 0; i < methods.length; i++) {
 
 			try {
-				methods[i] = (ILabelingMethod) ((Class) getClassesToTest().get(i)).newInstance();
+				methods[i] = (ILabelingMethod) ((Class) getClassesToTest().get(
+						i)).newInstance();
 
 			} catch (InstantiationException e) {
 				fail("Instantiating class");
@@ -91,16 +95,16 @@ public class TestILabelingMethod extends TestCase {
 		return methods;
 	}
 
-
 	protected void setUp() throws Exception {
 		methods = getNewMethodInstances();
 	}
-	
 
 	@SuppressWarnings("unchecked")
-	public static void addLabelingMethodToTest(Class<? extends ILabelingMethod> labelingMethodClass) {
+	public static void addLabelingMethodToTest(
+			Class<? extends ILabelingMethod> labelingMethodClass) {
 		try {
-			ILabelingMethod method = (ILabelingMethod) labelingMethodClass.newInstance();
+			ILabelingMethod method = (ILabelingMethod) labelingMethodClass
+					.newInstance();
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 			fail("Instantiating class, cannot test a non-instantiable labeling method");
@@ -114,16 +118,18 @@ public class TestILabelingMethod extends TestCase {
 	}
 
 	/**
-	 * this test ensures that the method is self-defining. Checks that
-	 * the labeling methods contained by it can be replicated, and the rules for
+	 * this test ensures that the method is self-defining. Checks that the
+	 * labeling methods contained by it can be replicated, and the rules for
 	 * such labeling methods as well.
+	 * 
 	 * @throws XMLException
 	 */
-	public void testILabelingSelfDefinition() throws XMLException{
+	public void testILabelingSelfDefinition() throws XMLException {
 		for (int i = 0; i < methods.length; i++) {
 			final ILabelingMethod theMethod = methods[i];
 			final ILabelingMethod cloneMethod = theMethod.cloneMethod();
-			assertTrue(theMethod.getClassName()+ " wrong class name declaration in getXMLEntity() ",
+			assertTrue(theMethod.getClassName()
+					+ " wrong class name declaration in getXMLEntity() ",
 					cloneMethod.getClass().equals(theMethod.getClass()));
 			final Field[] theLegendFields = theMethod.getClass().getFields();
 			for (int j = 0; j < theLegendFields.length; j++) {
@@ -132,7 +138,10 @@ public class TestILabelingMethod extends TestCase {
 				fi.setAccessible(true);
 
 				try {
-					assertTrue(theMethod.getClassName() + " fails or misses clonning the field " +fi.getName(),
+					assertTrue(
+							theMethod.getClassName()
+									+ " fails or misses clonning the field "
+									+ fi.getName(),
 							fi.get(theMethod).equals(fi.get(cloneMethod)));
 				} catch (IllegalArgumentException e) {
 					fail();
@@ -145,9 +154,9 @@ public class TestILabelingMethod extends TestCase {
 	}
 
 	public static Test suite() {
-		TestSuite suite = new TestSuite("Integration test for ILabelingMethod's.");
-		
-		
+		TestSuite suite = new TestSuite(
+				"Integration test for ILabelingMethod's.");
+
 		return suite;
 	}
 

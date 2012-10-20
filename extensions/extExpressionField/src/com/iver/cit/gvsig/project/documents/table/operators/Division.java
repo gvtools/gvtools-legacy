@@ -10,7 +10,7 @@ import com.iver.cit.gvsig.project.documents.table.IOperator;
 /**
  * @author Vicente Caballero Navarro
  */
-public class Division extends AbstractOperator{
+public class Division extends AbstractOperator {
 
 	public String addText(String s) {
 		return s.concat(toString());
@@ -18,19 +18,24 @@ public class Division extends AbstractOperator{
 
 	public void eval(BSFManager interpreter) throws BSFException {
 	}
+
 	public String toString() {
 		return "/";
 	}
+
 	public boolean isEnable() {
-		return (getType()==IOperator.NUMBER);
+		return (getType() == IOperator.NUMBER);
 	}
-	public String getTooltip(){
-		return PluginServices.getText(this,"operator")+":  "+addText("")+"\n"+getDescription();
+
+	public String getTooltip() {
+		return PluginServices.getText(this, "operator") + ":  " + addText("")
+				+ "\n" + getDescription();
 	}
+
 	public String getDescription() {
-        return PluginServices.getText(this, "returns") + ": " +
-        PluginServices.getText(this, "numeric_value") + "\n" +
-        PluginServices.getText(this, "description") + ": " +
-        "Returns the result of division.";
-    }
+		return PluginServices.getText(this, "returns") + ": "
+				+ PluginServices.getText(this, "numeric_value") + "\n"
+				+ PluginServices.getText(this, "description") + ": "
+				+ "Returns the result of division.";
+	}
 }

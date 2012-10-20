@@ -21,7 +21,6 @@ import com.iver.cit.gvsig.project.documents.table.gui.Table;
 import com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction;
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -65,7 +64,7 @@ import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
 
 /**
  * Open attibute table(s) of active layer(s)
- *
+ * 
  * @author Benjamin Ducke
  */
 public class AttTableTocMenuEntry extends AbstractTocContextMenuAction {
@@ -88,7 +87,7 @@ public class AttTableTocMenuEntry extends AbstractTocContextMenuAction {
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
 		if (isTocItemBranch(item)) {
 			FLayer lyr = getNodeLayer(item);
-			if (lyr.isAvailable()){
+			if (lyr.isAvailable()) {
 				return selectedItems.length == 1;
 			}
 		}
@@ -98,58 +97,64 @@ public class AttTableTocMenuEntry extends AbstractTocContextMenuAction {
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
 		if (isTocItemBranch(item)) {
 			FLayer lyr = getNodeLayer(item);
-				if ((lyr instanceof ClassifiableVectorial)) {
-					if (!((lyr instanceof FLyrVect) &&
-							!((FLyrVect)lyr).isPropertiesMenuVisible())){
-						if (!(lyr instanceof FLyrAnnotation))
-							return true;
-					}
-
+			if ((lyr instanceof ClassifiableVectorial)) {
+				if (!((lyr instanceof FLyrVect) && !((FLyrVect) lyr)
+						.isPropertiesMenuVisible())) {
+					if (!(lyr instanceof FLyrAnnotation))
+						return true;
 				}
+
+			}
 		}
 		return false;
 	}
 
 	public void execute(ITocItem item, FLayer[] selectedItems) {
 		FLayer lyr = getNodeLayer(item);
-		if (!lyr.isAvailable()) return;
-		
+		if (!lyr.isAvailable())
+			return;
+
 		try {
 			if (lyr instanceof AlphanumericData) {
 				AlphanumericData co = (AlphanumericData) lyr;
-				ProjectExtension ext = (ProjectExtension) PluginServices.getExtension(ProjectExtension.class);
+				ProjectExtension ext = (ProjectExtension) PluginServices
+						.getExtension(ProjectExtension.class);
 
 				ProjectTable projectTable = ext.getProject().getTable(co);
-				EditableAdapter ea=null;
-				ReadableVectorial rv=((FLyrVect)lyr).getSource();
-				if (rv instanceof VectorialEditableAdapter){
-					ea=(EditableAdapter)((FLyrVect)lyr).getSource();
-				}else{
-					ea=new EditableAdapter();
-					SelectableDataSource sds=((FLyrVect)lyr).getRecordset();
+				EditableAdapter ea = null;
+				ReadableVectorial rv = ((FLyrVect) lyr).getSource();
+				if (rv instanceof VectorialEditableAdapter) {
+					ea = (EditableAdapter) ((FLyrVect) lyr).getSource();
+				} else {
+					ea = new EditableAdapter();
+					SelectableDataSource sds = ((FLyrVect) lyr).getRecordset();
 					ea.setOriginalDataSource(sds);
 				}
 
 				if (projectTable == null) {
-					projectTable = ProjectFactory.createTable(PluginServices.getText(this, "Tabla_de_Atributos") + ": " + lyr.getName(),
-							ea);
-					projectTable.setProjectDocumentFactory(new ProjectTableFactory());
+					projectTable = ProjectFactory.createTable(
+							PluginServices.getText(this, "Tabla_de_Atributos")
+									+ ": " + lyr.getName(), ea);
+					projectTable
+							.setProjectDocumentFactory(new ProjectTableFactory());
 					projectTable.setAssociatedTable(co);
 					ext.getProject().addDocument(projectTable);
 					projectTable.setModel(ea);
 				}
 				Table t = new Table();
 				t.setModel(projectTable);
-					if (ea.isEditing())
-						ea.getCommandRecord().addCommandListener(t);
-					t.getModel().setModified(true);
-					PluginServices.getMDIManager().addWindow(t);
+				if (ea.isEditing())
+					ea.getCommandRecord().addCommandListener(t);
+				t.getModel().setModified(true);
+				PluginServices.getMDIManager().addWindow(t);
 			}
 		} catch (ReadDriverException e) {
-				NotificationManager.addError(PluginServices.getText(this,"No_se_pudo_obtener_la_tabla_de_la_capa"), e);
+			NotificationManager.addError(PluginServices.getText(this,
+					"No_se_pudo_obtener_la_tabla_de_la_capa"), e);
 		}
-		
-		Project project=((ProjectExtension)PluginServices.getExtension(ProjectExtension.class)).getProject();
+
+		Project project = ((ProjectExtension) PluginServices
+				.getExtension(ProjectExtension.class)).getProject();
 		project.setModified(true);
 	}
 }

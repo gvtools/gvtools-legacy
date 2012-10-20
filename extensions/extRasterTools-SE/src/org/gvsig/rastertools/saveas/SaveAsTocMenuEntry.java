@@ -58,36 +58,41 @@ import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
 
 /**
  * <p>
- * Entrada del TOC que corresponde con la opción "Salvar Como" de raster. Esta se apoya
- * en el proceso de recorte de raster para salvar datos.
+ * Entrada del TOC que corresponde con la opción "Salvar Como" de raster. Esta
+ * se apoya en el proceso de recorte de raster para salvar datos.
  * </p>
  * <p>
- * Cuando se abre el dialogo de "Salvar como" se cargan las extensiones soportadas en el
- * selector. Cada tipo de datos de la fuente soporta unas extensiones de escritura u otras.
- * Por ejemplo, si la capa de entrada  es FLOAT no podremos escribir a JPG2000 porque no
- * lo soporta, tendriamos que convertila primero a RGB.
+ * Cuando se abre el dialogo de "Salvar como" se cargan las extensiones
+ * soportadas en el selector. Cada tipo de datos de la fuente soporta unas
+ * extensiones de escritura u otras. Por ejemplo, si la capa de entrada es FLOAT
+ * no podremos escribir a JPG2000 porque no lo soporta, tendriamos que
+ * convertila primero a RGB.
  * </p>
  * <p>
- * Cambiando el tipo de extensión en el selector cambian el panel de propiedades asociado.
- * El fichero de salidad se salvará con las propiedades ajustadas.
+ * Cambiando el tipo de extensión en el selector cambian el panel de propiedades
+ * asociado. El fichero de salidad se salvará con las propiedades ajustadas.
  * </P>
+ * 
  * @version 30/05/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public class SaveAsTocMenuEntry extends AbstractTocContextMenuAction implements PropertyChangeListener, IGenericToolBarMenuItem {
-	static private SaveAsTocMenuEntry singleton     = null;
-	private JFileChooser              chooser       = null;
-	private PropertiesComponent       panelProperty = null;
+public class SaveAsTocMenuEntry extends AbstractTocContextMenuAction implements
+		PropertyChangeListener, IGenericToolBarMenuItem {
+	static private SaveAsTocMenuEntry singleton = null;
+	private JFileChooser chooser = null;
+	private PropertiesComponent panelProperty = null;
 
 	/**
 	 * Nadie puede crear una instancia a esta clase única, hay que usar el
 	 * getSingleton()
 	 */
-	private SaveAsTocMenuEntry() {}
+	private SaveAsTocMenuEntry() {
+	}
 
 	/**
 	 * Devuelve un objeto unico a dicha clase
+	 * 
 	 * @return
 	 */
 	static public SaveAsTocMenuEntry getSingleton() {
@@ -99,7 +104,10 @@ public class SaveAsTocMenuEntry extends AbstractTocContextMenuAction implements 
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getGroup()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getGroup()
 	 */
 	public String getGroup() {
 		return "RasterExport";
@@ -107,7 +115,10 @@ public class SaveAsTocMenuEntry extends AbstractTocContextMenuAction implements 
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getGroupOrder()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getGroupOrder()
 	 */
 	public int getGroupOrder() {
 		return 50;
@@ -115,7 +126,10 @@ public class SaveAsTocMenuEntry extends AbstractTocContextMenuAction implements 
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getOrder()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getOrder()
 	 */
 	public int getOrder() {
 		return 1;
@@ -123,6 +137,7 @@ public class SaveAsTocMenuEntry extends AbstractTocContextMenuAction implements 
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.project.documents.IContextMenuAction#getText()
 	 */
 	public String getText() {
@@ -131,7 +146,11 @@ public class SaveAsTocMenuEntry extends AbstractTocContextMenuAction implements 
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -148,7 +167,11 @@ public class SaveAsTocMenuEntry extends AbstractTocContextMenuAction implements 
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -157,12 +180,17 @@ public class SaveAsTocMenuEntry extends AbstractTocContextMenuAction implements 
 		if (!(selectedItems[0] instanceof FLyrRasterSE))
 			return false;
 
-		return (((FLyrRasterSE) selectedItems[0]).isActionEnabled(IRasterLayerActions.SAVEAS));
+		return (((FLyrRasterSE) selectedItems[0])
+				.isActionEnabled(IRasterLayerActions.SAVEAS));
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#execute(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #execute(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public void execute(ITocItem item, FLayer[] selectedItems) {
 		FLayer fLayer = null;
@@ -178,21 +206,26 @@ public class SaveAsTocMenuEntry extends AbstractTocContextMenuAction implements 
 
 		chooser = new JFileChooser(FileOpenWizard.getLastPath());
 		chooser.addPropertyChangeListener(this);
-		chooser.setDialogTitle(PluginServices.getText(this, "seleccionar_fichero"));
+		chooser.setDialogTitle(PluginServices.getText(this,
+				"seleccionar_fichero"));
 
 		// Cargamos las extensiones en la lista
 		ArrayList extList = new ArrayList();
 		try {
-			extList = GeoRasterWriter.getExtensionsSupported(((IRasterGeoOperations) fLayer).getDataType()[0], ((IRasterGeoOperations) fLayer).getBandCount(), false);
+			extList = GeoRasterWriter.getExtensionsSupported(
+					((IRasterGeoOperations) fLayer).getDataType()[0],
+					((IRasterGeoOperations) fLayer).getBandCount(), false);
 		} catch (RasterDriverException e2) {
-			RasterToolsUtil.messageBoxError("error_extensiones_soportadas", chooser, e2);
+			RasterToolsUtil.messageBoxError("error_extensiones_soportadas",
+					chooser, e2);
 			return;
 		}
-		
+
 		int selected_id = extList.size() - 1;
 		ExtendedFileFilter selected = null;
 		for (int i = 0; i < extList.size(); i++) {
-			ExtendedFileFilter filter = new ExtendedFileFilter((String) extList.get(i));
+			ExtendedFileFilter filter = new ExtendedFileFilter(
+					(String) extList.get(i));
 			if (extList.get(i).equals("tif")) {
 				selected = filter;
 				selected_id = i;
@@ -206,7 +239,7 @@ public class SaveAsTocMenuEntry extends AbstractTocContextMenuAction implements 
 			}
 			if (extList.get(i).equals("lan")) {
 				filter.addExtension((String) "gis");
-			}			
+			}
 			chooser.addChoosableFileFilter(filter);
 		}
 		if (selected != null)
@@ -220,39 +253,51 @@ public class SaveAsTocMenuEntry extends AbstractTocContextMenuAction implements 
 		if (w instanceof BaseView) {
 			if (chooser.showSaveDialog(((BaseView) w).getComponent(0)) == JFileChooser.APPROVE_OPTION) {
 				// Creación de parámetros
-				String tit = PluginServices.getMDIManager().getWindowInfo(w).getTitle();
+				String tit = PluginServices.getMDIManager().getWindowInfo(w)
+						.getTitle();
 				WriterBufferServer dataWriter = new WriterBufferServer();
-				int[] dValues = new int[] { 0, (int) ((IRasterOperations) fLayer).getPxHeight(), (int) ((IRasterOperations) fLayer).getPxWidth(), 0 };
-				IRasterDataSource dataset = (IRasterDataSource)((IRasterDataset) fLayer).getDataSource();
-				int[] drawableBands = new int[((IRasterOperations) fLayer).getBandCount()];
+				int[] dValues = new int[] { 0,
+						(int) ((IRasterOperations) fLayer).getPxHeight(),
+						(int) ((IRasterOperations) fLayer).getPxWidth(), 0 };
+				IRasterDataSource dataset = (IRasterDataSource) ((IRasterDataset) fLayer)
+						.getDataSource();
+				int[] drawableBands = new int[((IRasterOperations) fLayer)
+						.getBandCount()];
 				for (int i = 0; i < ((IRasterOperations) fLayer).getBandCount(); i++)
 					drawableBands[i] = i;
-				FileOpenWizard.setLastPath(chooser.getCurrentDirectory().toString());
-				String file =  ((ExtendedFileFilter) chooser.getFileFilter()).getNormalizedFilename(chooser.getSelectedFile());
-				
-				long bytes = RasterUtilities.getBytesFromRaster((int)((IRasterOperations) fLayer).getPxWidth(),
+				FileOpenWizard.setLastPath(chooser.getCurrentDirectory()
+						.toString());
+				String file = ((ExtendedFileFilter) chooser.getFileFilter())
+						.getNormalizedFilename(chooser.getSelectedFile());
+
+				long bytes = RasterUtilities.getBytesFromRaster(
+						(int) ((IRasterOperations) fLayer).getPxWidth(),
 						(int) ((IRasterOperations) fLayer).getPxHeight(),
 						((IRasterGeoOperations) fLayer).getDataType()[0],
 						((IRasterOperations) fLayer).getBandCount());
 				long maxJp2 = 13000 * 12500 * 3;
-				if (bytes > (20000*20000*3)){
+				if (bytes > (20000 * 20000 * 3)) {
 					RasterToolsUtil.messageBoxInfo("output_file_too_big", null);
 				}
-				if (file.endsWith(".jp2")){
-					if (bytes > maxJp2){
-						RasterToolsUtil.messageBoxInfo("output_file_too_big_jpeg2000", null);
+				if (file.endsWith(".jp2")) {
+					if (bytes > maxJp2) {
+						RasterToolsUtil.messageBoxInfo(
+								"output_file_too_big_jpeg2000", null);
 					}
 				}
-				
-				if (!RasterToolsUtil.canWrite(chooser.getCurrentDirectory().toString(), this))
+
+				if (!RasterToolsUtil.canWrite(chooser.getCurrentDirectory()
+						.toString(), this))
 					return;
 				Params params = null;
 				try {
 					params = GeoRasterWriter.getWriter(file).getParams();
 				} catch (NotSupportedExtensionException e1) {
-					RasterToolsUtil.messageBoxError("no_driver_escritura", this, e1);
+					RasterToolsUtil.messageBoxError("no_driver_escritura",
+							this, e1);
 				} catch (RasterDriverException e1) {
-					RasterToolsUtil.messageBoxError("no_driver_escritura", this, e1);
+					RasterToolsUtil.messageBoxError("no_driver_escritura",
+							this, e1);
 				}
 
 				// Lanzamiento del proceso de guardado
@@ -264,28 +309,34 @@ public class SaveAsTocMenuEntry extends AbstractTocContextMenuAction implements 
 				clippingProcess.addParam("datawriter", dataWriter);
 				clippingProcess.addParam("layer", fLayer);
 				clippingProcess.addParam("drawablebands", drawableBands);
-				clippingProcess.addParam("colorInterpretation", dataset.getColorInterpretation());
+				clippingProcess.addParam("colorInterpretation",
+						dataset.getColorInterpretation());
 				clippingProcess.addParam("onelayerperband", new Boolean(false));
-				clippingProcess.addParam("interpolationmethod", new Integer(BufferInterpolation.INTERPOLATION_NearestNeighbour));
-				clippingProcess.addParam("affinetransform", dataset.getAffineTransform(0));
-				clippingProcess.addParam("resolution", new int[]{(int) ((IRasterOperations) fLayer).getPxWidth(),
-																 (int) ((IRasterOperations) fLayer).getPxHeight()});
-								
+				clippingProcess.addParam("interpolationmethod", new Integer(
+						BufferInterpolation.INTERPOLATION_NearestNeighbour));
+				clippingProcess.addParam("affinetransform",
+						dataset.getAffineTransform(0));
+				clippingProcess.addParam("resolution", new int[] {
+						(int) ((IRasterOperations) fLayer).getPxWidth(),
+						(int) ((IRasterOperations) fLayer).getPxHeight() });
+
 				if (params != null)
-					RasterToolsUtil.loadWriterParamsFromPropertiesPanel(panelProperty, params);
+					RasterToolsUtil.loadWriterParamsFromPropertiesPanel(
+							panelProperty, params);
 				clippingProcess.addParam("driverparams", params);
 				clippingProcess.start();
 			}
 		}
 	}
-	
+
 	/**
-	 * Evento que se produce al cambiar el driver de escritura. Esto
-	 * sustituye el panel properties por el del nuevo driver seleccionado
+	 * Evento que se produce al cambiar el driver de escritura. Esto sustituye
+	 * el panel properties por el del nuevo driver seleccionado
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getNewValue() instanceof ExtendedFileFilter) {
-			String ext = ((ExtendedFileFilter) evt.getNewValue()).getExtensions().get(0).toString();
+			String ext = ((ExtendedFileFilter) evt.getNewValue())
+					.getExtensions().get(0).toString();
 			panelProperty = loadPanelProperties(ext);
 			chooser.setAccessory(panelProperty);
 			chooser.revalidate();
@@ -293,9 +344,11 @@ public class SaveAsTocMenuEntry extends AbstractTocContextMenuAction implements 
 	}
 
 	/**
-	 * Obtiene el objeto PropertiesComponent para una extensión concreta de fichero
-	 * sobre el que se va a escribir.
-	 * @param file Fichero raster sobre el que se escribirá
+	 * Obtiene el objeto PropertiesComponent para una extensión concreta de
+	 * fichero sobre el que se va a escribir.
+	 * 
+	 * @param file
+	 *            Fichero raster sobre el que se escribirá
 	 * @return PropertiesComponent
 	 */
 	private PropertiesComponent loadPanelProperties(String file) {
@@ -304,19 +357,26 @@ public class SaveAsTocMenuEntry extends AbstractTocContextMenuAction implements 
 		try {
 			params = GeoRasterWriter.getWriter(file).getParams();
 		} catch (NotSupportedExtensionException e1) {
-			JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(), PluginServices.getText(this, "no_driver_escritura"));
+			JOptionPane.showMessageDialog(
+					(Component) PluginServices.getMainFrame(),
+					PluginServices.getText(this, "no_driver_escritura"));
 			return null;
 		} catch (RasterDriverException e1) {
-			JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(), PluginServices.getText(this, "no_driver_escritura"));
+			JOptionPane.showMessageDialog(
+					(Component) PluginServices.getMainFrame(),
+					PluginServices.getText(this, "no_driver_escritura"));
 			return null;
 		}
-		RasterToolsUtil.loadPropertiesFromWriterParams(panelProperty, params, null);
+		RasterToolsUtil.loadPropertiesFromWriterParams(panelProperty, params,
+				null);
 		return panelProperty;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.generictoolbar.IGenericToolBarMenuItem#getIcon()
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.generictoolbar.IGenericToolBarMenuItem#getIcon()
 	 */
 	public Icon getIcon() {
 		return PluginServices.getIconTheme().get("save-icon");

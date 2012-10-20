@@ -42,23 +42,23 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: NumericFieldFunctionsControl.java 13881 2007-09-19 16:22:04Z jaume $
-* $Log$
-* Revision 1.4  2007-09-19 16:02:53  jaume
-* removed unnecessary imports
-*
-* Revision 1.3  2007/08/07 15:06:59  azabala
-* bug solved when a layer vect hasnt numeric fields
-*
-* Revision 1.2  2007/03/06 16:47:58  caballero
-* Exceptions
-*
-* Revision 1.1  2006/08/11 16:11:38  azabala
-* first version in cvs
-*
-*
-*/
+ *
+ * $Id: NumericFieldFunctionsControl.java 13881 2007-09-19 16:22:04Z jaume $
+ * $Log$
+ * Revision 1.4  2007-09-19 16:02:53  jaume
+ * removed unnecessary imports
+ *
+ * Revision 1.3  2007/08/07 15:06:59  azabala
+ * bug solved when a layer vect hasnt numeric fields
+ *
+ * Revision 1.2  2007/03/06 16:47:58  caballero
+ * Exceptions
+ *
+ * Revision 1.1  2006/08/11 16:11:38  azabala
+ * first version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core.gui;
 
 import java.awt.Dimension;
@@ -87,15 +87,14 @@ import com.iver.cit.gvsig.geoprocess.core.fmap.XTypes;
 import com.iver.cit.gvsig.geoprocess.core.gui.NumericFieldListModel.NumericFieldListEntry;
 
 /**
- * Control to select sumarization functions for a given
- * numeric field of a layer
+ * Control to select sumarization functions for a given numeric field of a layer
+ * 
  * @author azabala
- *
+ * 
  */
 public class NumericFieldFunctionsControl extends JPanel {
 
 	private FLyrVect inputLayer;
-
 
 	private JList numericFieldList;
 	private JList sumarizeFunctionsList;
@@ -103,23 +102,17 @@ public class NumericFieldFunctionsControl extends JPanel {
 	private Map nField_sumFuntionList;
 	private JButton sumFunctionSelectionJButton;
 
-
-
-	public NumericFieldFunctionsControl(FLyrVect inputLayer){
+	public NumericFieldFunctionsControl(FLyrVect inputLayer) {
 		super();
 		initialize();
 		setLayer(inputLayer);
 	}
 
-
-
-	public void initialize(){
+	public void initialize() {
 		setLayout(new GridBagLayout());
-		setBorder(BorderFactory.
-				createEtchedBorder(EtchedBorder.RAISED));
+		setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
 
-		GridBagConstraints buttonConstraints =
-			new GridBagConstraints();
+		GridBagConstraints buttonConstraints = new GridBagConstraints();
 		buttonConstraints.gridy = 1;
 		buttonConstraints.gridx = 1;
 		buttonConstraints.ipadx = 4;
@@ -160,8 +153,7 @@ public class NumericFieldFunctionsControl extends JPanel {
 		numericAttrScrollConstraints.ipady = 19;
 		numericAttrScrollConstraints.weightx = 0.75;
 		numericAttrScrollConstraints.weighty = 1.0;
-		numericAttrScrollConstraints.insets = new java.awt.Insets(5, 12, 1,
-				9);
+		numericAttrScrollConstraints.insets = new java.awt.Insets(5, 12, 1, 9);
 
 		JScrollPane numericAttrsScrollPane = new JScrollPane();
 		numericFieldList = new JList();
@@ -170,26 +162,22 @@ public class NumericFieldFunctionsControl extends JPanel {
 		numericAttrsScrollPane.setEnabled(false);
 		numericAttrsScrollPane.setPreferredSize(new Dimension(150, 150));
 		numericAttrsScrollPane.setMinimumSize(new Dimension(100, 100));
-		add(numericAttrsScrollPane,
-				numericAttrScrollConstraints);
+		add(numericAttrsScrollPane, numericAttrScrollConstraints);
 
 		JScrollPane sumarizationFunctionScrollPane = new JScrollPane();
 		sumarizeFunctionsList = new JList();
-		sumarizeFunctionsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		sumarizeFunctionsList
+				.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+		sumarizationFunctionScrollPane.setViewportView(sumarizeFunctionsList);
 		sumarizationFunctionScrollPane
-				.setViewportView(sumarizeFunctionsList);
-		sumarizationFunctionScrollPane.setPreferredSize(new Dimension(150,
-				150));
-		sumarizationFunctionScrollPane.setMinimumSize(new Dimension(100,
-				100));
-		add(sumarizationFunctionScrollPane,
-				functionScrollConstraints);
+				.setPreferredSize(new Dimension(150, 150));
+		sumarizationFunctionScrollPane.setMinimumSize(new Dimension(100, 100));
+		add(sumarizationFunctionScrollPane, functionScrollConstraints);
 
 		JLabel functionsLabel = new JLabel(PluginServices.getText(this,
 				"Funciones_Sumarizacion"));
-		add(functionsLabel,
-				functionsLabelConstraints);
+		add(functionsLabel, functionsLabelConstraints);
 
 		JLabel attrsLabel = new JLabel(PluginServices.getText(this,
 				"Atributos_Numericos"));
@@ -204,8 +192,7 @@ public class NumericFieldFunctionsControl extends JPanel {
 				openSumarizeFunction();
 			}
 		});
-		add(sumFunctionSelectionJButton,
-				buttonConstraints);
+		add(sumFunctionSelectionJButton, buttonConstraints);
 
 	}
 
@@ -219,11 +206,13 @@ public class NumericFieldFunctionsControl extends JPanel {
 		sumarizeFuncDialog.setVisible(true);
 		SummarizationFunction[] functions = sumarizeFuncDialog.getFunctions();
 
-		NumericFieldListEntry fieldName = (NumericFieldListEntry) numericFieldList.getSelectedValue();
-//		if it returns "", there arent any fields (disable button if list is empty??)
-		if(fieldName.getKey() != null  ){
-				if(!fieldName.getKey().equals(""))
-						nField_sumFuntionList.put(fieldName.getKey(), functions);
+		NumericFieldListEntry fieldName = (NumericFieldListEntry) numericFieldList
+				.getSelectedValue();
+		// if it returns "", there arent any fields (disable button if list is
+		// empty??)
+		if (fieldName.getKey() != null) {
+			if (!fieldName.getKey().equals(""))
+				nField_sumFuntionList.put(fieldName.getKey(), functions);
 		}
 		// refresh list and listModel
 		String[] numericFields = getInputLayerNumericFields();
@@ -251,7 +240,7 @@ public class NumericFieldFunctionsControl extends JPanel {
 				.get(numericFieldName);
 	}
 
-	public void setLayer(FLyrVect inputLayer){
+	public void setLayer(FLyrVect inputLayer) {
 		this.inputLayer = inputLayer;
 		String[] numericFields = getInputLayerNumericFields();
 		NumericFieldListModel numericListModel = new NumericFieldListModel(
@@ -264,7 +253,7 @@ public class NumericFieldFunctionsControl extends JPanel {
 				this.nField_sumFuntionList, numericFields);
 		sumarizeFunctionsList.setModel(functionListModel);
 		sumarizeFunctionsList.setSelectedIndex(0);
-		if(numericFields.length == 0){
+		if (numericFields.length == 0) {
 			sumFunctionSelectionJButton.setEnabled(false);
 		}
 	}
@@ -278,4 +267,3 @@ public class NumericFieldFunctionsControl extends JPanel {
 	}
 
 }
-

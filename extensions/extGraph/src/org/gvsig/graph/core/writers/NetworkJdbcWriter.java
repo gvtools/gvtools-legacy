@@ -71,7 +71,7 @@ public class NetworkJdbcWriter extends AbstractNetworkWriter {
 			layerName = lyr.getName();
 		else
 			layerName = lyr.getName().substring(0, indexPoint);
-		
+
 		try {
 			stCreate.execute("DROP TABLE " + layerName + "_nodes;");
 		} catch (SQLException e1) {
@@ -86,15 +86,15 @@ public class NetworkJdbcWriter extends AbstractNetworkWriter {
 		stCreate.execute("CREATE TABLE " + layerName
 				+ "_nodes (NODEID int4, X float8, Y float8);");
 		stCreate.execute("ALTER TABLE "
-						+ layerName
-						+ "_nodes MODIFY COLUMN NODEID INTEGER, ADD PRIMARY KEY(NODEID);");
+				+ layerName
+				+ "_nodes MODIFY COLUMN NODEID INTEGER, ADD PRIMARY KEY(NODEID);");
 		stCreate.execute("CREATE TABLE "
-						+ layerName
-						+ "_edges (EdgeId int4, ArcID int4, Direction int2, NodeOrigin int4, "
-						+ "NodeEnd int4, Type int4, Dist float8, Cost float8);");
+				+ layerName
+				+ "_edges (EdgeId int4, ArcID int4, Direction int2, NodeOrigin int4, "
+				+ "NodeEnd int4, Type int4, Dist float8, Cost float8);");
 		stCreate.execute("ALTER TABLE "
-						+ layerName
-						+ "_edges MODIFY COLUMN EdgeId INTEGER, ADD PRIMARY KEY(EdgeId);");
+				+ layerName
+				+ "_edges MODIFY COLUMN EdgeId INTEGER, ADD PRIMARY KEY(EdgeId);");
 
 		conn.setAutoCommit(false);
 		conn.commit();
@@ -117,9 +117,9 @@ public class NetworkJdbcWriter extends AbstractNetworkWriter {
 	public void writeNetwork() throws BaseException {
 		try {
 			createTables();
-			
+
 			conn.setAutoCommit(false);
-			
+
 			double distance;
 			double cost;
 			short arcType;
@@ -258,8 +258,8 @@ public class NetworkJdbcWriter extends AbstractNetworkWriter {
 	}
 
 	private void writeEdge(int edgeId, int id, short sense, int idNodeOrig,
-			int idNodeEnd, short tipoTramo, double dist, double cost) throws SQLException
-			 {
+			int idNodeEnd, short tipoTramo, double dist, double cost)
+			throws SQLException {
 		rsEdges.moveToInsertRow();
 		rsEdges.updateInt(1, edgeId);
 		rsEdges.updateInt(2, id);
@@ -270,7 +270,7 @@ public class NetworkJdbcWriter extends AbstractNetworkWriter {
 		rsEdges.updateDouble(7, dist);
 		rsEdges.updateDouble(8, cost);
 		rsEdges.insertRow();
-//		System.out.println("writing edge " + edgeId);
+		// System.out.println("writing edge " + edgeId);
 	}
 
 	private void writeNode(NodeGv node) throws SQLException {
@@ -279,8 +279,8 @@ public class NetworkJdbcWriter extends AbstractNetworkWriter {
 		rsNodes.updateInt(1, id);
 		rsNodes.updateDouble(2, node.getCoordinate().x);
 		rsNodes.updateDouble(3, node.getCoordinate().y);
-		rsNodes.insertRow();		
-//		System.out.println("writing node " + id);
+		rsNodes.insertRow();
+		// System.out.println("writing node " + id);
 
 	}
 

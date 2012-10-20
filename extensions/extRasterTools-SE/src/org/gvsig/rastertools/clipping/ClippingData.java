@@ -26,44 +26,46 @@ import java.util.Observable;
  * Datos necesarios para realizar un recorte.
  * 
  * 27/05/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class ClippingData extends Observable {
 	/**
 	 * Número de decimales a mostrar en visualización
 	 */
-	public static final int  DEC              = 4;
+	public static final int DEC = 4;
 	/**
 	 * Coordenadas reales y pixel
 	 */
-	private Point2D          ulWc             = new Point2D.Double();
-	private Point2D          lrWc             = new Point2D.Double();
-	private Point2D          llWc             = new Point2D.Double();
-	private Point2D          urWc             = new Point2D.Double();
-	
-	private Point2D          ulPx             = new Point2D.Double();
-	private Point2D          lrPx             = new Point2D.Double();
-	private Point2D          llPx             = new Point2D.Double();
-	private Point2D          urPx             = new Point2D.Double();
+	private Point2D ulWc = new Point2D.Double();
+	private Point2D lrWc = new Point2D.Double();
+	private Point2D llWc = new Point2D.Double();
+	private Point2D urWc = new Point2D.Double();
+
+	private Point2D ulPx = new Point2D.Double();
+	private Point2D lrPx = new Point2D.Double();
+	private Point2D llPx = new Point2D.Double();
+	private Point2D urPx = new Point2D.Double();
 	/**
 	 * Valores reales para el ancho, alto y tamaño de celda. Esto es necesario
-	 * porque en la caja de texto se guardan con decimales recortados y cuando se
-	 * pide el valor se devuelven completos.
+	 * porque en la caja de texto se guardan con decimales recortados y cuando
+	 * se pide el valor se devuelven completos.
 	 */
-	private double           pxWidth          = 0;
-	private double           pxHeight         = 0;
+	private double pxWidth = 0;
+	private double pxHeight = 0;
 	/**
 	 * Relación entre el ancho y alto en pixeles de la imagen
 	 */
-	private double           ratioWidthHeight = 0;
- 
-	private AffineTransform  at               = null;
-	
+	private double ratioWidthHeight = 0;
+
+	private AffineTransform at = null;
+
 	/**
-	 * Inicializa los valores de ancho y alto de la imagen de salida a partir del ancho y alto en pixeles
-	 * de la de entrada. Esto solo es necesario al inicio ya que no tienen por que coincidir. También inicializa
-	 * la relación entre ancho y alto. La llamada a este método notificará a los observadores cambios en los
-	 * datos.
+	 * Inicializa los valores de ancho y alto de la imagen de salida a partir
+	 * del ancho y alto en pixeles de la de entrada. Esto solo es necesario al
+	 * inicio ya que no tienen por que coincidir. También inicializa la relación
+	 * entre ancho y alto. La llamada a este método notificará a los
+	 * observadores cambios en los datos.
 	 */
 	public void initSize() {
 		pxHeight = (Math.ceil(getPxMaxY()) - Math.floor(getPxMinY()));
@@ -71,7 +73,7 @@ public class ClippingData extends Observable {
 		ratioWidthHeight = (double) (pxWidth / pxHeight);
 		updateObservers();
 	}
-	
+
 	/**
 	 * Actualiza datos y llama al update de los observadores
 	 */
@@ -79,33 +81,36 @@ public class ClippingData extends Observable {
 		setChanged();
 		notifyObservers();
 	}
-		
+
 	/**
-	 * Inicializa los valores a cero. Esto se hace cuando la selección es fuera del área.
+	 * Inicializa los valores a cero. Esto se hace cuando la selección es fuera
+	 * del área.
 	 */
 	public void setOutOfArea() {
 		ulWc = new Point2D.Double();
 		lrWc = new Point2D.Double();
 		urWc = new Point2D.Double();
 		llWc = new Point2D.Double();
-		
+
 		ulPx = new Point2D.Double();
 		lrPx = new Point2D.Double();
 		llPx = new Point2D.Double();
 		urPx = new Point2D.Double();
 		pxHeight = pxWidth = 0;
 	}
-	
+
 	/**
 	 * Obtiene la relación entre el ancho y alto en píxeles;
+	 * 
 	 * @return
 	 */
 	public double getRatio() {
 		return (double) (ratioWidthHeight);
 	}
-	
+
 	/**
 	 * Obtiene el valor del ancho del raster de salida
+	 * 
 	 * @return
 	 */
 	public double getPxWidth() {
@@ -114,15 +119,18 @@ public class ClippingData extends Observable {
 
 	/**
 	 * Obtiene el valor del alto del raster de salida
+	 * 
 	 * @return
 	 */
 	public double getPxHeight() {
 		return pxHeight;
 	}
-	
+
 	/**
 	 * Asigna el valor del ancho del raster de salida
-	 * @param pxw Ancho en píxeles del raster de salida
+	 * 
+	 * @param pxw
+	 *            Ancho en píxeles del raster de salida
 	 */
 	public void setPxWidth(double pxw) {
 		pxWidth = pxw;
@@ -130,86 +138,106 @@ public class ClippingData extends Observable {
 
 	/**
 	 * Asigna el valor del alto del raster de salida
-	 * @param pxh Alto en píxeles del raster de salida
+	 * 
+	 * @param pxh
+	 *            Alto en píxeles del raster de salida
 	 */
 	public void setPxHeight(double pxh) {
 		pxHeight = pxh;
 	}
-	
+
 	/**
 	 * Obtiene el tamaño de celda
+	 * 
 	 * @return
 	 */
 	public double getCellSize() {
 		return Math.abs(ulWc.getX() - lrWc.getX()) / pxWidth;
 	}
-	
+
 	/**
 	 * Obtiene la coordenada de máxima X en pixel.
+	 * 
 	 * @return Coordenada de máxima X en pixel
 	 */
 	public double getPxMaxX() {
-		return Math.max(Math.max(ulPx.getX(), lrPx.getX()), Math.max(urPx.getX(), llPx.getX()));
+		return Math.max(Math.max(ulPx.getX(), lrPx.getX()),
+				Math.max(urPx.getX(), llPx.getX()));
 	}
 
 	/**
 	 * Obtiene la coordenada de máxima Y en pixel.
+	 * 
 	 * @return Coordenada de máxima Y en pixel
 	 */
 	public double getPxMaxY() {
-		return Math.max(Math.max(ulPx.getY(), lrPx.getY()), Math.max(urPx.getY(), llPx.getY()));
+		return Math.max(Math.max(ulPx.getY(), lrPx.getY()),
+				Math.max(urPx.getY(), llPx.getY()));
 	}
 
 	/**
 	 * Obtiene la coordenada de mínima X en pixel.
+	 * 
 	 * @return Coordenada de mínima X en pixel
 	 */
 	public double getPxMinX() {
-		return Math.min(Math.min(ulPx.getX(), lrPx.getX()), Math.min(llPx.getX(), urPx.getX()));
+		return Math.min(Math.min(ulPx.getX(), lrPx.getX()),
+				Math.min(llPx.getX(), urPx.getX()));
 	}
 
 	/**
 	 * Obtiene la coordenada de mínima Y en pixel.
+	 * 
 	 * @return Coordenada de mínima Y en pixel
 	 */
 	public double getPxMinY() {
-		return Math.min(Math.min(ulPx.getY(), lrPx.getY()), Math.min(urPx.getY(), llPx.getY()));
+		return Math.min(Math.min(ulPx.getY(), lrPx.getY()),
+				Math.min(urPx.getY(), llPx.getY()));
 	}
-	
+
 	/**
 	 * Obtiene la coordenada de máxima X real.
+	 * 
 	 * @return Coordenada de máxima X real
 	 */
 	public double getWcMaxX() {
-		return Math.max(Math.max(ulWc.getX(), lrWc.getX()), Math.max(urWc.getX(), llWc.getX()));
+		return Math.max(Math.max(ulWc.getX(), lrWc.getX()),
+				Math.max(urWc.getX(), llWc.getX()));
 	}
 
 	/**
 	 * Obtiene la coordenada de máxima Y real.
+	 * 
 	 * @return Coordenada de máxima Y real
 	 */
 	public double getWcMaxY() {
-		return Math.max(Math.max(ulWc.getY(), lrWc.getY()), Math.max(urWc.getY(), llWc.getY()));
+		return Math.max(Math.max(ulWc.getY(), lrWc.getY()),
+				Math.max(urWc.getY(), llWc.getY()));
 	}
 
 	/**
 	 * Obtiene la coordenada de mínima X real.
+	 * 
 	 * @return Coordenada de mínima X real
 	 */
 	public double getWcMinX() {
-		return Math.min(Math.min(ulWc.getX(), lrWc.getX()), Math.min(llWc.getX(), urWc.getX()));
+		return Math.min(Math.min(ulWc.getX(), lrWc.getX()),
+				Math.min(llWc.getX(), urWc.getX()));
 	}
 
 	/**
 	 * Obtiene la coordenada de mínima Y real.
+	 * 
 	 * @return Coordenada de mínima Y real.
 	 */
 	public double getWcMinY() {
-		return Math.min(Math.min(ulWc.getY(), lrWc.getY()), Math.min(urWc.getY(), llWc.getY()));
+		return Math.min(Math.min(ulWc.getY(), lrWc.getY()),
+				Math.min(urWc.getY(), llWc.getY()));
 	}
 
 	/**
 	 * Obtiene la coordenada superior izquierda real en X.
+	 * 
 	 * @return Coordenada de máxima X real.
 	 */
 	public double getUlxWc() {
@@ -218,14 +246,16 @@ public class ClippingData extends Observable {
 
 	/**
 	 * Obtiene la coordenada superior izquierda real en Y.
+	 * 
 	 * @return Coordenada de máxima Y real
 	 */
 	public double getUlyWc() {
 		return ulWc.getY();
 	}
-	
+
 	/**
 	 * Obtiene la coordenada inferior izquierda real en X.
+	 * 
 	 * @return Coordenada de máxima X real.
 	 */
 	public double getLlxWc() {
@@ -234,6 +264,7 @@ public class ClippingData extends Observable {
 
 	/**
 	 * Obtiene la coordenada inferior izquierda real en Y.
+	 * 
 	 * @return Coordenada de máxima Y real
 	 */
 	public double getLlyWc() {
@@ -242,6 +273,7 @@ public class ClippingData extends Observable {
 
 	/**
 	 * Obtiene la coordenada inferior derecha real en X.
+	 * 
 	 * @return Coordenada de mínima X real
 	 */
 	public double getLrxWc() {
@@ -250,14 +282,16 @@ public class ClippingData extends Observable {
 
 	/**
 	 * Obtiene la coordenada inferior derecha real en Y.
+	 * 
 	 * @return Coordenada de mínima Y real
 	 */
 	public double getLryWc() {
 		return lrWc.getY();
 	}
-	
+
 	/**
 	 * Obtiene la coordenada superior derecha real en X.
+	 * 
 	 * @return Coordenada de mínima X real
 	 */
 	public double getUrxWc() {
@@ -266,14 +300,16 @@ public class ClippingData extends Observable {
 
 	/**
 	 * Obtiene la coordenada superior derecha real en Y.
+	 * 
 	 * @return Coordenada de mínima Y real
 	 */
 	public double getUryWc() {
 		return urWc.getY();
 	}
-	
+
 	/**
 	 * Obtiene la coordenada superior izquierda pixel en X.
+	 * 
 	 * @return Coordenada de máxima X real.
 	 */
 	public double getUlxPx() {
@@ -282,14 +318,16 @@ public class ClippingData extends Observable {
 
 	/**
 	 * Obtiene la coordenada superior izquierda pixel en Y.
+	 * 
 	 * @return Coordenada de máxima Y real
 	 */
 	public double getUlyPx() {
 		return ulPx.getY();
 	}
-	
+
 	/**
 	 * Obtiene la coordenada inferior izquierda pixel en X.
+	 * 
 	 * @return Coordenada de máxima X real.
 	 */
 	public double getLlxPx() {
@@ -298,6 +336,7 @@ public class ClippingData extends Observable {
 
 	/**
 	 * Obtiene la coordenada inferior izquierda pixel en Y.
+	 * 
 	 * @return Coordenada de máxima Y real
 	 */
 	public double getLlyPx() {
@@ -306,6 +345,7 @@ public class ClippingData extends Observable {
 
 	/**
 	 * Obtiene la coordenada inferior derecha pixel en X.
+	 * 
 	 * @return Coordenada de mínima X real
 	 */
 	public double getLrxPx() {
@@ -314,14 +354,16 @@ public class ClippingData extends Observable {
 
 	/**
 	 * Obtiene la coordenada inferior derecha pixel en Y.
+	 * 
 	 * @return Coordenada de mínima Y real
 	 */
 	public double getLryPx() {
 		return lrPx.getY();
 	}
-	
+
 	/**
 	 * Obtiene la coordenada superior derecha pixel en X.
+	 * 
 	 * @return Coordenada de mínima X real
 	 */
 	public double getUrxPx() {
@@ -330,34 +372,43 @@ public class ClippingData extends Observable {
 
 	/**
 	 * Obtiene la coordenada superior derecha pixel en Y.
+	 * 
 	 * @return Coordenada de mínima Y real
 	 */
 	public double getUryPx() {
 		return urPx.getY();
 	}
-	
+
 	/**
 	 * Ancho en coordenadas reales
+	 * 
 	 * @return
 	 */
 	public double getWcWidth() {
 		return Math.abs(getWcMaxX() - getWcMinX());
 	}
-	
+
 	/**
 	 * Alto en coordenadas reales
+	 * 
 	 * @return
 	 */
 	public double getWcHeight() {
 		return Math.abs(getWcMaxY() - getWcMinY());
 	}
-	
+
 	/**
-	 * Asigna las coordenadas del mundo real a partir de números en coma flotante.
-	 * @param ul coordenada superior izquierda
-	 * @param lr coordenada inferior derecha
-	 * @param ll coordenada inferior izquierda
-	 * @param ur coordenada superior derecha
+	 * Asigna las coordenadas del mundo real a partir de números en coma
+	 * flotante.
+	 * 
+	 * @param ul
+	 *            coordenada superior izquierda
+	 * @param lr
+	 *            coordenada inferior derecha
+	 * @param ll
+	 *            coordenada inferior izquierda
+	 * @param ur
+	 *            coordenada superior derecha
 	 */
 	public void setCoorReal(Point2D ul, Point2D lr, Point2D ll, Point2D ur) {
 		ulWc = ul;
@@ -365,13 +416,18 @@ public class ClippingData extends Observable {
 		llWc = ll;
 		urWc = ur;
 	}
-	
+
 	/**
 	 * Asigna las coordenadas pixel a partir de números en coma flotante.
-	 * @param ul coordenada superior izquierda
-	 * @param lr coordenada inferior derecha
-	 * @param ll coordenada inferior izquierda
-	 * @param ur coordenada superior derecha
+	 * 
+	 * @param ul
+	 *            coordenada superior izquierda
+	 * @param lr
+	 *            coordenada inferior derecha
+	 * @param ll
+	 *            coordenada inferior izquierda
+	 * @param ur
+	 *            coordenada superior derecha
 	 */
 	public void setCoorPixel(Point2D ul, Point2D lr, Point2D ll, Point2D ur) {
 		ulPx = ul;
@@ -379,91 +435,118 @@ public class ClippingData extends Observable {
 		llPx = ll;
 		urPx = ur;
 	}
-	
+
 	/**
-	 * Asigna las coordenadas del mundo real a partir de números en coma flotante.
-	 * @param minx coordenada mínima de X
-	 * @param miny coordenada mínima de Y
-	 * @param maxx coordenada máxima de X
-	 * @param maxy coordenada máxima de Y
-	 * @param dec Número de decimales a mostrar en la caja de texto
+	 * Asigna las coordenadas del mundo real a partir de números en coma
+	 * flotante.
+	 * 
+	 * @param minx
+	 *            coordenada mínima de X
+	 * @param miny
+	 *            coordenada mínima de Y
+	 * @param maxx
+	 *            coordenada máxima de X
+	 * @param maxy
+	 *            coordenada máxima de Y
+	 * @param dec
+	 *            Número de decimales a mostrar en la caja de texto
 	 */
-	/*public void setCoorRealFromDouble(double ulx, double uly, double lrx, double lry) {
-		ulWc = new Point2D.Double(ulx, uly);
-		lrWc = new Point2D.Double(lrx, lry);
-	}*/
-	
+	/*
+	 * public void setCoorRealFromDouble(double ulx, double uly, double lrx,
+	 * double lry) { ulWc = new Point2D.Double(ulx, uly); lrWc = new
+	 * Point2D.Double(lrx, lry); }
+	 */
+
 	/**
 	 * Asigna las coordenadas pixel a partir de números en coma flotante.
-	 * @param minx coordenada mínima de X
-	 * @param miny coordenada mínima de Y
-	 * @param maxx coordenada máxima de X
-	 * @param maxy coordenada máxima de Y
-	 * @param dec Número de decimales a mostrar en la caja de texto
+	 * 
+	 * @param minx
+	 *            coordenada mínima de X
+	 * @param miny
+	 *            coordenada mínima de Y
+	 * @param maxx
+	 *            coordenada máxima de X
+	 * @param maxy
+	 *            coordenada máxima de Y
+	 * @param dec
+	 *            Número de decimales a mostrar en la caja de texto
 	 */
-	/*public void setCoorPixelFromDouble(double minx, double miny, double maxx, double maxy) {
-		ulPx = new Point2D.Double(minx, miny);
-		lrPx = new Point2D.Double(maxx, maxy);
-	}*/
-	
+	/*
+	 * public void setCoorPixelFromDouble(double minx, double miny, double maxx,
+	 * double maxy) { ulPx = new Point2D.Double(minx, miny); lrPx = new
+	 * Point2D.Double(maxx, maxy); }
+	 */
+
 	/**
-	 * Asigna la coordenada X de la esquina superior izquierda en coordenadas reales
+	 * Asigna la coordenada X de la esquina superior izquierda en coordenadas
+	 * reales
+	 * 
 	 * @param ulx
 	 */
 	public void setUlxWc(double ulx) {
 		ulWc = new Point2D.Double(ulx, ulWc.getY());
 	}
-	
+
 	/**
-	 * Asigna la coordenada X de la esquina inferior izquierda en coordenadas reales
+	 * Asigna la coordenada X de la esquina inferior izquierda en coordenadas
+	 * reales
+	 * 
 	 * @param ulx
 	 */
 	public void setLlxWc(double llx) {
 		llWc = new Point2D.Double(llx, llWc.getY());
 	}
-	
+
 	/**
-	 * Asigna la coordenada Y de la esquina superior izquierda en coordenadas reales
+	 * Asigna la coordenada Y de la esquina superior izquierda en coordenadas
+	 * reales
+	 * 
 	 * @param uly
 	 */
 	public void setUlyWc(double uly) {
 		ulWc = new Point2D.Double(ulWc.getX(), uly);
 	}
-	
+
 	/**
-	 * Asigna la coordenada Y de la esquina superior derecha en coordenadas reales
+	 * Asigna la coordenada Y de la esquina superior derecha en coordenadas
+	 * reales
+	 * 
 	 * @param uly
 	 */
 	public void setUryWc(double ury) {
 		urWc = new Point2D.Double(urWc.getX(), ury);
 	}
-	
+
 	/**
 	 * Asigna la coordenada X de la esquina superior izquierda en píxeles
+	 * 
 	 * @param ulx
 	 */
 	public void setUlxPx(double ulx) {
 		ulPx = new Point2D.Double(ulx, ulPx.getY());
 	}
-	
+
 	/**
 	 * Asigna la coordenada X de la esquina inferior izquierda en píxeles
+	 * 
 	 * @param llx
 	 */
 	public void setLlxPx(double llx) {
 		llPx = new Point2D.Double(llx, llPx.getY());
 	}
-	
+
 	/**
 	 * Asigna la coordenada Y de la esquina superior izquierda en píxeles
+	 * 
 	 * @param uly
 	 */
 	public void setUlyPx(double uly) {
 		ulPx = new Point2D.Double(ulPx.getX(), uly);
 	}
-	
+
 	/**
 	 * Asigna la coordenada Y de la esquina superior derecha en píxeles
+	 * 
 	 * @param ury
 	 */
 	public void setUryPx(double ury) {
@@ -471,72 +554,86 @@ public class ClippingData extends Observable {
 	}
 
 	/**
-	 * Asigna la coordenada X de la esquina inferior derecha en coordenadas reales
+	 * Asigna la coordenada X de la esquina inferior derecha en coordenadas
+	 * reales
+	 * 
 	 * @param lrx
 	 */
 	public void setLrxWc(double lrx) {
 		lrWc = new Point2D.Double(lrx, lrWc.getY());
 	}
-	
+
 	/**
-	 * Asigna la coordenada X de la esquina superior derecha en coordenadas reales
+	 * Asigna la coordenada X de la esquina superior derecha en coordenadas
+	 * reales
+	 * 
 	 * @param urx
 	 */
 	public void setUrxWc(double urx) {
 		urWc = new Point2D.Double(urx, urWc.getY());
 	}
-	
+
 	/**
-	 * Asigna la coordenada Y de la esquina inferior derecha en coordenadas reales
+	 * Asigna la coordenada Y de la esquina inferior derecha en coordenadas
+	 * reales
+	 * 
 	 * @param lry
 	 */
 	public void setLryWc(double lry) {
 		lrWc = new Point2D.Double(lrWc.getX(), lry);
 	}
-	
+
 	/**
-	 * Asigna la coordenada Y de la esquina inferior izquierda en coordenadas reales
+	 * Asigna la coordenada Y de la esquina inferior izquierda en coordenadas
+	 * reales
+	 * 
 	 * @param lly
 	 */
 	public void setLlyWc(double lly) {
 		llWc = new Point2D.Double(llWc.getX(), lly);
 	}
-	
+
 	/**
 	 * Asigna la coordenada X de la esquina inferior derecha en píxeles
+	 * 
 	 * @param ulx
 	 */
 	public void setLrxPx(double lrx) {
 		lrPx = new Point2D.Double(lrx, lrPx.getY());
 	}
-	
+
 	/**
 	 * Asigna la coordenada X de la esquina superior derecha en píxeles
+	 * 
 	 * @param ulx
 	 */
 	public void setUrxPx(double urx) {
 		urPx = new Point2D.Double(urx, urPx.getY());
 	}
-	
+
 	/**
 	 * Asigna la coordenada Y de la esquina inferior derecha en píxeles
+	 * 
 	 * @param uly
 	 */
 	public void setLryPx(double lry) {
 		lrPx = new Point2D.Double(lrPx.getX(), lry);
 	}
-	
+
 	/**
 	 * Asigna la coordenada Y de la esquina inferior derecha en píxeles
+	 * 
 	 * @param uly
 	 */
 	public void setLlyPx(double lly) {
 		llPx = new Point2D.Double(llPx.getX(), lly);
 	}
-	
+
 	/**
 	 * Asigna la matriz de transformación
-	 * @param at AffineTransform
+	 * 
+	 * @param at
+	 *            AffineTransform
 	 */
 	public void setAffineTransform(AffineTransform at) {
 		this.at = at;
@@ -544,6 +641,7 @@ public class ClippingData extends Observable {
 
 	/**
 	 * Obtiene las coordenadas del mundo real para la petición de recorte
+	 * 
 	 * @return double[]
 	 */
 	public double[] getWcCoordinatesToClip() {
@@ -551,35 +649,38 @@ public class ClippingData extends Observable {
 		Point2D lr = new Point2D.Double(getPxMaxX(), getPxMaxY());
 		at.transform(ul, ul);
 		at.transform(lr, lr);
-		return new double[]{ul.getX(), ul.getY(), lr.getX(), lr.getY()};
+		return new double[] { ul.getX(), ul.getY(), lr.getX(), lr.getY() };
 	}
-	
+
 	/**
 	 * Obtiene el tamaño en pixeles de la imagen de la petición de recorte
+	 * 
 	 * @return double[]
 	 */
 	public double[] getPxSizeToClip() {
-		return new double[]{(getPxMaxX() - getPxMinX()), (getPxMaxY() - getPxMinY())};
+		return new double[] { (getPxMaxX() - getPxMinX()),
+				(getPxMaxY() - getPxMinY()) };
 	}
- 
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#clone()
 	 */
 	public Object clone() {
 		ClippingData data = new ClippingData();
-		data.ulWc = (Point2D)this.ulWc.clone();
-		data.llWc = (Point2D)this.llWc.clone();
-		data.lrWc = (Point2D)this.lrWc.clone();
-		data.urWc = (Point2D)this.urWc.clone();
-		data.ulPx = (Point2D)this.ulPx.clone();
-		data.llPx = (Point2D)this.llPx.clone();
-		data.lrPx = (Point2D)this.lrPx.clone();
-		data.urPx = (Point2D)this.urPx.clone();
+		data.ulWc = (Point2D) this.ulWc.clone();
+		data.llWc = (Point2D) this.llWc.clone();
+		data.lrWc = (Point2D) this.lrWc.clone();
+		data.urWc = (Point2D) this.urWc.clone();
+		data.ulPx = (Point2D) this.ulPx.clone();
+		data.llPx = (Point2D) this.llPx.clone();
+		data.lrPx = (Point2D) this.lrPx.clone();
+		data.urPx = (Point2D) this.urPx.clone();
 		data.pxWidth = this.pxWidth;
 		data.pxHeight = this.pxHeight;
 		data.ratioWidthHeight = this.ratioWidthHeight;
-		data.at = (AffineTransform)this.at.clone();
+		data.at = (AffineTransform) this.at.clone();
 		return data;
 	}
 }

@@ -122,10 +122,11 @@ public class VoronoiGeoprocessController extends AbstractGeoprocessController {
 			public ReadableVectorial getSource() {
 				return lyr.getSource();
 			}
-			
-			 public SelectableDataSource getRecordset() throws ReadDriverException {
-				 return lyr.getRecordset();
-			 }
+
+			public SelectableDataSource getRecordset()
+					throws ReadDriverException {
+				return lyr.getRecordset();
+			}
 
 			public Point2D getPoint(int geometryIndex) {
 				try {
@@ -148,8 +149,8 @@ public class VoronoiGeoprocessController extends AbstractGeoprocessController {
 		SHPLayerDefinition definition = (SHPLayerDefinition) geoprocess
 				.createLayerDefinition();
 		definition.setFile(outputFile);
-		ShpSchemaManager schemaManager = new ShpSchemaManager(outputFile
-				.getAbsolutePath());
+		ShpSchemaManager schemaManager = new ShpSchemaManager(
+				outputFile.getAbsolutePath());
 		IWriter writer = null;
 		try {
 			writer = getShpWriter(definition);

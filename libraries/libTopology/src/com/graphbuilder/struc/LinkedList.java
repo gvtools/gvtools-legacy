@@ -6,7 +6,8 @@ public class LinkedList {
 	protected Node tail = null;
 	protected int size = 0;
 
-	public LinkedList() {}
+	public LinkedList() {
+	}
 
 	public static class Node {
 		protected LinkedList list = null;
@@ -62,14 +63,12 @@ public class LinkedList {
 		if (size == 0) {
 			head = p;
 			tail = p;
-		}
-		else {
+		} else {
 			if (n == head) {
 				p.next = head;
 				head.prev = p;
 				head = p;
-			}
-			else {
+			} else {
 				n.prev.next = p;
 				p.prev = n.prev;
 				n.prev = p;
@@ -86,14 +85,12 @@ public class LinkedList {
 		if (size == 0) {
 			head = p;
 			tail = p;
-		}
-		else {
+		} else {
 			if (n == tail) {
 				p.prev = tail;
 				tail.next = p;
 				tail = p;
-			}
-			else {
+			} else {
 				n.next.prev = p;
 				p.next = n.next;
 				n.next = p;
@@ -117,12 +114,10 @@ public class LinkedList {
 				tail = null;
 			else
 				head.prev = null;
-		}
-		else if (n == tail) {
+		} else if (n == tail) {
 			tail = tail.prev;
 			tail.next = null;
-		}
-		else {
+		} else {
 			n.prev.next = n.next;
 			n.next.prev = n.prev;
 		}

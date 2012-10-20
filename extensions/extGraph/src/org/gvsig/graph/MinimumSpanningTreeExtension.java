@@ -64,22 +64,20 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 /**
  * @author fjp
  * 
- * Extension to perform ServiceArea calculations. Here you will find code to:
- * 1.- See the distances to every node on the network to one or many point
- * sources. 2.- TODO: Calculate a polyline layer with costs and length
- * calculated to nearest source point. 3.- TODO: Calculate polygons covering
- * those service areas.
+ *         Extension to perform ServiceArea calculations. Here you will find
+ *         code to: 1.- See the distances to every node on the network to one or
+ *         many point sources. 2.- TODO: Calculate a polyline layer with costs
+ *         and length calculated to nearest source point. 3.- TODO: Calculate
+ *         polygons covering those service areas.
  */
 public class MinimumSpanningTreeExtension extends Extension {
 
 	private int idSymbolLine = -1;
 
 	public void initialize() {
-		PluginServices.getIconTheme().registerDefault(
-				"mst",
-				this.getClass().getClassLoader().getResource("images/mst.png")
-			);		
-		
+		PluginServices.getIconTheme().registerDefault("mst",
+				this.getClass().getClassLoader().getResource("images/mst.png"));
+
 	}
 
 	public void execute(String actionCommand) {
@@ -87,7 +85,7 @@ public class MinimumSpanningTreeExtension extends Extension {
 		View v = (View) PluginServices.getMDIManager().getActiveWindow();
 		MapControl mapCtrl = v.getMapControl();
 		MapContext map = mapCtrl.getMapContext();
-		SingleLayerIterator it = new SingleLayerIterator(map.getLayers());		
+		SingleLayerIterator it = new SingleLayerIterator(map.getLayers());
 		while (it.hasNext()) {
 			FLayer aux = it.next();
 			if (!aux.isActive())
@@ -101,14 +99,14 @@ public class MinimumSpanningTreeExtension extends Extension {
 							"Primero carga las paradas.");
 					return;
 				}
-//					setVelocities(net);
+				// setVelocities(net);
 				try {
 					OneToManySolver solver = new OneToManySolver();
 					solver.setNetwork(net);
 					solver.putDestinationsOnNetwork(net.getFlags());
 					if (actionCommand.equals("MST")) {
 						calculateMST(map, net, flags, solver);
-					}					
+					}
 					solver.removeDestinationsFromNetwork(net.getFlags());
 				} catch (BaseException e) {
 					// TODO Auto-generated catch block
@@ -130,65 +128,61 @@ public class MinimumSpanningTreeExtension extends Extension {
 	 * @return
 	 * @throws GraphException
 	 */
-	private void calculateMST(MapContext map, Network net, GvFlag[] flags, OneToManySolver solver) throws BaseException {
-		MinimumSpanningTreeExtractor extractor = new MinimumSpanningTreeExtractor(net);
-		String aux = JOptionPane.showInputDialog(PluginServices.getText(this, "Please_enter_max_cost_MST") + ":");
+	private void calculateMST(MapContext map, Network net, GvFlag[] flags,
+			OneToManySolver solver) throws BaseException {
+		MinimumSpanningTreeExtractor extractor = new MinimumSpanningTreeExtractor(
+				net);
+		String aux = JOptionPane.showInputDialog(PluginServices.getText(this,
+				"Please_enter_max_cost_MST") + ":");
 		if (aux == null)
 			return;
 		double cost = 0;
 		try {
 			cost = Double.parseDouble(aux);
-		}
-		catch (NumberFormatException e) {
-			JOptionPane.showMessageDialog((Component) PluginServices.getMDIManager().getActiveWindow(),
-					PluginServices.getText(null, "Please_enter_a_valid_number"));
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog((Component) PluginServices
+					.getMDIManager().getActiveWindow(), PluginServices.getText(
+					null, "Please_enter_a_valid_number"));
 			return;
 		}
 		solver.addListener(extractor);
 		for (int i = 0; i < flags.length; i++) {
 			solver.setSourceFlag(flags[i]);
-			long t1 = System.currentTimeMillis();			
+			long t1 = System.currentTimeMillis();
 			solver.setExploreAllNetwork(true);
 			solver.setMaxCost(cost);
 			extractor.setIdFlag(i);
 			solver.calculate();
 			long t2 = System.currentTimeMillis();
-			System.out.println("Punto " + i + " de "
-					+ flags.length + ". " + (t2 - t1)
-					+ " msecs.");					
+			System.out.println("Punto " + i + " de " + flags.length + ". "
+					+ (t2 - t1) + " msecs.");
 		}
 		extractor.endExtraction();
-		
+
 		FLyrVect lyrLine = extractor.getLineLayer();
 		lyrLine.setCrs(map.getCrs());
 		map.beginAtomicEvent();
 		map.getLayers().addLayer(lyrLine);
 		map.endAtomicEvent();
 
-	
 	}
-	
 
 	public boolean isEnabled() {
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		if (window instanceof View)
-		{
+		if (window instanceof View) {
 			View v = (View) window;
-	        MapControl mapCtrl = v.getMapControl();
+			MapControl mapCtrl = v.getMapControl();
 			MapContext map = mapCtrl.getMapContext();
-			
+
 			SingleLayerIterator it = new SingleLayerIterator(map.getLayers());
-			while (it.hasNext())
-			{
+			while (it.hasNext()) {
 				FLayer aux = it.next();
 				if (!aux.isActive())
 					continue;
 				Network net = (Network) aux.getProperty("network");
-				
-				if ( net != null)
-				{
-					if (net.getFlags().length > 0)
-					{
+
+				if (net != null) {
+					if (net.getFlags().length > 0) {
 						return true;
 					}
 				}
@@ -196,14 +190,12 @@ public class MinimumSpanningTreeExtension extends Extension {
 		}
 		return false;
 
-
 	}
 
 	public boolean isVisible() {
-		IWindow f = PluginServices.getMDIManager()
-		 .getActiveWindow();
+		IWindow f = PluginServices.getMDIManager().getActiveWindow();
 		if (f == null) {
-		    return false;
+			return false;
 		}
 		if (f instanceof View) {
 			return true;

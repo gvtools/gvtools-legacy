@@ -46,7 +46,7 @@ public class FileTextField extends JPanel {
 	}
 
 	private void initializeUI() {
-		 jfc = new JFileChooser(JFC_ID, (String) null);
+		jfc = new JFileChooser(JFC_ID, (String) null);
 		setLayout(new GridBagLayout());
 
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -58,17 +58,18 @@ public class FileTextField extends JPanel {
 		constraints.anchor = GridBagConstraints.WEST;
 		constraints.weightx = 1.0;
 		constraints.weighty = 1.0;
-		constraints.insets = new Insets(0,0,0,4);
+		constraints.insets = new Insets(0, 0, 0, 4);
 		this.add(getNameField(), constraints);
 
 		getChooseFileButton().addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				if (e.getSource()==getChooseFileButton()) {
-					int action = jfc.showDialog(FileTextField.this, Messages.getText("Open"));
+				if (e.getSource() == getChooseFileButton()) {
+					int action = jfc.showDialog(FileTextField.this,
+							Messages.getText("Open"));
 					if (action == JFileChooser.APPROVE_OPTION) {
 						setSelectedFile(jfc.getSelectedFile());
-						setEnabled(true);	
+						setEnabled(true);
 					}
 				}
 			}
@@ -81,15 +82,16 @@ public class FileTextField extends JPanel {
 		constraints.anchor = GridBagConstraints.WEST;
 		constraints.weightx = 0.0;
 		constraints.weighty = 1.0;
-		constraints.insets = new Insets(0,0,0,0);
+		constraints.insets = new Insets(0, 0, 0, 0);
 		this.add(getChooseFileButton(), constraints);
 	}
 
 	private JTextField getNameField() {
-		if (tf_fileName==null) {
+		if (tf_fileName == null) {
 			tf_fileName = new JTextField();
 			tf_fileName.addFocusListener(new FocusListener() {
-				public void focusGained(FocusEvent e) {}
+				public void focusGained(FocusEvent e) {
+				}
 
 				public void focusLost(FocusEvent e) {
 					updateSelectedFile();
@@ -98,14 +100,13 @@ public class FileTextField extends JPanel {
 		}
 		return tf_fileName;
 	}
-	
+
 	private JButton getChooseFileButton() {
-		if (bt_chooseFile==null) {
+		if (bt_chooseFile == null) {
 			bt_chooseFile = new JButton("...");
 		}
 		return bt_chooseFile;
 	}
-
 
 	public void setSelectedFile(File file) {
 		File oldFile = selectedFile;
@@ -113,8 +114,7 @@ public class FileTextField extends JPanel {
 		getNameField().setText(selectedFile.toString());
 		if (file.isDirectory()) {
 			jfc.setLastPath(file);
-		}
-		else {
+		} else {
 			jfc.setLastPath(file.getParentFile());
 		}
 		fireValueChanged(oldFile, file);
@@ -123,30 +123,30 @@ public class FileTextField extends JPanel {
 	public File getSelectedFile() {
 		return updateSelectedFile();
 	}
-	
+
 	private File normalizeExtension(File file) {
-		javax.swing.filechooser.FileFilter filter = (javax.swing.filechooser.FileFilter) jfc.getFileFilter();
+		javax.swing.filechooser.FileFilter filter = (javax.swing.filechooser.FileFilter) jfc
+				.getFileFilter();
 		if (!filter.accept(file)) {
 			String path = file.getPath();
-			if (filter instanceof FileFilter)  {
+			if (filter instanceof FileFilter) {
 				FileFilter ourFilter = (FileFilter) filter;
-			if (path.endsWith(".")) {
-				path = path+ourFilter.getDefaultExtension();
-			}
-			else {
-				path = path+"."+ourFilter.getDefaultExtension();
-			}
-			file = new File(path);
+				if (path.endsWith(".")) {
+					path = path + ourFilter.getDefaultExtension();
+				} else {
+					path = path + "." + ourFilter.getDefaultExtension();
+				}
+				file = new File(path);
 			}
 		}
-		return file;	
+		return file;
 	}
-	
+
 	private File updateSelectedFile() {
 		File oldFile = selectedFile;
 		String text = getNameField().getText();
-		if ( (oldFile!=null && !oldFile.getPath().equals(text))
-				|| ((oldFile==null) && !text.equals(""))){
+		if ((oldFile != null && !oldFile.getPath().equals(text))
+				|| ((oldFile == null) && !text.equals(""))) {
 			File newFile = normalizeExtension(new File(getNameField().getText()));
 			selectedFile = newFile;
 			fireValueChanged(oldFile, newFile);
@@ -184,7 +184,7 @@ public class FileTextField extends JPanel {
 	public void setFileFilter(FileFilter filter) {
 
 		jfc.setFileFilter(filter);
-		
+
 	}
 
 	public void addChoosableFileFilter(FileFilter filter) {
@@ -206,5 +206,5 @@ public class FileTextField extends JPanel {
 	public void setAcceptAllFileFilterUsed(boolean b) {
 		jfc.setAcceptAllFileFilterUsed(b);
 	}
-	
+
 }

@@ -71,275 +71,282 @@ import org.xmlpull.v1.XmlPullParserException;
 /**
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class WFSProtocolHandler1_1_0 extends WFSProtocolHandler{
-	
-	public WFSProtocolHandler1_1_0(){
+public class WFSProtocolHandler1_1_0 extends WFSProtocolHandler {
+
+	public WFSProtocolHandler1_1_0() {
 		this.version = "1.1.0";
-		this.name = "WFS1.1.0";		
-	}	
-	
+		this.name = "WFS1.1.0";
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.remoteClient.OGCProtocolHandler#parseCapabilities(java.io.File)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.OGCProtocolHandler#parseCapabilities(java.io.File)
 	 */
 	public boolean parseCapabilities(File f) {
 		int tag;
 		XMLSchemaParser parser = null;
-      	parser = new XMLSchemaParser();
-    	try
-    	{
-    		parser.setInput(f);
-    		parser.nextTag();
-    		
-			if ( parser.getEventType() != KXmlParser.END_DOCUMENT ) 
-			{     	
-				parser.require(KXmlParser.START_TAG, null, CapabilitiesTags.WFS_CAPABILITIES_ROOT1_0_0);             
-				//Parses the Namespaces...
-				parseNamespaces(parser);	
+		parser = new XMLSchemaParser();
+		try {
+			parser.setInput(f);
+			parser.nextTag();
+
+			if (parser.getEventType() != KXmlParser.END_DOCUMENT) {
+				parser.require(KXmlParser.START_TAG, null,
+						CapabilitiesTags.WFS_CAPABILITIES_ROOT1_0_0);
+				// Parses the Namespaces...
+				parseNamespaces(parser);
 				tag = parser.nextTag();
-				while(tag != KXmlParser.END_DOCUMENT)
-				{
-					switch(tag)
-					{
+				while (tag != KXmlParser.END_DOCUMENT) {
+					switch (tag) {
 					case KXmlParser.START_TAG:
-						if (parser.getName().compareTo(CapabilitiesTags.SERVICE_IDENTIFICATION)==0)
-						{
+						if (parser.getName().compareTo(
+								CapabilitiesTags.SERVICE_IDENTIFICATION) == 0) {
 							parseServiceIdentification(parser);
-						} 
-						else if (parser.getName().compareTo(CapabilitiesTags.SERVICE_PROVIDER)==0)
-						{
+						} else if (parser.getName().compareTo(
+								CapabilitiesTags.SERVICE_PROVIDER) == 0) {
 							parseServiceProvider(parser);
-						} 
-						else if (parser.getName().compareTo(CapabilitiesTags.OPERATIONS_METADATA)==0)
-						{
+						} else if (parser.getName().compareTo(
+								CapabilitiesTags.OPERATIONS_METADATA) == 0) {
 							parseOperationsMetadata(parser);
-						} 
-						else if (parser.getName().compareTo(CapabilitiesTags.FEATURE_TYPE_LIST)==0)
-						{
+						} else if (parser.getName().compareTo(
+								CapabilitiesTags.FEATURE_TYPE_LIST) == 0) {
 							parseFeatureTypeList(parser);
-						} 
-						else if (parser.getName().compareTo(CapabilitiesTags.FILTER_CAPABILITIES)==0)
-						{
+						} else if (parser.getName().compareTo(
+								CapabilitiesTags.FILTER_CAPABILITIES) == 0) {
 							parseFilterCapabilities(parser);
-						} 
+						}
 						break;
-					case KXmlParser.END_TAG:                            
+					case KXmlParser.END_TAG:
 						break;
 					case KXmlParser.TEXT:
-						if (parser.getName()!=null)
-							                         
-						break;
+						if (parser.getName() != null)
+
+							break;
 					}
 					tag = parser.next();
 				}
-				parser.require(KXmlParser.END_DOCUMENT, null, null);                
+				parser.require(KXmlParser.END_DOCUMENT, null, null);
 			}
-		}
-		catch(XmlPullParserException parser_ex){
+		} catch (XmlPullParserException parser_ex) {
 			parser_ex.printStackTrace();
 			return false;
-		}
-		catch (IOException ioe) {           
+		} catch (IOException ioe) {
 			ioe.printStackTrace();
 			return false;
 		}
 		return true;
 	}
-	
+
 	/**
-	 * <p>Parses the Service Identification </p>
-	 */    
-	private void parseServiceIdentification(KXmlParser parser) throws IOException, XmlPullParserException {
-		int currentTag;
-		boolean end = false;		
-		
-		currentTag = parser.next();
-		
-		while (!end) 
-		{
-			switch(currentTag)
-			{
-			case KXmlParser.START_TAG:
-				if (parser.getName().compareTo(CapabilitiesTags.WFS_TITLE)==0)
-				{
-					serviceInfo.title = parser.nextText(); 
-				}
-				else if (parser.getName().compareTo(CapabilitiesTags.WFS_ABSTRACT)==0)
-				{
-					serviceInfo.abstr = parser.nextText(); 
-				} 			                       
-				break;
-			case KXmlParser.END_TAG:
-				if (parser.getName().compareTo(CapabilitiesTags.SERVICE_IDENTIFICATION) == 0)
-					end = true;
-				break;
-			case KXmlParser.TEXT:                   
-				break;
-			}
-			if (!end){
-				currentTag = parser.next();
-			}
-		}     
-	}	
-	
-	/**
-	 * <p>Parses the Service Provider </p>
-	 */    
-	private void parseServiceProvider(KXmlParser parser) throws IOException, XmlPullParserException {
-		int currentTag;
-		boolean end = false;		
-		
-		currentTag = parser.next();
-		
-		while (!end) 
-		{
-			switch(currentTag)
-			{
-			case KXmlParser.START_TAG:
-						                       
-				break;
-			case KXmlParser.END_TAG:
-				if (parser.getName().compareTo(CapabilitiesTags.SERVICE_PROVIDER) == 0)
-					end = true;
-				break;
-			case KXmlParser.TEXT:                   
-				break;
-			}
-			if (!end){
-				currentTag = parser.next();
-			}
-		}  
-	}	
-	/**
-	 * <p>Parses the Operations Metadata </p>
-	 */    
-	private void parseOperationsMetadata(KXmlParser parser) throws IOException, XmlPullParserException {
-		int currentTag;
-		boolean end = false;	
-		
-		currentTag = parser.next();
-		
-		while (!end) 
-		{
-			switch(currentTag)
-			{
-			case KXmlParser.START_TAG:
-				if (parser.getName().compareTo(CapabilitiesTags.OPERATION)==0)
-				{
-					String operation = null;
-					for (int i=0 ; i<parser.getAttributeCount() ; i++){
-						if (parser.getAttributeName(i).compareTo(CapabilitiesTags.OPERATION_NAME)==0){
-							operation = parser.getAttributeValue(i);
-						}
-					}				
-					int intOp = org.gvsig.remoteClient.wfs.WFSOperation.getOperation(operation);
-					currentTag = parser.nextTag();
-					if (parser.getName().compareTo(CapabilitiesTags.DCP)==0)
-					{			
-						currentTag = parser.nextTag();
-						if(parser.getName().compareTo(CapabilitiesTags.HTTP)==0)
-						{
-							currentTag = parser.nextTag();
-							if(parser.getName().compareTo(CapabilitiesTags.GET)==0)
-							{
-								String value = null;
-								for (int i=0 ; i<parser.getAttributeCount() ; i++){
-									if (parser.getAttributeName(i).compareTo(CapabilitiesTags.HREF) == 0){
-						    			value = parser.getAttributeValue(i);
-						    		}
-								}	
-								if (intOp > -1){
-									if (value == null){
-										serviceInfo.addOperation(intOp, WFSOperation.PROTOCOL_GET);
-									}else{
-										serviceInfo.addOperation(intOp, WFSOperation.PROTOCOL_GET, value);
-									}	
-								}
-							}
-						}
-					}					
-				}  				
-				break;
-			case KXmlParser.END_TAG:
-				if (parser.getName().compareTo(CapabilitiesTags.OPERATIONS_METADATA) == 0)
-					end = true;
-				break;
-			case KXmlParser.TEXT:                   
-				break;
-			}
-			if (!end){
-				currentTag = parser.next();
-			}
-		}
-	}	
-	/**
-	 * <p>Parses the Feature Type List </p>
-	 */    
-	private void parseFeatureTypeList(KXmlParser parser) throws IOException, XmlPullParserException {
+	 * <p>
+	 * Parses the Service Identification
+	 * </p>
+	 */
+	private void parseServiceIdentification(KXmlParser parser)
+			throws IOException, XmlPullParserException {
 		int currentTag;
 		boolean end = false;
 
 		currentTag = parser.next();
-		
-		while (!end) 
-		{
-			switch(currentTag)
-			{
+
+		while (!end) {
+			switch (currentTag) {
 			case KXmlParser.START_TAG:
-				if (parser.getName().compareToIgnoreCase(CapabilitiesTags.WFS_FEATURETYPE)==0)
-				{
-					//Parse the namespaces...
-					parseNamespaces(parser);	
-					WFSFeature1_1_0 feature = new WFSFeature1_1_0();
-					feature.parse(parser);	
-					features.put(feature.getName(),feature);
-				} 				         
+				if (parser.getName().compareTo(CapabilitiesTags.WFS_TITLE) == 0) {
+					serviceInfo.title = parser.nextText();
+				} else if (parser.getName().compareTo(
+						CapabilitiesTags.WFS_ABSTRACT) == 0) {
+					serviceInfo.abstr = parser.nextText();
+				}
 				break;
 			case KXmlParser.END_TAG:
-				if (parser.getName().compareTo(CapabilitiesTags.FEATURE_TYPE_LIST) == 0)
+				if (parser.getName().compareTo(
+						CapabilitiesTags.SERVICE_IDENTIFICATION) == 0)
 					end = true;
 				break;
-			case KXmlParser.TEXT:                   
+			case KXmlParser.TEXT:
 				break;
 			}
-			if (!end){
+			if (!end) {
 				currentTag = parser.next();
 			}
-		}     
-	}	
+		}
+	}
+
 	/**
-	 * <p>Parses the Filter Capabilities </p>
-	 */    
-	private void parseFilterCapabilities(KXmlParser parser) throws IOException, XmlPullParserException {
+	 * <p>
+	 * Parses the Service Provider
+	 * </p>
+	 */
+	private void parseServiceProvider(KXmlParser parser) throws IOException,
+			XmlPullParserException {
 		int currentTag;
-		boolean end = false;		
-		
+		boolean end = false;
+
 		currentTag = parser.next();
-		
-		while (!end) 
-		{
-			switch(currentTag)
-			{
+
+		while (!end) {
+			switch (currentTag) {
 			case KXmlParser.START_TAG:
-						                       
+
 				break;
 			case KXmlParser.END_TAG:
-				if (parser.getName().compareTo(CapabilitiesTags.FILTER_CAPABILITIES) == 0)
+				if (parser.getName().compareTo(
+						CapabilitiesTags.SERVICE_PROVIDER) == 0)
 					end = true;
 				break;
-			case KXmlParser.TEXT:                   
+			case KXmlParser.TEXT:
 				break;
 			}
-			if (!end){
+			if (!end) {
 				currentTag = parser.next();
 			}
-		}  
-	}	
-	
-	protected boolean parseDescribeFeatureType(File f,String nameSpace) {
+		}
+	}
+
+	/**
+	 * <p>
+	 * Parses the Operations Metadata
+	 * </p>
+	 */
+	private void parseOperationsMetadata(KXmlParser parser) throws IOException,
+			XmlPullParserException {
+		int currentTag;
+		boolean end = false;
+
+		currentTag = parser.next();
+
+		while (!end) {
+			switch (currentTag) {
+			case KXmlParser.START_TAG:
+				if (parser.getName().compareTo(CapabilitiesTags.OPERATION) == 0) {
+					String operation = null;
+					for (int i = 0; i < parser.getAttributeCount(); i++) {
+						if (parser.getAttributeName(i).compareTo(
+								CapabilitiesTags.OPERATION_NAME) == 0) {
+							operation = parser.getAttributeValue(i);
+						}
+					}
+					int intOp = org.gvsig.remoteClient.wfs.WFSOperation
+							.getOperation(operation);
+					currentTag = parser.nextTag();
+					if (parser.getName().compareTo(CapabilitiesTags.DCP) == 0) {
+						currentTag = parser.nextTag();
+						if (parser.getName().compareTo(CapabilitiesTags.HTTP) == 0) {
+							currentTag = parser.nextTag();
+							if (parser.getName()
+									.compareTo(CapabilitiesTags.GET) == 0) {
+								String value = null;
+								for (int i = 0; i < parser.getAttributeCount(); i++) {
+									if (parser.getAttributeName(i).compareTo(
+											CapabilitiesTags.HREF) == 0) {
+										value = parser.getAttributeValue(i);
+									}
+								}
+								if (intOp > -1) {
+									if (value == null) {
+										serviceInfo.addOperation(intOp,
+												WFSOperation.PROTOCOL_GET);
+									} else {
+										serviceInfo.addOperation(intOp,
+												WFSOperation.PROTOCOL_GET,
+												value);
+									}
+								}
+							}
+						}
+					}
+				}
+				break;
+			case KXmlParser.END_TAG:
+				if (parser.getName().compareTo(
+						CapabilitiesTags.OPERATIONS_METADATA) == 0)
+					end = true;
+				break;
+			case KXmlParser.TEXT:
+				break;
+			}
+			if (!end) {
+				currentTag = parser.next();
+			}
+		}
+	}
+
+	/**
+	 * <p>
+	 * Parses the Feature Type List
+	 * </p>
+	 */
+	private void parseFeatureTypeList(KXmlParser parser) throws IOException,
+			XmlPullParserException {
+		int currentTag;
+		boolean end = false;
+
+		currentTag = parser.next();
+
+		while (!end) {
+			switch (currentTag) {
+			case KXmlParser.START_TAG:
+				if (parser.getName().compareToIgnoreCase(
+						CapabilitiesTags.WFS_FEATURETYPE) == 0) {
+					// Parse the namespaces...
+					parseNamespaces(parser);
+					WFSFeature1_1_0 feature = new WFSFeature1_1_0();
+					feature.parse(parser);
+					features.put(feature.getName(), feature);
+				}
+				break;
+			case KXmlParser.END_TAG:
+				if (parser.getName().compareTo(
+						CapabilitiesTags.FEATURE_TYPE_LIST) == 0)
+					end = true;
+				break;
+			case KXmlParser.TEXT:
+				break;
+			}
+			if (!end) {
+				currentTag = parser.next();
+			}
+		}
+	}
+
+	/**
+	 * <p>
+	 * Parses the Filter Capabilities
+	 * </p>
+	 */
+	private void parseFilterCapabilities(KXmlParser parser) throws IOException,
+			XmlPullParserException {
+		int currentTag;
+		boolean end = false;
+
+		currentTag = parser.next();
+
+		while (!end) {
+			switch (currentTag) {
+			case KXmlParser.START_TAG:
+
+				break;
+			case KXmlParser.END_TAG:
+				if (parser.getName().compareTo(
+						CapabilitiesTags.FILTER_CAPABILITIES) == 0)
+					end = true;
+				break;
+			case KXmlParser.TEXT:
+				break;
+			}
+			if (!end) {
+				currentTag = parser.next();
+			}
+		}
+	}
+
+	protected boolean parseDescribeFeatureType(File f, String nameSpace) {
 		XMLSchemaParser schemaParser = new XMLSchemaParser();
 		try {
-			schemaParser.parse(f,nameSpace);
+			schemaParser.parse(f, nameSpace);
 		} catch (XmlPullParserException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -347,13 +354,13 @@ public class WFSProtocolHandler1_1_0 extends WFSProtocolHandler{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		String layerName = getCurrentFeature();
-		if (getCurrentFeature().split(":").length>1){
+		if (getCurrentFeature().split(":").length > 1) {
 			layerName = getCurrentFeature().split(":")[1];
 		}
 		XMLElement entity = XMLElementsFactory.getElement(layerName);
-		if (entity != null){
+		if (entity != null) {
 			Vector vector = new Vector();
 			vector.add(entity);
 			setFields(vector);
@@ -362,19 +369,23 @@ public class WFSProtocolHandler1_1_0 extends WFSProtocolHandler{
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see org.gvsig.remoteClient.wfs.WFSProtocolHandler#parseGetFeature(java.io.File, java.lang.String)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.wfs.WFSProtocolHandler#parseGetFeature(java.io
+	 * .File, java.lang.String)
 	 */
-	protected boolean parseGetFeature(File f, String nameSpace) throws WFSException{
+	protected boolean parseGetFeature(File f, String nameSpace)
+			throws WFSException {
 		XMLSchemaParser parser = null;
-      	parser = new XMLSchemaParser();
-    	try
-    	{
-    		parser.setInput(f);
-    		parser.nextTag();				
-			if (parser.getName().compareTo(CapabilitiesTags.SERVICE_EXCEPTION_REPORT)==0){
+		parser = new XMLSchemaParser();
+		try {
+			parser.setInput(f);
+			parser.nextTag();
+			if (parser.getName().compareTo(
+					CapabilitiesTags.SERVICE_EXCEPTION_REPORT) == 0) {
 				throw ExceptionsFactory.parseExceptionReport(parser);
-			}			
+			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			throw new WFSGetFeatureException(e);
@@ -384,24 +395,32 @@ public class WFSProtocolHandler1_1_0 extends WFSProtocolHandler{
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new WFSGetFeatureException(e);
-		}        
-		
+		}
+
 		return true;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.remoteClient.wfs.WFSProtocolHandler#parseTransaction(java.io.File, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.wfs.WFSProtocolHandler#parseTransaction(java.io
+	 * .File, java.lang.String)
 	 */
-	protected boolean parseTransaction(File f, String nameSpace, WFSTTransaction transaction) {
+	protected boolean parseTransaction(File f, String nameSpace,
+			WFSTTransaction transaction) {
 		return false;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.remoteClient.wfs.WFSProtocolHandler#parseLockFeature(java.io.File, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.wfs.WFSProtocolHandler#parseLockFeature(java.io
+	 * .File, java.lang.String)
 	 */
-	protected boolean parseLockFeature(File f, String nameSpace, WFSStatus status) throws WFSException {
+	protected boolean parseLockFeature(File f, String nameSpace,
+			WFSStatus status) throws WFSException {
 		return false;
 	}
 }

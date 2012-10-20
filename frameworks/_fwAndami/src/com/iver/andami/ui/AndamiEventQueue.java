@@ -46,20 +46,23 @@ import java.awt.EventQueue;
 import com.iver.andami.messages.Messages;
 import com.iver.andami.messages.NotificationManager;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public class AndamiEventQueue extends EventQueue {
-	protected void dispatchEvent(AWTEvent event){
-		try{
+	protected void dispatchEvent(AWTEvent event) {
+		try {
 			super.dispatchEvent(event);
-		} catch(RuntimeException e){
-			NotificationManager.addError(e);//Messages.getString("PluginServices.Bug en el código"), e);
-		} catch (Error e){
-			NotificationManager.addError(Messages.getString("PluginServices.Error grave de la aplicación.  \n Es conveniente que salgas de la aplicación"), e);
+		} catch (RuntimeException e) {
+			NotificationManager.addError(e);// Messages.getString("PluginServices.Bug en el código"),
+											// e);
+		} catch (Error e) {
+			NotificationManager
+					.addError(
+							Messages.getString("PluginServices.Error grave de la aplicación.  \n Es conveniente que salgas de la aplicación"),
+							e);
 		}
 	}
 }

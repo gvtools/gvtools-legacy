@@ -1,4 +1,5 @@
 package es.gva.cit.catalog.exceptions;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -48,21 +49,22 @@ package es.gva.cit.catalog.exceptions;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class NotSupportedVersionException extends Exception{
-	
+public class NotSupportedVersionException extends Exception {
+
 	public NotSupportedVersionException(Throwable cause) {
-		super(cause);		
+		super(cause);
 	}
-	
+
 	public NotSupportedVersionException() {
-		super();		
+		super();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Throwable#toString()
 	 */
-	public String toString(){
+	public String toString() {
 		return "errorNotSupportedVersion";
 	}
 }

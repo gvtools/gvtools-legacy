@@ -58,121 +58,129 @@ import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
 import com.iver.cit.gvsig.fmap.core.symbols.SymbolDrawingException;
 import com.iver.utiles.XMLEntity;
 
-
 /**
  * FFrame para introducir una Símbolo en el Layout.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FFrameSymbol extends FFrameGraphics {
 
-    private PrintRequestAttributeSet properties;
+	private PrintRequestAttributeSet properties;
 
 	/**
-     * Crea un nuevo FFrameSymbol.
-     */
-    public FFrameSymbol() {
-    	super();
-    }
+	 * Crea un nuevo FFrameSymbol.
+	 */
+	public FFrameSymbol() {
+		super();
+	}
 
-    /**
-     * Método que dibuja sobre el graphics que se le pasa como parámetro, según
-     * la transformada afin que se debe de aplicar y el rectángulo que se debe
-     * de dibujar.
-     *
-     * @param g Graphics
-     * @param at Transformada afin.
-     * @param rv rectángulo sobre el que hacer un clip.
-     * @param imgBase Imagen para acelerar el dibujado.
-     */
-    public void draw(Graphics2D g, AffineTransform at, Rectangle2D rv,
-        BufferedImage imgBase) {
-        Rectangle2D.Double re = getBoundingBox(at);
-        g.rotate(Math.toRadians(getRotation()), re.x + (re.width / 2),
-            re.y + (re.height / 2));
+	/**
+	 * Método que dibuja sobre el graphics que se le pasa como parámetro, según
+	 * la transformada afin que se debe de aplicar y el rectángulo que se debe
+	 * de dibujar.
+	 * 
+	 * @param g
+	 *            Graphics
+	 * @param at
+	 *            Transformada afin.
+	 * @param rv
+	 *            rectángulo sobre el que hacer un clip.
+	 * @param imgBase
+	 *            Imagen para acelerar el dibujado.
+	 */
+	public void draw(Graphics2D g, AffineTransform at, Rectangle2D rv,
+			BufferedImage imgBase) {
+		Rectangle2D.Double re = getBoundingBox(at);
+		g.rotate(Math.toRadians(getRotation()), re.x + (re.width / 2), re.y
+				+ (re.height / 2));
 
-        if (intersects(rv, re)) {
-            AffineTransform mT2 = new AffineTransform();
-            mT2.setToIdentity();
+		if (intersects(rv, re)) {
+			AffineTransform mT2 = new AffineTransform();
+			mT2.setToIdentity();
 
-            Rectangle rec = new Rectangle((int) re.x, (int) re.y,
-                    (int) (re.width), (int) (re.height));
+			Rectangle rec = new Rectangle((int) re.x, (int) re.y,
+					(int) (re.width), (int) (re.height));
 
-            try {
+			try {
 				getFSymbol().drawInsideRectangle(g, mT2, rec, properties);
 			} catch (SymbolDrawingException e) {
 				if (e.getType() == SymbolDrawingException.UNSUPPORTED_SET_OF_SETTINGS) {
 					try {
-						SymbologyFactory.getWarningSymbol(
-								SymbolDrawingException.STR_UNSUPPORTED_SET_OF_SETTINGS,
-								getFSymbol().getDescription(),
-								SymbolDrawingException.UNSUPPORTED_SET_OF_SETTINGS).drawInsideRectangle(g, null, rec, null);
+						SymbologyFactory
+								.getWarningSymbol(
+										SymbolDrawingException.STR_UNSUPPORTED_SET_OF_SETTINGS,
+										getFSymbol().getDescription(),
+										SymbolDrawingException.UNSUPPORTED_SET_OF_SETTINGS)
+								.drawInsideRectangle(g, null, rec, null);
 					} catch (SymbolDrawingException e1) {
 						// IMPOSSIBLE TO REACH THIS
 					}
 				} else {
 					// should be unreachable code
-					throw new Error(PluginServices.getText(this, "symbol_shapetype_mismatch"));
+					throw new Error(PluginServices.getText(this,
+							"symbol_shapetype_mismatch"));
 				}
 			}
-        }
+		}
 
-        g.rotate(Math.toRadians(-getRotation()), re.x + (re.width / 2),
-            re.y + (re.height / 2));
-    }
+		g.rotate(Math.toRadians(-getRotation()), re.x + (re.width / 2), re.y
+				+ (re.height / 2));
+	}
 
-    /**
-     * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#getNameFFrame()
-     */
-    public String getNameFFrame() {
-        return PluginServices.getText(this, "simbolo")+num;
-    }
+	/**
+	 * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#getNameFFrame()
+	 */
+	public String getNameFFrame() {
+		return PluginServices.getText(this, "simbolo") + num;
+	}
 
-    /**
-     * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#print(java.awt.Graphics2D,
-     *      java.awt.geom.AffineTransform)
-     */
-    public void print(Graphics2D g, AffineTransform at, FShape shape, PrintRequestAttributeSet properties) {
-        this.properties=properties;
-    	draw(g, at, null, null);
-    	this.properties=null;
-    }
+	/**
+	 * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#print(java.awt.Graphics2D,
+	 *      java.awt.geom.AffineTransform)
+	 */
+	public void print(Graphics2D g, AffineTransform at, FShape shape,
+			PrintRequestAttributeSet properties) {
+		this.properties = properties;
+		draw(g, at, null, null);
+		this.properties = null;
+	}
 
-    public void initialize() {
+	public void initialize() {
 
 	}
-    public void setBoundBox(Rectangle2D r) {
-        m_BoundBox.setRect(r.getX(), r.getY(), r.getWidth(), r.getHeight());
-    }
+
+	public void setBoundBox(Rectangle2D r) {
+		m_BoundBox.setRect(r.getX(), r.getY(), r.getWidth(), r.getHeight());
+	}
 
 	public void setShapeType(int shapeType) {
 		switch (shapeType % FShape.Z % FShape.M) {
-        case (FShape.POINT):
-        	m_type = POINT;
-            break;
+		case (FShape.POINT):
+			m_type = POINT;
+			break;
 
-        case (FShape.POLYGON):
-        	m_type = POLYGON;
-            break;
+		case (FShape.POLYGON):
+			m_type = POLYGON;
+			break;
 
-        case (FShape.LINE):
-        	m_type = LINE;
-            break;
-        }
+		case (FShape.LINE):
+			m_type = LINE;
+			break;
+		}
 
 	}
 
 	/**
-     * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#setXMLEntity(com.iver.utiles.XMLEntity,
-     *      com.iver.cit.gvsig.project.Project)
-     */
-    public void setXMLEntity(XMLEntity xml) {
-        m_Selected = xml.getIntProperty("m_Selected");
+	 * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#setXMLEntity(com.iver.utiles.XMLEntity,
+	 *      com.iver.cit.gvsig.project.Project)
+	 */
+	public void setXMLEntity(XMLEntity xml) {
+		m_Selected = xml.getIntProperty("m_Selected");
 
-        setRotation(xml.getDoubleProperty("m_rotation"));
-        setFSymbol(SymbologyFactory.createSymbolFromXML(xml.getChild(0), null));
-        if (xml.contains("m_type")) {
-            m_type = xml.getIntProperty("m_type");
-        }
-    }
+		setRotation(xml.getDoubleProperty("m_rotation"));
+		setFSymbol(SymbologyFactory.createSymbolFromXML(xml.getChild(0), null));
+		if (xml.contains("m_type")) {
+			m_type = xml.getIntProperty("m_type");
+		}
+	}
 }

@@ -31,6 +31,7 @@ import org.gvsig.gui.beans.swing.JButton;
 
 import com.iver.andami.PluginServices;
 import com.iver.utiles.listManager.ListManager;
+
 public class ListManagerSkin extends JPanel {
 
 	private JScrollPane jScrollPane = null;
@@ -44,9 +45,10 @@ public class ListManagerSkin extends JPanel {
 
 	private JList jList = null;
 	private JPanel jPanel1 = null;
+
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getJScrollPane() {
@@ -56,9 +58,10 @@ public class ListManagerSkin extends JPanel {
 		}
 		return jScrollPane;
 	}
+
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel() {
@@ -71,9 +74,10 @@ public class ListManagerSkin extends JPanel {
 		}
 		return jPanel;
 	}
+
 	/**
 	 * This method initializes jButton
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getJButtonDown() {
@@ -83,9 +87,10 @@ public class ListManagerSkin extends JPanel {
 		}
 		return jButtonDown;
 	}
+
 	/**
 	 * This method initializes jButton1
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getJButtonUp() {
@@ -95,9 +100,10 @@ public class ListManagerSkin extends JPanel {
 		}
 		return jButtonUp;
 	}
+
 	/**
 	 * This method initializes jButton2
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getJButtonAdd() {
@@ -107,9 +113,10 @@ public class ListManagerSkin extends JPanel {
 		}
 		return jButtonAdd;
 	}
+
 	/**
 	 * This method initializes jButton3
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getJButtonDel() {
@@ -119,9 +126,10 @@ public class ListManagerSkin extends JPanel {
 		}
 		return jButtonDel;
 	}
+
 	/**
 	 * This method initializes jList
-	 *
+	 * 
 	 * @return javax.swing.JList
 	 */
 	private JList getJList() {
@@ -130,7 +138,8 @@ public class ListManagerSkin extends JPanel {
 		}
 		return jList;
 	}
-         	/**
+
+	/**
 	 * This is the default constructor
 	 */
 	public ListManagerSkin(boolean down) {
@@ -138,12 +147,13 @@ public class ListManagerSkin extends JPanel {
 		listManager = new ListManager(down);
 		initialize();
 	}
+
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
-	private  void initialize() {
+	private void initialize() {
 		this.setLayout(new BorderLayout());
 		this.setSize(421, 349);
 		this.add(getJScrollPane(), BorderLayout.CENTER);
@@ -156,22 +166,24 @@ public class ListManagerSkin extends JPanel {
 		listManager.initialize();
 
 	}
+
 	/**
 	 * @return Returns the listManager.
 	 */
 	public ListManager getListManager() {
 		return listManager;
 	}
+
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel1() {
 		if (jPanel1 == null) {
 			jPanel1 = new JPanel(new GridLayout(6, 1, 5, 5));
 
-			jPanel1.setPreferredSize(new Dimension(100,180));
+			jPanel1.setPreferredSize(new Dimension(100, 180));
 			jPanel1.add(getJButtonAdd(), null);
 			jPanel1.add(getJButtonDel(), null);
 			jPanel1.add(getJButtonUp(), null);
@@ -179,4 +191,4 @@ public class ListManagerSkin extends JPanel {
 		}
 		return jPanel1;
 	}
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

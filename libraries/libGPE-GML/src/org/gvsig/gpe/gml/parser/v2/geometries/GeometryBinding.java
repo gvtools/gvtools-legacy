@@ -8,7 +8,6 @@ import javax.xml.namespace.QName;
 import org.gvsig.gpe.gml.parser.GPEDefaultGmlParser;
 import org.gvsig.gpe.gml.utils.GMLProjectionFactory;
 import org.gvsig.gpe.gml.utils.GMLTags;
-import org.gvsig.gpe.gml.utils.GMLUtilsParser;
 import org.gvsig.gpe.parser.IGPEErrorHandler;
 import org.gvsig.gpe.xml.stream.IXmlStreamReader;
 import org.gvsig.gpe.xml.stream.XmlStreamException;
@@ -89,44 +88,46 @@ import org.gvsig.gpe.xml.utils.XMLAttributesIterator;
  *
  */
 /**
- * This class parses a geometry. It is also used 
- * to get the attributes for a GML geometry. 
+ * This class parses a geometry. It is also used to get the attributes for a GML
+ * geometry.
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class GeometryBinding {
 	protected String srsName = null;
 	protected String id = null;
-	
+
 	/**
 	 * It parses the gml:Geometry tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * A geometry
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return A geometry
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public Object parse(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
+	public Object parse(IXmlStreamReader parser, GPEDefaultGmlParser handler)
+			throws XmlStreamException, IOException {
 		int currentTag;
-		Object geometry = null;		
+		Object geometry = null;
 
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-
-		switch(currentTag){
+		switch (currentTag) {
 		case IXmlStreamReader.START_ELEMENT:
 			geometry = parseTag(parser, handler, tag);
 			break;
-		}					
-		return geometry;	
+		}
+		return geometry;
 	}
-	
+
 	/**
 	 * It parses an XML tag
+	 * 
 	 * @param parser
 	 * @param handler
 	 * @param tag
@@ -134,154 +135,188 @@ public class GeometryBinding {
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	protected Object parseTag(IXmlStreamReader parser,GPEDefaultGmlParser handler, QName tag) throws XmlStreamException, IOException{
+	protected Object parseTag(IXmlStreamReader parser,
+			GPEDefaultGmlParser handler, QName tag) throws XmlStreamException,
+			IOException {
 		Object geometry = null;
-		//PROPERTIES
-		if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_GEOMETRYPROPERTY)){
-			geometry = handler.getProfile().getGeometryPropertyTypeBinding().
-			parse(parser, handler);
-		}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_POINTPROPERTY)){
-			geometry = handler.getProfile().getPointPropertyTypeBinding().
-			parse(parser, handler);
-		}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_LINESTRINGPROPERTY)){
-			geometry = handler.getProfile().getLineStringPropertyTypeBinding().
-			parse(parser, handler);
-		}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_POLYGONPROPERTY)){
-			geometry = handler.getProfile().getPolygonPropertyTypeBinding().
-			parse(parser, handler);
-		}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTIPOINTPROPERTY)){
-			geometry = handler.getProfile().getMultiPointPropertyTypeBinding().
-			parse(parser, handler);
-		}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTILINESTRINGPROPERTY)){
-			geometry = handler.getProfile().getMultiLineStringPropertyTypeBinding().
-			parse(parser, handler);
-		}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTIPOLYGONPROPERTY)){
-			geometry = handler.getProfile().getMultiPolygonPropertyTypeBinding().
-			parse(parser, handler);
-		}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTIGEOMETRYPROPERTY)){
-			geometry = handler.getProfile().getMultiGeometryPropertyTypeBinding().
-			parse(parser, handler);
+		// PROPERTIES
+		if (CompareUtils
+				.compareWithNamespace(tag, GMLTags.GML_GEOMETRYPROPERTY)) {
+			geometry = handler.getProfile().getGeometryPropertyTypeBinding()
+					.parse(parser, handler);
+		} else if (CompareUtils.compareWithNamespace(tag,
+				GMLTags.GML_POINTPROPERTY)) {
+			geometry = handler.getProfile().getPointPropertyTypeBinding()
+					.parse(parser, handler);
+		} else if (CompareUtils.compareWithNamespace(tag,
+				GMLTags.GML_LINESTRINGPROPERTY)) {
+			geometry = handler.getProfile().getLineStringPropertyTypeBinding()
+					.parse(parser, handler);
+		} else if (CompareUtils.compareWithNamespace(tag,
+				GMLTags.GML_POLYGONPROPERTY)) {
+			geometry = handler.getProfile().getPolygonPropertyTypeBinding()
+					.parse(parser, handler);
+		} else if (CompareUtils.compareWithNamespace(tag,
+				GMLTags.GML_MULTIPOINTPROPERTY)) {
+			geometry = handler.getProfile().getMultiPointPropertyTypeBinding()
+					.parse(parser, handler);
+		} else if (CompareUtils.compareWithNamespace(tag,
+				GMLTags.GML_MULTILINESTRINGPROPERTY)) {
+			geometry = handler.getProfile()
+					.getMultiLineStringPropertyTypeBinding()
+					.parse(parser, handler);
+		} else if (CompareUtils.compareWithNamespace(tag,
+				GMLTags.GML_MULTIPOLYGONPROPERTY)) {
+			geometry = handler.getProfile()
+					.getMultiPolygonPropertyTypeBinding()
+					.parse(parser, handler);
+		} else if (CompareUtils.compareWithNamespace(tag,
+				GMLTags.GML_MULTIGEOMETRYPROPERTY)) {
+			geometry = handler.getProfile()
+					.getMultiGeometryPropertyTypeBinding()
+					.parse(parser, handler);
 		}
-		//GEOMETRIES
-		else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_POINTMEMBER)){
-			geometry = handler.getProfile().getPointMemberTypeBinding().
-			parse(parser, handler);
-		}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_POINT)){
-			geometry = handler.getProfile().getPointTypeBinding().
-			parse(parser, handler);
-		}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_LINESTRINGMEMBER)){
-			geometry = handler.getProfile().getLineStringMemberTypeBinding().
-			parse(parser, handler);
-		}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_LINESTRING)){
-			geometry = handler.getProfile().getLineStringTypeBinding().
-			parse(parser, handler);
-		}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_LINEARRING)){
-			geometry = handler.getProfile().getLinearRingTypeBinding().
-			parse(parser, handler);
-		}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_POLYGONMEMBER)){
-			geometry = handler.getProfile().getPointMemberTypeBinding().
-			parse(parser, handler);
-		}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_POLYGON)){
-			geometry = handler.getProfile().getPolygonTypeBinding().
-			parse(parser, handler);
-		}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_GEOMETRYMEMBER)){
-			geometry = handler.getProfile().getGeometryMemberTypeBinding().
-			parse(parser, handler);
-		}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTIPOINT)){
-			geometry = handler.getProfile().getMultiPointTypeBinding().
-			parse(parser, handler);
-		}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTILINESTRING)){
-			geometry = handler.getProfile().getMultiLineStringTypeBinding().
-			parse(parser, handler);
-		}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTIPOLYGON)){
-			geometry = handler.getProfile().getMultiPolygonTypeBinding().
-			parse(parser, handler);
-		}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTIGEOMETRY)){
-			geometry = handler.getProfile().getMultiGeometryTypeBinding().
-			parse(parser, handler);
+		// GEOMETRIES
+		else if (CompareUtils
+				.compareWithNamespace(tag, GMLTags.GML_POINTMEMBER)) {
+			geometry = handler.getProfile().getPointMemberTypeBinding()
+					.parse(parser, handler);
+		} else if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_POINT)) {
+			geometry = handler.getProfile().getPointTypeBinding()
+					.parse(parser, handler);
+		} else if (CompareUtils.compareWithNamespace(tag,
+				GMLTags.GML_LINESTRINGMEMBER)) {
+			geometry = handler.getProfile().getLineStringMemberTypeBinding()
+					.parse(parser, handler);
+		} else if (CompareUtils.compareWithNamespace(tag,
+				GMLTags.GML_LINESTRING)) {
+			geometry = handler.getProfile().getLineStringTypeBinding()
+					.parse(parser, handler);
+		} else if (CompareUtils.compareWithNamespace(tag,
+				GMLTags.GML_LINEARRING)) {
+			geometry = handler.getProfile().getLinearRingTypeBinding()
+					.parse(parser, handler);
+		} else if (CompareUtils.compareWithNamespace(tag,
+				GMLTags.GML_POLYGONMEMBER)) {
+			geometry = handler.getProfile().getPointMemberTypeBinding()
+					.parse(parser, handler);
+		} else if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_POLYGON)) {
+			geometry = handler.getProfile().getPolygonTypeBinding()
+					.parse(parser, handler);
+		} else if (CompareUtils.compareWithNamespace(tag,
+				GMLTags.GML_GEOMETRYMEMBER)) {
+			geometry = handler.getProfile().getGeometryMemberTypeBinding()
+					.parse(parser, handler);
+		} else if (CompareUtils.compareWithNamespace(tag,
+				GMLTags.GML_MULTIPOINT)) {
+			geometry = handler.getProfile().getMultiPointTypeBinding()
+					.parse(parser, handler);
+		} else if (CompareUtils.compareWithNamespace(tag,
+				GMLTags.GML_MULTILINESTRING)) {
+			geometry = handler.getProfile().getMultiLineStringTypeBinding()
+					.parse(parser, handler);
+		} else if (CompareUtils.compareWithNamespace(tag,
+				GMLTags.GML_MULTIPOLYGON)) {
+			geometry = handler.getProfile().getMultiPolygonTypeBinding()
+					.parse(parser, handler);
+		} else if (CompareUtils.compareWithNamespace(tag,
+				GMLTags.GML_MULTIGEOMETRY)) {
+			geometry = handler.getProfile().getMultiGeometryTypeBinding()
+					.parse(parser, handler);
 		}
-		//POINT PROPERTY ALIASES
-		else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_LOCATION) ||
-				CompareUtils.compareWithNamespace(tag,GMLTags.GML_CENTEROF) ||
-				CompareUtils.compareWithNamespace(tag,GMLTags.GML_POSITION)){
-			geometry = handler.getProfile().getPointTypeBinding().
-			parse(parser, handler);
+		// POINT PROPERTY ALIASES
+		else if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_LOCATION)
+				|| CompareUtils.compareWithNamespace(tag, GMLTags.GML_CENTEROF)
+				|| CompareUtils.compareWithNamespace(tag, GMLTags.GML_POSITION)) {
+			geometry = handler.getProfile().getPointTypeBinding()
+					.parse(parser, handler);
 		}
-		//LINESTRING PROPERTY ALIASES
-		else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_EDGEOF) ||
-				CompareUtils.compareWithNamespace(tag,GMLTags.GML_CENTERLINEOF)){
-			geometry = handler.getProfile().getLineStringPropertyTypeBinding().
-			parse(parser, handler);
+		// LINESTRING PROPERTY ALIASES
+		else if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_EDGEOF)
+				|| CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_CENTERLINEOF)) {
+			geometry = handler.getProfile().getLineStringPropertyTypeBinding()
+					.parse(parser, handler);
 		}
-		//POLYGON PROPERTY ALIASES
-		else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_EXTENTOF) ||
-				CompareUtils.compareWithNamespace(tag,GMLTags.GML_COVERAGE)){
-			geometry = handler.getProfile().getPolygonPropertyTypeBinding().
-			parse(parser, handler);
+		// POLYGON PROPERTY ALIASES
+		else if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_EXTENTOF)
+				|| CompareUtils.compareWithNamespace(tag, GMLTags.GML_COVERAGE)) {
+			geometry = handler.getProfile().getPolygonPropertyTypeBinding()
+					.parse(parser, handler);
 		}
-		//MULTIPOINT PROPERTY ALIASES
-		else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTILOCATION) ||
-				CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTIPOSITION)){
-			geometry = handler.getProfile().getMultiPointPropertyTypeBinding().
-			parse(parser, handler);
+		// MULTIPOINT PROPERTY ALIASES
+		else if (CompareUtils.compareWithNamespace(tag,
+				GMLTags.GML_MULTILOCATION)
+				|| CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_MULTIPOSITION)) {
+			geometry = handler.getProfile().getMultiPointPropertyTypeBinding()
+					.parse(parser, handler);
 		}
-		//MULTILINESTRING PROPERTY ALIASES
-		else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTIEDGEOF) ||
-				CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTICENTERLINEOF)){
-			geometry =handler.getProfile().getMultiLineStringPropertyTypeBinding().
-			parse(parser, handler);
+		// MULTILINESTRING PROPERTY ALIASES
+		else if (CompareUtils
+				.compareWithNamespace(tag, GMLTags.GML_MULTIEDGEOF)
+				|| CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_MULTICENTERLINEOF)) {
+			geometry = handler.getProfile()
+					.getMultiLineStringPropertyTypeBinding()
+					.parse(parser, handler);
 		}
-		//MULTIPOLYGON PROPERTY ALIASES
-		else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTIEXTENTOF) ||
-				CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTICOVERAGE)){
-			geometry = handler.getProfile().getMultiPolygonTypeBinding().
-			parse(parser, handler);
+		// MULTIPOLYGON PROPERTY ALIASES
+		else if (CompareUtils.compareWithNamespace(tag,
+				GMLTags.GML_MULTIEXTENTOF)
+				|| CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_MULTICOVERAGE)) {
+			geometry = handler.getProfile().getMultiPolygonTypeBinding()
+					.parse(parser, handler);
 		}
 		return geometry;
 	}
-	
+
 	/**
-	 * This method has to be invoked by all the geometries
-	 * before to make the parse process. It retrieves
-	 * the common geometry attributes
+	 * This method has to be invoked by all the geometries before to make the
+	 * parse process. It retrieves the common geometry attributes
+	 * 
 	 * @param parser
-	 * The root geometry tag
+	 *            The root geometry tag
 	 * @param errorHandler
-	 * To add the errors
-	 * @throws XmlStreamException 
+	 *            To add the errors
+	 * @throws XmlStreamException
 	 */
-	protected void setAtributtes(IXmlStreamReader parser, IGPEErrorHandler errorHandler) throws XmlStreamException{
-		XMLAttributesIterator attributesIteartor = new XMLAttributesIterator(parser);
+	protected void setAtributtes(IXmlStreamReader parser,
+			IGPEErrorHandler errorHandler) throws XmlStreamException {
+		XMLAttributesIterator attributesIteartor = new XMLAttributesIterator(
+				parser);
 		Map attributes = attributesIteartor.getAttributes();
 		Object objId = attributes.get(GMLTags.GML_GID);
-		if (objId != null){
-			id = (String)objId;
-		}else{
+		if (objId != null) {
+			id = (String) objId;
+		} else {
 			id = null;
 		}
 		Object objSrs = attributes.get(GMLTags.GML_SRS_NAME);
-		if (objSrs != null){
-			srsName = GMLProjectionFactory.fromGMLToGPE((String)objSrs, errorHandler);
-		}else{
+		if (objSrs != null) {
+			srsName = GMLProjectionFactory.fromGMLToGPE((String) objSrs,
+					errorHandler);
+		} else {
 			srsName = null;
 		}
 	}
-	
+
 	/**
 	 * It returns a the geometry id attribute
-	 * @return
-	 * The id
+	 * 
+	 * @return The id
 	 */
-	public String getID(){
+	public String getID() {
 		return id;
-	}	
+	}
 
 	/**
 	 * It returns a the geometry srs attribute
-	 * @return
-	 * The srs
+	 * 
+	 * @return The srs
 	 */
-	public String getSrs(){
+	public String getSrs() {
 		return srsName;
 	}
 

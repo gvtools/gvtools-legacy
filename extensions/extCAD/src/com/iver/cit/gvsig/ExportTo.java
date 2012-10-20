@@ -73,35 +73,34 @@ import com.iver.utiles.SimpleFileFilter;
 import com.iver.utiles.swing.threads.AbstractMonitorableTask;
 import com.prodevelop.cit.gvsig.vectorialdb.wizard.ConnectionChooserPanel;
 
-
 public class ExportTo extends Extension {
-	
+
 	private static Logger logger = Logger.getLogger(ExportTo.class.getName());
 	private String lastPath = null;
-	private static HashMap<FLyrVect, EndExportToCommand> exportedLayers =
-		new HashMap<FLyrVect, EndExportToCommand>();
-	private static Preferences prefs = Preferences.userRoot().node( "gvSIG.encoding.dbf" );
+	private static HashMap<FLyrVect, EndExportToCommand> exportedLayers = new HashMap<FLyrVect, EndExportToCommand>();
+	private static Preferences prefs = Preferences.userRoot().node(
+			"gvSIG.encoding.dbf");
 
 	/**
-	 * This method is used to add a layer that is exported
-	 * to other format and its edition has to be finished
-	 * at the end of this process.
+	 * This method is used to add a layer that is exported to other format and
+	 * its edition has to be finished at the end of this process.
+	 * 
 	 * @param layer
 	 */
-	public static void addLayerToStopEdition(FLyrVect layer, EndExportToCommand command){
+	public static void addLayerToStopEdition(FLyrVect layer,
+			EndExportToCommand command) {
 		exportedLayers.put(layer, command);
 	}
 
-	public static void executeCommand(FLyrVect layer) throws Exception{
-		if (exportedLayers.containsKey(layer)){
+	public static void executeCommand(FLyrVect layer) throws Exception {
+		if (exportedLayers.containsKey(layer)) {
 			EndExportToCommand command = exportedLayers.get(layer);
 			command.execute();
 			exportedLayers.remove(layer);
 		}
 	}
 
-	private class WriterTask extends AbstractMonitorableTask
-	{
+	private class WriterTask extends AbstractMonitorableTask {
 		FLyrVect lyrVect;
 		IWriter writer;
 		int rowCount;
@@ -111,8 +110,8 @@ public class ExportTo extends Extension {
 		MapContext mapContext;
 		VectorialDriver reader;
 
-		public WriterTask(MapContext mapContext, FLyrVect lyr, IWriter writer, Driver reader) throws ReadDriverException
-		{
+		public WriterTask(MapContext mapContext, FLyrVect lyr, IWriter writer,
+				Driver reader) throws ReadDriverException {
 			this.mapContext = mapContext;
 			this.lyrVect = lyr;
 			this.writer = writer;
@@ -120,7 +119,8 @@ public class ExportTo extends Extension {
 
 			setInitialStep(0);
 			setDeterminatedProcess(true);
-			setStatusMessage(PluginServices.getText(this, "exportando_features"));
+			setStatusMessage(PluginServices
+					.getText(this, "exportando_features"));
 
 			va = lyrVect.getSource();
 			sds = lyrVect.getRecordset();
@@ -135,6 +135,7 @@ public class ExportTo extends Extension {
 			setFinalStep(rowCount);
 
 		}
+
 		public void run() throws Exception {
 			lyrVect.setWaitTodraw(true);
 			va.start();
@@ -146,20 +147,27 @@ public class ExportTo extends Extension {
 					bMustClone = attr.isLoadedInMemory();
 				}
 			}
-			if (lyrVect instanceof FLyrAnnotation && lyrVect.getShapeType()!=FShape.POINT) {
-				SHPLayerDefinition lyrDef=(SHPLayerDefinition)writer.getTableDefinition();
+			if (lyrVect instanceof FLyrAnnotation
+					&& lyrVect.getShapeType() != FShape.POINT) {
+				SHPLayerDefinition lyrDef = (SHPLayerDefinition) writer
+						.getTableDefinition();
 				lyrDef.setShapeType(FShape.POINT);
 				writer.initialize(lyrDef);
 			}
 
-			if(writer instanceof ShpWriter) {
-				String charSetName = prefs.get("dbf_encoding", DbaseFile.getDefaultCharset().toString());
-				if(lyrVect.getSource() instanceof VectorialFileAdapter) {
-					((ShpWriter)writer).loadDbfEncoding(((VectorialFileAdapter)lyrVect.getSource()).getFile().getAbsolutePath(), Charset.forName(charSetName));
+			if (writer instanceof ShpWriter) {
+				String charSetName = prefs.get("dbf_encoding", DbaseFile
+						.getDefaultCharset().toString());
+				if (lyrVect.getSource() instanceof VectorialFileAdapter) {
+					((ShpWriter) writer).loadDbfEncoding(
+							((VectorialFileAdapter) lyrVect.getSource())
+									.getFile().getAbsolutePath(), Charset
+									.forName(charSetName));
 				} else {
 					Object s = lyrVect.getProperty("DBFFile");
-					if(s != null && s instanceof String)
-						((ShpWriter)writer).loadDbfEncoding((String)s, Charset.forName(charSetName));
+					if (s != null && s instanceof String)
+						((ShpWriter) writer).loadDbfEncoding((String) s,
+								Charset.forName(charSetName));
 				}
 			}
 
@@ -176,9 +184,11 @@ public class ExportTo extends Extension {
 						reportStep();
 						continue;
 					}
-					if (lyrVect instanceof FLyrAnnotation && geom.getGeometryType()!=FShape.POINT) {
-						Point2D p=FLabel.createLabelPoint((FShape)geom.getInternalShape());
-						geom=ShapeFactory.createPoint2D(p.getX(),p.getY());
+					if (lyrVect instanceof FLyrAnnotation
+							&& geom.getGeometryType() != FShape.POINT) {
+						Point2D p = FLabel.createLabelPoint((FShape) geom
+								.getInternalShape());
+						geom = ShapeFactory.createPoint2D(p.getX(), p.getY());
 					}
 					if (isCanceled())
 						break;
@@ -203,7 +213,7 @@ public class ExportTo extends Extension {
 			} else {
 				int counter = 0;
 				for (int i = bitSet.nextSetBit(0); i >= 0; i = bitSet
-				.nextSetBit(i + 1)) {
+						.nextSetBit(i + 1)) {
 					if (isCanceled())
 						break;
 					IGeometry geom = va.getShape(i);
@@ -211,9 +221,11 @@ public class ExportTo extends Extension {
 						reportStep();
 						continue;
 					}
-					if (lyrVect instanceof FLyrAnnotation && geom.getGeometryType()!=FShape.POINT) {
-						Point2D p=FLabel.createLabelPoint((FShape)geom.getInternalShape());
-						geom=ShapeFactory.createPoint2D(p.getX(),p.getY());
+					if (lyrVect instanceof FLyrAnnotation
+							&& geom.getGeometryType() != FShape.POINT) {
+						Point2D p = FLabel.createLabelPoint((FShape) geom
+								.getInternalShape());
+						geom = ShapeFactory.createPoint2D(p.getX(), p.getY());
 					}
 					if (isCanceled())
 						break;
@@ -223,7 +235,8 @@ public class ExportTo extends Extension {
 						geom.reProject(trans);
 					}
 					reportStep();
-					setNote(PluginServices.getText(this, "exporting_") + counter);
+					setNote(PluginServices.getText(this, "exporting_")
+							+ counter);
 					if (isCanceled())
 						break;
 
@@ -241,17 +254,18 @@ public class ExportTo extends Extension {
 
 			writer.postProcess();
 			va.stop();
-			if (reader != null && !isCanceled()){
+			if (reader != null && !isCanceled()) {
 				int res = JOptionPane.showConfirmDialog(
-						(JComponent) PluginServices.getMDIManager().getActiveWindow()
-						, PluginServices.getText(this, "insertar_en_la_vista_la_capa_creada"),
-						PluginServices.getText(this,"insertar_capa"),
+						(JComponent) PluginServices.getMDIManager()
+								.getActiveWindow(), PluginServices.getText(
+								this, "insertar_en_la_vista_la_capa_creada"),
+						PluginServices.getText(this, "insertar_capa"),
 						JOptionPane.YES_NO_OPTION);
 
-				if (res == JOptionPane.YES_OPTION)
-				{
+				if (res == JOptionPane.YES_OPTION) {
 					PostProcessSupport.executeCalls();
-					ILayerDefinition lyrDef = (ILayerDefinition) writer.getTableDefinition();
+					ILayerDefinition lyrDef = (ILayerDefinition) writer
+							.getTableDefinition();
 					FLayer newLayer = LayerFactory.createLayer(
 							lyrDef.getName(), reader, mapContext.getCrs());
 					mapContext.getLayers().addLayer(newLayer);
@@ -260,7 +274,10 @@ public class ExportTo extends Extension {
 			lyrVect.setWaitTodraw(false);
 
 		}
-		/* (non-Javadoc)
+
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see com.iver.utiles.swing.threads.IMonitorableTask#finished()
 		 */
 		public void finished() {
@@ -272,28 +289,34 @@ public class ExportTo extends Extension {
 		}
 
 	}
-	private class MultiWriterTask extends AbstractMonitorableTask{
-		Vector tasks=new Vector();
+
+	private class MultiWriterTask extends AbstractMonitorableTask {
+		Vector tasks = new Vector();
+
 		public void addTask(WriterTask wt) {
 			tasks.add(wt);
 		}
+
 		public void run() throws Exception {
 			for (int i = 0; i < tasks.size(); i++) {
-				((WriterTask)tasks.get(i)).run();
+				((WriterTask) tasks.get(i)).run();
 			}
 		}
-		/* (non-Javadoc)
+
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see com.iver.utiles.swing.threads.IMonitorableTask#finished()
 		 */
 		public void finished() {
 			for (int i = 0; i < tasks.size(); i++) {
-				((WriterTask)tasks.get(i)).finished();
+				((WriterTask) tasks.get(i)).finished();
 			}
 			tasks.clear();
 		}
 
-
 	}
+
 	/**
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
@@ -304,8 +327,8 @@ public class ExportTo extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String actionCommand) {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-		.getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (f instanceof View) {
 			View vista = (View) f;
@@ -356,28 +379,30 @@ public class ExportTo extends Extension {
 					} // actives[i]
 				} // for
 			} catch (ReadDriverException e) {
-				NotificationManager.showMessageError(e.getMessage(),e);
+				NotificationManager.showMessageError(e.getMessage(), e);
 			}
 
 		}
 	}
 
-	public void saveToPostGIS(MapContext mapContext, FLyrVect layer){
+	public void saveToPostGIS(MapContext mapContext, FLyrVect layer) {
 		try {
 			String tableName = null;
 			boolean tableNameNotFilled = true;
 
-			// show the input tableName dialog until user cancel or enter a valid identifier
+			// show the input tableName dialog until user cancel or enter a
+			// valid identifier
 			do {
-				tableName = JOptionPane.showInputDialog(PluginServices.getText(this, "intro_tablename"));
+				tableName = JOptionPane.showInputDialog(PluginServices.getText(
+						this, "intro_tablename"));
 				if (tableName == null) {
 					return;
 				}
 				tableNameNotFilled = (tableName.trim().length() == 0);
 				if (tableNameNotFilled) {
-					JOptionPane.showMessageDialog(null,
-							PluginServices.getText(this,"intro_tablename_blank"),
-							PluginServices.getText(this,"warning"),
+					JOptionPane.showMessageDialog(null, PluginServices.getText(
+							this, "intro_tablename_blank"), PluginServices
+							.getText(this, "warning"),
 							JOptionPane.WARNING_MESSAGE);
 				}
 			} while (tableNameNotFilled);
@@ -385,42 +410,47 @@ public class ExportTo extends Extension {
 			CharSequence seq = "\\/=.:,;�?*{}�$%&()@#|!�";
 			for (int i = 0; i < seq.length(); i++) {
 				char c = seq.charAt(i);
-				if(tableName != null && tableName.indexOf(c) != -1) {
-					NotificationManager.showMessageInfo(PluginServices.getText(this, "wrong_characters"), null);
+				if (tableName != null && tableName.indexOf(c) != -1) {
+					NotificationManager.showMessageInfo(
+							PluginServices.getText(this, "wrong_characters"),
+							null);
 					break;
 				}
 			}
 
-			ConnectionChooserPanel ccp = new ConnectionChooserPanel(PostGisDriver.NAME);
-            PluginServices.getMDIManager().addWindow(ccp);
+			ConnectionChooserPanel ccp = new ConnectionChooserPanel(
+					PostGisDriver.NAME);
+			PluginServices.getMDIManager().addWindow(ccp);
 
-            if (!ccp.isOkPressed()) {
-            	logger.warn("User cancelled connection dlg, export is canceled.");
-                return;
-            }
+			if (!ccp.isOkPressed()) {
+				logger.warn("User cancelled connection dlg, export is canceled.");
+				return;
+			}
 
-            ConnectionWithParams cwp = ccp.getSelectedCWP();
+			ConnectionWithParams cwp = ccp.getSelectedCWP();
 
-            if (cwp == null) {
-            	logger.error("Selected CWP is null (?) Export canceled.");
-                return;
-            }
+			if (cwp == null) {
+				logger.error("Selected CWP is null (?) Export canceled.");
+				return;
+			}
 
 			IConnection _conex = cwp.getConnection();
 
 			DBLayerDefinition originalDef = null;
 			if (layer.getSource().getDriver() instanceof IVectorialDatabaseDriver) {
-				originalDef=((IVectorialDatabaseDriver) layer.getSource().getDriver()).getLyrDef();
+				originalDef = ((IVectorialDatabaseDriver) layer.getSource()
+						.getDriver()).getLyrDef();
 			}
-
 
 			DBLayerDefinition dbLayerDef = new DBLayerDefinition();
 			// Fjp:
-			// Cambio: En Postgis, el nombre de cat�logo est� siempre vac�o. Es algo heredado de Oracle, que no se usa.
+			// Cambio: En Postgis, el nombre de cat�logo est� siempre
+			// vac�o. Es algo heredado de Oracle, que no se usa.
 			// dbLayerDef.setCatalogName(cs.getDb());
 			dbLayerDef.setCatalogName("");
 
-			// A�adimos el schema dentro del layer definition para poder tenerlo en cuenta.
+			// A�adimos el schema dentro del layer definition para poder
+			// tenerlo en cuenta.
 			dbLayerDef.setSchema(cwp.getSchema());
 
 			dbLayerDef.setTableName(tableName);
@@ -433,24 +463,24 @@ public class ExportTo extends Extension {
 			// Creamos el driver. OJO: Hay que a�adir el campo ID a la
 			// definici�n de campos.
 
-			if (originalDef != null){
+			if (originalDef != null) {
 				dbLayerDef.setFieldID(originalDef.getFieldID());
 				dbLayerDef.setFieldGeometry(originalDef.getFieldGeometry());
 
-			}else{
+			} else {
 				// Search for id field name
-				int index=0;
-				String fieldName="gid";
-				while (findFileByName(fieldsDescrip,fieldName) != -1){
+				int index = 0;
+				String fieldName = "gid";
+				while (findFileByName(fieldsDescrip, fieldName) != -1) {
 					index++;
-					fieldName= "gid" + index;
+					fieldName = "gid" + index;
 				}
 				dbLayerDef.setFieldID(fieldName);
 
 				// search for geom field name
-				index=0;
-				fieldName="the_geom";
-				while (findFileByName(fieldsDescrip,fieldName) != -1){
+				index = 0;
+				fieldName = "the_geom";
+				while (findFileByName(fieldsDescrip, fieldName) != -1) {
 					index++;
 					fieldName = "the_geom" + index;
 				}
@@ -459,12 +489,11 @@ public class ExportTo extends Extension {
 			}
 
 			// if id field dosen't exist we add it
-			if (findFileByName(fieldsDescrip,dbLayerDef.getFieldID()) == -1)
-			{
+			if (findFileByName(fieldsDescrip, dbLayerDef.getFieldID()) == -1) {
 				int numFieldsAnt = fieldsDescrip.length;
-				FieldDescription[] newFields = new FieldDescription[dbLayerDef.getFieldsDesc().length + 1];
-				for (int i=0; i < numFieldsAnt; i++)
-				{
+				FieldDescription[] newFields = new FieldDescription[dbLayerDef
+						.getFieldsDesc().length + 1];
+				for (int i = 0; i < numFieldsAnt; i++) {
 					newFields[i] = fieldsDescrip[i];
 				}
 				newFields[numFieldsAnt] = new FieldDescription();
@@ -478,23 +507,25 @@ public class ExportTo extends Extension {
 
 			// all fields to lowerCase
 			FieldDescription field;
-			for (int i=0;i<dbLayerDef.getFieldsDesc().length;i++){
+			for (int i = 0; i < dbLayerDef.getFieldsDesc().length; i++) {
 				field = dbLayerDef.getFieldsDesc()[i];
 				field.setFieldName(field.getFieldName().toLowerCase());
 			}
 			dbLayerDef.setFieldID(dbLayerDef.getFieldID().toLowerCase());
-			dbLayerDef.setFieldGeometry(dbLayerDef.getFieldGeometry().toLowerCase());
+			dbLayerDef.setFieldGeometry(dbLayerDef.getFieldGeometry()
+					.toLowerCase());
 
 			dbLayerDef.setWhereClause("");
 			String strSRID = ProjectionUtils.getAbrev(layer.getCrs());
 			dbLayerDef.setSRID_EPSG(strSRID);
 			dbLayerDef.setConnection(_conex);
 
-			PostGISWriter writer=(PostGISWriter)LayerFactory.getWM().getWriter("PostGIS Writer");
+			PostGISWriter writer = (PostGISWriter) LayerFactory.getWM()
+					.getWriter("PostGIS Writer");
 			writer.setWriteAll(true);
 			writer.setCreateTable(true);
 			writer.initialize(dbLayerDef);
-			PostGisDriver postGISDriver=new PostGisDriver();
+			PostGisDriver postGISDriver = new PostGisDriver();
 			postGISDriver.setLyrDef(dbLayerDef);
 			postGISDriver.open();
 			PostProcessSupport.clearList();
@@ -507,18 +538,20 @@ public class ExportTo extends Extension {
 			writeFeatures(mapContext, layer, writer, postGISDriver);
 
 		} catch (DriverLoadException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		} catch (InitializeWriterException e) {
-			NotificationManager.showMessageError(e.getMessage(),e);
+			NotificationManager.showMessageError(e.getMessage(), e);
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 
 	}
 
 	/**
-	 * Lanza un thread en background que escribe las features. Cuando termina, pregunta al usuario si quiere
-	 * a�adir la nueva capa a la vista. Para eso necesita un driver de lectura ya configurado.
+	 * Lanza un thread en background que escribe las features. Cuando termina,
+	 * pregunta al usuario si quiere a�adir la nueva capa a la vista. Para eso
+	 * necesita un driver de lectura ya configurado.
+	 * 
 	 * @param mapContext
 	 * @param layer
 	 * @param writer
@@ -527,17 +560,22 @@ public class ExportTo extends Extension {
 	 * @throws DriverException
 	 * @throws DriverIOException
 	 */
-	private void writeFeatures(MapContext mapContext, FLyrVect layer, IWriter writer, Driver reader) throws ReadDriverException
-	{
-		PluginServices.cancelableBackgroundExecution(new WriterTask(mapContext, layer, writer, reader));
+	private void writeFeatures(MapContext mapContext, FLyrVect layer,
+			IWriter writer, Driver reader) throws ReadDriverException {
+		PluginServices.cancelableBackgroundExecution(new WriterTask(mapContext,
+				layer, writer, reader));
 	}
-	private void writeMultiFeatures(MapContext mapContext, FLyrVect layers, IWriter[] writers, Driver[] readers) throws ReadDriverException{
-		MultiWriterTask mwt=new MultiWriterTask();
-		for (int i=0;i<writers.length;i++) {
-			mwt.addTask(new WriterTask(mapContext, layers, writers[i], readers[i]));
+
+	private void writeMultiFeatures(MapContext mapContext, FLyrVect layers,
+			IWriter[] writers, Driver[] readers) throws ReadDriverException {
+		MultiWriterTask mwt = new MultiWriterTask();
+		for (int i = 0; i < writers.length; i++) {
+			mwt.addTask(new WriterTask(mapContext, layers, writers[i],
+					readers[i]));
 		}
 		PluginServices.cancelableBackgroundExecution(mwt);
 	}
+
 	/**
 	 * @param layer
 	 *            FLyrVect to obtain features. If selection, only selected
@@ -552,7 +590,9 @@ public class ExportTo extends Extension {
 	 * @throws DriverIOException
 	 * @throws com.hardcode.gdbms.engine.data.driver.DriverException
 	 */
-	public void writeFeaturesNoThread(FLyrVect layer, IWriter writer) throws ReadDriverException, VisitorException, ExpansionFileReadException{
+	public void writeFeaturesNoThread(FLyrVect layer, IWriter writer)
+			throws ReadDriverException, VisitorException,
+			ExpansionFileReadException {
 		ReadableVectorial va = layer.getSource();
 		SelectableDataSource sds = layer.getRecordset();
 
@@ -596,7 +636,7 @@ public class ExportTo extends Extension {
 		} else {
 			int counter = 0;
 			for (int i = bitSet.nextSetBit(0); i >= 0; i = bitSet
-			.nextSetBit(i + 1)) {
+					.nextSetBit(i + 1)) {
 				IGeometry geom = va.getShape(i);
 
 				progress.setProgress(counter++);
@@ -628,10 +668,15 @@ public class ExportTo extends Extension {
 			if (jfc.showSaveDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
 				File newFile = jfc.getSelectedFile();
 				String path = newFile.getAbsolutePath();
-				if( newFile.exists()){
-					int resp = JOptionPane.showConfirmDialog(
-							(Component) PluginServices.getMainFrame(),PluginServices.getText(this,"fichero_ya_existe_seguro_desea_guardarlo"),
-							PluginServices.getText(this,"guardar"), JOptionPane.YES_NO_OPTION);
+				if (newFile.exists()) {
+					int resp = JOptionPane
+							.showConfirmDialog(
+									(Component) PluginServices.getMainFrame(),
+									PluginServices
+											.getText(this,
+													"fichero_ya_existe_seguro_desea_guardarlo"),
+									PluginServices.getText(this, "guardar"),
+									JOptionPane.YES_NO_OPTION);
 					if (resp != JOptionPane.YES_OPTION) {
 						return;
 					}
@@ -641,21 +686,20 @@ public class ExportTo extends Extension {
 				}
 				newFile = new File(path);
 
-
-
 				SelectableDataSource sds = layer.getRecordset();
 				FieldDescription[] fieldsDescrip = sds.getFieldsDescription();
 
 				if (layer.getShapeType() == FShape.MULTI) // Exportamos a 3
-					// ficheros
+				// ficheros
 				{
-					ShpWriter writer1 = (ShpWriter) LayerFactory.getWM().getWriter(
-					"Shape Writer");
-					Driver[] drivers=new Driver[3];
-					ShpWriter[] writers=new ShpWriter[3];
+					ShpWriter writer1 = (ShpWriter) LayerFactory.getWM()
+							.getWriter("Shape Writer");
+					Driver[] drivers = new Driver[3];
+					ShpWriter[] writers = new ShpWriter[3];
 
 					// puntos
-					String auxPoint = path.replaceFirst("\\.shp", "_points.shp");
+					String auxPoint = path
+							.replaceFirst("\\.shp", "_points.shp");
 
 					SHPLayerDefinition lyrDefPoint = new SHPLayerDefinition();
 					lyrDefPoint.setFieldsDesc(fieldsDescrip);
@@ -666,12 +710,12 @@ public class ExportTo extends Extension {
 					loadEnconding(layer, writer1);
 					writer1.setFile(filePoints);
 					writer1.initialize(lyrDefPoint);
-					writers[0]=writer1;
-					drivers[0]=getOpenShpDriver(filePoints);
-					//drivers[0]=null;
+					writers[0] = writer1;
+					drivers[0] = getOpenShpDriver(filePoints);
+					// drivers[0]=null;
 
-					ShpWriter writer2 = (ShpWriter) LayerFactory.getWM().getWriter(
-					"Shape Writer");
+					ShpWriter writer2 = (ShpWriter) LayerFactory.getWM()
+							.getWriter("Shape Writer");
 					// Lineas
 					String auxLine = path.replaceFirst("\\.shp", "_line.shp");
 					SHPLayerDefinition lyrDefLine = new SHPLayerDefinition();
@@ -684,14 +728,15 @@ public class ExportTo extends Extension {
 					loadEnconding(layer, writer2);
 					writer2.setFile(fileLines);
 					writer2.initialize(lyrDefLine);
-					writers[1]=writer2;
-					drivers[1]=getOpenShpDriver(fileLines);
-					//drivers[1]=null;
+					writers[1] = writer2;
+					drivers[1] = getOpenShpDriver(fileLines);
+					// drivers[1]=null;
 
-					ShpWriter writer3 = (ShpWriter) LayerFactory.getWM().getWriter(
-					"Shape Writer");
+					ShpWriter writer3 = (ShpWriter) LayerFactory.getWM()
+							.getWriter("Shape Writer");
 					// Pol�gonos
-					String auxPolygon = path.replaceFirst("\\.shp", "_polygons.shp");
+					String auxPolygon = path.replaceFirst("\\.shp",
+							"_polygons.shp");
 					SHPLayerDefinition lyrDefPolygon = new SHPLayerDefinition();
 					lyrDefPolygon.setFieldsDesc(fieldsDescrip);
 					File filePolygons = new File(auxPolygon);
@@ -701,14 +746,14 @@ public class ExportTo extends Extension {
 					loadEnconding(layer, writer3);
 					writer3.setFile(filePolygons);
 					writer3.initialize(lyrDefPolygon);
-					writers[2]=writer3;
-					drivers[2]=getOpenShpDriver(filePolygons);
-					//drivers[2]=null;
+					writers[2] = writer3;
+					drivers[2] = getOpenShpDriver(filePolygons);
+					// drivers[2]=null;
 
-					writeMultiFeatures(mapContext,layer, writers, drivers);
+					writeMultiFeatures(mapContext, layer, writers, drivers);
 				} else {
-					ShpWriter writer = (ShpWriter) LayerFactory.getWM().getWriter(
-					"Shape Writer");
+					ShpWriter writer = (ShpWriter) LayerFactory.getWM()
+							.getWriter("Shape Writer");
 					loadEnconding(layer, writer);
 					IndexedShpDriver drv = getOpenShpDriver(newFile);
 					SHPLayerDefinition lyrDef = new SHPLayerDefinition();
@@ -719,72 +764,83 @@ public class ExportTo extends Extension {
 					writer.setFile(newFile);
 					writer.initialize(lyrDef);
 					// CODIGO PARA EXPORTAR UN SHP A UN CHARSET DETERMINADO
-					// ES UTIL PARA QUE UN DBF SE VEA CORRECTAMENTE EN EXCEL, POR EJEMPLO
-					//					Charset resul = (Charset) JOptionPane.showInputDialog((Component)PluginServices.getMDIManager().getActiveWindow(),
-					//								PluginServices.getText(ExportTo.class, "select_charset_for_writing"),
-					//								"Charset", JOptionPane.QUESTION_MESSAGE, null,
-					//								Charset.availableCharsets().values().toArray(),
-					//								writer.getCharsetForWriting().displayName());
-					//					if (resul == null)
-					//						return;
-					//					Charset charset = resul;
-					//					writer.setCharsetForWriting(charset);
+					// ES UTIL PARA QUE UN DBF SE VEA CORRECTAMENTE EN EXCEL,
+					// POR EJEMPLO
+					// Charset resul = (Charset)
+					// JOptionPane.showInputDialog((Component)PluginServices.getMDIManager().getActiveWindow(),
+					// PluginServices.getText(ExportTo.class,
+					// "select_charset_for_writing"),
+					// "Charset", JOptionPane.QUESTION_MESSAGE, null,
+					// Charset.availableCharsets().values().toArray(),
+					// writer.getCharsetForWriting().displayName());
+					// if (resul == null)
+					// return;
+					// Charset charset = resul;
+					// writer.setCharsetForWriting(charset);
 					writeFeatures(mapContext, layer, writer, drv);
 
 				}
 			}
 		} catch (InitializeWriterException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		} catch (OpenDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		} catch (DriverLoadException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 
 	}
 
 	/**
 	 * Loads the dbf enconding
+	 * 
 	 * @param layer
 	 * @param writer
 	 */
 	private void loadEnconding(FLyrVect layer, ShpWriter writer) {
-		String charSetName = prefs.get("dbf_encoding", DbaseFile.getDefaultCharset().toString());
-		if(layer.getSource() instanceof VectorialFileAdapter)
-			writer.loadDbfEncoding(((VectorialFileAdapter)layer.getSource()).getFile().getAbsolutePath(), Charset.forName(charSetName));
+		String charSetName = prefs.get("dbf_encoding", DbaseFile
+				.getDefaultCharset().toString());
+		if (layer.getSource() instanceof VectorialFileAdapter)
+			writer.loadDbfEncoding(((VectorialFileAdapter) layer.getSource())
+					.getFile().getAbsolutePath(), Charset.forName(charSetName));
 		else {
 			Object s = layer.getProperty("DBFFile");
-			if(s != null && s instanceof String)
-				writer.loadDbfEncoding((String)s, Charset.forName(charSetName));
+			if (s != null && s instanceof String)
+				writer.loadDbfEncoding((String) s, Charset.forName(charSetName));
 		}
 	}
 
-	private IndexedShpDriver getOpenShpDriver(File fileShp) throws OpenDriverException {
+	private IndexedShpDriver getOpenShpDriver(File fileShp)
+			throws OpenDriverException {
 		IndexedShpDriver drv = new IndexedShpDriver();
 		if (!fileShp.exists()) {
 			try {
 				fileShp.createNewFile();
-				File newFileSHX=new File(fileShp.getAbsolutePath().replaceAll("[.]shp",".shx"));
+				File newFileSHX = new File(fileShp.getAbsolutePath()
+						.replaceAll("[.]shp", ".shx"));
 				newFileSHX.createNewFile();
-				File newFileDBF=new File(fileShp.getAbsolutePath().replaceAll("[.]shp",".dbf"));
+				File newFileDBF = new File(fileShp.getAbsolutePath()
+						.replaceAll("[.]shp", ".dbf"));
 				newFileDBF.createNewFile();
 			} catch (IOException e) {
-				throw new FileNotFoundDriverException("SHP",e,fileShp.getAbsolutePath());
+				throw new FileNotFoundDriverException("SHP", e,
+						fileShp.getAbsolutePath());
 			}
 		}
 		drv.open(fileShp);
 		return drv;
 	}
+
 	/**
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
 		int status = EditionUtilities.getEditionStatus();
-		if (( status == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE || status == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE)
-				|| (status == EditionUtilities.EDITION_STATUS_MULTIPLE_VECTORIAL_LAYER_ACTIVE)|| (status == EditionUtilities.EDITION_STATUS_MULTIPLE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE))
-		{
+		if ((status == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE || status == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE)
+				|| (status == EditionUtilities.EDITION_STATUS_MULTIPLE_VECTORIAL_LAYER_ACTIVE)
+				|| (status == EditionUtilities.EDITION_STATUS_MULTIPLE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE)) {
 			return true;
 		}
 		return false;
@@ -794,8 +850,8 @@ public class ExportTo extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-		.getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (f == null) {
 			return false;
@@ -806,12 +862,10 @@ public class ExportTo extends Extension {
 		return false;
 	}
 
-	private int findFileByName(FieldDescription[] fields, String fieldName){
-		for (int i=0; i < fields.length; i++)
-		{
+	private int findFileByName(FieldDescription[] fields, String fieldName) {
+		for (int i = 0; i < fields.length; i++) {
 			FieldDescription f = fields[i];
-			if (f.getFieldName().equalsIgnoreCase(fieldName))
-			{
+			if (f.getFieldName().equalsIgnoreCase(fieldName)) {
 				return i;
 			}
 		}
@@ -821,12 +875,12 @@ public class ExportTo extends Extension {
 	}
 
 	/**
-	 * This class is used to execute a command at the end of a
-	 * export process.
+	 * This class is used to execute a command at the end of a export process.
+	 * 
 	 * @author jpiera
-	 *
+	 * 
 	 */
-	public interface EndExportToCommand{
+	public interface EndExportToCommand {
 		public void execute() throws Exception;
 	}
 

@@ -36,20 +36,20 @@ public class BaseExceptionTest extends TestCase {
 	protected void tearDown() throws Exception {
 		super.tearDown();
 	}
-	
-	public void testSimple(){
+
+	public void testSimple() {
 		try {
 			throw new NullPointerException("Excepcion de puntero nulo");
-		} catch (NullPointerException e){
-		    IBaseException de = createDriverException("SimpleDriver", e);
+		} catch (NullPointerException e) {
+			IBaseException de = createDriverException("SimpleDriver", e);
 			assertEquals("Error in the driver SimpleDrivers", de.getMessage());
 			assertEquals(
-                    "Error in the driver SimpleDrivers\nExcepcion de puntero nulo",
-                    de.getMessageStack());
+					"Error in the driver SimpleDrivers\nExcepcion de puntero nulo",
+					de.getMessageStack());
 		}
 	}
 
-	public void testSimpleLocalized(){
+	public void testSimpleLocalized() {
 		class MyTranslator implements IExceptionTranslator {
 			public String getText(String clave) {
 				return clave.toUpperCase();
@@ -58,30 +58,31 @@ public class BaseExceptionTest extends TestCase {
 		BaseException.setTranslator(new MyTranslator());
 		try {
 			throw new NullPointerException("Excepcion de puntero nulo");
-		} catch (NullPointerException e){
-            IBaseException de = createDriverException("SimpleDriver", e);
-			assertEquals("ERROR_IN_THE_DRIVER_%(DRIVERNAME)S",de.getLocalizedMessage());
+		} catch (NullPointerException e) {
+			IBaseException de = createDriverException("SimpleDriver", e);
+			assertEquals("ERROR_IN_THE_DRIVER_%(DRIVERNAME)S",
+					de.getLocalizedMessage());
 			assertEquals(
-                    "ERROR_IN_THE_DRIVER_%(DRIVERNAME)S\nExcepcion de puntero nulo",
-                    de.getLocalizedMessageStack());
+					"ERROR_IN_THE_DRIVER_%(DRIVERNAME)S\nExcepcion de puntero nulo",
+					de.getLocalizedMessageStack());
 		}
 		BaseException.setTranslator(null);
 	}
 
-	public void testSimple2(){
+	public void testSimple2() {
 		try {
 			throw new NullPointerException("Excepcion de puntero nulo");
-		} catch (NullPointerException e){
-            IBaseException de = createBadDateException("SimpleDriver", e);
+		} catch (NullPointerException e) {
+			IBaseException de = createBadDateException("SimpleDriver", e);
 			assertEquals("Driver SimpleDrivers: Formato de fecha incorrecto",
-                    de.getMessage());
+					de.getMessage());
 			assertEquals(
-                    "Driver SimpleDrivers: Formato de fecha incorrecto\nExcepcion de puntero nulo",
-                    de.getMessageStack());
+					"Driver SimpleDrivers: Formato de fecha incorrecto\nExcepcion de puntero nulo",
+					de.getMessageStack());
 		}
 	}
 
-	public void testSimpleLocalized2(){
+	public void testSimpleLocalized2() {
 		class MyTranslator implements IExceptionTranslator {
 			public String getText(String clave) {
 				return clave.toUpperCase();
@@ -90,67 +91,66 @@ public class BaseExceptionTest extends TestCase {
 		BaseException.setTranslator(new MyTranslator());
 		try {
 			throw new NullPointerException("Excepcion de puntero nulo");
-		} catch (NullPointerException e){
-            IBaseException de = createBadDateException("SimpleDriver", e);
-			assertEquals("DRIVER_%(DRIVERNAME)S_FORMATO_DE_FECHA_INCORRECTO",de.getLocalizedMessage());
+		} catch (NullPointerException e) {
+			IBaseException de = createBadDateException("SimpleDriver", e);
+			assertEquals("DRIVER_%(DRIVERNAME)S_FORMATO_DE_FECHA_INCORRECTO",
+					de.getLocalizedMessage());
 			assertEquals(
-                    "DRIVER_%(DRIVERNAME)S_FORMATO_DE_FECHA_INCORRECTO\nExcepcion de puntero nulo",
-                    de.getLocalizedMessageStack());
+					"DRIVER_%(DRIVERNAME)S_FORMATO_DE_FECHA_INCORRECTO\nExcepcion de puntero nulo",
+					de.getLocalizedMessageStack());
 		}
 		BaseException.setTranslator(null);
 	}
 
 	public void testTranslatorWithoutInterface() {
 		class MyTranslator {
-			public String getText(String clave) {
-				return clave.toUpperCase();
-			}
 		}
 		BaseException.setTranslator(new MyTranslator());
 		try {
 			throw new NullPointerException("Excepcion de puntero nulo");
-		} catch (NullPointerException e){
-            IBaseException de = createBadDateException("SimpleDriver", e);
-			assertEquals("DRIVER_%(DRIVERNAME)S_FORMATO_DE_FECHA_INCORRECTO",de.getLocalizedMessage());
+		} catch (NullPointerException e) {
+			IBaseException de = createBadDateException("SimpleDriver", e);
+			assertEquals("DRIVER_%(DRIVERNAME)S_FORMATO_DE_FECHA_INCORRECTO",
+					de.getLocalizedMessage());
 			assertEquals(
-                    "DRIVER_%(DRIVERNAME)S_FORMATO_DE_FECHA_INCORRECTO\nExcepcion de puntero nulo",
-                    de.getLocalizedMessageStack());
+					"DRIVER_%(DRIVERNAME)S_FORMATO_DE_FECHA_INCORRECTO\nExcepcion de puntero nulo",
+					de.getLocalizedMessageStack());
 		}
 		BaseException.setTranslator(null);
-		
+
 	}
-	
-    public void testInsertBlanksAtStart() {
-        String src = "test";
 
-        assertEquals("test", BaseException.insertBlanksAtStart(src, 0));
+	public void testInsertBlanksAtStart() {
+		String src = "test";
 
-        assertEquals("test", BaseException.insertBlanksAtStart(src, -5));
+		assertEquals("test", BaseException.insertBlanksAtStart(src, 0));
 
-        assertEquals("  test", BaseException.insertBlanksAtStart(src, 2));
+		assertEquals("test", BaseException.insertBlanksAtStart(src, -5));
 
-        assertEquals("      test", BaseException.insertBlanksAtStart(src, 6));
-    }
-    
-    protected IBaseException createDriverException(String driver,
-            Throwable throwable) {
-        return new DriverException(driver, throwable);
-    }
-    
-    protected IBaseException createBadDateException(String driver,
-            Throwable throwable) {
-        return new BadDateException(driver, throwable);
-    }
+		assertEquals("  test", BaseException.insertBlanksAtStart(src, 2));
+
+		assertEquals("      test", BaseException.insertBlanksAtStart(src, 6));
+	}
+
+	protected IBaseException createDriverException(String driver,
+			Throwable throwable) {
+		return new DriverException(driver, throwable);
+	}
+
+	protected IBaseException createBadDateException(String driver,
+			Throwable throwable) {
+		return new BadDateException(driver, throwable);
+	}
 
 	class BadDateException extends DriverException {
 		private static final long serialVersionUID = -8985920349210629998L;
-	    private static final String KEY = "Driver_%(driverName)s_Formato_de_fecha_incorrecto";
+		private static final String KEY = "Driver_%(driverName)s_Formato_de_fecha_incorrecto";
 
-	    private static final String MESSAGE = "Driver %(driverName)s: Formato de fecha incorrecto";
+		private static final String MESSAGE = "Driver %(driverName)s: Formato de fecha incorrecto";
 
 		public BadDateException(String driverName, Throwable cause) {
-            super(driverName, MESSAGE, cause, KEY, serialVersionUID);
+			super(driverName, MESSAGE, cause, KEY, serialVersionUID);
 		}
 	}
-	
+
 }

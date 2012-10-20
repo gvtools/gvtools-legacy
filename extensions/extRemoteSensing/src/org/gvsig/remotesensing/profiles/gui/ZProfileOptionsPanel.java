@@ -1,42 +1,42 @@
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
-*
-* Copyright (C) 2007 Instituto de Desarrollo Regional and Generalitat Valenciana.
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License
-* as published by the Free Software Foundation; either version 2
-* of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
-*
-* For more information, contact:
-*
-*  Generalitat Valenciana
-*   Conselleria d'Infraestructures i Transport
-*   Av. Blasco Ibáñez, 50
-*   46010 VALENCIA
-*   SPAIN
-*
-*      +34 963862235
-*   gvsig@gva.es
-*      www.gvsig.gva.es
-*
-*    or
-*
-*   Instituto de Desarrollo Regional (Universidad de Castilla La-Mancha)
-*   Campus Universitario s/n
-*   02071 Alabacete
-*   Spain
-*
-*   +34 967 599 200
-*/
+ *
+ * Copyright (C) 2007 Instituto de Desarrollo Regional and Generalitat Valenciana.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
+ *
+ * For more information, contact:
+ *
+ *  Generalitat Valenciana
+ *   Conselleria d'Infraestructures i Transport
+ *   Av. Blasco Ibáñez, 50
+ *   46010 VALENCIA
+ *   SPAIN
+ *
+ *      +34 963862235
+ *   gvsig@gva.es
+ *      www.gvsig.gva.es
+ *
+ *    or
+ *
+ *   Instituto de Desarrollo Regional (Universidad de Castilla La-Mancha)
+ *   Campus Universitario s/n
+ *   02071 Alabacete
+ *   Spain
+ *
+ *   +34 967 599 200
+ */
 
 package org.gvsig.remotesensing.profiles.gui;
 
@@ -82,38 +82,38 @@ import com.iver.cit.gvsig.fmap.tools.Behavior.PointBehavior;
 import com.iver.cit.gvsig.project.documents.view.toolListeners.StatusBarListener;
 
 /**
-* Panel de opciones para  z-Profiles.
-* 	
-* @author Alejandro Muñoz Sanchez (alejandro.munoz@uclm.es)   
-* @version 11/12/2007
-*  
-**/
+ * Panel de opciones para z-Profiles.
+ * 
+ * @author Alejandro Muñoz Sanchez (alejandro.munoz@uclm.es)
+ * @version 11/12/2007
+ * 
+ **/
 
 public class ZProfileOptionsPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private FLayer fLayer = null;
-	private Grid grid= null;
+	private Grid grid = null;
 	TableContainer tableContainer = null;
 	private JToggleButton newButton = null;
-	private JToggleButton deleteButton = null; 
+	private JToggleButton deleteButton = null;
 	private JPanel controlPanel = null;
-	private ZProfileOptionsListener listener= null;
+	private ZProfileOptionsListener listener = null;
 	private Cursor cursor = null;
-	private MapControl mapControl= null;
+	private MapControl mapControl = null;
 	private LinkedHashMap rois = null;
 	private HashMap roiGraphics = null;
-	private GraphicChartPanel		jPanelChart = null;
-	private ProfilePanel mainPanel= null;
+	private GraphicChartPanel jPanelChart = null;
+	private ProfilePanel mainPanel = null;
 	private String previousTool = null;
-	
-	public  ZProfileOptionsPanel(ProfilePanel mainPanel) {
+
+	public ZProfileOptionsPanel(ProfilePanel mainPanel) {
 		super();
 		this.mapControl = mainPanel.getMapControl();
-		this.mainPanel= mainPanel;
+		this.mainPanel = mainPanel;
 		this.fLayer = mainPanel.getFlayer();
-		BorderLayout bd= new BorderLayout();
-		listener= new ZProfileOptionsListener(this);
+		BorderLayout bd = new BorderLayout();
+		listener = new ZProfileOptionsListener(this);
 		bd.setHgap(1);
 		setLayout(bd);
 		add(getTable(), BorderLayout.CENTER);
@@ -121,27 +121,26 @@ public class ZProfileOptionsPanel extends JPanel {
 		previousTool = mapControl.getCurrentTool();
 		initialize();
 	}
-	
-	
+
 	private void initialize() {
-	
+
 		getNewButton().addActionListener(listener);
 		getDeleteButton().addActionListener(listener);
 		getTable().getTable().getJTable().getSelectionModel()
 				.addListSelectionListener(listener);
-		getTable().getTable().getJTable().getModel().addTableModelListener(
-				listener);
-		
+		getTable().getTable().getJTable().getModel()
+				.addTableModelListener(listener);
+
 		// Grid fuente de datos
 		FLyrRasterSE rasterLayer = (FLyrRasterSE) fLayer;
-		IRasterDataSource dsetCopy = null; 
+		IRasterDataSource dsetCopy = null;
 		dsetCopy = rasterLayer.getDataSource().newDataset();
 		BufferFactory bufferFactory = new BufferFactory(dsetCopy);
 		if (!RasterBuffer.loadInMemory(dsetCopy))
 			bufferFactory.setReadOnly(true);
 		try {
 			bufferFactory.setAllDrawableBands();
-			grid= new Grid(bufferFactory);
+			grid = new Grid(bufferFactory);
 		} catch (RasterBufferInvalidException e) {
 			e.printStackTrace();
 		}
@@ -151,17 +150,15 @@ public class ZProfileOptionsPanel extends JPanel {
 		mapControl.addMapTool("drawPointROI", new Behavior[] {
 				new PointBehavior(drawMouseViewListener),
 				new MouseMovementBehavior(sbl) });
-		
+
 	}
-	
-	
+
 	public TableContainer getTable() {
 		if (tableContainer == null) {
 			String[] columnNames = { PluginServices.getText(this, "punto"),
 					PluginServices.getText(this, "color"),
 					PluginServices.getText(this, "coordx"),
-					PluginServices.getText(this, "coordy"),
-			};
+					PluginServices.getText(this, "coordy"), };
 			int[] columnWidths = { 20, 25, 25, 25, 0 };
 			tableContainer = new TableContainer(columnNames, columnWidths);
 			tableContainer.setModel("ProfilesTableModel");
@@ -171,56 +168,54 @@ public class ZProfileOptionsPanel extends JPanel {
 		return tableContainer;
 	}
 
-	
 	public JPanel getControlPanel() {
 		if (controlPanel == null) {
 			controlPanel = new JPanel();
-			//controlPanel.setPreferredSize(new Dimension(80,20));	
+			// controlPanel.setPreferredSize(new Dimension(80,20));
 			GridBagLayout gb = new GridBagLayout();
 			controlPanel.setLayout(gb);
 			GridBagConstraints constrains = new GridBagConstraints();
-			constrains.insets = new java.awt.Insets(1,5 , 1, 1);
-			constrains.gridx= 0;
-			constrains.gridy= 0;
-			controlPanel.add(getNewButton(),constrains);
-			constrains.insets = new java.awt.Insets(1,5 , 1, 1);
-			constrains.gridx= 0;
-			constrains.gridy= 1;
-			controlPanel.add(getDeleteButton(),constrains);
+			constrains.insets = new java.awt.Insets(1, 5, 1, 1);
+			constrains.gridx = 0;
+			constrains.gridy = 0;
+			controlPanel.add(getNewButton(), constrains);
+			constrains.insets = new java.awt.Insets(1, 5, 1, 1);
+			constrains.gridx = 0;
+			constrains.gridy = 1;
+			controlPanel.add(getDeleteButton(), constrains);
 
 		}
 		return controlPanel;
 	}
 
-
 	public JToggleButton getDeleteButton() {
-		if(deleteButton== null){
+		if (deleteButton == null) {
 			deleteButton = new JToggleButton();
-			ImageIcon icono = new ImageIcon(ZProfileOptionsPanel.class.getClassLoader().getResource("images/delete.png"));
-			deleteButton.setSize(30,30);
+			ImageIcon icono = new ImageIcon(ZProfileOptionsPanel.class
+					.getClassLoader().getResource("images/delete.png"));
+			deleteButton.setSize(30, 30);
 			deleteButton.setIcon(icono);
 		}
 		return deleteButton;
 	}
 
-
 	public JToggleButton getNewButton() {
-		if(newButton== null){
+		if (newButton == null) {
 			newButton = new JToggleButton();
-			ImageIcon icono = new ImageIcon(ZProfileOptionsPanel.class.getClassLoader().getResource("images/Point.png"));
+			ImageIcon icono = new ImageIcon(ZProfileOptionsPanel.class
+					.getClassLoader().getResource("images/Point.png"));
 			newButton.setIcon(icono);
-			newButton.setSize(30,30);
+			newButton.setSize(30, 30);
 		}
 		return newButton;
 	}
 
-	
-	
 	public void selectDrawRoiTool() {
-		if (mapControl != null){
+		if (mapControl != null) {
 			if (getNewButton().isSelected()) {
-				Image img = new ImageIcon(ZProfileOptionsPanel.class.getClassLoader().getResource(
-						"images/PointCursor.png")).getImage();
+				Image img = new ImageIcon(ZProfileOptionsPanel.class
+						.getClassLoader().getResource("images/PointCursor.png"))
+						.getImage();
 				cursor = Toolkit.getDefaultToolkit().createCustomCursor(img,
 						new Point(16, 16), "");
 				mapControl.setTool("drawPointROI");
@@ -228,10 +223,9 @@ public class ZProfileOptionsPanel extends JPanel {
 		}
 	}
 
-	public Grid getGrid(){
-		 return grid;
+	public Grid getGrid() {
+		return grid;
 	}
-
 
 	public MapControl getMapControl() {
 		return mapControl;
@@ -240,7 +234,7 @@ public class ZProfileOptionsPanel extends JPanel {
 	public Cursor getToolCursor() {
 		return cursor;
 	}
-	
+
 	public LinkedHashMap getRois() {
 		if (rois == null)
 			rois = new LinkedHashMap();
@@ -256,7 +250,7 @@ public class ZProfileOptionsPanel extends JPanel {
 	public ArrayList getROIs() {
 		return new ArrayList(getRois().values());
 	}
-	
+
 	public ArrayList getRoiGraphics(String roiName) {
 		return (ArrayList) getRoiGraphics().get(roiName);
 	}
@@ -266,32 +260,33 @@ public class ZProfileOptionsPanel extends JPanel {
 		getRoiGraphics().put(roi.getName(), new ArrayList());
 	}
 
-
 	public void setJPanelChart(GraphicChartPanel panelChart) {
-		
-		
+
 		jPanelChart = panelChart;
 	}
 
-
 	public GraphicChartPanel getJPanelChart() {
-		jPanelChart.cleanChart(); 
+		jPanelChart.cleanChart();
 		XYPlot plot = jPanelChart.getChart().getChart().getXYPlot();
-		NumberAxis domainAxis = new NumberAxis(PluginServices.getText(this,"bandas"));
-		domainAxis.setRange(1,getGrid().getBandCount() );
+		NumberAxis domainAxis = new NumberAxis(PluginServices.getText(this,
+				"bandas"));
+		domainAxis.setRange(1, getGrid().getBandCount());
 		domainAxis.setTickUnit(new NumberTickUnit(1.0));
-		plot.setDomainAxis(domainAxis);	
+		plot.setDomainAxis(domainAxis);
 		return jPanelChart;
 	}
-
 
 	public void removeROI(String roiName) {
 		boolean repaint = false;
 		getRois().remove(roiName);
 		ArrayList roiGraphics = getRoiGraphics(roiName);
 		if (roiGraphics != null) {
-			for (int i = 0; i < roiGraphics.size(); i++){
-				getMapControl().getMapContext().getGraphicsLayer().removeGraphic((FGraphic) getRoiGraphics(roiName).get(i));
+			for (int i = 0; i < roiGraphics.size(); i++) {
+				getMapControl()
+						.getMapContext()
+						.getGraphicsLayer()
+						.removeGraphic(
+								(FGraphic) getRoiGraphics(roiName).get(i));
 				repaint = true;
 			}
 			if (repaint)
@@ -299,32 +294,28 @@ public class ZProfileOptionsPanel extends JPanel {
 			getRoiGraphics().remove(roiName);
 		}
 	}
-	
-	
-	
-	public void UpdateChart(){
+
+	public void UpdateChart() {
 		XYPlot plot = jPanelChart.getChart().getChart().getXYPlot();
-		int index=-1; 
-		for (Iterator iter = getROIs().iterator(); iter.hasNext();){
-			VectorialROI roi = (VectorialROI)iter.next();
-			index=index+1;
+		int index = -1;
+		for (Iterator iter = getROIs().iterator(); iter.hasNext();) {
+			VectorialROI roi = (VectorialROI) iter.next();
+			index = index + 1;
 			plot.getRenderer().setSeriesPaint(index, roi.getColor());
-		}	
+		}
 	}
-	
+
 	public ROI getROI(String roiName) {
 		return (ROI) getRois().get(roiName);
 	}
 
-	public int getNextActive(){
+	public int getNextActive() {
 		return mainPanel.getActivePanel();
 	}
-
 
 	public String getPreviousTool() {
 		return previousTool;
 	}
-
 
 	public ZProfileOptionsListener getListener() {
 		return listener;

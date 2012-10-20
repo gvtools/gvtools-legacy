@@ -21,28 +21,30 @@ package org.gvsig.raster.dataset;
 import junit.framework.TestCase;
 
 import org.gvsig.raster.RasterLibrary;
+
 /**
  * Este test que obtiene la información de un único pixel. Repetira esta
- * operación sobre varios pixels sobre una misma imagen comprobado que los resultados
- * sean correctos, es decir para la posición seleccionada existe ese pixel obtenido.
+ * operación sobre varios pixels sobre una misma imagen comprobado que los
+ * resultados sean correctos, es decir para la posición seleccionada existe ese
+ * pixel obtenido.
  * 
- * @author Nacho Brodin (nachobrodin@gmail.com)
- * TODO: Falta por hacer TestDataByPixelGdal
+ * @author Nacho Brodin (nachobrodin@gmail.com) TODO: Falta por hacer
+ *         TestDataByPixelGdal
  */
-public class TestDataByPixelGdal extends TestCase{
+public class TestDataByPixelGdal extends TestCase {
 	static {
 		RasterLibrary.wakeUp();
 	}
-	
+
 	public void start() {
 		this.setUp();
 		this.testStack();
 	}
-	
+
 	public void setUp() {
 		System.err.println("TestDataByPixelGdal running...");
 	}
-	
-	public void testStack(){
+
+	public void testStack() {
 	}
 }

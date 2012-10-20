@@ -42,35 +42,36 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: SummarizationFunction.java 5412 2006-05-24 21:15:07Z azabala $
-* $Log$
-* Revision 1.1  2006-05-24 21:12:16  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.1  2006/02/26 20:55:55  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: SummarizationFunction.java 5412 2006-05-24 21:15:07Z azabala $
+ * $Log$
+ * Revision 1.1  2006-05-24 21:12:16  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.1  2006/02/26 20:55:55  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core.fmap;
 
 import com.hardcode.gdbms.engine.values.NumericValue;
 
 /**
- * A summarization function is a function that operates
- * with numerical values to get a numeric resume of them.
+ * A summarization function is a function that operates with numerical values to
+ * get a numeric resume of them.
  * 
- * Is used to get sumarization values of Group By operations,
- * like Dissolve or Spatial Joins. Examples of sumarization 
- * functions are Average, Minimum, Max, etc.
+ * Is used to get sumarization values of Group By operations, like Dissolve or
+ * Spatial Joins. Examples of sumarization functions are Average, Minimum, Max,
+ * etc.
  * 
  * @author azabala
- *
+ * 
  */
 public interface SummarizationFunction {
 	public void process(NumericValue value);
+
 	public NumericValue getSumarizeValue();
+
 	public void reset();
 }
-

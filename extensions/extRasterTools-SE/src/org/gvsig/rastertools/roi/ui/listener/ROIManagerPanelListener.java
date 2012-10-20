@@ -47,8 +47,9 @@ import org.gvsig.gui.beans.buttonspanel.ButtonsPanelEvent;
 import org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener;
 import org.gvsig.rastertools.roi.ui.ROIsManagerPanel;
 
-public class ROIManagerPanelListener implements ButtonsPanelListener, ActionListener{
-	
+public class ROIManagerPanelListener implements ButtonsPanelListener,
+		ActionListener {
+
 	private ROIsManagerPanel roiManagerPanel = null;
 
 	public ROIManagerPanelListener(ROIsManagerPanel managerPanel) {
@@ -59,18 +60,18 @@ public class ROIManagerPanelListener implements ButtonsPanelListener, ActionList
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == roiManagerPanel.getCloseMenuItem()){
+		if (e.getSource() == roiManagerPanel.getCloseMenuItem()) {
 			roiManagerPanel.getRoiManagerDialog().close();
-		}else if (e.getSource() == roiManagerPanel.getSaveMenuItem()){
-			
-		}else if (e.getSource() == roiManagerPanel.getLoadMenuItem()){
-			
-		}else if (e.getSource() == roiManagerPanel.getExportMenuItem()){
-			
-		}else if (e.getSource() == roiManagerPanel.getHelpMenuItem()){
-			
-		}else if (e.getSource() == roiManagerPanel.getPreferencesMenuItem()){
-			
+		} else if (e.getSource() == roiManagerPanel.getSaveMenuItem()) {
+
+		} else if (e.getSource() == roiManagerPanel.getLoadMenuItem()) {
+
+		} else if (e.getSource() == roiManagerPanel.getExportMenuItem()) {
+
+		} else if (e.getSource() == roiManagerPanel.getHelpMenuItem()) {
+
+		} else if (e.getSource() == roiManagerPanel.getPreferencesMenuItem()) {
+
 		}
 	}
 }

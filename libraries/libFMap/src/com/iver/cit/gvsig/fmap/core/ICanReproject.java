@@ -47,40 +47,36 @@ import com.iver.cit.gvsig.fmap.drivers.DBLayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.IConnection;
 
 /**
- * @author fjp
- * If a driver can reproject, it must implement this
- * interface.
+ * @author fjp If a driver can reproject, it must implement this interface.
  */
 public interface ICanReproject {
-    /**
-     * @return a EPSG string defining the original projection.
-     * It means that the original data are in this proj.
-     */
+	/**
+	 * @return a EPSG string defining the original projection. It means that the
+	 *         original data are in this proj.
+	 */
 	String getSourceProjection(IConnection conn, DBLayerDefinition lyrDef);
 
-    /**
-     * @return a EPSG string. You set this variable with setDestProjection(String epsg)
-     */
-    String getDestProjection();
+	/**
+	 * @return a EPSG string. You set this variable with
+	 *         setDestProjection(String epsg)
+	 */
+	String getDestProjection();
 
+	/**
+	 * Set this variable to tell the driver in which projection do you want your
+	 * data. If the driver can reproject to this new EPSG, it will return true
+	 * in canReproject. NOTE: use String strEPSG = mapCtrl.getViewPort()
+	 * .getProjection().getAbrev() .substring(5); Otherwise, it will return
+	 * false.
+	 * 
+	 * @param toEPSG
+	 */
+	void setDestProjection(String toEPSG);
 
-    /**
-     * Set this variable to tell the driver in which projection
-     * do you want your data. If the driver can reproject to this
-     * new EPSG, it will return true in canReproject.
-     * NOTE: use String strEPSG = mapCtrl.getViewPort()
-	                    .getProjection().getAbrev()
-	                    .substring(5);
-     * Otherwise, it will return false.
-     * @param toEPSG
-     */
-    void setDestProjection(String toEPSG);
-
-
-    /**
-     * @return true if the driver will be able to deliver the
-     * entities in the destiny projection. False otherwise.
-     */
-    boolean canReproject(String toEPSGdestinyProjection);
+	/**
+	 * @return true if the driver will be able to deliver the entities in the
+	 *         destiny projection. False otherwise.
+	 */
+	boolean canReproject(String toEPSGdestinyProjection);
 
 }

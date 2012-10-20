@@ -53,48 +53,58 @@ import com.iver.cit.gvsig.fmap.core.v02.FLabel;
 
 /**
  * @author fjp
- *
+ * 
  */
 public class FGraphicLabel extends FGraphic {
 
-    private FLabel theLabel;
-    /**
-     * Le pasas la geometría que quieres etiquetar y el texto
-     * con el que quieres etiquetarla.
-     * @param geom
-     * @param idSymbol
-     */
-    public FGraphicLabel(IGeometry geom, int idSymbol, String theText) {
-        super(geom, idSymbol);
-        // TODO: Lo correcto debería ser hacer que FLabel
-        // siga el patrón COMPOSITE por ejemplo para que los
-        // multipoint se etiqueten bien, no solo el primer punto.
-        FLabel[] labels = geom.createLabels(0, true);
-        theLabel = labels[0];
-        theLabel.setString(theText);
-    }
-    /**
-     * @return Returns the theLabel.
-     */
-    public FLabel getLabel() {
-        return theLabel;
-    }
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.rendering.FGraphic#draw(java.awt.Graphics2D, com.iver.cit.gvsig.fmap.ViewPort, com.iver.cit.gvsig.fmap.core.v02.FSymbol)
-     */
-    public void draw(Graphics2D g, ViewPort viewPort, ISymbol theSymbol) {
-        super.draw(g, viewPort, theSymbol);
-        FPoint2D theShape = new FPoint2D(theLabel.getOrig());
-        theLabel.draw(g, viewPort.getAffineTransform(), theShape, theSymbol);
-//        FGraphicUtilities.DrawLabel(g, viewPort.getAffineTransform(),
-//                theShape, theSymbol, theLabel);
-        
-    }
-    /**
-     * @param theLabel The theLabel to set.
-     */
-    public void setLabel(FLabel theLabel) {
-        this.theLabel = theLabel;
-    }
+	private FLabel theLabel;
+
+	/**
+	 * Le pasas la geometría que quieres etiquetar y el texto con el que quieres
+	 * etiquetarla.
+	 * 
+	 * @param geom
+	 * @param idSymbol
+	 */
+	public FGraphicLabel(IGeometry geom, int idSymbol, String theText) {
+		super(geom, idSymbol);
+		// TODO: Lo correcto debería ser hacer que FLabel
+		// siga el patrón COMPOSITE por ejemplo para que los
+		// multipoint se etiqueten bien, no solo el primer punto.
+		FLabel[] labels = geom.createLabels(0, true);
+		theLabel = labels[0];
+		theLabel.setString(theText);
+	}
+
+	/**
+	 * @return Returns the theLabel.
+	 */
+	public FLabel getLabel() {
+		return theLabel;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.rendering.FGraphic#draw(java.awt.Graphics2D,
+	 * com.iver.cit.gvsig.fmap.ViewPort,
+	 * com.iver.cit.gvsig.fmap.core.v02.FSymbol)
+	 */
+	public void draw(Graphics2D g, ViewPort viewPort, ISymbol theSymbol) {
+		super.draw(g, viewPort, theSymbol);
+		FPoint2D theShape = new FPoint2D(theLabel.getOrig());
+		theLabel.draw(g, viewPort.getAffineTransform(), theShape, theSymbol);
+		// FGraphicUtilities.DrawLabel(g, viewPort.getAffineTransform(),
+		// theShape, theSymbol, theLabel);
+
+	}
+
+	/**
+	 * @param theLabel
+	 *            The theLabel to set.
+	 */
+	public void setLabel(FLabel theLabel) {
+		this.theLabel = theLabel;
+	}
 
 }

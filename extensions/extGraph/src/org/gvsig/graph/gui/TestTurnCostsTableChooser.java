@@ -27,15 +27,8 @@
 
 package org.gvsig.graph.gui;
 
-import java.awt.BorderLayout;
-import java.awt.GridBagLayout;
-
 import javax.swing.JDialog;
-import javax.swing.JPanel;
 
-import org.gvsig.gui.beans.buttonspanel.ButtonsPanel;
-
-import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 
 public class TestTurnCostsTableChooser {
@@ -43,7 +36,7 @@ public class TestTurnCostsTableChooser {
 	private static final long serialVersionUID = 1L;
 	private TurnCostsTableChooser centerPanel;
 	private WindowInfo w;
-	
+
 	public static void main(String[] args) {
 		JDialog dlg = new JDialog();
 		dlg.getContentPane().add(new TurnCostsTableChooser());
@@ -51,8 +44,5 @@ public class TestTurnCostsTableChooser {
 		dlg.setModal(true);
 		dlg.setVisible(true);
 	}
-
-
-
 
 }

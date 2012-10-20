@@ -28,18 +28,21 @@ public class CopyDocumentContextMenuAction extends
 	}
 
 	public void execute(ProjectDocument item, ProjectDocument[] selectedItems) {
-		ProjectExtension projectExtension = (ProjectExtension)PluginServices.getExtension(ProjectExtension.class);
+		ProjectExtension projectExtension = (ProjectExtension) PluginServices
+				.getExtension(ProjectExtension.class);
 		Project project = projectExtension.getProject();
 		String data;
 		try {
 			data = project.exportToXML(selectedItems);
 		} catch (SaveException e) {
 			JOptionPane.showMessageDialog(
-					(Component)PluginServices.getMainFrame(),
-					"<html>"+PluginServices.getText(this,"No_ha_sido_posible_realizar_la_operacion")+"</html>",//Mensaje
-					PluginServices.getText(this,"copiar"),//titulo
-					JOptionPane.ERROR_MESSAGE
-					);
+					(Component) PluginServices.getMainFrame(),
+					"<html>"
+							+ PluginServices.getText(this,
+									"No_ha_sido_posible_realizar_la_operacion")
+							+ "</html>",// Mensaje
+					PluginServices.getText(this, "copiar"),// titulo
+					JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		PluginServices.putInClipboard(data);

@@ -1,21 +1,18 @@
 package com.iver.andami.iconthemes;
 
-import java.net.URL;
-
 import javax.swing.ImageIcon;
 
 /**
- * This class is used by the default theme and don�t load icons because they are already
- * in memory.
+ * This class is used by the default theme and don�t load icons because they
+ * are already in memory.
  */
-public class IconThemeMemory extends AbstractIconTheme{
-
-
-
+public class IconThemeMemory extends AbstractIconTheme {
 
 	/**
 	 * Constructor
-	 * @param def. The default icon theme
+	 * 
+	 * @param def
+	 *            . The default icon theme
 	 */
 	public IconThemeMemory(IIconTheme def) {
 		setDefault(def);
@@ -25,7 +22,7 @@ public class IconThemeMemory extends AbstractIconTheme{
 	 * Return null, don�t load the icon
 	 */
 	@Override
-	protected ImageIcon loadIcon(String iconName,Object resource) {
+	protected ImageIcon loadIcon(String iconName, Object resource) {
 		return null;
 	}
 
@@ -34,7 +31,6 @@ public class IconThemeMemory extends AbstractIconTheme{
 	 */
 	@Override
 	public void load() {
-
 
 	}
 

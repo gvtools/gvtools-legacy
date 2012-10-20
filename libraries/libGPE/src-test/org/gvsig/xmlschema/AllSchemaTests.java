@@ -68,10 +68,10 @@ public class AllSchemaTests {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.gvsig.gpe.schema");
-		//$JUnit-BEGIN$
+		// $JUnit-BEGIN$
 		suite.addTest(AllReadingTests.suite());
 		suite.addTest(AllWriting.suite());
-		//$JUnit-END$
+		// $JUnit-END$
 		return suite;
 	}
 

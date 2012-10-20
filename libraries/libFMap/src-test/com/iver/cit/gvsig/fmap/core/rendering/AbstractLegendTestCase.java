@@ -40,79 +40,80 @@
  */
 package com.iver.cit.gvsig.fmap.core.rendering;
 
-import java.util.Hashtable;
-
 import junit.framework.TestCase;
 
 import com.iver.cit.gvsig.fmap.rendering.ILegend;
 
 /**
  * 
- * Your legend test itself must extend this. 
- * </p>
+ * Your legend test itself must extend this. </p>
  * <p>
- * You must not add this to the TestILegend. What you have to
- * do is to add your subclass like follows.
- * 		TestILegend.addLegendToTest(new SingleSymbolLegendTest());
+ * You must not add this to the TestILegend. What you have to do is to add your
+ * subclass like follows. TestILegend.addLegendToTest(new
+ * SingleSymbolLegendTest());
  * </p>
  * 
  * AbstractLegendTestCase.java
- *
+ * 
  * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Jun 11, 2008
- *
+ * 
  */
 public abstract class AbstractLegendTestCase extends TestCase {
 	protected Class<? extends ILegend> legClazz;
 
 	/**
-	 *  
-	 * Your legend test itself must extend this. 
-	 * </p>
+	 * 
+	 * Your legend test itself must extend this. </p>
 	 * <p>
-	 * You must not add this to the TestILegend. What you have to
-	 * do is to add your subclass like follows.
-	 * 		TestILegend.addLegendToTest(new SingleSymbolLegendTest());
+	 * You must not add this to the TestILegend. What you have to do is to add
+	 * your subclass like follows. TestILegend.addLegendToTest(new
+	 * SingleSymbolLegendTest());
 	 * </p>
+	 * 
 	 * @param legClazz
 	 */
 	public AbstractLegendTestCase(Class<? extends ILegend> legClazz) {
 		this.legClazz = legClazz;
 	}
-	
+
 	public ILegend newInstance() {
 		try {
-			ILegend leg =  (ILegend) legClazz.newInstance();
+			ILegend leg = (ILegend) legClazz.newInstance();
 			initLegend(leg);
 			return leg;
 		} catch (InstantiationException ex) {
 			// TODO Auto-generated catch block
-			fail("Instantiating class, cannot test a non-instantiable legend '"+ TestILegend.shortClassName(legClazz)+"'");
+			fail("Instantiating class, cannot test a non-instantiable legend '"
+					+ TestILegend.shortClassName(legClazz) + "'");
 		} catch (IllegalAccessException ex) {
 			// TODO Auto-generated catch block
-			fail("Class not instantiable '"+ TestILegend.shortClassName(legClazz)+"'");
+			fail("Class not instantiable '"
+					+ TestILegend.shortClassName(legClazz) + "'");
 		} catch (ClassCastException ccEx) {
-			fail("Cannot test a non legend class '"+ TestILegend.shortClassName(legClazz)+"'");
-		}			
+			fail("Cannot test a non legend class '"
+					+ TestILegend.shortClassName(legClazz) + "'");
+		}
 		return null;
 	}
-	
+
 	public abstract void initLegend(ILegend leg);
-	
+
 	public boolean equals(Object o) {
 		return (o.getClass().equals(getClass()));
 	}
-	
 
 	/**
 	 * <p>
-	 * As each legend type requires different value types (Value, FInterval, and others)
-	 * this method will provide the classification values of the required types.
+	 * As each legend type requires different value types (Value, FInterval, and
+	 * others) this method will provide the classification values of the
+	 * required types.
 	 * </p>
 	 * <p>
-	 * Please try to keep a minimum consictency between values provided here
-	 * and the values in the MockDataSource used in the test
+	 * Please try to keep a minimum consictency between values provided here and
+	 * the values in the MockDataSource used in the test
 	 * </p>
+	 * 
 	 * @return
 	 */
 	public abstract Object[] getTestSampleValues();

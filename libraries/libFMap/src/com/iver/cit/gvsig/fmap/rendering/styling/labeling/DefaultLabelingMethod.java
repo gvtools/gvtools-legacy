@@ -40,23 +40,23 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: DefaultLabelingMethod.java 10815 2007-03-20 16:16:20Z jaume $
-* $Log$
-* Revision 1.1  2007-03-20 16:16:20  jaume
-* refactored to use ISymbol instead of FSymbol
-*
-* Revision 1.2  2007/03/09 08:33:43  jaume
-* *** empty log message ***
-*
-* Revision 1.1.2.2  2007/02/01 11:42:47  jaume
-* *** empty log message ***
-*
-* Revision 1.1.2.1  2007/01/30 18:10:45  jaume
-* start commiting labeling stuff
-*
-*
-*/
+ *
+ * $Id: DefaultLabelingMethod.java 10815 2007-03-20 16:16:20Z jaume $
+ * $Log$
+ * Revision 1.1  2007-03-20 16:16:20  jaume
+ * refactored to use ISymbol instead of FSymbol
+ *
+ * Revision 1.2  2007/03/09 08:33:43  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1.2.2  2007/02/01 11:42:47  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1.2.1  2007/01/30 18:10:45  jaume
+ * start commiting labeling stuff
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.rendering.styling.labeling;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -69,13 +69,13 @@ public class DefaultLabelingMethod implements ILabelingMethod {
 
 	private LabelClass defaultLabel;
 
-	public DefaultLabelingMethod() {}
+	public DefaultLabelingMethod() {
+	}
 
 	public DefaultLabelingMethod(LabelClass defaultLabel) {
 		this();
 		this.defaultLabel = defaultLabel;
 	}
-
 
 	public void addLabelClass(LabelClass lbl) {
 		defaultLabel = lbl;
@@ -93,7 +93,7 @@ public class DefaultLabelingMethod implements ILabelingMethod {
 		XMLEntity xml = new XMLEntity();
 		xml.putProperty("className", getClassName());
 
-		if (defaultLabel !=null) {
+		if (defaultLabel != null) {
 			XMLEntity defaultLabelClassXML = defaultLabel.getXMLEntity();
 			defaultLabelClassXML.putProperty("id", "defaultLabelClass");
 			xml.addChild(defaultLabelClassXML);
@@ -102,9 +102,9 @@ public class DefaultLabelingMethod implements ILabelingMethod {
 	}
 
 	public void setXMLEntity(XMLEntity xml) {
-		if (xml.findChildren("id", "defaultClass") !=null)
-			defaultLabel = LabelingFactory.
-				createLabelClassFromXML(xml.firstChild("id", "defaultLabelClass"));
+		if (xml.findChildren("id", "defaultClass") != null)
+			defaultLabel = LabelingFactory.createLabelClassFromXML(xml
+					.firstChild("id", "defaultLabelClass"));
 	}
 
 	public boolean allowsMultipleClass() {
@@ -115,38 +115,40 @@ public class DefaultLabelingMethod implements ILabelingMethod {
 		// does nothing
 	}
 
+	public IFeatureIterator getFeatureIteratorByLabelClass(FLyrVect layer,
+			LabelClass lc, ViewPort viewPort, String[] usedFields)
+			throws ReadDriverException {
 
-	public IFeatureIterator getFeatureIteratorByLabelClass(FLyrVect layer, LabelClass lc, ViewPort viewPort, String[] usedFields)
-	throws ReadDriverException {
-
-//		if(lc.isUseSqlQuery()){
+		// if(lc.isUseSqlQuery()){
 		String sqlFields = "";
 		for (int i = 0; i < usedFields.length; i++) {
 			sqlFields += usedFields[i];
-			if (i < usedFields.length -1) sqlFields += ", ";
+			if (i < usedFields.length - 1)
+				sqlFields += ", ";
 		}
 		String fieldNames[] = layer.getSource().getRecordset().getFieldNames();
 		StringBuilder sql = new StringBuilder();
 		sql.append("select ");
-		for (int i=0; i<fieldNames.length-1; i++) {
-			sql.append("'"+fieldNames[i]+"'");
+		for (int i = 0; i < fieldNames.length - 1; i++) {
+			sql.append("'" + fieldNames[i] + "'");
 			sql.append(",");
 		}
-		sql.append(fieldNames[fieldNames.length-1]);
+		sql.append(fieldNames[fieldNames.length - 1]);
 		sql.append(" from ");
 		sql.append(layer.getRecordset().getName());
-		if(lc.isUseSqlQuery()){
+		if (lc.isUseSqlQuery()) {
 			sql.append(" where ");
 			sql.append(lc.getSQLQuery());
 		}
 		sql.append(";");
-		return layer.getSource().getFeatureIterator(sql.toString(), viewPort.getCrs());
-//		}
-//		else {
-//			return layer.getSource().getFeatureIterator(
-//					viewPort.getAdjustedExtent(), usedFields,
-//					layer.getProjection(), true);
-//		}
+		return layer.getSource().getFeatureIterator(sql.toString(),
+				viewPort.getCrs());
+		// }
+		// else {
+		// return layer.getSource().getFeatureIterator(
+		// viewPort.getAdjustedExtent(), usedFields,
+		// layer.getProjection(), true);
+		// }
 	}
 
 	public boolean definesPriorities() {
@@ -166,12 +168,15 @@ public class DefaultLabelingMethod implements ILabelingMethod {
 	}
 
 	public LabelClass[] getLabelClasses() {
-		return defaultLabel == null ? new LabelClass[0] : new LabelClass[] { defaultLabel };
+		return defaultLabel == null ? new LabelClass[0]
+				: new LabelClass[] { defaultLabel };
 	}
 
 	public ILabelingMethod cloneMethod() {
-		if (defaultLabel !=null)
-			return new DefaultLabelingMethod(LabelingFactory.createLabelClassFromXML(defaultLabel.getXMLEntity()));
+		if (defaultLabel != null)
+			return new DefaultLabelingMethod(
+					LabelingFactory.createLabelClassFromXML(defaultLabel
+							.getXMLEntity()));
 		return new DefaultLabelingMethod();
 	}
 }

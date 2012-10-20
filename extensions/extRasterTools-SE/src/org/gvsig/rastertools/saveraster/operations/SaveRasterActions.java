@@ -22,9 +22,10 @@ import org.gvsig.raster.IProcessActions;
 import org.gvsig.raster.util.RasterNotLoadException;
 import org.gvsig.raster.util.RasterToolsUtil;
 import org.gvsig.rastertools.saveraster.ui.info.EndInfoDialog;
+
 /**
  * Acciones que ejecuta el proceso de salvado.
- *
+ * 
  * @version 26/09/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
@@ -32,27 +33,29 @@ public class SaveRasterActions implements IProcessActions {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.IProcessActions#end(java.lang.Object)
 	 */
 	public void end(Object params) {
-		if(	params instanceof Object[] &&
-			((Object[])params).length == 2 &&
-			((Object[])params)[0] instanceof String &&
-			((Object[])params)[1] instanceof Long) {
+		if (params instanceof Object[] && ((Object[]) params).length == 2
+				&& ((Object[]) params)[0] instanceof String
+				&& ((Object[]) params)[1] instanceof Long) {
 
-			String fName = (String)((Object[])params)[0];
-			long milis = ((Long)((Object[])params)[1]).longValue();
+			String fName = (String) ((Object[]) params)[0];
+			long milis = ((Long) ((Object[]) params)[1]).longValue();
 
-			if(RasterToolsUtil.messageBoxYesOrNot("cargar_toc", this)) {
+			if (RasterToolsUtil.messageBoxYesOrNot("cargar_toc", this)) {
 				try {
 					RasterToolsUtil.loadLayer(null, fName, null);
 				} catch (RasterNotLoadException e) {
-					RasterToolsUtil.messageBoxError("error_load_layer", this, e);
+					RasterToolsUtil
+							.messageBoxError("error_load_layer", this, e);
 				}
 			}
 			EndInfoDialog.show(fName, milis);
 		}
 	}
 
-	public void interrupted() {}
+	public void interrupted() {
+	}
 }

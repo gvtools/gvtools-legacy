@@ -42,35 +42,35 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: GenericDissolveVisitor.java 13874 2007-09-19 16:12:18Z jaume $
-* $Log$
-* Revision 1.3  2007-09-19 16:06:36  jaume
-* ReadExpansionFileException removed from this context
-*
-* Revision 1.2  2007/03/06 16:47:58  caballero
-* Exceptions
-*
-* Revision 1.1  2006/06/20 18:20:45  azabala
-* first version in cvs
-*
-* Revision 1.3  2006/06/08 18:24:43  azabala
-* modificaciones para admitir capas de shapeType MULTI
-*
-* Revision 1.2  2006/06/02 18:21:28  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/05/24 21:11:14  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.2  2006/03/23 21:03:45  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/03/21 19:27:38  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: GenericDissolveVisitor.java 13874 2007-09-19 16:12:18Z jaume $
+ * $Log$
+ * Revision 1.3  2007-09-19 16:06:36  jaume
+ * ReadExpansionFileException removed from this context
+ *
+ * Revision 1.2  2007/03/06 16:47:58  caballero
+ * Exceptions
+ *
+ * Revision 1.1  2006/06/20 18:20:45  azabala
+ * first version in cvs
+ *
+ * Revision 1.3  2006/06/08 18:24:43  azabala
+ * modificaciones para admitir capas de shapeType MULTI
+ *
+ * Revision 1.2  2006/06/02 18:21:28  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/05/24 21:11:14  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.2  2006/03/23 21:03:45  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/03/21 19:27:38  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.dissolve.fmap;
 
 import java.awt.geom.Rectangle2D;
@@ -117,7 +117,7 @@ public class GenericDissolveVisitor implements FeatureVisitor {
 	/**
 	 * It marks all features that have already been dissolved (to avoid process
 	 * them in subsecuent steps)
-	 *
+	 * 
 	 */
 	FBitSet dissolvedGeometries;
 
@@ -138,7 +138,7 @@ public class GenericDissolveVisitor implements FeatureVisitor {
 
 	/**
 	 * Constructor
-	 *
+	 * 
 	 * @param layerToDissolve
 	 */
 	public GenericDissolveVisitor(FeatureProcessor processor) {
@@ -146,26 +146,26 @@ public class GenericDissolveVisitor implements FeatureVisitor {
 		dissolvedGeometries = new FBitSet();
 	}
 
-	public int getNumProcessedGeometries(){
+	public int getNumProcessedGeometries() {
 		return dissolvedGeometries.cardinality();
 	}
 
 	/*
-	 * Algorithm to compute dissolve is strongly based in depth first
-	 * algorithm to traverse graphs.
-	 *
-	 * It puts features to dissolve in a stack.
-	 * While stack is not empty, get Features and looks for adjacent to it.
-	 * For each adjacent feature, verify its dissolve field value,
-	 * and if it is similar to feature to dissolve
-	 * with, obtain a new feature by unioning their geometries.
-	 * For each adjacent feature, put it in the Stack
+	 * Algorithm to compute dissolve is strongly based in depth first algorithm
+	 * to traverse graphs.
+	 * 
+	 * It puts features to dissolve in a stack. While stack is not empty, get
+	 * Features and looks for adjacent to it. For each adjacent feature, verify
+	 * its dissolve field value, and if it is similar to feature to dissolve
+	 * with, obtain a new feature by unioning their geometries. For each
+	 * adjacent feature, put it in the Stack
 	 */
-	public void visit(IGeometry g, int index) throws VisitorException, ProcessVisitorException {
-		if(g == null)
+	public void visit(IGeometry g, int index) throws VisitorException,
+			ProcessVisitorException {
+		if (g == null)
 			return;
-		if(g.getGeometryType() != XTypes.POLYGON &&
-				g.getGeometryType() != XTypes.MULTI)
+		if (g.getGeometryType() != XTypes.POLYGON
+				&& g.getGeometryType() != XTypes.MULTI)
 			return;
 		if (!dissolvedGeometries.get(index)) {
 			// if we havent dissolved this feature
@@ -178,36 +178,34 @@ public class GenericDissolveVisitor implements FeatureVisitor {
 				toDissol.push(feature);
 				List geometries = dissolve(toDissol);
 				Geometry dissolvedGeom = union(geometries);
-				DissolvedFeature newFeature =
-					createFeature(null, -1);
+				DissolvedFeature newFeature = createFeature(null, -1);
 				newFeature.setJtsGeometry(dissolvedGeom);
 				this.featureProcessor.processFeature(newFeature);
 			} catch (ReadDriverException e) {
-				throw new ProcessVisitorException(recordset.getName(),e,
+				throw new ProcessVisitorException(recordset.getName(), e,
 						"Error al procesar las geometrias a fusionar durante dissolve");
 			} catch (VisitorException e) {
-				throw new ProcessVisitorException(recordset.getName(),e,
+				throw new ProcessVisitorException(recordset.getName(), e,
 						"Error al procesar las geometrias a fusionar durante dissolve");
 			}
 		}// if
 	}
 
-	protected Geometry union(List geometries){
+	protected Geometry union(List geometries) {
 		Geometry[] geom = new Geometry[geometries.size()];
 		geometries.toArray(geom);
 		GeometryFactory fact = geom[0].getFactory();
-	    Geometry geomColl = fact.createGeometryCollection(geom);
-	    Geometry union = geomColl.buffer(0.0);
-	    return union;
+		Geometry geomColl = fact.createGeometryCollection(geom);
+		Geometry union = geomColl.buffer(0.0);
+		return union;
 	}
-
 
 	/**
 	 * Inner class to manage dissolve geoprocess. It mantains feature info
 	 * interesting for dissolve (int index, JTS Geometry, etc)
-	 *
+	 * 
 	 * @author azabala
-	 *
+	 * 
 	 */
 	class DissolvedFeature extends DefaultFeature {
 		int index;
@@ -244,7 +242,7 @@ public class GenericDissolveVisitor implements FeatureVisitor {
 	/**
 	 * Creates a new IFeature with util info for dissolve geoprocess (it ignores
 	 * non numerical values, etc)
-	 *
+	 * 
 	 * @param g
 	 * @param index
 	 * @return
@@ -256,12 +254,12 @@ public class GenericDissolveVisitor implements FeatureVisitor {
 	}
 
 	/**
-	 * For each individual geometry processed in DissolveVisitor's visit
-	 * method, this Visitor visits its adjacent polygons geometries to check
-	 * dissolve conditions.
-	 *
+	 * For each individual geometry processed in DissolveVisitor's visit method,
+	 * this Visitor visits its adjacent polygons geometries to check dissolve
+	 * conditions.
+	 * 
 	 * @author azabala
-	 *
+	 * 
 	 */
 	class IndividualGeometryDissolveVisitor implements FeatureVisitor {
 		/**
@@ -298,27 +296,28 @@ public class GenericDissolveVisitor implements FeatureVisitor {
 			return "Dissolving a polygon with its adjacents";
 		}
 
-
-		public void visit(IGeometry g, int index) throws VisitorException, ProcessVisitorException {
+		public void visit(IGeometry g, int index) throws VisitorException,
+				ProcessVisitorException {
 			// Its the feature whose adjacents we are looking for?
 			if (index == feature.getIndex())
 				return;
 			// have we dissolved this feature yet?
 			if (dissolvedFeatures.get(index))
 				return;
-				Geometry jtsGeo = g.toJTSGeometry();
-				DissolvedFeature adjacentFeature = createFeature(g, index);
-				adjacentFeature.setJtsGeometry(jtsGeo);
-				if (jtsGeo.intersects(feature.getJtsGeometry())) {// They are adjacent
-					//TODO PARA HACER GENERICO EL ALGORITMO, Y QUE VALGA
-					//TANTO PARA DISSOLVER BUFFERS COMO PARA UN DISSOLVE
-					//ALFANUMERICO, AQUI USARIAMOS UN STRATEGY DISTINTO
-						dissolvedFeatures.set(index);
-						featuresToDissolve.push(adjacentFeature);
-						//geometriesToDissolve.add(jtsGeo);
-						//List toDissolve = dissolve(featuresToDissolve);
-						//geometriesToDissolve.addAll(toDissolve);
-				}// if touches
+			Geometry jtsGeo = g.toJTSGeometry();
+			DissolvedFeature adjacentFeature = createFeature(g, index);
+			adjacentFeature.setJtsGeometry(jtsGeo);
+			if (jtsGeo.intersects(feature.getJtsGeometry())) {// They are
+																// adjacent
+				// TODO PARA HACER GENERICO EL ALGORITMO, Y QUE VALGA
+				// TANTO PARA DISSOLVER BUFFERS COMO PARA UN DISSOLVE
+				// ALFANUMERICO, AQUI USARIAMOS UN STRATEGY DISTINTO
+				dissolvedFeatures.set(index);
+				featuresToDissolve.push(adjacentFeature);
+				// geometriesToDissolve.add(jtsGeo);
+				// List toDissolve = dissolve(featuresToDissolve);
+				// geometriesToDissolve.addAll(toDissolve);
+			}// if touches
 		}// visit
 
 		public void stop(FLayer layer) throws VisitorException {
@@ -340,8 +339,8 @@ public class GenericDissolveVisitor implements FeatureVisitor {
 		}
 	}// IndividualDissolve
 
-	private List dissolve(Stack toDissol)
-			throws ReadDriverException, ExpansionFileReadException, VisitorException {
+	private List dissolve(Stack toDissol) throws ReadDriverException,
+			ExpansionFileReadException, VisitorException {
 		List solution = new ArrayList();
 		while (toDissol.size() != 0) {
 			DissolvedFeature feature = (DissolvedFeature) toDissol.pop();
@@ -394,6 +393,4 @@ public class GenericDissolveVisitor implements FeatureVisitor {
 		return "Dissolving polygons of a layer";
 	}
 
-
 }
-

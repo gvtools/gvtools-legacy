@@ -27,37 +27,46 @@ import org.gvsig.raster.grid.filter.RasterFilter;
 import org.gvsig.raster.grid.filter.RasterFilterList;
 import org.gvsig.raster.grid.filter.RasterFilterListManager;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
+
 /**
  * Gestor de los filtros de brillo y contraste. Contiene métodos para añadir
  * ambos tipos de filtro en la pila.
- *
+ * 
  * @author Miguel Ángel Querol Carratalá (miguelangel.querol@iver.es)
  */
 public class BrightnessContrastListManager implements IRasterFilterListManager {
-	protected RasterFilterList			filterList				= null;
-	
+	protected RasterFilterList filterList = null;
+
 	/**
 	 * Constructor. Asigna la lista de filtros y el manager.
+	 * 
 	 * @param filterListManager
 	 */
-	public BrightnessContrastListManager(RasterFilterListManager filterListManager) {
+	public BrightnessContrastListManager(
+			RasterFilterListManager filterListManager) {
 		this.filterList = filterListManager.getFilterList();
 	}
 
 	/**
-	 * Registra BrightnessContrastListManager en los puntos de extension de RasterFilter
+	 * Registra BrightnessContrastListManager en los puntos de extension de
+	 * RasterFilter
 	 */
 	public static void register() {
 		ExtensionPoint point = ExtensionPoint.getExtensionPoint("RasterFilter");
-		point.register("BrightnessContrast", BrightnessContrastListManager.class);
+		point.register("BrightnessContrast",
+				BrightnessContrastListManager.class);
 	}
 
 	/**
 	 * Añade un filtro de brillo a la pila de filtros.
-	 * @param incrBrillo valor de brillo a aplicar
-	 * @param removeAll true si se desea eliminar cualquier filtro de brillo que
-	 * hubiera en la pila antes y false si se acumula sobre lo que haya
-	 * @throws FilterTypeException 
+	 * 
+	 * @param incrBrillo
+	 *            valor de brillo a aplicar
+	 * @param removeAll
+	 *            true si se desea eliminar cualquier filtro de brillo que
+	 *            hubiera en la pila antes y false si se acumula sobre lo que
+	 *            haya
+	 * @throws FilterTypeException
 	 */
 	public void addBrightnessFilter(int incrBrillo) throws FilterTypeException {
 		RasterFilter filter = createBrightnessFilter(incrBrillo);
@@ -69,7 +78,8 @@ public class BrightnessContrastListManager implements IRasterFilterListManager {
 	public static RasterFilter createBrightnessFilter(int incrBrillo) {
 		RasterFilter filter = new BrightnessByteFilter();
 
-		// Cuando el filtro esta creado, tomamos los valores y lo añadimos a la pila
+		// Cuando el filtro esta creado, tomamos los valores y lo añadimos a la
+		// pila
 		if (filter != null) {
 			filter.addParam("incrBrillo", new Integer(incrBrillo));
 		}
@@ -78,13 +88,15 @@ public class BrightnessContrastListManager implements IRasterFilterListManager {
 
 	/**
 	 * Añade un filtro de contraste a la pila de filtros.
+	 * 
 	 * @param incrBrillo
-	 * @throws FilterTypeException 
+	 * @throws FilterTypeException
 	 */
 	public void addContrastFilter(int incrContraste) throws FilterTypeException {
 		RasterFilter filter = createContrastFilter(incrContraste);
 
-		// Cuando el filtro esta creado, tomamos los valores y lo aï¿½adimos a la pila
+		// Cuando el filtro esta creado, tomamos los valores y lo aï¿½adimos a
+		// la pila
 		if (filter != null)
 			filterList.add(filter);
 	}
@@ -92,7 +104,8 @@ public class BrightnessContrastListManager implements IRasterFilterListManager {
 	public static RasterFilter createContrastFilter(int incrContraste) {
 		RasterFilter filter = new ContrastByteFilter();
 
-		// Cuando el filtro esta creado, tomamos los valores y lo aï¿½adimos a la pila
+		// Cuando el filtro esta creado, tomamos los valores y lo aï¿½adimos a
+		// la pila
 		if (filter != null)
 			filter.addParam("incrContraste", new Integer(incrContraste));
 
@@ -101,9 +114,13 @@ public class BrightnessContrastListManager implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#getStringsFromFilterList(java.util.ArrayList, org.gvsig.raster.grid.filter.RasterFilter)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#
+	 * getStringsFromFilterList(java.util.ArrayList,
+	 * org.gvsig.raster.grid.filter.RasterFilter)
 	 */
-	public ArrayList getStringsFromFilterList(ArrayList filterList, RasterFilter rf) {
+	public ArrayList getStringsFromFilterList(ArrayList filterList,
+			RasterFilter rf) {
 
 		if ((rf instanceof BrightnessFilter) || (rf instanceof ContrastFilter)) {
 			filterList.add("filter.brightCont.active=true");
@@ -114,7 +131,8 @@ public class BrightnessContrastListManager implements IRasterFilterListManager {
 			filterList.add("filter.brightness.incrBrillo=" + bright.incrBrillo);
 		} else if (rf instanceof ContrastFilter) {
 			ContrastFilter contrast = (ContrastFilter) rf;
-			filterList.add("filter.contrast.incrContraste=" + contrast.incrContraste);
+			filterList.add("filter.contrast.incrContraste="
+					+ contrast.incrContraste);
 		}
 
 		return filterList;
@@ -122,10 +140,14 @@ public class BrightnessContrastListManager implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#createFilterListFromStrings(java.util.ArrayList, java.lang.String, int)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#
+	 * createFilterListFromStrings(java.util.ArrayList, java.lang.String, int)
 	 */
-	public int createFilterListFromStrings(ArrayList filters, String fil, int filteri) throws FilterTypeException {
-		if ((fil.startsWith("filter.brightCont.active")) && (RasterFilterListManager.getValue(fil).equals("true"))) {
+	public int createFilterListFromStrings(ArrayList filters, String fil,
+			int filteri) throws FilterTypeException {
+		if ((fil.startsWith("filter.brightCont.active"))
+				&& (RasterFilterListManager.getValue(fil).equals("true"))) {
 
 			int incrBrillo = 0;
 			int incrContraste = 0;
@@ -134,14 +156,16 @@ public class BrightnessContrastListManager implements IRasterFilterListManager {
 			for (int prop = 0; prop < filters.size(); prop++) {
 				String elem = (String) filters.get(prop);
 				if (elem.startsWith("filter.brightness.incrBrillo")) {
-					incrBrillo = Integer.parseInt(RasterFilterListManager.getValue(elem));
+					incrBrillo = Integer.parseInt(RasterFilterListManager
+							.getValue(elem));
 					addBrightnessFilter(incrBrillo);
 					filters.remove(prop);
 					prop--;
 				}
 
 				if (elem.startsWith("filter.contrast.incrContraste")) {
-					incrContraste = Integer.parseInt(RasterFilterListManager.getValue(elem));
+					incrContraste = Integer.parseInt(RasterFilterListManager
+							.getValue(elem));
 					addContrastFilter(incrContraste);
 					filters.remove(prop);
 					prop--;
@@ -154,7 +178,10 @@ public class BrightnessContrastListManager implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList()
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList
+	 * ()
 	 */
 	public ArrayList getRasterFilterList() {
 		ArrayList filters = new ArrayList();
@@ -165,22 +192,29 @@ public class BrightnessContrastListManager implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#addFilter(java.lang.Class, org.gvsig.raster.dataset.Params)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.IRasterFilterListManager#addFilter(java.
+	 * lang.Class, org.gvsig.raster.dataset.Params)
 	 */
-	public void addFilter(Class classFilter, Params params) throws FilterTypeException {
+	public void addFilter(Class classFilter, Params params)
+			throws FilterTypeException {
 		if (classFilter.equals(ContrastFilter.class)) {
 			int contrast = 0;
 			for (int i = 0; i < params.getNumParams(); i++) {
 				if (params.getParam(i).id.equals("Contrast"))
-					contrast = ((Integer) params.getParam(i).defaultValue).intValue();
+					contrast = ((Integer) params.getParam(i).defaultValue)
+							.intValue();
 			}
 			addContrastFilter(contrast);
 		}
 		if (classFilter.equals(BrightnessFilter.class)) {
 			int brightness = 0;
 			for (int i = 0; i < params.getNumParams(); i++) {
-				if (params.getParam(i).id.equals("Brightness") && params.getParam(i).defaultValue instanceof Integer)
-					brightness = ((Integer) params.getParam(i).defaultValue).intValue();
+				if (params.getParam(i).id.equals("Brightness")
+						&& params.getParam(i).defaultValue instanceof Integer)
+					brightness = ((Integer) params.getParam(i).defaultValue)
+							.intValue();
 			}
 			addBrightnessFilter(brightness);
 		}

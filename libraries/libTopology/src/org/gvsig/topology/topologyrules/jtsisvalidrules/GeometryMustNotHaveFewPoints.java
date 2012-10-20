@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.topologyrules.jtsisvalidrules;
 
 import java.awt.Color;
@@ -71,42 +71,40 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geomgraph.GeometryGraph;
 
 /**
- * This rule checks that every geometry has at least the minimun number of points
- * to correctly define it.
- * For example: 
+ * This rule checks that every geometry has at least the minimun number of
+ * points to correctly define it. For example:
  * 
- * a) a polyline2d at least must have two points.
- * b) a polygon2d at least must have three non collinear points.
+ * a) a polyline2d at least must have two points. b) a polygon2d at least must
+ * have three non collinear points.
  * 
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
-public class GeometryMustNotHaveFewPoints extends AbstractTopologyRule{
-	  	
+public class GeometryMustNotHaveFewPoints extends AbstractTopologyRule {
+
 	private JtsValidRule parentRule;
-	
+
 	static final List<ITopologyErrorFix> automaticFixes = new ArrayList<ITopologyErrorFix>();
-	
+
 	private static final Color DEFAULT_ERROR_COLOR = Color.RED;
-	
-	//this symbol is multishape because this topology rule applies to lines or polygons
-	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = 
-		(MultiShapeSymbol) SymbologyFactory.createDefaultSymbolByShapeType(FShape.MULTI, 
-											DEFAULT_ERROR_COLOR);
-	static{
+
+	// this symbol is multishape because this topology rule applies to lines or
+	// polygons
+	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = (MultiShapeSymbol) SymbologyFactory
+			.createDefaultSymbolByShapeType(FShape.MULTI, DEFAULT_ERROR_COLOR);
+	static {
 		DEFAULT_ERROR_SYMBOL.setSize(1);
 		DEFAULT_ERROR_SYMBOL.setLineWidth(1);
 		DEFAULT_ERROR_SYMBOL.getOutline().setLineColor(DEFAULT_ERROR_COLOR);
 		DEFAULT_ERROR_SYMBOL.setFillColor(DEFAULT_ERROR_COLOR);
 	}
-	
+
 	/**
 	 * Symbol for topology errors caused by a violation of this rule.
 	 */
 	private MultiShapeSymbol errorSymbol = DEFAULT_ERROR_SYMBOL;
-	
-	
+
 	public JtsValidRule getParentRule() {
 		return parentRule;
 	}
@@ -118,69 +116,73 @@ public class GeometryMustNotHaveFewPoints extends AbstractTopologyRule{
 	public GeometryMustNotHaveFewPoints(FLyrVect originLyr) {
 		super(originLyr);
 	}
-	
-	public GeometryMustNotHaveFewPoints(){}
-		
-		public GeometryMustNotHaveFewPoints(Topology topology, FLyrVect originLyr) {
-			super(topology, originLyr);
-		}
-	
-	
-		public String getName() {
-			return Messages.getText("GEOMETRY_MUST_NOT_HAVE_FEW_POINTS");
-		}
-		
-		public void checkPreconditions() throws TopologyRuleDefinitionException {
-			int shapeType;
-			try {
-				shapeType = this.originLyr.getShapeType();
-				switch(shapeType){
-				case FShape.POINT:
-				case FShape.TEXT:
-				case FShape.MULTIPOINT:
-					throw new TopologyRuleDefinitionException("La regla Few Points no aplica sobre capas de puntos");
+
+	public GeometryMustNotHaveFewPoints() {
+	}
+
+	public GeometryMustNotHaveFewPoints(Topology topology, FLyrVect originLyr) {
+		super(topology, originLyr);
+	}
+
+	public String getName() {
+		return Messages.getText("GEOMETRY_MUST_NOT_HAVE_FEW_POINTS");
+	}
+
+	public void checkPreconditions() throws TopologyRuleDefinitionException {
+		int shapeType;
+		try {
+			shapeType = this.originLyr.getShapeType();
+			switch (shapeType) {
+			case FShape.POINT:
+			case FShape.TEXT:
+			case FShape.MULTIPOINT:
+				throw new TopologyRuleDefinitionException(
+						"La regla Few Points no aplica sobre capas de puntos");
 			}
-			} catch (ReadDriverException e) {
-				throw new TopologyRuleDefinitionException("Error al tratar de verificar el tipo de geometria");
-			}
+		} catch (ReadDriverException e) {
+			throw new TopologyRuleDefinitionException(
+					"Error al tratar de verificar el tipo de geometria");
 		}
-		
-		public void validateFeature(IFeature feature) {
-			IGeometry geometry = feature.getGeometry();
-			Geometry jtsGeo = geometry.toJTSGeometry();
-			if(jtsGeo.getDimension() == 0)
-				return;
-			GeometryGraph graph = new GeometryGraph(0, jtsGeo );
-		    if (graph.hasTooFewPoints()) {//TODO JTS NO CONTEMPLA CURVAS....VER SI ES MEJOR DEFINIR ESTO CON FMAP
-		        AbstractTopologyRule violatedRule = null;
-		        if(this.parentRule != null)
-		        	violatedRule = parentRule;
-		        else
-		        	violatedRule = this;
-		    	JtsValidTopologyError error = new JtsValidTopologyError(geometry, violatedRule, feature, topology );
-		    	error.setSecondaryRule(this);
-		      this.errorContainer.addTopologyError(error);
-		    }//if 
-		}
+	}
 
-		public boolean acceptsOriginLyr(FLyrVect lyr) {
-			try {
-				return FGeometryUtil.getDimensions(lyr.getShapeType()) > 0;
-			} catch (ReadDriverException e) {
-				e.printStackTrace();
-				return false;
-			}
-		}
+	public void validateFeature(IFeature feature) {
+		IGeometry geometry = feature.getGeometry();
+		Geometry jtsGeo = geometry.toJTSGeometry();
+		if (jtsGeo.getDimension() == 0)
+			return;
+		GeometryGraph graph = new GeometryGraph(0, jtsGeo);
+		if (graph.hasTooFewPoints()) {// TODO JTS NO CONTEMPLA CURVAS....VER SI
+										// ES MEJOR DEFINIR ESTO CON FMAP
+			AbstractTopologyRule violatedRule = null;
+			if (this.parentRule != null)
+				violatedRule = parentRule;
+			else
+				violatedRule = this;
+			JtsValidTopologyError error = new JtsValidTopologyError(geometry,
+					violatedRule, feature, topology);
+			error.setSecondaryRule(this);
+			this.errorContainer.addTopologyError(error);
+		}// if
+	}
 
-		public List<ITopologyErrorFix> getAutomaticErrorFixes() {
-			return automaticFixes;
+	public boolean acceptsOriginLyr(FLyrVect lyr) {
+		try {
+			return FGeometryUtil.getDimensions(lyr.getShapeType()) > 0;
+		} catch (ReadDriverException e) {
+			e.printStackTrace();
+			return false;
 		}
+	}
 
-		public MultiShapeSymbol getDefaultErrorSymbol() {
-			return DEFAULT_ERROR_SYMBOL;
-		}
+	public List<ITopologyErrorFix> getAutomaticErrorFixes() {
+		return automaticFixes;
+	}
 
-		public MultiShapeSymbol getErrorSymbol() {
-			return errorSymbol;
-		}  
-  }
+	public MultiShapeSymbol getDefaultErrorSymbol() {
+		return DEFAULT_ERROR_SYMBOL;
+	}
+
+	public MultiShapeSymbol getErrorSymbol() {
+		return errorSymbol;
+	}
+}

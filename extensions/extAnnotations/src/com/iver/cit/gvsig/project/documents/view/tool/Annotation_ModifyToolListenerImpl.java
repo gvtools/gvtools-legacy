@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Informaci�n Geogr�fica de la Generalitat Valenciana
  *
  * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
@@ -67,90 +66,112 @@ import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
 import com.iver.cit.gvsig.fmap.tools.Listeners.PointListener;
 import com.iver.cit.gvsig.project.documents.view.tool.gui.Annotation_ModifyWindow;
 
-
 /**
- * Implementation of the interface PointListener as tool
- * of modify annotation.
- *
+ * Implementation of the interface PointListener as tool of modify annotation.
+ * 
  * @author Vicente Caballero Navarro
  */
 public class Annotation_ModifyToolListenerImpl implements PointListener {
-	private static final int tolerance=10;
-	private static final Image imodifytool=PluginServices.getIconTheme().get("annotation-modify").getImage();
-	private Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(imodifytool,
-            new Point(16, 16), "");
-    private MapControl mapControl;
-    /**
-     * Create a new Annotation_ModifyToolListenerImpl.
-     *
-     * @param mapControl MapControl.
-     */
-    public Annotation_ModifyToolListenerImpl(MapControl mapControl) {
-        this.mapControl = mapControl;
-    }
+	private static final int tolerance = 10;
+	private static final Image imodifytool = PluginServices.getIconTheme()
+			.get("annotation-modify").getImage();
+	private Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(
+			imodifytool, new Point(16, 16), "");
+	private MapControl mapControl;
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#point(com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
-     */
-    public void point(PointEvent event) throws BehaviorException {
-    	 FLayer[] layers=mapControl.getMapContext().getLayers().getActives();
-         if (layers[0] instanceof Annotation_Layer){
-        	 if (layers[0].isEditing())
-     	    try {
-				Annotation_Mapping am=((Annotation_Layer)layers[0]).getAnnotatonMapping();
-     	    	Annotation_Strategy as=(Annotation_Strategy)((Annotation_Layer)layers[0]).getStrategy();
-     	    	BitSet bs=as.queryByPoint(mapControl.getViewPort().toMapPoint(event.getPoint()),mapControl.getViewPort().toMapDistance(tolerance));
-     	    	Annotation_EditableAdapter aea=(Annotation_EditableAdapter)((Annotation_Layer)layers[0]).getSource();
-				if (bs.cardinality()>0)
-					aea.startComplexRow();
-     	    	for(int i=bs.nextSetBit(0); i>=0; i=bs.nextSetBit(i+1)) {
-     	    		IRow row=aea.getRow(i).getLinkedRow().cloneRow();
-     	    		Value[] values=row.getAttributes();
-					Annotation_ModifyWindow maw=new Annotation_ModifyWindow();
-					maw.setValues(values,am);
-					PluginServices.getMDIManager().addWindow(maw);
-					if (maw.isAccepted()){
-						Value[] newValues=maw.getValues();
-						if (!(values.equals(newValues))){
-							row.setAttributes(newValues);
-							aea.modifyRow(i,row,PluginServices.getText(this,"modify_annotation"),EditionEvent.ALPHANUMERIC);
+	/**
+	 * Create a new Annotation_ModifyToolListenerImpl.
+	 * 
+	 * @param mapControl
+	 *            MapControl.
+	 */
+	public Annotation_ModifyToolListenerImpl(MapControl mapControl) {
+		this.mapControl = mapControl;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#point(com.iver.
+	 * cit.gvsig.fmap.tools.Events.PointEvent)
+	 */
+	public void point(PointEvent event) throws BehaviorException {
+		FLayer[] layers = mapControl.getMapContext().getLayers().getActives();
+		if (layers[0] instanceof Annotation_Layer) {
+			if (layers[0].isEditing())
+				try {
+					Annotation_Mapping am = ((Annotation_Layer) layers[0])
+							.getAnnotatonMapping();
+					Annotation_Strategy as = (Annotation_Strategy) ((Annotation_Layer) layers[0])
+							.getStrategy();
+					BitSet bs = as.queryByPoint(mapControl.getViewPort()
+							.toMapPoint(event.getPoint()), mapControl
+							.getViewPort().toMapDistance(tolerance));
+					Annotation_EditableAdapter aea = (Annotation_EditableAdapter) ((Annotation_Layer) layers[0])
+							.getSource();
+					if (bs.cardinality() > 0)
+						aea.startComplexRow();
+					for (int i = bs.nextSetBit(0); i >= 0; i = bs
+							.nextSetBit(i + 1)) {
+						IRow row = aea.getRow(i).getLinkedRow().cloneRow();
+						Value[] values = row.getAttributes();
+						Annotation_ModifyWindow maw = new Annotation_ModifyWindow();
+						maw.setValues(values, am);
+						PluginServices.getMDIManager().addWindow(maw);
+						if (maw.isAccepted()) {
+							Value[] newValues = maw.getValues();
+							if (!(values.equals(newValues))) {
+								row.setAttributes(newValues);
+								aea.modifyRow(i, row, PluginServices.getText(
+										this, "modify_annotation"),
+										EditionEvent.ALPHANUMERIC);
+							}
 						}
 					}
+					if (bs.cardinality() > 0) {
+						aea.endComplexRow(PluginServices.getText(this,
+								"modify_annotation"));
+						mapControl.drawMap(false);
+					}
+				} catch (ExpansionFileReadException e) {
+					throw new BehaviorException(e.getMessage());
+				} catch (ReadDriverException e) {
+					throw new BehaviorException(e.getMessage());
+				} catch (ValidateRowException e) {
+					throw new BehaviorException(e.getMessage());
+				} catch (VisitorException e) {
+					throw new BehaviorException(e.getMessage());
 				}
-     	    	if (bs.cardinality()>0){
-     	    		aea.endComplexRow(PluginServices.getText(this,"modify_annotation"));
-     	    		mapControl.drawMap(false);
-     	    	}
-			} catch (ExpansionFileReadException e) {
-				throw new BehaviorException(e.getMessage());
-			} catch (ReadDriverException e) {
-				throw new BehaviorException(e.getMessage());
-			} catch (ValidateRowException e) {
-				throw new BehaviorException(e.getMessage());
-			} catch (VisitorException e) {
-				throw new BehaviorException(e.getMessage());
-			}
 
-     	 }
-    }
+		}
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#getCursor()
-     */
-    public Cursor getCursor() {
-        return cur;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#getCursor()
+	 */
+	public Cursor getCursor() {
+		return cur;
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#cancelDrawing()
-     */
-    public boolean cancelDrawing() {
-        return true;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#cancelDrawing()
+	 */
+	public boolean cancelDrawing() {
+		return true;
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#pointDoubleClick(com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
-     */
-    public void pointDoubleClick(PointEvent event) {
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#pointDoubleClick
+	 * (com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
+	 */
+	public void pointDoubleClick(PointEvent event) {
+	}
 }

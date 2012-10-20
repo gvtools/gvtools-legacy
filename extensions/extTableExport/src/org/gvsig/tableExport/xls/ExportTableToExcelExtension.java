@@ -1,6 +1,5 @@
 package org.gvsig.tableExport.xls;
 
-
 import java.awt.Component;
 import java.io.File;
 import java.util.Iterator;
@@ -39,40 +38,44 @@ import com.iver.utiles.GenericFileFilter;
 
 public class ExportTableToExcelExtension extends Extension {
 
-	private WritableCellFormat floatFormat = new WritableCellFormat (NumberFormats.FLOAT);
-	private WritableCellFormat intFormat = new WritableCellFormat (NumberFormats.INTEGER);
-    /**
-     * @see com.iver.andami.plugins.IExtension#initialize()
-     */
-    public void initialize() {
-    }
+	private WritableCellFormat floatFormat = new WritableCellFormat(
+			NumberFormats.FLOAT);
+	private WritableCellFormat intFormat = new WritableCellFormat(
+			NumberFormats.INTEGER);
 
-    /**
-     * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
-     */
-    public void execute(String actionCommand) {
-    	IWindow v = PluginServices.getMDIManager().getActiveWindow();
-    	Table table = (Table) v;
-         try {
+	/**
+	 * @see com.iver.andami.plugins.IExtension#initialize()
+	 */
+	public void initialize() {
+	}
+
+	/**
+	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
+	 */
+	public void execute(String actionCommand) {
+		IWindow v = PluginServices.getMDIManager().getActiveWindow();
+		Table table = (Table) v;
+		try {
 			exportToXLS(table);
 		} catch (Exception e) {
 			NotificationManager.showMessageError("error_en_el_proceso", e);
 		}
 
-    }
-
-    /**
-	 * DOCUMENT ME!
-	 */
-	public void exportToXLS(Table table) throws Exception{
-		File file = this.askForFileName("xls",PluginServices.getText(this,"Ficheros_XLS"));
-		if (file == null){
-			return;
-		}
-		exportToFile(table,file);
 	}
 
-	public void exportToFile(Table table,File trgfile) throws Exception{
+	/**
+	 * DOCUMENT ME!
+	 */
+	public void exportToXLS(Table table) throws Exception {
+		File file = this.askForFileName("xls",
+				PluginServices.getText(this, "Ficheros_XLS"));
+		if (file == null) {
+			return;
+		}
+		exportToFile(table, file);
+	}
+
+	public void exportToFile(Table table, File trgfile) throws Exception {
 		SelectableDataSource source;
 		ITableDefinition orgDef;
 		try {
@@ -80,42 +83,42 @@ public class ExportTableToExcelExtension extends Extension {
 			source.start();
 			orgDef = table.getModel().getModelo().getTableDefinition();
 		} catch (Exception e) {
-			throw new Exception("Error preparando la fuente", e); // TODO intenacionalizacion??
+			throw new Exception("Error preparando la fuente", e); // TODO
+																	// intenacionalizacion??
 		}
 
-
-		File file = new File(trgfile.getAbsoluteFile()+".tmp");
+		File file = new File(trgfile.getAbsoluteFile() + ".tmp");
 
 		WritableWorkbook workbook = Workbook.createWorkbook(file);
 		WritableSheet sheet = workbook.createSheet("First Sheet", 0);
 
-		writeHeader(sheet,orgDef);
-
+		writeHeader(sheet, orgDef);
 
 		try {
 			SourceIterator iter = new SourceIterator(source);
 			Value[] values;
 			Value value;
-			int row=1;
+			int row = 1;
 			int col;
-			while (iter.hasNext()){
-				 values = iter.nextValues();
-				 for (col=0;col<values.length;col++){
+			while (iter.hasNext()) {
+				values = iter.nextValues();
+				for (col = 0; col < values.length; col++) {
 					value = values[col];
-					if (!(value instanceof NullValue)){
-						sheet.addCell(getCell(row,col,value));
+					if (!(value instanceof NullValue)) {
+						sheet.addCell(getCell(row, col, value));
 					}
-				 }
-				 row++;
+				}
+				row++;
 
 			}
 
-			 workbook.write();
+			workbook.write();
 
-			 workbook.close();
+			workbook.close();
 
 		} catch (Exception e) {
-			throw new Exception("Error generando fichero", e); // TODO intenacionalizacion??
+			throw new Exception("Error generando fichero", e); // TODO
+																// intenacionalizacion??
 
 		}
 
@@ -125,108 +128,112 @@ public class ExportTableToExcelExtension extends Extension {
 			source.stop();
 
 		} catch (Exception e) {
-			throw new Exception("Error cerrando ficheros", e); // TODO intenacionalizacion??
+			throw new Exception("Error cerrando ficheros", e); // TODO
+																// intenacionalizacion??
 		}
-
-
 
 	}
 
 	private WritableCell getCell(int row, int col, Value value) {
-		if (value instanceof NumericValue){
-			if (value instanceof DoubleValue || value instanceof FloatValue){
-				return new Number(col,row,((NumericValue)value).doubleValue(),floatFormat);
+		if (value instanceof NumericValue) {
+			if (value instanceof DoubleValue || value instanceof FloatValue) {
+				return new Number(col, row,
+						((NumericValue) value).doubleValue(), floatFormat);
 			} else {
-				return new Number(col,row,((NumericValue)value).longValue(),intFormat);
+				return new Number(col, row, ((NumericValue) value).longValue(),
+						intFormat);
 			}
-		} else{
-			return new Label(col,row,value.toString());
+		} else {
+			return new Label(col, row, value.toString());
 		}
 
 	}
 
-	private void writeHeader(WritableSheet sheet, ITableDefinition orgDef) throws JXLException {
+	private void writeHeader(WritableSheet sheet, ITableDefinition orgDef)
+			throws JXLException {
 		FieldDescription[] fields = orgDef.getFieldsDesc();
 		FieldDescription field;
 		Label cell;
 		int col;
-		for (col=0;col<fields.length;col++){
+		for (col = 0; col < fields.length; col++) {
 			field = fields[col];
-			cell=new Label(col,0,field.getFieldName());
+			cell = new Label(col, 0, field.getFieldName());
 			sheet.addCell(cell);
 		}
 	}
 
-	private File askForFileName(String ext,String extDescription){
+	private File askForFileName(String ext, String extDescription) {
 		JFileChooser jfc = new JFileChooser();
-		jfc.addChoosableFileFilter(new GenericFileFilter(ext,
-				extDescription));
+		jfc.addChoosableFileFilter(new GenericFileFilter(ext, extDescription));
 		if (jfc.showSaveDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
-			File file=jfc.getSelectedFile();
-			if (file == null){
+			File file = jfc.getSelectedFile();
+			if (file == null) {
 				return null;
 			}
-			if (file.exists()){
+			if (file.exists()) {
 				int resp = JOptionPane.showConfirmDialog(
-						(Component) PluginServices.getMainFrame(),PluginServices.getText(this,"fichero_ya_existe_seguro_desea_guardarlo"),
-						PluginServices.getText(this,"guardar"), JOptionPane.YES_NO_OPTION);
+						(Component) PluginServices.getMainFrame(),
+						PluginServices.getText(this,
+								"fichero_ya_existe_seguro_desea_guardarlo"),
+						PluginServices.getText(this, "guardar"),
+						JOptionPane.YES_NO_OPTION);
 				if (resp != JOptionPane.YES_OPTION) {
 					return null;
 				}
 			}
 			String name = file.getAbsolutePath();
-			if (!name.toLowerCase().endsWith("." +ext.toLowerCase())){
-				file = new File(name + "."+ext);
+			if (!name.toLowerCase().endsWith("." + ext.toLowerCase())) {
+				file = new File(name + "." + ext);
 			}
 			return file;
-		} else{
+		} else {
 			return null;
 		}
 
 	}
 
+	/**
+	 * @see com.iver.andami.plugins.IExtension#isEnabled()
+	 */
+	public boolean isEnabled() {
+		return true;
+	}
 
-    /**
-     * @see com.iver.andami.plugins.IExtension#isEnabled()
-     */
-    public boolean isEnabled() {
-       return true;
-    }
+	/**
+	 * @see com.iver.andami.plugins.IExtension#isVisible()
+	 */
+	public boolean isVisible() {
+		IWindow v = PluginServices.getMDIManager().getActiveWindow();
 
-    /**
-     * @see com.iver.andami.plugins.IExtension#isVisible()
-     */
-    public boolean isVisible() {
-        IWindow v = PluginServices.getMDIManager().getActiveWindow();
+		if (v == null) {
+			return false;
+		} else if (v instanceof Table) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-        if (v == null) {
-            return false;
-        } else if (v instanceof Table) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+	private class SourceIterator implements Iterator {
+		private int index;
+		private long count;
+		private FBitSet selection = null;
+		private SelectableDataSource source;
 
-    private class SourceIterator implements Iterator{
-    	private int index;
-    	private long count;
-    	private FBitSet selection = null;
-    	private SelectableDataSource source;
+		public SourceIterator(SelectableDataSource source)
+				throws DriverException, ReadDriverException {
+			this.source = source;
+			if (source.getSelection().cardinality() == 0) {
+				this.selection = null;
+				this.index = 0;
+				this.count = source.getRowCount();
+			} else {
+				this.selection = source.getSelection();
+				this.index = selection.nextSetBit(0);
+				this.count = selection.cardinality();
+			}
 
-    	public SourceIterator(SelectableDataSource source) throws DriverException, ReadDriverException{
-    		this.source = source;
-    		if (source.getSelection().cardinality()== 0){
-    			this.selection = null;
-    			this.index=0;
-    			this.count = source.getRowCount();
-    		} else{
-    			this.selection = source.getSelection();
-    			this.index=selection.nextSetBit(0);
-    			this.count = selection.cardinality();
-    		}
-
-    	}
+		}
 
 		public void remove() {
 			throw new UnsupportedOperationException();
@@ -240,7 +247,7 @@ public class ExportTableToExcelExtension extends Extension {
 
 		public Object next() {
 			try {
-				if (!hasNext()){
+				if (!hasNext()) {
 					throw new NoSuchElementException();
 				}
 				return this.nextValues();
@@ -254,7 +261,7 @@ public class ExportTableToExcelExtension extends Extension {
 		public Value[] nextValues() throws DriverException, ReadDriverException {
 
 			Value[] values = this.source.getRow(this.index);
-			if (this.selection == null){
+			if (this.selection == null) {
 				this.index++;
 			} else {
 				this.index = this.selection.nextSetBit(this.index + 1);
@@ -262,11 +269,5 @@ public class ExportTableToExcelExtension extends Extension {
 			return values;
 
 		}
-
-		public long count(){
-			return this.count;
-		}
-
-    }
-
+	}
 }

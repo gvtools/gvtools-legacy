@@ -75,6 +75,7 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * It parses a gml:linearRingType object. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;LinearRing&gt;
@@ -82,88 +83,95 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  * &lt;/LinearRing&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class LinearRingTypeBinding extends GeometryBinding{
-	
+public class LinearRingTypeBinding extends GeometryBinding {
+
 	/**
-	 * It parses the gml:LinearRing tag and return the 
-	 * Object
+	 * It parses the gml:LinearRing tag and return the Object
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * A linear ring
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return A linear ring
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public Object parse(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException{
+	public Object parse(IXmlStreamReader parser, GPEDefaultGmlParser handler)
+			throws XmlStreamException, IOException {
 		Object linearRing = null;
-				
+
 		super.setAtributtes(parser, handler.getErrorHandler());
-			
-		ICoordinateIterator coordinatesIteartor = parseCoordinates(parser, handler);	
-		
-		linearRing = handler.getContentHandler().startLinearRing(id, coordinatesIteartor, srsName);
+
+		ICoordinateIterator coordinatesIteartor = parseCoordinates(parser,
+				handler);
+
+		linearRing = handler.getContentHandler().startLinearRing(id,
+				coordinatesIteartor, srsName);
 		handler.getContentHandler().endLinearRing(linearRing);
-		
+
 		return linearRing;
 	}
-	
+
 	/**
-	 * It parses the gml:LinearRing tag and return the 
-	 * coordinates
+	 * It parses the gml:LinearRing tag and return the coordinates
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * An array of coordinates
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return An array of coordinates
 	 * @throws XmlStreamException
 	 * @throws IOException
-	 * @throws PolygonNotClosedWarning 
+	 * @throws PolygonNotClosedWarning
 	 */
-	public ICoordinateIterator parseCoordinates(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
+	public ICoordinateIterator parseCoordinates(IXmlStreamReader parser,
+			GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
 		boolean endFeature = false;
 		int currentTag;
-		
+
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
 				ICoordinateIterator iterator = parseTag_(parser, handler, tag);
-				if (iterator != null){
+				if (iterator != null) {
 					return iterator;
 				}
 			case IXmlStreamReader.END_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_LINEARRING)){						
-								
+				if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_LINEARRING)) {
+
 				}
 				break;
-			case IXmlStreamReader.CHARACTERS:					
+			case IXmlStreamReader.CHARACTERS:
 
 				break;
 			}
-			if (!endFeature){					
+			if (!endFeature) {
 				currentTag = parser.next();
 				tag = parser.getName();
 			}
-		}			
-		//The first and the last coordinates has to be the same
-//		if ((coordinates[0][0] != coordinates[0][coordinates[0].length - 1]) ||
-//				(coordinates[1][0] != coordinates[1][coordinates[1].length - 1]) ||
-//				(coordinates[2][0] != coordinates[2][coordinates[2].length - 1])){
-//			handler.getErrorHandler().addWarning(new PolygonNotClosedWarning(coordinates));
-//		}
+		}
+		// The first and the last coordinates has to be the same
+		// if ((coordinates[0][0] != coordinates[0][coordinates[0].length - 1])
+		// ||
+		// (coordinates[1][0] != coordinates[1][coordinates[1].length - 1]) ||
+		// (coordinates[2][0] != coordinates[2][coordinates[2].length - 1])){
+		// handler.getErrorHandler().addWarning(new
+		// PolygonNotClosedWarning(coordinates));
+		// }
 		return null;
 	}
-	
+
 	/**
 	 * 
 	 * @param parser
@@ -174,18 +182,23 @@ public class LinearRingTypeBinding extends GeometryBinding{
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	protected ICoordinateIterator parseTag_(IXmlStreamReader parser,GPEDefaultGmlParser handler, QName tag) throws XmlStreamException, IOException{
-		if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_COORDINATES)){
-			CoordinatesTypeIterator coordinatesIterator = handler.getProfile().getCoordinatesTypeBinding();
-			coordinatesIterator.initialize(parser, handler,GMLTags.GML_LINEARRING);
+	protected ICoordinateIterator parseTag_(IXmlStreamReader parser,
+			GPEDefaultGmlParser handler, QName tag) throws XmlStreamException,
+			IOException {
+		if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_COORDINATES)) {
+			CoordinatesTypeIterator coordinatesIterator = handler.getProfile()
+					.getCoordinatesTypeBinding();
+			coordinatesIterator.initialize(parser, handler,
+					GMLTags.GML_LINEARRING);
 			return coordinatesIterator;
-		}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_COORD)){
-			CoordTypeIterator coordinatesIterator = handler.getProfile().getCoordTypeBinding();
-			coordinatesIterator.initialize(parser, handler,GMLTags.GML_LINEARRING);
+		} else if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_COORD)) {
+			CoordTypeIterator coordinatesIterator = handler.getProfile()
+					.getCoordTypeBinding();
+			coordinatesIterator.initialize(parser, handler,
+					GMLTags.GML_LINEARRING);
 			return coordinatesIterator;
 		}
 		return null;
 	}
-	
-	
+
 }

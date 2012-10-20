@@ -1,10 +1,9 @@
-
 package org.gvsig.remoteClient;
+
 /**
- * <p></p>
+ * <p>
+ * </p>
  * 
  */
 public interface IRasterClient {
 }
-
-

@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.jump.adapter;
 
 import com.iver.utiles.swing.threads.CancellableProgressTask;
@@ -54,31 +54,29 @@ import com.vividsolutions.jump.task.TaskMonitor;
 public class TaskMonitorAdapter2 implements TaskMonitor {
 
 	CancellableProgressTask progressTask;
-	
-	
-	
-    public TaskMonitorAdapter2(CancellableProgressTask progressTask) {
+
+	public TaskMonitorAdapter2(CancellableProgressTask progressTask) {
 		super();
 		this.progressTask = progressTask;
 	}
 
 	public void report(String description) {
-        progressTask.setNote(description);
-    }
+		progressTask.setNote(description);
+	}
 
-    public void report(int itemsDone, int totalItems, String itemDescription) {
-        progressTask.reportStep();
-    }
+	public void report(int itemsDone, int totalItems, String itemDescription) {
+		progressTask.reportStep();
+	}
 
-    public void report(Exception exception) {
-    }
+	public void report(Exception exception) {
+	}
 
-    public void allowCancellationRequests() {
-        
-    }
+	public void allowCancellationRequests() {
 
-    public boolean isCancelRequested() {
-        return progressTask.isCanceled();
-    }
+	}
+
+	public boolean isCancelRequested() {
+		return progressTask.isCanceled();
+	}
 
 }

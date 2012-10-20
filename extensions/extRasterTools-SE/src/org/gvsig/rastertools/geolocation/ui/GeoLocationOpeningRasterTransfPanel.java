@@ -34,31 +34,31 @@ import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.ViewPort;
 
 /**
- * Panel de geolocalización. Este muestra los parámetros de la matriz de transformación
- * que está aplicandose en esos momentos al raster. 
+ * Panel de geolocalización. Este muestra los parámetros de la matriz de
+ * transformación que está aplicandose en esos momentos al raster.
  * 
  * @version 12/12/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public class GeoLocationOpeningRasterTransfPanel extends GeolocationBaseClassPanel {
-	private static final long         serialVersionUID = -7797379892312214949L;
-	private DataInputContainer	       ulx = null;
-	private DataInputContainer	       uly = null;
-	private DataInputContainer	       psx = null;
-	private DataInputContainer	       psy = null;
-	private DataInputContainer	       rotx = null;
-	private DataInputContainer	       roty = null;
-	
-		
-	private JPanel			           coordsPanel = null;
-	private JPanel			           paramsPanel = null;
-	
+public class GeoLocationOpeningRasterTransfPanel extends
+		GeolocationBaseClassPanel {
+	private static final long serialVersionUID = -7797379892312214949L;
+	private DataInputContainer ulx = null;
+	private DataInputContainer uly = null;
+	private DataInputContainer psx = null;
+	private DataInputContainer psy = null;
+	private DataInputContainer rotx = null;
+	private DataInputContainer roty = null;
+
+	private JPanel coordsPanel = null;
+	private JPanel paramsPanel = null;
+
 	/**
-     * Número de decimales a mostrar
-     */
-    private int                        tailValue = 2;
-	
+	 * Número de decimales a mostrar
+	 */
+	private int tailValue = 2;
+
 	/**
 	 * Constructor
 	 */
@@ -66,43 +66,46 @@ public class GeoLocationOpeningRasterTransfPanel extends GeolocationBaseClassPan
 		this.listener = list;
 		GridBagLayout gl = new GridBagLayout();
 		this.setLayout(gl);
-		setBorder(javax.swing.BorderFactory.createTitledBorder(null, PluginServices.getText(this, "geolocation"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
-		
+		setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+				PluginServices.getText(this, "geolocation"),
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+
 		ulx = new DataInputContainer();
-		ulx.setLabelText(PluginServices.getText(this,"ux"));
+		ulx.setLabelText(PluginServices.getText(this, "ux"));
 		ulx.addValueChangedListener(listener);
 		ulx.addKeyListener(listener);
-		
+
 		uly = new DataInputContainer();
-		uly.setLabelText(PluginServices.getText(this,"uy"));
+		uly.setLabelText(PluginServices.getText(this, "uy"));
 		uly.addValueChangedListener(listener);
 		uly.addKeyListener(listener);
-		
+
 		psx = new DataInputContainer();
-		psx.setLabelText(PluginServices.getText(this,"px"));
+		psx.setLabelText(PluginServices.getText(this, "px"));
 		psx.addValueChangedListener(listener);
 		psx.addKeyListener(listener);
-		
+
 		psy = new DataInputContainer();
-		psy.setLabelText(PluginServices.getText(this,"py"));
+		psy.setLabelText(PluginServices.getText(this, "py"));
 		psy.addValueChangedListener(listener);
 		psy.addKeyListener(listener);
-		
+
 		rotx = new DataInputContainer();
-		rotx.setLabelText(PluginServices.getText(this,"rx"));
+		rotx.setLabelText(PluginServices.getText(this, "rx"));
 		rotx.addValueChangedListener(listener);
 		rotx.addKeyListener(listener);
-		
+
 		roty = new DataInputContainer();
-		roty.setLabelText(PluginServices.getText(this,"ry"));
+		roty.setLabelText(PluginServices.getText(this, "ry"));
 		roty.addValueChangedListener(listener);
 		roty.addKeyListener(listener);
-				
+
 		coordsPanel = new JPanel();
 		GridLayout l = new GridLayout(2, 1);
 		l.setVgap(2);
 		coordsPanel.setLayout(l);
-		
+
 		paramsPanel = new JPanel();
 		GridLayout l1 = new GridLayout(2, 2);
 		l1.setVgap(2);
@@ -110,7 +113,7 @@ public class GeoLocationOpeningRasterTransfPanel extends GeolocationBaseClassPan
 
 		init();
 	}
-	
+
 	private void init() {
 		coordsPanel.add(ulx);
 		coordsPanel.add(uly);
@@ -118,33 +121,35 @@ public class GeoLocationOpeningRasterTransfPanel extends GeolocationBaseClassPan
 		paramsPanel.add(psy);
 		paramsPanel.add(rotx);
 		paramsPanel.add(roty);
-				
+
 		GridBagConstraints gbc = new GridBagConstraints();
-				
+
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.insets = new java.awt.Insets(1, 1, 1, 1);
 		this.add(coordsPanel, gbc);
-		
+
 		gbc.gridy = 1;
 		gbc.weightx = 1.0;
 		this.add(paramsPanel, gbc);
-		
+
 	}
-	
+
 	/**
-	 * Activa o desactiva los botones de transformación anterior y siguiente dependiendo
-	 * del estado de la lista de transformaciones.
+	 * Activa o desactiva los botones de transformación anterior y siguiente
+	 * dependiendo del estado de la lista de transformaciones.
+	 * 
 	 * @return
 	 */
 	public void activeButtons() {
 
 	}
-	
+
 	/**
-	 * Asigna la capa raster del raster seleccionado en el TOC en base 
-	 * al cual se asigna la georreferenciación al dialogo.
+	 * Asigna la capa raster del raster seleccionado en el TOC en base al cual
+	 * se asigna la georreferenciación al dialogo.
+	 * 
 	 * @param lyr
 	 */
 	public void setParams(FLyrRasterSE lyr, ViewPort vp) {
@@ -155,7 +160,9 @@ public class GeoLocationOpeningRasterTransfPanel extends GeolocationBaseClassPan
 
 	/**
 	 * Carga los parámetros en el dialogo a partir de la capa
-	 * @param lyr Capa raster
+	 * 
+	 * @param lyr
+	 *            Capa raster
 	 */
 	public void loadTransform(AffineTransform at) {
 		listener.setEnableValueChangeEvent(false);
@@ -167,9 +174,10 @@ public class GeoLocationOpeningRasterTransfPanel extends GeolocationBaseClassPan
 		setRoty(String.valueOf(MathUtils.format(at.getShearY(), tailValue)));
 		listener.setEnableValueChangeEvent(true);
 	}
-	
+
 	/**
 	 * Asigna el tamaño de pixel en X
+	 * 
 	 * @param psx
 	 */
 	public void setPsx(String psx) {
@@ -178,6 +186,7 @@ public class GeoLocationOpeningRasterTransfPanel extends GeolocationBaseClassPan
 
 	/**
 	 * Asigna el tamaño de pixel en Y
+	 * 
 	 * @param psy
 	 */
 	public void setPsy(String psy) {
@@ -186,6 +195,7 @@ public class GeoLocationOpeningRasterTransfPanel extends GeolocationBaseClassPan
 
 	/**
 	 * Asigna la rotación en X
+	 * 
 	 * @param rotx
 	 */
 	public void setRotx(String rotx) {
@@ -194,6 +204,7 @@ public class GeoLocationOpeningRasterTransfPanel extends GeolocationBaseClassPan
 
 	/**
 	 * Asigna la rotación en Y
+	 * 
 	 * @param roty
 	 */
 	public void setRoty(String roty) {
@@ -202,7 +213,8 @@ public class GeoLocationOpeningRasterTransfPanel extends GeolocationBaseClassPan
 
 	/**
 	 * Asigna la coordenada superior izquierda
-	 * @param ulx 
+	 * 
+	 * @param ulx
 	 */
 	public void setUlx(String ulx) {
 		this.ulx.setValue(ulx);
@@ -210,14 +222,16 @@ public class GeoLocationOpeningRasterTransfPanel extends GeolocationBaseClassPan
 
 	/**
 	 * Asigna la coordenada superior derecha
-	 * @param ulx 
+	 * 
+	 * @param ulx
 	 */
 	public void setUly(String uly) {
 		this.uly.setValue(uly);
 	}
-	
+
 	/**
 	 * Obtiene el tamaño de pixel en X
+	 * 
 	 * @return
 	 */
 	public DataInputContainer getPsx() {
@@ -226,6 +240,7 @@ public class GeoLocationOpeningRasterTransfPanel extends GeolocationBaseClassPan
 
 	/**
 	 * Obtiene el tamaño de pixel en Y
+	 * 
 	 * @return
 	 */
 	public DataInputContainer getPsy() {
@@ -234,6 +249,7 @@ public class GeoLocationOpeningRasterTransfPanel extends GeolocationBaseClassPan
 
 	/**
 	 * Obtiene la rotación en X
+	 * 
 	 * @return
 	 */
 	public DataInputContainer getRotx() {
@@ -242,6 +258,7 @@ public class GeoLocationOpeningRasterTransfPanel extends GeolocationBaseClassPan
 
 	/**
 	 * Obtiene la rotación en Y
+	 * 
 	 * @return
 	 */
 	public DataInputContainer getRoty() {
@@ -250,6 +267,7 @@ public class GeoLocationOpeningRasterTransfPanel extends GeolocationBaseClassPan
 
 	/**
 	 * Obtiene la X de la coordenada superior izquierda
+	 * 
 	 * @return
 	 */
 	public DataInputContainer getUlx() {
@@ -258,10 +276,11 @@ public class GeoLocationOpeningRasterTransfPanel extends GeolocationBaseClassPan
 
 	/**
 	 * Obtiene la Y de la coordenada superior izquierda
+	 * 
 	 * @return
 	 */
 	public DataInputContainer getUly() {
 		return uly;
 	}
-	
+
 }

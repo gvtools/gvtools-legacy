@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.catalog;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.Locale;
@@ -50,7 +50,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.gvsig.i18n.Messages;
 
 import es.gva.cit.catalog.csw.drivers.CSWISO19115CatalogServiceDriver;
-import es.gva.cit.catalog.csw.drivers.CSWCatalogServiceDriver;
 import es.gva.cit.catalog.csw.drivers.CSWebRIMCatalogServiceDriver;
 import es.gva.cit.catalog.srw.drivers.SRWCatalogServiceDriver;
 import es.gva.cit.catalog.ui.serverconnect.ServerConnectDialog;
@@ -66,7 +65,7 @@ import es.gva.cit.catalog.z3950.drivers.Z3950CatalogServiceDriver;
 public class CatalogAP {
 
 	/**
-	 * @param args 
+	 * @param args
 	 */
 	public static void main(String[] args) {
 		CatalogDriverRegister register = CatalogDriverRegister.getInstance();
@@ -82,21 +81,20 @@ public class CatalogAP {
 
 		}
 
-		//Get the currently installed look and feel
+		// Get the currently installed look and feel
 		UIManager.getLookAndFeel();
-		// Install a different look and feel; specifically, the Windows look and feel
+		// Install a different look and feel; specifically, the Windows look and
+		// feel
 		try {
-			UIManager.setLookAndFeel(
-					"com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			UIManager
+					.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (InstantiationException e) {
 		} catch (ClassNotFoundException e) {
 		} catch (UnsupportedLookAndFeelException e) {
 		} catch (IllegalAccessException e) {
 		}
 
-
-
-		//ServerConnectDialogPanel frame = new ServerConnectDialogPanel();
+		// ServerConnectDialogPanel frame = new ServerConnectDialogPanel();
 		new ServerConnectDialog();
-	} 
+	}
 }

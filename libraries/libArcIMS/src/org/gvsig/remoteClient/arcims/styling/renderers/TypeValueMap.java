@@ -48,47 +48,48 @@ package org.gvsig.remoteClient.arcims.styling.renderers;
 
 import org.gvsig.remoteClient.arcims.styling.symbols.IArcIMSSymbol;
 
-
 /**
  * @author jsanz
- *
+ * 
  */
 public abstract class TypeValueMap {
-    protected String label;
-    protected IArcIMSSymbol symbol;
+	protected String label;
+	protected IArcIMSSymbol symbol;
 
-    /**
-     * @param label
-     */
-    public TypeValueMap(String label) {
-        this.label = label;
-    }
+	/**
+	 * @param label
+	 */
+	public TypeValueMap(String label) {
+		this.label = label;
+	}
 
-    /**
-     * @return Returns the label.
-     */
-    public String getLabel() {
-        return label;
-    }
+	/**
+	 * @return Returns the label.
+	 */
+	public String getLabel() {
+		return label;
+	}
 
-    /**
-     * @param label The label to set.
-     */
-    public void setLabel(String label) {
-        this.label = label;
-    }
+	/**
+	 * @param label
+	 *            The label to set.
+	 */
+	public void setLabel(String label) {
+		this.label = label;
+	}
 
-    /**
-     * @return Returns the symbol.
-     */
-    public IArcIMSSymbol getSymbol() {
-        return symbol;
-    }
+	/**
+	 * @return Returns the symbol.
+	 */
+	public IArcIMSSymbol getSymbol() {
+		return symbol;
+	}
 
-    /**
-     * @param symbol The symbol to set.
-     */
-    public void setSymbol(IArcIMSSymbol symbol) {
-        this.symbol = symbol;
-    }
+	/**
+	 * @param symbol
+	 *            The symbol to set.
+	 */
+	public void setSymbol(IArcIMSSymbol symbol) {
+		this.symbol = symbol;
+	}
 }

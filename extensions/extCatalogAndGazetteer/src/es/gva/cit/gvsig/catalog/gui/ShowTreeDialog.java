@@ -49,54 +49,55 @@ import com.iver.andami.ui.mdiManager.WindowInfo;
 import es.gva.cit.catalog.metadataxml.XMLNode;
 import es.gva.cit.catalog.ui.showtree.ShowTreeDialogPanel;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author jorpiell TODO To change the template for this generated type comment
  *         go to Window - Preferences - Java - Code Style - Code Templates
  */
 public class ShowTreeDialog extends ShowTreeDialogPanel implements IWindow {
-	 private JDialog frame = null;
+	private JDialog frame = null;
+
 	/**
-     * DOCUMENT ME!
-     *
-     * @param node
-     */
-    public ShowTreeDialog(JDialog frame,XMLNode node) {
-        super(node);
-        this.frame = frame;
-        //8 --> Modal window
-        PluginServices.getMDIManager().getWindowInfo(this).setWindowInfo(new WindowInfo(
-                8));
-    }
+	 * DOCUMENT ME!
+	 * 
+	 * @param node
+	 */
+	public ShowTreeDialog(JDialog frame, XMLNode node) {
+		super(node);
+		this.frame = frame;
+		// 8 --> Modal window
+		PluginServices.getMDIManager().getWindowInfo(this)
+				.setWindowInfo(new WindowInfo(8));
+	}
 
-    /**
-     * DOCUMENT ME!
-     */
-    public void closeButtonActionPerformed() {
-        closeJDialog();
-    }
+	/**
+	 * DOCUMENT ME!
+	 */
+	public void closeButtonActionPerformed() {
+		closeJDialog();
+	}
 
-    /**
-     * DOCUMENT ME!
-     */
-    public void closeJDialog() {
-    	frame.setVisible(false);
-    }
+	/**
+	 * DOCUMENT ME!
+	 */
+	public void closeJDialog() {
+		frame.setVisible(false);
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public WindowInfo getWindowInfo() {
-        WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODALDIALOG);
-        m_viewinfo.setTitle(getName());
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public WindowInfo getWindowInfo() {
+		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODALDIALOG);
+		m_viewinfo.setTitle(getName());
 
-        return m_viewinfo;
-    }
-    public Object getWindowProfile(){
+		return m_viewinfo;
+	}
+
+	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
 }

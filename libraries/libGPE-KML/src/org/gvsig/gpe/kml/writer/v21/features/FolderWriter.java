@@ -70,6 +70,7 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
 /**
  * This class writes a Folder kml tag. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;Folder&gt;
@@ -83,45 +84,55 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  * &lt;/Folder&gt;
  * </code>
  * </pre>
+ * 
  * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#folder
  */
 public class FolderWriter {
-	
+
 	/**
 	 * Writes a Folder init tag and its attributes
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param id
-	 * Folder id
+	 *            Folder id
 	 * @param name
-	 * Folder name
+	 *            Folder name
 	 * @param description
-	 * Folder description
+	 *            Folder description
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler, String id, String name, String description) throws IOException{
-		handler.getProfile().getFeatureWriter().start(writer, handler, id, Kml2_1_Tags.FOLDER);
-		if (name != null){
+	public void start(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor handler, String id, String name,
+			String description) throws IOException {
+		handler.getProfile().getFeatureWriter()
+				.start(writer, handler, id, Kml2_1_Tags.FOLDER);
+		if (name != null) {
 			handler.getProfile().getNameWriter().write(writer, handler, name);
 		}
-		if (description != null){
-			handler.getProfile().getDescriptionWriter().write(writer, handler, description);
+		if (description != null) {
+			handler.getProfile().getDescriptionWriter()
+					.write(writer, handler, description);
 		}
 	}
-	
+
 	/**
 	 * It writes the end Folder tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @throws IOException
 	 */
-	public void end(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler) throws IOException{
-		handler.getProfile().getFeatureWriter().end(writer, handler, Kml2_1_Tags.FOLDER);
+	public void end(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor handler) throws IOException {
+		handler.getProfile().getFeatureWriter()
+				.end(writer, handler, Kml2_1_Tags.FOLDER);
 	}
 }

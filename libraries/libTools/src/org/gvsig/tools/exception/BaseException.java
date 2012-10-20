@@ -45,100 +45,102 @@ import java.util.Map;
  * 
  */
 public abstract class BaseException extends Exception implements IBaseException {
-	private final static String BLANKS ="                                                                                                     ";
-	private static IExceptionTranslator translator= null;
+	private final static String BLANKS = "                                                                                                     ";
+	private static IExceptionTranslator translator = null;
 
 	protected String messageKey;
 
 	/**
-     * TODO: remove the variable, use the Exception get/setMessage() instead.
-     */
+	 * TODO: remove the variable, use the Exception get/setMessage() instead.
+	 */
 	protected String formatString;
 
 	/**
 	 * Unique code of error.
 	 */
 	protected long code;
-	
-    /**
-     * Empty constructor, don't use it anymore.
-     * 
-     * @deprecated
-     */
-    public BaseException() {
-    }
-
-    /**
-     * Constructs a BaseException with a default message format, a key to find a
-     * localized message format, and a unique code to identify the exception.
-     * 
-     * @param message
-     *            the default messageFormat to describe the exception
-     * @param key
-     *            the key to use to search a localized messageFormnata
-     * @param code
-     *            the unique code to identify the exception
-     */
-    public BaseException(String message, String key, long code) {
-        super(message);
-        this.formatString = message;
-        this.messageKey = key;
-        this.code = code;
-    }
-
-    /**
-     * Constructs a BaseException with a default message format, a key to find a
-     * localized message format, and a unique code to identify the exception.
-     * 
-     * @param message
-     *            the default messageFormat to describe the exception
-     * @param cause
-     *            the original cause of the exception
-     * @param key
-     *            the key to use to search a localized messageFormnata
-     * @param code
-     *            the unique code to identify the exception
-     */
-    public BaseException(String message, Throwable cause, String key, long code) {
-        super(message, cause);
-        this.formatString = message;
-        this.messageKey = key;
-        this.code = code;
-    }
 
 	/**
-     * Returns the format string received in the parameter with its keys
-     * replaced with the corresponding values of the map.
-     * 
-     * @param formatString
-     * @param values
-     *            map
-     * @return string formatted
-     */
-    private String format(String formatString, Map values) {
-        if (values != null) {
+	 * Empty constructor, don't use it anymore.
+	 * 
+	 * @deprecated
+	 */
+	public BaseException() {
+	}
 
-            // If there is no message format, create a text with the values.
-            if (formatString == null) {
-                return "values = ".concat(values.toString());
-            } else {
-                // Replace the keys as variables with the values in the Map
-                Iterator keys = values.keySet().iterator();
-                String message = formatString;
-                while (keys.hasNext()) {
-                    String key = (String) keys.next();
-                    String varName = "%\\(".concat(key).concat("\\)");
-                    message = message.replaceAll(varName, (String) values
-                            .get(key));
-                }
-                return message;
-            }
-        }
-        // Return the original format message in any other case
-        return formatString;
-    }
+	/**
+	 * Constructs a BaseException with a default message format, a key to find a
+	 * localized message format, and a unique code to identify the exception.
+	 * 
+	 * @param message
+	 *            the default messageFormat to describe the exception
+	 * @param key
+	 *            the key to use to search a localized messageFormnata
+	 * @param code
+	 *            the unique code to identify the exception
+	 */
+	public BaseException(String message, String key, long code) {
+		super(message);
+		this.formatString = message;
+		this.messageKey = key;
+		this.code = code;
+	}
 
-	/* (non-Javadoc)
+	/**
+	 * Constructs a BaseException with a default message format, a key to find a
+	 * localized message format, and a unique code to identify the exception.
+	 * 
+	 * @param message
+	 *            the default messageFormat to describe the exception
+	 * @param cause
+	 *            the original cause of the exception
+	 * @param key
+	 *            the key to use to search a localized messageFormnata
+	 * @param code
+	 *            the unique code to identify the exception
+	 */
+	public BaseException(String message, Throwable cause, String key, long code) {
+		super(message, cause);
+		this.formatString = message;
+		this.messageKey = key;
+		this.code = code;
+	}
+
+	/**
+	 * Returns the format string received in the parameter with its keys
+	 * replaced with the corresponding values of the map.
+	 * 
+	 * @param formatString
+	 * @param values
+	 *            map
+	 * @return string formatted
+	 */
+	private String format(String formatString, Map values) {
+		if (values != null) {
+
+			// If there is no message format, create a text with the values.
+			if (formatString == null) {
+				return "values = ".concat(values.toString());
+			} else {
+				// Replace the keys as variables with the values in the Map
+				Iterator keys = values.keySet().iterator();
+				String message = formatString;
+				while (keys.hasNext()) {
+					String key = (String) keys.next();
+					String varName = "%\\(".concat(key).concat("\\)");
+					message = message.replaceAll(varName,
+							(String) values.get(key));
+				}
+				return message;
+			}
+		}
+		// Return the original format message in any other case
+		return formatString;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Throwable#getMessage()
 	 */
 	public String getMessage() {
@@ -146,30 +148,31 @@ public abstract class BaseException extends Exception implements IBaseException 
 	}
 
 	public String getMessage(int indent) {
-		return insertBlanksAtStart(format(formatString, values()),indent);
+		return insertBlanksAtStart(format(formatString, values()), indent);
 	}
 
 	public String getLocalizedMessage() {
-		return getLocalizedMessage(translator,0);
+		return getLocalizedMessage(translator, 0);
 	}
 
-	public String getLocalizedMessage(IExceptionTranslator translator, int indent){
+	public String getLocalizedMessage(IExceptionTranslator translator,
+			int indent) {
 
 		String fmt;
-		if (translator == null){
+		if (translator == null) {
 			translator = BaseException.translator;
 		}
-		if (translator == null){
+		if (translator == null) {
 			fmt = getFormatString();
 		} else {
 			fmt = getMessageKey();
-			if (fmt == null){
+			if (fmt == null) {
 				fmt = getFormatString();
 			} else {
 				fmt = translator.getText(fmt);
 			}
 		}
-		return insertBlanksAtStart(format(fmt,values()),indent);
+		return insertBlanksAtStart(format(fmt, values()), indent);
 	}
 
 	public String getMessageStack() {
@@ -180,64 +183,66 @@ public abstract class BaseException extends Exception implements IBaseException 
 		Iterator iter = this.iterator();
 		StringBuffer msgBuffer = new StringBuffer();
 		int i = 1;
-		while (iter.hasNext()){
-		    Exception ex = ((Exception) iter.next());
-			
-            if (msgBuffer.length() > 0) {
-                msgBuffer.append("\n");
-            }
-			
-			if ( ex instanceof BaseException ) {
+		while (iter.hasNext()) {
+			Exception ex = ((Exception) iter.next());
+
+			if (msgBuffer.length() > 0) {
+				msgBuffer.append("\n");
+			}
+
+			if (ex instanceof BaseException) {
 				BaseException bex = (BaseException) ex;
 				msgBuffer.append(bex.getMessage(indent * i));
 			} else {
-			    msgBuffer.append(insertBlanksAtStart(ex.getMessage(), indent
-                        * i));
+				msgBuffer.append(insertBlanksAtStart(ex.getMessage(), indent
+						* i));
 			}
-			
+
 			i++;
 		}
 		return msgBuffer.toString();
 	}
 
-
 	public String getLocalizedMessageStack() {
-		return getLocalizedMessageStack(BaseException.translator,0);
+		return getLocalizedMessageStack(BaseException.translator, 0);
 	}
 
-	public String getLocalizedMessageStack(IExceptionTranslator translator, int indent) {
+	public String getLocalizedMessageStack(IExceptionTranslator translator,
+			int indent) {
 		Iterator iter = this.iterator();
-        StringBuffer msgBuffer = new StringBuffer();
-        Exception ex;
-        while (iter.hasNext()) {
-            ex = ((Exception) iter.next());
-            if (msgBuffer.length() > 0) {
-                msgBuffer.append("\n");
-            }
+		StringBuffer msgBuffer = new StringBuffer();
+		Exception ex;
+		while (iter.hasNext()) {
+			ex = ((Exception) iter.next());
+			if (msgBuffer.length() > 0) {
+				msgBuffer.append("\n");
+			}
 
-            if (ex instanceof BaseException) {
-                BaseException bex = (BaseException) ex;
-                msgBuffer.append(bex.getLocalizedMessage(translator, indent));
-            } else {
-                msgBuffer.append(ex.getLocalizedMessage());
-            }
-        }
-        return msgBuffer.toString();
+			if (ex instanceof BaseException) {
+				BaseException bex = (BaseException) ex;
+				msgBuffer.append(bex.getLocalizedMessage(translator, indent));
+			} else {
+				msgBuffer.append(ex.getLocalizedMessage());
+			}
+		}
+		return msgBuffer.toString();
 	}
 
 	/**
 	 * Inserts blanks at the start of a string.
-	 *
-	 * @param str A string.
-	 * @param len Quantity of blanks to insert at the start of str.
-	 * @return A string compund by the quantity of blanks that
-	 *         len indicates and str.
+	 * 
+	 * @param str
+	 *            A string.
+	 * @param len
+	 *            Quantity of blanks to insert at the start of str.
+	 * @return A string compund by the quantity of blanks that len indicates and
+	 *         str.
 	 */
-	static String insertBlanksAtStart(String str, int len){
-        int blanksLen = len > BLANKS.length() ? BLANKS.length() : (len < 0 ? 0
-                : len);
+	static String insertBlanksAtStart(String str, int len) {
+		int blanksLen = len > BLANKS.length() ? BLANKS.length() : (len < 0 ? 0
+				: len);
 
-        return BLANKS.substring(0, blanksLen) + str;
+		return BLANKS.substring(0, blanksLen) + str;
 	}
 
 	public long getCode() {
@@ -257,7 +262,7 @@ public abstract class BaseException extends Exception implements IBaseException 
 
 	/**
 	 * Sets the format string.
-	 *
+	 * 
 	 * @param formatString
 	 */
 	public void setFormatString(String formatString) {
@@ -270,7 +275,7 @@ public abstract class BaseException extends Exception implements IBaseException 
 
 	/**
 	 * Sets the property messageKey.
-	 *
+	 * 
 	 * @param messageKey
 	 */
 	public void setMessageKey(String messageKey) {
@@ -282,25 +287,27 @@ public abstract class BaseException extends Exception implements IBaseException 
 	}
 
 	/**
-	 * @return A map that serves to replace in the format string
-	 * the keys with the corresponding values.
+	 * @return A map that serves to replace in the format string the keys with
+	 *         the corresponding values.
 	 */
 	abstract protected Map values();
 
 	/**
 	 * Sets the property translator.
-	 * @param translator It(He,She) is used to translate
-	 *        the messages associated with the exceptions.
+	 * 
+	 * @param translator
+	 *            It(He,She) is used to translate the messages associated with
+	 *            the exceptions.
 	 */
-	public static void setTranslator(IExceptionTranslator translator){
+	public static void setTranslator(IExceptionTranslator translator) {
 		BaseException.translator = translator;
 	}
 
-	public static void setTranslator(Object translator){
+	public static void setTranslator(Object translator) {
 		BaseException.translator = new TranslatorWraper(translator);
 	}
 
-	public String toString(){
+	public String toString() {
 		return format(this.formatString, values());
 	}
 
@@ -317,16 +324,19 @@ class TranslatorWraper implements IExceptionTranslator {
 
 		this.translator = translator;
 		try {
-			method = theClass.getMethod("getText",new Class[] { s.getClass() });
+			method = theClass
+					.getMethod("getText", new Class[] { s.getClass() });
 		} catch (Exception e) {
-			throw new RuntimeException("El objeto translator suministrado no tiene el metodo getText apropiado.", e);
+			throw new RuntimeException(
+					"El objeto translator suministrado no tiene el metodo getText apropiado.",
+					e);
 		}
 
 	}
 
 	public String getText(String key) {
 		try {
-			return (String)(method.invoke(translator,new String[] { key }));
+			return (String) (method.invoke(translator, new String[] { key }));
 		} catch (Exception e) {
 			return key;
 		}

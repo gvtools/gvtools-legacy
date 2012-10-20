@@ -19,19 +19,21 @@
 package org.gvsig.raster.grid;
 
 import org.gvsig.raster.datastruct.ColorTable;
+
 /**
  * Tabla de color asociada a un grid
- *
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class GridPalette extends ColorTable {
 	/**
 	 * Flag de activación de la paleta cuando se visualiza o exporta.
 	 */
-	private boolean 		paletteActive = true;
+	private boolean paletteActive = true;
 
 	/**
 	 * Constructor
+	 * 
 	 * @param fp
 	 */
 	public GridPalette() {
@@ -40,9 +42,10 @@ public class GridPalette extends ColorTable {
 
 	/**
 	 * Constructor
+	 * 
 	 * @param fp
 	 */
-	public GridPalette(ColorTable fp){
+	public GridPalette(ColorTable fp) {
 		if (fp == null)
 			return;
 		this.range = fp.getRange();
@@ -57,6 +60,7 @@ public class GridPalette extends ColorTable {
 
 	/**
 	 * Obtiene el flag de paleta activa o desactivada.
+	 * 
 	 * @return true la paleta está activa y false desactiva
 	 */
 	public boolean isPaletteActive() {
@@ -65,7 +69,9 @@ public class GridPalette extends ColorTable {
 
 	/**
 	 * Asigna el flag de paleta activa o desactivada.
-	 * @param paletteActive true activa la paleta false la desactiva
+	 * 
+	 * @param paletteActive
+	 *            true activa la paleta false la desactiva
 	 */
 	public void setPaletteActive(boolean paletteActive) {
 		this.paletteActive = paletteActive;

@@ -58,19 +58,21 @@ public class GPELinesDriverTest extends GPEParserTest {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.gpe.GPEDriverTest#getFile()
 	 */
 	public String getFile() {
-		return "../extGPE-gvSIG" + File.separatorChar +
-			"testdata" + File.separatorChar + "GML-lines.gml";
+		return "../extGPE-gvSIG" + File.separatorChar + "testdata"
+				+ File.separatorChar + "GML-lines.gml";
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.gpe.GPEDriverTest#makeAsserts()
 	 */
 	public void makeAsserts() throws DriverIOException, ReadDriverException {
-		assertEquals(getLayer().getSource().getShapeCount(),10);		
+		assertEquals(getLayer().getSource().getShapeCount(), 10);
 	}
 
 }

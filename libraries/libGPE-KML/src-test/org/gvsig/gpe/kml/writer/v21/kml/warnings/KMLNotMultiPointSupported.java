@@ -62,32 +62,34 @@ import org.gvsig.gpe.writer.GPEMultiPointLayerTest;
  *
  */
 /**
- * This test is made to try the conversion between a multipoint
- * layer ans a multigeometry layer that the KML parser make.
+ * This test is made to try the conversion between a multipoint layer ans a
+ * multigeometry layer that the KML parser make.
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class KMLNotMultiPointSupported extends GPEMultiPointLayerTest {
-	
+
 	public void readObjects() {
 		Layer[] layers = getLayers();
-		assertEquals(layers.length, 1);		
+		assertEquals(layers.length, 1);
 		Layer layer = layers[0];
-	
+
 		assertEquals(layer.getFeatures().size(), 1);
-		//FEATURE 1
-		Feature feature1 = (Feature)layer.getFeatures().get(0);
-		MultiGeometry multiGeometry = (MultiGeometry)feature1.getGeometry();
+		// FEATURE 1
+		Feature feature1 = (Feature) layer.getFeatures().get(0);
+		MultiGeometry multiGeometry = (MultiGeometry) feature1.getGeometry();
 		assertEquals(multiGeometry.getGeometries().size(), 3);
 
-		assertEquals(getErrorHandler().getWarningsSize(),1);
+		assertEquals(getErrorHandler().getWarningsSize(), 1);
 		assertTrue(getErrorHandler().getWarningAt(0) instanceof FeatureNotSupportedWarning);
-		for (int i=0 ; i<getErrorHandler().getWarningsSize() ; i++){
+		for (int i = 0; i < getErrorHandler().getWarningsSize(); i++) {
 			System.out.println(getErrorHandler().getWarningAt(i));
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEParserClass()
 	 */
 	public Class getGPEParserClass() {
@@ -96,6 +98,7 @@ public class KMLNotMultiPointSupported extends GPEMultiPointLayerTest {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEWriterHandlerClass()
 	 */
 	public Class getGPEWriterHandlerClass() {

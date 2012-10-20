@@ -1,6 +1,6 @@
 package org.gvsig.remotesensing.gridmath;
 
-public class NoVarsException extends Exception{
+public class NoVarsException extends Exception {
 
 	/**
 	 * 

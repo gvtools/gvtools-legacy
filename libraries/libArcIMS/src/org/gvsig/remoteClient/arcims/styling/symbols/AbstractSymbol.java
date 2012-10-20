@@ -46,13 +46,12 @@
  */
 package org.gvsig.remoteClient.arcims.styling.symbols;
 
-
 /**
  * @author jsanz
- *
+ * 
  */
 public abstract class AbstractSymbol {
-    protected String getParam() {
-        return "";
-    }
+	protected String getParam() {
+		return "";
+	}
 }

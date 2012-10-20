@@ -72,11 +72,12 @@ import com.iver.cit.gvsig.fmap.drivers.DriverAttributes;
 import com.iver.cit.gvsig.fmap.drivers.VectorialDriver;
 
 /**
- * Memory driver to adapt MappedPositionContainer (which contains MappedPosition)
- * to fmap driver interfaces. It only returns geometries (no fields)
+ * Memory driver to adapt MappedPositionContainer (which contains
+ * MappedPosition) to fmap driver interfaces. It only returns geometries (no
+ * fields)
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class VectorErrorMemoryDriver implements VectorialDriver, ObjectDriver,
 		BoundedShapes {
@@ -89,13 +90,11 @@ public class VectorErrorMemoryDriver implements VectorialDriver, ObjectDriver,
 	 * Name of the data source of this driver
 	 */
 	String name;
-	
+
 	/**
 	 * Container of MappedPosition
 	 */
 	MappedPositionContainer mappedPositionContainer;
-
-	
 
 	/**
 	 * Constructor
@@ -112,13 +111,13 @@ public class VectorErrorMemoryDriver implements VectorialDriver, ObjectDriver,
 		this.name = name;
 		this.mappedPositionContainer = mappedPositionContainer;
 		attr.setLoadedInMemory(true);
-//		try {
-//			computeFullExtent();
-//		} catch (ExpansionFileReadException e) {
-//			e.printStackTrace();
-//		} catch (ReadDriverException e) {
-//			e.printStackTrace();
-//		}
+		// try {
+		// computeFullExtent();
+		// } catch (ExpansionFileReadException e) {
+		// e.printStackTrace();
+		// } catch (ReadDriverException e) {
+		// e.printStackTrace();
+		// }
 	}
 
 	public int getShapeType() {
@@ -139,18 +138,17 @@ public class VectorErrorMemoryDriver implements VectorialDriver, ObjectDriver,
 	}
 
 	public IGeometry getShape(int index) throws ReadDriverException {
-		if (index < mappedPositionContainer.getCount()){
-			MappedPosition mappedPosition = mappedPositionContainer.getMappedPosition(index);
+		if (index < mappedPositionContainer.getCount()) {
+			MappedPosition mappedPosition = mappedPositionContainer
+					.getMappedPosition(index);
 			double[] sourceCoords = mappedPosition.getSource().getCoordinate();
 			double[] targetCoords = mappedPosition.getTarget().getCoordinate();
 			GeneralPathX gpx = new GeneralPathX();
 			gpx.moveTo(sourceCoords[0], sourceCoords[1]);
 			gpx.lineTo(targetCoords[0], targetCoords[1]);
 			return ShapeFactory.createPolyline2D(gpx);
-		
-	
-		}
-		else
+
+		} else
 			return null;
 	}
 
@@ -178,7 +176,7 @@ public class VectorErrorMemoryDriver implements VectorialDriver, ObjectDriver,
 
 	public Value getFieldValue(long rowIndex, int fieldId)
 			throws ReadDriverException {
-		if(fieldId == 0)
+		if (fieldId == 0)
 			return ValueFactory.createValue(rowIndex);
 		else
 			return ValueFactory.createNullValue();
@@ -189,7 +187,7 @@ public class VectorErrorMemoryDriver implements VectorialDriver, ObjectDriver,
 	}
 
 	public String getFieldName(int fieldId) throws ReadDriverException {
-		if(fieldId == 0)
+		if (fieldId == 0)
 			return "fid";
 		else
 			return "";
@@ -200,7 +198,7 @@ public class VectorErrorMemoryDriver implements VectorialDriver, ObjectDriver,
 	}
 
 	public int getFieldType(int i) throws ReadDriverException {
-		if(i == 0)
+		if (i == 0)
 			return Types.NUMERIC;
 		else
 			return -1;
@@ -221,16 +219,17 @@ public class VectorErrorMemoryDriver implements VectorialDriver, ObjectDriver,
 		return geometry.getGeometryType();
 	}
 
-	private Rectangle2D computeFullExtent() throws ExpansionFileReadException, ReadDriverException {
-		 Rectangle2D fullExtent = null;
-		 for (int i = 0; i < getRowCount(); i++) {
-			 Rectangle2D rAux = getShapeBounds(i);
-			 if (fullExtent == null)
-				 fullExtent = rAux;
-			 else
-				 fullExtent.add(rAux);
-		 }//for
-		 return fullExtent;
+	private Rectangle2D computeFullExtent() throws ExpansionFileReadException,
+			ReadDriverException {
+		Rectangle2D fullExtent = null;
+		for (int i = 0; i < getRowCount(); i++) {
+			Rectangle2D rAux = getShapeBounds(i);
+			if (fullExtent == null)
+				fullExtent = rAux;
+			else
+				fullExtent.add(rAux);
+		}// for
+		return fullExtent;
 	}
 
 	public MappedPositionContainer getMappedPositionContainer() {

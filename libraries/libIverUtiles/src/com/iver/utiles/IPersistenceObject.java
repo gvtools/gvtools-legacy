@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
@@ -44,9 +43,9 @@ package com.iver.utiles;
 
 /**
  * Add Object before call setXMLEntity.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public interface IPersistenceObject extends IPersistence {
-    void setObject(Object obj);
+	void setObject(Object obj);
 }

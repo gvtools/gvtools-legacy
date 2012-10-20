@@ -123,39 +123,46 @@ import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.SymbolDrawingException;
 
 /**
- * SymbolPreviewer creates a JPanel used for the user to watch the preview of
- * a symbol.It has an square form with a white background and the symbol
- * is inserted in the middle.
+ * SymbolPreviewer creates a JPanel used for the user to watch the preview of a
+ * symbol.It has an square form with a white background and the symbol is
+ * inserted in the middle.
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
 public class SymbolPreviewer extends JPanel {
 	private int hGap = 5, vGap = 5;
 	private ISymbol symbol;
 	private EditorTool prevTool;
+
 	/**
 	 * constructor method
-	 *
+	 * 
 	 */
 	public SymbolPreviewer() {
 		super(true);
 		setBackground(Color.WHITE);
 	}
+
 	/**
 	 * Returns the symbol printed inside
+	 * 
 	 * @return symbol
 	 */
 	public ISymbol getSymbol() {
 		return symbol;
 	}
+
 	/**
 	 * Establishes the symbol to be showed in the symbolpreviewer panel
+	 * 
 	 * @param symbol
 	 */
 	public void setSymbol(ISymbol symbol) {
 		this.symbol = symbol;
 		repaint();
 	}
+
 	/**
 	 * Draws the symbol in the middle of the pane in order to create a preview
 	 * of the final one.
@@ -164,13 +171,17 @@ public class SymbolPreviewer extends JPanel {
 		super.paint(g);
 		Graphics2D g2 = (Graphics2D) g;
 		RenderingHints old = g2.getRenderingHints();
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_RENDERING,
+				RenderingHints.VALUE_RENDER_QUALITY);
+		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
 		g2.translate(hGap, vGap);
 		Rectangle r = getBounds();
-		r = new Rectangle(0, 0, (int) (r.getWidth()-(hGap*2)), (int) (r.getHeight()-(vGap*2)));
+		r = new Rectangle(0, 0, (int) (r.getWidth() - (hGap * 2)),
+				(int) (r.getHeight() - (vGap * 2)));
 
 		if (symbol != null) {
 			try {
@@ -178,41 +189,47 @@ public class SymbolPreviewer extends JPanel {
 			} catch (SymbolDrawingException e) {
 				if (e.getType() == SymbolDrawingException.UNSUPPORTED_SET_OF_SETTINGS) {
 					try {
-						SymbologyFactory.getWarningSymbol(
-								SymbolDrawingException.STR_UNSUPPORTED_SET_OF_SETTINGS,
-								"",
-								SymbolDrawingException.UNSUPPORTED_SET_OF_SETTINGS).
-							drawInsideRectangle(g2, null, r, null);
+						SymbologyFactory
+								.getWarningSymbol(
+										SymbolDrawingException.STR_UNSUPPORTED_SET_OF_SETTINGS,
+										"",
+										SymbolDrawingException.UNSUPPORTED_SET_OF_SETTINGS)
+								.drawInsideRectangle(g2, null, r, null);
 					} catch (SymbolDrawingException e1) {
 						// IMPOSSIBLE TO REACH THIS
 					}
 				} else {
 					// should be unreachable code
-					throw new Error(PluginServices.getText(this, "symbol_shapetype_mismatch"));
+					throw new Error(PluginServices.getText(this,
+							"symbol_shapetype_mismatch"));
 				}
 			}
 		} else {
-			String noneSelected = "["+PluginServices.getText(this, "preview_not_available")+"]";
+			String noneSelected = "["
+					+ PluginServices.getText(this, "preview_not_available")
+					+ "]";
 			FontMetrics fm = g2.getFontMetrics();
 			int lineWidth = fm.stringWidth(noneSelected);
 			float scale = (float) r.getWidth() / lineWidth;
 			Font f = g2.getFont();
-			float fontSize = f.getSize()*scale;
-			g2.setFont(	f.deriveFont( fontSize ) );
+			float fontSize = f.getSize() * scale;
+			g2.setFont(f.deriveFont(fontSize));
 
-			g2.drawString(noneSelected,	 (r.x*scale) - (hGap/2), r.height/2+vGap*scale);
+			g2.drawString(noneSelected, (r.x * scale) - (hGap / 2), r.height
+					/ 2 + vGap * scale);
 		}
 		g2.setRenderingHints(old);
 	}
-	
+
 	/**
 	 * Sets the EditorTool for the pane.
-	 *
-	 * @param l,EditorTool
+	 * 
+	 * @param l
+	 *            ,EditorTool
 	 */
 	public EditorTool setEditorTool(EditorTool tool) {
 		EditorTool previous = prevTool;
-		
+
 		MouseListener[] ml = getMouseListeners();
 		for (int i = 0; i < ml.length; i++) {
 			super.removeMouseListener(ml[i]);
@@ -222,7 +239,7 @@ public class SymbolPreviewer extends JPanel {
 			super.removeMouseMotionListener(mml[i]);
 		}
 
-		if (tool!= null) {
+		if (tool != null) {
 			super.addMouseListener(tool);
 			setCursor(tool.getCursor());
 			super.addMouseMotionListener(tool);

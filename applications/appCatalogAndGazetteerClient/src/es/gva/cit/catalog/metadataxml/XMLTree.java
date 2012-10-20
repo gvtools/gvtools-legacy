@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.catalog.metadataxml;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileWriter;
@@ -57,6 +57,7 @@ import es.gva.cit.catalog.utils.Strings;
 
 /**
  * Utils to parse XML trees using DOM
+ * 
  * @author Jorge Piera Llodra (piera_jor@gva.es)
  */
 public class XMLTree {
@@ -64,10 +65,12 @@ public class XMLTree {
 
 	/**
 	 * Create a XML node from a File
+	 * 
 	 * @return XML node
-	 * @param file File name
+	 * @param file
+	 *            File name
 	 */
-	public static XMLNode xmlToTree(File file) {        
+	public static XMLNode xmlToTree(File file) {
 		try {
 			return new XMLNode(file);
 		} catch (Exception e) {
@@ -75,58 +78,65 @@ public class XMLTree {
 			e.printStackTrace();
 			return null;
 		}
-	} 
+	}
 
 	/**
 	 * Create a XML node from a InputStream
+	 * 
 	 * @return XML node
-	 * @param stream InputStream
+	 * @param stream
+	 *            InputStream
 	 */
-	public static XMLNode xmlToTree(InputStream stream) {        
+	public static XMLNode xmlToTree(InputStream stream) {
 		try {
 			return new XMLNode(stream);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			// e.printStackTrace();
 			return null;
 		}
-	} 
+	}
 
 	/**
 	 * Create a XML node from a String
+	 * 
 	 * @return XML node
-	 * @param stream InputStream
+	 * @param stream
+	 *            InputStream
 	 */
-	public static XMLNode xmlToTree(String string) {        
+	public static XMLNode xmlToTree(String string) {
 		try {
 			return new XMLNode(new ByteArrayInputStream(string.getBytes()));
 		} catch (Exception e) {
-			// Unconvertible UTF-8 character 
+			// Unconvertible UTF-8 character
 			string = Strings.replace(string,
 					"<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
-			"<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
+					"<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
 			try {
 				return new XMLNode(new ByteArrayInputStream(string.getBytes()));
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 				return null;
-			}           
+			}
 		}
-	} 
+	}
 
 	/**
 	 * Devuelve un fichero que crea a partir de un arbol XML
+	 * 
 	 * @return Devuelve el fichero escrito
-	 * @param dom Documento en XML
-	 * @param nombreFichero Nombre del fichero.
+	 * @param dom
+	 *            Documento en XML
+	 * @param nombreFichero
+	 *            Nombre del fichero.
 	 */
-	public static File treeToXML(Document dom, String nombreFichero) {        
+	public static File treeToXML(Document dom, String nombreFichero) {
 		OutputFormat format = null;
 		StringWriter stringOut = null;
 		XMLSerializer serial = null;
 		FileWriter file = null;
-		//Creamos un fichero para almacenar la respuesta
+		// Creamos un fichero para almacenar la respuesta
 		File file_answer = new File(nombreFichero);
 		format = new OutputFormat(dom);
 		format.setEncoding("ISO-8859-1");
@@ -145,36 +155,45 @@ public class XMLTree {
 			return null;
 		}
 		return file_answer;
-	} 
+	}
 
 	/**
-	 * Busca un Nodo dado una ruta de nodo del tipo "nodoRaiz:nodoPrimerNivel:...:nodoNivelN":
-	 * @return Devuelve el Nodo que corresponde a la ruta correcta o 'null' si no
-	 * lo encuentra
-	 * @param nodoRaiz Nodo a partir del cual se quiere hacer la búsqueda
-	 * @param etiqueta Ruta del campo que queremos buscar, separando los niveles por ':'
+	 * Busca un Nodo dado una ruta de nodo del tipo
+	 * "nodoRaiz:nodoPrimerNivel:...:nodoNivelN":
+	 * 
+	 * @return Devuelve el Nodo que corresponde a la ruta correcta o 'null' si
+	 *         no lo encuentra
+	 * @param nodoRaiz
+	 *            Nodo a partir del cual se quiere hacer la búsqueda
+	 * @param etiqueta
+	 *            Ruta del campo que queremos buscar, separando los niveles por
+	 *            ':'
 	 */
-	public static XMLNode searchNode(XMLNode nodoRaiz, String etiqueta) {        
+	public static XMLNode searchNode(XMLNode nodoRaiz, String etiqueta) {
 		XMLNode[] nodes = searchMultipleNode(nodoRaiz, etiqueta);
 		if ((nodes != null) && (nodes.length > 0)) {
 			return nodes[0];
 		} else {
 			return null;
 		}
-	} 
+	}
 
 	/**
-	 * Busca el padre de un Nodo dado una ruta de nodo del tipo "nodoRaiz:nodoPrimerNivel:...:nodoNivelN":
+	 * Busca el padre de un Nodo dado una ruta de nodo del tipo
+	 * "nodoRaiz:nodoPrimerNivel:...:nodoNivelN":
 	 * 
-	 * @param nodoRaiz Nodo a partir del cual se quiere hacer la búsqueda
-	 * @param etiqueta Ruta del campo que queremos buscar, separando los niveles por ':'
+	 * @param nodoRaiz
+	 *            Nodo a partir del cual se quiere hacer la búsqueda
+	 * @param etiqueta
+	 *            Ruta del campo que queremos buscar, separando los niveles por
+	 *            ':'
 	 * 
-	 * @return Devuelve el Nodo padre que corresponde a la ruta correcta o 'null' si no
-	 * lo encuentra
-	 * @param rootNode 
-	 * @param label 
+	 * @return Devuelve el Nodo padre que corresponde a la ruta correcta o
+	 *         'null' si no lo encuentra
+	 * @param rootNode
+	 * @param label
 	 */
-	public static XMLNode searchParentNode(XMLNode rootNode, String label) {        
+	public static XMLNode searchParentNode(XMLNode rootNode, String label) {
 		StringTokenizer sti = new StringTokenizer(label, "->");
 		if (rootNode == null) {
 			return null;
@@ -183,7 +202,7 @@ public class XMLTree {
 		XMLNode currentNode = rootNode.getSubNode(0);
 		XMLNode parentNode = rootNode;
 
-		//A cuantos niveles está el TOKEN
+		// A cuantos niveles está el TOKEN
 		int niveles = sti.countTokens();
 		String nombreNodo = cutNamespace(sti.nextToken());
 		int nivelActual = 1;
@@ -200,96 +219,111 @@ public class XMLTree {
 				i = 0;
 			} else {
 				currentNode = currentNode.getSubNode(i);
-				i ++;
+				i++;
 			}
 		}
 		return null;
-	} 
+	}
 
 	/**
 	 * Hace una busqueda de un atributo de un nodo
 	 * 
-	 * @param nodo Nodo del que se quiere buscar el atributo
-	 * @param nombreAtributo Nombre del atributo
+	 * @param nodo
+	 *            Nodo del que se quiere buscar el atributo
+	 * @param nombreAtributo
+	 *            Nombre del atributo
 	 * 
 	 * @return Valor del atributo, o null si no lo ha encontrado
-	 * @param node 
-	 * @param attributeName 
+	 * @param node
+	 * @param attributeName
 	 */
-	public static String searchAtribute(XMLNode node, String attributeName) {        
+	public static String searchAtribute(XMLNode node, String attributeName) {
 		return node.getAttribute(attributeName);
-	} 
+	}
 
 	/**
-	 * Hace una busqueda de una etiqueta en un nodo y devuelve
-	 * su valor
+	 * Hace una busqueda de una etiqueta en un nodo y devuelve su valor
 	 * 
-	 * @param nodo Nodo del que se quiere buscar el atributo
+	 * @param nodo
+	 *            Nodo del que se quiere buscar el atributo
 	 * 
 	 * @return Valor de la etiqueta
-	 * @param node 
-	 * @param etiqueta Nombre de la etiqueta
+	 * @param node
+	 * @param etiqueta
+	 *            Nombre de la etiqueta
 	 */
-	public static String searchNodeValue(XMLNode node, String etiqueta) {        
+	public static String searchNodeValue(XMLNode node, String etiqueta) {
 		XMLNode nodoB = searchNode(node, etiqueta);
 		if (nodoB == null)
 			return null;
 		return nodoB.getText();
 
-	} 
+	}
 
 	/**
-	 * Hace una busqueda de una etiqueta en un nodo y devuelve
-	 * el valor del atributo correspondiente
+	 * Hace una busqueda de una etiqueta en un nodo y devuelve el valor del
+	 * atributo correspondiente
 	 * 
-	 * @param nodo Nodo del que se quiere buscar el atributo
+	 * @param nodo
+	 *            Nodo del que se quiere buscar el atributo
 	 * 
 	 * @return Valor del atributo de la etiqueta o null
-	 * @param node 
-	 * @param etiqueta Nombre de la etiqueta
-	 * @param atributo 
+	 * @param node
+	 * @param etiqueta
+	 *            Nombre de la etiqueta
+	 * @param atributo
 	 */
-	public static String searchNodeAtribute(XMLNode node, String etiqueta, String atributo) {        
+	public static String searchNodeAtribute(XMLNode node, String etiqueta,
+			String atributo) {
 		XMLNode nodoB = searchNode(node, etiqueta);
 		if (nodoB == null) {
 			return null;
 		} else {
 			return searchAtribute(nodoB, atributo);
 		}
-	} 
+	}
 
 	/**
 	 * Hace una busqueda de nodos que se llaman igual y devuleve el valor
 	 * 
-	 * @param parentLabel Ruta del campo que queremos buscar, separando los niveles por '->'
+	 * @param parentLabel
+	 *            Ruta del campo que queremos buscar, separando los niveles por
+	 *            '->'
 	 * 
 	 * @return Un vector con valores de las etiquetas
-	 * @param rootNode Nodo a partir del cual se quiere hacer la búsqueda
-	 * @param label Node label
+	 * @param rootNode
+	 *            Nodo a partir del cual se quiere hacer la búsqueda
+	 * @param label
+	 *            Node label
 	 */
-	public static String[] searchMultipleNodeValue(XMLNode rootNode, String label) {        
+	public static String[] searchMultipleNodeValue(XMLNode rootNode,
+			String label) {
 		XMLNode[] nodes = searchMultipleNode(rootNode, label);
 		if ((nodes == null) || (nodes.length == 0)) {
 			return null;
 		}
 		String[] values = new String[nodes.length];
 		for (int i = 0; i < nodes.length; i++)
-			//if (nodes[i].getFirstChild() != null) {
+			// if (nodes[i].getFirstChild() != null) {
 			values[i] = nodes[i].getText();
-		//}
+		// }
 		return values;
-	} 
+	}
 
 	/**
-	 * Hace una busqueda de nodos que se llaman igual desde uno dado(sin recursividad)
+	 * Hace una busqueda de nodos que se llaman igual desde uno dado(sin
+	 * recursividad)
 	 * 
-	 * @param etiqueta Ruta del campo que queremos buscar, separando los niveles por ':'
+	 * @param etiqueta
+	 *            Ruta del campo que queremos buscar, separando los niveles por
+	 *            ':'
 	 * 
 	 * @return Un vector con los nodos que ha encontrado
-	 * @param nodoRaiz Nodo a partir del cual se quiere hacer la búsqueda
-	 * @param label 
+	 * @param nodoRaiz
+	 *            Nodo a partir del cual se quiere hacer la búsqueda
+	 * @param label
 	 */
-	public static XMLNode[] searchMultipleNode(XMLNode nodoRaiz, String label) {        
+	public static XMLNode[] searchMultipleNode(XMLNode nodoRaiz, String label) {
 		ArrayList rootNodes = new ArrayList();
 		ArrayList leafNodes = new ArrayList();
 		String firstLabel = null;
@@ -319,73 +353,78 @@ public class XMLTree {
 		for (int i = 0; i < leafNodes.size(); i++)
 			nodes[i] = (XMLNode) leafNodes.get(i);
 		return nodes;
-	} 
+	}
 
 	/**
 	 * Gets the parent node label
 	 * 
 	 * 
 	 * @return The parent node label
-	 * @param nodeLabel Node label
+	 * @param nodeLabel
+	 *            Node label
 	 */
-	private static String getParentLabel(String nodeLabel) {        
-		return separateParams(nodeLabel,SEPARATOR)[0];
-	} 
+	private static String getParentLabel(String nodeLabel) {
+		return separateParams(nodeLabel, SEPARATOR)[0];
+	}
 
 	/**
 	 * It cuts an String in an array of Strings separated by a pattern
 	 * 
 	 * 
 	 * @return An array of Strings
-	 * @param text Text to cut
-	 * @param separator Pattent to find      *
+	 * @param text
+	 *            Text to cut
+	 * @param separator
+	 *            Pattent to find *
 	 */
-	private static String[] separateParams(String text, String separator) {        
-		return text.split(separator);	
-	} 
+	private static String[] separateParams(String text, String separator) {
+		return text.split(separator);
+	}
 
 	/**
 	 * Gets the node label
 	 * 
 	 * 
 	 * @return The node label
-	 * @param nodeLabel Node label
+	 * @param nodeLabel
+	 *            Node label
 	 */
-	private static String getChildLabel(String nodeLabel) {        
+	private static String getChildLabel(String nodeLabel) {
 		String st = null;
-		String[] labels = separateParams(nodeLabel,SEPARATOR);
+		String[] labels = separateParams(nodeLabel, SEPARATOR);
 
-		if (labels.length  == 1){
+		if (labels.length == 1) {
 			return labels[0];
 		}
 
 		st = labels[1];
 
-		for (int i=2 ; i<labels.length ; i++)
+		for (int i = 2; i < labels.length; i++)
 			st = st + SEPARATOR + labels[i];
 
 		return st;
-	} 
+	}
 
 	/**
-	 * @return 
-	 * @param nodeLabel 
+	 * @return
+	 * @param nodeLabel
 	 */
-	private static int getLevelNumber(String nodeLabel) {        
-		String[] labels = separateParams(nodeLabel,SEPARATOR);
+	private static int getLevelNumber(String nodeLabel) {
+		String[] labels = separateParams(nodeLabel, SEPARATOR);
 		return labels.length;
-	} 
+	}
 
 	/**
 	 * Remove the namespace from a label
+	 * 
 	 * @param label
 	 */
-	private static String cutNamespace(String label){
-		if (label == null){
+	private static String cutNamespace(String label) {
+		if (label == null) {
 			return null;
 		}
-		int i =  label.indexOf(":");
-		if (i > 0){
+		int i = label.indexOf(":");
+		if (i > 0) {
 			return label.substring(i + 1, label.length());
 		}
 		return label;

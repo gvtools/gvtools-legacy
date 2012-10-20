@@ -48,8 +48,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class OracleTest {
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver").newInstance();
 		} catch (InstantiationException e) {
@@ -62,33 +61,34 @@ public class OracleTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		 String connString="jdbc:oracle:thin:@FPL:1521:SGF";
 
-        try {
-			Connection conn = DriverManager.getConnection(connString, "SCOTT", "TIGER");
+		String connString = "jdbc:oracle:thin:@FPL:1521:SGF";
+
+		try {
+			Connection conn = DriverManager.getConnection(connString, "SCOTT",
+					"TIGER");
 			String sql = "SELECT * FROM DEPT";
 			ResultSet rs = conn.createStatement().executeQuery(sql);
 			ResultSetMetaData metaData = rs.getMetaData();
 			String fields = "";
-			for (int i=0; i<metaData.getColumnCount(); i++)
-			{
-				if (i==0)
-					fields =metaData.getColumnName(i+1);
+			for (int i = 0; i < metaData.getColumnCount(); i++) {
+				if (i == 0)
+					fields = metaData.getColumnName(i + 1);
 				else
-					fields =fields + ", " + metaData.getColumnName(i+1);
+					fields = fields + ", " + metaData.getColumnName(i + 1);
 			}
 			rs.close();
 			String sqlAux = sql.replaceFirst(" [*] ", " " + fields + " ");
 			System.out.println(sqlAux);
-	        Statement st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-	                ResultSet.CONCUR_UPDATABLE);
+			Statement st = conn.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_UPDATABLE);
 
 			rs = st.executeQuery(sqlAux);
-	        if (rs.getConcurrency() != ResultSet.CONCUR_UPDATABLE)
-	        {
-	        	System.err.println("Error: No se puede editar la tabla " + fields);
-	        }
+			if (rs.getConcurrency() != ResultSet.CONCUR_UPDATABLE) {
+				System.err.println("Error: No se puede editar la tabla "
+						+ fields);
+			}
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -97,5 +97,3 @@ public class OracleTest {
 	}
 
 }
-
-

@@ -43,202 +43,226 @@
 
 package org.gvsig.remoteClient.arcims;
 
-import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
-import com.iver.cit.gvsig.fmap.rendering.ILegend;
+import java.net.URL;
+import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
-
 import org.gvsig.remoteClient.RasterClient;
 import org.gvsig.remoteClient.arcims.exceptions.ArcImsException;
 import org.gvsig.remoteClient.arcims.utils.ServiceInformation;
 import org.gvsig.remoteClient.wms.ICancellable;
 
-import java.net.URL;
-
-import java.util.TreeMap;
-
+import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
+import com.iver.cit.gvsig.fmap.rendering.ILegend;
 
 /**
- * Abstract class the with the necessary logic
- * to connect to a ArcIms and interpretate the data.
- *
- * The P at the end of the name is to avoid conflict with existing empty
- * class at libRemoteServices package @seeorg.gvsig.remoteClient.arcims.ArcImsClient
- *
+ * Abstract class the with the necessary logic to connect to a ArcIms and
+ * interpretate the data.
+ * 
+ * The P at the end of the name is to avoid conflict with existing empty class
+ * at libRemoteServices package @seeorg.gvsig.remoteClient.arcims.ArcImsClient
+ * 
  */
 public abstract class ArcImsClientP extends RasterClient {
-    private static Logger logger = Logger.getLogger(ArcImsProtocolHandler.class.getName());
+	private static Logger logger = Logger.getLogger(ArcImsProtocolHandler.class
+			.getName());
 
-    /**
-     * Handler of the service used by the client to contact with ArcIMS
-     * @see ArcImsProtocolHandler#ArcImsProtocolHandler()
-     */
-    protected ArcImsProtocolHandler handler;
+	/**
+	 * Handler of the service used by the client to contact with ArcIMS
+	 * 
+	 * @see ArcImsProtocolHandler#ArcImsProtocolHandler()
+	 */
+	protected ArcImsProtocolHandler handler;
 
-    /**
-     * Layers of the service
-     */
-    private TreeMap layers = new TreeMap();
+	/**
+	 * Layers of the service
+	 */
+	private TreeMap layers = new TreeMap();
 
-    //    /**
-    //     * Version and build number of the ArcIMS Server. This data is only 
-    //     * for information purposes as the ArcXML is (at this time) fully compatible with 
-    //     * 4 and 9 versions of ArcIMS.
-    //     */
-    //    private String[] version = new String[2]; 
+	// /**
+	// * Version and build number of the ArcIMS Server. This data is only
+	// * for information purposes as the ArcXML is (at this time) fully
+	// compatible with
+	// * 4 and 9 versions of ArcIMS.
+	// */
+	// private String[] version = new String[2];
 
-    /**
-    * Constructor.
-    * the parameter host, indicates the ArcIms host to connect.
-    * */
-    public ArcImsClientP(String host, String service, String serviceType) {
-        //m_log = LogManager.getLogManager().getLogger(getClass().getName());
-        setHost(host);
-        setServiceName(service);
+	/**
+	 * Constructor. the parameter host, indicates the ArcIms host to connect.
+	 * */
+	public ArcImsClientP(String host, String service, String serviceType) {
+		// m_log = LogManager.getLogManager().getLogger(getClass().getName());
+		setHost(host);
+		setServiceName(service);
 
-        try {
-            handler = ArcImsProtocolHandlerFactory.negotiate(serviceType);
+		try {
+			handler = ArcImsProtocolHandlerFactory.negotiate(serviceType);
 
-            //handler = new org.gvsig.remoteClient.arcims.
-            handler.setHost(host);
-            handler.setService(service);
-            handler.serviceInfo.setType(serviceType);
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error(e.getMessage(), e);
-        }
-    }
+			// handler = new org.gvsig.remoteClient.arcims.
+			handler.setHost(host);
+			handler.setService(service);
+			handler.serviceInfo.setType(serviceType);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage(), e);
+		}
+	}
 
-    /**
-     * <p>One of the three interfaces that  ArcIms defines. Request a map.</p>
-     * @throws ServerErrorException
-     * @throws ArcImsException
-     * @throws ServerErrorException
-     */
+	/**
+	 * <p>
+	 * One of the three interfaces that ArcIms defines. Request a map.
+	 * </p>
+	 * 
+	 * @throws ServerErrorException
+	 * @throws ArcImsException
+	 * @throws ServerErrorException
+	 */
 
-    //public abstract File getMap(ArcImsStatus status) throws ArcImsException, ServerErrorException;
+	// public abstract File getMap(ArcImsStatus status) throws ArcImsException,
+	// ServerErrorException;
 
-    /**
-     * <p>One of the three interfaces defined by  ArcIms, it gets the service capabilities</p>
-     *
-     */
-    public void getCapabilities(ArcImsStatus status) throws ArcImsException {
-        handler.getCapabilities(status);
+	/**
+	 * <p>
+	 * One of the three interfaces defined by ArcIms, it gets the service
+	 * capabilities
+	 * </p>
+	 * 
+	 */
+	public void getCapabilities(ArcImsStatus status) throws ArcImsException {
+		handler.getCapabilities(status);
 
-        layers = handler.layers;
+		layers = handler.layers;
 
-        // rootLayer = handler.rootLayer;
-    }
+		// rootLayer = handler.rootLayer;
+	}
 
-    /**
-     * <p>One of the three interfaces defined by  ArcIms, it gets the service capabilities</p>
-     *
-     */
+	/**
+	 * <p>
+	 * One of the three interfaces defined by ArcIms, it gets the service
+	 * capabilities
+	 * </p>
+	 * 
+	 */
 
-    /*
-    public void getCapabilities(URL url) {
-        handler.getCapabilities(url);
-        layers = handler.layers;
-        rootLayer = handler.rootLayer;
-    }
-    */
+	/*
+	 * public void getCapabilities(URL url) { handler.getCapabilities(url);
+	 * layers = handler.layers; rootLayer = handler.rootLayer; }
+	 */
 
-    /**
-     * <p>One of the three interfaces defined by the  ArcIms,
-     * it gets the information about a feature requested</p>
-     * @return  Proper XML to build the Element Info GUI
-     */
-    public String getFeatureInfo(ArcImsStatus status, int x, int y,
-        int featureCount) throws ArcImsException {
-        return handler.getElementInfo(status, x, y, featureCount);
-    }
+	/**
+	 * <p>
+	 * One of the three interfaces defined by the ArcIms, it gets the
+	 * information about a feature requested
+	 * </p>
+	 * 
+	 * @return Proper XML to build the Element Info GUI
+	 */
+	public String getFeatureInfo(ArcImsStatus status, int x, int y,
+			int featureCount) throws ArcImsException {
+		return handler.getElementInfo(status, x, y, featureCount);
+	}
 
-    /**
-     * <p> Reads from the ArcIms Capabilities, the layers available in the service</p>
-     * @return a TreeMap with the available layers in the ArcIms
-     */
-    public TreeMap getLayers() {
-        return layers;
-    }
+	/**
+	 * <p>
+	 * Reads from the ArcIms Capabilities, the layers available in the service
+	 * </p>
+	 * 
+	 * @return a TreeMap with the available layers in the ArcIms
+	 */
+	public TreeMap getLayers() {
+		return layers;
+	}
 
-    /**
-     * <p>Reads from the ArcIms Capabilities the number if layers available in the service</p>
-     * @return number of layers available
-     */
-    public int getNumberOfLayers() {
-        if (layers != null) {
-            return layers.size();
-        }
+	/**
+	 * <p>
+	 * Reads from the ArcIms Capabilities the number if layers available in the
+	 * service
+	 * </p>
+	 * 
+	 * @return number of layers available
+	 */
+	public int getNumberOfLayers() {
+		if (layers != null) {
+			return layers.size();
+		}
 
-        return 0;
-    }
+		return 0;
+	}
 
-    /**
-     * <p>Gets the image formats available in the Service to retrieve the maps</p>
-     * @return a vector with all the available formats
-     */
-    public boolean isQueryable() {
-        return handler.getServiceInformation().isQueryable();
-    }
+	/**
+	 * <p>
+	 * Gets the image formats available in the Service to retrieve the maps
+	 * </p>
+	 * 
+	 * @return a vector with all the available formats
+	 */
+	public boolean isQueryable() {
+		return handler.getServiceInformation().isQueryable();
+	}
 
-    public void close() {
-        // your code here
-    }
+	public void close() {
+		// your code here
+	}
 
-    /**
-     * Gets the Service information included in the Capabilities
-     * */
-    public ServiceInformation getServiceInformation() {
-        return handler.getServiceInformation();
-    }
+	/**
+	 * Gets the Service information included in the Capabilities
+	 * */
+	public ServiceInformation getServiceInformation() {
+		return handler.getServiceInformation();
+	}
 
-    /**
-     * <p>Checks the connection to de remote ArcIms and requests its capabilities.</p>
-     *
-     */
-    public boolean connect(boolean override, ICancellable cancel) {
-        try {
-            if (handler == null) {
-                if (getHost().trim().length() > 0) {
-                    handler.setHost(getHost());
-                } else {
-                    //must to specify host first!!!!
-                    return false;
-                }
-            }
+	/**
+	 * <p>
+	 * Checks the connection to de remote ArcIms and requests its capabilities.
+	 * </p>
+	 * 
+	 */
+	public boolean connect(boolean override, ICancellable cancel) {
+		try {
+			if (handler == null) {
+				if (getHost().trim().length() > 0) {
+					handler.setHost(getHost());
+				} else {
+					// must to specify host first!!!!
+					return false;
+				}
+			}
 
-            getCapabilities(null);
+			getCapabilities(null);
 
-            return true;
-        } catch (Exception e) {
-            logger.error("While connecting", e);
+			return true;
+		} catch (Exception e) {
+			logger.error("While connecting", e);
 
-            return false;
-        }
-    }
+			return false;
+		}
+	}
 
-    public boolean connect(URL server, ICancellable cancel) {
-        setHost(server.toString());
+	public boolean connect(URL server, ICancellable cancel) {
+		setHost(server.toString());
 
-        return connect(false, cancel);
-    }
+		return connect(false, cancel);
+	}
 
-    /**
-     * Returns the handler.
-     * @return The handler
-     */
-    public ArcImsProtocolHandler getHandler() {
-        return handler;
-    }
+	/**
+	 * Returns the handler.
+	 * 
+	 * @return The handler
+	 */
+	public ArcImsProtocolHandler getHandler() {
+		return handler;
+	}
 
-    /**
-     * Method called to obtain the Legend for an ArcIMS layer ID
-     * @see es.prodevelop.cit.gvsig.arcims.fmap.layers.FFeatureLyrArcIMS#setInitialLegend()
-     * @param layerId
-     * @return
-     * @throws ArcImsException
-     */
-    public ILegend getLegend(String layerId, SelectableDataSource sds) throws ArcImsException {
-        return handler.getLegend(layerId, sds);
-    }
+	/**
+	 * Method called to obtain the Legend for an ArcIMS layer ID
+	 * 
+	 * @see es.prodevelop.cit.gvsig.arcims.fmap.layers.FFeatureLyrArcIMS#setInitialLegend()
+	 * @param layerId
+	 * @return
+	 * @throws ArcImsException
+	 */
+	public ILegend getLegend(String layerId, SelectableDataSource sds)
+			throws ArcImsException {
+		return handler.getLegend(layerId, sds);
+	}
 }

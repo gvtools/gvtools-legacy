@@ -27,7 +27,7 @@ import com.iver.cit.gvsig.fmap.tools.Events.MeasureEvent;
 /**
  * 
  * @version 06/04/2009
- * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es) 
+ * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class CircleSelectListener extends CircleSelectionListener {
 	public CircleSelectListener(MapControl mc) {

@@ -37,6 +37,7 @@ import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.project.documents.view.gui.IView;
 import com.iver.utiles.FileUtils;
 import com.iver.utiles.Utils;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -86,7 +87,7 @@ import com.iver.utiles.Utils;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class SelectVersionListener implements ActionListener, ItemListener{
+public class SelectVersionListener implements ActionListener, ItemListener {
 	public static final String CANCEL_BUTTON = "cancel";
 	public static final String EXPORT_BUTTON = "export";
 	public static final String WRITER_COMBO = "combo";
@@ -99,57 +100,61 @@ public class SelectVersionListener implements ActionListener, ItemListener{
 		super();
 		this.window = window;
 		writerComboSelectionChange();
-		if(lastPath != null){
+		if (lastPath != null) {
 			window.setFile(lastPath);
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
-		if(e.getActionCommand().compareTo(CANCEL_BUTTON) == 0){
+		if (e.getActionCommand().compareTo(CANCEL_BUTTON) == 0) {
 			cancelButtonActionPerformed();
-		}else if (e.getActionCommand().compareTo(EXPORT_BUTTON) == 0){
+		} else if (e.getActionCommand().compareTo(EXPORT_BUTTON) == 0) {
 			try {
 				exportButtonActionPerformed();
 			} catch (WriterHandlerCreationException e1) {
 				NotificationManager.addError(e1);
-			} catch (FileNotFoundException e1){
+			} catch (FileNotFoundException e1) {
 				NotificationManager.addError(e1);
 			}
-		}else if(e.getActionCommand().compareTo(WRITER_COMBO) == 0){
+		} else if (e.getActionCommand().compareTo(WRITER_COMBO) == 0) {
 			writerComboSelectionChange();
-		}else if(e.getActionCommand().compareTo(FILE_BUTTON) == 0){
+		} else if (e.getActionCommand().compareTo(FILE_BUTTON) == 0) {
 			fileButtonActionPerformed();
-		}else if(e.getActionCommand().compareTo(SCHEMA_BUTTON) == 0){
+		} else if (e.getActionCommand().compareTo(SCHEMA_BUTTON) == 0) {
 			schemaButtonActionPerformed();
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ItemListener#itemStateChanged(java.awt.event.ItemEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ItemListener#itemStateChanged(java.awt.event.ItemEvent)
 	 */
 	public void itemStateChanged(ItemEvent e) {
-		if (window.isXMLSchemaCreated()){
+		if (window.isXMLSchemaCreated()) {
 			addDefaultSchema();
 		}
 	}
 
 	/**
 	 * Create and add a default XML schema
-	 */	 
-	private void addDefaultSchema(){
+	 */
+	private void addDefaultSchema() {
 		String sFile = window.getSelectedFile();
-		if (sFile.length() > 0){
+		if (sFile.length() > 0) {
 			File file = new File(sFile);
 			String extension = FileUtils.getFileExtension(file);
 			sFile = sFile.substring(0, sFile.length() - extension.length());
 			sFile = sFile + "xsd";
 			window.setXMLSchema(sFile);
-		}else{
+		} else {
 			window.setXMLSchema("default.xsd");
 		}
 	}
@@ -157,7 +162,7 @@ public class SelectVersionListener implements ActionListener, ItemListener{
 	/**
 	 * @return a file filter for the selected driver
 	 */
-	private FileFilter getFileFilter(){
+	private FileFilter getFileFilter() {
 		GPEWriterHandler writer = window.getSelectedWriter();
 		FileFilter filter = new GPEWriterFileFilter(writer);
 		return filter;
@@ -166,16 +171,19 @@ public class SelectVersionListener implements ActionListener, ItemListener{
 	/**
 	 * When the cancel button is clicked
 	 */
-	private boolean fileButtonActionPerformed(){
+	private boolean fileButtonActionPerformed() {
 		File file = getFile(lastPath, getFileFilter());
-		if (file == null){
+		if (file == null) {
 			return false;
 		}
-		String sFile = null;		
+		String sFile = null;
 		String extension = Utils.getExtension(file);
-		if (extension == null){
-			sFile = file.getPath() + "." + window.getSelectedWriter().getFileExtension().toLowerCase();
-		}else{
+		if (extension == null) {
+			sFile = file.getPath()
+					+ "."
+					+ window.getSelectedWriter().getFileExtension()
+							.toLowerCase();
+		} else {
 			sFile = file.getPath();
 		}
 		window.setFile(sFile);
@@ -185,16 +193,16 @@ public class SelectVersionListener implements ActionListener, ItemListener{
 	/**
 	 * When the schema button is clicked
 	 */
-	private boolean schemaButtonActionPerformed(){
+	private boolean schemaButtonActionPerformed() {
 		File file = getFile(lastPath, new XMLSchemaFileFilter());
-		if (file == null){
+		if (file == null) {
 			return false;
 		}
-		String sFile = null;		
+		String sFile = null;
 		String extension = Utils.getExtension(file);
-		if (extension == null){
+		if (extension == null) {
 			sFile = file.getPath() + "." + "xsd";
-		}else{
+		} else {
 			sFile = file.getPath();
 		}
 		window.setXMLSchema(sFile);
@@ -206,97 +214,100 @@ public class SelectVersionListener implements ActionListener, ItemListener{
 	 * @param lastPath_
 	 * @return
 	 */
-	private File getFile(String lastPath, FileFilter fileFilter){ 
+	private File getFile(String lastPath, FileFilter fileFilter) {
 		JFileChooser jfc = new JFileChooser(lastPath);
 		jfc.removeChoosableFileFilter(jfc.getAcceptAllFileFilter());
 		jfc.addChoosableFileFilter(fileFilter);
 		jfc.showSaveDialog((Component) PluginServices.getMainFrame());
 		File f = jfc.getSelectedFile();
-		if (f == null){
+		if (f == null) {
 			return null;
-		}	
+		}
 		return f;
 	}
 
 	/**
 	 * When the cancel button is clicked
 	 */
-	private void cancelButtonActionPerformed(){
+	private void cancelButtonActionPerformed() {
 		PluginServices.getMDIManager().closeWindow(window);
 	}
 
 	/**
-	 * When the export button is clicked	
-	 * @throws FileNotFoundException 
-	 * @throws GPEWriterHandlerCreationException 
+	 * When the export button is clicked
+	 * 
+	 * @throws FileNotFoundException
+	 * @throws GPEWriterHandlerCreationException
 	 */
-	private void exportButtonActionPerformed() throws WriterHandlerCreationException, FileNotFoundException{
-		if (!isExportable(window.getSelectedFile(), window.getSelectedXMLSchema())){
+	private void exportButtonActionPerformed()
+			throws WriterHandlerCreationException, FileNotFoundException {
+		if (!isExportable(window.getSelectedFile(),
+				window.getSelectedXMLSchema())) {
 			return;
-		}		
-		//Save the files that has been exported
+		}
+		// Save the files that has been exported
 		ArrayList exportedFiles = new ArrayList();
-		//Closes the window
+		// Closes the window
 		cancelButtonActionPerformed();
-		//Prepare the writerHandler to write
+		// Prepare the writerHandler to write
 		GPEWriterHandler writer = cloneWriterHandler();
 		FLayer[] actives = getActives();
-		if (actives.length > 0){
+		if (actives.length > 0) {
 			lastPath = window.getSelectedFile();
 			exportedFiles.add(lastPath);
-			//It generates the XML schema
-			if (window.isXMLSchemaCreated()){
+			// It generates the XML schema
+			if (window.isXMLSchemaCreated()) {
 				createXMLSchema(actives[0]);
-			}	
-			//Export the first selected layer
-			exportLayer(writer,actives[0]);
-			//Export the other layers
-			for (int i=1 ; i<actives.length ; i++){
-				//Gets a new file...
+			}
+			// Export the first selected layer
+			exportLayer(writer, actives[0]);
+			// Export the other layers
+			for (int i = 1; i < actives.length; i++) {
+				// Gets a new file...
 				boolean isSelected = isNextFileSelected();
-				if (!isSelected){
+				if (!isSelected) {
 					continue;
 				}
 
-				while (!isExportable(window.getSelectedFile(),window.getSelectedXMLSchema())
-						&& (isSelected)){
+				while (!isExportable(window.getSelectedFile(),
+						window.getSelectedXMLSchema())
+						&& (isSelected)) {
 					isSelected = isNextFileSelected();
 				}
-				if (!isSelected){
+				if (!isSelected) {
 					continue;
 				}
 				lastPath = window.getSelectedFile();
 				exportedFiles.add(lastPath);
 				writer = cloneWriterHandler();
-				//It generates the XML schema
-				if (window.isXMLSchemaCreated()){
+				// It generates the XML schema
+				if (window.isXMLSchemaCreated()) {
 					createXMLSchema(actives[i]);
-				}	
-				exportLayer(writer,actives[i]);
+				}
+				exportLayer(writer, actives[i]);
 			}
 		}
-	}	
+	}
 
 	/**
-	 * Return true if the outputFile and the output schema 
-	 * are exportable
+	 * Return true if the outputFile and the output schema are exportable
+	 * 
 	 * @param outputFile
-	 * The output file
+	 *            The output file
 	 * @param outputSchema
-	 * the output schema
-	 * @return
-	 * If it is exportable
+	 *            the output schema
+	 * @return If it is exportable
 	 */
-	private boolean isExportable(String outputFile, String outputSchema){
-		//If the output file doesn't exist or the user
-		//wants to override it continue
-		if (!fileIsOk(window.getSelectedFile())){
+	private boolean isExportable(String outputFile, String outputSchema) {
+		// If the output file doesn't exist or the user
+		// wants to override it continue
+		if (!fileIsOk(window.getSelectedFile())) {
 			return false;
 		}
-		//If the output schema doesn't exist or the user
-		//wants to override it continue
-		if (window.isXMLSchemaCreated()){
-			if (!fileIsOk(window.getSelectedXMLSchema())){
+		// If the output schema doesn't exist or the user
+		// wants to override it continue
+		if (window.isXMLSchemaCreated()) {
+			if (!fileIsOk(window.getSelectedXMLSchema())) {
 				return false;
 			}
 		}
@@ -304,20 +315,19 @@ public class SelectVersionListener implements ActionListener, ItemListener{
 	}
 
 	/**
-	 * Select a new output file for the
-	 * output file and for the XML schema
-	 * @return
-	 * true if the layer can be exported
+	 * Select a new output file for the output file and for the XML schema
+	 * 
+	 * @return true if the layer can be exported
 	 */
-	private boolean isNextFileSelected(){
+	private boolean isNextFileSelected() {
 		boolean selectedFile = fileButtonActionPerformed();
-		if (!selectedFile){
+		if (!selectedFile) {
 			return false;
 		}
-		//Gets a new Schema
-		if (window.isXMLSchemaCreated()){
+		// Gets a new Schema
+		if (window.isXMLSchemaCreated()) {
 			boolean selectedSchema = schemaButtonActionPerformed();
-			if (!selectedSchema){
+			if (!selectedSchema) {
 				return false;
 			}
 		}
@@ -326,18 +336,20 @@ public class SelectVersionListener implements ActionListener, ItemListener{
 
 	/**
 	 * Creates an XML schema
-	 * @param the layer to create the schema
+	 * 
+	 * @param the
+	 *            layer to create the schema
 	 */
-	private void createXMLSchema(FLayer layer){
-		if (layer instanceof FLyrVect){
+	private void createXMLSchema(FLayer layer) {
+		if (layer instanceof FLyrVect) {
 			File schema = new File(window.getSelectedXMLSchema());
 			try {
 				GMLSchemaCreator schemaCreator = new GMLSchemaCreator(schema);
 				SHPLayerDefinition lyrDef = new SHPLayerDefinition();
-				SelectableDataSource sds = ((FLyrVect)layer).getRecordset();
+				SelectableDataSource sds = ((FLyrVect) layer).getRecordset();
 				FieldDescription[] fieldsDescrip = sds.getFieldsDescription();
 				lyrDef.setFieldsDesc(fieldsDescrip);
-				lyrDef.setShapeType(((FLyrVect)layer).getShapeType());
+				lyrDef.setShapeType(((FLyrVect) layer).getShapeType());
 				schemaCreator.createFile(lyrDef);
 				schemaCreator.writeFile();
 			} catch (IOException e) {
@@ -346,17 +358,20 @@ public class SelectVersionListener implements ActionListener, ItemListener{
 				NotificationManager.addError(e);
 			}
 		}
-	}	
+	}
 
 	/**
 	 * Clones the selected writerHandler
+	 * 
 	 * @param writer
 	 * @return
-	 * @throws FileNotFoundException 
-	 * @throws GPEWriterHandlerCreationException 
+	 * @throws FileNotFoundException
+	 * @throws GPEWriterHandlerCreationException
 	 */
-	private GPEWriterHandler cloneWriterHandler() throws WriterHandlerCreationException, FileNotFoundException{
-		GPEWriterHandler writer = GPERegister.createWriter(window.getSelectedWriter().getName());
+	private GPEWriterHandler cloneWriterHandler()
+			throws WriterHandlerCreationException, FileNotFoundException {
+		GPEWriterHandler writer = GPERegister.createWriter(window
+				.getSelectedWriter().getName());
 		writer.setOutputStream(new FileOutputStream(window.getSelectedFile()));
 		writer.setErrorHandler(new FmapErrorHandler());
 		return writer;
@@ -365,46 +380,46 @@ public class SelectVersionListener implements ActionListener, ItemListener{
 	/**
 	 * @return if the file can be written
 	 */
-	private boolean fileIsOk(String sFile){
+	private boolean fileIsOk(String sFile) {
 		File file = new File(sFile);
-		//If the file exists...
-		if (file.exists()){
+		// If the file exists...
+		if (file.exists()) {
 			int resp = JOptionPane.showConfirmDialog(
 					(Component) PluginServices.getMainFrame(),
 					PluginServices.getText(this,
-					"fichero_ya_existe_seguro_desea_guardarlo")+
-					"\n"+
-					file.getAbsolutePath(),
-					PluginServices.getText(this,"guardar"), JOptionPane.YES_NO_OPTION);
+							"fichero_ya_existe_seguro_desea_guardarlo")
+							+ "\n"
+							+ file.getAbsolutePath(), PluginServices.getText(
+							this, "guardar"), JOptionPane.YES_NO_OPTION);
 			if (resp != JOptionPane.YES_OPTION) {
 				return false;
 			}
-		}	
+		}
 		return true;
 	}
 
 	/**
 	 * Export one layer
+	 * 
 	 * @param writer
-	 * The writerHandler
+	 *            The writerHandler
 	 * @param layer
-	 * The layer to export
+	 *            The layer to export
 	 */
-	private void exportLayer(GPEWriterHandler writer, FLayer layer){
-		ExportTask task = new ExportTask(layer,
-				writer,
-				getMapControl().getMapContext(),
-				new File(window.getSelectedFile()));
-		PluginServices.cancelableBackgroundExecution(task);		
+	private void exportLayer(GPEWriterHandler writer, FLayer layer) {
+		ExportTask task = new ExportTask(layer, writer, getMapControl()
+				.getMapContext(), new File(window.getSelectedFile()));
+		PluginServices.cancelableBackgroundExecution(task);
 	}
 
 	/**
 	 * @return the layer to export
 	 */
-	private FLayer[] getActives(){
+	private FLayer[] getActives() {
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		if (window instanceof IView){
-			return ((IView)window).getMapControl().getMapContext().getLayers().getActives();
+		if (window instanceof IView) {
+			return ((IView) window).getMapControl().getMapContext().getLayers()
+					.getActives();
 		}
 		return null;
 	}
@@ -412,10 +427,10 @@ public class SelectVersionListener implements ActionListener, ItemListener{
 	/**
 	 * @return the current mapContext
 	 */
-	private MapControl getMapControl(){
+	private MapControl getMapControl() {
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		if (window instanceof IView){
-			return ((IView)window).getMapControl();
+		if (window instanceof IView) {
+			return ((IView) window).getMapControl();
 		}
 		return null;
 	}
@@ -423,19 +438,19 @@ public class SelectVersionListener implements ActionListener, ItemListener{
 	/**
 	 * When the writer combo selection changes
 	 */
-	private void writerComboSelectionChange(){
+	private void writerComboSelectionChange() {
 		window.initializeSelection();
 		GPEWriterHandler writer = window.getSelectedWriter();
-		//String[] formats = writer.getFormat();
-		//for (int i=0 ; i<formats.length ; i++){
-			window.addFormat(writer.getFormat());
-		//}
+		// String[] formats = writer.getFormat();
+		// for (int i=0 ; i<formats.length ; i++){
+		window.addFormat(writer.getFormat());
+		// }
 		window.setSelectedFormat(writer.getFormat());
-//		String[] versions = writer.getVersions();
-//		for (int i=0 ; i<versions.length ; i++){
-//			window.addVersion(versions[i]);
-//		}
-//		window.setSelectedVersion(writer.getDefaultVersion());
+		// String[] versions = writer.getVersions();
+		// for (int i=0 ; i<versions.length ; i++){
+		// window.addVersion(versions[i]);
+		// }
+		// window.setSelectedVersion(writer.getDefaultVersion());
 	}
 
 }

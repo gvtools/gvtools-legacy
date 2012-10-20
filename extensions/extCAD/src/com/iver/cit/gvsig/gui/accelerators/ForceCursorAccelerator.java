@@ -52,7 +52,7 @@ import com.iver.cit.gvsig.gui.preferences.GridPage;
 
 /**
  * @author fjp
- *
+ * 
  */
 public class ForceCursorAccelerator implements KeyEventDispatcher {
 
@@ -67,12 +67,11 @@ public class ForceCursorAccelerator implements KeyEventDispatcher {
 		CADToolAdapter toolAdap = CADExtension.getCADToolAdapter();
 		toolAdap.setAdjustGrid(!toolAdap.getGrid().isAdjustGrid());
 
-		System.err.println("Ponemos ForceCursor a " + toolAdap.getGrid().isAdjustGrid());
-		Preferences prefs=GridPage.prefs;
-		prefs.putBoolean("grid.adjustgrid",toolAdap.getGrid().isAdjustGrid());
+		System.err.println("Ponemos ForceCursor a "
+				+ toolAdap.getGrid().isAdjustGrid());
+		Preferences prefs = GridPage.prefs;
+		prefs.putBoolean("grid.adjustgrid", toolAdap.getGrid().isAdjustGrid());
 		return false;
 	}
 
 }
-
-

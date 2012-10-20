@@ -45,38 +45,40 @@ import java.awt.geom.Rectangle2D;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
 
-
 /**
- * Interfaz a implementar por los drivers que puedan satisfacer de manera
- * rápida una llamada a getShapeBounds. Esto hará que el procesado de la capa
- * sea un poco más rápido
+ * Interfaz a implementar por los drivers que puedan satisfacer de manera rápida
+ * una llamada a getShapeBounds. Esto hará que el procesado de la capa sea un
+ * poco más rápido
  */
 public interface BoundedShapes {
 	/**
 	 * Obtiene el Rectángulo de la geometría iésima
-	 *
-	 * @param index Índice
-	 *
+	 * 
+	 * @param index
+	 *            Índice
+	 * 
 	 * @return Rectángulo.
-	 * @throws ReadDriverException TODO
+	 * @throws ReadDriverException
+	 *             TODO
 	 * @throws ExpansionFileReadException
 	 */
-	Rectangle2D getShapeBounds(int index) throws ReadDriverException, ExpansionFileReadException;
+	Rectangle2D getShapeBounds(int index) throws ReadDriverException,
+			ExpansionFileReadException;
 
 	/**
 	 * Devuelve el tipo de la geometría. Con .shp está claro. Con PostGIS,
-	 * existe una función:  GeometryType(geometry) Returns the type of the
-	 * geometry as a string. Eg: 'LINESTRING', 'POLYGON', 'MULTIPOINT', etc.
-	 * OGC SPEC s2.1.1.1 - Returns the name of the instantiable subtype of
-	 * Geometry of which this Geometry instance is a member. The name of the
-	 * instantiable subtype of Geometry is returned as a string. NOTA: CREO
-	 * QUE ESTO NO TIENE SENTIDO CON BASES DE DATOS. LA ESTRATEGIA CON BASES
-	 * DE DATOS DEBE SER PEDIR LAS GEOMETRIES CONTENIDAS EN UN RECTANGULO, Y
-	 * PREGUNTARLE A CADA GEOMETRY SU BOUNDINGBOX (Y GUARDARLO CON UN
-	 * SHAPEINFO). TENGO LA SENSACIÓN QUE ESTO LO VAMOS A USAR SOLO CON SHAPES
-	 *
+	 * existe una función: GeometryType(geometry) Returns the type of the
+	 * geometry as a string. Eg: 'LINESTRING', 'POLYGON', 'MULTIPOINT', etc. OGC
+	 * SPEC s2.1.1.1 - Returns the name of the instantiable subtype of Geometry
+	 * of which this Geometry instance is a member. The name of the instantiable
+	 * subtype of Geometry is returned as a string. NOTA: CREO QUE ESTO NO TIENE
+	 * SENTIDO CON BASES DE DATOS. LA ESTRATEGIA CON BASES DE DATOS DEBE SER
+	 * PEDIR LAS GEOMETRIES CONTENIDAS EN UN RECTANGULO, Y PREGUNTARLE A CADA
+	 * GEOMETRY SU BOUNDINGBOX (Y GUARDARLO CON UN SHAPEINFO). TENGO LA
+	 * SENSACIÓN QUE ESTO LO VAMOS A USAR SOLO CON SHAPES
+	 * 
 	 * @param index
-	 *
+	 * 
 	 * @return
 	 * @throws ReadDriverException
 	 */

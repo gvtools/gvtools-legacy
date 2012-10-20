@@ -69,18 +69,16 @@ import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
 
 /**
- * Iterates over the features of a vectorial data source
- * (readablevectorial, or vectorialadapter) which verify a SQL statement.
- * <br>
- * SQL syntax is very extrict, GDBMS based.
- * (for example, % character is not allowed to build strings expressions,
- * all SQL statement must end with ;, etc)
- *
- *
- *
- *
+ * Iterates over the features of a vectorial data source (readablevectorial, or
+ * vectorialadapter) which verify a SQL statement. <br>
+ * SQL syntax is very extrict, GDBMS based. (for example, % character is not
+ * allowed to build strings expressions, all SQL statement must end with ;, etc)
+ * 
+ * 
+ * 
+ * 
  * @author azabala
- *
+ * 
  */
 public class AttrQueryFeatureIterator extends DefaultFeatureIterator {
 
@@ -89,42 +87,45 @@ public class AttrQueryFeatureIterator extends DefaultFeatureIterator {
 
 	public AttrQueryFeatureIterator(ReadableVectorial source,
 			CoordinateReferenceSystem sourceCrs,
-			CoordinateReferenceSystem targetCrs, String sqlQuery) throws ReadDriverException {
-		super(source,sourceCrs,targetCrs,source.getRecordset().getFieldNames());
+			CoordinateReferenceSystem targetCrs, String sqlQuery)
+			throws ReadDriverException {
+		super(source, sourceCrs, targetCrs, source.getRecordset()
+				.getFieldNames());
 		this.sqlQuery = sqlQuery;
 
 		try {
-			if(hasWhere(sqlQuery)){
-				DataSource datasource = LayerFactory.getDataSourceFactory().executeSQL(sqlQuery,
-						DataSourceFactory.MANUAL_OPENING);
+			if (hasWhere(sqlQuery)) {
+				DataSource datasource = LayerFactory.getDataSourceFactory()
+						.executeSQL(sqlQuery, DataSourceFactory.MANUAL_OPENING);
 				super.setFieldNames(source.getRecordset().getFieldNames());
 				indexes = datasource.getWhereFilter();
-			}else{
-				//TODO This is not very elegant: rethink
+			} else {
+				// TODO This is not very elegant: rethink
 				indexes = new long[source.getShapeCount()];
-				for(int i = 0; i < indexes.length; i++){
+				for (int i = 0; i < indexes.length; i++) {
 					indexes[i] = i;
 				}
 				super.setFieldNames(source.getRecordset().getFieldNames());
 			}
 
-
-			//check to avoid reprojections with the same projection
-			if(targetCrs != null){
-				// FJP: Si la capa original no sabemos que proyeccion tiene, no hacemos nada
+			// check to avoid reprojections with the same projection
+			if (targetCrs != null) {
+				// FJP: Si la capa original no sabemos que proyeccion tiene, no
+				// hacemos nada
 				if (sourceCrs != null) {
-					if(!(targetCrs.getName().equals(sourceCrs.getName())))
+					if (!(targetCrs.getName().equals(sourceCrs.getName())))
 						this.targetCrs = targetCrs;
 				}
 			}
 
-		} catch (Exception e){
-			throw new ReadDriverException("error ejecutando consulta sql para iterador", e);
+		} catch (Exception e) {
+			throw new ReadDriverException(
+					"error ejecutando consulta sql para iterador", e);
 		}
 	}
 
-	public boolean hasNext(){
-		if(indexes != null && currentFeature < indexes.length)
+	public boolean hasNext() {
+		if (indexes != null && currentFeature < indexes.length)
 			return true;
 		else
 			return false;
@@ -135,16 +136,21 @@ public class AttrQueryFeatureIterator extends DefaultFeatureIterator {
 		int pos;
 
 		// Remove last ';' if exists
-		if (subExpression.charAt(subExpression.length() -1) == ';')
-			subExpression = subExpression.substring(0, subExpression.length() -1).trim();
+		if (subExpression.charAt(subExpression.length() - 1) == ';')
+			subExpression = subExpression.substring(0,
+					subExpression.length() - 1).trim();
 
 		// If there is no 'where' clause
 		if ((pos = subExpression.indexOf("where")) == -1)
 			return false;
 
 		// If there is no subexpression in the WHERE clause -> true
-		subExpression = subExpression.substring(pos + 5, subExpression.length()).trim(); // + 5 is the length of 'where'
-		if ( subExpression.length() == 0 )
+		subExpression = subExpression
+				.substring(pos + 5, subExpression.length()).trim(); // + 5 is
+																	// the
+																	// length of
+																	// 'where'
+		if (subExpression.length() == 0)
 			return false;
 		else
 			return true;
@@ -153,14 +159,15 @@ public class AttrQueryFeatureIterator extends DefaultFeatureIterator {
 	public IFeature next() throws ReadDriverException {
 		IGeometry geom;
 		try {
-			geom = chekIfCloned(source.getShape((int)indexes[currentFeature]));
+			geom = chekIfCloned(source.getShape((int) indexes[currentFeature]));
 			reprojectIfNecessary(geom);
 		} catch (ExpansionFileReadException e) {
 			throw new ReadDriverException("Error accediendo al driver", e);
 		}
 
-		Value[] regAtt = getValues((int)indexes[currentFeature]);
-		DefaultFeature feat = new DefaultFeature(geom, regAtt, (int)indexes[currentFeature] + "");
+		Value[] regAtt = getValues((int) indexes[currentFeature]);
+		DefaultFeature feat = new DefaultFeature(geom, regAtt,
+				(int) indexes[currentFeature] + "");
 		currentFeature++;
 		return feat;
 	}
@@ -170,4 +177,3 @@ public class AttrQueryFeatureIterator extends DefaultFeatureIterator {
 	}
 
 }
-

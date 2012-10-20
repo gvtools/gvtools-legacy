@@ -46,20 +46,21 @@ import javax.swing.ButtonGroup;
 /**
  * @author Cesar Martinez Izquierdo <cesar.martinez@iver.es>
  */
-public class ToggleButtonModel extends javax.swing.JToggleButton.ToggleButtonModel {
-	
+public class ToggleButtonModel extends
+		javax.swing.JToggleButton.ToggleButtonModel {
+
 	private String _groupName = null;
 
 	public ButtonGroup getGroup() {
 		return group;
 	}
-	
+
 	public String getGroupName() {
 		return _groupName;
 	}
-	
+
 	public void setGroupName(String groupName) {
-		_groupName = groupName; 
+		_groupName = groupName;
 	}
 
 }

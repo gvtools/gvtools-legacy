@@ -42,14 +42,14 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: JTSFacade.java 12946 2007-08-07 15:08:11Z azabala $
-* $Log$
-* Revision 1.1  2007-08-07 15:08:11  azabala
-* new version in cvs. centralizes all jts stuff
-*
-*
-*/
+ *
+ * $Id: JTSFacade.java 12946 2007-08-07 15:08:11Z azabala $
+ * $Log$
+ * Revision 1.1  2007-08-07 15:08:11  azabala
+ * new version in cvs. centralizes all jts stuff
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core.util;
 
 import com.iver.cit.gvsig.fmap.core.FShape;
@@ -60,79 +60,78 @@ import com.vividsolutions.jts.precision.EnhancedPrecisionOp;
 
 /**
  * 
- * Instead of calling individual methods of JTS (JTS Topology Suite),
- * this singleton facade allows gvSIG users to centralize all JTS computational
+ * Instead of calling individual methods of JTS (JTS Topology Suite), this
+ * singleton facade allows gvSIG users to centralize all JTS computational
  * geometry operations in one only class.
  * 
- * This is useful to ensure certain operations
- * (for example, geoprocessing operations could cause robustness problems, so JTS
- * allows to use enhanced precission operations, this facade forces to use these
- * enhanced precision operations)
+ * This is useful to ensure certain operations (for example, geoprocessing
+ * operations could cause robustness problems, so JTS allows to use enhanced
+ * precission operations, this facade forces to use these enhanced precision
+ * operations)
  * 
  * @author alvaro zabala
  * 
  * 
  * */
 public class JTSFacade {
-	
-	public static Geometry computeBuffer(Geometry originalGeometry, double distance){
-		return EnhancedPrecisionOp.buffer(originalGeometry, distance);	
+
+	public static Geometry computeBuffer(Geometry originalGeometry,
+			double distance) {
+		return EnhancedPrecisionOp.buffer(originalGeometry, distance);
 	}
-	
-	public static Geometry difference(Geometry geom1, Geometry geom2){
+
+	public static Geometry difference(Geometry geom1, Geometry geom2) {
 		return EnhancedPrecisionOp.difference(geom1, geom2);
 	}
-	
-	public static Geometry symDifference(Geometry geom1, Geometry geom2){
+
+	public static Geometry symDifference(Geometry geom1, Geometry geom2) {
 		return EnhancedPrecisionOp.symDifference(geom1, geom2);
 	}
-	
-	public static Geometry union(Geometry geom1, Geometry geom2){
+
+	public static Geometry union(Geometry geom1, Geometry geom2) {
 		return EnhancedPrecisionOp.union(geom1, geom2);
 	}
-	
-	public static Geometry union(Geometry[] geomArray, int geometryType){
-		if(geomArray.length == 0)
+
+	public static Geometry union(Geometry[] geomArray, int geometryType) {
+		if (geomArray.length == 0)
 			return null;
-		if(geomArray.length == 1)
+		if (geomArray.length == 1)
 			return geomArray[0];
-		if(geometryType == FShape.POLYGON || 
-			geometryType == FShape.CIRCLE || 
-			geometryType == FShape.ELLIPSE){
-				GeometryFactory fact = geomArray[0].getFactory();
-				Geometry geomCol = fact.createGeometryCollection(geomArray);
-				return computeBuffer(geomCol, 0d);
-		}else{
+		if (geometryType == FShape.POLYGON || geometryType == FShape.CIRCLE
+				|| geometryType == FShape.ELLIPSE) {
+			GeometryFactory fact = geomArray[0].getFactory();
+			Geometry geomCol = fact.createGeometryCollection(geomArray);
+			return computeBuffer(geomCol, 0d);
+		} else {
 			Geometry unionResult = geomArray[0];
-			for(int i = 1; i < geomArray.length; i++)
+			for (int i = 1; i < geomArray.length; i++)
 				unionResult = union(unionResult, geomArray[i]);
 			return unionResult;
 		}
 	}
-	
-	public static Geometry intersection(Geometry geom1, Geometry geom2){
+
+	public static Geometry intersection(Geometry geom1, Geometry geom2) {
 		return EnhancedPrecisionOp.intersection(geom1, geom2);
 	}
-	
+
 	/**
-	 * Checks a JTS geometry to be null or NIL.
-	 * NIL in jts is used to represent particular cases of geometries.
-	 * (for example, an interior buffer that collapses a geometry).
-	 * NIL is managed with a zero lenght GeometryCollection
+	 * Checks a JTS geometry to be null or NIL. NIL in jts is used to represent
+	 * particular cases of geometries. (for example, an interior buffer that
+	 * collapses a geometry). NIL is managed with a zero lenght
+	 * GeometryCollection
+	 * 
 	 * @param geometry
 	 * @return
 	 */
-	public static boolean checkNull(Geometry geometry){
-		if(geometry == null)
+	public static boolean checkNull(Geometry geometry) {
+		if (geometry == null)
 			return true;
-		if(geometry instanceof GeometryCollection){
-			GeometryCollection col = (GeometryCollection)geometry;
-			if(col.getNumGeometries() < 1)
+		if (geometry instanceof GeometryCollection) {
+			GeometryCollection col = (GeometryCollection) geometry;
+			if (col.getNumGeometries() < 1)
 				return true;
 		}
 		return false;
 	}
-	
-	
-}
 
+}

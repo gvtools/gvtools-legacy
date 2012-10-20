@@ -40,25 +40,24 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: WCSException.java 4493 2006-03-21 11:30:27Z jaume $
-* $Log$
-* Revision 1.1  2006-03-21 11:30:27  jaume
-* some wcs client operation stuff
-*
-*
-*/
+ *
+ * $Id: WCSException.java 4493 2006-03-21 11:30:27Z jaume $
+ * $Log$
+ * Revision 1.1  2006-03-21 11:30:27  jaume
+ * some wcs client operation stuff
+ *
+ *
+ */
 package org.gvsig.remoteClient.exceptions;
 
 /**
  * Excepción provocada por el WCS.
- *
+ * 
  * @author Jaume Dominguez Faus - jaume.dominguez@iver.es
  */
-public class WCSException extends Exception 
-{	
+public class WCSException extends Exception {
 	private String wcs_message = null;
-	
+
 	/**
 	 *
 	 */
@@ -68,7 +67,7 @@ public class WCSException extends Exception
 
 	/**
 	 * Creates a new WCS Exception
-	 *
+	 * 
 	 * @param message
 	 */
 	public WCSException(String message) {
@@ -77,7 +76,7 @@ public class WCSException extends Exception
 
 	/**
 	 * Creates a new WCS Exception
-	 *
+	 * 
 	 * @param message
 	 * @param cause
 	 */
@@ -87,25 +86,21 @@ public class WCSException extends Exception
 
 	/**
 	 * Creates a new WCSException
-	 *
+	 * 
 	 * @param cause
 	 */
 	public WCSException(Throwable cause) {
 		super(cause);
 	}
-	
-	public String getWCSMessage()
-	{
+
+	public String getWCSMessage() {
 		if (wcs_message == null)
 			return "";
 		else
 			return wcs_message;
 	}
-	
-	public void setWCSMessage(String mes)
-	{
+
+	public void setWCSMessage(String mes) {
 		wcs_message = mes;
 	}
 }
-
-

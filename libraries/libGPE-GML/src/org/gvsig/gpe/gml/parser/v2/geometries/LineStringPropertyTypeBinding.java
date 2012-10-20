@@ -9,6 +9,7 @@ import org.gvsig.gpe.gml.utils.GMLTags;
 import org.gvsig.gpe.xml.stream.IXmlStreamReader;
 import org.gvsig.gpe.xml.stream.XmlStreamException;
 import org.gvsig.gpe.xml.utils.CompareUtils;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -62,69 +63,75 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  *
  */
 /**
-* It parses a gml:lineStringProperty object. Example:
-* <p>
-* <pre>
-* <code>
-* &lt;lineStringProperty&gt;
-* &lt;LineString&gt;
-* &lt;coord&gt;&lt;X&gt;56.1&lt;/X&gt;&lt;Y&gt;0.45&lt;/Y&gt;&lt;/coord&gt;
-* &lt;coord&gt;&lt;X&gt;67.23&lt;/X&gt;&lt;Y&gt;0.98&lt;/Y&gt;&lt;/coord&gt;
-* &lt;/LineString&gt;
-* &lt;/lineStringProperty&gt;
-* </code>
-* </pre>
-* </p> 
-* @author Jorge Piera LLodrá (jorge.piera@iver.es)
-*/
+ * It parses a gml:lineStringProperty object. Example:
+ * <p>
+ * 
+ * <pre>
+ * <code>
+ * &lt;lineStringProperty&gt;
+ * &lt;LineString&gt;
+ * &lt;coord&gt;&lt;X&gt;56.1&lt;/X&gt;&lt;Y&gt;0.45&lt;/Y&gt;&lt;/coord&gt;
+ * &lt;coord&gt;&lt;X&gt;67.23&lt;/X&gt;&lt;Y&gt;0.98&lt;/Y&gt;&lt;/coord&gt;
+ * &lt;/LineString&gt;
+ * &lt;/lineStringProperty&gt;
+ * </code>
+ * </pre>
+ * 
+ * </p>
+ * 
+ * @author Jorge Piera LLodrá (jorge.piera@iver.es)
+ */
 public class LineStringPropertyTypeBinding {
-	
+
 	/**
 	 * It parses the gml:lineStringProperty tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * A line
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return A line
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public Object parse(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
+	public Object parse(IXmlStreamReader parser, GPEDefaultGmlParser handler)
+			throws XmlStreamException, IOException {
 		boolean endFeature = false;
 		int currentTag;
-		Object lineString = null;		
-		
+		Object lineString = null;
+
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-					if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_LINESTRING)){
-						lineString =handler.getProfile().getLineStringTypeBinding().
-						parse(parser, handler);
-					}
-					break;
-				case IXmlStreamReader.END_ELEMENT:
-					if ((CompareUtils.compareWithNamespace(tag,GMLTags.GML_LINESTRINGPROPERTY))||
-					(CompareUtils.compareWithNamespace(tag,GMLTags.GML_EDGEOF))||
-					(CompareUtils.compareWithNamespace(tag,GMLTags.GML_CENTERLINEOF)))
-					{						
-						endFeature = true;						
-					}
-					break;
-				case IXmlStreamReader.CHARACTERS:			
-					
-					break;
+				if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_LINESTRING)) {
+					lineString = handler.getProfile()
+							.getLineStringTypeBinding().parse(parser, handler);
 				}
-				if (!endFeature){					
-					currentTag = parser.next();
-					tag = parser.getName();
+				break;
+			case IXmlStreamReader.END_ELEMENT:
+				if ((CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_LINESTRINGPROPERTY))
+						|| (CompareUtils.compareWithNamespace(tag,
+								GMLTags.GML_EDGEOF))
+						|| (CompareUtils.compareWithNamespace(tag,
+								GMLTags.GML_CENTERLINEOF))) {
+					endFeature = true;
 				}
-			}			
-		return lineString;	
+				break;
+			case IXmlStreamReader.CHARACTERS:
+
+				break;
+			}
+			if (!endFeature) {
+				currentTag = parser.next();
+				tag = parser.getName();
+			}
+		}
+		return lineString;
 	}
 }
-

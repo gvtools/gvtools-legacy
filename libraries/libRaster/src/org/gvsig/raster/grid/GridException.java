@@ -19,28 +19,30 @@
 package org.gvsig.raster.grid;
 
 /**
- * Excepción lanzada por un grid cuando tiene un error general de acceso a 
- * datos o a alguna propiedad con valor/es inconsistente/s.
+ * Excepción lanzada por un grid cuando tiene un error general de acceso a datos
+ * o a alguna propiedad con valor/es inconsistente/s.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public class GridException extends Exception{
+public class GridException extends Exception {
 	private static final long serialVersionUID = 7412405741078802490L;
 
 	/**
 	 * Constructor. Asigna el texto de la excepción
+	 * 
 	 * @param msg
 	 */
-	public GridException(String msg){
+	public GridException(String msg) {
 		super(msg);
 	}
-	
+
 	/**
 	 * Constructor. Asigna el texto de la excepción y la excepción generica.
+	 * 
 	 * @param msg
 	 */
-	public GridException(String msg, Exception e){
+	public GridException(String msg, Exception e) {
 		super(msg, e);
 	}
 }

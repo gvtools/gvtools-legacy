@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 /**
  * Clase que recubre la función de reproyección de gdal.
- *  
+ * 
  * @author Miguel Ángel Querol Carratalá
  */
 public class GdalWarp extends JNIBase {
-	private int    porcentaje;
+	private int porcentaje;
 
 	/**
 	 * Parámetros de la operación de reproyección
@@ -18,31 +18,39 @@ public class GdalWarp extends JNIBase {
 	/**
 	 * Método nativo para el warp desde gdal.
 	 */
-	private native int warpDataset(String s_srs, String t_srs, String source, String dest, String format);
+	private native int warpDataset(String s_srs, String t_srs, String source,
+			String dest, String format);
 
 	/**
 	 * Constructor generico.
 	 */
-	public GdalWarp() {}
+	public GdalWarp() {
+	}
 
 	/**
 	 * Reproyecta una imagen raster, creando una imagen de salida
-	 * @param proj EPSG:code o proj4
-	 * @param source Ruta del fichero fuente
-	 * @param dest Ruta del fichero destino
+	 * 
+	 * @param proj
+	 *            EPSG:code o proj4
+	 * @param source
+	 *            Ruta del fichero fuente
+	 * @param dest
+	 *            Ruta del fichero destino
 	 * @param format
-	 * @return 0 si ha ocurrido algun error o 1 si la ejecución ha sido correcta.
+	 * @return 0 si ha ocurrido algun error o 1 si la ejecución ha sido
+	 *         correcta.
 	 * @throws GdalException
 	 */
 	public int warp(String t_srs, String source, String dest, String format) {
 
 		int stat = warpDataset(s_srs, t_srs, source, dest, format);
-		
+
 		return stat;
 	}
 
 	/**
 	 * Indica la proyección del dataset origen
+	 * 
 	 * @param s_srs
 	 */
 	public void setSsrs(String s_srs) {
@@ -55,9 +63,10 @@ public class GdalWarp extends JNIBase {
 	public int getPercent() {
 		return porcentaje;
 	}
-	
+
 	/**
 	 * Devuelve la lista de drivers que usa GdalWarp para reproyectar
+	 * 
 	 * @return
 	 */
 	static public ArrayList getDrivers() {

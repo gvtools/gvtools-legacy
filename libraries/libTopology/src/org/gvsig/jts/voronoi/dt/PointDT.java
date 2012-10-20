@@ -20,57 +20,56 @@ package org.gvsig.jts.voronoi.dt;
  *    @since JDK1.3 
  */
 
-
 import com.vividsolutions.jts.geom.Coordinate;
 
-
-public class PointDT extends Coordinate{
-	
-	/***
-	   * Constructor
-	   *
-	   * @param double x - coordinate of x-axis
-	   * @param double y - coordinate of y-axis
-	   * @param double z - coordinate of z-axis
-	   */			
-	
-	public PointDT (double x, double y, double z){
-		super(x,y,z);
-	}
+public class PointDT extends Coordinate {
 
 	/***
-	   * Constructor
-	   *
-	   * @param Coordinate x - coordinate
-	   *
-	   */
-		
-	PointDT (Coordinate P){
-		super (P.x,P.y,P.z);
+	 * Constructor
+	 * 
+	 * @param double x - coordinate of x-axis
+	 * @param double y - coordinate of y-axis
+	 * @param double z - coordinate of z-axis
+	 */
+
+	public PointDT(double x, double y, double z) {
+		super(x, y, z);
 	}
-	
+
 	/***
-	   *  The method for converting to String
-	   *
-	   * @return String - "PointDT: x y z
-	   *
-	   */
-	
-	public String toString(){
-		return ("PointDT: :"+x+" "+y+"   "+z+" ");
+	 * Constructor
+	 * 
+	 * @param Coordinate
+	 *            x - coordinate
+	 * 
+	 */
+
+	PointDT(Coordinate P) {
+		super(P.x, P.y, P.z);
 	}
-	
+
 	/***
-	   * The method for comparing two points
-	   *
-	   * @param Coordinate P - the point which is compare
-	   * 
-	   * @return boolean - true - are same
-	   * 	   			   false - are diffrent
-	   */
-	
-	public boolean compare(Coordinate P){
-		if (x==P.x&&y==P.y&&z==P.z)
+	 * The method for converting to String
+	 * 
+	 * @return String - "PointDT: x y z
+	 * 
+	 */
+
+	public String toString() {
+		return ("PointDT: :" + x + " " + y + "   " + z + " ");
+	}
+
+	/***
+	 * The method for comparing two points
+	 * 
+	 * @param Coordinate
+	 *            P - the point which is compare
+	 * 
+	 * @return boolean - true - are same false - are diffrent
+	 */
+
+	public boolean compare(Coordinate P) {
+		if (x == P.x && y == P.y && z == P.z)
 			return true;
 		return false;
 	}

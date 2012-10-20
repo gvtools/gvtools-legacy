@@ -45,7 +45,7 @@ import java.util.Hashtable;
 
 import com.hardcode.gdbms.engine.values.Value;
 
-public class LabelExpressionOperator extends Operator{
+public class LabelExpressionOperator extends Operator {
 
 	private ArrayList<Expression> arguments = new ArrayList<Expression>();
 
@@ -57,29 +57,27 @@ public class LabelExpressionOperator extends Operator{
 		arguments.add(i, arg);
 	}
 
-	public void check()
-	throws ExpressionException {
+	public void check() throws ExpressionException {
 
 	}
 
-	public Object evaluate()
-	throws ExpressionException {
+	public Object evaluate() throws ExpressionException {
 
 		ArrayList<String> result = new ArrayList<String>();
 
-		if(arguments != null) {
+		if (arguments != null) {
 
 			for (int i = 0; i < arguments.size(); i++) {
-				Expression function = (Expression)arguments.get(i);
-				if(function instanceof LabelExpressionOperator) {
+				Expression function = (Expression) arguments.get(i);
+				if (function instanceof LabelExpressionOperator) {
 					Object[] labResult = (Object[]) function.evaluate();
-					if(labResult != null) {
-						for (int j = labResult.length-1; j >= 0; j--) {
-							result.add(0,(String)labResult[j]);
+					if (labResult != null) {
+						for (int j = labResult.length - 1; j >= 0; j--) {
+							result.add(0, (String) labResult[j]);
 						}
 					}
-				}
-				else result.add(0, (String) (function.evaluate().toString()));
+				} else
+					result.add(0, (String) (function.evaluate().toString()));
 			}
 			return result.toArray(new String[0]);
 		}
@@ -96,7 +94,7 @@ public class LabelExpressionOperator extends Operator{
 	}
 
 	public String getPattern() {
-		throw new Error ("Not yet implemented");
+		throw new Error("Not yet implemented");
 	}
 
 	public void setArguments(ArrayList<Expression> arguments) {

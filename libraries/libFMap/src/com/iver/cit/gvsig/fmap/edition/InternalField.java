@@ -56,16 +56,16 @@ public class InternalField {
 	// private boolean isDeleted = false;
 
 	private FieldDescription fieldDesc = null;
-	
+
 	private int fieldIndex;
 
-//	public boolean isDeleted() {
-//		return isDeleted;
-//	}
-//
-//	public void setDeleted(boolean isDeleted) {
-//		this.isDeleted = isDeleted;
-//	}
+	// public boolean isDeleted() {
+	// return isDeleted;
+	// }
+	//
+	// public void setDeleted(boolean isDeleted) {
+	// this.isDeleted = isDeleted;
+	// }
 
 	public FieldDescription getFieldDesc() {
 		return fieldDesc;
@@ -80,9 +80,10 @@ public class InternalField {
 		return fieldType;
 	}
 
-	public InternalField(FieldDescription fieldDesc, int fieldType, Integer fieldId) {
-		this.fieldDesc = fieldDesc;		
-		this.fieldType  =fieldType;
+	public InternalField(FieldDescription fieldDesc, int fieldType,
+			Integer fieldId) {
+		this.fieldDesc = fieldDesc;
+		this.fieldType = fieldType;
 		this.fieldId = fieldId;
 	}
 
@@ -105,12 +106,13 @@ public class InternalField {
 
 	public void setFieldIndex(int i) {
 		fieldIndex = i;
-		
+
 	}
 
 	public InternalField cloneInternalField() {
 		FieldDescription copyFldDesc = fieldDesc.cloneField();
-		InternalField newFld = new InternalField(copyFldDesc, fieldType, new Integer(fieldId.intValue()));
+		InternalField newFld = new InternalField(copyFldDesc, fieldType,
+				new Integer(fieldId.intValue()));
 		newFld.setFieldIndex(fieldIndex);
 		return newFld;
 	}

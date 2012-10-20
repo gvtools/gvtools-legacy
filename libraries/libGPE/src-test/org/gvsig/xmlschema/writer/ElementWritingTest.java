@@ -72,21 +72,21 @@ import org.gvsig.xmlschema.som.IXSElementDeclaration;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class ElementWritingTest extends WriterBaseTest{
+public class ElementWritingTest extends WriterBaseTest {
 	private String elementName1 = "river";
 	private String elementType1 = "river_type";
-	
+
 	public void readSchema() {
-		IXSElementDeclaration element = getSchema().getElementDeclarationByName(getNamespaceURI(), elementName1);
+		IXSElementDeclaration element = getSchema()
+				.getElementDeclarationByName(getNamespaceURI(), elementName1);
 		assertNotNull(element);
 		assertEquals(element.getQName().getLocalPart(), elementName1);
-		assertEquals(element.getTypeName(), getSchema().getTargetNamespacePrefix() + ":" + elementType1);
+		assertEquals(element.getTypeName(), getSchema()
+				.getTargetNamespacePrefix() + ":" + elementType1);
 	}
 
 	public void writeSchema() {
-		getSchema().addElement( 
-				elementName1,
-				elementType1);							
+		getSchema().addElement(elementName1, elementType1);
 	}
 
 }

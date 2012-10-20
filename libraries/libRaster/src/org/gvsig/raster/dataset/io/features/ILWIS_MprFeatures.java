@@ -20,12 +20,13 @@ package org.gvsig.raster.dataset.io.features;
 
 import org.gvsig.raster.dataset.io.GdalDriver;
 import org.gvsig.raster.dataset.io.GdalWriter;
+
 /**
- * Caracteristicas del formato ILWIS para escritura.
- * Soporta tipos de datos enteros en 8, 16 y 32 bits y coma flotante en 32 y 64 bits
- * Genera un fichero .mpl con la información de contenido (ficheros), un fichero .grf con la
- * georreferenciación, y dos ficheros por banda. Un .mpr con la información referente a los
- * datos de la banda y un .mp# con los datos de la banda
+ * Caracteristicas del formato ILWIS para escritura. Soporta tipos de datos
+ * enteros en 8, 16 y 32 bits y coma flotante en 32 y 64 bits Genera un fichero
+ * .mpl con la información de contenido (ficheros), un fichero .grf con la
+ * georreferenciación, y dos ficheros por banda. Un .mpr con la información
+ * referente a los datos de la banda y un .mp# con los datos de la banda
  * 
  * @version 04/06/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
@@ -33,7 +34,8 @@ import org.gvsig.raster.dataset.io.GdalWriter;
 public class ILWIS_MprFeatures extends WriteFileFormatFeatures {
 
 	public ILWIS_MprFeatures() {
-		super(GdalDriver.FORMAT_ILWIS, "mpl", new int[] { -1 }, new int[] { 0, 1, 2, 3, 4, 5 }, GdalWriter.class);
+		super(GdalDriver.FORMAT_ILWIS, "mpl", new int[] { -1 }, new int[] { 0,
+				1, 2, 3, 4, 5 }, GdalWriter.class);
 	}
 
 	/**

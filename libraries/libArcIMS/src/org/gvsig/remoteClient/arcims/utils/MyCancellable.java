@@ -43,25 +43,24 @@
 
 package org.gvsig.remoteClient.arcims.utils;
 
-import com.iver.utiles.swing.threads.Cancellable;
-
 import org.gvsig.remoteClient.wms.ICancellable;
 
+import com.iver.utiles.swing.threads.Cancellable;
 
 public class MyCancellable implements ICancellable {
-    private Cancellable original;
+	private Cancellable original;
 
-    public MyCancellable(Cancellable cancelOriginal) {
-        this.original = cancelOriginal;
-    }
+	public MyCancellable(Cancellable cancelOriginal) {
+		this.original = cancelOriginal;
+	}
 
-    public boolean isCanceled() {
-        return original.isCanceled();
-    }
+	public boolean isCanceled() {
+		return original.isCanceled();
+	}
 
 	public Object getID() {
 		// TODO Auto-generated method stub
 		throw new Error("not yet implemented");
-//		return null;
+		// return null;
 	}
 }

@@ -39,25 +39,26 @@ import org.gvsig.raster.dataset.RasterDataset;
  * Test para salvar un raster a tif variando sus parámetros.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
 public class TestGdalWriter extends TestCase {
-	
+
 	private String baseDir = "./test-images/";
-	private String path1 = baseDir + "03AUG23153350-M2AS-000000122423_01_P001-BROWSE.jpg";
+	private String path1 = baseDir
+			+ "03AUG23153350-M2AS-000000122423_01_P001-BROWSE.jpg";
 	private String out = baseDir + "testGdalWriter";
 	private IBuffer buf = null;
 	private RasterDataset d = null;
-	
+
 	public void start() {
 		this.setUp();
 		this.testStack();
 	}
-	
+
 	static {
 		RasterLibrary.wakeUp();
 	}
-	
+
 	public void setUp() {
 		System.err.println("TestGdalWriter running...");
 		try {
@@ -68,7 +69,7 @@ public class TestGdalWriter extends TestCase {
 			e.printStackTrace();
 		}
 		BufferFactory bf = new BufferFactory(d);
-		bf.setDrawableBands(new int[]{0, 1, 2}); 
+		bf.setDrawableBands(new int[] { 0, 1, 2 });
 		try {
 			bf.setAreaOfInterest(0, 0, d.getWidth(), d.getHeight());
 		} catch (InvalidSetViewException e) {
@@ -80,8 +81,8 @@ public class TestGdalWriter extends TestCase {
 		}
 		buf = bf.getRasterBuf();
 	}
-	
-	public void testStack(){
+
+	public void testStack() {
 		try {
 			File f = new File(out + ".tif");
 			f.delete();
@@ -94,34 +95,32 @@ public class TestGdalWriter extends TestCase {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
-	 * Función para pruebas.
-	 * Convierte los ficheros generados por la función cachear en ficheros tif para comprobar que están
-	 * bien generados.
+	 * Función para pruebas. Convierte los ficheros generados por la función
+	 * cachear en ficheros tif para comprobar que están bien generados.
+	 * 
 	 * @param grf
 	 * @param pageBuffer
 	 * @param pageLines
 	 * @throws IOException
 	 */
-	private void convertBufferToTif(String fileName, AffineTransform at, IBuffer buffer)throws IOException, InterruptedException {
+	private void convertBufferToTif(String fileName, AffineTransform at,
+			IBuffer buffer) throws IOException, InterruptedException {
 		IDataWriter dataWriter1 = new WriterBufferServer(buffer);
 		GeoRasterWriter grw = null;
 		try {
 			Params params = GeoRasterWriter.getWriter(fileName).getParams();
-			params.changeParamValue("blocksize", "7");//posición 7 del array -> 512
+			params.changeParamValue("blocksize", "7");// posición 7 del array ->
+														// 512
 			params.changeParamValue("tfw", "true");
-			params.changeParamValue("interleave", new Integer(1));//posición 1 del array -> PIXEL
-			grw = GeoRasterWriter.getWriter(dataWriter1, 
-											fileName,
-											buffer.getBandCount(),
-											at,
-											buffer.getWidth(), 
-											buffer.getHeight(), 
-											buffer.getDataType(),
-											params,
-											null);
-			
+			params.changeParamValue("interleave", new Integer(1));// posición 1
+																	// del array
+																	// -> PIXEL
+			grw = GeoRasterWriter.getWriter(dataWriter1, fileName,
+					buffer.getBandCount(), at, buffer.getWidth(),
+					buffer.getHeight(), buffer.getDataType(), params, null);
+
 		} catch (NotSupportedExtensionException e) {
 			e.printStackTrace();
 		} catch (RasterDriverException e) {

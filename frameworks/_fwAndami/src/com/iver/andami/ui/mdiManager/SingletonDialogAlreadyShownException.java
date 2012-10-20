@@ -41,12 +41,10 @@
 package com.iver.andami.ui.mdiManager;
 
 /**
- * Excepción lanzada cuando un Dialogo modal intenta
- * mostrar una vista singleton que ya ha sido mostrada. Esto
- * obligaría a traerla al frente y debido a que el que
- * intenta la acción es un diálogo modal, se aborta mediante
- * esta excepción.
- *
+ * Excepción lanzada cuando un Dialogo modal intenta mostrar una vista singleton
+ * que ya ha sido mostrada. Esto obligaría a traerla al frente y debido a que el
+ * que intenta la acción es un diálogo modal, se aborta mediante esta excepción.
+ * 
  * @author Fernando González Cortés
  */
 public class SingletonDialogAlreadyShownException extends RuntimeException {

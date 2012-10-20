@@ -44,34 +44,51 @@
 package com.iver.utiles;
 
 /**
- * <p>Any object that needs store its data to restore it after, should implement <code>IPersistence</code>.</p>
+ * <p>
+ * Any object that needs store its data to restore it after, should implement
+ * <code>IPersistence</code>.
+ * </p>
  * 
- * <p>The process of persisting (for instance in a file) the information of an object using XML is named <i>Marshall</i>,
- *  whereas the inverse process in named <i>Unmarshall</i>.</p>
- *  
- * <p>It's necessary specify the name of the class that will be persisted or restored.</p>
+ * <p>
+ * The process of persisting (for instance in a file) the information of an
+ * object using XML is named <i>Marshall</i>, whereas the inverse process in
+ * named <i>Unmarshall</i>.
+ * </p>
+ * 
+ * <p>
+ * It's necessary specify the name of the class that will be persisted or
+ * restored.
+ * </p>
  * 
  * @author fjp
  */
 public interface IPersistence {
 	/**
-	 * <p>Gets the class name of the object.</p>
+	 * <p>
+	 * Gets the class name of the object.
+	 * </p>
 	 * 
 	 * @return the class name of the object
 	 */
-    String getClassName();
-    
-    /**
-     * <p>Returns an XML entity with all necessary information of the object to <i>marshall</i>.</p>
-     * 
-     * @return the XML entity with all necessary information of the object
-     */
-    XMLEntity getXMLEntity();
-    
-    /**
-     * <p>Sets an XML entity with all necessary information of the object.</p>
-     * 
-     * @param xml the XML entity with all necessary information of the object
-     */
-    void setXMLEntity(XMLEntity xml);
+	String getClassName();
+
+	/**
+	 * <p>
+	 * Returns an XML entity with all necessary information of the object to
+	 * <i>marshall</i>.
+	 * </p>
+	 * 
+	 * @return the XML entity with all necessary information of the object
+	 */
+	XMLEntity getXMLEntity();
+
+	/**
+	 * <p>
+	 * Sets an XML entity with all necessary information of the object.
+	 * </p>
+	 * 
+	 * @param xml
+	 *            the XML entity with all necessary information of the object
+	 */
+	void setXMLEntity(XMLEntity xml);
 }

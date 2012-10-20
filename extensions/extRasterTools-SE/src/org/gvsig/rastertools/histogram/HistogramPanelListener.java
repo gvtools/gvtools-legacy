@@ -1,21 +1,21 @@
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
-*
-* Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License
-* as published by the Free Software Foundation; either version 2
-* of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
-*/
+ *
+ * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
+ */
 package org.gvsig.rastertools.histogram;
 
 import java.awt.Color;
@@ -65,53 +65,47 @@ import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.project.ProjectFactory;
 import com.iver.cit.gvsig.project.documents.table.ProjectTable;
 import com.iver.cit.gvsig.project.documents.table.gui.Table;
+
 /**
  * Listener para eventos del panel de histograma
- *
+ * 
  * @version 20/03/2007
  * @author Nacho Brodin (brodin_ign@gva.es)
  * @author BorSanZa - Borja Sanchez Zamorano (borja.sanchez@iver.es)
  */
-public class HistogramPanelListener implements GraphicListener, ActionListener, PropertyChangeListener, IProcessActions {
-	private HistogramPanel histogramPanel    = null;
+public class HistogramPanelListener implements GraphicListener, ActionListener,
+		PropertyChangeListener, IProcessActions {
+	private HistogramPanel histogramPanel = null;
 
 	/**
 	 * Variable que apunta a uno de los dos histogramas posibles: Real o RGB
 	 */
-	private Histogram      lastHistogram     = null;
+	private Histogram lastHistogram = null;
 
 	/**
 	 * Histograma original sin convertir a RGB
 	 */
-	private Histogram      lastHistogramReal = null;
+	private Histogram lastHistogramReal = null;
 
 	/**
 	 * Histograma convertido a rango RGB
 	 */
-	private Histogram      lastHistogramRGB  = null;
+	private Histogram lastHistogramRGB = null;
 
-	public boolean         eventsEnabled     = false;
+	public boolean eventsEnabled = false;
 
 	/**
-	 * Bandas que se están mostrando en el gráfico. Se inicializa con las 3 bandas
-	 * RGB de la visualización. Este array puede tener más elementos ya que si las
-	 * bandas no son de visualización (bandas de la imagen en disco) tendrá un
-	 * elemento por cada una.
+	 * Bandas que se están mostrando en el gráfico. Se inicializa con las 3
+	 * bandas RGB de la visualización. Este array puede tener más elementos ya
+	 * que si las bandas no son de visualización (bandas de la imagen en disco)
+	 * tendrá un elemento por cada una.
 	 */
-	private boolean[]      showBands         = null;
-	private FLyrRasterSE   lyr               = null;
+	private boolean[] showBands = null;
+	private FLyrRasterSE lyr = null;
 
-	private Color[]						bandsColor     = {
-			Color.red,
-			Color.green,
-			Color.blue,
-			Color.cyan,
-			Color.black,
-			Color.darkGray,
-			Color.gray,
-			Color.magenta,
-			Color.yellow,
-			Color.orange};
+	private Color[] bandsColor = { Color.red, Color.green, Color.blue,
+			Color.cyan, Color.black, Color.darkGray, Color.gray, Color.magenta,
+			Color.yellow, Color.orange };
 
 	/**
 	 * Guardamos el histogramable para hacer el histogramProcess
@@ -120,7 +114,9 @@ public class HistogramPanelListener implements GraphicListener, ActionListener, 
 
 	/**
 	 * Constructor. Asigna el panel del histograma
-	 * @param p Panel
+	 * 
+	 * @param p
+	 *            Panel
 	 */
 	public HistogramPanelListener(HistogramPanel histogramPanel) {
 		this.histogramPanel = histogramPanel;
@@ -128,6 +124,7 @@ public class HistogramPanelListener implements GraphicListener, ActionListener, 
 
 	/**
 	 * Obtiene el panel del histograma
+	 * 
 	 * @return HistogramPanel
 	 */
 	private HistogramPanel getHistogramPanel() {
@@ -135,9 +132,11 @@ public class HistogramPanelListener implements GraphicListener, ActionListener, 
 	}
 
 	/**
-	 * Asigna la capa para obtener las fuentes de datos tanto del
-	 * datasource como de la visualización.
-	 * @param lyr Capa
+	 * Asigna la capa para obtener las fuentes de datos tanto del datasource
+	 * como de la visualización.
+	 * 
+	 * @param lyr
+	 *            Capa
 	 */
 	public void setLayer(FLyrRasterSE lyr) {
 		this.lyr = lyr;
@@ -159,14 +158,16 @@ public class HistogramPanelListener implements GraphicListener, ActionListener, 
 		double first = getHistogramPanel().getGraphicContainer().getX1();
 		double end = getHistogramPanel().getGraphicContainer().getX2();
 
-		getHistogramPanel().setStatistic(getLastHistogram().getBasicStats(first, end, showBands));
+		getHistogramPanel().setStatistic(
+				getLastHistogram().getBasicStats(first, end, showBands));
 	}
 
 	/**
 	 * Tratamiento de todos los eventos visuales.
 	 */
 	public void actionPerformed(ActionEvent e) {
-		if (!eventsEnabled) return;
+		if (!eventsEnabled)
+			return;
 
 		// Boton de desmarcar todas las bandas
 		if (e.getSource() == getHistogramPanel().getButtonClean()) {
@@ -188,20 +189,25 @@ public class HistogramPanelListener implements GraphicListener, ActionListener, 
 			return;
 		}
 
-		//--------------------------------------
-		//Selección de fuente de datos del histograma
+		// --------------------------------------
+		// Selección de fuente de datos del histograma
 		JComboBox cbo = getHistogramPanel().getComboBoxSource();
 		if (e.getSource() == cbo) {
 			ArrayList comboSource = getHistogramPanel().getComboSource();
 			for (int i = 0; i < comboSource.size(); i++) {
 				String name = (String) ((ArrayList) comboSource.get(i)).get(1);
-				if (name.compareTo(RasterToolsUtil.getText(this, "datos_visualizados")) == 0) {
+				if (name.compareTo(RasterToolsUtil.getText(this,
+						"datos_visualizados")) == 0) {
 					((ArrayList) comboSource.get(i)).remove(0);
-					((ArrayList) comboSource.get(i)).add(0, ((FLyrRasterSE) lyr).getRender().getLastRenderBuffer());
+					((ArrayList) comboSource.get(i)).add(0,
+							((FLyrRasterSE) lyr).getRender()
+									.getLastRenderBuffer());
 				}
-				if (name.compareTo(RasterToolsUtil.getText(this, "imagen_completa")) == 0) {
+				if (name.compareTo(RasterToolsUtil.getText(this,
+						"imagen_completa")) == 0) {
 					((ArrayList) comboSource.get(i)).remove(0);
-					((ArrayList) comboSource.get(i)).add(0, ((FLyrRasterSE) lyr).getDataSource());
+					((ArrayList) comboSource.get(i)).add(0,
+							((FLyrRasterSE) lyr).getDataSource());
 				}
 			}
 			showHistogram();
@@ -222,23 +228,29 @@ public class HistogramPanelListener implements GraphicListener, ActionListener, 
 			return;
 		}
 
-		//--------------------------------------
-		//Selección de histograma acumulado y no acumulado
+		// --------------------------------------
+		// Selección de histograma acumulado y no acumulado
 		JComboBox cbt = getHistogramPanel().getComboBoxType();
 		if (e.getSource() == cbt) {
-			getHistogramPanel().getGraphicContainer().getPGraphic().setViewType(getHistogramPanel().getComboBoxType().getSelectedIndex());
+			getHistogramPanel()
+					.getGraphicContainer()
+					.getPGraphic()
+					.setViewType(
+							getHistogramPanel().getComboBoxType()
+									.getSelectedIndex());
 			return;
 		}
 
-		//--------------------------------------
+		// --------------------------------------
 		// Boton Crear Tabla
 		JButton table = getHistogramPanel().getBCreateTable();
 		if (e.getSource() == table) {
 			try {
-//	        	-------Mostrar un fileChooser------------------
+				// -------Mostrar un fileChooser------------------
 				String fName;
 				JFileChooser chooser = new JFileChooser();
-				chooser.setDialogTitle(RasterToolsUtil.getText(this, "guardar_tabla"));
+				chooser.setDialogTitle(RasterToolsUtil.getText(this,
+						"guardar_tabla"));
 
 				int returnVal = chooser.showOpenDialog(getHistogramPanel());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -246,41 +258,45 @@ public class HistogramPanelListener implements GraphicListener, ActionListener, 
 					if (!fName.endsWith(".dbf"))
 						fName += ".dbf";
 
-					//-------------Crear el dbf----------------------
+					// -------------Crear el dbf----------------------
 
 					DbaseFileWriterNIO dbfWrite = null;
 					DbaseFileHeaderNIO myHeader;
 					Value[] record;
 
-					HistogramClass[][] histogram = getLastHistogram().getHistogram();
+					HistogramClass[][] histogram = getLastHistogram()
+							.getHistogram();
 					int numBands = histogram.length;
 					int numRecors = histogram[0].length;
 
 					File file = new File(fName);
 
-					String names[] = new String[numBands+1];
-					int types[] = new int [numBands+1];
-					int lengths[] = new int [numBands+1];
+					String names[] = new String[numBands + 1];
+					int types[] = new int[numBands + 1];
+					int lengths[] = new int[numBands + 1];
 
-					names[0]="Value";
-					types[0]=4;
-					lengths[0]=15;
-					for (int band = 0; band < numBands; band++){
-						names[band+1]="Band"+band;
-						types[band+1]=4;
-						lengths[band+1]=15;
+					names[0] = "Value";
+					types[0] = 4;
+					lengths[0] = 15;
+					for (int band = 0; band < numBands; band++) {
+						names[band + 1] = "Band" + band;
+						types[band + 1] = 4;
+						lengths[band + 1] = 15;
 					}
 
-					myHeader = DbaseFileHeaderNIO.createDbaseHeader(names,types,lengths);
+					myHeader = DbaseFileHeaderNIO.createDbaseHeader(names,
+							types, lengths);
 
 					myHeader.setNumRecords(numRecors);
-					dbfWrite = new DbaseFileWriterNIO(myHeader, (FileChannel) getWriteChannel(file.getPath()));
-					record = new Value[numBands+1];
+					dbfWrite = new DbaseFileWriterNIO(myHeader,
+							(FileChannel) getWriteChannel(file.getPath()));
+					record = new Value[numBands + 1];
 
 					for (int j = 0; j < numRecors; j++) {
 						record[0] = ValueFactory.createValue(j);
 						for (int r = 0; r < numBands; r++) {
-							record[r+1] = ValueFactory.createValue(histogram[r][j].getValue());
+							record[r + 1] = ValueFactory
+									.createValue(histogram[r][j].getValue());
 						}
 
 						dbfWrite.write(record);
@@ -288,33 +304,59 @@ public class HistogramPanelListener implements GraphicListener, ActionListener, 
 
 					dbfWrite.close();
 
-					//------------Añadir el dbf al proyecto--------------
-					ProjectExtension ext = (ProjectExtension) PluginServices.getExtension(ProjectExtension.class);
+					// ------------Añadir el dbf al proyecto--------------
+					ProjectExtension ext = (ProjectExtension) PluginServices
+							.getExtension(ProjectExtension.class);
 					String name = file.getName();
-					LayerFactory.getDataSourceFactory().addFileDataSource("gdbms dbf driver", name, fName);
+					LayerFactory.getDataSourceFactory().addFileDataSource(
+							"gdbms dbf driver", name, fName);
 					DataSource dataSource;
-					dataSource = LayerFactory.getDataSourceFactory().createRandomDataSource(name, DataSourceFactory.AUTOMATIC_OPENING);
+					dataSource = LayerFactory.getDataSourceFactory()
+							.createRandomDataSource(name,
+									DataSourceFactory.AUTOMATIC_OPENING);
 
-					SelectableDataSource sds = new SelectableDataSource(dataSource);
-					EditableAdapter auxea=new EditableAdapter();
+					SelectableDataSource sds = new SelectableDataSource(
+							dataSource);
+					EditableAdapter auxea = new EditableAdapter();
 					auxea.setOriginalDataSource(sds);
-					ProjectTable projectTable = ProjectFactory.createTable(name, auxea);
-					//ext.getProject().addTable(projectTable);
+					ProjectTable projectTable = ProjectFactory.createTable(
+							name, auxea);
+					// ext.getProject().addTable(projectTable);
 					ext.getProject().addDocument(projectTable);
 
 					Table t = new Table();
 					t.setModel(projectTable);
-					//projectTable.setAndamiWindow(t);
+					// projectTable.setAndamiWindow(t);
 					RasterToolsUtil.addWindow(t);
 				}
 			} catch (IOException e1) {
-				JOptionPane.showMessageDialog(null, getHistogramPanel().getName() + " " + RasterToolsUtil.getText(this,"table_not_create"));
+				JOptionPane.showMessageDialog(
+						null,
+						getHistogramPanel().getName()
+								+ " "
+								+ RasterToolsUtil.getText(this,
+										"table_not_create"));
 			} catch (DriverLoadException e1) {
-				JOptionPane.showMessageDialog(null, getHistogramPanel().getName() + " " + RasterToolsUtil.getText(this,"table_not_create"));
+				JOptionPane.showMessageDialog(
+						null,
+						getHistogramPanel().getName()
+								+ " "
+								+ RasterToolsUtil.getText(this,
+										"table_not_create"));
 			} catch (NoSuchTableException e1) {
-				JOptionPane.showMessageDialog(null, getHistogramPanel().getName() + " " + RasterToolsUtil.getText(this,"table_not_create"));
+				JOptionPane.showMessageDialog(
+						null,
+						getHistogramPanel().getName()
+								+ " "
+								+ RasterToolsUtil.getText(this,
+										"table_not_create"));
 			} catch (ReadDriverException e1) {
-				JOptionPane.showMessageDialog(null, getHistogramPanel().getName() + " " + RasterToolsUtil.getText(this,"table_not_create"));
+				JOptionPane.showMessageDialog(
+						null,
+						getHistogramPanel().getName()
+								+ " "
+								+ RasterToolsUtil.getText(this,
+										"table_not_create"));
 			}
 		}
 	}
@@ -333,15 +375,17 @@ public class HistogramPanelListener implements GraphicListener, ActionListener, 
 	}
 
 	/**
-	 * Lanza los dos threads para procesar el histograma y visualizar la
-	 * ventana de incremento
+	 * Lanza los dos threads para procesar el histograma y visualizar la ventana
+	 * de incremento
 	 */
 	public void showHistogram() {
 		if (getHistogramPanel().getComboBoxSource().getSelectedIndex() < 0)
 			return;
 
-		int dataSrc = getHistogramPanel().getComboBoxSource().getSelectedIndex();
-		histogramable = (IHistogramable) ((ArrayList) getHistogramPanel().getComboSource().get(dataSrc)).get(0);
+		int dataSrc = getHistogramPanel().getComboBoxSource()
+				.getSelectedIndex();
+		histogramable = (IHistogramable) ((ArrayList) getHistogramPanel()
+				.getComboSource().get(dataSrc)).get(0);
 
 		if (getLastHistogram() == null) {
 			try {
@@ -350,7 +394,8 @@ public class HistogramPanelListener implements GraphicListener, ActionListener, 
 				else
 					setNewHistogram(null);
 			} catch (HistogramException e) {
-				RasterToolsUtil.messageBoxError("histogram_error", getHistogramPanel(), e);
+				RasterToolsUtil.messageBoxError("histogram_error",
+						getHistogramPanel(), e);
 				return;
 			} catch (InterruptedException e) {
 
@@ -367,19 +412,21 @@ public class HistogramPanelListener implements GraphicListener, ActionListener, 
 		statisticsProcess.addParam("force", Boolean.FALSE);
 		statisticsProcess.start();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.rastertools.IProcessActions#end(java.lang.Object)
 	 */
 	public void end(Object object) {
-		// Si tenemos un histograma en el parametro, es que ya ha finalizado el proceso
+		// Si tenemos un histograma en el parametro, es que ya ha finalizado el
+		// proceso
 		if (object instanceof Histogram) {
 			setNewHistogram((Histogram) object);
 			return;
 		}
 
-		// Si no tenemos un histograma, osease, tenemos un layer, 
+		// Si no tenemos un histograma, osease, tenemos un layer,
 		// es que aun necesitamos calcularlo
 		if (object instanceof FLyrRasterSE) {
 			if (histogramable != null) {
@@ -398,7 +445,8 @@ public class HistogramPanelListener implements GraphicListener, ActionListener, 
 	 */
 	private void updateGraphic() {
 		if (getLastHistogram() == null) {
-			getHistogramPanel().getGraphicContainer().getPGraphic().cleanChart();
+			getHistogramPanel().getGraphicContainer().getPGraphic()
+					.cleanChart();
 			return;
 		}
 
@@ -414,19 +462,21 @@ public class HistogramPanelListener implements GraphicListener, ActionListener, 
 			}
 		}
 
-		// Definimos el principio y final de la grafica, sirve para descartar valores.
+		// Definimos el principio y final de la grafica, sirve para descartar
+		// valores.
 		int first = (int) getHistogramPanel().getBoxValueX1();
 		int end = (int) getHistogramPanel().getBoxValueX2();
-		//first = 0;
-		//end = 100;
+		// first = 0;
+		// end = 100;
 
 		int min = 0;
 		int max = histogramClass[0].length - 1;
 
-		first = min + ((first * (max - min))/ 100);
-		end = min + ((end * (max - min))/ 100);
+		first = min + ((first * (max - min)) / 100);
+		end = min + ((end * (max - min)) / 100);
 
-		// Si hay que eliminar los limites, quitamos el ultimo y primer valor de la grafica
+		// Si hay que eliminar los limites, quitamos el ultimo y primer valor de
+		// la grafica
 		if (getHistogramPanel().getCheckBoxDeleteEdges().isSelected()) {
 			if ((first + 1) <= end)
 				first++;
@@ -451,19 +501,24 @@ public class HistogramPanelListener implements GraphicListener, ActionListener, 
 					newHistogram[numBand][j - first][0] = datos[iBand][j][0];
 					newHistogram[numBand][j - first][1] = datos[iBand][j][1];
 				} catch (ArrayIndexOutOfBoundsException e) {
-					RasterToolsUtil.messageBoxError("Error al crear el array del histograma. DataType: " + getHistogramPanel().getDataType() + " Posición: " + j, this, e);
+					RasterToolsUtil.messageBoxError(
+							"Error al crear el array del histograma. DataType: "
+									+ getHistogramPanel().getDataType()
+									+ " Posición: " + j, this, e);
 				}
 			}
-			bandNames[numBand] = (String) ((DefaultTableModel) getHistogramPanel().getJTableBands().getModel()).getValueAt(iBand, 1);
+			bandNames[numBand] = (String) ((DefaultTableModel) getHistogramPanel()
+					.getJTableBands().getModel()).getValueAt(iBand, 1);
 
-			getHistogramPanel().getGraphicContainer().setBandColor(numBand, bandsColor[iBand % bandsColor.length]);
+			getHistogramPanel().getGraphicContainer().setBandColor(numBand,
+					bandsColor[iBand % bandsColor.length]);
 
 			numBand++;
 		}
 
-		getHistogramPanel().getGraphicContainer().getPGraphic().setNewChart(newHistogram, bandNames);
+		getHistogramPanel().getGraphicContainer().getPGraphic()
+				.setNewChart(newHistogram, bandNames);
 	}
-
 
 	public void selectHistogram() {
 		if (getHistogramPanel().getCheckBoxRGB().isSelected())
@@ -471,16 +526,20 @@ public class HistogramPanelListener implements GraphicListener, ActionListener, 
 		else
 			lastHistogram = lastHistogramReal;
 	}
+
 	/**
 	 * Definir el nuevo histograma, metodo puúblico para ser invocado desde
 	 * histogramProcess
-	 * @param histograma nuevo
+	 * 
+	 * @param histograma
+	 *            nuevo
 	 */
 	public void setNewHistogram(Histogram histogram) {
 		getHistogramPanel().panelInizialited = false;
 		eventsEnabled = false;
 
-		this.lastHistogramReal = histogram;;
+		this.lastHistogramReal = histogram;
+		;
 		this.lastHistogramRGB = Histogram.convertHistogramToRGB(histogram);
 		selectHistogram();
 
@@ -488,13 +547,15 @@ public class HistogramPanelListener implements GraphicListener, ActionListener, 
 		updateStatistic();
 		updateGraphic();
 
-		// Activo la ejecucion de los eventos porque seguro que ya tenemos un histograma
+		// Activo la ejecucion de los eventos porque seguro que ya tenemos un
+		// histograma
 		eventsEnabled = true;
 		getHistogramPanel().panelInizialited = true;
 	}
 
 	/**
 	 * Obtener último histograma
+	 * 
 	 * @return Histogram
 	 */
 	public Histogram getLastHistogram() {
@@ -511,6 +572,7 @@ public class HistogramPanelListener implements GraphicListener, ActionListener, 
 
 	/**
 	 * Proceso para guardar una estadistica en un fichero.
+	 * 
 	 * @param path
 	 * @return
 	 * @throws IOException
@@ -533,18 +595,22 @@ public class HistogramPanelListener implements GraphicListener, ActionListener, 
 	}
 
 	/**
-	 *  Cuando se selecciona/deselecciona una banda
+	 * Cuando se selecciona/deselecciona una banda
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (!eventsEnabled)
 			return;
-		int countRow = ((DefaultTableModel) getHistogramPanel().getJTableBands().getModel()).getRowCount();
+		int countRow = ((DefaultTableModel) getHistogramPanel()
+				.getJTableBands().getModel()).getRowCount();
 		for (int i = 0; i < countRow; i++)
-			showBands[i] = ((Boolean) ((DefaultTableModel) getHistogramPanel().getJTableBands().getModel()).getValueAt(i, 0)).booleanValue();
+			showBands[i] = ((Boolean) ((DefaultTableModel) getHistogramPanel()
+					.getJTableBands().getModel()).getValueAt(i, 0))
+					.booleanValue();
 
 		updateStatistic();
 		updateGraphic();
 	}
 
-	public void interrupted() {}
+	public void interrupted() {
+	}
 }

@@ -34,15 +34,15 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import es.gva.cit.jgdal.Gdal;
 import es.gva.cit.jgdal.GdalDriver;
 import es.gva.cit.jgdal.GdalException;
+
 /**
- * Driver para la escritura de Png.
- * Este driver utiliza GdalWriter para salvar Png. 
- * La escritura de un png no es posible utilizando un servidor de datos 
- * como el que usan los drivers comunes por lo que será necesario salvar antes
- * a Tif con el driver de Gdal para posteriormente convertir la imagen completa
- * a png. El problema que tiene es el mismo del jpg y es que el dataset solo soporta la
- * escritura rw y no rw+.
- *
+ * Driver para la escritura de Png. Este driver utiliza GdalWriter para salvar
+ * Png. La escritura de un png no es posible utilizando un servidor de datos
+ * como el que usan los drivers comunes por lo que será necesario salvar antes a
+ * Tif con el driver de Gdal para posteriormente convertir la imagen completa a
+ * png. El problema que tiene es el mismo del jpg y es que el dataset solo
+ * soporta la escritura rw y no rw+.
+ * 
  * @version 22/07/2008
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
@@ -56,25 +56,29 @@ public class PngWriter extends GeoRasterWriter {
 	}
 
 	private GdalWriter gdalWriter = null;
-	private String     outTif     = null;
-	private String     outPng     = null;
+	private String outTif = null;
+	private String outPng = null;
 
 	/**
 	 * Carga los parámetros de este driver.
 	 */
 	public void loadParams(String ident) {
-		WriteFileFormatFeatures wfff = (WriteFileFormatFeatures) fileFeature.get(ident);
+		WriteFileFormatFeatures wfff = (WriteFileFormatFeatures) fileFeature
+				.get(ident);
 		wfff.loadParams();
 		driverParams = wfff.getParams();
 	}
 
 	/**
 	 * Constructor para la obtención de parámetros del driver
-	 * @param drvType Tipo de driver
+	 * 
+	 * @param drvType
+	 *            Tipo de driver
 	 */
 	public PngWriter(String fileName) {
 		ident = RasterUtilities.getExtensionFromFileName(fileName);
-		driver = ((WriteFileFormatFeatures) fileFeature.get(ident)).getDriverName();
+		driver = ((WriteFileFormatFeatures) fileFeature.get(ident))
+				.getDriverName();
 		gdalWriter = new GdalWriter(fileName);
 
 		loadParams(ident);
@@ -82,31 +86,45 @@ public class PngWriter extends GeoRasterWriter {
 
 	/**
 	 * Constructor para salvar datos servidos por el cliente
-	 * @param dataWriter Objeto servidor de datos para el driver de escritura
-	 * @param outSizeX Número de pixels en X de la imagen de salida
-	 * @param outSizeY Número de pixels en Y de la imagen de salida
-	 * @param outFilename Fichero de salida
-	 * @param extentMaxX Posición en X máxima del extent
-	 * @param extentMinX Posición en X mínima del extent
-	 * @param extentMaxY Posición en Y máxima del extent
-	 * @param extentMinY Posición en Y mínima del extent
-	 * @param nBands Número de bandas
-	 * @param drvType Tipo de driver
+	 * 
+	 * @param dataWriter
+	 *            Objeto servidor de datos para el driver de escritura
+	 * @param outSizeX
+	 *            Número de pixels en X de la imagen de salida
+	 * @param outSizeY
+	 *            Número de pixels en Y de la imagen de salida
+	 * @param outFilename
+	 *            Fichero de salida
+	 * @param extentMaxX
+	 *            Posición en X máxima del extent
+	 * @param extentMinX
+	 *            Posición en X mínima del extent
+	 * @param extentMaxY
+	 *            Posición en Y máxima del extent
+	 * @param extentMinY
+	 *            Posición en Y mínima del extent
+	 * @param nBands
+	 *            Número de bandas
+	 * @param drvType
+	 *            Tipo de driver
 	 * @throws GdalException
 	 * @throws IOException
 	 */
 	public PngWriter(IDataWriter dataWriter, String outFileName,
 			Integer nBands, AffineTransform at, Integer outSizeX,
 			Integer outSizeY, Integer dataType, Params params,
-			CoordinateReferenceSystem crs, Boolean geo) throws GdalException, IOException  {
+			CoordinateReferenceSystem crs, Boolean geo) throws GdalException,
+			IOException {
 		ident = RasterUtilities.getExtensionFromFileName(outFileName);
-		driver = ((WriteFileFormatFeatures) fileFeature.get(ident)).getDriverName();
+		driver = ((WriteFileFormatFeatures) fileFeature.get(ident))
+				.getDriverName();
 		outPng = outFileName;
 		outTif = outFileName.substring(0, outFileName.lastIndexOf("."));
 		outTif += ".tif";
 		this.at = at;
 
-		gdalWriter = new GdalWriter(dataWriter, outTif, nBands, at, outSizeX, outSizeY, dataType, params, crs, geo);
+		gdalWriter = new GdalWriter(dataWriter, outTif, nBands, at, outSizeX,
+				outSizeY, dataType, params, crs, geo);
 		if (params == null)
 			loadParams(ident);
 		else
@@ -115,14 +133,17 @@ public class PngWriter extends GeoRasterWriter {
 
 	/**
 	 * Asigna el tipo de driver con el que se salvará la imagen
-	 * @param drvType Tipo de driver
+	 * 
+	 * @param drvType
+	 *            Tipo de driver
 	 */
 	public void setDriverType(String drvType) {
 		gdalWriter.setDriverType(drvType);
 	}
-	 
-		/**
+
+	/**
 	 * Realiza la función de compresión a partir de un GeoRasterFile.
+	 * 
 	 * @throws IOException
 	 */
 	public void fileWrite() throws IOException, InterruptedException {
@@ -131,19 +152,22 @@ public class PngWriter extends GeoRasterWriter {
 
 	/**
 	 * Realiza una copia en el formato especificado.
+	 * 
 	 * @throws IOException
 	 */
 	public static void createCopy(GdalDriver driverDst, String dst, String src,
-			boolean bstrict, String[] params, CoordinateReferenceSystem crs) throws IOException, GdalException {
+			boolean bstrict, String[] params, CoordinateReferenceSystem crs)
+			throws IOException, GdalException {
 		GdalWriter.createCopy(driverDst, dst, src, bstrict, params, crs);
 	}
 
 	/**
 	 * Realiza la escritura de datos con los datos que le pasa el cliente.
+	 * 
 	 * @throws IOException
 	 */
 	public void dataWrite() throws IOException, InterruptedException {
-		if(colorInterp != null)
+		if (colorInterp != null)
 			gdalWriter.setColorBandsInterpretation(colorInterp.getValues());
 		gdalWriter.dataWrite();
 		if (gdalWriter.isWrite()) {
@@ -152,7 +176,15 @@ public class PngWriter extends GeoRasterWriter {
 				GdalDriver driver = null;
 				try {
 					driver = Gdal.getDriverByName("PNG");
-					GdalWriter.createCopy(driver, outPng, outTif, false, gdalWriter.gdalParamsFromRasterParams(driverParams), null);
+					GdalWriter
+							.createCopy(
+									driver,
+									outPng,
+									outTif,
+									false,
+									gdalWriter
+											.gdalParamsFromRasterParams(driverParams),
+									null);
 				} catch (GdalException exc) {
 					throw new IOException("No se ha podido obtener el driver.");
 				}
@@ -171,21 +203,26 @@ public class PngWriter extends GeoRasterWriter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.dataset.GeoRasterWriter#setParams(org.gvsig.raster.dataset.Params)
+	 * 
+	 * @see
+	 * org.gvsig.raster.dataset.GeoRasterWriter#setParams(org.gvsig.raster.dataset
+	 * .Params)
 	 */
 	public void setParams(Params params) {
 		driverParams = params;
 		if (gdalWriter != null)
 			gdalWriter.setParams(params);
 	}
-		
+
 	/**
 	 * Cierra el compresor ecw.
+	 * 
 	 * @throws GdalException
 	 */
 	public void writeClose() {
-	// El close del tif se hizo en dataWrite
+		// El close del tif se hizo en dataWrite
 	}
 
-	public void setWkt(String wkt) {}
+	public void setWkt(String wkt) {
+	}
 }

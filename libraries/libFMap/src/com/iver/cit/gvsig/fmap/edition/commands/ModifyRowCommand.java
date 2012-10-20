@@ -16,31 +16,40 @@ public class ModifyRowCommand extends AbstractCommand {
 	private IRow rowNext;
 	private int calculatedIndexAnt;
 	private int previousIndexInExpansionFile;
-	private int type=EditionEvent.GRAPHIC;
+	private int type = EditionEvent.GRAPHIC;
+
 	/**
-	 * @param ef IEditableSource
-	 * @param calculatedIndex index of modified row
-	 * @param p previous index in expansion file. -1 if previous is from original data source.
+	 * @param ef
+	 *            IEditableSource
+	 * @param calculatedIndex
+	 *            index of modified row
+	 * @param p
+	 *            previous index in expansion file. -1 if previous is from
+	 *            original data source.
 	 * @param newRow
 	 * @throws IOException
 	 * @throws DriverIOException
 	 */
-	public ModifyRowCommand(EditableAdapter ef,int calculatedIndex,int previousInExpansionFile,IRow newRow,int type){
+	public ModifyRowCommand(EditableAdapter ef, int calculatedIndex,
+			int previousInExpansionFile, IRow newRow, int type) {
 		super();
-		efs=ef;
-		calculatedIndexAnt=calculatedIndex;
-		rowNext=newRow;
-		previousIndexInExpansionFile=previousInExpansionFile;
-		this.type=type;
+		efs = ef;
+		calculatedIndexAnt = calculatedIndex;
+		rowNext = newRow;
+		previousIndexInExpansionFile = previousInExpansionFile;
+		this.type = type;
 	}
+
 	/**
 	 * @throws DriverIOException
 	 * @throws IOException
 	 * @see com.iver.cit.gvsig.fmap.edition.Command#undo()
 	 */
 	public void undo() throws EditionCommandException {
-		previousIndexInExpansionFile=efs.undoModifyRow(calculatedIndexAnt,previousIndexInExpansionFile,type);
+		previousIndexInExpansionFile = efs.undoModifyRow(calculatedIndexAnt,
+				previousIndexInExpansionFile, type);
 	}
+
 	/**
 	 * @throws DriverIOException
 	 * @throws IOException
@@ -48,13 +57,15 @@ public class ModifyRowCommand extends AbstractCommand {
 	 */
 	public void redo() throws EditionCommandException {
 		try {
-			previousIndexInExpansionFile=efs.doModifyRow(calculatedIndexAnt,rowNext,type);
+			previousIndexInExpansionFile = efs.doModifyRow(calculatedIndexAnt,
+					rowNext, type);
 		} catch (ExpansionFileWriteException e) {
-			throw new EditionCommandException(efs.getWriter().getName(),e);
+			throw new EditionCommandException(efs.getWriter().getName(), e);
 		} catch (ReadDriverException e) {
-			throw new EditionCommandException(efs.getWriter().getName(),e);
+			throw new EditionCommandException(efs.getWriter().getName(), e);
 		}
 	}
+
 	public String getType() {
 		return "Modify";
 	}

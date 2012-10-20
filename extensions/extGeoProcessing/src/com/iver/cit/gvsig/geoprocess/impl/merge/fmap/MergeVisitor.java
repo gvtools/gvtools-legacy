@@ -42,38 +42,38 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: MergeVisitor.java 10626 2007-03-06 16:55:54Z caballero $
-* $Log$
-* Revision 1.2  2007-03-06 16:47:58  caballero
-* Exceptions
-*
-* Revision 1.1  2006/06/20 18:20:45  azabala
-* first version in cvs
-*
-* Revision 1.2  2006/06/02 18:21:28  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/05/24 21:10:15  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.5  2006/03/23 21:05:11  azabala
-* *** empty log message ***
-*
-* Revision 1.4  2006/03/17 19:53:34  azabala
-* *** empty log message ***
-*
-* Revision 1.3  2006/03/14 18:32:46  fjp
-* Cambio con LayerDefinition para que sea compatible con la definición de tablas también.
-*
-* Revision 1.2  2006/03/07 21:01:33  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/03/05 19:59:16  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: MergeVisitor.java 10626 2007-03-06 16:55:54Z caballero $
+ * $Log$
+ * Revision 1.2  2007-03-06 16:47:58  caballero
+ * Exceptions
+ *
+ * Revision 1.1  2006/06/20 18:20:45  azabala
+ * first version in cvs
+ *
+ * Revision 1.2  2006/06/02 18:21:28  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/05/24 21:10:15  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.5  2006/03/23 21:05:11  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.4  2006/03/17 19:53:34  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.3  2006/03/14 18:32:46  fjp
+ * Cambio con LayerDefinition para que sea compatible con la definición de tablas también.
+ *
+ * Revision 1.2  2006/03/07 21:01:33  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/03/05 19:59:16  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.merge.fmap;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -95,12 +95,11 @@ import com.iver.cit.gvsig.geoprocess.core.fmap.FeatureFactory;
 import com.iver.cit.gvsig.geoprocess.core.fmap.FeatureProcessor;
 
 /**
- * Visits all features of a layer, in context of a
- * merge geoprocess, and creates a new feature with the
- * attributes equals to ITableDefinition specified
- *
+ * Visits all features of a layer, in context of a merge geoprocess, and creates
+ * a new feature with the attributes equals to ITableDefinition specified
+ * 
  * @author azabala
- *
+ * 
  */
 public class MergeVisitor implements FeatureVisitor {
 
@@ -108,38 +107,40 @@ public class MergeVisitor implements FeatureVisitor {
 	ITableDefinition definition;
 	FeatureProcessor featureProcessor;
 
-	public MergeVisitor(ITableDefinition schema,
-			FeatureProcessor processor){
+	public MergeVisitor(ITableDefinition schema, FeatureProcessor processor) {
 		this.definition = schema;
 		this.featureProcessor = processor;
 	}
 
-	public void visit(IGeometry g, int index) throws VisitorException, ProcessVisitorException {
-		if(g == null)
+	public void visit(IGeometry g, int index) throws VisitorException,
+			ProcessVisitorException {
+		if (g == null)
 			return;
-		FieldDescription[] fields =
-			definition.getFieldsDesc();
+		FieldDescription[] fields = definition.getFieldsDesc();
 		Value[] values = new Value[fields.length];
-		for(int i = 0; i < fields.length; i++){
+		for (int i = 0; i < fields.length; i++) {
 			String fieldName = fields[i].getFieldName();
 			try {
 				int fieldIndex = recordset.getFieldIndexByName(fieldName);
-				if(fieldIndex == -1)
+				if (fieldIndex == -1)
 					values[i] = ValueFactory.createNullValue();
-				else{
-					//we must to verify data type, not only field name
+				else {
+					// we must to verify data type, not only field name
 					int fieldType = fields[i].getFieldType();
 					int recordsetType = recordset.getFieldType(fieldIndex);
-					if(fieldType != recordsetType){
+					if (fieldType != recordsetType) {
 						values[i] = ValueFactory.createNullValue();
-					}else{
+					} else {
 						values[i] = recordset.getFieldValue(index, fieldIndex);
 					}
 				}
 			} catch (ReadDriverException e) {
-				throw new ProcessVisitorException(recordset.getName(),e,"Error en merge al tratar de leer el atributo de un feature de una de las capas");
+				throw new ProcessVisitorException(
+						recordset.getName(),
+						e,
+						"Error en merge al tratar de leer el atributo de un feature de una de las capas");
 			}
-		}//for
+		}// for
 		IFeature feature = FeatureFactory.createFeature(values, g);
 		featureProcessor.processFeature(feature);
 	}
@@ -149,9 +150,9 @@ public class MergeVisitor implements FeatureVisitor {
 	}
 
 	public boolean start(FLayer layer) throws StartVisitorException {
-		if(layer instanceof VectorialData && layer instanceof AlphanumericData){
+		if (layer instanceof VectorialData && layer instanceof AlphanumericData) {
 			try {
-				this.recordset = ((AlphanumericData)layer).getRecordset();
+				this.recordset = ((AlphanumericData) layer).getRecordset();
 				this.featureProcessor.start();
 			} catch (ReadDriverException e) {
 				return false;
@@ -166,4 +167,3 @@ public class MergeVisitor implements FeatureVisitor {
 	}
 
 }
-

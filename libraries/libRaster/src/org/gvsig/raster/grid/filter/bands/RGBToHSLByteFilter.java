@@ -22,30 +22,33 @@ import org.gvsig.raster.dataset.IBuffer;
 
 /**
  * Filtro de conversión de datos RGB a HSL para tipo de datos byte.
- *
+ * 
  * @version 06/06/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class RGBToHSLByteFilter extends RGBToHSLFilter {
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.bands.ColorTableFilter#process(int, int)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.bands.ColorTableFilter#process(int,
+	 * int)
 	 */
 	public void process(int col, int line) throws InterruptedException {
 		byte[] value = new byte[3];
-		for (int i = 0; i < renderBands.length; i++) 
+		for (int i = 0; i < renderBands.length; i++)
 			value[i] = raster.getElemByte(line, col, renderBands[i]);
-		
-		double[] hsl = colorConversion.RGBtoHSL(value[0] & 0xff, value[1] & 0xff, value[2] & 0xff);
-		if(out == IBuffer.TYPE_BYTE) {
-			hsl[0] = (int)(255.0 * hsl[0] / 360.0 + 0.5);
+
+		double[] hsl = colorConversion.RGBtoHSL(value[0] & 0xff,
+				value[1] & 0xff, value[2] & 0xff);
+		if (out == IBuffer.TYPE_BYTE) {
+			hsl[0] = (int) (255.0 * hsl[0] / 360.0 + 0.5);
 			hsl[2] = (int) (hsl[2] * 255. + 0.5);
 			hsl[1] = (int) (hsl[1] * 255. + 0.5);
-			
+
 			for (int band = 0; band < 3; band++)
-				value[band] = (byte)(((byte)hsl[band]) & 0xff);
+				value[band] = (byte) (((byte) hsl[band]) & 0xff);
 			rasterResult.setElemByte(line, col, value);
-		} else if(out == IBuffer.TYPE_DOUBLE) 
+		} else if (out == IBuffer.TYPE_DOUBLE)
 			rasterResult.setElemDouble(line, col, hsl);
 	}
 }

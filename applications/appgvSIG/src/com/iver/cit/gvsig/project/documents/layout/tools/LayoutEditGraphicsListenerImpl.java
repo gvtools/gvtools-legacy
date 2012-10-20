@@ -45,10 +45,7 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 
-import javax.swing.ImageIcon;
-
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.AddLayer;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
 import com.iver.cit.gvsig.project.documents.layout.FLayoutUtilities;
@@ -57,24 +54,25 @@ import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrameEditableVertex
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.LayoutMoveListener;
 
-
 /**
- * Implementaci�n de la interfaz LayoutMoveListener como herramienta para editar
- * una geometr�a.
- *
+ * Implementaci�n de la interfaz LayoutMoveListener como herramienta para
+ * editar una geometr�a.
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LayoutEditGraphicsListenerImpl implements LayoutMoveListener {
 	public static final Image icrux = PluginServices.getIconTheme()
-		.get("crux-cursor").getImage();
-	private final Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(icrux,
-			new Point(16, 16), "");
+			.get("crux-cursor").getImage();
+	private final Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(
+			icrux, new Point(16, 16), "");
 
 	private Layout layout;
+
 	/**
 	 * Crea un nuevo LayoutSelectionListenerImpl.
-	 *
-	 * @param l Layout.
+	 * 
+	 * @param l
+	 *            Layout.
 	 */
 	public LayoutEditGraphicsListenerImpl(Layout l) {
 		this.layout = l;
@@ -82,18 +80,20 @@ public class LayoutEditGraphicsListenerImpl implements LayoutMoveListener {
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.PanListener#move(java.awt.geom.Point2D,
-	 * 		java.awt.geom.Point2D)
+	 *      java.awt.geom.Point2D)
 	 */
 	public void drag(PointEvent event) {
-		IFFrame[] fframes=layout.getLayoutContext().getFFrames();
-    	for (int i=0;i<fframes.length;i++){
-    		IFFrame frame=fframes[i];
-    		if (frame instanceof IFFrameEditableVertex){
-    			((IFFrameEditableVertex)frame).pointDragged(FLayoutUtilities.toSheetPoint(event.getPoint(),layout.getLayoutControl().getAT()));
-    			//layout.setStatus(Layout.GRAPHICS);
+		IFFrame[] fframes = layout.getLayoutContext().getFFrames();
+		for (int i = 0; i < fframes.length; i++) {
+			IFFrame frame = fframes[i];
+			if (frame instanceof IFFrameEditableVertex) {
+				((IFFrameEditableVertex) frame).pointDragged(FLayoutUtilities
+						.toSheetPoint(event.getPoint(), layout
+								.getLayoutControl().getAT()));
+				// layout.setStatus(Layout.GRAPHICS);
 
-    		}
-    	}
+			}
+		}
 	}
 
 	/**
@@ -102,7 +102,8 @@ public class LayoutEditGraphicsListenerImpl implements LayoutMoveListener {
 	public Image getImageCursor() {
 		return icrux;
 	}
-	public Cursor getCursor(){
+
+	public Cursor getCursor() {
 		return cur;
 	}
 
@@ -114,31 +115,38 @@ public class LayoutEditGraphicsListenerImpl implements LayoutMoveListener {
 	}
 
 	public void press(PointEvent event) throws BehaviorException {
-		IFFrame[] fframes=layout.getLayoutContext().getFFrames();
-    	for (int i=0;i<fframes.length;i++){
-    		IFFrame frame=fframes[i];
-    		if (frame instanceof IFFrameEditableVertex){
-    			((IFFrameEditableVertex)frame).pointPressed(FLayoutUtilities.toSheetPoint(event.getPoint(),layout.getLayoutControl().getAT()));
-    		}
-    	}
+		IFFrame[] fframes = layout.getLayoutContext().getFFrames();
+		for (int i = 0; i < fframes.length; i++) {
+			IFFrame frame = fframes[i];
+			if (frame instanceof IFFrameEditableVertex) {
+				((IFFrameEditableVertex) frame).pointPressed(FLayoutUtilities
+						.toSheetPoint(event.getPoint(), layout
+								.getLayoutControl().getAT()));
+			}
+		}
 	}
 
 	public void release(PointEvent event) throws BehaviorException {
-		IFFrame[] fframes=layout.getLayoutContext().getFFrames();
-    	for (int i=0;i<fframes.length;i++){
-    		IFFrame frame=fframes[i];
-    		if (frame instanceof IFFrameEditableVertex){
-    			if (frame.getSelected()!=IFFrame.NOSELECT && ((IFFrameEditableVertex)frame).isEditing()){
-    				IFFrame fframeAux=frame.cloneFFrame(layout);
-    				((IFFrameEditableVertex)fframeAux).startEditing();
-    				((IFFrameEditableVertex)fframeAux).pointReleased(FLayoutUtilities.toSheetPoint(event.getPoint(),layout.getLayoutControl().getAT()),((IFFrameEditableVertex)frame).getGeometry());
-    				layout.getLayoutContext().getEFS().modifyFFrame(frame,fframeAux);
-    				fframeAux.getBoundingBox(layout.getLayoutControl().getAT());
-    				layout.getLayoutContext().updateFFrames();
-    			}
-    		}
-    	}
-    	layout.getLayoutControl().refresh();
+		IFFrame[] fframes = layout.getLayoutContext().getFFrames();
+		for (int i = 0; i < fframes.length; i++) {
+			IFFrame frame = fframes[i];
+			if (frame instanceof IFFrameEditableVertex) {
+				if (frame.getSelected() != IFFrame.NOSELECT
+						&& ((IFFrameEditableVertex) frame).isEditing()) {
+					IFFrame fframeAux = frame.cloneFFrame(layout);
+					((IFFrameEditableVertex) fframeAux).startEditing();
+					((IFFrameEditableVertex) fframeAux).pointReleased(
+							FLayoutUtilities.toSheetPoint(event.getPoint(),
+									layout.getLayoutControl().getAT()),
+							((IFFrameEditableVertex) frame).getGeometry());
+					layout.getLayoutContext().getEFS()
+							.modifyFFrame(frame, fframeAux);
+					fframeAux.getBoundingBox(layout.getLayoutControl().getAT());
+					layout.getLayoutContext().updateFFrames();
+				}
+			}
+		}
+		layout.getLayoutControl().refresh();
 	}
 
 	public void click(PointEvent event) {

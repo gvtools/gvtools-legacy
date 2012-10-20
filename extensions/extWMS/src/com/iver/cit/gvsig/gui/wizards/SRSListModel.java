@@ -46,15 +46,14 @@ import java.util.TreeSet;
 
 import javax.swing.AbstractListModel;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public class SRSListModel extends AbstractListModel {
 	ArrayList srs = new ArrayList();
-	
+
 	public int getSize() {
 		return srs.size();
 	}
@@ -62,112 +61,74 @@ public class SRSListModel extends AbstractListModel {
 	public Object getElementAt(int index) {
 		return srs.get(index);
 	}
-	
+
 	public void setAll(Collection c) {
-		
+
 		srs.clear();
 		srs.addAll(c);
 	}
-	
+
 	public Collection intersect(Collection c) {
 		TreeSet resul = new TreeSet();
-    	for (int i = 0; i < srs.size(); i++) {
+		for (int i = 0; i < srs.size(); i++) {
 			if (c.contains(srs.get(i)))
 				resul.add(srs.get(i));
 		}
-    	return resul;	
+		return resul;
 	}
-	/*ArrayList comunes = new ArrayList();
-	
-    private HashSet srsSet = new HashSet();
-	private HashMap cuenta = new HashMap();
-	private ArrayList nombresSRS = new ArrayList();
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param srs DOCUMENT ME!
-     * /
-    public void add(String srs) {
-    	System.out.println("Añadiendo " + srs);
-        if (!srsSet.add(srs)) {
-            Integer i = (Integer) cuenta.get(srs);
-            cuenta.put(srs, new Integer(i.intValue() + 1));
-            System.out.println("Ya había, llevamos " + i.intValue() + 1);
-        } else {
-			nombresSRS.add(srs);
-            cuenta.put(srs, new Integer(1));
-			fireContentsChanged(this, nombresSRS.size()-1,nombresSRS.size()-1);
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param srs DOCUMENT ME!
-     * /
-    public void del(String srs) {
-    	System.out.println("Eliminando SRS: "+ srs);
-        Integer i = (Integer) cuenta.get(srs);
-
-        if (i == null) {
-        	System.out.println("Eliminando un elemento que no estaba");
-            return;
-        }
-
-        int nuevo = i.intValue() - 1;
-
-		System.out.println("quedan " + nuevo);
-		
-        if (nuevo == 0) {
-            cuenta.remove(srs);
-            srsSet.remove(srs);
-            nombresSRS.remove(srs);
-			fireContentsChanged(this, 0,nombresSRS.size()-1);
-        } else {
-            cuenta.put(srs, new Integer(nuevo));
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return
-     * /
-    public Iterator iterator() {
-        return srsSet.iterator();
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return
-     * /
-    public int size() {
-        return srsSet.size();
-    }
-
-	/**
-	 * @see javax.swing.ListModel#getSize()
-	 * /
-	public int getSize() {
-		return nombresSRS.size();
-	}
-
-	/**
-	 * @see javax.swing.ListModel#getElementAt(int)
-	 * /
-	public Object getElementAt(int index) {
-		return nombresSRS.get(index);
-	}
-	
-	public ArrayList intersect(Collection col) {
-    	ArrayList resul = new ArrayList();
-    	for (int i = 0; i < nombresSRS.size(); i++) {
-			if (col.contains(nombresSRS.get(i)))
-				resul.add(nombresSRS.get(i));
-		}
-    	return resul;
-    }
-    */
+	/*
+	 * ArrayList comunes = new ArrayList();
+	 * 
+	 * private HashSet srsSet = new HashSet(); private HashMap cuenta = new
+	 * HashMap(); private ArrayList nombresSRS = new ArrayList();
+	 * 
+	 * /** DOCUMENT ME!
+	 * 
+	 * @param srs DOCUMENT ME! / public void add(String srs) {
+	 * System.out.println("Añadiendo " + srs); if (!srsSet.add(srs)) { Integer i
+	 * = (Integer) cuenta.get(srs); cuenta.put(srs, new Integer(i.intValue() +
+	 * 1)); System.out.println("Ya había, llevamos " + i.intValue() + 1); } else
+	 * { nombresSRS.add(srs); cuenta.put(srs, new Integer(1));
+	 * fireContentsChanged(this, nombresSRS.size()-1,nombresSRS.size()-1); } }
+	 * 
+	 * /** DOCUMENT ME!
+	 * 
+	 * @param srs DOCUMENT ME! / public void del(String srs) {
+	 * System.out.println("Eliminando SRS: "+ srs); Integer i = (Integer)
+	 * cuenta.get(srs);
+	 * 
+	 * if (i == null) {
+	 * System.out.println("Eliminando un elemento que no estaba"); return; }
+	 * 
+	 * int nuevo = i.intValue() - 1;
+	 * 
+	 * System.out.println("quedan " + nuevo);
+	 * 
+	 * if (nuevo == 0) { cuenta.remove(srs); srsSet.remove(srs);
+	 * nombresSRS.remove(srs); fireContentsChanged(this, 0,nombresSRS.size()-1);
+	 * } else { cuenta.put(srs, new Integer(nuevo)); } }
+	 * 
+	 * /** DOCUMENT ME!
+	 * 
+	 * @return / public Iterator iterator() { return srsSet.iterator(); }
+	 * 
+	 * /** DOCUMENT ME!
+	 * 
+	 * @return / public int size() { return srsSet.size(); }
+	 * 
+	 * /**
+	 * 
+	 * @see javax.swing.ListModel#getSize() / public int getSize() { return
+	 * nombresSRS.size(); }
+	 * 
+	 * /**
+	 * 
+	 * @see javax.swing.ListModel#getElementAt(int) / public Object
+	 * getElementAt(int index) { return nombresSRS.get(index); }
+	 * 
+	 * public ArrayList intersect(Collection col) { ArrayList resul = new
+	 * ArrayList(); for (int i = 0; i < nombresSRS.size(); i++) { if
+	 * (col.contains(nombresSRS.get(i))) resul.add(nombresSRS.get(i)); } return
+	 * resul; }
+	 */
 }

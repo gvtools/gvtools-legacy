@@ -53,19 +53,26 @@ import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener;
 
-
 /**
- * <p>When user is working with a tool on a {@link MapControl MapControl} instance, <code>Behavior</code> defines
- *  the basic ways of interacting: selecting a point, a circle, a rectangle, or ...</p>
- *
- * <p>All events generated will be <code>MouseEvent</code>, and will depend on the nature of the
- *  <i>behavior</i>, like the kind of tool for applying the changes.</p>
+ * <p>
+ * When user is working with a tool on a {@link MapControl MapControl} instance,
+ * <code>Behavior</code> defines the basic ways of interacting: selecting a
+ * point, a circle, a rectangle, or ...
+ * </p>
  * 
- * <p><code>Behavior</code> defines the common and basic functionality for all kinds of interacting ways
- *  with the <code>MapControl</code> object.</p>
- *
+ * <p>
+ * All events generated will be <code>MouseEvent</code>, and will depend on the
+ * nature of the <i>behavior</i>, like the kind of tool for applying the
+ * changes.
+ * </p>
+ * 
+ * <p>
+ * <code>Behavior</code> defines the common and basic functionality for all
+ * kinds of interacting ways with the <code>MapControl</code> object.
+ * </p>
+ * 
  * @see IBehavior
- *
+ * 
  * @author Luis W. Sevilla
  */
 public abstract class Behavior implements IBehavior {
@@ -77,18 +84,22 @@ public abstract class Behavior implements IBehavior {
 	 */
 	private MapControl mapControl;
 
-	/* 
+	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.IBehavior#getListener()
 	 */
 	public abstract ToolListener getListener();
 
 	/*
-	 * <p>Draws as much of the associated <code>MapControl</code> image as is currently available. The image
-	 *  is drawn with its top-left corner at (0, 0) in this graphics context's coordinate space. Transparent
-	 *  pixels in the image do not affect whatever pixels are already there.</p>
+	 * <p>Draws as much of the associated <code>MapControl</code> image as is
+	 * currently available. The image is drawn with its top-left corner at (0,
+	 * 0) in this graphics context's coordinate space. Transparent pixels in the
+	 * image do not affect whatever pixels are already there.</p>
 	 * 
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.IBehavior#paintComponent(java.awt.Graphics)
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.IBehavior#paintComponent(java.
+	 * awt.Graphics)
 	 */
 	public void paintComponent(Graphics g) {
 		BufferedImage img = getMapControl().getImage();
@@ -98,71 +109,111 @@ public abstract class Behavior implements IBehavior {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.IBehavior#setMapControl(com.iver.cit.gvsig.fmap.MapControl)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.IBehavior#setMapControl(com.iver
+	 * .cit.gvsig.fmap.MapControl)
 	 */
 	public void setMapControl(MapControl mc) {
 		mapControl = mc;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.IBehavior#getCursor()
 	 */
 	public Cursor getCursor() {
 		return getListener().getCursor();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.IBehavior#getMapControl()
 	 */
 	public MapControl getMapControl() {
 		return mapControl;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.IBehavior#mouseClicked(java.awt.event.MouseEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.IBehavior#mouseClicked(java.awt
+	 * .event.MouseEvent)
 	 */
 	public void mouseClicked(MouseEvent e) throws BehaviorException {
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.IBehavior#mouseEntered(java.awt.event.MouseEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.IBehavior#mouseEntered(java.awt
+	 * .event.MouseEvent)
 	 */
 	public void mouseEntered(MouseEvent e) throws BehaviorException {
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.IBehavior#mouseExited(java.awt.event.MouseEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.IBehavior#mouseExited(java.awt
+	 * .event.MouseEvent)
 	 */
 	public void mouseExited(MouseEvent e) throws BehaviorException {
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.IBehavior#mousePressed(java.awt.event.MouseEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.IBehavior#mousePressed(java.awt
+	 * .event.MouseEvent)
 	 */
 	public void mousePressed(MouseEvent e) throws BehaviorException {
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.IBehavior#mouseReleased(java.awt.event.MouseEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.IBehavior#mouseReleased(java.awt
+	 * .event.MouseEvent)
 	 */
 	public void mouseReleased(MouseEvent e) throws BehaviorException {
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.IBehavior#mouseDragged(java.awt.event.MouseEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.IBehavior#mouseDragged(java.awt
+	 * .event.MouseEvent)
 	 */
 	public void mouseDragged(MouseEvent e) throws BehaviorException {
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.IBehavior#mouseMoved(java.awt.event.MouseEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.IBehavior#mouseMoved(java.awt.
+	 * event.MouseEvent)
 	 */
 	public void mouseMoved(MouseEvent e) throws BehaviorException {
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.IBehavior#mouseWheelMoved(java.awt.event.MouseWheelEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.IBehavior#mouseWheelMoved(java
+	 * .awt.event.MouseWheelEvent)
 	 */
 	public void mouseWheelMoved(MouseWheelEvent e) throws BehaviorException {
 	}

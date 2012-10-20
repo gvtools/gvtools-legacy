@@ -71,14 +71,14 @@ import com.iver.cit.gvsig.fmap.layers.layerOperations.Selectable;
 import com.iver.utiles.NumberUtilities;
 import com.iver.utiles.XMLEntity;
 
-
 /**
  * DataSource seleccionable.
- *
+ * 
  * @author Fernando González Cortés
  */
-public class SelectableDataSource implements DataSource,Selectable {
-	private static Logger logger = Logger.getLogger(SelectableDataSource.class.getName());
+public class SelectableDataSource implements DataSource, Selectable {
+	private static Logger logger = Logger.getLogger(SelectableDataSource.class
+			.getName());
 	private SelectionSupport selectionSupport = new SelectionSupport();
 	private DataSource dataSource;
 
@@ -87,10 +87,11 @@ public class SelectableDataSource implements DataSource,Selectable {
 
 	/**
 	 * Crea un nuevo SelectableDataSource.
-	 *
+	 * 
 	 * @param name
 	 * @param ds
-	 * @throws ReadDriverException TODO
+	 * @throws ReadDriverException
+	 *             TODO
 	 */
 	public SelectableDataSource(DataSource ds) throws ReadDriverException {
 		dataSource = ds;
@@ -98,25 +99,23 @@ public class SelectableDataSource implements DataSource,Selectable {
 		// Creamos el mapping de campos externos que no muestran el PK.
 		mapExternalFields();
 		alias = new String[mapping.length];
-		for (int i=0; i < mapping.length; i++)
-		{
+		for (int i = 0; i < mapping.length; i++) {
 			alias[i] = getFieldName(i);
 		}
-
-
 
 	}
 
 	/**
-	 * Maps real fields or "external" fields. We don't want to see virtual fields.
+	 * Maps real fields or "external" fields. We don't want to see virtual
+	 * fields.
+	 * 
 	 * @throws ReadDriverException
 	 */
 	public void mapExternalFields() throws ReadDriverException {
 		int numExternalFields = 0;
-//		this.dataSource.start();
-		int fieldCount=dataSource.getFieldCount();
-		for (int i=0; i < fieldCount; i++)
-		{
+		// this.dataSource.start();
+		int fieldCount = dataSource.getFieldCount();
+		for (int i = 0; i < fieldCount; i++) {
 			if (!dataSource.isVirtualField(i))
 				numExternalFields++;
 
@@ -124,9 +123,8 @@ public class SelectableDataSource implements DataSource,Selectable {
 
 		mapping = new int[numExternalFields];
 
-		int j=0;
-		for (int i=0; i < fieldCount; i++)
-		{
+		int j = 0;
+		for (int i = 0; i < fieldCount; i++) {
 			if (!dataSource.isVirtualField(i)) {
 				mapping[j] = i;
 				j++;
@@ -134,10 +132,11 @@ public class SelectableDataSource implements DataSource,Selectable {
 
 		}
 
-//		this.dataSource.stop();
+		// this.dataSource.stop();
 	}
 
-	public static SelectableDataSource createSelectableDataSource(XMLEntity xml) throws DriverLoadException, XMLException{
+	public static SelectableDataSource createSelectableDataSource(XMLEntity xml)
+			throws DriverLoadException, XMLException {
 
 		SelectionSupport ss = new SelectionSupport();
 		ss.setXMLEntity(xml.getChild(0));
@@ -151,34 +150,38 @@ public class SelectableDataSource implements DataSource,Selectable {
 			throw new XMLException(e);
 		}
 		SelectableDataSource sds;
-        try {
-            sds = new SelectableDataSource(gdbmsHandler.getDataSource(LayerFactory.getDataSourceFactory(), DataSourceFactory.AUTOMATIC_OPENING));
-        } catch (EvaluationException e1) {
-            throw new XMLException(e1);
-        } catch (ReadDriverException e) {
-        	 throw new XMLException(e);
+		try {
+			sds = new SelectableDataSource(gdbmsHandler.getDataSource(
+					LayerFactory.getDataSourceFactory(),
+					DataSourceFactory.AUTOMATIC_OPENING));
+		} catch (EvaluationException e1) {
+			throw new XMLException(e1);
+		} catch (ReadDriverException e) {
+			throw new XMLException(e);
 		} catch (DriverLoadException e) {
-			 throw new XMLException(e);
+			throw new XMLException(e);
 		} catch (SemanticException e) {
-			 throw new XMLException(e);
+			throw new XMLException(e);
 		} catch (ParseException e) {
-			 throw new XMLException(e);
+			throw new XMLException(e);
 		} catch (NoSuchTableException e) {
-			 throw new XMLException(e);
+			throw new XMLException(e);
 		}
-        sds.selectionSupport=ss;
+		sds.selectionSupport = ss;
 		return sds;
 	}
 
 	public void setDataSourceFactory(DataSourceFactory dsf) {
 		dataSource.setDataSourceFactory(dsf);
 	}
+
 	public void setSourceInfo(SourceInfo sourceInfo) {
 		dataSource.setSourceInfo(sourceInfo);
 	}
+
 	/**
 	 * Añade el soporte para la selección.
-	 *
+	 * 
 	 * @param selectionSupport
 	 */
 	public void setSelectionSupport(SelectionSupport selectionSupport) {
@@ -187,20 +190,21 @@ public class SelectableDataSource implements DataSource,Selectable {
 
 	/**
 	 * Devuelve el número de campos.
-	 *
+	 * 
 	 * @return Número de campos.
-	 *
+	 * 
 	 * @throws DriverException
 	 */
 	public int getFieldCount() throws ReadDriverException {
 		// return dataSource.getFieldCount()-numVirtual;
-//		if (mapping.length != dataSource.getFieldCount())
-//		{
-//			mapExternalFields();
-//			RuntimeException e = new RuntimeException("Recalculamos los campos de recordset!!");
-//			e.printStackTrace();
-//		}
-		if (mapping.length!=dataSource.getFieldCount()){
+		// if (mapping.length != dataSource.getFieldCount())
+		// {
+		// mapExternalFields();
+		// RuntimeException e = new
+		// RuntimeException("Recalculamos los campos de recordset!!");
+		// e.printStackTrace();
+		// }
+		if (mapping.length != dataSource.getFieldCount()) {
 			mapExternalFields();
 		}
 		return mapping.length;
@@ -208,39 +212,40 @@ public class SelectableDataSource implements DataSource,Selectable {
 
 	/**
 	 * Return index field searching by its name
-	 *
-	 * @param arg0 field name.
-	 *
+	 * 
+	 * @param arg0
+	 *            field name.
+	 * 
 	 * @return field index. -1 if not found
-	 *
+	 * 
 	 * @throws DriverException
 	 * @throws FieldNotFoundException
 	 */
-	public int getFieldIndexByName(String arg0)
-		throws ReadDriverException {
-//		int internal = dataSource.getFieldIndexByName(arg0);
-//		for (int i=0; i < mapping.length; i++)
-//		{
-//			if (mapping[i] == internal)
-//				return i;
-//		}
-//		//OJO Parche para rodear poblema de gdbms + FileDriver
-//		// Cuando en le fichero existe un campo de nombre 'PK'
-//		if (arg0.equalsIgnoreCase("pk")){
-//			for (int i=0; i < mapping.length; i++)
-//			{
-//				if (dataSource.getFieldName(mapping[i]).equalsIgnoreCase(arg0)){
-//					return i;
-//				}
-//			}
-//
-//		}
-		for (int i=0; i < getFieldCount(); i++) {
-			// Buscamos en los alias. Si no hay alias, cada alias es igual al fieldname
+	public int getFieldIndexByName(String arg0) throws ReadDriverException {
+		// int internal = dataSource.getFieldIndexByName(arg0);
+		// for (int i=0; i < mapping.length; i++)
+		// {
+		// if (mapping[i] == internal)
+		// return i;
+		// }
+		// //OJO Parche para rodear poblema de gdbms + FileDriver
+		// // Cuando en le fichero existe un campo de nombre 'PK'
+		// if (arg0.equalsIgnoreCase("pk")){
+		// for (int i=0; i < mapping.length; i++)
+		// {
+		// if (dataSource.getFieldName(mapping[i]).equalsIgnoreCase(arg0)){
+		// return i;
+		// }
+		// }
+		//
+		// }
+		for (int i = 0; i < getFieldCount(); i++) {
+			// Buscamos en los alias. Si no hay alias, cada alias es igual al
+			// fieldname
 			if (getFieldAlias(i).compareToIgnoreCase(arg0) == 0)
 				return i;
 		}
-		for (int i=0; i < getFieldCount(); i++) {
+		for (int i = 0; i < getFieldCount(); i++) {
 			// Por compatibilidad con posibles leyendas guardadas
 			if (getFieldName(i).compareToIgnoreCase(arg0) == 0)
 				return i;
@@ -251,30 +256,33 @@ public class SelectableDataSource implements DataSource,Selectable {
 
 	/**
 	 * Devuelve el nombre del campo a partir del índice.
-	 *
-	 * @param arg0 índice.
-	 *
+	 * 
+	 * @param arg0
+	 *            índice.
+	 * 
 	 * @return nombre del campo.
-	 *
+	 * 
 	 * @throws DriverException
 	 */
 	public String getFieldName(int arg0) throws ReadDriverException {
-	    // return dataSource.getFieldName(arg0);
+		// return dataSource.getFieldName(arg0);
 		return dataSource.getFieldName(mapping[arg0]);
 	}
 
 	/**
 	 * Devuelve el valor a partir del númro de fila y columna.
-	 *
-	 * @param arg0 número de registro.
-	 * @param arg1 número de campo.
-	 *
+	 * 
+	 * @param arg0
+	 *            número de registro.
+	 * @param arg1
+	 *            número de campo.
+	 * 
 	 * @return Valor.
-	 *
+	 * 
 	 * @throws DriverException
 	 */
 	public Value getFieldValue(long arg0, int arg1) throws ReadDriverException {
-		if (arg1==-1)
+		if (arg1 == -1)
 			return null;
 		return dataSource.getFieldValue(arg0, mapping[arg1]);
 		// return dataSource.getFieldValue(arg0, arg1);
@@ -282,7 +290,7 @@ public class SelectableDataSource implements DataSource,Selectable {
 
 	/**
 	 * Devuelve el nombre del DataSource.
-	 *
+	 * 
 	 * @return Nombre.
 	 */
 	public String getName() {
@@ -291,9 +299,9 @@ public class SelectableDataSource implements DataSource,Selectable {
 
 	/**
 	 * Devuelve el número de filas en total.
-	 *
+	 * 
 	 * @return número de filas.
-	 *
+	 * 
 	 * @throws DriverException
 	 */
 	public long getRowCount() throws ReadDriverException {
@@ -302,7 +310,7 @@ public class SelectableDataSource implements DataSource,Selectable {
 
 	/**
 	 * Inicializa el dataSource.
-	 *
+	 * 
 	 * @throws DriverException
 	 */
 	public void start() throws ReadDriverException {
@@ -312,7 +320,7 @@ public class SelectableDataSource implements DataSource,Selectable {
 
 	/**
 	 * Finaliza el DataSource.
-	 *
+	 * 
 	 * @throws DriverException
 	 */
 	public void stop() throws ReadDriverException {
@@ -322,7 +330,7 @@ public class SelectableDataSource implements DataSource,Selectable {
 
 	/**
 	 * A partir del XMLEntity se rellenan los atributos del DataSource.
-	 *
+	 * 
 	 * @param child
 	 */
 	public void setXMLEntity03(XMLEntity child) {
@@ -341,8 +349,9 @@ public class SelectableDataSource implements DataSource,Selectable {
 
 	/**
 	 * Añade un nuevo Listener al SelectionSupport.
-	 *
-	 * @param listener SelectionListener.
+	 * 
+	 * @param listener
+	 *            SelectionListener.
 	 */
 	public void addSelectionListener(SelectionListener listener) {
 		selectionSupport.addSelectionListener(listener);
@@ -350,8 +359,9 @@ public class SelectableDataSource implements DataSource,Selectable {
 
 	/**
 	 * Borra un Listener al SelectionSupport.
-	 *
-	 * @param listener Listener a borrar.
+	 * 
+	 * @param listener
+	 *            Listener a borrar.
 	 */
 	public void removeSelectionListener(SelectionListener listener) {
 		selectionSupport.removeSelectionListener(listener);
@@ -366,7 +376,7 @@ public class SelectableDataSource implements DataSource,Selectable {
 
 	/**
 	 * Develve un FBitSet con los índices de los elementos seleccionados.
-	 *
+	 * 
 	 * @return FBitset con los elementos seleccionados.
 	 */
 	public FBitSet getSelection() {
@@ -375,7 +385,7 @@ public class SelectableDataSource implements DataSource,Selectable {
 
 	/**
 	 * Devuelve el SelectionSupport.
-	 *
+	 * 
 	 * @return SelectinSuport.
 	 */
 	public SelectionSupport getSelectionSupport() {
@@ -384,9 +394,10 @@ public class SelectableDataSource implements DataSource,Selectable {
 
 	/**
 	 * Devuelve true si el elemento está seleccionado.
-	 *
-	 * @param recordIndex índice del registro.
-	 *
+	 * 
+	 * @param recordIndex
+	 *            índice del registro.
+	 * 
 	 * @return True si el registro está seleccionado.
 	 */
 	public boolean isSelected(int recordIndex) {
@@ -395,8 +406,9 @@ public class SelectableDataSource implements DataSource,Selectable {
 
 	/**
 	 * Inserta una nueva selección.
-	 *
-	 * @param selection FBitSet.
+	 * 
+	 * @param selection
+	 *            FBitSet.
 	 */
 	public void setSelection(FBitSet selection) {
 		selectionSupport.setSelection(selection);
@@ -421,13 +433,13 @@ public class SelectableDataSource implements DataSource,Selectable {
 	/**
 	 * Devuelve el XMLEntity con la información necesaria para reproducir el
 	 * DataSource.
-	 *
+	 * 
 	 * @return XMLEntity.
 	 * @throws XMLException
 	 */
 	public XMLEntity getXMLEntity() throws XMLException {
 		XMLEntity xml = new XMLEntity();
-		xml.putProperty("className",this.getClass().getName());
+		xml.putProperty("className", this.getClass().getName());
 		xml.addChild(selectionSupport.getXMLEntity());
 		putMemento(xml);
 
@@ -446,7 +458,7 @@ public class SelectableDataSource implements DataSource,Selectable {
 	 */
 	public int getFieldType(int i) throws ReadDriverException {
 		// return dataSource.getFieldType(i);
-		if (i>mapping.length-1)
+		if (i > mapping.length - 1)
 			return dataSource.getFieldType(i);
 		return dataSource.getFieldType(mapping[i]);
 	}
@@ -467,6 +479,7 @@ public class SelectableDataSource implements DataSource,Selectable {
 
 	/*
 	 * @throws DriverException
+	 * 
 	 * @see com.hardcode.gdbms.engine.data.DataSource#remove()
 	 */
 	public void remove() throws WriteDriverException {
@@ -487,98 +500,98 @@ public class SelectableDataSource implements DataSource,Selectable {
 		return dataSource.getSourceInfo();
 	}
 
-    /*
-     * @see com.hardcode.gdbms.engine.data.DataSource#getPrimaryKeys()
-     */
-    public int[] getPrimaryKeys() throws ReadDriverException {
-    	return dataSource.getPrimaryKeys();
-    }
+	/*
+	 * @see com.hardcode.gdbms.engine.data.DataSource#getPrimaryKeys()
+	 */
+	public int[] getPrimaryKeys() throws ReadDriverException {
+		return dataSource.getPrimaryKeys();
+	}
 
-    /*
-     * @see com.hardcode.gdbms.engine.data.DataSource#getPKValue(long)
-     */
-    public ValueCollection getPKValue(long rowIndex) throws ReadDriverException {
-        return dataSource.getPKValue(rowIndex);
-    }
+	/*
+	 * @see com.hardcode.gdbms.engine.data.DataSource#getPKValue(long)
+	 */
+	public ValueCollection getPKValue(long rowIndex) throws ReadDriverException {
+		return dataSource.getPKValue(rowIndex);
+	}
 
-    /*
-     * @see com.hardcode.gdbms.engine.data.DataSource#getPKName(int)
-     */
-    public String getPKName(int fieldId) throws ReadDriverException {
-        return dataSource.getPKName(fieldId);
-    }
+	/*
+	 * @see com.hardcode.gdbms.engine.data.DataSource#getPKName(int)
+	 */
+	public String getPKName(int fieldId) throws ReadDriverException {
+		return dataSource.getPKName(fieldId);
+	}
 
-    /*
-     * @see com.hardcode.gdbms.engine.data.DataSource#getPKType(int)
-     */
-    public int getPKType(int i) throws ReadDriverException {
-        return dataSource.getPKType(i);
-    }
+	/*
+	 * @see com.hardcode.gdbms.engine.data.DataSource#getPKType(int)
+	 */
+	public int getPKType(int i) throws ReadDriverException {
+		return dataSource.getPKType(i);
+	}
 
-    /*
-     * @throws DriverException
-     * @see com.hardcode.gdbms.engine.data.DataSource#getPKCardinality()
-     */
-    public int getPKCardinality() throws ReadDriverException {
-        return dataSource.getPKCardinality();
-    }
+	/*
+	 * @throws DriverException
+	 * 
+	 * @see com.hardcode.gdbms.engine.data.DataSource#getPKCardinality()
+	 */
+	public int getPKCardinality() throws ReadDriverException {
+		return dataSource.getPKCardinality();
+	}
 
-    /*
-     * @see com.hardcode.gdbms.engine.data.DataSource#getRow(long)
-     */
-    public Value[] getRow(long rowIndex) throws ReadDriverException {
-    	Value[] withoutVirtuals = new Value[mapping.length];
-    	Value[] internal = dataSource.getRow(rowIndex);
-    	for (int i=0; i < mapping.length; i++)
-    	{
-    		if (mapping[i] < internal.length)
-    			withoutVirtuals[i] = internal[mapping[i]];
+	/*
+	 * @see com.hardcode.gdbms.engine.data.DataSource#getRow(long)
+	 */
+	public Value[] getRow(long rowIndex) throws ReadDriverException {
+		Value[] withoutVirtuals = new Value[mapping.length];
+		Value[] internal = dataSource.getRow(rowIndex);
+		for (int i = 0; i < mapping.length; i++) {
+			if (mapping[i] < internal.length)
+				withoutVirtuals[i] = internal[mapping[i]];
 
-    	}
-        return withoutVirtuals;
-    }
+		}
+		return withoutVirtuals;
+	}
 
-    /*
-     * @see com.hardcode.gdbms.engine.data.DataSource#getFieldNames()
-     */
-    public String[] getFieldNames() throws ReadDriverException {
-    	int fieldCount=getFieldCount();
-    	String[] fieldNames = new String[fieldCount];
-//		int j=0;
-//		int fieldCount=dataSource.getFieldCount();
-//		for (int i=0; i < fieldCount; i++)
-//		{
-//			if (!dataSource.isVirtualField(i))
-//				fieldNames[j++] = dataSource.getFieldName(i);
-//
-//		}
-		for (int i=0; i < fieldCount; i++)
-		{
+	/*
+	 * @see com.hardcode.gdbms.engine.data.DataSource#getFieldNames()
+	 */
+	public String[] getFieldNames() throws ReadDriverException {
+		int fieldCount = getFieldCount();
+		String[] fieldNames = new String[fieldCount];
+		// int j=0;
+		// int fieldCount=dataSource.getFieldCount();
+		// for (int i=0; i < fieldCount; i++)
+		// {
+		// if (!dataSource.isVirtualField(i))
+		// fieldNames[j++] = dataSource.getFieldName(i);
+		//
+		// }
+		for (int i = 0; i < fieldCount; i++) {
 			fieldNames[i] = getFieldAlias(i);
 
 		}
 
-    	return fieldNames;
-    }
+		return fieldNames;
+	}
 
-    /*
-     * @see com.hardcode.gdbms.engine.data.DataSource#getPKNames()
-     */
-    public String[] getPKNames() throws ReadDriverException {
-        return dataSource.getPKNames();
-    }
+	/*
+	 * @see com.hardcode.gdbms.engine.data.DataSource#getPKNames()
+	 */
+	public String[] getPKNames() throws ReadDriverException {
+		return dataSource.getPKNames();
+	}
 
 	public void removeLinksSelectionListener() {
 		selectionSupport.removeLinkSelectionListener();
 	}
 
-    /*
-     * @throws DriverException
-     * @see com.hardcode.gdbms.engine.data.DataSource#getDataWare(int)
-     */
-    public DataWare getDataWare(int arg0) throws ReadDriverException {
-        return dataSource.getDataWare(arg0);
-    }
+	/*
+	 * @throws DriverException
+	 * 
+	 * @see com.hardcode.gdbms.engine.data.DataSource#getDataWare(int)
+	 */
+	public DataWare getDataWare(int arg0) throws ReadDriverException {
+		return dataSource.getDataWare(arg0);
+	}
 
 	public int getFieldWidth(int i) throws ReadDriverException {
 		return dataSource.getFieldWidth(mapping[i]);
@@ -590,33 +603,33 @@ public class SelectableDataSource implements DataSource,Selectable {
 	}
 
 	/**
-	 * Useful to writers, to know the field definitions.
-	 * NOTE: Maximun precision: 6 decimals. (We may need to change this)
+	 * Useful to writers, to know the field definitions. NOTE: Maximun
+	 * precision: 6 decimals. (We may need to change this)
+	 * 
 	 * @return Description of non virtual fields
 	 * @throws DriverException
 	 */
-	public FieldDescription[] getFieldsDescription() throws ReadDriverException{
+	public FieldDescription[] getFieldsDescription() throws ReadDriverException {
 		int numFields = getFieldCount();
 		FieldDescription[] fieldsDescrip = new FieldDescription[numFields];
-				
-		for (int i = 0; i < numFields; i++) {			
+
+		for (int i = 0; i < numFields; i++) {
 			fieldsDescrip[i] = new FieldDescription();
 			int type = getFieldType(i);
 			fieldsDescrip[i].setFieldType(type);
 			fieldsDescrip[i].setFieldName(getFieldName(i));
 			fieldsDescrip[i].setFieldLength(getFieldWidth(i));
-			try{
+			try {
 				fieldsDescrip[i].setFieldAlias(getFieldAlias(i));
-			}catch (Exception e) {
+			} catch (Exception e) {
 				fieldsDescrip[i].setFieldAlias(getFieldName(i));
 			}
-			if (NumberUtilities.isNumeric(type))
-			{
+			if (NumberUtilities.isNumeric(type)) {
 				if (!NumberUtilities.isNumericInteger(type))
-					// TODO: If there is a lost in precision, this should be changed.
+					// TODO: If there is a lost in precision, this should be
+					// changed.
 					fieldsDescrip[i].setFieldDecimalCount(6);
-			}
-			else
+			} else
 				fieldsDescrip[i].setFieldDecimalCount(0);
 			// TODO: ¿DEFAULTVALUE?
 			// fieldsDescrip[i].setDefaultValue(get)
@@ -625,9 +638,9 @@ public class SelectableDataSource implements DataSource,Selectable {
 	}
 
 	public String getFieldAlias(int i) {
-		try{
+		try {
 			return alias[i];
-		}catch (ArrayIndexOutOfBoundsException e) {
+		} catch (ArrayIndexOutOfBoundsException e) {
 			try {
 				return getFieldName(i);
 			} catch (ReadDriverException e1) {
@@ -635,10 +648,10 @@ public class SelectableDataSource implements DataSource,Selectable {
 			}
 		}
 	}
+
 	public void setFieldAlias(int idField, String aliasName) {
 		alias[idField] = aliasName;
 	}
-
 
 	public Driver getDriver() {
 		return this.dataSource.getDriver();
@@ -649,7 +662,7 @@ public class SelectableDataSource implements DataSource,Selectable {
 		try {
 			mapExternalFields();
 		} catch (ReadDriverException e) {
-			throw new ReloadDriverException(getDriver().getName(),e);
+			throw new ReloadDriverException(getDriver().getName(), e);
 		}
 
 	}

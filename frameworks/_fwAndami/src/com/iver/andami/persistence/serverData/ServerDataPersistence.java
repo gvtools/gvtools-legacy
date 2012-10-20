@@ -1,4 +1,5 @@
 package com.iver.andami.persistence.serverData;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -79,12 +80,11 @@ import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.jcomboServer.ServerData;
 
 /**
- * This class is used to save a list of servers (using the
- * Andami persistence model) to the plugins-persistence.xml file.
- * It has methods to create a set of ServerData objects  from an
- * xml file. It can also save a set of ServerData objects in an
- * xml file.
- *
+ * This class is used to save a list of servers (using the Andami persistence
+ * model) to the plugins-persistence.xml file. It has methods to create a set of
+ * ServerData objects from an xml file. It can also save a set of ServerData
+ * objects in an xml file.
+ * 
  * @see es.gva.cit.catalogClient.utils.comboserver.ServerData
  * @author Jorge Piera Llodra (piera_jor@gva.es)
  */
@@ -98,15 +98,16 @@ public class ServerDataPersistence {
 	private static final String SERVER_TYPE = "type";
 	private static final String SERVER_SUBTYPE = "subType";
 	private static final String SERVER_DATABASE = "database";
-	
+
 	/**
 	 * Constructor
+	 * 
 	 * @param view
-	 * The View Class
-	 * @param sevice Type
-	 * Service type to load
+	 *            The View Class
+	 * @param sevice
+	 *            Type Service type to load
 	 */
-	public ServerDataPersistence(Object pluginClassInstance,String serviceType){
+	public ServerDataPersistence(Object pluginClassInstance, String serviceType) {
 		ps = PluginServices.getPluginServices(pluginClassInstance);
 		xml = ps.getPersistentXML();
 		this.serviceType = serviceType;
@@ -115,34 +116,35 @@ public class ServerDataPersistence {
 	/**
 	 * This methos is used to save the information in an XML file
 	 */
-	public void setPersistent(){
+	public void setPersistent() {
 		ps.setPersistentXML(xml);
 	}
 
 	/**
-	 * This method saves an array of ServerData using the Anadami
-	 * persistence model
+	 * This method saves an array of ServerData using the Anadami persistence
+	 * model
+	 * 
 	 * @param servers
-	 * Array of servers
+	 *            Array of servers
 	 */
-	public void setArrayOfServerData(ServerData[] servers){
+	public void setArrayOfServerData(ServerData[] servers) {
 		xml.getXmlTag().removeAllXmlTag();
 
-		for (int i=0 ; i<servers.length ; i++){
+		for (int i = 0; i < servers.length; i++) {
 			xml.addChild(serverDataToXml(servers[i]));
 		}
 
 	}
 
 	/**
-	 * This method adds a ServerData using the Anadami
-	 * persistence model. If the server exists just actualizes
-	 * the type and subtype fileds and changes the last access
-	 * value to the current time.
+	 * This method adds a ServerData using the Anadami persistence model. If the
+	 * server exists just actualizes the type and subtype fileds and changes the
+	 * last access value to the current time.
+	 * 
 	 * @param server
-	 * ServerData
+	 *            ServerData
 	 */
-	public void addServerData(ServerData server){
+	public void addServerData(ServerData server) {
 		ServerData[] servers = getArrayOfServerData();
 		ServerData[] newServers = new ServerData[servers.length + 1];
 
@@ -168,60 +170,59 @@ public class ServerDataPersistence {
 		}
 	}
 
-
-
 	/**
-	 * This method returns an array of ServerData objects that
-	 * have been saved using the Andami persistence model.
-	 * @return
-	 * String[]
+	 * This method returns an array of ServerData objects that have been saved
+	 * using the Andami persistence model.
+	 * 
+	 * @return String[]
 	 */
-	public ServerData[] getArrayOfServerData(){
+	public ServerData[] getArrayOfServerData() {
 		ServerData[] servers = new ServerData[xml.getChildrenCount()];
-		for (int i=0 ; i<xml.getChildrenCount() ; i++){
+		for (int i = 0; i < xml.getChildrenCount(); i++) {
 			servers[i] = xmlToServerData(xml.getChild(i));
 		}
 		return servers;
 	}
 
-
 	/**
 	 * This method creates and returns a new XMLEntity.
+	 * 
 	 * @param server
-	 * ServerData with all the server information
-	 * @return
-	 * XMLEntity
+	 *            ServerData with all the server information
+	 * @return XMLEntity
 	 */
-	public XMLEntity serverDataToXml(ServerData server){
-		String dFormat="Y-m-d H:i:s.Z";
+	public XMLEntity serverDataToXml(ServerData server) {
+		String dFormat = "Y-m-d H:i:s.Z";
 
 		XMLEntity xmlEnt = new XMLEntity();
-		xmlEnt.putProperty(SERVER_URL,server.getServerAddress());
-		xmlEnt.putProperty(SERVER_ADDED,DateTime.dateToString(server.getAdded(),dFormat));
-		xmlEnt.putProperty(SERVER_LASTACCESS,DateTime.dateToString(server.getLastAccess(),dFormat));
-		xmlEnt.putProperty(SERVER_TYPE,server.getServiceType());
-		xmlEnt.putProperty(SERVER_SUBTYPE,server.getServiceSubType());
-		if (server.getServiceSubType().equals(ServerData.SERVER_SUBTYPE_CATALOG_Z3950)){
-			xmlEnt.putProperty(SERVER_DATABASE,server.getDatabase());
+		xmlEnt.putProperty(SERVER_URL, server.getServerAddress());
+		xmlEnt.putProperty(SERVER_ADDED,
+				DateTime.dateToString(server.getAdded(), dFormat));
+		xmlEnt.putProperty(SERVER_LASTACCESS,
+				DateTime.dateToString(server.getLastAccess(), dFormat));
+		xmlEnt.putProperty(SERVER_TYPE, server.getServiceType());
+		xmlEnt.putProperty(SERVER_SUBTYPE, server.getServiceSubType());
+		if (server.getServiceSubType().equals(
+				ServerData.SERVER_SUBTYPE_CATALOG_Z3950)) {
+			xmlEnt.putProperty(SERVER_DATABASE, server.getDatabase());
 		}
 		Set keys = server.getProperies().keySet();
 		Iterator it = keys.iterator();
-	    while (it.hasNext()) {
-	    	String next = (String)it.next();
-	    	xmlEnt.putProperty(next,
-	    			server.getProperies().get(next));
-	    }		   
+		while (it.hasNext()) {
+			String next = (String) it.next();
+			xmlEnt.putProperty(next, server.getProperies().get(next));
+		}
 		return xmlEnt;
 	}
 
 	/**
 	 * This method creates a new serverData from a XMLEntity
+	 * 
 	 * @param xmlEnt
-	 * XMLRntity that contains the server information
-	 * @return
-	 * ServerData
+	 *            XMLRntity that contains the server information
+	 * @return ServerData
 	 */
-	public ServerData xmlToServerData(XMLEntity xmlEnt){
+	public ServerData xmlToServerData(XMLEntity xmlEnt) {
 		String serverAddress;
 		Date added;
 		Date lastAccess;
@@ -231,31 +232,33 @@ public class ServerDataPersistence {
 
 		serverAddress = xmlEnt.getStringProperty(SERVER_URL);
 		added = DateTime.stringToDate(xmlEnt.getStringProperty(SERVER_ADDED));
-		lastAccess = DateTime.stringToDate(xmlEnt.getStringProperty(SERVER_LASTACCESS));
+		lastAccess = DateTime.stringToDate(xmlEnt
+				.getStringProperty(SERVER_LASTACCESS));
 		serviceType = xmlEnt.getStringProperty(SERVER_TYPE).toUpperCase();
 		serviceSubType = xmlEnt.getStringProperty(SERVER_SUBTYPE).toUpperCase();
-		
-		if (serviceSubType.equals(ServerData.SERVER_SUBTYPE_CATALOG_Z3950)){
-			try{
+
+		if (serviceSubType.equals(ServerData.SERVER_SUBTYPE_CATALOG_Z3950)) {
+			try {
 				databaseName = xmlEnt.getStringProperty(SERVER_DATABASE);
-			}catch(NotExistInXMLEntity e){
+			} catch (NotExistInXMLEntity e) {
 
 			}
 		}
-		
-		ServerData serverData = new ServerData(serverAddress,added,lastAccess,serviceType,serviceSubType,databaseName);
-		
+
+		ServerData serverData = new ServerData(serverAddress, added,
+				lastAccess, serviceType, serviceSubType, databaseName);
+
 		Properties props = new Properties();
-		for (int i=0 ; i<xmlEnt.getPropertyCount() ; i++){
+		for (int i = 0; i < xmlEnt.getPropertyCount(); i++) {
 			String property = xmlEnt.getPropertyName(i);
-			if (!((property.equals(SERVER_URL)) ||
-				(property.equals(SERVER_ADDED)) ||
-				(property.equals(SERVER_LASTACCESS)) ||
-				(property.equals(SERVER_TYPE)) ||
-				(property.equals(SERVER_SUBTYPE)) ||
-				(property.equals(SERVER_DATABASE)))){
-					props.put(property,xmlEnt.getStringProperty(property));
-				}					
+			if (!((property.equals(SERVER_URL))
+					|| (property.equals(SERVER_ADDED))
+					|| (property.equals(SERVER_LASTACCESS))
+					|| (property.equals(SERVER_TYPE))
+					|| (property.equals(SERVER_SUBTYPE)) || (property
+						.equals(SERVER_DATABASE)))) {
+				props.put(property, xmlEnt.getStringProperty(property));
+			}
 		}
 		serverData.setProperies(props);
 		return serverData;

@@ -40,17 +40,17 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: ErrorListener.java 7456 2006-09-21 17:20:50Z azabala $
-* $Log$
-* Revision 1.2  2006-09-21 17:20:50  azabala
-* added method to report many driver exceptions
-*
-* Revision 1.1  2005/12/20 10:56:34  jaume
-* Added an error event to fmap
-*
-*
-*/
+ *
+ * $Id: ErrorListener.java 7456 2006-09-21 17:20:50Z azabala $
+ * $Log$
+ * Revision 1.2  2006-09-21 17:20:50  azabala
+ * added method to report many driver exceptions
+ *
+ * Revision 1.1  2005/12/20 10:56:34  jaume
+ * Added an error event to fmap
+ *
+ *
+ */
 /**
  * 
  */
@@ -60,22 +60,25 @@ import java.util.List;
 
 /**
  * @author jaume
- *
+ * 
  */
 public interface ErrorListener {
-    /**
-     * Listen for error events
-     * (usually caused by driverExceptions)
-     * @param e
-     */
+	/**
+	 * Listen for error events (usually caused by driverExceptions)
+	 * 
+	 * @param e
+	 */
 	void errorThrown(ErrorEvent e);
 
 	/**
-	 * Report a bundle of driver exceptions caused in the same
-	 * fmap atomic transaction
-	 * @param introductoryText introductory text specified by developer. It null, used ""
-	 * @param driverExceptions list with a bundle of driver exceptions catched during
-	 * an atomic event
+	 * Report a bundle of driver exceptions caused in the same fmap atomic
+	 * transaction
+	 * 
+	 * @param introductoryText
+	 *            introductory text specified by developer. It null, used ""
+	 * @param driverExceptions
+	 *            list with a bundle of driver exceptions catched during an
+	 *            atomic event
 	 */
 	void reportDriverExceptions(String introductoryText, List driverExceptions);
 }

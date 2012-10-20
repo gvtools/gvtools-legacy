@@ -39,32 +39,37 @@
  *   dac@iver.es
  */
 package org.gvsig.remoteClient.sld;
+
 /**
- * Implements the Extent element of an SLD implementation specification .<p>
- * When used in a UserLayer (<code>SLDUserDefinedLayer</code>), it defines what 
- * features are to be included in the layer and when used in a NamedLayer (<code>SLDNamedLayer</code>)
- * , it filters the features that are part of the named layer.
- *  
- * @see http://portal.opengeospatial.org/files/?artifact_id=1188 
+ * Implements the Extent element of an SLD implementation specification .
+ * <p>
+ * When used in a UserLayer (<code>SLDUserDefinedLayer</code>), it defines what
+ * features are to be included in the layer and when used in a NamedLayer (
+ * <code>SLDNamedLayer</code>) , it filters the features that are part of the
+ * named layer.
+ * 
+ * @see http://portal.opengeospatial.org/files/?artifact_id=1188
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
 public abstract class SLDExtent implements ISLDFeatures {
 
 	protected String name;
 	protected String value;
-	
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getValue() {
 		return value;
 	}
+
 	public void setValue(String value) {
 		this.value = value;
 	}
-	
-	
+
 }

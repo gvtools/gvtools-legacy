@@ -42,39 +42,39 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: DeferredFeaturePersisterProcessor.java 10626 2007-03-06 16:55:54Z caballero $
-* $Log$
-* Revision 1.2  2007-03-06 16:47:58  caballero
-* Exceptions
-*
-* Revision 1.1  2006/05/24 21:12:16  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.1  2006/03/15 18:33:53  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: DeferredFeaturePersisterProcessor.java 10626 2007-03-06 16:55:54Z caballero $
+ * $Log$
+ * Revision 1.2  2007-03-06 16:47:58  caballero
+ * Exceptions
+ *
+ * Revision 1.1  2006/05/24 21:12:16  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.1  2006/03/15 18:33:53  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core.fmap;
 
 import com.iver.cit.gvsig.exceptions.visitors.StartVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.StopVisitorException;
 import com.iver.cit.gvsig.fmap.edition.IWriter;
+
 /**
- * Subclass of FeaturePersisterProcessor2 that
- * deferred postProcess call to subjacent IWriter.
- *
- * It is thinked for batch processes, because delegates
- * preprocess and postprocess calls to external processes
- * that uses this class' instances.
- *
- * PRECONDITIONS: IWriter has preprocessed yet.
- * POSTCONDITIONS: Must call IWriter postprocess externally
- *
- *
+ * Subclass of FeaturePersisterProcessor2 that deferred postProcess call to
+ * subjacent IWriter.
+ * 
+ * It is thinked for batch processes, because delegates preprocess and
+ * postprocess calls to external processes that uses this class' instances.
+ * 
+ * PRECONDITIONS: IWriter has preprocessed yet. POSTCONDITIONS: Must call
+ * IWriter postprocess externally
+ * 
+ * 
  * @author azabala
- *
+ * 
  */
 
 public class DeferredFeaturePersisterProcessor extends
@@ -84,7 +84,7 @@ public class DeferredFeaturePersisterProcessor extends
 		super(writer);
 	}
 
-	public void start() throws StartVisitorException{
+	public void start() throws StartVisitorException {
 	}
 
 	public void finish() throws StopVisitorException {
@@ -92,4 +92,3 @@ public class DeferredFeaturePersisterProcessor extends
 	}
 
 }
-

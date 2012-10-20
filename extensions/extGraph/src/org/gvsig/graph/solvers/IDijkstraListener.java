@@ -50,15 +50,16 @@ import org.gvsig.graph.core.GvNode;
 public interface IDijkstraListener {
 	/**
 	 * @param node
-	 * @return true if this is the final node you are searching. false otherwise.
+	 * @return true if this is the final node you are searching. false
+	 *         otherwise.
 	 */
 	boolean minimumCostNodeSelected(GvNode node);
-	
+
 	/**
 	 * @param fromNode
 	 * @param edge
-	 * @return true if this edge is valid for the solver. false if the algorithm should
-	 * bypass this edge
+	 * @return true if this edge is valid for the solver. false if the algorithm
+	 *         should bypass this edge
 	 */
 	boolean adjacentEdgeVisited(GvNode fromNode, GvEdge edge);
 

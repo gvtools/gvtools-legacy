@@ -51,7 +51,8 @@ import com.hardcode.gdbms.engine.values.ValueWriter;
 import com.iver.cit.gvsig.fmap.drivers.XTypes;
 
 public class JdbcFieldManager extends AbstractFieldManager {
-	private static Logger logger = Logger.getLogger(JdbcFieldManager.class.getName());
+	private static Logger logger = Logger.getLogger(JdbcFieldManager.class
+			.getName());
 	Connection conn;
 
 	/**
@@ -59,13 +60,12 @@ public class JdbcFieldManager extends AbstractFieldManager {
 	 */
 	String tableName;
 
-
 	public JdbcFieldManager(Connection conn, String schema_tablename) {
 		this.conn = conn;
 		this.tableName = schema_tablename;
 	}
 
-	public boolean alterTable() throws WriteDriverException{
+	public boolean alterTable() throws WriteDriverException {
 		String sql = "";
 		Statement st;
 		try {
@@ -77,27 +77,34 @@ public class JdbcFieldManager extends AbstractFieldManager {
 					AddFieldCommand addFC = (AddFieldCommand) fc;
 
 					sql = "ALTER TABLE "
-						+ tableName
-						+ " ADD COLUMN "
-						+ "\""+addFC.getFieldDesc().getFieldName()+"\""
-						+ " "
-						+ XTypes.fieldTypeToString(addFC.getFieldDesc()
-								.getFieldType())
-								+ " "
-								+ "DEFAULT " + addFC.getFieldDesc().getDefaultValue().getStringValue(ValueWriter.internalValueWriter)
-								+ ";";
+							+ tableName
+							+ " ADD COLUMN "
+							+ "\""
+							+ addFC.getFieldDesc().getFieldName()
+							+ "\""
+							+ " "
+							+ XTypes.fieldTypeToString(addFC.getFieldDesc()
+									.getFieldType())
+							+ " "
+							+ "DEFAULT "
+							+ addFC.getFieldDesc()
+									.getDefaultValue()
+									.getStringValue(
+											ValueWriter.internalValueWriter)
+							+ ";";
 					st.execute(sql);
 				}
 				if (fc instanceof RemoveFieldCommand) {
 					RemoveFieldCommand deleteFC = (RemoveFieldCommand) fc;
-					sql = "ALTER TABLE " + tableName + " DROP COLUMN "
-					+ "\""+deleteFC.getFieldName()+"\"" + ";";
+					sql = "ALTER TABLE " + tableName + " DROP COLUMN " + "\""
+							+ deleteFC.getFieldName() + "\"" + ";";
 					st.execute(sql);
 				}
 				if (fc instanceof RenameFieldCommand) {
 					RenameFieldCommand renFC = (RenameFieldCommand) fc;
-					sql = "ALTER TABLE " + tableName + " RENAME COLUMN "
-					+ "\""+renFC.getAntName()+"\"" + " TO " + "\""+renFC.getNewName()+"\"" + ";";
+					sql = "ALTER TABLE " + tableName + " RENAME COLUMN " + "\""
+							+ renFC.getAntName() + "\"" + " TO " + "\""
+							+ renFC.getNewName() + "\"" + ";";
 					st.execute(sql);
 				}
 				logger.debug("Alter Table: " + sql);
@@ -112,7 +119,7 @@ public class JdbcFieldManager extends AbstractFieldManager {
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
-			throw new WriteDriverException("JDBC",e);
+			throw new WriteDriverException("JDBC", e);
 		}
 
 		return false;

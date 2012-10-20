@@ -42,14 +42,14 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: SqlDriveExceptionType.java 7454 2006-09-21 17:18:31Z azabala $
-* $Log$
-* Revision 1.1  2006-09-21 17:18:31  azabala
-* First version in cvs
-*
-*
-*/
+ *
+ * $Id: SqlDriveExceptionType.java 7454 2006-09-21 17:18:31Z azabala $
+ * $Log$
+ * Revision 1.1  2006-09-21 17:18:31  azabala
+ * First version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap;
 
 import com.iver.cit.gvsig.fmap.drivers.DBLayerDefinition;
@@ -61,11 +61,11 @@ public class SqlDriveExceptionType extends ExceptionDescription {
 	String sql;
 	private String layerName;
 	private String driverName;
-	
-	public SqlDriveExceptionType(){
+
+	public SqlDriveExceptionType() {
 		super(200, "Error de SQL");
 	}
-	
+
 	public DBLayerDefinition getSchema() {
 		return schema;
 	}
@@ -84,28 +84,26 @@ public class SqlDriveExceptionType extends ExceptionDescription {
 
 	public String getHtmlErrorMessage() {
 		String message = "";
-		message += "<b>Error de SQL" + 
-					"</b><br>" +
-		"Los datos de la capa son:<br><ul>" ;
-		
-		message += "<li>Tabla: "+schema.getTableName() +"</li>";
-		message += "<li>Catalogo: "+schema.getCatalogName()+"</li>";
+		message += "<b>Error de SQL" + "</b><br>"
+				+ "Los datos de la capa son:<br><ul>";
+
+		message += "<li>Tabla: " + schema.getTableName() + "</li>";
+		message += "<li>Catalogo: " + schema.getCatalogName() + "</li>";
 		message += "</ul>";
-		message += "<br> La sentencia SQL que causó el error es:"
-			+ sql;
-		
+		message += "<br> La sentencia SQL que causó el error es:" + sql;
+
 		return message;
 	}
 
 	public void setLayerName(String tableName) {
 		this.layerName = tableName;
 	}
-	
-	public String getLayerName(){
+
+	public String getLayerName() {
 		return layerName;
 	}
-	
-	public String getDriverName(){
+
+	public String getDriverName() {
 		return driverName;
 	}
 
@@ -114,4 +112,3 @@ public class SqlDriveExceptionType extends ExceptionDescription {
 	}
 
 }
-

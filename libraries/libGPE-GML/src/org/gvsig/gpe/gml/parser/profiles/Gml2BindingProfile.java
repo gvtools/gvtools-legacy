@@ -1,6 +1,5 @@
 package org.gvsig.gpe.gml.parser.profiles;
 
-
 import org.gvsig.gpe.gml.parser.v2.coordinates.CoordTypeIterator;
 import org.gvsig.gpe.gml.parser.v2.coordinates.CoordinatesTypeIterator;
 import org.gvsig.gpe.gml.parser.v2.features.ElementTypeBinding;
@@ -116,25 +115,28 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 	protected MultiGeometryTypeBinding multiGeometryTypeBinding = new MultiGeometryTypeBinding();
 	protected OuterBoundaryIsTypeBinding outerBoundaryIsTypeBinding = new OuterBoundaryIsTypeBinding();
 	protected InnerBoundaryIsTypeBinding innerBoundaryIsTypeBinding = new InnerBoundaryIsTypeBinding();
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getFeatureCollectionBinding()
 	 */
-	public FeatureCollectionBinding getFeatureCollectionBinding(){
+	public FeatureCollectionBinding getFeatureCollectionBinding() {
 		return featureCollectionBinding;
 	}
-		
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getElementTypeBinding()
 	 */
-	public ElementTypeBinding getElementTypeBinding(){
+	public ElementTypeBinding getElementTypeBinding() {
 		return elementTypeBinding;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getGeometryBinding()
 	 */
 	public GeometryBinding getGeometryBinding() {
@@ -143,6 +145,7 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getGeometryPropertyTypeBinding()
 	 */
 	public GeometryPropertyTypeBinding getGeometryPropertyTypeBinding() {
@@ -151,7 +154,9 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.profiles.IProfile#getLineStringPropertyTypeBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.profiles.IProfile#getLineStringPropertyTypeBinding()
 	 */
 	public LineStringPropertyTypeBinding getLineStringPropertyTypeBinding() {
 		return lineStringPropertyTypeBinding;
@@ -159,7 +164,9 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.profiles.IProfile#getMultiGeometryPropertyTypeBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.profiles.IProfile#getMultiGeometryPropertyTypeBinding()
 	 */
 	public MultiGeometryPropertyTypeBinding getMultiGeometryPropertyTypeBinding() {
 		return multiGeometryPropertyTypeBinding;
@@ -167,7 +174,10 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.profiles.IProfile#getMultiLineStringPropertyTypeBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.profiles.IProfile#getMultiLineStringPropertyTypeBinding
+	 * ()
 	 */
 	public MultiLineStringPropertyTypeBinding getMultiLineStringPropertyTypeBinding() {
 		return multiLineStringPropertyTypeBinding;
@@ -175,15 +185,19 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.profiles.IProfile#getMultiPointPropertyTypeBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.profiles.IProfile#getMultiPointPropertyTypeBinding()
 	 */
 	public MultiPointPropertyTypeBinding getMultiPointPropertyTypeBinding() {
-		return multiPointPropertyTypeBinding ;
+		return multiPointPropertyTypeBinding;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.profiles.IProfile#getMultiPolygonPropertyTypeBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.profiles.IProfile#getMultiPolygonPropertyTypeBinding()
 	 */
 	public MultiPolygonPropertyTypeBinding getMultiPolygonPropertyTypeBinding() {
 		return multiPolygonPropertyTypeBinding;
@@ -191,6 +205,7 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getPointPropertyTypeBinding()
 	 */
 	public PointPropertyTypeBinding getPointPropertyTypeBinding() {
@@ -199,6 +214,7 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getPolygonPropertyTypeBinding()
 	 */
 	public PolygonPropertyTypeBinding getPolygonPropertyTypeBinding() {
@@ -207,6 +223,7 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getBoundedByTypeBinding()
 	 */
 	public BoundedByTypeBinding getBoundedByTypeBinding() {
@@ -215,6 +232,7 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getFeatureMemberTypeBinding()
 	 */
 	public FeatureMemberTypeBinding getFeatureMemberTypeBinding() {
@@ -223,6 +241,7 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getFeatureTypeBinding()
 	 */
 	public FeatureTypeBinding getFeatureTypeBinding() {
@@ -231,6 +250,7 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getBoxTypeBinding()
 	 */
 	public BoxTypeBinding getBoxTypeBinding() {
@@ -239,6 +259,7 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getCoordinatesTypeBinding()
 	 */
 	public CoordinatesTypeIterator getCoordinatesTypeBinding() {
@@ -247,6 +268,7 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getCoordTypeBinding()
 	 */
 	public CoordTypeIterator getCoordTypeBinding() {
@@ -255,6 +277,7 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getGeometryMemberTypeBinding()
 	 */
 	public GeometryMemberTypeBinding getGeometryMemberTypeBinding() {
@@ -263,6 +286,7 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getLineStringMemberTypeBinding()
 	 */
 	public LineStringMemberTypeBinding getLineStringMemberTypeBinding() {
@@ -271,6 +295,7 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getLineStringTypeBinding()
 	 */
 	public LineStringTypeBinding getLineStringTypeBinding() {
@@ -279,6 +304,7 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getLinearRingTypeBinding()
 	 */
 	public LinearRingTypeBinding getLinearRingTypeBinding() {
@@ -287,6 +313,7 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getMultiGeometryTypeBinding()
 	 */
 	public MultiGeometryTypeBinding getMultiGeometryTypeBinding() {
@@ -295,6 +322,7 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getMultiLineStringTypeBinding()
 	 */
 	public MultiLineStringTypeBinding getMultiLineStringTypeBinding() {
@@ -303,6 +331,7 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getMultiPointTypeBinding()
 	 */
 	public MultiPointTypeBinding getMultiPointTypeBinding() {
@@ -311,6 +340,7 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getMultiPolygonTypeBinding()
 	 */
 	public MultiPolygonTypeBinding getMultiPolygonTypeBinding() {
@@ -319,6 +349,7 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getPointMemberTypeBinding()
 	 */
 	public PointMemberTypeBinding getPointMemberTypeBinding() {
@@ -327,6 +358,7 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getPointTypeBinding()
 	 */
 	public PointTypeBinding getPointTypeBinding() {
@@ -335,6 +367,7 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getPolygonMemberTypeBinding()
 	 */
 	public PolygonMemberTypeBinding getPolygonMemberTypeBinding() {
@@ -343,15 +376,16 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getPolygonTypeBinding()
 	 */
 	public PolygonTypeBinding getPolygonTypeBinding() {
 		return polygonTypeBinding;
 	}
-	
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getOuterBoundaryIsTypeBinding()
 	 */
 	public OuterBoundaryIsTypeBinding getOuterBoundaryIsTypeBinding() {
@@ -360,6 +394,7 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getInnerBoundaryIsTypeBinding()
 	 */
 	public InnerBoundaryIsTypeBinding getInnerBoundaryIsTypeBinding() {
@@ -368,10 +403,11 @@ public class Gml2BindingProfile extends DefaultBindingProfile {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.parser.profiles.IBindingProfile#getFeatureMembersTypeBinding()
+	 * 
+	 * @see org.gvsig.gpe.gml.parser.profiles.IBindingProfile#
+	 * getFeatureMembersTypeBinding()
 	 */
 	public FeatureMembersTypeBinding getFeatureMembersTypeBinding() {
 		return featureMembersTypeBinding;
-	}	
+	}
 }
-

@@ -16,17 +16,18 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.cit.gvsig.project.documents.view.snapping.ISnapper;
 
-public class PropertySnapCellEditor extends JButton implements TableCellEditor{
+public class PropertySnapCellEditor extends JButton implements TableCellEditor {
 	private ArrayList snappers;
 	private int row;
 	private IWindow panel;
+
 	public PropertySnapCellEditor(ArrayList snappers) {
-		this.snappers=snappers;
+		this.snappers = snappers;
 		this.addMouseListener(new MouseListener() {
 
 			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount()==2) {
-					if (panel!=null)
+				if (e.getClickCount() == 2) {
+					if (panel != null)
 						openConfigurePanel();
 				}
 			}
@@ -53,31 +54,35 @@ public class PropertySnapCellEditor extends JButton implements TableCellEditor{
 
 		});
 	}
-//	class WinConfigure extends JPanel implements IWindow {
-//
-//		private WindowInfo wi=null;
-//
-//		public WindowInfo getWindowInfo() {
-//			if (wi==null) {
-//				wi=new WindowInfo(WindowInfo.MODALDIALOG|WindowInfo.RESIZABLE);
-//				wi.setWidth(panel.getWidth());
-//				wi.setHeight(panel.getHeight());
-//				wi.setTitle(PluginServices.getText(this,"propiedades"));
-//			}
-//			return wi;
-//		}
-//	}
+
+	// class WinConfigure extends JPanel implements IWindow {
+	//
+	// private WindowInfo wi=null;
+	//
+	// public WindowInfo getWindowInfo() {
+	// if (wi==null) {
+	// wi=new WindowInfo(WindowInfo.MODALDIALOG|WindowInfo.RESIZABLE);
+	// wi.setWidth(panel.getWidth());
+	// wi.setHeight(panel.getHeight());
+	// wi.setTitle(PluginServices.getText(this,"propiedades"));
+	// }
+	// return wi;
+	// }
+	// }
 	private void openConfigurePanel() {
-		//IWindow window=new WinConfigure();
-		((DefaultConfigurePanel)panel).setSnapper((ISnapper)snappers.get(row));
+		// IWindow window=new WinConfigure();
+		((DefaultConfigurePanel) panel)
+				.setSnapper((ISnapper) snappers.get(row));
 		PluginServices.getMDIManager().addWindow(panel);
 	}
-	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-		this.row=row;
-		panel=((ISnapper)snappers.get(row)).getConfigurator();
-		if (panel!=null) {
+
+	public Component getTableCellEditorComponent(JTable table, Object value,
+			boolean isSelected, int row, int column) {
+		this.row = row;
+		panel = ((ISnapper) snappers.get(row)).getConfigurator();
+		if (panel != null) {
 			this.setEnabled(true);
-		}else {
+		} else {
 			this.setEnabled(false);
 			this.setBackground(Color.white);
 		}

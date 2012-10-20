@@ -75,57 +75,62 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  *
  */
 /**
- * This class is used to write the attributes for
- * a GML geometry. 
+ * This class is used to write the attributes for a GML geometry.
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public abstract class GeometryWriter {
-	
+
 	/**
 	 * Writes a Geoemtry init tag in GML
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param tagName
-	 * Geometry type
+	 *            Geometry type
 	 * @param id
-	 * Geometry id
+	 *            Geometry id
 	 * @param srs
-	 * Spatial reference system
+	 *            Spatial reference system
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor handler, String id,String srs) throws IOException{
+	public void start(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler, String id, String srs)
+			throws IOException {
 		writer.writeStartElement(GMLTags.GML_NAMESPACE_URI, getGeometryName());
-		if (id != null){
+		if (id != null) {
 			writer.writeStartAttribute(GMLTags.GML_GID);
 			writer.writeValue(id);
 		}
-		if (srs != null){
+		if (srs != null) {
 			writer.writeStartAttribute(GMLTags.GML_SRS_NAME);
-			writer.writeValue(GMLProjectionFactory.fromGPEToGML(srs, handler.getErrorHandler()));
+			writer.writeValue(GMLProjectionFactory.fromGPEToGML(srs,
+					handler.getErrorHandler()));
 		}
-		writer.writeEndAttributes();		
+		writer.writeEndAttributes();
 	}
-	
+
 	/**
 	 * @return the geometry name
 	 */
 	public abstract String getGeometryName();
-	
+
 	/**
 	 * Writes a Geoemtry end tag in GML
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param tagName
-	 * Geometry type
+	 *            Geometry type
 	 * @throws IOException
 	 */
-	public void end(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor handler) throws IOException{
-		writer.writeEndElement();		
+	public void end(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler) throws IOException {
+		writer.writeEndElement();
 	}
-	
-}
 
+}

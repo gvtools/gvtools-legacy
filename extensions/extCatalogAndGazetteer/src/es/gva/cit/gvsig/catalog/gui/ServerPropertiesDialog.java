@@ -60,38 +60,43 @@ import es.gva.cit.catalog.ui.serverproperties.ServerPropertiesDialogPanel;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class ServerPropertiesDialog extends ServerPropertiesDialogPanel implements IWindow {
+public class ServerPropertiesDialog extends ServerPropertiesDialogPanel
+		implements IWindow {
 	private WindowInfo m_windowinfo = null;
-	
-	public ServerPropertiesDialog(ServerData serverData, CatalogClient client, 
+
+	public ServerPropertiesDialog(ServerData serverData, CatalogClient client,
 			IProfile profile, Object parentFrame) {
-		super(serverData, client, profile, parentFrame);		
+		super(serverData, client, profile, parentFrame);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalog.ui.serverproperties.ServerPropertiesDialogPanel#closeButtonActionPerformed()
+	 * 
+	 * @see es.gva.cit.catalog.ui.serverproperties.ServerPropertiesDialogPanel#
+	 * closeButtonActionPerformed()
 	 */
-	protected void closeButtonActionPerformed() {        
+	protected void closeButtonActionPerformed() {
 		client.setServerData(updateServerData());
 		PluginServices.getMDIManager().closeWindow(this);
-	} 
-	
-	/*
-	 * (non-Javadoc)
-	 * @see es.gva.cit.catalog.ui.serverproperties.ServerPropertiesDialogPanel#cancelButtonActionPerformed()
-	 */
-	protected void cancelButtonActionPerformed() {        
-		PluginServices.getMDIManager().closeWindow(this);
-	} 
+	}
 
-	
 	/*
 	 * (non-Javadoc)
+	 * 
+	 * @see es.gva.cit.catalog.ui.serverproperties.ServerPropertiesDialogPanel#
+	 * cancelButtonActionPerformed()
+	 */
+	protected void cancelButtonActionPerformed() {
+		PluginServices.getMDIManager().closeWindow(this);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindow#getWindowInfo()
 	 */
 	public WindowInfo getWindowInfo() {
-		if (m_windowinfo == null){
+		if (m_windowinfo == null) {
 			m_windowinfo = new WindowInfo(WindowInfo.MODALDIALOG);
 			m_windowinfo.setTitle(Messages.getText("propertiesNameWindow"));
 			m_windowinfo.setWidth(500);
@@ -99,7 +104,8 @@ public class ServerPropertiesDialog extends ServerPropertiesDialogPanel implemen
 		}
 		return m_windowinfo;
 	}
-	public Object getWindowProfile(){
+
+	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
 

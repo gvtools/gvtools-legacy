@@ -86,31 +86,33 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  *
  */
 /**
- * This class parses the KML header and retrieves
- * the namespace that will be used to obtain the
- * kml version
+ * This class parses the KML header and retrieves the namespace that will be
+ * used to obtain the kml version
+ * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
 public class HeaderBinding {
-	
+
 	/**
 	 * This method parses the kml header file
+	 * 
 	 * @throws KmlHeaderParseException
 	 */
-	public String parse(IXmlStreamReader parser,GPEDeafultKmlParser handler) throws KmlHeaderParseException{
+	public String parse(IXmlStreamReader parser, GPEDeafultKmlParser handler)
+			throws KmlHeaderParseException {
 		String namespace = Kml2_1_Tags.UNKNOWN_VERSION;
-		try {	
+		try {
 			parser.nextTag();
-			QName name = parser.getName();	
-			if (!CompareUtils.compareWithNamespace(name,Kml2_1_Tags.ROOT)){
+			QName name = parser.getName();
+			if (!CompareUtils.compareWithNamespace(name, Kml2_1_Tags.ROOT)) {
 				throw new KmlNotRootTagException(name);
 			}
-			for (int i=0 ; i<parser.getAttributeCount() ; i++){
-				namespace = parser.getAttributeValue(i);				
+			for (int i = 0; i < parser.getAttributeCount(); i++) {
+				namespace = parser.getAttributeValue(i);
 			}
 		} catch (Exception e) {
 			throw new KmlHeaderParseException(e);
-		} 
+		}
 		return namespace;
 	}
 }

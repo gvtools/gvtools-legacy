@@ -28,41 +28,41 @@
 package org.gvsig.normalization.persistence;
 
 public class GeocodingTags {
-	
+
 	// persistence geocoding
 	public static final String PROJECTENCODING = "UTF-8";
-	
+
 	public static final String PATTERN = "pattern";
 	public static final String PATTERNNAME = "patternname";
-	
+
 	public static final String SCORE = "score";
 	public static final String RESULTSNUMBER = "resultsnumber";
-	
+
 	public static final String LAYERNAME = "layername";
 	public static final String LAYERPROVIDER = "layerprovider";
-	
+
 	public static final String MAINLITERAL = "mainliteral";
-	
+
 	public static final String INTERSECTIONLITERAL = "intersectionLiteral";
-	
+
 	public static final String ADDRESSNUMBER = "addressnumber";
-	
+
 	public static final String FIRSTLEFTNUMBER = "firstleftnumber";
 	public static final String FIRSTRIGHTNUMBER = "firstrightnumber";
 	public static final String LASTLEFTNUMBER = "lastleftnumber";
 	public static final String LASTRIGHTNUMBER = "lastrightnumber";
-	
+
 	public static final String FIRSTNUMBER = "firstnumber";
 	public static final String LASTNUMBER = "lastnumber";
-	
+
 	public static final String STYLE = "style";
 	public static final String SIMPLECENTROID = "simplecentroid";
 	public static final String SIMPLERANGE = "simplerange";
 	public static final String DOUBLERANGE = "doublerange";
 	public static final String COMPOSED = "composed";
-	
+
 	// persistence normalization
-	
+
 	public static final String PATTERNz = "pattern";
 	public static final String NOFIRSTROWS = "nofirstrows";
 	public static final String STRINGVALUEWIDTH = "stringvaluewidth";
@@ -70,7 +70,7 @@ public class GeocodingTags {
 	public static final String THOUSANDSEPARATOR = "thousandseparator";
 	public static final String DECIMALSEPARATOR = "decimalseparator";
 	public static final String TEXTSEPARATOR = "textseparator";
-	
+
 	public static final String STRINGVALUE = "STRING VALUE";
 	public static final String DATEVALUE = "DATE VALUE";
 	public static final String DECIMALVALUE = "DECIMAL VALUE";
@@ -95,10 +95,9 @@ public class GeocodingTags {
 	public static final String SEMICOLONSEP = "semicolonsep";
 	public static final String OTHERSEP = "othersep";
 	public static final String JOINSEP = "joinsep";
-	
+
 	public static final String ELEMENT = "ELEMENT";
-	
+
 	public static final String NPATTERN = "NORMALIZATION PATTERN";
-	
-	
+
 }

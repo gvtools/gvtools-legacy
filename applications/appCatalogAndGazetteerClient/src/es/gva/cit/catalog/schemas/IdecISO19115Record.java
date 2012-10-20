@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.catalog.schemas;
+
 import java.net.URI;
 
 import es.gva.cit.catalog.metadataxml.XMLNode;
@@ -53,35 +53,37 @@ import es.gva.cit.catalog.metadataxml.XMLTree;
  */
 public class IdecISO19115Record extends Record {
 
-	public  IdecISO19115Record() {   
+	public IdecISO19115Record() {
 
 	}
 
 	/**
-	 * @param node 
+	 * @param node
 	 */
-	public  IdecISO19115Record(URI uri,XMLNode node) {        
-		super(uri,node);
+	public IdecISO19115Record(URI uri, XMLNode node) {
+		super(uri, node);
 		setTitle(XMLTree.searchNodeValue(node,
 				"identificationInfo->MD_DataIdentification->citation->title"));
 		setAbstract_(XMLTree.searchNodeValue(node,
-		"identificationInfo->MD_DataIdentification->abstract"));
+				"identificationInfo->MD_DataIdentification->abstract"));
 		setPurpose(XMLTree.searchNodeValue(node,
-		"identificationInfo->MD_DataIdentification->purpose"));
-		setKeyWords(XMLTree.searchMultipleNodeValue(node,
-		"identificationInfo->MD_DataIdentification->descriptiveKeywords->keyword"));
+				"identificationInfo->MD_DataIdentification->purpose"));
+		setKeyWords(XMLTree
+				.searchMultipleNodeValue(node,
+						"identificationInfo->MD_DataIdentification->descriptiveKeywords->keyword"));
 		setResources(getResources("distributionInfo->distributor->distributorTransferOptions->onLine"));
-		//setImage(getImageUrl("identificationInfo->MD_DataIdentification->graphicOverview->fileName"));
-	} 
+		// setImage(getImageUrl("identificationInfo->MD_DataIdentification->graphicOverview->fileName"));
+	}
 
 	/**
 	 * It parses the online resources
 	 * 
 	 * 
 	 * @return Resource
-	 * @param label Label that contains the resource root
+	 * @param label
+	 *            Label that contains the resource root
 	 */
-	private Resource[] getResources(String label) {        
+	private Resource[] getResources(String label) {
 		XMLNode[] nodes = XMLTree.searchMultipleNode(getNode(), label);
 
 		if (nodes == null) {
@@ -89,38 +91,35 @@ public class IdecISO19115Record extends Record {
 		}
 		Resource[] resources = new Resource[nodes.length];
 
-		for (int i = 0; i < resources.length; i++){
+		for (int i = 0; i < resources.length; i++) {
 
 			String sProtocol = XMLTree.searchNodeValue(nodes[i], "protocol");
 			String sName = XMLTree.searchNodeValue(nodes[i], "orName");
 
-			if (sProtocol == null){
-				sProtocol =   Resource.WEBSITE;
-				sName =  "orName";
+			if (sProtocol == null) {
+				sProtocol = Resource.WEBSITE;
+				sName = "orName";
 			}
 
 			resources[i] = new Resource(XMLTree.searchNodeValue(nodes[i],
-			"linkage"),
-			sProtocol,
-			sName,
-			"orDesc",
-			"",
-			"",	
-			null);
+					"linkage"), sProtocol, sName, "orDesc", "", "", null);
 		}
 		return resources;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.schemas.discoverer.Record#accept(java.net.URI, es.gva.cit.catalogClient.metadataxml.XMLNode)
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.schemas.discoverer.Record#accept(java.net.URI,
+	 * es.gva.cit.catalogClient.metadataxml.XMLNode)
 	 */
 	public boolean accept(URI uri, XMLNode node) {
-		if (node.getName().endsWith("MD_Metadata")){
-			if (node.searchNode("identificationInfo->MD_DataIdentification->citation->title")!=null){
+		if (node.getName().endsWith("MD_Metadata")) {
+			if (node.searchNode("identificationInfo->MD_DataIdentification->citation->title") != null) {
 				return true;
 			}
 		}
 		return false;
-	} 
+	}
 }

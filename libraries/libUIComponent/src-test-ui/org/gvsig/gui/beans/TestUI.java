@@ -22,30 +22,32 @@ import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
+
 /**
  * Base para inicializar el frame de un Test
+ * 
  * @version 30/10/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class TestUI extends JFrame {
-  private static final long serialVersionUID = -4036296272039858631L;
+	private static final long serialVersionUID = -4036296272039858631L;
 
 	public TestUI(String title) {
 		super(title);
 		defaultInit();
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 	}
-	
+
 	/**
 	 * Configura el entorno por defecto
 	 */
 	public static void defaultInit() {
-		 //Turn off metal's use of bold fonts
+		// Turn off metal's use of bold fonts
 		UIManager.put("swing.boldMetal", Boolean.FALSE);
 		Toolkit.getDefaultToolkit().setDynamicLayout(true);
 		try {
-	    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-    } catch (Exception e) {
-    }
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+		}
 	}
 }

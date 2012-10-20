@@ -29,28 +29,33 @@ import org.gvsig.raster.grid.filter.RasterFilterList;
 import org.gvsig.raster.grid.filter.RasterFilterListManager;
 import org.gvsig.raster.hierarchy.IStatistics;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
+
 /**
  * Gestor de la pila de filtros para filtros estadísticos.
- *
+ * 
  * @version 31/05/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class StatisticsListManager implements IRasterFilterListManager {
-	protected RasterFilterList			filterList				= null;
-	private RasterFilterListManager	filterListManager	= null;
-	private IStatistics							stats							= null;
+	protected RasterFilterList filterList = null;
+	private RasterFilterListManager filterListManager = null;
+	private IStatistics stats = null;
 
 	/**
 	 * Constructor. Asigna el gestor de todos los filtros y el objeto que
 	 * contiene las estadísticas.
-	 * @param filterListManager Gestor general de filtros donde se registran los gestores de filtros
-	 * de las extensiones
-	 * @param stats Estadisticas
+	 * 
+	 * @param filterListManager
+	 *            Gestor general de filtros donde se registran los gestores de
+	 *            filtros de las extensiones
+	 * @param stats
+	 *            Estadisticas
 	 */
 	public StatisticsListManager(RasterFilterListManager filterListManager) {
 		this.filterListManager = filterListManager;
 		this.filterList = filterListManager.getFilterList();
-		stats = (IStatistics)filterListManager.getFilterList().getEnvParam("IStatistics");
+		stats = (IStatistics) filterListManager.getFilterList().getEnvParam(
+				"IStatistics");
 	}
 
 	/**
@@ -64,40 +69,57 @@ public class StatisticsListManager implements IRasterFilterListManager {
 	/**
 	 * Constructor. Asigna el gestor de todos los filtros y el objeto que
 	 * contiene las estadísticas.
-	 * @param filterListManager Gestor general de filtros donde se registran los gestores de filtros
-	 * de las extensiones
-	 * @param stats Estadisticas
+	 * 
+	 * @param filterListManager
+	 *            Gestor general de filtros donde se registran los gestores de
+	 *            filtros de las extensiones
+	 * @param stats
+	 *            Estadisticas
 	 */
-	public StatisticsListManager(RasterFilterListManager filterListManager, IStatistics stats) {
+	public StatisticsListManager(RasterFilterListManager filterListManager,
+			IStatistics stats) {
 		this(filterListManager);
 		this.stats = stats;
 	}
 
 	/**
 	 * Añade un filtro de recorte de colas.
-	 * @param tail porcentaje de recorte
-	 * @param samples porcentaje de muestras tomadas del total de la imagen
+	 * 
+	 * @param tail
+	 *            porcentaje de recorte
+	 * @param samples
+	 *            porcentaje de muestras tomadas del total de la imagen
 	 * @param removeMaxValue
 	 * @param stats
-	 * @throws FilterTypeException 
+	 * @throws FilterTypeException
 	 */
-	public void addTailFilter(double tail, double samples, boolean removeMaxValue, IStatistics stats) throws FilterTypeException {
-		RasterFilter filter = createTailFilter(tail, samples, removeMaxValue, stats);
+	public void addTailFilter(double tail, double samples,
+			boolean removeMaxValue, IStatistics stats)
+			throws FilterTypeException {
+		RasterFilter filter = createTailFilter(tail, samples, removeMaxValue,
+				stats);
 
 		if (filter != null)
 			filterList.add(filter);
 	}
-	
+
 	/**
-	 * Añade un filtro de recorte de colas con una lista de valores de recorte a obtener
-	 * @param tail porcentaje de recorte
-	 * @param samples porcentaje de muestras tomadas del total de la imagen
+	 * Añade un filtro de recorte de colas con una lista de valores de recorte a
+	 * obtener
+	 * 
+	 * @param tail
+	 *            porcentaje de recorte
+	 * @param samples
+	 *            porcentaje de muestras tomadas del total de la imagen
 	 * @param removeMaxValue
 	 * @param stats
-	 * @throws FilterTypeException 
+	 * @throws FilterTypeException
 	 */
-	public void addTailFilter(double[] tailList, double samples, boolean removeMaxValue, IStatistics stats) throws FilterTypeException {
-		RasterFilter filter = createTailFilter(tailList, samples, removeMaxValue, stats);
+	public void addTailFilter(double[] tailList, double samples,
+			boolean removeMaxValue, IStatistics stats)
+			throws FilterTypeException {
+		RasterFilter filter = createTailFilter(tailList, samples,
+				removeMaxValue, stats);
 
 		if (filter != null)
 			filterList.add(filter);
@@ -105,13 +127,16 @@ public class StatisticsListManager implements IRasterFilterListManager {
 
 	/**
 	 * Crea un filtro de recorte de forma estática
-	 * @param tail Porcentaje de recorte
+	 * 
+	 * @param tail
+	 *            Porcentaje de recorte
 	 * @param samples
 	 * @param removeMaxValue
 	 * @param stats
 	 * @return
 	 */
-	public static RasterFilter createTailFilter(double tail, double samples, boolean removeMaxValue, IStatistics stats) {
+	public static RasterFilter createTailFilter(double tail, double samples,
+			boolean removeMaxValue, IStatistics stats) {
 		RasterFilter filter = new TailTrimFloatFilter();
 
 		if (filter != null) {
@@ -123,16 +148,19 @@ public class StatisticsListManager implements IRasterFilterListManager {
 
 		return filter;
 	}
-	
+
 	/**
 	 * Crea un filtro de recorte de forma estática
-	 * @param tailList Lista de porcentajes de recorte
+	 * 
+	 * @param tailList
+	 *            Lista de porcentajes de recorte
 	 * @param samples
 	 * @param removeMaxValue
 	 * @param stats
 	 * @return
 	 */
-	public static RasterFilter createTailFilter(double[] tailList, double samples, boolean removeMaxValue, IStatistics stats) {
+	public static RasterFilter createTailFilter(double[] tailList,
+			double samples, boolean removeMaxValue, IStatistics stats) {
 		RasterFilter filter = new TailTrimFloatFilter();
 
 		if (filter != null) {
@@ -147,15 +175,19 @@ public class StatisticsListManager implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#getStringsFromFilterList(java.util.ArrayList,
-	 *      org.gvsig.raster.grid.filter.RasterFilter)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#
+	 * getStringsFromFilterList(java.util.ArrayList,
+	 * org.gvsig.raster.grid.filter.RasterFilter)
 	 */
-	public ArrayList getStringsFromFilterList(ArrayList filterList, RasterFilter rf) {
+	public ArrayList getStringsFromFilterList(ArrayList filterList,
+			RasterFilter rf) {
 		if (rf instanceof TailTrimFilter) {
 			filterList.add("filter.tail.active=true");
-			filterList.add("filter.tail.value=" + ((TailTrimFilter) rf).tailPercent);
-			filterList.add("filter.tail.remove=" + ((TailTrimFilter) rf).removeMaxValue());
+			filterList.add("filter.tail.value="
+					+ ((TailTrimFilter) rf).tailPercent);
+			filterList.add("filter.tail.remove="
+					+ ((TailTrimFilter) rf).removeMaxValue());
 		}
 
 		return filterList;
@@ -163,14 +195,17 @@ public class StatisticsListManager implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#createFilterListFromStrings(java.util.ArrayList,
-	 *      java.lang.String, int)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#
+	 * createFilterListFromStrings(java.util.ArrayList, java.lang.String, int)
 	 */
-	public int createFilterListFromStrings(ArrayList filters, String fil, int filteri) throws FilterTypeException {
-		if (fil.startsWith("filter.tail.active") && RasterFilterListManager.getValue(fil).equals("true")) {
+	public int createFilterListFromStrings(ArrayList filters, String fil,
+			int filteri) throws FilterTypeException {
+		if (fil.startsWith("filter.tail.active")
+				&& RasterFilterListManager.getValue(fil).equals("true")) {
 			filters.remove(filteri);
-			filterListManager.removeFilter(Messages.getText(TailTrimFilter.names[0]));
+			filterListManager.removeFilter(Messages
+					.getText(TailTrimFilter.names[0]));
 
 			double recorte = 0D;
 			boolean remove = false;
@@ -179,13 +214,16 @@ public class StatisticsListManager implements IRasterFilterListManager {
 				String elem = (String) filters.get(propFilter);
 
 				if (elem.startsWith("filter.tail.value")) {
-					recorte = Double.parseDouble(RasterFilterListManager.getValue(elem));
+					recorte = Double.parseDouble(RasterFilterListManager
+							.getValue(elem));
 					filters.remove(propFilter);
 					propFilter--;
 				}
 
 				if (elem.startsWith("filter.tail.remove")) {
-					remove = Boolean.valueOf(RasterFilterListManager.getValue(elem)).booleanValue();
+					remove = Boolean.valueOf(
+							RasterFilterListManager.getValue(elem))
+							.booleanValue();
 					filters.remove(propFilter);
 					propFilter--;
 				}
@@ -199,8 +237,10 @@ public class StatisticsListManager implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList()
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList
+	 * ()
 	 */
 	public ArrayList getRasterFilterList() {
 		ArrayList filters = new ArrayList();

@@ -53,7 +53,6 @@ import com.iver.cit.gvsig.fmap.Messages;
 
 public class SubstringFunction extends Operator {
 
-
 	ArrayList<Expression> arguments = new ArrayList<Expression>();
 
 	public String getName() {
@@ -68,41 +67,44 @@ public class SubstringFunction extends Operator {
 		arguments.add(i, arg);
 	}
 
-	public void check()
-	throws ExpressionException {
+	public void check() throws ExpressionException {
 
-//		try {
-//			inputString = (String) args[0];
-//		} catch (ClassCastException ccEx) {
-//			throw new SemanticException(SemanticException.TYPE_MISMATCH);
-//		}
-//
-//		try {
-//			beginIndex = (Integer) args[1];
-//		} catch (ClassCastException ccEx) {
-//			throw new SemanticException(SemanticException.TYPE_MISMATCH);
-//		}
-//
-//		try {
-//			endIndex = (Integer) args[2];
-//		} catch (ClassCastException ccEx) {
-//			throw new SemanticException(SemanticException.TYPE_MISMATCH);
-//		}
-//
-//		if (endIndex < beginIndex) {
-//			throw new EvaluationException("Begining index is greather than the ending index!");
-//		}
-//
+		// try {
+		// inputString = (String) args[0];
+		// } catch (ClassCastException ccEx) {
+		// throw new SemanticException(SemanticException.TYPE_MISMATCH);
+		// }
+		//
+		// try {
+		// beginIndex = (Integer) args[1];
+		// } catch (ClassCastException ccEx) {
+		// throw new SemanticException(SemanticException.TYPE_MISMATCH);
+		// }
+		//
+		// try {
+		// endIndex = (Integer) args[2];
+		// } catch (ClassCastException ccEx) {
+		// throw new SemanticException(SemanticException.TYPE_MISMATCH);
+		// }
+		//
+		// if (endIndex < beginIndex) {
+		// throw new
+		// EvaluationException("Begining index is greather than the ending index!");
+		// }
+		//
 
-		if(arguments.size() != 3 && arguments.size() !=2)
-			throw new ExpressionException(ExpressionException.INCORRECT_NUMBER_OF_ARGUMENTS);
+		if (arguments.size() != 3 && arguments.size() != 2)
+			throw new ExpressionException(
+					ExpressionException.INCORRECT_NUMBER_OF_ARGUMENTS);
 
-		if (!(arguments.get(1).evaluate()instanceof Integer))
-			throw new ExpressionException(ExpressionException.CLASS_CASTING_EXCEPTION);
+		if (!(arguments.get(1).evaluate() instanceof Integer))
+			throw new ExpressionException(
+					ExpressionException.CLASS_CASTING_EXCEPTION);
 
-		if(arguments.size() == 3)
-			if (!(arguments.get(2).evaluate()instanceof Integer))
-				throw new ExpressionException(ExpressionException.CLASS_CASTING_EXCEPTION);
+		if (arguments.size() == 3)
+			if (!(arguments.get(2).evaluate() instanceof Integer))
+				throw new ExpressionException(
+						ExpressionException.CLASS_CASTING_EXCEPTION);
 	}
 
 	public Object evaluate() throws ExpressionException {
@@ -110,14 +112,14 @@ public class SubstringFunction extends Operator {
 		final int beginIndex;
 		final int endIndex;
 
-		if(arguments.size() != 3 && arguments.size() !=2)
-			throw new ExpressionException(ExpressionException.INCORRECT_NUMBER_OF_ARGUMENTS);
+		if (arguments.size() != 3 && arguments.size() != 2)
+			throw new ExpressionException(
+					ExpressionException.INCORRECT_NUMBER_OF_ARGUMENTS);
 
 		inputString = arguments.get(0).evaluate().toString();
 		beginIndex = (Integer) arguments.get(1).evaluate();
-		if(arguments.size() != 2) {
+		if (arguments.size() != 2) {
 			endIndex = (Integer) arguments.get(2).evaluate();
-
 
 			return inputString.substring(beginIndex, endIndex);
 		} else {
@@ -131,10 +133,12 @@ public class SubstringFunction extends Operator {
 	}
 
 	public String getPattern() {
-		return Messages.getString(getName())+"("+Messages.getString(OperationTags.STRING_CONSTANT)
-		+ ","+Messages.getString(OperationTags.OPERAND) + ","+Messages.getString(OperationTags.OPERAND)+ ")\n"+
-		Messages.getString(OperationTags.OPERAND) +" = "+
-		Messages.getString(OperationTags.NUMERIC_VALUE);
+		return Messages.getString(getName()) + "("
+				+ Messages.getString(OperationTags.STRING_CONSTANT) + ","
+				+ Messages.getString(OperationTags.OPERAND) + ","
+				+ Messages.getString(OperationTags.OPERAND) + ")\n"
+				+ Messages.getString(OperationTags.OPERAND) + " = "
+				+ Messages.getString(OperationTags.NUMERIC_VALUE);
 	}
 
 	public void setArguments(ArrayList<Expression> arguments) {

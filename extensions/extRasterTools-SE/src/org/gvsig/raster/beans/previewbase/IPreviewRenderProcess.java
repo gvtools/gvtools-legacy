@@ -23,36 +23,43 @@ import org.gvsig.raster.grid.filter.FilterTypeException;
 import org.gvsig.raster.hierarchy.IRasterRendering;
 
 /**
- * Interfaz para el procesado del rendering antes de dibujar la preview.
- * El cliente puede obtener la lista de filtros del rendering de la imagen 
- * que va a dibujarse como preview y modificarla para visulizar la preview 
- * modificada. En caso de no modificar la preview se verá la imagen sin variaciones
- * con respecto a la original.
+ * Interfaz para el procesado del rendering antes de dibujar la preview. El
+ * cliente puede obtener la lista de filtros del rendering de la imagen que va a
+ * dibujarse como preview y modificarla para visulizar la preview modificada. En
+ * caso de no modificar la preview se verá la imagen sin variaciones con
+ * respecto a la original.
  * 
  * 19/02/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public interface IPreviewRenderProcess {
-	
+
 	/**
 	 * Procesado del rendering
+	 * 
 	 * @param rendering
-	 * @throws ImageUnavailable Cuando se ha producido un error y hay que mostrar un mensaje en la 
-	 * previsualización porque no se puede mostrar la imagen
+	 * @throws ImageUnavailable
+	 *             Cuando se ha producido un error y hay que mostrar un mensaje
+	 *             en la previsualización porque no se puede mostrar la imagen
 	 */
-	public void process(IRasterRendering rendering) throws FilterTypeException, ImageUnavailableException;
-	
+	public void process(IRasterRendering rendering) throws FilterTypeException,
+			ImageUnavailableException;
+
 	/**
-	 * Obtiene el flag que informa de si se está mostrando la previsualización o no.
-	 * En caso de no mostrarse debería lanzarse una excepción ImageUnavailableExcepcion al
-	 * hacer un process.
+	 * Obtiene el flag que informa de si se está mostrando la previsualización o
+	 * no. En caso de no mostrarse debería lanzarse una excepción
+	 * ImageUnavailableExcepcion al hacer un process.
+	 * 
 	 * @return
 	 */
 	public boolean isShowPreview();
-	
+
 	/**
-	 * Asigna el flag para mostrar u ocultar la preview. En caso de no mostrarse debería lanzarse una 
-	 * excepción ImageUnavailableExcepcion cuando se hace un process.
+	 * Asigna el flag para mostrar u ocultar la preview. En caso de no mostrarse
+	 * debería lanzarse una excepción ImageUnavailableExcepcion cuando se hace
+	 * un process.
+	 * 
 	 * @param showPreview
 	 */
 	public void setShowPreview(boolean showPreview);

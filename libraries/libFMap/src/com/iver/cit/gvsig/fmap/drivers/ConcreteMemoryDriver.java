@@ -49,43 +49,41 @@ import com.iver.cit.gvsig.fmap.core.FShape;
 
 public class ConcreteMemoryDriver extends MemoryDriver {
 
-    int shapeType = FShape.MULTI;
-    String name;
+	int shapeType = FShape.MULTI;
+	String name;
 
-    public void setShapeType(int shapeType)
-    {
-        this.shapeType = shapeType;
-    }
+	public void setShapeType(int shapeType) {
+		this.shapeType = shapeType;
+	}
 
-    public int getShapeType() {
-        return shapeType;
-    }
+	public int getShapeType() {
+		return shapeType;
+	}
 
-    /**
+	/**
      *
      */
-    public ConcreteMemoryDriver() {
-    }
+	public ConcreteMemoryDriver() {
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public DriverAttributes getDriverAttributes() {
-        return null;
-    }
+	public DriverAttributes getDriverAttributes() {
+		return null;
+	}
 
-    public int[] getPrimaryKeys() throws ReadDriverException {
-        return null;
-    }
+	public int[] getPrimaryKeys() throws ReadDriverException {
+		return null;
+	}
 
-    public void write(DataWare dataWare) throws ReadDriverException {
+	public void write(DataWare dataWare) throws ReadDriverException {
 
-    }
+	}
 
 	public boolean isWritable() {
 		return true;
 	}
-
 
 }

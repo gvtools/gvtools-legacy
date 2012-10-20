@@ -53,11 +53,13 @@ import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
 import com.iver.cit.gvsig.fmap.rendering.XmlBuilder;
 
 /**
- * Implements the PolygonSymbolizer element of an SLD implementation specification 
- * (version 1.0.0).<p>
+ * Implements the PolygonSymbolizer element of an SLD implementation
+ * specification (version 1.0.0).
+ * <p>
  * 
  * PolygonSymbolizer is used draw a polygon (or other area-type geometries),
- * including filling its interior and stroking its border (outline).<p>
+ * including filling its interior and stroking its border (outline).
+ * <p>
  * 
  * @see SLDStroke1_0_0
  * @see SLDFill1_0_0
@@ -68,35 +70,33 @@ import com.iver.cit.gvsig.fmap.rendering.XmlBuilder;
  */
 public class SLDPolygonSymbolizer1_0_0 extends SLDPolygonSymbolizer {
 
-	
 	/**
-	 * Parses the xml data retrieved from the SLD, it will parse the PolygonSymbolizer
-	 *  element</p>
-	 * @throws LegendDriverException 
+	 * Parses the xml data retrieved from the SLD, it will parse the
+	 * PolygonSymbolizer element</p>
+	 * 
+	 * @throws LegendDriverException
 	 */
-	public void parse(XMLSchemaParser parser)throws IOException, XmlPullParserException, LegendDriverException  {
+	public void parse(XMLSchemaParser parser) throws IOException,
+			XmlPullParserException, LegendDriverException {
 		int currentTag;
 		boolean end = false;
 
-		parser.require(XMLSchemaParser.START_TAG, null, SLDTags.POLYGONSYMBOLIZER);
+		parser.require(XMLSchemaParser.START_TAG, null,
+				SLDTags.POLYGONSYMBOLIZER);
 		currentTag = parser.next();
 
-		while (!end)
-		{
-			switch(currentTag)
-			{
+		while (!end) {
+			switch (currentTag) {
 			case XMLSchemaParser.START_TAG:
-				if (parser.getName().compareTo(SLDTags.GEOMETRY)==0) {
+				if (parser.getName().compareTo(SLDTags.GEOMETRY) == 0) {
 					parseGeometry(parser);
-				}
-				else if (parser.getName().compareTo(SLDTags.FILL)==0) {
+				} else if (parser.getName().compareTo(SLDTags.FILL) == 0) {
 					SLDFill1_0_0 fill = new SLDFill1_0_0();
-					fill.parse(parser,currentTag,null);
+					fill.parse(parser, currentTag, null);
 					setFill(fill);
-				}
-				else if (parser.getName().compareTo(SLDTags.STROKE)==0) {
+				} else if (parser.getName().compareTo(SLDTags.STROKE) == 0) {
 					SLDStroke1_0_0 stroke = new SLDStroke1_0_0();
-					stroke.parse(parser,currentTag,null);
+					stroke.parse(parser, currentTag, null);
 					setStroke(stroke);
 				}
 				break;
@@ -116,34 +116,35 @@ public class SLDPolygonSymbolizer1_0_0 extends SLDPolygonSymbolizer {
 	}
 
 	/**
-	 * Parses the xml data retrieved from the SLD, it will parse the Geometry element</p>
-	 * The Geometry element of a Symbolizer defines the geometry to be used
-	 * for styling. The Geometry element is optional and if it is absent then the
-	 * “default” geometry property of the feature type that is used in the containing 
-	 * FeatureStyleType is used. The precise meaning of “default” geometry property is
-	 * system-dependent. Most frequently, feature types will have only a single geometry
-	 * property.<p>
-	 * The only method available for defining a geometry is to reference a geometry 
-	 * property using the ogc:PropertyName element (defined in the WFS Specification). 
-	 * The content of the element gives the property name in XPath syntax. In principle, 
-	 * a fixed geometry could be defined using GML or operators could be defined for 
-	 * computing the geometry from references or literals. However, using a feature 
-	 * property directly is by far the most commonly useful method.
-	 *
+	 * Parses the xml data retrieved from the SLD, it will parse the Geometry
+	 * element</p> The Geometry element of a Symbolizer defines the geometry to
+	 * be used for styling. The Geometry element is optional and if it is absent
+	 * then the “default” geometry property of the feature type that is used in
+	 * the containing FeatureStyleType is used. The precise meaning of “default”
+	 * geometry property is system-dependent. Most frequently, feature types
+	 * will have only a single geometry property.
+	 * <p>
+	 * The only method available for defining a geometry is to reference a
+	 * geometry property using the ogc:PropertyName element (defined in the WFS
+	 * Specification). The content of the element gives the property name in
+	 * XPath syntax. In principle, a fixed geometry could be defined using GML
+	 * or operators could be defined for computing the geometry from references
+	 * or literals. However, using a feature property directly is by far the
+	 * most commonly useful method.
+	 * 
 	 */
-	private void parseGeometry(XMLSchemaParser parser) throws IOException, XmlPullParserException{
+	private void parseGeometry(XMLSchemaParser parser) throws IOException,
+			XmlPullParserException {
 		int currentTag;
 		boolean end = false;
 
 		parser.require(XMLSchemaParser.START_TAG, null, SLDTags.GEOMETRY);
 		currentTag = parser.next();
 
-		while (!end)
-		{
-			switch(currentTag)
-			{
+		while (!end) {
+			switch (currentTag) {
 			case XMLSchemaParser.START_TAG:
-				if (parser.getName().compareTo(SLDTags.PROPERTY_NAME)==0) {
+				if (parser.getName().compareTo(SLDTags.PROPERTY_NAME) == 0) {
 					setGeometry(parser.nextText());
 				}
 
@@ -163,23 +164,19 @@ public class SLDPolygonSymbolizer1_0_0 extends SLDPolygonSymbolizer {
 
 	}
 
-	
-	
-
 	public String toXML() {
 		XmlBuilder xmlBuilder = new XmlBuilder();
 
 		xmlBuilder.openTag(SLDTags.POLYGONSYMBOLIZER);
-		if(fill != null) {
+		if (fill != null) {
 			xmlBuilder.writeRaw(getFill().toXML());
 		}
-		if(stroke != null) {
+		if (stroke != null) {
 			xmlBuilder.writeRaw(getStroke().toXML());
 		}
 		xmlBuilder.closeTag();
 
 		return xmlBuilder.getXML();
 	}
-
 
 }

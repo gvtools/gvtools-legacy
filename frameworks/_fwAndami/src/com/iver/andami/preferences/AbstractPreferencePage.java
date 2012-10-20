@@ -45,13 +45,15 @@ import java.util.Map;
 import org.gvsig.gui.beans.swing.GridBagLayoutPanel;
 
 import com.iver.utiles.extensionPoints.IExtensionBuilder;
+
 /**
  * The abstract class that any preference page should extend.
- *
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
-public abstract class AbstractPreferencePage extends GridBagLayoutPanel implements IPreference, IExtensionBuilder{
+public abstract class AbstractPreferencePage extends GridBagLayoutPanel
+		implements IPreference, IExtensionBuilder {
 	/**
 	 * The number of components already added to the layout manager.
 	 */
@@ -60,7 +62,6 @@ public abstract class AbstractPreferencePage extends GridBagLayoutPanel implemen
 	private String title;
 
 	protected String parentID = null; // Por defecto, nodo raiz
-
 
 	public final void setParentID(String parentID) {
 		this.parentID = parentID;
@@ -74,8 +75,7 @@ public abstract class AbstractPreferencePage extends GridBagLayoutPanel implemen
 		this.title = title;
 	}
 
-	public String toString()
-	{
+	public String toString() {
 		return title;
 	}
 
@@ -92,14 +92,14 @@ public abstract class AbstractPreferencePage extends GridBagLayoutPanel implemen
 	}
 
 	/**
-	 * Devuelve true si el Panel debe estar en un BorderLayout centrado o false si
-	 * tiene un tamaño fijo.
+	 * Devuelve true si el Panel debe estar en un BorderLayout centrado o false
+	 * si tiene un tamaño fijo.
+	 * 
 	 * @return
 	 */
 	public boolean isResizeable() {
 		return false;
 	}
-
 
 	public final void saveValues() throws StoreException {
 		// Store the values.
@@ -114,26 +114,29 @@ public abstract class AbstractPreferencePage extends GridBagLayoutPanel implemen
 	 * Gathers the configurations and stores them in the system.<br>
 	 * </p>
 	 * <p>
-	 * <b>storeValues()</b> and  <b>setChangesApplied()</b> are methods from <b>AbstractPreferencePage</b>
-	 * not from <b>IPreference</b>. They both perform in combination what saveValue() should do
-	 * by itself, but they exist for performance issues. In fact, you <b>should not</b>
-	 * invoke them outside your PreferencePage class, you only need to code them.
+	 * <b>storeValues()</b> and <b>setChangesApplied()</b> are methods from
+	 * <b>AbstractPreferencePage</b> not from <b>IPreference</b>. They both
+	 * perform in combination what saveValue() should do by itself, but they
+	 * exist for performance issues. In fact, you <b>should not</b> invoke them
+	 * outside your PreferencePage class, you only need to code them.
 	 * </p>
+	 * 
 	 * @throws StoreException
 	 */
 	public abstract void storeValues() throws StoreException;
 
 	/**
 	 * <p>
-	 * After this method is invoked, the Preference page <b>must</b> return <b>true</b> as the
-	 * result of invoking isValueChanged() method. It tells that the values have been
-	 * saved in the system.<br>
+	 * After this method is invoked, the Preference page <b>must</b> return
+	 * <b>true</b> as the result of invoking isValueChanged() method. It tells
+	 * that the values have been saved in the system.<br>
 	 * </p>
 	 * <p>
-	 * <b>storeValues()</b> and  <b>setChangesApplied()</b> are methods from  <b>AbstractPreferencePage</b>
-	 * not from  <b>IPreference</b>. They both perform in combination what storeValue() should
-	 * by itself, but they exist for performance issues. In fact, you <b>should not</b>
-	 * invoke them outside your PreferencePage class, you only need to code them.
+	 * <b>storeValues()</b> and <b>setChangesApplied()</b> are methods from
+	 * <b>AbstractPreferencePage</b> not from <b>IPreference</b>. They both
+	 * perform in combination what storeValue() should by itself, but they exist
+	 * for performance issues. In fact, you <b>should not</b> invoke them
+	 * outside your PreferencePage class, you only need to code them.
 	 * </p>
 	 */
 	public abstract void setChangesApplied();

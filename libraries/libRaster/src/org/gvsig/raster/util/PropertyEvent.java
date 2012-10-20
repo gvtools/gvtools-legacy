@@ -24,6 +24,7 @@ import java.util.EventObject;
  * Evento de una propiedad con la forma variable=valor
  * 
  * 07/01/2008
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class PropertyEvent extends EventObject {
@@ -33,13 +34,18 @@ public class PropertyEvent extends EventObject {
 	private Object oldValue = null;
 
 	/**
-	 * Constructor. Se asignan los valores de nombre y valor de la 
-	 * propiedad que ha disparado el evento.
-	 * @param source Objeto fuente
-	 * @param name Nombre de la propiedad
-	 * @param value Valor de la propiedad
+	 * Constructor. Se asignan los valores de nombre y valor de la propiedad que
+	 * ha disparado el evento.
+	 * 
+	 * @param source
+	 *            Objeto fuente
+	 * @param name
+	 *            Nombre de la propiedad
+	 * @param value
+	 *            Valor de la propiedad
 	 */
-	public PropertyEvent(Object source, String name, Object value, Object oldValue) {
+	public PropertyEvent(Object source, String name, Object value,
+			Object oldValue) {
 		super(source);
 		this.name = name;
 		this.value = value;
@@ -48,6 +54,7 @@ public class PropertyEvent extends EventObject {
 
 	/**
 	 * Obtiene el nombre de la propiedad que disparó el evento
+	 * 
 	 * @return cadena con el nombre de la propiedad que disparó el evento
 	 */
 	public String getName() {
@@ -56,14 +63,16 @@ public class PropertyEvent extends EventObject {
 
 	/**
 	 * Obtiene el valor de la propiedad que disparó el evento
+	 * 
 	 * @return Object con el valor de la propiedad que disparó el evento
 	 */
 	public Object getOldValue() {
 		return oldValue;
 	}
-	
+
 	/**
 	 * Obtiene el valor de la propiedad antes de que se modificara.
+	 * 
 	 * @return Object con el valor de la propiedad que disparó el evento
 	 */
 	public Object getValue() {

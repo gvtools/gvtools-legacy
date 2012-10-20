@@ -42,22 +42,25 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.impl.generalization;
 
 import com.iver.cit.gvsig.geoprocess.core.fmap.GeoprocessException;
 import com.iver.cit.gvsig.geoprocess.core.gui.IGeoprocessUserEntries;
 
-public interface IGeneralizationGeoprocessUserEntries extends IGeoprocessUserEntries {
-	
+public interface IGeneralizationGeoprocessUserEntries extends
+		IGeoprocessUserEntries {
+
 	public boolean computeDouglasPeucker();
+
 	public boolean computeTopologyPreservingSimplify();
+
 	public double getDistTolerance() throws GeoprocessException;
-	
-	/*TODO Mover a clase padre*/
+
+	/* TODO Mover a clase padre */
 	public boolean onlyFirstLayerSelected();
 
 }

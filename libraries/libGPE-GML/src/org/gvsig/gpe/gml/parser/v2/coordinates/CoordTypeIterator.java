@@ -11,7 +11,6 @@ import org.gvsig.gpe.xml.stream.IXmlStreamReader;
 import org.gvsig.gpe.xml.stream.XmlStreamException;
 import org.gvsig.gpe.xml.utils.CompareUtils;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -67,54 +66,64 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * It parses a gml:CoordType object. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;gml:coord&gt;&lt;gml:X&gt;0&lt;/gml:X&gt;&lt;gml:Y&gt;0&lt;/gml:Y&gt;&lt;/gml:coord&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class CoordTypeIterator extends GmlCoodinatesIterator{
-		
+public class CoordTypeIterator extends GmlCoodinatesIterator {
+
 	/**
 	 * It parses the gml:coord tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * It retuns an array of doubles with 3 values (x,y,z)
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return It retuns an array of doubles with 3 values (x,y,z)
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	/* (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.parser.v2.coordinates.GmlCoodinatesIterator#initialize(org.gvsig.gpe.xml.stream.IXmlStreamReader, org.gvsig.gpe.gml.parser.GPEDefaultGmlParser, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.parser.v2.coordinates.GmlCoodinatesIterator#initialize
+	 * (org.gvsig.gpe.xml.stream.IXmlStreamReader,
+	 * org.gvsig.gpe.gml.parser.GPEDefaultGmlParser, java.lang.String)
 	 */
 	public void initialize(IXmlStreamReader parser,
 			GPEDefaultGmlParser handler, QName lastTag)
 			throws XmlStreamException, IOException {
-		super.initialize(parser, handler, lastTag);	
+		super.initialize(parser, handler, lastTag);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.ICoordinateIterator#getDimension()
 	 */
 	public int getDimension() {
-		//TODO gets the dimension!!!
+		// TODO gets the dimension!!!
 		return 3;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.ICoordinateIterator#hasNext()
 	 */
 	public boolean hasNext() throws IOException {
 		QName tag = parser.getName();
-		
-		if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_COORD)){		
+
+		if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_COORD)) {
 			return true;
 		}
 		parseAll();
@@ -123,44 +132,50 @@ public class CoordTypeIterator extends GmlCoodinatesIterator{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.ICoordinateIterator#next(double[])
 	 */
 	public void next(double[] buffer) throws IOException {
 		boolean endCoord = false;
-		int currentTag;			
-				
+		int currentTag;
+
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
-		
-		while (!endCoord){
-			switch(currentTag){
+
+		while (!endCoord) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_X)){
-					parser.next();		
-					buffer[0] = DoubleTypeBinding.parse(parser.getText(),COORDINATES_DECIMAL);
-				}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_Y)){
-					parser.next();		
-					buffer[1] = DoubleTypeBinding.parse(parser.getText(),COORDINATES_DECIMAL);
-				}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_Z)){
-					parser.next();		
-					buffer[2] = DoubleTypeBinding.parse(parser.getText(),COORDINATES_DECIMAL);
+				if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_X)) {
+					parser.next();
+					buffer[0] = DoubleTypeBinding.parse(parser.getText(),
+							COORDINATES_DECIMAL);
+				} else if (CompareUtils
+						.compareWithNamespace(tag, GMLTags.GML_Y)) {
+					parser.next();
+					buffer[1] = DoubleTypeBinding.parse(parser.getText(),
+							COORDINATES_DECIMAL);
+				} else if (CompareUtils
+						.compareWithNamespace(tag, GMLTags.GML_Z)) {
+					parser.next();
+					buffer[2] = DoubleTypeBinding.parse(parser.getText(),
+							COORDINATES_DECIMAL);
 				}
 				break;
 			case IXmlStreamReader.END_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_COORD)){						
-					//Advance until netx XML tag
+				if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_COORD)) {
+					// Advance until netx XML tag
 					parser.nextTag();
 					endCoord = true;
 				}
 				break;
-			case IXmlStreamReader.CHARACTERS:					
+			case IXmlStreamReader.CHARACTERS:
 
 				break;
 			}
-			if (!endCoord){					
+			if (!endCoord) {
 				currentTag = parser.next();
 				tag = parser.getName();
 			}
-		}				
-	}	
+		}
+	}
 }

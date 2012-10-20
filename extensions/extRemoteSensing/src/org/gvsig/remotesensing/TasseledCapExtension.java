@@ -1,7 +1,5 @@
 package org.gvsig.remotesensing;
 
-
-
 import javax.swing.Icon;
 
 import org.gvsig.fmap.raster.layers.FLyrRasterSE;
@@ -18,34 +16,41 @@ import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
+
 /**
  * Extensión para el cálculo de Trasseled Cap
  * 
  * @author Diego Guerrero Sevilla (diego.guerrero@uclm.es)
  */
-public class TasseledCapExtension extends Extension implements IGenericToolBarMenuItem {
+public class TasseledCapExtension extends Extension implements
+		IGenericToolBarMenuItem {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
-//	TasseledCapRasterFilterListManager.register();
-		ExtensionPoint extensionPoint = ExtensionPoint.getExtensionPoint("GenericToolBarMenu");
+		// TasseledCapRasterFilterListManager.register();
+		ExtensionPoint extensionPoint = ExtensionPoint
+				.getExtensionPoint("GenericToolBarMenu");
 		extensionPoint.register("TasseledCap", this);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String actionCommand) {
 		if (actionCommand.equals("tasseled_cap")) {
-			com.iver.andami.ui.mdiManager.IWindow activeWindow = PluginServices.getMDIManager().getActiveWindow();
+			com.iver.andami.ui.mdiManager.IWindow activeWindow = PluginServices
+					.getMDIManager().getActiveWindow();
 
 			// si la ventana activa es de tipo Vista
 			if (activeWindow instanceof View) {
-				TasseledCapPanel tasseledcapPanel = new TasseledCapPanel((View) activeWindow);
+				TasseledCapPanel tasseledcapPanel = new TasseledCapPanel(
+						(View) activeWindow);
 
 				PluginServices.getMDIManager().addWindow(tasseledcapPanel);
 			}
@@ -54,10 +59,12 @@ public class TasseledCapExtension extends Extension implements IGenericToolBarMe
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (f == null) {
 			return false;
 		}
@@ -75,10 +82,12 @@ public class TasseledCapExtension extends Extension implements IGenericToolBarMe
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (f == null) {
 			return false;
 		}
@@ -94,7 +103,11 @@ public class TasseledCapExtension extends Extension implements IGenericToolBarMe
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#execute(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * org.gvsig.raster.gui.IGenericToolBarMenuItem#execute(com.iver.cit.gvsig
+	 * .project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public void execute(ITocItem item, FLayer[] selectedItems) {
 		this.execute("tasseled_cap");
@@ -102,6 +115,7 @@ public class TasseledCapExtension extends Extension implements IGenericToolBarMe
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getGroup()
 	 */
 	public String getGroup() {
@@ -110,6 +124,7 @@ public class TasseledCapExtension extends Extension implements IGenericToolBarMe
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getIcon()
 	 */
 	public Icon getIcon() {
@@ -118,6 +133,7 @@ public class TasseledCapExtension extends Extension implements IGenericToolBarMe
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getOrder()
 	 */
 	public int getOrder() {
@@ -126,6 +142,7 @@ public class TasseledCapExtension extends Extension implements IGenericToolBarMe
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getText()
 	 */
 	public String getText() {
@@ -134,7 +151,11 @@ public class TasseledCapExtension extends Extension implements IGenericToolBarMe
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * org.gvsig.raster.gui.IGenericToolBarMenuItem#isEnabled(com.iver.cit.gvsig
+	 * .project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -151,7 +172,11 @@ public class TasseledCapExtension extends Extension implements IGenericToolBarMe
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * org.gvsig.raster.gui.IGenericToolBarMenuItem#isVisible(com.iver.cit.gvsig
+	 * .project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -159,12 +184,13 @@ public class TasseledCapExtension extends Extension implements IGenericToolBarMe
 
 		if (!(selectedItems[0] instanceof FLyrRasterSE))
 			return false;
-		
+
 		return true;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getGroupOrder()
 	 */
 	public int getGroupOrder() {

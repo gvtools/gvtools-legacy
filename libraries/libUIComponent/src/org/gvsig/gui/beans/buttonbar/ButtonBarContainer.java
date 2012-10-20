@@ -30,12 +30,11 @@ public class ButtonBarContainer extends JPanel {
 
 	private ArrayList<JButton> buttons = new ArrayList<JButton>();
 
-	private int       wComp              = 400;
-	private int       hComp              = 26;
-	private String    pathToImages       = "images/";
-	private boolean   disableAllControls = false;
-	private boolean[] buttonsState       = null;
-
+	private int wComp = 400;
+	private int hComp = 26;
+	private String pathToImages = "images/";
+	private boolean disableAllControls = false;
+	private boolean[] buttonsState = null;
 
 	/**
 	 * This is the default constructor
@@ -47,7 +46,7 @@ public class ButtonBarContainer extends JPanel {
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
@@ -56,29 +55,32 @@ public class ButtonBarContainer extends JPanel {
 		flowLayout.setVgap(0);
 		this.setLayout(flowLayout);
 		this.setSize(wComp, hComp);
-		}
-
+	}
 
 	/**
 	 * Añade un boton al ArrayList de los botones.
-	 *
-	 * @param iconName: nombre del icono asignado al boton. La imagen tendrña que
-	 * 					estar dentro de la carpeta "images/"
-	 * @param tip: tip del boton;
-	 * @param order: orden que ocupará el boton dentro del control
+	 * 
+	 * @param iconName
+	 *            : nombre del icono asignado al boton. La imagen tendrña que
+	 *            estar dentro de la carpeta "images/"
+	 * @param tip
+	 *            : tip del boton;
+	 * @param order
+	 *            : orden que ocupará el boton dentro del control
 	 */
-	public void addButton(String iconName, String tip, int order){
+	public void addButton(String iconName, String tip, int order) {
 		JButton bt = new JButton();
 
 		bt.setPreferredSize(new java.awt.Dimension(22, 22));
-		try{
+		try {
 			if (iconName != null)
-				bt.setIcon(new ImageIcon(getClass().getResource(pathToImages + iconName)));
-		}catch(NullPointerException exc){
-			//El icono no existe -> No se añade ninguno
+				bt.setIcon(new ImageIcon(getClass().getResource(
+						pathToImages + iconName)));
+		} catch (NullPointerException exc) {
+			// El icono no existe -> No se añade ninguno
 		}
 
-		if(tip != null)
+		if (tip != null)
 			bt.setToolTipText(tip);
 
 		buttons.add(order, bt);
@@ -88,9 +90,10 @@ public class ButtonBarContainer extends JPanel {
 
 	/**
 	 * Elimina el botón correspondiente al indice que le pasamos.
+	 * 
 	 * @param index
 	 */
-	public void delButton(int index){
+	public void delButton(int index) {
 		buttons.remove(index);
 		this.removeAll();
 		addList();
@@ -98,34 +101,31 @@ public class ButtonBarContainer extends JPanel {
 
 	/**
 	 * Añade en el panel los botones que tenemos en el ArrayList.
-	 *
+	 * 
 	 */
-	public void addList(){
-		for(int i = 0 ; i < buttons.size() ; i++){
-			this.add((JButton)buttons.get(i));
+	public void addList() {
+		for (int i = 0; i < buttons.size(); i++) {
+			this.add((JButton) buttons.get(i));
 		}
 	}
 
-
 	/**
-	 * Esta función deshabilita todos los controles y guarda sus valores
-	 * de habilitado o deshabilitado para que cuando se ejecute restoreControlsValue
-	 * se vuelvan a quedar como estaba
+	 * Esta función deshabilita todos los controles y guarda sus valores de
+	 * habilitado o deshabilitado para que cuando se ejecute
+	 * restoreControlsValue se vuelvan a quedar como estaba
 	 */
-	public void disableAllControls(){
-		if(!disableAllControls){
+	public void disableAllControls() {
+		if (!disableAllControls) {
 			disableAllControls = true;
 
 			buttonsState = new boolean[buttons.size()];
 
+			for (int i = 0; i < buttons.size(); i++) {
 
-
-			for (int i = 0 ; i < buttons.size() ; i++){
-
-				//Salvamos los estados
-				buttonsState[i] = ((JButton)buttons.get(i)).isEnabled();
-				//Desactivamos controles
-				((JButton)buttons.get(i)).setEnabled(false);
+				// Salvamos los estados
+				buttonsState[i] = ((JButton) buttons.get(i)).isEnabled();
+				// Desactivamos controles
+				((JButton) buttons.get(i)).setEnabled(false);
 			}
 		}
 	}
@@ -134,30 +134,33 @@ public class ButtonBarContainer extends JPanel {
 	 * Esta función deja los controles como estaban al ejecutar la función
 	 * disableAllControls
 	 */
-	public void restoreControlsValue(){
-		if(disableAllControls){
+	public void restoreControlsValue() {
+		if (disableAllControls) {
 			disableAllControls = false;
 
-			for(int i = 0 ; i < buttons.size() ; i++){
-				((JButton)buttons.get(i)).setEnabled(buttonsState[i]);
+			for (int i = 0; i < buttons.size(); i++) {
+				((JButton) buttons.get(i)).setEnabled(buttonsState[i]);
 			}
 		}
 	}
 
 	/**
 	 * Método para acceder a los botones del control;
+	 * 
 	 * @param index
 	 * @return
 	 */
-	public JButton getButton(int index){
-		return (JButton)buttons.get(index);
+	public JButton getButton(int index) {
+		return (JButton) buttons.get(index);
 	}
 
 	/**
 	 * Método para establecer la posición de los botones dentro del control.
-	 * @param align: "left" o "right"
+	 * 
+	 * @param align
+	 *            : "left" o "right"
 	 */
-	public void setButtonAlignment(String align){
+	public void setButtonAlignment(String align) {
 		FlowLayout layout = new FlowLayout();
 		layout.setHgap(2);
 		layout.setVgap(0);
@@ -170,10 +173,13 @@ public class ButtonBarContainer extends JPanel {
 		this.setLayout(layout);
 	}
 
-	public void setComponentBorder(boolean br){
-		if(br)
-			this.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
-		if(!br)
+	public void setComponentBorder(boolean br) {
+		if (br)
+			this.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+					"", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					null));
+		if (!br)
 			this.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 	}
 

@@ -49,22 +49,26 @@ import com.iver.cit.gvsig.fmap.core.FShape;
 
 /**
  * @author fjp
- *
+ * 
  */
-public class LayerDefinition extends TableDefinition implements ILayerDefinition {
+public class LayerDefinition extends TableDefinition implements
+		ILayerDefinition {
 
 	protected int shapeType = FShape.MULTI;
 	protected CoordinateReferenceSystem crs;
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.ILayerDefinition#getShapeType()
 	 */
 	public int getShapeType() {
 		return shapeType;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.ILayerDefinition#setShapeType(int)
 	 */
 	public void setShapeType(int shapeType) {

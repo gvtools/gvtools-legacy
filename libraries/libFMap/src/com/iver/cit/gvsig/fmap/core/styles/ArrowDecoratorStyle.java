@@ -59,7 +59,7 @@ import com.iver.utiles.XMLEntity;
  * Class ArrowDecoratorStyle. It is used to store the information about the
  * different options to draw an arrow in a line (and draw it too). This
  * information is taken from the panel.
- *
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class ArrowDecoratorStyle implements IStyle {
@@ -76,7 +76,9 @@ public class ArrowDecoratorStyle implements IStyle {
 	}
 
 	/**
-	 * Obtains the number of arrows that the user wants to draw in the same line.
+	 * Obtains the number of arrows that the user wants to draw in the same
+	 * line.
+	 * 
 	 * @return
 	 */
 	public int getArrowMarkerCount() {
@@ -84,7 +86,9 @@ public class ArrowDecoratorStyle implements IStyle {
 	}
 
 	/**
-	 * Defines the number of arrows that the user wants to draw in the same line.
+	 * Defines the number of arrows that the user wants to draw in the same
+	 * line.
+	 * 
 	 * @return
 	 */
 	public void setArrowMarkerCount(int arrowMarkerCount) {
@@ -92,8 +96,9 @@ public class ArrowDecoratorStyle implements IStyle {
 	}
 
 	/**
-	 * Defines the flipAll attribute.If the value of this attribute is true all the
-	 * arrows that we had drawn in the same line will be flipped.
+	 * Defines the flipAll attribute.If the value of this attribute is true all
+	 * the arrows that we had drawn in the same line will be flipped.
+	 * 
 	 * @return
 	 */
 	public boolean isFlipAll() {
@@ -101,8 +106,9 @@ public class ArrowDecoratorStyle implements IStyle {
 	}
 
 	/**
-	 * Obtains the flipAll attribute.If the value of this attribute is true all the
-	 * arrows that we had drawn in the same line will be flipped.
+	 * Obtains the flipAll attribute.If the value of this attribute is true all
+	 * the arrows that we had drawn in the same line will be flipped.
+	 * 
 	 * @return
 	 */
 	public void setFlipAll(boolean flipAll) {
@@ -110,8 +116,9 @@ public class ArrowDecoratorStyle implements IStyle {
 	}
 
 	/**
-	 * Obtains the flipFirst attribute.If it is true only the first arrow of the line
-	 * will be flipped.The rest will keep the same orientation.
+	 * Obtains the flipFirst attribute.If it is true only the first arrow of the
+	 * line will be flipped.The rest will keep the same orientation.
+	 * 
 	 * @return
 	 */
 	public boolean isFlipFirst() {
@@ -119,8 +126,9 @@ public class ArrowDecoratorStyle implements IStyle {
 	}
 
 	/**
-	 * Sets the flipFirst attribute.If it is true only the first arrow of the line
-	 * will be flipped.The rest will keep the same orientation.
+	 * Sets the flipFirst attribute.If it is true only the first arrow of the
+	 * line will be flipped.The rest will keep the same orientation.
+	 * 
 	 * @return
 	 */
 	public void setFlipFirst(boolean flipFirst) {
@@ -128,8 +136,10 @@ public class ArrowDecoratorStyle implements IStyle {
 	}
 
 	/**
-	 * Gets the followLineAngle attribute.This attribute allows the arrow that we are
-	 * going to draw to be more or less aligned with the line where it will be included (depending on the angle) .
+	 * Gets the followLineAngle attribute.This attribute allows the arrow that
+	 * we are going to draw to be more or less aligned with the line where it
+	 * will be included (depending on the angle) .
+	 * 
 	 * @return
 	 */
 	public boolean isFollowLineAngle() {
@@ -137,31 +147,37 @@ public class ArrowDecoratorStyle implements IStyle {
 	}
 
 	/**
-	 * Sets the followLineAngle attribute.This attribute allows the arrow that we are
-	 * going to draw to be more or less aligned with the line where it will be included.
-	 * (depending on the angle).
+	 * Sets the followLineAngle attribute.This attribute allows the arrow that
+	 * we are going to draw to be more or less aligned with the line where it
+	 * will be included. (depending on the angle).
+	 * 
 	 * @param followingLineAngle
 	 * @return
 	 */
 	public void setFollowLineAngle(boolean followLineAngle) {
 		this.followLineAngle = followLineAngle;
 	}
+
 	/**
-	 * Draws an arrow(or other symbol that substitutes an arrow selected by the user)
-	 * in a line.When the line is drawn, the symbol is added and takes care of the different
-	 * options of the user(for example if he wants to flip the first symbol or all and
-	 * the number of symbols per line to be drawn)
+	 * Draws an arrow(or other symbol that substitutes an arrow selected by the
+	 * user) in a line.When the line is drawn, the symbol is added and takes
+	 * care of the different options of the user(for example if he wants to flip
+	 * the first symbol or all and the number of symbols per line to be drawn)
+	 * 
 	 * @param g
 	 * @param affineTransform
 	 * @param shp
 	 */
 	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp) {
-		if (arrowMarkerCount <= 0) return;
+		if (arrowMarkerCount <= 0)
+			return;
 
 		PathLength pl = new PathLength(shp);
 		float size = (float) marker.getSize();
-		float myLineLength = pl.lengthOfPath()-size; // length without the first and last arrow
-		float step = arrowMarkerCount>2 ? myLineLength/(arrowMarkerCount-1) : pl.lengthOfPath();
+		float myLineLength = pl.lengthOfPath() - size; // length without the
+														// first and last arrow
+		float step = arrowMarkerCount > 2 ? myLineLength
+				/ (arrowMarkerCount - 1) : pl.lengthOfPath();
 		float rotation1; // rotation at the arrow's vertex
 		float rotation2; // rotation at the arrow's back;
 
@@ -171,63 +187,66 @@ public class ArrowDecoratorStyle implements IStyle {
 		{
 			float theLength = pl.lengthOfPath();
 
-			if ((flipFirst || flipAll) && (flipFirst != flipAll)) { // logical XOR
-				startP = new FPoint2D(pl.pointAtLength(theLength-size));
-				rotation1 = pl.angleAtLength(theLength-size);
+			if ((flipFirst || flipAll) && (flipFirst != flipAll)) { // logical
+																	// XOR
+				startP = new FPoint2D(pl.pointAtLength(theLength - size));
+				rotation1 = pl.angleAtLength(theLength - size);
 				rotation2 = pl.angleAtLength(theLength);
 			} else {
 				startP = new FPoint2D(pl.pointAtLength(theLength));
-				rotation1 = pl.angleAtLength(theLength-size)+(float) Math.PI;
-				rotation2 = pl.angleAtLength(theLength)+(float) Math.PI;
+				rotation1 = pl.angleAtLength(theLength - size)
+						+ (float) Math.PI;
+				rotation2 = pl.angleAtLength(theLength) + (float) Math.PI;
 
 			}
 
-			if (rotation1 == rotation2)	{
+			if (rotation1 == rotation2) {
 				marker.setRotation(rotation1);
 				marker.draw(g, affineTransform, startP, null);
 			}
 		}
 		// the other arrows but the first and the last
 		float aLength;
-		for (int i = 1; i < arrowMarkerCount-1; i++) {
-			aLength = (float) (step*i);
+		for (int i = 1; i < arrowMarkerCount - 1; i++) {
+			aLength = (float) (step * i);
 
 			rotation1 = (float) pl.angleAtLength(aLength);
-			rotation2 = (float) pl.angleAtLength((float)(aLength+size));
+			rotation2 = (float) pl.angleAtLength((float) (aLength + size));
 
 			if (flipAll) {
 				startP = new FPoint2D(pl.pointAtLength(aLength));
 
 			} else {
-				startP = new FPoint2D(pl.pointAtLength(aLength+size));
+				startP = new FPoint2D(pl.pointAtLength(aLength + size));
 				rotation1 += Math.PI;
 				rotation2 += Math.PI;
 			}
 			/*
-			 *  the following are just visualization improvements,
-			 *  being rigurous it just be only these two lines
-			 *
-			 *  marker.setRotation(rotation1);
-			 *  marker.draw(g, affineTransform, startP);
-			 *
-			 *  but it produces ugly results at the line edges
+			 * the following are just visualization improvements, being rigurous
+			 * it just be only these two lines
+			 * 
+			 * marker.setRotation(rotation1); marker.draw(g, affineTransform,
+			 * startP);
+			 * 
+			 * but it produces ugly results at the line edges
 			 */
-			if (rotation1 == rotation2)	{
+			if (rotation1 == rotation2) {
 				marker.setRotation(rotation1);
 				marker.draw(g, affineTransform, startP, null);
 			} else {
-				rotation1 = (float) pl.angleAtLength(aLength+1);
-				rotation2 = (float) pl.angleAtLength((float)(aLength+size+1));
+				rotation1 = (float) pl.angleAtLength(aLength + 1);
+				rotation2 = (float) pl
+						.angleAtLength((float) (aLength + size + 1));
 				if (flipAll) {
-					startP = new FPoint2D(pl.pointAtLength(aLength+1));
+					startP = new FPoint2D(pl.pointAtLength(aLength + 1));
 
 				} else {
-					startP = new FPoint2D(pl.pointAtLength(aLength+size+1));
+					startP = new FPoint2D(pl.pointAtLength(aLength + size + 1));
 					rotation1 += Math.PI;
 					rotation2 += Math.PI;
 				}
 
-				if (rotation1 == rotation2)	{
+				if (rotation1 == rotation2) {
 					marker.setRotation(rotation1);
 					marker.draw(g, affineTransform, startP, null);
 				}
@@ -236,7 +255,7 @@ public class ArrowDecoratorStyle implements IStyle {
 		}
 
 		// and the last arrow at the begining of the line
-		if (arrowMarkerCount>1) {
+		if (arrowMarkerCount > 1) {
 			rotation1 = (float) pl.angleAtLength(size);
 			rotation2 = (float) pl.angleAtLength(0);
 
@@ -249,7 +268,7 @@ public class ArrowDecoratorStyle implements IStyle {
 				rotation2 += Math.PI;
 			}
 
-			if (rotation1 == rotation2)	{
+			if (rotation1 == rotation2) {
 				marker.setRotation(rotation1);
 				marker.draw(g, affineTransform, startP, null);
 			}
@@ -298,8 +317,7 @@ public class ArrowDecoratorStyle implements IStyle {
 		setFlipFirst(xml.getBooleanProperty("flipFirst"));
 		setArrowMarkerCount(xml.getIntProperty("arrowMarkerCount"));
 		setDescription(xml.getStringProperty("desc"));
-		marker = (IMarkerSymbol) SymbologyFactory.
-		createSymbolFromXML(
+		marker = (IMarkerSymbol) SymbologyFactory.createSymbolFromXML(
 				xml.getChild(0), "ArrowDecorator marker symbol");
 	}
 

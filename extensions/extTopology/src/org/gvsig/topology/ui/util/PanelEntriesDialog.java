@@ -92,7 +92,7 @@ public class PanelEntriesDialog extends IWindowBoxLayoutPanel {
 	 * Set of GParameter that this component is going to fill.
 	 */
 	private GParameter[] parameters;
-	
+
 	/**
 	 * Ok button
 	 */
@@ -102,30 +102,30 @@ public class PanelEntriesDialog extends IWindowBoxLayoutPanel {
 	 * Parent of the dialog
 	 */
 	private Window parent;
-	
+
 	/**
 	 * Flag to mark if the accept button was pressed
 	 */
 	private boolean accepted = false;
-	
+
 	/**
 	 * Collection of GParameterChangeListener, to notify when a GParameter value
-	 *  has changed.
+	 * has changed.
 	 */
 	List<GParameterChangeListener> paramsListener;
-	
+
 	/**
 	 * Constructor.
-	 * @param title title of the dialog
+	 * 
+	 * @param title
+	 *            title of the dialog
 	 * @param w
 	 * @param h
 	 * @param parameters
 	 * @param container
 	 */
-	public PanelEntriesDialog(String title, 
-							int w, int h,
-							GParameter[] parameters, 
-							Window container) {
+	public PanelEntriesDialog(String title, int w, int h,
+			GParameter[] parameters, Window container) {
 		super(title, w, h);
 		this.parameters = parameters;
 		this.parent = container;
@@ -139,8 +139,6 @@ public class PanelEntriesDialog extends IWindowBoxLayoutPanel {
 	public void setAccepted(boolean accepted) {
 		this.accepted = accepted;
 	}
-
-	
 
 	private void initialize() {
 		addRow(new JComponent[] { new JLabel(PluginServices.getText(this,
@@ -159,7 +157,7 @@ public class PanelEntriesDialog extends IWindowBoxLayoutPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				accept();
 			}
-			
+
 		});
 
 		addRow(new JComponent[] { acceptButton }, getWindowInfo().getWidth(),
@@ -186,7 +184,8 @@ public class PanelEntriesDialog extends IWindowBoxLayoutPanel {
 	public GParameterChangeListener addNumericalTextField(
 			final GNumberParameter parameter) {
 		final JTextField textField = new JTextField();
-		addTitleLabel(PluginServices.getText(this, parameter.getParamName()), false);
+		addTitleLabel(PluginServices.getText(this, parameter.getParamName()),
+				false);
 		textField.setText(parameter.getDefaultValue().toString());
 
 		textField.addFocusListener(new FocusAdapter() {
@@ -241,8 +240,9 @@ public class PanelEntriesDialog extends IWindowBoxLayoutPanel {
 	}
 
 	/**
-	 * Adds a component to this dialog wich allows to select features with the mouse in the map
-	 * control, and pass this selection to the specified GFeatureParameter.
+	 * Adds a component to this dialog wich allows to select features with the
+	 * mouse in the map control, and pass this selection to the specified
+	 * GFeatureParameter.
 	 * 
 	 * 
 	 * @param param
@@ -250,8 +250,9 @@ public class PanelEntriesDialog extends IWindowBoxLayoutPanel {
 	 */
 	private GParameterChangeListener addFeatureField(
 			final GFeatureParameter param) {
-		
-//		TODO Add a JLabel in the same row that the select button, to show fid and lyr of the selected feature
+
+		// TODO Add a JLabel in the same row that the select button, to show fid
+		// and lyr of the selected feature
 		addTitleLabel(param.getParamName(), false);
 
 		JButton button = new JButton();
@@ -269,15 +270,17 @@ public class PanelEntriesDialog extends IWindowBoxLayoutPanel {
 						StatusBarListener sbl = new StatusBarListener(mapCtrl);
 
 						final Window thisContainer = GUIUtil.getInstance()
-													.getParentWindow(PanelEntriesDialog.this);
+								.getParentWindow(PanelEntriesDialog.this);
 						FeatureSelectionListener fsl = new FeatureSelectionListener(
 								view, param, new FeatureSelectionCallBack() {
 									public void featureSelected() {
-										IFeature feature = (IFeature) param.getValue();
-										featureIdLabel.setText("fid:"+feature.getID());
-										if(!thisContainer.isVisible()){
+										IFeature feature = (IFeature) param
+												.getValue();
+										featureIdLabel.setText("fid:"
+												+ feature.getID());
+										if (!thisContainer.isVisible()) {
 											thisContainer.setVisible(true);
-										}	
+										}
 									}
 								});
 						mapCtrl.addMapTool(sTool, new Behavior[] {
@@ -308,22 +311,22 @@ public class PanelEntriesDialog extends IWindowBoxLayoutPanel {
 		};
 
 	}
-	
+
 	public void accept() {
 		for (int i = 0; i < paramsListener.size(); i++) {
 			paramsListener.get(i).parameterChange();
 		}
 
-		Window thisContainer = GUIUtil.getInstance().getParentWindow(PanelEntriesDialog.this);
+		Window thisContainer = GUIUtil.getInstance().getParentWindow(
+				PanelEntriesDialog.this);
 		thisContainer.setVisible(false);
-		
+
 		setAccepted(true);
 		if (parent != null) {
-			if(!parent.isVisible())
+			if (!parent.isVisible())
 				parent.setVisible(true);
 		}
-		
-		
+
 	}
 
 	public void addOkActionListener(ActionListener actionListener) {

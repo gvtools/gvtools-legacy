@@ -46,27 +46,33 @@ package com.iver.andami.messages;
  * recibe la aplicación
  */
 public interface NotificationListener {
-    /**
-     * Método invocado cuando la aplicación recibe mensajes de error
-     *
-     * @param app contexto de la aplicación
-     * @param text Texto del mensaje
-     */
-    public void errorEvent(MessageEvent e);
+	/**
+	 * Método invocado cuando la aplicación recibe mensajes de error
+	 * 
+	 * @param app
+	 *            contexto de la aplicación
+	 * @param text
+	 *            Texto del mensaje
+	 */
+	public void errorEvent(MessageEvent e);
 
-    /**
-     * Método invocado cuando la aplicación recibe mensajes de warning
-     *
-     * @param app contexto de la aplicación
-     * @param text Texto del mensaje
-     */
-    public void warningEvent(MessageEvent e);
+	/**
+	 * Método invocado cuando la aplicación recibe mensajes de warning
+	 * 
+	 * @param app
+	 *            contexto de la aplicación
+	 * @param text
+	 *            Texto del mensaje
+	 */
+	public void warningEvent(MessageEvent e);
 
-    /**
-     * Método invocado cuando la aplicación recibe mensajes de información
-     *
-     * @param app contexto de la aplicación
-     * @param text Texto del mensaje
-     */
-    public void infoEvent(MessageEvent e);
+	/**
+	 * Método invocado cuando la aplicación recibe mensajes de información
+	 * 
+	 * @param app
+	 *            contexto de la aplicación
+	 * @param text
+	 *            Texto del mensaje
+	 */
+	public void infoEvent(MessageEvent e);
 }

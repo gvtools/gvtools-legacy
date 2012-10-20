@@ -57,32 +57,33 @@ import com.iver.cit.gvsig.project.documents.ProjectDocument;
 import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 
-
 /**
  * Extension that handles the info by point tool for a selected layer set
+ * 
  * @author laura
  */
 public class InfoToolExtension extends Extension {
-	private static Logger logger = Logger.getLogger(InfoToolExtension.class.getName());
+	private static Logger logger = Logger.getLogger(InfoToolExtension.class
+			.getName());
 
 	public void execute(String s) {
-		BaseView vista = (BaseView) PluginServices.getMDIManager().getActiveWindow();
+		BaseView vista = (BaseView) PluginServices.getMDIManager()
+				.getActiveWindow();
 		MapControl mapCtrl = vista.getMapControl();
 		logger.debug("Comand : " + s);
 
 		if (s.compareTo("INFO") == 0) {
 			mapCtrl.setTool("info");
-			((ProjectDocument)vista.getModel()).setModified(true);
+			((ProjectDocument) vista.getModel()).setModified(true);
 		}
 	}
-
 
 	/**
 	 * @see com.iver.mdiApp.plugins.IExtension#isVisible()
 	 */
 	public boolean isEnabled() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-															 .getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (f == null) {
 			return false;
@@ -93,9 +94,10 @@ public class InfoToolExtension extends Extension {
 			IProjectView model = vista.getModel();
 			MapContext mapa = model.getMapContext();
 
-			FLayer[] layers =mapa.getLayers().getActives();
-			for (int i=0;i<layers.length;i++) {
-				if (layers[i].isAvailable()) return true;
+			FLayer[] layers = mapa.getLayers().getActives();
+			for (int i = 0; i < layers.length; i++) {
+				if (layers[i].isAvailable())
+					return true;
 			}
 		}
 		return false;
@@ -108,18 +110,19 @@ public class InfoToolExtension extends Extension {
 		registerIcons();
 	}
 
-	private void registerIcons(){
+	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"view-query-information",
-				InfoToolExtension.class.getClassLoader().getResource("images/Identify.png")
-		);
+				InfoToolExtension.class.getClassLoader().getResource(
+						"images/Identify.png"));
 	}
 
 	/**
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (f == null) {
 			return false;
@@ -135,4 +138,3 @@ public class InfoToolExtension extends Extension {
 		}
 	}
 }
-

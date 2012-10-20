@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.impl.voronoi;
 
 import java.net.URL;
@@ -60,36 +60,26 @@ import com.iver.cit.gvsig.geoprocess.impl.voronoi.gui.VoronoiGeoprocessPanel;
 import com.iver.cit.gvsig.geoprocess.manager.GeoprocessManager;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
-public class VoronoiGeoprocessPlugin extends GeoprocessPluginAbstract implements IGeoprocessPlugin {
+public class VoronoiGeoprocessPlugin extends GeoprocessPluginAbstract implements
+		IGeoprocessPlugin {
 
 	private static String analisisPkg;
 	private static String geometriaComputacionalPkg;
 	private static String geometriaCompPkgDesc;
 	private static String geoprocessName;
-	static{
-		analisisPkg = 
-			PluginServices.getText(null, "Analisis");
-		geometriaComputacionalPkg =
-			PluginServices.getText(null, "GC");
-		geometriaCompPkgDesc =
-			PluginServices.getText(null, "GC_Desc");
-		geoprocessName =
-			PluginServices.getText(null, "Voronoi");
-		
-		GeoprocessManager.registerPackageDescription(analisisPkg +
-									"/" + geometriaComputacionalPkg,
-										geometriaCompPkgDesc);
+	static {
+		analisisPkg = PluginServices.getText(null, "Analisis");
+		geometriaComputacionalPkg = PluginServices.getText(null, "GC");
+		geometriaCompPkgDesc = PluginServices.getText(null, "GC_Desc");
+		geoprocessName = PluginServices.getText(null, "Voronoi");
+
+		GeoprocessManager.registerPackageDescription(analisisPkg + "/"
+				+ geometriaComputacionalPkg, geometriaCompPkgDesc);
 	}
 
-
-
 	public IGeoprocessUserEntries getGeoprocessPanel() {
-		View vista = (View)PluginServices.
-		getMDIManager().
-		getActiveWindow();
-		FLayers layers = vista.getModel().
-			getMapContext().
-			getLayers();
+		View vista = (View) PluginServices.getMDIManager().getActiveWindow();
+		FLayers layers = vista.getModel().getMapContext().getLayers();
 
 		return new VoronoiGeoprocessPanel(layers);
 	}
@@ -104,14 +94,12 @@ public class VoronoiGeoprocessPlugin extends GeoprocessPluginAbstract implements
 	}
 
 	public String getNamespace() {
-		return analisisPkg + "/" + 
-		geometriaComputacionalPkg + "/" +
-			geoprocessName;
+		return analisisPkg + "/" + geometriaComputacionalPkg + "/"
+				+ geoprocessName;
 	}
 
-	public String toString(){
+	public String toString() {
 		return geoprocessName;
 	}
 
 }
-

@@ -50,11 +50,12 @@ import com.iver.cit.gvsig.fmap.tools.Events.MoveEvent;
 import com.iver.cit.gvsig.fmap.tools.Listeners.PanListener;
 import com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener;
 
-
 /**
- * <p>Behavior that permits user to move the image of the associated
- *  <code>MapControl</code> using a {@link PanListener PanListener}.</p>
- *
+ * <p>
+ * Behavior that permits user to move the image of the associated
+ * <code>MapControl</code> using a {@link PanListener PanListener}.
+ * </p>
+ * 
  * @author Vicente Caballero Navarro
  * @author Pablo Piqueras Bartolomé
  */
@@ -79,9 +80,13 @@ public class MoveBehavior extends Behavior {
 	private boolean isButton1;
 
 	/**
- 	 * <p>Creates a new behavior for moving the mouse.</p>
- 	 *
-	 * @param pli listener used to permit this object to work with the associated <code>MapControl</code>
+	 * <p>
+	 * Creates a new behavior for moving the mouse.
+	 * </p>
+	 * 
+	 * @param pli
+	 *            listener used to permit this object to work with the
+	 *            associated <code>MapControl</code>
 	 */
 	public MoveBehavior(PanListener pli) {
 		listener = pli;
@@ -89,22 +94,27 @@ public class MoveBehavior extends Behavior {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#paintComponent(java.awt.Graphics)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#paintComponent(java.awt
+	 * .Graphics)
 	 */
 	public void paintComponent(Graphics g) {
-	    Color theBackColor = getMapControl().getMapContext().getViewPort().getBackColor();
-	    if (theBackColor == null)
-	        g.setColor(Color.WHITE);
-	    else
-	        g.setColor(theBackColor);
+		Color theBackColor = getMapControl().getMapContext().getViewPort()
+				.getBackColor();
+		if (theBackColor == null)
+			g.setColor(Color.WHITE);
+		else
+			g.setColor(theBackColor);
 		g.setColor(getMapControl().getMapContext().getViewPort().getBackColor());
-		g.fillRect(0, 0, getMapControl().getWidth(), getMapControl().getHeight());
+		g.fillRect(0, 0, getMapControl().getWidth(), getMapControl()
+				.getHeight());
 
 		if (getMapControl().getImage() != null) {
 			if ((m_FirstPoint != null) && (m_LastPoint != null)) {
 				g.drawImage(getMapControl().getImage(),
-					(int) (m_LastPoint.getX() - m_FirstPoint.getX()),
-					(int) (m_LastPoint.getY() - m_FirstPoint.getY()), null);
+						(int) (m_LastPoint.getX() - m_FirstPoint.getX()),
+						(int) (m_LastPoint.getY() - m_FirstPoint.getY()), null);
 			} else {
 				super.paintComponent(g);
 			}
@@ -113,13 +123,16 @@ public class MoveBehavior extends Behavior {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mousePressed(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mousePressed(java.awt
+	 * .event.MouseEvent)
 	 */
 	public void mousePressed(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON1) {
 			isButton1 = true;
 			m_FirstPoint = e.getPoint();
-		}else{
+		} else {
 			isButton1 = false;
 		}
 
@@ -130,10 +143,13 @@ public class MoveBehavior extends Behavior {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseReleased(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseReleased(java.awt
+	 * .event.MouseEvent)
 	 */
 	public void mouseReleased(MouseEvent e) throws BehaviorException {
-		if (e.getButton() == MouseEvent.BUTTON1 && m_FirstPoint!=null) {
+		if (e.getButton() == MouseEvent.BUTTON1 && m_FirstPoint != null) {
 			MoveEvent event = new MoveEvent(m_FirstPoint, e.getPoint(), e);
 			listener.move(event);
 
@@ -146,19 +162,26 @@ public class MoveBehavior extends Behavior {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseDragged(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseDragged(java.awt
+	 * .event.MouseEvent)
 	 */
 	public void mouseDragged(MouseEvent e) {
-		if (isButton1){
+		if (isButton1) {
 			m_LastPoint = e.getPoint();
 			getMapControl().repaint();
 		}
 	}
 
 	/**
-	 * <p>Sets a tool listener to work with the <code>MapControl</code> using this behavior.</p>
+	 * <p>
+	 * Sets a tool listener to work with the <code>MapControl</code> using this
+	 * behavior.
+	 * </p>
 	 * 
-	 * @param listener a <code>PanListener</code> object for this behavior
+	 * @param listener
+	 *            a <code>PanListener</code> object for this behavior
 	 */
 	public void setListener(ToolListener listener) {
 		this.listener = (PanListener) listener;
@@ -166,6 +189,7 @@ public class MoveBehavior extends Behavior {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#getListener()
 	 */
 	public ToolListener getListener() {

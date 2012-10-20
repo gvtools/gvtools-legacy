@@ -66,6 +66,7 @@ import org.gvsig.gpe.gml.utils.GMLTags;
 /**
  * It writes a gml:MultiPolygonType object. Example:
  * <p>
+ * 
  * <pre>
  * <code> 
  * &lt;MultiPolygon gid="c731" srsName="http://www.opengis.net/gml/srs/epsg.xml#4326"&gt;
@@ -90,14 +91,18 @@ import org.gvsig.gpe.gml.utils.GMLTags;
  * &lt;/MultiPolygon&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class MultiPolygonWriter extends GeometryWriter {
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.v2.geometries.GeometriesWriter#getGeometryName()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.v2.geometries.GeometriesWriter#getGeometryName()
 	 */
 	public String getGeometryName() {
 		return GMLTags.GML_MULTIPOLYGON.getLocalPart();

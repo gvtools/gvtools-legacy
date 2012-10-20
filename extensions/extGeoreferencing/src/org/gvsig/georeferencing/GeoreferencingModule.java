@@ -35,12 +35,15 @@ import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
  * Extensión para georreferenciación
  * 
  * 05/02/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
-public class GeoreferencingModule  extends Extension implements IGenericToolBarMenuItem {
-	
+public class GeoreferencingModule extends Extension implements
+		IGenericToolBarMenuItem {
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String actionCommand) {
@@ -52,98 +55,103 @@ public class GeoreferencingModule  extends Extension implements IGenericToolBarM
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
 		RasterLibrary.wakeUp();
-		
-		ExtensionPoint extensionPoints = ExtensionPoint.getExtensionPoint("GenericToolBarMenu");
+
+		ExtensionPoint extensionPoints = ExtensionPoint
+				.getExtensionPoint("GenericToolBarMenu");
 		extensionPoints.register("Georreferencing", this);
 
 		PluginServices.getIconTheme().registerDefault(
 				"save-icon",
-				this.getClass().getClassLoader().getResource("images/savefile.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/savefile.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"reset-icon",
-				this.getClass().getClassLoader().getResource("images/reset.png")
-			);
-		PluginServices.getIconTheme().registerDefault(
-				"tfwload-icon",
-				this.getClass().getClassLoader().getResource("images/load.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/reset.png"));
+		PluginServices.getIconTheme()
+				.registerDefault(
+						"tfwload-icon",
+						this.getClass().getClassLoader()
+								.getResource("images/load.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"selectzoomarea-icon",
-				this.getClass().getClassLoader().getResource("images/view-zoom-to-seleccion.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/view-zoom-to-seleccion.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"prevzoom-icon",
-				this.getClass().getClassLoader().getResource("images/view-zoom-back.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/view-zoom-back.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"fullview-icon",
-				this.getClass().getClassLoader().getResource("images/view-zoom-map-contents.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/view-zoom-map-contents.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"increase-icon",
-				this.getClass().getClassLoader().getResource("images/aumentar.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/aumentar.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"decrease-icon",
-				this.getClass().getClassLoader().getResource("images/disminuir.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/disminuir.png"));
 		PluginServices.getIconTheme().register(
 				"georeferencing-icon",
-				this.getClass().getClassLoader().getResource("images/georef.gif")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/georef.gif"));
 		PluginServices.getIconTheme().register(
 				"exporttoascii-icon",
-				this.getClass().getClassLoader().getResource("images/exportToAscii.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/exportToAscii.png"));
 		PluginServices.getIconTheme().register(
 				"exporttocsv-icon",
-				this.getClass().getClassLoader().getResource("images/exportToCSV.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/exportToCSV.png"));
 		PluginServices.getIconTheme().register(
 				"importfromcsv-icon",
-				this.getClass().getClassLoader().getResource("images/importFromCSV.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/importFromCSV.png"));
 		PluginServices.getIconTheme().register(
 				"exit-icon",
-				this.getClass().getClassLoader().getResource("images/ico_exit.gif")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/ico_exit.gif"));
 		PluginServices.getIconTheme().register(
 				"process-icon",
-				this.getClass().getClassLoader().getResource("images/icon_process.gif")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/icon_process.gif"));
 		PluginServices.getIconTheme().register(
 				"endprocess-icon",
-				this.getClass().getClassLoader().getResource("images/icon_endprocess.gif")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/icon_endprocess.gif"));
 		PluginServices.getIconTheme().register(
 				"options-icon",
-				this.getClass().getClassLoader().getResource("images/ico_options.gif")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/ico_options.gif"));
 		PluginServices.getIconTheme().register(
 				"add-icon",
-				this.getClass().getClassLoader().getResource("images/add-ico.gif")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/add-ico.gif"));
 		PluginServices.getIconTheme().register(
 				"centerpoint-icon",
-				this.getClass().getClassLoader().getResource("images/icon_centerpoint.gif")
-			);
-		PluginServices.getIconTheme().register(
-				"hand-icon",
-				this.getClass().getClassLoader().getResource("images/Hand.gif")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/icon_centerpoint.gif"));
+		PluginServices.getIconTheme()
+				.register(
+						"hand-icon",
+						this.getClass().getClassLoader()
+								.getResource("images/Hand.gif"));
 		PluginServices.getIconTheme().register(
 				"centerlocator-icon",
-				this.getClass().getClassLoader().getResource("images/centerlocator.gif")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/centerlocator.gif"));
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
@@ -152,6 +160,7 @@ public class GeoreferencingModule  extends Extension implements IGenericToolBarM
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
@@ -160,7 +169,11 @@ public class GeoreferencingModule  extends Extension implements IGenericToolBarM
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#execute(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * org.gvsig.raster.gui.IGenericToolBarMenuItem#execute(com.iver.cit.gvsig
+	 * .project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public void execute(ITocItem item, FLayer[] selectedItems) {
 		this.execute("GEOREFERENCING");
@@ -168,6 +181,7 @@ public class GeoreferencingModule  extends Extension implements IGenericToolBarM
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getGroup()
 	 */
 	public String getGroup() {
@@ -176,6 +190,7 @@ public class GeoreferencingModule  extends Extension implements IGenericToolBarM
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getIcon()
 	 */
 	public Icon getIcon() {
@@ -184,6 +199,7 @@ public class GeoreferencingModule  extends Extension implements IGenericToolBarM
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getOrder()
 	 */
 	public int getOrder() {
@@ -192,6 +208,7 @@ public class GeoreferencingModule  extends Extension implements IGenericToolBarM
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getText()
 	 */
 	public String getText() {
@@ -200,7 +217,11 @@ public class GeoreferencingModule  extends Extension implements IGenericToolBarM
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * org.gvsig.raster.gui.IGenericToolBarMenuItem#isEnabled(com.iver.cit.gvsig
+	 * .project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
 		return this.isEnabled();
@@ -208,14 +229,19 @@ public class GeoreferencingModule  extends Extension implements IGenericToolBarM
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * org.gvsig.raster.gui.IGenericToolBarMenuItem#isVisible(com.iver.cit.gvsig
+	 * .project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
 		return this.isVisible();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getGroupOrder()
 	 */
 	public int getGroupOrder() {

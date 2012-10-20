@@ -27,6 +27,7 @@ import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.gdbms.engine.data.driver.FileDriver;
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
+
 /**
  * Clase para definir que ficheros aceptara el filtro de tablas, es necesario
  * para el JFileChooser
@@ -51,15 +52,16 @@ public class TableFileFilter extends FileFilter {
 		if (driver instanceof FileDriver)
 			return ((FileDriver) driver).fileAccepted(f);
 
-		throw new RuntimeException(PluginServices.getText(this, "Tipo_no_reconocido"));
+		throw new RuntimeException(PluginServices.getText(this,
+				"Tipo_no_reconocido"));
 	}
 
 	/**
 	 * @see javax.swing.filechooser.FileFilter#getDescription()
 	 */
 	public String getDescription() {
-				
-		if (((Driver) driver).getName().equals ( "gdbms dbf driver" ) ) {			
+
+		if (((Driver) driver).getName().equals("gdbms dbf driver")) {
 			return (PluginServices.getText(this, "Ficheros_dbf"));
 		}
 		return ((Driver) driver).getName();

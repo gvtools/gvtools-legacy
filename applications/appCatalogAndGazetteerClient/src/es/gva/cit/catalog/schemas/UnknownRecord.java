@@ -56,17 +56,19 @@ import es.gva.cit.catalog.metadataxml.XMLNode;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class UnknownRecord extends Record{
+public class UnknownRecord extends Record {
 
-	public  UnknownRecord(URI uri, XMLNode node) {        
-		super(uri,node);
+	public UnknownRecord(URI uri, XMLNode node) {
+		super(uri, node);
 		super.setTitle("Unknown record");
 		super.setAbstract_("It doesn't exist a parser for this record");
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.schemas.records.Record#accept(java.net.URI, es.gva.cit.catalogClient.metadataxml.XMLNode)
+	 * 
+	 * @see es.gva.cit.catalogClient.schemas.records.Record#accept(java.net.URI,
+	 * es.gva.cit.catalogClient.metadataxml.XMLNode)
 	 */
 	public boolean accept(URI uri, XMLNode node) {
 		return true;

@@ -54,29 +54,33 @@ import com.iver.cit.gvsig.fmap.layers.SelectionEvent;
 import com.iver.cit.gvsig.fmap.layers.SelectionListener;
 import com.iver.cit.gvsig.fmap.rendering.LegendListener;
 
-
 /**
- * <p><code>EventBuffer</code> represents a buffer of events that allows store listeners of events produced in layers
- *  of a <code>MapContext</code> instance, and configure its dispatching mode.</p>
+ * <p>
+ * <code>EventBuffer</code> represents a buffer of events that allows store
+ * listeners of events produced in layers of a <code>MapContext</code> instance,
+ * and configure its dispatching mode.
+ * </p>
  * 
- * <p>The <i>dispatching mode</i>:
+ * <p>
+ * The <i>dispatching mode</i>:
  * <ul>
- *  <li><code>true</code> : dispatches each new event received.</li>
- *  <li><code>false</code> : accumulates all new events received in a internal buffer, and only will dispatch them
- *   (according to the order they were received) when changes the mode.</li>
+ * <li><code>true</code> : dispatches each new event received.</li>
+ * <li><code>false</code> : accumulates all new events received in a internal
+ * buffer, and only will dispatch them (according to the order they were
+ * received) when changes the mode.</li>
  * </ul>
  * </p>
- *
+ * 
  * @see LegendListener
  * @see LayerCollectionListener
  * @see SelectionListener
  * @see ViewPortListener
  * @see LegendListener
- *
+ * 
  * @author Fernando González Cortés
  */
 public class EventBuffer implements LegendListener, LayerCollectionListener,
-SelectionListener, ViewPortListener, LayerListener {
+		SelectionListener, ViewPortListener, LayerListener {
 
 	/**
 	 * List with all events received and don't dispatched.
@@ -107,7 +111,7 @@ SelectionListener, ViewPortListener, LayerListener {
 	 * 
 	 * @see #addAtomicEventListener(AtomicEventListener)
 	 * @see #removeAtomicEventListener(AtomicEventListener)
-	 */ 
+	 */
 	private ArrayList listeners = new ArrayList();
 
 	/**
@@ -119,10 +123,15 @@ SelectionListener, ViewPortListener, LayerListener {
 	private boolean dispatching = true;
 
 	/**
-	 * <p>Enables buffer in <i>accumulation event</i> mode.<p>
+	 * <p>
+	 * Enables buffer in <i>accumulation event</i> mode.
+	 * <p>
 	 * 
-	 * <p>All new events received, will be accumulated and won't notified to their respective listeners,
-	 *  until this buffer would received a call to {@link #endAtomicEvent() endAtomicEvent}.</p>
+	 * <p>
+	 * All new events received, will be accumulated and won't notified to their
+	 * respective listeners, until this buffer would received a call to
+	 * {@link #endAtomicEvent() endAtomicEvent}.
+	 * </p>
 	 * 
 	 * @see #endAtomicEvent()
 	 */
@@ -131,11 +140,15 @@ SelectionListener, ViewPortListener, LayerListener {
 	}
 
 	/**
-	 * <p>Disables buffer in <i>accumulation event</i> mode.</p>
+	 * <p>
+	 * Disables buffer in <i>accumulation event</i> mode.
+	 * </p>
 	 * 
-	 * <p>All events accumulated will be notify to their respective
-	 *  listeners, in the same order as they arrived.</p>
-	 *  
+	 * <p>
+	 * All events accumulated will be notify to their respective listeners, in
+	 * the same order as they arrived.
+	 * </p>
+	 * 
 	 * @see #beginAtomicEvent()
 	 */
 	public void endAtomicEvent() {
@@ -145,7 +158,9 @@ SelectionListener, ViewPortListener, LayerListener {
 	}
 
 	/*
-	 * @see com.iver.cit.gvsig.fmap.layers.LegendListener#legendChanged(com.iver.cit.gvsig.fmap.rendering.LegendChangedEvent)
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.LegendListener#legendChanged(com.iver.
+	 * cit.gvsig.fmap.rendering.LegendChangedEvent)
 	 */
 	public void legendChanged(LegendChangedEvent e) {
 		events.add(e);
@@ -156,7 +171,9 @@ SelectionListener, ViewPortListener, LayerListener {
 	}
 
 	/*
-	 * @see com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerAdded(com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerAdded(com
+	 * .iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
 	 */
 	public void layerAdded(LayerCollectionEvent e) {
 		events.add(e);
@@ -167,7 +184,9 @@ SelectionListener, ViewPortListener, LayerListener {
 	}
 
 	/*
-	 * @see com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerMoved(com.iver.cit.gvsig.fmap.layers.LayerPositionEvent)
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerMoved(com
+	 * .iver.cit.gvsig.fmap.layers.LayerPositionEvent)
 	 */
 	public void layerMoved(LayerPositionEvent e) {
 		events.add(e);
@@ -178,7 +197,9 @@ SelectionListener, ViewPortListener, LayerListener {
 	}
 
 	/*
-	 * @see com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerRemoved(com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerRemoved(com
+	 * .iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
 	 */
 	public void layerRemoved(LayerCollectionEvent e) {
 		events.add(e);
@@ -189,7 +210,9 @@ SelectionListener, ViewPortListener, LayerListener {
 	}
 
 	/*
-	 * @see com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerAdding(com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerAdding(com
+	 * .iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
 	 */
 	public void layerAdding(LayerCollectionEvent e) throws CancelationException {
 		events.add(e);
@@ -200,7 +223,9 @@ SelectionListener, ViewPortListener, LayerListener {
 	}
 
 	/*
-	 * @see com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerMoving(com.iver.cit.gvsig.fmap.layers.LayerPositionEvent)
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerMoving(com
+	 * .iver.cit.gvsig.fmap.layers.LayerPositionEvent)
 	 */
 	public void layerMoving(LayerPositionEvent e) throws CancelationException {
 		events.add(e);
@@ -211,10 +236,12 @@ SelectionListener, ViewPortListener, LayerListener {
 	}
 
 	/*
-	 * @see com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerRemoving(com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerRemoving(
+	 * com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
 	 */
 	public void layerRemoving(LayerCollectionEvent e)
-	throws CancelationException {
+			throws CancelationException {
 		events.add(e);
 
 		if (dispatching) {
@@ -223,10 +250,12 @@ SelectionListener, ViewPortListener, LayerListener {
 	}
 
 	/*
-	 * @see com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#visibilityChanged(com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#visibilityChanged
+	 * (com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
 	 */
 	public void visibilityChanged(LayerCollectionEvent e)
-	throws CancelationException {
+			throws CancelationException {
 		events.add(e);
 
 		if (dispatching) {
@@ -235,7 +264,9 @@ SelectionListener, ViewPortListener, LayerListener {
 	}
 
 	/*
-	 * @see com.iver.cit.gvsig.fmap.layers.SelectionListener#selectionChanged(com.iver.cit.gvsig.fmap.layers.SelectionEvent)
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.SelectionListener#selectionChanged(com
+	 * .iver.cit.gvsig.fmap.layers.SelectionEvent)
 	 */
 	public void selectionChanged(SelectionEvent e) {
 		events.add(e);
@@ -246,7 +277,9 @@ SelectionListener, ViewPortListener, LayerListener {
 	}
 
 	/*
-	 * @see com.iver.cit.gvsig.fmap.ViewPortListener#extentChanged(com.iver.cit.gvsig.fmap.ExtentEvent)
+	 * @see
+	 * com.iver.cit.gvsig.fmap.ViewPortListener#extentChanged(com.iver.cit.gvsig
+	 * .fmap.ExtentEvent)
 	 */
 	public void extentChanged(ExtentEvent e) {
 		events.add(e);
@@ -257,43 +290,50 @@ SelectionListener, ViewPortListener, LayerListener {
 	}
 
 	/**
-	 * Appends, if wasn't, the specified listener to the end of the internal list of atomic event listeners.
-	 *
-	 * @param listener an object that implements the atomic event listener
-	 *
-	 * @return <code>true</code> if has added the listener successfully; otherwise <code>false</code>
+	 * Appends, if wasn't, the specified listener to the end of the internal
+	 * list of atomic event listeners.
+	 * 
+	 * @param listener
+	 *            an object that implements the atomic event listener
+	 * 
+	 * @return <code>true</code> if has added the listener successfully;
+	 *         otherwise <code>false</code>
 	 * 
 	 * @see #removeAtomicEventListener(AtomicEventListener)
 	 * @see #fireAtomicEventListener()
 	 */
 	public boolean addAtomicEventListener(AtomicEventListener listener) {
 		boolean bFound = false;
-		for (int i=0; i < listeners.size(); i++)
+		for (int i = 0; i < listeners.size(); i++)
 			if (listeners.get(i) == listener)
 				bFound = true;
 		if (!bFound)
 			listeners.add(listener);
-		return true; 
+		return true;
 	}
 
 	/**
-	 * <p>Removes a single instance of the {@link AtomicEventListener AtomicEventListener} from the
-     * internal list, if it is present (optional operation). Returns <tt>true</tt>
-     * if the list contained the specified element (or equivalently, if the list changed as a
-     * result of the call).<p>
-     *
-     * @param o element to be removed from this list, if present
-     * @return <tt>true</tt> if the list contained the specified element
-     * 
-     * @see #addAtomicEventListener(AtomicEventListener)
-     * @see #fireAtomicEventListener()
+	 * <p>
+	 * Removes a single instance of the {@link AtomicEventListener
+	 * AtomicEventListener} from the internal list, if it is present (optional
+	 * operation). Returns <tt>true</tt> if the list contained the specified
+	 * element (or equivalently, if the list changed as a result of the call).
+	 * <p>
+	 * 
+	 * @param o
+	 *            element to be removed from this list, if present
+	 * @return <tt>true</tt> if the list contained the specified element
+	 * 
+	 * @see #addAtomicEventListener(AtomicEventListener)
+	 * @see #fireAtomicEventListener()
 	 */
 	public boolean removeAtomicEventListener(AtomicEventListener listener) {
 		return listeners.remove(listener);
 	}
 
 	/**
-	 * Executes the {@linkplain AtomicEventListener#atomicEvent(AtomicEvent)} method of all listeners registered.
+	 * Executes the {@linkplain AtomicEventListener#atomicEvent(AtomicEvent)}
+	 * method of all listeners registered.
 	 * 
 	 * @see #addAtomicEventListener(AtomicEventListener)
 	 * @see #removeAtomicEventListener(AtomicEventListener)
@@ -311,7 +351,9 @@ SelectionListener, ViewPortListener, LayerListener {
 	}
 
 	/*
-	 * @see com.iver.cit.gvsig.fmap.layers.LayerListener#visibilityChanged(com.iver.cit.gvsig.fmap.layers.LayerEvent)
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.LayerListener#visibilityChanged(com.iver
+	 * .cit.gvsig.fmap.layers.LayerEvent)
 	 */
 	public void visibilityChanged(LayerEvent e) {
 		events.add(e);
@@ -322,7 +364,9 @@ SelectionListener, ViewPortListener, LayerListener {
 	}
 
 	/*
-	 * @see com.iver.cit.gvsig.fmap.layers.LayerListener#activationChanged(com.iver.cit.gvsig.fmap.layers.LayerEvent)
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.LayerListener#activationChanged(com.iver
+	 * .cit.gvsig.fmap.layers.LayerEvent)
 	 */
 	public void activationChanged(LayerEvent e) {
 		events.add(e);
@@ -333,7 +377,9 @@ SelectionListener, ViewPortListener, LayerListener {
 	}
 
 	/*
-	 * @see com.iver.cit.gvsig.fmap.layers.LayerListener#nameChanged(com.iver.cit.gvsig.fmap.layers.LayerEvent)
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.LayerListener#nameChanged(com.iver.cit
+	 * .gvsig.fmap.layers.LayerEvent)
 	 */
 	public void nameChanged(LayerEvent e) {
 		events.add(e);
@@ -344,7 +390,9 @@ SelectionListener, ViewPortListener, LayerListener {
 	}
 
 	/*
-	 * @see com.iver.cit.gvsig.fmap.ViewPortListener#backColorChanged(com.iver.cit.gvsig.fmap.ColorEvent)
+	 * @see
+	 * com.iver.cit.gvsig.fmap.ViewPortListener#backColorChanged(com.iver.cit
+	 * .gvsig.fmap.ColorEvent)
 	 */
 	public void backColorChanged(ColorEvent e) {
 		events.add(e);
@@ -355,7 +403,9 @@ SelectionListener, ViewPortListener, LayerListener {
 	}
 
 	/*
-	 * @see com.iver.cit.gvsig.fmap.layers.LayerListener#editionChanged(com.iver.cit.gvsig.fmap.layers.LayerEvent)
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.LayerListener#editionChanged(com.iver.
+	 * cit.gvsig.fmap.layers.LayerEvent)
 	 */
 	public void editionChanged(LayerEvent e) {
 		events.add(e);
@@ -367,7 +417,9 @@ SelectionListener, ViewPortListener, LayerListener {
 	}
 
 	/*
-	 * @see com.iver.cit.gvsig.fmap.ViewPortListener#projectionChanged(com.iver.cit.gvsig.fmap.ProjectionEvent)
+	 * @see
+	 * com.iver.cit.gvsig.fmap.ViewPortListener#projectionChanged(com.iver.cit
+	 * .gvsig.fmap.ProjectionEvent)
 	 */
 	public void projectionChanged(ProjectionEvent e) {
 		events.add(e);

@@ -1,10 +1,9 @@
 package com.hardcode.gdbms.engine.internalExceptions;
 
 /**
- * Reseteable timer. After a cancelTimer or after the execution of the
- * scheduled task the object becomes unuseful: It's not possible to schedule
- * more tasks
- *
+ * Reseteable timer. After a cancelTimer or after the execution of the scheduled
+ * task the object becomes unuseful: It's not possible to schedule more tasks
+ * 
  * @author Fernando González Cortés
  */
 public class Timer {
@@ -13,9 +12,11 @@ public class Timer {
 
 	/**
 	 * schedules a task
-	 *
-	 * @param task task to schedule
-	 * @param delay delay in milliseconds
+	 * 
+	 * @param task
+	 *            task to schedule
+	 * @param delay
+	 *            delay in milliseconds
 	 */
 	public void schedule(Task task, long delay) {
 		timerThread = new Thread(new TimerThread(delay, task));
@@ -42,7 +43,7 @@ public class Timer {
 
 	/**
 	 * timer thread
-	 *
+	 * 
 	 * @author Fernando González Cortés
 	 */
 	public class TimerThread implements Runnable {
@@ -51,9 +52,11 @@ public class Timer {
 
 		/**
 		 * Creates a new TimerThread.
-		 *
-		 * @param timeout delay in milliseconds
-		 * @param task task to schedule
+		 * 
+		 * @param timeout
+		 *            delay in milliseconds
+		 * @param task
+		 *            task to schedule
 		 */
 		public TimerThread(long timeout, Task task) {
 			this.timeout = timeout;
@@ -69,16 +72,16 @@ public class Timer {
 					// Waits the delay
 					wait(timeout);
 
-					//executes the task
+					// executes the task
 					task.execute();
 
-					//exits
+					// exits
 					break;
 				} catch (InterruptedException e) {
 					if (cancel) {
 						break;
 					} else {
-						//Volvemos a esperar
+						// Volvemos a esperar
 					}
 				}
 			}

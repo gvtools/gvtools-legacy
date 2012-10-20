@@ -21,10 +21,10 @@ package org.gvsig.raster.dataset.io.features;
 import org.gvsig.raster.dataset.Params;
 import org.gvsig.raster.dataset.io.GdalDriver;
 import org.gvsig.raster.dataset.io.GdalWriter;
+
 /**
- * Caracteristicas del formato PNM para escritura.
- * Esta clase soporta solo ficheros ppm. Estos son solo los PNM en
- * RGB
+ * Caracteristicas del formato PNM para escritura. Esta clase soporta solo
+ * ficheros ppm. Estos son solo los PNM en RGB
  * 
  * @version 04/06/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
@@ -32,7 +32,8 @@ import org.gvsig.raster.dataset.io.GdalWriter;
 public class PNM_PpmFeatures extends WriteFileFormatFeatures {
 
 	public PNM_PpmFeatures() {
-		super(GdalDriver.FORMAT_PNM, "pgm", new int[] { 3 }, null, GdalWriter.class);
+		super(GdalDriver.FORMAT_PNM, "pgm", new int[] { 3 }, null,
+				GdalWriter.class);
 	}
 
 	/**

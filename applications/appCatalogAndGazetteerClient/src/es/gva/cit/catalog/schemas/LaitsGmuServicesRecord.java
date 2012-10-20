@@ -74,7 +74,7 @@ import es.gva.cit.catalog.metadataxml.XMLTree;
  */
 public class LaitsGmuServicesRecord extends Record {
 
-	public  LaitsGmuServicesRecord() {        
+	public LaitsGmuServicesRecord() {
 
 	}
 
@@ -82,81 +82,86 @@ public class LaitsGmuServicesRecord extends Record {
 	 * Constructor
 	 * 
 	 * 
-	 * @param node Node with the answer
-	 * @param serverURI Server URL. Necessary to load the image (just Geonetwork)
+	 * @param node
+	 *            Node with the answer
+	 * @param serverURI
+	 *            Server URL. Necessary to load the image (just Geonetwork)
 	 */
-	public  LaitsGmuServicesRecord(URI uri,XMLNode node) {        
-		super(uri,node);
-		setTitle(XMLTree.searchNodeValue(node,"name"));
-		setAbstract_(XMLTree.searchNodeValue(node, "description"));	          
+	public LaitsGmuServicesRecord(URI uri, XMLNode node) {
+		super(uri, node);
+		setTitle(XMLTree.searchNodeValue(node, "name"));
+		setAbstract_(XMLTree.searchNodeValue(node, "description"));
 		setPurpose(null);
 		setKeyWords(null);
 		setResources(getResources(node));
-		setFileID(null);	        
-		//Caution: getImageUrl uses serverURL and FileID!!!
+		setFileID(null);
+		// Caution: getImageUrl uses serverURL and FileID!!!
 		setImage(null);
 
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @return 
-	 * @param label 
+	 * @return
+	 * @param label
 	 */
-	private Resource[] getResources(XMLNode node) {        
+	private Resource[] getResources(XMLNode node) {
 		XMLNode[] slots = XMLTree.searchMultipleNode(node, "rim:Slot");
-		if (slots != null){
+		if (slots != null) {
 			Resource[] resources = new Resource[1];
 			String resource = null;
 			String serviceType = null;
-			for (int i=0 ; i<slots.length ; i++){
+			for (int i = 0; i < slots.length; i++) {
 				XMLNode slot = slots[i];
 				String attType = slot.getAttribute("name");
-				if (attType.equals("connectPointLinkage")){
-					resource = XMLTree.searchNodeValue(slot,"rim:ValueList->rim:Value");
-				}else if(attType.equals("serviceType")){
-					serviceType = XMLTree.searchNodeValue(slot,"rim:ValueList->rim:Value");
+				if (attType.equals("connectPointLinkage")) {
+					resource = XMLTree.searchNodeValue(slot,
+							"rim:ValueList->rim:Value");
+				} else if (attType.equals("serviceType")) {
+					serviceType = XMLTree.searchNodeValue(slot,
+							"rim:ValueList->rim:Value");
 				}
 			}
-			resources[0] = new Resource(resource,getProtocol(serviceType),null,null,null,null,null);
+			resources[0] = new Resource(resource, getProtocol(serviceType),
+					null, null, null, null, null);
 			return resources;
-		}else{
+		} else {
 			return new Resource[0];
 		}
 
-//		for (int i = 0; i < resources.length; i++){
-//		resources[i] = new Resource(XMLTree.searchNodeValue(nodes[i],
-//		"URL"),
-//		Resource.DOWNLOAD,
-//		XMLTree.searchNodeValue(nodes[i], "orName"),
-//		XMLTree.searchNodeValue(nodes[i], "URLDescription"),
-//		XMLTree.searchNodeAtribute(nodes[i], "orFunct->OnFunctCd",
-//		"value"),
-//		srs,	
-//		coordinates);
-//		if (resources[i].getLinkage() == null){
-//		resources[i].setLinkage("");
-//		}
+		// for (int i = 0; i < resources.length; i++){
+		// resources[i] = new Resource(XMLTree.searchNodeValue(nodes[i],
+		// "URL"),
+		// Resource.DOWNLOAD,
+		// XMLTree.searchNodeValue(nodes[i], "orName"),
+		// XMLTree.searchNodeValue(nodes[i], "URLDescription"),
+		// XMLTree.searchNodeAtribute(nodes[i], "orFunct->OnFunctCd",
+		// "value"),
+		// srs,
+		// coordinates);
+		// if (resources[i].getLinkage() == null){
+		// resources[i].setLinkage("");
+		// }
 
-//		}
+		// }
 
-
-//		return resources;	    
+		// return resources;
 	}
 
 	private String getProtocol(String serviceType) {
-		if (serviceType == null){
+		if (serviceType == null) {
 			return Resource.UNKNOWN;
 		}
-		if (serviceType.compareTo("WMS")==0){
+		if (serviceType.compareTo("WMS") == 0) {
 			return Resource.WMS;
-		}else if (serviceType.compareTo("WCS")==0){
+		} else if (serviceType.compareTo("WCS") == 0) {
 			return Resource.WCS;
-		}else if (serviceType.compareTo("WFS")==0){
+		} else if (serviceType.compareTo("WFS") == 0) {
 			return Resource.WFS;
-		}else if (serviceType.compareTo("urn:uuid:677F6003-E6E0-4B5C-B930-09B36EF6E0FB")==0){
+		} else if (serviceType
+				.compareTo("urn:uuid:677F6003-E6E0-4B5C-B930-09B36EF6E0FB") == 0) {
 			return Resource.WMS;
 		}
 		return Resource.UNKNOWN;
@@ -164,13 +169,15 @@ public class LaitsGmuServicesRecord extends Record {
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.schemas.discoverer.Record#accept(java.net.URI, es.gva.cit.catalogClient.metadataxml.XMLNode)
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.schemas.discoverer.Record#accept(java.net.URI,
+	 * es.gva.cit.catalogClient.metadataxml.XMLNode)
 	 */
 	public boolean accept(URI uri, XMLNode node) {
-		if (node.getName().equals("rim:Service")){
+		if (node.getName().equals("rim:Service")) {
 			return true;
 		}
 		return false;
-	} 
+	}
 }
-

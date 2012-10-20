@@ -45,10 +45,12 @@ import java.util.Comparator;
 public class RemoveDuplicatesComparator implements Comparator<String[]> {
 
 	public int compare(String[] o1, String[] o2) {
-		if (o1 == null || o2 == null || o1.length != o2.length) return 0;
+		if (o1 == null || o2 == null || o1.length != o2.length)
+			return 0;
 		for (int i = 0; i < o2.length; i++) {
 			int c = o1[i].compareTo(o2[i]);
-			if (c != 0) return c;
+			if (c != 0)
+				return c;
 		}
 		return 0;
 	}

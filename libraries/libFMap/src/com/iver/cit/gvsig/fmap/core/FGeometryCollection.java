@@ -61,21 +61,21 @@ import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.io.WKBWriter;
 
-
 /**
  * Colección de Geometrías.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FGeometryCollection extends AbstractGeometry {
 	private static final WKBWriter writer = new WKBWriter();
-	
+
 	private ArrayList geometries = new ArrayList();
 
 	/**
 	 * Crea un nuevo FGeometryCollection.
-	 *
-	 * @param geoms vector de geometrías.
+	 * 
+	 * @param geoms
+	 *            vector de geometrías.
 	 */
 	public FGeometryCollection(IGeometry[] geoms) {
 		for (int i = 0; i < geoms.length; i++) {
@@ -83,17 +83,17 @@ public class FGeometryCollection extends AbstractGeometry {
 		}
 	}
 
-	public void addGeometry(IGeometry g){
+	public void addGeometry(IGeometry g) {
 		geometries.add(g);
 	}
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#draw(java.awt.Graphics2D,
-	 * 		com.iver.cit.gvsig.fmap.ViewPort, ISymbol)
+	 *      com.iver.cit.gvsig.fmap.ViewPort, ISymbol)
 	 */
 	public void draw(Graphics2D g, ViewPort vp, ISymbol symbol) {
 		for (int i = 0; i < geometries.size(); i++)
-			((IGeometry)geometries.get(i)).draw(g, vp, symbol);
+			((IGeometry) geometries.get(i)).draw(g, vp, symbol);
 	}
 
 	/**
@@ -106,26 +106,23 @@ public class FGeometryCollection extends AbstractGeometry {
 	/**
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#intersects(java.awt.geom.Rectangle2D)
 	 */
-/*	public boolean intersects(Rectangle2D r, double flatness) {
-	    boolean resul = false;
-		for (int i = 0; i < geometries.size(); i++)
-		{
-			resul = ((IGeometry)geometries.get(i)).intersects(r, flatness);
-			if (resul) break;
-		}
-
-		return resul;
-	}
-*/
+	/*
+	 * public boolean intersects(Rectangle2D r, double flatness) { boolean resul
+	 * = false; for (int i = 0; i < geometries.size(); i++) { resul =
+	 * ((IGeometry)geometries.get(i)).intersects(r, flatness); if (resul) break;
+	 * }
+	 * 
+	 * return resul; }
+	 */
 	/**
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#intersects(java.awt.geom.Rectangle2D)
 	 */
 	public boolean intersects(Rectangle2D r) {
-	    boolean resul = false;
-		for (int i = 0; i < geometries.size(); i++)
-		{
-			resul = ((IGeometry)geometries.get(i)).intersects(r);
-			if (resul) break;
+		boolean resul = false;
+		for (int i = 0; i < geometries.size(); i++) {
+			resul = ((IGeometry) geometries.get(i)).intersects(r);
+			if (resul)
+				break;
 		}
 
 		return resul;
@@ -138,10 +135,10 @@ public class FGeometryCollection extends AbstractGeometry {
 		Rectangle2D rAux = null;
 
 		for (int i = 0; i < geometries.size(); i++)
-			if (rAux==null){
-				rAux=((IGeometry)geometries.get(i)).getBounds2D();
-			}else{
-				rAux.add(((IGeometry)geometries.get(i)).getBounds2D());
+			if (rAux == null) {
+				rAux = ((IGeometry) geometries.get(i)).getBounds2D();
+			} else {
+				rAux.add(((IGeometry) geometries.get(i)).getBounds2D());
 			}
 		return rAux;
 	}
@@ -150,48 +147,56 @@ public class FGeometryCollection extends AbstractGeometry {
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#getGeometryType()
 	 */
 	public int getGeometryType() {
-		/*int ret = 0;
-
-		for (int i = 0; i < geometries.length; i++) {
-			ret = ret | geometries[i].getGeometryType();
-		}
-
-		return ret;
-		*/
+		/*
+		 * int ret = 0;
+		 * 
+		 * for (int i = 0; i < geometries.length; i++) { ret = ret |
+		 * geometries[i].getGeometryType(); }
+		 * 
+		 * return ret;
+		 */
 		return FShape.MULTI;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#draw(java.awt.Graphics2D, com.iver.cit.gvsig.fmap.ViewPort, com.iver.cit.gvsig.fmap.core.v02.FSymbol)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#draw(java.awt.Graphics2D,
+	 * com.iver.cit.gvsig.fmap.ViewPort,
+	 * com.iver.cit.gvsig.fmap.core.v02.FSymbol)
 	 */
-	public void draw(Graphics2D g, ViewPort vp, ISymbol symbol, Cancellable cancel) {
+	public void draw(Graphics2D g, ViewPort vp, ISymbol symbol,
+			Cancellable cancel) {
 		for (int i = 0; i < geometries.size(); i++)
-			((IGeometry)geometries.get(i)).draw(g, vp, symbol, cancel);
+			((IGeometry) geometries.get(i)).draw(g, vp, symbol, cancel);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#cloneGeometry()
 	 */
 	public IGeometry cloneGeometry() {
 		IGeometry[] newGeometries = new IGeometry[geometries.size()];
 
 		for (int i = 0; i < geometries.size(); i++)
-			newGeometries[i] = ((IGeometry)geometries.get(i)).cloneGeometry();
+			newGeometries[i] = ((IGeometry) geometries.get(i)).cloneGeometry();
 
 		return new FGeometryCollection(newGeometries);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#toJTSGeometry()
 	 */
 	public Geometry toJTSGeometry() {
-        Geometry[] theGeoms = new Geometry[geometries.size()];
-        for (int i = 0; i < geometries.size(); i++)
-        {
-            theGeoms[i] = ((IGeometry)geometries.get(i)).toJTSGeometry();
-        }
-        GeometryCollection geomCol = new GeometryFactory().createGeometryCollection(theGeoms);
-
+		Geometry[] theGeoms = new Geometry[geometries.size()];
+		for (int i = 0; i < geometries.size(); i++) {
+			theGeoms[i] = ((IGeometry) geometries.get(i)).toJTSGeometry();
+		}
+		GeometryCollection geomCol = new GeometryFactory()
+				.createGeometryCollection(theGeoms);
 
 		return geomCol;
 	}
@@ -199,7 +204,7 @@ public class FGeometryCollection extends AbstractGeometry {
 	@Override
 	public void reProject(MathTransform trans) {
 		for (int i = 0; i < geometries.size(); i++)
-			((IGeometry)geometries.get(i)).reProject(trans);
+			((IGeometry) geometries.get(i)).reProject(trans);
 	}
 
 	/**
@@ -212,126 +217,109 @@ public class FGeometryCollection extends AbstractGeometry {
 		// añadiendo las geometrías como FGeometryCollection
 		// para que el explode sea sencillo. No lo veo muy
 		// claro eso, pero bueno.
-		/* GeneralPathX gp = new GeneralPathX();
-		double[] coords = new double[6];
-		for (int i=0; i < geometries.size(); i++)
-		{
-			IGeometry gAux = (IGeometry) geometries.get(i);
-			GeneralPathXIterator pi = gAux.getGeneralPathXIterator();
-			// Si el primer punto y el ultimo son iguales, conectamos
-			// la geometría.
-			boolean bFirst = true;
-			double[] firstCoord = new double[6];
-			while (!pi.isDone())
-			{
-				int type = pi.currentSegment(coords);
-				switch (type)
-				{
-					case GeneralPathXIterator.SEG_MOVETO:
-						if ((!bFirst) || (firstCoord != coords))
-							gp.moveTo(coords[0], coords[1]);
-						break;
-			    	case SEG_LINETO:
-			    		lineTo(coords[0], coords[1]);
-			    		break;
-				    case SEG_QUADTO:
-				    	quadTo(coords[0], coords[1],
-					       coords[2], coords[3]);
-				    	break;
-				    case SEG_CUBICTO:
-				    	// Not implemented
-				    	System.err.println("ERROR. TRAMO CUBICO. SIN IMPLEMENTAR TODAVÍA");
-						curveTo(coords[0], coords[1],
-							coords[2], coords[3],
-							coords[4], coords[5]);
-						break;
-					    case SEG_CLOSE:
-					    	closePath();
-					    	break;
-				}
-				pi.next();
-			}
-		}		*/
+		/*
+		 * GeneralPathX gp = new GeneralPathX(); double[] coords = new
+		 * double[6]; for (int i=0; i < geometries.size(); i++) { IGeometry gAux
+		 * = (IGeometry) geometries.get(i); GeneralPathXIterator pi =
+		 * gAux.getGeneralPathXIterator(); // Si el primer punto y el ultimo son
+		 * iguales, conectamos // la geometría. boolean bFirst = true; double[]
+		 * firstCoord = new double[6]; while (!pi.isDone()) { int type =
+		 * pi.currentSegment(coords); switch (type) { case
+		 * GeneralPathXIterator.SEG_MOVETO: if ((!bFirst) || (firstCoord !=
+		 * coords)) gp.moveTo(coords[0], coords[1]); break; case SEG_LINETO:
+		 * lineTo(coords[0], coords[1]); break; case SEG_QUADTO:
+		 * quadTo(coords[0], coords[1], coords[2], coords[3]); break; case
+		 * SEG_CUBICTO: // Not implemented
+		 * System.err.println("ERROR. TRAMO CUBICO. SIN IMPLEMENTAR TODAVÍA");
+		 * curveTo(coords[0], coords[1], coords[2], coords[3], coords[4],
+		 * coords[5]); break; case SEG_CLOSE: closePath(); break; } pi.next(); }
+		 * }
+		 */
 		GeneralPathX gp = new GeneralPathX();
-		for (int i=0; i < geometries.size(); i++)
-		{
+		for (int i = 0; i < geometries.size(); i++) {
 			IGeometry gAux = (IGeometry) geometries.get(i);
 			gp.append(gAux.getPathIterator(null), true);
 		}
 		return (GeneralPathXIterator) gp.getPathIterator(null);
 	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.core.IGeometry#fastIntersects(double, double, double, double)
-     */
-    public boolean fastIntersects(double x, double y, double w, double h) {
-	    boolean resul = false;
-		for (int i = 0; i < geometries.size(); i++)
-		{
-			resul = ((IGeometry)geometries.get(i)).fastIntersects(x,y,w,h);
-			if (resul) break;
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#fastIntersects(double,
+	 * double, double, double)
+	 */
+	public boolean fastIntersects(double x, double y, double w, double h) {
+		boolean resul = false;
+		for (int i = 0; i < geometries.size(); i++) {
+			resul = ((IGeometry) geometries.get(i)).fastIntersects(x, y, w, h);
+			if (resul)
+				break;
 		}
 		return resul;
-    }
+	}
 
-    /**
-     * @see com.iver.cit.gvsig.fmap.core.IGeometry#toWKB()
-     */
-    public byte[] toWKB() throws IOException {
-        return writer.write(toJTSGeometry());
-    }
+	/**
+	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#toWKB()
+	 */
+	public byte[] toWKB() throws IOException {
+		return writer.write(toJTSGeometry());
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.core.IGeometry#drawInts(java.awt.Graphics2D, com.iver.cit.gvsig.fmap.ViewPort, com.iver.cit.gvsig.fmap.core.v02.FSymbol)
-     */
-    public void drawInts(Graphics2D g, ViewPort vp, ISymbol symbol, Cancellable cancel) {
-        for (int i = 0; i < geometries.size(); i++)
-            ((IGeometry)geometries.get(i)).drawInts(g, vp, symbol, null);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#drawInts(java.awt.Graphics2D,
+	 * com.iver.cit.gvsig.fmap.ViewPort,
+	 * com.iver.cit.gvsig.fmap.core.v02.FSymbol)
+	 */
+	public void drawInts(Graphics2D g, ViewPort vp, ISymbol symbol,
+			Cancellable cancel) {
+		for (int i = 0; i < geometries.size(); i++)
+			((IGeometry) geometries.get(i)).drawInts(g, vp, symbol, null);
 
-    }
+	}
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#getShapes()
 	 */
-	/*public FShape[] getShapes() {
-		ArrayList shapes=new ArrayList();
-		for (int i= 0;i<geometries.size();i++){
-			FShape[] s=((IGeometry)geometries.get(i)).getShapes();
-			for (int j=0;j<s.length;j++){
-				shapes.add(s[j]);
-			}
-		}
-		return (FShape[])shapes.toArray(new FShape[0]);
-	}*/
-	public IGeometry[] getGeometries(){
-		return (IGeometry[])geometries.toArray(new IGeometry[0]).clone();
+	/*
+	 * public FShape[] getShapes() { ArrayList shapes=new ArrayList(); for (int
+	 * i= 0;i<geometries.size();i++){ FShape[]
+	 * s=((IGeometry)geometries.get(i)).getShapes(); for (int
+	 * j=0;j<s.length;j++){ shapes.add(s[j]); } } return
+	 * (FShape[])shapes.toArray(new FShape[0]); }
+	 */
+	public IGeometry[] getGeometries() {
+		return (IGeometry[]) geometries.toArray(new IGeometry[0]).clone();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#getHandlers(int)
 	 */
 	public Handler[] getHandlers(int type) {
-		ArrayList handlers=new ArrayList();
-		for (int i = 0; i < geometries.size(); i++){
-			Handler[] handAux=((IGeometry)geometries.get(i)).getHandlers(type);
-			for (int j=0;j<handAux.length;j++){
+		ArrayList handlers = new ArrayList();
+		for (int i = 0; i < geometries.size(); i++) {
+			Handler[] handAux = ((IGeometry) geometries.get(i))
+					.getHandlers(type);
+			for (int j = 0; j < handAux.length; j++) {
 				handlers.add(handAux[j]);
 			}
 		}
-		return (Handler[])handlers.toArray(new Handler[0]);
+		return (Handler[]) handlers.toArray(new Handler[0]);
 	}
 
-
 	public void transform(AffineTransform at) {
-		for (int i = 0; i < geometries.size(); i++){
-			((IGeometry)geometries.get(i)).transform(at);
+		for (int i = 0; i < geometries.size(); i++) {
+			((IGeometry) geometries.get(i)).transform(at);
 		}
 	}
 
 	public PathIterator getPathIterator(AffineTransform at, double flatness) {
 		GeneralPathX gp = new GeneralPathX();
-		for (int i=0; i < geometries.size(); i++)
-		{
+		for (int i = 0; i < geometries.size(); i++) {
 			IGeometry gAux = (IGeometry) geometries.get(i);
 			gp.append(gAux.getPathIterator(null), true);
 		}
@@ -340,11 +328,11 @@ public class FGeometryCollection extends AbstractGeometry {
 
 	public boolean contains(double x, double y) {
 		boolean bRes;
-		for (int i=0; i < geometries.size(); i++)
-		{
+		for (int i = 0; i < geometries.size(); i++) {
 			IGeometry gAux = (IGeometry) geometries.get(i);
-			bRes = gAux.contains(x,y);
-			if (bRes) return bRes;
+			bRes = gAux.contains(x, y);
+			if (bRes)
+				return bRes;
 		}
 
 		return false;
@@ -352,11 +340,11 @@ public class FGeometryCollection extends AbstractGeometry {
 
 	public boolean contains(double x, double y, double w, double h) {
 		boolean bRes;
-		for (int i=0; i < geometries.size(); i++)
-		{
+		for (int i = 0; i < geometries.size(); i++) {
 			IGeometry gAux = (IGeometry) geometries.get(i);
-			bRes = gAux.contains(x,y, w, h);
-			if (bRes) return bRes;
+			bRes = gAux.contains(x, y, w, h);
+			if (bRes)
+				return bRes;
 		}
 
 		return false;
@@ -364,11 +352,11 @@ public class FGeometryCollection extends AbstractGeometry {
 
 	public boolean intersects(double x, double y, double w, double h) {
 		boolean bRes;
-		for (int i=0; i < geometries.size(); i++)
-		{
+		for (int i = 0; i < geometries.size(); i++) {
 			IGeometry gAux = (IGeometry) geometries.get(i);
-			bRes = gAux.intersects(x,y, w, h);
-			if (bRes) return bRes;
+			bRes = gAux.intersects(x, y, w, h);
+			if (bRes)
+				return bRes;
 		}
 
 		return false;
@@ -378,21 +366,21 @@ public class FGeometryCollection extends AbstractGeometry {
 		Rectangle rAux = null;
 
 		for (int i = 0; i < geometries.size(); i++)
-			if (rAux==null){
-				rAux=((IGeometry)geometries.get(i)).getBounds();
-			}else{
-				rAux.add(((IGeometry)geometries.get(i)).getBounds());
+			if (rAux == null) {
+				rAux = ((IGeometry) geometries.get(i)).getBounds();
+			} else {
+				rAux.add(((IGeometry) geometries.get(i)).getBounds());
 			}
 		return rAux;
 	}
 
 	public boolean contains(Point2D p) {
 		boolean bRes;
-		for (int i=0; i < geometries.size(); i++)
-		{
+		for (int i = 0; i < geometries.size(); i++) {
 			IGeometry gAux = (IGeometry) geometries.get(i);
 			bRes = gAux.contains(p);
-			if (bRes) return bRes;
+			if (bRes)
+				return bRes;
 		}
 
 		return false;
@@ -400,11 +388,11 @@ public class FGeometryCollection extends AbstractGeometry {
 
 	public boolean contains(Rectangle2D r) {
 		boolean bRes;
-		for (int i=0; i < geometries.size(); i++)
-		{
+		for (int i = 0; i < geometries.size(); i++) {
 			IGeometry gAux = (IGeometry) geometries.get(i);
 			bRes = gAux.contains(r);
-			if (bRes) return bRes;
+			if (bRes)
+				return bRes;
 		}
 
 		return false;
@@ -416,10 +404,9 @@ public class FGeometryCollection extends AbstractGeometry {
 
 	public void drawInts(Graphics2D graphics2D, ViewPort vp, double dpi,
 			CartographicSupport cartographicSymbol, Cancellable cancel) {
-        for (int i = 0; i < geometries.size(); i++)
-            ((IGeometry)geometries.get(i)).drawInts(graphics2D, vp, dpi, 
-            		cartographicSymbol, cancel);
-
+		for (int i = 0; i < geometries.size(); i++)
+			((IGeometry) geometries.get(i)).drawInts(graphics2D, vp, dpi,
+					cartographicSymbol, cancel);
 
 	}
 }

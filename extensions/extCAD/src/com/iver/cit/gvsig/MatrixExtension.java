@@ -46,13 +46,13 @@ import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.plugins.Extension;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
-import com.iver.cit.gvsig.gui.cad.DefaultCADTool;
 import com.iver.cit.gvsig.gui.cad.tools.MatrixCADTool;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 /**
- * Extensión que gestiona la creación de una matriz a partir de la geometría seleccionada.
- *
+ * Extensión que gestiona la creación de una matriz a partir de la geometría
+ * seleccionada.
+ * 
  * @author Vicente Caballero Navarro
  */
 public class MatrixExtension extends Extension {
@@ -66,25 +66,24 @@ public class MatrixExtension extends Extension {
 	 */
 	public void initialize() {
 		registerIcons();
-		matrixCADTool=new MatrixCADTool();
-		CADExtension.addCADTool("_matrix",matrixCADTool);
-
+		matrixCADTool = new MatrixCADTool();
+		CADExtension.addCADTool("_matrix", matrixCADTool);
 
 	}
 
-	private void registerIcons(){
+	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"edition-geometry-matrix",
-				this.getClass().getClassLoader().getResource("images/Matriz.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/Matriz.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"edition-geometrymatrix-lagxy",
-				this.getClass().getClassLoader().getResource("images/lagxy.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/lagxy.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"edition-geometrymatrix-addpoint",
-				this.getClass().getClassLoader().getResource("images/addpoint.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/addpoint.png"));
 	}
 
 	/**
@@ -94,9 +93,8 @@ public class MatrixExtension extends Extension {
 		CADExtension.initFocus();
 		if (s.equals("_matrix")) {
 
-
-			CADExtension.setCADTool(s,true);
-        }
+			CADExtension.setCADTool(s, true);
+		}
 		CADExtension.getEditionManager().setMapControl(mapControl);
 		CADExtension.getCADToolAdapter().configureMenu();
 	}
@@ -110,15 +108,16 @@ public class MatrixExtension extends Extension {
 			if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE) {
 				view = (View) PluginServices.getMDIManager().getActiveWindow();
 				mapControl = view.getMapControl();
-				if (CADExtension.getEditionManager().getActiveLayerEdited()==null)
+				if (CADExtension.getEditionManager().getActiveLayerEdited() == null)
 					return false;
-				FLyrVect lv=(FLyrVect)CADExtension.getEditionManager().getActiveLayerEdited().getLayer();
-				if (matrixCADTool.isApplicable(lv.getShapeType())){
+				FLyrVect lv = (FLyrVect) CADExtension.getEditionManager()
+						.getActiveLayerEdited().getLayer();
+				if (matrixCADTool.isApplicable(lv.getShapeType())) {
 					return true;
 				}
 			}
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 		return false;
 	}

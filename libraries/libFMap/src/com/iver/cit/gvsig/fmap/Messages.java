@@ -44,45 +44,45 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-
 /**
  * Clase que accede a los recursos para la i18n
  */
 public class Messages {
-    /** DOCUMENT ME! */
-    private static final String BUNDLE_NAME = "com.iver.cit.gvsig.fmap.FMap";
+	/** DOCUMENT ME! */
+	private static final String BUNDLE_NAME = "com.iver.cit.gvsig.fmap.FMap";
 
-    /** DOCUMENT ME! */
-    private static ResourceBundle RESOURCE_BUNDLE = null;
+	/** DOCUMENT ME! */
+	private static ResourceBundle RESOURCE_BUNDLE = null;
 
-    /**
-     * Inicializa la clase con el locale adecuado
-     *
-     * @param loc Locale de la aplicación
-     */
-    private static void init() {
-        Locale loc = Locale.getDefault();
-        RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME, loc);
-    }
+	/**
+	 * Inicializa la clase con el locale adecuado
+	 * 
+	 * @param loc
+	 *            Locale de la aplicación
+	 */
+	private static void init() {
+		Locale loc = Locale.getDefault();
+		RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME, loc);
+	}
 
-    
-    /**
-     * Obtiene el valor del recurso con clave 'key'
-     *
-     * @param key clave del recurso que se quiere obtener
-     *
-     * @return recurso que se quiere obtener o !key! en caso de no encontrarlo.
-     *         En dicho caso no se notifica al framework ya que  estos son los
-     *         mensajes propios de la aplicación y deben de estar todos
-     */
-    public static String getString(String key) {
-        try {
-            // La primera vez, cargamos las cadenas.
-            if (RESOURCE_BUNDLE == null)
-                init();
-            return RESOURCE_BUNDLE.getString(key);
-        } catch (MissingResourceException e) {
-            return '!' + key + '!';
-        }
-    }
+	/**
+	 * Obtiene el valor del recurso con clave 'key'
+	 * 
+	 * @param key
+	 *            clave del recurso que se quiere obtener
+	 * 
+	 * @return recurso que se quiere obtener o !key! en caso de no encontrarlo.
+	 *         En dicho caso no se notifica al framework ya que estos son los
+	 *         mensajes propios de la aplicación y deben de estar todos
+	 */
+	public static String getString(String key) {
+		try {
+			// La primera vez, cargamos las cadenas.
+			if (RESOURCE_BUNDLE == null)
+				init();
+			return RESOURCE_BUNDLE.getString(key);
+		} catch (MissingResourceException e) {
+			return '!' + key + '!';
+		}
+	}
 }

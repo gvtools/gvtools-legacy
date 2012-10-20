@@ -39,11 +39,12 @@
  *   dac@iver.es
  */
 package org.gvsig.symbology.fmap.rendering.filter.operations;
+
 /**
  * Exception that can be caused by the incorrect creation of an Expression
  * 
  * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
- *
+ * 
  */
 public class ExpressionException extends Exception {
 
@@ -52,16 +53,16 @@ public class ExpressionException extends Exception {
 	public static final int ARGUMENT_ADDED_TO_CONSTANT = 4;
 	public static final int DIVIDED_BY_CERO = 8;
 	public static final int NO_CLASSIF_NAME = 16;
-	
+
 	private int type;
-	
+
 	public ExpressionException(int type) {
 		super();
 		this.type = type;
 	}
-	
+
 	public int getType() {
 		return type;
 	}
-	
+
 }

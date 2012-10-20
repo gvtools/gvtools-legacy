@@ -90,55 +90,56 @@ import com.iver.cit.gvsig.gui.panels.fieldstree.TreeTableModelWithCheckBoxes;
 /**
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class FieldsTableTest{
+public class FieldsTableTest {
 	private String gmlFile = "src-test/WFS-DescribeFeatureTypeAves.xml";
-	
+
 	public static void main(String[] args) {
 		FieldsTableTest att = new FieldsTableTest();
-		att.initializeTable();	
-		//att.initializeTree();
-	}	
-	
-	private void initializeTree(){
+		att.initializeTable();
+		// att.initializeTree();
+	}
+
+	private void initializeTree() {
 		Vector att = describeFeatureType();
-			
-		TreeTableModelWithCheckBoxes model = new TreeTableModelWithCheckBoxes(att.get(0));
-		JTree tree = new JTree(model);		
-		
+
+		TreeTableModelWithCheckBoxes model = new TreeTableModelWithCheckBoxes(
+				att.get(0));
+		JTree tree = new JTree(model);
+
 		createFrame(tree);
 	}
-	private void initializeTable(){
+
+	private void initializeTable() {
 		Vector att = describeFeatureType();
-								
+
 		TreeTableModelWithCheckBoxes model = new TreeTableModelWithCheckBoxes();
 		FieldsTreeTable treetable = new FieldsTreeTable(model);
-						
-		JScrollPane scrollPane = new JScrollPane(); 
-		scrollPane.setViewportView(treetable); 	
-				
+
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setViewportView(treetable);
+
 		createFrame(scrollPane);
-		
-		//Sets the model
-		treetable.setModel(new TreeTableModelWithCheckBoxes(att.get(0)));		
+
+		// Sets the model
+		treetable.setModel(new TreeTableModelWithCheckBoxes(att.get(0)));
 	}
-	
-	private void createFrame(Component component){
+
+	private void createFrame(Component component) {
 		JFrame f = new JFrame();
 		f.addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-            	System.exit(0);
-            }
-        });
-		f.getContentPane().add(component);	    
-		f.setBounds(0,0,600,500);
+			public void windowClosing(java.awt.event.WindowEvent evt) {
+				System.exit(0);
+			}
+		});
+		f.getContentPane().add(component);
+		f.setBounds(0, 0, 600, 500);
 		f.setVisible(true);
 	}
-	
 
-	private Vector describeFeatureType(){
+	private Vector describeFeatureType() {
 		XMLSchemaParser schemaParser = new XMLSchemaParser();
 		try {
-			schemaParser.parse(new File(gmlFile),"ms");
+			schemaParser.parse(new File(gmlFile), "ms");
 		} catch (XmlPullParserException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -147,13 +148,13 @@ public class FieldsTableTest{
 			e.printStackTrace();
 		}
 		XMLElement entity = XMLElementsFactory.getElement("Blyr");
-		if (entity != null){
-				Vector vector = new Vector();
-				vector.add(entity);
-				return vector;
+		if (entity != null) {
+			Vector vector = new Vector();
+			vector.add(entity);
+			return vector;
 		}
-		
+
 		return null;
 	}
-	
+
 }

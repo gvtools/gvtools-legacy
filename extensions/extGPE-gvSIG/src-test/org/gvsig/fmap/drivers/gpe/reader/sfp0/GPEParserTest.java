@@ -53,13 +53,14 @@ import org.gvsig.gpe.parser.GPEParser;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class GPEParserTest extends org.gvsig.fmap.drivers.gpe.reader.v2.GPEParserTest{
+public abstract class GPEParserTest extends
+		org.gvsig.fmap.drivers.gpe.reader.v2.GPEParserTest {
 
 	/**
 	 * @return The GPE parser
 	 * @throws GPEParserCreationException
-	 */	
-	protected GPEParser getParser() throws ParserCreationException{
+	 */
+	protected GPEParser getParser() throws ParserCreationException {
 		return GPERegister.createParser("GML");
 	}
 }

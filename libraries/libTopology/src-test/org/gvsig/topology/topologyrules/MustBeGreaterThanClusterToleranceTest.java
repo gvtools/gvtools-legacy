@@ -42,11 +42,11 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id$
-* $Log$
-*
-*/
+ *
+ * $Id$
+ * $Log$
+ *
+ */
 package org.gvsig.topology.topologyrules;
 
 import junit.framework.TestCase;
@@ -65,11 +65,11 @@ import com.vividsolutions.jts.io.WKTReader;
 
 public class MustBeGreaterThanClusterToleranceTest extends TestCase {
 
+	public void testLineLayerWithCollapsedCoords() throws ParseException {
 
-	public void testLineLayerWithCollapsedCoords() throws ParseException{
-		
 		FLyrVect lyr = LayerFactory.getLineLayerWithCollapsedCoords();
-		MustBeLargerThanClusterTolerance rule = new MustBeLargerThanClusterTolerance(lyr, 11d);
+		MustBeLargerThanClusterTolerance rule = new MustBeLargerThanClusterTolerance(
+				lyr, 11d);
 		TestTopologyErrorContainer errorContainer = new TestTopologyErrorContainer();
 		rule.setTopologyErrorContainer(errorContainer);
 		try {
@@ -80,10 +80,11 @@ public class MustBeGreaterThanClusterToleranceTest extends TestCase {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		GeometrySnapper snapper = new GeometrySnapper(11d);
 		WKTReader reader = new WKTReader(JtsUtil.GEOMETRY_FACTORY);
-		Geometry jtsGeo = reader.read("POLYGON((10 10, 15 10, 15 15, 10 15, 10 10))");
+		Geometry jtsGeo = reader
+				.read("POLYGON((10 10, 15 10, 15 15, 10 15, 10 10))");
 		try {
 			Geometry newGeo = snapper.snap(jtsGeo);
 		} catch (GeometryCollapsedException e) {
@@ -99,4 +100,3 @@ public class MustBeGreaterThanClusterToleranceTest extends TestCase {
 		}
 	}
 }
-

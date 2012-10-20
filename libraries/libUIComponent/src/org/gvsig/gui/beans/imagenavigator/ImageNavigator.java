@@ -43,61 +43,59 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
 import org.gvsig.gui.beans.Messages;
+
 /**
- * <code>ImageNavigator</code> es un componente que representa un manejador
- * de imágenes. En él se puede desplazar, hacer un zoom out o un zoom in a una
+ * <code>ImageNavigator</code> es un componente que representa un manejador de
+ * imágenes. En él se puede desplazar, hacer un zoom out o un zoom in a una
  * imagen virtual. El componente no trata la imagen en si, solo lanza los
  * eventos indicando la nueva posición y zoom de la imagen, luego es el usuario
  * el que se encargará de dibujar esa imagen en la posición correspondiente.
- *
- * El modo de uso es el siguiente:
- * - Se puede desplazar una imagen con el botón izquierdo del ratón.
- * - Se puede hacer zoom in/out con las teclas +/- del teclado.
- * - Se puede hacer zoom in/out con la rueda del ratón teniendo en cuenta la
- * posición del mismo.
- * - Se puede resetear los valores con las teclas 'Espacio' o 0;
- * - Las teclas 1, 2, 3, 4 y 5 equivalen a zoom 1, 2, 4, 8 y 16 respectivamente.
- * - La tecla C sirve para centrar la imagen.
- * - La tecla B sirve para mostrar u ocultar los cuadros del fondo. Útil para
- *   mostrar imagenes con transparencia.
- * - La tecla H muestra la ayuda.
- *
+ * 
+ * El modo de uso es el siguiente: - Se puede desplazar una imagen con el botón
+ * izquierdo del ratón. - Se puede hacer zoom in/out con las teclas +/- del
+ * teclado. - Se puede hacer zoom in/out con la rueda del ratón teniendo en
+ * cuenta la posición del mismo. - Se puede resetear los valores con las teclas
+ * 'Espacio' o 0; - Las teclas 1, 2, 3, 4 y 5 equivalen a zoom 1, 2, 4, 8 y 16
+ * respectivamente. - La tecla C sirve para centrar la imagen. - La tecla B
+ * sirve para mostrar u ocultar los cuadros del fondo. Útil para mostrar
+ * imagenes con transparencia. - La tecla H muestra la ayuda.
+ * 
  * @version 04/05/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
-public class ImageNavigator extends JComponent implements KeyListener, MouseMotionListener, MouseListener, MouseWheelListener {
+public class ImageNavigator extends JComponent implements KeyListener,
+		MouseMotionListener, MouseListener, MouseWheelListener {
 	private static final long serialVersionUID = 1164788214432359272L;
-	private IClientImageNavigator iClient         = null;
+	private IClientImageNavigator iClient = null;
 
-	private Image                 image           = null;
-	private Graphics2D            widgetGraphics  = null;
-	private Image                 imageCache      = null;
-	private Graphics2D            cacheGraphics   = null;
+	private Image image = null;
+	private Graphics2D widgetGraphics = null;
+	private Image imageCache = null;
+	private Graphics2D cacheGraphics = null;
 
-	private double                zoom            = 1.0;
-	private double                x1              = 0.0;
-	private double                y1              = 0.0;
-	private boolean               yInverted       = false;
-	private boolean               xInverted       = false;
-	private int                   width           = 0;
-	private int                   height          = 0;
-	private boolean               showHelp        = false;
-	private boolean               showBackground  = false;
-	private Color                 backgroundColor = new Color(224, 224, 224);
-	private ImageIcon             imageIconClose  = null;
-	private ImageIcon             imageIconHelp   = null;
-	private ImageIcon             imageIconError  = null;
+	private double zoom = 1.0;
+	private double x1 = 0.0;
+	private double y1 = 0.0;
+	private boolean yInverted = false;
+	private boolean xInverted = false;
+	private int width = 0;
+	private int height = 0;
+	private boolean showHelp = false;
+	private boolean showBackground = false;
+	private Color backgroundColor = new Color(224, 224, 224);
+	private ImageIcon imageIconClose = null;
+	private ImageIcon imageIconHelp = null;
+	private ImageIcon imageIconError = null;
 
-	private double                initX1          = 0.0;
-	private double                initY1          = 0.0;
-	private double                initX2          = 100.0;
-	private double                initY2          = 100.0;
-	private double                initZoom        = 1.0;
-	private boolean               autoAdjusted    = true;
+	private double initX1 = 0.0;
+	private double initY1 = 0.0;
+	private double initX2 = 100.0;
+	private double initY2 = 100.0;
+	private double initZoom = 1.0;
+	private boolean autoAdjusted = true;
 
-	private boolean               errorDrawing    = false;
-	private String                errorDrawingMsg = null;
-
+	private boolean errorDrawing = false;
+	private String errorDrawingMsg = null;
 
 	/**
 	 * Crea un <code>ImageNavigator</code>
@@ -109,24 +107,25 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 		this.addMouseListener(this);
 		this.addMouseWheelListener(this);
 	}
-	
+
 	/**
 	 * Crea un <code>ImageNavigator</code> especificandole quien pintara el
 	 * componente
+	 * 
 	 * @param iClient
 	 */
 	public ImageNavigator(IClientImageNavigator iClient) {
 		this();
 		setClientImageNavigator(iClient);
 	}
-	
+
 	public void setClientImageNavigator(IClientImageNavigator iClient) {
 		this.iClient = iClient;
 	}
 
 	/**
-	 * Actualiza las dimensiones para ajustar la imagen a los bordes especificados
-	 * con setViewDimensions.
+	 * Actualiza las dimensiones para ajustar la imagen a los bordes
+	 * especificados con setViewDimensions.
 	 */
 	private void updateDimensions() {
 		double factor = this.getWidth() / (initX2 - initX1);
@@ -156,11 +155,15 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 	/**
 	 * Especifica el rectangulo de la imagen a visualizar, pudiendo tener
 	 * cualquiera de los ejes X e Y invertidos
-	 *
-	 * @param x1 Coordenada izquierda
-	 * @param y1 Coordenada superior
-	 * @param x2 Coordenada derecha
-	 * @param y2 Coordenada inferior
+	 * 
+	 * @param x1
+	 *            Coordenada izquierda
+	 * @param y1
+	 *            Coordenada superior
+	 * @param x2
+	 *            Coordenada derecha
+	 * @param y2
+	 *            Coordenada inferior
 	 */
 	public void setViewDimensions(double x1, double y1, double x2, double y2) {
 		this.initX1 = x1;
@@ -194,6 +197,7 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 
 	/**
 	 * Especifica el zoom que usará por defecto el componente.
+	 * 
 	 * @param zoom
 	 */
 	public void setZoom(double zoom) {
@@ -205,6 +209,7 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 
 	/**
 	 * Especifica el zoom que usará por defecto el componente.
+	 * 
 	 * @param zoom
 	 */
 	public void setAutoAdjusted() {
@@ -216,6 +221,7 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.JComponent#addNotify()
 	 */
 	public void addNotify() {
@@ -227,6 +233,7 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 
 	/**
 	 * Hace un zoom de aumento en las coordenadas especificadas
+	 * 
 	 * @param x
 	 * @param y
 	 */
@@ -258,6 +265,7 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 
 	/**
 	 * Hace un zoom hacia afuera en las coordenadas especificadas
+	 * 
 	 * @param x
 	 * @param y
 	 */
@@ -289,7 +297,7 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 
 	/**
 	 * Mostrar o ocultar la ayuda
-	 *
+	 * 
 	 */
 	private void callShowHelp() {
 		showHelp = !showHelp;
@@ -299,86 +307,88 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
 	 */
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyChar()) {
-			case 'h':
-			case 'H':
-				callShowHelp();
-				break;
-			case '+':
-				ZoomIn(width / 2.0, height / 2.0);
-				autoAdjusted = false;
-				break;
-			case '-':
-				ZoomOut(width / 2.0, height / 2.0);
-				autoAdjusted = false;
-				break;
-			case '1':
-				autoAdjusted = false;
-				this.zoom = initZoom;
-				imageCenter();
-				updateImageCache(true);
-				refreshImage(0, 0);
-				break;
-			case '2':
-				autoAdjusted = false;
-				this.zoom = initZoom * 2.0;
-				imageCenter();
-				updateImageCache(true);
-				refreshImage(0, 0);
-				break;
-			case '3':
-				autoAdjusted = false;
-				this.zoom = initZoom * 4.0;
-				imageCenter();
-				updateImageCache(true);
-				refreshImage(0, 0);
-				break;
-			case '4':
-				autoAdjusted = false;
-				this.zoom = initZoom * 8.0;
-				imageCenter();
-				updateImageCache(true);
-				refreshImage(0, 0);
-				break;
-			case '5':
-				autoAdjusted = false;
-				this.zoom = initZoom * 16.0;
-				imageCenter();
-				updateImageCache(true);
-				refreshImage(0, 0);
-				break;
-			case 'c':
-			case 'C':
-				imageCenter();
-				updateImageCache(true);
-				refreshImage(0, 0);
-				break;
-			case 'b':
-			case 'B':
-				setShowBackground(!isShowBackground());
-				break;
-			case '0':
-			case ' ':
-				setAutoAdjusted();
-				break;
+		case 'h':
+		case 'H':
+			callShowHelp();
+			break;
+		case '+':
+			ZoomIn(width / 2.0, height / 2.0);
+			autoAdjusted = false;
+			break;
+		case '-':
+			ZoomOut(width / 2.0, height / 2.0);
+			autoAdjusted = false;
+			break;
+		case '1':
+			autoAdjusted = false;
+			this.zoom = initZoom;
+			imageCenter();
+			updateImageCache(true);
+			refreshImage(0, 0);
+			break;
+		case '2':
+			autoAdjusted = false;
+			this.zoom = initZoom * 2.0;
+			imageCenter();
+			updateImageCache(true);
+			refreshImage(0, 0);
+			break;
+		case '3':
+			autoAdjusted = false;
+			this.zoom = initZoom * 4.0;
+			imageCenter();
+			updateImageCache(true);
+			refreshImage(0, 0);
+			break;
+		case '4':
+			autoAdjusted = false;
+			this.zoom = initZoom * 8.0;
+			imageCenter();
+			updateImageCache(true);
+			refreshImage(0, 0);
+			break;
+		case '5':
+			autoAdjusted = false;
+			this.zoom = initZoom * 16.0;
+			imageCenter();
+			updateImageCache(true);
+			refreshImage(0, 0);
+			break;
+		case 'c':
+		case 'C':
+			imageCenter();
+			updateImageCache(true);
+			refreshImage(0, 0);
+			break;
+		case 'b':
+		case 'B':
+			setShowBackground(!isShowBackground());
+			break;
+		case '0':
+		case ' ':
+			setAutoAdjusted();
+			break;
 		}
 	}
 
 	double updateWidth = 0;
 	double updateHeight = 0;
+
 	/**
-	 * Método que hara la invocación al cliente del pintado del trozo de imagen a
-	 * visualizar
+	 * Método que hara la invocación al cliente del pintado del trozo de imagen
+	 * a visualizar
+	 * 
 	 * @param forceUpdate
 	 */
 	private void updateImageCache(boolean forceUpdate) {
-		if (getWidgetImage() == null ||
-				(updateWidth == getWidgetImage().getWidth(this) &&
-				updateHeight == getWidgetImage().getHeight(this) &&
-				!forceUpdate))
+		if (getWidgetImage() == null
+				|| (updateWidth == getWidgetImage().getWidth(this)
+						&& updateHeight == getWidgetImage().getHeight(this) && !forceUpdate))
 			return;
 		updateWidth = getWidgetImage().getWidth(this);
 		updateHeight = getWidgetImage().getHeight(this);
@@ -425,7 +435,8 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 		if (iClient != null)
 			try {
 				errorDrawing = false;
-				iClient.drawImage(getCacheGraphics(), newX1, newY1, newX2, newY2, zoom, this.getWidth(), this.getHeight());
+				iClient.drawImage(getCacheGraphics(), newX1, newY1, newX2,
+						newY2, zoom, this.getWidth(), this.getHeight());
 			} catch (ImageUnavailableException e) {
 				getCacheGraphics().setColor(new Color(224, 224, 224));
 				getCacheGraphics().fillRect(0, 0, width, height);
@@ -440,7 +451,7 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 		if (width2 <= 0)
 			width2 = 1;
 		if (height2 <= 0)
-			height2=1;
+			height2 = 1;
 
 		if ((width != width2) || (height != height2)) {
 			image = createImage(width2, height2);
@@ -450,8 +461,11 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 			widgetGraphics = (Graphics2D) image.getGraphics();
 			cacheGraphics = (Graphics2D) imageCache.getGraphics();
 
-			RenderingHints hints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			hints.add(new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY));
+			RenderingHints hints = new RenderingHints(
+					RenderingHints.KEY_ANTIALIASING,
+					RenderingHints.VALUE_ANTIALIAS_ON);
+			hints.add(new RenderingHints(RenderingHints.KEY_RENDERING,
+					RenderingHints.VALUE_RENDER_QUALITY));
 			cacheGraphics.setRenderingHints(hints);
 		}
 
@@ -481,7 +495,8 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 						getWidgetGraphics().setColor(Color.white);
 					else
 						getWidgetGraphics().setColor(getBackgroundColor());
-					getWidgetGraphics().fillRect((i * 4) + (x % 8), (j * 4) + (y % 8), 4, 4);
+					getWidgetGraphics().fillRect((i * 4) + (x % 8),
+							(j * 4) + (y % 8), 4, 4);
 				}
 			}
 		} else {
@@ -497,20 +512,26 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 			if (showHelp) {
 				paintHelp((Graphics2D) getWidgetGraphics());
 			} else {
-				getWidgetGraphics().drawImage(getIconHelp().getImage(), width - getIconHelp().getIconWidth() - 4, 3, null);
+				getWidgetGraphics().drawImage(getIconHelp().getImage(),
+						width - getIconHelp().getIconWidth() - 4, 3, null);
 			}
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.JComponent#paint(java.awt.Graphics)
 	 */
 	public void paint(Graphics g) {
-		if (autoAdjusted) updateDimensions();
+		if (autoAdjusted)
+			updateDimensions();
 		Graphics2D g2d = (Graphics2D) g;
-		RenderingHints hints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		hints.add(new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY));
+		RenderingHints hints = new RenderingHints(
+				RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		hints.add(new RenderingHints(RenderingHints.KEY_RENDERING,
+				RenderingHints.VALUE_RENDER_QUALITY));
 		g2d.setRenderingHints(hints);
 
 		updateImageCache(false);
@@ -521,13 +542,16 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 			if (isEnabled()) {
 				g.drawImage(image, 0, 0, this);
 			} else {
-				// Dibujar en escala de grises y aclarado para cuando esta inactivo
-				BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+				// Dibujar en escala de grises y aclarado para cuando esta
+				// inactivo
+				BufferedImage bi = new BufferedImage(width, height,
+						BufferedImage.TYPE_INT_RGB);
 
 				Graphics big = bi.createGraphics();
 				big.drawImage(image, 0, 0, this);
 
-				ColorConvertOp colorConvert = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
+				ColorConvertOp colorConvert = new ColorConvertOp(
+						ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
 				colorConvert.filter(bi, bi);
 
 				big.setColor(new Color(255, 255, 255, 164));
@@ -546,8 +570,11 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 		Graphics2D g2d = (Graphics2D) getGraphics();
 		if (g2d == null)
 			return;
-		RenderingHints hints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		hints.add(new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY));
+		RenderingHints hints = new RenderingHints(
+				RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		hints.add(new RenderingHints(RenderingHints.KEY_RENDERING,
+				RenderingHints.VALUE_RENDER_QUALITY));
 		g2d.setRenderingHints(hints);
 		redrawBuffer(x, y);
 
@@ -557,33 +584,39 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 
 	/**
 	 * Devuelve el icono de cerrar
+	 * 
 	 * @return
 	 */
 	private ImageIcon getIconClose() {
 		if (imageIconClose == null) {
-			imageIconClose = new ImageIcon(ImageNavigator.class.getResource("images/close.png"));
+			imageIconClose = new ImageIcon(
+					ImageNavigator.class.getResource("images/close.png"));
 		}
 		return imageIconClose;
 	}
 
 	/**
 	 * Devuelve el icono de error
+	 * 
 	 * @return
 	 */
 	private ImageIcon getIconError() {
 		if (imageIconError == null) {
-			imageIconError = new ImageIcon(ImageNavigator.class.getResource("images/error.png"));
+			imageIconError = new ImageIcon(
+					ImageNavigator.class.getResource("images/error.png"));
 		}
 		return imageIconError;
 	}
 
 	/**
 	 * Devuelve el icono ayuda
+	 * 
 	 * @return
 	 */
 	private ImageIcon getIconHelp() {
 		if (imageIconHelp == null) {
-			imageIconHelp = new ImageIcon(ImageNavigator.class.getResource("images/help.png"));
+			imageIconHelp = new ImageIcon(
+					ImageNavigator.class.getResource("images/help.png"));
 		}
 		return imageIconHelp;
 	}
@@ -597,15 +630,19 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 		Image image2 = createImage(width, alto);
 		Graphics2D graphics2 = (Graphics2D) image2.getGraphics();
 
-		RenderingHints hints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		hints.add(new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY));
+		RenderingHints hints = new RenderingHints(
+				RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		hints.add(new RenderingHints(RenderingHints.KEY_RENDERING,
+				RenderingHints.VALUE_RENDER_QUALITY));
 		graphics2.setRenderingHints(hints);
 
 		alto--;
 
 		Color color1 = new Color(255, 255, 178);
 		Color color2 = new Color(255, 255, 74);
-		graphics2.setPaint(new GradientPaint(0, 0, color1, 0, alto, color2, false));
+		graphics2.setPaint(new GradientPaint(0, 0, color1, 0, alto, color2,
+				false));
 		graphics2.fillRect(0, 0, width, alto);
 
 		graphics2.setColor(new Color(0, 0, 0));
@@ -633,9 +670,11 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 		graphics2.setColor(new Color(185, 185, 185));
 		graphics2.drawLine(0, alto, width, alto);
 
-		graphics2.drawImage(getIconClose().getImage(), width - getIconClose().getIconWidth() - 4, 3, null);
+		graphics2.drawImage(getIconClose().getImage(), width
+				- getIconClose().getIconWidth() - 4, 3, null);
 
-		AlphaComposite myAlpha = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f);
+		AlphaComposite myAlpha = AlphaComposite.getInstance(
+				AlphaComposite.SRC_OVER, 0.7f);
 		g.setComposite(myAlpha);
 
 		g.drawImage(image2, 0, 0, this);
@@ -643,8 +682,9 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 		myAlpha = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f);
 		g.setComposite(myAlpha);
 	}
-	
-	private ArrayList<String> splitString4Width(Graphics2D g, String msg, int width) {
+
+	private ArrayList<String> splitString4Width(Graphics2D g, String msg,
+			int width) {
 		String words[] = msg.split(" ");
 
 		ArrayList<String> newString = new ArrayList<String>();
@@ -654,7 +694,8 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 				aux = words[i];
 				continue;
 			}
-			if (g.getFontMetrics().getStringBounds(aux + " " + words[i], g).getWidth() <= width) {
+			if (g.getFontMetrics().getStringBounds(aux + " " + words[i], g)
+					.getWidth() <= width) {
 				aux += " " + words[i];
 				continue;
 			}
@@ -667,7 +708,8 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 		return newString;
 	}
 
-	private ArrayList<String> splitString4Intro(Graphics2D g, String msg, int width) {
+	private ArrayList<String> splitString4Intro(Graphics2D g, String msg,
+			int width) {
 		String words[] = msg.split("\n");
 		ArrayList<String> newString = new ArrayList<String>();
 		for (int i = 0; i < words.length; i++) {
@@ -679,14 +721,15 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 
 		return newString;
 	}
-	
+
 	private void paintError(Graphics2D g) {
-		ArrayList<String> errors = splitString4Intro(g, errorDrawingMsg, width - 30);
+		ArrayList<String> errors = splitString4Intro(g, errorDrawingMsg,
+				width - 30);
 
 		int size = errors.size();
 		if (size < 6)
 			size = 6;
-		
+
 		int sep = 13;
 		int pos = sep + 2;
 
@@ -699,18 +742,19 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 
 		Color color1 = new Color(255, 152, 152);
 		Color color2 = new Color(255, 100, 100);
-		graphics2.setPaint(new GradientPaint(0, 0, color1, 0, alto, color2, false));
+		graphics2.setPaint(new GradientPaint(0, 0, color1, 0, alto, color2,
+				false));
 		graphics2.fillRect(0, 0, width, alto);
 
 		graphics2.setColor(new Color(0, 0, 0));
 
 		graphics2.setFont(new java.awt.Font("Tahoma", 0, sep - 2));
 
-		for (int i=0; i<errors.size(); i++) { 
+		for (int i = 0; i < errors.size(); i++) {
 			graphics2.drawString((String) errors.get(i), 24, pos);
-			pos+=sep;
+			pos += sep;
 		}
-		
+
 		graphics2.drawImage(getIconError().getImage(), 4, 4, null);
 
 		graphics2.setColor(new Color(185, 185, 185));
@@ -719,10 +763,11 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 		g.drawImage(image2, 0, 0, this);
 	}
 
-
 	Point mouse = null;
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
 	 */
 	public void mousePressed(MouseEvent e) {
@@ -733,17 +778,18 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 		if ((e.getX() > (width - 20)) && (e.getY() < 20))
 			return;
 
-		if ((e.getButton() != MouseEvent.BUTTON1) && (e.getButton() != MouseEvent.BUTTON2))
+		if ((e.getButton() != MouseEvent.BUTTON1)
+				&& (e.getButton() != MouseEvent.BUTTON2))
 			return;
 
 		// Oscurece la imagen cuando se mueve
 		Color gris = new Color(0, 0, 0, 16);
 		getCacheGraphics().setColor(gris);
-		getCacheGraphics().fillRect(0, 0, width-1, height-1);
+		getCacheGraphics().fillRect(0, 0, width - 1, height - 1);
 
 		// Pone un borde a la imagen cuando se mueve
 		getCacheGraphics().setColor(Color.gray);
-		getCacheGraphics().drawRect(0, 0, width-1, height-1);
+		getCacheGraphics().drawRect(0, 0, width - 1, height - 1);
 
 		mouse = new Point(e.getX(), e.getY());
 		changePos(e.getX(), e.getY());
@@ -752,7 +798,10 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent
+	 * )
 	 */
 	public void mouseDragged(MouseEvent e) {
 		if (!isInteractiveEnabled())
@@ -762,14 +811,16 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
 	 */
 	public void mouseReleased(MouseEvent e) {
 		if (!isInteractiveEnabled())
 			return;
 		if (mouse != null) {
-			x1 = x1 - ((e.getX() - mouse.getX())/zoom);
-			y1 = y1 - ((e.getY() - mouse.getY())/zoom);
+			x1 = x1 - ((e.getX() - mouse.getX()) / zoom);
+			y1 = y1 - ((e.getY() - mouse.getY()) / zoom);
 			updateImageCache(true);
 			refreshImage(0, 0);
 		}
@@ -790,17 +841,20 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 			return;
 
 		if (e.getWheelRotation() > 0) {
-			ZoomOut(isXInverted() ? this.getWidth() - e.getX() : e.getX(), isYInverted() ? this.getHeight() - e.getY() : e.getY());
+			ZoomOut(isXInverted() ? this.getWidth() - e.getX() : e.getX(),
+					isYInverted() ? this.getHeight() - e.getY() : e.getY());
 			autoAdjusted = false;
 		}
 		if (e.getWheelRotation() < 0) {
-			ZoomIn(isXInverted() ? this.getWidth() - e.getX() : e.getX(), isYInverted() ? this.getHeight() - e.getY() : e.getY());
+			ZoomIn(isXInverted() ? this.getWidth() - e.getX() : e.getX(),
+					isYInverted() ? this.getHeight() - e.getY() : e.getY());
 			autoAdjusted = false;
 		}
 	}
 
 	/**
 	 * Obtener si el eje de las Y esta invertido
+	 * 
 	 * @return
 	 */
 	private boolean isYInverted() {
@@ -809,6 +863,7 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 
 	/**
 	 * Obtener si el eje de las X esta invertido
+	 * 
 	 * @return
 	 */
 	private boolean isXInverted() {
@@ -817,7 +872,9 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
 	 */
 	public void mouseMoved(MouseEvent e) {
 		if (!isInteractiveEnabled())
@@ -836,6 +893,7 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
 	 */
 	public void mouseClicked(MouseEvent e) {
@@ -845,15 +903,23 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 			callShowHelp();
 	}
 
-	public void keyReleased(KeyEvent e) {}
-	public void keyTyped(KeyEvent e) {}
-	public void mouseEntered(MouseEvent e) {}
-	public void mouseExited(MouseEvent e) {}
+	public void keyReleased(KeyEvent e) {
+	}
+
+	public void keyTyped(KeyEvent e) {
+	}
+
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	public void mouseExited(MouseEvent e) {
+	}
 
 	/**
 	 * Define el color de los recuadros del fondo
-	 *
-	 * @param backgroundColor the backgroundColor to set
+	 * 
+	 * @param backgroundColor
+	 *            the backgroundColor to set
 	 */
 	public void setBackgroundColor(Color backgroundColor) {
 		this.backgroundColor = backgroundColor;
@@ -861,6 +927,7 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 
 	/**
 	 * Devuelve el color de los recuadros del fondo
+	 * 
 	 * @return the backgroundColor
 	 */
 	public Color getBackgroundColor() {
@@ -869,6 +936,7 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 
 	/**
 	 * Devuelve si se esta mostrando o no la cuadricula de fondo.
+	 * 
 	 * @return the showBackground
 	 */
 	public boolean isShowBackground() {
@@ -878,16 +946,20 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 	/**
 	 * Define si se muestra o no la cuadricula de fondo. Util para imagenes
 	 * transparentes
-	 * @param showBackground the showBackground to set
+	 * 
+	 * @param showBackground
+	 *            the showBackground to set
 	 */
 	public void setShowBackground(boolean showBackground) {
 		this.showBackground = showBackground;
 		updateImageCache(true);
 		refreshImage(0, 0);
 	}
-	
+
 	/**
-	 * Devuelve si se pueden gestionar los eventos segun el estado del componente
+	 * Devuelve si se pueden gestionar los eventos segun el estado del
+	 * componente
+	 * 
 	 * @return
 	 */
 	private boolean isInteractiveEnabled() {
@@ -896,7 +968,9 @@ public class ImageNavigator extends JComponent implements KeyListener, MouseMoti
 		return false;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.JComponent#setEnabled(boolean)
 	 */
 	public void setEnabled(boolean enabled) {

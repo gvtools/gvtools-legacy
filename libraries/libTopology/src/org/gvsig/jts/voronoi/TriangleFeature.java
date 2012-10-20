@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.jts.voronoi;
 
 import java.awt.Shape;
@@ -60,48 +60,49 @@ import com.iver.cit.gvsig.fmap.core.IRow;
 import com.iver.cit.gvsig.fmap.core.ShapeFactory;
 
 /**
- * IFeature which forms part of a Delaunay/Voronoi triangulation, so
- * its geometry is a FTriangle.
+ * IFeature which forms part of a Delaunay/Voronoi triangulation, so its
+ * geometry is a FTriangle.
  * 
  * @see FTriangle
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
-public class TriangleFeature extends DefaultRow implements IFeature{
+public class TriangleFeature extends DefaultRow implements IFeature {
 
 	private FGeometry geometry;
-	
-	public TriangleFeature(FTriangle triangle, Value[] attributes, String fid){
+
+	public TriangleFeature(FTriangle triangle, Value[] attributes, String fid) {
 		super(attributes, fid);
 		this.geometry = ShapeFactory.createGeometry(triangle);
 	}
-	
+
 	public IGeometry getGeometry() {
 		return geometry;
 	}
 
 	public void setGeometry(IGeometry geom) {
-		if(! (geom instanceof FGeometry))
-			throw new IllegalArgumentException("VoroniFeature requires a FGeometry geometry. Found: "+geom.getClass().getName());
+		if (!(geom instanceof FGeometry))
+			throw new IllegalArgumentException(
+					"VoroniFeature requires a FGeometry geometry. Found: "
+							+ geom.getClass().getName());
 		FGeometry fgeometry = (FGeometry) geom;
 		Shape internalShape = geometry.getInternalShape();
-		if(! ( internalShape instanceof FTriangle))
-				throw new IllegalArgumentException("VoroniFeature requires a FTriangle as internal shape of FGeometry. Found: "+ internalShape.getClass().getName());
+		if (!(internalShape instanceof FTriangle))
+			throw new IllegalArgumentException(
+					"VoroniFeature requires a FTriangle as internal shape of FGeometry. Found: "
+							+ internalShape.getClass().getName());
 		this.geometry = fgeometry;
-				
-		
+
 	}
 
 	public IRow cloneRow() {
-		IGeometry geom= geometry.cloneGeometry();
-		Value[] attri=null;
-		if (getAttributes()!=null)
-			attri=(Value[])getAttributes().clone();
-		DefaultFeature df=new DefaultFeature(geom,attri,getID());
+		IGeometry geom = geometry.cloneGeometry();
+		Value[] attri = null;
+		if (getAttributes() != null)
+			attri = (Value[]) getAttributes().clone();
+		DefaultFeature df = new DefaultFeature(geom, attri, getID());
 		return df;
 	}
-	
-	
 
 }

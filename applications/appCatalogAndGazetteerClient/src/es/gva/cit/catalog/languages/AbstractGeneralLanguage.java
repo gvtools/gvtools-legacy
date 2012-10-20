@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,13 +39,14 @@
  *   dac@iver.es
  */
 package es.gva.cit.catalog.languages;
+
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
 /**
- * All classes that implement a "Language" must to
- * inherit of this class
+ * All classes that implement a "Language" must to inherit of this class
+ * 
  * @author Jorge Piera Llodra (jorge.piera@iver.es)
  */
 public abstract class AbstractGeneralLanguage implements ILanguages {
@@ -61,30 +61,36 @@ public abstract class AbstractGeneralLanguage implements ILanguages {
 
 	/**
 	 * Divide a phrase in lines
-	 * @param concordancia If is 'E' (exact) don't divide
-	 * @return Iteraror
-	 * A set of words
-	 * @param line phrase to search
-	 * @param titleKeys 
+	 * 
+	 * @param concordancia
+	 *            If is 'E' (exact) don't divide
+	 * @return Iteraror A set of words
+	 * @param line
+	 *            phrase to search
+	 * @param titleKeys
 	 */
-	public Iterator parseValues(String line, String titleKeys){
-		return parseValues(line, titleKeys, FilterEncoding.PROPERTY_IS_EQUALS_TO, null);
+	public Iterator parseValues(String line, String titleKeys) {
+		return parseValues(line, titleKeys,
+				FilterEncoding.PROPERTY_IS_EQUALS_TO, null);
 	}
 
 	/**
 	 * Divide a phrase in lines
-	 *@param concordancia If is 'E' (exact) don't divide
-	 * @return Iteraror
-	 * A set of words
-	 * @param line phrase to search
-	 * @param titleKeys 
+	 * 
+	 * @param concordancia
+	 *            If is 'E' (exact) don't divide
+	 * @return Iteraror A set of words
+	 * @param line
+	 *            phrase to search
+	 * @param titleKeys
 	 * @param relationship
 	 * @param wildCard
 	 */
-	public Iterator parseValues(String line, String titleKeys, String relationship, String wildCard) {        
+	public Iterator parseValues(String line, String titleKeys,
+			String relationship, String wildCard) {
 		Vector values = new Vector();
 
-		if (titleKeys == null){
+		if (titleKeys == null) {
 			titleKeys = EXACT_WORDS;
 		}
 
@@ -100,7 +106,7 @@ public abstract class AbstractGeneralLanguage implements ILanguages {
 			if (token.equals("\"")) {
 				inside = !inside;
 			} else if (inside) {
-				if (relationship.compareTo(FilterEncoding.PROPERTY_IS_LIKE) == 0){
+				if (relationship.compareTo(FilterEncoding.PROPERTY_IS_LIKE) == 0) {
 					token = wildCard + token + wildCard;
 				}
 				values.add(token);
@@ -108,7 +114,7 @@ public abstract class AbstractGeneralLanguage implements ILanguages {
 				StringTokenizer spaceTokenizer = new StringTokenizer(token, " ");
 				while (spaceTokenizer.hasMoreTokens()) {
 					String value = spaceTokenizer.nextToken();
-					if (relationship.compareTo(FilterEncoding.PROPERTY_IS_LIKE) == 0){
+					if (relationship.compareTo(FilterEncoding.PROPERTY_IS_LIKE) == 0) {
 						value = wildCard + value + wildCard;
 					}
 					values.add(value);
@@ -116,21 +122,23 @@ public abstract class AbstractGeneralLanguage implements ILanguages {
 			}
 		}
 		return values.iterator();
-	} 
+	}
 
 	/**
 	 * Return logic operators
+	 * 
 	 * @return Or or And
-	 * @param titleKeys E,A o Y --> Exact, All, anY
+	 * @param titleKeys
+	 *            E,A o Y --> Exact, All, anY
 	 */
-	public String getOperator(String titleKeys) {        
-		if (titleKeys == null){
+	public String getOperator(String titleKeys) {
+		if (titleKeys == null) {
 			titleKeys = EXACT_WORDS;
-		} 
+		}
 		if (titleKeys.equals(ANY_WORDS)) {
 			return OR;
 		} else {
 			return AND;
 		}
-	} 
+	}
 }

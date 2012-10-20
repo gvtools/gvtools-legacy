@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.catalog.ui.serverconnect;
+
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
@@ -48,86 +48,101 @@ import javax.swing.JFrame;
 import es.gva.cit.catalog.utils.Frames;
 
 /**
- * This class implements the JFrame for the server
- * connect panel that will be used when the catalog
- * client is runned without gvSIG
+ * This class implements the JFrame for the server connect panel that will be
+ * used when the catalog client is runned without gvSIG
+ * 
  * @author Jorge Piera Llodrá (jorge.piera@iver.es)
  */
 public class ServerConnectDialog extends JFrame implements WindowListener {
 	private static final long serialVersionUID = 4678818428679670480L;
 
-	public ServerConnectDialog() {        
-		super();        
+	public ServerConnectDialog() {
+		super();
 		initialize();
-	} 
+	}
 
 	/**
 	 * This method initializes jDialog
 	 * 
 	 */
-	protected void initialize() {        
+	protected void initialize() {
 		Frames.centerFrame(this, 625, 290);
 		this.setTitle("Metadata catalog");
 		setName("serverConnect");
-		getContentPane().add(new ServerConnectDialogPanel(
-				this));
+		getContentPane().add(new ServerConnectDialogPanel(this));
 		addWindowListener(this);
 		setVisible(true);
-	} 
-	
-	/*
-	 * (non-Javadoc)
-	 * @see java.awt.event.WindowListener#windowActivated(java.awt.event.WindowEvent)
-	 */
-	public void windowActivated(WindowEvent e) {        
-		// TODO Auto-generated method stub
-	} 
+	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.WindowListener#windowClosing(java.awt.event.WindowEvent)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowActivated(java.awt.event.WindowEvent)
 	 */
-	public void windowClosing(WindowEvent arg0) {        
+	public void windowActivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowClosing(java.awt.event.WindowEvent)
+	 */
+	public void windowClosing(WindowEvent arg0) {
 		System.exit(0);
-	} 
-	
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.WindowListener#windowClosed(java.awt.event.WindowEvent)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowClosed(java.awt.event.WindowEvent)
 	 */
-	public void windowClosed(WindowEvent arg0) {        
+	public void windowClosed(WindowEvent arg0) {
 		System.exit(0);
-	} 
-	
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.WindowListener#windowDeactivated(java.awt.event.WindowEvent)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowDeactivated(java.awt.event.WindowEvent
+	 * )
 	 */
-	public void windowDeactivated(WindowEvent e) {        
+	public void windowDeactivated(WindowEvent e) {
 		// TODO Auto-generated method stub
-	} 
-	
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.WindowListener#windowDeiconified(java.awt.event.WindowEvent)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowDeiconified(java.awt.event.WindowEvent
+	 * )
 	 */
-	public void windowDeiconified(WindowEvent e) {        
+	public void windowDeiconified(WindowEvent e) {
 		// TODO Auto-generated method stub
-	} 
-	
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.WindowListener#windowIconified(java.awt.event.WindowEvent)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowIconified(java.awt.event.WindowEvent)
 	 */
-	public void windowIconified(WindowEvent e) {        
+	public void windowIconified(WindowEvent e) {
 		// TODO Auto-generated method stub
-	} 
-	
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.WindowListener#windowOpened(java.awt.event.WindowEvent)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowOpened(java.awt.event.WindowEvent)
 	 */
-	public void windowOpened(WindowEvent e) {        
+	public void windowOpened(WindowEvent e) {
 		// TODO Auto-generated method stub
-	} 
+	}
 }

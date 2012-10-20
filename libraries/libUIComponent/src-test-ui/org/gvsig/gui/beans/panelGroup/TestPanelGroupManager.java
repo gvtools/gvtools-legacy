@@ -25,22 +25,25 @@ import org.gvsig.gui.beans.panelGroup.tabbedPanel.TabbedPanel;
 import org.gvsig.gui.beans.panelGroup.treePanel.TreePanel;
 
 /**
- * <p>Tests the class {@link PanelGroupManager PanelGroupManager}.</p>
+ * <p>
+ * Tests the class {@link PanelGroupManager PanelGroupManager}.
+ * </p>
  * 
  * @version 06/11/2007
- * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es) 
+ * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class TestPanelGroupManager extends TestCase {
 	private PanelGroupManager manager;
-	private Object reference; 
+	private Object reference;
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see junit.framework.TestCase#setUp()
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
-		
+
 		manager = PanelGroupManager.getManager();
 		manager.registerPanelGroup(TabbedPanel.class);
 		manager.setDefaultType(TabbedPanel.class);
@@ -50,6 +53,7 @@ public class TestPanelGroupManager extends TestCase {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see junit.framework.TestCase#tearDown()
 	 */
 	protected void tearDown() throws Exception {
@@ -57,7 +61,9 @@ public class TestPanelGroupManager extends TestCase {
 	}
 
 	/**
-	 * <p>Test, results must be valid.</p>
+	 * <p>
+	 * Test, results must be valid.
+	 * </p>
 	 */
 	public void testGetManager() {
 		try {
@@ -69,11 +75,14 @@ public class TestPanelGroupManager extends TestCase {
 	}
 
 	/**
-	 * <p>Test, results must be valid.</p>
+	 * <p>
+	 * Test, results must be valid.
+	 * </p>
 	 */
 	public void testDefaultType() {
 		try {
-			assertSame(manager.getPanelGroup(reference).getClass(), TabbedPanel.class);
+			assertSame(manager.getPanelGroup(reference).getClass(),
+					TabbedPanel.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
@@ -81,12 +90,15 @@ public class TestPanelGroupManager extends TestCase {
 	}
 
 	/**
-	 * <p>Test, results must be valid.</p>
+	 * <p>
+	 * Test, results must be valid.
+	 * </p>
 	 */
 	public void testTabbedPanelType() {
 		try {
 			manager.setDefaultType(TabbedPanel.class);
-			assertSame(manager.getPanelGroup(reference).getClass(), TabbedPanel.class);
+			assertSame(manager.getPanelGroup(reference).getClass(),
+					TabbedPanel.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
@@ -94,26 +106,16 @@ public class TestPanelGroupManager extends TestCase {
 	}
 
 	/**
-	 * <p>Test, results must be valid.</p>
+	 * <p>
+	 * Test, results must be valid.
+	 * </p>
 	 */
 	public void testTreePanelType() {
 		try {
 			manager.registerPanelGroup(TreePanel.class);
 			manager.setDefaultType(TreePanel.class);
-			assertSame(manager.getPanelGroup(reference).getClass(), TreePanel.class);
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail();
-		}
-	}
-	
-	/**
-	 * <p>Test, results must be valid.</p>
-	 */
-	public void testCreateAPanelGroupManager() {
-		try {
-			manager.setDefaultType(TreePanel.class);
-			assertSame(manager.getPanelGroup(reference).getClass(), TreePanel.class);
+			assertSame(manager.getPanelGroup(reference).getClass(),
+					TreePanel.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
@@ -121,7 +123,25 @@ public class TestPanelGroupManager extends TestCase {
 	}
 
 	/**
-	 * <p>Test, results must be valid.</p>
+	 * <p>
+	 * Test, results must be valid.
+	 * </p>
+	 */
+	public void testCreateAPanelGroupManager() {
+		try {
+			manager.setDefaultType(TreePanel.class);
+			assertSame(manager.getPanelGroup(reference).getClass(),
+					TreePanel.class);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+
+	/**
+	 * <p>
+	 * Test, results must be valid.
+	 * </p>
 	 */
 	public void test1RegistegerAndDeregisterTypes() {
 		try {
@@ -129,16 +149,18 @@ public class TestPanelGroupManager extends TestCase {
 			manager.deregisterPanelGroup(TabbedPanel.class);
 
 			AbstractPanelGroup panelGroup = manager.getPanelGroup(reference);
-			
+
 			assertEquals(panelGroup, null);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
-	}	
+	}
 
 	/**
-	 * <p>Test, results must be valid.</p>
+	 * <p>
+	 * Test, results must be valid.
+	 * </p>
 	 */
 	public void test2RegistegerAndDeregisterTypes() {
 		try {
@@ -153,11 +175,11 @@ public class TestPanelGroupManager extends TestCase {
 			manager.deregisterPanelGroup(TabbedPanel.class);
 
 			AbstractPanelGroup panelGroup = manager.getPanelGroup(reference);
-			
+
 			assertEquals(panelGroup, null);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
-	}	
+	}
 }

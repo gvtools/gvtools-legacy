@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.topologyrules;
 
 import java.awt.Color;
@@ -79,18 +79,18 @@ import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.precision.EnhancedPrecisionOp;
 
 /**
- * Topololy rule that checks than polygon geometries of origin layer
- * doesnt checks with polygon geometries of destination layer.
+ * Topololy rule that checks than polygon geometries of origin layer doesnt
+ * checks with polygon geometries of destination layer.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
-public class PolygonMustNotOverlapWith extends PolygonMustNotOverlap 
-										implements ITwoLyrRule{
+public class PolygonMustNotOverlapWith extends PolygonMustNotOverlap implements
+		ITwoLyrRule {
 	final static String RULE_NAME = Messages.getText("must_not_overlap_with");
-	
+
 	FLyrVect destinationLyr;
-	
+
 	private static List<ITopologyErrorFix> automaticErrorFixes = new ArrayList<ITopologyErrorFix>();
 	static {
 		automaticErrorFixes.add(new SubstractOverlapPolygonWithFix());
@@ -106,9 +106,7 @@ public class PolygonMustNotOverlapWith extends PolygonMustNotOverlap
 	}
 
 	private MultiShapeSymbol errorSymbol = DEFAULT_ERROR_SYMBOL;
-	
-	
-	
+
 	/**
 	 * Constructor.
 	 * 
@@ -117,43 +115,44 @@ public class PolygonMustNotOverlapWith extends PolygonMustNotOverlap
 	 * @param destinationLyr
 	 * @param clusterTolerance
 	 */
-	public PolygonMustNotOverlapWith(Topology topology, 
-									 FLyrVect originLyr,
-									 FLyrVect destinationLyr,
-									 double clusterTolerance){
+	public PolygonMustNotOverlapWith(Topology topology, FLyrVect originLyr,
+			FLyrVect destinationLyr, double clusterTolerance) {
 		super(topology, originLyr, clusterTolerance);
 		setDestinationLyr(destinationLyr);
 	}
-	
-	public PolygonMustNotOverlapWith(){
-		
+
+	public PolygonMustNotOverlapWith() {
+
 	}
-	
+
 	@Override
 	public String getName() {
 		return RULE_NAME;
 	}
-	
+
 	@Override
 	public List<ITopologyErrorFix> getAutomaticErrorFixes() {
 		return automaticErrorFixes;
 	}
-	
-	public XMLEntity getXMLEntity(){
+
+	public XMLEntity getXMLEntity() {
 		XMLEntity xml = super.getXMLEntity();
 		xml.putProperty("destinationLayerName", this.destinationLyr.getName());
 		return xml;
 	}
-	@Override    
-	public void setXMLEntity(XMLEntity xml){
+
+	@Override
+	public void setXMLEntity(XMLEntity xml) {
 		super.setXMLEntity(xml);
 		String destinationLayerName = "";
 		if (xml.contains("destinationLayerName")) {
-			destinationLayerName = xml.getStringProperty("destinationLayerName");
-			this.destinationLyr = (FLyrVect) topology.getLayer(destinationLayerName);
-		}//if
+			destinationLayerName = xml
+					.getStringProperty("destinationLayerName");
+			this.destinationLyr = (FLyrVect) topology
+					.getLayer(destinationLayerName);
+		}// if
 	}
-	
+
 	@Override
 	protected void process(IGeometry geometry, IFeature feature) {
 		Geometry jtsGeom = NewFConverter.toJtsGeometry(geometry);
@@ -175,9 +174,8 @@ public class PolygonMustNotOverlapWith extends PolygonMustNotOverlap
 					maxY - minY);
 
 			try {
-				IFeatureIterator neighbours = destinationLyr.
-													getSource().
-													getFeatureIterator(rect, null, null, false);
+				IFeatureIterator neighbours = destinationLyr.getSource()
+						.getFeatureIterator(rect, null, null, false);
 				while (neighbours.hasNext()) {
 					IFeature neighbourFeature = neighbours.next();
 					IGeometry geom2 = neighbourFeature.getGeometry();
@@ -188,38 +186,40 @@ public class PolygonMustNotOverlapWith extends PolygonMustNotOverlap
 						int numGeometries = polygons2.length;
 						for (int j = 0; j < numGeometries; j++) {
 							Polygon poly2 = polygons2[j];
-							if (poly2.overlaps(polygon) || poly2.covers(polygon) || polygon.covers(poly2)) {
-										Geometry errorGeomJts = EnhancedPrecisionOp.intersection(poly2, polygon);
-										Polygon[] overlappingPolygons = JtsUtil.extractPolygons(errorGeomJts);
-										if(overlappingPolygons.length > 0){
-											errorGeomJts = JtsUtil.GEOMETRY_FACTORY.createGeometryCollection(overlappingPolygons);
-											IGeometry errorGeom = NewFConverter.toFMap(errorGeomJts);
-											TopologyError topologyError = 
-												new TopologyError(errorGeom, 
-															errorContainer.getErrorFid(), 
-															this,  
-															feature, 
-															neighbourFeature, 
-															topology );
-											addTopologyError(topologyError);
-										}
-								}//if
+							if (poly2.overlaps(polygon)
+									|| poly2.covers(polygon)
+									|| polygon.covers(poly2)) {
+								Geometry errorGeomJts = EnhancedPrecisionOp
+										.intersection(poly2, polygon);
+								Polygon[] overlappingPolygons = JtsUtil
+										.extractPolygons(errorGeomJts);
+								if (overlappingPolygons.length > 0) {
+									errorGeomJts = JtsUtil.GEOMETRY_FACTORY
+											.createGeometryCollection(overlappingPolygons);
+									IGeometry errorGeom = NewFConverter
+											.toFMap(errorGeomJts);
+									TopologyError topologyError = new TopologyError(
+											errorGeom,
+											errorContainer.getErrorFid(), this,
+											feature, neighbourFeature, topology);
+									addTopologyError(topologyError);
+								}
+							}// if
 						}// for
-					}//if
+					}// if
 				}// while
 
 			} catch (ReadDriverException e) {
 				e.printStackTrace();
 				return;
 			}
-		}//for polygons
+		}// for polygons
 	}
 
+	// public List<ITopologyErrorFix> getAutomaticErrorFixes() {
+	// return automaticErrorFixes;
+	// }
 
-//	public List<ITopologyErrorFix> getAutomaticErrorFixes() {
-//		return automaticErrorFixes;
-//	}
-	
 	public boolean acceptsDestinationLyr(FLyrVect destLyr) {
 		try {
 			int shapeType = destLyr.getShapeType();
@@ -230,16 +230,14 @@ public class PolygonMustNotOverlapWith extends PolygonMustNotOverlap
 		}
 	}
 
-
 	public FLyrVect getDestinationLyr() {
 		return destinationLyr;
 	}
 
-
 	public void setDestinationLyr(FLyrVect destinationLyr) {
 		this.destinationLyr = destinationLyr;
 	}
-	
+
 	public MultiShapeSymbol getDefaultErrorSymbol() {
 		return DEFAULT_ERROR_SYMBOL;
 	}
@@ -251,8 +249,8 @@ public class PolygonMustNotOverlapWith extends PolygonMustNotOverlap
 	public void setErrorSymbol(MultiShapeSymbol errorSymbol) {
 		this.errorSymbol = errorSymbol;
 	}
-	
-	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError){
+
+	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError) {
 		return automaticErrorFixes.get(0);
 	}
 }

@@ -12,11 +12,17 @@ import com.iver.utiles.swing.threads.Cancellable;
 public interface MapContextDrawer {
 
 	public void setMapContext(MapContext mapContext);
+
 	public void setViewPort(ViewPort viewPort);
-	public void draw(FLayers root, BufferedImage image, Graphics2D g, Cancellable cancel,
-			double scale) throws ReadDriverException;
+
+	public void draw(FLayers root, BufferedImage image, Graphics2D g,
+			Cancellable cancel, double scale) throws ReadDriverException;
+
 	public void print(FLayers root, Graphics2D g, Cancellable cancel,
-			double scale, PrintRequestAttributeSet properties) throws ReadDriverException;
+			double scale, PrintRequestAttributeSet properties)
+			throws ReadDriverException;
+
 	public void dispose();
+
 	public void clean();
 }

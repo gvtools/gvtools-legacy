@@ -44,7 +44,6 @@ USA.
  */
 package com.iver.andami.ui.mdiFrame;
 
-
 public class NoSuchMenuException extends RuntimeException {
 
 	/**
@@ -54,6 +53,7 @@ public class NoSuchMenuException extends RuntimeException {
 		super();
 
 	}
+
 	/**
 	 * @param message
 	 */
@@ -61,6 +61,7 @@ public class NoSuchMenuException extends RuntimeException {
 		super(message);
 
 	}
+
 	/**
 	 * @param message
 	 * @param cause
@@ -69,6 +70,7 @@ public class NoSuchMenuException extends RuntimeException {
 		super(message, cause);
 
 	}
+
 	/**
 	 * @param cause
 	 */

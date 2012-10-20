@@ -47,37 +47,35 @@ import edu.uci.ics.jung.graph.decorators.Indexer;
 import edu.uci.ics.jung.graph.impl.SparseGraph;
 
 public class JungConverter {
-	
+
 	IGraph g;
 	Graph gJ;
 	Indexer indexer;
-	
-	
+
 	public void setGraph(IGraph g) {
 		this.g = g;
 	}
-	
+
 	public void convert() {
 		// TODO: Hacer y lanzar una excepción si algo ha ido mal
 		if (g == null)
-			throw new RuntimeException("Please, use setGraph() before convert()");
+			throw new RuntimeException(
+					"Please, use setGraph() before convert()");
 		gJ = new SparseGraph();
 		long t1 = System.currentTimeMillis();
-		
-		for (int i=0; i < g.numVertices(); i++)
-		{
+
+		for (int i = 0; i < g.numVertices(); i++) {
 			GvNode n = g.getNodeByID(i);
 			FNode v = new FNode(i, n.getX(), n.getY());
-			gJ.addVertex(v);				
+			gJ.addVertex(v);
 		}
 		indexer = Indexer.getIndexer(gJ);
-		
-		for (int i=0; i < g.numEdges(); i++)
-		{
+
+		for (int i = 0; i < g.numEdges(); i++) {
 			GvEdge e = g.getEdgeByID(i);
 			Vertex vFrom = (Vertex) indexer.getVertex(e.getIdNodeOrig());
 			Vertex vTo = (Vertex) indexer.getVertex(e.getIdNodeEnd());
-			
+
 			FEdge edge = new FEdge(vFrom, vTo);
 			edge.setArcID(e.getIdArc());
 			edge.setDirection(e.getDirec());
@@ -86,23 +84,24 @@ public class JungConverter {
 			edge.setType(e.getType());
 			edge.setWeight(e.getDistance());
 			edge.setCost2(e.getWeight());
-			
+
 			gJ.addEdge(edge);
 		}
 		long t2 = System.currentTimeMillis();
-		System.out.println("Tiempo de carga desde nodes.dbf y edges.dbf y generando JUNG network: " + (t2-t1) + " msecs");
+		System.out
+				.println("Tiempo de carga desde nodes.dbf y edges.dbf y generando JUNG network: "
+						+ (t2 - t1) + " msecs");
 	}
-	
+
 	public ArchetypeGraph getJungGraph() {
 		if (gJ == null)
-			throw new RuntimeException("You should call convert() before use this method.");
+			throw new RuntimeException(
+					"You should call convert() before use this method.");
 		return gJ;
 	}
-	
+
 	public Indexer getIndexer() {
 		return indexer;
 	}
 
 }
-
-

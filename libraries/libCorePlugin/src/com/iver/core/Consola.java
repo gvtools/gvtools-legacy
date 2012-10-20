@@ -46,53 +46,58 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.plugins.Extension;
 
-
 /**
- * Extensión que registra un frame en la aplicación que recibe los eventos de
- * la consola de la aplicación y los muestra en el frame
+ * Extensión que registra un frame en la aplicación que recibe los eventos de la
+ * consola de la aplicación y los muestra en el frame
  */
 public class Consola extends Extension {
-	
+
 	private static Logger logger = Logger.getLogger(Consola.class.getName());
-	
+
 	static PluginServices ps;
-    public static ConsolaFrame consolaFrame;
-    public static NotificationDialog notificationDialog;
+	public static ConsolaFrame consolaFrame;
+	public static NotificationDialog notificationDialog;
 
-    /**
-     * @see com.iver.mdiApp.IExtension#initialize()
-     */
-    public void initialize() {
-    	ps = PluginServices.getPluginServices(this);
-    	consolaFrame = new ConsolaFrame();
-    	notificationDialog= new NotificationDialog();
-    	NotificationManager.addNotificationListener(consolaFrame);
-    	NotificationManager.addNotificationListener(notificationDialog);
+	/**
+	 * @see com.iver.mdiApp.IExtension#initialize()
+	 */
+	public void initialize() {
+		ps = PluginServices.getPluginServices(this);
+		consolaFrame = new ConsolaFrame();
+		notificationDialog = new NotificationDialog();
+		NotificationManager.addNotificationListener(consolaFrame);
+		NotificationManager.addNotificationListener(notificationDialog);
 
-    	PluginServices.getIconTheme().registerDefault(
+		PluginServices.getIconTheme().registerDefault(
 				"application-console",
-				this.getClass().getClassLoader().getResource("images/console.png")
-			);
-    }
+				this.getClass().getClassLoader()
+						.getResource("images/console.png"));
+	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.Extension#execute(java.lang.String)
 	 */
 	public void execute(String actionCommand) {
 		consolaFrame.setSize(400, 325);
 		consolaFrame.setVisible(true);
-        PluginServices.getMDIManager().addWindow(consolaFrame);
-		
+		PluginServices.getMDIManager().addWindow(consolaFrame);
+
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.Extension#isEnabled()
 	 */
 	public boolean isEnabled() {
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.Extension#isVisible()
 	 */
 	public boolean isVisible() {

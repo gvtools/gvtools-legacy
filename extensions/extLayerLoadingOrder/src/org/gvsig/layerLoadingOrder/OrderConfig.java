@@ -6,9 +6,9 @@ import com.iver.utiles.XMLEntity;
 /**
  * Stores the SmartOrderManager settings in memory, and offers a simple
  * interface to change them.
- *
+ * 
  * @author Cesar Martinez Izquierdo <cesar.martinez@iver.es>
- *
+ * 
  */
 public class OrderConfig implements IPersistence {
 	/**
@@ -22,14 +22,12 @@ public class OrderConfig implements IPersistence {
 	public static final int AT_THE_BOTTOM = 1;
 
 	/**
-	 * To place the layer on a fixed position counting from
-	 * top.
+	 * To place the layer on a fixed position counting from top.
 	 */
 	public static final int FROM_TOP = 2;
 
 	/**
-	 * To place the layer on a fixed position counting from
-	 * the bottom.
+	 * To place the layer on a fixed position counting from the bottom.
 	 */
 	public static final int FROM_BOTTOM = 3;
 
@@ -62,17 +60,16 @@ public class OrderConfig implements IPersistence {
 	protected int other_position = 0;
 
 	/**
-	 * <p>Sets the behaviour of the order manager when
-	 * adding Vector Layers.</p>
-	 * <p>Allowed values:
-	 * {@link OrderConfig#ON_TOP},
-	 * {@link OrderConfig#AT_THE_BOTTOM},
-	 * {@link OrderConfig#FROM_TOP},
-	 * {@link OrderConfig#FROM_BOTTOM},
-	 * {@link OrderConfig#OVER_RASTER},
+	 * <p>
+	 * Sets the behaviour of the order manager when adding Vector Layers.
+	 * </p>
+	 * <p>
+	 * Allowed values: {@link OrderConfig#ON_TOP},
+	 * {@link OrderConfig#AT_THE_BOTTOM}, {@link OrderConfig#FROM_TOP},
+	 * {@link OrderConfig#FROM_BOTTOM}, {@link OrderConfig#OVER_RASTER},
 	 * {@link OrderConfig#UNDER_RASTER}
 	 * </p>
-	 *
+	 * 
 	 * @param behaviour
 	 */
 	public void setVectorBehaviour(int behaviour) {
@@ -80,13 +77,13 @@ public class OrderConfig implements IPersistence {
 	}
 
 	/**
-	 * <p>Returns the behaviour of the order manager when
-	 * adding Vector Layers.</p>
-	 * <p>Allowed values: {@link OrderConfig#ON_TOP},
-	 * {@link OrderConfig#AT_THE_BOTTOM},
-	 * {@link OrderConfig#FROM_TOP},
-	 * {@link OrderConfig#FROM_BOTTOM},
-	 * {@link OrderConfig#OVER_RASTER},
+	 * <p>
+	 * Returns the behaviour of the order manager when adding Vector Layers.
+	 * </p>
+	 * <p>
+	 * Allowed values: {@link OrderConfig#ON_TOP},
+	 * {@link OrderConfig#AT_THE_BOTTOM}, {@link OrderConfig#FROM_TOP},
+	 * {@link OrderConfig#FROM_BOTTOM}, {@link OrderConfig#OVER_RASTER},
 	 * {@link OrderConfig#UNDER_RASTER}
 	 * </p>
 	 */
@@ -95,16 +92,16 @@ public class OrderConfig implements IPersistence {
 	}
 
 	/**
-	 * <p>Returns the behaviour of the order manager when
-	 * adding Raster Layers.</p>
-	 * <p>Allowed values: {@link OrderConfig#ON_TOP},
-	 * {@link OrderConfig#AT_THE_BOTTOM},
-	 * {@link OrderConfig#FROM_TOP},
-	 * {@link OrderConfig#FROM_BOTTOM},
-	 * {@link OrderConfig#OVER_RASTER},
+	 * <p>
+	 * Returns the behaviour of the order manager when adding Raster Layers.
+	 * </p>
+	 * <p>
+	 * Allowed values: {@link OrderConfig#ON_TOP},
+	 * {@link OrderConfig#AT_THE_BOTTOM}, {@link OrderConfig#FROM_TOP},
+	 * {@link OrderConfig#FROM_BOTTOM}, {@link OrderConfig#OVER_RASTER},
 	 * {@link OrderConfig#UNDER_RASTER}
 	 * </p>
-	 *
+	 * 
 	 * @param behaviour
 	 */
 	public void setRasterBehaviour(int behaviour) {
@@ -112,13 +109,13 @@ public class OrderConfig implements IPersistence {
 	}
 
 	/**
-	 * <p>Returns the behaviour of the order manager when
-	 * adding Raster Layers.</p>
-	 * <p>Allowed values: {@link OrderConfig#ON_TOP},
-	 * {@link OrderConfig#AT_THE_BOTTOM},
-	 * {@link OrderConfig#FROM_TOP},
-	 * {@link OrderConfig#FROM_BOTTOM},
-	 * {@link OrderConfig#OVER_RASTER},
+	 * <p>
+	 * Returns the behaviour of the order manager when adding Raster Layers.
+	 * </p>
+	 * <p>
+	 * Allowed values: {@link OrderConfig#ON_TOP},
+	 * {@link OrderConfig#AT_THE_BOTTOM}, {@link OrderConfig#FROM_TOP},
+	 * {@link OrderConfig#FROM_BOTTOM}, {@link OrderConfig#OVER_RASTER},
 	 * {@link OrderConfig#UNDER_RASTER}
 	 * </p>
 	 */
@@ -127,16 +124,17 @@ public class OrderConfig implements IPersistence {
 	}
 
 	/**
-	 * <p>Sets the behaviour of the order manager when
-	 * adding other type of Layers (not raster, not vector).</p>
-	 * <p>Allowed values: {@link OrderConfig#ON_TOP},
-	 * {@link OrderConfig#AT_THE_BOTTOM},
-	 * {@link OrderConfig#FROM_TOP},
-	 * {@link OrderConfig#FROM_BOTTOM},
-	 * {@link OrderConfig#OVER_RASTER},
+	 * <p>
+	 * Sets the behaviour of the order manager when adding other type of Layers
+	 * (not raster, not vector).
+	 * </p>
+	 * <p>
+	 * Allowed values: {@link OrderConfig#ON_TOP},
+	 * {@link OrderConfig#AT_THE_BOTTOM}, {@link OrderConfig#FROM_TOP},
+	 * {@link OrderConfig#FROM_BOTTOM}, {@link OrderConfig#OVER_RASTER},
 	 * {@link OrderConfig#UNDER_RASTER}
 	 * </p>
-	 *
+	 * 
 	 * @param behaviour
 	 */
 	public void setOtherLayersBehaviour(int behaviour) {
@@ -144,13 +142,14 @@ public class OrderConfig implements IPersistence {
 	}
 
 	/**
-	 * <p>Returns the behaviour of the order manager when
-	 * adding other type of Layers (not raster, not vector).</p>
-	 * <p>Allowed values: {@link OrderConfig#ON_TOP},
-	 * {@link OrderConfig#AT_THE_BOTTOM},
-	 * {@link OrderConfig#FROM_TOP},
-	 * {@link OrderConfig#FROM_BOTTOM},
-	 * {@link OrderConfig#OVER_RASTER},
+	 * <p>
+	 * Returns the behaviour of the order manager when adding other type of
+	 * Layers (not raster, not vector).
+	 * </p>
+	 * <p>
+	 * Allowed values: {@link OrderConfig#ON_TOP},
+	 * {@link OrderConfig#AT_THE_BOTTOM}, {@link OrderConfig#FROM_TOP},
+	 * {@link OrderConfig#FROM_BOTTOM}, {@link OrderConfig#OVER_RASTER},
 	 * {@link OrderConfig#UNDER_RASTER}
 	 * </p>
 	 */
@@ -158,30 +157,33 @@ public class OrderConfig implements IPersistence {
 		return other_behaviour;
 	}
 
-	/** Sets a fixed position in which vector layers will be added. This
-	 * method only makes sense when the behaviour is {@link OrderConfig#FROM_TOP}
-	 * or {@link OrderConfig#FROM_BOTTOM} .
-	 *
+	/**
+	 * Sets a fixed position in which vector layers will be added. This method
+	 * only makes sense when the behaviour is {@link OrderConfig#FROM_TOP} or
+	 * {@link OrderConfig#FROM_BOTTOM} .
+	 * 
 	 * @param position
 	 */
 	public void setVectorPosition(int position) {
 		vector_position = position;
 	}
 
-	/** Gets the fixed position in which vector layers will be added. This
-	 * method only makes sense when the behaviour is {@link OrderConfig#FROM_TOP}
-	 * or {@link OrderConfig#FROM_BOTTOM} .
-	 *
+	/**
+	 * Gets the fixed position in which vector layers will be added. This method
+	 * only makes sense when the behaviour is {@link OrderConfig#FROM_TOP} or
+	 * {@link OrderConfig#FROM_BOTTOM} .
+	 * 
 	 * @param position
 	 */
 	public int getVectorPosition() {
 		return vector_position;
 	}
 
-	/** Sets a fixed position in which raster layers will be added. This
-	 * method only makes sense when the behaviour is {@link OrderConfig#FROM_TOP}
-	 * or {@link OrderConfig#FROM_BOTTOM} .
-	 *
+	/**
+	 * Sets a fixed position in which raster layers will be added. This method
+	 * only makes sense when the behaviour is {@link OrderConfig#FROM_TOP} or
+	 * {@link OrderConfig#FROM_BOTTOM} .
+	 * 
 	 * @param position
 	 */
 	public void setRasterPosition(int position) {
@@ -189,10 +191,10 @@ public class OrderConfig implements IPersistence {
 	}
 
 	/**
-	 * Gets the fixed position in which raster layers will be added. This
-	 * method only makes sense when the behaviour is {@link OrderConfig#FROM_TOP}
-	 * or {@link OrderConfig#FROM_BOTTOM} .
-	 *
+	 * Gets the fixed position in which raster layers will be added. This method
+	 * only makes sense when the behaviour is {@link OrderConfig#FROM_TOP} or
+	 * {@link OrderConfig#FROM_BOTTOM} .
+	 * 
 	 * @param position
 	 */
 	public int getRasterPosition() {
@@ -200,11 +202,10 @@ public class OrderConfig implements IPersistence {
 	}
 
 	/**
-	 * Sets a fixed position in which other (not vector, not raster) layers
-	 * will be added. This
-	 * method only makes sense when the behaviour is {@link OrderConfig#FROM_TOP}
-	 * or {@link OrderConfig#FROM_BOTTOM} .
-	 *
+	 * Sets a fixed position in which other (not vector, not raster) layers will
+	 * be added. This method only makes sense when the behaviour is
+	 * {@link OrderConfig#FROM_TOP} or {@link OrderConfig#FROM_BOTTOM} .
+	 * 
 	 * @param position
 	 */
 	public void setOtherLayersPosition(int position) {
@@ -213,10 +214,9 @@ public class OrderConfig implements IPersistence {
 
 	/**
 	 * Gets the fixed position in which other (not vector, not raster) layers
-	 * will be added. This
-	 * method only makes sense when the behaviour is {@link OrderConfig#FROM_TOP}
-	 * or {@link OrderConfig#FROM_BOTTOM} .
-	 *
+	 * will be added. This method only makes sense when the behaviour is
+	 * {@link OrderConfig#FROM_TOP} or {@link OrderConfig#FROM_BOTTOM} .
+	 * 
 	 * @param position
 	 */
 	public int getOtherLayersPosition() {
@@ -232,16 +232,13 @@ public class OrderConfig implements IPersistence {
 		xml.putProperty("vector-behaviour", vector_behaviour);
 		xml.putProperty("raster-behaviour", raster_behaviour);
 		xml.putProperty("other-behaviour", other_behaviour);
-		if (vector_behaviour==FROM_BOTTOM ||
-				vector_behaviour==FROM_BOTTOM) {
+		if (vector_behaviour == FROM_BOTTOM || vector_behaviour == FROM_BOTTOM) {
 			xml.putProperty("vector-position", vector_position);
 		}
-		if (raster_behaviour==FROM_BOTTOM ||
-				raster_behaviour==FROM_BOTTOM) {
+		if (raster_behaviour == FROM_BOTTOM || raster_behaviour == FROM_BOTTOM) {
 			xml.putProperty("raster-position", raster_position);
 		}
-		if (other_behaviour==FROM_BOTTOM ||
-				other_behaviour==FROM_BOTTOM) {
+		if (other_behaviour == FROM_BOTTOM || other_behaviour == FROM_BOTTOM) {
 			xml.putProperty("other-position", other_position);
 		}
 		return xml;
@@ -250,11 +247,10 @@ public class OrderConfig implements IPersistence {
 	public void setXMLEntity(XMLEntity xml) {
 		if (xml.contains("vector-behaviour")) {
 			vector_behaviour = xml.getIntProperty("vector-behaviour");
-			if (vector_behaviour>5 || vector_behaviour<0) {
+			if (vector_behaviour > 5 || vector_behaviour < 0) {
 				vector_behaviour = ON_TOP;
 			}
-			if (vector_behaviour==FROM_BOTTOM ||
-					vector_behaviour==FROM_TOP) {
+			if (vector_behaviour == FROM_BOTTOM || vector_behaviour == FROM_TOP) {
 				if (xml.contains("vector-position")) {
 					vector_position = xml.getIntProperty("vector-position");
 				}
@@ -262,11 +258,10 @@ public class OrderConfig implements IPersistence {
 		}
 		if (xml.contains("raster-behaviour")) {
 			raster_behaviour = xml.getIntProperty("raster-behaviour");
-			if (raster_behaviour>5 || raster_behaviour<0) {
+			if (raster_behaviour > 5 || raster_behaviour < 0) {
 				raster_behaviour = ON_TOP;
 			}
-			if (raster_behaviour==FROM_BOTTOM ||
-					raster_behaviour==FROM_TOP) {
+			if (raster_behaviour == FROM_BOTTOM || raster_behaviour == FROM_TOP) {
 				if (xml.contains("raster-position")) {
 					raster_position = xml.getIntProperty("raster-position");
 				}
@@ -274,11 +269,10 @@ public class OrderConfig implements IPersistence {
 		}
 		if (xml.contains("other-behaviour")) {
 			other_behaviour = xml.getIntProperty("other-behaviour");
-			if (other_behaviour>5 || other_behaviour<0) {
+			if (other_behaviour > 5 || other_behaviour < 0) {
 				other_behaviour = ON_TOP;
 			}
-			if (other_behaviour==FROM_BOTTOM ||
-					other_behaviour==FROM_TOP) {
+			if (other_behaviour == FROM_BOTTOM || other_behaviour == FROM_TOP) {
 				if (xml.contains("other-position")) {
 					other_position = xml.getIntProperty("other-position");
 				}

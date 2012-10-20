@@ -26,37 +26,41 @@
 
 package org.gvsig.jogr;
 
-
-/** 
+/**
  * 
- * @author Nacho Brodin <brodin_ign@gva.es>.<BR> Equipo de desarrollo gvSIG.<BR> http://www.gvsig.gva.es
+ * @author Nacho Brodin <brodin_ign@gva.es>.<BR>
+ *         Equipo de desarrollo gvSIG.<BR>
+ *         http://www.gvsig.gva.es
  * @version 0.0
  * @link http://www.gvsig.gva.es
  */
 
-public class OGRSurface extends OGRGeometry{
-	
-	private native void FreeOGRSurface( long cPtr );
-	
-	public OGRSurface(){}
-	
+public class OGRSurface extends OGRGeometry {
+
+	private native void FreeOGRSurface(long cPtr);
+
+	public OGRSurface() {
+	}
+
 	/**
 	 * Constructor
-	 * @param cPtr	dirección de memoria al objeto OGRSurface de C. 
+	 * 
+	 * @param cPtr
+	 *            dirección de memoria al objeto OGRSurface de C.
 	 */
-	
-	public OGRSurface(long cPtr){
+
+	public OGRSurface(long cPtr) {
 		super(cPtr);
 	}
-	
+
 	/**
-	 * Destructor 
+	 * Destructor
 	 */
-	
-	protected void finalize() throws OGRFailureException{
-		if(cPtr == 0)
+
+	protected void finalize() throws OGRFailureException {
+		if (cPtr == 0)
 			throw new OGRFailureException("Fallo al acceder al dato.");
-			
+
 		FreeOGRSurface(cPtr);
 	}
 }

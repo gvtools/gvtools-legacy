@@ -53,19 +53,20 @@ import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.LayoutMoveListener;
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.LayoutToolListener;
 
-
 /**
  * Behaviour que espera un listener de tipo MoveListener.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LayoutViewZoomBehavior extends LayoutBehavior {
 	private LayoutMoveListener listener;
-	private boolean dragged=false;
+	private boolean dragged = false;
+
 	/**
 	 * Crea un nuevo MoveBehavior.
-	 *
-	 * @param pli listener.
+	 * 
+	 * @param pli
+	 *            listener.
 	 */
 	public LayoutViewZoomBehavior(LayoutMoveListener lpl) {
 		listener = lpl;
@@ -82,8 +83,8 @@ public class LayoutViewZoomBehavior extends LayoutBehavior {
 		gh.fillRect(0, 0, image.getWidth(), image.getHeight());
 
 		getLayoutControl().getLayoutDraw().drawRectangle((Graphics2D) gh);
-		gh.drawImage(getLayoutControl().getImgRuler(),0,0,null);
-		gh.drawImage(getLayoutControl().getImage(),0,0,null);
+		gh.drawImage(getLayoutControl().getImgRuler(), 0, 0, null);
+		gh.drawImage(getLayoutControl().getImage(), 0, 0, null);
 		getLayoutControl().getLayoutDraw().drawGrid((Graphics2D) gh);
 		gh.setColor(Color.black);
 		gh.setXORMode(Color.white);
@@ -91,20 +92,24 @@ public class LayoutViewZoomBehavior extends LayoutBehavior {
 		Rectangle r = new Rectangle();
 
 		// Dibujamos el actual
-		if (dragged && (getLayoutControl().getFirstPoint() != null) && (getLayoutControl().getLastPoint() != null)) {
-			r.setFrameFromDiagonal(getLayoutControl().getFirstPoint(), getLayoutControl().getLastPoint());
+		if (dragged && (getLayoutControl().getFirstPoint() != null)
+				&& (getLayoutControl().getLastPoint() != null)) {
+			r.setFrameFromDiagonal(getLayoutControl().getFirstPoint(),
+					getLayoutControl().getLastPoint());
 			gh.drawRect(r.x, r.y, r.width, r.height);
 		}
-		 IFFrame[] frames = getLayoutControl().getLayoutContext().getFFrameSelected();
-	        for (int i = 0; i < frames.length; i++) {
-	            gh.setColor(Color.black);
-	            frames[i].drawHandlers((Graphics2D) gh);
-	        }
+		IFFrame[] frames = getLayoutControl().getLayoutContext()
+				.getFFrameSelected();
+		for (int i = 0; i < frames.length; i++) {
+			gh.setColor(Color.black);
+			frames[i].drawHandlers((Graphics2D) gh);
+		}
 
-//		long t2 = System.currentTimeMillis();
+		// long t2 = System.currentTimeMillis();
 		gh.setPaintMode();
-		getLayoutControl().getLayoutDraw().drawRuler((Graphics2D) gh, Color.black);
-		g.drawImage(image,0,0,null);
+		getLayoutControl().getLayoutDraw().drawRuler((Graphics2D) gh,
+				Color.black);
+		g.drawImage(image, 0, 0, null);
 	}
 
 	/**
@@ -119,29 +124,32 @@ public class LayoutViewZoomBehavior extends LayoutBehavior {
 
 	/**
 	 * Reimplementación del método mouseReleased de Behavior.
-	 *
-	 * @param e MouseEvent
-	 *
-	 * @throws BehaviorException Excepción lanzada cuando el Behavior.
+	 * 
+	 * @param e
+	 *            MouseEvent
+	 * 
+	 * @throws BehaviorException
+	 *             Excepción lanzada cuando el Behavior.
 	 */
 	public void mouseReleased(MouseEvent e) throws BehaviorException {
 		super.mouseReleased(e);
 		PointEvent event = new PointEvent(e.getPoint(), e);
 		listener.release(event);
-		dragged=false;
+		dragged = false;
 	}
 
 	/**
 	 * Reimplementación del método mouseDragged de Behavior.
-	 *
-	 * @param e MouseEvent
+	 * 
+	 * @param e
+	 *            MouseEvent
 	 * @throws BehaviorException
 	 */
 	public void mouseDragged(MouseEvent e) throws BehaviorException {
 		super.mouseDragged(e);
 		PointEvent event = new PointEvent(e.getPoint(), e);
 		listener.drag(event);
-		dragged=true;
+		dragged = true;
 	}
 
 	/**

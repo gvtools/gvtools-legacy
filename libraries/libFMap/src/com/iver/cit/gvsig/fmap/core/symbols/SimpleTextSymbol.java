@@ -67,11 +67,12 @@ import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.threads.Cancellable;
 
 /**
- * SimpleTextSymbol is a class used to create symbols composed using a text defined by
- * the user.This text can be edited (changing the color, the font of the characters, and
- * the rotation of the text).
+ * SimpleTextSymbol is a class used to create symbols composed using a text
+ * defined by the user.This text can be edited (changing the color, the font of
+ * the characters, and the rotation of the text).
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
 public class SimpleTextSymbol extends AbstractSymbol implements ITextSymbol {
 	private String text = "";
@@ -85,69 +86,79 @@ public class SimpleTextSymbol extends AbstractSymbol implements ITextSymbol {
 	private FShape horizontalTextWrappingShape = null;
 	private PrintRequestAttributeSet properties;
 
-	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp, Cancellable cancel) {
-		if (!isShapeVisible()) return;
+	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp,
+			Cancellable cancel) {
+		if (!isShapeVisible())
+			return;
 		double shpX = ((FPoint2D) shp).getX();
 		double shpY = ((FPoint2D) shp).getY();
-		//Parche porque a veces llegan puntos cuyas coordenadas no han podido ser calculadas y vienen como NaN
-		if( Double.isNaN(shpX) || Double.isNaN(shpY)){
+		// Parche porque a veces llegan puntos cuyas coordenadas no han podido
+		// ser calculadas y vienen como NaN
+		if (Double.isNaN(shpX) || Double.isNaN(shpY)) {
 			return;
 		}
-		//Fin del parche
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		// Fin del parche
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
 		g.setColor(textColor);
 		g.setFont(font);
 		g.translate(shpX, shpY);
 
 		g.rotate(rotation);
-		Rectangle2D bounds = getHorizontalTextWrappingShape(new FPoint2D(0,0)).getBounds();
-		// Antes tomabamos el resultado de getBounds pero ya se le hab�a aplicado
-		// la rotaci�n, con lo que no obten�amos el la altura correcta de la fuente.
+		Rectangle2D bounds = getHorizontalTextWrappingShape(new FPoint2D(0, 0))
+				.getBounds();
+		// Antes tomabamos el resultado de getBounds pero ya se le hab�a
+		// aplicado
+		// la rotaci�n, con lo que no obten�amos el la altura correcta de la
+		// fuente.
 
 		// Alineamos el texto de manera que la parte inferior
 		// izquierda de la primera letra est� en (0,0).
 		// Para chino hay que escoger una fuente como esta (SimSun)
-//		g.setFont(new Font("SimSun",Font.PLAIN, 12));
+		// g.setFont(new Font("SimSun",Font.PLAIN, 12));
 
-		g.drawString(getText(), -((int) bounds.getWidth()/2), 0); //(int)-bounds.getY());
-//		g.drawRect(0, 0, 5, 5);
+		g.drawString(getText(), -((int) bounds.getWidth() / 2), 0); // (int)-bounds.getY());
+		// g.drawRect(0, 0, 5, 5);
 		g.rotate(-rotation);
 		g.translate(-shpX, -shpY);
 	}
 
 	public void drawInsideRectangle(Graphics2D g,
-			AffineTransform scaleInstance, Rectangle r, PrintRequestAttributeSet properties) throws SymbolDrawingException {
+			AffineTransform scaleInstance, Rectangle r,
+			PrintRequestAttributeSet properties) throws SymbolDrawingException {
 		int s = getFont().getSize();
 
 		if (autoresize) {
-			if (s==0) {
-				s =1;
+			if (s == 0) {
+				s = 1;
 				setFontSize(s);
 			}
 			g.setFont(getFont());
-		    FontMetrics fm = g.getFontMetrics();
-		    Rectangle2D rect = fm.getStringBounds(text, g);
-		    double width = rect.getWidth();
-		    double height = rect.getHeight();
-		    double rWidth = r.getWidth();
-		    double rHeight = r.getHeight();
-		    double ratioText = width/height;
-		    double ratioRect = rWidth/rHeight;
+			FontMetrics fm = g.getFontMetrics();
+			Rectangle2D rect = fm.getStringBounds(text, g);
+			double width = rect.getWidth();
+			double height = rect.getHeight();
+			double rWidth = r.getWidth();
+			double rHeight = r.getHeight();
+			double ratioText = width / height;
+			double ratioRect = rWidth / rHeight;
 
-		    if (ratioText>ratioRect) {
-		    	s = (int) (s*(rWidth/width));
-		    } else {
-		    	s = (int) (s*(rHeight/height));
-		    }
-		    setFontSize(s);
+			if (ratioText > ratioRect) {
+				s = (int) (s * (rWidth / width));
+			} else {
+				s = (int) (s * (rHeight / height));
+			}
+			setFontSize(s);
 		}
 
-		//Only for debugging purpose
-//		g.drawRect((int)r.getX(), (int)r.getY(), (int)r.getWidth(), (int)r.getHeight());
-		if (properties==null)
+		// Only for debugging purpose
+		// g.drawRect((int)r.getX(), (int)r.getY(), (int)r.getWidth(),
+		// (int)r.getHeight());
+		if (properties == null)
 			draw(g, null, new FPoint2D(r.getX(), r.getY()), null);
 		else
-			print(g, new AffineTransform(), new FPoint2D(r.getX(), r.getY()), properties);
+			print(g, new AffineTransform(), new FPoint2D(r.getX(), r.getY()),
+					properties);
 
 	}
 
@@ -191,12 +202,12 @@ public class SimpleTextSymbol extends AbstractSymbol implements ITextSymbol {
 
 	public void setXMLEntity(XMLEntity xml) {
 		font = new Font(xml.getStringProperty("font"),
-				xml.getIntProperty("fontStyle"),
-				xml.getIntProperty("size"));
+				xml.getIntProperty("fontStyle"), xml.getIntProperty("size"));
 		setDescription(xml.getStringProperty("desc"));
 		setIsShapeVisible(xml.getBooleanProperty("isShapeVisible"));
 		text = xml.getStringProperty("text");
-		textColor = StringUtilities.string2Color(xml.getStringProperty("textColor"));
+		textColor = StringUtilities.string2Color(xml
+				.getStringProperty("textColor"));
 		setUnit(xml.getIntProperty("unit"));
 		setReferenceSystem(xml.getIntProperty("referenceSystem"));
 		setAutoresizeEnabled(xml.getBooleanProperty("autoresizeFlag"));
@@ -208,10 +219,11 @@ public class SimpleTextSymbol extends AbstractSymbol implements ITextSymbol {
 		return getClass().getName();
 	}
 
-	public void print(Graphics2D g, AffineTransform at, FShape shape, PrintRequestAttributeSet properties) {
-		this.properties=properties;
-        draw(g, at, shape, null);
-        this.properties=null;
+	public void print(Graphics2D g, AffineTransform at, FShape shape,
+			PrintRequestAttributeSet properties) {
+		this.properties = properties;
+		draw(g, at, shape, null);
+		this.properties = null;
 
 	}
 
@@ -228,7 +240,7 @@ public class SimpleTextSymbol extends AbstractSymbol implements ITextSymbol {
 	}
 
 	public void setText(String text) {
-		if(text != null && !text.equals(this.text)){
+		if (text != null && !text.equals(this.text)) {
 			this.text = text;
 			this.bounds = null;
 			this.horizontalTextWrappingShape = null;
@@ -236,7 +248,7 @@ public class SimpleTextSymbol extends AbstractSymbol implements ITextSymbol {
 	}
 
 	public void setFont(Font font) {
-		if (font != null && !font.equals(this.font)){
+		if (font != null && !font.equals(this.font)) {
 			this.font = font;
 			this.bounds = null;
 			this.horizontalTextWrappingShape = null;
@@ -248,21 +260,22 @@ public class SimpleTextSymbol extends AbstractSymbol implements ITextSymbol {
 	}
 
 	public void setFontSize(double size) {
-		if (size != this.font.getSize2D()){
+		if (size != this.font.getSize2D()) {
 			this.font = this.font.deriveFont((float) size);
 			this.bounds = null;
 			this.horizontalTextWrappingShape = null;
 		}
-//		this.font = new Font(this.font.getName(),this.font.getStyle(),(int)size);
+		// this.font = new
+		// Font(this.font.getName(),this.font.getStyle(),(int)size);
 	}
 
 	/**
 	 * Defines the angle of rotation for the text that composes the symbol
-	 *
+	 * 
 	 * @param rotation
 	 */
 	public void setRotation(double rotation) {
-		if(rotation != this.rotation){
+		if (rotation != this.rotation) {
 			this.rotation = rotation;
 			this.bounds = null;
 		}
@@ -277,25 +290,28 @@ public class SimpleTextSymbol extends AbstractSymbol implements ITextSymbol {
 	 * <b>screen</b> units.
 	 */
 	private FShape getHorizontalTextWrappingShape(FPoint2D p) {
-		if (this.horizontalTextWrappingShape  == null){
+		if (this.horizontalTextWrappingShape == null) {
 			Font font = getFont();
-			/* Para tama�os de fuente de letras excesivamente grandes obtenemos
-			 * shapes con todas las coordenadas a 0, por eso limitamos el tama�o
-			 * a 1000 y despu�s reescalamos el bounds.
+			/*
+			 * Para tama�os de fuente de letras excesivamente grandes
+			 * obtenemos shapes con todas las coordenadas a 0, por eso limitamos
+			 * el tama�o a 1000 y despu�s reescalamos el bounds.
 			 */
 			double scale = 1;
 			float fontSize = font.getSize2D();
-			if (fontSize > 1000){
-				scale = fontSize/1000;
+			if (fontSize > 1000) {
+				scale = fontSize / 1000;
 				fontSize = 1000;
 			}
 			font = font.deriveFont(fontSize);
 			GlyphVector gv = font.createGlyphVector(frc, text);
 			Shape shape = gv.getOutline((float) p.getX(), (float) p.getY());
-			FShape myFShape = new FPolygon2D(new GeneralPathX(shape.getBounds2D()));
+			FShape myFShape = new FPolygon2D(new GeneralPathX(
+					shape.getBounds2D()));
 
-			if(scale != 1){
-				myFShape.transform(AffineTransform.getScaleInstance(scale, scale));
+			if (scale != 1) {
+				myFShape.transform(AffineTransform.getScaleInstance(scale,
+						scale));
 			}
 
 			this.horizontalTextWrappingShape = myFShape;
@@ -310,7 +326,8 @@ public class SimpleTextSymbol extends AbstractSymbol implements ITextSymbol {
 	public FShape getTextWrappingShape(FPoint2D p) {
 
 		FShape myFShape = getHorizontalTextWrappingShape(p);
-		myFShape.transform(AffineTransform.getTranslateInstance(p.getX(), p.getY()));
+		myFShape.transform(AffineTransform.getTranslateInstance(p.getX(),
+				p.getY()));
 
 		if (rotation != 0) {
 			myFShape.transform(AffineTransform.getRotateInstance(rotation));
@@ -319,11 +336,11 @@ public class SimpleTextSymbol extends AbstractSymbol implements ITextSymbol {
 	}
 
 	public Rectangle getBounds() {
-//		FontMetrics fm = g.getFontMetrics();
-//		Rectangle2D rect = fm.getStringBounds("graphics", g);
+		// FontMetrics fm = g.getFontMetrics();
+		// Rectangle2D rect = fm.getStringBounds("graphics", g);
 
-		if(this.bounds == null){
-			this.bounds = getTextWrappingShape(new FPoint2D(0,0)).getBounds();
+		if (this.bounds == null) {
+			this.bounds = getTextWrappingShape(new FPoint2D(0, 0)).getBounds();
 		}
 		return this.bounds;
 	}
@@ -334,20 +351,13 @@ public class SimpleTextSymbol extends AbstractSymbol implements ITextSymbol {
 
 	public double toCartographicSize(ViewPort viewPort, double dpi, FShape shp) {
 		double oldSize = getFont().getSize();
-		setCartographicSize(getCartographicSize(
-								viewPort,
-								dpi,
-								shp),
-							shp);
+		setCartographicSize(getCartographicSize(viewPort, dpi, shp), shp);
 		return oldSize;
 	}
 
 	public double getCartographicSize(ViewPort viewPort, double dpi, FShape shp) {
-		return CartographicSupportToolkit.
-					getCartographicLength(this,
-										  getFont().getSize(),
-										  viewPort,
-										  dpi);
+		return CartographicSupportToolkit.getCartographicLength(this, getFont()
+				.getSize(), viewPort, dpi);
 	}
 
 	public boolean isAutoresizeEnabled() {

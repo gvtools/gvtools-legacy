@@ -76,6 +76,7 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * It parses a gml:BoxType object. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;gml:Box srsName="http://www.opengis.net/gml/srs/epsg.xml#4326"&gt;
@@ -84,69 +85,76 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  * &lt;/gml:Box&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class BoxTypeBinding extends GeometryBinding{
+public class BoxTypeBinding extends GeometryBinding {
 
 	/**
 	 * It parses the gml:Box tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * The Bounding box
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return The Bounding box
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public Object parse(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
+	public Object parse(IXmlStreamReader parser, GPEDefaultGmlParser handler)
+			throws XmlStreamException, IOException {
 		boolean endFeature = false;
 		int currentTag;
-		Object bbox = null;		
+		Object bbox = null;
 
 		super.setAtributtes(parser, handler.getErrorHandler());
 
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_COORDINATES)){
-					CoordinatesTypeIterator coordinatesIterator = handler.getProfile().getCoordinatesTypeBinding();
-					coordinatesIterator.initialize(parser, handler,GMLTags.GML_BOX);
+				if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_COORDINATES)) {
+					CoordinatesTypeIterator coordinatesIterator = handler
+							.getProfile().getCoordinatesTypeBinding();
+					coordinatesIterator.initialize(parser, handler,
+							GMLTags.GML_BOX);
 					bbox = handler.getContentHandler().startBbox(id,
-							coordinatesIterator,
-							srsName);
-					//The parser pointer is in the </gml:Box> tag
-				 	return bbox;
-				}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_COORD)){
-					CoordTypeIterator coordinatesIterator = handler.getProfile().getCoordTypeBinding();
-					coordinatesIterator.initialize(parser, handler,GMLTags.GML_BOX);
+							coordinatesIterator, srsName);
+					// The parser pointer is in the </gml:Box> tag
+					return bbox;
+				} else if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_COORD)) {
+					CoordTypeIterator coordinatesIterator = handler
+							.getProfile().getCoordTypeBinding();
+					coordinatesIterator.initialize(parser, handler,
+							GMLTags.GML_BOX);
 					bbox = handler.getContentHandler().startBbox(id,
-							coordinatesIterator,								
-							srsName);
-					//The parser pointer is in the </gml:Box> tag
-				 	return bbox;
+							coordinatesIterator, srsName);
+					// The parser pointer is in the </gml:Box> tag
+					return bbox;
 				}
 				break;
 			case IXmlStreamReader.END_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_BOX)){						
+				if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_BOX)) {
 					endFeature = true;
 					handler.getContentHandler().endBbox(bbox);
 				}
 				break;
-			case IXmlStreamReader.CHARACTERS:					
+			case IXmlStreamReader.CHARACTERS:
 
 				break;
-			}		
-			if (!endFeature){					
+			}
+			if (!endFeature) {
 				currentTag = parser.next();
 				tag = parser.getName();
 			}
-		}			
-		return bbox;	
+		}
+		return bbox;
 	}
 }

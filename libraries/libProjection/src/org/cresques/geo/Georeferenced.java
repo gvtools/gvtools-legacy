@@ -26,28 +26,35 @@ package org.cresques.geo;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 
-
 /**
- * <p><code>Projected</code> should be implement by all objects that can be re-projected.</p>
- *
+ * <p>
+ * <code>Projected</code> should be implement by all objects that can be
+ * re-projected.
+ * </p>
+ * 
  * @author "Luis W. Sevilla" <sevilla_lui@gva.es>*
  */
 public interface Georeferenced {
 	/**
-	 * <p>Returns the current projection.<p>
+	 * <p>
+	 * Returns the current projection.
+	 * <p>
 	 * 
 	 * @return current projection
 	 * 
 	 * @see #reProject(ICoordTrans)
 	 */
-    public CoordinateReferenceSystem getCrs();
+	public CoordinateReferenceSystem getCrs();
 
-    /**
-     * <p>Changes projection of the graphical information of this object.</p>
-     * 
-     * @param trans transformation coordinates for obtaining the new projection
-     * 
-     * @see #getCrs()
-     */
-    public void reProject(MathTransform trans, CoordinateReferenceSystem target);
+	/**
+	 * <p>
+	 * Changes projection of the graphical information of this object.
+	 * </p>
+	 * 
+	 * @param trans
+	 *            transformation coordinates for obtaining the new projection
+	 * 
+	 * @see #getCrs()
+	 */
+	public void reProject(MathTransform trans, CoordinateReferenceSystem target);
 }

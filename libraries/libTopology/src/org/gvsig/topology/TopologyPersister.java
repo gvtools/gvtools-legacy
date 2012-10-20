@@ -103,26 +103,28 @@ public class TopologyPersister {
 		}
 	}
 
-	public static Topology load(MapContext mapContext, Map <String, ?> storageParams) {
+	public static Topology load(MapContext mapContext,
+			Map<String, ?> storageParams) {
 		String fileName = (String) storageParams.get(FILE_PARAM_NAME);
 		try {
 			File file = new File(fileName);
-			BufferedReader reader =null;
+			BufferedReader reader = null;
 			String encoding = XMLEncodingUtils.getEncoding(file);
 			FileInputStream stream = new FileInputStream(file);
 			reader = new BufferedReader(new InputStreamReader(stream, encoding));
 			XmlTag tag = (XmlTag) XmlTag.unmarshal(reader);
-			XMLEntity xml=new XMLEntity(tag);
+			XMLEntity xml = new XMLEntity(tag);
 			return Topology.createFromXML(mapContext, xml);
-			
-		} catch(Exception e) {
-			logger.error("Error cargando la topologia del recurso "+fileName, e);
-		} 
+
+		} catch (Exception e) {
+			logger.error("Error cargando la topologia del recurso " + fileName,
+					e);
+		}
 		return null;
 	}
 
-	public static ITopologyErrorContainer createErrorContainerFromXML(Topology owner,
-																		XMLEntity xml) {
+	public static ITopologyErrorContainer createErrorContainerFromXML(
+			Topology owner, XMLEntity xml) {
 		ITopologyErrorContainer solution = null;
 		String className = null;
 		if (xml.contains("className")) {

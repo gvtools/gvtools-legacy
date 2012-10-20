@@ -1,4 +1,5 @@
 package org.gvsig.jts.voronoi.dt;
+
 /*
  *    Geotools2 - OpenSource mapping toolkit
  *    http://geotools.org
@@ -19,20 +20,21 @@ package org.gvsig.jts.voronoi.dt;
  *    @since JDK1.3 
  */
 
-
 public class LineDT {
 	public PointDT A;
 	public PointDT B;
-	
+
 	/***
-	   * Constructor 
-	   * 	   
-	   * @param PointDT A - start point
-	   * @param PointDT B - end point
-	   * 
-	   */		
-	
-	public LineDT(PointDT A, PointDT B){
+	 * Constructor
+	 * 
+	 * @param PointDT
+	 *            A - start point
+	 * @param PointDT
+	 *            B - end point
+	 * 
+	 */
+
+	public LineDT(PointDT A, PointDT B) {
 		this.A = A;
 		this.B = B;
 	}

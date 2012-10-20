@@ -42,7 +42,6 @@ package org.gvsig.graph.tools;
 
 import java.awt.Cursor;
 import java.awt.geom.Point2D;
-import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -79,15 +78,16 @@ public class BarrierListener implements PointListener {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.gvsig.fmap.tools.Listeners.PointListener#point(org.gvsig.fmap.tools.Events.PointEvent)
-	 *      The PointEvent method bring you a point in pixel coordinates. You
-	 *      need to transform it to world coordinates. The class to do
-	 *      conversions is ViewPort, obtained thru the MapContext of mapCtrl.
+	 * @see
+	 * org.gvsig.fmap.tools.Listeners.PointListener#point(org.gvsig.fmap.tools
+	 * .Events.PointEvent) The PointEvent method bring you a point in pixel
+	 * coordinates. You need to transform it to world coordinates. The class to
+	 * do conversions is ViewPort, obtained thru the MapContext of mapCtrl.
 	 */
 	public void point(PointEvent event) throws BehaviorException {
 
-		Point2D pReal = mapCtrl.getMapContext().getViewPort().toMapPoint(
-				event.getPoint());
+		Point2D pReal = mapCtrl.getMapContext().getViewPort()
+				.toMapPoint(event.getPoint());
 
 		SingleLayerIterator it = new SingleLayerIterator(mapCtrl
 				.getMapContext().getLayers());
@@ -95,7 +95,7 @@ public class BarrierListener implements PointListener {
 			FLayer aux = it.next();
 			if (!aux.isActive())
 				continue;
-			Network net = (Network) aux.getProperty("network");			
+			Network net = (Network) aux.getProperty("network");
 
 			if (net != null) {
 				Point2D nearestPoint = new Point2D.Double();
@@ -107,7 +107,7 @@ public class BarrierListener implements PointListener {
 					JOptionPane.showMessageDialog(null, "No está sobre la red");
 					return;
 				}
-				
+
 				GvModifiedCost modCost = net.addModifiedCost(idArc, -1.0, 3);
 				GraphicLayer graphicLayer = mapCtrl.getMapContext()
 						.getGraphicsLayer();
@@ -122,8 +122,8 @@ public class BarrierListener implements PointListener {
 
 					idSymbolBarrier = graphicLayer.addSymbol(simFlag);
 				}
-				IGeometry gAux = ShapeFactory.createPoint2D(nearestPoint.getX(),
-						nearestPoint.getY());
+				IGeometry gAux = ShapeFactory.createPoint2D(
+						nearestPoint.getX(), nearestPoint.getY());
 				FGraphic graphic = new FGraphic(gAux, idSymbolBarrier);
 				graphic.setTag("BARRIER");
 				graphic.setObjectTag(modCost);

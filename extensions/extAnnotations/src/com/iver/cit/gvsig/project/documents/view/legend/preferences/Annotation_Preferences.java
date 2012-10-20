@@ -59,16 +59,15 @@ import com.iver.cit.gvsig.gui.panels.ColorChooserPanel;
 import com.iver.cit.gvsig.project.documents.view.gui.FontOptions;
 import com.iver.cit.gvsig.project.documents.view.tool.gui.TextPropertiesPanel;
 import com.iver.utiles.swing.JComboBox;
+
 /**
- *  Default configuration page.
- *  <b><b>
- *  Here the user can establish what settings wants to use by default annotations.
- *
- *
+ * Default configuration page. <b><b> Here the user can establish what settings
+ * wants to use by default annotations.
+ * 
+ * 
  * @author Vicente Caballero Navarro
  */
 public class Annotation_Preferences extends AbstractPreferencePage {
-
 
 	protected String id;
 	private ImageIcon icon;
@@ -79,11 +78,10 @@ public class Annotation_Preferences extends AbstractPreferencePage {
 	private JTextField txtDefaultHeight;
 	private ColorChooserPanel jccDefaultColor;
 	private TextPropertiesPanel panel = null;
-	
 
 	/**
 	 * Creates a new panel containing View preferences settings.
-	 *
+	 * 
 	 */
 	public Annotation_Preferences() {
 		super();
@@ -96,9 +94,9 @@ public class Annotation_Preferences extends AbstractPreferencePage {
 		panel.setFontType(Annotation_Mapping.DEFAULTTYPEFONT);
 		panel.setFontStyle(Annotation_Mapping.DEFAULTSTYLEFONT);
 		panel.setTextHeight(Annotation_Mapping.DEFAULTHEIGHT);
-		Color color=new Color(Annotation_Mapping.DEFAULTCOLOR);
+		Color color = new Color(Annotation_Mapping.DEFAULTCOLOR);
 		panel.setColor(color);
-		panel.setRotation(Annotation_Mapping.DEFAULTROTATE);		
+		panel.setRotation(Annotation_Mapping.DEFAULTROTATE);
 	}
 
 	public String getID() {
@@ -110,33 +108,34 @@ public class Annotation_Preferences extends AbstractPreferencePage {
 	}
 
 	public JPanel getPanel() {
-			if (panel==null) {
-				addComponent(new JLabel(PluginServices.getText(this,"text")),
-						txtDefaultText = new JTextField(), GridBagConstraints.BOTH, new Insets(4,0,4,8));
-				panel = new TextPropertiesPanel();
-				addComponent(panel);
-			}
-			return this;
+		if (panel == null) {
+			addComponent(new JLabel(PluginServices.getText(this, "text")),
+					txtDefaultText = new JTextField(), GridBagConstraints.BOTH,
+					new Insets(4, 0, 4, 8));
+			panel = new TextPropertiesPanel();
+			addComponent(panel);
+		}
+		return this;
 	}
 
 	public void storeValues() throws StoreException {
-		Color fontColor=panel.getColor();
-		String text=txtDefaultText.getText();
+		Color fontColor = panel.getColor();
+		String text = txtDefaultText.getText();
 		String fontType = panel.getFontType();
 		int fontStyle = panel.getFontStyle();
-		int fontHeight =  (int) panel.getTextHeight();
-		int fontRotate= (int) panel.getRotation();
-		Annotation_Mapping.storeValues(fontColor,text,fontType,fontStyle,fontHeight,fontRotate);
+		int fontHeight = (int) panel.getTextHeight();
+		int fontRotate = (int) panel.getRotation();
+		Annotation_Mapping.storeValues(fontColor, text, fontType, fontStyle,
+				fontHeight, fontRotate);
 	}
 
-
 	public void initializeDefaults() {
-		String fontType=FontOptions.ARIAL;
-		int fontStyle=Font.PLAIN;
-		int fontHeight=10;
-		Color fontColor=Color.black;
-		int fontRotate=0;
-		String text="";
+		String fontType = FontOptions.ARIAL;
+		int fontStyle = Font.PLAIN;
+		int fontHeight = 10;
+		Color fontColor = Color.black;
+		int fontRotate = 0;
+		String text = "";
 
 		panel.setFontType(fontType);
 		panel.setFontStyle(fontStyle);
@@ -144,18 +143,18 @@ public class Annotation_Preferences extends AbstractPreferencePage {
 		panel.setColor(fontColor);
 		panel.setRotation(fontRotate);
 		txtDefaultText.setText(text);
-		
-		Annotation_Mapping.DEFAULTCOLOR=fontColor.getRGB();
-		Annotation_Mapping.DEFAULTTEXT=text;
-		Annotation_Mapping.DEFAULTTYPEFONT=fontType;
-		Annotation_Mapping.DEFAULTSTYLEFONT=fontStyle;
-		Annotation_Mapping.DEFAULTHEIGHT=fontHeight;
-		Annotation_Mapping.DEFAULTROTATE=fontRotate;
+
+		Annotation_Mapping.DEFAULTCOLOR = fontColor.getRGB();
+		Annotation_Mapping.DEFAULTTEXT = text;
+		Annotation_Mapping.DEFAULTTYPEFONT = fontType;
+		Annotation_Mapping.DEFAULTSTYLEFONT = fontStyle;
+		Annotation_Mapping.DEFAULTHEIGHT = fontHeight;
+		Annotation_Mapping.DEFAULTROTATE = fontRotate;
 	}
 
 	public ImageIcon getIcon() {
-		if (icon==null)
-			icon=PluginServices.getIconTheme().get("annotation-properties");
+		if (icon == null)
+			icon = PluginServices.getIconTheme().get("annotation-properties");
 		return icon;
 	}
 

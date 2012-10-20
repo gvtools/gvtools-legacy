@@ -59,8 +59,6 @@ import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver;
 
-
-
 /**
  * Adapta un driver de base de datos vectorial a la interfaz vectorial,
  * manteniendo además el estado necesario por una capa vectorial de base de
@@ -71,13 +69,13 @@ public class VectorialDisconnectedDBAdapter extends VectorialAdapter {
 	private static final int RECEIVING = 1;
 	private static final int LOCAL = 2;
 
-    private int numReg=-1;
-    private SelectableDataSource ds = null;
-    private int status = REFRESH;
-    private VectorialDBAdapter connectedAdapter;
+	private int numReg = -1;
+	private SelectableDataSource ds = null;
+	private int status = REFRESH;
+	private VectorialDBAdapter connectedAdapter;
 
-    private File dataFile;
-    private File indexFile;
+	private File dataFile;
+	private File indexFile;
 
 	/**
 	 * incrementa el contador de las veces que se ha abierto el fichero.
@@ -85,15 +83,15 @@ public class VectorialDisconnectedDBAdapter extends VectorialAdapter {
 	 * la base de datos
 	 */
 	public void start() throws ReadDriverException {
-		switch (status){
-			case REFRESH:
-				Thread t = new Thread(new Receiver());
-				t.run();
-				break;
-			case RECEIVING:
-			case LOCAL:
+		switch (status) {
+		case REFRESH:
+			Thread t = new Thread(new Receiver());
+			t.run();
+			break;
+		case RECEIVING:
+		case LOCAL:
 
-				break;
+			break;
 		}
 
 	}
@@ -103,18 +101,18 @@ public class VectorialDisconnectedDBAdapter extends VectorialAdapter {
 	 * al driver que cierre la conexion con el servidor de base de datos
 	 */
 	public void stop() throws ReadDriverException {
-	    ((IVectorialDatabaseDriver)driver).close();
+		((IVectorialDatabaseDriver) driver).close();
 	}
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.layers.ReadableVectorial#getShape(int)
 	 */
 	public IGeometry getShape(int index) throws ReadDriverException {
-	    return ((IVectorialDatabaseDriver)driver).getShape(index);
-    }
+		return ((IVectorialDatabaseDriver) driver).getShape(index);
+	}
 
-	private String getTableName(){
-	    return ((IVectorialDatabaseDriver)driver).getTableName();
+	private String getTableName() {
+		return ((IVectorialDatabaseDriver) driver).getTableName();
 	}
 
 	/**
@@ -129,21 +127,23 @@ public class VectorialDisconnectedDBAdapter extends VectorialAdapter {
 	 * @see com.iver.cit.gvsig.fmap.layers.VectorialAdapter#getRecordset()
 	 */
 	public SelectableDataSource getRecordset() throws ReadDriverException {
-	    if (driver instanceof ObjectDriver)
-	    {
-			String name = LayerFactory.getDataSourceFactory().addDataSource((ObjectDriver)driver);
+		if (driver instanceof ObjectDriver) {
+			String name = LayerFactory.getDataSourceFactory().addDataSource(
+					(ObjectDriver) driver);
 			try {
-                ds = new SelectableDataSource(LayerFactory.getDataSourceFactory().createRandomDataSource(name, DataSourceFactory.AUTOMATIC_OPENING));
-            } catch (NoSuchTableException e) {
-                throw new RuntimeException(e);
+				ds = new SelectableDataSource(LayerFactory
+						.getDataSourceFactory().createRandomDataSource(name,
+								DataSourceFactory.AUTOMATIC_OPENING));
+			} catch (NoSuchTableException e) {
+				throw new RuntimeException(e);
 			} catch (DriverLoadException e) {
-				throw new ReadDriverException(name,e);
+				throw new ReadDriverException(name, e);
 			}
-	    }
+		}
 		return ds;
 	}
 
-	public class Receiver implements Runnable{
+	public class Receiver implements Runnable {
 		private ByteBuffer bb;
 		private int currentCapacity = 0;
 		private FileChannel channel;
@@ -151,10 +151,10 @@ public class VectorialDisconnectedDBAdapter extends VectorialAdapter {
 		private ByteBuffer indexBuffer = ByteBuffer.allocate(4);
 		private FileChannel indexChannel;
 
-	    private Rectangle2D extent = new Rectangle2D.Double();
+		private Rectangle2D extent = new Rectangle2D.Double();
 
-		public ByteBuffer getBuffer(int capacity){
-			if (capacity > currentCapacity){
+		public ByteBuffer getBuffer(int capacity) {
+			if (capacity > currentCapacity) {
 				bb = ByteBuffer.allocate(capacity);
 				currentCapacity = capacity;
 			}
@@ -162,8 +162,8 @@ public class VectorialDisconnectedDBAdapter extends VectorialAdapter {
 			return bb;
 		}
 
-		private void writeObject(byte[] bytes) throws IOException{
-			//Se escribe al fichero de datos
+		private void writeObject(byte[] bytes) throws IOException {
+			// Se escribe al fichero de datos
 			bb = getBuffer(bytes.length + 4);
 			bb.clear();
 			bb.putInt(bytes.length);
@@ -171,7 +171,7 @@ public class VectorialDisconnectedDBAdapter extends VectorialAdapter {
 			bb.flip();
 			channel.write(bb);
 
-			//Se actualiza el fichero de índice
+			// Se actualiza el fichero de índice
 			indexBuffer.clear();
 			indexBuffer.putInt((int) channel.position());
 			indexBuffer.flip();
@@ -183,29 +183,30 @@ public class VectorialDisconnectedDBAdapter extends VectorialAdapter {
 		 */
 		public void run() {
 			try {
-				//Abrimos el fichero de datos
+				// Abrimos el fichero de datos
 				dataFile = new File("/root/tirar/gvSIGtmp.gvs");
 				FileOutputStream fs = new FileOutputStream(dataFile);
 				channel = fs.getChannel();
 
-				//Abrimos el fichero de indice
+				// Abrimos el fichero de indice
 				indexFile = new File("/root/tirar/gvSIGindex.gvi");
 				FileOutputStream indexfs = new FileOutputStream(indexFile);
 				indexChannel = indexfs.getChannel();
 
-				//Creamos un adaptador conectado para bajarnos los datos
+				// Creamos un adaptador conectado para bajarnos los datos
 				IVectorialDatabaseDriver d = (IVectorialDatabaseDriver) VectorialDisconnectedDBAdapter.this.driver;
 				connectedAdapter = new VectorialDBAdapter();
 				connectedAdapter.setDriver(d);
 
-				//Escribimos el número de campos
+				// Escribimos el número de campos
 				indexBuffer.clear();
-				indexBuffer.putInt(connectedAdapter.getRecordset().getFieldCount());
+				indexBuffer.putInt(connectedAdapter.getRecordset()
+						.getFieldCount());
 				indexBuffer.flip();
 				indexChannel.write(indexBuffer);
 				indexChannel.position(indexChannel.position() + 4);
 
-				//Reservamos espacio para el número de campos
+				// Reservamos espacio para el número de campos
 				indexChannel.position(indexChannel.position() + 4 * 8);
 
 				connectedAdapter.start();
@@ -218,30 +219,32 @@ public class VectorialDisconnectedDBAdapter extends VectorialAdapter {
 					IGeometry g = connectedAdapter.getShape(i);
 					extent.add(g.getBounds2D());
 
-					//Se obtienen los bytes del objeto a serializar
+					// Se obtienen los bytes del objeto a serializar
 					bytes = new ByteArrayOutputStream();
 					oos = new ObjectOutputStream(bytes);
 					oos.writeObject(g);
 					oos.close();
 
-					//Se escribe al fichero
+					// Se escribe al fichero
 					writeObject(bytes.toByteArray());
 
-					for (int j = 0; j < connectedAdapter.getRecordset().getFieldCount(); j++) {
-						Value v = connectedAdapter.getRecordset().getFieldValue(i, j);
+					for (int j = 0; j < connectedAdapter.getRecordset()
+							.getFieldCount(); j++) {
+						Value v = connectedAdapter.getRecordset()
+								.getFieldValue(i, j);
 
-						//Se obtienen los bytes del objeto a serializar
+						// Se obtienen los bytes del objeto a serializar
 						bytes = new ByteArrayOutputStream();
 						oos = new ObjectOutputStream(bytes);
 						oos.writeObject(v);
 						oos.close();
 
-						//Se escribe al fichero
+						// Se escribe al fichero
 						writeObject(bytes.toByteArray());
 					}
 				}
 
-				//Escribimos el número de geometrías en el fichero de índice
+				// Escribimos el número de geometrías en el fichero de índice
 				indexBuffer.clear();
 				indexBuffer.putInt(geom);
 				indexBuffer.flip();
@@ -249,8 +252,8 @@ public class VectorialDisconnectedDBAdapter extends VectorialAdapter {
 				indexChannel.write(indexBuffer);
 				indexChannel.position(indexChannel.position() + 4);
 
-				//Escribimos el extent
-				ByteBuffer extentBuffer = ByteBuffer.allocate(4*8);
+				// Escribimos el extent
+				ByteBuffer extentBuffer = ByteBuffer.allocate(4 * 8);
 				extentBuffer.putDouble(extent.getMinX());
 				extentBuffer.putDouble(extent.getMinY());
 				extentBuffer.putDouble(extent.getMaxX());
@@ -259,7 +262,7 @@ public class VectorialDisconnectedDBAdapter extends VectorialAdapter {
 				indexChannel.position(8);
 				indexChannel.write(extentBuffer);
 
-				//Cerramos
+				// Cerramos
 				channel.close();
 				indexChannel.close();
 

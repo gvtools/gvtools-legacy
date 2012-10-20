@@ -7,10 +7,9 @@ import com.hardcode.gdbms.parser.Node;
 import com.hardcode.gdbms.parser.SQLEngineConstants;
 import com.hardcode.gdbms.parser.SimpleNode;
 
-
 /**
  * Adaptador
- *
+ * 
  * @author Fernando González Cortés
  */
 public class TableRefAdapter extends Adapter {
@@ -39,7 +38,7 @@ public class TableRefAdapter extends Adapter {
 
 	/**
 	 * Obtiene el alias de la tabla
-	 *
+	 * 
 	 * @return Returns the alias.
 	 */
 	public String getAlias() {
@@ -48,7 +47,7 @@ public class TableRefAdapter extends Adapter {
 
 	/**
 	 * Obtiene el nombre de la tabla
-	 *
+	 * 
 	 * @return Returns the name.
 	 */
 	public String getName() {

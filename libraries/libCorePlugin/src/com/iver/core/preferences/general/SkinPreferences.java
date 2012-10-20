@@ -1,6 +1,5 @@
 package com.iver.core.preferences.general;
 
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -19,7 +18,6 @@ import com.iver.andami.plugins.config.generate.PluginConfig;
 import com.iver.andami.plugins.config.generate.SkinExtension;
 import com.iver.andami.preferences.AbstractPreferencePage;
 import com.iver.andami.preferences.StoreException;
-import com.iver.andami.ui.mdiManager.MDIManagerFactory;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.JComboBox;
 
@@ -84,8 +82,8 @@ public class SkinPreferences extends AbstractPreferencePage {
 				if (newSkinName != null)
 					if (!newSkinName.equals(skinName)) {
 						skinName = newSkinName;
-						JOptionPane.showMessageDialog(null, PluginServices
-								.getText(this, "skin_message"));
+						JOptionPane.showMessageDialog(null,
+								PluginServices.getText(this, "skin_message"));
 					}
 			}
 
@@ -121,7 +119,7 @@ public class SkinPreferences extends AbstractPreferencePage {
 
 			if (pc.getExtensions().getSkinExtension() != null) {
 				SkinExtension[] se = pc.getExtensions().getSkinExtension();
-				for (int j=0;j<se.length;j++){
+				for (int j = 0; j < se.length; j++) {
 
 					listSkinsPlugins.add(se[j].getClassName());
 					System.out.println("plugin de skin + name");
@@ -129,15 +127,12 @@ public class SkinPreferences extends AbstractPreferencePage {
 			}
 		}
 
-
 		PluginServices ps = PluginServices.getPluginServices("com.iver.core");
 		XMLEntity xml = ps.getPersistentXML();
 		if (xml.contains("Skin-Selected")) {
 			skinName = xml.getStringProperty("Skin-Selected");
 
 		}
-
-
 
 	}
 

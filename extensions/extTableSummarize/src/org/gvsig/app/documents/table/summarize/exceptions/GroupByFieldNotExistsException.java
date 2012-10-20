@@ -53,5 +53,5 @@ public class GroupByFieldNotExistsException extends Exception {
 	public GroupByFieldNotExistsException(Throwable cause) {
 		super(cause);
 	}
-	
+
 }

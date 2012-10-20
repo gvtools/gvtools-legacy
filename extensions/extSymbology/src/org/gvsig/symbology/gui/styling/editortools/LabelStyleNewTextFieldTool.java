@@ -43,7 +43,6 @@ package org.gvsig.symbology.gui.styling.editortools;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 
@@ -70,6 +69,7 @@ public class LabelStyleNewTextFieldTool extends EditorTool {
 		super(targetEditor);
 		// TODO Auto-generated constructor stub
 	}
+
 	public Cursor getCursor() {
 		return cursor;
 	}
@@ -100,7 +100,7 @@ public class LabelStyleNewTextFieldTool extends EditorTool {
 			pEnd.y = (int) bounds.getHeight();
 
 		Rectangle2D rect = screenPointsToLabelRect(pIni, pEnd);
-		style.setTextFieldArea(style.getFieldCount()-1, rect);
+		style.setTextFieldArea(style.getFieldCount() - 1, rect);
 		owner.repaint();
 	}
 
@@ -108,13 +108,13 @@ public class LabelStyleNewTextFieldTool extends EditorTool {
 		int minx = pIni.x;
 		int miny = pIni.y;
 
-		int width = pEnd.x-pIni.x;
+		int width = pEnd.x - pIni.x;
 		int height = pEnd.y - pIni.y;
 		if (width < 0) {
 			minx += width;
 			width = -width;
 		}
-		if (height <0) {
+		if (height < 0) {
 			miny += height;
 			height = -height;
 		}
@@ -124,38 +124,45 @@ public class LabelStyleNewTextFieldTool extends EditorTool {
 
 		IStyle style = sp.getStyle();
 		Dimension backgroundBounds = null;
-		if (style instanceof SimpleLabelStyle){
-			backgroundBounds = ((SimpleLabelStyle)style).getSize();
+		if (style instanceof SimpleLabelStyle) {
+			backgroundBounds = ((SimpleLabelStyle) style).getSize();
 		}
-		//FIXME: Esto es un parche, habría que cambiar la API de los estilos y simbolos
-		//pero mientras tanto
+		// FIXME: Esto es un parche, habría que cambiar la API de los estilos y
+		// simbolos
+		// pero mientras tanto
 		Rectangle2D rect;
-		if (backgroundBounds == null){
-			rect = new Rectangle2D.Double(
-					minx/(bounds.getWidth()-sp.getHGap()/2), //OJO, aquí ponía cuatro 10's a piñon fijo
-					miny/(bounds.getHeight()-sp.getVGap()/2),
-					width/(bounds.getWidth()-sp.getHGap()),
-					height/(bounds.getHeight()-sp.getVGap())
-			);
+		if (backgroundBounds == null) {
+			rect = new Rectangle2D.Double(minx
+					/ (bounds.getWidth() - sp.getHGap() / 2), // OJO, aquí ponía
+																// cuatro 10's a
+																// piñon fijo
+					miny / (bounds.getHeight() - sp.getVGap() / 2), width
+							/ (bounds.getWidth() - sp.getHGap()), height
+							/ (bounds.getHeight() - sp.getVGap()));
 		} else {
 
 			double xOffset = 0;
 			double yOffset = 0;
 			double scale = 1;
-			if (backgroundBounds.getWidth()>backgroundBounds.getHeight()) {
-				scale = (bounds.getWidth()-sp.getHGap())/backgroundBounds.getWidth();
-				yOffset = 0.5*(bounds.getHeight()-sp.getVGap() - backgroundBounds.getHeight()*scale);
+			if (backgroundBounds.getWidth() > backgroundBounds.getHeight()) {
+				scale = (bounds.getWidth() - sp.getHGap())
+						/ backgroundBounds.getWidth();
+				yOffset = 0.5 * (bounds.getHeight() - sp.getVGap() - backgroundBounds
+						.getHeight() * scale);
 			} else {
-				scale = (bounds.getHeight()-sp.getVGap())/backgroundBounds.getHeight();
-				xOffset = 0.5*(bounds.getWidth()-sp.getHGap() - backgroundBounds.getWidth()*scale);
+				scale = (bounds.getHeight() - sp.getVGap())
+						/ backgroundBounds.getHeight();
+				xOffset = 0.5 * (bounds.getWidth() - sp.getHGap() - backgroundBounds
+						.getWidth() * scale);
 			}
 
 			rect = new Rectangle2D.Double(
-					((minx-(sp.getHGap()/2)-xOffset)/scale)/backgroundBounds.getWidth(),
-					((miny-(sp.getVGap()/2)-yOffset)/scale)/backgroundBounds.getHeight(),
-					(width/scale)/backgroundBounds.getWidth(),
-					(height/scale)/backgroundBounds.getHeight()
-			);
+					((minx - (sp.getHGap() / 2) - xOffset) / scale)
+							/ backgroundBounds.getWidth(), ((miny
+							- (sp.getVGap() / 2) - yOffset) / scale)
+							/ backgroundBounds.getHeight(), (width / scale)
+							/ backgroundBounds.getWidth(), (height / scale)
+							/ backgroundBounds.getHeight());
 		}
 
 		return rect;
@@ -182,8 +189,10 @@ public class LabelStyleNewTextFieldTool extends EditorTool {
 
 	private JToggleButton getBtnNewTextArea() {
 		if (btnNewTextArea == null) {
-			btnNewTextArea = new JToggleButton(PluginServices.getIconTheme().get("add-text-icon"));
-			btnNewTextArea.setToolTipText(PluginServices.getText(this, "add_text_area"));
+			btnNewTextArea = new JToggleButton(PluginServices.getIconTheme()
+					.get("add-text-icon"));
+			btnNewTextArea.setToolTipText(PluginServices.getText(this,
+					"add_text_area"));
 			btnNewTextArea.setSize(EditorTool.SMALL_BTN_SIZE);
 		}
 		return btnNewTextArea;

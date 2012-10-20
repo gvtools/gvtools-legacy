@@ -46,30 +46,31 @@
  */
 package org.gvsig.remoteClient.arcims.styling.symbols;
 
-
-
 import org.gvsig.remoteClient.arcims.utils.ServiceInfoTags;
 
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 
-
 /**
- * This Symbol is essentially a TextSymbol with a Shield to
- * symbolize US roads. Thus, gvSIG will represent this symbol as a TextSymbol.
+ * This Symbol is essentially a TextSymbol with a Shield to symbolize US roads.
+ * Thus, gvSIG will represent this symbol as a TextSymbol.
+ * 
  * @author jsanz
- *
+ * 
  */
 public class ShieldSymbol extends TextSymbol implements IArcIMSSymbol {
-    public static final String TAG = ServiceInfoTags.tSHIELDSYMBOL;
+	public static final String TAG = ServiceInfoTags.tSHIELDSYMBOL;
 
-    public String toString() {
-        return "<" + TAG + super.getParam() + "/>\r\n";
-    }
+	public String toString() {
+		return "<" + TAG + super.getParam() + "/>\r\n";
+	}
 
-    /* (non-Javadoc)
-     * @see org.gvsig.remoteClient.arcims.styling.symbols.IArcIMSSymbol#getFSymbol()
-     */
-    public ISymbol getFSymbol() {
-        return ArcImsFSymbolFactory.getFSymbol(this);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.arcims.styling.symbols.IArcIMSSymbol#getFSymbol()
+	 */
+	public ISymbol getFSymbol() {
+		return ArcImsFSymbolFactory.getFSymbol(this);
+	}
 }

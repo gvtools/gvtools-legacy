@@ -21,15 +21,18 @@ package org.gvsig.rastertools.colortable.ui.tabs;
 import javax.swing.JPanel;
 
 import org.gvsig.raster.datastruct.ColorTable;
+
 /**
  * Interfaz para poder hacer paneles de edicion de tablas de color
+ * 
  * @version 04/01/2008
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public interface IColorTableUI {
-	
+
 	/**
 	 * Devuelve el JPanel del panel de edicion
+	 * 
 	 * @return
 	 */
 	public JPanel getPanel();
@@ -37,24 +40,28 @@ public interface IColorTableUI {
 	/**
 	 * Devuelve la Tabla de color que se esta visualizando en el Panel en ese
 	 * momento
+	 * 
 	 * @return
 	 */
 	public ColorTable getColorTable();
-	
+
 	/**
 	 * Define que Tabla de color se ha de mostrar en el Panel
+	 * 
 	 * @param colorTable
 	 */
 	public void setColorTable(ColorTable colorTable);
-	
+
 	/**
 	 * Añade la gestion de eventos para cuando cambia el panel
+	 * 
 	 * @param listener
 	 */
 	public void addColorTableUIChangedListener(ColorTableUIListener listener);
-	
+
 	/**
 	 * Elimina la gestion de eventos para cuando cambia el panel
+	 * 
 	 * @param listener
 	 */
 	public void removeColorTableUIChangedListener(ColorTableUIListener listener);

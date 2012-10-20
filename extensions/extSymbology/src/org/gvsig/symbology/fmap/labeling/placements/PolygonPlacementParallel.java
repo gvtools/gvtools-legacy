@@ -61,33 +61,34 @@ import com.iver.utiles.swing.threads.Cancellable;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
-
-public class PolygonPlacementParallel implements ILabelPlacement{
-
+public class PolygonPlacementParallel implements ILabelPlacement {
 
 	public ArrayList<LabelLocationMetrics> guess(LabelClass lc, IGeometry geom,
 			IPlacementConstraints placementConstraints,
 			double cartographicSymbolSize, Cancellable cancel, ViewPort vp) {
 
-		if (cancel.isCanceled()) return CannotPlaceLabel.NO_PLACES;
-		FShape shp = (FShape)geom.getInternalShape();
+		if (cancel.isCanceled())
+			return CannotPlaceLabel.NO_PLACES;
+		FShape shp = (FShape) geom.getInternalShape();
 		Geometry geo = FConverter.java2d_to_jts(shp);
 		double theta = 0;
 		if (geo == null) {
 			return CannotPlaceLabel.NO_PLACES;
 		}
 		Point pJTS;
-		if(placementConstraints.isFitInsidePolygon()){
+		if (placementConstraints.isFitInsidePolygon()) {
 			pJTS = geo.getInteriorPoint();
 			if (pJTS == null) {
-				Logger.getAnonymousLogger().log(Level.SEVERE, "no interior point could be found");
+				Logger.getAnonymousLogger().log(Level.SEVERE,
+						"no interior point could be found");
 				return CannotPlaceLabel.NO_PLACES;
 			}
 		} else {
 			pJTS = geo.getCentroid();
 
 			if (pJTS == null) {
-				Logger.getAnonymousLogger().log(Level.SEVERE, "no centroid could be found");
+				Logger.getAnonymousLogger().log(Level.SEVERE,
+						"no centroid could be found");
 				return CannotPlaceLabel.NO_PLACES;
 			}
 		}
@@ -115,18 +116,18 @@ public class PolygonPlacementParallel implements ILabelPlacement{
 			count++;
 			sumx += p.getX();
 			sumy += p.getY();
-			sumxx += p.getX()*p.getX();
-			sumyy += p.getY()*p.getY();
-			sumxy += p.getX()*p.getY();
+			sumxx += p.getX() * p.getX();
+			sumyy += p.getY() * p.getY();
+			sumxy += p.getX() * p.getY();
 			pi.next();
 		}
 
 		// start regression
 		double n = (double) count;
-		Sxx = sumxx-sumx*sumx/n;
-		Sxy = sumxy-sumx*sumy/n;
-		b = Sxy/Sxx;
-		a = (sumy-b*sumx)/n;
+		Sxx = sumxx - sumx * sumx / n;
+		Sxy = sumxy - sumx * sumy / n;
+		b = Sxy / Sxx;
+		a = (sumy - b * sumx) / n;
 
 		boolean isVertical = false;
 		if (geomBounds.width < geomBounds.height) {
@@ -136,41 +137,44 @@ public class PolygonPlacementParallel implements ILabelPlacement{
 
 			} else {
 				// swap axes
-				double bAux = 1/b;
-				a = - a / b;
+				double bAux = 1 / b;
+				a = -a / b;
 				b = bAux;
 			}
 		}
 
-		if (isVertical){
+		if (isVertical) {
 			theta = AbstractLinePlacement.HALF_PI;
 		} else {
 			double p1x = 0;
-			double  p1y =geomBounds.height-a;
-			double  p2x = geomBounds.width;
-			double  p2y = geomBounds.height-
-			(a+geomBounds.width*b);
+			double p1y = geomBounds.height - a;
+			double p2x = geomBounds.width;
+			double p2y = geomBounds.height - (a + geomBounds.width * b);
 
-			theta = -Math.atan(((p2y - p1y) / (p2x - p1x)) );
+			theta = -Math.atan(((p2y - p1y) / (p2x - p1x)));
 		}
 
 		ArrayList<LabelLocationMetrics> guessed = new ArrayList<LabelLocationMetrics>();
 		Rectangle labelBounds = lc.getBounds();
 		double cosTheta = Math.cos(theta);
 		double sinTheta = Math.sin(theta);
-		double halfHeight = labelBounds.getHeight()*0.5;
-		double halfWidth= labelBounds.getWidth()*0.5;
-		double offsetX =  halfHeight * sinTheta + halfWidth*cosTheta;
-		double offsetY = -halfHeight * cosTheta + halfWidth*sinTheta;
-		double offsetRX=vp.toMapDistance((int)offsetX);
-		double offsetRY=vp.toMapDistance((int)offsetY);
+		double halfHeight = labelBounds.getHeight() * 0.5;
+		double halfWidth = labelBounds.getWidth() * 0.5;
+		double offsetX = halfHeight * sinTheta + halfWidth * cosTheta;
+		double offsetY = -halfHeight * cosTheta + halfWidth * sinTheta;
+		double offsetRX = vp.toMapDistance((int) offsetX);
+		double offsetRY = vp.toMapDistance((int) offsetY);
 		startingPoint.setLocation(startingPoint.getX() - offsetRX,
 				startingPoint.getY() - offsetRY);
-		FPoint2D p=(FPoint2D)FConverter.transformToInts(ShapeFactory.createPoint2D(startingPoint.getX(),startingPoint.getY()), vp.getAffineTransform());
+		FPoint2D p = (FPoint2D) FConverter.transformToInts(
+				ShapeFactory.createPoint2D(startingPoint.getX(),
+						startingPoint.getY()), vp.getAffineTransform());
 
-		guessed.add(new LabelLocationMetrics(new Point2D.Double(p.getX(),p.getY()), -theta, true));
+		guessed.add(new LabelLocationMetrics(new Point2D.Double(p.getX(), p
+				.getY()), -theta, true));
 		return guessed;
 	}
+
 	public boolean isSuitableFor(IPlacementConstraints placementConstraints,
 			int shapeType) {
 		if ((shapeType % FShape.Z) == FShape.POLYGON) {

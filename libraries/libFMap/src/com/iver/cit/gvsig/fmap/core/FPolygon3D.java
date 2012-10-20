@@ -46,7 +46,7 @@ import com.iver.cit.gvsig.fmap.core.v02.FConverter;
 
 /**
  * Polilinea 3D.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FPolygon3D extends FPolygon2D implements FShape3D {
@@ -54,9 +54,11 @@ public class FPolygon3D extends FPolygon2D implements FShape3D {
 
 	/**
 	 * Crea un nuevo Polyline3D.
-	 *
-	 * @param gpx GeneralPathX.
-	 * @param pZ vector con las Z.
+	 * 
+	 * @param gpx
+	 *            GeneralPathX.
+	 * @param pZ
+	 *            vector con las Z.
 	 */
 	public FPolygon3D(GeneralPathX gpx, double[] pZ) {
 		super(gpx);
@@ -65,7 +67,7 @@ public class FPolygon3D extends FPolygon2D implements FShape3D {
 
 	/**
 	 * Clona FPolygon3D.
-	 *
+	 * 
 	 * @return FShape clonado.
 	 */
 	public FShape cloneFShape() {
@@ -74,7 +76,7 @@ public class FPolygon3D extends FPolygon2D implements FShape3D {
 
 	/**
 	 * Devuelve un array con los valores de todas las Z.
-	 *
+	 * 
 	 * @return Array de Zs.
 	 */
 	public double[] getZs() {
@@ -89,27 +91,27 @@ public class FPolygon3D extends FPolygon2D implements FShape3D {
 	}
 
 	public String toText() {
-		//TODO: its not writing rings or multielements properly
+		// TODO: its not writing rings or multielements properly
 		StringBuffer str = new StringBuffer();
 		str.append("MULTIPOLYGON");
 		str.append(" ((");
-		int theType;		
-		double[] theData = new double[6];		
+		int theType;
+		double[] theData = new double[6];
 
 		PathIterator theIterator = getPathIterator(null, FConverter.FLATNESS);
 		int i = 0;
 
 		while (!theIterator.isDone()) {
-			//while not done
+			// while not done
 			theType = theIterator.currentSegment(theData);
 
 			double z = 0.0;
-			if (i < pZ.length){
-				z = pZ[i]; 
+			if (i < pZ.length) {
+				z = pZ[i];
 			}
-			
+
 			switch (theType) {
-			case PathIterator.SEG_MOVETO:					
+			case PathIterator.SEG_MOVETO:
 				str.append(theData[0] + " " + theData[1] + " " + z + ",");
 				break;
 
@@ -130,12 +132,12 @@ public class FPolygon3D extends FPolygon2D implements FShape3D {
 
 			case PathIterator.SEG_CLOSE:
 				break;
-			} //end switch
+			} // end switch
 
 			theIterator.next();
 			i++;
-		} //end while loop		
-		return str.delete(str.length()-1, str.length()) + "))";
+		} // end while loop
+		return str.delete(str.length() - 1, str.length()) + "))";
 
 	}
 }

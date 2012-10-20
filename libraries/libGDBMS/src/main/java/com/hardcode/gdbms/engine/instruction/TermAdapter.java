@@ -7,10 +7,9 @@ import com.hardcode.gdbms.parser.ASTSQLLiteral;
 import com.hardcode.gdbms.parser.ASTSQLOrExpr;
 import com.hardcode.gdbms.parser.SimpleNode;
 
-
 /**
  * Wrapper sobre el nodo Term del arbol sintáctico
- *
+ * 
  * @author Fernando González Cortés
  */
 public class TermAdapter extends AbstractExpression implements Expression {
@@ -74,10 +73,10 @@ public class TermAdapter extends AbstractExpression implements Expression {
 		getParent().replaceChild(this, getChilds()[0]);
 	}
 
-    /**
-     * @see com.hardcode.gdbms.engine.instruction.Expression#isAggregated()
-     */
-    public boolean isAggregated() {
+	/**
+	 * @see com.hardcode.gdbms.engine.instruction.Expression#isAggregated()
+	 */
+	public boolean isAggregated() {
 		Adapter[] expr = (Adapter[]) getChilds();
 
 		if (expr.length != 1) {
@@ -85,5 +84,5 @@ public class TermAdapter extends AbstractExpression implements Expression {
 		} else {
 			return ((Expression) expr[0]).isAggregated();
 		}
-    }
+	}
 }

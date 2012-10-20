@@ -14,18 +14,19 @@ public abstract class AbstractWriter implements IWriter {
 	/**
 	 * A developer can use this Properties for his own purposes. For example, to
 	 * let his extension know something about one writer.
+	 * 
 	 * @param capability
 	 * @return A message describing the capability. Null if not supported.
 	 */
-	public String getCapability(String capability)
-	{
+	public String getCapability(String capability) {
 		if (capabilities.containsKey(capability))
 			return capabilities.getProperty(capability);
 		return null;
 	}
 
 	/**
-	 * @param capabilities The capabilities to set.
+	 * @param capabilities
+	 *            The capabilities to set.
 	 */
 	public void setCapabilities(Properties capabilities) {
 		this.capabilities = capabilities;
@@ -34,8 +35,8 @@ public abstract class AbstractWriter implements IWriter {
 	// public abstract boolean canWriteGeometry(int gvSIGgeometryType);
 	public abstract boolean canWriteAttribute(int sqlType);
 
-
-	public void initialize(ITableDefinition tableDefinition) throws InitializeWriterException{
+	public void initialize(ITableDefinition tableDefinition)
+			throws InitializeWriterException {
 		this.tableDef = tableDefinition;
 
 	}
@@ -58,6 +59,5 @@ public abstract class AbstractWriter implements IWriter {
 	public void setWriteAll(boolean writeAll) {
 		bWriteAll = writeAll;
 	}
-
 
 }

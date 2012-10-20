@@ -43,27 +43,27 @@ package com.iver.utiles.xmlViewer;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
-
 /**
  * Interfaz que surte de datos al control XMLViewer
- *
+ * 
  * @author Fernando González Cortés
  */
 public interface XMLContent {
-    /**
-     * Mediante este método el control se registra como handler de los eventos
-     * SAX disparados en el evento parse
-     *
-     * @param handler Handler de los eventos del método parse que meterá toda
-     *        la información en el control
-     */
-    public void setContentHandler(ContentHandler handler);
+	/**
+	 * Mediante este método el control se registra como handler de los eventos
+	 * SAX disparados en el evento parse
+	 * 
+	 * @param handler
+	 *            Handler de los eventos del método parse que meterá toda la
+	 *            información en el control
+	 */
+	public void setContentHandler(ContentHandler handler);
 
-    /**
-     * Debe de lanzar los eventos SAX del contenido XML que representa
-     *
-     * @throws SAXException Si se produce algún error relacionado con los
-     *         eventos
-     */
-    public void parse() throws SAXException;
+	/**
+	 * Debe de lanzar los eventos SAX del contenido XML que representa
+	 * 
+	 * @throws SAXException
+	 *             Si se produce algún error relacionado con los eventos
+	 */
+	public void parse() throws SAXException;
 }

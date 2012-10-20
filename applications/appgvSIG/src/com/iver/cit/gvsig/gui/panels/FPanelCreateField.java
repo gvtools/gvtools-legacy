@@ -76,27 +76,30 @@ public class FPanelCreateField extends JPanel implements IWindow {
 	private JLabel jLblDefaultValue = null;
 	private JTextField jTxtDefaultValue = null;
 	private WindowInfo viewInfo;
-	private JPanel jPanel = null;  //  @jve:decl-index=0:visual-constraint="299,27"
+	private JPanel jPanel = null; // @jve:decl-index=0:visual-constraint="299,27"
 	private AcceptCancelPanel jPanelOkCancel = null;
 	private JPanel jPnlFields = null;
 	private KeyListener checkInt = new KeyListener() {
-		public void keyPressed(KeyEvent e)  { }
+		public void keyPressed(KeyEvent e) {
+		}
+
 		public void keyReleased(KeyEvent e) {
 			JTextField component = (JTextField) e.getComponent();
 
 			try {
-				component.setText(
-						String.valueOf(
-								Integer.parseInt(component.getText())
-								)
-						);
+				component.setText(String.valueOf(Integer.parseInt(component
+						.getText())));
 
 			} catch (Exception ex) {
 				String text = component.getText();
-				text = (text.length() <= 1)? "0" : text.substring(0, text.length()-1);
+				text = (text.length() <= 1) ? "0" : text.substring(0,
+						text.length() - 1);
 				component.setText(text);
-			}}
-		public void keyTyped(KeyEvent e)    { }
+			}
+		}
+
+		public void keyTyped(KeyEvent e) {
+		}
 	};
 	private String[] currentFieldNames;
 
@@ -125,26 +128,26 @@ public class FPanelCreateField extends JPanel implements IWindow {
 	}
 
 	public WindowInfo getWindowInfo() {
-		if (viewInfo == null)
-		{
+		if (viewInfo == null) {
 			viewInfo = new WindowInfo(WindowInfo.MODALDIALOG);
-			viewInfo.setWidth(this.getWidth()+8);
+			viewInfo.setWidth(this.getWidth() + 8);
 			viewInfo.setHeight(this.getHeight());
-			viewInfo.setTitle(PluginServices.getText(this, "new_field_properties"));
+			viewInfo.setTitle(PluginServices.getText(this,
+					"new_field_properties"));
 		}
 		return viewInfo;
 	}
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
 
 		this.setLayout(new BorderLayout());
 		this.setSize(300, 210);
-		this.setPreferredSize(new java.awt.Dimension(300,210));
+		this.setPreferredSize(new java.awt.Dimension(300, 210));
 		this.add(getJPanel(), java.awt.BorderLayout.CENTER);
 		this.add(getJPanelOkCancel(), java.awt.BorderLayout.SOUTH);
 
@@ -152,13 +155,13 @@ public class FPanelCreateField extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jTxtFieldName
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getJTxtFieldName() {
 		if (jTxtFieldName == null) {
 			jTxtFieldName = new JTextField();
-			jTxtFieldName.setBounds(new java.awt.Rectangle(147,15,138,22));
+			jTxtFieldName.setBounds(new java.awt.Rectangle(147, 15, 138, 22));
 
 		}
 		return jTxtFieldName;
@@ -166,13 +169,13 @@ public class FPanelCreateField extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jCboFieldType
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getJCboFieldType() {
 		if (jCboFieldType == null) {
 			jCboFieldType = new JComboBox();
-			jCboFieldType.setBounds(new java.awt.Rectangle(147,52,138,22));
+			jCboFieldType.setBounds(new java.awt.Rectangle(147, 52, 138, 22));
 			jCboFieldType.addItem("Boolean");
 			jCboFieldType.addItem("Date");
 			jCboFieldType.addItem("Integer");
@@ -180,38 +183,43 @@ public class FPanelCreateField extends JPanel implements IWindow {
 			jCboFieldType.addItem("String");
 
 			jCboFieldType.setSelectedIndex(4);
-			jCboFieldType.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					// System.out.println("actionPerformed()" + e.getActionCommand()); // TODO Auto-generated Event stub actionPerformed()
-					String strType = (String) getJCboFieldType().getModel().getSelectedItem();
-					int fieldType = FieldDescription.stringToType(strType);
-					if (fieldType == Types.DOUBLE) {
-						getJTxtFieldPrecision().setEnabled(true);
-						if (getJTxtFieldPrecision().getText().equals("")){
-							getJTxtFieldPrecision().setText("3");
-						} else {
-							try {
-								Integer.parseInt(getJTxtFieldPrecision().getText());
-							} catch (NumberFormatException e1){
-								getJTxtFieldPrecision().setText("3");
+			jCboFieldType
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							// System.out.println("actionPerformed()" +
+							// e.getActionCommand()); // TODO Auto-generated
+							// Event stub actionPerformed()
+							String strType = (String) getJCboFieldType()
+									.getModel().getSelectedItem();
+							int fieldType = FieldDescription
+									.stringToType(strType);
+							if (fieldType == Types.DOUBLE) {
+								getJTxtFieldPrecision().setEnabled(true);
+								if (getJTxtFieldPrecision().getText()
+										.equals("")) {
+									getJTxtFieldPrecision().setText("3");
+								} else {
+									try {
+										Integer.parseInt(getJTxtFieldPrecision()
+												.getText());
+									} catch (NumberFormatException e1) {
+										getJTxtFieldPrecision().setText("3");
+									}
+								}
+							} else {
+								getJTxtFieldPrecision().setEnabled(false);
 							}
-						}
-					}else{
-						getJTxtFieldPrecision().setEnabled(false);
-					}
-					if (fieldType == Types.INTEGER) {
-						getJTxtFieldLength().setText("9");
-					}
-					if (fieldType == Types.BOOLEAN)
-					{
-						getJTxtFieldLength().setText("0");
-						getJTxtFieldLength().setEnabled(false);
-					}
-					else
-						getJTxtFieldLength().setEnabled(true);
+							if (fieldType == Types.INTEGER) {
+								getJTxtFieldLength().setText("9");
+							}
+							if (fieldType == Types.BOOLEAN) {
+								getJTxtFieldLength().setText("0");
+								getJTxtFieldLength().setEnabled(false);
+							} else
+								getJTxtFieldLength().setEnabled(true);
 
-				}
-			});
+						}
+					});
 
 		}
 		return jCboFieldType;
@@ -219,13 +227,13 @@ public class FPanelCreateField extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jTxtFieldLength
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getJTxtFieldLength() {
 		if (jTxtFieldLength == null) {
 			jTxtFieldLength = new JTextField();
-			jTxtFieldLength.setBounds(new java.awt.Rectangle(147,89,138,22));
+			jTxtFieldLength.setBounds(new java.awt.Rectangle(147, 89, 138, 22));
 			jTxtFieldLength.setText(DEFAULT_FIELD_LENGTH);
 			jTxtFieldLength.addKeyListener(checkInt);
 		}
@@ -234,37 +242,39 @@ public class FPanelCreateField extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jTxtFieldPrecision
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getJTxtFieldPrecision() {
 		if (jTxtFieldPrecision == null) {
 			jTxtFieldPrecision = new JTextField();
-			jTxtFieldPrecision.setBounds(new java.awt.Rectangle(147,126,138,22));
+			jTxtFieldPrecision.setBounds(new java.awt.Rectangle(147, 126, 138,
+					22));
 			jTxtFieldPrecision.setEnabled(false);
-			jTxtFieldPrecision.addKeyListener(checkInt );
+			jTxtFieldPrecision.addKeyListener(checkInt);
 		}
 		return jTxtFieldPrecision;
 	}
 
 	/**
 	 * This method initializes jTxtDefaultValue
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getJTxtDefaultValue() {
 		if (jTxtDefaultValue == null) {
 			jTxtDefaultValue = new JTextField();
-			jTxtDefaultValue.setBounds(new java.awt.Rectangle(147,163,138,22));
+			jTxtDefaultValue
+					.setBounds(new java.awt.Rectangle(147, 163, 138, 22));
 		}
 		return jTxtDefaultValue;
 	}
 
-	public FieldDescription getFieldDescription() throws ParseException
-	{
+	public FieldDescription getFieldDescription() throws ParseException {
 		FieldDescription newField = new FieldDescription();
 		newField.setFieldName(getJTxtFieldName().getText());
-		String strType = (String) getJCboFieldType().getModel().getSelectedItem();
+		String strType = (String) getJCboFieldType().getModel()
+				.getSelectedItem();
 		int fieldType = FieldDescription.stringToType(strType);
 		newField.setFieldType(fieldType);
 		try {
@@ -274,26 +284,23 @@ public class FPanelCreateField extends JPanel implements IWindow {
 			throw new ParseException(e.getMessage(), 0);
 		}
 
-		if (fieldType == Types.DOUBLE)
-		{
+		if (fieldType == Types.DOUBLE) {
 			try {
-			newField.setFieldDecimalCount(
-					Integer.parseInt(
-							getJTxtFieldPrecision().getText()));
-			} catch (NumberFormatException e){
+				newField.setFieldDecimalCount(Integer
+						.parseInt(getJTxtFieldPrecision().getText()));
+			} catch (NumberFormatException e) {
 				newField.setFieldDecimalCount(3);
-		}
-		}
-		else
+			}
+		} else
 			newField.setFieldDecimalCount(0);
 		String defaultValue = getJTxtDefaultValue().getText();
-		if (defaultValue != null)
-		{
+		if (defaultValue != null) {
 
-			if (defaultValue.compareTo("")==0)
+			if (defaultValue.compareTo("") == 0)
 				newField.setDefaultValue(ValueFactory.createNullValue());
 			else
-				newField.setDefaultValue(ValueFactory.createValueByType(defaultValue, fieldType));
+				newField.setDefaultValue(ValueFactory.createValueByType(
+						defaultValue, fieldType));
 		}
 
 		return newField;
@@ -306,7 +313,7 @@ public class FPanelCreateField extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel() {
@@ -321,25 +328,26 @@ public class FPanelCreateField extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jPanelOkCancel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private AcceptCancelPanel getJPanelOkCancel() {
 		if (jPanelOkCancel == null) {
 			jPanelOkCancel = new AcceptCancelPanel();
-			jPanelOkCancel.setCancelButtonActionListener(new ActionListener(){
+			jPanelOkCancel.setCancelButtonActionListener(new ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					PluginServices.getMDIManager().closeWindow(FPanelCreateField.this);
+					PluginServices.getMDIManager().closeWindow(
+							FPanelCreateField.this);
 				};
 			});
-			jPanelOkCancel.setPreferredSize(new java.awt.Dimension(10,50));
+			jPanelOkCancel.setPreferredSize(new java.awt.Dimension(10, 50));
 		}
 		return jPanelOkCancel;
 	}
 
 	/**
 	 * This method initializes jPnlFields
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPnlFields() {
@@ -351,22 +359,27 @@ public class FPanelCreateField extends JPanel implements IWindow {
 			gridLayout.setColumns(2);
 			jPnlFields = new JPanel();
 			jPnlFields.setLayout(gridLayout);
-			jPnlFields.setBounds(new java.awt.Rectangle(5,12,290,142));
+			jPnlFields.setBounds(new java.awt.Rectangle(5, 12, 290, 142));
 			jLblDefaultValue = new JLabel();
-			jLblDefaultValue.setBounds(new java.awt.Rectangle(14,163,125,22));
-			jLblDefaultValue.setText(PluginServices.getText(this, "default_value"));
+			jLblDefaultValue
+					.setBounds(new java.awt.Rectangle(14, 163, 125, 22));
+			jLblDefaultValue.setText(PluginServices.getText(this,
+					"default_value"));
 			jLblFieldPrecision = new JLabel();
-			jLblFieldPrecision.setBounds(new java.awt.Rectangle(14,126,112,22));
-			jLblFieldPrecision.setText(PluginServices.getText(this, "precision"));
+			jLblFieldPrecision.setBounds(new java.awt.Rectangle(14, 126, 112,
+					22));
+			jLblFieldPrecision.setText(PluginServices
+					.getText(this, "precision"));
 			jLblFieldLength = new JLabel();
-			jLblFieldLength.setBounds(new java.awt.Rectangle(14,89,99,22));
-			jLblFieldLength.setText(PluginServices.getText(this, "field_length"));
+			jLblFieldLength.setBounds(new java.awt.Rectangle(14, 89, 99, 22));
+			jLblFieldLength.setText(PluginServices
+					.getText(this, "field_length"));
 			jLblFieldType = new JLabel();
-			jLblFieldType.setBounds(new java.awt.Rectangle(14,52,94,22));
+			jLblFieldType.setBounds(new java.awt.Rectangle(14, 52, 94, 22));
 			jLblFieldType.setText(PluginServices.getText(this, "field_type"));
 			jLblFieldName = new JLabel();
 			jLblFieldName.setText(PluginServices.getText(this, "field_name"));
-			jLblFieldName.setBounds(new java.awt.Rectangle(14,15,99,22));
+			jLblFieldName.setBounds(new java.awt.Rectangle(14, 15, 99, 22));
 			jPnlFields.add(jLblFieldName, null);
 			jPnlFields.add(getJTxtFieldName(), null);
 			jPnlFields.add(jLblFieldType, null);
@@ -383,19 +396,22 @@ public class FPanelCreateField extends JPanel implements IWindow {
 
 	public void setCurrentFieldNames(String[] fieldNames) {
 		currentFieldNames = fieldNames;
-		String newField = PluginServices.getText(this, "field").replaceAll(" +", "_");
-		int index=0;
+		String newField = PluginServices.getText(this, "field").replaceAll(
+				" +", "_");
+		int index = 0;
 		for (int i = 0; i < currentFieldNames.length; i++) {
 			if (currentFieldNames[i].startsWith(newField)) {
 				try {
-					index = Integer.parseInt(currentFieldNames[i].replaceAll(newField,""));
-				} catch (Exception e) { /* we don't care */}
+					index = Integer.parseInt(currentFieldNames[i].replaceAll(
+							newField, ""));
+				} catch (Exception e) { /* we don't care */
+				}
 			}
 		}
-		jTxtFieldName.setText(newField+(++index));
+		jTxtFieldName.setText(newField + (++index));
 	}
 
 	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
-}  //  @jve:decl-index=0:visual-constraint="9,10"
+} // @jve:decl-index=0:visual-constraint="9,10"

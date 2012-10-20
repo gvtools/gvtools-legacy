@@ -26,9 +26,10 @@ import org.gvsig.gui.beans.controls.combobutton.ComboButton;
 import org.gvsig.raster.gui.IGenericToolBarMenuItem;
 
 import com.iver.cit.gvsig.fmap.layers.FLayer;
+
 /**
  * Clase para gestionar y ordenar los items de un ComboButton
- *  
+ * 
  * @version 13/02/2008
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
@@ -42,9 +43,10 @@ public class ButtonItems {
 		this.comboButton = comboButton;
 		this.layers = layers;
 	}
-	
+
 	/**
 	 * Añade un item al ComboButton
+	 * 
 	 * @param menuItem
 	 * @param key
 	 */
@@ -53,7 +55,8 @@ public class ButtonItems {
 		boolean find = false;
 		for (int i = 0; i < arrayList.size(); i++) {
 			pos = i;
-			IGenericToolBarMenuItem aux = (IGenericToolBarMenuItem) arrayList.get(i);
+			IGenericToolBarMenuItem aux = (IGenericToolBarMenuItem) arrayList
+					.get(i);
 			if (aux.getGroupOrder() > menuItem.getGroupOrder()) {
 				find = true;
 				break;
@@ -70,7 +73,7 @@ public class ButtonItems {
 		arrayList.add(pos, menuItem);
 		arrayKeys.add(pos, key);
 	}
-	
+
 	/**
 	 * Refresca los items del ComboButton
 	 */
@@ -79,7 +82,8 @@ public class ButtonItems {
 		comboButton.clearButtons();
 		int group = -1;
 		for (int i = 0; i < arrayList.size(); i++) {
-			IGenericToolBarMenuItem aux = (IGenericToolBarMenuItem) arrayList.get(i);
+			IGenericToolBarMenuItem aux = (IGenericToolBarMenuItem) arrayList
+					.get(i);
 
 			if ((group != -1) && (group != aux.getGroupOrder()))
 				comboButton.addSeparator();
@@ -91,7 +95,7 @@ public class ButtonItems {
 
 			if (!aux.isEnabled(null, layers))
 				button2.setEnabled(false);
-			
+
 			button2.setActionCommand((String) arrayKeys.get(i));
 			comboButton.addButton(button2);
 			group = aux.getGroupOrder();

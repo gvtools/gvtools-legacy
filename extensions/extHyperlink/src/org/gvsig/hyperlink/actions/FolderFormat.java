@@ -11,25 +11,24 @@ import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 import org.gvsig.hyperlink.AbstractActionManager;
 import org.gvsig.hyperlink.AbstractHyperLinkPanel;
-import org.gvsig.hyperlink.LinkControls;
 
 import com.iver.andami.PluginServices;
 
 /**
- * This class manages the opening of the system file explorer pointing to the path
- * in the hyperlink field. 
+ * This class manages the opening of the system file explorer pointing to the
+ * path in the hyperlink field.
  * 
  * @author Pablo Sanxiao <psanxiao@icarto.es>
  */
 
-public class FolderFormat extends AbstractActionManager implements Serializable{
+public class FolderFormat extends AbstractActionManager implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	public static final String actionCode = "Folder_format";
-	private static Logger logger = Logger.getLogger(FolderFormat.class.getName());
-
+	private static Logger logger = Logger.getLogger(FolderFormat.class
+			.getName());
 
 	public String getActionCode() {
 		return actionCode;
@@ -46,12 +45,18 @@ public class FolderFormat extends AbstractActionManager implements Serializable{
 			try {
 				desktop.open(folder);
 			} catch (IOException e1) {
-				logger.error(PluginServices.getText(this, "Cant_open_folder"), e1);
-				JOptionPane.showMessageDialog(null, PluginServices.getText(this, "Cant_open_folder") + " : " + folder.getAbsolutePath());
+				logger.error(PluginServices.getText(this, "Cant_open_folder"),
+						e1);
+				JOptionPane.showMessageDialog(null,
+						PluginServices.getText(this, "Cant_open_folder")
+								+ " : " + folder.getAbsolutePath());
 			}
 
-		}else {
-			JOptionPane.showMessageDialog(null, PluginServices.getText(this, "Bad_path") + " : " + folder.getAbsolutePath());
+		} else {
+			JOptionPane.showMessageDialog(
+					null,
+					PluginServices.getText(this, "Bad_path") + " : "
+							+ folder.getAbsolutePath());
 		}
 	}
 
@@ -69,4 +74,3 @@ public class FolderFormat extends AbstractActionManager implements Serializable{
 	}
 
 }
-

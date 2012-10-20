@@ -42,23 +42,23 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: LineCleanGeoprocessPlugin.java 21235 2008-06-05 14:08:38Z azabala $
-* $Log$
-* Revision 1.1  2006-12-21 17:23:27  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/12/04 19:42:23  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/10/17 18:25:53  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/10/10 18:50:17  azabala
-* First version in CVS
-*
-*
-*/
+ *
+ * $Id: LineCleanGeoprocessPlugin.java 21235 2008-06-05 14:08:38Z azabala $
+ * $Log$
+ * Revision 1.1  2006-12-21 17:23:27  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/12/04 19:42:23  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/10/17 18:25:53  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/10/10 18:50:17  azabala
+ * First version in CVS
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.topology.lineclean;
 
 import java.net.URL;
@@ -72,27 +72,20 @@ import com.iver.cit.gvsig.geoprocess.core.gui.IGeoprocessUserEntries;
 import com.iver.cit.gvsig.geoprocess.impl.topology.lineclean.gui.LineCleanGeoprocessPanel;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
-public class LineCleanGeoprocessPlugin extends GeoprocessPluginAbstract implements IGeoprocessPlugin {
+public class LineCleanGeoprocessPlugin extends GeoprocessPluginAbstract
+		implements IGeoprocessPlugin {
 
 	private static String dataConvertPkg;
 	private static String geoprocessName;
 
-	static{
-		dataConvertPkg =
-			PluginServices.getText(null, "Conversion_de_datos");
-		geoprocessName =
-			PluginServices.getText(null, "LineClean");
+	static {
+		dataConvertPkg = PluginServices.getText(null, "Conversion_de_datos");
+		geoprocessName = PluginServices.getText(null, "LineClean");
 	}
 
-
-
 	public IGeoprocessUserEntries getGeoprocessPanel() {
-		View vista = (View)PluginServices.
-		getMDIManager().
-		getActiveWindow();
-		FLayers layers = vista.getModel().
-			getMapContext().
-			getLayers();
+		View vista = (View) PluginServices.getMDIManager().getActiveWindow();
+		FLayers layers = vista.getModel().getMapContext().getLayers();
 
 		return new LineCleanGeoprocessPanel(layers);
 	}
@@ -110,9 +103,8 @@ public class LineCleanGeoprocessPlugin extends GeoprocessPluginAbstract implemen
 		return dataConvertPkg + "/" + geoprocessName;
 	}
 
-	public String toString(){
+	public String toString() {
 		return geoprocessName;
 	}
 
 }
-

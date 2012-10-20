@@ -40,115 +40,118 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.GTLayerFactory;
 import com.iver.cit.gvsig.fmap.rendering.IVectorLegend;
 import com.iver.utiles.XMLEntity;
+
 /**
  * Clase que indicará que ficheros puede tratar al panel de apertura de ficheros
- *
+ * 
  * @version 04/09/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
-public class VectorialFileOpen extends AbstractFileOpen{
+public class VectorialFileOpen extends AbstractFileOpen {
 
 	/**
 	 * Constructor de FileOpenRaster
 	 */
 	public VectorialFileOpen() {
-//		TreeSet filters = new TreeSet(new Comparator() {
-//			public int compare(Object o1, Object o2) {
-//				VectorialFileFilter dff1 = (VectorialFileFilter) o1;
-//				VectorialFileFilter dff2 = (VectorialFileFilter) o2;
-//
-//				return dff1.driver.getName().compareTo(dff2.driver.getName());
-//			}
-//		});
-//
-//		Class[] driverClasses = new Class[] { VectorialFileDriver.class };
-//		String[] driverNames = LayerFactory.getDM().getDriverNames();
-//		VectorialFileFilter auxF;
-//		try {
-//			for (int i = 0; i < driverNames.length; i++) {
-//				System.err.println("DRIVER " + i + " : " + driverNames[i]);
-//				boolean is = false;
-//				for (int j = 0; j < driverClasses.length; j++) {
-//					if (i == 0)
-//						System.err.println("DRIVER CLASS " + j + " : " + driverClasses[j].toString());
-//					if (LayerFactory.getDM().isA(driverNames[i], driverClasses[j]))
-//						is = true;
-//				}
-//				if (is) {
-//					auxF = new VectorialFileFilter(driverNames[i]);
-//					filters.add(auxF);
-//				}
-//			}
-//			Iterator i = filters.iterator();
-//			while (i.hasNext()) {
-//				VectorialFileFilter element = (VectorialFileFilter) i.next();
-//				getFileFilter().add(element);
-//			}
-//		} catch (DriverLoadException e1) {
-//			NotificationManager.addError("No se pudo acceder a los drivers", e1);
-//		}
+		// TreeSet filters = new TreeSet(new Comparator() {
+		// public int compare(Object o1, Object o2) {
+		// VectorialFileFilter dff1 = (VectorialFileFilter) o1;
+		// VectorialFileFilter dff2 = (VectorialFileFilter) o2;
+		//
+		// return dff1.driver.getName().compareTo(dff2.driver.getName());
+		// }
+		// });
+		//
+		// Class[] driverClasses = new Class[] { VectorialFileDriver.class };
+		// String[] driverNames = LayerFactory.getDM().getDriverNames();
+		// VectorialFileFilter auxF;
+		// try {
+		// for (int i = 0; i < driverNames.length; i++) {
+		// System.err.println("DRIVER " + i + " : " + driverNames[i]);
+		// boolean is = false;
+		// for (int j = 0; j < driverClasses.length; j++) {
+		// if (i == 0)
+		// System.err.println("DRIVER CLASS " + j + " : " +
+		// driverClasses[j].toString());
+		// if (LayerFactory.getDM().isA(driverNames[i], driverClasses[j]))
+		// is = true;
+		// }
+		// if (is) {
+		// auxF = new VectorialFileFilter(driverNames[i]);
+		// filters.add(auxF);
+		// }
+		// }
+		// Iterator i = filters.iterator();
+		// while (i.hasNext()) {
+		// VectorialFileFilter element = (VectorialFileFilter) i.next();
+		// getFileFilter().add(element);
+		// }
+		// } catch (DriverLoadException e1) {
+		// NotificationManager.addError("No se pudo acceder a los drivers", e1);
+		// }
 
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.wizards.IFileOpen#execute(java.io.File[])
 	 */
 	public Rectangle2D createLayer(File file, MapControl mapControl,
 			CoordinateReferenceSystem crs) {
 		FLayer lyr = null;
 
-		// all catched errors will be saved here, to show user at the end of the method
+		// all catched errors will be saved here, to show user at the end of the
+		// method
 		List<Exception> errors = new ArrayList<Exception>();
 
 		// Envelope de cada fichero seleccionado por el usuario
 		String layerName = file.getName();
 
 		// Show file extension when adding layers on ToC
-		XMLEntity xml = PluginServices.getPluginServices("com.iver.cit.gvsig").getPersistentXML();
-		
+		XMLEntity xml = PluginServices.getPluginServices("com.iver.cit.gvsig")
+				.getPersistentXML();
+
 		boolean showFileExtension;
-		
+
 		if (!xml.contains("ShowFileExtensions")) {
-			//not show by def
+			// not show by def
 			showFileExtension = false;
 		} else {
 			showFileExtension = xml.getBooleanProperty("ShowFileExtensions");
 		}
-		
+
 		int dot_index = layerName.lastIndexOf(".");
 		if (!showFileExtension && dot_index > 0) {
 			layerName = layerName.substring(0, dot_index);
 		}
 
-		
 		try {
 
-				lyr = GTLayerFactory.createVectorLayer(layerName,
-						 file, crs, mapControl
-								.getViewPort().getBackColor());
+			lyr = GTLayerFactory.createVectorLayer(layerName, file, crs,
+					mapControl.getViewPort().getBackColor());
 
-				AddLayer.checkProjection(lyr, mapControl.getViewPort());
-				mapControl.getMapContext().getLayers().addLayer(lyr);
+			AddLayer.checkProjection(lyr, mapControl.getViewPort());
+			mapControl.getMapContext().getLayers().addLayer(lyr);
 
-				String path = file.getAbsolutePath();
-				// last index + 1 because FmapGVLDriver.FILE_EXTENSION
-				// does not contain the dot
-				FMapGVLDriver legendDriver = new FMapGVLDriver();
-				File legendFile = new File(path.substring(0,
-						path.lastIndexOf('.') + 1)
-						+ legendDriver.getFileExtension());
+			String path = file.getAbsolutePath();
+			// last index + 1 because FmapGVLDriver.FILE_EXTENSION
+			// does not contain the dot
+			FMapGVLDriver legendDriver = new FMapGVLDriver();
+			File legendFile = new File(path.substring(0,
+					path.lastIndexOf('.') + 1)
+					+ legendDriver.getFileExtension());
 
-				if (legendFile.exists() && lyr instanceof FLyrVect) {
-					FLyrVect lyrVect = (FLyrVect) lyr;
-					Hashtable<FLayer, IVectorLegend> map = legendDriver.read(
-							mapControl
-							.getMapContext().getLayers(), lyr, legendFile);
-					if (map.containsKey(lyr)) {
-						lyrVect.setLegend(map.get(lyr));
-					}
+			if (legendFile.exists() && lyr instanceof FLyrVect) {
+				FLyrVect lyrVect = (FLyrVect) lyr;
+				Hashtable<FLayer, IVectorLegend> map = legendDriver
+						.read(mapControl.getMapContext().getLayers(), lyr,
+								legendFile);
+				if (map.containsKey(lyr)) {
+					lyrVect.setLegend(map.get(lyr));
 				}
-				return lyr.getFullExtent();
+			}
+			return lyr.getFullExtent();
 		} catch (ReadDriverException e) {
 			errors.add(e);
 		} catch (LegendDriverException e) {
@@ -160,7 +163,7 @@ public class VectorialFileOpen extends AbstractFileOpen{
 		}
 		return null;
 	}
-	
+
 	@Override
 	public boolean accepts(File file) {
 		return true;

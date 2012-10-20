@@ -48,42 +48,43 @@ package org.gvsig.remoteClient.arcims.styling.renderers;
 
 import org.gvsig.remoteClient.arcims.styling.symbols.IArcIMSSymbol;
 
-
 /**
  * Simple Renderer for unique symbols
+ * 
  * @author jsanz
- *
+ * 
  */
 public class SimpleRenderer extends BasicRenderer {
-    public static final String TAG = "SIMPLERENDER";
-    protected IArcIMSSymbol symbol;
+	public static final String TAG = "SIMPLERENDER";
+	protected IArcIMSSymbol symbol;
 
-    /**
-     * @param symbol
-     */
-    public SimpleRenderer(IArcIMSSymbol symbol) {
-        this.symbol = symbol;
-    }
+	/**
+	 * @param symbol
+	 */
+	public SimpleRenderer(IArcIMSSymbol symbol) {
+		this.symbol = symbol;
+	}
 
-    /**
-     * @return Returns the symbol.
-     */
-    public IArcIMSSymbol getSymbol() {
-        return symbol;
-    }
+	/**
+	 * @return Returns the symbol.
+	 */
+	public IArcIMSSymbol getSymbol() {
+		return symbol;
+	}
 
-    /**
-     * @param symbol The symbol to set.
-     */
-    public void setSymbol(IArcIMSSymbol symbol) {
-        this.symbol = symbol;
-    }
+	/**
+	 * @param symbol
+	 *            The symbol to set.
+	 */
+	public void setSymbol(IArcIMSSymbol symbol) {
+		this.symbol = symbol;
+	}
 
-    /**
-     * Generates an XML representation of the Renderer
-     */
-    public String toString() {
-        return "<" + SimpleRenderer.TAG + ">\r\n" + symbol.toString() + "</" +
-        SimpleRenderer.TAG + ">\r\n";
-    }
+	/**
+	 * Generates an XML representation of the Renderer
+	 */
+	public String toString() {
+		return "<" + SimpleRenderer.TAG + ">\r\n" + symbol.toString() + "</"
+				+ SimpleRenderer.TAG + ">\r\n";
+	}
 }

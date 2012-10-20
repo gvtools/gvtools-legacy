@@ -42,29 +42,28 @@ package com.iver.andami.messages;
 
 import java.util.EventListener;
 
-
 /**
  * Interfaz implementada por las extensiones que quieran informar del estado de
  * su ejecución. Por ejemplo un extension que tarda mucho en ejecutarse puede
- * implementar esta interfaz y añadirse como ProgressListener de la
- * aplicacion. De esta manera la aplicación le pedirá su estado a intervalos
- * regulares de tiempo y mostrará esta información en la barra de estado
- *
+ * implementar esta interfaz y añadirse como ProgressListener de la aplicacion.
+ * De esta manera la aplicación le pedirá su estado a intervalos regulares de
+ * tiempo y mostrará esta información en la barra de estado
+ * 
  * @author Fernando González Cortés
  */
 public interface ProgressListener extends EventListener {
-    /**
-     * Método invocado a intervalos regulares por la aplicación y en el que se
-     * debe devolver el estado de una supuesta ejecución
-     *
-     * @return Cadena que se envía a la aplicación
-     */
-    public String getProgress();
+	/**
+	 * Método invocado a intervalos regulares por la aplicación y en el que se
+	 * debe devolver el estado de una supuesta ejecución
+	 * 
+	 * @return Cadena que se envía a la aplicación
+	 */
+	public String getProgress();
 
-    /**
-     * Devuelve un porcentaje que indica el progreso de la tarea
-     *
-     * @return número del 0 al 100
-     */
-    public int getProgressValue();
+	/**
+	 * Devuelve un porcentaje que indica el progreso de la tarea
+	 * 
+	 * @return número del 0 al 100
+	 */
+	public int getProgressValue();
 }

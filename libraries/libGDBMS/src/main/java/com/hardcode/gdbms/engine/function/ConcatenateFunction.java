@@ -3,10 +3,9 @@ package com.hardcode.gdbms.engine.function;
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public class ConcatenateFunction implements Function {
@@ -30,17 +29,17 @@ public class ConcatenateFunction implements Function {
 		return "concatenate";
 	}
 
-    /**
-     * @see com.hardcode.gdbms.engine.function.Function#isAggregate()
-     */
-    public boolean isAggregate() {
-        return false;
-    }
+	/**
+	 * @see com.hardcode.gdbms.engine.function.Function#isAggregate()
+	 */
+	public boolean isAggregate() {
+		return false;
+	}
 
-    /**
-     * @see com.hardcode.gdbms.engine.function.Function#cloneFunction()
-     */
-    public Function cloneFunction() {
-        return new ConcatenateFunction();
-    }
+	/**
+	 * @see com.hardcode.gdbms.engine.function.Function#cloneFunction()
+	 */
+	public Function cloneFunction() {
+		return new ConcatenateFunction();
+	}
 }

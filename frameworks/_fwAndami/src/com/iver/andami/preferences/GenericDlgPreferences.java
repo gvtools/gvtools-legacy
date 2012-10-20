@@ -73,9 +73,10 @@ import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
 /**
  * @author fjp
- *
- * The reason behind this class is to have the opportunity of use a DlgPreferences
- * in a local way. Then, you don't need to be a SingletonView.
+ * 
+ *         The reason behind this class is to have the opportunity of use a
+ *         DlgPreferences in a local way. Then, you don't need to be a
+ *         SingletonView.
  */
 public class GenericDlgPreferences extends JPanel implements IWindow {
 	private WindowInfo viewInfo = null;
@@ -106,38 +107,27 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 	private ActionListener action;
 	private boolean dirtyTree = false;
 
-	private class MyTreeCellRenderer extends DefaultTreeCellRenderer
-	{
-			public MyTreeCellRenderer() {
-			}
+	private class MyTreeCellRenderer extends DefaultTreeCellRenderer {
+		public MyTreeCellRenderer() {
+		}
 
-			public Component getTreeCellRendererComponent(
-													JTree tree,
-													Object value,
-													boolean sel,
-													boolean expanded,
-													boolean leaf,
-													int row,
-													boolean hasFocus) {
+		public Component getTreeCellRendererComponent(JTree tree, Object value,
+				boolean sel, boolean expanded, boolean leaf, int row,
+				boolean hasFocus) {
 
-					super.getTreeCellRendererComponent(
-													tree, value, sel,
-													expanded, leaf, row,
-													hasFocus);
-					if (value instanceof DefaultMutableTreeNode)
-					{
-						DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
-						if (node.getUserObject() instanceof IPreference)
-						{
-							IPreference pref = (IPreference) node.getUserObject();
-							this.setText(pref.getTitle());
-						}
-					}
-					return this;
+			super.getTreeCellRendererComponent(tree, value, sel, expanded,
+					leaf, row, hasFocus);
+			if (value instanceof DefaultMutableTreeNode) {
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+				if (node.getUserObject() instanceof IPreference) {
+					IPreference pref = (IPreference) node.getUserObject();
+					this.setText(pref.getTitle());
+				}
 			}
+			return this;
+		}
 
 	}
-
 
 	public GenericDlgPreferences() {
 		super();
@@ -147,24 +137,25 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 				String actionCommand = e.getActionCommand();
 				if ("RESTORE".equals(actionCommand)) {
 					// Restore default values in current page
-					if (activePreference!=null) {
+					if (activePreference != null) {
 						activePreference.initializeDefaults();
-//	bug 240
-//						try {
-//							activePreference.saveValues();
-//						} catch (StoreException sEx) {
-//							/*
-//							 * If you reach this code you coded your page
-//							 * with wrong factory default values.
-//							 * Check them out.
-//							 */
-//							PluginServices.getMDIManager().restoreCursor();
-//
-//							// Show error message
-//							JOptionPane.showMessageDialog((Component) PluginServices.
-//									getMainFrame(),sEx.getMessage());
-//
-//						}
+						// bug 240
+						// try {
+						// activePreference.saveValues();
+						// } catch (StoreException sEx) {
+						// /*
+						// * If you reach this code you coded your page
+						// * with wrong factory default values.
+						// * Check them out.
+						// */
+						// PluginServices.getMDIManager().restoreCursor();
+						//
+						// // Show error message
+						// JOptionPane.showMessageDialog((Component)
+						// PluginServices.
+						// getMainFrame(),sEx.getMessage());
+						//
+						// }
 					}
 				} else {
 					Iterator it = preferences.keySet().iterator();
@@ -172,7 +163,8 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 					if ("CANCEL".equals(actionCommand)) {
 						// Restore previous values in all pages
 						while (it.hasNext()) {
-							IPreference pref = (IPreference) preferences.get(it.next());
+							IPreference pref = (IPreference) preferences.get(it
+									.next());
 							if (pref.isValueChanged())
 								pref.initializeValues(); //
 						}
@@ -181,19 +173,24 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 						// Apply values in all pages
 						boolean shouldClose = true;
 						while (it.hasNext()) {
-							IPreference preference = (IPreference) preferences.get(it.next());
-							try{
+							IPreference preference = (IPreference) preferences
+									.get(it.next());
+							try {
 								if (preference.isValueChanged()) {
 									preference.saveValues();
 									preference.initializeValues();
 								}
-							}catch (StoreException ex) {
-								// Reach this code should mean that the page has wrong values
+							} catch (StoreException ex) {
+								// Reach this code should mean that the page has
+								// wrong values
 								shouldClose = false;
 								PluginServices.getMDIManager().restoreCursor();
 
 								// Show error message
-								JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),ex.getMessage());
+								JOptionPane.showMessageDialog(
+										(Component) PluginServices
+												.getMainFrame(), ex
+												.getMessage());
 
 								// Focus on error page
 								setActivePage(preference);
@@ -211,9 +208,9 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 
 	private void initialize() {
 		setLayout(new BorderLayout());
-		setSize(new java.awt.Dimension(750,479));
+		setSize(new java.awt.Dimension(750, 479));
 		super.add(getJPanelButtons(), BorderLayout.SOUTH);
-		setPreferredSize(new java.awt.Dimension(390,369));
+		setPreferredSize(new java.awt.Dimension(390, 369));
 		super.add(getJSplitPaneCenter(), java.awt.BorderLayout.CENTER);
 		getJSplitPaneCenter().setLeftComponent(getJScrollPane());
 		getJSplitPaneCenter().setRightComponent(getJPanelNorth());
@@ -221,15 +218,17 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 	}
 
 	public void refreshExtensionPoints() {
-		ExtensionPoints extensionPoints =
-			ExtensionPointsSingleton.getInstance();
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
 
-		ExtensionPoint extensionPoint =(ExtensionPoint)extensionPoints.get("AplicationPreferences");
+		ExtensionPoint extensionPoint = (ExtensionPoint) extensionPoints
+				.get("AplicationPreferences");
 
 		Iterator iterator = extensionPoint.keySet().iterator();
 		while (iterator.hasNext()) {
 			try {
-				IPreference obj = (IPreference)extensionPoint.create((String)iterator.next());
+				IPreference obj = (IPreference) extensionPoint
+						.create((String) iterator.next());
 				this.addPreferencePage(obj);
 			} catch (InstantiationException e) {
 				e.printStackTrace();
@@ -239,22 +238,28 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 				e.printStackTrace();
 			}
 		}
-		ArrayList<IPreference> prefList = new ArrayList<IPreference>(preferences.values());
+		ArrayList<IPreference> prefList = new ArrayList<IPreference>(
+				preferences.values());
 		addPreferencePages(prefList);
 	}
-	//	TODO este método es un parche provisional mientras se hace un refactoring de
-	//las PreferencePages para disponer de un método que inicialize las variables
-	//a partir de las preferencias.
-	public void storeValues() {
-		ExtensionPoints extensionPoints =
-			ExtensionPointsSingleton.getInstance();
 
-		ExtensionPoint extensionPoint =(ExtensionPoint)extensionPoints.get("AplicationPreferences");
+	// TODO este método es un parche provisional mientras se hace un refactoring
+	// de
+	// las PreferencePages para disponer de un método que inicialize las
+	// variables
+	// a partir de las preferencias.
+	public void storeValues() {
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+
+		ExtensionPoint extensionPoint = (ExtensionPoint) extensionPoints
+				.get("AplicationPreferences");
 
 		Iterator iterator = extensionPoint.keySet().iterator();
 		while (iterator.hasNext()) {
 			try {
-				IPreference obj = (IPreference)extensionPoint.create((String)iterator.next());
+				IPreference obj = (IPreference) extensionPoint
+						.create((String) iterator.next());
 				this.addPreferencePage(obj);
 
 				{
@@ -262,14 +267,14 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 						obj.saveValues();
 					} catch (StoreException e) {
 						/*
-						 * If you reach this code you coded your page
-						 * with wrong factory default values.
-						 * Check them out.
+						 * If you reach this code you coded your page with wrong
+						 * factory default values. Check them out.
 						 */
 						PluginServices.getMDIManager().restoreCursor();
-//						 Show error message
-						JOptionPane.showMessageDialog((Component) PluginServices.
-								getMainFrame(),e.getMessage());
+						// Show error message
+						JOptionPane.showMessageDialog(
+								(Component) PluginServices.getMainFrame(),
+								e.getMessage());
 					}
 				}
 			} catch (InstantiationException e) {
@@ -284,12 +289,14 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 	}
 
 	/**
-	 * It is very common to be confused with this method. But
-	 * the one you are looking for is addPreferencePage(IPreference)
+	 * It is very common to be confused with this method. But the one you are
+	 * looking for is addPreferencePage(IPreference)
 	 */
 	public Component add(Component c) {
-		//throw new Error("Do not use com.iver.cit.gvsig.gui.preferences.DlgPreferences.add(Component) use com.iver.cit.gvsig.gui.preferences.DlgPreferences.addPreferencePage(IPreference) instead");
-		throw new Error("Do not use com.iver.cit.gvsig.gui.preferences.DlgPreferences.add(Component) register an extension point instead");
+		// throw new
+		// Error("Do not use com.iver.cit.gvsig.gui.preferences.DlgPreferences.add(Component) use com.iver.cit.gvsig.gui.preferences.DlgPreferences.addPreferencePage(IPreference) instead");
+		throw new Error(
+				"Do not use com.iver.cit.gvsig.gui.preferences.DlgPreferences.add(Component) register an extension point instead");
 	}
 
 	public Component add(Component c, int i) {
@@ -306,10 +313,10 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 
 	public WindowInfo getWindowInfo() {
 		if (viewInfo == null) {
-			viewInfo = new WindowInfo(WindowInfo.MODALDIALOG | WindowInfo.RESIZABLE | WindowInfo.PALETTE);
-			viewInfo.setTitle(PluginServices.getText(this,
-					"Preferences"));
-			viewInfo.setWidth(this.getWidth()+8);
+			viewInfo = new WindowInfo(WindowInfo.MODALDIALOG
+					| WindowInfo.RESIZABLE | WindowInfo.PALETTE);
+			viewInfo.setTitle(PluginServices.getText(this, "Preferences"));
+			viewInfo.setWidth(this.getWidth() + 8);
 			viewInfo.setHeight(this.getHeight());
 		}
 		return viewInfo;
@@ -317,7 +324,7 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jTreePlugins
-	 *
+	 * 
 	 * @return javax.swing.JTree
 	 */
 	private JTree getJTreePlugins() {
@@ -333,17 +340,19 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 			jTreePlugins.setShowsRootHandles(true);
 			jTreePlugins
 					.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
-						public void valueChanged(javax.swing.event.TreeSelectionEvent e) {
-							 DefaultMutableTreeNode node = (DefaultMutableTreeNode)
-													 jTreePlugins.getLastSelectedPathComponent();
+						public void valueChanged(
+								javax.swing.event.TreeSelectionEvent e) {
+							DefaultMutableTreeNode node = (DefaultMutableTreeNode) jTreePlugins
+									.getLastSelectedPathComponent();
 
-							 	if (node == null) return;
-							 	setActivePage((IPreference) node.getUserObject());
+							if (node == null)
+								return;
+							setActivePage((IPreference) node.getUserObject());
 						}
 					});
 			jTreePlugins.putClientProperty("JTree.linestyle", "Angled");
-			jTreePlugins.getSelectionModel().
-				setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+			jTreePlugins.getSelectionModel().setSelectionMode(
+					TreeSelectionModel.SINGLE_TREE_SELECTION);
 		}
 
 		return jTreePlugins;
@@ -353,10 +362,10 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 	 * It takes an IPreference page and adds it to the application's preferences
 	 * dialog. The preference page is added in alphabetical order within the
 	 * branch where the page is hanging on, and defined by its title.
+	 * 
 	 * @param page
 	 */
-	public void addPreferencePage(IPreference page)
-	{
+	public void addPreferencePage(IPreference page) {
 		if (preferences.containsKey(page.getID()))
 			return;
 		preferences.put(page.getID(), page);
@@ -374,39 +383,40 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 		getJTreePlugins().setModel(treeModel);
 		getJTreePlugins().repaint();
 	}
-	private void addPreferencePages(ArrayList<IPreference> prefs){
-		while (prefs.size()>0){
-			IPreference pref=prefs.get(0);
-//				System.err.println("IPreference a persistir=  "+pref.getID());
-			if (pref.getParentID()!=null && preferences.get(pref.getParentID())==null){
+
+	private void addPreferencePages(ArrayList<IPreference> prefs) {
+		while (prefs.size() > 0) {
+			IPreference pref = prefs.get(0);
+			// System.err.println("IPreference a persistir=  "+pref.getID());
+			if (pref.getParentID() != null
+					&& preferences.get(pref.getParentID()) == null) {
 				prefs.remove(pref);
 				addPreferencePages(prefs);
-//				System.err.println("IPreference =  "+pref.getID());
+				// System.err.println("IPreference =  "+pref.getID());
 				addPreference(pref);
-			}else{
-//				System.err.println("IPreference =  "+pref.getID());
+			} else {
+				// System.err.println("IPreference =  "+pref.getID());
 				addPreference(pref);
 				prefs.remove(pref);
 			}
 		}
 	}
+
 	private void addPreference(IPreference pref) {
 		DefaultTreeModel model = new DefaultTreeModel(root);
 		doInsertNode(model, pref);
 	}
 
-	private DefaultMutableTreeNode findNode(String searchID)
-	{
+	private DefaultMutableTreeNode findNode(String searchID) {
 		Enumeration e = root.breadthFirstEnumeration();
-		while (e.hasMoreElements())
-		{
-			DefaultMutableTreeNode nodeAux = (DefaultMutableTreeNode) e.nextElement();
-			if (nodeAux != null)
-			{
+		while (e.hasMoreElements()) {
+			DefaultMutableTreeNode nodeAux = (DefaultMutableTreeNode) e
+					.nextElement();
+			if (nodeAux != null) {
 				IPreference pref = (IPreference) nodeAux.getUserObject();
-				if (pref == null) continue; // Root node
-				if (pref.getID().equals(searchID))
-				{
+				if (pref == null)
+					continue; // Root node
+				if (pref.getID().equals(searchID)) {
 					return nodeAux;
 				}
 			}
@@ -415,49 +425,52 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 
 	}
 
-	private void doInsertNode(DefaultTreeModel treeModel, IPreference page)
-	{
+	private void doInsertNode(DefaultTreeModel treeModel, IPreference page) {
 
-		dirtyTree = ((page.getParentID() != null) && (findNode(page.getParentID())==null));
+		dirtyTree = ((page.getParentID() != null) && (findNode(page
+				.getParentID()) == null));
 		if (findNode(page.getID()) != null) // It is already added
 			return;
-		if (page.getParentID() != null)
-		{
-			if (preferences.containsKey(page.getParentID()))
-			{
-				IPreference parent = (IPreference) preferences.get(page.getParentID());
+		if (page.getParentID() != null) {
+			if (preferences.containsKey(page.getParentID())) {
+				IPreference parent = (IPreference) preferences.get(page
+						.getParentID());
 				DefaultMutableTreeNode nodeParent = findNode(parent.getID());
 				if (nodeParent == null) // the parent is empty
 				{
 					// Recursively add it
 					doInsertNode(treeModel, parent);
-				}
-				else
-				{
-					DefaultMutableTreeNode nodeValue = new DefaultMutableTreeNode(page);
+				} else {
+					DefaultMutableTreeNode nodeValue = new DefaultMutableTreeNode(
+							page);
 					int children = nodeParent.getChildCount();
-					int pos=0;
+					int pos = 0;
 					for (int i = 0; i < children; i++) {
-						DefaultMutableTreeNode node = (DefaultMutableTreeNode) treeModel.getChild(nodeParent, i);
+						DefaultMutableTreeNode node = (DefaultMutableTreeNode) treeModel
+								.getChild(nodeParent, i);
 						if (node.getUserObject() instanceof IPreference) {
-							String pageTitle = ((IPreference) node.getUserObject()).getTitle();
-							if (pageTitle.compareTo(page.getTitle()) < 0) ++pos;
+							String pageTitle = ((IPreference) node
+									.getUserObject()).getTitle();
+							if (pageTitle.compareTo(page.getTitle()) < 0)
+								++pos;
 						}
 					}
 					treeModel.insertNodeInto(nodeValue, nodeParent, pos);
 				}
 			}
-		}
-		else // First level node ("General", "Edition")
+		} else // First level node ("General", "Edition")
 		{
 			DefaultMutableTreeNode nodeValue = new DefaultMutableTreeNode(page);
 			int children = root.getChildCount();
-			int pos=0;
+			int pos = 0;
 			for (int i = 0; i < children; i++) {
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) treeModel.getChild(root, i);
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) treeModel
+						.getChild(root, i);
 				if (node.getUserObject() instanceof IPreference) {
-					String pageTitle = ((IPreference) node.getUserObject()).getTitle();
-					if (pageTitle.compareTo(page.getTitle()) < 0) ++pos;
+					String pageTitle = ((IPreference) node.getUserObject())
+							.getTitle();
+					if (pageTitle.compareTo(page.getTitle()) < 0)
+						++pos;
 				}
 			}
 			treeModel.insertNodeInto(nodeValue, root, pos);
@@ -466,7 +479,7 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jPanelButtons
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanelButtons() {
@@ -475,7 +488,8 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 			JPanel jPanelAux = new JPanel();
 			JLabel l = new JLabel();
 			l.setPreferredSize(new Dimension(40, 20));
-			jPanelButtons.add(new JSeparator(JSeparator.HORIZONTAL), BorderLayout.NORTH);
+			jPanelButtons.add(new JSeparator(JSeparator.HORIZONTAL),
+					BorderLayout.NORTH);
 			jPanelAux.add(getJButtonRestore(), BorderLayout.WEST);
 			jPanelAux.add(l, BorderLayout.CENTER);
 			jPanelAux.add(getJButtonOK(), BorderLayout.EAST);
@@ -488,14 +502,13 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jPanelButtons
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 
-
 	/**
 	 * This method initializes jButtonOK
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getJButtonOK() {
@@ -510,13 +523,14 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jButtonOK
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getJButtonRestore() {
 		if (jButtonRestore == null) {
 			jButtonRestore = new JButton();
-			jButtonRestore.setText(PluginServices.getText(this, "restore_defaults"));
+			jButtonRestore.setText(PluginServices.getText(this,
+					"restore_defaults"));
 			jButtonRestore.setActionCommand("RESTORE");
 			jButtonRestore.addActionListener(action);
 		}
@@ -529,7 +543,7 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jButtonCancel
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getJButtonCancel() {
@@ -544,25 +558,30 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jPanelNorth
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanelNorth() {
 		if (jPanelCenter == null) {
 			jLabelBigTitle = new JLabel();
 			jLabelBigTitle.setText("General");
-			jLabelBigTitle.setFont(new java.awt.Font("MS Sans Serif", java.awt.Font.BOLD, 14));
-			jLabelBigTitle.setHorizontalTextPosition(javax.swing.SwingConstants.TRAILING);
-			jLabelBigTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+			jLabelBigTitle.setFont(new java.awt.Font("MS Sans Serif",
+					java.awt.Font.BOLD, 14));
+			jLabelBigTitle
+					.setHorizontalTextPosition(javax.swing.SwingConstants.TRAILING);
+			jLabelBigTitle
+					.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 			jPanelCenter = new JPanel();
 			JPanel jPanelPageTitle = new JPanel(new BorderLayout());
 			JPanel jPanelAux = new JPanel(new BorderLayout());
 			jPanelAux.add(jLabelBigTitle, java.awt.BorderLayout.NORTH);
 			jPanelPageTitle.add(jPanelAux, java.awt.BorderLayout.WEST);
-			jPanelPageTitle.add(new JSeparator(JSeparator.HORIZONTAL), BorderLayout.SOUTH);
+			jPanelPageTitle.add(new JSeparator(JSeparator.HORIZONTAL),
+					BorderLayout.SOUTH);
 			jPanelCenter.setLayout(new BorderLayout());
 			jPanelCenter.add(jPanelPageTitle, BorderLayout.NORTH);
-			jPanelCenter.add(getJPanelContainer(), java.awt.BorderLayout.CENTER);
+			jPanelCenter
+					.add(getJPanelContainer(), java.awt.BorderLayout.CENTER);
 
 		}
 		return jPanelCenter;
@@ -570,13 +589,13 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
-			jScrollPane.setPreferredSize(new java.awt.Dimension(140,322));
+			jScrollPane.setPreferredSize(new java.awt.Dimension(140, 322));
 			jScrollPane.setViewportView(getJTreePlugins());
 		}
 		return jScrollPane;
@@ -584,7 +603,7 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jSplitPaneCenter
-	 *
+	 * 
 	 * @return javax.swing.JSplitPane
 	 */
 	private JSplitPane getJSplitPaneCenter() {
@@ -598,7 +617,7 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jPanelContainer
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanelContainer() {
@@ -617,8 +636,8 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 		JPanel prefPanel = activePreference.getPanel();
 		jLabelBigTitle.setIcon(activePreference.getIcon());
 		jPanelContainer.removeAll();
-		if ((prefPanel instanceof AbstractPreferencePage) &&
-				((AbstractPreferencePage) prefPanel).isResizeable()) {
+		if ((prefPanel instanceof AbstractPreferencePage)
+				&& ((AbstractPreferencePage) prefPanel).isResizeable()) {
 			jPanelContainer.setLayout(new BorderLayout());
 			jPanelContainer.add(prefPanel, BorderLayout.CENTER);
 		} else {

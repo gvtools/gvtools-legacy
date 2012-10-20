@@ -42,33 +42,35 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: INearestNeighbourFinder.java 12380 2007-06-27 20:17:30Z azabala $
-* $Log$
-* Revision 1.2  2007-06-27 20:17:30  azabala
-* new spatial index (rix)
-*
-* Revision 1.1  2006/05/02 18:21:17  azabala
-* refactorización del nombre para seguir estandares de interfaces
-*
-* Revision 1.1  2006/05/01 18:38:41  azabala
-* primera version en cvs del api de indices espaciales
-*
-*
-*/
+ *
+ * $Id: INearestNeighbourFinder.java 12380 2007-06-27 20:17:30Z azabala $
+ * $Log$
+ * Revision 1.2  2007-06-27 20:17:30  azabala
+ * new spatial index (rix)
+ *
+ * Revision 1.1  2006/05/02 18:21:17  azabala
+ * refactorización del nombre para seguir estandares de interfaces
+ *
+ * Revision 1.1  2006/05/01 18:38:41  azabala
+ * primera version en cvs del api de indices espaciales
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.spatialindex;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
+
 /**
- * Find an specified number of items nearest to a given
- * geometry (Point or Rectangle2D as usual)
+ * Find an specified number of items nearest to a given geometry (Point or
+ * Rectangle2D as usual)
+ * 
  * @author azabala
- *
+ * 
  */
 public interface INearestNeighbourFinder {
 	public List findNNearest(int numberOfNearest, Point2D point);
+
 	public List findNNearest(int numberOfNearest, Rectangle2D rect);
 }
-

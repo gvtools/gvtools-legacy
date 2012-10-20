@@ -21,14 +21,16 @@ package org.gvsig.raster.grid.filter;
 import java.util.EventListener;
 
 /**
- * Listener que una lista de filtros dispara cuando es cambiada. 
+ * Listener que una lista de filtros dispara cuando es cambiada.
  * 
  * 07/01/2008
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public interface FilterListChangeListener extends EventListener {
 	/**
 	 * Evento que se dispara cuando cambia la lista de filtros
+	 * 
 	 * @param e
 	 */
 	public void filterListChanged(FilterListChangeEvent e);

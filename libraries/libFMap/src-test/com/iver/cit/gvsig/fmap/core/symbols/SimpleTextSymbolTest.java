@@ -40,7 +40,7 @@
  */
 package com.iver.cit.gvsig.fmap.core.symbols;
 
-public class SimpleTextSymbolTest extends AbstractSymbolTestCase{
+public class SimpleTextSymbolTest extends AbstractSymbolTestCase {
 	public SimpleTextSymbolTest() {
 		super(SimpleTextSymbol.class);
 	}

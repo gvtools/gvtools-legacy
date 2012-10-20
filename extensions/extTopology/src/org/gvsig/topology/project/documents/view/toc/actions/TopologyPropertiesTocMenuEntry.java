@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.project.documents.view.toc.actions;
 
 import javax.swing.JDialog;
@@ -63,12 +63,11 @@ import com.iver.cit.gvsig.project.documents.view.toc.TocItemBranch;
  * TOC menu entry to show a panel with the properties of a Topology.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class TopologyPropertiesTocMenuEntry extends
 		AbstractTocContextMenuAction {
 
-	
 	public int getGroupOrder() {
 		return 30;
 	}
@@ -76,13 +75,13 @@ public class TopologyPropertiesTocMenuEntry extends
 	public int getOrder() {
 		return 0;
 	}
-	
-	
+
 	public void execute(ITocItem item, FLayer[] selectedItems) {
-	    FLayer selectedLyr =((TocItemBranch)item).getLayer();
-	    Topology topology = (Topology) selectedLyr;
-	    TopologyPropertiesPanel propsPanel = new TopologyPropertiesPanel(topology);
-	    if (PluginServices.getMainFrame() == null) {
+		FLayer selectedLyr = ((TocItemBranch) item).getLayer();
+		Topology topology = (Topology) selectedLyr;
+		TopologyPropertiesPanel propsPanel = new TopologyPropertiesPanel(
+				topology);
+		if (PluginServices.getMainFrame() == null) {
 			JDialog dlg = new JDialog();
 			dlg.getContentPane().add(propsPanel);
 			dlg.setModal(false);
@@ -97,16 +96,16 @@ public class TopologyPropertiesTocMenuEntry extends
 	public String getText() {
 		return PluginServices.getText(this, "Topology_properties_toc");
 	}
-	
+
 	/**
-	 * This entry only will be visible if one only topology is 
-	 * selected in the TOC.
+	 * This entry only will be visible if one only topology is selected in the
+	 * TOC.
 	 */
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
-		if (!isTocItemBranch(item)) 
+		if (!isTocItemBranch(item))
 			return false;
-		FLayer selectedLyr =((TocItemBranch)item).getLayer();
-		if(selectedLyr instanceof Topology)
+		FLayer selectedLyr = ((TocItemBranch) item).getLayer();
+		if (selectedLyr instanceof Topology)
 			return true;
 		else
 			return false;

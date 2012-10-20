@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import org.gvsig.fmap.drivers.gpe.utils.GMLUtils;
-import org.gvsig.fmap.drivers.gpe.writer.schema.GMLTypesConversor;
 import org.gvsig.remoteClient.gml.schemas.XMLElement;
 import org.gvsig.remoteClient.gml.types.IXMLType;
 import org.gvsig.remoteClient.wfs.WFSStatus;
@@ -98,85 +97,87 @@ import com.iver.cit.gvsig.fmap.layers.WFSLayerNode;
  */
 /**
  * This class implements some utils to manage GML
+ * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
 public class WFSUtils extends GMLUtils {
-	
-	
+
 	/**
 	 * Return the layer geometry
+	 * 
 	 * @param layer
-	 * Layer with a set of Fields
+	 *            Layer with a set of Fields
 	 * @return
 	 */
-	public static String getGeometry(WFSLayerNode layer){
-   		if (layer.getGeometry() != null){
-   			return layer.getGeometry().getName().split(":")[1];
-   		}
-   		return "";
-  
+	public static String getGeometry(WFSLayerNode layer) {
+		if (layer.getGeometry() != null) {
+			return layer.getGeometry().getName().split(":")[1];
+		}
+		return "";
+
 	}
-	
+
 	/**
-	 * It returns the field type. It has to remove the
-	 * namespace to can use the translation mechanism 
-	 * translations
+	 * It returns the field type. It has to remove the namespace to can use the
+	 * translation mechanism translations
+	 * 
 	 * @param field
-	 * Field to translate
+	 *            Field to translate
 	 */
-	public static String getFieldType(IXMLType field){
-		if (field == null){
+	public static String getFieldType(IXMLType field) {
+		if (field == null) {
 			return "";
 		}
-		
-		if (field.getType() == IXMLType.GML_GEOMETRY){
+
+		if (field.getType() == IXMLType.GML_GEOMETRY) {
 			return field.getName().split(":")[1];
 		}
-		
+
 		String sfield = "";
-		if (field.getName().split(":").length > 1){
+		if (field.getName().split(":").length > 1) {
 			sfield = field.getName().split(":")[1];
-		}else{
+		} else {
 			sfield = field.getName();
-		}		
+		}
 		return sfield;
 	}
-	
-	
-	public static ArrayList getFields(WFSLayerNode[] featuresList,WFSStatus status){
+
+	public static ArrayList getFields(WFSLayerNode[] featuresList,
+			WFSStatus status) {
 		ArrayList fields = new ArrayList();
 		WFSLayerNode layer = null;
-		for (int i=0 ; i<featuresList.length ; i++){
-			if (featuresList[i].getName().equals(status.getFeatureName())){
+		for (int i = 0; i < featuresList.length; i++) {
+			if (featuresList[i].getName().equals(status.getFeatureName())) {
 				layer = featuresList[i];
 			}
 		}
 		Vector selectedFileds = layer.getSelectedFields();
-		for (int i=0 ; i<selectedFileds.size() ; i++){
-			IXMLType field = (IXMLType)selectedFileds.get(i);
-			if (!(field.getType() == IXMLType.GML_GEOMETRY)){
+		for (int i = 0; i < selectedFileds.size(); i++) {
+			IXMLType field = (IXMLType) selectedFileds.get(i);
+			if (!(field.getType() == IXMLType.GML_GEOMETRY)) {
 				fields.add(field);
 			}
 		}
 		return fields;
 	}
 
-	public static boolean getHasGeometry(WFSLayerNode[] featuresList, WFSStatus wfsStatus) {
+	public static boolean getHasGeometry(WFSLayerNode[] featuresList,
+			WFSStatus wfsStatus) {
 		WFSLayerNode layer = null;
-		for (int i=0 ; i<featuresList.length ; i++){
-			if (featuresList[i].getName().equals(wfsStatus.getFeatureName())){
+		for (int i = 0; i < featuresList.length; i++) {
+			if (featuresList[i].getName().equals(wfsStatus.getFeatureName())) {
 				layer = featuresList[i];
 			}
 		}
 		Vector selectedFileds = layer.getSelectedFields();
-		for (int i=0 ; i<selectedFileds.size() ; i++){
-			XMLElement field = (XMLElement)selectedFileds.get(i);
-			if (!((field.getEntityType() != null) && (field.getEntityType().getType() == IXMLType.GML_GEOMETRY))){
+		for (int i = 0; i < selectedFileds.size(); i++) {
+			XMLElement field = (XMLElement) selectedFileds.get(i);
+			if (!((field.getEntityType() != null) && (field.getEntityType()
+					.getType() == IXMLType.GML_GEOMETRY))) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
-	
+
 }

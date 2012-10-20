@@ -57,14 +57,14 @@ import javax.swing.JPanel;
  *
  */
 /**
- * This class has to be inherited by all the panels
- * that extend the search panel
+ * This class has to be inherited by all the panels that extend the search panel
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class SearchAditionalPropertiesPanel extends JPanel{
-	
+public abstract class SearchAditionalPropertiesPanel extends JPanel {
+
 	/**
 	 * @return the params to do the search
 	 */
-	public abstract Properties getProperties();	
+	public abstract Properties getProperties();
 }

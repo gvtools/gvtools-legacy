@@ -32,29 +32,31 @@ import org.gvsig.rastertools.clipping.ui.ClippingPanel;
 
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.tools.Events.RectangleEvent;
+
 /**
  * <code>ClippingMouseViewListener</code> es un listener del recorte de raster.
  * Al seleccionar un área sobre la vista debe cargar el cuadro con los datos de
  * coordenadas pixel, coordenadas reales, ancho y alto del raster resultante,
  * tamaño de celda.
- *
+ * 
  * @version 19/04/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class ClippingMouseViewListener extends SaveRasterListenerImpl {
-	private FLyrRasterSE    layer          = null;
-	private ClippingPanel   clippingPanel  = null;
-	private ClippingData    data           = null;
-	private MapControl      mapControl     = null;
-	private String          currentTool    = null;
+	private FLyrRasterSE layer = null;
+	private ClippingPanel clippingPanel = null;
+	private ClippingData data = null;
+	private MapControl mapControl = null;
+	private String currentTool = null;
 
 	/**
 	 * Crea un nuevo <code>ClippingMouseViewListener</code>
-	 *
+	 * 
 	 * @param mapCtrl
 	 * @param cutRasterDialog
 	 */
-	public ClippingMouseViewListener(MapControl mapControl, ClippingPanel clippingPanel, ClippingData data, FLyrRasterSE lyr) {
+	public ClippingMouseViewListener(MapControl mapControl,
+			ClippingPanel clippingPanel, ClippingData data, FLyrRasterSE lyr) {
 		super(mapControl);
 		this.clippingPanel = clippingPanel;
 		this.data = data;
@@ -65,26 +67,31 @@ public class ClippingMouseViewListener extends SaveRasterListenerImpl {
 
 	/**
 	 * Asigna la capa raster.
-	 * @param flyr Capa raster
+	 * 
+	 * @param flyr
+	 *            Capa raster
 	 */
 	public void setRasterLayer(FLyrRasterSE flyr) {
 		layer = flyr;
 	}
 
 	/**
-	 * Realiza las acciones de selección del área de recorte por medio de un rectangulo
-	 * sobre la vista.
+	 * Realiza las acciones de selección del área de recorte por medio de un
+	 * rectangulo sobre la vista.
 	 */
 	public void rectangle(RectangleEvent event) {
 		super.rectangle(event);
-		clippingPanel.getButtonsPanel().getButton(ButtonsPanel.BUTTON_APPLY).setEnabled(false);
-		clippingPanel.getButtonsPanel().getButton(ButtonsPanel.BUTTON_ACCEPT).setEnabled(false);
+		clippingPanel.getButtonsPanel().getButton(ButtonsPanel.BUTTON_APPLY)
+				.setEnabled(false);
+		clippingPanel.getButtonsPanel().getButton(ButtonsPanel.BUTTON_ACCEPT)
+				.setEnabled(false);
 
-		if(((FLyrRasterSE) layer).getAffineTransform() == null)
+		if (((FLyrRasterSE) layer).getAffineTransform() == null)
 			return;
-		
+
 		AffineTransform at = ((FLyrRasterSE) layer).getAffineTransform();
-		//Temporalmente cargamos las coordenadas reales para luego transformarlas a pixel
+		// Temporalmente cargamos las coordenadas reales para luego
+		// transformarlas a pixel
 		Point2D ulWc = new Point2D.Double(rect.getMinX(), rect.getMaxY());
 		Point2D lrWc = new Point2D.Double(rect.getMaxX(), rect.getMinY());
 		Point2D urWc = new Point2D.Double(rect.getMaxX(), rect.getMaxY());
@@ -99,23 +106,26 @@ public class ClippingMouseViewListener extends SaveRasterListenerImpl {
 			at.inverseTransform(urWc, urPx);
 			at.inverseTransform(llWc, llPx);
 		} catch (NoninvertibleTransformException e) {
-			RasterToolsUtil.messageBoxError(RasterToolsUtil.getText(this, "coordenadas_erroneas"), null);
+			RasterToolsUtil
+					.messageBoxError(RasterToolsUtil.getText(this,
+							"coordenadas_erroneas"), null);
 			return;
 		}
-		
-		Point2D[] pointList = new Point2D[]{ulPx, lrPx, urPx, llPx};
-		Point2D dim = new Point2D.Double(layer.getPxWidth(), layer.getPxHeight());
 
-		//Comprobamos si la selección está completamente fuera del área
-		if(isOutside(ulPx, lrPx)) {
+		Point2D[] pointList = new Point2D[] { ulPx, lrPx, urPx, llPx };
+		Point2D dim = new Point2D.Double(layer.getPxWidth(),
+				layer.getPxHeight());
+
+		// Comprobamos si la selección está completamente fuera del área
+		if (isOutside(ulPx, lrPx)) {
 			data.setOutOfArea();
 			return;
 		}
 
-		//Ajustamos los puntos al área en pixeles del raster
+		// Ajustamos los puntos al área en pixeles del raster
 		RasterUtilities.adjustToPixelSize(pointList, dim);
 
-		//Convertimos nuevamente a coordenadas reales después de ajustar
+		// Convertimos nuevamente a coordenadas reales después de ajustar
 		at.transform(ulPx, ulWc);
 		at.transform(lrPx, lrWc);
 		at.transform(llPx, llWc);
@@ -125,28 +135,35 @@ public class ClippingMouseViewListener extends SaveRasterListenerImpl {
 		data.setCoorReal(ulWc, lrWc, llWc, urWc);
 		data.setAffineTransform(at);
 		data.initSize();
-				
+
 		clippingPanel.saveStatus(data);
 
-		clippingPanel.getButtonsPanel().getButton(ButtonsPanel.BUTTON_APPLY).setEnabled(true);
-		clippingPanel.getButtonsPanel().getButton(ButtonsPanel.BUTTON_ACCEPT).setEnabled(true);
-		
+		clippingPanel.getButtonsPanel().getButton(ButtonsPanel.BUTTON_APPLY)
+				.setEnabled(true);
+		clippingPanel.getButtonsPanel().getButton(ButtonsPanel.BUTTON_ACCEPT)
+				.setEnabled(true);
+
 		if (currentTool != null)
 			mapControl.setTool(currentTool);
 	}
 
 	/**
 	 * Comprueba si la selección del punto está fuera del área del raster.
-	 * @param ulPx Coordenada superior izquierda en pixeles
-	 * @param lrPx Corrdenada inferior derecha en pixeles
-	 * @return true si la selección del punto está fuera del raster y false si no lo está
+	 * 
+	 * @param ulPx
+	 *            Coordenada superior izquierda en pixeles
+	 * @param lrPx
+	 *            Corrdenada inferior derecha en pixeles
+	 * @return true si la selección del punto está fuera del raster y false si
+	 *         no lo está
 	 */
 	private boolean isOutside(Point2D ulPx, Point2D lrPx) {
 		double minX = Math.min(ulPx.getX(), lrPx.getX());
 		double minY = Math.min(ulPx.getY(), lrPx.getY());
 		double maxX = Math.max(ulPx.getX(), lrPx.getX());
 		double maxY = Math.max(ulPx.getY(), lrPx.getY());
-		if(minX >= layer.getPxWidth() || minY >= layer.getPxHeight() || maxX < 0 || maxY < 0)
+		if (minX >= layer.getPxWidth() || minY >= layer.getPxHeight()
+				|| maxX < 0 || maxY < 0)
 			return true;
 		return false;
 	}

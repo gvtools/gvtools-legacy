@@ -1,4 +1,5 @@
 package org.gvsig.gpe.gml.utils;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -47,12 +48,13 @@ package org.gvsig.gpe.gml.utils;
  */
 /**
  * This class is used like a container of GML Objects
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class GMLObject {
 	public static final int LAYER = 0;
 	public static final int FEATURE = 1;
-	
+
 	private Object object = null;
 	private int type = -1;;
 
@@ -61,7 +63,7 @@ public class GMLObject {
 		this.object = object;
 		this.type = type;
 	}
-	
+
 	/**
 	 * @return the object
 	 */
@@ -76,5 +78,4 @@ public class GMLObject {
 		return type;
 	}
 
-	
 }

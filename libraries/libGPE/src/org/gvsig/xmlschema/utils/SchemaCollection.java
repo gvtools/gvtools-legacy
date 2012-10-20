@@ -79,48 +79,51 @@ import org.w3c.dom.NodeList;
  *
  */
 /**
- * This class represents the children from a 
- * DOM node
+ * This class represents the children from a DOM node
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class SchemaCollection implements Collection{
-	private Element element = null;	
+public class SchemaCollection implements Collection {
+	private Element element = null;
 	private SchemaObjectsMapping collectionTypes = null;
 	private IXSSchema schema = null;
-	
+
 	public SchemaCollection(IXSSchema schema, Element element) {
 		this.schema = schema;
-		this.element = element;		
-		this.collectionTypes = schema.getObjectsMapping();		
-	}	
-	
-	public SchemaCollection(IXSSchema schema, Element element, SchemaObjectsMapping collectionTypes) {
+		this.element = element;
+		this.collectionTypes = schema.getObjectsMapping();
+	}
+
+	public SchemaCollection(IXSSchema schema, Element element,
+			SchemaObjectsMapping collectionTypes) {
 		this.schema = schema;
-		this.element = element;		
-		this.collectionTypes = collectionTypes;		
-	}	
-	
+		this.element = element;
+		this.collectionTypes = collectionTypes;
+	}
+
 	/**
 	 * Return the first element of the collection
+	 * 
 	 * @return
 	 */
-	public IXSNode getFirstNode(){
+	public IXSNode getFirstNode() {
 		Iterator it = iterator();
 		it.hasNext();
 		Object obj = it.next();
-		if (obj != null){
-			return (IXSNode)obj;
+		if (obj != null) {
+			return (IXSNode) obj;
 		}
 		return null;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#add(java.lang.Object)
 	 */
 	public boolean add(Object o) {
-		if (o instanceof IXSNode){
-			element.appendChild(((IXSNode)o).getElement());
+		if (o instanceof IXSNode) {
+			element.appendChild(((IXSNode) o).getElement());
 			return true;
 		}
 		return false;
@@ -128,13 +131,14 @@ public class SchemaCollection implements Collection{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#addAll(java.util.Collection)
 	 */
 	public boolean addAll(Collection c) {
 		Iterator it = c.iterator();
-		while (it.hasNext()){
+		while (it.hasNext()) {
 			Object obj = it.next();
-			if (!add(obj)){
+			if (!add(obj)) {
 				return false;
 			}
 		}
@@ -143,40 +147,42 @@ public class SchemaCollection implements Collection{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#clear()
 	 */
 	public void clear() {
 		NodeList nl = element.getChildNodes();
-		for(int i = 0; i < nl.getLength(); i++){
+		for (int i = 0; i < nl.getLength(); i++) {
 			element.removeChild(nl.item(i));
-		}		
+		}
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#contains(java.lang.Object)
 	 */
 	public boolean contains(Object o) {
-		if (o instanceof IXSNode){
+		if (o instanceof IXSNode) {
 			return false;
 		}
-		Element element = ((IXSNode)o).getElement();
+		Element element = ((IXSNode) o).getElement();
 		NodeList nl = element.getChildNodes();
-		for(int i = 0; i < nl.getLength(); i++){
-			if (nl.item(i).equals(element)){
+		for (int i = 0; i < nl.getLength(); i++) {
+			if (nl.item(i).equals(element)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	
 	public boolean containsAll(Collection c) {
-		throw new UnsupportedOperationException();	
+		throw new UnsupportedOperationException();
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#isEmpty()
 	 */
 	public boolean isEmpty() {
@@ -185,6 +191,7 @@ public class SchemaCollection implements Collection{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#iterator()
 	 */
 	public Iterator iterator() {
@@ -193,50 +200,55 @@ public class SchemaCollection implements Collection{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#remove(java.lang.Object)
 	 */
 	public boolean remove(Object o) {
 		NodeList nl = element.getChildNodes();
-		for(int i = 0; i < nl.getLength(); i++){
-			if (o.equals(nl.item(i))){
+		for (int i = 0; i < nl.getLength(); i++) {
+			if (o.equals(nl.item(i))) {
 				element.removeChild(nl.item(i));
 				return true;
 			}
-		}	
+		}
 		return false;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#removeAll(java.util.Collection)
 	 */
 	public boolean removeAll(Collection c) {
 		NodeList nl = element.getChildNodes();
-		for(int i = 0; i < nl.getLength(); i++){
+		for (int i = 0; i < nl.getLength(); i++) {
 			element.removeChild(nl.item(i));
-		}	
+		}
 		return true;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#retainAll(java.util.Collection)
 	 */
 	public boolean retainAll(Collection c) {
-		throw new UnsupportedOperationException();	
+		throw new UnsupportedOperationException();
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#size()
 	 */
 	public int size() {
 		int size = 0;
 		Iterator it = collectionTypes.getTypes().iterator();
-		while (it.hasNext()){
-			String type = (String)it.next();
-			Element childElement = SchemaUtils.searchChildByTagName(element, type);
-			if (childElement != null){
+		while (it.hasNext()) {
+			String type = (String) it.next();
+			Element childElement = SchemaUtils.searchChildByTagName(element,
+					type);
+			if (childElement != null) {
 				size++;
 			}
 		}
@@ -245,32 +257,35 @@ public class SchemaCollection implements Collection{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#toArray()
 	 */
 	public Object[] toArray() {
-		throw new UnsupportedOperationException();	
+		throw new UnsupportedOperationException();
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#toArray(java.lang.Object[])
 	 */
 	public Object[] toArray(Object[] a) {
-		throw new UnsupportedOperationException();	
+		throw new UnsupportedOperationException();
 	}
-	
+
 	/**
 	 * Add a new type to the types collection
+	 * 
 	 * @param type
-	 * Type name that will be found in the XML file
+	 *            Type name that will be found in the XML file
 	 * @param clazz
-	 * Class used to create the object that envolves the element
+	 *            Class used to create the object that envolves the element
 	 * @throws TypeNotFoundException
 	 */
-	public void addType(String type, Class clazz){
-		if (collectionTypes == null){
+	public void addType(String type, Class clazz) {
+		if (collectionTypes == null) {
 			collectionTypes = new SchemaObjectsMapping(schema);
 		}
-		collectionTypes.addType(type, clazz);		
-	}	
+		collectionTypes.addType(type, clazz);
+	}
 }

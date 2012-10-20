@@ -71,11 +71,12 @@ import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
 import com.iver.cit.gvsig.fmap.core.styles.IStyle;
 
 /**
- * Implements the panel which is composed by a previsualization of the style for the label
- * and the different tools that the user has to modify that style in order to improve the
- * representation of the labelling in the layer. The different available tools and the preview
- * of the style change according with the geometry of the layer.
- *
+ * Implements the panel which is composed by a previsualization of the style for
+ * the label and the different tools that the user has to modify that style in
+ * order to improve the representation of the labelling in the layer. The
+ * different available tools and the preview of the style change according with
+ * the geometry of the layer.
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class StyleEditor extends JPanel implements IWindow, ActionListener {
@@ -108,15 +109,17 @@ public class StyleEditor extends JPanel implements IWindow, ActionListener {
 
 	/**
 	 * Constructor method
-	 *
-	 * @param style, an specific style for the labelling of the layer.This style depends on the
-	 * geometry of the layer.
-	 *
+	 * 
+	 * @param style
+	 *            , an specific style for the labelling of the layer.This style
+	 *            depends on the geometry of the layer.
+	 * 
 	 */
 	public StyleEditor(IStyle style) {
-		if (style!=null) {
+		if (style != null) {
 			oldStyle = style;
-			IStyle sty = SymbologyFactory.createStyleFromXML(style.getXMLEntity(), style.getDescription());
+			IStyle sty = SymbologyFactory.createStyleFromXML(
+					style.getXMLEntity(), style.getDescription());
 			getStylePreviewer().setStyle(sty);
 			String desc = sty.getDescription();
 			getTxtDesc().setText(desc);
@@ -128,21 +131,23 @@ public class StyleEditor extends JPanel implements IWindow, ActionListener {
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 */
 	private void initialize() {
-        this.setLayout(new BorderLayout());
-        this.setSize(417,284);
-        this.add(getPnlNorth(), java.awt.BorderLayout.NORTH);
-        this.add(getPnlCenter(), java.awt.BorderLayout.CENTER);
-        this.add(getPnlButtons(), java.awt.BorderLayout.SOUTH);
+		this.setLayout(new BorderLayout());
+		this.setSize(417, 284);
+		this.add(getPnlNorth(), java.awt.BorderLayout.NORTH);
+		this.add(getPnlCenter(), java.awt.BorderLayout.CENTER);
+		this.add(getPnlButtons(), java.awt.BorderLayout.SOUTH);
 
 	}
+
 	/**
 	 * Sets the previewer of the style in the panel
-	 *
-	 * @param sty, style to be previewed
-	 *
+	 * 
+	 * @param sty
+	 *            , style to be previewed
+	 * 
 	 */
 	public void setStyle(IStyle sty) {
 		preview.setStyle(sty);
@@ -150,7 +155,7 @@ public class StyleEditor extends JPanel implements IWindow, ActionListener {
 
 	/**
 	 * This method initializes the north JPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPnlNorth() {
@@ -165,7 +170,7 @@ public class StyleEditor extends JPanel implements IWindow, ActionListener {
 
 	/**
 	 * This method initializes the textDesc JTextfield
-	 *
+	 * 
 	 * @return javax.swing.JTextfield
 	 */
 	private JTextField getTxtDesc() {
@@ -180,7 +185,7 @@ public class StyleEditor extends JPanel implements IWindow, ActionListener {
 
 	/**
 	 * This method initializes the center JPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPnlCenter() {
@@ -196,7 +201,7 @@ public class StyleEditor extends JPanel implements IWindow, ActionListener {
 
 	/**
 	 * This method initializes the StylePreviewer
-	 *
+	 * 
 	 * @return StylePreviewer for the label
 	 */
 	public StylePreviewer getStylePreviewer() {
@@ -210,7 +215,7 @@ public class StyleEditor extends JPanel implements IWindow, ActionListener {
 
 	/**
 	 * This method initializes pnlButtons JPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPnlButtons() {
@@ -221,16 +226,17 @@ public class StyleEditor extends JPanel implements IWindow, ActionListener {
 	}
 
 	public WindowInfo getWindowInfo() {
-		WindowInfo wi = new WindowInfo(WindowInfo.MODALDIALOG | WindowInfo.RESIZABLE);
+		WindowInfo wi = new WindowInfo(WindowInfo.MODALDIALOG
+				| WindowInfo.RESIZABLE);
 		wi.setTitle(PluginServices.getText(this, "edit_style"));
-		wi.setWidth(getWidth()+10);
+		wi.setWidth(getWidth() + 10);
 		wi.setHeight(getHeight());
 		return wi;
 	}
 
 	/**
 	 * Obtains the style for the label
-	 *
+	 * 
 	 * @return IStyle
 	 */
 	public IStyle getStyle() {
@@ -247,31 +253,35 @@ public class StyleEditor extends JPanel implements IWindow, ActionListener {
 			prevTool = preview.setEditorTool(currTool);
 		}
 	}
+
 	/**
 	 * This method initializes pnlTools JPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPnlTools() {
 		if (pnlTools == null) {
 			pnlTools = new JPanel();
-			pnlTools.setBorder(BorderFactory.createTitledBorder(PluginServices.getText(this, "tools")));
-//			pnlTools.setLayout(new BoxLayout(pnlTools, BoxLayout.Y_AXIS));
-			pnlTools.setPreferredSize(new Dimension(this.getWidth()/4,0));
-			GridLayout grid = new GridLayout(0,1,1,1);
+			pnlTools.setBorder(BorderFactory.createTitledBorder(PluginServices
+					.getText(this, "tools")));
+			// pnlTools.setLayout(new BoxLayout(pnlTools, BoxLayout.Y_AXIS));
+			pnlTools.setPreferredSize(new Dimension(this.getWidth() / 4, 0));
+			GridLayout grid = new GridLayout(0, 1, 1, 1);
 			pnlTools.setLayout(grid);
 
 			ArrayList<EditorTool> availableTools = new ArrayList<EditorTool>();
 			IStyle sty = preview.getStyle();
 			Class<?> editorClazz = null;
-			Class[] constrLocator = new Class[] {JComponent.class};
+			Class[] constrLocator = new Class[] { JComponent.class };
 			Object[] constrInitargs = new Object[] { this };
 			try {
 				for (Iterator<Class> iterator = installedTools.iterator(); iterator
-				.hasNext();) {
+						.hasNext();) {
 					editorClazz = iterator.next();
-					Constructor<EditorTool> constructor = (Constructor<EditorTool>) editorClazz.getConstructor(constrLocator);
-					EditorTool editorTool = constructor.newInstance(constrInitargs);
+					Constructor<EditorTool> constructor = (Constructor<EditorTool>) editorClazz
+							.getConstructor(constrLocator);
+					EditorTool editorTool = constructor
+							.newInstance(constrInitargs);
 					if (editorTool.isSuitableFor(sty)) {
 						editorTool.setModel(sty);
 						availableTools.add(editorTool);
@@ -280,8 +290,8 @@ public class StyleEditor extends JPanel implements IWindow, ActionListener {
 				}
 
 				ButtonGroup group = new ButtonGroup();
-				for (Iterator<EditorTool> iterator = availableTools.iterator();
-				iterator.hasNext();) {
+				for (Iterator<EditorTool> iterator = availableTools.iterator(); iterator
+						.hasNext();) {
 					EditorTool editorTool = iterator.next();
 					AbstractButton button = editorTool.getButton();
 					button.addActionListener(this);
@@ -293,11 +303,16 @@ public class StyleEditor extends JPanel implements IWindow, ActionListener {
 
 				}
 
-
-
 			} catch (Exception e) {
-				NotificationManager.addWarning(PluginServices.getText(this, "could_not_initialize_editor_")+"'"+editorClazz+"'"+
-						" ["+new Date(System.currentTimeMillis()).toString()+"]");
+				NotificationManager
+						.addWarning(PluginServices.getText(this,
+								"could_not_initialize_editor_")
+								+ "'"
+								+ editorClazz
+								+ "'"
+								+ " ["
+								+ new Date(System.currentTimeMillis())
+										.toString() + "]");
 			}
 		}
 		return pnlTools;
@@ -305,15 +320,17 @@ public class StyleEditor extends JPanel implements IWindow, ActionListener {
 
 	/**
 	 * Sets the tool to be used with the previous one
-	 *
+	 * 
 	 */
 	public void restorePreviousTool() {
 		preview.setEditorTool(prevTool);
 	}
+
 	/**
 	 * Adds a new tool for the style
-	 *
-	 * @param styleEditorClass, the new tool to be added
+	 * 
+	 * @param styleEditorClass
+	 *            , the new tool to be added
 	 */
 	public static void addEditorTool(Class styleEditorClass) {
 		installedTools.add(styleEditorClass);
@@ -322,4 +339,4 @@ public class StyleEditor extends JPanel implements IWindow, ActionListener {
 	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

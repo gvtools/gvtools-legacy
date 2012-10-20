@@ -41,19 +41,24 @@
 package com.iver.cit.gvsig.fmap.core;
 
 /**
- * <p><code>FShape3D</code> extends <code>FShape</code> adding support for 3D.</p>
+ * <p>
+ * <code>FShape3D</code> extends <code>FShape</code> adding support for 3D.
+ * </p>
  * 
  * @see FShape
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public interface FShape3D extends FShape {
 	/**
-	 * <p>Gets an array with all the third coordinate <i>(Z)</i> values of this shape.</p>
-	 *
+	 * <p>
+	 * Gets an array with all the third coordinate <i>(Z)</i> values of this
+	 * shape.
+	 * </p>
+	 * 
 	 * @return an array with all the third coordinate values of this shape.
 	 */
 	double[] getZs();
-	
-	public String toText();	
+
+	public String toText();
 }

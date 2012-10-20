@@ -25,6 +25,7 @@ import java.awt.Rectangle;
 import org.gvsig.gui.beans.listview.IIconPaint;
 import org.gvsig.raster.datastruct.ColorItem;
 import org.gvsig.raster.datastruct.ColorTable;
+
 /**
  * Clase para dibujar los iconos del ListViewComponent del panel de color. Se
  * puede indicar si la paleta esta seleccionada y si se dibuja con
@@ -38,6 +39,7 @@ public class ColorTableIconPainter implements IIconPaint {
 
 	/**
 	 * Construye un ColorTablePaint con una tabla de color pasada por parametro
+	 * 
 	 * @param colorTable
 	 */
 	public ColorTableIconPainter(ColorTable colorTable) {
@@ -46,6 +48,7 @@ public class ColorTableIconPainter implements IIconPaint {
 
 	/**
 	 * Define si los valores estan interpolados o no entre si
+	 * 
 	 * @param value
 	 */
 	public void setInterpolated(boolean value) {
@@ -54,6 +57,7 @@ public class ColorTableIconPainter implements IIconPaint {
 
 	/**
 	 * Obtiene el ColorTable
+	 * 
 	 * @return
 	 */
 	public ColorTable getColorTable() {
@@ -62,6 +66,7 @@ public class ColorTableIconPainter implements IIconPaint {
 
 	/**
 	 * Metodo de pintado de la tabla de color
+	 * 
 	 * @param g
 	 * @param isSelected
 	 */
@@ -80,16 +85,20 @@ public class ColorTableIconPainter implements IIconPaint {
 					g.setColor(bgColor);
 				g.fillRect(area.x + 1 + i * 4, area.y + 1 + j * 4, 4, 4);
 			}
-		}		
-		
+		}
+
 		if (colorTable.getColorItems().size() >= 1) {
-			double min = ((ColorItem) colorTable.getColorItems().get(0)).getValue();
-			double max = ((ColorItem) colorTable.getColorItems().get(colorTable.getColorItems().size() - 1)).getValue();
+			double min = ((ColorItem) colorTable.getColorItems().get(0))
+					.getValue();
+			double max = ((ColorItem) colorTable.getColorItems().get(
+					colorTable.getColorItems().size() - 1)).getValue();
 			for (int i = area.x; i < (area.x + area.width); i++) {
-				double pos = min + (((max - min) * (i - area.x)) / (area.width - 2));
+				double pos = min
+						+ (((max - min) * (i - area.x)) / (area.width - 2));
 
 				byte[] col3 = colorTable.getRGBAByBand(pos);
-				g.setColor(new Color(col3[0] & 0xff, col3[1] & 0xff, col3[2] & 0xff, col3[3] & 0xff));
+				g.setColor(new Color(col3[0] & 0xff, col3[1] & 0xff,
+						col3[2] & 0xff, col3[3] & 0xff));
 				g.drawLine(i, area.y, i, area.y + area.height);
 			}
 		} else {
@@ -101,5 +110,5 @@ public class ColorTableIconPainter implements IIconPaint {
 		else
 			g.setColor(new Color(96, 96, 96));
 		g.drawRect(x1, area.y, x2 - x1, area.height - 1);
-	}	
+	}
 }

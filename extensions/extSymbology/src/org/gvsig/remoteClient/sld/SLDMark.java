@@ -43,19 +43,25 @@ package org.gvsig.remoteClient.sld;
 import org.gvsig.remoteClient.sld.filterEncoding.FExpression;
 
 /**
- * Implements the Mark element of an SLD implementation specification.<p>
- * The Mark element of a Graphic defines a �shape� which has coloring applied to it.<p>
+ * Implements the Mark element of an SLD implementation specification.
+ * <p>
+ * The Mark element of a Graphic defines a �shape� which has coloring
+ * applied to it.
+ * <p>
  * The WellKnownName element gives the well-known name of the shape of the mark.
- * Allowed values include at least �square�, �circle�, �triangle�, �star�, �cross�,
- * and �x�, though map servers may draw a different symbol instead if they don't
- * have a shape for all of these. The default WellKnownName is �square�. Renderings 
- * of these marks may be made solid or hollow depending on Fill and Stroke elements.
- * <p> 
- * The Mark element serves two purposes. It allows the selection of simple shapes,
- * and, in combination with the capability to select and mix multiple external-URL 
- * graphics and marks, it allows a style to be specified that can produce a usable 
- * result in a best-effort rendering environment, provided that a simple Mark is 
- * included at the bottom of the list of sources for every Graphic.<p>
+ * Allowed values include at least �square�, �circle�, �triangle�,
+ * �star�, �cross�, and �x�, though map servers may draw a different
+ * symbol instead if they don't have a shape for all of these. The default
+ * WellKnownName is �square�. Renderings of these marks may be made solid or
+ * hollow depending on Fill and Stroke elements.
+ * <p>
+ * The Mark element serves two purposes. It allows the selection of simple
+ * shapes, and, in combination with the capability to select and mix multiple
+ * external-URL graphics and marks, it allows a style to be specified that can
+ * produce a usable result in a best-effort rendering environment, provided that
+ * a simple Mark is included at the bottom of the list of sources for every
+ * Graphic.
+ * <p>
  * 
  * @see SLDFill
  * @see SLDStroke
@@ -68,25 +74,29 @@ public abstract class SLDMark implements ISLDFeatures {
 	protected SLDFill fill;
 	protected SLDStroke stroke;
 	protected FExpression wellKnownName = new FExpression();
-	
+
 	public SLDFill getFill() {
 		return fill;
 	}
+
 	public void setFill(SLDFill fill) {
 		this.fill = fill;
 	}
+
 	public SLDStroke getStroke() {
 		return stroke;
 	}
+
 	public void setStroke(SLDStroke stroke) {
 		this.stroke = stroke;
 	}
+
 	public FExpression getWellKnownName() {
 		return wellKnownName;
 	}
+
 	public void setWellKnownName(FExpression wellKnownName) {
 		this.wellKnownName = wellKnownName;
 	}
 
-	
 }

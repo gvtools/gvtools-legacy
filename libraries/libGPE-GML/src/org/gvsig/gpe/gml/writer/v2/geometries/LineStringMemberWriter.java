@@ -71,6 +71,7 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
 /**
  * It writes a gml:LineStringMemberType object. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;lineStringMember&gt;
@@ -81,41 +82,48 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  * &lt;/lineStringMember&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class LineStringMemberWriter {
-	
+
 	/**
 	 * It writes a gml:lineStringMember init tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param id
-	 * Geometry ID
+	 *            Geometry ID
 	 * @param coords
-	 * A coordinates sequence
+	 *            A coordinates sequence
 	 * @param srs
-	 * Spatial reference system
+	 *            Spatial reference system
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor handler, String id, 
-			ICoordinateSequence coords, String srs) throws IOException{
+	public void start(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler, String id,
+			ICoordinateSequence coords, String srs) throws IOException {
 		writer.writeStartElement(GMLTags.GML_LINESTRINGMEMBER);
-		handler.getProfile().getLineStringWriter().start(writer, handler, id, coords, srs);	
+		handler.getProfile().getLineStringWriter()
+				.start(writer, handler, id, coords, srs);
 	}
-	
+
 	/**
 	 * It writes a gml:lineStringMember init tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @throws IOException
 	 */
-	public void end(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor handler) throws IOException{
+	public void end(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler) throws IOException {
 		handler.getProfile().getLineStringWriter().end(writer, handler);
-		writer.writeEndElement();				
+		writer.writeEndElement();
 	}
 }

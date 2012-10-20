@@ -28,11 +28,15 @@ import org.gvsig.gui.beans.panelGroup.samples.Samples_Data;
 import org.gvsig.gui.beans.panelGroup.treePanel.TreePanel;
 
 /**
- * <p>Tests the loading of layers using a {@link TreePanel TreePanel} object and a {@link PanelGroupLoaderFromList PanelGroupLoaderFromList} loader
- * Tests also the managing of the different kind of exceptions which could be launched during this process.</p>
+ * <p>
+ * Tests the loading of layers using a {@link TreePanel TreePanel} object and a
+ * {@link PanelGroupLoaderFromList PanelGroupLoaderFromList} loader Tests also
+ * the managing of the different kind of exceptions which could be launched
+ * during this process.
+ * </p>
  * 
  * @version 29/11/2007
- * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es) 
+ * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class Test1ExceptionsUsingTreePanel extends TestCase {
 	private TreePanel panelGroup;
@@ -43,6 +47,7 @@ public class Test1ExceptionsUsingTreePanel extends TestCase {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see junit.framework.TestCase#setUp()
 	 */
 	protected void setUp() throws Exception {
@@ -56,18 +61,24 @@ public class Test1ExceptionsUsingTreePanel extends TestCase {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see junit.framework.TestCase#tearDown()
 	 */
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		manager.deregisterPanelGroup(TreePanel.class);
 	}
-	
+
 	/**
-	 * <p>Test the 'PanelGroup' exceptions </p>
+	 * <p>
+	 * Test the 'PanelGroup' exceptions
+	 * </p>
 	 */
 	public void test1() {
-		validationText = Messages.getText("couldnt_add_some_panel_exception") + "\n  " + Messages.getText("couldnt_load_panels_from_list_exception") + "\n  Error cargando un panel: / by zero.";
+		validationText = Messages.getText("couldnt_add_some_panel_exception")
+				+ "\n  "
+				+ Messages.getText("couldnt_load_panels_from_list_exception")
+				+ "\n  Error cargando un panel: / by zero.";
 
 		try {
 			System.out.println("----- Test 1 -----");
@@ -92,12 +103,15 @@ public class Test1ExceptionsUsingTreePanel extends TestCase {
 		System.out.println("------------------");
 		fail();
 	}
-	
+
 	/**
-	 * <p>Test the 'PanelGroup' exceptions </p>
+	 * <p>
+	 * Test the 'PanelGroup' exceptions
+	 * </p>
 	 */
 	public void test2() {
-		validationText = Messages.getText("couldnt_add_some_panel_exception") + "\n  Panel de etiqueta Information_LABEL sin tamaño inicial definido.";
+		validationText = Messages.getText("couldnt_add_some_panel_exception")
+				+ "\n  Panel de etiqueta Information_LABEL sin tamaño inicial definido.";
 
 		try {
 			System.out.println("----- Test 2 -----");
@@ -122,9 +136,11 @@ public class Test1ExceptionsUsingTreePanel extends TestCase {
 		System.out.println("------------------");
 		fail();
 	}
-	
+
 	/**
-	 * <p>Test the 'PanelGroup' exceptions </p>
+	 * <p>
+	 * Test the 'PanelGroup' exceptions
+	 * </p>
 	 */
 	public void test3() {
 		validationText = Messages.getText("empty_panel_group_exception");
@@ -152,9 +168,11 @@ public class Test1ExceptionsUsingTreePanel extends TestCase {
 		System.out.println("------------------");
 		fail();
 	}
-	
+
 	/**
-	 * <p>Test the 'PanelGroup' exceptions </p>
+	 * <p>
+	 * Test the 'PanelGroup' exceptions
+	 * </p>
 	 */
 	public void test4() {
 		validationText = Messages.getText("empty_panel_group_gui_exception");
@@ -182,12 +200,18 @@ public class Test1ExceptionsUsingTreePanel extends TestCase {
 		System.out.println("------------------");
 		fail();
 	}
-	
+
 	/**
-	 * <p>Test the 'PanelGroup' exceptions </p>
+	 * <p>
+	 * Test the 'PanelGroup' exceptions
+	 * </p>
 	 */
 	public void test5() {
-		validationText = Messages.getText("couldnt_add_some_panel_exception") + "\n  " + Messages.getText("couldnt_load_panels_from_list_exception") + "\n  Error cargando un panel: / by zero.\n  Panel de etiqueta Information_LABEL sin tamaño inicial definido.\n  " + Messages.getText("empty_panel_group_exception");
+		validationText = Messages.getText("couldnt_add_some_panel_exception")
+				+ "\n  "
+				+ Messages.getText("couldnt_load_panels_from_list_exception")
+				+ "\n  Error cargando un panel: / by zero.\n  Panel de etiqueta Information_LABEL sin tamaño inicial definido.\n  "
+				+ Messages.getText("empty_panel_group_exception");
 
 		try {
 			System.out.println("----- Test 5 -----");
@@ -212,12 +236,18 @@ public class Test1ExceptionsUsingTreePanel extends TestCase {
 		System.out.println("------------------");
 		fail();
 	}
-	
+
 	/**
-	 * <p>Test the 'PanelGroup' exceptions </p>
+	 * <p>
+	 * Test the 'PanelGroup' exceptions
+	 * </p>
 	 */
 	public void test6() {
-		validationText = Messages.getText("couldnt_add_some_panel_exception") + "\n  " + Messages.getText("couldnt_load_panels_from_list_exception") + "\n  Error cargando un panel: / by zero.\n  Panel de etiqueta Information_LABEL sin tamaño inicial definido.\n  " + Messages.getText("empty_panel_group_gui_exception");
+		validationText = Messages.getText("couldnt_add_some_panel_exception")
+				+ "\n  "
+				+ Messages.getText("couldnt_load_panels_from_list_exception")
+				+ "\n  Error cargando un panel: / by zero.\n  Panel de etiqueta Information_LABEL sin tamaño inicial definido.\n  "
+				+ Messages.getText("empty_panel_group_gui_exception");
 
 		try {
 			System.out.println("----- Test 6 -----");
@@ -242,12 +272,17 @@ public class Test1ExceptionsUsingTreePanel extends TestCase {
 		System.out.println("------------------");
 		fail();
 	}
-	
+
 	/**
-	 * <p>Test the 'PanelGroup' exceptions </p>
+	 * <p>
+	 * Test the 'PanelGroup' exceptions
+	 * </p>
 	 */
 	public void test7() {
-		validationText = Messages.getText("couldnt_add_some_panel_exception") + "\n  " + Messages.getText("couldnt_load_panels_from_list_exception") + "\n  Error cargando un panel: / by zero.\n  Panel de etiqueta Information_LABEL sin tamaño inicial definido.";
+		validationText = Messages.getText("couldnt_add_some_panel_exception")
+				+ "\n  "
+				+ Messages.getText("couldnt_load_panels_from_list_exception")
+				+ "\n  Error cargando un panel: / by zero.\n  Panel de etiqueta Information_LABEL sin tamaño inicial definido.";
 
 		try {
 			System.out.println("----- Test 7 -----");

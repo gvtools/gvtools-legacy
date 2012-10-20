@@ -84,7 +84,7 @@ public class GMLv2WritersTestSuite {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.gvsig.gpe.gml.writers");
-		//$JUnit-BEGIN$
+		// $JUnit-BEGIN$
 		suite.addTestSuite(GMLLayerWithNameTest.class);
 		suite.addTestSuite(GMLMultiPointLayerTest.class);
 		suite.addTestSuite(GMLFeatureWithBboxTest.class);
@@ -111,7 +111,7 @@ public class GMLv2WritersTestSuite {
 		suite.addTestSuite(GMLNotSupportedChildLayerTest.class);
 		suite.addTestSuite(GMLNotSupportedFeatureTest.class);
 		suite.addTestSuite(GMLNotSupportedElementTest.class);
-		//$JUnit-END$
+		// $JUnit-END$
 		return suite;
 	}
 

@@ -39,47 +39,45 @@
  *   dac@iver.es
  */
 package org.gvsig.remoteClient.sld.filterEncoding;
+
 /**
  * 
- * Useful methods which are used during the parse or the storage of a 
- * Filter Encoding expression
+ * Useful methods which are used during the parse or the storage of a Filter
+ * Encoding expression
  * 
  * @see http://www.opengeospatial.org/standards/filter
  * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
- *
+ * 
  */
 public class FilterUtils {
 
-
-
-
 	public static String getSymbol4Expression(String type) {
 
-		if (type.compareTo(FilterTags.PROPERTYISEQUALTO)==0)
+		if (type.compareTo(FilterTags.PROPERTYISEQUALTO) == 0)
 			return "==";
-		else if (type.compareTo(FilterTags.PROPERTYISNOTEQUALTO)==0)
+		else if (type.compareTo(FilterTags.PROPERTYISNOTEQUALTO) == 0)
 			return "!=";
-		else if (type.compareTo(FilterTags.PROPERTYISLESSTHAN)==0)
+		else if (type.compareTo(FilterTags.PROPERTYISLESSTHAN) == 0)
 			return "<";
-		else if (type.compareTo(FilterTags.PROPERTYISGREATERTHAN)==0)
+		else if (type.compareTo(FilterTags.PROPERTYISGREATERTHAN) == 0)
 			return ">";
-		else if (type.compareTo(FilterTags.PROPERTYISLESSOREQUALTHAN)==0)
+		else if (type.compareTo(FilterTags.PROPERTYISLESSOREQUALTHAN) == 0)
 			return "<=";
-		else if (type.compareTo(FilterTags.PROPERTYISGREATEROREQUALTHAN)==0) 
+		else if (type.compareTo(FilterTags.PROPERTYISGREATEROREQUALTHAN) == 0)
 			return ">=";
-		else if (type.compareTo(FilterTags.ADD)==0) 
+		else if (type.compareTo(FilterTags.ADD) == 0)
 			return "+";
-		else if (type.compareTo(FilterTags.DIV)==0) 
+		else if (type.compareTo(FilterTags.DIV) == 0)
 			return "/";
-		else if (type.compareTo(FilterTags.MULT)==0) 
+		else if (type.compareTo(FilterTags.MULT) == 0)
 			return "*";
-		else if (type.compareTo(FilterTags.SUB)==0) 
+		else if (type.compareTo(FilterTags.SUB) == 0)
 			return "-";
-		else if (type.compareTo(FilterTags.AND)==0) 
+		else if (type.compareTo(FilterTags.AND) == 0)
 			return "&&";
-		else if (type.compareTo(FilterTags.OR)==0) 
+		else if (type.compareTo(FilterTags.OR) == 0)
 			return "||";
-		else if (type.compareTo(FilterTags.NOT)==0) 
+		else if (type.compareTo(FilterTags.NOT) == 0)
 			return "!";
 
 		return null;
@@ -87,9 +85,8 @@ public class FilterUtils {
 
 	public static String remNameSpace(String literal) {
 
-		return literal.substring(literal.indexOf(":") + 1,literal.length());
+		return literal.substring(literal.indexOf(":") + 1, literal.length());
 
 	}
-
 
 }

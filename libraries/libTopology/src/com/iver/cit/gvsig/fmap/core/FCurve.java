@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.fmap.core;
 
 import java.awt.geom.Point2D;
@@ -63,18 +63,15 @@ import com.graphbuilder.curve.NURBSpline;
 import com.graphbuilder.curve.NaturalCubicSpline;
 import com.graphbuilder.curve.Point;
 
-
 /**
  * FMap geometry based in curve API classes (com.graphbuilder.curve).
  * 
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class FCurve extends FPolyline2D {
 
-	
-	
 	public static final int BEZIER = 0;
 	public static final int B_SPLINE = 1;
 	public static final int CARDINAL_SPLINE = 2;
@@ -83,79 +80,78 @@ public class FCurve extends FPolyline2D {
 	public static final int LAGRANGE_CURVE = 5;
 	public static final int NATURAL_CUBIC_SPLINE = 6;
 	public static final int NURB_SPLINE = 7;
-	
+
 	private static final long serialVersionUID = -8518882527338477090L;
-	
+
 	private Point2D[] controlPoints;
-	
+
 	public FCurve(Point2D[] points, int curveType) {
 		super(getGeneralPathX(points, curveType));
 		controlPoints = points;
 	}
-	
-	
-	public static GeneralPathX getGeneralPathX(Point2D[] controlPoints, int curveType){
+
+	public static GeneralPathX getGeneralPathX(Point2D[] controlPoints,
+			int curveType) {
 		ControlPath cp = new ControlPath();
-		for(int i = 0; i < controlPoints.length; i++){
+		for (int i = 0; i < controlPoints.length; i++) {
 			Point2D point = controlPoints[i];
 			Point capiPoint = createCapiPoint(point.getX(), point.getY());
 			cp.addPoint(capiPoint);
 		}
 		GroupIterator gi = new GroupIterator("0:n-1", cp.numPoints());
 		MultiPathGeneralPathX gpx = new MultiPathGeneralPathX();
-		
+
 		/*
-		 TODO
-		 Parametrizar o dejar que el usuario elija la forma de la curva,
-		 con los parámetros grado (b-spline), alpha (cardinal-spline), etc.
-		 * */
+		 * TODO Parametrizar o dejar que el usuario elija la forma de la curva,
+		 * con los parámetros grado (b-spline), alpha (cardinal-spline), etc.
+		 */
 		Curve curve = null;
-		switch(curveType){	
+		switch (curveType) {
 		case B_SPLINE:
 			curve = new BSpline(cp, gi);
-			((BSpline)curve).setDegree(cp.numPoints() - 2);
-		break;
-		
+			((BSpline) curve).setDegree(cp.numPoints() - 2);
+			break;
+
 		case CARDINAL_SPLINE:
 			curve = new CardinalSpline(cp, gi);
-			((CardinalSpline)curve).setAlpha(1);
+			((CardinalSpline) curve).setAlpha(1);
 			break;
 		case CATMULLROM_SPLINE:
 			curve = new CatmullRomSpline(cp, gi);
-			
+
 			break;
 		case CUBIC_BSPLINE:
 			curve = new CubicBSpline(cp, gi);
-			((CubicBSpline)curve).setInterpolateEndpoints(true);
+			((CubicBSpline) curve).setInterpolateEndpoints(true);
 			break;
 		case LAGRANGE_CURVE:
 			curve = new LagrangeCurve(cp, gi);
-			((LagrangeCurve)curve).setInterpolateFirst(true);
-			((LagrangeCurve)curve).setInterpolateLast(true);
+			((LagrangeCurve) curve).setInterpolateFirst(true);
+			((LagrangeCurve) curve).setInterpolateLast(true);
 			break;
 		case NATURAL_CUBIC_SPLINE:
 			curve = new NaturalCubicSpline(cp, gi);
-			
+
 			break;
 		case NURB_SPLINE:
 			curve = new NURBSpline(cp, gi);
-			((NURBSpline)curve).setUseWeightVector(false);
-			((NURBSpline)curve).setUseDefaultInterval(true);
+			((NURBSpline) curve).setUseWeightVector(false);
+			((NURBSpline) curve).setUseDefaultInterval(true);
 			break;
 		case BEZIER:
 		default:
 			curve = new BezierCurve(cp, gi);
 			break;
 		}
-		
+
 		curve.appendTo(gpx.getMultiPath());
-		
+
 		return gpx;
-		
+
 	}
-	
-	protected static Point createCapiPoint(double x, double y){
-		final double[] arr = new double[] {x, y};
+
+	protected static Point createCapiPoint(double x, double y) {
+		final double[] arr = new double[] { x, y };
 
 		return new Point() {
 			public double[] getLocation() {
@@ -169,7 +165,6 @@ public class FCurve extends FPolyline2D {
 		};
 
 	}
-
 
 	public Point2D[] getControlPoints() {
 		return controlPoints;

@@ -58,25 +58,27 @@ import org.gvsig.gpe.parser.GPEParser;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class GPEFileOpen extends JFileChooser{
+public class GPEFileOpen extends JFileChooser {
 	private ArrayList arrayFileFilter;
-	
-	public GPEFileOpen(){
+
+	public GPEFileOpen() {
 		arrayFileFilter = new ArrayList();
 		GPEParser[] parsers = GPERegister.getAllParsers();
-		for (int i=0 ; i<parsers.length ; i++){
+		for (int i = 0; i < parsers.length; i++) {
 			arrayFileFilter.add(new GPEParserFileFilter(parsers[i]));
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.JFileChooser#accept(java.io.File)
 	 */
 	public boolean accept(File f) {
-		if (f.isDirectory()){
+		if (f.isDirectory()) {
 			return true;
 		}
 		FileFilter filter = super.getFileFilter();
-		return (filter.accept(f));		
-	}	
+		return (filter.accept(f));
+	}
 }

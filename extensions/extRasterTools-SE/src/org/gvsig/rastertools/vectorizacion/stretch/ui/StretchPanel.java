@@ -48,18 +48,20 @@ import org.gvsig.rastertools.vectorizacion.stretch.StretchData;
  * Panel con los controles de creación de tramos con distancia variable.
  * 
  * 09/06/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
-public class StretchPanel extends BasePanel implements IUserPanelInterface, Observer {
-	private static final long             serialVersionUID       = 1L;
-	private StretchSelectorPanel          stretchSelectorPanel   = null;
-	private GCanvas                       canvas                 = null;
-	private JTable                        table                  = null;
-	private JScrollPane                   panelList              = null;
-	private IntervalTableModel            tableModel             = null;
-	private BasePanel                     valuesStretchPanel     = null;
-	private JButton                       loadButton             = null;
-	
+public class StretchPanel extends BasePanel implements IUserPanelInterface,
+		Observer {
+	private static final long serialVersionUID = 1L;
+	private StretchSelectorPanel stretchSelectorPanel = null;
+	private GCanvas canvas = null;
+	private JTable table = null;
+	private JScrollPane panelList = null;
+	private IntervalTableModel tableModel = null;
+	private BasePanel valuesStretchPanel = null;
+	private JButton loadButton = null;
+
 	/**
 	 * Inicializa componentes gráficos y traduce
 	 */
@@ -67,13 +69,15 @@ public class StretchPanel extends BasePanel implements IUserPanelInterface, Obse
 		init();
 		translate();
 	}
-		
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#translate()
 	 */
-	protected void translate() {}
-	
+	protected void translate() {
+	}
+
 	/**
 	 * Inicialización de los componentes gráficos
 	 */
@@ -82,24 +86,25 @@ public class StretchPanel extends BasePanel implements IUserPanelInterface, Obse
 		bl.setHgap(5);
 		bl.setVgap(5);
 		setLayout(bl);
-		
+
 		BasePanel upPanel = BasePanel.getInstance();
 		upPanel.setLayout(new BorderLayout());
 		upPanel.add(getStretchSelectorPanel(), BorderLayout.WEST);
 		BasePanel p = BasePanel.getInstance();
 		p.add(getLoadButton());
 		upPanel.add(p, BorderLayout.CENTER);
-		
+
 		add(upPanel, BorderLayout.NORTH);
 		add(getStretchValuesPanel(), BorderLayout.CENTER);
 	}
-	
+
 	/**
-	 * Obtiene el botón de carga de tramos 
+	 * Obtiene el botón de carga de tramos
+	 * 
 	 * @return JButton
 	 */
 	public JButton getLoadButton() {
-		if(loadButton == null) {
+		if (loadButton == null) {
 			loadButton = new JButton(getText("loadstretch"));
 			loadButton.setPreferredSize(new Dimension(180, 28));
 		}
@@ -107,13 +112,15 @@ public class StretchPanel extends BasePanel implements IUserPanelInterface, Obse
 	}
 
 	/**
-	 * Obtiene el panel con el gráfico y la lista de intervalos. 
+	 * Obtiene el panel con el gráfico y la lista de intervalos.
+	 * 
 	 * @return JPanel
 	 */
 	private BasePanel getStretchValuesPanel() {
-		if(valuesStretchPanel == null) {
+		if (valuesStretchPanel == null) {
 			valuesStretchPanel = new GenericBasePanel();
-			valuesStretchPanel.setBorder(BorderFactory.createTitledBorder(getText("histograma")));
+			valuesStretchPanel.setBorder(BorderFactory
+					.createTitledBorder(getText("histograma")));
 			BorderLayout bl = new BorderLayout();
 			bl.setHgap(5);
 			bl.setVgap(5);
@@ -123,14 +130,14 @@ public class StretchPanel extends BasePanel implements IUserPanelInterface, Obse
 		}
 		return valuesStretchPanel;
 	}
-	
-	/** 
-	 * Construye el gráfico con las capas para mover las
-	 * líneas.
+
+	/**
+	 * Construye el gráfico con las capas para mover las líneas.
+	 * 
 	 * @return
 	 */
 	public GCanvas getCanvas() {
-		if(canvas == null) {
+		if (canvas == null) {
 			canvas = new GCanvas(Color.BLACK);
 			DrawableElement border = new Border(Color.WHITE);
 			canvas.addDrawableElement(border);
@@ -140,85 +147,95 @@ public class StretchPanel extends BasePanel implements IUserPanelInterface, Obse
 		}
 		return canvas;
 	}
-	
+
 	/**
 	 * Obtiene el componente con la lista de tramos.
+	 * 
 	 * @return JList
 	 */
 	public JScrollPane getTablePanel() {
-		if(panelList == null) {
+		if (panelList == null) {
 			panelList = new JScrollPane(getTable());
-			//Asignamos el ancho máximo para la columna de los intervalos númericos
+			// Asignamos el ancho máximo para la columna de los intervalos
+			// númericos
 			panelList.setPreferredSize(new Dimension(80, 0));
 		}
 		return panelList;
 	}
-	
+
 	/**
 	 * Obtiene el panel con el selector de tramos.
+	 * 
 	 * @return
 	 */
 	public StretchSelectorPanel getStretchSelectorPanel() {
-		if(stretchSelectorPanel == null) 
+		if (stretchSelectorPanel == null)
 			stretchSelectorPanel = new StretchSelectorPanel();
 		return stretchSelectorPanel;
 	}
-		
+
 	public void actionPerformed(ActionEvent e) {
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.beans.previewbase.IUserPanelInterface#getTitle()
 	 */
 	public String getTitle() {
 		return getText(this, "stretch");
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.beans.previewbase.IUserPanelInterface#getPanel()
 	 */
 	public JPanel getPanel() {
 		return this;
 	}
-	
+
 	/**
 	 * Obtiene el modelo de la tabla
 	 */
 	public IntervalTableModel getModel() {
-		if(tableModel == null)
-			tableModel = new IntervalTableModel(getStretchLayer().getStretchDataModel());
+		if (tableModel == null)
+			tableModel = new IntervalTableModel(getStretchLayer()
+					.getStretchDataModel());
 		return tableModel;
 	}
-	
+
 	/**
 	 * Obtiene la capa gráfica que representa los tramos
-	 * @return StretchLayer 
+	 * 
+	 * @return StretchLayer
 	 */
 	public StretchLayer getStretchLayer() {
-		ArrayList listObjs = getCanvas().getDrawableElements(StretchLayer.class);
-		if(listObjs.size() <= 0) {
+		ArrayList listObjs = getCanvas()
+				.getDrawableElements(StretchLayer.class);
+		if (listObjs.size() <= 0) {
 			StretchLayer stretchLayer = new StretchLayer(Color.WHITE, 1);
 			stretchLayer.fixExtreme(true);
 			return stretchLayer;
 		}
-		return (StretchLayer)getCanvas().getDrawableElements(StretchLayer.class).get(0);
+		return (StretchLayer) getCanvas().getDrawableElements(
+				StretchLayer.class).get(0);
 	}
-	
+
 	/**
 	 * Obtiene la tabla
 	 */
 	public JTable getTable() {
-		if(table == null) {
+		if (table == null) {
 			table = new JTable(getModel());
 			table.setTableHeader(null);
 		}
 		return table;
 	}
-	
+
 	/**
 	 * Obtiene la lista de valores
+	 * 
 	 * @return
 	 */
 	public ArrayList getValueList() {
@@ -227,31 +244,36 @@ public class StretchPanel extends BasePanel implements IUserPanelInterface, Obse
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
 	 */
 	public void update(Observable o, Object arg) {
-		if(!(o instanceof StretchData))
+		if (!(o instanceof StretchData))
 			return;
-		StretchData data = (StretchData)o;
+		StretchData data = (StretchData) o;
 
 		setEnableValueChangedEvent(false);
-		
-		//Asigna el modelo de datos del selector
+
+		// Asigna el modelo de datos del selector
 		getStretchSelectorPanel().setData(data.getStretchSelectorData());
 		getStretchSelectorPanel().getData().updateObservers();
-		
-		//Asignamos el modelo de datos de la capa gráfica al modelo de datos global si todavia no ha sido asignado
-		if(data.getStretchDataModel() == null) {
-			StretchLayer stretch = (StretchLayer)getCanvas().getDrawableElements(StretchLayer.class).get(0);
+
+		// Asignamos el modelo de datos de la capa gráfica al modelo de datos
+		// global si todavia no ha sido asignado
+		if (data.getStretchDataModel() == null) {
+			StretchLayer stretch = (StretchLayer) getCanvas()
+					.getDrawableElements(StretchLayer.class).get(0);
 			data.setStretchLayerDataModel(stretch.getStretchDataModel());
 		}
-		
-		//Asigna máximo y mínimo a la capa de información
-		InfoLayer info = (InfoLayer)getCanvas().getDrawableElements(InfoLayer.class).get(0);
+
+		// Asigna máximo y mínimo a la capa de información
+		InfoLayer info = (InfoLayer) getCanvas().getDrawableElements(
+				InfoLayer.class).get(0);
 		info.setLimits(data.getMin(), data.getMax());
-		
-		//Asigna el histograma
-		GraphicHistogram gHistR = new GraphicHistogram(data.getHistogram(), Color.RED);
+
+		// Asigna el histograma
+		GraphicHistogram gHistR = new GraphicHistogram(data.getHistogram(),
+				Color.RED);
 		gHistR.setType(GraphicHistogram.TYPE_LINE);
 		getCanvas().removeDrawableElement(GraphicHistogram.class);
 		getCanvas().addDrawableElement(gHistR);
@@ -259,5 +281,5 @@ public class StretchPanel extends BasePanel implements IUserPanelInterface, Obse
 
 		setEnableValueChangedEvent(true);
 	}
-	
+
 }

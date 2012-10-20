@@ -42,83 +42,80 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: Queue.java 4419 2006-03-14 19:35:13Z azabala $
-* $Log$
-* Revision 1.1  2006-03-14 19:23:07  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: Queue.java 4419 2006-03-14 19:35:13Z azabala $
+ * $Log$
+ * Revision 1.1  2006-03-14 19:23:07  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.utiles;
+
 import java.util.Vector;
 
+/**
+ * A simple FIFO queue class which causes the calling thread to wait if the
+ * queue is empty and notifies threads that are waiting when it is not empty.
+ * 
+ * @author Anil V (akv@eng.sun.com)
+ */
+public class Queue {
+	private Vector vector = new Vector();
+
 	/**
-	 * A simple FIFO queue class which causes the calling thread to wait if the
-	 * queue is empty and notifies threads that are waiting when it is not
-	 * empty.
+	 * Put the object into the queue.
 	 * 
-	 * @author Anil V (akv@eng.sun.com)
+	 * @param object
+	 *            the object to be appended to the queue.
 	 */
-	public class Queue {
-	    private Vector vector = new Vector();
-
-	    /**
-		 * Put the object into the queue.
-		 * 
-		 * @param object
-		 *            the object to be appended to the queue.
-		 */
-	    public synchronized void put(Object object) {
-	        vector.addElement(object);
-	        notify();
-	    }
-
-	    /**
-		 * Pull the first object out of the queue. Wait if the queue is empty.
-		 */
-	    public synchronized Object pull() {
-	        while (isEmpty())
-	            try {
-	                wait();
-	            } catch (InterruptedException ex) {
-	            }
-	        return get();
-	    }
-
-	    /**
-		 * Get the first object out of the queue. Return null if the queue is
-		 * empty.
-		 */
-	    public synchronized Object get() {
-	        Object object = peek();
-	        if (object != null)
-	            vector.removeElementAt(0);
-	        return object;
-	    }
-
-	    /**
-		 * Peek to see if something is available.
-		 */
-	    public Object peek() {
-	        if (isEmpty())
-	            return null;
-	        return vector.elementAt(0);
-	    }
-
-	    /**
-		 * Is the queue empty?
-		 */
-	    public boolean isEmpty() {
-	        return vector.isEmpty();
-	    }
-
-	    /**
-		 * How many elements are there in this queue?
-		 */
-	    public int size() {
-	        return vector.size();
-	    }
+	public synchronized void put(Object object) {
+		vector.addElement(object);
+		notify();
 	}
 
+	/**
+	 * Pull the first object out of the queue. Wait if the queue is empty.
+	 */
+	public synchronized Object pull() {
+		while (isEmpty())
+			try {
+				wait();
+			} catch (InterruptedException ex) {
+			}
+		return get();
+	}
 
+	/**
+	 * Get the first object out of the queue. Return null if the queue is empty.
+	 */
+	public synchronized Object get() {
+		Object object = peek();
+		if (object != null)
+			vector.removeElementAt(0);
+		return object;
+	}
+
+	/**
+	 * Peek to see if something is available.
+	 */
+	public Object peek() {
+		if (isEmpty())
+			return null;
+		return vector.elementAt(0);
+	}
+
+	/**
+	 * Is the queue empty?
+	 */
+	public boolean isEmpty() {
+		return vector.isEmpty();
+	}
+
+	/**
+	 * How many elements are there in this queue?
+	 */
+	public int size() {
+		return vector.size();
+	}
+}

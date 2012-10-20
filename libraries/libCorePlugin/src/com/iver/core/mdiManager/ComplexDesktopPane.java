@@ -44,18 +44,20 @@ USA.
  */
 package com.iver.core.mdiManager;
 
-import javax.swing.JPanel;
-
-
-import javax.swing.JSplitPane;
 import java.awt.BorderLayout;
+
 import javax.swing.JDesktopPane;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+
 import com.iver.utiles.console.JConsole;
+
 public class ComplexDesktopPane extends JPanel {
 
 	private JSplitPane jSplitPane = null;
 	private JDesktopPane jDesktopPane = null;
 	private JConsole jConsole = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -63,21 +65,23 @@ public class ComplexDesktopPane extends JPanel {
 		super();
 		initialize();
 	}
+
 	/**
 	 * This method initializes this
 	 * 
 	 * @return void
 	 */
-	private  void initialize() {
+	private void initialize() {
 		this.setLayout(new BorderLayout());
-		this.setSize(300,200);
+		this.setSize(300, 200);
 		this.add(getJSplitPane(), java.awt.BorderLayout.CENTER);
 	}
+
 	/**
-	 * This method initializes jSplitPane	
-	 * 	
-	 * @return javax.swing.JSplitPane	
-	 */    
+	 * This method initializes jSplitPane
+	 * 
+	 * @return javax.swing.JSplitPane
+	 */
 	private JSplitPane getJSplitPane() {
 		if (jSplitPane == null) {
 			jSplitPane = new JSplitPane();
@@ -88,26 +92,28 @@ public class ComplexDesktopPane extends JPanel {
 		}
 		return jSplitPane;
 	}
+
 	/**
-	 * This method initializes jDesktopPane	
-	 * 	
-	 * @return javax.swing.JDesktopPane	
-	 */    
+	 * This method initializes jDesktopPane
+	 * 
+	 * @return javax.swing.JDesktopPane
+	 */
 	public JDesktopPane getDesktopPane() {
 		if (jDesktopPane == null) {
 			jDesktopPane = new JDesktopPane();
 		}
 		return jDesktopPane;
 	}
+
 	/**
-	 * This method initializes jConsole	
-	 * 	
-	 * @return com.iver.utiles.console.JConsole	
-	 */    
+	 * This method initializes jConsole
+	 * 
+	 * @return com.iver.utiles.console.JConsole
+	 */
 	private JConsole getJConsole() {
 		if (jConsole == null) {
 			jConsole = new JConsole();
 		}
 		return jConsole;
 	}
-   }
+}

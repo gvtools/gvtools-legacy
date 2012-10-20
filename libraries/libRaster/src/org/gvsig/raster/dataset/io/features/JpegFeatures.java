@@ -20,35 +20,38 @@ package org.gvsig.raster.dataset.io.features;
 
 import org.gvsig.raster.dataset.Params;
 import org.gvsig.raster.dataset.io.JpegWriter;
+
 /**
- * Caracteristicas del formato Jpeg para escritura.
- * Soporta escritura de imagenes 1 banda (monocromo) o 3 (RGB) en 8 bits. 
- * La georreferenciación puede hacerse mediante un fichero .wld.
+ * Caracteristicas del formato Jpeg para escritura. Soporta escritura de
+ * imagenes 1 banda (monocromo) o 3 (RGB) en 8 bits. La georreferenciación puede
+ * hacerse mediante un fichero .wld.
  * 
  * @version 04/06/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
 public class JpegFeatures extends WriteFileFormatFeatures {
-	
+
 	public JpegFeatures() {
-		super("Jpeg", "jpg", new int[]{3}, null, JpegWriter.class);
+		super("Jpeg", "jpg", new int[] { 3 }, null, JpegWriter.class);
 	}
-	
+
 	/**
 	 * Carga los parámetros de este driver.
 	 */
 	public void loadParams() {
 		super.loadParams();
-		
-		driverParams.setParam("quality",
-				new Integer(16),
-				Params.SLIDER,
-				new String[]{ "10", "100", "16", "5", "30"}); //min, max, valor defecto, intervalo pequeño, intervalo grande;
 
-		driverParams.setParam("progressive", 
-				new Boolean("false"), 
-				Params.CHECK, 
-				null);
+		driverParams.setParam("quality", new Integer(16), Params.SLIDER,
+				new String[] { "10", "100", "16", "5", "30" }); // min, max,
+																// valor
+																// defecto,
+																// intervalo
+																// pequeño,
+																// intervalo
+																// grande;
+
+		driverParams.setParam("progressive", new Boolean("false"),
+				Params.CHECK, null);
 	}
 }

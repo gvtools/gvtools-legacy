@@ -39,10 +39,10 @@ public class DirExtensionsPage extends AbstractPreferencePage {
 
 	private void initialize() {
 		icon = PluginServices.getIconTheme().get("file-manager");
-	    this.setLayout(new BorderLayout());
-	    this.setSize(new java.awt.Dimension(386,177));
-	    this.add(getPN(), java.awt.BorderLayout.NORTH);
-	    this.add(getPC(), java.awt.BorderLayout.CENTER);
+		this.setLayout(new BorderLayout());
+		this.setSize(new java.awt.Dimension(386, 177));
+		this.add(getPN(), java.awt.BorderLayout.NORTH);
+		this.add(getPC(), java.awt.BorderLayout.CENTER);
 	}
 
 	public String getID() {
@@ -57,15 +57,13 @@ public class DirExtensionsPage extends AbstractPreferencePage {
 		return this;
 	}
 
-
-
 	public void initializeValues() {
 		pluginDirectory = Launcher.getAndamiConfig().getPluginsDirectory();
 		getJTextField().setText(pluginDirectory);
 	}
 
 	public void storeValues() {
-//		Se escribe el directorio de los plugins
+		// Se escribe el directorio de los plugins
 		pluginDirectory = getJTextField().getText();
 		Launcher.getAndamiConfig().setPluginsDirectory(pluginDirectory);
 	}
@@ -80,7 +78,7 @@ public class DirExtensionsPage extends AbstractPreferencePage {
 
 	/**
 	 * This method initializes pN
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPN() {
@@ -92,7 +90,7 @@ public class DirExtensionsPage extends AbstractPreferencePage {
 
 	/**
 	 * This method initializes pC
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPC() {
@@ -105,13 +103,16 @@ public class DirExtensionsPage extends AbstractPreferencePage {
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel() {
 		if (jPanel == null) {
 			jPanel = new JPanel();
-			jPanel.setBorder(BorderFactory.createTitledBorder(null, PluginServices.getText(this, "directorio"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+			jPanel.setBorder(BorderFactory.createTitledBorder(null,
+					PluginServices.getText(this, "directorio"),
+					TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, null));
 			jPanel.add(getJTextField(), null);
 			jPanel.add(getJButton(), null);
 		}
@@ -120,7 +121,7 @@ public class DirExtensionsPage extends AbstractPreferencePage {
 
 	/**
 	 * This method initializes jTextField
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getJTextField() {
@@ -129,9 +130,17 @@ public class DirExtensionsPage extends AbstractPreferencePage {
 			jTextField.setPreferredSize(new Dimension(200, 20));
 			jTextField.setText(pluginDirectory);
 			jTextField.addKeyListener(new KeyListener() {
-               	public void keyPressed(KeyEvent e) { changed = true; }
-				public void keyReleased(KeyEvent e) { changed = true; }
-				public void keyTyped(KeyEvent e){ changed = true; }
+				public void keyPressed(KeyEvent e) {
+					changed = true;
+				}
+
+				public void keyReleased(KeyEvent e) {
+					changed = true;
+				}
+
+				public void keyTyped(KeyEvent e) {
+					changed = true;
+				}
 			});
 		}
 		return jTextField;
@@ -139,7 +148,7 @@ public class DirExtensionsPage extends AbstractPreferencePage {
 
 	/**
 	 * This method initializes jButton
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getJButton() {
@@ -152,12 +161,12 @@ public class DirExtensionsPage extends AbstractPreferencePage {
 					jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 					jfc.addChoosableFileFilter(new GenericFileFilter("",
 							PluginServices.getText(this,
-								"directorio_extensiones")));
+									"directorio_extensiones")));
 
-					if (jfc.showOpenDialog(
-								(Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
-						getJTextField().setText(jfc.getSelectedFile()
-												   .getAbsolutePath());
+					if (jfc.showOpenDialog((Component) PluginServices
+							.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
+						getJTextField().setText(
+								jfc.getSelectedFile().getAbsolutePath());
 						changed = true;
 					}
 				}
@@ -175,5 +184,5 @@ public class DirExtensionsPage extends AbstractPreferencePage {
 		changed = false;
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"
 

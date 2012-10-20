@@ -45,28 +45,30 @@ import java.io.IOException;
 import com.iver.cit.gvsig.exceptions.commands.EditionCommandException;
 import com.iver.cit.gvsig.fmap.drivers.DriverIOException;
 
-
 /**
  * Registro para apilar los comandos que se van ejecutando.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public interface CommandRecord {
 	/**
-	 * Añade un nuevo comando a la pila de deshacer(undos) y borra la de rehacer(redos).
-	 *
-	 * @param command Comando a añadir.
+	 * Añade un nuevo comando a la pila de deshacer(undos) y borra la de
+	 * rehacer(redos).
+	 * 
+	 * @param command
+	 *            Comando a añadir.
 	 * @throws DriverIOException
 	 * @throws IOException
 	 */
 	void pushCommand(Command command);
 
 	/**
-	 * Deshace, ejecutando el último comando de la pila de undos y
-	 * cambiandolo de esta pila a la de redos.
+	 * Deshace, ejecutando el último comando de la pila de undos y cambiandolo
+	 * de esta pila a la de redos.
+	 * 
 	 * @throws IOException
 	 * @throws DriverIOException
-	 *
+	 * 
 	 * @throws DriverIOException
 	 * @throws IOException
 	 * @throws EditionCommandException
@@ -74,8 +76,9 @@ public interface CommandRecord {
 	void undoCommand() throws EditionCommandException;
 
 	/**
-	 * Rehacer, ejecuta el último comando apilado en redos y
-	 * lo cambia a la pila de undos.
+	 * Rehacer, ejecuta el último comando apilado en redos y lo cambia a la pila
+	 * de undos.
+	 * 
 	 * @throws IOException
 	 * @throws DriverIOException
 	 * @throws IOException
@@ -85,25 +88,34 @@ public interface CommandRecord {
 
 	/**
 	 * Devuelve true si quedan más comandos aplilados para deshacer.
-	 *
+	 * 
 	 * @return True si quedan comandos de deshacer.
 	 */
 	boolean moreUndoCommands();
 
 	/**
 	 * Devuelve true si quedan comandos para rehacer.
-	 *
+	 * 
 	 * @return True si quedan comandos para rehacer.
 	 */
 	boolean moreRedoCommands();
+
 	public Command[] getUndoCommands();
+
 	public Command[] getRedoCommands();
+
 	public int getPos();
+
 	public void setPos(int pos) throws EditionCommandException;
+
 	public void addCommandListener(CommandListener ecl);
+
 	public void removeCommandListener(CommandListener e);
+
 	public void fireCommandsRepaint(CommandEvent e);
+
 	public int getCommandCount();
+
 	/**
 	 * Removes all do's and undo's
 	 */

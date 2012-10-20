@@ -61,10 +61,10 @@ import org.gvsig.xmlschema.som.IXSSchema;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class XSAllImpl extends XSGroupImpl implements IXSAll{
+public class XSAllImpl extends XSGroupImpl implements IXSAll {
 
 	public XSAllImpl(IXSSchema schema) {
-		super(schema);		
+		super(schema);
 	}
 
 }

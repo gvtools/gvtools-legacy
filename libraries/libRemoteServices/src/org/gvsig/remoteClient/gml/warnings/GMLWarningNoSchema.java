@@ -56,13 +56,12 @@ import org.gvsig.remoteClient.gml.exceptions.GMLException;
 /**
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  */
-public class GMLWarningNoSchema extends GMLException{
-		
+public class GMLWarningNoSchema extends GMLException {
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7047301394212726690L;
-
 
 	public GMLWarningNoSchema() {
 		init();
@@ -72,9 +71,10 @@ public class GMLWarningNoSchema extends GMLException{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	public void init() {
-		messageKey="gml_warning_no_schema";
-		formatString="GML without schema";
+		messageKey = "gml_warning_no_schema";
+		formatString = "GML without schema";
 		code = serialVersionUID;
 	}
 }

@@ -109,8 +109,8 @@ import com.iver.cit.gvsig.project.documents.view.legend.gui.AttrInTableLabeling;
  * @author Fco. José Peñarrubia
  * 
  */
-public class EdgesMemoryDriver implements VectorialDriver, ObjectDriver, BoundedShapes, 
-		WithDefaultLegend {
+public class EdgesMemoryDriver implements VectorialDriver, ObjectDriver,
+		BoundedShapes, WithDefaultLegend {
 	static FieldDescription[] fields = new FieldDescription[6];
 	static {
 		FieldDescription fieldDesc = new FieldDescription();
@@ -165,7 +165,7 @@ public class EdgesMemoryDriver implements VectorialDriver, ObjectDriver, Bounded
 	public EdgesMemoryDriver(Network net) {
 		this.net = net;
 		labeling = new AttrInTableLabeling();
-		
+
 	}
 
 	public int getShapeType() {
@@ -184,13 +184,11 @@ public class EdgesMemoryDriver implements VectorialDriver, ObjectDriver, Bounded
 		return false;
 	}
 
-	public int[] getPrimaryKeys()
-			 {
+	public int[] getPrimaryKeys() {
 		return null;
 	}
 
-	public void write(DataWare dataWare)
-			 {
+	public void write(DataWare dataWare) {
 	}
 
 	/**
@@ -237,8 +235,7 @@ public class EdgesMemoryDriver implements VectorialDriver, ObjectDriver, Bounded
 	 * 
 	 * @see com.hardcode.gdbms.engine.data.ReadDriver#getFieldValue(long, int)
 	 */
-	public Value getFieldValue(long rowIndex, int fieldId)
-			 {
+	public Value getFieldValue(long rowIndex, int fieldId) {
 		Value val = ValueFactory.createNullValue();
 		GvEdge edge = net.getGraph().getEdgeByID((int) rowIndex);
 		switch (fieldId) {
@@ -288,7 +285,9 @@ public class EdgesMemoryDriver implements VectorialDriver, ObjectDriver, Bounded
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.hardcode.gdbms.engine.data.driver.GDBMSDriver#setDataSourceFactory(com.hardcode.gdbms.engine.data.DataSourceFactory)
+	 * @see
+	 * com.hardcode.gdbms.engine.data.driver.GDBMSDriver#setDataSourceFactory
+	 * (com.hardcode.gdbms.engine.data.DataSourceFactory)
 	 */
 	public void setDataSourceFactory(DataSourceFactory dsf) {
 	}
@@ -328,48 +327,49 @@ public class EdgesMemoryDriver implements VectorialDriver, ObjectDriver, Bounded
 		legend.setStartColor(Color.RED);
 		legend.setEndColor(Color.BLUE);
 		FInterval[] arrayIntervalos = calculateEqualIntervals(20, 0, 20000);
-            FInterval elIntervalo;
-            NumberFormat.getInstance().setMaximumFractionDigits(2);
+		FInterval elIntervalo;
+		NumberFormat.getInstance().setMaximumFractionDigits(2);
 
-            int r;
-            int g;
-            int b;
-            int stepR;
-            int stepG;
-            int stepB;
-            r = legend.getStartColor().getRed();
-            g = legend.getStartColor().getGreen();
-            b = legend.getStartColor().getBlue();
-            stepR = (legend.getEndColor().getRed() - r) / arrayIntervalos.length;
-            stepG = (legend.getEndColor().getGreen() - g) / arrayIntervalos.length;
-            stepB = (legend.getEndColor().getBlue() - b) / arrayIntervalos.length;
-		
-        for (int k = 0; k < arrayIntervalos.length; k++) {
-            elIntervalo = arrayIntervalos[k];
+		int r;
+		int g;
+		int b;
+		int stepR;
+		int stepG;
+		int stepB;
+		r = legend.getStartColor().getRed();
+		g = legend.getStartColor().getGreen();
+		b = legend.getStartColor().getBlue();
+		stepR = (legend.getEndColor().getRed() - r) / arrayIntervalos.length;
+		stepG = (legend.getEndColor().getGreen() - g) / arrayIntervalos.length;
+		stepB = (legend.getEndColor().getBlue() - b) / arrayIntervalos.length;
 
-            // clave = elIntervalo; // elIntervalo.getMin() + " - " +
+		for (int k = 0; k < arrayIntervalos.length; k++) {
+			elIntervalo = arrayIntervalos[k];
+
+			// clave = elIntervalo; // elIntervalo.getMin() + " - " +
 			// elIntervalo.getMax();
-            // System.out.println("k = " + k + " clave = " + clave);
-            // //Comprobar que no esta repetido y no hace falta introducir en el
+			// System.out.println("k = " + k + " clave = " + clave);
+			// //Comprobar que no esta repetido y no hace falta introducir en el
 			// hashtable el campo junto con el simbolo.
-            // if (!m_Renderer.m_symbolList.containsKey(elIntervalo)) {
-            // si no esta creado el simbolo se crea
-//            FSymbol theSymbol = new FSymbol(FShape.LINE, new Color(r, g, b));
-            ILineSymbol theSymbol = new SimpleLineSymbol();
-            theSymbol.setLineColor(new Color(r, g, b));
-            theSymbol.setDescription(NumberFormat.getInstance().format(elIntervalo.getMin()) +
-                " - " +
-                NumberFormat.getInstance().format(elIntervalo.getMax()));
+			// if (!m_Renderer.m_symbolList.containsKey(elIntervalo)) {
+			// si no esta creado el simbolo se crea
+			// FSymbol theSymbol = new FSymbol(FShape.LINE, new Color(r, g, b));
+			ILineSymbol theSymbol = new SimpleLineSymbol();
+			theSymbol.setLineColor(new Color(r, g, b));
+			theSymbol.setDescription(NumberFormat.getInstance().format(
+					elIntervalo.getMin())
+					+ " - "
+					+ NumberFormat.getInstance().format(elIntervalo.getMax()));
 
-            // ////////////////////////////////////
-            // CALCULAMOS UN COLOR APROPIADO
-            r = r + stepR;
-            g = g + stepG;
-            b = b + stepB;
+			// ////////////////////////////////////
+			// CALCULAMOS UN COLOR APROPIADO
+			r = r + stepR;
+			g = g + stepG;
+			b = b + stepB;
 
-            // ///////////////////////////////
-            legend.addSymbol(elIntervalo, theSymbol);
-        } // for
+			// ///////////////////////////////
+			legend.addSymbol(elIntervalo, theSymbol);
+		} // for
 
 		return legend;
 	}
@@ -378,18 +378,18 @@ public class EdgesMemoryDriver implements VectorialDriver, ObjectDriver, Bounded
 		return (ILabelingStrategy) labeling;
 	}
 
-	public Rectangle2D getShapeBounds(int index) throws ReadDriverException, ExpansionFileReadException {
+	public Rectangle2D getShapeBounds(int index) throws ReadDriverException,
+			ExpansionFileReadException {
 		GvEdge edge = net.getGraph().getEdgeByID(index);
 		GvNode n1 = net.getGraph().getNodeByID(edge.getIdNodeOrig());
 		GvNode n2 = net.getGraph().getNodeByID(edge.getIdNodeEnd());
-		Rectangle2D bound = new Rectangle2D.Double(n1.getX(), n1.getY(), n2.getX()-n1.getX(),
-				n2.getY() - n1.getY());
+		Rectangle2D bound = new Rectangle2D.Double(n1.getX(), n1.getY(),
+				n2.getX() - n1.getX(), n2.getY() - n1.getY());
 		return bound;
 	}
 
 	public int getShapeType(int index) throws ReadDriverException {
 		return getShapeType();
 	}
-
 
 }

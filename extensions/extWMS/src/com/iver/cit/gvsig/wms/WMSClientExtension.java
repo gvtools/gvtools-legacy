@@ -56,50 +56,51 @@ import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
 /**
  * Extension for adding WMS support to gvSIG.
- *
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class WMSClientExtension extends Extension {
 
-    public void initialize() {
-    	// Adds an entry to the TOC's floating menu to those layers defined in this extension
-        FPopupMenu.addEntry(new WMSPropsTocMenuEntry());
-        FPopupMenu.addEntry(new ZoomToVisibleScaleTocMenuEntry());
+	public void initialize() {
+		// Adds an entry to the TOC's floating menu to those layers defined in
+		// this extension
+		FPopupMenu.addEntry(new WMSPropsTocMenuEntry());
+		FPopupMenu.addEntry(new ZoomToVisibleScaleTocMenuEntry());
 
-        // Adds a new tab to the "add layer" wizard for WMS layer creation
-    	AddLayer.addWizard(WMSWizard.class);
-    	ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
-    	extensionPoints.add("CatalogLayers","OGC:WMS",FLyrWMS.class);
+		// Adds a new tab to the "add layer" wizard for WMS layer creation
+		AddLayer.addWizard(WMSWizard.class);
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+		extensionPoints.add("CatalogLayers", "OGC:WMS", FLyrWMS.class);
 
-    	initilizeIcons();
-    }
+		initilizeIcons();
+	}
 
-    public void execute(String actionCommand) {
-    	// no commands, no code.
-    }
+	public void execute(String actionCommand) {
+		// no commands, no code.
+	}
 
-    public boolean isEnabled() {
-    	// may return whatever
-        return false;
-    }
+	public boolean isEnabled() {
+		// may return whatever
+		return false;
+	}
 
-    public boolean isVisible() {
-    	// may return whatever
-        return false;
-    }
+	public boolean isVisible() {
+		// may return whatever
+		return false;
+	}
 
-
-    void initilizeIcons(){
-    	// WMSParamsPanel.java
+	void initilizeIcons() {
+		// WMSParamsPanel.java
 		PluginServices.getIconTheme().registerDefault(
 				"aplication-preferences-uparrow",
-				this.getClass().getClassLoader().getResource("images/up-arrow.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/up-arrow.png"));
 
 		// WMSParamsPanel.java
 		PluginServices.getIconTheme().registerDefault(
 				"aplication-preferences-downarrow",
-				this.getClass().getClassLoader().getResource("images/down-arrow.png")
-			);
-    }
+				this.getClass().getClassLoader()
+						.getResource("images/down-arrow.png"));
+	}
 }

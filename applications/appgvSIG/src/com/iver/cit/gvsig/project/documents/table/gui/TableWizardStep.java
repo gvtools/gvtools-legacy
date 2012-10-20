@@ -28,8 +28,7 @@ public class TableWizardStep extends JWizardPanel {
 	private JComboBox fieldNameCmb = null;
 	private JLabel fieldPrefixLbl = null;
 	private JTextField fieldPrefixTxt = null;
-	
-	
+
 	public TableWizardStep(JWizardComponents wizardComponents, String title) {
 		super(wizardComponents, title);
 		initialize();
@@ -40,12 +39,14 @@ public class TableWizardStep extends JWizardPanel {
 		Object[] tableNames;
 		try {
 			tableNames = model.getObjects();
-			for (int i=0; i<tableNames.length; i++) {
+			for (int i = 0; i < tableNames.length; i++) {
 				getTableNameCmb().addItem(tableNames[i]);
 			}
 		} catch (Exception e) {
-			NotificationManager.addError(PluginServices.getText(this, "Error_getting_table_fields"), e);
-		}	
+			NotificationManager.addError(
+					PluginServices.getText(this, "Error_getting_table_fields"),
+					e);
+		}
 	}
 
 	public void setFieldModel(ObjectSelectionModel model) {
@@ -53,15 +54,17 @@ public class TableWizardStep extends JWizardPanel {
 		Object[] fieldNames;
 		try {
 			fieldNames = model.getObjects();
-			for (int i=0; i<fieldNames.length; i++) {
+			for (int i = 0; i < fieldNames.length; i++) {
 				getFieldNameCmb().addItem(fieldNames[i]);
 			}
 		} catch (Exception e) {
-			NotificationManager.addError(PluginServices.getText(this, "Error_getting_table_fields"), e);
-		}	
-		
+			NotificationManager.addError(
+					PluginServices.getText(this, "Error_getting_table_fields"),
+					e);
+		}
+
 	}
-	
+
 	private void initialize() {
 		this.setLayout(new GridBagLayout());
 
@@ -73,9 +76,9 @@ public class TableWizardStep extends JWizardPanel {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.weightx = 1.0;
 		constraints.weighty = 0.0;
-		constraints.insets = new Insets(4,10,8,4);
+		constraints.insets = new Insets(4, 10, 8, 4);
 		this.add(getHeaderLbl(), constraints);
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		constraints.gridwidth = 1;
@@ -83,9 +86,9 @@ public class TableWizardStep extends JWizardPanel {
 		constraints.fill = GridBagConstraints.NONE;
 		constraints.weightx = 0.0;
 		constraints.weighty = 0.0;
-		constraints.insets = new Insets(4,10,4,6);
+		constraints.insets = new Insets(4, 10, 4, 6);
 		this.add(getTableNameLbl(), constraints);
-		
+
 		constraints.gridx = 1;
 		constraints.gridy = 1;
 		constraints.gridwidth = 1;
@@ -102,9 +105,9 @@ public class TableWizardStep extends JWizardPanel {
 		constraints.fill = GridBagConstraints.NONE;
 		constraints.weightx = 0.0;
 		constraints.weighty = 0.0;
-		constraints.insets = new Insets(4,10,4,6);
+		constraints.insets = new Insets(4, 10, 4, 6);
 		this.add(getFieldNameLbl(), constraints);
-		
+
 		constraints.gridx = 1;
 		constraints.gridy = 2;
 		constraints.gridwidth = 1;
@@ -113,7 +116,7 @@ public class TableWizardStep extends JWizardPanel {
 		constraints.weightx = 0.5;
 		constraints.weighty = 0.0;
 		this.add(getFieldNameCmb(), constraints);
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 3;
 		constraints.gridwidth = 1;
@@ -121,9 +124,9 @@ public class TableWizardStep extends JWizardPanel {
 		constraints.fill = GridBagConstraints.NONE;
 		constraints.weightx = 0.0;
 		constraints.weighty = 0.0;
-		constraints.insets = new Insets(4,10,4,6);
+		constraints.insets = new Insets(4, 10, 4, 6);
 		this.add(getFieldPrefixLbl(), constraints);
-		
+
 		constraints.gridx = 1;
 		constraints.gridy = 3;
 		constraints.gridwidth = 1;
@@ -135,7 +138,7 @@ public class TableWizardStep extends JWizardPanel {
 	}
 
 	public JLabel getHeaderLbl() {
-		if (lbl_header==null) {
+		if (lbl_header == null) {
 			lbl_header = new JLabel();
 			Font font = lbl_header.getFont();
 			lbl_header.setFont(font.deriveFont(Font.BOLD));
@@ -158,28 +161,28 @@ public class TableWizardStep extends JWizardPanel {
 	}
 
 	public JLabel getFieldNameLbl() {
-		if (fieldNameLbl==null) {
+		if (fieldNameLbl == null) {
 			fieldNameLbl = new JLabel();
 		}
 		return fieldNameLbl;
 	}
 
 	public JComboBox getFieldNameCmb() {
-		if (fieldNameCmb==null) {
+		if (fieldNameCmb == null) {
 			fieldNameCmb = new JComboBox();
 		}
 		return fieldNameCmb;
 	}
 
 	public JLabel getFieldPrefixLbl() {
-		if (fieldPrefixLbl==null) {
+		if (fieldPrefixLbl == null) {
 			fieldPrefixLbl = new JLabel();
 		}
 		return fieldPrefixLbl;
 	}
 
 	public JTextField getFieldPrefixTxt() {
-		if (fieldPrefixTxt==null) {
+		if (fieldPrefixTxt == null) {
 			fieldPrefixTxt = new JTextField();
 		}
 		return fieldPrefixTxt;

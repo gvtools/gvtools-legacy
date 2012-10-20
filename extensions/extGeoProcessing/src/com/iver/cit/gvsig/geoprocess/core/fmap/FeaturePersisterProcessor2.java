@@ -42,29 +42,29 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: FeaturePersisterProcessor2.java 13881 2007-09-19 16:22:04Z jaume $
-* $Log$
-* Revision 1.3  2007-09-19 16:02:53  jaume
-* removed unnecessary imports
-*
-* Revision 1.2  2007/03/06 16:47:58  caballero
-* Exceptions
-*
-* Revision 1.1  2006/05/24 21:12:16  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.3  2006/03/15 18:34:03  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/03/05 19:58:58  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/02/26 20:55:08  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: FeaturePersisterProcessor2.java 13881 2007-09-19 16:22:04Z jaume $
+ * $Log$
+ * Revision 1.3  2007-09-19 16:02:53  jaume
+ * removed unnecessary imports
+ *
+ * Revision 1.2  2007/03/06 16:47:58  caballero
+ * Exceptions
+ *
+ * Revision 1.1  2006/05/24 21:12:16  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.3  2006/03/15 18:34:03  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/03/05 19:58:58  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/02/26 20:55:08  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core.fmap;
 
 import com.iver.cit.gvsig.exceptions.visitors.StartVisitorException;
@@ -76,33 +76,32 @@ import com.iver.cit.gvsig.fmap.edition.IRowEdited;
 import com.iver.cit.gvsig.fmap.edition.IWriter;
 
 /**
- * It saves in a persistent data store Features, by using a IWriter.
- * It does preprocess and postprocess in start() and stop() methods.
+ * It saves in a persistent data store Features, by using a IWriter. It does
+ * preprocess and postprocess in start() and stop() methods.
+ * 
  * @author azabala
- *
+ * 
  */
 public class FeaturePersisterProcessor2 implements FeatureProcessor {
 	/*
 	 * precondition: writer must have its schema created with
-	 * ISchemaManager#createOrAlterSchema()
-	 * FIXME Redesing writer to create schema by implementing ISchemaManager
-	 * interface
-	 * */
+	 * ISchemaManager#createOrAlterSchema() FIXME Redesing writer to create
+	 * schema by implementing ISchemaManager interface
+	 */
 	IWriter writer;
 	int numFeatures;
 
-
-	public FeaturePersisterProcessor2(IWriter writer){
+	public FeaturePersisterProcessor2(IWriter writer) {
 		this.writer = writer;
 	}
-	public void processFeature(IRow feature) throws VisitorException{
+
+	public void processFeature(IRow feature) throws VisitorException {
 		DefaultRowEdited editedFeature = new DefaultRowEdited(feature,
-									IRowEdited.STATUS_ADDED,
-											numFeatures++);
-			writer.process(editedFeature);
+				IRowEdited.STATUS_ADDED, numFeatures++);
+		writer.process(editedFeature);
 	}
 
-	public void start() throws StartVisitorException{
+	public void start() throws StartVisitorException {
 		this.writer.preProcess();
 	}
 
@@ -111,4 +110,3 @@ public class FeaturePersisterProcessor2 implements FeatureProcessor {
 	}
 
 }
-

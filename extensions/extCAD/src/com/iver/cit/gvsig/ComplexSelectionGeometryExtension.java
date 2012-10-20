@@ -50,29 +50,29 @@ import com.iver.cit.gvsig.gui.cad.tools.ComplexSelectionCADTool;
 
 /**
  * Extensión que gestiona la herramienta de seleccionar.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class ComplexSelectionGeometryExtension extends Extension {
 
 	private MapControl mapControl;
-	private  ComplexSelectionCADTool selection;
+	private ComplexSelectionCADTool selection;
 
 	/**
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
-		selection=new ComplexSelectionCADTool();
+		selection = new ComplexSelectionCADTool();
 		CADExtension.addCADTool("_complex_selection", selection);
-		
+
 		registerIcons();
 	}
-	
-	private void registerIcons(){
+
+	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"edition-complex-selection",
-				this.getClass().getClassLoader().getResource("images/ComplexSelCAD.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/ComplexSelCAD.png"));
 	}
 
 	/**
@@ -81,8 +81,8 @@ public class ComplexSelectionGeometryExtension extends Extension {
 	public void execute(String s) {
 		CADExtension.initFocus();
 		if (s.equals("_complex_selection")) {
-        	CADExtension.setCADTool("_complex_selection",true);
-        }
+			CADExtension.setCADTool("_complex_selection", true);
+		}
 		CADExtension.getEditionManager().setMapControl(mapControl);
 		CADExtension.getCADToolAdapter().configureMenu();
 	}
@@ -91,13 +91,14 @@ public class ComplexSelectionGeometryExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
-		if (CADExtension.getEditionManager().getActiveLayerEdited()==null)
+		if (CADExtension.getEditionManager().getActiveLayerEdited() == null)
 			return false;
-		FLyrVect lv=(FLyrVect)CADExtension.getEditionManager().getActiveLayerEdited().getLayer();
+		FLyrVect lv = (FLyrVect) CADExtension.getEditionManager()
+				.getActiveLayerEdited().getLayer();
 		try {
 			return selection.isApplicable(lv.getShapeType());
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 		return false;
 	}
@@ -106,7 +107,7 @@ public class ComplexSelectionGeometryExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE){
+		if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE) {
 			return true;
 		}
 		return false;

@@ -6,7 +6,6 @@ import org.gvsig.gpe.containers.GeometryAsserts;
 import org.gvsig.gpe.containers.Layer;
 import org.gvsig.gpe.containers.LinearRing;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -74,7 +73,7 @@ import org.gvsig.gpe.containers.LinearRing;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class GPELinearRingLayerTest extends GPEWriterBaseTest{
+public abstract class GPELinearRingLayerTest extends GPEWriterBaseTest {
 	private String layerId = "l1";
 	private String layerName = "Line String Layer";
 	private String layerDescription = "This is a linear ring test";
@@ -88,7 +87,7 @@ public abstract class GPELinearRingLayerTest extends GPEWriterBaseTest{
 	private String linearRing1Id = "p1";
 	private double[] linearRing1X = generateRandomLinearRing();
 	private double[] linearRing1Y = generateRandomLinearRing();
-	private double[] linearRing1Z = generateRandomLinearRing();	
+	private double[] linearRing1Z = generateRandomLinearRing();
 	private String feature2Name = "Los Angeles";
 	private String feature2Id = "f2";
 	private String linearRing2Id = "p2";
@@ -96,52 +95,55 @@ public abstract class GPELinearRingLayerTest extends GPEWriterBaseTest{
 	private double[] linearRing2Y = generateRandomLinearRing();
 	private double[] linearRing2Z = generateRandomLinearRing();
 
-	
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#readObjects()
 	 */
 	public void readObjects() {
 		Layer[] layers = getLayers();
-		assertEquals(layers.length, 1);		
+		assertEquals(layers.length, 1);
 		Layer layer = layers[0];
-		
-		assertEquals(layer.getFeatures().size(), 2);
-		//FEATURE 1
-		Feature feature1 = (Feature)layer.getFeatures().get(0);
-		GeometryAsserts.linearRing((LinearRing)feature1.getGeometry(), linearRing1X, linearRing1Y, linearRing1Z);
 
-		//FEATURE 2
-		Feature feature2 = (Feature)layer.getFeatures().get(1);
-		GeometryAsserts.linearRing((LinearRing)feature2.getGeometry(), linearRing2X, linearRing2Y, linearRing2Z);
+		assertEquals(layer.getFeatures().size(), 2);
+		// FEATURE 1
+		Feature feature1 = (Feature) layer.getFeatures().get(0);
+		GeometryAsserts.linearRing((LinearRing) feature1.getGeometry(),
+				linearRing1X, linearRing1Y, linearRing1Z);
+
+		// FEATURE 2
+		Feature feature2 = (Feature) layer.getFeatures().get(1);
+		GeometryAsserts.linearRing((LinearRing) feature2.getGeometry(),
+				linearRing2X, linearRing2Y, linearRing2Z);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#writeObjects()
 	 */
 	public void writeObjects() {
 		getWriterHandler().initialize();
-		getWriterHandler().startLayer(layerId, null, layerName, layerDescription, srs);
-		getWriterHandler().startBbox(bboxId, new CoordinatesSequence(bboxX,	bboxY, bboxZ), srs);
+		getWriterHandler().startLayer(layerId, null, layerName,
+				layerDescription, srs);
+		getWriterHandler().startBbox(bboxId,
+				new CoordinatesSequence(bboxX, bboxY, bboxZ), srs);
 		getWriterHandler().endBbox();
 		getWriterHandler().startFeature(feature1Id, null, feature1Name);
-		getWriterHandler().startLinearRing(linearRing1Id, new CoordinatesSequence(
-				linearRing1X,
-				linearRing1Y,
-				linearRing1Z), 
-				srs);
-		getWriterHandler().endLinearRing();		
+		getWriterHandler().startLinearRing(
+				linearRing1Id,
+				new CoordinatesSequence(linearRing1X, linearRing1Y,
+						linearRing1Z), srs);
+		getWriterHandler().endLinearRing();
 		getWriterHandler().endFeature();
 		getWriterHandler().startFeature(feature2Id, null, feature2Name);
-		getWriterHandler().startLinearRing(linearRing2Id, new CoordinatesSequence(
-				linearRing2X,
-				linearRing2Y,
-				linearRing2Z), 
-				srs);
-		getWriterHandler().endLinearRing();		
+		getWriterHandler().startLinearRing(
+				linearRing2Id,
+				new CoordinatesSequence(linearRing2X, linearRing2Y,
+						linearRing2Z), srs);
+		getWriterHandler().endLinearRing();
 		getWriterHandler().endFeature();
 		getWriterHandler().endLayer();
-		getWriterHandler().close();		
+		getWriterHandler().close();
 	}
 }

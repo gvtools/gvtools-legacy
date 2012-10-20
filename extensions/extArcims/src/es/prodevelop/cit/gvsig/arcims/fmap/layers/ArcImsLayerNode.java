@@ -42,21 +42,20 @@
  */
 package es.prodevelop.cit.gvsig.arcims.fmap.layers;
 
-
 /**
- * Encapsulates the characteristics of an ArcIMS layer.
- * So far, the ArcIMS plugin accesses the name only.
- *
+ * Encapsulates the characteristics of an ArcIMS layer. So far, the ArcIMS
+ * plugin accesses the name only.
+ * 
  * @author jldominguez
  */
 public class ArcImsLayerNode {
-    private String _name;
+	private String _name;
 
-    public String getName() {
-        return _name;
-    }
+	public String getName() {
+		return _name;
+	}
 
-    public void setName(String n) {
-        _name = n;
-    }
+	public void setName(String n) {
+		_name = n;
+	}
 }

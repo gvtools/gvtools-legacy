@@ -46,12 +46,12 @@
  */
 package org.gvsig.remoteClient.arcims.styling.renderers;
 
-
 /**
  * Abstract class to model ArcIMS Renderer's family
+ * 
  * @author jsanz
- *
+ * 
  */
 public abstract class Renderer {
-    public static final String TAG = "";
+	public static final String TAG = "";
 }

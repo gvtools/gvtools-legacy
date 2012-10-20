@@ -42,26 +42,26 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: FeatureFactory.java 5412 2006-05-24 21:15:07Z azabala $
-* $Log$
-* Revision 1.1  2006-05-24 21:12:16  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.4  2006/03/21 19:30:46  azabala
-* *** empty log message ***
-*
-* Revision 1.3  2006/03/14 18:32:46  fjp
-* Cambio con LayerDefinition para que sea compatible con la definición de tablas también.
-*
-* Revision 1.2  2006/02/17 16:34:00  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/02/09 15:59:48  azabala
-* First version in CVS
-*
-*
-*/
+ *
+ * $Id: FeatureFactory.java 5412 2006-05-24 21:15:07Z azabala $
+ * $Log$
+ * Revision 1.1  2006-05-24 21:12:16  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.4  2006/03/21 19:30:46  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.3  2006/03/14 18:32:46  fjp
+ * Cambio con LayerDefinition para que sea compatible con la definición de tablas también.
+ *
+ * Revision 1.2  2006/02/17 16:34:00  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/02/09 15:59:48  azabala
+ * First version in CVS
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core.fmap;
 
 import com.hardcode.gdbms.engine.values.Value;
@@ -72,8 +72,7 @@ import com.iver.cit.gvsig.fmap.drivers.ITableDefinition;
 
 public class FeatureFactory {
 	/**
-	 * Precondition: 
-	 * objs order and layerdefinition' s fielddescriptions order
+	 * Precondition: objs order and layerdefinition' s fielddescriptions order
 	 * must be the same.
 	 * 
 	 * @param objs
@@ -81,28 +80,24 @@ public class FeatureFactory {
 	 * @param layerDefinition
 	 * @return
 	 */
-	public static IFeature createFeature(Object[] objs, 
-									IGeometry g, 
-									ITableDefinition layerDefinition){
-        IFeature solution = null;
-        Value[] attributes = 
-        	new Value[layerDefinition.getFieldsDesc().length];
-        // Aunque no nos hayan pedido todos los campos, devolveremos
-        // tantos atributos como la capa tiene. Eso sí, puestos a null
-       for(int i = 0; i < objs.length; i++){
-    	   Object object = objs[i];
-    	   //Esto hay que corregirlo
-    	   int fieldType = layerDefinition.
-    	   			getFieldsDesc()[i].getFieldType();
-    	   Value newValue = XTypes.getValue(object, fieldType);
-    	   attributes[i] = newValue;
-       }
-       solution = new DefaultFeature(g, attributes); 
-       return solution;
+	public static IFeature createFeature(Object[] objs, IGeometry g,
+			ITableDefinition layerDefinition) {
+		IFeature solution = null;
+		Value[] attributes = new Value[layerDefinition.getFieldsDesc().length];
+		// Aunque no nos hayan pedido todos los campos, devolveremos
+		// tantos atributos como la capa tiene. Eso sí, puestos a null
+		for (int i = 0; i < objs.length; i++) {
+			Object object = objs[i];
+			// Esto hay que corregirlo
+			int fieldType = layerDefinition.getFieldsDesc()[i].getFieldType();
+			Value newValue = XTypes.getValue(object, fieldType);
+			attributes[i] = newValue;
+		}
+		solution = new DefaultFeature(g, attributes);
+		return solution;
 	}
-	
-	public static IFeature createFeature(Value[] values, IGeometry g){
+
+	public static IFeature createFeature(Value[] values, IGeometry g) {
 		return new DefaultFeature(g, values);
 	}
 }
-

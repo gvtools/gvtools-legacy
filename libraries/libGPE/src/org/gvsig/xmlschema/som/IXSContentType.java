@@ -66,20 +66,20 @@ import org.gvsig.xmlschema.utils.SchemaTags;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public interface IXSContentType extends IXSComponent{
+public interface IXSContentType extends IXSComponent {
 	public static final String WITOUT_CONTENT = "N";
 	public static final String COMPLEX_CONTENT = SchemaTags.COMPLEX_CONTENT;
 	public static final String SIMPLE_CONTENT = SchemaTags.SIMPLE_CONTENT;
-	//restrictions
+	// restrictions
 	public static final String WITOUT_RESTRICTION = "N";
 	public static final String EXTENSION = SchemaTags.EXTENSION;
 	public static final String RESTRICTION = SchemaTags.RESTRICTION;
-	
+
 	/**
 	 * @return the content type restriction
 	 */
 	public IXSRestriction getRestriction();
-	
+
 	/**
 	 * @returnm the content type extension
 	 */

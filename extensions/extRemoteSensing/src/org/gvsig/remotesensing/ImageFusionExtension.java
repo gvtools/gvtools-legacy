@@ -1,42 +1,42 @@
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
-*
-* Copyright (C) 2006 Instituto de Desarrollo Regional and Generalitat Valenciana.
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License
-* as published by the Free Software Foundation; either version 2
-* of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
-*
-* For more information, contact:
-*
-*  Generalitat Valenciana
-*   Conselleria d'Infraestructures i Transport
-*   Av. Blasco Ibñez, 50
-*   46010 VALENCIA
-*   SPAIN
-*
-*      +34 963862235
-*   gvsig@gva.es
-*      www.gvsig.gva.es
-*
-*    or
-*
-*   Instituto de Desarrollo Regional (Universidad de Castilla La-Mancha)
-*   Campus Universitario s/n
-*   02071 Alabacete
-*   Spain
-*
-*   +34 967 599 200
-*/
+ *
+ * Copyright (C) 2006 Instituto de Desarrollo Regional and Generalitat Valenciana.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
+ *
+ * For more information, contact:
+ *
+ *  Generalitat Valenciana
+ *   Conselleria d'Infraestructures i Transport
+ *   Av. Blasco Ibñez, 50
+ *   46010 VALENCIA
+ *   SPAIN
+ *
+ *      +34 963862235
+ *   gvsig@gva.es
+ *      www.gvsig.gva.es
+ *
+ *    or
+ *
+ *   Instituto de Desarrollo Regional (Universidad de Castilla La-Mancha)
+ *   Campus Universitario s/n
+ *   02071 Alabacete
+ *   Spain
+ *
+ *   +34 967 599 200
+ */
 
 package org.gvsig.remotesensing;
 
@@ -54,25 +54,30 @@ import com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuActio
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
 
 /**
-* Punto de entrada del menu del gestor de ROIs.
-*
-* @author Diego Guerrero Sevilla (diego.guerrero@uclm.es
-*/
+ * Punto de entrada del menu del gestor de ROIs.
+ * 
+ * @author Diego Guerrero Sevilla (diego.guerrero@uclm.es
+ */
 
-public class ImageFusionExtension extends AbstractTocContextMenuAction implements IGenericToolBarMenuItem {
-	static private ImageFusionExtension singleton  = null;
+public class ImageFusionExtension extends AbstractTocContextMenuAction
+		implements IGenericToolBarMenuItem {
+	static private ImageFusionExtension singleton = null;
 
-	private ImageFusionExtension() {}
+	private ImageFusionExtension() {
+	}
 
 	static public ImageFusionExtension getSingleton() {
 		if (singleton == null)
 			singleton = new ImageFusionExtension();
 		return singleton;
-	}	
-	
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getGroup()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getGroup()
 	 */
 	public String getGroup() {
 		return "RasterProcess";
@@ -80,7 +85,10 @@ public class ImageFusionExtension extends AbstractTocContextMenuAction implement
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getGroupOrder()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getGroupOrder()
 	 */
 	public int getGroupOrder() {
 		return 55;
@@ -88,7 +96,10 @@ public class ImageFusionExtension extends AbstractTocContextMenuAction implement
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getOrder()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getOrder()
 	 */
 	public int getOrder() {
 		return 0;
@@ -96,6 +107,7 @@ public class ImageFusionExtension extends AbstractTocContextMenuAction implement
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.project.documents.IContextMenuAction#getText()
 	 */
 	public String getText() {
@@ -104,7 +116,11 @@ public class ImageFusionExtension extends AbstractTocContextMenuAction implement
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -121,7 +137,11 @@ public class ImageFusionExtension extends AbstractTocContextMenuAction implement
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -129,13 +149,17 @@ public class ImageFusionExtension extends AbstractTocContextMenuAction implement
 
 		if (!(selectedItems[0] instanceof FLyrRasterSE))
 			return false;
-		
+
 		return true;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#execute(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #execute(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public void execute(ITocItem item, FLayer[] selectedItems) {
 		FLayer fLayer = null;
@@ -147,23 +171,25 @@ public class ImageFusionExtension extends AbstractTocContextMenuAction implement
 
 		if (!(fLayer instanceof FLyrRasterSE))
 			return;
-		
+
 		/* check if selected layer is multiband */
-		if ( ((FLyrRasterSE) fLayer).getBandCount() < 2) {
-			JOptionPane.showMessageDialog(null, 
-					PluginServices.getText (this, "ext_rs_is_not_a_multiband_layer") );
+		if (((FLyrRasterSE) fLayer).getBandCount() < 2) {
+			JOptionPane.showMessageDialog(null, PluginServices.getText(this,
+					"ext_rs_is_not_a_multiband_layer"));
 			return;
 		}
-		
-		com.iver.andami.ui.mdiManager.IWindow activeWindow = PluginServices.getMDIManager().getActiveWindow();
-		FusionDialog fusionDialog = new FusionDialog(selectedItems[0],590,385);
-	
+
+		com.iver.andami.ui.mdiManager.IWindow activeWindow = PluginServices
+				.getMDIManager().getActiveWindow();
+		FusionDialog fusionDialog = new FusionDialog(selectedItems[0], 590, 385);
+
 		PluginServices.getMDIManager().addWindow(fusionDialog);
-		
+
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getIcon()
 	 */
 	public Icon getIcon() {

@@ -76,17 +76,17 @@ public class TetraStateCheckBox extends JCheckBox {
 		setModel(model);
 	}
 
-	public TetraStateCheckBox(String text){
-		this(text,null,WHITE);
+	public TetraStateCheckBox(String text) {
+		this(text, null, WHITE);
 	}
-	
+
 	public TetraStateCheckBox() {
 		this(null, null, WHITE);
 	}
 
 	/**
-	 * Set the new state to either SELECTED, NOT_SELECTED or DONT_CARE. If state ==
-	 * null, it is treated as DONT_CARE.
+	 * Set the new state to either SELECTED, NOT_SELECTED or DONT_CARE. If state
+	 * == null, it is treated as DONT_CARE.
 	 */
 	public void setColor(int color) {
 		model.setColor(color, isSelected());

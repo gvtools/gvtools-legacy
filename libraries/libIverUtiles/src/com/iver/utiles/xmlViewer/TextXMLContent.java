@@ -49,54 +49,54 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-
 /**
  * Clase que sirve de XMLContent al control XMLViewer a partir de un string con
  * un fichero XML
- *
+ * 
  * @author Fernando González Cortés
  */
 public class TextXMLContent implements XMLContent {
-    private String text;
-    private ContentHandler handler;
+	private String text;
+	private ContentHandler handler;
 
-    /**
-     * Crea un nuevo TextXMLContent.
-     *
-     * @param text Texto con el XML
-     */
-    public TextXMLContent(String text) {
-        this.text = text;
-    }
+	/**
+	 * Crea un nuevo TextXMLContent.
+	 * 
+	 * @param text
+	 *            Texto con el XML
+	 */
+	public TextXMLContent(String text) {
+		this.text = text;
+	}
 
-    /**
-     * @see com.iver.utiles.xmlViewer.XMLContent#setContentHandler(org.xml.sax.ContentHandler)
-     */
-    public void setContentHandler(ContentHandler handler) {
-        this.handler = handler;
-    }
+	/**
+	 * @see com.iver.utiles.xmlViewer.XMLContent#setContentHandler(org.xml.sax.ContentHandler)
+	 */
+	public void setContentHandler(ContentHandler handler) {
+		this.handler = handler;
+	}
 
-    /**
-     * @see com.iver.utiles.xmlViewer.XMLContent#parse()
-     */
-    public void parse() throws SAXException {
-    	XMLReader reader = XMLReaderFactory.createXMLReader();
-    	reader.setFeature("http://xml.org/sax/features/namespaces", false);
-        reader.setContentHandler(handler);
+	/**
+	 * @see com.iver.utiles.xmlViewer.XMLContent#parse()
+	 */
+	public void parse() throws SAXException {
+		XMLReader reader = XMLReaderFactory.createXMLReader();
+		reader.setFeature("http://xml.org/sax/features/namespaces", false);
+		reader.setContentHandler(handler);
 
-        if (text == null) {
-            text = "<?xml version='1.0'?>";
-        }
+		if (text == null) {
+			text = "<?xml version='1.0'?>";
+		}
 
-        try {
-            reader.parse(new InputSource(
-                    new ByteArrayInputStream(text.getBytes())));
-        } catch (IOException e) {
-            //Una IO exception en un array de bytes???
-        }
-    }
-    
-    public String toString(){
-    	return text;
-    }
+		try {
+			reader.parse(new InputSource(new ByteArrayInputStream(text
+					.getBytes())));
+		} catch (IOException e) {
+			// Una IO exception en un array de bytes???
+		}
+	}
+
+	public String toString() {
+		return text;
+	}
 }

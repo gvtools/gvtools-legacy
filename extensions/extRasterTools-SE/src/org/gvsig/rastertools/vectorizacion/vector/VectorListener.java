@@ -38,21 +38,26 @@ import org.gvsig.rastertools.vectorizacion.vector.ui.VectorPanel;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
+
 /**
- * Clase para la gestión de eventos de los componentes gráficos del panel de preproceso
- * de vectorización.
+ * Clase para la gestión de eventos de los componentes gráficos del panel de
+ * preproceso de vectorización.
  * 
  * 12/06/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
-public class VectorListener implements ActionListener, DataInputContainerListener, ItemListener, SliderListener, PropertyChangeListener {
-	private VectorPanel   panel   = null;
-	private FLyrRasterSE  lyr     = null;
-	private VectorData    data    = null;
+public class VectorListener implements ActionListener,
+		DataInputContainerListener, ItemListener, SliderListener,
+		PropertyChangeListener {
+	private VectorPanel panel = null;
+	private FLyrRasterSE lyr = null;
+	private VectorData data = null;
 	private VectorProcess process = null;
 
 	/**
 	 * Asigna el nombre de la capa
+	 * 
 	 * @param lyrName
 	 */
 	public VectorListener(FLyrRasterSE lyr, VectorPanel panel, VectorData data) {
@@ -62,75 +67,84 @@ public class VectorListener implements ActionListener, DataInputContainerListene
 		if (process != null)
 			process.setSourceLayer(lyr);
 	}
-	
+
 	/**
-	 * Asigna la vista de datos. En este caso es el panel de preprocesado de la vectorización
+	 * Asigna la vista de datos. En este caso es el panel de preprocesado de la
+	 * vectorización
+	 * 
 	 * @param prepPanel
 	 */
 	private void setDataView(VectorPanel prepPanel) {
 		this.panel = prepPanel;
 		process = new VectorProcess(lyr, null, data.getLayerCrs());
-		panel.getContourLinesPanel().getDistance().addValueChangedListener(this);
+		panel.getContourLinesPanel().getDistance()
+				.addValueChangedListener(this);
 		panel.getPotracePanel().getPolicy().addItemListener(this);
 		panel.getAlgorithm().addItemListener(this);
 		panel.getPotracePanel().getCurveOptimization().addActionListener(this);
 		panel.getPotracePanel().getBezierPoints().addValueChangedListener(this);
-		panel.getPotracePanel().getDespeckle().addPropertyChangeListener("value", this);
-		panel.getPotracePanel().getCornerThreshold().addPropertyChangeListener("value", this);
-		panel.getPotracePanel().getOptimizationTolerance().addPropertyChangeListener("value", this);
-		panel.getPotracePanel().getOutputQuantization().addPropertyChangeListener("value", this);
+		panel.getPotracePanel().getDespeckle()
+				.addPropertyChangeListener("value", this);
+		panel.getPotracePanel().getCornerThreshold()
+				.addPropertyChangeListener("value", this);
+		panel.getPotracePanel().getOptimizationTolerance()
+				.addPropertyChangeListener("value", this);
+		panel.getPotracePanel().getOutputQuantization()
+				.addPropertyChangeListener("value", this);
 	}
-	
+
 	/**
 	 * Asigna el modelo de datos de los interfaces
+	 * 
 	 * @param coorData
 	 * @param grayConvData
 	 */
 	private void setData(VectorData data) {
 		this.data = data;
 	}
-		
+
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if (!panel.isEnableValueChangedEvent())
 			return;
-		
+
 		if (e.getSource() == panel.getPotracePanel().getCurveOptimization()) {
-			data.setCurveOptimization(panel.getPotracePanel().getCurveOptimization().isSelected());
+			data.setCurveOptimization(panel.getPotracePanel()
+					.getCurveOptimization().isSelected());
 		}
 	}
-	
+
 	/**
 	 * Asigna la capa fuente para el proceso
+	 * 
 	 * @param lyr
 	 */
 	public void setProcessSource(FLyrRasterSE lyr) {
 		if (process != null)
 			process.setSourceLayer(lyr);
 	}
-	
+
 	/**
 	 * Acciones realizadas cuando se activa el proceso
 	 */
 	public void apply() {
 		try {
 			switch (data.getAlgorithm()) {
-				case VectorData.CONTOUR_LINES:
-					process.contourLines(data.getDistance());
-					break;
-				case VectorData.POTRACE_LINES:
-					process.potraceLines(
-							data.getPolicy(),
-							data.getBezierPoints(),
-							data.getDespeckle(),
-							data.getCornerThreshold(),
-							data.getOptimizationTolerance(),
-							data.getOutputQuantizqtion(),
-							data.isCurveOptimization());
-					break;
+			case VectorData.CONTOUR_LINES:
+				process.contourLines(data.getDistance());
+				break;
+			case VectorData.POTRACE_LINES:
+				process.potraceLines(data.getPolicy(), data.getBezierPoints(),
+						data.getDespeckle(), data.getCornerThreshold(),
+						data.getOptimizationTolerance(),
+						data.getOutputQuantizqtion(),
+						data.isCurveOptimization());
+				break;
 			}
 		} catch (LoadLayerException e1) {
 			RasterToolsUtil.messageBoxError("error_carga_capa", null, e1);
@@ -146,22 +160,26 @@ public class VectorListener implements ActionListener, DataInputContainerListene
 		if (!panel.isEnableValueChangedEvent())
 			return;
 
-		//Distancia del método de lineas de contorno
-		if (e.getSource() == panel.getContourLinesPanel().getDistance().getDataInputField()) {
-			String valueStr = panel.getContourLinesPanel().getDistance().getValue();
+		// Distancia del método de lineas de contorno
+		if (e.getSource() == panel.getContourLinesPanel().getDistance()
+				.getDataInputField()) {
+			String valueStr = panel.getContourLinesPanel().getDistance()
+					.getValue();
 			double value = 0;
 			try {
 				value = Double.parseDouble(valueStr);
 				data.setDistance(value);
 			} catch (NumberFormatException ex) {
-				RasterToolsUtil.debug("Imposible convertir a entero", panel, ex);
+				RasterToolsUtil
+						.debug("Imposible convertir a entero", panel, ex);
 			}
 		}
 	}
-	
+
 	/**
-	 * Asigna el interfaz para que el proceso ejectute las acciones de finalización
-	 * al acabar.
+	 * Asigna el interfaz para que el proceso ejectute las acciones de
+	 * finalización al acabar.
+	 * 
 	 * @param endActions
 	 */
 	public void setProcessActions(IProcessActions endActions) {
@@ -171,54 +189,67 @@ public class VectorListener implements ActionListener, DataInputContainerListene
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ItemListener#itemStateChanged(java.awt.event.ItemEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ItemListener#itemStateChanged(java.awt.event.ItemEvent)
 	 */
 	public void itemStateChanged(ItemEvent e) {
 		if (!panel.isEnableValueChangedEvent())
 			return;
 
-		// Comprobamos si ha cambiado la seleccion del algoritmo a usar en la vectorización
+		// Comprobamos si ha cambiado la seleccion del algoritmo a usar en la
+		// vectorización
 		if (e.getSource() == panel.getAlgorithm()) {
 			do {
-				if (panel.getAlgorithm().getSelectedItem().equals(PluginServices.getText(this,"contour"))) {
+				if (panel.getAlgorithm().getSelectedItem()
+						.equals(PluginServices.getText(this, "contour"))) {
 					data.setAlgorithm(VectorData.CONTOUR_LINES);
 					break;
 				}
-				if (panel.getAlgorithm().getSelectedItem().equals(PluginServices.getText(this,"potrace"))) {
+				if (panel.getAlgorithm().getSelectedItem()
+						.equals(PluginServices.getText(this, "potrace"))) {
 					data.setAlgorithm(VectorData.POTRACE_LINES);
 					break;
 				}
 			} while (false);
 		}
 
-		// Comprobamos si ha cambiado la seleccion en el combo de policy de potrace
+		// Comprobamos si ha cambiado la seleccion en el combo de policy de
+		// potrace
 		if (e.getSource() == panel.getPotracePanel().getPolicy()) {
 			do {
-				if (panel.getPotracePanel().getPolicy().getSelectedItem().equals(RasterToolsUtil.getText(this, "black"))) {
+				if (panel.getPotracePanel().getPolicy().getSelectedItem()
+						.equals(RasterToolsUtil.getText(this, "black"))) {
 					data.setPolicy(VectorizationBinding.POLICY_BLACK);
 					break;
 				}
-				if (panel.getPotracePanel().getPolicy().getSelectedItem().equals(RasterToolsUtil.getText(this, "white"))) {
+				if (panel.getPotracePanel().getPolicy().getSelectedItem()
+						.equals(RasterToolsUtil.getText(this, "white"))) {
 					data.setPolicy(VectorizationBinding.POLICY_WHITE);
 					break;
 				}
-				if (panel.getPotracePanel().getPolicy().getSelectedItem().equals(RasterToolsUtil.getText(this, "right"))) {
+				if (panel.getPotracePanel().getPolicy().getSelectedItem()
+						.equals(RasterToolsUtil.getText(this, "right"))) {
 					data.setPolicy(VectorizationBinding.POLICY_RIGHT);
 					break;
 				}
-				if (panel.getPotracePanel().getPolicy().getSelectedItem().equals(RasterToolsUtil.getText(this, "left"))) {
+				if (panel.getPotracePanel().getPolicy().getSelectedItem()
+						.equals(RasterToolsUtil.getText(this, "left"))) {
 					data.setPolicy(VectorizationBinding.POLICY_LEFT);
 					break;
 				}
-				if (panel.getPotracePanel().getPolicy().getSelectedItem().equals(RasterToolsUtil.getText(this, "minority"))) {
+				if (panel.getPotracePanel().getPolicy().getSelectedItem()
+						.equals(RasterToolsUtil.getText(this, "minority"))) {
 					data.setPolicy(VectorizationBinding.POLICY_MINORITY);
 					break;
 				}
-				if (panel.getPotracePanel().getPolicy().getSelectedItem().equals(RasterToolsUtil.getText(this, "majority"))) {
+				if (panel.getPotracePanel().getPolicy().getSelectedItem()
+						.equals(RasterToolsUtil.getText(this, "majority"))) {
 					data.setPolicy(VectorizationBinding.POLICY_MAJORITY);
 					break;
 				}
-				if (panel.getPotracePanel().getPolicy().getSelectedItem().equals(RasterToolsUtil.getText(this, "random"))) {
+				if (panel.getPotracePanel().getPolicy().getSelectedItem()
+						.equals(RasterToolsUtil.getText(this, "random"))) {
 					data.setPolicy(VectorizationBinding.POLICY_RANDOM);
 					break;
 				}
@@ -228,42 +259,55 @@ public class VectorListener implements ActionListener, DataInputContainerListene
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.slidertext.listeners.SliderListener#actionValueChanged(org.gvsig.gui.beans.slidertext.listeners.SliderEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.slidertext.listeners.SliderListener#actionValueChanged
+	 * (org.gvsig.gui.beans.slidertext.listeners.SliderEvent)
 	 */
 	public void actionValueChanged(SliderEvent e) {
 		if (!panel.isEnableValueChangedEvent())
 			return;
-		
-		// Comprobamos si ha cambiado el valor de numero de puntos de bezier para la vectorizacion
+
+		// Comprobamos si ha cambiado el valor de numero de puntos de bezier
+		// para la vectorizacion
 		if (e.getSource() == panel.getPotracePanel().getBezierPoints()) {
-			data.setBezierPoints((int) panel.getPotracePanel().getBezierPoints().getValue());
+			data.setBezierPoints((int) panel.getPotracePanel()
+					.getBezierPoints().getValue());
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
+	 * 
+	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.
+	 * PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (!panel.isEnableValueChangedEvent())
 			return;
 
 		if (evt.getSource() == panel.getPotracePanel().getDespeckle()) {
-			data.setDespeckle(((Integer) panel.getPotracePanel().getDespeckle().getValue()).intValue());
+			data.setDespeckle(((Integer) panel.getPotracePanel().getDespeckle()
+					.getValue()).intValue());
 		}
-		
+
 		if (evt.getSource() == panel.getPotracePanel().getCornerThreshold()) {
-			data.setCornerThreshold(((Double) panel.getPotracePanel().getCornerThreshold().getValue()).doubleValue());
+			data.setCornerThreshold(((Double) panel.getPotracePanel()
+					.getCornerThreshold().getValue()).doubleValue());
 		}
-		
-		if (evt.getSource() == panel.getPotracePanel().getOptimizationTolerance()) {
-			data.setOptimizationTolerance(((Double) panel.getPotracePanel().getOptimizationTolerance().getValue()).doubleValue());
+
+		if (evt.getSource() == panel.getPotracePanel()
+				.getOptimizationTolerance()) {
+			data.setOptimizationTolerance(((Double) panel.getPotracePanel()
+					.getOptimizationTolerance().getValue()).doubleValue());
 		}
-		
+
 		if (evt.getSource() == panel.getPotracePanel().getOutputQuantization()) {
-			data.setOutputQuantization(((Integer) panel.getPotracePanel().getOutputQuantization().getValue()).intValue());
+			data.setOutputQuantization(((Integer) panel.getPotracePanel()
+					.getOutputQuantization().getValue()).intValue());
 		}
 	}
-	
-	public void actionValueDragged(SliderEvent e) {}
+
+	public void actionValueDragged(SliderEvent e) {
+	}
 }

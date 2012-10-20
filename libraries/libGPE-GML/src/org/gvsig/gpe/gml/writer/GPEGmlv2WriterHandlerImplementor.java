@@ -51,15 +51,17 @@ import org.gvsig.gpe.gml.writer.profiles.Gml2WriterProfile;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class GPEGmlv2WriterHandlerImplementor extends GPEGmlWriterHandlerImplementor {
+public class GPEGmlv2WriterHandlerImplementor extends
+		GPEGmlWriterHandlerImplementor {
 
 	public GPEGmlv2WriterHandlerImplementor() {
 		super();
 		setProfile(new Gml2WriterProfile());
-	}	
-	
+	}
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writer.IGPEWriterHandlerImplementor#getDescription()
 	 */
 	public String getDescription() {
@@ -68,6 +70,7 @@ public class GPEGmlv2WriterHandlerImplementor extends GPEGmlWriterHandlerImpleme
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writer.IGPEWriterHandlerImplementor#getName()
 	 */
 	public String getName() {
@@ -76,9 +79,10 @@ public class GPEGmlv2WriterHandlerImplementor extends GPEGmlWriterHandlerImpleme
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writer.GPEWriterHandlerImplementor#getDefaultFormat()
 	 */
 	public String getFormat() {
-		return "text/xml; subtype=gml/2.1.2";		
+		return "text/xml; subtype=gml/2.1.2";
 	}
 }

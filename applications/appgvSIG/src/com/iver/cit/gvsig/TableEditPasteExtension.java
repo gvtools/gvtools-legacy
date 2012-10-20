@@ -45,74 +45,73 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.plugins.Extension;
 import com.iver.andami.ui.mdiManager.IWindow;
-import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileWriteException;
 import com.iver.cit.gvsig.exceptions.validate.ValidateRowException;
 import com.iver.cit.gvsig.project.documents.table.gui.Table;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class TableEditPasteExtension extends Extension {
-    /**
-     * @see com.iver.andami.plugins.IExtension#initialize()
-     */
-    public void initialize() {
-    	registerIcons();
-    }
+	/**
+	 * @see com.iver.andami.plugins.IExtension#initialize()
+	 */
+	public void initialize() {
+		registerIcons();
+	}
 
-    private void registerIcons(){
-    	PluginServices.getIconTheme().registerDefault(
+	private void registerIcons() {
+		PluginServices.getIconTheme().registerDefault(
 				"edit-paste",
-				this.getClass().getClassLoader().getResource("images/editpaste.png")
-			);
-    }
-    /**
-     * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
-     */
-    public void execute(String actionCommand) {
-        if ("PASTE".equals(actionCommand)) {
-            IWindow v = PluginServices.getMDIManager().getActiveWindow();
+				this.getClass().getClassLoader()
+						.getResource("images/editpaste.png"));
+	}
 
-            try {
-                ((Table) v).pasteRow();
-            } catch (ValidateRowException e) {
-            	 NotificationManager.addError("No se pudo pegar la fila", e);
+	/**
+	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
+	 */
+	public void execute(String actionCommand) {
+		if ("PASTE".equals(actionCommand)) {
+			IWindow v = PluginServices.getMDIManager().getActiveWindow();
+
+			try {
+				((Table) v).pasteRow();
+			} catch (ValidateRowException e) {
+				NotificationManager.addError("No se pudo pegar la fila", e);
 			} catch (ReadDriverException e) {
-				 NotificationManager.addError("No se pudo pegar la fila", e);
+				NotificationManager.addError("No se pudo pegar la fila", e);
 			}
-        }
-    }
+		}
+	}
 
-    /**
-     * @see com.iver.andami.plugins.IExtension#isEnabled()
-     */
-    public boolean isEnabled() {
-    	 IWindow v = PluginServices.getMDIManager().getActiveWindow();
+	/**
+	 * @see com.iver.andami.plugins.IExtension#isEnabled()
+	 */
+	public boolean isEnabled() {
+		IWindow v = PluginServices.getMDIManager().getActiveWindow();
 
-         if (v == null) {
-             return false;
-         } else if (v.getClass() == Table.class) {
-             return ((Table) v).isEditing() && ((Table) v).isCopied();
-         } else {
-             return false;
-         }
-    }
+		if (v == null) {
+			return false;
+		} else if (v.getClass() == Table.class) {
+			return ((Table) v).isEditing() && ((Table) v).isCopied();
+		} else {
+			return false;
+		}
+	}
 
-    /**
-     * @see com.iver.andami.plugins.IExtension#isVisible()
-     */
-    public boolean isVisible() {
-        IWindow v = PluginServices.getMDIManager().getActiveWindow();
+	/**
+	 * @see com.iver.andami.plugins.IExtension#isVisible()
+	 */
+	public boolean isVisible() {
+		IWindow v = PluginServices.getMDIManager().getActiveWindow();
 
-        if (v == null) {
-            return false;
-        } else if (v instanceof Table && ((Table) v).isEditing()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+		if (v == null) {
+			return false;
+		} else if (v instanceof Table && ((Table) v).isEditing()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

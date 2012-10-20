@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.core;
 
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
@@ -53,41 +53,44 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 public class PairOfFeatures {
 	private FLyrVect firstFeatureLyr;
 	private int firstFeatureIdx;
-	
+
 	private FLyrVect secondFeatureLyr;
 	private int secondFeatureIdx;
-	
-	public PairOfFeatures(FLyrVect firstFeatureLyr,
-			int firstFeatureIdx, FLyrVect secondFeatureLyr, int secondFeatureIdx) {
+
+	public PairOfFeatures(FLyrVect firstFeatureLyr, int firstFeatureIdx,
+			FLyrVect secondFeatureLyr, int secondFeatureIdx) {
 		this.firstFeatureLyr = firstFeatureLyr;
 		this.firstFeatureIdx = firstFeatureIdx;
 		this.secondFeatureLyr = secondFeatureLyr;
 		this.secondFeatureIdx = secondFeatureIdx;
 	}
-	
-	
-	public boolean equals(PairOfFeatures other){
-		if(other == null || !(other instanceof PairOfFeatures))
+
+	public boolean equals(PairOfFeatures other) {
+		if (other == null || !(other instanceof PairOfFeatures))
 			return false;
-			
-		if(firstFeatureIdx != other.firstFeatureIdx && firstFeatureIdx != other.secondFeatureIdx)
+
+		if (firstFeatureIdx != other.firstFeatureIdx
+				&& firstFeatureIdx != other.secondFeatureIdx)
 			return false;
-		if(secondFeatureIdx != other.secondFeatureIdx && secondFeatureIdx != other.firstFeatureIdx)
+		if (secondFeatureIdx != other.secondFeatureIdx
+				&& secondFeatureIdx != other.firstFeatureIdx)
 			return false;
-		if(! firstFeatureLyr.equals(other.firstFeatureLyr)  && ! firstFeatureLyr.equals(other.secondFeatureLyr))
+		if (!firstFeatureLyr.equals(other.firstFeatureLyr)
+				&& !firstFeatureLyr.equals(other.secondFeatureLyr))
 			return false;
-		if(! secondFeatureLyr.equals(other.firstFeatureLyr)  && ! secondFeatureLyr.equals(other.secondFeatureLyr))
+		if (!secondFeatureLyr.equals(other.firstFeatureLyr)
+				&& !secondFeatureLyr.equals(other.secondFeatureLyr))
 			return false;
 		return true;
 	}
-	
-	public int hashCode(){
-//		int seed = HashCodeUtil.hashCode(HashCodeUtil.SEED, firstFeatureIdx);
-//		seed = HashCodeUtil.hashCode(seed, secondFeatureIdx );
-//		seed = HashCodeUtil.hashCode(seed, firstFeatureLyr);
-//		seed = HashCodeUtil.hashCode(seed, secondFeatureLyr);
-//		return seed;
+
+	public int hashCode() {
+		// int seed = HashCodeUtil.hashCode(HashCodeUtil.SEED, firstFeatureIdx);
+		// seed = HashCodeUtil.hashCode(seed, secondFeatureIdx );
+		// seed = HashCodeUtil.hashCode(seed, firstFeatureLyr);
+		// seed = HashCodeUtil.hashCode(seed, secondFeatureLyr);
+		// return seed;
 		return 1;
-		
+
 	}
 }

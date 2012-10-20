@@ -1,4 +1,5 @@
 package org.gvsig.xmlschema.utils;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -61,5 +62,5 @@ public class SchemaDefaults {
 	public static final boolean ELEMENT_NILLABLE = true;
 	public static final int ELEMENT_MAX_OCCURS = 1;
 	public static final int ELEMENT_MIN_OCCURS = 0;
-	
+
 }

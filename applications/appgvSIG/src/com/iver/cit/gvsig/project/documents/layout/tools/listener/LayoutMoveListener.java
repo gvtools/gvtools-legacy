@@ -43,19 +43,20 @@ package com.iver.cit.gvsig.project.documents.layout.tools.listener;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
 
-
 /**
  * Interfaz de listener de movimiento.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public interface LayoutMoveListener extends LayoutToolListener {
 	/**
 	 * Invocado cuando el usuario mueve el ratón sobre la vista.
-	 *
-	 * @param event MoveEvent.
-	 *
-	 * @throws BehaviorException se lanza cuando falla la herramienta.
+	 * 
+	 * @param event
+	 *            MoveEvent.
+	 * 
+	 * @throws BehaviorException
+	 *             se lanza cuando falla la herramienta.
 	 */
 	public void drag(PointEvent event) throws BehaviorException;
 
@@ -63,8 +64,8 @@ public interface LayoutMoveListener extends LayoutToolListener {
 
 	public void release(PointEvent event) throws BehaviorException;
 
-	public void move(PointEvent event)throws BehaviorException;
+	public void move(PointEvent event) throws BehaviorException;
 
-	public void click(PointEvent event)throws BehaviorException;
+	public void click(PointEvent event) throws BehaviorException;
 
 }

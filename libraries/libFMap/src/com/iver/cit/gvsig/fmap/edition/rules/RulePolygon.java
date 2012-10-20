@@ -53,63 +53,58 @@ import com.iver.cit.gvsig.fmap.edition.EditionEvent;
 
 /**
  * @author fjp
- *
- * Si le llega un punto, no pasa.
- * Si le llega una línea cerrada, la convierte en polígono y pasa.
+ * 
+ *         Si le llega un punto, no pasa. Si le llega una línea cerrada, la
+ *         convierte en polígono y pasa.
  */
 public class RulePolygon extends AbstractRule {
 
-    public boolean validate(IRow row,int sourceType) {
-        if (sourceType==EditionEvent.ALPHANUMERIC)
-        	return true;
-    	IFeature feat = (IFeature) row;
-        IGeometry geom = feat.getGeometry();
-        if ((geom.getInternalShape() instanceof FCircle2D)
-        		|| (geom.getInternalShape() instanceof FEllipse2D)) {
-        	return true;
-        }
-        GeneralPathX gp = new GeneralPathX();
-        gp.append(geom.getPathIterator(null, FConverter.FLATNESS), true);
+	public boolean validate(IRow row, int sourceType) {
+		if (sourceType == EditionEvent.ALPHANUMERIC)
+			return true;
+		IFeature feat = (IFeature) row;
+		IGeometry geom = feat.getGeometry();
+		if ((geom.getInternalShape() instanceof FCircle2D)
+				|| (geom.getInternalShape() instanceof FEllipse2D)) {
+			return true;
+		}
+		GeneralPathX gp = new GeneralPathX();
+		gp.append(geom.getPathIterator(null, FConverter.FLATNESS), true);
 
-        if (gp.isClosed())
-        {
-        	boolean bCCW =gp.isCCW();
-        	System.out.println("Counter ClockWise  = " + bCCW);
-        	if (bCCW)
-        	{
-//         		gp.ensureOrientation(false);
-        		gp.flip();
-//            	IGeometry aux = ShapeFactory.createPolygon2D(gp);
-//            	Geometry jtsGeom = aux.toJTSGeometry();
-//            	geom = FConverter.jts_to_igeometry(jtsGeom);
+		if (gp.isClosed()) {
+			boolean bCCW = gp.isCCW();
+			System.out.println("Counter ClockWise  = " + bCCW);
+			if (bCCW) {
+				// gp.ensureOrientation(false);
+				gp.flip();
+				// IGeometry aux = ShapeFactory.createPolygon2D(gp);
+				// Geometry jtsGeom = aux.toJTSGeometry();
+				// geom = FConverter.jts_to_igeometry(jtsGeom);
 
-        		geom = ShapeFactory.createPolygon2D(gp);
-        	}
-        	else
-        	{
-        		geom = ShapeFactory.createPolygon2D((FPolyline2D)geom.getInternalShape());
-        	}
-//        	IGeometry aux = ShapeFactory.createPolygon2D(gp);
-//
-//        	Geometry jtsGeom = geom.toJTSGeometry();
-//        	System.err.println(jtsGeom.toText());
-//
-//        	geom = FConverter.jts_to_igeometry(jtsGeom);
+				geom = ShapeFactory.createPolygon2D(gp);
+			} else {
+				geom = ShapeFactory.createPolygon2D((FPolyline2D) geom
+						.getInternalShape());
+			}
+			// IGeometry aux = ShapeFactory.createPolygon2D(gp);
+			//
+			// Geometry jtsGeom = geom.toJTSGeometry();
+			// System.err.println(jtsGeom.toText());
+			//
+			// geom = FConverter.jts_to_igeometry(jtsGeom);
 
-            // gp.ensureOrientation(false); // Poligono exterior.
+			// gp.ensureOrientation(false); // Poligono exterior.
 
-//        	Area area = new Area(geom);
-//            GeneralPathX gp2 = new GeneralPathX();
-//            gp2.append(area.getPathIterator(null), true);
-//            geom = ShapeFactory.createPolygon2D(gp2);
+			// Area area = new Area(geom);
+			// GeneralPathX gp2 = new GeneralPathX();
+			// gp2.append(area.getPathIterator(null), true);
+			// geom = ShapeFactory.createPolygon2D(gp2);
 
-            feat.setGeometry(geom);
-            return true;
-        }
+			feat.setGeometry(geom);
+			return true;
+		}
 
-        return false;
-    }
+		return false;
+	}
 
 }
-
-

@@ -50,17 +50,21 @@ import org.xmlpull.v1.XmlPullParserException;
 import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
 
 /**
- * Implements the User-Defined Layer element of an SLD implementation specification
- * .<p>
+ * Implements the User-Defined Layer element of an SLD implementation
+ * specification .
+ * <p>
  * 
- * In addition to using named layers, it is also useful to be able to define custom
- * user-defined layers for rendering.<p>
- * Since a layer is defined as a collection of potentially mixed-type features, the
- * UserLayer element must provide the means to identify the features to be used. All
- * features to be rendered are assumed to be fetched from a Web Feature Server (WFS) or a
- * Web Coverage Service (WCS, in which case the term �features� is used loosely).
+ * In addition to using named layers, it is also useful to be able to define
+ * custom user-defined layers for rendering.
+ * <p>
+ * Since a layer is defined as a collection of potentially mixed-type features,
+ * the UserLayer element must provide the means to identify the features to be
+ * used. All features to be rendered are assumed to be fetched from a Web
+ * Feature Server (WFS) or a Web Coverage Service (WCS, in which case the term
+ * �features� is used loosely).
  * 
- * The remote server to be used is identified by RemoteOWS (OGC Web Service) element.
+ * The remote server to be used is identified by RemoteOWS (OGC Web Service)
+ * element.
  * 
  * @see SLDLayer
  * @see SLDNamedLayer
@@ -68,30 +72,30 @@ import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
  * 
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
-public abstract class SLDUserLayer extends AbstractSLDLayer{
+public abstract class SLDUserLayer extends AbstractSLDLayer {
 
-
-	protected ArrayList<URL> remoteOWSOnlineResource= new ArrayList<URL>() ;
+	protected ArrayList<URL> remoteOWSOnlineResource = new ArrayList<URL>();
 	protected String remoteOWSService;
 
-	
-	public abstract void parse(XMLSchemaParser parser)throws IOException, XmlPullParserException, LegendDriverException;
-	
+	public abstract void parse(XMLSchemaParser parser) throws IOException,
+			XmlPullParserException, LegendDriverException;
+
 	public abstract String toXML();
 
 	public ArrayList<URL> getRemoteOWSOnlineResource() {
 		return remoteOWSOnlineResource;
 	}
 
-	public void setRemoteOWSOnlineResource(ArrayList<URL> remoteOWSOnlineResource) {
+	public void setRemoteOWSOnlineResource(
+			ArrayList<URL> remoteOWSOnlineResource) {
 		this.remoteOWSOnlineResource = remoteOWSOnlineResource;
 	}
-	
+
 	public void addRemoteOWSOnlineResource(URL myURL) {
 		this.remoteOWSOnlineResource.add(myURL);
-		
+
 	}
-	
+
 	public String getRemoteOWSService() {
 		return remoteOWSService;
 	}
@@ -99,6 +103,5 @@ public abstract class SLDUserLayer extends AbstractSLDLayer{
 	public void setRemoteOWSService(String remoteOWSService) {
 		this.remoteOWSService = remoteOWSService;
 	}
-	
-	
+
 }

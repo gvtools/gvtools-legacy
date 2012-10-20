@@ -53,8 +53,9 @@ import com.iver.cit.gvsig.layers.VectorialLayerEdited;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 /**
- * Extensión que gestiona la simplificación de una geometría compuesta en otras más sencillas.
- *
+ * Extensión que gestiona la simplificación de una geometría compuesta en otras
+ * más sencillas.
+ * 
  * @author Vicente Caballero Navarro
  */
 public class StretchExtension extends Extension {
@@ -67,20 +68,19 @@ public class StretchExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
-		stretch=new StretchCADTool();
-		CADExtension.addCADTool("_stretch",stretch);
-		
+		stretch = new StretchCADTool();
+		CADExtension.addCADTool("_stretch", stretch);
+
 		registerIcons();
 	}
-	
-	private void registerIcons(){
+
+	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"edition-geometry-stretch",
-				this.getClass().getClassLoader().getResource("images/Stretch.png")
-			);
-		
+				this.getClass().getClassLoader()
+						.getResource("images/Stretch.png"));
+
 	}
-	
 
 	/**
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
@@ -88,8 +88,8 @@ public class StretchExtension extends Extension {
 	public void execute(String s) {
 		CADExtension.initFocus();
 		if (s.equals("_stretch")) {
-        	CADExtension.setCADTool(s,true);
-        }
+			CADExtension.setCADTool(s, true);
+		}
 		CADExtension.getEditionManager().setMapControl(mapControl);
 		CADExtension.getCADToolAdapter().configureMenu();
 	}
@@ -103,21 +103,22 @@ public class StretchExtension extends Extension {
 			if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE) {
 				view = (View) PluginServices.getMDIManager().getActiveWindow();
 				mapControl = view.getMapControl();
-				EditionManager em=CADExtension.getEditionManager();
-				if (em.getActiveLayerEdited()==null)
+				EditionManager em = CADExtension.getEditionManager();
+				if (em.getActiveLayerEdited() == null)
 					return false;
-				VectorialLayerEdited vle=(VectorialLayerEdited)em.getActiveLayerEdited();
-				FLyrVect lv=(FLyrVect)vle.getLayer();
-				ArrayList selectedRows=vle.getSelectedRow();
-				if (selectedRows.size()<1) {
+				VectorialLayerEdited vle = (VectorialLayerEdited) em
+						.getActiveLayerEdited();
+				FLyrVect lv = (FLyrVect) vle.getLayer();
+				ArrayList selectedRows = vle.getSelectedRow();
+				if (selectedRows.size() < 1) {
 					return false;
 				}
-				if (stretch.isApplicable(lv.getShapeType())){
+				if (stretch.isApplicable(lv.getShapeType())) {
 					return true;
 				}
 			}
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 		return false;
 	}

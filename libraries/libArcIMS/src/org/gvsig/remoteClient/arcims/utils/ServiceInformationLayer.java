@@ -48,129 +48,136 @@ package org.gvsig.remoteClient.arcims.utils;
 
 import org.gvsig.remoteClient.utils.BoundaryBox;
 
-
 /**
- * Abstract class that stores the information of every layer that is
- * part of the Service
- *  @author jsanz
+ * Abstract class that stores the information of every layer that is part of the
+ * Service
+ * 
+ * @author jsanz
  */
 public abstract class ServiceInformationLayer {
-    private String id;
-    private double maxscale;
-    private double minscale;
-    protected String name;
-    protected String type;
-    private String visible;
-    private BoundaryBox envelope;
+	private String id;
+	private double maxscale;
+	private double minscale;
+	protected String name;
+	protected String type;
+	private String visible;
+	private BoundaryBox envelope;
 
-    // public String fclasstype;
-    public ServiceInformationLayer() {
-        id = new String();
-        name = new String();
-        type = new String();
-        visible = new String();
-        envelope = new BoundaryBox();
-        maxscale = -1.0;
-        minscale = -1.0;
+	// public String fclasstype;
+	public ServiceInformationLayer() {
+		id = new String();
+		name = new String();
+		type = new String();
+		visible = new String();
+		envelope = new BoundaryBox();
+		maxscale = -1.0;
+		minscale = -1.0;
 
-        // fclasstype = new String();
-    }
+		// fclasstype = new String();
+	}
 
-    /**
-     * @return Returns the envelope.
-     */
-    public BoundaryBox getEnvelope() {
-        return envelope;
-    }
+	/**
+	 * @return Returns the envelope.
+	 */
+	public BoundaryBox getEnvelope() {
+		return envelope;
+	}
 
-    /**
-     * @param envelope The envelope to set.
-     */
-    public void setEnvelope(BoundaryBox envelope) {
-        this.envelope = envelope;
-    }
+	/**
+	 * @param envelope
+	 *            The envelope to set.
+	 */
+	public void setEnvelope(BoundaryBox envelope) {
+		this.envelope = envelope;
+	}
 
-    /**
-     * @return Returns the id.
-     */
-    public String getId() {
-        return id;
-    }
+	/**
+	 * @return Returns the id.
+	 */
+	public String getId() {
+		return id;
+	}
 
-    /**
-     * @param id The id to set.
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
+	/**
+	 * @param id
+	 *            The id to set.
+	 */
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    /**
-     * @return Returns the maxscale.
-     */
-    public double getMaxscale() {
-        return maxscale;
-    }
+	/**
+	 * @return Returns the maxscale.
+	 */
+	public double getMaxscale() {
+		return maxscale;
+	}
 
-    /**
-     * @param maxscale The maxscale to set.
-     */
-    public void setMaxscale(double maxscale) {
-        this.maxscale = maxscale;
-    }
+	/**
+	 * @param maxscale
+	 *            The maxscale to set.
+	 */
+	public void setMaxscale(double maxscale) {
+		this.maxscale = maxscale;
+	}
 
-    /**
-     * @return Returns the minscale.
-     */
-    public double getMinscale() {
-        return minscale;
-    }
+	/**
+	 * @return Returns the minscale.
+	 */
+	public double getMinscale() {
+		return minscale;
+	}
 
-    /**
-     * @param minscale The minscale to set.
-     */
-    public void setMinscale(double minscale) {
-        this.minscale = minscale;
-    }
+	/**
+	 * @param minscale
+	 *            The minscale to set.
+	 */
+	public void setMinscale(double minscale) {
+		this.minscale = minscale;
+	}
 
-    /**
-     * @return Returns the name.
-     */
-    public String getName() {
-        return name;
-    }
+	/**
+	 * @return Returns the name.
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * @param name The name to set.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+	/**
+	 * @param name
+	 *            The name to set.
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    /**
-     * @return Returns the type.
-     */
-    public String getType() {
-        return type;
-    }
+	/**
+	 * @return Returns the type.
+	 */
+	public String getType() {
+		return type;
+	}
 
-    /**
-     * @param type The type to set.
-     */
-    public void setType(String type) {
-        this.type = type;
-    }
+	/**
+	 * @param type
+	 *            The type to set.
+	 */
+	public void setType(String type) {
+		this.type = type;
+	}
 
-    /**
-     * @return Returns the visible.
-     */
-    public String getVisible() {
-        return visible;
-    }
+	/**
+	 * @return Returns the visible.
+	 */
+	public String getVisible() {
+		return visible;
+	}
 
-    /**
-     * @param visible The visible to set.
-     */
-    public void setVisible(String visible) {
-        this.visible = visible;
-    }
+	/**
+	 * @param visible
+	 *            The visible to set.
+	 */
+	public void setVisible(String visible) {
+		this.visible = visible;
+	}
 }

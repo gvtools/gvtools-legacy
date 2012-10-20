@@ -1,4 +1,5 @@
 package org.gvsig.remoteClient.wfs.filters;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -49,11 +50,11 @@ package org.gvsig.remoteClient.wfs.filters;
  *
  */
 /**
- * This interface must be implemented by the classes that
- * format a SQL expression. A formatted expression has
- * this form: ((a = b) AND (3 = 4)). The exprerssions (a = b)
- * are witten between brackets and there has two terms.
- * The logic operators are used to link expressions.
+ * This interface must be implemented by the classes that format a SQL
+ * expression. A formatted expression has this form: ((a = b) AND (3 = 4)). The
+ * exprerssions (a = b) are witten between brackets and there has two terms. The
+ * logic operators are used to link expressions.
+ * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
 public interface ISQLExpressionFormat {

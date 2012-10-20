@@ -66,7 +66,6 @@ import org.gvsig.gui.beans.table.TableContainer;
 import org.gvsig.gui.beans.table.exceptions.NotInitializeException;
 import org.gvsig.gui.beans.table.models.IModel;
 import org.gvsig.raster.buffer.BufferFactory;
-import org.gvsig.raster.buffer.RasterBuffer;
 import org.gvsig.raster.buffer.RasterBufferInvalidException;
 import org.gvsig.raster.dataset.IRasterDataSource;
 import org.gvsig.raster.grid.Grid;
@@ -105,7 +104,7 @@ import com.iver.cit.gvsig.project.documents.view.toolListeners.StatusBarListener
  */
 public class ROIsTablePanel extends JPanel {
 	private static final long serialVersionUID = 2138437448356198224L;
-	
+
 	private ROIsManagerPanel managerPanel;
 
 	private ROIsTablePanelListener listener = null;
@@ -121,9 +120,9 @@ public class ROIsTablePanel extends JPanel {
 	private JButton newButton = null;
 
 	private JButton deleteButton = null;
-	
+
 	private JButton exportButton = null;
-	
+
 	private JButton importButton = null;
 
 	private JToggleButton pointToolButton = null;
@@ -137,7 +136,7 @@ public class ROIsTablePanel extends JPanel {
 	private MapControl mapControl = null;
 
 	private BaseView view = null;
-	
+
 	private GraphicLayer graphicLayer = null;
 
 	private LinkedHashMap rois = null;
@@ -173,11 +172,11 @@ public class ROIsTablePanel extends JPanel {
 		getPointToolButton().addActionListener(listener);
 		getLineToolButton().addActionListener(listener);
 		getPolygonToolButton().addActionListener(listener);
-		
+
 		getTable().getTable().getJTable().getSelectionModel()
 				.addListSelectionListener(listener);
-		getTable().getTable().getJTable().getModel().addTableModelListener(
-				listener);
+		getTable().getTable().getJTable().getModel()
+				.addTableModelListener(listener);
 
 		getPolygonToolButton().setSelected(true);
 		setToolsEnabled(false);
@@ -186,7 +185,7 @@ public class ROIsTablePanel extends JPanel {
 	public ROIsManagerPanel getManagerPanel() {
 		return managerPanel;
 	}
-	
+
 	public void setToolsEnabled(boolean b) {
 		getPointToolButton().setEnabled(b);
 		getLineToolButton().setEnabled(b);
@@ -199,8 +198,8 @@ public class ROIsTablePanel extends JPanel {
 					PluginServices.getText(this, "poligonos"),
 					PluginServices.getText(this, "lineas"),
 					PluginServices.getText(this, "puntos"),
-					PluginServices.getText(this, "color")};
-			int[] columnWidths = { 50, 25, 25, 25, 45};
+					PluginServices.getText(this, "color") };
+			int[] columnWidths = { 50, 25, 25, 25, 45 };
 			tableContainer = new TableContainer(columnNames, columnWidths);
 			tableContainer.setModel("ROIsTableModel");
 			tableContainer.initialize();
@@ -215,9 +214,9 @@ public class ROIsTablePanel extends JPanel {
 			controlPanel = new JPanel();
 			controlPanel.setLayout(new BorderLayout());
 
-			controlPanel.add(getTableButtonsPanel(),BorderLayout.NORTH);
+			controlPanel.add(getTableButtonsPanel(), BorderLayout.NORTH);
 
-			controlPanel.add(getToolsPanel(),BorderLayout.CENTER);
+			controlPanel.add(getToolsPanel(), BorderLayout.CENTER);
 		}
 		return controlPanel;
 	}
@@ -242,45 +241,42 @@ public class ROIsTablePanel extends JPanel {
 
 	public void setFLayer(FLayer layer) throws GridException {
 		fLayer = layer;
-		/*FLyrRasterSE rasterLayer = (FLyrRasterSE) layer;
-		IRasterDataSource dsetCopy = null; 
-		dsetCopy = rasterLayer.getDataSource().newDataset();
-		BufferFactory bufferFactory = new BufferFactory(dsetCopy);
-		if (!RasterBuffer.loadInMemory(dsetCopy))
-			bufferFactory.setReadOnly(true);
-		bufferFactory.setAllDrawableBands();
+		/*
+		 * FLyrRasterSE rasterLayer = (FLyrRasterSE) layer; IRasterDataSource
+		 * dsetCopy = null; dsetCopy = rasterLayer.getDataSource().newDataset();
+		 * BufferFactory bufferFactory = new BufferFactory(dsetCopy); if
+		 * (!RasterBuffer.loadInMemory(dsetCopy))
+		 * bufferFactory.setReadOnly(true); bufferFactory.setAllDrawableBands();
+		 * 
+		 * int bands[] = null; bands = new int[rasterLayer.getBandCount()]; for
+		 * (int i = 0; i < rasterLayer.getBandCount(); i++) bands[i] = i; try {
+		 * grid = new Grid(bufferFactory, bands); } catch
+		 * (RasterBufferInvalidException e) { e.printStackTrace(); }
+		 */
 
-		int bands[] = null;
-		bands = new int[rasterLayer.getBandCount()];
-		for (int i = 0; i < rasterLayer.getBandCount(); i++)
-			bands[i] = i;
-		try {
-			grid = new Grid(bufferFactory, bands);
-		} catch (RasterBufferInvalidException e) {
-			e.printStackTrace();
-		}*/
-		
-		if (view==null){
+		if (view == null) {
 			IWindow[] list = PluginServices.getMDIManager().getAllWindows();
 			for (int i = 0; i < list.length; i++) {
-				if(list[i] instanceof BaseView)
-					view = (BaseView)list[i];
+				if (list[i] instanceof BaseView)
+					view = (BaseView) list[i];
 			}
 			if (view == null)
 				return;
 			mapControl = view.getMapControl();
-			graphicLayer = view.getMapControl().getMapContext().getGraphicsLayer();
-	
+			graphicLayer = view.getMapControl().getMapContext()
+					.getGraphicsLayer();
+
 			/*
-			 * Guardar la herramienta actual para recuperarla más tarde, por ejemplo
-			 * al cerrar el contenedor del este panel.
+			 * Guardar la herramienta actual para recuperarla más tarde, por
+			 * ejemplo al cerrar el contenedor del este panel.
 			 */
 			previousTool = mapControl.getCurrentTool();
-	
-			// Listener de eventos de movimiento que pone las coordenadas del ratón
+
+			// Listener de eventos de movimiento que pone las coordenadas del
+			// ratón
 			// en la barra de estado
 			StatusBarListener sbl = new StatusBarListener(mapControl);
-	
+
 			DrawMouseViewListener drawMouseViewListener = new DrawMouseViewListener(
 					this);
 			mapControl.addMapTool("drawPolygonROI", new Behavior[] {
@@ -293,7 +289,7 @@ public class ROIsTablePanel extends JPanel {
 					new PointBehavior(drawMouseViewListener),
 					new MouseMovementBehavior(sbl) });
 		}
-		
+
 		/*
 		 * Caragar las ROIs asociadas a la capa, si las hay:
 		 */
@@ -304,7 +300,7 @@ public class ROIsTablePanel extends JPanel {
 	/**
 	 * Elimina todas las filas de la tabla de rois así como la ROI y objetos
 	 * FGraphic asociados (borrándolos también de la vista) a cada una.
-	 *
+	 * 
 	 */
 	public void clearROIs() {
 		boolean repaint = false;
@@ -313,10 +309,12 @@ public class ROIsTablePanel extends JPanel {
 		} catch (NotInitializeException e) {
 			RasterToolsUtil.messageBoxError("error_tabla_rois", this, e);
 		}
-		for (Iterator iter = getRoiGraphics().values().iterator(); iter.hasNext();) {
+		for (Iterator iter = getRoiGraphics().values().iterator(); iter
+				.hasNext();) {
 			ArrayList roiGraphics = (ArrayList) iter.next();
-			for (int i = 0; i < roiGraphics.size(); i++){
-				getMapControl().getMapContext().getGraphicsLayer().removeGraphic((FGraphic)roiGraphics.get(i));
+			for (int i = 0; i < roiGraphics.size(); i++) {
+				getMapControl().getMapContext().getGraphicsLayer()
+						.removeGraphic((FGraphic) roiGraphics.get(i));
 				repaint = true;
 			}
 		}
@@ -328,7 +326,8 @@ public class ROIsTablePanel extends JPanel {
 
 	/**
 	 * Cargar las ROIs asociadas a la capa, si las hay.
-	 * @throws GridException 
+	 * 
+	 * @throws GridException
 	 * 
 	 */
 	private void loadROIs() throws GridException {
@@ -373,23 +372,23 @@ public class ROIsTablePanel extends JPanel {
 						nLines++;
 						break;
 					}
-					fGraphic = new FGraphic(geometry, graphicLayer
-							.addSymbol(symbol));
+					fGraphic = new FGraphic(geometry,
+							graphicLayer.addSymbol(symbol));
 					graphicLayer.addGraphic(fGraphic);
 					getRoiGraphics(roi.getName()).add(fGraphic);
 				}
 				row[1] = new Integer(nPolygons);
 				row[2] = new Integer(nLines);
 				row[3] = new Integer(nPoints);
-				//row[5] = new Integer(roi.getValues());
+				// row[5] = new Integer(roi.getValues());
 				((DefaultTableModel) getTable().getModel()).addRow(row);
 			}
 			selectDrawRoiTool();
 			getMapControl().drawGraphics();
 		}
 	}
-	
-	public void setROIs(ArrayList roisArray) throws GridException{
+
+	public void setROIs(ArrayList roisArray) throws GridException {
 		if (roisArray != null) {
 			rois = new LinkedHashMap();
 			GraphicLayer graphicLayer = getMapControl().getMapContext()
@@ -431,15 +430,15 @@ public class ROIsTablePanel extends JPanel {
 						nLines++;
 						break;
 					}
-					fGraphic = new FGraphic(geometry, graphicLayer
-							.addSymbol(symbol));
+					fGraphic = new FGraphic(geometry,
+							graphicLayer.addSymbol(symbol));
 					graphicLayer.addGraphic(fGraphic);
 					getRoiGraphics(roi.getName()).add(fGraphic);
 				}
 				row[1] = new Integer(nPolygons);
 				row[2] = new Integer(nLines);
 				row[3] = new Integer(nPoints);
-				//row[5] = new Integer(roi.getValues());
+				// row[5] = new Integer(roi.getValues());
 				((DefaultTableModel) getTable().getModel()).addRow(row);
 			}
 			selectDrawRoiTool();
@@ -475,9 +474,9 @@ public class ROIsTablePanel extends JPanel {
 	}
 
 	public Grid getGrid() {
-		if(grid == null) {
+		if (grid == null) {
 			FLyrRasterSE rasterLayer = (FLyrRasterSE) getFLayer();
-			IRasterDataSource dsetCopy = null; 
+			IRasterDataSource dsetCopy = null;
 			dsetCopy = rasterLayer.getDataSource().newDataset();
 			BufferFactory bufferFactory = new BufferFactory(dsetCopy);
 			bufferFactory.setReadOnly(true);
@@ -553,21 +552,25 @@ public class ROIsTablePanel extends JPanel {
 		}
 		return polygonToolButton;
 	}
-	
+
 	public JButton getImportButton() {
 		if (importButton == null) {
 			importButton = new JButton();
-			importButton.setIcon(PluginServices.getIconTheme().get("tfwload-icon"));
-			importButton.setToolTipText(PluginServices.getText(this,"cargar_rois"));
+			importButton.setIcon(PluginServices.getIconTheme().get(
+					"tfwload-icon"));
+			importButton.setToolTipText(PluginServices.getText(this,
+					"cargar_rois"));
 		}
 		return importButton;
 	}
-	
+
 	public JButton getExportButton() {
 		if (exportButton == null) {
 			exportButton = new JButton();
-			exportButton.setIcon(PluginServices.getIconTheme().get("save-icon"));
-			exportButton.setToolTipText(PluginServices.getText(this,"salvar_rois"));
+			exportButton
+					.setIcon(PluginServices.getIconTheme().get("save-icon"));
+			exportButton.setToolTipText(PluginServices.getText(this,
+					"salvar_rois"));
 		}
 		return exportButton;
 	}
@@ -580,37 +583,26 @@ public class ROIsTablePanel extends JPanel {
 		return view;
 	}
 
-	
-/*	public void drawROIs() {
-		Color geometryColor;
+	/*
+	 * public void drawROIs() { Color geometryColor;
+	 * 
+	 * BufferedImage img = getMapControl().getImage(); Graphics2D gImag =
+	 * (Graphics2D) img.getGraphics(); ViewPort vp =
+	 * getMapControl().getViewPort(); try { for (int i = 0; i <
+	 * getTable().getRowCount(); i++) { geometryColor = (Color)
+	 * getTable().getModel().getValueAt(i, 4); VectorialROI vROI =
+	 * (VectorialROI) getRois().get(
+	 * getTable().getTable().getJTable().getValueAt(i, 0));
+	 * 
+	 * for (Iterator iter = vROI.getGeometries().iterator(); iter .hasNext();) {
+	 * IGeometry geometry = (IGeometry) iter.next();
+	 * 
+	 * ISymbol sym = SymbologyFactory .createDefaultSymbolByShapeType(geometry
+	 * .getGeometryType(), geometryColor); geometry.draw(gImag, vp, sym, null);
+	 * } } getView().repaint(); } catch (NotInitializeException e) { // TODO
+	 * Auto-generated catch block e.printStackTrace(); } }
+	 */
 
-		BufferedImage img = getMapControl().getImage();
-		Graphics2D gImag = (Graphics2D) img.getGraphics();
-		ViewPort vp = getMapControl().getViewPort();
-		try {
-			for (int i = 0; i < getTable().getRowCount(); i++) {
-				geometryColor = (Color) getTable().getModel().getValueAt(i, 4);
-				VectorialROI vROI = (VectorialROI) getRois().get(
-						getTable().getTable().getJTable().getValueAt(i, 0));
-
-				for (Iterator iter = vROI.getGeometries().iterator(); iter
-						.hasNext();) {
-					IGeometry geometry = (IGeometry) iter.next();
-
-					ISymbol sym = SymbologyFactory
-							.createDefaultSymbolByShapeType(geometry
-									.getGeometryType(), geometryColor);
-					geometry.draw(gImag, vp, sym, null);
-				}
-			}
-			getView().repaint();
-		} catch (NotInitializeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-*/
-	
 	private HashMap getRoiGraphics() {
 		if (roiGraphics == null)
 			roiGraphics = new HashMap();
@@ -628,19 +620,24 @@ public class ROIsTablePanel extends JPanel {
 	}
 
 	/**
-	 * Elimina la ROI correspondiente al nombre <code>roiName</code> así
-	 * como sus objetos FGraphic asociados (borrándolos también de la vista).
-	 * (NO elimina la fila correspondiente en la tabla del panel).
+	 * Elimina la ROI correspondiente al nombre <code>roiName</code> así como
+	 * sus objetos FGraphic asociados (borrándolos también de la vista). (NO
+	 * elimina la fila correspondiente en la tabla del panel).
 	 * 
-	 * @param roiName Nombre de la ROI a eliminar.
+	 * @param roiName
+	 *            Nombre de la ROI a eliminar.
 	 */
 	public void removeROI(String roiName) {
 		boolean repaint = false;
 		getRois().remove(roiName);
 		ArrayList roiGraphics = getRoiGraphics(roiName);
 		if (roiGraphics != null) {
-			for (int i = 0; i < roiGraphics.size(); i++){
-				getMapControl().getMapContext().getGraphicsLayer().removeGraphic((FGraphic) getRoiGraphics(roiName).get(i));
+			for (int i = 0; i < roiGraphics.size(); i++) {
+				getMapControl()
+						.getMapContext()
+						.getGraphicsLayer()
+						.removeGraphic(
+								(FGraphic) getRoiGraphics(roiName).get(i));
 				repaint = true;
 			}
 			if (repaint)
@@ -688,9 +685,9 @@ public class ROIsTablePanel extends JPanel {
 		getRois().put(newName, getRois().remove(currentName));
 		getRoiGraphics().put(newName, getRoiGraphics().remove(currentName));
 	}
-	
-	public void sortTable(){
-		
+
+	public void sortTable() {
+
 	}
 
 	public GraphicLayer getGraphicLayer() {

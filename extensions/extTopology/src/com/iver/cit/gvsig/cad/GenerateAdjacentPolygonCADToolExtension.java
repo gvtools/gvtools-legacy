@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.cad;
 
 import org.gvsig.fmap.core.FGeometryUtil;
@@ -65,57 +65,60 @@ public class GenerateAdjacentPolygonCADToolExtension extends Extension {
 	private View view;
 	private MapControl mapControl;
 	private GenerateAdjacentPolygonCADTool cadTool;
-	
-	
+
 	public void execute(String actionCommand) {
 		CADExtension.initFocus();
-		if (actionCommand.equals(GenerateAdjacentPolygonCADTool.ADJACENT_POLYGON_TOOL_NAME)) {
-        	CADExtension.setCADTool(GenerateAdjacentPolygonCADTool.ADJACENT_POLYGON_TOOL_NAME, true);
-        }
+		if (actionCommand
+				.equals(GenerateAdjacentPolygonCADTool.ADJACENT_POLYGON_TOOL_NAME)) {
+			CADExtension.setCADTool(
+					GenerateAdjacentPolygonCADTool.ADJACENT_POLYGON_TOOL_NAME,
+					true);
+		}
 		CADExtension.getEditionManager().setMapControl(mapControl);
 		CADExtension.getCADToolAdapter().configureMenu();
 	}
 
 	public void initialize() {
 		cadTool = new GenerateAdjacentPolygonCADTool();
-		CADExtension.addCADTool(GenerateAdjacentPolygonCADTool.ADJACENT_POLYGON_TOOL_NAME, cadTool);
+		CADExtension.addCADTool(
+				GenerateAdjacentPolygonCADTool.ADJACENT_POLYGON_TOOL_NAME,
+				cadTool);
 		registerIcons();
 	}
-	
-	private void registerIcons(){
-		PluginServices.getIconTheme().registerDefault("adjacent-polygon",
-													   this.getClass().
-													   getClassLoader().
-													   getResource("images/AddAreaToPolygon.gif")
-		);
+
+	private void registerIcons() {
+		PluginServices.getIconTheme().registerDefault(
+				"adjacent-polygon",
+				this.getClass().getClassLoader()
+						.getResource("images/AddAreaToPolygon.gif"));
 	}
 
 	/**
-	 * Returns if this Edit CAD tool is visible. 
-	 * For this, there must be an active vectorial editing lyr in the TOC, which geometries'
-	 * dimension would must be linear or polygonal, and with at least one selected geometry.
-	 *  
+	 * Returns if this Edit CAD tool is visible. For this, there must be an
+	 * active vectorial editing lyr in the TOC, which geometries' dimension
+	 * would must be linear or polygonal, and with at least one selected
+	 * geometry.
+	 * 
 	 */
 	public boolean isEnabled() {
 		try {
-			if (EditionUtilities.getEditionStatus() == 
-				EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE) {
-					this.view = (View) PluginServices.getMDIManager().getActiveWindow();
-					mapControl = view.getMapControl();
-					if (CADExtension.getEditionManager().getActiveLayerEdited() == null)
-						return false;
-					FLyrVect lv = (FLyrVect) CADExtension.
-											getEditionManager().
-											getActiveLayerEdited().
-											getLayer();
-					int geometryDimensions = FGeometryUtil.getDimensions(lv.getShapeType());
-					if(geometryDimensions != 2)
-						return false;
-					
-					return true;
+			if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE) {
+				this.view = (View) PluginServices.getMDIManager()
+						.getActiveWindow();
+				mapControl = view.getMapControl();
+				if (CADExtension.getEditionManager().getActiveLayerEdited() == null)
+					return false;
+				FLyrVect lv = (FLyrVect) CADExtension.getEditionManager()
+						.getActiveLayerEdited().getLayer();
+				int geometryDimensions = FGeometryUtil.getDimensions(lv
+						.getShapeType());
+				if (geometryDimensions != 2)
+					return false;
+
+				return true;
 			}
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 			return false;
 		}
 		return true;

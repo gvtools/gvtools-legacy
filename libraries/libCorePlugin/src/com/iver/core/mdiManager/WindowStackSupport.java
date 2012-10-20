@@ -56,7 +56,7 @@ public class WindowStackSupport {
 	/* arrays for dynamically assigned shortcut keys */
 	private static boolean[] key_free;
 	private static java.lang.String[] key;
-	
+
 	private Vector vistas = new Vector();
 
 	private WindowInfoSupport vis;
@@ -70,7 +70,7 @@ public class WindowStackSupport {
 		this.vis = vis;
 		/* restart window key shortcut numbering */
 		key_free = new boolean[10];
-		for ( int i = 0; i < 10; i ++ ) {
+		for (int i = 0; i < 10; i++) {
 			key_free[i] = true;
 		}
 		key = new java.lang.String[10];
@@ -91,28 +91,30 @@ public class WindowStackSupport {
 		WindowInfo vi = vis.getWindowInfo(v);
 		int id = vi.getId();
 		Menu m = new Menu();
-		m.setActionCommand(""+id);
+		m.setActionCommand("" + id);
 		m.setTooltip(PluginServices.getText(this, "activa_la_ventana"));
-		m.setText("Ventana/"+vi.getTitle());
+		m.setText("Ventana/" + vi.getTitle());
 		/* get the first free mnemonic (if any) and assign */
-		for ( int i=0; i < 10; i++) {
-			if ( key_free[i]) {
+		for (int i = 0; i < 10; i++) {
+			if (key_free[i]) {
 				m.setKey(key[i]);
 				key_free[i] = false;
 				break;
 			}
 		}
 		viewMenu.put(v, m);
-		PluginServices.getMainFrame().addMenu(m, listener, PluginServices.getPluginServices(this).getClassLoader() );
+		PluginServices.getMainFrame().addMenu(m, listener,
+				PluginServices.getPluginServices(this).getClassLoader());
 	}
 
-	public void remove(IWindow v){
+	public void remove(IWindow v) {
 		Menu m = (Menu) viewMenu.get(v);
-		if (m == null) return;
+		if (m == null)
+			return;
 		/* free keyboard shortut taken by this window (if any) */
-		if ( m.getKey() != null ) {
-			for ( int i=0; i < 10; i++ ) {
-				if ( m.getKey() == key[i]) {
+		if (m.getKey() != null) {
+			for (int i = 0; i < 10; i++) {
+				if (m.getKey() == key[i]) {
 					key_free[i] = true;
 					break;
 				}
@@ -126,63 +128,59 @@ public class WindowStackSupport {
 	/**
 	 * FJP: No se usa, y no sé para qué estaba pensado.
 	 */
-	public void ctrltab(){
+	public void ctrltab() {
 		IWindow v = (IWindow) vistas.remove(vistas.size() - 1);
 		vistas.add(0, v);
 	}
 
-	public IWindow getActiveWindow(){
-		if (vistas.size() == 0) return null;
-        int index = vistas.size()-1;
-        while (index >= 0)
-        {
-            IWindow aux = (IWindow) vistas.get(index);
-            if (!aux.getWindowInfo().isPalette())
-            {
-//                System.err.println("getActiveView = " + aux.getWindowInfo().getTitle());
-                return aux;
-            }
-            index--;
-        }
-        return null;
+	public IWindow getActiveWindow() {
+		if (vistas.size() == 0)
+			return null;
+		int index = vistas.size() - 1;
+		while (index >= 0) {
+			IWindow aux = (IWindow) vistas.get(index);
+			if (!aux.getWindowInfo().isPalette()) {
+				// System.err.println("getActiveView = " +
+				// aux.getWindowInfo().getTitle());
+				return aux;
+			}
+			index--;
+		}
+		return null;
 	}
-    /**
-     * Se utiliza cuando ya está abierta la vista para indicar
-     * que la pasamos a activa. De esta forma evitamos que el
-     * getActiveView devuelva algo que no es.
-     * En realidad lo que haces es mover la vista a la última
-     * posición.
-     * @param v
-     */
-    public void setActive(IWindow v)
-    {
-        IWindow copia = null;
-        boolean bCopiar = false;
-        // Si es de tipo palette, no se pone como activa.
-        // De esta forma, nunca nos la devolverá.... Bueno,
-        // igual si cerramos la de encima. Voy a ponerle en
-        // getActiveView que si es de tipo Palette, devuelva la
-        // de abajo.
-        if (v.getWindowInfo().isPalette()) return;
 
-        for (int i=0; i < vistas.size(); i++)
-        {
-            IWindow aux = (IWindow) vistas.get(i);
-            if (aux == v)
-            {
-                copia = aux;
-                bCopiar = true;
-            }
-            if (bCopiar)
-            {
-                if (i < vistas.size()-1)
-                {
-                    IWindow siguiente = (IWindow) vistas.get(i+1);
-                    vistas.set(i,siguiente);
-                }
-                else // La última
-                    vistas.set(i,copia);
-            }
-        } // for
-    }
+	/**
+	 * Se utiliza cuando ya está abierta la vista para indicar que la pasamos a
+	 * activa. De esta forma evitamos que el getActiveView devuelva algo que no
+	 * es. En realidad lo que haces es mover la vista a la última posición.
+	 * 
+	 * @param v
+	 */
+	public void setActive(IWindow v) {
+		IWindow copia = null;
+		boolean bCopiar = false;
+		// Si es de tipo palette, no se pone como activa.
+		// De esta forma, nunca nos la devolverá.... Bueno,
+		// igual si cerramos la de encima. Voy a ponerle en
+		// getActiveView que si es de tipo Palette, devuelva la
+		// de abajo.
+		if (v.getWindowInfo().isPalette())
+			return;
+
+		for (int i = 0; i < vistas.size(); i++) {
+			IWindow aux = (IWindow) vistas.get(i);
+			if (aux == v) {
+				copia = aux;
+				bCopiar = true;
+			}
+			if (bCopiar) {
+				if (i < vistas.size() - 1) {
+					IWindow siguiente = (IWindow) vistas.get(i + 1);
+					vistas.set(i, siguiente);
+				} else
+					// La última
+					vistas.set(i, copia);
+			}
+		} // for
+	}
 }

@@ -33,17 +33,18 @@ import com.iver.utiles.swing.threads.Cancellable;
 
 /**
  * Test para la vista de georreferenciación con peticiones a la capa.
- *
+ * 
  * @version 30/07/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class TestViewDialog implements ToolListener {
-	private JFrame 	   frame = new JFrame();
-	private String     path = "/home/nacho/images/500k_2.ecw";
-	//private String     path = "/home/nacho/images/orto5mv30f290126cor03.sid"; 
-	//private String     path = "/home/nacho/images/wcs16bits.tif";
-	//private String     path = "/home/nacho/images/03AUG23153350-M2AS-000000122423_01_P001-BROWSE.jpg";
-	private int        w = 500, h = 500;
+	private JFrame frame = new JFrame();
+	private String path = "/home/nacho/images/500k_2.ecw";
+	// private String path = "/home/nacho/images/orto5mv30f290126cor03.sid";
+	// private String path = "/home/nacho/images/wcs16bits.tif";
+	// private String path =
+	// "/home/nacho/images/03AUG23153350-M2AS-000000122423_01_P001-BROWSE.jpg";
+	private int w = 500, h = 500;
 
 	public TestViewDialog() {
 		super();
@@ -52,9 +53,10 @@ public class TestViewDialog implements ToolListener {
 
 	public static void main(String[] args) {
 		try {
-			UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
-		} catch( Exception e ) {
-			System.err.println( "No se puede cambiar al LookAndFeel");
+			UIManager
+					.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
+		} catch (Exception e) {
+			System.err.println("No se puede cambiar al LookAndFeel");
 		}
 		new TestViewDialog();
 	}
@@ -66,17 +68,19 @@ public class TestViewDialog implements ToolListener {
 		} catch (LoadLayerException e) {
 			e.printStackTrace();
 		}
-		
-		//Creamos el componente
+
+		// Creamos el componente
 		ViewDialog view = new ViewDialog(0, 0, w, h, this);
 		view.setShowInfo(true);
-		//Gestor de peticiones a la capa (IExtensionRequest)
-		ViewRasterRequestManager viewRequestManager = new ViewRasterRequestManager(view, layer);
-		//Asignamos al componente cual será su gestor de peticiones. Cada vez que se pulse un zoom el componente hará 
-		//una llamada request a su gestor de peticiones
+		// Gestor de peticiones a la capa (IExtensionRequest)
+		ViewRasterRequestManager viewRequestManager = new ViewRasterRequestManager(
+				view, layer);
+		// Asignamos al componente cual será su gestor de peticiones. Cada vez
+		// que se pulse un zoom el componente hará
+		// una llamada request a su gestor de peticiones
 		view.setExtensionRequest(viewRequestManager);
 		view.setCursorSize(w / 2, h / 2);
-				
+
 		frame.setContentPane(view);
 
 		frame.setSize(new java.awt.Dimension(w, h));
@@ -84,16 +88,17 @@ public class TestViewDialog implements ToolListener {
 		frame.setTitle("zoom");
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-		
+
 		try {
 			viewRequestManager.initRequest(layer.getFullExtent());
 		} catch (InvalidRequestException e1) {
 			System.out.println("Error asignando la vista");
 		}
 	}
-	
-	class CancellableClass implements Cancellable{
+
+	class CancellableClass implements Cancellable {
 		private boolean cancel = false;
+
 		public void setCanceled(boolean canceled) {
 			this.cancel = canceled;
 		}
@@ -111,5 +116,5 @@ public class TestViewDialog implements ToolListener {
 
 	public void onTool(ToolEvent ev) {
 	}
-	
+
 }

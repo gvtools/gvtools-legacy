@@ -26,6 +26,7 @@ import javax.swing.filechooser.FileFilter;
 import org.gvsig.fmap.raster.layers.FLyrRasterSE;
 
 import com.iver.andami.PluginServices;
+
 /**
  * Clase para indicar los ficheros que se verán en el JFileChooser.
  * 
@@ -35,6 +36,7 @@ import com.iver.andami.PluginServices;
 public class DriverFileFilter extends FileFilter {
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.filechooser.FileFilter#accept(java.io.File)
 	 */
 	public boolean accept(File f) {
@@ -61,7 +63,8 @@ public class DriverFileFilter extends FileFilter {
 			} finally {
 				try {
 					reader.close();
-				} catch (Exception e) {}
+				} catch (Exception e) {
+				}
 			}
 		}
 
@@ -70,9 +73,10 @@ public class DriverFileFilter extends FileFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.filechooser.FileFilter#getDescription()
 	 */
 	public String getDescription() {
-		return ( PluginServices.getText(this, "raster") );
+		return (PluginServices.getText(this, "raster"));
 	}
 }

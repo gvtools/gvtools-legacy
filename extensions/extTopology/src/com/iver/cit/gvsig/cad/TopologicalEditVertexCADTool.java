@@ -117,18 +117,18 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
  * 
  */
 public class TopologicalEditVertexCADTool extends SelectionCADTool {
-//FIXME
+	// FIXME
 	/*
-	 * La herramienta hace lo que tiene que hacer. El unico problema de funcionamiento que da
-	 * es el siguiente:
-	 * a) picamos en una geometria (poligono) pero no en su borde, por tanto,
-	 * ni se pueden seleccionar handlers ni insertar.
+	 * La herramienta hace lo que tiene que hacer. El unico problema de
+	 * funcionamiento que da es el siguiente: a) picamos en una geometria
+	 * (poligono) pero no en su borde, por tanto, ni se pueden seleccionar
+	 * handlers ni insertar.
 	 * 
 	 * b) el estado pasa a "selectedfeatures"; y debería dibujarse el poligono
-	 * seleccionado con los handlers y el color de selección. 
+	 * seleccionado con los handlers y el color de selección.
 	 * 
 	 * No obstante, se dibuja correctamente.
-	 * */
+	 */
 	public static final String COMMAND_STRING = "_topologicaleditvertex";
 
 	/**
@@ -190,31 +190,31 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 				FLyrVect lyrVect = (FLyrVect) topologyLyrs.get(i);
 				if (lyrVect == vle.getLayer())
 					continue;
-				VectorialLayerEdited vleTopo = (VectorialLayerEdited) this.getCadToolAdapter().
-																			getEditionManager().
-																			getLayerEdited(lyrVect);
-				if(vleTopo != null)
+				VectorialLayerEdited vleTopo = (VectorialLayerEdited) this
+						.getCadToolAdapter().getEditionManager()
+						.getLayerEdited(lyrVect);
+				if (vleTopo != null)
 					editionLyrs.add((FLyrVect) vleTopo.getLayer());
 			}// for
 		}// if topology
-		
-		
-		IWindow[] views = (IWindow[]) PluginServices.getMDIManager().getAllWindows();
+
+		IWindow[] views = (IWindow[]) PluginServices.getMDIManager()
+				.getAllWindows();
 		for (int i = 0; i < views.length; i++) {
 			if (views[i] instanceof Table) {
 				Table table = (Table) views[i];
-				if (table.getModel().getAssociatedTable() != null){
-					for(int j = 0; j < editionLyrs.size(); j++){
+				if (table.getModel().getAssociatedTable() != null) {
+					for (int j = 0; j < editionLyrs.size(); j++) {
 						FLyrVect lyr = editionLyrs.get(j);
-						if(! lyr.isEditing())
+						if (!lyr.isEditing())
 							continue;
-						if( table.getModel().getAssociatedTable().equals(lyr)){
+						if (table.getModel().getAssociatedTable().equals(lyr)) {
 							table.updateSelection();
 							break;
-						}//if
-					}//for j
-				}//if	
-			}//if views instanceof
+						}// if
+					}// for j
+				}// if
+			}// if views instanceof
 		}// for i
 
 	}
@@ -247,8 +247,10 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 					View vista = (View) PluginServices.getMDIManager()
 							.getActiveWindow();
 					TextFieldEdit tfe = new TextFieldEdit(lyrAnnotation);
-					tfe.show(vista.getMapControl().getViewPort().fromMapPoint(
-							fl.getOrig()), vista.getMapControl());
+					tfe.show(
+							vista.getMapControl().getViewPort()
+									.fromMapPoint(fl.getOrig()),
+							vista.getMapControl());
 				}// if
 			}// if
 		}// for
@@ -276,7 +278,7 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 		} else if (status.equals("TopologicalEdition.WithHandlers")) {
 			VectorialLayerEdited vle = getVLE();
 			finalizeVertexEdition(x, y, vle);
-			
+
 			Topology topology = getParentIfTopology(vle);
 			if (topology != null) {
 				List topologyLyrs = topology.getLayers();
@@ -287,43 +289,43 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 					VectorialLayerEdited vleTopo = (VectorialLayerEdited) this
 							.getCadToolAdapter().getEditionManager()
 							.getLayerEdited(lyrVect);
-					if(vleTopo != null){
+					if (vleTopo != null) {
 						finalizeVertexEdition(x, y, vleTopo);
 					}
 				}// for
 			}// if topology
-		
+
 			firstPoint = new Point2D.Double(x, y);
-			
+
 			clearSelections();
 		}
 	}
-	
+
 	/**
-	 * Overwrites this DefaultCADTool's method because this tool could put many layers
-	 * in 'dirty' status.
+	 * Overwrites this DefaultCADTool's method because this tool could put many
+	 * layers in 'dirty' status.
 	 */
 	public void refresh() {
 		VectorialLayerEdited vle = getVLE();
-//		vle.getLayer().setDirty(true);
-		
+		// vle.getLayer().setDirty(true);
+
 		Topology topology = getParentIfTopology(vle);
-		if(topology != null){
+		if (topology != null) {
 			List topologyLyrs = topology.getLayers();
 			for (int i = 0; i < topologyLyrs.size(); i++) {
 				FLyrVect lyrVect = (FLyrVect) topologyLyrs.get(i);
 				if (lyrVect == vle.getLayer())
 					continue;
-//				if(lyrVect.isEditing())
-//					lyrVect.setDirty(true);
+				// if(lyrVect.isEditing())
+				// lyrVect.setDirty(true);
 			}// for
 		}
 		getCadToolAdapter().getMapControl().rePaintDirtyLayers();
 	}
 
 	/**
-	 * DefaultCADTool#modifyFeature doesnt fit our needs, because we are working with more
-	 * than one layer.
+	 * DefaultCADTool#modifyFeature doesnt fit our needs, because we are working
+	 * with more than one layer.
 	 * 
 	 * @param index
 	 * @param row
@@ -333,32 +335,32 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 		try {
 			vle.getVEA().modifyRow(index, row, getName(), EditionEvent.GRAPHIC);
 		} catch (ValidateRowException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		} catch (ExpansionFileWriteException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 		draw(row.getGeometry().cloneGeometry());
 	}
-	
-	
+
 	/**
-	 * This method move the selected handlers and finalize the edition process of this tool.
+	 * This method move the selected handlers and finalize the edition process
+	 * of this tool.
 	 * 
 	 * @param x
 	 * @param y
 	 * @param vle
 	 * @param vea
 	 */
-	private void finalizeVertexEdition(double x, double y, VectorialLayerEdited vle) {
+	private void finalizeVertexEdition(double x, double y,
+			VectorialLayerEdited vle) {
 		VectorialEditableAdapter vea = vle.getVEA();
 		ArrayList selectedHandler = vle.getSelectedHandler();
 		ArrayList selectedRow = vle.getSelectedRow();
 		vea.startComplexRow();
-		ArrayList<DefaultRowEditedWithLyrEdited> selectedRowsAux = 
-							new ArrayList<DefaultRowEditedWithLyrEdited>();
-		
+		ArrayList<DefaultRowEditedWithLyrEdited> selectedRowsAux = new ArrayList<DefaultRowEditedWithLyrEdited>();
+
 		for (int i = 0; i < selectedRow.size(); i++) {
 			IRowEdited row = (IRowEdited) selectedRow.get(i);
 			IFeature feat = (IFeature) row.getLinkedRow().cloneRow();
@@ -370,8 +372,7 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 			} else {
 				// Movemos los handlers que hemos seleccionado
 				// previamente dentro del método select()
-				Handler[] handlers = ig
-						.getHandlers(IGeometry.SELECTHANDLER);
+				Handler[] handlers = ig.getHandlers(IGeometry.SELECTHANDLER);
 
 				for (int k = 0; k < selectedHandler.size(); k++) {
 					Handler h = (Handler) selectedHandler.get(k);
@@ -383,10 +384,9 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 			}// else
 			modifyFeature(row.getIndex(), feat, vle);
 			DefaultRowEdited newRowEdited = new DefaultRowEdited(feat,
-											IRowEdited.STATUS_MODIFIED, 
-														row.getIndex());
+					IRowEdited.STATUS_MODIFIED, row.getIndex());
 			selectedRowsAux.add(new DefaultRowEditedWithLyrEdited(vle,
-														newRowEdited));
+					newRowEdited));
 		}// for selectedRow size
 
 		vle.setSelectionCache(VectorialLayerEdited.SAVEPREVIOUS,
@@ -440,7 +440,7 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 
 		List<VectorialLayerEdited> editionLyrs = new ArrayList<VectorialLayerEdited>();
 		editionLyrs.add(vle);
-		
+
 		Topology topology = getParentIfTopology(vle);
 		if (topology != null) {
 			List topologyLyrs = topology.getLayers();
@@ -448,19 +448,18 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 				FLyrVect lyrVect = (FLyrVect) topologyLyrs.get(i);
 				if (lyrVect == vle.getLayer())
 					continue;
-				VectorialLayerEdited vleTopo = (VectorialLayerEdited) this.getCadToolAdapter().
-																			getEditionManager()
-																			.getLayerEdited(lyrVect);
-				if(vleTopo != null)
+				VectorialLayerEdited vleTopo = (VectorialLayerEdited) this
+						.getCadToolAdapter().getEditionManager()
+						.getLayerEdited(lyrVect);
+				if (vleTopo != null)
 					editionLyrs.add(vleTopo);
 			}// for
 		}// if topology
 
-		
 		if (status.equals("TopologicalEdition.SecondPoint")) {
 			for (int i = 0; i < editionLyrs.size(); i++) {
 				VectorialLayerEdited vl = editionLyrs.get(i);
-				
+
 				GeneralPathX elShape = new GeneralPathX(
 						GeneralPathX.WIND_EVEN_ODD, 4);
 				elShape.moveTo(firstPoint.getX(), firstPoint.getY());
@@ -469,50 +468,49 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 				elShape.lineTo(firstPoint.getX(), y);
 				elShape.lineTo(firstPoint.getX(), firstPoint.getY());
 				ShapeFactory.createPolyline2D(elShape).draw((Graphics2D) g, vp,
-												DefaultCADTool.geometrySelectSymbol);
+						DefaultCADTool.geometrySelectSymbol);
 				Image img = vl.getSelectionImage();
 				g.drawImage(img, 0, 0, null);
-			
-			}//for	
+
+			}// for
 		} else if (status.equals("TopologicalEdition.WithHandlers")) {
 			for (int i = 0; i < editionLyrs.size(); i++) {
 				VectorialLayerEdited vl = editionLyrs.get(i);
 				ArrayList selectedHandler = vl.getSelectedHandler();
-			
+
 				int selectionSize = selectedHandler.size();
 				double[] xPrev = new double[selectionSize];
 				double[] yPrev = new double[selectionSize];
-				
+
 				for (int k = 0; k < selectionSize; k++) {
 					Handler h = (Handler) selectedHandler.get(k);
 					xPrev[k] = h.getPoint().getX();
 					yPrev[k] = h.getPoint().getY();
 					h.set(x, y);
 				}
-				
-				
+
 				for (int j = 0; j < rowselectedHandlers.size(); j++) {
-					DefaultRowEditedWithLyrEdited rowEd = rowselectedHandlers.get(j);
-					//we skip those features which not are of the current VLE
-					if(! (rowEd.getLayerEdited().getLayer().equals(vl.getLayer())))
+					DefaultRowEditedWithLyrEdited rowEd = rowselectedHandlers
+							.get(j);
+					// we skip those features which not are of the current VLE
+					if (!(rowEd.getLayerEdited().getLayer().equals(vl
+							.getLayer())))
 						continue;
 					IGeometry geom = ((IFeature) rowEd.getLinkedRow())
-														.getGeometry().
-														cloneGeometry();
+							.getGeometry().cloneGeometry();
 					g.setColor(Color.gray);
-					geom.draw((Graphics2D) g,
-										  vp,
+					geom.draw((Graphics2D) g, vp,
 							DefaultCADTool.axisReferencesSymbol);
-				}//for j
-				
+				}// for j
+
 				for (int k = 0; k < selectionSize; k++) {
 					Handler h = (Handler) selectedHandler.get(k);
 					h.set(xPrev[k], yPrev[k]);
 				}
-			
-			}//for i
-			
-		}else{
+
+			}// for i
+
+		} else {
 			for (int i = 0; i < editionLyrs.size(); i++) {
 				VectorialLayerEdited vl = editionLyrs.get(i);
 				ArrayList selectedHandler = vl.getSelectedHandler();
@@ -527,7 +525,7 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 						g.drawImage(imgHand, 0, 0, null);
 				} catch (Exception e) {
 				}
-			}//for i
+			}// for i
 		}
 	}
 
@@ -557,9 +555,9 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 			return "TopologicalEdition.FirstPoint";
 		}
 	}
-	
-	
-	private void clearSelection(VectorialLayerEdited vle) throws ReadDriverException{
+
+	private void clearSelection(VectorialLayerEdited vle)
+			throws ReadDriverException {
 		ArrayList selectedRow = vle.getSelectedRow();
 		ArrayList selectedHandlers = vle.getSelectedHandler();
 		selectedRow.clear();
@@ -570,14 +568,13 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 		vea.setSelectionImage(null);
 		vea.setHandlersImage(null);
 	}
-	
-	
-	private void clearSelections(){
+
+	private void clearSelections() {
 		rowselectedHandlers.clear();
 		try {
 			VectorialLayerEdited vle = getVLE();
 			clearSelection(vle);
-			
+
 			Topology topology = getParentIfTopology(vle);
 			if (topology != null) {
 				List topologyLyrs = topology.getLayers();
@@ -585,14 +582,14 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 					FLyrVect lyrVect = (FLyrVect) topologyLyrs.get(i);
 					if (lyrVect == vle.getLayer())
 						continue;
-					VectorialLayerEdited vleTopo = (VectorialLayerEdited) this.getCadToolAdapter().
-																				getEditionManager()
-																				.getLayerEdited(lyrVect);
-					if(vleTopo != null)
+					VectorialLayerEdited vleTopo = (VectorialLayerEdited) this
+							.getCadToolAdapter().getEditionManager()
+							.getLayerEdited(lyrVect);
+					if (vleTopo != null)
 						clearSelection(vleTopo);
 				}// for
 			}// if topology
-			
+
 		} catch (ReadDriverException e) {
 			e.printStackTrace();
 		}
@@ -650,7 +647,7 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 			if (lyr == vle.getLayer())// we skip the actual edited layer
 				continue;
 			try {
-				if(! lyr.isEditing())
+				if (!lyr.isEditing())
 					lyr.setEditing(true);
 			} catch (StartEditionLayerException e) {
 				NotificationManager.addError(e.getMessage(), e);
@@ -687,8 +684,8 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 			if (lyrVect == getVLE().getLayer())
 				continue;
 			VectorialLayerEdited vleTopo = (VectorialLayerEdited) this
-					.getCadToolAdapter().getEditionManager().getLayerEdited(
-							lyrVect);
+					.getCadToolAdapter().getEditionManager()
+					.getLayerEdited(lyrVect);
 			vleTopo.selectWithPoint(x, y, multipleSelection);
 		}// for
 	}
@@ -699,7 +696,7 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 	public VectorialLayerEdited getVLE() {
 		VectorialLayerEdited solution = null;
 		IWindow activeWindow = PluginServices.getMDIManager().getActiveWindow();
-		if(! (activeWindow instanceof View))
+		if (!(activeWindow instanceof View))
 			return null;
 		View vista = (View) activeWindow;
 		MapContext mapContext = vista.getMapControl().getMapContext();
@@ -728,13 +725,13 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 		int selectionSize = activeLyrSelection.size();
 		if (topology != null && selectionSize > 0) {
 
-			for(int i = 0; i < selectionSize; i++){
+			for (int i = 0; i < selectionSize; i++) {
 				IRowEdited rowEdited = (IRowEdited) activeLyrSelection.get(i);
-				DefaultRowEditedWithLyrEdited newRowEdited = 
-					new DefaultRowEditedWithLyrEdited(getVLE(), rowEdited);
+				DefaultRowEditedWithLyrEdited newRowEdited = new DefaultRowEditedWithLyrEdited(
+						getVLE(), rowEdited);
 				solution.add(newRowEdited);
 			}
-			
+
 			// we only select features in topology lyrs if the active layer has
 			// a selected feature
 			for (int i = 0; i < topology.getLayers().size(); i++) {
@@ -747,8 +744,8 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 				ArrayList topoSelectedRows = vleTopo.getSelectedRow();
 				for (int j = 0; j < topoSelectedRows.size(); j++) {
 					IRowEdited rowEdited = (IRowEdited) topoSelectedRows.get(j);
-					DefaultRowEditedWithLyrEdited newRowEdited = 
-						new DefaultRowEditedWithLyrEdited(vleTopo, rowEdited);
+					DefaultRowEditedWithLyrEdited newRowEdited = new DefaultRowEditedWithLyrEdited(
+							vleTopo, rowEdited);
 					solution.add(newRowEdited);
 				}
 			}// for
@@ -764,7 +761,8 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 		VectorialLayerEdited vle = getVLE();
 
 		Topology topology = getParentIfTopology(vle);
-		if (topology != null)//refinar esto, solo poner en edicion aquellas capas que tengan vertice afectado
+		if (topology != null)// refinar esto, solo poner en edicion aquellas
+								// capas que tengan vertice afectado
 			startEdition(topology);
 
 		if ((status.equals("TopologicalEdition.FirstPoint"))
@@ -780,17 +778,19 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 		List<DefaultRowEditedWithLyrEdited> selectedRow = getSelectedRowsWithTopology(topology);
 
 		if (selectedRow.size() > 0) {
-			
+
 			Point2D auxPoint = new Point2D.Double(x, y);
 			double min = getCadToolAdapter().getMapControl().getViewPort()
 					.toMapDistance(tolerance);
-			
-			//FIXME CAMBIAR ESTO. ANTES TENIA SENTIDO PORQUE LA CAPA ACTIVA DEL TOC
-			//SOLO PERMITIA SELECCIONAR UN ELEMENTO. AHORA PERMITE SELECCIONAR VARIOS
+
+			// FIXME CAMBIAR ESTO. ANTES TENIA SENTIDO PORQUE LA CAPA ACTIVA DEL
+			// TOC
+			// SOLO PERMITIA SELECCIONAR UN ELEMENTO. AHORA PERMITE SELECCIONAR
+			// VARIOS
 			DefaultRowEditedWithLyrEdited rowEdited = selectedRow.get(0);
 			vle.getSelectedHandler().clear();
-			selectHandlers((IFeature) rowEdited.getLinkedRow(), rowEdited
-					.getIndex(), vle, min, auxPoint);
+			selectHandlers((IFeature) rowEdited.getLinkedRow(),
+					rowEdited.getIndex(), vle, min, auxPoint);
 
 			if (vle.getSelectedHandler().size() > 0) {
 				nextState = "TopologicalEdition.WithHandlers";
@@ -806,8 +806,8 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 							selectedFeature.getAttributes(), rowEdited.getID());
 					VectorialEditableAdapter vea = vle.getVEA();
 					try {
-						vea.modifyRow(rowEdited.getIndex(), df, PluginServices
-								.getText(this, "add_vertex"),
+						vea.modifyRow(rowEdited.getIndex(), df,
+								PluginServices.getText(this, "add_vertex"),
 								EditionEvent.GRAPHIC);
 					} catch (ExpansionFileWriteException e) {
 						// TODO Auto-generated catch block
@@ -823,8 +823,8 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 						e.printStackTrace();
 					}
 					selectedFeature.setGeometry(geomEdited);
-					selectHandlers(df, rowEdited.getIndex(), rowEdited
-							.getLayerEdited(), min, auxPoint);
+					selectHandlers(df, rowEdited.getIndex(),
+							rowEdited.getLayerEdited(), min, auxPoint);
 					nextState = "TopologicalEdition.WithHandlers";
 				} else {
 					nextState = "TopologicalEdition.WithSelectedFeatures";
@@ -862,8 +862,8 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 							IGeometry geomEdited = FGeometryUtil.insertVertex(
 									originalGeometry, auxPoint, min);
 							DefaultFeature df = new DefaultFeature(geomEdited,
-									selectedFeature.getAttributes(), rowEdited
-											.getID());
+									selectedFeature.getAttributes(),
+									rowEdited.getID());
 							VectorialEditableAdapter vea = rowEdited
 									.getLayerEdited().getVEA();
 							try {
@@ -885,8 +885,8 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 								e.printStackTrace();
 							}
 							selectedFeature.setGeometry(geomEdited);
-							selectHandlers(df, rowEdited.getIndex(), rowEdited
-									.getLayerEdited(), min, auxPoint);
+							selectHandlers(df, rowEdited.getIndex(),
+									rowEdited.getLayerEdited(), min, auxPoint);
 						}
 					}// else selected handlers size > 0
 				}
@@ -949,7 +949,7 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 		rowselectedHandlers.clear();
 		boolean selectedHandlers = selectHandlers(vle, auxPoint, tam);
 
-		if(selectedHandlers){
+		if (selectedHandlers) {
 			Topology parentTopology = getParentIfTopology(vle);
 			if (parentTopology != null) {
 				List lyrs = parentTopology.getLayers();
@@ -963,7 +963,7 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 					selectHandlers(vleTopo, auxPoint, tam);
 				}// for
 			}// parentTopology
-		}//if	
+		}// if
 		PluginServices.getMDIManager().restoreCursor();
 		if (selectedHandlers)
 			return 1;
@@ -991,8 +991,9 @@ public class TopologicalEditVertexCADTool extends SelectionCADTool {
 				rowEdited.getID());
 		VectorialEditableAdapter vea = vle.getVEA();
 		try {
-			vea.modifyRow(rowEdited.getIndex(), df, PluginServices.getText(
-					this, "add_vertex"), EditionEvent.GRAPHIC);
+			vea.modifyRow(rowEdited.getIndex(), df,
+					PluginServices.getText(this, "add_vertex"),
+					EditionEvent.GRAPHIC);
 			// TODO En realidad lo que deberiamos hacer es cambiar rowEdited (su
 			// seleccion)
 			fea.setGeometry(geomEdited);

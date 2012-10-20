@@ -77,28 +77,31 @@ import org.gvsig.remoteClient.gml.types.IXMLType;
 /**
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class CheckBoxTreeCellEditor extends AbstractCellEditor implements TreeCellEditor {
+public class CheckBoxTreeCellEditor extends AbstractCellEditor implements
+		TreeCellEditor {
 	CheckBoxTreeCellRenderer renderer = null;
 	ChangeEvent changeEvent = null;
 	JTree tree;
 	FieldsTreeTable treetable;
-	
+
 	public CheckBoxTreeCellEditor(FieldsTreeTable treetable) {
 		this.treetable = treetable;
-		this.tree = (JTree)treetable.getTree();
+		this.tree = (JTree) treetable.getTree();
 		this.renderer = new CheckBoxTreeCellRenderer(treetable);
-	}	
-	
+	}
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.CellEditor#getCellEditorValue()
 	 */
 	public Object getCellEditorValue() {
 		return null;
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.CellEditor#isCellEditable(java.util.EventObject)
 	 */
 	public boolean isCellEditable(EventObject event) {
@@ -109,12 +112,14 @@ public class CheckBoxTreeCellEditor extends AbstractCellEditor implements TreeCe
 			if (path != null) {
 				Object node = path.getLastPathComponent();
 				if ((node != null) && (node instanceof CheckBoxNode)) {
-					CheckBoxNode selectedNode = (CheckBoxNode)node;
-					if (mouseEvent.getClickCount() == 2){
-						
-					}else if(mouseEvent.getClickCount() == 1){
-						changeAllChildren(selectedNode,!selectedNode.isSelected());
-						changeParentState(selectedNode,!selectedNode.isSelected());
+					CheckBoxNode selectedNode = (CheckBoxNode) node;
+					if (mouseEvent.getClickCount() == 2) {
+
+					} else if (mouseEvent.getClickCount() == 1) {
+						changeAllChildren(selectedNode,
+								!selectedNode.isSelected());
+						changeParentState(selectedNode,
+								!selectedNode.isSelected());
 						tree.repaint();
 					}
 				}
@@ -122,74 +127,81 @@ public class CheckBoxTreeCellEditor extends AbstractCellEditor implements TreeCe
 		}
 		return false;
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
-	 * @see javax.swing.tree.TreeCellEditor#getTreeCellEditorComponent(javax.swing.JTree, java.lang.Object, boolean, boolean, boolean, int)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.swing.tree.TreeCellEditor#getTreeCellEditorComponent(javax.swing
+	 * .JTree, java.lang.Object, boolean, boolean, boolean, int)
 	 */
 	public Component getTreeCellEditorComponent(JTree tree, Object value,
 			boolean selected, boolean expanded, boolean leaf, int row) {
 		Component editor = renderer.getTreeCellRendererComponent(tree, value,
 				true, expanded, leaf, row, true);
-		
+
 		if (editor instanceof JCheckBox) {
-			//((JCheckBox) editor).addItemListener(new CheckBoxListener());
-		}		
+			// ((JCheckBox) editor).addItemListener(new CheckBoxListener());
+		}
 		return editor;
-	}	
-	
+	}
+
 	/**
-	 * It enable or disable the parent node state depending of its children values
+	 * It enable or disable the parent node state depending of its children
+	 * values
+	 * 
 	 * @param selectedNode
-	 * Selected node
+	 *            Selected node
 	 * @param isSelected
-	 * Current node status
+	 *            Current node status
 	 */
-	private void changeParentState(CheckBoxNode selectedNode,boolean isSelected){
+	private void changeParentState(CheckBoxNode selectedNode, boolean isSelected) {
 		CheckBoxNode parent = selectedNode.getParentNode();
-		while (parent != null){			
-			if (isSelected != parent.isSelected()){
+		while (parent != null) {
+			if (isSelected != parent.isSelected()) {
 				parent.setColor(TetraStateCheckBox.GREY);
-			}else{	
+			} else {
 				boolean isEnabled = true;
-				for (int i=0 ; i<parent.getChildren().size() ; i++){
-					CheckBoxNode child = (CheckBoxNode)parent.getChildren().get(i);
-					if (child != selectedNode){
-						if (parent.isSelected() != child.isSelected()){
+				for (int i = 0; i < parent.getChildren().size(); i++) {
+					CheckBoxNode child = (CheckBoxNode) parent.getChildren()
+							.get(i);
+					if (child != selectedNode) {
+						if (parent.isSelected() != child.isSelected()) {
 							isEnabled = false;
 						}
 					}
 				}
-				if (!isEnabled){
+				if (!isEnabled) {
 					parent.setColor(TetraStateCheckBox.GREY);
-				}else{
+				} else {
 					parent.setColor(TetraStateCheckBox.WHITE);
-				}					
-				
-			}			
+				}
+
+			}
 			selectedNode = parent;
-			parent = selectedNode.getParentNode();			
+			parent = selectedNode.getParentNode();
 		}
 	}
-	
-	
+
 	/**
 	 * It changes all the children status
+	 * 
 	 * @param selectedNode
-	 * Root node
+	 *            Root node
 	 * @param selected
-	 * New state
+	 *            New state
 	 */
-	private void changeAllChildren(CheckBoxNode selectedNode,boolean selected){
-		for (int i=0 ; i<selectedNode.getChildren().size() ; i++){
-			CheckBoxNode child = ((CheckBoxNode)selectedNode.getChildren().get(i));
-			if ((child.getElement().getEntityType() == null) || 
-					(child.getElement().getEntityType().getType() != IXMLType.GML_GEOMETRY)){
-				child.setSelected(selected);	
+	private void changeAllChildren(CheckBoxNode selectedNode, boolean selected) {
+		for (int i = 0; i < selectedNode.getChildren().size(); i++) {
+			CheckBoxNode child = ((CheckBoxNode) selectedNode.getChildren()
+					.get(i));
+			if ((child.getElement().getEntityType() == null)
+					|| (child.getElement().getEntityType().getType() != IXMLType.GML_GEOMETRY)) {
+				child.setSelected(selected);
 			}
-			if (child.getChildren().size() > 0){
-				changeAllChildren(child,selected);
-			}			
+			if (child.getChildren().size() > 0) {
+				changeAllChildren(child, selected);
+			}
 		}
 	}
 }

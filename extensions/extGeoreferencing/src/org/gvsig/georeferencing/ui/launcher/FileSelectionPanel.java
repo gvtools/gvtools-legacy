@@ -35,7 +35,6 @@ import org.gvsig.raster.util.ExtendedFileFilter;
 import org.gvsig.raster.util.RasterToolsUtil;
 import org.gvsig.raster.util.RasterUtilities;
 
-import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.addlayer.fileopen.FileOpenWizard;
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 
@@ -43,42 +42,49 @@ import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
  * Panel de selección de fichero a georreferenciar.
  * 
  * 10/01/2008
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class FileSelectionPanel extends JPanel implements ActionListener {
-	private static final long     serialVersionUID    = 1L;
-	
-	private JTextField            fileName            = null;
-	private JButton               bSelection          = null;
-	private FLyrRasterSE          layer               = null;
-	private DataInputContainer    yCellSize           = null;
-	private DataInputContainer    xCellSize           = null;
+	private static final long serialVersionUID = 1L;
+
+	private JTextField fileName = null;
+	private JButton bSelection = null;
+	private FLyrRasterSE layer = null;
+	private DataInputContainer yCellSize = null;
+	private DataInputContainer xCellSize = null;
 
 	/**
-	 * Constructor. Asigna la lista de nombres de vistas para el selector. 
+	 * Constructor. Asigna la lista de nombres de vistas para el selector.
+	 * 
 	 * @param viewList
 	 */
-	public FileSelectionPanel(DataInputContainer xCellSize, DataInputContainer yCellSize) {
+	public FileSelectionPanel(DataInputContainer xCellSize,
+			DataInputContainer yCellSize) {
 		this.xCellSize = xCellSize;
 		this.yCellSize = yCellSize;
 		init();
 	}
-	
+
 	/**
 	 * Acciones de inicialización del panel
 	 */
-	public void init() {	
+	public void init() {
 		BorderLayout fl = new BorderLayout();
 		fl.setHgap(3);
 		fl.setVgap(0);
 		setLayout(fl);
-		setBorder(javax.swing.BorderFactory.createTitledBorder(null, RasterToolsUtil.getText(this, "georef_file"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+		setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+				RasterToolsUtil.getText(this, "georef_file"),
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
 		add(getFileName(), BorderLayout.CENTER);
 		add(getSelectFileButton(), BorderLayout.EAST);
 	}
-	
+
 	/**
 	 * Obtiene el campo con la ruta al ficheo a georreferenciar
+	 * 
 	 * @return JFormattedTextField
 	 */
 	private JTextField getFileName() {
@@ -88,13 +94,14 @@ public class FileSelectionPanel extends JPanel implements ActionListener {
 		}
 		return fileName;
 	}
-	
+
 	/**
 	 * Obtiene el botón de selección de fichero
+	 * 
 	 * @return JButton
-		*/
+	 */
 	private JButton getSelectFileButton() {
-		if(bSelection == null) {
+		if (bSelection == null) {
 			bSelection = new JButton(RasterToolsUtil.getText(this, "select"));
 			bSelection.addActionListener(this);
 		}
@@ -105,18 +112,21 @@ public class FileSelectionPanel extends JPanel implements ActionListener {
 	 * Gestiona el evento del botón de apertura de capa
 	 */
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == getSelectFileButton()) {
+		if (e.getSource() == getSelectFileButton()) {
 			loadRasterLayer();
-			if(getLayer() != null && xCellSize != null && yCellSize != null) {
-				xCellSize.setValue(getLayer().getDataSource().getCellSize() + "");
-				yCellSize.setValue(getLayer().getDataSource().getCellSize() + "");
+			if (getLayer() != null && xCellSize != null && yCellSize != null) {
+				xCellSize.setValue(getLayer().getDataSource().getCellSize()
+						+ "");
+				yCellSize.setValue(getLayer().getDataSource().getCellSize()
+						+ "");
 			}
 		}
 	}
-	
+
 	/**
 	 * Muestra el dialogo de selección de fichero para la carga de la capa
 	 * raster en los formatos definidos para georreferenciar.
+	 * 
 	 * @return Capa raster cargada o null si no se consigue ninguna
 	 */
 	private FLyrRasterSE loadRasterLayer() {
@@ -125,40 +135,44 @@ public class FileSelectionPanel extends JPanel implements ActionListener {
 		chooser.setAcceptAllFileFilterUsed(false);
 		String[] extensionsSupported = RasterDataset.getExtensionsSupported();
 		ExtendedFileFilter allFiles = new ExtendedFileFilter();
-		for (int i = 0; i < extensionsSupported.length; i++) {						
-			/* Useless GDAL extensions: will skip those.
+		for (int i = 0; i < extensionsSupported.length; i++) {
+			/*
+			 * Useless GDAL extensions: will skip those.
 			 */
-			if 	( 	extensionsSupported[i].toLowerCase() != "vrt" ||
-					extensionsSupported[i].toLowerCase() != "memory" )
-			{
+			if (extensionsSupported[i].toLowerCase() != "vrt"
+					|| extensionsSupported[i].toLowerCase() != "memory") {
 				allFiles.addExtension((String) extensionsSupported[i]);
-			}						
+			}
 		}
 		chooser.addChoosableFileFilter(allFiles);
-				
+
 		int returnVal = chooser.showOpenDialog(null);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			path = chooser.getSelectedFile().getAbsolutePath();
 			try {
 				if (layer != null)
 					layer.getDataSource().close();
-				layer = FLyrRasterSE.createLayer(RasterUtilities.getLastPart(path, File.separator), path, null);
+				layer = FLyrRasterSE.createLayer(
+						RasterUtilities.getLastPart(path, File.separator),
+						path, null);
 				if (layer != null)
 					getFileName().setText(path);
 				return layer;
 			} catch (LoadLayerException e) {
 			}
 		}
-		RasterToolsUtil.messageBoxError(RasterToolsUtil.getText(this, "error_load_layer"), null);
+		RasterToolsUtil.messageBoxError(
+				RasterToolsUtil.getText(this, "error_load_layer"), null);
 		return null;
 	}
-	
-	//-------Consulta de propiedades seleccionadas---------
-	
+
+	// -------Consulta de propiedades seleccionadas---------
+
 	/**
-	 * Obtiene la capa que ha sido abierta por el usuario 
-	 * @return Obtiene la capa que ha sido abierta por el usuario o null si no 
-	 * hay abierta ninguna.
+	 * Obtiene la capa que ha sido abierta por el usuario
+	 * 
+	 * @return Obtiene la capa que ha sido abierta por el usuario o null si no
+	 *         hay abierta ninguna.
 	 */
 	public FLyrRasterSE getLayer() {
 		return layer;

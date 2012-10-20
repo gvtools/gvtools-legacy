@@ -30,23 +30,20 @@ import es.prodevelop.cit.gvsig.jdbc_spatial.gui.jdbcwizard.RepeatedChooseGeometr
 import es.prodevelop.cit.gvsig.jdbc_spatial.gui.jdbcwizard.RepeatedFieldDefinitionPanel;
 
 public class NewOracleSpatialTableFinishAction extends FinishAction {
-	
-	private static Logger logger = Logger.getLogger(NewOracleSpatialTableFinishAction.class.getName());
+
+	private static Logger logger = Logger
+			.getLogger(NewOracleSpatialTableFinishAction.class.getName());
 	private NewVectorDBConnectionPanel connectionPanel;
 	private RepeatedChooseGeometryTypePanel geoTypePanel;
 	private RepeatedFieldDefinitionPanel fieldsPanel;
 	private MapContext theMapContext;
 	private IWindow closeThis;
-	
-	
+
 	// ...
-	
-	public NewOracleSpatialTableFinishAction(
-			JWizardComponents wc,
-			IWindow closeit,
-			NewVectorDBConnectionPanel connPanel,
-			MapContext mc) {
-		
+
+	public NewOracleSpatialTableFinishAction(JWizardComponents wc,
+			IWindow closeit, NewVectorDBConnectionPanel connPanel, MapContext mc) {
+
 		super(wc);
 		theMapContext = mc;
 		closeThis = closeit;
@@ -60,66 +57,70 @@ public class NewOracleSpatialTableFinishAction extends FinishAction {
 		PluginServices.getMDIManager().closeWindow(closeThis);
 
 		ViewPort vp = theMapContext.getViewPort();
-		
+
 		DBLayerDefinition lyr_def = new DBLayerDefinition();
-		
+
 		FieldDescription[] flds = fieldsPanel.getFieldsDescription();
 		FieldDescription[] flds_new = getValidFields(flds);
-		
+
 		lyr_def.setFieldsDesc(flds_new);
-		
-		
-		
+
 		String usr = connectionPanel.getConnectionWithParams().getUser();
 		String table_name = connectionPanel.getTableName();
-		
+
 		lyr_def.setTableName(table_name);
 		lyr_def.setUser(usr.toUpperCase());
 		String epsg_code = CRS.toSRS(vp.getCrs(), true);
 		lyr_def.setSRID_EPSG(epsg_code.substring(5));
-		
+
 		lyr_def.setFieldID(OracleSpatialDriver.ORACLE_ID_FIELD);
 		lyr_def.setFieldGeometry(OracleSpatialDriver.DEFAULT_GEO_FIELD);
 		lyr_def.setWhereClause("");
-		
+
 		Rectangle2D extent = vp.getAdjustedExtent();
 		if (extent == null) {
 			int h = vp.getImageHeight();
 			int w = vp.getImageWidth();
 			extent = new Rectangle2D.Double(0, 0, w, h);
 		}
-		IConnection iconn = connectionPanel.getConnectionWithParams().getConnection();
+		IConnection iconn = connectionPanel.getConnectionWithParams()
+				.getConnection();
 
 		// --------------------------------------------------------------------
 		// -------------------------------------------------------------------
 		// --------------------------------------------------------------------
-		
+
 		try {
 			OracleSpatialWriter.createEmptyTable(lyr_def, iconn, extent);
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(connectionPanel,
-					PluginServices.getText(this, "nombre_no_valido") + ": " + 
-					PluginServices.getText(this, "Tabla") + " " + lyr_def.getTableName() + "\n" +
-					PluginServices.getText(this, "Process_canceled") + ": " + PluginServices.getText(this, "elemento_ya_existe"),
+			JOptionPane.showMessageDialog(
+					connectionPanel,
+					PluginServices.getText(this, "nombre_no_valido")
+							+ ": "
+							+ PluginServices.getText(this, "Tabla")
+							+ " "
+							+ lyr_def.getTableName()
+							+ "\n"
+							+ PluginServices.getText(this, "Process_canceled")
+							+ ": "
+							+ PluginServices
+									.getText(this, "elemento_ya_existe"),
 					PluginServices.getText(this, "nombre_no_valido"),
 					JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		
 
 		theMapContext.beginAtomicEvent();
 		OracleSpatialDriver oracleDrv = new OracleSpatialDriver();
 		oracleDrv.setData(iconn, lyr_def);
-		
+
 		int shptype = geoTypePanel.getSelectedGeometryType();
 		oracleDrv.setShapeType(shptype);
-		
+
 		String lyr_name = geoTypePanel.getLayerName();
-		
-		FLyrVect lyr = (FLyrVect) LayerFactory.createDBLayer(
-				oracleDrv,
-				lyr_name,
-				vp.getCrs());
+
+		FLyrVect lyr = (FLyrVect) LayerFactory.createDBLayer(oracleDrv,
+				lyr_name, vp.getCrs());
 
 		lyr.setVisible(true);
 		theMapContext.getLayers().addLayer(lyr);
@@ -127,20 +128,22 @@ public class NewOracleSpatialTableFinishAction extends FinishAction {
 		// --------------------------------------------------------------------
 		// --------------------------------------------------------------------
 		// --------------------------------------------------------------------
-		
+
 	}
-	
+
 	private boolean validFieldName(FieldDescription f_desc) {
-		
-		if ((f_desc.getFieldName().compareToIgnoreCase(OracleSpatialDriver.DEFAULT_ID_FIELD_CASE_SENSITIVE) == 0)
-				|| (f_desc.getFieldName().compareToIgnoreCase(OracleSpatialDriver.ORACLE_ID_FIELD) == 0)) {
+
+		if ((f_desc.getFieldName().compareToIgnoreCase(
+				OracleSpatialDriver.DEFAULT_ID_FIELD_CASE_SENSITIVE) == 0)
+				|| (f_desc.getFieldName().compareToIgnoreCase(
+						OracleSpatialDriver.ORACLE_ID_FIELD) == 0)) {
 			return false;
 		}
 		return true;
 	}
 
 	private FieldDescription[] getValidFields(FieldDescription[] ff) {
-		
+
 		// remove GID, ROWID
 		ArrayList aux = new ArrayList();
 
@@ -149,21 +152,19 @@ public class NewOracleSpatialTableFinishAction extends FinishAction {
 		row_fld.setFieldName(OracleSpatialDriver.ORACLE_ID_FIELD);
 		row_fld.setFieldType(Types.VARCHAR);
 		aux.add(row_fld);
-		
-		
-		for (int i=0; i<ff.length; i++) {
+
+		for (int i = 0; i < ff.length; i++) {
 			if (validFieldName(ff[i])) {
 				aux.add(ff[i]);
 			}
 		}
-		
-		
+
 		// gid
 		FieldDescription gid_fld = new FieldDescription();
 		gid_fld.setFieldName(OracleSpatialDriver.DEFAULT_ID_FIELD_CASE_SENSITIVE);
 		gid_fld.setFieldType(Types.INTEGER);
 		aux.add(gid_fld);
-		
+
 		return (FieldDescription[]) aux.toArray(new FieldDescription[0]);
 		// -------
 	}

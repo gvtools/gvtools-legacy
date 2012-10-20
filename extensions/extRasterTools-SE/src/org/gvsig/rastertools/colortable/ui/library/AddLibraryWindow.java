@@ -38,28 +38,30 @@ import com.iver.andami.PluginServices;
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class AddLibraryWindow extends JOptionPane {
-	private static final long   serialVersionUID  = 1L;
-	private AddLibraryPanel     libraryPanel      = null;
+	private static final long serialVersionUID = 1L;
+	private AddLibraryPanel libraryPanel = null;
 	/**
-	 * Si supera el numero de particiones estimado, se le preguntará al usuario si
-	 * quiere continuar
+	 * Si supera el numero de particiones estimado, se le preguntará al usuario
+	 * si quiere continuar
 	 */
-	private int                 limit_question    = 500;
-	
+	private int limit_question = 500;
+
 	/**
 	 * Devuelve el componente interno del JOptionPane
+	 * 
 	 * @return
 	 */
 	private Object getMessageComponent() {
 		return getLibraryPanel();
 	}
-	
+
 	/**
 	 * Obtiene el panel AddLibraryPanel
+	 * 
 	 * @return
 	 */
 	public AddLibraryPanel getLibraryPanel() {
-		if(libraryPanel == null)
+		if (libraryPanel == null)
 			libraryPanel = new AddLibraryPanel();
 		return libraryPanel;
 	}
@@ -68,21 +70,20 @@ public class AddLibraryWindow extends JOptionPane {
 	 * Muestra el diálogo de la creación de la tabla de color. Devolverá
 	 * JOptionPane.OK_OPTION si el usuario le ha dado a aceptar y otro valor en
 	 * caso contrario.
+	 * 
 	 * @param parentComponent
 	 * @return
 	 */
 	public int showConfirm(Component parentComponent) {
-		return showConfirmDialog(
-				parentComponent,
-				getMessageComponent(),
+		return showConfirmDialog(parentComponent, getMessageComponent(),
 				PluginServices.getText(this, "nueva_libreria_title"),
-				JOptionPane.OK_CANCEL_OPTION,
-				JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 	}
 
 	/**
-	 * Devuelve la tabla de color creada segun los parametros especificados en el
-	 * panel.
+	 * Devuelve la tabla de color creada segun los parametros especificados en
+	 * el panel.
+	 * 
 	 * @return
 	 */
 	public ColorTable getColorTable() {
@@ -90,7 +91,8 @@ public class AddLibraryWindow extends JOptionPane {
 		colorTable.setName(getLibraryPanel().getLibraryName().getText());
 		ArrayList items = new ArrayList();
 
-		StretchSelectorData stretchListData = getLibraryPanel().getStretchListPanel().getData(); 
+		StretchSelectorData stretchListData = getLibraryPanel()
+				.getStretchListPanel().getData();
 		double start = stretchListData.getMinimum();
 		double end = stretchListData.getMaximum();
 
@@ -102,13 +104,18 @@ public class AddLibraryWindow extends JOptionPane {
 
 		double num = getLibraryPanel().getStretchListPanel().getInterval();
 		boolean quest = false;
-		if (getLibraryPanel().getStretchListPanel().getIntervalNumber().isSelected())
+		if (getLibraryPanel().getStretchListPanel().getIntervalNumber()
+				.isSelected())
 			quest = (num > limit_question);
 		else
 			quest = (((end - start) / num) > limit_question);
-		if (quest && JOptionPane.showConfirmDialog(this, PluginServices.getText(this, "addlibrary_supera_limite"), PluginServices.getText(this, "confirmar"), JOptionPane.YES_NO_OPTION) == NO_OPTION)
+		if (quest
+				&& JOptionPane.showConfirmDialog(this, PluginServices.getText(
+						this, "addlibrary_supera_limite"), PluginServices
+						.getText(this, "confirmar"), JOptionPane.YES_NO_OPTION) == NO_OPTION)
 			return null;
-		if (getLibraryPanel().getStretchListPanel().getIntervalNumber().isSelected()) {
+		if (getLibraryPanel().getStretchListPanel().getIntervalNumber()
+				.isSelected()) {
 			for (double i = 0; i <= num; i++) {
 				ColorItem colorItem = new ColorItem();
 				colorItem.setValue(start + (((end - start) / num) * i));

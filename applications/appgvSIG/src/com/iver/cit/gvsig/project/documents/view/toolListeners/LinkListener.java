@@ -47,13 +47,12 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.geom.Point2D;
 import java.net.URI;
-import javax.swing.ImageIcon;
+
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 
 import com.iver.andami.PluginServices;
-import com.iver.andami.persistence.generate.PluginsStatus;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
@@ -63,27 +62,32 @@ import com.iver.cit.gvsig.fmap.tools.Listeners.PointListener;
 import com.iver.cit.gvsig.gui.panels.LinkPanel;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
-
 /**
- * <p>Listener that gets, if exists, the associated link at the feature that's at the position selection of an active, selected
- *  and vector layer of the associated <code>MapControl</code>; and displays
- *  that linked data (image, text, ...) on a dialog.</p>
- *
- * <p>Listens a single click of any mouse's button.</p>
- *
+ * <p>
+ * Listener that gets, if exists, the associated link at the feature that's at
+ * the position selection of an active, selected and vector layer of the
+ * associated <code>MapControl</code>; and displays that linked data (image,
+ * text, ...) on a dialog.
+ * </p>
+ * 
+ * <p>
+ * Listens a single click of any mouse's button.
+ * </p>
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LinkListener implements PointListener {
 	/**
 	 * Object used to log messages for this listener.
 	 */
-	private static Logger logger = Logger.getLogger(InfoListener.class.getName());
+	private static Logger logger = Logger.getLogger(InfoListener.class
+			.getName());
 
 	/**
 	 * The image to display when the cursor is active.
 	 */
 	private final Image img = PluginServices.getIconTheme()
-		.get("cursor-hiperlink").getImage();
+			.get("cursor-hiperlink").getImage();
 
 	/**
 	 * The cursor used to work with this tool listener.
@@ -97,21 +101,24 @@ public class LinkListener implements PointListener {
 	 * Reference to the <code>MapControl</code> object that uses.
 	 */
 	private MapControl mapCtrl;
-	
+
 	/**
 	 * Identifies the link as an image.
 	 */
-	public static final int TYPELINKIMAGE=0;
-	
+	public static final int TYPELINKIMAGE = 0;
+
 	/**
 	 * Identifies the link as text.
 	 */
-	public static final int TYPELINKTEXT=1;
+	public static final int TYPELINKTEXT = 1;
 
 	/**
-	 * <p>Creates a new <code>LinkListener</code> object.</p>
+	 * <p>
+	 * Creates a new <code>LinkListener</code> object.
+	 * </p>
 	 * 
-	 * @param mc the <code>MapControl</code> where will be applied the changes
+	 * @param mc
+	 *            the <code>MapControl</code> where will be applied the changes
 	 */
 	public LinkListener(MapControl mc) {
 		this.mapCtrl = mc;
@@ -119,39 +126,47 @@ public class LinkListener implements PointListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#point(com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#point(com.iver.
+	 * cit.gvsig.fmap.tools.Events.PointEvent)
 	 */
 	public void point(PointEvent event) throws BehaviorException {
-		Point2D pReal = mapCtrl.getMapContext().getViewPort().toMapPoint(event.getPoint());
-		View view=(View)PluginServices.getMDIManager().getActiveWindow();
+		Point2D pReal = mapCtrl.getMapContext().getViewPort()
+				.toMapPoint(event.getPoint());
+		View view = (View) PluginServices.getMDIManager().getActiveWindow();
 		FLayer[] sel = mapCtrl.getMapContext().getLayers().getActives();
 
-		URI[] uri=null;
+		URI[] uri = null;
 
 		for (int i = 0; i < sel.length; i++) {
 			FLayer laCapa = sel[i];
-            if (laCapa.allowLinks())
-            {
-            	FLyrVect lyrVect = (FLyrVect) laCapa;
-            	double tol = mapCtrl.getViewPort().toMapDistance(3);
-            	uri=lyrVect.getLink(pReal,tol);
-            	if (uri == null){
-            		JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),"Error" +
-            				" no has seleccionado una geometr�a para realizar HyperLink.");
-            		return;
-            	}
-            	for(int j=0; j<uri.length;j++){
-            		if(uri[j]!=null){
-            			LinkPanel lpanel = new LinkPanel (uri[j], lyrVect.getLinkProperties().getType());
-            			PluginServices.getMDIManager().addWindow(lpanel);
-            		}
-            	}
-            }
+			if (laCapa.allowLinks()) {
+				FLyrVect lyrVect = (FLyrVect) laCapa;
+				double tol = mapCtrl.getViewPort().toMapDistance(3);
+				uri = lyrVect.getLink(pReal, tol);
+				if (uri == null) {
+					JOptionPane
+							.showMessageDialog(
+									(Component) PluginServices.getMainFrame(),
+									"Error"
+											+ " no has seleccionado una geometr�a para realizar HyperLink.");
+					return;
+				}
+				for (int j = 0; j < uri.length; j++) {
+					if (uri[j] != null) {
+						LinkPanel lpanel = new LinkPanel(uri[j], lyrVect
+								.getLinkProperties().getType());
+						PluginServices.getMDIManager().addWindow(lpanel);
+					}
+				}
+			}
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#getCursor()
 	 */
 	public Cursor getCursor() {
@@ -160,6 +175,7 @@ public class LinkListener implements PointListener {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#cancelDrawing()
 	 */
 	public boolean cancelDrawing() {
@@ -168,7 +184,10 @@ public class LinkListener implements PointListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#pointDoubleClick(com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#pointDoubleClick
+	 * (com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
 	 */
 	public void pointDoubleClick(PointEvent event) throws BehaviorException {
 	}

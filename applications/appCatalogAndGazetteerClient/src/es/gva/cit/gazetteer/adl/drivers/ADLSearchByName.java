@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.gazetteer.adl.drivers;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -57,38 +57,41 @@ public class ADLSearchByName extends ADLGazetteerServiceDriver {
 
 	/**
 	 * This class needs the server URL to work
-	 * @param url Server URL
+	 * 
+	 * @param url
+	 *            Server URL
 	 */
-	public  ADLSearchByName(String uri) {        
+	public ADLSearchByName(String uri) {
 		super();
 		setServerURI(uri);
-	} 
+	}
 
 	/**
 	 * Constructor witout fileds
 	 * 
 	 */
-	public  ADLSearchByName() {        
+	public ADLSearchByName() {
 		super();
-	} 
+	}
 
 	/**
 	 * It searches and returns an array of features.
 	 * 
 	 * 
-	 * @return 
-	 * @param placeName String with the place name to find.
+	 * @return
+	 * @param placeName
+	 *            String with the place name to find.
 	 */
-	public Feature[] search(String placeName) {        
-		GazetteerQuery query = new GazetteerQuery(placeName,"populated places");
+	public Feature[] search(String placeName) {
+		GazetteerQuery query = new GazetteerQuery(placeName, "populated places");
 		try {
-			return getFeature(new URI(getServerURI()),query);
+			return getFeature(new URI(getServerURI()), query);
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
-	} 
+	}
 
 	/**
 	 * 
@@ -96,17 +99,18 @@ public class ADLSearchByName extends ADLGazetteerServiceDriver {
 	 * 
 	 * @return Returns the serverURL.
 	 */
-	public String getServerURI() {        
+	public String getServerURI() {
 		return serverURL;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param serverURL The serverURL to set.
+	 * @param serverURL
+	 *            The serverURL to set.
 	 */
-	public void setServerURI(String serverURL) {        
+	public void setServerURI(String serverURL) {
 		this.serverURL = serverURL;
-	} 
+	}
 }

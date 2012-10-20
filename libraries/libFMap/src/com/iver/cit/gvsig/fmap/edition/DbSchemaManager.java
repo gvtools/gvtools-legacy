@@ -53,8 +53,7 @@ public class DbSchemaManager implements IDbSchemaManager {
 
 	private Connection conn = null;
 
-	public DbSchemaManager(Connection conn)
-	{
+	public DbSchemaManager(Connection conn) {
 		this.conn = conn;
 	}
 
@@ -64,19 +63,19 @@ public class DbSchemaManager implements IDbSchemaManager {
 
 	public void createSchema(ITableDefinition dbLayerDef)
 			throws SchemaEditionException {
-		String sqlCreate = "CREATE TABLE " + dbLayerDef.getName()
-					+ " ( ";
-		int j=0;
+		String sqlCreate = "CREATE TABLE " + dbLayerDef.getName() + " ( ";
+		int j = 0;
 		FieldDescription[] fieldsDescr = dbLayerDef.getFieldsDesc();
 		for (int i = 0; i < fieldsDescr.length; i++) {
 			int fieldType = fieldsDescr[i].getFieldType();
 			String strType = XTypes.fieldTypeToString(fieldType);
 
 			if (j == 0)
-				sqlCreate = sqlCreate + fieldsDescr[i].getFieldName() + " " + strType;
-			else
-				sqlCreate = sqlCreate + ", " + fieldsDescr[i].getFieldName() + " "
+				sqlCreate = sqlCreate + fieldsDescr[i].getFieldName() + " "
 						+ strType;
+			else
+				sqlCreate = sqlCreate + ", " + fieldsDescr[i].getFieldName()
+						+ " " + strType;
 			j++;
 		}
 		sqlCreate = sqlCreate + ");";
@@ -85,7 +84,7 @@ public class DbSchemaManager implements IDbSchemaManager {
 			Statement st = conn.createStatement();
 			st.execute(sqlCreate);
 		} catch (SQLException e) {
-			throw new SchemaEditionException(dbLayerDef.getName(),e);
+			throw new SchemaEditionException(dbLayerDef.getName(), e);
 		}
 
 	}
@@ -96,23 +95,21 @@ public class DbSchemaManager implements IDbSchemaManager {
 			Statement st = conn.createStatement();
 			st.execute(sqlDrop);
 		} catch (SQLException e) {
-			throw new SchemaEditionException(name,e);
+			throw new SchemaEditionException(name, e);
 		}
 
 	}
 
-	public void renameSchema(String antName, String newName)  throws SchemaEditionException {
+	public void renameSchema(String antName, String newName)
+			throws SchemaEditionException {
 		String sqlAlter = "ALTER TABLE " + antName + " RENAME TO " + newName;
 		try {
 			Statement st = conn.createStatement();
 			st.execute(sqlAlter);
 		} catch (SQLException e) {
-			throw new SchemaEditionException(antName,e);
+			throw new SchemaEditionException(antName, e);
 		}
-
 
 	}
 
 }
-
-

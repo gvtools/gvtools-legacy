@@ -19,16 +19,16 @@
 package org.gvsig.georeferencing.ui.zoom;
 
 /**
- * Excepción que lanzan las peticiones de zoom que no pueden ser
- * satisfechas.
+ * Excepción que lanzan las peticiones de zoom que no pueden ser satisfechas.
  * 
  * 21/01/2008
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class InvalidRequestException extends Exception {
 	private static final long serialVersionUID = 337663732071639106L;
 
-	public InvalidRequestException(String msg){
+	public InvalidRequestException(String msg) {
 		super(msg);
 	}
 }

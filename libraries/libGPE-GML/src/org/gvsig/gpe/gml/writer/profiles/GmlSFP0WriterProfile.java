@@ -55,62 +55,73 @@ import org.gvsig.gpe.gml.writer.v2.geometries.PolygonWriter;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class GmlSFP0WriterProfile extends Gml2WriterProfile{
-	
+public class GmlSFP0WriterProfile extends Gml2WriterProfile {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getPolygonMemberWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getPolygonMemberWriter()
 	 */
 	public PolygonMemberWriter getPolygonMemberWriter() {
-		if (polygonMemberWriter == null){
+		if (polygonMemberWriter == null) {
 			polygonMemberWriter = new org.gvsig.gpe.gml.writer.sfp0.geometries.PolygonMemberWriter();
 		}
 		return polygonMemberWriter;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getPolygonWriter()
 	 */
 	public PolygonWriter getPolygonWriter() {
-		if (polygonWriter == null){
+		if (polygonWriter == null) {
 			polygonWriter = new org.gvsig.gpe.gml.writer.sfp0.geometries.PolygonWriter();
 		}
 		return polygonWriter;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.profiles.Gml2WriterProfile#getInnerBoundaryIsWriter()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.profiles.Gml2WriterProfile#getInnerBoundaryIsWriter
+	 * ()
 	 */
 	public InnerBoundaryIsWriter getInnerBoundaryIsWriter() {
-		if (innerBoundaryIsWriter == null){
+		if (innerBoundaryIsWriter == null) {
 			innerBoundaryIsWriter = new org.gvsig.gpe.gml.writer.sfp0.geometries.InnerBoundaryIsWriter();
 		}
 		return innerBoundaryIsWriter;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.profiles.Gml2WriterProfile#getOuterBoundaryIsWriter()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.profiles.Gml2WriterProfile#getOuterBoundaryIsWriter
+	 * ()
 	 */
 	public OuterBoundaryIsWriter getOuterBoundaryIsWriter() {
-		if (outerBoundaryIsWriter == null){
+		if (outerBoundaryIsWriter == null) {
 			outerBoundaryIsWriter = new org.gvsig.gpe.gml.writer.sfp0.geometries.OuterBoundaryIsWriter();
 		}
 		return outerBoundaryIsWriter;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.profiles.Gml2WriterProfile#getMultiPolygonWriter()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.profiles.Gml2WriterProfile#getMultiPolygonWriter
+	 * ()
 	 */
 	public MultiPolygonWriter getMultiPolygonWriter() {
-		if (multiPolygonWriter == null){
+		if (multiPolygonWriter == null) {
 			multiPolygonWriter = new org.gvsig.gpe.gml.writer.sfp0.geometries.MultiPolygonWriter();
 		}
 		return multiPolygonWriter;
 	}
-	
-	
-	
-	
+
 }

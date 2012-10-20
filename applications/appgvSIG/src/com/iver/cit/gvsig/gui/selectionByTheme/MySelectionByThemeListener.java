@@ -42,7 +42,6 @@ package com.iver.cit.gvsig.gui.selectionByTheme;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.messages.NotificationManager;
-import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
 import com.iver.cit.gvsig.exceptions.visitors.ProcessVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.VisitorException;
 import com.iver.cit.gvsig.fmap.layers.FBitSet;
@@ -54,7 +53,7 @@ import com.iver.cit.gvsig.fmap.operations.strategies.QueryByThemeVisitor;
 
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public class MySelectionByThemeListener implements SelectionByThemeListener {

@@ -55,12 +55,14 @@ import es.gva.cit.catalog.csw.parsers.CSWConstants;
 public class CSWMessages2_0_0 extends CSWAbstractMessages {
 
 	public CSWMessages2_0_0(CSWAbstractProfile profile) {
-		super(profile);		
+		super(profile);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalog.csw.messages.CSWAbstractMessages#getContraintVersion()
+	 * 
+	 * @see
+	 * es.gva.cit.catalog.csw.messages.CSWAbstractMessages#getContraintVersion()
 	 */
 	protected String getContraintVersion() {
 		return CSWConstants.CONSTRAINT_VERSION_2_0_0;

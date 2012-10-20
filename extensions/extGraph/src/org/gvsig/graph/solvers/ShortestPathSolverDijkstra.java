@@ -40,11 +40,9 @@
  */
 package org.gvsig.graph.solvers;
 
-import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 import org.gvsig.exceptions.BaseException;
-import org.gvsig.graph.core.AbstractNetSolver;
 import org.gvsig.graph.core.GlobalCounter;
 import org.gvsig.graph.core.GraphException;
 import org.gvsig.graph.core.GvConnector;
@@ -53,15 +51,12 @@ import org.gvsig.graph.core.GvFlag;
 import org.gvsig.graph.core.GvNode;
 import org.gvsig.graph.core.GvTurn;
 import org.gvsig.graph.core.IGraph;
-import org.gvsig.graph.solvers.pqueue.FibHeap;
-
-import com.hardcode.gdbms.engine.data.driver.DriverException;
 
 public class ShortestPathSolverDijkstra extends AbstractShortestPathSolver {
-	
+
 	/**
 	 * @return a list of features
-	 * @throws GraphException 
+	 * @throws GraphException
 	 */
 	public Route calculateRoute() throws GraphException {
 		GvFlag[] flags = net.getFlags();
@@ -82,17 +77,14 @@ public class ShortestPathSolverDijkstra extends AbstractShortestPathSolver {
 				double newCost = dijkstra(idStart, idStop);
 				elCoste1 += newCost;
 
-				if (newCost != Double.MAX_VALUE)
-				{
+				if (newCost != Double.MAX_VALUE) {
 					try {
 						populateRoute(fFrom, fTo, idStart, idStop);
 					} catch (BaseException e) {
 						e.printStackTrace();
 						throw new GraphException(e);
 					}
-				}
-				else
-				{
+				} else {
 					// No way
 				}
 
@@ -117,11 +109,11 @@ public class ShortestPathSolverDijkstra extends AbstractShortestPathSolver {
 		double bestCost;
 
 		boolean bGiroProhibido;
-//		ArrayList candidatos = new ArrayList();
+		// ArrayList candidatos = new ArrayList();
 
 		GvTurn theTurn;
 		// char Mensaje[200];
-		
+
 		IGraph graph = net.getGraph();
 
 		// NUEVO: 27-6-2003
@@ -131,15 +123,14 @@ public class ShortestPathSolverDijkstra extends AbstractShortestPathSolver {
 		// Para evitar coincidencias cuando de la vuelta el contador, cada
 		// 65000 peticiones (por ejemplo), repasamos toda
 		// la red y ponemos numSolucGlobal a -1
-		if (GlobalCounter.increment())
-		{
+		if (GlobalCounter.increment()) {
 			for (nodeNum = 0; nodeNum < graph.numVertices(); nodeNum++) {
 				node = graph.getNodeByID(nodeNum);
 				node.initialize();
 			} // for nodeNum */
 		}
 
-//		candidatos.clear();
+		// candidatos.clear();
 		// Añadimos el Start Node a la lista de candidatosSTL
 		// Nodo final
 		finalNode = graph.getNodeByID(idStop);
@@ -147,41 +138,43 @@ public class ShortestPathSolverDijkstra extends AbstractShortestPathSolver {
 
 		node = graph.getNodeByID(idStart);
 		node.initialize();
-//		bestNode = node;
+		// bestNode = node;
 
-//		candidatos.add(node);
+		// candidatos.add(node);
 		node.setCostZero();
 		node.setStatus(GvNode.statNowInList);
 		bestCost = Double.MAX_VALUE;
-        // Priority Queue
-        PriorityQueue<GvNode> pq = new PriorityQueue<GvNode>();
-        pq.add(node);
+		// Priority Queue
+		PriorityQueue<GvNode> pq = new PriorityQueue<GvNode>();
+		pq.add(node);
 
 		// Mientras que la lista de candidatosSTL no esté vacía, procesamos
 		// Nodos
 
 		while ((!bExit) && (!pq.isEmpty())) {
 			// Buscamos el nodo con mínimo coste
-//			node = (GvNode) candidatos.get(0);
-//			bestNode = node;
-//			bestCost = node.getBestCost();
-//			for (nodeNum = 1; nodeNum < candidatos.size(); nodeNum++) {
-//				node = (GvNode) candidatos.get(nodeNum);
-//				if (node.getBestCost() < bestCost) {
-//					bestCost = node.getBestCost();
-//					bestNode = node;
-//				}
-//			} // for nodeNum candidatosSTL
-//
-//			
-//			node = bestNode;
+			// node = (GvNode) candidatos.get(0);
+			// bestNode = node;
+			// bestCost = node.getBestCost();
+			// for (nodeNum = 1; nodeNum < candidatos.size(); nodeNum++) {
+			// node = (GvNode) candidatos.get(nodeNum);
+			// if (node.getBestCost() < bestCost) {
+			// bestCost = node.getBestCost();
+			// bestNode = node;
+			// }
+			// } // for nodeNum candidatosSTL
+			//
+			//
+			// node = bestNode;
 			node = pq.poll(); // get the lowest-weightSum Vertex 'u',
 			// Borramos el mejor nodo de la lista de candidatosSTL
 			node.setStatus(GvNode.statWasInList);
-			// TODO: BORRAR POR INDEX, NO ASÍ. ES MÁS LENTO QUE SI BORRAMOS EL i-ésimo.
-//			candidatos.remove(node);
+			// TODO: BORRAR POR INDEX, NO ASÍ. ES MÁS LENTO QUE SI BORRAMOS EL
+			// i-ésimo.
+			// candidatos.remove(node);
 			// System.out.println("LINK " + link.getIdArc() + " from ");
-			// System.out.println("from " + idStart + " to " + finalNode.getIdNode() + ". node=" + node.getIdNode());
+			// System.out.println("from " + idStart + " to " +
+			// finalNode.getIdNode() + ". node=" + node.getIdNode());
 			// Miramos si hemos llegado donde queríamos
 			if (node.getIdNode() == idStop) {
 				bExit = true;
@@ -196,14 +189,16 @@ public class ShortestPathSolverDijkstra extends AbstractShortestPathSolver {
 			// acabamos de borrar
 			// HAY Arcos QUE SALEN Y Arcos QUE LLEGAN. SOLO MIRAMOS LOS QUE
 			// SALEN.
-//			for (linkNum = 0; linkNum < node.getOutputLinks().size(); linkNum++) {
-			for (int iConec=0; iConec< node.getConnectors().size();  iConec++) {
+			// for (linkNum = 0; linkNum < node.getOutputLinks().size();
+			// linkNum++) {
+			for (int iConec = 0; iConec < node.getConnectors().size(); iConec++) {
 				// Pillamos el nodo vecino
 				GvConnector c = node.getConnectors().get(iConec);
-				if (c.getEdgeOut() == null) continue;
-				
+				if (c.getEdgeOut() == null)
+					continue;
+
 				link = (GvEdge) c.getEdgeOut();
-//				link = (GvEdge) node.getOutputLinks().get(linkNum);
+				// link = (GvEdge) node.getOutputLinks().get(linkNum);
 				idSiguienteNodo = link.getIdNodeEnd();
 				// To avoid U-turn
 				if (c.getEdgeIn() != null)
@@ -220,11 +215,10 @@ public class ShortestPathSolverDijkstra extends AbstractShortestPathSolver {
 				// Fin arco con coste negativo
 
 				// NUEVO: 26-7-2003: Comprobamos si está inicializado
-				if (toNode.getNumSoluc() != GlobalCounter.getGlobalSolutionNumber()) {
+				if (toNode.getNumSoluc() != GlobalCounter
+						.getGlobalSolutionNumber()) {
 					toNode.initialize();
-				}
-				else
-				{
+				} else {
 					// System.out.println("Nodo ya inicializado");
 				}
 
@@ -235,20 +229,23 @@ public class ShortestPathSolverDijkstra extends AbstractShortestPathSolver {
 					newCost = c.getBestCostOut() + link.getWeight();
 
 					// Change to take care of turn costs
-					if (toNode.existeMejora(link, newCost)) {  // Es una mejora, así que actualizamos el vecino y
-//						// lo añadimos a los candidatosSTL
-//						toNode.setBestCost(newCost);
-//						 
-//						toNode.setFromLink(link.getIdEdge());
-						double newLength = node.getAccumulatedLength() + link.getDistance();
+					if (toNode.existeMejora(link, newCost)) { // Es una mejora,
+																// así que
+																// actualizamos
+																// el vecino y
+					// // lo añadimos a los candidatosSTL
+					// toNode.setBestCost(newCost);
+					//
+					// toNode.setFromLink(link.getIdEdge());
+						double newLength = node.getAccumulatedLength()
+								+ link.getDistance();
 						toNode.setAccumulatedLength(newLength);
-
 
 						if (toNode.getStatus() != GvNode.statNowInList) {
 							toNode.setStatus(GvNode.statNowInList);
 							toNode.setStimation(newCost);
 							pq.add(toNode);
-							//candidatos.add(toNode);
+							// candidatos.add(toNode);
 						}
 					} // Si hay mejora
 				} // if ese nodo no ha estado en la lista de candidatosSTL

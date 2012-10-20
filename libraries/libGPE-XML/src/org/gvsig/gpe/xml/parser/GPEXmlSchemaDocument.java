@@ -84,76 +84,87 @@ import org.gvsig.xmlschema.warnings.SchemaLocationWarning;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class GPEXmlSchemaDocument extends XSSchemaDocumentImpl{
+public class GPEXmlSchemaDocument extends XSSchemaDocumentImpl {
 	private IXmlStreamReader parser = null;
 	private URI xmlURI = null;
 	private GPEErrorHandler errorHandler = null;
-	
-	public GPEXmlSchemaDocument(IXmlStreamReader parser, URI xmlURI, GPEErrorHandler errorHandler){
+
+	public GPEXmlSchemaDocument(IXmlStreamReader parser, URI xmlURI,
+			GPEErrorHandler errorHandler) {
 		this.parser = parser;
 		this.xmlURI = xmlURI;
-		this.errorHandler = errorHandler;		
+		this.errorHandler = errorHandler;
 	}
-	
+
 	/**
 	 * Parser the xml header
+	 * 
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public void parse() throws XmlStreamException, IOException{
-		while ((parser.getName() == null) && 
-				!(parser.getEventType() == IXmlStreamReader.END_DOCUMENT)){
+	public void parse() throws XmlStreamException, IOException {
+		while ((parser.getName() == null)
+				&& !(parser.getEventType() == IXmlStreamReader.END_DOCUMENT)) {
 			parser.next();
 		}
-		for (int i = 0 ; i < parser.getAttributeCount() ; i++){
+		for (int i = 0; i < parser.getAttributeCount(); i++) {
 			QName attName = parser.getAttributeName(i);
 			String attValue = parser.getAttributeValue(i);
-								
-			//it splits the attributes names at the both sides from ":"
-			//String[] ns = attName.split(":");
-			String[] ns = org.gvsig.gpe.utils.StringUtils.splitString(attName.getLocalPart(),":");
-			
-			//if is the targetNamespace declaration
-			if ((ns.length == 1) && (ns[0].compareTo(XMLTags.XML_NAMESPACE)==0)){
+
+			// it splits the attributes names at the both sides from ":"
+			// String[] ns = attName.split(":");
+			String[] ns = org.gvsig.gpe.utils.StringUtils.splitString(
+					attName.getLocalPart(), ":");
+
+			// if is the targetNamespace declaration
+			if ((ns.length == 1)
+					&& (ns[0].compareTo(XMLTags.XML_NAMESPACE) == 0)) {
 				setTargetNamespace(attValue);
 			}
-			
-			//If it founds the 'xmlns' is a new namespace declaration and it has to parse it
-			if ((ns.length>1) && (ns[0].compareTo(XMLTags.XML_NAMESPACE)==0)){
-				parseNameSpace(ns[1],attValue);
+
+			// If it founds the 'xmlns' is a new namespace declaration and it
+			// has to parse it
+			if ((ns.length > 1)
+					&& (ns[0].compareTo(XMLTags.XML_NAMESPACE) == 0)) {
+				parseNameSpace(ns[1], attValue);
 			}
-			
-			//If its the "SCHEMA LOCATION" attribute, it means that there are schema and it tries to parse it
-			if ((ns.length>1) && (ns[1].compareTo(XMLTags.XML_SCHEMA_LOCATION)==0)){
-				parseSchemaLocation(ns[0],attValue);
-			} 
-		}		
+
+			// If its the "SCHEMA LOCATION" attribute, it means that there are
+			// schema and it tries to parse it
+			if ((ns.length > 1)
+					&& (ns[1].compareTo(XMLTags.XML_SCHEMA_LOCATION) == 0)) {
+				parseSchemaLocation(ns[0], attValue);
+			}
+		}
 	}
-	
+
 	/***********************************************
-	 * <parseSchemaLocation>
-	 * It downloads the schema's file and parse it
-	 * @param xmlnsName : Alias
-	 * @param xmlnsValue: URI 
+	 * <parseSchemaLocation> It downloads the schema's file and parse it
+	 * 
+	 * @param xmlnsName
+	 *            : Alias
+	 * @param xmlnsValue
+	 *            : URI
 	 ***********************************************/
-	private void parseSchemaLocation(String schemaAlias, String schemaURI){
-		//If the XML Schema validation is not selected 
-		if (!GPEDefaults.getBooleanProperty(XmlProperties.XML_SCHEMA_VALIDATED)){
+	private void parseSchemaLocation(String schemaAlias, String schemaURI) {
+		// If the XML Schema validation is not selected
+		if (!GPEDefaults.getBooleanProperty(XmlProperties.XML_SCHEMA_VALIDATED)) {
 			return;
-		}		
-		//It take the name of the schemas file to open or downlad 
+		}
+		// It take the name of the schemas file to open or downlad
 		StringTokenizer tokenizer = new StringTokenizer(schemaURI, " \t");
-        while (tokenizer.hasMoreTokens()){
-            String URI = tokenizer.nextToken();
-            if (!tokenizer.hasMoreTokens()){
-            	//If it hasn't the name of the schemas file or dont find it,
-            	//it exits, and tries to parse without schema
-            	System.out.println("Error, esquema no encontrado.PARSEO SIN ESQUEMA ");
-            }else{
-            	String schemaLocation = tokenizer.nextToken();
-            	//TODO This line must be replaced by the new downloader
-            	try {
-					URI uri = getSchemaURI(schemaLocation);					
+		while (tokenizer.hasMoreTokens()) {
+			String URI = tokenizer.nextToken();
+			if (!tokenizer.hasMoreTokens()) {
+				// If it hasn't the name of the schemas file or dont find it,
+				// it exits, and tries to parse without schema
+				System.out
+						.println("Error, esquema no encontrado.PARSEO SIN ESQUEMA ");
+			} else {
+				String schemaLocation = tokenizer.nextToken();
+				// TODO This line must be replaced by the new downloader
+				try {
+					URI uri = getSchemaURI(schemaLocation);
 					addSchema(uri);
 				} catch (SchemaCreationException e) {
 					errorHandler.addError(e);
@@ -161,53 +172,58 @@ public class GPEXmlSchemaDocument extends XSSchemaDocumentImpl{
 					errorHandler.addWarning(e);
 				}
 			}
-        }
+		}
 	}
-	
+
 	/****************************************************************************
-	 * <getSchemaFile>
-	 * It downloads the schema if it's a remote schema
-	 * else it tries to open a local file and return if it's succesfull
-	 * @param String schema location
+	 * <getSchemaFile> It downloads the schema if it's a remote schema else it
+	 * tries to open a local file and return if it's succesfull
+	 * 
+	 * @param String
+	 *            schema location
 	 * @return Uri
-	 * @throws SchemaLocationWarning 
+	 * @throws SchemaLocationWarning
 	 ****************************************************************************/
-	private URI getSchemaURI(String schemaLocation) throws SchemaLocationWarning{
+	private URI getSchemaURI(String schemaLocation)
+			throws SchemaLocationWarning {
 		File f = null;
-		//If it is a local file, it has to construct the absolute route
-		if (schemaLocation.indexOf("http://") != 0){
+		// If it is a local file, it has to construct the absolute route
+		if (schemaLocation.indexOf("http://") != 0) {
 			f = new File(schemaLocation);
-			if (!(f.isAbsolute())){
-				schemaLocation = new File(xmlURI).getParentFile().getAbsolutePath() + File.separator +  schemaLocation;
+			if (!(f.isAbsolute())) {
+				schemaLocation = new File(xmlURI).getParentFile()
+						.getAbsolutePath() + File.separator + schemaLocation;
 				f = new File(schemaLocation);
 			}
 			try {
 				return new URI(f.getAbsolutePath());
 			} catch (URISyntaxException e) {
-				throw new SchemaLocationWarning(schemaLocation,e);
-			}			
+				throw new SchemaLocationWarning(schemaLocation, e);
+			}
 		}
-		//Else it is an URL direction and it has to download it.
+		// Else it is an URL direction and it has to download it.
 		else {
-			URL url;		
+			URL url;
 			try {
 				url = new URL(schemaLocation);
-				//Download the schema without cancel option.
-				f = DownloadUtilities.downloadFile(url,"gml_schmema.xsd");	
+				// Download the schema without cancel option.
+				f = DownloadUtilities.downloadFile(url, "gml_schmema.xsd");
 				return new URI(f.getAbsolutePath());
 			} catch (Exception e) {
-				throw new SchemaLocationWarning(schemaLocation,e);
+				throw new SchemaLocationWarning(schemaLocation, e);
 			}
 		}
 	}
-	
+
 	/************************************************
-	 * <parseNamespace>
-	 * It adds an XML namespace tag to the hashtable
-	 * @param xmlnsName : Namespace
-	 * @param xmlnsValue: URI 
+	 * <parseNamespace> It adds an XML namespace tag to the hashtable
+	 * 
+	 * @param xmlnsName
+	 *            : Namespace
+	 * @param xmlnsValue
+	 *            : URI
 	 ************************************************/
-	private void parseNameSpace(String xmlnsName,String xmlnsValue){
-		addNamespacePrefix(xmlnsName, xmlnsValue);	
+	private void parseNameSpace(String xmlnsName, String xmlnsValue) {
+		addNamespacePrefix(xmlnsName, xmlnsValue);
 	}
 }

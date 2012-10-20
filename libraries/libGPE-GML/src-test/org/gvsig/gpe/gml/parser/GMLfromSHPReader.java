@@ -51,9 +51,10 @@ import org.gvsig.gpe.containers.Layer;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class GMLfromSHPReader  extends GMLReaderBaseTest {
+public class GMLfromSHPReader extends GMLReaderBaseTest {
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.readers.GPEReaderBaseTest#getFile()
 	 */
 	public String getFile() {
@@ -62,6 +63,7 @@ public class GMLfromSHPReader  extends GMLReaderBaseTest {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.readers.GMLReaderBaseTest#hasSchema()
 	 */
 	public boolean hasSchema() {
@@ -70,6 +72,7 @@ public class GMLfromSHPReader  extends GMLReaderBaseTest {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.readers.GPEReaderBaseTest#makeAsserts()
 	 */
 	public void makeAsserts() {
@@ -77,6 +80,6 @@ public class GMLfromSHPReader  extends GMLReaderBaseTest {
 		assertEquals(layers.length, 1);
 		Layer layer = layers[0];
 		assertEquals(2643, layer.getFeatures().size());
-		
+
 	}
 }

@@ -72,7 +72,7 @@ import com.iver.utiles.XMLEntity;
 
 /**
  * Vectorial legend for unique values
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 // public class VectorialUniqueValueLegend implements
@@ -81,7 +81,6 @@ public class VectorialUniqueValueLegend extends AbstractClassifiedVectorLegend
 		implements IVectorialUniqueValueLegend {
 	private static final Logger log = Logger
 			.getLogger(VectorialUniqueValueLegend.class);
-
 
 	protected int fieldId;
 
@@ -96,15 +95,21 @@ public class VectorialUniqueValueLegend extends AbstractClassifiedVectorLegend
 				public int compare(Object o1, Object o2) {
 					if (ownOrder) {
 						try {
-							if (((BooleanValue)((Value)o1).equals((Value)o2)).getValue()) {
+							if (((BooleanValue) ((Value) o1).equals((Value) o2))
+									.getValue()) {
 								return 0;
 							}
 						} catch (IncompatibleTypesException e) {
-							log.info("Cannot compare the values: "+o1.toString()+" - "+o2.toString(), e);
+							log.info(
+									"Cannot compare the values: "
+											+ o1.toString() + " - "
+											+ o2.toString(), e);
 						}
-						if (orders.indexOf(o1.toString()) < orders.indexOf(o2.toString())) {
+						if (orders.indexOf(o1.toString()) < orders.indexOf(o2
+								.toString())) {
 							return -1;
-						} else if (orders.indexOf(o1.toString()) > orders.indexOf(o2.toString())) {
+						} else if (orders.indexOf(o1.toString()) > orders
+								.indexOf(o2.toString())) {
 							return 1;
 						}
 						return 0;
@@ -196,7 +201,7 @@ public class VectorialUniqueValueLegend extends AbstractClassifiedVectorLegend
 
 	/**
 	 * Constructor method
-	 *
+	 * 
 	 * @param shapeType
 	 *            Type of the shape.
 	 */
@@ -222,7 +227,7 @@ public class VectorialUniqueValueLegend extends AbstractClassifiedVectorLegend
 
 	/**
 	 * Used in the table that shows the legend
-	 *
+	 * 
 	 * @deprecated use setValueSymbolByID(int id, ISymbol symbol);
 	 * @param id
 	 * @param symbol
@@ -253,7 +258,6 @@ public class VectorialUniqueValueLegend extends AbstractClassifiedVectorLegend
 			}
 		}
 		fireClassifiedSymbolChangeEvent(new SymbolLegendEvent(resul, symbol));
-
 
 	}
 
@@ -306,12 +310,13 @@ public class VectorialUniqueValueLegend extends AbstractClassifiedVectorLegend
 
 	/**
 	 * Devuelve un s�mbolo a partir de una IFeature. OJO!! Cuando usamos un
-	 * feature iterator de base de datos el �nico campo que vendr� rellenado es
-	 * el de fieldID. Los dem�s vendr�n a nulos para ahorra tiempo de creaci�n.
-	 *
+	 * feature iterator de base de datos el �nico campo que vendr� rellenado
+	 * es el de fieldID. Los dem�s vendr�n a nulos para ahorra tiempo de
+	 * creaci�n.
+	 * 
 	 * @param feat
 	 *            IFeature
-	 *
+	 * 
 	 * @return S�mbolo.
 	 */
 	public ISymbol getSymbolByFeature(IFeature feat) {
@@ -319,8 +324,9 @@ public class VectorialUniqueValueLegend extends AbstractClassifiedVectorLegend
 		// feat.getAttribute(FLyrVect.forTestOnlyVariableUseIterators_REMOVE_THIS_FIELD
 		// ? 0 :fieldId);
 		Value val = feat.getAttribute(0);
-		// Para evitar que salte un error cuando hemos borrado un campo en el que estaba basada una leyenda
-		if (val==null)
+		// Para evitar que salte un error cuando hemos borrado un campo en el
+		// que estaba basada una leyenda
+		if (val == null)
 			return getDefaultSymbol();
 		// Fin
 		ISymbol theSymbol = getSymbolByValue(val);
@@ -346,11 +352,11 @@ public class VectorialUniqueValueLegend extends AbstractClassifiedVectorLegend
 		XMLEntity xml = new XMLEntity();
 		xml.putProperty("className", this.getClass().getName());
 		xml.putProperty("fieldNames", getClassifyingFieldNames()[0]);
-		if (getClassifyingFieldTypes()!=null)
+		if (getClassifyingFieldTypes() != null)
 			xml.putProperty("fieldTypes", getClassifyingFieldTypes()[0]);
 		xml.putProperty("ownOrder", isOwnOrder());
 
-		xml.putProperty("orders",getOrders().toArray());
+		xml.putProperty("orders", getOrders().toArray());
 
 		if (selectedColors != null) {
 			String[] strColors = new String[selectedColors.length];
@@ -383,22 +389,22 @@ public class VectorialUniqueValueLegend extends AbstractClassifiedVectorLegend
 				stk[i] = key.getSQLType();
 			}
 
-			for (int i=0; i < values.length; i++){
+			for (int i = 0; i < values.length; i++) {
 				Value value = (Value) values[i];
-				if( value instanceof NullUniqueValue){
-					sv[i] = ((NullUniqueValue)value).toString();
-					stv[i] = ((NullUniqueValue)value).getSQLType();
+				if (value instanceof NullUniqueValue) {
+					sv[i] = ((NullUniqueValue) value).toString();
+					stv[i] = ((NullUniqueValue) value).getSQLType();
 				} else {
 					sv[i] = value.toString();
 					stv[i] = value.getSQLType();
 				}
 
-//				ISymbol symbol = symbols.get(value);
-				//PARCHE
+				// ISymbol symbol = symbols.get(value);
+				// PARCHE
 				ISymbol symbol = getSymbolByKey(value);
-				//FIN DEL PARCHE
+				// FIN DEL PARCHE
 
-				if(symbol != null){
+				if (symbol != null) {
 					xml.addChild(symbol.getXMLEntity());
 				}
 			}
@@ -482,7 +488,7 @@ public class VectorialUniqueValueLegend extends AbstractClassifiedVectorLegend
 
 		if (xml.contains("ownOrder"))
 			setOwnOrder(xml.getBooleanProperty("ownOrder"));
-		if(xml.contains("orders")){
+		if (xml.contains("orders")) {
 			String[] ord = xml.getStringArrayProperty("orders");
 			ArrayList arrayOrd = new ArrayList();
 			for (int i = 0; i < ord.length; i++) {
@@ -500,12 +506,12 @@ public class VectorialUniqueValueLegend extends AbstractClassifiedVectorLegend
 		if (numKeys > 0) {
 			String className = xml.getStringProperty("tipoValueKeys");
 			String[] sk = xml.getStringArrayProperty("keys");
-			if(sk.length == 0){
-				sk = new String[]{""};
+			if (sk.length == 0) {
+				sk = new String[] { "" };
 			}
 			String[] sv = xml.getStringArrayProperty("values");
-			if(sv.length == 0){
-				sv = new String[]{""};
+			if (sv.length == 0) {
+				sv = new String[] { "" };
 			}
 			Value auxValue = null;
 			Value auxValue2 = null;
@@ -516,48 +522,48 @@ public class VectorialUniqueValueLegend extends AbstractClassifiedVectorLegend
 				int[] stv = xml.getIntArrayProperty("typeValues");
 				for (int i = 0; i < numKeys; i++) {
 					auxValue = getValue(sk[i], stk[i]);
-					if ( auxValue instanceof NullValue ) {
+					if (auxValue instanceof NullValue) {
 						auxValue = new NullUniqueValue();
 					} else {
-					keys.add(auxValue);
+						keys.add(auxValue);
 					}
 				}
 
 				boolean foundNullValue = false;
 				for (int i = 0; i < sv.length; i++) {
 					auxValue2 = getValue(sv[i], stv[i]);
-					if ( auxValue2 instanceof NullValue ) {
+					if (auxValue2 instanceof NullValue) {
 						foundNullValue = true;
 						auxValue2 = new NullUniqueValue();
 						sym = getDefaultSymbol();
 					} else {
-						if(foundNullValue){
-							if(stv.length == stk.length && xml.getChildrenCount()>stv.length){
-								sym = SymbologyFactory.createSymbolFromXML(xml
-										.getChild(i+1), null);
+						if (foundNullValue) {
+							if (stv.length == stk.length
+									&& xml.getChildrenCount() > stv.length) {
+								sym = SymbologyFactory.createSymbolFromXML(
+										xml.getChild(i + 1), null);
 							} else {
-								sym = SymbologyFactory.createSymbolFromXML(xml
-										.getChild(i), null);
+								sym = SymbologyFactory.createSymbolFromXML(
+										xml.getChild(i), null);
 							}
 						} else {
-							sym = SymbologyFactory.createSymbolFromXML(xml
-									.getChild(i+1), null);
+							sym = SymbologyFactory.createSymbolFromXML(
+									xml.getChild(i + 1), null);
 						}
 					}
 
 					symbols.put(auxValue2, sym);
 				}
-				if (!foundNullValue && useDefaultSymbol){
+				if (!foundNullValue && useDefaultSymbol) {
 					auxValue2 = new NullUniqueValue();
 					sym = getDefaultSymbol();
 					symbols.put(auxValue2, sym);
 				}
 			} else {
 
-
 				for (int i = 0; i < numKeys; i++) {
 					auxValue = getValue(sk[i]);
-					if ( auxValue  == null ) { //Default
+					if (auxValue == null) { // Default
 						auxValue = new NullUniqueValue();
 					}
 					keys.add(auxValue);
@@ -566,18 +572,18 @@ public class VectorialUniqueValueLegend extends AbstractClassifiedVectorLegend
 				boolean foundNullValue = false;
 				for (int i = 0; i < sv.length; i++) {
 					auxValue2 = getValue(sv[i]);
-					if ( auxValue2 == null ) { //Default
+					if (auxValue2 == null) { // Default
 						foundNullValue = true;
 						auxValue2 = new NullUniqueValue();
 						sym = getDefaultSymbol();
 					} else {
-						sym = SymbologyFactory.createSymbolFromXML(xml
-								.getChild(i+1), null);
+						sym = SymbologyFactory.createSymbolFromXML(
+								xml.getChild(i + 1), null);
 					}
 
 					symbols.put(auxValue2, sym);
 				}
-				if (!foundNullValue && useDefaultSymbol){
+				if (!foundNullValue && useDefaultSymbol) {
 					auxValue2 = new NullUniqueValue();
 					sym = getDefaultSymbol();
 					symbols.put(auxValue2, sym);
@@ -607,8 +613,8 @@ public class VectorialUniqueValueLegend extends AbstractClassifiedVectorLegend
 
 	/**
 	 * Returns the value using the its value in a string.
-	 *
-	 *
+	 * 
+	 * 
 	 * @param s
 	 *            String with the value.
 	 * @deprecated Method used until 1.0 alpha 855 You should use
@@ -659,10 +665,10 @@ public class VectorialUniqueValueLegend extends AbstractClassifiedVectorLegend
 
 	/**
 	 * Devuelve el valor a partir de su valor en un string.
-	 *
+	 * 
 	 * @param s
 	 *            String con el valor.
-	 *
+	 * 
 	 * @return Value.
 	 */
 	private Value getValue(String s, int type) {
@@ -683,30 +689,35 @@ public class VectorialUniqueValueLegend extends AbstractClassifiedVectorLegend
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.rendering.VectorialLegend#setDataSource(com.hardcode.gdbms.engine.data.DataSource)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.rendering.VectorialLegend#setDataSource(com.hardcode
+	 * .gdbms.engine.data.DataSource)
 	 */
 	public void setDataSource(DataSource ds) throws FieldNotFoundException,
 			ReadDriverException {
 		dataSource = ds;
 		ds.start();
-		if (getClassifyingFieldNames() != null && getClassifyingFieldNames().length>0)
+		if (getClassifyingFieldNames() != null
+				&& getClassifyingFieldNames().length > 0)
 			fieldId = ds.getFieldIndexByName(getClassifyingFieldNames()[0]);
 		ds.stop();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.rendering.UniqueValueLegend#getSymbolByValue(com.hardcode.gdbms.engine.values.Value)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.rendering.UniqueValueLegend#getSymbolByValue(
+	 * com.hardcode.gdbms.engine.values.Value)
 	 */
 	public ISymbol getSymbolByValue(Value key) {
 
-//		ISymbol symbol = symbols.get(key);
+		// ISymbol symbol = symbols.get(key);
 
-		//PARCHE
+		// PARCHE
 		ISymbol symbol = getSymbolByKey(key);
-		//FIN DEL PARCHE
+		// FIN DEL PARCHE
 
 		if (symbol != null) {
 			return symbol;
@@ -718,23 +729,24 @@ public class VectorialUniqueValueLegend extends AbstractClassifiedVectorLegend
 	}
 
 	private ISymbol getSymbolByKey(Value key) {
-		//FIXME: Esto es un parche para sustituir symbols.get(key)
+		// FIXME: Esto es un parche para sustituir symbols.get(key)
 		// porque parece que no funciona bien el metodo get sobre un
 		// TreeMap cuyas claves son Values. Si se consigue que funcione
 		// correctamente, eliminar este metodo.
-		if (key==null)
+		if (key == null)
 			return null;
 		ISymbol symbol = null;
 		Set<Entry<Value, ISymbol>> entrySet = symbols.entrySet();
 		Iterator<Entry<Value, ISymbol>> it = entrySet.iterator();
-		while(it.hasNext()){
+		while (it.hasNext()) {
 			Entry<Value, ISymbol> entry = it.next();
 			try {
-				if (((BooleanValue)key.equals(entry.getKey())).getValue()) {
-					symbol=entry.getValue();
+				if (((BooleanValue) key.equals(entry.getKey())).getValue()) {
+					symbol = entry.getValue();
 				}
 			} catch (IncompatibleTypesException e) {
-				log.info("Cannot compare the values: "+key.toString()+" - "+entry.getKey().toString(), e);
+				log.info("Cannot compare the values: " + key.toString() + " - "
+						+ entry.getKey().toString(), e);
 			}
 		}
 		if (symbol != null) {
@@ -753,7 +765,7 @@ public class VectorialUniqueValueLegend extends AbstractClassifiedVectorLegend
 
 	/**
 	 * Devuelve si se utiliza o no el resto de valores para representarse.
-	 *
+	 * 
 	 * @return True si se utiliza el resto de valores.
 	 */
 	public boolean isUseDefaultSymbol() {
@@ -763,8 +775,9 @@ public class VectorialUniqueValueLegend extends AbstractClassifiedVectorLegend
 	public void delSymbol(Object key) {
 		keys.remove(key);
 		ISymbol removedSymbol = symbols.remove(key);
-		if (removedSymbol != null){
-			fireClassifiedSymbolChangeEvent(new SymbolLegendEvent(removedSymbol, null));
+		if (removedSymbol != null) {
+			fireClassifiedSymbolChangeEvent(new SymbolLegendEvent(
+					removedSymbol, null));
 		}
 	}
 
@@ -773,22 +786,22 @@ public class VectorialUniqueValueLegend extends AbstractClassifiedVectorLegend
 	}
 
 	public void replace(ISymbol oldSymbol, ISymbol newSymbol) {
-//		if (symbols.containsValue(oldSymbol)) {
-			Iterator<Entry<Value, ISymbol>> it = symbols.entrySet().iterator();
-			while (it.hasNext()) {
-				Entry<Value, ISymbol> entry = it.next();
-				if (entry.getValue().equals(oldSymbol)) {
-					entry.setValue(newSymbol);
-					fireClassifiedSymbolChangeEvent(new SymbolLegendEvent(
-					oldSymbol, newSymbol));
-					break;
-				}
+		// if (symbols.containsValue(oldSymbol)) {
+		Iterator<Entry<Value, ISymbol>> it = symbols.entrySet().iterator();
+		while (it.hasNext()) {
+			Entry<Value, ISymbol> entry = it.next();
+			if (entry.getValue().equals(oldSymbol)) {
+				entry.setValue(newSymbol);
+				fireClassifiedSymbolChangeEvent(new SymbolLegendEvent(
+						oldSymbol, newSymbol));
+				break;
 			}
-			if(oldSymbol.equals(this.getDefaultSymbol())) {
-				this.setDefaultSymbol(newSymbol);
-			}
+		}
+		if (oldSymbol.equals(this.getDefaultSymbol())) {
+			this.setDefaultSymbol(newSymbol);
+		}
 
-//		}
+		// }
 	}
 
 	public Color[] getColorScheme() {

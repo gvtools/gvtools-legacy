@@ -44,6 +44,8 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 
 public interface SelectionByThemeListener {
 	public void newSet(FLayer[] toSelect, FLayer selectionLayer, int action);
+
 	public void addToSet(FLayer[] toSelect, FLayer selectionLayer, int action);
+
 	public void fromSet(FLayer[] toSelect, FLayer selectionLayer, int action);
 }

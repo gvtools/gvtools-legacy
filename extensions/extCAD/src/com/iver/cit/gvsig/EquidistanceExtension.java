@@ -51,7 +51,7 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 /**
  * Extensión para crear una geometría equidistante a otra.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class EquidistanceExtension extends Extension {
@@ -64,27 +64,27 @@ public class EquidistanceExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
-		equidistanceCADTool=new EquidistanceCADTool();
-		CADExtension.addCADTool("_equidistance",equidistanceCADTool);
-		
+		equidistanceCADTool = new EquidistanceCADTool();
+		CADExtension.addCADTool("_equidistance", equidistanceCADTool);
+
 		registerIcons();
 	}
 
-	private void registerIcons(){
+	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"edition-geometry-equidistance",
-				this.getClass().getClassLoader().getResource("images/Equidistance.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/Equidistance.png"));
 	}
-	
+
 	/**
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String s) {
 		CADExtension.initFocus();
 		if (s.equals("_equidistance")) {
-        	CADExtension.setCADTool(s,true);
-        }
+			CADExtension.setCADTool(s, true);
+		}
 		CADExtension.getEditionManager().setMapControl(mapControl);
 		CADExtension.getCADToolAdapter().configureMenu();
 	}
@@ -98,19 +98,19 @@ public class EquidistanceExtension extends Extension {
 			if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE) {
 				view = (View) PluginServices.getMDIManager().getActiveWindow();
 				mapControl = view.getMapControl();
-				EditionManager em=CADExtension.getEditionManager();
-				if (em.getActiveLayerEdited()==null)
+				EditionManager em = CADExtension.getEditionManager();
+				if (em.getActiveLayerEdited() == null)
 					return false;
-				FLyrVect lv=(FLyrVect)em.getActiveLayerEdited().getLayer();
+				FLyrVect lv = (FLyrVect) em.getActiveLayerEdited().getLayer();
 
-				if (lv.getRecordset().getSelection().cardinality()!=1)
+				if (lv.getRecordset().getSelection().cardinality() != 1)
 					return false;
-				if (equidistanceCADTool.isApplicable(lv.getShapeType())){
+				if (equidistanceCADTool.isApplicable(lv.getShapeType())) {
 					return true;
 				}
 			}
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 		return false;
 	}

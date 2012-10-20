@@ -53,8 +53,6 @@ import com.iver.cit.gvsig.fmap.Messages;
 
 public class IndexOfFunction extends Operator {
 
-
-
 	ArrayList<Expression> arguments = new ArrayList<Expression>();
 
 	public String getName() {
@@ -69,11 +67,11 @@ public class IndexOfFunction extends Operator {
 		arguments.add(i, arg);
 	}
 
-	public void check()
-	throws ExpressionException {
+	public void check() throws ExpressionException {
 
-		if(arguments.size() > 2)
-			throw new ExpressionException(ExpressionException.INCORRECT_NUMBER_OF_ARGUMENTS);
+		if (arguments.size() > 2)
+			throw new ExpressionException(
+					ExpressionException.INCORRECT_NUMBER_OF_ARGUMENTS);
 
 	}
 
@@ -81,25 +79,27 @@ public class IndexOfFunction extends Operator {
 		final String inputString;
 		final String subString;
 
-//		try {
-//			inputString = (String) args[0];
-//		} catch (ClassCastException ccEx) {
-//			throw new SemanticException(SemanticException.TYPE_MISMATCH);
-//		}
-//
-//		try {
-//			subString = (String) args[1];
-//		} catch (ClassCastException ccEx) {
-//			throw new SemanticException(SemanticException.TYPE_MISMATCH);
-//		}
+		// try {
+		// inputString = (String) args[0];
+		// } catch (ClassCastException ccEx) {
+		// throw new SemanticException(SemanticException.TYPE_MISMATCH);
+		// }
+		//
+		// try {
+		// subString = (String) args[1];
+		// } catch (ClassCastException ccEx) {
+		// throw new SemanticException(SemanticException.TYPE_MISMATCH);
+		// }
 
-		if(arguments.size() > 2)
-			throw new ExpressionException(ExpressionException.INCORRECT_NUMBER_OF_ARGUMENTS);
+		if (arguments.size() > 2)
+			throw new ExpressionException(
+					ExpressionException.INCORRECT_NUMBER_OF_ARGUMENTS);
 
 		inputString = arguments.get(0).evaluate().toString();
 		subString = arguments.get(1).evaluate().toString();
 
-		if (inputString == null) return "";
+		if (inputString == null)
+			return "";
 
 		return inputString.indexOf(subString);
 	}
@@ -109,10 +109,11 @@ public class IndexOfFunction extends Operator {
 	}
 
 	public String getPattern() {
-		return Messages.getString(getName())+"("+Messages.getString(OperationTags.OPERAND)
-		+ ","+Messages.getString(OperationTags.OPERAND)+ ")\n"+
-		Messages.getString(OperationTags.OPERAND) +" = "+
-		Messages.getString(OperationTags.STRING_CONSTANT);
+		return Messages.getString(getName()) + "("
+				+ Messages.getString(OperationTags.OPERAND) + ","
+				+ Messages.getString(OperationTags.OPERAND) + ")\n"
+				+ Messages.getString(OperationTags.OPERAND) + " = "
+				+ Messages.getString(OperationTags.STRING_CONSTANT);
 
 	}
 

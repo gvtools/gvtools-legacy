@@ -108,15 +108,15 @@ import com.iver.utiles.XMLEntity;
 
 /**
  * Creates a panel where the user can select a style for an object that allows
- * to manage this property.This panel will be similar to the symbol selector panel
- * and, on it, the user will have a previsualization of the style of objects
- * stored and posibilities to modify an existing one, to create a new one
- * and so on.
- *
+ * to manage this property.This panel will be similar to the symbol selector
+ * panel and, on it, the user will have a previsualization of the style of
+ * objects stored and posibilities to modify an existing one, to create a new
+ * one and so on.
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
-public class StyleSelector extends SymbolSelector{
+public class StyleSelector extends SymbolSelector {
 	private static final long serialVersionUID = -7476555713446755512L;
 	private ImageSizePanel isp;
 	private IStyle styleType;
@@ -135,9 +135,10 @@ public class StyleSelector extends SymbolSelector{
 			}
 		});
 	}
+
 	/**
 	 * Constructor method
-	 *
+	 * 
 	 * @param style
 	 * @param shapeType
 	 * @param filter
@@ -146,23 +147,23 @@ public class StyleSelector extends SymbolSelector{
 		this(style, shapeType, filter, true);
 	}
 
-
-	public StyleSelector(IStyle style, int shapeType, StyleSelectorFilter filter, boolean showPanelOptions) {
+	public StyleSelector(IStyle style, int shapeType,
+			StyleSelectorFilter filter, boolean showPanelOptions) {
 		super(null, shapeType, filter, false);
 
-		this.previousStyle = (IStyle)style;
+		this.previousStyle = (IStyle) style;
 		IStyle clonedStyle = null;
-		if (style != null){
+		if (style != null) {
 			clonedStyle = SymbologyFactory.createStyleFromXML(
-				((IStyle)style).getXMLEntity(), "");
+					((IStyle) style).getXMLEntity(), "");
 		}
-
 
 		this.showPanelOptions = showPanelOptions;
 
-		styleType = ((StyleSelectorFilter)filter).getAllowedObject();
-		Preferences prefs = Preferences.userRoot().node( "gvsig.foldering" );
-		rootDir = new File(prefs.get("SymbolStylesFolder", com.iver.andami.Launcher.getAppHomeDir() + "Styles"));
+		styleType = ((StyleSelectorFilter) filter).getAllowedObject();
+		Preferences prefs = Preferences.userRoot().node("gvsig.foldering");
+		rootDir = new File(prefs.get("SymbolStylesFolder",
+				com.iver.andami.Launcher.getAppHomeDir() + "Styles"));
 		if (!rootDir.exists())
 			rootDir.mkdir();
 
@@ -176,10 +177,9 @@ public class StyleSelector extends SymbolSelector{
 
 	}
 
-
-
 	@Override
-	protected void initialize(Object currentElement) throws ClassNotFoundException {
+	protected void initialize(Object currentElement)
+			throws ClassNotFoundException {
 		library = new StyleLibrary(rootDir);
 
 		this.setLayout(new BorderLayout());
@@ -224,10 +224,10 @@ public class StyleSelector extends SymbolSelector{
 
 	@Override
 	public Object getSelectedObject() {
-//		if (!accepted) return null;
+		// if (!accepted) return null;
 		Object mySelectedElement = ((StylePreviewer) jPanelPreview).getStyle();
 
-		if(mySelectedElement == null)
+		if (mySelectedElement == null)
 			return null;
 
 		if (mySelectedElement instanceof CartographicSupport) {
@@ -240,10 +240,8 @@ public class StyleSelector extends SymbolSelector{
 	}
 
 	protected SymbolSelectorListModel newListModel() {
-		StyleSelectorListModel listModel = new StyleSelectorListModel(
-				dir,
-				sFilter,
-				StyleSelectorListModel.STYLE_FILE_EXTENSION);
+		StyleSelectorListModel listModel = new StyleSelectorListModel(dir,
+				sFilter, StyleSelectorListModel.STYLE_FILE_EXTENSION);
 		return listModel;
 
 	}
@@ -251,22 +249,26 @@ public class StyleSelector extends SymbolSelector{
 	protected JPanel getJPanelOptions() {
 		if (jPanelOptions == null) {
 			jPanelOptions = new GridBagLayoutPanel();
-			if(showPanelOptions){
-				jPanelOptions.setBorder(BorderFactory.createTitledBorder(null, PluginServices.getText(this, "options")));
+			if (showPanelOptions) {
+				jPanelOptions.setBorder(BorderFactory.createTitledBorder(null,
+						PluginServices.getText(this, "options")));
 				jPanelOptions.addComponent(getImageSizePanel());
-				jPanelOptions.addComponent(PluginServices.getText(this, "units"),
+				jPanelOptions.addComponent(
+						PluginServices.getText(this, "units"),
 						cmbUnits = new JComboBoxUnits(true));
-				jPanelOptions.addComponent("",
-						cmbReferenceSystem = new JComboBoxUnitsReferenceSystem());
+				jPanelOptions
+						.addComponent(
+								"",
+								cmbReferenceSystem = new JComboBoxUnitsReferenceSystem());
 			}
 		}
 		return jPanelOptions;
 	}
 
 	/**
-	 *
+	 * 
 	 * This method initializes ImageSizePanel
-	 *
+	 * 
 	 * @return isp ImageSizePanel
 	 */
 	private ImageSizePanel getImageSizePanel() {
@@ -287,10 +289,10 @@ public class StyleSelector extends SymbolSelector{
 	}
 
 	protected void updateOptionsPanel() {
-		if(showPanelOptions){
+		if (showPanelOptions) {
 			IStyle s = ((StylePreviewer) jPanelPreview).getStyle();
-			if (s == null){
-				Dimension sz = new Dimension(0,0);
+			if (s == null) {
+				Dimension sz = new Dimension(0, 0);
 				getImageSizePanel().setImageSize(sz);
 			}
 			if (s instanceof ILabelStyle) {
@@ -301,23 +303,24 @@ public class StyleSelector extends SymbolSelector{
 		}
 	}
 
-
 	/**
 	 * This method initializes jList
-	 *
+	 * 
 	 * @return javax.swing.JList
 	 */
 	protected JList getJListSymbols() {
 		if (jListSymbols == null) {
 			jListSymbols = new JDnDList();
-			jListSymbols.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+			jListSymbols
+					.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 			jListSymbols.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 			jListSymbols.setVisibleRowCount(-1);
 			jListSymbols.addListSelectionListener(new ListSelectionListener() {
 				public void valueChanged(ListSelectionEvent e) {
-					if (jListSymbols.getSelectedValue()!=null) {
+					if (jListSymbols.getSelectedValue() != null) {
 						IStyle selStyle = SymbologyFactory.createStyleFromXML(
-								((IStyle) jListSymbols.getSelectedValue()).getXMLEntity(), null);
+								((IStyle) jListSymbols.getSelectedValue())
+										.getXMLEntity(), null);
 						setStyle(selStyle);
 						updateOptionsPanel();
 					}
@@ -325,8 +328,11 @@ public class StyleSelector extends SymbolSelector{
 
 			});
 			ListCellRenderer renderer = new ListCellRenderer() {
-				private Color mySelectedBGColor = new Color(255,145,100,255);
-				public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+				private Color mySelectedBGColor = new Color(255, 145, 100, 255);
+
+				public Component getListCellRendererComponent(JList list,
+						Object value, int index, boolean isSelected,
+						boolean cellHasFocus) {
 					IStyle sty = (IStyle) value;
 					JPanel pnl = new JPanel();
 					BoxLayout layout = new BoxLayout(pnl, BoxLayout.Y_AXIS);
@@ -355,14 +361,15 @@ public class StyleSelector extends SymbolSelector{
 		}
 		return jListSymbols;
 	}
+
 	/**
-	 * Modify the previsualization showed in the panel with the style of the
-	 * new object selected.
-	 *
+	 * Modify the previsualization showed in the panel with the style of the new
+	 * object selected.
+	 * 
 	 * @param selectedValue
 	 */
 	protected void setStyle(Object selectedValue) {
-		//selectedElement = selectedValue;
+		// selectedElement = selectedValue;
 		((StylePreviewer) jPanelPreview).setStyle((IStyle) selectedValue);
 		doLayout();
 		updateOptionsPanel();
@@ -378,14 +385,14 @@ public class StyleSelector extends SymbolSelector{
 	}
 
 	protected void propertiesPressed() {
-//		boolean state = accepted;
-//		accepted = true;
+		// boolean state = accepted;
+		// accepted = true;
 		StyleEditor se = new StyleEditor((IStyle) getSelectedObject());
-		if(se != null){
+		if (se != null) {
 			PluginServices.getMDIManager().addWindow(se);
 			setStyle(se.getStyle());
 		}
-//		accepted = state;
+		// accepted = state;
 	}
 
 	protected void savePressed() {
@@ -395,19 +402,21 @@ public class StyleSelector extends SymbolSelector{
 		JFileChooser jfc = new JFileChooser(rootDir);
 		javax.swing.filechooser.FileFilter ff = new javax.swing.filechooser.FileFilter() {
 			public boolean accept(File f) {
-				return f.getAbsolutePath().
-				toLowerCase().
-				endsWith(StyleSelectorListModel.STYLE_FILE_EXTENSION);
+				return f.getAbsolutePath().toLowerCase()
+						.endsWith(StyleSelectorListModel.STYLE_FILE_EXTENSION);
 			}
 
 			public String getDescription() {
-				return PluginServices.getText(
-						this, "gvSIG_style_definition_file")+ " ("+StyleSelectorListModel.STYLE_FILE_EXTENSION+")";
+				return PluginServices.getText(this,
+						"gvSIG_style_definition_file")
+						+ " ("
+						+ StyleSelectorListModel.STYLE_FILE_EXTENSION + ")";
 			}
 		};
 		jfc.setFileFilter(ff);
 		JPanel accessory = new JPanel(new FlowLayout(FlowLayout.LEADING, 5, 5));
-		accessory.add(new JLabel(PluginServices.getText(this, "enter_description")));
+		accessory.add(new JLabel(PluginServices.getText(this,
+				"enter_description")));
 		JTextField txtDesc = new JTextField(25);
 		txtDesc.setText(((IStyle) getSelectedObject()).getDescription());
 		accessory.add(txtDesc);
@@ -419,10 +428,12 @@ public class StyleSelector extends SymbolSelector{
 
 			// apply description
 			String desc;
-			if (txtDesc.getText()==null || txtDesc.getText().trim().equals("")) {
+			if (txtDesc.getText() == null
+					|| txtDesc.getText().trim().equals("")) {
 				// default to file name
 				String s = targetFile.getAbsolutePath();
-				desc = s.substring(s.lastIndexOf(File.separator)+1).replaceAll(fExtension, "");
+				desc = s.substring(s.lastIndexOf(File.separator) + 1)
+						.replaceAll(fExtension, "");
 			} else {
 				desc = txtDesc.getText().trim();
 			}
@@ -431,17 +442,16 @@ public class StyleSelector extends SymbolSelector{
 
 			// save it
 			XMLEntity xml = s.getXMLEntity();
-			if (!targetFile.
-					getAbsolutePath().
-					toLowerCase().
-					endsWith(fExtension))
+			if (!targetFile.getAbsolutePath().toLowerCase()
+					.endsWith(fExtension))
 				targetFile = new File(targetFile.getAbsolutePath() + fExtension);
-			if(targetFile.exists()){
+			if (targetFile.exists()) {
 				int resp = JOptionPane.showConfirmDialog(
 						(Component) PluginServices.getMainFrame(),
 						PluginServices.getText(this,
-						"fichero_ya_existe_seguro_desea_guardarlo"),
-						PluginServices.getText(this,"guardar"), JOptionPane.YES_NO_OPTION);
+								"fichero_ya_existe_seguro_desea_guardarlo"),
+						PluginServices.getText(this, "guardar"),
+						JOptionPane.YES_NO_OPTION);
 				if (resp != JOptionPane.YES_OPTION) {
 					return;
 				}
@@ -463,14 +473,15 @@ public class StyleSelector extends SymbolSelector{
 
 	/**
 	 * This method initializes jPanelPreview
-	 *
+	 * 
 	 * @return javax.swing.JComponent
 	 */
 	protected JComponent getJPanelPreview() {
 		if (jPanelPreview == null) {
 			jPanelPreview = new StylePreviewer();
-			jPanelPreview.setPreferredSize(new java.awt.Dimension(100,100));
-			jPanelPreview.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+			jPanelPreview.setPreferredSize(new java.awt.Dimension(100, 100));
+			jPanelPreview.setBorder(javax.swing.BorderFactory
+					.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 			((StylePreviewer) jPanelPreview).setShowOutline(true);
 		}
 		return jPanelPreview;
@@ -478,8 +489,9 @@ public class StyleSelector extends SymbolSelector{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (!act) return;
-		Object selectedElement = ((StylePreviewer) jPanelPreview).getStyle();//getSelectedObject();
+		if (!act)
+			return;
+		Object selectedElement = ((StylePreviewer) jPanelPreview).getStyle();// getSelectedObject();
 		performActionOn(selectedElement, (JComponent) e.getSource());
 		StyleSelector.this.repaint();
 	}
@@ -503,9 +515,9 @@ public class StyleSelector extends SymbolSelector{
 	public void windowClosed() {
 		if (!accepted) {
 			IStyle clonedStyle = null;
-			if (previousStyle != null){
+			if (previousStyle != null) {
 				clonedStyle = SymbologyFactory.createStyleFromXML(
-					((IStyle)previousStyle).getXMLEntity(), "");
+						((IStyle) previousStyle).getXMLEntity(), "");
 			}
 			((StylePreviewer) jPanelPreview).setStyle(clonedStyle);
 		}
@@ -516,12 +528,11 @@ public class StyleSelector extends SymbolSelector{
 	 */
 	protected void resetPressed() {
 		IStyle clonedStyle = null;
-		if (previousStyle != null){
+		if (previousStyle != null) {
 			clonedStyle = SymbologyFactory.createStyleFromXML(
-				((IStyle)previousStyle).getXMLEntity(), "");
+					((IStyle) previousStyle).getXMLEntity(), "");
 		}
 		setStyle(clonedStyle);
 	}
-
 
 }

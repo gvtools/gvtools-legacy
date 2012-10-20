@@ -63,19 +63,17 @@ import com.iver.cit.gvsig.project.documents.layout.Attributes;
 import com.iver.cit.gvsig.project.documents.layout.Size;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
-
 /**
  * Page setup dialog for printing Maps
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FConfigLayoutDialog extends JPanel implements IWindow {
-	
 
-    	private static final long serialVersionUID = -6516923224668133499L;
+	private static final long serialVersionUID = -6516923224668133499L;
 
 	private static Logger logger = Logger.getLogger(FConfigLayoutDialog.class);
-	
+
 	private javax.swing.JLabel lTamPag = null;
 	private javax.swing.JComboBox cbTipoFolio = null;
 	private javax.swing.JLabel lDistancia = null;
@@ -119,7 +117,6 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 		initialize();
 	}
 
-
 	private void initialize() {
 		nf.setMaximumFractionDigits(2);
 		this.setLayout(null);
@@ -160,15 +157,14 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lTamPag
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLTamPag() {
 		if (lTamPag == null) {
 			lTamPag = new javax.swing.JLabel();
 			lTamPag.setSize(134, 20);
-			lTamPag.setText(PluginServices.getText(this, "tamano_pagina") +
-				":");
+			lTamPag.setText(PluginServices.getText(this, "tamano_pagina") + ":");
 			lTamPag.setLocation(25, 15);
 		}
 
@@ -177,7 +173,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes cbTipoFolio
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private javax.swing.JComboBox getCbTipoFolio() {
@@ -186,76 +182,77 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 			cbTipoFolio.setSize(175, 20);
 			cbTipoFolio.setPreferredSize(new java.awt.Dimension(130, 20));
 			cbTipoFolio.setLocation(175, 15);
-			
+
 			Iterator iter = Attributes.PAPER_NAMES_LIST.keySet().iterator();
 			while (iter.hasNext()) {
-				cbTipoFolio.addItem(
-						new MediaSizeNameWrapper(
-								(MediaSizeName) Attributes.PAPER_NAMES_LIST.get(iter.next())));
+				cbTipoFolio.addItem(new MediaSizeNameWrapper(
+						(MediaSizeName) Attributes.PAPER_NAMES_LIST.get(iter
+								.next())));
 			}
-			
-			int curr_type = m_layout.getLayoutContext().getAtributes().getType();
+
+			int curr_type = m_layout.getLayoutContext().getAtributes()
+					.getType();
 			int index = getIndexOfWrapperWithId(cbTipoFolio, curr_type);
 			cbTipoFolio.setSelectedIndex(index);
-			
-			cbTipoFolio.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						
-						MediaSizeNameWrapper wra =
-							(MediaSizeNameWrapper) cbTipoFolio.getSelectedItem();
-						
-						type = Attributes.getIdForMediaSizeName(wra.getMediaSizeName());
 
-						Size size = m_layout.getLayoutContext().getAtributes().getSizeinUnits(isLand,
-								type);
-						
-						getTAlto().setText(String.valueOf(nf.format(
-									size.getAlto())));
-						getTAncho().setText(String.valueOf(nf.format(
-									size.getAncho())));
-						setMargin(margin);
-						if (type == Attributes.PREPARE_PAGE_ID_CUSTOM) {
-							getTAlto().setEnabled(true);
-							getTAncho().setEnabled(true);
-							getChbVertical().setSelected(true);
-							isLand=false;
-							getChbHorizontal().setSelected(false);
-							getChbVertical().setEnabled(false);
-							getChbHorizontal().setEnabled(false);
-						}else {
-							getTAlto().setEnabled(false);
-							getTAncho().setEnabled(false);
-							getChbVertical().setEnabled(true);
-							getChbHorizontal().setEnabled(true);
-						}
+			cbTipoFolio.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+
+					MediaSizeNameWrapper wra = (MediaSizeNameWrapper) cbTipoFolio
+							.getSelectedItem();
+
+					type = Attributes.getIdForMediaSizeName(wra
+							.getMediaSizeName());
+
+					Size size = m_layout.getLayoutContext().getAtributes()
+							.getSizeinUnits(isLand, type);
+
+					getTAlto().setText(
+							String.valueOf(nf.format(size.getAlto())));
+					getTAncho().setText(
+							String.valueOf(nf.format(size.getAncho())));
+					setMargin(margin);
+					if (type == Attributes.PREPARE_PAGE_ID_CUSTOM) {
+						getTAlto().setEnabled(true);
+						getTAncho().setEnabled(true);
+						getChbVertical().setSelected(true);
+						isLand = false;
+						getChbHorizontal().setSelected(false);
+						getChbVertical().setEnabled(false);
+						getChbHorizontal().setEnabled(false);
+					} else {
+						getTAlto().setEnabled(false);
+						getTAncho().setEnabled(false);
+						getChbVertical().setEnabled(true);
+						getChbHorizontal().setEnabled(true);
 					}
-				});
+				}
+			});
 		}
 
 		return cbTipoFolio;
 	}
 
-	
-
 	private int getIndexOfWrapperWithId(JComboBox combo, int id) {
-		
+
 		MediaSizeName msn = Attributes.getMediaSizeNameForId(id);
-		
+
 		int cnt = combo.getItemCount();
 		MediaSizeNameWrapper w = null;
-		for (int i=0; i<cnt; i++) {
+		for (int i = 0; i < cnt; i++) {
 			w = (MediaSizeNameWrapper) combo.getItemAt(i);
 			if (w.getMediaSizeName() == msn) {
 				return i;
 			}
 		}
-		logger.error("Did not find MSN for ID: " + id + " (returned index 0 for combo)");
+		logger.error("Did not find MSN for ID: " + id
+				+ " (returned index 0 for combo)");
 		return 0;
 	}
 
 	/**
 	 * This method initializes lDistancia
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLDistancia() {
@@ -271,33 +268,34 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes cbUnidades
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private javax.swing.JComboBox getCbUnidades() {
 		if (cbUnidades == null) {
 			cbUnidades = new javax.swing.JComboBox();
-			String[] names= MapContext.getDistanceNames();
-			for (int i=0;i<names.length;i++) {
-				cbUnidades.addItem(PluginServices.getText(this,names[i]));
+			String[] names = MapContext.getDistanceNames();
+			for (int i = 0; i < names.length; i++) {
+				cbUnidades.addItem(PluginServices.getText(this, names[i]));
 			}
 			cbUnidades.setSize(175, 20);
 			cbUnidades.setLocation(175, 40);
-			cbUnidades.setSelectedIndex(m_layout.getLayoutContext().getAtributes().getSelTypeUnit());
+			cbUnidades.setSelectedIndex(m_layout.getLayoutContext()
+					.getAtributes().getSelTypeUnit());
 			cbUnidades.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						unit = cbUnidades.getSelectedIndex();
-						m_layout.getLayoutContext().getAtributes().setUnit(unit);
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					unit = cbUnidades.getSelectedIndex();
+					m_layout.getLayoutContext().getAtributes().setUnit(unit);
 
-						Size size = m_layout.getLayoutContext().getAtributes().getSizeinUnits(isLand,
-								type);
-						getTAlto().setText(String.valueOf(nf.format(
-									size.getAlto())));
-						getTAncho().setText(String.valueOf(nf.format(
-									size.getAncho())));
-						setMargin(margin);
-					}
-				});
+					Size size = m_layout.getLayoutContext().getAtributes()
+							.getSizeinUnits(isLand, type);
+					getTAlto().setText(
+							String.valueOf(nf.format(size.getAlto())));
+					getTAncho().setText(
+							String.valueOf(nf.format(size.getAncho())));
+					setMargin(margin);
+				}
+			});
 		}
 
 		return cbUnidades;
@@ -305,7 +303,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lAnchura
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLAnchura() {
@@ -321,7 +319,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lAltura
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLAltura() {
@@ -337,7 +335,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes tAncho
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private javax.swing.JTextField getTAncho() {
@@ -346,12 +344,13 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 			tAncho.setSize(60, 20);
 			tAncho.setLocation(110, 65);
 
-			Size size = m_layout.getLayoutContext().getAtributes().getSizeinUnits(isLand, type);
+			Size size = m_layout.getLayoutContext().getAtributes()
+					.getSizeinUnits(isLand, type);
 			String s = String.valueOf(nf.format(size.getAncho()));
 			tAncho.setText(s);
 			if (type == Attributes.PREPARE_PAGE_ID_CUSTOM) {
 				getTAncho().setEnabled(true);
-			}else {
+			} else {
 				getTAncho().setEnabled(false);
 			}
 		}
@@ -361,7 +360,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes tAlto
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private javax.swing.JTextField getTAlto() {
@@ -370,12 +369,13 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 			tAlto.setSize(60, 20);
 			tAlto.setLocation(280, 65);
 
-			Size size = m_layout.getLayoutContext().getAtributes().getSizeinUnits(isLand, type);
+			Size size = m_layout.getLayoutContext().getAtributes()
+					.getSizeinUnits(isLand, type);
 			String s = String.valueOf(nf.format(size.getAlto()));
 			tAlto.setText(s);
 			if (type == Attributes.PREPARE_PAGE_ID_CUSTOM) {
 				getTAlto().setEnabled(true);
-			}else {
+			} else {
 				getTAlto().setEnabled(false);
 			}
 		}
@@ -385,7 +385,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lOrientacion
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLOrientacion() {
@@ -401,7 +401,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lMargenes
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLMargenes() {
@@ -417,21 +417,26 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 
 	/**
 	 * Inserta si se dibuja los margenes sobre el Layout o no.
-	 *
-	 * @param b True si se tiene que dibujar los margenes.
+	 * 
+	 * @param b
+	 *            True si se tiene que dibujar los margenes.
 	 */
 	private void setMargin(boolean b) {
 		margin = b;
 
 		if (b) {
-			getTSuperior().setText(String.valueOf(nf.format(
-						m_layout.getLayoutContext().getAtributes().toUnits(sup))));
-			getTIzquierdo().setText(String.valueOf(nf.format(
-						m_layout.getLayoutContext().getAtributes().toUnits(izq))));
-			getTInferior().setText(String.valueOf(nf.format(
-						m_layout.getLayoutContext().getAtributes().toUnits(inf))));
-			getTDerecho().setText(String.valueOf(nf.format(
-						m_layout.getLayoutContext().getAtributes().toUnits(der))));
+			getTSuperior().setText(
+					String.valueOf(nf.format(m_layout.getLayoutContext()
+							.getAtributes().toUnits(sup))));
+			getTIzquierdo().setText(
+					String.valueOf(nf.format(m_layout.getLayoutContext()
+							.getAtributes().toUnits(izq))));
+			getTInferior().setText(
+					String.valueOf(nf.format(m_layout.getLayoutContext()
+							.getAtributes().toUnits(inf))));
+			getTDerecho().setText(
+					String.valueOf(nf.format(m_layout.getLayoutContext()
+							.getAtributes().toUnits(der))));
 			getTSuperior().setEnabled(true);
 			getTIzquierdo().setEnabled(true);
 			getTInferior().setEnabled(true);
@@ -450,28 +455,30 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes chbMargenes
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	private javax.swing.JCheckBox getChbMargenes() {
 		if (chbMargenes == null) {
 			chbMargenes = new javax.swing.JCheckBox();
 			chbMargenes.setSize(230, 21);
-			chbMargenes.setText(PluginServices.getText(this,"personalizar_margenes"));
+			chbMargenes.setText(PluginServices.getText(this,
+					"personalizar_margenes"));
 			chbMargenes.setLocation(125, 145);
-			chbMargenes.setSelected(m_layout.getLayoutContext().getAtributes().isMargin());
+			chbMargenes.setSelected(m_layout.getLayoutContext().getAtributes()
+					.isMargin());
 			setMargin(m_layout.getLayoutContext().getAtributes().isMargin());
 			chbMargenes.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						if (chbMargenes.isSelected()) {
-							margin = true;
-						} else {
-							margin = false;
-						}
-
-						setMargin(margin);
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if (chbMargenes.isSelected()) {
+						margin = true;
+					} else {
+						margin = false;
 					}
-				});
+
+					setMargin(margin);
+				}
+			});
 		}
 
 		return chbMargenes;
@@ -479,7 +486,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lSuperior
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLSuperior() {
@@ -495,7 +502,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes tSuperior
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private javax.swing.JTextField getTSuperior() {
@@ -505,8 +512,8 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 			tSuperior.setLocation(110, 167);
 
 			if (m_layout.getLayoutContext().getAtributes().isMargin()) {
-				tSuperior.setText(String.valueOf(nf.format(
-							m_layout.getLayoutContext().getAtributes().toUnits(sup))));
+				tSuperior.setText(String.valueOf(nf.format(m_layout
+						.getLayoutContext().getAtributes().toUnits(sup))));
 			}
 		}
 
@@ -515,7 +522,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lIzquierdo
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLIzquierdo() {
@@ -531,7 +538,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes tIzquierdo
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private javax.swing.JTextField getTIzquierdo() {
@@ -541,8 +548,8 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 			tIzquierdo.setLocation(280, 167);
 
 			if (m_layout.getLayoutContext().getAtributes().isMargin()) {
-				tIzquierdo.setText(String.valueOf(nf.format(
-							m_layout.getLayoutContext().getAtributes().toUnits(izq))));
+				tIzquierdo.setText(String.valueOf(nf.format(m_layout
+						.getLayoutContext().getAtributes().toUnits(izq))));
 			}
 		}
 
@@ -551,7 +558,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lInferior
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLInferior() {
@@ -567,7 +574,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes tInferior
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private javax.swing.JTextField getTInferior() {
@@ -577,8 +584,8 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 			tInferior.setLocation(110, 190);
 
 			if (m_layout.getLayoutContext().getAtributes().isMargin()) {
-				tInferior.setText(String.valueOf(nf.format(
-							m_layout.getLayoutContext().getAtributes().toUnits(inf))));
+				tInferior.setText(String.valueOf(nf.format(m_layout
+						.getLayoutContext().getAtributes().toUnits(inf))));
 			}
 		}
 
@@ -587,7 +594,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lDerecho
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLDerecho() {
@@ -603,7 +610,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes tDerecho
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private javax.swing.JTextField getTDerecho() {
@@ -613,8 +620,8 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 			tDerecho.setLocation(280, 190);
 
 			if (m_layout.getLayoutContext().getAtributes().isMargin()) {
-				tDerecho.setText(String.valueOf(nf.format(
-							m_layout.getLayoutContext().getAtributes().toUnits(der))));
+				tDerecho.setText(String.valueOf(nf.format(m_layout
+						.getLayoutContext().getAtributes().toUnits(der))));
 			}
 		}
 
@@ -623,7 +630,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lResolucion
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLResolucion() {
@@ -640,7 +647,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes cbResolucion
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private javax.swing.JComboBox getCbResolucion() {
@@ -651,12 +658,13 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 			cbResolucion.addItem(PluginServices.getText(this, "alta"));
 			cbResolucion.addItem(PluginServices.getText(this, "normal"));
 			cbResolucion.addItem(PluginServices.getText(this, "baja"));
-			cbResolucion.setSelectedIndex(m_layout.getLayoutContext().getAtributes().getResolution());
+			cbResolucion.setSelectedIndex(m_layout.getLayoutContext()
+					.getAtributes().getResolution());
 			cbResolucion.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						resolution = cbResolucion.getSelectedIndex();
-					}
-				});
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					resolution = cbResolucion.getSelectedIndex();
+				}
+			});
 		}
 
 		return cbResolucion;
@@ -664,7 +672,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes bAceptar
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBAceptar() {
@@ -674,43 +682,51 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 			bAceptar.setText(PluginServices.getText(this, "Aceptar"));
 			bAceptar.setLocation(90, 255);
 			bAceptar.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						m_layout.getLayoutContext().getAtributes().setUnit(unit);
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					m_layout.getLayoutContext().getAtributes().setUnit(unit);
 
-						if (isLand) {
-							m_layout.getLayoutContext().getAtributes().setIsLandScape(true);
-						} else {
-							m_layout.getLayoutContext().getAtributes().setIsLandScape(false);
-						}
-
-						m_layout.getLayoutContext().getAtributes().setType(type);
-						m_layout.getLayoutContext().getAtributes().setSizeinUnits(isLand);
-						obtainArea();
-
-						double[] area = { sup, inf, izq, der };
-
-						if (type == Attributes.PREPARE_PAGE_ID_CUSTOM) {
-							String width=getTAncho().getText().replace(',','.');
-							String height=getTAlto().getText().replace(',','.');
-							
-							double _w = Double.valueOf(width).doubleValue();
-							double _h = Double.valueOf(height).doubleValue();
-							
-							_w = m_layout.getLayoutContext().getAtributes().fromUnits(_w);
-							_h = m_layout.getLayoutContext().getAtributes().fromUnits(_h);
-							
-							Attributes.CUSTOM_PAPER_SIZE = new Size(_h, _w);
-							m_layout.getLayoutContext().getAtributes().m_sizePaper=Attributes.CUSTOM_PAPER_SIZE;
-						}
-						m_layout.getLayoutContext().getAtributes().setType(type);
-						m_layout.obtainRect(false);
-						m_layout.getLayoutContext().getAtributes().setSelectedOptions(type, unit,
-							isLand, margin, resolution, area);
-						PluginServices.getMDIManager().closeWindow(FConfigLayoutDialog.this);
-						m_layout.getLayoutControl().fullRect();
-						//m_layout.refresh();
+					if (isLand) {
+						m_layout.getLayoutContext().getAtributes()
+								.setIsLandScape(true);
+					} else {
+						m_layout.getLayoutContext().getAtributes()
+								.setIsLandScape(false);
 					}
-				});
+
+					m_layout.getLayoutContext().getAtributes().setType(type);
+					m_layout.getLayoutContext().getAtributes()
+							.setSizeinUnits(isLand);
+					obtainArea();
+
+					double[] area = { sup, inf, izq, der };
+
+					if (type == Attributes.PREPARE_PAGE_ID_CUSTOM) {
+						String width = getTAncho().getText().replace(',', '.');
+						String height = getTAlto().getText().replace(',', '.');
+
+						double _w = Double.valueOf(width).doubleValue();
+						double _h = Double.valueOf(height).doubleValue();
+
+						_w = m_layout.getLayoutContext().getAtributes()
+								.fromUnits(_w);
+						_h = m_layout.getLayoutContext().getAtributes()
+								.fromUnits(_h);
+
+						Attributes.CUSTOM_PAPER_SIZE = new Size(_h, _w);
+						m_layout.getLayoutContext().getAtributes().m_sizePaper = Attributes.CUSTOM_PAPER_SIZE;
+					}
+					m_layout.getLayoutContext().getAtributes().setType(type);
+					m_layout.obtainRect(false);
+					m_layout.getLayoutContext()
+							.getAtributes()
+							.setSelectedOptions(type, unit, isLand, margin,
+									resolution, area);
+					PluginServices.getMDIManager().closeWindow(
+							FConfigLayoutDialog.this);
+					m_layout.getLayoutControl().fullRect();
+					// m_layout.refresh();
+				}
+			});
 		}
 
 		return bAceptar;
@@ -718,7 +734,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes bCancelar
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBCancelar() {
@@ -728,11 +744,12 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 			bCancelar.setText(PluginServices.getText(this, "Cancelar"));
 			bCancelar.setLocation(185, 255);
 			bCancelar.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						//setVisible(false);
-						PluginServices.getMDIManager().closeWindow(FConfigLayoutDialog.this);
-					}
-				});
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					// setVisible(false);
+					PluginServices.getMDIManager().closeWindow(
+							FConfigLayoutDialog.this);
+				}
+			});
 		}
 
 		return bCancelar;
@@ -740,7 +757,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes chbHorizontal
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	private javax.swing.JCheckBox getChbHorizontal() {
@@ -753,41 +770,49 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 			if (type == Attributes.PREPARE_PAGE_ID_CUSTOM) {
 				chbHorizontal.setEnabled(false);
 				chbHorizontal.setSelected(false);
-				isLand=false;
+				isLand = false;
 			}
-			chbHorizontal.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						isLand = true;
-						getChbVertical().setSelected(false);
+			chbHorizontal
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							isLand = true;
+							getChbVertical().setSelected(false);
 
-						if (chbHorizontal.isSelected()) {
-							double iz = izq;
-							izq = inf;
-							inf = der;
-							der = sup;
-							sup = iz;
+							if (chbHorizontal.isSelected()) {
+								double iz = izq;
+								izq = inf;
+								inf = der;
+								der = sup;
+								sup = iz;
 
-							setMargin(margin);
+								setMargin(margin);
 
-							//}else{
-							if (type == Attributes.PREPARE_PAGE_ID_CUSTOM) {
-								Attributes.CUSTOM_PAPER_SIZE = new Size(Double.valueOf(
-											getTAlto().getText()).doubleValue(),
-										Double.valueOf(getTAncho().getText())
-											  .doubleValue());
+								// }else{
+								if (type == Attributes.PREPARE_PAGE_ID_CUSTOM) {
+									Attributes.CUSTOM_PAPER_SIZE = new Size(
+											Double.valueOf(getTAlto().getText())
+													.doubleValue(), Double
+													.valueOf(
+															getTAncho()
+																	.getText())
+													.doubleValue());
+								}
+
+								Size size = m_layout.getLayoutContext()
+										.getAtributes()
+										.getSizeinUnits(isLand, type);
+								getTAncho().setText(
+										String.valueOf(nf.format(size
+												.getAncho())));
+								getTAlto()
+										.setText(
+												String.valueOf(nf.format(size
+														.getAlto())));
 							}
 
-							Size size = m_layout.getLayoutContext().getAtributes().getSizeinUnits(isLand,
-									type);
-							getTAncho().setText(String.valueOf(nf.format(
-										size.getAncho())));
-							getTAlto().setText(String.valueOf(nf.format(
-										size.getAlto())));
+							chbHorizontal.setSelected(true);
 						}
-
-						chbHorizontal.setSelected(true);
-					}
-				});
+					});
 		}
 
 		return chbHorizontal;
@@ -795,7 +820,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes chbVertical
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	private javax.swing.JCheckBox getChbVertical() {
@@ -808,47 +833,49 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 			if (type == Attributes.PREPARE_PAGE_ID_CUSTOM) {
 				chbVertical.setEnabled(false);
 				chbVertical.setSelected(true);
-				isLand=false;
+				isLand = false;
 			}
 			chbVertical.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						isLand = false;
-						getChbHorizontal().setSelected(false);
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					isLand = false;
+					getChbHorizontal().setSelected(false);
 
-						if (chbVertical.isSelected()) {
-							double in = inf;
-							inf = izq;
-							izq = sup;
-							sup = der;
-							der = in;
+					if (chbVertical.isSelected()) {
+						double in = inf;
+						inf = izq;
+						izq = sup;
+						sup = der;
+						der = in;
 
-							setMargin(margin);
+						setMargin(margin);
 
-							//}else{
-							if (type == Attributes.PREPARE_PAGE_ID_CUSTOM) {
-								Attributes.CUSTOM_PAPER_SIZE = new Size(Double.valueOf(
-											getTAncho().getText()).doubleValue(),
-										Double.valueOf(getTAlto().getText())
-											  .doubleValue());
-							}
-
-							Size size = m_layout.getLayoutContext().getAtributes().getSizeinUnits(isLand,
-									type);
-							getTAncho().setText(String.valueOf(nf.format(
-										size.getAncho())));
-							getTAlto().setText(String.valueOf(nf.format(
-										size.getAlto())));
+						// }else{
+						if (type == Attributes.PREPARE_PAGE_ID_CUSTOM) {
+							Attributes.CUSTOM_PAPER_SIZE = new Size(Double
+									.valueOf(getTAncho().getText())
+									.doubleValue(), Double.valueOf(
+									getTAlto().getText()).doubleValue());
 						}
 
-						chbVertical.setSelected(true);
+						Size size = m_layout.getLayoutContext().getAtributes()
+								.getSizeinUnits(isLand, type);
+						getTAncho().setText(
+								String.valueOf(nf.format(size.getAncho())));
+						getTAlto().setText(
+								String.valueOf(nf.format(size.getAlto())));
 					}
-				});
+
+					chbVertical.setSelected(true);
+				}
+			});
 		}
 
 		return chbVertical;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.mdiApp.ui.MDIManager.View#getViewInfo()
 	 */
 	public WindowInfo getWindowInfo() {
@@ -877,7 +904,8 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 			s = "0";
 		}
 
-		sup = m_layout.getLayoutContext().getAtributes().fromUnits(Double.valueOf(s).doubleValue());
+		sup = m_layout.getLayoutContext().getAtributes()
+				.fromUnits(Double.valueOf(s).doubleValue());
 		s = (getTIzquierdo().getText());
 		s = s.replace(',', '.');
 
@@ -885,7 +913,8 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 			s = "0";
 		}
 
-		izq = m_layout.getLayoutContext().getAtributes().fromUnits(Double.valueOf(s).doubleValue());
+		izq = m_layout.getLayoutContext().getAtributes()
+				.fromUnits(Double.valueOf(s).doubleValue());
 		s = (getTInferior().getText());
 		s = s.replace(',', '.');
 
@@ -893,7 +922,8 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 			s = "0";
 		}
 
-		inf = m_layout.getLayoutContext().getAtributes().fromUnits(Double.valueOf(s).doubleValue());
+		inf = m_layout.getLayoutContext().getAtributes()
+				.fromUnits(Double.valueOf(s).doubleValue());
 		s = (getTDerecho().getText());
 		s = s.replace(',', '.');
 
@@ -901,7 +931,8 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 			s = "0";
 		}
 
-		der = m_layout.getLayoutContext().getAtributes().fromUnits(Double.valueOf(s).doubleValue());
+		der = m_layout.getLayoutContext().getAtributes()
+				.fromUnits(Double.valueOf(s).doubleValue());
 	}
 
 	public Object getWindowProfile() {

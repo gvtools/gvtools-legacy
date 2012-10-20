@@ -40,56 +40,57 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: LinePlacementConstraints.java 13606 2007-09-10 15:47:11Z jaume $
-* $Log$
-* Revision 1.11  2007-09-10 15:47:11  jaume
-* *** empty log message ***
-*
-* Revision 1.10  2007/05/22 10:05:31  jaume
-* *** empty log message ***
-*
-* Revision 1.9  2007/05/08 08:47:40  jaume
-* *** empty log message ***
-*
-* Revision 1.8  2007/04/18 15:35:11  jaume
-* *** empty log message ***
-*
-* Revision 1.7  2007/04/13 11:59:30  jaume
-* *** empty log message ***
-*
-* Revision 1.6  2007/04/12 16:01:11  jaume
-* *** empty log message ***
-*
-* Revision 1.5  2007/04/12 14:28:43  jaume
-* basic labeling support for lines
-*
-* Revision 1.4  2007/04/11 16:01:08  jaume
-* maybe a label placer refactor
-*
-* Revision 1.3  2007/04/02 16:34:56  jaume
-* Styled labeling (start commiting)
-*
-* Revision 1.2  2007/03/09 08:33:43  jaume
-* *** empty log message ***
-*
-* Revision 1.1.2.1  2007/02/09 07:47:05  jaume
-* Isymbol moved
-*
-*
-*/
+ *
+ * $Id: LinePlacementConstraints.java 13606 2007-09-10 15:47:11Z jaume $
+ * $Log$
+ * Revision 1.11  2007-09-10 15:47:11  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.10  2007/05/22 10:05:31  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.9  2007/05/08 08:47:40  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.8  2007/04/18 15:35:11  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.7  2007/04/13 11:59:30  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.6  2007/04/12 16:01:11  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.5  2007/04/12 14:28:43  jaume
+ * basic labeling support for lines
+ *
+ * Revision 1.4  2007/04/11 16:01:08  jaume
+ * maybe a label placer refactor
+ *
+ * Revision 1.3  2007/04/02 16:34:56  jaume
+ * Styled labeling (start commiting)
+ *
+ * Revision 1.2  2007/03/09 08:33:43  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1.2.1  2007/02/09 07:47:05  jaume
+ * Isymbol moved
+ *
+ *
+ */
 package org.gvsig.symbology.fmap.labeling.placements;
 
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.IPlacementConstraints;
 import com.iver.utiles.XMLEntity;
+
 /**
- *
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
 public class LinePlacementConstraints extends AbstractPlacementConstraints {
-//	private static final double HALF_PI = Math.PI * 0.5;
-//	private Hashtable textPaths = new Hashtable(), texts = new Hashtable();
+	// private static final double HALF_PI = Math.PI * 0.5;
+	// private Hashtable textPaths = new Hashtable(), texts = new Hashtable();
 
 	public LinePlacementConstraints() {
 		super();
@@ -108,13 +109,13 @@ public class LinePlacementConstraints extends AbstractPlacementConstraints {
 		return xml;
 	}
 
-
-//	private TextPath getTreePath(Integer index, Graphics2D g, FShape shp, char[] text) {
-//		TextPath tp = (TextPath) textPaths.get(index);
-//		if (tp == null) {
-//			tp = new TextPath(g, shp, text);
-//			textPaths.put(index, tp);
-//		}
-//		return tp;
-//	}
+	// private TextPath getTreePath(Integer index, Graphics2D g, FShape shp,
+	// char[] text) {
+	// TextPath tp = (TextPath) textPaths.get(index);
+	// if (tp == null) {
+	// tp = new TextPath(g, shp, text);
+	// textPaths.put(index, tp);
+	// }
+	// return tp;
+	// }
 }

@@ -50,65 +50,55 @@ import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 
 /**
- * @author fjp
- * featureList es un array de IFeature.
- * Los campos que tiene cada feature son:
- * 0-> Id_Tramo (idArc sobre el que está ese tramo de ruta.
- * 1-> Weight
- * 2-> Length
- * 3-> Texto calle o via por la que pasa.
- *
+ * @author fjp featureList es un array de IFeature. Los campos que tiene cada
+ *         feature son: 0-> Id_Tramo (idArc sobre el que está ese tramo de ruta.
+ *         1-> Weight 2-> Length 3-> Texto calle o via por la que pasa.
+ * 
  */
 public class Route {
-	
+
 	public static final int ID_ARC_INDEX = 0;
 	public static final int WEIGHT_INDEX = 1;
 	public static final int LENGTH_INDEX = 2;
 	public static final int TEXT_INDEX = 3;
-	
-	
-	
-	
-	
-	
-	
-	public IFeature addRouteFeature(IGeometry geom, int idArc, double weight, double length, String text)
-	{
+
+	public IFeature addRouteFeature(IGeometry geom, int idArc, double weight,
+			double length, String text) {
 		Value[] values = new Value[4];
 		values[0] = ValueFactory.createValue(idArc);
 		values[1] = ValueFactory.createValue(weight);
 		values[2] = ValueFactory.createValue(length);
 		values[3] = ValueFactory.createValue(text);
 		// System.out.println("Añado text= " + idArc + ": " + text);
-		DefaultFeature feat = new DefaultFeature(geom, values, featureList.size() + "");
+		DefaultFeature feat = new DefaultFeature(geom, values,
+				featureList.size() + "");
 		featureList.add(feat);
 		return feat;
 	}
+
 	private ArrayList featureList = new ArrayList();
-	
-	public ArrayList getFeatureList() 
-	{
+
+	public ArrayList getFeatureList() {
 		return featureList;
 	}
-	
+
 	public String getInstructions() {
 		String instructions = "";
-		double  distTotal = 0;
-		for (int i=featureList.size()-1; i>=0; i--)
-		{
+		double distTotal = 0;
+		for (int i = featureList.size() - 1; i >= 0; i--) {
 			IFeature feat = (IFeature) featureList.get(i);
 			DoubleValue length = (DoubleValue) feat.getAttribute(2);
 			double dist = length.doubleValue();
 			distTotal += dist;
-			instructions = instructions + "\n" + feat.getAttribute(3) + " dist=" + dist;
+			instructions = instructions + "\n" + feat.getAttribute(3)
+					+ " dist=" + dist;
 		}
 		return instructions;
 	}
-	
+
 	public double getLength() {
-		double  distTotal = 0;
-		for (int i=0; i < featureList.size(); i++)
-		{
+		double distTotal = 0;
+		for (int i = 0; i < featureList.size(); i++) {
 			IFeature feat = (IFeature) featureList.get(i);
 			DoubleValue length = (DoubleValue) feat.getAttribute(2);
 			double dist = length.doubleValue();
@@ -116,18 +106,15 @@ public class Route {
 		}
 		return distTotal;
 	}
-	
+
 	public double getCost() {
-		double  costTotal = 0;
-		for (int i=0; i < featureList.size(); i++)
-		{
+		double costTotal = 0;
+		for (int i = 0; i < featureList.size(); i++) {
 			IFeature feat = (IFeature) featureList.get(i);
 			DoubleValue costVal = (DoubleValue) feat.getAttribute(1);
 			double cost = costVal.doubleValue();
 			costTotal += cost;
 		}
-		return costTotal;		
+		return costTotal;
 	}
 }
-
-

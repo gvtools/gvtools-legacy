@@ -49,19 +49,20 @@ import com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener;
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.LayoutPointListener;
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.LayoutToolListener;
 
-
 /**
  * LayoutBehaviour que espera un listener de tipo LayoutPointListener.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
-public class LayoutPointBehavior extends LayoutBehavior{
+public class LayoutPointBehavior extends LayoutBehavior {
 	private LayoutPointListener listener;
-	private boolean doubleClick=false;
+	private boolean doubleClick = false;
+
 	/**
 	 * Crea un nuevo LayoutPointBehavior.
-	 *
-	 * @param l listener.
+	 * 
+	 * @param l
+	 *            listener.
 	 */
 	public LayoutPointBehavior(LayoutPointListener l) {
 		listener = l;
@@ -69,39 +70,44 @@ public class LayoutPointBehavior extends LayoutBehavior{
 
 	/**
 	 * Reimplementación del método mousePressed de Behavior.
-	 *
-	 * @param e MouseEvent
+	 * 
+	 * @param e
+	 *            MouseEvent
 	 * @throws BehaviorException
 	 */
 	public void mousePressed(MouseEvent e) throws BehaviorException {
 		super.mousePressed(e);
 		if (listener.cancelDrawing()) {
-		//	getMapControl().cancelDrawing();
+			// getMapControl().cancelDrawing();
 		}
-		if (e.getClickCount()==2){
-			doubleClick=true;
+		if (e.getClickCount() == 2) {
+			doubleClick = true;
 		}
 	}
+
 	/**
 	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#paintComponent(java.awt.Graphics)
 	 */
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 	}
+
 	/**
 	 * Reimplementación del método mouseReleased de Behavior.
-	 *
-	 * @param e MouseEvent
-	 *
-	 * @throws BehaviorException Excepción lanzada cuando el Maptool.
+	 * 
+	 * @param e
+	 *            MouseEvent
+	 * 
+	 * @throws BehaviorException
+	 *             Excepción lanzada cuando el Maptool.
 	 */
 	public void mouseReleased(MouseEvent e) throws BehaviorException {
 		super.mouseReleased(e);
 		PointEvent event = new PointEvent(e.getPoint(), e);
 		listener.point(event);
-		if (doubleClick){
+		if (doubleClick) {
 			listener.pointDoubleClick(event);
-			doubleClick=false;
+			doubleClick = false;
 		}
 	}
 
@@ -121,7 +127,7 @@ public class LayoutPointBehavior extends LayoutBehavior{
 
 	public void mouseMoved(MouseEvent e) throws BehaviorException {
 		super.mouseMoved(e);
-		 getLayoutControl().setGeometryAdapterPoinPosition();
+		getLayoutControl().setGeometryAdapterPoinPosition();
 	}
 
 	public boolean isAdjustable() {

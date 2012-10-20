@@ -50,10 +50,11 @@ import com.iver.cit.gvsig.fmap.core.IRow;
 import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 import com.iver.cit.gvsig.layers.VectorialLayerEdited;
 import com.iver.utiles.swing.jtable.JTable;
+
 /**
- *
+ * 
  * @author Vicente Caballero Navarro
- *
+ * 
  */
 public class SelectRowPanel extends JPanel implements IWindow {
 
@@ -140,7 +141,6 @@ public class SelectRowPanel extends JPanel implements IWindow {
 		return cancel;
 	}
 
-	@SuppressWarnings("unchecked")
 	private JTable getTable() {
 		if (jTable == null) {
 
@@ -153,8 +153,7 @@ public class SelectRowPanel extends JPanel implements IWindow {
 
 			jTable.setCellSelectionEnabled(false);
 			jTable.setRowSelectionAllowed(true);
-			jTable
-					.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+			jTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		}
 		return jTable;
 	}
@@ -190,9 +189,10 @@ public class SelectRowPanel extends JPanel implements IWindow {
 					PluginServices.getMDIManager().closeWindow(
 							SelectRowPanel.this);
 				} else {
-					JOptionPane.showMessageDialog(null, PluginServices.getText(
-							this, "select_one_row"), PluginServices.getText(
-							this, "attention"), JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(null,
+							PluginServices.getText(this, "select_one_row"),
+							PluginServices.getText(this, "attention"),
+							JOptionPane.WARNING_MESSAGE);
 				}
 			}
 			if (e.getSource().equals(cancel)) {

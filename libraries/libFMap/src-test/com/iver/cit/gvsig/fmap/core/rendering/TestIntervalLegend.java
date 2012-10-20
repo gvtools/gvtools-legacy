@@ -1,4 +1,4 @@
- /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -40,8 +40,6 @@
  */
 package com.iver.cit.gvsig.fmap.core.rendering;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -49,25 +47,18 @@ import junit.framework.TestCase;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.Value;
-import com.iver.cit.gvsig.fmap.core.DefaultFeature;
-import com.iver.cit.gvsig.fmap.core.GeneralPathX;
 import com.iver.cit.gvsig.fmap.core.IFeature;
-import com.iver.cit.gvsig.fmap.core.IGeometry;
-import com.iver.cit.gvsig.fmap.core.ShapeFactory;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.TestISymbol;
 import com.iver.cit.gvsig.fmap.rendering.AbstractIntervalLegend;
 import com.iver.cit.gvsig.fmap.rendering.FInterval;
-import com.iver.cit.gvsig.fmap.rendering.IClassifiedLegend;
-import com.iver.cit.gvsig.fmap.rendering.IClassifiedVectorLegend;
 import com.iver.cit.gvsig.fmap.rendering.ILegend;
-import com.iver.cit.gvsig.fmap.rendering.IVectorialIntervalLegend;
 
 /**
  * Integration test to ensure that the legends which implements the
- * IVectorialIntervalLegend interface (and extend AbstractIntervalLegend)
- * follow the rules that manage them by the application.
- *
+ * IVectorialIntervalLegend interface (and extend AbstractIntervalLegend) follow
+ * the rules that manage them by the application.
+ * 
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
 public class TestIntervalLegend extends TestCase {
@@ -85,27 +76,25 @@ public class TestIntervalLegend extends TestCase {
 
 			}
 		}
-		this.legends = (AbstractIntervalLegend[]) legends.
-			toArray(new AbstractIntervalLegend[legends.size()]);
+		this.legends = (AbstractIntervalLegend[]) legends
+				.toArray(new AbstractIntervalLegend[legends.size()]);
 	}
 
-
-	public static final FInterval interval0=new FInterval(0,2);
-	public static final FInterval interval1=new FInterval(3,5);
-	public static final FInterval interval2=new FInterval(6,8);
-	public static final FInterval interval3=new FInterval(9,11);
+	public static final FInterval interval0 = new FInterval(0, 2);
+	public static final FInterval interval1 = new FInterval(3, 5);
+	public static final FInterval interval2 = new FInterval(6, 8);
+	public static final FInterval interval3 = new FInterval(9, 11);
 	private static final int FIELDID = 0;
 
 	private Hashtable<FInterval, ISymbol> symTable;
 
 	private ISymbol[] symbols = TestISymbol.getNewSymbolInstances();
-	private FInterval[] sampleIntervals = new FInterval[] { interval0, interval1, interval2, interval3, };
+	private FInterval[] sampleIntervals = new FInterval[] { interval0,
+			interval1, interval2, interval3, };
 	private IFeature[] features = AbstractVectorLegendTestCase.getFeatures();
 
-	
-
 	public void testGetSymbolByFeature() {
-		ISymbol tableSym =null;
+		ISymbol tableSym = null;
 
 		// fills the legends
 		for (int i = 0; i < legends.length; i++) {
@@ -121,13 +110,13 @@ public class TestIntervalLegend extends TestCase {
 				// the last value is used to access to the hash table to obtain
 				// a symbol
 
-				if(interval0.isInInterval(val))
+				if (interval0.isInInterval(val))
 					tableSym = symTable.get(interval0);
-				else if(interval1.isInInterval(val))
+				else if (interval1.isInInterval(val))
 					tableSym = symTable.get(interval1);
-				else if(interval2.isInInterval(val))
+				else if (interval2.isInInterval(val))
 					tableSym = symTable.get(interval2);
-				else if(interval3.isInInterval(val))
+				else if (interval3.isInInterval(val))
 					tableSym = symTable.get(interval3);
 
 				// takes the symbol from a legend using the feature
@@ -142,11 +131,11 @@ public class TestIntervalLegend extends TestCase {
 
 	/**
 	 * This method is used to add symbols to a legend.That is, it takes an array
-	 * of AbstractIntervalLegend which is empty and, using a second array
-	 * of FIntervals(values), the first one is filled.Also, a hash table is filled
+	 * of AbstractIntervalLegend which is empty and, using a second array of
+	 * FIntervals(values), the first one is filled.Also, a hash table is filled
 	 * using the array of FIntervals (it will be useful in some tests to check
 	 * that a symbol can be taken using a feature) .
-	 *
+	 * 
 	 * @param legend
 	 * @return
 	 */
@@ -164,32 +153,32 @@ public class TestIntervalLegend extends TestCase {
 		}
 	}
 
-//	 public IInterval getInterval(Value v) ;
-//	    public int getIntervalType();
-//	   
-//	   
-//		/**
-//		 * 
-//		 * Returns the symbol starting from an interval
-//		 *
-//		 * @param key interval.
-//		 *
-//		 * @return symbol.
-//		 */
-//	    public ISymbol getSymbolByInterval(IInterval key);
-//
-//	    /**
-//	     * Inserts the type of the classification of the intervals.
-//		 *
-//		 * @param tipoClasificacion type of the classification.
-//		 */
-//	    public void setIntervalType(int tipoClasificacion);
+	// public IInterval getInterval(Value v) ;
+	// public int getIntervalType();
+	//
+	//
+	// /**
+	// *
+	// * Returns the symbol starting from an interval
+	// *
+	// * @param key interval.
+	// *
+	// * @return symbol.
+	// */
+	// public ISymbol getSymbolByInterval(IInterval key);
+	//
+	// /**
+	// * Inserts the type of the classification of the intervals.
+	// *
+	// * @param tipoClasificacion type of the classification.
+	// */
+	// public void setIntervalType(int tipoClasificacion);
 	/**
 	 * This test ensures that when a legend is filled, the number of symbols
 	 * added is correct. To do it, is checked that the number of symbols of a
 	 * legend is the same as the length of the array of example values that we
 	 * have.
-	 *
+	 * 
 	 * @throws ReadDriverException
 	 */
 	public void testICLAdittion() throws ReadDriverException {
@@ -202,8 +191,7 @@ public class TestIntervalLegend extends TestCase {
 		for (int i = 0; i < legends.length; i++)
 			assertEquals(legends[i].getClassName()
 					+ " fails with the comparation of the number of symbols",
-					legends[i].getSymbols().length,
-					sampleIntervals.length);
+					legends[i].getSymbols().length, sampleIntervals.length);
 
 	}
 
@@ -212,48 +200,46 @@ public class TestIntervalLegend extends TestCase {
 	 * legend are accessible using its features.To do it, this test compares the
 	 * symbol taken from the legend with the symbol taken from the hashTable
 	 * (using the same feature).
-	 *
+	 * 
 	 * @throws ReadDriverException
 	 */
 
 	public void testICLCheckValueSymbols() throws ReadDriverException {
-		  ISymbol tableSym =null;
+		ISymbol tableSym = null;
 
-		  // fills the legends
-		  for (int i = 0; i < legends.length; i++) {
-		   fillClassifiedIntervalLegend(legends[i], sampleIntervals);
-		  }
+		// fills the legends
+		for (int i = 0; i < legends.length; i++) {
+			fillClassifiedIntervalLegend(legends[i], sampleIntervals);
+		}
 
-		  for (int i = 0; i < legends.length; i++) {
-		   // For each feature
-		   for (int j = 0; j < features.length; j++) {
-		    IFeature myFeature = features[i];
-		    // takes the value of the field that identifies the feature
-		    Value val = myFeature.getAttributes()[FIELDID];
-		    // the last value is used to access to the hash table to obtain
-		    // a symbol
+		for (int i = 0; i < legends.length; i++) {
+			// For each feature
+			for (int j = 0; j < features.length; j++) {
+				IFeature myFeature = features[i];
+				// takes the value of the field that identifies the feature
+				Value val = myFeature.getAttributes()[FIELDID];
+				// the last value is used to access to the hash table to obtain
+				// a symbol
 
-		    if(interval0.isInInterval(val))
-		     tableSym = (ISymbol) symTable.get(interval0);
-		    else if(interval1.isInInterval(val))
-		     tableSym = (ISymbol) symTable.get(interval1);
-		    else if(interval2.isInInterval(val))
-		     tableSym = (ISymbol) symTable.get(interval2);
-		    else if(interval3.isInInterval(val))
-		     tableSym = (ISymbol) symTable.get(interval3);
+				if (interval0.isInInterval(val))
+					tableSym = (ISymbol) symTable.get(interval0);
+				else if (interval1.isInInterval(val))
+					tableSym = (ISymbol) symTable.get(interval1);
+				else if (interval2.isInInterval(val))
+					tableSym = (ISymbol) symTable.get(interval2);
+				else if (interval3.isInInterval(val))
+					tableSym = (ISymbol) symTable.get(interval3);
 
-		    AbstractIntervalLegend leg = (AbstractIntervalLegend) legends[i];
-		    // takes the symbol from a legend using the feature
-		    ISymbol legendSym = leg.getSymbolByFeature(myFeature);
-		    // compares that both symbols are the same
-		    assertEquals(legendSym.getClassName()
-		      + " fails with the comparation of the class symbols",
-		      legendSym, tableSym);
-		   }
-		  }
-		
+				AbstractIntervalLegend leg = (AbstractIntervalLegend) legends[i];
+				// takes the symbol from a legend using the feature
+				ISymbol legendSym = leg.getSymbolByFeature(myFeature);
+				// compares that both symbols are the same
+				assertEquals(legendSym.getClassName()
+						+ " fails with the comparation of the class symbols",
+						legendSym, tableSym);
+			}
+		}
+
 	}
 
 }
-
-

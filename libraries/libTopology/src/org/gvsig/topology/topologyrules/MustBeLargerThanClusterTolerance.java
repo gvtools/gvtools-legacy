@@ -76,39 +76,39 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.utiles.XMLEntity;
 import com.vividsolutions.jts.geom.Geometry;
 
-
 /**
- * For lines o polygons. The lenght of a line or the perimeter
- * of a polygon must be larger than the cluster tolerance.
+ * For lines o polygons. The lenght of a line or the perimeter of a polygon must
+ * be larger than the cluster tolerance.
  * 
  * Two consecutives points at a distance lower than cluster tolerance must be
  * deleted.
- *
- *
+ * 
+ * 
  * @author azabala
  */
-public class MustBeLargerThanClusterTolerance extends AbstractTopologyRule implements  IRuleWithClusterTolerance {
- 
-	private static  final String RULE_NAME = Messages.getText("must_be_larger_than_cluster_tolerance");
-	
+public class MustBeLargerThanClusterTolerance extends AbstractTopologyRule
+		implements IRuleWithClusterTolerance {
+
+	private static final String RULE_NAME = Messages
+			.getText("must_be_larger_than_cluster_tolerance");
+
 	/**
-	 * Predefinex automatic fixes for those topology errors caused by this 
-	 * rule violation.
+	 * Predefinex automatic fixes for those topology errors caused by this rule
+	 * violation.
 	 */
-	private static List<ITopologyErrorFix> errorFixes = 
-		new ArrayList<ITopologyErrorFix>();
-	
-	static{
+	private static List<ITopologyErrorFix> errorFixes = new ArrayList<ITopologyErrorFix>();
+
+	static {
 		errorFixes.add(new DeleteTopologyErrorFix());
 	}
-	
+
 	private static final Color DEFAULT_ERROR_COLOR = Color.ORANGE;
-	
-	//this symbol is multishape because this topology rule applies to lines or polygons
-	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = 
-		(MultiShapeSymbol) SymbologyFactory.createDefaultSymbolByShapeType(FShape.MULTI, 
-											DEFAULT_ERROR_COLOR);
-	static{
+
+	// this symbol is multishape because this topology rule applies to lines or
+	// polygons
+	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = (MultiShapeSymbol) SymbologyFactory
+			.createDefaultSymbolByShapeType(FShape.MULTI, DEFAULT_ERROR_COLOR);
+	static {
 		DEFAULT_ERROR_SYMBOL.setDescription(RULE_NAME);
 		DEFAULT_ERROR_SYMBOL.setSize(1);
 		DEFAULT_ERROR_SYMBOL.setLineWidth(1);
@@ -116,85 +116,89 @@ public class MustBeLargerThanClusterTolerance extends AbstractTopologyRule imple
 		DEFAULT_ERROR_SYMBOL.setFillColor(DEFAULT_ERROR_COLOR);
 	}
 
-		
-	 /**
-	  * Cluster tolerance to check.
-	  */
+	/**
+	 * Cluster tolerance to check.
+	 */
 	private double clusterTolerance;
-	
+
 	/**
 	 * Snapper to check coords proximity of a given geometry
 	 */
 	private GeometrySnapper geometrySnapper;
-	
+
 	/**
 	 * Symbol for topology errors caused by a violation of this rule.
 	 */
 	private MultiShapeSymbol errorSymbol = DEFAULT_ERROR_SYMBOL;
-	
-	
-	
-	public MustBeLargerThanClusterTolerance(Topology topology, FLyrVect originLyr, double clusterTolerance){
+
+	public MustBeLargerThanClusterTolerance(Topology topology,
+			FLyrVect originLyr, double clusterTolerance) {
 		super(topology, originLyr);
 		setClusterTolerance(clusterTolerance);
 	}
-	
-	public MustBeLargerThanClusterTolerance(FLyrVect originLyr, double clusterTolerance){
+
+	public MustBeLargerThanClusterTolerance(FLyrVect originLyr,
+			double clusterTolerance) {
 		this(null, originLyr, clusterTolerance);
 	}
-	
-	public MustBeLargerThanClusterTolerance(){}
-	
-	
+
+	public MustBeLargerThanClusterTolerance() {
+	}
+
 	public String getName() {
 		return RULE_NAME;
 	}
-	
-	
+
 	public void checkPreconditions() throws TopologyRuleDefinitionException {
-		//This rule doesnt apply to Point or MultiPoint vectorial layers.
+		// This rule doesnt apply to Point or MultiPoint vectorial layers.
 		try {
 			int shapeType = this.originLyr.getShapeType();
-			if( (shapeType == FShape.POINT) || (shapeType == FShape.MULTIPOINT) || (shapeType == FShape.TEXT))
+			if ((shapeType == FShape.POINT) || (shapeType == FShape.MULTIPOINT)
+					|| (shapeType == FShape.TEXT))
 				throw new TopologyRuleDefinitionException();
 		} catch (ReadDriverException e) {
 			e.printStackTrace();
-			throw new TopologyRuleDefinitionException("Error leyendo el tipo de geometria del driver",e);
-		}	
+			throw new TopologyRuleDefinitionException(
+					"Error leyendo el tipo de geometria del driver", e);
+		}
 	}
 
 	/**
 	 * Validates this rule with a feature of the origin layer
-	 * @param feature feature of the origin layer this rule is checking
+	 * 
+	 * @param feature
+	 *            feature of the origin layer this rule is checking
 	 */
 	public void validateFeature(IFeature feature) {
 		IGeometry geometry = feature.getGeometry();
 		Geometry jtsGeometry = NewFConverter.toJtsGeometry(geometry);
 		try {
-			if(FGeometryUtil.getDimensions(originLyr.getShapeType()) == 2){
-				//for polygons we dont try to collapse and use isValid
-				//because self intersecting polygons will return false
+			if (FGeometryUtil.getDimensions(originLyr.getShapeType()) == 2) {
+				// for polygons we dont try to collapse and use isValid
+				// because self intersecting polygons will return false
 				double area = jtsGeometry.getArea();
 				double minArea = clusterTolerance * clusterTolerance;
-				if(area < minArea){
-					TopologyError topologyError = new TopologyError(geometry, this, feature, topology);
+				if (area < minArea) {
+					TopologyError topologyError = new TopologyError(geometry,
+							this, feature, topology);
 					topologyError.setID(errorContainer.getErrorFid());
 					addTopologyError(topologyError);
 				}
-			}else{
+			} else {
 				geometrySnapper.snap(jtsGeometry);
-				
+
 			}
 		} catch (ReadDriverException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}catch(GeometryCollapsedException e){
-			//use an ErrorFactory
-			TopologyError topologyError = new TopologyError(geometry, this, feature, topology);
+		} catch (GeometryCollapsedException e) {
+			// use an ErrorFactory
+			TopologyError topologyError = new TopologyError(geometry, this,
+					feature, topology);
 			topologyError.setID(errorContainer.getErrorFid());
 			addTopologyError(topologyError);
 		}
-		
+
 	}
 
 	public double getClusterTolerance() {
@@ -204,18 +208,18 @@ public class MustBeLargerThanClusterTolerance extends AbstractTopologyRule imple
 	public void setClusterTolerance(double clusterTolerance) {
 		this.clusterTolerance = clusterTolerance;
 		this.geometrySnapper = new GeometrySnapper(clusterTolerance);
-	} 
-	
-	public XMLEntity getXMLEntity(){
+	}
+
+	public XMLEntity getXMLEntity() {
 		XMLEntity xml = super.getXMLEntity();
 		xml.putProperty("className", getClassName());
 		xml.putProperty("clusterTolerance", this.clusterTolerance);
 		return xml;
 	}
-	    
-	public void setXMLEntity(XMLEntity xml){
+
+	public void setXMLEntity(XMLEntity xml) {
 		super.setXMLEntity(xml);
-		if(xml.contains("clusterTolerance")){
+		if (xml.contains("clusterTolerance")) {
 			setClusterTolerance(xml.getDoubleProperty("clusterTolerance"));
 		}
 	}
@@ -243,9 +247,8 @@ public class MustBeLargerThanClusterTolerance extends AbstractTopologyRule imple
 	public void setErrorSymbol(MultiShapeSymbol errorSymbol) {
 		this.errorSymbol = errorSymbol;
 	}
-	
-	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError){
+
+	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError) {
 		return errorFixes.get(0);
 	}
 }
- 

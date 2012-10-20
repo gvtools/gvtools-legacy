@@ -31,15 +31,17 @@ import org.gvsig.gui.beans.slidertext.SliderTextContainer;
 import org.gvsig.gui.beans.slidertext.listeners.SliderListener;
 
 import com.iver.andami.PluginServices;
+
 /**
  * Panel para los controles de brillo y contrase .
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
-public class EnhancedBrightnessContrastPanel extends JPanel implements ActionListener {
+public class EnhancedBrightnessContrastPanel extends JPanel implements
+		ActionListener {
 	private static final long serialVersionUID = -475762560608930500L;
-	private InternalPanel     internalPanel    = null;
-	private JCheckBox         active           = null;
+	private InternalPanel internalPanel = null;
+	private JCheckBox active = null;
 
 	/**
 	 * Panel con los controles deslizantes de brillo y contraste
@@ -47,7 +49,7 @@ public class EnhancedBrightnessContrastPanel extends JPanel implements ActionLis
 	 * @author Nacho Brodin (nachobrodin@gmail.com)
 	 */
 	class InternalPanel extends JPanel {
-		final private static long	serialVersionUID = 0;
+		final private static long serialVersionUID = 0;
 		protected SliderTextContainer brightness = null;
 		protected SliderTextContainer contrast = null;
 
@@ -70,7 +72,9 @@ public class EnhancedBrightnessContrastPanel extends JPanel implements ActionLis
 
 		/**
 		 * Activa o desactiva el control
-		 * @param enable true activa y false desactiva los controles del panel
+		 * 
+		 * @param enable
+		 *            true activa y false desactiva los controles del panel
 		 */
 		public void setControlEnabled(boolean enabled) {
 			brightness.setControlEnabled(enabled);
@@ -88,7 +92,10 @@ public class EnhancedBrightnessContrastPanel extends JPanel implements ActionLis
 	}
 
 	private void initialize() {
-		setBorder(javax.swing.BorderFactory.createTitledBorder(null, PluginServices.getText(this, "brillo_y_contraste"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+		setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+				PluginServices.getText(this, "brillo_y_contraste"),
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
 		setLayout(new BorderLayout());
 		add(getActive(), BorderLayout.NORTH);
 		add(internalPanel, BorderLayout.CENTER);
@@ -98,6 +105,7 @@ public class EnhancedBrightnessContrastPanel extends JPanel implements ActionLis
 
 	/**
 	 * Obtiene el check de activar
+	 * 
 	 * @return
 	 */
 	public JCheckBox getActive() {
@@ -111,60 +119,70 @@ public class EnhancedBrightnessContrastPanel extends JPanel implements ActionLis
 
 	/**
 	 * Activa o desactiva el control
-	 * @param enable true activa y false desactiva los controles del panel
+	 * 
+	 * @param enable
+	 *            true activa y false desactiva los controles del panel
 	 */
-	public void setControlEnabled(boolean enabled){
+	public void setControlEnabled(boolean enabled) {
 		this.getActive().setSelected(enabled);
 		internalPanel.setControlEnabled(enabled);
 	}
 
 	/**
 	 * Obtiene el valor del brillo que hay seleccionado en el control
-	 * @return double que representa el contraste seleccionado. Puede hacerse un casting a entero ya que 
-	 * no se consideran decimales
+	 * 
+	 * @return double que representa el contraste seleccionado. Puede hacerse un
+	 *         casting a entero ya que no se consideran decimales
 	 */
-	public double getBrightnessValue(){
+	public double getBrightnessValue() {
 		return internalPanel.brightness.getValue();
 	}
 
 	/**
 	 * Obtiene el valor del contraste que hay seleccionado en el control
-	 * @return double que representa el contraste seleccionado. Puede hacerse un casting a entero ya que 
-	 * no se consideran decimales
+	 * 
+	 * @return double que representa el contraste seleccionado. Puede hacerse un
+	 *         casting a entero ya que no se consideran decimales
 	 */
-	public double getContrastValue(){
+	public double getContrastValue() {
 		return internalPanel.contrast.getValue();
 	}
 
 	/**
 	 * Asigna el valor del brillo al control
+	 * 
 	 * @param value
 	 */
-	public void setBrightnessValue(double value){
+	public void setBrightnessValue(double value) {
 		internalPanel.brightness.setValue(value);
 	}
 
 	/**
 	 * Asigna el valor del contraste al control
+	 * 
 	 * @param value
 	 */
-	public void setContrastValue(double value){
+	public void setContrastValue(double value) {
 		internalPanel.contrast.setValue(value);
 	}
 
 	/**
 	 * Añade un listener para el slider de brillo
-	 * @param l ChangeListener
+	 * 
+	 * @param l
+	 *            ChangeListener
 	 */
-	public void addBrightnessValueChangedListener(SliderListener l){
+	public void addBrightnessValueChangedListener(SliderListener l) {
 		internalPanel.brightness.addValueChangedListener(l);
 	}
 
 	/**
 	 * Añade un listener para el slider de contraste
-	 * @param l ChangeListener
+	 * 
+	 * @param l
+	 *            ChangeListener
 	 */
-	public void addContrastValueChangedListener(SliderListener l){
+	public void addContrastValueChangedListener(SliderListener l) {
 		internalPanel.contrast.addValueChangedListener(l);
 	}
 

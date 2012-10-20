@@ -44,32 +44,32 @@ import java.util.Hashtable;
 
 /**
  * Clase que extiende de BitSet para poder añadirle más funcionalidad.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FBitSet extends java.util.BitSet {
-    private Hashtable hashtab;
-    private boolean isRandom;
-    
-    boolean isIdSelected(String ID)
-    {
-        return hashtab.containsKey(ID);
-    }
+	private Hashtable hashtab;
+	private boolean isRandom;
 
-    /**
-     * @return Returns the isRandom.
-     */
-    public boolean isRandom() {
-        return isRandom;
-    }
+	boolean isIdSelected(String ID) {
+		return hashtab.containsKey(ID);
+	}
 
-    /**
-     * If true, this FBitSet can be used with
-     * Random Access layers like shp files.
-     * If not set, use Hashtable and add
-     * @param isRandom The isRandom to set.
-     */
-    public void setRandom(boolean isRandom) {
-        this.isRandom = isRandom;
-    }
+	/**
+	 * @return Returns the isRandom.
+	 */
+	public boolean isRandom() {
+		return isRandom;
+	}
+
+	/**
+	 * If true, this FBitSet can be used with Random Access layers like shp
+	 * files. If not set, use Hashtable and add
+	 * 
+	 * @param isRandom
+	 *            The isRandom to set.
+	 */
+	public void setRandom(boolean isRandom) {
+		this.isRandom = isRandom;
+	}
 }

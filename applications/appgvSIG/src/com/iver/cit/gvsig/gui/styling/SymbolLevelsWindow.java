@@ -93,15 +93,16 @@ import com.iver.cit.gvsig.fmap.rendering.ZSort;
 import com.iver.cit.gvsig.project.documents.gui.TableSymbolCellRenderer;
 
 /**
- * Creates a panel to specify an order for the symbols of a map. This order
- * is important when the map is going to be painted because, apart from that
- * the waste of time can be less, the final representation of the map will
- * depend on this order.
- *
- *
+ * Creates a panel to specify an order for the symbols of a map. This order is
+ * important when the map is going to be painted because, apart from that the
+ * waste of time can be less, the final representation of the map will depend on
+ * this order.
+ * 
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
-public class SymbolLevelsWindow extends JPanel implements IWindow, ActionListener {
+public class SymbolLevelsWindow extends JPanel implements IWindow,
+		ActionListener {
 	private static final long serialVersionUID = 3241898997869313055L;
 	private static final int DESCRIPTION_COLUMN_INDEX = 1;
 	private static final int SYMBOL_COLUMN_INDEX = 0;
@@ -109,11 +110,10 @@ public class SymbolLevelsWindow extends JPanel implements IWindow, ActionListene
 	private static final int JOIN_COLUMN_INDEX = 2;
 	private static final int FIRST_LEVEL_COLUMN_INDEX = 2;
 	private static final String[] defaultHeaders = new String[] {
-		PluginServices.getText(SymbolLevelsWindow.class, "symbol"),
-		PluginServices.getText(SymbolLevelsWindow.class, "description"),
-		PluginServices.getText(SymbolLevelsWindow.class, "join"),
-		PluginServices.getText(SymbolLevelsWindow.class, "merge"),
-	};
+			PluginServices.getText(SymbolLevelsWindow.class, "symbol"),
+			PluginServices.getText(SymbolLevelsWindow.class, "description"),
+			PluginServices.getText(SymbolLevelsWindow.class, "join"),
+			PluginServices.getText(SymbolLevelsWindow.class, "merge"), };
 	private static final int DEFAULT_VIEW = 0;
 	private static final int ADVANCED_VIEW = 1;
 	private static int viewMode = ADVANCED_VIEW;
@@ -143,25 +143,25 @@ public class SymbolLevelsWindow extends JPanel implements IWindow, ActionListene
 	};
 
 	public WindowInfo getWindowInfo() {
-		WindowInfo wi = new WindowInfo(WindowInfo.RESIZABLE | WindowInfo.MODALDIALOG);
+		WindowInfo wi = new WindowInfo(WindowInfo.RESIZABLE
+				| WindowInfo.MODALDIALOG);
 		wi.setTitle(PluginServices.getText(this, "symbol_levels"));
-		wi.setWidth(getWidth()+10);
+		wi.setWidth(getWidth() + 10);
 		wi.setHeight(getHeight());
 		return wi;
 	}
+
 	/**
 	 * Completes the main table of the panel with the symbols contained in the
 	 * legend of the map.
-	 *
+	 * 
 	 */
 	private void applyValues() {
 
 		// update symbol order
 		TableModel model = tblLevels.getModel();
 
-
-
-		Hashtable<ISymbol, int[] > aTable = new Hashtable<ISymbol, int[]>();
+		Hashtable<ISymbol, int[]> aTable = new Hashtable<ISymbol, int[]>();
 		ISymbol[] symbols = new ISymbol[model.getRowCount()];
 		for (int i = 0; i < symbols.length; i++) {
 			symbols[i] = (ISymbol) model.getValueAt(i, SYMBOL_COLUMN_INDEX);
@@ -175,31 +175,33 @@ public class SymbolLevelsWindow extends JPanel implements IWindow, ActionListene
 			if (viewMode == DEFAULT_VIEW) {
 				// default view (JOIN and MERGE)
 				if (symbols[i] instanceof IMultiLayerSymbol) {
-					boolean join = ((Boolean) model.getValueAt(i, JOIN_COLUMN_INDEX)).booleanValue();
-					boolean merge= ((Boolean) model.getValueAt(i, MERGE_COLUMN_INDEX)).booleanValue();
+					boolean join = ((Boolean) model.getValueAt(i,
+							JOIN_COLUMN_INDEX)).booleanValue();
+					boolean merge = ((Boolean) model.getValueAt(i,
+							MERGE_COLUMN_INDEX)).booleanValue();
 					boolean needToJoin = true;
-					if (merge && i>0) {
-						int j=0;
+					if (merge && i > 0) {
+						int j = 0;
 						try {
-							int[] prevSymbolLevels = aTable.get(symbols[i-1]);
+							int[] prevSymbolLevels = aTable.get(symbols[i - 1]);
 							for (j = 0; j < symbolLevels.length; j++) {
 								symbolLevels[j] = prevSymbolLevels[j];
 							}
 						} catch (IndexOutOfBoundsException ex) {
-							/* perfect, no problem
-							 * the previous symbol has different amount of layers
-							 * that is ok because we just have to replicate
-							 * the values of each cell
+							/*
+							 * perfect, no problem the previous symbol has
+							 * different amount of layers that is ok because we
+							 * just have to replicate the values of each cell
 							 */
 							for (; j < symbolLevels.length; j++) {
-								symbolLevels[j] = symbolLevels[j-1]+1;
+								symbolLevels[j] = symbolLevels[j - 1] + 1;
 							}
 						}
 						needToJoin = false;
 					}
 					if (join && needToJoin) {
 						for (int j = 0; j < symbolLevels.length; j++) {
-							symbolLevels[j] = zSort.getLevelCount()+j+1;
+							symbolLevels[j] = zSort.getLevelCount() + j + 1;
 						}
 					}
 					if (!join && !merge) {
@@ -213,7 +215,8 @@ public class SymbolLevelsWindow extends JPanel implements IWindow, ActionListene
 			} else {
 				// ADVANCED VIEW (user may set map levels manually)
 				for (int j = 0; j < symbolLevels.length; j++) {
-					symbolLevels[j] = ((Integer) model.getValueAt(i, j+FIRST_LEVEL_COLUMN_INDEX)).intValue();
+					symbolLevels[j] = ((Integer) model.getValueAt(i, j
+							+ FIRST_LEVEL_COLUMN_INDEX)).intValue();
 				}
 			}
 
@@ -236,33 +239,38 @@ public class SymbolLevelsWindow extends JPanel implements IWindow, ActionListene
 		quitaEsteMetodo();
 		tblLevels.setRowHeight(23);
 	}
+
 	private void quitaEsteMetodo() {
 		getBtnSwitchView().setEnabled(false);
 		getBtnDown().setEnabled(false);
 		getBtnUp().setEnabled(false);
 	}
+
 	/**
 	 * Sets the model
-	 * @param plan ZSort
+	 * 
+	 * @param plan
+	 *            ZSort
 	 */
 
 	public void setModel(ZSort plan) {
 		advancedHeaders = new String[FIRST_LEVEL_COLUMN_INDEX
-		                             +plan.getTopLevelIndexAllowed() ];
+				+ plan.getTopLevelIndexAllowed()];
 		advancedHeaders[SYMBOL_COLUMN_INDEX] = defaultHeaders[SYMBOL_COLUMN_INDEX];
 		advancedHeaders[DESCRIPTION_COLUMN_INDEX] = defaultHeaders[DESCRIPTION_COLUMN_INDEX];
 		for (int i = 2; i < advancedHeaders.length; i++) {
-			advancedHeaders[i] = String.valueOf(i-1);
+			advancedHeaders[i] = String.valueOf(i - 1);
 		}
 		this.zSort = plan;
 		getChkSpecifyDrawOrder().setSelected(plan.isUsingZSort());
 		initTableContents(getTblLevels(), plan, viewMode);
 	}
+
 	/**
 	 * Initializes the table that it is showed in the panel where the user can
 	 * see the different symbols of the legend and has options to specify the
 	 * level for each one, merge and so on.
-	 *
+	 * 
 	 * @param table
 	 * @param zSort
 	 * @param mode
@@ -271,7 +279,7 @@ public class SymbolLevelsWindow extends JPanel implements IWindow, ActionListene
 		DefaultTableModel model = new DefaultTableModel();
 		Object[][] dataVector = null;
 		ISymbol[] syms = zSort.getSymbols();
-//		String[] labels = zSort.getDescriptions();
+		// String[] labels = zSort.getDescriptions();
 
 		if (mode == DEFAULT_VIEW) {
 			// default view (JOIN and MERGE)
@@ -280,28 +288,27 @@ public class SymbolLevelsWindow extends JPanel implements IWindow, ActionListene
 				dataVector[i] = new Object[defaultHeaders.length];
 				ISymbol symbol = syms[i];
 				dataVector[i][SYMBOL_COLUMN_INDEX] = symbol;
-				dataVector[i][DESCRIPTION_COLUMN_INDEX] = symbol.getDescription();
+				dataVector[i][DESCRIPTION_COLUMN_INDEX] = symbol
+						.getDescription();
 				if (symbol instanceof IMultiLayerSymbol) {
 					boolean joined = true;
 					int[] levels = zSort.getLevels(symbol);
-					if(levels != null){
+					if (levels != null) {
 						for (int j = 0; j < levels.length; j++) {
 							if (joined)
-								joined = levels[j] != levels[j+1];
+								joined = levels[j] != levels[j + 1];
 						}
 					}
 
-
-
 					boolean merged = true;
-					if (i<syms.length-1) {
+					if (i < syms.length - 1) {
 						for (int j = 0; joined && j < levels.length; j++) {
 							// must be joined to be merged
-							ISymbol nextSymbol = syms[i+1];
+							ISymbol nextSymbol = syms[i + 1];
 							int[] nextLevels = zSort.getLevels(nextSymbol);
-							if(nextLevels != null){
+							if (nextLevels != null) {
 								if (nextSymbol instanceof IMultiLayerSymbol) {
-									if (j<nextLevels.length) {
+									if (j < nextLevels.length) {
 										merged = levels[j] == nextLevels[j];
 									}
 								} else {
@@ -312,7 +319,8 @@ public class SymbolLevelsWindow extends JPanel implements IWindow, ActionListene
 						if (!merged)
 							break;
 					}
-					if (!joined) merged = false;
+					if (!joined)
+						merged = false;
 					dataVector[i][JOIN_COLUMN_INDEX] = new Boolean(joined);
 					dataVector[i][MERGE_COLUMN_INDEX] = new Boolean(merged);
 				}
@@ -320,37 +328,51 @@ public class SymbolLevelsWindow extends JPanel implements IWindow, ActionListene
 
 			model.setDataVector(dataVector, defaultHeaders);
 			table.setModel(model);
-			TableColumn col = table.getColumnModel().getColumn(JOIN_COLUMN_INDEX);
+			TableColumn col = table.getColumnModel().getColumn(
+					JOIN_COLUMN_INDEX);
 			col.setCellRenderer(new BooleanTableCellRenderer(true));
 			col.setCellEditor(new BooleanTableCellEditor(table));
 			col = table.getColumnModel().getColumn(MERGE_COLUMN_INDEX);
 			col.setCellRenderer(new BooleanTableCellRenderer(true));
 			col.setCellEditor(new BooleanTableCellEditor(table));
 
-			} else {
+		} else {
 			// advanced view (user may input the map level manually)
-			dataVector = new Object[syms.length][
-			                     FIRST_LEVEL_COLUMN_INDEX + /* this is the first column that
-			                     							 * contains a level for the symbol
-			                     							 */
+			dataVector = new Object[syms.length][FIRST_LEVEL_COLUMN_INDEX + /*
+																			 * this
+																			 * is
+																			 * the
+																			 * first
+																			 * column
+																			 * that
+																			 * contains
+																			 * a
+																			 * level
+																			 * for
+																			 * the
+																			 * symbol
+																			 */
 
-			                     zSort.getTopLevelIndexAllowed() + /* according to the set of
-			                      									* symbols this will get the
-			                      									* max level reachable
-			                      									*/
-			                     1 /* plus 1 to get a count instead of an index */];
+			zSort.getTopLevelIndexAllowed() + /*
+											 * according to the set of symbols
+											 * this will get the max level
+											 * reachable
+											 */
+			1 /* plus 1 to get a count instead of an index */];
 			for (int i = 0; i < syms.length; i++) {
 				ISymbol symbol = syms[i];
 				dataVector[i][SYMBOL_COLUMN_INDEX] = symbol;
-				dataVector[i][DESCRIPTION_COLUMN_INDEX] = symbol.getDescription();
+				dataVector[i][DESCRIPTION_COLUMN_INDEX] = symbol
+						.getDescription();
 				if (symbol instanceof IMultiLayerSymbol) {
 					int[] levels = zSort.getLevels(symbol);
 
 					for (int j = 0; j < levels.length; j++) {
-						dataVector[i][j+FIRST_LEVEL_COLUMN_INDEX] = levels[j];
+						dataVector[i][j + FIRST_LEVEL_COLUMN_INDEX] = levels[j];
 					}
 				} else {
-					dataVector[i][FIRST_LEVEL_COLUMN_INDEX] = new Integer(zSort.getLevels(symbol)[0]);
+					dataVector[i][FIRST_LEVEL_COLUMN_INDEX] = new Integer(
+							zSort.getLevels(symbol)[0]);
 				}
 			}
 
@@ -358,47 +380,64 @@ public class SymbolLevelsWindow extends JPanel implements IWindow, ActionListene
 			table.setModel(model);
 			for (int j = FIRST_LEVEL_COLUMN_INDEX; j < model.getColumnCount(); j++) {
 
-				table.getColumnModel().getColumn(j).setCellRenderer(new NumberTableCellRenderer(true, false));
-				table.getColumnModel().getColumn(j).setCellEditor(new IntegerTableCellEditor());
+				table.getColumnModel()
+						.getColumn(j)
+						.setCellRenderer(
+								new NumberTableCellRenderer(true, false));
+				table.getColumnModel().getColumn(j)
+						.setCellEditor(new IntegerTableCellEditor());
 			}
 		}
 
-		TableSymbolCellRenderer symbolCellRenderer = new TableSymbolCellRenderer(true) {
+		TableSymbolCellRenderer symbolCellRenderer = new TableSymbolCellRenderer(
+				true) {
 			private static final long serialVersionUID = 5603529641148869112L;
 
 			{ // Object static initialize block
 
-			preview = new SymbolPreviewer() {
-				private static final long serialVersionUID = 7262380340075167043L;
-				private Icon downIcon = new Icon(){
-					public int getIconHeight() { return 7; }
-					public int getIconWidth() { return 7; }
-					public void paintIcon(Component c, Graphics g, int x, int y) {
-						Graphics2D g2 = (Graphics2D) g;
-						g2.setColor(Color.GRAY);
-							g2.translate(x + c.getWidth()-getIconWidth()*2, y + c.getHeight()-getIconHeight()*2);
-						GeneralPath gp = new GeneralPath();
-						gp.moveTo(0, 0);
-						gp.lineTo(getIconWidth()/2, getIconHeight()-1);
-						gp.lineTo(getIconWidth()-1, 0);
-						g2.fill(gp);
-						g2.translate(-(x + c.getWidth()-getIconWidth()*2), -(y + c.getHeight()-getIconHeight()*2));
+				preview = new SymbolPreviewer() {
+					private static final long serialVersionUID = 7262380340075167043L;
+					private Icon downIcon = new Icon() {
+						public int getIconHeight() {
+							return 7;
+						}
+
+						public int getIconWidth() {
+							return 7;
+						}
+
+						public void paintIcon(Component c, Graphics g, int x,
+								int y) {
+							Graphics2D g2 = (Graphics2D) g;
+							g2.setColor(Color.GRAY);
+							g2.translate(x + c.getWidth() - getIconWidth() * 2,
+									y + c.getHeight() - getIconHeight() * 2);
+							GeneralPath gp = new GeneralPath();
+							gp.moveTo(0, 0);
+							gp.lineTo(getIconWidth() / 2, getIconHeight() - 1);
+							gp.lineTo(getIconWidth() - 1, 0);
+							g2.fill(gp);
+							g2.translate(
+									-(x + c.getWidth() - getIconWidth() * 2),
+									-(y + c.getHeight() - getIconHeight() * 2));
+						}
+					};
+
+					@Override
+					public void paint(Graphics g) {
+						super.paint(g);
+						if (getSymbol() instanceof IMultiLayerSymbol) {
+							downIcon.paintIcon(this, g, 0, 0);
+						}
 					}
 				};
-					@Override
-				public void paint(Graphics g) {
-					super.paint(g);
-					if (getSymbol() instanceof IMultiLayerSymbol) {
-						downIcon.paintIcon(this, g, 0, 0);
-					}
-				}
-			};
 
 			} // Object static initialize block
 		};
-		TableCellEditor symbolCellEditor = new TableCellEditor(){
+		TableCellEditor symbolCellEditor = new TableCellEditor() {
 
-			public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+			public Component getTableCellEditorComponent(JTable table,
+					Object value, boolean isSelected, int row, int column) {
 				return null;
 			}
 
@@ -442,13 +481,19 @@ public class SymbolLevelsWindow extends JPanel implements IWindow, ActionListene
 		this.add(getPnlCenter(), BorderLayout.CENTER);
 		this.add(getPnlSouth(), BorderLayout.SOUTH);
 		tblLevels.addMouseListener(new MouseListener() {
-			public void mouseReleased(MouseEvent e) { }
-			public void mouseClicked(MouseEvent e)  { }
-			public void mouseEntered(MouseEvent e)  { }
-			public void mouseExited(MouseEvent e)  {
+			public void mouseReleased(MouseEvent e) {
+			}
+
+			public void mouseClicked(MouseEvent e) {
+			}
+
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			public void mouseExited(MouseEvent e) {
 				summary.sym = null;
 				repaint();
-	}
+			}
 
 			public void mousePressed(MouseEvent e) {
 				Point where = e.getPoint();
@@ -456,24 +501,20 @@ public class SymbolLevelsWindow extends JPanel implements IWindow, ActionListene
 				int whereY = where.y;
 				Rectangle bounds = tblLevels.getBounds();
 				/*
-				 * calculate the right border x-position of the symbol
-				 * column
-	 			*/
+				 * calculate the right border x-position of the symbol column
+				 */
 				int rightEdge = 0;
 				for (int i = 0; i <= SYMBOL_COLUMN_INDEX; i++) {
-					rightEdge += tblLevels.getColumnModel().getColumn(i).getWidth();
+					rightEdge += tblLevels.getColumnModel().getColumn(i)
+							.getWidth();
 				}
-				if (whereX >= bounds.x &&
-					whereX <= rightEdge + bounds.x &&
-					whereY >= bounds.y &&
-					whereY <= bounds.height + bounds.y) {
+				if (whereX >= bounds.x && whereX <= rightEdge + bounds.x
+						&& whereY >= bounds.y
+						&& whereY <= bounds.height + bounds.y) {
 					int rowHeight = tblLevels.getRowHeight();
 					int rowClicked = (whereY - bounds.y) / rowHeight;
-					ISymbol sym = (ISymbol) tblLevels.
-											getModel().
-											getValueAt(
-												rowClicked,
-												SYMBOL_COLUMN_INDEX);
+					ISymbol sym = (ISymbol) tblLevels.getModel().getValueAt(
+							rowClicked, SYMBOL_COLUMN_INDEX);
 					if (sym instanceof IMultiLayerSymbol) {
 						summary.sym = (IMultiLayerSymbol) sym;
 						summary.rowIndex = rowClicked;
@@ -490,21 +531,21 @@ public class SymbolLevelsWindow extends JPanel implements IWindow, ActionListene
 
 	private JCheckBox getChkSpecifyDrawOrder() {
 		if (chkSpecifyDrawOrder == null) {
-			chkSpecifyDrawOrder = new JCheckBox("<html><b>"+
-					PluginServices.getText(this, "draw_symbols_in_specified_order")
-					+"</b></html>");
+			chkSpecifyDrawOrder = new JCheckBox("<html><b>"
+					+ PluginServices.getText(this,
+							"draw_symbols_in_specified_order") + "</b></html>");
 			chkSpecifyDrawOrder.addActionListener(this);
 		}
 		return chkSpecifyDrawOrder;
 	}
-
 
 	private JPanel getPnlCenter() {
 		if (pnlCenter == null) {
 			pnlCenter = new JPanel();
 			pnlCenter.setLayout(new BorderLayout(0, 15));
 			pnlCenter.add(getSrclLevels(), BorderLayout.CENTER);
-			pnlCenter.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+			pnlCenter.setBorder(BorderFactory
+					.createEtchedBorder(EtchedBorder.LOWERED));
 			JPanel aux = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 15));
 			JPanel pnlButtons = new JPanel();
 			pnlButtons.setLayout(new BoxLayout(pnlButtons, BoxLayout.Y_AXIS));
@@ -529,7 +570,6 @@ public class SymbolLevelsWindow extends JPanel implements IWindow, ActionListene
 		return srclLevels;
 	}
 
-
 	private JTable getTblLevels() {
 		if (tblLevels == null) {
 			tblLevels = new JTable() {
@@ -547,10 +587,10 @@ public class SymbolLevelsWindow extends JPanel implements IWindow, ActionListene
 		return tblLevels;
 	}
 
-
 	private JButton getBtnUp() {
 		if (btnUp == null) {
-			btnUp = new JButton(PluginServices.getIconTheme().get("arrow-up-icono"));
+			btnUp = new JButton(PluginServices.getIconTheme().get(
+					"arrow-up-icono"));
 			btnUp.setActionCommand("MOVE_UP");
 		}
 		return btnUp;
@@ -558,12 +598,12 @@ public class SymbolLevelsWindow extends JPanel implements IWindow, ActionListene
 
 	private JButton getBtnDown() {
 		if (btnDown == null) {
-			btnDown = new JButton(PluginServices.getIconTheme().get("arrow-down-icono"));
+			btnDown = new JButton(PluginServices.getIconTheme().get(
+					"arrow-down-icono"));
 			btnDown.setActionCommand("MOVE_DOWN");
 		}
 		return btnDown;
 	}
-
 
 	private JPanel getPnlSouth() {
 		if (pnlSouth == null) {
@@ -575,7 +615,8 @@ public class SymbolLevelsWindow extends JPanel implements IWindow, ActionListene
 
 			aux = new JPanel();
 			aux.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			pnlSouth.add(new AcceptCancelPanel(action, action), BorderLayout.SOUTH);
+			pnlSouth.add(new AcceptCancelPanel(action, action),
+					BorderLayout.SOUTH);
 
 		}
 		return pnlSouth;
@@ -584,10 +625,9 @@ public class SymbolLevelsWindow extends JPanel implements IWindow, ActionListene
 	private JButton getBtnSwitchView() {
 		if (btnSwitchView == null) {
 			btnSwitchView = new JButton(
-					(viewMode != DEFAULT_VIEW) ?
-					PluginServices.getText(this, "default_view"):
-					PluginServices.getText(this, "advanced_view")
-					);
+					(viewMode != DEFAULT_VIEW) ? PluginServices.getText(this,
+							"default_view") : PluginServices.getText(this,
+							"advanced_view"));
 			btnSwitchView.addActionListener(this);
 			btnSwitchView.setVisible(false);
 		}
@@ -601,21 +641,23 @@ public class SymbolLevelsWindow extends JPanel implements IWindow, ActionListene
 			getPnlCenter().setEnabled(getChkSpecifyDrawOrder().isSelected());
 			getSrclLevels().setEnabled(getChkSpecifyDrawOrder().isSelected());
 			TableCellEditor tce = getTblLevels().getCellEditor();
-			if (tce != null){
+			if (tce != null) {
 				tce.stopCellEditing();
 			}
 			getTblLevels().setEnabled(getChkSpecifyDrawOrder().isSelected());
 		} else if (c.equals(getBtnSwitchView())) {
-			viewMode = (viewMode == ADVANCED_VIEW) ? DEFAULT_VIEW : ADVANCED_VIEW;
+			viewMode = (viewMode == ADVANCED_VIEW) ? DEFAULT_VIEW
+					: ADVANCED_VIEW;
 			initTableContents(getTblLevels(), zSort, viewMode);
-			btnSwitchView.setText((viewMode != DEFAULT_VIEW) ?
-					PluginServices.getText(this, "default_view"):
-					PluginServices.getText(this, "advanced_view"));
+			btnSwitchView.setText((viewMode != DEFAULT_VIEW) ? PluginServices
+					.getText(this, "default_view") : PluginServices.getText(
+					this, "advanced_view"));
 		}
 	}
+
 	/**
 	 * Gets the ZSort value
-	 *
+	 * 
 	 * @return zSort ZSort
 	 */
 	public ZSort getZSort() {
@@ -630,17 +672,19 @@ public class SymbolLevelsWindow extends JPanel implements IWindow, ActionListene
 
 		IMultiLayerSymbol sym;
 
-		void paint(Graphics2D g){
+		void paint(Graphics2D g) {
 
 			if (sym != null) {
-				int whereY = (rowHeight*(rowIndex-1) + (int) (rowHeight/0.6));
+				int whereY = (rowHeight * (rowIndex - 1) + (int) (rowHeight / 0.6));
 				int whereX = 0;
 				for (int i = 0; i <= SYMBOL_COLUMN_INDEX; i++) {
-					whereX += tblLevels.getColumnModel().getColumn(i).getWidth();
+					whereX += tblLevels.getColumnModel().getColumn(i)
+							.getWidth();
 				}
 				whereX -= 40;
 				int width = 150;
-				int height = Math.max(rowHeight*sym.getLayerCount(), rowHeight);
+				int height = Math.max(rowHeight * sym.getLayerCount(),
+						rowHeight);
 				Rectangle bounds = new Rectangle(whereX, whereY, width, height);
 				g.setColor(new Color(255, 255, 220));
 				g.fill(bounds);
@@ -652,26 +696,31 @@ public class SymbolLevelsWindow extends JPanel implements IWindow, ActionListene
 
 				for (int i = 0; i < sym.getLayerCount(); i++) {
 					g.setColor(Color.black);
-					g.drawString(i+1+":", whereX+5, height + whereY - ( (i*rowHeight) + 5 ));
-					Rectangle rect = new Rectangle(whereX + 20,
-							height + whereY - ((i+1)*rowHeight) + 3,
-							width - 20,
+					g.drawString(i + 1 + ":", whereX + 5, height + whereY
+							- ((i * rowHeight) + 5));
+					Rectangle rect = new Rectangle(whereX + 20, height + whereY
+							- ((i + 1) * rowHeight) + 3, width - 20,
 							rowHeight - 6);
 					try {
-						sym.getLayer(i).drawInsideRectangle(g, null, rect, null);
+						sym.getLayer(i)
+								.drawInsideRectangle(g, null, rect, null);
 					} catch (SymbolDrawingException e) {
 						if (e.getType() == SymbolDrawingException.UNSUPPORTED_SET_OF_SETTINGS) {
 							try {
-								SymbologyFactory.getWarningSymbol(
-										SymbolDrawingException.STR_UNSUPPORTED_SET_OF_SETTINGS,
-										"",
-										SymbolDrawingException.UNSUPPORTED_SET_OF_SETTINGS).drawInsideRectangle(g, null, rect, null);
+								SymbologyFactory
+										.getWarningSymbol(
+												SymbolDrawingException.STR_UNSUPPORTED_SET_OF_SETTINGS,
+												"",
+												SymbolDrawingException.UNSUPPORTED_SET_OF_SETTINGS)
+										.drawInsideRectangle(g, null, rect,
+												null);
 							} catch (SymbolDrawingException e1) {
 								// IMPOSSIBLE TO REACH THIS
 							}
 						} else {
 							// should be unreachable code
-							throw new Error(PluginServices.getText(this, "symbol_shapetype_mismatch"));
+							throw new Error(PluginServices.getText(this,
+									"symbol_shapetype_mismatch"));
 						}
 					}
 				}

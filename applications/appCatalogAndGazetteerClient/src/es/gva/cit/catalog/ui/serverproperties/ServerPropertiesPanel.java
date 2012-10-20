@@ -4,7 +4,6 @@ import java.awt.event.ActionListener;
 import java.util.Properties;
 
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import org.gvsig.i18n.Messages;
 
@@ -62,7 +61,7 @@ import es.gva.cit.catalog.utils.CatalogConstants;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class ServerPropertiesPanel extends JPanel{
+public class ServerPropertiesPanel extends JPanel {
 	private ServerData serverData = null;
 	private IProfile profile = null;
 
@@ -93,20 +92,20 @@ public class ServerPropertiesPanel extends JPanel{
 	private javax.swing.JLabel titleLabel;
 	private javax.swing.JTextField titleText;
 
-	public ServerPropertiesPanel(ServerData serverData, IProfile profile){
-		this.serverData = serverData; 
+	public ServerPropertiesPanel(ServerData serverData, IProfile profile) {
+		this.serverData = serverData;
 		this.profile = profile;
 		initializeComponents();
 		initializeLabels();
 		initServerFields();
 		initButtonSize();
-		completeFieldsWithProfile();		
+		completeFieldsWithProfile();
 	}
 
 	/**
 	 * It initializes the graphical components
 	 */
-	private void initializeComponents(){
+	private void initializeComponents() {
 		java.awt.GridBagConstraints gridBagConstraints;
 
 		componetsPanel = new javax.swing.JPanel();
@@ -139,7 +138,8 @@ public class ServerPropertiesPanel extends JPanel{
 
 		componetsPanel.setLayout(new java.awt.GridBagLayout());
 
-		componetsPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		componetsPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(5,
+				5, 5, 5));
 		labelsPanel.setLayout(new java.awt.GridBagLayout());
 
 		gridBagConstraints = new java.awt.GridBagConstraints();
@@ -312,9 +312,11 @@ public class ServerPropertiesPanel extends JPanel{
 
 		add(componetsPanel, java.awt.BorderLayout.NORTH);
 
-		buttonsPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+		buttonsPanel.setLayout(new java.awt.FlowLayout(
+				java.awt.FlowLayout.RIGHT));
 
-		buttonsPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 5, 5));
+		buttonsPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,
+				5, 5, 5));
 		cancelButton.setText("cancel");
 		buttonsPanel.add(cancelButton);
 
@@ -336,7 +338,7 @@ public class ServerPropertiesPanel extends JPanel{
 		providerLabel.setText(Messages.getText("provider") + ":");
 		coordinatesLabel.setText(Messages.getText("coordinates") + ":");
 		dateFromLabel.setText(Messages.getText("from"));
-		dateToLabel.setText(Messages.getText("to"));	
+		dateToLabel.setText(Messages.getText("to"));
 		elementLabelText.setText(Messages.getText("elementName") + ":");
 		closeButton.setText(Messages.getText("aceptar"));
 		cancelButton.setText(Messages.getText("cancel"));
@@ -361,45 +363,55 @@ public class ServerPropertiesPanel extends JPanel{
 	/**
 	 * Complete the blank fields with the profile
 	 */
-	private void completeFieldsWithProfile(){
-		if (profile != null){
-			if ((titleText.getText() == null) || (titleText.getText().compareTo("") == 0)){
+	private void completeFieldsWithProfile() {
+		if (profile != null) {
+			if ((titleText.getText() == null)
+					|| (titleText.getText().compareTo("") == 0)) {
 				titleText.setText(profile.getTitleProperty());
 			}
-			if ((abstractText.getText() == null) || (abstractText.getText().compareTo("") == 0)){
+			if ((abstractText.getText() == null)
+					|| (abstractText.getText().compareTo("") == 0)) {
 				abstractText.setText(profile.getAbstractProperty());
 			}
-			if ((keywordsText.getText() == null) || (keywordsText.getText().compareTo("") == 0)){
+			if ((keywordsText.getText() == null)
+					|| (keywordsText.getText().compareTo("") == 0)) {
 				keywordsText.setText(profile.getKeywordsProperty());
 			}
-			if ((cathegoryText.getText() == null) || (cathegoryText.getText().compareTo("") == 0)){
+			if ((cathegoryText.getText() == null)
+					|| (cathegoryText.getText().compareTo("") == 0)) {
 				cathegoryText.setText(profile.getTopicProperty());
 			}
-			if ((scaleText.getText() == null) || (scaleText.getText().compareTo("") == 0)){
+			if ((scaleText.getText() == null)
+					|| (scaleText.getText().compareTo("") == 0)) {
 				scaleText.setText(profile.getScaleProperty());
 			}
-			if ((providerText.getText() == null) || (providerText.getText().compareTo("") == 0)){
+			if ((providerText.getText() == null)
+					|| (providerText.getText().compareTo("") == 0)) {
 				providerText.setText(profile.getProviderProperty());
 			}
-			if ((coordinatesText.getText() == null) || (coordinatesText.getText().compareTo("") == 0)){
+			if ((coordinatesText.getText() == null)
+					|| (coordinatesText.getText().compareTo("") == 0)) {
 				coordinatesText.setText(profile.getCoordinatesProperty());
 			}
-			if ((dateFromText.getText() == null) || (dateFromText.getText().compareTo("") == 0)){
+			if ((dateFromText.getText() == null)
+					|| (dateFromText.getText().compareTo("") == 0)) {
 				dateFromText.setText(profile.getDateFromProperty());
 			}
-			if ((dateToText.getText() == null) || (dateToText.getText().compareTo("") == 0)){
+			if ((dateToText.getText() == null)
+					|| (dateToText.getText().compareTo("") == 0)) {
 				dateToText.setText(profile.getDateToProperty());
-			}		
-			if ((elementNameText.getText() == null) || (elementNameText.getText().compareTo("") == 0)){
+			}
+			if ((elementNameText.getText() == null)
+					|| (elementNameText.getText().compareTo("") == 0)) {
 				elementNameText.setText(profile.getElementNameProperty());
-			}		
+			}
 		}
 	}
 
 	/**
 	 * Initialize the buttons size
 	 */
-	private void initButtonSize(){
+	private void initButtonSize() {
 		cancelButton.setPreferredSize(CatalogConstants.BUTTON_SIZE);
 		closeButton.setPreferredSize(CatalogConstants.BUTTON_SIZE);
 	}
@@ -409,50 +421,66 @@ public class ServerPropertiesPanel extends JPanel{
 	 */
 	protected ServerData updateServerData() {
 		Properties properties = serverData.getProperies();
-		if (properties == null){
+		if (properties == null) {
 			properties = new Properties();
 		}
-		updateProperty(titleText.getText(),profile.getTitleProperty(),IProfile.TITLE,properties);
-		updateProperty(abstractText.getText(),profile.getAbstractProperty(),IProfile.ABSTRACT,properties);
-		updateProperty(keywordsText.getText(),profile.getKeywordsProperty(),IProfile.KEYWORDS,properties);
-		updateProperty(cathegoryText.getText(),profile.getTopicProperty(),IProfile.CATHEGORY,properties);
-		updateProperty(providerText.getText(),profile.getProviderProperty(),IProfile.PROVIDER,properties);
-		updateProperty(scaleText.getText(),profile.getScaleProperty(),IProfile.SCALE,properties);
-		updateProperty(coordinatesText.getText(),profile.getCoordinatesProperty(),IProfile.COORDINATES,properties);
-		updateProperty(dateFromText.getText(),profile.getDateFromProperty(),IProfile.DATEFROM,properties);
-		updateProperty(dateToText.getText(),profile.getDateToProperty(),IProfile.DATETO,properties);
-		updateProperty(elementNameText.getText(), profile.getElementNameProperty(), IProfile.ELEMENT_NAME, properties);
+		updateProperty(titleText.getText(), profile.getTitleProperty(),
+				IProfile.TITLE, properties);
+		updateProperty(abstractText.getText(), profile.getAbstractProperty(),
+				IProfile.ABSTRACT, properties);
+		updateProperty(keywordsText.getText(), profile.getKeywordsProperty(),
+				IProfile.KEYWORDS, properties);
+		updateProperty(cathegoryText.getText(), profile.getTopicProperty(),
+				IProfile.CATHEGORY, properties);
+		updateProperty(providerText.getText(), profile.getProviderProperty(),
+				IProfile.PROVIDER, properties);
+		updateProperty(scaleText.getText(), profile.getScaleProperty(),
+				IProfile.SCALE, properties);
+		updateProperty(coordinatesText.getText(),
+				profile.getCoordinatesProperty(), IProfile.COORDINATES,
+				properties);
+		updateProperty(dateFromText.getText(), profile.getDateFromProperty(),
+				IProfile.DATEFROM, properties);
+		updateProperty(dateToText.getText(), profile.getDateToProperty(),
+				IProfile.DATETO, properties);
+		updateProperty(elementNameText.getText(),
+				profile.getElementNameProperty(), IProfile.ELEMENT_NAME,
+				properties);
 		serverData.setProperies(properties);
 		return serverData;
-	}	
+	}
 
 	/**
 	 * Updates a property
+	 * 
 	 * @param text
 	 * @param profileValue
 	 * @param key
 	 * @param properties
 	 */
-	private void updateProperty(String text, String profileValue, String key, Properties properties){
-		if ((text != null) && (!text.equals(""))){
-			if (profileValue == null){
-				properties.setProperty(key,text);
-			}else if (!(text.compareTo(profileValue) == 0)){
-				properties.setProperty(key,text);
+	private void updateProperty(String text, String profileValue, String key,
+			Properties properties) {
+		if ((text != null) && (!text.equals(""))) {
+			if (profileValue == null) {
+				properties.setProperty(key, text);
+			} else if (!(text.compareTo(profileValue) == 0)) {
+				properties.setProperty(key, text);
 			}
 		}
 	}
 
 	/**
 	 * Set the listener for the buttons
+	 * 
 	 * @param listener
 	 */
-	public void addActionListener(ActionListener listener){
-		closeButton.setActionCommand(CatalogConstants.CLOSE_BUTTON_ACTION_COMMAND);
+	public void addActionListener(ActionListener listener) {
+		closeButton
+				.setActionCommand(CatalogConstants.CLOSE_BUTTON_ACTION_COMMAND);
 		closeButton.addActionListener(listener);
-		cancelButton.setActionCommand(CatalogConstants.CANCEL_BUTTON_ACTION_COMMAND);
+		cancelButton
+				.setActionCommand(CatalogConstants.CANCEL_BUTTON_ACTION_COMMAND);
 		cancelButton.addActionListener(listener);
 	}
-
 
 }

@@ -50,8 +50,6 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
 
-
-
 /**
  * @see http://portal.opengeospatial.org/files/?artifact_id=1188
  * 
@@ -59,38 +57,34 @@ import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
  */
 public class SLDUserStyle1_0_0 extends SLDUserStyle {
 
-	public void parse(XMLSchemaParser parser)throws IOException, XmlPullParserException, LegendDriverException {
+	public void parse(XMLSchemaParser parser) throws IOException,
+			XmlPullParserException, LegendDriverException {
 		int currentTag;
 		boolean end = false;
 
 		parser.require(XMLSchemaParser.START_TAG, null, SLDTags.USERSTYLE);
 		currentTag = parser.next();
 
-		while (!end)
-		{
-			switch(currentTag)
-			{
+		while (!end) {
+			switch (currentTag) {
 			case XMLSchemaParser.START_TAG:
-				if (parser.getName().compareTo(SLDTags.NAME)==0) {
+				if (parser.getName().compareTo(SLDTags.NAME) == 0) {
 					setName(parser.nextText());
-				}
-				else if(parser.getName().compareTo(SLDTags.TITLE)==0) {
+				} else if (parser.getName().compareTo(SLDTags.TITLE) == 0) {
 					setTitle(parser.nextText());
-				}
-				else if(parser.getName().compareTo(SLDTags.ABSTRACT)==0) {
+				} else if (parser.getName().compareTo(SLDTags.ABSTRACT) == 0) {
 					setUStyleAbstract(parser.nextText());
-				}
-				else if(parser.getName().compareTo(SLDTags.IS_DEFAULT)==0) {
+				} else if (parser.getName().compareTo(SLDTags.IS_DEFAULT) == 0) {
 					String value = parser.nextText();
 					if (value.compareTo("1") != 0 && value.compareTo("0") != 0)
-						throw new LegendDriverException (LegendDriverException.PARSE_LEGEND_FILE_ERROR);
-					else if(value.compareTo("1") == 0) 
+						throw new LegendDriverException(
+								LegendDriverException.PARSE_LEGEND_FILE_ERROR);
+					else if (value.compareTo("1") == 0)
 						setDefault(true);
-				
-				}
-				else if(parser.getName().compareTo(SLDTags.FEATURETYPESTYLE)==0) {
-					SLDFeatureTypeStyle1_0_0 fTypeStyle = new SLDFeatureTypeStyle1_0_0();	
-					fTypeStyle.parse(parser,currentTag,null);
+
+				} else if (parser.getName().compareTo(SLDTags.FEATURETYPESTYLE) == 0) {
+					SLDFeatureTypeStyle1_0_0 fTypeStyle = new SLDFeatureTypeStyle1_0_0();
+					fTypeStyle.parse(parser, currentTag, null);
 					addFeatureTypeStyle(fTypeStyle);
 				}
 				break;
@@ -109,13 +103,10 @@ public class SLDUserStyle1_0_0 extends SLDUserStyle {
 
 	}
 
-
 	@Override
 	public String toXML() {
 		// TODO Auto-generated method stub
-		throw new Error ("Not yet implemented");
+		throw new Error("Not yet implemented");
 	}
 
 }
-
-

@@ -65,6 +65,7 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * It parses a gml:polygonProperty object. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;polygonProperty&gt;
@@ -78,57 +79,61 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  * &lt;/polygonProperty&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class PolygonPropertyTypeBinding {
-	
+
 	/**
 	 * It parses the gml:PolygonProperty tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * A polygon
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return A polygon
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public Object parse(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
+	public Object parse(IXmlStreamReader parser, GPEDefaultGmlParser handler)
+			throws XmlStreamException, IOException {
 		boolean endFeature = false;
 		int currentTag;
-		Object polygon = null;		
-		
+		Object polygon = null;
+
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-					if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_POLYGON)){
-						polygon = handler.getProfile().getPolygonTypeBinding().
-						parse(parser, handler);
-					}
-					break;
-				case IXmlStreamReader.END_ELEMENT:
-					if ((CompareUtils.compareWithNamespace(tag,GMLTags.GML_POLYGONPROPERTY))||
-					(CompareUtils.compareWithNamespace(tag,GMLTags.GML_EXTENTOF))||
-					(CompareUtils.compareWithNamespace(tag,GMLTags.GML_COVERAGE)))
-					{						
-						endFeature = true;						
-					}
-					break;
-				case IXmlStreamReader.CHARACTERS:			
-					
-					break;
+				if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_POLYGON)) {
+					polygon = handler.getProfile().getPolygonTypeBinding()
+							.parse(parser, handler);
 				}
-				if (!endFeature){					
-					currentTag = parser.next();
-					tag = parser.getName();
+				break;
+			case IXmlStreamReader.END_ELEMENT:
+				if ((CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_POLYGONPROPERTY))
+						|| (CompareUtils.compareWithNamespace(tag,
+								GMLTags.GML_EXTENTOF))
+						|| (CompareUtils.compareWithNamespace(tag,
+								GMLTags.GML_COVERAGE))) {
+					endFeature = true;
 				}
-			}			
-		return polygon;	
+				break;
+			case IXmlStreamReader.CHARACTERS:
+
+				break;
+			}
+			if (!endFeature) {
+				currentTag = parser.next();
+				tag = parser.getName();
+			}
+		}
+		return polygon;
 	}
 }
-

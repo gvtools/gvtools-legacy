@@ -10,35 +10,32 @@ import javax.swing.border.TitledBorder;
 
 import com.iver.andami.PluginServices;
 
-public class PCAParameterPanel  extends MethodFusionParameterPanel {
+public class PCAParameterPanel extends MethodFusionParameterPanel {
 
 	private JPanel parameterPanel = null;
-	
-	
-	
-	public PCAParameterPanel(){
+
+	public PCAParameterPanel() {
 		parameterPanel = new JPanel();
-		idPanel = PluginServices.getText(this,"pc");	
-		TitledBorder topBorder = BorderFactory.createTitledBorder(PluginServices.getText(this,"parametros"));
+		idPanel = PluginServices.getText(this, "pc");
+		TitledBorder topBorder = BorderFactory
+				.createTitledBorder(PluginServices.getText(this, "parametros"));
 		topBorder.setTitlePosition(TitledBorder.TOP);
-		parameterPanel.setBorder(new CompoundBorder(topBorder,new EmptyBorder(0,2,2,2)));
+		parameterPanel.setBorder(new CompoundBorder(topBorder, new EmptyBorder(
+				0, 2, 2, 2)));
 	}
-	
-	
+
 	public JPanel getParameterPanel() {
 		return parameterPanel;
 	}
-
 
 	public HashMap getParams() {
 		return null;
 	}
 
 	public void setParams() {
-		
+
 	}
 
-	
 	public String getIDPanel() {
 		return idPanel;
 	}

@@ -53,28 +53,31 @@ import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
-public class TranspByPixelListener implements ActionListener, ListSelectionListener, DoubleSliderListener, MouseListener, ISelectRGB {
-	private ArrayList                  entries        = new ArrayList();
-	private JButton                    addButton      = null;
-	private JButton                    removeButton   = null;
-	private JButton                    selectColorButton = null;
-	private JCheckBox                  cbActivar      = null;
-	private JList                      list           = null;
-	private JRadioButton               andRb          = null;
-	private JRadioButton               orRb           = null;
-	private TranspByPixelPanel         panel          = null;
-	private TranspByPixelRGBInputPanel rgbInputPanel  = null;
-	private boolean                    eventsDisabled = false;
-	private int                        itemSelected   = -1;
+public class TranspByPixelListener implements ActionListener,
+		ListSelectionListener, DoubleSliderListener, MouseListener, ISelectRGB {
+	private ArrayList entries = new ArrayList();
+	private JButton addButton = null;
+	private JButton removeButton = null;
+	private JButton selectColorButton = null;
+	private JCheckBox cbActivar = null;
+	private JList list = null;
+	private JRadioButton andRb = null;
+	private JRadioButton orRb = null;
+	private TranspByPixelPanel panel = null;
+	private TranspByPixelRGBInputPanel rgbInputPanel = null;
+	private boolean eventsDisabled = false;
+	private int itemSelected = -1;
 	private String viewName = "";
 
 	/**
 	 * This is the default constructor
 	 */
 	public TranspByPixelListener(TranspByPixelPanel panel) {
-		BaseView view = (BaseView) PluginServices.getMDIManager().getActiveWindow();
-		viewName = PluginServices.getMDIManager().getWindowInfo(view).getTitle();
-		
+		BaseView view = (BaseView) PluginServices.getMDIManager()
+				.getActiveWindow();
+		viewName = PluginServices.getMDIManager().getWindowInfo(view)
+				.getTitle();
+
 		this.panel = panel;
 		rgbInputPanel = panel.getPRGBInput();
 		list = panel.getJList();
@@ -105,7 +108,7 @@ public class TranspByPixelListener implements ActionListener, ListSelectionListe
 	/**
 	 * Obtiene el objeto TransparencyRange equivalente a los valores RGBA
 	 * seleccionados.
-	 *
+	 * 
 	 * @return TransparencyRange o null si la selección no es correcta.
 	 */
 	private TransparencyRange getEntrySelected() {
@@ -140,23 +143,25 @@ public class TranspByPixelListener implements ActionListener, ListSelectionListe
 
 		strEntry = textR + separator + textG + separator + textB;
 		if (rgbInputPanel.getTAlpha().getValue() != 255)
-			strEntry += " (A: " + rgbInputPanel.getTAlpha().getValue() + ")"; 
+			strEntry += " (A: " + rgbInputPanel.getTAlpha().getValue() + ")";
 		entry.setStrEntry(strEntry);
 
 		return entry;
 	}
 
 	/**
-	 * Gestión del evento de botón de selección de color desde la vista. 
-	 * Añade una tool a la vista para la selección de RGB.
+	 * Gestión del evento de botón de selección de color desde la vista. Añade
+	 * una tool a la vista para la selección de RGB.
 	 */
 	public void colorToolButton() {
 		BaseView theView = null;
 		try {
 			IWindow[] allViews = PluginServices.getMDIManager().getAllWindows();
 			for (int i = 0; i < allViews.length; i++) {
-				if (allViews[i] instanceof BaseView &&
-						PluginServices.getMDIManager().getWindowInfo((BaseView) allViews[i]).getTitle().equals(viewName))
+				if (allViews[i] instanceof BaseView
+						&& PluginServices.getMDIManager()
+								.getWindowInfo((BaseView) allViews[i])
+								.getTitle().equals(viewName))
 					theView = (BaseView) allViews[i];
 			}
 			if (theView == null)
@@ -166,17 +171,18 @@ public class TranspByPixelListener implements ActionListener, ListSelectionListe
 			return;
 		}
 		MapControl m_MapControl = theView.getMapControl();
-		
-		TranspByPixelStatusBarListener sbl = new TranspByPixelStatusBarListener(m_MapControl);
-		SelectRGBListener selectRGBListener = new SelectRGBListener(m_MapControl, this);
+
+		TranspByPixelStatusBarListener sbl = new TranspByPixelStatusBarListener(
+				m_MapControl);
+		SelectRGBListener selectRGBListener = new SelectRGBListener(
+				m_MapControl, this);
 		m_MapControl.addMapTool("selectColorRaster", new Behavior[] {
-				new PointBehavior(selectRGBListener), new MouseMovementBehavior(sbl)
-				}
-		);
+				new PointBehavior(selectRGBListener),
+				new MouseMovementBehavior(sbl) });
 
 		m_MapControl.setTool("selectColorRaster");
 	}
-	
+
 	/**
 	 * Actualiza el item seleccionado cogiendo los valores del RGB
 	 */
@@ -196,7 +202,9 @@ public class TranspByPixelListener implements ActionListener, ListSelectionListe
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
 
@@ -225,7 +233,7 @@ public class TranspByPixelListener implements ActionListener, ListSelectionListe
 			deleteSelected();
 			return;
 		}
-		
+
 		if (e.getSource() == selectColorButton) {
 			colorToolButton();
 			return;
@@ -257,6 +265,7 @@ public class TranspByPixelListener implements ActionListener, ListSelectionListe
 
 	/**
 	 * Establece los valores RGBA a sus componentes segun la seleccion
+	 * 
 	 * @param item
 	 */
 	private void setValues(int item) {
@@ -318,6 +327,7 @@ public class TranspByPixelListener implements ActionListener, ListSelectionListe
 
 	/**
 	 * Obtiene el array de entradas de valores añadidos a la lista
+	 * 
 	 * @return ArrayList
 	 */
 	public ArrayList getEntries() {
@@ -326,7 +336,10 @@ public class TranspByPixelListener implements ActionListener, ListSelectionListe
 
 	/*
 	 * (non-Javadoc)
-	 * @see javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event.ListSelectionEvent)
+	 * 
+	 * @see
+	 * javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event
+	 * .ListSelectionEvent)
 	 */
 	public void valueChanged(ListSelectionEvent e) {
 		eventsDisabled = true;
@@ -339,7 +352,10 @@ public class TranspByPixelListener implements ActionListener, ListSelectionListe
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.doubleslider.DoubleSliderListener#actionValueChanged(org.gvsig.gui.beans.doubleslider.DoubleSliderEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.doubleslider.DoubleSliderListener#actionValueChanged
+	 * (org.gvsig.gui.beans.doubleslider.DoubleSliderEvent)
 	 */
 	public void actionValueChanged(DoubleSliderEvent e) {
 		if (eventsDisabled)
@@ -351,6 +367,7 @@ public class TranspByPixelListener implements ActionListener, ListSelectionListe
 
 	/**
 	 * Habilita o deshabilita la gestion de eventos
+	 * 
 	 * @param value
 	 */
 	public void setEventsDisabled(boolean value) {
@@ -359,6 +376,7 @@ public class TranspByPixelListener implements ActionListener, ListSelectionListe
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
 	 */
 	public void mouseClicked(MouseEvent e) {
@@ -370,7 +388,10 @@ public class TranspByPixelListener implements ActionListener, ListSelectionListe
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.toolselectrgb.ISelectRGB#actionRGBSelected(int, int, int)
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.toolselectrgb.ISelectRGB#actionRGBSelected(int,
+	 * int, int)
 	 */
 	public void actionRGBSelected(int r, int g, int b) {
 		rgbInputPanel.getTRed().setValue(r);
@@ -378,9 +399,18 @@ public class TranspByPixelListener implements ActionListener, ListSelectionListe
 		rgbInputPanel.getTBlue().setValue(b);
 	}
 
-	public void actionValueDragged(DoubleSliderEvent e) {}
-	public void mouseEntered(MouseEvent e) {}
-	public void mouseExited(MouseEvent e) {}
-	public void mousePressed(MouseEvent e) {}
-	public void mouseReleased(MouseEvent e) {}
+	public void actionValueDragged(DoubleSliderEvent e) {
+	}
+
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	public void mouseExited(MouseEvent e) {
+	}
+
+	public void mousePressed(MouseEvent e) {
+	}
+
+	public void mouseReleased(MouseEvent e) {
+	}
 }

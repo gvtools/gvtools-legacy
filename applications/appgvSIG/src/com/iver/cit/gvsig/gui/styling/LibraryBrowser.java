@@ -65,14 +65,13 @@ import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.ui.mdiFrame.JMenuItem;
 import com.iver.andami.ui.mdiFrame.JPopUpMenu;
 
-
 /**
  * 
  * LibraryBrowser.java
- *
+ * 
  * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Dec 7, 2007
- *
+ * 
  */
 public class LibraryBrowser extends JPanel implements TreeModelListener {
 	private static final long serialVersionUID = 4322139976928871347L;
@@ -88,18 +87,22 @@ public class LibraryBrowser extends JPanel implements TreeModelListener {
 			removeFolder.setEnabled(selectedObject != null);
 			try {
 				if (source.equals(newFolder)) {
-					String newFolderName = JOptionPane.showInputDialog(PluginServices.getText(this, "new_name"));
+					String newFolderName = JOptionPane
+							.showInputDialog(PluginServices.getText(this,
+									"new_name"));
 					if (newFolderName != null)
 						model.addFolder(selectedObject, newFolderName);
 				} else if (source.equals(removeFolder)) {
 					model.removeFolder(selectedObject);
 				}
 			} catch (Exception ex) {
-				NotificationManager.addError(PluginServices
-						.getText(this, "notification_text"
-								+ " ["
-								+ new Date(System.currentTimeMillis())
-										.toString() + "]"), ex);
+				NotificationManager.addError(
+						PluginServices.getText(
+								this,
+								"notification_text"
+										+ " ["
+										+ new Date(System.currentTimeMillis())
+												.toString() + "]"), ex);
 			} finally {
 				popUpMenu.setVisible(false);
 			}
@@ -108,19 +111,20 @@ public class LibraryBrowser extends JPanel implements TreeModelListener {
 	private ArrayList<TreeSelectionListener> treeListeners = new ArrayList<TreeSelectionListener>();
 	private ArrayList<MouseListener> treeMouseListeners = new ArrayList<MouseListener>();
 	private ArrayList<MouseMotionListener> treeMouseMotionListeners = new ArrayList<MouseMotionListener>();
-	
+
 	public LibraryBrowser(ILibraryModel model) {
 		setLayout(new BorderLayout());
 		model.addTreeModelListener(this);
-		
+
 		popUpMenu = new JPopUpMenu();
 		newFolder = new JMenuItem(PluginServices.getText(this, "new_folder"));
 		newFolder.addActionListener(popUpMenuActions);
 
-		removeFolder = new JMenuItem(PluginServices.getText(this, "remove_folder"));
+		removeFolder = new JMenuItem(PluginServices.getText(this,
+				"remove_folder"));
 		removeFolder.addActionListener(popUpMenuActions);
-		
-		popUpMenu.add(newFolder) ;
+
+		popUpMenu.add(newFolder);
 		this.model = model;
 		setModel(model);
 	}
@@ -134,15 +138,15 @@ public class LibraryBrowser extends JPanel implements TreeModelListener {
 		for (int i = 0; i < treeListeners.size(); i++) {
 			tree.addTreeSelectionListener(treeListeners.get(i));
 		}
-		
+
 		for (int i = 0; i < treeMouseListeners.size(); i++) {
 			tree.addMouseListener(treeMouseListeners.get(i));
 		}
-		
+
 		for (int i = 0; i < treeMouseMotionListeners.size(); i++) {
 			tree.addMouseMotionListener(treeMouseMotionListeners.get(i));
 		}
-		
+
 		add(tree, BorderLayout.CENTER);
 		validate();
 	}
@@ -183,13 +187,12 @@ public class LibraryBrowser extends JPanel implements TreeModelListener {
 		tree.addTreeSelectionListener(treeSelectionListener);
 	}
 
-	
 	@Override
 	public synchronized void addMouseListener(MouseListener l) {
 		treeMouseListeners.add(l);
 		tree.addMouseListener(l);
 	}
-	
+
 	@Override
 	public synchronized void addMouseMotionListener(MouseMotionListener l) {
 		treeMouseMotionListeners.add(l);
@@ -199,21 +202,22 @@ public class LibraryBrowser extends JPanel implements TreeModelListener {
 	public void setSelectionRow(int i) {
 		tree.setSelectionRow(i);
 	}
-	
-	
 
 	public File getElementBellow(Point point) {
 		TreePath tp = tree.getPathForLocation(point.x, point.y);
-		if (tp == null) return null;
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode) tp.getLastPathComponent();
-		if (node == null) return null;
-		
+		if (tp == null)
+			return null;
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode) tp
+				.getLastPathComponent();
+		if (node == null)
+			return null;
+
 		if (node.getUserObject() instanceof File) {
 			return (File) node.getUserObject();
-		} 
+		}
 		return null;
 	}
-	
+
 	public void setSelectedElementBellow(Point point) {
 		TreePath tp = tree.getPathForLocation(point.x, point.y);
 		if (tp != null)

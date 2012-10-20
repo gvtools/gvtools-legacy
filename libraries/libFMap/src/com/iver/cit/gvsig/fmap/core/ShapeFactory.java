@@ -46,7 +46,6 @@ import java.awt.geom.Point2D;
 
 import com.iver.cit.gvsig.fmap.edition.UtilFunctions;
 
-
 /**
  * Clase que crea las geometrías, contendra un método create por cada tipo de
  * geometria que soporte gvSIG
@@ -54,26 +53,30 @@ import com.iver.cit.gvsig.fmap.edition.UtilFunctions;
 public class ShapeFactory {
 	/**
 	 * Crea una geometría que contiene como shape un punto 2D.
-	 *
-	 * @param x Coordenada x.
-	 * @param y Coordenada y.
-	 *
+	 * 
+	 * @param x
+	 *            Coordenada x.
+	 * @param y
+	 *            Coordenada y.
+	 * 
 	 * @return Geometría.
 	 */
 	public static IGeometry createPoint2D(double x, double y) {
 		return new FGeometry(new FPoint2D(x, y));
 	}
+
 	public static IGeometry createPoint2D(FPoint2D p) {
 		return new FGeometry(p);
 	}
 
-
 	/**
 	 * Crea una geometría que contiene como shape un Multipunto 2D.
-	 *
-	 * @param x Coordenada x.
-	 * @param y Coordenada y.
-	 *
+	 * 
+	 * @param x
+	 *            Coordenada x.
+	 * @param y
+	 *            Coordenada y.
+	 * 
 	 * @return Geometría.
 	 */
 	public static IGeometry createMultipoint2D(double[] x, double[] y) {
@@ -82,11 +85,14 @@ public class ShapeFactory {
 
 	/**
 	 * Crea una geometría que contiene como shape un punto 3D.
-	 *
-	 * @param x Coordenada x.
-	 * @param y Coordenada y.
-	 * @param z Coordenada z.
-	 *
+	 * 
+	 * @param x
+	 *            Coordenada x.
+	 * @param y
+	 *            Coordenada y.
+	 * @param z
+	 *            Coordenada z.
+	 * 
 	 * @return Geometría.
 	 */
 	public static IGeometry createPoint3D(double x, double y, double z) {
@@ -95,23 +101,27 @@ public class ShapeFactory {
 
 	/**
 	 * Crea una geometría que contiene como shape un Multipunto 3D.
-	 *
-	 * @param x Coordenada x.
-	 * @param y Coordenada y.
-	 * @param z Coordenada z.
-	 *
+	 * 
+	 * @param x
+	 *            Coordenada x.
+	 * @param y
+	 *            Coordenada y.
+	 * @param z
+	 *            Coordenada z.
+	 * 
 	 * @return Geometría.
 	 */
 	public static IGeometry createMultipoint3D(double[] x, double[] y,
-		double[] z) {
+			double[] z) {
 		return new FMultipoint3D(x, y, z);
 	}
 
 	/**
 	 * Crea una geometría que contiene como shape un Polilínea 2D.
-	 *
-	 * @param shape GeneralPathX.
-	 *
+	 * 
+	 * @param shape
+	 *            GeneralPathX.
+	 * 
 	 * @return Geometría.
 	 */
 	public static IGeometry createPolyline2D(GeneralPathX shape) {
@@ -120,21 +130,26 @@ public class ShapeFactory {
 
 	/**
 	 * Crea una geometría que contiene como shape un Polilínea 3D.
-	 *
-	 * @param shape GeneralPathX.
-	 * @param pZ Vector de Z.
-	 *
+	 * 
+	 * @param shape
+	 *            GeneralPathX.
+	 * @param pZ
+	 *            Vector de Z.
+	 * 
 	 * @return Geometría.
 	 */
 	public static IGeometry createPolyline3D(GeneralPathX shape, double[] pZ) {
 		return new FGeometry(new FPolyline3D(shape, pZ));
 	}
+
 	/**
 	 * Crea una geometría que contiene como shape un Polígono 3D.
-	 *
-	 * @param shape GeneralPathX.
-	 * @param pZ Vector de Z.
-	 *
+	 * 
+	 * @param shape
+	 *            GeneralPathX.
+	 * @param pZ
+	 *            Vector de Z.
+	 * 
 	 * @return Geometría.
 	 */
 	public static IGeometry createPolygon3D(GeneralPathX shape, double[] pZ) {
@@ -143,9 +158,10 @@ public class ShapeFactory {
 
 	/**
 	 * Crea una geometría que contiene como shape un Polígono 2D.
-	 *
-	 * @param shape GeneralPathX.
-	 *
+	 * 
+	 * @param shape
+	 *            GeneralPathX.
+	 * 
 	 * @return Geometría.
 	 */
 	public static IGeometry createPolygon2D(GeneralPathX shape) {
@@ -154,9 +170,10 @@ public class ShapeFactory {
 
 	/**
 	 * Crea una geometría que contiene como shape un Polígono 2D.
-	 *
-	 * @param shape FPolyline2D closed (you must be sure it is really closed).
-	 *
+	 * 
+	 * @param shape
+	 *            FPolyline2D closed (you must be sure it is really closed).
+	 * 
 	 * @return Geometría.
 	 */
 	public static IGeometry createPolygon2D(FPolyline2D shape) {
@@ -165,51 +182,63 @@ public class ShapeFactory {
 
 	/**
 	 * Crea a partir de un FShape una geometría.
-	 *
-	 * @param shp FShape.
-	 *
+	 * 
+	 * @param shp
+	 *            FShape.
+	 * 
 	 * @return Geometría.
 	 */
 	public static FGeometry createGeometry(FShape shp) {
 		return new FGeometry(shp);
 	}
 
-    public static IGeometry createCircle(Point2D center, Point2D r){
+	public static IGeometry createCircle(Point2D center, Point2D r) {
 		double radio = center.distance(r);
 		return createCircle(center, radio);
 	}
 
-	public static IGeometry createCircle(Point2D center, double radio){
-		Arc2D.Double arc = new Arc2D.Double(center.getX()-radio, center.getY() - radio,
-				2 * radio, 2 * radio, 0, 360, Arc2D.OPEN);
+	public static IGeometry createCircle(Point2D center, double radio) {
+		Arc2D.Double arc = new Arc2D.Double(center.getX() - radio,
+				center.getY() - radio, 2 * radio, 2 * radio, 0, 360, Arc2D.OPEN);
 
-		return new FGeometry(new FCircle2D(new GeneralPathX(arc),center,radio));
+		return new FGeometry(
+				new FCircle2D(new GeneralPathX(arc), center, radio));
 	}
-	public static IGeometry createCircle(Point2D p1, Point2D p2, Point2D p3){
+
+	public static IGeometry createCircle(Point2D p1, Point2D p2, Point2D p3) {
 		Point2D center = UtilFunctions.getCenter(p1, p2, p3);
-		if (center!=null)
-		return createCircle(center,p1);
+		if (center != null)
+			return createCircle(center, p1);
 		return null;
 	}
-	public static IGeometry createArc(Point2D p1, Point2D p2, Point2D p3){
+
+	public static IGeometry createArc(Point2D p1, Point2D p2, Point2D p3) {
 		Arc2D arco = UtilFunctions.createArc(p1, p2, p3);
-		if (arco == null) return null;
-		FArc2D arc=new FArc2D(new GeneralPathX(arco),p1,p2,p3);
-		IGeometry geom=new FGeometry(arc);
+		if (arco == null)
+			return null;
+		FArc2D arc = new FArc2D(new GeneralPathX(arco), p1, p2, p3);
+		IGeometry geom = new FGeometry(arc);
 		return geom;
 	}
-	public static IGeometry createEllipse(Point2D axis1Start, Point2D axis1End, double axis2Length){
+
+	public static IGeometry createEllipse(Point2D axis1Start, Point2D axis1End,
+			double axis2Length) {
 		double xAxis = axis1Start.distance(axis1End);
 		Arc2D.Double arc = new Arc2D.Double(axis1Start.getX(),
-				axis1Start.getY() - axis2Length, xAxis, 2 * axis2Length, 0, 360, Arc2D.OPEN);
-		Point2D rotationPoint = new Point2D.Double(axis1Start.getX() + xAxis /2, axis1Start.getY());
+				axis1Start.getY() - axis2Length, xAxis, 2 * axis2Length, 0,
+				360, Arc2D.OPEN);
+		Point2D rotationPoint = new Point2D.Double(axis1Start.getX() + xAxis
+				/ 2, axis1Start.getY());
 		double angle = UtilFunctions.getAngle(axis1Start, axis1End);
-		AffineTransform mT = AffineTransform.getRotateInstance(angle, axis1Start.getX(), axis1Start.getY());
+		AffineTransform mT = AffineTransform.getRotateInstance(angle,
+				axis1Start.getX(), axis1Start.getY());
 		GeneralPathX gp = new GeneralPathX(arc);
 		gp.transform(mT);
 
-		return new FGeometry(new FEllipse2D(new GeneralPathX(gp),axis1Start,axis1End,axis2Length));
+		return new FGeometry(new FEllipse2D(new GeneralPathX(gp), axis1Start,
+				axis1End, axis2Length));
 	}
+
 	public static IGeometry createSpline2D(Point2D[] points) {
 		return new FGeometry(new FSpline2D(points));
 	}

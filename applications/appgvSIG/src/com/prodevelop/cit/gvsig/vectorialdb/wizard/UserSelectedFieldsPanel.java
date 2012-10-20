@@ -54,200 +54,196 @@ import org.gvsig.gui.beans.swing.JButton;
 
 import com.iver.andami.PluginServices;
 
-
 /**
  * Utility class that holds a single table field selection controls.
- *
+ * 
  * @author jldominguez
- *
+ * 
  */
 public class UserSelectedFieldsPanel extends JPanel implements ActionListener {
-    private String[] fieldNames = null;
-    private String[] fieldTypes = null;
-    private JScrollPane fieldsScrollPane = null;
-    private AvailableFieldsCheckBoxList fieldsList = null;
-    private JButton selAllFieldsButton = null;
-    private JButton deselAllFieldsButton = null;
-    private WizardVectorialDB parent = null;
+	private String[] fieldNames = null;
+	private String[] fieldTypes = null;
+	private JScrollPane fieldsScrollPane = null;
+	private AvailableFieldsCheckBoxList fieldsList = null;
+	private JButton selAllFieldsButton = null;
+	private JButton deselAllFieldsButton = null;
+	private WizardVectorialDB parent = null;
 
-    public UserSelectedFieldsPanel(String[] fNames, String[] fTypes,
-        boolean empty, WizardVectorialDB _p) {
-        parent = _p;
-        fieldNames = fNames;
-        fieldTypes = fTypes;
-        initialize();
+	public UserSelectedFieldsPanel(String[] fNames, String[] fTypes,
+			boolean empty, WizardVectorialDB _p) {
+		parent = _p;
+		fieldNames = fNames;
+		fieldTypes = fTypes;
+		initialize();
 
-        if (empty) {
-            enableControls(false);
-        }
-        else {
-            setAllFieldsInTable(fNames, fieldTypes);
-        }
-    }
+		if (empty) {
+			enableControls(false);
+		} else {
+			setAllFieldsInTable(fNames, fieldTypes);
+		}
+	}
 
-    public void loadValues() {
-        setAllFieldsInTable(fieldNames, fieldTypes);
-    }
+	public void loadValues() {
+		setAllFieldsInTable(fieldNames, fieldTypes);
+	}
 
-    public String[] getUserSelectedFields(String idf, String gef) {
-        String[] resp = getUserSelectedFields();
-        resp = addBeginningIfNotContained(resp, idf);
-        resp = removeIfContained(resp, gef);
+	public String[] getUserSelectedFields(String idf, String gef) {
+		String[] resp = getUserSelectedFields();
+		resp = addBeginningIfNotContained(resp, idf);
+		resp = removeIfContained(resp, gef);
 
-        return resp;
-    }
+		return resp;
+	}
 
-    private String[] addBeginningIfNotContained(String[] arr, String item) {
-        if (contains(arr, item)) {
-            return arr;
-        }
-        else {
-            int size = arr.length;
-            String[] resp = new String[size + 1];
-            resp[0] = item;
+	private String[] addBeginningIfNotContained(String[] arr, String item) {
+		if (contains(arr, item)) {
+			return arr;
+		} else {
+			int size = arr.length;
+			String[] resp = new String[size + 1];
+			resp[0] = item;
 
-            for (int i = 0; i < size; i++) {
-                resp[i + 1] = arr[i];
-            }
+			for (int i = 0; i < size; i++) {
+				resp[i + 1] = arr[i];
+			}
 
-            return resp;
-        }
-    }
+			return resp;
+		}
+	}
 
-    private String[] removeIfContained(String[] arr, String item) {
-        if (!contains(arr, item)) {
-            return arr;
-        }
-        else {
-            int size = arr.length;
-            ArrayList aux = new ArrayList();
+	private String[] removeIfContained(String[] arr, String item) {
+		if (!contains(arr, item)) {
+			return arr;
+		} else {
+			int size = arr.length;
+			ArrayList aux = new ArrayList();
 
-            for (int i = 0; i < size; i++)
-                aux.add(arr[i]);
+			for (int i = 0; i < size; i++)
+				aux.add(arr[i]);
 
-            aux.remove(item);
+			aux.remove(item);
 
-            return (String[]) aux.toArray(new String[0]);
-        }
-    }
+			return (String[]) aux.toArray(new String[0]);
+		}
+	}
 
-    private boolean contains(String[] arr, String item) {
-        for (int i = 0; i < arr.length; i++) {
-            if (arr[i].compareTo(item) == 0) {
-                return true;
-            }
-        }
+	private boolean contains(String[] arr, String item) {
+		for (int i = 0; i < arr.length; i++) {
+			if (arr[i].compareTo(item) == 0) {
+				return true;
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    public void enableControls(boolean enable) {
-        getFieldsList().setEnabled(enable);
-        getSelAllFieldsButton().setEnabled(enable);
-        getDeselAllFieldsButton().setEnabled(enable);
-    }
+	public void enableControls(boolean enable) {
+		getFieldsList().setEnabled(enable);
+		getSelAllFieldsButton().setEnabled(enable);
+		getDeselAllFieldsButton().setEnabled(enable);
+	}
 
-    private void initialize() {
-        setLayout(null);
-        setBounds(new java.awt.Rectangle(255, 55, 251, 191));
-        setBorder(javax.swing.BorderFactory.createTitledBorder(null,
-                PluginServices.getText(this, "table_fields"),
-                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
-        add(getFieldsScrollPane(), null);
+	private void initialize() {
+		setLayout(null);
+		setBounds(new java.awt.Rectangle(255, 55, 251, 191));
+		setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+				PluginServices.getText(this, "table_fields"),
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+		add(getFieldsScrollPane(), null);
 
-        add(getSelAllFieldsButton(), null);
-        add(getDeselAllFieldsButton(), null);
-    }
+		add(getSelAllFieldsButton(), null);
+		add(getDeselAllFieldsButton(), null);
+	}
 
-    private JScrollPane getFieldsScrollPane() {
-        if (fieldsScrollPane == null) {
-            fieldsScrollPane = new JScrollPane();
-            fieldsScrollPane.setBounds(new java.awt.Rectangle(5, 20,
-                    101 + (28 * 5), 101 + (7 * 5)));
-            fieldsScrollPane.setViewportView(getFieldsList());
-        }
+	private JScrollPane getFieldsScrollPane() {
+		if (fieldsScrollPane == null) {
+			fieldsScrollPane = new JScrollPane();
+			fieldsScrollPane.setBounds(new java.awt.Rectangle(5, 20,
+					101 + (28 * 5), 101 + (7 * 5)));
+			fieldsScrollPane.setViewportView(getFieldsList());
+		}
 
-        return fieldsScrollPane;
-    }
+		return fieldsScrollPane;
+	}
 
-    private AvailableFieldsCheckBoxList getFieldsList() {
-        if (fieldsList == null) {
-            fieldsList = new AvailableFieldsCheckBoxList();
-        }
+	private AvailableFieldsCheckBoxList getFieldsList() {
+		if (fieldsList == null) {
+			fieldsList = new AvailableFieldsCheckBoxList();
+		}
 
-        return fieldsList;
-    }
+		return fieldsList;
+	}
 
-    private void setAllFieldsInTable(String[] all_f, String[] all_t) {
-        DefaultListModel lmodel = new DefaultListModel();
+	private void setAllFieldsInTable(String[] all_f, String[] all_t) {
+		DefaultListModel lmodel = new DefaultListModel();
 
-        for (int i = 0; i < all_f.length; i++) {
-            lmodel.addElement(new FieldsListItem(all_f[i], all_t[i]));
-        }
+		for (int i = 0; i < all_f.length; i++) {
+			lmodel.addElement(new FieldsListItem(all_f[i], all_t[i]));
+		}
 
-        getFieldsList().setModel(lmodel);
-        getFieldsScrollPane().setViewportView(fieldsList);
-        getFieldsScrollPane().updateUI();
-    }
+		getFieldsList().setModel(lmodel);
+		getFieldsScrollPane().setViewportView(fieldsList);
+		getFieldsScrollPane().updateUI();
+	}
 
-    private JButton getSelAllFieldsButton() {
-        if (selAllFieldsButton == null) {
-            selAllFieldsButton = new JButton();
-            selAllFieldsButton.addActionListener(this);
-            selAllFieldsButton.setBounds(new java.awt.Rectangle(28 + 5, 160,
-                    90, 26));
-            selAllFieldsButton.setText(PluginServices.getText(this, "all"));
-        }
+	private JButton getSelAllFieldsButton() {
+		if (selAllFieldsButton == null) {
+			selAllFieldsButton = new JButton();
+			selAllFieldsButton.addActionListener(this);
+			selAllFieldsButton.setBounds(new java.awt.Rectangle(28 + 5, 160,
+					90, 26));
+			selAllFieldsButton.setText(PluginServices.getText(this, "all"));
+		}
 
-        return selAllFieldsButton;
-    }
+		return selAllFieldsButton;
+	}
 
-    /**
-     * This method initializes deselAllFieldsButton
-     *
-     * @return javax.swing.JButton
-     */
-    private JButton getDeselAllFieldsButton() {
-        if (deselAllFieldsButton == null) {
-            deselAllFieldsButton = new JButton();
-            deselAllFieldsButton.addActionListener(this);
-            deselAllFieldsButton.setBounds(new java.awt.Rectangle(28 + 100,
-                    160, 90, 26));
-            deselAllFieldsButton.setText(PluginServices.getText(this, "none2"));
-        }
+	/**
+	 * This method initializes deselAllFieldsButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getDeselAllFieldsButton() {
+		if (deselAllFieldsButton == null) {
+			deselAllFieldsButton = new JButton();
+			deselAllFieldsButton.addActionListener(this);
+			deselAllFieldsButton.setBounds(new java.awt.Rectangle(28 + 100,
+					160, 90, 26));
+			deselAllFieldsButton.setText(PluginServices.getText(this, "none2"));
+		}
 
-        return deselAllFieldsButton;
-    }
+		return deselAllFieldsButton;
+	}
 
-    public void actionPerformed(ActionEvent e) {
-        Object src = e.getSource();
+	public void actionPerformed(ActionEvent e) {
+		Object src = e.getSource();
 
-        if (src == getDeselAllFieldsButton()) {
-            getFieldsList().checkAll(false);
-        }
+		if (src == getDeselAllFieldsButton()) {
+			getFieldsList().checkAll(false);
+		}
 
-        if (src == getSelAllFieldsButton()) {
-            getFieldsList().checkAll(true);
-        }
-    }
+		if (src == getSelAllFieldsButton()) {
+			getFieldsList().checkAll(true);
+		}
+	}
 
-    private String[] getUserSelectedFields() {
-        Object[] sel = fieldsList.getCheckedItems();
-        int size = sel.length;
+	private String[] getUserSelectedFields() {
+		Object[] sel = fieldsList.getCheckedItems();
+		int size = sel.length;
 
-        String[] resp = new String[size];
+		String[] resp = new String[size];
 
-        for (int i = 0; i < size; i++) {
-            resp[i] = ((FieldsListItem) sel[i]).getName();
-        }
+		for (int i = 0; i < size; i++) {
+			resp[i] = ((FieldsListItem) sel[i]).getName();
+		}
 
-        return resp;
-    }
+		return resp;
+	}
 
-    public void repaint() {
-        super.repaint();
-        getFieldsList().updateUI();
-        getFieldsScrollPane().updateUI();
-    }
+	public void repaint() {
+		super.repaint();
+		getFieldsList().updateUI();
+		getFieldsScrollPane().updateUI();
+	}
 }

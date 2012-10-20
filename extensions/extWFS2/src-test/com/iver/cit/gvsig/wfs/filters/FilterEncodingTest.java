@@ -5,6 +5,7 @@ import junit.framework.TestCase;
 import org.gvsig.remoteClient.wfs.filters.FilterEncoding;
 
 import com.iver.cit.gvsig.fmap.drivers.wfs.filters.SQLExpressionFormat;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -64,26 +65,26 @@ import com.iver.cit.gvsig.fmap.drivers.wfs.filters.SQLExpressionFormat;
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
 public class FilterEncodingTest extends TestCase {
-	String query1 = "nombre='pepe' and apellidos='sanchez' or edad < 3"; 
+	String query1 = "nombre='pepe' and apellidos='sanchez' or edad < 3";
 	String filter1 = "<Filter><Or><And><PropertyIsEqualTo><PropertyName>nombre</PropertyName><Literal>pepe</Literal></PropertyIsEqualTo><PropertyIsEqualTo><PropertyName>apellidos</PropertyName><Literal>sanchez</Literal></PropertyIsEqualTo></And><PropertyIsLessThan><PropertyName>edad</PropertyName><Literal>3</Literal></PropertyIsLessThan></Or></Filter>";
-	String query2 = "nombre='pepe' or apellidos='sanchez' and edad < 3"; 
+	String query2 = "nombre='pepe' or apellidos='sanchez' and edad < 3";
 	String filter2 = "<Filter><Or><PropertyIsEqualTo><PropertyName>nombre</PropertyName><Literal>pepe</Literal></PropertyIsEqualTo><And><PropertyIsEqualTo><PropertyName>apellidos</PropertyName><Literal>sanchez</Literal></PropertyIsEqualTo><PropertyIsLessThan><PropertyName>edad</PropertyName><Literal>3</Literal></PropertyIsLessThan></And></Or></Filter>";
-	String query3 = "nombre='pepe' or apellidos='sanchez' or edad < 3"; 
+	String query3 = "nombre='pepe' or apellidos='sanchez' or edad < 3";
 	String filter3 = "<Filter><Or><PropertyIsEqualTo><PropertyName>nombre</PropertyName><Literal>pepe</Literal></PropertyIsEqualTo><Or><PropertyIsEqualTo><PropertyName>apellidos</PropertyName><Literal>sanchez</Literal></PropertyIsEqualTo><PropertyIsLessThan><PropertyName>edad</PropertyName><Literal>3</Literal></PropertyIsLessThan></Or></Or></Filter>";
-	
-//	public void test1(){
-//		parseQuery(query1,filter1);
-//	}
-//	
-//	public void test2(){
-//		parseQuery(query2,filter2);
-//	}
-	
-	public void test3(){
-		parseQuery(query3,filter3);
+
+	// public void test1(){
+	// parseQuery(query1,filter1);
+	// }
+	//
+	// public void test2(){
+	// parseQuery(query2,filter2);
+	// }
+
+	public void test3() {
+		parseQuery(query3, filter3);
 	}
-	
-	private void parseQuery(String query, String filter){
+
+	private void parseQuery(String query, String filter) {
 		FilterEncoding fe = new FilterEncoding(new SQLExpressionFormat());
 		fe.setQuery(query);
 		System.out.println(fe.toString());

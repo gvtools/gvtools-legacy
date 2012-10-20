@@ -42,53 +42,53 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: ConvexHullGeoprocess.java 13881 2007-09-19 16:22:04Z jaume $
-* $Log$
-* Revision 1.4  2007-09-19 16:05:22  jaume
-* removed unnecessary imports
-*
-* Revision 1.3  2007/05/15 07:24:19  cesar
-* Add the finished method for execution from Event Dispatch Thread
-*
-* Revision 1.2  2007/03/06 16:47:58  caballero
-* Exceptions
-*
-* Revision 1.1  2006/06/20 18:20:45  azabala
-* first version in cvs
-*
-* Revision 1.1  2006/05/24 21:13:31  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.10  2006/05/01 19:16:22  azabala
-* la cancelacion no solo para el ITask que ejecuta el geoproceso, además llama al metodo cancel() del mismo (que se supone que debería hacer un drop() con los resultados del geoproceso inconcluso)
-*
-* Revision 1.9  2006/03/21 19:26:41  azabala
-* *** empty log message ***
-*
-* Revision 1.8  2006/03/17 19:52:54  azabala
-* *** empty log message ***
-*
-* Revision 1.7  2006/03/15 18:31:06  azabala
-* *** empty log message ***
-*
-* Revision 1.6  2006/03/14 18:32:46  fjp
-* Cambio con LayerDefinition para que sea compatible con la definición de tablas también.
-*
-* Revision 1.5  2006/03/07 21:01:33  azabala
-* *** empty log message ***
-*
-* Revision 1.4  2006/03/06 19:48:39  azabala
-* *** empty log message ***
-*
-* Revision 1.3  2006/03/05 19:57:25  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/02/26 20:52:43  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/02/17 16:32:20  azabala
-* *** empty log message ***
+ *
+ * $Id: ConvexHullGeoprocess.java 13881 2007-09-19 16:22:04Z jaume $
+ * $Log$
+ * Revision 1.4  2007-09-19 16:05:22  jaume
+ * removed unnecessary imports
+ *
+ * Revision 1.3  2007/05/15 07:24:19  cesar
+ * Add the finished method for execution from Event Dispatch Thread
+ *
+ * Revision 1.2  2007/03/06 16:47:58  caballero
+ * Exceptions
+ *
+ * Revision 1.1  2006/06/20 18:20:45  azabala
+ * first version in cvs
+ *
+ * Revision 1.1  2006/05/24 21:13:31  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.10  2006/05/01 19:16:22  azabala
+ * la cancelacion no solo para el ITask que ejecuta el geoproceso, además llama al metodo cancel() del mismo (que se supone que debería hacer un drop() con los resultados del geoproceso inconcluso)
+ *
+ * Revision 1.9  2006/03/21 19:26:41  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.8  2006/03/17 19:52:54  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.7  2006/03/15 18:31:06  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.6  2006/03/14 18:32:46  fjp
+ * Cambio con LayerDefinition para que sea compatible con la definición de tablas también.
+ *
+ * Revision 1.5  2006/03/07 21:01:33  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.4  2006/03/06 19:48:39  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.3  2006/03/05 19:57:25  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/02/26 20:52:43  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/02/17 16:32:20  azabala
+ * *** empty log message ***
  *
  *
  */
@@ -99,7 +99,6 @@ import java.util.Map;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
 import com.iver.cit.gvsig.exceptions.visitors.ProcessVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.VisitorException;
 import com.iver.cit.gvsig.fmap.core.IFeature;
@@ -126,9 +125,9 @@ import com.iver.utiles.swing.threads.IMonitorableTask;
 /**
  * Geoprocess that computes the convex hull of all geometries of the input
  * layer.
- *
+ * 
  * @author azabala
- *
+ * 
  */
 public class ConvexHullGeoprocess extends AbstractGeoprocess implements
 		IOneLayerGeoprocess {
@@ -139,8 +138,7 @@ public class ConvexHullGeoprocess extends AbstractGeoprocess implements
 	private LayerDefinition resultLayerDefinition;
 
 	/**
-	 * Iterates over geometries computing convex hull.
-	 * TODO Comparative Memory
+	 * Iterates over geometries computing convex hull. TODO Comparative Memory
 	 * vs Scalable
 	 */
 	private ScalableConvexHullVisitor visitor;
@@ -198,15 +196,15 @@ public class ConvexHullGeoprocess extends AbstractGeoprocess implements
 					"Problemas durante el proceso de calculo del convex hull");
 		} catch (ReadDriverException e) {
 			throw new GeoprocessException(
-				"Problemas con el driver calculando el convex hull");
+					"Problemas con el driver calculando el convex hull");
 		} catch (VisitorException e) {
 			throw new GeoprocessException(
-				"Problemas con el driver calculando el convex hull");
+					"Problemas con el driver calculando el convex hull");
 		}
 	}
 
 	public ILayerDefinition createLayerDefinition() {
-		if(resultLayerDefinition == null){
+		if (resultLayerDefinition == null) {
 			resultLayerDefinition = new SHPLayerDefinition();
 			resultLayerDefinition.setShapeType(XTypes.POLYGON);
 			FieldDescription[] fields = new FieldDescription[1];
@@ -234,25 +232,29 @@ public class ConvexHullGeoprocess extends AbstractGeoprocess implements
 	/**
 	 * IMonitorableTask that allows to run convex hull geoprocess in background,
 	 * with cancelation requests.
-	 *
+	 * 
 	 * @author azabala
-	 *
+	 * 
 	 */
 	class ConvexHullMonitorableTask implements IMonitorableTask {
 		private CancellableMonitorable cancelMonitor = null;
-		String MAIN_MESSAGE = PluginServices.getText(this, "Mensaje_convexhull");
-		String HULL_MESSAGE = PluginServices.getText(this, "Mensaje_procesando_convexhull");
+		String MAIN_MESSAGE = PluginServices
+				.getText(this, "Mensaje_convexhull");
+		String HULL_MESSAGE = PluginServices.getText(this,
+				"Mensaje_procesando_convexhull");
 		String of = PluginServices.getText(this, "De");
 		private boolean finished = false;
 
-		ConvexHullMonitorableTask() throws ReadDriverException{
+		ConvexHullMonitorableTask() throws ReadDriverException {
 			initialize();
 		}
+
 		void initialize() throws ReadDriverException {
 			cancelMonitor = createCancelMonitor();
 		}
 
-		private CancellableMonitorable createCancelMonitor() throws ReadDriverException {
+		private CancellableMonitorable createCancelMonitor()
+				throws ReadDriverException {
 			DefaultCancellableMonitorable monitor = new DefaultCancellableMonitorable();
 			monitor.setInitialStep(0);
 			monitor.setDeterminatedProcess(true);
@@ -284,10 +286,8 @@ public class ConvexHullGeoprocess extends AbstractGeoprocess implements
 		}
 
 		public String getNote() {
-			return HULL_MESSAGE + " " +
-			getCurrentStep()+ " " +
-			of  + " "+
-			getFinishStep();
+			return HULL_MESSAGE + " " + getCurrentStep() + " " + of + " "
+					+ getFinishStep();
 		}
 
 		public void cancel() {
@@ -322,10 +322,10 @@ public class ConvexHullGeoprocess extends AbstractGeoprocess implements
 						"Problemas durante el proceso de calculo del convex hull");
 			} catch (ReadDriverException e) {
 				throw new GeoprocessException(
-					"Problemas con el driver calculando el convex hull");
+						"Problemas con el driver calculando el convex hull");
 			} catch (VisitorException e) {
 				throw new GeoprocessException(
-					"Problemas con el driver calculando el convex hull");
+						"Problemas con el driver calculando el convex hull");
 			}
 			finished = true;
 		}
@@ -341,12 +341,15 @@ public class ConvexHullGeoprocess extends AbstractGeoprocess implements
 		public boolean isFinished() {
 			return finished;
 		}
-		/* (non-Javadoc)
+
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see com.iver.utiles.swing.threads.IMonitorableTask#finished()
 		 */
 		public void finished() {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 	}

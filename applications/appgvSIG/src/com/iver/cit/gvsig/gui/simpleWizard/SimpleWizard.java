@@ -15,61 +15,58 @@ import com.iver.andami.ui.mdiManager.WindowInfo;
 
 public class SimpleWizard extends JPanel implements IWindow {
 	WindowInfo viewInfo = null;
-	WizardPanelWithLogo wizardPanel;	
-	
-	// No deberían necesitarse un FinishAction y un CancelAction, pero bueno, 
+	WizardPanelWithLogo wizardPanel;
+
+	// No deberían necesitarse un FinishAction y un CancelAction, pero bueno,
 	// lo mantengo por ahora.
-	private class CloseAction extends FinishAction
-	{
+	private class CloseAction extends FinishAction {
 		IWindow v;
-		public CloseAction(IWindow view)
-		{
+
+		public CloseAction(IWindow view) {
 			super(wizardPanel.getWizardComponents());
 			v = view;
 		}
+
 		public void performAction() {
 			PluginServices.getMDIManager().closeWindow(v);
 		}
-		
+
 	}
-	private class CloseAction2 extends CancelAction
-	{
+
+	private class CloseAction2 extends CancelAction {
 
 		IWindow v;
-		public CloseAction2(IWindow view)
-		{
+
+		public CloseAction2(IWindow view) {
 			super(wizardPanel.getWizardComponents());
 			v = view;
 		}
+
 		public void performAction() {
 			PluginServices.getMDIManager().closeWindow(v);
 		}
-		
+
 	}
-	
-	
-	public SimpleWizard(ImageIcon logo)
-	{
+
+	public SimpleWizard(ImageIcon logo) {
 		wizardPanel = new WizardPanelWithLogo(logo);
 		CloseAction closeAction = new CloseAction(this);
 		CloseAction2 closeAction2 = new CloseAction2(this);
 		wizardPanel.getWizardComponents().setFinishAction(closeAction);
 		wizardPanel.getWizardComponents().setCancelAction(closeAction2);
-		
+
 		this.setLayout(new BorderLayout());
 		this.add(wizardPanel, BorderLayout.CENTER);
 	}
-	
-	public DefaultJWizardComponents getWizardComponents()
-	{
+
+	public DefaultJWizardComponents getWizardComponents() {
 		return wizardPanel.getWizardComponents();
 	}
-	
-	
+
 	public WindowInfo getWindowInfo() {
-		if (viewInfo == null)
-		{
-			viewInfo = new WindowInfo(WindowInfo.MODALDIALOG|WindowInfo.RESIZABLE);			
+		if (viewInfo == null) {
+			viewInfo = new WindowInfo(WindowInfo.MODALDIALOG
+					| WindowInfo.RESIZABLE);
 		}
 		return viewInfo;
 	}

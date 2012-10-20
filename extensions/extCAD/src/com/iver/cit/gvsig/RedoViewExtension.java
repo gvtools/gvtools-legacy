@@ -53,11 +53,10 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.gui.cad.CADTool;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
-
 /**
  * Extensión encargada de gestionar el rehacer un comando anteriormente
  * deshecho.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class RedoViewExtension extends Extension {
@@ -65,10 +64,11 @@ public class RedoViewExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
-		PluginServices.getIconTheme().registerDefault(
-				"view-redo",
-				this.getClass().getClassLoader().getResource("images/Redo.png")
-			);
+		PluginServices.getIconTheme()
+				.registerDefault(
+						"view-redo",
+						this.getClass().getClassLoader()
+								.getResource("images/Redo.png"));
 	}
 
 	/**
@@ -80,28 +80,32 @@ public class RedoViewExtension extends Extension {
 
 		if (s.compareTo("REDO") == 0) {
 			try {
-					FLayers layers=mapControl.getMapContext().getLayers();
-					FLayer[] activeLayers = layers.getActives();
-					if (activeLayers.length==1) {
-						FLayer activeLayer = activeLayers[0];
-						if (activeLayer instanceof FLyrVect && ((FLyrVect)activeLayer).getSource() instanceof VectorialEditableAdapter && activeLayer.isEditing() && activeLayer.isActive()){
-							VectorialEditableAdapter vea=(VectorialEditableAdapter)((FLyrVect)activeLayer).getSource();
-							vea.redo();
-							vea.getCommandRecord().fireCommandsRepaint(null);
-							vea.getSelection().clear();
-							CADTool cadTool=CADExtension.getCADTool();
-							if (cadTool!=null)
-								cadTool.clearSelection();
-						}
-
+				FLayers layers = mapControl.getMapContext().getLayers();
+				FLayer[] activeLayers = layers.getActives();
+				if (activeLayers.length == 1) {
+					FLayer activeLayer = activeLayers[0];
+					if (activeLayer instanceof FLyrVect
+							&& ((FLyrVect) activeLayer).getSource() instanceof VectorialEditableAdapter
+							&& activeLayer.isEditing()
+							&& activeLayer.isActive()) {
+						VectorialEditableAdapter vea = (VectorialEditableAdapter) ((FLyrVect) activeLayer)
+								.getSource();
+						vea.redo();
+						vea.getCommandRecord().fireCommandsRepaint(null);
+						vea.getSelection().clear();
+						CADTool cadTool = CADExtension.getCADTool();
+						if (cadTool != null)
+							cadTool.clearSelection();
 					}
+
+				}
 			} catch (EditionCommandException e) {
-				NotificationManager.addError(e.getMessage(),e);
+				NotificationManager.addError(e.getMessage(), e);
 			} catch (ReadDriverException e) {
-				NotificationManager.addError(e.getMessage(),e);
+				NotificationManager.addError(e.getMessage(), e);
 			}
 
-			//vista.getMapControl().drawMap(false);
+			// vista.getMapControl().drawMap(false);
 		}
 	}
 
@@ -111,13 +115,17 @@ public class RedoViewExtension extends Extension {
 	public boolean isEnabled() {
 		View vista = (View) PluginServices.getMDIManager().getActiveWindow();
 		MapControl mapControl = vista.getMapControl();
-		FLayers layers=mapControl.getMapContext().getLayers();
+		FLayers layers = mapControl.getMapContext().getLayers();
 		FLayer[] activeLayers = layers.getActives();
-		if (activeLayers.length==1) {
+		if (activeLayers.length == 1) {
 			FLayer activeLayer = activeLayers[0];
-			if (activeLayer instanceof FLyrVect && ((FLyrVect)activeLayer).getSource() instanceof VectorialEditableAdapter && activeLayer.isEditing() && activeLayer.isActive()){
-				VectorialEditableAdapter vea=(VectorialEditableAdapter)((FLyrVect)activeLayer).getSource();
-				if (vea==null)return false;
+			if (activeLayer instanceof FLyrVect
+					&& ((FLyrVect) activeLayer).getSource() instanceof VectorialEditableAdapter
+					&& activeLayer.isEditing() && activeLayer.isActive()) {
+				VectorialEditableAdapter vea = (VectorialEditableAdapter) ((FLyrVect) activeLayer)
+						.getSource();
+				if (vea == null)
+					return false;
 				return vea.getCommandRecord().moreRedoCommands();
 			}
 
@@ -129,22 +137,26 @@ public class RedoViewExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-															 .getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (f == null) {
 			return false;
 		}
 
 		if (f instanceof View) {
-			MapControl mapControl = ((View)f).getMapControl();
-			FLayers layers=mapControl.getMapContext().getLayers();
+			MapControl mapControl = ((View) f).getMapControl();
+			FLayers layers = mapControl.getMapContext().getLayers();
 			FLayer[] activeLayers = layers.getActives();
-			if (activeLayers.length==1) {
+			if (activeLayers.length == 1) {
 				FLayer activeLayer = activeLayers[0];
-				if (activeLayer instanceof FLyrVect && ((FLyrVect)activeLayer).getSource() instanceof VectorialEditableAdapter && activeLayer.isEditing() && activeLayer.isActive()){
-					VectorialEditableAdapter vea=(VectorialEditableAdapter)((FLyrVect)activeLayer).getSource();
-					if (vea==null)return false;
+				if (activeLayer instanceof FLyrVect
+						&& ((FLyrVect) activeLayer).getSource() instanceof VectorialEditableAdapter
+						&& activeLayer.isEditing() && activeLayer.isActive()) {
+					VectorialEditableAdapter vea = (VectorialEditableAdapter) ((FLyrVect) activeLayer)
+							.getSource();
+					if (vea == null)
+						return false;
 					return true;
 				}
 			}

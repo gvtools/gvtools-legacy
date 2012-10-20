@@ -42,14 +42,14 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: LayerListenerAdapter.java 24738 2008-11-04 12:32:27Z fpenarrubia $
-* $Log$
-* Revision 1.1  2006-11-07 19:49:55  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: LayerListenerAdapter.java 24738 2008-11-04 12:32:27Z fpenarrubia $
+ * $Log$
+ * Revision 1.1  2006-11-07 19:49:55  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package org.gvsig.fmap.layers;
 
 import com.iver.cit.gvsig.fmap.layers.CancelationException;
@@ -62,11 +62,12 @@ import com.iver.cit.gvsig.fmap.layers.LayerPositionEvent;
 /**
  * Empty implementation of LayerCollectionListener
  * 
- * (allows to extending classes to implements only interesting
- * methods, for example, only listen for layer selection events)
+ * (allows to extending classes to implements only interesting methods, for
+ * example, only listen for layer selection events)
  * 
  * */
-public class LayerListenerAdapter implements LayerCollectionListener, LayerListener {
+public class LayerListenerAdapter implements LayerCollectionListener,
+		LayerListener {
 
 	public void layerAdded(LayerCollectionEvent e) {
 	}
@@ -109,8 +110,7 @@ public class LayerListenerAdapter implements LayerCollectionListener, LayerListe
 
 	public void drawValueChanged(LayerEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
-

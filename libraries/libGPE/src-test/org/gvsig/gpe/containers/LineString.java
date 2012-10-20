@@ -59,21 +59,21 @@ import java.util.ArrayList;
  */
 public class LineString extends Geometry {
 	private ArrayList coordinates = null;
-				
+
 	public LineString() {
 		super();
 		coordinates = new ArrayList();
 	}
 
-	public void addCoordinate(double[] coordinate){
+	public void addCoordinate(double[] coordinate) {
 		coordinates.add(coordinate);
 	}
-	
-	public double geCoordinateAt(int index, int dimension){
-		return ((double[])(coordinates.get(index)))[dimension];
+
+	public double geCoordinateAt(int index, int dimension) {
+		return ((double[]) (coordinates.get(index)))[dimension];
 	}
-	
-	public int getCoordinatesNumber(){
+
+	public int getCoordinatesNumber() {
 		return coordinates.size();
-	}			
+	}
 }

@@ -40,19 +40,15 @@
  */
 package org.gvsig.graph.core;
 
-
-
-
-
 public abstract class AbstractNetSolver implements INetSolver {
 	protected Network net;
+
 	public Network getNetwork() {
 		return net;
 	}
+
 	public void setNetwork(Network net) {
 		this.net = net;
 	}
 
 }
-
-

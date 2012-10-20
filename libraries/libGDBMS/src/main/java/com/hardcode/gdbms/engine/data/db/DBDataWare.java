@@ -5,5 +5,5 @@ import com.hardcode.gdbms.engine.data.edition.DataWare;
 /**
  * @author Fernando González Cortés
  */
-public interface DBDataWare extends DataWare, DBDataSource{
+public interface DBDataWare extends DataWare, DBDataSource {
 }

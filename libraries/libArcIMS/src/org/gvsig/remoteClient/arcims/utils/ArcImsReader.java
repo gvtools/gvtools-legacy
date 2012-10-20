@@ -47,60 +47,64 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-
 public class ArcImsReader extends InputStreamReader {
-    private char codigoB;
-    private char codigoM;
+	private char codigoB;
+	private char codigoM;
 
-    public ArcImsReader(InputStream in, char codigoB, char codigoM) {
-        super(in);
-        this.codigoB = codigoB;
-        this.codigoM = codigoM;
-    }
+	public ArcImsReader(InputStream in, char codigoB, char codigoM) {
+		super(in);
+		this.codigoB = codigoB;
+		this.codigoM = codigoM;
+	}
 
-    /**
-    * Read a single character.
-    *
-    * @return The character read, or -1 if the end of the stream has been
-    *         reached
-    *
-    * @exception  IOException  If an I/O error occurs
-    */
-    public int read() throws IOException {
-        int sup = super.read();
+	/**
+	 * Read a single character.
+	 * 
+	 * @return The character read, or -1 if the end of the stream has been
+	 *         reached
+	 * 
+	 * @exception IOException
+	 *                If an I/O error occurs
+	 */
+	public int read() throws IOException {
+		int sup = super.read();
 
-        if (sup == (int) codigoM) {
-            return (int) codigoB;
-        } else {
-            return sup;
-        }
-    }
+		if (sup == (int) codigoM) {
+			return (int) codigoB;
+		} else {
+			return sup;
+		}
+	}
 
-    /**
-     * Read characters into a portion of an array.
-     *
-     * @param      cbuf     Destination buffer
-     * @param      offset   Offset at which to start storing characters
-     * @param      length   Maximum number of characters to read
-     *
-     * @return     The number of characters read, or -1 if the end of the
-     *             stream has been reached
-     *
-     * @exception  IOException  If an I/O error occurs
-     */
-    public int read(char[] cbuf, int off, int len) throws IOException {
-        synchronized (lock) {
-            int n = super.read(cbuf, off, len);
+	/**
+	 * Read characters into a portion of an array.
+	 * 
+	 * @param cbuf
+	 *            Destination buffer
+	 * @param offset
+	 *            Offset at which to start storing characters
+	 * @param length
+	 *            Maximum number of characters to read
+	 * 
+	 * @return The number of characters read, or -1 if the end of the stream has
+	 *         been reached
+	 * 
+	 * @exception IOException
+	 *                If an I/O error occurs
+	 */
+	public int read(char[] cbuf, int off, int len) throws IOException {
+		synchronized (lock) {
+			int n = super.read(cbuf, off, len);
 
-            for (int i = off; i < (off + n); i++) {
-                char c = cbuf[i];
+			for (int i = off; i < (off + n); i++) {
+				char c = cbuf[i];
 
-                if (c == codigoM) {
-                    cbuf[i] = codigoB;
-                }
-            }
+				if (c == codigoM) {
+					cbuf[i] = codigoB;
+				}
+			}
 
-            return n;
-        }
-    }
+			return n;
+		}
+	}
 }

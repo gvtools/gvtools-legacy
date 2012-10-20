@@ -8,7 +8,7 @@ import com.iver.utiles.XMLEntity;
 public class LayerLinkConfig implements IPersistence {
 	protected ArrayList<LinkConfig> linkList;
 	protected boolean enabled;
-	
+
 	public LayerLinkConfig() {
 		linkList = new ArrayList<LinkConfig>();
 	}
@@ -32,8 +32,7 @@ public class LayerLinkConfig implements IPersistence {
 	public LinkConfig removeLink(int linkIndex) {
 		try {
 			return linkList.remove(linkIndex);
-		}
-		catch (IndexOutOfBoundsException ex) {
+		} catch (IndexOutOfBoundsException ex) {
 			return null;
 		}
 	}
@@ -62,7 +61,7 @@ public class LayerLinkConfig implements IPersistence {
 		XMLEntity xmlconfig = new XMLEntity();
 		xmlconfig.putProperty("className", this.getClassName());
 		xmlconfig.putProperty("enabled", isEnabled());
-		for (int i=0; i<linkList.size(); i++) {
+		for (int i = 0; i < linkList.size(); i++) {
 			xmlconfig.addChild(linkList.get(i).getXMLEntity());
 		}
 		return xmlconfig;
@@ -71,11 +70,10 @@ public class LayerLinkConfig implements IPersistence {
 	public void setXMLEntity(XMLEntity xml) {
 		if (xml.contains("enabled")) {
 			setEnabled(xml.getBooleanProperty("enabled"));
+		} else {
+			setEnabled(false);
 		}
-		else {
-			setEnabled(false);			
-		}
-		for (int i=0; i<xml.getChildrenCount(); i++) {
+		for (int i = 0; i < xml.getChildrenCount(); i++) {
 			LinkConfig link = LinkConfig.createFromXMLEntity(xml.getChild(i));
 			linkList.add(link);
 		}

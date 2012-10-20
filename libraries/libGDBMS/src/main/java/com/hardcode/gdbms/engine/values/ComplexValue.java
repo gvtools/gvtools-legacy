@@ -18,17 +18,19 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 public class ComplexValue extends StringValue implements Map {
-	private LinkedHashMap mapValues =null;
+	private LinkedHashMap mapValues = null;
 
 	private static String indentString(int level) {
-		if (level < 1) return "";
-		char[] chars =new char[level*4];
-		Arrays.fill(chars,' ');
+		if (level < 1)
+			return "";
+		char[] chars = new char[level * 4];
+		Arrays.fill(chars, ' ');
 		return String.copyValueOf(chars);
 	}
+
 	/**
 	 * Construye un objeto ConplexValue con el parser
-	 *
+	 * 
 	 * @param text
 	 */
 	private ComplexValue(KXmlParser parser) {
@@ -39,18 +41,18 @@ public class ComplexValue extends StringValue implements Map {
 		} catch (Exception e) {
 			e.printStackTrace();
 			super.setValue(null);
-		}		
+		}
 	}
 
 	/**
 	 * Construye un objeto ConplexValue con el texto que se pasa como parametro
-	 *
+	 * 
 	 * @param text
 	 */
 	ComplexValue(String text) {
 		super();
 		this.mapValues = new LinkedHashMap();
-		this.setValue(text);		
+		this.setValue(text);
 	}
 
 	/**
@@ -60,7 +62,7 @@ public class ComplexValue extends StringValue implements Map {
 		super();
 		this.mapValues = new LinkedHashMap();
 	}
-	
+
 	private void parse() {
 		String value = super.getValue();
 		this.mapValues.clear();
@@ -80,36 +82,26 @@ public class ComplexValue extends StringValue implements Map {
 			super.setValue(null);
 		}
 	}
-	
-	
-		
-	private void parse(KXmlParser parser) throws XmlPullParserException, IOException, ParseException {
+
+	private void parse(KXmlParser parser) throws XmlPullParserException,
+			IOException, ParseException {
 		/*
-		 * Se espera que la le va a llegar una cadena
-		 * con el siguiente formato:
+		 * Se espera que la le va a llegar una cadena con el siguiente formato:
 		 * 
-		 * <dato1>valor1</dato1>
-		 * <dato2>valor2</dato2>
-		 * <dato3>
-		 *     <dato3_1>valor3</dato3_1>
-		 *     <dato3_2>
-		 *         <dato3_2_1>valor4</dato3_2_1>
-		 *         ....
-		 *     </dato3_2>		      
-		 * </dato3>
-		 * ....
+		 * <dato1>valor1</dato1> <dato2>valor2</dato2> <dato3>
+		 * <dato3_1>valor3</dato3_1> <dato3_2> <dato3_2_1>valor4</dato3_2_1>
+		 * .... </dato3_2> </dato3> ....
 		 * 
 		 * 
 		 * 
-		 * dentro del mapValues se registran los
-		 * valores de 'dato1', 'dato2' y 'dato3'.
-		 * Este ultimo sera a su vez un ComplexValue, y 
-		 * asi recursivamente.
+		 * dentro del mapValues se registran los valores de 'dato1', 'dato2' y
+		 * 'dato3'. Este ultimo sera a su vez un ComplexValue, y asi
+		 * recursivamente.
 		 */
-		
-		//FIXME: OJO!!!! que hacemos con la excepciones		
-		
-		try {					
+
+		// FIXME: OJO!!!! que hacemos con la excepciones
+
+		try {
 			String key;
 			Value value;
 			String cad;
@@ -117,14 +109,14 @@ public class ComplexValue extends StringValue implements Map {
 			if (parser.getEventType() == XmlPullParser.START_DOCUMENT) {
 				parser.nextTag();
 			}
-			
-			while (parser.getEventType() == XmlPullParser.START_TAG) {				
+
+			while (parser.getEventType() == XmlPullParser.START_TAG) {
 				key = parser.getName();
 				try {
-					type = parser.getAttributeValue(null,"_type");
+					type = parser.getAttributeValue(null, "_type");
 					cad = parser.nextText();
 					if (type != null) {
-						value = ValueFactory.createValueByValueName(cad,type);
+						value = ValueFactory.createValueByValueName(cad, type);
 					} else {
 						value = ValueFactory.createValue(cad);
 					}
@@ -138,31 +130,31 @@ public class ComplexValue extends StringValue implements Map {
 					}
 				}
 				parser.require(XmlPullParser.END_TAG, null, key);
-				
-				this.mapValues.put(key,value);
 
-				parser.nextTag();				
+				this.mapValues.put(key, value);
+
+				parser.nextTag();
 			}
 		} catch (XmlPullParserException e) {
-			if (parser.getEventType() == XmlPullParser.END_DOCUMENT) return; 
+			if (parser.getEventType() == XmlPullParser.END_DOCUMENT)
+				return;
 			throw e;
 		}
-		
+
 	}
-	
-	
+
 	private String dump() {
 		StringWriter buffer = new StringWriter();
 		try {
-			this.dumpToWriter(buffer,0);
+			this.dumpToWriter(buffer, 0);
 		} catch (IOException e) {
 			return null;
 		}
 		return buffer.toString();
 	}
-	
+
 	private void dumpToWriter(Writer buffer, int indent) throws IOException {
-		Iterator iter = this.mapValues.entrySet().iterator();		
+		Iterator iter = this.mapValues.entrySet().iterator();
 		String identStr = indentString(indent);
 		indent++;
 		Entry entry;
@@ -170,36 +162,39 @@ public class ComplexValue extends StringValue implements Map {
 		String typeString;
 		Value value;
 		while (iter.hasNext()) {
-			entry = (Entry)iter.next();
-			key = (String)entry.getKey();
-			value = (Value)entry.getValue();
-			buffer.write(identStr+"<"+key+ getDumpTypePropertyString(value) +">");
+			entry = (Entry) iter.next();
+			key = (String) entry.getKey();
+			value = (Value) entry.getValue();
+			buffer.write(identStr + "<" + key
+					+ getDumpTypePropertyString(value) + ">");
 			if (value instanceof ComplexValue) {
 				buffer.write("\n");
-				((ComplexValue)value).dumpToWriter(buffer,indent);
+				((ComplexValue) value).dumpToWriter(buffer, indent);
 				buffer.write(identStr);
 			} else {
 				buffer.write(value.toString());
 			}
-			buffer.write("</"+key+">\n");
+			buffer.write("</" + key + ">\n");
 		}
-		
+
 	}
-	
+
 	private String getDumpTypePropertyString(Value value) {
-		
+
 		if (value instanceof StringValue) {
 			return "";
 		} else if (value instanceof ComplexValue) {
 			return "";
-		} else{
-			String classname = value.getClass().getName();			
-			return " _type=\"" + (classname.substring(classname.lastIndexOf(".")+1)) + "\"";
+		} else {
+			String classname = value.getClass().getName();
+			return " _type=\""
+					+ (classname.substring(classname.lastIndexOf(".") + 1))
+					+ "\"";
 		}
-		
+
 	}
 
-	public int size() {	
+	public int size() {
 		return this.mapValues.size();
 	}
 
@@ -209,15 +204,15 @@ public class ComplexValue extends StringValue implements Map {
 
 	}
 
-	public boolean isEmpty() {		
+	public boolean isEmpty() {
 		return this.mapValues.isEmpty();
 	}
 
-	public boolean containsKey(Object key) {		
+	public boolean containsKey(Object key) {
 		return this.mapValues.containsKey(key);
 	}
 
-	public boolean containsValue(Object value) {		
+	public boolean containsValue(Object value) {
 		return this.mapValues.containsValue(value);
 	}
 
@@ -229,7 +224,7 @@ public class ComplexValue extends StringValue implements Map {
 		throw new UnsupportedOperationException();
 	}
 
-	public Set entrySet() {		
+	public Set entrySet() {
 		return this.mapValues.entrySet();
 	}
 
@@ -246,14 +241,13 @@ public class ComplexValue extends StringValue implements Map {
 	}
 
 	public Object put(Object key, Object value) {
-		throw new IllegalArgumentException("'value' must be a Value instance");		
-		//return this.mapValues.put(key,value);
+		throw new IllegalArgumentException("'value' must be a Value instance");
+		// return this.mapValues.put(key,value);
 	}
-	
+
 	public Object put(Object key, Value value) {
-		return this.mapValues.put(key,value);
+		return this.mapValues.put(key, value);
 	}
-	
 
 	public String getStringValue(ValueWriter writer) {
 		super.setValue(this.dump());
@@ -263,22 +257,23 @@ public class ComplexValue extends StringValue implements Map {
 	public String getValue() {
 		super.setValue(this.dump());
 		String val = super.getValue();
-		if (val == null){
+		if (val == null) {
 			return "";
 		}
 		return val;
 	}
 
-	public void setValue(String value) {		
+	public void setValue(String value) {
 		super.setValue(value);
 		this.parse();
 	}
-	
-	public String toString() {	
-		return this.getValue();		
+
+	public String toString() {
+		return this.getValue();
 	}
-	public int getSQLType() {		 
-		//return super.getSQLType(); --> Types.LONGVARCHAR;
+
+	public int getSQLType() {
+		// return super.getSQLType(); --> Types.LONGVARCHAR;
 		return Types.STRUCT;
 	}
 

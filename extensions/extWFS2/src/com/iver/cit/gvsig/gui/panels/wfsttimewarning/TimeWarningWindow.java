@@ -57,24 +57,28 @@ import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class TimeWarningWindow extends TimeWarningPanel implements IWindow{
+public class TimeWarningWindow extends TimeWarningPanel implements IWindow {
 	private WindowInfo info = null;
 
-	public TimeWarningWindow(FLyrWFS layer, ITocItem item, FLayer[] selectedItems, WFSTStartEditionTocMenuEntry startEditionTocMenuEntry){
+	public TimeWarningWindow(FLyrWFS layer, ITocItem item,
+			FLayer[] selectedItems,
+			WFSTStartEditionTocMenuEntry startEditionTocMenuEntry) {
 		super();
-		addActionListener(new TimeWarningWindowListener(this, layer, item, selectedItems, startEditionTocMenuEntry));
+		addActionListener(new TimeWarningWindowListener(this, layer, item,
+				selectedItems, startEditionTocMenuEntry));
 		setSrsBasedOnXML(layer.isWfstSrsBasedOnXML());
 		setLockFeatures(layer.isWfstLockFeaturesEnabled());
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindow#getWindowInfo()
 	 */
 	public WindowInfo getWindowInfo() {
-		if (info == null){
+		if (info == null) {
 			info = new WindowInfo(WindowInfo.MODALDIALOG);
-			info.setTitle(PluginServices.getText(this,"wfst_start_editing"));
+			info.setTitle(PluginServices.getText(this, "wfst_start_editing"));
 			info.setWidth(400);
 			info.setHeight(160);
 		}

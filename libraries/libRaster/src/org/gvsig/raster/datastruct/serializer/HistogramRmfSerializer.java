@@ -29,10 +29,11 @@ import org.gvsig.raster.datastruct.HistogramClass;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
 import org.kxml2.io.KXmlParser;
 import org.xmlpull.v1.XmlPullParserException;
+
 /**
  * <P>
  * Clase para convertir a XML un histograma y obtener el histograma desde XML.
- * Esta clase implementa el interfaz IRmfBlock con los métodos de escritura y 
+ * Esta clase implementa el interfaz IRmfBlock con los métodos de escritura y
  * lectura. Estos serán utilizados por el gestor de ficheros RMF para escribir y
  * leer datos.
  * </P>
@@ -40,37 +41,38 @@ import org.xmlpull.v1.XmlPullParserException;
  * La estructura XML de un histograma es la siguiente:
  * </P>
  * <P>
- *\<Histogram\> <BR>
- *&nbsp;\<ClassInterval\>1.0\</ClassInterval\><BR>
- *&nbsp;\<Min\>0.0\</Min\><BR>
- *&nbsp;\<Max\>255.0\</Max\><BR>
- *&nbsp;\<BandCount\>3\</BandCount\><BR>
- *&nbsp;\<Band\><BR>
- *&nbsp;&nbsp;\<Values\>13 2 0 ... 2 1 6\</Values\><BR>
- *&nbsp;\</Band\><BR>
- *&nbsp;\<Band\><BR>
- *&nbsp;&nbsp;\<Values\>6 2 2 ... 3 2 8\</Values\><BR>
- *&nbsp;\</Band\><BR>
- *&nbsp;\<Band\><BR>
- *&nbsp;&nbsp;\<Values\>16 1 1 ... 1 1 9\</Values\><BR>
- *&nbsp;\</Band\><BR\>
- *\</Histogram\><BR>
- *\</P\>
- *
+ * \<Histogram\> <BR>
+ * &nbsp;\<ClassInterval\>1.0\</ClassInterval\><BR>
+ * &nbsp;\<Min\>0.0\</Min\><BR>
+ * &nbsp;\<Max\>255.0\</Max\><BR>
+ * &nbsp;\<BandCount\>3\</BandCount\><BR>
+ * &nbsp;\<Band\><BR>
+ * &nbsp;&nbsp;\<Values\>13 2 0 ... 2 1 6\</Values\><BR>
+ * &nbsp;\</Band\><BR>
+ * &nbsp;\<Band\><BR>
+ * &nbsp;&nbsp;\<Values\>6 2 2 ... 3 2 8\</Values\><BR>
+ * &nbsp;\</Band\><BR>
+ * &nbsp;\<Band\><BR>
+ * &nbsp;&nbsp;\<Values\>16 1 1 ... 1 1 9\</Values\><BR>
+ * &nbsp;\</Band\><BR\>
+ * \</Histogram\><BR>
+ * \
+ * </P\>
+ * 
  * @version 23/04/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class HistogramRmfSerializer extends ClassSerializer {
-	//TAGS
-	public static final String MAIN_TAG   = "Histogram";
-	public static final String MIN        = "Min";
-	public static final String MAX        = "Max";
-	public static final String BAND       = "Band";
-	public static final String VALUES     = "Values";
+	// TAGS
+	public static final String MAIN_TAG = "Histogram";
+	public static final String MIN = "Min";
+	public static final String MAX = "Max";
+	public static final String BAND = "Band";
+	public static final String VALUES = "Values";
 	public static final String BAND_COUNT = "BandCount";
-	public static final String DATA_TYPE  = "DataType";
+	public static final String DATA_TYPE = "DataType";
 
-	private Histogram          histogram  = null;
+	private Histogram histogram = null;
 
 	/**
 	 * Registra HistogramRmfSerializer en los puntos de extension de Serializer
@@ -79,78 +81,89 @@ public class HistogramRmfSerializer extends ClassSerializer {
 		ExtensionPoint point = ExtensionPoint.getExtensionPoint("Serializer");
 		point.register("Histogram", HistogramRmfSerializer.class);
 	}
-	
+
 	/**
 	 * Constructor. Asigna el histograma a serializar.
-	 * @param Histogram histograma a convertir en XML
+	 * 
+	 * @param Histogram
+	 *            histograma a convertir en XML
 	 */
 	public HistogramRmfSerializer(Histogram hist) {
 		this.histogram = hist;
 	}
-	
+
 	/**
-	 * Constructor. 
+	 * Constructor.
 	 */
-	public HistogramRmfSerializer() {}
-	
+	public HistogramRmfSerializer() {
+	}
+
 	/**
 	 * Convierte una lista de valores en un solo String en un array de long
-	 * @param list Cadena con la lista de valores
+	 * 
+	 * @param list
+	 *            Cadena con la lista de valores
 	 * @return Array de valores long
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private long[] parseLongList(String list) throws XmlPullParserException, IOException {
+	private long[] parseLongList(String list) throws XmlPullParserException,
+			IOException {
 		String[] sValues = list.split(" ");
 		long[] dValues = new long[sValues.length];
 		for (int i = 0; i < sValues.length; i++)
 			dValues[i] = Long.parseLong(sValues[i]);
 		return dValues;
 	}
-	
+
 	/**
-	 * Parsea el tag Band para extraer la lista de valores (Values) asociada a una banda. 
-	 * @param parser KXmlParser
+	 * Parsea el tag Band para extraer la lista de valores (Values) asociada a
+	 * una banda.
+	 * 
+	 * @param parser
+	 *            KXmlParser
 	 * @return Array de long
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private long[] parserHistogramListValues(KXmlParser parser)  throws XmlPullParserException, IOException {
+	private long[] parserHistogramListValues(KXmlParser parser)
+			throws XmlPullParserException, IOException {
 		long[] valueList = null;
 		boolean end = false;
 		boolean tagOk = false;
 		int tag = parser.next();
 		while (!end) {
 			switch (tag) {
-				case KXmlParser.START_TAG:
-					if (parser.getName() != null) {
-						if (parser.getName().compareTo(VALUES) == 0)
-							tagOk = true;
-					}
-					break;
-				case KXmlParser.END_TAG:
-					if (parser.getName().compareTo(BAND) == 0)
-						end = true;
-					break;
-				case KXmlParser.TEXT:
-					if (tagOk) {
-						valueList = parseLongList(parser.getText());
-						tagOk = false;
-					}
-					break;
+			case KXmlParser.START_TAG:
+				if (parser.getName() != null) {
+					if (parser.getName().compareTo(VALUES) == 0)
+						tagOk = true;
+				}
+				break;
+			case KXmlParser.END_TAG:
+				if (parser.getName().compareTo(BAND) == 0)
+					end = true;
+				break;
+			case KXmlParser.TEXT:
+				if (tagOk) {
+					valueList = parseLongList(parser.getText());
+					tagOk = false;
+				}
+				break;
 			}
 			if (!end)
 				tag = parser.next();
 		}
 		return valueList;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.io.rmf.IRmfBlock#read(java.lang.String)
 	 */
-	public void read(String xml) throws ParsingException {	
-//		double interval = 0D;
+	public void read(String xml) throws ParsingException {
+		// double interval = 0D;
 		double min = 0D;
 		double max = 0D;
 		int numBands = 0;
@@ -171,24 +184,29 @@ public class HistogramRmfSerializer extends ClassSerializer {
 				parser.require(KXmlParser.START_TAG, null, MAIN_TAG);
 				while (tag != KXmlParser.END_DOCUMENT) {
 					switch (tag) {
-						case KXmlParser.START_TAG:
-							if (parser.getName() != null) {
-								if (parser.getName().compareTo(MAIN_TAG) == 0) {
-									numBands = (int) Double.parseDouble(parserString(parser, BAND_COUNT, null));
-									dataType = Integer.parseInt(parserString(parser, DATA_TYPE, null));
-									values = new long[numBands][];
-									for (int iBand = 0; iBand < numBands; iBand++) {
-										min = Double.parseDouble(parserString(parser, MIN, null));
-										max = Double.parseDouble(parserString(parser, MAX, null));
-										values[iBand] = parserHistogramListValues(parser);
-									}
+					case KXmlParser.START_TAG:
+						if (parser.getName() != null) {
+							if (parser.getName().compareTo(MAIN_TAG) == 0) {
+								numBands = (int) Double
+										.parseDouble(parserString(parser,
+												BAND_COUNT, null));
+								dataType = Integer.parseInt(parserString(
+										parser, DATA_TYPE, null));
+								values = new long[numBands][];
+								for (int iBand = 0; iBand < numBands; iBand++) {
+									min = Double.parseDouble(parserString(
+											parser, MIN, null));
+									max = Double.parseDouble(parserString(
+											parser, MAX, null));
+									values[iBand] = parserHistogramListValues(parser);
 								}
 							}
-							break;
-						case KXmlParser.END_TAG:
-							break;
-						case KXmlParser.TEXT:
-							break;
+						}
+						break;
+					case KXmlParser.END_TAG:
+						break;
+					case KXmlParser.TEXT:
+						break;
 					}
 					tag = parser.next();
 				}
@@ -213,6 +231,7 @@ public class HistogramRmfSerializer extends ClassSerializer {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.io.rmf.IRmfBlock#write()
 	 */
 	public String write() {
@@ -232,7 +251,8 @@ public class HistogramRmfSerializer extends ClassSerializer {
 			for (int iValues = 0; iValues < histogram.getNumValues(); iValues++) {
 				if (iValues != 0)
 					b.append(" ");
-				b.append((long) histogram.getHistogramValueByPos(iBand, iValues));
+				b.append((long) histogram
+						.getHistogramValueByPos(iBand, iValues));
 			}
 			b.append("</" + VALUES + ">\n");
 			b.append("\t</" + BAND + ">\n");
@@ -240,9 +260,10 @@ public class HistogramRmfSerializer extends ClassSerializer {
 		b.append("</" + MAIN_TAG + ">\n");
 		return b.toString();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.io.rmf.IRmfBlock#getResult()
 	 */
 	public Object getResult() {
@@ -251,6 +272,7 @@ public class HistogramRmfSerializer extends ClassSerializer {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.io.rmf.IRmfBlock#getMainTag()
 	 */
 	public String getMainTag() {

@@ -1,4 +1,5 @@
 package es.gva.cit.catalog.drivers.profiles;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -59,12 +60,12 @@ public interface IProfile {
 	public static final String DATEFROM = "datefromPropertyName";
 	public static final String DATETO = "datetoPropertyName";
 	public static final String ELEMENT_NAME = "elementNamePropertyName";
-	
+
 	/**
 	 * @return the element name property
 	 */
 	public String getElementNameProperty();
-	
+
 	/**
 	 * @return the title attribute name
 	 */
@@ -76,46 +77,46 @@ public interface IProfile {
 	public String getAbstractProperty();
 
 	/**
-	 * @return the keyword attribute name 
+	 * @return the keyword attribute name
 	 */
 	public String getKeywordsProperty();
 
 	/**
-	 * @return the topic attribute name  
+	 * @return the topic attribute name
 	 */
 	public String getTopicProperty();
 
 	/**
-	 * @return the scale attribute name  
+	 * @return the scale attribute name
 	 */
 	public String getScaleProperty();
 
 	/**
-	 * @return the provider attribute name 
+	 * @return the provider attribute name
 	 */
 	public String getProviderProperty();
 
 	/**
-	 * @return the date from attribute name  
+	 * @return the date from attribute name
 	 */
 	public String getDateFromProperty();
 
 	/**
-	 * @return the date to attribute name  
+	 * @return the date to attribute name
 	 */
 	public String getDateToProperty();
 
 	/**
-	 * @return the coordinates attribute name  
+	 * @return the coordinates attribute name
 	 */
 	public String getCoordinatesProperty();
 
 	/**
 	 * Return the topic name for a concrete profile
+	 * 
 	 * @param topic
-	 * @return
-	 * The topic name
+	 * @return The topic name
 	 */
-	public String getTopicValue(String topic);     
+	public String getTopicValue(String topic);
 
 }

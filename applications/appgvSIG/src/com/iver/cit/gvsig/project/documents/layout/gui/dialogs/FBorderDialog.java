@@ -67,10 +67,9 @@ import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 import com.iver.cit.gvsig.project.documents.layout.fframes.gui.dialogs.FFrameGraphicsDialog;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
-
 /**
  * Diálogo con todas las opciones para crear un borde a los fframes.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FBorderDialog extends JPanel implements IWindow {
@@ -99,46 +98,45 @@ public class FBorderDialog extends JPanel implements IWindow {
 	private FLayoutGraphics flg = null;
 	private String m_NameUnit = null;
 	private javax.swing.JButton bConfigurar = null;
-	GeometryAdapter geometry=new RectangleAdapter();
-	private boolean isAccepted=false;
+	GeometryAdapter geometry = new RectangleAdapter();
+	private boolean isAccepted = false;
 	private ISymbol symbol;
 
 	/**
 	 * This is the default constructor
-	 *
-	 * @param l Referencia al Layout.
+	 * 
+	 * @param l
+	 *            Referencia al Layout.
 	 */
 	public FBorderDialog(Layout l) {
 		super();
 		layout = l;
 		flg = new FLayoutGraphics(layout);
-		fframegraphics =(FFrameGraphics)FrameFactory.createFrameFromName(FFrameGraphicsFactory.registerName);
+		fframegraphics = (FFrameGraphics) FrameFactory
+				.createFrameFromName(FFrameGraphicsFactory.registerName);
 
 		fframegraphics.setLayout(layout);
 
 		fframegraphics.setColor(Color.black);
-		fframegraphics.update(FFrameGraphics.RECTANGLE, layout.getLayoutControl().getAT());
-
+		fframegraphics.update(FFrameGraphics.RECTANGLE, layout
+				.getLayoutControl().getAT());
 
 		initialize();
 		startFFrameGraphic();
 	}
+
 	private void startFFrameGraphic() {
-		IFFrame[] fframes=layout.getLayoutContext().getFFrames();
-		double x = Double.parseDouble(getTIzquierda().getText()
-				  .toString());
-		double y = Double.parseDouble(getTSuperior().getText()
-				  .toString());
-		double w = Double.parseDouble(getTDerecha().getText()
-				  .toString());
-		double h = Double.parseDouble(getTInferior().getText()
-				  .toString());
+		IFFrame[] fframes = layout.getLayoutContext().getFFrames();
+		double x = Double.parseDouble(getTIzquierda().getText().toString());
+		double y = Double.parseDouble(getTSuperior().getText().toString());
+		double w = Double.parseDouble(getTDerecha().getText().toString());
+		double h = Double.parseDouble(getTInferior().getText().toString());
 
 		Rectangle2D re = new Rectangle2D.Double();
 
 		if (getRbSeleccionados().isSelected()) {
 			if (selecList.length > 0) {
-				re=getRectangle(selecList[0]);
+				re = getRectangle(selecList[0]);
 
 			}
 
@@ -147,38 +145,38 @@ public class FBorderDialog extends JPanel implements IWindow {
 				re.add(rectaux);
 			}
 
-			//						crear un Rectángulo alrededor de los fframes seleccionados.
+			// crear un Rectángulo alrededor de los fframes seleccionados.
 		} else if (getRbTodos().isSelected()) {
 			if (fframes.length > 0) {
-				re=getRectangle(fframes[0]);
+				re = getRectangle(fframes[0]);
 			}
 
-			for (int i = 1; i < fframes.length;
-					i++) {
+			for (int i = 1; i < fframes.length; i++) {
 				Rectangle2D rectaux = getRectangle(fframes[i]);
 				re.add(rectaux);
 			}
 
-			//						creaer un Rectángulo que incluya a todos los fframes.
+			// creaer un Rectángulo que incluya a todos los fframes.
 		} else if (getRbMargen().isSelected()) {
-			//						creaer un Rectángulo en los márgenes del Layout.
+			// creaer un Rectángulo en los márgenes del Layout.
 			re.setRect(layout.getLayoutContext().getAtributes().getArea());
 		}
 
 		re.setRect(re.getX() - x, re.getY() - y, re.getWidth() + x + w,
-			re.getHeight() + y + h);
+				re.getHeight() + y + h);
 
-		geometry=new RectangleAdapter();
-		geometry.addPoint(new Point2D.Double(re.getX(),re.getY()));
-		geometry.addPoint(new Point2D.Double(re.getMaxX(),re.getMaxY()));
+		geometry = new RectangleAdapter();
+		geometry.addPoint(new Point2D.Double(re.getX(), re.getY()));
+		geometry.addPoint(new Point2D.Double(re.getMaxX(), re.getMaxY()));
 		geometry.end();
 		fframegraphics.setGeometryAdapter(geometry);
 	}
+
 	/**
 	 * This method initializes this
 	 */
 	private void initialize() {
-		selecList=layout.getLayoutContext().getFFrameSelected();
+		selecList = layout.getLayoutContext().getFFrameSelected();
 		this.setLayout(null);
 		m_NameUnit = layout.getLayoutContext().getAtributes().getNameUnit();
 		this.add(getRbSeleccionados(), null);
@@ -199,7 +197,7 @@ public class FBorderDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes rbSeleccionados
-	 *
+	 * 
 	 * @return javax.swing.JRadioButton
 	 */
 	private javax.swing.JRadioButton getRbSeleccionados() {
@@ -222,7 +220,7 @@ public class FBorderDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes rbTodos
-	 *
+	 * 
 	 * @return javax.swing.JRadioButton
 	 */
 	private javax.swing.JRadioButton getRbTodos() {
@@ -238,7 +236,7 @@ public class FBorderDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes rbMargen
-	 *
+	 * 
 	 * @return javax.swing.JRadioButton
 	 */
 	private javax.swing.JRadioButton getRbMargen() {
@@ -253,7 +251,7 @@ public class FBorderDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes chbAgrupar
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	private javax.swing.JCheckBox getChbAgrupar() {
@@ -268,7 +266,7 @@ public class FBorderDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes pPosicion
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private javax.swing.JPanel getPPosicion() {
@@ -291,7 +289,8 @@ public class FBorderDialog extends JPanel implements IWindow {
 			pPosicion.setBorder(javax.swing.BorderFactory.createTitledBorder(
 					null, PluginServices.getText(this, "posicion_linea"),
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					null));
 		}
 
 		return pPosicion;
@@ -299,7 +298,7 @@ public class FBorderDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes chbIgualLados
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	private javax.swing.JCheckBox getChbIgualLados() {
@@ -309,27 +308,28 @@ public class FBorderDialog extends JPanel implements IWindow {
 			chbIgualLados.setText(PluginServices.getText(this,
 					"igual_todos_lados"));
 			chbIgualLados.setSelected(true);
-			chbIgualLados.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						if (!chbIgualLados.isSelected()) {
-							getTTodosLados().setEnabled(false);
-							getTSuperior().setEnabled(true);
-							getTInferior().setEnabled(true);
-							getTIzquierda().setEnabled(true);
-							getTDerecha().setEnabled(true);
-						} else {
-							getTTodosLados().setEnabled(true);
-							getTSuperior().setEnabled(false);
-							getTInferior().setEnabled(false);
-							getTIzquierda().setEnabled(false);
-							getTDerecha().setEnabled(false);
-							getTSuperior().setText(tTodosLados.getText());
-							getTInferior().setText(tTodosLados.getText());
-							getTIzquierda().setText(tTodosLados.getText());
-							getTDerecha().setText(tTodosLados.getText());
+			chbIgualLados
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							if (!chbIgualLados.isSelected()) {
+								getTTodosLados().setEnabled(false);
+								getTSuperior().setEnabled(true);
+								getTInferior().setEnabled(true);
+								getTIzquierda().setEnabled(true);
+								getTDerecha().setEnabled(true);
+							} else {
+								getTTodosLados().setEnabled(true);
+								getTSuperior().setEnabled(false);
+								getTInferior().setEnabled(false);
+								getTIzquierda().setEnabled(false);
+								getTDerecha().setEnabled(false);
+								getTSuperior().setText(tTodosLados.getText());
+								getTInferior().setText(tTodosLados.getText());
+								getTIzquierda().setText(tTodosLados.getText());
+								getTDerecha().setText(tTodosLados.getText());
+							}
 						}
-					}
-				});
+					});
 		}
 
 		return chbIgualLados;
@@ -337,14 +337,14 @@ public class FBorderDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lunidades
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLunidades() {
 		if (lunidades == null) {
 			lunidades = new javax.swing.JLabel();
 			lunidades.setBounds(264, 64, 78, 18);
-			lunidades.setText(PluginServices.getText(this,m_NameUnit));
+			lunidades.setText(PluginServices.getText(this, m_NameUnit));
 		}
 
 		return lunidades;
@@ -352,7 +352,7 @@ public class FBorderDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes tTodosLados
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private javax.swing.JTextField getTTodosLados() {
@@ -361,15 +361,15 @@ public class FBorderDialog extends JPanel implements IWindow {
 			tTodosLados.setBounds(267, 19, 48, 16);
 			tTodosLados.setText("0.5");
 			tTodosLados.addCaretListener(new javax.swing.event.CaretListener() {
-					public void caretUpdate(javax.swing.event.CaretEvent e) {
-						if (getChbIgualLados().isSelected()) {
-							getTSuperior().setText(tTodosLados.getText());
-							getTInferior().setText(tTodosLados.getText());
-							getTIzquierda().setText(tTodosLados.getText());
-							getTDerecha().setText(tTodosLados.getText());
-						}
+				public void caretUpdate(javax.swing.event.CaretEvent e) {
+					if (getChbIgualLados().isSelected()) {
+						getTSuperior().setText(tTodosLados.getText());
+						getTInferior().setText(tTodosLados.getText());
+						getTIzquierda().setText(tTodosLados.getText());
+						getTDerecha().setText(tTodosLados.getText());
 					}
-				});
+				}
+			});
 		}
 
 		return tTodosLados;
@@ -377,7 +377,7 @@ public class FBorderDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lSuperior
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLSuperior() {
@@ -392,7 +392,7 @@ public class FBorderDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lInferior
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLInferior() {
@@ -407,7 +407,7 @@ public class FBorderDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes tSuperior
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private javax.swing.JTextField getTSuperior() {
@@ -423,7 +423,7 @@ public class FBorderDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes tInferior
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private javax.swing.JTextField getTInferior() {
@@ -439,7 +439,7 @@ public class FBorderDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lIzquierda
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLIzquierda() {
@@ -454,7 +454,7 @@ public class FBorderDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lDerecha
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLDerecha() {
@@ -469,7 +469,7 @@ public class FBorderDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes tIzquierda
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private javax.swing.JTextField getTIzquierda() {
@@ -485,7 +485,7 @@ public class FBorderDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes tDerecha
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private javax.swing.JTextField getTDerecha() {
@@ -501,7 +501,7 @@ public class FBorderDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lUnidades
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLUnidades() {
@@ -519,14 +519,15 @@ public class FBorderDialog extends JPanel implements IWindow {
 	 */
 	public WindowInfo getWindowInfo() {
 		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODALDIALOG);
-		m_viewinfo.setTitle(PluginServices.getText(this, "ajustes_linea_grafica"));
+		m_viewinfo.setTitle(PluginServices.getText(this,
+				"ajustes_linea_grafica"));
 
 		return m_viewinfo;
 	}
 
 	/**
 	 * This method initializes bAceptar
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBAceptar() {
@@ -535,117 +536,134 @@ public class FBorderDialog extends JPanel implements IWindow {
 			bAceptar.setBounds(134, 193, 100, 20);
 			bAceptar.setText(PluginServices.getText(this, "Aceptar"));
 			bAceptar.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						IFFrame[] fframes=layout.getLayoutContext().getFFrames();
-						double x = Double.parseDouble(getTIzquierda().getText()
-														  .toString());
-						double y = Double.parseDouble(getTSuperior().getText()
-														  .toString());
-						double w = Double.parseDouble(getTDerecha().getText()
-														  .toString());
-						double h = Double.parseDouble(getTInferior().getText()
-														  .toString());
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					IFFrame[] fframes = layout.getLayoutContext().getFFrames();
+					double x = Double.parseDouble(getTIzquierda().getText()
+							.toString());
+					double y = Double.parseDouble(getTSuperior().getText()
+							.toString());
+					double w = Double.parseDouble(getTDerecha().getText()
+							.toString());
+					double h = Double.parseDouble(getTInferior().getText()
+							.toString());
 
-						if (!getChbAgrupar().isSelected()) {
-							Rectangle2D re = new Rectangle2D.Double();
+					if (!getChbAgrupar().isSelected()) {
+						Rectangle2D re = new Rectangle2D.Double();
 
-							if (getRbSeleccionados().isSelected()) {
-								if (selecList.length > 0) {
-									re=getRectangle(selecList[0]);
+						if (getRbSeleccionados().isSelected()) {
+							if (selecList.length > 0) {
+								re = getRectangle(selecList[0]);
 
-								}
-
-								for (int i = 1; i < selecList.length; i++) {
-									Rectangle2D rectaux = getRectangle(selecList[i]);
-									re.add(rectaux);
-								}
-
-								//						crear un Rectángulo alrededor de los fframes seleccionados.
-							} else if (getRbTodos().isSelected()) {
-								if (fframes.length > 0) {
-									re=getRectangle(fframes[0]);
-								}
-
-								for (int i = 1; i < fframes.length;
-										i++) {
-									Rectangle2D rectaux = getRectangle(fframes[i]);
-									re.add(rectaux);
-								}
-
-								//						creaer un Rectángulo que incluya a todos los fframes.
-							} else if (getRbMargen().isSelected()) {
-								//						creaer un Rectángulo en los márgenes del Layout.
-								re.setRect(layout.getLayoutContext().getAtributes().getArea());
 							}
 
-							re.setRect(re.getX() - x, re.getY() - y, re.getWidth() + x + w,
-								re.getHeight() + y + h);
-
-							geometry=new RectangleAdapter();
-							geometry.addPoint(new Point2D.Double(re.getX(),re.getY()));
-							geometry.addPoint(new Point2D.Double(re.getMaxX(),re.getMaxY()));
-							geometry.end();
-							fframegraphics.setGeometryAdapter(geometry);
-							fframegraphics.setBoundBox(re);
-							if (symbol!=null)
-								fframegraphics.setFSymbol(symbol);
-							layout.getLayoutContext().addFFrame(fframegraphics, true,true);
-						} else { //Agrupar
-
-							Rectangle2D re = new Rectangle2D.Double();
-							if (getRbSeleccionados().isSelected()) {
-								if (selecList.length > 0) {
-									re=getRectangle(selecList[0]);
-								}
-
-								for (int i = 1; i < selecList.length; i++) {
-									Rectangle2D rectaux = getRectangle(selecList[i]);
-									re.add(rectaux);
-								}
-
-								//						crear un Rectángulo alrededor de los fframes seleccionados.
-							} else if (getRbTodos().isSelected()) {
-								if (fframes.length > 0) {
-									re=getRectangle(fframes[0]);
-								}
-
-								for (int i = 1; i < fframes.length;
-										i++) {
-									Rectangle2D rectaux = getRectangle(fframes[i]);
-									fframes[i].setSelected(true);
-									re.add(rectaux);
-								}
-
-								//						creaer un Rectángulo que incluya a todos los fframes.
-							} else if (getRbMargen().isSelected()) {
-								//						creaer un Rectángulo en los márgenes del Layout.
-								re.setRect(layout.getLayoutContext().getAtributes().getArea());
+							for (int i = 1; i < selecList.length; i++) {
+								Rectangle2D rectaux = getRectangle(selecList[i]);
+								re.add(rectaux);
 							}
 
-							re.setRect(re.getX() - x, re.getY() - y, re.getWidth() + x + w,
-								re.getHeight() + y + h);
+							// crear un Rectángulo alrededor de los fframes
+							// seleccionados.
+						} else if (getRbTodos().isSelected()) {
+							if (fframes.length > 0) {
+								re = getRectangle(fframes[0]);
+							}
 
-							geometry=new RectangleAdapter();
-							geometry.addPoint(new Point2D.Double(re.getX(),re.getY()));
-							geometry.addPoint(new Point2D.Double(re.getMaxX(),re.getMaxY()));
-							geometry.end();
-							fframegraphics.setGeometryAdapter(geometry);
-							fframegraphics.setBoundBox(re);
-							if (symbol!=null)
-								fframegraphics.setFSymbol(symbol);
-							layout.getLayoutContext().getEFS().startComplexCommand();
-							layout.getLayoutContext().addFFrame(fframegraphics, false,true);
-							flg.grouping();
-							layout.getLayoutContext().getEFS().endComplexCommand(PluginServices.getText(this,"group_graphic_line"));
+							for (int i = 1; i < fframes.length; i++) {
+								Rectangle2D rectaux = getRectangle(fframes[i]);
+								re.add(rectaux);
+							}
 
+							// creaer un Rectángulo que incluya a todos los
+							// fframes.
+						} else if (getRbMargen().isSelected()) {
+							// creaer un Rectángulo en los márgenes del Layout.
+							re.setRect(layout.getLayoutContext().getAtributes()
+									.getArea());
 						}
 
-						PluginServices.getMDIManager().closeWindow(FBorderDialog.this);
-						layout.getLayoutControl().setStatus(LayoutControl.DESACTUALIZADO);
-						layout.getLayoutControl().repaint();
-						isAccepted=true;
+						re.setRect(re.getX() - x, re.getY() - y, re.getWidth()
+								+ x + w, re.getHeight() + y + h);
+
+						geometry = new RectangleAdapter();
+						geometry.addPoint(new Point2D.Double(re.getX(), re
+								.getY()));
+						geometry.addPoint(new Point2D.Double(re.getMaxX(), re
+								.getMaxY()));
+						geometry.end();
+						fframegraphics.setGeometryAdapter(geometry);
+						fframegraphics.setBoundBox(re);
+						if (symbol != null)
+							fframegraphics.setFSymbol(symbol);
+						layout.getLayoutContext().addFFrame(fframegraphics,
+								true, true);
+					} else { // Agrupar
+
+						Rectangle2D re = new Rectangle2D.Double();
+						if (getRbSeleccionados().isSelected()) {
+							if (selecList.length > 0) {
+								re = getRectangle(selecList[0]);
+							}
+
+							for (int i = 1; i < selecList.length; i++) {
+								Rectangle2D rectaux = getRectangle(selecList[i]);
+								re.add(rectaux);
+							}
+
+							// crear un Rectángulo alrededor de los fframes
+							// seleccionados.
+						} else if (getRbTodos().isSelected()) {
+							if (fframes.length > 0) {
+								re = getRectangle(fframes[0]);
+							}
+
+							for (int i = 1; i < fframes.length; i++) {
+								Rectangle2D rectaux = getRectangle(fframes[i]);
+								fframes[i].setSelected(true);
+								re.add(rectaux);
+							}
+
+							// creaer un Rectángulo que incluya a todos los
+							// fframes.
+						} else if (getRbMargen().isSelected()) {
+							// creaer un Rectángulo en los márgenes del Layout.
+							re.setRect(layout.getLayoutContext().getAtributes()
+									.getArea());
+						}
+
+						re.setRect(re.getX() - x, re.getY() - y, re.getWidth()
+								+ x + w, re.getHeight() + y + h);
+
+						geometry = new RectangleAdapter();
+						geometry.addPoint(new Point2D.Double(re.getX(), re
+								.getY()));
+						geometry.addPoint(new Point2D.Double(re.getMaxX(), re
+								.getMaxY()));
+						geometry.end();
+						fframegraphics.setGeometryAdapter(geometry);
+						fframegraphics.setBoundBox(re);
+						if (symbol != null)
+							fframegraphics.setFSymbol(symbol);
+						layout.getLayoutContext().getEFS()
+								.startComplexCommand();
+						layout.getLayoutContext().addFFrame(fframegraphics,
+								false, true);
+						flg.grouping();
+						layout.getLayoutContext()
+								.getEFS()
+								.endComplexCommand(
+										PluginServices.getText(this,
+												"group_graphic_line"));
+
 					}
-				});
+
+					PluginServices.getMDIManager().closeWindow(
+							FBorderDialog.this);
+					layout.getLayoutControl().setStatus(
+							LayoutControl.DESACTUALIZADO);
+					layout.getLayoutControl().repaint();
+					isAccepted = true;
+				}
+			});
 		}
 
 		return bAceptar;
@@ -653,7 +671,7 @@ public class FBorderDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes bCancelar
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBCancelar() {
@@ -662,11 +680,12 @@ public class FBorderDialog extends JPanel implements IWindow {
 			bCancelar.setBounds(251, 193, 100, 20);
 			bCancelar.setText(PluginServices.getText(this, "Cancelar"));
 			bCancelar.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						PluginServices.getMDIManager().closeWindow(FBorderDialog.this);
-						isAccepted=false;
-					}
-				});
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					PluginServices.getMDIManager().closeWindow(
+							FBorderDialog.this);
+					isAccepted = false;
+				}
+			});
 		}
 
 		return bCancelar;
@@ -680,7 +699,7 @@ public class FBorderDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes bConfigurar
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBConfigurar() {
@@ -689,57 +708,60 @@ public class FBorderDialog extends JPanel implements IWindow {
 			bConfigurar.setBounds(17, 193, 100, 20);
 			bConfigurar.setText(PluginServices.getText(this, "configurar"));
 			bConfigurar.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						FFrameGraphicsDialog graphicsdialog = new FFrameGraphicsDialog(layout,
-								fframegraphics);
-						PluginServices.getMDIManager().addWindow(graphicsdialog);
-						symbol=(ISymbol)graphicsdialog.getSelectedObject();
-					}
-				});
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					FFrameGraphicsDialog graphicsdialog = new FFrameGraphicsDialog(
+							layout, fframegraphics);
+					PluginServices.getMDIManager().addWindow(graphicsdialog);
+					symbol = (ISymbol) graphicsdialog.getSelectedObject();
+				}
+			});
 		}
 
 		return bConfigurar;
 	}
-	private Rectangle2D getRectangle(IFFrame f){
-		Rectangle2D.Double re= new Rectangle2D.Double();
+
+	private Rectangle2D getRectangle(IFFrame f) {
+		Rectangle2D.Double re = new Rectangle2D.Double();
 		re.setRect(f.getBoundBox());
-		Point2D p1=new Point2D.Double();
-		Point2D p2=new Point2D.Double();
-		Point2D p3=new Point2D.Double();
-		Point2D p4=new Point2D.Double();
-		double rotation=(f).getRotation();
-		AffineTransform at=new AffineTransform();
-		at.rotate(Math.toRadians(rotation), re.x + (re.width / 2),
-				re.y + (re.height / 2));
-		at.transform(new Point2D.Double(re.getX(),re.getY()),p1);
-		at.transform(new Point2D.Double(re.getMaxX(),re.getY()),p2);
-		at.transform(new Point2D.Double(re.getMaxX(),re.getMaxY()),p3);
-		at.transform(new Point2D.Double(re.getX(),re.getMaxY()),p4);
-		if (p1.getX()<p4.getX()){
-			re.x=p1.getX();
-		}else{
-			re.x=p4.getX();
+		Point2D p1 = new Point2D.Double();
+		Point2D p2 = new Point2D.Double();
+		Point2D p3 = new Point2D.Double();
+		Point2D p4 = new Point2D.Double();
+		double rotation = (f).getRotation();
+		AffineTransform at = new AffineTransform();
+		at.rotate(Math.toRadians(rotation), re.x + (re.width / 2), re.y
+				+ (re.height / 2));
+		at.transform(new Point2D.Double(re.getX(), re.getY()), p1);
+		at.transform(new Point2D.Double(re.getMaxX(), re.getY()), p2);
+		at.transform(new Point2D.Double(re.getMaxX(), re.getMaxY()), p3);
+		at.transform(new Point2D.Double(re.getX(), re.getMaxY()), p4);
+		if (p1.getX() < p4.getX()) {
+			re.x = p1.getX();
+		} else {
+			re.x = p4.getX();
 		}
-		if (p1.getY()<p2.getY()){
-			re.y=p1.getY();
-		}else{
-			re.y=p2.getY();
+		if (p1.getY() < p2.getY()) {
+			re.y = p1.getY();
+		} else {
+			re.y = p2.getY();
 		}
-		if (p2.getX()>p3.getX()){
-			re.width=p2.getX()-re.x;
-		}else{
-			re.width=p3.getX()-re.x;
+		if (p2.getX() > p3.getX()) {
+			re.width = p2.getX() - re.x;
+		} else {
+			re.width = p3.getX() - re.x;
 		}
-		if (p4.getY()>p3.getY()){
-			re.height=p4.getY()-re.y;
-		}else{
-			re.height=p3.getY()-re.y;
+		if (p4.getY() > p3.getY()) {
+			re.height = p4.getY() - re.y;
+		} else {
+			re.height = p3.getY() - re.y;
 		}
 		return re;
 	}
+
 	public boolean isAccepted() {
 		return isAccepted;
 	}
+
 	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}

@@ -4,11 +4,10 @@ import java.sql.Types;
 
 import com.hardcode.gdbms.engine.values.NullValue;
 
-
 /**
  * Clase que extiende a NullValue para especificar los vlaores no representados
  * por ningún otro valor.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class NullUniqueValue extends NullValue {

@@ -6,9 +6,10 @@ public class InvalidROIsShpException extends Exception {
 
 	/**
 	 * Constructor. Asigna el texto de la excepción
+	 * 
 	 * @param msg
 	 */
-	public InvalidROIsShpException(String msg){
+	public InvalidROIsShpException(String msg) {
 		super(msg);
 	}
 

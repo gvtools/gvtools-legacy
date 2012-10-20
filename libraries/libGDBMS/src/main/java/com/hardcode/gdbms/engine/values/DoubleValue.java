@@ -2,11 +2,9 @@ package com.hardcode.gdbms.engine.values;
 
 import java.sql.Types;
 
-
-
 /**
  * Wrapper sobre el valor double
- *
+ * 
  * @author Fernando González Cortés
  */
 public class DoubleValue extends NumericValue {
@@ -14,8 +12,9 @@ public class DoubleValue extends NumericValue {
 
 	/**
 	 * Creates a new DoubleValue object.
-	 *
-	 * @param val DOCUMENT ME!
+	 * 
+	 * @param val
+	 *            DOCUMENT ME!
 	 */
 	DoubleValue(double val) {
 		value = val;
@@ -29,7 +28,7 @@ public class DoubleValue extends NumericValue {
 
 	/**
 	 * Establece el valor de este objeto
-	 *
+	 * 
 	 * @param value
 	 */
 	public void setValue(double value) {
@@ -38,7 +37,7 @@ public class DoubleValue extends NumericValue {
 
 	/**
 	 * Obtiene el valor de este objeto
-	 *
+	 * 
 	 * @return
 	 */
 	public double getValue() {
@@ -101,19 +100,19 @@ public class DoubleValue extends NumericValue {
 		return (short) value;
 	}
 
-    /**
-     * @see com.hardcode.gdbms.engine.values.Value#getStringValue(com.hardcode.gdbms.engine.data.driver.ValueWriter)
-     */
-    public String getStringValue(ValueWriter writer) {
-        return writer.getStatementString(value, Types.DOUBLE);
-    }
+	/**
+	 * @see com.hardcode.gdbms.engine.values.Value#getStringValue(com.hardcode.gdbms.engine.data.driver.ValueWriter)
+	 */
+	public String getStringValue(ValueWriter writer) {
+		return writer.getStatementString(value, Types.DOUBLE);
+	}
 
-    /**
-     * @see com.hardcode.gdbms.engine.values.Value#getSQLType()
-     */
-    public int getSQLType() {
-        return Types.DOUBLE;
-    }
+	/**
+	 * @see com.hardcode.gdbms.engine.values.Value#getSQLType()
+	 */
+	public int getSQLType() {
+		return Types.DOUBLE;
+	}
 
 	public int getWidth() {
 		return 8;

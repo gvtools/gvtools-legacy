@@ -80,7 +80,7 @@ import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
  */
 public class ZoomAlTemaTocMenuEntry extends AbstractTocContextMenuAction {
 	public String getGroup() {
-		return "group2"; //FIXME
+		return "group2"; // FIXME
 	}
 
 	public int getGroupOrder() {
@@ -100,23 +100,24 @@ public class ZoomAlTemaTocMenuEntry extends AbstractTocContextMenuAction {
 	}
 
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
-		if (isTocItemBranch(item) && ! (selectedItems == null || selectedItems.length <= 0)) {
+		if (isTocItemBranch(item)
+				&& !(selectedItems == null || selectedItems.length <= 0)) {
 			return true;
 		}
 		return false;
 
 	}
 
-
 	public void execute(ITocItem item, FLayer[] selectedItems) {
 
+		// 050209, jmorell: Para que haga un zoom a un grupo de capas
+		// seleccionadas.
 
-		// 050209, jmorell: Para que haga un zoom a un grupo de capas seleccionadas.
-
-		if (selectedItems.length==1) {
-	        try {
-	        	if (!selectedItems[0].isAvailable()) return;
-	        	getMapContext().zoomToExtent(selectedItems[0].getFullExtent());
+		if (selectedItems.length == 1) {
+			try {
+				if (!selectedItems[0].isAvailable())
+					return;
+				getMapContext().zoomToExtent(selectedItems[0].getFullExtent());
 			} catch (ReadDriverException e1) {
 				e1.printStackTrace();
 			}
@@ -128,7 +129,8 @@ public class ZoomAlTemaTocMenuEntry extends AbstractTocContextMenuAction {
 				e1.printStackTrace();
 			}
 		}
-		Project project=((ProjectExtension)PluginServices.getExtension(ProjectExtension.class)).getProject();
+		Project project = ((ProjectExtension) PluginServices
+				.getExtension(ProjectExtension.class)).getProject();
 		project.setModified(true);
 	}
 

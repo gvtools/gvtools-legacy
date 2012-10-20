@@ -63,54 +63,59 @@ public class FlagListener implements PointListener {
 	public static final int TO_ARC = 0;
 	public static final int TO_NODE = 1;
 	public static int pixelTolerance = 10;
-    private MapControl mapCtrl;
-    private int idSymbolFlag = -1;
-    private Cursor cur = java.awt.Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+	private MapControl mapCtrl;
+	private int idSymbolFlag = -1;
+	private Cursor cur = java.awt.Cursor
+			.getPredefinedCursor(Cursor.HAND_CURSOR);
 	private int mode;
 
-    
-    public FlagListener(MapControl mc) {
-        this.mapCtrl = mc;
-    }
+	public FlagListener(MapControl mc) {
+		this.mapCtrl = mc;
+	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.fmap.tools.Listeners.PointListener#point(org.gvsig.fmap.tools
+	 * .Events.PointEvent) The PointEvent method bring you a point in pixel
+	 * coordinates. You need to transform it to world coordinates. The class to
+	 * do conversions is ViewPort, obtained thru the MapContext of mapCtrl.
+	 */
+	public void point(PointEvent event) throws BehaviorException {
+		com.iver.cit.gvsig.fmap.ViewPort vp = mapCtrl.getViewPort();
+		Point2D pReal = vp.toMapPoint(event.getPoint());
 
-    /* (non-Javadoc)
-     * @see org.gvsig.fmap.tools.Listeners.PointListener#point(org.gvsig.fmap.tools.Events.PointEvent)
-     * The PointEvent method bring you a point in pixel coordinates. You
-     * need to transform it to world coordinates. The class to do conversions
-     * is ViewPort, obtained thru the MapContext of mapCtrl.
-     */
-    public void point(PointEvent event) throws BehaviorException {
-    	com.iver.cit.gvsig.fmap.ViewPort vp = mapCtrl.getViewPort();
-        Point2D pReal = vp.toMapPoint(event.getPoint());
-        
-		SingleLayerIterator it = new SingleLayerIterator(mapCtrl.getMapContext().getLayers());
-		while (it.hasNext())
-		{
+		SingleLayerIterator it = new SingleLayerIterator(mapCtrl
+				.getMapContext().getLayers());
+		while (it.hasNext()) {
 			FLayer aux = it.next();
 			if (!aux.isActive())
 				continue;
 			Network net = (Network) aux.getProperty("network");
-			
-			if ( net != null)
-			{
-				
+
+			if (net != null) {
+
 				double realTol = vp.toMapDistance(pixelTolerance);
-				Point2D pReal2 = vp.toMapPoint((int) event.getPoint().getX()+ pixelTolerance, (int) event.getPoint().getY()+ pixelTolerance);  
-				
-//				if ((vp.getProjection() != null) && !(vp.getProjection().isProjected())) {
-//					realTol = vp.distanceWorld(pReal, pReal2);
-//				}
-				
+				Point2D pReal2 = vp.toMapPoint((int) event.getPoint().getX()
+						+ pixelTolerance, (int) event.getPoint().getY()
+						+ pixelTolerance);
+
+				// if ((vp.getProjection() != null) &&
+				// !(vp.getProjection().isProjected())) {
+				// realTol = vp.distanceWorld(pReal, pReal2);
+				// }
+
 				GvFlag flag;
 				try {
 					if (mode == TO_ARC)
 						flag = net.addFlag(pReal.getX(), pReal.getY(), realTol);
 					else
-						flag = net.addFlagToNode(pReal.getX(), pReal.getY(), realTol);
-					if (flag == null)
-					{
-						JOptionPane.showMessageDialog(null, PluginServices.getText(this, "point_not_on_the_network"));
+						flag = net.addFlagToNode(pReal.getX(), pReal.getY(),
+								realTol);
+					if (flag == null) {
+						JOptionPane.showMessageDialog(null, PluginServices
+								.getText(this, "point_not_on_the_network"));
 						return;
 					}
 					NetworkUtils.addGraphicFlag(mapCtrl, flag);
@@ -120,32 +125,27 @@ public class FlagListener implements PointListener {
 					e.printStackTrace();
 					NotificationManager.addError(e);
 				}
-				
+
 			}
 		}
-        
-        
-    }
 
-    public Cursor getCursor() {
-        return cur;
-    }
-
-    public boolean cancelDrawing() {
-        return false;
-    }
-
-
-	public void pointDoubleClick(PointEvent event) throws BehaviorException {
-		
 	}
 
+	public Cursor getCursor() {
+		return cur;
+	}
+
+	public boolean cancelDrawing() {
+		return false;
+	}
+
+	public void pointDoubleClick(PointEvent event) throws BehaviorException {
+
+	}
 
 	public void setMode(int mode) {
 		this.mode = mode;
-		
+
 	}
 
 }
-
-

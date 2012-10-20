@@ -39,14 +39,16 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.cit.gvsig.project.documents.view.toolListeners.StatusBarListener;
 
 /**
- * <p>Extension to add support for selecting the geometries of the active vector layers that
- *  intersect with a polyline defined by the user.</p>
- *
+ * <p>
+ * Extension to add support for selecting the geometries of the active vector
+ * layers that intersect with a polyline defined by the user.
+ * </p>
+ * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class SelectByPolylineExtension extends Extension {
 	public static final String POLYLINE_SELECTION_TOOL_NAME = "polylineSelection";
-	
+
 	/*
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
@@ -56,31 +58,39 @@ public class SelectByPolylineExtension extends Extension {
 
 	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
-			"polyline-cursor-icon",
-			this.getClass().getClassLoader().getResource("images/polyline-cursor-icon.png")
-		);
-		
+				"polyline-cursor-icon",
+				this.getClass().getClassLoader()
+						.getResource("images/polyline-cursor-icon.png"));
+
 		PluginServices.getIconTheme().registerDefault(
-			"select-by-polyline-icon",
-			this.getClass().getClassLoader().getResource("images/select-by-polyline-icon.png")
-		);
+				"select-by-polyline-icon",
+				this.getClass().getClassLoader()
+						.getResource("images/select-by-polyline-icon.png"));
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String actionCommand) {
-		if (actionCommand.equals("SELPOLYLINE") ) {
+		if (actionCommand.equals("SELPOLYLINE")) {
 			IWindow view = PluginServices.getMDIManager().getActiveWindow();
 			if (view instanceof View) {
 				// Selection by polyline
-				MapControl mc = ((View)view).getMapControl();
+				MapControl mc = ((View) view).getMapControl();
 
-				// If current's view MapControl doesn't have the "CircleSelection" tool, adds it
-				if (!mc.getNamesMapTools().containsKey(POLYLINE_SELECTION_TOOL_NAME))	{
-					PolyLineSelectListener polylineSelListener = new PolyLineSelectListener(mc);
-					mc.addMapTool(POLYLINE_SELECTION_TOOL_NAME, new Behavior[] {new PolylineBehavior(polylineSelListener), new MouseMovementBehavior(new StatusBarListener(mc))});
+				// If current's view MapControl doesn't have the
+				// "CircleSelection" tool, adds it
+				if (!mc.getNamesMapTools().containsKey(
+						POLYLINE_SELECTION_TOOL_NAME)) {
+					PolyLineSelectListener polylineSelListener = new PolyLineSelectListener(
+							mc);
+					mc.addMapTool(POLYLINE_SELECTION_TOOL_NAME,
+							new Behavior[] {
+									new PolylineBehavior(polylineSelListener),
+									new MouseMovementBehavior(
+											new StatusBarListener(mc)) });
 				}
 
 				mc.setTool(POLYLINE_SELECTION_TOOL_NAME);
@@ -92,7 +102,8 @@ public class SelectByPolylineExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (f == null) {
 			return false;
@@ -113,7 +124,8 @@ public class SelectByPolylineExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (f == null) {
 			return false;
@@ -129,8 +141,9 @@ public class SelectByPolylineExtension extends Extension {
 
 			for (int i = 0; i < layers.length; i++) {
 				layer = layers[i];
-				
-				if ((layer instanceof FLyrVect) && (layer.isAvailable()) && (layer.isActive()))
+
+				if ((layer instanceof FLyrVect) && (layer.isAvailable())
+						&& (layer.isActive()))
 					return true;
 			}
 		}

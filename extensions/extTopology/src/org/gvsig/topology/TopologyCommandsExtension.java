@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology;
 
 import java.util.HashMap;
@@ -71,112 +71,115 @@ import com.iver.utiles.swing.threads.TopologyValidationTask;
  * Commands for a topology selected in the TOC.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class TopologyCommandsExtension extends Extension {
 
 	public void execute(String actionCommand) {
-		
-		com.iver.andami.ui.mdiManager.IWindow f = 
-			PluginServices.getMDIManager().getActiveWindow();
+
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		View vista = (View) f;
 		IProjectView model = vista.getModel();
 		final MapContext mapContext = model.getMapContext();
-		
-		if(actionCommand.equalsIgnoreCase("SAVE_TOPOLOGY")){
+
+		if (actionCommand.equalsIgnoreCase("SAVE_TOPOLOGY")) {
 			LayersIterator it = new LayersIterator(mapContext.getLayers());
-			while (it.hasNext())
-			{
+			while (it.hasNext()) {
 				FLayer aux = (FLayer) it.next();
 				if (!aux.isActive())
 					continue;
-				if(aux instanceof Topology)
-				{
+				if (aux instanceof Topology) {
 					Topology topology = (Topology) aux;
-					String selectedFile = GUIUtil.getInstance().selectFile("xml",
-							PluginServices.getText(this, "Ficheros_XML"), false);
-					if(! selectedFile.endsWith(".xml"))
+					String selectedFile = GUIUtil.getInstance()
+							.selectFile(
+									"xml",
+									PluginServices
+											.getText(this, "Ficheros_XML"),
+									false);
+					if (!selectedFile.endsWith(".xml"))
 						selectedFile += ".xml";
 					Map<String, Object> storageParams = new HashMap<String, Object>();
-					storageParams.put(TopologyPersister.FILE_PARAM_NAME, selectedFile);
-					//TODO Hacer la carga de la topologia en un ITask para no dejar la GUI
-					//congelada. Además, chequear que las capas que se referencian existen,
-					//y si no están en el TOC se cargan
+					storageParams.put(TopologyPersister.FILE_PARAM_NAME,
+							selectedFile);
+					// TODO Hacer la carga de la topologia en un ITask para no
+					// dejar la GUI
+					// congelada. Además, chequear que las capas que se
+					// referencian existen,
+					// y si no están en el TOC se cargan
 					TopologyPersister.persist(topology, storageParams);
 					return;
 				}
-			}//while
-		}else if(actionCommand.equalsIgnoreCase("EVALUATE_TOPOLOGY")){
-			
+			}// while
+		} else if (actionCommand.equalsIgnoreCase("EVALUATE_TOPOLOGY")) {
+
 			LayersIterator it = new LayersIterator(mapContext.getLayers());
-			while (it.hasNext())
-			{
+			while (it.hasNext()) {
 				FLayer aux = (FLayer) it.next();
 				if (!aux.isActive())
 					continue;
 
-				if(aux instanceof Topology)
-				{
+				if (aux instanceof Topology) {
 					Topology topology = (Topology) aux;
-					PluginServices.cancelableBackgroundExecution(new TopologyValidationTask(topology, mapContext));
+					PluginServices
+							.cancelableBackgroundExecution(new TopologyValidationTask(
+									topology, mapContext));
 				}
-			}//while
+			}// while
 		}
 
 	}
-	
+
 	public void initialize() {
 		PluginServices.getIconTheme().registerDefault(
 				"save-topology",
-				this.getClass().getClassLoader().getResource("images/save-topology.png")
-		);
-		
+				this.getClass().getClassLoader()
+						.getResource("images/save-topology.png"));
+
 		PluginServices.getIconTheme().registerDefault(
 				"evaluate-topology",
-				this.getClass().getClassLoader().getResource("images/evaluate-topology2.png")
-		);
-		
-		ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
-    	extensionPoints.add("View_TocActions","TopologyProperties",new TopologyPropertiesTocMenuEntry());
+				this.getClass().getClassLoader()
+						.getResource("images/evaluate-topology2.png"));
+
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+		extensionPoints.add("View_TocActions", "TopologyProperties",
+				new TopologyPropertiesTocMenuEntry());
 	}
 
 	public boolean isEnabled() {
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		if (window instanceof View)
-		{
+		if (window instanceof View) {
 			View v = (View) window;
-	        MapControl mapCtrl = v.getMapControl();
+			MapControl mapCtrl = v.getMapControl();
 			MapContext map = mapCtrl.getMapContext();
-			
+
 			LayersIterator it = new LayersIterator(map.getLayers());
-			while (it.hasNext())
-			{
+			while (it.hasNext()) {
 				FLayer aux = (FLayer) it.next();
-				if(! aux.isActive())
+				if (!aux.isActive())
 					continue;
-				if(aux instanceof Topology)
+				if (aux instanceof Topology)
 					return true;
-			}//while
-		}//if
+			}// while
+		}// if
 		return false;
 	}
 
 	public boolean isVisible() {
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		if (window instanceof View)
-		{
+		if (window instanceof View) {
 			View v = (View) window;
-	        MapControl mapCtrl = v.getMapControl();
+			MapControl mapCtrl = v.getMapControl();
 			MapContext map = mapCtrl.getMapContext();
-			
+
 			LayersIterator it = new LayersIterator(map.getLayers());
-			while (it.hasNext())
-			{
+			while (it.hasNext()) {
 				FLayer aux = (FLayer) it.next();
-				if(aux instanceof Topology)
+				if (aux instanceof Topology)
 					return true;
-			}//while
-		}//if
+			}// while
+		}// if
 		return false;
 	}
 

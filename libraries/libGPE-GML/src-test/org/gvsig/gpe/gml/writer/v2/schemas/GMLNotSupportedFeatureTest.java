@@ -54,11 +54,11 @@ import org.gvsig.gpe.writer.schemas.GPENotSupportedFeatureTest;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class GMLNotSupportedFeatureTest extends
-		GPENotSupportedFeatureTest {
+public class GMLNotSupportedFeatureTest extends GPENotSupportedFeatureTest {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEParserClass()
 	 */
 	public Class getGPEParserClass() {
@@ -67,6 +67,7 @@ public class GMLNotSupportedFeatureTest extends
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEWriterHandlerClass()
 	 */
 	public Class getGPEWriterHandlerClass() {

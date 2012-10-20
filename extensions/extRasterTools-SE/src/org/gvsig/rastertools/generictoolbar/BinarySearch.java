@@ -25,6 +25,7 @@ import java.util.Vector;
 import org.gvsig.gui.beans.comboboxconfigurablelookup.ILookUp;
 import org.gvsig.gui.beans.comboboxconfigurablelookup.JComboBoxConfigurableLookUp;
 import org.gvsig.gui.beans.comboboxconfigurablelookup.StringComparator;
+
 /**
  * Clase para reimplementar una nueva busqueda para el componente
  * {@link JComboBoxConfigurableLookUp}
@@ -35,9 +36,13 @@ import org.gvsig.gui.beans.comboboxconfigurablelookup.StringComparator;
 public class BinarySearch implements ILookUp {
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.comboboxconfigurablelookup.ILookUp#doLookUpConsideringCaseSensitive(java.lang.String, java.util.Vector, org.gvsig.gui.beans.comboboxconfigurablelookup.StringComparator)
+	 * 
+	 * @see org.gvsig.gui.beans.comboboxconfigurablelookup.ILookUp#
+	 * doLookUpConsideringCaseSensitive(java.lang.String, java.util.Vector,
+	 * org.gvsig.gui.beans.comboboxconfigurablelookup.StringComparator)
 	 */
-	public List doLookUpConsideringCaseSensitive(String text, Vector sortOrderedItems, StringComparator comp) {
+	public List doLookUpConsideringCaseSensitive(String text,
+			Vector sortOrderedItems, StringComparator comp) {
 		Vector list = new Vector();
 		for (int i = 0; i < sortOrderedItems.size(); i++)
 			if (sortOrderedItems.get(i).toString().indexOf(text) != -1)
@@ -47,12 +52,17 @@ public class BinarySearch implements ILookUp {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.comboboxconfigurablelookup.ILookUp#doLookUpIgnoringCaseSensitive(java.lang.String, java.util.Vector, org.gvsig.gui.beans.comboboxconfigurablelookup.StringComparator)
+	 * 
+	 * @see org.gvsig.gui.beans.comboboxconfigurablelookup.ILookUp#
+	 * doLookUpIgnoringCaseSensitive(java.lang.String, java.util.Vector,
+	 * org.gvsig.gui.beans.comboboxconfigurablelookup.StringComparator)
 	 */
-	public List doLookUpIgnoringCaseSensitive(String text, Vector sortOrderedItems, StringComparator comp) {
+	public List doLookUpIgnoringCaseSensitive(String text,
+			Vector sortOrderedItems, StringComparator comp) {
 		Vector list = new Vector();
 		for (int i = 0; i < sortOrderedItems.size(); i++)
-			if (sortOrderedItems.get(i).toString().toLowerCase().indexOf(text.toLowerCase()) != -1)
+			if (sortOrderedItems.get(i).toString().toLowerCase()
+					.indexOf(text.toLowerCase()) != -1)
 				list.add(sortOrderedItems.get(i));
 		return Arrays.asList(list.toArray());
 	}

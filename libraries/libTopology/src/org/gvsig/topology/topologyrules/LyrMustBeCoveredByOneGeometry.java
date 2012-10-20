@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.topologyrules;
 
 import java.awt.geom.Rectangle2D;
@@ -70,37 +70,36 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 
 /**
- * All feature geometries of origin layer must be covered by one only
- * element of destination layer.
+ * All feature geometries of origin layer must be covered by one only element of
+ * destination layer.
  * 
  * Covers spatial predicate is least exclusive than contains.<br>
  * 
- * Use spatial rule LyrMustBeContained if dont want to allow covers relationships.
- * (for example, a linestring in a polygon boundary)
+ * Use spatial rule LyrMustBeContained if dont want to allow covers
+ * relationships. (for example, a linestring in a polygon boundary)
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
-public class LyrMustBeCoveredByOneGeometry extends AbstractSpatialPredicateTwoLyrRule {
+public class LyrMustBeCoveredByOneGeometry extends
+		AbstractSpatialPredicateTwoLyrRule {
 
 	static final String RULE_NAME = Messages.getText("must_be_covered_by");
-	
+
 	static {
 		DEFAULT_ERROR_SYMBOL.setDescription(RULE_NAME);
 		automaticErrorFixes.add(new DeleteTopologyErrorFix());
 	}
-	
-	public LyrMustBeCoveredByOneGeometry(Topology topology, 
-			 FLyrVect originLyr,
-			 FLyrVect destinationLyr){
+
+	public LyrMustBeCoveredByOneGeometry(Topology topology, FLyrVect originLyr,
+			FLyrVect destinationLyr) {
 		super(topology, originLyr, destinationLyr);
 	}
 
-
-	public LyrMustBeCoveredByOneGeometry(){
+	public LyrMustBeCoveredByOneGeometry() {
 		super();
 	}
-	
-	
+
 	@Override
 	protected boolean acceptsDestinationGeometryType(int shapeType) {
 		return true;
@@ -110,42 +109,43 @@ public class LyrMustBeCoveredByOneGeometry extends AbstractSpatialPredicateTwoLy
 	protected boolean acceptsOriginGeometryType(int shapeType) {
 		return true;
 	}
-	
+
 	@Override
-	protected void checkWithNeighbourhood(IFeature feature, Rectangle2D extendedBounds, IFeatureIterator neighbourhood) throws BaseException{
-		Geometry firstGeometry = NewFConverter.toJtsGeometry(feature.getGeometry());
+	protected void checkWithNeighbourhood(IFeature feature,
+			Rectangle2D extendedBounds, IFeatureIterator neighbourhood)
+			throws BaseException {
+		Geometry firstGeometry = NewFConverter.toJtsGeometry(feature
+				.getGeometry());
 		List<Geometry> neighboursGeo = new ArrayList<Geometry>();
 		while (neighbourhood.hasNext()) {
 			IFeature neighbourFeature = neighbourhood.next();
 			IGeometry geom2 = neighbourFeature.getGeometry();
-			if(acceptsDestinationGeometryType(geom2.getGeometryType())){
+			if (acceptsDestinationGeometryType(geom2.getGeometryType())) {
 				Rectangle2D rect2 = geom2.getBounds2D();
 				if (extendedBounds.intersects(rect2)) {
 					Geometry jtsGeom2 = NewFConverter.toJtsGeometry(geom2);
-					if(!checkSpatialPredicate(feature, firstGeometry, 
-														neighbourFeature, jtsGeom2 )){
+					if (!checkSpatialPredicate(feature, firstGeometry,
+							neighbourFeature, jtsGeom2)) {
 						neighboursGeo.add(jtsGeom2);
-					}else
-						return;//checks the rule
-				}//if
-			}//if
-		}//while
-		if(neighboursGeo.size() == 0){
+					} else
+						return;// checks the rule
+				}// if
+			}// if
+		}// while
+		if (neighboursGeo.size() == 0) {
 			addTopologyError(createTopologyError(firstGeometry, feature, null));
 			return;
 		}
-		//at this point, feature is not covered by one neighbour feature
+		// at this point, feature is not covered by one neighbour feature
 		Geometry difference = JtsUtil.difference(firstGeometry, neighboursGeo);
-		if(difference instanceof GeometryCollection){
+		if (difference instanceof GeometryCollection) {
 			GeometryCollection diff = (GeometryCollection) difference;
-			if(diff.getNumGeometries() == 0)
+			if (diff.getNumGeometries() == 0)
 				difference = firstGeometry;
 		}
-		
-		
+
 		addTopologyError(createTopologyError(difference, feature, null));
 	}
-	
 
 	@Override
 	protected boolean checkSpatialPredicate(IFeature feature,
@@ -169,8 +169,8 @@ public class LyrMustBeCoveredByOneGeometry extends AbstractSpatialPredicateTwoLy
 	public boolean acceptsOriginLyr(FLyrVect originLyr) {
 		return true;
 	}
-	
-	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError){
+
+	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError) {
 		return automaticErrorFixes.get(0);
 	}
 }

@@ -42,18 +42,18 @@ package com.iver.cit.gvsig.project.documents.layout.fframes;
 
 import com.iver.cit.gvsig.project.Project;
 
-
 /**
  * Interfaz que da soporte a los fframes que necesiten conocer al proyecto al
  * que pertenecen.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public interface IFFrameUseProject {
-    /**
-     * Inserta el Project.
-     *
-     * @param project Project.
-     */
-    public void setProject(Project project);
+	/**
+	 * Inserta el Project.
+	 * 
+	 * @param project
+	 *            Project.
+	 */
+	public void setProject(Project project);
 }

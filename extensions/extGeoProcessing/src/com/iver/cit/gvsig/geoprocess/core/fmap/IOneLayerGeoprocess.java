@@ -42,35 +42,35 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: IOneLayerGeoprocess.java 5412 2006-05-24 21:15:07Z azabala $
-* $Log$
-* Revision 1.1  2006-05-24 21:12:16  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.1  2006/02/12 21:03:25  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/02/01 19:40:59  azabala
-* First version in CVS
-*
-*
-*/
+ *
+ * $Id: IOneLayerGeoprocess.java 5412 2006-05-24 21:15:07Z azabala $
+ * $Log$
+ * Revision 1.1  2006-05-24 21:12:16  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.1  2006/02/12 21:03:25  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/02/01 19:40:59  azabala
+ * First version in CVS
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core.fmap;
 
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
 /**
- * Geoprocess wich operates with only one vectorial
- * layer like input data.
+ * Geoprocess wich operates with only one vectorial layer like input data.
+ * 
  * @author azabala
- *
+ * 
  */
-public interface IOneLayerGeoprocess extends IGeoprocess{
+public interface IOneLayerGeoprocess extends IGeoprocess {
 	/**
 	 * Sets first geoprocess operand
+	 * 
 	 * @param firstLayer
 	 */
 	public void setFirstOperand(FLyrVect firstLayer);
 }
-

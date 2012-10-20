@@ -52,19 +52,20 @@ import es.gva.cit.catalog.csw.parsers.CSWConstants;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class CSWMessages2_0_1 extends CSWAbstractMessages{
+public class CSWMessages2_0_1 extends CSWAbstractMessages {
 
 	public CSWMessages2_0_1(CSWAbstractProfile profile) {
-		super(profile);		
+		super(profile);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalog.csw.messages.CSWAbstractMessages#getContraintVersion()
+	 * 
+	 * @see
+	 * es.gva.cit.catalog.csw.messages.CSWAbstractMessages#getContraintVersion()
 	 */
 	protected String getContraintVersion() {
 		return CSWConstants.CONSTRAINT_VERSION_2_0_1;
 	}
-
 
 }

@@ -26,37 +26,42 @@
 
 package org.gvsig.jogr;
 
-
-/** 
+/**
  * 
- * @author Nacho Brodin <brodin_ign@gva.es>.<BR> Equipo de desarrollo gvSIG.<BR> http://www.gvsig.gva.es
+ * @author Nacho Brodin <brodin_ign@gva.es>.<BR>
+ *         Equipo de desarrollo gvSIG.<BR>
+ *         http://www.gvsig.gva.es
  * @version 0.0
  * @link http://www.gvsig.gva.es
  */
 
-public class OGRCoordinateTransformation extends JNIBase{
-	
-	private native void FreeOGRCoordinateTransformation( long cPtr );
-	
-	public OGRCoordinateTransformation(){}
-	
+public class OGRCoordinateTransformation extends JNIBase {
+
+	private native void FreeOGRCoordinateTransformation(long cPtr);
+
+	public OGRCoordinateTransformation() {
+	}
+
 	/**
 	 * Constructor
-	 * @param cPtr	dirección de memoria al objeto OGRCoordinateTransformation de C. 
+	 * 
+	 * @param cPtr
+	 *            dirección de memoria al objeto OGRCoordinateTransformation de
+	 *            C.
 	 */
-	
-	public OGRCoordinateTransformation(long cPtr){
-		this.cPtr=cPtr;
+
+	public OGRCoordinateTransformation(long cPtr) {
+		this.cPtr = cPtr;
 	}
-	
+
 	/**
-	 * Destructor 
+	 * Destructor
 	 */
-	
+
 	protected void finalize() throws OGRFailureException {
-		if((cPtr == 0) || (cPtr == -1))
+		if ((cPtr == 0) || (cPtr == -1))
 			throw new OGRFailureException("Fallo al acceder al dato.");
-			
+
 		FreeOGRCoordinateTransformation(cPtr);
 	}
 }

@@ -29,41 +29,42 @@ import org.cresques.Messages;
 import org.cresques.cts.ProjectionUtils;
 import org.cresques.ui.DefaultDialogPanel;
 
-
 /**
  * Dialogo para abrir fichero.
+ * 
  * @author "Luis W. Sevilla" <sevilla_lui@gva.es>
  */
 public class CSSelectionDialogPanel extends DefaultDialogPanel {
-    final private static long serialVersionUID = -3370601314380922368L;
+	final private static long serialVersionUID = -3370601314380922368L;
 
-    public CSSelectionDialogPanel() {
-        super();
-        init();
-    }
+	public CSSelectionDialogPanel() {
+		super();
+		init();
+	}
 
-    /**
-     * This method initializes this
-     *
-     * @return void
-     */
-    private void init() {
-        this.setBounds(0, 0, 350, 260);
-    }
+	/**
+	 * This method initializes this
+	 * 
+	 * @return void
+	 */
+	private void init() {
+		this.setBounds(0, 0, 350, 260);
+	}
 
-    public CSSelectionPanel getProjPanel() {
-        return (CSSelectionPanel) getContentPanel();
-    }
+	public CSSelectionPanel getProjPanel() {
+		return (CSSelectionPanel) getContentPanel();
+	}
 
-    protected JPanel getContentPanel() {
-        if (contentPane == null) {
-        	contentPane = new CSSelectionPanel(Messages.getText("reference_system"));
-        	contentPane.setBounds(14, 12, 280, 163);
+	protected JPanel getContentPanel() {
+		if (contentPane == null) {
+			contentPane = new CSSelectionPanel(
+					Messages.getText("reference_system"));
+			contentPane.setBounds(14, 12, 280, 163);
 
 			((CSSelectionPanel) contentPane).setCrs(ProjectionUtils
 					.getCRS("EPSG:32619"));
-        }
+		}
 
-        return contentPane;
-    }
+		return contentPane;
+	}
 }

@@ -8,7 +8,6 @@ import javax.swing.JFormattedTextField;
 import org.gvsig.gui.awt.event.specificCaretPosition.ISpecificCaretPosition;
 import org.gvsig.gui.awt.event.specificCaretPosition.SpecificCaretPositionListeners;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -51,13 +50,15 @@ import org.gvsig.gui.awt.event.specificCaretPosition.SpecificCaretPositionListen
  */
 
 /**
- * This class is a JFormattedTextField with two listeners that allow authomatically reset the caret
- *   position of this component to left (LEFT_POSITIONS), right (RIGHT_POSITIONS) or like JFormattedTextField (LIKE_JTEXTCOMPONENT) (do nothing).
- *   By default is to left. 
+ * This class is a JFormattedTextField with two listeners that allow
+ * authomatically reset the caret position of this component to left
+ * (LEFT_POSITIONS), right (RIGHT_POSITIONS) or like JFormattedTextField
+ * (LIKE_JTEXTCOMPONENT) (do nothing). By default is to left.
  * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
-public class JFormattedTextFieldSCP extends JFormattedTextField implements ISpecificCaretPosition, Serializable {
+public class JFormattedTextFieldSCP extends JFormattedTextField implements
+		ISpecificCaretPosition, Serializable {
 	private static final long serialVersionUID = -8224060521711689694L;
 
 	private int caretPositionMode;
@@ -70,34 +71,39 @@ public class JFormattedTextFieldSCP extends JFormattedTextField implements ISpec
 		caretPositionMode = LEFT_POSITIONS;
 		initialize();
 	}
-	
+
 	/**
 	 * @see JFormattedTextField#JFormattedTextField(javax.swing.JFormattedTextField.AbstractFormatter)
 	 */
-	public JFormattedTextFieldSCP(JFormattedTextField.AbstractFormatter formatter) {
+	public JFormattedTextFieldSCP(
+			JFormattedTextField.AbstractFormatter formatter) {
 		super(formatter);
 		caretPositionMode = LEFT_POSITIONS;
 		initialize();
 	}
-	
+
 	/**
 	 * @see JFormattedTextField#JFormattedTextField(javax.swing.JFormattedTextField.AbstractFormatterFactory)
 	 */
-	public JFormattedTextFieldSCP(JFormattedTextField.AbstractFormatterFactory factory) {
+	public JFormattedTextFieldSCP(
+			JFormattedTextField.AbstractFormatterFactory factory) {
 		super(factory);
 		caretPositionMode = LEFT_POSITIONS;
 		initialize();
 	}
-	
+
 	/**
-	 * @see JFormattedTextField#JFormattedTextField(javax.swing.JFormattedTextField.AbstractFormatterFactory, java.lang.Object)
+	 * @see JFormattedTextField#JFormattedTextField(javax.swing.JFormattedTextField.AbstractFormatterFactory,
+	 *      java.lang.Object)
 	 */
-	public JFormattedTextFieldSCP(JFormattedTextField.AbstractFormatterFactory factory, Object currentValue) {
+	public JFormattedTextFieldSCP(
+			JFormattedTextField.AbstractFormatterFactory factory,
+			Object currentValue) {
 		super(factory, currentValue);
 		caretPositionMode = LEFT_POSITIONS;
 		initialize();
 	}
-	
+
 	/**
 	 * @see JFormattedTextField#JFormattedTextField()
 	 */
@@ -106,7 +112,7 @@ public class JFormattedTextFieldSCP extends JFormattedTextField implements ISpec
 		caretPositionMode = LEFT_POSITIONS;
 		initialize();
 	}
-	
+
 	/**
 	 * @see JFormattedTextField#JFormattedTextField(java.lang.Object)
 	 */
@@ -115,7 +121,7 @@ public class JFormattedTextFieldSCP extends JFormattedTextField implements ISpec
 		caretPositionMode = LEFT_POSITIONS;
 		initialize();
 	}
-	
+
 	/**
 	 * This method adds three listeners to this component:
 	 */
@@ -124,16 +130,20 @@ public class JFormattedTextFieldSCP extends JFormattedTextField implements ISpec
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see org.gvsig.gui.awt.event.ISpecificCaretPosition#getCaretPositionMode()
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gui.awt.event.ISpecificCaretPosition#getCaretPositionMode()
 	 */
 	public int getCaretPositionMode() {
 		return caretPositionMode;
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see org.gvsig.gui.awt.event.ISpecificCaretPosition#setCaretPositionMode(int)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gui.awt.event.ISpecificCaretPosition#setCaretPositionMode(int)
 	 */
 	public void setCaretPositionMode(int caretPositionMode) {
 		this.caretPositionMode = caretPositionMode;

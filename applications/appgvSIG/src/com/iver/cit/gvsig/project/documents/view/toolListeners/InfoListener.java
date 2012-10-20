@@ -47,7 +47,6 @@ import java.awt.Toolkit;
 import java.awt.geom.Point2D;
 import java.util.Vector;
 
-import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -63,7 +62,6 @@ import com.iver.andami.messages.NotificationManager;
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.exceptions.visitors.VisitorException;
 import com.iver.cit.gvsig.fmap.MapControl;
-import com.iver.cit.gvsig.fmap.drivers.DriverIOException;
 import com.iver.cit.gvsig.fmap.layers.FBitSet;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
@@ -78,10 +76,13 @@ import com.iver.cit.gvsig.project.documents.view.info.gui.FInfoDialogXML;
 import com.iver.utiles.xmlViewer.XMLContent;
 
 /**
- * <p>Listener that looks for alphanumeric information at the point selected by one click of any mouse's button,
- *   in the active layers of the associated <code>MapControl</code>, and displays that alphanumeric data on a
- *   {@link FInfoDialog FInfoDialog} dialog.</p>
- *
+ * <p>
+ * Listener that looks for alphanumeric information at the point selected by one
+ * click of any mouse's button, in the active layers of the associated
+ * <code>MapControl</code>, and displays that alphanumeric data on a
+ * {@link FInfoDialog FInfoDialog} dialog.
+ * </p>
+ * 
  * @author Vicente Caballero Navarro
  */
 public class InfoListener implements PointListener {
@@ -94,7 +95,8 @@ public class InfoListener implements PointListener {
 	/**
 	 * The image to display when the cursor is active.
 	 */
-	private final Image img = PluginServices.getIconTheme().get("cursor-query-information").getImage();
+	private final Image img = PluginServices.getIconTheme()
+			.get("cursor-query-information").getImage();
 
 	/**
 	 * The cursor used to work with this tool listener.
@@ -110,33 +112,41 @@ public class InfoListener implements PointListener {
 	private MapControl mapCtrl;
 
 	/**
-	 * Radius as tolerance around the selected point, the area will be used to look for information.
+	 * Radius as tolerance around the selected point, the area will be used to
+	 * look for information.
 	 */
-	private static int TOL=7;
+	private static int TOL = 7;
 
 	/**
-	 * <p>Creates a new <code>InfoListener</code> object.</p>
+	 * <p>
+	 * Creates a new <code>InfoListener</code> object.
+	 * </p>
 	 * 
-	 * @param mc the <code>MapControl</code> where will be applied the changes
+	 * @param mc
+	 *            the <code>MapControl</code> where will be applied the changes
 	 */
 	public InfoListener(MapControl mc) {
 		this.mapCtrl = mc;
 	}
 
 	/**
-	 * When user clicks on the associated <code>MapControl</code>'s view, the point is caught and handled by this method,
-	 *  which will look for alphanumeric information in features at that position in the active layers.
+	 * When user clicks on the associated <code>MapControl</code>'s view, the
+	 * point is caught and handled by this method, which will look for
+	 * alphanumeric information in features at that position in the active
+	 * layers.
 	 * 
-	 * @param event mouse event with the coordinates of the point pressed
-	 *
-	 * @throws BehaviorException will be thrown when fails this process
+	 * @param event
+	 *            mouse event with the coordinates of the point pressed
+	 * 
+	 * @throws BehaviorException
+	 *             will be thrown when fails this process
 	 * @deprecated
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#point(com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
 	 */
 	public void point_(PointEvent event) throws BehaviorException {
 
-		Point2D pReal = mapCtrl.getMapContext().getViewPort().toMapPoint(
-				event.getPoint());
+		Point2D pReal = mapCtrl.getMapContext().getViewPort()
+				.toMapPoint(event.getPoint());
 		Point imagePoint = new Point((int) event.getPoint().getX(), (int) event
 				.getPoint().getY());
 
@@ -150,91 +160,91 @@ public class InfoListener implements PointListener {
 		for (int i = 0; i < sel.length; i++) {
 			FLayer laCapa = (FLayer) sel[i];
 
-            if (laCapa instanceof FLyrVect)
-            {
-                FLyrVect lyrVect = (FLyrVect) laCapa;
-                FBitSet newBitSet;
-                try {
-                    newBitSet = lyrVect.queryByPoint(pReal, tol);
-                    items[i] = new VectorialXMLItem(newBitSet, laCapa);
-                    numLayersInfoable++;
-                } catch (ReadDriverException e) {
-                    e.printStackTrace();
-                    throw new BehaviorException("Fallo al consultar " + lyrVect.getName());
-                } catch (VisitorException e) {
-                	 e.printStackTrace();
-                     throw new BehaviorException("Fallo al consultar " + lyrVect.getName());
+			if (laCapa instanceof FLyrVect) {
+				FLyrVect lyrVect = (FLyrVect) laCapa;
+				FBitSet newBitSet;
+				try {
+					newBitSet = lyrVect.queryByPoint(pReal, tol);
+					items[i] = new VectorialXMLItem(newBitSet, laCapa);
+					numLayersInfoable++;
+				} catch (ReadDriverException e) {
+					e.printStackTrace();
+					throw new BehaviorException("Fallo al consultar "
+							+ lyrVect.getName());
+				} catch (VisitorException e) {
+					e.printStackTrace();
+					throw new BehaviorException("Fallo al consultar "
+							+ lyrVect.getName());
 				}
 
 			}
 			// TODO: PROVISIONAL PARA LA CAPA WMS
-/*
-            else if (laCapa instanceof RasterOperations) {
-				RasterOperations layer = (RasterOperations) laCapa;
-				String text;
-				try {
-
-					ArrayList attr = ((RasterOperations) laCapa)
-							.getAttributes();
-					int anchoRaster = 0;
-					int altoRaster = 0;
-
-					for (int j = 0; j < attr.size(); j++) {
-						Object[] a = (Object[]) attr.get(j);
-						if (a[0].toString().equals("Width"))
-							anchoRaster = Integer.parseInt(a[1].toString());
-						if (a[0].toString().equals("Height"))
-							altoRaster = Integer.parseInt(a[1].toString());
-					}
-
-					double xwc = ((RasterOperations) laCapa).getMaxX()
-							- ((RasterOperations) laCapa).getMinX();//((FLyrDefault)laCapa).getFullExtent().getMaxX()-((FLyrRaster)laCapa).getFullExtent().getMinX();
-					double ywc = ((RasterOperations) laCapa).getMaxY()
-							- ((RasterOperations) laCapa).getMinY();//((FLyrDefault)laCapa).getFullExtent().getMaxY()-((FLyrRaster)laCapa).getFullExtent().getMinY();
-					double ancho = ((RasterOperations) laCapa).getWidth();//((FLyrDefault)laCapa).getFullExtent().getWidth();
-					double alto = ((RasterOperations) laCapa).getHeight();//((FLyrDefault)laCapa).getFullExtent().getHeight();
-
-					//ptoX y ptoY son el pixel de la imagen donde se ha
-					// pinchado a escala 1:1
-					int ptoX = (int) (((pReal.getX() - ((RasterOperations) laCapa)
-							.getMinX()) * anchoRaster) / xwc);//(int)(((pReal.getX()-((FLyrDefault)laCapa).getFullExtent().getMinX())*anchoRaster)/xwc);
-					int ptoY = (int) (((pReal.getY() - ((RasterOperations) laCapa)
-							.getMinY()) * altoRaster) / ywc);//(int)(((pReal.getY()-((FLyrDefault)laCapa).getFullExtent().getMinY())*altoRaster)/ywc);
-					((RasterOperations) laCapa).setPos(ptoX, ptoY);
-					ViewPort v = mapCtrl.getMapContext().getViewPort();
-
-					int[] px = ((RasterOperations) laCapa).getPixel(pReal
-							.getX(), pReal.getY());
-
-					if (px != null)
-						((RasterOperations) laCapa).setRGB(px[1], px[2], px[3]);
-					((RasterOperations) laCapa).setPosWC(pReal.getX(), pReal
-							.getY());
-
-//					text = layer.getInfo(imagePoint, tol);
-//					items[i] = new StringXMLItem(text);
-					items[i] =  layer.getInfo(imagePoint, tol, null)[0];
-					numLayersInfoable++;
-
-				} catch (ReadDriverException e) {
-					throw new BehaviorException("No se pudo procesar la capa",
-							e);
-				} catch (VisitorException e) {
-					throw new BehaviorException("No se pudo procesar la capa",
-							e);
-				} catch (LoadLayerException e) {
-					throw new BehaviorException("No se pudo procesar la capa",
-							e);
-				}
-			}
-*/
+			/*
+			 * else if (laCapa instanceof RasterOperations) { RasterOperations
+			 * layer = (RasterOperations) laCapa; String text; try {
+			 * 
+			 * ArrayList attr = ((RasterOperations) laCapa) .getAttributes();
+			 * int anchoRaster = 0; int altoRaster = 0;
+			 * 
+			 * for (int j = 0; j < attr.size(); j++) { Object[] a = (Object[])
+			 * attr.get(j); if (a[0].toString().equals("Width")) anchoRaster =
+			 * Integer.parseInt(a[1].toString()); if
+			 * (a[0].toString().equals("Height")) altoRaster =
+			 * Integer.parseInt(a[1].toString()); }
+			 * 
+			 * double xwc = ((RasterOperations) laCapa).getMaxX() -
+			 * ((RasterOperations)
+			 * laCapa).getMinX();//((FLyrDefault)laCapa).getFullExtent
+			 * ().getMaxX()-((FLyrRaster)laCapa).getFullExtent().getMinX();
+			 * double ywc = ((RasterOperations) laCapa).getMaxY() -
+			 * ((RasterOperations)
+			 * laCapa).getMinY();//((FLyrDefault)laCapa).getFullExtent
+			 * ().getMaxY()-((FLyrRaster)laCapa).getFullExtent().getMinY();
+			 * double ancho = ((RasterOperations)
+			 * laCapa).getWidth();//((FLyrDefault
+			 * )laCapa).getFullExtent().getWidth(); double alto =
+			 * ((RasterOperations)
+			 * laCapa).getHeight();//((FLyrDefault)laCapa).getFullExtent
+			 * ().getHeight();
+			 * 
+			 * //ptoX y ptoY son el pixel de la imagen donde se ha // pinchado a
+			 * escala 1:1 int ptoX = (int) (((pReal.getX() - ((RasterOperations)
+			 * laCapa) .getMinX()) * anchoRaster) /
+			 * xwc);//(int)(((pReal.getX()-(
+			 * (FLyrDefault)laCapa).getFullExtent().
+			 * getMinX())*anchoRaster)/xwc); int ptoY = (int) (((pReal.getY() -
+			 * ((RasterOperations) laCapa) .getMinY()) * altoRaster) /
+			 * ywc);//(int
+			 * )(((pReal.getY()-((FLyrDefault)laCapa).getFullExtent().
+			 * getMinY())*altoRaster)/ywc); ((RasterOperations)
+			 * laCapa).setPos(ptoX, ptoY); ViewPort v =
+			 * mapCtrl.getMapContext().getViewPort();
+			 * 
+			 * int[] px = ((RasterOperations) laCapa).getPixel(pReal .getX(),
+			 * pReal.getY());
+			 * 
+			 * if (px != null) ((RasterOperations) laCapa).setRGB(px[1], px[2],
+			 * px[3]); ((RasterOperations) laCapa).setPosWC(pReal.getX(), pReal
+			 * .getY());
+			 * 
+			 * // text = layer.getInfo(imagePoint, tol); // items[i] = new
+			 * StringXMLItem(text); items[i] = layer.getInfo(imagePoint, tol,
+			 * null)[0]; numLayersInfoable++;
+			 * 
+			 * } catch (ReadDriverException e) { throw new
+			 * BehaviorException("No se pudo procesar la capa", e); } catch
+			 * (VisitorException e) { throw new
+			 * BehaviorException("No se pudo procesar la capa", e); } catch
+			 * (LoadLayerException e) { throw new
+			 * BehaviorException("No se pudo procesar la capa", e); } }
+			 */
 			else if (laCapa instanceof InfoByPoint) {
 				// TODO Hecho para el WMS. No deberia hacer falta
 				String text;
 				try {
 					InfoByPoint layer = (InfoByPoint) laCapa;
-//					text = layer.getInfo(imagePoint, tol);
-//					items[i] = new StringXMLItem(text);
+					// text = layer.getInfo(imagePoint, tol);
+					// items[i] = new StringXMLItem(text);
 					items[i] = layer.getInfo(imagePoint, tol, null)[0];
 					numLayersInfoable++;
 				} catch (ReadDriverException e) {
@@ -302,12 +312,16 @@ public class InfoListener implements PointListener {
 	}
 
 	/**
-	 * When user clicks on the associated <code>MapControl</code>'s view, the point is caught and handled by this method, which will look
-	 * for alphanumeric information in features at that position in the active layers.
+	 * When user clicks on the associated <code>MapControl</code>'s view, the
+	 * point is caught and handled by this method, which will look for
+	 * alphanumeric information in features at that position in the active
+	 * layers.
 	 * 
-	 * @param event mouse event with the coordinates of the point pressed
-	 *
-	 * @throws BehaviorException will be thrown when fails this process
+	 * @param event
+	 *            mouse event with the coordinates of the point pressed
+	 * 
+	 * @throws BehaviorException
+	 *             will be thrown when fails this process
 	 * @deprecated
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#point(com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
 	 */
@@ -330,21 +344,21 @@ public class InfoListener implements PointListener {
 				try {
 					InfoByPoint layer = (InfoByPoint) laCapa;
 					aux = layer.getInfo(imagePoint, tol, null);
-					for(int j = 0; j < aux.length; j++){
+					for (int j = 0; j < aux.length; j++) {
 						itemsVector.add(aux[j]);
 						numLayersInfoable++;
 					}
 				} catch (ReadDriverException e) {
-					throw new BehaviorException("Processing layer",e);
+					throw new BehaviorException("Processing layer", e);
 				} catch (VisitorException e) {
-					throw new BehaviorException("Processing layer",e);
+					throw new BehaviorException("Processing layer", e);
 				} catch (LoadLayerException e) {
 					throw new BehaviorException("No se pudo procesar la capa",
 							e);
 				}
 			}
 		}
-		final XMLItem[] items = (XMLItem[])itemsVector.toArray(new XMLItem[0]);
+		final XMLItem[] items = (XMLItem[]) itemsVector.toArray(new XMLItem[0]);
 
 		if (numLayersInfoable > 0) {
 			try {
@@ -399,8 +413,10 @@ public class InfoListener implements PointListener {
 
 	/*
 	 * (To use the old info tool, use again the point2 method!)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#point(com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#point(com.iver.
+	 * cit.gvsig.fmap.tools.Events.PointEvent)
 	 */
 	public void point(PointEvent event) throws BehaviorException {
 
@@ -419,24 +435,24 @@ public class InfoListener implements PointListener {
 			if (laCapa instanceof InfoByPoint) {
 				try {
 					InfoByPoint layer = (InfoByPoint) laCapa;
-					if (!(laCapa.getParentLayer().isActive())){
+					if (!(laCapa.getParentLayer().isActive())) {
 						aux = layer.getInfo(imagePoint, tol, null);
-						for(int j = 0; j < aux.length; j++){
+						for (int j = 0; j < aux.length; j++) {
 							itemsVector.add(aux[j]);
 							numLayersInfoable++;
 						}
 					}
 				} catch (ReadDriverException e) {
-					throw new BehaviorException("Processing layer",e);
+					throw new BehaviorException("Processing layer", e);
 				} catch (VisitorException e) {
-					throw new BehaviorException("Processing layer",e);
+					throw new BehaviorException("Processing layer", e);
 				} catch (LoadLayerException e) {
 					throw new BehaviorException("No se pudo procesar la capa",
 							e);
 				}
 			}
 		}
-		final XMLItem[] items = (XMLItem[])itemsVector.toArray(new XMLItem[0]);
+		final XMLItem[] items = (XMLItem[]) itemsVector.toArray(new XMLItem[0]);
 		FInfoDialog dlgXML = new FInfoDialog();
 
 		if (numLayersInfoable > 0) {
@@ -464,6 +480,7 @@ public class InfoListener implements PointListener {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#getCursor()
 	 */
 	public Cursor getCursor() {
@@ -472,6 +489,7 @@ public class InfoListener implements PointListener {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#cancelDrawing()
 	 */
 	public boolean cancelDrawing() {
@@ -480,7 +498,10 @@ public class InfoListener implements PointListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#pointDoubleClick(com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#pointDoubleClick
+	 * (com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
 	 */
 	public void pointDoubleClick(PointEvent event) throws BehaviorException {
 		// TODO Auto-generated method stub

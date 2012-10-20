@@ -45,10 +45,9 @@ import com.iver.cit.gvsig.project.documents.layout.LayoutContext;
 import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrameUseFMap;
 
-
 /**
  * Abre el diálogo de propiedades del FFrame seleccionado.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class PropertyLayoutMenuEntry extends AbstractLayoutContextMenuAction {
@@ -68,26 +67,29 @@ public class PropertyLayoutMenuEntry extends AbstractLayoutContextMenuAction {
 		return PluginServices.getText(this, "propiedades");
 	}
 
-	public boolean isEnabled(LayoutContext layoutContext, IFFrame[] selectedFrames) {
+	public boolean isEnabled(LayoutContext layoutContext,
+			IFFrame[] selectedFrames) {
 		return true;
 	}
 
-	public boolean isVisible(LayoutContext layoutContext, IFFrame[] selectedFrames) {
-		if (selectedFrames.length==1 && !(getLayout().getLayoutControl().getGeometryAdapter().getPoints().length>0))
+	public boolean isVisible(LayoutContext layoutContext,
+			IFFrame[] selectedFrames) {
+		if (selectedFrames.length == 1
+				&& !(getLayout().getLayoutControl().getGeometryAdapter()
+						.getPoints().length > 0))
 			return true;
 		return false;
 	}
 
-
 	public void execute(LayoutContext layoutContext, IFFrame[] selectedFrames) {
 		IFFrame[] selecList = layoutContext.getFFrameSelected();
 		if (selecList.length == 1) {
-			IFFrame frame=selecList[0];
-			IFFrame fframeAux=layoutContext.openFFrameDialog(frame);
-			if (fframeAux!=null) {
+			IFFrame frame = selecList[0];
+			IFFrame fframeAux = layoutContext.openFFrameDialog(frame);
+			if (fframeAux != null) {
 				if (fframeAux instanceof IFFrameUseFMap)
-					((IFFrameUseFMap)fframeAux).refresh();
-				layoutContext.getEFS().modifyFFrame(frame,fframeAux);
+					((IFFrameUseFMap) fframeAux).refresh();
+				layoutContext.getEFS().modifyFFrame(frame, fframeAux);
 				fframeAux.getBoundingBox(layoutContext.getAT());
 				layoutContext.updateFFrames();
 				layoutContext.callLayoutDrawListeners();

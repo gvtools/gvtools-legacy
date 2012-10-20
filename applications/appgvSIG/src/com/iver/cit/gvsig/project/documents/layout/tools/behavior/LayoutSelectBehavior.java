@@ -54,20 +54,20 @@ import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.LayoutMoveListener;
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.LayoutToolListener;
 
-
 /**
  * Behaviour que espera un listener de tipo LayoutMoveListener.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LayoutSelectBehavior extends LayoutBehavior {
 	private LayoutMoveListener listener;
-	private boolean dragged=false;
+	private boolean dragged = false;
 
 	/**
 	 * Crea un nuevo LayoutSelectBehavior.
-	 *
-	 * @param pli listener.
+	 * 
+	 * @param pli
+	 *            listener.
 	 */
 	public LayoutSelectBehavior(LayoutMoveListener lpl) {
 		listener = lpl;
@@ -83,102 +83,111 @@ public class LayoutSelectBehavior extends LayoutBehavior {
 		gh.fillRect(0, 0, image.getWidth(), image.getHeight());
 
 		getLayoutControl().getLayoutDraw().drawRectangle((Graphics2D) gh);
-		gh.drawImage(getLayoutControl().getImgRuler(),0,0,null);
-		gh.drawImage(getLayoutControl().getImage(),0,0,null);
+		gh.drawImage(getLayoutControl().getImgRuler(), 0, 0, null);
+		gh.drawImage(getLayoutControl().getImage(), 0, 0, null);
 		getLayoutControl().getLayoutDraw().drawGrid((Graphics2D) gh);
 
-		getLayoutControl().getLayoutDraw().drawHandlers((Graphics2D)gh, Color.black);
+		getLayoutControl().getLayoutDraw().drawHandlers((Graphics2D) gh,
+				Color.black);
 		gh.setColor(Color.black);
 		gh.setXORMode(Color.white);
 
 		if (getLayoutControl().isReSel()) {
-        	Rectangle reSel=getLayoutControl().getReSel();
-        	reSel=new Rectangle();
-        	reSel.setFrameFromDiagonal(getLayoutControl().getFirstPoint(), getLayoutControl().getLastPoint());
-            gh.drawRect(reSel.x, reSel.y, reSel.width, reSel.height);
-        }
-        IFFrame[] frames = getLayoutControl().getLayoutContext().getFFrameSelected();
-        for (int i = 0; i < frames.length; i++) {
-            gh.setColor(Color.black);
-            frames[i].drawHandlers((Graphics2D) g);
-            int difx = (getLayoutControl().getLastPoint().x - getLayoutControl().getFirstPoint().x);
-            int dify = (getLayoutControl().getLastPoint().y - getLayoutControl().getFirstPoint().y);
-            if ((Math.abs(difx) > 3) || (Math.abs(dify) > 3)) {
-                Rectangle2D rectangle = frames[i].getMovieRect(difx, dify);
-                if (rectangle == null)
-                    return;
-                ((Graphics2D) gh).rotate(Math.toRadians(frames[i]
-                        .getRotation()), rectangle.getX()
-                        + (rectangle.getWidth() / 2), rectangle.getY()
-                        + (rectangle.getHeight() / 2));
+			Rectangle reSel = getLayoutControl().getReSel();
+			reSel = new Rectangle();
+			reSel.setFrameFromDiagonal(getLayoutControl().getFirstPoint(),
+					getLayoutControl().getLastPoint());
+			gh.drawRect(reSel.x, reSel.y, reSel.width, reSel.height);
+		}
+		IFFrame[] frames = getLayoutControl().getLayoutContext()
+				.getFFrameSelected();
+		for (int i = 0; i < frames.length; i++) {
+			gh.setColor(Color.black);
+			frames[i].drawHandlers((Graphics2D) g);
+			int difx = (getLayoutControl().getLastPoint().x - getLayoutControl()
+					.getFirstPoint().x);
+			int dify = (getLayoutControl().getLastPoint().y - getLayoutControl()
+					.getFirstPoint().y);
+			if ((Math.abs(difx) > 3) || (Math.abs(dify) > 3)) {
+				Rectangle2D rectangle = frames[i].getMovieRect(difx, dify);
+				if (rectangle == null)
+					return;
+				((Graphics2D) gh).rotate(
+						Math.toRadians(frames[i].getRotation()),
+						rectangle.getX() + (rectangle.getWidth() / 2),
+						rectangle.getY() + (rectangle.getHeight() / 2));
 
-                if (rectangle != null && dragged && !getLayoutControl().isReSel()) {
-                    gh.drawRect((int) rectangle.getMinX(), (int) rectangle
-                            .getMinY(), (int) rectangle.getWidth(),
-                            (int) rectangle.getHeight());
-                }
+				if (rectangle != null && dragged
+						&& !getLayoutControl().isReSel()) {
+					gh.drawRect((int) rectangle.getMinX(),
+							(int) rectangle.getMinY(),
+							(int) rectangle.getWidth(),
+							(int) rectangle.getHeight());
+				}
 
-                ((Graphics2D) gh).rotate(Math.toRadians(-frames[i]
-                        .getRotation()), rectangle.getX()
-                        + (rectangle.getWidth() / 2), rectangle.getY()
-                        + (rectangle.getHeight() / 2));
+				((Graphics2D) gh).rotate(
+						Math.toRadians(-frames[i].getRotation()),
+						rectangle.getX() + (rectangle.getWidth() / 2),
+						rectangle.getY() + (rectangle.getHeight() / 2));
 
-            }
-        }
+			}
+		}
 
-//		long t2 = System.currentTimeMillis();
+		// long t2 = System.currentTimeMillis();
 		gh.setPaintMode();
-//		getLayoutControl().getLayoutDraw().drawRuler((Graphics2D) gh, Color.black);
-		g.drawImage(image,0,0,null);
+		// getLayoutControl().getLayoutDraw().drawRuler((Graphics2D) gh,
+		// Color.black);
+		g.drawImage(image, 0, 0, null);
 
+		// getLayoutControl().getLayoutDraw().drawRectangle((Graphics2D) g);
 
+		// g.drawImage(getLayoutControl().getImage(), 0, 0, getLayoutControl());
 
-
-
-
-//		getLayoutControl().getLayoutDraw().drawRectangle((Graphics2D) g);
-
-//        g.drawImage(getLayoutControl().getImage(), 0, 0, getLayoutControl());
-
-        //getLayout().getLayoutDraw().drawHandlers((Graphics2D) g, Color.black);
-//        if (getLayoutControl().isReSel()) {
-//        	Rectangle reSel=getLayoutControl().getReSel();
-//        	reSel=new Rectangle();
-//        	reSel.setFrameFromDiagonal(getLayoutControl().getFirstPoint(), getLayoutControl().getLastPoint());
-//            g.drawRect(reSel.x, reSel.y, reSel.width, reSel.height);
-//        }
-//        IFFrame[] frames = getLayoutControl().getLayoutContext().getFFrameSelected();
-//        for (int i = 0; i < frames.length; i++) {
-//            g.setColor(Color.black);
-//            frames[i].drawHandlers((Graphics2D) g);
-//            int difx = (getLayoutControl().getLastPoint().x - getLayoutControl().getFirstPoint().x);
-//            int dify = (getLayoutControl().getLastPoint().y - getLayoutControl().getFirstPoint().y);
-//            if ((Math.abs(difx) > 3) || (Math.abs(dify) > 3)) {
-//                Rectangle2D rectangle = frames[i].getMovieRect(difx, dify);
-//                if (rectangle == null)
-//                    return;
-//                ((Graphics2D) g).rotate(Math.toRadians(frames[i]
-//                        .getRotation()), rectangle.getX()
-//                        + (rectangle.getWidth() / 2), rectangle.getY()
-//                        + (rectangle.getHeight() / 2));
-//
-//                if (rectangle != null && dragged && !getLayoutControl().isReSel()) {
-//                    g.drawRect((int) rectangle.getMinX(), (int) rectangle
-//                            .getMinY(), (int) rectangle.getWidth(),
-//                            (int) rectangle.getHeight());
-//                }
-//
-//                ((Graphics2D) g).rotate(Math.toRadians(-frames[i]
-//                        .getRotation()), rectangle.getX()
-//                        + (rectangle.getWidth() / 2), rectangle.getY()
-//                        + (rectangle.getHeight() / 2));
-//
-//            }
-//        }
-//
-//        //g.setClip(rClip);
-//        g.drawImage(getLayoutControl().getImgRuler(), 0, 0, getLayoutControl());
-   }
+		// getLayout().getLayoutDraw().drawHandlers((Graphics2D) g,
+		// Color.black);
+		// if (getLayoutControl().isReSel()) {
+		// Rectangle reSel=getLayoutControl().getReSel();
+		// reSel=new Rectangle();
+		// reSel.setFrameFromDiagonal(getLayoutControl().getFirstPoint(),
+		// getLayoutControl().getLastPoint());
+		// g.drawRect(reSel.x, reSel.y, reSel.width, reSel.height);
+		// }
+		// IFFrame[] frames =
+		// getLayoutControl().getLayoutContext().getFFrameSelected();
+		// for (int i = 0; i < frames.length; i++) {
+		// g.setColor(Color.black);
+		// frames[i].drawHandlers((Graphics2D) g);
+		// int difx = (getLayoutControl().getLastPoint().x -
+		// getLayoutControl().getFirstPoint().x);
+		// int dify = (getLayoutControl().getLastPoint().y -
+		// getLayoutControl().getFirstPoint().y);
+		// if ((Math.abs(difx) > 3) || (Math.abs(dify) > 3)) {
+		// Rectangle2D rectangle = frames[i].getMovieRect(difx, dify);
+		// if (rectangle == null)
+		// return;
+		// ((Graphics2D) g).rotate(Math.toRadians(frames[i]
+		// .getRotation()), rectangle.getX()
+		// + (rectangle.getWidth() / 2), rectangle.getY()
+		// + (rectangle.getHeight() / 2));
+		//
+		// if (rectangle != null && dragged && !getLayoutControl().isReSel()) {
+		// g.drawRect((int) rectangle.getMinX(), (int) rectangle
+		// .getMinY(), (int) rectangle.getWidth(),
+		// (int) rectangle.getHeight());
+		// }
+		//
+		// ((Graphics2D) g).rotate(Math.toRadians(-frames[i]
+		// .getRotation()), rectangle.getX()
+		// + (rectangle.getWidth() / 2), rectangle.getY()
+		// + (rectangle.getHeight() / 2));
+		//
+		// }
+		// }
+		//
+		// //g.setClip(rClip);
+		// g.drawImage(getLayoutControl().getImgRuler(), 0, 0,
+		// getLayoutControl());
+	}
 
 	/**
 	 * @throws BehaviorException
@@ -192,30 +201,33 @@ public class LayoutSelectBehavior extends LayoutBehavior {
 
 	/**
 	 * Reimplementación del método mouseReleased de Behavior.
-	 *
-	 * @param e MouseEvent
-	 *
-	 * @throws BehaviorException Excepción lanzada cuando el Behavior.
+	 * 
+	 * @param e
+	 *            MouseEvent
+	 * 
+	 * @throws BehaviorException
+	 *             Excepción lanzada cuando el Behavior.
 	 */
 	public void mouseReleased(MouseEvent e) throws BehaviorException {
 		super.mouseReleased(e);
 		PointEvent event = new PointEvent(e.getPoint(), e);
 		listener.release(event);
-		dragged=false;
+		dragged = false;
 
 	}
 
 	/**
 	 * Reimplementación del método mouseDragged de Behavior.
-	 *
-	 * @param e MouseEvent
+	 * 
+	 * @param e
+	 *            MouseEvent
 	 * @throws BehaviorException
 	 */
 	public void mouseDragged(MouseEvent e) throws BehaviorException {
 		super.mouseDragged(e);
 		PointEvent event = new PointEvent(e.getPoint(), e);
 		listener.drag(event);
-		dragged=true;
+		dragged = true;
 	}
 
 	/**

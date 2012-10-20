@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.fmap.tools.listeners;
 
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
@@ -54,10 +54,12 @@ import com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener;
 
 public interface VectorListener extends ToolListener {
 	/**
-	 * Invocado cuando el usuario digitaliza un vector de dos puntos en la vista.
-	 *
-	 * @param event vector.
-	 *
+	 * Invocado cuando el usuario digitaliza un vector de dos puntos en la
+	 * vista.
+	 * 
+	 * @param event
+	 *            vector.
+	 * 
 	 * @throws BehaviorException
 	 */
 	public void vector(MoveEvent event) throws BehaviorException;

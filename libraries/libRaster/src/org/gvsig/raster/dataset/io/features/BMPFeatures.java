@@ -21,10 +21,11 @@ package org.gvsig.raster.dataset.io.features;
 import org.gvsig.raster.dataset.Params;
 import org.gvsig.raster.dataset.io.GdalDriver;
 import org.gvsig.raster.dataset.io.GdalWriter;
+
 /**
- * Caracteristicas del formato BMP para escritura.
- * Soporta escritura de imagenes 1 banda (monocromo) o 3 (RGB) en 8 bits. 
- * La georreferenciación puede hacerse mediante un fichero .wld.
+ * Caracteristicas del formato BMP para escritura. Soporta escritura de imagenes
+ * 1 banda (monocromo) o 3 (RGB) en 8 bits. La georreferenciación puede hacerse
+ * mediante un fichero .wld.
  * 
  * @version 04/06/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
@@ -32,7 +33,8 @@ import org.gvsig.raster.dataset.io.GdalWriter;
 public class BMPFeatures extends WriteFileFormatFeatures {
 
 	public BMPFeatures() {
-		super(GdalDriver.FORMAT_BMP, "bmp", new int[] { 3 }, null, GdalWriter.class);
+		super(GdalDriver.FORMAT_BMP, "bmp", new int[] { 3 }, null,
+				GdalWriter.class);
 	}
 
 	/**

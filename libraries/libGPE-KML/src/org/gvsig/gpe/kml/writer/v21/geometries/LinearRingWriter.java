@@ -68,6 +68,7 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
 /**
  * It writes the linearRing KML tag. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;LinearRing&gt;
@@ -75,37 +76,45 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  * &lt;/LinearRing&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
- * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#linearring
+ * @see http
+ *      ://code.google.com/apis/kml/documentation/kml_tags_21.html#linearring
  */
 public class LinearRingWriter {
-	
+
 	/**
 	 * It writes the linearRinzg kml init tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param coords
-	 * A coordinates iterator. 
+	 *            A coordinates iterator.
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler, 
-			ICoordinateSequence coords) throws IOException{
+	public void start(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor handler, ICoordinateSequence coords)
+			throws IOException {
 		writer.writeStartElement(Kml2_1_Tags.LINEARRING);
-		handler.getProfile().getCoordinatesWriter().write(writer, handler, coords);
+		handler.getProfile().getCoordinatesWriter()
+				.write(writer, handler, coords);
 	}
-	
+
 	/**
 	 * It writes the linearRing kml end tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @throws IOException
 	 */
-	public void end(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler) throws IOException{
+	public void end(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor handler) throws IOException {
 		writer.writeEndElement();
 	}
 }

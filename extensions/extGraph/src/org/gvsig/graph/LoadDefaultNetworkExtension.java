@@ -46,7 +46,6 @@ import java.sql.Types;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileFilter;
 
 import org.gvsig.exceptions.BaseException;
 import org.gvsig.graph.core.IGraph;
@@ -54,7 +53,6 @@ import org.gvsig.graph.core.Network;
 import org.gvsig.graph.core.NetworkUtils;
 import org.gvsig.graph.core.loaders.NetworkLoader;
 import org.gvsig.graph.core.loaders.NetworkRedLoader;
-import org.gvsig.gui.beans.swing.JFileChooser;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
@@ -80,8 +78,8 @@ public class LoadDefaultNetworkExtension extends Extension {
 	public void initialize() {
 		PluginServices.getIconTheme().registerDefault(
 				"network",
-				this.getClass().getClassLoader().getResource("images/network.png")
-			);		
+				this.getClass().getClassLoader()
+						.getResource("images/network.png"));
 
 	}
 
@@ -89,53 +87,56 @@ public class LoadDefaultNetworkExtension extends Extension {
 		IView view = (View) PluginServices.getMDIManager().getActiveWindow();
 		MapControl mapControl = view.getMapControl();
 		MapContext map = mapControl.getMapContext();
-		SingleLayerIterator lyrIterator = new SingleLayerIterator(map
-				.getLayers());
+		SingleLayerIterator lyrIterator = new SingleLayerIterator(
+				map.getLayers());
 		while (lyrIterator.hasNext()) {
 			FLayer lyr = lyrIterator.next();
-			if ((lyr.isActive()) && (lyr instanceof FLyrVect))
-			{
+			if ((lyr.isActive()) && (lyr instanceof FLyrVect)) {
 				FLyrVect lyrVect = (FLyrVect) lyr;
 				int shapeType;
 				try {
 					shapeType = lyrVect.getShapeType();
-					if ((shapeType & FShape.LINE) == FShape.LINE) 
-//						if (shapeType == FShape.LINE)
+					if ((shapeType & FShape.LINE) == FShape.LINE)
+					// if (shapeType == FShape.LINE)
 					{
 						if (actionCommand.equalsIgnoreCase("LOAD_NET")) {
 							File netFile = NetworkUtils.getNetworkFile(lyrVect);
 							loadNetwork(lyrVect, netFile);
 							return;
 						}
-//						if (actionCommand.equalsIgnoreCase("LOAD_NET_FROM_FILE")) {
-//							String curDir = System.getProperty("user.dir");
-//
-//							JFileChooser fileChooser = new JFileChooser("NET_FILES", new File(curDir));
-//							fileChooser.setFileFilter(new FileFilter() {
-//
-//								@Override
-//								public boolean accept(File f) {
-//									String path = f.getPath().toLowerCase();
-//									if (path.endsWith(".net"))
-//										return true;
-//									return false;
-//								}
-//
-//								@Override
-//								public String getDescription() {
-//									return ".net files";
-//								}
-//								
-//							});
-//							int res = fileChooser.showOpenDialog((Component) PluginServices.getMainFrame());
-//							if (res==JFileChooser.APPROVE_OPTION) {
-//								File netFile =fileChooser.getSelectedFile();
-//								loadNetwork(lyrVect, netFile);
-//							}
-//							
-//							return;
-//						}
-						
+						// if
+						// (actionCommand.equalsIgnoreCase("LOAD_NET_FROM_FILE"))
+						// {
+						// String curDir = System.getProperty("user.dir");
+						//
+						// JFileChooser fileChooser = new
+						// JFileChooser("NET_FILES", new File(curDir));
+						// fileChooser.setFileFilter(new FileFilter() {
+						//
+						// @Override
+						// public boolean accept(File f) {
+						// String path = f.getPath().toLowerCase();
+						// if (path.endsWith(".net"))
+						// return true;
+						// return false;
+						// }
+						//
+						// @Override
+						// public String getDescription() {
+						// return ".net files";
+						// }
+						//
+						// });
+						// int res = fileChooser.showOpenDialog((Component)
+						// PluginServices.getMainFrame());
+						// if (res==JFileChooser.APPROVE_OPTION) {
+						// File netFile =fileChooser.getSelectedFile();
+						// loadNetwork(lyrVect, netFile);
+						// }
+						//
+						// return;
+						// }
+
 					}
 				} catch (BaseException e) {
 					e.printStackTrace();
@@ -145,28 +146,25 @@ public class LoadDefaultNetworkExtension extends Extension {
 			}
 		}
 
-
 	}
 
 	/**
-	 * Suponemos que en el proyecto hay 2 tablas, una con los nodos
-	 * y otro con los edges.
-	 * Cargamos la red a partir de esas tablas y se la
-	 * asociamos a la capa. A partir de ahí, nuestras
-	 * herramientas pueden ver si la capa activa tiene
-	 * asociada o no una red y ponerse visibles / invisibles
-	 * Otra posible solución es llevar nuestra propia lista de capas
-	 * con red (que será pequeñita), y así, en lugar de recorrer
-	 * el MapContext, recorremos nuestra lista para ver la
-	 * capa que está activa y con red. Me empieza a preocupar
-	 * que todas las herramientas iteren por la colección de
-	 * capas para habilitarse/deshabilitarse:
-	 * 100 herramientas * 100 capas = 10.000 comprobaciones
-	 * Si comprobar algo cuesta 1 mseg => 10 segundos!!!
+	 * Suponemos que en el proyecto hay 2 tablas, una con los nodos y otro con
+	 * los edges. Cargamos la red a partir de esas tablas y se la asociamos a la
+	 * capa. A partir de ahí, nuestras herramientas pueden ver si la capa activa
+	 * tiene asociada o no una red y ponerse visibles / invisibles Otra posible
+	 * solución es llevar nuestra propia lista de capas con red (que será
+	 * pequeñita), y así, en lugar de recorrer el MapContext, recorremos nuestra
+	 * lista para ver la capa que está activa y con red. Me empieza a preocupar
+	 * que todas las herramientas iteren por la colección de capas para
+	 * habilitarse/deshabilitarse: 100 herramientas * 100 capas = 10.000
+	 * comprobaciones Si comprobar algo cuesta 1 mseg => 10 segundos!!!
+	 * 
 	 * @param lyrVect
-	 * @throws ReadDriverException 
+	 * @throws ReadDriverException
 	 */
-	private void loadNetworkFromTables(FLyrVect lyrVect) throws ReadDriverException {
+	private void loadNetworkFromTables(FLyrVect lyrVect)
+			throws ReadDriverException {
 		// Aquí mostrar un diálgo para seleccionar las tablas
 		// de nodos y edges
 		// y hacer un mapping (si es necesario) entre los
@@ -174,13 +172,13 @@ public class LoadDefaultNetworkExtension extends Extension {
 		String tableNodes = "Nodes";
 		String tableEdges = "Edges";
 
-		ProjectExtension projectExt = (ProjectExtension) PluginServices.getExtension(ProjectExtension.class);
+		ProjectExtension projectExt = (ProjectExtension) PluginServices
+				.getExtension(ProjectExtension.class);
 
 		ProjectTable ptNodes = projectExt.getProject().getTable(tableNodes);
 		ProjectTable ptEdges = projectExt.getProject().getTable(tableEdges);
 
 		SelectableDataSource sdsNodes = ptNodes.getModelo().getRecordset();
-
 
 		SelectableDataSource sdsEdges = ptEdges.getModelo().getRecordset();
 
@@ -191,53 +189,55 @@ public class LoadDefaultNetworkExtension extends Extension {
 
 		IGraph g = netLoader.loadNetwork();
 
-		System.out.println("Num nodos=" + g.numVertices() + " numEdges = " + g.numEdges());
+		System.out.println("Num nodos=" + g.numVertices() + " numEdges = "
+				+ g.numEdges());
 
 		lyrVect.setProperty("network", g);
 
 	}
-	public void loadNetwork(FLyrVect lyrVect, File netFile) throws BaseException {
+
+	public void loadNetwork(FLyrVect lyrVect, File netFile)
+			throws BaseException {
 		// Aquí mostrar un diálgo para seleccionar las tablas
 		// de nodos y edges
 		// y hacer un mapping (si es necesario) entre los
 		// nombres de campos
 
-		// TODO: MOSTRAR UN CUADRO DE DIÁLOGO CON UN COMBOBOX PARA QUE ESCOJA EL CAMPO DE NOMBRE DE CALLE.
+		// TODO: MOSTRAR UN CUADRO DE DIÁLOGO CON UN COMBOBOX PARA QUE ESCOJA EL
+		// CAMPO DE NOMBRE DE CALLE.
 		ArrayList aux = new ArrayList();
-		FieldDescription[] fields = lyrVect.getRecordset().getFieldsDescription();
-		for (int i=0; i<fields.length; i++)
-		{
-			if ((fields[i].getFieldType() == Types.VARCHAR) || (fields[i].getFieldType() == Types.LONGVARCHAR))
-			{
+		FieldDescription[] fields = lyrVect.getRecordset()
+				.getFieldsDescription();
+		for (int i = 0; i < fields.length; i++) {
+			if ((fields[i].getFieldType() == Types.VARCHAR)
+					|| (fields[i].getFieldType() == Types.LONGVARCHAR)) {
 				aux.add(fields[i].getFieldName());
 			}
 		}
-		String fieldStreetName = (String) JOptionPane.showInputDialog((Component) PluginServices.getMainFrame(),
+		String fieldStreetName = (String) JOptionPane.showInputDialog(
+				(Component) PluginServices.getMainFrame(),
 				PluginServices.getText(this, "select_street_route_field_name"),
-				"gvSIG",
-				JOptionPane.QUESTION_MESSAGE, 
-				null,
-				(Object[]) aux.toArray(new String[0]), 
-				"NOMBRE");
-		
+				"gvSIG", JOptionPane.QUESTION_MESSAGE, null,
+				(Object[]) aux.toArray(new String[0]), "NOMBRE");
+
 		if (fieldStreetName == null)
 			return;
 
-		
 		NetworkRedLoader netLoader = new NetworkRedLoader();
-		
+
 		netLoader.setNetFile(netFile);
 
 		IGraph g = netLoader.loadNetwork();
-		
-		System.out.println("Num nodos=" + g.numVertices() + " numEdges = " + g.numEdges());
+
+		System.out.println("Num nodos=" + g.numVertices() + " numEdges = "
+				+ g.numEdges());
 
 		Network net = new Network();
 		// lyrVect.createSpatialIndex();
 		net.setGraph(g);
 		net.setLayer(lyrVect);
-//		ShortestPathExtension.solver.setNetwork(net);
-//		ShortestPathExtension.solver.setFielStreetName(fieldStreetName);
+		// ShortestPathExtension.solver.setNetwork(net);
+		// ShortestPathExtension.solver.setFielStreetName(fieldStreetName);
 
 		lyrVect.setProperty("network", net);
 		lyrVect.setProperty("network_fieldStreetName", fieldStreetName);
@@ -257,7 +257,7 @@ public class LoadDefaultNetworkExtension extends Extension {
 			MapContext mapa = model.getMapContext();
 			FLayer[] activeLayers = mapa.getLayers().getActives();
 			if (activeLayers.length > 0)
-				if (activeLayers[0] instanceof FLyrVect){
+				if (activeLayers[0] instanceof FLyrVect) {
 					FLyrVect lyrVect = (FLyrVect) activeLayers[0];
 					File netFile = NetworkUtils.getNetworkFile(lyrVect);
 					if (netFile.exists())
@@ -281,26 +281,25 @@ public class LoadDefaultNetworkExtension extends Extension {
 			MapContext mapa = model.getMapContext();
 			FLayer[] activeLayers = mapa.getLayers().getActives();
 			if (activeLayers.length > 0)
-				if (activeLayers[0] instanceof FLyrVect){
+				if (activeLayers[0] instanceof FLyrVect) {
 					FLyrVect lyrVect = (FLyrVect) activeLayers[0];
-					int shapeType ;
+					int shapeType;
 					try {
 						if (!lyrVect.isAvailable())
 							return false;
-						
+
 						shapeType = lyrVect.getShapeType();
-//							if (shapeType == FShape.LINE)
-						if ((shapeType & FShape.LINE) == FShape.LINE) 
+						// if (shapeType == FShape.LINE)
+						if ((shapeType & FShape.LINE) == FShape.LINE)
 							return true;
 					} catch (ReadDriverException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				}	
+				}
 		}
 		return false;
 
 	}
-
 
 }

@@ -21,33 +21,40 @@ package org.gvsig.georeferencing.ui.zoom;
 import java.util.EventListener;
 
 /**
- * Interfaz que informa de eventos de acciones que se están produciendo
- * o que se han producido sobre la vista
- * 31/01/2008
+ * Interfaz que informa de eventos de acciones que se están produciendo o que se
+ * han producido sobre la vista 31/01/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public interface ViewListener extends EventListener {
-	
+
 	/**
 	 * Evento que se produce cuando se añade una herramienta sobre la vista
-	 * @param ev ViewEvent
+	 * 
+	 * @param ev
+	 *            ViewEvent
 	 */
 	public void addingTool(ViewEvent ev);
-		
+
 	/**
 	 * Evento producido cuando se empieza a dibujar
-	 * @param ev ViewEvent
+	 * 
+	 * @param ev
+	 *            ViewEvent
 	 */
 	public void startDraw(ViewEvent ev);
-	
+
 	/**
 	 * Evento producido cuando se empieza a dibujar
-	 * @param ev ViewEvent
+	 * 
+	 * @param ev
+	 *            ViewEvent
 	 */
 	public void endDraw(ViewEvent ev);
-	
+
 	/**
 	 * Informa de los cambios sobre el zoom de la vista
+	 * 
 	 * @param ev
 	 */
 	public void zoomViewChanged(ViewEvent ev);

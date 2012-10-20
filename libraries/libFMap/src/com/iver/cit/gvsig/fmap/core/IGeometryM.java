@@ -1,4 +1,5 @@
 package com.iver.cit.gvsig.fmap.core;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -49,44 +50,44 @@ package com.iver.cit.gvsig.fmap.core;
  *
  */
 /**
- * All the geometries that contains a M coordinate in their
- * nodes have to implement this interface. It has method
- * to manage this coordinate. 
+ * All the geometries that contains a M coordinate in their nodes have to
+ * implement this interface. It has method to manage this coordinate.
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public interface IGeometryM extends IGeometry{
-	
-	
+public interface IGeometryM extends IGeometry {
+
 	/**
 	 * @return if the M coordinates are decreasing
 	 */
 	public boolean isDecreasing();
-	
+
 	/**
 	 * @return the M value for each node
 	 */
 	public double[] getMs();
-	
+
 	/**
 	 * Sets the M value at a position
+	 * 
 	 * @param i
-	 * Position of the node
+	 *            Position of the node
 	 * @param value
-	 * The M value to set
+	 *            The M value to set
 	 */
 	public void setMAt(int i, double value);
-	
+
 	/**
 	 * Revert the Ms
 	 */
 	public void revertMs();
-	
+
 	/**
-	 * Return the geometry like text. It is added because JTS doesn't support the M
-	 * coordinate
+	 * Return the geometry like text. It is added because JTS doesn't support
+	 * the M coordinate
+	 * 
 	 * @return
 	 */
 	public String toText();
-		
-	
+
 }

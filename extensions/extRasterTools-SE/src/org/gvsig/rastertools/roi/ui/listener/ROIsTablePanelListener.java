@@ -80,12 +80,13 @@ import com.iver.cit.gvsig.fmap.rendering.FGraphic;
  * Listener para el panel ROIsTablPanel
  * 
  * @author Diego Guerrero Sevilla (diego.guerrero@uclm.es)
- *
+ * 
  */
-public class ROIsTablePanelListener implements ButtonsPanelListener, ActionListener, ListSelectionListener, TableModelListener{
-	
+public class ROIsTablePanelListener implements ButtonsPanelListener,
+		ActionListener, ListSelectionListener, TableModelListener {
+
 	private ROIsTablePanel tablePanel = null;
-	private String 		   roiSelectedName = "";
+	private String roiSelectedName = "";
 
 	public ROIsTablePanelListener(ROIsTablePanel tablePanel) {
 		this.tablePanel = tablePanel;
@@ -95,85 +96,106 @@ public class ROIsTablePanelListener implements ButtonsPanelListener, ActionListe
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == tablePanel.getNewButton()){
+		if (e.getSource() == tablePanel.getNewButton()) {
 			String roiName;
 			try {
-				roiName = "ROI" + String.valueOf(tablePanel.getTable().getRowCount());
-				Object row [] = ((IModel)tablePanel.getTable().getModel()).getNewLine();
-				row[0]= roiName;
-				((DefaultTableModel)tablePanel.getTable().getModel()).addRow(row);
-				if (tablePanel.getGrid()!=null){
+				roiName = "ROI"
+						+ String.valueOf(tablePanel.getTable().getRowCount());
+				Object row[] = ((IModel) tablePanel.getTable().getModel())
+						.getNewLine();
+				row[0] = roiName;
+				((DefaultTableModel) tablePanel.getTable().getModel())
+						.addRow(row);
+				if (tablePanel.getGrid() != null) {
 					ROI roi = new VectorialROI(tablePanel.getGrid());
 					roi.setName(roiName);
-					roi.setColor((Color)row[4]);
+					roi.setColor((Color) row[4]);
 					tablePanel.addROI(roi);
 				}
-				tablePanel.getTable().setSelectedIndex(tablePanel.getTable().getRowCount()-1);
+				tablePanel.getTable().setSelectedIndex(
+						tablePanel.getTable().getRowCount() - 1);
 				tablePanel.selectDrawRoiTool();
 				tablePanel.setToolsEnabled(true);
 			} catch (NotInitializeException e1) {
-				RasterToolsUtil.messageBoxError("error_tabla_rois", tablePanel, e1);
+				RasterToolsUtil.messageBoxError("error_tabla_rois", tablePanel,
+						e1);
 				if (tablePanel.getManagerPanel() != null)
 					tablePanel.getManagerPanel().getRoiManagerDialog().close();
 			}
-		}else if (e.getSource() == tablePanel.getDeleteButton()){
+		} else if (e.getSource() == tablePanel.getDeleteButton()) {
 			try {
-				if (tablePanel.getTable().getSelectedRows().length>0){
-					String className = (String)tablePanel.getTable().getModel().getValueAt(tablePanel.getTable().getSelectedRow(),0);
+				if (tablePanel.getTable().getSelectedRows().length > 0) {
+					String className = (String) tablePanel
+							.getTable()
+							.getModel()
+							.getValueAt(tablePanel.getTable().getSelectedRow(),
+									0);
 					tablePanel.removeROI(className);
-					((DefaultTableModel)tablePanel.getTable().getModel()).removeRow(tablePanel.getTable().getSelectedRow());
+					((DefaultTableModel) tablePanel.getTable().getModel())
+							.removeRow(tablePanel.getTable().getSelectedRow());
 				}
 			} catch (NotInitializeException e1) {
-				RasterToolsUtil.messageBoxError("error_tabla_rois", tablePanel, e1);
+				RasterToolsUtil.messageBoxError("error_tabla_rois", tablePanel,
+						e1);
 				if (tablePanel.getManagerPanel() != null)
 					tablePanel.getManagerPanel().getRoiManagerDialog().close();
 			}
-		}else if (e.getSource() == tablePanel.getPointToolButton()){
+		} else if (e.getSource() == tablePanel.getPointToolButton()) {
 			tablePanel.getPointToolButton().setSelected(true);
 			tablePanel.getLineToolButton().setSelected(false);
 			tablePanel.getPolygonToolButton().setSelected(false);
 			tablePanel.selectDrawRoiTool();
-		}else if (e.getSource() == tablePanel.getLineToolButton()){
+		} else if (e.getSource() == tablePanel.getLineToolButton()) {
 			tablePanel.getLineToolButton().setSelected(true);
 			tablePanel.getPointToolButton().setSelected(false);
 			tablePanel.getPolygonToolButton().setSelected(false);
 			tablePanel.selectDrawRoiTool();
-		}else if (e.getSource() == tablePanel.getPolygonToolButton()){
+		} else if (e.getSource() == tablePanel.getPolygonToolButton()) {
 			tablePanel.getPolygonToolButton().setSelected(true);
 			tablePanel.getLineToolButton().setSelected(false);
 			tablePanel.getPointToolButton().setSelected(false);
 			tablePanel.selectDrawRoiTool();
-		}
-		else if (e.getSource() == tablePanel.getExportButton()){
+		} else if (e.getSource() == tablePanel.getExportButton()) {
 			JFileChooser fileChooser = new JFileChooser();
-			fileChooser.removeChoosableFileFilter(fileChooser.getAcceptAllFileFilter());
+			fileChooser.removeChoosableFileFilter(fileChooser
+					.getAcceptAllFileFilter());
 			fileChooser.addChoosableFileFilter(new ShpFileFilter());
-			if (fileChooser.showSaveDialog(tablePanel) == JFileChooser.APPROVE_OPTION){
+			if (fileChooser.showSaveDialog(tablePanel) == JFileChooser.APPROVE_OPTION) {
 				File file = fileChooser.getSelectedFile();
-				VectorialROIsWriter writer = new VectorialROIsWriter(file.getPath(),tablePanel.getFLayer().getCrs());
-				writer.write((VectorialROI[])tablePanel.getROIs().toArray(new VectorialROI[0]));
+				VectorialROIsWriter writer = new VectorialROIsWriter(
+						file.getPath(), tablePanel.getFLayer().getCrs());
+				writer.write((VectorialROI[]) tablePanel.getROIs().toArray(
+						new VectorialROI[0]));
 			}
-		}else if (e.getSource() == tablePanel.getImportButton()){
+		} else if (e.getSource() == tablePanel.getImportButton()) {
 			JFileChooser fileChooser = new JFileChooser();
-			fileChooser.removeChoosableFileFilter(fileChooser.getAcceptAllFileFilter());
+			fileChooser.removeChoosableFileFilter(fileChooser
+					.getAcceptAllFileFilter());
 			fileChooser.addChoosableFileFilter(new ShpFileFilter());
-			if (fileChooser.showOpenDialog(tablePanel) == JFileChooser.APPROVE_OPTION){
+			if (fileChooser.showOpenDialog(tablePanel) == JFileChooser.APPROVE_OPTION) {
 				File file = fileChooser.getSelectedFile();
 				try {
-					VectorialROIsReader reader = new VectorialROIsReader(file.getPath(),tablePanel.getGrid(),tablePanel.getFLayer().getCrs());
+					VectorialROIsReader reader = new VectorialROIsReader(
+							file.getPath(), tablePanel.getGrid(), tablePanel
+									.getFLayer().getCrs());
 					ArrayList rois = reader.read(tablePanel.getROIs());
 					tablePanel.clearROIs();
 					tablePanel.setROIs(rois);
 				} catch (LoadLayerException e1) {
-					RasterToolsUtil.messageBoxError("error_file_not_valid", tablePanel, e1);
+					RasterToolsUtil.messageBoxError("error_file_not_valid",
+							tablePanel, e1);
 				} catch (FileNotExistsException e1) {
-					RasterToolsUtil.messageBoxError("error_file_not_found", tablePanel, e1);
+					RasterToolsUtil.messageBoxError("error_file_not_found",
+							tablePanel, e1);
 				} catch (ReadDriverException e1) {
-					RasterToolsUtil.messageBoxError("error_file_not_valid", tablePanel, e1);
+					RasterToolsUtil.messageBoxError("error_file_not_valid",
+							tablePanel, e1);
 				} catch (GridException e1) {
-					RasterToolsUtil.messageBoxError("error_creating_rois", tablePanel, e1);
+					RasterToolsUtil.messageBoxError("error_creating_rois",
+							tablePanel, e1);
 				} catch (InvalidROIsShpException e1) {
-					RasterToolsUtil.messageBoxError("error_file_not_valid", tablePanel, e1);
+					RasterToolsUtil.messageBoxError("error_file_not_valid",
+							tablePanel, e1);
 				}
 			}
 		}
@@ -181,43 +203,50 @@ public class ROIsTablePanelListener implements ButtonsPanelListener, ActionListe
 
 	public void valueChanged(ListSelectionEvent e) {
 		try {
-			if (tablePanel.getTable().getSelectedRows().length<=0){
+			if (tablePanel.getTable().getSelectedRows().length <= 0) {
 				tablePanel.setToolsEnabled(false);
 				tablePanel.setPreviousTool();
-			}
-			else{
+			} else {
 				tablePanel.setToolsEnabled(true);
 				tablePanel.selectDrawRoiTool();
-				
+
 				int selectedRow = tablePanel.getTable().getSelectedRow();
-				roiSelectedName = (String)tablePanel.getTable().getTable().getJTable().getValueAt(selectedRow,0);
-				}
+				roiSelectedName = (String) tablePanel.getTable().getTable()
+						.getJTable().getValueAt(selectedRow, 0);
+			}
 		} catch (NotInitializeException e1) {
 			RasterToolsUtil.messageBoxError("error_rois_table", tablePanel, e1);
-		}	
+		}
 	}
 
 	public void tableChanged(TableModelEvent e) {
 		/*
 		 * Cambio de color en una ROI:
 		 */
-		if(e.getColumn()==4){
-			String roiName = (String)tablePanel.getTable().getTable().getJTable().getValueAt(e.getFirstRow(),0);
+		if (e.getColumn() == 4) {
+			String roiName = (String) tablePanel.getTable().getTable()
+					.getJTable().getValueAt(e.getFirstRow(), 0);
 			ArrayList graphics = tablePanel.getRoiGraphics(roiName);
-			if(tablePanel.getMapControl()!=null){
-				GraphicLayer graphicLayer = tablePanel.getMapControl().getMapContext().getGraphicsLayer();
+			if (tablePanel.getMapControl() != null) {
+				GraphicLayer graphicLayer = tablePanel.getMapControl()
+						.getMapContext().getGraphicsLayer();
 				ISymbol symbol = null;
-				Color color = (Color)tablePanel.getTable().getTable().getJTable().getValueAt(e.getFirstRow(),4);
-				for (int i = 0; i< graphics.size(); i++){
-					symbol = SymbologyFactory.createDefaultSymbolByShapeType(((FGraphic)graphics.get(i)).getGeom().getGeometryType(), color);
-					((FGraphic)graphics.get(i)).setIdSymbol(graphicLayer.addSymbol(symbol));
+				Color color = (Color) tablePanel.getTable().getTable()
+						.getJTable().getValueAt(e.getFirstRow(), 4);
+				for (int i = 0; i < graphics.size(); i++) {
+					symbol = SymbologyFactory.createDefaultSymbolByShapeType(
+							((FGraphic) graphics.get(i)).getGeom()
+									.getGeometryType(), color);
+					((FGraphic) graphics.get(i)).setIdSymbol(graphicLayer
+							.addSymbol(symbol));
 				}
 				tablePanel.getROI(roiName).setColor(color);
 				tablePanel.getMapControl().drawGraphics();
 			}
-		}else if(e.getColumn()==0){
-			String newName = (String)tablePanel.getTable().getTable().getJTable().getValueAt(e.getFirstRow(),0);
-			tablePanel.changeRoiName(roiSelectedName,newName);
+		} else if (e.getColumn() == 0) {
+			String newName = (String) tablePanel.getTable().getTable()
+					.getJTable().getValueAt(e.getFirstRow(), 0);
+			tablePanel.changeRoiName(roiSelectedName, newName);
 			roiSelectedName = newName;
 		}
 	}
@@ -225,32 +254,34 @@ public class ROIsTablePanelListener implements ButtonsPanelListener, ActionListe
 
 /**
  * Filtro para el selector de expresiones matemáticas.
+ * 
  * @author Alejandro Muñoz (alejandro.munoz@uclm.es)
- *
+ * 
  */
 class ShpFileFilter extends FileFilter {
 
 	final static String exp = "shp";
+
 	public boolean accept(File f) {
 		if (f.isDirectory()) {
-           return true;
-       }
-       String s = f.getName();
-       int i = s.lastIndexOf('.');
+			return true;
+		}
+		String s = f.getName();
+		int i = s.lastIndexOf('.');
 
-       if (i > 0 &&  i < s.length() - 1) {
-           String extension = s.substring(i+1).toLowerCase();
-           if (exp.equals(extension)){
-                   return true;
-           } else {
-               return false;
-           }
-       }
-       return false;
+		if (i > 0 && i < s.length() - 1) {
+			String extension = s.substring(i + 1).toLowerCase();
+			if (exp.equals(extension)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return false;
 	}
 
 	public String getDescription() {
-		 return (PluginServices.getText(this, "Ficheros_SHP"));
+		return (PluginServices.getText(this, "Ficheros_SHP"));
 	}
-	
+
 }

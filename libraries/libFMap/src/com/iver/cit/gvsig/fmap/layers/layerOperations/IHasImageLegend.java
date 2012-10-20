@@ -45,8 +45,7 @@ import java.awt.Image;
 public interface IHasImageLegend {
 
 	Image getImageLegend();
+
 	String getPathImage();
 
 }
-
-

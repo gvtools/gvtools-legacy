@@ -32,12 +32,14 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 
 import org.gvsig.gui.beans.Messages;
+
 /**
  * Editor de celda con un botón selector de color-
- *
+ * 
  * @author Nacho Brodin (brodin_ign@gva.es)
  */
-public class TableColorButtonColumnEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {
+public class TableColorButtonColumnEditor extends AbstractCellEditor implements
+		TableCellEditor, ActionListener {
 	private static final long serialVersionUID = -6627842834708616873L;
 	Color currentColor;
 	JButton button;
@@ -47,7 +49,8 @@ public class TableColorButtonColumnEditor extends AbstractCellEditor implements 
 	private JTable table = null;
 	protected static final String EDIT = "edit";
 
-	public TableColorButtonColumnEditor(DefaultTableModel tableModel, JTable table) {
+	public TableColorButtonColumnEditor(DefaultTableModel tableModel,
+			JTable table) {
 		button = new JButton();
 		button.setActionCommand(EDIT);
 		button.addActionListener(this);
@@ -56,7 +59,9 @@ public class TableColorButtonColumnEditor extends AbstractCellEditor implements 
 		this.table = table;
 
 		colorChooser = new JColorChooser();
-		dialog = JColorChooser.createDialog(button, Messages.getText("select_color"), true, colorChooser, this, null);
+		dialog = JColorChooser.createDialog(button,
+				Messages.getText("select_color"), true, colorChooser, this,
+				null);
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -65,10 +70,14 @@ public class TableColorButtonColumnEditor extends AbstractCellEditor implements 
 			colorChooser.setColor(currentColor);
 			dialog.setVisible(true);
 			if ((tableModel != null) && (table != null)) {
-				if (!((tableModel instanceof ProfilesTableModel)||(tableModel instanceof ROIsTableModel))) {
-					String newColor = currentColor.getRed() + "," + currentColor.getGreen() + "," + currentColor.getBlue();
-					if (!newColor.equals(tableModel.getValueAt(table.getSelectedRow(), 2))) {	
-					tableModel.setValueAt(newColor, table.getSelectedRow(), 2);
+				if (!((tableModel instanceof ProfilesTableModel) || (tableModel instanceof ROIsTableModel))) {
+					String newColor = currentColor.getRed() + ","
+							+ currentColor.getGreen() + ","
+							+ currentColor.getBlue();
+					if (!newColor.equals(tableModel.getValueAt(
+							table.getSelectedRow(), 2))) {
+						tableModel.setValueAt(newColor, table.getSelectedRow(),
+								2);
 					}
 				}
 			}
@@ -81,7 +90,8 @@ public class TableColorButtonColumnEditor extends AbstractCellEditor implements 
 		return currentColor;
 	}
 
-	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+	public Component getTableCellEditorComponent(JTable table, Object value,
+			boolean isSelected, int row, int column) {
 		currentColor = (Color) value;
 		return button;
 	}

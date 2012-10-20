@@ -5,10 +5,11 @@ package com.iver.cit.gvsig.exceptions.layers;
  */
 public class LegendLayerException extends LoadLayerException {
 
-	public LegendLayerException(String l,Throwable exception) {
-		super(l,exception);
+	public LegendLayerException(String l, Throwable exception) {
+		super(l, exception);
 		init();
 	}
+
 	/**
 	 *
 	 */

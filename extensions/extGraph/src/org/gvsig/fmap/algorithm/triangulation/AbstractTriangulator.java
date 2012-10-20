@@ -28,7 +28,6 @@
 package org.gvsig.fmap.algorithm.triangulation;
 
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,27 +39,26 @@ public abstract class AbstractTriangulator implements Triangulator {
 	protected TIN tin = new TIN();
 	protected Rectangle2D.Double fullExtent = null;
 	protected Vertex firstVertex = null;
-//	protected List<Vertex> vertices = new ArrayList<Vertex>();
-//	protected List<Triangle> triangles = new ArrayList<Triangle>();
-	
+
+	// protected List<Vertex> vertices = new ArrayList<Vertex>();
+	// protected List<Triangle> triangles = new ArrayList<Triangle>();
+
 	public void addVertex(Vertex v) {
 		tin.addVertex(v);
 		if (firstVertex != null)
 			if (fullExtent == null) {
 				fullExtent = new Rectangle2D.Double();
-				fullExtent.setFrameFromDiagonal(v.getX(), v.getY(), 
-					firstVertex.getX(), firstVertex.getY());
-			}
-			else
+				fullExtent.setFrameFromDiagonal(v.getX(), v.getY(),
+						firstVertex.getX(), firstVertex.getY());
+			} else
 				fullExtent.add(v.getX(), v.getY());
-		
-		if (firstVertex == null) 
+
+		if (firstVertex == null)
 			firstVertex = v;
 	}
 
 	public List<Triangle> getTriangles() {
 		return tin.getTriangles();
 	}
-
 
 }

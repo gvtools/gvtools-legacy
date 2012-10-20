@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.impl.referencing;
 
 import java.net.URL;
@@ -62,24 +62,23 @@ public class ReferencingGeoprocessPlugin extends GeoprocessPluginAbstract {
 
 	private static String dataConvertPkg;
 	private static String geoprocessName;
-	
-	static{
-		dataConvertPkg = 
-			PluginServices.getText(null, "Conversion_de_datos");
-		geoprocessName =
-			PluginServices.getText(null, "Spatial_Adjust");
+
+	static {
+		dataConvertPkg = PluginServices.getText(null, "Conversion_de_datos");
+		geoprocessName = PluginServices.getText(null, "Spatial_Adjust");
 	}
-	
-	
+
 	public IGeoprocessUserEntries getGeoprocessPanel() {
-		com.iver.andami.ui.mdiManager.IWindow view = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow view = PluginServices
+				.getMDIManager().getActiveWindow();
 		View vista = (View) view;
 		FLayers layers = vista.getModel().getMapContext().getLayers();
 		return (IGeoprocessUserEntries) new ReferencingGeoprocessPanel(layers);
 	}
 
 	public URL getImgDescription() {
-		URL url = PluginServices.getIconTheme().getURL("spatialadjustdesc-icon");
+		URL url = PluginServices.getIconTheme()
+				.getURL("spatialadjustdesc-icon");
 		return url;
 	}
 
@@ -87,14 +86,12 @@ public class ReferencingGeoprocessPlugin extends GeoprocessPluginAbstract {
 		return new ReferencingGeoprocessController();
 	}
 
-	
 	public String getNamespace() {
 		return dataConvertPkg + "/" + geoprocessName;
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		return geoprocessName;
 	}
-
 
 }

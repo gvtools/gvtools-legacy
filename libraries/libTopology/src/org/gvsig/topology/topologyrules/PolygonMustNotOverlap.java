@@ -179,19 +179,19 @@ public class PolygonMustNotOverlap extends AbstractTopologyRule implements
 
 			ComputedTopologyError other = (ComputedTopologyError) o;
 
-			return (other.firstFeature.equalsIgnoreCase(firstFeature) &&
-				   other.secondFeature.equalsIgnoreCase(secondFeature)) ||
-				   (other.firstFeature.equalsIgnoreCase(secondFeature) &&
-						   other.secondFeature.equalsIgnoreCase(firstFeature));
-				   
+			return (other.firstFeature.equalsIgnoreCase(firstFeature) && other.secondFeature
+					.equalsIgnoreCase(secondFeature))
+					|| (other.firstFeature.equalsIgnoreCase(secondFeature) && other.secondFeature
+							.equalsIgnoreCase(firstFeature));
+
 		}
 
 		public int hashCode() {
 			return 1;
 		}
 	}
-	
-	public void ruleChecked(){
+
+	public void ruleChecked() {
 		errorEntries.clear();
 	}
 
@@ -231,30 +231,37 @@ public class PolygonMustNotOverlap extends AbstractTopologyRule implements
 
 						for (int j = 0; j < geometriesToProcess.length; j++) {
 							Polygon poly2 = geometriesToProcess[j];
-							//we check if overlaps or if one polygon contains the other
-							if (poly2.overlaps(polygon) || poly2.covers(polygon) || polygon.covers(poly2)) {
+							// we check if overlaps or if one polygon contains
+							// the other
+							if (poly2.overlaps(polygon)
+									|| poly2.covers(polygon)
+									|| polygon.covers(poly2)) {
 								ComputedTopologyError errorEntry = new ComputedTopologyError();
 								errorEntry.firstFeature = feature.getID();
-								errorEntry.secondFeature = neighbourFeature.getID();
+								errorEntry.secondFeature = neighbourFeature
+										.getID();
 
-								if(! this.errorEntries.containsKey(errorEntry)){
-									Geometry errorGeomJts = EnhancedPrecisionOp.intersection(poly2, polygon);
-									Polygon[] overlappingPolygons = JtsUtil.extractPolygons(errorGeomJts);
-									if(overlappingPolygons.length > 0){
-										errorGeomJts = JtsUtil.GEOMETRY_FACTORY.createGeometryCollection(overlappingPolygons);
-										IGeometry errorGeom = NewFConverter.toFMap(errorGeomJts);
-										TopologyError topologyError = 
-											new TopologyError(errorGeom, 
-														errorContainer.getErrorFid(), 
-														this,  
-														feature, 
-														neighbourFeature, 
-														topology );
+								if (!this.errorEntries.containsKey(errorEntry)) {
+									Geometry errorGeomJts = EnhancedPrecisionOp
+											.intersection(poly2, polygon);
+									Polygon[] overlappingPolygons = JtsUtil
+											.extractPolygons(errorGeomJts);
+									if (overlappingPolygons.length > 0) {
+										errorGeomJts = JtsUtil.GEOMETRY_FACTORY
+												.createGeometryCollection(overlappingPolygons);
+										IGeometry errorGeom = NewFConverter
+												.toFMap(errorGeomJts);
+										TopologyError topologyError = new TopologyError(
+												errorGeom,
+												errorContainer.getErrorFid(),
+												this, feature,
+												neighbourFeature, topology);
 										addTopologyError(topologyError);
-										
-										errorEntries.put(errorEntry, errorEntry);
-									}//if length > 0
-								}//if
+
+										errorEntries
+												.put(errorEntry, errorEntry);
+									}// if length > 0
+								}// if
 							}// if
 						}// for
 					}// if
@@ -301,8 +308,8 @@ public class PolygonMustNotOverlap extends AbstractTopologyRule implements
 	public void setErrorSymbol(MultiShapeSymbol errorSymbol) {
 		this.errorSymbol = errorSymbol;
 	}
-	
-	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError){
+
+	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError) {
 		return automaticErrorFixes.get(2);
 	}
 

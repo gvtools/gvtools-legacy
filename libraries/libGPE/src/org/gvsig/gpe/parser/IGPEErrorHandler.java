@@ -1,4 +1,5 @@
 package org.gvsig.gpe.parser;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -58,29 +59,31 @@ package org.gvsig.gpe.parser;
  *
  */
 /**
- * This interface defines the GPE error handler. It has methods
- * to register the errors and the warnings that can happen
- * wherear a parser is reading or writing a file. 
+ * This interface defines the GPE error handler. It has methods to register the
+ * errors and the warnings that can happen wherear a parser is reading or
+ * writing a file.
+ * 
  * @author Jorge Piera Llodrá (jorge.piera@iver.es)
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  */
 public interface IGPEErrorHandler {
 
 	/**
-	 * This method is invoked when a parser has found
-	 * an error that has to stop the reading or the writing 
-	 * process
+	 * This method is invoked when a parser has found an error that has to stop
+	 * the reading or the writing process
+	 * 
 	 * @param e
-	 * The detected exception
+	 *            The detected exception
 	 */
 	public void addError(Throwable e);
-	
+
 	/**
-	 * This method is invoke when a parser has detected a
-	 * error, but it is able to manage it by itself
+	 * This method is invoke when a parser has detected a error, but it is able
+	 * to manage it by itself
+	 * 
 	 * @param e
-	 * The detected exception
+	 *            The detected exception
 	 */
 	public void addWarning(Throwable e);
-	
+
 }

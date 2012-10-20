@@ -40,11 +40,10 @@
  */
 package com.iver.utiles;
 
-
 public class NotExistInXMLEntity extends RuntimeException {
-	
-	public NotExistInXMLEntity(){
-		
+
+	public NotExistInXMLEntity() {
+
 	}
 
 }

@@ -40,20 +40,16 @@
  */
 package org.gvsig.graph;
 
-import java.awt.geom.Point2D;
-
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
-import org.gvsig.graph.core.GvNode;
 import org.gvsig.graph.core.GvTurn;
 import org.gvsig.graph.core.Network;
 import org.gvsig.graph.gui.RouteControlPanel;
 import org.gvsig.graph.gui.TurnCostsTableChooser;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
-import com.hardcode.gdbms.engine.values.IntValue;
 import com.hardcode.gdbms.engine.values.NumericValue;
 import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
@@ -98,8 +94,8 @@ public class LoadTurnCostsExtension extends Extension {
 		IView view = (View) PluginServices.getMDIManager().getActiveWindow();
 		MapControl mapControl = view.getMapControl();
 		MapContext map = mapControl.getMapContext();
-		SingleLayerIterator lyrIterator = new SingleLayerIterator(map
-				.getLayers());
+		SingleLayerIterator lyrIterator = new SingleLayerIterator(
+				map.getLayers());
 		while (lyrIterator.hasNext()) {
 			FLayer lyr = lyrIterator.next();
 			if ((lyr.isActive()) && (lyr instanceof FLyrVect)) {
@@ -121,7 +117,7 @@ public class LoadTurnCostsExtension extends Extension {
 
 	private void addGraphicTurn(MapControl mapCtrl, GvTurn turnCost) {
 		GraphicLayer graphicLayer = mapCtrl.getMapContext().getGraphicsLayer();
-		if (idSymbolTurnCost  == -1) {
+		if (idSymbolTurnCost == -1) {
 			FSymbol simFlag = new FSymbol(FConstant.SYMBOL_TYPE_ICON);
 			simFlag.setStyle(FConstant.SYMBOL_STYLE_MARKER_IMAGEN);
 			simFlag.setSizeInPixels(true);
@@ -132,11 +128,12 @@ public class LoadTurnCostsExtension extends Extension {
 
 			idSymbolTurnCost = graphicLayer.addSymbol(simFlag);
 		}
-		IGeometry gAux = ShapeFactory.createPoint2D(turnCost.getNode().getX(), turnCost.getNode().getY());
+		IGeometry gAux = ShapeFactory.createPoint2D(turnCost.getNode().getX(),
+				turnCost.getNode().getY());
 		FGraphic graphic = new FGraphic(gAux, idSymbolTurnCost);
 		graphic.setTag("BARRIER");
 		graphic.setObjectTag(turnCost);
-		graphicLayer.addGraphic(graphic);		
+		graphicLayer.addGraphic(graphic);
 
 	}
 
@@ -171,8 +168,8 @@ public class LoadTurnCostsExtension extends Extension {
 					NumericValue to = (NumericValue) rs.getFieldValue(i, iF_to);
 					NumericValue turn_cost = (NumericValue) rs.getFieldValue(i,
 							iF_turncost);
-					GvTurn n = net.addTurnCost(from.intValue(), to.intValue(), turn_cost
-							.doubleValue());
+					GvTurn n = net.addTurnCost(from.intValue(), to.intValue(),
+							turn_cost.doubleValue());
 					if (n != null)
 						addGraphicTurn(mapControl, n);
 				}

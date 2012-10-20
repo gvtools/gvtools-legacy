@@ -104,92 +104,96 @@ import com.iver.cit.gvsig.fmap.drivers.wfs.WFSUtils;
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
 public class FieldsTreeTableModel extends AbstractTreeTableModel {
-	private boolean showGeometry;	
-	private String[]  cNames = {PluginServices.getText(this,"attributeName"),
-			PluginServices.getText(this,"attributeType")};
-	private Class[]  cTypes = {TreeTableModel.class,String.class};
-			
-	public FieldsTreeTableModel(Object root) { 
+	private boolean showGeometry;
+	private String[] cNames = { PluginServices.getText(this, "attributeName"),
+			PluginServices.getText(this, "attributeType") };
+	private Class[] cTypes = { TreeTableModel.class, String.class };
+
+	public FieldsTreeTableModel(Object root) {
 		super(root);
 		showGeometry = true;
 	}
-	
-	public FieldsTreeTableModel(Object root, boolean show_Geometry) { 
+
+	public FieldsTreeTableModel(Object root, boolean show_Geometry) {
 		super(root);
 		showGeometry = show_Geometry;
 	}
-	
-	public FieldsTreeTableModel() { 
+
+	public FieldsTreeTableModel() {
 		super(null);
 		showGeometry = true;
 	}
-	
+
 	public boolean getShowGeometry() {
 		return showGeometry;
 	}
-	
+
 	//
 	// The TreeModel interface
 	//
-	
-	public int getChildCount(Object node) { 
-		XMLElement element = (XMLElement)node;			
-		if (element.getEntityType().getType() == IXMLType.COMPLEX){
+
+	public int getChildCount(Object node) {
+		XMLElement element = (XMLElement) node;
+		if (element.getEntityType().getType() == IXMLType.COMPLEX) {
 
 			// It's supposed that geometry is on level 1
-			Vector fields = ((XMLComplexType)element.getEntityType()).getAttributes();
+			Vector fields = ((XMLComplexType) element.getEntityType())
+					.getAttributes();
 			int size = fields.size();
-			
+
 			if (!showGeometry) {
 				for (int i = 0; i < fields.size(); i++) {
-					if ((((XMLElement)fields.get(i)).getEntityType() == null) || (((XMLElement)fields.get(i)).getEntityType().getType() == IXMLType.GML_GEOMETRY))
-						size --;
+					if ((((XMLElement) fields.get(i)).getEntityType() == null)
+							|| (((XMLElement) fields.get(i)).getEntityType()
+									.getType() == IXMLType.GML_GEOMETRY))
+						size--;
 				}
 			}
-			
+
 			return size;
-		}else{
+		} else {
 			return 0;
 		}
 	}
-	
-	public Object getChild(Object node, int i) { 
-		XMLElement element = (XMLElement)node;			
-		if (element.getEntityType().getType() == IXMLType.COMPLEX){
-			Vector fields = ((XMLComplexType)element.getEntityType()).getAttributes();
+
+	public Object getChild(Object node, int i) {
+		XMLElement element = (XMLElement) node;
+		if (element.getEntityType().getType() == IXMLType.COMPLEX) {
+			Vector fields = ((XMLComplexType) element.getEntityType())
+					.getAttributes();
 			XMLElement child = null;
 			int k = -1;
-			
+
 			if (!showGeometry) {
 				for (int j = 0; j < fields.size(); j++) {
 					child = (XMLElement) fields.get(j);
 
-					if ((child.getEntityType() == null) || (child.getEntityType().getType() != IXMLType.GML_GEOMETRY))
-						k++;					
-					
+					if ((child.getEntityType() == null)
+							|| (child.getEntityType().getType() != IXMLType.GML_GEOMETRY))
+						k++;
+
 					if (i == k)
 						break;
-				}	
-			}
-			else {
+				}
+			} else {
 				child = (XMLElement) fields.get(i);
 			}
-			
+
 			child.setParentElement(element);
-			
+
 			return child;
 		}
 		return null;
 	}
-	
-	// The superclass's implementation would work, but this is more efficient. 
-	public boolean isLeaf(Object node) { 
-		if (node == null){
+
+	// The superclass's implementation would work, but this is more efficient.
+	public boolean isLeaf(Object node) {
+		if (node == null) {
 			return true;
 		}
-		XMLElement element = (XMLElement)node;	
-		if (element.getEntityType() != null){
-			if (element.getEntityType().getType() == IXMLType.COMPLEX){
+		XMLElement element = (XMLElement) node;
+		if (element.getEntityType() != null) {
+			if (element.getEntityType().getType() == IXMLType.COMPLEX) {
 				return false;
 			}
 		}
@@ -197,74 +201,84 @@ public class FieldsTreeTableModel extends AbstractTreeTableModel {
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.swing.treeTable.TreeTableModel#getColumnCount()
 	 */
 	public int getColumnCount() {
 		return cNames.length;
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
-	 * @see org.gvsig.gui.beans.swing.treeTable.TreeTableModel#getColumnName(int)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.swing.treeTable.TreeTableModel#getColumnName(int)
 	 */
 	public String getColumnName(int column) {
 		return cNames[column];
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
-	 * @see org.gvsig.gui.beans.swing.treeTable.TreeTableModel#getColumnClass(int)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.swing.treeTable.TreeTableModel#getColumnClass(int)
 	 */
 	public Class getColumnClass(int column) {
 		return cTypes[column];
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
-	 * @see org.gvsig.gui.beans.swing.treeTable.TreeTableModel#getValueAt(java.lang.Object, int)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.swing.treeTable.TreeTableModel#getValueAt(java.lang
+	 * .Object, int)
 	 */
 	public Object getValueAt(Object node, int column) {
-		XMLElement element = (XMLElement)node;	
+		XMLElement element = (XMLElement) node;
 		try {
-			switch(column) {
+			switch (column) {
 			case 0:
 				return element.getName();
 			case 1:
-				return PluginServices.getText(this,WFSUtils.getFieldType(element.getEntityType()));
+				return PluginServices.getText(this,
+						WFSUtils.getFieldType(element.getEntityType()));
 			}
+		} catch (SecurityException se) {
 		}
-		catch  (SecurityException se) { }
-		
-		return null; 
+
+		return null;
 	}
-	
+
 	/**
 	 * Returns leafs from a node branch
 	 * 
-	 * @param node A node in this tree model
+	 * @param node
+	 *            A node in this tree model
 	 * @return A vector with leafs
 	 */
 	public Vector<Object> getLeafsFromNodeBranch(Object node) {
 		Vector<Object> leafs = new Vector<Object>();
 		Object parent;
-		
+
 		if (this.isLeaf(node))
-			leafs.add( ((XMLElement)node).getName() );
+			leafs.add(((XMLElement) node).getName());
 		else {
 			int childrenCount = this.getChildCount(node);
 			parent = node;
-			
-			for (int i = 0; i < childrenCount; i ++) {
+
+			for (int i = 0; i < childrenCount; i++) {
 				node = this.getChild(parent, i);
-				
-				if ( (this.isLeaf(node)) && (! leafs.contains(node)) )
+
+				if ((this.isLeaf(node)) && (!leafs.contains(node)))
 					leafs.add(node);
 				else
 					leafs.addAll(getLeafsFromNodeBranch(node));
 			}
 		}
-		
+
 		return leafs;
 	}
 }

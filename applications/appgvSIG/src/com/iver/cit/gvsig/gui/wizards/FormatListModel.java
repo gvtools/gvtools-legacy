@@ -42,35 +42,35 @@ package com.iver.cit.gvsig.gui.wizards;
 
 import javax.swing.AbstractListModel;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public class FormatListModel extends AbstractListModel {
-    String[] formatos;
+	String[] formatos;
 
-    /**
-     * Creates a new FormatListModel object.
-     *
-     * @param f DOCUMENT ME!
-     */
-    public FormatListModel(String[] f) {
-        formatos = f;
-    }
+	/**
+	 * Creates a new FormatListModel object.
+	 * 
+	 * @param f
+	 *            DOCUMENT ME!
+	 */
+	public FormatListModel(String[] f) {
+		formatos = f;
+	}
 
-    /**
-     * @see javax.swing.ListModel#getSize()
-     */
-    public int getSize() {
-        return formatos.length;
-    }
+	/**
+	 * @see javax.swing.ListModel#getSize()
+	 */
+	public int getSize() {
+		return formatos.length;
+	}
 
-    /**
-     * @see javax.swing.ListModel#getElementAt(int)
-     */
-    public Object getElementAt(int index) {
-        return formatos[index];
-    }
+	/**
+	 * @see javax.swing.ListModel#getElementAt(int)
+	 */
+	public Object getElementAt(int index) {
+		return formatos[index];
+	}
 }

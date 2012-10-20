@@ -48,13 +48,10 @@ import java.nio.ByteOrder;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 
-import org.gvsig.graph.core.EdgePair;
 import org.gvsig.graph.core.GvEdge;
-import org.gvsig.graph.core.GvGraph;
 import org.gvsig.graph.core.GvNode;
 import org.gvsig.graph.core.IGraph;
 import org.gvsig.graph.core.INetworkLoader;
-
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Vertex;
@@ -66,62 +63,60 @@ import edu.uci.ics.jung.graph.impl.SparseGraph;
 /**
  * @author fjp
  * 
- * Primero vienen los arcos, y luego los nodos. En la cabecera, 3 enteros
- * con el numero de tramos, el de arcos y el de nodos.
- *
+ *         Primero vienen los arcos, y luego los nodos. En la cabecera, 3
+ *         enteros con el numero de tramos, el de arcos y el de nodos.
+ * 
  */
 public class NetworkJungLoader implements INetworkLoader {
-	
+
 	private File netFile = new File("c:/ejes.red");
 
-	public Graph loadJungNetwork()
-	{
+	public Graph loadJungNetwork() {
 		SparseGraph g = new SparseGraph();
 		long t1 = System.currentTimeMillis();
-		
+
 		RandomAccessFile file;
 		try {
-			file = new RandomAccessFile(netFile.getPath(),
-					"r");
+			file = new RandomAccessFile(netFile.getPath(), "r");
 			FileChannel channel = file.getChannel();
-			MappedByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
+			MappedByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY,
+					0, channel.size());
 			buf.order(ByteOrder.LITTLE_ENDIAN);
 
 			int numArcs = buf.getInt();
 			int numEdges = buf.getInt();
 			int numNodes = buf.getInt();
-			
+
 			// Nodes
-			buf.position(24*numEdges + 12);
-			for (int i=0; i < numNodes; i++)
-			{
+			buf.position(24 * numEdges + 12);
+			for (int i = 0; i < numNodes; i++) {
 				GvNode node = readNode(buf);
-				
+
 				Vertex v = new DirectedSparseVertex();
-//				v.addUserDatum("ID", node.idNode, UserData.CLONE);
-//				v.addUserDatum("X", node.x, UserData.CLONE);
-//				v.addUserDatum("Y", node.y, UserData.CLONE);
-	//			v_locations.setLocation(v, new Point2D.Double(x.doubleValue(),y.doubleValue()));
-				g.addVertex(v);				
+				// v.addUserDatum("ID", node.idNode, UserData.CLONE);
+				// v.addUserDatum("X", node.x, UserData.CLONE);
+				// v.addUserDatum("Y", node.y, UserData.CLONE);
+				// v_locations.setLocation(v, new
+				// Point2D.Double(x.doubleValue(),y.doubleValue()));
+				g.addVertex(v);
 			}
 			Indexer indexer = Indexer.getIndexer(g);
-		
+
 			buf.position(12);
-			for (int i=0; i < numEdges; i++)
-			{
+			for (int i = 0; i < numEdges; i++) {
 				GvEdge edge = readEdge(buf);
-				
+
 				int nodeOrig = edge.getIdNodeOrig();
 				int nodeEnd = edge.getIdNodeEnd();
-				
+
 				Vertex vFrom = (Vertex) indexer.getVertex(nodeOrig);
 				Vertex vTo = (Vertex) indexer.getVertex(nodeEnd);
-				
+
 				DirectedSparseEdge edgeJ = new DirectedSparseEdge(vFrom, vTo);
 				g.addEdge(edgeJ);
 			}
 			long t2 = System.currentTimeMillis();
-			System.out.println("Tiempo de carga: " + (t2-t1) + " msecs");
+			System.out.println("Tiempo de carga: " + (t2 - t1) + " msecs");
 			return g;
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -146,47 +141,47 @@ public class NetworkJungLoader implements INetworkLoader {
 		// memcpy(&Arcos[link_num].idTramo,puntero,sizeof(long));
 		edge.setIdArc(buf.getInt());
 
-		
-		// Sentido de digitalización.Un 1 indica que va en ese sentido, un cero al contrario.
+		// Sentido de digitalización.Un 1 indica que va en ese sentido, un cero
+		// al contrario.
 		// memcpy(&Arcos[link_num].sentido,puntero,sizeof(int));
 		edge.setDirec(buf.getInt());
 
 		// idNodeOrig
 		edge.setIdNodeOrig(buf.getInt());
 		// memcpy(&node_num1,puntero,sizeof(long));
-		
+
 		// idNodeEnd
 		edge.setIdNodeEnd(buf.getInt());
-//		memcpy(&node_num2,puntero,sizeof(long));
+		// memcpy(&node_num2,puntero,sizeof(long));
 
 		// Read the link costs.
 		// Type
 		edge.setType(buf.getInt());
-//		memcpy(&Arcos[link_num].TipoTramo,puntero,sizeof(int));
+		// memcpy(&Arcos[link_num].TipoTramo,puntero,sizeof(int));
 
 		// Distance
 		edge.setDistance(buf.getDouble());
 		edge.setWeight(buf.getDouble());
-		
-//		memcpy(&Arcos[link_num].Coste2,puntero,sizeof(float));
 
-//		pNodo1 = &Nodos[node_num1];
-//		Arcos[link_num].idNodo1 = node_num1;
-//
-//		Arcos[link_num].idNodo2 = node_num2;
+		// memcpy(&Arcos[link_num].Coste2,puntero,sizeof(float));
+
+		// pNodo1 = &Nodos[node_num1];
+		// Arcos[link_num].idNodo1 = node_num1;
+		//
+		// Arcos[link_num].idNodo2 = node_num2;
 		// pNodo2->Enlaces.Add(link_num);
 
-//		// NUEVO 11-JUL-2002
-//			if (Arcos[link_num].sentido)
-//			IndiceArcos[Arcos[link_num].idTramo].idArco = link_num;
-//		else
-//			IndiceArcos[Arcos[link_num].idTramo].idContraArco = link_num;
-//
-//		// NUEVO 27-JUL-2003
-//		Arcos[link_num].numSoluc = 0;
-//
-//		// NUEVO 23_2_2005
-//		CreaConectores(link_num);
+		// // NUEVO 11-JUL-2002
+		// if (Arcos[link_num].sentido)
+		// IndiceArcos[Arcos[link_num].idTramo].idArco = link_num;
+		// else
+		// IndiceArcos[Arcos[link_num].idTramo].idContraArco = link_num;
+		//
+		// // NUEVO 27-JUL-2003
+		// Arcos[link_num].numSoluc = 0;
+		//
+		// // NUEVO 23_2_2005
+		// CreaConectores(link_num);
 		return edge;
 	}
 
@@ -195,7 +190,7 @@ public class NetworkJungLoader implements INetworkLoader {
 	 */
 	public static void main(String[] args) {
 		NetworkJungLoader redLoader = new NetworkJungLoader();
-		
+
 		redLoader.loadNetwork();
 		redLoader.loadJungNetwork();
 
@@ -215,5 +210,3 @@ public class NetworkJungLoader implements INetworkLoader {
 	}
 
 }
-
-

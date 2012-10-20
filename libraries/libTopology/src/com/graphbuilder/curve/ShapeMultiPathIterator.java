@@ -1,6 +1,7 @@
 package com.graphbuilder.curve;
 
-import java.awt.geom.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
 
 class ShapeMultiPathIterator implements PathIterator {
 
@@ -59,7 +60,6 @@ class ShapeMultiPathIterator implements PathIterator {
 
 		if (at != null)
 			at.transform(coords, 0, coords, 0, 1);
-
 
 		if (smp.getType(n) == MultiPath.MOVE_TO)
 			return PathIterator.SEG_MOVETO;

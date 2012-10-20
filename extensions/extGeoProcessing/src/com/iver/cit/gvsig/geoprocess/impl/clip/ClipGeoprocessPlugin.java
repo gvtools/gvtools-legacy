@@ -42,39 +42,39 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: ClipGeoprocessPlugin.java 21232 2008-06-05 14:03:49Z azabala $
-* $Log$
-* Revision 1.8  2007-09-19 16:02:53  jaume
-* removed unnecessary imports
-*
-* Revision 1.7  2007/06/20 10:50:32  jmvivo
-* Modificación para estandarizar la busqueda de los html de descripciones.
-* También se controla que, si no existe la descripción en el idioma corriente se usará el inglés.
-*
-* Revision 1.6  2007/03/06 16:47:58  caballero
-* Exceptions
-*
-* Revision 1.5  2006/09/15 10:42:54  caballero
-* extensibilidad de documentos
-*
-* Revision 1.4  2006/08/29 07:56:30  cesar
-* Rename the *View* family of classes to *Window* (ie: SingletonView to SingletonWindow, ViewInfo to WindowInfo, etc)
-*
-* Revision 1.3  2006/08/11 16:19:01  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/06/27 16:11:41  azabala
-* toString() added to Plugin interface to force textual representation of geoprocess plugins
-*
-* Revision 1.1  2006/06/23 19:02:35  azabala
-* first version in cvs
-*
-* Revision 1.1  2006/06/22 17:46:30  azabala
-* first version in cvs
-*
-*
-*/
+ *
+ * $Id: ClipGeoprocessPlugin.java 21232 2008-06-05 14:03:49Z azabala $
+ * $Log$
+ * Revision 1.8  2007-09-19 16:02:53  jaume
+ * removed unnecessary imports
+ *
+ * Revision 1.7  2007/06/20 10:50:32  jmvivo
+ * Modificación para estandarizar la busqueda de los html de descripciones.
+ * También se controla que, si no existe la descripción en el idioma corriente se usará el inglés.
+ *
+ * Revision 1.6  2007/03/06 16:47:58  caballero
+ * Exceptions
+ *
+ * Revision 1.5  2006/09/15 10:42:54  caballero
+ * extensibilidad de documentos
+ *
+ * Revision 1.4  2006/08/29 07:56:30  cesar
+ * Rename the *View* family of classes to *Window* (ie: SingletonView to SingletonWindow, ViewInfo to WindowInfo, etc)
+ *
+ * Revision 1.3  2006/08/11 16:19:01  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/06/27 16:11:41  azabala
+ * toString() added to Plugin interface to force textual representation of geoprocess plugins
+ *
+ * Revision 1.1  2006/06/23 19:02:35  azabala
+ * first version in cvs
+ *
+ * Revision 1.1  2006/06/22 17:46:30  azabala
+ * first version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.clip;
 
 import java.net.URL;
@@ -89,42 +89,36 @@ import com.iver.cit.gvsig.geoprocess.core.gui.IGeoprocessUserEntries;
 import com.iver.cit.gvsig.geoprocess.manager.GeoprocessManager;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
-public class ClipGeoprocessPlugin extends GeoprocessPluginAbstract  implements IGeoprocessPlugin {
+public class ClipGeoprocessPlugin extends GeoprocessPluginAbstract implements
+		IGeoprocessPlugin {
 	private static String analisisPkg;
 	private static String overlayPkg;
 	private static String overlayPkgDesc;
 	private static String geoprocessName;
-	
-	static{
+
+	static {
 		analisisPkg = PluginServices.getText(null, "Analisis");
 		overlayPkg = PluginServices.getText(null, "Overlay");
 		overlayPkgDesc = PluginServices.getText(null, "Overlay_Desc");
 		geoprocessName = PluginServices.getText(null, "Recortar");
-		
-//		GeoprocessManager.registerPackageDescription(
-//		"Analisis/Overlay",
-//				"Geoprocesos que extraen "+
-//				"información basandose en "+
-//				"la superposición de dos capas");
-		GeoprocessManager.registerPackageDescription(
-				analisisPkg + "/" + overlayPkg,
-						overlayPkgDesc);
+
+		// GeoprocessManager.registerPackageDescription(
+		// "Analisis/Overlay",
+		// "Geoprocesos que extraen "+
+		// "información basandose en "+
+		// "la superposición de dos capas");
+		GeoprocessManager.registerPackageDescription(analisisPkg + "/"
+				+ overlayPkg, overlayPkgDesc);
 
 	}
-	
+
 	public IGeoprocessUserEntries getGeoprocessPanel() {
-		View vista = (View)PluginServices.
-			getMDIManager().
-			getActiveWindow();
-		FLayers layers = vista.getModel().
-			getMapContext().
-			getLayers();
+		View vista = (View) PluginServices.getMDIManager().getActiveWindow();
+		FLayers layers = vista.getModel().getMapContext().getLayers();
 		String titleText = PluginServices.getText(this,
-			"Recortar._Introduccion_de_datos")
-			+ ":";
+				"Recortar._Introduccion_de_datos") + ":";
 		return new GeoProcessingOverlayPanel2(layers, titleText);
 	}
-
 
 	public URL getImgDescription() {
 		return PluginServices.getIconTheme().getURL("clipdesc-resource");
@@ -135,14 +129,11 @@ public class ClipGeoprocessPlugin extends GeoprocessPluginAbstract  implements I
 	}
 
 	public String getNamespace() {
-		return analisisPkg + "/" + 
-				overlayPkg + "/" + 
-				geoprocessName;
+		return analisisPkg + "/" + overlayPkg + "/" + geoprocessName;
 	}
 
-	public String toString(){
+	public String toString() {
 		return geoprocessName;
 	}
 
 }
-

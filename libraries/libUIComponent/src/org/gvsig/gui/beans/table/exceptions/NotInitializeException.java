@@ -17,9 +17,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
  */
 package org.gvsig.gui.beans.table.exceptions;
+
 /**
  * Excepción que indica que una tabla no ha sido inicializada.
- *
+ * 
  * @author Nacho Brodin (brodin_ign@gva.es)
  */
 public class NotInitializeException extends Exception {
@@ -31,7 +32,7 @@ public class NotInitializeException extends Exception {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param message
 	 */
 	public NotInitializeException(String message) {
@@ -40,7 +41,7 @@ public class NotInitializeException extends Exception {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param message
 	 * @param cause
 	 */
@@ -50,7 +51,7 @@ public class NotInitializeException extends Exception {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param cause
 	 */
 	public NotInitializeException(Throwable cause) {

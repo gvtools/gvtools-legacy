@@ -21,29 +21,32 @@ package org.gvsig.raster.beans.canvas;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
+
 /**
  * Clase base para los gráficos a dibujar sobre el canvas
- *
+ * 
  * 14-oct-2007
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public abstract class DrawableElement {
-	protected Color   color     = Color.BLACK;
-	private boolean   firstDraw = true;
-	private boolean   drawing   = true;
+	protected Color color = Color.BLACK;
+	private boolean firstDraw = true;
+	private boolean drawing = true;
 
 	/**
 	 * Entorno donde se dibuja
 	 */
-	protected GCanvas canvas    = null;
-	
+	protected GCanvas canvas = null;
+
 	/**
-	 * Dibujado del elemento gráfico desde el GCanvas. Llamará antes de dibujar a
-	 * la función firstDrawActions
+	 * Dibujado del elemento gráfico desde el GCanvas. Llamará antes de dibujar
+	 * a la función firstDrawActions
+	 * 
 	 * @param g
 	 */
 	public void draw(Graphics g) {
-		if(!drawing)
+		if (!drawing)
 			return;
 		if (firstDraw) {
 			firstDrawActions();
@@ -51,18 +54,19 @@ public abstract class DrawableElement {
 		}
 		paint(g);
 	}
-	
+
 	/**
 	 * Asigna el flag de dibujado del elemento gráfico
+	 * 
 	 * @param draw
 	 */
 	public void setDrawing(boolean drawing) {
 		this.drawing = drawing;
 	}
-	
+
 	/**
-	 * Obtiene el flag que informa si el elemento gráfico está dibujandose
-	 * o no.
+	 * Obtiene el flag que informa si el elemento gráfico está dibujandose o no.
+	 * 
 	 * @return
 	 */
 	public boolean isDrawing() {
@@ -71,10 +75,11 @@ public abstract class DrawableElement {
 
 	/**
 	 * Dibujado del elemento gráfico
+	 * 
 	 * @param g
 	 */
 	protected abstract void paint(Graphics g);
-	
+
 	/**
 	 * Acciones a ejecutar al asignar el canvas
 	 */
@@ -84,26 +89,31 @@ public abstract class DrawableElement {
 	 * Acciones a ejecutar antes del primer dibujado
 	 */
 	public abstract void firstDrawActions();
-	
+
 	/**
 	 * Asigna el objeto JComponent donde se pintan los elementos.
+	 * 
 	 * @param canvas
 	 */
 	public void setCanvas(GCanvas canvas) {
 		this.canvas = canvas;
 	}
-	
+
 	/**
 	 * Asigna el color de la línea
-	 * @param c Color
+	 * 
+	 * @param c
+	 *            Color
 	 */
 	public void setColor(Color c) {
 		this.color = c;
 	}
-	
+
 	/**
 	 * Obtiene el color de la línea
-	 * @param c Color
+	 * 
+	 * @param c
+	 *            Color
 	 */
 	public Color getColor() {
 		return this.color;
@@ -111,8 +121,10 @@ public abstract class DrawableElement {
 
 	/**
 	 * Metodo que se ejecuta cuando se suelta el raton en el canvas
+	 * 
 	 * @param e
-	 * @return Si no se desea propagar el evento a otros drawables, devolver false.
+	 * @return Si no se desea propagar el evento a otros drawables, devolver
+	 *         false.
 	 */
 	public boolean mouseReleased(MouseEvent e) {
 		return true;
@@ -120,33 +132,40 @@ public abstract class DrawableElement {
 
 	/**
 	 * Metodo que se ejecuta cuando se presiona el raton en el canvas
+	 * 
 	 * @param e
-	 * @return Si no se desea propagar el evento a otros drawables, devolver false.
+	 * @return Si no se desea propagar el evento a otros drawables, devolver
+	 *         false.
 	 */
 	public boolean mousePressed(MouseEvent e) {
 		return true;
 	}
-	
+
 	/**
 	 * Metodo que se ejecuta cuando se esta dibujando con el raton en el canvas
+	 * 
 	 * @param e
-	 * @return Si no se desea propagar el evento a otros drawables, devolver false.
+	 * @return Si no se desea propagar el evento a otros drawables, devolver
+	 *         false.
 	 */
 	public boolean mouseDragged(MouseEvent e) {
 		return true;
 	}
-	
+
 	/**
 	 * Metodo que se ejecuta cuando se esta moviendo el raton sobre el canvas
+	 * 
 	 * @param e
-	 * @return Si no se desea propagar el evento a otros drawables, devolver false.
+	 * @return Si no se desea propagar el evento a otros drawables, devolver
+	 *         false.
 	 */
 	public boolean mouseMoved(MouseEvent e) {
 		return true;
 	}
-	
+
 	/**
 	 * Metodo que se ejecuta cuando entra el raton al canvas
+	 * 
 	 * @param e
 	 * @return
 	 */
@@ -156,6 +175,7 @@ public abstract class DrawableElement {
 
 	/**
 	 * Metodo que se ejecuta cuando sale el raton del canvas
+	 * 
 	 * @param e
 	 * @return
 	 */

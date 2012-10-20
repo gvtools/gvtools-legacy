@@ -44,6 +44,7 @@ import java.util.ArrayList;
 
 /**
  * Class abstracting WCS's axis descriptions into FMap
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  * @TODO add interval parameters support
  */
@@ -59,7 +60,7 @@ public class FMapWCSParameter {
 
 	public void setName(String name) {
 		this.name = name;
-		
+
 	}
 
 	public void setType(int type) {
@@ -83,7 +84,7 @@ public class FMapWCSParameter {
 	}
 
 	public String toString() {
-		return (label!=null) ? label : name;
+		return (label != null) ? label : name;
 	}
 
 	public ArrayList getValueList() {

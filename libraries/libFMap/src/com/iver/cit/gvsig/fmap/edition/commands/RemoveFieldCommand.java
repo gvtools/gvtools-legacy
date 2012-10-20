@@ -50,12 +50,10 @@ public class RemoveFieldCommand extends AbstractCommand {
 	EditableAdapter edAdapter;
 	InternalField field;
 
-	public RemoveFieldCommand(EditableAdapter edAdapter, InternalField fieldDesc)
-	{
+	public RemoveFieldCommand(EditableAdapter edAdapter, InternalField fieldDesc) {
 		this.edAdapter = edAdapter;
 		this.field = fieldDesc;
 	}
-
 
 	public void undo() throws EditionCommandException {
 		edAdapter.undoRemoveField(field);
@@ -65,7 +63,8 @@ public class RemoveFieldCommand extends AbstractCommand {
 		try {
 			edAdapter.doRemoveField(field);
 		} catch (ReadDriverException e) {
-			throw new EditionCommandException(edAdapter.getWriter().getName(),e);
+			throw new EditionCommandException(edAdapter.getWriter().getName(),
+					e);
 		}
 	}
 
@@ -74,5 +73,3 @@ public class RemoveFieldCommand extends AbstractCommand {
 	}
 
 }
-
-

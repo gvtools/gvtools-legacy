@@ -13,9 +13,8 @@ import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
 import com.iver.utiles.XMLEntity;
 
 public class PasteLayersTocMenuEntry extends AbstractTocContextMenuAction {
-	private XMLEntity xml=null;
+	private XMLEntity xml = null;
 	private CopyPasteLayersUtiles utiles = CopyPasteLayersUtiles.getInstance();
-
 
 	public String getGroup() {
 		return "copyPasteLayer";
@@ -52,7 +51,8 @@ public class PasteLayersTocMenuEntry extends AbstractTocContextMenuAction {
 
 	private XMLEntity getCheckedXMLFromClipboard() {
 		String sourceString = PluginServices.getFromClipboard();
-		if (sourceString == null) return null;
+		if (sourceString == null)
+			return null;
 
 		XMLEntity xml;
 		try {
@@ -63,38 +63,40 @@ public class PasteLayersTocMenuEntry extends AbstractTocContextMenuAction {
 			return null;
 		}
 
+		if (!this.utiles.checkXMLRootNode(xml))
+			return null;
 
-		if (!this.utiles.checkXMLRootNode(xml)) return null;
+		if (xml.findChildren("type", "layers") == null)
+			return null;
 
-		if (xml.findChildren("type","layers") == null) return null;
-
-		return  xml;
+		return xml;
 	}
 
 	public void execute(ITocItem item, FLayer[] selectedItems) {
 		FLayers root;
 
-		if (this.xml == null) return;
+		if (this.xml == null)
+			return;
 
 		if (isTocItemBranch(item)) {
-			root = (FLayers)getNodeLayer(item);
-		} else if (getNodeLayer(item) == null){
+			root = (FLayers) getNodeLayer(item);
+		} else if (getNodeLayer(item) == null) {
 			root = getMapContext().getLayers();
 		} else {
 			return;
 		}
 		getMapContext().beginAtomicEvent();
 
-		boolean isOK = this.utiles.loadLayersFromXML(this.xml,root);
+		boolean isOK = this.utiles.loadLayersFromXML(this.xml, root);
 
 		getMapContext().endAtomicEvent();
 
 		if (isOK) {
 			getMapContext().invalidate();
-			Project project=((ProjectExtension)PluginServices.getExtension(ProjectExtension.class)).getProject();
+			Project project = ((ProjectExtension) PluginServices
+					.getExtension(ProjectExtension.class)).getProject();
 			project.setModified(true);
 		}
 	}
-
 
 }

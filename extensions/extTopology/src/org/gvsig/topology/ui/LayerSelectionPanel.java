@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.ui;
 
 import java.awt.BorderLayout;
@@ -74,16 +74,16 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
 /**
- * This panel manages the selection of layers in TOC.
- * Allows to add layers from the toc, remove, and shows a dialog
- * with toc layers.
+ * This panel manages the selection of layers in TOC. Allows to add layers from
+ * the toc, remove, and shows a dialog with toc layers.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class LayerSelectionPanel extends JPanel {
 
 	private static final long serialVersionUID = 6171285621323810490L;
-	
+
 	/**
 	 * text in the header of the component
 	 */
@@ -92,35 +92,37 @@ public class LayerSelectionPanel extends JPanel {
 	 * Component to show the available layers in a table
 	 */
 	private JTable lyrsTable;
-	
+
 	/**
 	 * Layers selected in the component's table
 	 */
 	private List<FLayer> layers;
-	
+
 	/**
 	 * MapContext of the active view
 	 */
 	private MapContext mapContext;
-	
+
 	/**
-	 * Contains listeners interested in the addition or removing of layers
-	 * to this component.
+	 * Contains listeners interested in the addition or removing of layers to
+	 * this component.
 	 */
 	private List<LayerSelectionListener> selectionListeners;
-	
+
 	private boolean readOnly;
 
 	/**
 	 * Constructor.
 	 * 
-	 * @param layers List of layers to initialize the table content
+	 * @param layers
+	 *            List of layers to initialize the table content
 	 */
-	public LayerSelectionPanel(List<FLayer> layers, MapContext mapContext){
+	public LayerSelectionPanel(List<FLayer> layers, MapContext mapContext) {
 		this(layers, mapContext, false);
 	}
-	
-	public LayerSelectionPanel(List<FLayer> layers, MapContext mapContext, boolean readOnly){
+
+	public LayerSelectionPanel(List<FLayer> layers, MapContext mapContext,
+			boolean readOnly) {
 		super();
 		this.layers = layers;
 		this.mapContext = mapContext;
@@ -128,31 +130,31 @@ public class LayerSelectionPanel extends JPanel {
 		selectionListeners = new ArrayList<LayerSelectionListener>();
 		initialize();
 	}
-	
-	
+
 	/**
 	 * Returns the list of layers in the component's table
+	 * 
 	 * @return
 	 */
-	public List<FLayer> getLayers(){
+	public List<FLayer> getLayers() {
 		return layers;
 	}
-	
-	public void addLayerSelectionListener(LayerSelectionListener selectionListener){
+
+	public void addLayerSelectionListener(
+			LayerSelectionListener selectionListener) {
 		selectionListeners.add(selectionListener);
 	}
-	
-	private void fireLayerSelectionEvent(SelectedLayerEvent event){
-		for(int i = 0; i < selectionListeners.size(); i++){
+
+	private void fireLayerSelectionEvent(SelectedLayerEvent event) {
+		for (int i = 0; i < selectionListeners.size(); i++) {
 			LayerSelectionListener listener = selectionListeners.get(i);
 			listener.selectionEvent(event);
 		}
 	}
-	
-	
-	private void initialize(){
+
+	private void initialize() {
 		setLayout(new BorderLayout());
-		JLabel titleLbl = new JLabel(PluginServices.getText(null,title));
+		JLabel titleLbl = new JLabel(PluginServices.getText(null, title));
 		add(titleLbl, BorderLayout.NORTH);
 
 		TableModel dataModel = new AbstractTableModel() {
@@ -171,118 +173,135 @@ public class LayerSelectionPanel extends JPanel {
 		};
 		lyrsTable = new JTable();
 		lyrsTable.setModel(dataModel);
-		lyrsTable.getColumnModel().getColumn(0).setHeaderValue(
-				PluginServices.getText(null, "Layers"));
+		lyrsTable.getColumnModel().getColumn(0)
+				.setHeaderValue(PluginServices.getText(null, "Layers"));
 		JScrollPane scrollTable = new JScrollPane(lyrsTable);
 		add(scrollTable, BorderLayout.CENTER);
-		
-		if(! readOnly){
+
+		if (!readOnly) {
 			add(getButtonsPanel(), BorderLayout.SOUTH);
-		}//if ! readOnly
-		
+		}// if ! readOnly
+
 	}
-	
+
 	/**
 	 * Creates JPanel with add layer, remove layer, remove all layers buttons.
+	 * 
 	 * @return
 	 */
-	private JPanel getButtonsPanel(){
+	private JPanel getButtonsPanel() {
 		JButton addButton = new JButton(PluginServices.getText(null, "Add_Lyr"));
-		addButton.addActionListener(new ActionListener(){
+		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				LayersInTocPanel lyrsInTocPanel = new LayersInTocPanel(mapContext.getLayers(), layers);
+				LayersInTocPanel lyrsInTocPanel = new LayersInTocPanel(
+						mapContext.getLayers(), layers);
 				final JDialog dialog = new JDialog();
 				dialog.setLayout(new BorderLayout());
-				
-				dialog.getContentPane().add(lyrsInTocPanel, BorderLayout.CENTER);
-				
+
+				dialog.getContentPane()
+						.add(lyrsInTocPanel, BorderLayout.CENTER);
+
 				final LayersInTocPanel tempPanel = lyrsInTocPanel;
-				ActionListener okAction = new ActionListener(){
+				ActionListener okAction = new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						List<FLyrVect> newLyrs = tempPanel.getSelectedLyrs();
-						for(int i = 0; i < newLyrs.size(); i++){
+						for (int i = 0; i < newLyrs.size(); i++) {
 							FLyrVect lyr = newLyrs.get(i);
-							if(!layers.contains(lyr)){//FIXME La capa que se añada aquí hay que quitarla de la FLayers a la que pertenezca
-//								layers.add(lyr);
+							if (!layers.contains(lyr)) {// FIXME La capa que se
+														// añada aquí hay que
+														// quitarla de la
+														// FLayers a la que
+														// pertenezca
+							// layers.add(lyr);
 								SelectedLayerEvent event = new SelectedLayerEvent();
 								event.lyrOfEvent = lyr;
 								event.eventType = SelectedLayerEvent.ADDED_EVENT_TYPE;
 								fireLayerSelectionEvent(event);
-								
-							}//if
-						}//for
+
+							}// if
+						}// for
 						lyrsTable.revalidate();
 						dialog.dispose();
-					}};
-				ActionListener cancelAction = new ActionListener(){
+					}
+				};
+				ActionListener cancelAction = new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						dialog.dispose();
-					}};
-				
-				AcceptCancelPanel acceptCancelPnl = new AcceptCancelPanel(okAction, cancelAction);
-				dialog.getContentPane().add(acceptCancelPnl, BorderLayout.SOUTH);
-				dialog.setTitle(PluginServices.getText(this, "Capas_A_Añadir_A_La_Topologia"));
+					}
+				};
+
+				AcceptCancelPanel acceptCancelPnl = new AcceptCancelPanel(
+						okAction, cancelAction);
+				dialog.getContentPane()
+						.add(acceptCancelPnl, BorderLayout.SOUTH);
+				dialog.setTitle(PluginServices.getText(this,
+						"Capas_A_Añadir_A_La_Topologia"));
 				dialog.setModal(true);
 				dialog.pack();
-				GUIUtil.getInstance().centerDialog(dialog, (MDIFrame) PluginServices.getMainFrame());
-				dialog.setVisible(true);	
-			}});
-		
-		JButton removeButton = new JButton(PluginServices.getText(this, "Remove_Lyr"));
-		removeButton.addActionListener(new ActionListener(){
+				GUIUtil.getInstance().centerDialog(dialog,
+						(MDIFrame) PluginServices.getMainFrame());
+				dialog.setVisible(true);
+			}
+		});
+
+		JButton removeButton = new JButton(PluginServices.getText(this,
+				"Remove_Lyr"));
+		removeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int selectedLyr = lyrsTable.getSelectedRow();
 				SelectedLayerEvent event = new SelectedLayerEvent();
 				event.lyrOfEvent = layers.get(selectedLyr);
 				event.eventType = SelectedLayerEvent.REMOVED_EVENT_TYPE;
 				fireLayerSelectionEvent(event);
-//				layers.remove(selectedLyr);
+				// layers.remove(selectedLyr);
 				lyrsTable.revalidate();
-			}});
-		
-		JButton removeAllBtn = new JButton(PluginServices.getText(this, "Remove_All"));
-		removeAllBtn.addActionListener(new ActionListener(){
+			}
+		});
+
+		JButton removeAllBtn = new JButton(PluginServices.getText(this,
+				"Remove_All"));
+		removeAllBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				for(int i = 0; i < layers.size(); i++){
+				for (int i = 0; i < layers.size(); i++) {
 					FLayer lyr = layers.get(i);
 					SelectedLayerEvent event = new SelectedLayerEvent();
 					event.lyrOfEvent = lyr;
 					event.eventType = SelectedLayerEvent.REMOVED_EVENT_TYPE;
 					fireLayerSelectionEvent(event);
 				}
-//				layers.clear();
+				// layers.clear();
 				lyrsTable.revalidate();
 			}
 		});
 
-		
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		buttonPanel.add(addButton);
 		buttonPanel.add(removeButton);
 		buttonPanel.add(removeAllBtn);
 		return buttonPanel;
 	}
-	
+
 	/**
 	 * Subclasses of this interface listen for events launched by this control
 	 * 
 	 * @author Alvaro Zabala
-	 *
+	 * 
 	 */
-	public interface LayerSelectionListener{
+	public interface LayerSelectionListener {
 		public void selectionEvent(SelectedLayerEvent event);
 	}
+
 	/**
 	 * Event launched when this control adds or removes a layer.
+	 * 
 	 * @author Alvaro Zabala
 	 */
-	class SelectedLayerEvent{
+	class SelectedLayerEvent {
 		final static int ADDED_EVENT_TYPE = 0;
 		final static int REMOVED_EVENT_TYPE = 1;
-		
+
 		FLayer lyrOfEvent;
 		int eventType;
 	}
-	
-	
+
 }

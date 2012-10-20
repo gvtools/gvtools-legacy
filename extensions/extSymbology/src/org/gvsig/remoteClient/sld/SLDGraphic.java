@@ -43,21 +43,30 @@ package org.gvsig.remoteClient.sld;
 import java.util.ArrayList;
 
 import org.gvsig.remoteClient.sld.filterEncoding.FExpression;
+
 /**
- * Implements the Graphic element of an SLD implementation specification.<p>
- * A Graphic is a �graphic symbol� with an inherent shape, color(s), and possibly size. A
- * �graphic� can be very informally defined as �a little picture� and can be of either a raster
- * or vector-graphic source type. The term �graphic� is used since the term �symbol� is
- * similar to �symbolizer� which is used in a different context in SLD.<p>
- * If the Graphic element is omitted from the parent element, then nothing will be plotted.<p>
- * Graphics can either be referenced from an external URL in a common format (such as
- * GIF or SVG) or may be derived from a Mark. Multiple external URLs and marks may be
- * referenced with the semantic that they all provide the equivalent graphic in different
- * formats. The �hot spot� to use for positioning the rendering at a point must either be
- * inherent in the external format or is defined to be the �central point� of the graphic,
- * where the exact definition �central point� is system-dependent.<p>
- * The default if neither an ExternalGraphic nor a Mark is specified is to use the default
- * mark of a �square� with a 50%-gray fill and a black outline, with a size of 6 pixels,
+ * Implements the Graphic element of an SLD implementation specification.
+ * <p>
+ * A Graphic is a �graphic symbol� with an inherent shape, color(s), and
+ * possibly size. A �graphic� can be very informally defined as �a little
+ * picture� and can be of either a raster or vector-graphic source type. The
+ * term �graphic� is used since the term �symbol� is similar to
+ * �symbolizer� which is used in a different context in SLD.
+ * <p>
+ * If the Graphic element is omitted from the parent element, then nothing will
+ * be plotted.
+ * <p>
+ * Graphics can either be referenced from an external URL in a common format
+ * (such as GIF or SVG) or may be derived from a Mark. Multiple external URLs
+ * and marks may be referenced with the semantic that they all provide the
+ * equivalent graphic in different formats. The �hot spot� to use for
+ * positioning the rendering at a point must either be inherent in the external
+ * format or is defined to be the �central point� of the graphic, where the
+ * exact definition �central point� is system-dependent.
+ * <p>
+ * The default if neither an ExternalGraphic nor a Mark is specified is to use
+ * the default mark of a �square� with a 50%-gray fill and a black outline,
+ * with a size of 6 pixels,
  * 
  * @see SLDExternalGraphic
  * @see SLDMark
@@ -67,61 +76,71 @@ import org.gvsig.remoteClient.sld.filterEncoding.FExpression;
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
 public abstract class SLDGraphic implements ISLDFeatures {
-	
+
 	protected ArrayList<SLDExternalGraphic> externalGraphics = new ArrayList<SLDExternalGraphic>();
 	protected ArrayList<SLDMark> marks = new ArrayList<SLDMark>();
 	protected FExpression expressionOpacity = new FExpression();
 	protected FExpression expressionSize = new FExpression();
 	protected FExpression expressionRotation = new FExpression();
-	
-	
+
 	public ArrayList<SLDExternalGraphic> getExternalGraphics() {
 		return externalGraphics;
 	}
-	public void setExternalGraphics(ArrayList<SLDExternalGraphic> externalGraphics) {
+
+	public void setExternalGraphics(
+			ArrayList<SLDExternalGraphic> externalGraphics) {
 		this.externalGraphics = externalGraphics;
 	}
+
 	public void addExternalGraphic(SLDExternalGraphic external) {
 		this.externalGraphics.add(external);
 	}
-	
+
 	public ArrayList<SLDMark> getMarks() {
 		return marks;
 	}
+
 	public void setMarks(ArrayList<SLDMark> marks) {
 		this.marks = marks;
 	}
-	
+
 	public void addMark(SLDMark mark) {
 		this.marks.add(mark);
 	}
+
 	public FExpression getExpressionOpacity() {
 		return expressionOpacity;
 	}
+
 	public void setExpressionOpacity(FExpression expressionOpacity) {
 		this.expressionOpacity = expressionOpacity;
 	}
+
 	public FExpression getExpressionSize() {
 		return expressionSize;
 	}
+
 	public void setExpressionSize(FExpression expressionSize) {
 		this.expressionSize = expressionSize;
 	}
+
 	public FExpression getExpressionRotation() {
 		return expressionRotation;
 	}
+
 	public void setExpressionRotation(FExpression expressionRotation) {
 		this.expressionRotation = expressionRotation;
 	}
 
-	
-	public float getGraphicSize(){
+	public float getGraphicSize() {
 		return Float.valueOf(this.expressionSize.getLiteral());
 	}
-	public float getGraphicOpacity(){
+
+	public float getGraphicOpacity() {
 		return Float.valueOf(expressionOpacity.getLiteral());
 	}
-	public float getGraphicRotation(){
+
+	public float getGraphicRotation() {
 		return Float.valueOf(expressionRotation.getLiteral());
 	}
 

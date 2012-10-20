@@ -42,11 +42,12 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.util;
+
 public interface GParameterChangeListener {
 	public void parameterChange();
 }

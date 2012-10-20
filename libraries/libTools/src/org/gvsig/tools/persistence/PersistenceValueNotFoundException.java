@@ -19,5 +19,4 @@ public class PersistenceValueNotFoundException extends PersistenceException {
 		setValue("name", name);
 	}
 
-
 }

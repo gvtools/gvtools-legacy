@@ -43,80 +43,48 @@ package org.gvsig.symbology.fmap.rendering.filter.parser;
 
 public interface ExpressionParserConstants {
 
-  int EOF = 0;
-  int PLUS = 5;
-  int MINUS = 6;
-  int MULTIPLY = 7;
-  int DIVIDE = 8;
-  int GT = 9;
-  int LT = 10;
-  int NOT = 11;
-  int EQ = 12;
-  int LE = 13;
-  int GE = 14;
-  int NE = 15;
-  int OR = 16;
-  int AND = 17;
-  int DOT = 18;
-  int OPEN_SQ_BRACKETS = 19;
-  int CLOSE_SQ_BRACKETS = 20;
-  int OPEN_PARENTHESIS = 21;
-  int CLOSE_PARENTHESIS = 22;
-  int DOUBLE_QUOTE = 23;
-  int COMMA = 24;
-  int EOFIELD = 25;
-  int EOEXPR = 26;
-  int BOOLEAN = 27;
-  int NULL = 28;
-  int IDENTIFIER = 29;
-  int LETTER = 30;
-  int DIGIT = 31;
-  int INTEGER = 32;
-  int FLOATING_POINT = 33;
-  int EXPONENT = 34;
-  int STRING = 35;
-  int CHAR_STRING = 36;
+	int EOF = 0;
+	int PLUS = 5;
+	int MINUS = 6;
+	int MULTIPLY = 7;
+	int DIVIDE = 8;
+	int GT = 9;
+	int LT = 10;
+	int NOT = 11;
+	int EQ = 12;
+	int LE = 13;
+	int GE = 14;
+	int NE = 15;
+	int OR = 16;
+	int AND = 17;
+	int DOT = 18;
+	int OPEN_SQ_BRACKETS = 19;
+	int CLOSE_SQ_BRACKETS = 20;
+	int OPEN_PARENTHESIS = 21;
+	int CLOSE_PARENTHESIS = 22;
+	int DOUBLE_QUOTE = 23;
+	int COMMA = 24;
+	int EOFIELD = 25;
+	int EOEXPR = 26;
+	int BOOLEAN = 27;
+	int NULL = 28;
+	int IDENTIFIER = 29;
+	int LETTER = 30;
+	int DIGIT = 31;
+	int INTEGER = 32;
+	int FLOATING_POINT = 33;
+	int EXPONENT = 34;
+	int STRING = 35;
+	int CHAR_STRING = 36;
 
-  int DEFAULT = 0;
+	int DEFAULT = 0;
 
-  String[] tokenImage = {
-    "<EOF>",
-    "\" \"",
-    "\"\\r\"",
-    "\"\\t\"",
-    "\"\\n\"",
-    "\"+\"",
-    "\"-\"",
-    "\"*\"",
-    "\"/\"",
-    "\">\"",
-    "\"<\"",
-    "\"!\"",
-    "\"==\"",
-    "\"<=\"",
-    "\">=\"",
-    "\"!=\"",
-    "\"||\"",
-    "\"&&\"",
-    "\".\"",
-    "\"[\"",
-    "\"]\"",
-    "\"(\"",
-    "\")\"",
-    "\"\\\"\"",
-    "\",\"",
-    "\":\"",
-    "\";\"",
-    "<BOOLEAN>",
-    "\"null\"",
-    "<IDENTIFIER>",
-    "<LETTER>",
-    "<DIGIT>",
-    "<INTEGER>",
-    "<FLOATING_POINT>",
-    "<EXPONENT>",
-    "<STRING>",
-    "<CHAR_STRING>",
-  };
+	String[] tokenImage = { "<EOF>", "\" \"", "\"\\r\"", "\"\\t\"", "\"\\n\"",
+			"\"+\"", "\"-\"", "\"*\"", "\"/\"", "\">\"", "\"<\"", "\"!\"",
+			"\"==\"", "\"<=\"", "\">=\"", "\"!=\"", "\"||\"", "\"&&\"",
+			"\".\"", "\"[\"", "\"]\"", "\"(\"", "\")\"", "\"\\\"\"", "\",\"",
+			"\":\"", "\";\"", "<BOOLEAN>", "\"null\"", "<IDENTIFIER>",
+			"<LETTER>", "<DIGIT>", "<INTEGER>", "<FLOATING_POINT>",
+			"<EXPONENT>", "<STRING>", "<CHAR_STRING>", };
 
 }

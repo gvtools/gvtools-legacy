@@ -62,30 +62,32 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  *
  */
 /**
- * A Geometry element is an abstract element and cannot be used
- * directly in a KML file. It provides a placeholder object for
- * all derived Geometry objects.
- * <br>
- * This class parses the common parts. 
+ * A Geometry element is an abstract element and cannot be used directly in a
+ * KML file. It provides a placeholder object for all derived Geometry objects. <br>
+ * This class parses the common parts.
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#geometry
  */
 public class GeometryBinding {
-	
+
 	/**
 	 * It returns the KML geometry id attribute value
+	 * 
 	 * @param parser
 	 * @param handler
 	 * @return
-	 * @throws XmlStreamException 
+	 * @throws XmlStreamException
 	 */
-	public String getID(IXmlStreamReader parser,GPEDeafultKmlParser handler) throws XmlStreamException{
+	public String getID(IXmlStreamReader parser, GPEDeafultKmlParser handler)
+			throws XmlStreamException {
 		String id = null;
-		for (int i=0 ; i<parser.getAttributeCount() ; i++){
-			if (CompareUtils.compareWithNamespace(parser.getAttributeName(i),Kml2_1_Tags.GEOMETRY_ID)){
+		for (int i = 0; i < parser.getAttributeCount(); i++) {
+			if (CompareUtils.compareWithNamespace(parser.getAttributeName(i),
+					Kml2_1_Tags.GEOMETRY_ID)) {
 				id = parser.getAttributeValue(i);
 			}
 		}
-		return id;	
+		return id;
 	}
 }

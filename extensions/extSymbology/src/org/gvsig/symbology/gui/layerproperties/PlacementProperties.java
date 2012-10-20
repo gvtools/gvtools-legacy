@@ -40,35 +40,35 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: PlacementProperties.java 15674 2007-10-30 16:39:02Z jdominguez $
-* $Log$
-* Revision 1.7  2007-04-19 14:22:29  jaume
-* *** empty log message ***
-*
-* Revision 1.6  2007/04/13 12:43:08  jaume
-* *** empty log message ***
-*
-* Revision 1.5  2007/04/13 12:10:56  jaume
-* *** empty log message ***
-*
-* Revision 1.4  2007/04/12 16:01:32  jaume
-* *** empty log message ***
-*
-* Revision 1.3  2007/03/28 15:38:56  jaume
-* GUI for lines, points and polygons
-*
-* Revision 1.2  2007/03/09 11:25:00  jaume
-* Advanced symbology (start committing)
-*
-* Revision 1.1.2.2  2007/02/09 11:00:03  jaume
-* *** empty log message ***
-*
-* Revision 1.1.2.1  2007/02/01 12:12:41  jaume
-* theme manager window and all its components are now dynamic
-*
-*
-*/
+ *
+ * $Id: PlacementProperties.java 15674 2007-10-30 16:39:02Z jdominguez $
+ * $Log$
+ * Revision 1.7  2007-04-19 14:22:29  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.6  2007/04/13 12:43:08  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.5  2007/04/13 12:10:56  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.4  2007/04/12 16:01:32  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.3  2007/03/28 15:38:56  jaume
+ * GUI for lines, points and polygons
+ *
+ * Revision 1.2  2007/03/09 11:25:00  jaume
+ * Advanced symbology (start committing)
+ *
+ * Revision 1.1.2.2  2007/02/09 11:00:03  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1.2.1  2007/02/01 12:12:41  jaume
+ * theme manager window and all its components are now dynamic
+ *
+ *
+ */
 package org.gvsig.symbology.gui.layerproperties;
 
 import java.awt.BorderLayout;
@@ -132,24 +132,25 @@ import com.iver.cit.gvsig.gui.styling.AbstractStyleSelectorFilter;
 import com.iver.cit.gvsig.gui.styling.StylePreviewer;
 import com.iver.cit.gvsig.gui.styling.StyleSelector;
 import com.iver.utiles.swing.JComboBox;
+
 /**
- *
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
-public class PlacementProperties extends JPanel implements IPlacementProperties, ActionListener {
+public class PlacementProperties extends JPanel implements
+		IPlacementProperties, ActionListener {
 	private static final long serialVersionUID = 1022470370547576765L;
 	private PointLabelPositioneer defaultPointStyle = new PointLabelPositioneer(
-			new byte[] { 2, 2, 1, 3, 2, 3, 3, 2	},
-			PluginServices.getText(this, "prefer_top_right_all_allowed")
-			);
+			new byte[] { 2, 2, 1, 3, 2, 3, 3, 2 }, PluginServices.getText(this,
+					"prefer_top_right_all_allowed"));
 	private PointLabelPositioneer pointStyle = null;
 	private int shapeType;
 	private JPanel pnlContent = null;
 	private JPanel pnlCenter = null;
 	IPlacementConstraints constraints;
 	private GridBagLayoutPanel orientationPanel;
-	private DuplicateLayersMode	duplicateLabelsMode;
+	private DuplicateLayersMode duplicateLabelsMode;
 	private JRadioButton rdBtnHorizontal;
 	private JRadioButton rdBtnParallel;
 	private JRadioButton rdBtnFollowingLine;
@@ -172,30 +173,34 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 	private JRadioButton chkOnTheLine;
 	private JRadioButton chkAbove;
 	private JComboBox cmbOrientationSystem;
-	private JLabelHTML lblPointPosDesc = new JLabelHTML(""); //pointStyle.getDescription());
+	private JLabelHTML lblPointPosDesc = new JLabelHTML(""); // pointStyle.getDescription());
 	IPlacementConstraints oldConstraints;
 	private JCheckBox chkFitInsidePolygon;
 	private boolean fireEvent = false;
 
-
 	/**
 	 * Constructs a new panel for PlacementProperties.
-	 *
-	 * @param constraints, if not null this parameters is used to fill the panel. If it is null
-	 * this PlacementProperties constructor creates a new default one that is ready to be used
-	 * for the shapetype passed as second parameter
-	 *
-	 * @param shapeType, defines the target shapetype of the IPlacementConstraints obtained;
+	 * 
+	 * @param constraints
+	 *            , if not null this parameters is used to fill the panel. If it
+	 *            is null this PlacementProperties constructor creates a new
+	 *            default one that is ready to be used for the shapetype passed
+	 *            as second parameter
+	 * 
+	 * @param shapeType
+	 *            , defines the target shapetype of the IPlacementConstraints
+	 *            obtained;
 	 * @throws ReadDriverException
 	 */
-	public PlacementProperties(IPlacementConstraints constraints, int shapeType) throws ReadDriverException {
+	public PlacementProperties(IPlacementConstraints constraints, int shapeType)
+			throws ReadDriverException {
 		initialize(constraints, shapeType, getPnlDuplicateLabels());
 	}
 
-	PlacementProperties(IPlacementConstraints costraints,
-			int shapeType, DuplicateLayersMode duplicatesMode) {
+	PlacementProperties(IPlacementConstraints costraints, int shapeType,
+			DuplicateLayersMode duplicatesMode) {
 
-		initialize( costraints, shapeType, duplicatesMode);
+		initialize(costraints, shapeType, duplicatesMode);
 		refreshComponents();
 	}
 
@@ -210,7 +215,8 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 		getRdBtnFollowingLine().setSelected(constraints.isFollowingLine());
 		getRdBtnPerpendicular().setSelected(constraints.isPerpendicular());
 
-		getCmbOrientationSystem().setSelectedIndex(constraints.isPageOriented() ? 1 : 0);
+		getCmbOrientationSystem().setSelectedIndex(
+				constraints.isPageOriented() ? 1 : 0);
 
 		// points mode
 		if (constraints.isOnTopOfThePoint()) {
@@ -238,10 +244,9 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 			getRdBtnAlwaysStraight().setSelected(true);
 		}
 
-//		if(constraints.isFollowingLine()){
-//			setComponentEnabled(getPositionPanel(), false);
-//		}
-
+		// if(constraints.isFollowingLine()){
+		// setComponentEnabled(getPositionPanel(), false);
+		// }
 
 		// duplicates mode
 		int dupMode = constraints.getDuplicateLabelsMode();
@@ -250,41 +255,48 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 		changeIcon();
 	}
 
-	private void initialize(IPlacementConstraints constraints, int shapeType, DuplicateLayersMode duplicatesMode) {
+	private void initialize(IPlacementConstraints constraints, int shapeType,
+			DuplicateLayersMode duplicatesMode) {
 
 		this.duplicateLabelsMode = duplicatesMode;
 		this.shapeType = shapeType;
 		this.oldConstraints = constraints;
-//		this.constraints = constraints != null ?
-//				PlacementManager.createPlacementConstraints(constraints.getXMLEntity())	:
-//				PlacementManager.createPlacementConstraints(shapeType);
-		if( constraints != null ) {
-			this.constraints = PlacementManager.createPlacementConstraints(constraints.getXMLEntity());
-			if (constraints instanceof PointPlacementConstraints){
-				PointLabelPositioneer positioneer = ((PointPlacementConstraints)constraints).getPositioneer();
-				if (positioneer != null) this.setPointStyle(positioneer);
-				this.lblPointPosDesc.setText(this.getPointStyle().getDescription());
+		// this.constraints = constraints != null ?
+		// PlacementManager.createPlacementConstraints(constraints.getXMLEntity())
+		// :
+		// PlacementManager.createPlacementConstraints(shapeType);
+		if (constraints != null) {
+			this.constraints = PlacementManager
+					.createPlacementConstraints(constraints.getXMLEntity());
+			if (constraints instanceof PointPlacementConstraints) {
+				PointLabelPositioneer positioneer = ((PointPlacementConstraints) constraints)
+						.getPositioneer();
+				if (positioneer != null)
+					this.setPointStyle(positioneer);
+				this.lblPointPosDesc.setText(this.getPointStyle()
+						.getDescription());
 			}
 		} else {
-			this.constraints = PlacementManager.createPlacementConstraints(shapeType);
+			this.constraints = PlacementManager
+					.createPlacementConstraints(shapeType);
 		}
-
 
 		linePositionItem.add(PluginServices.getText(this, "in_the_middle"));
 		linePositionItem.add(PluginServices.getText(this, "at_begin"));
 		linePositionItem.add(PluginServices.getText(this, "at_end"));
 		linePositionItem.add(PluginServices.getText(this, "at_best"));
 
-        this.setLayout(new BorderLayout());
-        this.setSize(new Dimension(410,380));
-        this.add(getPnlContent(), BorderLayout.CENTER);
- 	}
+		this.setLayout(new BorderLayout());
+		this.setSize(new Dimension(410, 380));
+		this.add(getPnlContent(), BorderLayout.CENTER);
+	}
 
 	public WindowInfo getWindowInfo() {
-		WindowInfo viewInfo = new WindowInfo(WindowInfo.MODALDIALOG | WindowInfo.RESIZABLE);
+		WindowInfo viewInfo = new WindowInfo(WindowInfo.MODALDIALOG
+				| WindowInfo.RESIZABLE);
 		viewInfo.setWidth(getWidth());
 		viewInfo.setHeight(getHeight());
-		viewInfo.setTitle(PluginServices.getText(this,"placement_properties"));
+		viewInfo.setTitle(PluginServices.getText(this, "placement_properties"));
 		return viewInfo;
 	}
 
@@ -297,7 +309,8 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 			pnlContent = new JPanel();
 			pnlContent.setLayout(new BorderLayout());
 			pnlContent.add(getPnlCenter(), java.awt.BorderLayout.CENTER);
-			pnlContent.add(getPnlDuplicateLabels(), java.awt.BorderLayout.SOUTH);
+			pnlContent
+					.add(getPnlDuplicateLabels(), java.awt.BorderLayout.SOUTH);
 		}
 		return pnlContent;
 	}
@@ -314,21 +327,20 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 	private JPanel getPnlCenter() {
 		if (pnlCenter == null) {
 			pnlCenter = new JPanel();
-			switch (shapeType%FShape.Z) {
+			switch (shapeType % FShape.Z) {
 			case FShape.POINT:
-			case FShape.MULTIPOINT: // TODO (09/01/08) is this correct?? if not fix it also in PlacementManager, MarkerPlacementAroundPoint
-				pnlCenter.setBorder(BorderFactory.
-						createTitledBorder(null,
+			case FShape.MULTIPOINT: // TODO (09/01/08) is this correct?? if not
+									// fix it also in PlacementManager,
+									// MarkerPlacementAroundPoint
+				pnlCenter.setBorder(BorderFactory.createTitledBorder(null,
 						PluginServices.getText(this, "point_settings")));
 				pnlCenter.add(getPointSettingsPanel());
 				break;
 			case FShape.LINE:
 				pnlCenter.setLayout(new BorderLayout());
-				pnlCenter.setBorder(BorderFactory.
-						createTitledBorder(null,
+				pnlCenter.setBorder(BorderFactory.createTitledBorder(null,
 						PluginServices.getText(this, "line_settings")));
-				JPanel aux = new JPanel(
-						new GridLayout(1, 2));
+				JPanel aux = new JPanel(new GridLayout(1, 2));
 				aux.add(getOrientationPanel());
 				aux.add(getPositionPanel());
 				pnlCenter.add(aux, BorderLayout.CENTER);
@@ -338,8 +350,7 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 
 			case FShape.POLYGON:
 				pnlCenter.setLayout(new BorderLayout());
-				pnlCenter.setBorder(BorderFactory.
-						createTitledBorder(null,
+				pnlCenter.setBorder(BorderFactory.createTitledBorder(null,
 						PluginServices.getText(this, "polygon_settings")));
 				pnlCenter.add(getPolygonSettingsPanel(), BorderLayout.CENTER);
 				break;
@@ -354,10 +365,10 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 	private JPanel getLocationPanel() {
 		if (locationPanel == null) {
 			locationPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-			locationPanel.setBorder(BorderFactory.
-					createTitledBorder(null,
-							PluginServices.getText(this, "location")));
-			locationPanel.add(new JLabel(PluginServices.getText(this, "location_along_the_lines")+":"));
+			locationPanel.setBorder(BorderFactory.createTitledBorder(null,
+					PluginServices.getText(this, "location")));
+			locationPanel.add(new JLabel(PluginServices.getText(this,
+					"location_along_the_lines") + ":"));
 			locationPanel.add(getCmbLocationAlongLines());
 		}
 
@@ -366,22 +377,24 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 
 	private JComboBox getCmbLocationAlongLines() {
 		if (cmbLocationAlongLines == null) {
-			cmbLocationAlongLines = new JComboBox((String[]) linePositionItem.toArray(new String[linePositionItem.size()]));
+			cmbLocationAlongLines = new JComboBox(
+					(String[]) linePositionItem
+							.toArray(new String[linePositionItem.size()]));
 			cmbLocationAlongLines.addActionListener(this);
 		}
 
 		return cmbLocationAlongLines;
 	}
 
-	private PointLabelPositioneer getPointStyle(){
-		if (pointStyle == null){
+	private PointLabelPositioneer getPointStyle() {
+		if (pointStyle == null) {
 			pointStyle = defaultPointStyle;
 			lblPointPosDesc.setText(pointStyle.getDescription());
 		}
 		return pointStyle;
 	}
 
-	private void setPointStyle(PointLabelPositioneer pointStyle){
+	private void setPointStyle(PointLabelPositioneer pointStyle) {
 		this.pointStyle = pointStyle;
 	}
 
@@ -400,8 +413,10 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 
 			aux.add(aux2);
 			pointSettingsPanel.addComponent("", aux);
-			pointSettingsPanel.addComponent("",
-					new JLabel(PluginServices.getText(this, "label-point-priority-help")));
+			pointSettingsPanel.addComponent(
+					"",
+					new JLabel(PluginServices.getText(this,
+							"label-point-priority-help")));
 			pointSettingsPanel.addComponent(getRdOffsetLabelOnTopPoint());
 			ButtonGroup group = new ButtonGroup();
 			group.add(getRdOffsetLabelHorizontally());
@@ -411,11 +426,10 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 		return pointSettingsPanel;
 	}
 
-
-
 	private JButton getBtnChangeLocation() {
 		if (btnChangeLocation == null) {
-			btnChangeLocation = new JButton(PluginServices.getText(this, "change_location"));
+			btnChangeLocation = new JButton(PluginServices.getText(this,
+					"change_location"));
 			btnChangeLocation.addActionListener(this);
 		}
 
@@ -434,7 +448,8 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 	private JRadioButton getRdOffsetLabelOnTopPoint() {
 		if (rdBtnOffsetLabelOnTopPoint == null) {
 			rdBtnOffsetLabelOnTopPoint = new JRadioButton(
-					PluginServices.getText(this, "offset_labels_on_top_of_the_points")) ;
+					PluginServices.getText(this,
+							"offset_labels_on_top_of_the_points"));
 
 		}
 
@@ -456,18 +471,19 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 			polygonSettingsPanel = new JPanel(new BorderLayout(10, 10));
 			JPanel aux = new JPanel();
 			aux.setLayout(new BoxLayout(aux, BoxLayout.Y_AXIS));
-			aux.add(new JBlank(10,10));
+			aux.add(new JBlank(10, 10));
 			aux.add(getRdBtnAlwaysHorizontal());
-			aux.add(new JBlank(10,10));
+			aux.add(new JBlank(10, 10));
 			aux.add(getRdBtnAlwaysStraight());
-			aux.add(new JBlank(10,50));
+			aux.add(new JBlank(10, 50));
 
 			polygonSettingsPanel.add(getPreview(), BorderLayout.CENTER);
 			polygonSettingsPanel.add(aux, BorderLayout.EAST);
 			ButtonGroup group = new ButtonGroup();
 			group.add(getRdBtnAlwaysHorizontal());
 			group.add(getRdBtnAlwaysStraight());
-			polygonSettingsPanel.add(getChkFitInsidePolygon(), BorderLayout.SOUTH);
+			polygonSettingsPanel.add(getChkFitInsidePolygon(),
+					BorderLayout.SOUTH);
 		}
 
 		return polygonSettingsPanel;
@@ -475,7 +491,8 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 
 	private JCheckBox getChkFitInsidePolygon() {
 		if (chkFitInsidePolygon == null) {
-			chkFitInsidePolygon = new JCheckBox(PluginServices.getText(this, "fit_inside_polygon"));
+			chkFitInsidePolygon = new JCheckBox(PluginServices.getText(this,
+					"fit_inside_polygon"));
 
 		}
 
@@ -484,8 +501,8 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 
 	private JRadioButton getRdBtnAlwaysStraight() {
 		if (rdBtnAlwaysStraight == null) {
-			rdBtnAlwaysStraight = new JRadioButton(
-					PluginServices.getText(this, "always_straight"));
+			rdBtnAlwaysStraight = new JRadioButton(PluginServices.getText(this,
+					"always_straight"));
 			rdBtnAlwaysStraight.addActionListener(this);
 		}
 
@@ -494,22 +511,19 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 
 	private JRadioButton getRdBtnAlwaysHorizontal() {
 		if (rdBtnAlwaysHorizontal == null) {
-			rdBtnAlwaysHorizontal = new JRadioButton(
-					PluginServices.getText(this, "always_horizontal"));
+			rdBtnAlwaysHorizontal = new JRadioButton(PluginServices.getText(
+					this, "always_horizontal"));
 			rdBtnAlwaysHorizontal.addActionListener(this);
 		}
 
 		return rdBtnAlwaysHorizontal;
 	}
 
-
-
 	private JPanel getPositionPanel() {
 		if (positionPanel == null) {
 			positionPanel = new JPanel(new BorderLayout());
-			positionPanel.setBorder(BorderFactory.
-					createTitledBorder(null,
-							PluginServices.getText(this, "position")));
+			positionPanel.setBorder(BorderFactory.createTitledBorder(null,
+					PluginServices.getText(this, "position")));
 			GridBagLayoutPanel aux2 = new GridBagLayoutPanel();
 			JPanel aux = new JPanel(new GridLayout(4, 1));
 
@@ -525,7 +539,8 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 
 			aux2.addComponent(aux);
 			aux2.addComponent(
-					PluginServices.getText(this, "orientation_system"), getCmbOrientationSystem());
+					PluginServices.getText(this, "orientation_system"),
+					getCmbOrientationSystem());
 			positionPanel.add(getPreview(), BorderLayout.CENTER);
 			positionPanel.add(aux2, BorderLayout.SOUTH);
 		}
@@ -533,18 +548,17 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 	}
 
 	private Component getPreview() {
-		 if (preview == null) {
-			 preview = new MiniMapContext(shapeType);
-		 }
-		 return preview;
+		if (preview == null) {
+			preview = new MiniMapContext(shapeType);
+		}
+		return preview;
 	}
 
 	private JComboBox getCmbOrientationSystem() {
 		if (cmbOrientationSystem == null) {
 			cmbOrientationSystem = new JComboBox(new String[] {
-				PluginServices.getText(this, "line"),
-				PluginServices.getText(this, "page")
-			});
+					PluginServices.getText(this, "line"),
+					PluginServices.getText(this, "page") });
 			cmbOrientationSystem.setSelectedIndex(0);
 			cmbOrientationSystem.addActionListener(this);
 		}
@@ -562,7 +576,8 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 
 	private JRadioButton getChkOnTheLine() {
 		if (chkOnTheLine == null) {
-			chkOnTheLine = new JRadioButton(PluginServices.getText(this, "on_the_line"));
+			chkOnTheLine = new JRadioButton(PluginServices.getText(this,
+					"on_the_line"));
 			chkOnTheLine.addActionListener(this);
 		}
 		return chkOnTheLine;
@@ -579,9 +594,8 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 	private GridBagLayoutPanel getOrientationPanel() {
 		if (orientationPanel == null) {
 			orientationPanel = new GridBagLayoutPanel();
-			orientationPanel.setBorder(BorderFactory.
-					createTitledBorder(null,
-							PluginServices.getText(this, "orientation")));
+			orientationPanel.setBorder(BorderFactory.createTitledBorder(null,
+					PluginServices.getText(this, "orientation")));
 			orientationPanel.addComponent(getRdBtnHorizontal());
 			orientationPanel.addComponent(getRdBtnParallel());
 			orientationPanel.addComponent(getRdBtnFollowingLine());
@@ -592,16 +606,14 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 			group.add(getRdBtnFollowingLine());
 			group.add(getRdBtnPerpendicular());
 
-
-
 		}
 		return orientationPanel;
 	}
 
 	private JRadioButton getRdBtnParallel() {
 		if (rdBtnParallel == null) {
-			rdBtnParallel = new JRadioButton(
-				PluginServices.getText(this, "parallel"));
+			rdBtnParallel = new JRadioButton(PluginServices.getText(this,
+					"parallel"));
 
 			rdBtnParallel.addActionListener(this);
 		}
@@ -610,8 +622,8 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 
 	private JRadioButton getRdBtnFollowingLine() {
 		if (rdBtnFollowingLine == null) {
-			rdBtnFollowingLine = new JRadioButton(
-				PluginServices.getText(this, "following_line"));
+			rdBtnFollowingLine = new JRadioButton(PluginServices.getText(this,
+					"following_line"));
 			rdBtnFollowingLine.addActionListener(this);
 		}
 		return rdBtnFollowingLine;
@@ -619,8 +631,8 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 
 	private JRadioButton getRdBtnPerpendicular() {
 		if (rdBtnPerpendicular == null) {
-			rdBtnPerpendicular = new JRadioButton(
-				PluginServices.getText(this, "perpedicular"));
+			rdBtnPerpendicular = new JRadioButton(PluginServices.getText(this,
+					"perpedicular"));
 			rdBtnPerpendicular.addActionListener(this);
 		}
 		return rdBtnPerpendicular;
@@ -628,29 +640,29 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 
 	private JRadioButton getRdBtnHorizontal() {
 		if (rdBtnHorizontal == null) {
-			rdBtnHorizontal = new JRadioButton(
-				PluginServices.getText(this, "horizontal"));
+			rdBtnHorizontal = new JRadioButton(PluginServices.getText(this,
+					"horizontal"));
 			rdBtnHorizontal.addActionListener(this);
 		}
 		return rdBtnHorizontal;
 	}
 
-
-
-
 	void applyConstraints() {
-		int mode=0;
+		int mode = 0;
 
-		switch (shapeType%FShape.Z) {
+		switch (shapeType % FShape.Z) {
 		case FShape.POINT:
-		case FShape.MULTIPOINT: // TODO (09/01/08) is this correct? if not fix it also in PlacementManager, MarkerPlacementAroundPoint
+		case FShape.MULTIPOINT: // TODO (09/01/08) is this correct? if not fix
+								// it also in PlacementManager,
+								// MarkerPlacementAroundPoint
 			if (getRdOffsetLabelOnTopPoint().isSelected()) {
 				mode = IPlacementConstraints.ON_TOP_OF_THE_POINT;
 			} else if (getRdOffsetLabelHorizontally().isSelected()) {
 				mode = IPlacementConstraints.OFFSET_HORIZONTALY_AROUND_THE_POINT;
 			}
-			((PointPlacementConstraints) constraints).
-				setPositioneer((PointLabelPositioneer) stylePreview.getStyle());
+			((PointPlacementConstraints) constraints)
+					.setPositioneer((PointLabelPositioneer) stylePreview
+							.getStyle());
 			break;
 		case FShape.LINE:
 			if (getRdBtnFollowingLine().isSelected()) {
@@ -667,8 +679,8 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 			constraints.setBelowTheLine(getChkBelow().isSelected());
 			constraints.setOnTheLine(getChkOnTheLine().isSelected());
 
-			constraints.setPageOriented(
-					getCmbOrientationSystem().getSelectedIndex() == 1);
+			constraints.setPageOriented(getCmbOrientationSystem()
+					.getSelectedIndex() == 1);
 			int i = getCmbLocationAlongLines().getSelectedIndex();
 			if (i == 0) {
 				i = IPlacementConstraints.AT_THE_MIDDLE_OF_THE_LINE;
@@ -689,7 +701,8 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 				mode = IPlacementConstraints.PARALLEL;
 			}
 
-			constraints.setFitInsidePolygon(getChkFitInsidePolygon().isSelected());
+			constraints.setFitInsidePolygon(getChkFitInsidePolygon()
+					.isSelected());
 			break;
 		}
 		constraints.setPlacementMode(mode);
@@ -707,7 +720,6 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 		c.setEnabled(b);
 	}
 
-
 	public IPlacementConstraints getPlacementConstraints() {
 		return constraints;
 	}
@@ -722,31 +734,35 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 
 			if ("CANCEL".equals(e.getActionCommand()))
 				constraints = oldConstraints;
-			PluginServices.getMDIManager().closeWindow(PlacementProperties.this);
+			PluginServices.getMDIManager()
+					.closeWindow(PlacementProperties.this);
 
 			return;
-		} else if (c.equals(rdBtnAlwaysHorizontal) || c.equals(rdBtnAlwaysStraight) ) {
+		} else if (c.equals(rdBtnAlwaysHorizontal)
+				|| c.equals(rdBtnAlwaysStraight)) {
 
 		} else if (c.equals(rdBtnHorizontal)) {
 			// lock position panel and location panel
 			setComponentEnabled(getPositionPanel(), false);
 			setComponentEnabled(getLocationPanel(), false);
 		} else if (c.equals(rdBtnParallel) || c.equals(rdBtnPerpendicular)) {
-			// unlock position panel and location panel but keep orientation system locked
+			// unlock position panel and location panel but keep orientation
+			// system locked
 			setComponentEnabled(getLocationPanel(), true);
 			setComponentEnabled(getPositionPanel(), true);
 			getCmbOrientationSystem().setEnabled(true);
 		} else if (c.equals(rdBtnFollowingLine)) {
 			setComponentEnabled(getLocationPanel(), true);
 			setComponentEnabled(getPositionPanel(), true);
-			getCmbOrientationSystem().setSelectedItem(PluginServices.getText(this, "line"));
+			getCmbOrientationSystem().setSelectedItem(
+					PluginServices.getText(this, "line"));
 			getCmbOrientationSystem().setEnabled(false);
 		} else if (c.equals(btnChangeLocation)) {
-			StyleSelector stySel = new StyleSelector(
-				getPointStyle(),
-				FShape.POINT,  new AbstractStyleSelectorFilter(new PointLabelPositioneer()),
-				false);
-			stySel.setTitle(PluginServices.getText(this, "placement_priorities_selector"));
+			StyleSelector stySel = new StyleSelector(getPointStyle(),
+					FShape.POINT, new AbstractStyleSelectorFilter(
+							new PointLabelPositioneer()), false);
+			stySel.setTitle(PluginServices.getText(this,
+					"placement_priorities_selector"));
 			PluginServices.getMDIManager().addWindow(stySel);
 			IStyle sty = (IStyle) stySel.getSelectedObject();
 			if (sty != null) {
@@ -777,12 +793,13 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 		@Override
 		public void setText(String text) {
 			// silly fix to avoid too large text lines
-			super.setText("<html>"+text+"</html>");
+			super.setText("<html>" + text + "</html>");
 		}
 	}
 
 	public static IPlacementProperties createPlacementProperties(
-			IPlacementConstraints placementConstraints, int shapeType) throws ReadDriverException {
+			IPlacementConstraints placementConstraints, int shapeType)
+			throws ReadDriverException {
 		return createPlacementProperties(placementConstraints, shapeType, null);
 	}
 
@@ -800,11 +817,12 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 		((JPanel) pp).add(new AcceptCancelPanel(pp, pp), BorderLayout.SOUTH);
 		return pp;
 	}
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"
 
 class MiniMapContext extends JComponent {
 	private static final long serialVersionUID = 229128782038834443L;
-	private static final CoordinateReferenceSystem CRS = ProjectionUtils.getCRS("EPSG:23030");
+	private static final CoordinateReferenceSystem CRS = ProjectionUtils
+			.getCRS("EPSG:23030");
 	private static final String DRIVER_NAME = "gvSIG shp driver";
 	private MapContext theMapContext;
 	private FLyrVect line;
@@ -813,7 +831,6 @@ class MiniMapContext extends JComponent {
 	private FLyrVect polygon;
 	private int type;
 	private IPlacementConstraints placement;
-
 
 	public MiniMapContext(int shapeType) {
 		this.type = shapeType;
@@ -828,10 +845,13 @@ class MiniMapContext extends JComponent {
 		repaint();
 	}
 
-	private MapContext getMapContext() throws LoadLayerException, ReadDriverException {
+	private MapContext getMapContext() throws LoadLayerException,
+			ReadDriverException {
 		if (theMapContext == null) {
-			String lineFile = getClass().getClassLoader().getResource("docs/line.shp").getFile();
-			line = (FLyrVect) LayerFactory.createLayer("line", DRIVER_NAME, new File(lineFile), CRS);
+			String lineFile = getClass().getClassLoader()
+					.getResource("docs/line.shp").getFile();
+			line = (FLyrVect) LayerFactory.createLayer("line", DRIVER_NAME,
+					new File(lineFile), CRS);
 
 			SimpleLineSymbol sym = new SimpleLineSymbol();
 			sym.setLineColor(Color.red);
@@ -845,10 +865,15 @@ class MiniMapContext extends JComponent {
 			sym.setLineWidth(2);
 			line.setLegend(new SingleSymbolLegend(sym));
 
-			String backgroundPolygonFile = getClass().getClassLoader().getResource("docs/bg-polygon.shp").getFile();
-			backgroundPolygon = (FLyrVect) LayerFactory.createLayer("bg-polygon", DRIVER_NAME, new File(backgroundPolygonFile), CRS);
-			String polygonFile = getClass().getClassLoader().getResource("docs/polygon.shp").getFile();
-			polygon = (FLyrVect) LayerFactory.createLayer("polygon", DRIVER_NAME, new File(polygonFile), CRS);
+			String backgroundPolygonFile = getClass().getClassLoader()
+					.getResource("docs/bg-polygon.shp").getFile();
+			backgroundPolygon = (FLyrVect) LayerFactory.createLayer(
+					"bg-polygon", DRIVER_NAME, new File(backgroundPolygonFile),
+					CRS);
+			String polygonFile = getClass().getClassLoader()
+					.getResource("docs/polygon.shp").getFile();
+			polygon = (FLyrVect) LayerFactory.createLayer("polygon",
+					DRIVER_NAME, new File(polygonFile), CRS);
 
 			SimpleFillSymbol sym2 = new SimpleFillSymbol();
 			sym2.setFillColor(new Color(50, 245, 125));
@@ -861,20 +886,20 @@ class MiniMapContext extends JComponent {
 			polygon.setLegend(polyLegend);
 			backgroundPolygon.setLegend(polyLegend);
 
-
 			GeneralLabelingStrategy labeling1 = new GeneralLabelingStrategy();
 			GeneralLabelingStrategy labeling2 = new GeneralLabelingStrategy();
 			DefaultLabelingMethod method = new DefaultLabelingMethod();
 
 			LabelClass lc = null;
-			if (method.getLabelClasses() != null && method.getLabelClasses().length > 0) {
+			if (method.getLabelClasses() != null
+					&& method.getLabelClasses().length > 0) {
 				lc = method.getLabelClasses()[0];
 			} else {
 				lc = new LabelClass();
 				method.addLabelClass(lc);
 			}
 
-			String[] sampleExpression = {PluginServices.getText(this,"text")};
+			String[] sampleExpression = { PluginServices.getText(this, "text") };
 			lc.setLabelExpressions(sampleExpression);
 
 			lc.getTextSymbol().setFontSize(16);
@@ -891,24 +916,18 @@ class MiniMapContext extends JComponent {
 			polygon.setIsLabeled(true);
 			ViewPort theViewPort = new ViewPort(CRS);
 
-			theViewPort.setExtent(
-					new Rectangle2D.Double(
-							289600,
-							3973700,
-							2000,
-							2000)
-			);
+			theViewPort.setExtent(new Rectangle2D.Double(289600, 3973700, 2000,
+					2000));
 			theMapContext = new MapContext(theViewPort);
 			theMapContext.getLayers().addLayer(backgroundPolygon);
 			theMapContext.getLayers().addLayer(polygon);
 			theMapContext.getLayers().addLayer(line);
 
-
 		}
 		line.getLabelingStrategy().setPlacementConstraints(placement);
 		polygon.getLabelingStrategy().setPlacementConstraints(placement);
 		Dimension sz = getBounds().getSize();
-		sz.setSize(sz.width-2*hMargin, sz.height-2*vMargin);
+		sz.setSize(sz.width - 2 * hMargin, sz.height - 2 * vMargin);
 		theMapContext.getViewPort().setImageSize(sz);
 		theMapContext.getViewPort().setBackColor(new Color(255, 0, 0));
 
@@ -919,10 +938,10 @@ class MiniMapContext extends JComponent {
 	protected void paintComponent(Graphics g) {
 		try {
 			getMapContext();
-			if (type%FShape.Z == FShape.LINE) {
+			if (type % FShape.Z == FShape.LINE) {
 				line.setVisible(true);
 				polygon.setVisible(false);
-			} else if (type%FShape.Z == FShape.POLYGON) {
+			} else if (type % FShape.Z == FShape.POLYGON) {
 				line.setVisible(false);
 				polygon.setVisible(true);
 			} else {
@@ -932,26 +951,32 @@ class MiniMapContext extends JComponent {
 
 			Rectangle bounds = getBounds();
 			Dimension sz = bounds.getSize();
-			sz.setSize(sz.width-2*vMargin, sz.height-2*hMargin);
+			sz.setSize(sz.width - 2 * vMargin, sz.height - 2 * hMargin);
 			Dimension imageSize = sz;
-			BufferedImage bi = new BufferedImage(imageSize.width, imageSize.height, BufferedImage.TYPE_4BYTE_ABGR);
-			getMapContext().draw(bi, bi.createGraphics(), getMapContext().getScaleView());
-			g.setColor(new Color(150,180,255));
-			g.fillRect(vMargin, hMargin, bounds.width-2*hMargin, bounds.height-2*vMargin);
+			BufferedImage bi = new BufferedImage(imageSize.width,
+					imageSize.height, BufferedImage.TYPE_4BYTE_ABGR);
+			getMapContext().draw(bi, bi.createGraphics(),
+					getMapContext().getScaleView());
+			g.setColor(new Color(150, 180, 255));
+			g.fillRect(vMargin, hMargin, bounds.width - 2 * hMargin,
+					bounds.height - 2 * vMargin);
 			g.drawImage(bi, vMargin, vMargin, null);
 			bi = null;
 		} catch (Exception e) {
 			e.printStackTrace();
-			String noneSelected = "["+PluginServices.getText(this, "preview_not_available")+"]";
+			String noneSelected = "["
+					+ PluginServices.getText(this, "preview_not_available")
+					+ "]";
 			int vGap = 5, hGap = 5;
 			Rectangle r = getBounds();
 			FontMetrics fm = g.getFontMetrics();
 			int lineWidth = fm.stringWidth(noneSelected);
 			float scale = (float) r.getWidth() / lineWidth;
 			Font f = g.getFont();
-			float fontSize = f.getSize()*scale;
-			g.setFont(	f.deriveFont( fontSize ) );
-			((Graphics2D) g).drawString(noneSelected, (r.x*scale) - (hGap/2), r.height/2+vGap*scale);
+			float fontSize = f.getSize() * scale;
+			g.setFont(f.deriveFont(fontSize));
+			((Graphics2D) g).drawString(noneSelected, (r.x * scale)
+					- (hGap / 2), r.height / 2 + vGap * scale);
 		}
 
 	}

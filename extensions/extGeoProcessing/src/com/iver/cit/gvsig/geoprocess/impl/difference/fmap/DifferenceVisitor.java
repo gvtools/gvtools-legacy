@@ -95,7 +95,6 @@ import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.driver.DriverException;
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
-import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
 import com.iver.cit.gvsig.exceptions.visitors.ProcessVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.StartVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.VisitorException;
@@ -159,7 +158,7 @@ public class DifferenceVisitor implements FeatureVisitor {
 
 	/**
 	 * Constructor
-	 *
+	 * 
 	 * @param overlayLayer
 	 * @param processor
 	 * @throws DriverException
@@ -173,19 +172,19 @@ public class DifferenceVisitor implements FeatureVisitor {
 	}
 
 	/**
-	 * Inner class to process with a given strategy all geometries of overlay layer
-	 * that overlays with a given geometry of input layer.
-	 * @author azabala
-	 *
-	 */
-	
-	/*
-	 * TODO Dado un feature, es factible pensar que los de la otra capa que lo cubran pueden
-	 * estar en memoria (aunque esto no sea siempre así). Podemos hacer un
-	 * EnhancedMemoryOverlay, que primero lo haga todo en memoria, capture un OutOfMemoryException
-	 * y lo haga de modo incremental
+	 * Inner class to process with a given strategy all geometries of overlay
+	 * layer that overlays with a given geometry of input layer.
 	 * 
-	 * */
+	 * @author azabala
+	 * 
+	 */
+
+	/*
+	 * TODO Dado un feature, es factible pensar que los de la otra capa que lo
+	 * cubran pueden estar en memoria (aunque esto no sea siempre así). Podemos
+	 * hacer un EnhancedMemoryOverlay, que primero lo haga todo en memoria,
+	 * capture un OutOfMemoryException y lo haga de modo incremental
+	 */
 	class UnionOverlaysVisitor implements FeatureVisitor {
 		/**
 		 * Result of the strategy process (union of overlays of a IGeometry)
@@ -201,41 +200,41 @@ public class DifferenceVisitor implements FeatureVisitor {
 			return overlayGeometry;
 		}
 
-		public void visit(IGeometry g, int index) throws VisitorException, ProcessVisitorException {
-			if(g == null)
+		public void visit(IGeometry g, int index) throws VisitorException,
+				ProcessVisitorException {
+			if (g == null)
 				return;
-			
+
 			/*
-			 * TODO
-			 * Cuando hagamos uso de los iteradores en geoprocessing, meter
-			 * un readableVectorial.getFeatureIterator(IFeatureFilter), que pueda
-			 * englobar varias opciones de filtrado.
-			 * Así, por ejemplo, puedo tener en cuenta las SELECCIONES.
-			 * 
-			 * */
+			 * TODO Cuando hagamos uso de los iteradores en geoprocessing, meter
+			 * un readableVectorial.getFeatureIterator(IFeatureFilter), que
+			 * pueda englobar varias opciones de filtrado. Así, por ejemplo,
+			 * puedo tener en cuenta las SELECCIONES.
+			 */
 			if (overlayLayerSelected) {
 				try {
 					if (!overlayLayer.getRecordset().getSelection().get(index))
 						return;
 				} catch (ReadDriverException e) {
-					throw new ProcessVisitorException(overlayLayer.getName(),e,
+					throw new ProcessVisitorException(overlayLayer.getName(),
+							e,
 							"Error en diferencia: verificando si un posible overlay esta seleccionado");
 				}// geometry g is not selected
 			}
 
 			/*
-			Prueba para hacer diferencia entre cualquier tipo de geometria
-			if(g.getGeometryType() != XTypes.POLYGON &&
-					g.getGeometryType() != XTypes.MULTI)
-				return;
-			*/
-			
+			 * Prueba para hacer diferencia entre cualquier tipo de geometria
+			 * if(g.getGeometryType() != XTypes.POLYGON && g.getGeometryType()
+			 * != XTypes.MULTI) return;
+			 */
+
 			Geometry actualGeometry = g.toJTSGeometry();
 			if (overlayGeometry == null) {
 				overlayGeometry = actualGeometry;
 			} else {
-				overlayGeometry = JTSFacade.union(actualGeometry, overlayGeometry);
-//				overlayGeometry = actualGeometry.union(overlayGeometry);
+				overlayGeometry = JTSFacade.union(actualGeometry,
+						overlayGeometry);
+				// overlayGeometry = actualGeometry.union(overlayGeometry);
 			}// if
 
 		}// visit
@@ -250,26 +249,24 @@ public class DifferenceVisitor implements FeatureVisitor {
 		public boolean start(FLayer layer) throws StartVisitorException {
 			return true;
 		}
-	}//UnionOverlaysVisitor
+	}// UnionOverlaysVisitor
 
-
-	public void visit(IGeometry g, final int index) throws VisitorException, ProcessVisitorException {
-		if(g == null)
+	public void visit(IGeometry g, final int index) throws VisitorException,
+			ProcessVisitorException {
+		if (g == null)
 			return;
-		
-		
+
 		/*
-		if(g.getGeometryType() != XTypes.POLYGON &&
-				g.getGeometryType() != XTypes.MULTI)
-			return;
-		*/
+		 * if(g.getGeometryType() != XTypes.POLYGON && g.getGeometryType() !=
+		 * XTypes.MULTI) return;
+		 */
 		Geometry firstJts = g.toJTSGeometry();
 		Geometry solution = null;
 		try {
 			UnionOverlaysVisitor unionVisitor = new UnionOverlaysVisitor();
 			unionVisitor.overlayLayerSelected = onlyOverlayLayerSelected;
 			strategy.process(unionVisitor, g.getBounds2D());
-			
+
 			// now we compute difference of firstJts and overlaysUnion
 			Geometry overlays = unionVisitor.getUnionOfOverlays();
 			if (overlays != null) {
@@ -277,26 +274,22 @@ public class DifferenceVisitor implements FeatureVisitor {
 			} else {
 				solution = firstJts;
 			}
-			
+
 			/*
-			 * TODO Que pasa si la diferencia entre dos lineas es un punto, o una linea???
-			 * Saldrían geometrias mezcladas
+			 * TODO Que pasa si la diferencia entre dos lineas es un punto, o
+			 * una linea??? Saldrían geometrias mezcladas
 			 * 
-			if (!(solution instanceof Polygon)) {
-				if (!(solution instanceof MultiPolygon)) {
-					// intersection of adjacent polygons is a linestring
-					// but we are not interested in it
-					return;
-				}
-			}
-			*/
-			if(!JTSFacade.checkNull(solution)){
+			 * if (!(solution instanceof Polygon)) { if (!(solution instanceof
+			 * MultiPolygon)) { // intersection of adjacent polygons is a
+			 * linestring // but we are not interested in it return; } }
+			 */
+			if (!JTSFacade.checkNull(solution)) {
 				featureProcessor.processFeature(createFeature(solution, index));
 			}
 		} catch (ReadDriverException e) {
-			throw new ProcessVisitorException(overlayLayer.getName(),e,
+			throw new ProcessVisitorException(overlayLayer.getName(), e,
 					"Error buscando los overlays que intersectan con un feature");
-		} 
+		}
 	}
 
 	public void stop(FLayer layer) throws VisitorException {
@@ -319,21 +312,24 @@ public class DifferenceVisitor implements FeatureVisitor {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param jtsGeometry
 	 * @param firstLayerIndex
 	 * @return
 	 * @throws DriverException
-	 *
-	 * FIXME Revisar. Para el caso de la Union, hay que hacer dos pasadas:
-	 * diferencia A-B y diferencia B-A. Pero los features tienen que tener el
-	 * esquema de la intersección. ¿Como saber el lugar que ocupa cada atributo
-	 * en el esquema ILayerDefinition, en el caso de que dos capas tuviesen
-	 * atributos con el mismo nombre?) De momento, se buscará en
-	 * ILayerDefinition la posicion que ocupa un campo a partir de su nombre.
-	 * Esto obliga a que 2 campos no tomen el mismo nombre
 	 * 
-	 * POSIBLE SOLUCION: ANTEPONER EL NOMBRE DE LA LAYER AL NOMBRE DEL CAMPO
+	 *             FIXME Revisar. Para el caso de la Union, hay que hacer dos
+	 *             pasadas: diferencia A-B y diferencia B-A. Pero los features
+	 *             tienen que tener el esquema de la intersección. ¿Como saber
+	 *             el lugar que ocupa cada atributo en el esquema
+	 *             ILayerDefinition, en el caso de que dos capas tuviesen
+	 *             atributos con el mismo nombre?) De momento, se buscará en
+	 *             ILayerDefinition la posicion que ocupa un campo a partir de
+	 *             su nombre. Esto obliga a que 2 campos no tomen el mismo
+	 *             nombre
+	 * 
+	 *             POSIBLE SOLUCION: ANTEPONER EL NOMBRE DE LA LAYER AL NOMBRE
+	 *             DEL CAMPO
 	 */
 	private IFeature createFeature(Geometry jtsGeometry, int firstLayerIndex)
 			throws ReadDriverException {
@@ -352,7 +348,7 @@ public class DifferenceVisitor implements FeatureVisitor {
 				}// if
 			}// for
 		}// for
-		// now we put null values
+			// now we put null values
 		for (int i = 0; i < featureAttr.length; i++) {
 			if (featureAttr[i] == null)
 				featureAttr[i] = ValueFactory.createNullValue();

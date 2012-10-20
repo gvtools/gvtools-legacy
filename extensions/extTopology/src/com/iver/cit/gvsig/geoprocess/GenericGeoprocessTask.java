@@ -42,34 +42,34 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess;
 
 import com.iver.cit.gvsig.geoprocess.core.AbstractMonitorableGeoprocess;
 import com.iver.utiles.swing.threads.CancellableProgressTask;
 
 /**
- * Generic task to run in background any geoprocess that extends AbstractMonitorableGeoprocess
+ * Generic task to run in background any geoprocess that extends
+ * AbstractMonitorableGeoprocess
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class GenericGeoprocessTask extends CancellableProgressTask {
 
 	private AbstractMonitorableGeoprocess geoprocess;
-	
-	public GenericGeoprocessTask(AbstractMonitorableGeoprocess geoprocess){
+
+	public GenericGeoprocessTask(AbstractMonitorableGeoprocess geoprocess) {
 		this.geoprocess = geoprocess;
 	}
-	
-	
+
 	public void finished() {
 		super.finished = true;
 	}
 
-	
 	public void run() throws Exception {
 		this.geoprocess.initialize(this);
 		this.geoprocess.process(this);

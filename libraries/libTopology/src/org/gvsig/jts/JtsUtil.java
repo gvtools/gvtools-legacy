@@ -99,13 +99,14 @@ import es.axios.udig.ui.editingtools.internal.geometryoperations.split.SplitStra
  * 
  */
 public class JtsUtil {
-	
+
 	/**
 	 * Generalization factor to compute line generalization
 	 */
 	public static Double GENERALIZATION_FACTOR = new Double(10d);
-	
-	public static  PrecisionModel GVSIG_PRECISION_MODEL = new PrecisionModel(10000);
+
+	public static PrecisionModel GVSIG_PRECISION_MODEL = new PrecisionModel(
+			10000);
 
 	public static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory(
 			GVSIG_PRECISION_MODEL);
@@ -401,27 +402,29 @@ public class JtsUtil {
 	 * @param ring
 	 * @return
 	 */
-//	public static LinearRing reverse(LinearRing ring) {
-//		CoordinateSequence seq = ring.getCoordinateSequence();
-//		CoordinateSequences.reverse(seq);
-//		LinearRing solution = GEOMETRY_FACTORY.createLinearRing(seq);
-//		return solution;
-//	}
-//	
-//	
-	public static LineString reverse(LineString lineString){
+	// public static LinearRing reverse(LinearRing ring) {
+	// CoordinateSequence seq = ring.getCoordinateSequence();
+	// CoordinateSequences.reverse(seq);
+	// LinearRing solution = GEOMETRY_FACTORY.createLinearRing(seq);
+	// return solution;
+	// }
+	//
+	//
+	public static LineString reverse(LineString lineString) {
 		LineString solution = (LineString) lineString.reverse();
-		if(lineString instanceof LinearRing)
+		if (lineString instanceof LinearRing)
 			solution = toLinearRing(lineString);
 		return solution;
-		
+
 	}
-	
-	public static Geometry douglasPeuckerSimplify(Geometry geometry, double distTolerance){
+
+	public static Geometry douglasPeuckerSimplify(Geometry geometry,
+			double distTolerance) {
 		return DouglasPeuckerSimplifier.simplify(geometry, distTolerance);
 	}
-	
-	public static Geometry topologyPreservingSimplify(Geometry geometry, double distTolerance){
+
+	public static Geometry topologyPreservingSimplify(Geometry geometry,
+			double distTolerance) {
 		return TopologyPreservingSimplifier.simplify(geometry, distTolerance);
 	}
 
@@ -436,12 +439,10 @@ public class JtsUtil {
 		solution = new Envelope(xmin, xmax, ymin, ymax);
 		return solution;
 	}
-	
-	public static Envelope rectangle2dToEnvelope(Rectangle2D rect){
-		return new Envelope(rect.getMinX(),
-							rect.getMaxX(),
-							rect.getMinY(),
-							rect.getMaxY());
+
+	public static Envelope rectangle2dToEnvelope(Rectangle2D rect) {
+		return new Envelope(rect.getMinX(), rect.getMaxX(), rect.getMinY(),
+				rect.getMaxY());
 	}
 
 	public static Geometry[] extractGeometries(GeometryCollection geomCol) {
@@ -508,7 +509,7 @@ public class JtsUtil {
 	// }
 	//
 	// final GeometryFactory gf = inputGeom.getFactory();
-	//       
+	//
 	// if (MultiPoint.class.equals(adaptTo) && Point.class.equals(geomClass)) {
 	// return gf.createMultiPoint(new Point[]{(Point) inputGeom});
 	// }
@@ -573,15 +574,15 @@ public class JtsUtil {
 	// if(Polygon.class.equals(adaptTo) &&
 	// (MultiPolygon.class.equals(geomClass))){
 	// // adapts multipolygon to polygon
-	//            
+	//
 	// assert inputGeom.getNumGeometries() == 1 : "the collection must have 1
 	// element to adapt to Polygon";
 	// return inputGeom.getGeometryN(1);
-	//        
+	//
 	// } else if(LineString.class.equals(adaptTo) &&
 	// (MultiLineString.class.equals(geomClass))){
 	// // adapts MultiLinestring to Linestring
-	//            
+	//
 	// assert inputGeom.getNumGeometries() == 1 : "the collection must have 1
 	// element to adapt to Polygon";
 	// return inputGeom.getGeometryN(1);
@@ -622,14 +623,13 @@ public class JtsUtil {
 		solutionList.toArray(solution);
 		return solution;
 	}
-	
-	
-	public static LineString[] extractRings(Polygon polygon){
+
+	public static LineString[] extractRings(Polygon polygon) {
 		int numHoles = polygon.getNumInteriorRing();
 		LineString[] solution = new LineString[numHoles + 1];
 		solution[0] = polygon.getExteriorRing();
-		for(int i = 0; i < numHoles; i++){
-			solution[i+1] = polygon.getInteriorRingN(i);
+		for (int i = 0; i < numHoles; i++) {
+			solution[i + 1] = polygon.getInteriorRingN(i);
 		}
 		return solution;
 	}
@@ -696,8 +696,8 @@ public class JtsUtil {
 			List<Geometry> linesWithoutOvershoot = new ArrayList<Geometry>();
 			for (int i = 0; i < geoms.length; i++) {
 				LineString brokenLine = (LineString) geoms[i];
-				if(JtsUtil.isClosed(brokenLine, clusterTolerance)){
-//				if (brokenLine.isClosed()) {
+				if (JtsUtil.isClosed(brokenLine, clusterTolerance)) {
+					// if (brokenLine.isClosed()) {
 					linesWithoutOvershoot.add(brokenLine);
 				}// if
 			}// for
@@ -744,8 +744,8 @@ public class JtsUtil {
 				} else if (geometry instanceof Polygon) {
 					Polygon polygon = (Polygon) geometry;
 
-					Geometry correctedShell = removeOverShoot(polygon
-							.getExteriorRing(), clusterTolerance);
+					Geometry correctedShell = removeOverShoot(
+							polygon.getExteriorRing(), clusterTolerance);
 					if (!(correctedShell instanceof LinearRing)) {
 						correctedShell = JtsUtil
 								.toLinearRing((LineString) correctedShell);
@@ -899,9 +899,9 @@ public class JtsUtil {
 				}
 			}
 
-			if (minShell == null) {//this hole is not contained by any shell
+			if (minShell == null) {// this hole is not contained by any shell
 
-				//we do the assumption that this hole is really a
+				// we do the assumption that this hole is really a
 				// shell (polygon)
 				// whose point werent digitized in the right order
 				LinearRing newRing = (LinearRing) JtsUtil.reverse(testRing);
@@ -916,37 +916,42 @@ public class JtsUtil {
 
 		for (int i = 0; i < shells.size(); i++) {
 			polygons[i] = GEOMETRY_FACTORY.createPolygon(shells.get(i),
-					(LinearRing[]) (holesForShells.get(i)).toArray(new LinearRing[0]));
+					(LinearRing[]) (holesForShells.get(i))
+							.toArray(new LinearRing[0]));
 		}
-		
-		if(polygons.length == 1)
+
+		if (polygons.length == 1)
 			return polygons[0];
 		else
 			return GEOMETRY_FACTORY.createMultiPolygon(polygons);
 	}
-	
-	public static Envelope getBoundingBox(List<Geometry> geometries){
-		Envelope  envelope = new Envelope();
-	    for (int i = 0; i < geometries.size(); i++) {
-	        Geometry geometry = geometries.get(i);
-	        envelope.expandToInclude(geometry.getEnvelopeInternal());
-	    }
-	    return envelope;
+
+	public static Envelope getBoundingBox(List<Geometry> geometries) {
+		Envelope envelope = new Envelope();
+		for (int i = 0; i < geometries.size(); i++) {
+			Geometry geometry = geometries.get(i);
+			envelope.expandToInclude(geometry.getEnvelopeInternal());
+		}
+		return envelope;
 	}
-	
-	public static Coordinate getCircumCenter(Coordinate a, Coordinate b, Coordinate c){
+
+	public static Coordinate getCircumCenter(Coordinate a, Coordinate b,
+			Coordinate c) {
 		return Triangle.circumcentre(a, b, c);
 	}
 
-	public static Geometry difference(Geometry poly, List<Geometry> lineNeighbours){
+	public static Geometry difference(Geometry poly,
+			List<Geometry> lineNeighbours) {
 		Geometry solution = null;
 		List<Geometry> differences = new ArrayList<Geometry>();
-		for(int i = 0; i < lineNeighbours.size(); i++){
+		for (int i = 0; i < lineNeighbours.size(); i++) {
 			Geometry neighbour = lineNeighbours.get(i);
-			if(poly.overlaps(neighbour))
-				differences.add(EnhancedPrecisionOp.difference(poly, neighbour ));
+			if (poly.overlaps(neighbour))
+				differences
+						.add(EnhancedPrecisionOp.difference(poly, neighbour));
 		}
-		solution = GEOMETRY_FACTORY.createGeometryCollection(differences.toArray(new Geometry[0]));
+		solution = GEOMETRY_FACTORY.createGeometryCollection(differences
+				.toArray(new Geometry[0]));
 		return solution;
 	}
 }

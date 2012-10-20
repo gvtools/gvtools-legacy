@@ -30,26 +30,28 @@ import org.gvsig.raster.dataset.InvalidSetViewException;
 import org.gvsig.raster.dataset.NotSupportedExtensionException;
 import org.gvsig.raster.dataset.RasterDataset;
 import org.gvsig.raster.dataset.io.RasterDriverException;
+
 /**
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class TestSaveAndLoadPages extends TestCase {
-	private boolean       show    = false;
-	private String        baseDir = "./test-images/";
-	private String        path    = baseDir + "03AUG23153350-M2AS-000000122423_01_P001-BROWSE.jpg";
-	private RasterDataset f       = null;
-	private BufferFactory ds      = null;
-	private int           pages   = 10;
-		
-	static{
+	private boolean show = false;
+	private String baseDir = "./test-images/";
+	private String path = baseDir
+			+ "03AUG23153350-M2AS-000000122423_01_P001-BROWSE.jpg";
+	private RasterDataset f = null;
+	private BufferFactory ds = null;
+	private int pages = 10;
+
+	static {
 		RasterLibrary.wakeUp();
 	}
-	
+
 	public void start() {
 		this.setUp();
 		this.testStack();
 	}
-	
+
 	public void setUp() {
 		System.err.println("TestSaveAndLoadPages running...");
 		try {
@@ -60,10 +62,10 @@ public class TestSaveAndLoadPages extends TestCase {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void testStack() {
-		int[] drawableBands = {0, 1, 2};
-		
+		int[] drawableBands = { 0, 1, 2 };
+
 		ds = new BufferFactory(f);
 		ds.setDrawableBands(drawableBands);
 		try {
@@ -75,26 +77,27 @@ public class TestSaveAndLoadPages extends TestCase {
 		} catch (RasterDriverException e) {
 			e.printStackTrace();
 		}
-		
-		int h =  f.getHeight() / pages;
+
+		int h = f.getHeight() / pages;
 		PageBandBuffer[] pbWriterList = new PageBandBuffer[h];
 		CacheDataServer[] cds = new CacheDataServer[h];
-				
+
 		long t2, t3, t4;
 		long t1 = new Date().getTime();
 
-		//Salvamos los PageBuffer
+		// Salvamos los PageBuffer
 		try {
 			IBuffer buf = ds.getRasterBuf();
 			byte[] data = new byte[3];
 			for (int i = 0; i < pages; i++) {
-				pbWriterList[i] = new PageBandBuffer(ds.getDataSource().getDataType()[0], f.getWidth(), h, 3, true, i);
+				pbWriterList[i] = new PageBandBuffer(ds.getDataSource()
+						.getDataType()[0], f.getWidth(), h, 3, true, i);
 				cds[i] = new CacheDataServer(null, 0, i);
 				for (int k = 0; k < f.getWidth(); k++) {
 					for (int j = 0; j < h; j++) {
 						buf.getElemByte((i * h) + j, k, data);
 						pbWriterList[i].setElemByte(j, k, data);
-					}	
+					}
 				}
 				try {
 					cds[i].savePage(pbWriterList[i]);
@@ -108,23 +111,26 @@ public class TestSaveAndLoadPages extends TestCase {
 
 		t2 = new Date().getTime();
 		if (show)
-			System.out.println("Time: Cargar PageBuffers y salvar a disco: " + ((t2 - t1) / 1000D) + ", secs.");
+			System.out.println("Time: Cargar PageBuffers y salvar a disco: "
+					+ ((t2 - t1) / 1000D) + ", secs.");
 
-		//Recuperamos las páginas
+		// Recuperamos las páginas
 		PageBandBuffer[] pbReaderList = new PageBandBuffer[h];
 		for (int i = 0; i < pages; i++) {
-			pbReaderList[i] = new PageBandBuffer(ds.getDataSource().getDataType()[0], f.getWidth(), h, 3, true, i);
+			pbReaderList[i] = new PageBandBuffer(ds.getDataSource()
+					.getDataType()[0], f.getWidth(), h, 3, true, i);
 			try {
 				cds[i].loadPage(pbReaderList[i]);
 			} catch (InterruptedException e) {
 			}
 		}
-		
+
 		t3 = new Date().getTime();
 		if (show)
-			System.out.println("Time: Recuperar páginas de disco: " + ((t3 - t2) / 1000D) + ", secs.");
-		
-		//Comparamos
+			System.out.println("Time: Recuperar páginas de disco: "
+					+ ((t3 - t2) / 1000D) + ", secs.");
+
+		// Comparamos
 		byte[] a = new byte[3];
 		byte[] b = new byte[3];
 		for (int i = 0; i < pages; i++) {
@@ -132,7 +138,7 @@ public class TestSaveAndLoadPages extends TestCase {
 				for (int j = 0; j < h; j++) {
 					pbReaderList[i].getElemByte(j, k, a);
 					pbWriterList[i].getElemByte(j, k, b);
-					for (int t = 0; t < 3; t++) 
+					for (int t = 0; t < 3; t++)
 						assertEquals(a[t], b[t]);
 				}
 			}
@@ -140,6 +146,7 @@ public class TestSaveAndLoadPages extends TestCase {
 
 		t4 = new Date().getTime();
 		if (show)
-			System.out.println("Time: Comparaciones: " + ((t4 - t3) / 1000D) + ", secs.");
+			System.out.println("Time: Comparaciones: " + ((t4 - t3) / 1000D)
+					+ ", secs.");
 	}
 }

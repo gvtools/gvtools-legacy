@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -54,33 +53,33 @@ public class Coordinates {
 	public String bry;
 
 	/**
-	 * @param ulx 
-	 * @param uly 
-	 * @param brx 
-	 * @param bry 
+	 * @param ulx
+	 * @param uly
+	 * @param brx
+	 * @param bry
 	 */
-	public  Coordinates(String ulx, String uly, String brx, String bry) {        
+	public Coordinates(String ulx, String uly, String brx, String bry) {
 		this.ulx = ulx;
 		this.uly = uly;
 		this.brx = brx;
 		this.bry = bry;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param ulx 
-	 * @param uly 
-	 * @param brx 
-	 * @param bry 
+	 * @param ulx
+	 * @param uly
+	 * @param brx
+	 * @param bry
 	 */
-	public  Coordinates(double ulx, double uly, double brx, double bry) {        
+	public Coordinates(double ulx, double uly, double brx, double bry) {
 		this.ulx = String.valueOf(ulx);
 		this.uly = String.valueOf(uly);
 		this.brx = String.valueOf(brx);
 		this.bry = String.valueOf(bry);
-	} 
+	}
 
 	/**
 	 * 
@@ -88,29 +87,30 @@ public class Coordinates {
 	 * 
 	 * @return Returns the brx.
 	 */
-	public String getBrx() {        
+	public String getBrx() {
 		return brx;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @return 
+	 * @return
 	 */
-	public double getDoubleBrx() {        
+	public double getDoubleBrx() {
 		return Double.valueOf(brx).doubleValue();
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param brx The brx to set.
+	 * @param brx
+	 *            The brx to set.
 	 */
-	public void setBrx(String brx) {        
+	public void setBrx(String brx) {
 		this.brx = brx;
-	} 
+	}
 
 	/**
 	 * 
@@ -118,29 +118,30 @@ public class Coordinates {
 	 * 
 	 * @return Returns the bry.
 	 */
-	public String getBry() {        
+	public String getBry() {
 		return bry;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @return 
+	 * @return
 	 */
-	public double getDoubleBry() {        
+	public double getDoubleBry() {
 		return Double.valueOf(bry).doubleValue();
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param bry The bry to set.
+	 * @param bry
+	 *            The bry to set.
 	 */
-	public void setBry(String bry) {        
+	public void setBry(String bry) {
 		this.bry = bry;
-	} 
+	}
 
 	/**
 	 * 
@@ -148,29 +149,30 @@ public class Coordinates {
 	 * 
 	 * @return Returns the ulx.
 	 */
-	public String getUlx() {        
+	public String getUlx() {
 		return ulx;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @return 
+	 * @return
 	 */
-	public double getDoubleUlx() {        
+	public double getDoubleUlx() {
 		return Double.valueOf(ulx).doubleValue();
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param ulx The ulx to set.
+	 * @param ulx
+	 *            The ulx to set.
 	 */
-	public void setUlx(String ulx) {        
+	public void setUlx(String ulx) {
 		this.ulx = ulx;
-	} 
+	}
 
 	/**
 	 * 
@@ -178,27 +180,28 @@ public class Coordinates {
 	 * 
 	 * @return Returns the uly.
 	 */
-	public String getUly() {        
+	public String getUly() {
 		return uly;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @return 
+	 * @return
 	 */
-	public double getDoubleUly() {        
+	public double getDoubleUly() {
 		return Double.valueOf(uly).doubleValue();
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param uly The uly to set.
+	 * @param uly
+	 *            The uly to set.
 	 */
-	public void setUly(String uly) {        
+	public void setUly(String uly) {
 		this.uly = uly;
-	} 
+	}
 }

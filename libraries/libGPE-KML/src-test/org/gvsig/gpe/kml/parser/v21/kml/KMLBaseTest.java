@@ -60,10 +60,11 @@ import org.gvsig.gpe.parser.GPEReaderBaseTest;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class KMLBaseTest extends GPEReaderBaseTest{
-	
+public abstract class KMLBaseTest extends GPEReaderBaseTest {
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEParserClass()
 	 */
 	public Class getGPEParserClass() {

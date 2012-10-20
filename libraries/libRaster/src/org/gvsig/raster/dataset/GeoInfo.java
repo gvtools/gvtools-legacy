@@ -26,50 +26,53 @@ import org.gvsig.raster.dataset.io.IRegistrableRasterFormat;
 import org.gvsig.raster.datastruct.Extent;
 import org.gvsig.raster.util.RasterUtilities;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
+
 /**
  * Ancestro de todos los formatos geográficos
  */
 public abstract class GeoInfo implements Georeferenced {
 	protected CoordinateReferenceSystem crs = null;
-	protected long            fileSize               = 0;
-	protected long            bytesReaded            = 0;
-	protected long            lineCnt                = 0;
-	private String            name;
-	private Object            openParam              = null;
-	
+	protected long fileSize = 0;
+	protected long bytesReaded = 0;
+	protected long lineCnt = 0;
+	private String name;
+	private Object openParam = null;
+
 	/**
 	 * Transformación creada a partir de la información de georreferencia de la
 	 * propia imagen. Esta información está en la cabecera o en ficheros
 	 * worldfile.
 	 */
-	protected AffineTransform ownTransformation      = null;
+	protected AffineTransform ownTransformation = null;
 	/**
 	 * Transformación asignada de forma externa, bien desde el fichero rmf o
 	 * asignada directamente por el usuario.
 	 */
 	protected AffineTransform externalTransformation = null;
 
-	public GeoInfo() {}
+	public GeoInfo() {
+	}
 
 	public GeoInfo(CoordinateReferenceSystem crs, Object param) {
 		openParam = param;
 		this.crs = crs;
 		if (param instanceof String)
 			name = translateFileName((String) param);
+		else if (param instanceof IRegistrableRasterFormat)
+			name = ((IRegistrableRasterFormat) param).getFormatID();
 		else
-			if (param instanceof IRegistrableRasterFormat)
-				name = ((IRegistrableRasterFormat) param).getFormatID();
-			else
-				name = String.valueOf(System.currentTimeMillis());
+			name = String.valueOf(System.currentTimeMillis());
 		ownTransformation = new AffineTransform();
 		externalTransformation = new AffineTransform();
 	}
-		
+
 	/**
 	 * Traduce el nombre del fichero por un alias asignado por el propio driver.
-	 * Cuando es traducido por un alias el driver intentará abrir el alias y no el
-	 * fichero. Esto es util porque algunos formatos tienen la extensión en el
-	 * fichero de cabecera pero lo que se abre realmente es el fichero de datos.
+	 * Cuando es traducido por un alias el driver intentará abrir el alias y no
+	 * el fichero. Esto es util porque algunos formatos tienen la extensión en
+	 * el fichero de cabecera pero lo que se abre realmente es el fichero de
+	 * datos.
+	 * 
 	 * @param fileName
 	 * @return
 	 */
@@ -79,6 +82,7 @@ public abstract class GeoInfo implements Georeferenced {
 
 	/**
 	 * Gets the input parameters
+	 * 
 	 * @return
 	 */
 	public String getOpenParameters() {
@@ -111,17 +115,19 @@ public abstract class GeoInfo implements Georeferenced {
 
 	/**
 	 * Extent completo del raster.
+	 * 
 	 * @return Extent
 	 */
 	abstract public Extent getExtent();
 
 	/**
 	 * Este es el extent sobre el que se ajusta una petición para que esta no
-	 * exceda el extent máximo del raster. Para un raster sin rotar será igual al
-	 * extent pero para un raster rotado será igual al extent del raster como si
-	 * no tuviera rotación. Esto ha de ser así ya que la rotación solo se hace
-	 * sobre la vista y las peticiones han de hacerse en coordenadas de la imagen
-	 * sin shearing aplicado.
+	 * exceda el extent máximo del raster. Para un raster sin rotar será igual
+	 * al extent pero para un raster rotado será igual al extent del raster como
+	 * si no tuviera rotación. Esto ha de ser así ya que la rotación solo se
+	 * hace sobre la vista y las peticiones han de hacerse en coordenadas de la
+	 * imagen sin shearing aplicado.
+	 * 
 	 * @return Extent
 	 */
 	abstract public Extent getExtentWithoutRot();
@@ -162,6 +168,7 @@ public abstract class GeoInfo implements Georeferenced {
 
 	/**
 	 * Obtiene la proyección asociada al dataset en formato de cadena de texto
+	 * 
 	 * @return Proyección
 	 */
 	public String getWktProjection() {
@@ -174,7 +181,9 @@ public abstract class GeoInfo implements Georeferenced {
 	 * requestExtent y asigna el AffineTransform que se usará para la
 	 * transformación. Esta transformación será considerada como si la imagen
 	 * tuviera asociado un rmf.
-	 * @param t Transformación afín a aplicar
+	 * 
+	 * @param t
+	 *            Transformación afín a aplicar
 	 */
 	public void setAffineTransform(AffineTransform t) {
 		externalTransformation = (AffineTransform) t.clone();
@@ -184,8 +193,9 @@ public abstract class GeoInfo implements Georeferenced {
 	 * Obtiene la transformación afin aplicada en las peticiones con coordenadas
 	 * reales. Esta corresponde al producto matricial entre la transformación de
 	 * la propia georreferenciación del raster (ownTransformation) y la
-	 * transformación que se le aplique de forma externa. Si esta última no existe
-	 * será la matriz identidad.
+	 * transformación que se le aplique de forma externa. Si esta última no
+	 * existe será la matriz identidad.
+	 * 
 	 * @return Matriz de la transformación afín.
 	 */
 	public AffineTransform getAffineTransform() {
@@ -197,7 +207,9 @@ public abstract class GeoInfo implements Georeferenced {
 	 * cuenta para el setView. Este reseteo tendrá en cuenta que si el raster
 	 * tiene asociado un rmf esta transformación no será eliminada sino que se
 	 * asignará la correspondiente al rmf existente.
-	 * @return devuelve true si tiene fichero rmf asociado y false si no lo tiene.
+	 * 
+	 * @return devuelve true si tiene fichero rmf asociado y false si no lo
+	 *         tiene.
 	 */
 	public void resetAffineTransform() {
 		externalTransformation.setToIdentity();
@@ -205,13 +217,14 @@ public abstract class GeoInfo implements Georeferenced {
 
 	/**
 	 * Obtiene la matriz de transformación del propio raster. Esta matriz es la
-	 * encargada de convertir las coordenadas de la petición en coordenadas a las
-	 * que se pide a la libreria. En gdal, por ejemplo, se piden las coordenadas a
-	 * la libreria en coordenadas pixel por lo que esta matriz tendrá la
-	 * georreferenciación asociada en el worldfile o cabecera. Otras librerias
-	 * como ermapper la petición a la libreria se hace en coordenadas geograficas
-	 * que son las mismas en las que pide el usuario de gvSIG por lo que esta
-	 * matriz en este caso se inicializa con la identidad.
+	 * encargada de convertir las coordenadas de la petición en coordenadas a
+	 * las que se pide a la libreria. En gdal, por ejemplo, se piden las
+	 * coordenadas a la libreria en coordenadas pixel por lo que esta matriz
+	 * tendrá la georreferenciación asociada en el worldfile o cabecera. Otras
+	 * librerias como ermapper la petición a la libreria se hace en coordenadas
+	 * geograficas que son las mismas en las que pide el usuario de gvSIG por lo
+	 * que esta matriz en este caso se inicializa con la identidad.
+	 * 
 	 * @return
 	 */
 	public AffineTransform getOwnTransformation() {

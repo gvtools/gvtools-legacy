@@ -279,7 +279,7 @@ public class Element implements GeocodingPersistence {
 		this._fieldname = xml.getStringProperty(GeocodingTags.FIELDNAME);
 		this._fieldtype = new Fieldtype();
 		this._fieldtype.setXMLEntity(xml.getChild(0));
-		this._fieldwidth = xml.getIntProperty(GeocodingTags.FIELDWIDTH);		
+		this._fieldwidth = xml.getIntProperty(GeocodingTags.FIELDWIDTH);
 		this._fieldseparator = new Fieldseparator();
 		this._fieldseparator.setXMLEntity(xml.getChild(1));
 		this._infieldseparators = new Infieldseparators();

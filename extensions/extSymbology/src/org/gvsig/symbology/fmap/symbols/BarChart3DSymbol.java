@@ -44,20 +44,15 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 
 import org.apache.log4j.Logger;
-import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartRenderingInfo;
-import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryAxis3D;
-import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.axis.NumberAxis3D;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.BarRenderer3D;
-import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 import com.iver.cit.gvsig.fmap.core.FPoint2D;
@@ -83,8 +78,8 @@ public class BarChart3DSymbol extends JFreeChartSymbol {
 			try {
 				myMapPlot = (CategoryPlot) getOutlinePlot().clone();
 			} catch (CloneNotSupportedException e) {
-				Logger.getLogger(getClass()).
-					error("Error cloning the BarChart3DSymbol's plot, check consistency");
+				Logger.getLogger(getClass())
+						.error("Error cloning the BarChart3DSymbol's plot, check consistency");
 				myMapPlot = new CategoryPlot();
 			}
 
@@ -92,15 +87,14 @@ public class BarChart3DSymbol extends JFreeChartSymbol {
 			myMapPlot.setOutlinePaint(null);
 			BarRenderer3D renderer = (BarRenderer3D) myMapPlot.getRenderer();
 			renderer.setDrawBarOutline(drawBarOutline);
-//			renderer.setBaseItemLabelsVisible(false, false);
-//			renderer.setBaseSeriesVisible(false, false);
+			// renderer.setBaseItemLabelsVisible(false, false);
+			// renderer.setBaseSeriesVisible(false, false);
 			renderer.setBaseSeriesVisibleInLegend(false);
-			
-			
-//myMapPlot.setBackgroundImage(null);
-			
+
+			// myMapPlot.setBackgroundImage(null);
+
 			mapPlot = myMapPlot;
-		} 
+		}
 		return mapPlot;
 	}
 
@@ -109,53 +103,52 @@ public class BarChart3DSymbol extends JFreeChartSymbol {
 			Cancellable cancel) {
 		FPoint2D p = (FPoint2D) shp;
 		double size = getSize();
-		double halfSize = size*0.5;
+		double halfSize = size * 0.5;
 		double minx = p.getX() - halfSize;
 		double miny = p.getY() - halfSize;
 		super.draw(g, affineTransform, shp, cancel);
 	}
-	
+
 	protected Plot getOutlinePlot() {
 		outlinePlot = null; // <- delete this
 		if (outlinePlot == null) {
 			CategoryPlot myOutlinePlot;
 			DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-			
+
 			dataset.addValue(23D, "Series 1", "London");
-//			dataset.addValue(14D, "Series 1", "New York");
-//			dataset.addValue(14D, "Series 1", "Istanbul");
-//			dataset.addValue(14D, "Series 1", "Cairo");
+			// dataset.addValue(14D, "Series 1", "New York");
+			// dataset.addValue(14D, "Series 1", "Istanbul");
+			// dataset.addValue(14D, "Series 1", "Cairo");
 			dataset.addValue(13D, "Series 2", "London");
-//			dataset.addValue(19D, "Series 2", "New York");
-//			dataset.addValue(19D, "Series 2", "Istanbul");
-//			dataset.addValue(19D, "Series 2", "Cairo");
+			// dataset.addValue(19D, "Series 2", "New York");
+			// dataset.addValue(19D, "Series 2", "Istanbul");
+			// dataset.addValue(19D, "Series 2", "Cairo");
 			dataset.addValue(7D, "Series 3", "London");
-//			dataset.addValue(9D, "Series 3", "New York");
-//			dataset.addValue(9D, "Series 3", "Istanbul");
-//			dataset.addValue(9D, "Series 3", "Cairo");
+			// dataset.addValue(9D, "Series 3", "New York");
+			// dataset.addValue(9D, "Series 3", "Istanbul");
+			// dataset.addValue(9D, "Series 3", "Cairo");
 
-			
-				CategoryAxis categoryAxis = new CategoryAxis3D(categoryAxisLabel);
-				ValueAxis valueAxis = new NumberAxis3D(valueAxisLabel);
+			CategoryAxis categoryAxis = new CategoryAxis3D(categoryAxisLabel);
+			ValueAxis valueAxis = new NumberAxis3D(valueAxisLabel);
 
-				BarRenderer3D renderer = new BarRenderer3D();
-				myOutlinePlot = new CategoryPlot(dataset, categoryAxis, valueAxis, renderer);
-				double min = Double.POSITIVE_INFINITY;
-				double max = Double.NEGATIVE_INFINITY;
-//				for (int i = 0; values != null && i < values.length; i++) {
-//				min = Math.min(min, values[i]);
-//				max = Math.min(max, values[i]);
-//				dataset.addValue(values[i], rowKeys[i], columnKeys[i]);	
-//				}
-				myOutlinePlot.setDataset(dataset);
-				myOutlinePlot.setOrientation(vertical ? PlotOrientation.VERTICAL : PlotOrientation.HORIZONTAL);
-				outlinePlot = myOutlinePlot;
+			BarRenderer3D renderer = new BarRenderer3D();
+			myOutlinePlot = new CategoryPlot(dataset, categoryAxis, valueAxis,
+					renderer);
+			double min = Double.POSITIVE_INFINITY;
+			double max = Double.NEGATIVE_INFINITY;
+			// for (int i = 0; values != null && i < values.length; i++) {
+			// min = Math.min(min, values[i]);
+			// max = Math.min(max, values[i]);
+			// dataset.addValue(values[i], rowKeys[i], columnKeys[i]);
+			// }
+			myOutlinePlot.setDataset(dataset);
+			myOutlinePlot.setOrientation(vertical ? PlotOrientation.VERTICAL
+					: PlotOrientation.HORIZONTAL);
+			outlinePlot = myOutlinePlot;
 
-			
 		}
 		return outlinePlot;
 	}
-
 
 	public XMLEntity getXMLEntity() {
 		XMLEntity xml = new XMLEntity();
@@ -177,7 +170,7 @@ public class BarChart3DSymbol extends JFreeChartSymbol {
 		setReferenceSystem(xml.getIntProperty("referenceSystem"));
 		setSize(xml.getDoubleProperty("size"));
 		setRotation(xml.getDoubleProperty("rotation"));
-		
+
 	}
 
 	public String getClassName() {

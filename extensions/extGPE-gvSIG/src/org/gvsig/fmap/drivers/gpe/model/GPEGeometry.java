@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -59,12 +58,12 @@ public class GPEGeometry {
 	protected IGeometry geometry = null;
 	protected String srs = null;
 	protected String id = null;
-	//This geometri is reprojected from the original
-	//CRS to the layer CRS.
+	// This geometri is reprojected from the original
+	// CRS to the layer CRS.
 	private IGeometry reprojectedGeometry = null;
 	protected ArrayList geometries = null;
 	protected Rectangle2D bounds = null;
-			
+
 	public GPEGeometry(String id, IGeometry geometry, String srs) {
 		super();
 		this.geometry = geometry;
@@ -86,7 +85,7 @@ public class GPEGeometry {
 	public String getSrs() {
 		return srs;
 	}
-	
+
 	/**
 	 * @return the id
 	 */
@@ -102,7 +101,8 @@ public class GPEGeometry {
 	}
 
 	/**
-	 * @param reprojectedGeometry the reprojectedGeometry to set
+	 * @param reprojectedGeometry
+	 *            the reprojectedGeometry to set
 	 */
 	public void setReprojectedGeometry(IGeometry reprojectedGeometry) {
 		this.reprojectedGeometry = reprojectedGeometry;
@@ -114,45 +114,45 @@ public class GPEGeometry {
 	public Rectangle2D getShapeBounds() {
 		bounds = getIGeometry().getBounds2D();
 		return bounds;
-	}	
-	
+	}
+
 	/**
 	 * Gets one geometry
+	 * 
 	 * @param i
-	 * Geometry position
-	 * @return
-	 * A Geometry
+	 *            Geometry position
+	 * @return A Geometry
 	 */
-	public GPEGeometry getGeometryAt(int i){
+	public GPEGeometry getGeometryAt(int i) {
 		return (GPEGeometry) geometries.get(i);
 	}
-	
+
 	/**
 	 * @return the number of geometries
 	 */
-	public int getGeometriesSize(){
+	public int getGeometriesSize() {
 		return geometries.size();
 	}
-	
+
 	/**
 	 * Adds a new geometry
+	 * 
 	 * @param geometry
-	 * The geometry to add
+	 *            The geometry to add
 	 */
-	public void addGeometry(GPEGeometry geometry){
-		if (bounds == null){
+	public void addGeometry(GPEGeometry geometry) {
+		if (bounds == null) {
 			bounds = geometry.getShapeBounds();
-		}else{
+		} else {
 			bounds.add(geometry.getShapeBounds());
 		}
 		geometries.add(geometry);
 	}
-	
-	
-	public boolean isMultiGeometry(){
-		if (geometries.size()==0)
+
+	public boolean isMultiGeometry() {
+		if (geometries.size() == 0)
 			return false;
 		return true;
 	}
-	
+
 }

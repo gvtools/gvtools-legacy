@@ -45,11 +45,15 @@ import org.gvsig.remoteClient.sld.SLDFill;
 import org.gvsig.remoteClient.sld.SLDStroke;
 
 import com.iver.cit.gvsig.fmap.core.FShape;
+
 /**
- * Implements the PolygonSymbolizer element of an SLD implementation specification.<p>
+ * Implements the PolygonSymbolizer element of an SLD implementation
+ * specification.
+ * <p>
  * 
  * PolygonSymbolizer is used draw a polygon (or other area-type geometries),
- * including filling its interior and stroking its border (outline).<p>
+ * including filling its interior and stroking its border (outline).
+ * <p>
  * 
  * @see SLDStroke
  * @see SLDFill
@@ -58,25 +62,30 @@ import com.iver.cit.gvsig.fmap.core.FShape;
  * 
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
-public abstract class SLDPolygonSymbolizer extends AbstractSLDSymbolizer implements ISLDSymbolizer{
+public abstract class SLDPolygonSymbolizer extends AbstractSLDSymbolizer
+		implements ISLDSymbolizer {
 
 	protected SLDFill fill;
 	protected SLDStroke stroke;
-	
+
 	public SLDFill getFill() {
 		return fill;
 	}
+
 	public void setFill(SLDFill fill) {
 		this.fill = fill;
 	}
+
 	public SLDStroke getStroke() {
 		return stroke;
 	}
+
 	public void setStroke(SLDStroke stroke) {
 		this.stroke = stroke;
 	}
-	
-	public int getShapeType() {return FShape.POLYGON;}
 
-	
+	public int getShapeType() {
+		return FShape.POLYGON;
+	}
+
 }

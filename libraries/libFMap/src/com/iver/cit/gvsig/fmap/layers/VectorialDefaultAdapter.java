@@ -52,59 +52,69 @@ import com.iver.cit.gvsig.fmap.core.IGeometry;
 
 /**
  * @author fjp
- *
+ * 
  */
 public class VectorialDefaultAdapter extends VectorialAdapter {
 	private SelectableDataSource ds;
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.layers.VectorialAdapter#getRecordset()
-     */
-    public SelectableDataSource getRecordset() throws ReadDriverException {
-        if (getDriver() instanceof ObjectDriver)
-        {
-        	if (ds == null) {
-        		String name = LayerFactory.getDataSourceFactory().addDataSource((ObjectDriver)getDriver());
-        		try {
-        			ds = new SelectableDataSource(LayerFactory.getDataSourceFactory().createRandomDataSource(name, DataSourceFactory.AUTOMATIC_OPENING));
-        		} catch (NoSuchTableException e) {
-        			throw new RuntimeException(e);
-        		} catch (DriverLoadException e) {
-					throw new ReadDriverException(name,e);
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.layers.VectorialAdapter#getRecordset()
+	 */
+	public SelectableDataSource getRecordset() throws ReadDriverException {
+		if (getDriver() instanceof ObjectDriver) {
+			if (ds == null) {
+				String name = LayerFactory.getDataSourceFactory()
+						.addDataSource((ObjectDriver) getDriver());
+				try {
+					ds = new SelectableDataSource(LayerFactory
+							.getDataSourceFactory().createRandomDataSource(
+									name, DataSourceFactory.AUTOMATIC_OPENING));
+				} catch (NoSuchTableException e) {
+					throw new RuntimeException(e);
+				} catch (DriverLoadException e) {
+					throw new ReadDriverException(name, e);
 				}
-        	}
-        	return ds;
-        }
-        return null;
+			}
+			return ds;
+		}
+		return null;
 
-    }
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.layers.ReadableVectorial#start()
-     */
-    public void start() throws ReadDriverException {
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.layers.ReadableVectorial#start()
+	 */
+	public void start() throws ReadDriverException {
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.layers.ReadableVectorial#stop()
-     */
-    public void stop() throws ReadDriverException {
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.layers.ReadableVectorial#stop()
+	 */
+	public void stop() throws ReadDriverException {
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.layers.ReadableVectorial#getShape(int)
-     */
-    public IGeometry getShape(int index) throws ReadDriverException {
-        return getDriver().getShape(index);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.layers.ReadableVectorial#getShape(int)
+	 */
+	public IGeometry getShape(int index) throws ReadDriverException {
+		return getDriver().getShape(index);
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.layers.ReadableVectorial#getShapeType()
-     */
-    public int getShapeType() throws ReadDriverException {
-        return getDriver().getShapeType();
-    }
-
-	
-
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.layers.ReadableVectorial#getShapeType()
+	 */
+	public int getShapeType() throws ReadDriverException {
+		return getDriver().getShapeType();
+	}
 
 }

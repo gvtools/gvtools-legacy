@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.gazetteer.wfs.drivers;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -60,7 +60,6 @@ import org.gvsig.remoteClient.wfs.WFSClient;
 import org.gvsig.remoteClient.wfs.WFSFeature;
 import org.gvsig.remoteClient.wfs.WFSStatus;
 import org.gvsig.remoteClient.wfs.filters.FilterEncoding;
-import org.gvsig.remoteClient.wms.ICancellable;
 
 import com.iver.utiles.swing.jcomboServer.ServerData;
 
@@ -76,6 +75,7 @@ import es.gva.cit.gazetteer.utils.GazetteerFormatter;
 
 /**
  * Driver for the WFS protocol
+ * 
  * @author Jorge Piera Llodra (piera_jor@gva.es)
  */
 public class WFSServiceDriver extends AbstractGazetteerServiceDriver {
@@ -84,7 +84,10 @@ public class WFSServiceDriver extends AbstractGazetteerServiceDriver {
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.drivers.IDiscoveryServiceDriver#getCapabilities(java.net.URI)
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.drivers.IDiscoveryServiceDriver#getCapabilities
+	 * (java.net.URI)
 	 */
 	public DiscoveryServiceCapabilities getCapabilities(URI uri) {
 		GazetteerCapabilities capabilities = new GazetteerCapabilities();
@@ -100,22 +103,24 @@ public class WFSServiceDriver extends AbstractGazetteerServiceDriver {
 			client = new WFSClient(sURL);
 			client.getCapabilities(status, true, null);
 		} catch (Exception e) {
-			capabilities.setServerMessage(Messages.getText("errorNotParsedReply"));
+			capabilities.setServerMessage(Messages
+					.getText("errorNotParsedReply"));
 			capabilities.setAvailable(false);
 			return capabilities;
 		}
 		setServerAnswerReady(client.getServiceInformation().name);
 		Hashtable features = client.getFeatures();
 		setFeatureTypes(convertFeatureNames(features));
-		capabilities.setServerMessage(client.getServiceInformation().name +
-				client.getServiceInformation().abstr);
+		capabilities.setServerMessage(client.getServiceInformation().name
+				+ client.getServiceInformation().abstr);
 		capabilities.setFeatureTypes(getFeatureTypes());
 		return capabilities;
 	}
 
 	/**
-	 * Convert the features from the remote services format to
-	 * the gazetteer format
+	 * Convert the features from the remote services format to the gazetteer
+	 * format
+	 * 
 	 * @param features
 	 * @return
 	 */
@@ -123,9 +128,9 @@ public class WFSServiceDriver extends AbstractGazetteerServiceDriver {
 		Iterator it = features.keySet().iterator();
 		FeatureType[] featureTypes = new FeatureType[features.size()];
 		int i = 0;
-		while (it.hasNext()){
-			String featureName = (String)it.next();
-			WFSFeature feature = (WFSFeature)features.get(featureName);
+		while (it.hasNext()) {
+			String featureName = (String) it.next();
+			WFSFeature feature = (WFSFeature) features.get(featureName);
 			featureTypes[i] = new FeatureType(featureName);
 			featureTypes[i].setTitle(feature.getTitle());
 			i++;
@@ -135,65 +140,76 @@ public class WFSServiceDriver extends AbstractGazetteerServiceDriver {
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#describeFeatureType(java.net.URI, java.lang.String)
+	 * 
+	 * @see
+	 * es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#describeFeatureType
+	 * (java.net.URI, java.lang.String)
 	 */
 	public FeatureTypeAttribute[] describeFeatureType(URI uri, String feature) {
 		status.setFeatureName(feature);
-		try{
+		try {
 			client.describeFeatureType(status, false, null);
-		}catch (Exception e){
-			//Impossible to retrieve the attributes
+		} catch (Exception e) {
+			// Impossible to retrieve the attributes
 			return new FeatureTypeAttribute[0];
 		}
-		WFSFeature wfsFeature = (WFSFeature)client.getFeatures().get(feature);
-		if ((wfsFeature.getSrs() != null) && (wfsFeature.getSrs().size() > 0)){
-			this.setProjection((String)wfsFeature.getSrs().get(0));
+		WFSFeature wfsFeature = (WFSFeature) client.getFeatures().get(feature);
+		if ((wfsFeature.getSrs() != null) && (wfsFeature.getSrs().size() > 0)) {
+			this.setProjection((String) wfsFeature.getSrs().get(0));
 		}
 		return covertFeatuteAttributes(wfsFeature);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.drivers.AsbtractGazetteerServiceDriver#isDescribeFeatureTypeNeeded()
+	 * 
+	 * @see es.gva.cit.gazetteer.drivers.AsbtractGazetteerServiceDriver#
+	 * isDescribeFeatureTypeNeeded()
 	 */
-	public boolean isDescribeFeatureTypeNeeded(){
+	public boolean isDescribeFeatureTypeNeeded() {
 		return true;
 	}
 
 	/**
 	 * Convert the feature attributes
+	 * 
 	 * @param feature
-	 * a Remote clients feature
-	 * @return
-	 * A list of attributes
+	 *            a Remote clients feature
+	 * @return A list of attributes
 	 */
 	private FeatureTypeAttribute[] covertFeatuteAttributes(WFSFeature feature) {
-		XMLElement element = (XMLElement)feature.getFields().get(0);
-		XMLComplexType type = (XMLComplexType)element.getEntityType();
+		XMLElement element = (XMLElement) feature.getFields().get(0);
+		XMLComplexType type = (XMLComplexType) element.getEntityType();
 		Vector fields = type.getAttributes();
-		FeatureTypeAttribute[] attributes = new FeatureTypeAttribute[fields.size()];
-		for (int i=0 ; i<fields.size(); i++){
-			XMLElement child = (XMLElement)fields.get(i);
-			attributes[i] = new FeatureTypeAttribute(child.getName(),0,false,child.getEntityType().getName());
+		FeatureTypeAttribute[] attributes = new FeatureTypeAttribute[fields
+				.size()];
+		for (int i = 0; i < fields.size(); i++) {
+			XMLElement child = (XMLElement) fields.get(i);
+			attributes[i] = new FeatureTypeAttribute(child.getName(), 0, false,
+					child.getEntityType().getName());
 		}
 		return attributes;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getFeature(java.net.URI, es.gva.cit.gazetteer.querys.Query)
+	 * 
+	 * @see
+	 * es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getFeature(java.
+	 * net.URI, es.gva.cit.gazetteer.querys.Query)
 	 */
-	public Feature[] getFeature(URI uri, GazetteerQuery query) throws GMLException {
-		//Set the filter
+	public Feature[] getFeature(URI uri, GazetteerQuery query)
+			throws GMLException {
+		// Set the filter
 		String sQuery = getFilterSQL(query);
-		if (sQuery != null){
+		if (sQuery != null) {
 			status.setFilterQuery(sQuery);
 		}
 		status.setFields(new String[0]);
-		try{
+		try {
 			File file = client.getFeature(status, false, null);
-			return parseOutputFile(file,query.getFieldAttribute());
-		}catch(Exception e){
+			return parseOutputFile(file, query.getFieldAttribute());
+		} catch (Exception e) {
 			e.printStackTrace();
 			return new Feature[0];
 		}
@@ -201,48 +217,53 @@ public class WFSServiceDriver extends AbstractGazetteerServiceDriver {
 
 	/**
 	 * Parses the GML file
+	 * 
 	 * @param file
 	 * @return
-	 * @throws GPEParserCreationException 
-	 * @throws URISyntaxException 
+	 * @throws GPEParserCreationException
+	 * @throws URISyntaxException
 	 */
-	protected Feature[] parseOutputFile(File file, String fieldAttribute) throws URISyntaxException, ParserCreationException {
+	protected Feature[] parseOutputFile(File file, String fieldAttribute)
+			throws URISyntaxException, ParserCreationException {
 		URI uri = file.toURI();
 		GPEParser parser = new GPEGmlSFP0Parser();
 		WFSGPEErrorHandler errorHandler = new WFSGPEErrorHandler();
-		WFSGPEContentHandler contentHandler = new WFSGPEContentHandler(fieldAttribute);
+		WFSGPEContentHandler contentHandler = new WFSGPEContentHandler(
+				fieldAttribute);
 		parser.parse(contentHandler, errorHandler, uri);
 		ArrayList features = contentHandler.getFeatures();
 		Feature[] auxFeatures = new Feature[features.size()];
-		for (int i=0 ; i<features.size() ; i++){
-			auxFeatures[i] = (Feature)features.get(i);
+		for (int i = 0; i < features.size(); i++) {
+			auxFeatures[i] = (Feature) features.get(i);
 		}
 		return auxFeatures;
 	}
 
 	/**
 	 * Creates a SQL filter to do the search
-	 * @return
-	 * A standard SQL query
+	 * 
+	 * @return A standard SQL query
 	 */
-	protected String getFilterSQL(GazetteerQuery query){
+	protected String getFilterSQL(GazetteerQuery query) {
 		StringBuffer buffer = new StringBuffer();
-		if ((query.getName() == null) || (query.getName().equals(""))){
+		if ((query.getName() == null) || (query.getName().equals(""))) {
 			return null;
 		}
-		if (query.getNameFilter().equals(CatalogConstants.EXACT_WORDS)){
-			buffer.append("(" + query.getFieldAttribute() + " = " + query.getName() + ")");
-		}else{
+		if (query.getNameFilter().equals(CatalogConstants.EXACT_WORDS)) {
+			buffer.append("(" + query.getFieldAttribute() + " = "
+					+ query.getName() + ")");
+		} else {
 			String conector = null;
-			if (query.getNameFilter().equals(CatalogConstants.ALL_WORDS)){
+			if (query.getNameFilter().equals(CatalogConstants.ALL_WORDS)) {
 				conector = "AND";
-			}else if (query.getNameFilter().equals(CatalogConstants.ANY_WORD)){
+			} else if (query.getNameFilter().equals(CatalogConstants.ANY_WORD)) {
 				conector = "OR";
 			}
 			String[] words = query.getName().split(" ");
-			for (int i=0 ; i<words.length ; i++){
-				buffer.append("(" + query.getFieldAttribute() + " = " + words[i] + ")");
-				if (i  < words.length - 1){
+			for (int i = 0; i < words.length; i++) {
+				buffer.append("(" + query.getFieldAttribute() + " = "
+						+ words[i] + ")");
+				if (i < words.length - 1) {
 					buffer.append(" " + conector + " ");
 				}
 			}
@@ -254,7 +275,10 @@ public class WFSServiceDriver extends AbstractGazetteerServiceDriver {
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#isProtocolSupported(java.net.URI)
+	 * 
+	 * @see
+	 * es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#isProtocolSupported
+	 * (java.net.URI)
 	 */
 	public boolean isProtocolSupported(URI uri) {
 		return true;
@@ -262,7 +286,9 @@ public class WFSServiceDriver extends AbstractGazetteerServiceDriver {
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getDefaultPort()
+	 * 
+	 * @see
+	 * es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getDefaultPort()
 	 */
 	public int getDefaultPort() {
 		return 80;
@@ -270,7 +296,9 @@ public class WFSServiceDriver extends AbstractGazetteerServiceDriver {
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getDefaultSchema()
+	 * 
+	 * @see
+	 * es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getDefaultSchema()
 	 */
 	public String getDefaultSchema() {
 		return "http";
@@ -278,7 +306,9 @@ public class WFSServiceDriver extends AbstractGazetteerServiceDriver {
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getServiceName()
+	 * 
+	 * @see
+	 * es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getServiceName()
 	 */
 	public String getServiceName() {
 		return ServerData.SERVER_SUBTYPE_GAZETTEER_WFS;

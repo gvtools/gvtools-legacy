@@ -34,15 +34,16 @@ import org.gvsig.raster.util.RasterToolsUtil;
  * Ventana que contiene el panel de añadir librería de tablas de color.
  * 
  * 06/08/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class AddLibraryPanel extends BasePanel {
-	private static final long serialVersionUID  = 1L;
-	private StretchSelectorPanel  stretchListPanel  = null;
-	private JPanel            libraryName       = null;
-	private JTextField        jTextName         = null;
-	private JLabel            jLabelName        = null;
-	
+	private static final long serialVersionUID = 1L;
+	private StretchSelectorPanel stretchListPanel = null;
+	private JPanel libraryName = null;
+	private JTextField jTextName = null;
+	private JLabel jLabelName = null;
+
 	/**
 	 * Constructor. Llama al inicializador de componentes gráficos
 	 */
@@ -50,43 +51,46 @@ public class AddLibraryPanel extends BasePanel {
 		init();
 		translate();
 	}
-	
+
 	/**
 	 * Inicializa los componentes gráficos
 	 */
 	protected void init() {
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-	    setLayout(new GridBagLayout());
-	    gridBagConstraints.weightx = 1;
-	    gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-	    add(getLibraryNamePanel(), gridBagConstraints);
-	    gridBagConstraints.gridy = 1;
-	    add(getStretchListPanel(), gridBagConstraints);
+		setLayout(new GridBagLayout());
+		gridBagConstraints.weightx = 1;
+		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+		add(getLibraryNamePanel(), gridBagConstraints);
+		gridBagConstraints.gridy = 1;
+		add(getStretchListPanel(), gridBagConstraints);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#translate()
 	 */
 	protected void translate() {
 	}
-	
+
 	/**
 	 * Obtiene el componente para introducir tramos
+	 * 
 	 * @return StretchListPanel
 	 */
 	public StretchSelectorPanel getStretchListPanel() {
-		if(stretchListPanel == null)
+		if (stretchListPanel == null)
 			stretchListPanel = new StretchSelectorPanel();
 		return stretchListPanel;
 	}
-	
+
 	/**
 	 * Obtiene el panel con el nombre de la librería.
+	 * 
 	 * @return JPanel
 	 */
 	private JPanel getLibraryNamePanel() {
-		if(libraryName == null) {
+		if (libraryName == null) {
 			libraryName = new JPanel();
 			libraryName.setLayout(new GridBagLayout());
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
@@ -100,24 +104,28 @@ public class AddLibraryPanel extends BasePanel {
 		}
 		return libraryName;
 	}
-	
+
 	/**
 	 * Obtiene la etiqueta con el nombre de librería
+	 * 
 	 * @return JLabel
 	 */
 	private JLabel getLabelName() {
-		if(jLabelName == null) 
-			jLabelName = new JLabel(RasterToolsUtil.getText(this, "nombre") + ":");
+		if (jLabelName == null)
+			jLabelName = new JLabel(RasterToolsUtil.getText(this, "nombre")
+					+ ":");
 		return jLabelName;
 	}
-	
+
 	/**
 	 * Obtiene el nombre de la librería
+	 * 
 	 * @return JTextField
 	 */
 	public JTextField getLibraryName() {
-		if(jTextName == null)
-			jTextName = new JTextField(RasterToolsUtil.getText(this, "nueva_libreria"));
+		if (jTextName == null)
+			jTextName = new JTextField(RasterToolsUtil.getText(this,
+					"nueva_libreria"));
 		return jTextName;
 	}
 }

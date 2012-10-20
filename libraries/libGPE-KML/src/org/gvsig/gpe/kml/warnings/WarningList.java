@@ -75,6 +75,4 @@ public class WarningList extends ListBaseException {
 		return null;
 	}
 
-	
-
 }

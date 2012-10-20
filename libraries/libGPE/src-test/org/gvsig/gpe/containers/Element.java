@@ -2,7 +2,6 @@ package org.gvsig.gpe.containers;
 
 import java.util.ArrayList;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -72,50 +71,62 @@ public class Element {
 	private Object type = null;
 	private Element parentElement = null;
 	private ArrayList elements = new ArrayList();
+
 	/**
 	 * @return the id
 	 */
 	public String getId() {
 		return id;
 	}
+
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	public void setId(String id) {
 		this.id = id;
 	}
+
 	/**
 	 * @return the name
 	 */
 	public String getName() {
 		return name;
 	}
+
 	/**
-	 * @param name the name to set
+	 * @param name
+	 *            the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	/**
 	 * @return the type
 	 */
 	public Object getType() {
 		return type;
 	}
+
 	/**
-	 * @param type the type to set
+	 * @param type
+	 *            the type to set
 	 */
 	public void setType(Object type) {
 		this.type = type;
 	}
+
 	/**
 	 * @return the value
 	 */
 	public Object getValue() {
 		return value;
 	}
+
 	/**
-	 * @param value the value to set
+	 * @param value
+	 *            the value to set
 	 */
 	public void setValue(Object value) {
 		this.value = value;
@@ -127,52 +138,60 @@ public class Element {
 	public Element getParentElement() {
 		return parentElement;
 	}
+
 	/**
-	 * @param parentElement the parentElement to set
+	 * @param parentElement
+	 *            the parentElement to set
 	 */
 	public void setParentElement(Object parentElement) {
-		if (parentElement != null){
-			this.parentElement = (Element)parentElement;
-			((Element)parentElement).addChildEElement(this);
+		if (parentElement != null) {
+			this.parentElement = (Element) parentElement;
+			((Element) parentElement).addChildEElement(this);
 		}
 	}
+
 	/**
 	 * @return the elements
 	 */
 	public ArrayList getElements() {
 		return elements;
 	}
-	
+
 	/**
 	 * @return the element at position i
 	 * @param i
-	 * Element position
+	 *            Element position
 	 */
 	public Element getElementAt(int i) {
-		return (Element)elements.get(i);
+		return (Element) elements.get(i);
 	}
-		
+
 	/**
-	 * @param parentElement the parentElement to set
+	 * @param parentElement
+	 *            the parentElement to set
 	 */
 	public void setParentElement(Element parentElement) {
 		this.parentElement = parentElement;
 	}
-	
+
 	/**
-	 * @param adds a child element
+	 * @param adds
+	 *            a child element
 	 */
 	public void addChildEElement(Element element) {
 		getElements().add(element);
 	}
+
 	/**
 	 * @return the namespace
 	 */
 	public String getNamespace() {
 		return namespace;
 	}
+
 	/**
-	 * @param namespace the namespace to set
+	 * @param namespace
+	 *            the namespace to set
 	 */
 	public void setNamespace(String namespace) {
 		this.namespace = namespace;

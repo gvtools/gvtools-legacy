@@ -42,15 +42,16 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.impl.polytolines;
 
 import com.iver.cit.gvsig.geoprocess.core.gui.IGeoprocessUserEntries;
 
-public interface IPolyToLinesGeoprocessUserEntries extends IGeoprocessUserEntries {
+public interface IPolyToLinesGeoprocessUserEntries extends
+		IGeoprocessUserEntries {
 	public boolean onlyFirstLayerSelected();
 
 }

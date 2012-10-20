@@ -45,26 +45,25 @@ package org.gvsig.remoteClient.arcims.styling.renderers;
 
 import org.gvsig.remoteClient.arcims.utils.ServiceInfoTags;
 
-
 /**
  * @author jsanz
- *
+ * 
  */
 public class OtherValueMap extends TypeValueMap {
-    public static final String TAG = ServiceInfoTags.tOTHER;
+	public static final String TAG = ServiceInfoTags.tOTHER;
 
-    /**
-     * @param label
-     */
-    public OtherValueMap() {
-        super("");
-    }
+	/**
+	 * @param label
+	 */
+	public OtherValueMap() {
+		super("");
+	}
 
-    /**
-     * Generates an XML representation of the ValueMap type
-     */
-    public String toString() {
-        return "<" + OtherValueMap.TAG + " label=\"" + label + "\">\r\n" +
-        symbol.toString() + "</" + OtherValueMap.TAG + ">\r\n";
-    }
+	/**
+	 * Generates an XML representation of the ValueMap type
+	 */
+	public String toString() {
+		return "<" + OtherValueMap.TAG + " label=\"" + label + "\">\r\n"
+				+ symbol.toString() + "</" + OtherValueMap.TAG + ">\r\n";
+	}
 }

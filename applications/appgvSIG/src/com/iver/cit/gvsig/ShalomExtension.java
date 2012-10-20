@@ -35,26 +35,20 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
 import com.iver.andami.preferences.IPreference;
 import com.iver.andami.preferences.IPreferenceExtension;
-import com.iver.cit.gvsig.About;
 import com.iver.cit.gvsig.fmap.drivers.dbf.DbfEncodings;
 import com.iver.cit.gvsig.gui.preferencespage.DbfDefaultEncodingPage;
-import com.iver.cit.gvsig.gui.preferencespage.ViewPage;
-import com.iver.utiles.extensionPoints.ExtensionPoints;
-import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
-
-
 
 /**
  * @author Francisco José Peñarrubia
- *
- *  Set encoding to dbf files.
- *  To install it, you need to copy (overwrite) dbf.jar, fmap.jar, iver-utiles.jar and of course,
- *  install this plugin to gvSIG/extensiones.
- *
+ * 
+ *         Set encoding to dbf files. To install it, you need to copy
+ *         (overwrite) dbf.jar, fmap.jar, iver-utiles.jar and of course, install
+ *         this plugin to gvSIG/extensiones.
+ * 
  */
 public class ShalomExtension extends Extension implements IPreferenceExtension {
 	static File lastDir = null;
-	private static  DbfDefaultEncodingPage dbfDefaultEncodingPage = new DbfDefaultEncodingPage();
+	private static DbfDefaultEncodingPage dbfDefaultEncodingPage = new DbfDefaultEncodingPage();
 	private DbfEncodings dbfEncodings = DbfEncodings.getInstance();
 
 	private class MyOption extends Object {
@@ -73,24 +67,23 @@ public class ShalomExtension extends Extension implements IPreferenceExtension {
 
 	}
 
-
-
 	/**
 	 * @see com.iver.andami.plugins.Extension#inicializar()
 	 */
 	public void initialize() {
-        About classAbout = (About) PluginServices.getExtension(com.iver.cit.gvsig.About.class);
-        java.net.URL aboutURL2 = ShalomExtension.class.getResource(
-        "/about.htm");
+		About classAbout = (About) PluginServices
+				.getExtension(com.iver.cit.gvsig.About.class);
+		java.net.URL aboutURL2 = ShalomExtension.class
+				.getResource("/about.htm");
 
-        classAbout.getAboutPanel().addAboutUrl("Shalom", aboutURL2);
+		classAbout.getAboutPanel().addAboutUrl("Shalom", aboutURL2);
 
-
-        // TODO: To use in future releases.
-//        ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
-//
-//        extensionPoints.add("AplicationPreferences","EncodingsPage", new DbfDefaultEncodingPage());
-
+		// TODO: To use in future releases.
+		// ExtensionPoints extensionPoints =
+		// ExtensionPointsSingleton.getInstance();
+		//
+		// extensionPoints.add("AplicationPreferences","EncodingsPage", new
+		// DbfDefaultEncodingPage());
 
 	}
 
@@ -113,7 +106,7 @@ public class ShalomExtension extends Extension implements IPreferenceExtension {
 
 			@Override
 			public String getDescription() {
-				return ( PluginServices.getText(this, "Ficheros_dbf") );
+				return (PluginServices.getText(this, "Ficheros_dbf"));
 			}
 
 		});
@@ -121,15 +114,14 @@ public class ShalomExtension extends Extension implements IPreferenceExtension {
 			fc.setCurrentDirectory(lastDir);
 		fc.setMultiSelectionEnabled(true);
 
-		int res = fc.showOpenDialog((Component)PluginServices.getMainFrame());
-		if (res == JFileChooser.APPROVE_OPTION)
-		{
+		int res = fc.showOpenDialog((Component) PluginServices.getMainFrame());
+		if (res == JFileChooser.APPROVE_OPTION) {
 			lastDir = fc.getCurrentDirectory();
 			int dbfEncoding = getSelectedDbfEncoding();
 			if (dbfEncoding == -1)
 				return;
 			File[] files = fc.getSelectedFiles();
-			for (int i=0; i < files.length; i++) {
+			for (int i = 0; i < files.length; i++) {
 				try {
 					setSelectedDbfEncoding(files[i], dbfEncoding);
 				} catch (IOException e) {
@@ -142,32 +134,31 @@ public class ShalomExtension extends Extension implements IPreferenceExtension {
 
 	private int getSelectedDbfEncoding() {
 
-		MyOption[] myOptions = new MyOption[dbfEncodings.getSupportedDbfLanguageIDs().length];
-		for (int i=0; i < dbfEncodings.getSupportedDbfLanguageIDs().length; i++)
-		{
+		MyOption[] myOptions = new MyOption[dbfEncodings
+				.getSupportedDbfLanguageIDs().length];
+		for (int i = 0; i < dbfEncodings.getSupportedDbfLanguageIDs().length; i++) {
 			int aux = dbfEncodings.getSupportedDbfLanguageIDs()[i];
 			myOptions[i] = new MyOption(aux);
 		}
-		MyOption selectedOption = (MyOption) JOptionPane.showInputDialog((Component) PluginServices.getMainFrame(),
+		MyOption selectedOption = (MyOption) JOptionPane.showInputDialog(
+				(Component) PluginServices.getMainFrame(),
 				PluginServices.getText(this, "select_encoding"),
 				PluginServices.getText(this, "select_encoding"),
-				JOptionPane.OK_CANCEL_OPTION,
-				null,
-				myOptions, 2);
+				JOptionPane.OK_CANCEL_OPTION, null, myOptions, 2);
 		if (selectedOption == null)
 			return -1;
 
 		return selectedOption.dbfLanguageId;
 	}
 
-	private void setSelectedDbfEncoding(File file, int dbfEncoding) throws IOException {
+	private void setSelectedDbfEncoding(File file, int dbfEncoding)
+			throws IOException {
 		RandomAccessFile fo = new RandomAccessFile(file, "rw");
 		fo.seek(29);
 		fo.writeByte(dbfEncoding);
 		fo.close();
 
 	}
-
 
 	/**
 	 * @see com.iver.andami.plugins.Extension#isEnabled()
@@ -184,7 +175,7 @@ public class ShalomExtension extends Extension implements IPreferenceExtension {
 	}
 
 	public IPreference[] getPreferencesPages() {
-		IPreference[] preferences=new IPreference[1];
+		IPreference[] preferences = new IPreference[1];
 		preferences[0] = dbfDefaultEncodingPage;
 		return preferences;
 	}

@@ -1,8 +1,6 @@
 package org.gvsig.remoteClient.gml.schemas;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Hashtable;
@@ -102,39 +100,40 @@ import org.xmlpull.v1.XmlPullParserException;
 public class XMLSchemaParser extends EncodingXMLParser {
 	private String targetNameSpace = null;
 	private String schema = "";
-	private String encoding = "UTF-8";	
+	private String encoding = "UTF-8";
 	private String nameSpace = "";
 	private Hashtable attributes = null;
 	private String version = null;
-	
-	
-	public XMLSchemaParser(){
+
+	public XMLSchemaParser() {
 		super();
-		//initializes a new hash table for many namespace to store the defined types
+		// initializes a new hash table for many namespace to store the defined
+		// types
 		attributes = new Hashtable();
 	}
-	
-	public XMLSchemaParser(String schema){
+
+	public XMLSchemaParser(String schema) {
 		super();
-		//schema instace is named with the string in "schema"
+		// schema instace is named with the string in "schema"
 		this.schema = schema;
 		attributes = new Hashtable();
 	}
-	
+
 	/**
-	 * It gets the schema from a tag. The schema is separated
-	 * of the tag name by ":".
+	 * It gets the schema from a tag. The schema is separated of the tag name by
+	 * ":".
+	 * 
 	 * @param tag
 	 */
-	public void setSchemaFromMainTag(String tag){
-		//set the name string of the namespace.
+	public void setSchemaFromMainTag(String tag) {
+		// set the name string of the namespace.
 		int pos = tag.indexOf(":");
-		if (pos > 0){
-			this.schema = tag.substring(0,pos);
-		}else{
+		if (pos > 0) {
+			this.schema = tag.substring(0, pos);
+		} else {
 			this.schema = "";
 		}
-	}	
+	}
 
 	/**
 	 * @return Returns the schema.
@@ -144,295 +143,305 @@ public class XMLSchemaParser extends EncodingXMLParser {
 	}
 
 	/**
-	 * @param schema The schema to set.
+	 * @param schema
+	 *            The schema to set.
 	 */
 	public void setSchema(String schema) {
 		this.schema = schema;
-	}	
-	
+	}
+
 	/**
 	 * Returns a SCHEMA:TAG
+	 * 
 	 * @param tag
 	 * @return SCHEMA:TAG
 	 */
-	private String getTag(String tag){
-		//get the tag without the namespace
-		if (tag == null){
+	private String getTag(String tag) {
+		// get the tag without the namespace
+		if (tag == null) {
 			return null;
 		}
-		if ((schema == null) || (schema.equals(""))){
+		if ((schema == null) || (schema.equals(""))) {
 			return tag;
 		}
 		return schema + ":" + tag;
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
-	 * @see org.xmlpull.v1.XmlPullParser#require(int, java.lang.String, java.lang.String)
+	 * (non-Javadoc)
+	 * 
+	 * @see org.xmlpull.v1.XmlPullParser#require(int, java.lang.String,
+	 * java.lang.String)
 	 */
 	public void require(int type, String namespace, String name)
-		throws XmlPullParserException, IOException{
-		super.require(type,namespace,getTag(name));
+			throws XmlPullParserException, IOException {
+		super.require(type, namespace, getTag(name));
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see org.xmlpull.v1.XmlPullParser#getName()
 	 */
-	public String getName(){
-		try{
-		String name = super.getName();
-		if ((schema != null) || (!(schema.equals("")))){
-			return name.substring(name.indexOf(":") + 1,name.length());
-		}
-		return name;
-		}catch (NullPointerException e){
+	public String getName() {
+		try {
+			String name = super.getName();
+			if ((schema != null) || (!(schema.equals("")))) {
+				return name.substring(name.indexOf(":") + 1, name.length());
+			}
+			return name;
+		} catch (NullPointerException e) {
 			return "";
 		}
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see org.xmlpull.v1.XmlPullParser#getName()
 	 */
-	public String getNameSpace(){
-		try{
-		String name = super.getName();
-		if ((name!=null)&&(name.split(":").length > 1)){
-			return name.split(":")[0];
-		}
-		return "";
-		}catch (NullPointerException e){
+	public String getNameSpace() {
+		try {
+			String name = super.getName();
+			if ((name != null) && (name.split(":").length > 1)) {
+				return name.split(":")[0];
+			}
+			return "";
+		} catch (NullPointerException e) {
 			return "";
 		}
 	}
-	
+
 	/********************************************************************************
-	 *  FUNCTION PARSE(FILE,NAMESPACE) PARSING THE XML SCHEMA ".xsd"			   	*
-	 * 																			   	*
-	 *  	-gml version													 		*
-	 *  	-elementFormDefault {qualified,non-qualified} (not implemented yet)		*
-	 *  	-namespaces "xmlns" (nor implemented,only in gml file)		 			*
-	 *  	-targetNamespace (the name of this schema)					 			*
-	 *		-imports (not implemented)									   			*  
-	 *		-features -> "elements"="types"										  	*
-	 *																				*	
-	 * @param f (file ".xsd" to parse)												*
-	 * @param nameSpace (Schemas name)												*
-	 * @throws IOException 															*
-	 * @throws XmlPullParserException 												*
-	 *																				*
+	 * FUNCTION PARSE(FILE,NAMESPACE) PARSING THE XML SCHEMA ".xsd" * * -gml
+	 * version * -elementFormDefault {qualified,non-qualified} (not implemented
+	 * yet) * -namespaces "xmlns" (nor implemented,only in gml file) *
+	 * -targetNamespace (the name of this schema) * -imports (not implemented) *
+	 * -features -> "elements"="types" * *
+	 * 
+	 * @param f
+	 *            (file ".xsd" to parse) *
+	 * @param nameSpace
+	 *            (Schemas name) *
+	 * @throws IOException
+	 *             *
+	 * @throws XmlPullParserException
+	 *             * *
 	 ********************************************************************************/
-	public void parse(File f,String nameSpace) throws XmlPullParserException, IOException{
+	public void parse(File f, String nameSpace) throws XmlPullParserException,
+			IOException {
 		this.nameSpace = nameSpace;
-		FileReader reader = null;       
+		FileReader reader = null;
 		int tag;
-		
+
 		setInput(f);
 		nextTag();
-			
-		//Parsing attributes from the head tag...
-		if ( getEventType() != KXmlParser.END_DOCUMENT ) 
-		{     
+
+		// Parsing attributes from the head tag...
+		if (getEventType() != KXmlParser.END_DOCUMENT) {
 			/************************
-			 * Etiqueta <schema>	*
+			 * Etiqueta <schema> *
 			 ************************/
 			setSchemaFromMainTag(getName());
-			//Searching the init tag "schema"
-			require(KXmlParser.START_TAG, null, CapabilitiesTags.WFS_SCHEMAROOT); 
-			for (int i=0 ; i<getAttributeCount() ; i++){
-				//getting attributes and values
+			// Searching the init tag "schema"
+			require(KXmlParser.START_TAG, null, CapabilitiesTags.WFS_SCHEMAROOT);
+			for (int i = 0; i < getAttributeCount(); i++) {
+				// getting attributes and values
 				String attName = getAttributeName(i);
 				String attValue = getAttributeValue(i);
-				
+
 				/********************************
-				 * Atributo <targetNamespace>	*
+				 * Atributo <targetNamespace> *
 				 ********************************/
-				//Target Namespace (URI)
-				//this is the namespace of all components in the schema
-				//setTargetNamespace(); 
-				if (attName.compareTo(GMLTags.XML_TARGET_NAMESPACE)==0){
+				// Target Namespace (URI)
+				// this is the namespace of all components in the schema
+				// setTargetNamespace();
+				if (attName.compareTo(GMLTags.XML_TARGET_NAMESPACE) == 0) {
 					targetNameSpace = attValue;
 				}
-				
+
 				/************************************
-				 * Atributo <elementFormDefault>	*
+				 * Atributo <elementFormDefault> *
 				 ************************************/
-				//Qualified--> Los elementos del espacio de nombres de destino deben cualificarse 
-				//con el prefijo del espacio de nombres.
-				//Unqualified--> No es necesario que los elementos del 
-				//espacio de nombres de destino estén cualificados con el prefijo del espacio de nombres.
-				//(Espacion_de_Nombres:Elemento)
-				//elementFormDefault(); 
-				if (attName.compareTo(GMLTags.XML_ELEMENT_FORM_DEFAULT)==0){
+				// Qualified--> Los elementos del espacio de nombres de destino
+				// deben cualificarse
+				// con el prefijo del espacio de nombres.
+				// Unqualified--> No es necesario que los elementos del
+				// espacio de nombres de destino estén cualificados con el
+				// prefijo del espacio de nombres.
+				// (Espacion_de_Nombres:Elemento)
+				// elementFormDefault();
+				if (attName.compareTo(GMLTags.XML_ELEMENT_FORM_DEFAULT) == 0) {
 				}
-				
+
 				/************************************
-				 * Atributo <attributeFormDefault>	*
+				 * Atributo <attributeFormDefault> *
 				 ************************************/
-				//Lo mismo que el anterior pero con los atributos...
-				//(Espacio_de_Nombres:Atributo)
-				//attributeFormDefault();
-				if (attName.compareTo(GMLTags.XML_ATTRIBUTE_FORM_DEFAULT)==0){
+				// Lo mismo que el anterior pero con los atributos...
+				// (Espacio_de_Nombres:Atributo)
+				// attributeFormDefault();
+				if (attName.compareTo(GMLTags.XML_ATTRIBUTE_FORM_DEFAULT) == 0) {
 				}
-				
+
 				/************************
-				 * Atributo <Version>	*
+				 * Atributo <Version> *
 				 ************************/
-				//Gets gml version to parse by the right parser.
-				//getversion();
-				if (attName.compareTo(GMLTags.VERSION)==0){
-					version=attValue;
+				// Gets gml version to parse by the right parser.
+				// getversion();
+				if (attName.compareTo(GMLTags.VERSION) == 0) {
+					version = attValue;
 				}
 			}
 			tag = nextTag();
-			
-			while(tag != KXmlParser.END_DOCUMENT)
-			{
-				switch(tag)
-				{
+
+			while (tag != KXmlParser.END_DOCUMENT) {
+				switch (tag) {
 				case KXmlParser.START_TAG:
-					
+
 					/************************
-					 * Etiqueta <import>	*
+					 * Etiqueta <import> *
 					 ************************/
-					//imports elements from other schemas (other schema  ".xsd" files)
-					
+					// imports elements from other schemas (other schema ".xsd"
+					// files)
+
 					/****************************
-					 * Etiqueta <complexType>	*
+					 * Etiqueta <complexType> *
 					 ****************************/
-					if (getName().compareTo(CapabilitiesTags.COMPLEXTYPE)==0){							
-						for (int i=0 ; i<getAttributeCount() ; i++){
+					if (getName().compareTo(CapabilitiesTags.COMPLEXTYPE) == 0) {
+						for (int i = 0; i < getAttributeCount(); i++) {
 							/********************
-							 * Atributo <name>	*
+							 * Atributo <name> *
 							 ********************/
-							if (getAttributeName(i).compareTo(GMLTags.GML_NAME) == 0){
-								// inserts a new complex type inside the namespace
-								XMLComplexType complexType = XMLTypesFactory.addComplexType(nameSpace,getAttributeValue(i));
-				    			parseComplexType(complexType);	
-				    			attributes.put(complexType.getName(),complexType);
-				    		}
-				    		
+							if (getAttributeName(i).compareTo(GMLTags.GML_NAME) == 0) {
+								// inserts a new complex type inside the
+								// namespace
+								XMLComplexType complexType = XMLTypesFactory
+										.addComplexType(nameSpace,
+												getAttributeValue(i));
+								parseComplexType(complexType);
+								attributes.put(complexType.getName(),
+										complexType);
+							}
+
 						}
 					}
 					/****************************
-					 * Etiqueta <simpleType>	*
+					 * Etiqueta <simpleType> *
 					 ****************************/
-					// SIMPLE TYPE elements like enumerations not implemented 
-					else if (getName().compareTo(CapabilitiesTags.SIMPLETYPE)==0){
+					// SIMPLE TYPE elements like enumerations not implemented
+					else if (getName().compareTo(CapabilitiesTags.SIMPLETYPE) == 0) {
 						parseSimpleType();
 					}
 					/************************
-					 * Etiqueta <element>	*
+					 * Etiqueta <element> *
 					 ************************/
-					else if (getName().compareTo(CapabilitiesTags.ELEMENT)==0){							
+					else if (getName().compareTo(CapabilitiesTags.ELEMENT) == 0) {
 						XMLElement entity = XMLElementsFactory.addType(this);
-						try{
-							//Sets the name and type of one element
-							attributes.put(entity.getName(),entity.getEntityType());
-						}catch(NullPointerException e){
-							//Type not defined yet, do nothing here because the type will be declared later
+						try {
+							// Sets the name and type of one element
+							attributes.put(entity.getName(),
+									entity.getEntityType());
+						} catch (NullPointerException e) {
+							// Type not defined yet, do nothing here because the
+							// type will be declared later
 						}
 					}
 					break;
-					case KXmlParser.END_TAG:                            
-						break;
-					//Show the Text on the screen
-					case KXmlParser.TEXT:
-						                
-						break;
+				case KXmlParser.END_TAG:
+					break;
+				// Show the Text on the screen
+				case KXmlParser.TEXT:
+
+					break;
 				}
 				tag = next();
 			}
 			require(KXmlParser.END_DOCUMENT, null, null);
 		}
 	}
-	
+
 	/****************************************************
-	 *  FUNCTION PARSE SIMPLE TYPE()		 		   	*
-	 * 											    	*
-	 *  Parse simple types and its restrictions		 	*
-	 *													*	
+	 * FUNCTION PARSE SIMPLE TYPE() * * Parse simple types and its restrictions
+	 * * *
 	 ****************************************************/
-    private void parseSimpleType() throws IOException, XmlPullParserException{   
+	private void parseSimpleType() throws IOException, XmlPullParserException {
 		int currentTag;
-		boolean end = false;		
+		boolean end = false;
 		currentTag = getEventType();
-		
+
 		String typeName = null;
 		String typeValue = null;
 
-		for (int i=0 ; i<getAttributeCount() ; i++){			
-			if (getAttributeName(i).compareTo(CapabilitiesTags.ELEMENT_NAME) == 0){
+		for (int i = 0; i < getAttributeCount(); i++) {
+			if (getAttributeName(i).compareTo(CapabilitiesTags.ELEMENT_NAME) == 0) {
 				typeName = getAttributeValue(i);
 			}
 		}
-		
-		while (!end){
-			switch(currentTag){
+
+		while (!end) {
+			switch (currentTag) {
 			case KXmlParser.START_TAG:
-				if (getName().compareTo(CapabilitiesTags.RESTRICTION)==0){
-					for (int i=0 ; i<getAttributeCount() ; i++){
-						if (getAttributeName(i).compareTo(CapabilitiesTags.BASE) == 0){
+				if (getName().compareTo(CapabilitiesTags.RESTRICTION) == 0) {
+					for (int i = 0; i < getAttributeCount(); i++) {
+						if (getAttributeName(i)
+								.compareTo(CapabilitiesTags.BASE) == 0) {
 							typeValue = getAttributeValue(i);
 						}
-					}					
-				}   
-				//Falta parsear los tipos enumerados
+					}
+				}
+				// Falta parsear los tipos enumerados
 				break;
 			case KXmlParser.END_TAG:
 				if (getName().compareTo(CapabilitiesTags.SIMPLETYPE) == 0)
 					end = true;
 				break;
-			case KXmlParser.TEXT:                   
+			case KXmlParser.TEXT:
 				break;
 			}
-			if (!end){
+			if (!end) {
 				currentTag = next();
-			}			
+			}
 		}
-		if ((typeName != null) && (typeValue != null)){
-			XMLTypesFactory.addSimpleType(typeName,typeValue);
+		if ((typeName != null) && (typeValue != null)) {
+			XMLTypesFactory.addSimpleType(typeName, typeValue);
 		}
 	}
-    
-    /****************************************************
-	 *  FUNCTION PARSE COMPLEX TYPE(COMPLEX TYPE) 	   	*
-	 * 												   	*
-	 *  Parse the attributes from a complex type		*
-	 *													*	
-	 * @param complexType								*
-	 *													*
+
+	/****************************************************
+	 * FUNCTION PARSE COMPLEX TYPE(COMPLEX TYPE) * * Parse the attributes from a
+	 * complex type * *
+	 * 
+	 * @param complexType
+	 *            * *
 	 ****************************************************/
-	
-	private void parseComplexType(XMLComplexType complexType) throws IOException, XmlPullParserException{   
+
+	private void parseComplexType(XMLComplexType complexType)
+			throws IOException, XmlPullParserException {
 		int currentTag;
-		boolean end = false;		
-		
+		boolean end = false;
+
 		require(KXmlParser.START_TAG, null, CapabilitiesTags.COMPLEXTYPE);
 		currentTag = next();
-		
-		while (!end) 
-		{
-			switch(currentTag)
-			{
+
+		while (!end) {
+			switch (currentTag) {
 			case KXmlParser.START_TAG:
 				/********************************
-				 * Etiqueta <complexContent>	*
+				 * Etiqueta <complexContent> *
 				 ********************************/
-				if (getName().compareTo(CapabilitiesTags.COMPLEXCONTENT)==0){
-					parseComplexContent(complexType); 
+				if (getName().compareTo(CapabilitiesTags.COMPLEXCONTENT) == 0) {
+					parseComplexContent(complexType);
 				}
 				/************************
-				 * Etiqueta <sequence>	*
+				 * Etiqueta <sequence> *
 				 ************************/
-				else if(getName().compareTo(CapabilitiesTags.SEQUENCE)==0){
+				else if (getName().compareTo(CapabilitiesTags.SEQUENCE) == 0) {
 					parseSequence(complexType);
 				}
 				/************************
-				 * Etiqueta <choice>	*
+				 * Etiqueta <choice> *
 				 ************************/
-				else if(getName().compareTo(CapabilitiesTags.CHOICE)==0){
+				else if (getName().compareTo(CapabilitiesTags.CHOICE) == 0) {
 					parseChoice(complexType);
 				}
 				break;
@@ -440,162 +449,152 @@ public class XMLSchemaParser extends EncodingXMLParser {
 				if (getName().compareTo(CapabilitiesTags.COMPLEXTYPE) == 0)
 					end = true;
 				break;
-			case KXmlParser.TEXT:                   
+			case KXmlParser.TEXT:
 				break;
 			}
-			if (!end){
+			if (!end) {
 				currentTag = next();
-			}	
-		}		
+			}
+		}
 	}
-	
+
 	/************************************************************************************
-	 *  FUNCION PARSE COMPLEX CONTENT(COMPLEX TYPE)									   	*
-	 * 																				   	*
-	 *  Parsea los atributos que componen un contenido complejo 					 	*
-	 *																					*	
-	 * @param complexType (elemento complejo a parsear)									*
-	 *																					*
+	 * FUNCION PARSE COMPLEX CONTENT(COMPLEX TYPE) * * Parsea los atributos que
+	 * componen un contenido complejo * *
+	 * 
+	 * @param complexType
+	 *            (elemento complejo a parsear) * *
 	 ************************************************************************************/
-	
-	private void parseComplexContent(XMLComplexType complexType) throws IOException, XmlPullParserException
-	{   
+
+	private void parseComplexContent(XMLComplexType complexType)
+			throws IOException, XmlPullParserException {
 		int currentTag;
 		boolean end = false;
-		
-		//Establece como requisito abrir una etiqueta <complexContent>
+
+		// Establece como requisito abrir una etiqueta <complexContent>
 		require(KXmlParser.START_TAG, null, CapabilitiesTags.COMPLEXCONTENT);
 		currentTag = next();
-		
-		while (!end) 
-		{
-			switch(currentTag)
-			{
-			//Comparo las posibles etiquetas de apertura, las cuales solo nos interesa <extension>
+
+		while (!end) {
+			switch (currentTag) {
+			// Comparo las posibles etiquetas de apertura, las cuales solo nos
+			// interesa <extension>
 			case KXmlParser.START_TAG:
-				if (getName().compareTo(CapabilitiesTags.EXTENSION )==0){
-					parseExtension(complexType); 
-				}else if (getName().compareTo(CapabilitiesTags.RESTRICTION)==0){
-					parseRestriction(complexType); 
-				} 
+				if (getName().compareTo(CapabilitiesTags.EXTENSION) == 0) {
+					parseExtension(complexType);
+				} else if (getName().compareTo(CapabilitiesTags.RESTRICTION) == 0) {
+					parseRestriction(complexType);
+				}
 				break;
-			//encuentro una etiqueta de cierre de complexContent con lo cual cierro el tipo complejo
+			// encuentro una etiqueta de cierre de complexContent con lo cual
+			// cierro el tipo complejo
 			case KXmlParser.END_TAG:
 				if (getName().compareTo(CapabilitiesTags.COMPLEXCONTENT) == 0)
 					end = true;
 				break;
-			//Siempre puede existir texto por el medio que ignoro
-			case KXmlParser.TEXT:                   
+			// Siempre puede existir texto por el medio que ignoro
+			case KXmlParser.TEXT:
 				break;
 			}
-			if (!end){
+			if (!end) {
 				currentTag = next();
-			}	
+			}
 		}
 	}
-	
-	//Comprueba que las etiquetas extension se abren y se cierran
-	private void parseExtension(XMLComplexType complexType) throws IOException, XmlPullParserException
-	{   
+
+	// Comprueba que las etiquetas extension se abren y se cierran
+	private void parseExtension(XMLComplexType complexType) throws IOException,
+			XmlPullParserException {
 		int currentTag;
 		boolean end = false;
-		
-		
+
 		require(KXmlParser.START_TAG, null, CapabilitiesTags.EXTENSION);
 		currentTag = next();
-		
-		while (!end) 
-		{
-			switch(currentTag)
-			{
+
+		while (!end) {
+			switch (currentTag) {
 			case KXmlParser.START_TAG:
-				if (getName().compareTo(CapabilitiesTags.SEQUENCE)==0)
-				{
-					parseSequence(complexType); 
-				}   
+				if (getName().compareTo(CapabilitiesTags.SEQUENCE) == 0) {
+					parseSequence(complexType);
+				}
 				break;
 			case KXmlParser.END_TAG:
 				if (getName().compareTo(CapabilitiesTags.EXTENSION) == 0)
 					end = true;
 				break;
-			case KXmlParser.TEXT:                   
+			case KXmlParser.TEXT:
 				break;
 			}
-			if (!end){
+			if (!end) {
 				currentTag = next();
-			}			
+			}
 		}
 	}
-	
-	//Comprueba que las etiquetas extension se abren y se cierran
-	private void parseRestriction(XMLComplexType complexType) throws IOException, XmlPullParserException
-	{   
+
+	// Comprueba que las etiquetas extension se abren y se cierran
+	private void parseRestriction(XMLComplexType complexType)
+			throws IOException, XmlPullParserException {
 		int currentTag;
 		boolean end = false;
-		
-		
+
 		require(KXmlParser.START_TAG, null, CapabilitiesTags.RESTRICTION);
 		currentTag = next();
-		
-		while (!end) 
-		{
-			switch(currentTag)
-			{
+
+		while (!end) {
+			switch (currentTag) {
 			case KXmlParser.START_TAG:
-				if (getName().compareTo(CapabilitiesTags.SEQUENCE)==0)
-				{
-					parseSequence(complexType); 
-				}   
+				if (getName().compareTo(CapabilitiesTags.SEQUENCE) == 0) {
+					parseSequence(complexType);
+				}
 				break;
 			case KXmlParser.END_TAG:
 				if (getName().compareTo(CapabilitiesTags.RESTRICTION) == 0)
 					end = true;
 				break;
-			case KXmlParser.TEXT:                   
+			case KXmlParser.TEXT:
 				break;
 			}
-			if (!end){
+			if (!end) {
 				currentTag = next();
-			}			
+			}
 		}
 	}
-	
-	private void parseSequence(XMLComplexType complexType) throws IOException, XmlPullParserException
-	{   
+
+	private void parseSequence(XMLComplexType complexType) throws IOException,
+			XmlPullParserException {
 		int currentTag;
 		boolean end = false;
-		XMLElement elemento_previo=null;
-		
+		XMLElement elemento_previo = null;
+
 		require(KXmlParser.START_TAG, null, CapabilitiesTags.SEQUENCE);
 		currentTag = next();
-		
-		while (!end) 
-		{
-			switch(currentTag)
-			{
+
+		while (!end) {
+			switch (currentTag) {
 			case KXmlParser.START_TAG:
 				/************************
-				 * Etiqueta <Element>	*
+				 * Etiqueta <Element> *
 				 ************************/
-				if (getName().compareTo(CapabilitiesTags.ELEMENT)==0){
+				if (getName().compareTo(CapabilitiesTags.ELEMENT) == 0) {
 					XMLElement element = new XMLElement(this);
-					if (element != null){
+					if (element != null) {
 						complexType.addSubtypes(element);
 					}
-					elemento_previo=element;
+					elemento_previo = element;
 				}
 				/****************************
-				 * Etiqueta <ComplexType>	*
+				 * Etiqueta <ComplexType> *
 				 ****************************/
-				else if(getName().compareTo(CapabilitiesTags.COMPLEXTYPE)==0){
-					for (int i=0 ; i<getAttributeCount() ; i++){
-			    		if (getAttributeName(i).compareTo(GMLTags.GML_NAME) == 0){
-			    			XMLComplexType complexTypeChild = XMLTypesFactory.addComplexType(nameSpace,getAttributeValue(i));
-			    			parseComplexType(complexTypeChild);					    			
-			    		}			    		
+				else if (getName().compareTo(CapabilitiesTags.COMPLEXTYPE) == 0) {
+					for (int i = 0; i < getAttributeCount(); i++) {
+						if (getAttributeName(i).compareTo(GMLTags.GML_NAME) == 0) {
+							XMLComplexType complexTypeChild = XMLTypesFactory
+									.addComplexType(nameSpace,
+											getAttributeValue(i));
+							parseComplexType(complexTypeChild);
+						}
 					}
-				}
-				else if(getName().compareTo(CapabilitiesTags.SIMPLETYPE)==0){
+				} else if (getName().compareTo(CapabilitiesTags.SIMPLETYPE) == 0) {
 					elemento_previo.parseSimpleType(this);
 				}
 				break;
@@ -603,51 +602,49 @@ public class XMLSchemaParser extends EncodingXMLParser {
 				if (getName().compareTo(CapabilitiesTags.SEQUENCE) == 0)
 					end = true;
 				break;
-			case KXmlParser.TEXT:                   
+			case KXmlParser.TEXT:
 				break;
 			}
-			if (!end){
+			if (!end) {
 				currentTag = next();
 			}
-		}		
+		}
 	}
 
-	private void parseChoice(XMLComplexType complexType) throws IOException, XmlPullParserException
-	{   
+	private void parseChoice(XMLComplexType complexType) throws IOException,
+			XmlPullParserException {
 		int currentTag;
 		boolean end = false;
-			
+
 		require(KXmlParser.START_TAG, null, CapabilitiesTags.CHOICE);
 		currentTag = next();
-		
+
 		complexType.setAttributesType(XMLComplexType.CHOICE_TYPE);
-		
-		while (!end) 
-		{
-			switch(currentTag)
-			{
+
+		while (!end) {
+			switch (currentTag) {
 			case KXmlParser.START_TAG:
 				/************************
-				 * Etiqueta <Element>	*
+				 * Etiqueta <Element> *
 				 ************************/
-				if (getName().compareTo(CapabilitiesTags.ELEMENT)==0){
+				if (getName().compareTo(CapabilitiesTags.ELEMENT) == 0) {
 					XMLElement element = new XMLElement(this);
-					if (element != null){
+					if (element != null) {
 						complexType.addSubtypes(element);
-					}					
-				}				
+					}
+				}
 				break;
 			case KXmlParser.END_TAG:
 				if (getName().compareTo(CapabilitiesTags.CHOICE) == 0)
 					end = true;
 				break;
-			case KXmlParser.TEXT:                   
+			case KXmlParser.TEXT:
 				break;
 			}
-			if (!end){
+			if (!end) {
 				currentTag = next();
 			}
-		}		
+		}
 	}
 
 	/**
@@ -656,25 +653,26 @@ public class XMLSchemaParser extends EncodingXMLParser {
 	public Hashtable getAttributes() {
 		return attributes;
 	}
-	
-	public Vector getAttributesList(){
+
+	public Vector getAttributesList() {
 		Vector vector = new Vector();
 		Set keys = attributes.keySet();
 		Iterator it = keys.iterator();
-		while(it.hasNext()){
-			vector.add(attributes.get((String)it.next()));
+		while (it.hasNext()) {
+			vector.add(attributes.get((String) it.next()));
 		}
 		return vector;
 	}
 
 	public String getversion() {
-		if (version == null){
-			//return the default GML version
+		if (version == null) {
+			// return the default GML version
 			return "99.99.99";
 		}
-		return version;		
+		return version;
 	}
+
 	public String getTargetNamespace() {
-		return targetNameSpace;		
+		return targetNameSpace;
 	}
 }

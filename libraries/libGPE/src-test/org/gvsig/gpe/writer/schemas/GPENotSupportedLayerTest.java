@@ -53,41 +53,44 @@ import org.gvsig.gpe.warnings.NotSupportedLayerWarning;
  *
  */
 /**
- * This test try to add a Layer with a type that doesn't exist 
- * in its XML schema
+ * This test try to add a Layer with a type that doesn't exist in its XML schema
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class GPENotSupportedLayerTest extends GPENotSupportedSchema{
+public abstract class GPENotSupportedLayerTest extends GPENotSupportedSchema {
 	private String layer1Id = "l1";
 	private String layer1Name = "Parent layer";
 	private String layer1Description = "This is a test of a wrong layer feature";
 	private String layer1Srs = "EPSG:23030";
 	private String layer1XsElementName = "rivers";
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#readObjects()
 	 */
 	public void readObjects() {
 		Layer[] layers = getLayers();
-		assertEquals(layers.length, 0);		
-		
-		//Two warinings
-		assertEquals(getErrorHandler().getWarningsSize(),1);
-		for (int i=0 ; i<getErrorHandler().getWarningsSize() ; i++){
+		assertEquals(layers.length, 0);
+
+		// Two warinings
+		assertEquals(getErrorHandler().getWarningsSize(), 1);
+		for (int i = 0; i < getErrorHandler().getWarningsSize(); i++) {
 			assertTrue(getErrorHandler().getWarningAt(i) instanceof NotSupportedLayerWarning);
 			System.out.println(getErrorHandler().getWarningAt(i));
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#writeObjects()
 	 */
 	public void writeObjects() {
 		getWriterHandler().initialize();
-		getWriterHandler().startLayer(layer1Id, null, layer1Name, layer1Description, layer1Srs);
+		getWriterHandler().startLayer(layer1Id, null, layer1Name,
+				layer1Description, layer1Srs);
 		getWriterHandler().endLayer();
-		getWriterHandler().close();	
+		getWriterHandler().close();
 	}
 }

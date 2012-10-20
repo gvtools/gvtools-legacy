@@ -46,11 +46,9 @@ import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.exceptions.visitors.VisitorException;
 import com.iver.cit.gvsig.fmap.layers.FBitSet;
 
-
-
 /**
  * Interfaz que implementan las capas vectoriales de acceso aleatorio.
- *
+ * 
  */
 public interface RandomVectorialData {
 	/**
@@ -58,18 +56,22 @@ public interface RandomVectorialData {
 	 */
 	void createSpatialIndex();
 
-    void deleteSpatialIndex();
+	void deleteSpatialIndex();
 
 	/**
 	 * Devuelve un BitSet con los índices de los shapes que estan dentro del
 	 * rectángulo que se pasa como parámetro.
-	 *
-	 * @param rect Rectángulo.
-	 *
+	 * 
+	 * @param rect
+	 *            Rectángulo.
+	 * 
 	 * @return BitSet con los índices.
-	 * @throws ReadDriverException TODO
-	 * @throws VisitorException TODO
+	 * @throws ReadDriverException
+	 *             TODO
+	 * @throws VisitorException
+	 *             TODO
 	 * @see com.iver.cit.gvsig.fmap.operations.strategies.Strategy#queryByRect(java.awt.geom.Rectangle2D)
 	 */
-	FBitSet queryByRect(Rectangle2D rect) throws ReadDriverException, VisitorException;
+	FBitSet queryByRect(Rectangle2D rect) throws ReadDriverException,
+			VisitorException;
 }

@@ -45,35 +45,32 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Rectangle2D;
-
-import javax.swing.ImageIcon;
 
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.AddLayer;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.LayoutMoveListener;
 
-
 /**
- * Implementaci�n de la interfaz LayoutPanListener como herramienta para realizar el
- * Pan.
- *
+ * Implementaci�n de la interfaz LayoutPanListener como herramienta para
+ * realizar el Pan.
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LayoutPanListenerImpl implements LayoutMoveListener {
 	public static final Image iLayoutpan = PluginServices.getIconTheme()
-	 	.get("layout-hand-icon").getImage();
-	private final Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(iLayoutpan,
-			new Point(16, 16), "");
+			.get("layout-hand-icon").getImage();
+	private final Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(
+			iLayoutpan, new Point(16, 16), "");
 
 	private Layout layout;
+
 	/**
 	 * Crea un nuevo RectangleListenerImpl.
-	 *
-	 * @param mapControl MapControl.
+	 * 
+	 * @param mapControl
+	 *            MapControl.
 	 */
 	public LayoutPanListenerImpl(Layout l) {
 		this.layout = l;
@@ -81,14 +78,16 @@ public class LayoutPanListenerImpl implements LayoutMoveListener {
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.PanListener#move(java.awt.geom.Point2D,
-	 * 		java.awt.geom.Point2D)
+	 *      java.awt.geom.Point2D)
 	 */
 	public void drag(PointEvent event) {
-		Point pLast=layout.getLayoutControl().getLastPoint();
-		Point pAnt=layout.getLayoutControl().getPointAnt();
-		Point origin=layout.getLayoutControl().getRectOrigin();
-		layout.getLayoutControl().getRect().x=origin.getX()+pLast.getX()-pAnt.getX();
-		layout.getLayoutControl().getRect().y=origin.getY()+pLast.getY()-pAnt.getY();
+		Point pLast = layout.getLayoutControl().getLastPoint();
+		Point pAnt = layout.getLayoutControl().getPointAnt();
+		Point origin = layout.getLayoutControl().getRectOrigin();
+		layout.getLayoutControl().getRect().x = origin.getX() + pLast.getX()
+				- pAnt.getX();
+		layout.getLayoutControl().getRect().y = origin.getY() + pLast.getY()
+				- pAnt.getY();
 	}
 
 	/**
@@ -97,7 +96,8 @@ public class LayoutPanListenerImpl implements LayoutMoveListener {
 	public Image getImageCursor() {
 		return iLayoutpan;
 	}
-	public Cursor getCursor(){
+
+	public Cursor getCursor() {
 		return cur;
 	}
 
@@ -109,8 +109,10 @@ public class LayoutPanListenerImpl implements LayoutMoveListener {
 	}
 
 	public void press(PointEvent event) throws BehaviorException {
-		layout.getLayoutControl().getRectOrigin().setLocation(layout.getLayoutControl().getRect().x,
-                 layout.getLayoutControl().getRect().y);
+		layout.getLayoutControl()
+				.getRectOrigin()
+				.setLocation(layout.getLayoutControl().getRect().x,
+						layout.getLayoutControl().getRect().y);
 
 	}
 
@@ -120,17 +122,19 @@ public class LayoutPanListenerImpl implements LayoutMoveListener {
 
 		if (event.getEvent().getButton() == MouseEvent.BUTTON1) {
 			p1 = layout.getLayoutControl().getFirstPoint();
-	        p2 = event.getEvent().getPoint();
-			layout.getLayoutControl().getLayoutZooms().setPan(p1,p2);
+			p2 = event.getEvent().getPoint();
+			layout.getLayoutControl().getLayoutZooms().setPan(p1, p2);
 			layout.getLayoutControl().refresh();
-	     	PluginServices.getMainFrame().enableControls();
+			PluginServices.getMainFrame().enableControls();
 		}
 
 		layout.getLayoutControl().setFirstPoint();
 		layout.getLayoutControl().setLastPoint();
 		layout.getLayoutControl().setPointAnt();
-		layout.getLayoutControl().getRectOrigin().setLocation(layout.getLayoutControl().getRect().x,
-               layout.getLayoutControl().getRect().y);
+		layout.getLayoutControl()
+				.getRectOrigin()
+				.setLocation(layout.getLayoutControl().getRect().x,
+						layout.getLayoutControl().getRect().y);
 
 	}
 

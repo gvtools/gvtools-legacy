@@ -62,14 +62,12 @@ public class LinkConfig implements IPersistence {
 	public void setXMLEntity(XMLEntity xml) {
 		if (xml.contains("actionCode")) {
 			setActionCode(xml.getStringProperty("actionCode"));
-		}
-		else {
+		} else {
 			setActionCode("");
 		}
 		if (xml.contains("fieldName")) {
 			setFieldName(xml.getStringProperty("fieldName"));
-		}
-		else {
+		} else {
 			setFieldName("");
 		}
 		if (xml.contains("extension")) {

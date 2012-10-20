@@ -19,9 +19,10 @@
 package org.gvsig.raster.beans.canvas;
 
 import java.util.EventListener;
+
 /**
- * Listener que deben implementar las clases que quieran recibir cambios
- * del GCanvas.
+ * Listener que deben implementar las clases que quieran recibir cambios del
+ * GCanvas.
  * 
  * @version 28/02/2008
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
@@ -29,12 +30,14 @@ import java.util.EventListener;
 public interface IGCanvasListener extends EventListener {
 	/**
 	 * Evento que se dispara cuando el GCanvas cambia el valor de algún elemento
+	 * 
 	 * @param e
 	 */
 	public void actionDataChanged(GCanvasEvent e);
-	
+
 	/**
 	 * Evento que se dispara mientras se esta produciendo la acción
+	 * 
 	 * @param e
 	 */
 	public void actionDataDragged(GCanvasEvent e);

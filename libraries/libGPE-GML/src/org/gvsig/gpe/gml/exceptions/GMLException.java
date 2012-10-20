@@ -68,6 +68,7 @@ import org.gvsig.exceptions.BaseException;
  */
 /**
  * GML Exception.
+ * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  * 
@@ -75,23 +76,24 @@ import org.gvsig.exceptions.BaseException;
 public class GMLException extends BaseException {
 
 	private static final long serialVersionUID = -5486463227342843579L;
-	private String filename="";
-	
+	private String filename = "";
+
 	public GMLException(String file) {
 		init();
-		this.filename=file;
+		this.filename = file;
 	}
-	
+
 	public GMLException(Throwable exception) {
 		init();
 		initCause(exception);
 	}
+
 	public GMLException(String file, Throwable exception) {
 		init();
-		this.filename=file;
+		this.filename = file;
 		initCause(exception);
 	}
-	
+
 	public String getFilename() {
 		return filename;
 	}
@@ -99,21 +101,20 @@ public class GMLException extends BaseException {
 	public void setFilename(String filename) {
 		this.filename = filename;
 	}
-	
+
 	protected Map values() {
-		//Key -> value... filename -> name of the file
+		// Key -> value... filename -> name of the file
 		Hashtable params;
 		params = new Hashtable();
-		params.put("file",filename);
-		
+		params.put("file", filename);
+
 		return params;
 	}
 
 	public void init() {
-		messageKey="Gml_Error";
-		formatString="Error opening GML shape %(file)";
+		messageKey = "Gml_Error";
+		formatString = "Error opening GML shape %(file)";
 		code = serialVersionUID;
 	}
-	
 
 }

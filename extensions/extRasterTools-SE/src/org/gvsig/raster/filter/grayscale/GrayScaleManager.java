@@ -27,25 +27,27 @@ import org.gvsig.raster.grid.filter.RasterFilter;
 import org.gvsig.raster.grid.filter.RasterFilterList;
 import org.gvsig.raster.grid.filter.RasterFilterListManager;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
+
 /**
  * Gestor del filtro de conversión a escala de grises
  * 
  * 26/06/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
-public class GrayScaleManager  implements IRasterFilterListManager {
+public class GrayScaleManager implements IRasterFilterListManager {
 
-	protected RasterFilterList	filterList = null;
+	protected RasterFilterList filterList = null;
 
 	public static void register() {
-		ExtensionPoint extensionPoint = ExtensionPoint.getExtensionPoint("RasterFilter");
+		ExtensionPoint extensionPoint = ExtensionPoint
+				.getExtensionPoint("RasterFilter");
 		extensionPoint.register("GrayScale", GrayScaleManager.class);
 	}
 
 	/**
-	 * Constructor.
-	 * Asigna la lista de filtros y el managener global.
-	 *
+	 * Constructor. Asigna la lista de filtros y el managener global.
+	 * 
 	 * @param filterListManager
 	 */
 	public GrayScaleManager(RasterFilterListManager filterListManager) {
@@ -54,10 +56,13 @@ public class GrayScaleManager  implements IRasterFilterListManager {
 
 	/**
 	 * Añade un filtro de conversión de balance de color RGB.
-	 * @param type. parámetro para el filtro que indica que banda o combinación de 
-	 * estas es usada para la conversión a escala de gris. El valor de este parámtro 
-	 * está definido en las constantes de la clase GrayScaleFilter
-	 * @throws FilterTypeException 
+	 * 
+	 * @param type
+	 *            . parámetro para el filtro que indica que banda o combinación
+	 *            de estas es usada para la conversión a escala de gris. El
+	 *            valor de este parámtro está definido en las constantes de la
+	 *            clase GrayScaleFilter
+	 * @throws FilterTypeException
 	 */
 	public void addGrayScaleFilter(int type) throws FilterTypeException {
 		RasterFilter filter = new GrayScaleByteFilter();
@@ -71,7 +76,10 @@ public class GrayScaleManager  implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList()
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList
+	 * ()
 	 */
 	public ArrayList getRasterFilterList() {
 		ArrayList filters = new ArrayList();
@@ -81,15 +89,20 @@ public class GrayScaleManager  implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#addFilter(java.lang.Class, org.gvsig.raster.dataset.Params)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.IRasterFilterListManager#addFilter(java.
+	 * lang.Class, org.gvsig.raster.dataset.Params)
 	 */
-	public void addFilter(Class classFilter, Params params) throws FilterTypeException {
+	public void addFilter(Class classFilter, Params params)
+			throws FilterTypeException {
 		if (classFilter.equals(GrayScaleFilter.class)) {
 			int type = 0;
-			
+
 			for (int i = 0; i < params.getNumParams(); i++) {
-				if (params.getParam(i).id.equals("typeBand")) 
-					type = ((Integer) params.getParam(i).defaultValue).intValue();
+				if (params.getParam(i).id.equals("typeBand"))
+					type = ((Integer) params.getParam(i).defaultValue)
+							.intValue();
 			}
 			addGrayScaleFilter(type);
 		}
@@ -97,17 +110,24 @@ public class GrayScaleManager  implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#createFilterListFromStrings(java.util.ArrayList, java.lang.String, int)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#
+	 * createFilterListFromStrings(java.util.ArrayList, java.lang.String, int)
 	 */
-	public int createFilterListFromStrings(ArrayList filters, String fil, int filteri) {
+	public int createFilterListFromStrings(ArrayList filters, String fil,
+			int filteri) {
 		return filteri;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#getStringsFromFilterList(java.util.ArrayList, org.gvsig.raster.grid.filter.RasterFilter)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#
+	 * getStringsFromFilterList(java.util.ArrayList,
+	 * org.gvsig.raster.grid.filter.RasterFilter)
 	 */
-	public ArrayList getStringsFromFilterList(ArrayList filterList, RasterFilter rf) {
+	public ArrayList getStringsFromFilterList(ArrayList filterList,
+			RasterFilter rf) {
 		return filterList;
 	}
 }

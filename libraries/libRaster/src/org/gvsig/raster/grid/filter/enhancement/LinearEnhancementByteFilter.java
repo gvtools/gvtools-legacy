@@ -19,11 +19,12 @@
 package org.gvsig.raster.grid.filter.enhancement;
 
 import org.gvsig.raster.dataset.IBuffer;
+
 /**
  * Filtro de realce para tipos de datos short. En el método de proceso procesa
  * un solo pixel short. Asigna su valor en relación a los datos calculados en el
  * método pre() del padre.
- *
+ * 
  * @version 11/05/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
@@ -31,11 +32,14 @@ public class LinearEnhancementByteFilter extends LinearEnhancementFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.enhancement.LinearEnhancementFilter#process(int, int)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.enhancement.LinearEnhancementFilter#process
+	 * (int, int)
 	 */
 	public void process(int col, int line) throws InterruptedException {
 		for (int iBand = 0; iBand < raster.getBandCount(); iBand++) {
-			int p = (int)(raster.getElemByte(line, col, iBand) & 0xff);
+			int p = (int) (raster.getElemByte(line, col, iBand) & 0xff);
 			if (renderBands[iBand] < 0) {
 				rasterResult.setElem(line, col, iBand, (byte) p);
 				continue;
@@ -45,14 +49,16 @@ public class LinearEnhancementByteFilter extends LinearEnhancementFilter {
 			else if (p < minBandValue[renderBands[iBand]])
 				p = (int) minBandValue[renderBands[iBand]];
 
-			p =  (int)(((double)p) * scale[renderBands[iBand]] + offset[renderBands[iBand]]);
+			p = (int) (((double) p) * scale[renderBands[iBand]] + offset[renderBands[iBand]]);
 			rasterResult.setElem(line, col, iBand, (byte) p);
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.enhancement.LinearEnhancementFilter#getInRasterDataType()
+	 * 
+	 * @see org.gvsig.raster.grid.filter.enhancement.LinearEnhancementFilter#
+	 * getInRasterDataType()
 	 */
 	public int getInRasterDataType() {
 		return IBuffer.TYPE_BYTE;

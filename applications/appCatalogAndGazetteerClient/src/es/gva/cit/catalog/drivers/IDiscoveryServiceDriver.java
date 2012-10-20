@@ -2,8 +2,6 @@ package es.gva.cit.catalog.drivers;
 
 import java.net.URI;
 
-import com.iver.utiles.swing.jcomboServer.ServerData;
-
 import es.gva.cit.catalog.exceptions.NotSupportedProtocolException;
 import es.gva.cit.catalog.exceptions.NotSupportedVersionException;
 import es.gva.cit.catalog.querys.DiscoveryServiceQuery;
@@ -61,66 +59,70 @@ import es.gva.cit.catalog.ui.search.SearchAditionalPropertiesPanel;
 public interface IDiscoveryServiceDriver {
 	/**
 	 * It try to discover the server capabilities.
+	 * 
 	 * @return Node with the server answer.
-	 * @param uri Server URI
+	 * @param uri
+	 *            Server URI
 	 */
-	public DiscoveryServiceCapabilities getCapabilities(URI uri) throws NotSupportedVersionException;
-	
+	public DiscoveryServiceCapabilities getCapabilities(URI uri)
+			throws NotSupportedVersionException;
+
 	/**
 	 * It have to prove if the specified protocol is supported.
+	 * 
 	 * @return true if is supported, false if it isn't supported
-	 * @param uri Server URI
+	 * @param uri
+	 *            Server URI
 	 */
-	public boolean isProtocolSupported(URI uri) throws NotSupportedProtocolException;
-	
+	public boolean isProtocolSupported(URI uri)
+			throws NotSupportedProtocolException;
+
 	/**
 	 * It return a message to write in the server connection frame
+	 * 
 	 * @return It is/isn't the supported protocol
 	 */
 	public String getServerAnswerReady();
-	
+
 	/**
-	 * It sets an error message 
+	 * It sets an error message
 	 */
 	public void setServerAnswerReady(String message);
 
 	/**
-	 * @return the dafault port for an specific
-	 * service
+	 * @return the dafault port for an specific service
 	 */
 	public int getDefaultPort();
-	
+
 	/**
-	 * @return the dafault schema for an specific
-	 * service
+	 * @return the dafault schema for an specific service
 	 */
 	public String getDefaultSchema();
-	
+
 	/**
-	 * @return the service name that will be showed
-	 * in the user interface
+	 * @return the service name that will be showed in the user interface
 	 */
 	public String getServiceName();
-	
+
 	/**
 	 * This message will be showed in the protocols combo
+	 * 
 	 * @return The message to show
 	 */
 	public String toString();
-	
+
 	/**
-	 * There are protocols that can support other attributes
-	 * to do the search. They have to provide its own
-	 * panel to do the search
-	 * @return
-	 * JPanel with a list of properties.
+	 * There are protocols that can support other attributes to do the search.
+	 * They have to provide its own panel to do the search
+	 * 
+	 * @return JPanel with a list of properties.
 	 */
 	public SearchAditionalPropertiesPanel getAditionalSearchPanel();
 
 	/**
 	 * Create and return an empty query
+	 * 
 	 * @return
 	 */
 	public DiscoveryServiceQuery createQuery();
 }
-

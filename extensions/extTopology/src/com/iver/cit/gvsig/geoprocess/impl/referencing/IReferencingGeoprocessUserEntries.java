@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.impl.referencing;
 
 import org.opengis.referencing.operation.MathTransform;
@@ -61,7 +61,10 @@ public interface IReferencingGeoprocessUserEntries extends
 		IGeoprocessUserEntries {
 
 	public boolean onlyFirstLayerSelected();
+
 	public MathTransform getMathTransform() throws GeoprocessException;
+
 	public boolean hasAuxiliarLyrs();
+
 	public FLyrVect[] getAuxiliarLyrs();
 }

@@ -45,16 +45,16 @@ import java.util.Hashtable;
 
 import com.hardcode.gdbms.engine.values.Value;
 import com.iver.cit.gvsig.fmap.Messages;
+
 /**
- *
- * Implements the funcionality of the IsNull operator which can be
- * used in a Filter Encoding expression
- *
+ * 
+ * Implements the funcionality of the IsNull operator which can be used in a
+ * Filter Encoding expression
+ * 
  * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
- *
+ * 
  */
 public class IsNullOperator extends Operator {
-
 
 	private ArrayList<Expression> arguments = new ArrayList<Expression>();
 
@@ -62,31 +62,30 @@ public class IsNullOperator extends Operator {
 		return OperationTags.ISNULL_OP;
 	}
 
-
 	public IsNullOperator(Hashtable<String, Value> symbol_table) {
 		super(symbol_table);
 	}
-
 
 	public void addArgument(int i, Expression arg) {
 		arguments.add(i, arg);
 	}
 
-	public Object evaluate()throws ExpressionException {
+	public Object evaluate() throws ExpressionException {
 
-		if(arguments.size() > 1)
-			throw new ExpressionException(ExpressionException.INCORRECT_NUMBER_OF_ARGUMENTS);
+		if (arguments.size() > 1)
+			throw new ExpressionException(
+					ExpressionException.INCORRECT_NUMBER_OF_ARGUMENTS);
 
-		else if(arguments.get(0)== null)
+		else if (arguments.get(0) == null)
 			return true;
 		return false;
 	}
 
 	public String getPattern() {
-		return OperationTags.ISNULL_OP+"("
-		+ Messages.getString(OperationTags.OPERAND) +")\n"+
-		Messages.getString(OperationTags.OPERAND) +" = "+
-		Messages.getString(OperationTags.NUMERIC_OR_BOOLEAN_CONSTANT);
+		return OperationTags.ISNULL_OP + "("
+				+ Messages.getString(OperationTags.OPERAND) + ")\n"
+				+ Messages.getString(OperationTags.OPERAND) + " = "
+				+ Messages.getString(OperationTags.NUMERIC_OR_BOOLEAN_CONSTANT);
 	}
 
 	public ArrayList<Expression> getArguments() {
@@ -98,7 +97,8 @@ public class IsNullOperator extends Operator {
 	}
 
 	public void check() throws ExpressionException {
-		if(arguments.size() != 1)
-			throw new ExpressionException(ExpressionException.INCORRECT_NUMBER_OF_ARGUMENTS);
+		if (arguments.size() != 1)
+			throw new ExpressionException(
+					ExpressionException.INCORRECT_NUMBER_OF_ARGUMENTS);
 	}
 }

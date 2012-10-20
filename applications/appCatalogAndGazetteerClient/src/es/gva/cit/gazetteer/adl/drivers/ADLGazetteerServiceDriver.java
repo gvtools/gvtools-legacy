@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.gazetteer.adl.drivers;
+
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -60,28 +60,32 @@ import es.gva.cit.gazetteer.querys.Feature;
 import es.gva.cit.gazetteer.querys.GazetteerQuery;
 
 /**
- * This class implements the driver to connect with a
- * ADL gazetteer service
+ * This class implements the driver to connect with a ADL gazetteer service
+ * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  * @see http://alexandria.sdc.ucsb.edu/
  */
-public class ADLGazetteerServiceDriver extends AbstractGazetteerServiceDriver implements IGazetteerServiceDriver {
+public class ADLGazetteerServiceDriver extends AbstractGazetteerServiceDriver
+		implements IGazetteerServiceDriver {
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getCapabilities(java.net.URI)
+	 * 
+	 * @see
+	 * es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getCapabilities(
+	 * java.net.URI)
 	 */
-	public DiscoveryServiceCapabilities getCapabilities(URI uri) {        
+	public DiscoveryServiceCapabilities getCapabilities(URI uri) {
 		GazetteerCapabilities capabilities = new GazetteerCapabilities();
-		Collection nodes = new java.util.ArrayList();  
+		Collection nodes = new java.util.ArrayList();
 		URL url = null;
-			try {
-				url = uri.toURL();
-			} catch (MalformedURLException e) {
-				capabilities.setServerMessage("errorServerNotFound");
-				capabilities.setAvailable(false);
-				return capabilities;
-			}        
+		try {
+			url = uri.toURL();
+		} catch (MalformedURLException e) {
+			capabilities.setServerMessage("errorServerNotFound");
+			capabilities.setAvailable(false);
+			return capabilities;
+		}
 		try {
 			nodes = new HTTPPostProtocol().doQuery(uri.toURL(),
 					getPOSTMessageCapabilities(), 0);
@@ -89,30 +93,34 @@ public class ADLGazetteerServiceDriver extends AbstractGazetteerServiceDriver im
 			capabilities.setServerMessage(e.getMessage());
 			capabilities.setAvailable(false);
 			return capabilities;
-		}		
-		AdlCapabilitiesParser parser = new AdlCapabilitiesParser(this, capabilities);
+		}
+		AdlCapabilitiesParser parser = new AdlCapabilitiesParser(this,
+				capabilities);
 		parser.parse(nodes);
 		return capabilities;
-	} 
-	
+	}
+
 	/**
 	 * It creates the XML for the getCapabilities request
+	 * 
 	 * @return Name-value pair with a XML request
 	 */
-	private String getPOSTMessageCapabilities() {        
-		return "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" +
-		"<gazetteer-service " +
-		"xmlns=\"http://www.alexandria.ucsb.edu/gazetteer\" " +
-		"version=\"1.2\">" +
-		"<get-capabilities-request/>" +
-		"</gazetteer-service>";        
-	} 	
-	
+	private String getPOSTMessageCapabilities() {
+		return "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"
+				+ "<gazetteer-service "
+				+ "xmlns=\"http://www.alexandria.ucsb.edu/gazetteer\" "
+				+ "version=\"1.2\">" + "<get-capabilities-request/>"
+				+ "</gazetteer-service>";
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getFeature(java.net.URI, es.gva.cit.gazetteer.querys.Query)
+	 * 
+	 * @see
+	 * es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getFeature(java.
+	 * net.URI, es.gva.cit.gazetteer.querys.Query)
 	 */
-	public Feature[] getFeature(URI uri, GazetteerQuery query) {        
+	public Feature[] getFeature(URI uri, GazetteerQuery query) {
 		Collection nodes = new java.util.ArrayList();
 		setQuery(query);
 		URL url = null;
@@ -121,50 +129,56 @@ public class ADLGazetteerServiceDriver extends AbstractGazetteerServiceDriver im
 		} catch (MalformedURLException e) {
 			setServerAnswerReady("errorServerNotFound");
 			return null;
-		}    
-		System.out.println("**************POST*************");
-		System.out.println(getPOSTGetFeature(getQuery(),true));
-		nodes = new HTTPPostProtocol().doQuery(url,
-				getPOSTGetFeature(getQuery(),true), 0);
-
-		if (nodes == null){
-			System.out.println(getPOSTGetFeature(getQuery(),false));
-			nodes = new HTTPPostProtocol().doQuery(url,
-					getPOSTGetFeature(getQuery(),false), 0);
 		}
-		if ((nodes != null) && (nodes.size() == 1)){
-			return AdlFeatureParser.parse((XMLNode)nodes.toArray()[0]);
-		}else{
+		System.out.println("**************POST*************");
+		System.out.println(getPOSTGetFeature(getQuery(), true));
+		nodes = new HTTPPostProtocol().doQuery(url,
+				getPOSTGetFeature(getQuery(), true), 0);
+
+		if (nodes == null) {
+			System.out.println(getPOSTGetFeature(getQuery(), false));
+			nodes = new HTTPPostProtocol().doQuery(url,
+					getPOSTGetFeature(getQuery(), false), 0);
+		}
+		if ((nodes != null) && (nodes.size() == 1)) {
+			return AdlFeatureParser.parse((XMLNode) nodes.toArray()[0]);
+		} else {
 			return null;
 		}
-	} 
+	}
 
 	/**
 	 * It creates the XML for the getFeature request
+	 * 
 	 * @return Name-value pair with a XML request
-	 * @param query 
+	 * @param query
 	 */
-	private String getPOSTGetFeature(GazetteerQuery query,boolean withAccents) {        
-		return  "<gazetteer-service " +
-		"xmlns=\"http://www.alexandria.ucsb.edu/gazetteer\" " +
-		"xmlns:gml=\"http://www.opengis.net/gml\" " +
-		"version=\"1.2\">" +
-		new ADLFilter(withAccents).getQuery(query) +
-		"</gazetteer-service>" ;
-	} 
-	
-	/*
-	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#isProtocolSupported(java.net.URI)
-	 */
-	public boolean isProtocolSupported(URI uri) {        
-		// TODO Auto-generated method stub
-		return true;
-	} 	
+	private String getPOSTGetFeature(GazetteerQuery query, boolean withAccents) {
+		return "<gazetteer-service "
+				+ "xmlns=\"http://www.alexandria.ucsb.edu/gazetteer\" "
+				+ "xmlns:gml=\"http://www.opengis.net/gml\" "
+				+ "version=\"1.2\">"
+				+ new ADLFilter(withAccents).getQuery(query)
+				+ "</gazetteer-service>";
+	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getDefaultPort()
+	 * 
+	 * @see
+	 * es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#isProtocolSupported
+	 * (java.net.URI)
+	 */
+	public boolean isProtocolSupported(URI uri) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getDefaultPort()
 	 */
 	public int getDefaultPort() {
 		return 80;
@@ -172,7 +186,9 @@ public class ADLGazetteerServiceDriver extends AbstractGazetteerServiceDriver im
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getDefaultSchema()
+	 * 
+	 * @see
+	 * es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getDefaultSchema()
 	 */
 	public String getDefaultSchema() {
 		return "http";
@@ -180,7 +196,9 @@ public class ADLGazetteerServiceDriver extends AbstractGazetteerServiceDriver im
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getServiceName()
+	 * 
+	 * @see
+	 * es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getServiceName()
 	 */
 	public String getServiceName() {
 		return ServerData.SERVER_SUBTYPE_GAZETTEER_ADL;

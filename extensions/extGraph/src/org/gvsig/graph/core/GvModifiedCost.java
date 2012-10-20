@@ -41,13 +41,11 @@
 package org.gvsig.graph.core;
 
 /**
- * @author fjp
- * To set barriers or modified cost to a graph.
- * This objects are stored in arrayList modifiedCosts (inside
- * Network class). Useful to remove barriers, for example (restore
- * a cost). Be careful: You need to call applyModifiedCosts 
- * each time you call setVelocities (setVelocities recalculate
- * cost (weight?) field in graph 
+ * @author fjp To set barriers or modified cost to a graph. This objects are
+ *         stored in arrayList modifiedCosts (inside Network class). Useful to
+ *         remove barriers, for example (restore a cost). Be careful: You need
+ *         to call applyModifiedCosts each time you call setVelocities
+ *         (setVelocities recalculate cost (weight?) field in graph
  */
 public class GvModifiedCost {
 	private int idArc;
@@ -57,61 +55,76 @@ public class GvModifiedCost {
 	private double oldCost;
 	private double newCost;
 	private double oldInverseCost;
-	
+
 	private boolean applied;
+
 	public GvModifiedCost(int idArc, double newCost, int direction) {
 		this.idArc = idArc;
 		this.newCost = newCost;
 		this.direction = direction;
 	}
+
 	public boolean isApplied() {
 		return applied;
 	}
+
 	public void setApplied(boolean applied) {
 		this.applied = applied;
 	}
+
 	public int getIdArc() {
 		return idArc;
 	}
+
 	public void setIdArc(int idArc) {
 		this.idArc = idArc;
 	}
+
 	public int getIdEdge() {
 		return idEdge;
 	}
+
 	public void setIdEdge(int idEdge) {
 		this.idEdge = idEdge;
 	}
+
 	public int getDirection() {
 		return direction;
 	}
+
 	public void setDirection(int direction) {
 		this.direction = direction;
 	}
+
 	public int getIdInverseEdge() {
 		return idInverseEdge;
 	}
+
 	public void setIdInverseEdge(int idInverseEdge) {
 		this.idInverseEdge = idInverseEdge;
 	}
+
 	public double getNewCost() {
 		return newCost;
 	}
+
 	public void setNewCost(double newCost) {
 		this.newCost = newCost;
 	}
+
 	public double getOldCost() {
 		return oldCost;
 	}
+
 	public void setOldCost(double oldCost) {
 		this.oldCost = oldCost;
 	}
+
 	public double getOldInverseCost() {
 		return oldInverseCost;
 	}
+
 	public void setOldInverseCost(double oldInverseCost) {
 		this.oldInverseCost = oldInverseCost;
 	}
 }
-
-

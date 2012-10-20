@@ -5,10 +5,11 @@ package com.iver.cit.gvsig.exceptions.layers;
  */
 public class DriverLayerException extends LoadLayerException {
 
-	public DriverLayerException(String l,Throwable exception) {
-		super(l,exception);
+	public DriverLayerException(String l, Throwable exception) {
+		super(l, exception);
 		init();
 	}
+
 	/**
 	 *
 	 */

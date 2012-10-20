@@ -26,19 +26,20 @@ import org.gvsig.raster.datastruct.io.exceptions.RasterLegendIONotFound;
 import org.gvsig.raster.datastruct.io.formats.GimpGradients;
 import org.gvsig.raster.datastruct.io.formats.GimpPalettes;
 import org.gvsig.raster.datastruct.io.formats.LegendgvSIG;
+
 /**
- * Clase de la que debe heredar todo aquel que quiera hacer una clase
- * de importación o exportación de una tabla de color.
- *
+ * Clase de la que debe heredar todo aquel que quiera hacer una clase de
+ * importación o exportación de una tabla de color.
+ * 
  * @version 20/11/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 abstract public class RasterLegendIO {
-	private static String[] formats = {"rmf", "ggr", "gpl"};
+	private static String[] formats = { "rmf", "ggr", "gpl" };
 
 	/**
 	 * Lista de formatos soportados por RasterLegendIO
-	 *
+	 * 
 	 * @return
 	 */
 	public static String[] getFormats() {
@@ -47,12 +48,13 @@ abstract public class RasterLegendIO {
 
 	/**
 	 * Devuelve un RasterLegend para el formato especificado por parametro.
-	 *
+	 * 
 	 * @param formatName
 	 * @return
 	 * @throws RasterLegendIONotFound
 	 */
-	public static RasterLegendIO getRasterLegendIO(String formatName) throws RasterLegendIONotFound {
+	public static RasterLegendIO getRasterLegendIO(String formatName)
+			throws RasterLegendIONotFound {
 		if (formatName.equals(formats[0]))
 			return new LegendgvSIG();
 
@@ -67,8 +69,8 @@ abstract public class RasterLegendIO {
 	}
 
 	/**
-	 * Devuelve la descripcion a mostrar en los paneles de JFileChooser.
-	 * Si se devuelve null se mostrará la decripción por defecto.
+	 * Devuelve la descripcion a mostrar en los paneles de JFileChooser. Si se
+	 * devuelve null se mostrará la decripción por defecto.
 	 */
 	public String getDescription() {
 		return null;
@@ -76,19 +78,22 @@ abstract public class RasterLegendIO {
 
 	/**
 	 * Lee una tabla de color del fichero pasado por parametro
-	 *
+	 * 
 	 * @param input
 	 * @return
-	 * @throws IOException cuando ha fallado la carga
+	 * @throws IOException
+	 *             cuando ha fallado la carga
 	 */
 	abstract public ColorTable read(File input) throws IOException;
 
 	/**
 	 * Guarda una tabla de color en el fichero pasado por parametro
-	 *
+	 * 
 	 * @param colorTable
 	 * @param output
-	 * @throws IOException cuando ha fallado la escritura
+	 * @throws IOException
+	 *             cuando ha fallado la escritura
 	 */
-	abstract public void write(ColorTable colorTable, File output) throws IOException;
+	abstract public void write(ColorTable colorTable, File output)
+			throws IOException;
 }

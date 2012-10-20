@@ -39,22 +39,24 @@ import org.gvsig.raster.util.RasterToolsUtil;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
+
 /**
- * Es el interfaz gráfico que contiene el filtro de regiones de interes.
- * En el se muestra una tabla con las posibles Rois a seleccionar y también
- * un Checkbox para definir si la seleccion es normal o invertida.
+ * Es el interfaz gráfico que contiene el filtro de regiones de interes. En el
+ * se muestra una tabla con las posibles Rois a seleccionar y también un
+ * Checkbox para definir si la seleccion es normal o invertida.
  * 
  * @version 17/01/2008
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
-public class RegionAlphaUI extends RegistrableFilterListener implements TableModelListener, ChangeListener {
+public class RegionAlphaUI extends RegistrableFilterListener implements
+		TableModelListener, ChangeListener {
 	private static final long serialVersionUID = 4525736825113598035L;
 	private TableContainer tableContainer = null;
-	private FLayer         layer          = null;
-	private JLabel         warning        = null;
-	private ArrayList      rois           = null;
-	private JCheckBox      negative       = null;
-	private boolean        lastInv        = false;
+	private FLayer layer = null;
+	private JLabel warning = null;
+	private ArrayList rois = null;
+	private JCheckBox negative = null;
+	private boolean lastInv = false;
 
 	/**
 	 * Constructor de un RegionAlphaUI
@@ -62,7 +64,7 @@ public class RegionAlphaUI extends RegistrableFilterListener implements TableMod
 	public RegionAlphaUI() {
 		initialize();
 	}
-	
+
 	/**
 	 * Inicializa los elementos gráficos.
 	 */
@@ -72,33 +74,40 @@ public class RegionAlphaUI extends RegistrableFilterListener implements TableMod
 		add(getWarning(), BorderLayout.NORTH);
 		add(getInverse(), BorderLayout.SOUTH);
 	}
-	
+
 	/**
 	 * Obtiene el contenedor con la tabla.
+	 * 
 	 * @return
 	 */
 	private TableContainer getTableContainer() {
 		if (tableContainer == null) {
-			String[] columnNames = {" ", PluginServices.getText(null, "name"), ""};
-			int[] columnWidths = {22, 334, 0};
+			String[] columnNames = { " ", PluginServices.getText(null, "name"),
+					"" };
+			int[] columnWidths = { 22, 334, 0 };
 			tableContainer = new TableContainer(columnNames, columnWidths);
 			tableContainer.setPreferredSize(new Dimension(0, 130));
 			tableContainer.setModel("CheckBoxModel");
 			tableContainer.initialize();
 			tableContainer.setControlVisible(false);
 			tableContainer.setMoveRowsButtonsVisible(false);
-			tableContainer.getTable().getJTable().getColumnModel().getColumn(0).setMinWidth(22);
-			tableContainer.getTable().getJTable().getColumnModel().getColumn(0).setMaxWidth(22);
-			tableContainer.getTable().getJTable().getColumnModel().getColumn(2).setMinWidth(0);
-			tableContainer.getTable().getJTable().getColumnModel().getColumn(2).setMaxWidth(0);
+			tableContainer.getTable().getJTable().getColumnModel().getColumn(0)
+					.setMinWidth(22);
+			tableContainer.getTable().getJTable().getColumnModel().getColumn(0)
+					.setMaxWidth(22);
+			tableContainer.getTable().getJTable().getColumnModel().getColumn(2)
+					.setMinWidth(0);
+			tableContainer.getTable().getJTable().getColumnModel().getColumn(2)
+					.setMaxWidth(0);
 			tableContainer.getModel().addTableModelListener(this);
 		}
 		return tableContainer;
 	}
-	
+
 	/**
 	 * Obtiene el checkbox que informa de si selecciona lo que contiene las Rois
 	 * o su inversa.
+	 * 
 	 * @return JCheckBox
 	 */
 	private JCheckBox getInverse() {
@@ -111,47 +120,52 @@ public class RegionAlphaUI extends RegistrableFilterListener implements TableMod
 	}
 
 	/**
-	 * Obtiene el mensaje de aviso de que no hay rois en la lista. Esta etiqueta solo
-	 * es mostrada en caso en que la capa no tenga ROIs asociadas.
+	 * Obtiene el mensaje de aviso de que no hay rois en la lista. Esta etiqueta
+	 * solo es mostrada en caso en que la capa no tenga ROIs asociadas.
+	 * 
 	 * @return JLabel Etiqueta con el mensaje de aviso.
 	 */
 	public JLabel getWarning() {
-		if(warning == null) {
+		if (warning == null) {
 			warning = new JLabel(RasterToolsUtil.getText(this, "rois_needed"));
 			warning.setVisible(false);
 		}
 		return warning;
 	}
-	
+
 	/**
 	 * Asigna la lista de regiones de interés.
-	 * @param rois Lista de ROIs
+	 * 
+	 * @param rois
+	 *            Lista de ROIs
 	 */
 	public void setRois(ArrayList rois) {
 		this.rois = rois;
 	}
-	
+
 	/**
 	 * Asigna la capa.
+	 * 
 	 * @param layer
 	 */
 	public void setLayer(FLayer layer) {
 		this.layer = layer;
 		if (layer == null)
 			return;
-		
-		if(((FLyrRasterSE) layer).getRois() == null || ((FLyrRasterSE) layer).getRois().size() == 0)
+
+		if (((FLyrRasterSE) layer).getRois() == null
+				|| ((FLyrRasterSE) layer).getRois().size() == 0)
 			getWarning().setVisible(true);
-		
+
 		ArrayList roisArray = ((FLyrRasterSE) layer).getRois();
 		if (roisArray != null) {
 			for (int i = 0; i < roisArray.size(); i++) {
 				ROI roi = (ROI) roisArray.get(i);
-	
-				Object row[] = {"", "", ""};
-				
+
+				Object row[] = { "", "", "" };
+
 				boolean active = false;
-				
+
 				if (rois != null) {
 					for (int r = 0; r < rois.size(); r++) {
 						if (((ROI) rois.get(r)) == roi) {
@@ -160,9 +174,9 @@ public class RegionAlphaUI extends RegistrableFilterListener implements TableMod
 						}
 					}
 				}
-				
+
 				row[0] = new Boolean(active);
-				row[1] = roi.getName(); 
+				row[1] = roi.getName();
 				row[2] = new Integer(i);
 				try {
 					getTableContainer().addRow(row);
@@ -171,9 +185,10 @@ public class RegionAlphaUI extends RegistrableFilterListener implements TableMod
 			}
 		}
 	}
-	
+
 	/**
 	 * Obtiene la lista de ROIs seleccionadas
+	 * 
 	 * @return ArrayList con la lista de ROIs
 	 */
 	private ArrayList getSelectedROIs() {
@@ -185,37 +200,35 @@ public class RegionAlphaUI extends RegistrableFilterListener implements TableMod
 		if (roisArray != null) {
 			for (int i = 0; i < roisArray.size(); i++) {
 				try {
-					if (((Boolean) tableContainer.getModel().getValueAt(i, 0)).booleanValue()) {
+					if (((Boolean) tableContainer.getModel().getValueAt(i, 0))
+							.booleanValue()) {
 						selected.add(roisArray.get(i));
 					}
 				} catch (ArrayIndexOutOfBoundsException e) {
-					//Entra aquí si se han añadido ROIs con el cuadro abierto. Pasamos de hacer nada
+					// Entra aquí si se han añadido ROIs con el cuadro abierto.
+					// Pasamos de hacer nada
 				}
 			}
 		}
 		return selected;
 	}
-	
+
 	/**
-	 * Sobrecargamos el método getParams para que siempre devuelva
-	 * algo.
+	 * Sobrecargamos el método getParams para que siempre devuelva algo.
 	 */
 	public Params getParams() {
 		params = new Params();
-		params.setParam("rois",
-				getSelectedROIs(),
-				-1,
-				null);
-		params.setParam("inverse",
-				new Boolean(getInverse().isSelected()),
-				-1,
+		params.setParam("rois", getSelectedROIs(), -1, null);
+		params.setParam("inverse", new Boolean(getInverse().isSelected()), -1,
 				null);
 		return params;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see javax.swing.event.TableModelListener#tableChanged(javax.swing.event.TableModelEvent)
+	 * 
+	 * @see javax.swing.event.TableModelListener#tableChanged(javax.swing.event.
+	 * TableModelEvent)
 	 */
 	public void tableChanged(TableModelEvent e) {
 		callStateChanged();
@@ -223,6 +236,7 @@ public class RegionAlphaUI extends RegistrableFilterListener implements TableMod
 
 	/**
 	 * Cambio de estado para el check de inversa
+	 * 
 	 * @param e
 	 */
 	public void stateChanged(ChangeEvent e) {

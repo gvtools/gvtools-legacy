@@ -41,31 +41,41 @@
 package com.iver.cit.gvsig.fmap;
 
 /**
- * <p>All events produced on a layer must be of a particular type.</p>
- *
- * <p><code>FMapEvent</code> defines the least information that can have an event
- *  produced on a layer, its <i>type</i>.</p>
+ * <p>
+ * All events produced on a layer must be of a particular type.
+ * </p>
+ * 
+ * <p>
+ * <code>FMapEvent</code> defines the least information that can have an event
+ * produced on a layer, its <i>type</i>.
+ * </p>
  */
 public class FMapEvent {
 	/**
 	 * Kind of event type.
 	 */
 	private int eventType;
+
 	/**
-	 * <p>Gets the type of this event.</p>
+	 * <p>
+	 * Gets the type of this event.
+	 * </p>
 	 * 
 	 * @return the type of this event
 	 */
 	public int getEventType() {
 		return eventType;
 	}
+
 	/**
-	 * <p>Sets the type of the event.</p>
+	 * <p>
+	 * Sets the type of the event.
+	 * </p>
 	 * 
-	 * @param eventType the number that identifies this event's type
+	 * @param eventType
+	 *            the number that identifies this event's type
 	 */
 	public void setEventType(int eventType) {
 		this.eventType = eventType;
 	}
 }
-

@@ -53,30 +53,38 @@ import com.hardcode.gdbms.engine.values.Value;
 
 /**
  * Clase intervalo.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FInterval implements IInterval {
 	private double from;
 	private double to;
-	public FInterval(){
+
+	public FInterval() {
 	}
+
 	/**
 	 * Crea un nuevo FInterval.
-	 *
-	 * @param from Origen.
-	 * @param to Destino.
+	 * 
+	 * @param from
+	 *            Origen.
+	 * @param to
+	 *            Destino.
 	 */
 	public FInterval(double from, double to) {
 		this.from = from;
 		this.to = to;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.rendering.IInterval#isInInterval(com.hardcode.gdbms.engine.values.Value)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.rendering.IInterval#isInInterval(com.hardcode
+	 * .gdbms.engine.values.Value)
 	 */
 	public boolean isInInterval(Value v) {
-		double valor=0;
+		double valor = 0;
 		if (v instanceof IntValue) {
 			valor = ((IntValue) v).getValue();
 		} else if (v instanceof DoubleValue) {
@@ -86,8 +94,8 @@ public class FInterval implements IInterval {
 		} else if (v instanceof LongValue) {
 			valor = ((LongValue) v).getValue();
 		} else if (v instanceof DateValue) {
-			//TODO POR IMPLEMENTAR
-		} else if (v instanceof NullValue){
+			// TODO POR IMPLEMENTAR
+		} else if (v instanceof NullValue) {
 			return false;
 		}
 		return ((valor >= from) && (valor <= to));
@@ -95,7 +103,7 @@ public class FInterval implements IInterval {
 
 	/**
 	 * Devuelve el número de origen.
-	 *
+	 * 
 	 * @return Número de inicio.
 	 */
 	public double getMin() {
@@ -104,14 +112,16 @@ public class FInterval implements IInterval {
 
 	/**
 	 * Devuelve el número final.
-	 *
+	 * 
 	 * @return Número final.
 	 */
 	public double getMax() {
 		return to;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.rendering.IInterval#toString()
 	 */
 	public String toString() {
@@ -121,20 +131,21 @@ public class FInterval implements IInterval {
 	/**
 	 * Crea un FInterval nuevo a partir de un String con el número inicial un
 	 * guión y el número final.
-	 *
-	 * @param s String.
-	 *
+	 * 
+	 * @param s
+	 *            String.
+	 * 
 	 * @return FInterval nuevo.
 	 */
 	public static IInterval create(String s) {
 		Pattern pattern = Pattern.compile("(-?[^-]*)-(-?.*)");
 		Matcher matcher = pattern.matcher(s);
-		IInterval inter=new NullIntervalValue(); // temporal pessimism
+		IInterval inter = new NullIntervalValue(); // temporal pessimism
 		if (matcher.find()) {
-			try{
+			try {
 				inter = new FInterval(Double.parseDouble(matcher.group(1)),
 						Double.parseDouble(matcher.group(2)));
-			}catch (NumberFormatException e) {
+			} catch (NumberFormatException e) {
 			}
 		}
 

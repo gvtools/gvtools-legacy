@@ -2,11 +2,8 @@ package org.gvsig.remoteClient.wfs.wfs_1_0_0;
 
 import java.io.File;
 
-import org.gvsig.remoteClient.wcs.wcs_1_0_0.WCSProtocolHandler1_0_0;
-import org.gvsig.remoteClient.wfs.WFSStatus;
-import org.gvsig.remoteClient.wfs.wfs_1_0_0.WFSProtocolHandler1_0_0;
-
 import junit.framework.TestCase;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -73,40 +70,49 @@ import junit.framework.TestCase;
  */
 public class WFSProtocolHandlerTest1_0_0 extends TestCase {
 	WFSProtocolHandler1_0_0 handler;
-	
+
 	public void setUp() {
 		System.out.println("Setting up test..");
-		handler = new WFSProtocolHandler1_0_0();		
+		handler = new WFSProtocolHandler1_0_0();
 	}
-	
-	
+
 	public void testParsingDescribeFeatureType() {
 		long t1 = System.currentTimeMillis();
-		assertTrue(handler.parseCapabilities(new File("testdata/wfs/WFS-dmsolutionsGetCapabilities.xml")));
+		assertTrue(handler.parseCapabilities(new File(
+				"testdata/wfs/WFS-dmsolutionsGetCapabilities.xml")));
 		handler.setCurrentFeature("popplace");
-		assertTrue(handler.parseDescribeFeatureType(new File("testdata/wfs/WFS-dmsolutionsDescribeFeatureType.xml"),null));
+		assertTrue(handler.parseDescribeFeatureType(new File(
+				"testdata/wfs/WFS-dmsolutionsDescribeFeatureType.xml"), null));
 		long t2 = System.currentTimeMillis();
-		System.out.println("Test parsing vivid done with apparently no errors in "+ (t2-(float)t1)/1000+" seconds");
+		System.out
+				.println("Test parsing vivid done with apparently no errors in "
+						+ (t2 - (float) t1) / 1000 + " seconds");
 	}
-	
+
 	public void testParsingDescribeFeatureType2() {
 		long t1 = System.currentTimeMillis();
-		assertTrue(handler.parseCapabilities(new File("testdata/wfs/WFS-sercartlinGetCapabilities.xml")));
+		assertTrue(handler.parseCapabilities(new File(
+				"testdata/wfs/WFS-sercartlinGetCapabilities.xml")));
 		handler.setCurrentFeature("topp:tasmania_roads");
-		assertTrue(handler.parseDescribeFeatureType(new File("testdata/wfs/WFS-sercartlinDescribeFeatureType.xml"),"cit"));
+		assertTrue(handler.parseDescribeFeatureType(new File(
+				"testdata/wfs/WFS-sercartlinDescribeFeatureType.xml"), "cit"));
 		long t2 = System.currentTimeMillis();
-		System.out.println("Test parsing sercartlin done with apparently no errors in "+ (t2-(float)t1)/1000+" seconds");
+		System.out
+				.println("Test parsing sercartlin done with apparently no errors in "
+						+ (t2 - (float) t1) / 1000 + " seconds");
 	}
-	
+
 	public void testParsingDescribeFeatureType3() {
 		long t1 = System.currentTimeMillis();
-		assertTrue(handler.parseCapabilities(new File("testdata/wfs/WFS-IDEEGetCapabilities.xml")));
+		assertTrue(handler.parseCapabilities(new File(
+				"testdata/wfs/WFS-IDEEGetCapabilities.xml")));
 		handler.setCurrentFeature("BDLL200_Provincia");
-		assertTrue(handler.parseDescribeFeatureType(new File("testdata/wfs/WFS-IDEEDescribeFeatureType.xml"),null));
+		assertTrue(handler.parseDescribeFeatureType(new File(
+				"testdata/wfs/WFS-IDEEDescribeFeatureType.xml"), null));
 		long t2 = System.currentTimeMillis();
-		System.out.println("Test parsing TNT done with apparently no errors in "+ (t2-(float)t1)/1000+" seconds");
+		System.out
+				.println("Test parsing TNT done with apparently no errors in "
+						+ (t2 - (float) t1) / 1000 + " seconds");
 	}
-	
 
-	
 }

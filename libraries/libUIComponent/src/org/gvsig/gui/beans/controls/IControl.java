@@ -45,43 +45,44 @@ import java.awt.event.ActionListener;
 
 /**
  * This interface models a control to be used in Andami.
- *
+ * 
  * @author Cesar Martinez Izquierdo <cesar.martinez@iver.es>
- *
+ * 
  */
 public interface IControl {
 	/**
-	 *  Adds an ActionListener to the control
-	 *
+	 * Adds an ActionListener to the control
+	 * 
 	 * @param listener
 	 */
 	public void addActionListener(ActionListener listener);
 
 	/**
-	 *  Removes an ActionListener from the control
-	 *
+	 * Removes an ActionListener from the control
+	 * 
 	 * @param listener
 	 */
 	public void removeActionListener(ActionListener listener);
 
 	/**
-	 *  Sets the value of the control. It may mean different things for
-	 *  different kinds of controls.
-	 *
-	 *  @return The value which was set, or null if the value was not valid
-	 *  for this control
+	 * Sets the value of the control. It may mean different things for different
+	 * kinds of controls.
+	 * 
+	 * @return The value which was set, or null if the value was not valid for
+	 *         this control
 	 */
 	public Object setValue(Object value);
 
 	/**
 	 * Gets the name of the control, used to identify it
+	 * 
 	 * @return the name of the control
 	 */
 	public String getName();
 
 	/**
 	 * Sets the name of the control, used to identify it
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */

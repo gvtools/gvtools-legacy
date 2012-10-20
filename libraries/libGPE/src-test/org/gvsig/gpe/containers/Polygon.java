@@ -63,45 +63,47 @@ import java.util.ArrayList;
 public class Polygon extends Geometry {
 	private ArrayList coordinates = null;
 	private ArrayList innerBoundary = new ArrayList();
-	
+
 	public Polygon() {
 		super();
 		coordinates = new ArrayList();
 	}
 
-	public void addCoordinate(double[] coordinate){
+	public void addCoordinate(double[] coordinate) {
 		coordinates.add(coordinate);
 	}
-	
-	public double geCoordinateAt(int index, int dimension){
-		return ((double[])(coordinates.get(index)))[dimension];
+
+	public double geCoordinateAt(int index, int dimension) {
+		return ((double[]) (coordinates.get(index)))[dimension];
 	}
-	
-	public int getCoordinatesNumber(){
+
+	public int getCoordinatesNumber() {
 		return coordinates.size();
-	}	
-	
+	}
+
 	/**
 	 * @return the innerBoundary
 	 */
 	public ArrayList getInnerBoundary() {
 		return innerBoundary;
 	}
-	
+
 	/**
 	 * Adds a new layer
+	 * 
 	 * @param layer
 	 */
-	public void addInnerBoundary(Polygon polygon){
+	public void addInnerBoundary(Polygon polygon) {
 		innerBoundary.add(polygon);
 	}
-	
+
 	/**
 	 * Adds a new layer
+	 * 
 	 * @param layer
 	 */
-	public void addInnerBoundary(Object polygon){
-		if (polygon instanceof Polygon){
+	public void addInnerBoundary(Object polygon) {
+		if (polygon instanceof Polygon) {
 			innerBoundary.add(polygon);
 		}
 	}

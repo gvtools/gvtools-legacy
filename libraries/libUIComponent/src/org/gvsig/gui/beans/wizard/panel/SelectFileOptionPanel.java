@@ -44,26 +44,27 @@ import org.gvsig.gui.beans.openfile.FileTextField;
  * <p>
  * This panel implements a panel to select a file that can be added to a wizard.
  * </p>
+ * 
  * @author <a href="mailto:jpiera@gvsig.org">Jorge Piera Llodr&aacute;</a>
  */
-public class SelectFileOptionPanel extends JPanel implements DocumentListener{
+public class SelectFileOptionPanel extends JPanel implements DocumentListener {
 	private JLabel fileLabel;
 	private FileTextField fileTextField;
 	private javax.swing.JPanel northPanel;
 
 	public SelectFileOptionPanel(String fileText) {
-		super();		
+		super();
 		initComponents();
-		if (fileText != null){
-		    fileLabel.setText(fileText + ":");
+		if (fileText != null) {
+			fileLabel.setText(fileText + ":");
 		}
 		initListeners();
 	}
-	
-    private void initListeners() {	
+
+	private void initListeners() {
 		Object obj = fileTextField.getComponent(0);
 		if ((obj != null) && (obj instanceof JTextField)) {
-			((JTextField)obj).getDocument().addDocumentListener(this);	
+			((JTextField) obj).getDocument().addDocumentListener(this);
 		}
 	}
 
@@ -90,28 +91,27 @@ public class SelectFileOptionPanel extends JPanel implements DocumentListener{
 		add(northPanel, BorderLayout.NORTH);
 	}
 
-	public File getSelectedFile(){
+	public File getSelectedFile() {
 		return fileTextField.getSelectedFile();
 	}
 
-	public String getSelectedFileName(){
+	public String getSelectedFileName() {
 		return fileTextField.getSelectedFile().getAbsolutePath();
 	}
 
-	protected void checkNextButtonEnabled(){
+	protected void checkNextButtonEnabled() {
 
 	}
 
 	public void changedUpdate(DocumentEvent e) {
-		checkNextButtonEnabled();		
+		checkNextButtonEnabled();
 	}
 
 	public void insertUpdate(DocumentEvent e) {
-		checkNextButtonEnabled();			
+		checkNextButtonEnabled();
 	}
 
 	public void removeUpdate(DocumentEvent e) {
-		checkNextButtonEnabled();			
-	}   
+		checkNextButtonEnabled();
+	}
 }
-

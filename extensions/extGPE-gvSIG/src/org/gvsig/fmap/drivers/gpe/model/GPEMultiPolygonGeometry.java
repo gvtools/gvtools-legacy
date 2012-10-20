@@ -52,18 +52,19 @@ import com.iver.cit.gvsig.fmap.core.ShapeFactory;
 /**
  * @author Jorge Piera Llodrá (jorge.piera@iver.es)
  */
-public class GPEMultiPolygonGeometry extends GPEMultiLineGeometry{
+public class GPEMultiPolygonGeometry extends GPEMultiLineGeometry {
 
 	public GPEMultiPolygonGeometry(String id, String srs) {
-		super(id, srs);		
+		super(id, srs);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.fmap.drivers.gpe.model.GPEMultiGeometry#getIGeometry()
 	 */
 	public IGeometry getIGeometry() {
-		if (geometry == null){
+		if (geometry == null) {
 			geometry = ShapeFactory.createPolygon2D(createGeneralXPath());
 		}
 		return geometry;

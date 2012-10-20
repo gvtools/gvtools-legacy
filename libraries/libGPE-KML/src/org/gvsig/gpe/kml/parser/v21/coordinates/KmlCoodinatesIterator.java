@@ -65,47 +65,55 @@ public abstract class KmlCoodinatesIterator implements IKmlCoordinatesIterator {
 	protected QName lastTag = null;
 	protected int dimension = 0;
 	protected StringTokenizer coordinatesString = null;
-	
-	/* (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.parser.IGmlCoordinatesIterator#initialize(org.gvsig.gpe.xml.stream.IXmlStreamReader, org.gvsig.gpe.gml.parser.GPEDefaultGmlParser, java.lang.String)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.parser.IGmlCoordinatesIterator#initialize(org.gvsig
+	 * .gpe.xml.stream.IXmlStreamReader,
+	 * org.gvsig.gpe.gml.parser.GPEDefaultGmlParser, java.lang.String)
 	 */
 	public void initialize(IXmlStreamReader parser,
 			GPEDeafultKmlParser handler, QName lastTag)
-			throws XmlStreamException, IOException {		
+			throws XmlStreamException, IOException {
 		this.parser = parser;
 		this.handler = handler;
 		this.lastTag = lastTag;
-		this.dimension = -1;	
+		this.dimension = -1;
 	}
 
-	
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.ICoordinateIterator#getDimension()
 	 */
 	public int getDimension() {
 		return dimension;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.parser.IGmlCoordinatesIterator#parseAll()
 	 */
 	public void parseAll() throws XmlStreamException {
 		QName tag = parser.getName();
 		int currentTag = parser.getEventType();
 		boolean endCoordinates = false;
-		
-		while (!endCoordinates){
-			switch(currentTag){
-				case IXmlStreamReader.END_ELEMENT:
-					if (CompareUtils.compareWithNamespace(tag,lastTag)){
-						endCoordinates = true;						
-					}
-					break;
+
+		while (!endCoordinates) {
+			switch (currentTag) {
+			case IXmlStreamReader.END_ELEMENT:
+				if (CompareUtils.compareWithNamespace(tag, lastTag)) {
+					endCoordinates = true;
+				}
+				break;
 			}
-			if (!endCoordinates){					
+			if (!endCoordinates) {
 				currentTag = parser.next();
-				tag = parser.getName();				
-			}			
-		}	
-	}	
+				tag = parser.getName();
+			}
+		}
+	}
 }

@@ -7,9 +7,9 @@ public class AllTestsRender {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.gvsig.fmap.grid.render");
-		//$JUnit-BEGIN$
+		// $JUnit-BEGIN$
 		suite.addTestSuite(FormatArrayRenderTest.class);
-		//$JUnit-END$
+		// $JUnit-END$
 		return suite;
 	}
 

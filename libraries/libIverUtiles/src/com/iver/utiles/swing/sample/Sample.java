@@ -48,53 +48,56 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
 
-
 public class Sample {
-	
-    /**
-     * DOCUMENT ME!
-     *
-     * @param args DOCUMENT ME!
-     */
-    public static void main(String[] args) {
-        /* JFrame f = new JFrame("AutoCompleteComboBox");
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JComboBox box = new JComboBox(new Object[] {"", "bos días","ata logo","deica logo"});
-        box.setEditable(true);
-        f.getContentPane().add(box);
-        f.pack();
-        f.setLocationRelativeTo(null);
-        f.setVisible(true); */
-        /* JPasswordDlg dlg = new JPasswordDlg();
-        dlg.setMessage("Hola");
-        dlg.show(); */
-        Locale ukLocale = new Locale("en", "UK"); // English, UK version
-        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, ukLocale);
-        /* Calendar c = Calendar.getInstance();
-        c.clear();
-        c.set(Integer.parseInt(year), Integer.parseInt(month),
-            Integer.parseInt(day));
-        c.set(Calendar.MILLISECOND, 0); */
-        String strAux = "12/06/1996";
-        Date dat = null;
-        try {
-            dat = df.parse(strAux);
-        } catch (ParseException e) {
-            e.printStackTrace();            
-        } 
-        System.out.println(dat.getYear() + " " + dat.getMonth() + " " + dat.getDate());
-        
-        String aux = "Jaén";
-        StringBuffer strBuf = new StringBuffer(aux);
-        ByteArrayOutputStream out = new ByteArrayOutputStream(strBuf.length());
-        PrintStream printStream = new PrintStream(out);
-        printStream.print(aux);
-        try {
-            String aux2 = out.toString("UTF-8");
-            System.out.println(aux + " " + aux2);
-        } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }                
-    }}
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param args
+	 *            DOCUMENT ME!
+	 */
+	public static void main(String[] args) {
+		/*
+		 * JFrame f = new JFrame("AutoCompleteComboBox");
+		 * f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		 * 
+		 * JComboBox box = new JComboBox(new Object[] {"",
+		 * "bos días","ata logo","deica logo"}); box.setEditable(true);
+		 * f.getContentPane().add(box); f.pack(); f.setLocationRelativeTo(null);
+		 * f.setVisible(true);
+		 */
+		/*
+		 * JPasswordDlg dlg = new JPasswordDlg(); dlg.setMessage("Hola");
+		 * dlg.show();
+		 */
+		Locale ukLocale = new Locale("en", "UK"); // English, UK version
+		DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, ukLocale);
+		/*
+		 * Calendar c = Calendar.getInstance(); c.clear();
+		 * c.set(Integer.parseInt(year), Integer.parseInt(month),
+		 * Integer.parseInt(day)); c.set(Calendar.MILLISECOND, 0);
+		 */
+		String strAux = "12/06/1996";
+		Date dat = null;
+		try {
+			dat = df.parse(strAux);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		System.out.println(dat.getYear() + " " + dat.getMonth() + " "
+				+ dat.getDate());
+
+		String aux = "Jaén";
+		StringBuffer strBuf = new StringBuffer(aux);
+		ByteArrayOutputStream out = new ByteArrayOutputStream(strBuf.length());
+		PrintStream printStream = new PrintStream(out);
+		printStream.print(aux);
+		try {
+			String aux2 = out.toString("UTF-8");
+			System.out.println(aux + " " + aux2);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}

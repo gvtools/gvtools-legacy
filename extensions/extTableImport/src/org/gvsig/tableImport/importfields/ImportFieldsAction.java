@@ -14,7 +14,7 @@ public class ImportFieldsAction extends FinishAction {
 	private WizardAndami wizard;
 	private ImportFieldParams params;
 
-	public ImportFieldsAction(WizardAndami wizard,ImportFieldParams params) {
+	public ImportFieldsAction(WizardAndami wizard, ImportFieldParams params) {
 		super(wizard.getWizardComponents());
 
 		this.wizard = wizard;
@@ -22,8 +22,9 @@ public class ImportFieldsAction extends FinishAction {
 	}
 
 	public void performAction() {
-		if (params.isValid()){
-			ImportFieldsExtension ext = (ImportFieldsExtension) PluginServices.getExtension(ImportFieldsExtension.class);
+		if (params.isValid()) {
+			ImportFieldsExtension ext = (ImportFieldsExtension) PluginServices
+					.getExtension(ImportFieldsExtension.class);
 			try {
 				ext.doImportField(this.params);
 			} catch (Exception e) {
@@ -34,13 +35,14 @@ public class ImportFieldsAction extends FinishAction {
 		}
 		PluginServices.getMDIManager().closeWindow(this.wizard);
 
-		//TODO: Cuando la tabla es de una capa y no esta en edición no se refresca
+		// TODO: Cuando la tabla es de una capa y no esta en edición no se
+		// refresca
 		IWindow[] windows = PluginServices.getMDIManager().getAllWindows();
 		Table tableWindow;
-		for (int i=0;i<windows.length;i++){
-			if (windows[i] instanceof Table){
+		for (int i = 0; i < windows.length; i++) {
+			if (windows[i] instanceof Table) {
 				tableWindow = (Table) windows[i];
-				if (tableWindow.getModel().equals(params.getTable())){
+				if (tableWindow.getModel().equals(params.getTable())) {
 					try {
 						params.getTable().createAlias();
 					} catch (ReadDriverException e) {

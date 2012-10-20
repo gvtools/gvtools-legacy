@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.jts.voronoi.chew;
 
 import java.awt.geom.Point2D;
@@ -62,18 +62,17 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Point;
 
 /**
- * Implementation of List which returns JTS Points from a
- * VoronoiAndTinInputLyr layer.
+ * Implementation of List which returns JTS Points from a VoronoiAndTinInputLyr
+ * layer.
  * 
  * @author Alvaro Zabala
- *
+ * 
  * @param <Point>
  */
 public class ChewVoronoiList implements List<Point> {
-	
-	
+
 	VoronoiAndTinInputLyr inputLyr;
-	
+
 	public ChewVoronoiList(VoronoiAndTinInputLyr inputLyr) {
 		this.inputLyr = inputLyr;
 	}
@@ -106,7 +105,8 @@ public class ChewVoronoiList implements List<Point> {
 
 	public Point get(int index) {
 		Point2D point = inputLyr.getPoint(index);
-		return 	JtsUtil.GEOMETRY_FACTORY.createPoint(new Coordinate(point.getX(), point.getY()));
+		return JtsUtil.GEOMETRY_FACTORY.createPoint(new Coordinate(
+				point.getX(), point.getY()));
 	}
 
 	public int indexOf(Object o) {
@@ -133,7 +133,8 @@ public class ChewVoronoiList implements List<Point> {
 			public Point next() {
 				Point2D point = inputLyr.getPoint(index);
 				index++;
-				return 	JtsUtil.GEOMETRY_FACTORY.createPoint(new Coordinate(point.getX(), point.getY()));
+				return JtsUtil.GEOMETRY_FACTORY.createPoint(new Coordinate(
+						point.getX(), point.getY()));
 			}
 
 			public void remove() {

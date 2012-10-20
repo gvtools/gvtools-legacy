@@ -221,12 +221,12 @@ public class Fieldtype implements GeocodingPersistence {
 				.compareToIgnoreCase(GeocodingTags.STRINGVALUE) == 0) {
 			this._stringvalue = new Stringvalue();
 			this._stringvalue.setXMLEntity(xml2);
-		} else if (xml2.getName().trim().compareToIgnoreCase(
-				GeocodingTags.DATEVALUE) == 0) {
+		} else if (xml2.getName().trim()
+				.compareToIgnoreCase(GeocodingTags.DATEVALUE) == 0) {
 			this._datevalue = new Datevalue();
 			this._datevalue.setXMLEntity(xml2);
-		} else if (xml2.getName().trim().compareToIgnoreCase(
-				GeocodingTags.DECIMALVALUE) == 0) {
+		} else if (xml2.getName().trim()
+				.compareToIgnoreCase(GeocodingTags.DECIMALVALUE) == 0) {
 			this._decimalvalue = new Decimalvalue();
 			this._decimalvalue.setXMLEntity(xml2);
 		} else {

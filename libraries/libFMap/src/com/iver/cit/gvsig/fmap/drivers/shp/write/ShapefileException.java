@@ -65,8 +65,9 @@ package com.iver.cit.gvsig.fmap.drivers.shp.write;
 public class ShapefileException extends Exception {
 	/**
 	 * Crea un nuevo ShapefileException.
-	 *
-	 * @param s DOCUMENT ME!
+	 * 
+	 * @param s
+	 *            DOCUMENT ME!
 	 */
 	public ShapefileException(String s) {
 		super(s);
@@ -74,9 +75,11 @@ public class ShapefileException extends Exception {
 
 	/**
 	 * Crea un nuevo ShapefileException.
-	 *
-	 * @param s DOCUMENT ME!
-	 * @param cause DOCUMENT ME!
+	 * 
+	 * @param s
+	 *            DOCUMENT ME!
+	 * @param cause
+	 *            DOCUMENT ME!
 	 */
 	public ShapefileException(String s, Throwable cause) {
 		super(s, cause);

@@ -61,81 +61,83 @@ import es.prodevelop.cit.gvsig.arcims.gui.toc.ArcImsLayerScaleTocMenuEntry;
 import es.prodevelop.cit.gvsig.arcims.gui.toc.ArcImsPropsTocMenuEntry;
 import es.prodevelop.cit.gvsig.arcims.gui.wizards.ArcImsWizard;
 
-
 /**
  * This class implements the extension to access ArcIMS servers.
- *
+ * 
  * @author jldominguez
- *
+ * 
  */
 public class ArcimsClientModule extends Extension {
-    /**
-    * This method initializes the extension. Adds the ArcIMS wizard
-    * and the right-click popup menus to the gvSIG resources.
-    */
-    public void initialize() {
-        // must add menus and a new tab to the wizard..
-        // to create an arcims layer
-        FPopupMenu.addEntry(new ArcImsPropsTocMenuEntry());
-        // FPopupMenu.addEntry(new ArcImsRasterPropsTocMenuEntry());
-        FPopupMenu.addEntry(new ArcImsLayerScaleTocMenuEntry());
-        AddLayer.addWizard(ArcImsWizard.class);
-        
-        // properties tabs:
-        ThemeManagerWindow.setTabEnabledForLayer(General.class, FFeatureLyrArcIMS.class, true);
-        ThemeManagerWindow.setTabEnabledForLayer(LegendManager.class, FFeatureLyrArcIMS.class, true);
-        ThemeManagerWindow.setTabEnabledForLayer(LabelingManager.class, FFeatureLyrArcIMS.class, true);
+	/**
+	 * This method initializes the extension. Adds the ArcIMS wizard and the
+	 * right-click popup menus to the gvSIG resources.
+	 */
+	public void initialize() {
+		// must add menus and a new tab to the wizard..
+		// to create an arcims layer
+		FPopupMenu.addEntry(new ArcImsPropsTocMenuEntry());
+		// FPopupMenu.addEntry(new ArcImsRasterPropsTocMenuEntry());
+		FPopupMenu.addEntry(new ArcImsLayerScaleTocMenuEntry());
+		AddLayer.addWizard(ArcImsWizard.class);
 
-        // about
-        java.net.URL newurl = createResourceUrl("about/extarcims-about.html");
-        About claseAbout = (About) PluginServices.getExtension(com.iver.cit.gvsig.About.class);
-        claseAbout.getAboutPanel().addAboutUrl("ArcIMS", newurl);
+		// properties tabs:
+		ThemeManagerWindow.setTabEnabledForLayer(General.class,
+				FFeatureLyrArcIMS.class, true);
+		ThemeManagerWindow.setTabEnabledForLayer(LegendManager.class,
+				FFeatureLyrArcIMS.class, true);
+		ThemeManagerWindow.setTabEnabledForLayer(LabelingManager.class,
+				FFeatureLyrArcIMS.class, true);
 
-        // catalog
-        ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
-        extensionPoints.add("CatalogLayers", "arcims_raster",
-            FRasterLyrArcIMS.class);
-        extensionPoints.add("CatalogLayers", "arcims_vectorial",
-            FFeatureLyrArcIMSCollection.class);
+		// about
+		java.net.URL newurl = createResourceUrl("about/extarcims-about.html");
+		About claseAbout = (About) PluginServices
+				.getExtension(com.iver.cit.gvsig.About.class);
+		claseAbout.getAboutPanel().addAboutUrl("ArcIMS", newurl);
 
-        
-//        FLyrVect.forTestOnlyVariableUseIterators_REMOVE_THIS_FIELD = false;
-        // UIManager.put("Label.font", new Font("SimSun", Font.PLAIN, 12));
-    }
+		// catalog
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+		extensionPoints.add("CatalogLayers", "arcims_raster",
+				FRasterLyrArcIMS.class);
+		extensionPoints.add("CatalogLayers", "arcims_vectorial",
+				FFeatureLyrArcIMSCollection.class);
 
-    /**
-     * This method is called when the extension's controls are used.
-     * So far, the ArcIMS plugin does <i>not</i> add any controls.
-     *
-     * @param actionCommand the control's string action commmad.
-     *
-     */
-    public void execute(String actionCommand) {
-    }
+		// FLyrVect.forTestOnlyVariableUseIterators_REMOVE_THIS_FIELD = false;
+		// UIManager.put("Label.font", new Font("SimSun", Font.PLAIN, 12));
+	}
 
-    /**
-     * This method is called to find out if the plugin's controls are
-     * enabled or not. So far, the ArcIMS plugin does <i>not</i>
-     * add any controls.
-     *
-     * @return <b>true</b> if controls must be enabled, <b>false</b> if not.
-     */
-    public boolean isEnabled() {
-        return false;
-    }
+	/**
+	 * This method is called when the extension's controls are used. So far, the
+	 * ArcIMS plugin does <i>not</i> add any controls.
+	 * 
+	 * @param actionCommand
+	 *            the control's string action commmad.
+	 * 
+	 */
+	public void execute(String actionCommand) {
+	}
 
-    /**
-     * This method is called to find out if the plugin's controls are
-     * visible or not. So far, the ArcIMS plugin does <i>not</i>
-     * add any controls.
-     *
-     * @return <b>true</b> if controls must be visible, <b>false</b> if not.
-     */
-    public boolean isVisible() {
-        return false;
-    }
+	/**
+	 * This method is called to find out if the plugin's controls are enabled or
+	 * not. So far, the ArcIMS plugin does <i>not</i> add any controls.
+	 * 
+	 * @return <b>true</b> if controls must be enabled, <b>false</b> if not.
+	 */
+	public boolean isEnabled() {
+		return false;
+	}
 
-    private java.net.URL createResourceUrl(String path) {
-        return getClass().getClassLoader().getResource(path);
-    }
+	/**
+	 * This method is called to find out if the plugin's controls are visible or
+	 * not. So far, the ArcIMS plugin does <i>not</i> add any controls.
+	 * 
+	 * @return <b>true</b> if controls must be visible, <b>false</b> if not.
+	 */
+	public boolean isVisible() {
+		return false;
+	}
+
+	private java.net.URL createResourceUrl(String path) {
+		return getClass().getClassLoader().getResource(path);
+	}
 }

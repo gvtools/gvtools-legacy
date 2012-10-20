@@ -28,20 +28,22 @@ import javax.swing.border.EtchedBorder;
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
- 
+
 /**
  * JDateChooser is a simple Date choosing component with similar functionality
- * to JFileChooser and JColorChooser. It can be used as a component, to 
- * be inserted into a client layout, or can display it's own Dialog
- * through use of the {@link #showDialog(Component, String) showDialog} method.
+ * to JFileChooser and JColorChooser. It can be used as a component, to be
+ * inserted into a client layout, or can display it's own Dialog through use of
+ * the {@link #showDialog(Component, String) showDialog} method.
  * <p>
  * JDateChooser can be initialized to the current date using the no argument
- * constructor, or initialized to a predefined date by passing an instance
- * of Calendar to the constructor.<p>
- * Using the JDateChooser dialog works in a similar manner to JFileChooser
- * or JColorChooser. The {@link #showDialog(Component, String) showDialog} method
- * returns an int that equates to the public variables ACCEPT_OPTION, CANCEL_OPTION
- * or ERROR_OPTION.<p>
+ * constructor, or initialized to a predefined date by passing an instance of
+ * Calendar to the constructor.
+ * <p>
+ * Using the JDateChooser dialog works in a similar manner to JFileChooser or
+ * JColorChooser. The {@link #showDialog(Component, String) showDialog} method
+ * returns an int that equates to the public variables ACCEPT_OPTION,
+ * CANCEL_OPTION or ERROR_OPTION.
+ * <p>
  * <tt>
  * JDateChooser chooser = new JDateChooser();<br>
  * if (chooser.showDialog(this, "Select a date...") == JDateChooser.ACCEPT_OPTION) {<br>
@@ -56,8 +58,9 @@ import com.iver.andami.ui.mdiManager.WindowInfo;
  * method.
  */
 
-public class JDateChooser extends JPanel implements ActionListener, DaySelectionListener, IWindow {
-	
+public class JDateChooser extends JPanel implements ActionListener,
+		DaySelectionListener, IWindow {
+
 	public static final int CANCEL_OPTION = 4;
 	private int currentDay;
 	private int currentMonth;
@@ -72,8 +75,9 @@ public class JDateChooser extends JPanel implements ActionListener, DaySelection
 	private JButton okay;
 	private JButton cancel;
 	private JPanel days;
-	
+
 	private DayListener dayListener = new DayListener();
+
 	/**
 	 * This constructor creates a new instance of JDateChooser initialized to
 	 * the current date.
@@ -81,7 +85,7 @@ public class JDateChooser extends JPanel implements ActionListener, DaySelection
 	public JDateChooser() {
 		this(Calendar.getInstance());
 	}
-	
+
 	/**
 	 * Creates a new instance of JDateChooser initialized to the given Calendar.
 	 */
@@ -91,7 +95,7 @@ public class JDateChooser extends JPanel implements ActionListener, DaySelection
 		this.calendar.setLenient(true);
 		setup();
 	}
-	
+
 	private void setup() {
 		GridBagLayout g = new GridBagLayout();
 		GridBagConstraints c = new GridBagConstraints();
@@ -126,15 +130,16 @@ public class JDateChooser extends JPanel implements ActionListener, DaySelection
 		nextYear.setToolTipText("Año siguiente");
 		c.gridx++;
 		g.setConstraints(nextYear, c);
-		
+
 		updateCalendar(calendar);
-		
+
 		JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		okay = (JButton) buttons.add(new JButton("Ok"));
 		okay.addActionListener(this);
-		cancel = (JButton) buttons.add(new JButton(PluginServices.getText(this,"Cancelar")));
+		cancel = (JButton) buttons.add(new JButton(PluginServices.getText(this,
+				"Cancelar")));
 		cancel.addActionListener(this);
-		
+
 		setLayout(new BorderLayout());
 		add("North", header);
 		days.setBackground(Color.WHITE);
@@ -143,7 +148,7 @@ public class JDateChooser extends JPanel implements ActionListener, DaySelection
 		add("Center", days);
 		add("South", buttons);
 	}
-	
+
 	private void updateCalendar(Calendar c) {
 		if (days != null)
 			remove(days);
@@ -183,7 +188,7 @@ public class JDateChooser extends JPanel implements ActionListener, DaySelection
 		setup.set(Calendar.DAY_OF_MONTH, 1);
 		for (int i = 0; i < setup.getActualMaximum(setup.DAY_OF_MONTH); i++) {
 			DayButton button = new DayButton(setup.get(setup.DAY_OF_MONTH));
-			if (setup.get(Calendar.DAY_OF_MONTH) == currentDay){
+			if (setup.get(Calendar.DAY_OF_MONTH) == currentDay) {
 				button.setBackground(Color.BLUE);
 				button.setForeground(Color.WHITE);
 				dayListener.setDia(button);
@@ -201,28 +206,31 @@ public class JDateChooser extends JPanel implements ActionListener, DaySelection
 		setup = null;
 		updateLabel();
 	}
-	
+
 	private void updateLabel() {
 		Date date = calendar.getTime();
 		dateText.setText(DateFormat.getInstance().format(date));
 	}
-	
+
 	/**
 	 * Returns the currently selected Date in the form of a java.util.Calendar
-	 * object. Typically called adter receipt of an {@link #ACCEPT_OPTION ACCEPT_OPTION}
-	 * (using the {@link #showDialog(Component, String) showDialog} method) or
-	 * within the {@link #acceptSelection() acceptSelection} method (using the
-	 * JDateChooser as a component.)<p>
-	 * @return java.util.Calendar The selected date in the form of a Calendar object.
+	 * object. Typically called adter receipt of an {@link #ACCEPT_OPTION
+	 * ACCEPT_OPTION} (using the {@link #showDialog(Component, String)
+	 * showDialog} method) or within the {@link #acceptSelection()
+	 * acceptSelection} method (using the JDateChooser as a component.)
+	 * <p>
+	 * 
+	 * @return java.util.Calendar The selected date in the form of a Calendar
+	 *         object.
 	 */
 	public Calendar getSelectedDate() {
 		return calendar;
 	}
-	
+
 	/**
-	 * Used to process events from the previous month, previous year, next month, next year,
-	 * okay and cancel buttons. Users should call super.actionPerformed(ActionEvent) if overriding
-	 * this method.
+	 * Used to process events from the previous month, previous year, next
+	 * month, next year, okay and cancel buttons. Users should call
+	 * super.actionPerformed(ActionEvent) if overriding this method.
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == okay) {
@@ -249,11 +257,11 @@ public class JDateChooser extends JPanel implements ActionListener, DaySelection
 			updateCalendar(calendar);
 		}
 	}
-	
+
 	/**
 	 * Used to process day selection events from the user. This method resets
-	 * resets the Calendar object to the selected day. Subclasses should make a call
-	 * to super.daySelected() if overriding this method.
+	 * resets the Calendar object to the selected day. Subclasses should make a
+	 * call to super.daySelected() if overriding this method.
 	 */
 	public void daySelected(int d) {
 		calendar.set(Calendar.DAY_OF_MONTH, d);
@@ -265,11 +273,11 @@ public class JDateChooser extends JPanel implements ActionListener, DaySelection
 	 * @see com.iver.mdiApp.ui.MDIManager.IWindow#getWindowInfo()
 	 */
 	public WindowInfo getWindowInfo() {
-		WindowInfo m_viewinfo=new WindowInfo(WindowInfo.MODALDIALOG);
-			m_viewinfo.setTitle(PluginServices.getText(this,"seleccione_fecha"));
-			m_viewinfo.setWidth(400);
-			m_viewinfo.setHeight(200);
-		
+		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODALDIALOG);
+		m_viewinfo.setTitle(PluginServices.getText(this, "seleccione_fecha"));
+		m_viewinfo.setWidth(400);
+		m_viewinfo.setHeight(200);
+
 		return m_viewinfo;
 	}
 
@@ -284,17 +292,18 @@ public class JDateChooser extends JPanel implements ActionListener, DaySelection
 	}
 }
 
-class DayListener extends MouseAdapter{
+class DayListener extends MouseAdapter {
 	private DayButton btnDia;
-	
-	public void setDia(DayButton btn){
-		btnDia = btn; 
+
+	public void setDia(DayButton btn) {
+		btnDia = btn;
 	}
+
 	/**
 	 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
 	 */
 	public void mouseClicked(MouseEvent e) {
-		if (btnDia != null){
+		if (btnDia != null) {
 			btnDia.setBackground(Color.WHITE);
 			btnDia.setForeground(Color.BLACK);
 		}
@@ -302,16 +311,16 @@ class DayListener extends MouseAdapter{
 		btnDia = (DayButton) e.getSource();
 		btnDia.setBackground(Color.BLUE);
 		btnDia.setForeground(Color.WHITE);
-		
+
 	}
 
 }
 
 class DayButton extends JLabel implements MouseListener {
-	
+
 	private int day;
 	private Vector listeners;
-	
+
 	public DayButton(int d) {
 		super((new Integer(d)).toString());
 		this.day = d;
@@ -320,20 +329,20 @@ class DayButton extends JLabel implements MouseListener {
 		this.setOpaque(true);
 		this.setHorizontalAlignment(JLabel.CENTER);
 	}
-	
+
 	public void addDaySelectionListener(DaySelectionListener l) {
 		if (listeners == null)
 			listeners = new Vector(1, 1);
 		listeners.addElement(l);
 	}
-	
+
 	public void removeDaySelectionListener(DaySelectionListener l) {
 		if (listeners != null)
 			listeners.removeElement(l);
 	}
-	
+
 	public void removeAllListeners() {
-		listeners = new Vector(1,1);
+		listeners = new Vector(1, 1);
 	}
 
 	/**
@@ -342,7 +351,8 @@ class DayButton extends JLabel implements MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		if (listeners != null) {
 			for (int i = 0; i < listeners.size(); i++) {
-				((DaySelectionListener) listeners.elementAt(i)).daySelected(day);
+				((DaySelectionListener) listeners.elementAt(i))
+						.daySelected(day);
 			}
 		}
 	}
@@ -371,5 +381,3 @@ class DayButton extends JLabel implements MouseListener {
 	public void mouseReleased(MouseEvent arg0) {
 	}
 }
-
-	

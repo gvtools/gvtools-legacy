@@ -46,9 +46,10 @@ import org.gvsig.remoteClient.sld.SLDLayerFeatureConstraints;
 import org.gvsig.remoteClient.sld.filterEncoding.Filter;
 import org.gvsig.remoteClient.sld.styles.AbstractSLDStyle;
 import org.gvsig.remoteClient.sld.symbolizers.ISLDSymbolizer;
+
 /**
- * Interface that has to be implemented by all the sld Layers 
- *
+ * Interface that has to be implemented by all the sld Layers
+ * 
  * @see http://portal.opengeospatial.org/files/?artifact_id=1188
  * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
  */
@@ -56,39 +57,45 @@ import org.gvsig.remoteClient.sld.symbolizers.ISLDSymbolizer;
 public interface ISLDLayer {
 
 	/**
-	 * Obtains all the symbolizers for the specific shapeType which are contained in
-	 * a layer
+	 * Obtains all the symbolizers for the specific shapeType which are
+	 * contained in a layer
 	 * 
 	 * @param shapeType
 	 * @return
 	 */
 	public ArrayList<ISLDSymbolizer> getSymbolizersByShapeType(int type);
+
 	/**
 	 * Obtains all the filters contained in a layer.
 	 * 
 	 * @return ArrayList of Filters
 	 */
 	public ArrayList<Filter> getLayerFilters();
+
 	/**
 	 * Obtains all the fieldNames contained in a Layer.
-	 *  
+	 * 
 	 * @return String[] with all the fieldNames
 	 */
 	public String[] getFieldNames();
+
 	/**
-	 * Returns true if the layer has rules with filters for symbolizers which has
-	 * the same shapeType as the parameter (the shapeType of the layer).
+	 * Returns true if the layer has rules with filters for symbolizers which
+	 * has the same shapeType as the parameter (the shapeType of the layer).
 	 * Otherwise, false.
 	 * 
-	 * @param shapeType of the layer
+	 * @param shapeType
+	 *            of the layer
 	 */
 	public boolean layerHasFilterForSymbolizers(int shapeType);
+
 	/**
 	 * Returns true if the layer contains filters. Otherwise, false.
 	 * 
 	 * @return
 	 */
 	public boolean layerHasFilters();
+
 	/**
 	 * Returns true if the layer contains symbolizers of an specific shapeType.
 	 * Otherwise, false.
@@ -97,29 +104,42 @@ public interface ISLDLayer {
 	 * @return
 	 */
 	public boolean layerHasSymbolizers(int shapeType);
+
 	/**
 	 * Returns the name of the layer
+	 * 
 	 * @return
 	 */
 	public String getName();
+
 	/**
 	 * Sets the name of the layer
 	 * 
 	 * @param name
 	 */
-	public void setName(String name) ;
+	public void setName(String name);
+
 	/**
 	 * Obtains the styles contained in a layer
+	 * 
 	 * @return
 	 */
-	public ArrayList<AbstractSLDStyle> getLayerStyles() ;
+	public ArrayList<AbstractSLDStyle> getLayerStyles();
+
 	/**
 	 * Sets the styles to be contained in a layer
+	 * 
 	 * @param layerStyles
 	 */
 	public void setLayerStyles(ArrayList<AbstractSLDStyle> layerStyles);
-	public ArrayList<SLDLayerFeatureConstraints> getLayerFeatureConstraints() ;
-	public void setLayerFeatureConstraints(ArrayList<SLDLayerFeatureConstraints> layerFeatureConstraints) ;
-	public void addLayerFeatureConstraint(SLDLayerFeatureConstraints layerFeatureCons);
+
+	public ArrayList<SLDLayerFeatureConstraints> getLayerFeatureConstraints();
+
+	public void setLayerFeatureConstraints(
+			ArrayList<SLDLayerFeatureConstraints> layerFeatureConstraints);
+
+	public void addLayerFeatureConstraint(
+			SLDLayerFeatureConstraints layerFeatureCons);
+
 	public void addLayerStyle(AbstractSLDStyle style);
 }

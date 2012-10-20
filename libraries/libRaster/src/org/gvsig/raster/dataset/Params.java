@@ -21,37 +21,38 @@ package org.gvsig.raster.dataset;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-
 /**
-* Parámetros para los drivers de escritura. Las variables estaticas contenidas representan
-* los tipos de parámetro posibles.
-*
-* @version 17/04/2007
-* @author Nacho Brodin (nachobrodin@gmail.com)
-*/
+ * Parámetros para los drivers de escritura. Las variables estaticas contenidas
+ * representan los tipos de parámetro posibles.
+ * 
+ * @version 17/04/2007
+ * @author Nacho Brodin (nachobrodin@gmail.com)
+ */
 public class Params implements Cloneable {
-	public static final int NONE        = -1;
-	public static final int CHECK       = 1;
-	public static final int CHOICE      = 2;
-	public static final int SLIDER      = 3;
+	public static final int NONE = -1;
+	public static final int CHECK = 1;
+	public static final int CHOICE = 2;
+	public static final int SLIDER = 3;
 	public static final int MULTI_CHECK = 4;
 
 	/**
 	 * Clase que representa un parámetro. Los atributos principales son:
 	 * <UL>
-	 * <LI>type: tipo de parámetro que tendrá un valor correspondiente a las variables estaticas de
-	 * Params.</LI>
+	 * <LI>type: tipo de parámetro que tendrá un valor correspondiente a las
+	 * variables estaticas de Params.</LI>
 	 * <LI>id: que contiene el identificador del parámetro en cadena de texto</LI>
 	 * <LI>defaultValue: que será el valor por defecto asignado al parámetro</LI>
-	 * <LI>list: que contiene una lista de valores con datos asociados al parámetro en concreto</LI>
+	 * <LI>list: que contiene una lista de valores con datos asociados al
+	 * parámetro en concreto</LI>
 	 * </UL>
-	 * . Por ejemplo, para una selección por lista de valores tendrá la lista de valores a
-	 * seleccionar. Para un slider tendrá el valor máximo, el mínimo, el intervalo menor
-	 * y el mayor. Para una selección por check esta lista puede ser vacia.
-	 *
+	 * . Por ejemplo, para una selección por lista de valores tendrá la lista de
+	 * valores a seleccionar. Para un slider tendrá el valor máximo, el mínimo,
+	 * el intervalo menor y el mayor. Para una selección por check esta lista
+	 * puede ser vacia.
+	 * 
 	 * @version 17/04/2007
 	 * @author Nacho Brodin (nachobrodin@gmail.com)
-	 *
+	 * 
 	 */
 	public class Param {
 		public int type = -1;
@@ -64,15 +65,19 @@ public class Params implements Cloneable {
 
 	/**
 	 * Obtiene el parámetro de la posición definida por param
-	 * @param param Posición del parámetro
+	 * 
+	 * @param param
+	 *            Posición del parámetro
 	 * @return Objeto Param
 	 */
 	public Param getParam(int param) {
-		return (Param)params.get(param);
+		return (Param) params.get(param);
 	}
 
 	/**
-	 * Asigna el parámetro pasado a la lista de parámetros necesitados por el driver
+	 * Asigna el parámetro pasado a la lista de parámetros necesitados por el
+	 * driver
+	 * 
 	 * @param param
 	 */
 	public void setParam(Param param) {
@@ -88,7 +93,9 @@ public class Params implements Cloneable {
 
 	/**
 	 * Obtiene un parámetro de la lista a partir de su identificador
-	 * @param id Identificador del parámetro
+	 * 
+	 * @param id
+	 *            Identificador del parámetro
 	 * @return Parámetro o null si no existe
 	 */
 	public Param getParamById(String id) {
@@ -102,10 +109,15 @@ public class Params implements Cloneable {
 
 	/**
 	 * Asigna un parámetro. Si existe este lo reemplaza.
-	 * @param id Identificador
-	 * @param value Valor
-	 * @param type Tipo
-	 * @param list Lista de valores
+	 * 
+	 * @param id
+	 *            Identificador
+	 * @param value
+	 *            Valor
+	 * @param type
+	 *            Tipo
+	 * @param list
+	 *            Lista de valores
 	 */
 	public void setParam(String id, Object value, int type, String[] list) {
 		Param p = getParamById(id);
@@ -121,6 +133,7 @@ public class Params implements Cloneable {
 
 	/**
 	 * Borra los parametros asociados a ese id
+	 * 
 	 * @param id
 	 */
 	public void removeParam(String id) {
@@ -135,20 +148,23 @@ public class Params implements Cloneable {
 
 	/**
 	 * Asigna un valor para un parámetro existens. Si no existe no hace nada.
-	 *
-	 * @param id Identificador del parámetro
-	 * @param value Valor a asignar
+	 * 
+	 * @param id
+	 *            Identificador del parámetro
+	 * @param value
+	 *            Valor a asignar
 	 */
 	public void changeParamValue(String id, Object value) {
 		for (Iterator iter = params.iterator(); iter.hasNext();) {
 			Param p = (Param) iter.next();
-			if(p.id.equals(id))
+			if (p.id.equals(id))
 				p.defaultValue = value;
 		}
 	}
 
 	/**
 	 * Obtiene el número de parámetros.
+	 * 
 	 * @return Número de parámetros.
 	 */
 	public int getNumParams() {
@@ -157,13 +173,16 @@ public class Params implements Cloneable {
 
 	/**
 	 * Devuelve el array de los Params
+	 * 
 	 * @return
 	 */
 	public ArrayList getParams() {
 		return params;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#clone()
 	 */
 	public Object clone() throws CloneNotSupportedException {

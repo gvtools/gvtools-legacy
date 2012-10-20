@@ -1,12 +1,12 @@
 package com.hardcode.gdbms.driver.exceptions;
 
-
 public class InitializeDriverException extends ReadDriverException {
 
-	public InitializeDriverException(String l,Throwable exception) {
-		super(l,exception);
+	public InitializeDriverException(String l, Throwable exception) {
+		super(l, exception);
 		init();
 	}
+
 	/**
 	 *
 	 */

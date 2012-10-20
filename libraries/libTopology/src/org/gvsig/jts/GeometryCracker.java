@@ -66,11 +66,11 @@ import com.vividsolutions.jts.geom.Polygon;
  * Crack process consist in insert points in a segment when the distance of this
  * segment with a given coordinate is less than the snap tolerance.
  * 
- * So GeometryCracker doesnt compute intersections between segments 
- * and inserts new coordinates there.
+ * So GeometryCracker doesnt compute intersections between segments and inserts
+ * new coordinates there.
  * 
- * GeometryCracker only insert new coordinates in segments when these coordinates
- * are shared geometry (they are vertices of other geometries) 
+ * GeometryCracker only insert new coordinates in segments when these
+ * coordinates are shared geometry (they are vertices of other geometries)
  * 
  */
 public class GeometryCracker {
@@ -107,120 +107,138 @@ public class GeometryCracker {
 	 * @param snapTolerance
 	 * @return
 	 */
-	public static Geometry crackGeometries(Geometry a, Geometry b, double snapTolerance) {
+	public static Geometry crackGeometries(Geometry a, Geometry b,
+			double snapTolerance) {
 		GeometryCracker cracker = new GeometryCracker(snapTolerance);
 		return cracker.crackGeometries(a, b);
 	}
-	
-	
-	public Geometry crackGeometries(Geometry a, Geometry b){
+
+	public Geometry crackGeometries(Geometry a, Geometry b) {
 		Geometry solution = a;
-		if(a.getGeometryType().equalsIgnoreCase("Polygon")){
-			Polygon polygonA = (Polygon)a;
-			if(b.getGeometryType().equalsIgnoreCase("Point") || 
-			   b.getGeometryType().equalsIgnoreCase("LineString") || 
-			   b.getGeometryType().equalsIgnoreCase("LinearRing")){
+		if (a.getGeometryType().equalsIgnoreCase("Polygon")) {
+			Polygon polygonA = (Polygon) a;
+			if (b.getGeometryType().equalsIgnoreCase("Point")
+					|| b.getGeometryType().equalsIgnoreCase("LineString")
+					|| b.getGeometryType().equalsIgnoreCase("LinearRing")) {
 				solution = crackPolygonWithPointOrLine(polygonA, b);
-			}else if(b.getGeometryType().equalsIgnoreCase("Polygon")){
-				Polygon polygonB = (Polygon)b;
+			} else if (b.getGeometryType().equalsIgnoreCase("Polygon")) {
+				Polygon polygonB = (Polygon) b;
 				solution = crackPolygonWithPolygon(polygonA, polygonB);
-			}else if(b instanceof GeometryCollection){
-				GeometryCollection collection = (GeometryCollection)b;
-				for(int i = 0; i < collection.getNumGeometries(); i++){
+			} else if (b instanceof GeometryCollection) {
+				GeometryCollection collection = (GeometryCollection) b;
+				for (int i = 0; i < collection.getNumGeometries(); i++) {
 					Geometry geometry = collection.getGeometryN(i);
 					polygonA = (Polygon) crackGeometries(polygonA, geometry);
-				}//for
+				}// for
 				solution = polygonA;
-			}//else
-			
-		}else if(a.getGeometryType().equalsIgnoreCase("LineString") || a.getGeometryType().equalsIgnoreCase("LinearRing")){
+			}// else
+
+		} else if (a.getGeometryType().equalsIgnoreCase("LineString")
+				|| a.getGeometryType().equalsIgnoreCase("LinearRing")) {
 			LineString lineStringA = (LineString) a;
-			if(b.getGeometryType().equalsIgnoreCase("LineString") || b.getGeometryType().equalsIgnoreCase("LinearRing") || b instanceof Point){
+			if (b.getGeometryType().equalsIgnoreCase("LineString")
+					|| b.getGeometryType().equalsIgnoreCase("LinearRing")
+					|| b instanceof Point) {
 				solution = crackLineStringWithPointOrLine(lineStringA, b);
-			}else if(b instanceof Polygon){
+			} else if (b instanceof Polygon) {
 				Polygon polygonB = (Polygon) b;
 				solution = crackLineStringWithPolygon(lineStringA, polygonB);
-			}else if(b instanceof GeometryCollection){
-				GeometryCollection collection = (GeometryCollection)b;
-				for(int i = 0; i < collection.getNumGeometries(); i++){
+			} else if (b instanceof GeometryCollection) {
+				GeometryCollection collection = (GeometryCollection) b;
+				for (int i = 0; i < collection.getNumGeometries(); i++) {
 					Geometry geometry = collection.getGeometryN(i);
-					lineStringA = (LineString) crackGeometries(lineStringA, geometry);
-				}//for
+					lineStringA = (LineString) crackGeometries(lineStringA,
+							geometry);
+				}// for
 				solution = lineStringA;
-			}//else
-			
-		}else if(a.getGeometryType().equalsIgnoreCase("Point")){
-				solution = a;
-		}else if(a instanceof GeometryCollection){
-			GeometryCollection collection = (GeometryCollection)a;
+			}// else
+
+		} else if (a.getGeometryType().equalsIgnoreCase("Point")) {
+			solution = a;
+		} else if (a instanceof GeometryCollection) {
+			GeometryCollection collection = (GeometryCollection) a;
 			Geometry[] geomArray = new Geometry[collection.getNumGeometries()];
-			for(int i = 0; i < collection.getNumGeometries(); i++){
+			for (int i = 0; i < collection.getNumGeometries(); i++) {
 				Geometry geometry = collection.getGeometryN(i);
 				Geometry crackedGeometry = crackGeometries(geometry, b);
 				geomArray[i] = crackedGeometry;
-			}//for
-			solution = JtsUtil.GEOMETRY_FACTORY.createGeometryCollection(geomArray);
-		}//GeometryCollection
+			}// for
+			solution = JtsUtil.GEOMETRY_FACTORY
+					.createGeometryCollection(geomArray);
+		}// GeometryCollection
 		return solution;
 	}
-	
+
 	/**
 	 * Cracks the passed polygon with the point parameter
+	 * 
 	 * @param point
 	 * @param polygon
 	 * @return
 	 */
-	private Geometry crackPolygonWithPointOrLine(Polygon polygon, Geometry geometry){
-		if(! (geometry instanceof LineString) && ! (geometry instanceof Point))
-			throw new IllegalArgumentException("Este metodo solo funciona con puntos y lineas y se recibio "+geometry.getGeometryType());
+	private Geometry crackPolygonWithPointOrLine(Polygon polygon,
+			Geometry geometry) {
+		if (!(geometry instanceof LineString) && !(geometry instanceof Point))
+			throw new IllegalArgumentException(
+					"Este metodo solo funciona con puntos y lineas y se recibio "
+							+ geometry.getGeometryType());
 		LinearRing shell = (LinearRing) polygon.getExteriorRing();
-		LinearRing crackedShell = (LinearRing) JtsUtil.createGeometry(crackTo(shell.getCoordinates(), geometry.getCoordinates()), "LINEARRING");
+		LinearRing crackedShell = (LinearRing) JtsUtil.createGeometry(
+				crackTo(shell.getCoordinates(), geometry.getCoordinates()),
+				"LINEARRING");
 		int numberOfHoles = polygon.getNumInteriorRing();
 		LinearRing[] crackedHoles = new LinearRing[numberOfHoles];
-		for(int i = 0; i < numberOfHoles; i++){
+		for (int i = 0; i < numberOfHoles; i++) {
 			LinearRing hole = (LinearRing) polygon.getInteriorRingN(i);
-			LinearRing crackedHole = (LinearRing) JtsUtil.createGeometry(crackTo(hole.getCoordinates(), geometry.getCoordinates()), "LINEARRING");
+			LinearRing crackedHole = (LinearRing) JtsUtil.createGeometry(
+					crackTo(hole.getCoordinates(), geometry.getCoordinates()),
+					"LINEARRING");
 			crackedHoles[i] = crackedHole;
 		}
-		return JtsUtil.GEOMETRY_FACTORY.createPolygon(crackedShell, crackedHoles);
+		return JtsUtil.GEOMETRY_FACTORY.createPolygon(crackedShell,
+				crackedHoles);
 	}
-	
-	private Geometry crackLineStringWithPointOrLine(LineString lineA, Geometry geometry){
-		if(! (geometry instanceof LineString) && ! (geometry instanceof Point))
-			throw new IllegalArgumentException("Este metodo solo funciona con puntos y lineas y se recibio "+geometry.getGeometryType());
-		Coordinate[] newCoordsA = crackTo(lineA.getCoordinates(), geometry.getCoordinates());
-		//we call to lineA.getGeometryType because it could be a LineString or a LinearRing
-		return JtsUtil.createGeometry(newCoordsA,  lineA.getGeometryType());
+
+	private Geometry crackLineStringWithPointOrLine(LineString lineA,
+			Geometry geometry) {
+		if (!(geometry instanceof LineString) && !(geometry instanceof Point))
+			throw new IllegalArgumentException(
+					"Este metodo solo funciona con puntos y lineas y se recibio "
+							+ geometry.getGeometryType());
+		Coordinate[] newCoordsA = crackTo(lineA.getCoordinates(),
+				geometry.getCoordinates());
+		// we call to lineA.getGeometryType because it could be a LineString or
+		// a LinearRing
+		return JtsUtil.createGeometry(newCoordsA, lineA.getGeometryType());
 	}
-	
-	
-	
-	private Geometry crackLineStringWithPolygon(LineString line, Polygon polygon){
+
+	private Geometry crackLineStringWithPolygon(LineString line, Polygon polygon) {
 		LinearRing shell = (LinearRing) polygon.getExteriorRing();
-		Coordinate[] lineStringCracked = crackTo(line.getCoordinates(), shell.getCoordinates());
+		Coordinate[] lineStringCracked = crackTo(line.getCoordinates(),
+				shell.getCoordinates());
 		int numberOfHoles = polygon.getNumInteriorRing();
-		for(int i = 0; i < numberOfHoles; i++){
+		for (int i = 0; i < numberOfHoles; i++) {
 			LinearRing hole = (LinearRing) polygon.getInteriorRingN(i);
-			lineStringCracked = crackTo(lineStringCracked, hole.getCoordinates());
+			lineStringCracked = crackTo(lineStringCracked,
+					hole.getCoordinates());
 		}
-		return JtsUtil.createGeometry(lineStringCracked, line.getGeometryType());
+		return JtsUtil
+				.createGeometry(lineStringCracked, line.getGeometryType());
 	}
-	
-	
-	private Geometry crackPolygonWithPolygon(Polygon polyA, Polygon polyB){
+
+	private Geometry crackPolygonWithPolygon(Polygon polyA, Polygon polyB) {
 		LinearRing shell = (LinearRing) polyB.getExteriorRing();
-		Polygon crackedPolygon = (Polygon) crackPolygonWithPointOrLine(polyA, shell);
+		Polygon crackedPolygon = (Polygon) crackPolygonWithPointOrLine(polyA,
+				shell);
 		int numberOfHoles = polyB.getNumInteriorRing();
-		for(int i = 0; i < numberOfHoles; i++){
+		for (int i = 0; i < numberOfHoles; i++) {
 			LinearRing hole = (LinearRing) polyB.getInteriorRingN(i);
-			crackedPolygon = (Polygon) crackPolygonWithPointOrLine(crackedPolygon, hole);
+			crackedPolygon = (Polygon) crackPolygonWithPointOrLine(
+					crackedPolygon, hole);
 		}
 		return crackedPolygon;
 	}
-	
-	
-	
-	
+
 	/*
 	 * This code is extracted from the class LineStringSnapper of JTS
 	 */
@@ -235,8 +253,9 @@ public class GeometryCracker {
 		int distinctPtCount = snapPts.length;
 		Coordinate firstPoint = snapPts[0];
 		Coordinate lastPoint = snapPts[snapPts.length - 1];
-		if (SnapCGAlgorithms.snapEquals2D(firstPoint, lastPoint, snapTolerance)){
-			if(distinctPtCount > 1)//necessary because with snapPts.length the algorithm doesnt work
+		if (SnapCGAlgorithms.snapEquals2D(firstPoint, lastPoint, snapTolerance)) {
+			if (distinctPtCount > 1)// necessary because with snapPts.length the
+									// algorithm doesnt work
 				distinctPtCount = snapPts.length - 1;
 		}
 		for (int i = 0; i < distinctPtCount; i++) {
@@ -244,7 +263,7 @@ public class GeometryCracker {
 			int index = findSegmentIndexToSnap(snapPt, srcCoords);
 			if (index >= 0) {
 				seg.p0 = srcCoords.getCoordinate(index);
-				seg.p1 = srcCoords.getCoordinate(index +1);
+				seg.p1 = srcCoords.getCoordinate(index + 1);
 				Coordinate newCoordinate = seg.closestPoint(snapPt);
 				srcCoords.add(index + 1, newCoordinate, false);
 			}// if
@@ -268,7 +287,7 @@ public class GeometryCracker {
 				minDist = dist;
 				snapIndex = i;
 			}
-		}//for
+		}// for
 		return snapIndex;
 	}
 

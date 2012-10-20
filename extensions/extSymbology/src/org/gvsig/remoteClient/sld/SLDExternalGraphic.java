@@ -45,39 +45,43 @@ import java.util.ArrayList;
 
 /**
  * Implements the ExternalGraphic element of an SLD implementation specification
- * .<p>
- * The ExternalGraphic element allows a reference to be made to an external graphic
- * file with a Web URL. The onlineResource sub-element gives the URL and the format
- * sub-element identifies the expected document MIME type of a succesful fetch. Knowing
- * the MIME type in advance allows the styler to select the best-supported format
- * from the list of URLs with the equivalent content. Users should avoid referencing
- * external graphics that may change at arbitrary times. Graphic should be static
- * when al all possible.
- *
+ * .
+ * <p>
+ * The ExternalGraphic element allows a reference to be made to an external
+ * graphic file with a Web URL. The onlineResource sub-element gives the URL and
+ * the format sub-element identifies the expected document MIME type of a
+ * succesful fetch. Knowing the MIME type in advance allows the styler to select
+ * the best-supported format from the list of URLs with the equivalent content.
+ * Users should avoid referencing external graphics that may change at arbitrary
+ * times. Graphic should be static when al all possible.
+ * 
  * @see http://portal.opengeospatial.org/files/?artifact_id=1188
- *
+ * 
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
-*/
+ */
 public abstract class SLDExternalGraphic implements ISLDFeatures {
 
 	protected ArrayList<URL> onlineResource = new ArrayList<URL>();
 	protected String format;
-	
+
 	public ArrayList<URL> getOnlineResource() {
 		return onlineResource;
 	}
+
 	public void setOnlineResource(ArrayList<URL> onlineResource) {
 		this.onlineResource = onlineResource;
 	}
+
 	public String getFormat() {
 		return format;
 	}
+
 	public void setFormat(String format) {
 		this.format = format;
 	}
-	
+
 	public void addOnlineResource(URL myURL) {
 		this.onlineResource.add(myURL);
 	}
-	
+
 }

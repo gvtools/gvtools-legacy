@@ -33,42 +33,49 @@ import com.iver.cit.gvsig.panelGroup.PanelGroupDialog;
 import com.iver.cit.gvsig.panelGroup.loaders.PanelGroupLoaderFromExtensionPoint;
 import com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction;
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
+
 /**
  * Entrada en del menú contextual del TOC correspondiente al cuadro de
  * propiedades del raster
- *
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
-public class RasterPropertiesTocMenuEntry extends AbstractTocContextMenuAction implements IGenericToolBarMenuItem {
-	static private RasterPropertiesTocMenuEntry singleton  = null;
-	private PanelGroupDialog                    properties = null;
-	private FLayer                              lyr        = null;
+public class RasterPropertiesTocMenuEntry extends AbstractTocContextMenuAction
+		implements IGenericToolBarMenuItem {
+	static private RasterPropertiesTocMenuEntry singleton = null;
+	private PanelGroupDialog properties = null;
+	private FLayer lyr = null;
 
 	/**
-	 * Variable para controlar si los eventos de los paneles se deben interpretar.
-	 * En la carga inicial se deben desactivar todos los eventos
+	 * Variable para controlar si los eventos de los paneles se deben
+	 * interpretar. En la carga inicial se deben desactivar todos los eventos
 	 */
-	public static boolean                     enableEvents = false;
-	
+	public static boolean enableEvents = false;
+
 	/**
 	 * Nadie puede crear una instancia a esta clase única, hay que usar el
 	 * getSingleton()
 	 */
-	private RasterPropertiesTocMenuEntry() {}
+	private RasterPropertiesTocMenuEntry() {
+	}
 
 	/**
 	 * Devuelve un objeto unico a dicha clase
+	 * 
 	 * @return
 	 */
 	static public RasterPropertiesTocMenuEntry getSingleton() {
 		if (singleton == null)
 			singleton = new RasterPropertiesTocMenuEntry();
 		return singleton;
-	}	
-	
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getGroup()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getGroup()
 	 */
 	public String getGroup() {
 		return "RasterLayer";
@@ -76,7 +83,10 @@ public class RasterPropertiesTocMenuEntry extends AbstractTocContextMenuAction i
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getGroupOrder()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getGroupOrder()
 	 */
 	public int getGroupOrder() {
 		return 60;
@@ -84,7 +94,10 @@ public class RasterPropertiesTocMenuEntry extends AbstractTocContextMenuAction i
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getOrder()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getOrder()
 	 */
 	public int getOrder() {
 		return 0;
@@ -92,6 +105,7 @@ public class RasterPropertiesTocMenuEntry extends AbstractTocContextMenuAction i
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.project.documents.IContextMenuAction#getText()
 	 */
 	public String getText() {
@@ -100,7 +114,11 @@ public class RasterPropertiesTocMenuEntry extends AbstractTocContextMenuAction i
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -115,7 +133,11 @@ public class RasterPropertiesTocMenuEntry extends AbstractTocContextMenuAction i
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -144,22 +166,29 @@ public class RasterPropertiesTocMenuEntry extends AbstractTocContextMenuAction i
 			manager.setDefaultType(TabbedPanel.class);
 
 			TabbedPanel panelGroup = (TabbedPanel) manager.getPanelGroup(lyr);
-			PanelGroupLoaderFromExtensionPoint loader = new PanelGroupLoaderFromExtensionPoint("RasterSEPropertiesDialog");
+			PanelGroupLoaderFromExtensionPoint loader = new PanelGroupLoaderFromExtensionPoint(
+					"RasterSEPropertiesDialog");
 
-			properties = new PanelGroupDialog(lyr.getName() ,RasterToolsUtil.getText(this, "propiedades_raster"), 550, 450, (byte) (WindowInfo.MODELESSDIALOG | WindowInfo.RESIZABLE | WindowInfo.MAXIMIZABLE), panelGroup);
+			properties = new PanelGroupDialog(lyr.getName(),
+					RasterToolsUtil.getText(this, "propiedades_raster"), 550,
+					450, (byte) (WindowInfo.MODELESSDIALOG
+							| WindowInfo.RESIZABLE | WindowInfo.MAXIMIZABLE),
+					panelGroup);
 			properties.loadPanels(loader);
 			enableEvents = true;
 			RasterToolsUtil.addWindow(properties);
 		} catch (Exception e) {
 			RasterToolsUtil.messageBoxInfo("error_props_tabs", this, e);
-		} finally  {
+		} finally {
 			enableEvents = true;
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.generictoolbar.IGenericToolBarMenuItem#getIcon()
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.generictoolbar.IGenericToolBarMenuItem#getIcon()
 	 */
 	public Icon getIcon() {
 		return RasterToolsUtil.getIcon("properties-icon");

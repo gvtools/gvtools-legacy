@@ -63,24 +63,24 @@ import org.gvsig.exceptions.BaseException;
 /**
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  */
-public class GMLWarningWrongNamespace extends BaseException{
+public class GMLWarningWrongNamespace extends BaseException {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5960588828358796702L;
 	private String namespace;
-	
-	public GMLWarningWrongNamespace(String key){
+
+	public GMLWarningWrongNamespace(String key) {
 		super();
 		this.init();
 		this.namespace = key;
 	}
-	
+
 	protected Map values() {
 		Hashtable params;
 		params = new Hashtable();
-		params.put("namespace",namespace);
+		params.put("namespace", namespace);
 		return params;
 	}
 
@@ -93,8 +93,8 @@ public class GMLWarningWrongNamespace extends BaseException{
 	}
 
 	public void init() {
-		messageKey="gml_warning_wrong_Namespace";
-		formatString="Invalid Tag Ignored, not found in %(namespace) namespace";
+		messageKey = "gml_warning_wrong_Namespace";
+		formatString = "Invalid Tag Ignored, not found in %(namespace) namespace";
 		code = serialVersionUID;
 	}
 

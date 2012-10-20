@@ -106,8 +106,10 @@ import com.iver.utiles.StringUtilities;
  */
 
 /**
- * <p>Panel with options about the timeout, maximum number of features, the projection reference system, and
- *  if it's implemented, user and password.</p>
+ * <p>
+ * Panel with options about the timeout, maximum number of features, the
+ * projection reference system, and if it's implemented, user and password.
+ * </p>
  * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  * @author Pablo Piqueras Bartolomé
@@ -140,21 +142,21 @@ public class WFSOptionsPanel extends AbstractWFSPanel {
 
 	/**
 	 * This method initializes usernameText
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getUsernameText() {
 		if (usernameText == null) {
 			usernameText = new JTextField();
-			usernameText.setBounds(new java.awt.Rectangle(100,25,200,20));
+			usernameText.setBounds(new java.awt.Rectangle(100, 25, 200, 20));
 			usernameText.addKeyListener(new java.awt.event.KeyAdapter() {
 				public void keyTyped(java.awt.event.KeyEvent e) {
 					IPanelGroup panelGroup = getPanelGroup();
-					
+
 					if (panelGroup == null)
 						return;
-					
-					((WFSParamsPanel)panelGroup).setApplicable(true);
+
+					((WFSParamsPanel) panelGroup).setApplicable(true);
 				}
 			});
 		}
@@ -163,21 +165,21 @@ public class WFSOptionsPanel extends AbstractWFSPanel {
 
 	/**
 	 * This method initializes passwordText
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JPasswordField getPasswordText() {
 		if (passwordText == null) {
 			passwordText = new JPasswordField();
-			passwordText.setBounds(new java.awt.Rectangle(100,50,200,20));
+			passwordText.setBounds(new java.awt.Rectangle(100, 50, 200, 20));
 			passwordText.addKeyListener(new java.awt.event.KeyAdapter() {
 				public void keyTyped(java.awt.event.KeyEvent e) {
 					IPanelGroup panelGroup = getPanelGroup();
-					
+
 					if (panelGroup == null)
 						return;
-					
-					((WFSParamsPanel)panelGroup).setApplicable(true);
+
+					((WFSParamsPanel) panelGroup).setApplicable(true);
 				}
 			});
 		}
@@ -186,25 +188,32 @@ public class WFSOptionsPanel extends AbstractWFSPanel {
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getConnectionParamsPanel() {
 		if (connectionParamsPanel == null) {
 			bufferLabel = new JLabel();
 			bufferLabel.setBounds(new Rectangle(10, 25, 85, 16));
-			bufferLabel.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+			bufferLabel
+					.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
 			bufferLabel.setText(PluginServices.getText(this, "max_features"));
 			bufferLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-			bufferLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+			bufferLabel
+					.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 			timeoutLabel = new JLabel();
 			timeoutLabel.setBounds(new Rectangle(10, 50, 85, 16));
 			timeoutLabel.setText(PluginServices.getText(this, "timeout"));
-			timeoutLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+			timeoutLabel
+					.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 			connectionParamsPanel = new JPanel();
 			connectionParamsPanel.setLayout(null);
-			connectionParamsPanel.setBounds(new java.awt.Rectangle(7,65,485,80));
-			connectionParamsPanel.setBorder(BorderFactory.createTitledBorder(null, PluginServices.getText(this, "conection"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+			connectionParamsPanel.setBounds(new java.awt.Rectangle(7, 65, 485,
+					80));
+			connectionParamsPanel.setBorder(BorderFactory.createTitledBorder(
+					null, PluginServices.getText(this, "conection"),
+					TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, null));
 			connectionParamsPanel.add(timeoutLabel, null);
 			connectionParamsPanel.add(getBufferText(), null);
 			connectionParamsPanel.add(bufferLabel, null);
@@ -217,23 +226,25 @@ public class WFSOptionsPanel extends AbstractWFSPanel {
 
 	/**
 	 * This method initializes jTextField
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JFormattedTextField getBufferText() {
 		if (bufferText == null) {
-			bufferText = new JFormattedTextField(NumberFormat.getIntegerInstance());
+			bufferText = new JFormattedTextField(
+					NumberFormat.getIntegerInstance());
 			bufferText.setValue(new Integer(1000));
 			bufferText.setBounds(new Rectangle(100, 25, 70, 20));
-			bufferText.setToolTipText(PluginServices.getText(bufferText, "set_Max_Number_Of_Features_Will_Be_Loaded"));
+			bufferText.setToolTipText(PluginServices.getText(bufferText,
+					"set_Max_Number_Of_Features_Will_Be_Loaded"));
 			bufferText.addKeyListener(new java.awt.event.KeyAdapter() {
 				public void keyTyped(java.awt.event.KeyEvent e) {
 					IPanelGroup panelGroup = getPanelGroup();
-					
+
 					if (panelGroup == null)
 						return;
-					
-					((WFSParamsPanel)panelGroup).setApplicable(true);
+
+					((WFSParamsPanel) panelGroup).setApplicable(true);
 				}
 			});
 		}
@@ -243,23 +254,25 @@ public class WFSOptionsPanel extends AbstractWFSPanel {
 
 	/**
 	 * This method initializes jTextField1
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JFormattedTextField getTimeOutText() {
 		if (timeOutText == null) {
-			timeOutText = new JFormattedTextField(NumberFormat.getIntegerInstance());
+			timeOutText = new JFormattedTextField(
+					NumberFormat.getIntegerInstance());
 			timeOutText.setValue(new Integer(10000));
 			timeOutText.setBounds(new Rectangle(100, 50, 70, 20));
-			timeOutText.setToolTipText(PluginServices.getText(timeOutText, "set_TimeOut_Explanation"));
+			timeOutText.setToolTipText(PluginServices.getText(timeOutText,
+					"set_TimeOut_Explanation"));
 			timeOutText.addKeyListener(new java.awt.event.KeyAdapter() {
 				public void keyTyped(java.awt.event.KeyEvent e) {
 					IPanelGroup panelGroup = getPanelGroup();
-					
+
 					if (panelGroup == null)
 						return;
-					
-					((WFSParamsPanel)panelGroup).setApplicable(true);
+
+					((WFSParamsPanel) panelGroup).setApplicable(true);
 				}
 			});
 		}
@@ -272,7 +285,7 @@ public class WFSOptionsPanel extends AbstractWFSPanel {
 	 * 
 	 * @return name of the user
 	 */
-	public String getUserName(){
+	public String getUserName() {
 		return getUsernameText().getText();
 	}
 
@@ -281,19 +294,20 @@ public class WFSOptionsPanel extends AbstractWFSPanel {
 	 * 
 	 * @return password of the user
 	 */
-	public String getPassword(){
+	public String getPassword() {
 		return getPasswordText().getText();
 	}
 
 	/**
 	 * Gets the maximum number of values that can load.
-	 *
+	 * 
 	 * @return the maximum number of values that can load
 	 */
-	public int getBuffer(){
+	public int getBuffer() {
 		try {
-			String buffer = StringUtilities.replace(getBufferText().getText(),".","");
-			buffer = StringUtilities.replace(buffer,",","");
+			String buffer = StringUtilities.replace(getBufferText().getText(),
+					".", "");
+			buffer = StringUtilities.replace(buffer, ",", "");
 			return Integer.parseInt(buffer);
 		} catch (NumberFormatException e) {
 			return 10000;
@@ -302,13 +316,14 @@ public class WFSOptionsPanel extends AbstractWFSPanel {
 
 	/**
 	 * Gets the timeout used during the loading process.
-	 *
+	 * 
 	 * @return the timeout used during the loading process
 	 */
-	public int getTimeout(){
+	public int getTimeout() {
 		try {
-			String timeOut = StringUtilities.replace(getTimeOutText().getText(),".","");
-			timeOut = StringUtilities.replace(timeOut,",","");
+			String timeOut = StringUtilities.replace(
+					getTimeOutText().getText(), ".", "");
+			timeOut = StringUtilities.replace(timeOut, ",", "");
 			return Integer.parseInt(timeOut);
 		} catch (NumberFormatException e) {
 			return 10000;
@@ -317,16 +332,16 @@ public class WFSOptionsPanel extends AbstractWFSPanel {
 
 	/**
 	 * Gets the reference system of the layer.
-	 *
+	 * 
 	 * @return the reference system of the layer
 	 */
-	public String getSRS(){
+	public String getSRS() {
 		return getSrsText().getText();
 	}
 
 	/**
 	 * This method initializes formatPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getFormatPanel() {
@@ -334,17 +349,20 @@ public class WFSOptionsPanel extends AbstractWFSPanel {
 
 			formatPanel = new JPanel();
 			formatPanel.setLayout(null);
-			formatPanel.setBorder(BorderFactory.createTitledBorder(null, PluginServices.getText(this, "srs"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
-			formatPanel.setBounds(new java.awt.Rectangle(7,5,485,55));
+			formatPanel.setBorder(BorderFactory.createTitledBorder(null,
+					PluginServices.getText(this, "srs"),
+					TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, null));
+			formatPanel.setBounds(new java.awt.Rectangle(7, 5, 485, 55));
 			formatPanel.add(getSRSLabel(), null);
 			formatPanel.add(getSrsText(), null);
 		}
 		return formatPanel;
 	}
-	
+
 	/**
 	 * This method initializes srsLabel
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private JLabel getSRSLabel() {
@@ -356,13 +374,13 @@ public class WFSOptionsPanel extends AbstractWFSPanel {
 			srsLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 			srsLabel.setBounds(new java.awt.Rectangle(10, 25, 85, 16));
 		}
-		
+
 		return srsLabel;
 	}
 
 	/**
 	 * This method initializes srsText
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getSrsText() {
@@ -371,7 +389,8 @@ public class WFSOptionsPanel extends AbstractWFSPanel {
 			srsText.setBounds(new java.awt.Rectangle(98, 25, 100, 20));
 			srsText.setEnabled(false);
 			srsText.setEditable(false);
-			srsText.setToolTipText(PluginServices.getText(srsText, "select_Feature_Reference_System"));
+			srsText.setToolTipText(PluginServices.getText(srsText,
+					"select_Feature_Reference_System"));
 		}
 		return srsText;
 	}
@@ -385,14 +404,15 @@ public class WFSOptionsPanel extends AbstractWFSPanel {
 		Vector srs = layer.getSrs();
 
 		if (srs.size() > 0) {
-			getSrsText().setText((String)srs.get(0));
+			getSrsText().setText((String) srs.get(0));
 		}
 	}
 
 	/**
 	 * Updates the status of this panel.
 	 * 
-	 * @param status status of the WFS graphical interface.
+	 * @param status
+	 *            status of the WFS graphical interface.
 	 */
 	public void setStatus(WFSStatus status) {
 		getBufferText().setText(String.valueOf(status.getBuffer()));
@@ -403,13 +423,14 @@ public class WFSOptionsPanel extends AbstractWFSPanel {
 
 	/**
 	 * This method initializes jLabelMiliSeconds
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	public JLabel getJLabelMiliSeconds() {
 		if (jLabelMiliSeconds == null) {
 			jLabelMiliSeconds = new JLabel();
-			jLabelMiliSeconds.setText(PluginServices.getText(jLabelMiliSeconds, "miliSeconds"));
+			jLabelMiliSeconds.setText(PluginServices.getText(jLabelMiliSeconds,
+					"miliSeconds"));
 			jLabelMiliSeconds.setBounds(new Rectangle(175, 50, 40, 16));
 		}
 
@@ -418,11 +439,12 @@ public class WFSOptionsPanel extends AbstractWFSPanel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.gui.panels.AbstractWFSPanel#initialize()
 	 */
 	protected void initialize() {
 		setLabel(PluginServices.getText(this, "options"));
-		setLabelGroup(PluginServices.getText(this, "wfs"));		
+		setLabelGroup(PluginServices.getText(this, "wfs"));
 		this.setLayout(null);
 		this.setBounds(10, 5, 481, 427);
 		this.add(getConnectionParamsPanel(), null);

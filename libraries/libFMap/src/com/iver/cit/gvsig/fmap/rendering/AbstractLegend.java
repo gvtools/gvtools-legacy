@@ -43,22 +43,21 @@ package com.iver.cit.gvsig.fmap.rendering;
 import java.util.ArrayList;
 
 /**
- * Abstract class that implements the interface for legends.It is
- * considered as the father of all XXXLegends and will implement all the methods that
- * these classes had not developed.
+ * Abstract class that implements the interface for legends.It is considered as
+ * the father of all XXXLegends and will implement all the methods that these
+ * classes had not developed.
  * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  * @author pepe vidal salvador - jose.vidal.salvador@iver.ses
  */
-public abstract class AbstractLegend implements ILegend{
+public abstract class AbstractLegend implements ILegend {
 	/**
 	 * ArrayList of LegendListeners
 	 */
 	private ArrayList<LegendContentsChangedListener> listeners = new ArrayList<LegendContentsChangedListener>();
 
-	
 	public void addLegendListener(LegendContentsChangedListener listener) {
-		if (listener!=null && !listeners.contains(listener))
+		if (listener != null && !listeners.contains(listener))
 			listeners.add(listener);
 	}
 
@@ -66,7 +65,6 @@ public abstract class AbstractLegend implements ILegend{
 		listeners.remove(listener);
 	}
 
-	
 	public void fireDefaultSymbolChangedEvent(SymbolLegendEvent event) {
 
 		for (int i = 0; i < listeners.size(); i++) {
@@ -75,6 +73,7 @@ public abstract class AbstractLegend implements ILegend{
 	}
 
 	public LegendContentsChangedListener[] getListeners() {
-		return listeners.toArray(new LegendContentsChangedListener[listeners.size()]);
+		return listeners.toArray(new LegendContentsChangedListener[listeners
+				.size()]);
 	}
 }

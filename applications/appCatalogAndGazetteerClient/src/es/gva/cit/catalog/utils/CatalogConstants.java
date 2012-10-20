@@ -62,15 +62,17 @@ import java.awt.Dimension;
  */
 /**
  * This class has some constants for the catalog client
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class CatalogConstants {
 	public static final int BUTTON_LENGHT = 80;
 	public static final int BUTTON_WIDTH = 23;
-	public static final Dimension BUTTON_SIZE = new Dimension(BUTTON_LENGHT,BUTTON_WIDTH);
+	public static final Dimension BUTTON_SIZE = new Dimension(BUTTON_LENGHT,
+			BUTTON_WIDTH);
 	public static final int RESIZE_WINDOW_BUTTON_SIZE = 30;
-	
-	//Action commands
+
+	// Action commands
 	public static final String CLOSE_BUTTON_ACTION_COMMAND = "close";
 	public static final String NEXT_BUTTON_ACTION_COMMAND = "next";
 	public static final String LAST_BUTTON_ACTION_COMMAND = "last";
@@ -82,20 +84,20 @@ public class CatalogConstants {
 	public static final String CONNECT_BUTTON_ACTION_COMMAND = "connect";
 	public static final String SERVERPROPERTIES_BUTTON_ACTION_COMMAND = "serverProperties";
 
-	//conordancia
+	// conordancia
 	public static final String EXACT_WORDS = "E";
 	public static final String ANY_WORD = "Y";
 	public static final String ALL_WORDS = "A";
 	public static final String OR = "Or";
 	public static final String AND = "And";
-	
-	//Connection 
+
+	// Connection
 	public static final int GET = 0;
 	public static final int POST = 1;
 	public static final int SOAP = 2;
 	public static final int Z3950 = 4;
-	
-	//XML
+
+	// XML
 	public static final String XML_HEADER_ENCODING = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 	public static final String XML_NS = "xmlns";
 

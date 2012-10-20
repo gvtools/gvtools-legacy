@@ -6,12 +6,12 @@ import java.io.IOException;
 import junit.framework.TestCase;
 
 public class TestWarpDataset extends TestCase {
-	private GdalWarp warp    = null;
-	private String   baseDir = "./test-images/";
-	private String   src     = baseDir + "testGdalWarp.tif";
-	private String   dst     = baseDir + "warpedImage.tif";
-	private String   frm     = "GTiff";
-	private String   t_srs   = "EPSG:23030";
+	private GdalWarp warp = null;
+	private String baseDir = "./test-images/";
+	private String src = baseDir + "testGdalWarp.tif";
+	private String dst = baseDir + "warpedImage.tif";
+	private String frm = "GTiff";
+	private String t_srs = "EPSG:23030";
 
 	public void start() {
 		setUp();
@@ -39,10 +39,10 @@ public class TestWarpDataset extends TestCase {
 
 	public void testStack() {
 		assertNotNull(t_srs);
-		
+
 		warp.warp(t_srs, src, dst, frm);
 		System.err.println("Proceso completado al " + warp.getPercent() + " %");
-		
+
 		File f = new File(dst);
 
 		assertTrue("El fichero destino no existe", f.exists());

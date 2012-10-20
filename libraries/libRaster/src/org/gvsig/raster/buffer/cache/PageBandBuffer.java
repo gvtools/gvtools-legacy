@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2006 IVER T.I. and Generalitat Valenciana.
@@ -24,56 +23,68 @@ import java.io.IOException;
 import org.gvsig.raster.buffer.RasterMemoryBuffer;
 
 /**
- * Esta clase representa una página de cache. Una página no es más que un buffer de datos
- * con todas sus funcionalidades con un uso especifico, el de ser una página. 
+ * Esta clase representa una página de cache. Una página no es más que un buffer
+ * de datos con todas sus funcionalidades con un uso especifico, el de ser una
+ * página.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public class PageBandBuffer extends RasterMemoryBuffer{
+public class PageBandBuffer extends RasterMemoryBuffer {
 
 	/**
 	 * Número de banda que corresponde a este PageBandBuffer
 	 */
 	private int numBand = 0;
 	private HddPage[] hddPages = null;
-	
+
 	/**
 	 * Constructor.
-	 * @param dataType Tipo de dato
-	 * @param width Ancho de página
-	 * @param height Alto de página
-	 * @param bandNr Número de bandas
-	 * @param malloc true para reservar de memoria en el buffer 
+	 * 
+	 * @param dataType
+	 *            Tipo de dato
+	 * @param width
+	 *            Ancho de página
+	 * @param height
+	 *            Alto de página
+	 * @param bandNr
+	 *            Número de bandas
+	 * @param malloc
+	 *            true para reservar de memoria en el buffer
 	 */
-	public PageBandBuffer(int dataType, int width, int height, int bandNr, boolean malloc, int numBand){
+	public PageBandBuffer(int dataType, int width, int height, int bandNr,
+			boolean malloc, int numBand) {
 		super(dataType, width, height, bandNr, malloc);
 		this.numBand = numBand;
 	}
-	
+
 	/**
 	 * Asigna la lista de paginas de disco
-	 * @param hddList Lista de páginas de disco
+	 * 
+	 * @param hddList
+	 *            Lista de páginas de disco
 	 */
-	public void setHddPages(HddPage[] hddList){
+	public void setHddPages(HddPage[] hddList) {
 		this.hddPages = hddList;
 	}
-	
+
 	/**
-	 * Carga una página especificada en el parámetro nPag con los datos necesarios.
-	 * Para esto utiliza el dataSource.
-	 *   
-	 * @param nPag Número de página a cargar
+	 * Carga una página especificada en el parámetro nPag con los datos
+	 * necesarios. Para esto utiliza el dataSource.
+	 * 
+	 * @param nPag
+	 *            Número de página a cargar
 	 */
-	public void loadPage(int nPag) throws InterruptedException{
+	public void loadPage(int nPag) throws InterruptedException {
 		hddPages[nPag].getDataServer(numBand).loadPage(this);
 	}
-	
+
 	/**
-	 * Salva una página especificada en el parámetro nPag a disco. 
-	 * Para esto utiliza el dataSource
-	 *   
-	 * @param nPag Número de página a salvar
+	 * Salva una página especificada en el parámetro nPag a disco. Para esto
+	 * utiliza el dataSource
+	 * 
+	 * @param nPag
+	 *            Número de página a salvar
 	 * @throws IOException
 	 */
 	public void savePage(int nPag) throws IOException, InterruptedException {

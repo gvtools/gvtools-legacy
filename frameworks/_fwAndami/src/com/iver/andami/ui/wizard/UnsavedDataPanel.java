@@ -30,15 +30,14 @@ import com.iver.andami.ui.mdiManager.WindowInfo;
 
 /**
  * Ask for elements to save before application exit
- *
- *
+ * 
+ * 
  */
 public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener {
 	/**
 	 *
 	 */
 	private static final long serialVersionUID = -4745219917358767905L;
-
 
 	private static ImageIcon blanckIcon = null;
 	private JPanel pResources = null;
@@ -59,8 +58,6 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 	private IUnsavedData[] unsavedDataList;
 	private String windowTitle = PluginServices.getText(this, "save_resources");
 
-
-
 	/**
 	 * This is the default constructor
 	 */
@@ -72,7 +69,7 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
@@ -80,7 +77,8 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 		borderLayout.setHgap(5);
 		borderLayout.setVgap(5);
 		lblDescription = new JLabel();
-		lblDescription.setText(PluginServices.getText(this, "select_resources_to_save_before_exit"));
+		lblDescription.setText(PluginServices.getText(this,
+				"select_resources_to_save_before_exit"));
 		lblDescription.setPreferredSize(new Dimension(497, 40));
 		lblDescription.setName("lblDescription");
 		this.setLayout(borderLayout);
@@ -92,7 +90,7 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 
 	/**
 	 * This method initializes pResources
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPResources() {
@@ -105,10 +103,9 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 		return pResources;
 	}
 
-
 	/**
 	 * This method initializes lblResourceDescription
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private JLabel getLblResourceDescription() {
@@ -121,10 +118,9 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 		return lblResourceDescription;
 	}
 
-
 	/**
 	 * This method initializes pButtons
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPButtons() {
@@ -142,13 +138,13 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 
 	/**
 	 * This method initializes pScrollList
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getPScrollList() {
 		if (pScrollList == null) {
 			pScrollList = new JScrollPane();
-			pScrollList.setPreferredSize(new java.awt.Dimension(350,350));
+			pScrollList.setPreferredSize(new java.awt.Dimension(350, 350));
 			pScrollList.setViewportView(getList());
 		}
 		return pScrollList;
@@ -156,7 +152,7 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 
 	/**
 	 * This method initializes list
-	 *
+	 * 
 	 * @return javax.swing.JList
 	 */
 	private myList getList() {
@@ -169,14 +165,15 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 
 	/**
 	 * This method initializes botSave
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getBotSave() {
 		if (botSave == null) {
 			botSave = new JButton();
 			botSave.setName("botSave");
-			botSave.setToolTipText(PluginServices.getText(this, "save_selected_resources_and_exit"));
+			botSave.setToolTipText(PluginServices.getText(this,
+					"save_selected_resources_and_exit"));
 			botSave.setText(PluginServices.getText(this, "ok"));
 			botSave.setActionCommand("Accept");
 			botSave.addActionListener(this);
@@ -186,14 +183,15 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 
 	/**
 	 * This method initializes botDiscard
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getBotDiscard() {
 		if (botDiscard == null) {
 			botDiscard = new JButton();
 			botDiscard.setName("botDiscard");
-			botDiscard.setToolTipText(PluginServices.getText(this, "discard_changes_and_exit"));
+			botDiscard.setToolTipText(PluginServices.getText(this,
+					"discard_changes_and_exit"));
 			botDiscard.setText(PluginServices.getText(this, "discard_changes"));
 			botDiscard.setActionCommand("Discard");
 			botDiscard.addActionListener(this);
@@ -203,14 +201,15 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 
 	/**
 	 * This method initializes botDontExit
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getBotDontExit() {
 		if (botDontExit == null) {
 			botDontExit = new JButton();
 			botDontExit.setName("botDontExit");
-			botDontExit.setToolTipText(PluginServices.getText(this, "cancel_the_application_termination"));
+			botDontExit.setToolTipText(PluginServices.getText(this,
+					"cancel_the_application_termination"));
 			botDontExit.setText(PluginServices.getText(this, "cancelar"));
 			botDontExit.setActionCommand("Cancel");
 			botDontExit.addActionListener(this);
@@ -220,7 +219,7 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 
 	/**
 	 * This method initializes pActionButtons
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPActionButtons() {
@@ -239,7 +238,7 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 
 	/**
 	 * This method initializes pSelectionButtons
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPSelectionButtons() {
@@ -257,7 +256,7 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 
 	/**
 	 * This method initializes botSelectAll
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getBotSelectAll() {
@@ -265,7 +264,8 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 			botSelectAll = new JButton();
 			botSelectAll.setText(PluginServices.getText(this, "select_all"));
 			botSelectAll.setName("botSelectAll");
-			botSelectAll.setToolTipText(PluginServices.getText(this, "select_all_resources"));
+			botSelectAll.setToolTipText(PluginServices.getText(this,
+					"select_all_resources"));
 			botSelectAll.setActionCommand("SelectAll");
 			botSelectAll.addActionListener(this);
 		}
@@ -274,15 +274,17 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 
 	/**
 	 * This method initializes botDeselectAll
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getBotDeselectAll() {
 		if (botDeselectAll == null) {
 			botDeselectAll = new JButton();
 			botDeselectAll.setName("botDeselectAll");
-			botDeselectAll.setToolTipText(PluginServices.getText(this, "deselect_all_resources"));
-			botDeselectAll.setText(PluginServices.getText(this, "deselect_all"));
+			botDeselectAll.setToolTipText(PluginServices.getText(this,
+					"deselect_all_resources"));
+			botDeselectAll
+					.setText(PluginServices.getText(this, "deselect_all"));
 			botDeselectAll.setActionCommand("DeselectAll");
 			botDeselectAll.addActionListener(this);
 		}
@@ -291,8 +293,7 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 
 	public WindowInfo getWindowInfo() {
 		WindowInfo wi = new WindowInfo(WindowInfo.MODALDIALOG
-				| WindowInfo.RESIZABLE
-				| WindowInfo.MAXIMIZABLE);
+				| WindowInfo.RESIZABLE | WindowInfo.MAXIMIZABLE);
 		wi.setTitle(windowTitle);
 		wi.setHeight(270);
 		wi.setWidth(450);
@@ -324,23 +325,24 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 
 	/**
 	 * Register a listener to call
-	 *
-	 * @param a UnsavedDataPanelListener instance
+	 * 
+	 * @param a
+	 *            UnsavedDataPanelListener instance
 	 */
-	public void addActionListener(UnsavedDataPanelListener listener){
+	public void addActionListener(UnsavedDataPanelListener listener) {
 		this.listeners.add(listener);
 	}
 
-	public void removeActionListener(UnsavedDataPanelListener listener){
+	public void removeActionListener(UnsavedDataPanelListener listener) {
 		this.listeners.remove(listener);
 	}
 
 	public class UnsavedDataPanelListener {
-		public void cancel(UnsavedDataPanel panel){
+		public void cancel(UnsavedDataPanel panel) {
 
 		}
 
-		public void accept(UnsavedDataPanel panel){
+		public void accept(UnsavedDataPanel panel) {
 
 		}
 
@@ -349,7 +351,7 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 		}
 	}
 
-	private class myList extends JPanel{
+	private class myList extends JPanel {
 
 		/**
 		 *
@@ -359,68 +361,69 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 		private GridBagConstraints constraints;
 		private GridBagConstraints constraintsLast;
 
-		public myList(){
+		public myList() {
 			super();
 			initialize();
 		}
 
-		private void initialize(){
+		private void initialize() {
 			this.setLayout(new GridBagLayout());
 			this.constraints = new GridBagConstraints();
 			this.constraints.fill = GridBagConstraints.HORIZONTAL;
 			this.constraints.gridwidth = GridBagConstraints.REMAINDER;
-			this.constraints.weightx =0;
-			this.constraints.gridx =0;
-			this.constraints.gridy=0;
+			this.constraints.weightx = 0;
+			this.constraints.gridx = 0;
+			this.constraints.gridy = 0;
 			this.constraints.anchor = GridBagConstraints.WEST;
-			this.constraints.insets =new Insets(3,3,0,0);
+			this.constraints.insets = new Insets(3, 3, 0, 0);
 
 			this.constraintsLast = new GridBagConstraints();
 			this.constraintsLast.fill = GridBagConstraints.BOTH;
 			this.constraintsLast.gridheight = GridBagConstraints.REMAINDER;
 			this.constraintsLast.gridwidth = GridBagConstraints.REMAINDER;
-			this.constraintsLast.gridx =0;
-			this.constraintsLast.weightx =1;
-			this.constraintsLast.weighty =1;
+			this.constraintsLast.gridx = 0;
+			this.constraintsLast.weightx = 1;
+			this.constraintsLast.weighty = 1;
 			this.constraintsLast.anchor = GridBagConstraints.FIRST_LINE_START;
-
 
 		}
 
-		public void addItems(IUnsavedData[] itemList){
+		public void addItems(IUnsavedData[] itemList) {
 			int i;
 			this.removeAll();
-			if (itemList.length == 0){
+			if (itemList.length == 0) {
 				return;
 			}
 
-			for (i=0;i< itemList.length;i++){
+			for (i = 0; i < itemList.length; i++) {
 				this.constraints.gridy = i;
 				this.add(newItem(itemList[i]), this.constraints);
 			}
-			this.constraintsLast.gridy=itemList.length;
-			this.add(new JLabel(),this.constraintsLast);
+			this.constraintsLast.gridy = itemList.length;
+			this.add(new JLabel(), this.constraintsLast);
 
 		}
-		public int getItemsCount(){
-			return this.getComponentCount() -1;
+
+		public int getItemsCount() {
+			return this.getComponentCount() - 1;
 		}
 
-		public myUnsavedItem getItem(int i){
-			if (i>= this.getComponentCount()){
+		public myUnsavedItem getItem(int i) {
+			if (i >= this.getComponentCount()) {
 				return null;
 			}
-			return (myUnsavedItem)this.getComponent(i);
+			return (myUnsavedItem) this.getComponent(i);
 		}
 
-		private myUnsavedItem newItem(IUnsavedData itemData){
+		private myUnsavedItem newItem(IUnsavedData itemData) {
 			myUnsavedItem item;
 			item = new myUnsavedItem(itemData);
-			item.addMouseListener(new MouseListener(){
+			item.addMouseListener(new MouseListener() {
 				public void mouseClicked(MouseEvent e) {
-					myUnsavedItem item = (myUnsavedItem)e.getComponent();
+					myUnsavedItem item = (myUnsavedItem) e.getComponent();
 					getLblResourceDescription().setText(item.getDescription());
 				}
+
 				public void mouseEntered(MouseEvent e) {
 				}
 
@@ -439,7 +442,7 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 
 	}
 
-	private class myUnsavedItem extends JPanel{
+	private class myUnsavedItem extends JPanel {
 		/**
 		 *
 		 */
@@ -448,23 +451,23 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 		private JLabel lblText;
 		private IUnsavedData dataItem;
 
-		public myUnsavedItem(IUnsavedData dataItem ){
+		public myUnsavedItem(IUnsavedData dataItem) {
 			super();
 			this.initialize();
 			this.setData(dataItem);
 		}
 
-		private void initialize(){
+		private void initialize() {
 			this.setOpaque(false);
 			BorderLayout layout = new BorderLayout();
 			layout.setHgap(5);
 			this.setLayout(layout);
-			this.add(this.getChkChecked(),BorderLayout.WEST);
-			this.add(this.getLblText(),BorderLayout.CENTER);
+			this.add(this.getChkChecked(), BorderLayout.WEST);
+			this.add(this.getLblText(), BorderLayout.CENTER);
 		}
 
 		private JLabel getLblText() {
-			if (lblText == null){
+			if (lblText == null) {
 				lblText = new JLabel();
 				lblText.setName("lblText");
 			}
@@ -472,7 +475,7 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 		}
 
 		private JCheckBox getChkChecked() {
-			if (chkChecked == null){
+			if (chkChecked == null) {
 				chkChecked = new JCheckBox();
 				chkChecked.setName("chkChecked");
 				chkChecked.setSelected(true);
@@ -481,37 +484,38 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 			return chkChecked;
 		}
 
-		public boolean isSelected(){
+		public boolean isSelected() {
 			return getChkChecked().isSelected();
 		}
 
-		public void setSelected(boolean selected){
+		public void setSelected(boolean selected) {
 			getChkChecked().setSelected(selected);
 		}
 
-		public void setData(IUnsavedData dataItem){
+		public void setData(IUnsavedData dataItem) {
 			this.dataItem = dataItem;
 			JLabel lbl = getLblText();
-			if (dataItem.getIcon() != null){
+			if (dataItem.getIcon() != null) {
 				lbl.setIcon(dataItem.getIcon());
-			} else{
+			} else {
 				lbl.setIcon(getBlanckIcon());
 			}
 			lbl.setText(dataItem.getResourceName());
 			getChkChecked().setSelected(true);
 		}
 
-		public IUnsavedData getData(){
+		public IUnsavedData getData() {
 			return this.dataItem;
 		}
 
-		public String getDescription(){
+		public String getDescription() {
 			return this.dataItem.getDescription();
 		}
 
-		private ImageIcon getBlanckIcon(){
-			if (blanckIcon== null){
-				BufferedImage buff =new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+		private ImageIcon getBlanckIcon() {
+			if (blanckIcon == null) {
+				BufferedImage buff = new BufferedImage(16, 16,
+						BufferedImage.TYPE_INT_ARGB);
 				blanckIcon = new ImageIcon(buff);
 			}
 			return blanckIcon;
@@ -520,11 +524,11 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand() == "Cancel"){
+		if (e.getActionCommand() == "Cancel") {
 			fireDontExitEvent();
 			return;
 		}
-		if (e.getActionCommand() == "Accept"){
+		if (e.getActionCommand() == "Accept") {
 			fireAcceptEvent();
 			return;
 		}
@@ -532,48 +536,48 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 			fireDiscardEvent();
 			return;
 		}
-		if (e.getActionCommand() == "SelectAll"){
+		if (e.getActionCommand() == "SelectAll") {
 			selectAll();
 			return;
 		}
-		if (e.getActionCommand() == "DeselectAll"){
+		if (e.getActionCommand() == "DeselectAll") {
 			deselectAll();
 			return;
 		}
 	}
 
-	public void close(){
+	public void close() {
 		PluginServices.getMDIManager().closeWindow(this);
 
 	}
 
 	private void fireAcceptEvent() {
 		Iterator iter = this.listeners.iterator();
-		while (iter.hasNext()){
-			((UnsavedDataPanelListener)iter.next()).accept(this);
+		while (iter.hasNext()) {
+			((UnsavedDataPanelListener) iter.next()).accept(this);
 		}
 	}
 
 	private void fireDiscardEvent() {
 		Iterator iter = this.listeners.iterator();
-		while (iter.hasNext()){
-			((UnsavedDataPanelListener)iter.next()).discard(this);
+		while (iter.hasNext()) {
+			((UnsavedDataPanelListener) iter.next()).discard(this);
 		}
 	}
 
 	private void fireDontExitEvent() {
 		Iterator iter = this.listeners.iterator();
-		while (iter.hasNext()){
-			((UnsavedDataPanelListener)iter.next()).cancel(this);
+		while (iter.hasNext()) {
+			((UnsavedDataPanelListener) iter.next()).cancel(this);
 		}
 	}
 
-	private void setSelectedsAll( boolean selected){
+	private void setSelectedsAll(boolean selected) {
 		int i;
 		myList theList = getList();
 		myUnsavedItem item;
-		for (i=0;i < theList.getItemsCount();i++){
-			item = (myUnsavedItem)theList.getItem(i);
+		for (i = 0; i < theList.getItemsCount(); i++) {
+			item = (myUnsavedItem) theList.getItem(i);
 			item.setSelected(selected);
 		}
 		theList.doLayout();
@@ -587,13 +591,13 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 		this.setSelectedsAll(true);
 	}
 
-
 	/**
 	 * Set the resorces to ask for
-	 *
-	 * @param IUnsavedData[] resources pending to save
+	 * 
+	 * @param IUnsavedData
+	 *            [] resources pending to save
 	 */
-	public void setUnsavedDataArray(IUnsavedData[] unsavedDatalist){
+	public void setUnsavedDataArray(IUnsavedData[] unsavedDatalist) {
 		this.unsavedDataList = unsavedDatalist;
 		myList theList = getList();
 
@@ -602,17 +606,16 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 
 	}
 
-
-	private IUnsavedData[] getUnsavedData(boolean selected){
+	private IUnsavedData[] getUnsavedData(boolean selected) {
 		int i;
 		myList theList = getList();
 		ArrayList aList = new ArrayList();
 		myUnsavedItem item;
 		IUnsavedData[] result;
 
-		for (i=0;i < theList.getItemsCount();i++){
-			item = (myUnsavedItem)theList.getItem(i);
-			if (item.isSelected() == selected){
+		for (i = 0; i < theList.getItemsCount(); i++) {
+			item = (myUnsavedItem) theList.getItem(i);
+			if (item.isSelected() == selected) {
 				aList.add(item.getData());
 			}
 		}
@@ -621,23 +624,22 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 		return result;
 	}
 
-
 	/**
 	 * Returns the IUnsavedData selecteds for the user to save
-	 *
+	 * 
 	 * @return IUnsaveData[] to save
 	 */
-	public IUnsavedData[] getSelectedsUnsavedData(){
+	public IUnsavedData[] getSelectedsUnsavedData() {
 		return this.getUnsavedData(true);
 
 	}
 
 	/**
 	 * Returns the IUnsavedData not selecteds for the user
-	 *
+	 * 
 	 * @return IUnsavedData[] to ignore
 	 */
-	public IUnsavedData[] getUnselectedsUnsavedData(){
+	public IUnsavedData[] getUnselectedsUnsavedData() {
 		return this.getUnsavedData(false);
 	}
 
@@ -645,5 +647,5 @@ public class UnsavedDataPanel extends JPanel implements IWindow, ActionListener 
 		return WindowInfo.DIALOG_PROFILE;
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"
 

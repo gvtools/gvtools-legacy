@@ -59,34 +59,28 @@ import com.iver.cit.gvsig.fmap.core.IGeometry;
 /**
  * A kind of TopologyError caused by the violation of a JtsValid rule.
  * 
- * If offers access to the secondary rule which caused the violation of the
- * JTS specification.
+ * If offers access to the secondary rule which caused the violation of the JTS
+ * specification.
  * 
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class JtsValidTopologyError extends TopologyError {
 
-	
 	private ITopologyRule secondaryRule;
-	
-	
-	public JtsValidTopologyError(IGeometry geometry, 
-									String errorFid,
-									AbstractTopologyRule violatedRule, 
-									IFeature feature1,
-									IFeature feature2, 
-									Topology topology) {
-		
+
+	public JtsValidTopologyError(IGeometry geometry, String errorFid,
+			AbstractTopologyRule violatedRule, IFeature feature1,
+			IFeature feature2, Topology topology) {
+
 		super(geometry, errorFid, violatedRule, feature1, feature2, topology);
 
 	}
 
 	public JtsValidTopologyError(IGeometry geometry,
-						AbstractTopologyRule violatedRule, 
-						IFeature feature1,
-						Topology topology) {
+			AbstractTopologyRule violatedRule, IFeature feature1,
+			Topology topology) {
 		super(geometry, violatedRule, feature1, topology);
 	}
 

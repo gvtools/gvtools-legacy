@@ -68,6 +68,7 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
 /**
  * It writes the LineQName tag. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;LineString&gt;
@@ -76,39 +77,49 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  * &lt;/LineString&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
- * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#linestring
+ * @see http
+ *      ://code.google.com/apis/kml/documentation/kml_tags_21.html#linestring
  */
 public class LineStringWriter {
-		
+
 	/**
 	 * It writes the lineString kml init tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param id
-	 * LineString id
+	 *            LineString id
 	 * @param coords
-	 * A coordinates iterator. 
+	 *            A coordinates iterator.
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler,String id, 
-			ICoordinateSequence coords) throws IOException{
-		handler.getProfile().getGeometryWriter().startGeometry(writer, handler, Kml2_1_Tags.LINESTRING, id);
-		handler.getProfile().getCoordinatesWriter().write(writer, handler, coords);
+	public void start(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor handler, String id,
+			ICoordinateSequence coords) throws IOException {
+		handler.getProfile().getGeometryWriter()
+				.startGeometry(writer, handler, Kml2_1_Tags.LINESTRING, id);
+		handler.getProfile().getCoordinatesWriter()
+				.write(writer, handler, coords);
 	}
-	
+
 	/**
 	 * It writes the lineString kml end tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @throws IOException
 	 */
-	public void end(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler) throws IOException{
-		handler.getProfile().getGeometryWriter().endGeometry(writer, handler, Kml2_1_Tags.LINESTRING);
+	public void end(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor handler) throws IOException {
+		handler.getProfile().getGeometryWriter()
+				.endGeometry(writer, handler, Kml2_1_Tags.LINESTRING);
 	}
 }

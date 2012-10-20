@@ -42,26 +42,26 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: TurnUtil.java 22182 2008-07-10 07:20:11Z fpenarrubia $
-* $Log$
-* Revision 1.5  2007-09-07 11:29:47  fjp
-* Casi compila. Falta arreglar lo de FArrowSymbol y retocar el graphiclist de FMap.
-*
-* Revision 1.4  2006/10/26 11:42:42  fjp
-* Ya pita, ya.
-*
-* Revision 1.3  2006/10/25 15:51:20  fjp
-* por terminar lo de los giros
-*
-* Revision 1.2  2006/10/23 18:51:42  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/10/20 19:54:01  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: TurnUtil.java 22182 2008-07-10 07:20:11Z fpenarrubia $
+ * $Log$
+ * Revision 1.5  2007-09-07 11:29:47  fjp
+ * Casi compila. Falta arreglar lo de FArrowSymbol y retocar el graphiclist de FMap.
+ *
+ * Revision 1.4  2006/10/26 11:42:42  fjp
+ * Ya pita, ya.
+ *
+ * Revision 1.3  2006/10/25 15:51:20  fjp
+ * por terminar lo de los giros
+ *
+ * Revision 1.2  2006/10/23 18:51:42  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/10/20 19:54:01  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package org.gvsig.graph.core;
 
 import com.iver.cit.gvsig.fmap.core.IFeature;
@@ -76,82 +76,83 @@ public class TurnUtil {
 	public static final int TURN_LEFT = 1;
 	public static final int GO_STRAIGH_ON = 2;
 	public static final int TURN_U = 4;
-	
-	
-	public static boolean checkIsLine(Geometry geometry){
-		if(geometry instanceof LineString || geometry instanceof MultiLineString)
+
+	public static boolean checkIsLine(Geometry geometry) {
+		if (geometry instanceof LineString
+				|| geometry instanceof MultiLineString)
 			return true;
 		else
 			return false;
-		
-	}	
-	
-	
-	
-	public static final int getDirection(IFeature feature1, IFeature feature2){
+
+	}
+
+	public static final int getDirection(IFeature feature1, IFeature feature2) {
 		Geometry geom1 = feature1.getGeometry().toJTSGeometry();
 		Geometry geom2 = feature2.getGeometry().toJTSGeometry();
-		if(!checkIsLine(geom1))
+		if (!checkIsLine(geom1))
 			return -1;
-		if(!checkIsLine(geom2))
+		if (!checkIsLine(geom2))
 			return -1;
-	    Coordinate[] coords1 = geom1.getCoordinates();
-	    Coordinate p0 = coords1[coords1.length -2];
-	    Coordinate p1 = coords1[coords1.length -1];
-	    Coordinate[] coords2 = geom2.getCoordinates();
-	    Coordinate p2 = coords2[1];
-	    
-	     double deegreeAngle = angle(p0, p1, p2);
-	         
-	     if(Math.abs(deegreeAngle) <= 30)
-	    	 return GO_STRAIGH_ON;
-	     else if(deegreeAngle > 180)
-	    	 return TURN_LEFT;
-	     else
-	    	 return TURN_RIGHT;
-	}	
+		Coordinate[] coords1 = geom1.getCoordinates();
+		Coordinate p0 = coords1[coords1.length - 2];
+		Coordinate p1 = coords1[coords1.length - 1];
+		Coordinate[] coords2 = geom2.getCoordinates();
+		Coordinate p2 = coords2[1];
+
+		double deegreeAngle = angle(p0, p1, p2);
+
+		if (Math.abs(deegreeAngle) <= 30)
+			return GO_STRAIGH_ON;
+		else if (deegreeAngle > 180)
+			return TURN_LEFT;
+		else
+			return TURN_RIGHT;
+	}
+
 	public static double angle(Coordinate c1, Coordinate c2, Coordinate c3) {
 		double resul = 0.0;
 		// Normalizamos:
 		Coordinate origin = new Coordinate(0.0, 0.0);
-		Coordinate cAux1 = new Coordinate(c2.x-c1.x, c2.y-c1.y);
-		Coordinate cAux2 = new Coordinate(c3.x-c2.x, c3.y-c2.y);
+		Coordinate cAux1 = new Coordinate(c2.x - c1.x, c2.y - c1.y);
+		Coordinate cAux2 = new Coordinate(c3.x - c2.x, c3.y - c2.y);
 		LineSegment v1 = new LineSegment(origin, cAux1);
 		LineSegment v2 = new LineSegment(origin, cAux2);
-		double prodEscalar = cAux1.x*cAux2.x + cAux1.y*cAux2.y;
-		double cosAlpha = prodEscalar / (v1.getLength() * v2.getLength()) ; 
+		double prodEscalar = cAux1.x * cAux2.x + cAux1.y * cAux2.y;
+		double cosAlpha = prodEscalar / (v1.getLength() * v2.getLength());
 		resul = Math.toDegrees(Math.acos(cosAlpha));
-		
-        if (cAux1.x * cAux2.y > cAux1.y * cAux2.x) {
-            resul = 360 - resul;
-        }
 
-//		System.out.println("angulo = " + resul);
+		if (cAux1.x * cAux2.y > cAux1.y * cAux2.x) {
+			resul = 360 - resul;
+		}
+
+		// System.out.println("angulo = " + resul);
 		return resul;
 	}
-	
+
 	/**
 	 * 
 	 * Code extracted from JUMP
 	 * 
-	   * Returns the angle between two vectors.
-	   * @param a1 the angle of one vector, between -Pi and Pi
-	   * @param a2 the angle of the other vector, between -Pi and Pi
-	   * @return the angle (in radians) between the two vectors, between 0 and Pi
-	   */
-//	  public static double diff(double a1, double a2) {
-//	      double da;
-//
-//	      if (a1 < a2) {
-//	          da = a2 - a1;
-//	      } else {
-//	          da = a1 - a2;
-//	      }
-//
-//	      if (da > Math.PI) {
-//	          da = (2 * Math.PI) - da;
-//	      }
-//	      return da;
-//	  }
+	 * Returns the angle between two vectors.
+	 * 
+	 * @param a1
+	 *            the angle of one vector, between -Pi and Pi
+	 * @param a2
+	 *            the angle of the other vector, between -Pi and Pi
+	 * @return the angle (in radians) between the two vectors, between 0 and Pi
+	 */
+	// public static double diff(double a1, double a2) {
+	// double da;
+	//
+	// if (a1 < a2) {
+	// da = a2 - a1;
+	// } else {
+	// da = a1 - a2;
+	// }
+	//
+	// if (da > Math.PI) {
+	// da = (2 * Math.PI) - da;
+	// }
+	// return da;
+	// }
 }
-

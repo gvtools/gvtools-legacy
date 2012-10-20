@@ -45,36 +45,39 @@ import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
  * Gestor para operaciones con las vistas y zooms
  * 
  * 04/02/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class ViewsManager implements IProcessActions {
-	//Dialogos
-	private ViewDialog                    viewRaster                     = null;
-	private ViewDialog                    viewMap                        = null;
-	private ZoomDialog                    zoomMap                        = null;
-	private ZoomDialog                    zoomRaster                     = null;
-	
-	//Gestores de peticiones
-	private ViewRasterRequestManager      viewRasterRequestManager       = null;
-	private ViewMapRequestManager         viewMapRequestManager          = null;
-	private ViewRasterRequestManager      zoomRasterRequestManager       = null;
-	private ViewMapRequestManager         zoomMapRequestManager          = null;
-	
-	private GCPTablePanel                 table                          = null;
-	private String                        fileName                       = null;
-	
-	//Última capa procesada con los puntos de control. Al cerrar la aplicación 
-	//esta será la que se use como resultado 
-	private FLyrRasterSE                  lastTestLayer                  = null;
+	// Dialogos
+	private ViewDialog viewRaster = null;
+	private ViewDialog viewMap = null;
+	private ZoomDialog zoomMap = null;
+	private ZoomDialog zoomRaster = null;
+
+	// Gestores de peticiones
+	private ViewRasterRequestManager viewRasterRequestManager = null;
+	private ViewMapRequestManager viewMapRequestManager = null;
+	private ViewRasterRequestManager zoomRasterRequestManager = null;
+	private ViewMapRequestManager zoomMapRequestManager = null;
+
+	private GCPTablePanel table = null;
+	private String fileName = null;
+
+	// Última capa procesada con los puntos de control. Al cerrar la aplicación
+	// esta será la que se use como resultado
+	private FLyrRasterSE lastTestLayer = null;
 
 	/**
 	 * Asigna las vistas
+	 * 
 	 * @param vRaster
 	 * @param vMap
 	 * @param zRaster
 	 * @param zMap
 	 */
-	public void setViews(ViewDialog vRaster, ViewDialog vMap, ZoomDialog zRaster, ZoomDialog zMap) {
+	public void setViews(ViewDialog vRaster, ViewDialog vMap,
+			ZoomDialog zRaster, ZoomDialog zMap) {
 		viewRaster = vRaster;
 		viewMap = vMap;
 		zoomMap = zMap;
@@ -83,230 +86,255 @@ public class ViewsManager implements IProcessActions {
 
 	/**
 	 * Asigna los gestores de peticiones.
+	 * 
 	 * @param vRaster
 	 * @param vMap
 	 * @param zRaster
 	 * @param zMap
 	 */
-	public void setRequestsManager(ViewRasterRequestManager vRaster, ViewMapRequestManager vMap, ViewRasterRequestManager zRaster, ViewMapRequestManager zMap) {
+	public void setRequestsManager(ViewRasterRequestManager vRaster,
+			ViewMapRequestManager vMap, ViewRasterRequestManager zRaster,
+			ViewMapRequestManager zMap) {
 		viewRasterRequestManager = vRaster;
-		viewMapRequestManager= vMap;
+		viewMapRequestManager = vMap;
 		zoomRasterRequestManager = zRaster;
 		zoomMapRequestManager = zMap;
 	}
-	
+
 	/**
 	 * Asigna el panel con la tabla
+	 * 
 	 * @param tablePanel
 	 */
 	public void setTablePanel(GCPTablePanel tablePanel) {
 		this.table = tablePanel;
 	}
-	
+
 	/**
 	 * Desactiva la tool activa de las vistas
+	 * 
 	 * @param active
 	 */
 	public void sleepActiveTools() {
-		if(zoomMap != null) 
+		if (zoomMap != null)
 			zoomMap.getControl().sleepTools();
-		if(zoomRaster != null) 
+		if (zoomRaster != null)
 			zoomRaster.getControl().sleepTools();
-		if(viewRaster != null)
+		if (viewRaster != null)
 			viewRaster.getControl().sleepTools();
-		if(viewMap != null)
+		if (viewMap != null)
 			viewMap.getControl().sleepTools();
 	}
-	
+
 	/**
 	 * Activa la tool activa de las vistas
+	 * 
 	 * @param active
 	 */
 	public void awakeActiveTools() {
-		if(zoomMap != null) 
+		if (zoomMap != null)
 			zoomMap.getControl().awakeTools();
-		if(zoomRaster != null) 
+		if (zoomRaster != null)
 			zoomRaster.getControl().awakeTools();
-		if(viewRaster != null)
+		if (viewRaster != null)
 			viewRaster.getControl().awakeTools();
-		if(viewMap != null)
+		if (viewMap != null)
 			viewMap.getControl().awakeTools();
 	}
-	
+
 	/**
 	 * Selecciona o deselecciona la tool de selección de punto para cada vista
+	 * 
 	 * @param true para activar y false para desactivar
 	 */
 	public void selectPointTool(boolean select) {
-		if(zoomMap != null)
+		if (zoomMap != null)
 			zoomMap.getControl().selectTool(SelectPointTool.class, select);
-		if(zoomRaster != null)
+		if (zoomRaster != null)
 			zoomRaster.getControl().selectTool(SelectPointTool.class, select);
-		if(viewRaster != null)
+		if (viewRaster != null)
 			viewRaster.getControl().selectTool(SelectPointTool.class, select);
-		if(viewMap != null)
+		if (viewMap != null)
 			viewMap.getControl().selectTool(SelectPointTool.class, select);
 	}
-	
+
 	/**
 	 * Asigna el color de los gráficos.
+	 * 
 	 * @param c
 	 */
 	public void setGraphicsColor(Color c) {
-		if(viewRaster != null) {
+		if (viewRaster != null) {
 			viewRaster.getCanvas().setTextColor(c);
 			viewRaster.getZoomCursorGraphicLayer().setColor(c);
 		}
-		if(viewMap != null) {
+		if (viewMap != null) {
 			viewMap.getCanvas().setTextColor(c);
 			viewMap.getZoomCursorGraphicLayer().setColor(c);
 		}
-		if(zoomRaster != null) 
+		if (zoomRaster != null)
 			zoomRaster.getCanvas().setTextColor(c);
-		if(zoomMap != null) 
+		if (zoomMap != null)
 			zoomMap.getCanvas().setTextColor(c);
 	}
-	
+
 	/**
 	 * Asigna el color de los gráficos.
+	 * 
 	 * @param c
 	 */
 	public void setBackgroundColor(Color c) {
-		if(viewMapRequestManager != null)
+		if (viewMapRequestManager != null)
 			viewMapRequestManager.setBackGroundColor(c);
-		if(viewRasterRequestManager != null)
+		if (viewRasterRequestManager != null)
 			viewRasterRequestManager.setBackGroundColor(c);
-		if(zoomMapRequestManager != null)
+		if (zoomMapRequestManager != null)
 			zoomMapRequestManager.setBackGroundColor(c);
-		if(zoomRasterRequestManager != null)
+		if (zoomRasterRequestManager != null)
 			zoomRasterRequestManager.setBackGroundColor(c);
 		try {
-			if(viewRaster != null) {
+			if (viewRaster != null) {
 				viewRaster.getCanvas().setBackgroundColor(c);
 				viewRaster.getCanvas().setForceRequest(true);
-				viewRaster.getControl().getExtensionRequest().request(viewRaster.getCanvas().getExtent());
+				viewRaster.getControl().getExtensionRequest()
+						.request(viewRaster.getCanvas().getExtent());
 			}
-			if(viewMap != null) {
+			if (viewMap != null) {
 				viewMap.getCanvas().setBackgroundColor(c);
 				viewMap.getCanvas().setForceRequest(true);
-				viewMap.getControl().getExtensionRequest().request(viewMap.getCanvas().getExtent());
+				viewMap.getControl().getExtensionRequest()
+						.request(viewMap.getCanvas().getExtent());
 			}
-			if(zoomRaster != null) { 
+			if (zoomRaster != null) {
 				zoomRaster.getCanvas().setBackgroundColor(c);
 				zoomRaster.getCanvas().setForceRequest(true);
-				zoomRaster.getControl().getExtensionRequest().request(zoomRaster.getCanvas().getExtent());
+				zoomRaster.getControl().getExtensionRequest()
+						.request(zoomRaster.getCanvas().getExtent());
 			}
-			if(zoomMap != null) { 
+			if (zoomMap != null) {
 				zoomMap.getCanvas().setBackgroundColor(c);
 				zoomMap.getCanvas().setForceRequest(true);
-				zoomMap.getControl().getExtensionRequest().request(zoomMap.getCanvas().getExtent());
+				zoomMap.getControl().getExtensionRequest()
+						.request(zoomMap.getCanvas().getExtent());
 			}
 		} catch (InvalidRequestException e) {
 		}
 	}
-	
+
 	/**
 	 * Centra las vistas sobre el punto pasado por parámetro
-	 * @param n Número de punto sobre el que se centrará la visualización
+	 * 
+	 * @param n
+	 *            Número de punto sobre el que se centrará la visualización
 	 */
 	public void centerToPoint(int n) {
 		try {
-			if(table.getTable().getRowCount() <= 0) {
+			if (table.getTable().getRowCount() <= 0) {
 				RasterToolsUtil.messageBoxError("no_selected_point", table);
 				return;
 			}
-			
+
 			double[] values = table.getCoordinates(n);
 			double xMap = values[0];
 			double yMap = values[1];
 			double xRaster = values[2];
 			double yRaster = values[3];
-			
-			if(viewRaster != null) 
+
+			if (viewRaster != null)
 				viewRaster.setCenter(new Point2D.Double(xRaster, yRaster));
-			if(zoomRaster != null) 
-				zoomRaster.getControl().setCenter(new Point2D.Double(xRaster, yRaster));
-			if(viewMap != null) 
+			if (zoomRaster != null)
+				zoomRaster.getControl().setCenter(
+						new Point2D.Double(xRaster, yRaster));
+			if (viewMap != null)
 				viewMap.setCenter(new Point2D.Double(xMap, yMap));
-			if(zoomMap != null) 
+			if (zoomMap != null)
 				zoomMap.getControl().setCenter(new Point2D.Double(xMap, yMap));
 		} catch (NotInitializeException e1) {
-			RasterToolsUtil.messageBoxYesOrNot("table_not_initialize", table, e1);
-		}	
+			RasterToolsUtil.messageBoxYesOrNot("table_not_initialize", table,
+					e1);
+		}
 	}
-	
+
 	/**
 	 * Añade una capa en la vista del mapa para previsualizar el resultado
+	 * 
 	 * @param lyr
-	 * @param algorithm Algoritmo con el que se realiza la transformación
+	 * @param algorithm
+	 *            Algoritmo con el que se realiza la transformación
 	 */
-	public void addTestRasterLayer(	FLyrRasterSE lyr, 
-									int algorithm, 
-									int method, 
-									int order, 
-									String file) {
-		if(!testNumberOfPoints(order))
+	public void addTestRasterLayer(FLyrRasterSE lyr, int algorithm, int method,
+			int order, String file) {
+		if (!testNumberOfPoints(order))
 			return;
-		
+
 		fileName = file;
 		FLyrRasterSE lyrClon = null;
 		try {
-			lyrClon = (FLyrRasterSE)lyr.cloneLayer();
+			lyrClon = (FLyrRasterSE) lyr.cloneLayer();
 		} catch (Exception e1) {
 			RasterToolsUtil.messageBoxError("error_clone_layer", this, e1);
 			return;
 		}
-		
-		if(algorithm == Georeferencing.AFFINE) {
+
+		if (algorithm == Georeferencing.AFFINE) {
 			GeoTransformDataResult result = table.getGeoTransformDataResult();
 
-			if(result == null) {
+			if (result == null) {
 				RasterToolsUtil.messageBoxInfo("error_georef", this);
 				return;
 			}
 
-			AffineTransform at = new AffineTransform(	result.getPixelToMapCoefX()[1], 
-					result.getPixelToMapCoefY()[1], 
-					result.getPixelToMapCoefX()[2], 
-					result.getPixelToMapCoefY()[2], 
-					result.getPixelToMapCoefX()[0], 
+			AffineTransform at = new AffineTransform(
+					result.getPixelToMapCoefX()[1],
+					result.getPixelToMapCoefY()[1],
+					result.getPixelToMapCoefX()[2],
+					result.getPixelToMapCoefY()[2],
+					result.getPixelToMapCoefX()[0],
 					result.getPixelToMapCoefY()[0]);
 			lyrClon.setAffineTransform(at);
 			lastTestLayer = lyrClon;
 		}
-			
-		if(algorithm == Georeferencing.POLYNOMIAL) {
+
+		if (algorithm == Georeferencing.POLYNOMIAL) {
 			GeoreferencingProcess process = new GeoreferencingProcess();
 			process.addParam("fLayer", lyr);
 			process.addParam("filename", file);
 			process.addParam("method", new Integer(method));
-			process.addParam("gpcs", table.getAppMain().getLayerPointManager().getGeoPoints());
+			process.addParam("gpcs", table.getAppMain().getLayerPointManager()
+					.getGeoPoints());
 			process.addParam("orden", new Integer(order));
-			process.addParam("xCellSize", new Double(table.getAppMain().getOptions().getXCellSize()));
-			process.addParam("yCellSize", new Double(table.getAppMain().getOptions().getYCellSize()));
+			process.addParam("xCellSize", new Double(table.getAppMain()
+					.getOptions().getXCellSize()));
+			process.addParam("yCellSize", new Double(table.getAppMain()
+					.getOptions().getYCellSize()));
 			process.setActions(this);
 			process.start();
 		}
-		
-		//Con vista de de referencia cargamos la preview en esta
-		if(viewMapRequestManager != null) {
-			if(algorithm == Georeferencing.AFFINE) {
+
+		// Con vista de de referencia cargamos la preview en esta
+		if (viewMapRequestManager != null) {
+			if (algorithm == Georeferencing.AFFINE) {
 				try {
 					viewMapRequestManager.addTestRasterLayer(lyrClon);
 				} catch (InvalidRequestException e) {
-					RasterToolsUtil.messageBoxError("error_setview_preview", this, e);
+					RasterToolsUtil.messageBoxError("error_setview_preview",
+							this, e);
 				}
-			}			
-		} 
+			}
+		}
 	}
-	
+
 	/**
-	 * Consulta si hay suficientes puntos de control en la lista para los calculos
-	 * @param order Orden del polinomio a utilizar
+	 * Consulta si hay suficientes puntos de control en la lista para los
+	 * calculos
+	 * 
+	 * @param order
+	 *            Orden del polinomio a utilizar
 	 * @return true si hay suficientes puntos de control y false si no los hay
 	 */
 	private boolean testNumberOfPoints(int order) {
-		GeoPointList gp = table.getAppMain().getLayerPointManager().getGeoPoints();
+		GeoPointList gp = table.getAppMain().getLayerPointManager()
+				.getGeoPoints();
 		if (gp != null) {
 			// Obtenemos el número de puntos activos
 			int nPointsActive = 0;
@@ -316,19 +344,22 @@ public class ViewsManager implements IProcessActions {
 			}
 			int nPoints = (order + 1) * (order + 2) / 2;
 			if (nPointsActive < nPoints) {
-				RasterToolsUtil.messageBoxError(RasterToolsUtil.getText(this, "more_points") + ((int) Math.ceil(nPoints)), null);
+				RasterToolsUtil.messageBoxError(
+						RasterToolsUtil.getText(this, "more_points")
+								+ ((int) Math.ceil(nPoints)), null);
 				return false;
 			}
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Elimina la capa de test de la vista de mapa
-	 * @throws InvalidRequestException 
+	 * 
+	 * @throws InvalidRequestException
 	 */
 	public void removeTestRasterLayer() {
-		if(viewMapRequestManager != null) {
+		if (viewMapRequestManager != null) {
 			try {
 				viewMapRequestManager.removeTestRasterLayer();
 			} catch (InvalidRequestException e) {
@@ -339,6 +370,7 @@ public class ViewsManager implements IProcessActions {
 
 	/**
 	 * Obtiene la vista con el mapa de referencia
+	 * 
 	 * @return ViewDialog
 	 */
 	public ViewDialog getViewMap() {
@@ -347,6 +379,7 @@ public class ViewsManager implements IProcessActions {
 
 	/**
 	 * Obtiene la vista con el raster a georreferenciar
+	 * 
 	 * @return ViewDialog
 	 */
 	public ViewDialog getViewRaster() {
@@ -355,6 +388,7 @@ public class ViewsManager implements IProcessActions {
 
 	/**
 	 * Obtiene la vista con el zoom del mapa de referencia
+	 * 
 	 * @return ZoomMapDialog
 	 */
 	public ZoomDialog getZoomMap() {
@@ -363,6 +397,7 @@ public class ViewsManager implements IProcessActions {
 
 	/**
 	 * Obtiene la vista con el zoom del raster a georreferenciar
+	 * 
 	 * @return ZoomRasterDialog
 	 */
 	public ZoomDialog getZoomRaster() {
@@ -371,6 +406,7 @@ public class ViewsManager implements IProcessActions {
 
 	/**
 	 * Obtiene el gestor de la vista con la cartografía de referencia
+	 * 
 	 * @return ViewMapRequestManager
 	 */
 	public ViewMapRequestManager getViewMapRequestManager() {
@@ -379,6 +415,7 @@ public class ViewsManager implements IProcessActions {
 
 	/**
 	 * Obtiene el gestor de la vista con el raster a georreferenciar
+	 * 
 	 * @return ViewRasterRequestManager
 	 */
 	public ViewRasterRequestManager getViewRasterRequestManager() {
@@ -387,6 +424,7 @@ public class ViewsManager implements IProcessActions {
 
 	/**
 	 * Obtiene el gestor de la vista zoom con la cartografía de referencia
+	 * 
 	 * @return ViewMapRequestManager
 	 */
 	public ViewMapRequestManager getZoomMapRequestManager() {
@@ -395,6 +433,7 @@ public class ViewsManager implements IProcessActions {
 
 	/**
 	 * Obtiene el gestor de la vista zoom con el raster
+	 * 
 	 * @return ViewRasterRequestManager
 	 */
 	public ViewRasterRequestManager getZoomRasterRequestManager() {
@@ -402,19 +441,23 @@ public class ViewsManager implements IProcessActions {
 	}
 
 	/**
-	 * Cuando termina el proceso de georreferenciación carga la capa en la
-	 * vista con cartografía de referencia si esta existe.
+	 * Cuando termina el proceso de georreferenciación carga la capa en la vista
+	 * con cartografía de referencia si esta existe.
 	 */
 	public void end(Object param) {
-		if(viewMapRequestManager != null) {
+		if (viewMapRequestManager != null) {
 			try {
-				FLyrRasterSE lyr = FLyrRasterSE.createLayer(RasterUtilities.getLastPart(fileName, File.separator), fileName, null);
+				FLyrRasterSE lyr = FLyrRasterSE.createLayer(
+						RasterUtilities.getLastPart(fileName, File.separator),
+						fileName, null);
 				viewMapRequestManager.addTestRasterLayer(lyr);
 				lastTestLayer = lyr;
 			} catch (InvalidRequestException e) {
-				RasterToolsUtil.messageBoxError("error_setview_preview", this, e);
+				RasterToolsUtil.messageBoxError("error_setview_preview", this,
+						e);
 			} catch (LoadLayerException e) {
-				RasterToolsUtil.messageBoxError("error_setview_preview", this, e);
+				RasterToolsUtil.messageBoxError("error_setview_preview", this,
+						e);
 			}
 		}
 	}
@@ -423,11 +466,12 @@ public class ViewsManager implements IProcessActions {
 	}
 
 	/**
-	 * Obtiene la última capa procesada con los puntos de  control
+	 * Obtiene la última capa procesada con los puntos de control
+	 * 
 	 * @return FLyrRaterSE
 	 */
 	public FLyrRasterSE getLastTestLayer() {
 		return lastTestLayer;
 	}
-	
+
 }

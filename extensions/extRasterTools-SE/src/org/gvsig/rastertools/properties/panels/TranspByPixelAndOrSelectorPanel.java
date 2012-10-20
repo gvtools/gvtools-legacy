@@ -27,11 +27,12 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 public class TranspByPixelAndOrSelectorPanel extends JPanel {
-	final private static long	serialVersionUID = 0;
-	private JPanel 				pBorder = null;
-	private JRadioButton 		rbAnd = null;
-	private JRadioButton 		rbOr = null;
-	private ButtonGroup 		group = null;
+	final private static long serialVersionUID = 0;
+	private JPanel pBorder = null;
+	private JRadioButton rbAnd = null;
+	private JRadioButton rbOr = null;
+	private ButtonGroup group = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -51,7 +52,7 @@ public class TranspByPixelAndOrSelectorPanel extends JPanel {
 		flowLayout.setVgap(0);
 		this.setLayout(flowLayout);
 		this.setSize(60, 60);
-		this.setPreferredSize(new java.awt.Dimension(52,50));
+		this.setPreferredSize(new java.awt.Dimension(52, 50));
 		this.add(getJPanel(), null);
 		this.getRbAnd().setSelected(true);
 		group = new ButtonGroup();
@@ -60,9 +61,9 @@ public class TranspByPixelAndOrSelectorPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel() {
 		if (pBorder == null) {
@@ -76,8 +77,9 @@ public class TranspByPixelAndOrSelectorPanel extends JPanel {
 			gridBagConstraints.gridy = 1;
 			pBorder = new JPanel();
 			pBorder.setLayout(new GridBagLayout());
-			pBorder.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.gray,1));
-			pBorder.setPreferredSize(new java.awt.Dimension(60,60));
+			pBorder.setBorder(javax.swing.BorderFactory.createLineBorder(
+					java.awt.Color.gray, 1));
+			pBorder.setPreferredSize(new java.awt.Dimension(60, 60));
 			pBorder.add(getRbAnd(), gridBagConstraints1);
 			pBorder.add(getRbOr(), gridBagConstraints);
 		}
@@ -85,38 +87,40 @@ public class TranspByPixelAndOrSelectorPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes jRadioButton	
-	 * 	
-	 * @return javax.swing.JRadioButton	
+	 * This method initializes jRadioButton
+	 * 
+	 * @return javax.swing.JRadioButton
 	 */
 	public JRadioButton getRbAnd() {
 		if (rbAnd == null) {
 			rbAnd = new JRadioButton();
 			rbAnd.setText("And");
-			rbAnd.setPreferredSize(new java.awt.Dimension(60,25));
+			rbAnd.setPreferredSize(new java.awt.Dimension(60, 25));
 		}
 		return rbAnd;
 	}
 
 	/**
-	 * This method initializes jRadioButton1	
-	 * 	
-	 * @return javax.swing.JRadioButton	
+	 * This method initializes jRadioButton1
+	 * 
+	 * @return javax.swing.JRadioButton
 	 */
 	public JRadioButton getRbOr() {
 		if (rbOr == null) {
 			rbOr = new JRadioButton();
 			rbOr.setText("Or");
-			rbOr.setPreferredSize(new java.awt.Dimension(60,25));
+			rbOr.setPreferredSize(new java.awt.Dimension(60, 25));
 		}
 		return rbOr;
 	}
-	
+
 	/**
 	 * Activa o desactiva el control
-	 * @param enable True activa el control y false lo desactiva
+	 * 
+	 * @param enable
+	 *            True activa el control y false lo desactiva
 	 */
-	public void setControlEnabled(boolean enabled){
+	public void setControlEnabled(boolean enabled) {
 		this.getRbAnd().setEnabled(enabled);
 		this.getRbOr().setEnabled(enabled);
 	}

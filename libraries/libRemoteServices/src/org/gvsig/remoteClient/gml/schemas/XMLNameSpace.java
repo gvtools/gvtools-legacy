@@ -1,6 +1,5 @@
 package org.gvsig.remoteClient.gml.schemas;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -61,34 +60,35 @@ package org.gvsig.remoteClient.gml.schemas;
  * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
- *
+ * 
  */
 public class XMLNameSpace {
 	private String name = null;
 	private String location = null;
-	
-	public XMLNameSpace(String name,String location) {
+
+	public XMLNameSpace(String name, String location) {
 		super();
 		this.name = name;
 		this.location = location;
 	}
-	
+
 	/**
 	 * @return Returns the location.
 	 */
 	public String getLocation() {
 		return location;
 	}
-	
+
 	/**
 	 * @return Returns the name.
 	 */
 	public String getName() {
 		return name;
 	}
-	
+
 	/**
-	 * @param location The location to set.
+	 * @param location
+	 *            The location to set.
 	 */
 	public void setLocation(String location) {
 		this.location = location;

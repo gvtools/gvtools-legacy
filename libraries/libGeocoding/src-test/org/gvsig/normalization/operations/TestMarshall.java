@@ -105,8 +105,8 @@ public class TestMarshall extends TestCase {
 		// results
 		assertEquals(11, pat.getElements().size());
 		assertEquals(0, ((Element) pat.getElements().get(3)).getFieldwidth());
-		assertEquals(true, ((Element) pat.getElements().get(2))
-				.getImportfield());
+		assertEquals(true,
+				((Element) pat.getElements().get(2)).getImportfield());
 		assertEquals(true, ((Element) pat.getElements().get(4))
 				.getFieldseparator().getSemicolonsep());
 

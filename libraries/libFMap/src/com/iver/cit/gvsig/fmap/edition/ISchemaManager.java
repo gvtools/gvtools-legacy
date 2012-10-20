@@ -42,52 +42,54 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: ISchemaManager.java 10627 2007-03-06 17:10:21Z caballero $
-* $Log$
-* Revision 1.5  2007-03-06 17:08:55  caballero
-* Exceptions
-*
-* Revision 1.4  2006/06/29 07:33:56  fjp
-* Cambios ISchemaManager y IFieldManager por terminar
-*
-* Revision 1.3  2006/03/14 19:27:25  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/03/14 18:17:12  fjp
-* Preparando la creación de cero de un tema
-*
-* Revision 1.1  2006/02/06 18:15:14  azabala
-* ISchemaManager is needed to create new datastores' schemas from a LayerDefiniton. First version in CVS
-*
-*
-*/
+ *
+ * $Id: ISchemaManager.java 10627 2007-03-06 17:10:21Z caballero $
+ * $Log$
+ * Revision 1.5  2007-03-06 17:08:55  caballero
+ * Exceptions
+ *
+ * Revision 1.4  2006/06/29 07:33:56  fjp
+ * Cambios ISchemaManager y IFieldManager por terminar
+ *
+ * Revision 1.3  2006/03/14 19:27:25  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/03/14 18:17:12  fjp
+ * Preparando la creación de cero de un tema
+ *
+ * Revision 1.1  2006/02/06 18:15:14  azabala
+ * ISchemaManager is needed to create new datastores' schemas from a LayerDefiniton. First version in CVS
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.edition;
 
 import com.hardcode.gdbms.driver.exceptions.SchemaEditionException;
 import com.iver.cit.gvsig.fmap.drivers.ITableDefinition;
 
 /**
- * Before writing in a persistent datastore with a writer,
- * usually we'll need to create a schema that describe
- * data entities we are going to save into.
- * Event thought ascii based datastores, will need to
- * create phisically file (this would be its schema).
+ * Before writing in a persistent datastore with a writer, usually we'll need to
+ * create a schema that describe data entities we are going to save into. Event
+ * thought ascii based datastores, will need to create phisically file (this
+ * would be its schema).
  * 
- * This is the responsability of ISchemaManager: it will
- * create datastores phisical schemas from logical definitions
- * of LayerDefinition.
+ * This is the responsability of ISchemaManager: it will create datastores
+ * phisical schemas from logical definitions of LayerDefinition.
  * 
- *  TODO If we are going to move LayerDefinition responsability
- *  to DataSource (which will have a TableDescription reference)
- *  this interface have to change (to receive a TableDescription)
+ * TODO If we are going to move LayerDefinition responsability to DataSource
+ * (which will have a TableDescription reference) this interface have to change
+ * (to receive a TableDescription)
+ * 
  * @author azabala
  * 
  */
 public interface ISchemaManager {
-	public void createSchema(ITableDefinition layerDefinition)throws SchemaEditionException;
+	public void createSchema(ITableDefinition layerDefinition)
+			throws SchemaEditionException;
+
 	public void removeSchema(String name) throws SchemaEditionException;
-	public void renameSchema(String antName, String newName) throws SchemaEditionException;
+
+	public void renameSchema(String antName, String newName)
+			throws SchemaEditionException;
 
 }
-

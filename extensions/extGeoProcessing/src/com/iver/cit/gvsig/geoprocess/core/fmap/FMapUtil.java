@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.core.fmap;
 
 import java.util.ArrayList;
@@ -56,15 +56,15 @@ import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
 /**
- * Utility methods to work with FMap 
+ * Utility methods to work with FMap
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class FMapUtil {
 	/**
 	 * Filters TOC layers to get only FLyrVect layers.
-	 *
+	 * 
 	 * @param layers
 	 * @return
 	 */
@@ -75,7 +75,7 @@ public class FMapUtil {
 		for (int i = 0; i < numLayers; i++) {
 			FLayer layer = layers.getLayer(i);
 			if (layer instanceof FLyrVect)
-				list.add((FLyrVect)layer);
+				list.add((FLyrVect) layer);
 			else if (layer instanceof FLayers)
 				list.addAll(Arrays.asList(getVectorialLayers((FLayers) layer)));
 		}
@@ -84,7 +84,7 @@ public class FMapUtil {
 		return solution;
 
 	}
-	
+
 	public static String[] getLayerNames(FLayers layers) {
 		String[] solution = null;
 		int numLayers = layers.getLayersCount();
@@ -96,7 +96,8 @@ public class FMapUtil {
 					list.add(layer.getName());
 				if (layer instanceof FLayers) {
 					FLayers tempLayers = (FLayers) layer;
-					FLyrVect[] vectorials = FMapUtil.getVectorialLayers(tempLayers);
+					FLyrVect[] vectorials = FMapUtil
+							.getVectorialLayers(tempLayers);
 					for (int j = 0; j < vectorials.length; j++) {
 						list.add(vectorials[j].getName());
 					}

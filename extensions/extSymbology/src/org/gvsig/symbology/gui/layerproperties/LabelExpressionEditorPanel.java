@@ -22,7 +22,8 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 
-public class LabelExpressionEditorPanel extends JPanel implements IWindow, ActionListener, MouseListener {
+public class LabelExpressionEditorPanel extends JPanel implements IWindow,
+		ActionListener, MouseListener {
 	private static final String CANCEL_ACTION = "CANCEL";
 	private static final String ACCEPT_ACTION = "ACCEPT";
 	private static final String ADDFIELD_ACTION = "ADD_FIELD";
@@ -53,7 +54,7 @@ public class LabelExpressionEditorPanel extends JPanel implements IWindow, Actio
 		baseConst.ipadx = 2;
 		baseConst.ipady = 2;
 		baseConst.anchor = baseConst.CENTER;
-		baseConst.insets = new Insets(2,2,2,2);
+		baseConst.insets = new Insets(2, 2, 2, 2);
 
 		GridBagConstraints con;
 
@@ -120,27 +121,29 @@ public class LabelExpressionEditorPanel extends JPanel implements IWindow, Actio
 		if (spExpression == null) {
 			spExpression = new JScrollPane();
 			spExpression.setViewportView(getTxtExpression());
-			spExpression.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-			spExpression.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			spExpression
-					.setBorder(BorderFactory.createTitledBorder(PluginServices
-							.getText(this, "expression")));
+					.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+			spExpression
+					.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			spExpression.setBorder(BorderFactory
+					.createTitledBorder(PluginServices.getText(this,
+							"expression")));
 		}
 		return spExpression;
 	}
 
 	private JTextArea getTxtExpression() {
-		if (txtExpression == null){
+		if (txtExpression == null) {
 			txtExpression = new JTextArea();
 		}
 		return txtExpression;
 	}
 
-	public void setExpression(String expr){
+	public void setExpression(String expr) {
 		this.getTxtExpression().setText(expr);
 	}
 
-	public String getExpression(){
+	public String getExpression() {
 		return this.getTxtExpression().getText();
 	}
 
@@ -155,11 +158,13 @@ public class LabelExpressionEditorPanel extends JPanel implements IWindow, Actio
 	}
 
 	private Component getFieldListComposition() {
-		if (spFieldList == null){
+		if (spFieldList == null) {
 			spFieldList = new JScrollPane();
 			spFieldList.setViewportView(getLstFields());
-			spFieldList.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-			spFieldList.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			spFieldList
+					.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+			spFieldList
+					.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			spFieldList
 					.setBorder(BorderFactory.createTitledBorder(PluginServices
 							.getText(this, "fields")));
@@ -169,7 +174,7 @@ public class LabelExpressionEditorPanel extends JPanel implements IWindow, Actio
 	}
 
 	private JList getLstFields() {
-		if (lstFields == null){
+		if (lstFields == null) {
 			lstFields = new JList(this.fieldNames);
 			lstFields.addMouseListener(this);
 		}
@@ -205,22 +210,22 @@ public class LabelExpressionEditorPanel extends JPanel implements IWindow, Actio
 		doAction(e.getActionCommand());
 	}
 
-	private void doAction(String action){
-		if (action.equals(ADDFIELD_ACTION)){
+	private void doAction(String action) {
+		if (action.equals(ADDFIELD_ACTION)) {
 			JTextArea txt = getTxtExpression();
 			StringBuffer strb = new StringBuffer();
 			String str = txt.getText();
 			int sini = txt.getSelectionStart();
 			int send = txt.getSelectionEnd();
-			if (sini > 0){
+			if (sini > 0) {
 				strb.append(str.substring(0, sini));
 				str = str.substring(sini);
 			}
 			strb.append('[');
-			strb.append((String)getLstFields().getSelectedValue());
+			strb.append((String) getLstFields().getSelectedValue());
 			strb.append(']');
-			send = send -sini;
-			if (send > 0){
+			send = send - sini;
+			if (send > 0) {
 				str = str.substring(send);
 			}
 			strb.append(str);
@@ -229,7 +234,7 @@ public class LabelExpressionEditorPanel extends JPanel implements IWindow, Actio
 
 		} else {
 			// Accept or cancel
-			if (action.equals(ACCEPT_ACTION)){
+			if (action.equals(ACCEPT_ACTION)) {
 				this.value = getExpression();
 			} else {
 				this.value = this.originalValue;
@@ -239,12 +244,11 @@ public class LabelExpressionEditorPanel extends JPanel implements IWindow, Actio
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		if (e.getSource() == getLstFields()){
-			if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() > 1){
+		if (e.getSource() == getLstFields()) {
+			if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() > 1) {
 				doAction(ADDFIELD_ACTION);
 			}
 		}
-
 
 	}
 

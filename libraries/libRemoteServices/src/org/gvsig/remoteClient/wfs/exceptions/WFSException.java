@@ -61,25 +61,25 @@ public class WFSException extends Exception {
 	protected String formatString;
 	protected String messageKey;
 	protected long code;
-	
-	public WFSException() {		
-		init();			
-	}	
-	
-	public WFSException(Throwable cause) {		
-		init();	
+
+	public WFSException() {
+		init();
+	}
+
+	public WFSException(Throwable cause) {
+		init();
 		initCause(cause);
-	}	
-	
-	public WFSException(String wfsCode,String message) {		
-		init();	
+	}
+
+	public WFSException(String wfsCode, String message) {
+		init();
 		formatString = message;
 		this.wfsCode = wfsCode;
-	}	
-	
-	protected Map values() {		
+	}
+
+	protected Map values() {
 		Hashtable params;
-		params = new Hashtable();		
+		params = new Hashtable();
 		return params;
 	}
 
@@ -94,5 +94,5 @@ public class WFSException extends Exception {
 	 */
 	public String getWfsCode() {
 		return wfsCode;
-	}	
+	}
 }

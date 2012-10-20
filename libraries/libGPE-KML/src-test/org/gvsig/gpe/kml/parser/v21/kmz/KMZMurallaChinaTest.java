@@ -51,10 +51,11 @@ import org.gvsig.gpe.containers.Layer;
 /**
  * @author Jorge Piera Llodrá (jorge.piera@iver.es)
  */
-public class KMZMurallaChinaTest extends KMZv21BaseTest{
+public class KMZMurallaChinaTest extends KMZv21BaseTest {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.readers.GPEReaderBaseTest#getFile()
 	 */
 	public String getFile() {
@@ -63,6 +64,7 @@ public class KMZMurallaChinaTest extends KMZv21BaseTest{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.readers.GPEReaderBaseTest#makeAsserts()
 	 */
 	public void makeAsserts() {

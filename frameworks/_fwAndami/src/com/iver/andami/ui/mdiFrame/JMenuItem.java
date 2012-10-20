@@ -43,7 +43,8 @@ package com.iver.andami.ui.mdiFrame;
 import javax.swing.Action;
 import javax.swing.Icon;
 
-public class JMenuItem extends javax.swing.JMenuItem implements EnableTextSupport{
+public class JMenuItem extends javax.swing.JMenuItem implements
+		EnableTextSupport {
 	/**
 	 * 
 	 */
@@ -51,6 +52,7 @@ public class JMenuItem extends javax.swing.JMenuItem implements EnableTextSuppor
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
 	/**
 	 * @param text
 	 */
@@ -58,6 +60,7 @@ public class JMenuItem extends javax.swing.JMenuItem implements EnableTextSuppor
 		super(text);
 		// TODO Auto-generated constructor stub
 	}
+
 	/**
 	 * @param text
 	 * @param mnemonic
@@ -66,6 +69,7 @@ public class JMenuItem extends javax.swing.JMenuItem implements EnableTextSuppor
 		super(text, mnemonic);
 		// TODO Auto-generated constructor stub
 	}
+
 	/**
 	 * @param text
 	 * @param icon
@@ -74,6 +78,7 @@ public class JMenuItem extends javax.swing.JMenuItem implements EnableTextSuppor
 		super(text, icon);
 		// TODO Auto-generated constructor stub
 	}
+
 	/**
 	 * @param a
 	 */
@@ -81,6 +86,7 @@ public class JMenuItem extends javax.swing.JMenuItem implements EnableTextSuppor
 		super(a);
 		// TODO Auto-generated constructor stub
 	}
+
 	/**
 	 * @param icon
 	 */
@@ -88,35 +94,37 @@ public class JMenuItem extends javax.swing.JMenuItem implements EnableTextSuppor
 		super(icon);
 		// TODO Auto-generated constructor stub
 	}
+
 	private String enableText;
 	private String toolTip = super.getToolTipText();
-	
-	
+
 	/**
 	 * @return Returns the enableText.
 	 */
 	public String getEnableText() {
 		return enableText;
 	}
+
 	/**
-	 * @param enableText The enableText to set.
+	 * @param enableText
+	 *            The enableText to set.
 	 */
 	public void setEnableText(String enableText) {
 		this.enableText = enableText;
 	}
-	
-	
+
 	/**
 	 * @see java.awt.Component#setVisible(boolean)
 	 */
 	public void setEnabled(boolean aFlag) {
 		super.setEnabled(aFlag);
-		if (aFlag){
+		if (aFlag) {
 			setToolTipText(toolTip);
-		}else{
+		} else {
 			setToolTipText(enableText);
 		}
 	}
+
 	/**
 	 * @see javax.swing.JComponent#setToolTipText(java.lang.String)
 	 */

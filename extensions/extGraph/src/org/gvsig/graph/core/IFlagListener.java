@@ -41,19 +41,15 @@
 package org.gvsig.graph.core;
 
 /**
- * @author fjp
- * Util para avisar de un cambio en los flags (añadido, borrado
- * cambio de orden....). Los listener (el manager, por ejemplo)
- * tendrán que refrescar su contenido y redibujar el graphics
- * del mapcontrol
+ * @author fjp Util para avisar de un cambio en los flags (añadido, borrado
+ *         cambio de orden....). Los listener (el manager, por ejemplo) tendrán
+ *         que refrescar su contenido y redibujar el graphics del mapcontrol
  */
 public interface IFlagListener {
 	public final static int FLAG_ADDED = 0;
 	public final static int FLAG_REMOVED = 1;
 	public final static int FLAG_REORDER = 2;
 	public final static int FLAG_MANY_CHANGES = 3;
-	
+
 	void flagsChanged(int reason);
 }
-
-

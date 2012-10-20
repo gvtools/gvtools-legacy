@@ -42,20 +42,23 @@ package com.iver.cit.gvsig.fmap.core;
 
 /**
  * Punto 3D.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FPoint3D extends FPoint2D implements FShape3D {
 	private static final String NAME = "POINT";
-	
+
 	double z;
 
 	/**
 	 * Crea un nuevo FPoint3D.
-	 *
-	 * @param x Coordenada x.
-	 * @param y Coordenada y.
-	 * @param z Coordenada z.
+	 * 
+	 * @param x
+	 *            Coordenada x.
+	 * @param y
+	 *            Coordenada y.
+	 * @param z
+	 *            Coordenada z.
 	 */
 	public FPoint3D(double x, double y, double z) {
 		super(x, y);
@@ -65,13 +68,13 @@ public class FPoint3D extends FPoint2D implements FShape3D {
 	/**
 	 * Devuelve un Array con los valores de todas las Zs, en este caso con un
 	 * único vaor de z.
-	 *
+	 * 
 	 * @return Array de Zs.
 	 */
 	public double[] getZs() {
 		return new double[] { z };
 	}
-	
+
 	public double getZ() {
 		return z;
 	}
@@ -83,7 +86,9 @@ public class FPoint3D extends FPoint2D implements FShape3D {
 		return FShape.POINT | FShape.Z;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.FShape#cloneFShape()
 	 */
 	public FShape cloneFShape() {

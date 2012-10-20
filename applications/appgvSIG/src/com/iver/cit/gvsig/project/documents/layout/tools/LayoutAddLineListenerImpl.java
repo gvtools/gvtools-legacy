@@ -46,10 +46,7 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 
-import javax.swing.ImageIcon;
-
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.AddLayer;
 import com.iver.cit.gvsig.fmap.core.adapter.GeometryAdapter;
 import com.iver.cit.gvsig.fmap.core.adapter.PolyLineAdapter;
 import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
@@ -60,25 +57,26 @@ import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.ILayoutGraphicListener;
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.LayoutPointListener;
 
-
 /**
- * Implementaci�n de la interfaz LayoutPointListener como herramienta para realizar
- * una l�nea.
- *
+ * Implementaci�n de la interfaz LayoutPointListener como herramienta para
+ * realizar una l�nea.
+ * 
  * @author Vicente Caballero Navarro
  */
-public class LayoutAddLineListenerImpl implements LayoutPointListener, ILayoutGraphicListener{
-	 public static final Image iLine = PluginServices.getIconTheme()
-	 	.get("line-cursor").getImage();
-	 private final Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(iLine,
-				new Point(16, 16), "");
+public class LayoutAddLineListenerImpl implements LayoutPointListener,
+		ILayoutGraphicListener {
+	public static final Image iLine = PluginServices.getIconTheme()
+			.get("line-cursor").getImage();
+	private final Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(
+			iLine, new Point(16, 16), "");
 
 	private Layout layout;
 
 	/**
 	 * Crea un nuevo LayoutAddLineListenerImpl.
-	 *
-	 * @param l Layout.
+	 * 
+	 * @param l
+	 *            Layout.
 	 */
 	public LayoutAddLineListenerImpl(Layout l) {
 		this.layout = l;
@@ -91,7 +89,7 @@ public class LayoutAddLineListenerImpl implements LayoutPointListener, ILayoutGr
 		if (event.getEvent().getButton() == MouseEvent.BUTTON1) {
 			if (layout.getLayoutControl().addGeometryAdapterPoint() == 2) {
 				endGraphic();
-            }
+			}
 		}
 	}
 
@@ -101,7 +99,8 @@ public class LayoutAddLineListenerImpl implements LayoutPointListener, ILayoutGr
 	public Image getImageCursor() {
 		return iLine;
 	}
-	public Cursor getCursor(){
+
+	public Cursor getCursor() {
 		return cur;
 	}
 
@@ -109,7 +108,7 @@ public class LayoutAddLineListenerImpl implements LayoutPointListener, ILayoutGr
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#cancelDrawing()
 	 */
 	public boolean cancelDrawing() {
-	    System.out.println("cancelDrawing del ZoomOutListenerImpl");
+		System.out.println("cancelDrawing del ZoomOutListenerImpl");
 		return true;
 	}
 
@@ -117,19 +116,24 @@ public class LayoutAddLineListenerImpl implements LayoutPointListener, ILayoutGr
 		// TODO Auto-generated method stub
 
 	}
+
 	public void endGraphic() {
 		layout.getLayoutControl().getGeometryAdapter().end();
-        PluginServices.getMainFrame().enableControls();
-        FFrameGraphics fframe =(FFrameGraphics)FrameFactory.createFrameFromName(FFrameGraphicsFactory.registerName);
+		PluginServices.getMainFrame().enableControls();
+		FFrameGraphics fframe = (FFrameGraphics) FrameFactory
+				.createFrameFromName(FFrameGraphicsFactory.registerName);
 
-        fframe.setLayout(layout);
-		fframe.setGeometryAdapter(layout.getLayoutControl().getGeometryAdapter());
+		fframe.setLayout(layout);
+		fframe.setGeometryAdapter(layout.getLayoutControl()
+				.getGeometryAdapter());
 		fframe.update(FFrameGraphics.LINE, layout.getLayoutControl().getAT());
-		fframe.setBoundBox(layout.getLayoutControl().getGeometryAdapter().getBounds2D());
-		layout.getLayoutContext().addFFrame(fframe, true,true);
+		fframe.setBoundBox(layout.getLayoutControl().getGeometryAdapter()
+				.getBounds2D());
+		layout.getLayoutContext().addFFrame(fframe, true, true);
 		layout.getLayoutControl().setGeometryAdapter(new PolyLineAdapter());
-        layout.getLayoutControl().refresh();
+		layout.getLayoutControl().refresh();
 	}
+
 	public GeometryAdapter createGeometryAdapter() {
 		return new PolyLineAdapter();
 	}

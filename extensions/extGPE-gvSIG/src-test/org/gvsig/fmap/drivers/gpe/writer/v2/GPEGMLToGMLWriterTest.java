@@ -61,26 +61,23 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class GPEGMLToGMLWriterTest extends GPEWriterTest{
-	private String sFile = "../extGPE-gvSIG" + File.separatorChar +
-	"testdata" + File.separatorChar + "GML-lines.gml";
+public class GPEGMLToGMLWriterTest extends GPEWriterTest {
+	private String sFile = "../extGPE-gvSIG" + File.separatorChar + "testdata"
+			+ File.separatorChar + "GML-lines.gml";
 
-	protected FLayer getLayerToWrite() throws Exception{
+	protected FLayer getLayerToWrite() throws Exception {
 		MapControl mapControl = new MapControl();
 		mapControl.setMapContext(getMapContext());
 		FmapErrorHandler errorHandler = FmapHandlerFactory.createErrorHandler();
-		DefaultFmapContentHandler contentHandler = FmapHandlerFactory.createContentHandler(
-				errorHandler,
-				new GMLVectorialDriver());		
+		DefaultFmapContentHandler contentHandler = FmapHandlerFactory
+				.createContentHandler(errorHandler, new GMLVectorialDriver());
 		GPEParser parser = GPERegister.createParser("GML");
-		parser.parse(contentHandler,
-				errorHandler,
-				new File(sFile).toURI());	
+		parser.parse(contentHandler, errorHandler, new File(sFile).toURI());
 		return mapControl.getMapContext().getLayers().getLayer(0);
 	}
 
 	protected Class getGPEWriterHandlerClass() {
 		return org.gvsig.gpe.gml.writer.GPEGmlWriterHandlerImplementor.class;
 	}
-	
+
 }

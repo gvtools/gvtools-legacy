@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.catalog.srw.filters;
+
 import org.gvsig.i18n.Messages;
 
 import es.gva.cit.catalog.filters.AbstractFilter;
@@ -48,66 +48,70 @@ import es.gva.cit.catalog.querys.CatalogQuery;
 import es.gva.cit.catalog.utils.Strings;
 
 /**
- * This class creates a RSW query for the IDEE server 
+ * This class creates a RSW query for the IDEE server
  * 
  * @author Jorge Piera Llodra (piera_jor@gva.es)
  */
 public class IDEESRWFilter extends AbstractFilter {
-	
-	public  IDEESRWFilter() {        
+
+	public IDEESRWFilter() {
 		super();
-	} 
+	}
 
 	/**
 	 * Return a CQL-Text query
-	 * @param query 
+	 * 
+	 * @param query
 	 * @return String
-	 * @param profile 
+	 * @param profile
 	 */
-	public String getQuery(CatalogQuery query) {        
+	public String getQuery(CatalogQuery query) {
 		String pregunta = null;
 
-		FilterEncoding filter = new FilterEncoding("", "*", "?", "\\");    
+		FilterEncoding filter = new FilterEncoding("", "*", "?", "\\");
 
 		if (query.getTitle() != null) {
-			filter.addClauses("title", query.getTitle(), query.getTitleFilter(),
-					"PropertyIsLike", "L", "And");
-		}     
+			filter.addClauses("title", query.getTitle(),
+					query.getTitleFilter(), "PropertyIsLike", "L", "And");
+		}
 
-		if (query.isMinimized()){
+		if (query.isMinimized()) {
 			if (query.getAbstract() != null) {
-				filter.addClauses("subject", Strings.addAsteriscsFromAnArray(query.getAbstract()),
+				filter.addClauses("subject",
+						Strings.addAsteriscsFromAnArray(query.getAbstract()),
 						"Y", "PropertyIsLike", "L", "Or");
 			}
-		}else{
+		} else {
 			if (query.getAbstract() != null) {
-				filter.addClauses("subject", Strings.addAsteriscsFromAnArray(query.getAbstract()),
+				filter.addClauses("subject",
+						Strings.addAsteriscsFromAnArray(query.getAbstract()),
 						"Y", "PropertyIsLike", "L", "And");
 			}
-
 
 		}
 
 		pregunta = filter.toString();
 		return pregunta;
-	} 
+	}
 
 	/**
 	 * This function returns true only when the user has choosen the
 	 * "Fully Outside Of" of the coordinates option.
 	 * 
 	 * 
-	 * @return 
-	 * @param translator 
-	 * @param coordinatesOption 
+	 * @return
+	 * @param translator
+	 * @param coordinatesOption
 	 */
-	public boolean getCoordinatesOption(String coordinatesOption) {        
-		if ((coordinatesOption.equals(Messages.getText("coordinatesEqual"))) ||
-				(coordinatesOption.equals(Messages.getText("coordinatesContains"))) ||
-				(coordinatesOption.equals(Messages.getText("coordinatesEnclose"))))
+	public boolean getCoordinatesOption(String coordinatesOption) {
+		if ((coordinatesOption.equals(Messages.getText("coordinatesEqual")))
+				|| (coordinatesOption.equals(Messages
+						.getText("coordinatesContains")))
+				|| (coordinatesOption.equals(Messages
+						.getText("coordinatesEnclose"))))
 			return false;
 
-		return true; 
-	} 
+		return true;
+	}
 
 }

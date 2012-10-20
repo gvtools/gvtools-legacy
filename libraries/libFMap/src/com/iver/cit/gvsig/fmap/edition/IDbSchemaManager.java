@@ -42,10 +42,7 @@ package com.iver.cit.gvsig.fmap.edition;
 
 import java.sql.Connection;
 
-
 public interface IDbSchemaManager extends ISchemaManager {
 	public Connection getConnection();
 
 }
-
-

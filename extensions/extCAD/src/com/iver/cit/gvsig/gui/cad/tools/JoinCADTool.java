@@ -67,171 +67,198 @@ import com.iver.cit.gvsig.gui.cad.tools.smc.JoinCADToolContext;
 import com.iver.cit.gvsig.layers.VectorialLayerEdited;
 import com.vividsolutions.jts.geom.Geometry;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class JoinCADTool extends DefaultCADTool {
-    protected JoinCADToolContext _fsm;
-    private TreeSet<DefaultRowEdited> shorted = new TreeSet<DefaultRowEdited>(new Comparator<DefaultRowEdited>(){
-		public int compare(DefaultRowEdited o1, DefaultRowEdited o2) {
-			return new Integer(o2.getIndex()).compareTo(new Integer(o1.getIndex()));
+	protected JoinCADToolContext _fsm;
+	private TreeSet<DefaultRowEdited> shorted = new TreeSet<DefaultRowEdited>(
+			new Comparator<DefaultRowEdited>() {
+				public int compare(DefaultRowEdited o1, DefaultRowEdited o2) {
+					return new Integer(o2.getIndex()).compareTo(new Integer(o1
+							.getIndex()));
+				}
+			});
+
+	/**
+	 * Crea un nuevo JoinCADTool.
+	 */
+	public JoinCADTool() {
+	}
+
+	/**
+	 * Método de inicio, para poner el código de todo lo que se requiera de una
+	 * carga previa a la utilización de la herramienta.
+	 */
+	public void init() {
+		_fsm = new JoinCADToolContext(this);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.gui.cad.CADTool#transition(com.iver.cit.gvsig.fmap
+	 * .layers.FBitSet, double, double)
+	 */
+	public void transition(double x, double y, InputEvent event) {
+		_fsm.addPoint(x, y, event);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.gui.cad.CADTool#transition(com.iver.cit.gvsig.fmap
+	 * .layers.FBitSet, double)
+	 */
+	public void transition(double d) {
+		_fsm.addValue(d);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.gui.cad.CADTool#transition(com.iver.cit.gvsig.fmap
+	 * .layers.FBitSet, java.lang.String)
+	 */
+	public void transition(String s) throws CommandException {
+		if (!super.changeCommand(s)) {
+			_fsm.addOption(s);
 		}
-	});
-    /**
-     * Crea un nuevo JoinCADTool.
-     */
-    public JoinCADTool() {
-    }
+	}
 
-    /**
-     * Método de inicio, para poner el código de todo lo que se requiera de una
-     * carga previa a la utilización de la herramienta.
-     */
-    public void init() {
-        _fsm = new JoinCADToolContext(this);
-    }
+	/**
+	 * DOCUMENT ME!
+	 */
+	public void selection() {
+		ArrayList selectedRows = getSelectedRows();
+		if (selectedRows.size() == 0
+				&& !CADExtension
+						.getCADTool()
+						.getClass()
+						.getName()
+						.equals("com.iver.cit.gvsig.gui.cad.tools.SelectionCADTool")) {
+			CADExtension.setCADTool("_selection", false);
+			((SelectionCADTool) CADExtension.getCADTool()).setNextTool("_join");
+		}
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.gui.cad.CADTool#transition(com.iver.cit.gvsig.fmap.layers.FBitSet, double, double)
-     */
-    public void transition(double x, double y, InputEvent event) {
-        _fsm.addPoint(x, y, event);
-    }
+	/**
+	 * Equivale al transition del prototipo pero sin pasarle como parámetro el
+	 * editableFeatureSource que ya estará creado.
+	 * 
+	 * @param x
+	 *            parámetro x del punto que se pase en esta transición.
+	 * @param y
+	 *            parámetro y del punto que se pase en esta transición.
+	 */
+	public void addPoint(double x, double y, InputEvent event) {
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.gui.cad.CADTool#transition(com.iver.cit.gvsig.fmap.layers.FBitSet, double)
-     */
-    public void transition(double d) {
-        _fsm.addValue(d);
-    }
+	/**
+	 * Método para dibujar la lo necesario para el estado en el que nos
+	 * encontremos.
+	 * 
+	 * @param g
+	 *            Graphics sobre el que dibujar.
+	 * @param x
+	 *            parámetro x del punto que se pase para dibujar.
+	 * @param y
+	 *            parámetro x del punto que se pase para dibujar.
+	 */
+	public void drawOperation(Graphics g, double x, double y) {
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.gui.cad.CADTool#transition(com.iver.cit.gvsig.fmap.layers.FBitSet, java.lang.String)
-     */
-    public void transition(String s) throws CommandException {
-    	if (!super.changeCommand(s)){
-    		_fsm.addOption(s);
-    	}
-    }
+	public void join() {
+		ArrayList selectedRow = getSelectedRows();
+		if (selectedRow.size() < 2) {
+			return;
+		}
+		ArrayList selectedRowAux = new ArrayList();
+		VectorialLayerEdited vle = getVLE();
+		VectorialEditableAdapter vea = vle.getVEA();
+		try {
+			vea.startComplexRow();
+			Geometry geomTotal = null;
+			DefaultRowEdited[] dres = (DefaultRowEdited[]) selectedRow
+					.toArray(new DefaultRowEdited[0]);
+			for (int i = 0; i < dres.length; i++) {
+				shorted.add(dres[i]);
+			}
+			boolean first = true;
+			Value[] values = null;
+			Iterator<DefaultRowEdited> iterator = shorted.iterator();
+			while (iterator.hasNext()) {
+				DefaultRowEdited dre = (DefaultRowEdited) iterator.next();
+				DefaultFeature df = (DefaultFeature) dre.getLinkedRow()
+						.cloneRow();
+				if (first) {
+					values = df.getAttributes();
+					first = false;
+				}
+				IGeometry geom = df.getGeometry();
+				vea.removeRow(dre.getIndex(), getName(), EditionEvent.GRAPHIC);
 
-    /**
-     * DOCUMENT ME!
-     */
-    public void selection() {
-       ArrayList selectedRows=getSelectedRows();
-        if (selectedRows.size() == 0 && !CADExtension.getCADTool().getClass().getName().equals("com.iver.cit.gvsig.gui.cad.tools.SelectionCADTool")) {
-            CADExtension.setCADTool("_selection",false);
-            ((SelectionCADTool) CADExtension.getCADTool()).setNextTool(
-                "_join");
-        }
-    }
+				if (geomTotal == null) {
+					geomTotal = geom.toJTSGeometry();
+				} else {
+					Geometry geomJTS = geom.toJTSGeometry();
+					geomTotal = geomTotal.union(geomJTS);
+				}
+			}
+			shorted.clear();
+			String newFID = vea.getNewFID();
+			IGeometry geom = FConverter.jts_to_igeometry(geomTotal);
+			DefaultFeature df1 = new DefaultFeature(geom, values, newFID);
+			int index1 = vea.addRow(df1, PluginServices.getText(this, "join"),
+					EditionEvent.GRAPHIC);
+			selectedRowAux.add(new DefaultRowEdited(df1,
+					IRowEdited.STATUS_ADDED, vea.getInversedIndex(index1)));
+			vea.endComplexRow(getName());
+			vle.setSelectionCache(VectorialLayerEdited.NOTSAVEPREVIOUS,
+					selectedRowAux);
+			refresh();
+		} catch (ReadDriverException e) {
+			NotificationManager.addError(e.getMessage(), e);
+		} catch (ValidateRowException e) {
+			NotificationManager.addError(e.getMessage(), e);
+		}
+	}
 
-    /**
-     * Equivale al transition del prototipo pero sin pasarle como parámetro el
-     * editableFeatureSource que ya estará creado.
-     *
-     * @param x parámetro x del punto que se pase en esta transición.
-     * @param y parámetro y del punto que se pase en esta transición.
-     */
-    public void addPoint(double x, double y,InputEvent event) {
-    }
-
-    /**
-     * Método para dibujar la lo necesario para el estado en el que nos
-     * encontremos.
-     *
-     * @param g Graphics sobre el que dibujar.
-     * @param x parámetro x del punto que se pase para dibujar.
-     * @param y parámetro x del punto que se pase para dibujar.
-     */
-    public void drawOperation(Graphics g, double x, double y) {
-    }
-
-    public void join() {
-    	ArrayList selectedRow = getSelectedRows();
-    	if (selectedRow.size()<2) {
-    		return;
-    	}
-    	ArrayList selectedRowAux = new ArrayList();
-    	VectorialLayerEdited vle = getVLE();
-    	VectorialEditableAdapter vea = vle.getVEA();
-    	try {
-    		vea.startComplexRow();
-    		Geometry geomTotal=null;
-    		DefaultRowEdited[] dres=(DefaultRowEdited[])selectedRow.toArray(new DefaultRowEdited[0]);
-    		for (int i = 0; i < dres.length; i++) {
-        		shorted.add(dres[i]);
-    		}
-    		boolean first=true;
-    		Value[] values=null;
-    		Iterator<DefaultRowEdited> iterator=shorted.iterator();
-        	while (iterator.hasNext()) {
-    			DefaultRowEdited dre = (DefaultRowEdited) iterator.next();
-    			DefaultFeature df = (DefaultFeature) dre.getLinkedRow()
-    				.cloneRow();
-    			if (first){
-    				values=df.getAttributes();
-    				first=false;
-    			}
-    			IGeometry geom=df.getGeometry();
-   				vea.removeRow(dre.getIndex(), getName(), EditionEvent.GRAPHIC);
-
-    			if (geomTotal==null){
-    				geomTotal=geom.toJTSGeometry();
-    			}else{
-    				Geometry geomJTS=geom.toJTSGeometry();
-    				geomTotal=geomTotal.union(geomJTS);
-    			}
-    		}
-        	shorted.clear();
-    		String newFID = vea.getNewFID();
-    		IGeometry geom = FConverter.jts_to_igeometry(geomTotal);
-    		DefaultFeature df1 = new DefaultFeature(geom, values, newFID);
-    		int index1 = vea.addRow(df1, PluginServices.getText(this, "join"),
-    				EditionEvent.GRAPHIC);
-    		selectedRowAux.add(new DefaultRowEdited(df1, IRowEdited.STATUS_ADDED,
-    				vea.getInversedIndex(index1)));
-    		vea.endComplexRow(getName());
-    		vle.setSelectionCache(VectorialLayerEdited.NOTSAVEPREVIOUS, selectedRowAux);
-    		refresh();
-    	} catch (ReadDriverException e) {
-    		NotificationManager.addError(e.getMessage(),e);
-    	} catch (ValidateRowException e) {
-    		NotificationManager.addError(e.getMessage(),e);
-    	}
-    }
-       /**
+	/**
 	 * Add a diferent option.
-	 *
+	 * 
 	 * @param s
 	 *            Diferent option.
 	 */
-    public void addOption(String s) {
-    }
+	public void addOption(String s) {
+	}
 
-    /*
+	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.gui.cad.CADTool#addvalue(double)
 	 */
-    public void addValue(double d) {
+	public void addValue(double d) {
 
-    }
+	}
 
 	public String getName() {
-		return PluginServices.getText(this,"join_");
+		return PluginServices.getText(this, "join_");
 	}
 
 	public String toString() {
 		return "_join";
 	}
+
 	public boolean isApplicable(int shapeType) {
 		switch (shapeType) {
-			case FShape.POINT:
-				return false;
+		case FShape.POINT:
+			return false;
 		}
 		return true;
 	}

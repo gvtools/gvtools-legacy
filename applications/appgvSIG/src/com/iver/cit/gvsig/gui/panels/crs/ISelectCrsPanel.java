@@ -6,6 +6,8 @@ import com.iver.andami.ui.mdiManager.IWindow;
 
 public interface ISelectCrsPanel extends IWindow {
 	public CoordinateReferenceSystem getCrs();
-    public void setCrs(CoordinateReferenceSystem crs);
-    public boolean isOkPressed();
+
+	public void setCrs(CoordinateReferenceSystem crs);
+
+	public boolean isOkPressed();
 }

@@ -40,23 +40,23 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: JDnDTable.java 13655 2007-09-12 16:28:55Z bsanchez $
-* $Log$
-* Revision 1.3  2007-09-12 16:28:23  bsanchez
-* *** empty log message ***
-*
-* Revision 1.2  2007/08/21 09:56:44  bsanchez
-* - Variable no usada
-*
-* Revision 1.1  2007/08/20 08:34:46  evercher
-* He fusionado LibUI con LibUIComponents
-*
-* Revision 1.1  2006/09/21 16:35:12  jaume
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: JDnDTable.java 13655 2007-09-12 16:28:55Z bsanchez $
+ * $Log$
+ * Revision 1.3  2007-09-12 16:28:23  bsanchez
+ * *** empty log message ***
+ *
+ * Revision 1.2  2007/08/21 09:56:44  bsanchez
+ * - Variable no usada
+ *
+ * Revision 1.1  2007/08/20 08:34:46  evercher
+ * He fusionado LibUI con LibUIComponents
+ *
+ * Revision 1.1  2006/09/21 16:35:12  jaume
+ * *** empty log message ***
+ *
+ *
+ */
 package org.gvsig.gui.beans.controls.dnd;
 
 import java.awt.Component;
@@ -85,47 +85,49 @@ import java.util.StringTokenizer;
 
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
+
 /**
  * Preten ser una taula que accepte arrossegar i soltar. Ja mou coses i això
  * però encara està en proves.
- *
+ * 
  * La intenció és que pugues moure columnes, però una volta posats, que moga
  * línies i cel·les lliurement.
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
 public class JDnDTable extends JTable implements DragSourceListener,
-								DragGestureListener, DropTargetListener{
-  private static final long serialVersionUID = -5479369256188567414L;
-	private CellCoordinates	overCellCoordinates = null;
-	private DragSource	dragSource;
-	private CellCoordinates[]	selectedCells;
-	private boolean	dragging;
+		DragGestureListener, DropTargetListener {
+	private static final long serialVersionUID = -5479369256188567414L;
+	private CellCoordinates overCellCoordinates = null;
+	private DragSource dragSource;
+	private CellCoordinates[] selectedCells;
+	private boolean dragging;
 	private CellCoordinates currSelectedCell;
 	static final short FREE_CELL_MOVING = -4;
 	public static final short ONLY_ALLOW_MOVING_ROWS = -2;
 	public static final short ONLY_ALLOW_MOVING_COLUMNS = -1;
 
-
-
 	public JDnDTable() {
 		// Configure ourselves to be a drag source
 		dragSource = new DragSource();
-		dragSource.createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_MOVE, this);
+		dragSource.createDefaultDragGestureRecognizer(this,
+				DnDConstants.ACTION_MOVE, this);
 
 		// Configure ourselves to be a drop target
 		new DropTarget(this, this);
 	}
 
-	public JDnDTable( JDnDTableModel model ) {
-        super( model );
-        // Configure ourselves to be a drag source
-        dragSource = new DragSource();
-        dragSource.createDefaultDragGestureRecognizer( this, DnDConstants.ACTION_MOVE, this);
+	public JDnDTable(JDnDTableModel model) {
+		super(model);
+		// Configure ourselves to be a drag source
+		dragSource = new DragSource();
+		dragSource.createDefaultDragGestureRecognizer(this,
+				DnDConstants.ACTION_MOVE, this);
 
-        // Configure ourselves to be a drop target
-        new DropTarget( this, this );
-    }
+		// Configure ourselves to be a drop target
+		new DropTarget(this, this);
+	}
 
 	public void dragEnter(DragSourceDragEvent dsde) {
 		Point thisLocation = this.getLocationOnScreen();
@@ -142,12 +144,13 @@ public class JDnDTable extends JTable implements DragSourceListener,
 		if (mode == ONLY_ALLOW_MOVING_COLUMNS) {
 			setColumnSelectionAllowed(true);
 			setRowSelectionAllowed(false);
-		} else if ( mode == ONLY_ALLOW_MOVING_ROWS) {
+		} else if (mode == ONLY_ALLOW_MOVING_ROWS) {
 			setColumnSelectionAllowed(false);
 			setRowSelectionAllowed(true);
 		}
 		((JDnDTableModel) this.getModel()).setSelectionMode(mode);
 	}
+
 	private CellCoordinates locationToCellCoord(Point2D location) {
 
 		int[] ij = new int[2];
@@ -157,7 +160,8 @@ public class JDnDTable extends JTable implements DragSourceListener,
 		for (int i = 0; i < this.getColumnCount(); i++) {
 			int iColumnWidth = this.getColumnModel().getColumn(i).getWidth();
 			// it seems to be right, but just in case consideer to use:
-			// ? int iColumnWidth = this.getColumnModel().getColumn(i).getPreferredWidth();
+			// ? int iColumnWidth =
+			// this.getColumnModel().getColumn(i).getPreferredWidth();
 			if ((width - iColumnWidth) <= 0) {
 				ij[1] = i;
 				break;
@@ -166,26 +170,25 @@ public class JDnDTable extends JTable implements DragSourceListener,
 		}
 
 		// Get the current default height for all rows
-        int jRowHeight = this.getRowHeight();
+		int jRowHeight = this.getRowHeight();
 		for (int j = 0; j < this.getRowCount(); j++) {
-	        // Determine highest cell in the row
-	        for (int c=0; c<this.getColumnCount(); c++) {
-	            TableCellRenderer renderer = this.getCellRenderer(j, c);
-	            Component comp = this.prepareRenderer(renderer, j, c);
-	            int h = comp.getPreferredSize().height - 2*rowMargin;
-	            jRowHeight = Math.max(jRowHeight, h);
-	        }
+			// Determine highest cell in the row
+			for (int c = 0; c < this.getColumnCount(); c++) {
+				TableCellRenderer renderer = this.getCellRenderer(j, c);
+				Component comp = this.prepareRenderer(renderer, j, c);
+				int h = comp.getPreferredSize().height - 2 * rowMargin;
+				jRowHeight = Math.max(jRowHeight, h);
+			}
 
-	        if ((height - jRowHeight) <= 0) {
-	        	ij[0] = j;
-	        	break;
-	        }
-	        height = height - jRowHeight;
+			if ((height - jRowHeight) <= 0) {
+				ij[0] = j;
+				break;
+			}
+			height = height - jRowHeight;
 		}
 
 		return new CellCoordinates(ij[0], ij[1]);
 	}
-
 
 	public void dragOver(DragSourceDragEvent dsde) {
 		// TODO Auto-generated method stub
@@ -208,20 +211,20 @@ public class JDnDTable extends JTable implements DragSourceListener,
 		// TODO Auto-generated method stub
 		this.selectedCells = this.getSelectedCells();
 		Object[] selectedObjects = this.getSelectedValues();
-		if (selectedObjects.length>0) {
+		if (selectedObjects.length > 0) {
 			StringBuffer sb = new StringBuffer();
-            for( int i=0; i<selectedObjects.length; i++ ) {
-                sb.append( selectedObjects[ i ].toString() + "\n" );
-            }
+			for (int i = 0; i < selectedObjects.length; i++) {
+				sb.append(selectedObjects[i].toString() + "\n");
+			}
 
-            // Build a StringSelection object that the Drag Source
-            // can use to transport a string to the Drop Target
-            StringSelection text = new StringSelection( sb.toString() );
+			// Build a StringSelection object that the Drag Source
+			// can use to transport a string to the Drop Target
+			StringSelection text = new StringSelection(sb.toString());
 
-            // Start dragging the object
-            this.dragging = true;
-            dragSource.startDrag( dge, DragSource.DefaultMoveDrop, text, this );
-            System.err.println("Selected objects\n"+sb.toString());
+			// Start dragging the object
+			this.dragging = true;
+			dragSource.startDrag(dge, DragSource.DefaultMoveDrop, text, this);
+			System.err.println("Selected objects\n" + sb.toString());
 		}
 	}
 
@@ -238,7 +241,7 @@ public class JDnDTable extends JTable implements DragSourceListener,
 		for (int i = 0; i < this.getColumnCount(); i++) {
 			for (int j = 0; j < this.getRowCount(); j++) {
 				if (this.isCellSelected(i, j))
-					cells.add( new CellCoordinates(i,j) );
+					cells.add(new CellCoordinates(i, j));
 			}
 		}
 		return (CellCoordinates[]) cells.toArray(new CellCoordinates[0]);
@@ -250,18 +253,21 @@ public class JDnDTable extends JTable implements DragSourceListener,
 	}
 
 	public void dragOver(DropTargetDragEvent dtde) {
-		 // See who we are over...
-		CellCoordinates overCellCoordinates = this.locationToCellCoord( dtde.getLocation());
-        if( overCellCoordinates != null && !overCellCoordinates.equals(this.overCellCoordinates) ) {
-            // If the value has changed from what we were previously over
-            // then change the selected object to the one we are over; this
-            // is a visual representation that this is where the drop will occur
-            this.overCellCoordinates = overCellCoordinates;
+		// See who we are over...
+		CellCoordinates overCellCoordinates = this.locationToCellCoord(dtde
+				.getLocation());
+		if (overCellCoordinates != null
+				&& !overCellCoordinates.equals(this.overCellCoordinates)) {
+			// If the value has changed from what we were previously over
+			// then change the selected object to the one we are over; this
+			// is a visual representation that this is where the drop will occur
+			this.overCellCoordinates = overCellCoordinates;
 
-            currSelectedCell = this.overCellCoordinates;
-            System.out.println("Current cell  ["+currSelectedCell.i+","+currSelectedCell.j+"]");
+			currSelectedCell = this.overCellCoordinates;
+			System.out.println("Current cell  [" + currSelectedCell.i + ","
+					+ currSelectedCell.j + "]");
 
-        }
+		}
 	}
 
 	public void dropActionChanged(DropTargetDragEvent dtde) {
@@ -271,54 +277,55 @@ public class JDnDTable extends JTable implements DragSourceListener,
 	public void drop(DropTargetDropEvent dtde) {
 		try {
 			Transferable transferable = dtde.getTransferable();
-			if( transferable.isDataFlavorSupported( DataFlavor.stringFlavor ) ) {
-				dtde.acceptDrop( DnDConstants.ACTION_MOVE );
+			if (transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+				dtde.acceptDrop(DnDConstants.ACTION_MOVE);
 
 				// Find out where the item was dropped
-				CellCoordinates newCellCoord = locationToCellCoord(dtde.getLocation());
+				CellCoordinates newCellCoord = locationToCellCoord(dtde
+						.getLocation());
 
 				// Get the items out of the transferable object and build an
 				// array out of them...
-				String s = ( String ) transferable.getTransferData( DataFlavor.stringFlavor );
-				StringTokenizer st = new StringTokenizer( s );
+				String s = (String) transferable
+						.getTransferData(DataFlavor.stringFlavor);
+				StringTokenizer st = new StringTokenizer(s);
 				ArrayList items = new ArrayList();
-				while( st.hasMoreTokens() ) {
-					items.add( st.nextToken() );
+				while (st.hasMoreTokens()) {
+					items.add(st.nextToken());
 				}
 
 				JDnDTableModel model = (JDnDTableModel) this.getModel();
 
-                // If we are dragging from our this to our list them move the items,
-                // otherwise just add them...
-                if( this.dragging ) {
-                    //model.itemsMoved( newIndex, items );
-                    model.itemsMoved( newCellCoord, this.selectedCells );
-                } else {
-                    model.insertItems( newCellCoord, items );
-                }
+				// If we are dragging from our this to our list them move the
+				// items,
+				// otherwise just add them...
+				if (this.dragging) {
+					// model.itemsMoved( newIndex, items );
+					model.itemsMoved(newCellCoord, this.selectedCells);
+				} else {
+					model.insertItems(newCellCoord, items);
+				}
 
-                // Update the selected cells
-                /* TODO
-                int[] newIndicies = new int[ items.size() ];
-                for( int i=0; i<items.size(); i++ ) {
-                    newIndicies[ i ] = newIndex + i;
-                }
-                this.setSelectedIndices( newIndicies );
-                */
-                // Reset the over index
-                this.overCellCoordinates = null;
+				// Update the selected cells
+				/*
+				 * TODO int[] newIndicies = new int[ items.size() ]; for( int
+				 * i=0; i<items.size(); i++ ) { newIndicies[ i ] = newIndex + i;
+				 * } this.setSelectedIndices( newIndicies );
+				 */
+				// Reset the over index
+				this.overCellCoordinates = null;
 
-                dtde.getDropTargetContext().dropComplete( true );
+				dtde.getDropTargetContext().dropComplete(true);
 			} else {
 				dtde.rejectDrop();
 			}
-		} catch( IOException exception ) {
+		} catch (IOException exception) {
 			exception.printStackTrace();
-			System.err.println( "Exception" + exception.getMessage());
+			System.err.println("Exception" + exception.getMessage());
 			dtde.rejectDrop();
-		} catch( UnsupportedFlavorException ufException ) {
+		} catch (UnsupportedFlavorException ufException) {
 			ufException.printStackTrace();
-			System.err.println( "Exception" + ufException.getMessage());
+			System.err.println("Exception" + ufException.getMessage());
 			dtde.rejectDrop();
 		}
 	}

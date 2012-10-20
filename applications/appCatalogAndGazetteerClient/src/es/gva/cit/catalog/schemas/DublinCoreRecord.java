@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.catalog.schemas;
+
 import java.net.URI;
 
 import es.gva.cit.catalog.metadataxml.XMLNode;
@@ -54,37 +54,41 @@ import es.gva.cit.catalog.querys.Coordinates;
  */
 public class DublinCoreRecord extends Record {
 
-	public  DublinCoreRecord() {   
+	public DublinCoreRecord() {
 
 	}
 
 	/**
-	 * @param node 
+	 * @param node
 	 */
-	public  DublinCoreRecord(URI uri,XMLNode node) {        
-		super(uri,node);    	
-		setTitle(XMLTree.searchNodeValue(node,"dc:title"));
+	public DublinCoreRecord(URI uri, XMLNode node) {
+		super(uri, node);
+		setTitle(XMLTree.searchNodeValue(node, "dc:title"));
 		setAbstract_(XMLTree.searchNodeValue(node, "dc:subject"));
 		setPurpose(XMLTree.searchNodeValue(node, "dc:description"));
-		setResources(getResources(node));          
-	} 
+		setResources(getResources(node));
+	}
 
 	/**
 	 * It parses the resource tags
 	 * 
 	 * 
-	 * @return 
-	 * @param node 
+	 * @return
+	 * @param node
 	 */
-	public Resource[] getResources(XMLNode node) {        
+	public Resource[] getResources(XMLNode node) {
 		String format = XMLTree.searchNodeValue(node, "dc:format");
 		String source = XMLTree.searchNodeValue(node, "dc:source");
-		Coordinates coordinates = new Coordinates(XMLTree.searchNodeValue(getNode(),"dc:spatial->dcmiBox:Box->dcmiBox:westlimit"),
-				XMLTree.searchNodeValue(getNode(),"dc:spatial->dcmiBox:Box->dcmiBox:northlimit"),
-				XMLTree.searchNodeValue(getNode(),"dc:spatial->dcmiBox:Box->dcmiBox:eastlimit"),
-				XMLTree.searchNodeValue(getNode(),"dc:spatial->dcmiBox:Box->dcmiBox:southlimit"));
+		Coordinates coordinates = new Coordinates(XMLTree.searchNodeValue(
+				getNode(), "dc:spatial->dcmiBox:Box->dcmiBox:westlimit"),
+				XMLTree.searchNodeValue(getNode(),
+						"dc:spatial->dcmiBox:Box->dcmiBox:northlimit"),
+				XMLTree.searchNodeValue(getNode(),
+						"dc:spatial->dcmiBox:Box->dcmiBox:eastlimit"),
+				XMLTree.searchNodeValue(getNode(),
+						"dc:spatial->dcmiBox:Box->dcmiBox:southlimit"));
 
-		if ((source == null) || (format == null)){
+		if ((source == null) || (format == null)) {
 			return null;
 		}
 
@@ -95,22 +99,25 @@ public class DublinCoreRecord extends Record {
 			format = Resource.WEBSITE;
 
 		Resource[] resources = new Resource[1];
-		resources[0] = new Resource(source,format,"","","","",coordinates);
+		resources[0] = new Resource(source, format, "", "", "", "", coordinates);
 
 		return resources;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.schemas.discoverer.Record#accept(java.net.URI, es.gva.cit.catalogClient.metadataxml.XMLNode)
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.schemas.discoverer.Record#accept(java.net.URI,
+	 * es.gva.cit.catalogClient.metadataxml.XMLNode)
 	 */
 	public boolean accept(URI uri, XMLNode node) {
-		if ((node.getName().equals("dc:metadata")) ||
-				(node.getName().equals("simpledc")) ||
-				(node.getName().equals("csw:SummaryRecord")) ||
-				(node.getName().equals("csw:Record"))){
+		if ((node.getName().equals("dc:metadata"))
+				|| (node.getName().equals("simpledc"))
+				|| (node.getName().equals("csw:SummaryRecord"))
+				|| (node.getName().equals("csw:Record"))) {
 			return true;
 		}
 		return false;
-	} 
+	}
 }

@@ -59,6 +59,7 @@ import org.gvsig.xmlschema.som.IXSElementDeclaration;
  */
 /**
  * A class with some utils to manage the types
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class TypeUtils {
@@ -105,51 +106,51 @@ public class TypeUtils {
 
 	/**
 	 * Return the XML schema simple type from a class
+	 * 
 	 * @param clazz
-	 * Clazz to compare the name
-	 * @return
-	 * Xml schema simple type
+	 *            Clazz to compare the name
+	 * @return Xml schema simple type
 	 */
-	public static String getType(Class clazz){
-		if (clazz.getName().compareTo(String.class.getName()) == 0){
+	public static String getType(Class clazz) {
+		if (clazz.getName().compareTo(String.class.getName()) == 0) {
 			return STRING;
-		}else if (clazz.getName().compareTo(Integer.class.getName()) == 0){
+		} else if (clazz.getName().compareTo(Integer.class.getName()) == 0) {
 			return INTEGER;
-		}else if (clazz.getName().compareTo(Double.class.getName()) == 0){
+		} else if (clazz.getName().compareTo(Double.class.getName()) == 0) {
 			return DOUBLE;
-		}else if (clazz.getName().compareTo(Long.class.getName()) == 0){
+		} else if (clazz.getName().compareTo(Long.class.getName()) == 0) {
 			return LONG;
-		}else if (clazz.getName().compareTo(Boolean.class.getName()) == 0){
+		} else if (clazz.getName().compareTo(Boolean.class.getName()) == 0) {
 			return BOOLEAN;
 		}
 		return STRING;
 	}
-	
+
 	/**
-	 * Return the XML schema simple type from a class. The 
-	 * name contains the Xlink namespace
+	 * Return the XML schema simple type from a class. The name contains the
+	 * Xlink namespace
+	 * 
 	 * @param clazz
-	 * Clazz to compare the name
-	 * @return
-	 * Xml schema simple type with the xlink prefix
+	 *            Clazz to compare the name
+	 * @return Xml schema simple type with the xlink prefix
 	 */
-	public static String getXSType(Class clazz){
+	public static String getXSType(Class clazz) {
 		return SchemaTags.XS_NS + ":" + getType(clazz);
 	}
 
 	public static Object getValue(IXSElementDeclaration element, String value) {
-		if ((element == null) || (element.getTypeName() == null)){
+		if ((element == null) || (element.getTypeName() == null)) {
 			return value;
 		}
 		String typeName = element.getTypeName();
-		typeName = typeName.substring(typeName.indexOf(":") + 1,typeName.length());
-		if (typeName.compareTo(INTEGER) == 0){
+		typeName = typeName.substring(typeName.indexOf(":") + 1,
+				typeName.length());
+		if (typeName.compareTo(INTEGER) == 0) {
 			return new Integer(Integer.parseInt(value));
-		}else if (typeName.compareTo(BOOLEAN) == 0){
+		} else if (typeName.compareTo(BOOLEAN) == 0) {
 			return new Boolean(Boolean.getBoolean(value));
 		}
 		return value;
 	}
-	
-	
+
 }

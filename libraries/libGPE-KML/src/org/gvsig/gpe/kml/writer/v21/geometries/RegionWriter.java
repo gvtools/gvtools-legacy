@@ -62,6 +62,7 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
 /**
  * This class writes a Region Kml tag. Example:
  * <p>
+ * 
  * <pre>
  * <code> 
  * &lt;Region&gt;
@@ -75,38 +76,44 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  * &lt;/Region&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#region
  */
 public class RegionWriter {
-	
+
 	/**
 	 * It writes the Region init tag and its fields
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param coords
-	 * A coordinates iterator. 
+	 *            A coordinates iterator.
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler,
-			ICoordinateSequence coords) throws IOException{
+	public void start(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor handler, ICoordinateSequence coords)
+			throws IOException {
 		writer.writeStartElement(Kml2_1_Tags.REGION);
-		handler.getProfile().getLatLonAltBoxWriter().start(writer, handler, coords);
+		handler.getProfile().getLatLonAltBoxWriter()
+				.start(writer, handler, coords);
 	}
-	
+
 	/**
-	/**
-	 * It writes the LatLonAltBox end tag and its fields
+	 * /** It writes the LatLonAltBox end tag and its fields
+	 * 
 	 * @param writer
-	 * Writer to write the labels
-	 *  @param handler
-	 * The writer handler implementor
+	 *            Writer to write the labels
+	 * @param handler
+	 *            The writer handler implementor
 	 * @throws IOException
 	 */
-	public void end(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler) throws IOException{
+	public void end(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor handler) throws IOException {
 		handler.getProfile().getLatLonAltBoxWriter().end(writer, handler);
 		writer.writeEndElement();
 	}

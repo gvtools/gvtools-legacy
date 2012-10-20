@@ -4,7 +4,7 @@
  * TODO To change the template for this generated file go to
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
- /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -50,10 +50,9 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 
-
 /**
  * (Sacado de GT2)
- *
+ * 
  * @author FJP
  */
 public class FPointIterator extends GeneralPathXIterator {
@@ -68,9 +67,11 @@ public class FPointIterator extends GeneralPathXIterator {
 
 	/**
 	 * Creates a new PointIterator object.
-	 *
-	 * @param p The polygon
-	 * @param at The affine transform applied to coordinates during iteration
+	 * 
+	 * @param p
+	 *            The polygon
+	 * @param at
+	 *            The affine transform applied to coordinates during iteration
 	 */
 	public FPointIterator(Point2D p, AffineTransform at) {
 		super(new GeneralPathX());
@@ -85,7 +86,7 @@ public class FPointIterator extends GeneralPathXIterator {
 
 	/**
 	 * Return the winding rule for determining the interior of the path.
-	 *
+	 * 
 	 * @return <code>WIND_EVEN_ODD</code> by default.
 	 */
 	public int getWindingRule() {
@@ -117,7 +118,9 @@ public class FPointIterator extends GeneralPathXIterator {
 		return PathIterator.SEG_MOVETO;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.geom.PathIterator#currentSegment(float[])
 	 */
 	public int currentSegment(float[] coords) {

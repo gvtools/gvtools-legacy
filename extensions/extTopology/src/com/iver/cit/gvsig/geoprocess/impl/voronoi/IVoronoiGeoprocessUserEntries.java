@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.impl.voronoi;
 
 import org.gvsig.jts.voronoi.Voronoier.VoronoiStrategy;
@@ -53,17 +53,20 @@ import org.gvsig.jts.voronoi.Voronoier.VoronoiStrategy;
 import com.iver.cit.gvsig.geoprocess.core.gui.IGeoprocessUserEntries;
 
 /**
- * All classes that provides user entries to VoronoiGeoprocess,
- * by VoronoiGeoprocessController, must implement this interface.
+ * All classes that provides user entries to VoronoiGeoprocess, by
+ * VoronoiGeoprocessController, must implement this interface.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public interface IVoronoiGeoprocessUserEntries extends IGeoprocessUserEntries {
-	
+
 	public boolean computeTin();
+
 	public boolean computeThiessen();
+
 	public VoronoiStrategy getAlgorithm();
-	
-	/*TODO Mover a clase padre*/
+
+	/* TODO Mover a clase padre */
 	public boolean onlyFirstLayerSelected();
 }

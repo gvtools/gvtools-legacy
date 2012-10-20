@@ -18,17 +18,16 @@
  */
 package org.gvsig.rastertools.reproject;
 
-
 /**
  * Excepción producida cuando se produce algún problema en la reproyección.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
 public class ReprojectException extends Exception {
 	private static final long serialVersionUID = -3022090543908771484L;
-	
-	public ReprojectException(String msg){
+
+	public ReprojectException(String msg) {
 		super(msg);
 	}
 }

@@ -7,271 +7,251 @@
 
 package com.iver.andami.plugins.config.generate;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Serializable;
-import java.io.Writer;
-import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.Marshaller;
 import org.exolab.castor.xml.Unmarshaller;
-import org.exolab.castor.xml.ValidationException;
-import org.xml.sax.ContentHandler;
 
 /**
  * Class ExtensionType.
  * 
- * @version $Revision: 15983 $ $Date: 2007-11-07 12:11:19 +0100 (Wed, 07 Nov 2007) $
+ * @version $Revision: 15983 $ $Date: 2007-11-07 12:11:19 +0100 (Wed, 07 Nov
+ *          2007) $
  */
-public class ExtensionType extends com.iver.andami.plugins.config.generate.SkinExtensionType 
-implements java.io.Serializable
-{
+public class ExtensionType extends
+		com.iver.andami.plugins.config.generate.SkinExtensionType implements
+		java.io.Serializable {
 
+	// --------------------------/
+	// - Class/Member Variables -/
+	// --------------------------/
 
-      //--------------------------/
-     //- Class/Member Variables -/
-    //--------------------------/
+	/**
+	 * Field _priority
+	 */
+	private int _priority;
 
-    /**
-     * Field _priority
-     */
-    private int _priority;
+	/**
+	 * keeps track of state for field: _priority
+	 */
+	private boolean _has_priority;
 
-    /**
-     * keeps track of state for field: _priority
-     */
-    private boolean _has_priority;
+	/**
+	 * Field _active
+	 */
+	private boolean _active;
 
-    /**
-     * Field _active
-     */
-    private boolean _active;
+	/**
+	 * keeps track of state for field: _active
+	 */
+	private boolean _has_active;
 
-    /**
-     * keeps track of state for field: _active
-     */
-    private boolean _has_active;
+	/**
+	 * Field _description
+	 */
+	private java.lang.String _description;
 
-    /**
-     * Field _description
-     */
-    private java.lang.String _description;
+	/**
+	 * Field _alwaysvisible
+	 */
+	private boolean _alwaysvisible;
 
-    /**
-     * Field _alwaysvisible
-     */
-    private boolean _alwaysvisible;
+	/**
+	 * keeps track of state for field: _alwaysvisible
+	 */
+	private boolean _has_alwaysvisible;
 
-    /**
-     * keeps track of state for field: _alwaysvisible
-     */
-    private boolean _has_alwaysvisible;
+	// ----------------/
+	// - Constructors -/
+	// ----------------/
 
+	public ExtensionType() {
+		super();
+	} // -- com.iver.andami.plugins.config.generate.ExtensionType()
 
-      //----------------/
-     //- Constructors -/
-    //----------------/
+	// -----------/
+	// - Methods -/
+	// -----------/
 
-    public ExtensionType() {
-        super();
-    } //-- com.iver.andami.plugins.config.generate.ExtensionType()
+	/**
+	 * Method deleteActive
+	 */
+	public void deleteActive() {
+		this._has_active = false;
+	} // -- void deleteActive()
 
+	/**
+	 * Method deleteAlwaysvisible
+	 */
+	public void deleteAlwaysvisible() {
+		this._has_alwaysvisible = false;
+	} // -- void deleteAlwaysvisible()
 
-      //-----------/
-     //- Methods -/
-    //-----------/
+	/**
+	 * Method deletePriority
+	 */
+	public void deletePriority() {
+		this._has_priority = false;
+	} // -- void deletePriority()
 
-    /**
-     * Method deleteActive
-     */
-    public void deleteActive()
-    {
-        this._has_active= false;
-    } //-- void deleteActive() 
+	/**
+	 * Returns the value of field 'active'.
+	 * 
+	 * @return the value of field 'active'.
+	 */
+	public boolean getActive() {
+		return this._active;
+	} // -- boolean getActive()
 
-    /**
-     * Method deleteAlwaysvisible
-     */
-    public void deleteAlwaysvisible()
-    {
-        this._has_alwaysvisible= false;
-    } //-- void deleteAlwaysvisible() 
+	/**
+	 * Returns the value of field 'alwaysvisible'.
+	 * 
+	 * @return the value of field 'alwaysvisible'.
+	 */
+	public boolean getAlwaysvisible() {
+		return this._alwaysvisible;
+	} // -- boolean getAlwaysvisible()
 
-    /**
-     * Method deletePriority
-     */
-    public void deletePriority()
-    {
-        this._has_priority= false;
-    } //-- void deletePriority() 
+	/**
+	 * Returns the value of field 'description'.
+	 * 
+	 * @return the value of field 'description'.
+	 */
+	public java.lang.String getDescription() {
+		return this._description;
+	} // -- java.lang.String getDescription()
 
-    /**
-     * Returns the value of field 'active'.
-     * 
-     * @return the value of field 'active'.
-     */
-    public boolean getActive()
-    {
-        return this._active;
-    } //-- boolean getActive() 
+	/**
+	 * Returns the value of field 'priority'.
+	 * 
+	 * @return the value of field 'priority'.
+	 */
+	public int getPriority() {
+		return this._priority;
+	} // -- int getPriority()
 
-    /**
-     * Returns the value of field 'alwaysvisible'.
-     * 
-     * @return the value of field 'alwaysvisible'.
-     */
-    public boolean getAlwaysvisible()
-    {
-        return this._alwaysvisible;
-    } //-- boolean getAlwaysvisible() 
+	/**
+	 * Method hasActive
+	 */
+	public boolean hasActive() {
+		return this._has_active;
+	} // -- boolean hasActive()
 
-    /**
-     * Returns the value of field 'description'.
-     * 
-     * @return the value of field 'description'.
-     */
-    public java.lang.String getDescription()
-    {
-        return this._description;
-    } //-- java.lang.String getDescription() 
+	/**
+	 * Method hasAlwaysvisible
+	 */
+	public boolean hasAlwaysvisible() {
+		return this._has_alwaysvisible;
+	} // -- boolean hasAlwaysvisible()
 
-    /**
-     * Returns the value of field 'priority'.
-     * 
-     * @return the value of field 'priority'.
-     */
-    public int getPriority()
-    {
-        return this._priority;
-    } //-- int getPriority() 
+	/**
+	 * Method hasPriority
+	 */
+	public boolean hasPriority() {
+		return this._has_priority;
+	} // -- boolean hasPriority()
 
-    /**
-     * Method hasActive
-     */
-    public boolean hasActive()
-    {
-        return this._has_active;
-    } //-- boolean hasActive() 
+	/**
+	 * Method isValid
+	 */
+	public boolean isValid() {
+		try {
+			validate();
+		} catch (org.exolab.castor.xml.ValidationException vex) {
+			return false;
+		}
+		return true;
+	} // -- boolean isValid()
 
-    /**
-     * Method hasAlwaysvisible
-     */
-    public boolean hasAlwaysvisible()
-    {
-        return this._has_alwaysvisible;
-    } //-- boolean hasAlwaysvisible() 
+	/**
+	 * Method marshal
+	 * 
+	 * @param out
+	 */
+	public void marshal(java.io.Writer out)
+			throws org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
 
-    /**
-     * Method hasPriority
-     */
-    public boolean hasPriority()
-    {
-        return this._has_priority;
-    } //-- boolean hasPriority() 
+		Marshaller.marshal(this, out);
+	} // -- void marshal(java.io.Writer)
 
-    /**
-     * Method isValid
-     */
-    public boolean isValid()
-    {
-        try {
-            validate();
-        }
-        catch (org.exolab.castor.xml.ValidationException vex) {
-            return false;
-        }
-        return true;
-    } //-- boolean isValid() 
+	/**
+	 * Method marshal
+	 * 
+	 * @param handler
+	 */
+	public void marshal(org.xml.sax.ContentHandler handler)
+			throws java.io.IOException, org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
 
-    /**
-     * Method marshal
-     * 
-     * @param out
-     */
-    public void marshal(java.io.Writer out)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        
-        Marshaller.marshal(this, out);
-    } //-- void marshal(java.io.Writer) 
+		Marshaller.marshal(this, handler);
+	} // -- void marshal(org.xml.sax.ContentHandler)
 
-    /**
-     * Method marshal
-     * 
-     * @param handler
-     */
-    public void marshal(org.xml.sax.ContentHandler handler)
-        throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        
-        Marshaller.marshal(this, handler);
-    } //-- void marshal(org.xml.sax.ContentHandler) 
+	/**
+	 * Sets the value of field 'active'.
+	 * 
+	 * @param active
+	 *            the value of field 'active'.
+	 */
+	public void setActive(boolean active) {
+		this._active = active;
+		this._has_active = true;
+	} // -- void setActive(boolean)
 
-    /**
-     * Sets the value of field 'active'.
-     * 
-     * @param active the value of field 'active'.
-     */
-    public void setActive(boolean active)
-    {
-        this._active = active;
-        this._has_active = true;
-    } //-- void setActive(boolean) 
+	/**
+	 * Sets the value of field 'alwaysvisible'.
+	 * 
+	 * @param alwaysvisible
+	 *            the value of field 'alwaysvisible'.
+	 */
+	public void setAlwaysvisible(boolean alwaysvisible) {
+		this._alwaysvisible = alwaysvisible;
+		this._has_alwaysvisible = true;
+	} // -- void setAlwaysvisible(boolean)
 
-    /**
-     * Sets the value of field 'alwaysvisible'.
-     * 
-     * @param alwaysvisible the value of field 'alwaysvisible'.
-     */
-    public void setAlwaysvisible(boolean alwaysvisible)
-    {
-        this._alwaysvisible = alwaysvisible;
-        this._has_alwaysvisible = true;
-    } //-- void setAlwaysvisible(boolean) 
+	/**
+	 * Sets the value of field 'description'.
+	 * 
+	 * @param description
+	 *            the value of field 'description'.
+	 */
+	public void setDescription(java.lang.String description) {
+		this._description = description;
+	} // -- void setDescription(java.lang.String)
 
-    /**
-     * Sets the value of field 'description'.
-     * 
-     * @param description the value of field 'description'.
-     */
-    public void setDescription(java.lang.String description)
-    {
-        this._description = description;
-    } //-- void setDescription(java.lang.String) 
+	/**
+	 * Sets the value of field 'priority'.
+	 * 
+	 * @param priority
+	 *            the value of field 'priority'.
+	 */
+	public void setPriority(int priority) {
+		this._priority = priority;
+		this._has_priority = true;
+	} // -- void setPriority(int)
 
-    /**
-     * Sets the value of field 'priority'.
-     * 
-     * @param priority the value of field 'priority'.
-     */
-    public void setPriority(int priority)
-    {
-        this._priority = priority;
-        this._has_priority = true;
-    } //-- void setPriority(int) 
+	/**
+	 * Method unmarshal
+	 * 
+	 * @param reader
+	 */
+	public static java.lang.Object unmarshal(java.io.Reader reader)
+			throws org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
+		return (com.iver.andami.plugins.config.generate.ExtensionType) Unmarshaller
+				.unmarshal(
+						com.iver.andami.plugins.config.generate.ExtensionType.class,
+						reader);
+	} // -- java.lang.Object unmarshal(java.io.Reader)
 
-    /**
-     * Method unmarshal
-     * 
-     * @param reader
-     */
-    public static java.lang.Object unmarshal(java.io.Reader reader)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        return (com.iver.andami.plugins.config.generate.ExtensionType) Unmarshaller.unmarshal(com.iver.andami.plugins.config.generate.ExtensionType.class, reader);
-    } //-- java.lang.Object unmarshal(java.io.Reader) 
-
-    /**
-     * Method validate
-     */
-    public void validate()
-        throws org.exolab.castor.xml.ValidationException
-    {
-        org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
-        validator.validate(this);
-    } //-- void validate() 
+	/**
+	 * Method validate
+	 */
+	public void validate() throws org.exolab.castor.xml.ValidationException {
+		org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
+		validator.validate(this);
+	} // -- void validate()
 
 }

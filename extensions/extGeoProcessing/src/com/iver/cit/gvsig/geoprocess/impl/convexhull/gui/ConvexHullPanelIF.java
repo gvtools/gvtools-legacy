@@ -65,13 +65,13 @@ public interface ConvexHullPanelIF {
 	public abstract FLyrVect getInputLayer();
 
 	public abstract boolean isConvexHullOnlySelected();
-	
+
 	public FLayers getFLayers();
-	
+
 	public File getOutputFile() throws FileNotFoundException;
-	
+
 	public void error(String error, String errorDescription);
-	
+
 	public boolean askForOverwriteOutputFile(File file);
 
 }

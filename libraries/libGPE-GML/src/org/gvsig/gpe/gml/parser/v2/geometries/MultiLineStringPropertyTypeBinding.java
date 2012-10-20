@@ -65,6 +65,7 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * It parses a gml:multiLineStringProperty object. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;multiLineStringProperty&gt;
@@ -85,58 +86,65 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  * &lt;/multiLineStringProperty&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class MultiLineStringPropertyTypeBinding extends GeometryBinding{
-	
+public class MultiLineStringPropertyTypeBinding extends GeometryBinding {
+
 	/**
 	 * It parses the gml:MultiLineQName tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * A multilinestring
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return A multilinestring
 	 * @throws XmlStreamException
 	 */
-	public Object parse(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
+	public Object parse(IXmlStreamReader parser, GPEDefaultGmlParser handler)
+			throws XmlStreamException, IOException {
 		boolean endFeature = false;
 		int currentTag;
-		Object multiLineString = null;		
-		
+		Object multiLineString = null;
+
 		super.setAtributtes(parser, handler.getErrorHandler());
-					
+
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-					if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTILINESTRING)){
-						multiLineString = handler.getProfile().getMultiLineStringTypeBinding().parse(parser, handler);
-						
-					}
-					break;
-				case IXmlStreamReader.END_ELEMENT:
-					if ((CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTILINESTRINGPROPERTY))||
-					(CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTIEDGEOF))||
-					(CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTICENTERLINEOF)))
-					{						
-						endFeature = true;						
-					}
-					break;
-				case IXmlStreamReader.CHARACTERS:					
-					
-					break;
+				if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_MULTILINESTRING)) {
+					multiLineString = handler.getProfile()
+							.getMultiLineStringTypeBinding()
+							.parse(parser, handler);
+
 				}
-				if (!endFeature){					
-					currentTag = parser.next();
-					tag = parser.getName();
+				break;
+			case IXmlStreamReader.END_ELEMENT:
+				if ((CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_MULTILINESTRINGPROPERTY))
+						|| (CompareUtils.compareWithNamespace(tag,
+								GMLTags.GML_MULTIEDGEOF))
+						|| (CompareUtils.compareWithNamespace(tag,
+								GMLTags.GML_MULTICENTERLINEOF))) {
+					endFeature = true;
 				}
-			}			
-		return multiLineString;	
+				break;
+			case IXmlStreamReader.CHARACTERS:
+
+				break;
+			}
+			if (!endFeature) {
+				currentTag = parser.next();
+				tag = parser.getName();
+			}
+		}
+		return multiLineString;
 	}
 }
-

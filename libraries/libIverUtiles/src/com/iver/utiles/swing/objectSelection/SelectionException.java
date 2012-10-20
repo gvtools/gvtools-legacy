@@ -3,7 +3,7 @@ package com.iver.utiles.swing.objectSelection;
 /**
  * Excepción que indica que el modelo del control ObjectSelection no puede
  * proporcionar la información requerida.
- *
+ * 
  * @author Fernando González Cortés
  */
 public class SelectionException extends Exception {
@@ -18,7 +18,7 @@ public class SelectionException extends Exception {
 
 	/**
 	 * constructor
-	 *
+	 * 
 	 * @param message
 	 */
 	public SelectionException(String message) {
@@ -29,7 +29,7 @@ public class SelectionException extends Exception {
 
 	/**
 	 * constructor
-	 *
+	 * 
 	 * @param message
 	 * @param cause
 	 */
@@ -41,7 +41,7 @@ public class SelectionException extends Exception {
 
 	/**
 	 * constructor
-	 *
+	 * 
 	 * @param cause
 	 */
 	public SelectionException(Throwable cause) {

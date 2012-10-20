@@ -153,7 +153,9 @@ public class NewTopologyWizard extends WizardAndami {
 								tempMapContext, tempMapContext.getLayers());
 
 						// trick to update TOC component
-						newTopology.addLayerCollectionListener(new UpdateTopologyInTocLayerCollectionListener(tempMapContext, newTopology));
+						newTopology
+								.addLayerCollectionListener(new UpdateTopologyInTocLayerCollectionListener(
+										tempMapContext, newTopology));
 						int maxNumberOfErrors = propertiesPanel
 								.getMaxNumberOfErrors();
 						if (maxNumberOfErrors >= 0) {
@@ -179,13 +181,14 @@ public class NewTopologyWizard extends WizardAndami {
 
 						newTopology.setClusterTolerance(clusterTolerance);
 						if (clusterTolerance != 0d) {
-//							boolean applyCrackAndSnap = GUIUtil.getInstance()
-//									.optionMessage(
-//											"Message_apply_crack_process",
-//											"Message_crack_title");
+							// boolean applyCrackAndSnap = GUIUtil.getInstance()
+							// .optionMessage(
+							// "Message_apply_crack_process",
+							// "Message_crack_title");
 							boolean applyCrackAndSnap = false;
-							//muy complejo, y seguramente requiera de iteraciones.
-							//lo dejamos para otras versiones
+							// muy complejo, y seguramente requiera de
+							// iteraciones.
+							// lo dejamos para otras versiones
 							if (applyCrackAndSnap) {
 								boolean geoprocessSucessful = true;
 
@@ -194,7 +197,6 @@ public class NewTopologyWizard extends WizardAndami {
 								for (int i = 0; i < lyrs.size(); i++) {
 									FLyrVect lyr = (FLyrVect) lyrs.get(i);
 
-									
 									ArrayList<FLayer> crackingLyrs = new ArrayList<FLayer>();
 									for (int j = 0; j < lyrs.size(); j++) {
 										if (i == j)
@@ -203,7 +205,6 @@ public class NewTopologyWizard extends WizardAndami {
 										crackingLyrs.add(lyr2);
 									}// for j
 
-									
 									SnapAndCrackGeoprocess geoprocess = new SnapAndCrackGeoprocess(
 											lyr, crackingLyrs);
 
@@ -213,7 +214,8 @@ public class NewTopologyWizard extends WizardAndami {
 									// problema es que los geoprocesos
 									// solo pueden guardar sus resultados en
 									// formato SHP
-									String temp = System.getProperty("java.io.tmpdir")
+									String temp = System
+											.getProperty("java.io.tmpdir")
 											+ lyr.getName()
 											+ System.currentTimeMillis()
 											+ ".shp";
@@ -265,7 +267,7 @@ public class NewTopologyWizard extends WizardAndami {
 										geoprocess.checkPreconditions();
 										IMonitorableTask task = geoprocess
 												.createTask();
-										
+
 										task.run();
 
 										// AddResultLayerTask task2 = new
@@ -277,8 +279,9 @@ public class NewTopologyWizard extends WizardAndami {
 										// task2);
 										// if (globalTask.preprocess())
 										// PluginServices.cancelableBackgroundExecution(globalTask);
-										
-										crackedLyrs.add((FLyrVect) geoprocess.getResult());
+
+										crackedLyrs.add((FLyrVect) geoprocess
+												.getResult());
 
 									} catch (GeoprocessException e1) {
 										// TODO Auto-generated catch block
@@ -292,11 +295,12 @@ public class NewTopologyWizard extends WizardAndami {
 										break;
 									}
 								}// for
-								
-								
-								//FIXME ESTOY HAY QUE REFINARLO, PORQUE EN EL TOC SE SEGUIRIAN 
-								//MOSTRANDO LAS CAPAS ANTIGUAS MIENTRAS QUE EN LA TOPOLOGIA LO QUE 
-								//SE AÑADEN SON LAS CAPAS CRACKEADAS
+
+								// FIXME ESTOY HAY QUE REFINARLO, PORQUE EN EL
+								// TOC SE SEGUIRIAN
+								// MOSTRANDO LAS CAPAS ANTIGUAS MIENTRAS QUE EN
+								// LA TOPOLOGIA LO QUE
+								// SE AÑADEN SON LAS CAPAS CRACKEADAS
 								lyrs = crackedLyrs;
 
 							}// if
@@ -334,9 +338,10 @@ public class NewTopologyWizard extends WizardAndami {
 							getWizardComponents().setCurrentIndex(2);
 							return;
 						}
-						
-						GUIUtil.getInstance().addTopologyToTOC(tempMapContext, lyrs, newTopology);
-						
+
+						GUIUtil.getInstance().addTopologyToTOC(tempMapContext,
+								lyrs, newTopology);
+
 						getWizardComponents().getCancelAction().performAction();
 					}
 				});
@@ -345,8 +350,8 @@ public class NewTopologyWizard extends WizardAndami {
 				this.getWizardComponents());
 		getWizardComponents().addWizardPanel(introductoryPanel);
 
-		propertiesPanel = new TopologyPropertiesAndLayersPanel(this
-				.getWizardComponents());
+		propertiesPanel = new TopologyPropertiesAndLayersPanel(
+				this.getWizardComponents());
 		getWizardComponents().addWizardPanel(propertiesPanel);
 
 		topologyRulesPanel = new TopologyRulesPanel(this.getWizardComponents(),
@@ -517,7 +522,7 @@ public class NewTopologyWizard extends WizardAndami {
 		}
 		return viewInfo;
 	}
-	
+
 	public Object getWindowProfile() {
 		// TODO Auto-generated method stub
 		return WindowInfo.TOOL_PROFILE;

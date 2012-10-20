@@ -62,14 +62,14 @@ import com.iver.cit.gvsig.fmap.core.v02.FConverter;
 import com.iver.cit.gvsig.fmap.layers.VectorialAdapter;
 import com.iver.cit.gvsig.fmap.layers.VectorialFileAdapter;
 
-
 public abstract class AbstractFMapFileDriver implements SpatialFileDriver {
 
 	private VectorialAdapter adapter;
 	private DataSource dataSource;
 
 	/**
-	 * @throws OpenDriverException TODO
+	 * @throws OpenDriverException
+	 *             TODO
 	 * @see com.hardcode.gdbms.engine.data.driver.FileDriver#open(java.io.File)
 	 */
 	public void open(VectorialFileAdapter adapter) throws OpenDriverException {
@@ -79,7 +79,7 @@ public abstract class AbstractFMapFileDriver implements SpatialFileDriver {
 			dataSource = adapter.getRecordset();
 			dataSource.start();
 		} catch (ReadDriverException e) {
-			throw new OpenDriverException(getName(),e);
+			throw new OpenDriverException(getName(), e);
 		}
 	}
 
@@ -87,30 +87,35 @@ public abstract class AbstractFMapFileDriver implements SpatialFileDriver {
 	 * @see com.hardcode.gdbms.engine.data.driver.FileDriver#close()
 	 */
 	public void close() throws CloseDriverException {
-		try{
+		try {
 			adapter.stop();
 			dataSource.stop();
 		} catch (ReadDriverException e) {
-			throw new CloseDriverException(getName(),e);
+			throw new CloseDriverException(getName(), e);
 		}
 	}
 
 	/**
-	 * @see com.hardcode.gdbms.engine.data.driver.FileDriver#writeFile(com.hardcode.gdbms.engine.data.file.FileDataWare, java.io.File)
+	 * @see com.hardcode.gdbms.engine.data.driver.FileDriver#writeFile(com.hardcode.gdbms.engine.data.file.FileDataWare,
+	 *      java.io.File)
 	 */
 	public void writeFile(FileDataWare dataWare) throws WriteDriverException {
 	}
 
 	/**
-	 * @see com.hardcode.gdbms.engine.data.driver.FileDriver#createSource(java.lang.String, java.lang.String[], int[])
+	 * @see com.hardcode.gdbms.engine.data.driver.FileDriver#createSource(java.lang.String,
+	 *      java.lang.String[], int[])
 	 */
-	public void createSource(String path, String[] fieldNames, int[] fieldTypes) throws ReadDriverException {
+	public void createSource(String path, String[] fieldNames, int[] fieldTypes)
+			throws ReadDriverException {
 	}
 
 	/**
-	 * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getFieldValue(long, int)
+	 * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getFieldValue(long,
+	 *      int)
 	 */
-	public Value getFieldValue(long rowIndex, int fieldId) throws ReadDriverException {
+	public Value getFieldValue(long rowIndex, int fieldId)
+			throws ReadDriverException {
 		return dataSource.getFieldValue(rowIndex, fieldId);
 	}
 
@@ -154,23 +159,25 @@ public abstract class AbstractFMapFileDriver implements SpatialFileDriver {
 	 */
 	public Geometry getGeometry(long rowIndex) throws ReadDriverException {
 		try {
-			return new FMapGeometry(adapter.getShape((int)rowIndex));
+			return new FMapGeometry(adapter.getShape((int) rowIndex));
 		} catch (ExpansionFileReadException e) {
-			throw new ReadDriverException(getName(),e);
+			throw new ReadDriverException(getName(), e);
 		}
 	}
 
 	/**
 	 * @see com.hardcode.gdbms.engine.data.driver.SpatialDriver#getJTSGeometry(long)
 	 */
-	public com.vividsolutions.jts.geom.Geometry getJTSGeometry(long rowIndex) throws ReadDriverException {
+	public com.vividsolutions.jts.geom.Geometry getJTSGeometry(long rowIndex)
+			throws ReadDriverException {
 		try {
-			IGeometry ig = adapter.getShape((int)rowIndex);
+			IGeometry ig = adapter.getShape((int) rowIndex);
 			GeneralPathX gpx = new GeneralPathX();
 			gpx.append(ig.getPathIterator(null), true);
-			return FConverter.java2d_to_jts(new FShapeGeneralPathX(gpx, ig.getGeometryType()));
+			return FConverter.java2d_to_jts(new FShapeGeneralPathX(gpx, ig
+					.getGeometryType()));
 		} catch (ExpansionFileReadException e) {
-			throw new ReadDriverException(getName(),e);
+			throw new ReadDriverException(getName(), e);
 		}
 	}
 
@@ -181,6 +188,7 @@ public abstract class AbstractFMapFileDriver implements SpatialFileDriver {
 	protected DataSource getDataSource() {
 		return dataSource;
 	}
+
 	/**
 	 * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getFieldWidth(int)
 	 */

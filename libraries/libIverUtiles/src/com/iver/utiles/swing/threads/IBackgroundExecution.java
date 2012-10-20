@@ -42,27 +42,26 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: IBackgroundExecution.java 4419 2006-03-14 19:35:13Z azabala $
-* $Log$
-* Revision 1.1  2006-03-14 19:23:42  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/03/07 21:00:29  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: IBackgroundExecution.java 4419 2006-03-14 19:35:13Z azabala $
+ * $Log$
+ * Revision 1.1  2006-03-14 19:23:42  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/03/07 21:00:29  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.utiles.swing.threads;
+
 /**
- * This interface must be implemented by all classes
- * that could create a background, cancelable, GUI based
- * thread.
+ * This interface must be implemented by all classes that could create a
+ * background, cancelable, GUI based thread.
  * 
  * @author azabala
- *
+ * 
  */
 public interface IBackgroundExecution {
 	public IMonitorableTask createTask();
 }
-

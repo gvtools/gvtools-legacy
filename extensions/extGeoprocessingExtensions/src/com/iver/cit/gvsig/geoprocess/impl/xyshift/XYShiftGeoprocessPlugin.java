@@ -42,33 +42,33 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: XYShiftGeoprocessPlugin.java 21235 2008-06-05 14:08:38Z azabala $
-* $Log$
-* Revision 1.7  2007-09-19 16:09:14  jaume
-* removed unnecessary imports
-*
-* Revision 1.6  2007/06/20 10:50:31  jmvivo
-* Modificación para estandarizar la busqueda de los html de descripciones.
-* También se controla que, si no existe la descripción en el idioma corriente se usará el inglés.
-*
-* Revision 1.5  2006/09/21 18:14:42  azabala
-* changes of appGvSig packages (document extensibility)
-*
-* Revision 1.4  2006/08/29 08:46:36  cesar
-* Rename the remaining method calls (extGeoprocessingExtensions was not in my workspace)
-*
-* Revision 1.3  2006/08/11 17:17:55  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/06/29 17:58:31  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/06/28 18:17:21  azabala
-* first version in cvs
-*
-*
-*/
+ *
+ * $Id: XYShiftGeoprocessPlugin.java 21235 2008-06-05 14:08:38Z azabala $
+ * $Log$
+ * Revision 1.7  2007-09-19 16:09:14  jaume
+ * removed unnecessary imports
+ *
+ * Revision 1.6  2007/06/20 10:50:31  jmvivo
+ * Modificación para estandarizar la busqueda de los html de descripciones.
+ * También se controla que, si no existe la descripción en el idioma corriente se usará el inglés.
+ *
+ * Revision 1.5  2006/09/21 18:14:42  azabala
+ * changes of appGvSig packages (document extensibility)
+ *
+ * Revision 1.4  2006/08/29 08:46:36  cesar
+ * Rename the remaining method calls (extGeoprocessingExtensions was not in my workspace)
+ *
+ * Revision 1.3  2006/08/11 17:17:55  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/06/29 17:58:31  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/06/28 18:17:21  azabala
+ * first version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.xyshift;
 
 import java.net.URL;
@@ -82,29 +82,21 @@ import com.iver.cit.gvsig.geoprocess.core.gui.IGeoprocessUserEntries;
 import com.iver.cit.gvsig.geoprocess.impl.xyshift.gui.GeoprocessingXYShiftPanel2;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
-public class XYShiftGeoprocessPlugin extends GeoprocessPluginAbstract  implements IGeoprocessPlugin {
+public class XYShiftGeoprocessPlugin extends GeoprocessPluginAbstract implements
+		IGeoprocessPlugin {
 
 	private static String dataConvertPkg;
 	private static String geoprocessName;
-	
-	static{
-		dataConvertPkg = 
-			PluginServices.getText(null, "Conversion_de_datos");
-		geoprocessName =
-			PluginServices.getText(null, "XYShift");
+
+	static {
+		dataConvertPkg = PluginServices.getText(null, "Conversion_de_datos");
+		geoprocessName = PluginServices.getText(null, "XYShift");
 	}
-	
-	
-	
-	
+
 	public IGeoprocessUserEntries getGeoprocessPanel() {
-		View vista = (View)PluginServices.
-		getMDIManager().
-		getActiveWindow();
-		FLayers layers = vista.getModel().
-			getMapContext().
-			getLayers();
-		
+		View vista = (View) PluginServices.getMDIManager().getActiveWindow();
+		FLayers layers = vista.getModel().getMapContext().getLayers();
+
 		return new GeoprocessingXYShiftPanel2(layers);
 	}
 
@@ -120,10 +112,9 @@ public class XYShiftGeoprocessPlugin extends GeoprocessPluginAbstract  implement
 	public String getNamespace() {
 		return dataConvertPkg + "/" + geoprocessName;
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		return geoprocessName;
 	}
 
 }
-

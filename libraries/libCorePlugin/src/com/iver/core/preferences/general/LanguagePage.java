@@ -84,7 +84,8 @@ public class LanguagePage extends AbstractPreferencePage {
 	}
 
 	private void initialize() {
-		icon=PluginServices.getIconTheme().get("aplication-preferences-language");
+		icon = PluginServices.getIconTheme().get(
+				"aplication-preferences-language");
 		this.setLayout(new BorderLayout());
 		this.setSize(new java.awt.Dimension(386, 177));
 		this.add(getPN(), java.awt.BorderLayout.NORTH);
@@ -143,7 +144,7 @@ public class LanguagePage extends AbstractPreferencePage {
 
 	/**
 	 * This method initializes pN
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPN() {
@@ -155,7 +156,7 @@ public class LanguagePage extends AbstractPreferencePage {
 
 	/**
 	 * This method initializes pC
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPC() {
@@ -168,28 +169,27 @@ public class LanguagePage extends AbstractPreferencePage {
 
 	/**
 	 * This method initializes pS
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPS() {
 		if (pS == null) {
 			pS = new JPanel();
-			pS.add(getLabel(),BorderLayout.SOUTH);
+			pS.add(getLabel(), BorderLayout.SOUTH);
 		}
 		return pS;
 	}
 
-
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel() {
 		if (jPanel == null) {
 			jPanel = new JPanel();
 			jPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
-					PluginServices.getText(this,"idioma"),
+					PluginServices.getText(this, "idioma"),
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
 					null));
@@ -201,18 +201,23 @@ public class LanguagePage extends AbstractPreferencePage {
 
 	/**
 	 * This method initializes Label
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private JLabel getLabel() {
-		if (label == null){
-			label = new JLabel(PluginServices.getText(null,"Los_cambios_efectuados_sobre_estos_valores_se_aplicaran_al_reiniciar_la_aplicacion"));
+		if (label == null) {
+			label = new JLabel(
+					PluginServices
+							.getText(
+									null,
+									"Los_cambios_efectuados_sobre_estos_valores_se_aplicaran_al_reiniciar_la_aplicacion"));
 		}
 		return label;
 	}
+
 	/**
 	 * This method initializes jComboBox
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getJComboBox() {
@@ -258,29 +263,32 @@ public class LanguagePage extends AbstractPreferencePage {
 			LanguageItem[] lenguajes = new LanguageItem[] {
 					new LanguageItem(esp, esp.getDisplayLanguage()),
 					DEFAULT_LANGUAGE,
-					new LanguageItem(usa, usa.getDisplayLanguage()+"-"+usa.getCountry()),
+					new LanguageItem(usa, usa.getDisplayLanguage() + "-"
+							+ usa.getCountry()),
 					new LanguageItem(fra, fra.getDisplayLanguage()),
 					new LanguageItem(ita, ita.getDisplayLanguage()),
 					new LanguageItem(val, strValenciano),
 					new LanguageItem(cs, cs.getDisplayLanguage()),
 					new LanguageItem(eu, strEuskera),
 					new LanguageItem(pt, pt.getDisplayLanguage()),
-					new LanguageItem(brasil, brasil.getDisplayLanguage()+"-"+brasil.getCountry()),
+					new LanguageItem(brasil, brasil.getDisplayLanguage() + "-"
+							+ brasil.getCountry()),
 					new LanguageItem(de, de.getDisplayLanguage()),
 					new LanguageItem(gl, gl.getDisplayLanguage()),
 					new LanguageItem(zh, zh.getDisplayLanguage()),
 					new LanguageItem(ru, ru.getDisplayLanguage()),
 					new LanguageItem(el, el.getDisplayLanguage()),
 					new LanguageItem(ro, ro.getDisplayLanguage()),
-					new LanguageItem(pl, pl.getDisplayLanguage())};
+					new LanguageItem(pl, pl.getDisplayLanguage()) };
 
 			DefaultComboBoxModel model = new DefaultComboBoxModel(lenguajes);
 
 			/*
-			 * Comparamos primero con los "Locales" completos para admitir
-			 * las variaciones de los paises y si no encontramos la combinacion
-			 * idioma-pais entonces buscamos unicamente por el nombre del idioma,
-			 * y si seguimos sin encontrarlo seleccionamos el idioma por defecto.
+			 * Comparamos primero con los "Locales" completos para admitir las
+			 * variaciones de los paises y si no encontramos la combinacion
+			 * idioma-pais entonces buscamos unicamente por el nombre del
+			 * idioma, y si seguimos sin encontrarlo seleccionamos el idioma por
+			 * defecto.
 			 */
 			boolean foundLanguage = false;
 			for (int i = 0; i < lenguajes.length; i++) {
@@ -290,16 +298,17 @@ public class LanguagePage extends AbstractPreferencePage {
 					break;
 				}
 			}
-			if (!foundLanguage){
+			if (!foundLanguage) {
 				for (int i = 0; i < lenguajes.length; i++) {
-					if (lenguajes[i].locale.getISO3Language().equals(Locale.getDefault().getISO3Language())) {
+					if (lenguajes[i].locale.getISO3Language().equals(
+							Locale.getDefault().getISO3Language())) {
 						model.setSelectedItem(lenguajes[i]);
 						foundLanguage = true;
 						break;
 					}
 				}
 			}
-			if (!foundLanguage){
+			if (!foundLanguage) {
 				model.setSelectedItem(DEFAULT_LANGUAGE);
 			}
 			cmbIdioma.setModel(model);

@@ -42,23 +42,23 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: SpatialJoinPanelIF.java 6749 2006-08-11 16:30:38Z azabala $
-* $Log$
-* Revision 1.1  2006-08-11 16:30:38  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/05/24 21:13:09  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.2  2006/03/23 21:02:37  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/03/05 19:56:06  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: SpatialJoinPanelIF.java 6749 2006-08-11 16:30:38Z azabala $
+ * $Log$
+ * Revision 1.1  2006-08-11 16:30:38  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/05/24 21:13:09  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.2  2006/03/23 21:02:37  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/03/05 19:56:06  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.spatialjoin.gui;
 
 import java.util.Map;
@@ -66,18 +66,19 @@ import java.util.Map;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.geoprocess.core.gui.OverlayPanelIF;
 
-
 public interface SpatialJoinPanelIF extends OverlayPanelIF {
 	public boolean isNearestSelected();
+
 	/**
 	 * Opens a dialog where user could select sumarization functions to compute
 	 * for each numeric field in a 1-N spatial join
+	 * 
 	 * @return true if dialog was closed by pushing ok button, false if was
-	 * closed directly
+	 *         closed directly
 	 */
 	public boolean openSumarizeFunction();
+
 	public Map getSumarizeFunctions();
-	
+
 	public FLyrVect getFirstLayer();
 }
-

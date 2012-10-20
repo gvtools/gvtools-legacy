@@ -44,10 +44,9 @@ import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.project.documents.layout.LayoutContext;
 import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 
-
 /**
  * Refresca todos los fframes del Layout.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class RefreshLayoutMenuEntry extends AbstractLayoutContextMenuAction {
@@ -67,16 +66,17 @@ public class RefreshLayoutMenuEntry extends AbstractLayoutContextMenuAction {
 		return PluginServices.getText(this, "refrescar");
 	}
 
-	public boolean isEnabled(LayoutContext layoutContext, IFFrame[] selectedFrames) {
+	public boolean isEnabled(LayoutContext layoutContext,
+			IFFrame[] selectedFrames) {
 		return true;
 	}
 
-	public boolean isVisible(LayoutContext layoutContext, IFFrame[] selectedFrames) {
-		if (!(getLayout().getLayoutControl().getGeometryAdapter().getPoints().length>0))
+	public boolean isVisible(LayoutContext layoutContext,
+			IFFrame[] selectedFrames) {
+		if (!(getLayout().getLayoutControl().getGeometryAdapter().getPoints().length > 0))
 			return true;
 		return false;
 	}
-
 
 	public void execute(LayoutContext layoutContext, IFFrame[] selectedFrames) {
 		layoutContext.fullRefresh();

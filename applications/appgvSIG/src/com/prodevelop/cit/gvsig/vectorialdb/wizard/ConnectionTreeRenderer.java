@@ -10,11 +10,15 @@ import com.iver.andami.PluginServices;
 
 public class ConnectionTreeRenderer extends DefaultTreeCellRenderer {
 
-//	private ImageIcon connImage = new ImageIcon(createResourceUrl("images/conn.png"));
-	private ImageIcon connImage = PluginServices.getIconTheme().get("conn-image");
-//	private ImageIcon disconnImage = new ImageIcon(createResourceUrl("images/disconn.png"));
-	private ImageIcon disconnImage = PluginServices.getIconTheme().get("disconn-image");
-	
+	// private ImageIcon connImage = new
+	// ImageIcon(createResourceUrl("images/conn.png"));
+	private ImageIcon connImage = PluginServices.getIconTheme().get(
+			"conn-image");
+	// private ImageIcon disconnImage = new
+	// ImageIcon(createResourceUrl("images/disconn.png"));
+	private ImageIcon disconnImage = PluginServices.getIconTheme().get(
+			"disconn-image");
+
 	public Component getTreeCellRendererComponent(JTree tree, Object value,
 			boolean selected, boolean expanded, boolean leaf, int row,
 			boolean hasFocus) {
@@ -28,18 +32,7 @@ public class ConnectionTreeRenderer extends DefaultTreeCellRenderer {
 			}
 		}
 
-		return super.getTreeCellRendererComponent(
-					tree,
-					value,
-					selected,
-					expanded,
-					leaf,
-					row,
-					hasFocus);
+		return super.getTreeCellRendererComponent(tree, value, selected,
+				expanded, leaf, row, hasFocus);
 	}
-
-    private java.net.URL createResourceUrl(String path) {
-        return getClass().getClassLoader().getResource(path);
-    }
-
 }

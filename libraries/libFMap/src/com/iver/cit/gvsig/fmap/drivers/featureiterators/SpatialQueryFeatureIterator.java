@@ -98,20 +98,19 @@ public class SpatialQueryFeatureIterator extends DefaultFeatureIterator {
 	 */
 	IFeature nextFeature = null;
 
-	private boolean isUsedNext=true;
-	private boolean hasNext=false;
+	private boolean isUsedNext = true;
+	private boolean hasNext = false;
 
 	/**
-	 * Proportion of query extent area and layer extent area
-	 * to use boundedshapes capability (reading bounds without
-	 * reading its geometry)
-	 *
+	 * Proportion of query extent area and layer extent area to use
+	 * boundedshapes capability (reading bounds without reading its geometry)
+	 * 
 	 */
 	public static final double BOUNDED_SHAPES_FACTOR = 4.0d;
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param source
 	 *            vectorial data source
 	 * @param srcCrs
@@ -123,12 +122,13 @@ public class SpatialQueryFeatureIterator extends DefaultFeatureIterator {
 	 * @throws ReadDriverException
 	 */
 	public SpatialQueryFeatureIterator(ReadableVectorial source,
-			CoordinateReferenceSystem srcCrs, CoordinateReferenceSystem targetCrs,
-			String[] fieldNames, Rectangle2D spatialQuery, boolean fastIteration)
+			CoordinateReferenceSystem srcCrs,
+			CoordinateReferenceSystem targetCrs, String[] fieldNames,
+			Rectangle2D spatialQuery, boolean fastIteration)
 			throws ReadDriverException {
 		super(source, srcCrs, targetCrs, fieldNames);
 		setRect(spatialQuery);
-		if(fastIteration)
+		if (fastIteration)
 			spatialChecker = new FastSpatialCheck();
 		else
 			spatialChecker = new PrecisseSpatialCheck();
@@ -139,19 +139,23 @@ public class SpatialQueryFeatureIterator extends DefaultFeatureIterator {
 	}
 
 	public void setRect(Rectangle2D rect) {
-		//by design, rect Rectangle2D must be in the target reprojection
-		//if targetReprojection != sourceReprojection, we are going to reproject
-		//rect to the source reprojection (is faster).
-		//once spatial check is made, result features will be reprojected in the inverse direction
+		// by design, rect Rectangle2D must be in the target reprojection
+		// if targetReprojection != sourceReprojection, we are going to
+		// reproject
+		// rect to the source reprojection (is faster).
+		// once spatial check is made, result features will be reprojected in
+		// the inverse direction
 		if (this.targetCrs != null && this.sourceCrs != null
 				&& !this.targetCrs.getName().equals(this.sourceCrs.getName())) {
-			MathTransform trans = ProjectionUtils.getCrsTransform(targetCrs, sourceCrs);
-			try{
+			MathTransform trans = ProjectionUtils.getCrsTransform(targetCrs,
+					sourceCrs);
+			try {
 				rect = ProjectionUtils.transform(rect, trans);
 			} catch (Exception e) {
 				// if we get an exception during re-projection, that usually
 				// means that the provided rectangle coordinates exceed the
-				// logical limits of the target CRS. In this case we can fallback
+				// logical limits of the target CRS. In this case we can
+				// fallback
 				// to the full layer extent
 				try {
 					this.rect = source.getFullExtent();
@@ -166,38 +170,38 @@ public class SpatialQueryFeatureIterator extends DefaultFeatureIterator {
 	}
 
 	public boolean hasNext() throws ReadDriverException {
-		if(!isUsedNext){
+		if (!isUsedNext) {
 			return hasNext;
 		}
 		try {
-			while(true){
-				if(currentFeature >= source.getShapeCount())
-					return (hasNext=false);
-				if(spatialChecker.intersects(rect, currentFeature)){
-					//we only update the counter if spatialChecker could read the geometry
-					//if it is boundedshape it doesnt read the geometry, so we need to read
-					//currentFeature again
-//					if(spatialChecker.returnShapes())
-//						currentFeature++;
+			while (true) {
+				if (currentFeature >= source.getShapeCount())
+					return (hasNext = false);
+				if (spatialChecker.intersects(rect, currentFeature)) {
+					// we only update the counter if spatialChecker could read
+					// the geometry
+					// if it is boundedshape it doesnt read the geometry, so we
+					// need to read
+					// currentFeature again
+					// if(spatialChecker.returnShapes())
+					// currentFeature++;
 					break;
-				}
-				else
+				} else
 					currentFeature++;
-			}//while
+			}// while
 
-
-			//here, currentFeature intersects with the rectangle2d filter
+			// here, currentFeature intersects with the rectangle2d filter
 			IGeometry geom = null;
 			IFeature feat = null;
-			if(spatialChecker.returnShapes()){
+			if (spatialChecker.returnShapes()) {
 				geom = spatialChecker.getLastGeometry();
-			}else{
+			} else {
 				geom = chekIfCloned(source.getShape(currentFeature));
-//				currentFeature++;
+				// currentFeature++;
 				reprojectIfNecessary(geom);
 			}
 			Value[] regAtt = getValues(currentFeature);
-			if (geom==null) {
+			if (geom == null) {
 				geom = new FNullGeometry();
 			}
 			feat = new DefaultFeature(geom, regAtt, currentFeature + "");
@@ -212,20 +216,20 @@ public class SpatialQueryFeatureIterator extends DefaultFeatureIterator {
 	}
 
 	public IFeature next() throws ReadDriverException {
-		isUsedNext=true;
+		isUsedNext = true;
 		return nextFeature;
 	}
 
 	/**
-	 * Classes that chekcs if a specified feature intersects with a given Rectangle2D must
-	 * implement this interface.
-	 *
+	 * Classes that chekcs if a specified feature intersects with a given
+	 * Rectangle2D must implement this interface.
+	 * 
 	 * This interface is necessary because there are many approach to do that
 	 * (an exact intersection, an intersection based in bounds2d, etc)
-	 *
-	 *
+	 * 
+	 * 
 	 * @author azabala
-	 *
+	 * 
 	 */
 	interface ISpatialCheck {
 		public boolean intersects(Rectangle2D extent, int featureIndex)
@@ -233,39 +237,40 @@ public class SpatialQueryFeatureIterator extends DefaultFeatureIterator {
 
 		/**
 		 * Tells if this spatialcheck could return the geometry of the features
-		 * (or if it is boundedshapes based, needs another driver access operation)
+		 * (or if it is boundedshapes based, needs another driver access
+		 * operation)
+		 * 
 		 * @return
 		 */
 		public boolean returnShapes();
+
 		/**
 		 * Returns the last readed geometry (if the spatialcheck do that)
+		 * 
 		 * @return
 		 */
 		public IGeometry getLastGeometry();
 
 		/**
 		 * Return the index of the last readed geometry
+		 * 
 		 * @return
 		 */
 		public int getIndexOfLast();
 
-
 	}
-
-
-
 
 	/**
 	 * All classes that return the bounds Rectangle2D of a feature must
 	 * implement this interface.
-	 *
+	 * 
 	 * @author azabala
-	 *
+	 * 
 	 */
 	interface BoundsProvider {
 		/**
 		 * Returns the bound of the specified feature index
-		 *
+		 * 
 		 * @param featureIndex
 		 * @return
 		 * @throws ExpansionFileReadException
@@ -276,27 +281,24 @@ public class SpatialQueryFeatureIterator extends DefaultFeatureIterator {
 
 		/**
 		 * Tells if this boundsProvider could returns shapes
-		 *
+		 * 
 		 * @return
 		 */
 		public boolean returnShapes();
 
 		/**
 		 * Returns the last geometry readed, if the boundsProvider could do that
-		 *
+		 * 
 		 * @return
 		 */
 		public IGeometry getLastGeometry();
 	}
 
-
-
-
 	/**
 	 * BoundsProvider that uses a BoundedShapes (faster than others)
-	 *
+	 * 
 	 * @author azabala
-	 *
+	 * 
 	 */
 	class BoundedShapesProvider implements BoundsProvider {
 		BoundedShapes boundedShapes;
@@ -320,14 +322,11 @@ public class SpatialQueryFeatureIterator extends DefaultFeatureIterator {
 
 	}
 
-
-
-
 	/**
 	 * BoundsProvider that returns feature bounds from the feature geometry
-	 *
+	 * 
 	 * @author azabala
-	 *
+	 * 
 	 */
 	class IGeometryBoundProvider implements BoundsProvider {
 		/**
@@ -344,13 +343,13 @@ public class SpatialQueryFeatureIterator extends DefaultFeatureIterator {
 		public Rectangle2D getBounds(int featureIndex)
 				throws ExpansionFileReadException, ReadDriverException {
 			lastGeometry = chekIfCloned(source.getShape(featureIndex));
-			if (lastGeometry ==null)
-				return new Rectangle2D.Double(0,0,0,0);
-//			reprojectIfNecessary(this.lastGeometry);
-			//bounds2D is in the original projection
+			if (lastGeometry == null)
+				return new Rectangle2D.Double(0, 0, 0, 0);
+			// reprojectIfNecessary(this.lastGeometry);
+			// bounds2D is in the original projection
 			Rectangle2D solution = lastGeometry.getBounds2D();
-			//the readed geometry in the specified projection
-//			reprojectIfNecessary(this.lastGeometry);
+			// the readed geometry in the specified projection
+			// reprojectIfNecessary(this.lastGeometry);
 			return solution;
 		}
 
@@ -365,33 +364,29 @@ public class SpatialQueryFeatureIterator extends DefaultFeatureIterator {
 
 	}
 
-
-
-
 	/**
 	 * Checks if the specified features intersects with rectangle2D instances in
 	 * a rough but fast manner.
-	 *
+	 * 
 	 */
 	class FastSpatialCheck implements ISpatialCheck {
 		BoundsProvider boundProvider;
 		int lastIndex;
 
-
 		public FastSpatialCheck() {
 			try {
-				if(isBoundedShapesNecessary()){
-					if (source instanceof BoundedShapes){
+				if (isBoundedShapesNecessary()) {
+					if (source instanceof BoundedShapes) {
 						boundProvider = new BoundedShapesProvider(
 								(BoundedShapes) source);
-					}else if (source.getDriver() instanceof BoundedShapes){
+					} else if (source.getDriver() instanceof BoundedShapes) {
 						boundProvider = new BoundedShapesProvider(
 								(BoundedShapes) source.getDriver());
-				    }else{
-				    	boundProvider = new IGeometryBoundProvider(source);
-				    }
-				}else{
+					} else {
 						boundProvider = new IGeometryBoundProvider(source);
+					}
+				} else {
+					boundProvider = new IGeometryBoundProvider(source);
 				}
 			} catch (ExpansionFileReadException e) {
 				// TODO Auto-generated catch block
@@ -404,12 +399,12 @@ public class SpatialQueryFeatureIterator extends DefaultFeatureIterator {
 			}
 		}
 
-
-		protected boolean isBoundedShapesNecessary() throws ReadDriverException, ExpansionFileReadException {
+		protected boolean isBoundedShapesNecessary()
+				throws ReadDriverException, ExpansionFileReadException {
 			Rectangle2D driverExtent = source.getFullExtent();
 			double areaExtent = rect.getWidth() * rect.getHeight();
-			double areaFullExtent = driverExtent.getWidth() *
-				                         driverExtent.getHeight();
+			double areaFullExtent = driverExtent.getWidth()
+					* driverExtent.getHeight();
 			return areaExtent < (areaFullExtent / BOUNDED_SHAPES_FACTOR);
 
 		}
@@ -418,7 +413,7 @@ public class SpatialQueryFeatureIterator extends DefaultFeatureIterator {
 				throws ExpansionFileReadException, ReadDriverException {
 			this.lastIndex = featureIndex;
 			Rectangle2D featureBounds = boundProvider.getBounds(featureIndex);
-			if(featureBounds == null)
+			if (featureBounds == null)
 				return false;
 			return XRectangle2D.intersectInclusive(extent, featureBounds);
 		}
@@ -441,13 +436,12 @@ public class SpatialQueryFeatureIterator extends DefaultFeatureIterator {
 
 	}// FastSpatialCheck
 
-
 	/**
 	 * Checks if the specified features intersect with rectangle2D instances in
 	 * a precisse manner
-	 *
+	 * 
 	 * @author azabala
-	 *
+	 * 
 	 */
 
 	class PrecisseSpatialCheck implements ISpatialCheck {
@@ -461,10 +455,10 @@ public class SpatialQueryFeatureIterator extends DefaultFeatureIterator {
 				throws ExpansionFileReadException, ReadDriverException {
 			this.lastIndex = featureIndex;
 			this.lastGeometry = chekIfCloned(source.getShape(lastIndex));
-			//the spatial check is made in the original projection
+			// the spatial check is made in the original projection
 			boolean solution = lastGeometry.fastIntersects(rect.getMinX(),
 					rect.getMinY(), rect.getWidth(), rect.getHeight());
-			//but the solution is returned in the new projection (if applies)
+			// but the solution is returned in the new projection (if applies)
 			reprojectIfNecessary(lastGeometry);
 			return solution;
 		}

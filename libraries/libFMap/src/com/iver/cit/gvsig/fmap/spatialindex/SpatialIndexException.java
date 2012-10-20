@@ -42,20 +42,20 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: SpatialIndexException.java 12380 2007-06-27 20:17:30Z azabala $
-* $Log$
-* Revision 1.3  2007-06-27 20:17:30  azabala
-* new spatial index (rix)
-*
-* Revision 1.2  2007/03/06 17:08:59  caballero
-* Exceptions
-*
-* Revision 1.1  2006/05/01 18:38:41  azabala
-* primera version en cvs del api de indices espaciales
-*
-*
-*/
+ *
+ * $Id: SpatialIndexException.java 12380 2007-06-27 20:17:30Z azabala $
+ * $Log$
+ * Revision 1.3  2007-06-27 20:17:30  azabala
+ * new spatial index (rix)
+ *
+ * Revision 1.2  2007/03/06 17:08:59  caballero
+ * Exceptions
+ *
+ * Revision 1.1  2006/05/01 18:38:41  azabala
+ * primera version en cvs del api de indices espaciales
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.spatialindex;
 
 import java.util.Map;
@@ -63,23 +63,23 @@ import java.util.Map;
 import org.gvsig.exceptions.BaseException;
 
 public class SpatialIndexException extends BaseException {
-	
+
 	Exception e;
-	public SpatialIndexException(Exception e){
+
+	public SpatialIndexException(Exception e) {
 		this.e = e;
 	}
-	
-	public SpatialIndexException(){
-		
+
+	public SpatialIndexException() {
+
 	}
-	
+
 	protected Map values() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	public void printStackTrace(){
+
+	public void printStackTrace() {
 		e.printStackTrace();
 	}
 }
-

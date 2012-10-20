@@ -62,16 +62,15 @@ import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class TimeWarningWindowListener implements ActionListener{
+public class TimeWarningWindowListener implements ActionListener {
 	private TimeWarningWindow timeWarningWindow = null;
 	private FLyrWFS layer = null;
 	private ITocItem item = null;
 	private FLayer[] selectedItems = null;
 	private WFSTStartEditionTocMenuEntry startEditionTocMenuEntry = null;
 
-	public TimeWarningWindowListener(
-			TimeWarningWindow timeWarningWindow, FLyrWFS layer,
-			ITocItem item, FLayer[] selectedItems,
+	public TimeWarningWindowListener(TimeWarningWindow timeWarningWindow,
+			FLyrWFS layer, ITocItem item, FLayer[] selectedItems,
 			WFSTStartEditionTocMenuEntry startEditionTocMenuEntry) {
 		super();
 		this.timeWarningWindow = timeWarningWindow;
@@ -83,35 +82,40 @@ public class TimeWarningWindowListener implements ActionListener{
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
 		layer.setWfstSrsBasedOnXML(timeWarningWindow.isSrsBasedOnXML());
 		layer.setWfstLockFeaturesEnabled(timeWarningWindow.isLockGeometries());
-		if (e.getActionCommand().compareTo(TimeWarningPanel.ACCEPTBUTTON_ACTIONCOMMAND) == 0){
-			if (timeWarningWindow.isLockGeometries()){
+		if (e.getActionCommand().compareTo(
+				TimeWarningPanel.ACCEPTBUTTON_ACTIONCOMMAND) == 0) {
+			if (timeWarningWindow.isLockGeometries()) {
 				int time = timeWarningWindow.getExpiryTime();
-				//Lock the layer
+				// Lock the layer
 				try {
 					layer.lockCurrentFeatures(time);
 				} catch (WFSTLockFeaturesException e1) {
-					//Problem locking a feature. The WFST transaction has to be canceled
+					// Problem locking a feature. The WFST transaction has to be
+					// canceled
 					layer.setWfstEditing(false);
-					JOptionPane.showMessageDialog(
-							(Component) PluginServices.getMDIManager().getActiveWindow(),
-							PluginServices.getText(this, "wfst_layer_cant_be_locked"),
-							e1.getMessage(),
-							JOptionPane.WARNING_MESSAGE);
-					PluginServices.getMDIManager().closeWindow(timeWarningWindow);
+					JOptionPane.showMessageDialog((Component) PluginServices
+							.getMDIManager().getActiveWindow(), PluginServices
+							.getText(this, "wfst_layer_cant_be_locked"), e1
+							.getMessage(), JOptionPane.WARNING_MESSAGE);
+					PluginServices.getMDIManager().closeWindow(
+							timeWarningWindow);
 					return;
-				}	
-			}else{
+				}
+			} else {
 				layer.setWfstExpiryTime(-1);
 			}
 			PluginServices.getMDIManager().closeWindow(timeWarningWindow);
 			startEditionTocMenuEntry.edit(item, selectedItems);
-		}else if (e.getActionCommand().compareTo(TimeWarningPanel.CANCELBUTTON_ACTIONCOMMAND) == 0){
+		} else if (e.getActionCommand().compareTo(
+				TimeWarningPanel.CANCELBUTTON_ACTIONCOMMAND) == 0) {
 			PluginServices.getMDIManager().closeWindow(timeWarningWindow);
 		}
-	}	
+	}
 }

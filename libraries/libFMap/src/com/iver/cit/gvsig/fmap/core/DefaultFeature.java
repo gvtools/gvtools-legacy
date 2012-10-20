@@ -45,46 +45,53 @@ package com.iver.cit.gvsig.fmap.core;
 
 import com.hardcode.gdbms.engine.values.Value;
 
-
 /**
- * @author   FJP  TODO To change the template for this generated type comment go to  Window - Preferences - Java - Code Generation - Code and Comments
+ * @author FJP TODO To change the template for this generated type comment go to
+ *         Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class DefaultFeature extends DefaultRow implements IFeature {
-    private IGeometry theGeom;
+	private IGeometry theGeom;
 
-    /**
-     * @deprecated Dont use it, please. Instead, use DefaultFeature(IGeometry, Value[], String ID). You shoud know the correct ID of a feature.
-     * @param geom
-     * @param att
-     */
-    public DefaultFeature(IGeometry geom, Value[] att){
-    	 super(att);
-        this.theGeom = geom;
+	/**
+	 * @deprecated Dont use it, please. Instead, use DefaultFeature(IGeometry,
+	 *             Value[], String ID). You shoud know the correct ID of a
+	 *             feature.
+	 * @param geom
+	 * @param att
+	 */
+	public DefaultFeature(IGeometry geom, Value[] att) {
+		super(att);
+		this.theGeom = geom;
 
-    }
+	}
+
 	public DefaultFeature(IGeometry geom, Value[] att, String id) {
-		super(att,id);
+		super(att, id);
 		this.theGeom = geom;
 	}
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.core.IFeature#getGeometry()
-     */
-    public IGeometry getGeometry() {
-        return theGeom;
-    }
 
-    public IRow cloneRow() {
-    	IGeometry geom= null;
-    	if (theGeom!=null)
-    		geom=theGeom.cloneGeometry();
-		Value[] attri=null;
-		if (getAttributes()!=null)
-			attri=(Value[])getAttributes().clone();
-		DefaultFeature df=new DefaultFeature(geom,attri,getID());
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.core.IFeature#getGeometry()
+	 */
+	public IGeometry getGeometry() {
+		return theGeom;
+	}
+
+	public IRow cloneRow() {
+		IGeometry geom = null;
+		if (theGeom != null)
+			geom = theGeom.cloneGeometry();
+		Value[] attri = null;
+		if (getAttributes() != null)
+			attri = (Value[]) getAttributes().clone();
+		DefaultFeature df = new DefaultFeature(geom, attri, getID());
 		return df;
 	}
+
 	public void setGeometry(IGeometry g) {
-		theGeom=g;
+		theGeom = g;
 
 	}
 

@@ -45,22 +45,24 @@ import com.iver.andami.plugins.Extension;
 import com.iver.cit.gvsig.exceptions.commands.EditionCommandException;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
-public class LayoutRedoExtension extends Extension{
+public class LayoutRedoExtension extends Extension {
 
 	public void initialize() {
 		registerIcons();
 	}
 
-	private void registerIcons(){
-		PluginServices.getIconTheme().registerDefault(
-				"layout-redo",
-				this.getClass().getClassLoader().getResource("images/Redo.png")
-			);
+	private void registerIcons() {
+		PluginServices.getIconTheme()
+				.registerDefault(
+						"layout-redo",
+						this.getClass().getClassLoader()
+								.getResource("images/Redo.png"));
 	}
 
 	public void execute(String actionCommand) {
-		Layout layout=(Layout)PluginServices.getMDIManager().getActiveWindow();
-		if (actionCommand.equals("REDO")){
+		Layout layout = (Layout) PluginServices.getMDIManager()
+				.getActiveWindow();
+		if (actionCommand.equals("REDO")) {
 			try {
 				layout.getLayoutContext().getEFS().redo();
 			} catch (EditionCommandException e) {
@@ -73,16 +75,18 @@ public class LayoutRedoExtension extends Extension{
 	}
 
 	public boolean isEnabled() {
-		if (PluginServices.getMDIManager().getActiveWindow() instanceof Layout){
-			Layout layout=(Layout)PluginServices.getMDIManager().getActiveWindow();
-			if (layout.getLayoutContext().getEFS().moreRedoCommands() && layout.getLayoutContext().isEditable())
-			return true;
+		if (PluginServices.getMDIManager().getActiveWindow() instanceof Layout) {
+			Layout layout = (Layout) PluginServices.getMDIManager()
+					.getActiveWindow();
+			if (layout.getLayoutContext().getEFS().moreRedoCommands()
+					&& layout.getLayoutContext().isEditable())
+				return true;
 		}
 		return false;
 	}
 
 	public boolean isVisible() {
-		if (PluginServices.getMDIManager().getActiveWindow() instanceof Layout){
+		if (PluginServices.getMDIManager().getActiveWindow() instanceof Layout) {
 			return true;
 		}
 		return false;

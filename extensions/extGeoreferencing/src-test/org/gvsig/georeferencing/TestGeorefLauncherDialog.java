@@ -24,14 +24,15 @@ import javax.swing.UIManager;
 import org.gvsig.georeferencing.ui.launcher.GeorefLauncherPanel;
 import org.gvsig.gui.beans.buttonspanel.ButtonsPanelEvent;
 import org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener;
+
 /**
  * Test para el panel de geolocalización
- *
+ * 
  * @version 30/07/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class TestGeorefLauncherDialog implements ButtonsPanelListener {
-	private JFrame 			frame = new JFrame();
+	private JFrame frame = new JFrame();
 
 	public TestGeorefLauncherDialog() {
 		super();
@@ -40,15 +41,17 @@ public class TestGeorefLauncherDialog implements ButtonsPanelListener {
 
 	public static void main(String[] args) {
 		try {
-			UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
-		} catch( Exception e ) {
-			System.err.println( "No se puede cambiar al LookAndFeel");
+			UIManager
+					.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
+		} catch (Exception e) {
+			System.err.println("No se puede cambiar al LookAndFeel");
 		}
 		new TestGeorefLauncherDialog();
 	}
 
 	private void initialize() {
-		GeorefLauncherPanel glp = new GeorefLauncherPanel(new String[]{"vista1", "vista2"}, 3, this);
+		GeorefLauncherPanel glp = new GeorefLauncherPanel(new String[] {
+				"vista1", "vista2" }, 3, this);
 		frame.setContentPane(glp);
 
 		frame.setSize(new java.awt.Dimension(420, 380));

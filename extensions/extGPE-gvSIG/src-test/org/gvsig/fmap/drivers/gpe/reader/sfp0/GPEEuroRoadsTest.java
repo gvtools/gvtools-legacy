@@ -58,28 +58,35 @@ public class GPEEuroRoadsTest extends GPEParserTest {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.gpe.GPEDriverTest#getFile()
 	 */
 	public String getFile() {
-		return "../extGPE-gvSIG" + File.separatorChar +
-			"testdata" + File.separatorChar + "euroroads.gml";
+		return "../extGPE-gvSIG" + File.separatorChar + "testdata"
+				+ File.separatorChar + "euroroads.gml";
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.gpe.GPEDriverTest#makeAsserts()
 	 */
-	public void makeAsserts() throws DriverIOException, ReadDriverException  {
+	public void makeAsserts() throws DriverIOException, ReadDriverException {
 		assertEquals(getLayer().getSource().getShapeCount(), 7);
-//		FlyrGPEVectorial roadNodeLayer = (FlyrGPEVectorial)((IGPELayer)layer).getLayer(0);
-//		FlyrGPEVectorial roadLinkLayer = (FlyrGPEVectorial)((IGPELayer)layer).getLayer(1);
-//		FlyrGPEVectorial excludeLayer = (FlyrGPEVectorial)((IGPELayer)layer).getLayer(2);
-//		FlyrGPEVectorial routesLayer = (FlyrGPEVectorial)((IGPELayer)layer).getLayer(3);
-//		FlyrGPEVectorial propertiesLayer = (FlyrGPEVectorial)((IGPELayer)layer).getLayer(4);
-//		assertEquals(roadNodeLayer.getDriver().getRowCount(), 4);
-//		assertEquals(roadLinkLayer.getDriver().getRowCount(), 3);
-//		assertEquals(excludeLayer.getDriver().getRowCount(), 0);
-//		assertEquals(routesLayer.getDriver().getRowCount(), 0);
-//		assertEquals(propertiesLayer.getDriver().getRowCount(), 0);
+		// FlyrGPEVectorial roadNodeLayer =
+		// (FlyrGPEVectorial)((IGPELayer)layer).getLayer(0);
+		// FlyrGPEVectorial roadLinkLayer =
+		// (FlyrGPEVectorial)((IGPELayer)layer).getLayer(1);
+		// FlyrGPEVectorial excludeLayer =
+		// (FlyrGPEVectorial)((IGPELayer)layer).getLayer(2);
+		// FlyrGPEVectorial routesLayer =
+		// (FlyrGPEVectorial)((IGPELayer)layer).getLayer(3);
+		// FlyrGPEVectorial propertiesLayer =
+		// (FlyrGPEVectorial)((IGPELayer)layer).getLayer(4);
+		// assertEquals(roadNodeLayer.getDriver().getRowCount(), 4);
+		// assertEquals(roadLinkLayer.getDriver().getRowCount(), 3);
+		// assertEquals(excludeLayer.getDriver().getRowCount(), 0);
+		// assertEquals(routesLayer.getDriver().getRowCount(), 0);
+		// assertEquals(propertiesLayer.getDriver().getRowCount(), 0);
 	}
 }

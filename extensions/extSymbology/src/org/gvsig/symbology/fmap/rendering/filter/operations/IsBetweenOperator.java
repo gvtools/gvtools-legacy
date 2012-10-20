@@ -45,15 +45,16 @@ import java.util.Hashtable;
 
 import com.hardcode.gdbms.engine.values.Value;
 import com.iver.cit.gvsig.fmap.Messages;
+
 /**
- *
- * Implements the funcionality of the IsBetween operator which can be
- * used in a Filter Encoding expression
- *
+ * 
+ * Implements the funcionality of the IsBetween operator which can be used in a
+ * Filter Encoding expression
+ * 
  * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
- *
+ * 
  */
-public class IsBetweenOperator extends Operator{
+public class IsBetweenOperator extends Operator {
 
 	private ArrayList<Expression> arguments = new ArrayList<Expression>();
 
@@ -65,29 +66,30 @@ public class IsBetweenOperator extends Operator{
 		super(symbol_table);
 	}
 
-	public Object evaluate()throws ExpressionException {
-		if(arguments.size() != 3)
-			throw new ExpressionException(ExpressionException.INCORRECT_NUMBER_OF_ARGUMENTS);
-		Object eval1=((Expression)arguments.get(0)).evaluate();
-		Object eval2=((Expression)arguments.get(1)).evaluate();
-		Object eval3=((Expression)arguments.get(2)).evaluate();
-		if (eval1==null || eval2==null || eval3==null){
+	public Object evaluate() throws ExpressionException {
+		if (arguments.size() != 3)
+			throw new ExpressionException(
+					ExpressionException.INCORRECT_NUMBER_OF_ARGUMENTS);
+		Object eval1 = ((Expression) arguments.get(0)).evaluate();
+		Object eval2 = ((Expression) arguments.get(1)).evaluate();
+		Object eval3 = ((Expression) arguments.get(2)).evaluate();
+		if (eval1 == null || eval2 == null || eval3 == null) {
 			return false;
 		}
-
 
 		Double middle = new Double(eval1.toString());
 		Double lower = new Double(eval2.toString());
 		Double upper = new Double(eval3.toString());
-		if(lower <= upper) {
-			if((middle >= lower) && (middle <= upper))
+		if (lower <= upper) {
+			if ((middle >= lower) && (middle <= upper))
 				return true;
-			else return false;
-		}
-		else {
-			if((middle >= upper) && (middle <= lower))
+			else
+				return false;
+		} else {
+			if ((middle >= upper) && (middle <= lower))
 				return true;
-			else return false;
+			else
+				return false;
 		}
 	}
 
@@ -96,17 +98,17 @@ public class IsBetweenOperator extends Operator{
 
 	}
 
-	public Class getResultType()
-	{
+	public Class getResultType() {
 		return Boolean.class;
 	}
 
 	public String getPattern() {
-		return OperationTags.ISBETWEEN_OP + "(" +Messages.getString(OperationTags.OPERAND)
-		+" , "+Messages.getString(OperationTags.OPERAND)
-		+" , "+Messages.getString(OperationTags.OPERAND)+ ")\n"+
-		Messages.getString(OperationTags.OPERAND) +" = "+
-		Messages.getString(OperationTags.NUMERIC_VALUE);
+		return OperationTags.ISBETWEEN_OP + "("
+				+ Messages.getString(OperationTags.OPERAND) + " , "
+				+ Messages.getString(OperationTags.OPERAND) + " , "
+				+ Messages.getString(OperationTags.OPERAND) + ")\n"
+				+ Messages.getString(OperationTags.OPERAND) + " = "
+				+ Messages.getString(OperationTags.NUMERIC_VALUE);
 	}
 
 	public ArrayList<Expression> getArguments() {
@@ -118,7 +120,8 @@ public class IsBetweenOperator extends Operator{
 	}
 
 	public void check() throws ExpressionException {
-		if(arguments.size() != 3)
-			throw new ExpressionException(ExpressionException.INCORRECT_NUMBER_OF_ARGUMENTS);
+		if (arguments.size() != 3)
+			throw new ExpressionException(
+					ExpressionException.INCORRECT_NUMBER_OF_ARGUMENTS);
 	}
 }

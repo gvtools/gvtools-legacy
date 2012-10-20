@@ -19,12 +19,13 @@
 package org.gvsig.gui.beans.table.models;
 
 import javax.swing.table.DefaultTableModel;
+
 /**
  * Componente tabla
  * 
  * @author Nacho Brodin (brodin_ign@gva.es)
  */
-public class CheckBoxModel extends DefaultTableModel implements IModel{
+public class CheckBoxModel extends DefaultTableModel implements IModel {
 	final private static long serialVersionUID = -3370601314380922368L;
 
 	public CheckBoxModel(String[] columnNames) {
@@ -32,9 +33,9 @@ public class CheckBoxModel extends DefaultTableModel implements IModel{
 	}
 
 	public Object[] getNewLine() {
-		return new Object[] { new Boolean(false), "", new Integer(0)};
+		return new Object[] { new Boolean(false), "", new Integer(0) };
 	}
-	
+
 	public boolean isCellEditable(int row, int col) {
 		return (col == 0);
 	}

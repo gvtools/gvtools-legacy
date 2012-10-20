@@ -40,7 +40,6 @@
  */
 package es.gva.cit.gvsig.gazetteer.gui;
 
-
 import java.awt.Frame;
 
 import javax.swing.JDialog;
@@ -59,21 +58,20 @@ import es.gva.cit.gazetteer.ui.serverconnect.ServerConnectDialogPanel;
 /**
  * @author Jorge Piera Llodra (piera_jor@gva.es)
  */
-public class ConnectDialog extends ServerConnectDialogPanel
-implements IWindow {
+public class ConnectDialog extends ServerConnectDialogPanel implements IWindow {
 	public WindowInfo m_windowInfo = null;
 
 	/**
 	 * Building the dialog Window
 	 */
-	public ConnectDialog(/*FLayers layers, MapControl mapCtrl*/) {
+	public ConnectDialog(/* FLayers layers, MapControl mapCtrl */) {
 		super(null);
-		init();           
+		init();
 	}
 
 	/**
 	 * Establishing window properties
-	 *
+	 * 
 	 */
 	private void init() {
 		this.setBounds(0, 0, 610, 263);
@@ -86,41 +84,49 @@ implements IWindow {
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.ui.serverconnect.ServerConnectDialogPanel#searchButtonActionPerformed()
+	 * 
+	 * @see es.gva.cit.gazetteer.ui.serverconnect.ServerConnectDialogPanel#
+	 * searchButtonActionPerformed()
 	 */
 	protected void searchButtonActionPerformed() {
 		addCurrentHost();
-		closeJDialog();	       
+		closeJDialog();
 
-		JDialog panel = new JDialog((Frame) PluginServices.getMainFrame(), false);
-		Frames.centerFrame(panel,525,125);
-		panel.setTitle(Messages.getText( "gazetteer_search")); 
-		SearchDialog dialog = new SearchDialog(client,this);
+		JDialog panel = new JDialog((Frame) PluginServices.getMainFrame(),
+				false);
+		Frames.centerFrame(panel, 525, 125);
+		panel.setTitle(Messages.getText("gazetteer_search"));
+		SearchDialog dialog = new SearchDialog(client, this);
 		dialog.setFrame(panel);
 		dialog.setCurrentServer(getCurrentServer());
 		dialog.setFrame(panel);
 		panel.getContentPane().add(dialog);
-		panel.setVisible(true);   
+		panel.setVisible(true);
 	}
 
 	/**
 	 * Save the current host (if is neccessary) in a file using the andami
 	 * persistence
+	 * 
 	 * @param host
-	 * Host to save
+	 *            Host to save
 	 */
-	private void addCurrentHost(){
+	private void addCurrentHost() {
 		String host = client.getSUri();
-		ServerDataPersistence persistence = new ServerDataPersistence(this,ServerData.SERVER_TYPE_GAZETTEER);
-		persistence.addServerData(new ServerData(host, ServerData.SERVER_TYPE_GAZETTEER, client.getProtocol()));
+		ServerDataPersistence persistence = new ServerDataPersistence(this,
+				ServerData.SERVER_TYPE_GAZETTEER);
+		persistence.addServerData(new ServerData(host,
+				ServerData.SERVER_TYPE_GAZETTEER, client.getProtocol()));
 		persistence.setPersistent();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.ui.serverconnect.ServerConnectDialogPanel#closeButtonActionPerformed()
+	 * 
+	 * @see es.gva.cit.gazetteer.ui.serverconnect.ServerConnectDialogPanel#
+	 * closeButtonActionPerformed()
 	 */
-	protected void closeButtonActionPerformed() {   
+	protected void closeButtonActionPerformed() {
 		closeJDialog();
 	}
 
@@ -131,19 +137,23 @@ implements IWindow {
 		PluginServices.getMDIManager().closeWindow(ConnectDialog.this);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.View#getViewInfo()
 	 */
 	public WindowInfo getWindowInfo() {
-		if (m_windowInfo == null){
-			m_windowInfo=new WindowInfo(WindowInfo.RESIZABLE | WindowInfo.MODALDIALOG);		
-			m_windowInfo.setTitle(Messages.getText( "gazetteer_connect"));
+		if (m_windowInfo == null) {
+			m_windowInfo = new WindowInfo(WindowInfo.RESIZABLE
+					| WindowInfo.MODALDIALOG);
+			m_windowInfo.setTitle(Messages.getText("gazetteer_connect"));
 			m_windowInfo.setHeight(225);
 			m_windowInfo.setWidth(610);
 		}
 		return m_windowInfo;
 	}
-	public Object getWindowProfile(){
+
+	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
 

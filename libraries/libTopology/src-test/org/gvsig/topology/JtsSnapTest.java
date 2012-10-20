@@ -92,18 +92,16 @@ import com.vividsolutions.jts.operation.overlay.snap.SnapOverlayOp;
 /*
  * ¡Ojo! Tenemos dos alternativas para aplicar Snap con JTS que son excluyentes.
  * 
- * a) Usar  clase SnapOverlayOperation de JTS 1.8. En este caso no se maneja el
+ * a) Usar clase SnapOverlayOperation de JTS 1.8. En este caso no se maneja el
  * concepto de tolerancia de snap, sino de "rejilla". El tamaño del snap vendrá
  * dada por la resolución del PrecisionModel empleado (simplemente hay que usar
  * un PrecisionModel de tipo FIXED)
  * 
- * b) Usar las clases que hemos desarrollado en gvSIG dentro de
- * libFMap. En este caso si que se usa la tolerancia de snap. Estas clases han
- * sido testadas y funciona perfectamente para INTERSECCION entre lineas y
- * lineas.
+ * b) Usar las clases que hemos desarrollado en gvSIG dentro de libFMap. En este
+ * caso si que se usa la tolerancia de snap. Estas clases han sido testadas y
+ * funciona perfectamente para INTERSECCION entre lineas y lineas.
  * 
- * Hay que testar resto de operaciones (UNION, DIFERENCIA, etc.) 
- * 
+ * Hay que testar resto de operaciones (UNION, DIFERENCIA, etc.)
  */
 public class JtsSnapTest extends TestCase {
 
@@ -242,7 +240,7 @@ public class JtsSnapTest extends TestCase {
 		WKTReader wktReader = new WKTReader(factory);
 		Geometry ls1 = wktReader.read(line1wkt);
 		Geometry ls2 = wktReader.read(line2wkt);
-		//		
+		//
 		Geometry intersection = SnappingOverlayOperation.overlayOp(ls1, ls2,
 				OverlayOp.INTERSECTION, 19.99);
 		System.out.println(intersection.toText());
@@ -349,10 +347,10 @@ public class JtsSnapTest extends TestCase {
 	}
 
 	public void testIntersectionPolygonPointSnap() throws ParseException {
-		
+
 		GeometryFactory factory = new GeometryFactory(new PrecisionModel());
 		WKTReader wktReader = new WKTReader(factory);
-		
+
 		String polWkt = "POLYGON ((-13220 2200, -13200 2180, -13220 2160, -13260 2180, -13280 2200, -13280 2220, -13220 2200))";
 		String ptWkt = "POINT (-13253 2212)";
 		String ptWkt2 = "POINT(-13220.01 2200)";
@@ -371,166 +369,188 @@ public class JtsSnapTest extends TestCase {
 		// Conclusion: la interseccion punto-linea punto-poligono puede ser
 		// resuelta satisfactoriamente
 		// con el proceso de crack and snap
-		//En general, el proceso de crack and snap resuelve todo lo que tenga
-		//que ver con vertices
+		// En general, el proceso de crack and snap resuelve todo lo que tenga
+		// que ver con vertices
 	}
 
 	public void testIntersectionLinePolygonWithSnap() throws ParseException {
-		
+
 		GeometryFactory factory = new GeometryFactory(new PrecisionModel(100));
 		WKTReader wktReader = new WKTReader(factory);
-		
-		
-		//a) snapped intersection is a linestring vertex
+
+		// a) snapped intersection is a linestring vertex
 		String polWkt = "POLYGON ((-13240 2220, -13300 2180, -13260 2160, -13200 2180, -13160 2220, -13240 2220))";
 		String linWkt = "LINESTRING (-13320 2220, -13300 2200, -13271 2200, -13220 2260)";
 		Geometry pol = wktReader.read(polWkt);
 		Geometry lin = wktReader.read(linWkt);
 		double dist = pol.distance(lin);
-		Geometry[] geoms = {pol, lin};
+		Geometry[] geoms = { pol, lin };
 		GeometrySnapper snapper = new GeometrySnapper(dist);
 		GeometryCracker cracker = new GeometryCracker(dist);
-		
-		
-		//TODO It has not too much sense that snap and crack points has too mutch precision
-		//We could reduce this precision with a PrecisionModel and makePrecision call
+
+		// TODO It has not too much sense that snap and crack points has too
+		// mutch precision
+		// We could reduce this precision with a PrecisionModel and
+		// makePrecision call
 		geoms = cracker.crackGeometries(geoms);
 		geoms = snapper.snap(geoms);
-		
-		Geometry intersection = OverlayOp.overlayOp(geoms[0], geoms[1], OverlayOp.INTERSECTION);
-		assertTrue(!intersection.toText().equalsIgnoreCase("GEOMETRYCOLLECTION EMPTY"));
-		
-		intersection = SnappingOverlayOperation.overlayOp(pol, lin, OverlayOp.INTERSECTION, dist);
-		assertTrue(!intersection.toText().equalsIgnoreCase("GEOMETRYCOLLECTION EMPTY"));
-		
-		//El caso Linea - Poligono se resueve bien aplicando crack and snap si el snap no se hace en segmentos
-		//paralelos entre poligono y linea
+
+		Geometry intersection = OverlayOp.overlayOp(geoms[0], geoms[1],
+				OverlayOp.INTERSECTION);
+		assertTrue(!intersection.toText().equalsIgnoreCase(
+				"GEOMETRYCOLLECTION EMPTY"));
+
+		intersection = SnappingOverlayOperation.overlayOp(pol, lin,
+				OverlayOp.INTERSECTION, dist);
+		assertTrue(!intersection.toText().equalsIgnoreCase(
+				"GEOMETRYCOLLECTION EMPTY"));
+
+		// El caso Linea - Poligono se resueve bien aplicando crack and snap si
+		// el snap no se hace en segmentos
+		// paralelos entre poligono y linea
 		linWkt = "LINESTRING (-13380 2259.99, -13220 2259.99, -13140 2160, -13200 2200, -13260 2220, -13320 2160, -13400 2200, -13460 2260)";
 		polWkt = "POLYGON ((-13380 2260, -13260 2260, -13140 2320, -13260 2340, -13240 2300, -13380 2340, -13400 2340, -13380 2260))";
-		
+
 		lin = wktReader.read(linWkt);
 		pol = wktReader.read(polWkt);
-		
+
 		cracker = new GeometryCracker(0.02);
 		snapper = new GeometrySnapper(0.02);
-		Geometry[] geoms2 = {lin, pol};
+		Geometry[] geoms2 = { lin, pol };
 		geoms2 = cracker.crackGeometries(geoms2);
 		geoms2 = snapper.snap(geoms2);
-		
-		//en este caso cracker y snap no funcionan, pues poligono y linea deben snapear en un segmento paralelo
+
+		// en este caso cracker y snap no funcionan, pues poligono y linea deben
+		// snapear en un segmento paralelo
 		intersection = SnapOverlayOp.intersection(pol, lin);
 		System.out.println(intersection);
-		//El snap de JTS 1.8 no da resultados correctos para lineas paralelas si el PrecisionModel = 100
-		//probamos con precision model = 10
+		// El snap de JTS 1.8 no da resultados correctos para lineas paralelas
+		// si el PrecisionModel = 100
+		// probamos con precision model = 10
 		factory = new GeometryFactory(new PrecisionModel(10));
 		wktReader = new WKTReader(factory);
 		lin = wktReader.read(linWkt);
 		pol = wktReader.read(polWkt);
 		intersection = SnapOverlayOp.intersection(pol, lin);
 		System.out.println(intersection);
-		//El snap de JTS 1.8 funciona bien, solo que no permite jugar con la distancia de snap
-		//que viene dada por el precision model (10 = 0.1 ud, 100 = 0.01 ud. etc.)
-		
-		
-		//la interseccion con snap de linea con poligono funciona bien en nuestras clases
-		intersection = SnappingOverlayOperation.overlayOp(pol, lin, OverlayOp.INTERSECTION, 0.02);
+		// El snap de JTS 1.8 funciona bien, solo que no permite jugar con la
+		// distancia de snap
+		// que viene dada por el precision model (10 = 0.1 ud, 100 = 0.01 ud.
+		// etc.)
+
+		// la interseccion con snap de linea con poligono funciona bien en
+		// nuestras clases
+		intersection = SnappingOverlayOperation.overlayOp(pol, lin,
+				OverlayOp.INTERSECTION, 0.02);
 		assertTrue(intersection instanceof LineString);
 		assertTrue(intersection.getCoordinates().length == 2);
 		System.out.println(intersection);
-		
-		
+
 	}
 
 	public void testIntersectionPolygonPolygonWithSnap() throws ParseException {
 		GeometryFactory factory = new GeometryFactory(new PrecisionModel(100));
 		WKTReader wktReader = new WKTReader(factory);
-		//a) two polygons snaps with the crack and snap process
+		// a) two polygons snaps with the crack and snap process
 		String polwkt1 = "POLYGON ((-13540 2340, -13420 2340, -13351 2380, -13300 2420, -13440 2420, -13560 2400, -13540 2340))";
 		String polwkt2 = "POLYGON ((-13419.99 2340, -13280 2420, -12960 2360, -13060 2140, -13400 2140, -13560 2220, -13240 2240, -13240 2300, -13419.99 2340))";
-		
+
 		Geometry pol1 = wktReader.read(polwkt1);
 		Geometry pol2 = wktReader.read(polwkt2);
-	
-		Geometry[] geoms = {pol1, pol2};
+
+		Geometry[] geoms = { pol1, pol2 };
 		GeometryCracker cracker = new GeometryCracker(0.5);
 		geoms = cracker.crackGeometries(geoms);
 		GeometrySnapper snapper = new GeometrySnapper(0.5);
 		geoms = snapper.snap(geoms);
 		System.out.println(geoms);
-		Geometry intersection = OverlayOp.overlayOp(geoms[0], geoms[1], OverlayOp.INTERSECTION);
+		Geometry intersection = OverlayOp.overlayOp(geoms[0], geoms[1],
+				OverlayOp.INTERSECTION);
 		System.out.println(intersection);
-		intersection = SnappingOverlayOperation.overlayOp(geoms[0], geoms[1], OverlayOp.INTERSECTION, 0.4);
+		intersection = SnappingOverlayOperation.overlayOp(geoms[0], geoms[1],
+				OverlayOp.INTERSECTION, 0.4);
 		System.out.println(intersection);
-		//In this case, the crack and snap process solves the snap, so OverlayOp and
-		//SnapOverlayOp gives the same result
-		
-		//b) Snap with parallel segments. Again the crack and snap solves the problem
+		// In this case, the crack and snap process solves the snap, so
+		// OverlayOp and
+		// SnapOverlayOp gives the same result
+
+		// b) Snap with parallel segments. Again the crack and snap solves the
+		// problem
 		polwkt1 = "POLYGON ((-13600 2219.99, -13100 2219.99, -12920 2060, -13200 2020, -13160 2160, -13900 2040, -13600 2219.99))";
 		polwkt2 = "POLYGON ((-13460 2220, -13220 2220, -13000 2340, -13180 2420, -13500 2400, -13280 2280, -13480 2340, -13460 2220))";
 		pol1 = wktReader.read(polwkt1);
 		pol2 = wktReader.read(polwkt2);
 		cracker = new GeometryCracker(0.2);
 		snapper = new GeometrySnapper(0.2);
-		Geometry[] geoms2 = {pol1, pol2};
+		Geometry[] geoms2 = { pol1, pol2 };
 		geoms2 = cracker.crackGeometries(geoms2);
 		geoms2 = snapper.snap(geoms2);
-		intersection = SnappingOverlayOperation.overlayOp(pol1, pol2, OverlayOp.INTERSECTION, 0.2);
+		intersection = SnappingOverlayOperation.overlayOp(pol1, pol2,
+				OverlayOp.INTERSECTION, 0.2);
 		System.out.println(intersection);
-		
-		//c) Two intersection areas: a linestring (parallel segments snapped)
-		//and a true intersection
+
+		// c) Two intersection areas: a linestring (parallel segments snapped)
+		// and a true intersection
 		polwkt1 = "POLYGON ((-13460 2280, -13440 2300, -13280 2300, -13240 2220, -13400 2220, -13440 2240, -13460 2280))";
 		polwkt2 = "POLYGON ((-13320 2260, -13220 2340, -13340 2380, -13500 2400, -13600 2360, -13600 2280, -13540 2200, -13440.01 2240, -13560 2280, -13500 2360, -13360 2360, -13320 2260))";
-		
-		//by snapping, one intersection is POINT(-13440.01 2240)
-		//by computing, onother one is a POLYGON
+
+		// by snapping, one intersection is POINT(-13440.01 2240)
+		// by computing, onother one is a POLYGON
 		pol1 = wktReader.read(polwkt1);
 		pol2 = wktReader.read(polwkt2);
 		cracker = new GeometryCracker(0.2);
 		snapper = new GeometrySnapper(0.2);
-		Geometry[] geoms3 = {pol1, pol2};
+		Geometry[] geoms3 = { pol1, pol2 };
 		geoms3 = cracker.crackGeometries(geoms3);
 		geoms3 = snapper.snap(geoms3);
-		intersection = SnappingOverlayOperation.overlayOp(geoms3[0], geoms3[1], OverlayOp.INTERSECTION, 0.2);
+		intersection = SnappingOverlayOperation.overlayOp(geoms3[0], geoms3[1],
+				OverlayOp.INTERSECTION, 0.2);
 		System.out.println(intersection);
 		assertTrue(intersection instanceof GeometryCollection);
-		assertTrue(((GeometryCollection)intersection).getNumGeometries() == 2);
+		assertTrue(((GeometryCollection) intersection).getNumGeometries() == 2);
 	}
-	
-	
-	public void testUnionPointLineWithSnap() throws ParseException{
+
+	public void testUnionPointLineWithSnap() throws ParseException {
 		String lnWkt = "LINESTRING (120 340, 220 100, 440 320, 600 60, 860 180, 800 300)";
 		String ptWkt = "POINT (800 299.99)";
 		GeometryFactory factory = new GeometryFactory(new PrecisionModel());
 		WKTReader wktReader = new WKTReader(factory);
 		Geometry ln = wktReader.read(lnWkt);
 		Geometry pt = wktReader.read(ptWkt);
-		
-		Geometry lnUpt = SnappingOverlayOperation.overlayOp(ln, pt, OverlayOp.UNION, 0.02);
-		assertTrue(lnUpt.toText().equalsIgnoreCase("LINESTRING (120 340, 220 100, 440 320, 600 60, 860 180, 800 300)"));
-		
+
+		Geometry lnUpt = SnappingOverlayOperation.overlayOp(ln, pt,
+				OverlayOp.UNION, 0.02);
+		assertTrue(lnUpt
+				.toText()
+				.equalsIgnoreCase(
+						"LINESTRING (120 340, 220 100, 440 320, 600 60, 860 180, 800 300)"));
+
 		lnWkt = "LINESTRING (320 160, 780 160)";
 		ptWkt = "POINT (560 160.01)";
 		ln = wktReader.read(lnWkt);
 		pt = wktReader.read(ptWkt);
-		lnUpt = SnappingOverlayOperation.overlayOp(ln, pt, OverlayOp.UNION, 0.02);
-		
-		assertTrue(lnUpt.toText().equalsIgnoreCase("LINESTRING (320 160, 780 160)"));
+		lnUpt = SnappingOverlayOperation.overlayOp(ln, pt, OverlayOp.UNION,
+				0.02);
+
+		assertTrue(lnUpt.toText().equalsIgnoreCase(
+				"LINESTRING (320 160, 780 160)"));
 	}
-	
-	public void testUnionLineWithLineWithSnap() throws ParseException{
+
+	public void testUnionLineWithLineWithSnap() throws ParseException {
 		String lnWkt = "LINESTRING (480 160, 520 140, 540 160, 580 160)";
 		String ptWkt = "LINESTRING (580 160, 660 180, 680 160)";
 		GeometryFactory factory = new GeometryFactory(new PrecisionModel());
 		WKTReader wktReader = new WKTReader(factory);
 		Geometry ln1 = wktReader.read(lnWkt);
 		Geometry ln2 = wktReader.read(ptWkt);
-		
-		Geometry lnUpt = SnappingOverlayOperation.overlayOp(ln1, ln2, OverlayOp.UNION, 0.02);
+
+		Geometry lnUpt = SnappingOverlayOperation.overlayOp(ln1, ln2,
+				OverlayOp.UNION, 0.02);
 		System.out.println(lnUpt);
-		//El resultado es MULTILINESTRING ((480 160, 520 140, 540 160, 580 160), (580.01 160, 660 180, 680 160))
-		//Es lo mismo que saldría si los puntos final e inicial coincidiesen
-		
-		//Para fusionarlo están las clases LineStringSewer de JTS
+		// El resultado es MULTILINESTRING ((480 160, 520 140, 540 160, 580
+		// 160), (580.01 160, 660 180, 680 160))
+		// Es lo mismo que saldría si los puntos final e inicial coincidiesen
+
+		// Para fusionarlo están las clases LineStringSewer de JTS
 	}
 }

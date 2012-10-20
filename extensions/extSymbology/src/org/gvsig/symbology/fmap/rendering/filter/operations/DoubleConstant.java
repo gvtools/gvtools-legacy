@@ -45,29 +45,29 @@ import java.util.Hashtable;
 
 import com.hardcode.gdbms.engine.values.Value;
 import com.iver.cit.gvsig.fmap.Messages;
+
 /**
  * Implements the funcionality of a double constant
- *
+ * 
  * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
- *
+ * 
  */
-public class DoubleConstant extends Operator{
+public class DoubleConstant extends Operator {
 	private double value;
 
 	public String getName() {
 		return OperationTags.NUMERIC_VALUE;
 	}
 
-	public DoubleConstant(String value,Hashtable<String, Value> symbol_table) {
+	public DoubleConstant(String value, Hashtable<String, Value> symbol_table) {
 		super(symbol_table);
-		this.value=Double.valueOf(value);
+		this.value = Double.valueOf(value);
 
 	}
 
 	public Object evaluate() {
 		return value;
 	}
-
 
 	public String getDescription() {
 		return Messages.getString("constant");
@@ -88,7 +88,6 @@ public class DoubleConstant extends Operator{
 		throw new RuntimeException("Cannot add arguments to a constant");
 	}
 
-
 	public String getPattern() {
 		return null;
 	}
@@ -101,11 +100,9 @@ public class DoubleConstant extends Operator{
 		return;
 	}
 
-
 	public void check() throws ExpressionException {
 		return;
 	}
-
 
 	public double getValue() {
 		return value;

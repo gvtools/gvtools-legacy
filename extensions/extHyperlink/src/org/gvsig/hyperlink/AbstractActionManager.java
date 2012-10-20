@@ -2,8 +2,6 @@ package org.gvsig.hyperlink;
 
 import java.util.Map;
 
-
-
 public abstract class AbstractActionManager implements ILinkActionManager {
 	public boolean hasPanel() {
 		return false;

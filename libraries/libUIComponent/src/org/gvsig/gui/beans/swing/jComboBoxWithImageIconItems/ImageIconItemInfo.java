@@ -45,10 +45,9 @@ import javax.swing.ImageIcon;
  *   dac@iver.es
  */
 
-
-
 /**
- * This class represents the necessary information about each image icon item of 'JPanelWithJComboBoxImageIconItems'
+ * This class represents the necessary information about each image icon item of
+ * 'JPanelWithJComboBoxImageIconItems'
  * 
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
@@ -57,10 +56,14 @@ public class ImageIconItemInfo implements Serializable {
 
 	private ImageIcon imageIcon;
 	private String toolTipText;
-	private Object itemValue; // An object value of the item like a item value of a JComboBox
-	
-	/* This other attribute it's necessary because it's possible that the image icon couldn't be
-	     loaded and then in this case could be impossible to know the path after */
+	private Object itemValue; // An object value of the item like a item value
+								// of a JComboBox
+
+	/*
+	 * This other attribute it's necessary because it's possible that the image
+	 * icon couldn't be loaded and then in this case could be impossible to know
+	 * the path after
+	 */
 	private String path;
 
 	/**
@@ -72,16 +75,21 @@ public class ImageIconItemInfo implements Serializable {
 		toolTipText = null;
 		itemValue = null;
 	}
-	
+
 	/**
 	 * Default constructor with two parameters
 	 * 
-	 * @param path Path to the image icon
-	 * @param image_Icon The image icon
-	 * @param text The tool tip text
-	 * @param item_Value A value associated to this item
+	 * @param path
+	 *            Path to the image icon
+	 * @param image_Icon
+	 *            The image icon
+	 * @param text
+	 *            The tool tip text
+	 * @param item_Value
+	 *            A value associated to this item
 	 */
-	public ImageIconItemInfo(String image_Icon_Path, ImageIcon image_Icon, String text, Object item_Value) {
+	public ImageIconItemInfo(String image_Icon_Path, ImageIcon image_Icon,
+			String text, Object item_Value) {
 		path = image_Icon_Path;
 		imageIcon = image_Icon;
 		toolTipText = text;
@@ -100,7 +108,8 @@ public class ImageIconItemInfo implements Serializable {
 	/**
 	 * Sets the image icon object reference
 	 * 
-	 * @param imageIcon the imageIcon to set
+	 * @param imageIcon
+	 *            the imageIcon to set
 	 */
 	public void setImageIcon(ImageIcon imageIcon) {
 		this.imageIcon = imageIcon;
@@ -118,12 +127,13 @@ public class ImageIconItemInfo implements Serializable {
 	/**
 	 * Sets the path
 	 * 
-	 * @param path the path to set
+	 * @param path
+	 *            the path to set
 	 */
 	public void setPath(String path) {
 		this.path = path;
 	}
-	
+
 	/**
 	 * Gets the tool tip text
 	 * 
@@ -132,16 +142,17 @@ public class ImageIconItemInfo implements Serializable {
 	public String getToolTipText() {
 		return this.toolTipText;
 	}
-	
+
 	/**
 	 * Sets the tool tip text
 	 * 
-	 * @param text the tool tip text to this icon image
+	 * @param text
+	 *            the tool tip text to this icon image
 	 */
 	public void setToolTipText(String text) {
 		this.toolTipText = text;
 	}
-	
+
 	/**
 	 * Gets the associated item value
 	 * 
@@ -150,11 +161,12 @@ public class ImageIconItemInfo implements Serializable {
 	public Object getItemValue() {
 		return this.itemValue;
 	}
-	
+
 	/**
 	 * Sets the associated item value
 	 * 
-	 * @param item_Value a value associated to this item
+	 * @param item_Value
+	 *            a value associated to this item
 	 */
 	public void setItemValue(Object item_Value) {
 		this.itemValue = item_Value;

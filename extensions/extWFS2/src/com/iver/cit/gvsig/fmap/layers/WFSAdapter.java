@@ -40,8 +40,6 @@
  */
 package com.iver.cit.gvsig.fmap.layers;
 
-import java.io.IOException;
-
 import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.DataSourceFactory;
@@ -49,33 +47,35 @@ import com.hardcode.gdbms.engine.data.NoSuchTableException;
 import com.hardcode.gdbms.engine.data.driver.DriverException;
 import com.hardcode.gdbms.engine.data.driver.ObjectDriver;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
-import com.iver.cit.gvsig.fmap.drivers.DriverIOException;
 import com.iver.cit.gvsig.fmap.drivers.WFSDriver;
 
-
 /**
- * Adapta un driver de WFS a la interfaz vectorial, manteniendo además el
- * estado necesario por una capa vectorial WFS (URL del host, estado del
- * protocolo)
+ * Adapta un driver de WFS a la interfaz vectorial, manteniendo además el estado
+ * necesario por una capa vectorial WFS (URL del host, estado del protocolo)
  */
 public class WFSAdapter extends VectorialAdapter {
 	private SelectableDataSource ds = null;
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.ReadableVectorial#getRecordset()
 	 */
 	public SelectableDataSource getRecordset() {
-		if (ds==null && driver instanceof WFSDriver)
-		{
-			String name = LayerFactory.getDataSourceFactory().addDataSource((ObjectDriver)driver);
+		if (ds == null && driver instanceof WFSDriver) {
+			String name = LayerFactory.getDataSourceFactory().addDataSource(
+					(ObjectDriver) driver);
 			try {
-				// ds = LayerFactory.getDataSourceFactory().createRandomDataSource(name, DataSourceFactory.AUTOMATIC_OPENING);
-				ds = new SelectableDataSource(LayerFactory.getDataSourceFactory().createRandomDataSource(name, DataSourceFactory.AUTOMATIC_OPENING));
+				// ds =
+				// LayerFactory.getDataSourceFactory().createRandomDataSource(name,
+				// DataSourceFactory.AUTOMATIC_OPENING);
+				ds = new SelectableDataSource(LayerFactory
+						.getDataSourceFactory().createRandomDataSource(name,
+								DataSourceFactory.AUTOMATIC_OPENING));
 			} catch (NoSuchTableException e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
-			}  catch (ReadDriverException e) {
+			} catch (ReadDriverException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				throw new RuntimeException(e);
@@ -88,12 +88,13 @@ public class WFSAdapter extends VectorialAdapter {
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.ReadableVectorial#start()
 	 */
 	public void start() {
 		try {
-			((WFSDriver)driver).open();
+			((WFSDriver) driver).open();
 		} catch (DriverException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -102,30 +103,33 @@ public class WFSAdapter extends VectorialAdapter {
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.ReadableVectorial#stop()
 	 */
 	public void stop() {
-		((WFSDriver)driver).close();
+		((WFSDriver) driver).close();
 
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.ReadableVectorial#getShape(int)
 	 */
 	public IGeometry getShape(int index) throws ReadDriverException {
-		IGeometry geom = ((WFSDriver)driver).getShape(index);
-		
+		IGeometry geom = ((WFSDriver) driver).getShape(index);
+
 		return geom;
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.ReadableVectorial#getShapeType()
 	 */
 	public int getShapeType() {
-		return ((WFSDriver)driver).getShapeType();
+		return ((WFSDriver) driver).getShapeType();
 	}
 
 }

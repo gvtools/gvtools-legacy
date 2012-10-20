@@ -134,11 +134,15 @@ import com.vividsolutions.jts.planargraph.NodeMap;
 
 public class PolygonBuildGeoprocess extends AbstractGeoprocess {
 
-	private static final SimpleMarkerSymbol symNodeError =(SimpleMarkerSymbol) SymbologyFactory.createDefaultSymbolByShapeType(FShape.POINT, Color.RED);
-	private static final ILineSymbol symDangle = (ILineSymbol) SymbologyFactory.createDefaultSymbolByShapeType(FShape.LINE, Color.RED);
-	private static final ILineSymbol symCutEdge = (ILineSymbol)SymbologyFactory.createDefaultSymbolByShapeType(FShape.LINE, Color.BLUE);
-	private static final ILineSymbol symInvalidRing = (ILineSymbol)SymbologyFactory.createDefaultSymbolByShapeType(FShape.LINE, Color.YELLOW);
-	static{
+	private static final SimpleMarkerSymbol symNodeError = (SimpleMarkerSymbol) SymbologyFactory
+			.createDefaultSymbolByShapeType(FShape.POINT, Color.RED);
+	private static final ILineSymbol symDangle = (ILineSymbol) SymbologyFactory
+			.createDefaultSymbolByShapeType(FShape.LINE, Color.RED);
+	private static final ILineSymbol symCutEdge = (ILineSymbol) SymbologyFactory
+			.createDefaultSymbolByShapeType(FShape.LINE, Color.BLUE);
+	private static final ILineSymbol symInvalidRing = (ILineSymbol) SymbologyFactory
+			.createDefaultSymbolByShapeType(FShape.LINE, Color.YELLOW);
+	static {
 		symNodeError.setSize(10);
 		symNodeError.setStyle(SimpleMarkerSymbol.SQUARE_STYLE);
 		symNodeError.setOutlined(true);
@@ -165,8 +169,7 @@ public class PolygonBuildGeoprocess extends AbstractGeoprocess {
 	private GeometryFactory fact = new GeometryFactory();
 
 	/**
-	 * Relates an IWriter with the symbol of the layer
-	 * (for error layers)
+	 * Relates an IWriter with the symbol of the layer (for error layers)
 	 * */
 	private HashMap writer2sym = new HashMap();
 
@@ -184,7 +187,6 @@ public class PolygonBuildGeoprocess extends AbstractGeoprocess {
 	 * Schema of the result layer
 	 */
 	ILayerDefinition resultLayerDefinition;
-
 
 	public PolygonBuildGeoprocess(FLyrVect inputLayer) {
 		this.firstLayer = inputLayer;
@@ -249,7 +251,7 @@ public class PolygonBuildGeoprocess extends AbstractGeoprocess {
 	}
 
 	/**
-	 *
+	 * 
 	 * Creates the schema (ILayerDefinition) of the result layer which will have
 	 * all the polygons resulting from the BUILD
 	 */
@@ -261,11 +263,11 @@ public class PolygonBuildGeoprocess extends AbstractGeoprocess {
 	}
 
 	/**
-	 * Utility method to create schemas for all kind of layers this
-	 * geoprocess could create (polygons, and error layers -dangles, etc-)
-	 *
+	 * Utility method to create schemas for all kind of layers this geoprocess
+	 * could create (polygons, and error layers -dangles, etc-)
+	 * 
 	 * */
-	private ILayerDefinition getLayerDefinition(){
+	private ILayerDefinition getLayerDefinition() {
 		SHPLayerDefinition definition = new SHPLayerDefinition();
 		definition.setShapeType(XTypes.POLYGON);
 		FieldDescription[] fields = new FieldDescription[1];
@@ -274,13 +276,12 @@ public class PolygonBuildGeoprocess extends AbstractGeoprocess {
 		fields[0].setFieldName("FID");
 		fields[0].setFieldType(XTypes.BIGINT);
 		definition.setFieldsDesc(fields);
-	    return definition;
+		return definition;
 	}
 
 	public IMonitorableTask createTask() {
 		return new PolygonBuildTask();
 	}
-
 
 	class PolygonBuildTask extends AbstractMonitorableTask {
 
@@ -309,7 +310,7 @@ public class PolygonBuildGeoprocess extends AbstractGeoprocess {
 		/**
 		 * Verifies cancelation events, and return a boolean flag if processes
 		 * must be stopped for this cancelations events.
-		 *
+		 * 
 		 * @param cancel
 		 * @param va
 		 * @param visitor
@@ -333,17 +334,17 @@ public class PolygonBuildGeoprocess extends AbstractGeoprocess {
 		 * Processes the record "record" of the given vectorial data source
 		 * (ReadableVectorial) to extract linear components with "lineFilter".
 		 * (Previous step necessary to polygonize a linear layer).
-		 *
+		 * 
 		 * If user has choosen add to the toc a group of layers (with
 		 * topological errors, pseudonodes, dangles, etc) this method computes
 		 * pseudonodes also.
+		 * 
 		 * @throws StopWriterVisitorException
 		 */
 		void process(ReadableVectorial va,
 				FeaturePersisterProcessor2 processor,
-				LinearComponentExtracter lineFilter,
-				NodeMap nodeMap,
-				int record) throws ReadDriverException, StopVisitorException {
+				LinearComponentExtracter lineFilter, NodeMap nodeMap, int record)
+				throws ReadDriverException, StopVisitorException {
 
 			if (verifyCancelation(va)) {
 				processor.finish();
@@ -354,44 +355,39 @@ public class PolygonBuildGeoprocess extends AbstractGeoprocess {
 			try {
 				g = va.getShape(record);
 			} catch (ExpansionFileReadException e) {
-				throw new ReadDriverException(va.getDriver().getName(),e);
+				throw new ReadDriverException(va.getDriver().getName(), e);
 			}
-			if(g == null)
+			if (g == null)
 				return;
 			Geometry jtsGeom = g.toJTSGeometry();
 			jtsGeom.apply(lineFilter);
 
 			// In parallel to the line filtering, if nodeMap != null we
 			// look for pseudonodes
-			if(nodeMap != null){
+			if (nodeMap != null) {
 				Coordinate[] coords = jtsGeom.getCoordinates();
-			    if (jtsGeom.isEmpty())
-			    	return;
-			    Coordinate[] linePts = CoordinateArrays.
-			    			removeRepeatedPoints(coords);
-			    Coordinate startPt = linePts[0];
-			    Coordinate endPt = linePts[linePts.length - 1];
+				if (jtsGeom.isEmpty())
+					return;
+				Coordinate[] linePts = CoordinateArrays
+						.removeRepeatedPoints(coords);
+				Coordinate startPt = linePts[0];
+				Coordinate endPt = linePts[linePts.length - 1];
 
-			    NodeError nStart = (NodeError) nodeMap.find(startPt);
-			    NodeError nEnd = (NodeError) nodeMap.find(endPt);
-			    if (nStart == null)
-			    {
-			    	nStart = new NodeError(startPt);
-			    	nodeMap.add(nStart);
-			    }else
-			    	nStart.setOccurrences(nStart.getOccurrences()+1);
-			    
-			    if (nEnd == null)
-			    {
-			    	nEnd = new NodeError(endPt);
-			    	nodeMap.add(nEnd);
-			    }
-			    else
-			    	nEnd.setOccurrences(nEnd.getOccurrences()+1);
+				NodeError nStart = (NodeError) nodeMap.find(startPt);
+				NodeError nEnd = (NodeError) nodeMap.find(endPt);
+				if (nStart == null) {
+					nStart = new NodeError(startPt);
+					nodeMap.add(nStart);
+				} else
+					nStart.setOccurrences(nStart.getOccurrences() + 1);
+
+				if (nEnd == null) {
+					nEnd = new NodeError(endPt);
+					nodeMap.add(nEnd);
+				} else
+					nEnd.setOccurrences(nEnd.getOccurrences() + 1);
 			}// if nodeMap
 		}
-
-
 
 		public void run() throws Exception {
 			processor = new FeaturePersisterProcessor2(writer);
@@ -406,7 +402,7 @@ public class PolygonBuildGeoprocess extends AbstractGeoprocess {
 						linesList);
 
 				NodeMap nodeMap = null;
-				if(addGroupOfLyrs)
+				if (addGroupOfLyrs)
 					nodeMap = new NodeMap();
 				if (onlyFirstLayerSelection) {
 					FBitSet selection = firstLayer.getRecordset()
@@ -426,83 +422,85 @@ public class PolygonBuildGeoprocess extends AbstractGeoprocess {
 				if (computeCleanBefore) {
 					linesList = cleanLines(linesList);
 				}
-				for (Iterator i = linesList.iterator(); i.hasNext(); ) {
-				      Geometry g = (Geometry) i.next();
-				      polygonizer.add(g);
+				for (Iterator i = linesList.iterator(); i.hasNext();) {
+					Geometry g = (Geometry) i.next();
+					polygonizer.add(g);
 				}
 
 				reportStep();
 
 				// First we save polygons from build
 				List polygons = (List) polygonizer.getPolygons();
-				for(int i = 0; i < polygons.size(); i++){
+				for (int i = 0; i < polygons.size(); i++) {
 					Geometry geom = (Geometry) polygons.get(i);
 					Value[] values = new Value[1];
 					values[0] = ValueFactory.createValue(i);
 					IGeometry igeom = FConverter.jts_to_igeometry(geom);
-					DefaultFeature feature = new
-						DefaultFeature(igeom, values, (i+""));
+					DefaultFeature feature = new DefaultFeature(igeom, values,
+							(i + ""));
 					processor.processFeature(feature);
 				}
 				processor.finish();
 
 				reportStep();
-				if(addGroupOfLyrs){
+				if (addGroupOfLyrs) {
 					Collection cutEdgesLines = (List) polygonizer.getCutEdges();
 					Collection danglingLines = polygonizer.getDangles();
-					Collection invalidRingLines = (List) polygonizer.getInvalidRingLines();
+					Collection invalidRingLines = (List) polygonizer
+							.getInvalidRingLines();
 					List nodeErrors = new ArrayList();
 					// Obtain pseudonodes
 					// (we look for nodes of valency 1)
 					Iterator it = nodeMap.iterator();
-					while (it.hasNext()){
+					while (it.hasNext()) {
 						NodeError node = (NodeError) it.next();
-						if (node.getOccurrences() == 1){
-							FPoint2D p = FConverter.coordinate2FPoint2D(
-									node.getCoordinate());
+						if (node.getOccurrences() == 1) {
+							FPoint2D p = FConverter.coordinate2FPoint2D(node
+									.getCoordinate());
 							IGeometry gAux = ShapeFactory.createPoint2D(p);
 							nodeErrors.add(gAux.toJTSGeometry());
 						}// if
 					}// while
 
-					
-					String fileName = ((ShpWriter)writer).getShpPath();
+					String fileName = ((ShpWriter) writer).getShpPath();
 					String layerName = null;
 					int fileNameStart = fileName.lastIndexOf(File.separator) + 1;
-					if(fileNameStart == -1)
+					if (fileNameStart == -1)
 						fileNameStart = 0;
-					layerName = fileName.substring(fileNameStart, fileName.length());
-					if(layerName.endsWith(".shp"))
-						layerName = layerName.substring(0, layerName.length() - 4);
-					
-					if(cutEdgesLines != null){
-						if(cutEdgesLines.size() > 0)
+					layerName = fileName.substring(fileNameStart,
+							fileName.length());
+					if (layerName.endsWith(".shp"))
+						layerName = layerName.substring(0,
+								layerName.length() - 4);
+
+					if (cutEdgesLines != null) {
+						if (cutEdgesLines.size() > 0)
 							writeCutEdgeLines(cutEdgesLines, layerName);
 					}
 
-					if(danglingLines != null){
-						//check to filter dangling lines by length
-						if(applyDangleTolerance){
+					if (danglingLines != null) {
+						// check to filter dangling lines by length
+						if (applyDangleTolerance) {
 							ArrayList filteredDangles = new ArrayList();
 							Iterator iterator = danglingLines.iterator();
-							while(iterator.hasNext()){
+							while (iterator.hasNext()) {
 								Geometry geom = (Geometry) iterator.next();
-								if(geom.getLength() >= dangleTolerance)
+								if (geom.getLength() >= dangleTolerance)
 									filteredDangles.add(geom);
-							}//while
+							}// while
 							danglingLines = filteredDangles;
 						}
-						if(danglingLines.size() > 0)
+						if (danglingLines.size() > 0)
 							writeDanglingLines(danglingLines, layerName);
 					}
 
-					if(invalidRingLines != null){
-						if(invalidRingLines.size() > 0)
+					if (invalidRingLines != null) {
+						if (invalidRingLines.size() > 0)
 							writeInvalidRingLines(invalidRingLines, layerName);
 					}
 
-					if(nodeErrors != null){
-						if(nodeErrors.size() > 0)
+					if (nodeErrors != null) {
+						if (nodeErrors.size() > 0)
 							writeNodeErrors(nodeErrors, layerName);
 					}
 				}// if addGroupOfLayers
@@ -524,7 +522,9 @@ public class PolygonBuildGeoprocess extends AbstractGeoprocess {
 			PolygonBuildGeoprocess.this.cancel();
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see com.iver.utiles.swing.threads.IMonitorableTask#finished()
 		 */
 		public void finished() {
@@ -536,10 +536,10 @@ public class PolygonBuildGeoprocess extends AbstractGeoprocess {
 
 	/**
 	 * This method apply a topology clean to the list of lines.
-	 *
+	 * 
 	 * This clean is made in memory (against LineCleanGeoprocess, that makes
 	 * this clean without memory consumption).
-	 *
+	 * 
 	 */
 	// TODO Move this method to a JTS Utility class
 	List cleanLines(List lines) {
@@ -552,8 +552,9 @@ public class PolygonBuildGeoprocess extends AbstractGeoprocess {
 		return nodedList;
 	}
 
-
-	void writeGeometriesInMemory(Collection geometries, int geometryType, ISymbol symbol, String fileName) throws InitializeWriterException, SchemaEditionException, VisitorException {
+	void writeGeometriesInMemory(Collection geometries, int geometryType,
+			ISymbol symbol, String fileName) throws InitializeWriterException,
+			SchemaEditionException, VisitorException {
 
 		ShpWriter writer = new ShpWriter();
 		File newFile = new File(fileName);
@@ -562,99 +563,97 @@ public class PolygonBuildGeoprocess extends AbstractGeoprocess {
 		schema.setShapeType(geometryType);
 		writer.initialize(schema);
 		schema.setFile(newFile);
-		ShpSchemaManager schemaManager =
-			new ShpSchemaManager(newFile.getAbsolutePath());
+		ShpSchemaManager schemaManager = new ShpSchemaManager(
+				newFile.getAbsolutePath());
 		schemaManager.createSchema(schema);
-		FeaturePersisterProcessor2 tempProcessor = new
-			FeaturePersisterProcessor2(writer);
+		FeaturePersisterProcessor2 tempProcessor = new FeaturePersisterProcessor2(
+				writer);
 		tempProcessor = new FeaturePersisterProcessor2(writer);
 		tempProcessor.start();
 		Iterator it = geometries.iterator();
 		int i = 0;
-		while(it.hasNext()){
+		while (it.hasNext()) {
 			Geometry geom = (Geometry) it.next();
 			Value[] values = new Value[1];
 			values[0] = ValueFactory.createValue(i);
 			IGeometry igeom = FConverter.jts_to_igeometry(geom);
-			DefaultFeature feature = new
-				DefaultFeature(igeom, values, (i+""));
+			DefaultFeature feature = new DefaultFeature(igeom, values, (i + ""));
 			tempProcessor.processFeature(feature);
 			i++;
 		}
 		tempProcessor.finish();
-		//We save the information to recover these layers after
-		//(to add them to the toc)
+		// We save the information to recover these layers after
+		// (to add them to the toc)
 		tempWriters.add(writer);
 
-		//saves the symbol specified for this writer, to use it
-		//when we will add the layer derived of the writer to the TOC
+		// saves the symbol specified for this writer, to use it
+		// when we will add the layer derived of the writer to the TOC
 		writer2sym.put(writer, symbol);
 	}
 
-
-
-	void writeCutEdgeLines(Collection cutEdgeLines, String layerName) throws InitializeWriterException, SchemaEditionException, VisitorException{
-		String temp = System.getProperty("java.io.tmpdir") 	+ layerName +
-		"_cutEdgeLines" +
-		(numOcurrences++)+
-		".shp";
+	void writeCutEdgeLines(Collection cutEdgeLines, String layerName)
+			throws InitializeWriterException, SchemaEditionException,
+			VisitorException {
+		String temp = System.getProperty("java.io.tmpdir") + layerName
+				+ "_cutEdgeLines" + (numOcurrences++) + ".shp";
 		writeGeometriesInMemory(cutEdgeLines, XTypes.LINE, symCutEdge, temp);
 	}
 
-
-	void writeDanglingLines(Collection danglingLines, String layerName) throws InitializeWriterException, SchemaEditionException, VisitorException{
-		String temp = System.getProperty("java.io.tmpdir")  + layerName +
-		"_danglingLines" +
-		(numOcurrences++)+
-		".shp";
+	void writeDanglingLines(Collection danglingLines, String layerName)
+			throws InitializeWriterException, SchemaEditionException,
+			VisitorException {
+		String temp = System.getProperty("java.io.tmpdir") + layerName
+				+ "_danglingLines" + (numOcurrences++) + ".shp";
 		writeGeometriesInMemory(danglingLines, XTypes.LINE, symDangle, temp);
 	}
 
-	void writeInvalidRingLines(Collection invalidRingLines, String layerName) throws InitializeWriterException, SchemaEditionException, VisitorException{
-		String temp = System.getProperty("java.io.tmpdir")  + layerName +
-		"_invalidRing" +
-		(numOcurrences++)+
-		".shp";
-		writeGeometriesInMemory(invalidRingLines, XTypes.LINE,symInvalidRing, temp);
+	void writeInvalidRingLines(Collection invalidRingLines, String layerName)
+			throws InitializeWriterException, SchemaEditionException,
+			VisitorException {
+		String temp = System.getProperty("java.io.tmpdir") + layerName
+				+ "_invalidRing" + (numOcurrences++) + ".shp";
+		writeGeometriesInMemory(invalidRingLines, XTypes.LINE, symInvalidRing,
+				temp);
 	}
 
-	void writeNodeErrors(Collection nodeErrors, String layerName) throws InitializeWriterException, SchemaEditionException, VisitorException{
-		String temp = System.getProperty("java.io.tmpdir") + layerName +
-		"_pseudonodes" +
-		(numOcurrences++)+
-		".shp";
-		writeGeometriesInMemory(nodeErrors, XTypes.POINT,symNodeError, temp);
+	void writeNodeErrors(Collection nodeErrors, String layerName)
+			throws InitializeWriterException, SchemaEditionException,
+			VisitorException {
+		String temp = System.getProperty("java.io.tmpdir") + layerName
+				+ "_pseudonodes" + (numOcurrences++) + ".shp";
+		writeGeometriesInMemory(nodeErrors, XTypes.POINT, symNodeError, temp);
 	}
-
 
 	public FLayer getResult() throws GeoprocessException {
-		if(! addGroupOfLyrs){
+		if (!addGroupOfLyrs) {
 			// user choose in GUI not to load errors in TOC
 			return super.getResult();
-		}else{
-			if(tempWriters.size() == 0)
+		} else {
+			if (tempWriters.size() == 0)
 				return super.getResult();
 			IWriter[] writers = new IWriter[tempWriters.size()];
 			tempWriters.toArray(writers);
 
-			MapContext map = ((View)PluginServices.getMDIManager().
-				 getActiveWindow()).getModel().getMapContext();
-			FLayers solution = new FLayers();//(map,map.getLayers());
+			MapContext map = ((View) PluginServices.getMDIManager()
+					.getActiveWindow()).getModel().getMapContext();
+			FLayers solution = new FLayers();// (map,map.getLayers());
 			solution.setMapContext(map);
 			solution.setParentLayer(map.getLayers());
 			solution.setName("Build");
 			solution.addLayer(super.getResult());
-			for(int i = 0; i < writers.length; i++){
+			for (int i = 0; i < writers.length; i++) {
 				FLyrVect layer = (FLyrVect) createLayerFrom(writers[i]);
 				ISymbol symbol = (ISymbol) writer2sym.get(writers[i]);
 				try {
 					layer.setLegend(new SingleSymbolLegend(symbol));
 				} catch (Exception e) {
-					throw new GeoprocessException("Error al crear la leyenda de una de las capas resultado", e);
+					throw new GeoprocessException(
+							"Error al crear la leyenda de una de las capas resultado",
+							e);
 				}
 				solution.addLayer(layer);
 			}
 			return solution;
-		}//else
+		}// else
 	}
 }

@@ -25,42 +25,48 @@ import javax.swing.table.AbstractTableModel;
 import org.gvsig.raster.beans.canvas.layers.StretchLayerDataModel;
 
 /**
- * Modelo de datos para la tabla con la lista de valores. Utiliza el modelo de 
- * datos de la gráfica. El modelo de datos utiliza el rango 0-1 para almacenar los 
- * tramos. Es necesario un desplazamiento y una distancia para visualizarlo en el 
- * rango deseado.
+ * Modelo de datos para la tabla con la lista de valores. Utiliza el modelo de
+ * datos de la gráfica. El modelo de datos utiliza el rango 0-1 para almacenar
+ * los tramos. Es necesario un desplazamiento y una distancia para visualizarlo
+ * en el rango deseado.
  * 
  * 07/08/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class IntervalTableModel extends AbstractTableModel {
-	private static final long   serialVersionUID  = 1L;
-	
-	private StretchLayerDataModel    data              = new StretchLayerDataModel();
-	private double                   shift             = 0;
-	private double                   distance          = 255;
-	
+	private static final long serialVersionUID = 1L;
+
+	private StretchLayerDataModel data = new StretchLayerDataModel();
+	private double shift = 0;
+	private double distance = 255;
+
 	/**
 	 * Asigna el modelo de datos
+	 * 
 	 * @param data
 	 */
 	public IntervalTableModel(StretchLayerDataModel data) {
 		this.data = data;
 	}
-	
+
 	/**
 	 * Asigna la distancia y desplazamiento para que los valores del array que
 	 * son porcentuales sean mostrados en el rango requerido
-	 * @param shift Desplazamiento
-	 * @param distance Distancia
+	 * 
+	 * @param shift
+	 *            Desplazamiento
+	 * @param distance
+	 *            Distancia
 	 */
 	public void setShiftAndDistance(double shift, double distance) {
 		this.shift = shift;
 		this.distance = distance;
 	}
-	
+
 	/**
 	 * Obtiene el modelo de datos
+	 * 
 	 * @return
 	 */
 	public StretchLayerDataModel getStretchDataModel() {
@@ -69,15 +75,16 @@ public class IntervalTableModel extends AbstractTableModel {
 
 	/**
 	 * Añade un elemento a la lista
+	 * 
 	 * @param element
 	 */
 	public void setElement(String element) {
 		try {
-			Double value = new Double((String)element);
+			Double value = new Double((String) element);
 			data.add(value);
 			super.fireTableDataChanged();
-		}catch(NumberFormatException e) {
-			//No se hace ninguna asignación
+		} catch (NumberFormatException e) {
+			// No se hace ninguna asignación
 		}
 	}
 
@@ -87,10 +94,10 @@ public class IntervalTableModel extends AbstractTableModel {
 	public int getSize() {
 		return data.size();
 	}
-	
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.table.TableModel#getColumnClass(int)
 	 */
 	public Class getColumnClass(int columnIndex) {
@@ -99,6 +106,7 @@ public class IntervalTableModel extends AbstractTableModel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.table.TableModel#getColumnCount()
 	 */
 	public int getColumnCount() {
@@ -107,6 +115,7 @@ public class IntervalTableModel extends AbstractTableModel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.table.TableModel#getRowCount()
 	 */
 	public int getRowCount() {
@@ -115,14 +124,18 @@ public class IntervalTableModel extends AbstractTableModel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.table.TableModel#getValueAt(int, int)
 	 */
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		return new Double((((Double)data.get(rowIndex)).doubleValue() * distance) + shift);
+		return new Double(
+				(((Double) data.get(rowIndex)).doubleValue() * distance)
+						+ shift);
 	}
-	
+
 	/**
 	 * Obtiene la lista de valores contenida en el modelo
+	 * 
 	 * @return ArrayList
 	 */
 	public ArrayList getValueList() {
@@ -135,6 +148,7 @@ public class IntervalTableModel extends AbstractTableModel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.table.TableModel#isCellEditable(int, int)
 	 */
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -143,20 +157,21 @@ public class IntervalTableModel extends AbstractTableModel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.table.TableModel#setValueAt(java.lang.Object, int, int)
 	 */
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 		try {
-			if(aValue instanceof String) {
-				Double value = new Double((String)aValue);
-				//Devuelve el valor al rango 0-1 antes de salvar
+			if (aValue instanceof String) {
+				Double value = new Double((String) aValue);
+				// Devuelve el valor al rango 0-1 antes de salvar
 				value = new Double((value.doubleValue() - shift) / distance);
 				data.set(rowIndex, value);
 				data.sort();
 				super.fireTableDataChanged();
 			}
-		}catch(NumberFormatException e) {
-			//No se hace ninguna asignación
+		} catch (NumberFormatException e) {
+			// No se hace ninguna asignación
 		}
 	}
 }

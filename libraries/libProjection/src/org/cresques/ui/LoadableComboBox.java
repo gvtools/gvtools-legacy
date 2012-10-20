@@ -25,48 +25,47 @@ package org.cresques.ui;
 
 import javax.swing.JComboBox;
 
-
 /**
  * @author "Luis W. Sevilla" (sevilla_lui@gva.es)
  */
 public class LoadableComboBox extends JComboBox {
-    final private static long serialVersionUID = -3370601314380922368L;
+	final private static long serialVersionUID = -3370601314380922368L;
 
-    public LoadableComboBox() {
-        super();
-        initialize();
+	public LoadableComboBox() {
+		super();
+		initialize();
 
-        //		addItemListener(this);
-        //		setSize(new java.awt.Dimension(185, 23));
-    }
+		// addItemListener(this);
+		// setSize(new java.awt.Dimension(185, 23));
+	}
 
-    /**
-     * This method initializes this
-     *
-     * @return void
-     */
-    private void initialize() {
-        this.setPreferredSize(new java.awt.Dimension(185, 23));
-    }
+	/**
+	 * This method initializes this
+	 * 
+	 * @return void
+	 */
+	private void initialize() {
+		this.setPreferredSize(new java.awt.Dimension(185, 23));
+	}
 
-    /**
-     * Carga el vector de strings data con los valores pasados por parámetro
-     * @param data	vector de strings con los valores
-     */
-    public void loadData(String[] data) {
-        if (data == null) {
-            return;
-        }
+	/**
+	 * Carga el vector de strings data con los valores pasados por parámetro
+	 * 
+	 * @param data
+	 *            vector de strings con los valores
+	 */
+	public void loadData(String[] data) {
+		if (data == null) {
+			return;
+		}
 
-        for (int i = 0; i < data.length; i++)
-            addItem(data[i]);
-    }
+		for (int i = 0; i < data.length; i++)
+			addItem(data[i]);
+	}
 
-    /*        public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED) {
-                    //label.setVisible(true);
-                } else {
-                    //label.setVisible(false);
-                }
-            }*/
+	/*
+	 * public void itemStateChanged(ItemEvent e) { if (e.getStateChange() ==
+	 * ItemEvent.SELECTED) { //label.setVisible(true); } else {
+	 * //label.setVisible(false); } }
+	 */
 }

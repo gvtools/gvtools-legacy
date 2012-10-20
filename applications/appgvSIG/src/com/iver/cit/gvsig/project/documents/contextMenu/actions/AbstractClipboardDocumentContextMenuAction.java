@@ -6,17 +6,15 @@ import com.iver.cit.gvsig.project.documents.contextMenu.AbstractDocumentContextM
 import com.iver.utiles.extensionPoints.IExtensionBuilder;
 
 public abstract class AbstractClipboardDocumentContextMenuAction extends
-		AbstractDocumentContextMenuAction implements IExtensionBuilder{
+		AbstractDocumentContextMenuAction implements IExtensionBuilder {
 
 	public int getGroupOrder() {
 		return 0;
 	}
 
-
 	public String getGroup() {
 		return "ClipboardActions";
 	}
-
 
 	public Object create() {
 		return this;

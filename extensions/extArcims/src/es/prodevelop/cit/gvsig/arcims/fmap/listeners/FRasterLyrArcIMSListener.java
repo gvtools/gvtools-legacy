@@ -43,5 +43,5 @@
 package es.prodevelop.cit.gvsig.arcims.fmap.listeners;
 
 public interface FRasterLyrArcIMSListener {
-    public void thingsHaveChanged(String query, String name);
+	public void thingsHaveChanged(String query, String name);
 }

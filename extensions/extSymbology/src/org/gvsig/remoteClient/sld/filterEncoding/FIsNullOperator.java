@@ -44,42 +44,44 @@ import java.io.IOException;
 
 import org.gvsig.remoteClient.gml.schemas.XMLSchemaParser;
 import org.xmlpull.v1.XmlPullParserException;
+
 /**
- * Implements the main functionalities to parse a PropertyIsNull element
- * of a Filter Encoding expression<br>
+ * Implements the main functionalities to parse a PropertyIsNull element of a
+ * Filter Encoding expression<br>
  * 
- * The PropertyIsNull element encodes an operator that checks to see if the 
- * value of its content is NULL. A NULL is equivalent to no value present.
- * The value 0 is valid value and is not considered NULL.  
+ * The PropertyIsNull element encodes an operator that checks to see if the
+ * value of its content is NULL. A NULL is equivalent to no value present. The
+ * value 0 is valid value and is not considered NULL.
  * 
  * @see http://www.opengeospatial.org/standards/filter
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
-public class FIsNullOperator{
+public class FIsNullOperator {
 
 	protected String propName;
 	protected String opExpressionStr = "";
 
-
-	public void parse(XMLSchemaParser parser, int Tag2, String expressionType) throws XmlPullParserException, IOException {
+	public void parse(XMLSchemaParser parser, int Tag2, String expressionType)
+			throws XmlPullParserException, IOException {
 		int currentTag;
 		boolean end = false;
 		currentTag = Tag2;
 
-		parser.require(XMLSchemaParser.START_TAG, null, FilterTags.PROPERTYISNULL);
+		parser.require(XMLSchemaParser.START_TAG, null,
+				FilterTags.PROPERTYISNULL);
 
-		while (!end)
-		{
-			switch(currentTag)
-			{
+		while (!end) {
+			switch (currentTag) {
 			case XMLSchemaParser.START_TAG:
-				if (parser.getName().compareTo(FilterUtils.remNameSpace(FilterTags.PROPERTYNAME))==0) {
+				if (parser.getName().compareTo(
+						FilterUtils.remNameSpace(FilterTags.PROPERTYNAME)) == 0) {
 					this.propName = parser.nextText();
-					opExpressionStr += "( ["+this.propName+"] ) ";
+					opExpressionStr += "( [" + this.propName + "] ) ";
 				}
-				break;	
+				break;
 			case XMLSchemaParser.END_TAG:
-				if (parser.getName().compareTo(FilterUtils.remNameSpace(FilterTags.PROPERTYISNULL)) == 0)
+				if (parser.getName().compareTo(
+						FilterUtils.remNameSpace(FilterTags.PROPERTYISNULL)) == 0)
 					end = true;
 				break;
 			case XMLSchemaParser.TEXT:
@@ -90,6 +92,11 @@ public class FIsNullOperator{
 		}
 	}
 
-	public String getPropName() { return propName; }
-	public String getOpExpressionStr() {return opExpressionStr;}
+	public String getPropName() {
+		return propName;
+	}
+
+	public String getOpExpressionStr() {
+		return opExpressionStr;
+	}
 }

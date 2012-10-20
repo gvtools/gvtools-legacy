@@ -40,7 +40,6 @@
  */
 package com.iver.cit.gvsig.project.documents.view.gui;
 
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -71,16 +70,16 @@ import com.iver.cit.gvsig.project.documents.ProjectDocument;
 import com.iver.cit.gvsig.project.documents.layout.Attributes;
 import com.iver.cit.gvsig.project.documents.view.ProjectView;
 import com.iver.cit.gvsig.project.documents.view.ProjectViewFactory;
+
 /**
  * Dialogo donde se muestran las propiedades de una vista
- *
+ * 
  * @author Fernando González Cortés
  */
-public class ViewProperties extends JPanel implements SingletonWindow{
-	/*private String[] units = new String[] {
-	 PluginServices.getText(this, "metros"),
-	 PluginServices.getText(this, "kilometros"),
-	 };
+public class ViewProperties extends JPanel implements SingletonWindow {
+	/*
+	 * private String[] units = new String[] { PluginServices.getText(this,
+	 * "metros"), PluginServices.getText(this, "kilometros"), };
 	 */
 	private static String[] unitsNames = null;
 	private javax.swing.JLabel jLabel = null;
@@ -101,7 +100,7 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 	private Color backColor = null;
 
 	private JButton btnColor = null;
-	private ProjectView view=null;
+	private ProjectView view = null;
 	private javax.swing.JScrollPane jScrollPane = null;
 	private javax.swing.JPanel jPanel = null;
 	private javax.swing.JPanel jPanel1 = null;
@@ -111,19 +110,22 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 	private javax.swing.JLabel jLabel3 = null;
 	private javax.swing.JLabel jLabelSep1 = null;
 	private WindowInfo m_viewinfo = null;
-	//private JLabel jLblProj = null;
-	//private JLabel jLblProjName = null;
-	//private JButton jBtnChangeProj = null;
+	// private JLabel jLblProj = null;
+	// private JLabel jLblProjName = null;
+	// private JButton jBtnChangeProj = null;
 	protected CRSSelectPanel jPanelProj = null;
 	private AcceptCancelPanel okCancelPanel = null;
-	private boolean isAcceppted=false;
+	private boolean isAcceppted = false;
 	private JLabel jLabel8 = null;
 	private JComboBox cmbDistanceArea = null;
+
 	/**
 	 * This is the default constructor
-	 *
-	 * @param f Frame padre del dialogo
-	 * @param v Vista que se representa
+	 * 
+	 * @param f
+	 *            Frame padre del dialogo
+	 * @param v
+	 *            Vista que se representa
 	 */
 	public ViewProperties(ProjectView v) {
 		view = v;
@@ -138,13 +140,14 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 		java.awt.FlowLayout layFlowLayout3 = new java.awt.FlowLayout();
 		layFlowLayout3.setHgap(0);
 		setLayout(layFlowLayout3);
-		/*      jLblProjName = new JLabel();
-		 jLblProj = new JLabel();
-		 jLblProj.setText(view.getProjection().getAbrev());
-		 jLblProj.setPreferredSize(new java.awt.Dimension(180,20));
-		 jLblProjName.setText("Proyección actual:");
-		 jLblProjName.setPreferredSize(new java.awt.Dimension(95,15));*/
-		this.setPreferredSize(new java.awt.Dimension(365,463));
+		/*
+		 * jLblProjName = new JLabel(); jLblProj = new JLabel();
+		 * jLblProj.setText(view.getProjection().getAbrev());
+		 * jLblProj.setPreferredSize(new java.awt.Dimension(180,20));
+		 * jLblProjName.setText("Proyección actual:");
+		 * jLblProjName.setPreferredSize(new java.awt.Dimension(95,15));
+		 */
+		this.setPreferredSize(new java.awt.Dimension(365, 463));
 		add(getJPanel(), null);
 		add(getJPanel1(), null);
 		add(getJPanel2(), null);
@@ -154,11 +157,9 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 		this.add(getJLabel6(), null);
 		add(getJScrollPane(), null);
 
-
 		this.add(getJLabel7(), null);
 		this.add(getLblColor(), null);
 		this.add(getBtnColor(), null);
-
 
 		add(getJLabel3(), null);
 		this.add(getOkCancelPanel(), null);
@@ -166,17 +167,21 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 		txtDate.setText(view.getCreationDate());
 		txtOwner.setText(view.getOwner());
 
-		cmbMapUnits.setSelectedIndex(view.getMapContext().getViewPort().getMapUnits());
-		cmbDistanceUnits.setSelectedIndex(view.getMapContext().getViewPort().getDistanceUnits());
-		cmbDistanceArea.setSelectedIndex(view.getMapContext().getViewPort().getDistanceArea());
+		cmbMapUnits.setSelectedIndex(view.getMapContext().getViewPort()
+				.getMapUnits());
+		cmbDistanceUnits.setSelectedIndex(view.getMapContext().getViewPort()
+				.getDistanceUnits());
+		cmbDistanceArea.setSelectedIndex(view.getMapContext().getViewPort()
+				.getDistanceArea());
 		txtComments.setText(view.getComment());
 
-		lblColor.setBackground(view.getMapContext().getViewPort().getBackColor());
+		lblColor.setBackground(view.getMapContext().getViewPort()
+				.getBackColor());
 	}
 
 	/**
 	 * This method initializes jLabel
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getJLabel() {
@@ -198,7 +203,7 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 
 	/**
 	 * This method initializes txtName
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private javax.swing.JTextField getTxtName() {
@@ -212,7 +217,7 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 
 	/**
 	 * This method initializes jLabel1
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getJLabel1() {
@@ -226,7 +231,7 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 
 	/**
 	 * This method initializes txtDate
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private javax.swing.JTextField getTxtDate() {
@@ -242,7 +247,7 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 
 	/**
 	 * This method initializes jLabel2
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getJLabel2() {
@@ -256,7 +261,7 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 
 	/**
 	 * This method initializes txtOwner
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private javax.swing.JTextField getTxtOwner() {
@@ -270,7 +275,7 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 
 	/**
 	 * This method initializes jLabel4
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getJLabel4() {
@@ -285,39 +290,47 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 
 	/**
 	 * This method initializes cmbMapUnits
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private javax.swing.JComboBox getCmbMapUnits() {
-		if (cmbMapUnits == null|| MapContext.getDistanceNames().length>cmbMapUnits.getItemCount()) {
+		if (cmbMapUnits == null
+				|| MapContext.getDistanceNames().length > cmbMapUnits
+						.getItemCount()) {
 			boolean includePixels;
 			cmbMapUnits = new JComboBoxUnits(includePixels = false);
 
-//			cmbMapUnits = new javax.swing.JComboBox(getUnitsNames());
+			// cmbMapUnits = new javax.swing.JComboBox(getUnitsNames());
 			cmbMapUnits.setPreferredSize(new java.awt.Dimension(200, 20));
 			CoordinateReferenceSystem crs = view.getCrs();
 			if (!(crs instanceof ProjectedCRS)) {
-//				if (cmbMapUnits.getItemCount()==MapContext.NAMES.length) {
-//					cmbMapUnits.addItem(PluginServices.getText(this, Attributes.DEGREES));
-//				}
-				cmbMapUnits.setSelectedItem(PluginServices.getText(this,"Grados")); // deegree
+				// if (cmbMapUnits.getItemCount()==MapContext.NAMES.length) {
+				// cmbMapUnits.addItem(PluginServices.getText(this,
+				// Attributes.DEGREES));
+				// }
+				cmbMapUnits.setSelectedItem(PluginServices.getText(this,
+						"Grados")); // deegree
 				cmbMapUnits.setEnabled(false);
-			}else {
-				if (!(cmbMapUnits.getItemCount()==MapContext.getDistanceNames().length)) {
-					cmbMapUnits.removeItem(PluginServices.getText(this,"Grados")); // deegree
+			} else {
+				if (!(cmbMapUnits.getItemCount() == MapContext
+						.getDistanceNames().length)) {
+					cmbMapUnits.removeItem(PluginServices.getText(this,
+							"Grados")); // deegree
 					view.getMapContext().getViewPort().setMapUnits(1);
 				}
-				cmbMapUnits.setSelectedIndex(view.getMapContext().getViewPort().getMapUnits());
+				cmbMapUnits.setSelectedIndex(view.getMapContext().getViewPort()
+						.getMapUnits());
 				cmbMapUnits.setEnabled(true);
 			}
-//			cmbMapUnits.setSelectedIndex(view.getMapContext().getViewPort().getMapUnits());
+			// cmbMapUnits.setSelectedIndex(view.getMapContext().getViewPort().getMapUnits());
 
-//
-//			cmbMapUnits.addActionListener(new java.awt.event.ActionListener() {
-//				public void actionPerformed(java.awt.event.ActionEvent e) {
-//					//view.getMapContext().getViewPort().setMapUnits(cmbMapUnits.getSelectedIndex());
-//				}
-//			});
+			//
+			// cmbMapUnits.addActionListener(new java.awt.event.ActionListener()
+			// {
+			// public void actionPerformed(java.awt.event.ActionEvent e) {
+			// //view.getMapContext().getViewPort().setMapUnits(cmbMapUnits.getSelectedIndex());
+			// }
+			// });
 		}
 
 		return cmbMapUnits;
@@ -325,13 +338,14 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 
 	/**
 	 * This method initializes jLabel5
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getJLabel5() {
 		if (jLabel5 == null) {
 			jLabel5 = new javax.swing.JLabel();
-			jLabel5.setText(PluginServices.getText(this, "distance_units") + ":");
+			jLabel5.setText(PluginServices.getText(this, "distance_units")
+					+ ":");
 			jLabel5.setName("jLabel5");
 		}
 
@@ -340,22 +354,25 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 
 	/**
 	 * This method initializes cmbDistanceUnits
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private javax.swing.JComboBox getCmbDistanceUnits() {
-		if (cmbDistanceUnits == null|| MapContext.getDistanceNames().length>cmbDistanceUnits.getItemCount()){
+		if (cmbDistanceUnits == null
+				|| MapContext.getDistanceNames().length > cmbDistanceUnits
+						.getItemCount()) {
 			boolean includePixels;
 			cmbDistanceUnits = new JComboBoxUnits(includePixels = false);
-//			cmbDistanceUnits = new javax.swing.JComboBox(getUnitsNames());
+			// cmbDistanceUnits = new javax.swing.JComboBox(getUnitsNames());
 			cmbDistanceUnits.setPreferredSize(new java.awt.Dimension(200, 20));
-//			cmbDistanceUnits.setEditable(false);
-//			cmbDistanceUnits.setSelectedIndex(view.getMapContext().getViewPort().getDistanceUnits());
-//			cmbDistanceUnits.addActionListener(new java.awt.event.ActionListener() {
-//				public void actionPerformed(java.awt.event.ActionEvent e) {
-//					//view.getMapContext().getViewPort().setDistanceUnits(cmbDistanceUnits.getSelectedIndex());
-//				}
-//			});
+			// cmbDistanceUnits.setEditable(false);
+			// cmbDistanceUnits.setSelectedIndex(view.getMapContext().getViewPort().getDistanceUnits());
+			// cmbDistanceUnits.addActionListener(new
+			// java.awt.event.ActionListener() {
+			// public void actionPerformed(java.awt.event.ActionEvent e) {
+			// //view.getMapContext().getViewPort().setDistanceUnits(cmbDistanceUnits.getSelectedIndex());
+			// }
+			// });
 		}
 
 		return cmbDistanceUnits;
@@ -363,14 +380,14 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 
 	/**
 	 * This method initializes jLabel6
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getJLabel6() {
 		if (jLabel6 == null) {
 			jLabel6 = new javax.swing.JLabel();
 			jLabel6.setText(PluginServices.getText(this, "comentarios") + ":");
-			jLabel6.setPreferredSize(new java.awt.Dimension(340,35));
+			jLabel6.setPreferredSize(new java.awt.Dimension(340, 35));
 			jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 			jLabel6.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
 		}
@@ -380,7 +397,7 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 
 	/**
 	 * This method initializes txtComments
-	 *
+	 * 
 	 * @return javax.swing.JTextArea
 	 */
 	private javax.swing.JTextArea getTxtComments() {
@@ -395,15 +412,15 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 
 	/**
 	 * This method initializes jLabel7
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getJLabel7() {
 		if (jLabel7 == null) {
 			jLabel7 = new javax.swing.JLabel();
-			jLabel7.setText(PluginServices.getText(this, "background_color") +
-			":");
-			jLabel7.setPreferredSize(new java.awt.Dimension(190,16));
+			jLabel7.setText(PluginServices.getText(this, "background_color")
+					+ ":");
+			jLabel7.setPreferredSize(new java.awt.Dimension(190, 16));
 		}
 
 		return jLabel7;
@@ -411,7 +428,7 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 
 	/**
 	 * This method initializes lblColor
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLblColor() {
@@ -420,8 +437,9 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 			lblColor.setText("");
 			lblColor.setPreferredSize(new java.awt.Dimension(30, 16));
 			Color theColor = view.getMapContext().getViewPort().getBackColor();
-			backColor=theColor;
-			if (theColor == null) theColor = Color.WHITE;
+			backColor = theColor;
+			if (theColor == null)
+				theColor = Color.WHITE;
 			lblColor.setBackground(theColor);
 			lblColor.setOpaque(true);
 		}
@@ -431,7 +449,7 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 
 	/**
 	 * This method initializes btnColor
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getBtnColor() {
@@ -449,8 +467,7 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 					if (ret != null) {
 						lblColor.setBackground(ret);
 						backColor = ret;
-					}
-					else
+					} else
 						lblColor.setBackground(Color.WHITE);
 				}
 			});
@@ -461,7 +478,7 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private javax.swing.JScrollPane getJScrollPane() {
@@ -476,7 +493,7 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private javax.swing.JPanel getJPanel() {
@@ -484,16 +501,14 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 			jPanel = new javax.swing.JPanel();
 
 			/*
-			java.awt.FlowLayout layFlowLayout4 = new java.awt.FlowLayout();
-			layFlowLayout4.setAlignment(java.awt.FlowLayout.LEFT);
-			layFlowLayout4.setVgap(9);
-			jPanel.setLayout(layFlowLayout4);
-			*/
+			 * java.awt.FlowLayout layFlowLayout4 = new java.awt.FlowLayout();
+			 * layFlowLayout4.setAlignment(java.awt.FlowLayout.LEFT);
+			 * layFlowLayout4.setVgap(9); jPanel.setLayout(layFlowLayout4);
+			 */
 
-            GridLayout layout = new GridLayout(3,1);
-            layout.setVgap(5);
-            jPanel.setLayout(layout);
-
+			GridLayout layout = new GridLayout(3, 1);
+			layout.setVgap(5);
+			jPanel.setLayout(layout);
 
 			jPanel.add(getJLabel(), null);
 			jPanel.add(getJLabel1(), null);
@@ -506,7 +521,7 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private javax.swing.JPanel getJPanel1() {
@@ -528,19 +543,19 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 
 	/**
 	 * This method initializes jPanel2
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private javax.swing.JPanel getJPanel2() {
 		if (jPanel2 == null) {
 			jLabel8 = new JLabel();
-			jLabel8.setText(PluginServices.getText(this,"unidades_area"));
+			jLabel8.setText(PluginServices.getText(this, "unidades_area"));
 			GridLayout gridLayout = new GridLayout();
 			gridLayout.setRows(3);
 			jPanel2 = new javax.swing.JPanel();
 
 			jPanel2.setLayout(gridLayout);
-			jPanel2.setPreferredSize(new java.awt.Dimension(140,80));
+			jPanel2.setPreferredSize(new java.awt.Dimension(140, 80));
 			jPanel2.add(getJLabel4(), null);
 			jPanel2.add(getJLabel5(), null);
 			jPanel2.add(jLabel8, null);
@@ -551,7 +566,7 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 
 	/**
 	 * This method initializes jPanel3
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private javax.swing.JPanel getJPanel3() {
@@ -563,17 +578,16 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 			jPanel3.setLayout(layFlowLayout6);
 			jPanel3.add(getCmbMapUnits(), null);
 			jPanel3.add(getCmbDistanceUnits(), null);
-			jPanel3.setPreferredSize(new java.awt.Dimension(210,80));
+			jPanel3.setPreferredSize(new java.awt.Dimension(210, 80));
 			jPanel3.add(getCmbDistanceArea(), null);
 		}
 
 		return jPanel3;
 	}
 
-
 	/**
 	 * This method initializes jLabel3
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getJLabel3() {
@@ -590,7 +604,7 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 	 * @see com.iver.mdiApp.ui.MDIManager.IWindow#getWindowInfo()
 	 */
 	public WindowInfo getWindowInfo() {
-		WindowInfo m_viewinfo=new WindowInfo();
+		WindowInfo m_viewinfo = new WindowInfo();
 		m_viewinfo.setTitle(PluginServices.getText(this, "propiedades_vista"));
 		m_viewinfo.setHeight(410);
 		m_viewinfo.setWidth(386);
@@ -602,67 +616,72 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 	 */
 	public void viewActivated() {
 	}
+
 	/**
 	 * This method initializes jButton
-	 *
-	 * @return javax.swing.JButton
-	 * /
-	 private JButton getJBtnChangeProj() {
-	 if (jBtnChangeProj == null) {
-	 jBtnChangeProj = new JButton();
-	 jBtnChangeProj.setText("...");
-	 jBtnChangeProj.setPreferredSize(new java.awt.Dimension(34,16));
-	 jBtnChangeProj.addActionListener(new java.awt.event.ActionListener() {
-	 public void actionPerformed(java.awt.event.ActionEvent e) {
-	 CSSelectionDialog csSelect = new CSSelectionDialog();
-	 csSelect.setProjection(view.getProjection());
-
-	 PluginServices.getMDIManager().addView(csSelect);
-
-	 if (csSelect.isOkPressed()) {
-	 view.getMapContext().setProjection(csSelect.getProjection());
-	 jLblProj.setText(view.getProjection().getAbrev());
-	 }
-	 }
-	 });
-	 }
-	 return jBtnChangeProj;
-	 } */
+	 * 
+	 * @return javax.swing.JButton / private JButton getJBtnChangeProj() { if
+	 *         (jBtnChangeProj == null) { jBtnChangeProj = new JButton();
+	 *         jBtnChangeProj.setText("...");
+	 *         jBtnChangeProj.setPreferredSize(new java.awt.Dimension(34,16));
+	 *         jBtnChangeProj.addActionListener(new
+	 *         java.awt.event.ActionListener() { public void
+	 *         actionPerformed(java.awt.event.ActionEvent e) { CSSelectionDialog
+	 *         csSelect = new CSSelectionDialog();
+	 *         csSelect.setProjection(view.getProjection());
+	 * 
+	 *         PluginServices.getMDIManager().addView(csSelect);
+	 * 
+	 *         if (csSelect.isOkPressed()) {
+	 *         view.getMapContext().setProjection(csSelect.getProjection());
+	 *         jLblProj.setText(view.getProjection().getAbrev()); } } }); }
+	 *         return jBtnChangeProj; }
+	 */
 	/**
 	 * This method initializes jPanel4
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private CRSSelectPanel getJPanelProj() {
 		if (jPanelProj == null) {
 			jPanelProj = CRSSelectPanel.getPanel(view.getCrs());
-			jPanelProj.setPreferredSize(new java.awt.Dimension(330,35));
+			jPanelProj.setPreferredSize(new java.awt.Dimension(330, 35));
 			jPanelProj.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (jPanelProj.isOkPressed()) {
 						if (!(jPanelProj.getCurrentCrs() instanceof ProjectedCRS)) {
-//							if (getCmbMapUnits().getItemCount()==MapContext.NAMES.length) {
-//								getCmbMapUnits().addItem(PluginServices.getText(this, Attributes.DEGREES));
-//							}
-							getCmbMapUnits().setSelectedItem(PluginServices.getText(this, Attributes.DEGREES));
+							// if
+							// (getCmbMapUnits().getItemCount()==MapContext.NAMES.length)
+							// {
+							// getCmbMapUnits().addItem(PluginServices.getText(this,
+							// Attributes.DEGREES));
+							// }
+							getCmbMapUnits().setSelectedItem(
+									PluginServices.getText(this,
+											Attributes.DEGREES));
 							getCmbMapUnits().setEnabled(false);
-						}else {
-							if (getCmbMapUnits().getSelectedItem().equals(PluginServices.getText(this, Attributes.DEGREES))) {
+						} else {
+							if (getCmbMapUnits().getSelectedItem().equals(
+									PluginServices.getText(this,
+											Attributes.DEGREES))) {
 								getCmbMapUnits().setSelectedIndex(1);
 							}
 							getCmbMapUnits().setEnabled(true);
-//							if (!(getCmbMapUnits().getItemCount()==MapContext.NAMES.length)) {
-//								getCmbMapUnits().removeItem(PluginServices.getText(this, Attributes.DEGREES));
-//							}
+							// if
+							// (!(getCmbMapUnits().getItemCount()==MapContext.NAMES.length))
+							// {
+							// getCmbMapUnits().removeItem(PluginServices.getText(this,
+							// Attributes.DEGREES));
+							// }
 						}
 						view.setCrs(jPanelProj.getCurrentCrs());
 					}
 				}
 			});
 
-//			jPanelProj.add(jLblProjName, null);
-//			jPanelProj.add(jLblProj, null);
-//			jPanelProj.add(getJBtnChangeProj(), null);
+			// jPanelProj.add(jLblProjName, null);
+			// jPanelProj.add(jLblProj, null);
+			// jPanelProj.add(getJBtnChangeProj(), null);
 		}
 		return jPanelProj;
 	}
@@ -676,7 +695,7 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 
 	/**
 	 * This method initializes okCancelPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private AcceptCancelPanel getOkCancelPanel() {
@@ -684,19 +703,25 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 			ActionListener okAction, cancelAction;
 			okAction = new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					String name=txtName.getText();
+					String name = txtName.getText();
 					if (name == null || name.length() == 0) {
 						return;
 					}
-					Project project=((ProjectExtension)PluginServices.getExtension(ProjectExtension.class)).getProject();
-					ArrayList<ProjectDocument> views=project.getDocumentsByType(ProjectViewFactory.registerName);
+					Project project = ((ProjectExtension) PluginServices
+							.getExtension(ProjectExtension.class)).getProject();
+					ArrayList<ProjectDocument> views = project
+							.getDocumentsByType(ProjectViewFactory.registerName);
 
-					for (int i=0; i<views.size(); i++){
-						if (view.equals(views.get(i))){
+					for (int i = 0; i < views.size(); i++) {
+						if (view.equals(views.get(i))) {
 							continue;
 						}
-						if (((ProjectDocument)views.get(i)).getName().equals(name)){
-							JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(), PluginServices.getText(this, "elemento_ya_existe"));
+						if (((ProjectDocument) views.get(i)).getName().equals(
+								name)) {
+							JOptionPane.showMessageDialog(
+									(Component) PluginServices.getMainFrame(),
+									PluginServices.getText(this,
+											"elemento_ya_existe"));
 							return;
 						}
 
@@ -706,64 +731,77 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 					view.setCreationDate(txtDate.getText());
 					view.setOwner(txtOwner.getText());
 					view.setComment(txtComments.getText());
-					view.getMapContext().getViewPort().setMapUnits(cmbMapUnits.getSelectedIndex());
-					view.getMapContext().getViewPort().setDistanceUnits(cmbDistanceUnits.getSelectedIndex());
-					view.getMapContext().getViewPort().setDistanceArea(cmbDistanceArea.getSelectedIndex());
+					view.getMapContext().getViewPort()
+							.setMapUnits(cmbMapUnits.getSelectedIndex());
+					view.getMapContext()
+							.getViewPort()
+							.setDistanceUnits(
+									cmbDistanceUnits.getSelectedIndex());
+					view.getMapContext()
+							.getViewPort()
+							.setDistanceArea(cmbDistanceArea.getSelectedIndex());
 					view.setBackColor(backColor);
-					isAcceppted=true;
-					PluginServices.getMDIManager().closeWindow(ViewProperties.this);
+					isAcceppted = true;
+					PluginServices.getMDIManager().closeWindow(
+							ViewProperties.this);
 				}
 			};
 			cancelAction = new java.awt.event.ActionListener() {
 
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					isAcceppted=false;
-					PluginServices.getMDIManager().closeWindow(ViewProperties.this);
+					isAcceppted = false;
+					PluginServices.getMDIManager().closeWindow(
+							ViewProperties.this);
 				}
 			};
 			okCancelPanel = new AcceptCancelPanel(okAction, cancelAction);
 			Dimension sz = this.getSize();
-			sz.setSize((int)sz.getWidth()-20, (int) sz.getHeight());
+			sz.setSize((int) sz.getWidth() - 20, (int) sz.getHeight());
 			okCancelPanel.setPreferredSize(sz);
 		}
 		return okCancelPanel;
 	}
 
-//	private String[] getUnitsNames() {
-//		if (unitsNames == null) {
-//			unitsNames = new String[MapContext.NAMES.length];
-//			int i=0;
-//			for (i=0;i<MapContext.NAMES.length;i++) {
-//				unitsNames[i]=PluginServices.getText(this, MapContext.NAMES[i]);
-//			}
-//			//unitsNames[i]=PluginServices.getText(this, Attributes.DEGREES);
-//		}
-//		return unitsNames;
-//	}
+	// private String[] getUnitsNames() {
+	// if (unitsNames == null) {
+	// unitsNames = new String[MapContext.NAMES.length];
+	// int i=0;
+	// for (i=0;i<MapContext.NAMES.length;i++) {
+	// unitsNames[i]=PluginServices.getText(this, MapContext.NAMES[i]);
+	// }
+	// //unitsNames[i]=PluginServices.getText(this, Attributes.DEGREES);
+	// }
+	// return unitsNames;
+	// }
 
 	public boolean isAcceppted() {
 		return isAcceppted;
 	}
+
 	/**
 	 * This method initializes jComboBox
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getCmbDistanceArea() {
-		String[] names= MapContext.getAreaNames();
-		if (cmbDistanceArea == null || names.length>cmbDistanceArea.getItemCount()) {
+		String[] names = MapContext.getAreaNames();
+		if (cmbDistanceArea == null
+				|| names.length > cmbDistanceArea.getItemCount()) {
 			for (int i = 0; i < names.length; i++) {
-				names[i]=PluginServices.getText(this,names[i])+ MapContext.getOfLinear(i);
+				names[i] = PluginServices.getText(this, names[i])
+						+ MapContext.getOfLinear(i);
 			}
 			cmbDistanceArea = new javax.swing.JComboBox(names);
 			cmbDistanceArea.setPreferredSize(new java.awt.Dimension(200, 20));
 			cmbDistanceArea.setEditable(false);
-			cmbDistanceArea.setSelectedIndex(view.getMapContext().getViewPort().getDistanceArea());
-			cmbDistanceArea.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					//view.getMapContext().getViewPort().setDistanceUnits(cmbDistanceUnits.getSelectedIndex());
-				}
-			});
+			cmbDistanceArea.setSelectedIndex(view.getMapContext().getViewPort()
+					.getDistanceArea());
+			cmbDistanceArea
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							// view.getMapContext().getViewPort().setDistanceUnits(cmbDistanceUnits.getSelectedIndex());
+						}
+					});
 		}
 
 		return cmbDistanceArea;
@@ -774,4 +812,4 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 		// TODO Auto-generated method stub
 		return WindowInfo.PROPERTIES_PROFILE;
 	}
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

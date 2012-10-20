@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.ui.util;
 
 import java.awt.BorderLayout;
@@ -58,65 +58,61 @@ import javax.swing.text.html.HTMLEditorKit;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 
-public class HTMLPanel extends JPanel implements IWindow{
+public class HTMLPanel extends JPanel implements IWindow {
 	private static final long serialVersionUID = 1490785370826172129L;
-	
+
 	private JScrollPane scrollPanel;
 	private JEditorPane htmlPanel;
 	private StringBuffer htmlText = new StringBuffer();
 	private WindowInfo viewInfo;
-	
+
 	private String title;
-	
+
 	public HTMLPanel(String title, String htmlBody) {
 		super();
 		this.title = title;
-		
+
 		setLayout(new BorderLayout());
 		scrollPanel = new JScrollPane();
 		htmlPanel = new JEditorPane();
 		htmlPanel.setEditable(false);
 		htmlPanel.setEditorKit(new HTMLEditorKit());
-		
-		
+
 		initialize(htmlBody);
-		
+
 		scrollPanel.setViewportView(htmlPanel);
 		add(scrollPanel, BorderLayout.CENTER);
 	}
 
-
 	private void initialize(String htmlBody) {
-		htmlText.append( "<head>" );
-		htmlText.append( "<style type='text/css'>" );
-		htmlText.append( "</style>" );
-		htmlText.append( "</head>" );
-		htmlText.append( "<body>" );
-		
-		htmlText.append( htmlBody );
-		
+		htmlText.append("<head>");
+		htmlText.append("<style type='text/css'>");
+		htmlText.append("</style>");
+		htmlText.append("</head>");
+		htmlText.append("<body>");
+
+		htmlText.append(htmlBody);
+
 		htmlText.append("</body>");
-		
+
 		htmlPanel.setText(htmlText.toString());
-		
+
 	}
-	
+
 	public WindowInfo getWindowInfo() {
 		if (viewInfo == null) {
-			viewInfo = new WindowInfo(WindowInfo.MODELESSDIALOG | 
-										WindowInfo.RESIZABLE | 
-										WindowInfo.MAXIMIZABLE |
-										WindowInfo.ICONIFIABLE | 
-										WindowInfo.PALETTE);
+			viewInfo = new WindowInfo(WindowInfo.MODELESSDIALOG
+					| WindowInfo.RESIZABLE | WindowInfo.MAXIMIZABLE
+					| WindowInfo.ICONIFIABLE | WindowInfo.PALETTE);
 			viewInfo.setTitle(title);
 			viewInfo.setWidth(200);
 			viewInfo.setHeight(250);
 		}
 		return viewInfo;
 	}
-	
+
 	public Object getWindowProfile() {
 		return WindowInfo.TOOL_PROFILE;
 	}
-	
+
 }

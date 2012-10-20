@@ -44,27 +44,37 @@ import com.iver.cit.gvsig.fmap.FMapEvent;
 import com.iver.cit.gvsig.fmap.layers.LegendEvent;
 
 /**
- * <p>Event produced when changes any value of a legend.</p>
- *
+ * <p>
+ * Event produced when changes any value of a legend.
+ * </p>
+ * 
  * @see FMapEvent
  * @author Vicente Caballero Navarro
  */
 public class ValueLegendEvent extends ClassificationLegendEvent {
 	/**
-	 * <p>Previous legend value.</p>
+	 * <p>
+	 * Previous legend value.
+	 * </p>
 	 */
 	private Object oldValue;
 
 	/**
-	 * <p>New legend value.</p>
+	 * <p>
+	 * New legend value.
+	 * </p>
 	 */
 	private Object newValue;
 
 	/**
-	 * <p>Creates a new value legend event.</p>
-	 *
-	 * @param oldValue previous legend value
-	 * @param newValue new legend value
+	 * <p>
+	 * Creates a new value legend event.
+	 * </p>
+	 * 
+	 * @param oldValue
+	 *            previous legend value
+	 * @param newValue
+	 *            new legend value
 	 */
 	public ValueLegendEvent(Object oldValue, Object newValue) {
 		this.oldValue = oldValue;
@@ -72,8 +82,10 @@ public class ValueLegendEvent extends ClassificationLegendEvent {
 	}
 
 	/**
-	 * <p>Gets the previous value.</p>
-	 *
+	 * <p>
+	 * Gets the previous value.
+	 * </p>
+	 * 
 	 * @return the previous value
 	 */
 	public Object getOldValue() {
@@ -81,8 +93,10 @@ public class ValueLegendEvent extends ClassificationLegendEvent {
 	}
 
 	/**
-	 * <p>Gets the new value.</p>
-	 *
+	 * <p>
+	 * Gets the new value.
+	 * </p>
+	 * 
 	 * @return the new value
 	 */
 	public Object getNewValue() {
@@ -90,7 +104,9 @@ public class ValueLegendEvent extends ClassificationLegendEvent {
 	}
 
 	/**
-	 * <p>Returns the type of this legend event.</p>
+	 * <p>
+	 * Returns the type of this legend event.
+	 * </p>
 	 * 
 	 * @return the type of this legend event
 	 * 

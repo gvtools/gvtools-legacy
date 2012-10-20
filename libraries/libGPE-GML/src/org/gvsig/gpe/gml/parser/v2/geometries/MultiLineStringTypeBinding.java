@@ -77,6 +77,7 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * It parses a gml:MultiLineStringType object. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;MultiLineString srsName="http://www.opengis.net/gml/srs/epsg.xml#4326"&gt;
@@ -95,59 +96,67 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  * &lt;/MultiLineString&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class MultiLineStringTypeBinding extends GeometryBinding{
-	
+public class MultiLineStringTypeBinding extends GeometryBinding {
+
 	/**
 	 * It parses the gml:MultiLineQName tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * A multilinestring
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return A multilinestring
 	 * @throws XmlStreamException
 	 */
-	public Object parse(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
+	public Object parse(IXmlStreamReader parser, GPEDefaultGmlParser handler)
+			throws XmlStreamException, IOException {
 		boolean endFeature = false;
 		int currentTag;
-		Object multiLineString = null;		
-		
+		Object multiLineString = null;
+
 		super.setAtributtes(parser, handler.getErrorHandler());
-		
-		multiLineString = 
-			handler.getContentHandler().startMultiLineString(id, srsName);
-		
+
+		multiLineString = handler.getContentHandler().startMultiLineString(id,
+				srsName);
+
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-					if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_LINESTRINGMEMBER)){
-						Object lineString = handler.getProfile().getLineStringMemberTypeBinding().
-						parse(parser, handler);
-						handler.getContentHandler().addLineStringToMultiLineString(lineString, multiLineString);
-					}
-					break;
-				case IXmlStreamReader.END_ELEMENT:
-					if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTILINESTRING)){						
-						endFeature = true;	
-						handler.getContentHandler().endMultiLineString(multiLineString);
-					}
-					break;
-				case IXmlStreamReader.CHARACTERS:					
-					
-					break;
+				if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_LINESTRINGMEMBER)) {
+					Object lineString = handler.getProfile()
+							.getLineStringMemberTypeBinding()
+							.parse(parser, handler);
+					handler.getContentHandler().addLineStringToMultiLineString(
+							lineString, multiLineString);
 				}
-				if (!endFeature){					
-					currentTag = parser.next();
-					tag = parser.getName();
+				break;
+			case IXmlStreamReader.END_ELEMENT:
+				if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_MULTILINESTRING)) {
+					endFeature = true;
+					handler.getContentHandler().endMultiLineString(
+							multiLineString);
 				}
-			}			
-		return multiLineString;	
+				break;
+			case IXmlStreamReader.CHARACTERS:
+
+				break;
+			}
+			if (!endFeature) {
+				currentTag = parser.next();
+				tag = parser.getName();
+			}
+		}
+		return multiLineString;
 	}
 }

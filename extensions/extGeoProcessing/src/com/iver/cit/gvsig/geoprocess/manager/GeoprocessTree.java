@@ -83,8 +83,7 @@ import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
  * This component shows all registered geoprocesses in extension point
  * "GeoprocessManager", in a tree style.
  * 
- * Its different subnodes represents an organization
- * of geoprocesses.
+ * Its different subnodes represents an organization of geoprocesses.
  * 
  * Leaf nodes are IGeoprocessPlugin instances.
  * 
@@ -95,8 +94,8 @@ public class GeoprocessTree extends JScrollPane implements IGeoprocessTree {
 	private static final long serialVersionUID = -6244491453178280294L;
 	private JTree tree;
 	DefaultMutableTreeNode root;
-	final  GeoprocessTreeDirectory ROOT = new GeoprocessTreeDirectory();
-	
+	final GeoprocessTreeDirectory ROOT = new GeoprocessTreeDirectory();
+
 	public GeoprocessTree() {
 		super();
 		root = new DefaultMutableTreeNode();
@@ -106,38 +105,39 @@ public class GeoprocessTree extends JScrollPane implements IGeoprocessTree {
 		loadGeoprocesses();
 		tree.getSelectionModel().setSelectionMode(
 				TreeSelectionModel.SINGLE_TREE_SELECTION);
-//		tree.setRootVisible(false);
+		// tree.setRootVisible(false);
 		tree.setShowsRootHandles(true);
 		setViewportView(tree);
 		// tree.setCellRenderer( new JTreeEntidadesRenderer(listeners) );
 	}
-	
-	public static void main(String[] args){
+
+	public static void main(String[] args) {
 		JFrame f = new JFrame();
-		ExtensionPoints extensionPoints = 
-			ExtensionPointsSingleton.getInstance();
-		extensionPoints.add("GeoprocessManager","BUFFER", BufferGeoprocessPlugin.class);
-		extensionPoints.add("GeoprocessManager","CLIP", ClipGeoprocessPlugin.class);
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+		extensionPoints.add("GeoprocessManager", "BUFFER",
+				BufferGeoprocessPlugin.class);
+		extensionPoints.add("GeoprocessManager", "CLIP",
+				ClipGeoprocessPlugin.class);
 		GeoprocessManager tree = new GeoprocessManager();
 		f.getContentPane().add(tree);
-		f.setSize(800,600);
+		f.setSize(800, 600);
 		f.setVisible(true);
 	}
 
 	private void loadGeoprocesses() {
-		ExtensionPoints extensionPoints = 
-			ExtensionPointsSingleton.getInstance();
-		ExtensionPoint geoprocessManager = 
-			(ExtensionPoint)extensionPoints.get("GeoprocessManager"); 
-		if(geoprocessManager == null)
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+		ExtensionPoint geoprocessManager = (ExtensionPoint) extensionPoints
+				.get("GeoprocessManager");
+		if (geoprocessManager == null)
 			return;
 		Iterator i = geoprocessManager.keySet().iterator();
-		while( i.hasNext() ) { 
-			String nombre = (String)i.next(); 
-			Class metadataClass =
-				(Class) geoprocessManager.get(nombre);
+		while (i.hasNext()) {
+			String nombre = (String) i.next();
+			Class metadataClass = (Class) geoprocessManager.get(nombre);
 			try {
-				register((IGeoprocessPlugin)metadataClass.newInstance());
+				register((IGeoprocessPlugin) metadataClass.newInstance());
 			} catch (InstantiationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -149,8 +149,8 @@ public class GeoprocessTree extends JScrollPane implements IGeoprocessTree {
 	}
 
 	/**
-	 * Registers a new geoprocess (linked to the plugin)
-	 * in the geoprocess manager.
+	 * Registers a new geoprocess (linked to the plugin) in the geoprocess
+	 * manager.
 	 */
 	public void register(IGeoprocessPlugin metadata) {
 		String namespace = metadata.getNamespace();
@@ -159,87 +159,88 @@ public class GeoprocessTree extends JScrollPane implements IGeoprocessTree {
 		DefaultMutableTreeNode scanned = null;
 		int levelNum = 0;
 		boolean doit = true;
-		while(doit){
+		while (doit) {
 			int numChilds = bestMatch.getChildCount();
-			if(numChilds == 0)
+			if (numChilds == 0)
 				break;
 			boolean match = true;
-			for(int i = 0; i < numChilds; i++){
-				match = true;//is true if we dont verify is false
-				scanned =
-					(DefaultMutableTreeNode) bestMatch.getChildAt(i);
-				if(scanned.isLeaf() || 
-						(scanned.getUserObject() instanceof IGeoprocessPlugin))//this is a geoprocess, not a directory
+			for (int i = 0; i < numChilds; i++) {
+				match = true;// is true if we dont verify is false
+				scanned = (DefaultMutableTreeNode) bestMatch.getChildAt(i);
+				if (scanned.isLeaf()
+						|| (scanned.getUserObject() instanceof IGeoprocessPlugin))// this
+																					// is
+																					// a
+																					// geoprocess,
+																					// not
+																					// a
+																					// directory
 				{
 					doit = false;
-					if(scanned.getUserObject().getClass() == metadata.getClass()){
-						//we are trying to add the same geoprocess twice
+					if (scanned.getUserObject().getClass() == metadata
+							.getClass()) {
+						// we are trying to add the same geoprocess twice
 						return;
-					}	
+					}
 					break;
 				}
-				
-				GeoprocessTreeDirectory path =
-					(GeoprocessTreeDirectory) scanned.getUserObject();
+
+				GeoprocessTreeDirectory path = (GeoprocessTreeDirectory) scanned
+						.getUserObject();
 				String[] pathStr = path.getPath();
-				//verify the length of the path
-				for(int j = 0; j < pathStr.length; j++){
-					if(!pathStr[j].equalsIgnoreCase(directories[j])){
+				// verify the length of the path
+				for (int j = 0; j < pathStr.length; j++) {
+					if (!pathStr[j].equalsIgnoreCase(directories[j])) {
 						match = false;
 						break;
 					}
-				}//for num paths
-				if(match){
+				}// for num paths
+				if (match) {
 					bestMatch = scanned;
 					break;
 				}
-			}//for numChilds
-			
-			if(! match)//si en el escaneo de nivel no se encontro nada, paramos
+			}// for numChilds
+
+			if (!match)// si en el escaneo de nivel no se encontro nada, paramos
 				doit = false;
 			else
 				levelNum++;
-		}//while
-		
-		//Llegados a este punto, tenemos el nodo que mejor casa
-		//si el numero de niveles recorridos es directories.length -1
-		//lo añadimos directamente. Si no, hay que crear nuevos niveles
-		DefaultMutableTreeNode gpNode
-			= new DefaultMutableTreeNode();
+		}// while
+
+		// Llegados a este punto, tenemos el nodo que mejor casa
+		// si el numero de niveles recorridos es directories.length -1
+		// lo añadimos directamente. Si no, hay que crear nuevos niveles
+		DefaultMutableTreeNode gpNode = new DefaultMutableTreeNode();
 		gpNode.setUserObject(metadata);
-		if(levelNum == directories.length -1){
+		if (levelNum == directories.length - 1) {
 			bestMatch.add(gpNode);
-		}else{
+		} else {
 			int numNewNodes = (directories.length - 1) - levelNum;
 			DefaultMutableTreeNode prev = bestMatch;
-			for(int i = 0; i < numNewNodes; i++){
-				DefaultMutableTreeNode newNode = 
-					new DefaultMutableTreeNode();
-				GeoprocessTreeDirectory path
-					= new GeoprocessTreeDirectory();
+			for (int i = 0; i < numNewNodes; i++) {
+				DefaultMutableTreeNode newNode = new DefaultMutableTreeNode();
+				GeoprocessTreeDirectory path = new GeoprocessTreeDirectory();
 				String[] newPath = new String[levelNum + i + 1];
 				System.arraycopy(directories, 0, newPath, 0, (levelNum + i + 1));
 				path.path = newPath;
 				newNode.setUserObject(path);
 				String packageName = "";
-				for(int j = 0; j < newPath.length -1; j++){
+				for (int j = 0; j < newPath.length - 1; j++) {
 					packageName += newPath[j];
 					packageName += "/";
-					
+
 				}
-				packageName += newPath[newPath.length -1];
-				String description = GeoprocessManager.
-					getDescriptionFor(packageName);
+				packageName += newPath[newPath.length - 1];
+				String description = GeoprocessManager
+						.getDescriptionFor(packageName);
 				path.description = description;
 				prev.add(newNode);
 				prev = newNode;
-			}//for
+			}// for
 			prev.add(gpNode);
-		}//else
-		
-	}
+		}// else
 
-	
+	}
 
 	public IGeoprocessPlugin getGeoprocess() {
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree
@@ -248,10 +249,9 @@ public class GeoprocessTree extends JScrollPane implements IGeoprocessTree {
 		if ((node == null) || !(nodeInfo instanceof IGeoprocessPlugin))
 			return null;
 		else {
-			return (IGeoprocessPlugin)nodeInfo;
+			return (IGeoprocessPlugin) nodeInfo;
 		}
 	}
-
 
 	/**
 	 * A directory of the geoprocesses path.
@@ -263,13 +263,13 @@ public class GeoprocessTree extends JScrollPane implements IGeoprocessTree {
 		String[] path;
 
 		String description;
-		
+
 		public boolean equals(Object o) {
 			if (!(o instanceof GeoprocessTreeDirectory))
 				return false;
 			GeoprocessTreeDirectory d = (GeoprocessTreeDirectory) o;
-			for(int i = 0; i < path.length; i++){
-				if(!path[i].equalsIgnoreCase(d.path[i]))
+			for (int i = 0; i < path.length; i++) {
+				if (!path[i].equalsIgnoreCase(d.path[i]))
 					return false;
 			}
 			return true;
@@ -282,13 +282,12 @@ public class GeoprocessTree extends JScrollPane implements IGeoprocessTree {
 		public String getDescription() {
 			return description;
 		}
-		
-		public String toString(){
-			if(path != null && path.length > 0)
-				return path[path.length-1];
+
+		public String toString() {
+			if (path != null && path.length > 0)
+				return path[path.length - 1];
 			else
-				return PluginServices.getText(this, 
-							"Geoprocesos");
+				return PluginServices.getText(this, "Geoprocesos");
 		}
 	}
 
@@ -299,8 +298,8 @@ public class GeoprocessTree extends JScrollPane implements IGeoprocessTree {
 	public void addTreeSelectionListener(TreeSelectionListener l) {
 		tree.addTreeSelectionListener(l);
 	}
-	
-	public void addMouseListener(MouseListener l){
+
+	public void addMouseListener(MouseListener l) {
 		tree.addMouseListener(l);
 	}
 }

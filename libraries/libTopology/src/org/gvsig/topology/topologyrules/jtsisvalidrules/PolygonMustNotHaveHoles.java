@@ -74,36 +74,35 @@ import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Polygon;
 
 public class PolygonMustNotHaveHoles extends AbstractTopologyRule {
-	
+
 	private MultiShapeSymbol errorSymbol = DEFAULT_ERROR_SYMBOL;
-	
-	private static String RULE_NAME = Messages.getText("POLYGON_MUST_NOT_HAVE_DUPLICATED_RINGS");
-	
-	private static List<ITopologyErrorFix> automaticErrorFixes =
-		new ArrayList<ITopologyErrorFix>();	
-	
+
+	private static String RULE_NAME = Messages
+			.getText("POLYGON_MUST_NOT_HAVE_DUPLICATED_RINGS");
+
+	private static List<ITopologyErrorFix> automaticErrorFixes = new ArrayList<ITopologyErrorFix>();
+
 	private static final Color DEFAULT_ERROR_COLOR = Color.RED;
-	
-	
-	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = 
-		(MultiShapeSymbol) SymbologyFactory.createDefaultSymbolByShapeType(FShape.MULTI, 
-											DEFAULT_ERROR_COLOR);
-	static{
+
+	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = (MultiShapeSymbol) SymbologyFactory
+			.createDefaultSymbolByShapeType(FShape.MULTI, DEFAULT_ERROR_COLOR);
+	static {
 		DEFAULT_ERROR_SYMBOL.setDescription(RULE_NAME);
 		DEFAULT_ERROR_SYMBOL.setLineWidth(2);
 	}
-	
+
 	JtsValidRule parentRule;
-	
+
 	public PolygonMustNotHaveHoles(Topology topology, FLyrVect lyr) {
 		super(topology, lyr);
 	}
-	
+
 	public PolygonMustNotHaveHoles(FLyrVect lyr) {
 		super(lyr);
 	}
-	
-	public PolygonMustNotHaveHoles(){}
+
+	public PolygonMustNotHaveHoles() {
+	}
 
 	public String getName() {
 		return RULE_NAME;
@@ -152,12 +151,12 @@ public class PolygonMustNotHaveHoles extends AbstractTopologyRule {
 
 	private void createTopologyError(IFeature feature) {
 		AbstractTopologyRule violatedRule = null;
-		if(this.parentRule == null)
+		if (this.parentRule == null)
 			violatedRule = parentRule;
 		else
 			violatedRule = this;
-		JtsValidTopologyError error = 
-			new JtsValidTopologyError(feature.getGeometry(), violatedRule, feature, topology);
+		JtsValidTopologyError error = new JtsValidTopologyError(
+				feature.getGeometry(), violatedRule, feature, topology);
 		error.setSecondaryRule(this);
 		addTopologyError(error);
 	}

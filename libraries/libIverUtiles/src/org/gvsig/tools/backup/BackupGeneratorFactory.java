@@ -21,19 +21,25 @@ package org.gvsig.tools.backup;
  * MA  02110-1301, USA.
  * 
  */
- 
+
 /**
- * <p>Generic factory that creates a {@link BackupGenerator BackupGenerator} that performs a particular
- *  kind of backup.</p>
- *
+ * <p>
+ * Generic factory that creates a {@link BackupGenerator BackupGenerator} that
+ * performs a particular kind of backup.
+ * </p>
+ * 
  * @author Jose Ignacio Yarza (jiyarza@opensistemas.com)
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public abstract class BackupGeneratorFactory {
 	/**
-	 * <p>Gets an instance of a backup generator that performs a particular kind of backup.</p>
+	 * <p>
+	 * Gets an instance of a backup generator that performs a particular kind of
+	 * backup.
+	 * </p>
 	 * 
-	 * @return an instance of a backup generator that performs a particular kind of backup
+	 * @return an instance of a backup generator that performs a particular kind
+	 *         of backup
 	 */
 	public abstract BackupGenerator getBackupGenerator();
 }

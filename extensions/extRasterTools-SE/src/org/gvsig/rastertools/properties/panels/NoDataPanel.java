@@ -47,21 +47,23 @@ import org.gvsig.raster.util.BasePanel;
 import org.gvsig.raster.util.RasterToolsUtil;
 
 import com.iver.andami.PluginServices;
+
 /**
  * Panel para la gestion del valor NoData en el panel de propiedades
- *
+ * 
  * @version 18/12/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
-public class NoDataPanel extends BasePanel implements ItemListener, ActionListener {
-	private static final long   serialVersionUID = 7645641060812458944L;
+public class NoDataPanel extends BasePanel implements ItemListener,
+		ActionListener {
+	private static final long serialVersionUID = 7645641060812458944L;
 
-	private JLabel              jLabelValue       = null;
-	private JComboBox           jComboBoxSetup    = null;
-	private JButton             buttonSaveDefault = null;
-	private JFormattedTextField jTextFieldValue   = null;
-	private INoDataPanel        noDataPanel       = null;
-	private IRasterProperties   layer             = null;
+	private JLabel jLabelValue = null;
+	private JComboBox jComboBoxSetup = null;
+	private JButton buttonSaveDefault = null;
+	private JFormattedTextField jTextFieldValue = null;
+	private INoDataPanel noDataPanel = null;
+	private IRasterProperties layer = null;
 
 	public NoDataPanel(INoDataPanel noDataPanel) {
 		this.noDataPanel = noDataPanel;
@@ -80,7 +82,10 @@ public class NoDataPanel extends BasePanel implements ItemListener, ActionListen
 
 	protected void translate() {
 		getButtonSaveDefault().setText(getText(this, "guardar_predeterminado"));
-		getComboBoxSetup().setModel(new DefaultComboBoxModel(new String[] { getText(this, "desactivado"), getText(this, "capa"), getText(this, "personalizado") }));
+		getComboBoxSetup().setModel(
+				new DefaultComboBoxModel(new String[] {
+						getText(this, "desactivado"), getText(this, "capa"),
+						getText(this, "personalizado") }));
 		getLabelValue().setText(getText(this, "value") + ":");
 	}
 
@@ -98,10 +103,10 @@ public class NoDataPanel extends BasePanel implements ItemListener, ActionListen
 			integerFormat.setParseIntegerOnly(false);
 			integerFormat.setMinimumFractionDigits(0);
 			integerFormat.setMaximumFractionDigits(3);
-			jTextFieldValue = new JFormattedTextField(new DefaultFormatterFactory(
-					new NumberFormatter(integerFormat),
-					new NumberFormatter(integerFormat),
-					new NumberFormatter(integerFormat)));
+			jTextFieldValue = new JFormattedTextField(
+					new DefaultFormatterFactory(new NumberFormatter(
+							integerFormat), new NumberFormatter(integerFormat),
+							new NumberFormatter(integerFormat)));
 		}
 		return jTextFieldValue;
 	}
@@ -153,12 +158,15 @@ public class NoDataPanel extends BasePanel implements ItemListener, ActionListen
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ItemListener#itemStateChanged(java.awt.event.ItemEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ItemListener#itemStateChanged(java.awt.event.ItemEvent)
 	 */
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getStateChange() == ItemEvent.SELECTED) {
 			if (e.getSource() == getComboBoxSetup()) {
-				noDataPanel.sourceStateChanged(this, getComboBoxSetup().getSelectedIndex());
+				noDataPanel.sourceStateChanged(this, getComboBoxSetup()
+						.getSelectedIndex());
 				return;
 			}
 		}
@@ -179,7 +187,8 @@ public class NoDataPanel extends BasePanel implements ItemListener, ActionListen
 	}
 
 	public double getNoDataValue() {
-		return Double.valueOf(getTextFieldValue().getValue().toString()).doubleValue();
+		return Double.valueOf(getTextFieldValue().getValue().toString())
+				.doubleValue();
 	}
 
 	public int getComboSetupIndex() {
@@ -188,7 +197,10 @@ public class NoDataPanel extends BasePanel implements ItemListener, ActionListen
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.fmap.raster.util.ConfigurationListener#actionConfigurationChanged(org.gvsig.fmap.raster.util.ConfigurationEvent)
+	 * 
+	 * @see
+	 * org.gvsig.fmap.raster.util.ConfigurationListener#actionConfigurationChanged
+	 * (org.gvsig.fmap.raster.util.ConfigurationEvent)
 	 */
 	public void actionConfigurationChanged(ConfigurationEvent e) {
 	}
@@ -202,6 +214,7 @@ public class NoDataPanel extends BasePanel implements ItemListener, ActionListen
 
 	/**
 	 * Aqui se definen los parametros iniciales para la transparencia del panel
+	 * 
 	 * @param t
 	 */
 	public void setLayer(IRasterProperties layer) {
@@ -213,16 +226,23 @@ public class NoDataPanel extends BasePanel implements ItemListener, ActionListen
 
 	/**
 	 * Salva el valor NoData al fichero rmf.
+	 * 
 	 * @param fName
 	 * @throws IOException
 	 */
 	private void saveToRmf() {
-		if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(this, getText(this, "nodata_modificado_continuar"))) {
-			IRasterDataSource datasource = ((FLyrRasterSE) layer).getDataSource();
+		if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(this,
+				getText(this, "nodata_modificado_continuar"))) {
+			IRasterDataSource datasource = ((FLyrRasterSE) layer)
+					.getDataSource();
 			try {
-				datasource.saveObjectToRmf(0, NoData.class, new NoData(getNoDataValue(), getComboSetupIndex(), layer.getDataType()[0]));
+				datasource.saveObjectToRmf(0, NoData.class,
+						new NoData(getNoDataValue(), getComboSetupIndex(),
+								layer.getDataType()[0]));
 			} catch (RmfSerializerException e) {
-				RasterToolsUtil.messageBoxError(PluginServices.getText(this,"error_salvando_rmf"), this, e);
+				RasterToolsUtil.messageBoxError(
+						PluginServices.getText(this, "error_salvando_rmf"),
+						this, e);
 			}
 		}
 	}

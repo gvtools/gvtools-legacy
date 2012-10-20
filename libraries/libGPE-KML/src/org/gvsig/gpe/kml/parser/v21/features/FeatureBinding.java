@@ -62,33 +62,35 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  *
  */
 /**
- * This is an abstract element and cannot be used 
- * directly in a KML file. Document, Folder, NetworkLink,
- * Placemark, GroundOverLay and ScreenOverlay inherit from
- * it. It parses the common attributes
+ * This is an abstract element and cannot be used directly in a KML file.
+ * Document, Folder, NetworkLink, Placemark, GroundOverLay and ScreenOverlay
+ * inherit from it. It parses the common attributes
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#feature
  */
 public class FeatureBinding {
-	
+
 	/**
 	 * It returns the feature id attribute
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * The feature id
-	 * @throws XmlStreamException 
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return The feature id
+	 * @throws XmlStreamException
 	 */
-	public  String getID(IXmlStreamReader parser,GPEDeafultKmlParser handler) throws XmlStreamException{
+	public String getID(IXmlStreamReader parser, GPEDeafultKmlParser handler)
+			throws XmlStreamException {
 		String id = null;
-		for (int i=0 ; i<parser.getAttributeCount() ; i++){
-			if (CompareUtils.compareWithNamespace(parser.getAttributeName(i),Kml2_1_Tags.ID)){
+		for (int i = 0; i < parser.getAttributeCount(); i++) {
+			if (CompareUtils.compareWithNamespace(parser.getAttributeName(i),
+					Kml2_1_Tags.ID)) {
 				id = parser.getAttributeValue(i);
 			}
 		}
-		return id;	
+		return id;
 	}
 }

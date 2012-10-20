@@ -31,36 +31,36 @@ import javax.swing.table.TableCellRenderer;
  * Componente tabla
  * 
  * @author Nacho Brodin (brodin_ign@gva.es)
- *
+ * 
  */
-public class CheckBoxColumnRenderer extends JCheckBox implements TableCellRenderer {
-    final private static long            serialVersionUID = -3370601314380922368L;
-    private ActionListener               listener = null;
+public class CheckBoxColumnRenderer extends JCheckBox implements
+		TableCellRenderer {
+	final private static long serialVersionUID = -3370601314380922368L;
+	private ActionListener listener = null;
 
-    public CheckBoxColumnRenderer() {}
-    
-    public CheckBoxColumnRenderer(ActionListener listener) {
-    	this.listener = listener;
-    }
-    
-    public Component getTableCellRendererComponent(JTable table,
-                                                   Object value,
-                                                   boolean isSelected,
-                                                   boolean hasFocus,
-                                                   int row, int column) {
-        if (value == null) {
-            this.setSelected(false);
-        }
-        if(isSelected)
-        	if(listener != null) 
-        		listener.actionPerformed(new ActionEvent(this, row, "SELECT_ROW"));
-        	
-        if(value instanceof Boolean){
-	        Boolean ValueAsBoolean = (Boolean) value;
-	        this.setSelected(ValueAsBoolean.booleanValue());
-	        this.setHorizontalAlignment(SwingConstants.CENTER);
-        }
-        	
-        return this;
-    }
+	public CheckBoxColumnRenderer() {
+	}
+
+	public CheckBoxColumnRenderer(ActionListener listener) {
+		this.listener = listener;
+	}
+
+	public Component getTableCellRendererComponent(JTable table, Object value,
+			boolean isSelected, boolean hasFocus, int row, int column) {
+		if (value == null) {
+			this.setSelected(false);
+		}
+		if (isSelected)
+			if (listener != null)
+				listener.actionPerformed(new ActionEvent(this, row,
+						"SELECT_ROW"));
+
+		if (value instanceof Boolean) {
+			Boolean ValueAsBoolean = (Boolean) value;
+			this.setSelected(ValueAsBoolean.booleanValue());
+			this.setHorizontalAlignment(SwingConstants.CENTER);
+		}
+
+		return this;
+	}
 }

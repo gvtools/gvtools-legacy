@@ -47,10 +47,9 @@ import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.project.documents.ProjectDocument;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
-
 /**
  * Extensión que cambia el extent de la vista al extent anterior.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class ZoomPrev extends Extension {
@@ -68,8 +67,8 @@ public class ZoomPrev extends Extension {
 	 * @see com.iver.mdiApp.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-															 .getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (f == null) {
 			return false;
@@ -92,7 +91,7 @@ public class ZoomPrev extends Extension {
 		View vista = (View) PluginServices.getMDIManager().getActiveWindow();
 		ViewPort vp = vista.getModel().getMapContext().getViewPort();
 		vp.setPreviousExtent();
-		((ProjectDocument)vista.getModel()).setModified(true);
+		((ProjectDocument) vista.getModel()).setModified(true);
 	}
 
 	/**
@@ -102,7 +101,7 @@ public class ZoomPrev extends Extension {
 
 		PluginServices.getIconTheme().registerDefault(
 				"view-zoom-back",
-				this.getClass().getClassLoader().getResource("images/ZoomPrevio.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/ZoomPrevio.png"));
 	}
 }

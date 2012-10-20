@@ -40,51 +40,54 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: ITaskPlanner.java 5157 2006-05-12 07:45:49Z jaume $
-* $Log$
-* Revision 1.2  2006-05-12 07:45:49  jaume
-* some warnings removed
-*
-* Revision 1.1  2006/05/12 07:15:45  jaume
-* *** empty log message ***
-*
-* Revision 1.1  2006/05/11 17:18:06  jaume
-* Un planificador, monitorizador, de descargas que trabaja en segundo plano
-*
-*
-*/
+ *
+ * $Id: ITaskPlanner.java 5157 2006-05-12 07:45:49Z jaume $
+ * $Log$
+ * Revision 1.2  2006-05-12 07:45:49  jaume
+ * some warnings removed
+ *
+ * Revision 1.1  2006/05/12 07:15:45  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/05/11 17:18:06  jaume
+ * Un planificador, monitorizador, de descargas que trabaja en segundo plano
+ *
+ *
+ */
 package org.gvsig.remoteClient.taskplanning;
 
 /**
  * <p>
- * ITaskPlanner provides an interface to program your own task planning. It gives
- * you operations for pick a task from the queue according on the criteria that
- * you designed.<br>
+ * ITaskPlanner provides an interface to program your own task planning. It
+ * gives you operations for pick a task from the queue according on the criteria
+ * that you designed.<br>
  * </p>
  * <p>
  * The simplest implementation of ITaskPlanner would be a FIFO task planner (see
  * FIFOTaskPlanner.java) which takes jobs from a task queue in the same order
- * they were put. But any kind of planner is possible (SJF, LIFO, RoundRobin, etc.). 
+ * they were put. But any kind of planner is possible (SJF, LIFO, RoundRobin,
+ * etc.).
  * </p>
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
 public interface ITaskPlanner {
 	/**
 	 * Takes the next task to be executed.
+	 * 
 	 * @return IRunnableTask representing the next task to be executed
 	 */
 	public IRunnableTask nextTask();
-	
+
 	/**
 	 * Takes the previous executed task. Notice that it may or may not have
 	 * sense for specific implementations. For example, in a FIFO-like planner,
-	 * the task is taken from the queue, executed until it is finished and 
+	 * the task is taken from the queue, executed until it is finished and
 	 * removed from the queue. So, there is no previous task.
 	 * 
-	 * @return IRunnableTask representing the previous executed task, or null
-	 * if none.
+	 * @return IRunnableTask representing the previous executed task, or null if
+	 *         none.
 	 * @deprecated (probably this is unuseful and i'll remove it)
 	 */
 	public IRunnableTask previousTask();

@@ -1,14 +1,17 @@
 package com.graphbuilder.math;
 
 /**
-<p>VarMap maps a name to a value.  A VarMap is used in the eval method of an Expression object.
-This class can be used as the default variable-map.
-
-<p>During the evaluation of an expression, if a variable is not supported then a RuntimeException is thrown.
-Case sensitivity can only be specified in the constructor (for consistency).  When case sensitivity is false,
-the String.equalsIgnoreCase method is used.  When case sensitivity is true, the String.equals method is used.
-By default, case sensitivity is true.
-*/
+ * <p>
+ * VarMap maps a name to a value. A VarMap is used in the eval method of an
+ * Expression object. This class can be used as the default variable-map.
+ * 
+ * <p>
+ * During the evaluation of an expression, if a variable is not supported then a
+ * RuntimeException is thrown. Case sensitivity can only be specified in the
+ * constructor (for consistency). When case sensitivity is false, the
+ * String.equalsIgnoreCase method is used. When case sensitivity is true, the
+ * String.equals method is used. By default, case sensitivity is true.
+ */
 public class VarMap {
 
 	private boolean caseSensitive = true;
@@ -25,29 +28,34 @@ public class VarMap {
 	}
 
 	/**
-	Returns the value associated with the specified variable name.
-
-	@throws RuntimeException If a matching variable name cannot be found.
-	*/
+	 * Returns the value associated with the specified variable name.
+	 * 
+	 * @throws RuntimeException
+	 *             If a matching variable name cannot be found.
+	 */
 	public double getValue(String varName) {
 		for (int i = 0; i < numVars; i++)
-			if (caseSensitive && name[i].equals(varName) || !caseSensitive && name[i].equalsIgnoreCase(varName))
+			if (caseSensitive && name[i].equals(varName) || !caseSensitive
+					&& name[i].equalsIgnoreCase(varName))
 				return value[i];
 
-		throw new RuntimeException("variable value has not been set: " + varName);
+		throw new RuntimeException("variable value has not been set: "
+				+ varName);
 	}
 
 	/**
-	Assigns the value to the specified variable name.
-
-	@throws IllegalArgumentException If the variable name is null.
-	*/	
+	 * Assigns the value to the specified variable name.
+	 * 
+	 * @throws IllegalArgumentException
+	 *             If the variable name is null.
+	 */
 	public void setValue(String varName, double val) {
 		if (varName == null)
 			throw new IllegalArgumentException("varName cannot be null");
 
 		for (int i = 0; i < numVars; i++) {
-			if (caseSensitive && name[i].equals(varName) || !caseSensitive && name[i].equalsIgnoreCase(varName)) {
+			if (caseSensitive && name[i].equals(varName) || !caseSensitive
+					&& name[i].equalsIgnoreCase(varName)) {
 				value[i] = val;
 				return;
 			}
@@ -72,15 +80,16 @@ public class VarMap {
 	}
 
 	/**
-	Returns true if the case of the variable names is considered.
-	*/
+	 * Returns true if the case of the variable names is considered.
+	 */
 	public boolean isCaseSensitive() {
 		return caseSensitive;
 	}
 
 	/**
-	Returns an array of exact length of the variable names stored in this map.
-	*/
+	 * Returns an array of exact length of the variable names stored in this
+	 * map.
+	 */
 	public String[] getVariableNames() {
 		String[] arr = new String[numVars];
 
@@ -91,9 +100,10 @@ public class VarMap {
 	}
 
 	/**
-	Returns an array of exact length of the values stored in this map.  The returned
-	array corresponds to the order of the names returned by getVariableNames.
-	*/
+	 * Returns an array of exact length of the values stored in this map. The
+	 * returned array corresponds to the order of the names returned by
+	 * getVariableNames.
+	 */
 	public double[] getValues() {
 		double[] arr = new double[numVars];
 
@@ -104,11 +114,13 @@ public class VarMap {
 	}
 
 	/**
-	Removes the variable-name from the map. Does nothing if the variable-name is not found.
-	*/
+	 * Removes the variable-name from the map. Does nothing if the variable-name
+	 * is not found.
+	 */
 	public void remove(String varName) {
 		for (int i = 0; i < numVars; i++) {
-			if (caseSensitive && name[i].equals(varName) || !caseSensitive && name[i].equalsIgnoreCase(varName)) {
+			if (caseSensitive && name[i].equals(varName) || !caseSensitive
+					&& name[i].equalsIgnoreCase(varName)) {
 				for (int j = i + 1; j < numVars; j++) {
 					name[j - 1] = name[j];
 					value[j - 1] = value[j];

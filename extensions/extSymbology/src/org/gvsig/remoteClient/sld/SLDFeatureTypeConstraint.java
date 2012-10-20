@@ -43,48 +43,53 @@ package org.gvsig.remoteClient.sld;
 import java.util.ArrayList;
 
 import org.gvsig.remoteClient.sld.filterEncoding.Filter;
+
 /**
- * Implements the FeatureTypeConstraint element of an SLD implementation 
- * specification.<p>
- * A FeatureTypeConstraint element is used to identify a feature type by a 
+ * Implements the FeatureTypeConstraint element of an SLD implementation
+ * specification.
+ * <p>
+ * A FeatureTypeConstraint element is used to identify a feature type by a
  * well-known name, using the FeatureTypeName element. Any positive number of
- * FeatureTypeConstraints may be used to define the features of a layer, though 
+ * FeatureTypeConstraints may be used to define the features of a layer, though
  * all FeatureTypeConstraints in a UserLayer must come from the same WFS source.
  * 
  * @see SLDExtent
  * @see http://portal.opengeospatial.org/files/?artifact_id=1188
- *
+ * 
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
 public abstract class SLDFeatureTypeConstraint implements ISLDFeatures {
-	
+
 	protected String featureTypeName;
-	protected ArrayList<SLDExtent>sldExtent = new ArrayList<SLDExtent>();
+	protected ArrayList<SLDExtent> sldExtent = new ArrayList<SLDExtent>();
 	protected Filter filter = new Filter();
-	
+
 	public String getFeatureTypeName() {
 		return featureTypeName;
 	}
+
 	public void setFeatureTypeName(String featureTypeName) {
 		this.featureTypeName = featureTypeName;
 	}
+
 	public ArrayList<SLDExtent> getSldExtent() {
 		return sldExtent;
 	}
+
 	public void setSldExtent(ArrayList<SLDExtent> sldExtent) {
 		this.sldExtent = sldExtent;
 	}
-	
+
 	public void addSldExtent(SLDExtent extent) {
 		this.sldExtent.add(extent);
 	}
+
 	public Filter getFilter() {
 		return filter;
 	}
+
 	public void setFilter(Filter filter) {
 		this.filter = filter;
 	}
-
-	
 
 }

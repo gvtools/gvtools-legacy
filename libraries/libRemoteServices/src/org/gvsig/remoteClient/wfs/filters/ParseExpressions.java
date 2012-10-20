@@ -52,117 +52,116 @@ import java.util.ArrayList;
  *
  */
 /**
- * It parses a SQL expression (just the where part) and seperates
- * it in "sub-expresion". A sub-expresion could be a separator ('(' or ')'),
- * a logical operator ('And', 'Not' or 'Or') or a expresion (A op B).
- *  
+ * It parses a SQL expression (just the where part) and seperates it in
+ * "sub-expresion". A sub-expresion could be a separator ('(' or ')'), a logical
+ * operator ('And', 'Not' or 'Or') or a expresion (A op B).
+ * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
 public class ParseExpressions {
-		
+
 	/**
-	 * It parses a expression and return one arrayList with
-	 * the separated words
+	 * It parses a expression and return one arrayList with the separated words
+	 * 
 	 * @param expression
 	 * @return
 	 */
-	public ArrayList parseExpression(String expression){
+	public ArrayList parseExpression(String expression) {
 		ArrayList expressions = new ArrayList();
-		
+
 		char[] chars = expression.toCharArray();
-		int i=0;
-		while (i<chars.length){
-			if (chars[i] == '('){
+		int i = 0;
+		while (i < chars.length) {
+			if (chars[i] == '(') {
 				expressions.add("(");
 				i++;
-			}else if(chars[i] == ')'){
+			} else if (chars[i] == ')') {
 				expressions.add(")");
 				i++;
-			}else if(chars[i] == ' '){
+			} else if (chars[i] == ' ') {
 				i++;
-			}else{
-				int desp = getShift(chars,i);
-				expressions.add(expression.substring(i,i + desp));
+			} else {
+				int desp = getShift(chars, i);
+				expressions.add(expression.substring(i, i + desp));
 				i = i + desp;
 			}
-		}		
+		}
 		return expressions;
 	}
-	
+
 	/**
 	 * Gets the shift of the next expression.
+	 * 
 	 * @param chars
 	 * @param position
 	 * @return
 	 */
-	private int getShift(char[] chars,int position){
+	private int getShift(char[] chars, int position) {
 		int shift = 0;
-		shift = isAndOperator(chars,position);
-		if (shift == 0){
-			shift = isOrOperator(chars,position);
-			if (shift == 0){
-				shift = isNotOperator(chars,position);
-				if (shift == 0){
-					shift = isExpression(chars,position);
+		shift = isAndOperator(chars, position);
+		if (shift == 0) {
+			shift = isOrOperator(chars, position);
+			if (shift == 0) {
+				shift = isNotOperator(chars, position);
+				if (shift == 0) {
+					shift = isExpression(chars, position);
 				}
 			}
 		}
 		return shift;
 	}
-	
-	private int isExpression(char[] chars,int position){
+
+	private int isExpression(char[] chars, int position) {
 		int desp = 0;
-		for (int i=position ;i<chars.length ; i++){
-			if (chars[i] == ')'){
-				break;			
-			}			
+		for (int i = position; i < chars.length; i++) {
+			if (chars[i] == ')') {
+				break;
+			}
 			desp++;
 		}
 		return desp;
 	}
-	
+
 	/**
 	 * Return true if the next array is a AND operator
+	 * 
 	 * @param chars
 	 * @param position
 	 * @return
 	 */
-	private int isAndOperator(char[] chars,int position){
-		if (chars[position] == 'A' && 
-				chars[position+1] == 'N' && 
-				chars[position+2] == 'D' &&
-				chars[position+3] == ' '){
+	private int isAndOperator(char[] chars, int position) {
+		if (chars[position] == 'A' && chars[position + 1] == 'N'
+				&& chars[position + 2] == 'D' && chars[position + 3] == ' ') {
 			return 3;
 		}
 		return 0;
 	}
-	
+
 	/**
 	 * Return true if the next array is a OR operator
+	 * 
 	 * @param chars
 	 * @param position
 	 * @return
 	 */
-	private int isOrOperator(char[] chars,int position){
-		if (chars[position] == 'O' && 
-				chars[position+1] == 'R' && 
-				chars[position+2] == ' '){
+	private int isOrOperator(char[] chars, int position) {
+		if (chars[position] == 'O' && chars[position + 1] == 'R'
+				&& chars[position + 2] == ' ') {
 			return 2;
 		}
 		return 0;
 	}
-	
+
 	/**
 	 * Return true if the next array is a NOT operator
+	 * 
 	 * @param chars
 	 * @param position
 	 * @return
 	 */
-	private int isNotOperator(char[] chars,int position){
-		if (chars[position] == 'N' && 
-				chars[position+1] == 'O' && 
-				chars[position+2] == 'T' &&
-				chars[position+3] == ' '){
+	private int isNotOperator(char[] chars, int position) {
+		if (chars[position] == 'N' && chars[position + 1] == 'O'
+				&& chars[position + 2] == 'T' && chars[position + 3] == ' ') {
 			return 3;
 		}
 		return 0;

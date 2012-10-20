@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,40 +39,42 @@
  *   dac@iver.es
  */
 package es.gva.cit.gazetteer.wfsg.drivers;
+
 import es.gva.cit.gazetteer.querys.GazetteerQuery;
 import es.gva.cit.gazetteer.wfsg.filters.WFSGFilter;
 
 /**
  * This class has methods that return the WFSG operations messages.
+ * 
  * @author Jorge Piera Llodra (piera_jor@gva.es)
  */
 public class WFSGMessages {
 
-	public static String getHTTPPOSTCapabilities() {        
-		return "<?xml version=\"1.0\" ?>" +
-		"<GetCapabilities " +
-		"service=\"WFS\" " +
-		"xmlns:csw=\"http://www.opengis.net/wfs\" " +
-		"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
-		"xsi:schemaLocation=\"http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd\">" +
-		"</GetCapabilities>";
-	} 
+	public static String getHTTPPOSTCapabilities() {
+		return "<?xml version=\"1.0\" ?>"
+				+ "<GetCapabilities "
+				+ "service=\"WFS\" "
+				+ "xmlns:csw=\"http://www.opengis.net/wfs\" "
+				+ "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
+				+ "xsi:schemaLocation=\"http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd\">"
+				+ "</GetCapabilities>";
+	}
 
-	public static String getHTTPPOSTFeature(GazetteerQuery query, int firstRecord) {        
+	public static String getHTTPPOSTFeature(GazetteerQuery query,
+			int firstRecord) {
 
-		String message = "<wfs:GetFeature service=\"WFS\" version=\"1.0.0\" " +
-		"outputFormat=\"GML2\" " +
-		"xmlns:topp=\"http://www.openplans.org/topp\" " +
-		"xmlns:wfs=\"http://www.opengis.net/wfs\" " +
-		"xmlns:ogc=\"http://www.opengis.net/ogc\" " +
-		"xmlns:gml=\"http://www.opengis.net/gml\" " +
-		"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
-		"xsi:schemaLocation=\"http://www.opengis.net/wfs " +
-		"http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd\">" +
-		"<wfs:Query typeName=\"" + query.getFeatures()[0].getName() + "\">" +
-			new WFSGFilter().getQuery(query) + 
-		"</wfs:Query>" +
-		"</wfs:GetFeature>";                 
-		return message;    
-	} 
+		String message = "<wfs:GetFeature service=\"WFS\" version=\"1.0.0\" "
+				+ "outputFormat=\"GML2\" "
+				+ "xmlns:topp=\"http://www.openplans.org/topp\" "
+				+ "xmlns:wfs=\"http://www.opengis.net/wfs\" "
+				+ "xmlns:ogc=\"http://www.opengis.net/ogc\" "
+				+ "xmlns:gml=\"http://www.opengis.net/gml\" "
+				+ "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
+				+ "xsi:schemaLocation=\"http://www.opengis.net/wfs "
+				+ "http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd\">"
+				+ "<wfs:Query typeName=\"" + query.getFeatures()[0].getName()
+				+ "\">" + new WFSGFilter().getQuery(query) + "</wfs:Query>"
+				+ "</wfs:GetFeature>";
+		return message;
+	}
 }

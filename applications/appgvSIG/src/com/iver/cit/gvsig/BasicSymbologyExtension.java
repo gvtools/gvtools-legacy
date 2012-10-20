@@ -40,55 +40,55 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: AdvancedSymbologyExtension.java 16205 2007-11-08 16:33:35Z jdominguez $
-* $Log: AdvancedSymbologyExtension.java,v $
-* Revision 1.12  2007/09/19 15:34:59  jaume
-* removed unnecessary imports
-*
-* Revision 1.11  2007/09/17 09:11:28  jaume
-* order of the elements inverted
-*
-* Revision 1.10  2007/09/13 11:37:09  jvidal
-* *** empty log message ***
-*
-* Revision 1.9  2007/09/04 10:53:10  caballero
-* show page
-*
-* Revision 1.8  2007/08/09 10:39:04  jaume
-* first round of found bugs fixed
-*
-* Revision 1.7  2007/08/01 13:03:31  jaume
-* plugable symbol editor
-*
-* Revision 1.6  2007/05/22 12:17:12  jaume
-* *** empty log message ***
-*
-* Revision 1.5  2007/05/17 09:32:37  jaume
-* *** empty log message ***
-*
-* Revision 1.4  2007/03/21 08:03:03  jaume
-* refactored to use ISymbol instead of FSymbol
-*
-* Revision 1.3  2007/03/13 16:57:35  jaume
-* Added MultiVariable legend
-*
-* Revision 1.2  2007/03/09 11:25:00  jaume
-* Advanced symbology (start committing)
-*
-* Revision 1.1.2.4  2007/02/21 07:35:14  jaume
-* *** empty log message ***
-*
-* Revision 1.1.2.3  2007/02/12 15:14:41  jaume
-* refactored interval legend and added graduated symbol legend
-*
-* Revision 1.1.2.2  2007/02/01 17:47:12  jaume
-* *** empty log message ***
-*
-* Revision 1.1.2.1  2007/02/01 12:12:41  jaume
-* theme manager window and all its components are now dynamic
-*
-*/
+ *
+ * $Id: AdvancedSymbologyExtension.java 16205 2007-11-08 16:33:35Z jdominguez $
+ * $Log: AdvancedSymbologyExtension.java,v $
+ * Revision 1.12  2007/09/19 15:34:59  jaume
+ * removed unnecessary imports
+ *
+ * Revision 1.11  2007/09/17 09:11:28  jaume
+ * order of the elements inverted
+ *
+ * Revision 1.10  2007/09/13 11:37:09  jvidal
+ * *** empty log message ***
+ *
+ * Revision 1.9  2007/09/04 10:53:10  caballero
+ * show page
+ *
+ * Revision 1.8  2007/08/09 10:39:04  jaume
+ * first round of found bugs fixed
+ *
+ * Revision 1.7  2007/08/01 13:03:31  jaume
+ * plugable symbol editor
+ *
+ * Revision 1.6  2007/05/22 12:17:12  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.5  2007/05/17 09:32:37  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.4  2007/03/21 08:03:03  jaume
+ * refactored to use ISymbol instead of FSymbol
+ *
+ * Revision 1.3  2007/03/13 16:57:35  jaume
+ * Added MultiVariable legend
+ *
+ * Revision 1.2  2007/03/09 11:25:00  jaume
+ * Advanced symbology (start committing)
+ *
+ * Revision 1.1.2.4  2007/02/21 07:35:14  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1.2.3  2007/02/12 15:14:41  jaume
+ * refactored interval legend and added graduated symbol legend
+ *
+ * Revision 1.1.2.2  2007/02/01 17:47:12  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1.2.1  2007/02/01 12:12:41  jaume
+ * theme manager window and all its components are now dynamic
+ *
+ */
 package com.iver.cit.gvsig;
 
 import com.iver.andami.PluginServices;
@@ -117,12 +117,15 @@ import com.iver.cit.gvsig.project.documents.view.legend.gui.SingleSymbol;
 import com.iver.cit.gvsig.project.documents.view.legend.gui.ThemeManagerWindow;
 import com.iver.cit.gvsig.project.documents.view.legend.gui.VectorialInterval;
 import com.iver.cit.gvsig.project.documents.view.legend.gui.VectorialUniqueValue;
+
 /**
  * Extension for enable the symbology. It only installs the core symbology.
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
-public class BasicSymbologyExtension extends Extension implements IPreferenceExtension{
+public class BasicSymbologyExtension extends Extension implements
+		IPreferenceExtension {
 
 	public void initialize() {
 		// Install required features
@@ -138,19 +141,20 @@ public class BasicSymbologyExtension extends Extension implements IPreferenceExt
 		ThemeManagerWindow.addPage(LegendManager.class);
 		ThemeManagerWindow.addPage(LabelingManager.class);
 
-		ThemeManagerWindow.setTabEnabledForLayer(General.class, FLyrVect.class, true);
-		ThemeManagerWindow.setTabEnabledForLayer(LegendManager.class, FLyrVect.class, true);
-		ThemeManagerWindow.setTabEnabledForLayer(LabelingManager.class, FLyrVect.class, true);
+		ThemeManagerWindow.setTabEnabledForLayer(General.class, FLyrVect.class,
+				true);
+		ThemeManagerWindow.setTabEnabledForLayer(LegendManager.class,
+				FLyrVect.class, true);
+		ThemeManagerWindow.setTabEnabledForLayer(LabelingManager.class,
+				FLyrVect.class, true);
 		// labeling strategies (inverse order to the wanted to be shown)
 		LabelingManager.addLabelingStrategy(AttrInTableLabeling.class);
-
 
 		// legends available in the legend page
 		LegendManager.addLegendPage(Quantities.class);
 		LegendManager.addLegendPage(Features.class);
 		LegendManager.addLegendPage(Categories.class);
 		LegendManager.addLegendPage(MultipleAttributes.class);
-
 
 		LegendManager.addLegendPage(SingleSymbol.class);
 		LegendManager.addLegendPage(VectorialInterval.class);
@@ -160,36 +164,40 @@ public class BasicSymbologyExtension extends Extension implements IPreferenceExt
 		registerIcons();
 	}
 
-	private void registerIcons(){
+	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"chain",
-				this.getClass().getClassLoader().getResource("images/chain.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/chain.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"broken-chain",
-				this.getClass().getClassLoader().getResource("images/broken-chain.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/broken-chain.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"underline-icon",
-				this.getClass().getClassLoader().getResource("images/underlined.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/underlined.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"italic-icon",
-				this.getClass().getClassLoader().getResource("images/italic.png")
-			);
-		PluginServices.getIconTheme().registerDefault(
-				"bold-icon",
-				this.getClass().getClassLoader().getResource("images/bold.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/italic.png"));
+		PluginServices.getIconTheme()
+				.registerDefault(
+						"bold-icon",
+						this.getClass().getClassLoader()
+								.getResource("images/bold.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"symbol-pref",
-				this.getClass().getClassLoader().getResource("images/QuantitiesByCategory.png"));
+				this.getClass().getClassLoader()
+						.getResource("images/QuantitiesByCategory.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"up-arrow",
-				this.getClass().getClassLoader().getResource("images/up-arrow.png"));
+				this.getClass().getClassLoader()
+						.getResource("images/up-arrow.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"down-arrow",
-				this.getClass().getClassLoader().getResource("images/down-arrow.png"));
+				this.getClass().getClassLoader()
+						.getResource("images/down-arrow.png"));
 	}
 
 	public void execute(String actionCommand) {
@@ -205,8 +213,7 @@ public class BasicSymbologyExtension extends Extension implements IPreferenceExt
 	}
 
 	public IPreference[] getPreferencesPages() {
-		return new IPreference[] {
-			new CartographicSupportPage(), new SymbologyPage()
-		};
+		return new IPreference[] { new CartographicSupportPage(),
+				new SymbologyPage() };
 	}
 }

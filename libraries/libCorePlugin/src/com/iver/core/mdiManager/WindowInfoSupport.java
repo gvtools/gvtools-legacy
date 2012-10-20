@@ -54,14 +54,13 @@ import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.SingletonWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 
-
 /**
  * This class listens to changes in WindowInfo objects, and reflects this
  * changes in the associated window.
  */
 public class WindowInfoSupport {
 	private static int serialId = 0;
-	
+
 	/**
 	 * Support class which associates Frames and Windows
 	 */
@@ -82,13 +81,15 @@ public class WindowInfoSupport {
 
 	/**
 	 * Creates a new ViewInfoSupport object.
-	 *
-	 * @param frame DOCUMENT ME!
-	 * @param fvs DOCUMENT ME!
+	 * 
+	 * @param frame
+	 *            DOCUMENT ME!
+	 * @param fvs
+	 *            DOCUMENT ME!
 	 * @param svs
 	 */
 	public WindowInfoSupport(MainFrame frame, FrameWindowSupport fvs,
-		SingletonWindowSupport svs) {
+			SingletonWindowSupport svs) {
 		this.fws = fvs;
 		this.sws = svs;
 		this.mdiFrame = frame;
@@ -96,9 +97,10 @@ public class WindowInfoSupport {
 
 	/**
 	 * Devuelve la vista cuyo identificador es el parametro
-	 *
-	 * @param id Identificador de la vista que se quiere obtener
-	 *
+	 * 
+	 * @param id
+	 *            Identificador de la vista que se quiere obtener
+	 * 
 	 * @return La vista o null si no hay ninguna vista con ese identificador
 	 */
 	public IWindow getWindowById(int id) {
@@ -117,9 +119,10 @@ public class WindowInfoSupport {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param w DOCUMENT ME!
-	 *
+	 * 
+	 * @param w
+	 *            DOCUMENT ME!
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public synchronized WindowInfo getWindowInfo(IWindow w) {
@@ -127,11 +130,10 @@ public class WindowInfoSupport {
 
 		if (wi != null) {
 			fws.updateWindowInfo(w, wi);
-		}
-		else {
+		} else {
 			wi = w.getWindowInfo();
 
-			//Para el título
+			// Para el título
 			if (wi.getHeight() != -1) {
 				wi.setHeight(wi.getHeight() + 40);
 			}
@@ -147,8 +149,9 @@ public class WindowInfoSupport {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param p DOCUMENT ME!
+	 * 
+	 * @param p
+	 *            DOCUMENT ME!
 	 */
 	public void deleteWindowInfo(IWindow p) {
 		WindowInfo vi = (WindowInfo) viewInfo.remove(p);
@@ -157,7 +160,7 @@ public class WindowInfoSupport {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @author $author$
 	 * @version $Revision: 13794 $
 	 */
@@ -181,7 +184,8 @@ public class WindowInfoSupport {
 				} else if (evt.getPropertyName().equals("width")) {
 					sws.setWidth(sw, ((Integer) evt.getNewValue()).intValue());
 				} else if (evt.getPropertyName().equals("maximized")) {
-					sws.setMaximized(sw, ((Boolean) evt.getNewValue()).booleanValue());
+					sws.setMaximized(sw,
+							((Boolean) evt.getNewValue()).booleanValue());
 				} else if (evt.getPropertyName().equals("normalBounds")) {
 					sws.setNormalBounds(sw, (Rectangle) evt.getNewValue());
 				} else if (evt.getPropertyName().equals("minimumSize")) {
@@ -190,10 +194,10 @@ public class WindowInfoSupport {
 					sws.setTitle(sw, (String) evt.getNewValue());
 
 					try {
-						mdiFrame.changeMenuName(new String[] {
-								"Ventana", (String) evt.getOldValue()
-						}, (String) evt.getNewValue(),
-						(PluginClassLoader) getClass().getClassLoader());
+						mdiFrame.changeMenuName(new String[] { "Ventana",
+								(String) evt.getOldValue() },
+								(String) evt.getNewValue(),
+								(PluginClassLoader) getClass().getClassLoader());
 					} catch (NoSuchMenuException e) {
 						/*
 						 * No se hace nada porque puede modificarse el título de
@@ -214,11 +218,11 @@ public class WindowInfoSupport {
 					fws.setMinimumSize(win, (Dimension) evt.getNewValue());
 				} else if (evt.getPropertyName().equals("title")) {
 					fws.setTitle(win, (String) evt.getNewValue());
-					try{
-						mdiFrame.changeMenuName(new String[] {
-								"Ventana", (String) evt.getOldValue()
-						}, (String) evt.getNewValue(),
-						(PluginClassLoader) getClass().getClassLoader());
+					try {
+						mdiFrame.changeMenuName(new String[] { "Ventana",
+								(String) evt.getOldValue() },
+								(String) evt.getNewValue(),
+								(PluginClassLoader) getClass().getClassLoader());
 					} catch (NoSuchMenuException e) {
 						/*
 						 * No se hace nada porque puede modificarse el título de

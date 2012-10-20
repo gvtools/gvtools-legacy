@@ -6,74 +6,74 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 
 /**
- * Utility class with methods to deal with layer naming.
- * These methods are used to prevent repeated layer names
- * Indexes are used with the '-' character.
+ * Utility class with methods to deal with layer naming. These methods are used
+ * to prevent repeated layer names Indexes are used with the '-' character.
  * 
- * Apart from this te user can choose whether or not the file extension
- * (for example ".shp") is part of the layer name.
- *  
+ * Apart from this te user can choose whether or not the file extension (for
+ * example ".shp") is part of the layer name.
+ * 
  * @author jldominguez
- *
+ * 
  */
 public class LayerNameUtils {
-	
+
 	/**
-	 * Find highest index among layer names starting with
-	 * a given name (example:
+	 * Find highest index among layer names starting with a given name (example:
 	 * countries, countries-2, countries-1, result = 2)
 	 * 
 	 * @param layers
-	 * @param name base name
+	 * @param name
+	 *            base name
 	 * @return
 	 */
-    public static long findHighestIndex(FLayers layers, String name) {
+	public static long findHighestIndex(FLayers layers, String name) {
 
-    	ArrayList indexed = getIndexedLayers(layers);
-    	long max = 0;
-    	int len = indexed.size();
-    	Long long_aux = null;
-    	FLayer lyr = null;
-    	
-    	String it_name = null;
-    	String re_name = null;
-    	
-    	for (int i=0; i<len; i++) {
-    		lyr = (FLayer) indexed.get(i);
-    		it_name = lyr.getName();
-    		long_aux = getIndexFromName(it_name);
-    		if (long_aux != null && long_aux.longValue() > max) {
-    			re_name = name + "-" + long_aux.longValue();
-    			if (re_name.compareToIgnoreCase(it_name) == 0) {
-    				max = long_aux.longValue();
-    			}
-    			
-    		}
-    	}
+		ArrayList indexed = getIndexedLayers(layers);
+		long max = 0;
+		int len = indexed.size();
+		Long long_aux = null;
+		FLayer lyr = null;
+
+		String it_name = null;
+		String re_name = null;
+
+		for (int i = 0; i < len; i++) {
+			lyr = (FLayer) indexed.get(i);
+			it_name = lyr.getName();
+			long_aux = getIndexFromName(it_name);
+			if (long_aux != null && long_aux.longValue() > max) {
+				re_name = name + "-" + long_aux.longValue();
+				if (re_name.compareToIgnoreCase(it_name) == 0) {
+					max = long_aux.longValue();
+				}
+
+			}
+		}
 		return max;
 	}
 
-    /**
-     * Returns layers whose names are "*-<number>"
-     * @param lyrs
-     * @return
-     */
-    public static ArrayList getIndexedLayers(FLayers lyrs) {
+	/**
+	 * Returns layers whose names are "*-<number>"
+	 * 
+	 * @param lyrs
+	 * @return
+	 */
+	public static ArrayList getIndexedLayers(FLayers lyrs) {
 		ArrayList resp = new ArrayList();
-		
-		if (lyrs.getName() != null && getIndexFromName(lyrs.getName()) != null)  {
+
+		if (lyrs.getName() != null && getIndexFromName(lyrs.getName()) != null) {
 			resp.add(lyrs);
 		}
-		
+
 		FLayer lyr = null;
 		int len = lyrs.getLayersCount();
-		for (int i=0; i<len; i++) {
+		for (int i = 0; i < len; i++) {
 			lyr = lyrs.getLayer(i);
 			if (lyr instanceof FLayers) {
 				ArrayList al = getIndexedLayers((FLayers) lyr);
 				resp.addAll(al);
 			} else {
-				if (getIndexFromName(lyr.getName()) != null)  {
+				if (getIndexFromName(lyr.getName()) != null) {
 					resp.add(lyr);
 				}
 			}
@@ -81,22 +81,23 @@ public class LayerNameUtils {
 		return resp;
 	}
 
-    /**
-     * Remove index and '-' from layer name.
-     * @param name
-     * @return
-     */
-    public static String removeIndex(String name) {
+	/**
+	 * Remove index and '-' from layer name.
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public static String removeIndex(String name) {
 		int last = name.lastIndexOf("-");
-		
+
 		if (name.length() == (last + 1)) {
 			// ends with - not indexed
 			return name;
 		}
-		
-		String indx = name.substring(last+1);
+
+		String indx = name.substring(last + 1);
 		try {
-			// try to parse  string after "-" as integer
+			// try to parse string after "-" as integer
 			Long.parseLong(indx);
 			// ok, remove index
 			return name.substring(0, last);
@@ -104,12 +105,12 @@ public class LayerNameUtils {
 			// not valid, not index
 			return name;
 		}
-		
+
 	}
 
-    public static Long getIndexFromName(String name) {
+	public static Long getIndexFromName(String name) {
 		int last = name.lastIndexOf("-");
-		String aux = name.substring(last+1);
+		String aux = name.substring(last + 1);
 		long r = 0;
 		try {
 			r = Long.parseLong(aux);
@@ -118,21 +119,21 @@ public class LayerNameUtils {
 			return null;
 		}
 	}
-	
 
-    public static boolean nameExists(FLayers layers, String name) {
-		
-    	if (layers == null) {
-    		return false;
-    	}
-    	
-		if (layers.getName() != null && layers.getName().compareToIgnoreCase(name) == 0) {
+	public static boolean nameExists(FLayers layers, String name) {
+
+		if (layers == null) {
+			return false;
+		}
+
+		if (layers.getName() != null
+				&& layers.getName().compareToIgnoreCase(name) == 0) {
 			return true;
 		} else {
-			
+
 			int cnt = layers.getLayersCount();
 			FLayer aux = null;
-			for (int i=0; i<cnt; i++) {
+			for (int i = 0; i < cnt; i++) {
 				aux = layers.getLayer(i);
 				if (aux instanceof FLayers) {
 					if (nameExists((FLayers) aux, name)) {
@@ -148,8 +149,8 @@ public class LayerNameUtils {
 		}
 	}
 
-    public static String normalizeName(String name) {
-		
+	public static String normalizeName(String name) {
+
 		String resp = name.trim();
 		while (resp.indexOf("  ") != -1) {
 			resp = resp.replace("  ", " ");
@@ -160,7 +161,7 @@ public class LayerNameUtils {
 	public static String composeWithIndex(String name, long ind) {
 		return name + "-" + ind;
 	}
-	
+
 	// ======================================================
 	// ======================================================
 	// ======================================================

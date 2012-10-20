@@ -26,10 +26,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class TestDataInput implements DataInputContainerListener {
-	private DataInputContainer data  = null;
+	private DataInputContainer data = null;
 	private DataInputContainer data2 = null;
 
-	public TestDataInput(){
+	public TestDataInput() {
 		data = new DataInputContainer();
 		data.setLabelText("Valor 1");
 		data.addValueChangedListener(this);
@@ -54,6 +54,6 @@ public class TestDataInput implements DataInputContainerListener {
 	}
 
 	public void actionValueChanged(EventObject e) {
-	  System.out.println(data.getValue());
-  }
+		System.out.println(data.getValue());
+	}
 }

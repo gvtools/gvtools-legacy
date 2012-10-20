@@ -1,4 +1,5 @@
 package org.gvsig.remoteClient.wfs.edition;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -60,11 +61,11 @@ public class WFSTTags {
 	public static final String OGC_NAMESPACE = "http://www.opengis.net/ogc";
 	public static final String GML_NAMESPACE_PREFIX = "gml";
 	public static final String GML_NAMESPACE = "http://www.opengis.net/gml";
-	
+
 	public static final String WFST_LOCKID = "LockId";
 	public static final String WFST_LOCK = "Lock";
 	public static final String WFST_FEATURESLOCKED = "FeaturesLocked";
-	public static final String WFST_FEATURESID = "FeatureId";	
+	public static final String WFST_FEATURESID = "FeatureId";
 	public static final String WFST_SERVICE = "service";
 	public static final String WFST_TRANSACTIONRESULT = "TransactionResult";
 	public static final String WFST_TRANSACTIONRESPONSE = "WFS_TransactionResponse";

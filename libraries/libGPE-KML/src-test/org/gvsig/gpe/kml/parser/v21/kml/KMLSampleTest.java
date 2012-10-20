@@ -2,8 +2,6 @@ package org.gvsig.gpe.kml.parser.v21.kml;
 
 import org.gvsig.gpe.containers.Layer;
 
-
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -68,10 +66,11 @@ import org.gvsig.gpe.containers.Layer;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class KMLSampleTest extends KMLBaseTest{
-	
+public class KMLSampleTest extends KMLBaseTest {
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.readers.GPEReaderBaseTest#getFile()
 	 */
 	public String getFile() {
@@ -80,6 +79,7 @@ public class KMLSampleTest extends KMLBaseTest{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.readers.GPEReaderBaseTest#makeAsserts()
 	 */
 	public void makeAsserts() {
@@ -87,15 +87,17 @@ public class KMLSampleTest extends KMLBaseTest{
 		assertEquals(layers.length, 1);
 		Layer layer = layers[0];
 		assertEquals(layer.getName(), "KML Samples");
-		assertEquals(layer.getDescription(), "Unleash your creativity with the help of these examples!");
+		assertEquals(layer.getDescription(),
+				"Unleash your creativity with the help of these examples!");
 		assertEquals(layer.getLayers().size(), 6);
-		//Sublayer 1
+		// Sublayer 1
 		Layer layer1 = layer.getLayerAt(0);
 		assertEquals(layer1.getName(), "Placemarks");
-		assertEquals(layer1.getDescription(), "These are just some of the different kinds of placemarks with\n" +
-        				"        which you can mark your favorite places");
-		assertEquals(layer1.getFeatures().size(), 3);		
-		
+		assertEquals(layer1.getDescription(),
+				"These are just some of the different kinds of placemarks with\n"
+						+ "        which you can mark your favorite places");
+		assertEquals(layer1.getFeatures().size(), 3);
+
 	}
 
 }

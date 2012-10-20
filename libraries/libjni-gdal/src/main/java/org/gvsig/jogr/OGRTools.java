@@ -26,34 +26,39 @@
 
 package org.gvsig.jogr;
 
-
-
-/** 
+/**
  * 
- * @author Nacho Brodin <brodin_ign@gva.es>.<BR> Equipo de desarrollo gvSIG.<BR> http://www.gvsig.gva.es
+ * @author Nacho Brodin <brodin_ign@gva.es>.<BR>
+ *         Equipo de desarrollo gvSIG.<BR>
+ *         http://www.gvsig.gva.es
  * @version 0.0
  * @link http://www.gvsig.gva.es
  */
 
-public class OGRTools extends JNIBase{
-	
-	private native static long OGRCreateCoordinateTransformationNat( long poSource, long poTarget);
-	
+public class OGRTools extends JNIBase {
+
+	private native static long OGRCreateCoordinateTransformationNat(
+			long poSource, long poTarget);
+
 	/**
 	 * 
 	 */
-	
-	public static OGRCoordinateTransformation OGRCreateCoordinateTransformation( OGRSpatialReference poSource,
-            																OGRSpatialReference poTarget )throws OGRException{
-		if(poSource.getPtro() ==0  || poTarget.getPtro() ==0)
-			throw new OGRException("Error en OGRCreateCoordinateTransformation(). Los parámetros no tienen una referencia correcta.");
-		
-		long ptr_cct = OGRCreateCoordinateTransformationNat(poSource.getPtro(), poTarget.getPtro());
-		
-		if(ptr_cct == 0)
-			throw new OGRException("Error en OGRCreateCoordinateTransformation(). No se ha podido obtener una referencia valida al objeto OGRCoordinateTransformation.");
-		
+
+	public static OGRCoordinateTransformation OGRCreateCoordinateTransformation(
+			OGRSpatialReference poSource, OGRSpatialReference poTarget)
+			throws OGRException {
+		if (poSource.getPtro() == 0 || poTarget.getPtro() == 0)
+			throw new OGRException(
+					"Error en OGRCreateCoordinateTransformation(). Los parámetros no tienen una referencia correcta.");
+
+		long ptr_cct = OGRCreateCoordinateTransformationNat(poSource.getPtro(),
+				poTarget.getPtro());
+
+		if (ptr_cct == 0)
+			throw new OGRException(
+					"Error en OGRCreateCoordinateTransformation(). No se ha podido obtener una referencia valida al objeto OGRCoordinateTransformation.");
+
 		return new OGRCoordinateTransformation(ptr_cct);
-		
+
 	}
 }

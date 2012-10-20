@@ -77,18 +77,18 @@ public class LayerList extends JList {
 				if (!showLayerNames) {
 					if (layer.getName() != null || layer.getName() == "") {
 						String text = layer.toString();
-						text = text.substring(text.indexOf(']') + 2, text
-								.length());
+						text = text.substring(text.indexOf(']') + 2,
+								text.length());
 						setText(text);
 					}
 				}
 				String myAbstract = layer.getDescription();
 				String myLonLatTxt = layer.getLonLatEnvelope();
 
-                if (myAbstract == null)
-                    myAbstract = "-";
-                else 
-                    myAbstract = format(myAbstract.trim(), 100);
+				if (myAbstract == null)
+					myAbstract = "-";
+				else
+					myAbstract = format(myAbstract.trim(), 100);
 				String text = PluginServices.getText(this, "abstract") + ":\n"
 						+ myAbstract + "\n\n"
 						+ PluginServices.getText(this, "covered_extension")
@@ -105,15 +105,14 @@ public class LayerList extends JList {
 		}
 	}
 
-
 	/**
 	 * Cuts the message text to force its lines to be shorter or equal to
 	 * lineLength.
 	 * 
-	 * @param message,
-	 *            the message.
-	 * @param lineLength,
-	 *            the max line length in number of characters.
+	 * @param message
+	 *            , the message.
+	 * @param lineLength
+	 *            , the max line length in number of characters.
 	 * @return the formated message.
 	 */
 	public static String format(String message, int lineLength) {

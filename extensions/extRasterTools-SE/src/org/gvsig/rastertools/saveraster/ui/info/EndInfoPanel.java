@@ -1,21 +1,21 @@
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
-*
-* Copyright (C) 2007 IVER T.I. and Generalitat Valenciana.
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License
-* as published by the Free Software Foundation; either version 2
-* of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
-*/
+ *
+ * Copyright (C) 2007 IVER T.I. and Generalitat Valenciana.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
+ */
 package org.gvsig.rastertools.saveraster.ui.info;
 
 import java.awt.BorderLayout;
@@ -42,16 +42,17 @@ import org.gvsig.raster.util.RasterUtilities;
 
 import com.iver.andami.PluginServices;
 import com.iver.utiles.swing.JComboBox;
+
 /**
  * Panel principal del dialogo de finalización del salvado a raster. En el se
  * muestra la información de nombre de fichero, tamaño de este, tiempo de la
  * operación, etc...
- *
+ * 
  * @version 18/04/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class EndInfoPanel extends DefaultButtonsPanel implements ActionListener {
-	private static final long	serialVersionUID	= -2280318605043767336L;
+	private static final long serialVersionUID = -2280318605043767336L;
 	private JPanel contentPane = null;
 	private JComboBox comboBox = null;
 
@@ -87,13 +88,13 @@ public class EndInfoPanel extends DefaultButtonsPanel implements ActionListener 
 		String size = RasterUtilities.formatFileSize(f.length());
 
 		String compression;
-		if (fileName.endsWith("ecw") || fileName.endsWith("jp2") ||
-				fileName.endsWith("jpg") || fileName.endsWith("jpeg")) {
+		if (fileName.endsWith("ecw") || fileName.endsWith("jp2")
+				|| fileName.endsWith("jpg") || fileName.endsWith("jpeg")) {
 			compression = "Yes";
 		} else {
 			compression = "No";
 		}
-		
+
 		JPanel pContent = new JPanel();
 		pContent.setLayout(new GridBagLayout());
 
@@ -108,7 +109,8 @@ public class EndInfoPanel extends DefaultButtonsPanel implements ActionListener 
 		gridBagConstraints.gridy = 1;
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints.insets = new Insets(2, 5, 2, 5);
-		pContent.add(newPanelTimeSize(RasterUtilities.formatTime(time), size), gridBagConstraints);
+		pContent.add(newPanelTimeSize(RasterUtilities.formatTime(time), size),
+				gridBagConstraints);
 
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
@@ -126,12 +128,14 @@ public class EndInfoPanel extends DefaultButtonsPanel implements ActionListener 
 		emptyPanel.setPreferredSize(new Dimension(0, 0));
 		pContent.add(emptyPanel, gridBagConstraints);
 
-		pContent.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.gray, 1), 
+		pContent.setBorder(BorderFactory.createTitledBorder(
+				BorderFactory.createLineBorder(Color.gray, 1),
 				PluginServices.getText(this, "Estadisticas"),
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+				TitledBorder.DEFAULT_JUSTIFICATION,
+				TitledBorder.DEFAULT_POSITION, null, null));
 
 		File file = new File(fileName);
-		
+
 		contentPane.add(pContent, file.getName());
 		if (comboBox.getItemCount() == 0)
 			comboBox.setVisible(false);
@@ -142,6 +146,7 @@ public class EndInfoPanel extends DefaultButtonsPanel implements ActionListener 
 
 	/**
 	 * This method initializes this
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
@@ -149,18 +154,18 @@ public class EndInfoPanel extends DefaultButtonsPanel implements ActionListener 
 
 		contentPane = new JPanel();
 		contentPane.setLayout(new CardLayout());
-		
+
 		comboBox = new JComboBox();
 		comboBox.setVisible(false);
 		comboBox.addActionListener(this);
-		
+
 		this.add(contentPane, BorderLayout.CENTER);
 		this.add(comboBox, BorderLayout.SOUTH);
 	}
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel newPanelFile(String file) {
@@ -176,15 +181,16 @@ public class EndInfoPanel extends DefaultButtonsPanel implements ActionListener 
 		tFile.setEditable(false);
 		tFile.setHorizontalAlignment(JTextField.LEFT);
 		tFile.setBorder(null);
-		
-		JTextField pathFile = new JTextField(fileorig.getParent() + File.separator);
+
+		JTextField pathFile = new JTextField(fileorig.getParent()
+				+ File.separator);
 		pathFile.setBackground(pFile.getBackground());
 		pathFile.setEditable(false);
 		pathFile.setHorizontalAlignment(JTextField.LEFT);
 		pathFile.setBorder(null);
-		
+
 		pFile.setLayout(new GridBagLayout());
-		
+
 		GridBagConstraints gridBagConstraints;
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
@@ -201,7 +207,7 @@ public class EndInfoPanel extends DefaultButtonsPanel implements ActionListener 
 		gridBagConstraints.weightx = 1.0;
 		gridBagConstraints.insets = new Insets(5, 5, 5, 5);
 		pFile.add(tFile, gridBagConstraints);
-		
+
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 1;
@@ -218,13 +224,12 @@ public class EndInfoPanel extends DefaultButtonsPanel implements ActionListener 
 		gridBagConstraints.insets = new Insets(5, 5, 5, 5);
 		pFile.add(pathFile, gridBagConstraints);
 
-		
 		return pFile;
 	}
 
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel newPanelTimeSize(String time, String size) {
@@ -263,7 +268,7 @@ public class EndInfoPanel extends DefaultButtonsPanel implements ActionListener 
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel newPanelCompression(String compression) {
@@ -280,35 +285,40 @@ public class EndInfoPanel extends DefaultButtonsPanel implements ActionListener 
 	}
 
 	/**
-	 * @param labelFilename the labelFilename to set
+	 * @param labelFilename
+	 *            the labelFilename to set
 	 */
 	private void setLabelFilename(String labelFilename) {
 		this.labelFilename = labelFilename;
 	}
 
 	/**
-	 * @param labelFilename the labelFilename to set
+	 * @param labelFilename
+	 *            the labelFilename to set
 	 */
 	private void setLabelPath(String labelPath) {
 		this.labelPath = labelPath;
 	}
 
 	/**
-	 * @param labelTime the labelTime to set
+	 * @param labelTime
+	 *            the labelTime to set
 	 */
 	private void setLabelTime(String labelTime) {
 		this.labelTime = labelTime;
 	}
 
 	/**
-	 * @param labelSize the labelSize to set
+	 * @param labelSize
+	 *            the labelSize to set
 	 */
 	private void setLabelSize(String labelSize) {
 		this.labelSize = labelSize;
 	}
 
 	/**
-	 * @param labelCompression the labelCompression to set
+	 * @param labelCompression
+	 *            the labelCompression to set
 	 */
 	private void setLabelCompression(String labelCompression) {
 		this.labelCompression = labelCompression;
@@ -316,6 +326,7 @@ public class EndInfoPanel extends DefaultButtonsPanel implements ActionListener 
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == comboBox)
-			((CardLayout) contentPane.getLayout()).show(contentPane, (String) comboBox.getSelectedItem());
+			((CardLayout) contentPane.getLayout()).show(contentPane,
+					(String) comboBox.getSelectedItem());
 	}
 }

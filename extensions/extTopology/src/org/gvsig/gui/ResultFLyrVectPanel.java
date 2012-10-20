@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.gui;
 
 import java.awt.BorderLayout;
@@ -65,51 +65,48 @@ import org.gvsig.gui.beans.swing.GridBagLayoutPanel;
 import com.iver.andami.PluginServices;
 import com.iver.utiles.GenericFileFilter;
 
-public class ResultFLyrVectPanel extends GridBagLayoutPanel{
+public class ResultFLyrVectPanel extends GridBagLayoutPanel {
 
-	
-	private JPanel createFilePanel(){
+	private JPanel createFilePanel() {
 		Insets insets = new Insets(5, 5, 5, 5);
 		JPanel aux = new JPanel(new BorderLayout());
-		String resultLayerText = PluginServices.getText(this, "Cobertura_de_salida") + ":";
+		String resultLayerText = PluginServices.getText(this,
+				"Cobertura_de_salida") + ":";
 		JTextField resultTf = getFileNameResultTextField();
 		JButton openButton = getOpenResultButton();
-	    aux.add(resultTf, BorderLayout.WEST);
-	    aux.add(new JLabel(" "), BorderLayout.CENTER);
-	    aux.add(openButton, BorderLayout.EAST);
-	    addComponent(resultLayerText, aux, GridBagConstraints.HORIZONTAL, insets );
+		aux.add(resultTf, BorderLayout.WEST);
+		aux.add(new JLabel(" "), BorderLayout.CENTER);
+		aux.add(openButton, BorderLayout.EAST);
+		addComponent(resultLayerText, aux, GridBagConstraints.HORIZONTAL,
+				insets);
 		setBounds(0, 0, 520, 410);
 		return aux;
 	}
-	
-	
-	
+
 	protected JTextField getFileNameResultTextField() {
 		return new JTextField(25);
 	}
-	
+
 	private JButton getOpenResultButton() {
-		JButton	openResultButton = new JButton();
+		JButton openResultButton = new JButton();
 		openResultButton.setText(PluginServices.getText(this, "Abrir"));
 		openResultButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					openResultFile();
-				}
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+				openResultFile();
 			}
-		);
+		});
 		return openResultButton;
 	}
-	
+
 	/**
-	 * Opens a dialog to select where (file, database, etc)
-	 * to save the result layer.
-	 *
+	 * Opens a dialog to select where (file, database, etc) to save the result
+	 * layer.
+	 * 
 	 */
 	public void openResultFile() {
 		JFileChooser jfc = new JFileChooser();
-		jfc
-				.addChoosableFileFilter(new GenericFileFilter("shp",
-						PluginServices.getText (this,"Ficheros_SHP")));
+		jfc.addChoosableFileFilter(new GenericFileFilter("shp", PluginServices
+				.getText(this, "Ficheros_SHP")));
 		if (jfc.showSaveDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
 			File file = jfc.getSelectedFile();
 			if (!(file.getPath().endsWith(".shp") || file.getPath().endsWith(

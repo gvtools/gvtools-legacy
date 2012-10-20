@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.gvsig.gpe.kml.parser.GPEKml2_1_Parser;
 import org.gvsig.gpe.kml.parser.GPEKmz2_1_Parser;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -55,13 +54,12 @@ import org.gvsig.gpe.kml.parser.GPEKmz2_1_Parser;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class KMLVectorialDriver extends GPEVectorialDriver{
+public class KMLVectorialDriver extends GPEVectorialDriver {
 	public static final String DRIVERNAME = "gvSIG KML Memory Driver";
-	
-	
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.hardcode.driverManager.Driver#getName()
 	 */
 	public String getName() {
@@ -70,6 +68,7 @@ public class KMLVectorialDriver extends GPEVectorialDriver{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.gpe.reader.IGPEDriver#getGPEParser()
 	 */
 	public ArrayList getGPEParsers() {

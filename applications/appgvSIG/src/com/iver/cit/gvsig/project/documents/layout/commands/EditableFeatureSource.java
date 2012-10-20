@@ -46,149 +46,182 @@ import com.iver.cit.gvsig.exceptions.commands.EditionCommandException;
 import com.iver.cit.gvsig.fmap.edition.commands.CommandRecord;
 import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 
-
 /**
  * Interface of class to control the edition of FFrames.
- *
+ * 
  * @author Vicente Caballero Navarro
-*/
+ */
 public interface EditableFeatureSource {
-	 /**
-     * Returns from an index the FFrame.
-     *
-     * @param index
-     *
-     * @return FFrame.
-     */
+	/**
+	 * Returns from an index the FFrame.
+	 * 
+	 * @param index
+	 * 
+	 * @return FFrame.
+	 */
 	IFFrame getFFrame(int index);
-	 /**
-     * Returns all the fframes that are not removed.
-     *
-     * @return Vector with fframes.
-     */
-    IFFrame[] getFFrames();
-    /**
-     * Returns the number of FFrame.
-     *
-     * @return Number of FFrames
-     */
-    int getFFrameCount();
-    /**
-     * Add a FFrame in the mechanism of control creating a command.
-     *
-     * @param f FFrame to add
-     */
-    void addFFrame(IFFrame f);
-    /**
-     * Undo the last command added.
-     * @throws EditionCommandException
-     */
-    void undo() throws EditionCommandException;
-    /**
-     * Redo the last command undid.
-     * @throws EditionCommandException
-     */
-    void redo() throws EditionCommandException;
-    /**
-     * Returns if there are more commands to undo
-     *
-     * @return True if there are more commands to undo
-     */
-    boolean moreUndoCommands();
-    /**
-     * Returns if there are more commands to redo
-     *
-     * @return True if there are more commands to redo
-     */
-    boolean moreRedoCommands();
-    /**
-     * Remove the FFrame by the index.
-     *
-     * @param index
-     */
-    void removeFFrame(int index);
-    /**
-     * Modify a fframe to another fframe new.
-     *
-     * @param fant Previous Fframe.
-     * @param fnew New FFrame.
-     */
-    boolean modifyFFrame(IFFrame fant, IFFrame fnew);
 
-    void setImage(Image i);
+	/**
+	 * Returns all the fframes that are not removed.
+	 * 
+	 * @return Vector with fframes.
+	 */
+	IFFrame[] getFFrames();
 
-    Image getImage();
-    /**
-     * Start a composed command of other simpler commands.
-     * Create an only one command to reproduce if all at once.
-     */
-    void startComplexCommand();
-    /**
-     * Terminate a composed command.
-     */
-    void endComplexCommand(String description);
-    /**
-     * Undo add FFrame from index.
-     *
-     * @param index
-     */
-    void undoAddFFrame(int index);
-    /**
-     * Add FFrame.
-     *
-     * @param frame
-     *
-     * @return index of new fframe.
-     */
-    int doAddFFrame(IFFrame frame);
-    /**
-     * Add FFrame from index.
-     *
-     * @param frame New FFrame.
-     * @param index Index of new FFrame.
-     */
-    void doAddFFrame(IFFrame frame, int index);
-    /**
-     * Undo modify an FFrame modified.
-     *
-     * @param fant Previous fframe.
-     * @param fnew New FFrame.
-     * @param indexAnt Actual index.
-     * @param indexLast Previous index.
-     */
-    void undoModifyFFrame( int indexAnt,
-        int previousIndex);
-    /**
-     * Modify FFrame from index and new FFrame.
-     *
-     * @param indexAnt Actual index.
-     * @param frameNext New FFrame.
-     *
-     * @return New index of FFrame.
-     */
-    int doModifyFFrame(int indexAnt, IFFrame frameNext);
-    /**
-     * Undo Remove FFrame from index.
-     *
-     * @param index Actual index of FFrame.
-     */
-    void undoRemoveFFrame(int index);
-    /**
-     * Remove FFrame from actual index.
-     *
-     * @param index Actual index.
-     */
-    void doRemoveFFrame(int index);
-    /**
-     * Returns all the fframes, remove and done not remove.
-     *
-     * @return All FFrames.
-     */
-    IFFrame[] getAllFFrames();
-    /**
-     * Returns the command record.
-     *
-     * @return CommandRecord.
-     */
-    CommandRecord getCommandRecord();
+	/**
+	 * Returns the number of FFrame.
+	 * 
+	 * @return Number of FFrames
+	 */
+	int getFFrameCount();
+
+	/**
+	 * Add a FFrame in the mechanism of control creating a command.
+	 * 
+	 * @param f
+	 *            FFrame to add
+	 */
+	void addFFrame(IFFrame f);
+
+	/**
+	 * Undo the last command added.
+	 * 
+	 * @throws EditionCommandException
+	 */
+	void undo() throws EditionCommandException;
+
+	/**
+	 * Redo the last command undid.
+	 * 
+	 * @throws EditionCommandException
+	 */
+	void redo() throws EditionCommandException;
+
+	/**
+	 * Returns if there are more commands to undo
+	 * 
+	 * @return True if there are more commands to undo
+	 */
+	boolean moreUndoCommands();
+
+	/**
+	 * Returns if there are more commands to redo
+	 * 
+	 * @return True if there are more commands to redo
+	 */
+	boolean moreRedoCommands();
+
+	/**
+	 * Remove the FFrame by the index.
+	 * 
+	 * @param index
+	 */
+	void removeFFrame(int index);
+
+	/**
+	 * Modify a fframe to another fframe new.
+	 * 
+	 * @param fant
+	 *            Previous Fframe.
+	 * @param fnew
+	 *            New FFrame.
+	 */
+	boolean modifyFFrame(IFFrame fant, IFFrame fnew);
+
+	void setImage(Image i);
+
+	Image getImage();
+
+	/**
+	 * Start a composed command of other simpler commands. Create an only one
+	 * command to reproduce if all at once.
+	 */
+	void startComplexCommand();
+
+	/**
+	 * Terminate a composed command.
+	 */
+	void endComplexCommand(String description);
+
+	/**
+	 * Undo add FFrame from index.
+	 * 
+	 * @param index
+	 */
+	void undoAddFFrame(int index);
+
+	/**
+	 * Add FFrame.
+	 * 
+	 * @param frame
+	 * 
+	 * @return index of new fframe.
+	 */
+	int doAddFFrame(IFFrame frame);
+
+	/**
+	 * Add FFrame from index.
+	 * 
+	 * @param frame
+	 *            New FFrame.
+	 * @param index
+	 *            Index of new FFrame.
+	 */
+	void doAddFFrame(IFFrame frame, int index);
+
+	/**
+	 * Undo modify an FFrame modified.
+	 * 
+	 * @param fant
+	 *            Previous fframe.
+	 * @param fnew
+	 *            New FFrame.
+	 * @param indexAnt
+	 *            Actual index.
+	 * @param indexLast
+	 *            Previous index.
+	 */
+	void undoModifyFFrame(int indexAnt, int previousIndex);
+
+	/**
+	 * Modify FFrame from index and new FFrame.
+	 * 
+	 * @param indexAnt
+	 *            Actual index.
+	 * @param frameNext
+	 *            New FFrame.
+	 * 
+	 * @return New index of FFrame.
+	 */
+	int doModifyFFrame(int indexAnt, IFFrame frameNext);
+
+	/**
+	 * Undo Remove FFrame from index.
+	 * 
+	 * @param index
+	 *            Actual index of FFrame.
+	 */
+	void undoRemoveFFrame(int index);
+
+	/**
+	 * Remove FFrame from actual index.
+	 * 
+	 * @param index
+	 *            Actual index.
+	 */
+	void doRemoveFFrame(int index);
+
+	/**
+	 * Returns all the fframes, remove and done not remove.
+	 * 
+	 * @return All FFrames.
+	 */
+	IFFrame[] getAllFFrames();
+
+	/**
+	 * Returns the command record.
+	 * 
+	 * @return CommandRecord.
+	 */
+	CommandRecord getCommandRecord();
 }

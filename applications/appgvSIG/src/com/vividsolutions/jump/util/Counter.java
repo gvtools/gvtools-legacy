@@ -1,4 +1,3 @@
-
 /*
  * The Unified Mapping Platform (JUMP) is an extensible, interactive GUI 
  * for visualizing and manipulating spatial features with geometry and attributes.
@@ -33,26 +32,25 @@
 
 package com.vividsolutions.jump.util;
 
-
 /**
- * A Counter used for example in Maps to count the number of times
- * an item occurs.
+ * A Counter used for example in Maps to count the number of times an item
+ * occurs.
  */
 public class Counter {
-    private int value = 0;
+	private int value = 0;
 
-    public Counter() {
-    }
+	public Counter() {
+	}
 
-    public Counter(int value) {
-        this.value = value;
-    }
+	public Counter(int value) {
+		this.value = value;
+	}
 
-    public int getValue() {
-        return value;
-    }
+	public int getValue() {
+		return value;
+	}
 
-    public void increment() {
-        value++;
-    }
+	public void increment() {
+		value++;
+	}
 }

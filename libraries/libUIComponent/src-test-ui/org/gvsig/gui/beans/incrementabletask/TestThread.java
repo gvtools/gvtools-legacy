@@ -26,7 +26,7 @@ public class TestThread {
 	public class miThread1 extends Thread {
 		public void run() {
 			System.out.println("miThread1 begin");
-			for (int i=0; i<=10; i++) {
+			for (int i = 0; i <= 10; i++) {
 				System.out.println(i);
 				try {
 					Thread.sleep(500);
@@ -49,7 +49,8 @@ public class TestThread {
 				e.printStackTrace();
 			}
 			System.out.println("isAlive(): " + a.isAlive());
-			if (!a.isAlive()) break;
+			if (!a.isAlive())
+				break;
 		}
 		System.out.println("testThread end");
 	}

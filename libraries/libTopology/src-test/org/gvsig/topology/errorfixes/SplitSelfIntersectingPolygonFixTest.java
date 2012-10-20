@@ -42,20 +42,21 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.errorfixes;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import org.gvsig.exceptions.BaseException;
 import org.gvsig.topology.SimpleTopologyErrorContainer;
 import org.gvsig.topology.Topology;
 import org.gvsig.topology.TopologyError;
-import org.gvsig.topology.topologyrules.LineMustNotSelfIntersect;
 import org.gvsig.topology.topologyrules.PolygonMustNotSelfIntersect;
 import org.gvsig.topology.util.LayerFactory;
 
@@ -65,14 +66,13 @@ import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.ShapeFactory;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
-import junit.framework.TestCase;
-
 public class SplitSelfIntersectingPolygonFixTest extends TestCase {
-//	 220 260, 260 200)
-//	LINESTRING (140 120, 100 140, 100 240, 220 220, 200 140, 60 180, 60 140, 100 100, 180 80, 140 120)
-	
-public void testSplitSelfFix() throws BaseException{
-		
+	// 220 260, 260 200)
+	// LINESTRING (140 120, 100 140, 100 240, 220 220, 200 140, 60 180, 60 140,
+	// 100 100, 180 80, 140 120)
+
+	public void testSplitSelfFix() throws BaseException {
+
 		GeneralPathX gpx = new GeneralPathX();
 		gpx.moveTo(260, 200);
 		gpx.lineTo(280, 80);
@@ -85,9 +85,9 @@ public void testSplitSelfFix() throws BaseException{
 		gpx.lineTo(0, 160);
 		gpx.lineTo(60, 260);
 		gpx.lineTo(220, 260);
-//		gpx.lineTo(260, 200);
+		// gpx.lineTo(260, 200);
 		gpx.closePath();
-		
+
 		gpx.moveTo(140, 120);
 		gpx.lineTo(100, 140);
 		gpx.lineTo(100, 240);
@@ -97,29 +97,27 @@ public void testSplitSelfFix() throws BaseException{
 		gpx.lineTo(60, 140);
 		gpx.lineTo(100, 100);
 		gpx.lineTo(180, 80);
-//		gpx.lineTo(140, 120);
+		// gpx.lineTo(140, 120);
 		gpx.closePath();
-		
-			
-		
+
 		IGeometry geometry = ShapeFactory.createPolygon2D(gpx);
-	
+
 		List<IGeometry> geoms = new ArrayList<IGeometry>();
 		geoms.add(geometry);
-		
+
 		FLyrVect lyr = LayerFactory.createLayerFor(geoms, FShape.POLYGON);
-		
-		
-		Topology topo = new Topology(null, null, 0.2d, 0, new SimpleTopologyErrorContainer());
-		PolygonMustNotSelfIntersect violatedRule = new PolygonMustNotSelfIntersect(topo, lyr, 0.1d);
+
+		Topology topo = new Topology(null, null, 0.2d, 0,
+				new SimpleTopologyErrorContainer());
+		PolygonMustNotSelfIntersect violatedRule = new PolygonMustNotSelfIntersect(
+				topo, lyr, 0.1d);
 		violatedRule.setTopologyErrorContainer(topo);
 		violatedRule.checkRule();
-		
+
 		TopologyError error = topo.getTopologyError(0);
-		
-		
+
 		new SplitSelfIntersectingPolygonFix().fix(error);
-		
+
 		assertTrue(topo.getNumberOfErrors() == 0);
 	}
 }

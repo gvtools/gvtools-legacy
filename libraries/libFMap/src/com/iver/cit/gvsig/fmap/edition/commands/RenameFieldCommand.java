@@ -52,14 +52,13 @@ public class RenameFieldCommand extends AbstractCommand {
 	String antName;
 	String newName;
 
-	public RenameFieldCommand(EditableAdapter edAdapter, InternalField field, String newName)
-	{
+	public RenameFieldCommand(EditableAdapter edAdapter, InternalField field,
+			String newName) {
 		this.edAdapter = edAdapter;
 		this.field = field;
 		antName = field.getFieldDesc().getFieldAlias();
 		this.newName = newName;
 	}
-
 
 	public void undo() throws EditionCommandException {
 		edAdapter.undoRenameField(field, antName);
@@ -69,7 +68,8 @@ public class RenameFieldCommand extends AbstractCommand {
 		try {
 			edAdapter.doRenameField(field, newName);
 		} catch (ReadDriverException e) {
-			throw new EditionCommandException(edAdapter.getWriter().getName(),e);
+			throw new EditionCommandException(edAdapter.getWriter().getName(),
+					e);
 		}
 	}
 
@@ -78,5 +78,3 @@ public class RenameFieldCommand extends AbstractCommand {
 	}
 
 }
-
-

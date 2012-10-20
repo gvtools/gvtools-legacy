@@ -88,11 +88,13 @@ import com.iver.cit.gvsig.fmap.rendering.IClassifiedVectorLegend;
 import com.iver.cit.gvsig.fmap.rendering.ILegend;
 import com.iver.cit.gvsig.fmap.rendering.IVectorLegend;
 import com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend;
+
 /**
- * Implements the panel which allows the user to control all the information about the
- * legends of a layer in order to improve the information that it offers to the user.
- * There are options to create, save or load an existing legend.
- *
+ * Implements the panel which allows the user to control all the information
+ * about the legends of a layer in order to improve the information that it
+ * offers to the user. There are options to create, save or load an existing
+ * legend.
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class LegendManager extends AbstractThemeManagerPage {
@@ -126,7 +128,7 @@ public class LegendManager extends AbstractThemeManagerPage {
 	public static String defaultLegendFolderPath;
 	{
 
-		Preferences prefs = Preferences.userRoot().node( "gvsig.foldering" );
+		Preferences prefs = Preferences.userRoot().node("gvsig.foldering");
 		defaultLegendFolderPath = prefs.get("LegendsFolder", "");
 	}
 	private ActionListener loadSaveLegendAction = new ActionListener() {
@@ -134,169 +136,239 @@ public class LegendManager extends AbstractThemeManagerPage {
 			JComponent c = (JComponent) e.getSource();
 			if (c.equals(getBtnSaveLegend())) {
 
-				JLegendFileChooser jfc = new JLegendFileChooser(getLegendDrivers(),true);
+				JLegendFileChooser jfc = new JLegendFileChooser(
+						getLegendDrivers(), true);
 				jfc.setAcceptAllFileFilterUsed(false);
-
 
 				File basedir = null;
 
 				jfc.setCurrentDirectory(basedir);
-				if (jfc.showSaveDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
+				if (jfc.showSaveDialog((Component) PluginServices
+						.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
 
 					File file = jfc.getSelectedFile();
-					String version = jfc.getDriverVersion();
+					String version = JLegendFileChooser.getDriverVersion();
 					IFMapLegendDriver driver = jfc.getSuitableDriver();
 
-					if(!(driver instanceof FMapGVLDriver)){
-						Object[] options = {PluginServices.getText(this, "yes"),
-								PluginServices.getText(this, "no")};
+					if (!(driver instanceof FMapGVLDriver)) {
+						Object[] options = {
+								PluginServices.getText(this, "yes"),
+								PluginServices.getText(this, "no") };
 
-						int answer = JOptionPane.showOptionDialog((Component)PluginServices.getMainFrame(),
-								PluginServices.getText(this, "not_GVL_save_question")+"\n"+
-								PluginServices.getText(this, "desea_continuar"),
-								PluginServices.getText(this, "confirmation_dialog"),
+						int answer = JOptionPane.showOptionDialog(
+								(Component) PluginServices.getMainFrame(),
+								PluginServices.getText(this,
+										"not_GVL_save_question")
+										+ "\n"
+										+ PluginServices.getText(this,
+												"desea_continuar"),
+								PluginServices.getText(this,
+										"confirmation_dialog"),
 								JOptionPane.YES_NO_OPTION,
-								JOptionPane.QUESTION_MESSAGE,
-								null,
-								options, options[1]);
-						if (answer!=JOptionPane.OK_OPTION) {
-							// 'Cancel' pressed or window closed: don't save anythig, exit save dialog
+								JOptionPane.QUESTION_MESSAGE, null, options,
+								options[1]);
+						if (answer != JOptionPane.OK_OPTION) {
+							// 'Cancel' pressed or window closed: don't save
+							// anythig, exit save dialog
 							return;
 						}
 					}
 
 					if (file.exists()) {
-						Object[] options = {PluginServices.getText(this, "yes"),
+						Object[] options = {
+								PluginServices.getText(this, "yes"),
 								PluginServices.getText(this, "no"),
-								PluginServices.getText(this, "Cancel")};
+								PluginServices.getText(this, "Cancel") };
 
-						int answer = JOptionPane.showOptionDialog((Component)PluginServices.getMainFrame(),
-								PluginServices.getText(this, "fichero_ya_existe_seguro_desea_guardarlo"),
-								PluginServices.getText(this, "confirmation_dialog"),
-								JOptionPane.YES_NO_CANCEL_OPTION,
-								JOptionPane.QUESTION_MESSAGE,
-								null,
-								options, options[1]);
-						if (answer!=JOptionPane.OK_OPTION) {
-							// 'Cancel' pressed or window closed: don't save anythig, exit save dialog
+						int answer = JOptionPane
+								.showOptionDialog(
+										(Component) PluginServices
+												.getMainFrame(),
+										PluginServices
+												.getText(this,
+														"fichero_ya_existe_seguro_desea_guardarlo"),
+										PluginServices.getText(this,
+												"confirmation_dialog"),
+										JOptionPane.YES_NO_CANCEL_OPTION,
+										JOptionPane.QUESTION_MESSAGE, null,
+										options, options[1]);
+						if (answer != JOptionPane.OK_OPTION) {
+							// 'Cancel' pressed or window closed: don't save
+							// anythig, exit save dialog
 							return;
 						}
 					}
 
-
 					try {
-						driver.write(layer.getMapContext().getLayers(),layer, activePanel.getLegend(), file, version);
+						driver.write(layer.getMapContext().getLayers(), layer,
+								activePanel.getLegend(), file, version);
 
 					} catch (LegendDriverException e1) {
 						int type = e1.getType();
-						String message=PluginServices.getText(this, "could_not_save_legend")+":\n";
+						String message = PluginServices.getText(this,
+								"could_not_save_legend") + ":\n";
 
-						if ((type & LegendDriverException.SAVE_LEGEND_ERROR) != 0){
-							type = type & ~LegendDriverException.SAVE_LEGEND_ERROR;
-							message += PluginServices.getText(this, "error_writing_file")+".\n";
+						if ((type & LegendDriverException.SAVE_LEGEND_ERROR) != 0) {
+							type = type
+									& ~LegendDriverException.SAVE_LEGEND_ERROR;
+							message += PluginServices.getText(this,
+									"error_writing_file") + ".\n";
 						}
-						if ((type & LegendDriverException.UNSUPPORTED_LEGEND_CREATION) != 0){
-							type = type & ~LegendDriverException.UNSUPPORTED_LEGEND_CREATION;
-							message += "-"+ PluginServices.getText(this, "legend_format_not_yet_supported")+"\n";
+						if ((type & LegendDriverException.UNSUPPORTED_LEGEND_CREATION) != 0) {
+							type = type
+									& ~LegendDriverException.UNSUPPORTED_LEGEND_CREATION;
+							message += "-"
+									+ PluginServices.getText(this,
+											"legend_format_not_yet_supported")
+									+ "\n";
 						}
 						if (type != 0) {
-							message = "-"+PluginServices.getText(this, "unknown_error")+"\n";
+							message = "-"
+									+ PluginServices.getText(this,
+											"unknown_error") + "\n";
 						}
-						JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(), message);
+						JOptionPane.showMessageDialog(
+								(Component) PluginServices.getMainFrame(),
+								message);
 					}
 				}
 			} else if (c.equals(getBtnLoadLegend())) {
 
-				JLegendFileChooser jfc = new JLegendFileChooser(getLegendDrivers());
+				JLegendFileChooser jfc = new JLegendFileChooser(
+						getLegendDrivers());
 				jfc.setAcceptAllFileFilterUsed(false);
 
-				if (jfc.showOpenDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
-					File file=jfc.getSelectedFile();
+				if (jfc.showOpenDialog((Component) PluginServices
+						.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
+					File file = jfc.getSelectedFile();
 					IFMapLegendDriver driver = jfc.getSuitableDriver();
 					String path = file.getAbsolutePath();
-					defaultLegendFolderPath = path.substring(0, path.lastIndexOf(File.separator));
+					defaultLegendFolderPath = path.substring(0,
+							path.lastIndexOf(File.separator));
 
 					try {
-						table = driver.read(layer.getMapContext().getLayers(),layer, file);
+						table = driver.read(layer.getMapContext().getLayers(),
+								layer, file);
 
-						if(table.containsKey(layer))
+						if (table.containsKey(layer))
 							applyLegend((ILegend) table.get(layer));
-
 
 					} catch (LegendDriverException e1) {
 						int type = e1.getType();
-						String message = PluginServices.getText(this, "the_legend_will_not_be_applied")+":\n";
+						String message = PluginServices.getText(this,
+								"the_legend_will_not_be_applied") + ":\n";
 						boolean hasReason = false;
 
-						if ((type & LegendDriverException.CLASSIFICATION_FIELDS_NOT_FOUND) != 0){
-							type = type & ~LegendDriverException.CLASSIFICATION_FIELDS_NOT_FOUND;
-							message +="-"+ PluginServices.getText(this, "classification_field_does_not_exists")+"\n";
+						if ((type & LegendDriverException.CLASSIFICATION_FIELDS_NOT_FOUND) != 0) {
+							type = type
+									& ~LegendDriverException.CLASSIFICATION_FIELDS_NOT_FOUND;
+							message += "-"
+									+ PluginServices
+											.getText(this,
+													"classification_field_does_not_exists")
+									+ "\n";
 							hasReason = true;
 						}
-						if ((type & LegendDriverException.LEGEND_TYPE_NOT_YET_SUPPORTED) != 0){
-							type = type & ~LegendDriverException.LEGEND_TYPE_NOT_YET_SUPPORTED;
-							message += "-"+ PluginServices.getText(this, "legend_type_not_yet_supported")+"\n";
+						if ((type & LegendDriverException.LEGEND_TYPE_NOT_YET_SUPPORTED) != 0) {
+							type = type
+									& ~LegendDriverException.LEGEND_TYPE_NOT_YET_SUPPORTED;
+							message += "-"
+									+ PluginServices.getText(this,
+											"legend_type_not_yet_supported")
+									+ "\n";
 							hasReason = true;
 						}
-						if ((type & LegendDriverException.SYMBOL_TYPE_NOT_YET_SUPPORTED) != 0){
-							type = type & ~LegendDriverException.SYMBOL_TYPE_NOT_YET_SUPPORTED;
-							message += "-"+ PluginServices.getText(this, "unsupported_symbol_type")+"\n";
+						if ((type & LegendDriverException.SYMBOL_TYPE_NOT_YET_SUPPORTED) != 0) {
+							type = type
+									& ~LegendDriverException.SYMBOL_TYPE_NOT_YET_SUPPORTED;
+							message += "-"
+									+ PluginServices.getText(this,
+											"unsupported_symbol_type") + "\n";
 							hasReason = true;
 						}
-						if ((type & LegendDriverException.LAYER_SHAPETYPE_MISMATCH) != 0){
-							type = type & ~LegendDriverException.LAYER_SHAPETYPE_MISMATCH;
-							message += "-"+ PluginServices.getText(this, "layer_geometry_and_legend_types_are_incompatible")+"\n";
+						if ((type & LegendDriverException.LAYER_SHAPETYPE_MISMATCH) != 0) {
+							type = type
+									& ~LegendDriverException.LAYER_SHAPETYPE_MISMATCH;
+							message += "-"
+									+ PluginServices
+											.getText(this,
+													"layer_geometry_and_legend_types_are_incompatible")
+									+ "\n";
 							hasReason = true;
 						}
-						if ((type & LegendDriverException.PARSE_LEGEND_FILE_ERROR) != 0){
-							type = type & ~LegendDriverException.PARSE_LEGEND_FILE_ERROR;
-							message += "-"+ PluginServices.getText(this, "failed_reading_file")+"\n";
+						if ((type & LegendDriverException.PARSE_LEGEND_FILE_ERROR) != 0) {
+							type = type
+									& ~LegendDriverException.PARSE_LEGEND_FILE_ERROR;
+							message += "-"
+									+ PluginServices.getText(this,
+											"failed_reading_file") + "\n";
 							hasReason = true;
 						}
-						if ((type & LegendDriverException.UNSUPPORTED_LEGEND_FILE_VERSION) != 0){
-							type = type & ~LegendDriverException.UNSUPPORTED_LEGEND_FILE_VERSION;
-							message += "-"+ PluginServices.getText(this, "unsupported_legend_file_version")+"\n";
+						if ((type & LegendDriverException.UNSUPPORTED_LEGEND_FILE_VERSION) != 0) {
+							type = type
+									& ~LegendDriverException.UNSUPPORTED_LEGEND_FILE_VERSION;
+							message += "-"
+									+ PluginServices.getText(this,
+											"unsupported_legend_file_version")
+									+ "\n";
 							hasReason = true;
 						}
-						if ((type & LegendDriverException.UNSUPPORTED_LEGEND_READING) != 0){
-							type = type & ~LegendDriverException.UNSUPPORTED_LEGEND_READING;
-							message +="-"+ PluginServices.getText(this, "unsupported_legend_file_format")+"\n";
+						if ((type & LegendDriverException.UNSUPPORTED_LEGEND_READING) != 0) {
+							type = type
+									& ~LegendDriverException.UNSUPPORTED_LEGEND_READING;
+							message += "-"
+									+ PluginServices.getText(this,
+											"unsupported_legend_file_format")
+									+ "\n";
 							hasReason = true;
 						}
-						if ((type & LegendDriverException.LAYER_NAME_NOT_FOUND) != 0){
-							type = type & ~LegendDriverException.LAYER_NAME_NOT_FOUND;
-							message +="-"+ PluginServices.getText(this, "could_not_find_layer")+"\n";
+						if ((type & LegendDriverException.LAYER_NAME_NOT_FOUND) != 0) {
+							type = type
+									& ~LegendDriverException.LAYER_NAME_NOT_FOUND;
+							message += "-"
+									+ PluginServices.getText(this,
+											"could_not_find_layer") + "\n";
 							hasReason = true;
 						}
 						if (!hasReason) {
-							message = "-"+ PluginServices.getText(this, "unknown_error")+"\n";
+							message = "-"
+									+ PluginServices.getText(this,
+											"unknown_error") + "\n";
 						}
-						JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(), message);
+						JOptionPane.showMessageDialog(
+								(Component) PluginServices.getMainFrame(),
+								message);
 					}
-					getBtnSaveLegend().setEnabled(activePanel!=null);
+					getBtnSaveLegend().setEnabled(activePanel != null);
 				}
 			}
 		}
 
-
 		private IFMapLegendDriver[] getLegendDrivers() {
-			Class<?>[] legendDriverClasses = legendDriverPool.toArray(new Class[0]);
+			Class<?>[] legendDriverClasses = legendDriverPool
+					.toArray(new Class[0]);
 			ArrayList<IFMapLegendDriver> drivers = new ArrayList<IFMapLegendDriver>();
 			for (int i = 0; i < legendDriverClasses.length; i++) {
-				String message = PluginServices.getText(this, "adding_legend_file_format_support")+": ";
+				String message = PluginServices.getText(this,
+						"adding_legend_file_format_support") + ": ";
 				try {
 					Class<?> c = legendDriverClasses[i];
 					drivers.add((IFMapLegendDriver) c.newInstance());
 				} catch (Exception e) {
-					NotificationManager.addError(message+PluginServices.getText(this, "failed"), e);
+					NotificationManager
+							.addError(
+									message
+											+ PluginServices.getText(this,
+													"failed"), e);
 				}
-				NotificationManager.addInfo(message+PluginServices.getText(this, "OK"));
+				NotificationManager.addInfo(message
+						+ PluginServices.getText(this, "OK"));
 
 			}
-			return (IFMapLegendDriver[]) drivers.toArray(new IFMapLegendDriver[0]);
+			return (IFMapLegendDriver[]) drivers
+					.toArray(new IFMapLegendDriver[0]);
 		};
 	};
-
 
 	public LegendManager() {
 		initialize();
@@ -325,7 +397,7 @@ public class LegendManager extends AbstractThemeManagerPage {
 
 	private JPanel getCentralPanel() {
 		if (jCentralPanel == null) {
-			jCentralPanel = new JPanel(new BorderLayout(0,10));
+			jCentralPanel = new JPanel(new BorderLayout(0, 10));
 			jCentralPanel.add(getTitleScroll(), BorderLayout.NORTH);
 			jCentralPanel.add(getJPanelContainer(), BorderLayout.CENTER);
 		}
@@ -341,14 +413,18 @@ public class LegendManager extends AbstractThemeManagerPage {
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getTopPanel() {
 		if (topPanel == null) {
 			topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
 			topPanel.setPreferredSize(new Dimension(638, 31));
-			topPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			topPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+					null, "",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					null));
 			topPanel.add(getBtnSaveLegend(), null);
 			topPanel.add(getBtnLoadLegend(), null);
 		}
@@ -357,7 +433,8 @@ public class LegendManager extends AbstractThemeManagerPage {
 
 	private JButton getBtnSaveLegend() {
 		if (btnSaveLegend == null) {
-			btnSaveLegend = new JButton(PluginServices.getText(this,"Guardar_leyenda")+"...");
+			btnSaveLegend = new JButton(PluginServices.getText(this,
+					"Guardar_leyenda") + "...");
 			btnSaveLegend.addActionListener(loadSaveLegendAction);
 		}
 		return btnSaveLegend;
@@ -365,7 +442,8 @@ public class LegendManager extends AbstractThemeManagerPage {
 
 	private JButton getBtnLoadLegend() {
 		if (btnLoadLegend == null) {
-			btnLoadLegend = new JButton(PluginServices.getText(this,"Recuperar_leyenda")+"...");
+			btnLoadLegend = new JButton(PluginServices.getText(this,
+					"Recuperar_leyenda") + "...");
 			btnLoadLegend.addActionListener(loadSaveLegendAction);
 		}
 		return btnLoadLegend;
@@ -373,7 +451,7 @@ public class LegendManager extends AbstractThemeManagerPage {
 
 	/**
 	 * This method initializes jTextArea
-	 *
+	 * 
 	 * @return javax.swing.JTextArea
 	 */
 	private JTextArea getTitleArea() {
@@ -384,25 +462,26 @@ public class LegendManager extends AbstractThemeManagerPage {
 			titleArea.setRows(0);
 			titleArea.setWrapStyleWord(false);
 			titleArea.setEditable(false);
-			titleArea.setPreferredSize(new java.awt.Dimension(495,40));
+			titleArea.setPreferredSize(new java.awt.Dimension(495, 40));
 		}
 		return titleArea;
 	}
+
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPreviewPanel() {
 		if (preview == null) {
 			preview = new JPanel();
-			preview.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+			preview.setBorder(javax.swing.BorderFactory
+					.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 			preview.setBackground(java.awt.SystemColor.text);
-			preview.setLayout(new BorderLayout(5,5));
+			preview.setLayout(new BorderLayout(5, 5));
 			preview.add(getIconLabel());
-			preview.setPreferredSize(new Dimension(
-					getSplitPane().getDividerLocation(),
-					130));
+			preview.setPreferredSize(new Dimension(getSplitPane()
+					.getDividerLocation(), 130));
 			preview.setBackground(Color.white);
 		}
 		return preview;
@@ -420,7 +499,7 @@ public class LegendManager extends AbstractThemeManagerPage {
 
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getLegendTreeScrollPane() {
@@ -432,25 +511,34 @@ public class LegendManager extends AbstractThemeManagerPage {
 	}
 
 	/**
-	 * <p>Adds a new fully-featured legend panel to the LegendManager.<br></p>
-	 *
-	 * <p><b>CAUTION:</b> Trying to add a child page whose parent hasn't been added yet
-	 * causes the application to fall in an infinite loop. This is a known
-	 * bug, sorry. Just avoid this case or try to fix it (lol).<br></p>
-	 *
-	 * <p><b>Notice</b> that there is no type check so if you add a non-ILegendPanel class,
-	 * you'll have a runtime error later.</p>
-	 * @param page, Class of type ILegendPanel
+	 * <p>
+	 * Adds a new fully-featured legend panel to the LegendManager.<br>
+	 * </p>
+	 * 
+	 * <p>
+	 * <b>CAUTION:</b> Trying to add a child page whose parent hasn't been added
+	 * yet causes the application to fall in an infinite loop. This is a known
+	 * bug, sorry. Just avoid this case or try to fix it (lol).<br>
+	 * </p>
+	 * 
+	 * <p>
+	 * <b>Notice</b> that there is no type check so if you add a
+	 * non-ILegendPanel class, you'll have a runtime error later.
+	 * </p>
+	 * 
+	 * @param page
+	 *            , Class of type ILegendPanel
 	 */
-	public static void addLegendPage(Class<? extends ILegendPanel> iLegendPanelClass) {
+	public static void addLegendPage(
+			Class<? extends ILegendPanel> iLegendPanelClass) {
 		if (!legendPool.contains(iLegendPanelClass)) {
 			legendPool.add(iLegendPanelClass);
 		}
 	}
 
 	/**
-	 * Causes the component to be autofilled with the legend pages that
-	 * were added through the static method addLegendPage(ILegendPanel page)
+	 * Causes the component to be autofilled with the legend pages that were
+	 * added through the static method addLegendPage(ILegendPanel page)
 	 */
 	private void fillDialog() {
 		if (empty) {
@@ -461,7 +549,9 @@ public class LegendManager extends AbstractThemeManagerPage {
 					try {
 						page = (ILegendPanel) pageClass.newInstance();
 					} catch (NoClassDefFoundError ex) {
-						NotificationManager.addWarning("Trying to look for this class:" + pageClass.getName(), ex);
+						NotificationManager.addWarning(
+								"Trying to look for this class:"
+										+ pageClass.getName(), ex);
 						continue;
 					}
 					if (page.isSuitableFor(layer)) {
@@ -472,14 +562,18 @@ public class LegendManager extends AbstractThemeManagerPage {
 							// rebuild page tree
 							dirtyTree = false;
 
-							ArrayList<ILegendPanel> legList = new ArrayList<ILegendPanel>(pages.values());
+							ArrayList<ILegendPanel> legList = new ArrayList<ILegendPanel>(
+									pages.values());
 							ArrayList<ILegendPanel> alreadyAdded = new ArrayList<ILegendPanel>();
 							DefaultTreeModel model = new DefaultTreeModel(root);
-							while (legList.size()>0) {
-								ILegendPanel legend = (ILegendPanel) legList.get(0);
-								Class<? extends ILegendPanel> parent = legend.getParentClass();
-								while (parent != null &&
-										!alreadyAdded.contains(pages.get(parent))) {
+							while (legList.size() > 0) {
+								ILegendPanel legend = (ILegendPanel) legList
+										.get(0);
+								Class<? extends ILegendPanel> parent = legend
+										.getParentClass();
+								while (parent != null
+										&& !alreadyAdded.contains(pages
+												.get(parent))) {
 									legend = (ILegendPanel) pages.get(parent);
 								}
 								doInsertNode(model, legend);
@@ -495,12 +589,16 @@ public class LegendManager extends AbstractThemeManagerPage {
 					getJTreeLegends().setModel(treeModel);
 
 				} catch (InstantiationException e) {
-					NotificationManager.addError("Trying to instantiate an interface" +
-							" or abstract class + "+pageClass.getName(), e);
+					NotificationManager.addError(
+							"Trying to instantiate an interface"
+									+ " or abstract class + "
+									+ pageClass.getName(), e);
 				} catch (IllegalAccessException e) {
-					NotificationManager.addError("IllegalAccessException: does " +
-							pageClass.getName()	+ " class have an anonymous" +
-							" constructor?", e);
+					NotificationManager.addError(
+							"IllegalAccessException: does "
+									+ pageClass.getName()
+									+ " class have an anonymous"
+									+ " constructor?", e);
 				}
 			}
 			getJTreeLegends().repaint();
@@ -508,23 +606,26 @@ public class LegendManager extends AbstractThemeManagerPage {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private DefaultMutableTreeNode findNode(Class searchID) {
 		String title;
 		try {
-			title = ((ILegendPanel) Class.forName(searchID.getName()).newInstance()).getTitle();
+			title = ((ILegendPanel) Class.forName(searchID.getName())
+					.newInstance()).getTitle();
 		} catch (Exception e) {
-			// this should be impossible, but anyway this case will be treat as the node does not
+			// this should be impossible, but anyway this case will be treat as
+			// the node does not
 			// exist.
 			return null;
 		}
 
 		Enumeration e = root.breadthFirstEnumeration();
 		while (e.hasMoreElements()) {
-			DefaultMutableTreeNode nodeAux = (DefaultMutableTreeNode) e.nextElement();
+			DefaultMutableTreeNode nodeAux = (DefaultMutableTreeNode) e
+					.nextElement();
 			if (nodeAux != null) {
 				ILegendPanel legend = (ILegendPanel) nodeAux.getUserObject();
-				if (legend == null) continue; // Root node
+				if (legend == null)
+					continue; // Root node
 				if (legend.getTitle().equals(title)) {
 					return nodeAux;
 				}
@@ -534,26 +635,32 @@ public class LegendManager extends AbstractThemeManagerPage {
 	}
 
 	private void doInsertNode(DefaultTreeModel treeModel, ILegendPanel page) {
-		dirtyTree = ((page.getParentClass() != null) && (findNode(page.getParentClass())==null));
+		dirtyTree = ((page.getParentClass() != null) && (findNode(page
+				.getParentClass()) == null));
 		if (findNode(page.getClass()) != null) // It is already added
 			return;
 		if (page.getParentClass() != null) {
 			if (pages.containsKey(page.getParentClass())) {
-				ILegendPanel parent = (ILegendPanel) pages.get(page.getParentClass());
+				ILegendPanel parent = (ILegendPanel) pages.get(page
+						.getParentClass());
 				DefaultMutableTreeNode nodeParent = findNode(parent.getClass());
 				if (nodeParent == null) {
 					// the parent is empty
 					// Recursively add it
 					doInsertNode(treeModel, parent);
 				} else {
-					DefaultMutableTreeNode nodeValue = new DefaultMutableTreeNode(page);
+					DefaultMutableTreeNode nodeValue = new DefaultMutableTreeNode(
+							page);
 					int children = nodeParent.getChildCount();
-					int pos=0;
+					int pos = 0;
 					for (int i = 0; i < children; i++) {
-						DefaultMutableTreeNode node = (DefaultMutableTreeNode) treeModel.getChild(nodeParent, i);
+						DefaultMutableTreeNode node = (DefaultMutableTreeNode) treeModel
+								.getChild(nodeParent, i);
 						if (node.getUserObject() instanceof ILegendPanel) {
-							String pageTitle = ((ILegendPanel) node.getUserObject()).getTitle();
-							if (pageTitle.compareTo(page.getTitle()) < 0) ++pos;
+							String pageTitle = ((ILegendPanel) node
+									.getUserObject()).getTitle();
+							if (pageTitle.compareTo(page.getTitle()) < 0)
+								++pos;
 						}
 					}
 					treeModel.insertNodeInto(nodeValue, nodeParent, pos);
@@ -563,12 +670,15 @@ public class LegendManager extends AbstractThemeManagerPage {
 			// First level node
 			DefaultMutableTreeNode nodeValue = new DefaultMutableTreeNode(page);
 			int children = root.getChildCount();
-			int pos=0;
+			int pos = 0;
 			for (int i = 0; i < children; i++) {
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) treeModel.getChild(root, i);
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) treeModel
+						.getChild(root, i);
 				if (node.getUserObject() instanceof ILegendPanel) {
-					String pageTitle = ((ILegendPanel) node.getUserObject()).getTitle();
-					if (pageTitle.compareTo(page.getTitle()) < 0) ++pos;
+					String pageTitle = ((ILegendPanel) node.getUserObject())
+							.getTitle();
+					if (pageTitle.compareTo(page.getTitle()) < 0)
+						++pos;
 				}
 			}
 			treeModel.insertNodeInto(nodeValue, root, pos);
@@ -595,20 +705,24 @@ public class LegendManager extends AbstractThemeManagerPage {
 
 			jTreeLegends.setCellRenderer(treeCellRenderer);
 			jTreeLegends.setShowsRootHandles(true);
-			jTreeLegends.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
-				public void valueChanged(javax.swing.event.TreeSelectionEvent e) {
-					if (isTreeListenerDisabled) return;
-					DefaultMutableTreeNode node = (DefaultMutableTreeNode)
-					jTreeLegends.getLastSelectedPathComponent();
+			jTreeLegends
+					.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
+						public void valueChanged(
+								javax.swing.event.TreeSelectionEvent e) {
+							if (isTreeListenerDisabled)
+								return;
+							DefaultMutableTreeNode node = (DefaultMutableTreeNode) jTreeLegends
+									.getLastSelectedPathComponent();
 
-					if (node == null) return;
-					setActivePage((ILegendPanel) node.getUserObject());
-					getBtnSaveLegend().setEnabled(activePanel!=null);
-				}
-			});
+							if (node == null)
+								return;
+							setActivePage((ILegendPanel) node.getUserObject());
+							getBtnSaveLegend().setEnabled(activePanel != null);
+						}
+					});
 			jTreeLegends.putClientProperty("JTree.linestyle", "Angled");
-			jTreeLegends.getSelectionModel().
-			setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+			jTreeLegends.getSelectionModel().setSelectionMode(
+					TreeSelectionModel.SINGLE_TREE_SELECTION);
 		}
 		return jTreeLegends;
 	}
@@ -619,8 +733,9 @@ public class LegendManager extends AbstractThemeManagerPage {
 			// which only acts as a folder, and does not manage any legend
 			// then it expands and selects the first child
 			DefaultMutableTreeNode node = findNode(page.getClass());
-			if (treeModel.getChildCount(node)>0) {
-				DefaultMutableTreeNode dmn = (DefaultMutableTreeNode) treeModel.getChild(node, 0);
+			if (treeModel.getChildCount(node) > 0) {
+				DefaultMutableTreeNode dmn = (DefaultMutableTreeNode) treeModel
+						.getChild(node, 0);
 				page = (ILegendPanel) dmn.getUserObject();
 				setActivePage(page);
 				expandAndSelect(page);
@@ -641,38 +756,29 @@ public class LegendManager extends AbstractThemeManagerPage {
 		}
 	}
 
-
 	private void setIcon(ImageIcon icon) {
 		getIconLabel().setIcon(icon);
 	}
 
-
 	private class MyTreeCellRenderer extends DefaultTreeCellRenderer {
 		private static final long serialVersionUID = -6013698992263578041L;
 
-		public MyTreeCellRenderer() {}
+		public MyTreeCellRenderer() {
+		}
 
-		public Component getTreeCellRendererComponent(
-				JTree tree,
-				Object value,
-				boolean sel,
-				boolean expanded,
-				boolean leaf,
-				int row,
+		public Component getTreeCellRendererComponent(JTree tree, Object value,
+				boolean sel, boolean expanded, boolean leaf, int row,
 				boolean hasFocus) {
 
-			super.getTreeCellRendererComponent(
-					tree, value, sel,
-					expanded, leaf, row,
-					hasFocus);
-			if (value instanceof DefaultMutableTreeNode)
-			{
+			super.getTreeCellRendererComponent(tree, value, sel, expanded,
+					leaf, row, hasFocus);
+			if (value instanceof DefaultMutableTreeNode) {
 				DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
-				if (node.getUserObject() instanceof ILegendPanel)
-				{
+				if (node.getUserObject() instanceof ILegendPanel) {
 					ILegendPanel legend = (ILegendPanel) node.getUserObject();
-					this.setText(
-							legend.getPanel() == null ? "<html><b>"+legend.getTitle()+"</b></html>":legend.getTitle());
+					this.setText(legend.getPanel() == null ? "<html><b>"
+							+ legend.getTitle() + "</b></html>" : legend
+							.getTitle());
 				}
 			}
 			return this;
@@ -688,17 +794,18 @@ public class LegendManager extends AbstractThemeManagerPage {
 
 		TreePath tp = null;
 		// find the page in the tree
-		while (i<jTreeLegends.getRowCount() && !exit) {
-			//see if this row is the node that we are looking for
+		while (i < jTreeLegends.getRowCount() && !exit) {
+			// see if this row is the node that we are looking for
 
 			tp = jTreeLegends.getPathForRow(i);
 			Object[] obj = tp.getPath();
-			for (int j = 0; j < obj.length && !exit ; j++) {
+			for (int j = 0; j < obj.length && !exit; j++) {
 				Object o = ((DefaultMutableTreeNode) obj[j]).getUserObject();
 
-				if (o!=null	&& o.getClass().equals(node.getClass())	&& o.equals(node)) {
+				if (o != null && o.getClass().equals(node.getClass())
+						&& o.equals(node)) {
 					// found it! collapse the tree
-					while (i>=0) {
+					while (i >= 0) {
 						jTreeLegends.collapseRow(i);
 						i--;
 					}
@@ -718,7 +825,7 @@ public class LegendManager extends AbstractThemeManagerPage {
 	}
 
 	public String getName() {
-		return PluginServices.getText(this,"Simbologia");
+		return PluginServices.getText(this, "Simbologia");
 	}
 
 	public void acceptAction() {
@@ -730,21 +837,23 @@ public class LegendManager extends AbstractThemeManagerPage {
 	}
 
 	public void applyAction() {
-		if(activePanel != null){
+		if (activePanel != null) {
 			legend = activePanel.getLegend();
 
-
 			if (table != null && table.size() > 1)
-				applyRestOfLegends(table,layer.getMapContext().getLayers());
+				applyRestOfLegends(table, layer.getMapContext().getLayers());
 
-			/* try to apply the legend to all the active layers that
-		 can accept it */
-			FLayer[] activeLyrs = layer.getMapContext().getLayers().getActives();
-			for (int i=0; i < activeLyrs.length; i++) {
-				FLayer laux=activeLyrs[i];
+			/*
+			 * try to apply the legend to all the active layers that can accept
+			 * it
+			 */
+			FLayer[] activeLyrs = layer.getMapContext().getLayers()
+					.getActives();
+			for (int i = 0; i < activeLyrs.length; i++) {
+				FLayer laux = activeLyrs[i];
 
-				if (activeLyrs[i] instanceof FLayers){
-					laux=getFirstActiveLayerVect((FLayers)activeLyrs[i]);
+				if (activeLyrs[i] instanceof FLayers) {
+					laux = getFirstActiveLayerVect((FLayers) activeLyrs[i]);
 				}
 
 				if (laux instanceof ClassifiableVectorial) {
@@ -758,34 +867,41 @@ public class LegendManager extends AbstractThemeManagerPage {
 
 							if (aux2 instanceof AlphanumericData) {
 
-								if (cl.getValues().length==0) {
-									JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),PluginServices.getText(this,"no_es_posible_aplicar_leyenda_vacia"));
+								if (cl.getValues().length == 0) {
+									JOptionPane
+											.showMessageDialog(
+													(Component) PluginServices
+															.getMainFrame(),
+													PluginServices
+															.getText(this,
+																	"no_es_posible_aplicar_leyenda_vacia"));
 									return;
 								}
 
 								aux2.setLegend((IVectorLegend) legend);
 							}
-						}
-						else if (legend instanceof SingleSymbolLegend)
+						} else if (legend instanceof SingleSymbolLegend)
 							aux2.setLegend((IVectorLegend) legend);
 					} catch (LegendLayerException e) {
-						NotificationManager.addError(PluginServices.getText(this, "legend_exception"), e);
+						NotificationManager.addError(PluginServices.getText(
+								this, "legend_exception"), e);
 					}
 				}
 			}
 		}
 	}
 
-	private void applyRestOfLegends(Hashtable<FLayer, ILegend> table2,FLayers layers) {
+	private void applyRestOfLegends(Hashtable<FLayer, ILegend> table2,
+			FLayers layers) {
 
-		for(int i = 0; i < layers.getLayersCount(); i++) {
-			FLayer my_layer= layers.getLayer(i);
+		for (int i = 0; i < layers.getLayersCount(); i++) {
+			FLayer my_layer = layers.getLayer(i);
 
-			if(!(my_layer instanceof FLayers)){
-				if(my_layer instanceof ClassifiableVectorial){
+			if (!(my_layer instanceof FLayers)) {
+				if (my_layer instanceof ClassifiableVectorial) {
 					try {
-						if(table.containsKey(my_layer)){
-							ClassifiableVectorial lyr = (ClassifiableVectorial)my_layer;
+						if (table.containsKey(my_layer)) {
+							ClassifiableVectorial lyr = (ClassifiableVectorial) my_layer;
 							lyr.setLegend((IVectorLegend) table.get(my_layer));
 						}
 
@@ -794,9 +910,8 @@ public class LegendManager extends AbstractThemeManagerPage {
 						e.printStackTrace();
 					}
 				}
-			}
-			else
-				applyRestOfLegends(table,(FLayers) my_layer);
+			} else
+				applyRestOfLegends(table, (FLayers) my_layer);
 		}
 	}
 
@@ -808,8 +923,9 @@ public class LegendManager extends AbstractThemeManagerPage {
 
 	/**
 	 * Applies the legend to the layer.
-	 *
-	 * @param aLegend , legend that the user wants to apply
+	 * 
+	 * @param aLegend
+	 *            , legend that the user wants to apply
 	 */
 	private void applyLegend(ILegend aLegend) {
 		this.legend = aLegend;
@@ -823,13 +939,13 @@ public class LegendManager extends AbstractThemeManagerPage {
 				return;
 			}
 		}
-		NotificationManager.addWarning(
-				PluginServices.getText(this,
-						"caution_no_registered_panel_associated_to_" +
-						"loaded_legend_the_legend_wont_be_applied"));
+		NotificationManager.addWarning(PluginServices.getText(this,
+				"caution_no_registered_panel_associated_to_"
+						+ "loaded_legend_the_legend_wont_be_applied"));
 	}
 
-	public static void addLegendDriver(Class<? extends IFMapLegendDriver> legendDriverClass) {
+	public static void addLegendDriver(
+			Class<? extends IFMapLegendDriver> legendDriverClass) {
 		if (!legendDriverPool.contains(legendDriverClass)) {
 			legendDriverPool.add(legendDriverClass);
 		}

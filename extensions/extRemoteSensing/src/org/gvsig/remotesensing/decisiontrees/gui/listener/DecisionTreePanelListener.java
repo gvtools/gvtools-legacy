@@ -1,42 +1,42 @@
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
-	 *
-	 * Copyright (C) 2006 Instituto de Desarrollo Regional and Generalitat Valenciana.
-	 *
-	 * This program is free software; you can redistribute it and/or
-	 * modify it under the terms of the GNU General Public License
-	 * as published by the Free Software Foundation; either version 2
-	 * of the License, or (at your option) any later version.
-	 *
-	 * This program is distributed in the hope that it will be useful,
-	 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-	 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	 * GNU General Public License for more details.
-	 *
-	 * You should have received a copy of the GNU General Public License
-	 * along with this program; if not, write to the Free Software
-	 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
-	 *
-	 * For more information, contact:
-	 *
-	 *  Generalitat Valenciana
-	 *   Conselleria d'Infraestructures i Transport
-	 *   Av. Blasco Ibañez, 50
-	 *   46010 VALENCIA
-	 *   SPAIN
-	 *
-	 *      +34 963862235
-	 *   gvsig@gva.es
-	 *      www.gvsig.gva.es
-	 *
-	 *    or
-	 *
-	 *   Instituto de Desarrollo Regional (Universidad de Castilla La-Mancha)
-	 *   Campus Universitario s/n
-	 *   02071 Alabacete
-	 *   Spain
-	 *
-	 *   +34 967 599 200
-	 */
+ *
+ * Copyright (C) 2006 Instituto de Desarrollo Regional and Generalitat Valenciana.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
+ *
+ * For more information, contact:
+ *
+ *  Generalitat Valenciana
+ *   Conselleria d'Infraestructures i Transport
+ *   Av. Blasco Ibañez, 50
+ *   46010 VALENCIA
+ *   SPAIN
+ *
+ *      +34 963862235
+ *   gvsig@gva.es
+ *      www.gvsig.gva.es
+ *
+ *    or
+ *
+ *   Instituto de Desarrollo Regional (Universidad de Castilla La-Mancha)
+ *   Campus Universitario s/n
+ *   02071 Alabacete
+ *   Spain
+ *
+ *   +34 967 599 200
+ */
 package org.gvsig.remotesensing.decisiontrees.gui.listener;
 
 import java.awt.Color;
@@ -100,10 +100,11 @@ import com.iver.utiles.xmlEntity.generate.XmlTag;
  * Listener del panel de Árboles de decisión.
  * 
  * @author Diego Guerrero Sevilla (diego.guerrero@uclm.es)
- *
+ * 
  */
-public class DecisionTreePanelListener implements ButtonsPanelListener, ActionListener, MouseListener, IProcessActions {
-	
+public class DecisionTreePanelListener implements ButtonsPanelListener,
+		ActionListener, MouseListener, IProcessActions {
+
 	DecisionTreePanel decisionTreePanel = null;
 
 	public DecisionTreePanelListener(DecisionTreePanel decisionTreePanel) {
@@ -111,64 +112,71 @@ public class DecisionTreePanelListener implements ButtonsPanelListener, ActionLi
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource()==decisionTreePanel.getAddMenuItem()){
+		if (e.getSource() == decisionTreePanel.getAddMenuItem()) {
 			DefaultGraphCell cell = decisionTreePanel.getSelectedCell();
-			DecisionTreeNode node = (DecisionTreeNode)cell.getUserObject();
+			DecisionTreeNode node = (DecisionTreeNode) cell.getUserObject();
 			int classId = node.getClassID();
 			node.setChildren();
 			node.getLeftChild().setClassID(classId);
-			node.getRightChild().setClassID(decisionTreePanel.generateClassId());
+			node.getRightChild()
+					.setClassID(decisionTreePanel.generateClassId());
 			decisionTreePanel.reloadGraph();
 		}
-		
-		else if (e.getSource()==decisionTreePanel.getDeleteMenuItem()){
+
+		else if (e.getSource() == decisionTreePanel.getDeleteMenuItem()) {
 			DefaultGraphCell cell = decisionTreePanel.getSelectedCell();
-			DecisionTreeNode node = (DecisionTreeNode)cell.getUserObject();
-			if(cell!=decisionTreePanel.getJGraph().getRoots()[0]){
+			DecisionTreeNode node = (DecisionTreeNode) cell.getUserObject();
+			if (cell != decisionTreePanel.getJGraph().getRoots()[0]) {
 				node.deleteChildren();
 				decisionTreePanel.cleanClassColors();
 				node.setClassID(decisionTreePanel.generateClassId());
 				decisionTreePanel.reloadGraph();
 			}
 		}
-		
-		else if (e.getSource()==decisionTreePanel.getExecuteMenuItem()){
+
+		else if (e.getSource() == decisionTreePanel.getExecuteMenuItem()) {
 			DefaultGraphCell cell = decisionTreePanel.getSelectedCell();
-			DecisionTreeNode node = (DecisionTreeNode)cell.getUserObject();
+			DecisionTreeNode node = (DecisionTreeNode) cell.getUserObject();
 			executeTree(node);
 		}
-		
-		else if (e.getSource()==decisionTreePanel.getCloseMenuItem()){
+
+		else if (e.getSource() == decisionTreePanel.getCloseMenuItem()) {
 			close();
 		}
-		
-		else if (e.getSource()==decisionTreePanel.getSaveMenuItem()){
+
+		else if (e.getSource() == decisionTreePanel.getSaveMenuItem()) {
 			JFileChooser openFileChooser;
-			openFileChooser = new JFileChooser();			
+			openFileChooser = new JFileChooser();
 			openFileChooser.setEnabled(false);
 			openFileChooser.addChoosableFileFilter(new TreeFileFilter());
 			openFileChooser.setAcceptAllFileFilterUsed(false);
 			int returnVal = openFileChooser.showSaveDialog(decisionTreePanel);
-	        if (returnVal == JFileChooser.APPROVE_OPTION) {
-	        	String fileName = openFileChooser.getSelectedFile().toString();
-	        	if (!fileName.endsWith(".tree")){
-	        		fileName = fileName + ".tree";
-	        	}
-	        	File file = new File(fileName);
-	        	if (file.exists()){
-	        		int resp = JOptionPane.showConfirmDialog(
-							(Component) PluginServices.getMainFrame(),PluginServices.getText(this,"fichero_ya_existe_seguro_desea_guardarlo"),
-							PluginServices.getText(this,"guardar"), JOptionPane.YES_NO_OPTION);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				String fileName = openFileChooser.getSelectedFile().toString();
+				if (!fileName.endsWith(".tree")) {
+					fileName = fileName + ".tree";
+				}
+				File file = new File(fileName);
+				if (file.exists()) {
+					int resp = JOptionPane
+							.showConfirmDialog(
+									(Component) PluginServices.getMainFrame(),
+									PluginServices
+											.getText(this,
+													"fichero_ya_existe_seguro_desea_guardarlo"),
+									PluginServices.getText(this, "guardar"),
+									JOptionPane.YES_NO_OPTION);
 					if (resp != JOptionPane.YES_OPTION) {
 						return;
 					}
-	        	}
+				}
 				FileWriter writer;
 				try {
 					writer = new FileWriter(fileName);
 					Marshaller m = new Marshaller(writer);
-	    			m.setEncoding("ISO-8859-1");
-	    			m.marshal(decisionTreePanel.getDecisionTree().getXMLEntity().getXmlTag());
+					m.setEncoding("ISO-8859-1");
+					m.marshal(decisionTreePanel.getDecisionTree()
+							.getXMLEntity().getXmlTag());
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -179,23 +187,24 @@ public class DecisionTreePanelListener implements ButtonsPanelListener, ActionLi
 					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				}
-	        }
+			}
 		}
-		
-		else if (e.getSource()==decisionTreePanel.getLoadMenuItem()){
+
+		else if (e.getSource() == decisionTreePanel.getLoadMenuItem()) {
 			JFileChooser openFileChooser;
-			openFileChooser = new JFileChooser();			
+			openFileChooser = new JFileChooser();
 			openFileChooser.setEnabled(false);
 			openFileChooser.setAcceptAllFileFilterUsed(false);
 			openFileChooser.addChoosableFileFilter(new TreeFileFilter());
 			int returnVal = openFileChooser.showOpenDialog(decisionTreePanel);
-	        if (returnVal == JFileChooser.APPROVE_OPTION) {
-	            File inFile = openFileChooser.getSelectedFile();
-	            try {
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				File inFile = openFileChooser.getSelectedFile();
+				try {
 					FileReader fileReader = new FileReader(inFile);
 					XmlTag xmlTag = (XmlTag) XmlTag.unmarshal(fileReader);
 					XMLEntity xmlDecisionTree = new XMLEntity(xmlTag);
-					decisionTreePanel.getDecisionTree().setXMLEntity(xmlDecisionTree);
+					decisionTreePanel.getDecisionTree().setXMLEntity(
+							xmlDecisionTree);
 					decisionTreePanel.reloadGraph();
 				} catch (FileNotFoundException e2) {
 					// TODO Auto-generated catch block
@@ -207,32 +216,33 @@ public class DecisionTreePanelListener implements ButtonsPanelListener, ActionLi
 					// TODO Auto-generated catch block
 					e3.printStackTrace();
 				}
-	        }
+			}
 		}
-		
-		else if (e.getSource()==decisionTreePanel.getImportMenuItem()){
-			
+
+		else if (e.getSource() == decisionTreePanel.getImportMenuItem()) {
+
 		}
-		
-		else if (e.getSource()==decisionTreePanel.getExportMenuItem()){
-			
+
+		else if (e.getSource() == decisionTreePanel.getExportMenuItem()) {
+
 		}
-		
-		else if(e.getSource()==decisionTreePanel.getJButtonLoadTree()){
+
+		else if (e.getSource() == decisionTreePanel.getJButtonLoadTree()) {
 			// Cargar arbol
 			JFileChooser openFileChooser;
-			openFileChooser = new JFileChooser();			
+			openFileChooser = new JFileChooser();
 			openFileChooser.setEnabled(false);
 			openFileChooser.setAcceptAllFileFilterUsed(false);
 			openFileChooser.addChoosableFileFilter(new TreeFileFilter());
 			int returnVal = openFileChooser.showOpenDialog(decisionTreePanel);
-	        if (returnVal == JFileChooser.APPROVE_OPTION) {
-	            File inFile = openFileChooser.getSelectedFile();
-	            try {
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				File inFile = openFileChooser.getSelectedFile();
+				try {
 					FileReader fileReader = new FileReader(inFile);
 					XmlTag xmlTag = (XmlTag) XmlTag.unmarshal(fileReader);
 					XMLEntity xmlDecisionTree = new XMLEntity(xmlTag);
-					decisionTreePanel.getDecisionTree().setXMLEntity(xmlDecisionTree);
+					decisionTreePanel.getDecisionTree().setXMLEntity(
+							xmlDecisionTree);
 					decisionTreePanel.reloadGraph();
 				} catch (FileNotFoundException e2) {
 					// TODO Auto-generated catch block
@@ -244,39 +254,44 @@ public class DecisionTreePanelListener implements ButtonsPanelListener, ActionLi
 					// TODO Auto-generated catch block
 					e3.printStackTrace();
 				}
-	        }
-			
-			
+			}
+
 		}
-		
-		else if(e.getSource()==decisionTreePanel.getJButtonSaveTree()){
-			
+
+		else if (e.getSource() == decisionTreePanel.getJButtonSaveTree()) {
+
 			JFileChooser openFileChooser;
-			openFileChooser = new JFileChooser();			
+			openFileChooser = new JFileChooser();
 			openFileChooser.setEnabled(false);
 			openFileChooser.setAcceptAllFileFilterUsed(false);
 			openFileChooser.addChoosableFileFilter(new TreeFileFilter());
 			int returnVal = openFileChooser.showSaveDialog(decisionTreePanel);
-	        if (returnVal == JFileChooser.APPROVE_OPTION) {
-	        	String fileName = openFileChooser.getSelectedFile().toString();
-	        	if (!fileName.endsWith(".tree")){
-	        		fileName = fileName + ".tree";
-	        	}
-	        	File file = new File(fileName);
-	        	if (file.exists()){
-	        		int resp = JOptionPane.showConfirmDialog(
-							(Component) PluginServices.getMainFrame(),PluginServices.getText(this,"fichero_ya_existe_seguro_desea_guardarlo"),
-							PluginServices.getText(this,"guardar"), JOptionPane.YES_NO_OPTION);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				String fileName = openFileChooser.getSelectedFile().toString();
+				if (!fileName.endsWith(".tree")) {
+					fileName = fileName + ".tree";
+				}
+				File file = new File(fileName);
+				if (file.exists()) {
+					int resp = JOptionPane
+							.showConfirmDialog(
+									(Component) PluginServices.getMainFrame(),
+									PluginServices
+											.getText(this,
+													"fichero_ya_existe_seguro_desea_guardarlo"),
+									PluginServices.getText(this, "guardar"),
+									JOptionPane.YES_NO_OPTION);
 					if (resp != JOptionPane.YES_OPTION) {
 						return;
 					}
-	        	}
+				}
 				FileWriter writer;
 				try {
 					writer = new FileWriter(fileName);
 					Marshaller m = new Marshaller(writer);
-	    			m.setEncoding("ISO-8859-1");
-	    			m.marshal(decisionTreePanel.getDecisionTree().getXMLEntity().getXmlTag());
+					m.setEncoding("ISO-8859-1");
+					m.marshal(decisionTreePanel.getDecisionTree()
+							.getXMLEntity().getXmlTag());
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -287,13 +302,13 @@ public class DecisionTreePanelListener implements ButtonsPanelListener, ActionLi
 					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				}
-	        }
-			
+			}
+
 		}
 	}
 
 	public void actionButtonPressed(ButtonsPanelEvent e) {
-//		 Al pulsar Aceptar o Aplicar se ejecuta el aceptar del panel
+		// Al pulsar Aceptar o Aplicar se ejecuta el aceptar del panel
 		if (e.getButton() == ButtonsPanel.BUTTON_APPLY) {
 			executeTree(decisionTreePanel.getDecisionTree().getRoot());
 		}
@@ -303,14 +318,15 @@ public class DecisionTreePanelListener implements ButtonsPanelListener, ActionLi
 			close();
 		}
 	}
-	
+
 	private void close() {
 		try {
-			PluginServices.getMDIManager().closeWindow(decisionTreePanel.getDecisionTreeDialog());
+			PluginServices.getMDIManager().closeWindow(
+					decisionTreePanel.getDecisionTreeDialog());
 		} catch (ArrayIndexOutOfBoundsException e) {
-			//Si la ventana no se puede eliminar no hacemos nada
+			// Si la ventana no se puede eliminar no hacemos nada
 		}
-		
+
 	}
 
 	public void mouseClicked(MouseEvent e) {
@@ -329,7 +345,7 @@ public class DecisionTreePanelListener implements ButtonsPanelListener, ActionLi
 	}
 
 	public void mousePressed(MouseEvent e) {
-		if (e.getButton() ==  MouseEvent.BUTTON3){
+		if (e.getButton() == MouseEvent.BUTTON3) {
 			showPopupMenu(e);
 		}
 		if (e.getClickCount() == 2) {
@@ -345,202 +361,261 @@ public class DecisionTreePanelListener implements ButtonsPanelListener, ActionLi
 	private void editCell(MouseEvent e) {
 		int x = e.getX();
 		int y = e.getY();
-		DefaultGraphCell cell = (DefaultGraphCell) decisionTreePanel.getJGraph().getFirstCellForLocation(x, y);
-		if (cell!=null){
+		DefaultGraphCell cell = (DefaultGraphCell) decisionTreePanel
+				.getJGraph().getFirstCellForLocation(x, y);
+		if (cell != null) {
 			decisionTreePanel.setSelectedCell(cell);
 			Object userObject = cell.getUserObject();
-			if(userObject instanceof DecisionTreeNode){
-				DecisionTreeNode node = (DecisionTreeNode)userObject;
-				
-				if(!node.isFinal()){
-					ExpressionEditorDialog expressionEditorDialog = new ExpressionEditorDialog(600,250,decisionTreePanel);
-					expressionEditorDialog.getExpressionEditorPanel().getCalculatorPanel().setPersistentVarTable(
-							decisionTreePanel.getDecisionTree().getVariablesTable());
-					PluginServices.getMDIManager().addWindow(expressionEditorDialog);
-				}
-				else{
-					ClassEditorDialog classEditorDialog = new ClassEditorDialog(250,100,decisionTreePanel);
+			if (userObject instanceof DecisionTreeNode) {
+				DecisionTreeNode node = (DecisionTreeNode) userObject;
+
+				if (!node.isFinal()) {
+					ExpressionEditorDialog expressionEditorDialog = new ExpressionEditorDialog(
+							600, 250, decisionTreePanel);
+					expressionEditorDialog
+							.getExpressionEditorPanel()
+							.getCalculatorPanel()
+							.setPersistentVarTable(
+									decisionTreePanel.getDecisionTree()
+											.getVariablesTable());
+					PluginServices.getMDIManager().addWindow(
+							expressionEditorDialog);
+				} else {
+					ClassEditorDialog classEditorDialog = new ClassEditorDialog(
+							250, 100, decisionTreePanel);
 					PluginServices.getMDIManager().addWindow(classEditorDialog);
 				}
 				decisionTreePanel.reloadGraph();
 			}
 		}
 	}
-	
+
 	private void showPopupMenu(MouseEvent e) {
 		int x = e.getX();
 		int y = e.getY();
-		DefaultGraphCell cell = (DefaultGraphCell) decisionTreePanel.getJGraph().getFirstCellForLocation(x, y);
-		if (cell != null){
-			if(cell.getUserObject() instanceof DecisionTreeNode){
+		DefaultGraphCell cell = (DefaultGraphCell) decisionTreePanel
+				.getJGraph().getFirstCellForLocation(x, y);
+		if (cell != null) {
+			if (cell.getUserObject() instanceof DecisionTreeNode) {
 				decisionTreePanel.getDeleteMenuItem().setVisible(true);
 				decisionTreePanel.getAddMenuItem().setVisible(true);
 				decisionTreePanel.getExecuteMenuItem().setVisible(true);
-				if(cell == decisionTreePanel.getJGraph().getRoots()[0])
+				if (cell == decisionTreePanel.getJGraph().getRoots()[0])
 					decisionTreePanel.getDeleteMenuItem().setVisible(false);
-				if(!((DecisionTreeNode)cell.getUserObject()).isFinal())
+				if (!((DecisionTreeNode) cell.getUserObject()).isFinal())
 					decisionTreePanel.getAddMenuItem().setVisible(false);
-				else{
+				else {
 					decisionTreePanel.getDeleteMenuItem().setVisible(false);
 					decisionTreePanel.getExecuteMenuItem().setVisible(false);
 				}
 				decisionTreePanel.setSelectedCell(cell);
-				decisionTreePanel.getJPopupMenu().show(e.getComponent(),  x, y);
+				decisionTreePanel.getJPopupMenu().show(e.getComponent(), x, y);
 			}
 		}
 	}
-	
+
 	/**
 	 * Ejecuta el árbol desde el nodo indicado.
 	 * 
-	 * @param root Nodo que se considera raiz en la ejecución de árbol.
+	 * @param root
+	 *            Nodo que se considera raiz en la ejecución de árbol.
 	 */
-	private void executeTree(DecisionTreeNode root){
-		//Comprobar que todas laa variables estén asignadas:
+	private void executeTree(DecisionTreeNode root) {
+		// Comprobar que todas laa variables estén asignadas:
 		boolean allVarsAsigned = true;
-		for (Iterator iter = decisionTreePanel.getDecisionTree().getVariablesTable().keySet().iterator(); iter.hasNext();) {
+		for (Iterator iter = decisionTreePanel.getDecisionTree()
+				.getVariablesTable().keySet().iterator(); iter.hasNext();) {
 			String varName = (String) iter.next();
-			String layerName = (String) decisionTreePanel.getDecisionTree().getVariablesTable().get(varName); 
-			if (layerName==null || layerName.equals("")){
+			String layerName = (String) decisionTreePanel.getDecisionTree()
+					.getVariablesTable().get(varName);
+			if (layerName == null || layerName.equals("")) {
 				allVarsAsigned = false;
 				break;
 			}
 		}
-		
-		if (allVarsAsigned){
-			if (!root.hasError()){
-				
+
+		if (allVarsAsigned) {
+			if (!root.hasError()) {
+
 				int nBand;
 				String layerBand;
 				String layerName;
 				FLyrRasterSE rasterLayer;
-				
+
 				String path = getFileSelected();
 				if (path == null)
-					return;		
-				FLayers layers = decisionTreePanel.getView().getModel().getMapContext().getLayers();
+					return;
+				FLayers layers = decisionTreePanel.getView().getModel()
+						.getMapContext().getLayers();
 				// Extent de salida personalizado.
-				OptionsPanel outputOptionsPanel = decisionTreePanel.getOutputOptionsPanel();
-				if (outputOptionsPanel.getRButtom2().isSelected()){
-					try{
-						outputOptionsPanel.getOutputExtent().setXRange(Double.parseDouble(outputOptionsPanel.getJTextRangoX1().getText()),Double.parseDouble(outputOptionsPanel.getJTextRangoX2().getText()));
-						outputOptionsPanel.getOutputExtent().setYRange(Double.parseDouble(outputOptionsPanel.getJTextRangoY1().getText()), Double.parseDouble(outputOptionsPanel.getJTextRangoY2().getText()));
-						outputOptionsPanel.getOutputExtent().setCellSizeX(Double.parseDouble(outputOptionsPanel.getJTextCellSizeX().getText()));
-						outputOptionsPanel.getOutputExtent().setCellSizeY(Double.parseDouble(outputOptionsPanel.getJTextCellSizeY().getText()));
-					}catch (NumberFormatException  e) {
-						RasterToolsUtil.messageBoxError(PluginServices.getText(this, "invalid_number"), this);
+				OptionsPanel outputOptionsPanel = decisionTreePanel
+						.getOutputOptionsPanel();
+				if (outputOptionsPanel.getRButtom2().isSelected()) {
+					try {
+						outputOptionsPanel.getOutputExtent().setXRange(
+								Double.parseDouble(outputOptionsPanel
+										.getJTextRangoX1().getText()),
+								Double.parseDouble(outputOptionsPanel
+										.getJTextRangoX2().getText()));
+						outputOptionsPanel.getOutputExtent().setYRange(
+								Double.parseDouble(outputOptionsPanel
+										.getJTextRangoY1().getText()),
+								Double.parseDouble(outputOptionsPanel
+										.getJTextRangoY2().getText()));
+						outputOptionsPanel.getOutputExtent().setCellSizeX(
+								Double.parseDouble(outputOptionsPanel
+										.getJTextCellSizeX().getText()));
+						outputOptionsPanel.getOutputExtent().setCellSizeY(
+								Double.parseDouble(outputOptionsPanel
+										.getJTextCellSizeY().getText()));
+					} catch (NumberFormatException e) {
+						RasterToolsUtil.messageBoxError(
+								PluginServices.getText(this, "invalid_number"),
+								this);
 						return;
 					}
 				}
-				//	Extent de salida a partir de una capa.
-				else if(outputOptionsPanel.getRButtom4().isSelected()){
+				// Extent de salida a partir de una capa.
+				else if (outputOptionsPanel.getRButtom4().isSelected()) {
 					try {
-						FLayer layer = layers.getLayer(outputOptionsPanel.getJComboCapas().getSelectedIndex());	
-						outputOptionsPanel.getOutputExtent().setXRange(layer.getFullExtent().getMinX(),
+						FLayer layer = layers.getLayer(outputOptionsPanel
+								.getJComboCapas().getSelectedIndex());
+						outputOptionsPanel.getOutputExtent().setXRange(
+								layer.getFullExtent().getMinX(),
 								layer.getFullExtent().getMaxX());
-						outputOptionsPanel.getOutputExtent().setYRange(layer.getFullExtent().getMinY(),
+						outputOptionsPanel.getOutputExtent().setYRange(
+								layer.getFullExtent().getMinY(),
 								layer.getFullExtent().getMaxY());
-						outputOptionsPanel.getOutputExtent().setCellSizeX(Double.parseDouble(outputOptionsPanel.getJTextCellSizeX().getText()));
-						outputOptionsPanel.getOutputExtent().setCellSizeY(Double.parseDouble(outputOptionsPanel.getJTextCellSizeY().getText()));	
+						outputOptionsPanel.getOutputExtent().setCellSizeX(
+								Double.parseDouble(outputOptionsPanel
+										.getJTextCellSizeX().getText()));
+						outputOptionsPanel.getOutputExtent().setCellSizeY(
+								Double.parseDouble(outputOptionsPanel
+										.getJTextCellSizeY().getText()));
 						outputOptionsPanel.extentHasChanged();
 					} catch (Exception ex) {
 						ex.printStackTrace();
 					}
 				}
-				
-				// Crear un HashMap con los rasterbuffers de entrada indexados por el nombre de variable.
-				RasterBuffer valor=null;
+
+				// Crear un HashMap con los rasterbuffers de entrada indexados
+				// por el nombre de variable.
+				RasterBuffer valor = null;
 				HashMap buffers = new HashMap();
-				for (Iterator iter = decisionTreePanel.getDecisionTree().getVariablesTable().keySet().iterator(); iter.hasNext();) {
+				for (Iterator iter = decisionTreePanel.getDecisionTree()
+						.getVariablesTable().keySet().iterator(); iter
+						.hasNext();) {
 					String varName = (String) iter.next();
-					
-					layerBand =  (String)decisionTreePanel.getDecisionTree().getVariablesTable().get(varName);
-					layerName = layerBand.substring(0,layerBand.indexOf("["));
-					nBand = Integer.valueOf(layerBand.substring(layerBand.lastIndexOf("Band")+4,layerBand.lastIndexOf("]"))).intValue();
-					rasterLayer = (FLyrRasterSE)layers.getLayer(layerName);		
-					BufferFactory bufferFactory= rasterLayer.getBufferFactory();
-					
-					double minX=0,minY=0,maxX=0,maxY=0;
-					minX= outputOptionsPanel.getOutputExtent().getMin().getX();
-					minY= outputOptionsPanel.getOutputExtent().getMin().getY();
-					maxX= outputOptionsPanel.getOutputExtent().getMax().getX();
-					maxY =outputOptionsPanel.getOutputExtent().getMax().getY();
-					
+
+					layerBand = (String) decisionTreePanel.getDecisionTree()
+							.getVariablesTable().get(varName);
+					layerName = layerBand.substring(0, layerBand.indexOf("["));
+					nBand = Integer.valueOf(
+							layerBand.substring(
+									layerBand.lastIndexOf("Band") + 4,
+									layerBand.lastIndexOf("]"))).intValue();
+					rasterLayer = (FLyrRasterSE) layers.getLayer(layerName);
+					BufferFactory bufferFactory = rasterLayer
+							.getBufferFactory();
+
+					double minX = 0, minY = 0, maxX = 0, maxY = 0;
+					minX = outputOptionsPanel.getOutputExtent().getMin().getX();
+					minY = outputOptionsPanel.getOutputExtent().getMin().getY();
+					maxX = outputOptionsPanel.getOutputExtent().getMax().getX();
+					maxY = outputOptionsPanel.getOutputExtent().getMax().getY();
+
 					try {
-							bufferFactory.setAdjustToExtent(false);
-							bufferFactory.setDrawableBands(new int[]{nBand-1});
-							bufferFactory.setAreaOfInterest(minX,minY,maxX,maxY,outputOptionsPanel.getOutputExtent().getNX(),
-									outputOptionsPanel.getOutputExtent().getNY());
-							valor=(RasterBuffer) bufferFactory.getRasterBuf();
-						
+						bufferFactory.setAdjustToExtent(false);
+						bufferFactory.setDrawableBands(new int[] { nBand - 1 });
+						bufferFactory.setAreaOfInterest(minX, minY, maxX, maxY,
+								outputOptionsPanel.getOutputExtent().getNX(),
+								outputOptionsPanel.getOutputExtent().getNY());
+						valor = (RasterBuffer) bufferFactory.getRasterBuf();
+
 					} catch (ArrayIndexOutOfBoundsException e) {
-						RasterToolsUtil.messageBoxError(PluginServices.getText(this, "error_writer"), this, e);
+						RasterToolsUtil.messageBoxError(
+								PluginServices.getText(this, "error_writer"),
+								this, e);
 					} catch (InvalidSetViewException e) {
-							e.printStackTrace();
+						e.printStackTrace();
 					} catch (InterruptedException e) {
 						Thread.currentThread().interrupt();
 					} catch (RasterDriverException e) {
 						e.printStackTrace();
 					}
-				
-					buffers.put(varName,new Object[]{valor,new Integer(valor.getDataType())});
-				}	
-				//Ejecutar el proceso:
-				/*
-				String viewName = PluginServices.getMDIManager().getWindowInfo(decisionTreePanel.getView()).getTitle();
-				DecisionTreeProcess decisionTreeProcess = new DecisionTreeProcess(root, buffers, outputOptionsPanel.getOutputExtent(),
-						viewName, path);
-				IncrementableTask incrementableTask = new IncrementableTask(decisionTreeProcess);
-				decisionTreeProcess.setIncrementableTask(incrementableTask);
-				incrementableTask.showWindow();
-				decisionTreeProcess.start();
-				incrementableTask.start();
-				*/	
-				
-				//*********************************
-				String viewName = PluginServices.getMDIManager().getWindowInfo(decisionTreePanel.getView()).getTitle();
-				
-				//Comprobar que estén todas las variables asignadas
-				for (Iterator iter = root.getParser().getSymbolTable().values().iterator(); iter.hasNext();) {
-					Variable variable = (Variable) iter.next();	
-					if (!buffers.containsKey(variable.getName())){
-						RasterToolsUtil.messageBoxError(PluginServices.getText(this,"variables_sin_asignar"),this);
-						return;
-					}		
+
+					buffers.put(varName, new Object[] { valor,
+							new Integer(valor.getDataType()) });
 				}
-				
+				// Ejecutar el proceso:
+				/*
+				 * String viewName =
+				 * PluginServices.getMDIManager().getWindowInfo
+				 * (decisionTreePanel.getView()).getTitle(); DecisionTreeProcess
+				 * decisionTreeProcess = new DecisionTreeProcess(root, buffers,
+				 * outputOptionsPanel.getOutputExtent(), viewName, path);
+				 * IncrementableTask incrementableTask = new
+				 * IncrementableTask(decisionTreeProcess);
+				 * decisionTreeProcess.setIncrementableTask(incrementableTask);
+				 * incrementableTask.showWindow(); decisionTreeProcess.start();
+				 * incrementableTask.start();
+				 */
+
+				// *********************************
+				String viewName = PluginServices.getMDIManager()
+						.getWindowInfo(decisionTreePanel.getView()).getTitle();
+
+				// Comprobar que estén todas las variables asignadas
+				for (Iterator iter = root.getParser().getSymbolTable().values()
+						.iterator(); iter.hasNext();) {
+					Variable variable = (Variable) iter.next();
+					if (!buffers.containsKey(variable.getName())) {
+						RasterToolsUtil.messageBoxError(PluginServices.getText(
+								this, "variables_sin_asignar"), this);
+						return;
+					}
+				}
+
 				RasterProcess decisionTreeProcess = new DecisionTreeProcess();
 				decisionTreeProcess.setActions(this);
 				decisionTreeProcess.addParam("tree", root);
 				decisionTreeProcess.addParam("varsTable", buffers);
 				decisionTreeProcess.addParam("viewName", viewName);
 				decisionTreeProcess.addParam("filename", path);
-				decisionTreeProcess.addParam("resultExtent", outputOptionsPanel.getOutputExtent());
-				
+				decisionTreeProcess.addParam("resultExtent",
+						outputOptionsPanel.getOutputExtent());
+
 				decisionTreeProcess.start();
-			}else{
-				RasterToolsUtil.messageBoxError(PluginServices.getText(this, "bad_expresion_in_tree"), this);
+			} else {
+				RasterToolsUtil.messageBoxError(
+						PluginServices.getText(this, "bad_expresion_in_tree"),
+						this);
 			}
 		}
 	}
-	
+
 	/**
 	 * Devuelve la ruta del fichero donde se va a guardar, en caso de guardarse
 	 * en memoria, calcula el nombre sin preguntar y devuelve la ruta.
+	 * 
 	 * @return string con la ruta de salida
 	 */
 	public String getFileSelected() {
 		String path = "";
-		if (decisionTreePanel.getOutputOptionsPanel().getRadioFile().isSelected()) {
-			JFileChooser chooser = new JFileChooser(FileOpenWizard.getLastPath());
-			chooser.setDialogTitle(PluginServices.getText(this, "seleccionar_fichero"));			
-			//Añadimos las extensiones que hayan sido registradas en el driver
+		if (decisionTreePanel.getOutputOptionsPanel().getRadioFile()
+				.isSelected()) {
+			JFileChooser chooser = new JFileChooser(
+					FileOpenWizard.getLastPath());
+			chooser.setDialogTitle(PluginServices.getText(this,
+					"seleccionar_fichero"));
+			// Añadimos las extensiones que hayan sido registradas en el driver
 			String[] extList = GeoRasterWriter.getDriversExtensions();
-			
+
 			chooser.setAcceptAllFileFilterUsed(false);
 			ExtendedFileFilter selectedFilter = null;
-			for(int i=0;i<extList.length;i++) {
-				ExtendedFileFilter fileFilter = new ExtendedFileFilter(extList[i]);
+			for (int i = 0; i < extList.length; i++) {
+				ExtendedFileFilter fileFilter = new ExtendedFileFilter(
+						extList[i]);
 				chooser.addChoosableFileFilter(fileFilter);
 				if (extList[i].toLowerCase().equals("tif")) {
 					selectedFilter = fileFilter;
@@ -554,110 +629,128 @@ public class DecisionTreePanelListener implements ButtonsPanelListener, ActionLi
 				}
 				if (extList[i].toLowerCase().equals("lan")) {
 					fileFilter.addExtension((String) "gis");
-				}							
+				}
 			}
 			if (selectedFilter != null)
-				chooser.setFileFilter(selectedFilter);			
+				chooser.setFileFilter(selectedFilter);
 
-
-			if (chooser.showOpenDialog(decisionTreePanel.getOutputOptionsPanel()) != JFileChooser.APPROVE_OPTION)
+			if (chooser.showOpenDialog(decisionTreePanel
+					.getOutputOptionsPanel()) != JFileChooser.APPROVE_OPTION)
 				return null;
 
-			FileOpenWizard.setLastPath(chooser.getSelectedFile().getPath().substring(0, chooser.getSelectedFile().getPath().lastIndexOf(File.separator)));
-			ExtendedFileFilter fileFilter = (ExtendedFileFilter) chooser.getFileFilter();
+			FileOpenWizard.setLastPath(chooser
+					.getSelectedFile()
+					.getPath()
+					.substring(
+							0,
+							chooser.getSelectedFile().getPath()
+									.lastIndexOf(File.separator)));
+			ExtendedFileFilter fileFilter = (ExtendedFileFilter) chooser
+					.getFileFilter();
 			path = fileFilter.getNormalizedFilename(chooser.getSelectedFile());
 		} else {
-			String file = decisionTreePanel.getOutputOptionsPanel().getJTextNombreCapa().getText();
-			path = Utilities.createTempDirectory() + File.separator + decisionTreePanel.getOutputOptionsPanel().getJTextNombreCapa().getText() + ".tif";
-			if(file.compareTo(RasterLibrary.getOnlyLayerName()) == 0) 
+			String file = decisionTreePanel.getOutputOptionsPanel()
+					.getJTextNombreCapa().getText();
+			path = Utilities.createTempDirectory()
+					+ File.separator
+					+ decisionTreePanel.getOutputOptionsPanel()
+							.getJTextNombreCapa().getText() + ".tif";
+			if (file.compareTo(RasterLibrary.getOnlyLayerName()) == 0)
 				RasterLibrary.usesOnlyLayerName();
 			decisionTreePanel.getOutputOptionsPanel().updateNewLayerText();
 		}
-		
+
 		return path;
 	}
-	
+
 	/**
 	 * @return string con el path del fichero de salida
 	 */
-/*	public String getFileSelected() {
-		String path = "";
-		if (decisionTreePanel.getOutputOptionsPanel().getRadioFile().isSelected()) {
-			JFileChooser chooser = new JFileChooser(FileOpenWizard.getLastPath());
-			chooser.setDialogTitle(PluginServices.getText(this, "seleccionar_fichero"));
-
-			//Añadimos las extensiones que hayan sido registradas en el driver
-			String[] extList = GeoRasterWriter.getDriversExtensions();
-			for(int i=0;i<extList.length;i++)
-				chooser.addChoosableFileFilter(new WriterFilter(extList[i]));
-
-			if (chooser.showOpenDialog(decisionTreePanel) != JFileChooser.APPROVE_OPTION)
-				return null;
-
-			String fName = chooser.getSelectedFile().toString();
-			String ext = ((WriterFilter)chooser.getFileFilter()).getDescription();
-
-			ext = ext.toLowerCase().substring(ext.lastIndexOf(".") + 1, ext.length());
-
-			if ((fName != null) && !fName.equals(""))
-				if (!fName.endsWith("." + ext))
-					fName = fName + "." + ext;
-
-			FileOpenWizard.setLastPath(chooser.getSelectedFile().getPath().substring(0, chooser.getSelectedFile().getPath().lastIndexOf(File.separator)));
-			path = fName;
-		} else {
-			path = Utilities.createTempDirectory() + File.separator + decisionTreePanel.getOutputOptionsPanel().getJTextNombreCapa().getText() + ".tif";
-			decisionTreePanel.getOutputOptionsPanel().updateNewLayerText();
-		}
-		return path;
-	}*/
+	/*
+	 * public String getFileSelected() { String path = ""; if
+	 * (decisionTreePanel.getOutputOptionsPanel().getRadioFile().isSelected()) {
+	 * JFileChooser chooser = new JFileChooser(FileOpenWizard.getLastPath());
+	 * chooser.setDialogTitle(PluginServices.getText(this,
+	 * "seleccionar_fichero"));
+	 * 
+	 * //Añadimos las extensiones que hayan sido registradas en el driver
+	 * String[] extList = GeoRasterWriter.getDriversExtensions(); for(int
+	 * i=0;i<extList.length;i++) chooser.addChoosableFileFilter(new
+	 * WriterFilter(extList[i]));
+	 * 
+	 * if (chooser.showOpenDialog(decisionTreePanel) !=
+	 * JFileChooser.APPROVE_OPTION) return null;
+	 * 
+	 * String fName = chooser.getSelectedFile().toString(); String ext =
+	 * ((WriterFilter)chooser.getFileFilter()).getDescription();
+	 * 
+	 * ext = ext.toLowerCase().substring(ext.lastIndexOf(".") + 1,
+	 * ext.length());
+	 * 
+	 * if ((fName != null) && !fName.equals("")) if (!fName.endsWith("." + ext))
+	 * fName = fName + "." + ext;
+	 * 
+	 * FileOpenWizard.setLastPath(chooser.getSelectedFile().getPath().substring(0
+	 * , chooser.getSelectedFile().getPath().lastIndexOf(File.separator))); path
+	 * = fName; } else { path = Utilities.createTempDirectory() + File.separator
+	 * +
+	 * decisionTreePanel.getOutputOptionsPanel().getJTextNombreCapa().getText()
+	 * + ".tif"; decisionTreePanel.getOutputOptionsPanel().updateNewLayerText();
+	 * } return path; }
+	 */
 
 	public void end(Object fileName) {
-		String viewName = PluginServices.getMDIManager().getWindowInfo(decisionTreePanel.getView()).getTitle();
+		String viewName = PluginServices.getMDIManager()
+				.getWindowInfo(decisionTreePanel.getView()).getTitle();
 		try {
-			FLayer lyr = RasterToolsUtil.loadLayer(viewName,(String)fileName,null);
+			FLayer lyr = RasterToolsUtil.loadLayer(viewName, (String) fileName,
+					null);
 			/*
 			 * Asignar la leyenda a la nueva capa:
 			 */
 			ArrayList colorItems = new ArrayList();
 			ColorItem colorItem = null;
-			HashMap classColors = decisionTreePanel.getDecisionTree().getColorTable();
-			for (Iterator iter = classColors.keySet().iterator(); iter.hasNext();) {
+			HashMap classColors = decisionTreePanel.getDecisionTree()
+					.getColorTable();
+			for (Iterator iter = classColors.keySet().iterator(); iter
+					.hasNext();) {
 				Integer classId = (Integer) iter.next();
 				colorItem = new ColorItem();
-				colorItem.setColor((Color)classColors.get(classId));
-				colorItem.setNameClass("Class "+classId.toString());
+				colorItem.setColor((Color) classColors.get(classId));
+				colorItem.setNameClass("Class " + classId.toString());
 				colorItem.setValue(classId.intValue());
 				colorItems.add(colorItem);
 			}
-			
+
 			RemoteSensingUtils.setLeyend(lyr, colorItems);
-			
+
 		} catch (RasterNotLoadException e) {
 			RasterToolsUtil.messageBoxError("error_load_layer", this, e);
 		} catch (FilterTypeException e) {
-			RasterToolsUtil.messageBoxError(PluginServices.getText(this, "error_adding_leyend"), this, e);
+			RasterToolsUtil.messageBoxError(
+					PluginServices.getText(this, "error_adding_leyend"), this,
+					e);
 		}
 	}
-	
-	
+
 	public void interrupted() {
 	}
 }
 
 /**
- * @author Nacho Brodin <brodin_ign@gva.es>
- * Filtro para el selector de formatos de escritura
+ * @author Nacho Brodin <brodin_ign@gva.es> Filtro para el selector de formatos
+ *         de escritura
  */
 class WriterFilter extends javax.swing.filechooser.FileFilter {
-	private String				filter;
+	private String filter;
 
 	public WriterFilter(String fil) {
 		this.filter = fil;
 	}
 
 	public boolean accept(File f) {
-		return f.isDirectory() || f.getName().toLowerCase().endsWith("." + filter);
+		return f.isDirectory()
+				|| f.getName().toLowerCase().endsWith("." + filter);
 	}
 
 	public String getDescription() {
@@ -667,32 +760,34 @@ class WriterFilter extends javax.swing.filechooser.FileFilter {
 
 /**
  * Filtro para el selector de expresiones matemáticas.
+ * 
  * @author Alejandro Muñoz (alejandro.munoz@uclm.es)
- *
+ * 
  */
 class TreeFileFilter extends FileFilter {
 
 	final static String exp = "tree";
+
 	public boolean accept(File f) {
 		if (f.isDirectory()) {
-           return true;
-       }
-       String s = f.getName();
-       int i = s.lastIndexOf('.');
+			return true;
+		}
+		String s = f.getName();
+		int i = s.lastIndexOf('.');
 
-       if (i > 0 &&  i < s.length() - 1) {
-           String extension = s.substring(i+1).toLowerCase();
-           if (exp.equals(extension)){
-                   return true;
-           } else {
-               return false;
-           }
-       }
-       return false;
+		if (i > 0 && i < s.length() - 1) {
+			String extension = s.substring(i + 1).toLowerCase();
+			if (exp.equals(extension)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return false;
 	}
 
 	public String getDescription() {
 		return (PluginServices.getText(this, "Ficheros_TREE"));
 	}
-	
+
 }

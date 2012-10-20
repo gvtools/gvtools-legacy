@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
@@ -44,54 +43,54 @@ package com.iver.cit.gvsig.project.documents.view.gui;
 
 /**
  * Font options.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FontOptions {
-    public static String ARIAL = "Arial";
-    public static String DIALOG = "Dialog";
-    public static String DIALOGINPUT = "DialogInput";
-    public static String SERIF = "Serif";
-    public static String SANSSERIF = "SansSerif";
-    public static String MONOSPACED = "Monospaced";
-    public static String COURIER = "Courier";
-    public static String TIMESROMAN = "TimesRoman";
-    public static String HELVETICA = "Helvetica";
-    public static String PLAIN = "Plain";
-    public static String ITALIC = "Italic";
-    public static String BOLD = "Bold";
-    private static int size = 9;
+	public static String ARIAL = "Arial";
+	public static String DIALOG = "Dialog";
+	public static String DIALOGINPUT = "DialogInput";
+	public static String SERIF = "Serif";
+	public static String SANSSERIF = "SansSerif";
+	public static String MONOSPACED = "Monospaced";
+	public static String COURIER = "Courier";
+	public static String TIMESROMAN = "TimesRoman";
+	public static String HELVETICA = "Helvetica";
+	public static String PLAIN = "Plain";
+	public static String ITALIC = "Italic";
+	public static String BOLD = "Bold";
+	private static int size = 9;
 
-    /**
-     * Returns font types.
-     *
-     * @return String[] of font types.
-     */
-    public static String[] getFontTypes() {
-        String[] types = new String[size];
-        types[0] = ARIAL;
-        types[1] = DIALOG;
-        types[2] = DIALOGINPUT;
-        types[3] = SERIF;
-        types[4] = SANSSERIF;
-        types[5] = MONOSPACED;
-        types[6] = COURIER;
-        types[7] = TIMESROMAN;
-        types[8] = HELVETICA;
+	/**
+	 * Returns font types.
+	 * 
+	 * @return String[] of font types.
+	 */
+	public static String[] getFontTypes() {
+		String[] types = new String[size];
+		types[0] = ARIAL;
+		types[1] = DIALOG;
+		types[2] = DIALOGINPUT;
+		types[3] = SERIF;
+		types[4] = SANSSERIF;
+		types[5] = MONOSPACED;
+		types[6] = COURIER;
+		types[7] = TIMESROMAN;
+		types[8] = HELVETICA;
 
-        return types;
-    }
+		return types;
+	}
 
-    /**
-     * Returns font styles.
-     *
-     * @return String[] of font styles.
-     */
-    public static String[] getFontStyles() {
-        String[] styles = new String[3];
-        styles[0] = PLAIN;
-        styles[1] = BOLD;
-        styles[2] = ITALIC;
-        return styles;
-    }
+	/**
+	 * Returns font styles.
+	 * 
+	 * @return String[] of font styles.
+	 */
+	public static String[] getFontStyles() {
+		String[] styles = new String[3];
+		styles[0] = PLAIN;
+		styles[1] = BOLD;
+		styles[2] = ITALIC;
+		return styles;
+	}
 }

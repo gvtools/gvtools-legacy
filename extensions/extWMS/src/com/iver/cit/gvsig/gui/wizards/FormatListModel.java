@@ -45,53 +45,53 @@ import java.util.Collection;
 
 import javax.swing.AbstractListModel;
 
-
 /**
- * This class implements a list model to be used at the SRS JList
- * It just ensures that no repeated items are being added.
- *
+ * This class implements a list model to be used at the SRS JList It just
+ * ensures that no repeated items are being added.
+ * 
  * @author Fernando González Cortés
  */
 public class FormatListModel extends AbstractListModel {
-    ArrayList formatos;
+	ArrayList formatos;
 
-    /**
-     * Creates a new FormatListModel object.
-     *
-     * @param f String array containing the SRS names
-     */
-    public FormatListModel(String[] f) {
-        formatos = new ArrayList();
-        for (int i = 0; i < f.length; i++) {
-            formatos.add(f[i]);            
-        }
-        
-    }
+	/**
+	 * Creates a new FormatListModel object.
+	 * 
+	 * @param f
+	 *            String array containing the SRS names
+	 */
+	public FormatListModel(String[] f) {
+		formatos = new ArrayList();
+		for (int i = 0; i < f.length; i++) {
+			formatos.add(f[i]);
+		}
 
-    /**
-     * @see javax.swing.ListModel#getSize()
-     */
-    public int getSize() {
-        return formatos.size();
-    }
+	}
 
-    
-    public boolean addElement(String element){
-        if (formatos.contains(element))
-            return false;
-        return formatos.add(element);
-    }
-    
-    public boolean addElements(Collection element){
-        return formatos.addAll(element);
-    }
+	/**
+	 * @see javax.swing.ListModel#getSize()
+	 */
+	public int getSize() {
+		return formatos.size();
+	}
 
-    /* (non-Javadoc)
-     * @see javax.swing.ListModel#getElementAt(int)
-     */
-    public Object getElementAt(int index) {
-        return formatos.get(index);
-    }
-    
-    
+	public boolean addElement(String element) {
+		if (formatos.contains(element))
+			return false;
+		return formatos.add(element);
+	}
+
+	public boolean addElements(Collection element) {
+		return formatos.addAll(element);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.swing.ListModel#getElementAt(int)
+	 */
+	public Object getElementAt(int index) {
+		return formatos.get(index);
+	}
+
 }

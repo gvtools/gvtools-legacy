@@ -55,15 +55,16 @@ import org.gvsig.remoteClient.wfs.edition.WFSTTags;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class WFSTLockFeatureRequest extends WFSRequest{
+public class WFSTLockFeatureRequest extends WFSRequest {
 
 	public WFSTLockFeatureRequest(WFSStatus status,
 			WFSProtocolHandler protocolHandler) {
-		super(status, protocolHandler);		
+		super(status, protocolHandler);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.remoteClient.wfs.requests.WFSRequest#getTempFilePrefix()
 	 */
 	protected String getTempFilePrefix() {
@@ -72,6 +73,7 @@ public class WFSTLockFeatureRequest extends WFSRequest{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.remoteClient.wfs.requests.WFSRequest#getOperationCode()
 	 */
 	protected int getOperationCode() {
@@ -80,36 +82,44 @@ public class WFSTLockFeatureRequest extends WFSRequest{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.remoteClient.wfs.requests.WFSRequest#getHttpGetRequest(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.wfs.requests.WFSRequest#getHttpGetRequest(java
+	 * .lang.String)
 	 */
 	protected String getHttpGetRequest(String onlineResource) {
 		StringBuffer req = new StringBuffer();
 		req.append(onlineResource);
 		req.append("REQUEST=LockFeature&SERVICE=WFS&");
 		req.append("TYPENAME=").append(status.getFeatureName()).append("&");
-		req.append("LOCKACTION=" + status.getLockAction() + "&");		
-		if (status.getFilterQueryLocked() != null){
+		req.append("LOCKACTION=" + status.getLockAction() + "&");
+		if (status.getFilterQueryLocked() != null) {
 			req.append("FILTER=");
 			req.append(status.getFilterQueryLocked() + "&");
-		}		
-		if (status.getExpiry() > 0){
+		}
+		if (status.getExpiry() > 0) {
 			req.append("EXPIRY=" + status.getExpiry() + "&");
 		}
-		req.append("VERSION=").append(protocolHandler.getVersion()).append("&EXCEPTIONS=XML");
+		req.append("VERSION=").append(protocolHandler.getVersion())
+				.append("&EXCEPTIONS=XML");
 		req.append("&MAXFEATURES=").append(status.getBuffer());
 		return req.toString();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.remoteClient.wfs.requests.WFSRequest#getHttpPostRequest(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.wfs.requests.WFSRequest#getHttpPostRequest(java
+	 * .lang.String)
 	 */
 	protected String getHttpPostRequest(String onlineResource) {
 		StringBuffer request = new StringBuffer();
 		request.append(WFSTTags.XML_ROOT);
 		request.append("<" + WFSTTags.WFS_NAMESPACE_PREFIX + ":");
 		request.append(CapabilitiesTags.WFS_LOCKFEATURE + " ");
-		request.append(CapabilitiesTags.VERSION + "=\"" + protocolHandler.getVersion() + "\" ");
+		request.append(CapabilitiesTags.VERSION + "=\""
+				+ protocolHandler.getVersion() + "\" ");
 		request.append(WFSTTags.WFST_SERVICE + "=\"WFS\" ");
 		request.append(WFSTTags.XMLNS + ":" + WFSTTags.OGC_NAMESPACE_PREFIX);
 		request.append("=\"" + WFSTTags.OGC_NAMESPACE + "\" ");
@@ -121,7 +131,8 @@ public class WFSTLockFeatureRequest extends WFSRequest{
 		request.append("=\"" + WFSTTags.GML_NAMESPACE + "\" ");
 		request.append(WFSTTags.XMLNS + ":" + status.getNamespacePrefix());
 		request.append("=\"" + status.getNamespace() + "\" ");
-		request.append(WFSTTags.XML_NAMESPACE_PREFIX + ":" + WFSTTags.XML_SCHEMALOCATION);
+		request.append(WFSTTags.XML_NAMESPACE_PREFIX + ":"
+				+ WFSTTags.XML_SCHEMALOCATION);
 		request.append("=\"" + WFSTTags.WFS_NAMESPACE + " ");
 		request.append(getSchemaLocation());
 		request.append("\">");
@@ -130,19 +141,20 @@ public class WFSTLockFeatureRequest extends WFSRequest{
 		request.append(CapabilitiesTags.WFS_LOCKFEATURE + ">");
 		return request.toString();
 	}
-	
+
 	/**
 	 * Creates a Lock query for a HTTP Post request
+	 * 
 	 * @return
 	 */
-	private String getLockPostRequest(){
+	private String getLockPostRequest() {
 		StringBuffer request = new StringBuffer();
 		request.append("<" + WFSTTags.WFS_NAMESPACE_PREFIX + ":");
 		request.append(WFSTTags.WFST_LOCK);
 		request.append(" typeName=\"" + status.getFeatureName() + "\"");
 		request.append(">");
 		String filter = status.getFilterQueryLocked();
-		if (filter != null){
+		if (filter != null) {
 			request.append(status.getFilterQueryLockedPost());
 		}
 		request.append("</" + WFSTTags.WFS_NAMESPACE_PREFIX + ":");
@@ -152,6 +164,7 @@ public class WFSTLockFeatureRequest extends WFSRequest{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.remoteClient.wfs.requests.WFSRequest#getSchemaLocation()
 	 */
 	protected String getSchemaLocation() {
@@ -160,6 +173,7 @@ public class WFSTLockFeatureRequest extends WFSRequest{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.remoteClient.wfs.requests.WFSRequest#isDeleted()
 	 */
 	protected boolean isDeleted() {

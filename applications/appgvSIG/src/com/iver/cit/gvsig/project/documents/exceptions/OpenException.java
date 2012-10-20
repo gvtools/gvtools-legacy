@@ -50,26 +50,36 @@ import com.iver.andami.messages.NotificationManager;
 public class OpenException extends BaseException {
 	private Exception e;
 	private String c;
-	public OpenException(Exception e,String c) {
-		this.e=e;
-		this.c=c;
+
+	public OpenException(Exception e, String c) {
+		this.e = e;
+		this.c = c;
 	}
-	public void showError(){
-		NotificationManager.addError(PluginServices.getText(this,"abrir_proyecto"),e);
+
+	public void showError() {
+		NotificationManager.addError(
+				PluginServices.getText(this, "abrir_proyecto"), e);
 	}
-	public void showInfo(){
-		NotificationManager.addInfo(PluginServices.getText(this,"abrir_proyecto"),e);
+
+	public void showInfo() {
+		NotificationManager.addInfo(
+				PluginServices.getText(this, "abrir_proyecto"), e);
 	}
-	public void showWarning(){
-		NotificationManager.addWarning(PluginServices.getText(this,"abrir_proyecto"),e);
+
+	public void showWarning() {
+		NotificationManager.addWarning(
+				PluginServices.getText(this, "abrir_proyecto"), e);
 	}
+
 	protected Map values() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	public void showMessageError(String name) {
-		String message=PluginServices.getText(this,"error_opening_the_document")+": "+name;
-		NotificationManager.showMessageError(message,e);
+		String message = PluginServices.getText(this,
+				"error_opening_the_document") + ": " + name;
+		NotificationManager.showMessageError(message, e);
 
 	}
 }

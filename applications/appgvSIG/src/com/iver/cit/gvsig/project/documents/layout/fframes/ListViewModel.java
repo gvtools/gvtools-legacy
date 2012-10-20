@@ -53,10 +53,9 @@ import com.iver.cit.gvsig.ProjectExtension;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 import com.iver.cit.gvsig.project.documents.view.ProjectViewFactory;
 
-
 /**
  * Modelo de la Lista de vistas a seleccionar.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class ListViewModel extends AbstractListModel {
@@ -66,42 +65,46 @@ public class ListViewModel extends AbstractListModel {
 	 * Añade las vistas que tiene el proyecto a la lista.
 	 */
 	public void addViews() {
-		ProjectExtension projectextension = (ProjectExtension) PluginServices.getExtension(com.iver.cit.gvsig.ProjectExtension.class);
-		views = projectextension.getProject().getDocumentsByType(ProjectViewFactory.registerName);
+		ProjectExtension projectextension = (ProjectExtension) PluginServices
+				.getExtension(com.iver.cit.gvsig.ProjectExtension.class);
+		views = projectextension.getProject().getDocumentsByType(
+				ProjectViewFactory.registerName);
 	}
 
 	/**
 	 * Add all fframeviews into a list.
-	 *
-	 * @param l Layout.
+	 * 
+	 * @param l
+	 *            Layout.
 	 */
 	public void addViews(Layout l) {
 		int num = 0;
 		l.getLayoutContext().updateFFrames();
-		IFFrame[] fframes=l.getLayoutContext().getFFrames();
+		IFFrame[] fframes = l.getLayoutContext().getFFrames();
 		for (int i = 0; i < fframes.length; i++) {
 			IFFrame f = fframes[i];
 
 			if (f instanceof FFrameView) {
-				//((FFrameView)f).getView().setName("FFrameView "+num+((FFrameView)f).getName());
+				// ((FFrameView)f).getView().setName("FFrameView "+num+((FFrameView)f).getName());
 				views.add(f);
 				((FFrameView) f).setNum(num);
 				num++;
 			}
 		}
 
-		//ProjectExtension projectextension =(ProjectExtension)App.instance.getPc().getExtension(com.iver.cit.gvsig.ProjectExtension.class);
-		//views=projectextension.getProject().getViews();
+		// ProjectExtension projectextension
+		// =(ProjectExtension)App.instance.getPc().getExtension(com.iver.cit.gvsig.ProjectExtension.class);
+		// views=projectextension.getProject().getViews();
 	}
 
 	/**
 	 * Devuelve el ArrayList con las FFrameView.
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
-	//public ArrayList getViews() {
-	//	return views;
-	//}
+	// public ArrayList getViews() {
+	// return views;
+	// }
 
 	/**
 	 * @see javax.swing.ListModel#getSize()

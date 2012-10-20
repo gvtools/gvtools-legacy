@@ -19,68 +19,71 @@ public class GdbmsWriter extends AbstractWriter {
 	Value[] record;
 	int numRecord;
 
-	public GdbmsWriter(){
+	public GdbmsWriter() {
 	}
-	public void initialize(ITableDefinition tableDef){
+
+	public void initialize(ITableDefinition tableDef) {
 	}
-	public void setDataWare(DataWare dataWare)
-	{
+
+	public void setDataWare(DataWare dataWare) {
 		this.dataWare = dataWare;
 	}
+
 	public void preProcess() throws StartWriterVisitorException {
 		try {
 			dataWare.beginTrans();
 			numRecord = 0;
 		} catch (ReadDriverException e) {
-			throw new StartWriterVisitorException(getName(),e);
+			throw new StartWriterVisitorException(getName(), e);
 		}
 	}
 
-	public void process(IRowEdited editedRow) throws ProcessWriterVisitorException {
+	public void process(IRowEdited editedRow)
+			throws ProcessWriterVisitorException {
 		IRow row = editedRow.getLinkedRow();
 
 		try {
-			/* System.out.println("Intento escribir el registro " +
-					numRows + " de la capa " + lyrVect.getName()); */
+			/*
+			 * System.out.println("Intento escribir el registro " + numRows +
+			 * " de la capa " + lyrVect.getName());
+			 */
 
-
-			switch (editedRow.getStatus())
-			{
-    		case IRowEdited.STATUS_ADDED:
-    			record=row.getAttributes();
-    				//record[i] = row.getAttribute(i);
-    			dataWare.insertFilledRow(record);
-    			break;
-    		case IRowEdited.STATUS_MODIFIED:
-    			record=row.getAttributes();
-    			for (int i=0; i < record.length; i++)
-    				dataWare.setFieldValue(numRecord, i, record[i]);
-    			break;
-    		case IRowEdited.STATUS_ORIGINAL:
-    			break;
-    		case IRowEdited.STATUS_DELETED:
-        		dataWare.deleteRow(numRecord);
-    			break;
+			switch (editedRow.getStatus()) {
+			case IRowEdited.STATUS_ADDED:
+				record = row.getAttributes();
+				// record[i] = row.getAttribute(i);
+				dataWare.insertFilledRow(record);
+				break;
+			case IRowEdited.STATUS_MODIFIED:
+				record = row.getAttributes();
+				for (int i = 0; i < record.length; i++)
+					dataWare.setFieldValue(numRecord, i, record[i]);
+				break;
+			case IRowEdited.STATUS_ORIGINAL:
+				break;
+			case IRowEdited.STATUS_DELETED:
+				dataWare.deleteRow(numRecord);
+				break;
 			}
 			numRecord++;
 
 		} catch (WriteDriverException e) {
-			throw new ProcessWriterVisitorException(getName(),e);
+			throw new ProcessWriterVisitorException(getName(), e);
 		} catch (ReadDriverException e) {
-			throw new ProcessWriterVisitorException(getName(),e);
+			throw new ProcessWriterVisitorException(getName(), e);
 		}
 
 	}
 
 	public void postProcess() throws StopWriterVisitorException {
-		boolean exception=false;
+		boolean exception = false;
 		try {
 			dataWare.commitTrans();
 
 		} catch (WriteDriverException e) {
-			exception=true;
+			exception = true;
 		} catch (ReadDriverException e) {
-			exception=true;
+			exception = true;
 		}
 		if (exception) {
 			try {
@@ -88,10 +91,9 @@ public class GdbmsWriter extends AbstractWriter {
 			} catch (WriteDriverException e1) {
 			} catch (ReadDriverException e) {
 			}
-			throw new StopWriterVisitorException(getName(),null);
+			throw new StopWriterVisitorException(getName(), null);
 		}
 	}
-
 
 	public String getName() {
 		return "GDBMS Writer";
@@ -102,8 +104,7 @@ public class GdbmsWriter extends AbstractWriter {
 	}
 
 	public boolean canWriteAttribute(int sqlType) {
-		switch (sqlType)
-		{
+		switch (sqlType) {
 		case Types.DOUBLE:
 		case Types.FLOAT:
 		case Types.INTEGER:
@@ -117,19 +118,21 @@ public class GdbmsWriter extends AbstractWriter {
 		case Types.VARCHAR:
 		case Types.CHAR:
 		case Types.LONGVARCHAR:
-			return true; // TODO: Revisar esto, porque no creo que admita campos muy grandes
+			return true; // TODO: Revisar esto, porque no creo que admita campos
+							// muy grandes
 
 		}
 
 		return false;
 	}
+
 	public boolean canAlterTable() {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
 	public boolean canSaveEdits() {
 		return false;
 	}
-
 
 }

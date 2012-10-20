@@ -69,52 +69,58 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  *
  */
 /**
- * This class writes the Elemtent tag. One Element
- * is a feature attribute.
+ * This class writes the Elemtent tag. One Element is a feature attribute.
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class ElementWriter {
-	
+
 	/**
 	 * It writes an Element tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param namespace
-	 * Element namespcae
+	 *            Element namespcae
 	 * @param name
-	 * Element name
+	 *            Element name
 	 * @param value
-	 * Element value
+	 *            Element value
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor handler, String namespace, String name, Object value) throws IOException{
-		if (namespace != null){
+	public void start(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler, String namespace,
+			String name, Object value) throws IOException {
+		if (namespace != null) {
 			writer.writeStartElement(namespace, name);
-		}else{
-			writer.writeStartElement(GPEDefaults.getStringProperty(XmlProperties.DEFAULT_NAMESPACE_URI),
+		} else {
+			writer.writeStartElement(GPEDefaults
+					.getStringProperty(XmlProperties.DEFAULT_NAMESPACE_URI),
 					name);
 		}
-		if (value != null){
-			writer.writeValue(value.toString());		
-		}	
+		if (value != null) {
+			writer.writeValue(value.toString());
+		}
 	}
-	
+
 	/**
 	 * It writes an end Element tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param namespace
-	 * Element namespace
+	 *            Element namespace
 	 * @param name
-	 * Element name
+	 *            Element name
 	 * @throws IOException
 	 */
-	public void end(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor hanlder, String namespace, String name) throws IOException{
-		writer.writeEndElement();	
+	public void end(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor hanlder, String namespace,
+			String name) throws IOException {
+		writer.writeEndElement();
 	}
 }
-

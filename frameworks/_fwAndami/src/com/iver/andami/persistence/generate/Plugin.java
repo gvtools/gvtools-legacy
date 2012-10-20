@@ -47,8 +47,8 @@
  */
 package com.iver.andami.persistence.generate;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
 import org.exolab.castor.xml.Marshaller;
@@ -57,211 +57,204 @@ import org.exolab.castor.xml.Unmarshaller;
 /**
  * Class Plugin.
  * 
- * @version $Revision: 5275 $ $Date: 2006-05-19 08:41:50 +0200 (Fri, 19 May 2006) $
+ * @version $Revision: 5275 $ $Date: 2006-05-19 08:41:50 +0200 (Fri, 19 May
+ *          2006) $
  */
 public class Plugin implements java.io.Serializable {
 
+	// --------------------------/
+	// - Class/Member Variables -/
+	// --------------------------/
 
-      //--------------------------/
-     //- Class/Member Variables -/
-    //--------------------------/
+	/**
+	 * Field _name
+	 */
+	private java.lang.String _name;
 
-    /**
-     * Field _name
-     */
-    private java.lang.String _name;
+	/**
+	 * Field _lastUpdate
+	 */
+	private java.lang.String _lastUpdate;
 
-    /**
-     * Field _lastUpdate
-     */
-    private java.lang.String _lastUpdate;
+	/**
+	 * Field _xmlEntity
+	 */
+	private com.iver.andami.persistence.generate.XmlEntity _xmlEntity;
 
-    /**
-     * Field _xmlEntity
-     */
-    private com.iver.andami.persistence.generate.XmlEntity _xmlEntity;
+	/**
+	 * Field _bookmarks
+	 */
+	private com.iver.andami.persistence.generate.Bookmarks _bookmarks;
 
-    /**
-     * Field _bookmarks
-     */
-    private com.iver.andami.persistence.generate.Bookmarks _bookmarks;
+	/**
+	 * Field _windows
+	 */
+	private com.iver.andami.persistence.generate.Windows _windows;
 
-    /**
-     * Field _windows
-     */
-    private com.iver.andami.persistence.generate.Windows _windows;
+	// ----------------/
+	// - Constructors -/
+	// ----------------/
 
+	public Plugin() {
+		super();
+	} // -- com.iver.andami.persistence.generate.Plugin()
 
-      //----------------/
-     //- Constructors -/
-    //----------------/
+	// -----------/
+	// - Methods -/
+	// -----------/
 
-    public Plugin() {
-        super();
-    } //-- com.iver.andami.persistence.generate.Plugin()
+	/**
+	 * Returns the value of field 'bookmarks'.
+	 * 
+	 * @return the value of field 'bookmarks'.
+	 */
+	public com.iver.andami.persistence.generate.Bookmarks getBookmarks() {
+		return this._bookmarks;
+	} // -- com.iver.andami.persistence.generate.Bookmarks getBookmarks()
 
+	/**
+	 * Returns the value of field 'lastUpdate'.
+	 * 
+	 * @return the value of field 'lastUpdate'.
+	 */
+	public java.lang.String getLastUpdate() {
+		return this._lastUpdate;
+	} // -- java.lang.String getLastUpdate()
 
-      //-----------/
-     //- Methods -/
-    //-----------/
+	/**
+	 * Returns the value of field 'name'.
+	 * 
+	 * @return the value of field 'name'.
+	 */
+	public java.lang.String getName() {
+		return this._name;
+	} // -- java.lang.String getName()
 
-    /**
-     * Returns the value of field 'bookmarks'.
-     * 
-     * @return the value of field 'bookmarks'.
-     */
-    public com.iver.andami.persistence.generate.Bookmarks getBookmarks()
-    {
-        return this._bookmarks;
-    } //-- com.iver.andami.persistence.generate.Bookmarks getBookmarks() 
+	/**
+	 * Returns the value of field 'windows'.
+	 * 
+	 * @return the value of field 'windows'.
+	 */
+	public com.iver.andami.persistence.generate.Windows getWindows() {
+		return this._windows;
+	} // -- com.iver.andami.persistence.generate.Windows getWindows()
 
-    /**
-     * Returns the value of field 'lastUpdate'.
-     * 
-     * @return the value of field 'lastUpdate'.
-     */
-    public java.lang.String getLastUpdate()
-    {
-        return this._lastUpdate;
-    } //-- java.lang.String getLastUpdate() 
+	/**
+	 * Returns the value of field 'xmlEntity'.
+	 * 
+	 * @return the value of field 'xmlEntity'.
+	 */
+	public com.iver.andami.persistence.generate.XmlEntity getXmlEntity() {
+		return this._xmlEntity;
+	} // -- com.iver.andami.persistence.generate.XmlEntity getXmlEntity()
 
-    /**
-     * Returns the value of field 'name'.
-     * 
-     * @return the value of field 'name'.
-     */
-    public java.lang.String getName()
-    {
-        return this._name;
-    } //-- java.lang.String getName() 
+	/**
+	 * Method isValid
+	 */
+	public boolean isValid() {
+		try {
+			validate();
+		} catch (org.exolab.castor.xml.ValidationException vex) {
+			return false;
+		}
+		return true;
+	} // -- boolean isValid()
 
-    /**
-     * Returns the value of field 'windows'.
-     * 
-     * @return the value of field 'windows'.
-     */
-    public com.iver.andami.persistence.generate.Windows getWindows()
-    {
-        return this._windows;
-    } //-- com.iver.andami.persistence.generate.Windows getWindows() 
+	/**
+	 * Method marshal
+	 * 
+	 * @param out
+	 */
+	public void marshal(java.io.Writer out)
+			throws org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
 
-    /**
-     * Returns the value of field 'xmlEntity'.
-     * 
-     * @return the value of field 'xmlEntity'.
-     */
-    public com.iver.andami.persistence.generate.XmlEntity getXmlEntity()
-    {
-        return this._xmlEntity;
-    } //-- com.iver.andami.persistence.generate.XmlEntity getXmlEntity() 
+		Marshaller.marshal(this, out);
+	} // -- void marshal(java.io.Writer)
 
-    /**
-     * Method isValid
-     */
-    public boolean isValid()
-    {
-        try {
-            validate();
-        }
-        catch (org.exolab.castor.xml.ValidationException vex) {
-            return false;
-        }
-        return true;
-    } //-- boolean isValid() 
+	/**
+	 * Method marshal
+	 * 
+	 * @param handler
+	 */
+	public void marshal(org.xml.sax.ContentHandler handler)
+			throws java.io.IOException, org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
 
-    /**
-     * Method marshal
-     * 
-     * @param out
-     */
-    public void marshal(java.io.Writer out)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        
-        Marshaller.marshal(this, out);
-    } //-- void marshal(java.io.Writer) 
+		Marshaller.marshal(this, handler);
+	} // -- void marshal(org.xml.sax.ContentHandler)
 
-    /**
-     * Method marshal
-     * 
-     * @param handler
-     */
-    public void marshal(org.xml.sax.ContentHandler handler)
-        throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        
-        Marshaller.marshal(this, handler);
-    } //-- void marshal(org.xml.sax.ContentHandler) 
+	/**
+	 * Sets the value of field 'bookmarks'.
+	 * 
+	 * @param bookmarks
+	 *            the value of field 'bookmarks'.
+	 */
+	public void setBookmarks(
+			com.iver.andami.persistence.generate.Bookmarks bookmarks) {
+		this._bookmarks = bookmarks;
+	} // -- void setBookmarks(com.iver.andami.persistence.generate.Bookmarks)
 
-    /**
-     * Sets the value of field 'bookmarks'.
-     * 
-     * @param bookmarks the value of field 'bookmarks'.
-     */
-    public void setBookmarks(com.iver.andami.persistence.generate.Bookmarks bookmarks)
-    {
-        this._bookmarks = bookmarks;
-    } //-- void setBookmarks(com.iver.andami.persistence.generate.Bookmarks) 
+	/**
+	 * Sets the value of field 'lastUpdate'.
+	 * 
+	 * @param lastUpdate
+	 *            the value of field 'lastUpdate'.
+	 */
+	public void setLastUpdate(java.lang.String lastUpdate) {
+		this._lastUpdate = lastUpdate;
+	} // -- void setLastUpdate(java.lang.String)
 
-    /**
-     * Sets the value of field 'lastUpdate'.
-     * 
-     * @param lastUpdate the value of field 'lastUpdate'.
-     */
-    public void setLastUpdate(java.lang.String lastUpdate)
-    {
-        this._lastUpdate = lastUpdate;
-    } //-- void setLastUpdate(java.lang.String) 
+	/**
+	 * Sets the value of field 'name'.
+	 * 
+	 * @param name
+	 *            the value of field 'name'.
+	 */
+	public void setName(java.lang.String name) {
+		this._name = name;
+	} // -- void setName(java.lang.String)
 
-    /**
-     * Sets the value of field 'name'.
-     * 
-     * @param name the value of field 'name'.
-     */
-    public void setName(java.lang.String name)
-    {
-        this._name = name;
-    } //-- void setName(java.lang.String) 
+	/**
+	 * Sets the value of field 'windows'.
+	 * 
+	 * @param windows
+	 *            the value of field 'windows'.
+	 */
+	public void setWindows(com.iver.andami.persistence.generate.Windows windows) {
+		this._windows = windows;
+	} // -- void setWindows(com.iver.andami.persistence.generate.Windows)
 
-    /**
-     * Sets the value of field 'windows'.
-     * 
-     * @param windows the value of field 'windows'.
-     */
-    public void setWindows(com.iver.andami.persistence.generate.Windows windows)
-    {
-        this._windows = windows;
-    } //-- void setWindows(com.iver.andami.persistence.generate.Windows) 
+	/**
+	 * Sets the value of field 'xmlEntity'.
+	 * 
+	 * @param xmlEntity
+	 *            the value of field 'xmlEntity'.
+	 */
+	public void setXmlEntity(
+			com.iver.andami.persistence.generate.XmlEntity xmlEntity) {
+		this._xmlEntity = xmlEntity;
+	} // -- void setXmlEntity(com.iver.andami.persistence.generate.XmlEntity)
 
-    /**
-     * Sets the value of field 'xmlEntity'.
-     * 
-     * @param xmlEntity the value of field 'xmlEntity'.
-     */
-    public void setXmlEntity(com.iver.andami.persistence.generate.XmlEntity xmlEntity)
-    {
-        this._xmlEntity = xmlEntity;
-    } //-- void setXmlEntity(com.iver.andami.persistence.generate.XmlEntity) 
+	/**
+	 * Method unmarshal
+	 * 
+	 * @param reader
+	 */
+	public static java.lang.Object unmarshal(java.io.Reader reader)
+			throws org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
+		return (com.iver.andami.persistence.generate.Plugin) Unmarshaller
+				.unmarshal(com.iver.andami.persistence.generate.Plugin.class,
+						reader);
+	} // -- java.lang.Object unmarshal(java.io.Reader)
 
-    /**
-     * Method unmarshal
-     * 
-     * @param reader
-     */
-    public static java.lang.Object unmarshal(java.io.Reader reader)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        return (com.iver.andami.persistence.generate.Plugin) Unmarshaller.unmarshal(com.iver.andami.persistence.generate.Plugin.class, reader);
-    } //-- java.lang.Object unmarshal(java.io.Reader) 
-
-    /**
-     * Method validate
-     */
-    public void validate()
-        throws org.exolab.castor.xml.ValidationException
-    {
-        org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
-        validator.validate(this);
-    } //-- void validate() 
+	/**
+	 * Method validate
+	 */
+	public void validate() throws org.exolab.castor.xml.ValidationException {
+		org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
+		validator.validate(this);
+	} // -- void validate()
 
 }

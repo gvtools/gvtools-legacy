@@ -54,21 +54,21 @@ import org.gvsig.raster.grid.filter.RasterFilter;
  * 
  * */
 
-public class HistogramMatchingFilter  extends RasterFilter {
+public class HistogramMatchingFilter extends RasterFilter {
 
-	public static String[] 				names 					= new String[] {"HistogramMatch"};
+	public static String[] names = new String[] { "HistogramMatch" };
 
 	Histogram histogramReference = null;
-	Histogram histogramSource= null;
-	double [][] acumulateS= null;
-	double [][]acumulateR = null;
+	Histogram histogramSource = null;
+	double[][] acumulateS = null;
+	double[][] acumulateR = null;
 	String fileNameOutput = null;
-	byte tableAsign[][]= null;
-	int numbands= 0;
-	
+	byte tableAsign[][] = null;
+	int numbands = 0;
+
 	/** Constructor */
 	public HistogramMatchingFilter() {
-			super();
+		super();
 	}
 
 	public String getGroup() {
@@ -80,119 +80,118 @@ public class HistogramMatchingFilter  extends RasterFilter {
 	}
 
 	public String[] getNames() {
-		return names;			
+		return names;
 	}
 
 	public int getOutRasterDataType() {
 		return RasterBuffer.TYPE_BYTE;
 	}
 
-
 	public Params getUIParams(String nameFilter) {
 		Params params = new Params();
 		return params;
 	}
 
-	
-	 public boolean isVisible() {
-			return false;
-	 }
-	
-	
+	public boolean isVisible() {
+		return false;
+	}
+
 	/**
 	 * Acciones antes de la ejecución del filtro
 	 * */
-	public void pre() {	
+	public void pre() {
 		// Carga de los parametros del filtro y obtencion de histogramas
 		loadParam();
-		
-		// Funcion que calcula la correspondencia entre los histogramas, El resultado es tableAsign completa
-		// para cada clase en el histograma fuente asigan su clase en el histograma corregido.
-		double inValue=0;
-		tableAsign= new byte[numbands][256];
-		
+
+		// Funcion que calcula la correspondencia entre los histogramas, El
+		// resultado es tableAsign completa
+		// para cada clase en el histograma fuente asigan su clase en el
+		// histograma corregido.
+		double inValue = 0;
+		tableAsign = new byte[numbands][256];
+
 		// Cálculo de la tabla de asignaciones entre los histogramas
-		for (int band=0; band <numbands; band++){
-			for(int i= 0; i< tableAsign[0].length; i++){
+		for (int band = 0; band < numbands; band++) {
+			for (int i = 0; i < tableAsign[0].length; i++) {
 				inValue = acumulateS[band][i];
-				int value= (searchInHistogramReference(inValue,band));
-				tableAsign[band][i]= (byte)value;
+				int value = (searchInHistogramReference(inValue, band));
+				tableAsign[band][i] = (byte) value;
 			}
 		}
 	}
-	
-	
+
 	/**
 	 * Acciones posteriores a la ejecución del filtro
 	 * */
-	public void post() {		
+	public void post() {
 	}
-
-
 
 	public Object getResult(String name) {
 		return rasterResult;
 	}
-	
-	
+
 	/**
-	 *  Se recogen los parametros necesarios para la aplicacion del filtro. 
-	 * 	histogramReference histograma de referencia.
-	 *	fileNameOutput 
-	 *  
+	 * Se recogen los parametros necesarios para la aplicacion del filtro.
+	 * histogramReference histograma de referencia. fileNameOutput
+	 * 
 	 */
-	protected void loadParam(){	
+	protected void loadParam() {
 		// Raster
-		raster= (RasterBuffer) params.get("raster"); 
-		height= raster.getHeight();
-		width= raster.getWidth();
+		raster = (RasterBuffer) params.get("raster");
+		height = raster.getHeight();
+		width = raster.getWidth();
 		try {
 
-			histogramSource= raster.getHistogram();
+			histogramSource = raster.getHistogram();
 			histogramSource = Histogram.convertHistogramToRGB(histogramSource);
-			
+
 			// COMPROBACION HISTOGRAMA RGB
 			if (!histogramSource.isInRangeRGB())
 				return;
-			
-			// Histograma de referencia
-			histogramReference= (Histogram)params.get("histogramReference");
-			histogramReference = Histogram.convertHistogramToRGB(histogramReference);
-			//numbands = (int)params.get("numbads");
-			numbands=((Integer)params.get("numbands")).intValue();
-			// Histogramas acumilados y normalizados 
-			acumulateS = Histogram.convertTableToNormalizeAccumulate(histogramSource.getTable());
-			acumulateR= Histogram.convertTableToNormalizeAccumulate(histogramReference.getTable());
-			
-		} catch (HistogramException e) {
-		
-		} catch (InterruptedException e) {
-			
-		} 
-		rasterResult= RasterBuffer.getBuffer(RasterBuffer.TYPE_BYTE,raster.getWidth(),raster.getHeight(),numbands,true);
-		fileNameOutput= (String)params.get("fileNameOutput");
-	}
 
+			// Histograma de referencia
+			histogramReference = (Histogram) params.get("histogramReference");
+			histogramReference = Histogram
+					.convertHistogramToRGB(histogramReference);
+			// numbands = (int)params.get("numbads");
+			numbands = ((Integer) params.get("numbands")).intValue();
+			// Histogramas acumilados y normalizados
+			acumulateS = Histogram
+					.convertTableToNormalizeAccumulate(histogramSource
+							.getTable());
+			acumulateR = Histogram
+					.convertTableToNormalizeAccumulate(histogramReference
+							.getTable());
+
+		} catch (HistogramException e) {
+
+		} catch (InterruptedException e) {
+
+		}
+		rasterResult = RasterBuffer.getBuffer(RasterBuffer.TYPE_BYTE,
+				raster.getWidth(), raster.getHeight(), numbands, true);
+		fileNameOutput = (String) params.get("fileNameOutput");
+	}
 
 	/**
 	 * Método que realiza la correspondencia entre las clases de los histogramas
 	 * */
-	public int searchInHistogramReference(double value,int band){
-		int i=0;
-		while(value>acumulateR[band][i]){
+	public int searchInHistogramReference(double value, int band) {
+		int i = 0;
+		while (value > acumulateR[band][i]) {
 			i++;
-			if(i==255) 
-				return (int)255;
+			if (i == 255)
+				return (int) 255;
 		}
-		if(i==0)
+		if (i == 0)
 			return 0;
-		if((acumulateR[band][i]-value) < (acumulateR[band][i-1]-value))
-			return (int)i;
-		else 
-			return (int)(i-1);
+		if ((acumulateR[band][i] - value) < (acumulateR[band][i - 1] - value))
+			return (int) i;
+		else
+			return (int) (i - 1);
 	}
 
 	public void process(int x, int y) throws InterruptedException {
 	}
-	
+
 }

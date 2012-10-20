@@ -28,7 +28,6 @@ import org.cresques.cts.ProjectionUtils;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 
-import com.hardcode.driverManager.DriverManager;
 import com.hardcode.driverManager.WriterManager;
 import com.hardcode.gdbms.driver.exceptions.FileNotFoundDriverException;
 import com.iver.andami.PluginServices;
@@ -51,11 +50,10 @@ import com.iver.cit.gvsig.project.documents.view.gui.IView;
 import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
-
 /**
- * Extensi�n que abre un di�logo para seleccionar la capa o capas que se quieren
- * a�adir a la vista.
- *
+ * Extensi�n que abre un di�logo para seleccionar la capa o capas que se
+ * quieren a�adir a la vista.
+ * 
  * @author Fernando Gonz�lez Cort�s
  */
 public class AddLayer extends Extension {
@@ -65,8 +63,9 @@ public class AddLayer extends Extension {
 
 	static {
 		AddLayer.wizardStack = new ArrayList();
-		// A�adimos el panel al wizard de cargar capa. (Esto es temporal hasta que
-    // el actual sea totalmente extensible)
+		// A�adimos el panel al wizard de cargar capa. (Esto es temporal hasta
+		// que
+		// el actual sea totalmente extensible)
 		AddLayer.addWizard(FileOpenWizard.class);
 	}
 
@@ -93,8 +92,8 @@ public class AddLayer extends Extension {
 	 * @see com.iver.mdiApp.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow window = PluginServices.getMDIManager()
-															 .getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow window = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (window == null) {
 			return false;
@@ -104,16 +103,12 @@ public class AddLayer extends Extension {
 
 		IView view;
 		try {
-			view = (IView)window;
-		}
-		catch (ClassCastException e) {
-		    return false;
-		}
-
-		if (view == null)
+			view = (IView) window;
+		} catch (ClassCastException e) {
 			return false;
+		}
 
-		BaseView baseView = (BaseView)view;
+		BaseView baseView = (BaseView) view;
 		return (baseView != null);
 	}
 
@@ -122,18 +117,20 @@ public class AddLayer extends Extension {
 	 */
 	public void postInitialize() {
 		LayerFactory.initialize();
-		WriterManager wm=LayerFactory.getWM();
+		WriterManager wm = LayerFactory.getWM();
 		PluginServices.addLoaders(wm.getWriterClassLoaders());
 
-		ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
-		extensionPoints.add("FileExtendingOpenDialog", "FileOpenVectorial", VectorialFileOpen.class);
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+		extensionPoints.add("FileExtendingOpenDialog", "FileOpenVectorial",
+				VectorialFileOpen.class);
 	}
 
 	public static void checkProjection(FLayer lyr, ViewPort viewPort) {
-		if (lyr instanceof FLayers){
-			FLayers layers=(FLayers)lyr;
-			for (int i=0;i<layers.getLayersCount();i++){
-				checkProjection(layers.getLayer(i),viewPort);
+		if (lyr instanceof FLayers) {
+			FLayers layers = (FLayers) lyr;
+			for (int i = 0; i < layers.getLayersCount(); i++) {
+				checkProjection(layers.getLayer(i), viewPort);
 			}
 		}
 		if (lyr instanceof FLyrVect) {
@@ -148,9 +145,16 @@ public class AddLayer extends Extension {
 			}
 			int option = JOptionPane.YES_OPTION;
 			if (!viewPort.getCrs().getName().equals(crs.getName())) {
-				option = JOptionPane.showConfirmDialog((Component)PluginServices.getMainFrame(), PluginServices
-						.getText(AddLayer.class, "reproyectar_aviso")+"\n"+ PluginServices.getText(AddLayer.class,"Capa")+": "+lyrVect.getName(), PluginServices
-						.getText(AddLayer.class, "reproyectar_pregunta"),
+				option = JOptionPane.showConfirmDialog(
+						(Component) PluginServices.getMainFrame(),
+						PluginServices.getText(AddLayer.class,
+								"reproyectar_aviso")
+								+ "\n"
+								+ PluginServices
+										.getText(AddLayer.class, "Capa")
+								+ ": "
+								+ lyrVect.getName(), PluginServices.getText(
+								AddLayer.class, "reproyectar_pregunta"),
 						JOptionPane.YES_NO_OPTION);
 
 				if (option != JOptionPane.OK_OPTION) {
@@ -173,11 +177,12 @@ public class AddLayer extends Extension {
 	public void execute(String actionCommand) {
 		// Project project = ((ProjectExtension)
 		// PluginServices.getExtension(ProjectExtension.class)).getProject();
-		BaseView theView = (BaseView) PluginServices.getMDIManager().getActiveWindow();
-		MapControl mapControl=theView.getMapControl();
+		BaseView theView = (BaseView) PluginServices.getMDIManager()
+				.getActiveWindow();
+		MapControl mapControl = theView.getMapControl();
 		this.addLayers(mapControl);
 		mapControl.getMapContext().callLegendChanged();
-		((ProjectDocument)theView.getModel()).setModified(true);
+		((ProjectDocument) theView.getModel()).setModified(true);
 	}
 
 	/**
@@ -189,7 +194,7 @@ public class AddLayer extends Extension {
 
 	/**
 	 * Creates FOpenDialog, and adds file tab, and additional registered tabs
-	 *
+	 * 
 	 * @return FOpenDialog
 	 */
 	private AddLayerDialog createFOpenDialog() {
@@ -219,22 +224,24 @@ public class AddLayer extends Extension {
 	}
 
 	/**
-	 * Adds to mapcontrol all layers selected by user in the specified WizardPanel.
-	 *
+	 * Adds to mapcontrol all layers selected by user in the specified
+	 * WizardPanel.
+	 * 
 	 * @param mapControl
-	 * 	MapControl on which we want to load user selected layers.
+	 *            MapControl on which we want to load user selected layers.
 	 * @param wizardPanel
-	 * 	WizardPanel where user selected the layers to load
+	 *            WizardPanel where user selected the layers to load
 	 * @return
 	 */
-	private boolean loadGenericWizardPanelLayers(MapControl mapControl, WizardPanel wp) {
+	private boolean loadGenericWizardPanelLayers(MapControl mapControl,
+			WizardPanel wp) {
 		FLayer lyr = null;
 		wp.setMapCtrl(mapControl);
 		wp.execute();
 		lyr = wp.getLayer();
 
-		if((lyr != null) && !(lyr.isOk())){
-			//if the layer is not okay (it has errors) process them
+		if ((lyr != null) && !(lyr.isOk())) {
+			// if the layer is not okay (it has errors) process them
 			processErrorsOfLayer(lyr, mapControl);
 		}
 
@@ -256,19 +263,20 @@ public class AddLayer extends Extension {
 
 	/**
 	 * This method process the errors found in a layer
+	 * 
 	 * @param lyr
 	 * @param mapControl
 	 */
 
-	private void processErrorsOfLayer(FLayer lyr, MapControl mapControl){
-//		List errors = lyr.getErrors();
-//		wp.callError(null);
+	private void processErrorsOfLayer(FLayer lyr, MapControl mapControl) {
+		// List errors = lyr.getErrors();
+		// wp.callError(null);
 		mapControl.getMapContext().callNewErrorEvent(null);
 	}
 
 	/**
 	 * Abre dialogo para a�adir capas y las a�ade en mapControl
-	 *
+	 * 
 	 * Devuelve true si se han a�adido capas.
 	 */
 	public boolean addLayers(MapControl mapControl) {
@@ -282,24 +290,28 @@ public class AddLayer extends Extension {
 				return loadGenericWizardPanelLayers(mapControl, wp);
 			} else {
 				JOptionPane.showMessageDialog((Component) PluginServices
-						.getMainFrame(), PluginServices.getText(this,"ninguna_capa_seleccionada"));
+						.getMainFrame(), PluginServices.getText(this,
+						"ninguna_capa_seleccionada"));
 			}
-			
+
 		}
 		return false;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
-		//Listener para resolver un FileDriverNotFoundException
-		LayerFactory.addSolveErrorForLayer(FileNotFoundDriverException.class,new FileNotFoundSolve());
+		// Listener para resolver un FileDriverNotFoundException
+		LayerFactory.addSolveErrorForLayer(FileNotFoundDriverException.class,
+				new FileNotFoundSolve());
 
 		PluginServices.getIconTheme().registerDefault(
 				"layer-add",
-				this.getClass().getClassLoader().getResource("images/addlayer.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/addlayer.png"));
 
 	}
 }

@@ -33,93 +33,96 @@ package org.gvsig.gpe.xml.stream;
 import javax.xml.namespace.QName;
 
 /**
- * Plain wrapper for an {@link IXmlStreamReader} aimed at easying the creation of IXmlStreamReader
- * decorators.
+ * Plain wrapper for an {@link IXmlStreamReader} aimed at easying the creation
+ * of IXmlStreamReader decorators.
  * <p>
- * This class is a pure abstract wrapper, so all methods delegate to the wrapped object.
+ * This class is a pure abstract wrapper, so all methods delegate to the wrapped
+ * object.
  * </p>
  * 
  * @author Gabriel Roldan (TOPP)
- * @version $Id: AbstractXmlStreamReaderWrapper.java 20425 2008-05-05 14:24:58Z groldan $
+ * @version $Id: AbstractXmlStreamReaderWrapper.java 20425 2008-05-05 14:24:58Z
+ *          groldan $
  */
-public abstract class AbstractXmlStreamReaderWrapper implements IXmlStreamReader {
+public abstract class AbstractXmlStreamReaderWrapper implements
+		IXmlStreamReader {
 
-    private IXmlStreamReader wrapped;
+	private IXmlStreamReader wrapped;
 
-    protected AbstractXmlStreamReaderWrapper() {
-        // do nothing
-    }
+	protected AbstractXmlStreamReaderWrapper() {
+		// do nothing
+	}
 
-    protected AbstractXmlStreamReaderWrapper(IXmlStreamReader wrapped) {
-        setWrapped(wrapped);
-    }
+	protected AbstractXmlStreamReaderWrapper(IXmlStreamReader wrapped) {
+		setWrapped(wrapped);
+	}
 
-    public void setWrapped(IXmlStreamReader wrapped) {
-        this.wrapped = wrapped;
-    }
-    
-    /**
-     * @see org.gvsig.gpe.xml.stream.IXmlStreamReader#getAttributeCount()
-     */
-    public int getAttributeCount() throws XmlStreamException {
-        return wrapped.getAttributeCount();
-    }
+	public void setWrapped(IXmlStreamReader wrapped) {
+		this.wrapped = wrapped;
+	}
 
-    /**
-     * @see org.gvsig.gpe.xml.stream.IXmlStreamReader#getAttributeName(int)
-     */
-    public QName getAttributeName(int i) throws XmlStreamException {
-        return wrapped.getAttributeName(i);
-    }
+	/**
+	 * @see org.gvsig.gpe.xml.stream.IXmlStreamReader#getAttributeCount()
+	 */
+	public int getAttributeCount() throws XmlStreamException {
+		return wrapped.getAttributeCount();
+	}
 
-    /**
-     * @param i
-     * @see org.gvsig.gpe.xml.stream.IXmlStreamReader#getAttributeValue(int)
-     */
-    public String getAttributeValue(int i) throws XmlStreamException {
-        return wrapped.getAttributeValue(i);
-    }
+	/**
+	 * @see org.gvsig.gpe.xml.stream.IXmlStreamReader#getAttributeName(int)
+	 */
+	public QName getAttributeName(int i) throws XmlStreamException {
+		return wrapped.getAttributeName(i);
+	}
 
-    /**
-     * @see org.gvsig.gpe.xml.stream.IXmlStreamReader#getEventType()
-     */
-    public int getEventType() throws XmlStreamException {
-        return wrapped.getEventType();
-    }
+	/**
+	 * @param i
+	 * @see org.gvsig.gpe.xml.stream.IXmlStreamReader#getAttributeValue(int)
+	 */
+	public String getAttributeValue(int i) throws XmlStreamException {
+		return wrapped.getAttributeValue(i);
+	}
 
-    /**
-     * @see org.gvsig.gpe.xml.stream.IXmlStreamReader#getName()
-     */
-    public QName getName() throws XmlStreamException {
-        return wrapped.getName();
-    }
+	/**
+	 * @see org.gvsig.gpe.xml.stream.IXmlStreamReader#getEventType()
+	 */
+	public int getEventType() throws XmlStreamException {
+		return wrapped.getEventType();
+	}
 
-    /**
-     * @see org.gvsig.gpe.xml.stream.IXmlStreamReader#getText()
-     */
-    public String getText() throws XmlStreamException {
-        return wrapped.getText();
-    }
+	/**
+	 * @see org.gvsig.gpe.xml.stream.IXmlStreamReader#getName()
+	 */
+	public QName getName() throws XmlStreamException {
+		return wrapped.getName();
+	}
 
-    /**
-     * @see org.gvsig.gpe.xml.stream.IXmlStreamReader#isWhitespace()
-     */
-    public boolean isWhitespace() throws XmlStreamException {
-        return wrapped.isWhitespace();
-    }
+	/**
+	 * @see org.gvsig.gpe.xml.stream.IXmlStreamReader#getText()
+	 */
+	public String getText() throws XmlStreamException {
+		return wrapped.getText();
+	}
 
-    /**
-     * @see org.gvsig.gpe.xml.stream.IXmlStreamReader#next()
-     */
-    public int next() throws XmlStreamException {
-        return wrapped.next();
-    }
+	/**
+	 * @see org.gvsig.gpe.xml.stream.IXmlStreamReader#isWhitespace()
+	 */
+	public boolean isWhitespace() throws XmlStreamException {
+		return wrapped.isWhitespace();
+	}
 
-    /**
-     * @see org.gvsig.gpe.xml.stream.IXmlStreamReader#nextTag()
-     */
-    public int nextTag() throws XmlStreamException {
-        return wrapped.nextTag();
-    }
+	/**
+	 * @see org.gvsig.gpe.xml.stream.IXmlStreamReader#next()
+	 */
+	public int next() throws XmlStreamException {
+		return wrapped.next();
+	}
+
+	/**
+	 * @see org.gvsig.gpe.xml.stream.IXmlStreamReader#nextTag()
+	 */
+	public int nextTag() throws XmlStreamException {
+		return wrapped.nextTag();
+	}
 
 }

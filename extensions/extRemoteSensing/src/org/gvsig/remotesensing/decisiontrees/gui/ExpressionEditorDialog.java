@@ -18,21 +18,22 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
  * Diálogo para edición de nodos en la herramiento de árbole de decisión
  * 
  * @author Diego Guerrero Sevilla (diego.guerrero@uclm.es)
- *
+ * 
  */
-public class ExpressionEditorDialog extends JPanel implements ButtonsPanelListener,
-IWindow, IWindowListener {
+public class ExpressionEditorDialog extends JPanel implements
+		ButtonsPanelListener, IWindow, IWindowListener {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4471419877633981558L;
-	private View 						view = null;
-	private ExpressionEditorPanel 		expressionEditorPanel = null;
-	private DecisionTreePanel 			decisionTreePanel = null;
+	private View view = null;
+	private ExpressionEditorPanel expressionEditorPanel = null;
+	private DecisionTreePanel decisionTreePanel = null;
 
 	public WindowInfo getWindowInfo() {
-		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODALDIALOG | WindowInfo.RESIZABLE | WindowInfo.MAXIMIZABLE);
+		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODALDIALOG
+				| WindowInfo.RESIZABLE | WindowInfo.MAXIMIZABLE);
 		m_viewinfo.setTitle(PluginServices.getText(this, "editor_expresiones"));
 		m_viewinfo.setHeight(this.getHeight());
 		m_viewinfo.setWidth(this.getWidth());
@@ -45,25 +46,25 @@ IWindow, IWindowListener {
 		}
 	}
 
-	public ExpressionEditorDialog(int width, int height, DecisionTreePanel decisionTreePanel) {
+	public ExpressionEditorDialog(int width, int height,
+			DecisionTreePanel decisionTreePanel) {
 		this.setSize(width, height);
 		this.decisionTreePanel = decisionTreePanel;
 		this.view = decisionTreePanel.getView();
-		this.setLayout(new BorderLayout());		
+		this.setLayout(new BorderLayout());
 		this.add(getExpressionEditorPanel(), BorderLayout.CENTER);
 	}
 
-
 	public void windowActivated() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void windowClosed() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	/**
 	 * Acciones a ejecutar cuando se cancela
 	 */
@@ -71,13 +72,14 @@ IWindow, IWindowListener {
 		try {
 			PluginServices.getMDIManager().closeWindow(this);
 		} catch (ArrayIndexOutOfBoundsException e) {
-			//Si la ventana no se puede eliminar no hacemos nada
+			// Si la ventana no se puede eliminar no hacemos nada
 		}
 	}
 
 	public ExpressionEditorPanel getExpressionEditorPanel() {
-		if (expressionEditorPanel == null){
-			expressionEditorPanel = new ExpressionEditorPanel(this, decisionTreePanel);
+		if (expressionEditorPanel == null) {
+			expressionEditorPanel = new ExpressionEditorPanel(this,
+					decisionTreePanel);
 		}
 		return expressionEditorPanel;
 	}

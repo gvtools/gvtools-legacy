@@ -41,9 +41,12 @@ import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 /**
- * <p>Extension to add support for selecting the geometries of the active vector layers that
- *  intersect with a buffer around their previously selected geometries.</p>
- *
+ * <p>
+ * Extension to add support for selecting the geometries of the active vector
+ * layers that intersect with a buffer around their previously selected
+ * geometries.
+ * </p>
+ * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class SelectByBufferExtension extends Extension {
@@ -58,36 +61,46 @@ public class SelectByBufferExtension extends Extension {
 
 	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
-			"select-by-buffer-icon",
-			this.getClass().getClassLoader().getResource("images/select-by-buffer-icon.png")
-		);
+				"select-by-buffer-icon",
+				this.getClass().getClassLoader()
+						.getResource("images/select-by-buffer-icon.png"));
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String actionCommand) {
-		if (actionCommand.equals("SELBUFFER") ) {
+		if (actionCommand.equals("SELBUFFER")) {
 			IWindow window = PluginServices.getMDIManager().getActiveWindow();
 
 			if (window instanceof View) {
-				View view = (View) window; 
-				IProjectView model = ((View)window).getModel();
+				View view = (View) window;
+				IProjectView model = ((View) window).getModel();
 
 				/*
 				 * Unavaliable tool with views in geographic projections
 				 */
 				CoordinateReferenceSystem crs = view.getMapControl().getCrs();
 				if (!(crs instanceof ProjectedCRS)) {
-					JOptionPane.showMessageDialog(null, PluginServices.getText(null, "Tool_unavaliable_with_view_in_geographic_projection"), PluginServices.getText(this, "Warning"), JOptionPane.ERROR_MESSAGE);
+					JOptionPane
+							.showMessageDialog(
+									null,
+									PluginServices
+											.getText(null,
+													"Tool_unavaliable_with_view_in_geographic_projection"),
+									PluginServices.getText(this, "Warning"),
+									JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 
 				MapContext mapContext = model.getMapContext();
 
-				// If there is at least one active vector layer that has geometries selected -> can use this tool, otherwise notifies the
-				//  limitation in a JOptionPane
+				// If there is at least one active vector layer that has
+				// geometries selected -> can use this tool, otherwise notifies
+				// the
+				// limitation in a JOptionPane
 				FLayer layers[] = mapContext.getLayers().getActives();
 				FLayer layer;
 				ArrayList usefulLayers = new ArrayList();
@@ -96,27 +109,41 @@ public class SelectByBufferExtension extends Extension {
 				for (int i = 0; i < layers.length; i++) {
 					layer = layers[i];
 
-					if ((layer instanceof FLyrVect) && (layer.isAvailable()) && (layer.isActive())) {
+					if ((layer instanceof FLyrVect) && (layer.isAvailable())
+							&& (layer.isActive())) {
 						try {
-							usefulLayers.add((FLyrVect)layer);
-							if (((FLyrVect)layer).getSource().getRecordset().getSelection().cardinality() == 0) {
+							usefulLayers.add((FLyrVect) layer);
+							if (((FLyrVect) layer).getSource().getRecordset()
+									.getSelection().cardinality() == 0) {
 								emptySelectionLayers++;
 							}
-						}
-						catch (ReadDriverException rde) {
-							JOptionPane.showMessageDialog(null, PluginServices.getText(null, "Failed_selecting_layer") + ": " + layer.getName(), PluginServices.getText(null, "Warning"), JOptionPane.WARNING_MESSAGE);
+						} catch (ReadDriverException rde) {
+							JOptionPane.showMessageDialog(
+									null,
+									PluginServices.getText(null,
+											"Failed_selecting_layer")
+											+ ": "
+											+ layer.getName(), PluginServices
+											.getText(null, "Warning"),
+									JOptionPane.WARNING_MESSAGE);
 						}
 					}
 				}
 
-				if (usefulLayers.size() == 0 || emptySelectionLayers == usefulLayers.size()) {
-					JOptionPane.showMessageDialog(null, PluginServices.getText(null, "There_are_no_geometries_selected"), PluginServices.getText(null, "Warning"), JOptionPane.WARNING_MESSAGE);
+				if (usefulLayers.size() == 0
+						|| emptySelectionLayers == usefulLayers.size()) {
+					JOptionPane.showMessageDialog(null, PluginServices.getText(
+							null, "There_are_no_geometries_selected"),
+							PluginServices.getText(null, "Warning"),
+							JOptionPane.WARNING_MESSAGE);
 
 					return;
 				}
 
 				// Creates and displays the configuration panel
-				PluginServices.getMDIManager().addWindow(new BufferConfigurationPanel((FLyrVect[])usefulLayers.toArray(new FLyrVect[0]), (View)window));
+				PluginServices.getMDIManager().addWindow(
+						new BufferConfigurationPanel((FLyrVect[]) usefulLayers
+								.toArray(new FLyrVect[0]), (View) window));
 			}
 		}
 	}
@@ -125,7 +152,8 @@ public class SelectByBufferExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (f == null) {
 			return false;
@@ -146,7 +174,8 @@ public class SelectByBufferExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (f == null) {
 			return false;
@@ -171,7 +200,8 @@ public class SelectByBufferExtension extends Extension {
 			for (int i = 0; i < layers.length; i++) {
 				layer = layers[i];
 
-				if ((layer instanceof FLyrVect) && (layer.isAvailable()) && (layer.isActive()))
+				if ((layer instanceof FLyrVect) && (layer.isAvailable())
+						&& (layer.isActive()))
 					return true;
 			}
 		}

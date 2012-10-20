@@ -69,142 +69,141 @@ import com.iver.utiles.swing.threads.CancellableProgressTask;
  * @author azabala
  * 
  */
-public abstract class AbstractTopologyRule implements IOneLyrRule  {
-	
+public abstract class AbstractTopologyRule implements IOneLyrRule {
+
 	/**
-	 * We need a reference to topology to get a layer from its name
-	 * in setXML method.
+	 * We need a reference to topology to get a layer from its name in setXML
+	 * method.
 	 */
 	protected Topology topology;
-	
- 
+
 	protected FLyrVect originLyr;
-	
+
 	/**
 	 * Container for the topology errors detected.
 	 */
 	protected ITopologyErrorContainer errorContainer;
-	
-	
+
 	/**
-	 * Container for all those error fixes that dont need user
-	 * interaction (so they could be invoked in a batch process).
-	 * The first fix of the list is the default fix
+	 * Container for all those error fixes that dont need user interaction (so
+	 * they could be invoked in a batch process). The first fix of the list is
+	 * the default fix
 	 */
 	protected static List<ITopologyErrorFix> automaticErrorFixes = new ArrayList<ITopologyErrorFix>();
-	
+
 	/**
-	 * Unique identifier of the rule to distinct it of the rest of rules
-	 * of a topology
+	 * Unique identifier of the rule to distinct it of the rest of rules of a
+	 * topology
 	 */
 	private int ruleId;
-	
+
 	/**
 	 * Constructor.
 	 * 
-	 *  @param originLyr
+	 * @param originLyr
 	 *            layer which features we are checking
 	 * 
-	 * @param topology reference to the topology that owns this rule.
+	 * @param topology
+	 *            reference to the topology that owns this rule.
 	 */
-	public AbstractTopologyRule(Topology topology, FLyrVect originLyr){
+	public AbstractTopologyRule(Topology topology, FLyrVect originLyr) {
 		this.topology = topology;
 		this.originLyr = originLyr;
 	}
-	
+
 	/**
 	 * Constructor without topology param
 	 * 
 	 * @param originLyr
 	 */
-	public AbstractTopologyRule(FLyrVect originLyr){
+	public AbstractTopologyRule(FLyrVect originLyr) {
 		this.originLyr = originLyr;
 	}
-	
-	public AbstractTopologyRule(){
-		//default constructor. Needed for persistence
+
+	public AbstractTopologyRule() {
+		// default constructor. Needed for persistence
 	}
-	 
+
 	public void setOriginLyr(FLyrVect originLyr) {
 		this.originLyr = originLyr;
 	}
-	 
+
 	public FLyrVect getOriginLyr() {
 		return originLyr;
 	}
-	 
-	
-	public void setTopologyErrorContainer(ITopologyErrorContainer errorContainer){
+
+	public void setTopologyErrorContainer(ITopologyErrorContainer errorContainer) {
 		this.errorContainer = errorContainer;
 	}
-	
-	public ITopologyErrorContainer getTopologyErrorContainer(){
+
+	public ITopologyErrorContainer getTopologyErrorContainer() {
 		return errorContainer;
 	}
 
 	public abstract String getName();
-	
-	
-	public  URL  getDescription(){
+
+	public URL getDescription() {
 		Locale locale = Locale.getDefault();
 		String localeStr = locale.getLanguage();
-		String urlStr = "docs/"+
-						getClass().getName() +
-						"/description_%lang%.html";
+		String urlStr = "docs/" + getClass().getName()
+				+ "/description_%lang%.html";
 		String localizedUrl = urlStr.replaceAll("%lang%", localeStr);
-		
+
 		URL url = AbstractTopologyRule.class.getResource(localizedUrl);
-		if(url == null){
-			// for languages used in Spain, fallback to Spanish if their translation is not available
-			if (localeStr.equals("ca")||localeStr.equals("gl")||localeStr.equals("eu")||localeStr.equals("va")) {
+		if (url == null) {
+			// for languages used in Spain, fallback to Spanish if their
+			// translation is not available
+			if (localeStr.equals("ca") || localeStr.equals("gl")
+					|| localeStr.equals("eu") || localeStr.equals("va")) {
 				localeStr = "es";
 				localizedUrl = urlStr.replaceAll("%lang", localeStr);
 				url = AbstractTopologyRule.class.getResource(localizedUrl);
-				if(url != null)
+				if (url != null)
 					return url;
 			}
 			// as a last resort, fallback to English
 			localeStr = "en";
 			localizedUrl = urlStr.replaceAll("%lang", localeStr);
-			url = AbstractTopologyRule.class.getResource(localizedUrl);	
-		}			
+			url = AbstractTopologyRule.class.getResource(localizedUrl);
+		}
 		return url;
-     }
-		
+	}
+
 	/**
 	 * Checks if the rule's parameters (sourceLyr, destinationLyr) verify rule
 	 * preconditions (geometry type, etc.)
 	 */
-	public abstract void checkPreconditions() throws TopologyRuleDefinitionException ;
-	 
-	
-	public void checkRule(){
-		this.checkRule((CancellableProgressTask)null);
+	public abstract void checkPreconditions()
+			throws TopologyRuleDefinitionException;
+
+	public void checkRule() {
+		this.checkRule((CancellableProgressTask) null);
 	}
-	
-	public void checkRule(Rectangle2D rect){
+
+	public void checkRule(Rectangle2D rect) {
 		checkRule(null, rect);
 	}
-	
-	
-	public void checkRule(CancellableProgressTask progressMonitor){
+
+	public void checkRule(CancellableProgressTask progressMonitor) {
 		try {
 			// when we dont pass field names iterator only iterates over
 			// geometries
-			IFeatureIterator featureIterator = originLyr.getSource().getFeatureIterator();
-			while(featureIterator.hasNext()){
+			IFeatureIterator featureIterator = originLyr.getSource()
+					.getFeatureIterator();
+			while (featureIterator.hasNext()) {
 				IFeature feature = featureIterator.next();
-				if(progressMonitor != null){
-					if(progressMonitor.isCanceled()/*
+				if (progressMonitor != null) {
+					if (progressMonitor.isCanceled()/*
 													 * ||
-													 * progressMonitor.isFinished()
-													 */){
+													 * progressMonitor.isFinished
+													 * ()
+													 */) {
 						// TODO Maybe we could show progress info of rule
 						// checking.
 						// example: feature 1 of N...etc
 						return;
 					}
-   				}
+				}
 				validateFeature(feature);
 			}
 			this.ruleChecked();
@@ -212,27 +211,30 @@ public abstract class AbstractTopologyRule implements IOneLyrRule  {
 			e.printStackTrace();
 		} catch (ReadDriverException e) {
 			e.printStackTrace();
-		}	
+		}
 	}
-	 
-	public  void checkRule(CancellableProgressTask progressMonitor, Rectangle2D rect){
+
+	public void checkRule(CancellableProgressTask progressMonitor,
+			Rectangle2D rect) {
 		try {
-			IFeatureIterator iterator = originLyr.getSource().getFeatureIterator(rect, null, null, true);
-			while(iterator.hasNext()){
+			IFeatureIterator iterator = originLyr.getSource()
+					.getFeatureIterator(rect, null, null, true);
+			while (iterator.hasNext()) {
 				IFeature feature = iterator.next();
-				if(progressMonitor != null){
-					if(progressMonitor.isCanceled()/*
+				if (progressMonitor != null) {
+					if (progressMonitor.isCanceled()/*
 													 * ||
-													 * progressMonitor.isFinished()
-													 */){
+													 * progressMonitor.isFinished
+													 * ()
+													 */) {
 						// TODO Maybe we could show progress info of rule
 						// checking.
 						// example: feature 1 of N...etc
 						return;
 					}
-   				}
+				}
 				validateFeature(feature);
-			}//while
+			}// while
 			ruleChecked();
 		} catch (ExpansionFileReadException e) {
 			// TODO Auto-generated catch block
@@ -240,64 +242,66 @@ public abstract class AbstractTopologyRule implements IOneLyrRule  {
 		} catch (ReadDriverException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}	
+		}
 	}
-	
+
 	/**
-	 * This method must be overwrited by all of those subclases which uses temporal results,
-	 * cachés, etc. 
+	 * This method must be overwrited by all of those subclases which uses
+	 * temporal results, cachés, etc.
 	 */
-	public void ruleChecked(){};
-	
+	public void ruleChecked() {
+	};
+
 	public abstract void validateFeature(IFeature feature);
-	
-	
-	public void addTopologyError(TopologyError topologyError){
+
+	public void addTopologyError(TopologyError topologyError) {
 		this.errorContainer.addTopologyError(topologyError);
 	}
-	
+
 	/*
 	 * Implementation of IPersistence
 	 */
-	public String getClassName(){
+	public String getClassName() {
 		return this.getClass().getName();
 	}
-	   
-	public XMLEntity getXMLEntity(){
+
+	public XMLEntity getXMLEntity() {
 		XMLEntity xml = new XMLEntity();
 		xml.putProperty("className", getClassName());
 		xml.putProperty("originLayerName", this.originLyr.getName());
 		xml.putProperty("ruleId", this.ruleId);
-		if(this instanceof IRuleWithClusterTolerance){
-			double clusterTolerance = ((IRuleWithClusterTolerance)this).getClusterTolerance();
+		if (this instanceof IRuleWithClusterTolerance) {
+			double clusterTolerance = ((IRuleWithClusterTolerance) this)
+					.getClusterTolerance();
 			xml.putProperty("clusterTolerance", clusterTolerance);
 		}
 		return xml;
 	}
-	    
-	public void setXMLEntity(XMLEntity xml){
+
+	public void setXMLEntity(XMLEntity xml) {
 		String originLayerName = "";
 		if (xml.contains("originLayerName")) {
 			originLayerName = xml.getStringProperty("originLayerName");
 			this.originLyr = (FLyrVect) topology.getLayer(originLayerName);
-		}//if
-		
-		if(xml.contains("ruleId")){
+		}// if
+
+		if (xml.contains("ruleId")) {
 			ruleId = xml.getIntProperty("ruleId");
 		}
-		
-		if(xml.contains("clusterTolerance")){
+
+		if (xml.contains("clusterTolerance")) {
 			double clusterTolerance = xml.getDoubleProperty("clusterTolerance");
-			if(this instanceof IRuleWithClusterTolerance)
-				((IRuleWithClusterTolerance)this).setClusterTolerance(clusterTolerance);
+			if (this instanceof IRuleWithClusterTolerance)
+				((IRuleWithClusterTolerance) this)
+						.setClusterTolerance(clusterTolerance);
 		}
 	}
-	
-    public void setId(int ruleId){
-    	this.ruleId = ruleId;
-    }
-	
-	public int getId(){
+
+	public void setId(int ruleId) {
+		this.ruleId = ruleId;
+	}
+
+	public int getId() {
 		return ruleId;
 	}
 
@@ -308,41 +312,39 @@ public abstract class AbstractTopologyRule implements IOneLyrRule  {
 	public void setTopology(Topology topology) {
 		this.topology = topology;
 	}
-	
-	public boolean equals(Object o){
-		if(!o.getClass().equals(this.getClass()))
+
+	public boolean equals(Object o) {
+		if (!o.getClass().equals(this.getClass()))
 			return false;
-		AbstractTopologyRule oRule = (AbstractTopologyRule)o;
-		if(!oRule.originLyr.equals(this.originLyr))
+		AbstractTopologyRule oRule = (AbstractTopologyRule) o;
+		if (!oRule.originLyr.equals(this.originLyr))
 			return false;
-		if(this instanceof ITwoLyrRule){
-			if(! (o instanceof ITwoLyrRule))
+		if (this instanceof ITwoLyrRule) {
+			if (!(o instanceof ITwoLyrRule))
 				return false;
-			
-			ITwoLyrRule thisRule = (ITwoLyrRule)this;
-			ITwoLyrRule oTwoRule = (ITwoLyrRule)oRule;
-			if(! thisRule.getDestinationLyr().equals(oTwoRule.getDestinationLyr()))
+
+			ITwoLyrRule thisRule = (ITwoLyrRule) this;
+			ITwoLyrRule oTwoRule = (ITwoLyrRule) oRule;
+			if (!thisRule.getDestinationLyr().equals(
+					oTwoRule.getDestinationLyr()))
 				return false;
 		}
 		return true;
 	}
-	
-	public int hashCode(){
+
+	public int hashCode() {
 		return 1;
 	}
-	
-	
-	
-	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError){
+
+	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError) {
 		ITopologyErrorFix solution = null;
-		if(automaticErrorFixes.size() > 0)
+		if (automaticErrorFixes.size() > 0)
 			solution = automaticErrorFixes.get(0);
 		return solution;
 	}
 
-	public  List<ITopologyErrorFix> getAutomaticErrorFixes() {
+	public List<ITopologyErrorFix> getAutomaticErrorFixes() {
 		return automaticErrorFixes;
 	}
 
 }
- 

@@ -4,12 +4,12 @@ import org.gvsig.raster.dataset.Params;
 
 /**
  * Filtro para de prueba para el test TestRasterFilterList
- *
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 
 public class RasterFilterForTest extends RasterFilter {
-	public static String[] names = new String[] {"test"};
+	public static String[] names = new String[] { "test" };
 
 	public RasterFilterForTest() {
 		setName(names[0]);

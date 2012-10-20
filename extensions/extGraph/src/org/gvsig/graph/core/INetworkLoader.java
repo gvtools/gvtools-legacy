@@ -40,10 +40,7 @@
  */
 package org.gvsig.graph.core;
 
-
 public interface INetworkLoader {
 	IGraph loadNetwork();
 
 }
-
-

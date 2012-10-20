@@ -45,34 +45,32 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 
-import javax.swing.ImageIcon;
-
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
-
 /**
- * Implementación de la interfaz LayoutPointListener como herramienta para realizar
- * una selección por punto.
- *
+ * Implementación de la interfaz LayoutPointListener como herramienta para
+ * realizar una selección por punto.
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LayoutPointSelectionListener implements LayoutPointListener {
-//	private final Image img = new ImageIcon(MapControl.class.getResource(
-//				"images/PointSelectCursor.gif")).getImage();
-	private final Image img = PluginServices.getIconTheme().get("point-select-cursor").getImage();
-	private final Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(img,
-			new Point(16, 16), "");
+	// private final Image img = new ImageIcon(MapControl.class.getResource(
+	// "images/PointSelectCursor.gif")).getImage();
+	private final Image img = PluginServices.getIconTheme()
+			.get("point-select-cursor").getImage();
+	private final Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(
+			img, new Point(16, 16), "");
 
 	protected Layout layout;
 
 	/**
 	 * Crea un nuevo AreaListenerImpl.
-	 *
-	 * @param mc MapControl.
+	 * 
+	 * @param mc
+	 *            MapControl.
 	 */
 	public LayoutPointSelectionListener(Layout l) {
 		this.layout = l;
@@ -91,7 +89,8 @@ public class LayoutPointSelectionListener implements LayoutPointListener {
 	public Image getImageCursor() {
 		return img;
 	}
-	public Cursor getCursor(){
+
+	public Cursor getCursor() {
 		return cur;
 	}
 
@@ -105,6 +104,5 @@ public class LayoutPointSelectionListener implements LayoutPointListener {
 	public void pointDoubleClick(PointEvent event) throws BehaviorException {
 
 	}
-
 
 }

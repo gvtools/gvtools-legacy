@@ -21,13 +21,14 @@ import com.iver.utiles.swing.threads.Cancellable;
 
 /**
  * MultiShapeSymbol class allows to create a composition of several symbols with
- * different shapes and be treated as a single symbol.These shapes can be marker,line
- * or fill.
- *
- * @author   jaume dominguez faus - jaume.dominguez@iver.es
+ * different shapes and be treated as a single symbol.These shapes can be
+ * marker,line or fill.
+ * 
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 
-public class MultiShapeSymbol implements ILineSymbol, IMarkerSymbol, IFillSymbol {
+public class MultiShapeSymbol implements ILineSymbol, IMarkerSymbol,
+		IFillSymbol {
 	private IMarkerSymbol marker = SymbologyFactory.createDefaultMarkerSymbol();
 	private ILineSymbol line = SymbologyFactory.createDefaultLineSymbol();
 	private IFillSymbol fill = SymbologyFactory.createDefaultFillSymbol();
@@ -73,15 +74,16 @@ public class MultiShapeSymbol implements ILineSymbol, IMarkerSymbol, IFillSymbol
 			symSelect = new MultiShapeSymbol();
 		}
 
-		if (marker!=null){
-			symSelect.setMarkerSymbol((IMarkerSymbol) marker.getSymbolForSelection());
+		if (marker != null) {
+			symSelect.setMarkerSymbol((IMarkerSymbol) marker
+					.getSymbolForSelection());
 		}
 
-		if (line!=null){
+		if (line != null) {
 			symSelect.setLineSymbol((ILineSymbol) line.getSymbolForSelection());
 		}
 
-		if (fill!=null ){
+		if (fill != null) {
 			symSelect.setFillSymbol((IFillSymbol) fill.getSymbolForSelection());
 		}
 
@@ -89,15 +91,16 @@ public class MultiShapeSymbol implements ILineSymbol, IMarkerSymbol, IFillSymbol
 
 	}
 
-	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp, Cancellable cancel) {
+	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp,
+			Cancellable cancel) {
 		switch (shp.getShapeType()) {
-		case FShape.POINT: //Tipo punto
-        case FShape.POINT + FShape.Z:
-        	if (marker != null)
-        		marker.draw(g, affineTransform, shp, cancel);
+		case FShape.POINT: // Tipo punto
+		case FShape.POINT + FShape.Z:
+			if (marker != null)
+				marker.draw(g, affineTransform, shp, cancel);
 			break;
 		case FShape.LINE:
-        case FShape.LINE + FShape.Z:
+		case FShape.LINE + FShape.Z:
 		case FShape.ARC:
 		case FShape.ARC + FShape.Z:
 			if (line != null)
@@ -105,16 +108,15 @@ public class MultiShapeSymbol implements ILineSymbol, IMarkerSymbol, IFillSymbol
 			break;
 
 		case FShape.POLYGON:
-        case FShape.POLYGON + FShape.Z:
+		case FShape.POLYGON + FShape.Z:
 		case FShape.ELLIPSE:
 		case FShape.ELLIPSE + FShape.Z:
-        case FShape.CIRCLE:
+		case FShape.CIRCLE:
 		case FShape.CIRCLE + FShape.Z:
 			if (fill != null)
 				fill.draw(g, affineTransform, shp, cancel);
 			break;
 		}
-
 
 	}
 
@@ -133,7 +135,7 @@ public class MultiShapeSymbol implements ILineSymbol, IMarkerSymbol, IFillSymbol
 		int bMarker = 0;
 		int aMarker = 0;
 
-		if (marker!=null && marker.getColor() != null) {
+		if (marker != null && marker.getColor() != null) {
 			rMarker = marker.getColor().getRed();
 			gMarker = marker.getColor().getGreen();
 			bMarker = marker.getColor().getBlue();
@@ -145,7 +147,7 @@ public class MultiShapeSymbol implements ILineSymbol, IMarkerSymbol, IFillSymbol
 		int bLine = 0;
 		int aLine = 0;
 
-		if (line != null  && line.getColor() != null) {
+		if (line != null && line.getColor() != null) {
 			rLine = line.getColor().getRed();
 			gLine = line.getColor().getGreen();
 			bLine = line.getColor().getBlue();
@@ -157,11 +159,11 @@ public class MultiShapeSymbol implements ILineSymbol, IMarkerSymbol, IFillSymbol
 		int bFill = 0;
 		int aFill = 0;
 
-		if (fill != null ) {
+		if (fill != null) {
 			Color colorOfFill = null;
-			if (fill.getOutline()!=null) {
+			if (fill.getOutline() != null) {
 				colorOfFill = fill.getOutline().getColor();
-			} else if (fill.getFillColor()!=null) {
+			} else if (fill.getFillColor() != null) {
 				colorOfFill = fill.getFillColor();
 			}
 			if (colorOfFill != null) {
@@ -187,23 +189,22 @@ public class MultiShapeSymbol implements ILineSymbol, IMarkerSymbol, IFillSymbol
 		xml.putProperty("desc", getDescription());
 		xml.putProperty("unit", getUnit());
 
-		if (marker!=null) {
+		if (marker != null) {
 			XMLEntity markerXML = marker.getXMLEntity();
 			markerXML.putProperty("id", "marker");
 			xml.addChild(markerXML);
 		}
 
-		if (line!=null) {
+		if (line != null) {
 			XMLEntity lineXML = line.getXMLEntity();
 			lineXML.putProperty("id", "line");
 			xml.addChild(lineXML);
 		}
 
-		if (fill!=null) {
+		if (fill != null) {
 			XMLEntity fillXML = fill.getXMLEntity();
 			fillXML.putProperty("id", "fill");
 			xml.addChild(fillXML);
-
 
 		}
 		return xml;
@@ -216,19 +217,18 @@ public class MultiShapeSymbol implements ILineSymbol, IMarkerSymbol, IFillSymbol
 		XMLEntity myXML;
 		myXML = xml.firstChild("id", "marker");
 		if (myXML != null)
-			marker = (IMarkerSymbol) SymbologyFactory.
-						createSymbolFromXML(myXML, null);
+			marker = (IMarkerSymbol) SymbologyFactory.createSymbolFromXML(
+					myXML, null);
 
 		myXML = xml.firstChild("id", "line");
 		if (myXML != null)
-			line = (ILineSymbol) SymbologyFactory.
-						createSymbolFromXML(myXML, null);
+			line = (ILineSymbol) SymbologyFactory.createSymbolFromXML(myXML,
+					null);
 
 		myXML = xml.firstChild("id", "fill");
 		if (myXML != null)
-			fill = (IFillSymbol) SymbologyFactory.
-						createSymbolFromXML(myXML, null);
-
+			fill = (IFillSymbol) SymbologyFactory.createSymbolFromXML(myXML,
+					null);
 
 	}
 
@@ -237,7 +237,7 @@ public class MultiShapeSymbol implements ILineSymbol, IMarkerSymbol, IFillSymbol
 	}
 
 	public boolean isShapeVisible() {
-		if (marker!=null) {
+		if (marker != null) {
 			return marker.isShapeVisible();
 		}
 
@@ -251,7 +251,7 @@ public class MultiShapeSymbol implements ILineSymbol, IMarkerSymbol, IFillSymbol
 	}
 
 	public void setDescription(String desc) {
-		this.desc = desc ;
+		this.desc = desc;
 	}
 
 	public int getSymbolType() {
@@ -264,29 +264,32 @@ public class MultiShapeSymbol implements ILineSymbol, IMarkerSymbol, IFillSymbol
 	}
 
 	public void drawInsideRectangle(Graphics2D g,
-			AffineTransform scaleInstance, Rectangle r, PrintRequestAttributeSet properties) throws SymbolDrawingException {
-		double myWidth =  (r.getWidth()/3);
+			AffineTransform scaleInstance, Rectangle r,
+			PrintRequestAttributeSet properties) throws SymbolDrawingException {
+		double myWidth = (r.getWidth() / 3);
 
 		Rectangle rect = new Rectangle(r.x, r.y, (int) myWidth, r.height);
 
 		if (marker != null) {
-//			g.translate(r.x, r.y);
+			// g.translate(r.x, r.y);
 			marker.drawInsideRectangle(g, scaleInstance, rect, properties);
-//			g.translate(-(r.x), -(r.y));
+			// g.translate(-(r.x), -(r.y));
 		}
-		rect = new Rectangle((int)(r.x+myWidth), r.y, (int) myWidth, r.height);
+		rect = new Rectangle((int) (r.x + myWidth), r.y, (int) myWidth,
+				r.height);
 
 		if (line != null) {
-//			g.translate(r.x+myWidth, r.y);
+			// g.translate(r.x+myWidth, r.y);
 			line.drawInsideRectangle(g, scaleInstance, rect, properties);
-//			g.translate(-(r.x+myWidth), -(r.y));
+			// g.translate(-(r.x+myWidth), -(r.y));
 		}
-		rect = new Rectangle((int)(r.x+myWidth+myWidth), r.y, (int) myWidth, r.height);
+		rect = new Rectangle((int) (r.x + myWidth + myWidth), r.y,
+				(int) myWidth, r.height);
 
 		if (fill != null) {
-//			g.translate(r.x+myWidth+myWidth, r.y);
+			// g.translate(r.x+myWidth+myWidth, r.y);
 			fill.drawInsideRectangle(g, scaleInstance, rect, properties);
-//			g.translate(-(r.x+myWidth+myWidth), -(r.y));
+			// g.translate(-(r.x+myWidth+myWidth), -(r.y));
 
 		}
 	}
@@ -295,15 +298,16 @@ public class MultiShapeSymbol implements ILineSymbol, IMarkerSymbol, IFillSymbol
 		return getClass().getName();
 	}
 
-	public void print(Graphics2D g, AffineTransform at, FShape shape, PrintRequestAttributeSet properties) {
+	public void print(Graphics2D g, AffineTransform at, FShape shape,
+			PrintRequestAttributeSet properties) {
 		switch (shape.getShapeType()) {
-		case FShape.POINT: //Tipo punto
-        case FShape.POINT + FShape.Z:
-        	if (marker != null)
-        		marker.print(g, at, shape, properties);
+		case FShape.POINT: // Tipo punto
+		case FShape.POINT + FShape.Z:
+			if (marker != null)
+				marker.print(g, at, shape, properties);
 			break;
 		case FShape.LINE:
-        case FShape.LINE + FShape.Z:
+		case FShape.LINE + FShape.Z:
 		case FShape.ARC:
 		case FShape.ARC + FShape.Z:
 			if (line != null)
@@ -311,10 +315,10 @@ public class MultiShapeSymbol implements ILineSymbol, IMarkerSymbol, IFillSymbol
 			break;
 
 		case FShape.POLYGON:
-        case FShape.POLYGON + FShape.Z:
+		case FShape.POLYGON + FShape.Z:
 		case FShape.ELLIPSE:
 		case FShape.ELLIPSE + FShape.Z:
-        case FShape.CIRCLE:
+		case FShape.CIRCLE:
 		case FShape.CIRCLE + FShape.Z:
 			if (fill != null)
 				fill.print(g, at, shape, properties);
@@ -431,23 +435,25 @@ public class MultiShapeSymbol implements ILineSymbol, IMarkerSymbol, IFillSymbol
 
 	public double toCartographicSize(ViewPort viewPort, double dpi, FShape shp) {
 		switch (shp.getShapeType()) {
-		case FShape.POINT: //Tipo punto
-        case FShape.POINT + FShape.Z:
-        	if (marker != null)
-        		return marker.toCartographicSize(viewPort, dpi, shp);
+		case FShape.POINT: // Tipo punto
+		case FShape.POINT + FShape.Z:
+			if (marker != null)
+				return marker.toCartographicSize(viewPort, dpi, shp);
 		case FShape.LINE:
-        case FShape.LINE + FShape.Z:
+		case FShape.LINE + FShape.Z:
 		case FShape.ARC:
 		case FShape.ARC + FShape.Z:
 			if (line != null)
 				return line.toCartographicSize(viewPort, dpi, shp);
 		case FShape.POLYGON:
-        case FShape.POLYGON + FShape.Z:
+		case FShape.POLYGON + FShape.Z:
 		case FShape.ELLIPSE:
 		case FShape.ELLIPSE + FShape.Z:
-        case FShape.CIRCLE:
+		case FShape.CIRCLE:
 		case FShape.CIRCLE + FShape.Z:
-			Logger.getAnonymousLogger().warning("Cartographic size does not have any sense for fill symbols");
+			Logger.getAnonymousLogger()
+					.warning(
+							"Cartographic size does not have any sense for fill symbols");
 
 		}
 		return -1;
@@ -455,54 +461,51 @@ public class MultiShapeSymbol implements ILineSymbol, IMarkerSymbol, IFillSymbol
 
 	public void setCartographicSize(double cartographicSize, FShape shp) {
 		switch (shp.getShapeType()) {
-		case FShape.POINT: //Tipo punto
-        case FShape.POINT + FShape.Z:
-        	if (marker != null)
-            	marker.setCartographicSize(cartographicSize, null);
-        	break;
+		case FShape.POINT: // Tipo punto
+		case FShape.POINT + FShape.Z:
+			if (marker != null)
+				marker.setCartographicSize(cartographicSize, null);
+			break;
 		case FShape.LINE:
-        case FShape.LINE + FShape.Z:
+		case FShape.LINE + FShape.Z:
 		case FShape.ARC:
 		case FShape.ARC + FShape.Z:
 			if (line != null)
 				line.setCartographicSize(cartographicSize, null);
-        	break;
+			break;
 		case FShape.POLYGON:
-        case FShape.POLYGON + FShape.Z:
+		case FShape.POLYGON + FShape.Z:
 		case FShape.ELLIPSE:
 		case FShape.ELLIPSE + FShape.Z:
-        case FShape.CIRCLE:
+		case FShape.CIRCLE:
 		case FShape.CIRCLE + FShape.Z:
-			Logger.getAnonymousLogger().warning("Cartographic size does not have any sense for fill symbols");
+			Logger.getAnonymousLogger()
+					.warning(
+							"Cartographic size does not have any sense for fill symbols");
 		}
 	}
 
-
 	public double getCartographicSize(ViewPort viewPort, double dpi, FShape shp) {
 		switch (shp.getShapeType()) {
-		case FShape.POINT: //Tipo punto
-        case FShape.POINT + FShape.Z:
-        	return CartographicSupportToolkit.
-			getCartographicLength(marker,
-								  getSize(),
-								  viewPort,
-								  dpi);
+		case FShape.POINT: // Tipo punto
+		case FShape.POINT + FShape.Z:
+			return CartographicSupportToolkit.getCartographicLength(marker,
+					getSize(), viewPort, dpi);
 		case FShape.LINE:
-        case FShape.LINE + FShape.Z:
+		case FShape.LINE + FShape.Z:
 		case FShape.ARC:
 		case FShape.ARC + FShape.Z:
-			return CartographicSupportToolkit.
-			getCartographicLength(line,
-								  getSize(),
-								  viewPort,
-								  dpi);
+			return CartographicSupportToolkit.getCartographicLength(line,
+					getSize(), viewPort, dpi);
 		case FShape.POLYGON:
-        case FShape.POLYGON + FShape.Z:
+		case FShape.POLYGON + FShape.Z:
 		case FShape.ELLIPSE:
 		case FShape.ELLIPSE + FShape.Z:
-        case FShape.CIRCLE:
+		case FShape.CIRCLE:
 		case FShape.CIRCLE + FShape.Z:
-			Logger.getAnonymousLogger().warning("Cartographic size does not have any sense for fill symbols");
+			Logger.getAnonymousLogger()
+					.warning(
+							"Cartographic size does not have any sense for fill symbols");
 		}
 		return -1;
 	}
@@ -532,14 +535,15 @@ public class MultiShapeSymbol implements ILineSymbol, IMarkerSymbol, IFillSymbol
 	}
 
 	public boolean hasFill() {
-	if (fill == null) return false;
-	return fill.hasFill();
+		if (fill == null)
+			return false;
+		return fill.hasFill();
 	}
 
 	public void setHasFill(boolean hasFill) {
 		if (fill != null) {
 			fill.setHasFill(hasFill);
-//			this.hasFill = hasFill;
+			// this.hasFill = hasFill;
 		}
 	}
 

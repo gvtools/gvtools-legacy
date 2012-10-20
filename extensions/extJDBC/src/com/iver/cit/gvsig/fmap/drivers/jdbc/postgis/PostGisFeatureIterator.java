@@ -56,15 +56,13 @@ import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.drivers.DBLayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
-import com.iver.cit.gvsig.fmap.drivers.WKBParser2;
 import com.iver.cit.gvsig.fmap.drivers.WKBParser3;
-import com.iver.cit.gvsig.fmap.drivers.XTypes;
 
 /**
  * @author FJP
- *
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
+ * 
+ *         TODO To change the template for this generated type comment go to
+ *         Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class PostGisFeatureIterator implements IFeatureIterator {
 	private static int FETCH_SIZE = 5000;
@@ -102,7 +100,7 @@ public class PostGisFeatureIterator implements IFeatureIterator {
 	/**
 	 * @throws SQLException
 	 * @throws SQLException
-	 *
+	 * 
 	 */
 	public PostGisFeatureIterator(Connection conn, String cursorName, String sql)
 			throws SQLException {
@@ -111,13 +109,15 @@ public class PostGisFeatureIterator implements IFeatureIterator {
 		// de geometria
 		// Debe ser forward only
 		st = conn.createStatement();
-		
+
 		// CodeSprint 2010 (Manuel López Sánchez)
-		try{
-			st.execute("BEGIN");  
-		}catch(SQLException e){
-			st.execute("END"); // Cerramos la transacción para anular los cursores binarios
-									// que pueden quedar colgados (from CodeSprint 2010)								
+		try {
+			st.execute("BEGIN");
+		} catch (SQLException e) {
+			st.execute("END"); // Cerramos la transacción para anular los
+								// cursores binarios
+								// que pueden quedar colgados (from CodeSprint
+								// 2010)
 			st.execute("BEGIN"); // Si salta otra excepción, no la capturamos
 		}
 		// End CodeSprint 2010
@@ -135,7 +135,7 @@ public class PostGisFeatureIterator implements IFeatureIterator {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.jdbc.GeometryIterator#hasNext()
 	 */
 	public boolean hasNext() throws ReadDriverException {
@@ -154,22 +154,22 @@ public class PostGisFeatureIterator implements IFeatureIterator {
 				return false;
 			}
 		} catch (SQLException e) {
-//			SqlDriveExceptionType type = new SqlDriveExceptionType();
-//            type.setDriverName("PostGIS Driver");
-//            try {
-//				type.setSql(rs.getStatement().toString());
-//			} catch (SQLException e1) {
-//				e1.printStackTrace();
-//			}
-            throw new ReadDriverException("PostGIS Driver",e);
-//			throw new DriverException(e);
+			// SqlDriveExceptionType type = new SqlDriveExceptionType();
+			// type.setDriverName("PostGIS Driver");
+			// try {
+			// type.setSql(rs.getStatement().toString());
+			// } catch (SQLException e1) {
+			// e1.printStackTrace();
+			// }
+			throw new ReadDriverException("PostGIS Driver", e);
+			// throw new DriverException(e);
 		}
 
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.jdbc.GeometryIterator#next()
 	 */
 	public IFeature next() throws ReadDriverException {
@@ -187,34 +187,32 @@ public class PostGisFeatureIterator implements IFeatureIterator {
 			if (idFieldID != -1) {
 				String theID = regAtt[lyrDef.getIdFieldID()].toString();
 				feat = new DefaultFeature(geom, regAtt.clone(), theID);
-			}
-			else
-			{
-//				// feat = new DefaultFeature(geom, regAtt);
-//				FeatureWithoutIdExceptionType  type = new FeatureWithoutIdExceptionType();
-//	        	type.setSchema(lyrDef);
-				throw new ReadDriverException("PostGIS Driver",null);
+			} else {
+				// // feat = new DefaultFeature(geom, regAtt);
+				// FeatureWithoutIdExceptionType type = new
+				// FeatureWithoutIdExceptionType();
+				// type.setSchema(lyrDef);
+				throw new ReadDriverException("PostGIS Driver", null);
 			}
 			numReg++;
 			return feat;
 		} catch (SQLException e) {
-//			SqlDriveExceptionType type = new SqlDriveExceptionType();
-//            type.setDriverName("PostGIS Driver");
-//            try {
-//				type.setSql(rs.getStatement().toString());
-//			} catch (SQLException e1) {
-//				e1.printStackTrace();
-//			}
-            throw new ReadDriverException("PostGIS Driver",e);
-//			throw new DriverException(e);
+			// SqlDriveExceptionType type = new SqlDriveExceptionType();
+			// type.setDriverName("PostGIS Driver");
+			// try {
+			// type.setSql(rs.getStatement().toString());
+			// } catch (SQLException e1) {
+			// e1.printStackTrace();
+			// }
+			throw new ReadDriverException("PostGIS Driver", e);
+			// throw new DriverException(e);
 		}
 
 	}
 
-
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.IFeatureIterator#closeIterator()
 	 */
 	public void closeIterator() throws ReadDriverException {
@@ -225,15 +223,15 @@ public class PostGisFeatureIterator implements IFeatureIterator {
 			// st.execute("COMMIT");
 			rs.close();
 		} catch (SQLException e) {
-//			SqlDriveExceptionType type = new SqlDriveExceptionType();
-//            type.setDriverName("PostGIS Driver");
-//            try {
-//				type.setSql(rs.getStatement().toString());
-//			} catch (SQLException e1) {
-//				e1.printStackTrace();
-//			}
-            throw new ReadDriverException("PostGIS Driver",e);
-//			throw new DriverException(e);
+			// SqlDriveExceptionType type = new SqlDriveExceptionType();
+			// type.setDriverName("PostGIS Driver");
+			// try {
+			// type.setSql(rs.getStatement().toString());
+			// } catch (SQLException e1) {
+			// e1.printStackTrace();
+			// }
+			throw new ReadDriverException("PostGIS Driver", e);
+			// throw new DriverException(e);
 		}
 		// st.execute("COMMIT");
 		// st.close();
@@ -250,9 +248,10 @@ public class PostGisFeatureIterator implements IFeatureIterator {
 		try {
 			for (int i = 2; i <= metaData.getColumnCount(); i++) {
 				int idRel = lyrDef.getFieldIdByName(metaData.getColumnName(i));
-				if (idRel == -1)
-				{
-					throw new RuntimeException("No se ha encontrado el nombre de campo " + metaData.getColumnName(i));
+				if (idRel == -1) {
+					throw new RuntimeException(
+							"No se ha encontrado el nombre de campo "
+									+ metaData.getColumnName(i));
 				}
 				relIds[i - 2] = idRel;
 				if (lyrDef.getFieldID().equals(metaData.getColumnName(i))) {

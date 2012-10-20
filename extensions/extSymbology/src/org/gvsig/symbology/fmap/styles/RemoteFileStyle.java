@@ -50,17 +50,18 @@ import org.gvsig.remoteClient.utils.Utilities;
 
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.SymbolDrawingException;
+
 /**
  * 
  * RemoteFileStyle.java
- *
+ * 
  * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Feb 13, 2008
- *
+ * 
  */
 public class RemoteFileStyle extends BackgroundFileStyle {
 	private BackgroundFileStyle bgStyle;
-	
+
 	@Override
 	public Rectangle getBounds() {
 		return bgStyle.getBounds();
@@ -68,16 +69,19 @@ public class RemoteFileStyle extends BackgroundFileStyle {
 
 	@Override
 	public void setSource(URL url) throws IOException {
-		File f = Utilities.downloadFile(url, "remote_picture_symbol_style", null);
+		File f = Utilities.downloadFile(url, "remote_picture_symbol_style",
+				null);
 		sourceFile = url;
 		bgStyle = BackgroundFileStyle.createStyleByURL(f.toURL());
 	}
 
-	public void drawInsideRectangle(Graphics2D g, Rectangle r, boolean keepAspectRatio) throws SymbolDrawingException {
+	public void drawInsideRectangle(Graphics2D g, Rectangle r,
+			boolean keepAspectRatio) throws SymbolDrawingException {
 		bgStyle.drawInsideRectangle(g, r, keepAspectRatio);
 	}
 
-	public void drawOutline(Graphics2D g, Rectangle r) throws SymbolDrawingException {
+	public void drawOutline(Graphics2D g, Rectangle r)
+			throws SymbolDrawingException {
 		bgStyle.drawOutline(g, r);
 	}
 

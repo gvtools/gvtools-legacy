@@ -1,4 +1,5 @@
 package org.gvsig.xmlschema.som;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.

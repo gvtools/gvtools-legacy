@@ -40,7 +40,7 @@ package org.gvsig.app.documents.table.summarize.utils;
  * @author IVER T.I. <http://www.iver.es> 01/02/2009
  */
 public class SelectedStatistics {
-	
+
 	private String columnName;
 	private int columnNumber;
 	/**
@@ -53,60 +53,75 @@ public class SelectedStatistics {
 	private boolean sum;
 	private boolean sd;
 	private boolean var;
-	
-	
 
 	public String getColumnName() {
 		return columnName;
 	}
+
 	public void setColumnName(String columnName) {
 		this.columnName = columnName;
 	}
+
 	public int getColumnNumber() {
 		return columnNumber;
 	}
+
 	public void setColumnNumber(int columnNumber) {
 		this.columnNumber = columnNumber;
 	}
+
 	public boolean isMin() {
 		return min;
 	}
+
 	public void setMin(boolean min) {
 		this.min = min;
 	}
+
 	public boolean isMax() {
 		return max;
 	}
+
 	public void setMax(boolean max) {
 		this.max = max;
 	}
+
 	public boolean isMean() {
 		return mean;
 	}
+
 	public void setMean(boolean mean) {
 		this.mean = mean;
 	}
+
 	public boolean isSum() {
 		return sum;
 	}
+
 	public void setSum(boolean sum) {
 		this.sum = sum;
 	}
+
 	public boolean isSd() {
 		return sd;
 	}
+
 	public void setSd(boolean sd) {
 		this.sd = sd;
 	}
+
 	public boolean isVar() {
 		return var;
 	}
+
 	public void setVar(boolean var) {
 		this.var = var;
 	}
+
 	public void setColumnType(int columnType) {
 		this.columnType = columnType;
 	}
+
 	public int getColumnType() {
 		return columnType;
 	}

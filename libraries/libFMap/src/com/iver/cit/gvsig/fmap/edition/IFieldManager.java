@@ -51,7 +51,8 @@ public interface IFieldManager {
 
 	/**
 	 * @param fieldName
-	 * @return FieldDescription of removed field, if any. If not found, returns null
+	 * @return FieldDescription of removed field, if any. If not found, returns
+	 *         null
 	 */
 	public FieldDescription removeField(String fieldName);
 
@@ -67,5 +68,3 @@ public interface IFieldManager {
 	public FieldDescription[] getFields();
 
 }
-
-

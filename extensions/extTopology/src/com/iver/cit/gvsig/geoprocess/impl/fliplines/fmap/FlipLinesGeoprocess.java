@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.impl.fliplines.fmap;
 
 import java.rmi.server.UID;
@@ -83,18 +83,17 @@ import com.vividsolutions.jts.geom.LineString;
 
 /**
  * Geoprocess to generalize linear or poligonal vectorial layers.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class FlipLinesGeoprocess extends AbstractMonitorableGeoprocess {
 
 	private static Logger logger = Logger.getLogger(FlipLinesGeoprocess.class
 			.getName());
-	
+
 	private LayerDefinition resultLayerDefinition;
-	
-	
-	
+
 	public FlipLinesGeoprocess(FLyrVect inputLayer) {
 		this.firstLayer = inputLayer;
 	}
@@ -102,20 +101,22 @@ public class FlipLinesGeoprocess extends AbstractMonitorableGeoprocess {
 	public void checkPreconditions() throws GeoprocessException {
 		int lyrDimensions;
 		try {
-			lyrDimensions = FGeometryUtil.getDimensions(firstLayer.getShapeType());
-		
-			if(lyrDimensions != 1)
+			lyrDimensions = FGeometryUtil.getDimensions(firstLayer
+					.getShapeType());
+
+			if (lyrDimensions != 1)
 				throw new GeoprocessException(
-					"Geoproceso invertir lineas con capa que no es de lineas");
-		
+						"Geoproceso invertir lineas con capa que no es de lineas");
+
 		} catch (ReadDriverException e) {
-			throw new GeoprocessException("Error intentando acceder al tipo de geometria de capa vectorial");
+			throw new GeoprocessException(
+					"Error intentando acceder al tipo de geometria de capa vectorial");
 		}
 
 	}
 
 	public ILayerDefinition createLayerDefinition() {
-		if(resultLayerDefinition == null){
+		if (resultLayerDefinition == null) {
 			try {
 				resultLayerDefinition = DefinitionUtils
 						.createLayerDefinition(firstLayer);
@@ -126,15 +127,11 @@ public class FlipLinesGeoprocess extends AbstractMonitorableGeoprocess {
 		return resultLayerDefinition;
 	}
 
-	
-
 	public void setParameters(Map params) throws GeoprocessException {
 		Boolean onlySelection = (Boolean) params.get("layer_selection");
 		if (onlySelection != null)
 			this.operateOnlyWithSelection = onlySelection.booleanValue();
 	}
-
-	
 
 	public void process(CancellableProgressTask progressMonitor)
 			throws GeoprocessException {
@@ -158,14 +155,15 @@ public class FlipLinesGeoprocess extends AbstractMonitorableGeoprocess {
 
 		try {
 			IFeatureIterator featureIterator = null;
-			if(this.operateOnlyWithSelection){
+			if (this.operateOnlyWithSelection) {
 				FBitSet selection = firstLayer.getRecordset().getSelection();
-	        	featureIterator = new FeatureBitsetIterator(selection, firstLayer.getSource());
-			}else{
+				featureIterator = new FeatureBitsetIterator(selection,
+						firstLayer.getSource());
+			} else {
 				featureIterator = firstLayer.getSource().getFeatureIterator();
 			}
-			
-			while(featureIterator.hasNext()){
+
+			while (featureIterator.hasNext()) {
 				IFeature feature = featureIterator.next();
 				IGeometry fmapGeo = feature.getGeometry();
 				Value[] values = feature.getAttributes();
@@ -175,17 +173,17 @@ public class FlipLinesGeoprocess extends AbstractMonitorableGeoprocess {
 				for (int i = 0; i < lineStrings.length; i++) {
 					lineStrings[i] = JtsUtil.reverse(lineStrings[i]);
 				}
-				GeometryCollection gc = JtsUtil.GEOMETRY_FACTORY.createGeometryCollection(lineStrings);
+				GeometryCollection gc = JtsUtil.GEOMETRY_FACTORY
+						.createGeometryCollection(lineStrings);
 				reversedGeometry = gc;
-				if(progressMonitor != null)
+				if (progressMonitor != null)
 					progressMonitor.reportStep();
-				
-				if(reversedGeometry != null){
-					IGeometry simplifiedFMap = NewFConverter.toFMap(reversedGeometry);
-					DefaultFeature newFeature = 
-						new DefaultFeature(simplifiedFMap, 
-													values, 
-												new UID().toString());
+
+				if (reversedGeometry != null) {
+					IGeometry simplifiedFMap = NewFConverter
+							.toFMap(reversedGeometry);
+					DefaultFeature newFeature = new DefaultFeature(
+							simplifiedFMap, values, new UID().toString());
 					featureProcessor.processFeature(newFeature);
 				}
 			}
@@ -201,10 +199,8 @@ public class FlipLinesGeoprocess extends AbstractMonitorableGeoprocess {
 			throw new GeoprocessException(
 					"Error al acceder a la informacion del driver dentro del geoproceso",
 					e);
-		} 
+		}
 	}
-	
-	
 
 	public void initialize(CancellableProgressTask progressMonitor)
 			throws GeoprocessException {

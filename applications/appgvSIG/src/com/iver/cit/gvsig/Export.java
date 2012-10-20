@@ -73,10 +73,9 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.sun.jimi.core.Jimi;
 import com.sun.jimi.core.JimiException;
 
-
 /**
  * Extensión para exportar en algunos formatos raster la vista actual.
- *
+ * 
  * @author Fernando González Cortés
  */
 public class Export extends Extension {
@@ -95,7 +94,7 @@ public class Export extends Extension {
 		}
 
 		FLayers layers = f.getModel().getMapContext().getLayers();
-		for (int i=0;i< layers.getLayersCount();i++) {
+		for (int i = 0; i < layers.getLayersCount(); i++) {
 			return layers.getLayer(i).isAvailable();
 		}
 		return false;
@@ -105,8 +104,9 @@ public class Export extends Extension {
 	 * @see com.iver.mdiApp.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = (com.iver.andami.ui.mdiManager.IWindow) PluginServices.getMDIManager().getActiveWindow();
-		if (f == null) 
+		com.iver.andami.ui.mdiManager.IWindow f = (com.iver.andami.ui.mdiManager.IWindow) PluginServices
+				.getMDIManager().getActiveWindow();
+		if (f == null)
 			return false;
 
 		return (f instanceof View);
@@ -118,7 +118,9 @@ public class Export extends Extension {
 	public void initialize() {
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.Extension#postInitialize()
 	 */
 	public void postInitialize() {
@@ -126,30 +128,26 @@ public class Export extends Extension {
 		jimiExtensionsSupported = new Hashtable<String, MyFileFilter>();
 		cmsExtensionsSupported.put("jpg", new MyFileFilter("jpg",
 				PluginServices.getText(this, "jpg"), "jimi"));
-		jimiExtensionsSupported.put("png",new MyFileFilter("png",
+		jimiExtensionsSupported.put("png", new MyFileFilter("png",
 				PluginServices.getText(this, "png"), "jimi"));
-		jimiExtensionsSupported.put("bmp",new MyFileFilter("bmp",
+		jimiExtensionsSupported.put("bmp", new MyFileFilter("bmp",
 				PluginServices.getText(this, "bmp"), "jimi"));
 	}
 
-	public static boolean saveImageCMS(File fileDst,BufferedImage srcImage) throws IOException, NotSupportedExtensionException, RasterDriverException {
+	public static boolean saveImageCMS(File fileDst, BufferedImage srcImage)
+			throws IOException, NotSupportedExtensionException,
+			RasterDriverException {
 		RasterLibrary.wakeUp();
 		RasterizerImage data = new RasterizerImage(srcImage);
 		GeoRasterWriter writer = null;
-		writer = GeoRasterWriter.getWriter(
-				data,
-				fileDst.getAbsolutePath(),
-				3,
-				new AffineTransform(),
-				srcImage.getWidth(),
-				srcImage.getHeight(),
-				IBuffer.TYPE_IMAGE,
-				GeoRasterWriter.getWriter(fileDst.getAbsolutePath()).getParams(),
-				null,
-				false
-		);
-		if (writer == null){
-			PluginServices.getLogger().error("No supported Format: " + fileDst.getAbsolutePath());
+		writer = GeoRasterWriter.getWriter(data, fileDst.getAbsolutePath(), 3,
+				new AffineTransform(), srcImage.getWidth(), srcImage
+						.getHeight(), IBuffer.TYPE_IMAGE, GeoRasterWriter
+						.getWriter(fileDst.getAbsolutePath()).getParams(),
+				null, false);
+		if (writer == null) {
+			PluginServices.getLogger().error(
+					"No supported Format: " + fileDst.getAbsolutePath());
 			return false;
 		}
 		try {
@@ -160,13 +158,12 @@ public class Export extends Extension {
 		return true;
 	}
 
-
-
-	public static boolean saveImageJimi(File fileDst,BufferedImage srcImage) throws Exception{
+	public static boolean saveImageJimi(File fileDst, BufferedImage srcImage)
+			throws Exception {
 		try {
 			Jimi.putImage(srcImage, fileDst.getAbsolutePath());
 		} catch (JimiException e) {
-			throw new Exception(fileDst.getAbsolutePath(),e);
+			throw new Exception(fileDst.getAbsolutePath(), e);
 		}
 		return true;
 
@@ -180,38 +177,38 @@ public class Export extends Extension {
 
 		jfc.removeChoosableFileFilter(jfc.getAcceptAllFileFilter());
 
-		Iterator<MyFileFilter> iter = cmsExtensionsSupported.values().iterator();
+		Iterator<MyFileFilter> iter = cmsExtensionsSupported.values()
+				.iterator();
 		while (iter.hasNext())
-			jfc.addChoosableFileFilter((FileFilter)iter.next());
+			jfc.addChoosableFileFilter((FileFilter) iter.next());
 
 		iter = jimiExtensionsSupported.values().iterator();
 		while (iter.hasNext())
-			jfc.addChoosableFileFilter((FileFilter)iter.next());
+			jfc.addChoosableFileFilter((FileFilter) iter.next());
 
-		jfc.setFileFilter((FileFilter)jimiExtensionsSupported.get("png"));
-		if (jfc.showSaveDialog(
-				(Component) PluginServices.getMainFrame()
-		) == JFileChooser.APPROVE_OPTION) {
+		jfc.setFileFilter((FileFilter) jimiExtensionsSupported.get("png"));
+		if (jfc.showSaveDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
 
 			BufferedImage tempImage;
 
-			tempImage = ((View) PluginServices.getMDIManager().getActiveWindow()).getImage();
+			tempImage = ((View) PluginServices.getMDIManager()
+					.getActiveWindow()).getImage();
 
 			File f = jfc.getSelectedFile();
 
 			lastPath = f.getParent();
 
-			MyFileFilter filter = (MyFileFilter)jfc.getFileFilter();
+			MyFileFilter filter = (MyFileFilter) jfc.getFileFilter();
 			f = filter.normalizeExtension(f);
 
 			if (f.exists()) {
 				int resp = JOptionPane.showConfirmDialog(
 						(Component) PluginServices.getMainFrame(),
 						PluginServices.getText(this,
-						"fichero_ya_existe_seguro_desea_guardarlo")+
-						"\n"+
-						f.getAbsolutePath(),
-						PluginServices.getText(this,"guardar"), JOptionPane.YES_NO_OPTION);
+								"fichero_ya_existe_seguro_desea_guardarlo")
+								+ "\n" + f.getAbsolutePath(), PluginServices
+								.getText(this, "guardar"),
+						JOptionPane.YES_NO_OPTION);
 				if (resp != JOptionPane.YES_OPTION) {
 					return;
 				}
@@ -222,17 +219,22 @@ public class Export extends Extension {
 				try {
 					saveImageCMS(f, tempImage);
 				} catch (IOException e) {
-					NotificationManager.addError("Error exportando la imagen", e);
+					NotificationManager.addError("Error exportando la imagen",
+							e);
 				} catch (NotSupportedExtensionException e) {
-					NotificationManager.addError("Error exportando la imagen: formato no soportado", e);
+					NotificationManager.addError(
+							"Error exportando la imagen: formato no soportado",
+							e);
 				} catch (RasterDriverException e) {
-					NotificationManager.addError("Error exportando la imagen", e);
+					NotificationManager.addError("Error exportando la imagen",
+							e);
 				}
 			} else if (filter.getInfo().equalsIgnoreCase("jimi")) {
 				try {
 					saveImageJimi(f, tempImage);
 				} catch (Exception e) {
-					NotificationManager.addError("Error exportando la imagen", e);
+					NotificationManager.addError("Error exportando la imagen",
+							e);
 				}
 
 			}
@@ -241,30 +243,31 @@ public class Export extends Extension {
 }
 
 /**
- * Servidor de datos desde un BufferedImage. Cada petición es de un tamaño
- * de bloque indicado por el escritor en los parámetros de la llamada por lo 
- * que en la siguiente petición habrá que escribir el bloque siguiente.
+ * Servidor de datos desde un BufferedImage. Cada petición es de un tamaño de
+ * bloque indicado por el escritor en los parámetros de la llamada por lo que en
+ * la siguiente petición habrá que escribir el bloque siguiente.
  */
 class RasterizerImage implements IDataWriter {
-	private BufferedImage source  = null;
-	private int[]         data    = null;
-	private int           y       = 0;
+	private BufferedImage source = null;
+	private int[] data = null;
+	private int y = 0;
 
 	public RasterizerImage(BufferedImage source) {
 		this.source = source;
 	}
 
 	/**
-	 * Solo necesita implementar el método RGB porque solo se
-	 * utiliza para exportar la vista.
+	 * Solo necesita implementar el método RGB porque solo se utiliza para
+	 * exportar la vista.
 	 */
-	public int[] readARGBData(int sX, int sY, int nBand){
-		return readData( sX, sY, nBand);
+	public int[] readARGBData(int sX, int sY, int nBand) {
+		return readData(sX, sY, nBand);
 	}
 
 	public int[] readData(int sizeX, int sizeY, int nBand) {
-		if(nBand == 0) { //Con nBand==0 se devuelven las 3 bandas
-			this.data = this.source.getRGB(0, y, sizeX, sizeY, this.data, 0, sizeX);
+		if (nBand == 0) { // Con nBand==0 se devuelven las 3 bandas
+			this.data = this.source.getRGB(0, y, sizeX, sizeY, this.data, 0,
+					sizeX);
 			y += sizeY;
 			return this.data;
 		}
@@ -295,17 +298,17 @@ class RasterizerImage implements IDataWriter {
 
 class MyFileFilter extends FileFilter {
 
-	private String[] extensiones=new String[1];
+	private String[] extensiones = new String[1];
 	private String description;
 	private boolean dirs = true;
-	private String info= null;
+	private String info = null;
 
 	public MyFileFilter(String[] ext, String desc) {
 		extensiones = ext;
 		description = desc;
 	}
 
-	public MyFileFilter(String[] ext, String desc,String info) {
+	public MyFileFilter(String[] ext, String desc, String info) {
 		extensiones = ext;
 		description = desc;
 		this.info = info;
@@ -316,7 +319,7 @@ class MyFileFilter extends FileFilter {
 		description = desc;
 	}
 
-	public MyFileFilter(String ext, String desc,String info) {
+	public MyFileFilter(String ext, String desc, String info) {
 		extensiones[0] = ext;
 		description = desc;
 		this.info = info;
@@ -328,7 +331,7 @@ class MyFileFilter extends FileFilter {
 		this.dirs = dirs;
 	}
 
-	public MyFileFilter(String ext, String desc, boolean dirs,String info) {
+	public MyFileFilter(String ext, String desc, boolean dirs, String info) {
 		extensiones[0] = ext;
 		description = desc;
 		this.dirs = dirs;
@@ -343,11 +346,11 @@ class MyFileFilter extends FileFilter {
 				return false;
 			}
 		}
-		for (int i=0;i<extensiones.length;i++){
-			if (extensiones[i].equals("")){
+		for (int i = 0; i < extensiones.length; i++) {
+			if (extensiones[i].equals("")) {
 				continue;
 			}
-			if (getExtensionOfAFile(f).equalsIgnoreCase(extensiones[i])){
+			if (getExtensionOfAFile(f).equalsIgnoreCase(extensiones[i])) {
 				return true;
 			}
 		}
@@ -366,34 +369,34 @@ class MyFileFilter extends FileFilter {
 		return extensiones;
 	}
 
-	public boolean isDirectory(){
+	public boolean isDirectory() {
 		return dirs;
 	}
 
-	private String getExtensionOfAFile(File file){
+	private String getExtensionOfAFile(File file) {
 		String name;
 		int dotPos;
 		name = file.getName();
 		dotPos = name.lastIndexOf(".");
-		if (dotPos < 1){
+		if (dotPos < 1) {
 			return "";
 		}
-		return name.substring(dotPos+1);
+		return name.substring(dotPos + 1);
 	}
 
-	public File normalizeExtension(File file){
+	public File normalizeExtension(File file) {
 		String ext = getExtensionOfAFile(file);
-		if (ext.equals("") || !(this.accept(file))){
+		if (ext.equals("") || !(this.accept(file))) {
 			return new File(file.getAbsolutePath() + "." + extensiones[0]);
 		}
 		return file;
 	}
 
-	public String getInfo(){
+	public String getInfo() {
 		return this.info;
 	}
 
-	public void setInfo(String info){
+	public void setInfo(String info) {
 		this.info = info;
 	}
 

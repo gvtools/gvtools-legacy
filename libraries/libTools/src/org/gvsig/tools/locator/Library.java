@@ -33,25 +33,25 @@ package org.gvsig.tools.locator;
  */
 public interface Library {
 
-    /**
-     * Performs all the initializations of the library, only related to himself:
-     * register implementation classes through the Locator, start services, etc.
-     * 
-     * @throws ReferenceNotRegisteredException
-     *             if there is an error while performing the initialization of
-     *             the library
-     */
-    void initialize() throws ReferenceNotRegisteredException;
+	/**
+	 * Performs all the initializations of the library, only related to himself:
+	 * register implementation classes through the Locator, start services, etc.
+	 * 
+	 * @throws ReferenceNotRegisteredException
+	 *             if there is an error while performing the initialization of
+	 *             the library
+	 */
+	void initialize() throws ReferenceNotRegisteredException;
 
-    /**
-     * Performs all the initializations or validations related to the library
-     * dependencies, as getting references to objects through other libraries
-     * Locators.
-     * 
-     * @throws ReferenceNotRegisteredException
-     *             if there is an error while loading an implementation of the
-     *             library
-     */
-    void postInitialize() throws ReferenceNotRegisteredException;
+	/**
+	 * Performs all the initializations or validations related to the library
+	 * dependencies, as getting references to objects through other libraries
+	 * Locators.
+	 * 
+	 * @throws ReferenceNotRegisteredException
+	 *             if there is an error while loading an implementation of the
+	 *             library
+	 */
+	void postInitialize() throws ReferenceNotRegisteredException;
 
 }

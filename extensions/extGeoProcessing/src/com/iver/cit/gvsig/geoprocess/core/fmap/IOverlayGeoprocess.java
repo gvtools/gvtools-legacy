@@ -42,38 +42,36 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: IOverlayGeoprocess.java 5412 2006-05-24 21:15:07Z azabala $
-* $Log$
-* Revision 1.1  2006-05-24 21:12:16  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.3  2006/03/17 19:54:02  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/02/19 20:55:47  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/02/12 21:03:25  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/02/01 19:40:59  azabala
-* First version in CVS
-*
-*
-*/
+ *
+ * $Id: IOverlayGeoprocess.java 5412 2006-05-24 21:15:07Z azabala $
+ * $Log$
+ * Revision 1.1  2006-05-24 21:12:16  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.3  2006/03/17 19:54:02  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/02/19 20:55:47  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/02/12 21:03:25  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/02/01 19:40:59  azabala
+ * First version in CVS
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core.fmap;
 
-
 /**
- * Geoprocess which operates with two layers, creating a new layer
- * by computing overlay intersections of layers.
+ * Geoprocess which operates with two layers, creating a new layer by computing
+ * overlay intersections of layers.
  * 
  * 
  * @author azabala
- *
+ * 
  */
 public interface IOverlayGeoprocess extends ITwoLayersGeoprocess {
-	//TODO By the moment it is a marked interface
+	// TODO By the moment it is a marked interface
 }
-

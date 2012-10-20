@@ -31,21 +31,27 @@ import org.gvsig.raster.util.RasterNotLoadException;
 import org.gvsig.raster.util.RasterToolsUtil;
 import org.gvsig.rastertools.reproject.ReprojectProcess;
 import org.gvsig.rastertools.saveraster.ui.info.EndInfoDialog;
+
 /**
  * Listener del panel de selección de proyección.
  * 
  * 29/04/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
-public class LayerReprojectListener implements ButtonsPanelListener, IProcessActions {
-	private LayerReprojectPanel dialog       = null;
-	private FLyrRasterSE        lyr          = null;
-	private Boolean             isInTOC     = Boolean.FALSE;
-	
+public class LayerReprojectListener implements ButtonsPanelListener,
+		IProcessActions {
+	private LayerReprojectPanel dialog = null;
+	private FLyrRasterSE lyr = null;
+	private Boolean isInTOC = Boolean.FALSE;
+
 	/**
 	 * Constructor. Asigna el dialogo y la capa y registra los listener.
-	 * @param lyr Capa
-	 * @param dialog Dialogo
+	 * 
+	 * @param lyr
+	 *            Capa
+	 * @param dialog
+	 *            Dialogo
 	 */
 	public LayerReprojectListener(LayerReprojectPanel dialog) {
 		this.dialog = dialog;
@@ -53,6 +59,7 @@ public class LayerReprojectListener implements ButtonsPanelListener, IProcessAct
 
 	/**
 	 * Se asigna la capa al listener
+	 * 
 	 * @param lyr
 	 */
 	public void setLayer(FLyrRasterSE lyr) {
@@ -60,7 +67,9 @@ public class LayerReprojectListener implements ButtonsPanelListener, IProcessAct
 	}
 
 	/**
-	 * Se especifica si hay que cerrar la capa de origen cuando acabe de reproyectar
+	 * Se especifica si hay que cerrar la capa de origen cuando acabe de
+	 * reproyectar
+	 * 
 	 * @param lyr
 	 */
 	public void setIsInTOC(Boolean isInTOC) {
@@ -69,7 +78,10 @@ public class LayerReprojectListener implements ButtonsPanelListener, IProcessAct
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener#actionButtonPressed(org.gvsig.gui.beans.buttonspanel.ButtonsPanelEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener#actionButtonPressed
+	 * (org.gvsig.gui.beans.buttonspanel.ButtonsPanelEvent)
 	 */
 	public void actionButtonPressed(ButtonsPanelEvent e) {
 		if (e.getButton() == ButtonsPanel.BUTTON_CANCEL) {
@@ -81,15 +93,16 @@ public class LayerReprojectListener implements ButtonsPanelListener, IProcessAct
 			path = dialog.getNewLayerPanel().getFileSelected();
 			if (path == null)
 				return;
-			
+
 			File f = new File(path);
-			if(f.exists()) {
-				if(!RasterToolsUtil.messageBoxYesOrNot("raster_error_file_exists", this))
+			if (f.exists()) {
+				if (!RasterToolsUtil.messageBoxYesOrNot(
+						"raster_error_file_exists", this))
 					return;
 				else
 					f.delete();
 			}
-			
+
 			RasterProcess process = new ReprojectProcess();
 			process.setCancelable(false);
 			process.addParam("layer", lyr);
@@ -98,7 +111,7 @@ public class LayerReprojectListener implements ButtonsPanelListener, IProcessAct
 			process.addParam("srcprojection", dialog.getSourceCrs());
 			process.addParam("isintoc", isInTOC);
 			process.setActions(this);
-			
+
 			UniqueProcessQueue queue = UniqueProcessQueue.getSingleton();
 			queue.add(process);
 
@@ -120,15 +133,15 @@ public class LayerReprojectListener implements ButtonsPanelListener, IProcessAct
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.IProcessActions#end(java.lang.Object)
 	 */
 	public void end(Object params) {
-		if(	params instanceof Object[] &&
-				((Object[])params).length == 3 &&
-				((Object[])params)[0] instanceof String &&
-				((Object[])params)[1] instanceof Long) {
+		if (params instanceof Object[] && ((Object[]) params).length == 3
+				&& ((Object[]) params)[0] instanceof String
+				&& ((Object[]) params)[1] instanceof Long) {
 			Object[] objects = (Object[]) params;
-			
+
 			String fileName = (String) objects[0];
 			Long milis = (Long) objects[1];
 			Boolean isInToc = (Boolean) objects[2];
@@ -140,5 +153,6 @@ public class LayerReprojectListener implements ButtonsPanelListener, IProcessAct
 		}
 	}
 
-	public void interrupted() {}
+	public void interrupted() {
+	}
 }

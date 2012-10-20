@@ -43,8 +43,6 @@
  */
 package com.iver.cit.gvsig.geoprocess.wizard;
 
-import java.net.URL;
-
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -57,10 +55,10 @@ import javax.swing.event.ChangeListener;
 import com.iver.andami.PluginServices;
 
 /**
- *
+ * 
  * This component is the first step of GeoProcessing Wizard. It allows user to
  * select which geoprocessing operation want to do.
- *
+ * 
  * @author jmorell, azabala
  */
 public class GeoProcessingOperationSelectorPanel extends JPanel {
@@ -118,83 +116,84 @@ public class GeoProcessingOperationSelectorPanel extends JPanel {
 		initialize();
 	}
 
-	public void changeSelection(){
-		if(isBufferSelected()){
+	public void changeSelection() {
+		if (isBufferSelected()) {
 			imageLabel.setIcon(bufferDescIcon);
-		}else if(isDissolveSelected()){
+		} else if (isDissolveSelected()) {
 			imageLabel.setIcon(dissolveDescIcon);
-		}else if(isMergeSelected()){
+		} else if (isMergeSelected()) {
 			imageLabel.setIcon(mergeDescIcon);
-		}else if(isIntersectSelected()){
+		} else if (isIntersectSelected()) {
 			imageLabel.setIcon(intersectDescIcon);
-		}else if(isUnionSelected()){
+		} else if (isUnionSelected()) {
 			imageLabel.setIcon(unionDescIcon);
-		}else if(isClipSelected()){
+		} else if (isClipSelected()) {
 			imageLabel.setIcon(clipDescIcon);
-		}else if(isSpatialJoinSelected()){
+		} else if (isSpatialJoinSelected()) {
 			imageLabel.setIcon(spatialJoinDescIcon);
-		}else if(isDifferenceSelected()){
+		} else if (isDifferenceSelected()) {
 			imageLabel.setIcon(differenceDescIcon);
-		}else if(isConvexHullSelected()){
+		} else if (isConvexHullSelected()) {
 			imageLabel.setIcon(convexHullDescIcon);
 		}
 	}
 
-	public boolean isBufferSelected(){
+	public boolean isBufferSelected() {
 		return bufferRadioButton.isSelected();
 	}
 
-	public boolean isDissolveSelected(){
+	public boolean isDissolveSelected() {
 		return dissolveRadioButton.isSelected();
 	}
 
-	public boolean isMergeSelected(){
+	public boolean isMergeSelected() {
 		return mergeRadioButton.isSelected();
 	}
 
-	public boolean isIntersectSelected(){
+	public boolean isIntersectSelected() {
 		return intersectRadioButton.isSelected();
 	}
 
-	public boolean isUnionSelected(){
+	public boolean isUnionSelected() {
 		return unionRadioButton.isSelected();
 	}
 
-	public boolean isClipSelected(){
+	public boolean isClipSelected() {
 		return clipRadioButton.isSelected();
 	}
 
-	public boolean isSpatialJoinSelected(){
+	public boolean isSpatialJoinSelected() {
 		return spatialJoinRadioButton.isSelected();
 	}
 
-	public boolean isDifferenceSelected(){
+	public boolean isDifferenceSelected() {
 		return differenceRadioButton.isSelected();
 	}
 
-	public boolean isConvexHullSelected(){
+	public boolean isConvexHullSelected() {
 		return convexHullRadioButton.isSelected();
 	}
 
-	private void initializeImages(){
-
-
+	private void initializeImages() {
 
 		bufferDescIcon = PluginServices.getIconTheme().get("buffered-desc");
 		dissolveDescIcon = PluginServices.getIconTheme().get("dissolved-desc");
 		mergeDescIcon = PluginServices.getIconTheme().get("merge-desc");
 		intersectDescIcon = PluginServices.getIconTheme().get("intersect-desc");
 		unionDescIcon = PluginServices.getIconTheme().get("union-desc");
-		spatialJoinDescIcon = PluginServices.getIconTheme().get("spatialjoin-desc");
+		spatialJoinDescIcon = PluginServices.getIconTheme().get(
+				"spatialjoin-desc");
 		clipDescIcon = PluginServices.getIconTheme().get("clip-desc");
-		convexHullDescIcon = PluginServices.getIconTheme().get("convexhull-desc");
-		differenceDescIcon = PluginServices.getIconTheme().get("difference-desc");
+		convexHullDescIcon = PluginServices.getIconTheme().get(
+				"convexhull-desc");
+		differenceDescIcon = PluginServices.getIconTheme().get(
+				"difference-desc");
 
 	}
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
@@ -205,18 +204,17 @@ public class GeoProcessingOperationSelectorPanel extends JPanel {
 		imageLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 		imageLabel.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
 		imageLabel.setIcon(bufferDescIcon);
-		imageLabel.setBounds(new java.awt.Rectangle(5,44,271,328));
+		imageLabel.setBounds(new java.awt.Rectangle(5, 44, 271, 328));
 		jLabel = new JLabel();
 		this.setLayout(null);
-		this.setBounds(new java.awt.Rectangle(0,0,486,377));
+		this.setBounds(new java.awt.Rectangle(0, 0, 486, 377));
 		this.add(jLabel, null);
 		this.add(imageLabel, null);
 		jLabel.setText(PluginServices.getText(this,
-				"Elija_una_herramienta_de_analisis")
-				+ ":");
+				"Elija_una_herramienta_de_analisis") + ":");
 		this.add(getMainPanel(), null);
 
-		jLabel.setBounds(new java.awt.Rectangle(4,5,471,32));
+		jLabel.setBounds(new java.awt.Rectangle(4, 5, 471, 32));
 		confButtonGroup();
 		getBufferRadioButton().setSelected(true);
 	}
@@ -239,7 +237,7 @@ public class GeoProcessingOperationSelectorPanel extends JPanel {
 
 	/**
 	 * This method initializes bufferRadioButton
-	 *
+	 * 
 	 * @return javax.swing.JRadioButton
 	 */
 	private JRadioButton getBufferRadioButton() {
@@ -247,7 +245,7 @@ public class GeoProcessingOperationSelectorPanel extends JPanel {
 			bufferRadioButton = new JRadioButton();
 			bufferRadioButton.setText(PluginServices.getText(this,
 					"Area_de_influencia"));
-			bufferRadioButton.addChangeListener(new ChangeListener(){
+			bufferRadioButton.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent arg0) {
 					changeSelection();
 				}
@@ -259,14 +257,14 @@ public class GeoProcessingOperationSelectorPanel extends JPanel {
 
 	/**
 	 * This method initializes clipRadioButton
-	 *
+	 * 
 	 * @return javax.swing.JRadioButton
 	 */
 	private JRadioButton getClipRadioButton() {
 		if (clipRadioButton == null) {
 			clipRadioButton = new JRadioButton();
 			clipRadioButton.setText(PluginServices.getText(this, "Recortar"));
-			clipRadioButton.addChangeListener(new ChangeListener(){
+			clipRadioButton.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent arg0) {
 					changeSelection();
 				}
@@ -277,7 +275,7 @@ public class GeoProcessingOperationSelectorPanel extends JPanel {
 
 	/**
 	 * This method initializes dissolveRadioButton
-	 *
+	 * 
 	 * @return javax.swing.JRadioButton
 	 */
 	private JRadioButton getDissolveRadioButton() {
@@ -285,7 +283,7 @@ public class GeoProcessingOperationSelectorPanel extends JPanel {
 			dissolveRadioButton = new JRadioButton();
 			dissolveRadioButton.setText(PluginServices
 					.getText(this, "Disolver"));
-			dissolveRadioButton.addChangeListener(new ChangeListener(){
+			dissolveRadioButton.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent arg0) {
 					changeSelection();
 				}
@@ -297,14 +295,14 @@ public class GeoProcessingOperationSelectorPanel extends JPanel {
 
 	/**
 	 * This method initializes mergeRadioButton
-	 *
+	 * 
 	 * @return javax.swing.JRadioButton
 	 */
 	private JRadioButton getMergeRadioButton() {
 		if (mergeRadioButton == null) {
 			mergeRadioButton = new JRadioButton();
 			mergeRadioButton.setText(PluginServices.getText(this, "Juntar"));
-			mergeRadioButton.addChangeListener(new ChangeListener(){
+			mergeRadioButton.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent arg0) {
 					changeSelection();
 				}
@@ -316,7 +314,7 @@ public class GeoProcessingOperationSelectorPanel extends JPanel {
 
 	/**
 	 * This method initializes intersectRadioButton
-	 *
+	 * 
 	 * @return javax.swing.JRadioButton
 	 */
 	private JRadioButton getIntersectRadioButton() {
@@ -324,7 +322,7 @@ public class GeoProcessingOperationSelectorPanel extends JPanel {
 			intersectRadioButton = new JRadioButton();
 			intersectRadioButton.setText(PluginServices.getText(this,
 					"Interseccion"));
-			intersectRadioButton.addChangeListener(new ChangeListener(){
+			intersectRadioButton.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent arg0) {
 					changeSelection();
 				}
@@ -336,14 +334,14 @@ public class GeoProcessingOperationSelectorPanel extends JPanel {
 
 	/**
 	 * This method initializes unionRadioButton
-	 *
+	 * 
 	 * @return javax.swing.JRadioButton
 	 */
 	private JRadioButton getUnionRadioButton() {
 		if (unionRadioButton == null) {
 			unionRadioButton = new JRadioButton();
 			unionRadioButton.setText(PluginServices.getText(this, "Union"));
-			unionRadioButton.addChangeListener(new ChangeListener(){
+			unionRadioButton.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent arg0) {
 					changeSelection();
 				}
@@ -355,7 +353,7 @@ public class GeoProcessingOperationSelectorPanel extends JPanel {
 
 	/**
 	 * This method initializes spatialJoinRadioButton
-	 *
+	 * 
 	 * @return javax.swing.JRadioButton
 	 */
 	private JRadioButton getSpatialJoinRadioButton() {
@@ -363,7 +361,7 @@ public class GeoProcessingOperationSelectorPanel extends JPanel {
 			spatialJoinRadioButton = new JRadioButton();
 			spatialJoinRadioButton.setText(PluginServices.getText(this,
 					"Enlace_espacial"));
-			spatialJoinRadioButton.addChangeListener(new ChangeListener(){
+			spatialJoinRadioButton.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent arg0) {
 					changeSelection();
 				}
@@ -375,7 +373,7 @@ public class GeoProcessingOperationSelectorPanel extends JPanel {
 
 	/**
 	 * This method initializes convexHullRadioButton
-	 *
+	 * 
 	 * @return javax.swing.JRadioButton
 	 */
 	private JRadioButton getConvexHullRadioButton() {
@@ -383,7 +381,7 @@ public class GeoProcessingOperationSelectorPanel extends JPanel {
 			convexHullRadioButton = new JRadioButton();
 			convexHullRadioButton.setText(PluginServices.getText(this,
 					"Convex_Hull"));
-			convexHullRadioButton.addChangeListener(new ChangeListener(){
+			convexHullRadioButton.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent arg0) {
 					changeSelection();
 				}
@@ -395,15 +393,15 @@ public class GeoProcessingOperationSelectorPanel extends JPanel {
 
 	/**
 	 * This method initializes differenceRadioButton
-	 *
+	 * 
 	 * @return javax.swing.JRadioButton
 	 */
 	private JRadioButton getDifferenceRadioButton() {
 		if (differenceRadioButton == null) {
 			differenceRadioButton = new JRadioButton();
 			differenceRadioButton.setText(PluginServices.getText(this,
-			"Diferencia"));
-			differenceRadioButton.addChangeListener(new ChangeListener(){
+					"Diferencia"));
+			differenceRadioButton.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent arg0) {
 					changeSelection();
 				}
@@ -415,14 +413,15 @@ public class GeoProcessingOperationSelectorPanel extends JPanel {
 
 	/**
 	 * This method initializes mainPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
 			mainPanel = new JPanel();
-			mainPanel.setLayout(new BoxLayout(getMainPanel(), BoxLayout.Y_AXIS));
-			mainPanel.setBounds(new java.awt.Rectangle(283,44,192,328));
+			mainPanel
+					.setLayout(new BoxLayout(getMainPanel(), BoxLayout.Y_AXIS));
+			mainPanel.setBounds(new java.awt.Rectangle(283, 44, 192, 328));
 			mainPanel.add(getBufferRadioButton(), null);
 			mainPanel.add(getDissolveRadioButton(), null);
 			mainPanel.add(getClipRadioButton(), null);
@@ -435,4 +434,4 @@ public class GeoProcessingOperationSelectorPanel extends JPanel {
 		}
 		return mainPanel;
 	}
-}  //  @jve:decl-index=0:visual-constraint="24,7"
+} // @jve:decl-index=0:visual-constraint="24,7"

@@ -53,8 +53,9 @@ import org.gvsig.gpe.parser.GPEErrorHandler;
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class FmapContentHandler extends DefaultFmapContentHandler {
-	
-	public FmapContentHandler(GPEErrorHandler errorHandler, GPEVectorialDriver driver) {
-		super(errorHandler, driver);		
+
+	public FmapContentHandler(GPEErrorHandler errorHandler,
+			GPEVectorialDriver driver) {
+		super(errorHandler, driver);
 	}
 }

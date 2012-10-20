@@ -48,12 +48,14 @@ import org.gvsig.remoteClient.sld.SLDTags;
 import org.xmlpull.v1.XmlPullParserException;
 
 import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
+
 /**
- * Implements the LegendGraphic element of an SLD implementation specification (version 
- * 1.0.0).<p>
+ * Implements the LegendGraphic element of an SLD implementation specification
+ * (version 1.0.0).
+ * <p>
  * 
- * The LegendGraphic element gives an optional explicit Graphic Symbol to be displayed
- * i a legend or the rule that contains it inside.
+ * The LegendGraphic element gives an optional explicit Graphic Symbol to be
+ * displayed i a legend or the rule that contains it inside.
  * 
  * @see SLDGraphic1_0_0
  * @see http://portal.opengeospatial.org/files/?artifact_id=1188
@@ -61,28 +63,24 @@ import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
 public class SLDLegendGraphic1_0_0 extends SLDLegendGraphic {
-	
-	
 
-
-	public void parse(XMLSchemaParser parser, int cuTag, String expressionType)throws IOException, XmlPullParserException, LegendDriverException  {
+	public void parse(XMLSchemaParser parser, int cuTag, String expressionType)
+			throws IOException, XmlPullParserException, LegendDriverException {
 		int currentTag;
 		boolean end = false;
 
 		parser.require(XMLSchemaParser.START_TAG, null, SLDTags.LEGENDGRAPHIC);
 		currentTag = parser.next();
 
-		while (!end)
-		{
-			switch(currentTag)
-			{
+		while (!end) {
+			switch (currentTag) {
 			case XMLSchemaParser.START_TAG:
-				if (parser.getName().compareTo(SLDTags.GRAPHIC)==0) {
-					SLDGraphic1_0_0 graphic= new SLDGraphic1_0_0();
-					graphic.parse(parser,currentTag,parser.getName());
+				if (parser.getName().compareTo(SLDTags.GRAPHIC) == 0) {
+					SLDGraphic1_0_0 graphic = new SLDGraphic1_0_0();
+					graphic.parse(parser, currentTag, parser.getName());
 					setGraphic(graphic);
 				}
-	
+
 				break;
 			case XMLSchemaParser.END_TAG:
 				if (parser.getName().compareTo(SLDTags.LEGENDGRAPHIC) == 0)
@@ -100,8 +98,7 @@ public class SLDLegendGraphic1_0_0 extends SLDLegendGraphic {
 
 	public String toXML() {
 		// TODO Auto-generated method stub
-		throw new Error ("Not yet implemented");
+		throw new Error("Not yet implemented");
 	}
-	
-	
+
 }

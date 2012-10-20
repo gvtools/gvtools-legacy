@@ -26,27 +26,28 @@ import java.util.Observable;
  * Datos asociados a la interfaz de usuario CoordinatesSelectionPanel.
  * 
  * 12/06/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class ClipData extends Observable {
 	/**
 	 * Número de decimales a mostrar en visualización
 	 */
-	public static final int    DEC               = 4;
-	private String[]           scales            = {"1/4", "1/3", "1/2", "1", "2", "3", "4", "5"};
-	private int                scaleSelected     = 3;
+	public static final int DEC = 4;
+	private String[] scales = { "1/4", "1/3", "1/2", "1", "2", "3", "4", "5" };
+	private int scaleSelected = 3;
 	/**
 	 * Coordenadas reales y pixel
 	 */
-	private Point2D            ulWc              = new Point2D.Double();
-	private Point2D            lrWc              = new Point2D.Double();
-	private Point2D            ulPx              = new Point2D.Double();
-	private Point2D            lrPx              = new Point2D.Double();
+	private Point2D ulWc = new Point2D.Double();
+	private Point2D lrWc = new Point2D.Double();
+	private Point2D ulPx = new Point2D.Double();
+	private Point2D lrPx = new Point2D.Double();
 	/**
 	 * Lista de rois seleccionadas
 	 */
-	private ArrayList          selectedrois      = new ArrayList();
-	
+	private ArrayList selectedrois = new ArrayList();
+
 	/**
 	 * Actualiza datos y llama al update de los observadores
 	 */
@@ -54,17 +55,20 @@ public class ClipData extends Observable {
 		setChanged();
 		notifyObservers();
 	}
-	
+
 	/**
 	 * Obtiene las coordenadas del mundo real
+	 * 
 	 * @return double[]
 	 */
 	public double[] getWCCoordinates() {
-		return new double[]{ulWc.getX(), ulWc.getY(), lrWc.getX(), lrWc.getY()};
+		return new double[] { ulWc.getX(), ulWc.getY(), lrWc.getX(),
+				lrWc.getY() };
 	}
-	
+
 	/**
 	 * Obtiene la coordenada de máxima X en pixel.
+	 * 
 	 * @return Coordenada de máxima X en pixel
 	 */
 	public double getPxMaxX() {
@@ -73,6 +77,7 @@ public class ClipData extends Observable {
 
 	/**
 	 * Obtiene la coordenada de máxima Y en pixel.
+	 * 
 	 * @return Coordenada de máxima Y en pixel
 	 */
 	public double getPxMaxY() {
@@ -81,6 +86,7 @@ public class ClipData extends Observable {
 
 	/**
 	 * Obtiene la coordenada de mínima X en pixel.
+	 * 
 	 * @return Coordenada de mínima X en pixel
 	 */
 	public double getPxMinX() {
@@ -89,6 +95,7 @@ public class ClipData extends Observable {
 
 	/**
 	 * Obtiene la coordenada de mínima Y en pixel.
+	 * 
 	 * @return Coordenada de mínima Y en pixel
 	 */
 	public double getPxMinY() {
@@ -97,6 +104,7 @@ public class ClipData extends Observable {
 
 	/**
 	 * Obtiene la coordenada de máxima X real.
+	 * 
 	 * @return Coordenada de máxima X real.
 	 */
 	public double getUlxWc() {
@@ -105,6 +113,7 @@ public class ClipData extends Observable {
 
 	/**
 	 * Obtiene la coordenada de máxima Y real.
+	 * 
 	 * @return Coordenada de máxima Y real
 	 */
 	public double getUlyWc() {
@@ -113,6 +122,7 @@ public class ClipData extends Observable {
 
 	/**
 	 * Obtiene la coordenada de mínima X real.
+	 * 
 	 * @return Coordenada de mínima X real
 	 */
 	public double getLrxWc() {
@@ -121,14 +131,16 @@ public class ClipData extends Observable {
 
 	/**
 	 * Obtiene la coordenada de mínima Y real.
+	 * 
 	 * @return Coordenada de mínima Y real
 	 */
 	public double getLryWc() {
 		return lrWc.getY();
 	}
-	
+
 	/**
 	 * Obtiene la coordenada de máxima X pixel
+	 * 
 	 * @return Coordenada de máxima X pixel
 	 */
 	public double getUlxPx() {
@@ -137,6 +149,7 @@ public class ClipData extends Observable {
 
 	/**
 	 * Obtiene la coordenada de máxima Y pixel.
+	 * 
 	 * @return Coordenada de máxima Y pixel
 	 */
 	public double getUlyPx() {
@@ -145,6 +158,7 @@ public class ClipData extends Observable {
 
 	/**
 	 * Obtiene la coordenada de mínima X pixel
+	 * 
 	 * @return Coordenada de mínima X pixel
 	 */
 	public double getLrxPx() {
@@ -153,74 +167,97 @@ public class ClipData extends Observable {
 
 	/**
 	 * Obtiene la coordenada de mínima Y pixel.
+	 * 
 	 * @return Coordenada de mínima Y pixel
 	 */
 	public double getLryPx() {
 		return lrPx.getY();
 	}
-	
+
 	/**
 	 * Obtiene la lista de rois seleccionadas.
+	 * 
 	 * @return
 	 */
 	public ArrayList getSelectedROIs() {
 		return selectedrois;
 	}
-	
+
 	/**
-	 * Asigna las coordenadas del mundo real a partir de números en coma flotante.
-	 * @param minx coordenada mínima de X
-	 * @param miny coordenada mínima de Y
-	 * @param maxx coordenada máxima de X
-	 * @param maxy coordenada máxima de Y
-	 * @param dec Número de decimales a mostrar en la caja de texto
+	 * Asigna las coordenadas del mundo real a partir de números en coma
+	 * flotante.
+	 * 
+	 * @param minx
+	 *            coordenada mínima de X
+	 * @param miny
+	 *            coordenada mínima de Y
+	 * @param maxx
+	 *            coordenada máxima de X
+	 * @param maxy
+	 *            coordenada máxima de Y
+	 * @param dec
+	 *            Número de decimales a mostrar en la caja de texto
 	 */
-	public void setCoorRealFromDouble(double ulx, double uly, double lrx, double lry) {
+	public void setCoorRealFromDouble(double ulx, double uly, double lrx,
+			double lry) {
 		ulWc = new Point2D.Double(ulx, uly);
 		lrWc = new Point2D.Double(lrx, lry);
 		updateObservers();
 	}
-	
+
 	/**
 	 * Asigna las coordenadas pixel a partir de números en coma flotante.
-	 * @param minx coordenada mínima de X
-	 * @param miny coordenada mínima de Y
-	 * @param maxx coordenada máxima de X
-	 * @param maxy coordenada máxima de Y
-	 * @param dec Número de decimales a mostrar en la caja de texto
+	 * 
+	 * @param minx
+	 *            coordenada mínima de X
+	 * @param miny
+	 *            coordenada mínima de Y
+	 * @param maxx
+	 *            coordenada máxima de X
+	 * @param maxy
+	 *            coordenada máxima de Y
+	 * @param dec
+	 *            Número de decimales a mostrar en la caja de texto
 	 */
-	public void setCoorPixelFromDouble(double minx, double miny, double maxx, double maxy) {
+	public void setCoorPixelFromDouble(double minx, double miny, double maxx,
+			double maxy) {
 		ulPx = new Point2D.Double(minx, miny);
 		lrPx = new Point2D.Double(maxx, maxy);
 		updateObservers();
 	}
-	
+
 	/**
-	 * Asigna la coordenada X de la esquina superior izquierda en coordenadas reales
+	 * Asigna la coordenada X de la esquina superior izquierda en coordenadas
+	 * reales
+	 * 
 	 * @param ulx
 	 */
 	public void setUlxWc(double ulx) {
 		ulWc = new Point2D.Double(ulx, ulWc.getY());
 	}
-	
+
 	/**
-	 * Asigna la coordenada Y de la esquina superior izquierda en coordenadas reales
+	 * Asigna la coordenada Y de la esquina superior izquierda en coordenadas
+	 * reales
+	 * 
 	 * @param uly
 	 */
 	public void setUlyWc(double uly) {
 		ulWc = new Point2D.Double(ulWc.getX(), uly);
 	}
-	
+
 	/**
 	 * Asigna la coordenada X de la esquina superior izquierda en píxeles
+	 * 
 	 * @param ulx
 	 */
 	public void setUlxPx(double ulx) {
 		ulPx = new Point2D.Double(ulx, ulPx.getY());
 	}
-	
+
 	/**
 	 * Asigna la coordenada Y de la esquina superior izquierda en píxeles
+	 * 
 	 * @param uly
 	 */
 	public void setUlyPx(double uly) {
@@ -228,47 +265,55 @@ public class ClipData extends Observable {
 	}
 
 	/**
-	 * Asigna la coordenada X de la esquina inferior derecha en coordenadas reales
+	 * Asigna la coordenada X de la esquina inferior derecha en coordenadas
+	 * reales
+	 * 
 	 * @param lrx
 	 */
 	public void setLrxWc(double lrx) {
 		lrWc = new Point2D.Double(lrx, lrWc.getY());
 	}
-	
+
 	/**
-	 * Asigna la coordenada Y de la esquina inferior derecha en coordenadas reales
+	 * Asigna la coordenada Y de la esquina inferior derecha en coordenadas
+	 * reales
+	 * 
 	 * @param lry
 	 */
 	public void setLryWc(double lry) {
 		lrWc = new Point2D.Double(lrWc.getX(), lry);
 	}
-	
+
 	/**
 	 * Asigna la coordenada X de la esquina inferior derecha en píxeles
+	 * 
 	 * @param ulx
 	 */
 	public void setLrxPx(double lrx) {
 		lrPx = new Point2D.Double(lrx, lrPx.getY());
 	}
-	
+
 	/**
 	 * Asigna la coordenada Y de la esquina inferior derecha en píxeles
+	 * 
 	 * @param uly
 	 */
 	public void setLryPx(double lry) {
 		lrPx = new Point2D.Double(lrPx.getX(), lry);
 	}
-	
+
 	/**
 	 * Asigna la lista de ROIs seleccionadas.
+	 * 
 	 * @param selrois
 	 */
-	public void setSelectedROIs(ArrayList selrois){
+	public void setSelectedROIs(ArrayList selrois) {
 		selectedrois = selrois;
 	}
-	
+
 	/**
-	 * Inicializa los valores a cero. Esto se hace cuando la selección es fuera del área.
+	 * Inicializa los valores a cero. Esto se hace cuando la selección es fuera
+	 * del área.
 	 */
 	public void setOutOfArea() {
 		ulWc = new Point2D.Double();
@@ -276,26 +321,30 @@ public class ClipData extends Observable {
 		ulPx = new Point2D.Double();
 		lrPx = new Point2D.Double();
 	}
-	
+
 	/**
-	 * Obtiene el texto del desplegable de escalas. 
+	 * Obtiene el texto del desplegable de escalas.
+	 * 
 	 * @return Lista de textos con las escalas
 	 */
 	public String[] getScales() {
 		return scales;
 	}
-	
+
 	/**
-	 * Asigna el texto del desplegable de escalas. 
-	 * @param Lista de textos con las escalas
+	 * Asigna el texto del desplegable de escalas.
+	 * 
+	 * @param Lista
+	 *            de textos con las escalas
 	 */
 	public void setScales(String[] scales) {
 		this.scales = scales;
 		updateObservers();
 	}
-	
+
 	/**
 	 * Obtiene la escala seleccionada en el selector
+	 * 
 	 * @return posición en la lista de escalas
 	 */
 	public int getScaleSelected() {
@@ -304,27 +353,38 @@ public class ClipData extends Observable {
 
 	/**
 	 * Asigna la escala seleccionada
-	 * @param posición en la lista de escalas
+	 * 
+	 * @param posición
+	 *            en la lista de escalas
 	 */
 	public void setScaleSelected(int scaleSelected) {
 		this.scaleSelected = scaleSelected;
 	}
-	
+
 	/**
-	 * Obtiene el valor de escala a partir de la posición 
-	 * seleccionada en la lista.
+	 * Obtiene el valor de escala a partir de la posición seleccionada en la
+	 * lista.
+	 * 
 	 * @return
 	 */
 	public double getScaleSelectedValue() {
 		switch (getScaleSelected()) {
-		case 0: return 0.25;
-		case 1: return 0.33;
-		case 2: return 0.5;
-		case 3: return 1;
-		case 4: return 2;
-		case 5: return 3;
-		case 6: return 4;
-		case 7: return 5;
+		case 0:
+			return 0.25;
+		case 1:
+			return 0.33;
+		case 2:
+			return 0.5;
+		case 3:
+			return 1;
+		case 4:
+			return 2;
+		case 5:
+			return 3;
+		case 6:
+			return 4;
+		case 7:
+			return 5;
 		}
 		return 1;
 	}

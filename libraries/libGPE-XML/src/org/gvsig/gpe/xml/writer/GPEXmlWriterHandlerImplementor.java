@@ -96,41 +96,45 @@ import org.gvsig.xmlschema.som.IXSSchema;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class GPEXmlWriterHandlerImplementor extends GPEWriterHandlerImplementor {
+public abstract class GPEXmlWriterHandlerImplementor extends
+		GPEWriterHandlerImplementor {
 	protected IXmlStreamWriter writer = null;
 	private String targetNamespace = null;
 	private String targetNamespacePrefix = null;
-	
+
 	public GPEXmlWriterHandlerImplementor() {
-		super();		
-	}	
-	
-	/* (non-Javadoc)
+		super();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writer.GPEWriterHandlerImplementor#initialize()
 	 */
 	public void initialize() {
 		super.initialize();
 		try {
-			writer = GPEXmlParserFactory.getWriter(getFormat(), getOutputStream());
+			writer = GPEXmlParserFactory.getWriter(getFormat(),
+					getOutputStream());
 		} catch (XmlStreamException e) {
 			getErrorHandler().addError(e);
 		} catch (IllegalArgumentException e) {
 			getErrorHandler().addError(e);
 		}
-	}	
-	
+	}
+
 	/**
 	 * @return the schemaLocation tag
 	 */
-	protected String getSchemaLocations(){
+	protected String getSchemaLocations() {
 		StringBuffer schemaLocation = new StringBuffer();
 		Enumeration uris = getSchemaDocument().getURIs();
 		int i = 0;
-		while (uris.hasMoreElements()){
-			if (i > 0){
+		while (uris.hasMoreElements()) {
+			if (i > 0) {
 				schemaLocation.append("\b");
 			}
-			URI uri = (URI)uris.nextElement();
+			URI uri = (URI) uris.nextElement();
 			IXSSchema schema = getSchemaDocument().getSchema(uri);
 			schemaLocation.append(schema.getTargetNamespace());
 			schemaLocation.append(" ");
@@ -138,34 +142,31 @@ public abstract class GPEXmlWriterHandlerImplementor extends GPEWriterHandlerImp
 			i++;
 		}
 		return schemaLocation.toString();
-	}	
-	
-	
-	
+	}
+
 	/**
-	 * Returns the selected target namespace prefix. If
-	 * the namespace doesn't exists it returns the 
-	 * default Namespace prefix; 
+	 * Returns the selected target namespace prefix. If the namespace doesn't
+	 * exists it returns the default Namespace prefix;
+	 * 
 	 * @return the namespace prefix
 	 */
 	protected String getTargetNamespacePrefix() {
-		if (targetNamespacePrefix == null){
+		if (targetNamespacePrefix == null) {
 			String prefix = null;
-			if (getSchemaDocument().getTargetNamespace() != null){
+			if (getSchemaDocument().getTargetNamespace() != null) {
 				prefix = getSchemaDocument().getNamespacePrefix(
 						getSchemaDocument().getTargetNamespace());
-			}else{
-				prefix = GPEDefaults.getStringProperty(XmlProperties.DEFAULT_NAMESPACE_PREFIX);
+			} else {
+				prefix = GPEDefaults
+						.getStringProperty(XmlProperties.DEFAULT_NAMESPACE_PREFIX);
 			}
-			if (prefix != null){
+			if (prefix != null) {
 				targetNamespacePrefix = prefix + ":";
-			}else{
+			} else {
 				targetNamespacePrefix = "";
 			}
 		}
 		return targetNamespacePrefix;
-	}		
-	
-}
-	
+	}
 
+}

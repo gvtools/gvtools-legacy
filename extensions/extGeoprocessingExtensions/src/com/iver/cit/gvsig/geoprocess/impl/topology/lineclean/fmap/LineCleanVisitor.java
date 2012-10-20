@@ -315,8 +315,7 @@ public class LineCleanVisitor implements FeatureVisitor {
 						LineString line = (LineString) processedGeometry;
 						geomNodes = new Coordinate[2];
 						geomNodes[0] = line.getCoordinateN(0);
-						geomNodes[1] = line
-								.getCoordinateN(line.getNumPoints() - 1);
+						geomNodes[1] = line.getCoordinateN(line.getNumPoints() - 1);
 					} else if (processedGeometry instanceof MultiLineString) {
 						MultiLineString lines = (MultiLineString) processedGeometry;
 						int numLines = lines.getNumGeometries();
@@ -389,7 +388,6 @@ public class LineCleanVisitor implements FeatureVisitor {
 							 * intersection B and B intersection A. This is
 							 * simpler than manage caches. With this logic, we
 							 * avoid to write the same pseudonode twice
-							 * 
 							 */
 							if (snapCoordMap.containsKey(coord))
 								return;
@@ -452,8 +450,8 @@ public class LineCleanVisitor implements FeatureVisitor {
 							// de la geometria intersectada se repite cada vez
 							// revisar, pues MultiLineString puede ser un
 							// resultado habitual
-							processIntersections(nodes, processedGeometry, col
-									.getGeometryN(i), fid1, fid2);
+							processIntersections(nodes, processedGeometry,
+									col.getGeometryN(i), fid1, fid2);
 						}
 					}
 					// else if (intersections instanceof Polygon) {
@@ -546,7 +544,7 @@ public class LineCleanVisitor implements FeatureVisitor {
 			// geometry
 			boolean rightGeometry = true;
 			if (nodes.values().size() > 0) {
-				
+
 				LengthIndexedLine lengthLine = new LengthIndexedLine(jtsGeo);
 				Iterator nodesIt = nodes.iterator();
 				ArrayList nodeIntersections = new ArrayList();
@@ -559,7 +557,7 @@ public class LineCleanVisitor implements FeatureVisitor {
 					inters.lenght = lengthOfNode;
 					nodeIntersections.add(inters);
 				}
-				
+
 				if (nodeIntersections.size() > 0) {
 					// We sort the intersections by distance along the line
 					// (dynamic
@@ -594,34 +592,32 @@ public class LineCleanVisitor implements FeatureVisitor {
 														// REVISAR
 						if (lastLocation == null) {
 							LinearLocation from = new LinearLocation(0, 0d);
-							
-//							solution = splitLineString(jtsGeo, from, location,
-//									null, li);
-//							
-							
+
+							// solution = splitLineString(jtsGeo, from,
+							// location,
+							// null, li);
+							//
+
 							solution = indexedLine.extractLine(from, location);
-							
-							
+
 							lastLocation = location;
 							lastIntersection = li;
 							/*
 							 * Construimos una linea desde el primer punto hasta
 							 * el punto contenido en LineIntersection, con todos
 							 * los puntos intermedios de la linea.
-							 * 
-							 * 
-							 * 
 							 */
 						} else {
 							// Construimos una linea entre lastIntersection y la
 							// intersection
 							// actual
 							LinearLocation locationFrom = lastLocation;
-							
-//							solution = splitLineString(jtsGeo, locationFrom,
-//									location, lastIntersection, li);
-							
-							solution = indexedLine.extractLine(locationFrom, location);
+
+							// solution = splitLineString(jtsGeo, locationFrom,
+							// location, lastIntersection, li);
+
+							solution = indexedLine.extractLine(locationFrom,
+									location);
 							lastLocation = location;
 							lastIntersection = li;
 
@@ -635,45 +631,42 @@ public class LineCleanVisitor implements FeatureVisitor {
 					}// for
 
 					// añadimos el ultimo segmento
-//					Coordinate[] geomCoords = jtsGeo.getCoordinates();
-//					ArrayList coordinates = new ArrayList();
-//					coordinates.add(lastIntersection.coordinate);
-//					int startIndex = lastLocation.getSegmentIndex() + 1;
-//					for (int i = startIndex; i < geomCoords.length; i++) {
-//						coordinates.add(geomCoords[i]);
-//					}
-//					Coordinate[] solutionCoords = new Coordinate[coordinates
-//							.size()];
-//					coordinates.toArray(solutionCoords);
-//					IFeature lastFeature = createFeature(new GeometryFactory()
-//							.createLineString(solutionCoords), index);
+					// Coordinate[] geomCoords = jtsGeo.getCoordinates();
+					// ArrayList coordinates = new ArrayList();
+					// coordinates.add(lastIntersection.coordinate);
+					// int startIndex = lastLocation.getSegmentIndex() + 1;
+					// for (int i = startIndex; i < geomCoords.length; i++) {
+					// coordinates.add(geomCoords[i]);
+					// }
+					// Coordinate[] solutionCoords = new Coordinate[coordinates
+					// .size()];
+					// coordinates.toArray(solutionCoords);
+					// IFeature lastFeature = createFeature(new
+					// GeometryFactory()
+					// .createLineString(solutionCoords), index);
 					LinearLocation endLocation = new LinearLocation();
 					endLocation.setToEnd(jtsGeo);
-					Geometry geo = indexedLine.extractLine(lastLocation, endLocation);
+					Geometry geo = indexedLine.extractLine(lastLocation,
+							endLocation);
 					IFeature lastFeature = createFeature(geo, index);
 					featureProcessor.processFeature(lastFeature);
 
 				}
-			} 
-			if(rightGeometry){
+			}
+			if (rightGeometry) {
 				IFeature feature = createFeature(g, index);
 				featureProcessor.processFeature(feature);
 			}
-			
 
 		} catch (ReadDriverException e) {
 			throw new ProcessVisitorException(recordset.getName(), e,
 					"Error buscando los overlays que intersectan con un feature");
-		} 
+		}
 	}
-	
-	
-	
-	
-	
-	
-	
-//Dada una linea, una localizacion de partida (from), una localización de llegada (to), y dos puntos de interseccion (from) devuelve la linea entre from y to
+
+	// Dada una linea, una localizacion de partida (from), una localización de
+	// llegada (to), y dos puntos de interseccion (from) devuelve la linea entre
+	// from y to
 	private Geometry splitLineString(Geometry linearGeometry,
 			LinearLocation from, LinearLocation to, LineIntersection fromInt,
 			LineIntersection toInt) {
@@ -750,7 +743,7 @@ public class LineCleanVisitor implements FeatureVisitor {
 				}// if
 			}// for
 		}// for
-		// now we put null values
+			// now we put null values
 		for (int i = 0; i < featureAttr.length; i++) {
 			if (featureAttr[i] == null)
 				featureAttr[i] = ValueFactory.createNullValue();
@@ -787,7 +780,7 @@ public class LineCleanVisitor implements FeatureVisitor {
 				}// if
 			}// for
 		}// for
-		// now we put null values
+			// now we put null values
 		for (int i = 0; i < featureAttr.length; i++) {
 			if (featureAttr[i] == null)
 				featureAttr[i] = ValueFactory.createNullValue();

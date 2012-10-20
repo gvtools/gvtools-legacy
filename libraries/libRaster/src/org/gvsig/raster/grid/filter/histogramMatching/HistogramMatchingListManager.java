@@ -53,99 +53,115 @@ import org.gvsig.raster.grid.filter.RasterFilterListManager;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
 
 /**
- * Gestion  de la lista de filtros para el filtro de tipo HistogramMatchig
+ * Gestion de la lista de filtros para el filtro de tipo HistogramMatchig
  * 
  * @author aMu—oz (alejandro.munoz@uclm.es)
  * @version 27-05-2008
  * 
  * */
-public class HistogramMatchingListManager implements IRasterFilterListManager{
+public class HistogramMatchingListManager implements IRasterFilterListManager {
 
-	protected RasterFilterList			filterList				= null;
+	protected RasterFilterList filterList = null;
 
 	// Constructor
-	public HistogramMatchingListManager(RasterFilterListManager filterListManager){
+	public HistogramMatchingListManager(
+			RasterFilterListManager filterListManager) {
 		this.filterList = filterListManager.getFilterList();
 	}
-	
+
 	/** Metodo de registro del filtro */
 	public static void register() {
 		ExtensionPoint point = ExtensionPoint.getExtensionPoint("RasterFilter");
 		point.register("Matching", HistogramMatchingListManager.class);
 	}
-	
-	
-	public void addFilter(Class classFilter, Params params) throws FilterTypeException {
+
+	public void addFilter(Class classFilter, Params params)
+			throws FilterTypeException {
 		if (classFilter.equals(HistogramMatchingFilter.class)) {
-			String fileNameOutput=null;
-			IRasterDataSource raster=null;
-			int numbands=0;
-			Histogram histogramReference		= null;
+			String fileNameOutput = null;
+			IRasterDataSource raster = null;
+			int numbands = 0;
+			Histogram histogramReference = null;
 			for (int i = 0; i < params.getNumParams(); i++) {
 				if (params.getParam(i).id.equals("raster"))
-					raster = (IRasterDataSource)(params.getParam(i).defaultValue);
+					raster = (IRasterDataSource) (params.getParam(i).defaultValue);
 				if (params.getParam(i).id.equals("numbands"))
-					numbands = ((Integer)(params.getParam(i).defaultValue)).intValue();
+					numbands = ((Integer) (params.getParam(i).defaultValue))
+							.intValue();
 				if (params.getParam(i).id.equals("histogramReference"))
-					histogramReference = (Histogram)(params.getParam(i).defaultValue);
+					histogramReference = (Histogram) (params.getParam(i).defaultValue);
 				if (params.getParam(i).id.equals("fileNameOutput"))
-					fileNameOutput= new String((String) params.getParam(i).defaultValue);
-			}	
-			addHistogramMatchingFilter(raster,numbands,histogramReference,fileNameOutput);
+					fileNameOutput = new String(
+							(String) params.getParam(i).defaultValue);
+			}
+			addHistogramMatchingFilter(raster, numbands, histogramReference,
+					fileNameOutput);
 		}
 	}
-	
+
 	/**
 	 * AÒade un filtro HistogramMatching a la pila de filtros.
-	 * @param histogramReference Histograma de referencia al que ajustar el raster
-	 * @param fileNameOutput fichero de salida
-	 * @throws FilterTypeException 
+	 * 
+	 * @param histogramReference
+	 *            Histograma de referencia al que ajustar el raster
+	 * @param fileNameOutput
+	 *            fichero de salida
+	 * @throws FilterTypeException
 	 */
-	public void addHistogramMatchingFilter(IRasterDataSource raster,int numbands,Histogram histogramReference,String fileNameOutput) throws FilterTypeException {
+	public void addHistogramMatchingFilter(IRasterDataSource raster,
+			int numbands, Histogram histogramReference, String fileNameOutput)
+			throws FilterTypeException {
 		RasterFilter filter = new HistogramMatchingByteFilter();
-		if (filter != null){
+		if (filter != null) {
 			filter.addParam("raster", raster);
 			filter.addParam("histogramReference", histogramReference);
-			filter.addParam("numbands",new Integer(numbands));
-			filter.addParam("fileNameOutput",fileNameOutput);
+			filter.addParam("numbands", new Integer(numbands));
+			filter.addParam("fileNameOutput", fileNameOutput);
 			filterList.add(filter);
 		}
 	}
 
-	
-	public int createFilterListFromStrings(ArrayList filters, String fil, int filteri) {
-		return filteri;	
+	public int createFilterListFromStrings(ArrayList filters, String fil,
+			int filteri) {
+		return filteri;
 	}
 
-	
 	/**
-	 * Obtiene un Array de Strings a partir de una pila de filtros. Cada elemento
-	 * del array tendr· la forma de elemento=valor.
+	 * Obtiene un Array de Strings a partir de una pila de filtros. Cada
+	 * elemento del array tendr· la forma de elemento=valor.
 	 */
-	public ArrayList getStringsFromFilterList(ArrayList filterList, RasterFilter rf) {
-		
+	public ArrayList getStringsFromFilterList(ArrayList filterList,
+			RasterFilter rf) {
+
 		if (rf instanceof HistogramMatchingFilter) {
 			HistogramMatchingFilter histogramMatchingFilter = (HistogramMatchingFilter) rf;
 			filterList.add("filter.histogramMatch.active=true");
-			filterList.add("filter.histogramMatch.histogramReference="+histogramMatchingFilter.histogramReference);
-			filterList.add("filter.histogramMatch.numbands="+histogramMatchingFilter.numbands);
-			filterList.add("filter.histogramMatch.filenameOutput="+histogramMatchingFilter.fileNameOutput);
-			filterList.add("filter.histogramMatch.filterName=" + histogramMatchingFilter.getName());
+			filterList.add("filter.histogramMatch.histogramReference="
+					+ histogramMatchingFilter.histogramReference);
+			filterList.add("filter.histogramMatch.numbands="
+					+ histogramMatchingFilter.numbands);
+			filterList.add("filter.histogramMatch.filenameOutput="
+					+ histogramMatchingFilter.fileNameOutput);
+			filterList.add("filter.histogramMatch.filterName="
+					+ histogramMatchingFilter.getName());
 		}
 
 		return filterList;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList()
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList
+	 * ()
 	 */
 	public ArrayList getRasterFilterList() {
 		ArrayList filters = new ArrayList();
 		filters.add(HistogramMatchingFilter.class);
 		return filters;
 	}
-	
+
 	public static RasterFilter createHistogramMatchFilter() {
 		RasterFilter filter = new HistogramMatchingFilter();
 		return filter;

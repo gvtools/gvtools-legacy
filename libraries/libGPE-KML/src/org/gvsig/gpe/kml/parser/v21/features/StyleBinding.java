@@ -71,6 +71,7 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * This class parses a Style tag. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;Style id="globeIcon"&gt;
@@ -85,7 +86,9 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  * &lt;/Style&gt;
  * </code>
  * </pre>
+ * 
  * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#style
  */
@@ -93,41 +96,43 @@ public class StyleBinding {
 
 	/**
 	 * It parses the Style tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @throws IOException 
-	 * @throws XmlStreamException 
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @throws IOException
+	 * @throws XmlStreamException
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public static void parse(IXmlStreamReader parser,GPEDeafultKmlParser handler) throws XmlStreamException, IOException{
+	public static void parse(IXmlStreamReader parser,
+			GPEDeafultKmlParser handler) throws XmlStreamException, IOException {
 		boolean endFeature = false;
-		int currentTag;				
+		int currentTag;
 
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
 
 				break;
 			case IXmlStreamReader.END_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.STYLE)){
+				if (CompareUtils.compareWithNamespace(tag, Kml2_1_Tags.STYLE)) {
 					endFeature = true;
 				}
 				break;
-			case IXmlStreamReader.CHARACTERS:					
+			case IXmlStreamReader.CHARACTERS:
 
 				break;
 			}
-			if (!endFeature){					
+			if (!endFeature) {
 				currentTag = parser.next();
 				tag = parser.getName();
 			}
-		}			
+		}
 	}
 }

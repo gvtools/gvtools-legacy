@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.fmap.core;
 
 import java.awt.Graphics2D;
@@ -58,14 +58,15 @@ import com.iver.utiles.swing.threads.Cancellable;
 
 /**
  * Symbol to draw linear geometries with an arrow at the last segment
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class ArrowLineSymbol extends SimpleLineSymbol {
-	
+
 	private int arrowLength = 15;
 	private int arrowWidth = 10;
-	
+
 	public int getArrowLength() {
 		return arrowLength;
 	}
@@ -82,7 +83,9 @@ public class ArrowLineSymbol extends SimpleLineSymbol {
 		this.arrowWidth = arrowWidth;
 	}
 
-	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp, Cancellable cancel) {
-		FGeometryUtil.drawLineWithArrow(g, affineTransform, shp, getColor(), getLineStyle().getStroke(), arrowLength, arrowWidth);
+	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp,
+			Cancellable cancel) {
+		FGeometryUtil.drawLineWithArrow(g, affineTransform, shp, getColor(),
+				getLineStyle().getStroke(), arrowLength, arrowWidth);
 	}
 }

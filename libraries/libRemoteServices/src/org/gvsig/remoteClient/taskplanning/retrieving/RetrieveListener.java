@@ -3,7 +3,6 @@
  */
 package org.gvsig.remoteClient.taskplanning.retrieving;
 
-
 /**
  * @author Luis W. Sevilla (sevilla_lui@gva.es)
  */

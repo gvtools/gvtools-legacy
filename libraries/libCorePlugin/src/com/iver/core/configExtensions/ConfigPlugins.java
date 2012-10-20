@@ -79,15 +79,16 @@ import com.iver.andami.plugins.config.generate.PluginConfig;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.utiles.GenericFileFilter;
+
 /**
  * Diálogo de Configuración de ANDAMI.
- *
+ * 
  * @author Vicente Caballero Navarro
  * @deprecated
  */
 public class ConfigPlugins extends JPanel implements IWindow {
 	private JTree jTree = null;
-	private JPanel jPanel = null; //  @jve:decl-index=0:visual-constraint="113,10"
+	private JPanel jPanel = null; // @jve:decl-index=0:visual-constraint="113,10"
 	private JPanel jPanel1 = null;
 	private JSplitPane jSplitPane = null;
 	private JCheckBox chbActivar = null;
@@ -116,6 +117,7 @@ public class ConfigPlugins extends JPanel implements IWindow {
 	private JPanel jPanel4 = null;
 	private JLabel jLabel1 = null;
 	private JComboBox cmbIdioma = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -125,8 +127,9 @@ public class ConfigPlugins extends JPanel implements IWindow {
 	}
 
 	/**
-	 * Añade los nodes al arbol que representa a todos los plugins y extesiones que hay.
-	 *
+	 * Añade los nodes al arbol que representa a todos los plugins y extesiones
+	 * que hay.
+	 * 
 	 * @param top
 	 */
 	private void addNodes(DefaultMutableTreeNode top) {
@@ -154,20 +157,20 @@ public class ConfigPlugins extends JPanel implements IWindow {
 				namePlugin = new DefaultMutableTreeNode(pn);
 
 				if (!listPlugins.containsKey(namePlugin.getUserObject()
-														   .toString())) {
+						.toString())) {
 					listPlugins.put(namePlugin.getUserObject().toString(),
-						namePlugin);
+							namePlugin);
 					top.add(namePlugin);
-					nameExtension = new DefaultMutableTreeNode(sExt.substring(sExt.lastIndexOf(
-									".") + 1, sExt.length())); //replaceFirst(namePlugin.getUserObject().toString()+".",""));
+					nameExtension = new DefaultMutableTreeNode(sExt.substring(
+							sExt.lastIndexOf(".") + 1, sExt.length())); // replaceFirst(namePlugin.getUserObject().toString()+".",""));
 					listExt.put(sExt, ext);
 					namePlugin.add(nameExtension);
 				} else {
-					nameExtension = new DefaultMutableTreeNode(sExt.substring(sExt.lastIndexOf(
-									".") + 1, sExt.length())); //sExt.replaceFirst(namePlugin.getUserObject().toString()+".",""));
+					nameExtension = new DefaultMutableTreeNode(sExt.substring(
+							sExt.lastIndexOf(".") + 1, sExt.length())); // sExt.replaceFirst(namePlugin.getUserObject().toString()+".",""));
 					listExt.put(sExt, ext);
-					((DefaultMutableTreeNode) listPlugins.get(namePlugin.getUserObject()
-																		.toString())).add(nameExtension);
+					((DefaultMutableTreeNode) listPlugins.get(namePlugin
+							.getUserObject().toString())).add(nameExtension);
 				}
 			}
 		}
@@ -175,7 +178,7 @@ public class ConfigPlugins extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jTree
-	 *
+	 * 
 	 * @return javax.swing.JTree
 	 */
 	private JTree getJTree() {
@@ -186,37 +189,44 @@ public class ConfigPlugins extends JPanel implements IWindow {
 
 			jTree.setName("ANDAMI");
 			jTree.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
-					public void valueChanged(
-						javax.swing.event.TreeSelectionEvent e) {
-						if (e.getPath().getParentPath() != null) {
-							ext = (Extension) listExt.get(e.getPath()
-														   .getParentPath()
-														   .getLastPathComponent()
-														   .toString() + "." +
-									e.getPath().getLastPathComponent().toString());
+				public void valueChanged(javax.swing.event.TreeSelectionEvent e) {
+					if (e.getPath().getParentPath() != null) {
+						ext = (Extension) listExt
+								.get(e.getPath().getParentPath()
+										.getLastPathComponent().toString()
+										+ "."
+										+ e.getPath().getLastPathComponent()
+												.toString());
 
-							if (ext == null) {
+						if (ext == null) {
+							getChbActivar().setVisible(false);
+							getTaDescripcion().setText(
+									"Plugin : "
+											+ e.getNewLeadSelectionPath()
+													.toString());
+						} else {
+							try {
+								getChbActivar().setSelected(
+										((Extension) Launcher.getExtension(ext
+												.getClassName())).getActive());
+								getChbActivar().setVisible(true);
+								getTaDescripcion().setText(
+										((Extension) Launcher.getExtension(ext
+												.getClassName()))
+												.getDescription());
+								getJTextField1().setText(
+										String.valueOf(ext.getPriority()));
+							} catch (NullPointerException npe) {
 								getChbActivar().setVisible(false);
-								getTaDescripcion().setText("Plugin : " +
-									e.getNewLeadSelectionPath().toString());
-							} else {
-								try {
-									getChbActivar().setSelected(((Extension) Launcher.getExtension(
-											ext.getClassName())).getActive());
-									getChbActivar().setVisible(true);
-									getTaDescripcion().setText(((Extension) Launcher.getExtension(
-											ext.getClassName())).getDescription());
-									getJTextField1().setText(String.valueOf(
-											ext.getPriority()));
-								} catch (NullPointerException npe) {
-									getChbActivar().setVisible(false);
-									getTaDescripcion().setText("Plugin : " +
-										e.getNewLeadSelectionPath().toString());
-								}
+								getTaDescripcion().setText(
+										"Plugin : "
+												+ e.getNewLeadSelectionPath()
+														.toString());
 							}
 						}
 					}
-				});
+				}
+			});
 		}
 
 		return jTree;
@@ -224,7 +234,7 @@ public class ConfigPlugins extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel() {
@@ -243,7 +253,7 @@ public class ConfigPlugins extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel1() {
@@ -260,7 +270,7 @@ public class ConfigPlugins extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jSplitPane
-	 *
+	 * 
 	 * @return javax.swing.JSplitPane
 	 */
 	private JSplitPane getJSplitPane() {
@@ -275,7 +285,7 @@ public class ConfigPlugins extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes chbActivar
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getChbActivar() {
@@ -283,12 +293,13 @@ public class ConfigPlugins extends JPanel implements IWindow {
 			chbActivar = new JCheckBox();
 			chbActivar.setSelected(true);
 			chbActivar.setVisible(false);
-			chbActivar.setText(PluginServices.getText(this, "extension_activada"));
+			chbActivar.setText(PluginServices.getText(this,
+					"extension_activada"));
 			chbActivar.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						ext.setActive(chbActivar.isSelected());
-					}
-				});
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					ext.setActive(chbActivar.isSelected());
+				}
+			});
 		}
 
 		return chbActivar;
@@ -296,14 +307,15 @@ public class ConfigPlugins extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jTextField
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getJTextField() {
 		if (jTextField == null) {
 			jTextField = new JTextField();
 			jTextField.setPreferredSize(new java.awt.Dimension(200, 20));
-			jTextField.setText(Launcher.getAndamiConfig().getPluginsDirectory());
+			jTextField
+					.setText(Launcher.getAndamiConfig().getPluginsDirectory());
 		}
 
 		return jTextField;
@@ -311,7 +323,7 @@ public class ConfigPlugins extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes pGeneral
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPGeneral() {
@@ -326,7 +338,7 @@ public class ConfigPlugins extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jButton
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getJButton() {
@@ -334,20 +346,20 @@ public class ConfigPlugins extends JPanel implements IWindow {
 			jButton = new JButton();
 			jButton.setText(PluginServices.getText(this, "examinar"));
 			jButton.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						JFileChooser jfc = new JFileChooser();
-						jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-						jfc.addChoosableFileFilter(new GenericFileFilter("",
-								PluginServices.getText(this,
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					JFileChooser jfc = new JFileChooser();
+					jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+					jfc.addChoosableFileFilter(new GenericFileFilter("",
+							PluginServices.getText(this,
 									"directorio_extensiones")));
 
-						if (jfc.showOpenDialog(
-									(Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
-							getJTextField().setText(jfc.getSelectedFile()
-													   .getAbsolutePath());
-						}
+					if (jfc.showOpenDialog((Component) PluginServices
+							.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
+						getJTextField().setText(
+								jfc.getSelectedFile().getAbsolutePath());
 					}
-				});
+				}
+			});
 		}
 
 		return jButton;
@@ -355,7 +367,7 @@ public class ConfigPlugins extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes pOpciones
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPOpciones() {
@@ -374,16 +386,16 @@ public class ConfigPlugins extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jTabbedPane1
-	 *
+	 * 
 	 * @return javax.swing.JTabbedPane
 	 */
 	private JTabbedPane getJTabbedPane1() {
 		if (jTabbedPane1 == null) {
 			jTabbedPane1 = new JTabbedPane();
 			jTabbedPane1.addTab(PluginServices.getText(this, "opciones"), null,
-				getPOpciones(), null);
+					getPOpciones(), null);
 			jTabbedPane1.addTab(PluginServices.getText(this, "general"), null,
-				getPGeneral(), null);
+					getPGeneral(), null);
 		}
 
 		return jTabbedPane1;
@@ -391,7 +403,7 @@ public class ConfigPlugins extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes pDescripcion
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPDescripcion() {
@@ -399,10 +411,13 @@ public class ConfigPlugins extends JPanel implements IWindow {
 			pDescripcion = new JPanel();
 			pDescripcion.setLayout(new BorderLayout());
 			pDescripcion.add(getJScrollPane(), java.awt.BorderLayout.CENTER);
-			pDescripcion.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, PluginServices.getText(this, "descripcion"),
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			pDescripcion
+					.setBorder(javax.swing.BorderFactory.createTitledBorder(
+							null,
+							PluginServices.getText(this, "descripcion"),
+							javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+							javax.swing.border.TitledBorder.DEFAULT_POSITION,
+							null, null));
 		}
 
 		return pDescripcion;
@@ -410,7 +425,7 @@ public class ConfigPlugins extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes pDirectorio
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPDirectorio() {
@@ -419,7 +434,8 @@ public class ConfigPlugins extends JPanel implements IWindow {
 			pDirectorio.setBorder(javax.swing.BorderFactory.createTitledBorder(
 					null, PluginServices.getText(this, "directorio"),
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					null));
 			pDirectorio.add(getJTextField(), null);
 			pDirectorio.add(getJButton(), null);
 		}
@@ -429,7 +445,7 @@ public class ConfigPlugins extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jPanel2
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel2() {
@@ -445,7 +461,7 @@ public class ConfigPlugins extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jScrollPane1
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getJScrollPane1() {
@@ -459,7 +475,7 @@ public class ConfigPlugins extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes pBotones
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPBotones() {
@@ -474,7 +490,7 @@ public class ConfigPlugins extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes bAceptar
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getBAceptar() {
@@ -482,22 +498,28 @@ public class ConfigPlugins extends JPanel implements IWindow {
 			bAceptar = new JButton();
 			bAceptar.setText(PluginServices.getText(this, "aceptar"));
 			bAceptar.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						//Se escribe el config de los plugins
-						marshalPlugins();
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					// Se escribe el config de los plugins
+					marshalPlugins();
 
-						//Se escribe el directorio de los plugins
-						Launcher.getAndamiConfig().setPluginsDirectory(getJTextField().getText());
+					// Se escribe el directorio de los plugins
+					Launcher.getAndamiConfig().setPluginsDirectory(
+							getJTextField().getText());
 
-						//Se escribe el idioma
-						LanguageItem sel = (LanguageItem) cmbIdioma.getSelectedItem();
-						Launcher.getAndamiConfig().setLocaleLanguage(sel.locale.getLanguage());
-						Launcher.getAndamiConfig().setLocaleCountry(sel.locale.getCountry());
-						Launcher.getAndamiConfig().setLocaleVariant(sel.locale.getVariant());
+					// Se escribe el idioma
+					LanguageItem sel = (LanguageItem) cmbIdioma
+							.getSelectedItem();
+					Launcher.getAndamiConfig().setLocaleLanguage(
+							sel.locale.getLanguage());
+					Launcher.getAndamiConfig().setLocaleCountry(
+							sel.locale.getCountry());
+					Launcher.getAndamiConfig().setLocaleVariant(
+							sel.locale.getVariant());
 
-						PluginServices.getMDIManager().closeWindow(ConfigPlugins.this);
-					}
-				});
+					PluginServices.getMDIManager().closeWindow(
+							ConfigPlugins.this);
+				}
+			});
 		}
 
 		return bAceptar;
@@ -505,7 +527,7 @@ public class ConfigPlugins extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes bCancelar
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getBCancelar() {
@@ -513,11 +535,12 @@ public class ConfigPlugins extends JPanel implements IWindow {
 			bCancelar = new JButton();
 			bCancelar.setText(PluginServices.getText(this, "cancelar"));
 			bCancelar.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						unmarshalPlugins();
-						PluginServices.getMDIManager().closeWindow(ConfigPlugins.this);
-					}
-				});
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					unmarshalPlugins();
+					PluginServices.getMDIManager().closeWindow(
+							ConfigPlugins.this);
+				}
+			});
 		}
 
 		return bCancelar;
@@ -525,7 +548,7 @@ public class ConfigPlugins extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jTextArea1
-	 *
+	 * 
 	 * @return javax.swing.JTextArea
 	 */
 	private JTextArea getTaDescripcion() {
@@ -543,15 +566,17 @@ public class ConfigPlugins extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
 			jScrollPane.setViewportView(getTaDescripcion());
-			jScrollPane.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-			jScrollPane.setVerticalScrollBarPolicy(javax.swing.JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+			jScrollPane
+					.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			jScrollPane
+					.setVerticalScrollBarPolicy(javax.swing.JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		}
 
 		return jScrollPane;
@@ -559,7 +584,7 @@ public class ConfigPlugins extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jTextField1
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getJTextField1() {
@@ -568,10 +593,10 @@ public class ConfigPlugins extends JPanel implements IWindow {
 			jTextField1.setPreferredSize(new java.awt.Dimension(20, 20));
 
 			jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
-					public void keyTyped(java.awt.event.KeyEvent e) {
-						ext.setPriority(Integer.parseInt(jTextField1.getText()));
-					}
-				});
+				public void keyTyped(java.awt.event.KeyEvent e) {
+					ext.setPriority(Integer.parseInt(jTextField1.getText()));
+				}
+			});
 		}
 
 		return jTextField1;
@@ -579,7 +604,7 @@ public class ConfigPlugins extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jPanel3
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel3() {
@@ -594,7 +619,7 @@ public class ConfigPlugins extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jPanel4
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel4() {
@@ -607,57 +632,58 @@ public class ConfigPlugins extends JPanel implements IWindow {
 		}
 		return jPanel4;
 	}
+
 	/**
 	 * This method initializes cmbIdioma
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getCmbIdioma() {
 		if (cmbIdioma == null) {
 			cmbIdioma = new JComboBox();
-			cmbIdioma.setPreferredSize(new java.awt.Dimension(195,20));
+			cmbIdioma.setPreferredSize(new java.awt.Dimension(195, 20));
 
 			Locale esp = new Locale("es");
 			Locale eng = new Locale("en");
 			Locale fra = new Locale("fr");
 			Locale ita = new Locale("it");
 			Locale val = new Locale("ca");
-            Locale cs = new Locale("cs"); // Checo
-            Locale eu = new Locale("eu"); // euskera
-            Locale brasil = new Locale("pt", "BR");
-            Locale de = new Locale("de"); // Alemán
-            Locale gr = new Locale("el", "GR"); // Griego
-            Locale gl = new Locale("gl", "GL"); // Griego
+			Locale cs = new Locale("cs"); // Checo
+			Locale eu = new Locale("eu"); // euskera
+			Locale brasil = new Locale("pt", "BR");
+			Locale de = new Locale("de"); // Alemán
+			Locale gr = new Locale("el", "GR"); // Griego
+			Locale gl = new Locale("gl", "GL"); // Griego
 
 			// Parche para valenciano/catalán valencià/català
 			String strValenciano = PluginServices.getText(this, "__valenciano");
-            // Parche para euskera
+			// Parche para euskera
 
-            Locale localeActual = Locale.getDefault(); // Se configura en la clase Launcher
-            String strEuskera;
-            if (eu.getDisplayLanguage().compareTo("vascuence") == 0)
-                strEuskera = "Euskera";
-            else
-                strEuskera = eu.getDisplayLanguage();
+			Locale localeActual = Locale.getDefault(); // Se configura en la
+														// clase Launcher
+			String strEuskera;
+			if (eu.getDisplayLanguage().compareTo("vascuence") == 0)
+				strEuskera = "Euskera";
+			else
+				strEuskera = eu.getDisplayLanguage();
 
-
-			LanguageItem[] lenguajes = new LanguageItem[]{
+			LanguageItem[] lenguajes = new LanguageItem[] {
 					new LanguageItem(esp, esp.getDisplayLanguage()),
 					new LanguageItem(eng, eng.getDisplayLanguage()),
 					new LanguageItem(fra, fra.getDisplayLanguage()),
 					new LanguageItem(ita, ita.getDisplayLanguage()),
-                    new LanguageItem(val, strValenciano),
-                    new LanguageItem(cs, cs.getDisplayLanguage()),
-                    new LanguageItem(eu, strEuskera),
-                    new LanguageItem(brasil, brasil.getDisplayLanguage()),
+					new LanguageItem(val, strValenciano),
+					new LanguageItem(cs, cs.getDisplayLanguage()),
+					new LanguageItem(eu, strEuskera),
+					new LanguageItem(brasil, brasil.getDisplayLanguage()),
 					new LanguageItem(de, de.getDisplayLanguage()),
 					new LanguageItem(gr, gr.getDisplayLanguage()),
-					new LanguageItem(gl, gl.getDisplayLanguage())};
+					new LanguageItem(gl, gl.getDisplayLanguage()) };
 
 			DefaultComboBoxModel model = new DefaultComboBoxModel(lenguajes);
 
 			for (int i = 0; i < lenguajes.length; i++) {
-				if (lenguajes[i].locale.equals(Locale.getDefault())){
+				if (lenguajes[i].locale.equals(Locale.getDefault())) {
 					model.setSelectedItem(lenguajes[i]);
 				}
 			}
@@ -671,19 +697,21 @@ public class ConfigPlugins extends JPanel implements IWindow {
 		public Locale locale;
 		public String description;
 
-		public LanguageItem(Locale loc, String str){
+		public LanguageItem(Locale loc, String str) {
 			locale = loc;
 			description = str;
 		}
 
-		public String toString(){
+		public String toString() {
 			return description;
 		}
 	}
-   	/**
+
+	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param args DOCUMENT ME!
+	 * 
+	 * @param args
+	 *            DOCUMENT ME!
 	 */
 	public static void main(String[] args) {
 		ConfigPlugins cp = new ConfigPlugins();
@@ -711,7 +739,8 @@ public class ConfigPlugins extends JPanel implements IWindow {
 	public WindowInfo getWindowInfo() {
 		if (m_viewinfo == null) {
 			m_viewinfo = new WindowInfo(WindowInfo.MODALDIALOG);
-			m_viewinfo.setTitle(PluginServices.getText(this, "configurar_ANDAMI"));
+			m_viewinfo.setTitle(PluginServices.getText(this,
+					"configurar_ANDAMI"));
 		}
 
 		return m_viewinfo;
@@ -737,9 +766,11 @@ public class ConfigPlugins extends JPanel implements IWindow {
 			FileWriter writer;
 
 			try {
-				writer = new FileWriter(Launcher.getAndamiConfig().getPluginsDirectory() +
-						File.separator + (String) obj + File.separator +
-						"config.xml");
+				writer = new FileWriter(Launcher.getAndamiConfig()
+						.getPluginsDirectory()
+						+ File.separator
+						+ (String) obj
+						+ File.separator + "config.xml");
 
 				try {
 					pconfig.marshal(writer);
@@ -752,8 +783,8 @@ public class ConfigPlugins extends JPanel implements IWindow {
 				e.printStackTrace();
 			}
 
-			//hay que refrescar la aplicación
-			///((App)App.instance).run();
+			// hay que refrescar la aplicación
+			// /((App)App.instance).run();
 		}
 	}
 
@@ -770,20 +801,22 @@ public class ConfigPlugins extends JPanel implements IWindow {
 			PluginConfig pconfig = (PluginConfig) pc.get(obj);
 
 			try {
-				FileReader reader = new FileReader(Launcher.getAndamiConfig().getPluginsDirectory() +
-						File.separator + (String) obj + File.separator +
-						"config.xml");
+				FileReader reader = new FileReader(Launcher.getAndamiConfig()
+						.getPluginsDirectory()
+						+ File.separator
+						+ (String) obj
+						+ File.separator + "config.xml");
 				PluginConfig.unmarshal(reader);
 			} catch (Exception e) {
 				System.out.println("Exception unmarshalPlugin " + e);
 			}
 		}
 
-		//hay que refrescar la aplicación
-		///((App)App.instance).run();
+		// hay que refrescar la aplicación
+		// /((App)App.instance).run();
 	}
 
 	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
-} //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

@@ -42,71 +42,68 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: RegisterGeoprocessExtension.java 30593 2009-08-26 09:09:53Z yhijazi $
-* $Log$
-* Revision 1.4  2006-12-21 17:23:48  azabala
-* *** empty log message ***
-*
-* Revision 1.3  2006/07/03 20:28:20  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/06/29 17:58:31  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/06/28 18:17:21  azabala
-* first version in cvs
-*
-*
-*/
+ *
+ * $Id: RegisterGeoprocessExtension.java 30593 2009-08-26 09:09:53Z yhijazi $
+ * $Log$
+ * Revision 1.4  2006-12-21 17:23:48  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.3  2006/07/03 20:28:20  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/06/29 17:58:31  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/06/28 18:17:21  azabala
+ * first version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
 import com.iver.cit.gvsig.geoprocess.impl.reproject.ReprojectGeoprocessPlugin;
 import com.iver.cit.gvsig.geoprocess.impl.topology.lineclean.LineCleanGeoprocessPlugin;
-import com.iver.cit.gvsig.geoprocess.impl.topology.polygonbuild.PolygonBuildGeoprocessPlugin;
 import com.iver.cit.gvsig.geoprocess.impl.xyshift.XYShiftGeoprocessPlugin;
 import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
-public class RegisterGeoprocessExtension extends Extension{
+public class RegisterGeoprocessExtension extends Extension {
 
 	public void initialize() {
-		ExtensionPoints extensionPoints = 
-			ExtensionPointsSingleton.getInstance();
-		extensionPoints.add("GeoprocessManager",
-				"XYSHIFT", 
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+		extensionPoints.add("GeoprocessManager", "XYSHIFT",
 				XYShiftGeoprocessPlugin.class);
-		extensionPoints.add("GeoprocessManager",
-				"REPROJECT", 
+		extensionPoints.add("GeoprocessManager", "REPROJECT",
 				ReprojectGeoprocessPlugin.class);
-		
-		/*extensionPoints.add("GeoprocessManager",
-				"LINECLEAN", 
-				LineCleanGeoprocessPlugin.class);
-		
-		extensionPoints.add("GeoprocessManager",
-				"POLYGONBUILD", 
-				PolygonBuildGeoprocessPlugin.class);*/
+
+		/*
+		 * extensionPoints.add("GeoprocessManager", "LINECLEAN",
+		 * LineCleanGeoprocessPlugin.class);
+		 * 
+		 * extensionPoints.add("GeoprocessManager", "POLYGONBUILD",
+		 * PolygonBuildGeoprocessPlugin.class);
+		 */
 		registerIcons();
 	}
-	
-	private void registerIcons(){
+
+	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"xyshiftdesc-icon",
-				XYShiftGeoprocessPlugin.class.getResource("resources/xyshiftdesc.png")
-			);
+				XYShiftGeoprocessPlugin.class
+						.getResource("resources/xyshiftdesc.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"polygbuilddesc-icon",
-				LineCleanGeoprocessPlugin.class.getResource("resources/polygbuilddesc.png")
-			);
+				LineCleanGeoprocessPlugin.class
+						.getResource("resources/polygbuilddesc.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"linecleandesc-icon",
-				LineCleanGeoprocessPlugin.class.getResource("resources/linecleandesc.png")
-			);
+				LineCleanGeoprocessPlugin.class
+						.getResource("resources/linecleandesc.png"));
 	}
-	
+
 	public void execute(String actionCommand) {
 	}
 
@@ -119,4 +116,3 @@ public class RegisterGeoprocessExtension extends Extension{
 	}
 
 }
-

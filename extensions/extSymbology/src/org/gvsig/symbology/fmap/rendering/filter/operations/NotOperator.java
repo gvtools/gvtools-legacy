@@ -47,14 +47,13 @@ import com.hardcode.gdbms.engine.values.Value;
 import com.iver.cit.gvsig.fmap.Messages;
 
 /**
- * Implements the funcionality of the negation operator which only can
- * be used in boolean expressions
- *
+ * Implements the funcionality of the negation operator which only can be used
+ * in boolean expressions
+ * 
  * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
- *
+ * 
  */
 public class NotOperator extends Operator {
-
 
 	private ArrayList<Expression> arguments = new ArrayList<Expression>();
 
@@ -66,23 +65,22 @@ public class NotOperator extends Operator {
 		super(symbol_table);
 	}
 
-	public Object evaluate()throws ExpressionException {
+	public Object evaluate() throws ExpressionException {
 
-		if(arguments.size() > 1)
-			throw new ExpressionException(ExpressionException.INCORRECT_NUMBER_OF_ARGUMENTS);
-		Object eval=((Expression)arguments.get(0)).evaluate();
-		if (eval==null)
+		if (arguments.size() > 1)
+			throw new ExpressionException(
+					ExpressionException.INCORRECT_NUMBER_OF_ARGUMENTS);
+		Object eval = ((Expression) arguments.get(0)).evaluate();
+		if (eval == null)
 			return false;
-		boolean result = ((Boolean)eval).booleanValue();
+		boolean result = ((Boolean) eval).booleanValue();
 		if (result)
 			return false;
 		else
 			return true;
 	}
 
-
-	public Class getResultType()
-	{
+	public Class getResultType() {
 		return Boolean.class;
 	}
 
@@ -92,12 +90,11 @@ public class NotOperator extends Operator {
 
 	}
 
-
 	public String getPattern() {
-		return OperationTags.NOT_OP +"("+
-			Messages.getString(OperationTags.OPERAND)+")\n"+
-			Messages.getString(OperationTags.OPERAND)+" = "+
-			Messages.getString(OperationTags.BOOLEAN_VALUE);
+		return OperationTags.NOT_OP + "("
+				+ Messages.getString(OperationTags.OPERAND) + ")\n"
+				+ Messages.getString(OperationTags.OPERAND) + " = "
+				+ Messages.getString(OperationTags.BOOLEAN_VALUE);
 	}
 
 	public ArrayList<Expression> getArguments() {
@@ -108,13 +105,14 @@ public class NotOperator extends Operator {
 		this.arguments = arguments;
 	}
 
-
 	public void check() throws ExpressionException {
 		if (arguments.size() != 1)
-			throw new ExpressionException(ExpressionException.INCORRECT_NUMBER_OF_ARGUMENTS);
+			throw new ExpressionException(
+					ExpressionException.INCORRECT_NUMBER_OF_ARGUMENTS);
 
-		if(! (arguments.get(0).evaluate() instanceof Boolean))
-			throw new ExpressionException(ExpressionException.CLASS_CASTING_EXCEPTION);
+		if (!(arguments.get(0).evaluate() instanceof Boolean))
+			throw new ExpressionException(
+					ExpressionException.CLASS_CASTING_EXCEPTION);
 
 	}
 

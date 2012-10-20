@@ -34,104 +34,105 @@ import javax.swing.JPanel;
 
 import org.cresques.Messages;
 
-
 /**
  * @author Luis W. Sevilla (sevilla_lui@gva.es)
  */
-public class DefaultDialogPanel extends JPanel implements ComponentListener{
-    final private static long serialVersionUID = -3370601314380922368L;
-    protected JPanel contentPane = null;
-    private JPanel tabPane = null;
-    protected JPanel buttonPane = null;
-    private JButton acceptButton = null;
-    private JButton cancelButton = null;
-    private JButton applyButton = null;
-    private int flag = 0;
-    protected int cWidth = 0, difWidth = 0;
-    protected int cHeight = 0, difHeight = 0;
+public class DefaultDialogPanel extends JPanel implements ComponentListener {
+	final private static long serialVersionUID = -3370601314380922368L;
+	protected JPanel contentPane = null;
+	private JPanel tabPane = null;
+	protected JPanel buttonPane = null;
+	private JButton acceptButton = null;
+	private JButton cancelButton = null;
+	private JButton applyButton = null;
+	private int flag = 0;
+	protected int cWidth = 0, difWidth = 0;
+	protected int cHeight = 0, difHeight = 0;
 	protected JPanel pButton = null;
 
-    /**
-     * Constructor
-     * @param init
-     */
-    public DefaultDialogPanel(boolean init){
-    	if(init)
-    		initialize();
-    }
+	/**
+	 * Constructor
+	 * 
+	 * @param init
+	 */
+	public DefaultDialogPanel(boolean init) {
+		if (init)
+			initialize();
+	}
 
-    /**
-     * Constructor
-     */
-    public DefaultDialogPanel() {
-        super();
-        this.initialize();
-    }
+	/**
+	 * Constructor
+	 */
+	public DefaultDialogPanel() {
+		super();
+		this.initialize();
+	}
 
-    /**
-     * This method initializes this
-     *
-     * @return void
-     */
-    public void initialize() {
-        //setBounds(0,0,321,230);
-        //javax.swing.BoxLayout(jContentPane, javax.swing.BoxLayout.Y_AXIS);
-        //jContentPane.setLayout(new java.awt.GridLayout(2,1));
-        GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-        gridBagConstraints11.gridx = 0;
-        gridBagConstraints11.insets = new java.awt.Insets(4,0,0,0);
-        gridBagConstraints11.gridy = 1;
-        GridBagConstraints gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(5,0,2,0);
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridx = 0;
-        setLayout(new GridBagLayout());
-        setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+	/**
+	 * This method initializes this
+	 * 
+	 * @return void
+	 */
+	public void initialize() {
+		// setBounds(0,0,321,230);
+		// javax.swing.BoxLayout(jContentPane, javax.swing.BoxLayout.Y_AXIS);
+		// jContentPane.setLayout(new java.awt.GridLayout(2,1));
+		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+		gridBagConstraints11.gridx = 0;
+		gridBagConstraints11.insets = new java.awt.Insets(4, 0, 0, 0);
+		gridBagConstraints11.gridy = 1;
+		GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.insets = new java.awt.Insets(5, 0, 2, 0);
+		gridBagConstraints.gridy = 0;
+		gridBagConstraints.gridx = 0;
+		setLayout(new GridBagLayout());
+		setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-        //jContentPane.setSize(30, 24);
-        this.setPreferredSize(new java.awt.Dimension(320, 165));
-        this.add(getTabPanel(), gridBagConstraints);
-        this.add(getPButton(), gridBagConstraints11);
-        this.addComponentListener(this);
+		// jContentPane.setSize(30, 24);
+		this.setPreferredSize(new java.awt.Dimension(320, 165));
+		this.add(getTabPanel(), gridBagConstraints);
+		this.add(getPButton(), gridBagConstraints11);
+		this.addComponentListener(this);
 
-    }
+	}
 
-    /**
-     * Obtiene el panel general
-     * @return
-     */
-    protected JPanel getContentPanel() {
-        if (contentPane == null) {
-            contentPane = new JPanel();
-            contentPane.setLayout(new GridBagLayout());
-            contentPane.setBounds(6, 200, 310, 125);
-            contentPane.setPreferredSize(new java.awt.Dimension(310, 100));
-        }
+	/**
+	 * Obtiene el panel general
+	 * 
+	 * @return
+	 */
+	protected JPanel getContentPanel() {
+		if (contentPane == null) {
+			contentPane = new JPanel();
+			contentPane.setLayout(new GridBagLayout());
+			contentPane.setBounds(6, 200, 310, 125);
+			contentPane.setPreferredSize(new java.awt.Dimension(310, 100));
+		}
 
-        return contentPane;
-    }
+		return contentPane;
+	}
 
-    public JPanel getTabPanel() {
-        if (tabPane == null) {
-            GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-            gridBagConstraints2.insets = new java.awt.Insets(5,0,0,0);
-            gridBagConstraints2.gridy = 0;
-            gridBagConstraints2.gridx = 0;
-            tabPane = new JPanel();
-            tabPane.setLayout(new GridBagLayout());
+	public JPanel getTabPanel() {
+		if (tabPane == null) {
+			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+			gridBagConstraints2.insets = new java.awt.Insets(5, 0, 0, 0);
+			gridBagConstraints2.gridy = 0;
+			gridBagConstraints2.gridx = 0;
+			tabPane = new JPanel();
+			tabPane.setLayout(new GridBagLayout());
 
+			// tabPane.setBounds(6, 7, 309, 189);
+			tabPane.setBorder(new javax.swing.border.SoftBevelBorder(
+					javax.swing.border.SoftBevelBorder.RAISED));
+			tabPane.add(getContentPanel(), gridBagConstraints2);
+		}
 
-            //tabPane.setBounds(6, 7, 309, 189);
-            tabPane.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.SoftBevelBorder.RAISED));
-            tabPane.add(getContentPanel(), gridBagConstraints2);
-        }
+		return tabPane;
+	}
 
-        return tabPane;
-    }
-
-    /**
+	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPButton() {
@@ -141,82 +142,82 @@ public class DefaultDialogPanel extends JPanel implements ComponentListener{
 			flowLayout1.setHgap(0);
 			flowLayout1.setVgap(0);
 			pButton = new JPanel();
-			pButton.setPreferredSize(new java.awt.Dimension(320,25));
+			pButton.setPreferredSize(new java.awt.Dimension(320, 25));
 			pButton.setLayout(flowLayout1);
 			pButton.add(getButtonPanel(), null);
 		}
 		return pButton;
 	}
 
+	/**
+	 * Obtiene el panel que contiene los botones de Aceptar, Cancelar y Aplicar
+	 * 
+	 * @return
+	 */
+	protected JPanel getButtonPanel() {
+		if (buttonPane == null) {
+			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+			gridBagConstraints4.gridx = 2;
+			gridBagConstraints4.insets = new java.awt.Insets(0, 3, 0, 0);
+			gridBagConstraints4.gridy = 0;
+			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.gridx = 1;
+			gridBagConstraints3.insets = new java.awt.Insets(0, 3, 0, 3);
+			gridBagConstraints3.gridy = 0;
+			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			gridBagConstraints1.insets = new java.awt.Insets(0, 0, 0, 3);
+			gridBagConstraints1.gridy = 0;
+			gridBagConstraints1.gridx = 0;
+			buttonPane = new JPanel();
+			buttonPane.setLayout(new GridBagLayout());
+			buttonPane.add(getAcceptButton(), gridBagConstraints1);
+			buttonPane.add(getCancelButton(), gridBagConstraints3);
+			buttonPane.add(getApplyButton(), gridBagConstraints4);
+		}
 
-    /**
-     * Obtiene el panel que contiene los botones de Aceptar, Cancelar y Aplicar
-     * @return
-     */
-    protected JPanel getButtonPanel() {
-        if (buttonPane == null) {
-            GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-            gridBagConstraints4.gridx = 2;
-            gridBagConstraints4.insets = new java.awt.Insets(0,3,0,0);
-            gridBagConstraints4.gridy = 0;
-            GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-            gridBagConstraints3.gridx = 1;
-            gridBagConstraints3.insets = new java.awt.Insets(0,3,0,3);
-            gridBagConstraints3.gridy = 0;
-            GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-            gridBagConstraints1.insets = new java.awt.Insets(0,0,0,3);
-            gridBagConstraints1.gridy = 0;
-            gridBagConstraints1.gridx = 0;
-            buttonPane = new JPanel();
-            buttonPane.setLayout(new GridBagLayout());
-            buttonPane.add(getAcceptButton(), gridBagConstraints1);
-            buttonPane.add(getCancelButton(), gridBagConstraints3);
-            buttonPane.add(getApplyButton(), gridBagConstraints4);
-        }
+		return buttonPane;
+	}
 
-        return buttonPane;
-    }
+	/**
+	 * This method initializes Accept button
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	public JButton getAcceptButton() {
+		if (acceptButton == null) {
+			acceptButton = new JButton("Aceptar");
+			acceptButton.setText(Messages.getText("Aceptar"));
+		}
 
-    /**
-     * This method initializes Accept button
-     *
-     * @return javax.swing.JButton
-     */
-    public JButton getAcceptButton() {
-        if (acceptButton == null) {
-            acceptButton = new JButton("Aceptar");
-            acceptButton.setText(Messages.getText("Aceptar"));
-        }
+		return acceptButton;
+	}
 
-        return acceptButton;
-    }
+	/**
+	 * This method initializes Cancel Button
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	public JButton getCancelButton() {
+		if (cancelButton == null) {
+			cancelButton = new JButton("Cancelar");
+			cancelButton.setText(Messages.getText("Cancelar"));
+		}
 
-    /**
-     * This method initializes Cancel Button
-     *
-     * @return javax.swing.JButton
-     */
-    public JButton getCancelButton() {
-        if (cancelButton == null) {
-            cancelButton = new JButton("Cancelar");
-            cancelButton.setText(Messages.getText("Cancelar"));
-        }
+		return cancelButton;
+	}
 
-        return cancelButton;
-    }
+	/**
+	 * This method initializes Apply Button
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	public JButton getApplyButton() {
+		if (applyButton == null) {
+			applyButton = new JButton(Messages.getText("Aplicar"));
+		}
 
-    /**
-     * This method initializes Apply Button
-     *
-     * @return javax.swing.JButton
-     */
-    public JButton getApplyButton() {
-        if (applyButton == null) {
-            applyButton = new JButton(Messages.getText("Aplicar"));
-        }
-
-        return applyButton;
-    }
+		return applyButton;
+	}
 
 	public void componentHidden(ComponentEvent e) {
 		// TODO Auto-generated method stub
@@ -229,12 +230,12 @@ public class DefaultDialogPanel extends JPanel implements ComponentListener{
 	}
 
 	public void componentResized(ComponentEvent e) {
-		if(e.getSource() == this)
+		if (e.getSource() == this)
 			this.resizeWindow();
 	}
 
-	public void resizeWindow(){
-		if (flag == 0){
+	public void resizeWindow() {
+		if (flag == 0) {
 			cWidth = this.getSize().width;
 			cHeight = this.getSize().height;
 			flag++;
@@ -244,13 +245,18 @@ public class DefaultDialogPanel extends JPanel implements ComponentListener{
 		int nHeight = getHeight();
 		difWidth = nWidth - cWidth;
 		difHeight = nHeight - cHeight;
-		this.tabPane.setSize(this.tabPane.getSize().width + difWidth, this.tabPane.getSize().height + difHeight);
-		this.tabPane.setLocation(this.tabPane.getLocation().x - difWidth/2, this.tabPane.getLocation().y - difHeight/2);
+		this.tabPane.setSize(this.tabPane.getSize().width + difWidth,
+				this.tabPane.getSize().height + difHeight);
+		this.tabPane.setLocation(this.tabPane.getLocation().x - difWidth / 2,
+				this.tabPane.getLocation().y - difHeight / 2);
 
-		this.contentPane.setSize(this.contentPane.getSize().width + difWidth, this.contentPane.getSize().height + difHeight);
-		//this.pButton.setSize(this.getPButton().getWidth() + difWidth/2, 25);
-		//this.buttonPane.setLocation(this.buttonPane.getLocation().x + difWidth/2, this.buttonPane.getLocation().y + difHeight/2);
-		this.pButton.setLocation(this.pButton.getLocation().x + difWidth/2, this.pButton.getLocation().y + difHeight/2);
+		this.contentPane.setSize(this.contentPane.getSize().width + difWidth,
+				this.contentPane.getSize().height + difHeight);
+		// this.pButton.setSize(this.getPButton().getWidth() + difWidth/2, 25);
+		// this.buttonPane.setLocation(this.buttonPane.getLocation().x +
+		// difWidth/2, this.buttonPane.getLocation().y + difHeight/2);
+		this.pButton.setLocation(this.pButton.getLocation().x + difWidth / 2,
+				this.pButton.getLocation().y + difHeight / 2);
 
 	}
 
@@ -259,5 +265,4 @@ public class DefaultDialogPanel extends JPanel implements ComponentListener{
 
 	}
 
-
-}  //  @jve:decl-index=0:visual-constraint="12,13"
+} // @jve:decl-index=0:visual-constraint="12,13"

@@ -115,11 +115,13 @@ import com.iver.utiles.XMLEntity;
 
 /**
  * @see http://www.oreilly.com/catalog/java2d/chapter/ch04.html
- * @author  jaume dominguez faus - jaume.dominguez@iver.es
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
-public class SimpleLineStyle extends AbstractStyle implements ILineStyle, CartographicSupport {
-	private final static Color PREVIEW_COLOR_1= new Color(150, 255, 200); //light blue
-	private final static Color PREVIEW_COLOR_2 = new Color(255, 200, 100); //orange
+public class SimpleLineStyle extends AbstractStyle implements ILineStyle,
+		CartographicSupport {
+	private final static Color PREVIEW_COLOR_1 = new Color(150, 255, 200); // light
+																			// blue
+	private final static Color PREVIEW_COLOR_2 = new Color(255, 200, 100); // orange
 	private final static int COLOR1_STROKE = 1;
 	private final static int COLOR2_STROKE = 3;
 	private float[] dashArray, tempDashArray;
@@ -132,9 +134,10 @@ public class SimpleLineStyle extends AbstractStyle implements ILineStyle, Cartog
 	private double offset = 0, csOffset = 0;
 	private int referenceSystem;
 	private ArrowDecoratorStyle arrowDecorator;
+
 	/**
 	 * Constructor method
-	 *
+	 * 
 	 */
 	public SimpleLineStyle() {
 		BasicStroke dummy = new BasicStroke();
@@ -145,9 +148,10 @@ public class SimpleLineStyle extends AbstractStyle implements ILineStyle, Cartog
 		lineJoin = BasicStroke.JOIN_BEVEL;
 		miterlimit = dummy.getMiterLimit();
 	}
+
 	/**
 	 * Constructor method
-	 *
+	 * 
 	 * @param width
 	 * @param cap
 	 * @param join
@@ -155,7 +159,8 @@ public class SimpleLineStyle extends AbstractStyle implements ILineStyle, Cartog
 	 * @param dash
 	 * @param dash_phase
 	 */
-	public SimpleLineStyle(float width, int cap, int join, float miterlimit, float[] dash, float dash_phase) {
+	public SimpleLineStyle(float width, int cap, int join, float miterlimit,
+			float[] dash, float dash_phase) {
 		this.lineWidth = width;
 		this.endCap = cap;
 		this.lineJoin = join;
@@ -171,15 +176,17 @@ public class SimpleLineStyle extends AbstractStyle implements ILineStyle, Cartog
 		int margins = 2;
 
 		BasicStroke stroke;
-		stroke = new BasicStroke(COLOR1_STROKE, endCap, lineJoin, miterlimit, tempDashArray, dashPhase);
+		stroke = new BasicStroke(COLOR1_STROKE, endCap, lineJoin, miterlimit,
+				tempDashArray, dashPhase);
 		g.setStroke(stroke);
 		g.setColor(PREVIEW_COLOR_1);
-		g.drawLine(margins, h, r.width-margins-margins, h);
+		g.drawLine(margins, h, r.width - margins - margins, h);
 
-		stroke = new BasicStroke(COLOR2_STROKE, endCap, lineJoin, miterlimit, tempDashArray, dashPhase);
+		stroke = new BasicStroke(COLOR2_STROKE, endCap, lineJoin, miterlimit,
+				tempDashArray, dashPhase);
 		g.setStroke(stroke);
 		g.setColor(PREVIEW_COLOR_2);
-		g.drawLine(margins, h, r.width-margins-margins, h);
+		g.drawLine(margins, h, r.width - margins - margins, h);
 		g.setStroke(oldStroke);
 	}
 
@@ -196,7 +203,7 @@ public class SimpleLineStyle extends AbstractStyle implements ILineStyle, Cartog
 			StringBuffer sb = new StringBuffer();
 			for (int i = 0; i < dashArray.length; i++) {
 				sb.append(dashArray[i]);
-				if (i< dashArray.length)
+				if (i < dashArray.length)
 					sb.append(",");
 			}
 			xml.putProperty("dashArray", sb.toString());
@@ -239,19 +246,20 @@ public class SimpleLineStyle extends AbstractStyle implements ILineStyle, Cartog
 		XMLEntity decXML = xml.firstChild("id", "arrowDecorator");
 		if (decXML != null) {
 			// it contains an arrow decorator
-			arrowDecorator = (ArrowDecoratorStyle) SymbologyFactory.createStyleFromXML(decXML, "arrowDecorator");
+			arrowDecorator = (ArrowDecoratorStyle) SymbologyFactory
+					.createStyleFromXML(decXML, "arrowDecorator");
 		}
 
 	}
 
 	public Stroke getStroke() {
-		return new BasicStroke((float) lineWidth, endCap, lineJoin, miterlimit, tempDashArray, dashPhase);
+		return new BasicStroke((float) lineWidth, endCap, lineJoin, miterlimit,
+				tempDashArray, dashPhase);
 	}
 
 	public float getLineWidth() {
 		return lineWidth;
 	}
-
 
 	public void setLineWidth(float width) {
 		if (lineWidth != 0) {
@@ -282,7 +290,6 @@ public class SimpleLineStyle extends AbstractStyle implements ILineStyle, Cartog
 				}
 			} else
 				tempDashArray = null;
-
 
 			dashPhase = dummy.getDashPhase();
 			endCap = dummy.getEndCap();
@@ -344,11 +351,8 @@ public class SimpleLineStyle extends AbstractStyle implements ILineStyle, Cartog
 	}
 
 	public double getCartographicSize(ViewPort viewPort, double dpi, FShape shp) {
-		return CartographicSupportToolkit.
-		getCartographicLength(this,
-				getOffset(),
-				viewPort,
-				dpi);
+		return CartographicSupportToolkit.getCartographicLength(this,
+				getOffset(), viewPort, dpi);
 
 	}
 }

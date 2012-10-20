@@ -30,6 +30,7 @@ import javax.swing.JLabel;
 import org.gvsig.addo.Jaddo;
 import org.gvsig.raster.Configuration;
 import org.gvsig.raster.util.BasePanel;
+
 /**
  * PreferenceOverviews es una clase para la configuracion de las overviews de
  * Raster en gvSIG
@@ -38,25 +39,26 @@ import org.gvsig.raster.util.BasePanel;
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class PreferenceOverviews extends BasePanel {
-	private static final long  serialVersionUID  = 1L;
-	//	private JCheckBox jCheckBoxAsk           = null;
-	private JComboBox          comboBoxRate      = null;
-	private JComboBox          comboBoxNumber    = null;
-	private JComboBox          comboBoxAlgorithm = null;
-	private JLabel             labelNumber       = null;
-	private JLabel             labelRate         = null;
-	private JLabel             labelAlgorithm    = null;
+	private static final long serialVersionUID = 1L;
+	// private JCheckBox jCheckBoxAsk = null;
+	private JComboBox comboBoxRate = null;
+	private JComboBox comboBoxNumber = null;
+	private JComboBox comboBoxAlgorithm = null;
+	private JLabel labelNumber = null;
+	private JLabel labelRate = null;
+	private JLabel labelAlgorithm = null;
 
 	/**
-	 *Inicializa componentes gráficos y traduce
+	 * Inicializa componentes gráficos y traduce
 	 */
 	public PreferenceOverviews() {
 		init();
 		translate();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#translate()
 	 */
 	protected void translate() {
@@ -64,13 +66,14 @@ public class PreferenceOverviews extends BasePanel {
 		getLabelNumber().setText(getText(this, "num_overviews") + ":");
 		getLabelRate().setText(getText(this, "proporcion_overviews") + ":");
 		getLabelAlgorithm().setText(getText(this, "algorithm") + ":");
-//		getCheckBoxAsk().setText(getText(this, "generacion_overviews"));
-//		getCheckBoxAsk().setToolTipText(getCheckBoxAsk().getText());
-		
+		// getCheckBoxAsk().setText(getText(this, "generacion_overviews"));
+		// getCheckBoxAsk().setToolTipText(getCheckBoxAsk().getText());
+
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#init()
 	 */
 	protected void init() {
@@ -79,17 +82,17 @@ public class PreferenceOverviews extends BasePanel {
 		setLayout(new GridBagLayout());
 
 		int posy = 0;
-		
-//		gridBagConstraints = new GridBagConstraints();
-//		gridBagConstraints.gridx = 0;
-//		gridBagConstraints.gridy = posy;
-//		gridBagConstraints.gridwidth = 2;
-//		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-//		gridBagConstraints.weightx = 1.0;
-//		gridBagConstraints.insets = new Insets(5, 5, 2, 5);
-//		add(getCheckBoxAsk(), gridBagConstraints);
 
-//		posy++;
+		// gridBagConstraints = new GridBagConstraints();
+		// gridBagConstraints.gridx = 0;
+		// gridBagConstraints.gridy = posy;
+		// gridBagConstraints.gridwidth = 2;
+		// gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+		// gridBagConstraints.weightx = 1.0;
+		// gridBagConstraints.insets = new Insets(5, 5, 2, 5);
+		// add(getCheckBoxAsk(), gridBagConstraints);
+
+		// posy++;
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = posy;
@@ -157,19 +160,20 @@ public class PreferenceOverviews extends BasePanel {
 		return labelNumber;
 	}
 
-//	private JCheckBox getCheckBoxAsk() {
-//		if (jCheckBoxAsk == null) {
-//			jCheckBoxAsk = new JCheckBox();
-//			jCheckBoxAsk.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-//			jCheckBoxAsk.setMargin(new Insets(0, 0, 0, 0));
-//		}
-//		return jCheckBoxAsk;
-//	}
+	// private JCheckBox getCheckBoxAsk() {
+	// if (jCheckBoxAsk == null) {
+	// jCheckBoxAsk = new JCheckBox();
+	// jCheckBoxAsk.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+	// jCheckBoxAsk.setMargin(new Insets(0, 0, 0, 0));
+	// }
+	// return jCheckBoxAsk;
+	// }
 
 	private JComboBox getComboRate() {
 		if (comboBoxRate == null) {
 			comboBoxRate = new JComboBox();
-			comboBoxRate.setModel(new DefaultComboBoxModel(new String[] { "/2", "/3" }));
+			comboBoxRate.setModel(new DefaultComboBoxModel(new String[] { "/2",
+					"/3" }));
 		}
 		return comboBoxRate;
 	}
@@ -177,7 +181,8 @@ public class PreferenceOverviews extends BasePanel {
 	private JComboBox getComboNumber() {
 		if (comboBoxNumber == null) {
 			comboBoxNumber = new JComboBox();
-			comboBoxNumber.setModel(new DefaultComboBoxModel(new String[] { "2", "3", "4", "5", "6" }));
+			comboBoxNumber.setModel(new DefaultComboBoxModel(new String[] {
+					"2", "3", "4", "5", "6" }));
 		}
 		return comboBoxNumber;
 	}
@@ -185,7 +190,9 @@ public class PreferenceOverviews extends BasePanel {
 	private JComboBox getComboAlgorithm() {
 		if (comboBoxAlgorithm == null) {
 			comboBoxAlgorithm = new JComboBox();
-			comboBoxAlgorithm.setModel(new DefaultComboBoxModel(new String[] { getText(this, "vecino_cercano"), getText(this, "media"), getText(this, "media_phase") }));
+			comboBoxAlgorithm.setModel(new DefaultComboBoxModel(new String[] {
+					getText(this, "vecino_cercano"), getText(this, "media"),
+					getText(this, "media_phase") }));
 		}
 		return comboBoxAlgorithm;
 	}
@@ -195,57 +202,65 @@ public class PreferenceOverviews extends BasePanel {
 	 */
 	public void initializeDefaults() {
 		int pos = 0;
-//		getCheckBoxAsk().setSelected(((Boolean) Configuration.getDefaultValue("overviews_ask_before_loading")).booleanValue());
+		// getCheckBoxAsk().setSelected(((Boolean)
+		// Configuration.getDefaultValue("overviews_ask_before_loading")).booleanValue());
 
-		pos = ((Integer) Configuration.getDefaultValue("overviews_number")).intValue() - 2;
+		pos = ((Integer) Configuration.getDefaultValue("overviews_number"))
+				.intValue() - 2;
 		if ((pos < 0) || (pos >= getComboNumber().getItemCount()))
 			pos = 2;
 		getComboNumber().setSelectedIndex(pos);
 
-		pos = ((Integer) Configuration.getDefaultValue("overviews_rate")).intValue() - 2;
+		pos = ((Integer) Configuration.getDefaultValue("overviews_rate"))
+				.intValue() - 2;
 		if ((pos < 0) || (pos >= getComboRate().getItemCount()))
 			pos = 0;
 		getComboRate().setSelectedIndex(pos);
 
-		pos = ((Integer) Configuration.getDefaultValue("overviews_resampling_algorithm")).intValue();
+		pos = ((Integer) Configuration
+				.getDefaultValue("overviews_resampling_algorithm")).intValue();
 		int type = 1;
 		switch (pos) {
-			case Jaddo.NEAREST:
-				type = 0;
-				break;
-			case Jaddo.AVERAGE_MAGPHASE:
-				type = 2;
-				break;
+		case Jaddo.NEAREST:
+			type = 0;
+			break;
+		case Jaddo.AVERAGE_MAGPHASE:
+			type = 2;
+			break;
 		}
 		getComboAlgorithm().setSelectedIndex(type);
 	}
 
 	/**
-	 * Carga los valores definidos previamente por el usuario 
+	 * Carga los valores definidos previamente por el usuario
 	 */
 	public void initializeValues() {
 		int pos = 0;
-//		getCheckBoxAsk().setSelected(Configuration.getValue("overviews_ask_before_loading", Boolean.FALSE).booleanValue());
+		// getCheckBoxAsk().setSelected(Configuration.getValue("overviews_ask_before_loading",
+		// Boolean.FALSE).booleanValue());
 
-		pos = Configuration.getValue("overviews_number", Integer.valueOf(4)).intValue() - 2;
+		pos = Configuration.getValue("overviews_number", Integer.valueOf(4))
+				.intValue() - 2;
 		if ((pos < 0) || (pos >= getComboNumber().getItemCount()))
 			pos = 2;
 		getComboNumber().setSelectedIndex(pos);
 
-		pos = Configuration.getValue("overviews_rate", Integer.valueOf(2)).intValue() - 2;
+		pos = Configuration.getValue("overviews_rate", Integer.valueOf(2))
+				.intValue() - 2;
 		if ((pos < 0) || (pos >= getComboRate().getItemCount()))
 			pos = 0;
 		getComboRate().setSelectedIndex(pos);
 
-		pos = Configuration.getValue("overviews_resampling_algorithm", Integer.valueOf(Jaddo.AVERAGE)).intValue();
+		pos = Configuration.getValue("overviews_resampling_algorithm",
+				Integer.valueOf(Jaddo.AVERAGE)).intValue();
 		int type = 1;
 		switch (pos) {
-			case Jaddo.NEAREST:
-				type = 0;
-				break;
-			case Jaddo.AVERAGE_MAGPHASE:
-				type = 2;
-				break;
+		case Jaddo.NEAREST:
+			type = 0;
+			break;
+		case Jaddo.AVERAGE_MAGPHASE:
+			type = 2;
+			break;
 		}
 		getComboAlgorithm().setSelectedIndex(type);
 	}
@@ -254,22 +269,26 @@ public class PreferenceOverviews extends BasePanel {
 	 * Guarda los valores definidos por el usuario
 	 */
 	public void storeValues() {
-//		Configuration.setValue("overviews_ask_before_loading", Boolean.valueOf(getCheckBoxAsk().isSelected()));
+		// Configuration.setValue("overviews_ask_before_loading",
+		// Boolean.valueOf(getCheckBoxAsk().isSelected()));
 		if (getComboRate().getSelectedIndex() > -1)
-			Configuration.setValue("overviews_rate", Integer.valueOf(getComboRate().getSelectedIndex() + 2));
+			Configuration.setValue("overviews_rate",
+					Integer.valueOf(getComboRate().getSelectedIndex() + 2));
 		if (getComboNumber().getSelectedIndex() > -1)
-			Configuration.setValue("overviews_number", Integer.valueOf(getComboNumber().getSelectedIndex() + 2));
+			Configuration.setValue("overviews_number",
+					Integer.valueOf(getComboNumber().getSelectedIndex() + 2));
 
 		int type = Jaddo.AVERAGE;
 		switch (getComboAlgorithm().getSelectedIndex()) {
-			case 0:
-				type = Jaddo.NEAREST;
-				break;
-			case 2:
-				type = Jaddo.AVERAGE_MAGPHASE;
-				break;
+		case 0:
+			type = Jaddo.NEAREST;
+			break;
+		case 2:
+			type = Jaddo.AVERAGE_MAGPHASE;
+			break;
 		}
-		Configuration.setValue("overviews_resampling_algorithm", Integer.valueOf(type));
+		Configuration.setValue("overviews_resampling_algorithm",
+				Integer.valueOf(type));
 	}
 
 }

@@ -1,21 +1,21 @@
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
-*
-* Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License
-* as published by the Free Software Foundation; either version 2
-* of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
-*/
+ *
+ * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
+ */
 package org.gvsig.rastertools.statistics;
 
 import javax.swing.SwingUtilities;
@@ -32,30 +32,35 @@ import com.iver.andami.PluginServices;
 
 /**
  * Proceso para la generación de estadísticas.
- *
+ * 
  * 10/12/2007
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class StatisticsProcess extends RasterProcess {
-	private FLyrRasterSE          lyr   = null;
+	private FLyrRasterSE lyr = null;
 	private DatasetListStatistics stats = null;
-	private boolean               force = false;
+	private boolean force = false;
 
 	/**
 	 * Lanzador del procesos de estadísticas
-	 * @param lyr Capa a calcular las estadísticas
-	 * @param actions Clase que recoge eventos del proceso
+	 * 
+	 * @param lyr
+	 *            Capa a calcular las estadísticas
+	 * @param actions
+	 *            Clase que recoge eventos del proceso
 	 */
 	public static void launcher(FLyrRasterSE lyr, IProcessActions actions) {
 		RasterProcess process = new StatisticsProcess();
 		process.addParam("layer", lyr);
 		process.addParam("force", new Boolean(false));
 		process.setActions(actions);
-		process.start();	
+		process.start();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.rastertools.RasterProcess#init()
 	 */
 	public void init() {
@@ -64,12 +69,11 @@ public class StatisticsProcess extends RasterProcess {
 	}
 
 	/**
-	 * Método donde se ejecutará el Thread, aquí se calcularán las 
-	 * estadísticas.
+	 * Método donde se ejecutará el Thread, aquí se calcularán las estadísticas.
 	 */
 	public void process() throws InterruptedException {
 		insertLineLog(PluginServices.getText(this, "statistics_generation"));
-		if(lyr == null || lyr.getDataSource() == null)
+		if (lyr == null || lyr.getDataSource() == null)
 			return;
 		stats = lyr.getDataSource().getStatistics();
 		lyr.setReadingData(Thread.currentThread().toString());
@@ -84,9 +88,12 @@ public class StatisticsProcess extends RasterProcess {
 				}
 			});
 		} catch (FileNotOpenException e) {
-			RasterToolsUtil.debug("No se ha podido escribir en el fichero rmf", this, e);
+			RasterToolsUtil.debug("No se ha podido escribir en el fichero rmf",
+					this, e);
 		} catch (RasterDriverException e) {
-			RasterToolsUtil.debug("Error leyendo bloques de datos para calcular estadísticas", this, e);
+			RasterToolsUtil
+					.debug("Error leyendo bloques de datos para calcular estadísticas",
+							this, e);
 		} finally {
 			lyr.setReadingData(null);
 		}
@@ -94,6 +101,7 @@ public class StatisticsProcess extends RasterProcess {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.incrementabletask.IIncrementable#getPercent()
 	 */
 	public int getPercent() {
@@ -102,6 +110,7 @@ public class StatisticsProcess extends RasterProcess {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.incrementabletask.IIncrementable#getTitle()
 	 */
 	public String getTitle() {

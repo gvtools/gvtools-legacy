@@ -60,51 +60,52 @@ public class GPEElement {
 	private String name = null;
 	private Value value = null;
 	private HashMap subElements = null;
-	
+
 	public GPEElement(String name, Value value) {
 		super();
 		this.name = name;
 		this.value = value;
 		subElements = new HashMap();
 	}
-	
+
 	public GPEElement(String name, Value value, GPEElement parentElement) {
-		this(name,value);
-		//If it is a complex value
-		if (parentElement != null){
-			parentElement.addChildElement(this);			
+		this(name, value);
+		// If it is a complex value
+		if (parentElement != null) {
+			parentElement.addChildElement(this);
 		}
-	}	
-	
+	}
+
 	/**
 	 * It adds a new child element
+	 * 
 	 * @param children
-	 * The element to add
+	 *            The element to add
 	 */
-	public void addChildElement(GPEElement children){
+	public void addChildElement(GPEElement children) {
 		subElements.put(children.getName(), children);
 	}
-	
+
 	/**
 	 * @return the name
 	 */
 	public String getName() {
 		return name;
 	}
-	
+
 	/**
 	 * @return the value
 	 */
 	public Value getValue() {
-		if (subElements.size() > 0){
+		if (subElements.size() > 0) {
 			ComplexValue cValue = ValueFactory.createComplexValue(name);
 			Iterator it = subElements.keySet().iterator();
-			while(it.hasNext()){
-				GPEElement element = (GPEElement)subElements.get(it.next());
+			while (it.hasNext()) {
+				GPEElement element = (GPEElement) subElements.get(it.next());
 				cValue.put(element.getName(), element.getValue());
 			}
 			return cValue;
 		}
-		return value;		
+		return value;
 	}
 }

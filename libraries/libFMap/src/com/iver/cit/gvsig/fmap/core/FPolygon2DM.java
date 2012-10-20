@@ -1,30 +1,30 @@
 /* gvSIG. Geographic Information System of the Valencian Government
-*
-* Copyright (C) 2007-2008 Infrastructures and Transports Department
-* of the Valencian Government (CIT)
-* 
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License
-* as published by the Free Software Foundation; either version 2
-* of the License, or (at your option) any later version.
-* 
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-* 
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
-* MA  02110-1301, USA.
-* 
-*/
+ *
+ * Copyright (C) 2007-2008 Infrastructures and Transports Department
+ * of the Valencian Government (CIT)
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+ * MA  02110-1301, USA.
+ * 
+ */
 
 /*
-* AUTHORS (In addition to CIT):
-* 2010 Software Colaborativo (www.scolab.es)   development
-*/
- 
+ * AUTHORS (In addition to CIT):
+ * 2010 Software Colaborativo (www.scolab.es)   development
+ */
+
 package com.iver.cit.gvsig.fmap.core;
 
 import java.awt.geom.PathIterator;
@@ -59,23 +59,23 @@ public class FPolygon2DM extends FPolyline2DM implements FShapeM {
 		StringBuffer str = new StringBuffer();
 		str.append("MULTIPOLYGONM");
 		str.append(" ((");
-		int theType;		
-		double[] theData = new double[6];		
+		int theType;
+		double[] theData = new double[6];
 
 		PathIterator theIterator = getPathIterator(null, FConverter.FLATNESS);
 		int i = 0;
 
 		while (!theIterator.isDone()) {
-			//while not done
+			// while not done
 			theType = theIterator.currentSegment(theData);
 
 			double m = 0.0;
-			if (i < pM.length){
-				m = pM[i]; 
+			if (i < pM.length) {
+				m = pM[i];
 			}
-			
+
 			switch (theType) {
-			case PathIterator.SEG_MOVETO:					
+			case PathIterator.SEG_MOVETO:
 				str.append(theData[0] + " " + theData[1] + " " + m + ",");
 				break;
 
@@ -96,12 +96,12 @@ public class FPolygon2DM extends FPolyline2DM implements FShapeM {
 
 			case PathIterator.SEG_CLOSE:
 				break;
-			} //end switch
+			} // end switch
 
 			theIterator.next();
 			i++;
-		} //end while loop		
-		return str.delete(str.length()-1, str.length()) + "))";
+		} // end while loop
+		return str.delete(str.length() - 1, str.length()) + "))";
 
 	}
 
@@ -111,4 +111,3 @@ public class FPolygon2DM extends FPolyline2DM implements FShapeM {
 	}
 
 }
-

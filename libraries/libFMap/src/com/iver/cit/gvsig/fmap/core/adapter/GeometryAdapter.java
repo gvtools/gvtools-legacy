@@ -53,252 +53,273 @@ import com.iver.cit.gvsig.fmap.core.GeneralPathX;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.utiles.XMLEntity;
 
-
 /**
  * Abstract adaptor to relate the geometries with the fframes and to be able to
  * integrate them in the Layout.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public abstract class GeometryAdapter {
-    private ArrayList points = new ArrayList();
-    private GeneralPathX shape;
+	private ArrayList points = new ArrayList();
+	private GeneralPathX shape;
 
-    /**
-     * Add a point to de geometry.
-     *
-     * @param point Point that is added.
-     *
-     * @return Number of points that contains the geometry.
-     */
-    public int addPoint(Point2D point) {
-        points.add(point);
+	/**
+	 * Add a point to de geometry.
+	 * 
+	 * @param point
+	 *            Point that is added.
+	 * 
+	 * @return Number of points that contains the geometry.
+	 */
+	public int addPoint(Point2D point) {
+		points.add(point);
 
-        return points.size();
-    }
+		return points.size();
+	}
 
-    /**
-     * End the creation of the geometry with the last point added.
-     */
-    public void end() {
-        obtainShape((Point2D) points.get(points.size() - 1));
-    }
+	/**
+	 * End the creation of the geometry with the last point added.
+	 */
+	public void end() {
+		obtainShape((Point2D) points.get(points.size() - 1));
+	}
 
-    /**
-     * Adds the GeneralPathX with all the points of the geometry.
-     *
-     * @param gpx GeneralPathX
-     */
-    protected void setGPX(GeneralPathX gpx) {
-        shape = gpx;
-    }
+	/**
+	 * Adds the GeneralPathX with all the points of the geometry.
+	 * 
+	 * @param gpx
+	 *            GeneralPathX
+	 */
+	protected void setGPX(GeneralPathX gpx) {
+		shape = gpx;
+	}
 
-    /**
-     * Returns the GeneralPathX.
-     *
-     * @return GeneralPathX.
-     */
-    protected GeneralPathX getGPX() {
-        return shape;
-    }
+	/**
+	 * Returns the GeneralPathX.
+	 * 
+	 * @return GeneralPathX.
+	 */
+	protected GeneralPathX getGPX() {
+		return shape;
+	}
 
-    /**
-     * Obtains the geometry passing him as parameter the last point.
-     *
-     * @param p Last Point.
-     */
-    public abstract void obtainShape(Point2D p);
+	/**
+	 * Obtains the geometry passing him as parameter the last point.
+	 * 
+	 * @param p
+	 *            Last Point.
+	 */
+	public abstract void obtainShape(Point2D p);
 
-    /**
-     * Applies the transformation to all the points of the geometry.
-     *
-     * @param at AffineTransform
-     */
-    public void applyTransform(AffineTransform at) {
-        for (int i = 0; i < points.size(); i++) {
-            at.transform((Point2D) points.get(i), (Point2D) points.get(i));
-        }
+	/**
+	 * Applies the transformation to all the points of the geometry.
+	 * 
+	 * @param at
+	 *            AffineTransform
+	 */
+	public void applyTransform(AffineTransform at) {
+		for (int i = 0; i < points.size(); i++) {
+			at.transform((Point2D) points.get(i), (Point2D) points.get(i));
+		}
 
-        shape.transform(at);
-    }
+		shape.transform(at);
+	}
 
-    /**
-     * It draws the geometry on the Graphics that is passed like parameter.
-     *
-     * @param g Graphics
-     * @param at AffineTransform
-     * @param symbol FSymbol
-     */
-    public abstract void draw(Graphics2D g, AffineTransform at, ISymbol symbol);
-    public abstract void print(Graphics2D g, AffineTransform at, ISymbol symbol, PrintRequestAttributeSet properties);
-    /**
-     * Paints the geometry on the Graphics adding him the last point if the
-     * parameter andLastPoint is true.
-     *
-     * @param g Graphics
-     * @param at AffineTransform
-     * @param andLastPoint If true add last point.
-     */
-    public abstract void paint(Graphics2D g, AffineTransform at,
-        boolean andLastPoint);
+	/**
+	 * It draws the geometry on the Graphics that is passed like parameter.
+	 * 
+	 * @param g
+	 *            Graphics
+	 * @param at
+	 *            AffineTransform
+	 * @param symbol
+	 *            FSymbol
+	 */
+	public abstract void draw(Graphics2D g, AffineTransform at, ISymbol symbol);
 
-    /**
-     * Set the point of cursor.
-     *
-     * @param p Point of cursor.
-     */
-    public abstract void pointPosition(Point2D p);
+	public abstract void print(Graphics2D g, AffineTransform at,
+			ISymbol symbol, PrintRequestAttributeSet properties);
 
-    /**
-     * Obtains the shape of the Geometry.
-     *
-     * @return FShape.
-     */
-    public abstract FShape getShape(AffineTransform at);
+	/**
+	 * Paints the geometry on the Graphics adding him the last point if the
+	 * parameter andLastPoint is true.
+	 * 
+	 * @param g
+	 *            Graphics
+	 * @param at
+	 *            AffineTransform
+	 * @param andLastPoint
+	 *            If true add last point.
+	 */
+	public abstract void paint(Graphics2D g, AffineTransform at,
+			boolean andLastPoint);
 
-    /**
-     * Returns all the points of Geometry.
-     *
-     * @return Array of points.
-     */
-    public Point2D[] getPoints() {
-        return (Point2D[]) points.toArray(new Point2D[0]);
-    }
+	/**
+	 * Set the point of cursor.
+	 * 
+	 * @param p
+	 *            Point of cursor.
+	 */
+	public abstract void pointPosition(Point2D p);
 
-    /**
-     * Draws a handler in each vertex of the Geometry.
-     *
-     * @param g Graphics
-     * @param at AffineTransform.
-     */
-    public void drawVertex(Graphics2D g, AffineTransform at) {
-        Point2D[] ps = getPoints();
-        Point2D[] pointRes = new Point2D[ps.length];
-        at.transform(ps, 0, pointRes, 0, ps.length);
+	/**
+	 * Obtains the shape of the Geometry.
+	 * 
+	 * @return FShape.
+	 */
+	public abstract FShape getShape(AffineTransform at);
 
-        int d = 3;
+	/**
+	 * Returns all the points of Geometry.
+	 * 
+	 * @return Array of points.
+	 */
+	public Point2D[] getPoints() {
+		return (Point2D[]) points.toArray(new Point2D[0]);
+	}
 
-        for (int i = 0; i < pointRes.length; i++) {
-            g.fillRect((int) pointRes[i].getX() - d,
-                (int) pointRes[i].getY() - d, d * 2, d * 2);
-        }
-    }
+	/**
+	 * Draws a handler in each vertex of the Geometry.
+	 * 
+	 * @param g
+	 *            Graphics
+	 * @param at
+	 *            AffineTransform.
+	 */
+	public void drawVertex(Graphics2D g, AffineTransform at) {
+		Point2D[] ps = getPoints();
+		Point2D[] pointRes = new Point2D[ps.length];
+		at.transform(ps, 0, pointRes, 0, ps.length);
 
-    /**
-     * Modifies a point of the Geometry from an index by the one that is passed
-     * like parameter.
-     *
-     * @param pos Index
-     * @param point Point
-     */
-    public void changePoint(int pos, Point2D point) {
-        this.points.set(pos, point);
-    }
+		int d = 3;
 
-    /**
-     * Add all the points of Geometry.
-     *
-     * @param points All points.
-     */
-    public void setPoints(Point2D[] points) {
-        this.points.clear();
+		for (int i = 0; i < pointRes.length; i++) {
+			g.fillRect((int) pointRes[i].getX() - d, (int) pointRes[i].getY()
+					- d, d * 2, d * 2);
+		}
+	}
 
-        for (int i = 0; i < points.length; i++) {
-            this.points.add(points[i]);
-        }
-    }
+	/**
+	 * Modifies a point of the Geometry from an index by the one that is passed
+	 * like parameter.
+	 * 
+	 * @param pos
+	 *            Index
+	 * @param point
+	 *            Point
+	 */
+	public void changePoint(int pos, Point2D point) {
+		this.points.set(pos, point);
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public XMLEntity getXMLEntity() {
-        XMLEntity xml = new XMLEntity();
-        double[] ps = new double[points.size() * 2];
-        int j = 0;
+	/**
+	 * Add all the points of Geometry.
+	 * 
+	 * @param points
+	 *            All points.
+	 */
+	public void setPoints(Point2D[] points) {
+		this.points.clear();
 
-        for (int i = 0; i < points.size(); i++) {
-            ps[j] = (((Point2D) (points.get(i))).getX());
-            ps[j + 1] = (((Point2D) (points.get(i))).getY());
-            j = j + 2;
-        }
+		for (int i = 0; i < points.length; i++) {
+			this.points.add(points[i]);
+		}
+	}
 
-        xml.putProperty("points", ps);
-        xml.putProperty("className", this.getClass().getName());
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public XMLEntity getXMLEntity() {
+		XMLEntity xml = new XMLEntity();
+		double[] ps = new double[points.size() * 2];
+		int j = 0;
 
-        return xml;
-    }
+		for (int i = 0; i < points.size(); i++) {
+			ps[j] = (((Point2D) (points.get(i))).getX());
+			ps[j + 1] = (((Point2D) (points.get(i))).getY());
+			j = j + 2;
+		}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param xml DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public static GeometryAdapter createFromXML(XMLEntity xml) {
-        GeometryAdapter geometry = null;
+		xml.putProperty("points", ps);
+		xml.putProperty("className", this.getClass().getName());
 
-        try {
-            Class clase = Class.forName(xml.getStringProperty("className"));
-            geometry = (GeometryAdapter) clase.newInstance();
-        } catch (Exception e) {
-        }
+		return xml;
+	}
 
-        double[] ps = xml.getDoubleArrayProperty("points");
-        Point2D[] pointsAux = new Point2D[ps.length / 2];
-        int j = 0;
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param xml
+	 *            DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public static GeometryAdapter createFromXML(XMLEntity xml) {
+		GeometryAdapter geometry = null;
 
-        for (int i = 0; i < ps.length; i = i + 2) {
-            pointsAux[j] = new Point2D.Double(ps[i], ps[i + 1]);
-            j++;
-        }
-
-        geometry.setPoints(pointsAux);
-        geometry.end();
-
-        return geometry;
-    }
-
-    /**
-     * Remove last point of Geometry.
-     */
-    public void delLastPoint() {
-        if (points.size() > 0) {
-            points.remove(points.size() - 1);
-        }
-    }
-    public GeometryAdapter cloneAdapter(){
-    	GeometryAdapter cloneAdapter=null;
 		try {
-			cloneAdapter = (GeometryAdapter)this.getClass().newInstance();
+			Class clase = Class.forName(xml.getStringProperty("className"));
+			geometry = (GeometryAdapter) clase.newInstance();
+		} catch (Exception e) {
+		}
+
+		double[] ps = xml.getDoubleArrayProperty("points");
+		Point2D[] pointsAux = new Point2D[ps.length / 2];
+		int j = 0;
+
+		for (int i = 0; i < ps.length; i = i + 2) {
+			pointsAux[j] = new Point2D.Double(ps[i], ps[i + 1]);
+			j++;
+		}
+
+		geometry.setPoints(pointsAux);
+		geometry.end();
+
+		return geometry;
+	}
+
+	/**
+	 * Remove last point of Geometry.
+	 */
+	public void delLastPoint() {
+		if (points.size() > 0) {
+			points.remove(points.size() - 1);
+		}
+	}
+
+	public GeometryAdapter cloneAdapter() {
+		GeometryAdapter cloneAdapter = null;
+		try {
+			cloneAdapter = (GeometryAdapter) this.getClass().newInstance();
 		} catch (InstantiationException e) {
 		} catch (IllegalAccessException e) {
 		}
-    	cloneAdapter.points=(ArrayList)this.points.clone();
-    	cloneAdapter.shape=(GeneralPathX)this.shape.clone();
-    	return cloneAdapter;
-    }
-    public Rectangle2D getBounds2D(){
-        Rectangle2D r=shape.getBounds2D();
-        double w=r.getWidth();
-        double h=r.getHeight();
-        double x=r.getX();
-        double y=r.getY();
-        boolean modified=false;
-        if (r.getWidth()<0.5) {
-         modified=true;
-         w=0.5;
-         x=x-0.25;
-        }
-        if(r.getHeight()<0.5) {
-         modified=true;
-         h=0.5;
-         y=y-0.25;
-        }
-        if (modified)
-         return new Rectangle2D.Double(x,y,w,h);
-        return r;
-   }
+		cloneAdapter.points = (ArrayList) this.points.clone();
+		cloneAdapter.shape = (GeneralPathX) this.shape.clone();
+		return cloneAdapter;
+	}
+
+	public Rectangle2D getBounds2D() {
+		Rectangle2D r = shape.getBounds2D();
+		double w = r.getWidth();
+		double h = r.getHeight();
+		double x = r.getX();
+		double y = r.getY();
+		boolean modified = false;
+		if (r.getWidth() < 0.5) {
+			modified = true;
+			w = 0.5;
+			x = x - 0.25;
+		}
+		if (r.getHeight() < 0.5) {
+			modified = true;
+			h = 0.5;
+			y = y - 0.25;
+		}
+		if (modified)
+			return new Rectangle2D.Double(x, y, w, h);
+		return r;
+	}
 }

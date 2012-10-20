@@ -22,9 +22,9 @@ import com.iver.utiles.swing.threads.IMonitorableTask;
 import com.iver.utiles.swing.threads.MonitorableDecoratorMainFirst;
 
 public class CleanGeoprocessController extends AbstractGeoprocessController {
-	
+
 	private ICleanGeoprocessUserEntries userEntries;
-	
+
 	private CleanGeoprocess geoProcess;
 
 	@Override
@@ -34,24 +34,26 @@ public class CleanGeoprocessController extends AbstractGeoprocessController {
 
 	@Override
 	public boolean launchGeoprocess() {
-		
+
 		boolean createErrorLayer = userEntries.createLyrsWithErrorGeometries();
-		
+
 		String error = PluginServices.getText(this, "Error_entrada_datos");
-		
+
 		FLyrVect inputLayer = userEntries.getInputLayer();
 		FLayers layers = userEntries.getFLayers();
 		File outputFile = null;
 		try {
 			outputFile = userEntries.getOutputFile();
 		} catch (FileNotFoundException e3) {
-			
-			String errorDescription = PluginServices.getText(this, "Error_seleccionar_resultado");
+
+			String errorDescription = PluginServices.getText(this,
+					"Error_seleccionar_resultado");
 			userEntries.error(errorDescription, error);
 			return false;
 		}
 		if (outputFile == null || (outputFile.getAbsolutePath().length() == 0)) {
-			String errorDescription = PluginServices.getText(this, "Error_seleccionar_resultado");
+			String errorDescription = PluginServices.getText(this,
+					"Error_seleccionar_resultado");
 			userEntries.error(errorDescription, error);
 			return false;
 		}
@@ -60,65 +62,71 @@ public class CleanGeoprocessController extends AbstractGeoprocessController {
 				return false;
 			}
 		}
-		
+
 		geoProcess = new CleanGeoprocess(inputLayer);
-		
-		SHPLayerDefinition definition = (SHPLayerDefinition) geoProcess.createLayerDefinition();
+
+		SHPLayerDefinition definition = (SHPLayerDefinition) geoProcess
+				.createLayerDefinition();
 		definition.setFile(outputFile);
-		ShpSchemaManager schemaManager = new ShpSchemaManager(outputFile.getAbsolutePath());
+		ShpSchemaManager schemaManager = new ShpSchemaManager(
+				outputFile.getAbsolutePath());
 		IWriter writer = null;
 		try {
 			writer = getShpWriter(definition);
 		} catch (Exception e1) {
-			String errorDescription = PluginServices.getText(this, "Error_preparar_escritura_resultados");
+			String errorDescription = PluginServices.getText(this,
+					"Error_preparar_escritura_resultados");
 			userEntries.error(errorDescription, error);
 			return false;
-		} 
+		}
 		geoProcess.setResultLayerProperties(writer, schemaManager);
 		HashMap<String, Object> params = new HashMap<String, Object>();
-		
+
 		String resultLayerName = outputFile.getName();
-		params.put("resultlayername",resultLayerName);
-		
+		params.put("resultlayername", resultLayerName);
+
 		boolean onlySelected = userEntries.cleanOnlySelection();
 		params.put("layer_selection", new Boolean(onlySelected));
-		
-		boolean createLayerWithError = userEntries.createLyrsWithErrorGeometries();
+
+		boolean createLayerWithError = userEntries
+				.createLyrsWithErrorGeometries();
 		params.put("createlayerswitherrors", new Boolean(createLayerWithError));
-		
+
 		try {
 			double fuzzyTol = userEntries.getFuzzyTolerance();
 			params.put("fuzzyTolerance", new Double(fuzzyTol));
-			
+
 			double dangleTol = userEntries.getDangleTolerance();
 			params.put("dangleTolerance", new Double(dangleTol));
 		} catch (GeoprocessException e1) {
-			JOptionPane.showMessageDialog(null,e1.toString(),"Error!",JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, e1.toString(), "Error!",
+					JOptionPane.WARNING_MESSAGE);
 			userEntries.error(e1.toString(), error);
 			return false;
 		}
-		
-		params.put("cleanbefore",new Boolean(false));
-		
-//		String outputLayerType = userEntries.getOutputLayerType();
-//		params.put("outputlayertype",outputLayerType);
-		
+
+		params.put("cleanbefore", new Boolean(false));
+
+		// String outputLayerType = userEntries.getOutputLayerType();
+		// params.put("outputlayertype",outputLayerType);
+
 		try {
 			geoProcess.setParameters(params);
 			geoProcess.checkPreconditions();
 			IMonitorableTask task1 = geoProcess.createTask();
-			if(task1 == null){
+			if (task1 == null) {
 				return false;
 			}
 			AddResultLayerTask task2 = new AddResultLayerTask(geoProcess);
 			task2.setLayers(layers);
-			MonitorableDecoratorMainFirst globalTask = new MonitorableDecoratorMainFirst(task1,
-					task2);
+			MonitorableDecoratorMainFirst globalTask = new MonitorableDecoratorMainFirst(
+					task1, task2);
 			if (globalTask.preprocess())
 				PluginServices.cancelableBackgroundExecution(globalTask);
-			
+
 		} catch (GeoprocessException e) {
-			String errorDescription = PluginServices.getText(this, "Error_fallo_geoproceso");
+			String errorDescription = PluginServices.getText(this,
+					"Error_fallo_geoproceso");
 			userEntries.error(errorDescription, error);
 			return false;
 		}
@@ -127,7 +135,7 @@ public class CleanGeoprocessController extends AbstractGeoprocessController {
 
 	@Override
 	public void setView(IGeoprocessUserEntries userEntries) {
-		this.userEntries = (ICleanGeoprocessUserEntries)userEntries;
+		this.userEntries = (ICleanGeoprocessUserEntries) userEntries;
 	}
 
 	public int getHeight() {

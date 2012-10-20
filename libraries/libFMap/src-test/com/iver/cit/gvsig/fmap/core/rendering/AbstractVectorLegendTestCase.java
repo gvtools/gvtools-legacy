@@ -56,31 +56,28 @@ import com.iver.cit.gvsig.fmap.rendering.IVectorLegend;
 /**
  * 
  * AbstractVectorLegendTestCase.java
- *
- * NOTE: Although it has no abstract components, the class is abstract in purpose
- * since it does not test any concrete legend, but initializes legends of 
- * this kind. Subclass it to test any concrete Legend: For example: 
+ * 
+ * NOTE: Although it has no abstract components, the class is abstract in
+ * purpose since it does not test any concrete legend, but initializes legends
+ * of this kind. Subclass it to test any concrete Legend: For example:
  * SingleLegendTestCase extends AbstractVectorLegendTestCase
  * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Jun 11, 2008
- *
+ * 
  */
-public abstract /*<-MUST BE ABSTRACT!!*/ class AbstractVectorLegendTestCase extends AbstractLegendTestCase {
-	
+public abstract/* <-MUST BE ABSTRACT!! */class AbstractVectorLegendTestCase
+		extends AbstractLegendTestCase {
+
 	private static IFeature[] features;
-	private Object[] sampleValues ;
-
-	
-
+	private Object[] sampleValues;
 
 	public AbstractVectorLegendTestCase(
-			Class<? extends IVectorLegend> legClazz,
-			Object[] sampleValues) {
+			Class<? extends IVectorLegend> legClazz, Object[] sampleValues) {
 		super(legClazz);
 		this.sampleValues = sampleValues;
-		
+
 	}
-	
+
 	public static IFeature[] getFeatures() {
 		if (features == null) {
 			features = new IFeature[4];
@@ -92,21 +89,23 @@ public abstract /*<-MUST BE ABSTRACT!!*/ class AbstractVectorLegendTestCase exte
 				Dimension d = new Dimension(size, size);
 				Rectangle aShape = new Rectangle(i * size, i * size, d.width,
 						d.height);
-				IGeometry geom = ShapeFactory.createPolyline2D(new GeneralPathX(
-						aShape));
+				IGeometry geom = ShapeFactory
+						.createPolyline2D(new GeneralPathX(aShape));
 
 				/*
-				 * create a full-featured Feature with randomed values at its fields
-				 * to avoid testing over the same values each time
+				 * create a full-featured Feature with randomed values at its
+				 * fields to avoid testing over the same values each time
 				 */
-				features[i] = new DefaultFeature(geom, 
-						TestClassifiedVectorLegend.mockDataSource.featureValues[i], "[" + i
-						+ "]");
+				features[i] = new DefaultFeature(
+						geom,
+						TestClassifiedVectorLegend.mockDataSource.featureValues[i],
+						"[" + i + "]");
 			}
 		}
 
 		return features;
 	}
+
 	/**
 	 * all vector legends must have a datasource from which take shapetype and/
 	 * or other values. this method initializes the legend with the generic
@@ -115,7 +114,7 @@ public abstract /*<-MUST BE ABSTRACT!!*/ class AbstractVectorLegendTestCase exte
 	@Override
 	public ILegend newInstance() {
 		try {
-			ILegend leg =  (ILegend) legClazz.newInstance();
+			ILegend leg = (ILegend) legClazz.newInstance();
 			IVectorLegend vl = (IVectorLegend) leg;
 			vl.setDataSource(TestClassifiedVectorLegend.mockDataSource);
 			vl.setShapeType(FShape.POLYGON);
@@ -127,14 +126,13 @@ public abstract /*<-MUST BE ABSTRACT!!*/ class AbstractVectorLegendTestCase exte
 			// Hey dude! it is a mock datasource, this can't happen!!!
 			ex.printStackTrace();
 			fail(ex.getMessage());
-		} 
+		}
 		return null;
 	}
 
-	
 	@Override
 	public Object[] getTestSampleValues() {
 		return sampleValues;
 	}
-	
+
 }

@@ -61,21 +61,21 @@ import es.gva.cit.catalog.drivers.ICatalogServiceDriver;
  *
  */
 /**
- * This class is used to register the different catalog
- * drivers and to retrieve them. It uses the gvSIG extension
- * points.
+ * This class is used to register the different catalog drivers and to retrieve
+ * them. It uses the gvSIG extension points.
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class CatalogDriverRegister {
 	private static CatalogDriverRegister instance = null;
-	private static final String DRIVER_REGISTER_NAME = "CatalogDrivers";	
+	private static final String DRIVER_REGISTER_NAME = "CatalogDrivers";
 
 	/**
 	 * This method cretaes the singleton instance
-	 *
+	 * 
 	 */
 	private synchronized static void createInstance() {
-		if (instance == null) { 
+		if (instance == null) {
 			instance = new CatalogDriverRegister();
 		}
 	}
@@ -84,55 +84,60 @@ public class CatalogDriverRegister {
 	 * @return the remote service instance instance
 	 */
 	public static CatalogDriverRegister getInstance() {
-		if (instance == null){
+		if (instance == null) {
 			createInstance();
 		}
 		return instance;
 	}
 
 	/**
-	 * This method is used to register a new catalog driver 
-	 * that manage a concrete protocol
+	 * This method is used to register a new catalog driver that manage a
+	 * concrete protocol
+	 * 
 	 * @param driver
-	 * Catalog driver to register
+	 *            Catalog driver to register
 	 */
-	public void register(ICatalogServiceDriver driver){
-		ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
-    	extensionPoints.add(DRIVER_REGISTER_NAME,driver.getServiceName().toLowerCase(), driver);
+	public void register(ICatalogServiceDriver driver) {
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+		extensionPoints.add(DRIVER_REGISTER_NAME, driver.getServiceName()
+				.toLowerCase(), driver);
 	}
 
 	/**
-	 * It is used to retrieve a driver that supports a concrete 
-	 * protocol
+	 * It is used to retrieve a driver that supports a concrete protocol
+	 * 
 	 * @param protocol
-	 * Catalog protocol
-	 * @return
-	 * The concrete catalog service driver
+	 *            Catalog protocol
+	 * @return The concrete catalog service driver
 	 */
-	public ICatalogServiceDriver getDriver(String protocol){
-		ExtensionPoint extensionPoint = (ExtensionPoint)ExtensionPointsSingleton.getInstance().get(DRIVER_REGISTER_NAME);
+	public ICatalogServiceDriver getDriver(String protocol) {
+		ExtensionPoint extensionPoint = (ExtensionPoint) ExtensionPointsSingleton
+				.getInstance().get(DRIVER_REGISTER_NAME);
 		Iterator keys = extensionPoint.keySet().iterator();
-		while (keys.hasNext()){
+		while (keys.hasNext()) {
 			Object driver = extensionPoint.get(keys.next());
-			if (((ICatalogServiceDriver)driver).getServiceName().toLowerCase().compareTo(protocol.toLowerCase()) == 0){
-				return (ICatalogServiceDriver)driver;
+			if (((ICatalogServiceDriver) driver).getServiceName().toLowerCase()
+					.compareTo(protocol.toLowerCase()) == 0) {
+				return (ICatalogServiceDriver) driver;
 			}
 		}
 		return null;
 	}
-	
-	
+
 	/**
 	 * @return a list with all the gazetteer drivers
 	 */
-	public ICatalogServiceDriver[] getDrivers(){
+	public ICatalogServiceDriver[] getDrivers() {
 		ICatalogServiceDriver[] drivers = null;
-		ExtensionPoint extensionPoint = (ExtensionPoint)ExtensionPointsSingleton.getInstance().get(DRIVER_REGISTER_NAME);
+		ExtensionPoint extensionPoint = (ExtensionPoint) ExtensionPointsSingleton
+				.getInstance().get(DRIVER_REGISTER_NAME);
 		drivers = new ICatalogServiceDriver[extensionPoint.keySet().size()];
-		Iterator keys = extensionPoint.keySet().iterator();		
+		Iterator keys = extensionPoint.keySet().iterator();
 		int i = 0;
-		while (keys.hasNext()){
-			drivers[i] = (ICatalogServiceDriver)extensionPoint.get(keys.next());
+		while (keys.hasNext()) {
+			drivers[i] = (ICatalogServiceDriver) extensionPoint
+					.get(keys.next());
 			i++;
 		}
 		return drivers;

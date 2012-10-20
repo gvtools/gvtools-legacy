@@ -27,57 +27,57 @@ import javax.swing.JFileChooser;
 
 import org.gvsig.gui.beans.openfile.OpenFileContainer;
 
-public class OpenFileListener implements ActionListener{
+public class OpenFileListener implements ActionListener {
 
 	private JButton button = null;
 	private String fName = null;
-	private OpenFileContainer controlPanel= null;
-	
-	public OpenFileListener(OpenFileContainer panel){
+	private OpenFileContainer controlPanel = null;
+
+	public OpenFileListener(OpenFileContainer panel) {
 		this.controlPanel = panel;
 	}
-	
-	public void setButton(JButton but){
+
+	public void setButton(JButton but) {
 		this.button = but;
 	}
-	
-	
+
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == this.button){
+		if (e.getSource() == this.button) {
 			JFileChooser file = new JFileChooser();
 			file.setDialogTitle("Select File");
 			file.addChoosableFileFilter(new ReadFilter(file, "raw"));
 			int returnVal = file.showOpenDialog(controlPanel);
-			if(returnVal == JFileChooser.APPROVE_OPTION){
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				fName = file.getSelectedFile().toString();
 				controlPanel.getTOpen().setText(fName);
 			}
 		}
-		
+
 	}
 
-	public String getFileName(){
+	public String getFileName() {
 		return fName;
 	}
-	
+
 }
 
-class ReadFilter extends javax.swing.filechooser.FileFilter{
+class ReadFilter extends javax.swing.filechooser.FileFilter {
 
 	JFileChooser chooser = null;
 	String filter = null;
-	
-	public ReadFilter(JFileChooser cho,String fil){
+
+	public ReadFilter(JFileChooser cho, String fil) {
 		this.chooser = cho;
 		this.filter = fil;
 	}
-	
+
 	public boolean accept(File f) {
-		 return f.isDirectory() || f.getName().toLowerCase().endsWith("."+filter);
+		return f.isDirectory()
+				|| f.getName().toLowerCase().endsWith("." + filter);
 	}
 
 	public String getDescription() {
-		return "."+filter;
+		return "." + filter;
 	}
-	
+
 }

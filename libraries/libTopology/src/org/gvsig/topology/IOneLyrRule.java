@@ -51,29 +51,31 @@ package org.gvsig.topology;
 
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
-
 /**
  * Interface for all rules that applies to only one layer
- *
+ * 
  */
 public interface IOneLyrRule extends ITopologyRule {
 	/**
 	 * Sets the origin layer
+	 * 
 	 * @param originLyr
 	 */
 	public void setOriginLyr(FLyrVect originLyr);
+
 	/**
 	 * Returns the origin layer
+	 * 
 	 * @return
 	 */
 	public FLyrVect getOriginLyr();
-	
+
 	/**
-	 * Checks if the specified origin layer is accepted by this rule.
-	 * (if the geometry type is the required one, etc.)
+	 * Checks if the specified origin layer is accepted by this rule. (if the
+	 * geometry type is the required one, etc.)
+	 * 
 	 * @param originLyr
 	 * @return
 	 */
 	public boolean acceptsOriginLyr(FLyrVect originLyr);
 }
- 

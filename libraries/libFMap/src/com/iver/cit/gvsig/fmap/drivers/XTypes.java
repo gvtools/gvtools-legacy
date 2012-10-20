@@ -145,25 +145,26 @@ public class XTypes {
 			ByteBuffer buf = ByteBuffer.wrap(data);
 			if (metaData.getColumnType(fieldId) == Types.VARCHAR) {
 				val = ValueFactory.createValue(rs.getString(fieldId));
-			}else if (metaData.getColumnType(fieldId) == Types.FLOAT) {
+			} else if (metaData.getColumnType(fieldId) == Types.FLOAT) {
 				val = ValueFactory.createValue(buf.getFloat());
-			}else if (metaData.getColumnType(fieldId) == Types.DOUBLE) {
+			} else if (metaData.getColumnType(fieldId) == Types.DOUBLE) {
 				val = ValueFactory.createValue(buf.getDouble());
-			}else if (metaData.getColumnType(fieldId) == Types.INTEGER){
+			} else if (metaData.getColumnType(fieldId) == Types.INTEGER) {
 				val = ValueFactory.createValue(buf.getInt());
-			}else if (metaData.getColumnType(fieldId) == Types.SMALLINT){
+			} else if (metaData.getColumnType(fieldId) == Types.SMALLINT) {
 				val = ValueFactory.createValue(buf.getShort());
-			}else if (metaData.getColumnType(fieldId) == Types.TINYINT){
+			} else if (metaData.getColumnType(fieldId) == Types.TINYINT) {
 				val = ValueFactory.createValue(buf.getShort());
-			}else if (metaData.getColumnType(fieldId) == Types.BIGINT){
+			} else if (metaData.getColumnType(fieldId) == Types.BIGINT) {
 				val = ValueFactory.createValue(buf.getLong());
-			}else if (metaData.getColumnType(fieldId) == Types.BIT || metaData.getColumnType(fieldId) == Types.BOOLEAN ){
+			} else if (metaData.getColumnType(fieldId) == Types.BIT
+					|| metaData.getColumnType(fieldId) == Types.BOOLEAN) {
 				val = ValueFactory.createValue(rs.getBoolean(fieldId));
-			}else if (metaData.getColumnType(fieldId) == Types.DATE){
+			} else if (metaData.getColumnType(fieldId) == Types.DATE) {
 				val = ValueFactory.createValue(rs.getDate(fieldId));
-			}else if (metaData.getColumnType(fieldId) == Types.TIME){
+			} else if (metaData.getColumnType(fieldId) == Types.TIME) {
 				val = ValueFactory.createValue(rs.getTime(fieldId));
-			}else if (metaData.getColumnType(fieldId) == Types.TIMESTAMP){
+			} else if (metaData.getColumnType(fieldId) == Types.TIMESTAMP) {
 				val = ValueFactory.createValue(rs.getTimestamp(fieldId));
 			}
 
@@ -232,7 +233,7 @@ public class XTypes {
 			System.err.println("Tipo no soportado:"
 					+ metaData.getColumnType(fieldId) + ". Field:" + fieldId
 					+ ": " + metaData.getColumnName(fieldId));
-		// throw new UnsupportedOperationException();
+			// throw new UnsupportedOperationException();
 
 		}
 	}

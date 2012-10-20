@@ -59,12 +59,12 @@ import junit.framework.TestSuite;
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class KMZReaderv21TestSuite {
-	
+
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.gvsig.gpe.readers.kmz");
-		//$JUnit-BEGIN$
+		// $JUnit-BEGIN$
 		suite.addTestSuite(KMZMurallaChinaTest.class);
-		//$JUnit-END$
+		// $JUnit-END$
 		return suite;
 	}
 }

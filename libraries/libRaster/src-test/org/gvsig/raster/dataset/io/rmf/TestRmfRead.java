@@ -40,6 +40,7 @@ import org.gvsig.raster.datastruct.NoData;
 import org.gvsig.raster.datastruct.serializer.ColorTableRmfSerializer;
 import org.gvsig.raster.datastruct.serializer.HistogramRmfSerializer;
 import org.gvsig.raster.datastruct.serializer.NoDataRmfSerializer;
+
 /**
  * Test de lectura para ficheros rmf. Obtiene distintos tipos de bloques y
  * comprueba que el objeto que han de generar es correcto.
@@ -47,11 +48,12 @@ import org.gvsig.raster.datastruct.serializer.NoDataRmfSerializer;
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class TestRmfRead extends BaseTestCase {
-	private String           baseDir = "./test-images/";
+	private String baseDir = "./test-images/";
 	private RmfBlocksManager manager = null;
-	public String            file    = "readtest.rmf";
-	private RasterDataset    f1      = null;
-	private String           path1   = baseDir + "03AUG23153350-M2AS-000000122423_01_P001-BROWSE.jpg";
+	public String file = "readtest.rmf";
+	private RasterDataset f1 = null;
+	private String path1 = baseDir
+			+ "03AUG23153350-M2AS-000000122423_01_P001-BROWSE.jpg";
 
 	static {
 		RasterLibrary.wakeUp();
@@ -74,7 +76,7 @@ public class TestRmfRead extends BaseTestCase {
 		}
 	}
 
-	public void testStack(){
+	public void testStack() {
 		manager = new RmfBlocksManager(baseDir + file);
 		if (!manager.checkRmf())
 			assertEquals(0, 1);
@@ -84,7 +86,8 @@ public class TestRmfRead extends BaseTestCase {
 		GeoInfoRmfSerializer ser3 = new GeoInfoRmfSerializer(f1);
 		GeoPointListRmfSerializer ser4 = new GeoPointListRmfSerializer();
 		NoDataRmfSerializer ser5 = new NoDataRmfSerializer();
-		ColorInterpretationRmfSerializer ser6 = new ColorInterpretationRmfSerializer(f1.getColorInterpretation());
+		ColorInterpretationRmfSerializer ser6 = new ColorInterpretationRmfSerializer(
+				f1.getColorInterpretation());
 
 		manager.addClient(ser);
 		manager.addClient(ser1);
@@ -109,12 +112,13 @@ public class TestRmfRead extends BaseTestCase {
 					testStatistics((DatasetStatistics) client.getResult());
 				if (client instanceof NoDataRmfSerializer)
 					testNoData((NoData) client.getResult());
-//				if (client instanceof GeoInfoRmfSerializer)
-//					testGeoInfo((RasterDataset) client.getResult());
+				// if (client instanceof GeoInfoRmfSerializer)
+				// testGeoInfo((RasterDataset) client.getResult());
 				if (client instanceof GeoPointListRmfSerializer)
 					testGeoPoints((GeoPointList) client.getResult());
 				if (client instanceof ColorInterpretationRmfSerializer) {
-					DatasetColorInterpretation ci = (DatasetColorInterpretation) client.getResult();
+					DatasetColorInterpretation ci = (DatasetColorInterpretation) client
+							.getResult();
 					testColorInterpretation(ci);
 				}
 			}
@@ -128,7 +132,7 @@ public class TestRmfRead extends BaseTestCase {
 	public void testColorInterpretation(DatasetColorInterpretation ci) {
 		for (int j = 0; j < ci.length(); j++) {
 			String value = (String) ci.get(j);
-//			System.out.println(value);
+			// System.out.println(value);
 			if (j == 0)
 				assertEquals(value, "Blue");
 			if (j == 1)
@@ -137,10 +141,10 @@ public class TestRmfRead extends BaseTestCase {
 				assertEquals(value, "Red");
 		}
 	}
-	
+
 	public void testHistogram(Histogram h) {
 		Histogram h2 = Histogram.convertHistogramToRGB(h);
-		
+
 		HistogramClass[][] classes = h2.getHistogram();
 		for (int iBand = 0; iBand < classes.length; iBand++) {
 			for (int iValue = 0; iValue < classes[iBand].length; iValue++) {
@@ -167,9 +171,9 @@ public class TestRmfRead extends BaseTestCase {
 
 	public void testColorTable(ColorTable ct) {
 
-//		byte[][] color = ct.getColorTableByBand();
+		// byte[][] color = ct.getColorTableByBand();
 
-//		assertEquals(ct.getName(), "Prueba Tabla de Color");
+		// assertEquals(ct.getName(), "Prueba Tabla de Color");
 
 		assertEquals(ct.getRGBAByBand(15)[0] & 0xff, 95);
 		assertEquals(ct.getRGBAByBand(15)[1] & 0xff, 95);
@@ -199,10 +203,11 @@ public class TestRmfRead extends BaseTestCase {
 		assertEquals(ct.getRGBAByBand(2)[1] & 0xff, 102);
 		assertEquals(ct.getRGBAByBand(2)[2] & 0xff, 255);
 
-//		System.out.println(ct.getName());
-//		for (int i = 0; i < color.length; i++) {
-//			System.out.println((color[i][0] & 0xff) + " " + (color[i][1] & 0xff) + " " + (color[i][2] & 0xff));
-//		}
+		// System.out.println(ct.getName());
+		// for (int i = 0; i < color.length; i++) {
+		// System.out.println((color[i][0] & 0xff) + " " + (color[i][1] & 0xff)
+		// + " " + (color[i][2] & 0xff));
+		// }
 	}
 
 	public void testNoData(NoData noData) {
@@ -222,46 +227,47 @@ public class TestRmfRead extends BaseTestCase {
 		assertEquals(bandCount, 3);
 		for (int i = 0; i < bandCount; i++) {
 			switch (i) {
-				case 0:
-					assertEquals((int) max[i], 250);
-					assertEquals((int) min[i], 0);
-					assertEquals((int) secondMax[i], 248);
-					assertEquals((int) secondMin[i], 1);
-					assertEquals((int) mean[i], 36);
-					assertEquals((int) variance[i], 4984);
-					break;
-				case 1:
-					assertEquals((int) max[i], 255);
-					assertEquals((int) min[i], 0);
-					assertEquals((int) secondMax[i], 254);
-					assertEquals((int) secondMin[i], 3);
-					assertEquals((int) mean[i], 37);
-					assertEquals((int) variance[i], 6292);
-					break;
-				case 2:
-					assertEquals((int) max[i], 254);
-					assertEquals((int) min[i], 0);
-					assertEquals((int) secondMax[i], 250);
-					assertEquals((int) secondMin[i], 1);
-					assertEquals((int) mean[i], 35);
-					assertEquals((int) variance[i], 4154);
-					break;
+			case 0:
+				assertEquals((int) max[i], 250);
+				assertEquals((int) min[i], 0);
+				assertEquals((int) secondMax[i], 248);
+				assertEquals((int) secondMin[i], 1);
+				assertEquals((int) mean[i], 36);
+				assertEquals((int) variance[i], 4984);
+				break;
+			case 1:
+				assertEquals((int) max[i], 255);
+				assertEquals((int) min[i], 0);
+				assertEquals((int) secondMax[i], 254);
+				assertEquals((int) secondMin[i], 3);
+				assertEquals((int) mean[i], 37);
+				assertEquals((int) variance[i], 6292);
+				break;
+			case 2:
+				assertEquals((int) max[i], 254);
+				assertEquals((int) min[i], 0);
+				assertEquals((int) secondMax[i], 250);
+				assertEquals((int) secondMin[i], 1);
+				assertEquals((int) mean[i], 35);
+				assertEquals((int) variance[i], 4154);
+				break;
 			}
 		}
 
-//		System.out.println(ct.getName());
-//		System.out.println(ct.getType());
-//		for (int i = 0; i < color.length; i++) {
-//			System.out.print(range[i] + ": ");
-//			System.out.println(color[i][0] + " " + color[i][1] + " " + color[i][2]);
-//		}
+		// System.out.println(ct.getName());
+		// System.out.println(ct.getType());
+		// for (int i = 0; i < color.length; i++) {
+		// System.out.print(range[i] + ": ");
+		// System.out.println(color[i][0] + " " + color[i][1] + " " +
+		// color[i][2]);
+		// }
 	}
 
 	public void testGeoInfo(RasterDataset dataset) {
-	//TODO: TEST: Terminar test de acceso a la georreferenciación.
-//		String proj = "";
-//		if(dataset.getProjection() != null)
-//			proj = dataset.getProjection().getAbrev();
+		// TODO: TEST: Terminar test de acceso a la georreferenciación.
+		// String proj = "";
+		// if(dataset.getProjection() != null)
+		// proj = dataset.getProjection().getAbrev();
 		AffineTransform at = dataset.getAffineTransform();
 
 		assertEquals((int) at.getTranslateX(), 5000);
@@ -280,16 +286,16 @@ public class TestRmfRead extends BaseTestCase {
 
 		assertEquals(p.active, true);
 
-//		assertEquals((int) p.leftCenterPoint.getX(), 24223);
-//		assertEquals((int) p.leftCenterPoint.getY(), 3244);
-//		assertEquals((int) p.rightCenterPoint.getX(), 2433);
-//		assertEquals((int) p.rightCenterPoint.getY(), 6244);
-//
-//		assertEquals((int) p.leftViewPort.getExtent().minX(), 30032);
-//		assertEquals((int) p.leftViewPort.getExtent().maxY(), 2103);
-//
-//		assertEquals((int) p.rightViewPort.getExtent().minX(), 30032);
-//		assertEquals((int) p.rightViewPort.getExtent().maxY(), 2103);
+		// assertEquals((int) p.leftCenterPoint.getX(), 24223);
+		// assertEquals((int) p.leftCenterPoint.getY(), 3244);
+		// assertEquals((int) p.rightCenterPoint.getX(), 2433);
+		// assertEquals((int) p.rightCenterPoint.getY(), 6244);
+		//
+		// assertEquals((int) p.leftViewPort.getExtent().minX(), 30032);
+		// assertEquals((int) p.leftViewPort.getExtent().maxY(), 2103);
+		//
+		// assertEquals((int) p.rightViewPort.getExtent().minX(), 30032);
+		// assertEquals((int) p.rightViewPort.getExtent().maxY(), 2103);
 
 		assertEquals((int) p.zoomLeft, 1);
 		assertEquals((int) p.zoomRight, 1);

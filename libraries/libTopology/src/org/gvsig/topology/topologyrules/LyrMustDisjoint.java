@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.topologyrules;
 
 import org.gvsig.topology.ITopologyErrorFix;
@@ -61,32 +61,30 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.precision.EnhancedPrecisionOp;
 
 /**
- * feature geometries of origin layer must disjoint with feature geometries of 
+ * feature geometries of origin layer must disjoint with feature geometries of
  * destination layer.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class LyrMustDisjoint extends AbstractSpatialPredicateTwoLyrRule {
 
 	static final String RULE_NAME = Messages.getText("lyrs_must_disjoint");
-	
+
 	static {
 		DEFAULT_ERROR_SYMBOL.setDescription(RULE_NAME);
 		automaticErrorFixes.add(new DeleteTopologyErrorFix());
 	}
-	
-	public LyrMustDisjoint(Topology topology, 
-							FLyrVect originLyr,
-							FLyrVect destinationLyr){
+
+	public LyrMustDisjoint(Topology topology, FLyrVect originLyr,
+			FLyrVect destinationLyr) {
 		super(topology, originLyr, destinationLyr);
 	}
 
-
-	public LyrMustDisjoint(){
+	public LyrMustDisjoint() {
 		super();
 	}
-	
-	
+
 	@Override
 	protected boolean acceptsDestinationGeometryType(int shapeType) {
 		return true;
@@ -100,9 +98,11 @@ public class LyrMustDisjoint extends AbstractSpatialPredicateTwoLyrRule {
 	@Override
 	protected boolean checkSpatialPredicate(IFeature feature,
 			Geometry firstGeometry, IFeature neighbourFeature, Geometry jtsGeom2) {
-		if(! firstGeometry.disjoint(jtsGeom2)){
-			Geometry errorGeo = EnhancedPrecisionOp.intersection(firstGeometry, jtsGeom2);
-			addTopologyError(createTopologyError(errorGeo, feature, neighbourFeature));
+		if (!firstGeometry.disjoint(jtsGeom2)) {
+			Geometry errorGeo = EnhancedPrecisionOp.intersection(firstGeometry,
+					jtsGeom2);
+			addTopologyError(createTopologyError(errorGeo, feature,
+					neighbourFeature));
 			return false;
 		}
 		return true;
@@ -124,8 +124,8 @@ public class LyrMustDisjoint extends AbstractSpatialPredicateTwoLyrRule {
 	public boolean acceptsOriginLyr(FLyrVect originLyr) {
 		return true;
 	}
-	
-	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError){
+
+	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError) {
 		return automaticErrorFixes.get(0);
 	}
 }

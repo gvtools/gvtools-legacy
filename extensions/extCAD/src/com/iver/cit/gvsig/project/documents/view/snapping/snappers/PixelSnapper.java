@@ -58,8 +58,14 @@ public class PixelSnapper extends AbstractSnapper implements ISnapperRaster {
 	private int tolColorR = 100;
 	private int tolColorG = 100;
 	private int tolColorB = 100;
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.gui.cad.snapping.ISnapperRaster#getSnapPoint(java.awt.image.BufferedImage, java.awt.geom.Point2D, double, java.awt.geom.Point2D)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.gui.cad.snapping.ISnapperRaster#getSnapPoint(java.
+	 * awt.image.BufferedImage, java.awt.geom.Point2D, double,
+	 * java.awt.geom.Point2D)
 	 */
 	public Point2D getSnapPoint(MapControl mapControl, Point2D point,
 			double mapTolerance, Point2D lastPoint) {
@@ -70,7 +76,7 @@ public class PixelSnapper extends AbstractSnapper implements ISnapperRaster {
 		Point2D pPixel = vp.fromMapPoint(point);
 		int xPixel = (int) pPixel.getX();
 		int yPixel = (int) pPixel.getY();
-//		int centerRGB = img.getRGB(xPixel, yPixel);
+		// int centerRGB = img.getRGB(xPixel, yPixel);
 		int centerRGB = refColor.getRGB();
 		double x1 = ColorModel.getRGBdefault().getRed(centerRGB);
 		double y1 = ColorModel.getRGBdefault().getGreen(centerRGB);
@@ -81,35 +87,36 @@ public class PixelSnapper extends AbstractSnapper implements ISnapperRaster {
 		double minDistColor = Double.MAX_VALUE;
 		int xSnapped = -1;
 		int ySnapped = -1;
-		int fromX =xPixel -half;
-		if (fromX <0) fromX = 0;
-		int fromY =yPixel -half;
-		if (fromY <0) fromY = 0;
+		int fromX = xPixel - half;
+		if (fromX < 0)
+			fromX = 0;
+		int fromY = yPixel - half;
+		if (fromY < 0)
+			fromY = 0;
 
-		int toX =xPixel + half;
-		if (toX > vp.getImageWidth()) toX = vp.getImageWidth();
-		int toY =yPixel + half;
-		if (toY > vp.getImageHeight()) toY = vp.getImageHeight();
+		int toX = xPixel + half;
+		if (toX > vp.getImageWidth())
+			toX = vp.getImageWidth();
+		int toY = yPixel + half;
+		if (toY > vp.getImageHeight())
+			toY = vp.getImageHeight();
 
-		for (int testX= fromX; testX< toX; testX++)
-		{
-			for (int testY= fromY; testY< toY; testY++)
-			{
+		for (int testX = fromX; testX < toX; testX++) {
+			for (int testY = fromY; testY < toY; testY++) {
 				// System.out.println("Testing: " + testX + ", " + testY);
 				int testRGB = img.getRGB(testX, testY);
-				// TODO: Aquí deberíamos trabajar con un ColorSpace y usar toCIEXYZ. Por ahora lo calculo con RGB.
+				// TODO: Aquí deberíamos trabajar con un ColorSpace y usar
+				// toCIEXYZ. Por ahora lo calculo con RGB.
 				int r = ColorModel.getRGBdefault().getRed(testRGB);
 				int g = ColorModel.getRGBdefault().getGreen(testRGB);
 				int b = ColorModel.getRGBdefault().getBlue(testRGB);
 				Coordinate cAux = new Coordinate(r, g, b);
 
-				if (Math.abs(r-x1) < tolColorR)
-					if (Math.abs(g-y1) < tolColorG)
-						if (Math.abs(b-z1) < tolColorB)
-						{
+				if (Math.abs(r - x1) < tolColorR)
+					if (Math.abs(g - y1) < tolColorG)
+						if (Math.abs(b - z1) < tolColorB) {
 							double dist = c.distance(cAux);
-							if (dist < minDistColor)
-							{
+							if (dist < minDistColor) {
 								minDistColor = dist;
 								xSnapped = testX;
 								ySnapped = testY;
@@ -118,8 +125,7 @@ public class PixelSnapper extends AbstractSnapper implements ISnapperRaster {
 			}
 		}
 		Point2D pResul = null;
-		if (xSnapped != -1)
-		{
+		if (xSnapped != -1) {
 			pResul = vp.toMapPoint(xSnapped, ySnapped);
 		}
 		return pResul;
@@ -129,8 +135,7 @@ public class PixelSnapper extends AbstractSnapper implements ISnapperRaster {
 		g.setColor(getColor());
 		int half = getSizePixels() / 2;
 		g.drawOval((int) (pPixels.getX() - half),
-				(int) (pPixels.getY() - half),
-				getSizePixels(), getSizePixels());
+				(int) (pPixels.getY() - half), getSizePixels(), getSizePixels());
 	}
 
 	public String getToolTipText() {
@@ -138,5 +143,3 @@ public class PixelSnapper extends AbstractSnapper implements ISnapperRaster {
 	}
 
 }
-
-

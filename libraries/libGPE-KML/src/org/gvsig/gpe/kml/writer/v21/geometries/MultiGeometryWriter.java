@@ -61,6 +61,7 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
 /**
  * It writes a MultyGeometry tag. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;MultiGeometry&gt;
@@ -77,40 +78,50 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  * &lt;MultiGeometry&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
- * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#multigeometry
+ * @see http
+ *      ://code.google.com/apis/kml/documentation/kml_tags_21.html#multigeometry
  */
 public class MultiGeometryWriter {
 	/**
 	 * It writes the MultiGeometry init tag and its value.
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param id
-	 * Point id
+	 *            Point id
 	 * @param longitude
-	 * Longitude >= -180 and <= 180
+	 *            Longitude >= -180 and <= 180
 	 * @param latitude
-	 * Latitude >= -90 and <= 90
+	 *            Latitude >= -90 and <= 90
 	 * @param altitude
-	 * Meters above sea level
+	 *            Meters above sea level
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler, String id) throws IOException{
-		handler.getProfile().getGeometryWriter().startGeometry(writer, handler, Kml2_1_Tags.MULTIGEOMETRY, id);
+	public void start(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor handler, String id)
+			throws IOException {
+		handler.getProfile().getGeometryWriter()
+				.startGeometry(writer, handler, Kml2_1_Tags.MULTIGEOMETRY, id);
 	}
-	
+
 	/**
 	 * It writes the MultiGeometry end tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @throws IOException
 	 */
-	public void end(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler) throws IOException{
-		handler.getProfile().getGeometryWriter().endGeometry(writer, handler, Kml2_1_Tags.MULTIGEOMETRY);
+	public void end(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor handler) throws IOException {
+		handler.getProfile().getGeometryWriter()
+				.endGeometry(writer, handler, Kml2_1_Tags.MULTIGEOMETRY);
 	}
 }

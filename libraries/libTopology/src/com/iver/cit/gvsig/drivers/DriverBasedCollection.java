@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.drivers;
 
 import java.util.Collection;
@@ -53,16 +53,16 @@ import java.util.Iterator;
 
 import com.iver.cit.gvsig.fmap.layers.FBitSet;
 import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
+
 /**
  * 
- * Implementation of collection which saves and reads
- * its objects from a subjacent driver.
+ * Implementation of collection which saves and reads its objects from a
+ * subjacent driver.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
-public abstract class DriverBasedCollection 
-	implements Collection {
+public abstract class DriverBasedCollection implements Collection {
 
 	/**
 	 * Adapter associated to this collection
@@ -72,12 +72,12 @@ public abstract class DriverBasedCollection
 	 * Bitset that marks the index of the added
 	 */
 	protected FBitSet bitset;
-	
-//	protected 
-	
-	
+
+	// protected
+
 	/**
 	 * Constructor
+	 * 
 	 * @param adapter
 	 */
 	public DriverBasedCollection(ReadableVectorial adapter) {
@@ -85,28 +85,20 @@ public abstract class DriverBasedCollection
 		this.bitset = new FBitSet();
 	}
 
-
 	public boolean add(Object obj) {
-		if(! (obj instanceof AbstractDriverCollectionEntry))
+		if (!(obj instanceof AbstractDriverCollectionEntry))
 			return false;
-		AbstractDriverCollectionEntry entry =
-			(AbstractDriverCollectionEntry)obj;
+		AbstractDriverCollectionEntry entry = (AbstractDriverCollectionEntry) obj;
 		int idx = entry.getDriverIdx();
-		
-		
-		
-		
-		
+
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
 
 	public boolean addAll(Collection arg0) {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
 
 	public void clear() {
 		bitset.clear();

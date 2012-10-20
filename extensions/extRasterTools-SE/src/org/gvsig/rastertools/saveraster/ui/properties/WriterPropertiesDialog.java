@@ -35,16 +35,18 @@ import com.iver.andami.ui.mdiManager.WindowInfo;
  * 
  * @version 24/04/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
 public class WriterPropertiesDialog extends JPanel implements IWindow {
 	private static final long serialVersionUID = 1L;
 	private PropertiesPanel pd = null;
 	private WriterPropertiesListener listener = null;
-	
+
 	/**
 	 * Constructor. Asigna el panel de propiedades.
-	 * @param pd PropertiesDialog
+	 * 
+	 * @param pd
+	 *            PropertiesDialog
 	 */
 	public WriterPropertiesDialog(PropertiesPanel pd, Params params) {
 		this.pd = pd;
@@ -54,21 +56,24 @@ public class WriterPropertiesDialog extends JPanel implements IWindow {
 		this.setLayout(new BorderLayout());
 		add(pd, BorderLayout.CENTER);
 	}
-	
+
 	/**
 	 * Obtiene el componente panel de propiedades
+	 * 
 	 * @return PropertiesPanel
 	 */
 	public PropertiesPanel getPropertiesPanel() {
 		return pd;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindow#getWindowInfo()
 	 */
 	public WindowInfo getWindowInfo() {
-		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODALDIALOG | WindowInfo.RESIZABLE);
+		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODALDIALOG
+				| WindowInfo.RESIZABLE);
 		m_viewinfo.setTitle(PluginServices.getText(this, "properties"));
 		return m_viewinfo;
 	}

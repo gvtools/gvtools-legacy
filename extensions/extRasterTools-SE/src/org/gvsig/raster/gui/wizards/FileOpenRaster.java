@@ -47,32 +47,31 @@ import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 
 /**
- * Clase que indicará que ficheros puede tratar al panel de apertura de
- * ficheros
- *
+ * Clase que indicará que ficheros puede tratar al panel de apertura de ficheros
+ * 
  * @version 04/09/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class FileOpenRaster extends AbstractFileOpen {
-	public static int                     CHANGE_VIEW_PROJECTION = 0;
-	public static int                     REPROJECT              = 1;
-	public static int                     IGNORE                 = 2;
-	public static int                     NOTLOAD                = 3;
+	public static int CHANGE_VIEW_PROJECTION = 0;
+	public static int REPROJECT = 1;
+	public static int IGNORE = 2;
+	public static int NOTLOAD = 3;
 	/**
-	 * Acción a realizar con la capa. Por defecto ignora la proyección y la carga
-	 * en la vista pero esta opción puede ser cambiada por el usuario desde el
-	 * dialogo.
+	 * Acción a realizar con la capa. Por defecto ignora la proyección y la
+	 * carga en la vista pero esta opción puede ser cambiada por el usuario
+	 * desde el dialogo.
 	 */
-	public static int                     defaultActionLayer     = IGNORE;
+	public static int defaultActionLayer = IGNORE;
 	/**
 	 * Lista de acciones. Una por capa a añadir.
 	 */
-	private ArrayList                     actionList             = new ArrayList(); ;
+	private ArrayList actionList = new ArrayList();;
 
-	private ArrayList                     lyrsRaster             = new ArrayList();
-	private RasterProjectionActionsDialog dialog                 = null;
-	private MapControl                    mapControl             = null;
-	
+	private ArrayList lyrsRaster = new ArrayList();
+	private RasterProjectionActionsDialog dialog = null;
+	private MapControl mapControl = null;
+
 	/**
 	 * Constructor de FileOpenRaster
 	 */
@@ -83,114 +82,142 @@ public class FileOpenRaster extends AbstractFileOpen {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.wizards.IFileOpen#post(java.io.File[])
 	 */
 	public File post(File file) throws LoadLayerException {
-				
-		//Si el fichero es raw lanzamos el dialogo de parámetros de raw
-		if (RasterUtilities.getExtensionFromFileName(file.getAbsolutePath()).equals("raw")) {
-			OpenRawFileDefaultView view = new OpenRawFileDefaultView(file.getAbsolutePath());
- 			file = view.getImageFile();
+
+		// Si el fichero es raw lanzamos el dialogo de parámetros de raw
+		if (RasterUtilities.getExtensionFromFileName(file.getAbsolutePath())
+				.equals("raw")) {
+			OpenRawFileDefaultView view = new OpenRawFileDefaultView(
+					file.getAbsolutePath());
+			file = view.getImageFile();
 		}
 
-		if(file == null || file.getAbsoluteFile() == null)
+		if (file == null || file.getAbsoluteFile() == null)
 			return null;
-		
-		//Si el fichero es vrt chequeamos que sea correcto
-		if (RasterUtilities.getExtensionFromFileName(file.getAbsolutePath()).equals("vrt")) {
+
+		// Si el fichero es vrt chequeamos que sea correcto
+		if (RasterUtilities.getExtensionFromFileName(file.getAbsolutePath())
+				.equals("vrt")) {
 			try {
 				checkFileVRT(file);
 			} catch (FileOpenVRTException e) {
-				RasterToolsUtil.messageBoxError(PluginServices.getText(this, "error_abrir_fichero") + " " + file.getName() + "\n\n" + PluginServices.getText(this, "informacion_adicional") + ":\n\n  " + e.getMessage(), this, e);
+				RasterToolsUtil.messageBoxError(
+						PluginServices.getText(this, "error_abrir_fichero")
+								+ " "
+								+ file.getName()
+								+ "\n\n"
+								+ PluginServices.getText(this,
+										"informacion_adicional") + ":\n\n  "
+								+ e.getMessage(), this, e);
 				return null;
 			}
 		}
-		
+
 		try {
 			FLyrRasterSE lyrRaster = null;
-			
+
 			String lyr_name = RasterToolsUtil.getLayerNameFromFile(file);
 			lyrRaster = FLyrRasterSE.createLayer(lyr_name, file, null);
-			
-			// Si hay que generar las overviews por el panel de preferencias
-//			if (Configuration.getValue("overviews_ask_before_loading", Boolean.FALSE).booleanValue() == true) {
-//				try {
-//					boolean generate = false;
-//					for (int i = 0; i < lyrRaster.getFileCount(); i++) {
-//						if (lyrRaster.getDataSource().getDataset(i)[0].getOverviewCount(0) == 0) {
-//							generate = true;
-//							break;
-//						}
-//					}
-//					if (generate) {
-//						if (firstTaskOverview) {
-//							execOverview = RasterToolsUtil.messageBoxYesOrNot("generar_overviews", this);
-//							firstTaskOverview = false;
-//						}
-//					
-//						if (execOverview) {
-//							RasterProcess process = new OverviewsProcess();
-//							process.setCancelable(false);
-//							process.addParam("layer", (FLyrRasterSE) lyrRaster);
-//							UniqueProcessQueue.getSingleton().add(process);
-//						}
-//					}
-//				} catch (Exception e) {
-//					// Si no se puede generar la overview no hacemos nada
-//				}
-//			}
 
-			//Mostramos el cuadro que pide la georreferenciación si la capa no tiene y si la opción está activa en preferencias
-			if(RasterModule.askCoordinates) {
-				if(	lyrRaster.getFullExtent().getMinX() == 0 && 
-						lyrRaster.getFullExtent().getMinY() == 0 &&
-						lyrRaster.getFullExtent().getMaxX() == ((FLyrRasterSE)lyrRaster).getPxWidth() &&
-						lyrRaster.getFullExtent().getMaxY() == ((FLyrRasterSE)lyrRaster).getPxHeight()) {
-					if(RasterToolsUtil.messageBoxYesOrNot(lyrRaster.getName() + "\n" + PluginServices.getText(this, "layer_without_georref"), null)) {
-						GeoLocationOpeningRasterDialog gld = new GeoLocationOpeningRasterDialog(lyrRaster);
+			// Si hay que generar las overviews por el panel de preferencias
+			// if (Configuration.getValue("overviews_ask_before_loading",
+			// Boolean.FALSE).booleanValue() == true) {
+			// try {
+			// boolean generate = false;
+			// for (int i = 0; i < lyrRaster.getFileCount(); i++) {
+			// if
+			// (lyrRaster.getDataSource().getDataset(i)[0].getOverviewCount(0)
+			// == 0) {
+			// generate = true;
+			// break;
+			// }
+			// }
+			// if (generate) {
+			// if (firstTaskOverview) {
+			// execOverview =
+			// RasterToolsUtil.messageBoxYesOrNot("generar_overviews", this);
+			// firstTaskOverview = false;
+			// }
+			//
+			// if (execOverview) {
+			// RasterProcess process = new OverviewsProcess();
+			// process.setCancelable(false);
+			// process.addParam("layer", (FLyrRasterSE) lyrRaster);
+			// UniqueProcessQueue.getSingleton().add(process);
+			// }
+			// }
+			// } catch (Exception e) {
+			// // Si no se puede generar la overview no hacemos nada
+			// }
+			// }
+
+			// Mostramos el cuadro que pide la georreferenciación si la capa no
+			// tiene y si la opción está activa en preferencias
+			if (RasterModule.askCoordinates) {
+				if (lyrRaster.getFullExtent().getMinX() == 0
+						&& lyrRaster.getFullExtent().getMinY() == 0
+						&& lyrRaster.getFullExtent().getMaxX() == ((FLyrRasterSE) lyrRaster)
+								.getPxWidth()
+						&& lyrRaster.getFullExtent().getMaxY() == ((FLyrRasterSE) lyrRaster)
+								.getPxHeight()) {
+					if (RasterToolsUtil.messageBoxYesOrNot(
+							lyrRaster.getName()
+									+ "\n"
+									+ PluginServices.getText(this,
+											"layer_without_georref"), null)) {
+						GeoLocationOpeningRasterDialog gld = new GeoLocationOpeningRasterDialog(
+								lyrRaster);
 						PluginServices.getMDIManager().addWindow(gld);
 					}
 				}
 			}
-			
-			//Opciones de proyección
-			boolean compareProj = Configuration.getValue("general_ask_projection", Boolean.valueOf(false)).booleanValue();
-			if(compareProj)
+
+			// Opciones de proyección
+			boolean compareProj = Configuration.getValue(
+					"general_ask_projection", Boolean.valueOf(false))
+					.booleanValue();
+			if (compareProj)
 				compareProjections(lyrRaster);
 			else
 				actionList.add(new Integer(defaultActionLayer));
-			
+
 			lyrsRaster.add(lyrRaster);
 		} catch (LoadLayerException e) {
 			RasterToolsUtil.messageBoxError("error_carga_capa", this, e);
 			throw new LoadLayerException("error_carga_capa", e);
 		}
-				
+
 		return super.post(file);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.wizards.IFileOpen#execute(java.io.File[])
 	 */
-	public Rectangle2D createLayer(File file, MapControl mapControl, CoordinateReferenceSystem crs) {
+	public Rectangle2D createLayer(File file, MapControl mapControl,
+			CoordinateReferenceSystem crs) {
 		this.mapControl = mapControl;
 		FLyrRasterSE lyr = null;
-		
+
 		String layerName = RasterToolsUtil.getLayerNameFromFile(file);
 		int nLayer = -1;
 
 		// Si hay capas en la lista la buscamos allí
 		if (lyrsRaster.size() != 0) {
 			for (int i = 0; i < lyrsRaster.size(); i++) {
-				if (((FLyrRasterSE) lyrsRaster.get(i)).getName().equals(layerName)) {
+				if (((FLyrRasterSE) lyrsRaster.get(i)).getName().equals(
+						layerName)) {
 					lyr = (FLyrRasterSE) lyrsRaster.get(i);
 					lyr.setCrs(crs);
 					nLayer = i;
 				}
 			}
 		}
-		
+
 		// Si no hay capa la cargamos
 		if (lyr == null) {
 			try {
@@ -217,10 +244,11 @@ public class FileOpenRaster extends AbstractFileOpen {
 
 		return null;
 	}
-	
+
 	/**
 	 * Compara las proyecciones de la vista y la capa. En caso de ser diferentes
 	 * pregunta por las opciones a realizar.
+	 * 
 	 * @param lyr
 	 * @param mapControl
 	 */
@@ -232,17 +260,18 @@ public class FileOpenRaster extends AbstractFileOpen {
 			actionList.add(new Integer(defaultActionLayer));
 			return;
 		}
-		if(viewCrs == null) {
+		if (viewCrs == null) {
 			getMapControl().setCrs(lyrCrs);
 			actionList.add(new Integer(defaultActionLayer));
 			return;
 		}
 
 		/*
-		 * Si las proyecciones de vista y raster son distintas se lanza el dialogo de selección de
-		 * opciones. Este dialogo solo se lanza en caso de que el checkbox de aplicar a todos los 
-		 * ficheros no haya sido marcado. En este caso para el resto de ficheros de esa selección 
-		 * se hará la misma acción que se hizo para el primero.
+		 * Si las proyecciones de vista y raster son distintas se lanza el
+		 * dialogo de selección de opciones. Este dialogo solo se lanza en caso
+		 * de que el checkbox de aplicar a todos los ficheros no haya sido
+		 * marcado. En este caso para el resto de ficheros de esa selección se
+		 * hará la misma acción que se hizo para el primero.
 		 */
 		if (!viewCrs.getName().equals(lyrCrs.getName())) {
 			boolean showDialog = false;
@@ -252,23 +281,28 @@ public class FileOpenRaster extends AbstractFileOpen {
 			if (showDialog) {
 				dialog = new RasterProjectionActionsDialog(lyr);
 			} else {
-				if (defaultActionLayer == FileOpenRaster.REPROJECT && !lyr.isReproyectable())
+				if (defaultActionLayer == FileOpenRaster.REPROJECT
+						&& !lyr.isReproyectable())
 					dialog = new RasterProjectionActionsDialog(lyr);
 			}
 			int select = defaultActionLayer;
 			if (dialog != null)
-				select = dialog.getRasterProjectionActionsPanel().getSelection();
-			
+				select = dialog.getRasterProjectionActionsPanel()
+						.getSelection();
+
 			actionList.add(new Integer(select));
 			return;
-		} 
+		}
 		actionList.add(new Integer(defaultActionLayer));
 	}
 
 	/**
-	 * Acciones posibles cuando la proyección de la capa es distinta de la de
-	 * la vista.
-	 * @param action Valor de la acción. Está representado en RasterProjectionActionsPanel
+	 * Acciones posibles cuando la proyección de la capa es distinta de la de la
+	 * vista.
+	 * 
+	 * @param action
+	 *            Valor de la acción. Está representado en
+	 *            RasterProjectionActionsPanel
 	 */
 	private void layerActions(int action, FLyrRasterSE lyr) {
 		// Cambia la proyección de la vista y carga la capa
@@ -290,7 +324,8 @@ public class FileOpenRaster extends AbstractFileOpen {
 
 		// Reproyectando
 		if (action == REPROJECT) {
-			LayerReprojectPanel reprojectPanel = new LayerReprojectPanel((FLyrRasterSE) lyr, Boolean.FALSE);
+			LayerReprojectPanel reprojectPanel = new LayerReprojectPanel(
+					(FLyrRasterSE) lyr, Boolean.FALSE);
 			RasterToolsUtil.addWindow(reprojectPanel);
 		}
 
@@ -298,11 +333,11 @@ public class FileOpenRaster extends AbstractFileOpen {
 		if (action == NOTLOAD) {
 		}
 	}
-	
+
 	/**
 	 * Comprueba si un fichero VRT esta en correcto estado, en caso contrario
 	 * lanza una excepcion indicando el tipo de error en la apertura.
-	 *
+	 * 
 	 * @param file
 	 * @throws FileOpenVRTException
 	 */
@@ -318,26 +353,31 @@ public class FileOpenRaster extends AbstractFileOpen {
 
 			parser.require(XmlPullParser.START_TAG, null, "VRTDataset");
 
-			while (parser.nextTag () != XmlPullParser.END_TAG) {
+			while (parser.nextTag() != XmlPullParser.END_TAG) {
 				parser.require(XmlPullParser.START_TAG, null, "VRTRasterBand");
 
 				String name;
 				while (parser.nextTag() != XmlPullParser.END_TAG) {
 					parser.require(XmlPullParser.START_TAG, null, null);
 					boolean relativePath = false;
-					for (int i=0; i<parser.getAttributeCount(); i++) {
-						if (parser.getAttributeName(i).equals("relativetoVRT") &&
-								parser.getAttributeValue(i).equals("1"))
+					for (int i = 0; i < parser.getAttributeCount(); i++) {
+						if (parser.getAttributeName(i).equals("relativetoVRT")
+								&& parser.getAttributeValue(i).equals("1"))
 							relativePath = true;
 					}
 					name = parser.getName();
 					String nameFile = parser.nextText();
 					if (name.equals("SourceFilename")) {
 						if (relativePath)
-							nameFile = file.getParent() + File.separator + nameFile;
+							nameFile = file.getParent() + File.separator
+									+ nameFile;
 						File tryFile = new File(nameFile);
 						if (!tryFile.exists())
-							throw new FileOpenVRTException(PluginServices.getText(this, "no_existe_fichero") + " " + nameFile);
+							throw new FileOpenVRTException(
+									PluginServices.getText(this,
+											"no_existe_fichero")
+											+ " "
+											+ nameFile);
 					}
 					parser.require(XmlPullParser.END_TAG, null, name);
 				}
@@ -348,9 +388,15 @@ public class FileOpenRaster extends AbstractFileOpen {
 			parser.next();
 			parser.require(XmlPullParser.END_DOCUMENT, null, null);
 		} catch (XmlPullParserException e) {
-			throw new FileOpenVRTException(PluginServices.getText(this, "el_fichero")+ " " + file.getName().toString() + " " + PluginServices.getText(this, "esta_formato_desconocido"));
+			throw new FileOpenVRTException(PluginServices.getText(this,
+					"el_fichero")
+					+ " "
+					+ file.getName().toString()
+					+ " "
+					+ PluginServices.getText(this, "esta_formato_desconocido"));
 		} catch (IOException e) {
-			throw new FileOpenVRTException(PluginServices.getText(this, "no_puede_abrir_fichero") + " " + file.getName().toString());
+			throw new FileOpenVRTException(PluginServices.getText(this,
+					"no_puede_abrir_fichero") + " " + file.getName().toString());
 		} finally {
 			if (fileReader != null)
 				try {
@@ -359,16 +405,18 @@ public class FileOpenRaster extends AbstractFileOpen {
 				}
 		}
 	}
-	
+
 	/**
-	 * Obtiene el mapControl. La llamada createLayer recibe el MapControl por parámetro pero
-	 * ni pre() ni post() pueden tener acceso al MapControl a no ser que lo busquen ellos. 
+	 * Obtiene el mapControl. La llamada createLayer recibe el MapControl por
+	 * parámetro pero ni pre() ni post() pueden tener acceso al MapControl a no
+	 * ser que lo busquen ellos.
+	 * 
 	 * @return MapControl
 	 */
 	public MapControl getMapControl() {
 		if (mapControl != null)
 			return mapControl;
-		
+
 		IWindow activeWindow = PluginServices.getMDIManager().getActiveWindow();
 		if ((activeWindow != null) && (activeWindow instanceof BaseView))
 			return ((BaseView) activeWindow).getMapControl();
@@ -376,19 +424,23 @@ public class FileOpenRaster extends AbstractFileOpen {
 		IWindow[] w = PluginServices.getMDIManager().getAllWindows();
 		// Obtiene la primera vista activa
 		for (int i = 0; i < w.length; i++)
-			if (w[i] instanceof BaseView && w[i].equals(PluginServices.getMDIManager().getActiveWindow()))
+			if (w[i] instanceof BaseView
+					&& w[i].equals(PluginServices.getMDIManager()
+							.getActiveWindow()))
 				return ((BaseView) w[i]).getMapControl();
-		
-		// Si no hay ninguna activa obtiene la primera vista aunque no esté activa
+
+		// Si no hay ninguna activa obtiene la primera vista aunque no esté
+		// activa
 		for (int i = 0; i < w.length; i++)
 			if (w[i] instanceof BaseView)
 				return ((BaseView) w[i]).getMapControl();
 
 		return null;
 	}
-	
-	public void pre() {}
-	
+
+	public void pre() {
+	}
+
 	@Override
 	public boolean accepts(File file) {
 		return false;

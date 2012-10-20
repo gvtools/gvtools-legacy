@@ -61,21 +61,21 @@ import es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver;
  *
  */
 /**
- * This class is used to register the different gazetteer
- * drivers and to retrieve them. It uses the gvSIG extension
- * points.
+ * This class is used to register the different gazetteer drivers and to
+ * retrieve them. It uses the gvSIG extension points.
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class GazetteerDriverRegister {
 	private static GazetteerDriverRegister instance = null;
-	private static final String DRIVER_REGISTER_NAME = "GazetteerDrivers";	
+	private static final String DRIVER_REGISTER_NAME = "GazetteerDrivers";
 
 	/**
 	 * This method cretaes the singleton instance
-	 *
+	 * 
 	 */
 	private synchronized static void createInstance() {
-		if (instance == null) { 
+		if (instance == null) {
 			instance = new GazetteerDriverRegister();
 		}
 	}
@@ -84,54 +84,60 @@ public class GazetteerDriverRegister {
 	 * @return the remote service instance instance
 	 */
 	public static GazetteerDriverRegister getInstance() {
-		if (instance == null){
+		if (instance == null) {
 			createInstance();
 		}
 		return instance;
 	}
 
 	/**
-	 * This method is used to register a new gazetter driver 
-	 * that manage a concrete protocol
+	 * This method is used to register a new gazetter driver that manage a
+	 * concrete protocol
+	 * 
 	 * @param driver
-	 * Gazetteer driver to register
+	 *            Gazetteer driver to register
 	 */
-	public void register(IGazetteerServiceDriver driver){
-		ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
-    	extensionPoints.add(DRIVER_REGISTER_NAME,driver.getServiceName(), driver);
+	public void register(IGazetteerServiceDriver driver) {
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+		extensionPoints.add(DRIVER_REGISTER_NAME, driver.getServiceName(),
+				driver);
 	}
 
 	/**
-	 * It is used to retrieve a driver that supports a concrete 
-	 * protocol
+	 * It is used to retrieve a driver that supports a concrete protocol
+	 * 
 	 * @param protocol
-	 * Gazetteer protocol
-	 * @return
-	 * The concrete gazatteer service driver
+	 *            Gazetteer protocol
+	 * @return The concrete gazatteer service driver
 	 */
-	public IGazetteerServiceDriver getDriver(String protocol){
-		ExtensionPoint extensionPoint = (ExtensionPoint)ExtensionPointsSingleton.getInstance().get(DRIVER_REGISTER_NAME);
+	public IGazetteerServiceDriver getDriver(String protocol) {
+		ExtensionPoint extensionPoint = (ExtensionPoint) ExtensionPointsSingleton
+				.getInstance().get(DRIVER_REGISTER_NAME);
 		Iterator keys = extensionPoint.keySet().iterator();
-		while (keys.hasNext()){
+		while (keys.hasNext()) {
 			Object driver = extensionPoint.get(keys.next());
-			if (((IGazetteerServiceDriver)driver).getServiceName().toUpperCase().compareTo(protocol.toUpperCase()) == 0){
-				return (IGazetteerServiceDriver)driver;
+			if (((IGazetteerServiceDriver) driver).getServiceName()
+					.toUpperCase().compareTo(protocol.toUpperCase()) == 0) {
+				return (IGazetteerServiceDriver) driver;
 			}
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @return a list with all the gazetteer drivers
 	 */
-	public IGazetteerServiceDriver[] getDrivers(){
+	public IGazetteerServiceDriver[] getDrivers() {
 		IGazetteerServiceDriver[] drivers = null;
-		ExtensionPoint extensionPoint = (ExtensionPoint)ExtensionPointsSingleton.getInstance().get(DRIVER_REGISTER_NAME);
+		ExtensionPoint extensionPoint = (ExtensionPoint) ExtensionPointsSingleton
+				.getInstance().get(DRIVER_REGISTER_NAME);
 		drivers = new IGazetteerServiceDriver[extensionPoint.keySet().size()];
-		Iterator keys = extensionPoint.keySet().iterator();		
+		Iterator keys = extensionPoint.keySet().iterator();
 		int i = 0;
-		while (keys.hasNext()){
-			drivers[i] = (IGazetteerServiceDriver)extensionPoint.get(keys.next());
+		while (keys.hasNext()) {
+			drivers[i] = (IGazetteerServiceDriver) extensionPoint.get(keys
+					.next());
 			i++;
 		}
 		return drivers;

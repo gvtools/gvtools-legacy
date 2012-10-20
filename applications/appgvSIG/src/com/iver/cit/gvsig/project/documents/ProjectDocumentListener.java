@@ -46,14 +46,15 @@ import com.iver.andami.ui.mdiManager.IWindow;
  * Listener para notificaci�n en los cambios de las vistas de un proyecto.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
 public interface ProjectDocumentListener {
 
 	/**
 	 * Evento lanzado cuando se crea una ventana de proyecto
-	 * @param  view
-	 *         Ventana creada
+	 * 
+	 * @param view
+	 *            Ventana creada
 	 */
 	public void windowCreated(IWindow window);
 

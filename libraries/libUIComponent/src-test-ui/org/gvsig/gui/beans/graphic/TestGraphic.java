@@ -24,6 +24,7 @@ import org.gvsig.gui.beans.TestUI;
 import org.gvsig.gui.beans.buttonspanel.ButtonsPanel;
 import org.gvsig.gui.beans.defaultbuttonspanel.DefaultButtonsPanel;
 import org.gvsig.gui.beans.table.exceptions.NotInitializeException;
+
 /**
  * Test para comprobar el funcionamiento de la grafica
  * 
@@ -31,11 +32,11 @@ import org.gvsig.gui.beans.table.exceptions.NotInitializeException;
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class TestGraphic implements GraphicListener {
-	private TestUI              frame               = new TestUI("TestGraphic");
+	private TestUI frame = new TestUI("TestGraphic");
 	private DefaultButtonsPanel defaultButtonsPanel = null;
-	private GraphicContainer    graphic             = null;
+	private GraphicContainer graphic = null;
 
-	public TestGraphic() throws NotInitializeException{
+	public TestGraphic() throws NotInitializeException {
 		graphic = new GraphicContainer(true);
 
 		int nSeries = 3;
@@ -43,20 +44,22 @@ public class TestGraphic implements GraphicListener {
 		String[] names = new String[nSeries];
 		int[][] series = new int[nSeries][256];
 
-		for(int iSerie = 0; iSerie < nSeries; iSerie++){
+		for (int iSerie = 0; iSerie < nSeries; iSerie++) {
 			names[iSerie] = "Band " + iSerie;
 			for (int i = 0; i < 256; i++)
 				series[iSerie][i] = i * (iSerie + 1);
 		}
-		
+
 		graphic.getPGraphic().setViewType(0);
-		
+
 		graphic.getPGraphic().setNewChart(series, names);
 
 		graphic.addValueChangedListener(this);
-		defaultButtonsPanel = new DefaultButtonsPanel(ButtonsPanel.BUTTONS_CLOSE);
+		defaultButtonsPanel = new DefaultButtonsPanel(
+				ButtonsPanel.BUTTONS_CLOSE);
 		defaultButtonsPanel.setLayout(new BorderLayout(5, 5));
-		defaultButtonsPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		defaultButtonsPanel.setBorder(javax.swing.BorderFactory
+				.createEmptyBorder(5, 5, 5, 5));
 		defaultButtonsPanel.add(graphic, BorderLayout.CENTER);
 		frame.getContentPane().add(defaultButtonsPanel);
 		frame.setSize(640, 480);
@@ -66,7 +69,7 @@ public class TestGraphic implements GraphicListener {
 	public static void main(String[] args) {
 		try {
 			new TestGraphic();
-		} catch (NotInitializeException ex){
+		} catch (NotInitializeException ex) {
 			System.out.println("Tabla no inicializada");
 		}
 	}

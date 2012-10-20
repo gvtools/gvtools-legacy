@@ -10,11 +10,11 @@ import com.iver.cit.gvsig.fmap.core.v02.FConverter;
  * @author Pompermaier Flavio
  */
 public class FPolyline3DM extends FPolyline3D implements FShapeM {
-	
+
 	private static final long serialVersionUID = -4920745174292188836L;
 	private static final String NAME = "MULTILINESTRING_3DM";
 	double[] pM = null;
-	
+
 	/**
 	 * Crea un nuevo Polyline3DM.
 	 * 
@@ -29,7 +29,7 @@ public class FPolyline3DM extends FPolyline3D implements FShapeM {
 		super(gpx, pZ);
 		this.pM = pM;
 	}
-	
+
 	/**
 	 * @see com.iver.cit.gvsig.fmap.core.FShape#getShapeType()
 	 */
@@ -37,7 +37,7 @@ public class FPolyline3DM extends FPolyline3D implements FShapeM {
 	public int getShapeType() {
 		return FShape.LINE | FShape.Z;
 	}
-	
+
 	/**
 	 * Devuelve un Array con todos los valores de M.
 	 * 
@@ -46,19 +46,20 @@ public class FPolyline3DM extends FPolyline3D implements FShapeM {
 	public double[] getMs() {
 		return pM;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.FShape#cloneFShape()
 	 */
 	@Override
 	public FShape cloneFShape() {
 		return new FPolyline3DM((GeneralPathX) gp.clone(), pZ, pM);
 	}
-	
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.FShapeM#isDecreasing()
 	 */
 	public boolean isDecreasing() {
@@ -66,10 +67,10 @@ public class FPolyline3DM extends FPolyline3D implements FShapeM {
 			return false;
 		return pM[0] > pM[pM.length - 1];
 	}
-	
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.FShapeM#revertMs()
 	 */
 	public void revertMs() {
@@ -78,7 +79,7 @@ public class FPolyline3DM extends FPolyline3D implements FShapeM {
 		for (int i = 1; i < percentages.length; i++) {
 			percentages[i] = Math.abs(pM[i] - pM[i - 1]) / totalDistance;
 		}
-		//The first value
+		// The first value
 		double pm0 = pM[0];
 		if (!isDecreasing()) {
 			pM[0] = pM[pM.length - 1];
@@ -86,8 +87,7 @@ public class FPolyline3DM extends FPolyline3D implements FShapeM {
 				double increasing = percentages[i] * totalDistance;
 				pM[i] = pM[i - 1] - increasing;
 			}
-		}
-		else {
+		} else {
 			pM[0] = pM[pM.length - 1];
 			for (int i = 1; i < pM.length - 1; i++) {
 				double decreasing = percentages[i] * totalDistance;
@@ -95,24 +95,24 @@ public class FPolyline3DM extends FPolyline3D implements FShapeM {
 			}
 		}
 		pM[pM.length - 1] = pm0;
-		
+
 	}
-	
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.FShapeM#setMAt(int, double)
 	 */
 	public void setMAt(int i, double value) {
 		if (i < pM.length) {
 			pM[i] = value;
 		}
-		
+
 	}
-	
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.FShapeM#toText()
 	 */
 	public String toText() {
@@ -121,46 +121,46 @@ public class FPolyline3DM extends FPolyline3D implements FShapeM {
 		str.append(" ((");
 		int theType;
 		double[] theData = new double[6];
-		
+
 		PathIterator theIterator = getPathIterator(null, FConverter.FLATNESS);
 		int i = 0;
-		
+
 		while (!theIterator.isDone()) {
-			//while not done
+			// while not done
 			theType = theIterator.currentSegment(theData);
-			
+
 			double m = 0.0;
 			if (i < pM.length) {
 				m = pM[i];
 			}
-			
+
 			switch (theType) {
-				case PathIterator.SEG_MOVETO:
-					str.append(theData[0] + " " + theData[1] + " " + m + ",");
-					break;
-				
-				case PathIterator.SEG_LINETO:
-					str.append(theData[0] + " " + theData[1] + " " + m + ",");
-					
-					break;
-				
-				case PathIterator.SEG_QUADTO:
-					System.out.println("Not supported here");
-					
-					break;
-				
-				case PathIterator.SEG_CUBICTO:
-					System.out.println("Not supported here");
-					
-					break;
-				
-				case PathIterator.SEG_CLOSE:
-					break;
-			} //end switch
-			
+			case PathIterator.SEG_MOVETO:
+				str.append(theData[0] + " " + theData[1] + " " + m + ",");
+				break;
+
+			case PathIterator.SEG_LINETO:
+				str.append(theData[0] + " " + theData[1] + " " + m + ",");
+
+				break;
+
+			case PathIterator.SEG_QUADTO:
+				System.out.println("Not supported here");
+
+				break;
+
+			case PathIterator.SEG_CUBICTO:
+				System.out.println("Not supported here");
+
+				break;
+
+			case PathIterator.SEG_CLOSE:
+				break;
+			} // end switch
+
 			theIterator.next();
 			i++;
-		} //end while loop		
+		} // end while loop
 		return str.delete(str.length() - 1, str.length()) + "))";
 	}
 }

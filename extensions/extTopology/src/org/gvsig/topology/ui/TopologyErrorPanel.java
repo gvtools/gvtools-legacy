@@ -123,15 +123,16 @@ public class TopologyErrorPanel extends BoxLayoutPanel {
 
 	/**
 	 * Table model to show topology errors in a table.
+	 * 
 	 * @author Alvaro Zabala
-	 *
+	 * 
 	 */
 	private final class TopologyErrorTableModel extends AbstractTableModel {
 
 		private static final long serialVersionUID = -5615838036054987191L;
 
 		private ITopologyErrorContainer errorContainer;
-		
+
 		public void setErrorContainer(ITopologyErrorContainer errorContainer) {
 			this.errorContainer = errorContainer;
 		}
@@ -183,10 +184,12 @@ public class TopologyErrorPanel extends BoxLayoutPanel {
 				case FShape.ARC:
 				case FShape.CIRCLE:
 				case FShape.ELLIPSE:
-					//We have found that FGeometryCollection returns FShape.LINE
-					//Are there any reason for this?
-					if(error.getGeometry() instanceof FGeometryCollection)
-						solution = PluginServices.getText(this, "MULTIGEOMETRY");
+					// We have found that FGeometryCollection returns
+					// FShape.LINE
+					// Are there any reason for this?
+					if (error.getGeometry() instanceof FGeometryCollection)
+						solution = PluginServices
+								.getText(this, "MULTIGEOMETRY");
 					else
 						solution = PluginServices.getText(this, "LINE");
 					break;
@@ -201,7 +204,7 @@ public class TopologyErrorPanel extends BoxLayoutPanel {
 
 			case 4:
 				IFeature lyr1Feature = error.getFeature1();
-				if(lyr1Feature != null)
+				if (lyr1Feature != null)
 					solution = lyr1Feature.getID();
 				else
 					solution = "";
@@ -252,14 +255,13 @@ public class TopologyErrorPanel extends BoxLayoutPanel {
 	 */
 	private Map<String, ITopologyRule> ruleOption_rule;
 
-//	private List<FGraphic> selectedErrors;
-	
+	// private List<FGraphic> selectedErrors;
+
 	/**
 	 * Code of the symbol used to mark selections
 	 */
-//	int symbolSelectionCode;
-	
-	
+	// int symbolSelectionCode;
+
 	/**
 	 * Constructor
 	 * 
@@ -267,16 +269,17 @@ public class TopologyErrorPanel extends BoxLayoutPanel {
 	 */
 	public TopologyErrorPanel(ITopologyErrorContainer errorContainer) {
 		this.errorContainer = errorContainer;
-//		this.selectedErrors = new ArrayList<FGraphic>();
-		
-//		ISymbol selectionSymbol = new SimpleFillSymbol().getSymbolForSelection();
-//		IWindow f = PluginServices.getMDIManager().getActiveWindow();
-//		View vista = (View)f;
-//		symbolSelectionCode = vista.getMapControl().
-//									getMapContext().
-//									getGraphicsLayer().
-//									addSymbol(selectionSymbol);
-		
+		// this.selectedErrors = new ArrayList<FGraphic>();
+
+		// ISymbol selectionSymbol = new
+		// SimpleFillSymbol().getSymbolForSelection();
+		// IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		// View vista = (View)f;
+		// symbolSelectionCode = vista.getMapControl().
+		// getMapContext().
+		// getGraphicsLayer().
+		// addSymbol(selectionSymbol);
+
 		initialize();
 	}
 
@@ -291,10 +294,12 @@ public class TopologyErrorPanel extends BoxLayoutPanel {
 				getShowExceptionsCb(), getShowViewExtentCb() };
 		this.addRow(row, 600, DEFAULT_HEIGHT);
 
-		this.addRow(new JComponent[] { getUpdateButton(), getBatchFixButton() }, 600,
-						DEFAULT_HEIGHT);
+		this.addRow(
+				new JComponent[] { getUpdateButton(), getBatchFixButton() },
+				600, DEFAULT_HEIGHT);
 
-		this.addRow(new JComponent[] { new JScrollPane(getErrorInspectorTable()) },
+		this.addRow(
+				new JComponent[] { new JScrollPane(getErrorInspectorTable()) },
 				600, 300);
 	}
 
@@ -316,11 +321,11 @@ public class TopologyErrorPanel extends BoxLayoutPanel {
 
 				violatedRules.put(violatedRule, violatedRule);
 				String rule_option = ((IOneLyrRule) violatedRule)
-						.getOriginLyr().getName()
-						+ " - ";
+						.getOriginLyr().getName() + " - ";
 				if (violatedRule instanceof ITwoLyrRule) {
 					ITwoLyrRule twoLyrRule = (ITwoLyrRule) violatedRule;
-					rule_option += twoLyrRule.getDestinationLyr().getName() + " - ";
+					rule_option += twoLyrRule.getDestinationLyr().getName()
+							+ " - ";
 				}
 				rule_option += violatedRule.getName();
 
@@ -364,35 +369,41 @@ public class TopologyErrorPanel extends BoxLayoutPanel {
 		});
 		return updateButton;
 	}
-	
-	private JButton getBatchFixButton(){
-		JButton batchFixButton = new JButton(PluginServices.getText(this, "BATCH_FIX"));
+
+	private JButton getBatchFixButton() {
+		JButton batchFixButton = new JButton(PluginServices.getText(this,
+				"BATCH_FIX"));
 		batchFixButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				batchFix();
 			}
 
-			
 		});
 		return batchFixButton;
 	}
-	
+
 	private void batchFix() {
 		ITopologyRule selectedRule = getSelectedRule();
-		if(selectedRule == null){
-			GUIUtil.getInstance().messageBox(PluginServices.getText(this, "Must_select_a_rule_to_correct"), PluginServices.getText(this, "ERROR"));
+		if (selectedRule == null) {
+			GUIUtil.getInstance().messageBox(
+					PluginServices.getText(this,
+							"Must_select_a_rule_to_correct"),
+					PluginServices.getText(this, "ERROR"));
 			return;
 		}
 		ITopologyErrorFix errorFix = selectedRule.getDefaultFixFor(null);
-		if(errorFix instanceof ITopologyErrorFixWithParameters){
-			GUIUtil.getInstance().messageBox(PluginServices.getText(this, "correction_needs_user_interaction"),
+		if (errorFix instanceof ITopologyErrorFixWithParameters) {
+			GUIUtil.getInstance().messageBox(
+					PluginServices.getText(this,
+							"correction_needs_user_interaction"),
 					PluginServices.getText(this, "could_not_launch_process"));
 			return;
 		}
-		
-		TopologyBatchCorrectionTask task = new TopologyBatchCorrectionTask(this.errorContainer, selectedRule);
+
+		TopologyBatchCorrectionTask task = new TopologyBatchCorrectionTask(
+				this.errorContainer, selectedRule);
 		PluginServices.cancelableBackgroundExecution(task);
-		
+
 	}
 
 	private JTable getErrorInspectorTable() {
@@ -401,30 +412,30 @@ public class TopologyErrorPanel extends BoxLayoutPanel {
 			dataModel = new TopologyErrorTableModel();
 			dataModel.setErrorContainer(errorContainer);
 			errorInspectorTable.setModel(dataModel);
-			errorInspectorTable.getColumnModel().getColumn(0).setHeaderValue(
-					PluginServices.getText(this, "Rule_type"));
+			errorInspectorTable.getColumnModel().getColumn(0)
+					.setHeaderValue(PluginServices.getText(this, "Rule_type"));
 
-			errorInspectorTable.getColumnModel().getColumn(1).setHeaderValue(
-					PluginServices.getText(this, "Layer_1"));
+			errorInspectorTable.getColumnModel().getColumn(1)
+					.setHeaderValue(PluginServices.getText(this, "Layer_1"));
 
-			errorInspectorTable.getColumnModel().getColumn(2).setHeaderValue(
-					PluginServices.getText(this, "Layer_2"));
+			errorInspectorTable.getColumnModel().getColumn(2)
+					.setHeaderValue(PluginServices.getText(this, "Layer_2"));
 
-			errorInspectorTable.getColumnModel().getColumn(3).setHeaderValue(
-					PluginServices.getText(this, "Shape_Type"));
+			errorInspectorTable.getColumnModel().getColumn(3)
+					.setHeaderValue(PluginServices.getText(this, "Shape_Type"));
 
-			errorInspectorTable.getColumnModel().getColumn(4).setHeaderValue(
-					PluginServices.getText(this, "Feature_1"));
+			errorInspectorTable.getColumnModel().getColumn(4)
+					.setHeaderValue(PluginServices.getText(this, "Feature_1"));
 
-			errorInspectorTable.getColumnModel().getColumn(5).setHeaderValue(
-					PluginServices.getText(this, "Feature_2"));
+			errorInspectorTable.getColumnModel().getColumn(5)
+					.setHeaderValue(PluginServices.getText(this, "Feature_2"));
 
-			errorInspectorTable.getColumnModel().getColumn(6).setHeaderValue(
-					PluginServices.getText(this, "Exception"));
+			errorInspectorTable.getColumnModel().getColumn(6)
+					.setHeaderValue(PluginServices.getText(this, "Exception"));
 		}
 
 		errorInspectorTable.addMouseListener(new MouseAdapter() {
-			
+
 			private void maybeShowPopup(MouseEvent e) {
 				if (e.isPopupTrigger() && errorInspectorTable.isEnabled()) {
 					Point p = new Point(e.getX(), e.getY());
@@ -434,18 +445,19 @@ public class TopologyErrorPanel extends BoxLayoutPanel {
 						if (contextMenu != null
 								&& contextMenu.getComponentCount() > 0) {
 							contextMenu.show(errorInspectorTable, p.x, p.y);
-						}//if
-					}//if
-				}//if
+						}// if
+					}// if
+				}// if
 			}
 
 			private JPopupMenu createContextMenu(final int row) {
 				IWindow f = PluginServices.getMDIManager().getActiveWindow();
-				if(! (f instanceof View))
+				if (!(f instanceof View))
 					return null;
-				final View vista = (View)f;
-				final TopologyError error = errorContainer.getTopologyError(row);
-				
+				final View vista = (View) f;
+				final TopologyError error = errorContainer
+						.getTopologyError(row);
+
 				JPopupMenu contextMenu = new JPopupMenu();
 				JMenuItem panMenu = new JMenuItem();
 				panMenu.setText(PluginServices.getText(this, "PAN_TO"));
@@ -453,27 +465,27 @@ public class TopologyErrorPanel extends BoxLayoutPanel {
 					public void actionPerformed(ActionEvent e) {
 						IProjectView model = vista.getModel();
 						MapContext mapa = model.getMapContext();
-						Rectangle2D currentExtent = mapa.getViewPort().getExtent();
+						Rectangle2D currentExtent = mapa.getViewPort()
+								.getExtent();
 						double width = currentExtent.getWidth();
 						double height = currentExtent.getHeight();
-						
-						Rectangle2D errorBounds = error.getGeometry().getBounds2D();
+
+						Rectangle2D errorBounds = error.getGeometry()
+								.getBounds2D();
 						double centerX = errorBounds.getCenterX();
 						double centerY = errorBounds.getCenterY();
-						
-						Rectangle2D newExtent = new Rectangle2D.Double(centerX - (width / 2),
-																	  centerY - (height / 2), 
-																		width, 
-																	    height);
+
+						Rectangle2D newExtent = new Rectangle2D.Double(centerX
+								- (width / 2), centerY - (height / 2), width,
+								height);
 						mapa.getViewPort().setExtent(newExtent);
-						((ProjectDocument)vista.getModel()).setModified(true);
-						
+						((ProjectDocument) vista.getModel()).setModified(true);
+
 					}
-					
+
 				});
 				contextMenu.add(panMenu);
-				
-				
+
 				JMenuItem zoomMenu = new JMenuItem();
 				zoomMenu.setText(PluginServices.getText(this, "ZOOM_TO"));
 				zoomMenu.addActionListener(new ActionListener() {
@@ -481,30 +493,34 @@ public class TopologyErrorPanel extends BoxLayoutPanel {
 						IProjectView model = vista.getModel();
 						MapContext mapa = model.getMapContext();
 						Rectangle2D errorBounds = null;
-						
+
 						errorBounds = error.getGeometry().getBounds2D();
-//						if(error.getGeometry() instanceof FGeometryCollection){
-//							errorBounds = ((FGeometryCollection) error.getGeometry()).getGeometries()[0].getBounds2D();
-//						}else
-//							errorBounds = error.getGeometry().getBounds2D();
-//						
-//						double w = 600d;
-//						double h = 400d;
-//						
-//						if(errorBounds.getWidth() > w)
-//							w = errorBounds.getWidth();
-//						if(errorBounds.getHeight() > h)
-//							h = errorBounds.getHeight();
-//						
-//						double minx = errorBounds.getMinX();
-//						double miny = errorBounds.getMinY();
-//						
-//						Rectangle2D newExtent = new Rectangle2D.Double(minx, 
-//																	   miny, 
-//																	   w / 2, 
-//																	   h / 2);
-//						//we select the error to make easy its localization in map
-						FLyrVect errorLyr = (FLyrVect) error.getTopology().getErrorLayer();
+						// if(error.getGeometry() instanceof
+						// FGeometryCollection){
+						// errorBounds = ((FGeometryCollection)
+						// error.getGeometry()).getGeometries()[0].getBounds2D();
+						// }else
+						// errorBounds = error.getGeometry().getBounds2D();
+						//
+						// double w = 600d;
+						// double h = 400d;
+						//
+						// if(errorBounds.getWidth() > w)
+						// w = errorBounds.getWidth();
+						// if(errorBounds.getHeight() > h)
+						// h = errorBounds.getHeight();
+						//
+						// double minx = errorBounds.getMinX();
+						// double miny = errorBounds.getMinY();
+						//
+						// Rectangle2D newExtent = new Rectangle2D.Double(minx,
+						// miny,
+						// w / 2,
+						// h / 2);
+						// //we select the error to make easy its localization
+						// in map
+						FLyrVect errorLyr = (FLyrVect) error.getTopology()
+								.getErrorLayer();
 						try {
 							errorLyr.getRecordset().clearSelection();
 							FBitSet newSelection = new FBitSet();
@@ -514,17 +530,18 @@ public class TopologyErrorPanel extends BoxLayoutPanel {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-						
+
 						Rectangle2D newExtent = errorBounds;
 						mapa.getViewPort().setExtent(newExtent);
-						((ProjectDocument)vista.getModel()).setModified(true);
+						((ProjectDocument) vista.getModel()).setModified(true);
 					}
 				});
 				contextMenu.add(zoomMenu);
 				contextMenu.addSeparator();
-				
+
 				JMenuItem viewDescriptionMenu = new JMenuItem();
-				viewDescriptionMenu.setText(PluginServices.getText(this, "VIEW_RULE_DESCRIPTION"));
+				viewDescriptionMenu.setText(PluginServices.getText(this,
+						"VIEW_RULE_DESCRIPTION"));
 				viewDescriptionMenu.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						showViolatedRuleDescriptionDialog(error);
@@ -532,30 +549,34 @@ public class TopologyErrorPanel extends BoxLayoutPanel {
 
 					private void showViolatedRuleDescriptionDialog(
 							final TopologyError error) {
-						
-						
-						class DescriptionPanel extends JPanel implements IWindow{
+
+						class DescriptionPanel extends JPanel implements
+								IWindow {
 							public WindowInfo getWindowInfo() {
-								WindowInfo solution = new WindowInfo(WindowInfo.MODALDIALOG|
-													  WindowInfo.PALETTE|
-													  WindowInfo.ICONIFIABLE|
-													  WindowInfo.RESIZABLE|WindowInfo.MAXIMIZABLE);
+								WindowInfo solution = new WindowInfo(
+										WindowInfo.MODALDIALOG
+												| WindowInfo.PALETTE
+												| WindowInfo.ICONIFIABLE
+												| WindowInfo.RESIZABLE
+												| WindowInfo.MAXIMIZABLE);
 								solution.setWidth(300);
 								solution.setHeight(300);
 								return solution;
 							}
+
 							public Object getWindowProfile() {
 								return WindowInfo.DIALOG_PROFILE;
 							}
-							
+
 						}
-						
-						final DescriptionPanel descriptionPanel =
-							new DescriptionPanel();
+
+						final DescriptionPanel descriptionPanel = new DescriptionPanel();
 						descriptionPanel.setLayout(new BorderLayout());
-						
-						JScrollPane rightPanel = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-						JEditorPane htmlViewer = new JEditorPane(){
+
+						JScrollPane rightPanel = new JScrollPane(
+								JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+								JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+						JEditorPane htmlViewer = new JEditorPane() {
 							public URL getPage() {
 								return null;
 							}
@@ -567,37 +588,43 @@ public class TopologyErrorPanel extends BoxLayoutPanel {
 						try {
 							ITopologyRule rule = error.getViolatedRule();
 							URL description = rule.getDescription();
-							htmlViewer.setPage(description);	 
+							htmlViewer.setPage(description);
 						} catch (Exception ex) {
-							htmlViewer.setText("<p>"+PluginServices.getText(this, "UNAVAILABLE_DESCRIPTION")+"</p>");
+							htmlViewer.setText("<p>"
+									+ PluginServices.getText(this,
+											"UNAVAILABLE_DESCRIPTION") + "</p>");
 						}
-						
+
 						JPanel southPanel = new JPanel();
-						JButton okButton = new JButton(PluginServices.getText(this, "OK"));
-						okButton.addActionListener(new ActionListener(){
+						JButton okButton = new JButton(PluginServices.getText(
+								this, "OK"));
+						okButton.addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent arg0) {
-								Window parentWindow = GUIUtil.getInstance().getParentWindow(descriptionPanel);
+								Window parentWindow = GUIUtil.getInstance()
+										.getParentWindow(descriptionPanel);
 								parentWindow.setVisible(false);
 								parentWindow.dispose();
-							}});
-						
+							}
+						});
+
 						southPanel.setLayout(new BorderLayout());
 						JPanel aux = new JPanel();
 						aux.add(okButton, BorderLayout.EAST);
 						southPanel.add(aux, BorderLayout.EAST);
-						
+
 						descriptionPanel.add(rightPanel, BorderLayout.CENTER);
 						descriptionPanel.add(southPanel, BorderLayout.SOUTH);
 						descriptionPanel.setSize(new Dimension(300, 300));
-						PluginServices.getMDIManager().addWindow(descriptionPanel);
+						PluginServices.getMDIManager().addWindow(
+								descriptionPanel);
 					}
 				});
 				contextMenu.add(viewDescriptionMenu);
 				contextMenu.addSeparator();
-				
-				
+
 				JMenuItem markAsExceptionMenu = new JMenuItem();
-				markAsExceptionMenu.setText(PluginServices.getText(this, "MARK_AS_EXCEPTION"));
+				markAsExceptionMenu.setText(PluginServices.getText(this,
+						"MARK_AS_EXCEPTION"));
 				markAsExceptionMenu.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						error.getTopology().markAsTopologyException(error);
@@ -605,72 +632,117 @@ public class TopologyErrorPanel extends BoxLayoutPanel {
 					}
 				});
 				contextMenu.add(markAsExceptionMenu);
-				
+
 				contextMenu.addSeparator();
-				
+
 				ITopologyRule violatedRule = error.getViolatedRule();
 				List<ITopologyErrorFix> errorFixes = null;
-				if(error.getViolatedRule() instanceof ITopologyRuleWithExclusiveFix){
-					errorFixes = ((ITopologyRuleWithExclusiveFix)violatedRule).getExclusiveErrorFixes(error);
-				}else{
+				if (error.getViolatedRule() instanceof ITopologyRuleWithExclusiveFix) {
+					errorFixes = ((ITopologyRuleWithExclusiveFix) violatedRule)
+							.getExclusiveErrorFixes(error);
+				} else {
 					errorFixes = violatedRule.getAutomaticErrorFixes();
 				}
-				
-				for(int i = 0; i < errorFixes.size(); i++){
+
+				for (int i = 0; i < errorFixes.size(); i++) {
 					final ITopologyErrorFix errorFix = errorFixes.get(i);
 					JMenuItem fixMenuItem = new JMenuItem();
 					fixMenuItem.setText(errorFix.getEditionDescription());
 					fixMenuItem.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
-							if(errorFix instanceof ITopologyErrorFixWithParameters){
-								ITopologyErrorFixWithParameters fix =
-									(ITopologyErrorFixWithParameters) errorFix;
+							if (errorFix instanceof ITopologyErrorFixWithParameters) {
+								ITopologyErrorFixWithParameters fix = (ITopologyErrorFixWithParameters) errorFix;
 								fix.initialize(error);
-								final GParameter[] parameters = fix.getParameters();
-								
-								Window topologyErrorPanelContainer = (Window)GUIUtil.
-																				getInstance().
-																				getParentOfType(TopologyErrorPanel.this, Window.class);
-								
-								PanelEntriesDialog panelEntriesDialog = new PanelEntriesDialog(PluginServices.getText(this, "Fix_parameters"), 
-																		   400, 130, parameters, topologyErrorPanelContainer);
-								panelEntriesDialog.addOkActionListener(new ActionListener(){
-									public void actionPerformed(ActionEvent arg0) {
-										try {
-											//previously we check if user selected a param
-											for(int z = 0; z < parameters.length; z++){
-												GParameter parameter = parameters[z];
-												Object value = parameter.getValue();
-												Object defaultValue = parameter.getDefaultValue();
-												if(  value == null || value.equals(defaultValue))
-													parameter.setValue(defaultValue);
-												
-											}//for z
-											errorFix.fix(error);
-											GUIUtil.getInstance().messageBox(PluginServices.getText(this, "ERROR_FIX_SUCCESS"),
-																			 PluginServices.getText(this, "INFO"));
-											//now we update the error panel and the error layer
-											updateErrorTable();
-											vista.getMapControl().repaint();
-											
-										} catch (BaseException e1) {
-											GUIUtil.getInstance().messageBox(PluginServices.getText(this, "ERROR_FIX_ERROR")+e1.getFormatString(),
-																			 PluginServices.getText(this, "ERROR"));
-										}
-									}});
-							   
-								JDialog entriesParent = new JDialog((Frame)PluginServices.getMainFrame(), true);
-								entriesParent.setContentPane(panelEntriesDialog);
-								entriesParent.setTitle(PluginServices.getText(this, "Parametros_De_Entrada_Para_La_Correccion"));
+								final GParameter[] parameters = fix
+										.getParameters();
+
+								Window topologyErrorPanelContainer = (Window) GUIUtil
+										.getInstance().getParentOfType(
+												TopologyErrorPanel.this,
+												Window.class);
+
+								PanelEntriesDialog panelEntriesDialog = new PanelEntriesDialog(
+										PluginServices.getText(this,
+												"Fix_parameters"), 400, 130,
+										parameters, topologyErrorPanelContainer);
+								panelEntriesDialog
+										.addOkActionListener(new ActionListener() {
+											public void actionPerformed(
+													ActionEvent arg0) {
+												try {
+													// previously we check if
+													// user selected a param
+													for (int z = 0; z < parameters.length; z++) {
+														GParameter parameter = parameters[z];
+														Object value = parameter
+																.getValue();
+														Object defaultValue = parameter
+																.getDefaultValue();
+														if (value == null
+																|| value.equals(defaultValue))
+															parameter
+																	.setValue(defaultValue);
+
+													}// for z
+													errorFix.fix(error);
+													GUIUtil.getInstance()
+															.messageBox(
+																	PluginServices
+																			.getText(
+																					this,
+																					"ERROR_FIX_SUCCESS"),
+																	PluginServices
+																			.getText(
+																					this,
+																					"INFO"));
+													// now we update the error
+													// panel and the error layer
+													updateErrorTable();
+													vista.getMapControl()
+															.repaint();
+
+												} catch (BaseException e1) {
+													GUIUtil.getInstance()
+															.messageBox(
+																	PluginServices
+																			.getText(
+																					this,
+																					"ERROR_FIX_ERROR")
+																			+ e1.getFormatString(),
+																	PluginServices
+																			.getText(
+																					this,
+																					"ERROR"));
+												}
+											}
+										});
+
+								JDialog entriesParent = new JDialog(
+										(Frame) PluginServices.getMainFrame(),
+										true);
+								entriesParent
+										.setContentPane(panelEntriesDialog);
+								entriesParent.setTitle(PluginServices
+										.getText(this,
+												"Parametros_De_Entrada_Para_La_Correccion"));
 								entriesParent.setSize(290, 220);
-								GUIUtil.getInstance().centerDialog(entriesParent, (MDIFrame) PluginServices.getMainFrame());
+								GUIUtil.getInstance().centerDialog(
+										entriesParent,
+										(MDIFrame) PluginServices
+												.getMainFrame());
 								entriesParent.setVisible(true);
-							}else{
+							} else {
 								try {
 									errorFix.fix(error);
-									JOptionPane.showMessageDialog(null, PluginServices.getText(this, "ERROR_FIX_SUCCESS"));
+									JOptionPane.showMessageDialog(null,
+											PluginServices.getText(this,
+													"ERROR_FIX_SUCCESS"));
 								} catch (BaseException e1) {
-									JOptionPane.showMessageDialog(null, PluginServices.getText(this, "ERROR_FIX_ERROR")+e1.getFormatString());
+									JOptionPane.showMessageDialog(
+											null,
+											PluginServices.getText(this,
+													"ERROR_FIX_ERROR")
+													+ e1.getFormatString());
 								}
 							}
 						}
@@ -680,7 +752,6 @@ public class TopologyErrorPanel extends BoxLayoutPanel {
 				return contextMenu;
 			}
 
-			
 			public void mousePressed(MouseEvent e) {
 				maybeShowPopup(e);
 			}
@@ -690,69 +761,63 @@ public class TopologyErrorPanel extends BoxLayoutPanel {
 			}
 		});
 		/*
-		errorInspectorTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-			public void valueChanged(ListSelectionEvent e) {
-			if (e.getSource() == errorInspectorTable.getSelectionModel() && errorInspectorTable.getRowSelectionAllowed()) {
-				IWindow f = PluginServices.getMDIManager().getActiveWindow();
-				final View vista = (View)f; 
-				MapControl mapControl = vista.getMapControl();
-				MapContext map = mapControl.getMapContext();
-				
-				//first of all we delete the graphics of the previous selection
-//				for(int i = 0; i < selectedErrors.size(); i++){
-//					FGraphic oldGraphic = selectedErrors.get(i);
-//					map.getGraphicsLayer().removeGraphic(oldGraphic);
-//				}
-//				mapControl.drawGraphics();
-//				mapControl.repaint();
-//				selectedErrors.clear();
-				
-				int first = e.getFirstIndex();
-                int last = e.getLastIndex();
-//                for(int i = first; i <= last; i++){
-//                	TopologyError error = errorContainer.getTopologyError(i);
-//                	IGeometry errorGeometry = error.getGeometry();
-//                	FGraphic newGraphic = 
-//                		new FGraphic(errorGeometry, symbolSelectionCode);
-//                	map.getGraphicsLayer().addGraphic(newGraphic);
-//                	selectedErrors.add(newGraphic);
-//                }//for
-//            	mapControl.drawGraphics();
-//            	mapControl.repaint();
-		      }//if 
-			}});
-			*/
+		 * errorInspectorTable.getSelectionModel().addListSelectionListener(new
+		 * ListSelectionListener(){ public void valueChanged(ListSelectionEvent
+		 * e) { if (e.getSource() == errorInspectorTable.getSelectionModel() &&
+		 * errorInspectorTable.getRowSelectionAllowed()) { IWindow f =
+		 * PluginServices.getMDIManager().getActiveWindow(); final View vista =
+		 * (View)f; MapControl mapControl = vista.getMapControl(); MapContext
+		 * map = mapControl.getMapContext();
+		 * 
+		 * //first of all we delete the graphics of the previous selection //
+		 * for(int i = 0; i < selectedErrors.size(); i++){ // FGraphic
+		 * oldGraphic = selectedErrors.get(i); //
+		 * map.getGraphicsLayer().removeGraphic(oldGraphic); // } //
+		 * mapControl.drawGraphics(); // mapControl.repaint(); //
+		 * selectedErrors.clear();
+		 * 
+		 * int first = e.getFirstIndex(); int last = e.getLastIndex(); //
+		 * for(int i = first; i <= last; i++){ // TopologyError error =
+		 * errorContainer.getTopologyError(i); // IGeometry errorGeometry =
+		 * error.getGeometry(); // FGraphic newGraphic = // new
+		 * FGraphic(errorGeometry, symbolSelectionCode); //
+		 * map.getGraphicsLayer().addGraphic(newGraphic); //
+		 * selectedErrors.add(newGraphic); // }//for //
+		 * mapControl.drawGraphics(); // mapControl.repaint(); }//if }});
+		 */
 		return errorInspectorTable;
 	}
-	
-//	private JPanel getFixUserEntriesPanel(GParameter[] parameters){
-//		BoxLayoutPanel solution = new BoxLayoutPanel();
-//		solution.addRow(new JComponent[] { new JLabel(PluginServices.getText(this,
-//				"Parametros_De_Entrada_Para_La_Correccion")) });
-//		
-//		final List<GParameterChangeListener> paramsListener
-//		 = new ArrayList<GParameterChangeListener>();
-//		
-//		for(int i = 0; i < parameters.length; i++){
-//			GParameter param = parameters[i];
-//			GParameterChangeListener listener = solution.addComponentForParameter(param);
-//			paramsListener.add(listener);
-//		}
-//
-//		JButton bton = new JButton(PluginServices.getText(this, "Aceptar"));
-//		bton.addActionListener(new ActionListener(){
-//			public void actionPerformed(ActionEvent arg0) {
-//				for(int i = 0; i < paramsListener.size(); i++){
-//					paramsListener.get(i).parameterChange();
-//				}
-//			}});
-//
-//		solution.addRow(new JComponent[] { bton }, 600, DEFAULT_HEIGHT);
-//		
-//		
-//		return solution;
-//		
-//	}
+
+	// private JPanel getFixUserEntriesPanel(GParameter[] parameters){
+	// BoxLayoutPanel solution = new BoxLayoutPanel();
+	// solution.addRow(new JComponent[] { new
+	// JLabel(PluginServices.getText(this,
+	// "Parametros_De_Entrada_Para_La_Correccion")) });
+	//
+	// final List<GParameterChangeListener> paramsListener
+	// = new ArrayList<GParameterChangeListener>();
+	//
+	// for(int i = 0; i < parameters.length; i++){
+	// GParameter param = parameters[i];
+	// GParameterChangeListener listener =
+	// solution.addComponentForParameter(param);
+	// paramsListener.add(listener);
+	// }
+	//
+	// JButton bton = new JButton(PluginServices.getText(this, "Aceptar"));
+	// bton.addActionListener(new ActionListener(){
+	// public void actionPerformed(ActionEvent arg0) {
+	// for(int i = 0; i < paramsListener.size(); i++){
+	// paramsListener.get(i).parameterChange();
+	// }
+	// }});
+	//
+	// solution.addRow(new JComponent[] { bton }, 600, DEFAULT_HEIGHT);
+	//
+	//
+	// return solution;
+	//
+	// }
 
 	public void updateErrorTable() {
 		ITopologyRule filterRule = getSelectedRule();
@@ -791,9 +856,9 @@ public class TopologyErrorPanel extends BoxLayoutPanel {
 					continue;
 				}
 			}
-			if(filterRule != null &&  error.getViolatedRule() != filterRule)
+			if (filterRule != null && error.getViolatedRule() != filterRule)
 				continue;
-			
+
 			filteredErrorContainer.addTopologyError(error);
 		}// for
 

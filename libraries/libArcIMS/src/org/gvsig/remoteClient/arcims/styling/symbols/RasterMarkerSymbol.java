@@ -46,91 +46,94 @@
  */
 package org.gvsig.remoteClient.arcims.styling.symbols;
 
-
-
 import org.gvsig.remoteClient.arcims.utils.ServiceInfoTags;
 
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 
-
 /**
  * This type of symbol is supported by gvSIG
+ * 
  * @author jsanz
- *
+ * 
  */
 public class RasterMarkerSymbol extends AbstractSymbol implements IArcIMSSymbol {
-    public static final String TAG = ServiceInfoTags.tRASTERMARKERSYMBOL;
-    private String url;
-    private String size;
-    private String transparency;
+	public static final String TAG = ServiceInfoTags.tRASTERMARKERSYMBOL;
+	private String url;
+	private String size;
+	private String transparency;
 
-    public RasterMarkerSymbol(String murl) {
-        this.url = murl;
-        transparency = "1.0";
-    }
+	public RasterMarkerSymbol(String murl) {
+		this.url = murl;
+		transparency = "1.0";
+	}
 
-    public String toString() {
-        return "<" + TAG + getParam() + "/>\r\n";
-    }
+	public String toString() {
+		return "<" + TAG + getParam() + "/>\r\n";
+	}
 
-    protected String getParam() {
-        String param = "";
+	protected String getParam() {
+		String param = "";
 
-        if (SymbolUtils.isVoid(url)) {
-            param += (" url=\"" + url + "\"");
-        }
+		if (SymbolUtils.isVoid(url)) {
+			param += (" url=\"" + url + "\"");
+		}
 
-        if (SymbolUtils.isVoid(size)) {
-            param += (" size=\"" + size + "\"");
-        }
+		if (SymbolUtils.isVoid(size)) {
+			param += (" size=\"" + size + "\"");
+		}
 
-        if (SymbolUtils.isVoid(transparency)) {
-            param += (" transparency=\"" + transparency + "\"");
-        }
+		if (SymbolUtils.isVoid(transparency)) {
+			param += (" transparency=\"" + transparency + "\"");
+		}
 
-        return param;
-    }
+		return param;
+	}
 
-    /**
-     * @return Returns the size.
-     */
-    public String getSize() {
-        return size;
-    }
+	/**
+	 * @return Returns the size.
+	 */
+	public String getSize() {
+		return size;
+	}
 
-    /**
-     * @param size The size to set.
-     */
-    public void setSize(String size) {
-        this.size = size;
-    }
+	/**
+	 * @param size
+	 *            The size to set.
+	 */
+	public void setSize(String size) {
+		this.size = size;
+	}
 
-    /**
-     * @return Returns the url.
-     */
-    public String getUrl() {
-        return url;
-    }
+	/**
+	 * @return Returns the url.
+	 */
+	public String getUrl() {
+		return url;
+	}
 
-    /**
-     * @param url The url to set.
-     */
-    public void setUrl(String url) {
-        this.url = url;
-    }
+	/**
+	 * @param url
+	 *            The url to set.
+	 */
+	public void setUrl(String url) {
+		this.url = url;
+	}
 
-    /* (non-Javadoc)
-     * @see org.gvsig.remoteClient.arcims.styling.symbols.IArcIMSSymbol#getFSymbol()
-     */
-    public ISymbol getFSymbol() {
-        return ArcImsFSymbolFactory.getFSymbol(this);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.arcims.styling.symbols.IArcIMSSymbol#getFSymbol()
+	 */
+	public ISymbol getFSymbol() {
+		return ArcImsFSymbolFactory.getFSymbol(this);
+	}
 
-    public String getTransparency() {
-        return transparency;
-    }
+	public String getTransparency() {
+		return transparency;
+	}
 
-    public void setTransparency(String transparency) {
-        this.transparency = transparency;
-    }
+	public void setTransparency(String transparency) {
+		this.transparency = transparency;
+	}
 }

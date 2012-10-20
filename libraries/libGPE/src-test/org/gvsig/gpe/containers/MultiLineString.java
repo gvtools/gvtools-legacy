@@ -1,4 +1,5 @@
 package org.gvsig.gpe.containers;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -50,25 +51,28 @@ package org.gvsig.gpe.containers;
  */
 /**
  * This class represetnts a MultiLineString
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class MultiLineString extends MultiGeometry{
-	
+public class MultiLineString extends MultiGeometry {
+
 	/**
 	 * Adds a new LineString
+	 * 
 	 * @param lineString
-	 * LineString to add
+	 *            LineString to add
 	 */
 	public void addLineString(LineString lineString) {
 		addGeometry(lineString);
 	}
-	
+
 	/**
 	 * Gets a LineString at position i
+	 * 
 	 * @param i
-	 * position
+	 *            position
 	 */
 	public LineString getMultiLineStringAt(int i) {
-		return (LineString)getGeometryAt(i);
+		return (LineString) getGeometryAt(i);
 	}
 }

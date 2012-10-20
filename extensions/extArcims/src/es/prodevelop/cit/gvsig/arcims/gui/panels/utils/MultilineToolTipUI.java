@@ -54,106 +54,102 @@ import javax.swing.JToolTip;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicToolTipUI;
 
-
 /**
  * This class allows nice multiline tool tips.
- *
+ * 
  * @author Zafir Anjum
  * @author jldominguez
  */
 public class MultilineToolTipUI extends BasicToolTipUI {
-    static MultilineToolTipUI sharedInstance = new MultilineToolTipUI();
+	static MultilineToolTipUI sharedInstance = new MultilineToolTipUI();
 
-    // Dialog, SansSerif - similar to Arial
-    // DialogInput, Monospaced - similar to Courier
-    // Serif - similar to Times New Roman 
-    static JToolTip tip;
-    private static JTextArea textArea;
-    Font smallFont = new Font("Dialog", Font.PLAIN, 12);
-    protected CellRendererPane rendererPane;
+	// Dialog, SansSerif - similar to Arial
+	// DialogInput, Monospaced - similar to Courier
+	// Serif - similar to Times New Roman
+	static JToolTip tip;
+	private static JTextArea textArea;
+	Font smallFont = new Font("Dialog", Font.PLAIN, 12);
+	protected CellRendererPane rendererPane;
 
-    public MultilineToolTipUI() {
-        super();
-    }
+	public MultilineToolTipUI() {
+		super();
+	}
 
-    public static ComponentUI createUI(JComponent c) {
-        return sharedInstance;
-    }
+	public static ComponentUI createUI(JComponent c) {
+		return sharedInstance;
+	}
 
-    public void installUI(JComponent c) {
-        super.installUI(c);
-        tip = (JToolTip) c;
-        rendererPane = new CellRendererPane();
-        c.add(rendererPane);
-    }
+	public void installUI(JComponent c) {
+		super.installUI(c);
+		tip = (JToolTip) c;
+		rendererPane = new CellRendererPane();
+		c.add(rendererPane);
+	}
 
-    public void uninstallUI(JComponent c) {
-        super.uninstallUI(c);
+	public void uninstallUI(JComponent c) {
+		super.uninstallUI(c);
 
-        c.remove(rendererPane);
-        rendererPane = null;
-    }
+		c.remove(rendererPane);
+		rendererPane = null;
+	}
 
-    public void paint(Graphics g, JComponent c) {
-        Dimension size = c.getSize();
-        rendererPane.paintComponent(g, textArea, c, 1, 1, size.width - 1,
-            size.height - 1, true);
-    }
+	public void paint(Graphics g, JComponent c) {
+		Dimension size = c.getSize();
+		rendererPane.paintComponent(g, textArea, c, 1, 1, size.width - 1,
+				size.height - 1, true);
+	}
 
-    /**
-     * Overrides a method that is called by the system and,
-     * at the same time, creates a nice textarea and displays the tool tip in it.
-     */
-    public Dimension getPreferredSize(JComponent c) {
-        String tipText = ((JToolTip) c).getTipText();
+	/**
+	 * Overrides a method that is called by the system and, at the same time,
+	 * creates a nice textarea and displays the tool tip in it.
+	 */
+	public Dimension getPreferredSize(JComponent c) {
+		String tipText = ((JToolTip) c).getTipText();
 
-        if (tipText == null) {
-            return new Dimension(0, 0);
-        }
+		if (tipText == null) {
+			return new Dimension(0, 0);
+		}
 
-        textArea = new JTextArea(tipText);
-        textArea.setMargin(new Insets(10, 10, 10, 10));
-        textArea.setBackground(tip.getBackground());
-        rendererPane.removeAll();
-        rendererPane.add(textArea);
-        textArea.setWrapStyleWord(true);
-        textArea.setFont(smallFont);
+		textArea = new JTextArea(tipText);
+		textArea.setMargin(new Insets(10, 10, 10, 10));
+		textArea.setBackground(tip.getBackground());
+		rendererPane.removeAll();
+		rendererPane.add(textArea);
+		textArea.setWrapStyleWord(true);
+		textArea.setFont(smallFont);
 
-        int width = ((JMultilineToolTip) c).getFixedWidth();
-        int columns = ((JMultilineToolTip) c).getColumns();
+		int width = ((JMultilineToolTip) c).getFixedWidth();
+		int columns = ((JMultilineToolTip) c).getColumns();
 
-        if (columns > 0) {
-            textArea.setColumns(columns);
-            textArea.setSize(0, 0);
-            textArea.setLineWrap(true);
-            textArea.setSize(textArea.getPreferredSize());
-        }
-        else if (width > 0) {
-            textArea.setLineWrap(true);
+		if (columns > 0) {
+			textArea.setColumns(columns);
+			textArea.setSize(0, 0);
+			textArea.setLineWrap(true);
+			textArea.setSize(textArea.getPreferredSize());
+		} else if (width > 0) {
+			textArea.setLineWrap(true);
 
-            Dimension d = textArea.getPreferredSize();
-            d.width = width;
-            d.height++;
-            textArea.setSize(d);
-        }
-        else
-        {
-            textArea.setLineWrap(false);
-        }
+			Dimension d = textArea.getPreferredSize();
+			d.width = width;
+			d.height++;
+			textArea.setSize(d);
+		} else {
+			textArea.setLineWrap(false);
+		}
 
-        Dimension dim = textArea.getPreferredSize();
+		Dimension dim = textArea.getPreferredSize();
 
-        dim.height += 1;
-        dim.width += 1;
+		dim.height += 1;
+		dim.width += 1;
 
-        return dim;
-    }
+		return dim;
+	}
 
-    public Dimension getMinimumSize(JComponent c) {
-        return getPreferredSize(c);
-    }
+	public Dimension getMinimumSize(JComponent c) {
+		return getPreferredSize(c);
+	}
 
-    public Dimension getMaximumSize(JComponent c) {
-        return getPreferredSize(c);
-    }
+	public Dimension getMaximumSize(JComponent c) {
+		return getPreferredSize(c);
+	}
 }

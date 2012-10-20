@@ -312,7 +312,7 @@ import com.iver.cit.gvsig.fmap.spatialindex.QuadtreeJts;
 
 /**
  * @author fjp
- *
+ * 
  */
 public class VectorialEditableAdapter extends EditableAdapter implements
 		ReadableVectorial, BoundedShapes {
@@ -326,49 +326,45 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 
 	protected BufferedImage handlersImage;
 
-
 	/*
-	 * azo; ReadableVectorial implementations need a reference to
-	 * IProjection (of the layer) and to ISpatialIndex (of the layer)
-	 * to allow iteration with different criteria
-	 * */
+	 * azo; ReadableVectorial implementations need a reference to IProjection
+	 * (of the layer) and to ISpatialIndex (of the layer) to allow iteration
+	 * with different criteria
+	 */
 	protected CoordinateReferenceSystem crs;
-//	protected ISpatialIndex fmapSpatialIndex;
+	// protected ISpatialIndex fmapSpatialIndex;
 	private MathTransform crsTransform;
 
-	//private double flatness=0.8;
+	// private double flatness=0.8;
 	/*
-	 * private class MyFeatureIterator implements IFeatureIterator { int numReg =
-	 * 0; Rectangle2D rect; String epsg; IFeatureIterator origFeatIt; boolean
+	 * private class MyFeatureIterator implements IFeatureIterator { int numReg
+	 * = 0; Rectangle2D rect; String epsg; IFeatureIterator origFeatIt; boolean
 	 * bHasNext = true;
-	 *
+	 * 
 	 * public MyFeatureIterator(Rectangle2D r, String strEPSG) throws
 	 * DriverException { rect = r; epsg = strEPSG; origFeatIt =
 	 * ova.getFeatureIterator(r, epsg); } public boolean hasNext() throws
 	 * DriverException { return bHasNext; }
-	 *
+	 * 
 	 * public IFeature next() throws DriverException { IFeature aux =
 	 * origFeatIt.next(); return null; }
-	 *
-	 * public void closeIterator() throws DriverException {
-	 *  }
-	 *  }
+	 * 
+	 * public void closeIterator() throws DriverException { } }
 	 */
-
-
 
 	public VectorialEditableAdapter() {
 		super();
 	}
 
-	public void setOriginalVectorialAdapter(ReadableVectorial rv) throws ReadDriverException {
+	public void setOriginalVectorialAdapter(ReadableVectorial rv)
+			throws ReadDriverException {
 		ova = rv;
 		setOriginalDataSource(rv.getRecordset());
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.ReadableVectorial#start()
 	 */
 	public void start() throws ReadDriverException, InitializeDriverException {
@@ -376,8 +372,7 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 	}
 
 	public IWriter getWriter() {
-		if (ova.getDriver() instanceof IWriteable)
-		{
+		if (ova.getDriver() instanceof IWriteable) {
 			IWriter writer = ((IWriteable) ova.getDriver()).getWriter();
 			if (writer instanceof ISpatialWriter)
 				return writer;
@@ -387,7 +382,7 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.ReadableVectorial#stop()
 	 */
 	public void stop() throws ReadDriverException {
@@ -396,10 +391,11 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.ReadableVectorial#getShape(int)
 	 */
-	public IGeometry getShape(int rowIndex) throws ReadDriverException, ExpansionFileReadException {
+	public IGeometry getShape(int rowIndex) throws ReadDriverException,
+			ExpansionFileReadException {
 		// Si no está en el fichero de expansión
 		int calculatedIndex = getCalculatedIndex(rowIndex);
 		Integer integer = new Integer(calculatedIndex);
@@ -414,15 +410,15 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 		int num = ((Integer) relations.get(integer)).intValue();
 		DefaultRowEdited feat;
 		feat = (DefaultRowEdited) expansionFile.getRow(num);
-		IGeometry geom=((IFeature) feat.getLinkedRow()).getGeometry();
-		if (geom!=null)
+		IGeometry geom = ((IFeature) feat.getLinkedRow()).getGeometry();
+		if (geom != null)
 			return geom.cloneGeometry();
 		return geom;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.ReadableVectorial#getShapeType()
 	 */
 	public int getShapeType() throws ReadDriverException {
@@ -447,37 +443,35 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 
 	/**
 	 * DOCUMENT ME!
+	 * 
 	 * @throws StartEditionLayerException
 	 * @throws StartWriterVisitorException
-	 *
+	 * 
 	 * @throws EditionException
 	 *             DOCUMENT ME!
 	 */
 	public void startEdition(int sourceType) throws StartWriterVisitorException {
 		super.startEdition(sourceType);
 		Driver drv = ova.getDriver();
-		if (drv instanceof IWriteable)
-		{
+		if (drv instanceof IWriteable) {
 			setWriter(((IWriteable) drv).getWriter());
 		}
-
 
 		try {
 			expansionFile.open();
 			if (fmapSpatialIndex == null) {
 				// TODO: Si la capa dispone de un índice espacial, hacer
 				// algo aquí para que se use ese índice espacial.
-//				index = new Quadtree();
+				// index = new Quadtree();
 				fmapSpatialIndex = new QuadtreeJts();
 
 				for (int i = 0; i < ova.getShapeCount(); i++) {
-					Rectangle2D r=null;
+					Rectangle2D r = null;
 					if (ova.getDriver() instanceof BoundedShapes) {
 						r = ((BoundedShapes) ova.getDriver()).getShapeBounds(i);
 					} else {
 						IGeometry g = null;
-						g = ((DefaultFeature) ova.getFeature(i))
-									.getGeometry();
+						g = ((DefaultFeature) ova.getFeature(i)).getGeometry();
 						if (g == null) {
 							continue;
 						}
@@ -496,24 +490,28 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 				}
 			}
 		} catch (ReadDriverException e) {
-			throw new StartWriterVisitorException(writer.getName(),e);
+			throw new StartWriterVisitorException(writer.getName(), e);
 		}
 
-//		System.err.println("Se han metido en el índice "
-//				+ index.queryAll().size() + " geometrías");
+		// System.err.println("Se han metido en el índice "
+		// + index.queryAll().size() + " geometrías");
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.edition.IEditableSource#getRow(int)
 	 */
-	public IRowEdited getRow(int index) throws ReadDriverException, ExpansionFileReadException {
-		// FJP: Demasiados start - stop hacen que se abra miles de veces el fichero y salte un error. Es mejor
-		// no abrir al leer una fila, y si se abre, que se haga en procesos de lectura y escritura en batch.
-		// otra posibilidad es abrir y no cerrar. (De todas formas a los 5 segundos lo cierrra el AutomaticDataSource
+	public IRowEdited getRow(int index) throws ReadDriverException,
+			ExpansionFileReadException {
+		// FJP: Demasiados start - stop hacen que se abra miles de veces el
+		// fichero y salte un error. Es mejor
+		// no abrir al leer una fila, y si se abre, que se haga en procesos de
+		// lectura y escritura en batch.
+		// otra posibilidad es abrir y no cerrar. (De todas formas a los 5
+		// segundos lo cierrra el AutomaticDataSource
 		// Por cierto, al quitar esto también se gana velocidad.
-//		start(); 
+		// start();
 		int calculatedIndex = getCalculatedIndex(index);
 		Integer integer = new Integer(calculatedIndex);
 		// Si no está en el fichero de expansión
@@ -521,14 +519,14 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 		if (!relations.containsKey(integer)) {
 			edRow = new DefaultRowEdited(ova.getFeature(calculatedIndex),
 					IRowEdited.STATUS_ORIGINAL, index);
-//			stop();
+			// stop();
 			return createExternalRow(edRow, 0);
 		}
 		int num = ((Integer) relations.get(integer)).intValue();
 		IRowEdited aux = expansionFile.getRow(num);
-		edRow = new DefaultRowEdited(aux.getLinkedRow().cloneRow(), aux
-				.getStatus(), index);
-//		stop();
+		edRow = new DefaultRowEdited(aux.getLinkedRow().cloneRow(),
+				aux.getStatus(), index);
+		// stop();
 		return edRow;
 	}
 
@@ -537,16 +535,17 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 	 * se marca como eliminada (haya sido modificada o no). Si es una geometría
 	 * añadida posteriormente se invalida en el fichero de expansión, para que
 	 * una futura compactación termine con ella.
-	 *
+	 * 
 	 * @param index
 	 *            Índice de la geometría.
 	 * @throws ReadDriverException
 	 * @throws ExpansionFileReadException
-	 *
+	 * 
 	 * @throws DriverIOException
 	 * @throws IOException
 	 */
-	public IRow doRemoveRow(int index, int sourceType) throws ReadDriverException, ExpansionFileReadException{
+	public IRow doRemoveRow(int index, int sourceType)
+			throws ReadDriverException, ExpansionFileReadException {
 		boolean cancel = fireBeforeRemoveRow(index, sourceType);
 		if (cancel)
 			return null;
@@ -567,10 +566,9 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 		// Se actualiza el índice
 		if (feat != null) {
 			Rectangle2D r = feat.getGeometry().getBounds2D();
-			this.fmapSpatialIndex.delete(r,
-					new Integer(index));
-//			System.out.println("Está borrado : " + borrado);
-//			System.out.println("Index.lenght : " + this.index.size());
+			this.fmapSpatialIndex.delete(r, new Integer(index));
+			// System.out.println("Está borrado : " + borrado);
+			// System.out.println("Index.lenght : " + this.index.size());
 			isFullExtentDirty = true;
 		}
 		setSelection(new FBitSet());
@@ -585,21 +583,23 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 	 * fichero de expansión (por ser nueva o original pero modificada) se invoca
 	 * el método modifyGeometry y se actualiza el índice de la geometria en el
 	 * fichero.
-	 *
+	 * 
 	 * @param calculatedIndex
 	 *            DOCUMENT ME!
 	 * @param feat
 	 *            DOCUMENT ME!
-	 *
+	 * 
 	 * @return position inside ExpansionFile
 	 * @throws ReadDriverException
 	 * @throws ExpansionFileWriteException
 	 * @throws ExpansionFileReadException
-	 *
+	 * 
 	 * @throws IOException
 	 * @throws DriverIOException
 	 */
-	public int doModifyRow(int calculatedIndex, IRow feat, int sourceType) throws ReadDriverException, ExpansionFileWriteException, ExpansionFileReadException {
+	public int doModifyRow(int calculatedIndex, IRow feat, int sourceType)
+			throws ReadDriverException, ExpansionFileWriteException,
+			ExpansionFileReadException {
 		boolean cancel = fireBeforeModifyRow(feat, calculatedIndex, sourceType);
 		if (cancel)
 			return -1;
@@ -607,8 +607,8 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 		Integer integer = new Integer(calculatedIndex);
 
 		IFeature featAnt = null;
-//		System.err.println("Modifica una Row en la posición: "
-//				+ calculatedIndex);
+		// System.err.println("Modifica una Row en la posición: "
+		// + calculatedIndex);
 		// Si la geometría no ha sido modificada
 		if (!relations.containsKey(integer)) {
 			int newPosition = expansionFile.addRow(feat,
@@ -621,13 +621,14 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 				IGeometry g = featAnt.getGeometry();
 				Rectangle2D rAnt = g.getBounds2D();
 				Rectangle2D r = ((IFeature) feat).getGeometry().getBounds2D();
-				this.fmapSpatialIndex.delete(rAnt, new Integer(calculatedIndex));
+				this.fmapSpatialIndex
+						.delete(rAnt, new Integer(calculatedIndex));
 				this.fmapSpatialIndex.insert(r, new Integer(calculatedIndex));
 			}
 		} else {
 			// Obtenemos el índice en el fichero de expansión
 			int num = ((Integer) relations.get(integer)).intValue();
-			posAnteriorInExpansionFile=num;
+			posAnteriorInExpansionFile = num;
 
 			// Obtenemos la geometría para actualiza el índice
 			// espacialposteriormente
@@ -649,7 +650,8 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 				// Se modifica el índice espacial
 				Rectangle2D rAnt = featAnt.getGeometry().getBounds2D();
 				Rectangle2D r = ((IFeature) feat).getGeometry().getBounds2D();
-				this.fmapSpatialIndex.delete(rAnt, new Integer(calculatedIndex));
+				this.fmapSpatialIndex
+						.delete(rAnt, new Integer(calculatedIndex));
 				this.fmapSpatialIndex.insert(r, new Integer(calculatedIndex));
 			}
 
@@ -665,7 +667,7 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 	 * fuera una modificación de una geometría que estuviese en el fichero de
 	 * expansión antes de ser modificada y se pone el puntero de escritura del
 	 * expansion file a justo despues de la penultima geometría
-	 *
+	 * 
 	 * @param calculatedIndex
 	 *            índice de la geometría que se quiere deshacer su modificación
 	 * @param previousExpansionFileIndex
@@ -677,7 +679,8 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 	 * @throws DriverIOException
 	 */
 	public int undoModifyRow(int calculatedIndex,
-			int previousExpansionFileIndex, int sourceType) throws EditionCommandException{
+			int previousExpansionFileIndex, int sourceType)
+			throws EditionCommandException {
 		try {
 			// Llega el CalculatedIndex
 			/*
@@ -708,18 +711,21 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 					// Se actualizan los índices
 					IGeometry gAnt = ova.getShape(calculatedIndex);
 					/*
-					 * IGeometry gAnt = ((DefaultFeature) getRow(calculatedIndex)
-					 * .getLinkedRow()).getGeometry();
+					 * IGeometry gAnt = ((DefaultFeature)
+					 * getRow(calculatedIndex) .getLinkedRow()).getGeometry();
 					 */
 					Rectangle2D rAnt = gAnt.getBounds2D();
-					this.fmapSpatialIndex.delete(r, new Integer(calculatedIndex));
-					this.fmapSpatialIndex.insert(rAnt, new Integer(calculatedIndex));
+					this.fmapSpatialIndex.delete(r,
+							new Integer(calculatedIndex));
+					this.fmapSpatialIndex.insert(rAnt, new Integer(
+							calculatedIndex));
 				}
 			} else {
 				// Se obtiene la geometría para actualizar el índice
 				IGeometry g = null;
 				int inverse = getInversedIndex(calculatedIndex);
-				DefaultFeature df = (DefaultFeature) getRow(inverse).getLinkedRow();
+				DefaultFeature df = (DefaultFeature) getRow(inverse)
+						.getLinkedRow();
 				boolean cancel = fireBeforeModifyRow(df, calculatedIndex,
 						sourceType);
 				if (cancel)
@@ -729,49 +735,54 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 					System.out.println("Actual: " + g.toString());
 
 					Rectangle2D r = g.getBounds2D();
-					this.fmapSpatialIndex.delete(r, new Integer(calculatedIndex));
+					this.fmapSpatialIndex.delete(r,
+							new Integer(calculatedIndex));
 
 					// Se recupera la geometría
 					// expansionFile.validateRow(previousExpansionFileIndex);
 
 					// Se actualizan los índices
-					 g = ((IFeature)
-					 (expansionFile.getRow(previousExpansionFileIndex).getLinkedRow())).getGeometry();
+					g = ((IFeature) (expansionFile
+							.getRow(previousExpansionFileIndex).getLinkedRow()))
+							.getGeometry();
 					// System.out.println("Anterior a la que volvemos : " +
 					// g.toString());
-//					g = ((DefaultFeature) getRow(inverse).getLinkedRow())
-//					.getGeometry();
+					// g = ((DefaultFeature) getRow(inverse).getLinkedRow())
+					// .getGeometry();
 					r = g.getBounds2D();
-					this.fmapSpatialIndex.insert(r, new Integer(calculatedIndex));
+					this.fmapSpatialIndex.insert(r,
+							new Integer(calculatedIndex));
 				}
 				// Se actualiza la relación de índices
 				// Integer integer = new Integer(geometryIndex);
-				int numAnt=((Integer)relations.get(new Integer(calculatedIndex))).intValue();
+				int numAnt = ((Integer) relations.get(new Integer(
+						calculatedIndex))).intValue();
 				relations.put(new Integer(calculatedIndex), new Integer(
 						previousExpansionFileIndex));
 				return numAnt;
 
 			}
 		} catch (ReadDriverException e) {
-			throw new EditionCommandException(writer.getName(),e);
+			throw new EditionCommandException(writer.getName(), e);
 		}
-		//fireAfterModifyRow(calculatedIndex, sourceType);
+		// fireAfterModifyRow(calculatedIndex, sourceType);
 		return -1;
 	}
 
 	/**
 	 * Añade una geometria al fichero de expansión y guarda la correspondencia
 	 * en la tabla relations.
-	 *
+	 * 
 	 * @param feat
 	 *            geometría a guardar.
-	 *
+	 * 
 	 * @return calculatedIndex
 	 * @throws ExpansionFileWriteException
 	 * @throws DriverIOException
 	 * @throws IOException
 	 */
-	public int doAddRow(IRow feat, int sourceType) throws ReadDriverException, ExpansionFileWriteException{
+	public int doAddRow(IRow feat, int sourceType) throws ReadDriverException,
+			ExpansionFileWriteException {
 		int calculatedIndex = super.doAddRow(feat, sourceType);
 		// Actualiza el índice espacial
 		IGeometry g = ((IFeature) feat).getGeometry();
@@ -784,20 +795,22 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 	/**
 	 * Se desmarca como invalidada en el fichero de expansion o como eliminada
 	 * en el fichero original
-	 *
+	 * 
 	 * @param index
 	 *            DOCUMENT ME!
 	 * @throws IOException
 	 * @throws DriverIOException
 	 */
-	public void undoRemoveRow(int index, int sourceType) throws EditionCommandException  {
+	public void undoRemoveRow(int index, int sourceType)
+			throws EditionCommandException {
 		super.undoRemoveRow(index, sourceType);
 
 		IGeometry g = null;
 		try {
-			g = ((IFeature) getRow(getInversedIndex(index)).getLinkedRow()).getGeometry();
+			g = ((IFeature) getRow(getInversedIndex(index)).getLinkedRow())
+					.getGeometry();
 		} catch (ReadDriverException e) {
-			throw new EditionCommandException(writer.getName(),e);
+			throw new EditionCommandException(writer.getName(), e);
 		}
 
 		Rectangle2D r = g.getBounds2D();
@@ -808,14 +821,15 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 	 * Se elimina del final del fichero de expansión poniendo el puntero de
 	 * escritura apuntando al final de la penúltima geometría. Deberá quitar la
 	 * relación del mapa de relaciones
-	 *
+	 * 
 	 * @param fmapSpatialIndex
 	 *            Índice de la geometría que se añadió
 	 * @throws EditionCommandException
 	 * @throws DriverIOException
 	 * @throws IOException
 	 */
-	public void undoAddRow(int calculatedIndex, int sourceType) throws EditionCommandException{
+	public void undoAddRow(int calculatedIndex, int sourceType)
+			throws EditionCommandException {
 		int inverse = getInversedIndex(calculatedIndex);
 		IGeometry g;
 		try {
@@ -826,19 +840,19 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 			super.undoAddRow(calculatedIndex, sourceType);
 			setSelection(new FBitSet());
 		} catch (ReadDriverException e) {
-			throw new EditionCommandException(writer.getName(),e);
+			throw new EditionCommandException(writer.getName(), e);
 		}
 	}
 
 	/**
 	 * Obtiene las geometrías que se encuentran en el rectángulo que se pasa
 	 * como parámetro haciendo uso del índice espacial
-	 *
+	 * 
 	 * @param r
 	 *            Rectángulo indicando la porción del espacio para el cual se
 	 *            quiere saber los índices de las geometrías que se encuentran
 	 *            dentro de él
-	 *
+	 * 
 	 * @return Array de índices para su uso con getGeometry, removeGeometry, ...
 	 */
 	/*
@@ -846,10 +860,10 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 	 * Envelope(r.getX(), r.getX() + r.getWidth(), r.getY(), r.getY() +
 	 * r.getHeight()); List l = index.query(e); int[] indexes = new
 	 * int[l.size()];
-	 *
+	 * 
 	 * for (int index = 0; index < l.size(); index++) { Integer i = (Integer)
 	 * l.get(index); indexes[index] = getInversedIndex(i.intValue()); }
-	 *
+	 * 
 	 * return indexes; }
 	 */
 	/**
@@ -863,7 +877,8 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 	 * @throws ExpansionFileReadException
 	 * @see com.iver.cit.gvsig.fmap.layers.ReadableVectorial#getFullExtent()
 	 */
-	public Rectangle2D getFullExtent() throws ReadDriverException, ExpansionFileReadException {
+	public Rectangle2D getFullExtent() throws ReadDriverException,
+			ExpansionFileReadException {
 		if (fullExtent == null) {
 			fullExtent = ova.getFullExtent();
 		}
@@ -877,26 +892,27 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 
 	/**
 	 * Use it BEFORE writing to a file.
-	 *
+	 * 
 	 * @return real full extent.
 	 * @throws ExpansionFileReadException
 	 * @throws ReadDriverException
 	 * @throws DriverIOException
 	 */
-	public Rectangle2D reCalculateFullExtent() throws ReadDriverException, ExpansionFileReadException  {
-		int i=0;
-		int count=getShapeCount();
-		while (i<count && getShape(i) == null){
+	public Rectangle2D reCalculateFullExtent() throws ReadDriverException,
+			ExpansionFileReadException {
+		int i = 0;
+		int count = getShapeCount();
+		while (i < count && getShape(i) == null) {
 			i++;
 		}
-		if (i < count){
+		if (i < count) {
 			fullExtent = getShape(i).getBounds2D();
 			for (int j = i; j < count; j++) {
-				IGeometry geom=getShape(i);
-				if (geom==null)
+				IGeometry geom = getShape(i);
+				if (geom == null)
 					continue;
-				if (fullExtent==null) {
-					fullExtent=geom.getBounds2D();
+				if (fullExtent == null) {
+					fullExtent = geom.getBounds2D();
 					continue;
 				}
 				if (!(geom instanceof FNullGeometry)) {
@@ -910,41 +926,44 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 	}
 
 	/**
-	 * En la implementación por defecto podemos hacer que cada feature tenga ID =
-	 * numero de registro. En el DBAdapter podríamos "overrride" este método y
+	 * En la implementación por defecto podemos hacer que cada feature tenga ID
+	 * = numero de registro. En el DBAdapter podríamos "overrride" este método y
 	 * poner como ID de la Feature el campo único escogido en la base de datos.
-	 *
+	 * 
 	 * @param numReg
 	 * @return
 	 * @throws ExpansionFileReadException
 	 */
-	public IFeature getFeature(int numReg) throws ReadDriverException, ExpansionFileReadException {
+	public IFeature getFeature(int numReg) throws ReadDriverException,
+			ExpansionFileReadException {
 		IGeometry geom;
 		IFeature feat = null;
-			geom = getShape(numReg);
-			DataSource rs = getRecordset();
-			Value[] regAtt = new Value[rs.getFieldCount()];
-			for (int fieldId = 0; fieldId < rs.getFieldCount(); fieldId++) {
-				regAtt[fieldId] = rs.getFieldValue(numReg, fieldId);
-			}
-			feat = new DefaultFeature(geom, regAtt, numReg + "");
+		geom = getShape(numReg);
+		DataSource rs = getRecordset();
+		Value[] regAtt = new Value[rs.getFieldCount()];
+		for (int fieldId = 0; fieldId < rs.getFieldCount(); fieldId++) {
+			regAtt[fieldId] = rs.getFieldValue(numReg, fieldId);
+		}
+		feat = new DefaultFeature(geom, regAtt, numReg + "");
 		return feat;
 	}
 
-	public void stopEdition(IWriter writer, int sourceType) throws StopWriterVisitorException {
-//		ISpatialWriter spatialWriter = (ISpatialWriter) writer;
-//		spatialWriter.setFlatness(FConverter.flatness);
+	public void stopEdition(IWriter writer, int sourceType)
+			throws StopWriterVisitorException {
+		// ISpatialWriter spatialWriter = (ISpatialWriter) writer;
+		// spatialWriter.setFlatness(FConverter.flatness);
 		super.stopEdition(writer, sourceType);
-//		try {
-//			ova.getDriver().reload();
-//		} catch (ReloadDriverException e) {
-//			throw new StopWriterVisitorException(writer.getName(),e);
-//		}
-//		fmapSpatialIndex=null;
-		writer=null;
+		// try {
+		// ova.getDriver().reload();
+		// } catch (ReloadDriverException e) {
+		// throw new StopWriterVisitorException(writer.getName(),e);
+		// }
+		// fmapSpatialIndex=null;
+		writer = null;
 	}
 
-	public Rectangle2D getShapeBounds(int index) throws ReadDriverException, ExpansionFileReadException {
+	public Rectangle2D getShapeBounds(int index) throws ReadDriverException,
+			ExpansionFileReadException {
 		// Solo se utiliza cuando el driver es BoundedShapes
 		// Si no está en el fichero de expansión
 		Integer integer = new Integer(index);
@@ -975,7 +994,7 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 	 * usamos para las búsquedas por índice espacial con el handle. La idea es
 	 * usarlo una vez, guardar las geometrías que necesitas en ese extent y
 	 * trabajar con ellas hasta el siguiente cambio de extent.
-	 *
+	 * 
 	 * @param r
 	 * @param strEPSG
 	 * @return
@@ -983,11 +1002,12 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 	 * @throws ReadDriverException
 	 * @throws DriverException
 	 */
-	public IRowEdited[] getFeatures(Rectangle2D r, String strEPSG) throws ReadDriverException, ExpansionFileReadException{
+	public IRowEdited[] getFeatures(Rectangle2D r, String strEPSG)
+			throws ReadDriverException, ExpansionFileReadException {
 		// En esta clase suponemos random access.
 		// Luego tendremos otra clase que sea VectorialEditableDBAdapter
 		// que reescribirá este método.
-//		Envelope e = FConverter.convertRectangle2DtoEnvelope(r);
+		// Envelope e = FConverter.convertRectangle2DtoEnvelope(r);
 		long t1 = System.currentTimeMillis();
 		List l = fmapSpatialIndex.query(r);
 		long t2 = System.currentTimeMillis();
@@ -998,16 +1018,18 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 			feats[index] = getRow(inverse);
 		}
 		long t3 = System.currentTimeMillis();
-		System.out.println("VectorialEditableAdapter.getFeatures: tSpatialIndex = " + (t2-t1) + " tFor=" + (t3-t2));
+		System.out
+				.println("VectorialEditableAdapter.getFeatures: tSpatialIndex = "
+						+ (t2 - t1) + " tFor=" + (t3 - t2));
 		return feats;
 	}
 
-//	public void setSpatialIndex(SpatialIndex spatialIndex) {
-//		index = (Quadtree) spatialIndex;
-//		QuadtreeJts fmapidx = new QuadtreeJts(index);
-//		setSpatialIndex(fmapidx);
-//
-//	}
+	// public void setSpatialIndex(SpatialIndex spatialIndex) {
+	// index = (Quadtree) spatialIndex;
+	// QuadtreeJts fmapidx = new QuadtreeJts(index);
+	// setSpatialIndex(fmapidx);
+	//
+	// }
 
 	public void setFullExtent(Rectangle2D fullExtent2) {
 		fullExtent = fullExtent2;
@@ -1015,7 +1037,7 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public Image getSelectionImage() {
@@ -1028,7 +1050,7 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param i
 	 *            DOCUMENT ME!
 	 */
@@ -1044,42 +1066,45 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 		return new DefaultFeatureIterator(this, crs, null, null);
 	}
 
-
 	public IFeatureIterator getFeatureIterator(String[] fields,
 			CoordinateReferenceSystem newCrs) throws ReadDriverException {
 		return new DefaultFeatureIterator(this, crs, newCrs, fields);
 	}
 
 	/**
-	* Return a feature iterator from a given sql statement.
-	* <br>
-	* In this case, the statement will have the "projection" operator
-	* (select campo1, campo2, ...etc) and the "selection" operator (where ....)
-	* @param sql statement which define a filter
-	* @return feature iterator
-	* */
+	 * Return a feature iterator from a given sql statement. <br>
+	 * In this case, the statement will have the "projection" operator (select
+	 * campo1, campo2, ...etc) and the "selection" operator (where ....)
+	 * 
+	 * @param sql
+	 *            statement which define a filter
+	 * @return feature iterator
+	 * */
 	public IFeatureIterator getFeatureIterator(String sql,
-			CoordinateReferenceSystem newCrs) throws ReadDriverException{
+			CoordinateReferenceSystem newCrs) throws ReadDriverException {
 		return new AttrQueryFeatureIterator(this, crs, newCrs, sql);
 	}
 
-
 	/**
-	* Makes an spatial query returning a feature iterator over the features which intersects
-	* or are contained in the rectangle query. Applies a restriction to the alphanumeric fields
-	* returned by the iterator.
-	* @param rect
-	* @param fields
-	* @return
+	 * Makes an spatial query returning a feature iterator over the features
+	 * which intersects or are contained in the rectangle query. Applies a
+	 * restriction to the alphanumeric fields returned by the iterator.
+	 * 
+	 * @param rect
+	 * @param fields
+	 * @return
 	 * @throws ReadDriverException
-	*/
+	 */
 	public IFeatureIterator getFeatureIterator(Rectangle2D rect,
-			String[] fields, CoordinateReferenceSystem newCrs, boolean fastIteration) throws ReadDriverException{
-//		if(index == null){
-			return new SpatialQueryFeatureIterator(this, crs, newCrs, fields, rect, fastIteration);
-//		}else{
-//			return new IndexedSptQueryFeatureIterator(this, projection, newProjection, fields, rect, fmapSpatialIndex, fastIteration);
-//		}
+			String[] fields, CoordinateReferenceSystem newCrs,
+			boolean fastIteration) throws ReadDriverException {
+		// if(index == null){
+		return new SpatialQueryFeatureIterator(this, crs, newCrs, fields, rect,
+				fastIteration);
+		// }else{
+		// return new IndexedSptQueryFeatureIterator(this, projection,
+		// newProjection, fields, rect, fmapSpatialIndex, fastIteration);
+		// }
 	}
 
 	public ISpatialIndex getSpatialIndex() {
@@ -1087,7 +1112,7 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 	}
 
 	public void setSpatialIndex(ISpatialIndex spatialIndex) {
-//		this.fmapSpatialIndex = spatialIndex;
+		// this.fmapSpatialIndex = spatialIndex;
 	}
 
 	public void setCrs(CoordinateReferenceSystem crs) {
@@ -1098,17 +1123,19 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 		return crs;
 	}
 
-	public void cancelEdition(int sourceType) throws CancelEditingLayerException {
+	public void cancelEdition(int sourceType)
+			throws CancelEditingLayerException {
 		super.cancelEdition(sourceType);
-		fmapSpatialIndex=null;
+		fmapSpatialIndex = null;
 		setWriter(null);
 		System.gc();
 	}
 
 	/**
 	 * Inserta las coordenadas de transformación.
-	 *
-	 * @param ct Coordenadas de transformación.
+	 * 
+	 * @param ct
+	 *            Coordenadas de transformación.
 	 */
 	public void setCrsTransform(MathTransform ct) {
 		this.crsTransform = ct;
@@ -1120,7 +1147,7 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 		if (withSelection)
 			return new AttrQuerySelectionFeatureIterator(this, crs, newCrs, sql);
 		else
-			return getFeatureIterator(sql,newCrs);
+			return getFeatureIterator(sql, newCrs);
 	}
 
 }

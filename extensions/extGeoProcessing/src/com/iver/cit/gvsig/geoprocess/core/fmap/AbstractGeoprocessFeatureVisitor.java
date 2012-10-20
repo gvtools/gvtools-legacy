@@ -42,17 +42,17 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: AbstractGeoprocessFeatureVisitor.java 10626 2007-03-06 16:55:54Z caballero $
-* $Log$
-* Revision 1.2  2007-03-06 16:47:58  caballero
-* Exceptions
-*
-* Revision 1.1  2006/07/21 09:08:15  azabala
-* first version in cvs
-*
-*
-*/
+ *
+ * $Id: AbstractGeoprocessFeatureVisitor.java 10626 2007-03-06 16:55:54Z caballero $
+ * $Log$
+ * Revision 1.2  2007-03-06 16:47:58  caballero
+ * Exceptions
+ *
+ * Revision 1.1  2006/07/21 09:08:15  azabala
+ * first version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core.fmap;
 
 import com.iver.cit.gvsig.exceptions.visitors.ProcessVisitorException;
@@ -65,10 +65,10 @@ import com.iver.cit.gvsig.fmap.layers.layerOperations.VectorialData;
 import com.iver.cit.gvsig.fmap.operations.strategies.FeatureVisitor;
 
 /**
- * Abstract base class to all feature visitor created
- * for geoprocessing.
+ * Abstract base class to all feature visitor created for geoprocessing.
+ * 
  * @author azabala
- *
+ * 
  */
 public abstract class AbstractGeoprocessFeatureVisitor implements
 		FeatureVisitor {
@@ -78,17 +78,17 @@ public abstract class AbstractGeoprocessFeatureVisitor implements
 	FeatureProcessor featureProcessor;
 
 	/**
-	 * Constructor.
-	 * It receives a FeatureProcessor to process visited features
+	 * Constructor. It receives a FeatureProcessor to process visited features
 	 * (usually to save them)
+	 * 
 	 * @param processor
 	 */
-	public AbstractGeoprocessFeatureVisitor(FeatureProcessor processor){
+	public AbstractGeoprocessFeatureVisitor(FeatureProcessor processor) {
 		this.featureProcessor = processor;
 	}
 
-
-	public abstract void visit(IGeometry g, int index) throws VisitorException, ProcessVisitorException;
+	public abstract void visit(IGeometry g, int index) throws VisitorException,
+			ProcessVisitorException;
 
 	public abstract String getProcessDescription();
 
@@ -103,14 +103,11 @@ public abstract class AbstractGeoprocessFeatureVisitor implements
 	 * to start the visit process, prepares result layer.
 	 */
 	public boolean start(FLayer layer) throws StartVisitorException {
-		if (layer instanceof AlphanumericData &&
-				layer instanceof VectorialData) {
-				this.featureProcessor.start();
+		if (layer instanceof AlphanumericData && layer instanceof VectorialData) {
+			this.featureProcessor.start();
 			return true;
 		}
 		return false;
 	}
 
-
 }
-

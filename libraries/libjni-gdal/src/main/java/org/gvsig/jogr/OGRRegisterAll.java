@@ -26,20 +26,21 @@
 
 package org.gvsig.jogr;
 
-
-/** 
+/**
  * Clase para el registro de drivers.
  * 
- * @author Nacho Brodin <brodin_ign@gva.es>.<BR> Equipo de desarrollo gvSIG.<BR> http://www.gvsig.gva.es
+ * @author Nacho Brodin <brodin_ign@gva.es>.<BR>
+ *         Equipo de desarrollo gvSIG.<BR>
+ *         http://www.gvsig.gva.es
  * @version 0.0
  * @link http://www.gvsig.gva.es
  */
 
-public class OGRRegisterAll extends JNIBase{
-	
+public class OGRRegisterAll extends JNIBase {
+
 	public static native void OGRRegisterAllNat();
-	
-	public static void register(){
+
+	public static void register() {
 		OGRRegisterAllNat();
 	}
 

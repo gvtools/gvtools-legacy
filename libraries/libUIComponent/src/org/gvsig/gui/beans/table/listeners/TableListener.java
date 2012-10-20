@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
-*/
+ */
 package org.gvsig.gui.beans.table.listeners;
 
 import java.awt.event.ActionEvent;
@@ -30,27 +30,30 @@ import org.gvsig.gui.beans.table.TableContainer;
 import org.gvsig.gui.beans.table.TableControlerPanel;
 import org.gvsig.gui.beans.table.exceptions.NotInitializeException;
 import org.gvsig.gui.beans.table.models.IModel;
+
 /**
  * Listener para la tabla
+ * 
  * @author Nacho Brodin <brodin_ign@gva.es>
  */
 public class TableListener implements ActionListener, ListSelectionListener {
-	public static boolean       comboEventEnable      = true;
-	private TableContainer      tableContainer        = null;
-	private TableControlerPanel controlPanel          = null;
-	private MoveRowsPanel       moveRowsPanel         = null;
-	private Table               table                 = null;
-	public boolean              enableNewLineListener = true;
+	public static boolean comboEventEnable = true;
+	private TableContainer tableContainer = null;
+	private TableControlerPanel controlPanel = null;
+	private MoveRowsPanel moveRowsPanel = null;
+	private Table table = null;
+	public boolean enableNewLineListener = true;
 
 	/**
 	 * Constructor
+	 * 
 	 * @param tableContainer
 	 */
-	public TableListener(TableContainer tableContainer){
+	public TableListener(TableContainer tableContainer) {
 		this.tableContainer = tableContainer;
 	}
 
-	private void initialize(){
+	private void initialize() {
 		controlPanel = tableContainer.getPTableControl();
 		moveRowsPanel = tableContainer.getMoveRowsPanel();
 		table = tableContainer.getTable();
@@ -68,24 +71,28 @@ public class TableListener implements ActionListener, ListSelectionListener {
 			/**
 			 * Nueva entrada
 			 */
-			if (enableNewLineListener && e.getSource() == controlPanel.getBNew()) {
+			if (enableNewLineListener
+					&& e.getSource() == controlPanel.getBNew()) {
 				if (table.getTableModel() instanceof IModel)
-					tableContainer.addRow(((IModel) table.getTableModel()).getNewLine());
+					tableContainer.addRow(((IModel) table.getTableModel())
+							.getNewLine());
 			}
 
 			/**
 			 * Eliminar todas las filas
 			 */
-			if (enableNewLineListener && e.getSource() == controlPanel.getBClear()) {
+			if (enableNewLineListener
+					&& e.getSource() == controlPanel.getBClear()) {
 				tableContainer.removeAllRows();
 			}
 
 			/**
 			 * Elimina una entrada concreta de la tabla
 			 */
-			if (enableNewLineListener && e.getSource() == controlPanel.getBDelPoint()) {
+			if (enableNewLineListener
+					&& e.getSource() == controlPanel.getBDelPoint()) {
 				int[] lista = tableContainer.getSelectedRows();
-				for (int i = lista.length - 1; i>=0; i--)
+				for (int i = lista.length - 1; i >= 0; i--)
 					tableContainer.delRow(lista[i]);
 			}
 
@@ -95,10 +102,10 @@ public class TableListener implements ActionListener, ListSelectionListener {
 			if (e.getSource() == moveRowsPanel.getBUp()) {
 				int[] lista = tableContainer.getSelectedRows();
 				if (lista.length > 0) {
-  				for (int i = 0; i < lista.length; i++)
-  					tableContainer.swapRow(lista[i] - 1, lista[i]);
-  				if (lista[0] > 0)
-  					tableContainer.setSelectedIndex(lista[0] - 1);
+					for (int i = 0; i < lista.length; i++)
+						tableContainer.swapRow(lista[i] - 1, lista[i]);
+					if (lista[0] > 0)
+						tableContainer.setSelectedIndex(lista[0] - 1);
 				}
 			}
 
@@ -108,9 +115,9 @@ public class TableListener implements ActionListener, ListSelectionListener {
 			if (e.getSource() == moveRowsPanel.getBDown()) {
 				int[] lista = tableContainer.getSelectedRows();
 				if (lista.length > 0) {
-  				for (int i = lista.length - 1; i >= 0; i--)
-  					tableContainer.swapRow(lista[i], lista[i] + 1);
-  				tableContainer.setSelectedIndex(lista[0] + 1);
+					for (int i = lista.length - 1; i >= 0; i--)
+						tableContainer.swapRow(lista[i], lista[i] + 1);
+					tableContainer.setSelectedIndex(lista[0] + 1);
 				}
 			}
 
@@ -119,22 +126,27 @@ public class TableListener implements ActionListener, ListSelectionListener {
 			}
 
 			if (e.getSource() == controlPanel.getBLast()) {
-				tableContainer.setSelectedIndex(tableContainer.getRowCount() - 1);
+				tableContainer
+						.setSelectedIndex(tableContainer.getRowCount() - 1);
 			}
 
 			if (e.getSource() == controlPanel.getBNext()) {
-				if (tableContainer.getSelectedRow() < tableContainer.getRowCount())
-					tableContainer.setSelectedIndex(tableContainer.getSelectedRow() + 1);
+				if (tableContainer.getSelectedRow() < tableContainer
+						.getRowCount())
+					tableContainer.setSelectedIndex(tableContainer
+							.getSelectedRow() + 1);
 			}
 
 			if (e.getSource() == controlPanel.getBPrev()) {
 				if (tableContainer.getSelectedRow() > 0)
-					tableContainer.setSelectedIndex(tableContainer.getSelectedRow() - 1);
+					tableContainer.setSelectedIndex(tableContainer
+							.getSelectedRow() - 1);
 			}
 
 			if (e.getSource() == controlPanel.getCPoint()) {
 				if (comboEventEnable)
-					tableContainer.setSelectedIndex(controlPanel.getCPoint().getSelectedIndex());
+					tableContainer.setSelectedIndex(controlPanel.getCPoint()
+							.getSelectedIndex());
 			}
 
 		} catch (NotInitializeException ex) {
@@ -144,13 +156,16 @@ public class TableListener implements ActionListener, ListSelectionListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event.ListSelectionEvent)
+	 * 
+	 * @see
+	 * javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event
+	 * .ListSelectionEvent)
 	 */
 	public void valueChanged(ListSelectionEvent e) {
 		try {
-	    tableContainer.setSelectedIndex(tableContainer.getSelectedRow());
-    } catch (NotInitializeException e1) {
-	    e1.printStackTrace();
-    }
-  }
+			tableContainer.setSelectedIndex(tableContainer.getSelectedRow());
+		} catch (NotInitializeException e1) {
+			e1.printStackTrace();
+		}
+	}
 }

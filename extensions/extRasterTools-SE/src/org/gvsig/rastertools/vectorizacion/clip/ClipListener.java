@@ -55,21 +55,23 @@ import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 import com.iver.cit.gvsig.project.documents.view.toolListeners.StatusBarListener;
 
 /**
- * Clase para la gestión de eventos de los componentes gráficos del panel de preproceso
- * de vectorización.
+ * Clase para la gestión de eventos de los componentes gráficos del panel de
+ * preproceso de vectorización.
  * 
  * 12/06/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
-public class ClipListener implements ActionListener, TableModelListener, ButtonsPanelListener, IProcessActions {
-	private FLyrRasterSE                     lyr                      = null;
-	private ClipData                         data                     = null;
-	private ClipPanel                        panel                    = null;	
-	private ClipProcess                      process                  = null;
+public class ClipListener implements ActionListener, TableModelListener,
+		ButtonsPanelListener, IProcessActions {
+	private FLyrRasterSE lyr = null;
+	private ClipData data = null;
+	private ClipPanel panel = null;
+	private ClipProcess process = null;
 
-	
 	/**
 	 * Constructor. Asigna los listeners a los componentes
+	 * 
 	 * @param prepPanel
 	 */
 	public ClipListener(FLyrRasterSE lyr, ClipPanel prepPanel, ClipData data) {
@@ -77,7 +79,7 @@ public class ClipListener implements ActionListener, TableModelListener, Buttons
 		setDataView(prepPanel);
 		setData(data);
 	}
-	
+
 	/**
 	 * Acciones de inicialización del componente
 	 */
@@ -85,29 +87,37 @@ public class ClipListener implements ActionListener, TableModelListener, Buttons
 		assignFullExtent();
 		loadROIs();
 	}
-	
+
 	/**
-	 * Asigna la vista de datos. En este caso es el panel de preprocesado de la vectorización
+	 * Asigna la vista de datos. En este caso es el panel de preprocesado de la
+	 * vectorización
+	 * 
 	 * @param prepPanel
 	 */
 	private void setDataView(ClipPanel prepPanel) {
 		this.panel = prepPanel;
 		process = new ClipProcess(this);
 		process.setSourceLayer(lyr);
-		
+
 		panel.getSelectionAreaPanel().getROI().addActionListener(this);
-		panel.getSelectionAreaPanel().getButtonBarContainer().getButton(0).addActionListener(this);
-		panel.getSelectionAreaPanel().getButtonBarContainer().getButton(1).addActionListener(this);
+		panel.getSelectionAreaPanel().getButtonBarContainer().getButton(0)
+				.addActionListener(this);
+		panel.getSelectionAreaPanel().getButtonBarContainer().getButton(1)
+				.addActionListener(this);
 		panel.getSelectionAreaPanel().getROISelector().addActionListener(this);
 		panel.getSelectionAreaPanel().getAreaSelector().addActionListener(this);
-		panel.getSelectionAreaPanel().getVectorizeAllBBox().addActionListener(this);
-		panel.getSelectionAreaPanel().getVectorizeOnlyInside().addActionListener(this);
-		panel.getSelectionAreaPanel().getTableContainer().getModel().addTableModelListener(this);
-		panel.getComboOutputScale().addActionListener(this);		
+		panel.getSelectionAreaPanel().getVectorizeAllBBox()
+				.addActionListener(this);
+		panel.getSelectionAreaPanel().getVectorizeOnlyInside()
+				.addActionListener(this);
+		panel.getSelectionAreaPanel().getTableContainer().getModel()
+				.addTableModelListener(this);
+		panel.getComboOutputScale().addActionListener(this);
 	}
-	
+
 	/**
 	 * Asigna el modelo de datos de los interfaces
+	 * 
 	 * @param coorData
 	 * @param grayConvData
 	 */
@@ -115,69 +125,81 @@ public class ClipListener implements ActionListener, TableModelListener, Buttons
 		this.data = coorData;
 		initActions();
 	}
-		
+
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
-		if(!panel.isEnableValueChangedEvent())
+		if (!panel.isEnableValueChangedEvent())
 			return;
-		//Seleccionar extent completo
-		if(e.getSource() == panel.getSelectionAreaPanel().getButtonBarContainer().getButton(0)) {
+		// Seleccionar extent completo
+		if (e.getSource() == panel.getSelectionAreaPanel()
+				.getButtonBarContainer().getButton(0)) {
 			assignFullExtent();
 		}
-		
-		//Seleccionar área desde la vista
-		if(e.getSource() == panel.getSelectionAreaPanel().getButtonBarContainer().getButton(1)) {
+
+		// Seleccionar área desde la vista
+		if (e.getSource() == panel.getSelectionAreaPanel()
+				.getButtonBarContainer().getButton(1)) {
 			selectToolButton();
 		}
-		
-		//Cuadro de seleccionar ROIS
-		if(e.getSource() == panel.getSelectionAreaPanel().getROI()) {
-			ROIManagerDialog roiManagerDialog = new ROIManagerDialog(500,250);
+
+		// Cuadro de seleccionar ROIS
+		if (e.getSource() == panel.getSelectionAreaPanel().getROI()) {
+			ROIManagerDialog roiManagerDialog = new ROIManagerDialog(500, 250);
 
 			try {
 				roiManagerDialog.setLayer(lyr);
-				roiManagerDialog.getROIsManagerPanel().addButtonPressedListener(this);
+				roiManagerDialog.getROIsManagerPanel()
+						.addButtonPressedListener(this);
 			} catch (GridException ex) {
 			}
 			RasterToolsUtil.addWindow(roiManagerDialog);
 		}
-		
-		if (e.getSource().equals(panel.getSelectionAreaPanel().getROISelector()) ||
-				e.getSource().equals(panel.getSelectionAreaPanel().getAreaSelector()) ||
-				e.getSource().equals(panel.getSelectionAreaPanel().getVectorizeAllBBox()) ||
-				e.getSource().equals(panel.getSelectionAreaPanel().getVectorizeOnlyInside())){
+
+		if (e.getSource()
+				.equals(panel.getSelectionAreaPanel().getROISelector())
+				|| e.getSource().equals(
+						panel.getSelectionAreaPanel().getAreaSelector())
+				|| e.getSource().equals(
+						panel.getSelectionAreaPanel().getVectorizeAllBBox())
+				|| e.getSource().equals(
+						panel.getSelectionAreaPanel().getVectorizeOnlyInside())) {
 			addROIs();
 		}
-		
-		//Cambio de escala
-		if(e.getSource() == panel.getComboOutputScale()) {
-			data.setScaleSelected(panel.getComboOutputScale().getSelectedIndex());
+
+		// Cambio de escala
+		if (e.getSource() == panel.getComboOutputScale()) {
+			data.setScaleSelected(panel.getComboOutputScale()
+					.getSelectedIndex());
 		}
-		
+
 	}
-	
+
 	/**
 	 * Asigna la capa fuente para el proceso
+	 * 
 	 * @param lyr
 	 */
 	public void setProcessSource(FLyrRasterSE lyr) {
-		if(process != null)
+		if (process != null)
 			process.setSourceLayer(lyr);
 	}
-	
+
 	/**
-	 * Asigna el interfaz para que el proceso ejectute las acciones de finalización
-	 * al acabar.
+	 * Asigna el interfaz para que el proceso ejectute las acciones de
+	 * finalización al acabar.
+	 * 
 	 * @param endActions
 	 */
 	public void setProcessActions(IProcessActions endActions) {
-		if(process != null)
+		if (process != null)
 			process.setProcessActions(endActions);
 	}
-	
+
 	/**
 	 * Acciones realizadas cuando se acepta la operación
 	 */
@@ -188,35 +210,38 @@ public class ClipListener implements ActionListener, TableModelListener, Buttons
 			RasterToolsUtil.messageBoxError("error_cutting", null, e);
 		}
 	}
-			
+
 	/**
 	 * Gestión de los eventos de los botones de la ventana de selección de ROIs
 	 */
 	public void actionButtonPressed(ButtonsPanelEvent e) {
-		//Al pulsar Aceptar o Aplicar se ejecuta el aceptar del panel
-		if (e.getButton() == ButtonsPanel.BUTTON_APPLY || e.getButton() == ButtonsPanel.BUTTON_ACCEPT) {
+		// Al pulsar Aceptar o Aplicar se ejecuta el aceptar del panel
+		if (e.getButton() == ButtonsPanel.BUTTON_APPLY
+				|| e.getButton() == ButtonsPanel.BUTTON_ACCEPT) {
 			loadROIs();
 		}
 	}
 
 	/**
-	 * Asigna el extent completo a los cuadros de texto donde se introducen las coordenadas
-	 * reales y píxel. 
+	 * Asigna el extent completo a los cuadros de texto donde se introducen las
+	 * coordenadas reales y píxel.
 	 */
 	private void assignFullExtent() {
 		Point2D ulPx = new Point2D.Double(0, 0);
 		Point2D lrPx = new Point2D.Double(lyr.getPxWidth(), lyr.getPxHeight());
 
-		//Convertimos a coordenadas reales
+		// Convertimos a coordenadas reales
 		Point2D ulWc = new Point2D.Double();
 		Point2D lrWc = new Point2D.Double();
 		lyr.getAffineTransform().transform(ulPx, ulWc);
 		lyr.getAffineTransform().transform(lrPx, lrWc);
 
-		data.setCoorRealFromDouble(ulWc.getX(), ulWc.getY(), lrWc.getX(), lrWc.getY());
-		data.setCoorPixelFromDouble(ulPx.getX(), ulPx.getY(), lrPx.getX() - 1, lrPx.getY() - 1);
+		data.setCoorRealFromDouble(ulWc.getX(), ulWc.getY(), lrWc.getX(),
+				lrWc.getY());
+		data.setCoorPixelFromDouble(ulPx.getX(), ulPx.getY(), lrPx.getX() - 1,
+				lrPx.getY() - 1);
 	}
-	
+
 	/**
 	 * Acciones que se realizan para seleccionar la tool CutRaster
 	 */
@@ -225,36 +250,39 @@ public class ClipListener implements ActionListener, TableModelListener, Buttons
 		IWindow[] list = PluginServices.getMDIManager().getAllWindows();
 		BaseView view = null;
 		for (int i = 0; i < list.length; i++) {
-			if(list[i] instanceof BaseView)
-				view = (BaseView)list[i];
+			if (list[i] instanceof BaseView)
+				view = (BaseView) list[i];
 		}
 		if (view == null)
 			return;
-	
+
 		MapControl m_MapControl = view.getMapControl();
 
-		// Listener de eventos de movimiento que pone las coordenadas del ratón en
+		// Listener de eventos de movimiento que pone las coordenadas del ratón
+		// en
 		// la barra de estado
 		StatusBarListener sbl = new StatusBarListener(m_MapControl);
 
 		// Cortar Raster
-		ClipMouseViewListener clippingMouseViewListener = new ClipMouseViewListener(m_MapControl, data, lyr);
+		ClipMouseViewListener clippingMouseViewListener = new ClipMouseViewListener(
+				m_MapControl, data, lyr);
 		m_MapControl.addMapTool("cutRaster", new Behavior[] {
-				new RectangleBehavior(clippingMouseViewListener), new MouseMovementBehavior(sbl)
-				}
-		);
+				new RectangleBehavior(clippingMouseViewListener),
+				new MouseMovementBehavior(sbl) });
 
 		m_MapControl.setTool("cutRaster");
 	}
-	
+
 	/**
 	 * Carga las ROIS de la capa sobre la tabla
+	 * 
 	 * @param layer
 	 */
 	public void loadROIs() {
 		if (lyr == null)
 			return;
-		TableContainer table = panel.getSelectionAreaPanel().getTableContainer();
+		TableContainer table = panel.getSelectionAreaPanel()
+				.getTableContainer();
 		try {
 			table.removeAllRows();
 		} catch (NotInitializeException e1) {
@@ -264,13 +292,13 @@ public class ClipListener implements ActionListener, TableModelListener, Buttons
 		if (roisArray != null) {
 			for (int i = 0; i < roisArray.size(); i++) {
 				ROI roi = (ROI) roisArray.get(i);
-	
-				Object row[] = {"", "", ""};
-				
+
+				Object row[] = { "", "", "" };
+
 				boolean active = false;
-								
+
 				row[0] = new Boolean(active);
-				row[1] = roi.getName(); 
+				row[1] = roi.getName();
 				row[2] = new Integer(i);
 				try {
 					table.addRow(row);
@@ -279,9 +307,10 @@ public class ClipListener implements ActionListener, TableModelListener, Buttons
 			}
 		}
 	}
-	
+
 	/**
 	 * Obtiene la lista de ROIs seleccionadas
+	 * 
 	 * @return ArrayList con la lista de ROIs
 	 */
 	private ArrayList getSelectedROIs() {
@@ -290,77 +319,85 @@ public class ClipListener implements ActionListener, TableModelListener, Buttons
 
 		ArrayList roisArray = lyr.getRois();
 		ArrayList selected = new ArrayList();
-		TableContainer table = panel.getSelectionAreaPanel().getTableContainer();
+		TableContainer table = panel.getSelectionAreaPanel()
+				.getTableContainer();
 		if (roisArray != null) {
 			for (int i = 0; i < roisArray.size(); i++) {
 				try {
-					if (((Boolean) table.getModel().getValueAt(i, 0)).booleanValue()) {
+					if (((Boolean) table.getModel().getValueAt(i, 0))
+							.booleanValue()) {
 						selected.add(roisArray.get(i));
 					}
 				} catch (ArrayIndexOutOfBoundsException e) {
-					//Entra aquí si se han añadido ROIs con el cuadro abierto. Pasamos de hacer nada
+					// Entra aquí si se han añadido ROIs con el cuadro abierto.
+					// Pasamos de hacer nada
 				}
 			}
 		}
 		return selected;
-	} 
-	
+	}
+
 	/**
-	 * Asigna el extent completo a los cuadros de texto donde se introducen las coordenadas
-	 * reales y píxel. 
+	 * Asigna el extent completo a los cuadros de texto donde se introducen las
+	 * coordenadas reales y píxel.
 	 */
 	private void assignROISExtent() {
 		ArrayList roiList = getSelectedROIs();
 		Extent ext = null;
-		if(roiList != null && roiList.size() > 0) {
+		if (roiList != null && roiList.size() > 0) {
 			ext = ROI.getROIsMaximunExtent(roiList);
 		} else
 			assignFullExtent();
-		
-		if(ext == null)
+
+		if (ext == null)
 			return;
-		
+
 		AffineTransform at = lyr.getAffineTransform();
 		Point2D ulWc = new Point2D.Double(ext.minX(), ext.maxY());
 		Point2D lrWc = new Point2D.Double(ext.maxX(), ext.minY());
-		
+
 		ulWc = lyr.adjustWorldRequest(ulWc);
 		lrWc = lyr.adjustWorldRequest(lrWc);
-		
+
 		Point2D ulPx = new Point2D.Double();
 		Point2D lrPx = new Point2D.Double();
-		
+
 		try {
 			at.inverseTransform(ulWc, ulPx);
 			at.inverseTransform(lrWc, lrPx);
 		} catch (NoninvertibleTransformException e) {
-			JOptionPane.showMessageDialog((Component) PluginServices.getMainFrame(), PluginServices.getText(this, "coordenadas_erroneas"));
+			JOptionPane.showMessageDialog(
+					(Component) PluginServices.getMainFrame(),
+					PluginServices.getText(this, "coordenadas_erroneas"));
 			return;
 		}
 
-		data.setCoorRealFromDouble(ulWc.getX(), ulWc.getY(), lrWc.getX(), lrWc.getY());
-		data.setCoorPixelFromDouble(ulPx.getX(), ulPx.getY(), lrPx.getX() - 1, lrPx.getY() - 1);
+		data.setCoorRealFromDouble(ulWc.getX(), ulWc.getY(), lrWc.getX(),
+				lrWc.getY());
+		data.setCoorPixelFromDouble(ulPx.getX(), ulPx.getY(), lrPx.getX() - 1,
+				lrPx.getY() - 1);
 	}
-	
+
 	/**
 	 * Añade o elimina el parámetro selectedrois en función del estado de los
 	 * controles del panel
 	 */
-	private void addROIs(){
-		if (panel.getSelectionAreaPanel().getAreaSelector().isSelected()){
+	private void addROIs() {
+		if (panel.getSelectionAreaPanel().getAreaSelector().isSelected()) {
 			data.setSelectedROIs(null);
-		}else{
-			if(panel.getSelectionAreaPanel().getVectorizeOnlyInside().isSelected()){
+		} else {
+			if (panel.getSelectionAreaPanel().getVectorizeOnlyInside()
+					.isSelected()) {
 				data.setSelectedROIs(getSelectedROIs());
 			} else {
 				data.setSelectedROIs(null);
 			}
 		}
 	}
-	
-	
+
 	/**
 	 * Gestión de eventos producidos en la tabla con la lista de ROIs
+	 * 
 	 * @param e
 	 */
 	public void tableChanged(TableModelEvent e) {
@@ -370,6 +407,7 @@ public class ClipListener implements ActionListener, TableModelListener, Buttons
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.IProcessActions#interrupted()
 	 */
 	public void interrupted() {

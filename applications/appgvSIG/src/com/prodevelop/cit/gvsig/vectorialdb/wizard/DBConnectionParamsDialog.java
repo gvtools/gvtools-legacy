@@ -47,7 +47,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -72,513 +71,522 @@ import com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver;
 import com.iver.cit.gvsig.fmap.drivers.db.utils.ConnectionWithParams;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 
-
 /**
  * Lets the user input the connection parameters.
- *
+ * 
  * @author jldominguez
- *
+ * 
  */
 public class DBConnectionParamsDialog extends JPanel implements IWindow,
-    ActionListener, KeyListener {
-    private static Logger logger = Logger.getLogger(DBConnectionParamsDialog.class.getName());
-    private WindowInfo winfo = new WindowInfo(WindowInfo.MODALDIALOG); // MODAL only
-    private JButton cancelButton = null;
-    private JButton okButton = null;
-    private JPanel paramsPanel = null;
-    private JComboBox driverComboBox = null;
-    private JTextField portTextField = null;
-    private JTextField dbTextField = null;
-    private JTextField userTextField = null;
-    private JPasswordField passwordField = null;
-    private JLabel driverLabel = null;
-    private JLabel portLabel = null;
-    private JLabel dbLabel = null;
-    private JLabel dbLabelWarning = null;
-    private JLabel userLabel = null;
-    private JLabel pwLabel = null;
-    private boolean okPressed = false;
-    private JTextField urlTextField = null;
-    private JLabel urlLabel = null;
-    private JCheckBox connectedCheckBox = null;
-    private JLabel connectedLabel = null;
-    private JLabel connNameLabel = null;
-    private JTextField connNameTextField = null;
-    
-    private JLabel schemaLabel = null; 
-    private JTextField schemaTextField = null; 
-    // private JCheckBox schemaCheck = null; 
+		ActionListener, KeyListener {
+	private static Logger logger = Logger
+			.getLogger(DBConnectionParamsDialog.class.getName());
+	private WindowInfo winfo = new WindowInfo(WindowInfo.MODALDIALOG); // MODAL
+																		// only
+	private JButton cancelButton = null;
+	private JButton okButton = null;
+	private JPanel paramsPanel = null;
+	private JComboBox driverComboBox = null;
+	private JTextField portTextField = null;
+	private JTextField dbTextField = null;
+	private JTextField userTextField = null;
+	private JPasswordField passwordField = null;
+	private JLabel driverLabel = null;
+	private JLabel portLabel = null;
+	private JLabel dbLabel = null;
+	private JLabel dbLabelWarning = null;
+	private JLabel userLabel = null;
+	private JLabel pwLabel = null;
+	private boolean okPressed = false;
+	private JTextField urlTextField = null;
+	private JLabel urlLabel = null;
+	private JCheckBox connectedCheckBox = null;
+	private JLabel connectedLabel = null;
+	private JLabel connNameLabel = null;
+	private JTextField connNameTextField = null;
 
-    /**
-     * This method initializes
-     *
-     */
-    public DBConnectionParamsDialog() {
-        super();
-        initialize();
-    }
+	private JLabel schemaLabel = null;
+	private JTextField schemaTextField = null;
 
-    public void showDialog() {
-        PluginServices.getMDIManager().addWindow(this);
-    }
-
-    /**
-     * This method initializes this
-     *
-     */
-    private void initialize() {
-        winfo.setWidth(370);
-        winfo.setHeight(317 );
-        winfo.setTitle(PluginServices.getText(this, "connection_parameters"));
-
-        this.setSize(new java.awt.Dimension(360, 329+25));
-        this.setLayout(null);
-        this.add(getCancelButton(), null);
-        this.add(getOkButton(), null);
-        this.add(getParamsPanel(), null);
-    }
-
-    public WindowInfo getWindowInfo() {
-        return winfo;
-    }
-
-    /**
-     * This method initializes cancelButton
-     *
-     * @return javax.swing.JButton
-     */
-    private JButton getCancelButton() {
-        if (cancelButton == null) {
-            cancelButton = new JButton();
-            cancelButton.setText(PluginServices.getText(this, "cancel"));
-            cancelButton.addActionListener(this);
-            cancelButton.setBounds(new java.awt.Rectangle(185, 292+25, 106, 26));
-        }
-
-        return cancelButton;
-    }
-
-    /**
-     * This method initializes okButton
-     *
-     * @return javax.swing.JButton
-     */
-    private JButton getOkButton() {
-        if (okButton == null) {
-            okButton = new JButton();
-            okButton.setText(PluginServices.getText(this, "ok"));
-            okButton.addActionListener(this);
-            okButton.setBounds(new java.awt.Rectangle(70, 292+25, 106, 26));
-        }
-
-        return okButton;
-    }
-
-    /**
-     * This method initializes paramsPanel
-     *
-     * @return javax.swing.JPanel
-     */
-    private JPanel getParamsPanel() {
-        if (paramsPanel == null) {
-            connNameLabel = new JLabel();
-            connNameLabel.setBounds(new java.awt.Rectangle(10, 30, 141, 21));
-            connNameLabel.setText(PluginServices.getText(this, "connection_name") +
-                ":");
-            connectedLabel = new JLabel();
-            connectedLabel.setBounds(new java.awt.Rectangle(10, 247+25, 141, 21));
-            connectedLabel.setText(PluginServices.getText(this, "connected") +
-                ":");
-            urlLabel = new JLabel();
-            urlLabel.setBounds(new java.awt.Rectangle(10, 80, 141, 21));
-            urlLabel.setText(PluginServices.getText(this, "server_url") + ":");
-            pwLabel = new JLabel();
-            pwLabel.setBounds(new java.awt.Rectangle(10, 222+25, 141, 21));
-            pwLabel.setText(PluginServices.getText(this, "password") + ":");
-            userLabel = new JLabel();
-            userLabel.setBounds(new java.awt.Rectangle(10, 197+25, 141, 21));
-            userLabel.setText(PluginServices.getText(this, "user") + ":");
-            dbLabel = new JLabel();
-            dbLabel.setBounds(new java.awt.Rectangle(10, 130, 141, 21));
-            dbLabel.setText(PluginServices.getText(this, "database_name") +
-                ":");
-            
-            schemaLabel = new JLabel();
-            schemaLabel.setBounds(new java.awt.Rectangle(10, 130+25, 141, 21));
-            schemaLabel.setText(PluginServices.getText(this, "Schema") + ":");
-
-            dbLabelWarning = new JLabel();
-            dbLabelWarning.setBounds(new java.awt.Rectangle(10, 155+25, 310, 41));
-            dbLabelWarning.setText(PluginServices.getText(this, "warning_you_must_input_the_exact_name_this_difference_between_capital_letters_and_small_letters")
-                );
-
-            portLabel = new JLabel();
-            portLabel.setBounds(new java.awt.Rectangle(10, 105, 141, 21));
-            portLabel.setText(PluginServices.getText(this, "port") + ":");
-            driverLabel = new JLabel();
-            driverLabel.setBounds(new java.awt.Rectangle(10, 55, 141, 21));
-            driverLabel.setText(PluginServices.getText(this, "driver") + ":");
-            paramsPanel = new JPanel();
-            paramsPanel.setBounds(new java.awt.Rectangle(10, 10, 336, 273+25));
-            paramsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                    null, PluginServices.getText(this, "connection_parameters"),
-                    javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                    javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
-            paramsPanel.setLayout(null);
-            paramsPanel.add(getPortTextField(), null);
-            paramsPanel.add(getDriverComboBox(), null);
-            paramsPanel.add(getDbTextField(), null);
-            paramsPanel.add(getUserTextField(), null);
-            paramsPanel.add(getPasswordField(), null);
-            paramsPanel.add(driverLabel, null);
-            paramsPanel.add(portLabel, null);
-            
-            paramsPanel.add(dbLabel, null);
-            paramsPanel.add(schemaLabel, null);
-            
-            paramsPanel.add(getSchemaField(), null);
-            
-            paramsPanel.add(dbLabelWarning, null);
-            paramsPanel.add(userLabel, null);
-            paramsPanel.add(pwLabel, null);
-            paramsPanel.add(getUrlTextArea(), null);
-            paramsPanel.add(urlLabel, null);
-            paramsPanel.add(getConnectedCheckBox(), null);
-            paramsPanel.add(connectedLabel, null);
-            paramsPanel.add(connNameLabel, null);
-            paramsPanel.add(getConnNameTextField(), null);
-        }
-
-        return paramsPanel;
-    }
-
-    private JTextField getSchemaField() {
-        if (schemaTextField == null) {
-        	schemaTextField = new JTextField();
-        	schemaTextField.addKeyListener(this);
-        	schemaTextField.setBounds(new java.awt.Rectangle(155, 130+25, 166, 21));
-        }
-
-        return schemaTextField;
-	}
-
+	// private JCheckBox schemaCheck = null;
 
 	/**
-     * This method initializes driverComboBox
-     *
-     * @return javax.swing.JComboBox
-     */
-    private JComboBox getDriverComboBox() {
-        if (driverComboBox == null) {
-            driverComboBox = new JComboBox();
-            driverComboBox.setMaximumRowCount(20);
-            driverComboBox.addActionListener(this);
+	 * This method initializes
+	 * 
+	 */
+	public DBConnectionParamsDialog() {
+		super();
+		initialize();
+	}
 
-            String[] drvName = getDriverNames();
-            int len = drvName.length;
-            String[] sorted = new String[len];
-            for (int i=0; i<len; i++) {
-            	sorted[i] = "" + drvName[i];
-            }
-            Arrays.sort(sorted);
-            
-            for (int i = 0; i < len; i++)
-                driverComboBox.addItem(sorted[ (i + (2*len-2)) % len]);
+	public void showDialog() {
+		PluginServices.getMDIManager().addWindow(this);
+	}
 
-            driverComboBox.setBounds(new java.awt.Rectangle(155, 55, 166, 21));
-        }
+	/**
+	 * This method initializes this
+	 * 
+	 */
+	private void initialize() {
+		winfo.setWidth(370);
+		winfo.setHeight(317);
+		winfo.setTitle(PluginServices.getText(this, "connection_parameters"));
 
-        return driverComboBox;
-    }
+		this.setSize(new java.awt.Dimension(360, 329 + 25));
+		this.setLayout(null);
+		this.add(getCancelButton(), null);
+		this.add(getOkButton(), null);
+		this.add(getParamsPanel(), null);
+	}
 
-    /**
-     * This method initializes portTextField
-     *
-     * @return javax.swing.JTextField
-     */
-    private JTextField getPortTextField() {
-        if (portTextField == null) {
-            portTextField = new JTextField();
-            portTextField.addKeyListener(this);
-            portTextField.setBounds(new java.awt.Rectangle(155, 105, 166, 21));
-        }
+	public WindowInfo getWindowInfo() {
+		return winfo;
+	}
 
-        return portTextField;
-    }
+	/**
+	 * This method initializes cancelButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getCancelButton() {
+		if (cancelButton == null) {
+			cancelButton = new JButton();
+			cancelButton.setText(PluginServices.getText(this, "cancel"));
+			cancelButton.addActionListener(this);
+			cancelButton.setBounds(new java.awt.Rectangle(185, 292 + 25, 106,
+					26));
+		}
 
-    /**
-     * This method initializes dbTextField
-     *
-     * @return javax.swing.JTextField
-     */
-    private JTextField getDbTextField() {
-        if (dbTextField == null) {
-            dbTextField = new JTextField();
-            dbTextField.addKeyListener(this);
-            dbTextField.setBounds(new java.awt.Rectangle(155, 130, 166, 21));
-        }
+		return cancelButton;
+	}
 
-        return dbTextField;
-    }
+	/**
+	 * This method initializes okButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getOkButton() {
+		if (okButton == null) {
+			okButton = new JButton();
+			okButton.setText(PluginServices.getText(this, "ok"));
+			okButton.addActionListener(this);
+			okButton.setBounds(new java.awt.Rectangle(70, 292 + 25, 106, 26));
+		}
 
-    /**
-     * This method initializes userTextField
-     *
-     * @return javax.swing.JTextField
-     */
-    private JTextField getUserTextField() {
-        if (userTextField == null) {
-            userTextField = new JTextField();
-            userTextField.addKeyListener(this);
-            userTextField.setBounds(new java.awt.Rectangle(155, 197+25, 166, 21));
-        }
+		return okButton;
+	}
 
-        return userTextField;
-    }
+	/**
+	 * This method initializes paramsPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getParamsPanel() {
+		if (paramsPanel == null) {
+			connNameLabel = new JLabel();
+			connNameLabel.setBounds(new java.awt.Rectangle(10, 30, 141, 21));
+			connNameLabel.setText(PluginServices.getText(this,
+					"connection_name") + ":");
+			connectedLabel = new JLabel();
+			connectedLabel.setBounds(new java.awt.Rectangle(10, 247 + 25, 141,
+					21));
+			connectedLabel.setText(PluginServices.getText(this, "connected")
+					+ ":");
+			urlLabel = new JLabel();
+			urlLabel.setBounds(new java.awt.Rectangle(10, 80, 141, 21));
+			urlLabel.setText(PluginServices.getText(this, "server_url") + ":");
+			pwLabel = new JLabel();
+			pwLabel.setBounds(new java.awt.Rectangle(10, 222 + 25, 141, 21));
+			pwLabel.setText(PluginServices.getText(this, "password") + ":");
+			userLabel = new JLabel();
+			userLabel.setBounds(new java.awt.Rectangle(10, 197 + 25, 141, 21));
+			userLabel.setText(PluginServices.getText(this, "user") + ":");
+			dbLabel = new JLabel();
+			dbLabel.setBounds(new java.awt.Rectangle(10, 130, 141, 21));
+			dbLabel.setText(PluginServices.getText(this, "database_name") + ":");
 
-    /**
-     * This method initializes passwordField
-     *
-     * @return javax.swing.JPasswordField
-     */
-    private JPasswordField getPasswordField() {
-        if (passwordField == null) {
-            passwordField = new JPasswordField();
-            passwordField.addKeyListener(this);
-            passwordField.setBounds(new java.awt.Rectangle(155, 222+25, 166, 21));
-        }
+			schemaLabel = new JLabel();
+			schemaLabel
+					.setBounds(new java.awt.Rectangle(10, 130 + 25, 141, 21));
+			schemaLabel.setText(PluginServices.getText(this, "Schema") + ":");
 
-        return passwordField;
-    }
+			dbLabelWarning = new JLabel();
+			dbLabelWarning.setBounds(new java.awt.Rectangle(10, 155 + 25, 310,
+					41));
+			dbLabelWarning
+					.setText(PluginServices
+							.getText(
+									this,
+									"warning_you_must_input_the_exact_name_this_difference_between_capital_letters_and_small_letters"));
 
-    private String[] getDriverNames() {
-        Class[] classes = new Class[] {
-        		IVectorialDatabaseDriver.class,
-        		AlphanumericDBDriver.class };
+			portLabel = new JLabel();
+			portLabel.setBounds(new java.awt.Rectangle(10, 105, 141, 21));
+			portLabel.setText(PluginServices.getText(this, "port") + ":");
+			driverLabel = new JLabel();
+			driverLabel.setBounds(new java.awt.Rectangle(10, 55, 141, 21));
+			driverLabel.setText(PluginServices.getText(this, "driver") + ":");
+			paramsPanel = new JPanel();
+			paramsPanel
+					.setBounds(new java.awt.Rectangle(10, 10, 336, 273 + 25));
+			paramsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+					null,
+					PluginServices.getText(this, "connection_parameters"),
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					null));
+			paramsPanel.setLayout(null);
+			paramsPanel.add(getPortTextField(), null);
+			paramsPanel.add(getDriverComboBox(), null);
+			paramsPanel.add(getDbTextField(), null);
+			paramsPanel.add(getUserTextField(), null);
+			paramsPanel.add(getPasswordField(), null);
+			paramsPanel.add(driverLabel, null);
+			paramsPanel.add(portLabel, null);
 
-        ArrayList ret = new ArrayList();
-        String[] driverNames = LayerFactory.getDM().getDriverNames();
+			paramsPanel.add(dbLabel, null);
+			paramsPanel.add(schemaLabel, null);
 
-        for (int i = 0; i < driverNames.length; i++) {
-            for (int j = 0; j < classes.length; j++) {
-                if (LayerFactory.getDM().isA(driverNames[i], classes[j])) {
-                    ret.add(driverNames[i]);
-                    continue;
-                }
-            }
-        }
+			paramsPanel.add(getSchemaField(), null);
 
-        return (String[]) ret.toArray(new String[0]);
-    }
+			paramsPanel.add(dbLabelWarning, null);
+			paramsPanel.add(userLabel, null);
+			paramsPanel.add(pwLabel, null);
+			paramsPanel.add(getUrlTextArea(), null);
+			paramsPanel.add(urlLabel, null);
+			paramsPanel.add(getConnectedCheckBox(), null);
+			paramsPanel.add(connectedLabel, null);
+			paramsPanel.add(connNameLabel, null);
+			paramsPanel.add(getConnNameTextField(), null);
+		}
 
-    public void actionPerformed(ActionEvent arg0) {
-        Object src = arg0.getSource();
+		return paramsPanel;
+	}
 
-        if (src == connectedCheckBox) {
-            if (connectedCheckBox.isSelected()) {
-                passwordField.setEnabled(true);
-                passwordField.setBackground(Color.WHITE);
-            }
-            else {
-                passwordField.setText("");
-                passwordField.setEnabled(false);
-                passwordField.setBackground(Color.LIGHT_GRAY);
-            }
-        }
+	private JTextField getSchemaField() {
+		if (schemaTextField == null) {
+			schemaTextField = new JTextField();
+			schemaTextField.addKeyListener(this);
+			schemaTextField.setBounds(new java.awt.Rectangle(155, 130 + 25,
+					166, 21));
+		}
 
-        if (src == okButton) {
-            okPressed = true;
-            PluginServices.getMDIManager().closeWindow(this);
+		return schemaTextField;
+	}
 
-            return;
-        }
+	/**
+	 * This method initializes driverComboBox
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
+	private JComboBox getDriverComboBox() {
+		if (driverComboBox == null) {
+			driverComboBox = new JComboBox();
+			driverComboBox.setMaximumRowCount(20);
+			driverComboBox.addActionListener(this);
 
-        if (src == cancelButton) {
-            okPressed = false;
-            PluginServices.getMDIManager().closeWindow(this);
+			String[] drvName = getDriverNames();
+			int len = drvName.length;
+			String[] sorted = new String[len];
+			for (int i = 0; i < len; i++) {
+				sorted[i] = "" + drvName[i];
+			}
+			Arrays.sort(sorted);
 
-            return;
-        }
+			for (int i = 0; i < len; i++)
+				driverComboBox.addItem(sorted[(i + (2 * len - 2)) % len]);
 
-        if (src == driverComboBox) {
-            String driverName = driverComboBox.getSelectedItem().toString();
-            Driver _drv;
+			driverComboBox.setBounds(new java.awt.Rectangle(155, 55, 166, 21));
+		}
 
-            try {
-                _drv = LayerFactory.getDM().getDriver(driverName);
-                
-                if (_drv instanceof IVectorialDatabaseDriver) {
-                	IVectorialDatabaseDriver geo_drv = (IVectorialDatabaseDriver) _drv;
-                	portTextField.setText("" + geo_drv.getDefaultPort());
-                } else {
-                    if (_drv instanceof AlphanumericDBDriver) {
-                    	AlphanumericDBDriver alpha_drv = (AlphanumericDBDriver) _drv;
-                    	portTextField.setText(alpha_drv.getDefaultPort());
-                    } else {
-                    	portTextField.setText("");
-                    }
-                }
-            } catch (DriverLoadException e1) {
-                portTextField.setText("");
-            }
+		return driverComboBox;
+	}
 
-            return;
-        }
+	/**
+	 * This method initializes portTextField
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getPortTextField() {
+		if (portTextField == null) {
+			portTextField = new JTextField();
+			portTextField.addKeyListener(this);
+			portTextField.setBounds(new java.awt.Rectangle(155, 105, 166, 21));
+		}
 
+		return portTextField;
+	}
 
-    }
+	/**
+	 * This method initializes dbTextField
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getDbTextField() {
+		if (dbTextField == null) {
+			dbTextField = new JTextField();
+			dbTextField.addKeyListener(this);
+			dbTextField.setBounds(new java.awt.Rectangle(155, 130, 166, 21));
+		}
 
-    public boolean isOkPressed() {
-        return okPressed;
-    }
+		return dbTextField;
+	}
 
-    public boolean hasToBeConnected() {
-        return connectedCheckBox.isSelected();
-    }
+	/**
+	 * This method initializes userTextField
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getUserTextField() {
+		if (userTextField == null) {
+			userTextField = new JTextField();
+			userTextField.addKeyListener(this);
+			userTextField.setBounds(new java.awt.Rectangle(155, 197 + 25, 166,
+					21));
+		}
 
-    public String getConnectionDriverName() {
-        return driverComboBox.getSelectedItem().toString();
-    }
+		return userTextField;
+	}
 
-    public String getConnectionServerUrl() {
-        return urlTextField.getText();
-    }
+	/**
+	 * This method initializes passwordField
+	 * 
+	 * @return javax.swing.JPasswordField
+	 */
+	private JPasswordField getPasswordField() {
+		if (passwordField == null) {
+			passwordField = new JPasswordField();
+			passwordField.addKeyListener(this);
+			passwordField.setBounds(new java.awt.Rectangle(155, 222 + 25, 166,
+					21));
+		}
 
-    public String getConnectionPort() {
-        return portTextField.getText();
-    }
+		return passwordField;
+	}
 
-    public String getConnectionDBName() {
-        return dbTextField.getText();
-    }
+	private String[] getDriverNames() {
+		Class[] classes = new Class[] { IVectorialDatabaseDriver.class,
+				AlphanumericDBDriver.class };
 
-    public String getConnectionUser() {
-        return userTextField.getText();
-    }
+		ArrayList ret = new ArrayList();
+		String[] driverNames = LayerFactory.getDM().getDriverNames();
 
-    public String getConnectionPassword() {
-        String resp = new String(passwordField.getPassword());
+		for (int i = 0; i < driverNames.length; i++) {
+			for (int j = 0; j < classes.length; j++) {
+				if (LayerFactory.getDM().isA(driverNames[i], classes[j])) {
+					ret.add(driverNames[i]);
+					continue;
+				}
+			}
+		}
 
-        return resp;
-    }
+		return (String[]) ret.toArray(new String[0]);
+	}
 
-    private JTextField getUrlTextArea() {
-        if (urlTextField == null) {
-            urlTextField = new JTextField();
-            urlTextField.addKeyListener(this);
-            urlTextField.setBounds(new java.awt.Rectangle(155, 80, 166, 21));
-        }
+	public void actionPerformed(ActionEvent arg0) {
+		Object src = arg0.getSource();
 
-        return urlTextField;
-    }
+		if (src == connectedCheckBox) {
+			if (connectedCheckBox.isSelected()) {
+				passwordField.setEnabled(true);
+				passwordField.setBackground(Color.WHITE);
+			} else {
+				passwordField.setText("");
+				passwordField.setEnabled(false);
+				passwordField.setBackground(Color.LIGHT_GRAY);
+			}
+		}
 
-    /**
-     * This method initializes connectedCheckBox
-     *
-     * @return javax.swing.JCheckBox
-     */
-    private JCheckBox getConnectedCheckBox() {
-        if (connectedCheckBox == null) {
-            connectedCheckBox = new JCheckBox();
-            connectedCheckBox.setSelected(true);
-            connectedCheckBox.addActionListener(this);
-            connectedCheckBox.setBounds(new java.awt.Rectangle(155, 247+25, 26, 21));
-        }
+		if (src == okButton) {
+			okPressed = true;
+			PluginServices.getMDIManager().closeWindow(this);
 
-        return connectedCheckBox;
-    }
+			return;
+		}
 
-    public String getConnectionName() {
-        return getConnNameTextField().getText();
-    }
+		if (src == cancelButton) {
+			okPressed = false;
+			PluginServices.getMDIManager().closeWindow(this);
 
-    /**
-     * This method initializes connNameTextField
-     *
-     * @return javax.swing.JTextField
-     */
-    private JTextField getConnNameTextField() {
-        if (connNameTextField == null) {
-            connNameTextField = new JTextField();
-            connNameTextField.addKeyListener(this);
-            connNameTextField.setBounds(new java.awt.Rectangle(155, 30, 166, 21));
-        }
+			return;
+		}
 
-        return connNameTextField;
-    }
+		if (src == driverComboBox) {
+			String driverName = driverComboBox.getSelectedItem().toString();
+			Driver _drv;
 
-    public void keyPressed(KeyEvent e) {
-    }
+			try {
+				_drv = LayerFactory.getDM().getDriver(driverName);
 
-    public void keyReleased(KeyEvent e) {
-        if (e.getKeyChar() != '\n') {
-            return;
-        }
+				if (_drv instanceof IVectorialDatabaseDriver) {
+					IVectorialDatabaseDriver geo_drv = (IVectorialDatabaseDriver) _drv;
+					portTextField.setText("" + geo_drv.getDefaultPort());
+				} else {
+					if (_drv instanceof AlphanumericDBDriver) {
+						AlphanumericDBDriver alpha_drv = (AlphanumericDBDriver) _drv;
+						portTextField.setText(alpha_drv.getDefaultPort());
+					} else {
+						portTextField.setText("");
+					}
+				}
+			} catch (DriverLoadException e1) {
+				portTextField.setText("");
+			}
 
-        Object src = e.getSource();
+			return;
+		}
 
-        if (src == passwordField) {
-            ActionEvent aevt = new ActionEvent(okButton,
-                    ActionEvent.ACTION_PERFORMED, "");
-            actionPerformed(aevt);
-        }
-        else {
-            if (src instanceof JTextField) {
-                ((JTextField) src).transferFocus();
-            }
-        }
-    }
+	}
 
-    public void keyTyped(KeyEvent e) {
-    }
+	public boolean isOkPressed() {
+		return okPressed;
+	}
 
-    public void loadValues(ConnectionWithParams cwp) {
-        getPortTextField().setText(cwp.getPort());
-        selectThisInDriverCombo(cwp.getDrvName());
-        getDbTextField().setText(cwp.getDb());
-        getUserTextField().setText(cwp.getUser());
+	public boolean hasToBeConnected() {
+		return connectedCheckBox.isSelected();
+	}
 
-        if (cwp.getPw() == null) {
-            getPasswordField().setText("");
-        }
-        else {
-            getPasswordField().setText(cwp.getPw());
-        }
+	public String getConnectionDriverName() {
+		return driverComboBox.getSelectedItem().toString();
+	}
 
-        getUrlTextArea().setText(cwp.getHost());
+	public String getConnectionServerUrl() {
+		return urlTextField.getText();
+	}
 
-        boolean connected = false;
+	public String getConnectionPort() {
+		return portTextField.getText();
+	}
 
-        try {
-            connected = (cwp.getConnection() != null) &&
-                (!cwp.getConnection().isClosed());
-        }
-        catch (DBException e) {
-            logger.error("While checking connection: " + e.getMessage());
-            connected = false;
-        }
+	public String getConnectionDBName() {
+		return dbTextField.getText();
+	}
 
-        getConnectedCheckBox().setSelected(connected);
-        getConnNameTextField().setText(cwp.getName());
-        
-        if (cwp.getSchema() != null) {
-        	getSchemaField().setText(cwp.getSchema());
-        }
-    }
+	public String getConnectionUser() {
+		return userTextField.getText();
+	}
 
-    private void selectThisInDriverCombo(String drvName) {
-        int size = getDriverComboBox().getItemCount();
+	public String getConnectionPassword() {
+		String resp = new String(passwordField.getPassword());
 
-        for (int i = 0; i < size; i++) {
-            Object item = getDriverComboBox().getItemAt(i);
+		return resp;
+	}
 
-            if (item.toString().compareToIgnoreCase(drvName) == 0) {
-                getDriverComboBox().setSelectedIndex(i);
+	private JTextField getUrlTextArea() {
+		if (urlTextField == null) {
+			urlTextField = new JTextField();
+			urlTextField.addKeyListener(this);
+			urlTextField.setBounds(new java.awt.Rectangle(155, 80, 166, 21));
+		}
 
-                return;
-            }
-        }
-    }
+		return urlTextField;
+	}
+
+	/**
+	 * This method initializes connectedCheckBox
+	 * 
+	 * @return javax.swing.JCheckBox
+	 */
+	private JCheckBox getConnectedCheckBox() {
+		if (connectedCheckBox == null) {
+			connectedCheckBox = new JCheckBox();
+			connectedCheckBox.setSelected(true);
+			connectedCheckBox.addActionListener(this);
+			connectedCheckBox.setBounds(new java.awt.Rectangle(155, 247 + 25,
+					26, 21));
+		}
+
+		return connectedCheckBox;
+	}
+
+	public String getConnectionName() {
+		return getConnNameTextField().getText();
+	}
+
+	/**
+	 * This method initializes connNameTextField
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getConnNameTextField() {
+		if (connNameTextField == null) {
+			connNameTextField = new JTextField();
+			connNameTextField.addKeyListener(this);
+			connNameTextField
+					.setBounds(new java.awt.Rectangle(155, 30, 166, 21));
+		}
+
+		return connNameTextField;
+	}
+
+	public void keyPressed(KeyEvent e) {
+	}
+
+	public void keyReleased(KeyEvent e) {
+		if (e.getKeyChar() != '\n') {
+			return;
+		}
+
+		Object src = e.getSource();
+
+		if (src == passwordField) {
+			ActionEvent aevt = new ActionEvent(okButton,
+					ActionEvent.ACTION_PERFORMED, "");
+			actionPerformed(aevt);
+		} else {
+			if (src instanceof JTextField) {
+				((JTextField) src).transferFocus();
+			}
+		}
+	}
+
+	public void keyTyped(KeyEvent e) {
+	}
+
+	public void loadValues(ConnectionWithParams cwp) {
+		getPortTextField().setText(cwp.getPort());
+		selectThisInDriverCombo(cwp.getDrvName());
+		getDbTextField().setText(cwp.getDb());
+		getUserTextField().setText(cwp.getUser());
+
+		if (cwp.getPw() == null) {
+			getPasswordField().setText("");
+		} else {
+			getPasswordField().setText(cwp.getPw());
+		}
+
+		getUrlTextArea().setText(cwp.getHost());
+
+		boolean connected = false;
+
+		try {
+			connected = (cwp.getConnection() != null)
+					&& (!cwp.getConnection().isClosed());
+		} catch (DBException e) {
+			logger.error("While checking connection: " + e.getMessage());
+			connected = false;
+		}
+
+		getConnectedCheckBox().setSelected(connected);
+		getConnNameTextField().setText(cwp.getName());
+
+		if (cwp.getSchema() != null) {
+			getSchemaField().setText(cwp.getSchema());
+		}
+	}
+
+	private void selectThisInDriverCombo(String drvName) {
+		int size = getDriverComboBox().getItemCount();
+
+		for (int i = 0; i < size; i++) {
+			Object item = getDriverComboBox().getItemAt(i);
+
+			if (item.toString().compareToIgnoreCase(drvName) == 0) {
+				getDriverComboBox().setSelectedIndex(i);
+
+				return;
+			}
+		}
+	}
 
 	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
@@ -587,6 +595,6 @@ public class DBConnectionParamsDialog extends JPanel implements IWindow,
 	public String getConnectionSchema() {
 		return this.schemaTextField.getText();
 	}
-} //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"
 
 // [eiel-gestion-conexiones]

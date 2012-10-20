@@ -68,7 +68,7 @@ public class CSWCapabilities extends CatalogCapabilities {
 	private String[] outputFormat = null;
 	private String[] outputSchema = null;
 	private CSWException exception = null;
-		
+
 	/**
 	 * @return the exception
 	 */
@@ -77,12 +77,13 @@ public class CSWCapabilities extends CatalogCapabilities {
 	}
 
 	/**
-	 * @param exception the exception to set
+	 * @param exception
+	 *            the exception to set
 	 */
 	public void setException(CSWException exception) {
 		this.exception = exception;
 	}
-	
+
 	/**
 	 * @return the outputSchema
 	 */
@@ -91,7 +92,8 @@ public class CSWCapabilities extends CatalogCapabilities {
 	}
 
 	/**
-	 * @param outputSchema the outputSchema to set
+	 * @param outputSchema
+	 *            the outputSchema to set
 	 */
 	public void setOutputSchema(String[] outputSchema) {
 		this.outputSchema = outputSchema;
@@ -105,7 +107,8 @@ public class CSWCapabilities extends CatalogCapabilities {
 	}
 
 	/**
-	 * @param operations the operations to set
+	 * @param operations
+	 *            the operations to set
 	 */
 	public void setOperations(CSWSupportedProtocolOperations operations) {
 		this.operations = operations;
@@ -119,7 +122,8 @@ public class CSWCapabilities extends CatalogCapabilities {
 	}
 
 	/**
-	 * @param outputFormat the outputFormat to set
+	 * @param outputFormat
+	 *            the outputFormat to set
 	 */
 	public void setOutputFormat(String[] outputFormat) {
 		this.outputFormat = outputFormat;
@@ -129,132 +133,140 @@ public class CSWCapabilities extends CatalogCapabilities {
 		super();
 		operations = new CSWSupportedProtocolOperations(url);
 	}
-	
+
 	/**
 	 * @return the responseHandler
 	 */
 	public String getResponseHandler() {
 		return responseHandler;
 	}
-	
+
 	/**
-	 * @param responseHandler the responseHandler to set
+	 * @param responseHandler
+	 *            the responseHandler to set
 	 */
 	public void setResponseHandler(String responseHandler) {
 		this.responseHandler = responseHandler;
 	}
-	
+
 	/**
 	 * @return the hopCount
 	 */
 	public String getHopCount() {
 		return hopCount;
 	}
-	
+
 	/**
-	 * @param hopCount the hopCount to set
+	 * @param hopCount
+	 *            the hopCount to set
 	 */
 	public void setHopCount(String hopCount) {
 		this.hopCount = hopCount;
 	}
-	
+
 	/**
 	 * @return the distributedSearch
 	 */
 	public String getDistributedSearch() {
 		return distributedSearch;
 	}
-	
+
 	/**
-	 * @param distributedSearch the distributedSearch to set
+	 * @param distributedSearch
+	 *            the distributedSearch to set
 	 */
 	public void setDistributedSearch(String distributedSearch) {
 		this.distributedSearch = distributedSearch;
 	}
-	
+
 	/**
 	 * @return the constraint
 	 */
 	public String getConstraint() {
 		return constraint;
 	}
-	
+
 	/**
-	 * @param constraint the constraint to set
+	 * @param constraint
+	 *            the constraint to set
 	 */
 	public void setConstraint(String constraint) {
 		this.constraint = constraint;
 	}
-	
+
 	/**
 	 * @return the cONSTRAINTLANGUAGE
 	 */
 	public String[] getCONSTRAINTLANGUAGE() {
 		return CONSTRAINTLANGUAGE;
 	}
-	
+
 	/**
-	 * @param constraintlanguage the cONSTRAINTLANGUAGE to set
+	 * @param constraintlanguage
+	 *            the cONSTRAINTLANGUAGE to set
 	 */
 	public void setCONSTRAINTLANGUAGE(String[] constraintlanguage) {
 		CONSTRAINTLANGUAGE = constraintlanguage;
 	}
-	
+
 	/**
 	 * @return the elementSetName
 	 */
 	public String[] getElementSetName() {
 		return elementSetName;
 	}
-	
+
 	/**
-	 * @param elementSetName the elementSetName to set
+	 * @param elementSetName
+	 *            the elementSetName to set
 	 */
 	public void setElementSetName(String[] elementSetName) {
 		this.elementSetName = elementSetName;
 	}
-	
+
 	/**
 	 * @return the typeNames
 	 */
 	public String[] getTypeNames() {
 		return typeNames;
 	}
-	
+
 	/**
-	 * @param typeNames the typeNames to set
+	 * @param typeNames
+	 *            the typeNames to set
 	 */
 	public void setTypeNames(String[] typeNames) {
 		this.typeNames = typeNames;
 	}
-	
+
 	/**
 	 * @return the resultType
 	 */
 	public String[] getResultType() {
 		return resultType;
 	}
-	
+
 	/**
-	 * @param resultType the resultType to set
+	 * @param resultType
+	 *            the resultType to set
 	 */
 	public void setResultType(String[] resultType) {
 		this.resultType = resultType;
 	}
-	
+
 	/**
 	 * @return the nAMESPACE
 	 */
 	public String[] getNAMESPACE() {
 		return NAMESPACE;
 	}
-	
+
 	/**
-	 * @param namespace the nAMESPACE to set
+	 * @param namespace
+	 *            the nAMESPACE to set
 	 */
 	public void setNAMESPACE(String[] namespace) {
 		NAMESPACE = namespace;
 	}
-	
-	
+
 }

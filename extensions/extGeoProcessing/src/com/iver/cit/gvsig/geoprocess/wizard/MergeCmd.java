@@ -42,32 +42,32 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: MergeCmd.java 7304 2006-09-15 10:44:24Z caballero $
-* $Log$
-* Revision 1.5  2006-09-15 10:42:54  caballero
-* extensibilidad de documentos
-*
-* Revision 1.4  2006/08/29 07:56:30  cesar
-* Rename the *View* family of classes to *Window* (ie: SingletonView to SingletonWindow, ViewInfo to WindowInfo, etc)
-*
-* Revision 1.3  2006/08/29 07:21:09  cesar
-* Rename com.iver.cit.gvsig.fmap.Fmap class to com.iver.cit.gvsig.fmap.MapContext
-*
-* Revision 1.2  2006/06/20 18:21:48  azabala
-* refactorización para que todos los nuevos geoprocesos cuelguen del paquete impl
-*
-* Revision 1.1  2006/05/24 21:08:45  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.2  2006/04/11 18:00:06  azabala
-* Primera version que funciona
-*
-* Revision 1.1  2006/03/28 16:25:09  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: MergeCmd.java 7304 2006-09-15 10:44:24Z caballero $
+ * $Log$
+ * Revision 1.5  2006-09-15 10:42:54  caballero
+ * extensibilidad de documentos
+ *
+ * Revision 1.4  2006/08/29 07:56:30  cesar
+ * Rename the *View* family of classes to *Window* (ie: SingletonView to SingletonWindow, ViewInfo to WindowInfo, etc)
+ *
+ * Revision 1.3  2006/08/29 07:21:09  cesar
+ * Rename com.iver.cit.gvsig.fmap.Fmap class to com.iver.cit.gvsig.fmap.MapContext
+ *
+ * Revision 1.2  2006/06/20 18:21:48  azabala
+ * refactorización para que todos los nuevos geoprocesos cuelguen del paquete impl
+ *
+ * Revision 1.1  2006/05/24 21:08:45  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.2  2006/04/11 18:00:06  azabala
+ * Primera version que funciona
+ *
+ * Revision 1.1  2006/03/28 16:25:09  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.wizard;
 
 import com.iver.andami.PluginServices;
@@ -81,21 +81,19 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 public class MergeCmd implements AndamiCmd {
 
 	public void execute() {
-		View vista = (View)PluginServices.getMDIManager().getActiveWindow();
+		View vista = (View) PluginServices.getMDIManager().getActiveWindow();
 		MapContext mapContext = vista.getModel().getMapContext();
-        FLayers layers = mapContext.getLayers();
-		GeoProcessingMergePanel dataSelectionPanel = 
-			new GeoProcessingMergePanel(layers);
-        GeoprocessPaneContainer container = new 
-    		GeoprocessPaneContainer(dataSelectionPanel);
-        MergeGeoprocessController controller =
-        	new MergeGeoprocessController();
-        controller.setView(dataSelectionPanel);
-        container.setCommand(controller);
-        container.validate();
-        container.repaint();
-        PluginServices.getMDIManager().addWindow(container);
+		FLayers layers = mapContext.getLayers();
+		GeoProcessingMergePanel dataSelectionPanel = new GeoProcessingMergePanel(
+				layers);
+		GeoprocessPaneContainer container = new GeoprocessPaneContainer(
+				dataSelectionPanel);
+		MergeGeoprocessController controller = new MergeGeoprocessController();
+		controller.setView(dataSelectionPanel);
+		container.setCommand(controller);
+		container.validate();
+		container.repaint();
+		PluginServices.getMDIManager().addWindow(container);
 	}
 
 }
-

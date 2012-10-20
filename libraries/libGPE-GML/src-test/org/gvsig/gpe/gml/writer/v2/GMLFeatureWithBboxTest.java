@@ -63,6 +63,7 @@ import org.gvsig.gpe.writer.GPEFeatureWithBboxTest;
 public class GMLFeatureWithBboxTest extends GPEFeatureWithBboxTest {
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEParserClass()
 	 */
 	public Class getGPEParserClass() {
@@ -71,6 +72,7 @@ public class GMLFeatureWithBboxTest extends GPEFeatureWithBboxTest {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEWriterHandlerClass()
 	 */
 	public Class getGPEWriterHandlerClass() {

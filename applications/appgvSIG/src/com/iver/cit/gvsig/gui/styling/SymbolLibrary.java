@@ -62,13 +62,14 @@ import com.iver.andami.messages.NotificationManager;
 import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.utiles.XMLEntity;
+
 /**
- *
+ * 
  * SymbolLibrary.java
- *
- *
+ * 
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Dec 7, 2007
- *
+ * 
  */
 public class SymbolLibrary extends DefaultTreeModel implements ILibraryModel {
 	static protected String rootDirString;
@@ -77,7 +78,8 @@ public class SymbolLibrary extends DefaultTreeModel implements ILibraryModel {
 	private static SymbolLibrary instance = null;
 
 	public static SymbolLibrary getInstance() {
-		if (instance == null || rootDirString != SymbologyFactory.SymbolLibraryPath) {
+		if (instance == null
+				|| rootDirString != SymbologyFactory.SymbolLibraryPath) {
 			rootDirString = SymbologyFactory.SymbolLibraryPath;
 			instance = new SymbolLibrary(new File(rootDirString));
 		}
@@ -102,7 +104,8 @@ public class SymbolLibrary extends DefaultTreeModel implements ILibraryModel {
 			String path = getAbsolutePath();
 			if (path.equals(rootDir.getAbsolutePath()))
 				return rootDirString;
-			return path.substring(path.lastIndexOf(File.separator)+1, path.length());
+			return path.substring(path.lastIndexOf(File.separator) + 1,
+					path.length());
 		}
 	};
 
@@ -133,7 +136,7 @@ public class SymbolLibrary extends DefaultTreeModel implements ILibraryModel {
 
 	@Override
 	public boolean isLeaf(Object node) {
-		return getChildCount(node)==0;
+		return getChildCount(node) == 0;
 	}
 
 	@Override
@@ -147,13 +150,15 @@ public class SymbolLibrary extends DefaultTreeModel implements ILibraryModel {
 	}
 
 	@Override
-	public void valueForPathChanged(TreePath path, Object newValue) {}
-
+	public void valueForPathChanged(TreePath path, Object newValue) {
+	}
 
 	@Override
 	public Object getChild(Object parent, int index) {
-		File file = ((File) (((DefaultMutableTreeNode) parent).getUserObject())).listFiles(ff)[index];
-		DefaultMutableTreeNode node = new DefaultMutableTreeNode(new MyFile(file.getAbsolutePath()));
+		File file = ((File) (((DefaultMutableTreeNode) parent).getUserObject()))
+				.listFiles(ff)[index];
+		DefaultMutableTreeNode node = new DefaultMutableTreeNode(new MyFile(
+				file.getAbsolutePath()));
 		node.setParent((DefaultMutableTreeNode) parent);
 		return node;
 	}
@@ -162,7 +167,8 @@ public class SymbolLibrary extends DefaultTreeModel implements ILibraryModel {
 	public int getIndexOfChild(Object parent, Object child) {
 		if (parent == null)
 			return -1;
-		File[] files = ((File) ((DefaultMutableTreeNode) parent).getUserObject()).listFiles(ff);
+		File[] files = ((File) ((DefaultMutableTreeNode) parent)
+				.getUserObject()).listFiles(ff);
 		for (int i = 0; i < files.length; i++) {
 			if (files[i].equals(child))
 				return i;
@@ -171,8 +177,10 @@ public class SymbolLibrary extends DefaultTreeModel implements ILibraryModel {
 	}
 
 	private Object getChildFile(Object parent, int index) {
-		File file = ((File) (((DefaultMutableTreeNode) parent).getUserObject())).listFiles()[index];
-		DefaultMutableTreeNode node = new DefaultMutableTreeNode(new MyFile(file.getAbsolutePath()));
+		File file = ((File) (((DefaultMutableTreeNode) parent).getUserObject()))
+				.listFiles()[index];
+		DefaultMutableTreeNode node = new DefaultMutableTreeNode(new MyFile(
+				file.getAbsolutePath()));
 		node.setParent((DefaultMutableTreeNode) parent);
 		return node;
 	}
@@ -180,7 +188,8 @@ public class SymbolLibrary extends DefaultTreeModel implements ILibraryModel {
 	private int getIndexOfChildFiles(Object parent, Object child) {
 		if (parent == null)
 			return -1;
-		File[] files = ((File) ((DefaultMutableTreeNode) parent).getUserObject()).listFiles();
+		File[] files = ((File) ((DefaultMutableTreeNode) parent)
+				.getUserObject()).listFiles();
 		for (int i = 0; files != null && i < files.length; i++) {
 			if (files[i].getName().equals(child))
 				return i;
@@ -197,7 +206,8 @@ public class SymbolLibrary extends DefaultTreeModel implements ILibraryModel {
 			return getChildFile(containerFolder, index);
 		} else {
 			for (int i = 0; i < getChildCount(containerFolder); i++) {
-				Object o = getElement(getChildFile(containerFolder, i), elementName);
+				Object o = getElement(getChildFile(containerFolder, i),
+						elementName);
 				if (o != null) {
 					return o;
 				}
@@ -206,9 +216,8 @@ public class SymbolLibrary extends DefaultTreeModel implements ILibraryModel {
 		return null;
 	}
 
-
-
-	public void addElement(Object element, String elementName, Object containerFolder) {
+	public void addElement(Object element, String elementName,
+			Object containerFolder) {
 		if (element instanceof ISymbol) {
 			ISymbol sym = (ISymbol) element;
 			if (containerFolder == null) {
@@ -216,20 +225,21 @@ public class SymbolLibrary extends DefaultTreeModel implements ILibraryModel {
 			}
 
 			String fExtension = SymbolLibrary.SYMBOL_FILE_EXTENSION;
-			File targetFile = new File(((File) containerFolder).getAbsolutePath() + File.separator + elementName);
+			File targetFile = new File(
+					((File) containerFolder).getAbsolutePath() + File.separator
+							+ elementName);
 			// save it
 			XMLEntity xml = sym.getXMLEntity();
-			if (!targetFile.
-					getAbsolutePath().
-					toLowerCase().
-					endsWith(fExtension))
+			if (!targetFile.getAbsolutePath().toLowerCase()
+					.endsWith(fExtension))
 				targetFile = new File(targetFile.getAbsolutePath() + fExtension);
-			if(targetFile.exists()){
+			if (targetFile.exists()) {
 				int resp = JOptionPane.showConfirmDialog(
 						(Component) PluginServices.getMainFrame(),
 						PluginServices.getText(this,
-						"fichero_ya_existe_seguro_desea_guardarlo"),
-						PluginServices.getText(this,"guardar"), JOptionPane.YES_NO_OPTION);
+								"fichero_ya_existe_seguro_desea_guardarlo"),
+						PluginServices.getText(this, "guardar"),
+						JOptionPane.YES_NO_OPTION);
 				if (resp != JOptionPane.YES_OPTION) {
 					return;
 				}
@@ -246,9 +256,8 @@ public class SymbolLibrary extends DefaultTreeModel implements ILibraryModel {
 						PluginServices.getText(this, "save_error"), ex);
 			}
 		} else {
-			throw new IllegalArgumentException(
-					PluginServices.getText(this, "adding_a_non_symbol_as_element")
-					);
+			throw new IllegalArgumentException(PluginServices.getText(this,
+					"adding_a_non_symbol_as_element"));
 		}
 	}
 
@@ -257,8 +266,10 @@ public class SymbolLibrary extends DefaultTreeModel implements ILibraryModel {
 			parentFolder = rootDir;
 		}
 		try {
-			File fParentFolder = (File) ((DefaultMutableTreeNode) parentFolder).getUserObject();
-			File f = new File(fParentFolder.getAbsolutePath()+File.separator+folderName);
+			File fParentFolder = (File) ((DefaultMutableTreeNode) parentFolder)
+					.getUserObject();
+			File f = new File(fParentFolder.getAbsolutePath() + File.separator
+					+ folderName);
 			if (!f.exists())
 				f.mkdir();
 			for (int i = 0; i < listeners.size(); i++) {
@@ -267,24 +278,22 @@ public class SymbolLibrary extends DefaultTreeModel implements ILibraryModel {
 		} catch (ConcurrentModificationException cme) {
 			cme.printStackTrace();
 		} catch (Exception e) {
-			throw new IllegalArgumentException(
-					PluginServices.getText(this, "invalid_folder_name"), e
-			);
+			throw new IllegalArgumentException(PluginServices.getText(this,
+					"invalid_folder_name"), e);
 		}
 	}
-
 
 	public void removeElement(Object element, Object containerFolder) {
 		try {
 			File fParentFolder = (File) containerFolder;
-			File f = new File(fParentFolder.getAbsolutePath()+File.separator+(String) element);
+			File f = new File(fParentFolder.getAbsolutePath() + File.separator
+					+ (String) element);
 			if (f.exists())
 				deleteRecursively(f);
 
 		} catch (Exception e) {
-			throw new IllegalArgumentException(
-					PluginServices.getText(this, "invalid_folder_name")
-			);
+			throw new IllegalArgumentException(PluginServices.getText(this,
+					"invalid_folder_name"));
 		}
 	}
 
@@ -296,16 +305,16 @@ public class SymbolLibrary extends DefaultTreeModel implements ILibraryModel {
 			if (f.exists())
 				f.delete();
 		} catch (Exception e) {
-			throw new IllegalArgumentException(
-					PluginServices.getText(this, "invalid_folder_name")
-			);
+			throw new IllegalArgumentException(PluginServices.getText(this,
+					"invalid_folder_name"));
 		}
 	}
 
 	private void deleteRecursively(File f) {
 		if (f.isDirectory()) {
-			for (int i = f.list().length-1; i >= 0; i--) {
-				deleteRecursively(new File(f.getAbsolutePath()+File.separator+f.list()[i]));
+			for (int i = f.list().length - 1; i >= 0; i--) {
+				deleteRecursively(new File(f.getAbsolutePath() + File.separator
+						+ f.list()[i]));
 			}
 		}
 		f.delete();
@@ -333,10 +342,10 @@ public class SymbolLibrary extends DefaultTreeModel implements ILibraryModel {
 
 	private void fireTreeNodesRemoved(TreePath removedObjectTreePath) {
 		TreeModelEvent e = new TreeModelEvent(this, removedObjectTreePath);
-		for (Iterator<TreeModelListener> iterator = listeners.iterator(); iterator.hasNext();) {
+		for (Iterator<TreeModelListener> iterator = listeners.iterator(); iterator
+				.hasNext();) {
 			iterator.next().treeNodesRemoved(e);
 		}
 	}
-
 
 }

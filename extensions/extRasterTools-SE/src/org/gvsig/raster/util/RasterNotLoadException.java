@@ -18,17 +18,17 @@
  */
 package org.gvsig.raster.util;
 
-
 /**
- * Excepción producida cuando no es posible cargar un raster en la vista de gvSIG.
+ * Excepción producida cuando no es posible cargar un raster en la vista de
+ * gvSIG.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
 public class RasterNotLoadException extends Exception {
 	private static final long serialVersionUID = -3022090543908771484L;
-	
-	public RasterNotLoadException(String msg){
+
+	public RasterNotLoadException(String msg) {
 		super(msg);
 	}
 }

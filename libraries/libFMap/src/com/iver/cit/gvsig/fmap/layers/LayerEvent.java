@@ -42,107 +42,154 @@ package com.iver.cit.gvsig.fmap.layers;
 
 import com.iver.cit.gvsig.fmap.FMapEvent;
 
-
 /**
- * <p>Event produced when changes the visibility, activation, edition status, or the name of a layer.</p>
- *
+ * <p>
+ * Event produced when changes the visibility, activation, edition status, or
+ * the name of a layer.
+ * </p>
+ * 
  * @author Fernando González Cortés
  */
 public class LayerEvent extends FMapEvent {
 	/**
-	 * <p>String that identifies the property that has changed.</p>
+	 * <p>
+	 * String that identifies the property that has changed.
+	 * </p>
 	 */
 	private String property;
 
 	/**
-	 * <p>Layer affected by the action.</p>
+	 * <p>
+	 * Layer affected by the action.
+	 * </p>
 	 */
 	private FLayer source;
 
 	/**
-	 * <p>Identifies this event as a action of change of the visibility status of a layer.</p>
+	 * <p>
+	 * Identifies this event as a action of change of the visibility status of a
+	 * layer.
+	 * </p>
 	 */
 	public static final int VISIBILITY_CHANGED = 0;
 
 	/**
-	 * <p>Identifies this event as a action of change of the activation status of a layer.</p>
+	 * <p>
+	 * Identifies this event as a action of change of the activation status of a
+	 * layer.
+	 * </p>
 	 */
 	public static final int ACTIVATION_CHANGED = 1;
 
 	/**
-	 * <p>Identifies this event as a action of a change of the name of a layer.</p>
+	 * <p>
+	 * Identifies this event as a action of a change of the name of a layer.
+	 * </p>
 	 */
 	public static final int NAME_CHANGED = 2;
 
 	/**
-	 * <p>Identifies this event as a action of change of the edition status of a layer.</p>
+	 * <p>
+	 * Identifies this event as a action of change of the edition status of a
+	 * layer.
+	 * </p>
 	 */
 	public static final int EDITION_CHANGED = 3;
 
 	/**
-	 * <p>Identifies this event as a action of change of any property that affects to draw of the layer.</p>
+	 * <p>
+	 * Identifies this event as a action of change of any property that affects
+	 * to draw of the layer.
+	 * </p>
 	 */
 	public static final int DRAW_VALUES_CHANGED = 4;
 
 	/**
-	 * <p>Creates a new layer event notifying a "visibility changed" action.</p>
-	 *
-	 * @param default1 layer affected by the action
-	 * @param property property that has changed
-	 *
+	 * <p>
+	 * Creates a new layer event notifying a "visibility changed" action.
+	 * </p>
+	 * 
+	 * @param default1
+	 *            layer affected by the action
+	 * @param property
+	 *            property that has changed
+	 * 
 	 * @return a new layer event
 	 */
-	public static LayerEvent createVisibilityChangedEvent(FLyrDefault default1, String property){
+	public static LayerEvent createVisibilityChangedEvent(FLyrDefault default1,
+			String property) {
 		return new LayerEvent(default1, property, VISIBILITY_CHANGED);
 	}
 
 	/**
-	 * <p>Creates a new layer event notifying an "activation changed" action.</p>
-	 *
-	 * @param default1 layer affected by the action
-	 * @param property property that has changed
-	 *
+	 * <p>
+	 * Creates a new layer event notifying an "activation changed" action.
+	 * </p>
+	 * 
+	 * @param default1
+	 *            layer affected by the action
+	 * @param property
+	 *            property that has changed
+	 * 
 	 * @return a new layer event
 	 */
-	public static LayerEvent createActivationChangedEvent(FLyrDefault default1, String property){
+	public static LayerEvent createActivationChangedEvent(FLyrDefault default1,
+			String property) {
 		return new LayerEvent(default1, property, ACTIVATION_CHANGED);
 	}
 
-	public static LayerEvent createDrawValuesChangedEvent(FLyrDefault default1, String property){
+	public static LayerEvent createDrawValuesChangedEvent(FLyrDefault default1,
+			String property) {
 		return new LayerEvent(default1, property, DRAW_VALUES_CHANGED);
 	}
 
 	/**
-	 * <p>Creates a new layer event notifying an action of "change of the name of a layer".</p>
-	 *
-	 * @param default1 layer affected by the action
-	 * @param property property that has changed
-	 *
+	 * <p>
+	 * Creates a new layer event notifying an action of
+	 * "change of the name of a layer".
+	 * </p>
+	 * 
+	 * @param default1
+	 *            layer affected by the action
+	 * @param property
+	 *            property that has changed
+	 * 
 	 * @return a new layer event
 	 */
-	public static LayerEvent createNameChangedEvent(FLyrDefault default1, String property){
+	public static LayerEvent createNameChangedEvent(FLyrDefault default1,
+			String property) {
 		return new LayerEvent(default1, property, NAME_CHANGED);
 	}
 
 	/**
-	 * <p>Creates a new layer event notifying an "edition changed" action.</p>
-	 *
-	 * @param default1 layer affected by the action
-	 * @param property property that has changed
-	 *
+	 * <p>
+	 * Creates a new layer event notifying an "edition changed" action.
+	 * </p>
+	 * 
+	 * @param default1
+	 *            layer affected by the action
+	 * @param property
+	 *            property that has changed
+	 * 
 	 * @return a new layer event
 	 */
-	public static LayerEvent createEditionChangedEvent(FLyrDefault default1, String property){
+	public static LayerEvent createEditionChangedEvent(FLyrDefault default1,
+			String property) {
 		return new LayerEvent(default1, property, EDITION_CHANGED);
 	}
 
 	/**
-	 * <p>Creates a new layer event of the specified type.</p>
-	 *
-	 * @param default1 layer affected by the action
-	 * @param property property that has changed
-	 * @param eventType type of layer collection event
-	 *
+	 * <p>
+	 * Creates a new layer event of the specified type.
+	 * </p>
+	 * 
+	 * @param default1
+	 *            layer affected by the action
+	 * @param property
+	 *            property that has changed
+	 * @param eventType
+	 *            type of layer collection event
+	 * 
 	 * @return a new layer collection event
 	 */
 	private LayerEvent(FLayer default1, String property, int eventType) {
@@ -152,8 +199,10 @@ public class LayerEvent extends FMapEvent {
 	}
 
 	/**
-	 * <p>Gets the layer affected.</p>
-	 *
+	 * <p>
+	 * Gets the layer affected.
+	 * </p>
+	 * 
 	 * @return the layer affected
 	 */
 	public FLayer getSource() {
@@ -161,17 +210,22 @@ public class LayerEvent extends FMapEvent {
 	}
 
 	/**
-	 * <p>Sets the layer affected.</p>
-	 *
-	 * @param the layer affected
+	 * <p>
+	 * Sets the layer affected.
+	 * </p>
+	 * 
+	 * @param the
+	 *            layer affected
 	 */
 	public void setSource(FLayer source) {
 		this.source = source;
 	}
 
 	/**
-	 * <p>Gets the property that has changed.</p>
-	 *
+	 * <p>
+	 * Gets the property that has changed.
+	 * </p>
+	 * 
 	 * @return the property that has changed
 	 */
 	public String getProperty() {
@@ -179,9 +233,12 @@ public class LayerEvent extends FMapEvent {
 	}
 
 	/**
-	 * <p>Sets the property that has changed.</p>
-	 *
-	 * @param the property that has changed
+	 * <p>
+	 * Sets the property that has changed.
+	 * </p>
+	 * 
+	 * @param the
+	 *            property that has changed
 	 */
 	public void setProperty(String property) {
 		this.property = property;

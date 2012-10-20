@@ -5,10 +5,11 @@ package com.iver.cit.gvsig.exceptions.layers;
  */
 public class ProjectionLayerException extends LoadLayerException {
 
-	public ProjectionLayerException(String l,Throwable exception) {
-		super(l,exception);
+	public ProjectionLayerException(String l, Throwable exception) {
+		super(l, exception);
 		init();
 	}
+
 	/**
 	 *
 	 */

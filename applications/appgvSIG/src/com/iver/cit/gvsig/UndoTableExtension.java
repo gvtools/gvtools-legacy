@@ -48,11 +48,10 @@ import com.iver.cit.gvsig.exceptions.commands.EditionCommandException;
 import com.iver.cit.gvsig.fmap.edition.IEditableSource;
 import com.iver.cit.gvsig.project.documents.table.gui.Table;
 
-
 /**
  * Extensión encargada de gestionar el rehacer un comando anteriormente
  * deshecho.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class UndoTableExtension extends Extension {
@@ -63,11 +62,12 @@ public class UndoTableExtension extends Extension {
 		registerIcons();
 	}
 
-	private void registerIcons(){
-		PluginServices.getIconTheme().registerDefault(
-				"table-undo",
-				this.getClass().getClassLoader().getResource("images/Undo.png")
-			);
+	private void registerIcons() {
+		PluginServices.getIconTheme()
+				.registerDefault(
+						"table-undo",
+						this.getClass().getClassLoader()
+								.getResource("images/Undo.png"));
 	}
 
 	/**
@@ -77,18 +77,22 @@ public class UndoTableExtension extends Extension {
 		Table tabla = (Table) PluginServices.getMDIManager().getActiveWindow();
 
 		if (s.compareTo("UNDO") == 0) {
-			if (tabla.isEditing()){
-				IEditableSource vea=tabla.getModel().getModelo();
+			if (tabla.isEditing()) {
+				IEditableSource vea = tabla.getModel().getModelo();
 				try {
 					vea.undo();
 
-				vea.getSelection().clear();
+					vea.getSelection().clear();
 				} catch (EditionCommandException e) {
-					NotificationManager.addError("Error accediendo a los Drivers para deshacer un comando",
-							e);
-				}catch (ReadDriverException e) {
-					NotificationManager.addError("Error accediendo a los Drivers para deshacer un comando",
-							e);
+					NotificationManager
+							.addError(
+									"Error accediendo a los Drivers para deshacer un comando",
+									e);
+				} catch (ReadDriverException e) {
+					NotificationManager
+							.addError(
+									"Error accediendo a los Drivers para deshacer un comando",
+									e);
 				}
 			}
 			tabla.getModel().setModified(true);
@@ -100,16 +104,19 @@ public class UndoTableExtension extends Extension {
 	 */
 	public boolean isEnabled() {
 		Table tabla = (Table) PluginServices.getMDIManager().getActiveWindow();
-		//MapControl mapControl = (MapControl) vista.getMapControl();
-		//FLayers layers=mapControl.getMapContext().getLayers();
-		//for (int i=0;i<layers.getLayersCount();i++){
-			if (tabla.getModel().getModelo() instanceof IEditableSource && tabla.isEditing()){
-				IEditableSource vea=(IEditableSource)tabla.getModel().getModelo();
-				if (vea==null)return false;
-				return vea.getCommandRecord().moreUndoCommands();
-			}
+		// MapControl mapControl = (MapControl) vista.getMapControl();
+		// FLayers layers=mapControl.getMapContext().getLayers();
+		// for (int i=0;i<layers.getLayersCount();i++){
+		if (tabla.getModel().getModelo() instanceof IEditableSource
+				&& tabla.isEditing()) {
+			IEditableSource vea = (IEditableSource) tabla.getModel()
+					.getModelo();
+			if (vea == null)
+				return false;
+			return vea.getCommandRecord().moreUndoCommands();
+		}
 
-		//}
+		// }
 		return false;
 	}
 
@@ -117,8 +124,8 @@ public class UndoTableExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-															 .getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (f == null) {
 			return false;

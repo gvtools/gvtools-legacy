@@ -17,14 +17,15 @@ public class AddRowCommand extends AbstractCommand {
 	private IRow row;
 	private int calculatedIndex;
 	private EditableAdapter efs;
-	private int sourceType=EditionEvent.GRAPHIC;
+	private int sourceType = EditionEvent.GRAPHIC;
 
-	public AddRowCommand(EditableAdapter ef, IRow row, int calculatedIndex, int sourceType) {
+	public AddRowCommand(EditableAdapter ef, IRow row, int calculatedIndex,
+			int sourceType) {
 		super();
 		efs = ef;
 		this.calculatedIndex = calculatedIndex;
 		this.row = row;
-		this.sourceType=sourceType;
+		this.sourceType = sourceType;
 	}
 
 	/**
@@ -43,11 +44,11 @@ public class AddRowCommand extends AbstractCommand {
 	 */
 	public void redo() throws EditionCommandException {
 		try {
-			calculatedIndex=efs.doAddRow(row, sourceType);
+			calculatedIndex = efs.doAddRow(row, sourceType);
 			efs.setSelection(new FBitSet());
 		} catch (ReadDriverException e) {
-			throw new EditionCommandException(efs.getWriter().getName(),e);
-		} 
+			throw new EditionCommandException(efs.getWriter().getName(), e);
+		}
 	}
 
 	public String getType() {

@@ -63,31 +63,26 @@ public class ClearFlagsExtension extends Extension {
 
 	public void initialize() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void execute(String actionCommand) {
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		if (window instanceof View)
-		{
+		if (window instanceof View) {
 			View v = (View) window;
-	        MapControl mapCtrl = v.getMapControl();
+			MapControl mapCtrl = v.getMapControl();
 			MapContext map = mapCtrl.getMapContext();
-			
+
 			SingleLayerIterator it = new SingleLayerIterator(map.getLayers());
-			while (it.hasNext())
-			{
+			while (it.hasNext()) {
 				FLayer aux = it.next();
 				if (!aux.isActive())
 					continue;
 				Network net = (Network) aux.getProperty("network");
-				
-				if ( net != null)
-				{
-					if (actionCommand.equalsIgnoreCase("CLEAR_FLAGS"))
-					{
-						if (net.getFlags().length > 0)
-						{
+
+				if (net != null) {
+					if (actionCommand.equalsIgnoreCase("CLEAR_FLAGS")) {
+						if (net.getFlags().length > 0) {
 							net.removeFlags();
 							NetworkUtils.clearFlagsFromGraphics(mapCtrl);
 							mapCtrl.drawMap(false);
@@ -96,29 +91,25 @@ public class ClearFlagsExtension extends Extension {
 				}
 			}
 		}
-		
+
 	}
 
 	public boolean isEnabled() {
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		if (window instanceof View)
-		{
+		if (window instanceof View) {
 			View v = (View) window;
-	        MapControl mapCtrl = v.getMapControl();
+			MapControl mapCtrl = v.getMapControl();
 			MapContext map = mapCtrl.getMapContext();
-			
+
 			SingleLayerIterator it = new SingleLayerIterator(map.getLayers());
-			while (it.hasNext())
-			{
+			while (it.hasNext()) {
 				FLayer aux = it.next();
 				if (!aux.isActive())
 					continue;
 				Network net = (Network) aux.getProperty("network");
-				
-				if ( net != null)
-				{
-					if (net.getFlags().length > 0)
-					{
+
+				if (net != null) {
+					if (net.getFlags().length > 0) {
 						return true;
 					}
 				}
@@ -130,42 +121,53 @@ public class ClearFlagsExtension extends Extension {
 
 	public boolean isVisible() {
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		if (window instanceof View)
-		{
+		if (window instanceof View) {
 			View v = (View) window;
-	        mapCtrl = v.getMapControl();
+			mapCtrl = v.getMapControl();
 			MapContext map = mapCtrl.getMapContext();
-			
+
 			SingleLayerIterator it = new SingleLayerIterator(map.getLayers());
-			while (it.hasNext())
-			{
+			while (it.hasNext()) {
 				FLayer aux = it.next();
 				if (!aux.isActive())
 					continue;
 				Network net = (Network) aux.getProperty("network");
-				
-				if ( net != null)
-				{
-					if (clearFlagGraphicsListener  == null) {
+
+				if (net != null) {
+					if (clearFlagGraphicsListener == null) {
 						clearFlagGraphicsListener = new LayerListenerAdapter() {
 							public void layerRemoved(LayerCollectionEvent e) {
-								Network net = (Network) e.getAffectedLayer().getProperty("network");
+								Network net = (Network) e.getAffectedLayer()
+										.getProperty("network");
 								if (net != null) {
-									for (int i=0; i< net.getFlagsCount(); i++) {
-										NetworkUtils.clearFlagFromGraphics(mapCtrl, (GvFlag) net.getOriginaFlags().get(i));
+									for (int i = 0; i < net.getFlagsCount(); i++) {
+										NetworkUtils.clearFlagFromGraphics(
+												mapCtrl,
+												(GvFlag) net.getOriginaFlags()
+														.get(i));
 									}
-									for (int i=0; i< net.getModifiedCosts().size(); i++) {
-										NetworkUtils.clearGraphicByObjectTag(mapCtrl, net.getModifiedCosts().get(i));
+									for (int i = 0; i < net.getModifiedCosts()
+											.size(); i++) {
+										NetworkUtils.clearGraphicByObjectTag(
+												mapCtrl, net.getModifiedCosts()
+														.get(i));
 									}
-									for (int i=0; i< net.getTurnCosts().size(); i++) {
-										NetworkUtils.clearGraphicByObjectTag(mapCtrl, net.getTurnCosts().get(i));
+									for (int i = 0; i < net.getTurnCosts()
+											.size(); i++) {
+										NetworkUtils.clearGraphicByObjectTag(
+												mapCtrl, net.getTurnCosts()
+														.get(i));
 									}
-									NetworkUtils.clearRouteFromGraphics(mapCtrl);
+									NetworkUtils
+											.clearRouteFromGraphics(mapCtrl);
 
 								}
 							}
 						};
-						mapCtrl.getMapContext().getLayers().addLayerCollectionListener(clearFlagGraphicsListener);
+						mapCtrl.getMapContext()
+								.getLayers()
+								.addLayerCollectionListener(
+										clearFlagGraphicsListener);
 					}
 					return true;
 				}
@@ -176,5 +178,3 @@ public class ClearFlagsExtension extends Extension {
 	}
 
 }
-
-

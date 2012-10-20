@@ -74,43 +74,49 @@ package org.gvsig.remoteClient.wcs;
 import java.awt.geom.Rectangle2D;
 
 import org.gvsig.remoteClient.RemoteClientStatus;
+
 /**
- * Describes the status of a WCSclient, so it adds to the Remote client status
- * a list of layers, a list of layer styles, the extent of the map.
- * Provides the functionality to modify these lists.
+ * Describes the status of a WCSclient, so it adds to the Remote client status a
+ * list of layers, a list of layer styles, the extent of the map. Provides the
+ * functionality to modify these lists.
  * 
  * @author jaume domínguez faus - jaume.dominguez@iver.es
  */
 public class WCSStatus extends RemoteClientStatus {
-	//private String		resolution		= null; TODO do I need it?
-	private Rectangle2D	bBox			= null;
-	private String		coverageName	= null;
-	private String		onlineResource	= null;
-	private String		depth			= null;
-	private String		times			= null;
-	private String		parameters		= null;
-	private String		message			= null;
-	
+	// private String resolution = null; TODO do I need it?
+	private Rectangle2D bBox = null;
+	private String coverageName = null;
+	private String onlineResource = null;
+	private String depth = null;
+	private String times = null;
+	private String parameters = null;
+	private String message = null;
+
 	/**
 	 * Sets the Bounding Box that is going to be requested to the server.
-	 * @param bBox, Rectangle2D containing the edges of the bounding box
+	 * 
+	 * @param bBox
+	 *            , Rectangle2D containing the edges of the bounding box
 	 */
 	public void setExtent(Rectangle2D bBox) {
 		this.bBox = bBox;
 	}
-	
+
 	/**
 	 * Sets the name of the coverage requested to the server.
-	 * @param coverageName, String containing the name of the requesting coverage
+	 * 
+	 * @param coverageName
+	 *            , String containing the name of the requesting coverage
 	 */
 	public void setCoveraName(String coverageName) {
 		this.coverageName = coverageName;
 	}
 
 	/**
-	 * Sets the parameter string. The parameter string is the part of the request 
-	 * containing the value for the axis as described in the DescribeCoverage
-	 * document.
+	 * Sets the parameter string. The parameter string is the part of the
+	 * request containing the value for the axis as described in the
+	 * DescribeCoverage document.
+	 * 
 	 * @param parameters
 	 */
 	public void setParameters(String parameters) {
@@ -119,22 +125,26 @@ public class WCSStatus extends RemoteClientStatus {
 
 	/**
 	 * Will set the address of the host that serves the following request
+	 * 
 	 * @param onlineResources
 	 */
 	public void setOnlineResource(String onlineResources) {
 		this.onlineResource = onlineResources;
 	}
-	
+
 	/**
-	 * Sets the depth. The depth is the third dimension for the size. 
-	 * @param depth, String
+	 * Sets the depth. The depth is the third dimension for the size.
+	 * 
+	 * @param depth
+	 *            , String
 	 */
 	public void setDepth(String depth) {
 		this.depth = depth;
 	}
 
 	/**
-	 * Returns the address host that will serve the request 
+	 * Returns the address host that will serve the request
+	 * 
 	 * @return String
 	 */
 	public String getOnlineResource() {
@@ -143,14 +153,16 @@ public class WCSStatus extends RemoteClientStatus {
 
 	/**
 	 * Return the name of the coverage requested to the server.
+	 * 
 	 * @return String containing the name of the requesting coverage
 	 */
 	public String getCoverageName() {
 		return this.coverageName;
 	}
-	
+
 	/**
 	 * Returns the Bounding Box that is going to be requested to the server.
+	 * 
 	 * @return Rectangle2D containing the edges of the bounding box
 	 */
 	public Rectangle2D getExtent() {
@@ -159,6 +171,7 @@ public class WCSStatus extends RemoteClientStatus {
 
 	/**
 	 * Returns the depth of the next request.
+	 * 
 	 * @return String
 	 */
 	public String getDepth() {
@@ -166,17 +179,20 @@ public class WCSStatus extends RemoteClientStatus {
 	}
 
 	/**
-	 * Returns the value for the time parameter that will be used in the next request
+	 * Returns the value for the time parameter that will be used in the next
+	 * request
+	 * 
 	 * @return String
 	 */
 	public String getTime() {
 		return times;
 	}
-	
+
 	/**
-	 * Returns the parameter string.
-	 * The parameter string is the part of the request containing the value for the
-	 * axis as described in the DescribeCoverage.
+	 * Returns the parameter string. The parameter string is the part of the
+	 * request containing the value for the axis as described in the
+	 * DescribeCoverage.
+	 * 
 	 * @return String
 	 */
 	public String getParameters() {
@@ -184,7 +200,8 @@ public class WCSStatus extends RemoteClientStatus {
 	}
 
 	/**
-	 * Sets the value(s) for the time that will be used in the next request. 
+	 * Sets the value(s) for the time that will be used in the next request.
+	 * 
 	 * @param times
 	 */
 	public void setTime(String times) {
@@ -193,18 +210,20 @@ public class WCSStatus extends RemoteClientStatus {
 
 	/**
 	 * Returns the message string
+	 * 
 	 * @return String
 	 */
 	public String getMessage() {
 		return message;
 	}
-	
+
 	/**
-	 * Sets the message string 
+	 * Sets the message string
+	 * 
 	 * @param message
 	 */
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
+
 }

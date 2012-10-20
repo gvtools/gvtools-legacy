@@ -1,5 +1,11 @@
 package com.hardcode.gdbms.control;
 
+import java.util.Stack;
+
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
+
 import com.hardcode.gdbms.parser.ASTSQLAndExpr;
 import com.hardcode.gdbms.parser.ASTSQLBetweenClause;
 import com.hardcode.gdbms.parser.ASTSQLColRef;
@@ -49,18 +55,11 @@ import com.hardcode.gdbms.parser.SQLEngineVisitor;
 import com.hardcode.gdbms.parser.SimpleNode;
 import com.hardcode.gdbms.parser.Token;
 
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
-
-import java.util.Stack;
-
-
 /**
  * Se encarga de obtener una estructura de datos que defina la instrucción SQL
  * en términos de DataSources y demás estructuras internas a partir del árbol
  * obtenido en el análisis sintáctico
- *
+ * 
  * @author Fernando González Cortés
  */
 public class SemanticParser implements SQLEngineVisitor {
@@ -71,16 +70,16 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * Obtiene el texto del nodo
-	 *
-	 * @param s Nodo del cual se quiere obtener el texto
-	 *
+	 * 
+	 * @param s
+	 *            Nodo del cual se quiere obtener el texto
+	 * 
 	 * @return String
 	 */
 	private String getText(SimpleNode s) {
 		String ret = "";
 
-		for (Token tok = s.first_token; tok != s.last_token.next;
-				tok = tok.next) {
+		for (Token tok = s.first_token; tok != s.last_token.next; tok = tok.next) {
 			ret += (" " + tok.image);
 		}
 
@@ -90,9 +89,10 @@ public class SemanticParser implements SQLEngineVisitor {
 	/**
 	 * Obtiene el nombre de la clase a partir de dicha clase. El nombre no
 	 * cualificado, es decir, sin el paquete
-	 *
-	 * @param clase Clase de la cual se quiere obtener el nombre
-	 *
+	 * 
+	 * @param clase
+	 *            Clase de la cual se quiere obtener el nombre
+	 * 
 	 * @return String con el nombre
 	 */
 	private String getClassName(Class clase) {
@@ -104,8 +104,9 @@ public class SemanticParser implements SQLEngineVisitor {
 	/**
 	 * Lanza un evento SAX de startElement con la información del nodo que se
 	 * pasa como parametro
-	 *
-	 * @param node nodo del arbol sintáctico
+	 * 
+	 * @param node
+	 *            nodo del arbol sintáctico
 	 */
 	private void start(SimpleNode node) {
 
@@ -120,13 +121,13 @@ public class SemanticParser implements SQLEngineVisitor {
 		atts.addAttribute("", "image", "image", "CDATA", getText(node));
 
 		if (node.first_token == node.last_token) {
-			atts.addAttribute("", "type", "type", "CDATA",
-				"" + node.first_token.kind);
+			atts.addAttribute("", "type", "type", "CDATA", ""
+					+ node.first_token.kind);
 		}
 
 		try {
 			handler.startElement("", getClassName(node.getClass()),
-				getClassName(node.getClass()), atts);
+					getClassName(node.getClass()), atts);
 		} catch (SAXException e) {
 		}
 
@@ -137,8 +138,9 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * metodo que procesa un nodo
-	 *
-	 * @param node nodo a procesar
+	 * 
+	 * @param node
+	 *            nodo a procesar
 	 */
 	private void process(SimpleNode node) {
 		start(node);
@@ -158,7 +160,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 			try {
 				handler.endElement("", getClassName(node.getClass()),
-					getClassName(node.getClass()));
+						getClassName(node.getClass()));
 			} catch (SAXException e) {
 			}
 
@@ -170,7 +172,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.SimpleNode,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(SimpleNode node, Object data) {
 		process(node);
@@ -180,7 +182,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLAndExpr,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLAndExpr node, Object data) {
 		process(node);
@@ -190,7 +192,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLBetweenClause,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLBetweenClause node, Object data) {
 		process(node);
@@ -200,7 +202,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLColRef,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLColRef node, Object data) {
 		process(node);
@@ -210,7 +212,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLCompareExpr,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLCompareExpr node, Object data) {
 		process(node);
@@ -220,7 +222,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLCompareExprRight,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLCompareExprRight node, Object data) {
 		process(node);
@@ -230,7 +232,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLCompareOp,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLCompareOp node, Object data) {
 		process(node);
@@ -240,7 +242,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLDelete,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLDelete node, Object data) {
 		process(node);
@@ -250,7 +252,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLExistsClause,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLExistsClause node, Object data) {
 		process(node);
@@ -260,7 +262,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLFunction,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLFunction node, Object data) {
 		process(node);
@@ -270,7 +272,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLFunctionArgs,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLFunctionArgs node, Object data) {
 		process(node);
@@ -280,7 +282,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLGroupBy,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLGroupBy node, Object data) {
 		process(node);
@@ -290,7 +292,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLInClause,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLInClause node, Object data) {
 		process(node);
@@ -300,7 +302,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLInsert,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLInsert node, Object data) {
 		process(node);
@@ -310,7 +312,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLIsClause,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLIsClause node, Object data) {
 		process(node);
@@ -320,7 +322,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLLeftJoinClause,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLLeftJoinClause node, Object data) {
 		process(node);
@@ -330,7 +332,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLLikeClause,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLLikeClause node, Object data) {
 		process(node);
@@ -340,7 +342,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLLiteral,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLLiteral node, Object data) {
 		process(node);
@@ -350,7 +352,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLLvalue,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLLvalue node, Object data) {
 		process(node);
@@ -360,7 +362,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLLvalueTerm,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLLvalueTerm node, Object data) {
 		process(node);
@@ -370,7 +372,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLNotExpr,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLNotExpr node, Object data) {
 		process(node);
@@ -380,7 +382,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLOrderBy,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLOrderBy node, Object data) {
 		process(node);
@@ -390,7 +392,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLOrderByElem,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLOrderByElem node, Object data) {
 		process(node);
@@ -400,7 +402,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLOrderByList,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLOrderByList node, Object data) {
 		process(node);
@@ -410,7 +412,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLOrderDirection,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLOrderDirection node, Object data) {
 		process(node);
@@ -420,7 +422,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLOrExpr,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLOrExpr node, Object data) {
 		process(node);
@@ -430,7 +432,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLPattern,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLPattern node, Object data) {
 		process(node);
@@ -440,7 +442,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLProductExpr,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLProductExpr node, Object data) {
 		process(node);
@@ -450,7 +452,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLRightJoinClause,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLRightJoinClause node, Object data) {
 		process(node);
@@ -460,7 +462,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLSelect,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLSelect node, Object data) {
 		process(node);
@@ -470,7 +472,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLSelectCols,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLSelectCols node, Object data) {
 		process(node);
@@ -480,7 +482,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLSelectList,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLSelectList node, Object data) {
 		process(node);
@@ -490,7 +492,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLStatement,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLStatement node, Object data) {
 		process(node);
@@ -500,7 +502,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLSumExpr,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLSumExpr node, Object data) {
 		process(node);
@@ -510,7 +512,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLTableList,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLTableList node, Object data) {
 		process(node);
@@ -520,7 +522,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLTableRef,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLTableRef node, Object data) {
 		process(node);
@@ -530,7 +532,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLTerm,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLTerm node, Object data) {
 		process(node);
@@ -540,7 +542,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLUnaryExpr,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLUnaryExpr node, Object data) {
 		process(node);
@@ -550,7 +552,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLUpdate,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLUpdate node, Object data) {
 		process(node);
@@ -560,7 +562,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLUpdateAssignment,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLUpdateAssignment node, Object data) {
 		process(node);
@@ -570,7 +572,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLLValueElement,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLLValueElement node, Object data) {
 		process(node);
@@ -580,7 +582,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLLValueList,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLLValueList node, Object data) {
 		process(node);
@@ -590,7 +592,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLWhere,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLWhere node, Object data) {
 		process(node);
@@ -613,12 +615,14 @@ public class SemanticParser implements SQLEngineVisitor {
 	}
 
 	/**
-	 * Hace que este visitor sp visite el nodo que se pasa como parámetro y
-	 * cada uno de sus hijos
-	 *
-	 * @param root nodo raiz que se va a visitar
-	 *
-	 * @throws SAXException DOCUMENT ME!
+	 * Hace que este visitor sp visite el nodo que se pasa como parámetro y cada
+	 * uno de sus hijos
+	 * 
+	 * @param root
+	 *            nodo raiz que se va a visitar
+	 * 
+	 * @throws SAXException
+	 *             DOCUMENT ME!
 	 */
 	public void parse(Node root) throws SAXException {
 		handler.startDocument();
@@ -628,10 +632,12 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param root DOCUMENT ME!
-	 *
-	 * @throws SAXException DOCUMENT ME!
+	 * 
+	 * @param root
+	 *            DOCUMENT ME!
+	 * 
+	 * @throws SAXException
+	 *             DOCUMENT ME!
 	 */
 	private void parsing(Node root) throws SAXException {
 		root.jjtAccept(this, null);
@@ -643,7 +649,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLUnion,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLUnion node, Object data) {
 		process(node);
@@ -653,7 +659,7 @@ public class SemanticParser implements SQLEngineVisitor {
 
 	/**
 	 * @see com.hardcode.gdbms.parser.SQLEngineVisitor#visit(com.hardcode.gdbms.parser.ASTSQLCustom,
-	 * 		java.lang.Object)
+	 *      java.lang.Object)
 	 */
 	public Object visit(ASTSQLCustom node, Object data) {
 		// TODO Auto-generated method stub

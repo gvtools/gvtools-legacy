@@ -54,8 +54,9 @@ import org.gvsig.gui.beans.Messages;
  */
 
 /**
- * Tests the JCalendarDateDialog  -> creates a JFrame that allows use a JCalendarDateDialog  object
-
+ * Tests the JCalendarDateDialog -> creates a JFrame that allows use a
+ * JCalendarDateDialog object
+ * 
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
 public class TestJCalendarDateDialog extends JFrame implements Serializable {
@@ -64,63 +65,68 @@ public class TestJCalendarDateDialog extends JFrame implements Serializable {
 
 	/**
 	 * Test method for the TestJCalendarCDatePanel class
+	 * 
 	 * @param args
 	 */
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		int widthJF = 200;
 		int heightJF = 50;
 		int widthJB = 30;
 		int heightJB = 20;
-		
+
 		// Objects creation
 		JFrame jF = new JFrame();
-		
+
 		// JCalendarDateDialog
-		t = new JCalendarDateDialog();		
-		
+		t = new JCalendarDateDialog();
+
 		// Test Modal
 		t.setModal(true);
-		
+
 		// Test set minimum dimension
-//		t.setMinimumWidth(200);
-//		t.setMinimumHeight(150);
+		// t.setMinimumWidth(200);
+		// t.setMinimumHeight(150);
 		t.setMinimumWidthScreenResolutionPercentage(0.30);
 		t.setMinimumHeightScreenResolutionPercentage(0.20);
-		
+
 		// Test set maximum dimension
-//		t.setMaximumWidth(500);
-//		t.setMaximumHeight(400);		
+		// t.setMaximumWidth(500);
+		// t.setMaximumHeight(400);
 		t.setMaximumWidthScreenResolutionPercentage(0.60);
-		t.setMaximumHeightScreenResolutionPercentage(0.40);		
+		t.setMaximumHeightScreenResolutionPercentage(0.40);
 
 		// Test Resize the component:
 		t.setSizeResize(350, 300);
-		
+
 		// Creates a JButton
 		JButton jButton = new JButton();
 		jButton.setPreferredSize(new Dimension(widthJB, heightJB));
 		jButton.setText(Messages.getText("date"));
 		jButton.addMouseListener(new MouseAdapter() {
 			/*
-			 *  (non-Javadoc)
-			 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent
+			 * )
 			 */
 			public void mouseClicked(MouseEvent e) {
 				t.setVisible(true);
 				t.setLocationRelativeTo(null);
-				System.out.println("Selected date: " + new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(t.getDate()));
+				System.out.println("Selected date: "
+						+ new SimpleDateFormat("yyyy-MM-dd", Locale
+								.getDefault()).format(t.getDate()));
 			}
 		});
-		
+
 		// Set properties
 		jF.setTitle("Test JCalendarDateDialog");
-		jF.setSize(new Dimension(widthJF, heightJF));	    
-	    jF.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    jF.getContentPane().add(jButton);
-	    jF.setLocationRelativeTo(null);
-		
+		jF.setSize(new Dimension(widthJF, heightJF));
+		jF.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		jF.getContentPane().add(jButton);
+		jF.setLocationRelativeTo(null);
+
 		jF.setVisible(true);
-	
+
 	}
 }

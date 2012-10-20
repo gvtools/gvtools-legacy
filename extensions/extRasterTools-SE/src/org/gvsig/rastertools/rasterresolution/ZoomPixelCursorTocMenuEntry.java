@@ -37,9 +37,9 @@ import com.iver.cit.gvsig.project.documents.view.toolListeners.StatusBarListener
 
 /**
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
- * Entrada de menú para la activación de la funcionalidad de zoom a un
- * pixel centrado en el cursor.
+ * 
+ *         Entrada de menú para la activación de la funcionalidad de zoom a un
+ *         pixel centrado en el cursor.
  */
 public class ZoomPixelCursorTocMenuEntry extends AbstractTocContextMenuAction {
 	public static final int ZOOM_TO_IMAGE_CENTER = 0x1;
@@ -48,23 +48,27 @@ public class ZoomPixelCursorTocMenuEntry extends AbstractTocContextMenuAction {
 	public int zoomType = ZOOM_TO_VIEW_CENTER;
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.project.documents.IContextMenuAction#getGroup()
 	 */
 	public String getGroup() {
-		return "group2"; //FIXME
+		return "group2"; // FIXME
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.IContextMenuAction#getGroupOrder()
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.IContextMenuAction#getGroupOrder()
 	 */
 	public int getGroupOrder() {
 		return 20;
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.project.documents.IContextMenuAction#getOrder()
 	 */
 	public int getOrder() {
@@ -72,7 +76,8 @@ public class ZoomPixelCursorTocMenuEntry extends AbstractTocContextMenuAction {
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.project.documents.IContextMenuAction#getText()
 	 */
 	public String getText() {
@@ -80,26 +85,35 @@ public class ZoomPixelCursorTocMenuEntry extends AbstractTocContextMenuAction {
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
-		if(getNodeLayer(item) instanceof ILayerState)
-			if(!((ILayerState)getNodeLayer(item)).isOpen()) 
+		if (getNodeLayer(item) instanceof ILayerState)
+			if (!((ILayerState) getNodeLayer(item)).isOpen())
 				return false;
 		return true;
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
 		if (isTocItemBranch(item)) {
-			if(selectedItems == null || selectedItems.length != 1)
+			if (selectedItems == null || selectedItems.length != 1)
 				return false;
-			if((getNodeLayer(item) instanceof FLyrRasterSE) && 
-			   ((FLyrRasterSE)getNodeLayer(item)).isActionEnabled(IRasterLayerActions.ZOOM_PIXEL_RESOLUTION))
+			if ((getNodeLayer(item) instanceof FLyrRasterSE)
+					&& ((FLyrRasterSE) getNodeLayer(item))
+							.isActionEnabled(IRasterLayerActions.ZOOM_PIXEL_RESOLUTION))
 				return getNodeLayer(item) instanceof FLyrRasterSE;
 		}
 		return false;
@@ -107,25 +121,28 @@ public class ZoomPixelCursorTocMenuEntry extends AbstractTocContextMenuAction {
 	}
 
 	/**
-	 * Método que se ejecuta cuando se pulsa la entrada en el menú contextual del TOC 
-	 * correspondiente a "Zoom a la resolución del raster". Aquí se creará el mapTool si 
-	 * no se ha hecho antes y se cargará.
+	 * Método que se ejecuta cuando se pulsa la entrada en el menú contextual
+	 * del TOC correspondiente a "Zoom a la resolución del raster". Aquí se
+	 * creará el mapTool si no se ha hecho antes y se cargará.
 	 */
 	public void execute(ITocItem item, FLayer[] selectedItems) {
-		if(selectedItems.length == 1) {
-	        lyr = getNodeLayer(item);
-	        BaseView vista = (BaseView) PluginServices.getMDIManager().getActiveWindow();
-	    	MapControl mapCtrl = vista.getMapControl();
-	    	//Si no se ha cargado el listener aún lo cargamos.
-	        if(mapCtrl.getNamesMapTools().get("zoom_pixel_cursor_SE") == null) {
-		        //Crea el listener del zoom a la resolución del raster
-	        	StatusBarListener sbl = new StatusBarListener(mapCtrl);
-		        ZoomPixelCursorListener zp = new ZoomPixelCursorListener(mapCtrl);
-		        mapCtrl.addMapTool("zoom_pixel_cursor_SE", new Behavior[]{
-		        					new PointBehavior(zp), new MouseMovementBehavior(sbl)});
-	        }
-	    	mapCtrl.setTool("zoom_pixel_cursor_SE");
-	    	Project project = ((ProjectExtension)PluginServices.getExtension(ProjectExtension.class)).getProject();
+		if (selectedItems.length == 1) {
+			lyr = getNodeLayer(item);
+			BaseView vista = (BaseView) PluginServices.getMDIManager()
+					.getActiveWindow();
+			MapControl mapCtrl = vista.getMapControl();
+			// Si no se ha cargado el listener aún lo cargamos.
+			if (mapCtrl.getNamesMapTools().get("zoom_pixel_cursor_SE") == null) {
+				// Crea el listener del zoom a la resolución del raster
+				StatusBarListener sbl = new StatusBarListener(mapCtrl);
+				ZoomPixelCursorListener zp = new ZoomPixelCursorListener(
+						mapCtrl);
+				mapCtrl.addMapTool("zoom_pixel_cursor_SE", new Behavior[] {
+						new PointBehavior(zp), new MouseMovementBehavior(sbl) });
+			}
+			mapCtrl.setTool("zoom_pixel_cursor_SE");
+			Project project = ((ProjectExtension) PluginServices
+					.getExtension(ProjectExtension.class)).getProject();
 			project.setModified(true);
 
 		}

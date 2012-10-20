@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.impl.generalization.fmap;
 
 import java.rmi.server.UID;
@@ -81,22 +81,22 @@ import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * Geoprocess to generalize linear or poligonal vectorial layers.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class GeneralizationGeoprocess extends AbstractMonitorableGeoprocess {
 
-	private static Logger logger = Logger.getLogger(GeneralizationGeoprocess.class
-			.getName());
-	
+	private static Logger logger = Logger
+			.getLogger(GeneralizationGeoprocess.class.getName());
+
 	private LayerDefinition resultLayerDefinition;
-	
+
 	private boolean computeDouglasPeucker;
-	
+
 	private boolean computeTopologyPreservingSimplify;
-	
+
 	private double distTolerance = 0d;
-	
 
 	public GeneralizationGeoprocess(FLyrVect inputLayer) {
 		this.firstLayer = inputLayer;
@@ -105,20 +105,22 @@ public class GeneralizationGeoprocess extends AbstractMonitorableGeoprocess {
 	public void checkPreconditions() throws GeoprocessException {
 		int lyrDimensions;
 		try {
-			lyrDimensions = FGeometryUtil.getDimensions(firstLayer.getShapeType());
-		
-			if(lyrDimensions == 0)
+			lyrDimensions = FGeometryUtil.getDimensions(firstLayer
+					.getShapeType());
+
+			if (lyrDimensions == 0)
 				throw new GeoprocessException(
-					"Geoproceso generalizacion con capa de puntos");
-		
+						"Geoproceso generalizacion con capa de puntos");
+
 		} catch (ReadDriverException e) {
-			throw new GeoprocessException("Error intentando acceder al tipo de geometria de capa vectorial");
+			throw new GeoprocessException(
+					"Error intentando acceder al tipo de geometria de capa vectorial");
 		}
 
 	}
 
 	public ILayerDefinition createLayerDefinition() {
-		if(resultLayerDefinition == null){
+		if (resultLayerDefinition == null) {
 			try {
 				resultLayerDefinition = DefinitionUtils
 						.createLayerDefinition(firstLayer);
@@ -129,27 +131,23 @@ public class GeneralizationGeoprocess extends AbstractMonitorableGeoprocess {
 		return resultLayerDefinition;
 	}
 
-	
-
 	public void setParameters(Map params) throws GeoprocessException {
 		Boolean onlySelection = (Boolean) params.get("layer_selection");
 		if (onlySelection != null)
 			this.operateOnlyWithSelection = onlySelection.booleanValue();
-		
+
 		Boolean dp = (Boolean) params.get("dp");
-		if(dp != null)
+		if (dp != null)
 			computeDouglasPeucker = dp.booleanValue();
-		
+
 		Boolean tp = (Boolean) params.get("topologyPreserving");
-		if(tp != null)
-		computeTopologyPreservingSimplify = tp.booleanValue(); 
-		
+		if (tp != null)
+			computeTopologyPreservingSimplify = tp.booleanValue();
+
 		Double dist = (Double) params.get("distTolerance");
-		if(dist != null)
+		if (dist != null)
 			distTolerance = dist.doubleValue();
 	}
-
-	
 
 	public void process(CancellableProgressTask progressMonitor)
 			throws GeoprocessException {
@@ -173,34 +171,36 @@ public class GeneralizationGeoprocess extends AbstractMonitorableGeoprocess {
 
 		try {
 			IFeatureIterator featureIterator = null;
-			if(this.operateOnlyWithSelection){
+			if (this.operateOnlyWithSelection) {
 				FBitSet selection = firstLayer.getRecordset().getSelection();
-	        	featureIterator = new FeatureBitsetIterator(selection, firstLayer.getSource());
-			}else{
+				featureIterator = new FeatureBitsetIterator(selection,
+						firstLayer.getSource());
+			} else {
 				featureIterator = firstLayer.getSource().getFeatureIterator();
 			}
-			
-			while(featureIterator.hasNext()){
+
+			while (featureIterator.hasNext()) {
 				IFeature feature = featureIterator.next();
 				IGeometry fmapGeo = feature.getGeometry();
 				Value[] values = feature.getAttributes();
 				Geometry geometry = NewFConverter.toJtsGeometry(fmapGeo);
 				Geometry simplifiedGeometry = null;
-				if(this.computeDouglasPeucker){
-					simplifiedGeometry = JtsUtil.douglasPeuckerSimplify(geometry, distTolerance);
-				}else if(this.computeTopologyPreservingSimplify){
-					simplifiedGeometry = JtsUtil.topologyPreservingSimplify(geometry, distTolerance);
+				if (this.computeDouglasPeucker) {
+					simplifiedGeometry = JtsUtil.douglasPeuckerSimplify(
+							geometry, distTolerance);
+				} else if (this.computeTopologyPreservingSimplify) {
+					simplifiedGeometry = JtsUtil.topologyPreservingSimplify(
+							geometry, distTolerance);
 				}
-				
-				if(progressMonitor != null)
+
+				if (progressMonitor != null)
 					progressMonitor.reportStep();
-				
-				if(simplifiedGeometry != null){
-					IGeometry simplifiedFMap = NewFConverter.toFMap(simplifiedGeometry);
-					DefaultFeature newFeature = 
-						new DefaultFeature(simplifiedFMap, 
-													values, 
-												new UID().toString());
+
+				if (simplifiedGeometry != null) {
+					IGeometry simplifiedFMap = NewFConverter
+							.toFMap(simplifiedGeometry);
+					DefaultFeature newFeature = new DefaultFeature(
+							simplifiedFMap, values, new UID().toString());
 					featureProcessor.processFeature(newFeature);
 				}
 			}
@@ -216,10 +216,8 @@ public class GeneralizationGeoprocess extends AbstractMonitorableGeoprocess {
 			throw new GeoprocessException(
 					"Error al acceder a la informacion del driver dentro del geoproceso",
 					e);
-		} 
+		}
 	}
-	
-	
 
 	public void initialize(CancellableProgressTask progressMonitor)
 			throws GeoprocessException {

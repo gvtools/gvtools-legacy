@@ -42,40 +42,36 @@
 package com.iver.andami.plugins;
 
 /**
- * Extensions implementing this interface are able to take control
- * over the user interface, by deciding which of the other extensions
- * will be enabled/disabled or visible/hidden.
+ * Extensions implementing this interface are able to take control over the user
+ * interface, by deciding which of the other extensions will be enabled/disabled
+ * or visible/hidden.
  * 
- * Besides implementing this interface, the extension needs to
- * be set as ExclusiveUIExtension during Andami startup process.
- * This is performed by providing a command line argument to
- * Andami:
- * <br>
+ * Besides implementing this interface, the extension needs to be set as
+ * ExclusiveUIExtension during Andami startup process. This is performed by
+ * providing a command line argument to Andami: <br>
  * <code>ExclusiveUIExtension=ExtensionName</code>
- *
+ * 
  * @author Cesar Martinez Izquierdo <cesar.martinez@iver.es>
  */
 public interface ExclusiveUIExtension extends IExtension {
-	
-    /**
-     * This method is used when this extension is installed as
-     * ExclusiveUIExtension. This extension will be asked for
-     * each installed extension to determine which of them
-     * should be enabled.
-     * 
-     * @return true if the provided extension should be enabled,
-     * false if it should be disabled.
-     */
-    public boolean isEnabled(IExtension extension);
 
-    /**
-     * This method is used when this extension is installed as
-     * ExclusiveUIExtension. This extension will be asked for
-     * each installed extension to determine which of them
-     * should be visible.
-     * 
-     * @return true if the provided extension should be visible,
-     * false if it should be hidden.
-     */
-    public boolean isVisible(IExtension extension);
+	/**
+	 * This method is used when this extension is installed as
+	 * ExclusiveUIExtension. This extension will be asked for each installed
+	 * extension to determine which of them should be enabled.
+	 * 
+	 * @return true if the provided extension should be enabled, false if it
+	 *         should be disabled.
+	 */
+	public boolean isEnabled(IExtension extension);
+
+	/**
+	 * This method is used when this extension is installed as
+	 * ExclusiveUIExtension. This extension will be asked for each installed
+	 * extension to determine which of them should be visible.
+	 * 
+	 * @return true if the provided extension should be visible, false if it
+	 *         should be hidden.
+	 */
+	public boolean isVisible(IExtension extension);
 }

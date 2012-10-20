@@ -46,27 +46,26 @@ import java.awt.geom.Rectangle2D;
 
 import com.iver.cit.gvsig.fmap.operations.selection.Record;
 
-
 /**
  * Clase Driver de raster para acceso a bases de datos.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class RasterDBDriver {
 	/**
 	 * @see com.iver.cit.gvsig.fmap.layers.RasterAdapter#renderTo(java.awt.Graphics2D,
-	 * 		java.awt.geom.Rectangle2D)
+	 *      java.awt.geom.Rectangle2D)
 	 */
 	public void renderTo(Graphics2D g, Rectangle2D rectVisible)
-		throws DriverIOException {
+			throws DriverIOException {
 	}
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.layers.RasterAdapter#queryByPoint(Point2D,
-	 * 		double)
+	 *      double)
 	 */
 	public Record queryByPoint(Point2D p, double tolerancia)
-		throws DriverIOException {
+			throws DriverIOException {
 		return null;
 	}
 

@@ -23,28 +23,30 @@ import junit.framework.TestCase;
 import org.gvsig.raster.RasterLibrary;
 import org.gvsig.raster.buffer.BufferFactory;
 import org.gvsig.raster.dataset.io.RasterDriverException;
+
 /**
- * Test que compara los resultados de la llamada getWindowRaster en coordenadas pixel 
- * y coordenadas reales para comprobar que producen el mismo resultado para la misma extensión.
+ * Test que compara los resultados de la llamada getWindowRaster en coordenadas
+ * pixel y coordenadas reales para comprobar que producen el mismo resultado
+ * para la misma extensión.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class TestGetWindowRasterMrSID extends TestCase {
-	
+
 	private String baseDir = "./test-images/";
 	private String path1 = baseDir + "q101866.sid";
 	private RasterDataset f1 = null;
 	private RasterDataset f2 = null;
-	
+
 	static {
 		RasterLibrary.wakeUp();
 	}
-	
+
 	public void start() {
 		this.setUp();
 		this.testStack();
 	}
-	
+
 	public void setUp() {
 		System.err.println("TestGetWindowRasterMrSID running...");
 		try {
@@ -56,12 +58,14 @@ public class TestGetWindowRasterMrSID extends TestCase {
 			e1.printStackTrace();
 		}
 	}
-	
-	public void testStack(){
+
+	public void testStack() {
 		BufferFactory bf1 = new BufferFactory(f1);
 		bf1.setAllDrawableBands();
 		try {
-			bf1.setAreaOfInterest(f1.getExtent().getMin().getX(), f1.getExtent().getMax().getY(), f1.getExtent().width(), f1.getExtent().height());
+			bf1.setAreaOfInterest(f1.getExtent().getMin().getX(), f1
+					.getExtent().getMax().getY(), f1.getExtent().width(), f1
+					.getExtent().height());
 		} catch (RasterDriverException e) {
 			e.printStackTrace();
 		} catch (InvalidSetViewException e) {
@@ -70,23 +74,27 @@ public class TestGetWindowRasterMrSID extends TestCase {
 			e.printStackTrace();
 		}
 		IBuffer buf1 = bf1.getRasterBuf();
-		
+
 		BufferFactory bf2 = new BufferFactory(f2);
 		bf2.setAllDrawableBands();
 		try {
 			bf2.setAreaOfInterest(0, 0, f2.getWidth(), f2.getHeight());
 			IBuffer buf2 = bf2.getRasterBuf();
-			
+
 			for (int band = 0; band < buf1.getBandCount(); band++) {
 				for (int row = 0; row < buf1.getHeight(); row++) {
 					for (int col = 0; col < buf1.getWidth(); col++) {
-						//try {
-						assertEquals(buf1.getElemByte(row, col, band), buf2.getElemByte(row, col, band));
-						//System.out.println(buf1.getElemByte(row, col, band) + " " + buf2.getElemByte(row, col, band));
-						/*} catch (AssertionFailedError e) {
-							System.out.println(band + " " + line + " " + column);
-							
-						}*/
+						// try {
+						assertEquals(buf1.getElemByte(row, col, band),
+								buf2.getElemByte(row, col, band));
+						// System.out.println(buf1.getElemByte(row, col, band) +
+						// " " + buf2.getElemByte(row, col, band));
+						/*
+						 * } catch (AssertionFailedError e) {
+						 * System.out.println(band + " " + line + " " + column);
+						 * 
+						 * }
+						 */
 					}
 				}
 			}
@@ -97,6 +105,6 @@ public class TestGetWindowRasterMrSID extends TestCase {
 		} catch (RasterDriverException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 }

@@ -45,21 +45,22 @@ import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelingFactory;
 import com.iver.utiles.XMLEntity;
 
 /**
- *
+ * 
  * MultiShapePlacementConstraints.java
- *
- *
+ * 
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Apr 1, 2008
- *
+ * 
  */
-public class MultiShapePlacementConstraints extends AbstractPlacementConstraints {
+public class MultiShapePlacementConstraints extends
+		AbstractPlacementConstraints {
 
 	private IPlacementConstraints polygonConstraints;
 	private IPlacementConstraints lineConstraints;
 	private IPlacementConstraints pointConstraints;
 
-
-	public MultiShapePlacementConstraints() { }
+	public MultiShapePlacementConstraints() {
+	}
 
 	public MultiShapePlacementConstraints(
 			IPlacementConstraints pointConstraints,
@@ -95,117 +96,138 @@ public class MultiShapePlacementConstraints extends AbstractPlacementConstraints
 		return pointConstraints;
 	}
 
-
-//	@Override
-//	public boolean isAboveTheLine() {
-//		throw new Error("Operation delegated to its members. Access them directly");
-//	}
-//
-//	@Override
-//	public boolean isAroundThePoint() {
-//		throw new Error("Operation delegated to its members. Access them directly");
-//	}
-//
-//	@Override
-//	public boolean isAtBestOfLine() {
-//		throw new Error("Operation delegated to its members. Access them directly");
-//	}
-//
-//	@Override
-//	public boolean isAtTheBeginingOfLine() {
-//		throw new Error("Operation delegated to its members. Access them directly");
-//	}
-//
-//	@Override
-//	public boolean isAtTheEndOfLine() {
-//		throw new Error("Operation delegated to its members. Access them directly");
-//	}
-//
-//	@Override
-//	public boolean isBelowTheLine() {
-//		throw new Error("Operation delegated to its members. Access them directly");
-//	}
-//
-//	@Override
-//	public boolean isFitInsidePolygon() {
-//		throw new Error("Operation delegated to its members. Access them directly");
-//	}
-//
-//	@Override
-//	public boolean isFollowingLine() {
-//		throw new Error("Operation delegated to its members. Access them directly");
-//	}
-//
-//	@Override
-//	public boolean isHorizontal() {
-//		throw new Error("Operation delegated to its members. Access them directly");
-//	}
-//
-//	@Override
-//	public boolean isInTheMiddleOfLine() {
-//		throw new Error("Operation delegated to its members. Access them directly");
-//	}
-//
-//	@Override
-//	public boolean isOnTheLine() {
-//		throw new Error("Operation delegated to its members. Access them directly");
-//	}
-//
-//	@Override
-//	public boolean isOnTopOfThePoint() {
-//		throw new Error("Operation delegated to its members. Access them directly");
-//	}
-//
-//	@Override
-//	public boolean isPageOriented() {
-//		throw new Error("Operation delegated to its members. Access them directly");
-//	}
-//
-//	@Override
-//	public boolean isParallel() {
-//		throw new Error("Operation delegated to its members. Access them directly");
-//	}
-//
-//	@Override
-//	public boolean isPerpendicular() {
-//		throw new Error("Operation delegated to its members. Access them directly");
-//	}
-//
-//	@Override
-//	public void setAboveTheLine(boolean b) {
-//		throw new Error("Operation delegated to its members. Access them directly");
-//	}
-//
-//	@Override
-//	public void setBelowTheLine(boolean b) {
-//		throw new Error("Operation delegated to its members. Access them directly");
-//	}
-//
-//
-//	@Override
-//	public void setFitInsidePolygon(boolean b) {
-//		throw new Error("Operation delegated to its members. Access them directly");
-//	}
-//
-//	@Override
-//	public void setLocationAlongTheLine(int location) {
-//		throw new Error("Operation delegated to its members. Access them directly");
-//	}
-//
-//	@Override
-//	public void setOnTheLine(boolean b) {
-//		throw new Error("Operation delegated to its members. Access them directly");
-//	}
-//
-//	@Override
-//	public void setPageOriented(boolean b) {
-//		throw new Error("Operation delegated to its members. Access them directly");
-//	}
-//
-//	@Override
-//	public void setPlacementMode(int mode) {
-//		throw new Error("Operation delegated to its members. Access them directly");
-//	}
+	// @Override
+	// public boolean isAboveTheLine() {
+	// throw new
+	// Error("Operation delegated to its members. Access them directly");
+	// }
+	//
+	// @Override
+	// public boolean isAroundThePoint() {
+	// throw new
+	// Error("Operation delegated to its members. Access them directly");
+	// }
+	//
+	// @Override
+	// public boolean isAtBestOfLine() {
+	// throw new
+	// Error("Operation delegated to its members. Access them directly");
+	// }
+	//
+	// @Override
+	// public boolean isAtTheBeginingOfLine() {
+	// throw new
+	// Error("Operation delegated to its members. Access them directly");
+	// }
+	//
+	// @Override
+	// public boolean isAtTheEndOfLine() {
+	// throw new
+	// Error("Operation delegated to its members. Access them directly");
+	// }
+	//
+	// @Override
+	// public boolean isBelowTheLine() {
+	// throw new
+	// Error("Operation delegated to its members. Access them directly");
+	// }
+	//
+	// @Override
+	// public boolean isFitInsidePolygon() {
+	// throw new
+	// Error("Operation delegated to its members. Access them directly");
+	// }
+	//
+	// @Override
+	// public boolean isFollowingLine() {
+	// throw new
+	// Error("Operation delegated to its members. Access them directly");
+	// }
+	//
+	// @Override
+	// public boolean isHorizontal() {
+	// throw new
+	// Error("Operation delegated to its members. Access them directly");
+	// }
+	//
+	// @Override
+	// public boolean isInTheMiddleOfLine() {
+	// throw new
+	// Error("Operation delegated to its members. Access them directly");
+	// }
+	//
+	// @Override
+	// public boolean isOnTheLine() {
+	// throw new
+	// Error("Operation delegated to its members. Access them directly");
+	// }
+	//
+	// @Override
+	// public boolean isOnTopOfThePoint() {
+	// throw new
+	// Error("Operation delegated to its members. Access them directly");
+	// }
+	//
+	// @Override
+	// public boolean isPageOriented() {
+	// throw new
+	// Error("Operation delegated to its members. Access them directly");
+	// }
+	//
+	// @Override
+	// public boolean isParallel() {
+	// throw new
+	// Error("Operation delegated to its members. Access them directly");
+	// }
+	//
+	// @Override
+	// public boolean isPerpendicular() {
+	// throw new
+	// Error("Operation delegated to its members. Access them directly");
+	// }
+	//
+	// @Override
+	// public void setAboveTheLine(boolean b) {
+	// throw new
+	// Error("Operation delegated to its members. Access them directly");
+	// }
+	//
+	// @Override
+	// public void setBelowTheLine(boolean b) {
+	// throw new
+	// Error("Operation delegated to its members. Access them directly");
+	// }
+	//
+	//
+	// @Override
+	// public void setFitInsidePolygon(boolean b) {
+	// throw new
+	// Error("Operation delegated to its members. Access them directly");
+	// }
+	//
+	// @Override
+	// public void setLocationAlongTheLine(int location) {
+	// throw new
+	// Error("Operation delegated to its members. Access them directly");
+	// }
+	//
+	// @Override
+	// public void setOnTheLine(boolean b) {
+	// throw new
+	// Error("Operation delegated to its members. Access them directly");
+	// }
+	//
+	// @Override
+	// public void setPageOriented(boolean b) {
+	// throw new
+	// Error("Operation delegated to its members. Access them directly");
+	// }
+	//
+	// @Override
+	// public void setPlacementMode(int mode) {
+	// throw new
+	// Error("Operation delegated to its members. Access them directly");
+	// }
 
 	public String getClassName() {
 		return getClass().getName();
@@ -243,22 +265,23 @@ public class MultiShapePlacementConstraints extends AbstractPlacementConstraints
 		XMLEntity aux;
 
 		// points
-		if ( ((aux = xml.firstChild("id", "PointConstraints")) != null) ) {
-			pointConstraints = LabelingFactory.createPlacementConstraintsFromXML(aux);
+		if (((aux = xml.firstChild("id", "PointConstraints")) != null)) {
+			pointConstraints = LabelingFactory
+					.createPlacementConstraintsFromXML(aux);
 		}
 
 		// lines
-		if ( ((aux = xml.firstChild("id", "LineConstraints")) != null) ) {
-			lineConstraints = LabelingFactory.createPlacementConstraintsFromXML(aux);
+		if (((aux = xml.firstChild("id", "LineConstraints")) != null)) {
+			lineConstraints = LabelingFactory
+					.createPlacementConstraintsFromXML(aux);
 		}
 
 		// polygons
-		if ( ((aux = xml.firstChild("id", "PolygonConstraints")) != null) ) {
-			polygonConstraints = LabelingFactory.createPlacementConstraintsFromXML(aux);
+		if (((aux = xml.firstChild("id", "PolygonConstraints")) != null)) {
+			polygonConstraints = LabelingFactory
+					.createPlacementConstraintsFromXML(aux);
 		}
 
 	}
-
-
 
 }

@@ -14,22 +14,22 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 public class BuildGeoprocessPlugin extends GeoprocessPluginAbstract implements
 		IGeoprocessPlugin {
-	
+
 	private static String topologyPkg;
 	private static String geoprocessName;
 	private static String topologyPkgDesc;
-	
-	static{
+
+	static {
 		topologyPkg = PluginServices.getText(null, "Topology");
 		geoprocessName = PluginServices.getText(null, "Build");
-		topologyPkgDesc = PluginServices.getText(null, "Topology_Desc");		
-		GeoprocessManager.
-		registerPackageDescription(topologyPkg, topologyPkgDesc);		
-	}	
-		
+		topologyPkgDesc = PluginServices.getText(null, "Topology_Desc");
+		GeoprocessManager.registerPackageDescription(topologyPkg,
+				topologyPkgDesc);
+	}
 
 	public IGeoprocessUserEntries getGeoprocessPanel() {
-		com.iver.andami.ui.mdiManager.IWindow view = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow view = PluginServices
+				.getMDIManager().getActiveWindow();
 		View vista = (View) view;
 		FLayers layers = vista.getModel().getMapContext().getLayers();
 		return (IGeoprocessUserEntries) new BuildGeoprocessPanel(layers);
@@ -47,7 +47,7 @@ public class BuildGeoprocessPlugin extends GeoprocessPluginAbstract implements
 	public String getNamespace() {
 		return topologyPkg + "/" + geoprocessName;
 	}
-	
+
 	public String toString() {
 		return geoprocessName;
 	}

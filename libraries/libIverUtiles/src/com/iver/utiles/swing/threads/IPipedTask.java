@@ -42,21 +42,22 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log:
-*/
+ *
+ * $Id: 
+ * $Log:
+ */
 package com.iver.utiles.swing.threads;
 
 /**
  * 
- * This task is useful for pipes.
- * Its methods getResult and setEntry are useful for pipes
- * process.
+ * This task is useful for pipes. Its methods getResult and setEntry are useful
+ * for pipes process.
+ * 
  * @author alzabord
- *
+ * 
  */
 public interface IPipedTask extends IMonitorableTask {
 	public Object getResult();
+
 	public void setEntry(Object object);
 }

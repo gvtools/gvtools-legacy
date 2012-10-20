@@ -41,28 +41,38 @@
 package com.iver.cit.gvsig.fmap;
 
 /**
- * <p>Defines the interface for an object that listens to changes in a view port.</p>
+ * <p>
+ * Defines the interface for an object that listens to changes in a view port.
+ * </p>
  */
 public interface ViewPortListener {
 	/**
- 	 * <p>Called when the <i>extent</i> of the view port has changed.</p>
-	 *
-	 * @param e an extend event object
+	 * <p>
+	 * Called when the <i>extent</i> of the view port has changed.
+	 * </p>
+	 * 
+	 * @param e
+	 *            an extend event object
 	 */
 	void extentChanged(ExtentEvent e);
 
 	/**
-	 * <p>Called when the background color of the view port has changed.</p>
+	 * <p>
+	 * Called when the background color of the view port has changed.
+	 * </p>
 	 * 
-	 * @param e a color event object
+	 * @param e
+	 *            a color event object
 	 */
 	void backColorChanged(ColorEvent e);
 
 	/**
-	 * <p>Called when the projection of the view port has changed.</p>
-	 *
-	 * @param e a projection event object
+	 * <p>
+	 * Called when the projection of the view port has changed.
+	 * </p>
+	 * 
+	 * @param e
+	 *            a projection event object
 	 */
 	void projectionChanged(ProjectionEvent e);
 }
-

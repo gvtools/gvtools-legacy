@@ -59,10 +59,11 @@ import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.threads.Cancellable;
 
 /**
- * MarkerLineSymbol allows to use any symbol defined as an image to draw a lineal object.
- * The line will be painted as a run of symbols through the path defined by the line.
- *
- * @author   jaume dominguez faus - jaume.dominguez@iver.es
+ * MarkerLineSymbol allows to use any symbol defined as an image to draw a
+ * lineal object. The line will be painted as a run of symbols through the path
+ * defined by the line.
+ * 
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class MarkerLineSymbol extends AbstractLineSymbol {
 	private IMarkerSymbol marker;
@@ -86,10 +87,11 @@ public class MarkerLineSymbol extends AbstractLineSymbol {
 		return width;
 	}
 
-
-	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp, Cancellable cancel) {
+	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp,
+			Cancellable cancel) {
 		PathLength pl = new PathLength(shp);
-		float myLineLength = pl.lengthOfPath(); // length without the first and last arrow
+		float myLineLength = pl.lengthOfPath(); // length without the first and
+												// last arrow
 		float separation = (float) cartographicSeparation;
 
 		FPoint2D p = new FPoint2D(pl.pointAtLength(0));
@@ -97,19 +99,19 @@ public class MarkerLineSymbol extends AbstractLineSymbol {
 		marker.setSize(lineWidth);
 		marker.draw(g, affineTransform, p, null);
 
-
 		float length = (float) (separation + lineWidth);
-		while ((cancel==null || !cancel.isCanceled()) && length < myLineLength) {
+		while ((cancel == null || !cancel.isCanceled())
+				&& length < myLineLength) {
 			p = new FPoint2D(pl.pointAtLength(length));
 			marker.draw(g, affineTransform, p, null);
 			length += separation + lineWidth;
 		}
 	}
 
-
 	/**
-	 * Gets the separation between the marker symbols that are used to draw the line.
-	 *
+	 * Gets the separation between the marker symbols that are used to draw the
+	 * line.
+	 * 
 	 * @return separation
 	 */
 	public double getSeparation() {
@@ -118,8 +120,9 @@ public class MarkerLineSymbol extends AbstractLineSymbol {
 
 	public ISymbol getSymbolForSelection() {
 		if (symSelect == null) {
-			symSelect = (MarkerLineSymbol) SymbologyFactory.
-			createSymbolFromXML(getXMLEntity(), "selection derived symbol");
+			symSelect = (MarkerLineSymbol) SymbologyFactory
+					.createSymbolFromXML(getXMLEntity(),
+							"selection derived symbol");
 			symSelect.setMarker((IMarkerSymbol) symSelect.getMarker()
 					.getSymbolForSelection());
 
@@ -161,15 +164,16 @@ public class MarkerLineSymbol extends AbstractLineSymbol {
 		setSeparation(xml.getDoubleProperty("separation"));
 		setUnit(xml.getIntProperty("unit"));
 		setReferenceSystem(xml.getIntProperty("referenceSystem"));
-		marker = (IMarkerSymbol) SymbologyFactory.
-		createSymbolFromXML(xml.firstChild("id", "marker"), "theMarker");
-		setLineStyle((ILineStyle) SymbologyFactory.
-				createStyleFromXML(xml.firstChild("id", "lineStyle"), "theLineStyle"));
+		marker = (IMarkerSymbol) SymbologyFactory.createSymbolFromXML(
+				xml.firstChild("id", "marker"), "theMarker");
+		setLineStyle((ILineStyle) SymbologyFactory.createStyleFromXML(
+				xml.firstChild("id", "lineStyle"), "theLineStyle"));
 		width = getLineStyle().getLineWidth();
 	}
+
 	/**
 	 * Sets the separation between the marker symbols that compose the line
-	 *
+	 * 
 	 * @param separation
 	 */
 	public void setSeparation(double separation) {
@@ -183,22 +187,25 @@ public class MarkerLineSymbol extends AbstractLineSymbol {
 
 	public void print(Graphics2D g, AffineTransform at, FShape shape,
 			PrintRequestAttributeSet properties) {
-		this.properties=properties;
-        draw(g, at, shape, null);
-        this.properties=null;
+		this.properties = properties;
+		draw(g, at, shape, null);
+		this.properties = null;
 	}
+
 	/**
 	 * Returns the marker symbol that compose the line
-	 *
+	 * 
 	 * @return marker IMarkerSymbol
 	 */
 	public IMarkerSymbol getMarker() {
 		return marker;
 	}
+
 	/**
 	 * Sets the marker symbol that compose the line
-	 *
-	 * @param marker IMarkerSymbol
+	 * 
+	 * @param marker
+	 *            IMarkerSymbol
 	 */
 	public void setMarker(IMarkerSymbol marker) {
 		this.marker = marker;
@@ -209,7 +216,7 @@ public class MarkerLineSymbol extends AbstractLineSymbol {
 		double oldLineWidth = getLineWidth();
 		super.setCartographicSize(cartographicSize, shp);
 		double newLineWidth = getLineWidth();
-		double scale = newLineWidth/oldLineWidth;
+		double scale = newLineWidth / oldLineWidth;
 		cartographicSeparation = separation * scale;
 	}
 
@@ -224,6 +231,5 @@ public class MarkerLineSymbol extends AbstractLineSymbol {
 		super.setReferenceSystem(system);
 		marker.setReferenceSystem(system);
 	}
-
 
 }

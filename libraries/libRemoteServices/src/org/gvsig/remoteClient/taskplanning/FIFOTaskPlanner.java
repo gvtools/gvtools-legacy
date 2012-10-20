@@ -40,43 +40,46 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: FIFOTaskPlanner.java 5156 2006-05-12 07:15:45Z jaume $
-* $Log$
-* Revision 1.1  2006-05-12 07:15:45  jaume
-* *** empty log message ***
-*
-* Revision 1.1  2006/05/11 17:18:06  jaume
-* Un planificador, monitorizador, de descargas que trabaja en segundo plano
-*
-*
-*/
+ *
+ * $Id: FIFOTaskPlanner.java 5156 2006-05-12 07:15:45Z jaume $
+ * $Log$
+ * Revision 1.1  2006-05-12 07:15:45  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/05/11 17:18:06  jaume
+ * Un planificador, monitorizador, de descargas que trabaja en segundo plano
+ *
+ *
+ */
 package org.gvsig.remoteClient.taskplanning;
 
 /**
  * A simple FIFO task planner. The tasks returned by this planner are executed
- * enterely. It does not issue another task until the current is finished. 
+ * enterely. It does not issue another task until the current is finished.
+ * 
  * @author jaume
- *
+ * 
  */
 public class FIFOTaskPlanner implements ITaskPlanner {
 	IQueue queue;
-	
+
 	/**
 	 * Creates a new instance of FIFOTaskPlanner that will work against the
-	 * queue passed as paramenter 
-	 * @param queue, the IQueue to be planned
+	 * queue passed as paramenter
+	 * 
+	 * @param queue
+	 *            , the IQueue to be planned
 	 */
 	public FIFOTaskPlanner(IQueue queue) {
 		this.queue = queue;
 	}
 
-	
 	public IRunnableTask nextTask() {
 		synchronized (this) {
 			return (IRunnableTask) queue.getTasks().remove(0);
 		}
 	}
+
 	/**
 	 * FIFO plans have no previous tasks so, null is always returned.
 	 */

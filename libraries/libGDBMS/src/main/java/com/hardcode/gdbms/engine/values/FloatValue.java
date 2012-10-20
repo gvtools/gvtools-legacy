@@ -2,11 +2,9 @@ package com.hardcode.gdbms.engine.values;
 
 import java.sql.Types;
 
-
-
 /**
  * Wrapper sobre la clase float
- *
+ * 
  * @author Fernando González Cortés
  */
 public class FloatValue extends NumericValue {
@@ -14,7 +12,7 @@ public class FloatValue extends NumericValue {
 
 	/**
 	 * Establece el valor de este objeto
-	 *
+	 * 
 	 * @param value
 	 */
 	public void setValue(float value) {
@@ -23,7 +21,7 @@ public class FloatValue extends NumericValue {
 
 	/**
 	 * Obtiene el valor de este objeto
-	 *
+	 * 
 	 * @return
 	 */
 	public float getValue() {
@@ -86,21 +84,21 @@ public class FloatValue extends NumericValue {
 		return (short) value;
 	}
 
-    /**
-     * @see com.hardcode.gdbms.engine.values.Value#getStringValue(com.hardcode.gdbms.engine.data.driver.ValueWriter)
-     */
-    public String getStringValue(ValueWriter writer) {
-        return writer.getStatementString(value, Types.REAL);
-    }
+	/**
+	 * @see com.hardcode.gdbms.engine.values.Value#getStringValue(com.hardcode.gdbms.engine.data.driver.ValueWriter)
+	 */
+	public String getStringValue(ValueWriter writer) {
+		return writer.getStatementString(value, Types.REAL);
+	}
 
-    /**
-     * @see com.hardcode.gdbms.engine.values.Value#getSQLType()
-     */
-    public int getSQLType() {
-        return Types.REAL;
-    }
-    
+	/**
+	 * @see com.hardcode.gdbms.engine.values.Value#getSQLType()
+	 */
+	public int getSQLType() {
+		return Types.REAL;
+	}
+
 	public int getWidth() {
 		return 4;
-	}   
+	}
 }

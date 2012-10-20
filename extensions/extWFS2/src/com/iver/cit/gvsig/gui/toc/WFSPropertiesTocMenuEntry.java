@@ -75,21 +75,27 @@ import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
  */
 
 /**
- * <p>Loads a dialog the properties of an WFS layer.</p>
+ * <p>
+ * Loads a dialog the properties of an WFS layer.
+ * </p>
  * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
 public class WFSPropertiesTocMenuEntry extends AbstractTocContextMenuAction {
-	private FLyrWFS lyr = null; 
+	private FLyrWFS lyr = null;
 	private WFSPropertiesDialog properties = null;
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#execute(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #execute(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public void execute(ITocItem item, FLayer[] selectedItems) {
-		if (selectedItems.length == 1){
+		if (selectedItems.length == 1) {
 			lyr = (FLyrWFS) selectedItems[0];
 		} else {
 			return;
@@ -101,27 +107,33 @@ public class WFSPropertiesTocMenuEntry extends AbstractTocContextMenuAction {
 			manager.setDefaultType(WFSParamsPanel.class);
 
 			// Creates the panel group
-			WFSParamsPanel panelGroup = (WFSParamsPanel) manager.getPanelGroup(lyr);
-//			panelGroup.setBounds(4, 9, 502, 423);
+			WFSParamsPanel panelGroup = (WFSParamsPanel) manager
+					.getPanelGroup(lyr);
+			// panelGroup.setBounds(4, 9, 502, 423);
 
 			// Creates the loader
-			PanelGroupLoaderFromExtensionPoint loader = new PanelGroupLoaderFromExtensionPoint("WFSPropertiesDialog");
+			PanelGroupLoaderFromExtensionPoint loader = new PanelGroupLoaderFromExtensionPoint(
+					"WFSPropertiesDialog");
 
 			// Creates the dialog
-			properties = new WFSPropertiesDialog(PluginServices.getText(this, "wfs_properties"), panelGroup);
+			properties = new WFSPropertiesDialog(PluginServices.getText(this,
+					"wfs_properties"), panelGroup);
 
 			// Loads the panels
 			properties.loadPanels(loader);
 
 			PluginServices.getMDIManager().addWindow(properties);
 		} catch (Exception e) {
-			NotificationManager.addError(e);			
-		} 
+			NotificationManager.addError(e);
+		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getGroupOrder()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getGroupOrder()
 	 */
 	public int getGroupOrder() {
 		return 100;
@@ -129,14 +141,18 @@ public class WFSPropertiesTocMenuEntry extends AbstractTocContextMenuAction {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getOrder()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getOrder()
 	 */
 	public int getOrder() {
 		return 10;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.project.documents.IContextMenuAction#getText()
 	 */
 	public String getText() {
@@ -145,7 +161,11 @@ public class WFSPropertiesTocMenuEntry extends AbstractTocContextMenuAction {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
 		return true;
@@ -153,7 +173,11 @@ public class WFSPropertiesTocMenuEntry extends AbstractTocContextMenuAction {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
 		if (isTocItemBranch(item))

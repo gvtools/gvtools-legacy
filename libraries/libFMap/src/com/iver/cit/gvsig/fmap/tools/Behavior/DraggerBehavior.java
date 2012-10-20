@@ -49,13 +49,14 @@ import com.iver.cit.gvsig.fmap.tools.Events.MoveEvent;
 import com.iver.cit.gvsig.fmap.tools.Listeners.PanListener;
 import com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener;
 
-
 /**
- * <p>Behavior that permits user to drag the image of the associated
- *  <code>MapControl</code> using a {@link PanListener PanListener}.</p>
- *
+ * <p>
+ * Behavior that permits user to drag the image of the associated
+ * <code>MapControl</code> using a {@link PanListener PanListener}.
+ * </p>
+ * 
  * @author Vicente Caballero Navarro
-  * @author Pablo Piqueras Bartolomé
+ * @author Pablo Piqueras Bartolomé
  */
 public class DraggerBehavior extends Behavior {
 	/**
@@ -72,9 +73,13 @@ public class DraggerBehavior extends Behavior {
 	private PanListener listener;
 
 	/**
- 	 * <p>Creates a new behavior for dragging the mouse.</p>
- 	 *
-	 * @param pli listener used to permit this object to work with the associated <code>MapControl</code>
+	 * <p>
+	 * Creates a new behavior for dragging the mouse.
+	 * </p>
+	 * 
+	 * @param pli
+	 *            listener used to permit this object to work with the
+	 *            associated <code>MapControl</code>
 	 */
 	public DraggerBehavior(PanListener pli) {
 		listener = pli;
@@ -82,14 +87,20 @@ public class DraggerBehavior extends Behavior {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#paintComponent(java.awt.Graphics)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#paintComponent(java.awt
+	 * .Graphics)
 	 */
 	public void paintComponent(Graphics g) {
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mousePressed(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mousePressed(java.awt
+	 * .event.MouseEvent)
 	 */
 	public void mousePressed(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON1) {
@@ -103,7 +114,10 @@ public class DraggerBehavior extends Behavior {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseReleased(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseReleased(java.awt
+	 * .event.MouseEvent)
 	 */
 	public void mouseReleased(MouseEvent e) throws BehaviorException {
 		m_FirstPoint = null;
@@ -111,7 +125,10 @@ public class DraggerBehavior extends Behavior {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseDragged(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseDragged(java.awt
+	 * .event.MouseEvent)
 	 */
 	public void mouseDragged(MouseEvent e) throws BehaviorException {
 		MoveEvent event = new MoveEvent(m_FirstPoint, e.getPoint(), e);
@@ -120,9 +137,13 @@ public class DraggerBehavior extends Behavior {
 	}
 
 	/**
-	 * <p>Sets a tool listener to work with the <code>MapControl</code> using this behavior.</p>
+	 * <p>
+	 * Sets a tool listener to work with the <code>MapControl</code> using this
+	 * behavior.
+	 * </p>
 	 * 
-	 * @param listener a <code>PanListener</code> object for this behavior
+	 * @param listener
+	 *            a <code>PanListener</code> object for this behavior
 	 */
 	public void setListener(ToolListener listener) {
 		this.listener = (PanListener) listener;
@@ -130,6 +151,7 @@ public class DraggerBehavior extends Behavior {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#getListener()
 	 */
 	public ToolListener getListener() {

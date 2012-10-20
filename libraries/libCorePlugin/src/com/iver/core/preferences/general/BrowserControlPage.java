@@ -40,20 +40,20 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: BrowserControlPage.java 15635 2007-10-30 11:58:33Z jmvivo $
-* $Log$
-* Revision 1.3  2007-09-19 16:16:52  jaume
-* removed unnecessary imports
-*
-* Revision 1.2  2007/01/10 18:28:58  jaume
-* *** empty log message ***
-*
-* Revision 1.1  2007/01/10 16:55:04  jaume
-* default browser now configurable in linux
-*
-*
-*/
+ *
+ * $Id: BrowserControlPage.java 15635 2007-10-30 11:58:33Z jmvivo $
+ * $Log$
+ * Revision 1.3  2007-09-19 16:16:52  jaume
+ * removed unnecessary imports
+ *
+ * Revision 1.2  2007/01/10 18:28:58  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1  2007/01/10 16:55:04  jaume
+ * default browser now configurable in linux
+ *
+ *
+ */
 package com.iver.core.preferences.general;
 
 import java.awt.FlowLayout;
@@ -74,23 +74,34 @@ import com.iver.andami.preferences.StoreException;
 import com.iver.utiles.BrowserControl;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.JComboBox;
+
 /**
- * <p><b>Preference page</b> for system browser's properties.<br></p>
- *
- * <p>At the moment, this page will allow the <b>linux</b> users to select
- * a web browser and how to open it when the app needs to do such thing.<br>
- * For instance when following a link to a web page.<br></p>
- *
- * <p>This is the merely purpose of it, and it makes that this page has no
- * sense for windows users. That is why it does not appear in windows platforms.</p>
- *
- * <p>If you decide to extend this purpose, then you should enable it for those platforms
- * (or any) you want.</p>
+ * <p>
+ * <b>Preference page</b> for system browser's properties.<br>
+ * </p>
+ * 
+ * <p>
+ * At the moment, this page will allow the <b>linux</b> users to select a web
+ * browser and how to open it when the app needs to do such thing.<br>
+ * For instance when following a link to a web page.<br>
+ * </p>
+ * 
+ * <p>
+ * This is the merely purpose of it, and it makes that this page has no sense
+ * for windows users. That is why it does not appear in windows platforms.
+ * </p>
+ * 
+ * <p>
+ * If you decide to extend this purpose, then you should enable it for those
+ * platforms (or any) you want.
+ * </p>
  * TODO to know what about Mac platforms.
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
-public class BrowserControlPage extends AbstractPreferencePage implements ActionListener{
+public class BrowserControlPage extends AbstractPreferencePage implements
+		ActionListener {
 
 	private static final String DEFAULT_BROWSER_KEY_NAME = "DefaultBrowser";
 	private String id;
@@ -110,7 +121,8 @@ public class BrowserControlPage extends AbstractPreferencePage implements Action
 		JPanel aux;
 
 		ButtonGroup group = new ButtonGroup();
-		rdBtnSelectBrowser = new JRadioButton(PluginServices.getText(this, "options.general.browser.select_a_known_browser"));
+		rdBtnSelectBrowser = new JRadioButton(PluginServices.getText(this,
+				"options.general.browser.select_a_known_browser"));
 		rdBtnSelectBrowser.addActionListener(this);
 
 		aux = new JPanel(new FlowLayout(FlowLayout.LEADING));
@@ -120,7 +132,8 @@ public class BrowserControlPage extends AbstractPreferencePage implements Action
 
 		addComponent(rdBtnSelectBrowser, aux);
 
-		rdBtnSpecifyCommand = new JRadioButton(PluginServices.getText(this, "options.general.browser.specify_a_command"));
+		rdBtnSpecifyCommand = new JRadioButton(PluginServices.getText(this,
+				"options.general.browser.specify_a_command"));
 		rdBtnSpecifyCommand.setVerticalAlignment(SwingConstants.BOTTOM);
 		rdBtnSpecifyCommand.addActionListener(this);
 		aux = new JPanel(new FlowLayout(FlowLayout.LEADING));
@@ -133,10 +146,8 @@ public class BrowserControlPage extends AbstractPreferencePage implements Action
 	}
 
 	public void storeValues() throws StoreException {
-		String cmd =
-			rdBtnSelectBrowser.isSelected()
-			? (String) cmbBrowsers.getSelectedItem()
-			: txtCustomCommand.getText();
+		String cmd = rdBtnSelectBrowser.isSelected() ? (String) cmbBrowsers
+				.getSelectedItem() : txtCustomCommand.getText();
 		BrowserControl.setBrowserCommand(cmd);
 
 		PluginServices ps = PluginServices.getPluginServices(this);

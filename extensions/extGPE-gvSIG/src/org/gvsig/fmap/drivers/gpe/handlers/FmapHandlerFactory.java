@@ -3,7 +3,6 @@ package org.gvsig.fmap.drivers.gpe.handlers;
 import org.gvsig.fmap.drivers.gpe.reader.GPEVectorialDriver;
 import org.gvsig.gpe.parser.GPEErrorHandler;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -54,26 +53,25 @@ import org.gvsig.gpe.parser.GPEErrorHandler;
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class FmapHandlerFactory {
-	
+
 	/**
 	 * Creates a new FMap contentHandler
+	 * 
 	 * @param errorHandler
-	 * The error handler
+	 *            The error handler
 	 * @param driver
-	 * The vectorial driver
-	 * @return
-	 * One FMAP ContentHandler
+	 *            The vectorial driver
+	 * @return One FMAP ContentHandler
 	 */
 	public static DefaultFmapContentHandler createContentHandler(
-			GPEErrorHandler errorHandler,
-			GPEVectorialDriver driver){
-		return new FmapContentHandler(errorHandler, driver);	
+			GPEErrorHandler errorHandler, GPEVectorialDriver driver) {
+		return new FmapContentHandler(errorHandler, driver);
 	}
-	
+
 	/**
 	 * @return an FmapErrorHandler class
 	 */
-	public static FmapErrorHandler createErrorHandler(){
-		return new FmapErrorHandler();		
+	public static FmapErrorHandler createErrorHandler() {
+		return new FmapErrorHandler();
 	}
 }

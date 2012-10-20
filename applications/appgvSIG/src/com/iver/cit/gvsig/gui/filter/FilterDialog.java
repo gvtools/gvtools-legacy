@@ -76,12 +76,14 @@ import com.iver.utiles.exceptionHandling.ExceptionHandlingSupport;
 import com.iver.utiles.exceptionHandling.ExceptionListener;
 
 /**
- * This class substitutes the old "FilterDialog" class made by "Fernando González Cortés"
- * The functionality is the same, but now the class is made from separately (and reusable) components
- *
+ * This class substitutes the old "FilterDialog" class made by
+ * "Fernando González Cortés" The functionality is the same, but now the class
+ * is made from separately (and reusable) components
+ * 
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
-public class FilterDialog extends TableFilterQueryJPanel implements IWindow, IWindowListener {
+public class FilterDialog extends TableFilterQueryJPanel implements IWindow,
+		IWindowListener {
 	private static Logger logger = Logger.getLogger(Table.class.getName());
 	private ExpressionDataSource model = null;
 	private ArrayList expressionListeners = new ArrayList();
@@ -92,8 +94,11 @@ public class FilterDialog extends TableFilterQueryJPanel implements IWindow, IWi
 
 	private final int filterDialog_Width = 500;
 	private final int filterDialog_Height = 362;
-	private final int widthIncrementForAndami = 20; // This is necessary because when the panel is sent to Andami, that needs a bit more width-space to show that panel.
-
+	private final int widthIncrementForAndami = 20; // This is necessary because
+													// when the panel is sent to
+													// Andami, that needs a bit
+													// more width-space to show
+													// that panel.
 
 	/**
 	 * This is the default constructor
@@ -101,19 +106,22 @@ public class FilterDialog extends TableFilterQueryJPanel implements IWindow, IWi
 	public FilterDialog(String _title) {
 		super();
 		title = _title;
-		defaultTreeModel = (DefaultTreeModel)fieldsJTree.getModel();
+		defaultTreeModel = (DefaultTreeModel) fieldsJTree.getModel();
 	}
+
 	/**
 	 * This is the default constructor
 	 */
 	public FilterDialog() {
 		super();
-		defaultTreeModel = (DefaultTreeModel)fieldsJTree.getModel();
+		defaultTreeModel = (DefaultTreeModel) fieldsJTree.getModel();
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see org.gvsig.gui.beans.filterPanel.AbstractFilterQueryJPanel#initialize()
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.filterPanel.AbstractFilterQueryJPanel#initialize()
 	 */
 	protected void initialize() {
 		super.initialize();
@@ -130,45 +138,49 @@ public class FilterDialog extends TableFilterQueryJPanel implements IWindow, IWi
 	private void addNewListeners() {
 		// Listener for "btnAdd"
 		// Adds more elements to the current set
-		getBtnAddToCurrentSet().addActionListener(new java.awt.event.ActionListener() {
-			/*
-			 *  (non-Javadoc)
-			 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-			 */
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				final String expr = "select * from '" +
-					model.getDataSourceName() + "' where " +
-					getTxtExpression().getText() + ";";
+		getBtnAddToCurrentSet().addActionListener(
+				new java.awt.event.ActionListener() {
+					/*
+					 * (non-Javadoc)
+					 * 
+					 * @see
+					 * java.awt.event.ActionListener#actionPerformed(java.awt
+					 * .event.ActionEvent)
+					 */
+					public void actionPerformed(java.awt.event.ActionEvent e) {
+						final String expr = "select * from '"
+								+ model.getDataSourceName() + "' where "
+								+ getTxtExpression().getText() + ";";
 
-				logger.debug(expr);
+						logger.debug(expr);
 
-				PluginServices.backgroundExecution(new Runnable() {
-						public void run() {
-							for (int i = 0;
-									i < expressionListeners.size();
-									i++) {
-								ExpressionListener l = (ExpressionListener) expressionListeners.get(i);
-								l.addToSet(expr);
+						PluginServices.backgroundExecution(new Runnable() {
+							public void run() {
+								for (int i = 0; i < expressionListeners.size(); i++) {
+									ExpressionListener l = (ExpressionListener) expressionListeners
+											.get(i);
+									l.addToSet(expr);
+								}
 							}
-						}
-					});
-			}
-		});
+						});
+					}
+				});
 
 		// Listener for "btnNuevo"
 		// Adds a new set
 		getBtnNewSet().addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
-				final String expr = "select * from '" +
-					model.getDataSourceName() + "' where " +
-					getTxtExpression().getText() + ";";
+				final String expr = "select * from '"
+						+ model.getDataSourceName() + "' where "
+						+ getTxtExpression().getText() + ";";
 
 				logger.debug(expr);
 
 				PluginServices.backgroundExecution(new Runnable() {
 					public void run() {
 						for (int i = 0; i < expressionListeners.size(); i++) {
-							ExpressionListener l = (ExpressionListener) expressionListeners.get(i);
+							ExpressionListener l = (ExpressionListener) expressionListeners
+									.get(i);
 							l.newSet(expr);
 						}
 					}
@@ -177,19 +189,21 @@ public class FilterDialog extends TableFilterQueryJPanel implements IWindow, IWi
 		});
 
 		// Listener for "btnFromSet"
-		// Selects elements in the table that are according the current filter condition
+		// Selects elements in the table that are according the current filter
+		// condition
 		getBtnFromSet().addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
-				final String expr = "select * from '" +
-					model.getDataSourceName() + "' where " +
-					getTxtExpression().getText() + ";";
+				final String expr = "select * from '"
+						+ model.getDataSourceName() + "' where "
+						+ getTxtExpression().getText() + ";";
 
 				logger.debug(expr);
 
 				PluginServices.backgroundExecution(new Runnable() {
 					public void run() {
 						for (int i = 0; i < expressionListeners.size(); i++) {
-							ExpressionListener l = (ExpressionListener) expressionListeners.get(i);
+							ExpressionListener l = (ExpressionListener) expressionListeners
+									.get(i);
 							l.fromSet(expr);
 						}
 					}
@@ -200,28 +214,31 @@ public class FilterDialog extends TableFilterQueryJPanel implements IWindow, IWi
 		// Listener for "fieldsJTree"
 		getFieldsJTree().addMouseListener(new MouseAdapter() {
 			/*
-			 *  (non-Javadoc)
-			 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent
+			 * )
 			 */
 			public void mouseClicked(MouseEvent e) {
 				int row = fieldsJTree.getRowForLocation(e.getX(), e.getY());
 
 				if (row > -1) {
 					switch (e.getClickCount()) {
-						case 1:
-							fillValues(row);
-							break;
-						case 2:
-							String alias = jtreeRoot.getChildAt(row).toString();
-							String name;
-							try {
-								name = model.getFieldName(row);
-								putSymbol(name);
-							} catch (FilterException e1) {
-								e1.printStackTrace();
-							}
-							
-							break;
+					case 1:
+						fillValues(row);
+						break;
+					case 2:
+						String alias = jtreeRoot.getChildAt(row).toString();
+						String name;
+						try {
+							name = model.getFieldName(row);
+							putSymbol(name);
+						} catch (FilterException e1) {
+							e1.printStackTrace();
+						}
+
+						break;
 					}
 				}
 			}
@@ -230,19 +247,24 @@ public class FilterDialog extends TableFilterQueryJPanel implements IWindow, IWi
 		// Listener for "valuesJList"
 		getValuesJList().addMouseListener(new MouseAdapter() {
 			/*
-			 *  (non-Javadoc)
-			 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent
+			 * )
 			 */
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
-					Value valor = (Value) valuesListModel.getElementAt(getValuesJList().getSelectedIndex());
+					Value valor = (Value) valuesListModel
+							.getElementAt(getValuesJList().getSelectedIndex());
 
 					if (valor instanceof DateValue) {
 						putSymbol("date('" + valor + "')");
 					} else if (valor instanceof BooleanValue) {
 						putSymbol("boolean('" + valor.toString() + "')");
 					} else if (valor instanceof StringValue) {
-						putSymbol("'" + valor.toString().replaceAll("'","''") + "'");
+						putSymbol("'" + valor.toString().replaceAll("'", "''")
+								+ "'");
 					} else {
 						putSymbol(valor.toString());
 					}
@@ -255,10 +277,10 @@ public class FilterDialog extends TableFilterQueryJPanel implements IWindow, IWi
 	 * Rellena la lista con los valores del campo seleccionado
 	 */
 	private void fillValues(int row) {
-		//int index = lstCampos.getSelectedIndex();
+		// int index = lstCampos.getSelectedIndex();
 
-		//Index es ahora el índice del campo seleccionado
-		//Se eliminan los duplicados
+		// Index es ahora el índice del campo seleccionado
+		// Se eliminan los duplicados
 		TreeSet conjunto = new TreeSet(new Comparator() {
 			public int compare(Object o1, Object o2) {
 				if ((o1 != null) && (o2 != null)) {
@@ -287,17 +309,16 @@ public class FilterDialog extends TableFilterQueryJPanel implements IWindow, IWi
 			}
 		}); // Para poder ordenar
 
-
 		valuesListModel.clear();
 		try {
 			for (int i = 0; i < model.getRowCount(); i++) {
 				Value value = model.getFieldValue(i, row);
 
 				if (value instanceof NullValue)
-				    continue;
+					continue;
 
 				if (!conjunto.contains(value)) {
-				    conjunto.add(value);
+					conjunto.add(value);
 				}
 			}
 
@@ -312,20 +333,21 @@ public class FilterDialog extends TableFilterQueryJPanel implements IWindow, IWi
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param t DOCUMENT ME!
+	 * 
+	 * @param t
+	 *            DOCUMENT ME!
 	 */
 	public void setModel(ExpressionDataSource t) {
 		try {
 			model = t;
-            model.start();
-        } catch (ReadDriverException e1) {
-            NotificationManager.addError(e1.getMessage(), e1);
-        }
+			model.start();
+		} catch (ReadDriverException e1) {
+			NotificationManager.addError(e1.getMessage(), e1);
+		}
 
-        jtreeRoot.removeAllChildren();
+		jtreeRoot.removeAllChildren();
 
-        try {
+		try {
 			for (int i = 0; i < model.getFieldCount(); i++) {
 				Object field = model.getFieldAlias(i);
 
@@ -340,54 +362,58 @@ public class FilterDialog extends TableFilterQueryJPanel implements IWindow, IWi
 		}
 	}
 
-		/**
-		 * DOCUMENT ME!
-		 *
-		 * @return DOCUMENT ME!
-		 *
-		 * @throws ParseException DOCUMENT ME!
-		 */
-		private String validateExpression() throws ParseException {
-			String expression = txtExpression.getText();
-	//		HashSet variablesIndexes = new HashSet();
-	//
-	//		StringBuffer traducida = new StringBuffer();
-
-			//Se transforman los nombres de los campos en las variables xix que analizarán
-			//Se quitan los Date(fecha) y se mete la fecha correspondiente
-			expression = translateDates(expression);
-			expression = translateNumber(expression);
-			expression = translateWord(expression, "true", "1");
-			expression = translateWord(expression, "false", "0");
-
-			String replacement;
-			Pattern patron = Pattern.compile("[^<>!]=");
-			Matcher m = patron.matcher(expression);
-			int index = 0;
-
-			while (m.find(index)) {
-				index = m.start();
-				replacement = expression.charAt(index) + "==";
-				m.replaceFirst(replacement);
-				index++;
-			}
-
-			expression = expression.replaceAll("[^<>!]=", "==");
-
-			logger.debug(expression);
-
-			return expression;
-		}
 	/**
-	 * Redefinition of the 'putSymbol' method of AbstractFilterQueryJPanel
-	 *   (I've made this redefinition for write the same code as the 'putSymbol'
-	 *    code of the original class (FilterDialog) that was in this project
-	 *    (appgvSIG) and didn't has path troubles to find 'StringUtilities').
-	 *
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 * 
+	 * @throws ParseException
+	 *             DOCUMENT ME!
+	 */
+	private String validateExpression() throws ParseException {
+		String expression = txtExpression.getText();
+		// HashSet variablesIndexes = new HashSet();
+		//
+		// StringBuffer traducida = new StringBuffer();
+
+		// Se transforman los nombres de los campos en las variables xix que
+		// analizarán
+		// Se quitan los Date(fecha) y se mete la fecha correspondiente
+		expression = translateDates(expression);
+		expression = translateNumber(expression);
+		expression = translateWord(expression, "true", "1");
+		expression = translateWord(expression, "false", "0");
+
+		String replacement;
+		Pattern patron = Pattern.compile("[^<>!]=");
+		Matcher m = patron.matcher(expression);
+		int index = 0;
+
+		while (m.find(index)) {
+			index = m.start();
+			replacement = expression.charAt(index) + "==";
+			m.replaceFirst(replacement);
+			index++;
+		}
+
+		expression = expression.replaceAll("[^<>!]=", "==");
+
+		logger.debug(expression);
+
+		return expression;
+	}
+
+	/**
+	 * Redefinition of the 'putSymbol' method of AbstractFilterQueryJPanel (I've
+	 * made this redefinition for write the same code as the 'putSymbol' code of
+	 * the original class (FilterDialog) that was in this project (appgvSIG) and
+	 * didn't has path troubles to find 'StringUtilities').
+	 * 
 	 * Sets a symbol on the filter expression (JTextArea that stores and shows
-	 *   the current filter expression)
-	 *
-	 * @param symbol A symbol: character, characters, number, ...
+	 * the current filter expression)
+	 * 
+	 * @param symbol
+	 *            A symbol: character, characters, number, ...
 	 */
 	protected void putSymbol(String symbol) {
 		int position = txtExpression.getCaretPosition();
@@ -405,11 +431,14 @@ public class FilterDialog extends TableFilterQueryJPanel implements IWindow, IWi
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param expresion DOCUMENT ME!
-	 * @param substring DOCUMENT ME!
-	 * @param startingPos DOCUMENT ME!
-	 *
+	 * 
+	 * @param expresion
+	 *            DOCUMENT ME!
+	 * @param substring
+	 *            DOCUMENT ME!
+	 * @param startingPos
+	 *            DOCUMENT ME!
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	private int getIndex(String expresion, String substring, int startingPos) {
@@ -417,25 +446,29 @@ public class FilterDialog extends TableFilterQueryJPanel implements IWindow, IWi
 
 		do {
 			index = expresion.indexOf(substring, index);
-		} while ((StringUtilities.isBetweenSymbols(expresion, index, "\"")) &&
-				(index != -1));
+		} while ((StringUtilities.isBetweenSymbols(expresion, index, "\""))
+				&& (index != -1));
 
 		return index;
 	}
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param expresion DOCUMENT ME!
-	 * @param word DOCUMENT ME!
-	 * @param translation DOCUMENT ME!
-	 *
+	 * 
+	 * @param expresion
+	 *            DOCUMENT ME!
+	 * @param word
+	 *            DOCUMENT ME!
+	 * @param translation
+	 *            DOCUMENT ME!
+	 * 
 	 * @return DOCUMENT ME!
-	 *
-	 * @throws ParseException DOCUMENT ME!
+	 * 
+	 * @throws ParseException
+	 *             DOCUMENT ME!
 	 */
 	private String translateWord(String expresion, String word,
-		String translation) throws ParseException {
+			String translation) throws ParseException {
 		int booleanIndex = 0;
 		int endIndex = 0;
 		StringBuffer res = new StringBuffer();
@@ -456,15 +489,17 @@ public class FilterDialog extends TableFilterQueryJPanel implements IWindow, IWi
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param expresion DOCUMENT ME!
-	 *
+	 * 
+	 * @param expresion
+	 *            DOCUMENT ME!
+	 * 
 	 * @return DOCUMENT ME!
-	 *
-	 * @throws ParseException DOCUMENT ME!
+	 * 
+	 * @throws ParseException
+	 *             DOCUMENT ME!
 	 */
 	private String translateDates(String expresion) throws ParseException {
-		//Se obtiene el valor de la fecha
+		// Se obtiene el valor de la fecha
 		String date = StringUtilities.substringDelimited(expresion, "Date(",
 				")", 0);
 
@@ -472,24 +507,27 @@ public class FilterDialog extends TableFilterQueryJPanel implements IWindow, IWi
 			return expresion;
 		}
 
-		//Se comprueba que no esté entre comillas
+		// Se comprueba que no esté entre comillas
 		int startIndex = expresion.indexOf(date);
 
 		while (startIndex != -1) {
 			if (!StringUtilities.isBetweenSymbols(expresion, startIndex, "\"")) {
-				//Se sustituye por el valor ordinal de la fecha
-				expresion = expresion.substring(0, startIndex - 5) +
-					expresion.substring(startIndex).replaceFirst(date + "\\)",
-						new Long((filterButtonsJPanel.getDateFormat().parse(date)).getTime()).toString());
+				// Se sustituye por el valor ordinal de la fecha
+				expresion = expresion.substring(0, startIndex - 5)
+						+ expresion.substring(startIndex).replaceFirst(
+								date + "\\)",
+								new Long((filterButtonsJPanel.getDateFormat()
+										.parse(date)).getTime()).toString());
 				;
 			} else {
 				startIndex += date.length();
 			}
 
-			//Se obtiene el valor de la fecha
+			// Se obtiene el valor de la fecha
 
-			/*            date = StringUtilities.substringDelimited(expresion, "Date(", ")",
-			   startIndex);
+			/*
+			 * date = StringUtilities.substringDelimited(expresion, "Date(",
+			 * ")", startIndex);
 			 */
 			if (date == null) {
 				return expresion;
@@ -503,12 +541,14 @@ public class FilterDialog extends TableFilterQueryJPanel implements IWindow, IWi
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param expresion DOCUMENT ME!
-	 *
+	 * 
+	 * @param expresion
+	 *            DOCUMENT ME!
+	 * 
 	 * @return DOCUMENT ME!
-	 *
-	 * @throws ParseException DOCUMENT ME!
+	 * 
+	 * @throws ParseException
+	 *             DOCUMENT ME!
 	 */
 	public String translateNumber(String expresion) throws ParseException {
 		DefaultCharSet ss = new DefaultCharSet();
@@ -528,10 +568,10 @@ public class FilterDialog extends TableFilterQueryJPanel implements IWindow, IWi
 			Number n = nf.parse(number);
 
 			if (!StringUtilities.isBetweenSymbols(expresion, startIndex, "\"")) {
-				//Se sustituye por el valor ordinal de la fecha
-				expresion = expresion.substring(0, startIndex) +
-					expresion.substring(startIndex).replaceFirst(number,
-						n.toString());
+				// Se sustituye por el valor ordinal de la fecha
+				expresion = expresion.substring(0, startIndex)
+						+ expresion.substring(startIndex).replaceFirst(number,
+								n.toString());
 			} else {
 				startIndex += n.toString().length();
 			}
@@ -551,9 +591,9 @@ public class FilterDialog extends TableFilterQueryJPanel implements IWindow, IWi
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param arg0
-	 *
+	 * 
 	 * @return
 	 */
 	public boolean addExpressionListener(ExpressionListener arg0) {
@@ -562,9 +602,9 @@ public class FilterDialog extends TableFilterQueryJPanel implements IWindow, IWi
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param arg0
-	 *
+	 * 
 	 * @return
 	 */
 	public boolean removeExpressionListener(ExpressionListener arg0) {
@@ -577,21 +617,22 @@ public class FilterDialog extends TableFilterQueryJPanel implements IWindow, IWi
 	public WindowInfo getWindowInfo() {
 		WindowInfo vi = new WindowInfo(WindowInfo.ICONIFIABLE);
 
-		//if (System.getProperty("os.name")co.compareTo(arg0))
+		// if (System.getProperty("os.name")co.compareTo(arg0))
 		vi.setHeight(this.filterDialog_Height);
 		vi.setWidth(this.filterDialog_Width);
 
 		// Old instructions
-//		vi.setWidth(480);
-//		vi.setHeight(362);
-		vi.setTitle(PluginServices.getText( this, "filtro") + " (" + title + ")");
+		// vi.setWidth(480);
+		// vi.setHeight(362);
+		vi.setTitle(PluginServices.getText(this, "filtro") + " (" + title + ")");
 		return vi;
 	}
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param o DOCUMENT ME!
+	 * 
+	 * @param o
+	 *            DOCUMENT ME!
 	 */
 	public void addExceptionListener(ExceptionListener o) {
 		exceptionHandlingSupport.addExceptionListener(o);
@@ -599,9 +640,10 @@ public class FilterDialog extends TableFilterQueryJPanel implements IWindow, IWi
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param o DOCUMENT ME!
-	 *
+	 * 
+	 * @param o
+	 *            DOCUMENT ME!
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public boolean removeExceptionListener(ExceptionListener o) {
@@ -610,30 +652,36 @@ public class FilterDialog extends TableFilterQueryJPanel implements IWindow, IWi
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param t DOCUMENT ME!
+	 * 
+	 * @param t
+	 *            DOCUMENT ME!
 	 */
 	private void throwException(Throwable t) {
 		exceptionHandlingSupport.throwException(t);
 	}
 
-    /* (non-Javadoc)
-     * @see com.iver.andami.ui.mdiManager.ViewListener#viewActivated()
-     */
-    public void windowActivated() {
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.andami.ui.mdiManager.ViewListener#viewActivated()
+	 */
+	public void windowActivated() {
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.andami.ui.mdiManager.ViewListener#viewClosed()
-     */
-    public void windowClosed() {
-        try {
-            model.stop();
-        } catch (ReadDriverException e) {
-            NotificationManager.addError(e.getMessage(), e);
-        }
-    }
-    public Object getWindowProfile() {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.andami.ui.mdiManager.ViewListener#viewClosed()
+	 */
+	public void windowClosed() {
+		try {
+			model.stop();
+		} catch (ReadDriverException e) {
+			NotificationManager.addError(e.getMessage(), e);
+		}
+	}
+
+	public Object getWindowProfile() {
 		return WindowInfo.TOOL_PROFILE;
 	}
 }

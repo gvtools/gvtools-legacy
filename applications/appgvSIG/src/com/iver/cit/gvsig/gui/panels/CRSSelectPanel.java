@@ -58,14 +58,13 @@ import com.iver.cit.gvsig.gui.panels.crs.ISelectCRSButton;
  * 
  * @author Luis W. Sevilla <sevilla_lui@gva.es>
  */
-public abstract class CRSSelectPanel extends JPanel 
-   implements ISelectCRSButton {
+public abstract class CRSSelectPanel extends JPanel implements ISelectCRSButton {
 	private static Class panelClass = ProjChooserPanel.class;
 	private static Class uiFactory = CrsUIFactory.class;
 	private boolean transPanelActive = false;
 
 	protected ActionListener actionListener = null;
-	
+
 	public static void registerPanelClass(Class panelClass) {
 		CRSSelectPanel.panelClass = panelClass;
 	}
@@ -73,42 +72,51 @@ public abstract class CRSSelectPanel extends JPanel
 	public static void registerUIFactory(Class uiFactory) {
 		CRSSelectPanel.uiFactory = uiFactory;
 	}
-	
+
 	public static CRSSelectPanel getPanel(CoordinateReferenceSystem crs) {
 		CRSSelectPanel panel = null;
 		Class[] args = { CoordinateReferenceSystem.class };
-		Object [] params = {crs};
+		Object[] params = { crs };
 		try {
-			panel = (CRSSelectPanel) panelClass.getConstructor(args).newInstance(params);
+			panel = (CRSSelectPanel) panelClass.getConstructor(args)
+					.newInstance(params);
 		} catch (IllegalArgumentException e) {
-			PluginServices.getLogger().error("Error creating CRS selection button", e);
+			PluginServices.getLogger().error(
+					"Error creating CRS selection button", e);
 		} catch (SecurityException e) {
-			PluginServices.getLogger().error("Error creating CRS selection button", e);
+			PluginServices.getLogger().error(
+					"Error creating CRS selection button", e);
 		} catch (InstantiationException e) {
-			PluginServices.getLogger().error("Error creating CRS selection button", e);
+			PluginServices.getLogger().error(
+					"Error creating CRS selection button", e);
 		} catch (IllegalAccessException e) {
-			PluginServices.getLogger().error("Error creating CRS selection button", e);
+			PluginServices.getLogger().error(
+					"Error creating CRS selection button", e);
 		} catch (InvocationTargetException e) {
-			PluginServices.getLogger().error("Error creating CRS selection button", e);
+			PluginServices.getLogger().error(
+					"Error creating CRS selection button", e);
 		} catch (NoSuchMethodException e) {
-			PluginServices.getLogger().error("Error creating CRS selection button", e);
+			PluginServices.getLogger().error(
+					"Error creating CRS selection button", e);
 		}
 		return panel;
 	}
-	
+
 	public CRSSelectPanel(CoordinateReferenceSystem crs) {
 		super();
 	}
-	
+
 	abstract public JButton getJBtnChangeProj();
-	
+
 	abstract public JLabel getJLabel();
-	
+
 	abstract public CoordinateReferenceSystem getCurrentCrs();
-	
+
 	abstract public boolean isOkPressed();
+
 	/**
-	 * @param actionListener The actionListener to set.
+	 * @param actionListener
+	 *            The actionListener to set.
 	 */
 	public void addActionListener(ActionListener actionListener) {
 		this.actionListener = actionListener;
@@ -121,19 +129,25 @@ public abstract class CRSSelectPanel extends JPanel
 	public void setTransPanelActive(boolean transPanelActive) {
 		this.transPanelActive = transPanelActive;
 	}
-	
+
 	public static ICrsUIFactory getUIFactory() {
 		ICrsUIFactory factory;
 		try {
 			factory = (ICrsUIFactory) uiFactory.newInstance();
 		} catch (InstantiationException e) {
-			PluginServices.getLogger().error("Error creating CRS UI factory. Switching to default factory", e);
-			 factory = new CrsUIFactory();
+			PluginServices
+					.getLogger()
+					.error("Error creating CRS UI factory. Switching to default factory",
+							e);
+			factory = new CrsUIFactory();
 		} catch (IllegalAccessException e) {
-			PluginServices.getLogger().error("Error creating CRS UI factory. Switching to default factory", e);
-			factory =  new CrsUIFactory();
+			PluginServices
+					.getLogger()
+					.error("Error creating CRS UI factory. Switching to default factory",
+							e);
+			factory = new CrsUIFactory();
 		}
 		return factory;
 	}
-	
+
 }

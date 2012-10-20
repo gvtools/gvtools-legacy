@@ -64,13 +64,11 @@ import org.gvsig.xmlschema.som.IXSTypeDefinition;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class XSTypeDefinitionImpl extends XSComponentImpl implements IXSTypeDefinition {
+public abstract class XSTypeDefinitionImpl extends XSComponentImpl implements
+		IXSTypeDefinition {
 
 	public XSTypeDefinitionImpl(IXSSchema schema) {
-		super(schema);		
+		super(schema);
 	}
-	
 
 }
-
-	

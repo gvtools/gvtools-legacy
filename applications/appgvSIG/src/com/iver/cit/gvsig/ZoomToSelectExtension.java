@@ -60,10 +60,10 @@ import com.iver.cit.gvsig.project.documents.table.gui.Table;
 import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
-
 /**
- * Extensión de zoom a lo seleccionado teniendo como ventana activa una vista o una tabla.
- *
+ * Extensión de zoom a lo seleccionado teniendo como ventana activa una vista o
+ * una tabla.
+ * 
  * @author Vicente Caballero Navarro
  */
 public class ZoomToSelectExtension extends Extension {
@@ -71,21 +71,22 @@ public class ZoomToSelectExtension extends Extension {
 	 * @see com.iver.mdiApp.plugins.IExtension#updateUI(java.lang.String)
 	 */
 	public void execute(String s) {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-		 	.getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (f instanceof View) {
-			View vista = (View)f;
+			View vista = (View) f;
 			IProjectView model = vista.getModel();
 			MapContext mapa = model.getMapContext();
 			Rectangle2D selectedExtent = mapa.getSelectionBounds();
 
 			if (selectedExtent != null) {
 				mapa.getViewPort().setExtent(selectedExtent);
-				((ProjectDocument)vista.getModel()).setModified(true);
+				((ProjectDocument) vista.getModel()).setModified(true);
 			}
-		}else if (f instanceof Table) {
-			Table table=(Table)f;
-			MapContext mapa=((FLyrVect)table.getModel().getAssociatedTable()).getMapContext();
+		} else if (f instanceof Table) {
+			Table table = (Table) f;
+			MapContext mapa = ((FLyrVect) table.getModel().getAssociatedTable())
+					.getMapContext();
 			Rectangle2D selectedExtent = mapa.getSelectionBounds();
 
 			if (selectedExtent != null) {
@@ -99,23 +100,27 @@ public class ZoomToSelectExtension extends Extension {
 	 * @see com.iver.mdiApp.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-															 .getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (f == null) {
 			return false;
 		}
 		if (f instanceof View) {
 			MapContext mapa = ((View) f).getModel().getMapContext();
 			return mapa.getLayers().getLayersCount() > 0;
-		}else if (f instanceof Table) {
-			Table t=(Table)f;
-			IWindow[] windows=PluginServices.getMDIManager().getAllWindows();
-			for (int i=0;i<windows.length;i++) {
+		} else if (f instanceof Table) {
+			Table t = (Table) f;
+			IWindow[] windows = PluginServices.getMDIManager().getAllWindows();
+			for (int i = 0; i < windows.length; i++) {
 				if (windows[i] instanceof View) {
-					if (t.getModel().getAssociatedTable()!=null)
-					if (((View)windows[i]).getMapControl().getMapContext().equals(((FLyrVect)t.getModel().getAssociatedTable()).getMapContext())){
-						return true;
-					}
+					if (t.getModel().getAssociatedTable() != null)
+						if (((View) windows[i])
+								.getMapControl()
+								.getMapContext()
+								.equals(((FLyrVect) t.getModel()
+										.getAssociatedTable()).getMapContext())) {
+							return true;
+						}
 				}
 			}
 		}
@@ -127,30 +132,38 @@ public class ZoomToSelectExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-		 	.getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (f == null) {
 			return false;
 		}
 		if (f instanceof View) {
 			View view = (View) f;
-			FLayer[] selected = view.getModel().getMapContext().getLayers().getActives();
-			if (selected.length == 1 && selected[0] instanceof FLyrVect && selected[0].isAvailable()){
+			FLayer[] selected = view.getModel().getMapContext().getLayers()
+					.getActives();
+			if (selected.length == 1 && selected[0] instanceof FLyrVect
+					&& selected[0].isAvailable()) {
 				try {
-					if (!((FLyrVect)selected[0]).getRecordset().getSelection().isEmpty())
+					if (!((FLyrVect) selected[0]).getRecordset().getSelection()
+							.isEmpty())
 						return true;
 				} catch (ReadDriverException e) {
 					return false;
 				}
 			}
-		}else if (f instanceof Table) {
-			Table t=(Table)f;
-			IWindow[] windows=PluginServices.getMDIManager().getAllWindows();
-			for (int i=0;i<windows.length;i++) {
+		} else if (f instanceof Table) {
+			Table t = (Table) f;
+			IWindow[] windows = PluginServices.getMDIManager().getAllWindows();
+			for (int i = 0; i < windows.length; i++) {
 				if (windows[i] instanceof View) {
-					if (((View)windows[i]).getMapControl().getMapContext().equals(((FLyrVect)t.getModel().getAssociatedTable()).getMapContext())){
+					if (((View) windows[i])
+							.getMapControl()
+							.getMapContext()
+							.equals(((FLyrVect) t.getModel()
+									.getAssociatedTable()).getMapContext())) {
 						try {
-							if (!t.getModel().getModelo().getSelection().isEmpty()) {
+							if (!t.getModel().getModelo().getSelection()
+									.isEmpty()) {
 								return true;
 							}
 						} catch (ReadDriverException e) {
@@ -171,10 +184,10 @@ public class ZoomToSelectExtension extends Extension {
 		registerIcons();
 	}
 
-	private void registerIcons(){
+	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"view-zoom-to-seleccion",
-				this.getClass().getClassLoader().getResource("images/ZoomSeleccion.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/ZoomSeleccion.png"));
 	}
 }

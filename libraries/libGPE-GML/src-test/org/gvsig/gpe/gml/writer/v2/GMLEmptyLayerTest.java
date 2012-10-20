@@ -60,6 +60,7 @@ import org.gvsig.gpe.writer.GPEEmptyLayerTest;
 public class GMLEmptyLayerTest extends GPEEmptyLayerTest {
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEParserClass()
 	 */
 	public Class getGPEParserClass() {
@@ -68,6 +69,7 @@ public class GMLEmptyLayerTest extends GPEEmptyLayerTest {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEWriterHandlerClass()
 	 */
 	public Class getGPEWriterHandlerClass() {

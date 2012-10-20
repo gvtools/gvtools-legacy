@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.errorfixes;
 
 import java.util.ArrayList;
@@ -62,27 +62,28 @@ import com.iver.cit.gvsig.fmap.core.IGeometry;
 /**
  * 
  * Automatic topology error fix for Overshoots errors.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class RemoveOvershootFix extends AbstractTopologyErrorFix {
 
-	
-	public List<IFeature>[] fixAlgorithm(TopologyError topologyError){
-		
+	public List<IFeature>[] fixAlgorithm(TopologyError topologyError) {
+
 		IFeature causingFeature = topologyError.getFeature1();
 		IGeometry geom = causingFeature.getGeometry();
-		double clusterTolerance = topologyError.getTopology().getClusterTolerance();
-		IGeometry correctedGeom = FGeometryUtil.removeOvershoot(geom, clusterTolerance);
-		if(correctedGeom == null)
+		double clusterTolerance = topologyError.getTopology()
+				.getClusterTolerance();
+		IGeometry correctedGeom = FGeometryUtil.removeOvershoot(geom,
+				clusterTolerance);
+		if (correctedGeom == null)
 			return null;
-		DefaultFeature df = new DefaultFeature(correctedGeom, 
-								causingFeature.getAttributes(),
-									causingFeature.getID());
-		
+		DefaultFeature df = new DefaultFeature(correctedGeom,
+				causingFeature.getAttributes(), causingFeature.getID());
+
 		List<IFeature> editedFeatures = new ArrayList<IFeature>();
 		editedFeatures.add(df);
-		return (List<IFeature>[]) new List[]{editedFeatures};
+		return (List<IFeature>[]) new List[] { editedFeatures };
 	}
 
 	public String getEditionDescription() {

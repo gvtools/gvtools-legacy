@@ -85,115 +85,122 @@ import org.gvsig.xmlschema.utils.TypeUtils;
  *
  */
 /**
- * This class is used to parse some xml tags that
- * represents a xml element. 
+ * This class is used to parse some xml tags that represents a xml element.
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  * @see http://www.w3.org/XML/Schema
  */
 public class ElementTypeBinding {
-	
+
 	/**
 	 * It parses a xml element
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
 	 * @param feature
-	 * The feature is needed to add the geometry
+	 *            The feature is needed to add the geometry
 	 * @param parentElement
-	 * The parent element
-	 * @return
-	 * A Element
+	 *            The parent element
+	 * @return A Element
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public Object parse(IXmlStreamReader parser,GPEDefaultGmlParser handler, Object feature, Object parentElement, IXSElementDeclaration parentType) throws XmlStreamException, IOException {
+	public Object parse(IXmlStreamReader parser, GPEDefaultGmlParser handler,
+			Object feature, Object parentElement,
+			IXSElementDeclaration parentType) throws XmlStreamException,
+			IOException {
 		boolean endFeature = false;
 		boolean isGeometryTag = false;
-		int currentTag;		
-		Object element = null;	
+		int currentTag;
+		Object element = null;
 		Object value = null;
 		Object geometry = null;
 		boolean isInitialized = false;
-		//Used to finish to parse the current element
+		// Used to finish to parse the current element
 		QName elementRootType = parser.getName();
-		String type = null;	
-		
-		XMLAttributesIterator attributesIterator = new XMLAttributesIterator(parser);
-		
-		//Find the element type
+		String type = null;
+
+		XMLAttributesIterator attributesIterator = new XMLAttributesIterator(
+				parser);
+
+		// Find the element type
 		IXSElementDeclaration elementType = null;
-		if (parentType != null){
-			elementType = parentType.getSubElementByName(elementRootType.getLocalPart());
-			if (elementType == null){
+		if (parentType != null) {
+			elementType = parentType.getSubElementByName(elementRootType
+					.getLocalPart());
+			if (elementType == null) {
 				type = TypeUtils.getXSType(String.class);
-			}else{
+			} else {
 				type = elementType.getTypeName();
 			}
-		}else{
+		} else {
 			type = TypeUtils.getXSType(String.class);
 		}
-		
+
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-				if (!(CompareUtils.compareWithNamespace(tag,elementRootType))){
-					//If is a geometry
-					if (GMLGeometries.isGML(tag)){
-						geometry = handler.getProfile().getGeometryBinding().
-								parse(parser, handler);
-						handler.getContentHandler().addGeometryToFeature(geometry, feature);
-						if (geometry==null){
+				if (!(CompareUtils.compareWithNamespace(tag, elementRootType))) {
+					// If is a geometry
+					if (GMLGeometries.isGML(tag)) {
+						geometry = handler.getProfile().getGeometryBinding()
+								.parse(parser, handler);
+						handler.getContentHandler().addGeometryToFeature(
+								geometry, feature);
+						if (geometry == null) {
 							System.out.println("\t\t\tGEOMETRIA VACIA");
-							//Warning geometria vacia
+							// Warning geometria vacia
 						}
-						isGeometryTag=true;
-					}else {
-						//If is not a geometry could be a complex feature
-						if (!isInitialized){
-							element = handler.getContentHandler().startElement(elementRootType.getNamespaceURI(),
-									GMLUtilsParser.removeBlancSymbol(elementRootType.getLocalPart()),
-									null,
-									attributesIterator,
-									parentElement);
+						isGeometryTag = true;
+					} else {
+						// If is not a geometry could be a complex feature
+						if (!isInitialized) {
+							element = handler.getContentHandler().startElement(
+									elementRootType.getNamespaceURI(),
+									GMLUtilsParser
+											.removeBlancSymbol(elementRootType
+													.getLocalPart()), null,
+									attributesIterator, parentElement);
 							isInitialized = true;
 						}
-						handler.getProfile().getElementTypeBinding().
-							parse(parser, handler, feature, element, null);
-					}				
+						handler.getProfile().getElementTypeBinding()
+								.parse(parser, handler, feature, element, null);
+					}
 				}
 				break;
 			case IXmlStreamReader.END_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,elementRootType)){						
+				if (CompareUtils.compareWithNamespace(tag, elementRootType)) {
 					endFeature = true;
-					//If not is complex the element has not been created yet
-					if (!isInitialized){
+					// If not is complex the element has not been created yet
+					if (!isInitialized) {
 						element = handler.getContentHandler().startElement(
 								elementRootType.getNamespaceURI(),
-								GMLUtilsParser.removeBlancSymbol(elementRootType.getLocalPart()), 
-								value,	
-								attributesIterator,
-								parentElement);
+								GMLUtilsParser
+										.removeBlancSymbol(elementRootType
+												.getLocalPart()), value,
+								attributesIterator, parentElement);
 						isInitialized = true;
 					}
 					handler.getContentHandler().endElement(element);
 				}
 				break;
-			case IXmlStreamReader.CHARACTERS:					
-				if (geometry == null){
+			case IXmlStreamReader.CHARACTERS:
+				if (geometry == null) {
 					value = TypeUtils.getValue(elementType, parser.getText());
 				}
 				break;
 			}
-			if (!endFeature){					
+			if (!endFeature) {
 				currentTag = parser.next();
 				tag = parser.getName();
 			}
-		}			
-		return element;		
+		}
+		return element;
 	}
 }

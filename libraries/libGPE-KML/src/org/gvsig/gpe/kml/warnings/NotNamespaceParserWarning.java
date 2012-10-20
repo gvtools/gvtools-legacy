@@ -69,30 +69,30 @@ import org.gvsig.exceptions.BaseException;
 /**
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class NotNamespaceParserWarning extends BaseException{ 
+public class NotNamespaceParserWarning extends BaseException {
 	private static final long serialVersionUID = -5950402725537407038L;
 	private String nameSpace = null;
-	
+
 	public NotNamespaceParserWarning(String nameSpace) {
 		this.nameSpace = nameSpace;
-		init();		
+		init();
 	}
-	
-	public NotNamespaceParserWarning(String nameSpace,Throwable exception) {
+
+	public NotNamespaceParserWarning(String nameSpace, Throwable exception) {
 		this.nameSpace = nameSpace;
 		init();
 		initCause(exception);
 	}
-	
+
 	private void init() {
 		messageKey = "error_kml_notParserForNamespace";
 		formatString = "The namespace %(namespace) is not recognized. Anyway, the system will be try to parse";
-		code = serialVersionUID;		
+		code = serialVersionUID;
 	}
-	
+
 	protected Map values() {
 		Hashtable params = new Hashtable();
-		params.put("nameSpace",nameSpace);
-		return params;		
+		params.put("nameSpace", nameSpace);
+		return params;
 	}
 }

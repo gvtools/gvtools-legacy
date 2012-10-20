@@ -40,35 +40,35 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: WebMapContextFileChooserAccessory.java 32876 2010-06-24 10:57:33Z jpiera $
-* $Log$
-* Revision 1.7  2007-09-19 16:15:41  jaume
-* removed unnecessary imports
-*
-* Revision 1.6  2007/06/27 06:29:27  jaume
-* Views jcombobox bug fixed
-*
-* Revision 1.5  2006/09/20 07:45:21  caballero
-* constante registerName
-*
-* Revision 1.4  2006/09/18 08:28:44  caballero
-* cambio de nombre
-*
-* Revision 1.3  2006/09/15 10:44:24  caballero
-* extensibilidad de documentos
-*
-* Revision 1.2  2006/04/21 11:34:30  jaume
-* *** empty log message ***
-*
-* Revision 1.1  2006/04/19 07:57:29  jaume
-* *** empty log message ***
-*
-* Revision 1.1  2006/04/12 17:10:53  jaume
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: WebMapContextFileChooserAccessory.java 32876 2010-06-24 10:57:33Z jpiera $
+ * $Log$
+ * Revision 1.7  2007-09-19 16:15:41  jaume
+ * removed unnecessary imports
+ *
+ * Revision 1.6  2007/06/27 06:29:27  jaume
+ * Views jcombobox bug fixed
+ *
+ * Revision 1.5  2006/09/20 07:45:21  caballero
+ * constante registerName
+ *
+ * Revision 1.4  2006/09/18 08:28:44  caballero
+ * cambio de nombre
+ *
+ * Revision 1.3  2006/09/15 10:44:24  caballero
+ * extensibilidad de documentos
+ *
+ * Revision 1.2  2006/04/21 11:34:30  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/04/19 07:57:29  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/04/12 17:10:53  jaume
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.gui.panels;
 
 import java.awt.Dimension;
@@ -109,16 +109,16 @@ public class WebMapContextFileChooserAccessory extends JPanel {
 		setPreferredSize(new Dimension(315, 72));
 		this.add(getCmbViews(), null);
 		this.add(lblExplain, null);
-		setBorder(javax.swing.BorderFactory.createTitledBorder(
-				  null, PluginServices.getText(this, "open_layers_as"),
-				  javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				  javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+		setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+				PluginServices.getText(this, "open_layers_as"),
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
 		this.add(getCmbMode(), null);
 	}
 
 	/**
 	 * This method initializes cmbBoxMode
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getCmbMode() {
@@ -132,28 +132,32 @@ public class WebMapContextFileChooserAccessory extends JPanel {
 					cmbViews.setVisible(false);
 
 					if (cmbMode.getSelectedIndex() == NEW_VIEW) {
-						lblExplain.setText(PluginServices.getText(this, "html_in_a_new_view"));
+						lblExplain.setText(PluginServices.getText(this,
+								"html_in_a_new_view"));
 					} else if (cmbMode.getSelectedIndex() == CURRENT_VIEW) {
-						lblExplain.setText(PluginServices.getText(this, "html_in_the_current_view"));
+						lblExplain.setText(PluginServices.getText(this,
+								"html_in_the_current_view"));
 					} else if (cmbMode.getSelectedIndex() == USERS_VIEW_SELECTION) {
-						lblExplain.setText(PluginServices.getText(this, "html_in_other_view"));
+						lblExplain.setText(PluginServices.getText(this,
+								"html_in_other_view"));
 						cmbViews.setVisible(true);
 					}
 				}
 			});
 
 			cmbMode.addItem(PluginServices.getText(this, "a_new_view"));
-			if (currentView!=null) {
-				cmbMode.addItem(PluginServices.getText(this, "layers_in_the_current_view")+": "+currentView);
-				CURRENT_VIEW = cmbMode.getItemCount()-1;
+			if (currentView != null) {
+				cmbMode.addItem(PluginServices.getText(this,
+						"layers_in_the_current_view") + ": " + currentView);
+				CURRENT_VIEW = cmbMode.getItemCount() - 1;
 				cmbMode.setSelectedIndex(CURRENT_VIEW);
 			}
-//			cmbViews.removeAllItems();
-			if (getCmbViews().getItemCount()>0) {
-				cmbMode.addItem(PluginServices.getText(this, "layers_in_other_view"));
-				USERS_VIEW_SELECTION = cmbMode.getItemCount() -1;
+			// cmbViews.removeAllItems();
+			if (getCmbViews().getItemCount() > 0) {
+				cmbMode.addItem(PluginServices.getText(this,
+						"layers_in_other_view"));
+				USERS_VIEW_SELECTION = cmbMode.getItemCount() - 1;
 			}
-
 
 		}
 
@@ -172,8 +176,10 @@ public class WebMapContextFileChooserAccessory extends JPanel {
 			viewName = currentView;
 		else if (getCmbMode().getSelectedIndex() == USERS_VIEW_SELECTION)
 			viewName = (String) getCmbViews().getSelectedItem();
-		ProjectExtension pe = (ProjectExtension) PluginServices.getExtension(ProjectExtension.class);
-		return (ProjectView) pe.getProject().getProjectDocumentByName(viewName, ProjectViewFactory.registerName);
+		ProjectExtension pe = (ProjectExtension) PluginServices
+				.getExtension(ProjectExtension.class);
+		return (ProjectView) pe.getProject().getProjectDocumentByName(viewName,
+				ProjectViewFactory.registerName);
 	}
 
 	public int getOption() {
@@ -182,20 +188,22 @@ public class WebMapContextFileChooserAccessory extends JPanel {
 
 	/**
 	 * This method initializes cmbViews
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getCmbViews() {
 		if (cmbViews == null) {
 			cmbViews = new JComboBox();
 			cmbViews.setBounds(25, 114, 266, 20);
-			ProjectExtension pe = (ProjectExtension) PluginServices.getExtension(ProjectExtension.class);
-			ArrayList views = pe.getProject().getDocumentsByType(ProjectViewFactory.registerName);
+			ProjectExtension pe = (ProjectExtension) PluginServices
+					.getExtension(ProjectExtension.class);
+			ArrayList views = pe.getProject().getDocumentsByType(
+					ProjectViewFactory.registerName);
 			for (int i = 0; i < views.size(); i++) {
-				ProjectView v = (ProjectView)views.get(i);
+				ProjectView v = (ProjectView) views.get(i);
 				cmbViews.addItem(v.getName());
 			}
 		}
 		return cmbViews;
 	}
-}  //  @jve:decl-index=0:visual-constraint="10,0"
+} // @jve:decl-index=0:visual-constraint="10,0"

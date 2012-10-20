@@ -52,8 +52,9 @@ import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
 import com.iver.cit.gvsig.fmap.rendering.XmlBuilder;
 
 /**
- *  * Implements the Point Symbolizer element of an SLD implementation specification (version 
- * 1.0.0).<p>
+ * * Implements the Point Symbolizer element of an SLD implementation
+ * specification (version 1.0.0).
+ * <p>
  * 
  * A point symbolizer is used to draw "graphic" at a point.
  * 
@@ -64,30 +65,28 @@ import com.iver.cit.gvsig.fmap.rendering.XmlBuilder;
  */
 public class SLDPointSymbolizer1_0_0 extends SLDPointSymbolizer {
 
-
 	/**
-	 * Parses the xml data retrieved from the SLD, it will parse the Point Symbolizer
-	 *  element</p>
-	 * @throws LegendDriverException 
+	 * Parses the xml data retrieved from the SLD, it will parse the Point
+	 * Symbolizer element</p>
+	 * 
+	 * @throws LegendDriverException
 	 */
-	public void parse(XMLSchemaParser parser)throws IOException, XmlPullParserException, LegendDriverException  {
+	public void parse(XMLSchemaParser parser) throws IOException,
+			XmlPullParserException, LegendDriverException {
 		int currentTag;
 		boolean end = false;
 
 		parser.require(XMLSchemaParser.START_TAG, null, SLDTags.POINTSYMBOLIZER);
 		currentTag = parser.next();
 
-		while (!end)
-		{
-			switch(currentTag)
-			{
+		while (!end) {
+			switch (currentTag) {
 			case XMLSchemaParser.START_TAG:
-				if (parser.getName().compareTo(SLDTags.GEOMETRY)==0) {
+				if (parser.getName().compareTo(SLDTags.GEOMETRY) == 0) {
 					parseGeometry(parser);
-				}
-				else if (parser.getName().compareTo(SLDTags.GRAPHIC)==0) {
+				} else if (parser.getName().compareTo(SLDTags.GRAPHIC) == 0) {
 					SLDGraphic1_0_0 graphic = new SLDGraphic1_0_0();
-					graphic.parseGraphic(parser,parser.getName());
+					graphic.parseGraphic(parser, parser.getName());
 					setGraphic(graphic);
 				}
 				break;
@@ -106,36 +105,36 @@ public class SLDPointSymbolizer1_0_0 extends SLDPointSymbolizer {
 
 	}
 
-
 	/**
-	 * Parse the xml data retrieved from the SLD, it will parse the Geometry element</p>
-	 * The Geometry element of a Symbolizer defines the geometry to be used
-	 * for styling. The Geometry element is optional and if it is absent then the
-	 * �default� geometry property of the feature type that is used in the containing 
-	 * FeatureStyleType is used. The precise meaning of �default� geometry property is
-	 * system-dependent. Most frequently, feature types will have only a single geometry
-	 * property.<p>
-	 * The only method available for defining a geometry is to reference a geometry 
-	 * property using the ogc:PropertyName element (defined in the WFS Specification). 
-	 * The content of the element gives the property name in XPath syntax. In principle, 
-	 * a fixed geometry could be defined using GML or operators could be defined for 
-	 * computing the geometry from references or literals. However, using a feature 
-	 * property directly is by far the most commonly useful method.
-	 *
+	 * Parse the xml data retrieved from the SLD, it will parse the Geometry
+	 * element</p> The Geometry element of a Symbolizer defines the geometry to
+	 * be used for styling. The Geometry element is optional and if it is absent
+	 * then the �default� geometry property of the feature type that is used
+	 * in the containing FeatureStyleType is used. The precise meaning of
+	 * �default� geometry property is system-dependent. Most frequently,
+	 * feature types will have only a single geometry property.
+	 * <p>
+	 * The only method available for defining a geometry is to reference a
+	 * geometry property using the ogc:PropertyName element (defined in the WFS
+	 * Specification). The content of the element gives the property name in
+	 * XPath syntax. In principle, a fixed geometry could be defined using GML
+	 * or operators could be defined for computing the geometry from references
+	 * or literals. However, using a feature property directly is by far the
+	 * most commonly useful method.
+	 * 
 	 */
-	private void parseGeometry(XMLSchemaParser parser) throws IOException, XmlPullParserException{
+	private void parseGeometry(XMLSchemaParser parser) throws IOException,
+			XmlPullParserException {
 		int currentTag;
 		boolean end = false;
 
 		parser.require(XMLSchemaParser.START_TAG, null, SLDTags.GEOMETRY);
 		currentTag = parser.next();
 
-		while (!end)
-		{
-			switch(currentTag)
-			{
+		while (!end) {
+			switch (currentTag) {
 			case XMLSchemaParser.START_TAG:
-				if (parser.getName().compareTo(SLDTags.PROPERTY_NAME)==0) {
+				if (parser.getName().compareTo(SLDTags.PROPERTY_NAME) == 0) {
 					setGeometry(parser.nextText());
 				}
 
@@ -155,7 +154,6 @@ public class SLDPointSymbolizer1_0_0 extends SLDPointSymbolizer {
 
 	}
 
-
 	public String toXML() {
 		XmlBuilder xmlBuilder = new XmlBuilder();
 		xmlBuilder.openTag(SLDTags.POINTSYMBOLIZER);
@@ -164,8 +162,5 @@ public class SLDPointSymbolizer1_0_0 extends SLDPointSymbolizer {
 		return xmlBuilder.getXML();
 
 	}
-
-	
-	
 
 }

@@ -3,17 +3,16 @@
 package com.hardcode.gdbms.parser;
 
 public class ASTSQLExistsClause extends SimpleNode {
-  public ASTSQLExistsClause(int id) {
-    super(id);
-  }
+	public ASTSQLExistsClause(int id) {
+		super(id);
+	}
 
-  public ASTSQLExistsClause(SQLEngine p, int id) {
-    super(p, id);
-  }
+	public ASTSQLExistsClause(SQLEngine p, int id) {
+		super(p, id);
+	}
 
-
-  /** Accept the visitor. **/
-  public Object jjtAccept(SQLEngineVisitor visitor, Object data) {
-    return visitor.visit(this, data);
-  }
+	/** Accept the visitor. **/
+	public Object jjtAccept(SQLEngineVisitor visitor, Object data) {
+		return visitor.visit(this, data);
+	}
 }

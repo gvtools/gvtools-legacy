@@ -44,28 +44,27 @@ import java.util.Comparator;
 
 public class LabelFieldComparator implements Comparator<LabelField> {
 
-	 public int compare(LabelField o1, LabelField o2)
-	   {
-	      if ( o1 != null && o2 == null )
-	         return -1;
-	      if ( o1 == null && o2 != null )
-	         return 1;
-	      if ( o1 == null && o2 == null )
-	         return 0;
-	      if ( o1.pos <= o2.pos )
-	         return -1;
-	      else
-	         return 1;
-	   }
+	public int compare(LabelField o1, LabelField o2) {
+		if (o1 != null && o2 == null)
+			return -1;
+		if (o1 == null && o2 != null)
+			return 1;
+		if (o1 == null && o2 == null)
+			return 0;
+		if (o1.pos <= o2.pos)
+			return -1;
+		else
+			return 1;
+	}
 
 }
-class LabelField
-{
-   String text;
-   int pos;
-   public LabelField(String text,int pos)
-   {
-      this.text = text;
-      this.pos = pos;
-   }
+
+class LabelField {
+	String text;
+	int pos;
+
+	public LabelField(String text, int pos) {
+		this.text = text;
+		this.pos = pos;
+	}
 }

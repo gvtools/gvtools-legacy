@@ -19,18 +19,18 @@
 package org.gvsig.raster.grid.filter.enhancement;
 
 import org.gvsig.raster.buffer.RasterBuffer;
-import org.gvsig.raster.buffer.cache.RasterReadOnlyBuffer;
 import org.gvsig.raster.dataset.IBuffer;
 import org.gvsig.raster.dataset.Params;
 import org.gvsig.raster.grid.filter.RasterFilter;
+
 /**
  * Clase base para los filtros de brillo.
- *
+ * 
  * @version 31/05/2007
- * @author Miguel Ángel Querol Carratalá  (miguelangel.querol@iver.es)
+ * @author Miguel Ángel Querol Carratalá (miguelangel.querol@iver.es)
  */
 public class BrightnessFilter extends RasterFilter {
-	public static String[]	names = new String[] {"brightness"};
+	public static String[] names = new String[] { "brightness" };
 
 	/**
 	 * Variable para guardar el incremento de brillo que se va a aplicar
@@ -38,8 +38,8 @@ public class BrightnessFilter extends RasterFilter {
 	int incrBrillo = 0;
 
 	/**
-	 * Constructor. Llama al constructor de la clase base y asigna el
-	 * nombre del filtro.
+	 * Constructor. Llama al constructor de la clase base y asigna el nombre del
+	 * filtro.
 	 */
 	public BrightnessFilter() {
 		setName(names[0]);
@@ -47,6 +47,7 @@ public class BrightnessFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#pre()
 	 */
 	public void pre() {
@@ -57,12 +58,15 @@ public class BrightnessFilter extends RasterFilter {
 		if (raster != null) {
 			height = raster.getHeight();
 			width = raster.getWidth();
-			rasterResult = RasterBuffer.getBuffer(IBuffer.TYPE_BYTE, raster.getWidth(), raster.getHeight(), raster.getBandCount(), true);
+			rasterResult = RasterBuffer.getBuffer(IBuffer.TYPE_BYTE,
+					raster.getWidth(), raster.getHeight(),
+					raster.getBandCount(), true);
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#post()
 	 */
 	public void post() {
@@ -72,6 +76,7 @@ public class BrightnessFilter extends RasterFilter {
 
 	/**
 	 * Obtiene el incremento de brillo que se está aplicando
+	 * 
 	 * @return entero que representa el incremento de brillo aplicado.
 	 */
 	public int getBrightnessIncrease() {
@@ -80,6 +85,7 @@ public class BrightnessFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.IRasterFilter#getGroup()
 	 */
 	public String getGroup() {
@@ -88,19 +94,25 @@ public class BrightnessFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.IRasterFilter#getParams()
 	 */
 	public Params getUIParams(String nameFilter) {
 		Params params = new Params();
-		params.setParam("Brightness",
-				new Integer(incrBrillo),
-				Params.SLIDER,
-				new String[]{ "-255", "255", "50", "1", "25" }); //min, max, valor defecto, intervalo pequeño, intervalo grande;
+		params.setParam("Brightness", new Integer(incrBrillo), Params.SLIDER,
+				new String[] { "-255", "255", "50", "1", "25" }); // min, max,
+																	// valor
+																	// defecto,
+																	// intervalo
+																	// pequeño,
+																	// intervalo
+																	// grande;
 		return params;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getInRasterDataType()
 	 */
 	public int getInRasterDataType() {
@@ -109,6 +121,7 @@ public class BrightnessFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getOutRasterDataType()
 	 */
 	public int getOutRasterDataType() {
@@ -117,7 +130,10 @@ public class BrightnessFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.enhancement.BrightnessFilter#getResult(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.enhancement.BrightnessFilter#getResult(java
+	 * .lang.String)
 	 */
 	public Object getResult(String name) {
 		if (name.equals("raster")) {
@@ -130,6 +146,7 @@ public class BrightnessFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#process(int, int)
 	 */
 	public void process(int x, int y) throws InterruptedException {
@@ -137,6 +154,7 @@ public class BrightnessFilter extends RasterFilter {
 
 	/**
 	 * Calcula el brillo para un pixel
+	 * 
 	 * @param px
 	 * @return
 	 */
@@ -151,6 +169,7 @@ public class BrightnessFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getName()
 	 */
 	public String[] getNames() {

@@ -56,14 +56,14 @@ import com.iver.cit.gvsig.exceptions.layers.UnsupportedVersionLayerException;
 
 /**
  * @author fernando
- *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * 
+ *         To change the template for this generated type comment go to
+ *         Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 public interface WizardDataSource {
-	public WizardData detalles(URL host)throws IllegalStateException, ValidationException, 
-	UnsupportedVersionLayerException, IOException ;
-	
+	public WizardData detalles(URL host) throws IllegalStateException,
+			ValidationException, UnsupportedVersionLayerException, IOException;
+
 	public Rectangle2D getBoundingBox(String[] layerName, String srs);
 
 }

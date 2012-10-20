@@ -31,60 +31,64 @@ import org.gvsig.raster.dataset.serializer.RmfSerializerException;
 import org.gvsig.raster.hierarchy.IStatistics;
 import org.gvsig.raster.process.RasterTask;
 import org.gvsig.raster.process.RasterTaskQueue;
+
 /**
  * Estadisticas asociadas a un fichero raster.
- *  
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class DatasetStatistics implements IStatistics {
-	
+
 	/*
-	 * Esta a false si las estadisticas no son del fichero completo. Esto es posible porque podemos
-	 * tener unas estadísticas calculadas a partir de una petición con subsampleo. Hay que tener en
-	 * cuenta que el raster puede ser muy grande y este calculo muy costoso.
+	 * Esta a false si las estadisticas no son del fichero completo. Esto es
+	 * posible porque podemos tener unas estadísticas calculadas a partir de una
+	 * petición con subsampleo. Hay que tener en cuenta que el raster puede ser
+	 * muy grande y este calculo muy costoso.
 	 */
-	protected boolean       complete                = false;
-	protected double[]      max                     = null;
-	protected double[]      min                     = null;
-	protected double[]      secondMax               = null;
-	protected double[]      secondMin               = null;
+	protected boolean complete = false;
+	protected double[] max = null;
+	protected double[] min = null;
+	protected double[] secondMax = null;
+	protected double[] secondMin = null;
 
-	protected double[]      maxByteUnsigned         = null;
-	protected double[]      minByteUnsigned         = null;
-	protected double[]      secondMaxByteUnsigned   = null;
-	protected double[]      secondMinByteUnsigned   = null;
+	protected double[] maxByteUnsigned = null;
+	protected double[] minByteUnsigned = null;
+	protected double[] secondMaxByteUnsigned = null;
+	protected double[] secondMinByteUnsigned = null;
 
-	protected double[]      mean                    = null;
-	protected double[]      variance                = null;
+	protected double[] mean = null;
+	protected double[] variance = null;
 
-	protected String        fName                   = null;
-	protected RasterDataset dataset                 = null;
-	protected boolean       calculated              = false;
-	protected Hashtable     tailTrim                = new Hashtable();
-	protected ArrayList     tailTrimValues          = new ArrayList();
-	private int             bandCount               = 0;
-	private int             percent                 = 0;
-	private boolean         forceToRecalc           = false;
-	
+	protected String fName = null;
+	protected RasterDataset dataset = null;
+	protected boolean calculated = false;
+	protected Hashtable tailTrim = new Hashtable();
+	protected ArrayList tailTrimValues = new ArrayList();
+	private int bandCount = 0;
+	private int percent = 0;
+	private boolean forceToRecalc = false;
+
 	/**
 	 * Constructor. Asigna el fichero asociado.
 	 */
-	public DatasetStatistics(RasterDataset grf){
+	public DatasetStatistics(RasterDataset grf) {
 		this.dataset = grf;
-		if(dataset != null)
+		if (dataset != null)
 			bandCount = dataset.getBandCount();
 	}
-	
+
 	/**
 	 * Obtiene el dataset asociado
+	 * 
 	 * @return
 	 */
 	public RasterDataset getDataset() {
 		return dataset;
 	}
-	
+
 	/**
 	 * Asigna el valor máximo del grid
+	 * 
 	 * @return Valor máximo
 	 */
 	public void setMax(double[] max) {
@@ -93,14 +97,16 @@ public class DatasetStatistics implements IStatistics {
 
 	/**
 	 * Asigna el valor del segundo máximo
+	 * 
 	 * @return Valor del segundo máximo
 	 */
 	public void setSecondMax(double[] smax) {
 		this.secondMax = smax;
 	}
-	
+
 	/**
 	 * Asigna el valor máximo del grid
+	 * 
 	 * @return Valor máximo
 	 */
 	public void setMaxRGB(double[] max) {
@@ -109,14 +115,16 @@ public class DatasetStatistics implements IStatistics {
 
 	/**
 	 * Asigna el valor del segundo máximo
+	 * 
 	 * @return Valor del segundo máximo
 	 */
 	public void setSecondMaxRGB(double[] smax) {
 		this.secondMaxByteUnsigned = smax;
 	}
-	
+
 	/**
 	 * Asigna el valor médio del grid
+	 * 
 	 * @return Valor medio
 	 */
 	public void setMean(double[] mean) {
@@ -125,6 +133,7 @@ public class DatasetStatistics implements IStatistics {
 
 	/**
 	 * Asigna el valor míximo del grid
+	 * 
 	 * @return Valor mínimo
 	 */
 	public void setMin(double[] min) {
@@ -133,14 +142,16 @@ public class DatasetStatistics implements IStatistics {
 
 	/**
 	 * Asigna el valor del segundo mínimo
+	 * 
 	 * @return Valor del segundo mínimo
 	 */
 	public void setSecondMin(double[] smin) {
 		this.secondMin = smin;
 	}
-	
+
 	/**
 	 * Asigna el valor míximo del grid
+	 * 
 	 * @return Valor mínimo
 	 */
 	public void setMinRGB(double[] min) {
@@ -149,86 +160,97 @@ public class DatasetStatistics implements IStatistics {
 
 	/**
 	 * Asigna el valor del segundo mínimo
+	 * 
 	 * @return Valor del segundo mínimo
 	 */
 	public void setSecondMinRGB(double[] smin) {
 		this.secondMinByteUnsigned = smin;
 	}
-	
+
 	/**
 	 * Asigna la varianza
+	 * 
 	 * @return Varianza
 	 */
 	public void setVariance(double[] variance) {
 		this.variance = variance;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.hierarchy.IStatistics#getMin()
 	 */
 	public double[] getMin() {
 		return min;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.hierarchy.IStatistics#getMax()
 	 */
 	public double[] getMax() {
 		return max;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.hierarchy.IStatistics#getSecondMax()
 	 */
 	public double[] getSecondMax() {
 		return secondMax;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.hierarchy.IStatistics#getSecondMin()
 	 */
 	public double[] getSecondMin() {
 		return secondMin;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.hierarchy.IStatistics#getMinRGB()
 	 */
 	public double[] getMinByteUnsigned() {
 		return minByteUnsigned;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.hierarchy.IStatistics#getMaxRGB()
 	 */
 	public double[] getMaxByteUnsigned() {
 		return maxByteUnsigned;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.hierarchy.IStatistics#getSecondMaxRGB()
 	 */
 	public double[] getSecondMaxByteUnsigned() {
 		return secondMaxByteUnsigned;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.hierarchy.IStatistics#getSecondMinRGB()
 	 */
 	public double[] getSecondMinByteUnsigned() {
 		return secondMinByteUnsigned;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.hierarchy.IStatistics#getMaximun()
 	 */
 	public double getMaximun() {
@@ -237,9 +259,10 @@ public class DatasetStatistics implements IStatistics {
 			m = Math.max(m, max[i]);
 		return m;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.hierarchy.IStatistics#getMinimun()
 	 */
 	public double getMinimun() {
@@ -251,6 +274,7 @@ public class DatasetStatistics implements IStatistics {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.hierarchy.IStatistics#getMaximunRGB()
 	 */
 	public double getMaximunByteUnsigned() {
@@ -262,6 +286,7 @@ public class DatasetStatistics implements IStatistics {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.hierarchy.IStatistics#getMinimunRGB()
 	 */
 	public double getMinimunByteUnsigned() {
@@ -273,6 +298,7 @@ public class DatasetStatistics implements IStatistics {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.hierarchy.IStatistics#getMean()
 	 */
 	public double[] getMean() {
@@ -281,39 +307,45 @@ public class DatasetStatistics implements IStatistics {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.hierarchy.IStatistics#getVariance()
 	 */
 	public double[] getVariance() {
 		return variance;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.hierarchy.IStatistics#getBandCount()
 	 */
-	public int getBandCount(){
+	public int getBandCount() {
 		return this.bandCount;
 	}
-	
+
 	/**
 	 * Asigna el número de bandas
+	 * 
 	 * @param bandCount
 	 */
 	public void setBandCount(int bandCount) {
 		this.bandCount = bandCount;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.hierarchy.IStatistics#calcFullStatistics()
 	 */
-	public void calcFullStatistics() throws FileNotOpenException, RasterDriverException, InterruptedException {
+	public void calcFullStatistics() throws FileNotOpenException,
+			RasterDriverException, InterruptedException {
 		if (dataset == null)
 			return;
-		
-		RasterTask task = RasterTaskQueue.get(Thread.currentThread().toString());
+
+		RasterTask task = RasterTaskQueue
+				.get(Thread.currentThread().toString());
 		percent = 0;
-		
+
 		// Si no se fuerza su calculo, intentamos ver si estan calculadas y sino
 		// las intentamos cargar del RMF
 		if (!forceToRecalc) {
@@ -321,7 +353,8 @@ public class DatasetStatistics implements IStatistics {
 				try {
 					dataset.loadObjectFromRmf(DatasetStatistics.class, this);
 				} catch (RmfSerializerException e) {
-					// Si no se puede cargar del RMF, recalcularemos las estadisticas.
+					// Si no se puede cargar del RMF, recalcularemos las
+					// estadisticas.
 				}
 			}
 			if (isCalculated())
@@ -369,47 +402,58 @@ public class DatasetStatistics implements IStatistics {
 			try {
 				Object buf = dataset.readBlock(height, blockHeight);
 				switch (type[0]) {
-					case IBuffer.TYPE_BYTE:	  b = (byte[][][]) buf; break;
-					case IBuffer.TYPE_SHORT:  s = (short[][][]) buf; break;
-					case IBuffer.TYPE_FLOAT:  f = (float[][][]) buf; break;
-					case IBuffer.TYPE_DOUBLE: d = (double[][][]) buf; break;
-					case IBuffer.TYPE_INT:    i = (int[][][]) buf; break;
+				case IBuffer.TYPE_BYTE:
+					b = (byte[][][]) buf;
+					break;
+				case IBuffer.TYPE_SHORT:
+					s = (short[][][]) buf;
+					break;
+				case IBuffer.TYPE_FLOAT:
+					f = (float[][][]) buf;
+					break;
+				case IBuffer.TYPE_DOUBLE:
+					d = (double[][][]) buf;
+					break;
+				case IBuffer.TYPE_INT:
+					i = (int[][][]) buf;
+					break;
 				}
 			} catch (InvalidSetViewException e) {
 				// La vista se asigna automáticamente
 				return;
 			}
-			
+
 			int hB = blockHeight;
 			if ((height + hB) > dataset.getHeight())
 				hB = dataset.getHeight() - height;
 			for (int iBand = 0; iBand < bandCount; iBand++) {
 				for (int col = 0; col < dataset.getWidth(); col++) {
 					for (int row = 0; row < hB; row++) {
-						z = (b != null) ? b[iBand][row][col] :
-								(s != null) ? s[iBand][row][col] :
-								(d != null) ? d[iBand][row][col] :
-								(f != null) ? f[iBand][row][col] :
-								(i != null) ? i[iBand][row][col] :
-								0;
+						z = (b != null) ? b[iBand][row][col]
+								: (s != null) ? s[iBand][row][col]
+										: (d != null) ? d[iBand][row][col]
+												: (f != null) ? f[iBand][row][col]
+														: (i != null) ? i[iBand][row][col]
+																: 0;
 
-						if (dataset.isNoDataEnabled() && (z == dataset.getNoDataValue()))
+						if (dataset.isNoDataEnabled()
+								&& (z == dataset.getNoDataValue()))
 							continue;
 
 						if (Double.isNaN(z))
 							continue;
 
 						rgb = 0;
-						if(b != null) {
+						if (b != null) {
 							rgb = ((byte) z) & 0xff;
 							mean[iBand] += rgb;
 							variance[iBand] += rgb * rgb;
 						} else {
-							//rgb = (b != null) ? ((byte) z) & 0xff : 0;
+							// rgb = (b != null) ? ((byte) z) & 0xff : 0;
 							mean[iBand] += z;
 							variance[iBand] += z * z;
 						}
-						
+
 						iValues[iBand]++;
 
 						if (!initializedBand[iBand]) {
@@ -476,7 +520,8 @@ public class DatasetStatistics implements IStatistics {
 		for (int iBand = 0; iBand < bandCount; iBand++) {
 			if (iValues[iBand] > 0) {
 				mean[iBand] = mean[iBand] / (double) iValues[iBand];
-				variance[iBand] = variance[iBand] / (double) iValues[iBand] - mean[iBand] * mean[iBand];
+				variance[iBand] = variance[iBand] / (double) iValues[iBand]
+						- mean[iBand] * mean[iBand];
 			}
 		}
 
@@ -491,53 +536,62 @@ public class DatasetStatistics implements IStatistics {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.hierarchy.IStatistics#isCalculated()
 	 */
 	public boolean isCalculated() {
 		return calculated;
 	}
-	
+
 	/**
 	 * Asigna el flag de estadísticas calculadas.
+	 * 
 	 * @param calc
 	 */
 	public void setCalculated(boolean calc) {
 		calculated = calc;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.hierarchy.IStatistics#setTailTrimValue(double, java.lang.Object)
+	 * 
+	 * @see org.gvsig.raster.hierarchy.IStatistics#setTailTrimValue(double,
+	 * java.lang.Object)
 	 */
-	public void setTailTrimValue(double percent, Object valueByBand){
+	public void setTailTrimValue(double percent, Object valueByBand) {
 		tailTrim.put(percent + "", valueByBand);
 		for (int i = 0; i < tailTrimValues.size(); i++) {
-			if(tailTrimValues.get(i).equals(percent + "")) {
+			if (tailTrimValues.get(i).equals(percent + "")) {
 				tailTrimValues.set(i, percent + "");
 				return;
 			}
 		}
 		tailTrimValues.add(percent + "");
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.hierarchy.IStatistics#getTailTrimValue(double)
 	 */
-	public Object getTailTrimValue(double percent){
+	public Object getTailTrimValue(double percent) {
 		return tailTrim.get(percent + "");
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.shared.IStatistics#getTailTrimValue(int)
 	 */
 	public Object[] getTailTrimValue(int pos) {
-		return new Object[] { Double.valueOf(Double.parseDouble(tailTrimValues.get(pos) + "")), tailTrim.get(tailTrimValues.get(pos)) };
+		return new Object[] {
+				Double.valueOf(Double.parseDouble(tailTrimValues.get(pos) + "")),
+				tailTrim.get(tailTrimValues.get(pos)) };
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.shared.IStatistics#getTailTrimCount()
 	 */
 	public int getTailTrimCount() {
@@ -545,7 +599,8 @@ public class DatasetStatistics implements IStatistics {
 	}
 
 	/**
-	 * Pone a cero el porcentaje de progreso del proceso de calculo de histograma
+	 * Pone a cero el porcentaje de progreso del proceso de calculo de
+	 * histograma
 	 */
 	public void resetPercent() {
 		percent = 0;
@@ -553,6 +608,7 @@ public class DatasetStatistics implements IStatistics {
 
 	/**
 	 * Obtiene el porcentaje de progreso del proceso de calculo de histograma
+	 * 
 	 * @return porcentaje de progreso
 	 */
 	public int getPercent() {
@@ -560,8 +616,9 @@ public class DatasetStatistics implements IStatistics {
 	}
 
 	/**
-	 * Cuando se llama a este método fuerza que la siguiente petición de estadísticas 
-	 * no sea leída de RMF y sean recalculadas por completo.
+	 * Cuando se llama a este método fuerza que la siguiente petición de
+	 * estadísticas no sea leída de RMF y sean recalculadas por completo.
+	 * 
 	 * @param forceToRecalc
 	 */
 	public void forceToRecalc() {

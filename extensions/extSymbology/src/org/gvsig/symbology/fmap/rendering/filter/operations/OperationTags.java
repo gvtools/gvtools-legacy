@@ -42,16 +42,16 @@ package org.gvsig.symbology.fmap.rendering.filter.operations;
 
 public class OperationTags {
 
-	//Useful to create the pattern
+	// Useful to create the pattern
 	public final static String OPERAND = "operand";
 	public final static String NUMERIC_VALUE = "numeric_value";
 	public final static String BOOLEAN_VALUE = "boolean_value";
 	public final static String CONSTANT = "constant";
-	public final static String NUMERIC_OR_BOOLEAN_CONSTANT ="numeric_or_boolean_value";
+	public final static String NUMERIC_OR_BOOLEAN_CONSTANT = "numeric_or_boolean_value";
 	public static final String NULL_CONSTANT = "null";
 	public static final String STRING_CONSTANT = "String";
 
-	//Operators
+	// Operators
 	public final static String ADD_OP = "+";
 	public final static String DIV_OP = "/";
 	public final static String MINUS_OP = "-";
@@ -61,7 +61,7 @@ public class OperationTags {
 	public final static String NOT_OP = "Not";
 
 	public final static String EQ_OP = "==";
-	public final static String NEQ_OP ="!=";
+	public final static String NEQ_OP = "!=";
 	public final static String GREATER_THAN_OP = ">";
 	public final static String GREATER_THAN_OR_EQ_OP = ">=";
 	public final static String LESS_THAN_OP = "<";
@@ -70,7 +70,5 @@ public class OperationTags {
 	public final static String ISBETWEEN_OP = "IsBetween";
 	public final static String ISNULL_OP = "IsNull";
 	public final static String REPLACE_OP = "Replace";
-
-
 
 }

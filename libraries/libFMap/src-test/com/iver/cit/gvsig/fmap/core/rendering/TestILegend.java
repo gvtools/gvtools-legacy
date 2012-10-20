@@ -59,10 +59,10 @@ import com.iver.utiles.XMLEntity;
  * Integration test for all legends. It tests basic operations:
  * </p>
  * <ol>
- * 	<li>legend clonation (used in the layer properties window)</li>
- * 	<li>legend knows how to self-define correctly in the XMLEntity</li>
- *  <li>legend registers and manages all the listeners for its contents changes</li>
- *  
+ * <li>legend clonation (used in the layer properties window)</li>
+ * <li>legend knows how to self-define correctly in the XMLEntity</li>
+ * <li>legend registers and manages all the listeners for its contents changes</li>
+ * 
  * </ol>
  * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
@@ -70,16 +70,17 @@ import com.iver.utiles.XMLEntity;
 public class TestILegend extends TestCase {
 	private static boolean init = true;
 	private static ArrayList<AbstractLegendTestCase> classesToTest;
-	
+
 	public static TestSuite suite() {
-		TestSuite suite = new TestSuite("Integration test for "+ILegend.class.getCanonicalName());
-	    suite.addTestSuite(TestILegend.class);
-	    suite.addTestSuite(TestVectorLegend.class);
-	    suite.addTestSuite(TestIClassifiedLegend.class);
-	    
-	    suite.addTestSuite(TestIntervalLegend.class);
-	    suite.addTestSuite(TestClassifiedVectorLegend.class);
-	    
+		TestSuite suite = new TestSuite("Integration test for "
+				+ ILegend.class.getCanonicalName());
+		suite.addTestSuite(TestILegend.class);
+		suite.addTestSuite(TestVectorLegend.class);
+		suite.addTestSuite(TestIClassifiedLegend.class);
+
+		suite.addTestSuite(TestIntervalLegend.class);
+		suite.addTestSuite(TestClassifiedVectorLegend.class);
+
 		addLegendToTest(new SingleSymbolLegendTest());
 		addLegendToTest(new VectorialUniqueValueLegendTest());
 		addLegendToTest(new VectorialIntervalLegendTest());
@@ -87,12 +88,12 @@ public class TestILegend extends TestCase {
 	}
 
 	public static void addLegendToTest(AbstractLegendTestCase legendTestClass) {
-		if (classesToTest == null) 
+		if (classesToTest == null)
 			classesToTest = new ArrayList<AbstractLegendTestCase>();
 		if (!classesToTest.contains(legendTestClass))
 			classesToTest.add(legendTestClass);
 	}
-	
+
 	public static AbstractLegendTestCase getLegendTestCaseByLegend(ILegend leg) {
 		for (AbstractLegendTestCase testCase : classesToTest) {
 			if (testCase.legClazz.equals(leg.getClass())) {
@@ -101,39 +102,41 @@ public class TestILegend extends TestCase {
 		}
 		return null;
 	}
-	
+
 	public static String shortClassName(Class<?> c) {
-		return c.getName().substring(
-				c.getName().lastIndexOf('.')+1,
+		return c.getName().substring(c.getName().lastIndexOf('.') + 1,
 				c.getName().length());
 	}
-	
- 	public static String getNameForLegend(ILegend testLegend) {
-		 return shortClassName(testLegend.getClass());
+
+	public static String getNameForLegend(ILegend testLegend) {
+		return shortClassName(testLegend.getClass());
 	}
 
 	public static ILegend[] getNewLegendInstances() {
-    	if (init ) suite();
-    	init = false;
-    	ILegend[] legends = new ILegend[classesToTest.size()];
-        for (int i = 0; i < legends.length; i++) {
-        	legends[i] = classesToTest.get(i).newInstance();
-        }
-        return legends;
-    }
+		if (init)
+			suite();
+		init = false;
+		ILegend[] legends = new ILegend[classesToTest.size()];
+		for (int i = 0; i < legends.length; i++) {
+			legends[i] = classesToTest.get(i).newInstance();
+		}
+		return legends;
+	}
 
 	/**
-	 * this test ensures that the legend is self-defining. Checks that
-	 * the legends contained by it can be replicated, and the rules for
-	 * such legends as well.
+	 * this test ensures that the legend is self-defining. Checks that the
+	 * legends contained by it can be replicated, and the rules for such legends
+	 * as well.
+	 * 
 	 * @throws XMLException
 	 */
-	public void testILegendSelfDefinition() throws XMLException{
+	public void testILegendSelfDefinition() throws XMLException {
 		ILegend[] legends = getNewLegendInstances();
 		for (int i = 0; i < legends.length; i++) {
 			final ILegend theLegend = legends[i];
 			final ILegend cloneLegend = theLegend.cloneLegend();
-			assertTrue(theLegend.getClassName()+ " wrong class name declaration in getXMLEntity() ",
+			assertTrue(theLegend.getClassName()
+					+ " wrong class name declaration in getXMLEntity() ",
 					cloneLegend.getClass().equals(theLegend.getClass()));
 			final Field[] theLegendFields = theLegend.getClass().getFields();
 			for (int j = 0; j < theLegendFields.length; j++) {
@@ -142,7 +145,10 @@ public class TestILegend extends TestCase {
 				fi.setAccessible(true);
 
 				try {
-					assertTrue(theLegend.getClassName() + " fails or misses clonning the field " +fi.getName(),
+					assertTrue(
+							theLegend.getClassName()
+									+ " fails or misses clonning the field "
+									+ fi.getName(),
 							fi.get(theLegend).equals(fi.get(cloneLegend)));
 				} catch (IllegalArgumentException e) {
 					fail();
@@ -153,23 +159,24 @@ public class TestILegend extends TestCase {
 			}
 		}
 	}
-	
-	public void testILegendClone() throws XMLException{
+
+	public void testILegendClone() throws XMLException {
 		ILegend[] legends = getNewLegendInstances();
 		for (int i = 0; i < legends.length; i++) {
 			final ILegend theLegend = legends[i];
-			final ILegend cloneLegend =theLegend.cloneLegend();
-			
+			final ILegend cloneLegend = theLegend.cloneLegend();
+
 			XMLEntity oriXML = theLegend.getXMLEntity();
 			XMLEntity clonXML = cloneLegend.getXMLEntity();
 			assertTrue(oriXML.hash() == clonXML.hash());
 		}
 	}
 
-	class MockLegendContentsChangedListener implements LegendContentsChangedListener {
+	class MockLegendContentsChangedListener implements
+			LegendContentsChangedListener {
 		public boolean legendClearedEventFired = false;
 		public boolean symbolChangedEventFired = false;
-		
+
 		public void legendCleared(LegendClearEvent event) {
 			legendClearedEventFired = true;
 		}
@@ -179,61 +186,73 @@ public class TestILegend extends TestCase {
 			return true;
 		}
 	}
-	
-	public void testLegendContentsChangedListener(LegendContentsChangedListener listener) {
+
+	public void testLegendContentsChangedListener(
+			LegendContentsChangedListener listener) {
 		ILegend[] legends = getNewLegendInstances();
 		for (int i = 0; i < legends.length; i++) {
-			MockLegendContentsChangedListener mockLegendListener = new MockLegendContentsChangedListener();		
+			MockLegendContentsChangedListener mockLegendListener = new MockLegendContentsChangedListener();
 			MockLegendContentsChangedListener mockLegendListener2 = new MockLegendContentsChangedListener();
-			
-			legends[i].addLegendListener(mockLegendListener);
-			legends[i].fireDefaultSymbolChangedEvent(new SymbolLegendEvent(null, null));
-			assertTrue("fireDefaultSymbolChangedEvent does not " +
-					"notify to the listeners in legend '"+
-					getNameForLegend(legends[i])+"'", mockLegendListener.legendClearedEventFired);
 
-			assertTrue("adding LegendContentsChangeListeners does " +
-					"not add any listener, or getListeners() is no " +
-					"returning all the linsteners installed in the " +
-					"legend '"+getNameForLegend(legends[i]), legends[i].
-					getListeners().length == 1 &&  legends[i].getListeners()[0].
-					equals(mockLegendListener));
-			
 			legends[i].addLegendListener(mockLegendListener);
-			assertTrue("adding LegendContentsChangeListeners does " +
-					"not add any listener, or getListeners() is no " +
-					"returning all the linsteners installed in the " +
-					"legend '"+getNameForLegend(legends[i]), legends[i].
-					getListeners().length == 2 &&  legends[i].getListeners()[1].
-					equals(mockLegendListener2));
-			
-			
+			legends[i].fireDefaultSymbolChangedEvent(new SymbolLegendEvent(
+					null, null));
+			assertTrue("fireDefaultSymbolChangedEvent does not "
+					+ "notify to the listeners in legend '"
+					+ getNameForLegend(legends[i]) + "'",
+					mockLegendListener.legendClearedEventFired);
+
+			assertTrue(
+					"adding LegendContentsChangeListeners does "
+							+ "not add any listener, or getListeners() is no "
+							+ "returning all the linsteners installed in the "
+							+ "legend '" + getNameForLegend(legends[i]),
+					legends[i].getListeners().length == 1
+							&& legends[i].getListeners()[0]
+									.equals(mockLegendListener));
+
+			legends[i].addLegendListener(mockLegendListener);
+			assertTrue(
+					"adding LegendContentsChangeListeners does "
+							+ "not add any listener, or getListeners() is no "
+							+ "returning all the linsteners installed in the "
+							+ "legend '" + getNameForLegend(legends[i]),
+					legends[i].getListeners().length == 2
+							&& legends[i].getListeners()[1]
+									.equals(mockLegendListener2));
+
 			legends[i].removeLegendListener(mockLegendListener2);
-			
-			assertTrue("removing LegendContentsChangeListeners does " +
-					"not removes any listener, or getListeners() is no " +
-					"returning all the linsteners installed in the " +
-					"legend '"+getNameForLegend(legends[i]), legends[i].
-					getListeners().length == 1 &&  legends[i].getListeners().
-					equals(mockLegendListener));
-			
-			mockLegendListener.symbolChangedEventFired =false;
-			legends[i].fireDefaultSymbolChangedEvent(new SymbolLegendEvent(null, null));
-			assertFalse("removeLegendListener does not " +
-					"remove to the listeners in legend '"+
-					getNameForLegend(legends[i])+"'", mockLegendListener.legendClearedEventFired);
+
+			assertTrue(
+					"removing LegendContentsChangeListeners does "
+							+ "not removes any listener, or getListeners() is no "
+							+ "returning all the linsteners installed in the "
+							+ "legend '" + getNameForLegend(legends[i]),
+					legends[i].getListeners().length == 1
+							&& legends[i].getListeners().equals(
+									mockLegendListener));
+
+			mockLegendListener.symbolChangedEventFired = false;
+			legends[i].fireDefaultSymbolChangedEvent(new SymbolLegendEvent(
+					null, null));
+			assertFalse("removeLegendListener does not "
+					+ "remove to the listeners in legend '"
+					+ getNameForLegend(legends[i]) + "'",
+					mockLegendListener.legendClearedEventFired);
 		}
 	}
-	
+
 	/**
 	 * this test ensures that any legend always have a legend ready to be used.
 	 * an empty legend is incorrect.
-	 *
+	 * 
 	 */
 	public void testSymbolAvailability() {
 		ILegend[] legends = getNewLegendInstances();
 		for (int i = 0; i < legends.length; i++) {
-			assertNotNull("Legend no. "+i+" '"+legends[i].getClassName()+" does not have a legend ready to be used", legends[i].getDefaultSymbol());
+			assertNotNull("Legend no. " + i + " '" + legends[i].getClassName()
+					+ " does not have a legend ready to be used",
+					legends[i].getDefaultSymbol());
 		}
 
 		for (int i = 0; i < legends.length; i++) {
@@ -250,6 +269,5 @@ public class TestILegend extends TestCase {
 
 		}
 	}
-
 
 }

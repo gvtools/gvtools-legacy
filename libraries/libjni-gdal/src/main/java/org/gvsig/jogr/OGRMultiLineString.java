@@ -26,52 +26,60 @@
 
 package org.gvsig.jogr;
 
-
-/** 
+/**
  * Esta clase representa a una fuente de datos
  * 
- * @author Nacho Brodin <brodin_ign@gva.es>.<BR> Equipo de desarrollo gvSIG.<BR> http://www.gvsig.gva.es
+ * @author Nacho Brodin <brodin_ign@gva.es>.<BR>
+ *         Equipo de desarrollo gvSIG.<BR>
+ *         http://www.gvsig.gva.es
  * @version 0.0
  * @link http://www.gvsig.gva.es
  */
 
-public class OGRMultiLineString extends JNIBase{
-	
+public class OGRMultiLineString extends JNIBase {
+
 	private native void FreeOGRMultiLineStringNat(long cPtr);
-	private native String getGeometryTypeNat(long cPtr);//return OGRwkbGeometryType
+
+	private native String getGeometryTypeNat(long cPtr);// return
+														// OGRwkbGeometryType
+
 	private native OGRGeometry cloneNat(long cPtr);
-	private native int importFromWktNat(long cPtr, String[] wkt );//Excepciones
-	private native int exportToWktNat(long cPtr, String[] wkt );//Excepciones
-	private native int addGeometryDirectlyNat(long cPtr, OGRGeometry geom );//Excepciones
-	
-	
+
+	private native int importFromWktNat(long cPtr, String[] wkt);// Excepciones
+
+	private native int exportToWktNat(long cPtr, String[] wkt);// Excepciones
+
+	private native int addGeometryDirectlyNat(long cPtr, OGRGeometry geom);// Excepciones
+
 	/**
 	 * Constructor
-	 * @param cPtr	dirección de memoria al objeto OGRMultiLineString de C. 
+	 * 
+	 * @param cPtr
+	 *            dirección de memoria al objeto OGRMultiLineString de C.
 	 */
-		
-	public OGRMultiLineString(long cPtr){
-		this.cPtr=cPtr;
-	}		
-		
+
+	public OGRMultiLineString(long cPtr) {
+		this.cPtr = cPtr;
+	}
+
 	/**
-	 * Destructor 
+	 * Destructor
 	 */
-	
-	protected void finalize() throws OGRFailureException{
-		if(cPtr == 0)
+
+	protected void finalize() throws OGRFailureException {
+		if (cPtr == 0)
 			throw new OGRFailureException("Fallo al acceder al dato.");
-		
+
 		FreeOGRMultiLineStringNat(cPtr);
 	}
-	 
-//	Non standard (OGRGeometry).
-	
+
+	// Non standard (OGRGeometry).
+
 	/**
 	 * 
 	 */
-	
-	public String getGeometryName()throws OGRException{
+
+	public String getGeometryName() throws OGRException {
 		return null;
 	}
 
@@ -79,7 +87,7 @@ public class OGRMultiLineString extends JNIBase{
 	 * 
 	 */
 
-	public String getGeometryType()throws OGRException{
+	public String getGeometryType() throws OGRException {
 		return null;
 	}
 
@@ -87,7 +95,7 @@ public class OGRMultiLineString extends JNIBase{
 	 * 
 	 */
 
-	public OGRGeometry cloneMultiPolygon()throws OGRException{
+	public OGRGeometry cloneMultiPolygon() throws OGRException {
 		return null;
 	}
 
@@ -95,27 +103,26 @@ public class OGRMultiLineString extends JNIBase{
 	 * 
 	 */
 
-	public void importFromWkt( String[] wkt )throws OGRException{//Excepciones
-		
+	public void importFromWkt(String[] wkt) throws OGRException {// Excepciones
+
 	}
 
 	/**
 	 * 
 	 */
 
-	public void exportToWkt( String[] wkt )throws OGRException{//Excepciones
-		
+	public void exportToWkt(String[] wkt) throws OGRException {// Excepciones
+
 	}
 
-    // Non standard
+	// Non standard
 
 	/**
 	 * 
 	 */
 
-	public void addGeometryDirectly( OGRGeometry geom )throws OGRException{//Excepciones
-		
+	public void addGeometryDirectly(OGRGeometry geom) throws OGRException {// Excepciones
+
 	}
-	
-	
+
 }

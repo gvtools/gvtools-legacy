@@ -19,10 +19,11 @@
 package org.gvsig.raster.grid.filter.enhancement;
 
 import org.gvsig.raster.dataset.IBuffer;
+
 /**
- * Filtro de realce para tipos de datos Double. En el método de proceso 
- * procesa un solo pixel double. Asigna su valor en relación a los datos calculados
- * en el método pre() del padre.
+ * Filtro de realce para tipos de datos Double. En el método de proceso procesa
+ * un solo pixel double. Asigna su valor en relación a los datos calculados en
+ * el método pre() del padre.
  * 
  * @version 11/05/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
@@ -31,28 +32,33 @@ public class LinearEnhancementDoubleFilter extends LinearEnhancementFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.enhancement.LinearEnhancementFilter#process(int, int)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.enhancement.LinearEnhancementFilter#process
+	 * (int, int)
 	 */
 	public void process(int col, int line) throws InterruptedException {
-		for (int iBand = 0; iBand < raster.getBandCount(); iBand ++) {
+		for (int iBand = 0; iBand < raster.getBandCount(); iBand++) {
 			double p = raster.getElemDouble(line, col, iBand);
-			if(renderBands[iBand] < 0) {
-				rasterResult.setElem(line, col, iBand, (byte)p);
+			if (renderBands[iBand] < 0) {
+				rasterResult.setElem(line, col, iBand, (byte) p);
 				continue;
 			}
 			if (p > maxBandValue[renderBands[iBand]])
 				p = (double) maxBandValue[renderBands[iBand]];
 			else if (p < minBandValue[renderBands[iBand]])
 				p = (double) minBandValue[renderBands[iBand]];
-			
-			int value = (int)(((int) (( p * scale[renderBands[iBand]]) + offset[renderBands[iBand]])) & 0xff);
-			rasterResult.setElem(line, col, iBand, (byte)value);
+
+			int value = (int) (((int) ((p * scale[renderBands[iBand]]) + offset[renderBands[iBand]])) & 0xff);
+			rasterResult.setElem(line, col, iBand, (byte) value);
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.enhancement.LinearEnhancementFilter#getInRasterDataType()
+	 * 
+	 * @see org.gvsig.raster.grid.filter.enhancement.LinearEnhancementFilter#
+	 * getInRasterDataType()
 	 */
 	public int getInRasterDataType() {
 		return IBuffer.TYPE_DOUBLE;

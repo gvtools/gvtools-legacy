@@ -19,37 +19,36 @@ public class WizardAndami extends JPanel implements IWindow {
 
 	// No deberían necesitarse un FinishAction y un CancelAction, pero bueno,
 	// lo mantengo por ahora.
-	private class CloseAction extends FinishAction
-	{
+	private class CloseAction extends FinishAction {
 		IWindow v;
-		public CloseAction(IWindow view)
-		{
+
+		public CloseAction(IWindow view) {
 			super(wizardPanel.getWizardComponents());
 			v = view;
 		}
-		public void performAction() {
-			PluginServices.getMDIManager().closeWindow(v);
-		}
 
-	}
-	private class CloseAction2 extends CancelAction
-	{
-
-		IWindow v;
-		public CloseAction2(IWindow view)
-		{
-			super(wizardPanel.getWizardComponents());
-			v = view;
-		}
 		public void performAction() {
 			PluginServices.getMDIManager().closeWindow(v);
 		}
 
 	}
 
+	private class CloseAction2 extends CancelAction {
 
-	public WizardAndami(ImageIcon logo)
-	{
+		IWindow v;
+
+		public CloseAction2(IWindow view) {
+			super(wizardPanel.getWizardComponents());
+			v = view;
+		}
+
+		public void performAction() {
+			PluginServices.getMDIManager().closeWindow(v);
+		}
+
+	}
+
+	public WizardAndami(ImageIcon logo) {
 		wizardPanel = new WizardPanelWithLogo(logo);
 		CloseAction closeAction = new CloseAction(this);
 		CloseAction2 closeAction2 = new CloseAction2(this);
@@ -60,16 +59,14 @@ public class WizardAndami extends JPanel implements IWindow {
 		this.add(wizardPanel, BorderLayout.CENTER);
 	}
 
-	public DefaultJWizardComponents getWizardComponents()
-	{
+	public DefaultJWizardComponents getWizardComponents() {
 		return wizardPanel.getWizardComponents();
 	}
 
-
 	public WindowInfo getWindowInfo() {
-		if (viewInfo == null)
-		{
-			viewInfo = new WindowInfo(WindowInfo.MODALDIALOG|WindowInfo.RESIZABLE);
+		if (viewInfo == null) {
+			viewInfo = new WindowInfo(WindowInfo.MODALDIALOG
+					| WindowInfo.RESIZABLE);
 		}
 		return viewInfo;
 	}

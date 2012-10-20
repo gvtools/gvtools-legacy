@@ -63,22 +63,21 @@ import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.styles.ArrowDecoratorStyle;
 import com.iver.cit.gvsig.fmap.core.symbols.ArrowMarkerSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.IMarkerSymbol;
-import com.iver.cit.gvsig.gui.styling.SymbolSelector;
 import com.iver.cit.gvsig.project.documents.view.legend.gui.ISymbolSelector;
 
 /**
- * Implements a tab to modify attributes of an arrow decorator (size,
- * arrow sharpnss, symbol, number of symbols to draw in the same line and options
- * for flip and rotate the arrow)which allows the user to insert a symbol in the
+ * Implements a tab to modify attributes of an arrow decorator (size, arrow
+ * sharpnss, symbol, number of symbols to draw in the same line and options for
+ * flip and rotate the arrow)which allows the user to insert a symbol in the
  * line (for example an arrow to specify its orientation)and to modify it.
- *
+ * 
  * <p>
  * This tab is used several times in different places in our applicattion .For
  * this reason, in order to avoid the repetition of code, this class has been
  * created (instead of treat it like a simple tab). With this solution, the user
- * only has to refer it to use it (and do not need to create a tab and fill it again
- * and so on).
-
+ * only has to refer it to use it (and do not need to create a tab and fill it
+ * again and so on).
+ * 
  * @autor jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class ArrowDecorator extends DefaultBean implements ActionListener {
@@ -103,69 +102,65 @@ public class ArrowDecorator extends DefaultBean implements ActionListener {
 		setName(PluginServices.getText(this, "arrow_decorator"));
 		setLayout(new BorderLayout(10, 10));
 
-		chkUseDecorator = new JCheckBox(PluginServices.getText(this, "use_decorator"));
+		chkUseDecorator = new JCheckBox(PluginServices.getText(this,
+				"use_decorator"));
 
 		JPanel aux = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		GridBagLayoutPanel pnlTopOptions = new GridBagLayoutPanel();
 		pnlTopOptions.addComponent(chkUseDecorator);
 		pnlTopOptions.addComponent(PluginServices.getText(this, "size"),
-				incrSize = new  JIncrementalNumberField(
-						"0",
-						5,
+				incrSize = new JIncrementalNumberField("0", 5,
 						ValidatingTextField.DOUBLE_VALIDATOR,
-						ValidatingTextField.NUMBER_CLEANER,
-						0,
-						Integer.MAX_VALUE,
-						1)
-		);
-		pnlTopOptions.addComponent(PluginServices.getText(this, "arrow_sharpness"),
-				incrSharpness = new  JIncrementalNumberField(
-						"0",
-						5,
+						ValidatingTextField.NUMBER_CLEANER, 0,
+						Integer.MAX_VALUE, 1));
+		pnlTopOptions.addComponent(PluginServices.getText(this,
+				"arrow_sharpness"),
+				incrSharpness = new JIncrementalNumberField("0", 5,
 						ValidatingTextField.DOUBLE_VALIDATOR,
-						ValidatingTextField.NUMBER_CLEANER,
-						0,
-						Integer.MAX_VALUE,
-						1)
-		);
+						ValidatingTextField.NUMBER_CLEANER, 0,
+						Integer.MAX_VALUE, 1));
 		JPanel aux2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-		aux2.add(	incrPositionCount = new JIncrementalNumberField(
-				"0",
-				5,
+		aux2.add(incrPositionCount = new JIncrementalNumberField("0", 5,
 				ValidatingTextField.INTEGER_VALIDATOR,
-				ValidatingTextField.NUMBER_CLEANER,
-				0,
-				Integer.MAX_VALUE,
-				1)
-		);
-//		JButton btnChooseSymbol = new JButton(PluginServices.getText(this, "symbol"));
-//		JPanel aux3 = new JPanel(new FlowLayout(FlowLayout.LEFT,5, 0));
-//		aux3.add(btnChooseSymbol);
-//		aux2.add(aux3);
+				ValidatingTextField.NUMBER_CLEANER, 0, Integer.MAX_VALUE, 1));
+		// JButton btnChooseSymbol = new JButton(PluginServices.getText(this,
+		// "symbol"));
+		// JPanel aux3 = new JPanel(new FlowLayout(FlowLayout.LEFT,5, 0));
+		// aux3.add(btnChooseSymbol);
+		// aux2.add(aux3);
 
-
-		JPanel aux3 = new JPanel(new FlowLayout(FlowLayout.LEFT,5, 0));
+		JPanel aux3 = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
 		aux3.add(getBtnOpenSymbolSelector());
 		aux2.add(aux3);
 
-		pnlTopOptions.addComponent(PluginServices.getText(this, "number_of_positions")+":", aux2);
+		pnlTopOptions
+				.addComponent(
+						PluginServices.getText(this, "number_of_positions")
+								+ ":", aux2);
 		aux.add(pnlTopOptions);
 		add(aux, BorderLayout.NORTH);
 
-		aux = new JPanel(new BorderLayout(5,5));
+		aux = new JPanel(new BorderLayout(5, 5));
 		aux2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		GridBagLayoutPanel pnlFlip = new GridBagLayoutPanel();
-		pnlFlip.setBorder(BorderFactory.createTitledBorder(PluginServices.getText(this, "flip")+":"));
-		pnlFlip.addComponent(chkFlipAll = new JCheckBox(PluginServices.getText(this, "flip_all")));
-		pnlFlip.addComponent(chkFlipFirst = new JCheckBox(PluginServices.getText(this, "flip_first")));
-
+		pnlFlip.setBorder(BorderFactory.createTitledBorder(PluginServices
+				.getText(this, "flip") + ":"));
+		pnlFlip.addComponent(chkFlipAll = new JCheckBox(PluginServices.getText(
+				this, "flip_all")));
+		pnlFlip.addComponent(chkFlipFirst = new JCheckBox(PluginServices
+				.getText(this, "flip_first")));
 
 		aux2.add(pnlFlip);
 
 		GridBagLayoutPanel pnlRotation = new GridBagLayoutPanel();
-		pnlRotation.setBorder(BorderFactory.createTitledBorder(PluginServices.getText(this, "rotation")+":"));
-		pnlRotation.addComponent(rdBtnFollowLine = new JRadioButton(PluginServices.getText(this, "rotate_symbol_to_follow_line_angle")));
-		pnlRotation.addComponent(rdBtnFixedAngle = new JRadioButton(PluginServices.getText(this, "keep_symbol_at_fixed_angle_to_page")));
+		pnlRotation.setBorder(BorderFactory.createTitledBorder(PluginServices
+				.getText(this, "rotation") + ":"));
+		pnlRotation.addComponent(rdBtnFollowLine = new JRadioButton(
+				PluginServices.getText(this,
+						"rotate_symbol_to_follow_line_angle")));
+		pnlRotation.addComponent(rdBtnFixedAngle = new JRadioButton(
+				PluginServices.getText(this,
+						"keep_symbol_at_fixed_angle_to_page")));
 		ButtonGroup group = new ButtonGroup();
 		group.add(rdBtnFixedAngle);
 		group.add(rdBtnFollowLine);
@@ -185,13 +180,14 @@ public class ArrowDecorator extends DefaultBean implements ActionListener {
 	}
 
 	/**
-	 * Defines  the attributes that appear in the arrow decorator tab and will
-	 * determine the arrow decorator style.If this style has not been created previosly,
-	 * it will be done.
+	 * Defines the attributes that appear in the arrow decorator tab and will
+	 * determine the arrow decorator style.If this style has not been created
+	 * previosly, it will be done.
+	 * 
 	 * @param ads
 	 */
 	public void setArrowDecoratorStyle(ArrowDecoratorStyle ads) {
-		chkUseDecorator.setSelected(ads!=null);
+		chkUseDecorator.setSelected(ads != null);
 
 		if (ads == null) {
 			ads = new ArrowDecoratorStyle();
@@ -209,16 +205,18 @@ public class ArrowDecorator extends DefaultBean implements ActionListener {
 		rdBtnFollowLine.setSelected(ads.isFollowLineAngle());
 
 	}
+
 	/**
-	 * Obtains the values of the attributes of an arrow decorator.This attributes
-	 * will be different depending on the type of the symbol that the user had selected
-	 * (because if for example the arrow is changed into a square the sharpness won't
-	 * necessary and so on)
-	 *
+	 * Obtains the values of the attributes of an arrow decorator.This
+	 * attributes will be different depending on the type of the symbol that the
+	 * user had selected (because if for example the arrow is changed into a
+	 * square the sharpness won't necessary and so on)
+	 * 
 	 * @return
 	 */
 	public ArrowDecoratorStyle getArrowDecoratorStyle() {
-		if (!chkUseDecorator.isSelected()) return null;
+		if (!chkUseDecorator.isSelected())
+			return null;
 
 		ArrowDecoratorStyle ads = new ArrowDecoratorStyle();
 		if (marker == null) {
@@ -238,11 +236,11 @@ public class ArrowDecorator extends DefaultBean implements ActionListener {
 		return ads;
 	}
 
-
 	public void actionPerformed(ActionEvent e) {
 		JComponent c = (JComponent) e.getSource();
 		if (c.equals(getBtnOpenSymbolSelector())) {
-			ISymbolSelector se = SymbolSelector.createSymbolSelector(marker, FShape.POINT);
+			ISymbolSelector se = SymbolSelector.createSymbolSelector(marker,
+					FShape.POINT);
 			PluginServices.getMDIManager().addWindow(se);
 			marker = (IMarkerSymbol) se.getSelectedObject();
 
@@ -256,7 +254,8 @@ public class ArrowDecorator extends DefaultBean implements ActionListener {
 	private JButton getBtnOpenSymbolSelector() {
 		if (btnOpenSymbolSelector == null) {
 			btnOpenSymbolSelector = new JButton();
-			btnOpenSymbolSelector.setText(PluginServices.getText(this, "choose_symbol"));
+			btnOpenSymbolSelector.setText(PluginServices.getText(this,
+					"choose_symbol"));
 			btnOpenSymbolSelector.addActionListener(this);
 		}
 		return btnOpenSymbolSelector;

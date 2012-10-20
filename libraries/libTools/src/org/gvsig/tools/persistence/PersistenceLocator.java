@@ -19,7 +19,7 @@ public class PersistenceLocator extends AbstractLocator {
 
 	/**
 	 * Return the singleton instance.
-	 *
+	 * 
 	 * @return the singleton instance
 	 */
 	public static PersistenceLocator getInstance() {
@@ -32,7 +32,7 @@ public class PersistenceLocator extends AbstractLocator {
 
 	/**
 	 * Return a reference to PersistenceManager.
-	 *
+	 * 
 	 * @return a reference to PersistenceManager
 	 * @throws LocatorException
 	 *             if there is no access to the class or the class cannot be
@@ -46,7 +46,7 @@ public class PersistenceLocator extends AbstractLocator {
 
 	/**
 	 * Registers the Class implementing the PersistenceManager interface.
-	 *
+	 * 
 	 * @param clazz
 	 *            implementing the DataManager interface
 	 */

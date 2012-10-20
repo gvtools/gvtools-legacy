@@ -64,32 +64,34 @@ import org.gvsig.gpe.xml.utils.XMLAttributesIterator;
  *
  */
 /**
- * It parses an element. An element is a tag inside of a 
- * metadata tag
+ * It parses an element. An element is a tag inside of a metadata tag
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class ElementBinding {
 	/**
 	 * It parses a xml element
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
 	 * @param parentElement
-	 * The parent element
-	 * @return
-	 * A Element
+	 *            The parent element
+	 * @return A Element
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public  Object parse(IXmlStreamReader parser,GPEDeafultKmlParser handler, Object feature, Object parentElement) throws XmlStreamException, IOException {
+	public Object parse(IXmlStreamReader parser, GPEDeafultKmlParser handler,
+			Object feature, Object parentElement) throws XmlStreamException,
+			IOException {
 		boolean endFeature = false;
-		int currentTag;		
-		Object element = null;	
+		int currentTag;
+		Object element = null;
 		Object value = null;
 		boolean isInitialized = false;
-		//Used to finish to parse the current element
+		// Used to finish to parse the current element
 		QName elementRootType = parser.getName();
 
 		String type = getType(elementRootType.getLocalPart());
@@ -97,72 +99,73 @@ public class ElementBinding {
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		XMLAttributesIterator attributesIterator = new XMLAttributesIterator(parser);
-		
-		while (!endFeature){
-			switch(currentTag){
+		XMLAttributesIterator attributesIterator = new XMLAttributesIterator(
+				parser);
+
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-				if (!(CompareUtils.compareWithNamespace(tag,elementRootType))){
-					if (!isInitialized){
-						element = handler.getContentHandler().startElement(elementRootType.getNamespaceURI(),
-								KMLUtilsParser.removeBlancSymbol(elementRootType), 
-								null,
-								attributesIterator,
-								parentElement);
+				if (!(CompareUtils.compareWithNamespace(tag, elementRootType))) {
+					if (!isInitialized) {
+						element = handler.getContentHandler().startElement(
+								elementRootType.getNamespaceURI(),
+								KMLUtilsParser
+										.removeBlancSymbol(elementRootType),
+								null, attributesIterator, parentElement);
 						isInitialized = true;
 					}
-					handler.getProfile().getElementBinding().parse(parser, handler, feature, element);
+					handler.getProfile().getElementBinding()
+							.parse(parser, handler, feature, element);
 				}
 
 				break;
 			case IXmlStreamReader.END_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,elementRootType)){						
+				if (CompareUtils.compareWithNamespace(tag, elementRootType)) {
 					endFeature = true;
-					if (!isInitialized){
+					if (!isInitialized) {
 						element = handler.getContentHandler().startElement(
 								elementRootType.getNamespaceURI(),
-								KMLUtilsParser.removeBlancSymbol(elementRootType), 
-								value,	
-								attributesIterator,
-								parentElement);
+								KMLUtilsParser
+										.removeBlancSymbol(elementRootType),
+								value, attributesIterator, parentElement);
 						isInitialized = true;
 					}
 					handler.getContentHandler().endElement(element);
 				}
 				break;
-			case IXmlStreamReader.CHARACTERS:					
+			case IXmlStreamReader.CHARACTERS:
 				value = getValue(type, parser.getText());
 				break;
 			}
-			if (!endFeature){					
+			if (!endFeature) {
 				currentTag = parser.next();
 				tag = parser.getName();
 			}
 		}
-		return element;		
+		return element;
 	}
 
 	/**
 	 * This method has to calculate the element type
+	 * 
 	 * @param name
-	 * Element name
-	 * @return
-	 * Element type
+	 *            Element name
+	 * @return Element type
 	 */
-	private  String getType(String name){
+	private String getType(String name) {
 		return "xs:string";
 	}
 
 	/**
 	 * This method must return the element value
+	 * 
 	 * @param type
-	 * XS Element type
+	 *            XS Element type
 	 * @param value
-	 * Element value like a String
-	 * @return
-	 * Element value
+	 *            Element value like a String
+	 * @return Element value
 	 */
-	private  Object getValue(String type, String value){
+	private Object getValue(String type, String value) {
 		return value;
 	}
 

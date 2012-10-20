@@ -27,55 +27,62 @@ import java.text.DecimalFormat;
 import org.gvsig.quickInfo.tools.QuickInfoListener;
 
 /**
- * <p>Class that has a method to format decimal numbers with the criterions
- *  to display them as calculated fields in the {@link QuickInfoListener QuickInfoListener} tool.</p>
- *
+ * <p>
+ * Class that has a method to format decimal numbers with the criterions to
+ * display them as calculated fields in the {@link QuickInfoListener
+ * QuickInfoListener} tool.
+ * </p>
+ * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class FormatDecimalNumber {
-    /**
-     * <p>Formats a decimal number according some criterions:
-     *  <ul>
-     *   <li>If number has more than 10 digits: uses scientific notation.</li>
-     *   <li>If number has more than 5 0's before the first non-zero after the comma: uses scientific notation.</li>
-     *   <li>Otherwise uses normal notation.</li>
-     *   <li>Uses 6 decimal digits as much.</li>
-     *  </ul>
-     * </p>
-     * 
-     * @param number the decimal number to be formatted
-     * @return the decimal number formatted
-     */
-    public static String formatDecimal(double number) {
-    	DecimalFormat dFormat = null; 
+	/**
+	 * <p>
+	 * Formats a decimal number according some criterions:
+	 * <ul>
+	 * <li>If number has more than 10 digits: uses scientific notation.</li>
+	 * <li>If number has more than 5 0's before the first non-zero after the
+	 * comma: uses scientific notation.</li>
+	 * <li>Otherwise uses normal notation.</li>
+	 * <li>Uses 6 decimal digits as much.</li>
+	 * </ul>
+	 * </p>
+	 * 
+	 * @param number
+	 *            the decimal number to be formatted
+	 * @return the decimal number formatted
+	 */
+	public static String formatDecimal(double number) {
+		DecimalFormat dFormat = null;
 
-    	double abs_number = Math.abs(number);
+		double abs_number = Math.abs(number);
 
-    	if ((abs_number >= 10E9) || (abs_number <= 10E-6)) {
-        	dFormat = new DecimalFormat("0.######E0");
-        	dFormat.setGroupingUsed(false);
-    		return dFormat.format(number);
-    	}
+		if ((abs_number >= 10E9) || (abs_number <= 10E-6)) {
+			dFormat = new DecimalFormat("0.######E0");
+			dFormat.setGroupingUsed(false);
+			return dFormat.format(number);
+		}
 
-    	dFormat = new DecimalFormat("0.######");
-    	dFormat.setGroupingUsed(false);
+		dFormat = new DecimalFormat("0.######");
+		dFormat.setGroupingUsed(false);
 		return dFormat.format(number);
-    }
+	}
 
-    public static String formatDecimal(double number, String base, boolean superIndex) {
-    	String f_number = formatDecimal(number);
-    	
-    	String[] parts = f_number.split("E");
-    	
-    	if (parts.length == 2) {
-    		String exp = parts[1];
-    		
-    		if (superIndex)
-    			exp = "<sup>" + exp + "</sup>";
-    		
-    		f_number = parts[0] + base + exp;
-    	}
-    	System.out.println(f_number);
-    	return f_number;
-    }
+	public static String formatDecimal(double number, String base,
+			boolean superIndex) {
+		String f_number = formatDecimal(number);
+
+		String[] parts = f_number.split("E");
+
+		if (parts.length == 2) {
+			String exp = parts[1];
+
+			if (superIndex)
+				exp = "<sup>" + exp + "</sup>";
+
+			f_number = parts[0] + base + exp;
+		}
+		System.out.println(f_number);
+		return f_number;
+	}
 }

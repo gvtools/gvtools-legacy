@@ -19,28 +19,30 @@
 package org.gvsig.raster.grid.filter;
 
 /**
- * Excepción lanzada por un filtro o proceso. Cuando es lanzada significa que 
- * el filtro no puede ser añadido.
+ * Excepción lanzada por un filtro o proceso. Cuando es lanzada significa que el
+ * filtro no puede ser añadido.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
 public class FilterAddException extends Exception {
 	private static final long serialVersionUID = 5187136969233163574L;
 
 	/**
 	 * Constructor. Asigna el texto de la excepción
+	 * 
 	 * @param msg
 	 */
-	public FilterAddException(String msg){
+	public FilterAddException(String msg) {
 		super(msg);
 	}
-	
+
 	/**
 	 * Constructor. Asigna el texto de la excepción y la excepción generica.
+	 * 
 	 * @param msg
 	 */
-	public FilterAddException(String msg, Exception e){
+	public FilterAddException(String msg, Exception e) {
 		super(msg, e);
 	}
 }

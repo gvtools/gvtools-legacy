@@ -21,19 +21,22 @@ package org.gvsig.raster.util;
 import java.util.EventListener;
 
 /**
- * Listener con los eventos que puede disparar una propiedad. Este interfaz forma parte
- * del servicio de actualización de nombre de capa único. Este proporciona un nombre de capa
- * raster temporal que no haya sido utilizado todavía. Cuando alguien modifica este nombre de capa
- * se lanza este evento y todos los que necesitan un nombre de capa se actualizan. Puede utilizarse
+ * Listener con los eventos que puede disparar una propiedad. Este interfaz
+ * forma parte del servicio de actualización de nombre de capa único. Este
+ * proporciona un nombre de capa raster temporal que no haya sido utilizado
+ * todavía. Cuando alguien modifica este nombre de capa se lanza este evento y
+ * todos los que necesitan un nombre de capa se actualizan. Puede utilizarse
  * para cualquier cambio de un propiedad.
  * 
  * 07/01/2008
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public interface PropertyListener extends EventListener {
-		/**
-		 * Evento que se dispara cuando cambia el valor de la propiedad.
-		 * @param e
-		 */
-		public void actionValueChanged(PropertyEvent e);
+	/**
+	 * Evento que se dispara cuando cambia el valor de la propiedad.
+	 * 
+	 * @param e
+	 */
+	public void actionValueChanged(PropertyEvent e);
 }

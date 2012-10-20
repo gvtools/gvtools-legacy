@@ -65,6 +65,7 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * It parses a gml:BoundingShapeType object. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;gml:boundedBy&gt;
@@ -75,55 +76,60 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  * &lt;/gml:boundedBy&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class BoundedByTypeBinding {
-	
+
 	/**
 	 * It parses the gml:shapeType tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * The Bounding box
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return The Bounding box
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public Object parse(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
+	public Object parse(IXmlStreamReader parser, GPEDefaultGmlParser handler)
+			throws XmlStreamException, IOException {
 		boolean endFeature = false;
 		int currentTag;
-		Object bbox = null;		
-		
+		Object bbox = null;
+
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-					bbox = parseTag(parser, handler, tag);
-					break;
-				case IXmlStreamReader.END_ELEMENT:
-					if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_BOUNDEDBY)){						
-						endFeature = true;						
-					}
-					break;
-				case IXmlStreamReader.CHARACTERS:			
-					
-					break;
+				bbox = parseTag(parser, handler, tag);
+				break;
+			case IXmlStreamReader.END_ELEMENT:
+				if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_BOUNDEDBY)) {
+					endFeature = true;
 				}
-				if (!endFeature){					
-					currentTag = parser.next();
-					tag = parser.getName();
-				}
-			}			
-		return bbox;	
+				break;
+			case IXmlStreamReader.CHARACTERS:
+
+				break;
+			}
+			if (!endFeature) {
+				currentTag = parser.next();
+				tag = parser.getName();
+			}
+		}
+		return bbox;
 	}
-	
+
 	/**
 	 * Parses the tag
+	 * 
 	 * @param parser
 	 * @param handler
 	 * @param tag
@@ -131,10 +137,13 @@ public class BoundedByTypeBinding {
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	protected Object parseTag(IXmlStreamReader parser,GPEDefaultGmlParser handler, QName tag) throws XmlStreamException, IOException{
+	protected Object parseTag(IXmlStreamReader parser,
+			GPEDefaultGmlParser handler, QName tag) throws XmlStreamException,
+			IOException {
 		Object bbox = null;
-		if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_BOX)){
-			bbox = handler.getProfile().getBoxTypeBinding().parse(parser, handler);
+		if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_BOX)) {
+			bbox = handler.getProfile().getBoxTypeBinding()
+					.parse(parser, handler);
 		}
 		return bbox;
 	}

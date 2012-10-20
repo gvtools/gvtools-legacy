@@ -53,33 +53,31 @@ import java.util.ArrayList;
  */
 public class WFSTransactionFactory {
 	private static ArrayList transactions = null;
-	
-	static{
+
+	static {
 		transactions = new ArrayList();
 		transactions.add(new WFSTTransaction_1_0_0());
 		transactions.add(new WFSTTransaction_1_1_0());
 	}
-	
+
 	/**
-	 * Cretates a transaction. By default it returns a WFS 1.0.0
-	 * transaction
+	 * Cretates a transaction. By default it returns a WFS 1.0.0 transaction
+	 * 
 	 * @param version
-	 * The WFS version
-	 * @return
-	 * A WFS transaction
+	 *            The WFS version
+	 * @return A WFS transaction
 	 */
-	public static WFSTTransaction createTransaction(String version, 
-			String typename,
-			String namespaceprefix,
-			String namespace,
-			ArrayList featuresLocked){
-		if (version == null){
-			return new WFSTTransaction_1_0_0(typename,namespaceprefix, namespace, featuresLocked);
+	public static WFSTTransaction createTransaction(String version,
+			String typename, String namespaceprefix, String namespace,
+			ArrayList featuresLocked) {
+		if (version == null) {
+			return new WFSTTransaction_1_0_0(typename, namespaceprefix,
+					namespace, featuresLocked);
 		}
-		for (int i=0 ; i<transactions.size() ; i++){
-			WFSTTransaction transaction = (WFSTTransaction)transactions.get(i);
-			if (transaction.getVersion().compareTo(version) == 0){
-				try{
+		for (int i = 0; i < transactions.size(); i++) {
+			WFSTTransaction transaction = (WFSTTransaction) transactions.get(i);
+			if (transaction.getVersion().compareTo(version) == 0) {
+				try {
 					Class[] args = new Class[4];
 					args[0] = String.class;
 					args[1] = String.class;
@@ -90,12 +88,15 @@ public class WFSTransactionFactory {
 					params[1] = namespaceprefix;
 					params[2] = namespace;
 					params[3] = featuresLocked;
-					return (WFSTTransaction)transaction.getClass().getConstructor(args).newInstance(params);
-				}catch(Exception e){
-					return new WFSTTransaction_1_0_0(typename,namespaceprefix,namespace,featuresLocked);
+					return (WFSTTransaction) transaction.getClass()
+							.getConstructor(args).newInstance(params);
+				} catch (Exception e) {
+					return new WFSTTransaction_1_0_0(typename, namespaceprefix,
+							namespace, featuresLocked);
 				}
 			}
 		}
-		return new WFSTTransaction_1_0_0(typename,namespaceprefix,namespace,featuresLocked);
+		return new WFSTTransaction_1_0_0(typename, namespaceprefix, namespace,
+				featuresLocked);
 	}
 }

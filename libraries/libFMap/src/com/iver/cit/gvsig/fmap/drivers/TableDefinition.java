@@ -57,7 +57,9 @@ public class TableDefinition implements ITableDefinition {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.iver.cit.gvsig.fmap.drivers.ITableDefinition#setName(java.lang.String)
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.ITableDefinition#setName(java.lang.String
+	 * )
 	 */
 	public void setName(String Name) {
 		this.name = Name;
@@ -75,12 +77,12 @@ public class TableDefinition implements ITableDefinition {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.iver.cit.gvsig.fmap.drivers.ITableDefinition#setFieldsDesc(com.iver.cit.gvsig.fmap.drivers.FieldDescription[])
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.ITableDefinition#setFieldsDesc(com.iver
+	 * .cit.gvsig.fmap.drivers.FieldDescription[])
 	 */
 	public void setFieldsDesc(FieldDescription[] fieldsDesc) {
 		this.fieldsDesc = fieldsDesc;
 	}
 
 }
-
-

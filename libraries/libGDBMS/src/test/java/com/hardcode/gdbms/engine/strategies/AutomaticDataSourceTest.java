@@ -11,18 +11,18 @@ import com.hardcode.gdbms.engine.data.NoSuchTableException;
  * @author Fernando González Cortés
  */
 public class AutomaticDataSourceTest extends DataSourceTestCase {
-    public void testGetFieldNames() {
-        DataSource d;
-        try {
-            d = ds.createRandomDataSource("persona", DataSourceFactory.AUTOMATIC_OPENING);
-            d.getFieldNames();
-            assertTrue(true);
-            return;
-        } catch (DriverLoadException e) {
-        } catch (NoSuchTableException e) {
-        } catch (ReadDriverException e) {
-        }
-        assertTrue(false);
-    }
+	public void testGetFieldNames() {
+		DataSource d;
+		try {
+			d = ds.createRandomDataSource("persona",
+					DataSourceFactory.AUTOMATIC_OPENING);
+			d.getFieldNames();
+			assertTrue(true);
+			return;
+		} catch (DriverLoadException e) {
+		} catch (NoSuchTableException e) {
+		} catch (ReadDriverException e) {
+		}
+		assertTrue(false);
+	}
 }
-

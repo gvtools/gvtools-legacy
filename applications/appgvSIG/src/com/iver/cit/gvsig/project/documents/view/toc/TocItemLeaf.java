@@ -69,9 +69,9 @@ import com.iver.cit.gvsig.project.documents.view.toc.actions.ChangeSymbolTocMenu
 
 /**
  * @author FJP
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
+ * 
+ *         TODO To change the template for this generated type comment go to
+ *         Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class TocItemLeaf implements ITocItem {
 
@@ -80,161 +80,191 @@ public class TocItemLeaf implements ITocItem {
 	private int layerType;
 	private static int w_1symbol = 20;
 	private static int h_1symbol = 15;
-	
+
 	private Dimension sz;
 	BufferedImage imgLegend = null;
-	
-    final public static DataFlavor INFO_FLAVOR =
-	    new DataFlavor(TocItemLeaf.class, "ItemLeaf");
 
-	static DataFlavor flavors[] = {INFO_FLAVOR };
-	
-	
-	public TocItemLeaf(ISymbol symbol, String description, int layerType)
-	{
+	final public static DataFlavor INFO_FLAVOR = new DataFlavor(
+			TocItemLeaf.class, "ItemLeaf");
+
+	static DataFlavor flavors[] = { INFO_FLAVOR };
+
+	public TocItemLeaf(ISymbol symbol, String description, int layerType) {
 		this.symbol = symbol;
 		this.description = description;
 		this.layerType = layerType;
 	}
-	public TocItemLeaf()
-	{
-		
+
+	public TocItemLeaf() {
+
 	}
-	public void setImageLegend(Image imageLegend, String descrip, Dimension size) 
-	{		
+
+	public void setImageLegend(Image imageLegend, String descrip, Dimension size) {
 		this.description = descrip;
 		this.sz = size;
-		imgLegend = new BufferedImage(sz.width, sz.height, BufferedImage.TYPE_INT_ARGB);
+		imgLegend = new BufferedImage(sz.width, sz.height,
+				BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2 = imgLegend.createGraphics();
 		// Rectangle r = new Rectangle(sz.width, sz.height);
 		// TODO: Calcular ratio
 
-		double ratioImage =  (double) imageLegend.getWidth(null) / (double) imageLegend.getHeight(null);
-	    double ratioToc  = (double) sz.width / (double) sz.height;
+		double ratioImage = (double) imageLegend.getWidth(null)
+				/ (double) imageLegend.getHeight(null);
+		double ratioToc = (double) sz.width / (double) sz.height;
 
-	    boolean resul = g2.drawImage(imageLegend, 0, 0, sz.width, sz.height, null);
-//		if (ratioImage > ratioToc) {
-//			int newHeight = (int) (sz.width / ratioImage);
-//			boolean resul = g2.drawImage(imageLegend, 0, 0, sz.width, newHeight, null);
-//		} else {
-//			int newWidth = (int) (sz.height * ratioImage);
-//			boolean resul = g2.drawImage(imageLegend, 0, 0, newWidth, sz.height, null);
-//		}
-		
+		boolean resul = g2.drawImage(imageLegend, 0, 0, sz.width, sz.height,
+				null);
+		// if (ratioImage > ratioToc) {
+		// int newHeight = (int) (sz.width / ratioImage);
+		// boolean resul = g2.drawImage(imageLegend, 0, 0, sz.width, newHeight,
+		// null);
+		// } else {
+		// int newWidth = (int) (sz.height * ratioImage);
+		// boolean resul = g2.drawImage(imageLegend, 0, 0, newWidth, sz.height,
+		// null);
+		// }
+
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.gui.toc.ITocItem#getLabel()
 	 */
 	public String getLabel() {
 		return description;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.gui.toc.ITocItem#getIcon()
 	 */
 	public Icon getIcon() {
 		// System.out.println("Dentro de getIcon: layerType=" + layerType);
-		if (imgLegend != null)
-		{
-//			Graphics2D g2 = imgLegend.createGraphics();
-//			g2.drawString("Prueba", 10, 20);
+		if (imgLegend != null) {
+			// Graphics2D g2 = imgLegend.createGraphics();
+			// g2.drawString("Prueba", 10, 20);
 			return new ImageIcon(imgLegend);
 		}
-		
+
 		BufferedImage img = null;
 		Graphics2D g2 = null;
 		Rectangle r = null;
-		
-		switch (layerType)
-		{
-			case FShape.POINT:
-			case FShape.LINE:
-			case FShape.POLYGON:
-			case FShape.POINT | FShape.Z:
-			case FShape.LINE  | FShape.Z:
-			case FShape.POLYGON | FShape.Z:
-			case FShape.POINT | FShape.M:
-			case FShape.LINE | FShape.M:
-			case FShape.POLYGON | FShape.M:
-			case FShape.MULTIPOINT:
-				img = new BufferedImage(w_1symbol, h_1symbol, BufferedImage.TYPE_INT_ARGB);
-				g2 = img.createGraphics();
-				r = new Rectangle(w_1symbol, h_1symbol);	
 
-//				// TODO: CAMBIAR PARA QUE NO DEPENDA DE FSYMBOL
-//				if (symbol instanceof FSymbol)
-//					FGraphicUtilities.DrawSymbol(g2, AffineTransform.getScaleInstance(0.8,0.8), r, (FSymbol) symbol);
-//				// Por ahora, los que no sean FSymbol no se renderizan en el TOC.
-				break;									
-			case FShape.MULTI:
-				img = new BufferedImage(3*w_1symbol, h_1symbol, BufferedImage.TYPE_INT_ARGB);
-				g2 = img.createGraphics();
-				r = new Rectangle(3*w_1symbol, h_1symbol);
-//				if (symbol instanceof FSymbol)
-//					FGraphicUtilities.DrawSymbol(g2, AffineTransform.getScaleInstance(0.8,0.8), r, (FSymbol) symbol);
-				break;					
-			
+		switch (layerType) {
+		case FShape.POINT:
+		case FShape.LINE:
+		case FShape.POLYGON:
+		case FShape.POINT | FShape.Z:
+		case FShape.LINE | FShape.Z:
+		case FShape.POLYGON | FShape.Z:
+		case FShape.POINT | FShape.M:
+		case FShape.LINE | FShape.M:
+		case FShape.POLYGON | FShape.M:
+		case FShape.MULTIPOINT:
+			img = new BufferedImage(w_1symbol, h_1symbol,
+					BufferedImage.TYPE_INT_ARGB);
+			g2 = img.createGraphics();
+			r = new Rectangle(w_1symbol, h_1symbol);
+
+			// // TODO: CAMBIAR PARA QUE NO DEPENDA DE FSYMBOL
+			// if (symbol instanceof FSymbol)
+			// FGraphicUtilities.DrawSymbol(g2,
+			// AffineTransform.getScaleInstance(0.8,0.8), r, (FSymbol) symbol);
+			// // Por ahora, los que no sean FSymbol no se renderizan en el TOC.
+			break;
+		case FShape.MULTI:
+			img = new BufferedImage(3 * w_1symbol, h_1symbol,
+					BufferedImage.TYPE_INT_ARGB);
+			g2 = img.createGraphics();
+			r = new Rectangle(3 * w_1symbol, h_1symbol);
+			// if (symbol instanceof FSymbol)
+			// FGraphicUtilities.DrawSymbol(g2,
+			// AffineTransform.getScaleInstance(0.8,0.8), r, (FSymbol) symbol);
+			break;
+
 		}
-		
-		if (g2 == null) return null;//TODO tipo de shape no soportado.
+
+		if (g2 == null)
+			return null;// TODO tipo de shape no soportado.
 		try {
-			symbol.drawInsideRectangle(g2, AffineTransform.getScaleInstance(0.8,0.8), r, null);
+			symbol.drawInsideRectangle(g2,
+					AffineTransform.getScaleInstance(0.8, 0.8), r, null);
 		} catch (SymbolDrawingException e) {
 			if (e.getType() == SymbolDrawingException.UNSUPPORTED_SET_OF_SETTINGS) {
 				try {
-					SymbologyFactory.getWarningSymbol(
-							SymbolDrawingException.STR_UNSUPPORTED_SET_OF_SETTINGS,
-							symbol.getDescription(),
-							SymbolDrawingException.UNSUPPORTED_SET_OF_SETTINGS
-							).drawInsideRectangle(g2, g2.getTransform(), r.getBounds(), null);
+					SymbologyFactory
+							.getWarningSymbol(
+									SymbolDrawingException.STR_UNSUPPORTED_SET_OF_SETTINGS,
+									symbol.getDescription(),
+									SymbolDrawingException.UNSUPPORTED_SET_OF_SETTINGS)
+							.drawInsideRectangle(g2, g2.getTransform(),
+									r.getBounds(), null);
 				} catch (SymbolDrawingException e1) {
 					// IMPOSSIBLE TO REACH THIS
 				}
 			} else {
 				// should be unreachable code
-				throw new Error(PluginServices.getText(this, "symbol_shapetype_mismatch"));
+				throw new Error(PluginServices.getText(this,
+						"symbol_shapetype_mismatch"));
 			}
 		}
 		return new ImageIcon(img);
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.datatransfer.Transferable#getTransferDataFlavors()
 	 */
 	public DataFlavor[] getTransferDataFlavors() {
 		return flavors;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.awt.datatransfer.Transferable#isDataFlavorSupported(java.awt.datatransfer.DataFlavor)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.awt.datatransfer.Transferable#isDataFlavorSupported(java.awt.
+	 * datatransfer.DataFlavor)
 	 */
 	public boolean isDataFlavorSupported(DataFlavor dF) {
 		return dF.equals(INFO_FLAVOR);
 	}
 
-	/* (non-Javadoc)
-	 * @see java.awt.datatransfer.Transferable#getTransferData(java.awt.datatransfer.DataFlavor)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.datatransfer.Transferable#getTransferData(java.awt.datatransfer
+	 * .DataFlavor)
 	 */
-	public Object getTransferData(DataFlavor dF) throws UnsupportedFlavorException, IOException {
-	    if (dF.equals(INFO_FLAVOR)) {
-	        return this;
-	      }
-	      else throw new UnsupportedFlavorException(dF);
+	public Object getTransferData(DataFlavor dF)
+			throws UnsupportedFlavorException, IOException {
+		if (dF.equals(INFO_FLAVOR)) {
+			return this;
+		} else
+			throw new UnsupportedFlavorException(dF);
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.gui.toc.ITocItem#getSize()
 	 */
 	public Dimension getSize() {
 		return sz;
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.gui.toc.ITocItem#setSize(java.awt.Dimension)
 	 */
 	public void setSize(Dimension sz) {
 		this.sz = sz;
-		
+
 	}
-	
 
 	/**
 	 * @return Returns the symbol.
@@ -242,6 +272,7 @@ public class TocItemLeaf implements ITocItem {
 	public ISymbol getSymbol() {
 		return symbol;
 	}
+
 	public IContextMenuAction getDoubleClickAction() {
 		return new ChangeSymbolTocMenuEntry();
 	}

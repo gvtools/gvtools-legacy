@@ -46,66 +46,67 @@
  */
 package org.gvsig.remoteClient.arcims.styling.symbols;
 
-
-
 import org.gvsig.remoteClient.arcims.utils.ServiceInfoTags;
 
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 
-
 /**
  * This class is not supported at this time by gvSIG.
+ * 
  * @author jsanz
- *
+ * 
  */
 public class RasterFillSymbol extends AbstractSymbol implements IArcIMSSymbol {
-    public static final String TAG = ServiceInfoTags.tRASTERFILLSYMBOL;
-    private String url;
-    private String transparency;
+	public static final String TAG = ServiceInfoTags.tRASTERFILLSYMBOL;
+	private String url;
+	private String transparency;
 
-    public RasterFillSymbol(String murl) {
-        this.url = murl;
-        transparency = "1.0";
-    }
+	public RasterFillSymbol(String murl) {
+		this.url = murl;
+		transparency = "1.0";
+	}
 
-    public String toString() {
-        return "<" + TAG + getParam() + " />\r\n";
-    }
+	public String toString() {
+		return "<" + TAG + getParam() + " />\r\n";
+	}
 
-    protected String getParam() {
-        String param = "";
+	protected String getParam() {
+		String param = "";
 
-        if (SymbolUtils.isVoid(url)) {
-            param += (" url=\"" + url + "\"");
-        }
+		if (SymbolUtils.isVoid(url)) {
+			param += (" url=\"" + url + "\"");
+		}
 
-        if (SymbolUtils.isVoid(transparency)) {
-            param += (" transparency=\"" + transparency + "\"");
-        }
+		if (SymbolUtils.isVoid(transparency)) {
+			param += (" transparency=\"" + transparency + "\"");
+		}
 
-        return param;
-    }
+		return param;
+	}
 
-    /* (non-Javadoc)
-     * @see org.gvsig.remoteClient.arcims.styling.symbols.IArcIMSSymbol#getFSymbol()
-     */
-    public ISymbol getFSymbol() {
-        return ArcImsFSymbolFactory.getFSymbol(this);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.arcims.styling.symbols.IArcIMSSymbol#getFSymbol()
+	 */
+	public ISymbol getFSymbol() {
+		return ArcImsFSymbolFactory.getFSymbol(this);
+	}
 
-    public String getTransparency() {
-        return transparency;
-    }
+	public String getTransparency() {
+		return transparency;
+	}
 
-    public void setTransparency(String transparency) {
-        this.transparency = transparency;
-    }
+	public void setTransparency(String transparency) {
+		this.transparency = transparency;
+	}
 
-    public String getUrl() {
-        return url;
-    }
+	public String getUrl() {
+		return url;
+	}
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
+	public void setUrl(String url) {
+		this.url = url;
+	}
 }

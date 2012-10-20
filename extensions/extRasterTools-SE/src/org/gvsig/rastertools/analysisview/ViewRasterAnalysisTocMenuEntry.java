@@ -41,14 +41,19 @@ import com.iver.cit.gvsig.project.documents.view.MapOverview;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 import com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction;
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
+
 /**
- * Herramienta del menú contextual que carga el raster en el localizador para tener una visión general de
- * esta y carga el zoom del cursor para tener una selección de precisión.
- *
+ * Herramienta del menú contextual que carga el raster en el localizador para
+ * tener una visión general de esta y carga el zoom del cursor para tener una
+ * selección de precisión.
+ * 
  * 16-jun-2007
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
-public class ViewRasterAnalysisTocMenuEntry extends AbstractTocContextMenuAction implements PropertyChangeListener, IGenericToolBarMenuItem {
+public class ViewRasterAnalysisTocMenuEntry extends
+		AbstractTocContextMenuAction implements PropertyChangeListener,
+		IGenericToolBarMenuItem {
 	private boolean onView = false;
 	private String rasterNameInLoc = "";
 	static private ViewRasterAnalysisTocMenuEntry singleton = null;
@@ -57,10 +62,12 @@ public class ViewRasterAnalysisTocMenuEntry extends AbstractTocContextMenuAction
 	 * Nadie puede crear una instancia a esta clase única, hay que usar el
 	 * getSingleton()
 	 */
-	private ViewRasterAnalysisTocMenuEntry() {}
+	private ViewRasterAnalysisTocMenuEntry() {
+	}
 
 	/**
 	 * Devuelve un objeto unico a dicha clase
+	 * 
 	 * @return
 	 */
 	static public ViewRasterAnalysisTocMenuEntry getSingleton() {
@@ -72,7 +79,10 @@ public class ViewRasterAnalysisTocMenuEntry extends AbstractTocContextMenuAction
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getGroup()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getGroup()
 	 */
 	public String getGroup() {
 		return "RasterLayer";
@@ -80,7 +90,10 @@ public class ViewRasterAnalysisTocMenuEntry extends AbstractTocContextMenuAction
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getGroupOrder()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getGroupOrder()
 	 */
 	public int getGroupOrder() {
 		return 55;
@@ -88,7 +101,10 @@ public class ViewRasterAnalysisTocMenuEntry extends AbstractTocContextMenuAction
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getOrder()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getOrder()
 	 */
 	public int getOrder() {
 		return 4;
@@ -96,6 +112,7 @@ public class ViewRasterAnalysisTocMenuEntry extends AbstractTocContextMenuAction
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.project.documents.IContextMenuAction#getText()
 	 */
 	public String getText() {
@@ -104,10 +121,14 @@ public class ViewRasterAnalysisTocMenuEntry extends AbstractTocContextMenuAction
 		else
 			return RasterToolsUtil.getText(this, "closeanalysisview");
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -123,7 +144,11 @@ public class ViewRasterAnalysisTocMenuEntry extends AbstractTocContextMenuAction
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -137,9 +162,13 @@ public class ViewRasterAnalysisTocMenuEntry extends AbstractTocContextMenuAction
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#execute(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #execute(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
-	public void execute(ITocItem item, FLayer[] selectedItems) {		
+	public void execute(ITocItem item, FLayer[] selectedItems) {
 		MapControl mcCurrentLoc = null;
 		ArrayList mapControlListLoc = new ArrayList();
 		IWindow[] w = PluginServices.getMDIManager().getAllWindows();
@@ -170,11 +199,13 @@ public class ViewRasterAnalysisTocMenuEntry extends AbstractTocContextMenuAction
 				path = ((FLyrRasterSE) lyr).getLoadParams();
 
 			try {
-				lyr = FLyrRasterSE.createLayer(lyr.getName(), path, lyr.getCrs());
+				lyr = FLyrRasterSE.createLayer(lyr.getName(), path,
+						lyr.getCrs());
 				rasterNameInLoc = lyr.getName();
 				mcCurrentLoc.getMapContext().getLayers().addLayer(lyr);
 			} catch (LoadLayerException e) {
-				JOptionPane.showMessageDialog(null, RasterToolsUtil.getText(this, "coordenadas_erroneas"));
+				JOptionPane.showMessageDialog(null,
+						RasterToolsUtil.getText(this, "coordenadas_erroneas"));
 			}
 			mcCurrentLoc.getMapContext().endAtomicEvent();
 		} else {
@@ -194,11 +225,14 @@ public class ViewRasterAnalysisTocMenuEntry extends AbstractTocContextMenuAction
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.generictoolbar.IGenericToolBarMenuItem#getIcon()
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.generictoolbar.IGenericToolBarMenuItem#getIcon()
 	 */
 	public Icon getIcon() {
 		return RasterToolsUtil.getIcon("analisis-icon");
 	}
 
-	public void propertyChange(PropertyChangeEvent evt) {}
+	public void propertyChange(PropertyChangeEvent evt) {
+	}
 }

@@ -39,20 +39,24 @@ import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
 /**
  * Punto de entrada para la funcionalidad de realce por expansión del contraste
  * 19/02/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
-public class EnhancedTocMenuEntry extends AbstractTocContextMenuAction implements IGenericToolBarMenuItem, IProcessActions {
-	static private EnhancedTocMenuEntry   singleton   = null;
-	private FLyrRasterSE                  lyr         = null;
+public class EnhancedTocMenuEntry extends AbstractTocContextMenuAction
+		implements IGenericToolBarMenuItem, IProcessActions {
+	static private EnhancedTocMenuEntry singleton = null;
+	private FLyrRasterSE lyr = null;
 
 	/**
 	 * Nadie puede crear una instancia a esta clase única, hay que usar el
 	 * getSingleton()
 	 */
-	private EnhancedTocMenuEntry() {}
+	private EnhancedTocMenuEntry() {
+	}
 
 	/**
 	 * Devuelve un objeto unico a dicha clase
+	 * 
 	 * @return
 	 */
 	static public EnhancedTocMenuEntry getSingleton() {
@@ -60,10 +64,13 @@ public class EnhancedTocMenuEntry extends AbstractTocContextMenuAction implement
 			singleton = new EnhancedTocMenuEntry();
 		return singleton;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getGroup()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getGroup()
 	 */
 	public String getGroup() {
 		return "RasterProcess";
@@ -71,7 +78,10 @@ public class EnhancedTocMenuEntry extends AbstractTocContextMenuAction implement
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getGroupOrder()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getGroupOrder()
 	 */
 	public int getGroupOrder() {
 		return 55;
@@ -79,7 +89,10 @@ public class EnhancedTocMenuEntry extends AbstractTocContextMenuAction implement
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getOrder()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getOrder()
 	 */
 	public int getOrder() {
 		return 0;
@@ -87,6 +100,7 @@ public class EnhancedTocMenuEntry extends AbstractTocContextMenuAction implement
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.project.documents.IContextMenuAction#getText()
 	 */
 	public String getText() {
@@ -95,7 +109,11 @@ public class EnhancedTocMenuEntry extends AbstractTocContextMenuAction implement
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -112,7 +130,11 @@ public class EnhancedTocMenuEntry extends AbstractTocContextMenuAction implement
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -120,20 +142,26 @@ public class EnhancedTocMenuEntry extends AbstractTocContextMenuAction implement
 
 		if (!(selectedItems[0] instanceof FLyrRasterSE))
 			return false;
-		
-		return ((FLyrRasterSE) selectedItems[0]).isActionEnabled(IRasterLayerActions.ENHANCED);
+
+		return ((FLyrRasterSE) selectedItems[0])
+				.isActionEnabled(IRasterLayerActions.ENHANCED);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#execute(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #execute(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public void execute(ITocItem item, FLayer[] selectedItems) {
-		if ((selectedItems == null) || (selectedItems.length != 1) || (!(selectedItems[0] instanceof FLyrRasterSE)))
+		if ((selectedItems == null) || (selectedItems.length != 1)
+				|| (!(selectedItems[0] instanceof FLyrRasterSE)))
 			return;
-				
-		this.lyr = (FLyrRasterSE)selectedItems[0];
-		if(!lyr.getDataSource().getStatistics().isCalculated()) {
+
+		this.lyr = (FLyrRasterSE) selectedItems[0];
+		if (!lyr.getDataSource().getStatistics().isCalculated()) {
 			RasterProcess process = new StatisticsProcess();
 			process.addParam("layer", lyr);
 			process.addParam("force", new Boolean(false));
@@ -142,10 +170,12 @@ public class EnhancedTocMenuEntry extends AbstractTocContextMenuAction implement
 		} else
 			end(null);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.generictoolbar.IGenericToolBarMenuItem#getIcon()
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.generictoolbar.IGenericToolBarMenuItem#getIcon()
 	 */
 	public Icon getIcon() {
 		return RasterToolsUtil.getIcon("brush-icon");
@@ -155,13 +185,14 @@ public class EnhancedTocMenuEntry extends AbstractTocContextMenuAction implement
 	 * Lanzamos la ventana al final del proceso de calculo de estadísticas.
 	 */
 	public void end(Object param) {
-		if(param == null || param instanceof FLyrRasterSE) {
+		if (param == null || param instanceof FLyrRasterSE) {
 			RasterProcess histogramProcess = new HistogramProcess();
 			histogramProcess.setActions(this);
-			histogramProcess.addParam("histogramable", this.lyr.getDataSource());
+			histogramProcess
+					.addParam("histogramable", this.lyr.getDataSource());
 			histogramProcess.start();
-		} 
-		if(param instanceof Histogram) {
+		}
+		if (param instanceof Histogram) {
 			EnhancedDialog enhancedDialog = new EnhancedDialog(lyr, 760, 421);
 			RasterToolsUtil.addWindow(enhancedDialog);
 		}

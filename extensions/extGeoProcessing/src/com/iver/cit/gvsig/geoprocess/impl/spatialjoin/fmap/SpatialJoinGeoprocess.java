@@ -108,7 +108,6 @@ import java.util.Map;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.driver.exceptions.SchemaEditionException;
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
 import com.iver.cit.gvsig.exceptions.visitors.ProcessVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.VisitorException;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
@@ -129,34 +128,33 @@ import com.iver.cit.gvsig.geoprocess.core.fmap.XTypes;
 import com.iver.utiles.swing.threads.CancellableMonitorable;
 import com.iver.utiles.swing.threads.DefaultCancellableMonitorable;
 import com.iver.utiles.swing.threads.IMonitorableTask;
+
 /**
- * This geoprocess implements Spatial Join operation.
- * A spatial join is a join where the criteria to link
- * a feature of layer A to one (or many) features of layer B
- * is a spatial critera.<br>
+ * This geoprocess implements Spatial Join operation. A spatial join is a join
+ * where the criteria to link a feature of layer A to one (or many) features of
+ * layer B is a spatial critera.<br>
  * We can do two types of spatial join:
  * <ul>
- * <li><b>Intersect spatial join (1->N).</b> Given a feature, looks for
- * all intersecting features, and apply a sumarization function
- * to all of them. The result is a feature where all numeric features
- * of layer B have been grouped by one or many sumarization functions.
- * </li>
- * <li><b>Nearest spatial join (1->N)</b>Given a feature, looks
- * for the nearest feature of layer B, and tooks its fields.
- * </li>
+ * <li><b>Intersect spatial join (1->N).</b> Given a feature, looks for all
+ * intersecting features, and apply a sumarization function to all of them. The
+ * result is a feature where all numeric features of layer B have been grouped
+ * by one or many sumarization functions.</li>
+ * <li><b>Nearest spatial join (1->N)</b>Given a feature, looks for the nearest
+ * feature of layer B, and tooks its fields.</li>
  * </ul>
+ * 
  * @author azabala
- *
+ * 
  */
-public class SpatialJoinGeoprocess extends AbstractGeoprocess
-								implements ITwoLayersGeoprocess {
+public class SpatialJoinGeoprocess extends AbstractGeoprocess implements
+		ITwoLayersGeoprocess {
 	/**
 	 * overlay layer
 	 */
 	private FLyrVect secondLayer;
 	/**
-	 * Relates each numeric field of target layer with
-	 * many sumarization functions
+	 * Relates each numeric field of target layer with many sumarization
+	 * functions
 	 */
 	private Map fields_sumFunctions;
 
@@ -185,7 +183,6 @@ public class SpatialJoinGeoprocess extends AbstractGeoprocess
 	 */
 	private FeaturePersisterProcessor2 processor;
 
-
 	public SpatialJoinGeoprocess(FLyrVect inputLayer) {
 		setFirstOperand(inputLayer);
 	}
@@ -201,9 +198,8 @@ public class SpatialJoinGeoprocess extends AbstractGeoprocess
 	}
 
 	/**
-	 * PRECONDITION: We must setResultLayerProperties before
-	 * to call setParameters.
-	 * FIXME
+	 * PRECONDITION: We must setResultLayerProperties before to call
+	 * setParameters. FIXME
 	 */
 	public void setParameters(Map params) throws GeoprocessException {
 		Boolean firstLayerSelection = (Boolean) params
@@ -216,47 +212,45 @@ public class SpatialJoinGeoprocess extends AbstractGeoprocess
 		if (secondLayerSelection != null)
 			this.onlySecondLayerSelection = secondLayerSelection.booleanValue();
 
-		if(writer == null)
-			throw new GeoprocessException("Hay que hacer setResultLayerProperties antes de hacer setParameters en el spatial join");
-		
+		if (writer == null)
+			throw new GeoprocessException(
+					"Hay que hacer setResultLayerProperties antes de hacer setParameters en el spatial join");
+
 		/*
-		¿POR QUE ESTA REPETIDO?
-		processor =
-			new FeaturePersisterProcessor2(writer);
-        */
+		 * ¿POR QUE ESTA REPETIDO? processor = new
+		 * FeaturePersisterProcessor2(writer);
+		 */
 		processor = new FeaturePersisterProcessor2(writer);
 
-		Boolean nearest = (Boolean) params
-				.get("nearest");
+		Boolean nearest = (Boolean) params.get("nearest");
 		if (nearest != null)
 			this.nearestSpatialJoin = nearest.booleanValue();
-		if(nearestSpatialJoin){
+		if (nearestSpatialJoin) {
 			try {
-//				ISpatialIndex spatialIndex = secondLayer.getISpatialIndex();
-//				if(spatialIndex != null &&
-//						(spatialIndex instanceof INearestNeighbourFinder))
-//				{
-					visitor = new SpatiallyIndexedSpatialJoinVisitor(this.firstLayer,
-							this.secondLayer,
-							processor);
-//				}else{
-//
-//					visitor = new NearestSpatialJoinVisitor(this.firstLayer,
-//							this.secondLayer,
-//							processor);
-//				}
+				// ISpatialIndex spatialIndex = secondLayer.getISpatialIndex();
+				// if(spatialIndex != null &&
+				// (spatialIndex instanceof INearestNeighbourFinder))
+				// {
+				visitor = new SpatiallyIndexedSpatialJoinVisitor(
+						this.firstLayer, this.secondLayer, processor);
+				// }else{
+				//
+				// visitor = new NearestSpatialJoinVisitor(this.firstLayer,
+				// this.secondLayer,
+				// processor);
+				// }
 			} catch (ReadDriverException e) {
-				throw new GeoprocessException("Error preparando el procesado de las capas a enlazar");
+				throw new GeoprocessException(
+						"Error preparando el procesado de las capas a enlazar");
 			}
 
-		}else{
+		} else {
 			try {
 				visitor = new IntersectSpatialJoinVisitor(this.firstLayer,
-												this.secondLayer,
-								this.fields_sumFunctions,
-								processor);
+						this.secondLayer, this.fields_sumFunctions, processor);
 			} catch (ReadDriverException e) {
-				throw new GeoprocessException("Error preparando el procesado de las capas a enlazar");
+				throw new GeoprocessException(
+						"Error preparando el procesado de las capas a enlazar");
 			}
 		}
 		visitor.setFeatureProcessor(processor);
@@ -276,11 +270,10 @@ public class SpatialJoinGeoprocess extends AbstractGeoprocess
 		try {
 			int firstLayerType = firstLayer.getShapeType();
 			int secondLayerType = secondLayer.getShapeType();
-			if(firstLayerType == XTypes.POINT
-					&& secondLayerType == XTypes.POINT
-					&& (!nearestSpatialJoin)){
+			if (firstLayerType == XTypes.POINT
+					&& secondLayerType == XTypes.POINT && (!nearestSpatialJoin)) {
 				throw new GeoprocessException(
-				"No está permitido el spatial join M:N entre puntos");
+						"No está permitido el spatial join M:N entre puntos");
 			}
 		} catch (ReadDriverException e) {
 			throw new GeoprocessException(
@@ -296,8 +289,8 @@ public class SpatialJoinGeoprocess extends AbstractGeoprocess
 		}
 	}
 
-	//FIXME to throw an edition exception in
-	//schema manager
+	// FIXME to throw an edition exception in
+	// schema manager
 	public void cancel() {
 		try {
 			this.schemaManager.removeSchema("");
@@ -308,17 +301,16 @@ public class SpatialJoinGeoprocess extends AbstractGeoprocess
 	}
 
 	/**
-	 * FIXME Lanzar una excepcion si esto se llama antes
-	 * que el setParameters (esto me lo aseguro obligando a meter
-	 * los datos en el constructor)
-	 *
-	 * FIXME Añadir, en las relaciones 1-N, el número de features
-	 * que participan en la relación de la parte de N
+	 * FIXME Lanzar una excepcion si esto se llama antes que el setParameters
+	 * (esto me lo aseguro obligando a meter los datos en el constructor)
+	 * 
+	 * FIXME Añadir, en las relaciones 1-N, el número de features que participan
+	 * en la relación de la parte de N
 	 */
 	public ILayerDefinition createLayerDefinition() {
 		ILayerDefinition solution = null;
 		try {
-			solution =  visitor.getResultLayerDefinition();
+			solution = visitor.getResultLayerDefinition();
 		} catch (GeoprocessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -344,22 +336,25 @@ public class SpatialJoinGeoprocess extends AbstractGeoprocess
 
 	class SpatialJoinMonitorableTask implements IMonitorableTask {
 		private CancellableMonitorable cancelMonitor = null;
-		String SPJOIN_MESSAGE = PluginServices.getText(this, "Mensaje_enlace_espacial");
-		String SPJOIN_NOTE = PluginServices.getText(this, "Mensaje_procesando_enlace_espacial");
-		String OF =  PluginServices.getText(this, "De");
+		String SPJOIN_MESSAGE = PluginServices.getText(this,
+				"Mensaje_enlace_espacial");
+		String SPJOIN_NOTE = PluginServices.getText(this,
+				"Mensaje_procesando_enlace_espacial");
+		String OF = PluginServices.getText(this, "De");
 
 		private boolean finished = false;
 
-		SpatialJoinMonitorableTask() throws ReadDriverException  {
+		SpatialJoinMonitorableTask() throws ReadDriverException {
 			initialize();
 		}
-		void initialize() throws ReadDriverException  {
+
+		void initialize() throws ReadDriverException {
 			cancelMonitor = createCancelMonitor();
 		}
 
-		private CancellableMonitorable createCancelMonitor() throws ReadDriverException {
-			DefaultCancellableMonitorable monitor = new
-							DefaultCancellableMonitorable();
+		private CancellableMonitorable createCancelMonitor()
+				throws ReadDriverException {
+			DefaultCancellableMonitorable monitor = new DefaultCancellableMonitorable();
 			monitor.setInitialStep(0);
 			monitor.setDeterminatedProcess(true);
 			int numSteps = 0;
@@ -390,9 +385,8 @@ public class SpatialJoinGeoprocess extends AbstractGeoprocess
 		}
 
 		public String getNote() {
-			return SPJOIN_NOTE + " " +
-			getCurrentStep() + " "+
-			OF + " " + getFinishStep();
+			return SPJOIN_NOTE + " " + getCurrentStep() + " " + OF + " "
+					+ getFinishStep();
 		}
 
 		public void cancel() {
@@ -402,67 +396,68 @@ public class SpatialJoinGeoprocess extends AbstractGeoprocess
 
 		public void run() throws GeoprocessException {
 			ISpatialIndex oldSptIdx = null;
-			if(nearestSpatialJoin){
-				//TODO Para spatial join m-n lo estoy haciendo
-				//en el GeoprocessController, mientras que para el 1-n
-				//aquí: unificar criterios
+			if (nearestSpatialJoin) {
+				// TODO Para spatial join m-n lo estoy haciendo
+				// en el GeoprocessController, mientras que para el 1-n
+				// aquí: unificar criterios
 				oldSptIdx = secondLayer.getISpatialIndex();
-				if(oldSptIdx == null || ! (oldSptIdx instanceof INearestNeighbourFinder)){
+				if (oldSptIdx == null
+						|| !(oldSptIdx instanceof INearestNeighbourFinder)) {
 					RTreeJsi newSptIdx = new RTreeJsi();
 					newSptIdx.create();
 					ReadableVectorial source = secondLayer.getSource();
 					try {
 						int numFeatures = source.getShapeCount();
 						source.start();
-						for(int i = 0; i < numFeatures; i++){
+						for (int i = 0; i < numFeatures; i++) {
 							IGeometry geometry = source.getShape(i);
-							if(geometry != null)
+							if (geometry != null)
 								newSptIdx.insert(geometry.getBounds2D(), i);
 						}
 						source.stop();
 					} catch (ReadDriverException e) {
-						throw new GeoprocessException("Error intentando indexar para busqueda por mas proximo");
-					} 
+						throw new GeoprocessException(
+								"Error intentando indexar para busqueda por mas proximo");
+					}
 					secondLayer.setISpatialIndex(newSptIdx);
-				}//if oldSptIdx
-			}//if nearest
+				}// if oldSptIdx
+			}// if nearest
 
-			if(visitor instanceof SpatiallyIndexedSpatialJoinVisitor)
-			{
-				//here checks for Nearest Neighbour capabilitie
-				((SpatiallyIndexedSpatialJoinVisitor)visitor).initialize();
+			if (visitor instanceof SpatiallyIndexedSpatialJoinVisitor) {
+				// here checks for Nearest Neighbour capabilitie
+				((SpatiallyIndexedSpatialJoinVisitor) visitor).initialize();
 			}
 
-			Strategy strategy =
-				StrategyManager.getStrategy(firstLayer);
-			Strategy secondLyrStrategy =
-				StrategyManager.getStrategy(secondLayer);
+			Strategy strategy = StrategyManager.getStrategy(firstLayer);
+			Strategy secondLyrStrategy = StrategyManager
+					.getStrategy(secondLayer);
 			visitor.setCancelableStrategy(secondLyrStrategy);
 			visitor.setOnlySecondLyrSelection(onlySecondLayerSelection);
 			try {
-				if(onlyFirstLayerSelection){
-					strategy.process(visitor,
-							firstLayer.getRecordset().
-							getSelection(),
-							cancelMonitor);
+				if (onlyFirstLayerSelection) {
+					strategy.process(visitor, firstLayer.getRecordset()
+							.getSelection(), cancelMonitor);
 
-				}else{
+				} else {
 					strategy.process(visitor, cancelMonitor);
 				}
 
-//				If we changed spatial index to allow Nearest Neighbour queries,
-				//recover the old spatial index
-				if(oldSptIdx != null)
+				// If we changed spatial index to allow Nearest Neighbour
+				// queries,
+				// recover the old spatial index
+				if (oldSptIdx != null)
 					secondLayer.setISpatialIndex(oldSptIdx);
 
 			} catch (ReadDriverException e) {
-				throw new GeoprocessException("Error al acceder a los datos durante un spatial join");
+				throw new GeoprocessException(
+						"Error al acceder a los datos durante un spatial join");
 			} catch (ProcessVisitorException e) {
-				throw new GeoprocessException("Error al procesar los datos durante un spatial join");
+				throw new GeoprocessException(
+						"Error al procesar los datos durante un spatial join");
 			} catch (VisitorException e) {
-				throw new GeoprocessException("Error al procesar los datos durante un spatial join");
-			}
-			finally{
+				throw new GeoprocessException(
+						"Error al procesar los datos durante un spatial join");
+			} finally {
 				finished = true;
 			}
 		}
@@ -478,14 +473,16 @@ public class SpatialJoinGeoprocess extends AbstractGeoprocess
 		public boolean isFinished() {
 			return finished;
 		}
-		/* (non-Javadoc)
+
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see com.iver.utiles.swing.threads.IMonitorableTask#finished()
 		 */
 		public void finished() {
 			// TODO Auto-generated method stub
-			
+
 		}
 	}
-
 
 }

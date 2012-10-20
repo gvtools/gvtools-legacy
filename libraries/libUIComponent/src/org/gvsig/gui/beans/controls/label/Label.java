@@ -49,26 +49,35 @@ import org.gvsig.gui.beans.controls.IControl;
 
 /**
  * @author Cesar Martinez Izquierdo <cesar.martinez@iver.es>
- *
+ * 
  */
 public class Label extends JLabel implements IControl {
 	private static final long serialVersionUID = 1L;
 
-
-	/* (non-Javadoc)
-	 * @see org.gvsig.gui.beans.controls.IControl#addActionListener(java.awt.event.ActionListener)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.controls.IControl#addActionListener(java.awt.event
+	 * .ActionListener)
 	 */
 	public void addActionListener(ActionListener listener) {
 		// Labels doesn't have any action, so we discard actionListeners
 	}
 
-	/* (non-Javadoc)
-	 * @see org.gvsig.gui.beans.controls.IControl#removeActionListener(java.awt.event.ActionListener)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.controls.IControl#removeActionListener(java.awt.event
+	 * .ActionListener)
 	 */
 	public void removeActionListener(ActionListener listener) {
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.controls.IControl#setValue(java.lang.Object)
 	 */
 	public Object setValue(Object value) {
@@ -76,8 +85,7 @@ public class Label extends JLabel implements IControl {
 			String text = (String) value;
 			setText(text);
 			return text;
-		}
-		catch (ClassCastException ex) {
+		} catch (ClassCastException ex) {
 			return null;
 		}
 	}

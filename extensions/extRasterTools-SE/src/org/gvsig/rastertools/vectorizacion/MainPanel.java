@@ -36,130 +36,148 @@ import org.gvsig.rastertools.vectorizacion.vector.ui.VectorPanel;
 import com.iver.andami.PluginServices;
 
 /**
- * Panel para la conversión a escala de grises. Lleva incluida una previsualización
- * de capa.
+ * Panel para la conversión a escala de grises. Lleva incluida una
+ * previsualización de capa.
  * 
  * 09/06/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class MainPanel extends BasePanel {
-	private static final long           serialVersionUID   = -1;
-	private PreviewBasePanel            previewBasePanel   = null;
-	private IPreviewRenderProcess       renderProcess      = null;
-	private FLyrRasterSE                lyr                = null;
-	//Lista de paneles en el Tab de PreviewBasePanel
-	private ArrayList                   panels             = new ArrayList();
-		
+	private static final long serialVersionUID = -1;
+	private PreviewBasePanel previewBasePanel = null;
+	private IPreviewRenderProcess renderProcess = null;
+	private FLyrRasterSE lyr = null;
+	// Lista de paneles en el Tab de PreviewBasePanel
+	private ArrayList panels = new ArrayList();
+
 	/**
 	 * Constructor.
-	 * @param lyr Capa para la preview
-	 * @param previewRender Gestor de la previsualización
+	 * 
+	 * @param lyr
+	 *            Capa para la preview
+	 * @param previewRender
+	 *            Gestor de la previsualización
 	 */
 	public MainPanel(FLyrRasterSE lyr, IPreviewRenderProcess previewRender) {
 		this.lyr = lyr;
 		this.renderProcess = previewRender;
 	}
-	
+
 	/**
 	 * Asigna un panel a los tabs.
-	 * @param p JPanel para añadir a los tabs
+	 * 
+	 * @param p
+	 *            JPanel para añadir a los tabs
 	 */
 	public void setPanel(JPanel p) {
 		panels.add(p);
 	}
-	
+
 	/**
-	 * Inicialización de componentes gráficos. Se llama al
-	 * terminar de añadir todos los paneles.
+	 * Inicialización de componentes gráficos. Se llama al terminar de añadir
+	 * todos los paneles.
 	 */
 	public void initialize() {
 		init();
 		translate();
 	}
-	
+
 	/**
 	 * Inicializa los componentes gráficos
 	 */
 	protected void init() {
 		setLayout(new BorderLayout());
 		add(getPreviewBasePanel(), BorderLayout.CENTER);
-		getPreviewBasePanel().getButtonsPanel().getButton(ButtonsPanel.BUTTON_APPLY).setVisible(false);
-		getPreviewBasePanel().getButtonsPanel().getButton(ButtonsPanel.BUTTON_ACCEPT).setVisible(false);
-		getPreviewBasePanel().getButtonsPanel().addButton(PluginServices.getText(this, "anterior"), 14);
-		getPreviewBasePanel().getButtonsPanel().addButton(PluginServices.getText(this,"siguiente"), 13);
+		getPreviewBasePanel().getButtonsPanel()
+				.getButton(ButtonsPanel.BUTTON_APPLY).setVisible(false);
+		getPreviewBasePanel().getButtonsPanel()
+				.getButton(ButtonsPanel.BUTTON_ACCEPT).setVisible(false);
+		getPreviewBasePanel().getButtonsPanel().addButton(
+				PluginServices.getText(this, "anterior"), 14);
+		getPreviewBasePanel().getButtonsPanel().addButton(
+				PluginServices.getText(this, "siguiente"), 13);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#translate()
 	 */
 	protected void translate() {
 	}
-	
+
 	/**
 	 * Obtiene el panel con la previsualización
+	 * 
 	 * @return HistogramPanel
 	 */
 	public PreviewBasePanel getPreviewBasePanel() {
 		if (previewBasePanel == null) {
 			ArrayList list = new ArrayList();
 			list.add(panels.get(0));
-			previewBasePanel = new PreviewBasePanel(list, null, null, renderProcess, lyr);
+			previewBasePanel = new PreviewBasePanel(list, null, null,
+					renderProcess, lyr);
 			previewBasePanel.setPreviewSize(new Dimension(230, 215));
 		}
 		return previewBasePanel;
 	}
-	
+
 	/**
 	 * Obtiene el panel de la posición indicada en el parámetro
+	 * 
 	 * @param position
 	 * @return JPanel
 	 */
 	public JPanel getPanel(int position) {
-		return (JPanel)panels.get(position);
+		return (JPanel) panels.get(position);
 	}
-	
+
 	/**
 	 * Obtiene el número de paneles de la serie
-	 * @return 
+	 * 
+	 * @return
 	 */
 	public int getPanelCount() {
 		return panels.size();
 	}
-		
+
 	/**
-	 * Obtiene el panel con los paneles de selección de coordenadas para
-	 * el recorte.
+	 * Obtiene el panel con los paneles de selección de coordenadas para el
+	 * recorte.
+	 * 
 	 * @return ClipPanel
 	 */
 	public ClipPanel getCoordinatesSelectionPanel() {
 		for (int i = 0; i < panels.size(); i++) {
-			if(panels.get(i) instanceof ClipPanel)
-				return (ClipPanel)panels.get(i);
+			if (panels.get(i) instanceof ClipPanel)
+				return (ClipPanel) panels.get(i);
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Obtiene el panel con los controles para vectorizar
+	 * 
 	 * @return VectorPanel
 	 */
 	public VectorPanel getVectorizationPanel() {
 		for (int i = 0; i < panels.size(); i++) {
-			if(panels.get(i) instanceof VectorPanel)
-				return (VectorPanel)panels.get(i);
+			if (panels.get(i) instanceof VectorPanel)
+				return (VectorPanel) panels.get(i);
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Obtiene el panel con los paneles de conversión a B/W
+	 * 
 	 * @return GrayConversionPanel
 	 */
 	public GrayConversionPanel getGrayConversionPanel() {
 		for (int i = 0; i < panels.size(); i++) {
-			if(panels.get(i) instanceof GrayConversionPanel)
-				return (GrayConversionPanel)panels.get(i);
+			if (panels.get(i) instanceof GrayConversionPanel)
+				return (GrayConversionPanel) panels.get(i);
 		}
 		return null;
 	}

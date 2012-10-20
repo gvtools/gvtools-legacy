@@ -1,4 +1,5 @@
 package org.gvsig.remoteClient.utils;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -71,12 +72,9 @@ import javax.net.ssl.X509TrustManager;
 
 import org.gvsig.remoteClient.wms.ICancellable;
 
-
-
-
 /**
  * Clase con métodos de utilidad en el protocolo WMS
- *
+ * 
  * @authors Laura Díaz, jaume dominguez faus
  */
 public class Utilities {
@@ -84,10 +82,8 @@ public class Utilities {
 	static boolean canceled;
 	static final long latency = 500;
 	/**
-	 * Used to cancel a group of files
-	 * <b>key</b>: Group id, <b>value</b>: Boolean (true if
-	 * the group has to be canceled. Otherwise it is
-	 * false)
+	 * Used to cancel a group of files <b>key</b>: Group id, <b>value</b>:
+	 * Boolean (true if the group has to be canceled. Otherwise it is false)
 	 */
 	static Hashtable canceledGroup = new Hashtable();
 	/**
@@ -95,28 +91,28 @@ public class Utilities {
 	 */
 	private static Hashtable downloadedFiles;
 	static Exception downloadException;
-	private static final String tempDirectoryPath = System.getProperty("java.io.tmpdir")+"/tmp-andami";
+	private static final String tempDirectoryPath = System
+			.getProperty("java.io.tmpdir") + "/tmp-andami";
 
 	private static Logger logger = Logger.getLogger(Utilities.class.getName());
 	static {
 		characters = "";
-		for (int j = 32; j<=127; j++){
+		for (int j = 32; j <= 127; j++) {
 			characters += (char) j;
 		}
 		characters += "áàÁÀäÄâÂéÉèÈëËêÊíìÍÌïÏîÎóÓòÒöÖôÔúùÚÙüÜûÛñÑçÇ¡¿·ªº€\n\r\f\t«»";
 	}
 
-
 	/**
 	 * Checks a File and tries to figure if the file is a text or a binary file.<br>
 	 * Keep in mind that binary files are those that contains at least one
 	 * non-printable character.
-	 *
+	 * 
 	 * @param file
 	 * @return <b>true</b> when the file is <b>pretty problably</b> text,
-	 * <b>false</b> if the file <b>is</b> binary.
+	 *         <b>false</b> if the file <b>is</b> binary.
 	 */
-	public static boolean isTextFile(File file){
+	public static boolean isTextFile(File file) {
 		return isTextFile(file, 1024);
 	}
 
@@ -124,25 +120,26 @@ public class Utilities {
 	 * Checks a File and tries to figure if the file is a text or a binary file.<br>
 	 * Keep in mind that binary files are those that contains at least one
 	 * non-printable character.
-	 *
+	 * 
 	 * @param file
-	 * @param byteAmount, number of bytes to check.
+	 * @param byteAmount
+	 *            , number of bytes to check.
 	 * @return <b>true</b> when the file is <b>pretty problably</b> text,
-	 * <b>false</b> if the file <b>is</b> binary.
+	 *         <b>false</b> if the file <b>is</b> binary.
 	 */
-	public static boolean isTextFile(File file, int byteAmount){
+	public static boolean isTextFile(File file, int byteAmount) {
 		int umbral = byteAmount;
 		try {
 			FileReader fr = new FileReader(file);
 			for (int i = 0; i < umbral; i++) {
 				int c = fr.read();
-				if (c==-1){
+				if (c == -1) {
 					// End of file. If we reach this
 					// everything before is printable data.
 					return true;
 				}
 				char ch = (char) c;
-				if (characters.indexOf(ch)==-1){
+				if (characters.indexOf(ch) == -1) {
 					// We've found a non-printable character.
 					// Then we'll assume that this file is binary.
 					return false;
@@ -157,48 +154,47 @@ public class Utilities {
 	}
 
 	/**
-	 * Checks a byte array and tells if it contains only text or contains
-	 * any binary data.
-	 *
+	 * Checks a byte array and tells if it contains only text or contains any
+	 * binary data.
+	 * 
 	 * @param file
-	 * @return <b>true</b> when the data is <b>only</b> text, <b>false</b> otherwise.
+	 * @return <b>true</b> when the data is <b>only</b> text, <b>false</b>
+	 *         otherwise.
 	 * @deprecated
 	 */
-	public static boolean isTextData(byte[] data){
+	public static boolean isTextData(byte[] data) {
 		char[] charData = new char[data.length];
-		for (int i = 0; i<data.length; i++){
+		for (int i = 0; i < data.length; i++) {
 			charData[i] = (char) data[i];
 		}
 
 		for (int i = 0; i < data.length; i++) {
 			int c = charData[i];
 
-
-			if (c==-1){
+			if (c == -1) {
 				// End of file. If we reach this
 				// everything before is printable data.
 				return true;
 			}
 			char ch = (char) c;
-			if (characters.indexOf(ch)==-1){
+			if (characters.indexOf(ch) == -1) {
 				// We've found a non-printable character.
 				// Then we'll assume that this file is binary.
 
-				//System.out.println(ch+" at "+i);
+				// System.out.println(ch+" at "+i);
 				return false;
 			}
 		}
 		return true;
 	}
 
-
-
-
 	/**
 	 * Copia el contenido de un InputStream en un OutputStream
-	 *
-	 * @param in InputStream
-	 * @param out OutputStream
+	 * 
+	 * @param in
+	 *            InputStream
+	 * @param out
+	 *            OutputStream
 	 */
 	public static void serializar(InputStream in, OutputStream out) {
 		byte[] buffer = new byte[102400];
@@ -216,10 +212,12 @@ public class Utilities {
 
 	/**
 	 * Elimina del xml la declaración del DTD
-	 *
-	 * @param bytes bytes del fichero XML de respuesta a getCapabilities
-	 * @param startTag Tag raiz del xml respuesta a getCapabilities
-	 *
+	 * 
+	 * @param bytes
+	 *            bytes del fichero XML de respuesta a getCapabilities
+	 * @param startTag
+	 *            Tag raiz del xml respuesta a getCapabilities
+	 * 
 	 * @return bytes del fichero XML sin la declaración del DTD
 	 */
 	public static byte[] eliminarDTD(byte[] bytes, String startTag) {
@@ -242,16 +240,19 @@ public class Utilities {
 
 	/**
 	 * Obtiene el índice del comienzo del xml
-	 *
-	 * @param bytes bytes del fichero XML en el que se busca
-	 * @param tagRaiz Tag raiz del xml respuesta a getCapabilities
-	 *
+	 * 
+	 * @param bytes
+	 *            bytes del fichero XML en el que se busca
+	 * @param tagRaiz
+	 *            Tag raiz del xml respuesta a getCapabilities
+	 * 
 	 * @return Índice donde empieza el tag raiz
-	 *
-	 * @throws NoSuchObjectException Si no se encuentra el tag
+	 * 
+	 * @throws NoSuchObjectException
+	 *             Si no se encuentra el tag
 	 */
 	private static int findBeginIndex(byte[] bytes, String tagRaiz)
-	throws NoSuchObjectException {
+			throws NoSuchObjectException {
 		try {
 			int nodo = 0;
 			int ret = -1;
@@ -302,50 +303,38 @@ public class Utilities {
 
 	/**
 	 * Converts the contents of a Vector to a comma separated list
-	 *
+	 * 
 	 * */
-	public static String Vector2CS(Vector v)
-	{
+	public static String Vector2CS(Vector v) {
 		String str = new String();
-		if (v != null)
-		{
+		if (v != null) {
 			int i;
-			for (i=0; i<v.size() ;i++)
-			{
+			for (i = 0; i < v.size(); i++) {
 				str = str + v.elementAt(i);
-				if (i<v.size()-1)
+				if (i < v.size() - 1)
 					str = str + ",";
 			}
 		}
 		return str;
 	}
 
-	public static boolean isValidVersion(String version)
-	{
-		if(version.trim().length() == 5)
-		{
-			if ( (version.charAt(1)=='.') && (version.charAt(3)=='.'))
-			{
+	public static boolean isValidVersion(String version) {
+		if (version.trim().length() == 5) {
+			if ((version.charAt(1) == '.') && (version.charAt(3) == '.')) {
 				char x = version.charAt(0);
 				char y = version.charAt(2);
 				char z = version.charAt(4);
 
-				if ((Character.isDigit(x)) && (Character.isDigit(y)) && (Character.isDigit(z)))
-				{
+				if ((Character.isDigit(x)) && (Character.isDigit(y))
+						&& (Character.isDigit(z))) {
 					return true;
-				}
-				else
-				{
+				} else {
 					return false;
 				}
-			}
-			else
-			{
+			} else {
 				return false;
 			}
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	}
@@ -353,12 +342,17 @@ public class Utilities {
 	/**
 	 * Crea un fichero temporal con un nombre concreto y unos datos pasados por
 	 * parámetro.
-	 * @param fileName Nombre de fichero
-	 * @param data datos a guardar en el fichero
+	 * 
+	 * @param fileName
+	 *            Nombre de fichero
+	 * @param data
+	 *            datos a guardar en el fichero
 	 */
-	public static void createTemp(String fileName, String data)throws IOException{
+	public static void createTemp(String fileName, String data)
+			throws IOException {
 		File f = new File(fileName);
-		DataOutputStream dos = new DataOutputStream( new BufferedOutputStream(new FileOutputStream(f)) );
+		DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(
+				new FileOutputStream(f)));
 		dos.writeBytes(data);
 		dos.close();
 		f.deleteOnExit();
@@ -366,19 +360,16 @@ public class Utilities {
 
 	/**
 	 * Checks if a String is a number or not
-	 *
-	 * @param String, s
+	 * 
+	 * @param String
+	 *            , s
 	 * @return boolean, true if s is a number
 	 */
-	public static boolean isNumber(String s)
-	{
-		try
-		{
-			//double d = Double.parseDouble(s);
+	public static boolean isNumber(String s) {
+		try {
+			// double d = Double.parseDouble(s);
 			return true;
-		}
-		catch(NumberFormatException e)
-		{
+		} catch (NumberFormatException e) {
 			return false;
 		}
 
@@ -387,24 +378,22 @@ public class Utilities {
 	/**
 	 * Parses the String containing different items [character] separated and
 	 * creates a vector with them.
-	 * @param str String contains item1[c]item2[c]item3...
-	 * @param c is the string value for separating the items
+	 * 
+	 * @param str
+	 *            String contains item1[c]item2[c]item3...
+	 * @param c
+	 *            is the string value for separating the items
 	 * @return Vector containing all the items
 	 */
-	public static Vector createVector(String str, String c)
-	{
+	public static Vector createVector(String str, String c) {
 		StringTokenizer tokens = new StringTokenizer(str, c);
 		Vector v = new Vector();
-		try
-		{
-			while (tokens.hasMoreTokens())
-			{
+		try {
+			while (tokens.hasMoreTokens()) {
 				v.addElement(tokens.nextToken());
 			}
 			return v;
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			return new Vector();
 		}
 	}
@@ -414,46 +403,48 @@ public class Utilities {
 	 * @return
 	 */
 	public static String Vector2URLParamString(Vector v) {
-		if (v==null) return "";
+		if (v == null)
+			return "";
 		String s = "";
 		for (int i = 0; i < v.size(); i++) {
 			s += v.get(i);
-			if (i<v.size()-1)
+			if (i < v.size() - 1)
 				s += "&";
 		}
 		return s;
 	}
 
 	/**
-	 * Return the content of a file that has been created 
-	 * from a URL using the HTTP POST protocol
+	 * Return the content of a file that has been created from a URL using the
+	 * HTTP POST protocol
+	 * 
 	 * @param url
-	 * The URL
+	 *            The URL
 	 * @param data
-	 * The data to send on the query
-	 * @return
-	 * File containing this URL's content or null if no file was found.
+	 *            The data to send on the query
+	 * @return File containing this URL's content or null if no file was found.
 	 */
-	private static File getPreviousDownloadedURL(URL url, String data){
-		if(data == null)
+	private static File getPreviousDownloadedURL(URL url, String data) {
+		if (data == null)
 			return getPreviousDownloaded(url);
-		return getPreviousDownloaded(url+data);
+		return getPreviousDownloaded(url + data);
 	}
 
 	/**
 	 * Returns the content of a URL as a file from the file system.<br>
 	 * <p>
-	 * If the URL has been already downloaded in this session and notified
-	 * to the system using the static <b>Utilities.addDownloadedURL(URL)</b>
+	 * If the URL has been already downloaded in this session and notified to
+	 * the system using the static <b>Utilities.addDownloadedURL(URL)</b>
 	 * method, it can be restored faster from the file system avoiding to
 	 * download it again.
 	 * </p>
+	 * 
 	 * @param url
 	 * @return File containing this URL's content or null if no file was found.
 	 */
-	private static File getPreviousDownloaded(Object object){
+	private static File getPreviousDownloaded(Object object) {
 		File f = null;
-		if (downloadedFiles!=null && downloadedFiles.containsKey(object)){
+		if (downloadedFiles != null && downloadedFiles.containsKey(object)) {
 			String filePath = (String) downloadedFiles.get(object);
 			f = new File(filePath);
 			if (!f.exists())
@@ -464,46 +455,46 @@ public class Utilities {
 
 	/**
 	 * Adds an URL to the table of downloaded files for further uses. If the URL
-	 * already exists in the table its filePath value is updated to the new one and
-	 * the old file itself is removed from the file system.
-	 *
+	 * already exists in the table its filePath value is updated to the new one
+	 * and the old file itself is removed from the file system.
+	 * 
 	 * @param url
 	 * @param filePath
 	 */
-	static void addDownloadedURL(URL url, String filePath){
-		if (downloadedFiles==null)
+	static void addDownloadedURL(URL url, String filePath) {
+		if (downloadedFiles == null)
 			downloadedFiles = new Hashtable();
 		String fileName = (String) downloadedFiles.put(url, filePath);
-		//JMV: No se puede eliminar el anterior porque puede que alguien lo
+		// JMV: No se puede eliminar el anterior porque puede que alguien lo
 		// este usando
 		/*
-        if (fileName!=null){
-            File f = new File(fileName);
-            if (f.exists())
-                f.delete();
-        }
+		 * if (fileName!=null){ File f = new File(fileName); if (f.exists())
+		 * f.delete(); }
 		 */
 	}
-	
-	/** 
+
+	/**
 	 * Computes the correct temporal filename based on an input name.
 	 * 
 	 * @param name
 	 * @return Computed temporal filename
 	 */
-	private static String calculateFileName(String name){
+	private static String calculateFileName(String name) {
 		int index = name.lastIndexOf(".");
-		if (index > 0){
-			return tempDirectoryPath + File.separator + name.substring(0,index) + System.currentTimeMillis() + 
-				name.substring(index, name.length());
+		if (index > 0) {
+			return tempDirectoryPath + File.separator
+					+ name.substring(0, index) + System.currentTimeMillis()
+					+ name.substring(index, name.length());
 		}
-		return tempDirectoryPath+File.separator+name+System.currentTimeMillis();
+		return tempDirectoryPath + File.separator + name
+				+ System.currentTimeMillis();
 	}
 
 	/**
 	 * Downloads an URL into a temporary file that is removed the next time the
-	 * tempFileManager class is called, which means the next time gvSIG is launched.
-	 *
+	 * tempFileManager class is called, which means the next time gvSIG is
+	 * launched.
+	 * 
 	 * @param url
 	 * @param name
 	 * @return
@@ -512,30 +503,34 @@ public class Utilities {
 	 * @throws ConnectException
 	 * @throws UnknownHostException
 	 */
-	public static synchronized File downloadFile(URL url, String name, ICancellable cancel) throws IOException,ConnectException, UnknownHostException{
+	public static synchronized File downloadFile(URL url, String name,
+			ICancellable cancel) throws IOException, ConnectException,
+			UnknownHostException {
 		return downloadFile(url, null, name, cancel);
 	}
 
 	/**
 	 * Downloads a URL using the HTTP Post protocol
+	 * 
 	 * @param url
-	 * The server URL
+	 *            The server URL
 	 * @param data
-	 * The data to send in the request
+	 *            The data to send in the request
 	 * @param name
-	 * A common name for all the retrieved files
+	 *            A common name for all the retrieved files
 	 * @param cancel
-	 * Used to cancel the downloads
-	 * @return
-	 * The retrieved file
+	 *            Used to cancel the downloads
+	 * @return The retrieved file
 	 * @throws IOException
 	 * @throws ConnectException
 	 * @throws UnknownHostException
 	 */
-	public static synchronized File downloadFile(URL url, String data, String name, ICancellable cancel) throws IOException,ConnectException, UnknownHostException{
+	public static synchronized File downloadFile(URL url, String data,
+			String name, ICancellable cancel) throws IOException,
+			ConnectException, UnknownHostException {
 		File f = null;
 
-		if ((f=getPreviousDownloadedURL(url,data))==null){
+		if ((f = getPreviousDownloadedURL(url, data)) == null) {
 			File tempDirectory = new File(tempDirectoryPath);
 			if (!tempDirectory.exists())
 				tempDirectory.mkdir();
@@ -547,17 +542,19 @@ public class Utilities {
 					public boolean isCanceled() {
 						return false;
 					}
-					public Object getID(){
+
+					public Object getID() {
 						return Utilities.class.getName();
 					}
 				};
 			}
 			Monitor monitorObj = new Monitor(cancel);
-			Thread downloader = new Thread(new Downloader(url, data, f, cancel.getID()));
+			Thread downloader = new Thread(new Downloader(url, data, f,
+					cancel.getID()));
 			Thread monitor = new Thread(monitorObj);
 			monitor.start();
 			downloader.start();
-			while(!getCanceled(cancel.getID()) && downloader.isAlive()) {
+			while (!getCanceled(cancel.getID()) && downloader.isAlive()) {
 				try {
 					Thread.sleep(latency);
 				} catch (InterruptedException e) {
@@ -577,8 +574,8 @@ public class Utilities {
 
 			if (getCanceled(cancel.getID()))
 				return null;
-			
-			if (Utilities.downloadException!=null) {
+
+			if (Utilities.downloadException != null) {
 				Exception e = Utilities.downloadException;
 				if (e instanceof FileNotFoundException)
 					throw (IOException) e;
@@ -590,7 +587,8 @@ public class Utilities {
 					throw (UnknownHostException) e;
 			}
 		} else {
-			logger.info(url.toString()+" cached at '"+f.getAbsolutePath()+"'");
+			logger.info(url.toString() + " cached at '" + f.getAbsolutePath()
+					+ "'");
 		}
 
 		return f;
@@ -598,69 +596,76 @@ public class Utilities {
 
 	/**
 	 * Try if a group of downloads has been canceled
+	 * 
 	 * @param groupId
-	 * Group id
-	 * @return
-	 * If the group has been canceled
+	 *            Group id
+	 * @return If the group has been canceled
 	 */
-	protected static boolean getCanceled(Object groupId){
+	protected static boolean getCanceled(Object groupId) {
 		Object obj = canceledGroup.get(groupId);
-		if (obj != null){
-			return ((Boolean)obj).booleanValue();
+		if (obj != null) {
+			return ((Boolean) obj).booleanValue();
 		}
 		return false;
 	}
 
 	/**
 	 * Cancel a group of downloads
+	 * 
 	 * @param groupId
-	 * Group id
+	 *            Group id
 	 * @param isCanceled
-	 * if the group has to be canceled
+	 *            if the group has to be canceled
 	 */
-	protected static void setCanceled(Object groupId, boolean isCanceled){
-		if (groupId == null){
+	protected static void setCanceled(Object groupId, boolean isCanceled) {
+		if (groupId == null) {
 			groupId = Utilities.class.getName();
 		}
-		canceledGroup.put(groupId,new Boolean(isCanceled));
+		canceledGroup.put(groupId, new Boolean(isCanceled));
 	}
 
 	/**
 	 * Cleans every temporal file previously downloaded.
 	 */
 	public static void cleanUpTempFiles() {
-		try{
+		try {
 			File tempDirectory = new File(tempDirectoryPath);
 
 			File[] files = tempDirectory.listFiles();
-			if (files!=null) {
+			if (files != null) {
 				for (int i = 0; i < files.length; i++) {
-					// sólo por si en un futuro se necesitan crear directorios temporales
-					if (files[i].isDirectory())	deleteDirectory(files[i]);
+					// sólo por si en un futuro se necesitan crear directorios
+					// temporales
+					if (files[i].isDirectory())
+						deleteDirectory(files[i]);
 					files[i].delete();
 				}
 			}
 			tempDirectory.delete();
-		} catch (Exception e) {	}
+		} catch (Exception e) {
+		}
 
 	}
+
 	/**
 	 * Recursive directory delete.
+	 * 
 	 * @param f
 	 */
 	private static void deleteDirectory(File f) {
 		File[] files = f.listFiles();
 		for (int i = 0; i < files.length; i++) {
-			if (files[i].isDirectory()) deleteDirectory(files[i]);
+			if (files[i].isDirectory())
+				deleteDirectory(files[i]);
 			files[i].delete();
 		}
 
 	}
 
-
 	/**
 	 * Remove an URL from the system cache. The file will remain in the file
 	 * system for further eventual uses.
+	 * 
 	 * @param request
 	 */
 	public static void removeURL(URL url) {
@@ -671,6 +676,7 @@ public class Utilities {
 	/**
 	 * Remove an URL from the system cache. The file will remain in the file
 	 * system for further eventual uses.
+	 * 
 	 * @param request
 	 */
 	public static void removeURL(Object url) {
@@ -682,10 +688,12 @@ public class Utilities {
 final class Monitor implements Runnable {
 	ICancellable c;
 	private volatile boolean finish = false;
+
 	public Monitor(ICancellable cancel) {
-		Utilities.setCanceled(cancel.getID(),false);
+		Utilities.setCanceled(cancel.getID(), false);
 		this.c = cancel;
 	}
+
 	public void run() {
 		while (!c.isCanceled() && !getFinish()) {
 			try {
@@ -695,21 +703,29 @@ final class Monitor implements Runnable {
 			}
 		}
 
-		/*  WARNING!! This works because only one download is being processed at once.
-		 *  You could prefer to start several transfers simultaneously. If so, you
-		 *  should consideer using a non-static variable such is Utilities.canceled to
-		 *  control when and which transfer in particular has been canceled.
-		 *
-		 *  The feature of transfer several files is at the moment under study. We are
-		 *  planning to add an intelligent system that will give you a lot of services
-		 *  and ease-of-use. So, we encourage you to wait for it instead of write your
-		 *  own code.
+		/*
+		 * WARNING!! This works because only one download is being processed at
+		 * once. You could prefer to start several transfers simultaneously. If
+		 * so, you should consideer using a non-static variable such is
+		 * Utilities.canceled to control when and which transfer in particular
+		 * has been canceled.
+		 * 
+		 * The feature of transfer several files is at the moment under study.
+		 * We are planning to add an intelligent system that will give you a lot
+		 * of services and ease-of-use. So, we encourage you to wait for it
+		 * instead of write your own code.
 		 */
-		if(c.isCanceled())
-			Utilities.setCanceled(c.getID(),true);
+		if (c.isCanceled())
+			Utilities.setCanceled(c.getID(), true);
 	}
-	public synchronized void setFinish(boolean value) { finish = value; }
-	public synchronized boolean getFinish() { return finish; }
+
+	public synchronized void setFinish(boolean value) {
+		finish = value;
+	}
+
+	public synchronized boolean getFinish() {
+		return finish;
+	}
 }
 
 final class Downloader implements Runnable {
@@ -735,9 +751,10 @@ final class Downloader implements Runnable {
 	}
 
 	public void run() {
-		logger.info("downloading '"+url.toString()+"' to: "+dstFile.getAbsolutePath());
+		logger.info("downloading '" + url.toString() + "' to: "
+				+ dstFile.getAbsolutePath());
 		// getting timeout from preferences in milliseconds.
-		Preferences prefs = Preferences.userRoot().node( "gvsig.downloader" );
+		Preferences prefs = Preferences.userRoot().node("gvsig.downloader");
 		// by default 1 minute (60000 milliseconds.
 		int timeout = prefs.getInt("timeout", 60000);
 		DataOutputStream dos;
@@ -745,38 +762,40 @@ final class Downloader implements Runnable {
 			DataInputStream is;
 			OutputStreamWriter os = null;
 			HttpURLConnection connection = null;
-			//If the used protocol is HTTPS
-			if (url.getProtocol().equals("https")){
+			// If the used protocol is HTTPS
+			if (url.getProtocol().equals("https")) {
 				disableHttsValidation();
 			}
-			
-			connection = (HttpURLConnection)url.openConnection();
+
+			connection = (HttpURLConnection) url.openConnection();
 			connection.setConnectTimeout(timeout);
-			//If it uses a HTTP POST
-			if (data != null){
-				connection.setRequestProperty("SOAPAction","post");
+			// If it uses a HTTP POST
+			if (data != null) {
+				connection.setRequestProperty("SOAPAction", "post");
 				connection.setRequestMethod("POST");
 				connection.setDoOutput(true);
-				connection.setRequestProperty("Content-Type", "text/xml; charset=UTF-8");
+				connection.setRequestProperty("Content-Type",
+						"text/xml; charset=UTF-8");
 				os = new OutputStreamWriter(connection.getOutputStream());
 				os.write(data);
-				os.flush();	
+				os.flush();
 				is = new DataInputStream(connection.getInputStream());
-			}else{
+			} else {
 				is = new DataInputStream(url.openStream());
 			}
-			
-			dos = new DataOutputStream( new BufferedOutputStream(new FileOutputStream(dstFile)));
-			byte[] buffer = new byte[1024*4];
 
+			dos = new DataOutputStream(new BufferedOutputStream(
+					new FileOutputStream(dstFile)));
+			byte[] buffer = new byte[1024 * 4];
 
 			long readed = 0;
-			for (int i = is.read(buffer); !Utilities.getCanceled(groupID) && i>0; i = is.read(buffer)){
+			for (int i = is.read(buffer); !Utilities.getCanceled(groupID)
+					&& i > 0; i = is.read(buffer)) {
 				dos.write(buffer, 0, i);
 				readed += i;
 
 			}
-			if(os != null){
+			if (os != null) {
 				os.close();
 			}
 			dos.close();
@@ -784,9 +803,9 @@ final class Downloader implements Runnable {
 			is = null;
 			dos = null;
 			if (Utilities.getCanceled(groupID)) {
-				logger.warning("[RemoteServices] '"+url+"' CANCELED.");
+				logger.warning("[RemoteServices] '" + url + "' CANCELED.");
 				dstFile.delete();
-				dstFile= null;
+				dstFile = null;
 			} else {
 				Utilities.addDownloadedURL(url, dstFile.getAbsolutePath());
 			}
@@ -798,24 +817,26 @@ final class Downloader implements Runnable {
 
 	/**
 	 * This method disables the Https certificate validation.
+	 * 
 	 * @throws KeyManagementException
 	 * @throws NoSuchAlgorithmException
 	 */
-	private void disableHttsValidation() throws KeyManagementException, NoSuchAlgorithmException{
+	private void disableHttsValidation() throws KeyManagementException,
+			NoSuchAlgorithmException {
 		// Create a trust manager that does not validate certificate chains
-		TrustManager[] trustAllCerts = new TrustManager[]{
-				new X509TrustManager() {
-					public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-						return null;
-					}
-					public void checkClientTrusted(
-							java.security.cert.X509Certificate[] certs, String authType) {
-					}
-					public void checkServerTrusted(
-							java.security.cert.X509Certificate[] certs, String authType) {
-					}
-				}
-		};
+		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+			public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+				return null;
+			}
+
+			public void checkClientTrusted(
+					java.security.cert.X509Certificate[] certs, String authType) {
+			}
+
+			public void checkServerTrusted(
+					java.security.cert.X509Certificate[] certs, String authType) {
+			}
+		} };
 
 		// Install the all-trusting trust manager
 		SSLContext sc = SSLContext.getInstance("SSL");

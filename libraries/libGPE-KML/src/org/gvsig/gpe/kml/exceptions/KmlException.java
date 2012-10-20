@@ -69,45 +69,45 @@ import org.gvsig.exceptions.BaseException;
 /**
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class KmlException extends BaseException{
+public class KmlException extends BaseException {
 	private static final long serialVersionUID = -5288461844362832914L;
-	private String m_File = null;	
+	private String m_File = null;
 
 	public KmlException(InputStream file) {
-		if (file instanceof FileInputStream){
-			//Object o = ((FileInputStream)file).getFD().
+		if (file instanceof FileInputStream) {
+			// Object o = ((FileInputStream)file).getFD().
 		}
 		this.m_File = "fileName";
-		init();		
+		init();
 	}
-	
-	public KmlException(InputStream file,Throwable exception) {
+
+	public KmlException(InputStream file, Throwable exception) {
 		this.m_File = "fileName";
 		init();
 		initCause(exception);
 	}
-	
+
 	public KmlException(File file) {
 		this.m_File = file.getAbsolutePath();
-		init();		
+		init();
 	}
-	
-	public KmlException(File file,Throwable exception) {
+
+	public KmlException(File file, Throwable exception) {
 		this.m_File = file.getAbsolutePath();
 		init();
 		initCause(exception);
 	}
-	
+
 	private void init() {
 		messageKey = "error_kml_generic";
 		formatString = "Error opening Kml file %(file)";
-		code = serialVersionUID;		
+		code = serialVersionUID;
 	}
 
 	protected Map values() {
 		Hashtable params = new Hashtable();
-		params.put("file",m_File);
-		return params;		
+		params.put("file", m_File);
+		return params;
 	}
 
 }

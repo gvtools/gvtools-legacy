@@ -56,7 +56,6 @@ import org.gvsig.graph.core.IGraph;
 import org.gvsig.graph.core.Network;
 import org.gvsig.graph.core.NetworkUtils;
 
-import com.hardcode.gdbms.driver.exceptions.InitializeWriterException;
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
@@ -79,14 +78,15 @@ import com.vividsolutions.jts.geom.LineString;
 /**
  * @author fjp
  * 
- * This class can label nodes with distances and costs to a flag
- * Use first doLabelling() with every source flag and call
- * doExtract() to obtain a new layer with fields
- * IdArc, IdEdge, CostOrig, DistOrig, CostEnd, DistEnd, IdFlag 
- *
+ *         This class can label nodes with distances and costs to a flag Use
+ *         first doLabelling() with every source flag and call doExtract() to
+ *         obtain a new layer with fields IdArc, IdEdge, CostOrig, DistOrig,
+ *         CostEnd, DistEnd, IdFlag
+ * 
  */
 public class ServiceAreaExtractor {
-	private static String tempDirectoryPath = System.getProperty("java.io.tmpdir");
+	private static String tempDirectoryPath = System
+			.getProperty("java.io.tmpdir");
 	static FieldDescription[] fields = new FieldDescription[7];
 	static {
 		FieldDescription fieldDesc = new FieldDescription();
@@ -109,7 +109,7 @@ public class ServiceAreaExtractor {
 		fieldDesc.setFieldLength(20);
 		fieldDesc.setFieldDecimalCount(5);
 		fields[2] = fieldDesc;
-		
+
 		fieldDesc = new FieldDescription();
 		fieldDesc.setFieldName("DISTORIG");
 		fieldDesc.setFieldType(Types.DOUBLE);
@@ -147,7 +147,7 @@ public class ServiceAreaExtractor {
 		fieldDesc.setFieldLength(20);
 		fieldDesc.setFieldDecimalCount(5);
 		fieldsPol[0] = fieldDesc;
-		
+
 		fieldDesc = new FieldDescription();
 		fieldDesc.setFieldName("IDFLAG");
 		fieldDesc.setFieldType(Types.INTEGER);
@@ -157,7 +157,6 @@ public class ServiceAreaExtractor {
 
 	}
 
-	
 	private Network net;
 	private ShpWriter shpWriter;
 	private ShpWriter shpWriterPol;
@@ -166,28 +165,28 @@ public class ServiceAreaExtractor {
 	private SHPLayerDefinition layerDef;
 	private SHPLayerDefinition layerDefPol;
 	private Geometry serviceArea = null;
-	private ArrayList <Geometry> serviceAreaPolygons;
+	private ArrayList<Geometry> serviceAreaPolygons;
 
 	public ServiceAreaExtractor(Network net) throws BaseException {
 		this.net = net;
-		int aux = (int)(Math.random() * 1000);
+		int aux = (int) (Math.random() * 1000);
 		String nameLine = "tmpServiceAreaLine" + aux + ".shp";
 		String namePol = "tmpServiceAreaPol" + aux + ".shp";
-		fTemp = new File(tempDirectoryPath + "/" + nameLine );
-		fTempPol = new File(tempDirectoryPath + "/" + namePol );
-		
+		fTemp = new File(tempDirectoryPath + "/" + nameLine);
+		fTempPol = new File(tempDirectoryPath + "/" + namePol);
+
 		layerDef = new SHPLayerDefinition();
 		layerDef.setFile(fTemp);
-		layerDef.setName(nameLine);		
+		layerDef.setName(nameLine);
 		layerDef.setFieldsDesc(fields);
 		layerDef.setShapeType(FShape.LINE);
 
 		layerDefPol = new SHPLayerDefinition();
 		layerDefPol.setFile(fTempPol);
-		layerDefPol.setName(namePol);		
+		layerDefPol.setName(namePol);
 		layerDefPol.setFieldsDesc(fieldsPol);
 		layerDefPol.setShapeType(FShape.POLYGON);
-		
+
 		shpWriter = new ShpWriter();
 		shpWriter.setFile(fTemp);
 		shpWriter.initialize(layerDef);
@@ -197,81 +196,79 @@ public class ServiceAreaExtractor {
 		shpWriterPol.initialize(layerDefPol);
 		shpWriter.preProcess();
 		shpWriterPol.preProcess();
-		
-		
+
 	}
-	
+
 	public void doExtract(int idFlag, double[] costs) {
-//		if (maxCost == -1)
-//		{
-//			throw new RuntimeException("ServiceAreaExtactor: You need to set maxCost.");
-//		}
-		double maxCost = costs[costs.length-1];
+		// if (maxCost == -1)
+		// {
+		// throw new
+		// RuntimeException("ServiceAreaExtactor: You need to set maxCost.");
+		// }
+		double maxCost = costs[costs.length - 1];
 		serviceAreaPolygons = new ArrayList<Geometry>(costs.length);
-		for (int i=0; i < costs.length-1; i++)
+		for (int i = 0; i < costs.length - 1; i++)
 			serviceAreaPolygons.add(null);
 		FLyrVect lyr = net.getLayer();
 		IGraph g = net.getGraph();
 		ReadableVectorial adapter = lyr.getSource();
 		try {
-			
+
 			adapter.start();
-		
-			for (int i=0; i < adapter.getShapeCount(); i++)
-			{
+
+			for (int i = 0; i < adapter.getShapeCount(); i++) {
 				IGeometry geom = adapter.getShape(i);
 				EdgePair edgePair = g.getEdgesByIdArc(i);
-				if (edgePair.getIdEdge() != -1)
-				{
+				if (edgePair.getIdEdge() != -1) {
 					GvEdge edge = g.getEdgeByID(edgePair.getIdEdge());
 					GvNode nodeEnd = g.getNodeByID(edge.getIdNodeEnd());
 					GvNode nodeOrig = g.getNodeByID(edge.getIdNodeOrig());
 					processEdgeForPolygon(edge, nodeOrig, nodeEnd, geom, costs);
-					if (nodeEnd.getBestCost() > nodeOrig.getBestCost())
-					{						
+					if (nodeEnd.getBestCost() > nodeOrig.getBestCost()) {
 						if (nodeEnd.getBestCost() < maxCost) {
 							// A ese tramo hemos llegado por completo
 							// Recuperamos su distancia y etiquetamos.
-							writeTotalEdge(i, geom, edge, nodeOrig, nodeEnd, idFlag);	
-						}
-						else
-						{
+							writeTotalEdge(i, geom, edge, nodeOrig, nodeEnd,
+									idFlag);
+						} else {
 							if (nodeOrig.getBestCost() < maxCost) {
 								// A ese tramo hemos llegado parcialmente
 								// Recuperamos su distancia y etiquetamos.
-								writePartialEdge(i, geom, edge, nodeOrig, nodeEnd, idFlag, maxCost);	
-								
+								writePartialEdge(i, geom, edge, nodeOrig,
+										nodeEnd, idFlag, maxCost);
+
 							}
 						} // else
 					} // if nodeEnd > nodeOrig
 				}
-				if (edgePair.getIdInverseEdge() != -1)
-				{
-					GvEdge inversedEdge = g.getEdgeByID(edgePair.getIdInverseEdge());
+				if (edgePair.getIdInverseEdge() != -1) {
+					GvEdge inversedEdge = g.getEdgeByID(edgePair
+							.getIdInverseEdge());
 					GvNode nodeEnd = g.getNodeByID(inversedEdge.getIdNodeEnd());
-					GvNode nodeOrig = g.getNodeByID(inversedEdge.getIdNodeOrig());
-					processEdgeForPolygon(inversedEdge, nodeOrig, nodeEnd, geom, costs);
-					if (nodeEnd.getBestCost() > nodeOrig.getBestCost())
-					{					
+					GvNode nodeOrig = g.getNodeByID(inversedEdge
+							.getIdNodeOrig());
+					processEdgeForPolygon(inversedEdge, nodeOrig, nodeEnd,
+							geom, costs);
+					if (nodeEnd.getBestCost() > nodeOrig.getBestCost()) {
 						if (nodeEnd.getBestCost() < maxCost) {
 							// A ese tramo hemos llegado por completo
 							// Recuperamos su distancia y etiquetamos.
-							writeTotalEdge(i, geom, inversedEdge, nodeOrig, nodeEnd, idFlag);	
-						}
-						else
-						{
+							writeTotalEdge(i, geom, inversedEdge, nodeOrig,
+									nodeEnd, idFlag);
+						} else {
 							if (nodeOrig.getBestCost() < maxCost) {
 								// A ese tramo hemos llegado parcialmente
 								// Recuperamos su distancia y etiquetamos.
-								writePartialEdge(i, geom, inversedEdge, nodeOrig, nodeEnd, idFlag, maxCost);	
-								
+								writePartialEdge(i, geom, inversedEdge,
+										nodeOrig, nodeEnd, idFlag, maxCost);
+
 							}
 						} // else
-					} // if nodeEnd > nodeOrig 
+					} // if nodeEnd > nodeOrig
 				}
-				
+
 			}
-			for (int j=serviceAreaPolygons.size()-1; j>=0; j--) {
+			for (int j = serviceAreaPolygons.size() - 1; j >= 0; j--) {
 				Geometry jtsGeom = serviceAreaPolygons.get(j);
 				writePolygon(idFlag, costs[j], jtsGeom);
 			}
@@ -280,77 +277,74 @@ public class ServiceAreaExtractor {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 
 	}
-	
+
 	/**
 	 * Write data and close files.
+	 * 
 	 * @throws BaseException
 	 */
 	public void endExtraction() throws BaseException {
-		shpWriter.postProcess();			
+		shpWriter.postProcess();
 		shpWriterPol.postProcess();
 	}
 
 	/**
-	 * We process each edge and prepare a list of polygons, classified by
-	 * cost
+	 * We process each edge and prepare a list of polygons, classified by cost
+	 * 
 	 * @param edge
 	 * @param nodeOrig
 	 * @param nodeEnd
 	 * @param geom
 	 * @param costs
 	 */
-	private void processEdgeForPolygon(GvEdge edge, GvNode nodeOrig, GvNode nodeEnd, IGeometry geom, double[] costs) {
-		if (nodeEnd.getBestCost() > nodeOrig.getBestCost())
-		{		
-			// miramos en qué polígono cae ese edge POR COMPLETO 
+	private void processEdgeForPolygon(GvEdge edge, GvNode nodeOrig,
+			GvNode nodeEnd, IGeometry geom, double[] costs) {
+		if (nodeEnd.getBestCost() > nodeOrig.getBestCost()) {
+			// miramos en qué polígono cae ese edge POR COMPLETO
 			// El coste de su punto final es menor que uno de los costes.
 			int indexInterval = getCostInterval(nodeEnd.getBestCost(), costs);
 			// Un polígono por cada zona
 			Geometry jtsGeom = geom.toJTSGeometry();
-			if (indexInterval != -1)
-			{
-				for (int i=costs.length-1; i >= indexInterval; i--) {
+			if (indexInterval != -1) {
+				for (int i = costs.length - 1; i >= indexInterval; i--) {
 					calculateConvexHull(jtsGeom, i);
 				}
 			}
-			double maxCost = costs[costs.length-1];
+			double maxCost = costs[costs.length - 1];
 			// Es -1 si caso límite externo
-			if (indexInterval < costs.length-1)
-			{
+			if (indexInterval < costs.length - 1) {
 				// Caso límite externo
-				if ((nodeEnd.getBestCost() > maxCost) &&						
-						(nodeOrig.getBestCost() < maxCost))
-				{
-					double pct = (maxCost - nodeOrig.getBestCost())/ edge.getWeight();
-					LineString partial = NetworkUtils.getPartialLineString(jtsGeom, pct, edge.getDirec());
-					calculateConvexHull(partial, costs.length-1);
+				if ((nodeEnd.getBestCost() > maxCost)
+						&& (nodeOrig.getBestCost() < maxCost)) {
+					double pct = (maxCost - nodeOrig.getBestCost())
+							/ edge.getWeight();
+					LineString partial = NetworkUtils.getPartialLineString(
+							jtsGeom, pct, edge.getDirec());
+					calculateConvexHull(partial, costs.length - 1);
 					return;
 				}
 				// Parcial interno
-				maxCost = costs[indexInterval+1];
-				if ((nodeOrig.getBestCost() < maxCost) &&
-						(nodeEnd.getBestCost() > maxCost)) 
-				{
+				maxCost = costs[indexInterval + 1];
+				if ((nodeOrig.getBestCost() < maxCost)
+						&& (nodeEnd.getBestCost() > maxCost)) {
 					// A ese tramo hemos llegado parcialmente
-					 
-					double pct = (maxCost - nodeOrig.getBestCost())/ edge.getWeight();
+
+					double pct = (maxCost - nodeOrig.getBestCost())
+							/ edge.getWeight();
 					try {
-						LineString partial = NetworkUtils.getPartialLineString(jtsGeom, pct, edge.getDirec());
-						calculateConvexHull(partial, indexInterval+1);							
-					}
-					catch (Exception e)
-					{
+						LineString partial = NetworkUtils.getPartialLineString(
+								jtsGeom, pct, edge.getDirec());
+						calculateConvexHull(partial, indexInterval + 1);
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					
+
 				}
 			}
-		} 
+		}
 
-		
 	}
 
 	/**
@@ -359,17 +353,14 @@ public class ServiceAreaExtractor {
 	 */
 	private void calculateConvexHull(Geometry jtsGeom, int i) {
 		if (serviceAreaPolygons.size() <= i) { // se crea por primera vez
-			Geometry gIni = jtsGeom; 
+			Geometry gIni = jtsGeom;
 			serviceAreaPolygons.add(i, gIni);
-		}
-		else
-		{
+		} else {
 			Geometry antG = serviceAreaPolygons.get(i);
 			if (antG == null)
 				antG = jtsGeom;
-			else
-			{
-				antG = antG.union(jtsGeom);				
+			else {
+				antG = antG.union(jtsGeom);
 			}
 			antG = antG.convexHull();
 			serviceAreaPolygons.set(i, antG);
@@ -378,38 +369,41 @@ public class ServiceAreaExtractor {
 
 	/**
 	 * Devuelve el índice del intervalo más alto que contiene a ese valor.
+	 * 
 	 * @param bestCost
 	 * @param costs
 	 * @return
 	 */
 	private int getCostInterval(double bestCost, double[] costs) {
 		int ret = 0;
-		if (bestCost > costs[costs.length-1])
+		if (bestCost > costs[costs.length - 1])
 			return -1;
-		for (int i=costs.length-1; i>=0; i--) {
-			if (bestCost > costs[i])
-			{
-				ret = i+1;
+		for (int i = costs.length - 1; i >= 0; i--) {
+			if (bestCost > costs[i]) {
+				ret = i + 1;
 				break;
 			}
 		}
-//		if (ret > 0)
-//			System.out.println(costs[ret-1] + " < " + bestCost + " < " + costs[ret]); 
+		// if (ret > 0)
+		// System.out.println(costs[ret-1] + " < " + bestCost + " < " +
+		// costs[ret]);
 		return ret;
 	}
 
-	private void writePartialEdge(int i, IGeometry geom, GvEdge edge, GvNode nodeOrig, GvNode nodeEnd, int idFlag, double maxCost) throws ProcessWriterVisitorException {
+	private void writePartialEdge(int i, IGeometry geom, GvEdge edge,
+			GvNode nodeOrig, GvNode nodeEnd, int idFlag, double maxCost)
+			throws ProcessWriterVisitorException {
 		Geometry jtsGeom = geom.toJTSGeometry();
-		double pct = (maxCost - nodeOrig.getBestCost())/ edge.getWeight();
-		LineString partial = NetworkUtils.getPartialLineString(jtsGeom, pct, edge.getDirec());
+		double pct = (maxCost - nodeOrig.getBestCost()) / edge.getWeight();
+		LineString partial = NetworkUtils.getPartialLineString(jtsGeom, pct,
+				edge.getDirec());
 		if (serviceArea == null)
 			serviceArea = partial;
-		else
-		{
+		else {
 			serviceArea = serviceArea.union(partial);
 			serviceArea = serviceArea.convexHull();
 		}
-		
+
 		IGeometry newGeom = FConverter.jts_to_igeometry(partial);
 
 		Value[] values = new Value[7];
@@ -418,26 +412,28 @@ public class ServiceAreaExtractor {
 		values[2] = ValueFactory.createValue(nodeOrig.getBestCost());
 		values[3] = ValueFactory.createValue(nodeOrig.getAccumulatedLength());
 		values[4] = ValueFactory.createValue(maxCost);
-		values[5] = ValueFactory.createValue(nodeOrig.getAccumulatedLength() + edge.getDistance()*pct);
+		values[5] = ValueFactory.createValue(nodeOrig.getAccumulatedLength()
+				+ edge.getDistance() * pct);
 		values[6] = ValueFactory.createValue(idFlag);
-		
-		
+
 		DefaultFeature feat = new DefaultFeature(newGeom, values);
-		IRowEdited row = new DefaultRowEdited(feat, DefaultRowEdited.STATUS_ADDED, i);
+		IRowEdited row = new DefaultRowEdited(feat,
+				DefaultRowEdited.STATUS_ADDED, i);
 		shpWriter.process(row);
-		
+
 	}
-	
-	private void writeTotalEdge(int i, IGeometry geom, GvEdge edge, GvNode nodeOrig, GvNode nodeEnd, int idFlag) throws ProcessWriterVisitorException {
+
+	private void writeTotalEdge(int i, IGeometry geom, GvEdge edge,
+			GvNode nodeOrig, GvNode nodeEnd, int idFlag)
+			throws ProcessWriterVisitorException {
 		Geometry jtsGeom = geom.toJTSGeometry();
 		if (serviceArea == null)
 			serviceArea = jtsGeom;
-		else
-		{
+		else {
 			serviceArea = serviceArea.union(jtsGeom);
 			serviceArea = serviceArea.convexHull();
 		}
-		
+
 		Value[] values = new Value[7];
 		values[0] = ValueFactory.createValue(i);
 		values[1] = ValueFactory.createValue(edge.getIdEdge());
@@ -446,33 +442,36 @@ public class ServiceAreaExtractor {
 		values[4] = ValueFactory.createValue(nodeEnd.getBestCost());
 		values[5] = ValueFactory.createValue(nodeEnd.getAccumulatedLength());
 		values[6] = ValueFactory.createValue(idFlag);
-		
-		
+
 		DefaultFeature feat = new DefaultFeature(geom, values);
-		IRowEdited row = new DefaultRowEdited(feat, DefaultRowEdited.STATUS_ADDED, i);
+		IRowEdited row = new DefaultRowEdited(feat,
+				DefaultRowEdited.STATUS_ADDED, i);
 		shpWriter.process(row);
 	}
 
-	private void writePolygon(int idFlag, double maxCost, Geometry jtsGeom) throws ProcessWriterVisitorException {
+	private void writePolygon(int idFlag, double maxCost, Geometry jtsGeom)
+			throws ProcessWriterVisitorException {
 		Value[] values = new Value[2];
 		values[0] = ValueFactory.createValue(maxCost);
 		values[1] = ValueFactory.createValue(idFlag);
-		
+
 		IGeometry geom = FConverter.jts_to_igeometry(jtsGeom);
 		DefaultFeature feat = new DefaultFeature(geom, values);
-		IRowEdited row = new DefaultRowEdited(feat, DefaultRowEdited.STATUS_ADDED, idFlag);
+		IRowEdited row = new DefaultRowEdited(feat,
+				DefaultRowEdited.STATUS_ADDED, idFlag);
 		shpWriterPol.process(row);
 	}
 
 	public FLyrVect getPolygonLayer() throws LoadLayerException {
-		FLyrVect lyr = (FLyrVect) LayerFactory.createLayer(layerDefPol.getName(), "gvSIG shp driver", 
+		FLyrVect lyr = (FLyrVect) LayerFactory.createLayer(
+				layerDefPol.getName(), "gvSIG shp driver",
 				layerDefPol.getFile(), null);
 		return lyr;
 	}
 
 	public FLyrVect getLineLayer() throws LoadLayerException {
-		FLyrVect lyr = (FLyrVect) LayerFactory.createLayer(layerDef.getName(), "gvSIG shp driver", 
-				layerDef.getFile(), null);
+		FLyrVect lyr = (FLyrVect) LayerFactory.createLayer(layerDef.getName(),
+				"gvSIG shp driver", layerDef.getFile(), null);
 		return lyr;
 	}
 

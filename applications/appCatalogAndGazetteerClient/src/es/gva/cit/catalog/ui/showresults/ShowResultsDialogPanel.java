@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.catalog.ui.showresults;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collection;
@@ -74,44 +74,51 @@ public class ShowResultsDialogPanel extends JPanel implements ActionListener {
 	protected GetRecordsReply recordsReply = null;
 
 	/**
-	 * @param client 
-	 * @param nodes 
-	 * @param currentRecord 
-	 * @param translator 
+	 * @param client
+	 * @param nodes
+	 * @param currentRecord
+	 * @param translator
 	 */
-	public  ShowResultsDialogPanel(CatalogClient client, GetRecordsReply recordsReply, int currentRecord) {        
+	public ShowResultsDialogPanel(CatalogClient client,
+			GetRecordsReply recordsReply, int currentRecord) {
 		this.recordsReply = recordsReply;
 		this.client = client;
 		this.currentRecord = currentRecord;
 		controlsPanel = new ShowResultsPanel(client,
-				recordsReply.getRecordsNumber());  
-		controlsPanel.loadTextNewRecord(recordsReply.getRecordAt(currentRecord - 1));
+				recordsReply.getRecordsNumber());
+		controlsPanel.loadTextNewRecord(recordsReply
+				.getRecordAt(currentRecord - 1));
 		setDefaultButtonListeners();
 		enableLoadResourcesButton();
 		add(controlsPanel);
-	} 
+	}
 
 	/**
-	 *  Enable the button to load online resources
+	 * Enable the button to load online resources
 	 */
-	public void enableLoadResourcesButton() {        
+	public void enableLoadResourcesButton() {
 		getMapButton().setEnabled(false);
-		if (controlsPanel.getRecord() != null){
+		if (controlsPanel.getRecord() != null) {
 			Resource[] resources = controlsPanel.getRecord().getResources();
 			if (resources == null)
 				return;
 			for (int i = 0; i < resources.length; i++) {
 				String protocol = resources[i].getProtocol();
 
-				if (protocol != null){        	
-					if ((protocol.toUpperCase().indexOf(Resource.WMS) >= 0) ||
-							(protocol.toUpperCase().indexOf(Resource.WFS) >=0) ||
-							(protocol.toUpperCase().indexOf(Resource.WCS) >=0) ||
-							(protocol.toUpperCase().indexOf(Resource.POSTGIS) >=0) ||
-							(protocol.toUpperCase().indexOf(Resource.WEBSITE) >=0) ||
-							(protocol.toUpperCase().indexOf(Resource.ARCIMS_IMAGE) >=0) ||
-							(protocol.toUpperCase().indexOf(Resource.ARCIMS_VECTORIAL) >=0) ||
-							(protocol.toUpperCase().indexOf(Resource.DOWNLOAD) >=0)){
+				if (protocol != null) {
+					if ((protocol.toUpperCase().indexOf(Resource.WMS) >= 0)
+							|| (protocol.toUpperCase().indexOf(Resource.WFS) >= 0)
+							|| (protocol.toUpperCase().indexOf(Resource.WCS) >= 0)
+							|| (protocol.toUpperCase()
+									.indexOf(Resource.POSTGIS) >= 0)
+							|| (protocol.toUpperCase()
+									.indexOf(Resource.WEBSITE) >= 0)
+							|| (protocol.toUpperCase().indexOf(
+									Resource.ARCIMS_IMAGE) >= 0)
+							|| (protocol.toUpperCase().indexOf(
+									Resource.ARCIMS_VECTORIAL) >= 0)
+							|| (protocol.toUpperCase().indexOf(
+									Resource.DOWNLOAD) >= 0)) {
 						getMapButton().setEnabled(true);
 						return;
 					}
@@ -119,13 +126,13 @@ public class ShowResultsDialogPanel extends JPanel implements ActionListener {
 			}
 		}
 
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 */
-	public void setDefaultButtonListeners() {        
+	public void setDefaultButtonListeners() {
 		nextButton = controlsPanel.getNextButton();
 		lastButton = controlsPanel.getLastButton();
 		descriptionButton = controlsPanel.getDescriptionButton();
@@ -136,98 +143,101 @@ public class ShowResultsDialogPanel extends JPanel implements ActionListener {
 		descriptionButton.addActionListener(this);
 		mapButton.addActionListener(this);
 		closeButton.addActionListener(this);
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @return 
+	 * @return
 	 */
-	public JButton getDescriptionButton() {        
+	public JButton getDescriptionButton() {
 		return descriptionButton;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @return 
+	 * @return
 	 */
-	public JButton getMapButton() {        
+	public JButton getMapButton() {
 		return mapButton;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @return 
+	 * @return
 	 */
-	public JButton getCloseButton() {        
+	public JButton getCloseButton() {
 		return closeButton;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param firstRecord 
+	 * @param firstRecord
 	 */
-	public void createNewSearch(int firstRecord) {        
+	public void createNewSearch(int firstRecord) {
 		recordsReply = client.getRecords(null, firstRecord);
-	} 
+	}
 
 	/**
-	 * @return 
+	 * @return
 	 */
-	public int getCurrentNode() {        
+	public int getCurrentNode() {
 		return currentRecord - 1;
-	} 
+	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
-	public void actionPerformed(ActionEvent e) {        
+	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("next")) {
 			nextButtonActionPerformed();
-		} 
+		}
 		if (e.getActionCommand().equals("last")) {
 			lastButtonActionPerformed();
-		} 
+		}
 		if (e.getActionCommand().equals("description")) {
 			descriptionButtonActionPerformed();
-		} 
+		}
 		if (e.getActionCommand().equals("layer")) {
 			mapButtonActionPerformed();
-		} 
+		}
 		if (e.getActionCommand().equals("close")) {
 			closeButtonActionPerformed();
 		}
 
-	} 
+	}
 
-	protected void nextButtonActionPerformed() {        
+	protected void nextButtonActionPerformed() {
 		this.currentRecord = this.currentRecord + 1;
-		if (this.currentRecord == recordsReply.getRecordsNumber()){
+		if (this.currentRecord == recordsReply.getRecordsNumber()) {
 			nextButton.setEnabled(false);
 		} else {
 			nextButton.setEnabled(true);
 		}
 		lastButton.setEnabled(true);
 		if ((this.currentRecord % 10) == 1) {
-			if (recordsReply.getRetrievedRecordsNumber() + 1 == this.currentRecord){
+			if (recordsReply.getRetrievedRecordsNumber() + 1 == this.currentRecord) {
 				createNewSearch(currentRecord);
 			}
 		}
-		controlsPanel.loadTextNewRecord(recordsReply.getRecordAt(getCurrentNode()));
+		controlsPanel.loadTextNewRecord(recordsReply
+				.getRecordAt(getCurrentNode()));
 		controlsPanel.actualizaLabel(currentRecord);
 
 		enableLoadResourcesButton();
-	} 
+	}
 
-	protected void lastButtonActionPerformed() {        
+	protected void lastButtonActionPerformed() {
 		this.currentRecord = this.currentRecord - 1;
 		if (this.currentRecord == 1) {
 			lastButton.setEnabled(false);
@@ -235,42 +245,44 @@ public class ShowResultsDialogPanel extends JPanel implements ActionListener {
 			lastButton.setEnabled(true);
 		}
 		nextButton.setEnabled(true);
-		controlsPanel.loadTextNewRecord(recordsReply.getRecordAt(getCurrentNode()));
+		controlsPanel.loadTextNewRecord(recordsReply
+				.getRecordAt(getCurrentNode()));
 		controlsPanel.actualizaLabel(currentRecord);
 
 		enableLoadResourcesButton();
-	} 
+	}
 
-	protected void descriptionButtonActionPerformed() {        
+	protected void descriptionButtonActionPerformed() {
 		Record record = recordsReply.getRecordAt(getCurrentNode());
-		if (record == null){
-			//Impossible to parse
-		}else{
+		if (record == null) {
+			// Impossible to parse
+		} else {
 			new ShowTreeDialog(record.getNode());
 		}
-	} 
+	}
 
-	protected void mapButtonActionPerformed() {        
+	protected void mapButtonActionPerformed() {
 		Resource[] resources = controlsPanel.getRecord().getResources();
 		Collection col = new java.util.ArrayList();
-		for (int i=0 ; i<resources.length ; i++){
+		for (int i = 0; i < resources.length; i++) {
 			col.add(resources[i]);
 		}
 		new ChooseResourceDialog(col);
 
-	} 
+	}
 
-	protected void closeButtonActionPerformed() {        
+	protected void closeButtonActionPerformed() {
 		parent.setVisible(false);
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param parent The parent to set.
+	 * @param parent
+	 *            The parent to set.
 	 */
-	public void setParent(JDialog parent) {        
+	public void setParent(JDialog parent) {
 		this.parent = parent;
-	} 
+	}
 }

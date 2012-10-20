@@ -17,42 +17,45 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
-public class ViewCommandStackExtension extends Extension implements CommandListener{
-	public static CommandStackDialog csd=null;
+public class ViewCommandStackExtension extends Extension implements
+		CommandListener {
+	public static CommandStackDialog csd = null;
+
 	/**
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
 		PluginServices.getIconTheme().registerDefault(
 				"commands-stack",
-				this.getClass().getClassLoader().getResource("images/commandstack.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/commandstack.png"));
 	}
 
 	/**
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String s) {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-				.getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		View vista = (View) f;
 		IProjectView model = vista.getModel();
 		MapContext mapa = model.getMapContext();
 		FLayers layers = mapa.getLayers();
 		if (s.equals("COMMANDSTACK")) {
-			for (int i =0;i<layers.getLayersCount();i++){
-				if (layers.getLayer(i) instanceof FLyrVect){
-					FLyrVect lyrVect=(FLyrVect)layers.getLayer(i);
-					if (lyrVect.isEditing() && lyrVect.isActive()){
+			for (int i = 0; i < layers.getLayersCount(); i++) {
+				if (layers.getLayer(i) instanceof FLyrVect) {
+					FLyrVect lyrVect = (FLyrVect) layers.getLayer(i);
+					if (lyrVect.isEditing() && lyrVect.isActive()) {
 						VectorialEditableAdapter vea = (VectorialEditableAdapter) lyrVect
-						.getSource();
+								.getSource();
 						vea.getCommandRecord().addCommandListener(this);
-						csd=new CommandStackDialog();
-						csd.setModel(((IEditableSource)lyrVect.getSource()).getCommandRecord());
+						csd = new CommandStackDialog();
+						csd.setModel(((IEditableSource) lyrVect.getSource())
+								.getCommandRecord());
 						PluginServices.getMDIManager().addWindow(csd);
 						return;
 					}
@@ -60,7 +63,7 @@ public class ViewCommandStackExtension extends Extension implements CommandListe
 			}
 		}
 
-		//PluginServices.getMainFrame().enableControls();
+		// PluginServices.getMainFrame().enableControls();
 
 	}
 
@@ -84,24 +87,24 @@ public class ViewCommandStackExtension extends Extension implements CommandListe
 
 	public void commandRepaint() {
 		try {
-			CADTool cadTool=CADExtension.getCADTool();
-			if (cadTool!=null){
+			CADTool cadTool = CADExtension.getCADTool();
+			if (cadTool != null) {
 				cadTool.clearSelection();
 			}
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 
 	}
 
 	public void commandRefresh() {
 		try {
-			CADTool cadTool=CADExtension.getCADTool();
-			if (cadTool!=null){
+			CADTool cadTool = CADExtension.getCADTool();
+			if (cadTool != null) {
 				cadTool.clearSelection();
 			}
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 	}
 }

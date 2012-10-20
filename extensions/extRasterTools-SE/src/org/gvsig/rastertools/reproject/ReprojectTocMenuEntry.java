@@ -33,28 +33,33 @@ import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
 /**
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
-public class ReprojectTocMenuEntry extends AbstractTocContextMenuAction implements IGenericToolBarMenuItem {
-	static private ReprojectTocMenuEntry singleton  = null;
+public class ReprojectTocMenuEntry extends AbstractTocContextMenuAction
+		implements IGenericToolBarMenuItem {
+	static private ReprojectTocMenuEntry singleton = null;
 	FLayer lyr = null;
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.project.documents.IContextMenuAction#getGroup()
 	 */
 	public String getGroup() {
-		return "GeoRaster"; //FIXME
+		return "GeoRaster"; // FIXME
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.IContextMenuAction#getGroupOrder()
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.IContextMenuAction#getGroupOrder()
 	 */
 	public int getGroupOrder() {
 		return 60;
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.project.documents.IContextMenuAction#getOrder()
 	 */
 	public int getOrder() {
@@ -62,15 +67,17 @@ public class ReprojectTocMenuEntry extends AbstractTocContextMenuAction implemen
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.project.documents.IContextMenuAction#getText()
 	 */
 	public String getText() {
 		return RasterToolsUtil.getText(this, "toc_reproject");
 	}
-	
+
 	/**
 	 * Devuelve un objeto unico a dicha clase
+	 * 
 	 * @return
 	 */
 	static public ReprojectTocMenuEntry getSingleton() {
@@ -80,16 +87,24 @@ public class ReprojectTocMenuEntry extends AbstractTocContextMenuAction implemen
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
 		return true;
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -98,27 +113,31 @@ public class ReprojectTocMenuEntry extends AbstractTocContextMenuAction implemen
 		if (!(selectedItems[0] instanceof FLyrRasterSE))
 			return false;
 
-		return ((FLyrRasterSE) selectedItems[0]).isActionEnabled(IRasterLayerActions.REPROJECT);
+		return ((FLyrRasterSE) selectedItems[0])
+				.isActionEnabled(IRasterLayerActions.REPROJECT);
 	}
 
 	/**
-	 * Método que se ejecuta cuando se pulsa la entrada en el menú contextual del TOC 
-	 * correspondiente a "Zoom a la resolución del raster". Aquí se creará el mapTool si 
-	 * no se ha hecho antes y se cargará.
+	 * Método que se ejecuta cuando se pulsa la entrada en el menú contextual
+	 * del TOC correspondiente a "Zoom a la resolución del raster". Aquí se
+	 * creará el mapTool si no se ha hecho antes y se cargará.
 	 */
 	public void execute(ITocItem item, FLayer[] selectedItems) {
 		if (selectedItems.length == 1) {
 			lyr = selectedItems[0];
 			if (lyr instanceof FLyrRasterSE) {
-				LayerReprojectPanel reprojectPanel = new LayerReprojectPanel((FLyrRasterSE) lyr, Boolean.TRUE);
+				LayerReprojectPanel reprojectPanel = new LayerReprojectPanel(
+						(FLyrRasterSE) lyr, Boolean.TRUE);
 				RasterToolsUtil.addWindow(reprojectPanel);
 			}
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.generictoolbar.IGenericToolBarMenuItem#getIcon()
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.generictoolbar.IGenericToolBarMenuItem#getIcon()
 	 */
 	public Icon getIcon() {
 		return RasterToolsUtil.getIcon("reproj-icon");

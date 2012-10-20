@@ -1,4 +1,5 @@
 package org.gvsig.gpe.gml.parser.v2.geometries;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -49,23 +50,23 @@ package org.gvsig.gpe.gml.parser.v2.geometries;
  *
  */
 /**
- * It parses a double. It has to manage the
- * coordinates separator symbol
+ * It parses a double. It has to manage the coordinates separator symbol
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class DoubleTypeBinding {
 
 	/**
 	 * It parses a double value
+	 * 
 	 * @param doubleValue
-	 * Double value like a string
+	 *            Double value like a string
 	 * @param coordinatesSeparato
-	 * Double coordinates separator
-	 * @return
-	 * The double
+	 *            Double coordinates separator
+	 * @return The double
 	 */
-	public static double parse(String doubleValue, String coordinatesSeparator){
-		//TODO Tener en cuenta el separador decimal del double
+	public static double parse(String doubleValue, String coordinatesSeparator) {
+		// TODO Tener en cuenta el separador decimal del double
 		return Double.valueOf(doubleValue).doubleValue();
 	}
 }

@@ -44,19 +44,20 @@ package com.iver.utiles.listManager;
  * Indica si este objeto admite algún tipo de propiedad. De los objetos que se
  * añaden al listManager, los que implementan esta interfaz tendrán el boton
  * "Propiedades" activo
- *
+ * 
  * @author Fernando González Cortés
  */
 public interface Propertiable {
-    /**
-     * Establece la propiedad del elemento de la lista. Como esta propiedad se
-     * establece por medio de la implementación de la interfaz
-     * ListManagerListener, que implementa el usuario, en la implementación de
-     * esta interfaz se sabrá qué clase tiene el objeto que se pasa como
-     * parámetro.
-     *
-     * @param o El objeto que se devuelve en el método getProperties de
-     *        ListManagerListener
-     */
-    public void setProperties(Object o);
+	/**
+	 * Establece la propiedad del elemento de la lista. Como esta propiedad se
+	 * establece por medio de la implementación de la interfaz
+	 * ListManagerListener, que implementa el usuario, en la implementación de
+	 * esta interfaz se sabrá qué clase tiene el objeto que se pasa como
+	 * parámetro.
+	 * 
+	 * @param o
+	 *            El objeto que se devuelve en el método getProperties de
+	 *            ListManagerListener
+	 */
+	public void setProperties(Object o);
 }

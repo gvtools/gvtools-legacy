@@ -32,47 +32,58 @@ import org.gvsig.gui.beans.table.listeners.TableListener;
 /**
  * Contenedor para los componentes de la tabla. Incluye la tabla y el panel de
  * control.
+ * 
  * @author Nacho Brodin (brodin_ign@gva.es)
  */
 public class TableContainer extends JPanel {
-	private static final long   serialVersionUID = 384372026944926838L;
+	private static final long serialVersionUID = 384372026944926838L;
 
-	private Table               table           = null;
-	private TableControlerPanel pTableControl   = null;
-	private MoveRowsPanel       moveRowsPanel   = null;
-	private String[]            columnNames     = null;
-	private int[]               columnWidths    = null;
-	private TableListener       tableListener   = null;
+	private Table table = null;
+	private TableControlerPanel pTableControl = null;
+	private MoveRowsPanel moveRowsPanel = null;
+	private String[] columnNames = null;
+	private int[] columnWidths = null;
+	private TableListener tableListener = null;
 	// Variable que indica si la tabla ha sido inicializada
-	private boolean             initTable       = false;
-	private String              tableModelClass = "ListModel";
-	private ArrayList           listeners       = null;
+	private boolean initTable = false;
+	private String tableModelClass = "ListModel";
+	private ArrayList listeners = null;
 
 	/**
-	 * @param width Ancho de la tabla en pixeles
-	 * @param height Alto de la tabla en pixeles
-	 * @param columnNames Vector de nombres de columna
-	 * @param columnsWidth Vector de anchos para cada columna. Ha de tener el
-	 *          mismo número de elementos que columnNames. Si vale null las
-	 *          columnas se pondrán equidistantes.
+	 * @param width
+	 *            Ancho de la tabla en pixeles
+	 * @param height
+	 *            Alto de la tabla en pixeles
+	 * @param columnNames
+	 *            Vector de nombres de columna
+	 * @param columnsWidth
+	 *            Vector de anchos para cada columna. Ha de tener el mismo
+	 *            número de elementos que columnNames. Si vale null las columnas
+	 *            se pondrán equidistantes.
 	 */
 	public TableContainer(String[] columnNames, int[] columnWidths) {
 		this.columnNames = columnNames;
 		this.columnWidths = columnWidths;
 	}
-	
+
 	/**
-	 * @param width Ancho de la tabla en pixeles
-	 * @param height Alto de la tabla en pixeles
-	 * @param columnNames Vector de nombres de columna
-	 * @param columnsWidth Vector de anchos para cada columna. Ha de tener el
-	 *          mismo número de elementos que columnNames. Si vale null las
-	 *          columnas se pondrán equidistantes.
-	 * @para listener Liste de eventos para recoger en las tablas. Cada modelo tiene la posibilida de recoger unos listener
-	 * u otros. El usuario le pasará el listener y el modelo se encargará de gestionarlos si puede hacerlo. Si no puede no
-	 * hará nada con ellos.
+	 * @param width
+	 *            Ancho de la tabla en pixeles
+	 * @param height
+	 *            Alto de la tabla en pixeles
+	 * @param columnNames
+	 *            Vector de nombres de columna
+	 * @param columnsWidth
+	 *            Vector de anchos para cada columna. Ha de tener el mismo
+	 *            número de elementos que columnNames. Si vale null las columnas
+	 *            se pondrán equidistantes.
+	 * @para listener Liste de eventos para recoger en las tablas. Cada modelo
+	 *       tiene la posibilida de recoger unos listener u otros. El usuario le
+	 *       pasará el listener y el modelo se encargará de gestionarlos si
+	 *       puede hacerlo. Si no puede no hará nada con ellos.
 	 */
-	public TableContainer(String[] columnNames, int[] columnWidths, ArrayList listeners) {
+	public TableContainer(String[] columnNames, int[] columnWidths,
+			ArrayList listeners) {
 		this.columnNames = columnNames;
 		this.columnWidths = columnWidths;
 		this.listeners = listeners;
@@ -84,7 +95,8 @@ public class TableContainer extends JPanel {
 	public void initialize() {
 		initTable = true;
 		tableListener = new TableListener(this);
-		getTable().getJTable().getSelectionModel().addListSelectionListener(tableListener);
+		getTable().getJTable().getSelectionModel()
+				.addListSelectionListener(tableListener);
 
 		this.setLayout(new BorderLayout(5, 5));
 		this.setBorder(javax.swing.BorderFactory.createEmptyBorder(8, 8, 8, 8));
@@ -100,11 +112,13 @@ public class TableContainer extends JPanel {
 
 	/**
 	 * This method initializes jPanel
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	public Table getTable() {
 		if (table == null) {
-			table = new Table(columnNames, columnWidths, tableModelClass, listeners);
+			table = new Table(columnNames, columnWidths, tableModelClass,
+					listeners);
 			table.setTableContainer(this);
 		}
 		return table;
@@ -112,6 +126,7 @@ public class TableContainer extends JPanel {
 
 	/**
 	 * This method initializes jPanel
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	public TableControlerPanel getPTableControl() {
@@ -123,6 +138,7 @@ public class TableContainer extends JPanel {
 
 	/**
 	 * This method initializes jPanel
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	public MoveRowsPanel getMoveRowsPanel() {
@@ -137,7 +153,9 @@ public class TableContainer extends JPanel {
 
 	/**
 	 * Añade una fila a la tabla.
-	 * @param list Lista de cadenas
+	 * 
+	 * @param list
+	 *            Lista de cadenas
 	 */
 	public void addRow(Object[] list) throws NotInitializeException {
 		if (!initTable)
@@ -145,14 +163,17 @@ public class TableContainer extends JPanel {
 
 		TableListener.comboEventEnable = false;
 		getTable().addRow(list);
-		getPTableControl().addPointToTable((getTable()).getJTable().getRowCount());
+		getPTableControl().addPointToTable(
+				(getTable()).getJTable().getRowCount());
 		setSelectedIndex(getRowCount() - 1);
 		TableListener.comboEventEnable = true;
 	}
 
 	/**
 	 * Elimina una fila de la tabla.
-	 * @param i Fila a eliminar
+	 * 
+	 * @param i
+	 *            Fila a eliminar
 	 */
 	public void delRow(int i) throws NotInitializeException {
 		if (!initTable)
@@ -174,7 +195,9 @@ public class TableContainer extends JPanel {
 
 	/**
 	 * Intercambia una fila de la tabla por otra.
-	 * @param i Fila a eliminar
+	 * 
+	 * @param i
+	 *            Fila a eliminar
 	 */
 	public void swapRow(int i, int j) throws NotInitializeException {
 		if (!initTable)
@@ -200,6 +223,7 @@ public class TableContainer extends JPanel {
 
 	/**
 	 * Obtiene el número de filas en la tabla
+	 * 
 	 * @return Número de filas de la tabla
 	 */
 	public int getRowCount() throws NotInitializeException {
@@ -211,7 +235,9 @@ public class TableContainer extends JPanel {
 
 	/**
 	 * Selecciona un punto de la lista
-	 * @param i punto a seleccionar
+	 * 
+	 * @param i
+	 *            punto a seleccionar
 	 */
 	public void setSelectedIndex(int i) throws NotInitializeException {
 		if (!initTable)
@@ -230,6 +256,7 @@ public class TableContainer extends JPanel {
 
 	/**
 	 * Obtiene el punto seleccionado de la lista
+	 * 
 	 * @return Posición del punto seleccionado de la tabla
 	 */
 	public int getSelectedRow() throws NotInitializeException {
@@ -241,6 +268,7 @@ public class TableContainer extends JPanel {
 
 	/**
 	 * Obtiene los puntos seleccionados de la lista
+	 * 
 	 * @return Posición del punto seleccionado de la tabla
 	 */
 	public int[] getSelectedRows() throws NotInitializeException {
@@ -252,11 +280,16 @@ public class TableContainer extends JPanel {
 
 	/**
 	 * Asigna un valor a una posición de la tabla
-	 * @param value Valor
-	 * @param row Fila
-	 * @param col Columna
+	 * 
+	 * @param value
+	 *            Valor
+	 * @param row
+	 *            Fila
+	 * @param col
+	 *            Columna
 	 */
-	public void setValueAt(Object value, int row, int col) throws NotInitializeException {
+	public void setValueAt(Object value, int row, int col)
+			throws NotInitializeException {
 		if (!initTable)
 			throw new NotInitializeException();
 
@@ -264,8 +297,9 @@ public class TableContainer extends JPanel {
 	}
 
 	/**
-	 * Dice si una tabla es editable o no. Este flag hay que asignarlo antes de la
-	 * inicialización de tabla.
+	 * Dice si una tabla es editable o no. Este flag hay que asignarlo antes de
+	 * la inicialización de tabla.
+	 * 
 	 * @param editable
 	 */
 	public void setEditable(boolean editable) throws NotInitializeException {
@@ -282,7 +316,9 @@ public class TableContainer extends JPanel {
 
 	/**
 	 * Asigna el modelo de la tabla
-	 * @param model cadena con el nombre del modelo
+	 * 
+	 * @param model
+	 *            cadena con el nombre del modelo
 	 */
 	public void setModel(String model) {
 		tableModelClass = model;
@@ -290,6 +326,7 @@ public class TableContainer extends JPanel {
 
 	/**
 	 * Obtiene el model de la tabla
+	 * 
 	 * @return
 	 */
 	public DefaultTableModel getModel() {
@@ -299,15 +336,17 @@ public class TableContainer extends JPanel {
 	/**
 	 * Asigna al panel de control de tabla la propiedad de visible/invisible a
 	 * true o false
+	 * 
 	 * @param visible
 	 */
 	public void setControlVisible(boolean visible) {
 		getPTableControl().setVisible(visible);
 	}
-	
+
 	/**
 	 * Asigna al panel de control de tabla la propiedad de visible/invisible a
 	 * true o false
+	 * 
 	 * @param visible
 	 */
 	public void setMoveRowsButtonsVisible(boolean visible) {
@@ -316,6 +355,7 @@ public class TableContainer extends JPanel {
 
 	/**
 	 * Obtiene el control de tabla
+	 * 
 	 * @return TableControlerPanel
 	 */
 	public TableControlerPanel getControl() {
@@ -323,9 +363,11 @@ public class TableContainer extends JPanel {
 	}
 
 	/**
-	 * Desactiva o activa el evento de nueva linea. Si se desactiva tendrá que ser
-	 * gestionado por el cliente
-	 * @param enabled true para activar y false para desactivar
+	 * Desactiva o activa el evento de nueva linea. Si se desactiva tendrá que
+	 * ser gestionado por el cliente
+	 * 
+	 * @param enabled
+	 *            true para activar y false para desactivar
 	 */
 	public void setEnableControlsListener(boolean enabled) {
 		tableListener.enableNewLineListener = enabled;

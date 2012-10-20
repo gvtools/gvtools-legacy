@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.referencing;
 
 import java.awt.Dimension;
@@ -87,51 +87,47 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.cit.gvsig.referencing.TransformationsRegistry.TransformationRegistryEntry;
 
 /**
- * Referencing panel. GUI component which allows user to specify the needed params
- * to apply a transformation to a vectorial layer. 
+ * Referencing panel. GUI component which allows user to specify the needed
+ * params to apply a transformation to a vectorial layer.
+ * 
  * @author Alvaro Zabala
  */
-public class VectorialReferencingPanel extends AbstractGeoprocessGridbagPanel implements IWindow {
+public class VectorialReferencingPanel extends AbstractGeoprocessGridbagPanel
+		implements IWindow {
 
 	private static final long serialVersionUID = 1749313592205873002L;
-	
-	//TODO Sustituir esto por puntos de extension
-	
-	//least squares methods
-	
-	
+
+	// TODO Sustituir esto por puntos de extension
+
+	// least squares methods
+
 	private MappedPositionContainer linksList;
 	/**
 	 * Current view when user opened this referencing panel
 	 */
 	private MapControl currentView;
-	
-	
-	
+
 	/*
 	 * GUI
-	 * */
+	 */
 	private String controlPointsTitle;
 	private JScrollPane scrollView;
 	private JPanel mappedPositionContainer;
-	private JButton addMappedPositionBtn; 
-	
+	private JButton addMappedPositionBtn;
+
 	private String transformationTitle;
 	private JComboBox transformationOptionCb;
 	private JButton transformButton;
 
 	private WindowInfo viewInfo;
-	
 
-	
-	
-	public VectorialReferencingPanel(FLayers lyrs){
-		super(lyrs, PluginServices.getText(null, "referencing_vectorial_layers"));
+	public VectorialReferencingPanel(FLayers lyrs) {
+		super(lyrs, PluginServices
+				.getText(null, "referencing_vectorial_layers"));
 	}
-		
-	
+
 	protected void addSpecificDesign() {
-		
+
 		IWindow f = PluginServices.getMDIManager().getActiveWindow();
 		View vista = (View) f;
 		if (f != null) {
@@ -141,75 +137,80 @@ public class VectorialReferencingPanel extends AbstractGeoprocessGridbagPanel im
 		controlPointsTitle = PluginServices.getText(null, "Control_points");
 		transformationTitle = PluginServices.getText(null, "Transform");
 		linksList = new DisactivableMappedPositionContainerImpl();
-		
+
 		JLabel controlPointsLbl = new JLabel(controlPointsTitle);
 		addComponent(controlPointsLbl);
-		
+
 		scrollView = new JScrollPane();
 		mappedPositionContainer = getMappedPositionContainer();
 		scrollView.setViewportView(mappedPositionContainer);
-		scrollView.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+		scrollView.setBorder(BorderFactory
+				.createEtchedBorder(EtchedBorder.RAISED));
 		scrollView.setPreferredSize(new Dimension(600, 160));
 		scrollView.setMinimumSize(new Dimension(600, 120));
-		scrollView.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollView.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		
+		scrollView
+				.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollView
+				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
 		addComponent(scrollView);
 		addComponent(getAddMappedPositionBtn());
-		
+
 		JLabel transformTitleLbl = new JLabel(transformationTitle);
 		addComponent(transformTitleLbl);
 		addComponent(getTransformationOptionCb());
 		addComponent(getTransformBtn());
 	}
-	
 
 	protected void processLayerComboBoxStateChange(ItemEvent e) {
-		
-		
+
 	}
-	
-	private JPanel getMappedPositionContainer(){
-		if(mappedPositionContainer == null){
+
+	private JPanel getMappedPositionContainer() {
+		if (mappedPositionContainer == null) {
 			mappedPositionContainer = new JPanel(new VerticalBagLayout());
-			
-			mappedPositionContainer.add(new MappedPositionPanel(linksList, currentView));
+
+			mappedPositionContainer.add(new MappedPositionPanel(linksList,
+					currentView));
 		}
 		return mappedPositionContainer;
 	}
-	
-	private JButton getAddMappedPositionBtn(){
-		if(addMappedPositionBtn == null){
-			addMappedPositionBtn = new JButton(PluginServices.getText(this, "Add_Vector"));
-			addMappedPositionBtn.addActionListener(new ActionListener(){
+
+	private JButton getAddMappedPositionBtn() {
+		if (addMappedPositionBtn == null) {
+			addMappedPositionBtn = new JButton(PluginServices.getText(this,
+					"Add_Vector"));
+			addMappedPositionBtn.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent arg0) {
-					MappedPositionPanel newPanel = new MappedPositionPanel(linksList, currentView);
+					MappedPositionPanel newPanel = new MappedPositionPanel(
+							linksList, currentView);
 					mappedPositionContainer.add(newPanel);
 					scrollView.repaint();
 					scrollView.revalidate();
 					mappedPositionContainer.repaint();
 					scrollView.revalidate();
-				}});
+				}
+			});
 		}
 		return addMappedPositionBtn;
 	}
-		
-		
-	private JButton getTransformBtn(){
-		if(transformButton == null){
-			transformButton = new JButton(PluginServices.getText(this, "transform_lyr"));
-			transformButton.addActionListener(new ActionListener(){
+
+	private JButton getTransformBtn() {
+		if (transformButton == null) {
+			transformButton = new JButton(PluginServices.getText(this,
+					"transform_lyr"));
+			transformButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					try {
-						MathTransformBuilder transformBuilder =
-							createTransformBuilder();
-						MathTransform mathTransform = transformBuilder.getMathTransform();
-						Statistics statistics = transformBuilder.getErrorStatistics();
+						MathTransformBuilder transformBuilder = createTransformBuilder();
+						MathTransform mathTransform = transformBuilder
+								.getMathTransform();
+						Statistics statistics = transformBuilder
+								.getErrorStatistics();
 						statistics.rms();
-						
-						
-					}//TODO MOSTRAR MENSAJES DE ERROR PERSONALIZADOS 
+
+					}// TODO MOSTRAR MENSAJES DE ERROR PERSONALIZADOS
 					catch (MismatchedDimensionException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -227,58 +228,68 @@ public class VectorialReferencingPanel extends AbstractGeoprocessGridbagPanel im
 						e.printStackTrace();
 					}
 				}
-			});//addActionListener
+			});// addActionListener
 		}
 		return transformButton;
 	}
-			
-	
+
 	public WindowInfo getWindowInfo() {
 		if (viewInfo == null) {
 			viewInfo = new WindowInfo(WindowInfo.MODELESSDIALOG
 					| WindowInfo.RESIZABLE | WindowInfo.PALETTE);
-			viewInfo.setTitle(PluginServices.getText(null, "referencing_vectorial_layers"));
+			viewInfo.setTitle(PluginServices.getText(null,
+					"referencing_vectorial_layers"));
 			viewInfo.setWidth(700);
 			viewInfo.setHeight(465);
 		}
 		return viewInfo;
 	}
+
 	public Object getWindowProfile() {
 		return WindowInfo.TOOL_PROFILE;
 	}
-	
-	private JComboBox getTransformationOptionCb(){
-		if(transformationOptionCb == null)
-		{
+
+	private JComboBox getTransformationOptionCb() {
+		if (transformationOptionCb == null) {
 			transformationOptionCb = new JComboBox();
-			
-			Collection<TransformationRegistryEntry> transforms =
-				TransformationsRegistry.getRegisteredTransforms();
+
+			Collection<TransformationRegistryEntry> transforms = TransformationsRegistry
+					.getRegisteredTransforms();
 			Iterator<TransformationRegistryEntry> it = transforms.iterator();
-			while(it.hasNext()){
+			while (it.hasNext()) {
 				transformationOptionCb.addItem(it.next());
 			}
-			
+
 			transformationOptionCb.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						TransformationRegistryEntry selectedEntry = 
-							(TransformationRegistryEntry) e.getItem();
-						try{
-							MathTransformBuilder transformBuilder = 
-								selectedEntry.createTransformBuilder(linksList.getAsList());
-//							vectorErrorTable.setTransformBuilder(transformBuilder);
-//							vectorErrorTable.updateVErrorTable();
-							
-						}catch(MismatchedSizeException exception){
-							GUIUtil.getInstance().messageBox(PluginServices.getText(this, "INCORRECT_VERROR_LINKS"), 
-									PluginServices.getText(this, "TRANSFORMATION_ERROR"));
-						}catch(MismatchedDimensionException exception){
-							GUIUtil.getInstance().messageBox(PluginServices.getText(this, "INCORRECT_VERROR_LINKS"), 
-									PluginServices.getText(this, "TRANSFORMATION_ERROR"));
-						}catch(MismatchedReferenceSystemException exception){
-							GUIUtil.getInstance().messageBox(PluginServices.getText(this, "INCORRECT_VERROR_LINKS"), 
-									PluginServices.getText(this, "TRANSFORMATION_ERROR"));
+						TransformationRegistryEntry selectedEntry = (TransformationRegistryEntry) e
+								.getItem();
+						try {
+							MathTransformBuilder transformBuilder = selectedEntry
+									.createTransformBuilder(linksList
+											.getAsList());
+							// vectorErrorTable.setTransformBuilder(transformBuilder);
+							// vectorErrorTable.updateVErrorTable();
+
+						} catch (MismatchedSizeException exception) {
+							GUIUtil.getInstance().messageBox(
+									PluginServices.getText(this,
+											"INCORRECT_VERROR_LINKS"),
+									PluginServices.getText(this,
+											"TRANSFORMATION_ERROR"));
+						} catch (MismatchedDimensionException exception) {
+							GUIUtil.getInstance().messageBox(
+									PluginServices.getText(this,
+											"INCORRECT_VERROR_LINKS"),
+									PluginServices.getText(this,
+											"TRANSFORMATION_ERROR"));
+						} catch (MismatchedReferenceSystemException exception) {
+							GUIUtil.getInstance().messageBox(
+									PluginServices.getText(this,
+											"INCORRECT_VERROR_LINKS"),
+									PluginServices.getText(this,
+											"TRANSFORMATION_ERROR"));
 						}
 					}
 				}// itemStateChange
@@ -286,15 +297,13 @@ public class VectorialReferencingPanel extends AbstractGeoprocessGridbagPanel im
 		}
 		return transformationOptionCb;
 	}
-	
-	
-	private MathTransformBuilder createTransformBuilder() 
-					throws MismatchedSizeException, 
-					  MismatchedDimensionException,
-					  MismatchedReferenceSystemException, 
-					  FactoryException, TransformException{
-		TransformationRegistryEntry selectedEntry = 
-			(TransformationRegistryEntry) getTransformationOptionCb().getSelectedItem();
+
+	private MathTransformBuilder createTransformBuilder()
+			throws MismatchedSizeException, MismatchedDimensionException,
+			MismatchedReferenceSystemException, FactoryException,
+			TransformException {
+		TransformationRegistryEntry selectedEntry = (TransformationRegistryEntry) getTransformationOptionCb()
+				.getSelectedItem();
 		return selectedEntry.createTransformBuilder(linksList.getAsList());
 	}
 }

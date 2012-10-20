@@ -75,16 +75,15 @@ import com.iver.cit.gvsig.project.documents.layout.Attributes;
 import com.iver.cit.gvsig.project.documents.layout.FLayoutUtilities;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
-
 /**
  * Extensión desde la que se imprime.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class Print extends Extension implements Printable {
 	public static PrinterJob printerJob = PrinterJob.getPrinterJob();
 	private static Layout l = null;
-	//private Paper paper;
+	// private Paper paper;
 	Rectangle2D.Double aux = null;
 	private int veces = 0;
 	private PrintService[] m_cachePrintServices = null;
@@ -98,29 +97,30 @@ public class Print extends Extension implements Printable {
 		l = layout;
 		try {
 			PluginServices.backgroundExecution(new Runnable() {
-					public void run() {
-						if (l.getLayoutContext().getAtributes().getType() == Attributes.PREPARE_PAGE_ID_CUSTOM) {
-							l.showPrintDialog(printerJob);
-						} else {
-							l.showPrintDialog(null);
-						}
+				public void run() {
+					if (l.getLayoutContext().getAtributes().getType() == Attributes.PREPARE_PAGE_ID_CUSTOM) {
+						l.showPrintDialog(printerJob);
+					} else {
+						l.showPrintDialog(null);
 					}
-				});
+				}
+			});
 
 		} catch (Exception e) {
-			System.out.println("Excepción al abrir el diálogo de impresión: " +
-				e);
+			System.out.println("Excepción al abrir el diálogo de impresión: "
+					+ e);
 		}
 	}
 
-	public void setLayout(Layout l){
-		this.l=l;
+	public void setLayout(Layout l) {
+		this.l = l;
 	}
 
 	/**
 	 * Se dibuja sobre el graphics el Layout.
-	 *
-	 * @param g2 graphics sobre el que se dibuja.
+	 * 
+	 * @param g2
+	 *            graphics sobre el que se dibuja.
 	 */
 	public void drawShapes(Graphics2D g2) {
 		l.drawLayoutPrint(g2);
@@ -147,7 +147,7 @@ public class Print extends Extension implements Printable {
 	}
 
 	public int print(Graphics g, PageFormat format, int pi)
-		throws PrinterException {
+			throws PrinterException {
 		if (pi >= 1) {
 			return Printable.NO_SUCH_PAGE;
 		}
@@ -161,7 +161,8 @@ public class Print extends Extension implements Printable {
 		double w = format.getImageableWidth();
 		double h = format.getImageableHeight();
 
-		//System.err.println("Orientación en Print: " + format.getOrientation());
+		// System.err.println("Orientación en Print: " +
+		// format.getOrientation());
 		System.out.println("print:(" + x + "," + y + "," + w + "," + h + ")");
 		System.err.println("Clip 1 = " + g2d.getClip());
 
@@ -169,24 +170,33 @@ public class Print extends Extension implements Printable {
 		g2d.translate(0, 0);
 		l.obtainRect(true);
 
-		//LWSAffineTransform at = g2d.getTransform();
-		g2d.scale((double) 72 / (double) (Attributes.DPI),
-			(double) 72 / (double) (Attributes.DPI));
+		// LWSAffineTransform at = g2d.getTransform();
+		g2d.scale((double) 72 / (double) (Attributes.DPI), (double) 72
+				/ (double) (Attributes.DPI));
 		System.err.println("Clip 2 =" + g2d.getClip());
 
 		if (l.getLayoutContext().getAtributes().isMargin()) {
-			g2d.setClip((int) (l.getLayoutControl().getRect().getMinX() +
-				FLayoutUtilities.fromSheetDistance(l.getLayoutContext().getAtributes().m_area[2],
-					l.getLayoutControl().getAT())),
-				(int) (l.getLayoutControl().getRect().getMinY() +
-				FLayoutUtilities.fromSheetDistance(l.getLayoutContext().getAtributes().m_area[0],
-					l.getLayoutControl().getAT())),
-				(int) (l.getLayoutControl().getRect().getWidth() -
-				FLayoutUtilities.fromSheetDistance(l.getLayoutContext().getAtributes().m_area[2] +
-					l.getLayoutContext().getAtributes().m_area[3], l.getLayoutControl().getAT())),
-				(int) (l.getLayoutControl().getRect().getHeight() -
-				FLayoutUtilities.fromSheetDistance(l.getLayoutContext().getAtributes().m_area[0] +
-					l.getLayoutContext().getAtributes().m_area[1], l.getLayoutControl().getAT())));
+			g2d.setClip(
+					(int) (l.getLayoutControl().getRect().getMinX() + FLayoutUtilities
+							.fromSheetDistance(l.getLayoutContext()
+									.getAtributes().m_area[2], l
+									.getLayoutControl().getAT())),
+					(int) (l.getLayoutControl().getRect().getMinY() + FLayoutUtilities
+							.fromSheetDistance(l.getLayoutContext()
+									.getAtributes().m_area[0], l
+									.getLayoutControl().getAT())),
+					(int) (l.getLayoutControl().getRect().getWidth() - FLayoutUtilities
+							.fromSheetDistance(
+									l.getLayoutContext().getAtributes().m_area[2]
+											+ l.getLayoutContext()
+													.getAtributes().m_area[3],
+									l.getLayoutControl().getAT())),
+					(int) (l.getLayoutControl().getRect().getHeight() - FLayoutUtilities
+							.fromSheetDistance(
+									l.getLayoutContext().getAtributes().m_area[0]
+											+ l.getLayoutContext()
+													.getAtributes().m_area[1],
+									l.getLayoutControl().getAT())));
 		}
 
 		veces++;
@@ -202,17 +212,18 @@ public class Print extends Extension implements Printable {
 		registerIcons();
 	}
 
-	private void registerIcons(){
+	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"document-print",
-				this.getClass().getClassLoader().getResource("images/print.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/print.png"));
 	}
 
 	/**
 	 * Abre un diálogo para imprimir.
-	 *
-	 * @param layout Layout a imprimir.
+	 * 
+	 * @param layout
+	 *            Layout a imprimir.
 	 */
 	public void OpenDialogToPrint(Layout layout) {
 		l = layout;
@@ -224,32 +235,33 @@ public class Print extends Extension implements Printable {
 				layout.showPrintDialog(null);
 			}
 		} catch (Exception e) {
-			System.out.println("Excepción al abrir el diálogo de impresión: " +
-				e);
+			System.out.println("Excepción al abrir el diálogo de impresión: "
+					+ e);
 			e.printStackTrace();
 		}
 	}
 
 	/**
 	 * Imprime el Layout que se pasa como parámetro.
-	 *
-	 * @param layout Layout a imprimir.
+	 * 
+	 * @param layout
+	 *            Layout a imprimir.
 	 */
 	public void printLayout(Layout layout) {
 		l = layout;
 
 		try {
-			printerJob.setPrintable((Printable) PluginServices.getExtension(
-					com.iver.cit.gvsig.Print.class));
+			printerJob.setPrintable((Printable) PluginServices
+					.getExtension(com.iver.cit.gvsig.Print.class));
 
-			//Actualizar attributes
-			PrintRequestAttributeSet att = layout.getLayoutContext().getAtributes()
-												 .toPrintAttributes();
+			// Actualizar attributes
+			PrintRequestAttributeSet att = layout.getLayoutContext()
+					.getAtributes().toPrintAttributes();
 			DocFlavor flavor = DocFlavor.SERVICE_FORMATTED.PRINTABLE;
 
 			if (m_cachePrintServices == null) {
-				m_cachePrintServices = PrintServiceLookup.lookupPrintServices(flavor,
-						null);
+				m_cachePrintServices = PrintServiceLookup.lookupPrintServices(
+						flavor, null);
 			}
 
 			PrintService defaultService = null;
@@ -266,15 +278,17 @@ public class Print extends Extension implements Printable {
 			if (m_cachePrintService != null) {
 				DocPrintJob jobNuevo = m_cachePrintService.createPrintJob();
 				PrintJobListener pjlistener = new PrintJobAdapter() {
-						public void printDataTransferCompleted(PrintJobEvent e) {
-							System.out.println("Fin de impresión");
-						}
-					};
+					public void printDataTransferCompleted(PrintJobEvent e) {
+						System.out.println("Fin de impresión");
+					}
+				};
 
 				jobNuevo.addPrintJobListener(pjlistener);
 
-				Doc doc = new SimpleDoc((Printable) PluginServices.getExtension(
-							com.iver.cit.gvsig.Print.class), flavor, null);
+				Doc doc = new SimpleDoc(
+						(Printable) PluginServices
+								.getExtension(com.iver.cit.gvsig.Print.class),
+						flavor, null);
 				jobNuevo.print(doc, att);
 			}
 		} catch (PrintException pe) {

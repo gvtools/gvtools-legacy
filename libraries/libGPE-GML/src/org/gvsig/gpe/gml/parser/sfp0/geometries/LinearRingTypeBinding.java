@@ -11,6 +11,7 @@ import org.gvsig.gpe.parser.ICoordinateIterator;
 import org.gvsig.gpe.xml.stream.IXmlStreamReader;
 import org.gvsig.gpe.xml.stream.XmlStreamException;
 import org.gvsig.gpe.xml.utils.CompareUtils;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -60,23 +61,31 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class LinearRingTypeBinding extends org.gvsig.gpe.gml.parser.v2.geometries.LinearRingTypeBinding{
+public class LinearRingTypeBinding extends
+		org.gvsig.gpe.gml.parser.v2.geometries.LinearRingTypeBinding {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.bindings.v2.geometries.LinearRingTypeBinding#parseTag(org.xmlpull.v1.XmlPullParser, org.gvsig.gpe.gml.GPEDefaultGmlParser, java.lang.String, org.gvsig.gpe.gml.utils.CoordsContainer)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.bindings.v2.geometries.LinearRingTypeBinding#parseTag
+	 * (org.xmlpull.v1.XmlPullParser, org.gvsig.gpe.gml.GPEDefaultGmlParser,
+	 * java.lang.String, org.gvsig.gpe.gml.utils.CoordsContainer)
 	 */
-	protected ICoordinateIterator parseTag_(IXmlStreamReader parser,GPEDefaultGmlParser handler, QName tag) throws XmlStreamException, IOException{
-		ICoordinateIterator coordinatesIterator = super.parseTag_(parser, handler, tag);
-		if (coordinatesIterator != null){
+	protected ICoordinateIterator parseTag_(IXmlStreamReader parser,
+			GPEDefaultGmlParser handler, QName tag) throws XmlStreamException,
+			IOException {
+		ICoordinateIterator coordinatesIterator = super.parseTag_(parser,
+				handler, tag);
+		if (coordinatesIterator != null) {
 			return coordinatesIterator;
 		}
-		if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_POSLIST)){
-			PosListTypeIterator postListBinding = handler.getProfile().getPosListTypeBinding();
-			postListBinding.initialize(parser, handler,GMLTags.GML_LINEARRING);
-			coordinatesIterator = postListBinding; 
+		if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_POSLIST)) {
+			PosListTypeIterator postListBinding = handler.getProfile()
+					.getPosListTypeBinding();
+			postListBinding.initialize(parser, handler, GMLTags.GML_LINEARRING);
+			coordinatesIterator = postListBinding;
 		}
 		return coordinatesIterator;
 	}
 }
-

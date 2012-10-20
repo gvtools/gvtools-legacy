@@ -45,100 +45,103 @@ import java.util.Collection;
 
 import javax.swing.AbstractListModel;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public class LayerListModel extends AbstractListModel {
-    private ArrayList nodos = new ArrayList();
+	private ArrayList nodos = new ArrayList();
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param elemento DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public boolean addElement(LayerInfo elemento) {
-        if (elemento == null) {
-            return false;
-        }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param elemento
+	 *            DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public boolean addElement(LayerInfo elemento) {
+		if (elemento == null) {
+			return false;
+		}
 
-        for (int i = 0; i < nodos.size(); i++) {
-            if (((LayerInfo) nodos.get(i)).equals(elemento)) {
-                return false;
-            }
-        }
+		for (int i = 0; i < nodos.size(); i++) {
+			if (((LayerInfo) nodos.get(i)).equals(elemento)) {
+				return false;
+			}
+		}
 
-        nodos.add(elemento);
+		nodos.add(elemento);
 
-        fireContentsChanged(this, nodos.size() - 1, nodos.size() - 1);
+		fireContentsChanged(this, nodos.size() - 1, nodos.size() - 1);
 
-        return true;
-    }
+		return true;
+	}
 
-	public void clear(){
+	public void clear() {
 		nodos.clear();
 		fireContentsChanged(this, 0, 0);
 	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param index DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public LayerInfo delElement(int index) {
-        LayerInfo ret = (LayerInfo) nodos.remove(index);
-        this.fireContentsChanged(this, index, index);
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param index
+	 *            DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public LayerInfo delElement(int index) {
+		LayerInfo ret = (LayerInfo) nodos.remove(index);
+		this.fireContentsChanged(this, index, index);
 
-        return ret;
-    }
+		return ret;
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param c DOCUMENT ME!
-     */
-    public void delElements(Collection c) {
-        nodos.removeAll(c);
-        this.fireContentsChanged(this, 0, nodos.size());
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param c
+	 *            DOCUMENT ME!
+	 */
+	public void delElements(Collection c) {
+		nodos.removeAll(c);
+		this.fireContentsChanged(this, 0, nodos.size());
+	}
 
-    /**
-     * @see javax.swing.ListModel#getSize()
-     */
-    public int getSize() {
-        return nodos.size();
-    }
+	/**
+	 * @see javax.swing.ListModel#getSize()
+	 */
+	public int getSize() {
+		return nodos.size();
+	}
 
-    /**
-     * @see javax.swing.ListModel#getElementAt(int)
-     */
-    public Object getElementAt(int index) {
-        return ((LayerInfo) nodos.get(index)).text;
-    }
+	/**
+	 * @see javax.swing.ListModel#getElementAt(int)
+	 */
+	public Object getElementAt(int index) {
+		return ((LayerInfo) nodos.get(index)).text;
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public LayerInfo[] getElements() {
-        return (LayerInfo[]) nodos.toArray(new LayerInfo[0]);
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public LayerInfo[] getElements() {
+		return (LayerInfo[]) nodos.toArray(new LayerInfo[0]);
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param index DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public LayerInfo getLayerInfo(int index) {
-        return (LayerInfo) nodos.get(index);
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param index
+	 *            DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public LayerInfo getLayerInfo(int index) {
+		return (LayerInfo) nodos.get(index);
+	}
 }

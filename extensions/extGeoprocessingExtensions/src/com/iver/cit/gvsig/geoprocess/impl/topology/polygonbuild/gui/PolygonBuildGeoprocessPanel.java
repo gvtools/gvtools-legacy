@@ -42,20 +42,20 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: PolygonBuildGeoprocessPanel.java 21235 2008-06-05 14:08:38Z azabala $
-* $Log$
-* Revision 1.1  2006-12-21 17:23:27  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/12/19 19:29:50  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/12/15 19:06:29  azabala
-* scheleton of polygon build
-*
-*
-*/
+ *
+ * $Id: PolygonBuildGeoprocessPanel.java 21235 2008-06-05 14:08:38Z azabala $
+ * $Log$
+ * Revision 1.1  2006-12-21 17:23:27  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/12/19 19:29:50  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/12/15 19:06:29  azabala
+ * scheleton of polygon build
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.topology.polygonbuild.gui;
 
 import java.awt.GridBagConstraints;
@@ -74,29 +74,27 @@ import com.iver.cit.gvsig.geoprocess.core.gui.AbstractGeoprocessGridbagPanel;
 import com.iver.cit.gvsig.geoprocess.impl.topology.polygonbuild.IPolygonBuildGeoprocessUserEntries;
 
 public class PolygonBuildGeoprocessPanel extends AbstractGeoprocessGridbagPanel
-	implements IPolygonBuildGeoprocessUserEntries{
+		implements IPolygonBuildGeoprocessUserEntries {
 
 	private JCheckBox snapToleranceCb;
 	private JTextField snapToleranceTf;
-	
+
 	private JCheckBox dangleToleranceCb;
 	private JTextField dangleToleranceTf;
-	
-	
+
 	private JCheckBox previousCleanCb;
-	
-	
+
 	private JCheckBox addGroupOfLyrsCb;
-	
+
 	public PolygonBuildGeoprocessPanel(FLayers layers) {
 		super(layers, PluginServices.getText(null, "Build_de_poligonos"));
 	}
 
-	public boolean applySnapTolerance(){
+	public boolean applySnapTolerance() {
 		return snapToleranceCb.isSelected();
 	}
-	
-	public double getSnapTolerance() throws GeoprocessException{
+
+	public double getSnapTolerance() throws GeoprocessException {
 		try {
 			String strDist = this.snapToleranceTf.getText();
 			return Double.parseDouble(strDist);
@@ -105,12 +103,12 @@ public class PolygonBuildGeoprocessPanel extends AbstractGeoprocessGridbagPanel
 					"Tolerancia de snap introducida no numerica");
 		}
 	}
-	
-	public boolean applyDangleTolerance(){
+
+	public boolean applyDangleTolerance() {
 		return dangleToleranceCb.isSelected();
 	}
-	
-	public double getDangleTolerance() throws GeoprocessException{
+
+	public double getDangleTolerance() throws GeoprocessException {
 		try {
 			String strDist = this.dangleToleranceTf.getText();
 			return Double.parseDouble(strDist);
@@ -119,66 +117,59 @@ public class PolygonBuildGeoprocessPanel extends AbstractGeoprocessGridbagPanel
 					"Tolerancia de dangle introducida no numerica");
 		}
 	}
-	
-	public boolean computeCleanBefore(){
+
+	public boolean computeCleanBefore() {
 		return previousCleanCb.isSelected();
 	}
-	
-	public boolean createLyrsWithErrorGeometries(){
+
+	public boolean createLyrsWithErrorGeometries() {
 		return addGroupOfLyrsCb.isSelected();
 	}
-	
-	
+
 	protected void addSpecificDesign() {
 		Insets insets = new Insets(5, 5, 5, 5);
-		
-		//snap tolerance
+
+		// snap tolerance
 		this.snapToleranceCb = new JCheckBox();
 		this.snapToleranceCb.setText(PluginServices.getText(this,
 				"Aplicar_tolerancia_de_snap"));
 		this.snapToleranceTf = new JTextField(20);
 		this.snapToleranceTf.setEnabled(false);
-		this.snapToleranceCb.addActionListener(new ActionListener(){
+		this.snapToleranceCb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				snapToleranceTf.setEnabled(snapToleranceCb.isSelected());
-				
-			}});
-		addComponent(snapToleranceCb, 
-				snapToleranceTf,
-				GridBagConstraints.NONE, 
+
+			}
+		});
+		addComponent(snapToleranceCb, snapToleranceTf, GridBagConstraints.NONE,
 				insets);
-		
-		//dangle tolerance
+
+		// dangle tolerance
 		this.dangleToleranceCb = new JCheckBox();
 		this.dangleToleranceCb.setText(PluginServices.getText(this,
 				"Aplicar_tolerancia_de_dangles"));
 		this.dangleToleranceTf = new JTextField(20);
 		this.dangleToleranceTf.setEnabled(false);
-		this.dangleToleranceCb.addActionListener(new ActionListener(){
+		this.dangleToleranceCb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				dangleToleranceTf.setEnabled(dangleToleranceCb.isSelected());
-				
-			}});
-		addComponent(dangleToleranceCb, 
-				dangleToleranceTf,
-				GridBagConstraints.NONE, 
-				insets);
-		//clean previous
+
+			}
+		});
+		addComponent(dangleToleranceCb, dangleToleranceTf,
+				GridBagConstraints.NONE, insets);
+		// clean previous
 		this.previousCleanCb = new JCheckBox();
 		this.previousCleanCb.setText(PluginServices.getText(this,
-		"Limpiar_topologicamente_la_capa_de_entrada"));
-		addComponent(previousCleanCb, 
-				GridBagConstraints.NONE, 
-				insets);
-		
-		//add dangles to toc
+				"Limpiar_topologicamente_la_capa_de_entrada"));
+		addComponent(previousCleanCb, GridBagConstraints.NONE, insets);
+
+		// add dangles to toc
 		this.addGroupOfLyrsCb = new JCheckBox();
 		this.addGroupOfLyrsCb.setText(PluginServices.getText(this,
 				"Añadir_al_TOC_geometrias_erroneas"));
-		addComponent(addGroupOfLyrsCb, 
-				GridBagConstraints.NONE, 
-				insets);
-		//FORCE THIS IN ALL GRIDBAGPANEL IMPLEMENTATIONS
+		addComponent(addGroupOfLyrsCb, GridBagConstraints.NONE, insets);
+		// FORCE THIS IN ALL GRIDBAGPANEL IMPLEMENTATIONS
 		initSelectedItemsJCheckBox();
 		updateNumSelectedFeaturesLabel();
 	}
@@ -187,4 +178,3 @@ public class PolygonBuildGeoprocessPanel extends AbstractGeoprocessGridbagPanel
 	}
 
 }
-

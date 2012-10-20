@@ -70,7 +70,7 @@ public abstract class GPEFeatureWithBboxTest extends GPEWriterBaseTest {
 	private String srs = "EPSG:23030";
 	private String feature1Name = "New York";
 	private String feature1Id = "f1";
-	private String point1Id = "p1";	
+	private String point1Id = "p1";
 	private double point1X = generateRandomPoint();
 	private double point1Y = generateRandomPoint();
 	private double point1Z = generateRandomPoint();
@@ -88,48 +88,54 @@ public abstract class GPEFeatureWithBboxTest extends GPEWriterBaseTest {
 	private double[] bboxG2X = generateRandomBBox();
 	private double[] bboxG2Y = generateRandomBBox();
 	private double[] bboxG2Z = generateRandomBBox();
-	
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#readObjects()
 	 */
 	public void readObjects() {
 		Layer[] layers = getLayers();
-		assertEquals(layers.length, 1);		
+		assertEquals(layers.length, 1);
 		Layer layer = layers[0];
-	
+
 		assertEquals(layer.getFeatures().size(), 2);
-		//FEATURE 1
-		Feature feature1 = (Feature)layer.getFeatures().get(0);
-		GeometryAsserts.bbox(feature1.getBbox(),bboxG1X,bboxG1Y,bboxG1Z);
-				
-		//FEATURE 2
-		Feature feature2 = (Feature)layer.getFeatures().get(1);
-		GeometryAsserts.bbox(feature2.getBbox(),bboxG2X,bboxG2Y,bboxG2Z);
+		// FEATURE 1
+		Feature feature1 = (Feature) layer.getFeatures().get(0);
+		GeometryAsserts.bbox(feature1.getBbox(), bboxG1X, bboxG1Y, bboxG1Z);
+
+		// FEATURE 2
+		Feature feature2 = (Feature) layer.getFeatures().get(1);
+		GeometryAsserts.bbox(feature2.getBbox(), bboxG2X, bboxG2Y, bboxG2Z);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#writeObjects()
 	 */
 	public void writeObjects() {
 		getWriterHandler().initialize();
-		getWriterHandler().startLayer(layerId, null, layerName, layerDescription, srs);
+		getWriterHandler().startLayer(layerId, null, layerName,
+				layerDescription, srs);
 		getWriterHandler().startFeature(feature1Id, null, feature1Name);
-		getWriterHandler().startPoint(point1Id, new CoordinatesSequence(point1X, point1Y, point1Z), srs);
-		getWriterHandler().endPoint();	
-		getWriterHandler().startBbox(bboxG1Id, new CoordinatesSequence(bboxG1X,	bboxG1Y,bboxG1Z), srs);
+		getWriterHandler().startPoint(point1Id,
+				new CoordinatesSequence(point1X, point1Y, point1Z), srs);
+		getWriterHandler().endPoint();
+		getWriterHandler().startBbox(bboxG1Id,
+				new CoordinatesSequence(bboxG1X, bboxG1Y, bboxG1Z), srs);
 		getWriterHandler().endBbox();
 		getWriterHandler().endFeature();
 		getWriterHandler().startFeature(feature2Id, null, feature2Name);
-		getWriterHandler().startPoint(point2Id, new CoordinatesSequence(point2X, point2Y, point2Z), srs);
-		getWriterHandler().endPoint();	
-		getWriterHandler().startBbox(bboxG2Id, new CoordinatesSequence(bboxG2X,	bboxG2Y,bboxG2Z), srs);
+		getWriterHandler().startPoint(point2Id,
+				new CoordinatesSequence(point2X, point2Y, point2Z), srs);
+		getWriterHandler().endPoint();
+		getWriterHandler().startBbox(bboxG2Id,
+				new CoordinatesSequence(bboxG2X, bboxG2Y, bboxG2Z), srs);
 		getWriterHandler().endBbox();
 		getWriterHandler().endFeature();
 		getWriterHandler().endLayer();
-		getWriterHandler().close();		
+		getWriterHandler().close();
 	}
 
 }

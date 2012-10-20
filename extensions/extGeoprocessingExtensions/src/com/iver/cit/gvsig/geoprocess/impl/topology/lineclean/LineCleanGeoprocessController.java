@@ -42,26 +42,26 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: LineCleanGeoprocessController.java 21235 2008-06-05 14:08:38Z azabala $
-* $Log$
-* Revision 1.1  2006-12-21 17:23:27  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/12/04 19:42:23  azabala
-* *** empty log message ***
-*
-* Revision 1.3  2006/10/23 16:52:39  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/10/17 18:25:53  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/10/10 18:50:17  azabala
-* First version in CVS
-*
-*
-*/
+ *
+ * $Id: LineCleanGeoprocessController.java 21235 2008-06-05 14:08:38Z azabala $
+ * $Log$
+ * Revision 1.1  2006-12-21 17:23:27  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/12/04 19:42:23  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.3  2006/10/23 16:52:39  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/10/17 18:25:53  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/10/10 18:50:17  azabala
+ * First version in CVS
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.topology.lineclean;
 
 import java.io.File;
@@ -87,20 +87,19 @@ public class LineCleanGeoprocessController extends AbstractGeoprocessController 
 
 	private ILineCleanGeoprocessUserEntries userEntries;
 	private LineCleanGeoprocess geoprocess;
-	
+
 	public void setView(IGeoprocessUserEntries viewPanel) {
-		this.userEntries =  
-			(ILineCleanGeoprocessUserEntries) viewPanel;
+		this.userEntries = (ILineCleanGeoprocessUserEntries) viewPanel;
 	}
+
 	public IGeoprocess getGeoprocess() {
 		return geoprocess;
 	}
 
 	public boolean launchGeoprocess() {
 		/*
-		 * TODO
-		 * METER TODO ESTO EN LA CLASE ABSTRACTA
-		 * */
+		 * TODO METER TODO ESTO EN LA CLASE ABSTRACTA
+		 */
 		FLyrVect inputLayer = userEntries.getInputLayer();
 		FLayers layers = userEntries.getFLayers();
 		File outputFile = null;
@@ -108,13 +107,15 @@ public class LineCleanGeoprocessController extends AbstractGeoprocessController 
 			outputFile = userEntries.getOutputFile();
 		} catch (FileNotFoundException e3) {
 			String error = PluginServices.getText(this, "Error_entrada_datos");
-			String errorDescription = PluginServices.getText(this, "Error_seleccionar_resultado");
+			String errorDescription = PluginServices.getText(this,
+					"Error_seleccionar_resultado");
 			userEntries.error(errorDescription, error);
 			return false;
 		}
 		if (outputFile == null || (outputFile.getAbsolutePath().length() == 0)) {
 			String error = PluginServices.getText(this, "Error_entrada_datos");
-			String errorDescription = PluginServices.getText(this, "Error_seleccionar_resultado");
+			String errorDescription = PluginServices.getText(this,
+					"Error_seleccionar_resultado");
 			userEntries.error(errorDescription, error);
 			return false;
 		}
@@ -123,63 +124,65 @@ public class LineCleanGeoprocessController extends AbstractGeoprocessController 
 				return false;
 			}
 		}
-		
-		
-		
-		
+
 		geoprocess = new LineCleanGeoprocess(inputLayer);
 
 		SHPLayerDefinition definition = (SHPLayerDefinition) geoprocess
 				.createLayerDefinition();
 		definition.setFile(outputFile);
-		ShpSchemaManager schemaManager = new ShpSchemaManager(outputFile.getAbsolutePath());
+		ShpSchemaManager schemaManager = new ShpSchemaManager(
+				outputFile.getAbsolutePath());
 		IWriter writer = null;
 		try {
 			writer = getShpWriter(definition);
 		} catch (Exception e1) {
-			String error = PluginServices.getText(this, "Error_escritura_resultados");
-			String errorDescription = PluginServices.getText(this, "Error_preparar_escritura_resultados");
+			String error = PluginServices.getText(this,
+					"Error_escritura_resultados");
+			String errorDescription = PluginServices.getText(this,
+					"Error_preparar_escritura_resultados");
 			userEntries.error(errorDescription, error);
 			return false;
-		} 
+		}
 		geoprocess.setResultLayerProperties(writer, schemaManager);
 		HashMap params = new HashMap();
 		boolean onlySelected = userEntries.cleanOnlySelection();
 		params.put("layer_selection", new Boolean(onlySelected));
-		
-		boolean createLayerWithError = userEntries.createLyrsWithErrorGeometries();
+
+		boolean createLayerWithError = userEntries
+				.createLyrsWithErrorGeometries();
 		params.put("createlayerswitherrors", new Boolean(createLayerWithError));
-		
+
 		try {
 			geoprocess.setParameters(params);
 			geoprocess.checkPreconditions();
 			IMonitorableTask task1 = geoprocess.createTask();
-			if(task1 == null){
+			if (task1 == null) {
 				return false;
-				
+
 			}
 			AddResultLayerTask task2 = new AddResultLayerTask(geoprocess);
 			task2.setLayers(layers);
-			MonitorableDecoratorMainFirst globalTask = new MonitorableDecoratorMainFirst(task1,
-					task2);
+			MonitorableDecoratorMainFirst globalTask = new MonitorableDecoratorMainFirst(
+					task1, task2);
 			if (globalTask.preprocess())
 				PluginServices.cancelableBackgroundExecution(globalTask);
-			
+
 		} catch (GeoprocessException e) {
 			String error = PluginServices.getText(this, "Error_ejecucion");
-			String errorDescription = PluginServices.getText(this, "Error_fallo_geoproceso");
+			String errorDescription = PluginServices.getText(this,
+					"Error_fallo_geoproceso");
 			userEntries.error(errorDescription, error);
 			return false;
 		}
 		return true;
 	}
+
 	public int getWidth() {
 		return 700;
 	}
+
 	public int getHeight() {
 		return 600;
 	}
 
-
 }
-

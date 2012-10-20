@@ -42,23 +42,23 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: FilterRectVisitor.java 30933 2009-09-23 06:13:48Z vcaballero $
-* $Log$
-* Revision 1.4  2007-03-06 17:08:55  caballero
-* Exceptions
-*
-* Revision 1.3  2006/06/20 18:15:19  azabala
-* añadida comprobación de geometria nula en la construcción del indice espacial
-*
-* Revision 1.2  2006/03/07 20:59:28  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/02/26 20:50:00  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: FilterRectVisitor.java 30933 2009-09-23 06:13:48Z vcaballero $
+ * $Log$
+ * Revision 1.4  2007-03-06 17:08:55  caballero
+ * Exceptions
+ *
+ * Revision 1.3  2006/06/20 18:15:19  azabala
+ * añadida comprobación de geometria nula en la construcción del indice espacial
+ *
+ * Revision 1.2  2006/03/07 20:59:28  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/02/26 20:50:00  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.operations.strategies;
 
 import java.awt.geom.Rectangle2D;
@@ -69,41 +69,47 @@ import com.iver.cit.gvsig.exceptions.visitors.StartVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.VisitorException;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
+
 /**
- * This FeatureVisitor is a spatial filter.
- * It wraps a FeatureVisitor, and only calls its visit
- * method if visited geometries are within specified rectangle.
+ * This FeatureVisitor is a spatial filter. It wraps a FeatureVisitor, and only
+ * calls its visit method if visited geometries are within specified rectangle.
+ * 
  * @author azabala
- *
+ * 
  */
 public class FilterRectVisitor implements FeatureVisitor {
 	private Rectangle2D rect;
 	private FeatureVisitor wrappedVisitor;
 
-	public void setRectangle(Rectangle2D rect){
+	public void setRectangle(Rectangle2D rect) {
 		this.rect = rect;
 	}
-	public void visit(IGeometry g, int index) throws ReadDriverException, VisitorException, ProcessVisitorException {
+
+	public void visit(IGeometry g, int index) throws ReadDriverException,
+			VisitorException, ProcessVisitorException {
 		if (g != null) {
-			if(g.intersects(rect)) {
+			if (g.intersects(rect)) {
 				wrappedVisitor.visit(g, index);
 			}
-			 //When the rectangle is an absolutely vertical line 
-			else if(rect.getWidth() == 0.0) {
-				rect.setFrame(rect.getX()-0.000000005, rect.getY(), 0.00000001, rect.getHeight());
-				if(g.intersects(rect)) {
+			// When the rectangle is an absolutely vertical line
+			else if (rect.getWidth() == 0.0) {
+				rect.setFrame(rect.getX() - 0.000000005, rect.getY(),
+						0.00000001, rect.getHeight());
+				if (g.intersects(rect)) {
 					wrappedVisitor.visit(g, index);
 				}
 			}
-			 //When the rectangle is an absolutely horizontal line
-			else if(rect.getHeight() == 0.0) {
-				rect.setFrame(rect.getX(), rect.getY()-0.000000005, rect.getWidth(), 0.00000001);
-				if(g.intersects(rect)) {
+			// When the rectangle is an absolutely horizontal line
+			else if (rect.getHeight() == 0.0) {
+				rect.setFrame(rect.getX(), rect.getY() - 0.000000005,
+						rect.getWidth(), 0.00000001);
+				if (g.intersects(rect)) {
 					wrappedVisitor.visit(g, index);
 				}
 			}
 		}
 	}
+
 	public void stop(FLayer layer) throws VisitorException {
 		wrappedVisitor.stop(layer);
 	}
@@ -111,16 +117,17 @@ public class FilterRectVisitor implements FeatureVisitor {
 	public boolean start(FLayer layer) throws StartVisitorException {
 		return wrappedVisitor.start(layer);
 	}
+
 	public FeatureVisitor getWrappedVisitor() {
 		return wrappedVisitor;
 	}
+
 	public void setWrappedVisitor(FeatureVisitor wrappedVisitor) {
 		this.wrappedVisitor = wrappedVisitor;
 	}
+
 	public String getProcessDescription() {
 		return "Filters visit calls to a visitor by spatial criteria";
 	}
 
-
 }
-

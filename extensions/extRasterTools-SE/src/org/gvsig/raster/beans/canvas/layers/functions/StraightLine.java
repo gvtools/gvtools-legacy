@@ -31,31 +31,34 @@ import java.util.ArrayList;
 import org.gvsig.raster.beans.canvas.GCanvas;
 import org.gvsig.raster.beans.canvas.layers.InfoLayer;
 import org.gvsig.raster.util.MathUtils;
+
 /**
- * Representa una linea recta con puntos de arrastre para la ecualización de
- * un histograma y realce lineales y dencity slicing.
- *
+ * Representa una linea recta con puntos de arrastre para la ecualización de un
+ * histograma y realce lineales y dencity slicing.
+ * 
  * 14-oct-2007
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class StraightLine extends BaseFunction {
 
 	/**
-	 * Representa un punto seleccionado sobre el canvas. Este es
-	 * dibujado como un pequeño cuadrado.
-	 *
+	 * Representa un punto seleccionado sobre el canvas. Este es dibujado como
+	 * un pequeño cuadrado.
+	 * 
 	 * 14-oct-2007
+	 * 
 	 * @author Nacho Brodin (nachobrodin@gmail.com)
 	 */
 	class Square {
-		private double x      = 0.0D;
-		private double y      = 0.0D;
-		private int    width  = 6;
-		private Color  color  = Color.WHITE;
-		
-		
+		private double x = 0.0D;
+		private double y = 0.0D;
+		private int width = 6;
+		private Color color = Color.WHITE;
+
 		/**
 		 * Constructor. Calcula las esquinas del cuadrado
+		 * 
 		 * @param p
 		 */
 		public Square(double x, double y) {
@@ -64,34 +67,41 @@ public class StraightLine extends BaseFunction {
 
 		/**
 		 * Constructor. Calcula las esquinas del cuadrado
+		 * 
 		 * @param p
 		 */
 		public Square(int x, int y) {
 			setPosition(x, y);
 		}
-		
+
 		/**
 		 * Asigna una nueva posición al punto
+		 * 
 		 * @param x
 		 */
 		public void setPosition(double x, double y) {
 			this.x = x;
 			this.y = y;
 
-			if (this.x > 1.0D) this.x = 1.0D;
-			if (this.x < 0.0D) this.x = 0.0D;
-			if (this.y > 1.0D) this.y = 1.0D;
-			if (this.y < 0.0D) this.y = 0.0D;
+			if (this.x > 1.0D)
+				this.x = 1.0D;
+			if (this.x < 0.0D)
+				this.x = 0.0D;
+			if (this.y > 1.0D)
+				this.y = 1.0D;
+			if (this.y < 0.0D)
+				this.y = 0.0D;
 		}
-		
+
 		/**
 		 * Asigna una nueva posición al punto
+		 * 
 		 * @param x
 		 */
 		public void setPosition(int x, int y) {
 			setPosition(pixelToValueX(x), pixelToValueY(y));
 		}
-		
+
 		public int getPixelX() {
 			return valueToPixelX(x);
 		}
@@ -99,37 +109,46 @@ public class StraightLine extends BaseFunction {
 		public int getPixelY() {
 			return valueToPixelY(y);
 		}
-		
+
 		public double getX() {
 			return x;
 		}
-		
+
 		public double getY() {
 			return y;
 		}
-		
+
 		/**
 		 * Dibuja el cuadrado
+		 * 
 		 * @param g
 		 */
 		protected void paint(Graphics g) {
 			g.setColor(color);
-			g.drawRect((int) valueToPixelX(x) - (width >> 1), (int) valueToPixelY(y) - (width >> 1), (int) width, (int)width);
+			g.drawRect((int) valueToPixelX(x) - (width >> 1),
+					(int) valueToPixelY(y) - (width >> 1), (int) width,
+					(int) width);
 		}
 
 		/**
 		 * Dibuja el cursor del raton
+		 * 
 		 * @param g
 		 */
 		protected void paintCursor(Graphics g) {
 			g.setColor(Color.white);
-			g.drawLine(valueToPixelX(x) - 6, valueToPixelY(y), valueToPixelX(x) + 6, valueToPixelY(y));
-			g.drawLine(valueToPixelX(x), valueToPixelY(y) - 6, valueToPixelX(x), valueToPixelY(y) + 6);
+			g.drawLine(valueToPixelX(x) - 6, valueToPixelY(y),
+					valueToPixelX(x) + 6, valueToPixelY(y));
+			g.drawLine(valueToPixelX(x), valueToPixelY(y) - 6,
+					valueToPixelX(x), valueToPixelY(y) + 6);
 		}
-		
+
 		/**
-		 * Informa de si el punto pasado por parámetro cae dentro del cuadro o no
-		 * @param p Punto a comprobar
+		 * Informa de si el punto pasado por parámetro cae dentro del cuadro o
+		 * no
+		 * 
+		 * @param p
+		 *            Punto a comprobar
 		 * @return true si el punto está dentro y false si no lo está
 		 */
 		public boolean isInside(Point p) {
@@ -143,45 +162,56 @@ public class StraightLine extends BaseFunction {
 				return false;
 			return true;
 		}
-		
+
 		/**
 		 * Asigna el color del cuadrado
-		 * @param c Color
+		 * 
+		 * @param c
+		 *            Color
 		 */
 		public void setColor(Color c) {
 			this.color = c;
 		}
-		
+
 		private int valueToPixelX(double value) {
 			value = minx + ((maxx - minx) * value);
-			return (int) Math.round(canvas.getCanvasMinX() + border + ((canvas.getCanvasMaxX() - canvas.getCanvasMinX() - (border * 2)) * value));
+			return (int) Math
+					.round(canvas.getCanvasMinX()
+							+ border
+							+ ((canvas.getCanvasMaxX() - canvas.getCanvasMinX() - (border * 2)) * value));
 		}
 
 		private int valueToPixelY(double value) {
 			value = 1.0D - value;
-			return (int) Math.round(canvas.getCanvasMinY() + border + ((canvas.getCanvasMaxY() - canvas.getCanvasMinY() - (border * 2)) * value));
+			return (int) Math
+					.round(canvas.getCanvasMinY()
+							+ border
+							+ ((canvas.getCanvasMaxY() - canvas.getCanvasMinY() - (border * 2)) * value));
 		}
 
 	}
-	
+
 	/**
 	 * Lista de cuadrados que intersectan con la recta
 	 */
-	protected ArrayList listSquare        = new ArrayList();
-	private int         pointDragged      = -1;
-	private Cursor      transparentCursor = null;
-	private boolean     showSquares       = true;
-	private int         border            = 2;
-	
+	protected ArrayList listSquare = new ArrayList();
+	private int pointDragged = -1;
+	private Cursor transparentCursor = null;
+	private boolean showSquares = true;
+	private int border = 2;
+
 	/**
 	 * Constructor. Asigna el color
+	 * 
 	 * @param c
 	 */
 	public StraightLine(Color c) {
 		int[] pixels = new int[16 * 16];
-		Image image = Toolkit.getDefaultToolkit().createImage(new MemoryImageSource(16, 16, pixels, 0, 16));
-		transparentCursor = Toolkit.getDefaultToolkit().createCustomCursor(image, new Point(0, 0), "invisibleCursor");
-		
+		Image image = Toolkit.getDefaultToolkit().createImage(
+				new MemoryImageSource(16, 16, pixels, 0, 16));
+		transparentCursor = Toolkit.getDefaultToolkit().createCustomCursor(
+				image, new Point(0, 0), "invisibleCursor");
+
 		setColor(c);
 		clearSquares();
 		addSquare(0.0D, 0.0D);
@@ -197,13 +227,14 @@ public class StraightLine extends BaseFunction {
 
 	/**
 	 * Añade un punto a la lista de puntos
+	 * 
 	 * @param x
 	 * @param y
 	 */
 	public void addSquare(double x, double y) {
 		listSquare.add(new Square(x, y));
 	}
-	
+
 	/**
 	 * Dibujado de las líneas y cuadros sobre el canvas
 	 */
@@ -218,17 +249,20 @@ public class StraightLine extends BaseFunction {
 
 		if (listSquare.size() > 0) {
 			square = ((Square) listSquare.get(0));
-			g.drawLine(canvas.getCanvasMinX(), square.getPixelY(), square.getPixelX(), square.getPixelY());
+			g.drawLine(canvas.getCanvasMinX(), square.getPixelY(),
+					square.getPixelX(), square.getPixelY());
 		}
 		for (int i = 0; i < listSquare.size(); i++) {
 			lastSquare = square;
 			square = ((Square) listSquare.get(i));
 			if (lastSquare != null)
-				g.drawLine(lastSquare.getPixelX(), lastSquare.getPixelY(), square.getPixelX(), square.getPixelY());
+				g.drawLine(lastSquare.getPixelX(), lastSquare.getPixelY(),
+						square.getPixelX(), square.getPixelY());
 		}
 		if (listSquare.size() > 0) {
 			square = ((Square) listSquare.get(listSquare.size() - 1));
-			g.drawLine(square.getPixelX(), square.getPixelY(), canvas.getCanvasMaxX(), square.getPixelY());
+			g.drawLine(square.getPixelX(), square.getPixelY(),
+					canvas.getCanvasMaxX(), square.getPixelY());
 		}
 
 		// Dibujamos los cuadrados de los puntos
@@ -247,9 +281,10 @@ public class StraightLine extends BaseFunction {
 			setInfoPoint(pointDragged);
 		}
 	}
-	
+
 	/**
 	 * Visualiza la posicion de un punto en la barra de estado
+	 * 
 	 * @param square
 	 */
 	private void setInfoPoint(int point) {
@@ -258,12 +293,15 @@ public class StraightLine extends BaseFunction {
 			InfoLayer infoLayer = (InfoLayer) list.get(0);
 			if (point != -1) {
 				Square square = ((Square) listSquare.get(point));
-				
+
 				double value = minx + (square.getX() * (maxx - minx));
-				value = infoLayer.getMin() + (value * (infoLayer.getMax() - infoLayer.getMin()));
-				
-				infoLayer.setStatusLeft("In: " + MathUtils.clipDecimals(value, 1));
-				infoLayer.setStatusRight("Out: " + Math.round(square.getY() * 255.0D));
+				value = infoLayer.getMin()
+						+ (value * (infoLayer.getMax() - infoLayer.getMin()));
+
+				infoLayer.setStatusLeft("In: "
+						+ MathUtils.clipDecimals(value, 1));
+				infoLayer.setStatusRight("Out: "
+						+ Math.round(square.getY() * 255.0D));
 			} else {
 				infoLayer.setStatusLeft(null);
 				infoLayer.setStatusRight(null);
@@ -272,20 +310,23 @@ public class StraightLine extends BaseFunction {
 	}
 
 	/**
-	 * Asigna el objeto JComponent donde se pintan los elementos. Inicializa los puntos
-	 * de inicio y fin de línea y asigna los listener
+	 * Asigna el objeto JComponent donde se pintan los elementos. Inicializa los
+	 * puntos de inicio y fin de línea y asigna los listener
+	 * 
 	 * @param canvas
 	 */
 	public void setCanvas(GCanvas canvas) {
 		super.setCanvas(canvas);
 	}
-	
+
 	/**
-	 * Inserta un elemento (cuadrado) en el array entre los dos cuadrados entre los que se
-	 * encuentre el valor de su X, así siempre están ordenados en el array por valor de X. 
+	 * Inserta un elemento (cuadrado) en el array entre los dos cuadrados entre
+	 * los que se encuentre el valor de su X, así siempre están ordenados en el
+	 * array por valor de X.
+	 * 
 	 * @param element
-	 * @return Devuelve la posición del elemento insertado, en caso de no poder insertarse
-	 *         devolverá -1
+	 * @return Devuelve la posición del elemento insertado, en caso de no poder
+	 *         insertarse devolverá -1
 	 */
 	private int insert(Square element) {
 		for (int i = 0; i < (listSquare.size() - 1); i++) {
@@ -298,7 +339,7 @@ public class StraightLine extends BaseFunction {
 		}
 		return -1;
 	}
-	
+
 	/**
 	 * Se captura el punto a arrastrar, en caso de que no coincida con un punto,
 	 * se inserta
@@ -345,7 +386,8 @@ public class StraightLine extends BaseFunction {
 	}
 
 	/**
-	 * Cuando se ha pinchado un punto y se arrastra se define aquí su comportamiento.
+	 * Cuando se ha pinchado un punto y se arrastra se define aquí su
+	 * comportamiento.
 	 */
 	public boolean mouseDragged(MouseEvent e) {
 		if (pointDragged >= 0) {
@@ -414,13 +456,17 @@ public class StraightLine extends BaseFunction {
 	 * Variable para saber si se ha visualizado alguna informacion
 	 */
 	boolean last = false;
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.beans.canvas.DrawableElement#mouseMoved(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * org.gvsig.raster.beans.canvas.DrawableElement#mouseMoved(java.awt.event
+	 * .MouseEvent)
 	 */
 	public boolean mouseMoved(MouseEvent e) {
 		for (int i = 0; i < listSquare.size(); i++) {
-			if (((Square)listSquare.get(i)).isInside(e.getPoint())) {
+			if (((Square) listSquare.get(i)).isInside(e.getPoint())) {
 				canvas.setCursor(new Cursor(Cursor.MOVE_CURSOR));
 				setInfoPoint(i);
 				canvas.repaint();
@@ -437,15 +483,16 @@ public class StraightLine extends BaseFunction {
 	}
 
 	/**
-	 * Valores de los datos de entrada correspondientes al mínimo y al máximo de 
+	 * Valores de los datos de entrada correspondientes al mínimo y al máximo de
 	 * cada tramo. Estos tendrán un rango entre el mínimo y el máximo en cada
 	 * banda de la imagen.
+	 * 
 	 * @param min
 	 * @param max
 	 * @return
 	 */
 	public double[] getInValues(double min, double max) {
-		double[] in = getPercentInValues(); 
+		double[] in = getPercentInValues();
 		for (int i = 0; i < in.length; i++)
 			in[i] = min + (in[i] * (max - min));
 		return in;
@@ -454,10 +501,11 @@ public class StraightLine extends BaseFunction {
 	/**
 	 * Valores de los datos de salida correspondientes al mínimo y al máximo de
 	 * cada tramo. Estos tendrán un rango entre 0 y 255.
+	 * 
 	 * @return
 	 */
 	public int[] getOutValues() {
-		double[] values = getPercentOutValues(); 
+		double[] values = getPercentOutValues();
 		int[] out = new int[values.length];
 		for (int i = 0; i < values.length; i++)
 			out[i] = (int) Math.round(values[i] * 255.0D);
@@ -465,7 +513,7 @@ public class StraightLine extends BaseFunction {
 	}
 
 	/**
-	 * Valores de los datos de entrada correspondientes al mínimo y al máximo de 
+	 * Valores de los datos de entrada correspondientes al mínimo y al máximo de
 	 * cada tramo devuelto en forma de porcentaje
 	 * 
 	 * @param min
@@ -486,6 +534,7 @@ public class StraightLine extends BaseFunction {
 	/**
 	 * Valores de los datos de salida correspondientes al mínimo y al máximo de
 	 * cada tramo, devueltos en forma de porcentaje.
+	 * 
 	 * @return
 	 */
 	public double[] getPercentOutValues() {
@@ -498,22 +547,27 @@ public class StraightLine extends BaseFunction {
 		out[out.length - 1] = out[out.length - 2];
 		return out;
 	}
-	
-	public void firstActions() {}
-	public void firstDrawActions() {}
+
+	public void firstActions() {
+	}
+
+	public void firstDrawActions() {
+	}
 
 	/**
-	 * @param showSquares the showSquares to set
+	 * @param showSquares
+	 *            the showSquares to set
 	 */
 	public void setShowSquares(boolean showSquares) {
 		this.showSquares = showSquares;
 	}
 
 	protected double pixelToValueX(int pixel) {
-		double value = ((double) (pixel - canvas.getCanvasMinX() - border) / (double) (canvas.getCanvasMaxX() - canvas.getCanvasMinX() - (border * 2.0D)));
-		
+		double value = ((double) (pixel - canvas.getCanvasMinX() - border) / (double) (canvas
+				.getCanvasMaxX() - canvas.getCanvasMinX() - (border * 2.0D)));
+
 		value = (value - minx) / (maxx - minx);
-		
+
 		return value;
 	}
 
@@ -521,21 +575,23 @@ public class StraightLine extends BaseFunction {
 		double div = (double) (canvas.getCanvasMaxY() - canvas.getCanvasMinY() - (border * 2.0D));
 		if (div == 0.0D)
 			return 0.0D;
-		
+
 		return (1.0D - ((double) (pixel - canvas.getCanvasMinY() - border) / div));
 	}
-	
+
 	/**
 	 * Devuelve 0 para indicar que estamos en una funcion lineal.
+	 * 
 	 * @return
 	 */
 	public int getFunctionType() {
 		return 0;
 	}
-	
+
 	/**
-	 * En una función lineal da igual lo que devuelva, pero es interesante para sus
-	 * clases derivadas
+	 * En una función lineal da igual lo que devuelva, pero es interesante para
+	 * sus clases derivadas
+	 * 
 	 * @return
 	 */
 	public double getValueFunction() {

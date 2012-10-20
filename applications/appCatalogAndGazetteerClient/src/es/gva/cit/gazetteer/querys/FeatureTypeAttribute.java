@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -42,8 +41,8 @@
 package es.gva.cit.gazetteer.querys;
 
 /**
- * This class represents a field from a thesaurus name 
- * (name,description,...)
+ * This class represents a field from a thesaurus name (name,description,...)
+ * 
  * @author Jorge Piera Llodra (piera_jor@gva.es)
  */
 public class FeatureTypeAttribute {
@@ -53,80 +52,86 @@ public class FeatureTypeAttribute {
 	private String type;
 
 	/**
-	 * @param name 
-	 * @param minOccurs 
-	 * @param nillable 
-	 * @param type 
+	 * @param name
+	 * @param minOccurs
+	 * @param nillable
+	 * @param type
 	 */
-	public FeatureTypeAttribute(String name, int minOccurs, boolean nillable, String type) {        
+	public FeatureTypeAttribute(String name, int minOccurs, boolean nillable,
+			String type) {
 		super();
 		this.name = name;
 		this.minOccurs = minOccurs;
 		this.nillable = nillable;
 		this.type = type;
-	} 
+	}
 
 	/**
 	 * @return Returns the minOccurs.
 	 */
-	public int getMinOccurs() {        
+	public int getMinOccurs() {
 		return minOccurs;
-	} 
+	}
 
 	/**
-	 * @param minOccurs The minOccurs to set.
+	 * @param minOccurs
+	 *            The minOccurs to set.
 	 */
-	public void setMinOccurs(int minOccurs) {        
+	public void setMinOccurs(int minOccurs) {
 		this.minOccurs = minOccurs;
-	} 
+	}
 
 	/**
 	 * @return Returns the name.
 	 */
-	public String getName() {        
+	public String getName() {
 		return name;
-	} 
+	}
 
 	/**
-	 * @param name The name to set.
+	 * @param name
+	 *            The name to set.
 	 */
-	public void setName(String name) {        
+	public void setName(String name) {
 		this.name = name;
-	} 
+	}
 
 	/**
 	 * @return Returns the nillable.
 	 */
-	public boolean getNillable() {        
+	public boolean getNillable() {
 		return nillable;
-	} 
+	}
 
 	/**
-	 * @param nillable The nillable to set.
+	 * @param nillable
+	 *            The nillable to set.
 	 */
-	public void setNillable(boolean nillable) {        
+	public void setNillable(boolean nillable) {
 		this.nillable = nillable;
-	} 
+	}
 
 	/**
 	 * @return Returns the type.
 	 */
-	public String getType() {        
+	public String getType() {
 		return type;
-	} 
+	}
 
 	/**
-	 * @param type The type to set.
+	 * @param type
+	 *            The type to set.
 	 */
-	public void setType(String type) {        
+	public void setType(String type) {
 		this.type = type;
-	} 
-	
+	}
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
-	public String toString(){
+	public String toString() {
 		return name;
 	}
 }

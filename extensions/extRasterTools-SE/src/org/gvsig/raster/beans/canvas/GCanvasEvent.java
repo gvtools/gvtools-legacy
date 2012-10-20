@@ -19,9 +19,10 @@
 package org.gvsig.raster.beans.canvas;
 
 import java.util.EventObject;
+
 /**
- * Clase que contiene la información que se produce al dispararse un evento
- * en el GCanvas
+ * Clase que contiene la información que se produce al dispararse un evento en
+ * el GCanvas
  * 
  * @version 28/02/2008
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)

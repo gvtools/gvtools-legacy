@@ -42,58 +42,66 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.impl.topology.polygonbuild;
 
 import com.iver.cit.gvsig.geoprocess.core.fmap.GeoprocessException;
 import com.iver.cit.gvsig.geoprocess.core.gui.IGeoprocessUserEntries;
 
-
 /**
- * All classes that provides user entries for PolygonBuildGeoprocess must implement
- * this interface.
+ * All classes that provides user entries for PolygonBuildGeoprocess must
+ * implement this interface.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
-public interface IPolygonBuildGeoprocessUserEntries extends IGeoprocessUserEntries {
-	
+public interface IPolygonBuildGeoprocessUserEntries extends
+		IGeoprocessUserEntries {
+
 	/**
 	 * Return if the polygon build must be computed with the whole layer or only
 	 * with the layer selection.
+	 * 
 	 * @return
 	 */
 	public boolean isFirstOnlySelected();
+
 	/**
-	 * Return if after the build process add to the TOC the error layers. 
+	 * Return if after the build process add to the TOC the error layers.
+	 * 
 	 * @return
 	 */
 	public boolean createLyrsWithErrorGeometries();
-	
+
 	/**
 	 * If apply dangle tolerance (minimumn lenght of segment)
+	 * 
 	 * @return
 	 */
 	public boolean applyDangleTolerance();
 
 	/**
 	 * dangle tolerance (minimumn lenght of segment)
+	 * 
 	 * @return
-	 * @throws GeoprocessException 
+	 * @throws GeoprocessException
 	 */
 	public double getDangleTolerance() throws GeoprocessException;
 
 	/**
 	 * 
-	 * Tells If apply snap tolerance 
+	 * Tells If apply snap tolerance
+	 * 
 	 * @return
 	 */
 	public boolean applySnapTolerance();
 
 	/**
-	 * Tells if compute a clean with the lines 
+	 * Tells if compute a clean with the lines
+	 * 
 	 * @return
 	 */
 	public boolean computeCleanBefore();

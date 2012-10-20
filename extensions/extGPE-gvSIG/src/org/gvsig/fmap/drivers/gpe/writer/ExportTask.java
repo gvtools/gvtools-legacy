@@ -83,30 +83,29 @@ import com.iver.utiles.swing.threads.AbstractMonitorableTask;
  *
  */
 /**
- * This class writes a gvSIG layer and its children
- * (if the driver supports a layer with children)
+ * This class writes a gvSIG layer and its children (if the driver supports a
+ * layer with children)
+ * 
  * @author Jorge Piera LLodr� (jorge.piera@iver.es)
  */
-public class ExportTask extends AbstractMonitorableTask{
+public class ExportTask extends AbstractMonitorableTask {
 	private FLayer rootLayer = null;
 	private GPEWriterHandler writer = null;
 	private MapContext mapContext = null;
-	private ExportGeometry eGeometry = null;	
+	private ExportGeometry eGeometry = null;
 	private File file = null;
-	
-	public ExportTask(FLayer layer, 
-			GPEWriterHandler writer,
-			MapContext mapContext,
-			File file){
+
+	public ExportTask(FLayer layer, GPEWriterHandler writer,
+			MapContext mapContext, File file) {
 		this.rootLayer = layer;
 		this.writer = writer;
 		this.mapContext = mapContext;
 		this.eGeometry = new ExportGeometry(writer);
 		this.file = file;
 		eGeometry.setSourceCrs(layer.getCrs());
-		if (writer.getFormat().equals("text/xml; subtype=kml/2.1")){
-			eGeometry.setTargetCrs(ProjectionUtils.getCRS("EPSG:4326"));			
-		}else{
+		if (writer.getFormat().equals("text/xml; subtype=kml/2.1")) {
+			eGeometry.setTargetCrs(ProjectionUtils.getCRS("EPSG:4326"));
+		} else {
 			eGeometry.setTargetCrs(layer.getCrs());
 		}
 		setInitialStep(0);
@@ -118,39 +117,39 @@ public class ExportTask extends AbstractMonitorableTask{
 		writer.initialize();
 		exportLayer(rootLayer);
 		writer.close();
-		if (isFileLoaded()){
+		if (isFileLoaded()) {
 			loadExportedFile();
 		}
 	}
-	
+
 	/**
 	 * Load the exported file
-	 * @throws GPEParserCreationException 
-	 * @throws IOException 
+	 * 
+	 * @throws GPEParserCreationException
+	 * @throws IOException
 	 */
-	private void loadExportedFile() throws ParserCreationException, IOException{
+	private void loadExportedFile() throws ParserCreationException, IOException {
 		GPEParser parser = GPERegister.createParser(file.toURI());
 		GPEVectorialDriver driver = GPEDriverFactory.createDriver(parser);
 		driver.open(file);
 		CoordinateReferenceSystem crs = driver.getCrs();
-		if(crs == null)
+		if (crs == null)
 			crs = eGeometry.getTargetCrs();
-		FLayer layer = LayerFactory.createLayer(file.getAbsolutePath(),
-				driver, crs);
-		((IView)PluginServices.getMDIManager().getActiveWindow()).
-		getMapControl().getMapContext().getLayers().addLayer(layer);
+		FLayer layer = LayerFactory.createLayer(file.getAbsolutePath(), driver,
+				crs);
+		((IView) PluginServices.getMDIManager().getActiveWindow())
+				.getMapControl().getMapContext().getLayers().addLayer(layer);
 	}
-	
+
 	/**
 	 * @return true if the exported files have to be loaded
 	 */
-	private boolean isFileLoaded(){
-		int load = JOptionPane.showConfirmDialog(
-				(JComponent) PluginServices.getMDIManager().getActiveWindow()
-				, PluginServices.getText(this, "insertar_en_la_vista_la_capa_creada"),
-				PluginServices.getText(this,"insertar_capa"),
-				JOptionPane.YES_NO_OPTION);
-		if (load == JOptionPane.YES_OPTION){
+	private boolean isFileLoaded() {
+		int load = JOptionPane.showConfirmDialog((JComponent) PluginServices
+				.getMDIManager().getActiveWindow(), PluginServices.getText(
+				this, "insertar_en_la_vista_la_capa_creada"), PluginServices
+				.getText(this, "insertar_capa"), JOptionPane.YES_NO_OPTION);
+		if (load == JOptionPane.YES_OPTION) {
 			return true;
 		}
 		return false;
@@ -158,14 +157,15 @@ public class ExportTask extends AbstractMonitorableTask{
 
 	/**
 	 * It writes a layer and its children recursively
+	 * 
 	 * @param layer
-	 * The layer to write
+	 *            The layer to write
 	 */
-	private void exportLayer(FLayer layer){
+	private void exportLayer(FLayer layer) {
 		String projection = ProjectionUtils.getAbrev(eGeometry.getTargetCrs());
-		
+
 		writer.startLayer(null, null, layer.getName(), null, projection);
-		//Sets the extent
+		// Sets the extent
 		try {
 			if (layer.getCrs().getName()
 					.equals(mapContext.getViewPort().getCrs().getName()))
@@ -180,14 +180,15 @@ public class ExportTask extends AbstractMonitorableTask{
 						ProjectionUtils.getAbrev(eGeometry.getTargetCrs()));
 			writer.endBbox();
 		} catch (Exception e) {
-			writer.getErrorHandler().addWarning(new ExtentExportWarning(layer,e));
-		} 
-		//Export the layer information
+			writer.getErrorHandler().addWarning(
+					new ExtentExportWarning(layer, e));
+		}
+		// Export the layer information
 		exportLayerInfo(layer);
-		//If the layer has children...
-		if (layer instanceof LayerCollection){
-			LayerCollection layers = (LayerCollection)layer;
-			for (int i=0 ; i<layers.getLayersCount() ; i++){
+		// If the layer has children...
+		if (layer instanceof LayerCollection) {
+			LayerCollection layers = (LayerCollection) layer;
+			for (int i = 0; i < layers.getLayersCount(); i++) {
 				exportLayer(layers.getLayer(i));
 			}
 		}
@@ -195,91 +196,98 @@ public class ExportTask extends AbstractMonitorableTask{
 	}
 
 	/**
-	 * It exports the layer information. Geometries if is
-	 * a vectorial layer, images if is a raster layer...
+	 * It exports the layer information. Geometries if is a vectorial layer,
+	 * images if is a raster layer...
+	 * 
 	 * @param layer
 	 */
-	private void exportLayerInfo(FLayer layer){
+	private void exportLayerInfo(FLayer layer) {
 		try {
-			if (layer instanceof FLyrVect){
-				exportVectorialLayer((FLyrVect)layer);
+			if (layer instanceof FLyrVect) {
+				exportVectorialLayer((FLyrVect) layer);
 			}
 		} catch (Exception e) {
 			writer.getErrorHandler().addError(e);
 		}
-	}	
+	}
 
 	/**
 	 * Export the geometries of a vectorial layer
+	 * 
 	 * @param layer
-	 * @throws DriverException 
-	 * @throws DriverIOException 
-	 * @throws ReadDriverException 
-	 * @throws InitializeDriverException 
-	 * @throws ReadDriverException 
+	 * @throws DriverException
+	 * @throws DriverIOException
+	 * @throws ReadDriverException
+	 * @throws InitializeDriverException
+	 * @throws ReadDriverException
 	 */
-	private void exportVectorialLayer(FLyrVect layer) throws DriverException, DriverIOException, InitializeDriverException, ReadDriverException {
+	private void exportVectorialLayer(FLyrVect layer) throws DriverException,
+			DriverIOException, InitializeDriverException, ReadDriverException {
 		System.out.println(layer.getName());
 		ReadableVectorial rv = layer.getSource();
 		SelectableDataSource sds = layer.getRecordset();
 		rv.start();
-		//If there is a selection the rows to export have to be 
-		//the selected rows
+		// If there is a selection the rows to export have to be
+		// the selected rows
 		FBitSet bitSet = sds.getSelection();
-		int rowCount;		
-		if (bitSet.cardinality() == 0){
+		int rowCount;
+		if (bitSet.cardinality() == 0) {
 			rowCount = rv.getShapeCount();
 			for (int i = 0; i < rowCount; i++) {
 				exportFeature(sds, rv, i, layer);
 			}
-		}else{
+		} else {
 			rowCount = bitSet.cardinality();
 			for (int i = bitSet.nextSetBit(0); i >= 0; i = bitSet
-			.nextSetBit(i + 1)) {
+					.nextSetBit(i + 1)) {
 				exportFeature(sds, rv, i, layer);
 			}
-		}	
+		}
 		rv.stop();
 	}
 
 	/**
 	 * It writes a feature (geometry + attributes)
+	 * 
 	 * @param sds
-	 * The selectable datasource to get the attributes
+	 *            The selectable datasource to get the attributes
 	 * @param rv
-	 * The readable vectorial to get the geoemtries
+	 *            The readable vectorial to get the geoemtries
 	 * @param index
-	 * The feature index
+	 *            The feature index
 	 * @param layer
-	 * Only to personalize the exceptions
+	 *            Only to personalize the exceptions
 	 * @throws ReadDriverException
 	 */
-	private void exportFeature(SelectableDataSource sds, ReadableVectorial rv, int index, FLayer layer){
+	private void exportFeature(SelectableDataSource sds, ReadableVectorial rv,
+			int index, FLayer layer) {
 		try {
 			writer.startFeature(String.valueOf(index), "FEATURE", null);
-			//Add the geoemtry
-			IGeometry geom = rv.getShape(index);			
+			// Add the geoemtry
+			IGeometry geom = rv.getShape(index);
 			eGeometry.writeGeometry(geom);
-			//Add the attributes
+			// Add the attributes
 			Value[] values = sds.getRow(index);
-			for (int i=0 ; i<values.length ; i++){				
-				writer.startElement("", 
-						StringUtils.replaceAllString(sds.getFieldName(i), " ", "_"),
-						values[i].toString());
+			for (int i = 0; i < values.length; i++) {
+				writer.startElement("", StringUtils.replaceAllString(
+						sds.getFieldName(i), " ", "_"), values[i].toString());
 				writer.endElement();
 			}
 			writer.endFeature();
 		} catch (Exception e) {
-			writer.getErrorHandler().addError(new FeatureExportException(layer,index,e));
-		}		
+			writer.getErrorHandler().addError(
+					new FeatureExportException(layer, index, e));
+		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.utiles.swing.threads.IMonitorableTask#finished()
 	 */
-	public void finished() {		
+	public void finished() {
 		try {
-			ExportTo.executeCommand((FLyrVect)rootLayer);
+			ExportTo.executeCommand((FLyrVect) rootLayer);
 		} catch (Exception e) {
 			NotificationManager.addError(e);
 		}

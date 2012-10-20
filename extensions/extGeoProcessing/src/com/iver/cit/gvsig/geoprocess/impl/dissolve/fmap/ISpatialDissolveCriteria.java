@@ -42,17 +42,17 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: ISpatialDissolveCriteria.java 5918 2006-06-20 18:20:45Z azabala $
-* $Log$
-* Revision 1.1  2006-06-20 18:20:45  azabala
-* first version in cvs
-*
-* Revision 1.1  2006/05/24 21:11:14  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-*
-*/
+ *
+ * $Id: ISpatialDissolveCriteria.java 5918 2006-06-20 18:20:45Z azabala $
+ * $Log$
+ * Revision 1.1  2006-06-20 18:20:45  azabala
+ * first version in cvs
+ *
+ * Revision 1.1  2006/05/24 21:11:14  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.dissolve.fmap;
 
 import org.opengis.referencing.operation.MathTransform;
@@ -61,22 +61,27 @@ import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.vividsolutions.jts.geom.Geometry;
 
 /**
- * Forces to IDissolveCriteria to fetch geometries from 
- * ReadableVectorial (for performance reasons, once a criteria
- * has verified a spatial conditions, it caches IGeometry, to
- * avoid reading them many times)
+ * Forces to IDissolveCriteria to fetch geometries from ReadableVectorial (for
+ * performance reasons, once a criteria has verified a spatial conditions, it
+ * caches IGeometry, to avoid reading them many times)
+ * 
  * @author azabala
- *
+ * 
  */
 public interface ISpatialDissolveCriteria {
 	public IGeometry getFirstGeometry();
+
 	public void setFirstGeometry(IGeometry g);
+
 	public void setFirstJts(Geometry g);
+
 	public void setSecondJts(Geometry g);
+
 	public Geometry getSecondJts();
-	
+
 	public void setSecondGeometry(IGeometry g);
+
 	public IGeometry getSecondGeometry();
+
 	public void setCrsTransform(MathTransform crsTransform);
 }
-

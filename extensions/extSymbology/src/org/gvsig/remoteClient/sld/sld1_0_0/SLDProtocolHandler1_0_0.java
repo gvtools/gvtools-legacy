@@ -40,7 +40,6 @@
  */
 package org.gvsig.remoteClient.sld.sld1_0_0;
 
-
 import java.io.File;
 import java.io.IOException;
 
@@ -56,18 +55,22 @@ import org.xmlpull.v1.XmlPullParserException;
 import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
 
 /**
- * Implements the main class for the SLD implementation specification (version 1.0.0)
- * which starts the parsing of the styled layer descriptor document in order to store
- * all the information that it has inside and transform it into objects.<p>
+ * Implements the main class for the SLD implementation specification (version
+ * 1.0.0) which starts the parsing of the styled layer descriptor document in
+ * order to store all the information that it has inside and transform it into
+ * objects.
+ * <p>
  * 
- * An SLD document is defined as a sequence of styled layers.<p>
- * The version attribute gives the SLD version an SLD document, to facilitate backward
- * compatibility with static documents stored in various different versions of an SLD
- * spec.<p>
+ * An SLD document is defined as a sequence of styled layers.
+ * <p>
+ * The version attribute gives the SLD version an SLD document, to facilitate
+ * backward compatibility with static documents stored in various different
+ * versions of an SLD spec.
+ * <p>
  * 
- * The Styled layers can correspond to either named layers or user-defined layers,
- * which are described in subsequent sections. There may be any number of either type
- * of styled layer, including zero, mixed in any order.
+ * The Styled layers can correspond to either named layers or user-defined
+ * layers, which are described in subsequent sections. There may be any number
+ * of either type of styled layer, including zero, mixed in any order.
  * 
  * @see http://portal.opengeospatial.org/files/?artifact_id=1188
  * 
@@ -75,56 +78,61 @@ import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
  */
 public class SLDProtocolHandler1_0_0 extends SLDProtocolHandler {
 
-	public SLDProtocolHandler1_0_0(){
+	public SLDProtocolHandler1_0_0() {
 		setVersion("1.0.0");
 	}
 
-	public void parse(File f) throws XmlPullParserException, IOException, LegendDriverException {
+	public void parse(File f) throws XmlPullParserException, IOException,
+			LegendDriverException {
 		int tag;
 		XMLSchemaParser xmlSchemaParser = null;
 		xmlSchemaParser = new XMLSchemaParser();
 
-
 		xmlSchemaParser.setInput(f);
 		xmlSchemaParser.nextTag();
-		if ( xmlSchemaParser.getEventType() != XmlPullParser.END_DOCUMENT ) {
+		if (xmlSchemaParser.getEventType() != XmlPullParser.END_DOCUMENT) {
 
-			String value = xmlSchemaParser.getAttributeValue("",SLDTags.VERSION_ATTR);
+			String value = xmlSchemaParser.getAttributeValue("",
+					SLDTags.VERSION_ATTR);
 			setVersion(value);
 
-			xmlSchemaParser.require(KXmlParser.START_TAG, null, SLDTags.SLD_ROOT);    			
+			xmlSchemaParser.require(KXmlParser.START_TAG, null,
+					SLDTags.SLD_ROOT);
 			tag = xmlSchemaParser.nextTag();
 
-			while(tag != KXmlParser.END_DOCUMENT){
-				switch(tag){
+			while (tag != KXmlParser.END_DOCUMENT) {
+				switch (tag) {
 				case KXmlParser.START_TAG:
-					if (xmlSchemaParser.getName().compareTo(SLDTags.USERDEFINEDLAYER)==0)
-					{
+					if (xmlSchemaParser.getName().compareTo(
+							SLDTags.USERDEFINEDLAYER) == 0) {
 						SLDUserLayer1_0_0 lyr = new SLDUserLayer1_0_0();
 						lyr.parse(xmlSchemaParser);
-						if (lyr.getName()!= null && lyr.getName()!="")
+						if (lyr.getName() != null && lyr.getName() != "")
 							layers.add(lyr);
-						else throw new LegendDriverException (LegendDriverException.LAYER_NAME_NOT_SPECIFIED);
-					}	
-					else if(xmlSchemaParser.getName().compareTo(SLDTags.NAMEDLAYER)==0)
-					{
+						else
+							throw new LegendDriverException(
+									LegendDriverException.LAYER_NAME_NOT_SPECIFIED);
+					} else if (xmlSchemaParser.getName().compareTo(
+							SLDTags.NAMEDLAYER) == 0) {
 						SLDNamedLayer1_0_0 lyr = new SLDNamedLayer1_0_0();
 						lyr.parse(xmlSchemaParser);
-						if (lyr.getName()!= null && lyr.getName()!="")
+						if (lyr.getName() != null && lyr.getName() != "")
 							layers.add(lyr);
-						else throw new LegendDriverException (LegendDriverException.LAYER_NAME_NOT_SPECIFIED);
+						else
+							throw new LegendDriverException(
+									LegendDriverException.LAYER_NAME_NOT_SPECIFIED);
 
-					}	
+					}
 					break;
-				case KXmlParser.END_TAG:							
+				case KXmlParser.END_TAG:
 					break;
 				case KXmlParser.TEXT:
 					break;
-				}	
+				}
 				tag = xmlSchemaParser.next();
 			}
 			xmlSchemaParser.require(KXmlParser.END_DOCUMENT, null, null);
 		}
 
-	}	
+	}
 }

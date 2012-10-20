@@ -1,4 +1,3 @@
-
 package com.iver.cit.gvsig.project.documents.view.info.gui;
 
 import com.iver.andami.PluginServices;
@@ -6,17 +5,15 @@ import com.iver.andami.ui.mdiManager.SingletonWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.XMLItem;
 
-
 /**
  * Dialog that contains the generic Feature Info Viewer
- *
+ * 
  * @author laura
- *
+ * 
  */
 public class FInfoDialog extends InfoToolViewer implements SingletonWindow {
 
-
-	public FInfoDialog(){
+	public FInfoDialog() {
 		super();
 		setSize(600, 375);
 	}
@@ -32,14 +29,16 @@ public class FInfoDialog extends InfoToolViewer implements SingletonWindow {
 	public void viewActivated() {
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.mdiApp.ui.MDIManager.View#getViewInfo()
 	 */
 	public WindowInfo getWindowInfo() {
 
-		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODELESSDIALOG |
-				WindowInfo.RESIZABLE | WindowInfo.PALETTE);
-		m_viewinfo.setWidth(getWidth()+8);
+		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODELESSDIALOG
+				| WindowInfo.RESIZABLE | WindowInfo.PALETTE);
+		m_viewinfo.setWidth(getWidth() + 8);
 		m_viewinfo.setHeight(getHeight());
 		m_viewinfo.setTitle(PluginServices.getText(this,
 				"Identificar_Resultados"));

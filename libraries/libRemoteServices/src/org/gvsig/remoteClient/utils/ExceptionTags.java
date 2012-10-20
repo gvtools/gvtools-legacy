@@ -40,17 +40,17 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: ExceptionTags.java 5132 2006-05-10 14:15:31Z jaume $
-* $Log$
-* Revision 1.2  2006-05-10 14:15:31  jaume
-* removed unnecessary imports
-*
-* Revision 1.1  2005/12/27 17:28:15  jaume
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: ExceptionTags.java 5132 2006-05-10 14:15:31Z jaume $
+ * $Log$
+ * Revision 1.2  2006-05-10 14:15:31  jaume
+ * removed unnecessary imports
+ *
+ * Revision 1.1  2005/12/27 17:28:15  jaume
+ * *** empty log message ***
+ *
+ *
+ */
 /**
  * 
  */
@@ -58,11 +58,13 @@ package org.gvsig.remoteClient.utils;
 
 /**
  * @author jaume
- *
+ * 
  */
 public class ExceptionTags {
-	private ExceptionTags() {};
-    public final static String EXCEPTION_ROOT="ServiceExceptionReport";
-    public final static String SERVICE_EXCEPTION="ServiceException";
-    public final static String CODE="code";
+	private ExceptionTags() {
+	};
+
+	public final static String EXCEPTION_ROOT = "ServiceExceptionReport";
+	public final static String SERVICE_EXCEPTION = "ServiceException";
+	public final static String CODE = "code";
 }

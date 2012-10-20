@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.io.PushbackInputStream;
 
 import org.gvsig.gpe.GPEDefaults;
-import org.gvsig.gpe.GPEProperties;
 import org.gvsig.gpe.parser.GPEParser;
 import org.gvsig.gpe.xml.XmlProperties;
 import org.gvsig.gpe.xml.exceptions.GPEXmlEmptyFileException;
@@ -94,102 +93,106 @@ import org.gvsig.gpe.xml.stream.XmlStreamException;
  *
  */
 /**
- * This class can be implemented by all the classes that implements a GPE driver based on the XML
- * format.
+ * This class can be implemented by all the classes that implements a GPE driver
+ * based on the XML format.
  * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public abstract class GPEXmlParser extends GPEParser {
-    private IXmlStreamReader parser = null;
+	private IXmlStreamReader parser = null;
 
-    public GPEXmlParser() {
-        super();
-    }
+	public GPEXmlParser() {
+		super();
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.gvsig.gpe.GPEParser#parseStream()
-     */
-    protected void parseStream() {
-        try {
-            parser = getXmlReader();            
-            //Check the XMLSchema
-             if (GPEDefaults.getBooleanProperty(XmlProperties.XML_SCHEMA_VALIDATED) == true){
-            	 
-             }
-            initParse();
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.gpe.GPEParser#parseStream()
+	 */
+	protected void parseStream() {
+		try {
+			parser = getXmlReader();
+			// Check the XMLSchema
+			if (GPEDefaults
+					.getBooleanProperty(XmlProperties.XML_SCHEMA_VALIDATED) == true) {
 
-        } // EL PARSER LANZARÁ UN EVENTO AL ERRORHANDLER SEGÚN EL ERROR RECOGIDO
-        catch (IOException e) {
-            getErrorHandler().addError(e);
-        } catch (GPEXmlEmptyFileException e) {
-            getErrorHandler().addError(e);
-        }
-    }
+			}
+			initParse();
 
-    private IXmlStreamReader getXmlReader() throws XmlStreamException {
-        PushbackInputStream pushBackStream = new PushbackInputStream(getInputStream());
+		} // EL PARSER LANZARÁ UN EVENTO AL ERRORHANDLER SEGÚN EL ERROR RECOGIDO
+		catch (IOException e) {
+			getErrorHandler().addError(e);
+		} catch (GPEXmlEmptyFileException e) {
+			getErrorHandler().addError(e);
+		}
+	}
 
-        IXmlStreamReader reader;
-        try {
-            int firstByte = pushBackStream.read();
-            pushBackStream.unread(firstByte);
-            
-            if (0x01 == firstByte) {
-                // binary
-                reader = GPEXmlParserFactory.getParser("text/x-bxml", pushBackStream);
-            } else {
-                // text
-                reader = GPEXmlParserFactory.getParser("text/xml", pushBackStream);
-            }
-        } catch (IOException e) {
-            throw new XmlStreamException(e);
-        }
-        return reader;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.gvsig.gpe.GPEParser#parseURI()
-     */
-    protected void parseURI() {
-        try {
-            // Creates an input stream to read the file
-            File file = new File(getMainFile());
-            InputStream inputStream = createInputStream(file);
-            setInputStream(inputStream);
-            parseStream();
-        } catch (FileNotFoundException e) {
-            System.out.println("ERROR: Fichero " + getMainFile().getPath() + " no encontrado");
-            getErrorHandler().addError(e);
-        } catch (IOException e) {
-            System.out.println("ERROR: No se puede leer/escribir la codificación del fichero: "
-                    + e.getMessage());
-            getErrorHandler().addError(e);
-        }
-    }
+	private IXmlStreamReader getXmlReader() throws XmlStreamException {
+		PushbackInputStream pushBackStream = new PushbackInputStream(
+				getInputStream());
 
-    /**
-     * Creates an input stream from a file.
-     * 
-     * @param file
-     * @return InputStream
-     * @throws FileNotFoundException
-     */
-    protected abstract InputStream createInputStream(File file) throws FileNotFoundException;
+		IXmlStreamReader reader;
+		try {
+			int firstByte = pushBackStream.read();
+			pushBackStream.unread(firstByte);
 
-    /**
-     * This method start the parse process. It is called after the XML parser is initialized
-     */
-    protected abstract void initParse() throws GPEXmlEmptyFileException, XmlStreamException;
+			if (0x01 == firstByte) {
+				// binary
+				reader = GPEXmlParserFactory.getParser("text/x-bxml",
+						pushBackStream);
+			} else {
+				// text
+				reader = GPEXmlParserFactory.getParser("text/xml",
+						pushBackStream);
+			}
+		} catch (IOException e) {
+			throw new XmlStreamException(e);
+		}
+		return reader;
+	}
 
-    /**
-     * @return the parser
-     */
-    protected IXmlStreamReader getParser() {
-        return parser;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.gpe.GPEParser#parseURI()
+	 */
+	protected void parseURI() {
+		try {
+			// Creates an input stream to read the file
+			File file = new File(getMainFile());
+			InputStream inputStream = createInputStream(file);
+			setInputStream(inputStream);
+			parseStream();
+		} catch (FileNotFoundException e) {
+			System.out.println("ERROR: Fichero " + getMainFile().getPath()
+					+ " no encontrado");
+			getErrorHandler().addError(e);
+		}
+	}
+
+	/**
+	 * Creates an input stream from a file.
+	 * 
+	 * @param file
+	 * @return InputStream
+	 * @throws FileNotFoundException
+	 */
+	protected abstract InputStream createInputStream(File file)
+			throws FileNotFoundException;
+
+	/**
+	 * This method start the parse process. It is called after the XML parser is
+	 * initialized
+	 */
+	protected abstract void initParse() throws GPEXmlEmptyFileException,
+			XmlStreamException;
+
+	/**
+	 * @return the parser
+	 */
+	protected IXmlStreamReader getParser() {
+		return parser;
+	}
 
 }

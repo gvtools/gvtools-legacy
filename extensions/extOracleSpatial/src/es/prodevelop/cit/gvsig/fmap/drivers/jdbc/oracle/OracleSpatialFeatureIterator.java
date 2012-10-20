@@ -58,192 +58,195 @@ import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
 
-
 /**
  * Oracle feature iterator. An instance of this class is returned whaen gvSIG
  * asks for a feature iterator for a new viewport.
- *
+ * 
  * @author jldominguez
- *
+ * 
  */
 public class OracleSpatialFeatureIterator implements IFeatureIterator {
-	
-	private static Logger logger = Logger.getLogger(OracleSpatialFeatureIterator.class);	
-	
-    private OracleSpatialDriver driver;
-    private ResultSet rs = null;
-    private int oneBasedGeoColInd = 0;
-    private boolean useGeotools = false;
-    private Statement st;
-    private String[] explicitAtts = null;
-    private boolean useExplicitAtts = false;
 
-    /**
-     * Constructor.
-     *
-     * @param parent the driver that creates it
-     * @param _rs the result set to be iterated (already computed by the driver)
-     * @param _st the statement that generated the result set. The iterator will close it.
-     * @param geoColIndex index of the geometry field
-     * @param _useGeotools a switch to decide if the geotools classes
-     * must be used to deal with geometris
-     */
-    public OracleSpatialFeatureIterator(
-    		OracleSpatialDriver parent,
-    		ResultSet _rs, Statement _st,
-    		int geoColIndex, boolean _useGeotools,
-    		boolean explicit_atts, String[] exp_atts) {
-        driver = parent;
-        rs = _rs;
-        st = _st;
-        useGeotools = _useGeotools;
-        oneBasedGeoColInd = geoColIndex;
-        explicitAtts = exp_atts;
-        useExplicitAtts = explicit_atts;
-    }
+	private static Logger logger = Logger
+			.getLogger(OracleSpatialFeatureIterator.class);
 
-    public boolean hasNext() throws ReadDriverException {
-        if (rs == null) {
-            return false;
-        }
+	private OracleSpatialDriver driver;
+	private ResultSet rs = null;
+	private int oneBasedGeoColInd = 0;
+	private boolean useGeotools = false;
+	private Statement st;
+	private String[] explicitAtts = null;
+	private boolean useExplicitAtts = false;
 
-        try {
-            boolean _resp = rs.next();
+	/**
+	 * Constructor.
+	 * 
+	 * @param parent
+	 *            the driver that creates it
+	 * @param _rs
+	 *            the result set to be iterated (already computed by the driver)
+	 * @param _st
+	 *            the statement that generated the result set. The iterator will
+	 *            close it.
+	 * @param geoColIndex
+	 *            index of the geometry field
+	 * @param _useGeotools
+	 *            a switch to decide if the geotools classes must be used to
+	 *            deal with geometris
+	 */
+	public OracleSpatialFeatureIterator(OracleSpatialDriver parent,
+			ResultSet _rs, Statement _st, int geoColIndex,
+			boolean _useGeotools, boolean explicit_atts, String[] exp_atts) {
+		driver = parent;
+		rs = _rs;
+		st = _st;
+		useGeotools = _useGeotools;
+		oneBasedGeoColInd = geoColIndex;
+		explicitAtts = exp_atts;
+		useExplicitAtts = explicit_atts;
+	}
 
-            if (!_resp) {
-                rs.close();
-                st.close();
-            }
+	public boolean hasNext() throws ReadDriverException {
+		if (rs == null) {
+			return false;
+		}
 
-            return _resp;
-        } catch (SQLException se) {
-        	throw new ReadDriverException(driver.getName(), se);
-        }
-    }
+		try {
+			boolean _resp = rs.next();
 
-    public IFeature next() throws ReadDriverException {
-        if (rs == null) {
-            return null;
-        }
+			if (!_resp) {
+				rs.close();
+				st.close();
+			}
 
-        IFeature ife = null;
+			return _resp;
+		} catch (SQLException se) {
+			throw new ReadDriverException(driver.getName(), se);
+		}
+	}
 
-        try {
-            ROWID ri = (ROWID) rs.getObject(1);
-            Value[] atts = driver.getAttributes(rs, false);
-            
-            if (useExplicitAtts) {
-            	atts = reorderAtts(atts, driver, explicitAtts);
-            }
-            
-            String gid = ri.stringValue();
-            STRUCT _st = (oracle.sql.STRUCT) rs.getObject(oneBasedGeoColInd);
-            IGeometry theGeom = driver.getGeometryUsing(_st, useGeotools);
-            ife = new DefaultFeature(theGeom, atts, gid);
-        }
-        catch (SQLException se) {
-        	throw new ReadDriverException(driver.getName(), se);
-        }
+	public IFeature next() throws ReadDriverException {
+		if (rs == null) {
+			return null;
+		}
 
-        // showGeometrySample(ife);
-        
-        return ife;
-    }
+		IFeature ife = null;
 
-    private Value[] reorderAtts(
-    		Value[] atts,
-    		OracleSpatialDriver drv,
+		try {
+			ROWID ri = (ROWID) rs.getObject(1);
+			Value[] atts = driver.getAttributes(rs, false);
+
+			if (useExplicitAtts) {
+				atts = reorderAtts(atts, driver, explicitAtts);
+			}
+
+			String gid = ri.stringValue();
+			STRUCT _st = (oracle.sql.STRUCT) rs.getObject(oneBasedGeoColInd);
+			IGeometry theGeom = driver.getGeometryUsing(_st, useGeotools);
+			ife = new DefaultFeature(theGeom, atts, gid);
+		} catch (SQLException se) {
+			throw new ReadDriverException(driver.getName(), se);
+		}
+
+		// showGeometrySample(ife);
+
+		return ife;
+	}
+
+	private Value[] reorderAtts(Value[] atts, OracleSpatialDriver drv,
 			String[] ordered_names) {
-    	
-    	String[] fnames = drv.getFieldNames();
-    	int len = ordered_names.length;
-    	Value[] resp = new Value[len];
-    	for (int i=0; i<len; i++) {
-    		int index = getFiledIndexByName(fnames, ordered_names[i]);
-    		resp[i] = atts[index];
-    	}
+
+		String[] fnames = drv.getFieldNames();
+		int len = ordered_names.length;
+		Value[] resp = new Value[len];
+		for (int i = 0; i < len; i++) {
+			int index = getFiledIndexByName(fnames, ordered_names[i]);
+			resp[i] = atts[index];
+		}
 		return resp;
 	}
-    
-    private int getFiledIndexByName(String[] names, String item) {
-    	for (int i=0; i<names.length; i++) {
-    		if (names[i].compareToIgnoreCase(item) == 0) {
-    			return i;
-    		}
-    	}
-    	return -1;
-    }
+
+	private int getFiledIndexByName(String[] names, String item) {
+		for (int i = 0; i < names.length; i++) {
+			if (names[i].compareToIgnoreCase(item) == 0) {
+				return i;
+			}
+		}
+		return -1;
+	}
 
 	private void showGeometrySample(IFeature ife) {
-    	
-    	IGeometry geom = ife.getGeometry();
-    	
-    	int size = 80;
-    	
-			String wkt_str = geom.toJTSGeometry().toText();
-			if (wkt_str.length() <= size) {
-				logger.debug("Oracle driver returns geometry:\n" + wkt_str);
-			} else {
-				logger.debug("Oracle driver returns geometry:\n" + wkt_str.substring(0, size));
-			}
+
+		IGeometry geom = ife.getGeometry();
+
+		int size = 80;
+
+		String wkt_str = geom.toJTSGeometry().toText();
+		if (wkt_str.length() <= size) {
+			logger.debug("Oracle driver returns geometry:\n" + wkt_str);
+		} else {
+			logger.debug("Oracle driver returns geometry:\n"
+					+ wkt_str.substring(0, size));
+		}
 	}
 
 	public void closeIterator() throws ReadDriverException {
-        try {
-            rs.close();
-            st.close();
-        }
-        catch (SQLException se) {
-            throw new ReadDriverException(driver.getName(), se);
-        }
-    }
+		try {
+			rs.close();
+			st.close();
+		} catch (SQLException se) {
+			throw new ReadDriverException(driver.getName(), se);
+		}
+	}
 
-    /**
-     * Utility method to get the oracle geometry type as a human-readable String.
-     *
-     * @param type the oracle geometry type
-     * @return a human-readable String describing it.
-     */
-    public static String getJGeometryTypeName(int type) {
-        String resp = "Unknown JGeometry type (" + type + ")";
+	/**
+	 * Utility method to get the oracle geometry type as a human-readable
+	 * String.
+	 * 
+	 * @param type
+	 *            the oracle geometry type
+	 * @return a human-readable String describing it.
+	 */
+	public static String getJGeometryTypeName(int type) {
+		String resp = "Unknown JGeometry type (" + type + ")";
 
-        switch (type) {
-        case OracleSpatialDriver.JGeometry_GTYPE_COLLECTION:
-            resp = "Collection";
+		switch (type) {
+		case OracleSpatialDriver.JGeometry_GTYPE_COLLECTION:
+			resp = "Collection";
 
-            break;
+			break;
 
-        case OracleSpatialDriver.JGeometry_GTYPE_CURVE:
-            resp = "Curve";
+		case OracleSpatialDriver.JGeometry_GTYPE_CURVE:
+			resp = "Curve";
 
-            break;
+			break;
 
-        case OracleSpatialDriver.JGeometry_GTYPE_MULTICURVE:
-            resp = "Multi-curve";
+		case OracleSpatialDriver.JGeometry_GTYPE_MULTICURVE:
+			resp = "Multi-curve";
 
-            break;
+			break;
 
-        case OracleSpatialDriver.JGeometry_GTYPE_MULTIPOINT:
-            resp = "Multi-point";
+		case OracleSpatialDriver.JGeometry_GTYPE_MULTIPOINT:
+			resp = "Multi-point";
 
-            break;
+			break;
 
-        case OracleSpatialDriver.JGeometry_GTYPE_MULTIPOLYGON:
-            resp = "Multi-polygon";
+		case OracleSpatialDriver.JGeometry_GTYPE_MULTIPOLYGON:
+			resp = "Multi-polygon";
 
-            break;
+			break;
 
-        case OracleSpatialDriver.JGeometry_GTYPE_POINT:
-            resp = "Point";
+		case OracleSpatialDriver.JGeometry_GTYPE_POINT:
+			resp = "Point";
 
-            break;
+			break;
 
-        case OracleSpatialDriver.JGeometry_GTYPE_POLYGON:
-            resp = "Polygon";
+		case OracleSpatialDriver.JGeometry_GTYPE_POLYGON:
+			resp = "Polygon";
 
-            break;
-        }
+			break;
+		}
 
-        return resp;
-    }
+		return resp;
+	}
 }

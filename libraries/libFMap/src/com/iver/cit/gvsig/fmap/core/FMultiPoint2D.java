@@ -62,47 +62,51 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.MultiPoint;
 import com.vividsolutions.jts.io.WKBWriter;
 
-
 /**
  * Multipunto 2D.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FMultiPoint2D extends AbstractGeometry {
 	private static final WKBWriter writer = new WKBWriter();
-	
+
 	FGeometry[] points = null;
 
 	/**
 	 * Crea un nuevo MultiPoint2D.
-	 *
-	 * @param x DOCUMENT ME!
-	 * @param y DOCUMENT ME!
+	 * 
+	 * @param x
+	 *            DOCUMENT ME!
+	 * @param y
+	 *            DOCUMENT ME!
 	 */
 	public FMultiPoint2D(double[] x, double[] y) {
 		points = new FGeometry[x.length];
-		for (int i=0;i<x.length;i++){
+		for (int i = 0; i < x.length; i++) {
 			points[i] = new FGeometry(new FPoint2D(x[i], y[i]));
 		}
 
 	}
+
 	public FMultiPoint2D(FPoint2D[] points) {
-		this.points=new FGeometry[points.length];
-		for (int i=0;i<points.length;i++){
+		this.points = new FGeometry[points.length];
+		for (int i = 0; i < points.length; i++) {
 			this.points[i] = new FGeometry(points[i]);
 		}
-   }
+	}
+
 	/**
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#draw(java.awt.Graphics2D,
-	 * 		ViewPort, ISymbol)
+	 *      ViewPort, ISymbol)
 	 */
 	public void draw(Graphics2D g, ViewPort vp, ISymbol symbol) {
 		int size = 2;
 		int hw = 4;
 
 		for (int i = 0; i < points.length; i++) {
-			Point2D p=points[i].getHandlers(IGeometry.SELECTHANDLER)[0].getPoint();
-			//Point2D.Double p = new Point2D.Double(p.getX(), p.getY());
+			Point2D p = points[i].getHandlers(IGeometry.SELECTHANDLER)[0]
+					.getPoint();
+			// Point2D.Double p = new Point2D.Double(p.getX(), p.getY());
 			vp.getAffineTransform().transform(p, p);
 			g.setColor(Color.red);
 			g.fillOval((int) p.getX() - size, (int) p.getY() - size, hw, hw);
@@ -115,16 +119,15 @@ public class FMultiPoint2D extends AbstractGeometry {
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#toJTSGeometry()
 	 */
 	public Geometry toJTSGeometry() {
-        Coordinate[] theGeoms = new Coordinate[points.length];
-        for (int i = 0; i < theGeoms.length; i++)
-        {
-        	Point2D p=points[i].getHandlers(IGeometry.SELECTHANDLER)[0].getPoint();
+		Coordinate[] theGeoms = new Coordinate[points.length];
+		for (int i = 0; i < theGeoms.length; i++) {
+			Point2D p = points[i].getHandlers(IGeometry.SELECTHANDLER)[0]
+					.getPoint();
 
-        	Coordinate c = new Coordinate(p.getX(), p.getY());
-            theGeoms[i] = c;
-        }
-        MultiPoint geomCol = new GeometryFactory().createMultiPoint(theGeoms);
-
+			Coordinate c = new Coordinate(p.getX(), p.getY());
+			theGeoms[i] = c;
+		}
+		MultiPoint geomCol = new GeometryFactory().createMultiPoint(theGeoms);
 
 		return geomCol;
 	}
@@ -133,42 +136,50 @@ public class FMultiPoint2D extends AbstractGeometry {
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#createLabels(int, boolean)
 	 */
 	public FLabel[] createLabels(int position, boolean duplicates) {
-        FLabel[] aux = new FLabel[getNumPoints()];
-        for (int i=0; i < getNumPoints(); i++)
-        {
-        	Shape p=points[i].getInternalShape();
+		FLabel[] aux = new FLabel[getNumPoints()];
+		for (int i = 0; i < getNumPoints(); i++) {
+			Shape p = points[i].getInternalShape();
 
-            aux[i] = FLabel.createFLabel((FShape)p);
-        }
+			aux[i] = FLabel.createFLabel((FShape) p);
+		}
 
 		return aux;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#intersects(java.awt.geom.Rectangle2D)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.core.IGeometry#intersects(java.awt.geom.Rectangle2D
+	 * )
 	 */
 	public boolean intersects(Rectangle2D r) {
-		for (int i=0;i<getNumPoints();i++){
-			Point2D p=points[i].getHandlers(IGeometry.SELECTHANDLER)[0].getPoint();
-			if (r.contains(p.getX(),p.getY()))
+		for (int i = 0; i < getNumPoints(); i++) {
+			Point2D p = points[i].getHandlers(IGeometry.SELECTHANDLER)[0]
+					.getPoint();
+			if (r.contains(p.getX(), p.getY()))
 				return true;
 		}
 		return false;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#getBounds2D()
 	 */
 	public Rectangle2D getBounds2D() {
-		Rectangle2D r=null;
-		if (getNumPoints()>0){
-			Point2D p=points[0].getHandlers(IGeometry.SELECTHANDLER)[0].getPoint();
+		Rectangle2D r = null;
+		if (getNumPoints() > 0) {
+			Point2D p = points[0].getHandlers(IGeometry.SELECTHANDLER)[0]
+					.getPoint();
 
-			r=new Rectangle2D.Double(p.getX(),p.getY(),0.001,0.001);
+			r = new Rectangle2D.Double(p.getX(), p.getY(), 0.001, 0.001);
 		}
-		for (int i=1;i<getNumPoints();i++){
-			Point2D p=points[i].getHandlers(IGeometry.SELECTHANDLER)[0].getPoint();
-			r.add(p.getX(),p.getY());
+		for (int i = 1; i < getNumPoints(); i++) {
+			Point2D p = points[i].getHandlers(IGeometry.SELECTHANDLER)[0]
+					.getPoint();
+			r.add(p.getX(), p.getY());
 		}
 		return r;
 	}
@@ -180,38 +191,47 @@ public class FMultiPoint2D extends AbstractGeometry {
 		return FShape.MULTIPOINT;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#draw(java.awt.Graphics2D, com.iver.cit.gvsig.fmap.ViewPort, com.iver.cit.gvsig.fmap.core.v02.FSymbol)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#draw(java.awt.Graphics2D,
+	 * com.iver.cit.gvsig.fmap.ViewPort,
+	 * com.iver.cit.gvsig.fmap.core.v02.FSymbol)
 	 */
-	public void draw(Graphics2D g, ViewPort vp, ISymbol symbol, Cancellable cancel) {
-		//int size = 2;
-		//int hw = 4;
+	public void draw(Graphics2D g, ViewPort vp, ISymbol symbol,
+			Cancellable cancel) {
+		// int size = 2;
+		// int hw = 4;
 
 		for (int i = 0; i < getNumPoints(); i++) {
-			Point2D p=points[i].getHandlers(IGeometry.SELECTHANDLER)[0].getPoint();
+			Point2D p = points[i].getHandlers(IGeometry.SELECTHANDLER)[0]
+					.getPoint();
 
 			vp.getAffineTransform().transform(p, p);
-			symbol.draw(g, vp.getAffineTransform(), new FPoint2D(p.getX(),p.getY()), cancel);
-			// FGraphicUtilities.DrawShape(g, vp.getAffineTransform(), new FPoint2D(p.getX(),p.getY()), symbol);
+			symbol.draw(g, vp.getAffineTransform(),
+					new FPoint2D(p.getX(), p.getY()), cancel);
+			// FGraphicUtilities.DrawShape(g, vp.getAffineTransform(), new
+			// FPoint2D(p.getX(),p.getY()), symbol);
 
-		/*	java.awt.geom.Point2D.Double p = new java.awt.geom.Point2D.Double(x[i],
-					y[i]);
-			vp.getAffineTransform().transform(p, p);
-			g.setColor(Color.red);
-			g.fillOval((int) p.x - size, (int) p.y - size, (int) hw, (int) hw);
-			g.setColor(Color.black);
-			g.drawOval((int) p.x - size, (int) p.y - size, (int) hw, (int) hw);
-		*/
+			/*
+			 * java.awt.geom.Point2D.Double p = new
+			 * java.awt.geom.Point2D.Double(x[i], y[i]);
+			 * vp.getAffineTransform().transform(p, p); g.setColor(Color.red);
+			 * g.fillOval((int) p.x - size, (int) p.y - size, (int) hw, (int)
+			 * hw); g.setColor(Color.black); g.drawOval((int) p.x - size, (int)
+			 * p.y - size, (int) hw, (int) hw);
+			 */
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#cloneGeometry()
 	 */
 	public IGeometry cloneGeometry() {
 		FPoint2D[] aux = new FPoint2D[getNumPoints()];
-		for (int i=0; i < getNumPoints(); i++)
-		{
+		for (int i = 0; i < getNumPoints(); i++) {
 			aux[i] = (FPoint2D) points[i].cloneGeometry().getInternalShape();
 		}
 		return new FMultiPoint2D(aux);
@@ -219,94 +239,114 @@ public class FMultiPoint2D extends AbstractGeometry {
 
 	@Override
 	public void reProject(MathTransform trans) {
-		for (int i=0; i < getNumPoints(); i++)
-		{
+		for (int i = 0; i < getNumPoints(); i++) {
 			points[i].reProject(trans);
 		}
 	}
-	
-	public int getNumPoints(){
+
+	public int getNumPoints() {
 		return points.length;
 	}
-	public FPoint2D getPoint(int i){
-		return (FPoint2D)points[i].getInternalShape();
+
+	public FPoint2D getPoint(int i) {
+		return (FPoint2D) points[i].getInternalShape();
 	}
+
 	/**
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#getPathIterator(AffineTransform)
 	 */
 	public PathIterator getPathIterator(AffineTransform at) {
-		GeneralPathX gpx=new GeneralPathX();
-		if (getNumPoints()>0){
-			Point2D p=points[0].getHandlers(IGeometry.SELECTHANDLER)[0].getPoint();
+		GeneralPathX gpx = new GeneralPathX();
+		if (getNumPoints() > 0) {
+			Point2D p = points[0].getHandlers(IGeometry.SELECTHANDLER)[0]
+					.getPoint();
 			gpx.moveTo(p.getX(), p.getY());
 		}
-		for (int i=1;i<getNumPoints();i++){
-			Point2D p=points[i].getHandlers(IGeometry.SELECTHANDLER)[0].getPoint();
+		for (int i = 1; i < getNumPoints(); i++) {
+			Point2D p = points[i].getHandlers(IGeometry.SELECTHANDLER)[0]
+					.getPoint();
 			gpx.lineTo(p.getX(), p.getY());
 		}
-		return (GeneralPathXIterator)gpx.getPathIterator(null);
+		return (GeneralPathXIterator) gpx.getPathIterator(null);
 	}
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.core.IGeometry#fastIntersects(double, double, double, double)
-     */
-    public boolean fastIntersects(double x, double y, double w, double h) {
-		for (int i=0; i < getNumPoints(); i++)
-		{
-			if (points[i].intersects(x,y,w,h))
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#fastIntersects(double,
+	 * double, double, double)
+	 */
+	public boolean fastIntersects(double x, double y, double w, double h) {
+		for (int i = 0; i < getNumPoints(); i++) {
+			if (points[i].intersects(x, y, w, h))
 				return true;
 		}
-        return false;
-    }
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.core.IGeometry#drawInts(java.awt.Graphics2D, com.iver.cit.gvsig.fmap.ViewPort, com.iver.cit.gvsig.fmap.core.v02.FSymbol)
-     */
-    public void drawInts(Graphics2D g, ViewPort vp, ISymbol symbol, Cancellable cancel) {
-//        draw(g,vp, symbol, cancel);
-    	for (int i = 0; i < points.length; i++) {
-			points[i].drawInts(g,vp,symbol,cancel);
+		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#drawInts(java.awt.Graphics2D,
+	 * com.iver.cit.gvsig.fmap.ViewPort,
+	 * com.iver.cit.gvsig.fmap.core.v02.FSymbol)
+	 */
+	public void drawInts(Graphics2D g, ViewPort vp, ISymbol symbol,
+			Cancellable cancel) {
+		// draw(g,vp, symbol, cancel);
+		for (int i = 0; i < points.length; i++) {
+			points[i].drawInts(g, vp, symbol, cancel);
 		}
-    }
-	/* (non-Javadoc)
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#getHandlers(int)
 	 */
 	public Handler[] getHandlers(int type) {
-		int numPoints=getNumPoints();
-		Handler[] handlers=new Handler[numPoints];
-		for (int i = 0; i < numPoints; i++){
-			handlers[i]=points[i].getHandlers(type)[0];
+		int numPoints = getNumPoints();
+		Handler[] handlers = new Handler[numPoints];
+		for (int i = 0; i < numPoints; i++) {
+			handlers[i] = points[i].getHandlers(type)[0];
 		}
 		return handlers;
 	}
+
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @author Vicente Caballero Navarro
 	 */
 	class PointHandler extends AbstractHandler {
 		/**
 		 * Crea un nuevo PointHandler.
-		 *
-		 * @param x DOCUMENT ME!
-		 * @param y DOCUMENT ME!
+		 * 
+		 * @param x
+		 *            DOCUMENT ME!
+		 * @param y
+		 *            DOCUMENT ME!
 		 */
-		public PointHandler(int i,FPoint2D p) {
+		public PointHandler(int i, FPoint2D p) {
 			point = new Point2D.Double(p.getX(), p.getY());
-			index=i;
+			index = i;
 		}
 
 		/**
 		 * DOCUMENT ME!
-		 *
-		 * @param x DOCUMENT ME!
-		 * @param y DOCUMENT ME!
-		 *
+		 * 
+		 * @param x
+		 *            DOCUMENT ME!
+		 * @param y
+		 *            DOCUMENT ME!
+		 * 
 		 * @return DOCUMENT ME!
 		 */
 		public void move(double x, double y) {
-			Point2D p=points[index].getHandlers(IGeometry.SELECTHANDLER)[0].getPoint();
+			Point2D p = points[index].getHandlers(IGeometry.SELECTHANDLER)[0]
+					.getPoint();
 
-			point.setLocation(p.getX()+x,
-					p.getY()+y);
+			point.setLocation(p.getX() + x, p.getY() + y);
 		}
 
 		/**
@@ -317,90 +357,104 @@ public class FMultiPoint2D extends AbstractGeometry {
 		}
 
 	}
+
 	public void transform(AffineTransform at) {
-		for (int i=0; i < getNumPoints(); i++)
-		{
+		for (int i = 0; i < getNumPoints(); i++) {
 			points[i].transform(at);
 		}
 
 	}
+
 	public byte[] toWKB() throws IOException {
 		return writer.write(toJTSGeometry());
 	}
+
 	public PathIterator getPathIterator(AffineTransform at, double flatness) {
-		GeneralPathX gpx=new GeneralPathX();
-		if (getNumPoints()>0){
-			Point2D p=points[0].getHandlers(IGeometry.SELECTHANDLER)[0].getPoint();
+		GeneralPathX gpx = new GeneralPathX();
+		if (getNumPoints() > 0) {
+			Point2D p = points[0].getHandlers(IGeometry.SELECTHANDLER)[0]
+					.getPoint();
 
 			gpx.moveTo(p.getX(), p.getY());
 		}
-		for (int i=1;i<getNumPoints();i++){
-			Point2D p=points[i].getHandlers(IGeometry.SELECTHANDLER)[0].getPoint();
+		for (int i = 1; i < getNumPoints(); i++) {
+			Point2D p = points[i].getHandlers(IGeometry.SELECTHANDLER)[0]
+					.getPoint();
 
 			gpx.lineTo(p.getX(), p.getY());
 		}
 		return gpx.getPathIterator(at, flatness);
 
 	}
+
 	public boolean contains(double x, double y) {
 		boolean bResul;
-		for (int i=0; i < getNumPoints(); i++)
-		{
-			bResul = points[i].contains(x,y);
-			if (bResul) return true;
+		for (int i = 0; i < getNumPoints(); i++) {
+			bResul = points[i].contains(x, y);
+			if (bResul)
+				return true;
 		}
 		return false;
 	}
+
 	public boolean contains(double x, double y, double w, double h) {
 		return false;
 	}
+
 	public boolean intersects(double x, double y, double w, double h) {
 		boolean bResul;
-		for (int i=0; i < getNumPoints(); i++)
-		{
-			bResul = points[i].contains(x,y,w,h);
-			if (bResul) return true;
+		for (int i = 0; i < getNumPoints(); i++) {
+			bResul = points[i].contains(x, y, w, h);
+			if (bResul)
+				return true;
 		}
 		return false;
 	}
+
 	public Rectangle getBounds() {
-		Rectangle r=null;
-		if (getNumPoints()>0){
-			r= points[0].getBounds();
+		Rectangle r = null;
+		if (getNumPoints() > 0) {
+			r = points[0].getBounds();
 		}
-		for (int i=1;i<getNumPoints();i++){
-			Point2D p=points[i].getHandlers(IGeometry.SELECTHANDLER)[0].getPoint();
-			r.add(p.getX(),p.getY());
+		for (int i = 1; i < getNumPoints(); i++) {
+			Point2D p = points[i].getHandlers(IGeometry.SELECTHANDLER)[0]
+					.getPoint();
+			r.add(p.getX(), p.getY());
 		}
 		return r;
 	}
+
 	public boolean contains(Point2D p) {
 		boolean bResul;
-		for (int i=0; i < getNumPoints(); i++)
-		{
+		for (int i = 0; i < getNumPoints(); i++) {
 			bResul = points[i].contains(p);
-			if (bResul) return true;
+			if (bResul)
+				return true;
 		}
 		return false;
 
 	}
+
 	public boolean contains(Rectangle2D r) {
 		boolean bResul;
-		for (int i=0; i < getNumPoints(); i++)
-		{
+		for (int i = 0; i < getNumPoints(); i++) {
 			bResul = points[i].contains(r);
-			if (bResul) return true;
+			if (bResul)
+				return true;
 		}
 		return false;
 
 	}
+
 	public Shape getInternalShape() {
 		return this;
 	}
+
 	public void drawInts(Graphics2D graphics2D, ViewPort viewPort, double dpi,
 			CartographicSupport cartographicSymbol, Cancellable cancel) {
 		for (int i = 0; i < points.length; i++) {
-			points[i].drawInts(graphics2D,viewPort,dpi,cartographicSymbol,cancel);
+			points[i].drawInts(graphics2D, viewPort, dpi, cartographicSymbol,
+					cancel);
 		}
 
 	}

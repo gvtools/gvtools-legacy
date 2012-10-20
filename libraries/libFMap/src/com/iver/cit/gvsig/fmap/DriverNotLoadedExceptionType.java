@@ -42,40 +42,40 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: DriverNotLoadedExceptionType.java 7454 2006-09-21 17:18:31Z azabala $
-* $Log$
-* Revision 1.1  2006-09-21 17:18:31  azabala
-* First version in cvs
-*
-*
-*/
+ *
+ * $Id: DriverNotLoadedExceptionType.java 7454 2006-09-21 17:18:31Z azabala $
+ * $Log$
+ * Revision 1.1  2006-09-21 17:18:31  azabala
+ * First version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap;
 
 import com.iver.utiles.ExceptionDescription;
 
-public class DriverNotLoadedExceptionType extends ExceptionDescription{
-	
+public class DriverNotLoadedExceptionType extends ExceptionDescription {
+
 	private String driverName;
-	
-	
+
 	public DriverNotLoadedExceptionType() {
 		super();
 		setCode(0);
 		setDescription("error al intentar cargar un driver");
 	}
-	
-	public void setDriverName(String driverName){
+
+	public void setDriverName(String driverName) {
 		this.driverName = driverName;
 	}
 
 	public String getHtmlErrorMessage() {
 		String message = "";
-		message += "<b>Error en la carga del driver</b><br>" +
-					"El driver " + driverName +
-					" no ha podido ser cargado, al no ser encontrado o tratarse de un "+
-					" driver no instanciable.";
+		message += "<b>Error en la carga del driver</b><br>"
+				+ "El driver "
+				+ driverName
+				+ " no ha podido ser cargado, al no ser encontrado o tratarse de un "
+				+ " driver no instanciable.";
 		return message;
-			
+
 	}
 }

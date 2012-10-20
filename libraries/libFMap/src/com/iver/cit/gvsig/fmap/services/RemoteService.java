@@ -11,28 +11,36 @@ import com.hardcode.gdbms.engine.data.driver.DriverException;
  * @author luisw
  */
 public interface RemoteService {
-//	private String serviceName;
-//	private String host;
-//	private int port;
-//	
-//	public RemoteService(String name, String host, int port){
-//		serviceName = name;
-//		this.host = host;
-//		this.port = port;
-//	}
+	// private String serviceName;
+	// private String host;
+	// private int port;
+	//
+	// public RemoteService(String name, String host, int port){
+	// serviceName = name;
+	// this.host = host;
+	// this.port = port;
+	// }
 	public void setServiceName(String serviceName);
-	public String getServiceName(); //{
-//		return serviceName;
-//	}
-	public void setHost(String hostName) throws IOException ;
-	public String getHost(); //{
-//		return host;
-//	}
-	public void setPort(int portNr); //{
-	public int getPort(); //{
-//		return port;
-//	}
+
+	public String getServiceName(); // {
+	// return serviceName;
+	// }
+
+	public void setHost(String hostName) throws IOException;
+
+	public String getHost(); // {
+	// return host;
+	// }
+
+	public void setPort(int portNr); // {
+
+	public int getPort(); // {
+	// return port;
+	// }
+
 	public void connect() throws IOException, DriverException;
-	public boolean isConnected();	
+
+	public boolean isConnected();
+
 	public void close();
 }

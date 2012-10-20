@@ -26,9 +26,8 @@
  */
 package org.gvsig.tools.observer;
 
-
 public interface Observer {
 
-	public void update(Observable observable,Object notification);
+	public void update(Observable observable, Object notification);
 
 }

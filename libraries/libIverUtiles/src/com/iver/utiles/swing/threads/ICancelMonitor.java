@@ -42,26 +42,27 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: ICancelMonitor.java 4419 2006-03-14 19:35:13Z azabala $
-* $Log$
-* Revision 1.1  2006-03-14 19:23:42  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/03/07 21:00:29  azabala
-* *** empty log message ***
-*
-*
-*/
-package com.iver.utiles.swing.threads;
-/**
- * It monitors cancelation of task, informing
- * to interested in cancelation
- * @author azabala
  *
+ * $Id: ICancelMonitor.java 4419 2006-03-14 19:35:13Z azabala $
+ * $Log$
+ * Revision 1.1  2006-03-14 19:23:42  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/03/07 21:00:29  azabala
+ * *** empty log message ***
+ *
+ *
+ */
+package com.iver.utiles.swing.threads;
+
+/**
+ * It monitors cancelation of task, informing to interested in cancelation
+ * 
+ * @author azabala
+ * 
  */
 public interface ICancelMonitor {
 	public boolean isCanceled();
+
 	public boolean isFinished();
 }
-

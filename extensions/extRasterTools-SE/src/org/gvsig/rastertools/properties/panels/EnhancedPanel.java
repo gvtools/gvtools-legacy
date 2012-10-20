@@ -32,18 +32,19 @@ import org.gvsig.rastertools.properties.control.EnhancedControl;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
+
 /**
  * Panel para los controles de brillo y contrase .
- *
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class EnhancedPanel extends AbstractPanel {
 	final private static long serialVersionUID = 0;
 
-	private EnhancedBrightnessContrastPanel contrastPanel   = null;
-	private EnhancedWithTrimPanel           trimPanel       = null;
-	private EnhancedControl                 enhancedControl = null;
-	private FLayer                          fLayer          = null;
+	private EnhancedBrightnessContrastPanel contrastPanel = null;
+	private EnhancedWithTrimPanel trimPanel = null;
+	private EnhancedControl enhancedControl = null;
+	private FLayer fLayer = null;
 
 	/**
 	 * Contructor
@@ -52,7 +53,6 @@ public class EnhancedPanel extends AbstractPanel {
 		setLabel(PluginServices.getText(this, "realce"));
 		initialize();
 	}
-
 
 	protected void initialize() {
 		setLayout(new GridLayout(1, 2));
@@ -63,13 +63,16 @@ public class EnhancedPanel extends AbstractPanel {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.gui.properties.dialog.IRegistrablePanel#initializeUI()
+	 * 
+	 * @see
+	 * org.gvsig.raster.gui.properties.dialog.IRegistrablePanel#initializeUI()
 	 */
 	public void initializeUI() {
 	}
 
 	/**
 	 * Obtiene el panel de brillo y contraste
+	 * 
 	 * @return EnhancedBrightnessContrastPanel
 	 */
 	public EnhancedBrightnessContrastPanel getBrightnessContrastPanel() {
@@ -81,6 +84,7 @@ public class EnhancedPanel extends AbstractPanel {
 
 	/**
 	 * Obtiene el panel de realce con recorte de colas
+	 * 
 	 * @return EnhancedWithTrimPanel
 	 */
 	public EnhancedWithTrimPanel getEnhancedWithTrimPanel() {
@@ -92,6 +96,7 @@ public class EnhancedPanel extends AbstractPanel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.properties.dialog.IRegistrablePanel#accept()
 	 */
 	public void accept() {
@@ -100,6 +105,7 @@ public class EnhancedPanel extends AbstractPanel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.properties.dialog.IRegistrablePanel#apply()
 	 */
 	public void apply() {
@@ -108,6 +114,7 @@ public class EnhancedPanel extends AbstractPanel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.properties.dialog.IRegistrablePanel#cancel()
 	 */
 	public void cancel() {
@@ -133,21 +140,23 @@ public class EnhancedPanel extends AbstractPanel {
 		if (lyr instanceof IRasterProperties)
 			rfl = (((IRasterProperties) lyr).getRenderFilterList());
 
-		enhancedControl = new EnhancedControl(getPanelGroup(), this, dataset, fLayer, rfl);
+		enhancedControl = new EnhancedControl(getPanelGroup(), this, dataset,
+				fLayer, rfl);
 	}
-
 
 	private void actionEnabled() {
 		FLyrRasterSE fLyrRasterSE = ((FLyrRasterSE) fLayer);
 
-		if (!fLyrRasterSE.isActionEnabled(IRasterLayerActions.BRIGHTNESSCONTRAST))
+		if (!fLyrRasterSE
+				.isActionEnabled(IRasterLayerActions.BRIGHTNESSCONTRAST))
 			StatusComponent.setDisabled(getBrightnessContrastPanel());
 
 		if (!fLyrRasterSE.isActionEnabled(IRasterLayerActions.ENHANCED))
 			StatusComponent.setDisabled(getEnhancedWithTrimPanel());
 
-		if (!fLyrRasterSE.isActionEnabled(IRasterLayerActions.BRIGHTNESSCONTRAST) &&
-				!fLyrRasterSE.isActionEnabled(IRasterLayerActions.ENHANCED))
+		if (!fLyrRasterSE
+				.isActionEnabled(IRasterLayerActions.BRIGHTNESSCONTRAST)
+				&& !fLyrRasterSE.isActionEnabled(IRasterLayerActions.ENHANCED))
 			setVisible(false);
 		else
 			setVisible(true);

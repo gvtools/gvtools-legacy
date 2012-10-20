@@ -41,48 +41,74 @@
 package com.iver.cit.gvsig.fmap.edition;
 
 /**
- * <p>An <code>EditionException</code> is thrown if fails the edition of a layer or a table.</p>
- *
+ * <p>
+ * An <code>EditionException</code> is thrown if fails the edition of a layer or
+ * a table.
+ * </p>
+ * 
  * @author Fernando González Cortés
  */
 public class EditionExceptionOld extends Exception {
 	/**
-	 * <p>Constructs a new edition exception with <code>null</code> as its detail message. The cause
-	 *  is not initialized, and may subsequently be initialized by a call to <code>initCause</code>.</p>
+	 * <p>
+	 * Constructs a new edition exception with <code>null</code> as its detail
+	 * message. The cause is not initialized, and may subsequently be
+	 * initialized by a call to <code>initCause</code>.
+	 * </p>
 	 */
 	public EditionExceptionOld() {
 		super();
 	}
 
 	/**
-	 * <p>Constructs a new edition exception with the specified detail message. The cause is not
-	 *  initialized, and may subsequently be initialized by a call to <code>initCause</code>.
+	 * <p>
+	 * Constructs a new edition exception with the specified detail message. The
+	 * cause is not initialized, and may subsequently be initialized by a call
+	 * to <code>initCause</code>.
 	 * 
-	 * @param message the detail message. The detail message is saved for later retrieval by the <code>getMessage()</code> method.
+	 * @param message
+	 *            the detail message. The detail message is saved for later
+	 *            retrieval by the <code>getMessage()</code> method.
 	 */
 	public EditionExceptionOld(String arg0) {
 		super(arg0);
 	}
 
 	/**
-	 * <p>Constructs a new edition exception with the specified detail message and cause.</p>
-	 * <p>Note that the detail message associated with <code>cause</code> is not automatically incorporated in this
-	 *  exception's detailed message.</p>
-	 *  
-	 * @param arg0 the detailed message (which is saved for later retrieval by the <code>getMessage()</code> method).
-	 * @param arg1 the cause (which is saved for later retrieval by the <code>getCause()</code> method). (A <code>null</code>
-	 *  value is permitted, and indicates that the cause is nonexistent or unknown.)
+	 * <p>
+	 * Constructs a new edition exception with the specified detail message and
+	 * cause.
+	 * </p>
+	 * <p>
+	 * Note that the detail message associated with <code>cause</code> is not
+	 * automatically incorporated in this exception's detailed message.
+	 * </p>
+	 * 
+	 * @param arg0
+	 *            the detailed message (which is saved for later retrieval by
+	 *            the <code>getMessage()</code> method).
+	 * @param arg1
+	 *            the cause (which is saved for later retrieval by the
+	 *            <code>getCause()</code> method). (A <code>null</code> value is
+	 *            permitted, and indicates that the cause is nonexistent or
+	 *            unknown.)
 	 */
 	public EditionExceptionOld(String arg0, Throwable arg1) {
 		super(arg0, arg1);
 	}
 
 	/**
-	 * <p>Constructs a edition exception with the specified cause and a detail message of <code>(cause==null ?
-	 *  null : cause.toString())</code> (which typically contains the class and detail message of cause).
-	 *  
-	 * @param arg0 the cause (which is saved for later retrieval by the <code>getCause()</code> method). (A <code>null</code>
-	 *  value is permitted, and indicates that the cause is nonexistent or unknown.)
+	 * <p>
+	 * Constructs a edition exception with the specified cause and a detail
+	 * message of <code>(cause==null ?
+	 *  null : cause.toString())</code> (which typically contains the class and
+	 * detail message of cause).
+	 * 
+	 * @param arg0
+	 *            the cause (which is saved for later retrieval by the
+	 *            <code>getCause()</code> method). (A <code>null</code> value is
+	 *            permitted, and indicates that the cause is nonexistent or
+	 *            unknown.)
 	 */
 	public EditionExceptionOld(Throwable arg0) {
 		super(arg0);

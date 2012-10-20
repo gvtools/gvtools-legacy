@@ -57,45 +57,50 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  *
  */
 /**
- * It parses an element. An element is a tag inside of a 
- * metadata tag
+ * It parses an element. An element is a tag inside of a metadata tag
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class ElementWriter {
-	
+
 	/**
 	 * It writes an Element tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param name
-	 * Element name
+	 *            Element name
 	 * @param value
-	 * Element value
+	 *            Element value
 	 * @param type
-	 * Element type
+	 *            Element type
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler, QName name, Object value) throws IOException{
+	public void start(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor handler, QName name, Object value)
+			throws IOException {
 		writer.writeStartElement(name);
-		if (value != null){
+		if (value != null) {
 			writer.writeValue(value.toString());
 		}
 	}
-	
+
 	/**
 	 * It writes an end Element tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param name
-	 * Element name
+	 *            Element name
 	 * @throws IOException
 	 */
-	public void end(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler) throws IOException{
-		writer.writeEndElement();		
+	public void end(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor handler) throws IOException {
+		writer.writeEndElement();
 	}
-	
+
 }

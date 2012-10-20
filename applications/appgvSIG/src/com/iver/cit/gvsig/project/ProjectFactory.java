@@ -52,32 +52,36 @@ import com.iver.utiles.extensionPoints.ExtensionPoint;
 import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
-
-
 public class ProjectFactory {
-	public static ProjectMap createMap(String baseName){
-		ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
-		ExtensionPoint extPoint=((ExtensionPoint)extensionPoints.get("Documents"));
-		ProjectDocumentFactory pdf=null;
+	public static ProjectMap createMap(String baseName) {
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+		ExtensionPoint extPoint = ((ExtensionPoint) extensionPoints
+				.get("Documents"));
+		ProjectDocumentFactory pdf = null;
 		try {
-			pdf = (ProjectDocumentFactory)extPoint.create(ProjectMapFactory.registerName);
+			pdf = (ProjectDocumentFactory) extPoint
+					.create(ProjectMapFactory.registerName);
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
-		ProjectMap pm=(ProjectMap)pdf.create((Project)null);
+		ProjectMap pm = (ProjectMap) pdf.create((Project) null);
 		pm.setProjectDocumentFactory(pdf);
 		pm.setName(baseName);
 		return pm;
 	}
 
-	public static ProjectTable createTable(String name, IEditableSource ies){
-		ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
-		ExtensionPoint extPoint=((ExtensionPoint)extensionPoints.get("Documents"));
-		ProjectDocumentFactory pdf=null;
+	public static ProjectTable createTable(String name, IEditableSource ies) {
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+		ExtensionPoint extPoint = ((ExtensionPoint) extensionPoints
+				.get("Documents"));
+		ProjectDocumentFactory pdf = null;
 		try {
-			pdf = (ProjectDocumentFactory)extPoint.create(ProjectTableFactory.registerName);
+			pdf = (ProjectDocumentFactory) extPoint
+					.create(ProjectTableFactory.registerName);
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
@@ -89,36 +93,37 @@ public class ProjectFactory {
 		return pt;
 	}
 
-	//TODO implementar bien
-/*	public static ProjectTable createTable(String viewName, FTable ftable){
-		return Table.createTable(viewName, ftable);
-	}
-*/
-	public static ProjectView createView(String viewName){
-		ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
-		ExtensionPoint extPoint=((ExtensionPoint)extensionPoints.get("Documents"));
-		ProjectDocumentFactory pdf=null;
+	// TODO implementar bien
+	/*
+	 * public static ProjectTable createTable(String viewName, FTable ftable){
+	 * return Table.createTable(viewName, ftable); }
+	 */
+	public static ProjectView createView(String viewName) {
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+		ExtensionPoint extPoint = ((ExtensionPoint) extensionPoints
+				.get("Documents"));
+		ProjectDocumentFactory pdf = null;
 		try {
-			pdf = (ProjectDocumentFactory)extPoint.create(ProjectViewFactory.registerName);
+			pdf = (ProjectDocumentFactory) extPoint
+					.create(ProjectViewFactory.registerName);
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
-		ProjectView pv=(ProjectView)pdf.create((Project)null);
+		ProjectView pv = (ProjectView) pdf.create((Project) null);
 		pv.setProjectDocumentFactory(pdf);
 		pv.setName(viewName);
 		return pv;
 	}
 
-	public static Project createProject(){
+	public static Project createProject() {
 		return new Project();
 	}
 
-	public static ProjectExtent createExtent(){
+	public static ProjectExtent createExtent() {
 		return new ProjectExtent();
 	}
-
-
 
 }

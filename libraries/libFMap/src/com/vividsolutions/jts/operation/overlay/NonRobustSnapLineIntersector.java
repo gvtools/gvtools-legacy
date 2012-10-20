@@ -42,55 +42,44 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: NonRobustSnapLineIntersector.java 9178 2006-12-04 19:30:23Z azabala $
-* $Log$
-* Revision 1.1  2006-12-04 19:30:23  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/10/19 16:06:48  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/10/17 18:25:53  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/10/05 19:20:57  azabala
-* first version in cvs
-*
-* Revision 1.1  2006/10/02 19:06:56  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: NonRobustSnapLineIntersector.java 9178 2006-12-04 19:30:23Z azabala $
+ * $Log$
+ * Revision 1.1  2006-12-04 19:30:23  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/10/19 16:06:48  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/10/17 18:25:53  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/10/05 19:20:57  azabala
+ * first version in cvs
+ *
+ * Revision 1.1  2006/10/02 19:06:56  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.vividsolutions.jts.operation.overlay;
-
 
 import com.vividsolutions.jts.algorithm.NonRobustLineIntersector;
 
 public class NonRobustSnapLineIntersector extends NonRobustLineIntersector {
 
 	/**
-	   * @return true if both numbers are positive or if both numbers are negative.
-	   * Returns false if both numbers are zero.
-	   */
-	  public static boolean isSameSignAndNonZero(double a, double b) {
-	    if (a == 0 || b == 0) {
-	      return false;
-	    }
-	    return (a < 0 && b < 0) || (a > 0 && b > 0);
-	  }
+	 * @return true if both numbers are positive or if both numbers are
+	 *         negative. Returns false if both numbers are zero.
+	 */
+	public static boolean isSameSignAndNonZero(double a, double b) {
+		if (a == 0 || b == 0) {
+			return false;
+		}
+		return (a < 0 && b < 0) || (a > 0 && b > 0);
+	}
 
-
-	  public NonRobustSnapLineIntersector() {
-	  }
-
-	  
-	  
-
-
-
-	
-
+	public NonRobustSnapLineIntersector() {
+	}
 
 }
-

@@ -56,17 +56,18 @@ import org.gvsig.remotesensing.tasseledcap.TasseledCapProcess;
 
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 
-
 /**
- * Este test prueba el proceso de calculo de la trasformacion Tasseled Cap.
- * A partir del fichero "bhtmref.img", se construye un grid con las bandas correspondientes
- * (las 6 bandas de la imagen para el caso de LandSat TM y ETM y las 4 primeras bandas para el caso de MSS).
- * Construido el grid se lanza el calculo y se comparan los resultados con los ficheros  que se
- * detallan a continuación calculados previamente con Envi.
- * Para el caso de la Imagen LandSat TM, se compara el resultado con Imagen: LandSatTM_Envi
- * Para el caso de la Imagen LandSat ETM, se compara el resultado con Imagen LandSatETM_Envi
- * Para el caso de la Imagen LandSat MSS, se compara el resultado con Imagen LandSatMSS_Envi.tif
- *
+ * Este test prueba el proceso de calculo de la trasformacion Tasseled Cap. A
+ * partir del fichero "bhtmref.img", se construye un grid con las bandas
+ * correspondientes (las 6 bandas de la imagen para el caso de LandSat TM y ETM
+ * y las 4 primeras bandas para el caso de MSS). Construido el grid se lanza el
+ * calculo y se comparan los resultados con los ficheros que se detallan a
+ * continuación calculados previamente con Envi. Para el caso de la Imagen
+ * LandSat TM, se compara el resultado con Imagen: LandSatTM_Envi Para el caso
+ * de la Imagen LandSat ETM, se compara el resultado con Imagen LandSatETM_Envi
+ * Para el caso de la Imagen LandSat MSS, se compara el resultado con Imagen
+ * LandSatMSS_Envi.tif
+ * 
  * @author Alejandro Muñoz Sanchez (alejandro.munoz@uclm.es)
  * */
 
@@ -77,118 +78,112 @@ public class TTasseledCapProcess extends TestCase {
 	private String path2 = baseDir + "LandSatTM_Envi";
 	private String path3 = baseDir + "LandSatETM_Envi";
 	private String path4 = baseDir + "LandSatMSS_Envi";
-	private RasterDataset f2,f3,f4 = null;
-	private BufferFactory ds2,ds3,ds4 = null;
+	private RasterDataset f2, f3, f4 = null;
+	private BufferFactory ds2, ds3, ds4 = null;
 	private FLyrRasterSE lyr1 = null;
-	
-	static{
-		RasterLibrary.wakeUp();	
+
+	static {
+		RasterLibrary.wakeUp();
 	}
-	
+
 	public void start() {
 		this.setUp();
-	    this.testStack();
+		this.testStack();
 	}
-	
+
 	public void setUp() {
 		System.err.println("TTasseledCapProcess running...");
 
 		try {
-			lyr1 = FLyrRasterSE.createLayer(
-					path1,
-					path1,
-					null
-					);
+			lyr1 = FLyrRasterSE.createLayer(path1, path1, null);
 		} catch (LoadLayerException e) {
 			System.out.print("Error en la construcción de la capa");
 		}
-		
+
 		try {
-			f2=	RasterDataset.open(null,path2);
-			f3 = RasterDataset.open(null,path3);
-			f4= RasterDataset.open(null, path4);
+			f2 = RasterDataset.open(null, path2);
+			f3 = RasterDataset.open(null, path3);
+			f4 = RasterDataset.open(null, path4);
 		} catch (NotSupportedExtensionException e) {
 			e.printStackTrace();
 		} catch (RasterDriverException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		ds2=  new BufferFactory (f2);
-		ds3=  new BufferFactory (f3);
-		ds4=  new BufferFactory (f4); 
-		
+		ds2 = new BufferFactory(f2);
+		ds3 = new BufferFactory(f3);
+		ds4 = new BufferFactory(f4);
+
 	}
-	
+
 	public void testStack() {
-	
-		Grid enviResultTM=null;
-		Grid enviResultETM=null;
-		Grid enviResultMSS=null;
-		
+
+		Grid enviResultTM = null;
+		Grid enviResultETM = null;
+		Grid enviResultMSS = null;
+
 		try {
-			 enviResultTM= new Grid(ds2);
-			 enviResultETM= new Grid(ds3);
-			 enviResultMSS= new Grid (ds4);
-	
+			enviResultTM = new Grid(ds2);
+			enviResultETM = new Grid(ds3);
+			enviResultMSS = new Grid(ds4);
+
 		} catch (RasterBufferInvalidException e) {
 			e.printStackTrace();
 		}
-	
-		
-//		**Caso LandSat MSS
-		TasseledCapProcess mssProcess= new TasseledCapProcess();
-		mssProcess.addParam("bands", new int[]{0,1,2,3});
-		mssProcess.addParam("layer",lyr1);
-		mssProcess.addParam("type",new Integer(0));
+
+		// **Caso LandSat MSS
+		TasseledCapProcess mssProcess = new TasseledCapProcess();
+		mssProcess.addParam("bands", new int[] { 0, 1, 2, 3 });
+		mssProcess.addParam("layer", lyr1);
+		mssProcess.addParam("type", new Integer(0));
 		mssProcess.run();
-		//try {
-		//	compare(mssProcess.getBufferResult(),enviResultMSS.getRasterBuf());
-		//} catch (RasterBufferInvalidAccessException e) {
-		//	e.printStackTrace();
-		//}
-		
-		
-		
-		//**Caso LandSat TM
-		TasseledCapProcess tmProcess= new TasseledCapProcess();
-		tmProcess.addParam("bands", new int[]{0,1,2,3,4,5});
-		tmProcess.addParam("layer",lyr1);
-		tmProcess.addParam("type",new Integer(1));
+		// try {
+		// compare(mssProcess.getBufferResult(),enviResultMSS.getRasterBuf());
+		// } catch (RasterBufferInvalidAccessException e) {
+		// e.printStackTrace();
+		// }
+
+		// **Caso LandSat TM
+		TasseledCapProcess tmProcess = new TasseledCapProcess();
+		tmProcess.addParam("bands", new int[] { 0, 1, 2, 3, 4, 5 });
+		tmProcess.addParam("layer", lyr1);
+		tmProcess.addParam("type", new Integer(1));
 		tmProcess.run();
 		try {
-			compare(tmProcess.getBufferResult(),enviResultTM.getRasterBuf());
+			compare(tmProcess.getBufferResult(), enviResultTM.getRasterBuf());
 		} catch (RasterBufferInvalidAccessException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
 		}
-		
-		
-		//**Caso LandSat ETM
-		TasseledCapProcess etmProcess= new TasseledCapProcess();
-		etmProcess.addParam("bands", new int[]{0,1,2,3,4,5});
-		etmProcess.addParam("layer",lyr1);
-		etmProcess.addParam("type",new Integer(2));
+
+		// **Caso LandSat ETM
+		TasseledCapProcess etmProcess = new TasseledCapProcess();
+		etmProcess.addParam("bands", new int[] { 0, 1, 2, 3, 4, 5 });
+		etmProcess.addParam("layer", lyr1);
+		etmProcess.addParam("type", new Integer(2));
 		etmProcess.run();
 		try {
-			compare(etmProcess.getBufferResult(),enviResultETM.getRasterBuf());
+			compare(etmProcess.getBufferResult(), enviResultETM.getRasterBuf());
 		} catch (RasterBufferInvalidAccessException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
 		}
-		
-		
+
 	}
-	
-	//**Metodo que compara celda a celda cada uno de los valores de dos grids.
-	 // Para imagenes LandSat ETM, la sexta banda no se compara porque envi realiza una transformacion 
-	 // para evitar los numeros negativos *//*
-	private void compare(IBuffer buffer, IBuffer buffer2) throws RasterBufferInvalidAccessException, InterruptedException {
-		assertEquals(buffer.getBandCount(),buffer2.getBandCount());
-		for(int band=0; band<buffer.getBandCount();band++){
-			if(band<5){
-				for(int line = 0; line < buffer2.getHeight(); line++){
-					for(int col = 0; col < buffer2.getWidth(); col++){
-						assertEquals(buffer2.getElemFloat(col,line,band), buffer.getElemFloat(col, line,band),0.1);
+
+	// **Metodo que compara celda a celda cada uno de los valores de dos grids.
+	// Para imagenes LandSat ETM, la sexta banda no se compara porque envi
+	// realiza una transformacion
+	// para evitar los numeros negativos *//*
+	private void compare(IBuffer buffer, IBuffer buffer2)
+			throws RasterBufferInvalidAccessException, InterruptedException {
+		assertEquals(buffer.getBandCount(), buffer2.getBandCount());
+		for (int band = 0; band < buffer.getBandCount(); band++) {
+			if (band < 5) {
+				for (int line = 0; line < buffer2.getHeight(); line++) {
+					for (int col = 0; col < buffer2.getWidth(); col++) {
+						assertEquals(buffer2.getElemFloat(col, line, band),
+								buffer.getElemFloat(col, line, band), 0.1);
 					}
 				}
 			}

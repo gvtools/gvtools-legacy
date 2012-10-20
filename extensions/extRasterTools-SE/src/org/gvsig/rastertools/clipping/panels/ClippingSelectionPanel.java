@@ -30,6 +30,7 @@ import org.gvsig.raster.dataset.IRasterDataSource;
 import org.gvsig.raster.util.RasterToolsUtil;
 
 import com.iver.andami.PluginServices;
+
 /**
  * Panel de seleccion de que bandas. Permite seleccionar que bandas se van a
  * guardar y especificar su orden.
@@ -38,7 +39,7 @@ import com.iver.andami.PluginServices;
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class ClippingSelectionPanel extends JPanel {
-  private static final long serialVersionUID = 813234785743904477L;
+	private static final long serialVersionUID = 813234785743904477L;
 	private TableContainer tableContainer = null;
 
 	/**
@@ -47,39 +48,45 @@ public class ClippingSelectionPanel extends JPanel {
 	public ClippingSelectionPanel() {
 		initialize();
 	}
-	
 
 	private void initialize() {
 		setLayout(new BorderLayout());
 		add(getTableContainer(), BorderLayout.CENTER);
 	}
-	
+
 	/**
 	 * Obtiene la tabla de selección de bandas
+	 * 
 	 * @return Tabla de selección de bandas
 	 */
 	public TableContainer getTableContainer() {
 		if (tableContainer == null) {
-			String[] columnNames = {PluginServices.getText(this, "bandas"), PluginServices.getText(this, "nombre"), ""};
-			int[] columnWidths = {55, 305, 0};
+			String[] columnNames = { PluginServices.getText(this, "bandas"),
+					PluginServices.getText(this, "nombre"), "" };
+			int[] columnWidths = { 55, 305, 0 };
 			tableContainer = new TableContainer(columnNames, columnWidths);
 			tableContainer.setModel("CheckBoxModel");
 			tableContainer.initialize();
 			tableContainer.setControlVisible(false);
 			tableContainer.setMoveRowsButtonsVisible(true);
-			
-			tableContainer.getTable().getJTable().getColumnModel().getColumn(2).setMinWidth(0);
-			tableContainer.getTable().getJTable().getColumnModel().getColumn(2).setMaxWidth(0);
-			tableContainer.getTable().getJTable().getColumnModel().getColumn(0).setMinWidth(55);
-			tableContainer.getTable().getJTable().getColumnModel().getColumn(0).setMaxWidth(55);
-			
+
+			tableContainer.getTable().getJTable().getColumnModel().getColumn(2)
+					.setMinWidth(0);
+			tableContainer.getTable().getJTable().getColumnModel().getColumn(2)
+					.setMaxWidth(0);
+			tableContainer.getTable().getJTable().getColumnModel().getColumn(0)
+					.setMinWidth(55);
+			tableContainer.getTable().getJTable().getColumnModel().getColumn(0)
+					.setMaxWidth(55);
+
 		}
 
 		return tableContainer;
 	}
-	
+
 	/**
 	 * Establecer la capa para usarla en el recorte
+	 * 
 	 * @param fLayer
 	 */
 	public void setLayer(FLyrRasterSE fLayer) {
@@ -92,15 +99,19 @@ public class ClippingSelectionPanel extends JPanel {
 
 			if (mDataset.getDataset(i)[0].getBandCount() > 1) {
 				for (int b = 0; b < mDataset.getDataset(i)[0].getBandCount(); b++) {
-					Object row[] = { new Boolean(true), new String("B" + (b + 1) + " - " + bandName), new Integer(cont++)};
+					Object row[] = { new Boolean(true),
+							new String("B" + (b + 1) + " - " + bandName),
+							new Integer(cont++) };
 					try {
 						getTableContainer().addRow(row);
 					} catch (NotInitializeException e) {
-						RasterToolsUtil.messageBoxError("error_rowtable", this, e);
+						RasterToolsUtil.messageBoxError("error_rowtable", this,
+								e);
 					}
 				}
 			} else {
-				Object row[] = { new Boolean(true), new String("B - " + bandName), new Integer(cont++)};
+				Object row[] = { new Boolean(true),
+						new String("B - " + bandName), new Integer(cont++) };
 				try {
 					getTableContainer().addRow(row);
 				} catch (NotInitializeException e) {

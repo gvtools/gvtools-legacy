@@ -1,14 +1,12 @@
 package org.gvsig.gpe.gml.parser.v2.features;
 
 import java.io.IOException;
-import java.util.Map;
 
 import javax.xml.namespace.QName;
 
 import org.gvsig.gpe.gml.parser.GPEDefaultGmlParser;
 import org.gvsig.gpe.gml.utils.GMLObject;
 import org.gvsig.gpe.gml.utils.GMLTags;
-import org.gvsig.gpe.gml.utils.GMLUtilsParser;
 import org.gvsig.gpe.xml.stream.IXmlStreamReader;
 import org.gvsig.gpe.xml.stream.XmlStreamException;
 import org.gvsig.gpe.xml.utils.CompareUtils;
@@ -67,9 +65,10 @@ import org.gvsig.gpe.xml.utils.XMLAttributesIterator;
  *
  */
 /**
- * This class parses the gml objects that has a 
- * gml:FeatureCollection type. Example:
+ * This class parses the gml objects that has a gml:FeatureCollection type.
+ * Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;gml:featureCollection&gt;
@@ -80,93 +79,111 @@ import org.gvsig.gpe.xml.utils.XMLAttributesIterator;
  * &lt;/gml:featureCollection&gt;
  * </code>
  * </pre>
+ * 
  * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class FeatureCollectionBinding {
 	/**
 	 * It parses a feature collection
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * A feature
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return A feature
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public Object parse(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
+	public Object parse(IXmlStreamReader parser, GPEDefaultGmlParser handler)
+			throws XmlStreamException, IOException {
 		boolean endCollection = false;
-		int currentTag;		
-		Object layer = null;	
-		//Used to finish to parse the current feature collection
-		while(parser.getEventType()!= IXmlStreamReader.START_ELEMENT){
-			parser.next();			
+		int currentTag;
+		Object layer = null;
+		// Used to finish to parse the current feature collection
+		while (parser.getEventType() != IXmlStreamReader.START_ELEMENT) {
+			parser.next();
 		}
-		QName layerRootType = parser.getName();		
-		
-		XMLAttributesIterator attributesIterator = new XMLAttributesIterator(parser);		
-		String fid = handler.getProfile().getFeatureTypeBinding().getID(attributesIterator.getAttributes());
+		QName layerRootType = parser.getName();
 
-		layer = handler.getContentHandler().startLayer(fid, parser.getName().getNamespaceURI(), null, null, null, attributesIterator, null, null);
+		XMLAttributesIterator attributesIterator = new XMLAttributesIterator(
+				parser);
+		String fid = handler.getProfile().getFeatureTypeBinding()
+				.getID(attributesIterator.getAttributes());
+
+		layer = handler.getContentHandler().startLayer(fid,
+				parser.getName().getNamespaceURI(), null, null, null,
+				attributesIterator, null, null);
 
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endCollection){
-			switch(currentTag){
+		while (!endCollection) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_NAME)){
+				if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_NAME)) {
 					parser.next();
-					handler.getContentHandler().addNameToLayer(parser.getText(), layer);
-				}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_DESCRIPTION)){
+					handler.getContentHandler().addNameToLayer(
+							parser.getText(), layer);
+				} else if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_DESCRIPTION)) {
 					parser.next();
-					handler.getContentHandler().addDescriptionToLayer(parser.getText(), layer);
-				}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_BOUNDEDBY)){
-					Object bbox = handler.getProfile().getBoundedByTypeBinding().
-							parse(parser, handler);
+					handler.getContentHandler().addDescriptionToLayer(
+							parser.getText(), layer);
+				} else if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_BOUNDEDBY)) {
+					Object bbox = handler.getProfile()
+							.getBoundedByTypeBinding().parse(parser, handler);
 					handler.getContentHandler().addBboxToLayer(bbox, layer);
-				}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_FEATUREMEMBER)){
-					GMLObject object = (GMLObject)handler.getProfile().getFeatureMemberTypeBinding().
-							parse(parser, handler);
-				
-					if (object != null){
-						if (GMLObject.FEATURE == object.getType()){
-							handler.getContentHandler().addFeatureToLayer(object.getObject(), layer);
-						}else{
-							handler.getContentHandler().addParentLayerToLayer(layer, object.getObject());
+				} else if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_FEATUREMEMBER)) {
+					GMLObject object = (GMLObject) handler.getProfile()
+							.getFeatureMemberTypeBinding()
+							.parse(parser, handler);
+
+					if (object != null) {
+						if (GMLObject.FEATURE == object.getType()) {
+							handler.getContentHandler().addFeatureToLayer(
+									object.getObject(), layer);
+						} else {
+							handler.getContentHandler().addParentLayerToLayer(
+									layer, object.getObject());
 						}
 					}
-				}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_FEATUREMEMBERS)){
-					handler.getProfile().getFeatureMembersTypeBinding().
-					parse(parser, handler, layer);
-				}else{
-					if (!(CompareUtils.compareWithNamespace(layerRootType,tag))){						
-						//Feature members
-						GMLObject object =(GMLObject)handler.getProfile().getFeatureTypeBinding().parse(parser, handler);
-						handler.getContentHandler().addFeatureToLayer(object.getObject(), layer);
+				} else if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_FEATUREMEMBERS)) {
+					handler.getProfile().getFeatureMembersTypeBinding()
+							.parse(parser, handler, layer);
+				} else {
+					if (!(CompareUtils.compareWithNamespace(layerRootType, tag))) {
+						// Feature members
+						GMLObject object = (GMLObject) handler.getProfile()
+								.getFeatureTypeBinding().parse(parser, handler);
+						handler.getContentHandler().addFeatureToLayer(
+								object.getObject(), layer);
 					}
 				}
 				break;
 			case IXmlStreamReader.END_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,layerRootType)){						
+				if (CompareUtils.compareWithNamespace(tag, layerRootType)) {
 					endCollection = true;
 					handler.getContentHandler().endLayer(layer);
 				}
 				break;
-			case IXmlStreamReader.CHARACTERS:					
+			case IXmlStreamReader.CHARACTERS:
 
 				break;
 			case IXmlStreamReader.END_DOCUMENT:
 				endCollection = true;
 				break;
 			}
-			if (!endCollection){					
+			if (!endCollection) {
 				currentTag = parser.next();
 				tag = parser.getName();
 			}
-		}			
-		return layer;	
+		}
+		return layer;
 	}
 }

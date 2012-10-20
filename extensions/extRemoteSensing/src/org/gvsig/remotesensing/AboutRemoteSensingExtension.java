@@ -7,7 +7,7 @@ import com.iver.cit.gvsig.gui.panels.FPanelAbout;
 
 /**
  * About extension.
- *
+ * 
  * Add the about coments to the gvSIG About panel
  */
 
@@ -19,10 +19,13 @@ public class AboutRemoteSensingExtension extends Extension {
 	}
 
 	public void postInitialize() {
-		About about=(About)PluginServices.getExtension(About.class);
-		FPanelAbout panelAbout=about.getAboutPanel();
+		About about = (About) PluginServices.getExtension(About.class);
+		FPanelAbout panelAbout = about.getAboutPanel();
 		java.net.URL aboutURL = this.getClass().getResource("/about.htm");
-	        panelAbout.addAboutUrl("Teledetección"/*PluginServices.getText(this,"remote_sensing")*/,aboutURL);
+		panelAbout.addAboutUrl("Teledetección"/*
+											 * PluginServices.getText(this,
+											 * "remote_sensing")
+											 */, aboutURL);
 	}
 
 	public void execute(String actionCommand) {

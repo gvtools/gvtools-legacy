@@ -47,8 +47,8 @@
  */
 package com.iver.andami.persistence.generate;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
 import org.exolab.castor.xml.Marshaller;
@@ -57,111 +57,108 @@ import org.exolab.castor.xml.Unmarshaller;
 /**
  * Class Bookmarks.
  * 
- * @version $Revision: 5275 $ $Date: 2006-05-19 08:41:50 +0200 (Fri, 19 May 2006) $
+ * @version $Revision: 5275 $ $Date: 2006-05-19 08:41:50 +0200 (Fri, 19 May
+ *          2006) $
  */
 public class Bookmarks implements java.io.Serializable {
 
+	// --------------------------/
+	// - Class/Member Variables -/
+	// --------------------------/
 
-      //--------------------------/
-     //- Class/Member Variables -/
-    //--------------------------/
+	/**
+	 * Field _bookmark
+	 */
+	private com.iver.andami.persistence.generate.Bookmark _bookmark;
 
-    /**
-     * Field _bookmark
-     */
-    private com.iver.andami.persistence.generate.Bookmark _bookmark;
+	// ----------------/
+	// - Constructors -/
+	// ----------------/
 
+	public Bookmarks() {
+		super();
+	} // -- com.iver.andami.persistence.generate.Bookmarks()
 
-      //----------------/
-     //- Constructors -/
-    //----------------/
+	// -----------/
+	// - Methods -/
+	// -----------/
 
-    public Bookmarks() {
-        super();
-    } //-- com.iver.andami.persistence.generate.Bookmarks()
+	/**
+	 * Returns the value of field 'bookmark'.
+	 * 
+	 * @return the value of field 'bookmark'.
+	 */
+	public com.iver.andami.persistence.generate.Bookmark getBookmark() {
+		return this._bookmark;
+	} // -- com.iver.andami.persistence.generate.Bookmark getBookmark()
 
+	/**
+	 * Method isValid
+	 */
+	public boolean isValid() {
+		try {
+			validate();
+		} catch (org.exolab.castor.xml.ValidationException vex) {
+			return false;
+		}
+		return true;
+	} // -- boolean isValid()
 
-      //-----------/
-     //- Methods -/
-    //-----------/
+	/**
+	 * Method marshal
+	 * 
+	 * @param out
+	 */
+	public void marshal(java.io.Writer out)
+			throws org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
 
-    /**
-     * Returns the value of field 'bookmark'.
-     * 
-     * @return the value of field 'bookmark'.
-     */
-    public com.iver.andami.persistence.generate.Bookmark getBookmark()
-    {
-        return this._bookmark;
-    } //-- com.iver.andami.persistence.generate.Bookmark getBookmark() 
+		Marshaller.marshal(this, out);
+	} // -- void marshal(java.io.Writer)
 
-    /**
-     * Method isValid
-     */
-    public boolean isValid()
-    {
-        try {
-            validate();
-        }
-        catch (org.exolab.castor.xml.ValidationException vex) {
-            return false;
-        }
-        return true;
-    } //-- boolean isValid() 
+	/**
+	 * Method marshal
+	 * 
+	 * @param handler
+	 */
+	public void marshal(org.xml.sax.ContentHandler handler)
+			throws java.io.IOException, org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
 
-    /**
-     * Method marshal
-     * 
-     * @param out
-     */
-    public void marshal(java.io.Writer out)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        
-        Marshaller.marshal(this, out);
-    } //-- void marshal(java.io.Writer) 
+		Marshaller.marshal(this, handler);
+	} // -- void marshal(org.xml.sax.ContentHandler)
 
-    /**
-     * Method marshal
-     * 
-     * @param handler
-     */
-    public void marshal(org.xml.sax.ContentHandler handler)
-        throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        
-        Marshaller.marshal(this, handler);
-    } //-- void marshal(org.xml.sax.ContentHandler) 
+	/**
+	 * Sets the value of field 'bookmark'.
+	 * 
+	 * @param bookmark
+	 *            the value of field 'bookmark'.
+	 */
+	public void setBookmark(
+			com.iver.andami.persistence.generate.Bookmark bookmark) {
+		this._bookmark = bookmark;
+	} // -- void setBookmark(com.iver.andami.persistence.generate.Bookmark)
 
-    /**
-     * Sets the value of field 'bookmark'.
-     * 
-     * @param bookmark the value of field 'bookmark'.
-     */
-    public void setBookmark(com.iver.andami.persistence.generate.Bookmark bookmark)
-    {
-        this._bookmark = bookmark;
-    } //-- void setBookmark(com.iver.andami.persistence.generate.Bookmark) 
+	/**
+	 * Method unmarshal
+	 * 
+	 * @param reader
+	 */
+	public static java.lang.Object unmarshal(java.io.Reader reader)
+			throws org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
+		return (com.iver.andami.persistence.generate.Bookmarks) Unmarshaller
+				.unmarshal(
+						com.iver.andami.persistence.generate.Bookmarks.class,
+						reader);
+	} // -- java.lang.Object unmarshal(java.io.Reader)
 
-    /**
-     * Method unmarshal
-     * 
-     * @param reader
-     */
-    public static java.lang.Object unmarshal(java.io.Reader reader)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        return (com.iver.andami.persistence.generate.Bookmarks) Unmarshaller.unmarshal(com.iver.andami.persistence.generate.Bookmarks.class, reader);
-    } //-- java.lang.Object unmarshal(java.io.Reader) 
-
-    /**
-     * Method validate
-     */
-    public void validate()
-        throws org.exolab.castor.xml.ValidationException
-    {
-        org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
-        validator.validate(this);
-    } //-- void validate() 
+	/**
+	 * Method validate
+	 */
+	public void validate() throws org.exolab.castor.xml.ValidationException {
+		org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
+		validator.validate(this);
+	} // -- void validate()
 
 }

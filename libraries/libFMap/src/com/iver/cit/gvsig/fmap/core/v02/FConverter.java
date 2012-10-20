@@ -79,11 +79,10 @@ import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
 
-
 /**
  * Clase con varios métodos estáticos utilizados para pasar de java2d a jts y
  * viceversa.
- *
+ * 
  * @author fjp
  */
 public class FConverter {
@@ -97,13 +96,13 @@ public class FConverter {
 	private static double POINT_MARKER_SIZE = 3.0;
 
 	/**
-	 * Es la máxima distancia que permitimos que el trazo aproximado
-	 * difiera del trazo real.
+	 * Es la máxima distancia que permitimos que el trazo aproximado difiera del
+	 * trazo real.
 	 */
-	public static double FLATNESS =0.8;// Por ejemplo. Cuanto más pequeño, más segmentos necesitará la curva
+	public static double FLATNESS = 0.8;// Por ejemplo. Cuanto más pequeño, más
+										// segmentos necesitará la curva
 
-
-	//returns true if testPoint is a point in the pointList list.
+	// returns true if testPoint is a point in the pointList list.
 	static boolean pointInList(Coordinate testPoint, Coordinate[] pointList) {
 		int t;
 		int numpoints;
@@ -114,8 +113,15 @@ public class FConverter {
 		for (t = 0; t < numpoints; t++) {
 			p = pointList[t];
 
-			if ((testPoint.x == p.x) && (testPoint.y == p.y) &&
-					((testPoint.z == p.z) || (!(testPoint.z == testPoint.z))) //nan test; x!=x iff x is nan
+			if ((testPoint.x == p.x)
+					&& (testPoint.y == p.y)
+					&& ((testPoint.z == p.z) || (!(testPoint.z == testPoint.z))) // nan
+																					// test;
+																					// x!=x
+																					// iff
+																					// x
+																					// is
+																					// nan
 			) {
 				return true;
 			}
@@ -126,11 +132,13 @@ public class FConverter {
 
 	/**
 	 * Receives a JTS Geometry and returns a fmap IGeometry
-	 * @param jtsGeometry jts Geometry
+	 * 
+	 * @param jtsGeometry
+	 *            jts Geometry
 	 * @return IGeometry of FMap
 	 * @author azabala
 	 */
-	public static IGeometry jts_to_igeometry(Geometry jtsGeometry){
+	public static IGeometry jts_to_igeometry(Geometry jtsGeometry) {
 		FShape shape = FConverter.jts_to_java2d(jtsGeometry);
 		if (shape == null)
 			return new FNullGeometry();
@@ -141,13 +149,13 @@ public class FConverter {
 	 * Convierte un FShape a una Geometry del JTS. Para ello, utilizamos un
 	 * "flattened PathIterator". El flattened indica que las curvas las pasa a
 	 * segmentos de línea recta AUTOMATICAMENTE!!!.
-	 *
-	 * @param shp FShape que se quiere convertir.
-	 *
+	 * 
+	 * @param shp
+	 *            FShape que se quiere convertir.
+	 * 
 	 * @return Geometry de JTS.
 	 */
 	public static Geometry java2d_to_jts(FShape shp) {
-
 
 		Geometry geoJTS = null;
 		Coordinate coord;
@@ -160,361 +168,375 @@ public class FConverter {
 		int theType;
 		int numParts = 0;
 
-		//	 	Use this array to store segment coordinate data
+		// Use this array to store segment coordinate data
 		double[] theData = new double[6];
 		PathIterator theIterator;
 
 		switch (shp.getShapeType()) {
-			case FShape.POINT:
-            case FShape.POINT + FShape.Z:
-				FPoint2D p = (FPoint2D) shp;
-				coord = new Coordinate(p.getX(), p.getY());
-				geoJTS = geomFactory.createPoint(coord);
+		case FShape.POINT:
+		case FShape.POINT + FShape.Z:
+			FPoint2D p = (FPoint2D) shp;
+			coord = new Coordinate(p.getX(), p.getY());
+			geoJTS = geomFactory.createPoint(coord);
 
-				break;
+			break;
 
-			case FShape.LINE:
-			case FShape.ARC:
-            case FShape.LINE + FShape.Z:
-            case FShape.LINE | FShape.M:
-				arrayLines = new ArrayList();
-				theIterator = shp.getPathIterator(null, FLATNESS);
+		case FShape.LINE:
+		case FShape.ARC:
+		case FShape.LINE + FShape.Z:
+		case FShape.LINE | FShape.M:
+			arrayLines = new ArrayList();
+			theIterator = shp.getPathIterator(null, FLATNESS);
 
-				while (!theIterator.isDone()) {
-					//while not done
-					theType = theIterator.currentSegment(theData);
+			while (!theIterator.isDone()) {
+				// while not done
+				theType = theIterator.currentSegment(theData);
 
-					//Populate a segment of the new
-					// GeneralPathX object.
-					//Process the current segment to populate a new
-					// segment of the new GeneralPathX object.
-					switch (theType) {
-						case PathIterator.SEG_MOVETO:
+				// Populate a segment of the new
+				// GeneralPathX object.
+				// Process the current segment to populate a new
+				// segment of the new GeneralPathX object.
+				switch (theType) {
+				case PathIterator.SEG_MOVETO:
 
-							// System.out.println("SEG_MOVETO");
-							if (arrayCoords == null) {
-								arrayCoords = new ArrayList();
-							} else {
-								lin = geomFactory.createLineString(CoordinateArrays.toCoordinateArray(
-											arrayCoords));
-								arrayLines.add(lin);
-								arrayCoords = new ArrayList();
-							}
-
-							numParts++;
-							arrayCoords.add(new Coordinate(theData[0],
-									theData[1]));
-
-							break;
-
-						case PathIterator.SEG_LINETO:
-
-							// System.out.println("SEG_LINETO");
-							arrayCoords.add(new Coordinate(theData[0],
-									theData[1]));
-
-							break;
-
-						case PathIterator.SEG_QUADTO:
-							System.out.println("Not supported here");
-
-							break;
-
-						case PathIterator.SEG_CUBICTO:
-							System.out.println("Not supported here");
-
-							break;
-
-						case PathIterator.SEG_CLOSE:
-							// Añadimos el primer punto para cerrar.
-							Coordinate firstCoord = (Coordinate) arrayCoords.get(0);
-							arrayCoords.add(new Coordinate(firstCoord.x,
-									firstCoord.y));
-
-							break;
-					} //end switch
-
-					theIterator.next();
-				} //end while loop
-
-				lin = new GeometryFactory().createLineString(CoordinateArrays.toCoordinateArray(
-							arrayCoords));
-
-				// CAMBIO: ENTREGAMOS SIEMPRE MULTILINESTRING, QUE ES
-				// LO QUE HACE TODO EL MUNDO CUANDO ESCRIBE EN POSTGIS
-				// O CON GEOTOOLS
-				// if (numParts > 1) // Generamos una MultiLineString
-				//  {
-					arrayLines.add(lin);
-					geoJTS = geomFactory.createMultiLineString(GeometryFactory.toLineStringArray(
-								arrayLines));
-				/* } else {
-					geoJTS = lin;
-				} */
-
-				break;
-
-			case FShape.POLYGON:
-			case FShape.CIRCLE:
-			case FShape.ELLIPSE:
-			case FShape.POLYGON | FShape.M:
-            case FShape.POLYGON + FShape.Z:
-            	
-				arrayLines = new ArrayList();
-
-				ArrayList shells = new ArrayList();
-				ArrayList holes = new ArrayList();
-				Coordinate[] points = null;
-
-				theIterator = shp.getPathIterator(null, FLATNESS);
-
-				while (!theIterator.isDone()) {
-					//while not done
-					theType = theIterator.currentSegment(theData);
-
-					//Populate a segment of the new
-					// GeneralPathX object.
-					//Process the current segment to populate a new
-					// segment of the new GeneralPathX object.
-					switch (theType) {
-						case PathIterator.SEG_MOVETO:
-
-							// System.out.println("SEG_MOVETO");
-							if (arrayCoords == null) {
-								arrayCoords = new ArrayList();
-							} else {
-								points = CoordinateArrays.toCoordinateArray(arrayCoords);
-
-								try {
-									LinearRing ring = geomFactory.createLinearRing(points);
-
-									if (CGAlgorithms.isCCW(points)) {
-										holes.add(ring);
-									} else {
-										shells.add(ring);
-									}
-								} catch (Exception e) {
-									/* (jaume) caso cuando todos los puntos son iguales
-									 * devuelvo el propio punto
-									 */
-									boolean same = true;
-									for (int i = 0; i < points.length-1 && same; i++) {
-										if (points[i].x != points[i+1].x ||
-												points[i].y != points[i+1].y /*||
-												points[i].z != points[i+1].z*/
-												) same = false;
-									}
-									if (same)
-										return geomFactory.createPoint(points[0]);
-									/*
-									 * caso cuando es una línea de 3 puntos, no creo un LinearRing, sino
-									 * una linea
-									 */
-									if (points.length>1 && points.length<=3)
-										// return geomFactory.createLineString(points);
-										return geomFactory.createMultiLineString(new LineString[] {geomFactory.createLineString(points)});
-
-									System.err.println(
-										"Caught Topology exception in GMLLinearRingHandler");
-
-									return null;
-								}
-
-								/* if (numParts == 1)
-								   {
-								           linRingExt = new GeometryFactory().createLinearRing(
-								                  CoordinateArrays.toCoordinateArray(arrayCoords));
-								   }
-								   else
-								   {
-								           linRing = new GeometryFactory().createLinearRing(
-								                          CoordinateArrays.toCoordinateArray(arrayCoords));
-								           arrayLines.add(linRing);
-								   } */
-								arrayCoords = new ArrayList();
-							}
-
-							numParts++;
-							arrayCoords.add(new Coordinate(theData[0],
-									theData[1]));
-
-							break;
-
-						case PathIterator.SEG_LINETO:
-
-							// System.out.println("SEG_LINETO");
-							arrayCoords.add(new Coordinate(theData[0],
-									theData[1]));
-
-							break;
-
-						case PathIterator.SEG_QUADTO:
-							System.out.println("SEG_QUADTO Not supported here");
-
-							break;
-
-						case PathIterator.SEG_CUBICTO:
-							System.out.println("SEG_CUBICTO Not supported here");
-
-							break;
-
-						case PathIterator.SEG_CLOSE:
-
-							// Añadimos el primer punto para cerrar.
-							Coordinate firstCoord = (Coordinate) arrayCoords.get(0);
-							arrayCoords.add(new Coordinate(firstCoord.x,
-									firstCoord.y));
-
-							break;
-					} //end switch
-
-					// System.out.println("theData[0] = " + theData[0] + " theData[1]=" + theData[1]);
-					theIterator.next();
-				} //end while loop
-
-				arrayCoords.add(arrayCoords.get(0));
-				points = CoordinateArrays.toCoordinateArray(arrayCoords);
-
-				try {
-					LinearRing ring = geomFactory.createLinearRing(points);
-
-					if (CGAlgorithms.isCCW(points)) {
-						holes.add(ring);
+					// System.out.println("SEG_MOVETO");
+					if (arrayCoords == null) {
+						arrayCoords = new ArrayList();
 					} else {
-						shells.add(ring);
+						lin = geomFactory.createLineString(CoordinateArrays
+								.toCoordinateArray(arrayCoords));
+						arrayLines.add(lin);
+						arrayCoords = new ArrayList();
 					}
-				} catch (Exception e) {
-					/* (jaume) caso cuando todos los puntos son iguales
-					 * devuelvo el propio punto
-					 */
-					boolean same = true;
-					for (int i = 0; i < points.length-1 && same; i++) {
-						if (points[i].x != points[i+1].x ||
-								points[i].y != points[i+1].y /*||
-								points[i].z != points[i+1].z*/
-								) same = false;
-					}
-					if (same)
-						return geomFactory.createPoint(points[0]);
-					/*
-					 * caso cuando es una línea de 3 puntos, no creo un LinearRing, sino
-					 * una linea
-					 */
-					if (points.length>1 && points.length<=3)
-						// return geomFactory.createLineString(points);
-						return geomFactory.createMultiLineString(new LineString[] {geomFactory.createLineString(points)});
-					System.err.println(
-						"Caught Topology exception in GMLLinearRingHandler");
 
-					return null;
+					numParts++;
+					arrayCoords.add(new Coordinate(theData[0], theData[1]));
+
+					break;
+
+				case PathIterator.SEG_LINETO:
+
+					// System.out.println("SEG_LINETO");
+					arrayCoords.add(new Coordinate(theData[0], theData[1]));
+
+					break;
+
+				case PathIterator.SEG_QUADTO:
+					System.out.println("Not supported here");
+
+					break;
+
+				case PathIterator.SEG_CUBICTO:
+					System.out.println("Not supported here");
+
+					break;
+
+				case PathIterator.SEG_CLOSE:
+					// Añadimos el primer punto para cerrar.
+					Coordinate firstCoord = (Coordinate) arrayCoords.get(0);
+					arrayCoords.add(new Coordinate(firstCoord.x, firstCoord.y));
+
+					break;
+				} // end switch
+
+				theIterator.next();
+			} // end while loop
+
+			lin = new GeometryFactory().createLineString(CoordinateArrays
+					.toCoordinateArray(arrayCoords));
+
+			// CAMBIO: ENTREGAMOS SIEMPRE MULTILINESTRING, QUE ES
+			// LO QUE HACE TODO EL MUNDO CUANDO ESCRIBE EN POSTGIS
+			// O CON GEOTOOLS
+			// if (numParts > 1) // Generamos una MultiLineString
+			// {
+			arrayLines.add(lin);
+			geoJTS = geomFactory.createMultiLineString(GeometryFactory
+					.toLineStringArray(arrayLines));
+			/*
+			 * } else { geoJTS = lin; }
+			 */
+
+			break;
+
+		case FShape.POLYGON:
+		case FShape.CIRCLE:
+		case FShape.ELLIPSE:
+		case FShape.POLYGON | FShape.M:
+		case FShape.POLYGON + FShape.Z:
+
+			arrayLines = new ArrayList();
+
+			ArrayList shells = new ArrayList();
+			ArrayList holes = new ArrayList();
+			Coordinate[] points = null;
+
+			theIterator = shp.getPathIterator(null, FLATNESS);
+
+			while (!theIterator.isDone()) {
+				// while not done
+				theType = theIterator.currentSegment(theData);
+
+				// Populate a segment of the new
+				// GeneralPathX object.
+				// Process the current segment to populate a new
+				// segment of the new GeneralPathX object.
+				switch (theType) {
+				case PathIterator.SEG_MOVETO:
+
+					// System.out.println("SEG_MOVETO");
+					if (arrayCoords == null) {
+						arrayCoords = new ArrayList();
+					} else {
+						points = CoordinateArrays
+								.toCoordinateArray(arrayCoords);
+
+						try {
+							LinearRing ring = geomFactory
+									.createLinearRing(points);
+
+							if (CGAlgorithms.isCCW(points)) {
+								holes.add(ring);
+							} else {
+								shells.add(ring);
+							}
+						} catch (Exception e) {
+							/*
+							 * (jaume) caso cuando todos los puntos son iguales
+							 * devuelvo el propio punto
+							 */
+							boolean same = true;
+							for (int i = 0; i < points.length - 1 && same; i++) {
+								if (points[i].x != points[i + 1].x
+										|| points[i].y != points[i + 1].y /*
+																		 * ||
+																		 * points
+																		 * [i].z
+																		 * !=
+																		 * points
+																		 * [
+																		 * i+1].
+																		 * z
+																		 */
+								)
+									same = false;
+							}
+							if (same)
+								return geomFactory.createPoint(points[0]);
+							/*
+							 * caso cuando es una línea de 3 puntos, no creo un
+							 * LinearRing, sino una linea
+							 */
+							if (points.length > 1 && points.length <= 3)
+								// return geomFactory.createLineString(points);
+								return geomFactory
+										.createMultiLineString(new LineString[] { geomFactory
+												.createLineString(points) });
+
+							System.err
+									.println("Caught Topology exception in GMLLinearRingHandler");
+
+							return null;
+						}
+
+						/*
+						 * if (numParts == 1) { linRingExt = new
+						 * GeometryFactory().createLinearRing(
+						 * CoordinateArrays.toCoordinateArray(arrayCoords)); }
+						 * else { linRing = new
+						 * GeometryFactory().createLinearRing(
+						 * CoordinateArrays.toCoordinateArray(arrayCoords));
+						 * arrayLines.add(linRing); }
+						 */
+						arrayCoords = new ArrayList();
+					}
+
+					numParts++;
+					arrayCoords.add(new Coordinate(theData[0], theData[1]));
+
+					break;
+
+				case PathIterator.SEG_LINETO:
+
+					// System.out.println("SEG_LINETO");
+					arrayCoords.add(new Coordinate(theData[0], theData[1]));
+
+					break;
+
+				case PathIterator.SEG_QUADTO:
+					System.out.println("SEG_QUADTO Not supported here");
+
+					break;
+
+				case PathIterator.SEG_CUBICTO:
+					System.out.println("SEG_CUBICTO Not supported here");
+
+					break;
+
+				case PathIterator.SEG_CLOSE:
+
+					// Añadimos el primer punto para cerrar.
+					Coordinate firstCoord = (Coordinate) arrayCoords.get(0);
+					arrayCoords.add(new Coordinate(firstCoord.x, firstCoord.y));
+
+					break;
+				} // end switch
+
+				// System.out.println("theData[0] = " + theData[0] +
+				// " theData[1]=" + theData[1]);
+				theIterator.next();
+			} // end while loop
+
+			arrayCoords.add(arrayCoords.get(0));
+			points = CoordinateArrays.toCoordinateArray(arrayCoords);
+
+			try {
+				LinearRing ring = geomFactory.createLinearRing(points);
+
+				if (CGAlgorithms.isCCW(points)) {
+					holes.add(ring);
+				} else {
+					shells.add(ring);
+				}
+			} catch (Exception e) {
+				/*
+				 * (jaume) caso cuando todos los puntos son iguales devuelvo el
+				 * propio punto
+				 */
+				boolean same = true;
+				for (int i = 0; i < points.length - 1 && same; i++) {
+					if (points[i].x != points[i + 1].x
+							|| points[i].y != points[i + 1].y /*
+															 * || points[i].z !=
+															 * points[i+1].z
+															 */
+					)
+						same = false;
+				}
+				if (same)
+					return geomFactory.createPoint(points[0]);
+				/*
+				 * caso cuando es una línea de 3 puntos, no creo un LinearRing,
+				 * sino una linea
+				 */
+				if (points.length > 1 && points.length <= 3)
+					// return geomFactory.createLineString(points);
+					return geomFactory
+							.createMultiLineString(new LineString[] { geomFactory
+									.createLineString(points) });
+				System.err
+						.println("Caught Topology exception in GMLLinearRingHandler");
+
+				return null;
+			}
+
+			/*
+			 * linRing = new GeometryFactory().createLinearRing(
+			 * CoordinateArrays.toCoordinateArray(arrayCoords));
+			 */
+
+			// System.out.println("NumParts = " + numParts);
+			// now we have a list of all shells and all holes
+			ArrayList holesForShells = new ArrayList(shells.size());
+
+			for (int i = 0; i < shells.size(); i++) {
+				holesForShells.add(new ArrayList());
+			}
+
+			// find homes
+			for (int i = 0; i < holes.size(); i++) {
+				LinearRing testRing = (LinearRing) holes.get(i);
+				LinearRing minShell = null;
+				Envelope minEnv = null;
+				Envelope testEnv = testRing.getEnvelopeInternal();
+				Coordinate testPt = testRing.getCoordinateN(0);
+				LinearRing tryRing = null;
+
+				for (int j = 0; j < shells.size(); j++) {
+					tryRing = (LinearRing) shells.get(j);
+
+					Envelope tryEnv = tryRing.getEnvelopeInternal();
+
+					if (minShell != null) {
+						minEnv = minShell.getEnvelopeInternal();
+					}
+
+					boolean isContained = false;
+					Coordinate[] coordList = tryRing.getCoordinates();
+
+					if (tryEnv.contains(testEnv)
+							&& (CGAlgorithms.isPointInRing(testPt, coordList) || (pointInList(
+									testPt, coordList)))) {
+						isContained = true;
+					}
+
+					// check if this new containing ring is smaller than the
+					// current minimum ring
+					if (isContained) {
+						if ((minShell == null) || minEnv.contains(tryEnv)) {
+							minShell = tryRing;
+						}
+					}
 				}
 
-				/* linRing = new GeometryFactory().createLinearRing(
-				   CoordinateArrays.toCoordinateArray(arrayCoords)); */
-
-				// System.out.println("NumParts = " + numParts);
-				//now we have a list of all shells and all holes
-				ArrayList holesForShells = new ArrayList(shells.size());
-
-				for (int i = 0; i < shells.size(); i++) {
+				if (minShell == null) {
+					// System.out.println(
+					// "polygon found with a hole thats not inside a shell");
+					// azabala: we do the assumption that this hole is really a
+					// shell (polygon)
+					// whose point werent digitized in the right order
+					Coordinate[] cs = testRing.getCoordinates();
+					Coordinate[] reversed = new Coordinate[cs.length];
+					int pointIndex = 0;
+					for (int z = cs.length - 1; z >= 0; z--) {
+						reversed[pointIndex] = cs[z];
+						pointIndex++;
+					}
+					LinearRing newRing = geomFactory.createLinearRing(reversed);
+					shells.add(newRing);
 					holesForShells.add(new ArrayList());
+				} else {
+					((ArrayList) holesForShells.get(shells.indexOf(minShell)))
+							.add(testRing);
 				}
+			}
 
-				//find homes
-				for (int i = 0; i < holes.size(); i++) {
-					LinearRing testRing = (LinearRing) holes.get(i);
-					LinearRing minShell = null;
-					Envelope minEnv = null;
-					Envelope testEnv = testRing.getEnvelopeInternal();
-					Coordinate testPt = testRing.getCoordinateN(0);
-					LinearRing tryRing = null;
+			Polygon[] polygons = new Polygon[shells.size()];
 
-					for (int j = 0; j < shells.size(); j++) {
-						tryRing = (LinearRing) shells.get(j);
+			for (int i = 0; i < shells.size(); i++) {
+				polygons[i] = geomFactory.createPolygon((LinearRing) shells
+						.get(i), (LinearRing[]) ((ArrayList) holesForShells
+						.get(i)).toArray(new LinearRing[0]));
+			}
+			// CAMBIO: ENTREGAMOS SIEMPRE MULTILINESTRING, QUE ES
+			// LO QUE HACE TODO EL MUNDO CUANDO ESCRIBE EN POSTGIS
+			// O CON GEOTOOLS
+			// if (numParts > 1) // Generamos una MultiLineString
 
-						Envelope tryEnv = tryRing.getEnvelopeInternal();
+			/*
+			 * if (polygons.length == 1) { return polygons[0]; }
+			 */
 
-						if (minShell != null) {
-							minEnv = minShell.getEnvelopeInternal();
-						}
+			// FIN CAMBIO
 
-						boolean isContained = false;
-						Coordinate[] coordList = tryRing.getCoordinates();
+			holesForShells = null;
+			shells = null;
+			holes = null;
 
-						if (tryEnv.contains(testEnv) &&
-								(CGAlgorithms.isPointInRing(testPt, coordList) ||
-								(pointInList(testPt, coordList)))) {
-							isContained = true;
-						}
+			// its a multi part
+			geoJTS = geomFactory.createMultiPolygon(polygons);
 
-						// check if this new containing ring is smaller than the current minimum ring
-						if (isContained) {
-							if ((minShell == null) || minEnv.contains(tryEnv)) {
-								minShell = tryRing;
-							}
-						}
-					}
-
-					if (minShell == null) {
-//						System.out.println(
-//							"polygon found with a hole thats not inside a shell");
-//azabala: we do the assumption that this hole is really a shell (polygon)
-//whose point werent digitized in the right order
-Coordinate[] cs = testRing.getCoordinates();
-Coordinate[] reversed = new Coordinate[cs.length];
-int pointIndex = 0;
-for(int z = cs.length-1; z >= 0; z--){
-	reversed[pointIndex] = cs[z];
-	pointIndex++;
-}
-LinearRing newRing = geomFactory.createLinearRing(reversed);
-shells.add(newRing);
-holesForShells.add(new ArrayList());
-					} else {
-						((ArrayList) holesForShells.get(shells.indexOf(minShell))).add(testRing);
-					}
-				}
-
-				Polygon[] polygons = new Polygon[shells.size()];
-
-				for (int i = 0; i < shells.size(); i++) {
-					polygons[i] = geomFactory.createPolygon((LinearRing) shells.get(
-								i),
-							(LinearRing[]) ((ArrayList) holesForShells.get(i)).toArray(
-								new LinearRing[0]));
-				}
-				// CAMBIO: ENTREGAMOS SIEMPRE MULTILINESTRING, QUE ES
-				// LO QUE HACE TODO EL MUNDO CUANDO ESCRIBE EN POSTGIS
-				// O CON GEOTOOLS
-				// if (numParts > 1) // Generamos una MultiLineString
-
-				/* if (polygons.length == 1) {
-					return polygons[0];
-				} */
-
-				// FIN CAMBIO
-
-				holesForShells = null;
-				shells = null;
-				holes = null;
-
-				//its a multi part
-				geoJTS = geomFactory.createMultiPolygon(polygons);
-
-				/* if (numParts > 1) // Generamos un Polygon con agujeros
-				   {
-				    arrayLines.add(linRing);
-				           // geoJTS = new GeometryFactory().createPolygon(linRingExt,
-				                           // GeometryFactory.toLinearRingArray(arrayLines));
-				    geoJTS = new GeometryFactory().buildGeometry(arrayLines);
-
-				    // geoJTS = Polygonizer.class.
-				   }
-				   else
-				   {
-				           geoJTS = new GeometryFactory().createPolygon(linRing,null);
-				   } */
-				break;
+			/*
+			 * if (numParts > 1) // Generamos un Polygon con agujeros {
+			 * arrayLines.add(linRing); // geoJTS = new
+			 * GeometryFactory().createPolygon(linRingExt, //
+			 * GeometryFactory.toLinearRingArray(arrayLines)); geoJTS = new
+			 * GeometryFactory().buildGeometry(arrayLines);
+			 * 
+			 * // geoJTS = Polygonizer.class. } else { geoJTS = new
+			 * GeometryFactory().createPolygon(linRing,null); }
+			 */
+			break;
 		}
 
 		return geoJTS;
@@ -522,9 +544,10 @@ holesForShells.add(new ArrayList());
 
 	/**
 	 * Converts JTS Geometry objects into Java 2D Shape objects
-	 *
-	 * @param geo Geometry de JTS.
-	 *
+	 * 
+	 * @param geo
+	 *            Geometry de JTS.
+	 * 
 	 * @return FShape.
 	 */
 	public static FShape jts_to_java2d(Geometry geo) {
@@ -532,7 +555,8 @@ holesForShells.add(new ArrayList());
 
 		try {
 			if (geo instanceof Point) {
-				shpNew = new FPoint2D(((Point) geo).getX(), ((Point) geo).getY());
+				shpNew = new FPoint2D(((Point) geo).getX(),
+						((Point) geo).getY());
 			}
 
 			if (geo.isEmpty()) {
@@ -555,11 +579,12 @@ holesForShells.add(new ArrayList());
 				shpNew = new FPolyline2D(toShape((MultiLineString) geo));
 			}
 
-			/* OJO: CON ALGO COMO FSHAPE NO SÉ CÓMO PODEMOS IMPLEMENTAR UN GeometryCollection
-			 * No sabremos si queremos una línea o un polígono.....
-			 *  if (geometry instanceof GeometryCollection) {
-			          return toShape((GeometryCollection) geometry);
-			   } */
+			/*
+			 * OJO: CON ALGO COMO FSHAPE NO SÉ CÓMO PODEMOS IMPLEMENTAR UN
+			 * GeometryCollection No sabremos si queremos una línea o un
+			 * polígono..... if (geometry instanceof GeometryCollection) {
+			 * return toShape((GeometryCollection) geometry); }
+			 */
 			return shpNew;
 		} catch (NoninvertibleTransformException e) {
 			// TODO Auto-generated catch block
@@ -571,9 +596,10 @@ holesForShells.add(new ArrayList());
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param p DOCUMENT ME!
-	 *
+	 * 
+	 * @param p
+	 *            DOCUMENT ME!
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	private static GeneralPathX toShape(Polygon p) {
@@ -584,9 +610,9 @@ holesForShells.add(new ArrayList());
 			coord = p.getExteriorRing().getCoordinateN(i);
 
 			if (i == 0) {
-				resul.moveTo(coord.x,coord.y);
+				resul.moveTo(coord.x, coord.y);
 			} else {
-				resul.lineTo(coord.x,coord.y);
+				resul.lineTo(coord.x, coord.y);
 			}
 		}
 
@@ -609,36 +635,37 @@ holesForShells.add(new ArrayList());
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param modelCoordinates DOCUMENT ME!
-	 *
+	 * 
+	 * @param modelCoordinates
+	 *            DOCUMENT ME!
+	 * 
 	 * @return DOCUMENT ME!
-	 *
-	 * @throws NoninvertibleTransformException DOCUMENT ME!
-	 *
-	private Coordinate[] toViewCoordinates(Coordinate[] modelCoordinates)
-		throws NoninvertibleTransformException {
-		Coordinate[] viewCoordinates = new Coordinate[modelCoordinates.length];
+	 * 
+	 * @throws NoninvertibleTransformException
+	 *             DOCUMENT ME!
+	 * 
+	 *             private Coordinate[] toViewCoordinates(Coordinate[]
+	 *             modelCoordinates) throws NoninvertibleTransformException {
+	 *             Coordinate[] viewCoordinates = new
+	 *             Coordinate[modelCoordinates.length];
+	 * 
+	 *             for (int i = 0; i < modelCoordinates.length; i++) { FPoint2D
+	 *             point2D = coordinate2FPoint2D(modelCoordinates[i]);
+	 *             viewCoordinates[i] = new Coordinate(point2D.getX(),
+	 *             point2D.getY()); }
+	 * 
+	 *             return viewCoordinates; }
+	 */
 
-		for (int i = 0; i < modelCoordinates.length; i++) {
-			FPoint2D point2D = coordinate2FPoint2D(modelCoordinates[i]);
-			viewCoordinates[i] = new Coordinate(point2D.getX(), point2D.getY());
-		}
-
-		return viewCoordinates;
-	} */
-
-	/* private Shape toShape(GeometryCollection gc)
-	   throws NoninvertibleTransformException {
-	   GeometryCollectionShape shape = new GeometryCollectionShape();
-	   for (int i = 0; i < gc.getNumGeometries(); i++) {
-	           Geometry g = (Geometry) gc.getGeometryN(i);
-	           shape.add(toShape(g));
-	   }
-	   return shape;
-	   } */
+	/*
+	 * private Shape toShape(GeometryCollection gc) throws
+	 * NoninvertibleTransformException { GeometryCollectionShape shape = new
+	 * GeometryCollectionShape(); for (int i = 0; i < gc.getNumGeometries();
+	 * i++) { Geometry g = (Geometry) gc.getGeometryN(i); shape.add(toShape(g));
+	 * } return shape; }
+	 */
 	private static GeneralPathX toShape(MultiLineString mls)
-		throws NoninvertibleTransformException {
+			throws NoninvertibleTransformException {
 		GeneralPathX path = new GeneralPathX();
 
 		for (int i = 0; i < mls.getNumGeometries(); i++) {
@@ -646,22 +673,24 @@ holesForShells.add(new ArrayList());
 			path.append(toShape(lineString), false);
 		}
 
-		//BasicFeatureRenderer expects LineStrings and MultiLineStrings to be
-		//converted to GeneralPathXs. [Jon Aquino]
+		// BasicFeatureRenderer expects LineStrings and MultiLineStrings to be
+		// converted to GeneralPathXs. [Jon Aquino]
 		return path;
 	}
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param lineString DOCUMENT ME!
-	 *
+	 * 
+	 * @param lineString
+	 *            DOCUMENT ME!
+	 * 
 	 * @return DOCUMENT ME!
-	 *
-	 * @throws NoninvertibleTransformException DOCUMENT ME!
+	 * 
+	 * @throws NoninvertibleTransformException
+	 *             DOCUMENT ME!
 	 */
 	private static GeneralPathX toShape(LineString lineString)
-		throws NoninvertibleTransformException {
+			throws NoninvertibleTransformException {
 		GeneralPathX shape = new GeneralPathX();
 		FPoint2D viewPoint = coordinate2FPoint2D(lineString.getCoordinateN(0));
 		shape.moveTo(viewPoint.getX(), viewPoint.getY());
@@ -671,63 +700,50 @@ holesForShells.add(new ArrayList());
 			shape.lineTo(viewPoint.getX(), viewPoint.getY());
 		}
 
-		//BasicFeatureRenderer expects LineStrings and MultiLineStrings to be
-		//converted to GeneralPathXs. [Jon Aquino]
+		// BasicFeatureRenderer expects LineStrings and MultiLineStrings to be
+		// converted to GeneralPathXs. [Jon Aquino]
 		return shape;
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 *
-	 * @param point DOCUMENT ME!
-	 *
-	 * @return DOCUMENT ME!
-	 *
-	 * @throws NoninvertibleTransformException DOCUMENT ME!
-	 */
-	private static FPoint2D toShape(Point point)
-		throws NoninvertibleTransformException {
-		FPoint2D viewPoint = coordinate2FPoint2D(point.getCoordinate());
-
-		return viewPoint;
-	}
-
 	private static GeneralPathX toShape(MultiPolygon mp)
-	throws NoninvertibleTransformException {
-	GeneralPathX path = new GeneralPathX();
+			throws NoninvertibleTransformException {
+		GeneralPathX path = new GeneralPathX();
 
-	for (int i = 0; i < mp.getNumGeometries(); i++) {
-		Polygon polygon = (Polygon) mp.getGeometryN(i);
-		path.append(toShape(polygon), false);
+		for (int i = 0; i < mp.getNumGeometries(); i++) {
+			Polygon polygon = (Polygon) mp.getGeometryN(i);
+			path.append(toShape(polygon), false);
+		}
+
+		// BasicFeatureRenderer expects LineStrings and MultiLineStrings to be
+		// converted to GeneralPathXs. [Jon Aquino]
+		return path;
 	}
 
-	//BasicFeatureRenderer expects LineStrings and MultiLineStrings to be
-	//converted to GeneralPathXs. [Jon Aquino]
-	return path;
-}
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param coord DOCUMENT ME!
-	 *
+	 * 
+	 * @param coord
+	 *            DOCUMENT ME!
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public static FPoint2D coordinate2FPoint2D(Coordinate coord) {
-		return new FPoint2D(coord.x, coord.y); //,coord.z);
+		return new FPoint2D(coord.x, coord.y); // ,coord.z);
 	}
 
 	/**
 	 * Convierte una Geometry de JTS a GeneralPathX.
-	 *
-	 * @param geometry Geometry a convertir.
-	 *
+	 * 
+	 * @param geometry
+	 *            Geometry a convertir.
+	 * 
 	 * @return GeneralPathX.
-	 *
+	 * 
 	 * @throws NoninvertibleTransformException
 	 * @throws IllegalArgumentException
 	 */
 	public static GeneralPathX toShape(Geometry geometry)
-		throws NoninvertibleTransformException {
+			throws NoninvertibleTransformException {
 		if (geometry.isEmpty()) {
 			return new GeneralPathX();
 		}
@@ -752,279 +768,272 @@ holesForShells.add(new ArrayList());
 			return toShape((GeometryCollection) geometry);
 		}
 
-		throw new IllegalArgumentException("Unrecognized Geometry class: " +
-			geometry.getClass());
+		throw new IllegalArgumentException("Unrecognized Geometry class: "
+				+ geometry.getClass());
 	}
 
+	public static GeneralPathX transformToInts(GeneralPathX gp,
+			AffineTransform at) {
+		GeneralPathX newGp = new GeneralPathX();
+		PathIterator theIterator;
+		int theType;
+		int numParts = 0;
+		double[] theData = new double[6];
+		Point2D ptDst = new Point2D.Double();
+		Point2D ptSrc = new Point2D.Double();
+		boolean bFirst = true;
+		int xInt, yInt, antX = -1, antY = -1;
 
-    public static GeneralPathX transformToInts(GeneralPathX gp, AffineTransform at) {
-        GeneralPathX newGp = new GeneralPathX();
-        PathIterator theIterator;
-        int theType;
-        int numParts = 0;
-        double[] theData = new double[6];
-        Point2D ptDst = new Point2D.Double();
-        Point2D ptSrc = new Point2D.Double();
-        boolean bFirst = true;
-        int xInt, yInt, antX = -1, antY = -1;
+		theIterator = gp.getPathIterator(null); // , flatness);
 
-        theIterator = gp.getPathIterator(null); //, flatness);
+		while (!theIterator.isDone()) {
+			theType = theIterator.currentSegment(theData);
+			switch (theType) {
+			case PathIterator.SEG_MOVETO:
+				numParts++;
+				ptSrc.setLocation(theData[0], theData[1]);
+				at.transform(ptSrc, ptDst);
+				antX = (int) ptDst.getX();
+				antY = (int) ptDst.getY();
+				newGp.moveTo(antX, antY);
+				bFirst = true;
+				break;
 
-        while (!theIterator.isDone()) {
-            theType = theIterator.currentSegment(theData);
-            switch (theType) {
-                case PathIterator.SEG_MOVETO:
-                    numParts++;
-                    ptSrc.setLocation(theData[0], theData[1]);
-                    at.transform(ptSrc, ptDst);
-                    antX = (int) ptDst.getX();
-                    antY = (int) ptDst.getY();
-                    newGp.moveTo(antX, antY);
-                    bFirst = true;
-                    break;
+			case PathIterator.SEG_LINETO:
+				ptSrc.setLocation(theData[0], theData[1]);
+				at.transform(ptSrc, ptDst);
+				xInt = (int) ptDst.getX();
+				yInt = (int) ptDst.getY();
+				if ((bFirst) || ((xInt != antX) || (yInt != antY))) {
+					newGp.lineTo(xInt, yInt);
+					antX = xInt;
+					antY = yInt;
+					bFirst = false;
+				}
+				break;
 
-                case PathIterator.SEG_LINETO:
-                    ptSrc.setLocation(theData[0], theData[1]);
-                    at.transform(ptSrc, ptDst);
-                    xInt = (int) ptDst.getX();
-                    yInt = (int) ptDst.getY();
-                    if ((bFirst) || ((xInt != antX) || (yInt != antY)))
-                    {
-                        newGp.lineTo(xInt, yInt);
-                        antX = xInt;
-                        antY = yInt;
-                        bFirst = false;
-                    }
-                    break;
+			case PathIterator.SEG_QUADTO:
+				System.out.println("Not supported here");
 
-                case PathIterator.SEG_QUADTO:
-                    System.out.println("Not supported here");
+				break;
 
-                    break;
+			case PathIterator.SEG_CUBICTO:
+				System.out.println("Not supported here");
 
-                case PathIterator.SEG_CUBICTO:
-                    System.out.println("Not supported here");
+				break;
 
-                    break;
+			case PathIterator.SEG_CLOSE:
+				newGp.closePath();
 
-                case PathIterator.SEG_CLOSE:
-                    newGp.closePath();
+				break;
+			} // end switch
 
-                    break;
-            } //end switch
+			theIterator.next();
+		} // end while loop
 
-            theIterator.next();
-        } //end while loop
+		return newGp;
+	}
 
-        return newGp;
-    }
-    public static FShape transformToInts(IGeometry gp, AffineTransform at) {
-        GeneralPathX newGp = new GeneralPathX();
-        double[] theData = new double[6];
-        double[] aux = new double[6];
+	public static FShape transformToInts(IGeometry gp, AffineTransform at) {
+		GeneralPathX newGp = new GeneralPathX();
+		double[] theData = new double[6];
+		double[] aux = new double[6];
 
-        // newGp.reset();
-        PathIterator theIterator;
-        int theType;
-        int numParts = 0;
+		// newGp.reset();
+		PathIterator theIterator;
+		int theType;
+		int numParts = 0;
 
-        Point2D ptDst = new Point2D.Double();
-        Point2D ptSrc = new Point2D.Double();
-        boolean bFirst = true;
-        int xInt, yInt, antX = -1, antY = -1;
+		Point2D ptDst = new Point2D.Double();
+		Point2D ptSrc = new Point2D.Double();
+		boolean bFirst = true;
+		int xInt, yInt, antX = -1, antY = -1;
 
+		theIterator = gp.getPathIterator(null); // , flatness);
+		int numSegmentsAdded = 0;
+		while (!theIterator.isDone()) {
+			theType = theIterator.currentSegment(theData);
 
-        theIterator = gp.getPathIterator(null); //, flatness);
-        int numSegmentsAdded = 0;
-        while (!theIterator.isDone()) {
-            theType = theIterator.currentSegment(theData);
+			switch (theType) {
+			case PathIterator.SEG_MOVETO:
+				numParts++;
+				ptSrc.setLocation(theData[0], theData[1]);
+				at.transform(ptSrc, ptDst);
+				antX = (int) ptDst.getX();
+				antY = (int) ptDst.getY();
+				newGp.moveTo(antX, antY);
+				numSegmentsAdded++;
+				bFirst = true;
+				break;
 
-            switch (theType) {
-                case PathIterator.SEG_MOVETO:
-                    numParts++;
-                    ptSrc.setLocation(theData[0], theData[1]);
-                    at.transform(ptSrc, ptDst);
-                    antX = (int) ptDst.getX();
-                    antY = (int) ptDst.getY();
-                    newGp.moveTo(antX, antY);
-                    numSegmentsAdded++;
-                    bFirst = true;
-                    break;
+			case PathIterator.SEG_LINETO:
+				ptSrc.setLocation(theData[0], theData[1]);
+				at.transform(ptSrc, ptDst);
+				xInt = (int) ptDst.getX();
+				yInt = (int) ptDst.getY();
+				if ((bFirst) || ((xInt != antX) || (yInt != antY))) {
+					newGp.lineTo(xInt, yInt);
+					antX = xInt;
+					antY = yInt;
+					bFirst = false;
+					numSegmentsAdded++;
+				}
+				break;
 
-                case PathIterator.SEG_LINETO:
-                    ptSrc.setLocation(theData[0], theData[1]);
-                    at.transform(ptSrc, ptDst);
-                    xInt = (int) ptDst.getX();
-                    yInt = (int) ptDst.getY();
-                    if ((bFirst) || ((xInt != antX) || (yInt != antY)))
-                    {
-                        newGp.lineTo(xInt, yInt);
-                        antX = xInt;
-                        antY = yInt;
-                        bFirst = false;
-                        numSegmentsAdded++;
-                    }
-                    break;
+			case PathIterator.SEG_QUADTO:
+				at.transform(theData, 0, aux, 0, 2);
+				newGp.quadTo(aux[0], aux[1], aux[2], aux[3]);
+				numSegmentsAdded++;
+				break;
 
-                case PathIterator.SEG_QUADTO:
-                    at.transform(theData,0,aux,0,2);
-                    newGp.quadTo(aux[0], aux[1], aux[2], aux[3]);
-                    numSegmentsAdded++;
-                    break;
+			case PathIterator.SEG_CUBICTO:
+				at.transform(theData, 0, aux, 0, 3);
+				newGp.curveTo(aux[0], aux[1], aux[2], aux[3], aux[4], aux[5]);
+				numSegmentsAdded++;
+				break;
 
-                case PathIterator.SEG_CUBICTO:
-                    at.transform(theData,0,aux,0,3);
-                    newGp.curveTo(aux[0], aux[1], aux[2], aux[3], aux[4], aux[5]);
-                    numSegmentsAdded++;
-                    break;
+			case PathIterator.SEG_CLOSE:
+				if (numSegmentsAdded < 3)
+					newGp.lineTo(antX, antY);
+				newGp.closePath();
 
-                case PathIterator.SEG_CLOSE:
-                    if (numSegmentsAdded < 3)
-                        newGp.lineTo(antX, antY);
-                    newGp.closePath();
+				break;
+			} // end switch
 
-                    break;
-            } //end switch
+			theIterator.next();
+		} // end while loop
 
-            theIterator.next();
-        } //end while loop
+		FShape shp = null;
+		switch (gp.getGeometryType()) {
+		case FShape.POINT: // Tipo punto
+		case FShape.POINT + FShape.Z:
+			shp = new FPoint2D(ptDst.getX(), ptDst.getY());
+			break;
 
-        FShape shp = null;
-        switch (gp.getGeometryType())
-        {
-            case FShape.POINT: //Tipo punto
-            case FShape.POINT + FShape.Z:
-                shp = new FPoint2D(ptDst.getX(), ptDst.getY());
-                break;
+		case FShape.LINE:
+		case FShape.LINE + FShape.Z:
+		case FShape.LINE | FShape.M:
+		case FShape.ARC:
+			shp = new FPolyline2D(newGp);
+			break;
 
-            case FShape.LINE:
-            case FShape.LINE + FShape.Z:
-            case FShape.LINE | FShape.M:
-            case FShape.ARC:
-            	shp = new FPolyline2D(newGp);
-                break;
+		case FShape.POLYGON:
+		case FShape.POLYGON + FShape.Z:
+		case FShape.POLYGON | FShape.M:
+		case FShape.CIRCLE:
+		case FShape.ELLIPSE:
 
-            case FShape.POLYGON:
-            case FShape.POLYGON + FShape.Z:
-            case FShape.POLYGON | FShape.M:
-            case FShape.CIRCLE:
-            case FShape.ELLIPSE:
+			shp = new FPolygon2D(newGp);
+			break;
+		}
+		return shp;
+	}
 
-                shp = new FPolygon2D(newGp);
-                break;
-        }
-        return shp;
-    }
+	public static Rectangle2D convertEnvelopeToRectangle2D(Envelope jtsR) {
+		Rectangle2D.Double r = new Rectangle2D.Double(jtsR.getMinX(),
+				jtsR.getMinY(), jtsR.getWidth(), jtsR.getHeight());
+		return r;
+	}
 
-    public static Rectangle2D convertEnvelopeToRectangle2D(Envelope jtsR)
-    {
-        Rectangle2D.Double r = new Rectangle2D.Double(jtsR.getMinX(),
-                jtsR.getMinY(), jtsR.getWidth(), jtsR.getHeight());
-        return r;
-    }
+	public static Envelope convertRectangle2DtoEnvelope(Rectangle2D r) {
+		Envelope e = new Envelope(r.getX(), r.getX() + r.getWidth(), r.getY(),
+				r.getY() + r.getHeight());
+		return e;
+	}
 
-    public static Envelope convertRectangle2DtoEnvelope(Rectangle2D r)
-    {
-    	Envelope e = new Envelope(r.getX(), r.getX() + r.getWidth(), r.getY(),
-			r.getY() + r.getHeight());
-    	return e;
-    }
+	/**
+	 * Return a correct polygon (no hole)
+	 * 
+	 * @param coordinates
+	 * @return
+	 */
+	public static IGeometry getExteriorPolygon(Coordinate[] coordinates) {
+		// isCCW = true => it's a hole
+		Coordinate[] vs = new Coordinate[coordinates.length];
+		if (CGAlgorithms.isCCW(coordinates)) {
+			for (int i = vs.length - 1; i >= 0; i--) {
+				vs[i] = coordinates[i];
+			}
+		} else {
+			vs = coordinates;
+		}
+		LinearRing ring = geomFactory.createLinearRing(vs);
 
-    /**
-     * Return a correct polygon (no hole)
-     * @param coordinates
-     * @return
-     */
-    public static IGeometry getExteriorPolygon(Coordinate[] coordinates)
-    {
-    	// isCCW = true => it's a hole
-    	Coordinate[] vs=new Coordinate[coordinates.length];
-        if (CGAlgorithms.isCCW(coordinates)){
-        	for (int i=vs.length-1;i>=0;i--){
-        		vs[i]=coordinates[i];
-        	}
-        }else{
-        	vs=coordinates;
-        }
-        LinearRing ring = geomFactory.createLinearRing(vs);
-
-        try {
+		try {
 			return ShapeFactory.createPolygon2D(toShape(ring));
 		} catch (NoninvertibleTransformException e) {
 			e.printStackTrace();
 		}
 		return null;
-    }
+	}
 
-    public static boolean isCCW(Point2D[] points)
-    {
-    	int length = points.length;
-    	Coordinate[] vs;
-    	// CGAlgorithms.isCCW asume que la lista de puntos tienen el primer
-    	// y el ultimo puntos iguales.... y que este algoritmo está solo
-    	// garantizado con anillos válidos.
-    	if (points[0].getX() != points[length-1].getX() || points[0].getY() != points[length-1].getY()) {
-        	vs=new Coordinate[length+1];
-        	vs[points.length] = new Coordinate(points[0].getX(), points[0].getY());
-    	} else {
-        	vs=new Coordinate[length];
-    	}
-       	for (int i=0; i<length; i++){
-    		vs[i] = new Coordinate(points[i].getX(), points[i].getY());
-    	}
-        return CGAlgorithms.isCCW(vs);
-    }
+	public static boolean isCCW(Point2D[] points) {
+		int length = points.length;
+		Coordinate[] vs;
+		// CGAlgorithms.isCCW asume que la lista de puntos tienen el primer
+		// y el ultimo puntos iguales.... y que este algoritmo está solo
+		// garantizado con anillos válidos.
+		if (points[0].getX() != points[length - 1].getX()
+				|| points[0].getY() != points[length - 1].getY()) {
+			vs = new Coordinate[length + 1];
+			vs[points.length] = new Coordinate(points[0].getX(),
+					points[0].getY());
+		} else {
+			vs = new Coordinate[length];
+		}
+		for (int i = 0; i < length; i++) {
+			vs[i] = new Coordinate(points[i].getX(), points[i].getY());
+		}
+		return CGAlgorithms.isCCW(vs);
+	}
 
-    public static boolean isCCW(FPolygon2D pol)
-    {
-    	Geometry jtsGeom = FConverter.java2d_to_jts(pol);
-    	if (jtsGeom.getNumGeometries() == 1)
-    	{
-    		Coordinate[] coords = jtsGeom.getCoordinates();
-    		return CGAlgorithms.isCCW(coords);
-    	}
-    	return false;
+	public static boolean isCCW(FPolygon2D pol) {
+		Geometry jtsGeom = FConverter.java2d_to_jts(pol);
+		if (jtsGeom.getNumGeometries() == 1) {
+			Coordinate[] coords = jtsGeom.getCoordinates();
+			return CGAlgorithms.isCCW(coords);
+		}
+		return false;
 
-    }
+	}
 
+	/**
+	 * Return a hole (CCW ordered points)
+	 * 
+	 * @param coordinates
+	 * @return
+	 */
+	public static IGeometry getHole(Coordinate[] coordinates) {
+		// isCCW = true => it's a hole
+		Coordinate[] vs = new Coordinate[coordinates.length];
+		if (CGAlgorithms.isCCW(coordinates)) {
+			vs = coordinates;
 
-    /**
-     * Return a hole (CCW ordered points)
-     * @param coordinates
-     * @return
-     */
-    public static IGeometry getHole(Coordinate[] coordinates)
-    {
-    	// isCCW = true => it's a hole
-    	Coordinate[] vs=new Coordinate[coordinates.length];
-        if (CGAlgorithms.isCCW(coordinates)){
-        	vs=coordinates;
+		} else {
+			for (int i = vs.length - 1; i >= 0; i--) {
+				vs[i] = coordinates[i];
+			}
+		}
+		LinearRing ring = geomFactory.createLinearRing(vs);
 
-        }else{
-        	for (int i=vs.length-1;i>=0;i--){
-        		vs[i]=coordinates[i];
-        	}
-        }
-        LinearRing ring = geomFactory.createLinearRing(vs);
-
-        try {
+		try {
 			return ShapeFactory.createPolygon2D(toShape(ring));
 		} catch (NoninvertibleTransformException e) {
 			e.printStackTrace();
 		}
 		return null;
-    }
+	}
 
 	public static Shape getExteriorPolygon(GeneralPathX gp) {
 		Area area = new Area(gp);
 		area.isSingular();
 		return area;
 
-
-
 	}
+
 	/**
 	 * Use it ONLY for NOT multipart polygons.
+	 * 
 	 * @param pol
 	 * @return
 	 */
@@ -1035,116 +1044,109 @@ holesForShells.add(new ArrayList());
 		int theType;
 		int numParts = 0;
 
-		//	 	Use this array to store segment coordinate data
+		// Use this array to store segment coordinate data
 		double[] theData = new double[6];
 		PathIterator theIterator;
 
-				ArrayList shells = new ArrayList();
-				ArrayList holes = new ArrayList();
-				Coordinate[] points = null;
+		ArrayList shells = new ArrayList();
+		ArrayList holes = new ArrayList();
+		Coordinate[] points = null;
 
-				theIterator = pol.getPathIterator(null, FLATNESS);
+		theIterator = pol.getPathIterator(null, FLATNESS);
 
-				while (!theIterator.isDone()) {
-					//while not done
-					theType = theIterator.currentSegment(theData);
+		while (!theIterator.isDone()) {
+			// while not done
+			theType = theIterator.currentSegment(theData);
 
-					//Populate a segment of the new
-					// GeneralPathX object.
-					//Process the current segment to populate a new
-					// segment of the new GeneralPathX object.
-					switch (theType) {
-						case PathIterator.SEG_MOVETO:
+			// Populate a segment of the new
+			// GeneralPathX object.
+			// Process the current segment to populate a new
+			// segment of the new GeneralPathX object.
+			switch (theType) {
+			case PathIterator.SEG_MOVETO:
 
-							// System.out.println("SEG_MOVETO");
-							if (arrayCoords == null) {
-								arrayCoords = new ArrayList();
-							} else {
-								points = CoordinateArrays.toCoordinateArray(arrayCoords);
+				// System.out.println("SEG_MOVETO");
+				if (arrayCoords == null) {
+					arrayCoords = new ArrayList();
+				} else {
+					points = CoordinateArrays.toCoordinateArray(arrayCoords);
 
-								try {
-									LinearRing ring = geomFactory.createLinearRing(points);
+					try {
+						LinearRing ring = geomFactory.createLinearRing(points);
 
-									if (CGAlgorithms.isCCW(points)) {
-										holes.add(ring);
-									} else {
-										shells.add(ring);
-									}
-								} catch (Exception e) {
-									System.err.println(
-										"Caught Topology exception in GMLLinearRingHandler");
+						if (CGAlgorithms.isCCW(points)) {
+							holes.add(ring);
+						} else {
+							shells.add(ring);
+						}
+					} catch (Exception e) {
+						System.err
+								.println("Caught Topology exception in GMLLinearRingHandler");
 
-									return null;
-								}
+						return null;
+					}
 
-								/* if (numParts == 1)
-								   {
-								           linRingExt = new GeometryFactory().createLinearRing(
-								                  CoordinateArrays.toCoordinateArray(arrayCoords));
-								   }
-								   else
-								   {
-								           linRing = new GeometryFactory().createLinearRing(
-								                          CoordinateArrays.toCoordinateArray(arrayCoords));
-								           arrayLines.add(linRing);
-								   } */
-								arrayCoords = new ArrayList();
-							}
+					/*
+					 * if (numParts == 1) { linRingExt = new
+					 * GeometryFactory().createLinearRing(
+					 * CoordinateArrays.toCoordinateArray(arrayCoords)); } else
+					 * { linRing = new GeometryFactory().createLinearRing(
+					 * CoordinateArrays.toCoordinateArray(arrayCoords));
+					 * arrayLines.add(linRing); }
+					 */
+					arrayCoords = new ArrayList();
+				}
 
-							numParts++;
-							arrayCoords.add(new Coordinate(theData[0],
-									theData[1]));
+				numParts++;
+				arrayCoords.add(new Coordinate(theData[0], theData[1]));
 
-							break;
+				break;
 
-						case PathIterator.SEG_LINETO:
+			case PathIterator.SEG_LINETO:
 
-							// System.out.println("SEG_LINETO");
-							arrayCoords.add(new Coordinate(theData[0],
-									theData[1]));
+				// System.out.println("SEG_LINETO");
+				arrayCoords.add(new Coordinate(theData[0], theData[1]));
 
-							break;
+				break;
 
-						case PathIterator.SEG_QUADTO:
-							System.out.println("SEG_QUADTO Not supported here");
+			case PathIterator.SEG_QUADTO:
+				System.out.println("SEG_QUADTO Not supported here");
 
-							break;
+				break;
 
-						case PathIterator.SEG_CUBICTO:
-							System.out.println("SEG_CUBICTO Not supported here");
+			case PathIterator.SEG_CUBICTO:
+				System.out.println("SEG_CUBICTO Not supported here");
 
-							break;
+				break;
 
-						case PathIterator.SEG_CLOSE:
+			case PathIterator.SEG_CLOSE:
 
-							// Añadimos el primer punto para cerrar.
-							Coordinate firstCoord = (Coordinate) arrayCoords.get(0);
-							arrayCoords.add(new Coordinate(firstCoord.x,
-									firstCoord.y));
+				// Añadimos el primer punto para cerrar.
+				Coordinate firstCoord = (Coordinate) arrayCoords.get(0);
+				arrayCoords.add(new Coordinate(firstCoord.x, firstCoord.y));
 
-							break;
-					} //end switch
+				break;
+			} // end switch
 
-					// System.out.println("theData[0] = " + theData[0] + " theData[1]=" + theData[1]);
-					theIterator.next();
-				} //end while loop
+			// System.out.println("theData[0] = " + theData[0] + " theData[1]="
+			// + theData[1]);
+			theIterator.next();
+		} // end while loop
 
-				arrayCoords.add(arrayCoords.get(0));
-				coords = CoordinateArrays.toCoordinateArray(arrayCoords);
+		arrayCoords.add(arrayCoords.get(0));
+		coords = CoordinateArrays.toCoordinateArray(arrayCoords);
 
-
-		if (numParts == 1)
-		{
+		if (numParts == 1) {
 			return getExteriorPolygon(coords);
 		}
 		return ShapeFactory.createGeometry(pol);
 
 	}
 
-
-    /* public static GeometryCollection convertFGeometryCollection(FGeometryCollection fGeomC)
-    {
-
-        geomFactory.createGeometryCollection(theGeoms);
-    } */
+	/*
+	 * public static GeometryCollection
+	 * convertFGeometryCollection(FGeometryCollection fGeomC) {
+	 * 
+	 * geomFactory.createGeometryCollection(theGeoms); }
+	 */
 }

@@ -47,108 +47,112 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-
-
 /**
  * Renderer of the JTree.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class ConnRenderer extends DefaultTreeCellRenderer {
-	//private static final ImageIcon bdConnectIcon= new ImageIcon(ConnRenderer.class.getClassLoader()
-	//		  .getResource("images/gtk-ok.png"));
-	
-	//private String directory=PluginServices.getPluginServices(this)
-	//  .getPluginDirectory().getPath();
-private String directory=null;
+	// private static final ImageIcon bdConnectIcon= new
+	// ImageIcon(ConnRenderer.class.getClassLoader()
+	// .getResource("images/gtk-ok.png"));
+
+	// private String directory=PluginServices.getPluginServices(this)
+	// .getPluginDirectory().getPath();
+	private String directory = null;
 	private static ImageIcon bdConnectIcon = null;
 	private static ImageIcon bdConnectkeyIcon = null;
-    private static ImageIcon bdNoConnectIcon = null;
-    private static ImageIcon bdNoConnectkeyIcon = null;
-    private static ImageIcon tableIcon = null;
-	
-    public ConnRenderer(){
-    directory=".";
-    	
-	bdConnectIcon = new ImageIcon(ConnRenderer.class.getResource(
-	"images/gtk-ok.png"));
-	bdConnectkeyIcon = new ImageIcon(ConnRenderer.class.getResource(
-	"images/gtk-ok-key.png"));
-    bdNoConnectIcon = new ImageIcon(ConnRenderer.class.getResource(
-	"images/gtk-no.png"));
-    bdNoConnectkeyIcon = new ImageIcon(ConnRenderer.class.getResource(
-	"images/gtk-no-key.png"));
-    tableIcon = new ImageIcon(ConnRenderer.class.getResource(
-	"images/gtk-properties.png"));
-   }
-    public Component getTreeCellRendererComponent(JTree tree, Object value,
-        boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-        super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf,
-            row, hasFocus);
+	private static ImageIcon bdNoConnectIcon = null;
+	private static ImageIcon bdNoConnectkeyIcon = null;
+	private static ImageIcon tableIcon = null;
 
-        if (isConnection(value)) {
-            if (isConnected(value)) {
-            	if (havePassword(value))
-            		setIcon(bdConnectIcon); //Conectado
-            	else
-            		setIcon(bdConnectkeyIcon); //Conectado sin clave
-            } else {
-            	if (havePassword(value))
-            		setIcon(bdNoConnectIcon); //Desconectado
-            	else
-            		setIcon(bdNoConnectkeyIcon); //Desconectado sin clave
-            }
-        } else {
-            setIcon(tableIcon);
-        }
+	public ConnRenderer() {
+		directory = ".";
 
-        return this;
-    }
+		bdConnectIcon = new ImageIcon(
+				ConnRenderer.class.getResource("images/gtk-ok.png"));
+		bdConnectkeyIcon = new ImageIcon(
+				ConnRenderer.class.getResource("images/gtk-ok-key.png"));
+		bdNoConnectIcon = new ImageIcon(
+				ConnRenderer.class.getResource("images/gtk-no.png"));
+		bdNoConnectkeyIcon = new ImageIcon(
+				ConnRenderer.class.getResource("images/gtk-no-key.png"));
+		tableIcon = new ImageIcon(
+				ConnRenderer.class.getResource("images/gtk-properties.png"));
+	}
 
-    /**
-     * Returns true if is a connection.
-     *
-     * @param value Tree큦 node.
-     *
-     * @return True if is a connection.
-     */
-    private boolean isConnection(Object value) {
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
-        if (node.getUserObject() instanceof ConnectionTrans) {
-            return true;
-        }
-        return false;
-    }
+	public Component getTreeCellRendererComponent(JTree tree, Object value,
+			boolean sel, boolean expanded, boolean leaf, int row,
+			boolean hasFocus) {
+		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf,
+				row, hasFocus);
 
-    /**
-     * Returns true if the connection that is passed for parameter is connected.
-     *
-     * @param value Tree큦 node.
-     *
-     * @return True if is connected.
-     */
-    private boolean isConnected(Object value) {
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
-        if (node.getUserObject() instanceof ConnectionTrans) {
-        	ConnectionTrans connTrans=(ConnectionTrans) node.getUserObject();
-        	return connTrans.isConnected();
-        }
-        return false;
-    }
-    
-    /**
-     * Returns true if the connection has kept the password.
-     *
-     * @param value Tree큦 node.
-     *
-     * @return True if is connected.
-     */
-    private boolean havePassword(Object value){
-    	DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
-        if (node.getUserObject() instanceof ConnectionTrans) {
-        	ConnectionTrans connTrans=(ConnectionTrans) node.getUserObject();
-        	return connTrans.isSavePassword();
-        }
-        return false;
-    }
+		if (isConnection(value)) {
+			if (isConnected(value)) {
+				if (havePassword(value))
+					setIcon(bdConnectIcon); // Conectado
+				else
+					setIcon(bdConnectkeyIcon); // Conectado sin clave
+			} else {
+				if (havePassword(value))
+					setIcon(bdNoConnectIcon); // Desconectado
+				else
+					setIcon(bdNoConnectkeyIcon); // Desconectado sin clave
+			}
+		} else {
+			setIcon(tableIcon);
+		}
+
+		return this;
+	}
+
+	/**
+	 * Returns true if is a connection.
+	 * 
+	 * @param value
+	 *            Tree큦 node.
+	 * 
+	 * @return True if is a connection.
+	 */
+	private boolean isConnection(Object value) {
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+		if (node.getUserObject() instanceof ConnectionTrans) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Returns true if the connection that is passed for parameter is connected.
+	 * 
+	 * @param value
+	 *            Tree큦 node.
+	 * 
+	 * @return True if is connected.
+	 */
+	private boolean isConnected(Object value) {
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+		if (node.getUserObject() instanceof ConnectionTrans) {
+			ConnectionTrans connTrans = (ConnectionTrans) node.getUserObject();
+			return connTrans.isConnected();
+		}
+		return false;
+	}
+
+	/**
+	 * Returns true if the connection has kept the password.
+	 * 
+	 * @param value
+	 *            Tree큦 node.
+	 * 
+	 * @return True if is connected.
+	 */
+	private boolean havePassword(Object value) {
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+		if (node.getUserObject() instanceof ConnectionTrans) {
+			ConnectionTrans connTrans = (ConnectionTrans) node.getUserObject();
+			return connTrans.isSavePassword();
+		}
+		return false;
+	}
 }

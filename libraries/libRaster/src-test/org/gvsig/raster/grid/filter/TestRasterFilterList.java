@@ -21,19 +21,20 @@ package org.gvsig.raster.grid.filter;
 import junit.framework.TestCase;
 
 import org.gvsig.raster.RasterLibrary;
+
 /**
- * Este test prueba la lista de filtros.
- * Mete n filtros en la lista y asigna prioridades para comprobar luego que la lista
- * esté en el orden correcto. Se comprueban las operaciones de eliminar filtro por
- * prioridad, por nombre y por objeto y sustituir filtro por posición y por nombre.
- *
+ * Este test prueba la lista de filtros. Mete n filtros en la lista y asigna
+ * prioridades para comprobar luego que la lista esté en el orden correcto. Se
+ * comprueban las operaciones de eliminar filtro por prioridad, por nombre y por
+ * objeto y sustituir filtro por posición y por nombre.
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class TestRasterFilterList extends TestCase {
-	private boolean               show       = false;
-	private int                   nFilters   = 7;
+	private boolean show = false;
+	private int nFilters = 7;
 	private RasterFilterForTest[] filterList = null;
-	private RasterFilterList      list       = new RasterFilterList();
+	private RasterFilterList list = new RasterFilterList();
 
 	static {
 		RasterLibrary.wakeUp();
@@ -58,8 +59,10 @@ public class TestRasterFilterList extends TestCase {
 			System.out.println("Lista completa");
 		for (int i = 0; i < list.lenght(); i++) {
 			if (show)
-				System.out.println(" Name: " + ((RasterFilter) list.get(i)).getName());
-			assertEquals(((RasterFilter) list.get(i)).getName(), "filtro" + (i + 1));
+				System.out.println(" Name: "
+						+ ((RasterFilter) list.get(i)).getName());
+			assertEquals(((RasterFilter) list.get(i)).getName(), "filtro"
+					+ (i + 1));
 		}
 		try {
 			initList();
@@ -71,23 +74,29 @@ public class TestRasterFilterList extends TestCase {
 				System.out.println("Completa menos filtros 5 y 2");
 			for (int i = 0; i < list.lenght(); i++) {
 				if (show)
-					System.out.println(" Name: " + ((RasterFilter) list.get(i)).getName());
+					System.out.println(" Name: "
+							+ ((RasterFilter) list.get(i)).getName());
 				switch (i) {
-					case 0:
-						assertEquals(((RasterFilter) list.get(i)).getName(), "filtro1");
-						break;
-					case 1:
-						assertEquals(((RasterFilter) list.get(i)).getName(), "filtro3");
-						break;
-					case 2:
-						assertEquals(((RasterFilter) list.get(i)).getName(), "filtro4");
-						break;
-					case 3:
-						assertEquals(((RasterFilter) list.get(i)).getName(), "filtro6");
-						break;
-					case 4:
-						assertEquals(((RasterFilter) list.get(i)).getName(), "filtro7");
-						break;
+				case 0:
+					assertEquals(((RasterFilter) list.get(i)).getName(),
+							"filtro1");
+					break;
+				case 1:
+					assertEquals(((RasterFilter) list.get(i)).getName(),
+							"filtro3");
+					break;
+				case 2:
+					assertEquals(((RasterFilter) list.get(i)).getName(),
+							"filtro4");
+					break;
+				case 3:
+					assertEquals(((RasterFilter) list.get(i)).getName(),
+							"filtro6");
+					break;
+				case 4:
+					assertEquals(((RasterFilter) list.get(i)).getName(),
+							"filtro7");
+					break;
 				}
 			}
 
@@ -96,32 +105,41 @@ public class TestRasterFilterList extends TestCase {
 			rf.setName("filtroNew");
 			list.replace(rf, "filtro3");
 			if (show)
-				System.out.println("Completa reemplazando el filtro3 por filtroNew");
+				System.out
+						.println("Completa reemplazando el filtro3 por filtroNew");
 			for (int i = 0; i < list.lenght(); i++) {
 				if (show)
-					System.out.println("Name: " + ((RasterFilter) list.get(i)).getName());
+					System.out.println("Name: "
+							+ ((RasterFilter) list.get(i)).getName());
 				switch (i) {
-					case 0:
-						assertEquals(((RasterFilter) list.get(i)).getName(), "filtro1");
-						break;
-					case 1:
-						assertEquals(((RasterFilter) list.get(i)).getName(), "filtro2");
-						break;
-					case 2:
-						assertEquals(((RasterFilter) list.get(i)).getName(), "filtroNew");
-						break;
-					case 3:
-						assertEquals(((RasterFilter) list.get(i)).getName(), "filtro4");
-						break;
-					case 4:
-						assertEquals(((RasterFilter) list.get(i)).getName(), "filtro5");
-						break;
-					case 5:
-						assertEquals(((RasterFilter) list.get(i)).getName(), "filtro6");
-						break;
-					case 6:
-						assertEquals(((RasterFilter) list.get(i)).getName(), "filtro7");
-						break;
+				case 0:
+					assertEquals(((RasterFilter) list.get(i)).getName(),
+							"filtro1");
+					break;
+				case 1:
+					assertEquals(((RasterFilter) list.get(i)).getName(),
+							"filtro2");
+					break;
+				case 2:
+					assertEquals(((RasterFilter) list.get(i)).getName(),
+							"filtroNew");
+					break;
+				case 3:
+					assertEquals(((RasterFilter) list.get(i)).getName(),
+							"filtro4");
+					break;
+				case 4:
+					assertEquals(((RasterFilter) list.get(i)).getName(),
+							"filtro5");
+					break;
+				case 5:
+					assertEquals(((RasterFilter) list.get(i)).getName(),
+							"filtro6");
+					break;
+				case 6:
+					assertEquals(((RasterFilter) list.get(i)).getName(),
+							"filtro7");
+					break;
 				}
 			}
 
@@ -131,7 +149,8 @@ public class TestRasterFilterList extends TestCase {
 				System.out.println("Eliminar por clase");
 			for (int i = 0; i < list.lenght(); i++)
 				if (show)
-					System.out.println("Name: " + ((RasterFilter) list.get(i)).getName());
+					System.out.println("Name: "
+							+ ((RasterFilter) list.get(i)).getName());
 			assertEquals(list.lenght(), 0);
 		} catch (FilterTypeException e) {
 			e.printStackTrace();
@@ -140,6 +159,7 @@ public class TestRasterFilterList extends TestCase {
 
 	/**
 	 * Crea la lista
+	 * 
 	 * @throws FilterTypeException
 	 */
 	private void initList() throws FilterTypeException {

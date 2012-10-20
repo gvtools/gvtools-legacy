@@ -57,52 +57,54 @@ import org.xmlpull.v1.XmlPullParserException;
  */
 /**
  * This class parses an exception and returns it
+ * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
 public class ExceptionsFactory {
-	
-	public static WFSException parseExceptionReport(KXmlParser parser) throws XmlPullParserException, IOException {
+
+	public static WFSException parseExceptionReport(KXmlParser parser)
+			throws XmlPullParserException, IOException {
 		int currentTag;
-		boolean end = false;		
-		
+		boolean end = false;
+
 		currentTag = parser.next();
-		
-		while (!end) 
-		{
-			switch(currentTag)
-			{
+
+		while (!end) {
+			switch (currentTag) {
 			case KXmlParser.START_TAG:
-				if (parser.getName().compareToIgnoreCase(CapabilitiesTags.SERVICE_EXCEPTION)==0)
-				{
-					for (int i=0 ; i<parser.getAttributeCount() ; i++){
+				if (parser.getName().compareToIgnoreCase(
+						CapabilitiesTags.SERVICE_EXCEPTION) == 0) {
+					for (int i = 0; i < parser.getAttributeCount(); i++) {
 						String attName = parser.getAttributeName(i);
 						String code = null;
-						if (attName.compareTo(CapabilitiesTags.CODE)==0){
+						if (attName.compareTo(CapabilitiesTags.CODE) == 0) {
 							code = parser.getAttributeValue(i);
 						}
-						if (code != null){
-							if (code.compareTo(CapabilitiesTags.INVALID_FORMAT)==0){
+						if (code != null) {
+							if (code.compareTo(CapabilitiesTags.INVALID_FORMAT) == 0) {
 								parser.next();
-								return new InvalidFormatException(parser.getText());
+								return new InvalidFormatException(
+										parser.getText());
 							}
-							//Code unspecified
+							// Code unspecified
 							parser.next();
-							return new WFSException(code,parser.getText());
+							return new WFSException(code, parser.getText());
 						}
 					}
-				}  		                       
+				}
 				break;
 			case KXmlParser.END_TAG:
-				if (parser.getName().compareTo(CapabilitiesTags.SERVICE_EXCEPTION_REPORT) == 0)
+				if (parser.getName().compareTo(
+						CapabilitiesTags.SERVICE_EXCEPTION_REPORT) == 0)
 					end = true;
 				break;
-			case KXmlParser.TEXT:                   
+			case KXmlParser.TEXT:
 				break;
 			}
-			if (!end){
+			if (!end) {
 				currentTag = parser.next();
 			}
-		}   
+		}
 		return new WFSException();
 	}
 }

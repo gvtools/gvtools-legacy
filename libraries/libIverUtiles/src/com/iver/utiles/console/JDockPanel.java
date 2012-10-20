@@ -67,13 +67,13 @@ public class JDockPanel extends JPanel {
 	private int originalCenterComponentHeight;
 
 	public JDockPanel(JComponent centerComponent) {
-		super();	
+		super();
 		the = this;
 		initialize();
 		this.centerComponent = centerComponent;
 		this.originalCenterComponentHeight = centerComponent.getPreferredSize().height;
 		this.add(centerComponent, BorderLayout.CENTER);
-		
+
 	}
 
 	/**
@@ -81,41 +81,41 @@ public class JDockPanel extends JPanel {
 	 * 
 	 */
 	private void initialize() {
-        this.setLayout(new BorderLayout());
-        this.setSize(new java.awt.Dimension(388,225));
-        this.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,0,0,0));
-        this.add(getJPanelNorth(), java.awt.BorderLayout.NORTH);
-			
+		this.setLayout(new BorderLayout());
+		this.setSize(new java.awt.Dimension(388, 225));
+		this.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+		this.add(getJPanelNorth(), java.awt.BorderLayout.NORTH);
+
 	}
 
 	/**
-	 * This method initializes jPanelNorth	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes jPanelNorth
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanelNorth() {
 		if (jPanelNorth == null) {
 			jPanelNorth = new JPanel();
 			jPanelNorth.setLayout(new BorderLayout());
-			jPanelNorth.setPreferredSize(new java.awt.Dimension(100,12));
-			jPanelNorth.add(getJPanelCenterNorth(), java.awt.BorderLayout.CENTER);
+			jPanelNorth.setPreferredSize(new java.awt.Dimension(100, 12));
+			jPanelNorth.add(getJPanelCenterNorth(),
+					java.awt.BorderLayout.CENTER);
 			jPanelNorth.add(getJPanelButtons(), java.awt.BorderLayout.EAST);
-			
-			
+
 		}
 		return jPanelNorth;
 	}
 
 	/**
-	 * This method initializes jPanelButtons	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes jPanelButtons
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanelButtons() {
 		if (jPanelButtons == null) {
 			jPanelButtons = new JPanel();
 			jPanelButtons.setLayout(null);
-			jPanelButtons.setPreferredSize(new java.awt.Dimension(51,12));
+			jPanelButtons.setPreferredSize(new java.awt.Dimension(51, 12));
 			jPanelButtons.add(getJButtonUp(), null);
 			jPanelButtons.add(getJButtonDown(), null);
 		}
@@ -123,33 +123,39 @@ public class JDockPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes jButtonUp	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes jButtonUp
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getJButtonUp() {
 		if (jButtonUp == null) {
 			jButtonUp = new JButton();
 			jButtonUp.setCursor(Cursor.getDefaultCursor());
-			jButtonUp.setIcon(new ImageIcon(getClass().getResource("/images/up" +
-					".png")));
+			jButtonUp.setIcon(new ImageIcon(getClass().getResource(
+					"/images/up" + ".png")));
 			jButtonUp.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-			jButtonUp.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-			jButtonUp.setBounds(new java.awt.Rectangle(3,0,20,12));
-			jButtonUp.setPreferredSize(new java.awt.Dimension(20,12));
+			jButtonUp
+					.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+			jButtonUp.setBounds(new java.awt.Rectangle(3, 0, 20, 12));
+			jButtonUp.setPreferredSize(new java.awt.Dimension(20, 12));
 			jButtonUp.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					// UP
-					centerComponent.setPreferredSize(new Dimension(centerComponent.getWidth(), originalCenterComponentHeight));
-					int hTot = centerComponent.getPreferredSize().height + getJPanelNorth().getHeight();
-					
+					centerComponent.setPreferredSize(new Dimension(
+							centerComponent.getWidth(),
+							originalCenterComponentHeight));
+					int hTot = centerComponent.getPreferredSize().height
+							+ getJPanelNorth().getHeight();
+
 					// the.setLocation(0, the.getParent().getHeight()-hTot);
-//					the.centerComponent.setLocation(0, getJPanelNorth().getHeight());
-					the.reshape(0, the.getParent().getHeight()-hTot, the.getWidth(), hTot);
+					// the.centerComponent.setLocation(0,
+					// getJPanelNorth().getHeight());
+					the.reshape(0, the.getParent().getHeight() - hTot,
+							the.getWidth(), hTot);
 					the.validate();
 					the.doLayout();
-//					centerComponent.validate();
-//					centerComponent.doLayout();
+					// centerComponent.validate();
+					// centerComponent.doLayout();
 
 				}
 			});
@@ -158,27 +164,31 @@ public class JDockPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes jButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes jButton
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getJButtonDown() {
 		if (jButtonDown == null) {
 			jButtonDown = new JButton();
 			jButtonDown.setCursor(Cursor.getDefaultCursor());
-			jButtonDown.setPreferredSize(new java.awt.Dimension(20,12));
+			jButtonDown.setPreferredSize(new java.awt.Dimension(20, 12));
 			jButtonDown.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-			jButtonDown.setIcon(new ImageIcon(getClass().getResource("/images/down.png")));
-			jButtonDown.setBounds(new java.awt.Rectangle(26,0,20,12));
-			jButtonDown.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+			jButtonDown.setIcon(new ImageIcon(getClass().getResource(
+					"/images/down.png")));
+			jButtonDown.setBounds(new java.awt.Rectangle(26, 0, 20, 12));
+			jButtonDown
+					.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 			jButtonDown.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					// DOWN
-					centerComponent.setPreferredSize(new Dimension(centerComponent.getWidth(), 0));
-					
+					centerComponent.setPreferredSize(new Dimension(
+							centerComponent.getWidth(), 0));
+
 					int hTot = getJPanelNorth().getHeight();
 					// the.setLocation(0, the.getParent().getHeight()-hTot);
-					the.reshape(0, the.getParent().getHeight()-hTot, the.getWidth(), hTot);
+					the.reshape(0, the.getParent().getHeight() - hTot,
+							the.getWidth(), hTot);
 					// the.setPreferredSize()
 					the.validate();
 					the.doLayout();
@@ -189,14 +199,14 @@ public class JDockPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes jPanelCenterNorth	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes jPanelCenterNorth
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanelCenterNorth() {
 		if (jPanelCenterNorth == null) {
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.insets = new java.awt.Insets(2,0,2,0);
+			gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
 			gridBagConstraints.weightx = 90.0D;
 			gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			jPanelCenterNorth = new JPanel();
@@ -207,39 +217,50 @@ public class JDockPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes jSeparator1	
-	 * 	
-	 * @return javax.swing.JSeparator	
+	 * This method initializes jSeparator1
+	 * 
+	 * @return javax.swing.JSeparator
 	 */
 	private JSeparator getJSeparator1() {
 		if (jSeparator1 == null) {
 			jSeparator1 = new JSeparator();
-			jSeparator1.setPreferredSize(new java.awt.Dimension(100,5));
-			jSeparator1.setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
-			jSeparator1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-				public void mouseDragged(java.awt.event.MouseEvent e) {
-					Point pExt = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), the.getParent());
-					Dimension sizeFather = the.getParent().getSize();
-					int heightFather = sizeFather.height;
-					Dimension newDimension = new Dimension(the.getSize().width, heightFather - pExt.y);
-					Dimension newCDimension = new Dimension(the.getSize().width, heightFather - pExt.y - getJPanelNorth().getHeight());
-					Point actualOrigin = the.getLocation();
-//					the.setSize(newDimension);
-//					the.setBounds(actualOrigin.x, pExt.y, newDimension.width, newDimension.height);
-					the.reshape(actualOrigin.x, pExt.y, newDimension.width, newDimension.height);
-//					centerComponent.reshape(0, newDimension.width, getJPanelNorth().getHeight(), newDimension.height-getJPanelNorth().getHeight());
-//					the.doLayout();
-//			        ComponentEvent ev = new ComponentEvent(the,
-//                            ComponentEvent.COMPONENT_RESIZED);
-//			        the.dispatchEvent(ev);					
-//					invalidate();
-//					repaint();
-					originalCenterComponentHeight = newDimension.height;
-					centerComponent.setPreferredSize(newCDimension);
-					the.validate();
-					the.doLayout();
-				}
-			});
+			jSeparator1.setPreferredSize(new java.awt.Dimension(100, 5));
+			jSeparator1.setCursor(Cursor
+					.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
+			jSeparator1
+					.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+						public void mouseDragged(java.awt.event.MouseEvent e) {
+							Point pExt = SwingUtilities.convertPoint(
+									e.getComponent(), e.getPoint(),
+									the.getParent());
+							Dimension sizeFather = the.getParent().getSize();
+							int heightFather = sizeFather.height;
+							Dimension newDimension = new Dimension(the
+									.getSize().width, heightFather - pExt.y);
+							Dimension newCDimension = new Dimension(the
+									.getSize().width, heightFather - pExt.y
+									- getJPanelNorth().getHeight());
+							Point actualOrigin = the.getLocation();
+							// the.setSize(newDimension);
+							// the.setBounds(actualOrigin.x, pExt.y,
+							// newDimension.width, newDimension.height);
+							the.reshape(actualOrigin.x, pExt.y,
+									newDimension.width, newDimension.height);
+							// centerComponent.reshape(0, newDimension.width,
+							// getJPanelNorth().getHeight(),
+							// newDimension.height-getJPanelNorth().getHeight());
+							// the.doLayout();
+							// ComponentEvent ev = new ComponentEvent(the,
+							// ComponentEvent.COMPONENT_RESIZED);
+							// the.dispatchEvent(ev);
+							// invalidate();
+							// repaint();
+							originalCenterComponentHeight = newDimension.height;
+							centerComponent.setPreferredSize(newCDimension);
+							the.validate();
+							the.doLayout();
+						}
+					});
 		}
 		return jSeparator1;
 	}
@@ -249,8 +270,7 @@ public class JDockPanel extends JPanel {
 	}
 
 	public void setCenterComponent(JComponent centerComponent) {
-		if (this.centerComponent != null)
-		{
+		if (this.centerComponent != null) {
 			this.remove(this.centerComponent);
 		}
 		this.centerComponent = centerComponent;
@@ -259,6 +279,5 @@ public class JDockPanel extends JPanel {
 
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="10,10"
-
+} // @jve:decl-index=0:visual-constraint="10,10"
 

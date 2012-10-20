@@ -22,7 +22,6 @@ import org.gvsig.gpe.kml.parser.v21.geometries.PolygonTypeBinding;
 import org.gvsig.gpe.kml.parser.v21.geometries.RegionBinding;
 import org.gvsig.gpe.kml.parser.v21.header.HeaderBinding;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -73,46 +72,46 @@ import org.gvsig.gpe.kml.parser.v21.header.HeaderBinding;
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public interface IBindingProfile {
-	
+
 	public DocumentBinding getDocumentBinding();
-	
+
 	public ElementBinding getElementBinding();
-	
+
 	public FeatureBinding getFeatureBinding();
-	
+
 	public FolderBinding getFolderBinding();
-	
+
 	public LookAtBinding getLookAtBinding();
-	
+
 	public MetadataBinding getMetadataBinding();
-	
+
 	public PlaceMarketBinding getPlaceMarketBinding();
-	
+
 	public StyleBinding getStyleBinding();
-	
+
 	public CoordinatesTypeIterator getCoordinatesTypeBinding();
-	
+
 	public DoubleBinding getDoubleBinding();
-	
+
 	public GeometryBinding getGeometryBinding();
-	
+
 	public InnerBoundaryIsBinding getInnerBoundaryIsBinding();
-	
+
 	public LatLonAltBoxIterator getLatLonAltBoxBinding();
-	
+
 	public LinearRingBinding getLinearRingBinding();
-	
+
 	public LineStringTypeBinding getLineStringTypeBinding();
-	
+
 	public MultiGeometryBinding getMultiGeometryBinding();
-	
+
 	public OuterBoundaryIsBinding getOuterBoundaryIsBinding();
-	
+
 	public PointTypeBinding getPointTypeBinding();
-	
+
 	public PolygonTypeBinding getPolygonTypeBinding();
-	
+
 	public RegionBinding getRegionBinding();
-	
-	public HeaderBinding getHeaderBinding();	
+
+	public HeaderBinding getHeaderBinding();
 }

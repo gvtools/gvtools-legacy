@@ -53,23 +53,24 @@ import org.gvsig.gpe.xml.stream.XmlStreamException;
  */
 public class StaxXmlWriterFactory implements IXmlStreamWriterFactory {
 
-    /**
-     * @see org.gvsig.gpe.xml.stream.IXmlStreamWriterFactory#canWrite(java.lang.String)
-     */
-    public boolean canWrite(final String mimeType) {
-        return mimeType.startsWith("text/xml");
-    }
+	/**
+	 * @see org.gvsig.gpe.xml.stream.IXmlStreamWriterFactory#canWrite(java.lang.String)
+	 */
+	public boolean canWrite(final String mimeType) {
+		return mimeType.startsWith("text/xml");
+	}
 
-    /**
-     * @see org.gvsig.gpe.xml.stream.IXmlStreamWriterFactory#createWriter(java.lang.String,
-     *      java.io.OutputStream)
-     */
-    public IXmlStreamWriter createWriter(String mimeType, OutputStream out)
-            throws XmlStreamException, IllegalArgumentException {
-        if (!canWrite(mimeType)) {
-            throw new IllegalArgumentException("Unsupported mime type for this writer factory: "
-                    + mimeType);
-        }
-        return new StaxXmlStreamWriter(out);
-    }
+	/**
+	 * @see org.gvsig.gpe.xml.stream.IXmlStreamWriterFactory#createWriter(java.lang.String,
+	 *      java.io.OutputStream)
+	 */
+	public IXmlStreamWriter createWriter(String mimeType, OutputStream out)
+			throws XmlStreamException, IllegalArgumentException {
+		if (!canWrite(mimeType)) {
+			throw new IllegalArgumentException(
+					"Unsupported mime type for this writer factory: "
+							+ mimeType);
+		}
+		return new StaxXmlStreamWriter(out);
+	}
 }

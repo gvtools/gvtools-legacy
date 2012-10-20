@@ -46,48 +46,49 @@ import com.hardcode.gdbms.engine.instruction.FieldNotFoundException;
 import com.hardcode.gdbms.engine.values.Value;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 
-
-
 /**
  * Interface that allows the methods to classify the legend through intervals.
  * 
  */
 public interface IVectorialIntervalLegend extends IClassifiedVectorLegend {
 
+	public IInterval getInterval(Value v);
 
+	public int getIntervalType();
 
-    public IInterval getInterval(Value v) ;
-    public int getIntervalType();
-   
-   
 	/**
 	 * 
 	 * Returns the symbol starting from an interval
-	 *
-	 * @param key interval.
-	 *
+	 * 
+	 * @param key
+	 *            interval.
+	 * 
 	 * @return symbol.
 	 */
-    public ISymbol getSymbolByInterval(IInterval key);
+	public ISymbol getSymbolByInterval(IInterval key);
 
-    /**
-     * Inserts the type of the classification of the intervals.
-	 *
-	 * @param tipoClasificacion type of the classification.
+	/**
+	 * Inserts the type of the classification of the intervals.
+	 * 
+	 * @param tipoClasificacion
+	 *            type of the classification.
 	 */
-    public void setIntervalType(int tipoClasificacion);
-    
-    /**
-     * Returns if the rest of values are used or not to be represented.
+	public void setIntervalType(int tipoClasificacion);
+
+	/**
+	 * Returns if the rest of values are used or not to be represented.
+	 * 
 	 * @deprecated 18-09-07 when moving definitely to FeatureIterators
 	 * 
 	 * @return True if the rest of values are used.
 	 */
 
-    public void setDataSource(DataSource ds) throws FieldNotFoundException, ReadDriverException;
-    /**
-     * @deprecated 18/09/07 will be removed when Strategies will be discarded
-     */
-    public ISymbol getSymbol(int recordIndex) throws ReadDriverException;
+	public void setDataSource(DataSource ds) throws FieldNotFoundException,
+			ReadDriverException;
+
+	/**
+	 * @deprecated 18/09/07 will be removed when Strategies will be discarded
+	 */
+	public ISymbol getSymbol(int recordIndex) throws ReadDriverException;
 
 }

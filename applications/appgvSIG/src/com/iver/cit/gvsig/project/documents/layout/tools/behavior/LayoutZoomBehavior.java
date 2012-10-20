@@ -42,10 +42,9 @@ package com.iver.cit.gvsig.project.documents.layout.tools.behavior;
 
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.LayoutRectangleListener;
 
-
 /**
  * Behaviour que espera un listener de tipo LayoutRectangleListener.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LayoutZoomBehavior extends LayoutRectangleBehavior {

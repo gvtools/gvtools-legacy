@@ -57,10 +57,9 @@ import com.iver.cit.gvsig.fmap.core.v02.FLabel;
 import com.iver.utiles.swing.threads.Cancellable;
 import com.vividsolutions.jts.geom.Geometry;
 
-
 /**
  * Interfaz de Geometría.
- *
+ * 
  * @author $author$
  */
 public interface IGeometry extends Shape, Serializable {
@@ -74,50 +73,59 @@ public interface IGeometry extends Shape, Serializable {
 	public static int W = 7;
 	public static int NW = 8;
 
-	public static int SELECTHANDLER=0;
-	public static int STRETCHINGHANDLER=1;
+	public static int SELECTHANDLER = 0;
+	public static int STRETCHINGHANDLER = 1;
 	public final static StyledShapePainter shpPainter = new StyledShapePainter();
 
 	/**
 	 * Dibujará esta Shape en el Graphics con el símbolo que se pasa como
 	 * parámetro y despues de aplicarle la transformación que se pasa también
-	 * como parámetro. El parametro image que recibe es la imagen de la cual
-	 * se obtuvo el graphics que también se pasa como parámetro. Dibujará la
+	 * como parámetro. El parametro image que recibe es la imagen de la cual se
+	 * obtuvo el graphics que también se pasa como parámetro. Dibujará la
 	 * geometria en caso de que la IGeometry intersecte o esté contenida en el
 	 * rectángulo que se pasa como parámetro
-	 *
-	 * @param g DOCUMENT ME!
-	 * @param vp TODO
-	 * @param symbol DOCUMENT ME!
+	 * 
+	 * @param g
+	 *            DOCUMENT ME!
+	 * @param vp
+	 *            TODO
+	 * @param symbol
+	 *            DOCUMENT ME!
 	 */
 	void draw(Graphics2D g, ViewPort vp, ISymbol symbol);
 
 	/**
 	 * Dibuja la geometría sobre el Graphics2D que se pasa como parámetro.
-	 *
-	 * @param g Graphics2D.
-	 * @param vp ViewPort.
-	 * @param symbol Símbolo.
-	 * @param cancel TODO
+	 * 
+	 * @param g
+	 *            Graphics2D.
+	 * @param vp
+	 *            ViewPort.
+	 * @param symbol
+	 *            Símbolo.
+	 * @param cancel
+	 *            TODO
 	 */
 	void draw(Graphics2D g, ViewPort vp, ISymbol symbol, Cancellable cancel);
 
-    /**
-     * You can use this function if you are going to draw into
-     * a bitmap. (With ints coords). It will do a decimation,
-     * drawing a shape with less coords (faster draw)
-     * @param g
-     * @param vp
-     * @param symbol
-     * @param cancel TODO
-     */
-    void drawInts(Graphics2D g, ViewPort vp, ISymbol symbol, Cancellable cancel);
-    
-    
-    void drawInts(Graphics2D g, ViewPort vp, ISymbol symbol);
+	/**
+	 * You can use this function if you are going to draw into a bitmap. (With
+	 * ints coords). It will do a decimation, drawing a shape with less coords
+	 * (faster draw)
+	 * 
+	 * @param g
+	 * @param vp
+	 * @param symbol
+	 * @param cancel
+	 *            TODO
+	 */
+	void drawInts(Graphics2D g, ViewPort vp, ISymbol symbol, Cancellable cancel);
+
+	void drawInts(Graphics2D g, ViewPort vp, ISymbol symbol);
+
 	/**
 	 * Transforma esta Shape en un Geometry de JTS
-	 *
+	 * 
 	 * @return Geometría.
 	 */
 	Geometry toJTSGeometry();
@@ -127,24 +135,26 @@ public interface IGeometry extends Shape, Serializable {
 	 * IGeometry. Es un array porque si una geometria es un multipunto por
 	 * ejemplo puede quererse etiquetar todos sus puntos. El parámetro que se
 	 * pasa indica como debe de colocar la geometria la etiqueta
-	 *
-	 * @param position TODO: POR AHORA NO SE HACE CASO A ESTO
-	 * @param duplicates TODO: POR AHORA NO SE HACE CASO A ESTO
-	 *
+	 * 
+	 * @param position
+	 *            TODO: POR AHORA NO SE HACE CASO A ESTO
+	 * @param duplicates
+	 *            TODO: POR AHORA NO SE HACE CASO A ESTO
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	FLabel[] createLabels(int position, boolean duplicates);
 
 	/**
 	 * Obtiene el tipo de la geometría
-	 *
+	 * 
 	 * @return una de las constantes de FShape: POINT, LINE, POLIGON
 	 */
 	int getGeometryType();
 
 	/**
 	 * Clona la Geometría.
-	 *
+	 * 
 	 * @return Geometría clonada.
 	 */
 	IGeometry cloneGeometry();
@@ -152,25 +162,29 @@ public interface IGeometry extends Shape, Serializable {
 	/**
 	 * Devuelve true si la geometría intersecta con el rectángulo que se pasa
 	 * como parámetro.
-	 *
-	 * @param r Rectángulo.
-	 *
+	 * 
+	 * @param r
+	 *            Rectángulo.
+	 * 
 	 * @return True, si intersecta.
 	 */
 	boolean intersects(Rectangle2D r);
-	/**
-	 * Devuelve true si la geometría contiene al rectángulo que se pasa
-	 * como parámetro.
-	 *
-	 * @param r Rectángulo.
-	 *
-	 * @return True, si intersecta.
-	 */
-	//boolean contains(IGeometry g);
 
 	/**
-	 * Se usa en las strategies de dibujo para comprobar de manera rápida
-	 * si intersecta con el rectángulo visible
+	 * Devuelve true si la geometría contiene al rectángulo que se pasa como
+	 * parámetro.
+	 * 
+	 * @param r
+	 *            Rectángulo.
+	 * 
+	 * @return True, si intersecta.
+	 */
+	// boolean contains(IGeometry g);
+
+	/**
+	 * Se usa en las strategies de dibujo para comprobar de manera rápida si
+	 * intersecta con el rectángulo visible
+	 * 
 	 * @param x
 	 * @param y
 	 * @param w
@@ -181,33 +195,39 @@ public interface IGeometry extends Shape, Serializable {
 
 	/**
 	 * Devuelve el Rectángulo que ocupa la geometría.
-	 *
+	 * 
 	 * @return Rectángulo.
 	 */
 	Rectangle2D getBounds2D();
 
 	/**
 	 * Reproyecta la geometría a partir del transformador de coordenadas.
-	 *
-	 * @param ct Coordinate Transformer.
+	 * 
+	 * @param ct
+	 *            Coordinate Transformer.
 	 */
 	void reProject(MathTransform ct);
 
 	/**
-	 * Devuelve el GeneralPathXIterator con la información relativa a la geometría.
-	 * @param at TODO
-	 *
+	 * Devuelve el GeneralPathXIterator con la información relativa a la
+	 * geometría.
+	 * 
+	 * @param at
+	 *            TODO
+	 * 
 	 * @return PathIterator.
 	 */
 	PathIterator getPathIterator(AffineTransform at);
 
-    public byte[] toWKB() throws IOException;
-    /**
-	 * It returns the handlers of the geomety,
-	 * these they can be of two types is straightening and of seleccion.
-	 *
-	 * @param type Type of handlers
-	 *
+	public byte[] toWKB() throws IOException;
+
+	/**
+	 * It returns the handlers of the geomety, these they can be of two types is
+	 * straightening and of seleccion.
+	 * 
+	 * @param type
+	 *            Type of handlers
+	 * 
 	 * @return Handlers.
 	 */
 	public Handler[] getHandlers(int type);
@@ -217,13 +237,15 @@ public interface IGeometry extends Shape, Serializable {
 	PathIterator getPathIterator(AffineTransform at, double flatness);
 
 	/**
-	 * Useful to have the real shape behind the scenes.
-	 * May be uses to edit it knowing it it is a Circle, Ellipse, etc
+	 * Useful to have the real shape behind the scenes. May be uses to edit it
+	 * knowing it it is a Circle, Ellipse, etc
+	 * 
 	 * @return
 	 */
 	Shape getInternalShape();
 
-	void drawInts(Graphics2D graphics2D, ViewPort viewPort, double dpi, CartographicSupport cartographicSymbol, Cancellable cancel);
+	void drawInts(Graphics2D graphics2D, ViewPort viewPort, double dpi,
+			CartographicSupport cartographicSymbol, Cancellable cancel);
 
-	//boolean intersects(IGeometry geom);
+	// boolean intersects(IGeometry geom);
 }

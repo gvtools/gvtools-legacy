@@ -77,110 +77,106 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 
-
 /**
- * This rule checks that a geometry (line or polygon)
- * dont have consecutive repeated points)
+ * This rule checks that a geometry (line or polygon) dont have consecutive
+ * repeated points)
  * 
  * @author azabala
- *
+ * 
  */
-public class MustNotHaveRepeatedPoints extends AbstractTopologyRule{
+public class MustNotHaveRepeatedPoints extends AbstractTopologyRule {
 
-	//TODO Test that internazionalization are running well
-	static final String RULE_NAME = Messages.getText("must_not_have_repeated_points");
-	
+	// TODO Test that internazionalization are running well
+	static final String RULE_NAME = Messages
+			.getText("must_not_have_repeated_points");
+
 	/**
 	 * Symbol for topology errors caused by a violation of this rule.
 	 */
 	private MultiShapeSymbol errorSymbol = DEFAULT_ERROR_SYMBOL;
-	
-	
-	private static List<ITopologyErrorFix> automaticErrorFixes =
-		new ArrayList<ITopologyErrorFix>();
-	static{
+
+	private static List<ITopologyErrorFix> automaticErrorFixes = new ArrayList<ITopologyErrorFix>();
+	static {
 		automaticErrorFixes.add(new RemoveRepeatedCoordsFix());
 	}
-	
-	
+
 	private static final Color DEFAULT_ERROR_COLOR = Color.BLACK;
-	
-	
-	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = 
-		(MultiShapeSymbol) SymbologyFactory.createDefaultSymbolByShapeType(FShape.MULTI, 
-											DEFAULT_ERROR_COLOR);
-	static{
+
+	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = (MultiShapeSymbol) SymbologyFactory
+			.createDefaultSymbolByShapeType(FShape.MULTI, DEFAULT_ERROR_COLOR);
+	static {
 		DEFAULT_ERROR_SYMBOL.setDescription(RULE_NAME);
 		DEFAULT_ERROR_SYMBOL.setSize(2);
 	}
 
-	
 	/**
 	 * tests if a geometry has repeated points
 	 */
 	RepeatedPointTester tester = new RepeatedPointTester();
-	
+
 	/**
 	 * Default constructor
-	 *
+	 * 
 	 */
-	public MustNotHaveRepeatedPoints(Topology topology, FLyrVect originLyr){
+	public MustNotHaveRepeatedPoints(Topology topology, FLyrVect originLyr) {
 		super(topology, originLyr);
 	}
-	
-	public MustNotHaveRepeatedPoints(FLyrVect originLyr){
+
+	public MustNotHaveRepeatedPoints(FLyrVect originLyr) {
 		super(originLyr);
 	}
-	
-	public MustNotHaveRepeatedPoints(){}
-	
+
+	public MustNotHaveRepeatedPoints() {
+	}
+
 	public String getName() {
 		return RULE_NAME;
 	}
 
-	
 	public void checkPreconditions() throws TopologyRuleDefinitionException {
-		//This rule doesnt apply to Point vectorial layers.
+		// This rule doesnt apply to Point vectorial layers.
 		try {
 			int shapeType = this.originLyr.getShapeType();
-			if(shapeType == FShape.POINT)
-				throw new TopologyRuleDefinitionException("La regla MustNotHaveRepeatedPoints no aplica a capas de puntos");
+			if (shapeType == FShape.POINT)
+				throw new TopologyRuleDefinitionException(
+						"La regla MustNotHaveRepeatedPoints no aplica a capas de puntos");
 		} catch (ReadDriverException e) {
 			e.printStackTrace();
-			throw new TopologyRuleDefinitionException("Error leyendo el tipo de geometria del driver",e);
-		}	
+			throw new TopologyRuleDefinitionException(
+					"Error leyendo el tipo de geometria del driver", e);
+		}
 	}
 
 	/**
 	 * Validates this rule with a feature of the origin layer
-	 * @param feature feature of the origin layer this rule is checking
+	 * 
+	 * @param feature
+	 *            feature of the origin layer this rule is checking
 	 */
 	public void validateFeature(IFeature feature) {
 		IGeometry geometry = feature.getGeometry();
 		Geometry jtsGeometry = NewFConverter.toJtsGeometry(geometry);
-		if(tester.hasRepeatedPoint(jtsGeometry)){
-			Collection<Coordinate> repeatedCoords = tester.getRepeatedCoordinates();
-		    int numRepeatedPoints = repeatedCoords.size();
-		    double[] x = new double[numRepeatedPoints];
-		    double[] y = new double[numRepeatedPoints];
-		    Iterator<Coordinate> coordsIt = repeatedCoords.iterator();
-		    int count = 0;
-		    while(coordsIt.hasNext()){
-		    	Coordinate coord = (Coordinate) coordsIt.next();
-		    	x[count] = coord.x;
-		    	y[count] = coord.y;
-		    	count++;
-		    }
-		    
-		    FMultiPoint2D multiPoint = new FMultiPoint2D(x, y);
-		    TopologyError topologyError = 
-					new TopologyError(multiPoint, 
-										this, 
-									 feature,
-									topology);
+		if (tester.hasRepeatedPoint(jtsGeometry)) {
+			Collection<Coordinate> repeatedCoords = tester
+					.getRepeatedCoordinates();
+			int numRepeatedPoints = repeatedCoords.size();
+			double[] x = new double[numRepeatedPoints];
+			double[] y = new double[numRepeatedPoints];
+			Iterator<Coordinate> coordsIt = repeatedCoords.iterator();
+			int count = 0;
+			while (coordsIt.hasNext()) {
+				Coordinate coord = (Coordinate) coordsIt.next();
+				x[count] = coord.x;
+				y[count] = coord.y;
+				count++;
+			}
+
+			FMultiPoint2D multiPoint = new FMultiPoint2D(x, y);
+			TopologyError topologyError = new TopologyError(multiPoint, this,
+					feature, topology);
 			topologyError.setID(errorContainer.getErrorFid());
 			addTopologyError(topologyError);
-		}//if
+		}// if
 		tester.clear();
 	}
 
@@ -191,8 +187,8 @@ public class MustNotHaveRepeatedPoints extends AbstractTopologyRule{
 			e.printStackTrace();
 			return false;
 		}
-	} 
-	
+	}
+
 	public List<ITopologyErrorFix> getAutomaticErrorFixes() {
 		return automaticErrorFixes;
 	}
@@ -204,13 +200,12 @@ public class MustNotHaveRepeatedPoints extends AbstractTopologyRule{
 	public MultiShapeSymbol getErrorSymbol() {
 		return errorSymbol;
 	}
-	
+
 	public void setErrorSymbol(MultiShapeSymbol errorSymbol) {
 		this.errorSymbol = errorSymbol;
 	}
-	
-	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError){
+
+	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError) {
 		return automaticErrorFixes.get(0);
 	}
 }
- 

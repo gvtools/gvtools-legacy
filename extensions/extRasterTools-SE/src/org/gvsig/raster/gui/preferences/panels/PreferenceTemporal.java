@@ -37,6 +37,7 @@ import org.gvsig.raster.RasterLibrary;
 import org.gvsig.raster.util.BasePanel;
 
 import com.iver.andami.PluginServices;
+
 /**
  * PreferenceTemporal es una clase para la configuracion de los directorios
  * temporales de raster en gvSIG.
@@ -45,21 +46,22 @@ import com.iver.andami.PluginServices;
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class PreferenceTemporal extends BasePanel implements ActionListener {
-	private static final long serialVersionUID   = 1L;
-	private JLabel            labelTemporales    = null;
-	private JButton           buttonOpen         = null;
-	private JTextField        textFieldDirectory = null;
+	private static final long serialVersionUID = 1L;
+	private JLabel labelTemporales = null;
+	private JButton buttonOpen = null;
+	private JTextField textFieldDirectory = null;
 
 	/**
-	 *Inicializa componentes gráficos y traduce
+	 * Inicializa componentes gráficos y traduce
 	 */
 	public PreferenceTemporal() {
 		init();
 		translate();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#translate()
 	 */
 	protected void translate() {
@@ -70,6 +72,7 @@ public class PreferenceTemporal extends BasePanel implements ActionListener {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#init()
 	 */
 	protected void init() {
@@ -111,7 +114,8 @@ public class PreferenceTemporal extends BasePanel implements ActionListener {
 		if (textFieldDirectory == null) {
 			textFieldDirectory = new JTextField();
 			textFieldDirectory.setEditable(false);
-			textFieldDirectory.setPreferredSize(new Dimension(0, textFieldDirectory.getPreferredSize().height));
+			textFieldDirectory.setPreferredSize(new Dimension(0,
+					textFieldDirectory.getPreferredSize().height));
 		}
 		return textFieldDirectory;
 	}
@@ -120,7 +124,9 @@ public class PreferenceTemporal extends BasePanel implements ActionListener {
 	 * Carga los valores por defecto del componente
 	 */
 	public void initializeDefaults() {
-		File file = new File((String) Configuration.getDefaultValue("path_temp_cache_directory"));
+		File file = new File(
+				(String) Configuration
+						.getDefaultValue("path_temp_cache_directory"));
 		if (!file.exists())
 			file.mkdir();
 		getTextFieldDirectory().setText(file.getAbsolutePath());
@@ -130,7 +136,9 @@ public class PreferenceTemporal extends BasePanel implements ActionListener {
 	 * Carga los valores establecidos por el usuario en el componente
 	 */
 	public void initializeValues() {
-		File file = new File(Configuration.getValue("path_temp_cache_directory", RasterLibrary.tempCacheDirectoryPath));
+		File file = new File(Configuration.getValue(
+				"path_temp_cache_directory",
+				RasterLibrary.tempCacheDirectoryPath));
 		if (!file.exists())
 			file.mkdir();
 		getTextFieldDirectory().setText(file.getAbsolutePath());
@@ -140,21 +148,28 @@ public class PreferenceTemporal extends BasePanel implements ActionListener {
 	 * Guarda los valores establecidos por el usuario
 	 */
 	public void storeValues() {
-		Configuration.setValue("path_temp_cache_directory", getTextFieldDirectory().getText());
+		Configuration.setValue("path_temp_cache_directory",
+				getTextFieldDirectory().getText());
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
-		JFileChooser chooser = new JFileChooser(this.getClass().getName(), new File(getTextFieldDirectory().getText()));
+		JFileChooser chooser = new JFileChooser(this.getClass().getName(),
+				new File(getTextFieldDirectory().getText()));
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		chooser.setDialogTitle(PluginServices.getText(this, "seleccionar_directorio"));
+		chooser.setDialogTitle(PluginServices.getText(this,
+				"seleccionar_directorio"));
 
 		if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
-			getTextFieldDirectory().setText(chooser.getSelectedFile().getAbsolutePath());
+			getTextFieldDirectory().setText(
+					chooser.getSelectedFile().getAbsolutePath());
 
-		JFileChooser.setLastPath(this.getClass().getName(), new File(getTextFieldDirectory().getText()));
+		JFileChooser.setLastPath(this.getClass().getName(), new File(
+				getTextFieldDirectory().getText()));
 	}
 }

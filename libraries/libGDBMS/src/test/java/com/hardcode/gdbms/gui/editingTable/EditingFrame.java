@@ -12,6 +12,7 @@ import com.hardcode.gdbms.driver.exceptions.WriteDriverException;
 import com.hardcode.gdbms.engine.data.DataSource;
 import com.hardcode.gdbms.engine.data.DataSourceFactory;
 import com.hardcode.gdbms.engine.data.SetUp;
+
 /**
  * @author Fernando González Cortés
  */
@@ -22,6 +23,7 @@ public class EditingFrame extends JFrame {
 	private JButton jButton = null;
 	private JPanel jPanel = null;
 	private JButton jButton1 = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -29,23 +31,25 @@ public class EditingFrame extends JFrame {
 		super();
 		initialize();
 	}
+
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(1000,200);
+		this.setSize(1000, 200);
 		this.setContentPane(getJContentPane());
 		this.setTitle("JFrame");
 	}
+
 	/**
 	 * This method initializes jContentPane
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private javax.swing.JPanel getJContentPane() {
-		if(jContentPane == null) {
+		if (jContentPane == null) {
 			jContentPane = new javax.swing.JPanel();
 			jContentPane.setLayout(new java.awt.BorderLayout());
 			jContentPane.add(getEditingTable(), java.awt.BorderLayout.CENTER);
@@ -53,9 +57,10 @@ public class EditingFrame extends JFrame {
 		}
 		return jContentPane;
 	}
+
 	/**
 	 * This method initializes editingTable
-	 *
+	 * 
 	 * @return com.hardcode.gdbms.gui.editingTable.EditingTable
 	 */
 	private EditingTable getEditingTable() {
@@ -64,9 +69,10 @@ public class EditingFrame extends JFrame {
 		}
 		return editingTable;
 	}
+
 	/**
 	 * This method initializes jButton
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getJButton() {
@@ -75,9 +81,10 @@ public class EditingFrame extends JFrame {
 		}
 		return jButton;
 	}
+
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel() {
@@ -88,9 +95,10 @@ public class EditingFrame extends JFrame {
 		}
 		return jPanel;
 	}
+
 	/**
 	 * This method initializes jButton1
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getJButton1() {
@@ -101,25 +109,26 @@ public class EditingFrame extends JFrame {
 	}
 
 	public static void main(String[] args) throws Exception {
-	    DataSourceFactory dsf = SetUp.setUp();
-	    final DataSource ds = dsf.createRandomDataSource("persona", DataSourceFactory.MANUAL_OPENING);
-	    ds.start();
-        final EditingFrame ef = new EditingFrame();
-        ef.getEditingTable().setDataSource(ds);
-        ef.getEditingTable().startEditing();
-        ef.addWindowListener(new WindowAdapter () {
-            public void windowClosing(WindowEvent e) {
-                try {
-                    ef.getEditingTable().commit();
-                    ds.stop();
-                    System.exit(0);
-                } catch (ReadDriverException e1) {
-                    throw new RuntimeException(e1);
-                } catch (WriteDriverException e1) {
-                	 throw new RuntimeException(e1);
+		DataSourceFactory dsf = SetUp.setUp();
+		final DataSource ds = dsf.createRandomDataSource("persona",
+				DataSourceFactory.MANUAL_OPENING);
+		ds.start();
+		final EditingFrame ef = new EditingFrame();
+		ef.getEditingTable().setDataSource(ds);
+		ef.getEditingTable().startEditing();
+		ef.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				try {
+					ef.getEditingTable().commit();
+					ds.stop();
+					System.exit(0);
+				} catch (ReadDriverException e1) {
+					throw new RuntimeException(e1);
+				} catch (WriteDriverException e1) {
+					throw new RuntimeException(e1);
 				}
-            }
-        });
-        ef.show();
-    }
+			}
+		});
+		ef.show();
+	}
 }

@@ -52,19 +52,20 @@ import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.tools.Events.MeasureEvent;
 import com.iver.cit.gvsig.fmap.tools.Listeners.PolylineListener;
 
-
 /**
- * <p>Listener for calculating the length of the segments of a polyline, defined in the associated {@link MapControl MapControl}
- *  object.</p>
- *
+ * <p>
+ * Listener for calculating the length of the segments of a polyline, defined in
+ * the associated {@link MapControl MapControl} object.
+ * </p>
+ * 
  * @author Vicente Caballero Navarro
  */
 public class MeasureListenerImpl implements PolylineListener {
 	/**
 	 * The image to display when the cursor is active.
 	 */
-	private final Image iruler = new ImageIcon(MapControl.class.getResource(
-				"images/RulerCursor.gif")).getImage();
+	private final Image iruler = new ImageIcon(
+			MapControl.class.getResource("images/RulerCursor.gif")).getImage();
 
 	/**
 	 * The cursor used to work with this tool listener.
@@ -80,9 +81,12 @@ public class MeasureListenerImpl implements PolylineListener {
 	protected MapControl mapCtrl;
 
 	/**
-	 * <p>Creates a new listener for calculating the length of a polyline.</p>
-	 *
-	 * @param mc the <code>MapControl</code> where is calculated the length
+	 * <p>
+	 * Creates a new listener for calculating the length of a polyline.
+	 * </p>
+	 * 
+	 * @param mc
+	 *            the <code>MapControl</code> where is calculated the length
 	 */
 	public MeasureListenerImpl(MapControl mc) {
 		this.mapCtrl = mc;
@@ -90,7 +94,10 @@ public class MeasureListenerImpl implements PolylineListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.PolylineListener#points(com.iver.cit.gvsig.fmap.tools.Events.MeasureEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.PolylineListener#points(com.iver
+	 * .cit.gvsig.fmap.tools.Events.MeasureEvent)
 	 */
 	public void points(MeasureEvent event) {
 		double dist = 0;
@@ -106,17 +113,18 @@ public class MeasureListenerImpl implements PolylineListener {
 			Point p2 = new Point(event.getXs()[i + 1].intValue(),
 					event.getXs()[i + 1].intValue());
 
-			///dist = vp.toMapDistance((int) p.distance(p2));
+			// /dist = vp.toMapDistance((int) p.distance(p2));
 			dist = vp.distanceWorld(p, p2);
 			distAll += dist;
 		}
 
-		System.out.println("Distancia = " + dist + " Distancia Total = " +
-			(distAll));
+		System.out.println("Distancia = " + dist + " Distancia Total = "
+				+ (distAll));
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#getCursor()
 	 */
 	public Cursor getCursor() {
@@ -125,13 +133,17 @@ public class MeasureListenerImpl implements PolylineListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.PolylineListener#pointFixed(com.iver.cit.gvsig.fmap.tools.Events.MeasureEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.PolylineListener#pointFixed(com
+	 * .iver.cit.gvsig.fmap.tools.Events.MeasureEvent)
 	 */
 	public void pointFixed(MeasureEvent event) {
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#cancelDrawing()
 	 */
 	public boolean cancelDrawing() {
@@ -140,7 +152,10 @@ public class MeasureListenerImpl implements PolylineListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.PolylineListener#polylineFinished(com.iver.cit.gvsig.fmap.tools.Events.MeasureEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.PolylineListener#polylineFinished
+	 * (com.iver.cit.gvsig.fmap.tools.Events.MeasureEvent)
 	 */
 	public void polylineFinished(MeasureEvent event) {
 	}

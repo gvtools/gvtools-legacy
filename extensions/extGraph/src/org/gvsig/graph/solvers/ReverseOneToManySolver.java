@@ -42,10 +42,7 @@ package org.gvsig.graph.solvers;
 
 import java.util.ArrayList;
 import java.util.PriorityQueue;
-import java.util.Stack;
 
-import org.gvsig.exceptions.BaseException;
-import org.gvsig.graph.core.AbstractNetSolver;
 import org.gvsig.graph.core.GlobalCounter;
 import org.gvsig.graph.core.GraphException;
 import org.gvsig.graph.core.GvConnector;
@@ -53,67 +50,48 @@ import org.gvsig.graph.core.GvEdge;
 import org.gvsig.graph.core.GvFlag;
 import org.gvsig.graph.core.GvNode;
 import org.gvsig.graph.core.IGraph;
-import org.gvsig.graph.core.InfoShp;
-import org.gvsig.graph.core.NetworkUtils;
-import org.gvsig.graph.solvers.pqueue.FibHeap;
-
-import com.iver.cit.gvsig.fmap.core.IFeature;
-import com.iver.cit.gvsig.fmap.core.IGeometry;
-import com.iver.cit.gvsig.fmap.core.v02.FConverter;
-import com.iver.cit.gvsig.fmap.layers.VectorialAdapter;
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.MultiLineString;
-
 
 /**
  * @author Francisco José Peñarrubia (fjp@scolab.es)
- *
- * We iterate by the network following in edges instead of out edges.
- * Useful to find points connected to the network "aguas arriba".
- * For example, to find switches on network that we must close to avoid leaks.
+ * 
+ *         We iterate by the network following in edges instead of out edges.
+ *         Useful to find points connected to the network "aguas arriba". For
+ *         example, to find switches on network that we must close to avoid
+ *         leaks.
  */
 public class ReverseOneToManySolver extends OneToManySolver {
 
-	
 	/**
-	 * @throws GraphException 
+	 * @throws GraphException
 	 */
 	public void calculate() throws GraphException {
-		if (idStops == null)
-		{
-			throw new RuntimeException("Please, call putDestinationsOnNetwork before calculate()");
+		if (idStops == null) {
+			throw new RuntimeException(
+					"Please, call putDestinationsOnNetwork before calculate()");
 		}
-//		destinations = net.getFlags();
+		// destinations = net.getFlags();
 		idStart = net.creaArcosVirtuales(sourceFlag);
 		reverse_dijkstra(idStart, idStops);
-		
+
 		IGraph graph = net.getGraph();
-		for (int i = 0; i < destinations.length; i++)
-		{
+		for (int i = 0; i < destinations.length; i++) {
 			GvFlag fTo = destinations[i];
 			Integer auxId = (Integer) idStops.get(i);
 			GvNode auxNode = graph.getNodeByID(auxId.intValue());
-//			System.out.println("Asigno bestCost = " + auxNode.getBestCost());
-			if (auxNode.getBestCost() == Double.MAX_VALUE)
-			{
+			// System.out.println("Asigno bestCost = " + auxNode.getBestCost());
+			if (auxNode.getBestCost() == Double.MAX_VALUE) {
 				fTo.setCost(-1);
 				fTo.setAccumulatedLength(-1);
-			}
-			else
-			{
+			} else {
 				fTo.setCost(auxNode.getBestCost());
-				fTo.setAccumulatedLength(auxNode.getAccumulatedLength());				
+				fTo.setAccumulatedLength(auxNode.getAccumulatedLength());
 			}
 		}
-		
+
 		// TODO: No podemos reconstruir el tramo porque perdemos la conectividad
 		// con el resto de destinos.
-//		net.reconstruyeTramo(sourceFlag.getIdArc());
+		// net.reconstruyeTramo(sourceFlag.getIdArc());
 	}
-
 
 	private void reverse_dijkstra(int idStart, ArrayList stops) {
 		int nodeNum;
@@ -128,15 +106,14 @@ public class ReverseOneToManySolver extends OneToManySolver {
 		boolean bGiroProhibido;
 		// List clonedStops = Collections.synchronizedList(stops);
 		ArrayList clonedStops = new ArrayList();
-		for (int i=0; i < stops.size(); i++)
-		{
+		for (int i = 0; i < stops.size(); i++) {
 			Integer idStop = (Integer) stops.get(i);
 			clonedStops.add(new StopAux(idStop));
 		}
 
-//		GvTurn elGiro;
+		// GvTurn elGiro;
 		// char Mensaje[200];
-		
+
 		IGraph graph = net.getGraph();
 
 		// NUEVO: 27-6-2003
@@ -146,8 +123,7 @@ public class ReverseOneToManySolver extends OneToManySolver {
 		// Para evitar coincidencias cuando de la vuelta el contador, cada
 		// 65000 peticiones (por ejemplo), repasamos toda
 		// la red y ponemos numSolucGlobal a -1
-		if (GlobalCounter.increment())
-		{
+		if (GlobalCounter.increment()) {
 			for (nodeNum = 0; nodeNum < graph.numVertices(); nodeNum++) {
 				node = graph.getNodeByID(nodeNum);
 				node.initialize();
@@ -156,23 +132,22 @@ public class ReverseOneToManySolver extends OneToManySolver {
 
 		// Añadimos el Start Node a la lista de candidatosSTL
 		// Nodos finales
-		for (int h=0; h < clonedStops.size(); h++)
-		{
+		for (int h = 0; h < clonedStops.size(); h++) {
 			StopAux auxStop = (StopAux) clonedStops.get(h);
 			int idStop = auxStop.getIdStop().intValue();
-		
+
 			GvNode auxNode = graph.getNodeByID(idStop);
 			auxNode.initialize();
 		}
 		node = graph.getNodeByID(idStart);
 		node.initialize();
-        // Priority Queue
-        PriorityQueue<GvNode> pq = new PriorityQueue<GvNode>();
+		// Priority Queue
+		PriorityQueue<GvNode> pq = new PriorityQueue<GvNode>();
 
-        node.setCostZero();
+		node.setCostZero();
 		node.setStatus(GvNode.statNowInList);
 
-        pq.add(node);
+		pq.add(node);
 
 		bestCost = Double.MAX_VALUE;
 
@@ -185,60 +160,56 @@ public class ReverseOneToManySolver extends OneToManySolver {
 			node = pq.poll(); // get the lowest-weightSum Vertex 'u',
 
 			node.setStatus(GvNode.statWasInList);
-			
+
 			if (callMinimumCostNodeSelectedListeners(node))
 				bExit = true;
-			
+
 			// Si hemos fijado un máximo coste de exploración, lo
 			// tenemos en cuenta para salir.
-			if ((maxCost < node.getBestCost()) ||
-					maxDistance < node.getAccumulatedLength())
-			{
-				bExit=true;
+			if ((maxCost < node.getBestCost())
+					|| maxDistance < node.getAccumulatedLength()) {
+				bExit = true;
 			}
-			
+
 			// System.out.println("LINK " + link.getIdArc() + " from ");
-			// System.out.println("from " + idStart + " to " + finalNode.getIdNode() + ". node=" + node.getIdNode());
-			if (!bExploreAll)
-			{
+			// System.out.println("from " + idStart + " to " +
+			// finalNode.getIdNode() + ". node=" + node.getIdNode());
+			if (!bExploreAll) {
 				// Miramos si hemos llegado donde queríamos
 				StopAux auxStop = (StopAux) clonedStops.get(stopActual);
 				int idStop = auxStop.getIdStop().intValue();
-				
+
 				if (node.getIdNode() == idStop) {
-					// Hemos llegado a ese punto. Miramos el resto de puntos destino
+					// Hemos llegado a ese punto. Miramos el resto de puntos
+					// destino
 					// a ver si ya hemos pasado por alguno de ellos.
-					// Si con algun punto no pasamos por aquí, no habremos llegado a ese punto.
-					// No importa, puede que al resto sí, y esos nodos a los que sí hemos llegado
+					// Si con algun punto no pasamos por aquí, no habremos
+					// llegado a ese punto.
+					// No importa, puede que al resto sí, y esos nodos a los que
+					// sí hemos llegado
 					// tendrán bien rellenado el coste.
 					auxStop.setFound(true);
-					for (int i=stopActual; i < clonedStops.size(); i++)
-					{
+					for (int i = stopActual; i < clonedStops.size(); i++) {
 						auxStop = (StopAux) clonedStops.get(i);
-						if (!auxStop.isFound())
-						{
+						if (!auxStop.isFound()) {
 							Integer id = auxStop.getIdStop();
-		
+
 							GvNode auxNode = graph.getNodeByID(id.intValue());
-							if (auxNode.getStatus() == GvNode.statWasInList)
-							{
+							if (auxNode.getStatus() == GvNode.statWasInList) {
 								auxStop.setFound(true);
-							}
-							else
-							{
+							} else {
 								stopActual = i;
 								break;
 							}
 						}
-					}						
-					if (clonedStops.size() == 0)
-					{
+					}
+					if (clonedStops.size() == 0) {
 						bExit = true;
 						break; // Ya hemos llegado a todos los nodos
-					}				
+					}
 				}
 			} // if bExploreAll
-			
+
 			// sprintf(Mensaje,"Enlaces en el nodo %ld:
 			// %ld.",pNodo->idNodo,pNodo->Enlaces.GetSize());
 			// AfxMessageBox(Mensaje);
@@ -247,19 +218,21 @@ public class ReverseOneToManySolver extends OneToManySolver {
 			// acabamos de borrar
 			// HAY Arcos QUE SALEN Y Arcos QUE LLEGAN. SOLO MIRAMOS LOS QUE
 			// SALEN.
-//			for (linkNum = 0; linkNum < node.getOutputLinks().size(); linkNum++) {
-			for (int iConec=0; iConec< node.getConnectors().size();  iConec++) {
+			// for (linkNum = 0; linkNum < node.getOutputLinks().size();
+			// linkNum++) {
+			for (int iConec = 0; iConec < node.getConnectors().size(); iConec++) {
 				// Pillamos el nodo vecino
 				GvConnector c = node.getConnectors().get(iConec);
-				if (c.getEdgeIn() == null) continue;
-				
+				if (c.getEdgeIn() == null)
+					continue;
+
 				link = (GvEdge) c.getEdgeIn();
 				idSiguienteNodo = link.getIdNodeOrig();
 				// To avoid U-turn
 				if (c.getEdgeOut() != null)
 					if (c.getFrom_link_c() == c.getEdgeOut().getIdEdge())
 						continue;
-				
+
 				toNode = graph.getNodeByID(idSiguienteNodo);
 
 				// 27_5_2004
@@ -270,11 +243,10 @@ public class ReverseOneToManySolver extends OneToManySolver {
 				// Fin arco con coste negativo
 
 				// NUEVO: 26-7-2003: Comprobamos si está inicializado
-				if (toNode.getNumSoluc() != GlobalCounter.getGlobalSolutionNumber()) {
+				if (toNode.getNumSoluc() != GlobalCounter
+						.getGlobalSolutionNumber()) {
 					toNode.initialize();
-				}
-				else
-				{
+				} else {
 					// System.out.println("Nodo ya inicializado");
 				}
 
@@ -283,16 +255,25 @@ public class ReverseOneToManySolver extends OneToManySolver {
 				if (toNode.getStatus() != GvNode.statWasInList) {
 					// Miramos a ver si podemos mejorar su best_cost
 					newCost = c.getBestCostOut() + link.getWeight();
-//					newCost = node.getBestCost() + link.getWeight();
+					// newCost = node.getBestCost() + link.getWeight();
 					// Change to take care of turn costs
-					if (toNode.reverseFoundBetterPath(link, newCost)) {  // Es una mejora, así que actualizamos el vecino y
-//						// lo añadimos a los candidatosSTL
-//						toNode.setBestCost(newCost);
-//						 
-//						toNode.setFromLink(link.getIdEdge());
+					if (toNode.reverseFoundBetterPath(link, newCost)) { // Es
+																		// una
+																		// mejora,
+																		// así
+																		// que
+																		// actualizamos
+																		// el
+																		// vecino
+																		// y
+					// // lo añadimos a los candidatosSTL
+					// toNode.setBestCost(newCost);
+					//
+					// toNode.setFromLink(link.getIdEdge());
 						// Es una mejora, así que actualizamos el vecino y
 						// lo añadimos a los candidatosSTL
-						double newLength = node.getAccumulatedLength() + link.getDistance();
+						double newLength = node.getAccumulatedLength()
+								+ link.getDistance();
 						toNode.setAccumulatedLength(newLength);
 
 						if (toNode.getStatus() != GvNode.statNowInList) {
@@ -303,7 +284,7 @@ public class ReverseOneToManySolver extends OneToManySolver {
 					} // Si hay mejora
 				} // if ese nodo no ha estado en la lista de candidatosSTL
 				if (callAdjacenteEdgeVisitedListeners(node, link))
-					continue;				
+					continue;
 
 			} // for linkNum
 		} // while candidatosSTL

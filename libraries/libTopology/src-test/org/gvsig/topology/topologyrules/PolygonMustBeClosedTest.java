@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.topologyrules;
 
 import junit.framework.TestCase;
@@ -61,51 +61,49 @@ import com.vividsolutions.jts.geom.PrecisionModel;
 import com.vividsolutions.jts.io.WKTReader;
 
 public class PolygonMustBeClosedTest extends TestCase {
-	
+
 	PrecisionModel pm = new PrecisionModel(10000);
 	GeometryFactory factory = new GeometryFactory(pm);
 	WKTReader wktReader = new WKTReader(factory);
-	
-	
+
 	IGeometry polygon1;
-	
+
 	FMapGeometryMustBeClosed rule;
-	
-	public void setUp() throws Exception{
+
+	public void setUp() throws Exception {
 		super.setUp();
-		
+
 		GeneralPathX gp = new GeneralPathX();
-		gp.moveTo(320d,240d);
+		gp.moveTo(320d, 240d);
 		gp.lineTo(300d, 160d);
-		gp.lineTo(400d,80d);
-		gp.lineTo(540d,40d); 
-		gp.lineTo(660d,100d); 
-		gp.lineTo(660d,160d);
-		gp.lineTo(680d,220d);
-		gp.lineTo(660d,280d);
-		gp.lineTo(580,320d);
-		gp.lineTo(500d,320d);
-		gp.lineTo(440d,340d);
-		gp.lineTo(340d,340d);
-		gp.lineTo(280d,280d);
-		
+		gp.lineTo(400d, 80d);
+		gp.lineTo(540d, 40d);
+		gp.lineTo(660d, 100d);
+		gp.lineTo(660d, 160d);
+		gp.lineTo(680d, 220d);
+		gp.lineTo(660d, 280d);
+		gp.lineTo(580, 320d);
+		gp.lineTo(500d, 320d);
+		gp.lineTo(440d, 340d);
+		gp.lineTo(340d, 340d);
+		gp.lineTo(280d, 280d);
+
 		polygon1 = ShapeFactory.createPolygon2D(gp);
-		
-//		rule = new PolygonMustBeClosed(null, null, 0d);
-		
+
+		// rule = new PolygonMustBeClosed(null, null, 0d);
+
 		rule = new FMapGeometryMustBeClosed(null, null, 0d);
 		TestTopologyErrorContainer errorContainer = new TestTopologyErrorContainer();
 		rule.setTopologyErrorContainer(errorContainer);
-		
-		
+
 	}
-	
-	public void tearDown() throws Exception{
+
+	public void tearDown() throws Exception {
 		super.tearDown();
 	}
-	
-	public void test1(){
-		
+
+	public void test1() {
+
 		rule.validateFeature(new DefaultFeature(polygon1, null));
 	}
 }

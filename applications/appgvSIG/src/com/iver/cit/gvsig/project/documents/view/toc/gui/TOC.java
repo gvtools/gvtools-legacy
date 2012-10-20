@@ -80,7 +80,6 @@ import javax.swing.tree.TreeSelectionModel;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
-import com.iver.cit.gvsig.ProjectExtension;
 import com.iver.cit.gvsig.fmap.AtomicEvent;
 import com.iver.cit.gvsig.fmap.AtomicEventListener;
 import com.iver.cit.gvsig.fmap.MapContext;
@@ -102,7 +101,6 @@ import com.iver.cit.gvsig.fmap.rendering.ILegend;
 import com.iver.cit.gvsig.fmap.rendering.IVectorLegend;
 import com.iver.cit.gvsig.fmap.rendering.LegendListener;
 import com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend;
-import com.iver.cit.gvsig.project.Project;
 import com.iver.cit.gvsig.project.documents.IContextMenuAction;
 import com.iver.cit.gvsig.project.documents.view.toc.DnDJTree;
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
@@ -110,906 +108,1020 @@ import com.iver.cit.gvsig.project.documents.view.toc.ITocOrderListener;
 import com.iver.cit.gvsig.project.documents.view.toc.TocItemBranch;
 import com.iver.cit.gvsig.project.documents.view.toc.TocItemLeaf;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author fjp To change the template for this generated type comment go to
- *         Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and
- *         Comments
+ *         Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 public class TOC extends JComponent implements ITocOrderListener,
-    LegendListener, LayerCollectionListener, TreeExpansionListener,
-    ComponentListener {
-    private MapContext mapContext;
-    private DnDJTree m_Tree;
-    private DefaultTreeModel m_TreeModel;
-    private DefaultMutableTreeNode m_Root;
-    private TOCRenderer m_TocRenderer;
-    private JScrollPane m_Scroller;
+		LegendListener, LayerCollectionListener, TreeExpansionListener,
+		ComponentListener {
+	private MapContext mapContext;
+	private DnDJTree m_Tree;
+	private DefaultTreeModel m_TreeModel;
+	private DefaultMutableTreeNode m_Root;
+	private TOCRenderer m_TocRenderer;
+	private JScrollPane m_Scroller;
 
-    //private ArrayList m_Listeners;
-    private HashMap m_ItemsExpanded = new HashMap();
-    private NodeSelectionListener nodeSelectionListener = null;
+	// private ArrayList m_Listeners;
+	private HashMap m_ItemsExpanded = new HashMap();
+	private NodeSelectionListener nodeSelectionListener = null;
 
-    /**
-     * Crea un nuevo TOC.
-     */
-    public TOC() {
-    	this.setName("TOC");
-        this.setLayout(new BorderLayout());
-        this.setMinimumSize(new Dimension(100, 80));
-        this.setPreferredSize(new Dimension(100, 80));
+	/**
+	 * Crea un nuevo TOC.
+	 */
+	public TOC() {
+		this.setName("TOC");
+		this.setLayout(new BorderLayout());
+		this.setMinimumSize(new Dimension(100, 80));
+		this.setPreferredSize(new Dimension(100, 80));
 
-        //Construct the tree.
-        m_Root = new DefaultMutableTreeNode(java.lang.Object.class);
-        m_TreeModel = new DefaultTreeModel(m_Root);
-        m_Tree = new DnDJTree(m_TreeModel);
+		// Construct the tree.
+		m_Root = new DefaultMutableTreeNode(java.lang.Object.class);
+		m_TreeModel = new DefaultTreeModel(m_Root);
+		m_Tree = new DnDJTree(m_TreeModel);
 
-        m_TocRenderer = new TOCRenderer();
-        m_Tree.setCellRenderer(m_TocRenderer);
+		m_TocRenderer = new TOCRenderer();
+		m_Tree.setCellRenderer(m_TocRenderer);
 
-        m_Tree.setRootVisible(false);
+		m_Tree.setRootVisible(false);
 
-        // m_Tree.setExpandsSelectedPaths(true);
-        // m_Tree.setAutoscrolls(true);
-        m_Tree.setShowsRootHandles(true);
+		// m_Tree.setExpandsSelectedPaths(true);
+		// m_Tree.setAutoscrolls(true);
+		m_Tree.setShowsRootHandles(true);
 
-        //Posibilidad de seleccionar de forma aleatoria nodos de la leyenda.
-        m_Tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-        nodeSelectionListener=new NodeSelectionListener(m_Tree);
-        m_Tree.addMouseListener(nodeSelectionListener);
-        m_Tree.setBackground(UIManager.getColor("Button.background"));
-        m_Tree.setBorder(BorderFactory.createEtchedBorder());
+		// Posibilidad de seleccionar de forma aleatoria nodos de la leyenda.
+		m_Tree.getSelectionModel().setSelectionMode(
+				TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+		nodeSelectionListener = new NodeSelectionListener(m_Tree);
+		m_Tree.addMouseListener(nodeSelectionListener);
+		m_Tree.setBackground(UIManager.getColor("Button.background"));
+		m_Tree.setBorder(BorderFactory.createEtchedBorder());
 
-        this.addComponentListener(this);
+		this.addComponentListener(this);
 
-        m_Tree.addTreeExpansionListener(this);
+		m_Tree.addTreeExpansionListener(this);
 
-        m_Tree.addOrderListener(this);
+		m_Tree.addOrderListener(this);
 
-        m_Tree.setRowHeight(0); // Para que lo determine el renderer
+		m_Tree.setRowHeight(0); // Para que lo determine el renderer
 
-        m_Scroller = new JScrollPane(m_Tree);
-        m_Scroller.setBorder(BorderFactory.createEmptyBorder());
+		m_Scroller = new JScrollPane(m_Tree);
+		m_Scroller.setBorder(BorderFactory.createEmptyBorder());
 
-        // scrollPane.setPreferredSize(new Dimension(80,80));
-        //Add everything to this panel.
-        /* GridBagLayout gridbag = new GridBagLayout();
-           GridBagConstraints c = new GridBagConstraints();
-           setLayout(gridbag);
-           c.fill = GridBagConstraints.BOTH;
-           c.weightx = 1.0;
-           gridbag.setConstraints(check,c); */
-        add(m_Scroller); //, BorderLayout.WEST);
+		// scrollPane.setPreferredSize(new Dimension(80,80));
+		// Add everything to this panel.
+		/*
+		 * GridBagLayout gridbag = new GridBagLayout(); GridBagConstraints c =
+		 * new GridBagConstraints(); setLayout(gridbag); c.fill =
+		 * GridBagConstraints.BOTH; c.weightx = 1.0;
+		 * gridbag.setConstraints(check,c);
+		 */
+		add(m_Scroller); // , BorderLayout.WEST);
 
-        //		refresh();
-    }
+		// refresh();
+	}
 
-    /**
-     * Elimina los listeners que actuan sobre el TOC, lo único que deja hacer
-     * es desplegar la leyenda de las capas.
-     */
-    public void removeListeners() {
-        m_Tree.removeMouseListener(nodeSelectionListener);
-        m_Tree.invalidateListeners();
-    }
+	/**
+	 * Elimina los listeners que actuan sobre el TOC, lo único que deja hacer es
+	 * desplegar la leyenda de las capas.
+	 */
+	public void removeListeners() {
+		m_Tree.removeMouseListener(nodeSelectionListener);
+		m_Tree.invalidateListeners();
+	}
 
-    /**
-     * Inserta el FMap.
-     *
-     * @param mc FMap.
-     */
-    public void setMapContext(MapContext mc) {
-        mapContext = mc;
-        mapContext.addAtomicEventListener(new AtomicEventListener() {
-                /**
-                 * @see com.iver.cit.gvsig.fmap.AtomicEventListener#atomicEvent(com.iver.cit.gvsig.fmap.AtomicEvent)
-                 */
-                public void atomicEvent(AtomicEvent e) {
-                    if ((e.getLayerCollectionEvents().length > 0) ||
-                            (e.getLegendEvents().length > 0)) {
-                        SwingUtilities.invokeLater(new Runnable() {
-                                public void run() {
-                                    refresh();
-                                }
-                            });
-                    }
+	/**
+	 * Inserta el FMap.
+	 * 
+	 * @param mc
+	 *            FMap.
+	 */
+	public void setMapContext(MapContext mc) {
+		mapContext = mc;
+		mapContext.addAtomicEventListener(new AtomicEventListener() {
+			/**
+			 * @see com.iver.cit.gvsig.fmap.AtomicEventListener#atomicEvent(com.iver.cit.gvsig.fmap.AtomicEvent)
+			 */
+			public void atomicEvent(AtomicEvent e) {
+				if ((e.getLayerCollectionEvents().length > 0)
+						|| (e.getLegendEvents().length > 0)) {
+					SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							refresh();
+						}
+					});
+				}
 
-                    if (e.getLayerEvents().length > 0) {
-                        repaint();
-                    }
+				if (e.getLayerEvents().length > 0) {
+					repaint();
+				}
 
-                    if (e.getExtentEvents().length > 0) {
-                        repaint();
-                    }
-                }
-            });
+				if (e.getExtentEvents().length > 0) {
+					repaint();
+				}
+			}
+		});
 
-        SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    refresh();
-                }
-            });
-    }
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				refresh();
+			}
+		});
+	}
 
-    /**
-     * DOCUMENT ME!
-     */
-     private void setExpandedNodes(DefaultMutableTreeNode node) {
-        //int i = 0;
-        // Las claves sobrantes de m_ItemsExpanded (provocadas
-        // por layerRemove, se quitan en el evento layerRemoved
-        // de este TOC
-        DefaultMutableTreeNode n;
-       Enumeration enumeration = node.children();
+	/**
+	 * DOCUMENT ME!
+	 */
+	private void setExpandedNodes(DefaultMutableTreeNode node) {
+		// int i = 0;
+		// Las claves sobrantes de m_ItemsExpanded (provocadas
+		// por layerRemove, se quitan en el evento layerRemoved
+		// de este TOC
+		DefaultMutableTreeNode n;
+		Enumeration enumeration = node.children();
 
-        while (enumeration.hasMoreElements()) {
-            n = (DefaultMutableTreeNode) enumeration.nextElement();
-			if (n.getChildCount()>0){
-            	setExpandedNodes(n);
-            }
-            TreePath path = new TreePath(m_TreeModel.getPathToRoot(n));
-            ITocItem item = (ITocItem) n.getUserObject();
-            Boolean b = (Boolean) m_ItemsExpanded.get(item.getLabel());
+		while (enumeration.hasMoreElements()) {
+			n = (DefaultMutableTreeNode) enumeration.nextElement();
+			if (n.getChildCount() > 0) {
+				setExpandedNodes(n);
+			}
+			TreePath path = new TreePath(m_TreeModel.getPathToRoot(n));
+			ITocItem item = (ITocItem) n.getUserObject();
+			Boolean b = (Boolean) m_ItemsExpanded.get(item.getLabel());
 
-            if (b == null) // No estaba en el hash todavía: valor por defecto
-             {
-                // System.out.println("Primera expansión de " + item.getLabel());
-                m_Tree.expandPath(path);
+			if (b == null) // No estaba en el hash todavía: valor por defecto
+			{
+				// System.out.println("Primera expansión de " +
+				// item.getLabel());
+				m_Tree.expandPath(path);
 
-                return;
-            }
+				return;
+			}
 
-            if (b.booleanValue()) {
-                // System.out.println("Expansión de " + item.getLabel());
-                m_Tree.expandPath(path);
-            } else {
-                // System.out.println("Colapso de " + item.getLabel());
-                m_Tree.collapsePath(path);
-            }
-        }
-    }
+			if (b.booleanValue()) {
+				// System.out.println("Expansión de " + item.getLabel());
+				m_Tree.expandPath(path);
+			} else {
+				// System.out.println("Colapso de " + item.getLabel());
+				m_Tree.collapsePath(path);
+			}
+		}
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.opensig.gui.IToc#refresh()
-     */
-    public void refresh() {
-        LayerCollection theLayers = mapContext.getLayers();
-        m_Root.removeAllChildren();
-        m_Root.setAllowsChildren(true);
-        //System.out.println("Refresh del toc");
-        doRefresh(theLayers, m_Root);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.opensig.gui.IToc#refresh()
+	 */
+	public void refresh() {
+		LayerCollection theLayers = mapContext.getLayers();
+		m_Root.removeAllChildren();
+		m_Root.setAllowsChildren(true);
+		// System.out.println("Refresh del toc");
+		doRefresh(theLayers, m_Root);
 
-        m_TreeModel.reload();
+		m_TreeModel.reload();
 
-       setExpandedNodes(m_Root);
-    }
+		setExpandedNodes(m_Root);
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param theLayers DOCUMENT ME!
-     * @param parentNode DOCUMENT ME!
-     */
-    private void doRefresh(LayerCollection theLayers,
-        DefaultMutableTreeNode parentNode) {
-        Dimension sizeLeaf = new Dimension(m_Tree.getWidth(), 15);
-        Dimension sizeBranch = new Dimension(m_Tree.getWidth(), 25);
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param theLayers
+	 *            DOCUMENT ME!
+	 * @param parentNode
+	 *            DOCUMENT ME!
+	 */
+	private void doRefresh(LayerCollection theLayers,
+			DefaultMutableTreeNode parentNode) {
+		Dimension sizeLeaf = new Dimension(m_Tree.getWidth(), 15);
+		Dimension sizeBranch = new Dimension(m_Tree.getWidth(), 25);
 
-        for (int i = theLayers.getLayersCount() - 1; i >= 0; i--) {
-            FLayer lyr = theLayers.getLayer(i);
-            if (!lyr.isInTOC())
-            	continue;
-            TocItemBranch elTema = new TocItemBranch(lyr);
-            elTema.setSize(sizeBranch);
+		for (int i = theLayers.getLayersCount() - 1; i >= 0; i--) {
+			FLayer lyr = theLayers.getLayer(i);
+			if (!lyr.isInTOC())
+				continue;
+			TocItemBranch elTema = new TocItemBranch(lyr);
+			elTema.setSize(sizeBranch);
 
-            DefaultMutableTreeNode nodeLayer = new DefaultMutableTreeNode(elTema);
+			DefaultMutableTreeNode nodeLayer = new DefaultMutableTreeNode(
+					elTema);
 
-            m_TreeModel.insertNodeInto(nodeLayer, parentNode,
-                parentNode.getChildCount());
+			m_TreeModel.insertNodeInto(nodeLayer, parentNode,
+					parentNode.getChildCount());
 
-            //TreePath path = new TreePath(m_TreeModel.getPathToRoot(nodeLayer));
-            // m_Tree.makeVisible(path);
-            if (lyr instanceof LayerCollection) {
-                LayerCollection group = (LayerCollection) lyr;
-                doRefresh(group, nodeLayer);
-            } else {
-                if (lyr instanceof Classifiable && !(lyr instanceof FLyrAnnotation)) {
+			// TreePath path = new
+			// TreePath(m_TreeModel.getPathToRoot(nodeLayer));
+			// m_Tree.makeVisible(path);
+			if (lyr instanceof LayerCollection) {
+				LayerCollection group = (LayerCollection) lyr;
+				doRefresh(group, nodeLayer);
+			} else {
+				if (lyr instanceof Classifiable
+						&& !(lyr instanceof FLyrAnnotation)) {
 
-                    Classifiable aux = (Classifiable) lyr;
-                    ILegend legendInfo = aux.getLegend();
+					Classifiable aux = (Classifiable) lyr;
+					ILegend legendInfo = aux.getLegend();
 
-                    try {
-                        if (legendInfo instanceof IClassifiedLegend) {
-                            IClassifiedLegend cl = (IClassifiedLegend) legendInfo;
-                            String[] descriptions = cl.getDescriptions();
-                            ISymbol[] symbols = cl.getSymbols();
+					try {
+						if (legendInfo instanceof IClassifiedLegend) {
+							IClassifiedLegend cl = (IClassifiedLegend) legendInfo;
+							String[] descriptions = cl.getDescriptions();
+							ISymbol[] symbols = cl.getSymbols();
 
-                            for (int j = 0; j < descriptions.length; j++) {
-                                TocItemLeaf itemLeaf;
-                                itemLeaf = new TocItemLeaf(symbols[j],
-                                        descriptions[j], aux.getShapeType());
-                                itemLeaf.setSize(sizeLeaf);
+							for (int j = 0; j < descriptions.length; j++) {
+								TocItemLeaf itemLeaf;
+								itemLeaf = new TocItemLeaf(symbols[j],
+										descriptions[j], aux.getShapeType());
+								itemLeaf.setSize(sizeLeaf);
 
-                                DefaultMutableTreeNode nodeValue = new DefaultMutableTreeNode(itemLeaf);
-                                m_TreeModel.insertNodeInto(nodeValue,
-                                    nodeLayer, nodeLayer.getChildCount());
+								DefaultMutableTreeNode nodeValue = new DefaultMutableTreeNode(
+										itemLeaf);
+								m_TreeModel.insertNodeInto(nodeValue,
+										nodeLayer, nodeLayer.getChildCount());
 
-                                //TreePath pathSymbol = new TreePath(m_TreeModel.getPathToRoot(
-                                //			nodeValue));
-                                // m_Tree.makeVisible(pathSymbol);
-                            }
-                        }
+								// TreePath pathSymbol = new
+								// TreePath(m_TreeModel.getPathToRoot(
+								// nodeValue));
+								// m_Tree.makeVisible(pathSymbol);
+							}
+						}
 
-                        if (legendInfo instanceof SingleSymbolLegend &&
-                                (legendInfo.getDefaultSymbol() != null)) {
-                            TocItemLeaf itemLeaf;
-                            itemLeaf = new TocItemLeaf(legendInfo.getDefaultSymbol(),
-                            		legendInfo.getDefaultSymbol().getDescription(), aux.getShapeType());
-                            itemLeaf.setSize(sizeLeaf);
+						if (legendInfo instanceof SingleSymbolLegend
+								&& (legendInfo.getDefaultSymbol() != null)) {
+							TocItemLeaf itemLeaf;
+							itemLeaf = new TocItemLeaf(
+									legendInfo.getDefaultSymbol(), legendInfo
+											.getDefaultSymbol()
+											.getDescription(),
+									aux.getShapeType());
+							itemLeaf.setSize(sizeLeaf);
 
-                            DefaultMutableTreeNode nodeValue = new DefaultMutableTreeNode(itemLeaf);
-                            m_TreeModel.insertNodeInto(nodeValue, nodeLayer,
-                                nodeLayer.getChildCount());
+							DefaultMutableTreeNode nodeValue = new DefaultMutableTreeNode(
+									itemLeaf);
+							m_TreeModel.insertNodeInto(nodeValue, nodeLayer,
+									nodeLayer.getChildCount());
 
-                            //TreePath pathSymbol = new TreePath(m_TreeModel.getPathToRoot(
-                            //			nodeValue));
-                            // m_Tree.makeVisible(pathSymbol);
-                        }
+							// TreePath pathSymbol = new
+							// TreePath(m_TreeModel.getPathToRoot(
+							// nodeValue));
+							// m_Tree.makeVisible(pathSymbol);
+						}
 
-                        if (lyr instanceof IHasImageLegend)
-                        {
-                            TocItemLeaf itemLeaf;
-                            IHasImageLegend auxLayer = (IHasImageLegend) lyr;
-                            Image image = auxLayer.getImageLegend();
+						if (lyr instanceof IHasImageLegend) {
+							TocItemLeaf itemLeaf;
+							IHasImageLegend auxLayer = (IHasImageLegend) lyr;
+							Image image = auxLayer.getImageLegend();
 
-                            if (image != null)
-                            {
-                            	itemLeaf = new TocItemLeaf();
-                               	itemLeaf.setImageLegend(image, "",
-                               							new Dimension(image.getWidth( null ),
-                               							image.getHeight( null )));//new Dimension(150,200));
+							if (image != null) {
+								itemLeaf = new TocItemLeaf();
+								itemLeaf.setImageLegend(image, "",
+										new Dimension(image.getWidth(null),
+												image.getHeight(null)));// new
+																		// Dimension(150,200));
 
-                                DefaultMutableTreeNode nodeValue = new DefaultMutableTreeNode(itemLeaf);
-                                m_TreeModel.insertNodeInto(nodeValue, nodeLayer,
-                                    nodeLayer.getChildCount());
-                            }
-                        }
-                    } catch (ReadDriverException e) {
+								DefaultMutableTreeNode nodeValue = new DefaultMutableTreeNode(
+										itemLeaf);
+								m_TreeModel.insertNodeInto(nodeValue,
+										nodeLayer, nodeLayer.getChildCount());
+							}
+						}
+					} catch (ReadDriverException e) {
 						e.printStackTrace();
 					}
-                }
-            } // if instanceof layers
-        }
-    }
+				}
+			} // if instanceof layers
+		}
+	}
 
-    /**
-     * @see com.iver.cit.opensig.gui.toc.ITocOrderListener#orderChanged(int,
-     *      int)
-     */
-    public void orderChanged(int oldPos, int newPos, FLayers lpd) {
-        //LayerCollection layers = mapContext.getLayers();
-        // El orden es el contrario, hay que traducir.
-        // El orden es el contrario, hay que traducir.
-        ///oldPos = layers.getLayersCount() - 1 - oldPos;
-        ///newPos = layers.getLayersCount() - 1 - newPos;
-        try {
-            lpd.moveTo(oldPos, newPos);
-        } catch (CancelationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+	/**
+	 * @see com.iver.cit.opensig.gui.toc.ITocOrderListener#orderChanged(int,
+	 *      int)
+	 */
+	public void orderChanged(int oldPos, int newPos, FLayers lpd) {
+		// LayerCollection layers = mapContext.getLayers();
+		// El orden es el contrario, hay que traducir.
+		// El orden es el contrario, hay que traducir.
+		// /oldPos = layers.getLayersCount() - 1 - oldPos;
+		// /newPos = layers.getLayersCount() - 1 - newPos;
+		try {
+			lpd.moveTo(oldPos, newPos);
+		} catch (CancelationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-        // No hace falta un refresh, lo hace mediante eventos.
-        //refresh();
-        mapContext.invalidate();
-    }
+		// No hace falta un refresh, lo hace mediante eventos.
+		// refresh();
+		mapContext.invalidate();
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param lpo DOCUMENT ME!
-     * @param lpd DOCUMENT ME!
-     * @param ls DOCUMENT ME!
-     */
-    public void parentChanged(FLayers lpo, FLayers lpd, FLayer ls) {
-        lpo.removeLayer(ls);
-        lpd.addLayer(ls);
-        PluginServices.getMainFrame().enableControls();
-        /*if (lpo.getLayersCount()==0){
-           lpo.getParentLayer().removeLayer(lpo);
-           }*/
-        mapContext.invalidate();
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param lpo
+	 *            DOCUMENT ME!
+	 * @param lpd
+	 *            DOCUMENT ME!
+	 * @param ls
+	 *            DOCUMENT ME!
+	 */
+	public void parentChanged(FLayers lpo, FLayers lpd, FLayer ls) {
+		lpo.removeLayer(ls);
+		lpd.addLayer(ls);
+		PluginServices.getMainFrame().enableControls();
+		/*
+		 * if (lpo.getLayersCount()==0){ lpo.getParentLayer().removeLayer(lpo);
+		 * }
+		 */
+		mapContext.invalidate();
 
-    }
+	}
 
-    /* (non-Javadoc)
-     * @see java.awt.event.ComponentListener#componentHidden(java.awt.event.ComponentEvent)
-     */
-    public void componentHidden(ComponentEvent e) {
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.awt.event.ComponentListener#componentHidden(java.awt.event.
+	 * ComponentEvent)
+	 */
+	public void componentHidden(ComponentEvent e) {
+	}
 
-    /* (non-Javadoc)
-     * @see java.awt.event.ComponentListener#componentMoved(java.awt.event.ComponentEvent)
-     */
-    public void componentMoved(ComponentEvent e) {
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.ComponentListener#componentMoved(java.awt.event.ComponentEvent
+	 * )
+	 */
+	public void componentMoved(ComponentEvent e) {
+	}
 
-    /* (non-Javadoc)
-     * @see java.awt.event.ComponentListener#componentResized(java.awt.event.ComponentEvent)
-     */
-    public void componentResized(ComponentEvent e) {
-        System.out.println("Cambiando tamaño.");
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.awt.event.ComponentListener#componentResized(java.awt.event.
+	 * ComponentEvent)
+	 */
+	public void componentResized(ComponentEvent e) {
+		System.out.println("Cambiando tamaño.");
 
-        int i = 0;
-        DefaultMutableTreeNode n;
-        Enumeration enumeration = m_Root.children();
+		int i = 0;
+		DefaultMutableTreeNode n;
+		Enumeration enumeration = m_Root.children();
 
-        while (enumeration.hasMoreElements()) {
-            n = (DefaultMutableTreeNode) enumeration.nextElement();
+		while (enumeration.hasMoreElements()) {
+			n = (DefaultMutableTreeNode) enumeration.nextElement();
 
-            if (n.getUserObject() instanceof TocItemBranch) {
-                ITocItem item = (ITocItem) n.getUserObject();
-                Dimension szAnt = item.getSize();
-                item.setSize(new Dimension(this.getWidth() - 40, szAnt.height));
-            }
+			if (n.getUserObject() instanceof TocItemBranch) {
+				ITocItem item = (ITocItem) n.getUserObject();
+				Dimension szAnt = item.getSize();
+				item.setSize(new Dimension(this.getWidth() - 40, szAnt.height));
+			}
 
-        }
+		}
 
-        // m_Tree.setSize(this.getSize());
-        System.out.println("Ancho del tree=" + m_Tree.getWidth() + " " +
-            m_Tree.getComponentCount());
-        System.out.println("Ancho del TOC=" + this.getWidth());
+		// m_Tree.setSize(this.getSize());
+		System.out.println("Ancho del tree=" + m_Tree.getWidth() + " "
+				+ m_Tree.getComponentCount());
+		System.out.println("Ancho del TOC=" + this.getWidth());
 
-        // m_Tree.repaint();
-    }
+		// m_Tree.repaint();
+	}
 
-    /* (non-Javadoc)
-     * @see java.awt.event.ComponentListener#componentShown(java.awt.event.ComponentEvent)
-     */
-    public void componentShown(ComponentEvent e) {
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.ComponentListener#componentShown(java.awt.event.ComponentEvent
+	 * )
+	 */
+	public void componentShown(ComponentEvent e) {
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.layers.LayerListener#legendChanged(com.iver.cit.gvsig.fmap.rendering.LegendChangedEvent)
-     */
-    public void legendChanged(LegendChangedEvent e) {
-        System.out.println("Refrescando TOC");
-        refresh();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.LayerListener#legendChanged(com.iver.cit
+	 * .gvsig.fmap.rendering.LegendChangedEvent)
+	 */
+	public void legendChanged(LegendChangedEvent e) {
+		System.out.println("Refrescando TOC");
+		refresh();
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerAdded(com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
-     */
-    public void layerAdded(LayerCollectionEvent e) {
-        refresh();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerAdded(com
+	 * .iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
+	 */
+	public void layerAdded(LayerCollectionEvent e) {
+		refresh();
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerMoved(com.iver.cit.gvsig.fmap.layers.LayerPositionEvent)
-     */
-    public void layerMoved(LayerPositionEvent e) {
-        refresh();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerMoved(com
+	 * .iver.cit.gvsig.fmap.layers.LayerPositionEvent)
+	 */
+	public void layerMoved(LayerPositionEvent e) {
+		refresh();
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerRemoved(com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
-     */
-    public void layerRemoved(LayerCollectionEvent e) {
-        m_ItemsExpanded.remove(e.getAffectedLayer().getName());
-        refresh();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerRemoved(com
+	 * .iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
+	 */
+	public void layerRemoved(LayerCollectionEvent e) {
+		m_ItemsExpanded.remove(e.getAffectedLayer().getName());
+		refresh();
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerAdding(com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
-     */
-    public void layerAdding(LayerCollectionEvent e) throws CancelationException {
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerAdding(com
+	 * .iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
+	 */
+	public void layerAdding(LayerCollectionEvent e) throws CancelationException {
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerMoving(com.iver.cit.gvsig.fmap.layers.LayerPositionEvent)
-     */
-    public void layerMoving(LayerPositionEvent e) throws CancelationException {
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerMoving(com
+	 * .iver.cit.gvsig.fmap.layers.LayerPositionEvent)
+	 */
+	public void layerMoving(LayerPositionEvent e) throws CancelationException {
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerRemoving(com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
-     */
-    public void layerRemoving(LayerCollectionEvent e)
-        throws CancelationException {
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#layerRemoving(
+	 * com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
+	 */
+	public void layerRemoving(LayerCollectionEvent e)
+			throws CancelationException {
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#activationChanged(com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
-     */
-    public void activationChanged(LayerCollectionEvent e)
-        throws CancelationException {
-        repaint();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#activationChanged
+	 * (com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
+	 */
+	public void activationChanged(LayerCollectionEvent e)
+			throws CancelationException {
+		repaint();
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#visibilityChanged(com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
-     */
-    public void visibilityChanged(LayerCollectionEvent e)
-        throws CancelationException {
-        repaint();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.LayerCollectionListener#visibilityChanged
+	 * (com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent)
+	 */
+	public void visibilityChanged(LayerCollectionEvent e)
+			throws CancelationException {
+		repaint();
+	}
 
-    /* (non-Javadoc)
-     * @see javax.swing.event.TreeExpansionListener#treeCollapsed(javax.swing.event.TreeExpansionEvent)
-     */
-    public void treeCollapsed(TreeExpansionEvent event) {
-        TreePath path = event.getPath();
-        DefaultMutableTreeNode n = (DefaultMutableTreeNode) path.getLastPathComponent();
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.swing.event.TreeExpansionListener#treeCollapsed(javax.swing.event
+	 * .TreeExpansionEvent)
+	 */
+	public void treeCollapsed(TreeExpansionEvent event) {
+		TreePath path = event.getPath();
+		DefaultMutableTreeNode n = (DefaultMutableTreeNode) path
+				.getLastPathComponent();
 
-        if (n.getUserObject() instanceof ITocItem) {
-            ITocItem item = (ITocItem) n.getUserObject();
-            Boolean b = Boolean.FALSE;
+		if (n.getUserObject() instanceof ITocItem) {
+			ITocItem item = (ITocItem) n.getUserObject();
+			Boolean b = Boolean.FALSE;
 
-            // System.out.println("Collapsed: " + item.getLabel());
-            m_ItemsExpanded.put(item.getLabel(), b);
-        }
-    }
+			// System.out.println("Collapsed: " + item.getLabel());
+			m_ItemsExpanded.put(item.getLabel(), b);
+		}
+	}
 
-    /* (non-Javadoc)
-     * @see javax.swing.event.TreeExpansionListener#treeExpanded(javax.swing.event.TreeExpansionEvent)
-     */
-    public void treeExpanded(TreeExpansionEvent event) {
-        TreePath path = event.getPath();
-        DefaultMutableTreeNode n = (DefaultMutableTreeNode) path.getLastPathComponent();
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.swing.event.TreeExpansionListener#treeExpanded(javax.swing.event
+	 * .TreeExpansionEvent)
+	 */
+	public void treeExpanded(TreeExpansionEvent event) {
+		TreePath path = event.getPath();
+		DefaultMutableTreeNode n = (DefaultMutableTreeNode) path
+				.getLastPathComponent();
 
-        if (n.getUserObject() instanceof ITocItem) {
-            ITocItem item = (ITocItem) n.getUserObject();
-            Boolean b = Boolean.TRUE;
+		if (n.getUserObject() instanceof ITocItem) {
+			ITocItem item = (ITocItem) n.getUserObject();
+			Boolean b = Boolean.TRUE;
 
-            // System.out.println("Expanded: " + item.getLabel());
-            m_ItemsExpanded.put(item.getLabel(), b);
-        }
-    }
+			// System.out.println("Expanded: " + item.getLabel());
+			m_ItemsExpanded.put(item.getLabel(), b);
+		}
+	}
 
-    /**
-     * Obtiene el JScrollPane que contiene el TOC
-     *
-     * @return JScrollPane que contiene el TOC
-     */
-    public JScrollPane getJScrollPane() {
-        return this.m_Scroller;
-    }
+	/**
+	 * Obtiene el JScrollPane que contiene el TOC
+	 * 
+	 * @return JScrollPane que contiene el TOC
+	 */
+	public JScrollPane getJScrollPane() {
+		return this.m_Scroller;
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public DnDJTree getTree() {
-        return m_Tree;
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public DnDJTree getTree() {
+		return m_Tree;
+	}
 
-    /**
-     * Clase Listener que reacciona al pulsar sobre el checkbox de un nodo y
-     * crea un popupmenu al pulsar el botón derecho.
-     */
-    class NodeSelectionListener extends MouseAdapter implements ActionListener {
-        JTree tree;
-        JDialog dlg;
-        JColorChooser colorChooser;
-        FPopupMenu popmenu = null;
-        DefaultMutableTreeNode node;
+	/**
+	 * Clase Listener que reacciona al pulsar sobre el checkbox de un nodo y
+	 * crea un popupmenu al pulsar el botón derecho.
+	 */
+	class NodeSelectionListener extends MouseAdapter implements ActionListener {
+		JTree tree;
+		JDialog dlg;
+		JColorChooser colorChooser;
+		FPopupMenu popmenu = null;
+		DefaultMutableTreeNode node;
 
-        /**
-         * Crea un nuevo NodeSelectionListener.
-         *
-         * @param tree DOCUMENT ME!
-         */
-        NodeSelectionListener(JTree tree) {
-            this.tree = tree;
-        }
+		/**
+		 * Crea un nuevo NodeSelectionListener.
+		 * 
+		 * @param tree
+		 *            DOCUMENT ME!
+		 */
+		NodeSelectionListener(JTree tree) {
+			this.tree = tree;
+		}
 
-        /**
-         * DOCUMENT ME!
-         *
-         * @param e DOCUMENT ME!
-         */
-        public void mouseClicked(MouseEvent e) {
-        	int x = e.getX();
-        	int y = e.getY();
-        	int row = tree.getRowForLocation(x, y);
-        	TreePath path = tree.getPathForRow(row);
-        	LayerCollection layers = mapContext.getLayers();
+		/**
+		 * DOCUMENT ME!
+		 * 
+		 * @param e
+		 *            DOCUMENT ME!
+		 */
+		public void mouseClicked(MouseEvent e) {
+			int x = e.getX();
+			int y = e.getY();
+			int row = tree.getRowForLocation(x, y);
+			TreePath path = tree.getPathForRow(row);
+			LayerCollection layers = mapContext.getLayers();
 
-        	// System.out.println(e.getSource());
-        	if (path != null) {
-        		if (e.getClickCount() == 1) {
-        			// this fixes a bug when double-clicking. JTree by default
-        			// expands the tree when double-clicking, so we capture a
-        			// different node in the second click than in the first
-        			node = (DefaultMutableTreeNode) path.getLastPathComponent();
-        		}
+			// System.out.println(e.getSource());
+			if (path != null) {
+				if (e.getClickCount() == 1) {
+					// this fixes a bug when double-clicking. JTree by default
+					// expands the tree when double-clicking, so we capture a
+					// different node in the second click than in the first
+					node = (DefaultMutableTreeNode) path.getLastPathComponent();
+				}
 
-        		// System.out.println("Evento de ratón originado por " +
-        		// e.getSource().getClass().toString());
-        		if (node != null && node.getUserObject() instanceof TocItemBranch) {
-        			// double click with left button ON A BRANCH/NODE (layer)
-        			if (e.getClickCount()>=2 && e.getButton() == MouseEvent.BUTTON1) {
-        				e.consume();
-        				PluginServices.getMDIManager().setWaitCursor();
-        				try {
-        					TocItemBranch leaf = (TocItemBranch) node.getUserObject();
+				// System.out.println("Evento de ratón originado por " +
+				// e.getSource().getClass().toString());
+				if (node != null
+						&& node.getUserObject() instanceof TocItemBranch) {
+					// double click with left button ON A BRANCH/NODE (layer)
+					if (e.getClickCount() >= 2
+							&& e.getButton() == MouseEvent.BUTTON1) {
+						e.consume();
+						PluginServices.getMDIManager().setWaitCursor();
+						try {
+							TocItemBranch leaf = (TocItemBranch) node
+									.getUserObject();
 
-        					IContextMenuAction action = leaf.getDoubleClickAction();
-        					if (action != null) {
-        						/* if there is an action associated with the double-clicked element
-        						 * it will be fired for it and FOR ALL OTHER COMPATIBLES THAT HAVE
-        						 * BEEN ACTIVATED.
-        						 */
-        						ArrayList<FLayer> targetLayers = new ArrayList<FLayer>();
+							IContextMenuAction action = leaf
+									.getDoubleClickAction();
+							if (action != null) {
+								/*
+								 * if there is an action associated with the
+								 * double-clicked element it will be fired for
+								 * it and FOR ALL OTHER COMPATIBLES THAT HAVE
+								 * BEEN ACTIVATED.
+								 */
+								ArrayList<FLayer> targetLayers = new ArrayList<FLayer>();
 
-        						TocItemBranch owner = (TocItemBranch) node.getUserObject();
+								TocItemBranch owner = (TocItemBranch) node
+										.getUserObject();
 
-        						FLayer masterLayer = owner.getLayer();
-        						targetLayers.add(masterLayer);
-        						FLayer[] actives = mapContext.getLayers().getActives();
-        						for (int i = 0; i < actives.length; i++) {
-									if (actives[i].getClass().equals(masterLayer.getClass())) {
-										if (actives[i] instanceof FLyrVect && actives[i].isAvailable()) {
+								FLayer masterLayer = owner.getLayer();
+								targetLayers.add(masterLayer);
+								FLayer[] actives = mapContext.getLayers()
+										.getActives();
+								for (int i = 0; i < actives.length; i++) {
+									if (actives[i].getClass().equals(
+											masterLayer.getClass())) {
+										if (actives[i] instanceof FLyrVect
+												&& actives[i].isAvailable()) {
 											FLyrVect vectorLayer = (FLyrVect) actives[i];
 											FLyrVect vectorMaster = (FLyrVect) masterLayer;
-											if (vectorLayer.getShapeType() == vectorMaster.getShapeType()) {
+											if (vectorLayer.getShapeType() == vectorMaster
+													.getShapeType()) {
 												targetLayers.add(vectorLayer);
 											} else {
 												vectorLayer.setActive(false);
 											}
 										}
-										// TODO for the rest of layer types (i.e. FLyrRaster)
+										// TODO for the rest of layer types
+										// (i.e. FLyrRaster)
 									} else {
 										actives[i].setActive(false);
 									}
 								}
-        						action.execute(leaf, targetLayers.toArray(new FLayer[0]));
-        					}
-        				} catch (Exception ex) {
-        					NotificationManager.addError(ex);
-        				} finally {
-        					PluginServices.getMDIManager().restoreCursor();
-        				}
-        				return;
-        			}
+								action.execute(leaf,
+										targetLayers.toArray(new FLayer[0]));
+							}
+						} catch (Exception ex) {
+							NotificationManager.addError(ex);
+						} finally {
+							PluginServices.getMDIManager().restoreCursor();
+						}
+						return;
+					}
 
-        			TocItemBranch elTema = (TocItemBranch) node.getUserObject();
-        			FLayer lyr = elTema.getLayer();
-        			lyr.getMapContext().beginAtomicEvent();
+					TocItemBranch elTema = (TocItemBranch) node.getUserObject();
+					FLayer lyr = elTema.getLayer();
+					lyr.getMapContext().beginAtomicEvent();
 
-        			if (((e.getModifiers() & InputEvent.SHIFT_MASK) != 0)
-        					&& (e.getButton() == MouseEvent.BUTTON1)) {
-        				FLayer[] activeLayers = layers.getActives();
-        				if (activeLayers.length > 0) {
-        					selectInterval(layers,lyr);
-        				} else {
-        					updateActive(lyr, !lyr.isActive());
-        				}
+					if (((e.getModifiers() & InputEvent.SHIFT_MASK) != 0)
+							&& (e.getButton() == MouseEvent.BUTTON1)) {
+						FLayer[] activeLayers = layers.getActives();
+						if (activeLayers.length > 0) {
+							selectInterval(layers, lyr);
+						} else {
+							updateActive(lyr, !lyr.isActive());
+						}
 
-        			} else {
-        				if (!((e.getModifiers() & InputEvent.CTRL_MASK) != 0)
-        						&& (e.getButton() == MouseEvent.BUTTON1)) {
-        					layers.setAllActives(false);
-        				}
-        				if (e.getButton() == MouseEvent.BUTTON1) {
-        					// lyr.setActive(true);
-        					updateActive(lyr, !lyr.isActive());
-        				}
-        			}
-        			// Si pertenece a un grupo, lo ponemos activo también.
-        			// FLayer parentLayer = lyr.getParentLayer();
+					} else {
+						if (!((e.getModifiers() & InputEvent.CTRL_MASK) != 0)
+								&& (e.getButton() == MouseEvent.BUTTON1)) {
+							layers.setAllActives(false);
+						}
+						if (e.getButton() == MouseEvent.BUTTON1) {
+							// lyr.setActive(true);
+							updateActive(lyr, !lyr.isActive());
+						}
+					}
+					// Si pertenece a un grupo, lo ponemos activo también.
+					// FLayer parentLayer = lyr.getParentLayer();
 
-        			/*
-        			 * if (parentLayer != null) { parentLayer.setActive(true); }
-        			 */
-        			Point layerNodeLocation = tree.getUI().getPathBounds(tree,
-        					path).getLocation();
+					/*
+					 * if (parentLayer != null) { parentLayer.setActive(true); }
+					 */
+					Point layerNodeLocation = tree.getUI()
+							.getPathBounds(tree, path).getLocation();
 
-        			// Rectángulo que representa el checkbox
-        			Rectangle checkBoxBounds = m_TocRenderer
-        			.getCheckBoxBounds();
-        			checkBoxBounds.translate((int) layerNodeLocation.getX(),
-        					(int) layerNodeLocation.getY());
+					// Rectángulo que representa el checkbox
+					Rectangle checkBoxBounds = m_TocRenderer
+							.getCheckBoxBounds();
+					checkBoxBounds.translate((int) layerNodeLocation.getX(),
+							(int) layerNodeLocation.getY());
 
-        			if (checkBoxBounds.contains(e.getPoint())) {
-        				updateVisible(lyr);
-        			}
+					if (checkBoxBounds.contains(e.getPoint())) {
+						updateVisible(lyr);
+					}
 
-        			// }
-        			if (e.getButton() == MouseEvent.BUTTON3) {
-        				// Boton derecho sobre un nodo del arbol
-        				// if ((e.getModifiers() & InputEvent.META_MASK) != 0) {
-        				popmenu = new FPopupMenu(mapContext, node);
-        				tree.add(popmenu);
+					// }
+					if (e.getButton() == MouseEvent.BUTTON3) {
+						// Boton derecho sobre un nodo del arbol
+						// if ((e.getModifiers() & InputEvent.META_MASK) != 0) {
+						popmenu = new FPopupMenu(mapContext, node);
+						tree.add(popmenu);
 
-        				popmenu.show(e.getComponent(), e.getX(), e.getY());
+						popmenu.show(e.getComponent(), e.getX(), e.getY());
 
-        				// }
-        			}
+						// }
+					}
 
-        			lyr.getMapContext().endAtomicEvent();
-        		}
+					lyr.getMapContext().endAtomicEvent();
+				}
 
-        		if (node!=null && node.getUserObject() instanceof TocItemLeaf) {
-        			// double click with left button ON A LEAF (ISymbol)
-        			if (e.getClickCount()>=2 && e.getButton() == MouseEvent.BUTTON1) {
-        				e.consume();
+				if (node != null && node.getUserObject() instanceof TocItemLeaf) {
+					// double click with left button ON A LEAF (ISymbol)
+					if (e.getClickCount() >= 2
+							&& e.getButton() == MouseEvent.BUTTON1) {
+						e.consume();
 
-        				PluginServices.getMDIManager().setWaitCursor();
-        				try {
-        					TocItemLeaf leaf = (TocItemLeaf) node.getUserObject();
-        					IContextMenuAction action = leaf.getDoubleClickAction();
-        					if (action != null) {
-        						/* if there is an action associated with the double-clicked element
-        						 * it will be fired for it and FOR ALL OTHER COMPATIBLES THAT HAVE
-        						 * BEEN ACTIVATED.
-        						 */
-        						ArrayList<FLayer> targetLayers = new ArrayList<FLayer>();
+						PluginServices.getMDIManager().setWaitCursor();
+						try {
+							TocItemLeaf leaf = (TocItemLeaf) node
+									.getUserObject();
+							IContextMenuAction action = leaf
+									.getDoubleClickAction();
+							if (action != null) {
+								/*
+								 * if there is an action associated with the
+								 * double-clicked element it will be fired for
+								 * it and FOR ALL OTHER COMPATIBLES THAT HAVE
+								 * BEEN ACTIVATED.
+								 */
+								ArrayList<FLayer> targetLayers = new ArrayList<FLayer>();
 
-        						TocItemBranch owner = (TocItemBranch) ((DefaultMutableTreeNode) node.getParent())
-        													.getUserObject();
+								TocItemBranch owner = (TocItemBranch) ((DefaultMutableTreeNode) node
+										.getParent()).getUserObject();
 
-        						FLayer masterLayer = owner.getLayer();
-        						targetLayers.add(masterLayer);
-        						FLayer[] actives = mapContext.getLayers().getActives();
+								FLayer masterLayer = owner.getLayer();
+								targetLayers.add(masterLayer);
+								FLayer[] actives = mapContext.getLayers()
+										.getActives();
 
-        						if ((e.getModifiers() & InputEvent.CTRL_MASK) != 0){
-        							masterLayer.setActive(true);
-        						}else{
-        							for (int i = 0; i < actives.length; i++) {
-        								actives[i].setActive(false);
-        							}
-        							masterLayer.setActive(true);
-        						}
+								if ((e.getModifiers() & InputEvent.CTRL_MASK) != 0) {
+									masterLayer.setActive(true);
+								} else {
+									for (int i = 0; i < actives.length; i++) {
+										actives[i].setActive(false);
+									}
+									masterLayer.setActive(true);
+								}
 
-        						actives = mapContext.getLayers().getActives();
+								actives = mapContext.getLayers().getActives();
 
-        						for (int i = 0; i < actives.length; i++) {
-									if (actives[i].getClass().equals(masterLayer.getClass())) {
+								for (int i = 0; i < actives.length; i++) {
+									if (actives[i].getClass().equals(
+											masterLayer.getClass())) {
 										if (actives[i] instanceof FLyrVect) {
 											FLyrVect vectorLayer = (FLyrVect) actives[i];
 											FLyrVect vectorMaster = (FLyrVect) masterLayer;
-											int masterLayerShapetypeOF_THE_LEGEND = ((IVectorLegend) vectorMaster.getLegend()).getShapeType();
-											int anotherVectorLayerShapetypeOF_THE_LEGEND = ((IVectorLegend) vectorLayer.getLegend()).getShapeType();
-											if ( masterLayerShapetypeOF_THE_LEGEND == anotherVectorLayerShapetypeOF_THE_LEGEND) {
+											int masterLayerShapetypeOF_THE_LEGEND = ((IVectorLegend) vectorMaster
+													.getLegend())
+													.getShapeType();
+											int anotherVectorLayerShapetypeOF_THE_LEGEND = ((IVectorLegend) vectorLayer
+													.getLegend())
+													.getShapeType();
+											if (masterLayerShapetypeOF_THE_LEGEND == anotherVectorLayerShapetypeOF_THE_LEGEND) {
 												targetLayers.add(vectorLayer);
 											} else {
 												vectorLayer.setActive(false);
 											}
 										}
-										// TODO for the rest of layer types (i.e. FLyrRaster)
+										// TODO for the rest of layer types
+										// (i.e. FLyrRaster)
 									} else {
 										actives[i].setActive(false);
 									}
 								}
-        						action.execute(leaf, targetLayers.toArray(new FLayer[0]));
-        					}
-        				} catch (Exception ex) {
-        					NotificationManager.addError(ex);
-        				} finally {
-        					PluginServices.getMDIManager().restoreCursor();
-        				}
-        				return;
-        			}
-
-
-        			// Boton derecho sobre un Simbolo
-        			// TocItemLeaf auxLeaf = (TocItemLeaf) node.getUserObject();
-        			// FSymbol theSym = auxLeaf.getSymbol();
-        			if ((e.getModifiers() & InputEvent.META_MASK) != 0) {
-
-        				TocItemBranch owner = (TocItemBranch) ((DefaultMutableTreeNode) node.getParent())
-        				.getUserObject();
-
-        				FLayer masterLayer = owner.getLayer();
-        				FLayer[] actives = mapContext.getLayers().getActives();
-
-        				if ((e.getModifiers() & InputEvent.CTRL_MASK) != 0){
-        					masterLayer.setActive(true);
-        				}else{
-        					for (int i = 0; i < actives.length; i++) {
-        						actives[i].setActive(false);
-        					}
-        					masterLayer.setActive(true);
-        				}
-
-        				popmenu = new FPopupMenu(mapContext, node);
-        				tree.add(popmenu);
-        				popmenu.show(e.getComponent(), e.getX(), e.getY());
-        			}
-        		}
-
-        		((DefaultTreeModel) tree.getModel()).nodeChanged(node);
-
-        		if (row == 0) {
-        			tree.revalidate();
-        			tree.repaint();
-        		}
-
-        		if (PluginServices.getMainFrame() != null) {
-        			PluginServices.getMainFrame().enableControls();
-        		}
-        	} else {
-        		if (e.getButton() == MouseEvent.BUTTON3) {
-        			popmenu = new FPopupMenu(mapContext, null);
-        			tree.add(popmenu);
-        			popmenu.show(e.getComponent(), e.getX(), e.getY());
-        		}
-
-        	}
-        }
-
-        private void selectInterval(LayerCollection layers, FLayer lyr) {
-        	FLayer[] activeLayers = layers.getActives();
-				//if (activeLayers[0].getParentLayer() instanceof FLayers && activeLayers[0].getParentLayer().getParentLayer()!=null) {
-				//	selectInterval((LayerCollection)activeLayers[0].getParentLayer(),lyr);
-				//}
-				for (int j = 0; j < layers.getLayersCount(); j++) {
-					FLayer layerAux=layers.getLayer(j);
-					//Si se cumple esta condición es porque la primera capa que nos encontramos en el TOC es la que estaba activa
-					if (activeLayers[0].equals(layerAux)) {
-						boolean isSelected = false;
-						for (int i = 0; i < layers.getLayersCount(); i++) {
-							FLayer layer = layers.getLayer(i);
-							if (!isSelected)
-								isSelected = layer.isActive();
-							else {
-								updateActive(layer, true);
-								if (lyr.equals(layer)) {
-									isSelected = false;
-								}
+								action.execute(leaf,
+										targetLayers.toArray(new FLayer[0]));
 							}
+						} catch (Exception ex) {
+							NotificationManager.addError(ex);
+						} finally {
+							PluginServices.getMDIManager().restoreCursor();
 						}
-						break;
-					} else
-						//Si se cumple esta condición es porque la primera capa que nos encontramos en el TOC es la que acabamos de seleccionar
-						if (lyr.equals(layerAux)) {
-						boolean isSelected = false;
-						for (int i = layers.getLayersCount() - 1; i >= 0; i--) {
-							FLayer layer = layers.getLayer(i);
-							if (!isSelected)
-								isSelected = layer.isActive();
-							else {
-								updateActive(layer, true);
-								if (lyr.equals(layer)) {
-									isSelected = false;
-								}
+						return;
+					}
+
+					// Boton derecho sobre un Simbolo
+					// TocItemLeaf auxLeaf = (TocItemLeaf) node.getUserObject();
+					// FSymbol theSym = auxLeaf.getSymbol();
+					if ((e.getModifiers() & InputEvent.META_MASK) != 0) {
+
+						TocItemBranch owner = (TocItemBranch) ((DefaultMutableTreeNode) node
+								.getParent()).getUserObject();
+
+						FLayer masterLayer = owner.getLayer();
+						FLayer[] actives = mapContext.getLayers().getActives();
+
+						if ((e.getModifiers() & InputEvent.CTRL_MASK) != 0) {
+							masterLayer.setActive(true);
+						} else {
+							for (int i = 0; i < actives.length; i++) {
+								actives[i].setActive(false);
 							}
+							masterLayer.setActive(true);
 						}
-						break;
+
+						popmenu = new FPopupMenu(mapContext, node);
+						tree.add(popmenu);
+						popmenu.show(e.getComponent(), e.getX(), e.getY());
 					}
 				}
+
+				((DefaultTreeModel) tree.getModel()).nodeChanged(node);
+
+				if (row == 0) {
+					tree.revalidate();
+					tree.repaint();
+				}
+
+				if (PluginServices.getMainFrame() != null) {
+					PluginServices.getMainFrame().enableControls();
+				}
+			} else {
+				if (e.getButton() == MouseEvent.BUTTON3) {
+					popmenu = new FPopupMenu(mapContext, null);
+					tree.add(popmenu);
+					popmenu.show(e.getComponent(), e.getX(), e.getY());
+				}
+
+			}
+		}
+
+		private void selectInterval(LayerCollection layers, FLayer lyr) {
+			FLayer[] activeLayers = layers.getActives();
+			// if (activeLayers[0].getParentLayer() instanceof FLayers &&
+			// activeLayers[0].getParentLayer().getParentLayer()!=null) {
+			// selectInterval((LayerCollection)activeLayers[0].getParentLayer(),lyr);
+			// }
+			for (int j = 0; j < layers.getLayersCount(); j++) {
+				FLayer layerAux = layers.getLayer(j);
+				// Si se cumple esta condición es porque la primera capa que nos
+				// encontramos en el TOC es la que estaba activa
+				if (activeLayers[0].equals(layerAux)) {
+					boolean isSelected = false;
+					for (int i = 0; i < layers.getLayersCount(); i++) {
+						FLayer layer = layers.getLayer(i);
+						if (!isSelected)
+							isSelected = layer.isActive();
+						else {
+							updateActive(layer, true);
+							if (lyr.equals(layer)) {
+								isSelected = false;
+							}
+						}
+					}
+					break;
+				} else
+				// Si se cumple esta condición es porque la primera capa que nos
+				// encontramos en el TOC es la que acabamos de seleccionar
+				if (lyr.equals(layerAux)) {
+					boolean isSelected = false;
+					for (int i = layers.getLayersCount() - 1; i >= 0; i--) {
+						FLayer layer = layers.getLayer(i);
+						if (!isSelected)
+							isSelected = layer.isActive();
+						else {
+							updateActive(layer, true);
+							if (lyr.equals(layer)) {
+								isSelected = false;
+							}
+						}
+					}
+					break;
+				}
+			}
 
 		}
 
 		/**
 		 * DOCUMENT ME!
-		 *
+		 * 
 		 * @param lyr
 		 *            DOCUMENT ME!
 		 * @param active
 		 *            DOCUMENT ME!
 		 */
-        private void updateActive(FLayer lyr, boolean active) {
-            lyr.setActive(active);
-            updateActiveChild(lyr);
-        }
+		private void updateActive(FLayer lyr, boolean active) {
+			lyr.setActive(active);
+			updateActiveChild(lyr);
+		}
 
-        /**
+		/**
 		 * DOCUMENT ME!
-		 *
+		 * 
 		 * @param lyr
 		 *            DOCUMENT ME!
 		 */
-        private void updateActiveChild(FLayer lyr) {
-            if (lyr instanceof FLayers) { // Es la raiz de una rama o
+		private void updateActiveChild(FLayer lyr) {
+			if (lyr instanceof FLayers) { // Es la raiz de una rama o
 											// cualquier nodo intermedio.
 
-                FLayers layergroup = (FLayers) lyr;
+				FLayers layergroup = (FLayers) lyr;
 
-                for (int i = 0; i < layergroup.getLayersCount(); i++) {
-                    layergroup.getLayer(i).setActive(lyr.isActive());
-                    updateActiveChild(layergroup.getLayer(i));
-                }
-            }
-        }
+				for (int i = 0; i < layergroup.getLayersCount(); i++) {
+					layergroup.getLayer(i).setActive(lyr.isActive());
+					updateActiveChild(layergroup.getLayer(i));
+				}
+			}
+		}
 
-        /**
+		/**
 		 * Actualiza la visibilidad de la capas.
-		 *
+		 * 
 		 * @param lyr
 		 *            Capa sobre la que se está clickando.
 		 */
-        private void updateVisible(FLayer lyr) {
-        	if (lyr.isAvailable()) {
-        		lyr.setVisible(!lyr.visibleRequired());
-        		updateVisibleChild(lyr);
-        		updateVisibleParent(lyr);
-        		 // refresh view treak
-    			MapContext mc = lyr.getMapContext();
-    			mc.callLegendChanged();
-        	}
-        }
+		private void updateVisible(FLayer lyr) {
+			if (lyr.isAvailable()) {
+				lyr.setVisible(!lyr.visibleRequired());
+				updateVisibleChild(lyr);
+				updateVisibleParent(lyr);
+				// refresh view treak
+				MapContext mc = lyr.getMapContext();
+				mc.callLegendChanged();
+			}
+		}
 
-        /**
+		/**
 		 * Actualiza de forma recursiva la visibilidad de los hijos de la capa
 		 * que se pasa como parámetro.
-		 *
+		 * 
 		 * @param lyr
 		 *            Capa a actualizar.
 		 */
-        private void updateVisibleChild(FLayer lyr) {
-            if (lyr instanceof FLayers) { //Es la raiz de una rama o cualquier nodo intermedio.
+		private void updateVisibleChild(FLayer lyr) {
+			if (lyr instanceof FLayers) { // Es la raiz de una rama o cualquier
+											// nodo intermedio.
 
-                FLayers layergroup = (FLayers) lyr;
+				FLayers layergroup = (FLayers) lyr;
 
-                for (int i = 0; i < layergroup.getLayersCount(); i++) {
-                    layergroup.getLayer(i).setVisible(lyr.visibleRequired());
-                    updateVisibleChild(layergroup.getLayer(i));
-                }
-            }
-        }
+				for (int i = 0; i < layergroup.getLayersCount(); i++) {
+					layergroup.getLayer(i).setVisible(lyr.visibleRequired());
+					updateVisibleChild(layergroup.getLayer(i));
+				}
+			}
+		}
 
-        /**
-         * Actualiza de forma recursiva la visibilidad del padre de la capa que
-         * se pasa como parámetro.
-         *
-         * @param lyr Capa a actualizar.
-         */
-        private void updateVisibleParent(FLayer lyr) {
-            FLayers parent = (FLayers) lyr.getParentLayer();
+		/**
+		 * Actualiza de forma recursiva la visibilidad del padre de la capa que
+		 * se pasa como parámetro.
+		 * 
+		 * @param lyr
+		 *            Capa a actualizar.
+		 */
+		private void updateVisibleParent(FLayer lyr) {
+			FLayers parent = (FLayers) lyr.getParentLayer();
 
-            if (parent != null) {
-                boolean parentVisible = false;
+			if (parent != null) {
+				boolean parentVisible = false;
 
-                for (int i = 0; i < parent.getLayersCount(); i++) {
-                    if (parent.getLayer(i).visibleRequired()) {
-                        parentVisible = true;
-                    }
-                }
+				for (int i = 0; i < parent.getLayersCount(); i++) {
+					if (parent.getLayer(i).visibleRequired()) {
+						parentVisible = true;
+					}
+				}
 
-                parent.setVisible(parentVisible);
-                updateVisibleParent(parent);
-            }
-        }
+				parent.setVisible(parentVisible);
+				updateVisibleParent(parent);
+			}
+		}
 
-        /**
-         * DOCUMENT ME!
-         *
-         * @param arg0 DOCUMENT ME!
-         */
-        public void actionPerformed(ActionEvent arg0) {
-        }
+		/**
+		 * DOCUMENT ME!
+		 * 
+		 * @param arg0
+		 *            DOCUMENT ME!
+		 */
+		public void actionPerformed(ActionEvent arg0) {
+		}
 
-        /**
-         * DOCUMENT ME!
-         *
-         * @param arg0 DOCUMENT ME!
-         */
-        public void mouseReleased(MouseEvent arg0) {
-            super.mouseReleased(arg0);
-        }
+		/**
+		 * DOCUMENT ME!
+		 * 
+		 * @param arg0
+		 *            DOCUMENT ME!
+		 */
+		public void mouseReleased(MouseEvent arg0) {
+			super.mouseReleased(arg0);
+		}
 
-        /**
-         * DOCUMENT ME!
-         *
-         * @param arg0 DOCUMENT ME!
-         */
-        public void mouseEntered(MouseEvent arg0) {
-            // TODO Auto-generated method stub
-            super.mouseEntered(arg0);
+		/**
+		 * DOCUMENT ME!
+		 * 
+		 * @param arg0
+		 *            DOCUMENT ME!
+		 */
+		public void mouseEntered(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			super.mouseEntered(arg0);
 
-            // FJP: COMENTO ESTO.
-            // LO CORRECTO CREO QUE ES IMPLEMENTAR CORRECTAMENTE
-            // LOS METODOS DE DRAG AND DROP
+			// FJP: COMENTO ESTO.
+			// LO CORRECTO CREO QUE ES IMPLEMENTAR CORRECTAMENTE
+			// LOS METODOS DE DRAG AND DROP
 
-            /* if (m_Root.getChildCount()==0){
-               m_Tree.dropRoot(m_Root);
-               }*/
-        }
-    }
+			/*
+			 * if (m_Root.getChildCount()==0){ m_Tree.dropRoot(m_Root); }
+			 */
+		}
+	}
 
 }

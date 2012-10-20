@@ -42,30 +42,31 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: MySQLSpatialWriter.java 13881 2007-09-19 16:22:04Z jaume $
-* $Log$
-* Revision 1.5  2007-09-19 16:11:32  jaume
-* removed unnecessary imports
-*
-* Revision 1.4  2007/06/04 07:10:07  caballero
-* connections refactoring
-*
-* Revision 1.3  2007/03/06 16:49:54  caballero
-* Exceptions
-*
-* Revision 1.2  2007/01/16 20:03:36  azabala
-* change of the writer name
-*
-* Revision 1.1  2007/01/16 13:11:20  azabala
-* first version in cvs
-*
-* Revision 1.1  2007/01/15 20:15:35  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: MySQLSpatialWriter.java 13881 2007-09-19 16:22:04Z jaume $
+ * $Log$
+ * Revision 1.5  2007-09-19 16:11:32  jaume
+ * removed unnecessary imports
+ *
+ * Revision 1.4  2007/06/04 07:10:07  caballero
+ * connections refactoring
+ *
+ * Revision 1.3  2007/03/06 16:49:54  caballero
+ * Exceptions
+ *
+ * Revision 1.2  2007/01/16 20:03:36  azabala
+ * change of the writer name
+ *
+ * Revision 1.1  2007/01/16 13:11:20  azabala
+ * first version in cvs
+ *
+ * Revision 1.1  2007/01/15 20:15:35  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.drivers.jdbc.mysql;
+
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
@@ -88,8 +89,8 @@ import com.iver.cit.gvsig.fmap.edition.ISpatialWriter;
 import com.iver.cit.gvsig.fmap.edition.fieldmanagers.JdbcFieldManager;
 import com.iver.cit.gvsig.fmap.edition.writers.AbstractWriter;
 
-public class MySQLSpatialWriter extends AbstractWriter
-		implements ISpatialWriter, IFieldManager {
+public class MySQLSpatialWriter extends AbstractWriter implements
+		ISpatialWriter, IFieldManager {
 
 	private int numRows;
 
@@ -100,9 +101,9 @@ public class MySQLSpatialWriter extends AbstractWriter
 	private Statement st;
 
 	/**
-	 * flag to mark if writer must create the table or it must
-	 * add records to an existing one
-	 *
+	 * flag to mark if writer must create the table or it must add records to an
+	 * existing one
+	 * 
 	 */
 	private boolean bCreateTable;
 
@@ -111,79 +112,73 @@ public class MySQLSpatialWriter extends AbstractWriter
 	private MySql mySql = new MySql();
 
 	/*
-	 * TODO
-	 * Ver si en MySQL los tipos de datos (numeric, etc.)
-	 * se nombran así también
-	 * */
+	 * TODO Ver si en MySQL los tipos de datos (numeric, etc.) se nombran así
+	 * también
+	 */
 	private JdbcFieldManager fieldManager;
 
+	// public void initialize(Connection conex)throws SQLException{
+	// this.conex = conex;
+	// init();
+	// }
 
-//	public void initialize(Connection conex)throws SQLException{
-//		this.conex = conex;
-//		init();
-//	}
-
-
-
-	public void initialize(ITableDefinition lyrD) throws InitializeWriterException {
+	public void initialize(ITableDefinition lyrD)
+			throws InitializeWriterException {
 		super.initialize(lyrD);
 		this.lyrDef = (DBLayerDefinition) lyrD;
 		conex = lyrDef.getConnection();
 		try {
 			init();
 		} catch (SQLException e) {
-			throw new InitializeWriterException(getName(),e);
+			throw new InitializeWriterException(getName(), e);
 		}
 	}
 
-	private void init() throws SQLException{
+	private void init() throws SQLException {
 
-			st = ((ConnectionJDBC)conex).getConnection().createStatement();
+		st = ((ConnectionJDBC) conex).getConnection().createStatement();
 
-			/*
-			 * y en caso de que sea false usar "CREATE TABLE IF NOT EXISTS" en el
-			 * else
-			 * (AZO)
-			 *
-			 * */
-			if (bCreateTable) {
-				try {
-					st.execute("DROP TABLE " + lyrDef.getTableName() + ";");
-				} catch (SQLException e1) {
-				}
-				//In MySQL you can add geometry column in CREATE TABLE statement
-				String sqlCreate = mySql.getSqlCreateSpatialTable(lyrDef,
-												lyrDef.getFieldsDesc(),
-												true);
-				st.execute(sqlCreate);
-				((ConnectionJDBC)conex).getConnection().commit();
-			}//if
-			((ConnectionJDBC)conex).getConnection().setAutoCommit(false);
-			fieldManager = new JdbcFieldManager(((ConnectionJDBC)conex).getConnection(), lyrDef.getTableName());
+		/*
+		 * y en caso de que sea false usar "CREATE TABLE IF NOT EXISTS" en el
+		 * else (AZO)
+		 */
+		if (bCreateTable) {
+			try {
+				st.execute("DROP TABLE " + lyrDef.getTableName() + ";");
+			} catch (SQLException e1) {
+			}
+			// In MySQL you can add geometry column in CREATE TABLE statement
+			String sqlCreate = mySql.getSqlCreateSpatialTable(lyrDef,
+					lyrDef.getFieldsDesc(), true);
+			st.execute(sqlCreate);
+			((ConnectionJDBC) conex).getConnection().commit();
+		}// if
+		((ConnectionJDBC) conex).getConnection().setAutoCommit(false);
+		fieldManager = new JdbcFieldManager(
+				((ConnectionJDBC) conex).getConnection(), lyrDef.getTableName());
 	}
-
 
 	public void preProcess() throws StartWriterVisitorException {
 		numRows = 0;
 
-        // ATENTION: We will transform (in PostGIS class; doubleQuote())
-        // to UTF-8 strings. Then, we tell the PostgreSQL server
-        // that we will use UTF-8, and it can translate
-        // to its charset
-        // Note: we have to translate to UTF-8 because
-        // the server cannot manage UTF-16
+		// ATENTION: We will transform (in PostGIS class; doubleQuote())
+		// to UTF-8 strings. Then, we tell the PostgreSQL server
+		// that we will use UTF-8, and it can translate
+		// to its charset
+		// Note: we have to translate to UTF-8 because
+		// the server cannot manage UTF-16
 		try {
-			((ConnectionJDBC)conex).getConnection().setAutoCommit(false);
-			((ConnectionJDBC)conex).getConnection().rollback();
+			((ConnectionJDBC) conex).getConnection().setAutoCommit(false);
+			((ConnectionJDBC) conex).getConnection().rollback();
 			alterTable();
 		} catch (SQLException e) {
-			throw new StartWriterVisitorException(getName(),e);
+			throw new StartWriterVisitorException(getName(), e);
 		} catch (WriteDriverException e) {
-			throw new StartWriterVisitorException(getName(),e);
+			throw new StartWriterVisitorException(getName(), e);
 		}
 	}
 
-	public void process(IRowEdited row) throws ProcessWriterVisitorException{
+	public void process(IRowEdited row) throws ProcessWriterVisitorException {
 
 		String sqlInsert;
 		try {
@@ -224,16 +219,16 @@ public class MySQLSpatialWriter extends AbstractWriter
 
 			numRows++;
 		} catch (SQLException e) {
-			throw new ProcessWriterVisitorException(getName(),e);
+			throw new ProcessWriterVisitorException(getName(), e);
 		}
 
 	}
 
-	public void postProcess() throws StopWriterVisitorException{
+	public void postProcess() throws StopWriterVisitorException {
 		try {
-			((ConnectionJDBC)conex).getConnection().setAutoCommit(true);
+			((ConnectionJDBC) conex).getConnection().setAutoCommit(true);
 		} catch (SQLException e) {
-			throw new StopWriterVisitorException(getName(),e);
+			throw new StopWriterVisitorException(getName(), e);
 		}
 	}
 
@@ -313,7 +308,6 @@ public class MySQLSpatialWriter extends AbstractWriter
 		bWriteAll = writeAll;
 	}
 
-
 	public FieldDescription[] getOriginalFields() {
 		return lyrDef.getFieldsDesc();
 	}
@@ -348,7 +342,7 @@ public class MySQLSpatialWriter extends AbstractWriter
 	public boolean canSaveEdits() {
 		// TODO: Revisar los permisos de la tabla en cuestión.
 		try {
-			return !((ConnectionJDBC)conex).getConnection().isReadOnly();
+			return !((ConnectionJDBC) conex).getConnection().isReadOnly();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

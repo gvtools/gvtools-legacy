@@ -52,71 +52,67 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-
 /**
  * This class sets the tool tips in a JList component.
- *
+ * 
  * @author jldominguez
  */
 public class SelectedLayersListCellRenderer extends DefaultListCellRenderer {
-    private static final Border SAFE_NO_FOCUS_BORDER = new EmptyBorder(1, 1, 1,
-            1);
-    private static final long serialVersionUID = 0;
+	private static final Border SAFE_NO_FOCUS_BORDER = new EmptyBorder(1, 1, 1,
+			1);
+	private static final long serialVersionUID = 0;
 
-    public SelectedLayersListCellRenderer() {
-        super();
-    }
+	public SelectedLayersListCellRenderer() {
+		super();
+	}
 
-    /**
-     * Sets special graphic properties (colors, and tool tips) in list elements
-     * and returns <tt>this</tt>.
-     */
-    public Component getListCellRendererComponent(JList list, Object value,
-        int index, boolean isSelected, boolean cellHasFocus) {
-        JComponent jc;
-        LayersListElement lle;
-        setComponentOrientation(list.getComponentOrientation());
+	/**
+	 * Sets special graphic properties (colors, and tool tips) in list elements
+	 * and returns <tt>this</tt>.
+	 */
+	public Component getListCellRendererComponent(JList list, Object value,
+			int index, boolean isSelected, boolean cellHasFocus) {
+		JComponent jc;
+		LayersListElement lle;
+		setComponentOrientation(list.getComponentOrientation());
 
-        if (isSelected) {
-            setBackground(list.getSelectionBackground());
-            setForeground(list.getSelectionForeground());
-        }
-        else {
-            setBackground(list.getBackground());
-            setForeground(list.getForeground());
-        }
+		if (isSelected) {
+			setBackground(list.getSelectionBackground());
+			setForeground(list.getSelectionForeground());
+		} else {
+			setBackground(list.getBackground());
+			setForeground(list.getForeground());
+		}
 
-        if (value instanceof Icon) {
-            setIcon((Icon) value);
-            setText("");
-        }
-        else {
-            setIcon(null);
-            setText((value == null) ? "" : value.toString());
-        }
+		if (value instanceof Icon) {
+			setIcon((Icon) value);
+			setText("");
+		} else {
+			setIcon(null);
+			setText((value == null) ? "" : value.toString());
+		}
 
-        setEnabled(list.isEnabled());
-        setFont(list.getFont());
-        setBorder((cellHasFocus)
-            ? UIManager.getBorder("List.focusCellHighlightBorder")
-            : getNoFocusBorder());
+		setEnabled(list.isEnabled());
+		setFont(list.getFont());
+		setBorder((cellHasFocus) ? UIManager
+				.getBorder("List.focusCellHighlightBorder")
+				: getNoFocusBorder());
 
-        // Set the specific tool tip:
-        if (value instanceof LayersListElement) {
-            lle = (LayersListElement) value;
-            jc = (JComponent) this;
-            jc.setToolTipText(lle.toolTipText());
-        }
+		// Set the specific tool tip:
+		if (value instanceof LayersListElement) {
+			lle = (LayersListElement) value;
+			jc = (JComponent) this;
+			jc.setToolTipText(lle.toolTipText());
+		}
 
-        return this;
-    }
+		return this;
+	}
 
-    private static Border getNoFocusBorder() {
-        if (System.getSecurityManager() != null) {
-            return SAFE_NO_FOCUS_BORDER;
-        }
-        else {
-            return noFocusBorder;
-        }
-    }
+	private static Border getNoFocusBorder() {
+		if (System.getSecurityManager() != null) {
+			return SAFE_NO_FOCUS_BORDER;
+		} else {
+			return noFocusBorder;
+		}
+	}
 }

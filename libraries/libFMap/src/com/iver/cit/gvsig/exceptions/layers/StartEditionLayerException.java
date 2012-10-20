@@ -4,16 +4,19 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import org.gvsig.exceptions.BaseException;
+
 /**
  * @author Vicente Caballero Navarro
  */
 public class StartEditionLayerException extends BaseException {
 	private String layer;
-	public StartEditionLayerException(String l,Throwable exception) {
-		this.layer=l;
+
+	public StartEditionLayerException(String l, Throwable exception) {
+		this.layer = l;
 		init();
 		initCause(exception);
 	}
+
 	/**
 	 *
 	 */
@@ -22,10 +25,9 @@ public class StartEditionLayerException extends BaseException {
 		formatString = "Cannot start editing layer: %(tag). ";
 	}
 
-
 	protected Map values() {
 		Hashtable params = new Hashtable();
-		params.put("layer",layer);
+		params.put("layer", layer);
 		return params;
 	}
 

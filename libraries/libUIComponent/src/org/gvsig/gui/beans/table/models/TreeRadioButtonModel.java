@@ -19,6 +19,7 @@
 package org.gvsig.gui.beans.table.models;
 
 import javax.swing.table.DefaultTableModel;
+
 /**
  * Componente tabla
  * 
@@ -51,10 +52,12 @@ public class TreeRadioButtonModel extends DefaultTableModel implements IModel {
 	}
 
 	public void addNew() {
-		super.addRow(new Object[] { new Boolean(false), new Boolean(false), new Boolean(false), "" });
+		super.addRow(new Object[] { new Boolean(false), new Boolean(false),
+				new Boolean(false), "" });
 	}
 
 	public Object[] getNewLine() {
-		return new Object[] { new Boolean(false), new Boolean(false), new Boolean(false), "" };
+		return new Object[] { new Boolean(false), new Boolean(false),
+				new Boolean(false), "" };
 	}
 }

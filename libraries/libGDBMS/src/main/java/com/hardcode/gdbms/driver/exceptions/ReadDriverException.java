@@ -9,10 +9,10 @@ public class ReadDriverException extends BaseException {
 
 	private String driver = null;
 
-	public ReadDriverException(String driver,Throwable exception) {
+	public ReadDriverException(String driver, Throwable exception) {
 		this.driver = driver;
 		init();
-		if (exception != null){
+		if (exception != null) {
 			initCause(exception);
 		}
 	}
@@ -24,7 +24,7 @@ public class ReadDriverException extends BaseException {
 
 	protected Map values() {
 		Hashtable params = new Hashtable();
-		params.put("driver",driver);
+		params.put("driver", driver);
 		return params;
 	}
 

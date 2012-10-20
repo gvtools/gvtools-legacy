@@ -29,7 +29,6 @@ package org.gvsig.graph.solvers;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Stack;
 
 import org.gvsig.exceptions.BaseException;
 import org.gvsig.graph.core.AbstractNetSolver;
@@ -41,20 +40,14 @@ import org.gvsig.graph.core.GvNode;
 import org.gvsig.graph.core.IFeatureExtractor;
 import org.gvsig.graph.core.IGraph;
 import org.gvsig.graph.core.InfoShp;
-import org.gvsig.graph.core.Network;
 import org.gvsig.graph.core.NetworkUtils;
 
 import com.hardcode.gdbms.engine.values.Value;
-import com.hardcode.gdbms.engine.values.ValueFactory;
-import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
-import com.iver.cit.gvsig.fmap.core.v02.FConverter;
-import com.iver.cit.gvsig.fmap.layers.VectorialAdapter;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.MultiLineString;
 
 public abstract class AbstractShortestPathSolver extends AbstractNetSolver {
 
@@ -68,8 +61,8 @@ public abstract class AbstractShortestPathSolver extends AbstractNetSolver {
 	public void setFielStreetName(String name) {
 		try {
 			if (net.getLayer() != null) {
-				int aux = net.getLayer().getRecordset().getFieldIndexByName(
-						name);
+				int aux = net.getLayer().getRecordset()
+						.getFieldIndexByName(name);
 				if (aux == -1)
 					throw new RuntimeException("Field " + name + " not found.");
 				fieldIndexStreetName = aux;
@@ -83,49 +76,10 @@ public abstract class AbstractShortestPathSolver extends AbstractNetSolver {
 
 	}
 
-	private void populateRouteSimple(int idStart, int idEnd)
-			throws BaseException {
-		int idEnlace;
-		GvNode node;
-		GvEdge link;
-		double costeEntrada;
-
-		// Trazar el camino desde idEnd hasta idStart hacia atrás marcando los
-		// Enlaces
-		double Coste = 0;
-		double Coste2 = 0;
-		IGraph graph = net.getGraph();
-		node = graph.getNodeByID(idEnd);
-		int from_link = node.get_best_from_link();
-		VectorialAdapter va = (VectorialAdapter) net.getLayer().getSource();
-		while (node.getIdNode() != idStart) {
-			if (from_link == -1) {
-				throw new RuntimeException(
-						"Fallo al recorrer de manera inversa la solución. Encontrado arco con -1");
-				// break; // FALLO!!
-			}
-			link = graph.getEdgeByID(from_link);
-			IFeature feat = va.getFeature(link.getIdArc());
-			route.addRouteFeature(feat.getGeometry(), link.getIdArc(), link
-					.getWeight(), link.getDistance(), feat.getAttribute(
-					getFieldIndexStreetName()).toString());
-
-			node = graph.getNodeByID(link.getIdNodeOrig());
-
-			Coste = Coste + link.getWeight();
-			Coste2 = Coste2 + link.getDistance();
-
-			// TODO:
-			// from_link = node.get_from_link(idEnlace, &costeEntrada);
-			from_link = node.get_from_link(link.getIdEdge());
-
-		}
-		System.out.println("Salgo con node = " + node.getIdNode());
-	}
-
 	/**
-	 * TODO: DON'T USE JTS GEOMETRIES IN ORDER TO DO IT MUCH FASTER!!
-	 * 			=> Implement 
+	 * TODO: DON'T USE JTS GEOMETRIES IN ORDER TO DO IT MUCH FASTER!! =>
+	 * Implement
+	 * 
 	 * @param origin
 	 * @param dest
 	 * @param idStart
@@ -136,8 +90,6 @@ public abstract class AbstractShortestPathSolver extends AbstractNetSolver {
 			int idEnd) throws BaseException {
 		int idEnlace;
 		GvNode node;
-		GvEdge link;
-		double costeEntrada;
 
 		// Trazar el camino desde idEnd hasta idStart hacia atrás marcando los
 		// Enlaces
@@ -145,18 +97,17 @@ public abstract class AbstractShortestPathSolver extends AbstractNetSolver {
 		node = graph.getNodeByID(idEnd);
 		int from_link = node.get_best_from_link();
 
-		if (featExtractor == null)
-		{
-			if (net.getFeatExtractor() == null) { 
+		if (featExtractor == null) {
+			if (net.getFeatExtractor() == null) {
 				featExtractor = new DefaultFeatureExtractor(net.getLayer());
 				net.setFeatExtractor(featExtractor);
 			}
 			featExtractor = net.getFeatExtractor();
-					
+
 		}
 
-//		VectorialAdapter va = (VectorialAdapter) net.getLayer().getSource();
-//		va.start();
+		// VectorialAdapter va = (VectorialAdapter) net.getLayer().getSource();
+		// va.start();
 
 		/*
 		 * Miramos los nodos de los tramos inicio y final, y cogemos el nodo que
@@ -213,7 +164,7 @@ public abstract class AbstractShortestPathSolver extends AbstractNetSolver {
 		Value nameStreet = featExtractor.getFieldValue(finalEdge.getIdArc(),
 				getFieldIndexStreetName());
 
-//		MultiLineString jtsGeom = (MultiLineString) g.toJTSGeometry();
+		// MultiLineString jtsGeom = (MultiLineString) g.toJTSGeometry();
 		// CoordinateFilter removeDuplicates = new
 		// UniqueCoordinateArrayFilter();
 		// jtsGeom.apply(removeDuplicates);
@@ -232,8 +183,7 @@ public abstract class AbstractShortestPathSolver extends AbstractNetSolver {
 				bFlipearShape = true;
 			}
 
-			IGeometry line = NetworkUtils.getPartialLineString(g,
-					pctMax, 1);
+			IGeometry line = NetworkUtils.getPartialLineString(g, pctMax, 1);
 
 			pctMin = pctMin / pctMax; // Porque ha cambiado la longitud
 			// del shape
@@ -246,9 +196,9 @@ public abstract class AbstractShortestPathSolver extends AbstractNetSolver {
 			IGeometry geom = line;
 			// TODO: Calcular bien el length de este arco,
 			// basandonos en el porcentaje costeTramoFinal / costeOriginal
-			route.addRouteFeature(geom, origin.getIdArc(), nodeEnd
-					.getBestCost(), nodeEnd.getAccumulatedLength(), nameStreet
-					.toString());
+			route.addRouteFeature(geom, origin.getIdArc(),
+					nodeEnd.getBestCost(), nodeEnd.getAccumulatedLength(),
+					nameStreet.toString());
 
 			return; // Debería sacar el coste
 		}
@@ -327,9 +277,9 @@ public abstract class AbstractShortestPathSolver extends AbstractNetSolver {
 			g = featExtractor.getGeometry(infoShp.idArc);
 			nameStreet = featExtractor.getFieldValue(infoShp.idArc,
 					getFieldIndexStreetName());
-//			nameStreet = ValueFactory.createValue("TEST");
-			
-//			MultiLineString line = (MultiLineString) g.toJTSGeometry();
+			// nameStreet = ValueFactory.createValue("TEST");
+
+			// MultiLineString line = (MultiLineString) g.toJTSGeometry();
 			IGeometry line = g;
 			IGeometry aux = null;
 			if (infoShp.pct < 1.0)
@@ -340,11 +290,11 @@ public abstract class AbstractShortestPathSolver extends AbstractNetSolver {
 			if (aux == null) {
 				if (infoShp.bFlip)
 					line = NetworkUtils.flipGeometry(line);
-				geom = line; //FConverter.jts_to_igeometry(line);
+				geom = line; // FConverter.jts_to_igeometry(line);
 			} else {
 				if (infoShp.bFlip)
-					aux = NetworkUtils.flipGeometry(aux); //aux.reverse();
-				geom = aux; //FConverter.jts_to_igeometry(aux);
+					aux = NetworkUtils.flipGeometry(aux); // aux.reverse();
+				geom = aux; // FConverter.jts_to_igeometry(aux);
 			}
 
 			route.addRouteFeature(geom, infoShp.idArc, infoShp.cost,
@@ -354,7 +304,7 @@ public abstract class AbstractShortestPathSolver extends AbstractNetSolver {
 			auxC++;
 
 		}
-//		va.stop();
+		// va.stop();
 		t2 = System.currentTimeMillis();
 		System.out.println("T populate 2 = " + (t2 - t1));
 		return;

@@ -148,23 +148,28 @@ import com.iver.cit.gvsig.gui.panels.ColorChooserPanel;
 
 /**
  * SimpleLine allows the user to store and modify the main properties that
- * define a <b>simple line</b>.<p>
+ * define a <b>simple line</b>.
+ * <p>
  * <p>
  * This functionality is carried out thanks to two tabs (simple line and arrow
  * decorator)which are included in the panel to edit the properities of a symbol
- * (SymbolEditor)how is explained in AbstractTypeSymbolEditor.<p>
+ * (SymbolEditor)how is explained in AbstractTypeSymbolEditor.
  * <p>
- * The first tab (Simple Line)allows the user to change the color (<b>jccColor</b>),
- * the width (<b>txtWidth</b>) and the style of the line (<b>cmbLinStyles</b>).<p>
  * <p>
- * The second tab (<b>arrowDecorator</b>)allows the user to insert a symbol in the
- * line (for example an arrow to specify its orientation)and to modify it.
- *
- *@see ArrowDecorator
- *@see AbstractTypeSymbolEditor
- *@author jaume dominguez faus - jaume.dominguez@iver.es
+ * The first tab (Simple Line)allows the user to change the color
+ * (<b>jccColor</b>), the width (<b>txtWidth</b>) and the style of the line
+ * (<b>cmbLinStyles</b>).
+ * <p>
+ * <p>
+ * The second tab (<b>arrowDecorator</b>)allows the user to insert a symbol in
+ * the line (for example an arrow to specify its orientation)and to modify it.
+ * 
+ * @see ArrowDecorator
+ * @see AbstractTypeSymbolEditor
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
-public class SimpleLine extends AbstractTypeSymbolEditor implements ActionListener {
+public class SimpleLine extends AbstractTypeSymbolEditor implements
+		ActionListener {
 
 	private ColorChooserPanel jccColor;
 	private JIncrementalNumberField txtWidth;
@@ -173,42 +178,38 @@ public class SimpleLine extends AbstractTypeSymbolEditor implements ActionListen
 	private LineProperties lineProperties;
 	private JIncrementalNumberField txtOffset;
 
-
 	public SimpleLine(SymbolEditor owner) {
 		super(owner);
 		initialize();
 	}
 
-
 	/**
 	 * Initializes the parameters that define a simpleline.To do it, two tabs
 	 * are created inside the SymbolEditor panel with default values for the
-	 * different attributes of the simple line.This two tabs will be simple
-	 * line tab (options of color, width and style of the line)and arrow
-	 * decorator tab (options to "decorate" the line with a symbol).
+	 * different attributes of the simple line.This two tabs will be simple line
+	 * tab (options of color, width and style of the line)and arrow decorator
+	 * tab (options to "decorate" the line with a symbol).
 	 */
 	private void initialize() {
-		JPanel myTab = new JPanel(new FlowLayout(FlowLayout.LEADING, 5,5));
+		JPanel myTab = new JPanel(new FlowLayout(FlowLayout.LEADING, 5, 5));
 		myTab.setName(PluginServices.getText(this, "simple_line"));
 		GridBagLayoutPanel aux = new GridBagLayoutPanel();
 
 		// color chooser
 		jccColor = new ColorChooserPanel(true);
 		jccColor.setAlpha(255);
-		aux.addComponent(PluginServices.getText(this, "color")+":",
-				jccColor	);
+		aux.addComponent(PluginServices.getText(this, "color") + ":", jccColor);
 
 		// line width
-		txtWidth = new JIncrementalNumberField("3", 25, 0, Double.POSITIVE_INFINITY, 1);
-		aux.addComponent(PluginServices.getText(this, "width")+":",
-				txtWidth );
+		txtWidth = new JIncrementalNumberField("3", 25, 0,
+				Double.POSITIVE_INFINITY, 1);
+		aux.addComponent(PluginServices.getText(this, "width") + ":", txtWidth);
 
 		// line offset
-		txtOffset = new JIncrementalNumberField("0", 25, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1);
-		aux.addComponent(PluginServices.getText(this, "offset")+":",
-				txtOffset );
-
-
+		txtOffset = new JIncrementalNumberField("0", 25,
+				Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1);
+		aux.addComponent(PluginServices.getText(this, "offset") + ":",
+				txtOffset);
 
 		aux.setPreferredSize(new Dimension(300, 300));
 		myTab.add(aux);
@@ -233,7 +234,7 @@ public class SimpleLine extends AbstractTypeSymbolEditor implements ActionListen
 		tabs.add(arrowDecorator);
 
 		lineProperties = new LineProperties((float) txtWidth.getDouble());
-		lineProperties.addListener(new BeanListener(){
+		lineProperties.addListener(new BeanListener() {
 
 			public void beanValueChanged(Object value) {
 				fireSymbolChangedEvent();
@@ -242,19 +243,18 @@ public class SimpleLine extends AbstractTypeSymbolEditor implements ActionListen
 		tabs.add(lineProperties);
 	}
 
-
 	public ISymbol getLayer() {
 		SimpleLineSymbol layer = new SimpleLineSymbol();
 		layer.setLineColor(jccColor.getColor());
 		layer.setIsShapeVisible(true);
 		// clone the selected style in the combo box
 
-		SimpleLineStyle simplLine= new SimpleLineStyle();
+		SimpleLineStyle simplLine = new SimpleLineStyle();
 
 		simplLine.setStroke(lineProperties.getLinePropertiesStyle());
 		simplLine.setOffset(-txtOffset.getDouble());
 
-		ArrowDecoratorStyle ads= arrowDecorator.getArrowDecoratorStyle();
+		ArrowDecoratorStyle ads = arrowDecorator.getArrowDecoratorStyle();
 		if (ads != null) {
 			ads.getMarker().setColor(jccColor.getColor());
 		}
@@ -278,7 +278,8 @@ public class SimpleLine extends AbstractTypeSymbolEditor implements ActionListen
 		try {
 			if (layer == null) {
 				// initialize defaults
-				System.err.println(getClass().getName()+":: should be unreachable code");
+				System.err.println(getClass().getName()
+						+ ":: should be unreachable code");
 				jccColor.setColor(Color.BLACK);
 				txtWidth.setDouble(1.0);
 				txtOffset.setDouble(0);
@@ -286,22 +287,29 @@ public class SimpleLine extends AbstractTypeSymbolEditor implements ActionListen
 				sym = (SimpleLineSymbol) layer;
 				jccColor.setColor(sym.getColor());
 				txtWidth.setDouble(sym.getLineStyle().getLineWidth());
-				txtOffset.setDouble(sym.getLineStyle().getOffset() == 0 ? 0 : -sym.getLineStyle().getOffset() );
-				arrowDecorator.setArrowDecoratorStyle( sym.getLineStyle().getArrowDecorator());
+				txtOffset.setDouble(sym.getLineStyle().getOffset() == 0 ? 0
+						: -sym.getLineStyle().getOffset());
+				arrowDecorator.setArrowDecoratorStyle(sym.getLineStyle()
+						.getArrowDecorator());
 				/*
-				 * this line discards any temp changes in the linestyle
-				 * widths made by any previous rendering and sets all the
-				 * values to those to be persisted.
+				 * this line discards any temp changes in the linestyle widths
+				 * made by any previous rendering and sets all the values to
+				 * those to be persisted.
 				 */
-				ILineStyle tempLineStyle = (ILineStyle) SymbologyFactory.createStyleFromXML(sym.getLineStyle().getXMLEntity(), sym.getDescription());
-				lineProperties.setLinePropertiesStyle((BasicStroke) tempLineStyle.getStroke());
+				ILineStyle tempLineStyle = (ILineStyle) SymbologyFactory
+						.createStyleFromXML(sym.getLineStyle().getXMLEntity(),
+								sym.getDescription());
+				lineProperties
+						.setLinePropertiesStyle((BasicStroke) tempLineStyle
+								.getStroke());
 			}
 		} catch (IndexOutOfBoundsException ioEx) {
-			NotificationManager.addWarning("Symbol layer index out of bounds", ioEx);
+			NotificationManager.addWarning("Symbol layer index out of bounds",
+					ioEx);
 		} catch (ClassCastException ccEx) {
-			NotificationManager.addWarning("Illegal casting from " +
-					layer.getClassName() + " to " + getSymbolClass().
-					getName() + ".", ccEx);
+			NotificationManager.addWarning(
+					"Illegal casting from " + layer.getClassName() + " to "
+							+ getSymbolClass().getName() + ".", ccEx);
 		}
 	}
 

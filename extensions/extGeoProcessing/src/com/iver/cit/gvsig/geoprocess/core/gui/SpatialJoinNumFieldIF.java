@@ -42,41 +42,41 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: SpatialJoinNumFieldIF.java 10626 2007-03-06 16:55:54Z caballero $
-* $Log$
-* Revision 1.3  2007-03-06 16:47:58  caballero
-* Exceptions
-*
-* Revision 1.2  2006/08/11 16:12:27  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/05/24 21:13:09  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.2  2006/03/23 21:02:37  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/03/05 19:56:06  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: SpatialJoinNumFieldIF.java 10626 2007-03-06 16:55:54Z caballero $
+ * $Log$
+ * Revision 1.3  2007-03-06 16:47:58  caballero
+ * Exceptions
+ *
+ * Revision 1.2  2006/08/11 16:12:27  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/05/24 21:13:09  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.2  2006/03/23 21:02:37  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/03/05 19:56:06  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core.gui;
 
 /**
- * Base interface to model logic of
- * dialogs to select sumarize functions for numeric
- * fields of related layer of a spatial join relationship
+ * Base interface to model logic of dialogs to select sumarize functions for
+ * numeric fields of related layer of a spatial join relationship
+ * 
  * @author azabala
- *
+ * 
  */
 public interface SpatialJoinNumFieldIF {
 	/**
-	 * will be called when user would pust ok button, 
-	 * or when would close main dialog
+	 * will be called when user would pust ok button, or when would close main
+	 * dialog
 	 */
 	public void ok();
+
 	public boolean isOk();
 }
-

@@ -1,12 +1,5 @@
 package es.gva.cit.catalog.csw.drivers.profiles;
 
-import org.apache.commons.httpclient.NameValuePair;
-
-import com.iver.utiles.swing.jcomboServer.ServerData;
-
-import es.gva.cit.catalog.csw.drivers.CSWCapabilities;
-import es.gva.cit.catalog.csw.parsers.CSWConstants;
-import es.gva.cit.catalog.querys.CatalogQuery;
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
@@ -57,30 +50,33 @@ import es.gva.cit.catalog.querys.CatalogQuery;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class CSWebRIMProfile extends CSWAbstractProfile{
+public class CSWebRIMProfile extends CSWAbstractProfile {
 
 	public CSWebRIMProfile() {
-		super();		
+		super();
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see es.gva.cit.catalog.csw.drivers.profiles.ICSWProfile#getTitle()
 	 */
 	public String getTitleProperty() {
 		return "/DataGranule/instrumentShortName";
-	}	
-	
-	/*
-	 * (non-Javadoc)
-	 * @see es.gva.cit.catalog.csw.drivers.profiles.ICSWProfile#getAbstract()
-	 */
-	public String getAbstractProperty() {
-		 return "/Dataset/Description/LocalizedString/@value";
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
+	 * @see es.gva.cit.catalog.csw.drivers.profiles.ICSWProfile#getAbstract()
+	 */
+	public String getAbstractProperty() {
+		return "/Dataset/Description/LocalizedString/@value";
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see es.gva.cit.catalog.csw.drivers.profiles.ICSWProfile#getCoordinates()
 	 */
 	public String getCoordinatesProperty() {
@@ -90,6 +86,7 @@ public class CSWebRIMProfile extends CSWAbstractProfile{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see es.gva.cit.catalog.csw.drivers.profiles.ICSWProfile#getDateFrom()
 	 */
 	public String getDateFromProperty() {
@@ -99,6 +96,7 @@ public class CSWebRIMProfile extends CSWAbstractProfile{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see es.gva.cit.catalog.csw.drivers.profiles.ICSWProfile#getDateTo()
 	 */
 	public String getDateToProperty() {
@@ -108,6 +106,7 @@ public class CSWebRIMProfile extends CSWAbstractProfile{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see es.gva.cit.catalog.csw.drivers.profiles.ICSWProfile#getProvider()
 	 */
 	public String getProviderProperty() {
@@ -116,6 +115,7 @@ public class CSWebRIMProfile extends CSWAbstractProfile{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see es.gva.cit.catalog.csw.drivers.profiles.ICSWProfile#getScale()
 	 */
 	public String getScaleProperty() {
@@ -125,14 +125,16 @@ public class CSWebRIMProfile extends CSWAbstractProfile{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see es.gva.cit.catalog.csw.drivers.profiles.ICSWProfile#getThemeKey()
 	 */
 	public String getKeywordsProperty() {
-		 return "/Dataset/Slot:s2/ValueList/Value";
+		return "/Dataset/Slot:s2/ValueList/Value";
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see es.gva.cit.catalog.csw.drivers.profiles.ICSWProfile#getTopic()
 	 */
 	public String getTopicProperty() {
@@ -141,74 +143,79 @@ public class CSWebRIMProfile extends CSWAbstractProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalog.csw.drivers.profiles.ICSWProfile#getTopicValue(java.lang.String)
+	 * 
+	 * @see
+	 * es.gva.cit.catalog.csw.drivers.profiles.ICSWProfile#getTopicValue(java
+	 * .lang.String)
 	 */
 	public String getTopicValue(String topic) {
-		 if (topic.equals("farming")) {
-	            return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:001";
-	        }
-	        if (topic.equals("biota")) {
-	            return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:002";
-	        }
-	        if (topic.equals("boundaries")) {
-	            return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:003";
-	        }
-	        if (topic.equals("climatologyMeteorologyAtmosphere")) {
-	            return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:004";
-	        }
-	        if (topic.equals("economy")) {
-	            return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:005";
-	        }
-	        if (topic.equals("elevation")) {
-	            return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:006";
-	        }
-	        if (topic.equals("environment")) {
-	            return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:007";
-	        }
-	        if (topic.equals("geoscientificInformation")) {
-	            return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:008";
-	        }
-	        if (topic.equals("health")) {
-	            return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:009";
-	        }
-	        if (topic.equals("imageryBaseMapsEarthCover")) {
-	            return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:010";
-	        }
-	        if (topic.equals("intelligenceMilitary")) {
-	            return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:011";
-	        }
-	        if (topic.equals("inlandWaters")) {
-	            return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:012";
-	        }
-	        if (topic.equals("location")) {
-	            return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:013";
-	        }
-	        if (topic.equals("oceans")) {
-	            return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:014";
-	        }
-	        if (topic.equals("planningCadastre")) {
-	            return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:015";
-	        }
-	        if (topic.equals("society")) {
-	            return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:016";
-	        }
-	        if (topic.equals("structure")) {
-	            return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:017";
-	        }
-	        if (topic.equals("transportation")) {
-	            return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:018";
-	        }
-	        if (topic.equals("utilitiesCommunication")) {
-	            return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:019";
-	        }
-	        return "";
+		if (topic.equals("farming")) {
+			return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:001";
+		}
+		if (topic.equals("biota")) {
+			return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:002";
+		}
+		if (topic.equals("boundaries")) {
+			return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:003";
+		}
+		if (topic.equals("climatologyMeteorologyAtmosphere")) {
+			return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:004";
+		}
+		if (topic.equals("economy")) {
+			return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:005";
+		}
+		if (topic.equals("elevation")) {
+			return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:006";
+		}
+		if (topic.equals("environment")) {
+			return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:007";
+		}
+		if (topic.equals("geoscientificInformation")) {
+			return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:008";
+		}
+		if (topic.equals("health")) {
+			return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:009";
+		}
+		if (topic.equals("imageryBaseMapsEarthCover")) {
+			return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:010";
+		}
+		if (topic.equals("intelligenceMilitary")) {
+			return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:011";
+		}
+		if (topic.equals("inlandWaters")) {
+			return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:012";
+		}
+		if (topic.equals("location")) {
+			return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:013";
+		}
+		if (topic.equals("oceans")) {
+			return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:014";
+		}
+		if (topic.equals("planningCadastre")) {
+			return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:015";
+		}
+		if (topic.equals("society")) {
+			return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:016";
+		}
+		if (topic.equals("structure")) {
+			return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:017";
+		}
+		if (topic.equals("transportation")) {
+			return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:018";
+		}
+		if (topic.equals("utilitiesCommunication")) {
+			return "urn:x-iso-tc211:19119(2003)/scheme/services/scheme/topics:019";
+		}
+		return "";
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalog.drivers.profiles.IProfile#getElementNameProperty()
+	 * 
+	 * @see
+	 * es.gva.cit.catalog.drivers.profiles.IProfile#getElementNameProperty()
 	 */
 	public String getElementNameProperty() {
 		return "/DataGranule/";
-	} 
+	}
 }

@@ -48,11 +48,12 @@ import junit.framework.TestCase;
  * 
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
-public class TestStringNumberUtilities extends TestCase{
+public class TestStringNumberUtilities extends TestCase {
 	private String word;
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see junit.framework.TestCase#setUp()
 	 */
 	protected void setUp() throws Exception {
@@ -61,13 +62,14 @@ public class TestStringNumberUtilities extends TestCase{
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see junit.framework.TestCase#tearDown()
 	 */
 	protected void tearDown() throws Exception {
 		super.tearDown();
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -77,8 +79,7 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
@@ -93,8 +94,7 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
@@ -109,8 +109,7 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
@@ -125,8 +124,7 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
@@ -141,8 +139,7 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
@@ -157,8 +154,7 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
@@ -173,8 +169,7 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isNaturalNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
@@ -189,8 +184,7 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isNaturalNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
@@ -205,8 +199,7 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isIntegerNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
@@ -221,13 +214,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isIntegerNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -237,13 +229,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isIntegerNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -253,8 +244,7 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isIntegerNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
@@ -269,13 +259,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -285,13 +274,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -301,13 +289,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -317,8 +304,7 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
@@ -333,13 +319,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-		
+
 	/**
 	 * A test
 	 */
@@ -349,13 +334,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -365,13 +349,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -381,14 +364,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
-	
+
 	/**
 	 * A test
 	 */
@@ -398,14 +379,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
-	
+
 	/**
 	 * A test
 	 */
@@ -415,13 +394,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -431,13 +409,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -447,13 +424,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -463,14 +439,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithIntegerExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
-	
+
 	/**
 	 * A test
 	 */
@@ -480,14 +454,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithIntegerExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
 
-	
 	/**
 	 * A test
 	 */
@@ -497,14 +469,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithIntegerExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
 
-	
 	/**
 	 * A test
 	 */
@@ -514,14 +484,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithIntegerExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
 
-	
 	/**
 	 * A test
 	 */
@@ -531,14 +499,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithIntegerExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
 
-	
 	/**
 	 * A test
 	 */
@@ -548,13 +514,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithIntegerExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -564,14 +529,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithIntegerExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
-	
+
 	/**
 	 * A test
 	 */
@@ -581,13 +544,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithIntegerExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -597,13 +559,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithIntegerExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -613,13 +574,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithIntegerExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -629,13 +589,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithIntegerExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -645,13 +604,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithIntegerExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -661,13 +619,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithIntegerExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -677,13 +634,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithIntegerExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-		
+
 	/**
 	 * A test
 	 */
@@ -693,13 +649,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithIntegerExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -709,13 +664,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithIntegerExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -725,14 +679,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithIntegerExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
-	
+
 	/**
 	 * A test
 	 */
@@ -742,13 +694,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithIntegerExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -758,14 +709,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithRealExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
-	
+
 	/**
 	 * A test
 	 */
@@ -775,14 +724,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithRealExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
 
-	
 	/**
 	 * A test
 	 */
@@ -792,14 +739,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithRealExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
 
-	
 	/**
 	 * A test
 	 */
@@ -809,14 +754,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithRealExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
 
-	
 	/**
 	 * A test
 	 */
@@ -826,14 +769,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithRealExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
 
-	
 	/**
 	 * A test
 	 */
@@ -843,13 +784,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithRealExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -859,14 +799,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithRealExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
-	
+
 	/**
 	 * A test
 	 */
@@ -876,13 +814,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithRealExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -892,13 +829,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithRealExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -908,13 +844,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithRealExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -924,13 +859,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithRealExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -940,13 +874,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithRealExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -956,13 +889,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithRealExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -972,13 +904,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithRealExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-		
+
 	/**
 	 * A test
 	 */
@@ -988,13 +919,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithRealExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -1004,13 +934,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithRealExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -1020,13 +949,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithRealExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -1036,8 +964,7 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithRealExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
@@ -1052,13 +979,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isIntegerNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -1068,13 +994,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isNaturalNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -1084,13 +1009,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -1100,13 +1024,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -1116,13 +1039,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithIntegerExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -1132,8 +1054,7 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithRealExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
@@ -1148,13 +1069,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isIntegerNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -1164,13 +1084,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isNaturalNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -1180,13 +1099,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -1196,13 +1114,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumber(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -1212,13 +1129,12 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithIntegerExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -1228,8 +1144,7 @@ public class TestStringNumberUtilities extends TestCase{
 
 		if (StringNumberUtilities.isRealNumberWithRealExponent(word)) {
 			ShowText.showYes();
-		}
-		else {
+		} else {
 			ShowText.showNo();
 			fail();
 		}
@@ -1244,7 +1159,8 @@ public class TestStringNumberUtilities extends TestCase{
 		/**
 		 * Shows the text: Is number?
 		 * 
-		 * @param word An String
+		 * @param word
+		 *            An String
 		 */
 		public static void showIsNumberText(String word) {
 			System.out.print("¿ Es número \'" + word + "\' ? ");
@@ -1253,7 +1169,8 @@ public class TestStringNumberUtilities extends TestCase{
 		/**
 		 * Shows the text: Is natural number?
 		 * 
-		 * @param word An String
+		 * @param word
+		 *            An String
 		 */
 		public static void showIsNaturalText(String word) {
 			System.out.print("¿ Es número natural \'" + word + "\' ? ");
@@ -1262,7 +1179,8 @@ public class TestStringNumberUtilities extends TestCase{
 		/**
 		 * Shows the text: Is integer number?
 		 * 
-		 * @param word An String
+		 * @param word
+		 *            An String
 		 */
 		public static void showIsIntegerText(String word) {
 			System.out.print("¿ Es número entero \'" + word + "\' ? ");
@@ -1271,43 +1189,50 @@ public class TestStringNumberUtilities extends TestCase{
 		/**
 		 * Shows the text: Is rational number?
 		 * 
-		 * @param word An String
+		 * @param word
+		 *            An String
 		 */
 		public static void showIsRealText(String word) {
 			System.out.print("¿ Es número real \'" + word + "\' ? ");
 		}
-		
+
 		/**
 		 * Shows the text: Is integer exponent rational number?
 		 * 
-		 * @param word An String
+		 * @param word
+		 *            An String
 		 */
 		public static void showIsRealWithIntegerExponentText(String word) {
-			System.out.print("¿ Es número real con exponente entero \'" + word + "\' ? ");
+			System.out.print("¿ Es número real con exponente entero \'" + word
+					+ "\' ? ");
 		}
-		
+
 		/**
 		 * Shows the text: Is rational exponent rational number?
 		 * 
-		 * @param word An String
+		 * @param word
+		 *            An String
 		 */
 		public static void showIsRealWithRealExponentText(String word) {
-			System.out.print("¿ Es número real con exponente real \'" + word + "\' ? ");
+			System.out.print("¿ Es número real con exponente real \'" + word
+					+ "\' ? ");
 		}
 
 		/**
 		 * Shows the text: Yes
 		 * 
-		 * @param word An String
+		 * @param word
+		 *            An String
 		 */
 		public static void showYes() {
 			System.out.println("Si.");
 		}
-		
+
 		/**
 		 * Shows the text: No
 		 * 
-		 * @param word An String
+		 * @param word
+		 *            An String
 		 */
 		public static void showNo() {
 			System.out.println("No.");

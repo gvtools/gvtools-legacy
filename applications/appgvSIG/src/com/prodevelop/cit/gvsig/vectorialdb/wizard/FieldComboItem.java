@@ -42,21 +42,20 @@
  */
 package com.prodevelop.cit.gvsig.vectorialdb.wizard;
 
-
 /**
  * Utility class to deal with combo boxes.
- *
+ * 
  * @author jldominguez
- *
+ * 
  */
 public class FieldComboItem {
-    private String name = "";
+	private String name = "";
 
-    public FieldComboItem(String _name) {
-        name = _name;
-    }
+	public FieldComboItem(String _name) {
+		name = _name;
+	}
 
-    public String toString() {
-        return name;
-    }
+	public String toString() {
+		return name;
+	}
 }

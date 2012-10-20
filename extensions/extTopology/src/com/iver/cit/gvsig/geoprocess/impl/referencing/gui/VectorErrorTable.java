@@ -126,7 +126,6 @@ public class VectorErrorTable extends BoxLayoutPanel {
 
 	private static final long serialVersionUID = -6506747314549738246L;
 
-
 	private static boolean registeredKeyStrokes = false;
 
 	/**
@@ -150,7 +149,7 @@ public class VectorErrorTable extends BoxLayoutPanel {
 	 */
 	MathTransform mathTransform;
 	/**
-	 * Lyr we are spatially adjusting 
+	 * Lyr we are spatially adjusting
 	 */
 	FLyrVect adjustingLyr;
 
@@ -160,7 +159,7 @@ public class VectorErrorTable extends BoxLayoutPanel {
 	 * @author Alvaro Zabala
 	 * 
 	 */
-	private final class VErrorTableModel extends AbstractTableModel{
+	private final class VErrorTableModel extends AbstractTableModel {
 
 		private static final long serialVersionUID = -3431188780005613099L;
 		private static final int COLUMN_COUNT = 7;
@@ -180,7 +179,7 @@ public class VectorErrorTable extends BoxLayoutPanel {
 		}
 
 		public boolean isCellEditable(int row, int col) {
-			if ((col == 0) || (col==5)) {
+			if ((col == 0) || (col == 5)) {
 				return false;
 			} else {
 				return true;
@@ -188,31 +187,32 @@ public class VectorErrorTable extends BoxLayoutPanel {
 		}
 
 		public void setValueAt(Object value, int row, int col) {
-			if (col == 6){
+			if (col == 6) {
 				DisactivableMappedPosition mappedPosition = (DisactivableMappedPosition) verrorContainer
-				.getMappedPosition(row);
+						.getMappedPosition(row);
 				mappedPosition.setActive(((Boolean) value).booleanValue());
 				fireTableCellUpdated(row, col);
 
 				updateVErrorTable();
 				updateRmsText();
-			}else if ((col==1) || (col==2) || (col==3) || (col==4)){
+			} else if ((col == 1) || (col == 2) || (col == 3) || (col == 4)) {
 				double newValue = 0.0;
-				try{
+				try {
 					newValue = Double.parseDouble(value.toString());
-				}catch(Exception e){
+				} catch (Exception e) {
 					return;
 				}
-				MappedPosition mappedPosition = verrorContainer.getMappedPosition(row);
-				if (col==1){
+				MappedPosition mappedPosition = verrorContainer
+						.getMappedPosition(row);
+				if (col == 1) {
 					mappedPosition.getSource().setOrdinate(0, newValue);
-				}else if (col==2){
+				} else if (col == 2) {
 					mappedPosition.getSource().setOrdinate(1, newValue);
-				}else if (col==3){
+				} else if (col == 3) {
 					mappedPosition.getTarget().setOrdinate(0, newValue);
-				}else if (col==4){
+				} else if (col == 4) {
 					mappedPosition.getTarget().setOrdinate(1, newValue);
-				}				
+				}
 			}
 		}
 
@@ -220,7 +220,7 @@ public class VectorErrorTable extends BoxLayoutPanel {
 			// PARA LAS COORDENADAS
 			Object solution = null;
 			MappedPosition mappedPosition = verrorContainer
-			.getMappedPosition(row);
+					.getMappedPosition(row);
 
 			DirectPosition position = null;
 			switch (col) {
@@ -250,14 +250,17 @@ public class VectorErrorTable extends BoxLayoutPanel {
 						// because there arent
 						// enought control points to build a transformation
 						MathTransformBuilder transformBuilder = transformBuilderProvider
-						.createTransformBuilder(
-								verrorContainer.getAsList());
-						if(transformBuilder != null)
+								.createTransformBuilder(verrorContainer
+										.getAsList());
+						if (transformBuilder != null)
 							mathTransform = transformBuilder.getMathTransform();
-						else{
+						else {
 							solution = "";
-							getRmsLabel().setText(PluginServices.getText(this,
-							"More_control_points_needed_for_the_current_transform"));
+							getRmsLabel()
+									.setText(
+											PluginServices
+													.getText(this,
+															"More_control_points_needed_for_the_current_transform"));
 							break;
 						}
 					}
@@ -269,30 +272,30 @@ public class VectorErrorTable extends BoxLayoutPanel {
 				} catch (MismatchedSizeException e) {
 					solution = "";
 					getRmsLabel()
-					.setText(
-							PluginServices
-							.getText(this,
-									"More_control_points_needed_for_the_current_transform"));
+							.setText(
+									PluginServices
+											.getText(this,
+													"More_control_points_needed_for_the_current_transform"));
 				} catch (MismatchedDimensionException e) {
 					solution = "";
 					getRmsLabel()
-					.setText(
-							PluginServices
-							.getText(
-									this,
-									"Control_points_coordinates_dimension_are_insufficient_for_the_current_transform"));
+							.setText(
+									PluginServices
+											.getText(
+													this,
+													"Control_points_coordinates_dimension_are_insufficient_for_the_current_transform"));
 				} catch (MismatchedReferenceSystemException e) {
 					solution = "";
 					getRmsLabel()
-					.setText(
-							PluginServices
-							.getText(this,
-									"Control_points_have_inconsistent_reference_system"));
+							.setText(
+									PluginServices
+											.getText(this,
+													"Control_points_have_inconsistent_reference_system"));
 				} catch (FactoryException e) {
 					solution = "";
 					getRmsLabel().setText(
 							PluginServices.getText(this,
-							"Error_creating_mathTransform"));
+									"Error_creating_mathTransform"));
 				}
 				break;
 
@@ -306,7 +309,7 @@ public class VectorErrorTable extends BoxLayoutPanel {
 				break;
 			}
 			return solution;
-		}		
+		}
 	}// TableModel
 
 	private JTable verrorTable;
@@ -332,12 +335,12 @@ public class VectorErrorTable extends BoxLayoutPanel {
 
 	/**
 	 * Constructor.
+	 * 
 	 * @param currentView
 	 * @param adjustingLyr
 	 * @param transformBuilderProvider
 	 */
-	public VectorErrorTable(MapControl currentView,
-			FLyrVect adjustingLyr,
+	public VectorErrorTable(MapControl currentView, FLyrVect adjustingLyr,
 			TransformationRegistryEntry transformBuilderProvider) {
 		this.currentView = currentView;
 		this.verrorContainer = new DisactivableMappedPositionContainerImpl();
@@ -345,8 +348,8 @@ public class VectorErrorTable extends BoxLayoutPanel {
 		this.adjustingLyr = adjustingLyr;
 		try {
 			this.mathTransform = transformBuilderProvider
-			.createTransformBuilder(verrorContainer.getAsList())
-			.getMathTransform();
+					.createTransformBuilder(verrorContainer.getAsList())
+					.getMathTransform();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -363,7 +366,7 @@ public class VectorErrorTable extends BoxLayoutPanel {
 
 	private void initialize() {
 		this.addRow(new JComponent[] { new JLabel(PluginServices.getText(this,
-		"VERROR_TITLE")) });
+				"VERROR_TITLE")) });
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(getVErrorTable());
@@ -372,9 +375,9 @@ public class VectorErrorTable extends BoxLayoutPanel {
 		// scrollPane.setPreferredSize(new Dimension(600, 160));
 		// scrollPane.setMinimumSize(new Dimension(600, 120));
 		scrollPane
-		.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+				.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPane
-		.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 		this.addRow(new JComponent[] { scrollPane }, 600, 300);
 
@@ -388,39 +391,44 @@ public class VectorErrorTable extends BoxLayoutPanel {
 
 	}
 
-	private void initializeKeyEventsListening(){
-		if(! registeredKeyStrokes){
+	private void initializeKeyEventsListening() {
+		if (!registeredKeyStrokes) {
 			KeyStroke key = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
 
-			PluginServices.registerKeyStroke(key, new KeyEventDispatcher(){
+			PluginServices.registerKeyStroke(key, new KeyEventDispatcher() {
 				public boolean dispatchKeyEvent(KeyEvent e) {
 					if (e.getID() != KeyEvent.KEY_RELEASED)
 						return false;
 
-					IWindow v = PluginServices.getMDIManager().getActiveWindow();
+					IWindow v = PluginServices.getMDIManager()
+							.getActiveWindow();
 					if (!(v instanceof View))
 						return false;
 
-					View view = (View)v;
+					View view = (View) v;
 					MapControl mapControl = view.getMapControl();
-					if(mapControl.getCurrentTool().equals("digitizeVectorError")){
-						if (e.getKeyCode() == KeyEvent.VK_ESCAPE){
+					if (mapControl.getCurrentTool().equals(
+							"digitizeVectorError")) {
+						if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 							mapControl.setPrevTool();
-							PluginServices.backgroundExecution(new Runnable(){
+							PluginServices.backgroundExecution(new Runnable() {
 								public void run() {
 									vl.showContainer();
-								}});
+								}
+							});
 							return true;
 						}
 					}
 					return false;
-				}});
+				}
+			});
 
-			//		KeyboardFocusManager kfm = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-			//		kfm.addKeyEventPostProcessor(new KeyEventPostProcessor(){
-			//			public boolean postProcessKeyEvent(KeyEvent arg0) {
-			//				return false;
-			//			}});
+			// KeyboardFocusManager kfm =
+			// KeyboardFocusManager.getCurrentKeyboardFocusManager();
+			// kfm.addKeyEventPostProcessor(new KeyEventPostProcessor(){
+			// public boolean postProcessKeyEvent(KeyEvent arg0) {
+			// return false;
+			// }});
 			registeredKeyStrokes = true;
 		}
 
@@ -430,27 +438,27 @@ public class VectorErrorTable extends BoxLayoutPanel {
 		if (verrorTable == null) {
 			verrorTable = new JTable();
 			verrorTableModel = new VErrorTableModel();
-			verrorTable.setModel(verrorTableModel);			
-			verrorTable.getColumnModel().getColumn(0).setHeaderValue(
-					PluginServices.getText(this, "VError_ID"));
+			verrorTable.setModel(verrorTableModel);
+			verrorTable.getColumnModel().getColumn(0)
+					.setHeaderValue(PluginServices.getText(this, "VError_ID"));
 
-			verrorTable.getColumnModel().getColumn(1).setHeaderValue(
-					PluginServices.getText(this, "Source_x"));
+			verrorTable.getColumnModel().getColumn(1)
+					.setHeaderValue(PluginServices.getText(this, "Source_x"));
 
-			verrorTable.getColumnModel().getColumn(2).setHeaderValue(
-					PluginServices.getText(this, "Source_y"));
+			verrorTable.getColumnModel().getColumn(2)
+					.setHeaderValue(PluginServices.getText(this, "Source_y"));
 
-			verrorTable.getColumnModel().getColumn(3).setHeaderValue(
-					PluginServices.getText(this, "Target_x"));
+			verrorTable.getColumnModel().getColumn(3)
+					.setHeaderValue(PluginServices.getText(this, "Target_x"));
 
-			verrorTable.getColumnModel().getColumn(4).setHeaderValue(
-					PluginServices.getText(this, "Target_y"));
+			verrorTable.getColumnModel().getColumn(4)
+					.setHeaderValue(PluginServices.getText(this, "Target_y"));
 
-			verrorTable.getColumnModel().getColumn(5).setHeaderValue(
-					PluginServices.getText(this, "RMS"));
+			verrorTable.getColumnModel().getColumn(5)
+					.setHeaderValue(PluginServices.getText(this, "RMS"));
 
-			verrorTable.getColumnModel().getColumn(6).setHeaderValue(
-					PluginServices.getText(this, "Active"));
+			verrorTable.getColumnModel().getColumn(6)
+					.setHeaderValue(PluginServices.getText(this, "Active"));
 
 			verrorTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		}
@@ -461,7 +469,7 @@ public class VectorErrorTable extends BoxLayoutPanel {
 	private JButton getDeleteVErrorButton() {
 		if (deleteLinkBtn == null) {
 			deleteLinkBtn = new JButton(PluginServices.getText(this,
-			"Delete_VError"));
+					"Delete_VError"));
 			deleteLinkBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					deleteLink();
@@ -486,7 +494,7 @@ public class VectorErrorTable extends BoxLayoutPanel {
 	private JButton getLoadLinksButton() {
 		if (loadLinksBtn == null) {
 			loadLinksBtn = new JButton(PluginServices.getText(this,
-			"Load_links"));
+					"Load_links"));
 			loadLinksBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					loadLinks();
@@ -508,10 +516,11 @@ public class VectorErrorTable extends BoxLayoutPanel {
 		try {
 			getRmsLabel().setText(
 					PluginServices.getText(this, "RMS")
-					+ " : "
-					+ transformBuilderProvider.createTransformBuilder(
-							verrorContainer.getAsList())
-							.getErrorStatistics().rms());
+							+ " : "
+							+ transformBuilderProvider
+									.createTransformBuilder(
+											verrorContainer.getAsList())
+									.getErrorStatistics().rms());
 		} catch (FactoryException e) {
 			getRmsLabel().setText(
 					PluginServices.getText(this, "Error_al_calcular_RMS"));
@@ -523,53 +532,59 @@ public class VectorErrorTable extends BoxLayoutPanel {
 		// MismatchedReferenceSystemException
 	}
 
-	class ExtendedVectorListener extends VectorListenerImpl{
+	class ExtendedVectorListener extends VectorListenerImpl {
 		JComponent container;
 
-		public ExtendedVectorListener(MapControl mapCtrl, 
-				MappedPositionContainer linksList,
-				JComponent container) {
+		public ExtendedVectorListener(MapControl mapCtrl,
+				MappedPositionContainer linksList, JComponent container) {
 			super(mapCtrl, linksList);
 			this.container = container;
 		}
 
-		public void hideContainer(){
+		public void hideContainer() {
 			if (container != null) {
-				GUIUtil.getInstance().getParentOfType(container,
-						JDialog.class).setVisible(false);
+				GUIUtil.getInstance().getParentOfType(container, JDialog.class)
+						.setVisible(false);
 			}
 		}
 
-		public void showContainer(){
+		public void showContainer() {
 			if (container != null) {
-				if (!GUIUtil.getInstance().getParentOfType(container, JDialog.class).isVisible()) {
-					PluginServices.backgroundExecution(new Runnable(){
+				if (!GUIUtil.getInstance()
+						.getParentOfType(container, JDialog.class).isVisible()) {
+					PluginServices.backgroundExecution(new Runnable() {
 						public void run() {
-							GUIUtil.getInstance().
-							getParentOfType(container, JDialog.class).
-							setVisible(true);		
-						}});
+							GUIUtil.getInstance()
+									.getParentOfType(container, JDialog.class)
+									.setVisible(true);
+						}
+					});
 
-				}//if
+				}// if
 			}// thisContainer
 		}
 
 		public void vector(MoveEvent event) throws BehaviorException {
 			super.vector(event);
-			if(isZooming)
+			if (isZooming)
 				return;
 			mapCtrl.setPrevTool();
 
 			if (!verrorContainer.existsLinksLyr()) {
-				FLyrVect linkLyr = verrorContainer
-				.getLinkLyr(currentView.getCrs());
+				FLyrVect linkLyr = verrorContainer.getLinkLyr(currentView
+						.getCrs());
 				MapContext mapContext = currentView.getMapContext();
 
-				//each time we create a new link layer, we are creating a new spatial adjusting session
+				// each time we create a new link layer, we are creating a new
+				// spatial adjusting session
 				FLayers solution = new FLayers();
 				solution.setMapContext(mapContext);
 				solution.setParentLayer(mapContext.getLayers());
-				solution.setName(PluginServices.getText(this, "SPATIAL_ADJUST_SESSION")+" "+ReferencingUtil.getInstance().getNumberOfSpatialAdjustSessions());
+				solution.setName(PluginServices.getText(this,
+						"SPATIAL_ADJUST_SESSION")
+						+ " "
+						+ ReferencingUtil.getInstance()
+								.getNumberOfSpatialAdjustSessions());
 				solution.addLayer(linkLyr);
 				mapContext.beginAtomicEvent();
 				mapContext.getLayers().addLayer(solution);
@@ -582,37 +597,34 @@ public class VectorErrorTable extends BoxLayoutPanel {
 
 			showContainer();
 		}
-	}//class ExtendedVectorListener
+	}// class ExtendedVectorListener
 
 	private void addLink() {
 		final MapControl mapCtrl = currentView;
 		if (mapCtrl != null) {
 			String sTool = "digitizeVectorError";
 
-			if(vb == null){
+			if (vb == null) {
 				JComponent container = (JComponent) GUIUtil.getInstance()
-				.getParentOfType(this, IWindow.class);
+						.getParentOfType(this, IWindow.class);
 
-				vl = new ExtendedVectorListener(mapCtrl,
-						verrorContainer, 
+				vl = new ExtendedVectorListener(mapCtrl, verrorContainer,
 						container);
-				
+
 				mapCtrl.setVisible(true);
-				
+
 				vb = new VectorBehavior(vl, this.adjustingLyr);
 
 				StatusBarListener sbl = new StatusBarListener(mapCtrl);
-				mapCtrl.addMapTool(sTool, 
-						new Behavior[] { vb, 
+				mapCtrl.addMapTool(sTool, new Behavior[] { vb,
 						new MouseMovementBehavior(sbl) });
-			}//if vl == null
+			}// if vl == null
 
 			mapCtrl.setTool(sTool);
 
 			vl.hideContainer();
 		}// if mapCtrl != null
 	}
-
 
 	private void deleteLink() {
 		int toDelete = getVErrorTable().getSelectedRow();
@@ -631,7 +643,8 @@ public class VectorErrorTable extends BoxLayoutPanel {
 				if (layer instanceof FLyrVect) {
 					FLyrVect aux = (FLyrVect) layer;
 					try {
-						if (aux.getShapeType() == FShape.LINE || aux.getShapeType() == FShape.MULTI)
+						if (aux.getShapeType() == FShape.LINE
+								|| aux.getShapeType() == FShape.MULTI)
 							return true;
 					} catch (ReadDriverException e) {
 						e.printStackTrace();
@@ -650,11 +663,12 @@ public class VectorErrorTable extends BoxLayoutPanel {
 						| WindowInfo.PALETTE | WindowInfo.ICONIFIABLE
 						| WindowInfo.RESIZABLE | WindowInfo.MAXIMIZABLE);
 				solution.setTitle(PluginServices.getText(this,
-				"Link_layer_Selection"));
+						"Link_layer_Selection"));
 				solution.setWidth(300);
 				solution.setHeight(50);
 				return solution;
 			}
+
 			public Object getWindowProfile() {
 				return WindowInfo.DIALOG_PROFILE;
 			}
@@ -706,14 +720,13 @@ public class VectorErrorTable extends BoxLayoutPanel {
 		FLyrVect selectedLyr = null;
 		if (panel.isOkPressed()) {
 			selectedLyr = (FLyrVect) lyrComboBox.getSelectedLayer();
-			//clone the layer to ensure in TOC we wont duplicate a layer
+			// clone the layer to ensure in TOC we wont duplicate a layer
 			FLyrVect clonedSelectedLyr = null;
 			MappedPositionContainer auxContainer = null;
-			String name = PluginServices.getText(this,
-			"LINKS_SPATIAL_ADJUST")
-			+ " "
-			+ ReferencingUtil.getInstance()
-			.getNumberOfSpatialAdjustSessions();
+			String name = PluginServices.getText(this, "LINKS_SPATIAL_ADJUST")
+					+ " "
+					+ ReferencingUtil.getInstance()
+							.getNumberOfSpatialAdjustSessions();
 			if (selectedLyr instanceof FLayerGenericVectorial) {
 				FLayerGenericVectorial genericLyr = (FLayerGenericVectorial) selectedLyr;
 				VectorialDriver driver = genericLyr.getDriver();
@@ -724,12 +737,13 @@ public class VectorErrorTable extends BoxLayoutPanel {
 					auxContainer = errorDriver.getMappedPositionContainer();
 				}
 				clonedSelectedLyr = new FLayerGenericVectorial();
-				((FLayerGenericVectorial)clonedSelectedLyr).setName(name);
-				((FLayerGenericVectorial)clonedSelectedLyr).setDriver(driver);
-				((FLayerGenericVectorial)clonedSelectedLyr).setCrs(crs);
+				((FLayerGenericVectorial) clonedSelectedLyr).setName(name);
+				((FLayerGenericVectorial) clonedSelectedLyr).setDriver(driver);
+				((FLayerGenericVectorial) clonedSelectedLyr).setCrs(crs);
 				try {
-					((FLayerGenericVectorial)clonedSelectedLyr).load();
-					((FLayerGenericVectorial)clonedSelectedLyr).setLegend(legend);
+					((FLayerGenericVectorial) clonedSelectedLyr).load();
+					((FLayerGenericVectorial) clonedSelectedLyr)
+							.setLegend(legend);
 				} catch (LegendLayerException e) {
 					e.printStackTrace();
 					return;
@@ -745,11 +759,12 @@ public class VectorErrorTable extends BoxLayoutPanel {
 							selectedLyr);
 				} catch (BaseException e) {
 					e.printStackTrace();
-					GUIUtil.getInstance().messageBox(
-							PluginServices
-							.getText(this, "Error_cargando_links"),
-							PluginServices
-							.getText(this, "Error_cargando_links"));
+					GUIUtil.getInstance()
+							.messageBox(
+									PluginServices.getText(this,
+											"Error_cargando_links"),
+									PluginServices.getText(this,
+											"Error_cargando_links"));
 					return;
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -760,7 +775,7 @@ public class VectorErrorTable extends BoxLayoutPanel {
 			if (this.verrorContainer.getCount() > 0) {
 				overwriteCurrentLinks = GUIUtil.getInstance().optionMessage(
 						PluginServices.getText(this,
-						"overwrite_current_vector_error"),
+								"overwrite_current_vector_error"),
 						PluginServices.getText(this, "spatial_adjust_warning"));
 
 			}
@@ -768,26 +783,27 @@ public class VectorErrorTable extends BoxLayoutPanel {
 				this.verrorContainer = auxContainer;
 				updateVErrorTable();
 				String folderName = PluginServices.getText(this,
-				"SPATIAL_ADJUST_SESSION")
-				+ " "
-				+ ReferencingUtil.getInstance()
-				.getNumberOfSpatialAdjustSessions();
+						"SPATIAL_ADJUST_SESSION")
+						+ " "
+						+ ReferencingUtil.getInstance()
+								.getNumberOfSpatialAdjustSessions();
 				FLayers rootLyrs = currentView.getMapContext().getLayers();
-				FLayers adjustSessionLyrs = (FLayers) rootLyrs.getLayer(folderName);
-				if(adjustSessionLyrs == null){
+				FLayers adjustSessionLyrs = (FLayers) rootLyrs
+						.getLayer(folderName);
+				if (adjustSessionLyrs == null) {
 					adjustSessionLyrs = new FLayers();
-					adjustSessionLyrs.setMapContext(currentView.getMapContext());
+					adjustSessionLyrs
+							.setMapContext(currentView.getMapContext());
 					adjustSessionLyrs.setParentLayer(rootLyrs);
 					adjustSessionLyrs.setName(folderName);
 					rootLyrs.addLayer(adjustSessionLyrs);
-				}//if
-				//				rootLyrs.removeLayer(selectedLyr);
-				//				adjustSessionLyrs.addLayer(selectedLyr);
+				}// if
+					// rootLyrs.removeLayer(selectedLyr);
+					// adjustSessionLyrs.addLayer(selectedLyr);
 				adjustSessionLyrs.addLayer(clonedSelectedLyr);
 
-
 			}
-		}//if ok pressed
+		}// if ok pressed
 	}
 
 	public TransformationRegistryEntry getTransformBuilderProvider() {
@@ -796,7 +812,7 @@ public class VectorErrorTable extends BoxLayoutPanel {
 
 	public void setTransformBuilderProvider(
 			TransformationRegistryEntry transformBuilderProvider)
-	throws FactoryException {
+			throws FactoryException {
 		this.transformBuilderProvider = transformBuilderProvider;
 		this.mathTransform = transformBuilderProvider.createTransformBuilder(
 				verrorContainer.getAsList()).getMathTransform();
@@ -818,7 +834,7 @@ public class VectorErrorTable extends BoxLayoutPanel {
 
 	public void setAdjustingLyr(FLyrVect adjustingLyr) {
 		this.adjustingLyr = adjustingLyr;
-		if(vb != null)
+		if (vb != null)
 			vb.setSnappingLyr(adjustingLyr);
 	}
 }

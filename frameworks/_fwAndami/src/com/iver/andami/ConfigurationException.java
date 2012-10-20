@@ -41,50 +41,50 @@
 package com.iver.andami;
 
 /**
- * Indica que se ha producido un error accediendo a los ficheros de configuración
- * de la plicación, de Andami o de los plugins
+ * Indica que se ha producido un error accediendo a los ficheros de
+ * configuración de la plicación, de Andami o de los plugins
  */
 public class ConfigurationException extends Exception {
-    /**
+	/**
      *
      */
-    public ConfigurationException() {
-        super();
+	public ConfigurationException() {
+		super();
 
-        // TODO Auto-generated constructor stub
-    }
+		// TODO Auto-generated constructor stub
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param message
-     */
-    public ConfigurationException(String message) {
-        super(message);
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param message
+	 */
+	public ConfigurationException(String message) {
+		super(message);
 
-        // TODO Auto-generated constructor stub
-    }
+		// TODO Auto-generated constructor stub
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param message
-     * @param cause
-     */
-    public ConfigurationException(String message, Throwable cause) {
-        super(message, cause);
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param message
+	 * @param cause
+	 */
+	public ConfigurationException(String message, Throwable cause) {
+		super(message, cause);
 
-        // TODO Auto-generated constructor stub
-    }
+		// TODO Auto-generated constructor stub
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param cause
-     */
-    public ConfigurationException(Throwable cause) {
-        super(cause);
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param cause
+	 */
+	public ConfigurationException(Throwable cause) {
+		super(cause);
 
-        // TODO Auto-generated constructor stub
-    }
+		// TODO Auto-generated constructor stub
+	}
 }

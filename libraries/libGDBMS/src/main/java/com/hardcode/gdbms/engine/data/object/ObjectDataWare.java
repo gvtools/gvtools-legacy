@@ -5,6 +5,6 @@ import com.hardcode.gdbms.engine.data.edition.DataWare;
 /**
  * @author Fernando González Cortés
  */
-public interface ObjectDataWare extends ObjectDataSource, DataWare{
+public interface ObjectDataWare extends ObjectDataSource, DataWare {
 
 }

@@ -54,48 +54,51 @@ package org.gvsig.topology;
  * status of validation.
  * 
  * <ol>
- * <li>EMPTY. The topology has just been created. It has neither layers nor rules</li>
+ * <li>EMPTY. The topology has just been created. It has neither layers nor
+ * rules</li>
  * 
- * <li>NOT_VALIDATED. The topology has layers and rules but it hasnt been validated.</li>
+ * <li>NOT_VALIDATED. The topology has layers and rules but it hasnt been
+ * validated.</li>
  * 
  * <li>VALIDATING. The topoly is validating.</li>
  * 
- * <li> VALIDATED. The topology has been validated and it hasnt any topology error </li>
+ * <li>VALIDATED. The topology has been validated and it hasnt any topology
+ * error</li>
  * 
- * <li> VALIDATED_WITH_ERRORS. After the validation of the topology there are topology errors</li>
+ * <li>VALIDATED_WITH_ERRORS. After the validation of the topology there are
+ * topology errors</li>
  * 
- * <li>VALIDATED_WITH_DIRTY_ZONES. After the topology validation, any change has been made in the geometry
- * of the topology layers so dirty zones has been added to it.</li>
+ * <li>VALIDATED_WITH_DIRTY_ZONES. After the topology validation, any change has
+ * been made in the geometry of the topology layers so dirty zones has been
+ * added to it.</li>
  * </ol>
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public interface ITopologyStatus {
- 
+
 	public static final byte VALIDATED = 0;
-	 
+
 	public static final byte VALIDATED_WITH_ERRORS = 1;
-	 
+
 	public static final byte NOT_VALIDATED = 2;
-	
+
 	/**
 	 * Status of a topology which hasnt any layer
 	 */
 	public static final byte EMPTY = 3;
-	
+
 	/**
-	 * This status is different off VALIDATED_WITH_ERRORS.
-	 * Examples:
-	 * if we have a validated topology, and we add a new rule,
-	 * its status will be VALIDATED_WITH_DIRTY_ZONES.
+	 * This status is different off VALIDATED_WITH_ERRORS. Examples: if we have
+	 * a validated topology, and we add a new rule, its status will be
+	 * VALIDATED_WITH_DIRTY_ZONES.
 	 * 
-	 * If we have a validated topology, and we edit a feature geometry
-	 * of one of its layers, status will be VALIDATED_WITH_DIRTY_ZONES.
+	 * If we have a validated topology, and we edit a feature geometry of one of
+	 * its layers, status will be VALIDATED_WITH_DIRTY_ZONES.
 	 */
 	public static final byte VALIDATED_WITH_DIRTY_ZONES = 4;
-	
+
 	public static final byte VALIDATING = 5;
-	 
+
 }
- 

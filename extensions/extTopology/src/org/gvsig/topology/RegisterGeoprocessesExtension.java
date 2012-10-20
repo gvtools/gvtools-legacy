@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology;
 
 import com.iver.andami.PluginServices;
@@ -63,105 +63,96 @@ import com.iver.cit.gvsig.geoprocess.impl.voronoi.VoronoiGeoprocessPlugin;
 import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
-public class RegisterGeoprocessesExtension extends Extension{
+public class RegisterGeoprocessesExtension extends Extension {
 
 	public void initialize() {
-		ExtensionPoints extensionPoints = 
-			ExtensionPointsSingleton.getInstance();
-//		extensionPoints.add("GeoprocessManager",
-//				"SNAPANDCRACK", 
-//				SnapAndCrackGeoprocessPlugin.class);
-		extensionPoints.add("GeoprocessManager",
-				"VORONOI", 
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+		// extensionPoints.add("GeoprocessManager",
+		// "SNAPANDCRACK",
+		// SnapAndCrackGeoprocessPlugin.class);
+		extensionPoints.add("GeoprocessManager", "VORONOI",
 				VoronoiGeoprocessPlugin.class);
-		
-		extensionPoints.add("GeoprocessManager",
-				"GENERALIZATION", 
+
+		extensionPoints.add("GeoprocessManager", "GENERALIZATION",
 				GeneralizationGeoprocessPlugin.class);
-		
-		extensionPoints.add("GeoprocessManager",
-				"FLIPLINES", 
+
+		extensionPoints.add("GeoprocessManager", "FLIPLINES",
 				FlipLinesGeoprocessPlugin.class);
-		
-		extensionPoints.add("GeoprocessManager",
-				"POLYGONTOLINES", 
+
+		extensionPoints.add("GeoprocessManager", "POLYGONTOLINES",
 				PolyToLinesGeoprocessPlugin.class);
-		
-		extensionPoints.add("GeoprocessManager",
-				"POLYGONORLINESTOPOINTS", 
+
+		extensionPoints.add("GeoprocessManager", "POLYGONORLINESTOPOINTS",
 				LineToPointsGeoprocessPlugin.class);
-		
-		extensionPoints.add("GeoprocessManager",
-				"SMOOTH_GEOMETRIES", 
+
+		extensionPoints.add("GeoprocessManager", "SMOOTH_GEOMETRIES",
 				SmoothGeoprocessPlugin.class);
-		
-		extensionPoints.add("GeoprocessManager",
-				"SPATIAL_ADJUST", 
+
+		extensionPoints.add("GeoprocessManager", "SPATIAL_ADJUST",
 				ReferencingGeoprocessPlugin.class);
-		
-		extensionPoints.add("GeoprocessManager",
-				"LineClean",
+
+		extensionPoints.add("GeoprocessManager", "LineClean",
 				CleanGeoprocessPlugin.class);
-		
-		extensionPoints.add("GeoprocessManager",
-				"PolygonBuild",
+
+		extensionPoints.add("GeoprocessManager", "PolygonBuild",
 				BuildGeoprocessPlugin.class);
-		
+
 		registerIcons();
 	}
-	
-	private void registerIcons(){
+
+	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"voroidesc-icon",
-				VoronoiGeoprocessPlugin.class.getResource("resources/voronoi_desc.png")
-			);
-		
+				VoronoiGeoprocessPlugin.class
+						.getResource("resources/voronoi_desc.png"));
+
 		PluginServices.getIconTheme().registerDefault(
 				"generalizationdesc-icon",
-				GeneralizationGeoprocessPlugin.class.getResource("resources/generalization_desc.png")
-			);
+				GeneralizationGeoprocessPlugin.class
+						.getResource("resources/generalization_desc.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"crackdesc-icon",
-				SnapAndCrackGeoprocessPlugin.class.getResource("resources/crackdesc.png")
-			);
-		
+				SnapAndCrackGeoprocessPlugin.class
+						.getResource("resources/crackdesc.png"));
+
 		PluginServices.getIconTheme().registerDefault(
 				"fliplines-icon",
-				FlipLinesGeoprocessPlugin.class.getResource("resources/flipline_desc.png")
-			);
-		
+				FlipLinesGeoprocessPlugin.class
+						.getResource("resources/flipline_desc.png"));
+
 		PluginServices.getIconTheme().registerDefault(
 				"polytolines-icon",
-				PolyToLinesGeoprocessPlugin.class.getResource("resources/polygontoline_desc.gif")
-			);
-		
+				PolyToLinesGeoprocessPlugin.class
+						.getResource("resources/polygontoline_desc.gif"));
+
 		PluginServices.getIconTheme().registerDefault(
 				"linetopoints-icon",
-				LineToPointsGeoprocessPlugin.class.getResource("resources/linetopoint_desc.gif")
-			);
-		
+				LineToPointsGeoprocessPlugin.class
+						.getResource("resources/linetopoint_desc.gif"));
+
 		PluginServices.getIconTheme().registerDefault(
 				"smoothdesc-icon",
-				SmoothGeoprocessPlugin.class.getResource("resources/smooth_desc.gif")
-			);
-		
+				SmoothGeoprocessPlugin.class
+						.getResource("resources/smooth_desc.gif"));
+
 		PluginServices.getIconTheme().registerDefault(
 				"spatialadjustdesc-icon",
-				ReferencingGeoprocessPlugin.class.getResource("resources/spatial_ adjust_desc.gif")
-			);
-		
+				ReferencingGeoprocessPlugin.class
+						.getResource("resources/spatial_ adjust_desc.gif"));
+
 		PluginServices.getIconTheme().registerDefault(
 				"clean-icon",
-				CleanGeoprocessPlugin.class.getResource("resources/spatial_ adjust_desc.gif")
-			);
-		
+				CleanGeoprocessPlugin.class
+						.getResource("resources/spatial_ adjust_desc.gif"));
+
 		PluginServices.getIconTheme().registerDefault(
 				"build-icon",
-				BuildGeoprocessPlugin.class.getResource("resources/spatial_ adjust_desc.gif")
-			);
-		
+				BuildGeoprocessPlugin.class
+						.getResource("resources/spatial_ adjust_desc.gif"));
+
 	}
-	
+
 	public void execute(String actionCommand) {
 	}
 
@@ -173,4 +164,3 @@ public class RegisterGeoprocessesExtension extends Extension{
 		return true;
 	}
 }
-

@@ -67,16 +67,17 @@ import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.Version;
 import com.iver.utiles.BrowserControl;
+
 /**
  * @author FJP
- *
- * A Window with panels showing web pages. A developer
- * can write a web page with information about his/her plugin
- * and call addAboutUrl to add his/her about to gvSIG's about and
- * others.
+ * 
+ *         A Window with panels showing web pages. A developer can write a web
+ *         page with information about his/her plugin and call addAboutUrl to
+ *         add his/her about to gvSIG's about and others.
  */
 public class FPanelAbout extends JPanel implements IWindow {
-	private static Logger logger = Logger.getLogger(FPanelAbout.class.getName());
+	private static Logger logger = Logger
+			.getLogger(FPanelAbout.class.getName());
 	private JEditorPane jEditorPane = null;
 	private JScrollPane jScrollPane = null;
 	private JEditorPane jEditorPane1 = null;
@@ -85,22 +86,25 @@ public class FPanelAbout extends JPanel implements IWindow {
 
 	private JLabel jLblVersion = null;
 	private JLabel jLblJavaVersion = null;
-    private JTabbedPane jTabbedPane = null;
+	private JTabbedPane jTabbedPane = null;
+
 	/**
 	 * This is the default constructor
+	 * 
 	 * @throws FileNotFoundException
 	 */
-	public FPanelAbout(){
+	public FPanelAbout() {
 		super();
 		initialize();
 	}
+
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 * @throws FileNotFoundException
 	 */
-	private  void initialize(){
+	private void initialize() {
 		this.setLayout(new BorderLayout());
 		this.setSize(600, 450);
 		this.add(getJTabbedPane(), java.awt.BorderLayout.CENTER);
@@ -110,59 +114,69 @@ public class FPanelAbout extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getJScrollPane(URL url) {
 		// if (jScrollPane == null) {
-			jScrollPane = new JScrollPane();
-			jScrollPane.setPreferredSize(new java.awt.Dimension(300,400));
-			jScrollPane.setViewportView(getJEditorPane(url));
+		jScrollPane = new JScrollPane();
+		jScrollPane.setPreferredSize(new java.awt.Dimension(300, 400));
+		jScrollPane.setViewportView(getJEditorPane(url));
 		// }
 		return jScrollPane;
 	}
+
 	/**
 	 * This method initializes jEditorPane1
-	 *
+	 * 
 	 * @return javax.swing.JEditorPane
 	 */
-		private JEditorPane getJEditorPane(URL aboutURL) {
-			// if (jEditorPane == null) {
-				jEditorPane = new JEditorPane();
+	private JEditorPane getJEditorPane(URL aboutURL) {
+		// if (jEditorPane == null) {
+		jEditorPane = new JEditorPane();
 
-				jEditorPane.setEditable(false);
-				jEditorPane.setContentType("text/html");
-				jEditorPane.setPreferredSize(new java.awt.Dimension(300,200));
+		jEditorPane.setEditable(false);
+		jEditorPane.setContentType("text/html");
+		jEditorPane.setPreferredSize(new java.awt.Dimension(300, 200));
 
-				if (aboutURL != null) {
-				    try {
-				    	jEditorPane.setPage(aboutURL);
-				    	jEditorPane.addHyperlinkListener(new javax.swing.event.HyperlinkListener() {
-				    		public void hyperlinkUpdate(javax.swing.event.HyperlinkEvent e) {
-				    			if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
-				    			{
-				    	 		      JEditorPane pane = (JEditorPane) e.getSource();
-				    	 		      System.out.println("hyperlinkUpdate()"); // TODO Auto-generated Event stub hyperlinkUpdate()
-				    	 		      BrowserControl.displayURL(e.getURL().toString());
-				    	 		      // if (e instanceof HTMLFrameHyperlinkEvent) {
-				    			}
+		if (aboutURL != null) {
+			try {
+				jEditorPane.setPage(aboutURL);
+				jEditorPane
+						.addHyperlinkListener(new javax.swing.event.HyperlinkListener() {
+							public void hyperlinkUpdate(
+									javax.swing.event.HyperlinkEvent e) {
+								if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+									JEditorPane pane = (JEditorPane) e
+											.getSource();
+									System.out.println("hyperlinkUpdate()"); // TODO
+																				// Auto-generated
+																				// Event
+																				// stub
+																				// hyperlinkUpdate()
+									BrowserControl.displayURL(e.getURL()
+											.toString());
+									// if (e instanceof HTMLFrameHyperlinkEvent)
+									// {
+								}
 
-
-				    		}
-				    	});
-				    } catch (IOException e) {
-				        System.err.println("Attempted to read a bad URL: " + aboutURL);
-				    }
-				} else {
-				    System.err.println("Couldn't find file: about.html" + aboutURL.getPath());
-				}
-
-			// }
-			return jEditorPane;
+							}
+						});
+			} catch (IOException e) {
+				System.err.println("Attempted to read a bad URL: " + aboutURL);
+			}
+		} else {
+			System.err.println("Couldn't find file: about.html"
+					+ aboutURL.getPath());
 		}
+
+		// }
+		return jEditorPane;
+	}
+
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel() {
@@ -171,38 +185,42 @@ public class FPanelAbout extends JPanel implements IWindow {
 			jLblJavaVersion = new JLabel();
 			jPanel = new JPanel();
 			jPanel.setLayout(null);
-			jPanel.setPreferredSize(new java.awt.Dimension(10,50));
+			jPanel.setPreferredSize(new java.awt.Dimension(10, 50));
 			jLblVersion.setBounds(10, 16, 225, 17);
-			jLblVersion.setText("Version "+Version.longFormat());
+			jLblVersion.setText("Version " + Version.longFormat());
 			jLblJavaVersion.setBounds(415, 16, 150, 17);
-			jLblJavaVersion.setText("Java "+System.getProperties().get("java.version"));
+			jLblJavaVersion.setText("Java "
+					+ System.getProperties().get("java.version"));
 			jPanel.add(getJButton(), null);
 			jPanel.add(jLblVersion, null);
 			jPanel.add(jLblJavaVersion, null);
 		}
 		return jPanel;
 	}
+
 	/**
 	 * This method initializes jButton
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getJButton() {
 		if (jButton == null) {
 			jButton = new JButton();
 			jButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-			jButton.setText(PluginServices.getText(this,"Cerrar"));
+			jButton.setText(PluginServices.getText(this, "Cerrar"));
 			jButton.setBounds(266, 12, 94, 25);
 			jButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
-					if (PluginServices.getMainFrame() != null)
-					{
-						PluginServices.getMDIManager().closeWindow(FPanelAbout.this);
-					}
-					else
-					{
-						((JDialog) (getParent().getParent().getParent().getParent())).dispose();
+					System.out.println("actionPerformed()"); // TODO
+																// Auto-generated
+																// Event stub
+																// actionPerformed()
+					if (PluginServices.getMainFrame() != null) {
+						PluginServices.getMDIManager().closeWindow(
+								FPanelAbout.this);
+					} else {
+						((JDialog) (getParent().getParent().getParent()
+								.getParent())).dispose();
 					}
 
 				}
@@ -210,41 +228,50 @@ public class FPanelAbout extends JPanel implements IWindow {
 		}
 		return jButton;
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.mdiApp.ui.MDIManager.View#getViewInfo()
 	 */
 	public WindowInfo getWindowInfo() {
-		WindowInfo m_ViewInfo = new WindowInfo(WindowInfo.MODALDIALOG|WindowInfo.RESIZABLE);
-		m_ViewInfo.setTitle(PluginServices.getText(this,"acerca_de")+" Community Edition");
+		WindowInfo m_ViewInfo = new WindowInfo(WindowInfo.MODALDIALOG
+				| WindowInfo.RESIZABLE);
+		m_ViewInfo.setTitle(PluginServices.getText(this, "acerca_de")
+				+ " Community Edition");
 
 		return m_ViewInfo;
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.mdiApp.ui.MDIManager.View#viewActivated()
 	 */
 	public void viewActivated() {
 		// TODO Auto-generated method stub
 
 	}
-    public void addAboutUrl(String pluginName, URL url)
-    {
-        getJTabbedPane().addTab(pluginName, getJScrollPane(url));
-        // this.add(getJScrollPane(url), java.awt.BorderLayout.CENTER);
-    }
-    /**
-     * This method initializes jTabbedPane
-     *
-     * @return javax.swing.JTabbedPane
-     */
-    private JTabbedPane getJTabbedPane() {
-    	if (jTabbedPane == null) {
-    		jTabbedPane = new JTabbedPane();
-    		jTabbedPane.setPreferredSize(new java.awt.Dimension(5,50));
-    	}
-    	return jTabbedPane;
-    }
-    
-    public Object getWindowProfile() {
-    	return WindowInfo.DIALOG_PROFILE;
-    }
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+
+	public void addAboutUrl(String pluginName, URL url) {
+		getJTabbedPane().addTab(pluginName, getJScrollPane(url));
+		// this.add(getJScrollPane(url), java.awt.BorderLayout.CENTER);
+	}
+
+	/**
+	 * This method initializes jTabbedPane
+	 * 
+	 * @return javax.swing.JTabbedPane
+	 */
+	private JTabbedPane getJTabbedPane() {
+		if (jTabbedPane == null) {
+			jTabbedPane = new JTabbedPane();
+			jTabbedPane.setPreferredSize(new java.awt.Dimension(5, 50));
+		}
+		return jTabbedPane;
+	}
+
+	public Object getWindowProfile() {
+		return WindowInfo.DIALOG_PROFILE;
+	}
+} // @jve:decl-index=0:visual-constraint="10,10"

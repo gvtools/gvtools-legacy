@@ -42,7 +42,6 @@ package com.iver.cit.gvsig.gui.selectionByTheme;
 
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 
-
 public interface SelectionByThemeModel {
 	public FLayers getLayers();
 }

@@ -1,4 +1,5 @@
 package org.gvsig.gpe.containers;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -48,23 +49,25 @@ package org.gvsig.gpe.containers;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class MultiCurve extends MultiGeometry{
-	
+public class MultiCurve extends MultiGeometry {
+
 	/**
 	 * Adds a new Curve
+	 * 
 	 * @param curve
-	 * The curve to add
+	 *            The curve to add
 	 */
 	public void addCurve(Curve curve) {
 		addGeometry(curve);
 	}
-	
+
 	/**
 	 * Gets a Curve at position i
+	 * 
 	 * @param i
-	 * position
+	 *            position
 	 */
 	public Curve getCurvePointAt(int i) {
-		return (Curve)getGeometryAt(i);
+		return (Curve) getGeometryAt(i);
 	}
 }

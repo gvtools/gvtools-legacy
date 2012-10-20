@@ -53,27 +53,24 @@ public class FieldExpressionOperator extends Operator {
 		super(symbol_table);
 	}
 
-
 	public void addArgument(int i, Expression arg) {
 		arguments.add(i, arg);
 	}
 
-	public void check()
-	throws ExpressionException {
+	public void check() throws ExpressionException {
 	}
 
-	public Object evaluate()
-	throws ExpressionException {
+	public Object evaluate() throws ExpressionException {
 
 		String result = "";
 
-		if(arguments != null) {
+		if (arguments != null) {
 
-			for (int i = arguments.size()-1; i >= 0; i--) {
-				Expression function = (Expression)arguments.get(i);
-				Object value1=function.evaluate();
-				if (value1==null)
-					value1="";
+			for (int i = arguments.size() - 1; i >= 0; i--) {
+				Expression function = (Expression) arguments.get(i);
+				Object value1 = function.evaluate();
+				if (value1 == null)
+					value1 = "";
 				result += ((String) (value1.toString()));
 			}
 			return result;
@@ -91,12 +88,11 @@ public class FieldExpressionOperator extends Operator {
 	}
 
 	public String getPattern() {
-		throw new Error ("Not yet implemented");
+		throw new Error("Not yet implemented");
 	}
 
 	public void setArguments(ArrayList<Expression> arguments) {
 		this.arguments = arguments;
 	}
-
 
 }

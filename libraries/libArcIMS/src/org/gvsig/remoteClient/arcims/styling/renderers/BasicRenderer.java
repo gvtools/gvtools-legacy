@@ -43,12 +43,12 @@
 
 package org.gvsig.remoteClient.arcims.styling.renderers;
 
-
 /**
  * Abstrac class that models renderers not classifying symbols (legends)
+ * 
  * @author jsanz
- *
+ * 
  */
 public abstract class BasicRenderer extends Renderer {
-    public static final String TAG = "";
+	public static final String TAG = "";
 }

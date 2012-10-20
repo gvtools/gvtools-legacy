@@ -41,47 +41,59 @@ import javax.swing.event.ChangeListener;
 
 import org.gvsig.gui.beans.slidertext.listeners.SliderEvent;
 import org.gvsig.gui.beans.slidertext.listeners.SliderListener;
+
 /**
  * Barra de deslizamiento con una ventana de texto que tiene el valor de la
  * posición de la barra. En este control podrá controlarse mediante la entrada
  * de datos por la caja de texto la posibilidad de introducir valores decimales.
- *
+ * 
  * Nacho Brodin (nachobrodin@gmail.com)
  */
-public class SliderTextContainer extends JPanel implements ChangeListener, FocusListener, KeyListener, MouseListener {
+public class SliderTextContainer extends JPanel implements ChangeListener,
+		FocusListener, KeyListener, MouseListener {
 	private static final long serialVersionUID = 1876415954410511634L;
 	private ArrayList<SliderListener> actionCommandListeners = new ArrayList<SliderListener>();
-	private JPanel     pText           = null;
-	private JSlider    slider          = null;
-	private JTextField text            = null;
-	private int        min             = 0;
-	private int        max             = 255;
-	private double     interval        = 1.0;
-	private int        defaultPos      = 0;
-	private boolean    decimal         = false;
-	private boolean    disconnectEvent = false;
-	private boolean    dragged         = false;
-	private boolean    showBorder      = false;
+	private JPanel pText = null;
+	private JSlider slider = null;
+	private JTextField text = null;
+	private int min = 0;
+	private int max = 255;
+	private double interval = 1.0;
+	private int defaultPos = 0;
+	private boolean decimal = false;
+	private boolean disconnectEvent = false;
+	private boolean dragged = false;
+	private boolean showBorder = false;
 
 	/**
 	 * Contructor
-	 * @param min Valor mínimo de la barra
-	 * @param max Valor máximo de la barra
-	 * @param defaultPos Posición por defecto
-	 * @deprecated Es recomendable el uso del constructor con el parámetro border. Tiene la misma funcionalidad 
-	 * si se pone ese parámetro a true. Se mantiene este constructor por compatibilidad con versiones 
-	 * anteriores.
+	 * 
+	 * @param min
+	 *            Valor mínimo de la barra
+	 * @param max
+	 *            Valor máximo de la barra
+	 * @param defaultPos
+	 *            Posición por defecto
+	 * @deprecated Es recomendable el uso del constructor con el parámetro
+	 *             border. Tiene la misma funcionalidad si se pone ese parámetro
+	 *             a true. Se mantiene este constructor por compatibilidad con
+	 *             versiones anteriores.
 	 */
 	public SliderTextContainer(int min, int max, int defaultPos) {
 		this(min, max, defaultPos, false);
 	}
-	
+
 	/**
 	 * Contructor
-	 * @param min Valor mínimo de la barra
-	 * @param max Valor máximo de la barra
-	 * @param defaultPos Posición por defecto
-	 * @param border Flag que obliga a mostrar u ocultar el borde
+	 * 
+	 * @param min
+	 *            Valor mínimo de la barra
+	 * @param max
+	 *            Valor máximo de la barra
+	 * @param defaultPos
+	 *            Posición por defecto
+	 * @param border
+	 *            Flag que obliga a mostrar u ocultar el borde
 	 */
 	public SliderTextContainer(int min, int max, int defaultPos, boolean border) {
 		super();
@@ -91,7 +103,6 @@ public class SliderTextContainer extends JPanel implements ChangeListener, Focus
 		this.showBorder = border;
 		initialize();
 	}
-
 
 	/**
 	 * Constructor vacio
@@ -126,6 +137,7 @@ public class SliderTextContainer extends JPanel implements ChangeListener, Focus
 
 	/**
 	 * Añadir un listener a la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void addValueChangedListener(SliderListener listener) {
@@ -135,6 +147,7 @@ public class SliderTextContainer extends JPanel implements ChangeListener, Focus
 
 	/**
 	 * Borrar un listener de la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void removeValueChangedListener(SliderListener listener) {
@@ -142,29 +155,32 @@ public class SliderTextContainer extends JPanel implements ChangeListener, Focus
 	}
 
 	/**
-	 * Asigna un borde al componente con el texto pasado como
-	 * parámetro
+	 * Asigna un borde al componente con el texto pasado como parámetro
+	 * 
 	 * @param name
 	 */
-	public void setBorder(String name){
-		setBorder(BorderFactory.createTitledBorder(null, name, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+	public void setBorder(String name) {
+		setBorder(BorderFactory.createTitledBorder(null, name,
+				TitledBorder.DEFAULT_JUSTIFICATION,
+				TitledBorder.DEFAULT_POSITION, null, null));
 	}
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 */
 	private void initialize() {
 		this.setLayout(new BorderLayout());
 		this.add(getSlider(), BorderLayout.CENTER);
 		this.add(getPText(), BorderLayout.EAST);
-		if(showBorder)
-			this.setBorder(BorderFactory.createLineBorder(java.awt.Color.gray,1));
+		if (showBorder)
+			this.setBorder(BorderFactory.createLineBorder(java.awt.Color.gray,
+					1));
 	}
 
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPText() {
@@ -180,7 +196,7 @@ public class SliderTextContainer extends JPanel implements ChangeListener, Focus
 
 	/**
 	 * This method initializes jSlider
-	 *
+	 * 
 	 * @return javax.swing.JSlider
 	 */
 	public JSlider getSlider() {
@@ -198,7 +214,7 @@ public class SliderTextContainer extends JPanel implements ChangeListener, Focus
 
 	/**
 	 * This method initializes jTextField
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	public JTextField getTextField() {
@@ -213,11 +229,12 @@ public class SliderTextContainer extends JPanel implements ChangeListener, Focus
 		return text;
 	}
 
-	public void setComponentSize(int w, int h){
+	public void setComponentSize(int w, int h) {
 	}
 
 	/**
 	 * Obtiene el valor del control.
+	 * 
 	 * @return Valor del control en formato double.
 	 */
 	public double getValue() {
@@ -226,21 +243,23 @@ public class SliderTextContainer extends JPanel implements ChangeListener, Focus
 
 	/**
 	 * Asigna el valor del control.
+	 * 
 	 * @return Valor del control en formato double.
 	 */
-	public void setValue(double value){
-		if(decimal)
+	public void setValue(double value) {
+		if (decimal)
 			getTextField().setText(String.valueOf(value));
 		else
-			getTextField().setText(String.valueOf((int)value));
+			getTextField().setText(String.valueOf((int) value));
 		getSlider().setValue((int) ((value - min) / interval));
 	}
 
 	/**
 	 * Activa o desactiva el control del panel
+	 * 
 	 * @param active
 	 */
-	public void setControlEnabled(boolean active){
+	public void setControlEnabled(boolean active) {
 		getSlider().setEnabled(active);
 		getTextField().setEnabled(active);
 		if (active == false) {
@@ -251,34 +270,38 @@ public class SliderTextContainer extends JPanel implements ChangeListener, Focus
 	}
 
 	/**
-	 * Asigna el flag que dice si el valor del campo de texto será
-	 * decimal o entero
-	 * @param dec true si se admiten valores decimales y false si no se admiten
+	 * Asigna el flag que dice si el valor del campo de texto será decimal o
+	 * entero
+	 * 
+	 * @param dec
+	 *            true si se admiten valores decimales y false si no se admiten
 	 */
-	public void setDecimal (boolean dec){
+	public void setDecimal(boolean dec) {
 		decimal = dec;
 		String s = getTextField().getText();
-		if(dec)
-			getTextField().setText((s +".0"));
-		else{
+		if (dec)
+			getTextField().setText((s + ".0"));
+		else {
 			int index = s.lastIndexOf(".");
-			if(index == -1 || index == 0)
+			if (index == -1 || index == 0)
 				index = s.length() - 1;
 			getTextField().setText(s.substring(0, index + 1));
 		}
 	}
 
 	/**
-	 * Obtiene el flag que dice si el valor del campo de texto es
-	 * decimal o entero
+	 * Obtiene el flag que dice si el valor del campo de texto es decimal o
+	 * entero
+	 * 
 	 * @return true si se admiten valores decimales y false si no se admiten
 	 */
-	public boolean getDecimal (){
+	public boolean getDecimal() {
 		return decimal;
 	}
 
 	/**
 	 * Obtiene el valor máximo del slider
+	 * 
 	 * @return Entero con el valor máximo
 	 */
 	public int getMax() {
@@ -287,7 +310,9 @@ public class SliderTextContainer extends JPanel implements ChangeListener, Focus
 
 	/**
 	 * Asigna el valor máximo del slider
-	 * @param Entero con el valor máximo
+	 * 
+	 * @param Entero
+	 *            con el valor máximo
 	 * @deprecated Usar setMaximum en su lugar
 	 */
 	public void setMax(int max) {
@@ -296,7 +321,9 @@ public class SliderTextContainer extends JPanel implements ChangeListener, Focus
 
 	/**
 	 * Asigna el valor máximo del slider
-	 * @param Entero con el valor máximo
+	 * 
+	 * @param Entero
+	 *            con el valor máximo
 	 */
 	public void setMaximum(int max) {
 		this.max = max;
@@ -305,6 +332,7 @@ public class SliderTextContainer extends JPanel implements ChangeListener, Focus
 
 	/**
 	 * Obtiene el valor mínimo del slider
+	 * 
 	 * @return Entero con el valor mínimo
 	 */
 	public int getMin() {
@@ -313,7 +341,9 @@ public class SliderTextContainer extends JPanel implements ChangeListener, Focus
 
 	/**
 	 * Asigna el valor mínimo del slider
-	 * @param Entero con el valor mínimo
+	 * 
+	 * @param Entero
+	 *            con el valor mínimo
 	 * @deprecated Usar setMinimum
 	 */
 	public void setMin(int min) {
@@ -322,7 +352,9 @@ public class SliderTextContainer extends JPanel implements ChangeListener, Focus
 
 	/**
 	 * Asigna el valor mínimo del slider
-	 * @param Entero con el valor mínimo
+	 * 
+	 * @param Entero
+	 *            con el valor mínimo
 	 */
 	public void setMinimum(int min) {
 		this.min = min;
@@ -333,7 +365,7 @@ public class SliderTextContainer extends JPanel implements ChangeListener, Focus
 	 * Actualizar la separacion entre los Ticks
 	 */
 	private void updateTicks() {
-		int ticks = (int) ((max-min)/interval) / 40;
+		int ticks = (int) ((max - min) / interval) / 40;
 		getSlider().setMajorTickSpacing(ticks * 4);
 		slider.setPaintTicks(true);
 		getSlider().setMinorTickSpacing(ticks);
@@ -346,8 +378,10 @@ public class SliderTextContainer extends JPanel implements ChangeListener, Focus
 		setValue(aux);
 		updateTicks();
 	}
+
 	/**
 	 * Definir un intervalo para el slider
+	 * 
 	 * @param value
 	 */
 	public void setInterval(double value) {
@@ -357,6 +391,7 @@ public class SliderTextContainer extends JPanel implements ChangeListener, Focus
 
 	/**
 	 * Obtener el intervalo definido para el slider
+	 * 
 	 * @return
 	 */
 	public double getInterval() {
@@ -374,7 +409,8 @@ public class SliderTextContainer extends JPanel implements ChangeListener, Focus
 
 		try {
 			if (!text.equals("")) {
-				value = (Double.parseDouble(text) * 100) / (double) (getMax() - getMin());
+				value = (Double.parseDouble(text) * 100)
+						/ (double) (getMax() - getMin());
 				value = Double.valueOf(text).doubleValue();
 				if (value < getMin())
 					value = getMin();
@@ -384,17 +420,17 @@ public class SliderTextContainer extends JPanel implements ChangeListener, Focus
 			setValue(value);
 			callChangeValue(true);
 		} catch (NumberFormatException exc) {
-			setValue(getSlider().getValue()*interval + min);
+			setValue(getSlider().getValue() * interval + min);
 		}
 	}
 
 	/**
 	 * Control del evento de cambio en la posición del slider. Este cambio
-	 * actualiza el valor de la caja de texto y ejecuta el método stateChanged de
-	 * los listener registrados.
+	 * actualiza el valor de la caja de texto y ejecuta el método stateChanged
+	 * de los listener registrados.
 	 */
 	public void stateChanged(ChangeEvent e) {
-		//Modificamos la caja de texto con el valor de la posición del slider
+		// Modificamos la caja de texto con el valor de la posición del slider
 		if (!disconnectEvent) {
 			double value = (getSlider().getValue() * getInterval()) + getMin();
 			if (!getDecimal())
@@ -411,6 +447,7 @@ public class SliderTextContainer extends JPanel implements ChangeListener, Focus
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.FocusListener#focusLost(java.awt.event.FocusEvent)
 	 */
 	public void focusLost(FocusEvent e) {
@@ -419,6 +456,7 @@ public class SliderTextContainer extends JPanel implements ChangeListener, Focus
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
 	 */
 	public void keyReleased(KeyEvent e) {
@@ -428,6 +466,7 @@ public class SliderTextContainer extends JPanel implements ChangeListener, Focus
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
 	 */
 	public void mousePressed(MouseEvent e) {
@@ -436,17 +475,30 @@ public class SliderTextContainer extends JPanel implements ChangeListener, Focus
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
 	 */
 	public void mouseReleased(MouseEvent e) {
 		dragged = false;
 		callChangeValue(false);
 	}
 
-	public void focusGained(FocusEvent e) {}
-	public void keyPressed(KeyEvent e) {}
-	public void keyTyped(KeyEvent e) {}
-	public void mouseClicked(MouseEvent e) {}
-	public void mouseEntered(MouseEvent e) {}
-	public void mouseExited(MouseEvent e) {}
+	public void focusGained(FocusEvent e) {
+	}
+
+	public void keyPressed(KeyEvent e) {
+	}
+
+	public void keyTyped(KeyEvent e) {
+	}
+
+	public void mouseClicked(MouseEvent e) {
+	}
+
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	public void mouseExited(MouseEvent e) {
+	}
 }

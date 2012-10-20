@@ -4,6 +4,7 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.layers.FLyrWFS;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -53,19 +54,20 @@ import com.iver.cit.gvsig.fmap.layers.FLyrWFS;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class ClockWindow extends ClockPanel implements IWindow{
+public class ClockWindow extends ClockPanel implements IWindow {
 	private WindowInfo info = null;
 
-	public ClockWindow(FLyrWFS layer){
+	public ClockWindow(FLyrWFS layer) {
 		super(layer);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindow#getWindowInfo()
 	 */
 	public WindowInfo getWindowInfo() {
-		if (info == null){
+		if (info == null) {
 			info = new WindowInfo(WindowInfo.PALETTE);
 			info.setTitle("WFST:" + getLayer().getName());
 			info.setWidth(150);
@@ -73,21 +75,24 @@ public class ClockWindow extends ClockPanel implements IWindow{
 		}
 		return info;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.gui.tools.expirytime.ExpiryTimePanel#closeWindow()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.gui.tools.expirytime.ExpiryTimePanel#closeWindow()
 	 */
-	protected void closeWindow(){
+	protected void closeWindow() {
 		PluginServices.getMDIManager().closeWindow(this);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindow#getWindowProfile()
 	 */
 	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
-	
+
 }

@@ -41,17 +41,24 @@
 package com.iver.cit.gvsig.fmap.layers;
 
 /**
- * <p>The interface <code>SelectionListener</code> defines the interface for an object that listens
- *  to changes in a vector layer.</p>
+ * <p>
+ * The interface <code>SelectionListener</code> defines the interface for an
+ * object that listens to changes in a vector layer.
+ * </p>
  */
 public interface SelectionListener {
 	/**
-	 * <p>Called when the selection in a vector layer has changed.</p>
+	 * <p>
+	 * Called when the selection in a vector layer has changed.
+	 * </p>
 	 * 
-	 * <p>The <code>SelectionEvent</code> event must be launched invoking
-	 *  the <code>fireSelectionEvents</code> method of the layer.</p>
-	 *
-	 * @param e a selection event on a vector layer
+	 * <p>
+	 * The <code>SelectionEvent</code> event must be launched invoking the
+	 * <code>fireSelectionEvents</code> method of the layer.
+	 * </p>
+	 * 
+	 * @param e
+	 *            a selection event on a vector layer
 	 */
 	void selectionChanged(SelectionEvent e);
 }

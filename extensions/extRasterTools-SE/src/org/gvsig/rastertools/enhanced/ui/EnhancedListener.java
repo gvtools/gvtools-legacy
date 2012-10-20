@@ -53,41 +53,50 @@ import org.gvsig.rastertools.enhanced.graphics.HistogramGraphicBase;
 import org.gvsig.rastertools.enhanced.graphics.HistogramGraphicBase.HistogramStatus;
 
 import com.iver.andami.PluginServices;
+
 /**
  * Gestor de eventos de los paneles de gráficas y controles.
  * 
  * 21/02/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
-public class EnhancedListener implements ActionListener, IGCanvasListener, ButtonsPanelListener, IProcessActions {
-	private SelectorsPanel               selectorsPanel  = null;
-	private GraphicsPanel                graphicsPanel   = null;
-	private EnhancedDialog               enhancedDialog  = null;
-	private PreviewFiltering             filteredPreview = null;
-	private EnhancedHistogramController  enhancedManager = null;
-	private LayerVisualStatusList        status          = new LayerVisualStatusList();
-	
+public class EnhancedListener implements ActionListener, IGCanvasListener,
+		ButtonsPanelListener, IProcessActions {
+	private SelectorsPanel selectorsPanel = null;
+	private GraphicsPanel graphicsPanel = null;
+	private EnhancedDialog enhancedDialog = null;
+	private PreviewFiltering filteredPreview = null;
+	private EnhancedHistogramController enhancedManager = null;
+	private LayerVisualStatusList status = new LayerVisualStatusList();
+
 	/**
 	 * Constructor
-	 * @param selectorsPanel Panel con los selectores de opciones
-	 * @param graphicsPanel Panel con los gráficos
-	 * @param enhancedPanel Panel base con la previsualización
-	 * @param enhancedDialog Dialogo general
-	 * @param filteredPreview Preprocesado para la preview
+	 * 
+	 * @param selectorsPanel
+	 *            Panel con los selectores de opciones
+	 * @param graphicsPanel
+	 *            Panel con los gráficos
+	 * @param enhancedPanel
+	 *            Panel base con la previsualización
+	 * @param enhancedDialog
+	 *            Dialogo general
+	 * @param filteredPreview
+	 *            Preprocesado para la preview
 	 */
-	public EnhancedListener(SelectorsPanel selectorsPanel, 
-							GraphicsPanel graphicsPanel, 
-							EnhancedDialog enhancedDialog, 
-							PreviewFiltering filteredPreview) {
+	public EnhancedListener(SelectorsPanel selectorsPanel,
+			GraphicsPanel graphicsPanel, EnhancedDialog enhancedDialog,
+			PreviewFiltering filteredPreview) {
 		this.selectorsPanel = selectorsPanel;
 		this.graphicsPanel = graphicsPanel;
 		this.enhancedDialog = enhancedDialog;
 		this.filteredPreview = filteredPreview;
 		status.getVisualStatus(((FLyrRasterSE) enhancedDialog.getLayer()));
-		
-		
-		enhancedManager = new EnhancedHistogramController(graphicsPanel.getInputHistogram(), graphicsPanel.getOutputHistogram(), enhancedDialog);
-		
+
+		enhancedManager = new EnhancedHistogramController(
+				graphicsPanel.getInputHistogram(),
+				graphicsPanel.getOutputHistogram(), enhancedDialog);
+
 		selectorsPanel.getHistogramType().addActionListener(this);
 		selectorsPanel.getDrawType().addActionListener(this);
 		selectorsPanel.getBand(null).addActionListener(this);
@@ -95,22 +104,30 @@ public class EnhancedListener implements ActionListener, IGCanvasListener, Butto
 		graphicsPanel.getLevels().addActionListener(this);
 		graphicsPanel.getRGB().addActionListener(this);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
-		//Cambio del tipo de de dibujado del histograma
-		if(e.getSource() == selectorsPanel.getDrawType()) {
-			if(((String)selectorsPanel.getDrawType().getSelectedItem()).equals(RasterToolsUtil.getText(this, "fill"))) {
-				graphicsPanel.getInputHistogram().setType(GraphicHistogram.TYPE_FILL);
-				graphicsPanel.getOutputHistogram().setType(GraphicHistogram.TYPE_FILL);
+		// Cambio del tipo de de dibujado del histograma
+		if (e.getSource() == selectorsPanel.getDrawType()) {
+			if (((String) selectorsPanel.getDrawType().getSelectedItem())
+					.equals(RasterToolsUtil.getText(this, "fill"))) {
+				graphicsPanel.getInputHistogram().setType(
+						GraphicHistogram.TYPE_FILL);
+				graphicsPanel.getOutputHistogram().setType(
+						GraphicHistogram.TYPE_FILL);
 			}
-			
-			if(((String)selectorsPanel.getDrawType().getSelectedItem()).equals(RasterToolsUtil.getText(this, "line"))) {
-				graphicsPanel.getInputHistogram().setType(GraphicHistogram.TYPE_LINE);
-				graphicsPanel.getOutputHistogram().setType(GraphicHistogram.TYPE_LINE);
+
+			if (((String) selectorsPanel.getDrawType().getSelectedItem())
+					.equals(RasterToolsUtil.getText(this, "line"))) {
+				graphicsPanel.getInputHistogram().setType(
+						GraphicHistogram.TYPE_LINE);
+				graphicsPanel.getOutputHistogram().setType(
+						GraphicHistogram.TYPE_LINE);
 			}
 			graphicsPanel.getInputHistogram().getCanvas().repaint();
 			graphicsPanel.getOutputHistogram().getCanvas().repaint();
@@ -118,20 +135,29 @@ public class EnhancedListener implements ActionListener, IGCanvasListener, Butto
 
 		// Cambio el tipo de visualizacion del histograma
 		if (e.getSource() == selectorsPanel.getHistogramType()) {
-			if (((String) selectorsPanel.getHistogramType().getSelectedItem()).equals(RasterToolsUtil.getText(this, "standard"))) {
-				graphicsPanel.getOutputHistogram().setHistogramType(GraphicHistogram.VIEW_LINEAL);
+			if (((String) selectorsPanel.getHistogramType().getSelectedItem())
+					.equals(RasterToolsUtil.getText(this, "standard"))) {
+				graphicsPanel.getOutputHistogram().setHistogramType(
+						GraphicHistogram.VIEW_LINEAL);
 			}
-			
-			if (((String) selectorsPanel.getHistogramType().getSelectedItem()).equals(RasterToolsUtil.getText(this, "cumulative"))) {
-				graphicsPanel.getOutputHistogram().setHistogramType(GraphicHistogram.VIEW_ACUMMULATED);
+
+			if (((String) selectorsPanel.getHistogramType().getSelectedItem())
+					.equals(RasterToolsUtil.getText(this, "cumulative"))) {
+				graphicsPanel.getOutputHistogram().setHistogramType(
+						GraphicHistogram.VIEW_ACUMMULATED);
 			}
-			
-			if (((String) selectorsPanel.getHistogramType().getSelectedItem()).equals(RasterToolsUtil.getText(this, "logaritmic"))) {
-				graphicsPanel.getOutputHistogram().setHistogramType(GraphicHistogram.VIEW_LOGARITHMIC);
+
+			if (((String) selectorsPanel.getHistogramType().getSelectedItem())
+					.equals(RasterToolsUtil.getText(this, "logaritmic"))) {
+				graphicsPanel.getOutputHistogram().setHistogramType(
+						GraphicHistogram.VIEW_LOGARITHMIC);
 			}
-			
-			if (((String) selectorsPanel.getHistogramType().getSelectedItem()).equals(RasterToolsUtil.getText(this, "cumulative_logarithmic"))) {
-				graphicsPanel.getOutputHistogram().setHistogramType(GraphicHistogram.VIEW_ACUMMULATEDLOG);
+
+			if (((String) selectorsPanel.getHistogramType().getSelectedItem())
+					.equals(RasterToolsUtil.getText(this,
+							"cumulative_logarithmic"))) {
+				graphicsPanel.getOutputHistogram().setHistogramType(
+						GraphicHistogram.VIEW_ACUMMULATEDLOG);
 			}
 			graphicsPanel.getOutputHistogram().getCanvas().repaint();
 		}
@@ -141,128 +167,171 @@ public class EnhancedListener implements ActionListener, IGCanvasListener, Butto
 			graphicsPanel.updateHistogram();
 			updatePreview();
 		}
-		
-		//Cambio de banda
-		if(e.getSource() == selectorsPanel.getBand(null)) {
-			if(((String)selectorsPanel.getBand(null).getSelectedItem()).equals(RasterToolsUtil.getText(this, "red"))) {
-				graphicsPanel.getInputHistogram().setHistogramDrawed(HistogramGraphicBase.RED);
-				graphicsPanel.getOutputHistogram().setHistogramDrawed(HistogramGraphicBase.RED);
+
+		// Cambio de banda
+		if (e.getSource() == selectorsPanel.getBand(null)) {
+			if (((String) selectorsPanel.getBand(null).getSelectedItem())
+					.equals(RasterToolsUtil.getText(this, "red"))) {
+				graphicsPanel.getInputHistogram().setHistogramDrawed(
+						HistogramGraphicBase.RED);
+				graphicsPanel.getOutputHistogram().setHistogramDrawed(
+						HistogramGraphicBase.RED);
 			}
-			
-			if(((String)selectorsPanel.getBand(null).getSelectedItem()).equals(RasterToolsUtil.getText(this, "green"))) {
-				graphicsPanel.getInputHistogram().setHistogramDrawed(HistogramGraphicBase.GREEN);
-				graphicsPanel.getOutputHistogram().setHistogramDrawed(HistogramGraphicBase.GREEN);
+
+			if (((String) selectorsPanel.getBand(null).getSelectedItem())
+					.equals(RasterToolsUtil.getText(this, "green"))) {
+				graphicsPanel.getInputHistogram().setHistogramDrawed(
+						HistogramGraphicBase.GREEN);
+				graphicsPanel.getOutputHistogram().setHistogramDrawed(
+						HistogramGraphicBase.GREEN);
 			}
-			
-			if(((String)selectorsPanel.getBand(null).getSelectedItem()).equals(RasterToolsUtil.getText(this, "blue"))) {
-				graphicsPanel.getInputHistogram().setHistogramDrawed(HistogramGraphicBase.BLUE);
-				graphicsPanel.getOutputHistogram().setHistogramDrawed(HistogramGraphicBase.BLUE);
+
+			if (((String) selectorsPanel.getBand(null).getSelectedItem())
+					.equals(RasterToolsUtil.getText(this, "blue"))) {
+				graphicsPanel.getInputHistogram().setHistogramDrawed(
+						HistogramGraphicBase.BLUE);
+				graphicsPanel.getOutputHistogram().setHistogramDrawed(
+						HistogramGraphicBase.BLUE);
 			}
 
 			updateTypeSelected();
-			
-			HistogramStatus status = graphicsPanel.getOutputHistogram().getHistogramStatus(HistogramGraphicBase.DRAWED);
+
+			HistogramStatus status = graphicsPanel.getOutputHistogram()
+					.getHistogramStatus(HistogramGraphicBase.DRAWED);
 
 			switch (status.getGraphicHistogram().getType()) {
-				case GraphicHistogram.TYPE_FILL:
-					selectorsPanel.getDrawType().setSelectedItem(RasterToolsUtil.getText(this, "fill"));
-					break;
-				default:
-					selectorsPanel.getDrawType().setSelectedItem(RasterToolsUtil.getText(this, "line"));
-					break;
+			case GraphicHistogram.TYPE_FILL:
+				selectorsPanel.getDrawType().setSelectedItem(
+						RasterToolsUtil.getText(this, "fill"));
+				break;
+			default:
+				selectorsPanel.getDrawType().setSelectedItem(
+						RasterToolsUtil.getText(this, "line"));
+				break;
 			}
 
 			switch (status.getGraphicHistogram().getTypeViewed()) {
-				case GraphicHistogram.VIEW_ACUMMULATED:
-					selectorsPanel.getHistogramType().setSelectedItem(RasterToolsUtil.getText(this, "cumulative"));
-					break;
-				case GraphicHistogram.VIEW_LOGARITHMIC:
-					selectorsPanel.getHistogramType().setSelectedItem(RasterToolsUtil.getText(this, "logaritmic"));
-					break;
-				case GraphicHistogram.VIEW_ACUMMULATEDLOG:
-					selectorsPanel.getHistogramType().setSelectedItem(RasterToolsUtil.getText(this, "cumulative_logarithmic"));
-					break;
-				default:
-					selectorsPanel.getHistogramType().setSelectedItem(RasterToolsUtil.getText(this, "standard"));
-					break;
+			case GraphicHistogram.VIEW_ACUMMULATED:
+				selectorsPanel.getHistogramType().setSelectedItem(
+						RasterToolsUtil.getText(this, "cumulative"));
+				break;
+			case GraphicHistogram.VIEW_LOGARITHMIC:
+				selectorsPanel.getHistogramType().setSelectedItem(
+						RasterToolsUtil.getText(this, "logaritmic"));
+				break;
+			case GraphicHistogram.VIEW_ACUMMULATEDLOG:
+				selectorsPanel.getHistogramType()
+						.setSelectedItem(
+								RasterToolsUtil.getText(this,
+										"cumulative_logarithmic"));
+				break;
+			default:
+				selectorsPanel.getHistogramType().setSelectedItem(
+						RasterToolsUtil.getText(this, "standard"));
+				break;
 			}
 		}
-		
-		//Cambio de operación
-		if(e.getSource() == selectorsPanel.getEnhancedType()) {
+
+		// Cambio de operación
+		if (e.getSource() == selectorsPanel.getEnhancedType()) {
 			graphicsPanel.setLevelsEnabled(false);
-			
-			if(((String)selectorsPanel.getEnhancedType().getSelectedItem()).equals(RasterToolsUtil.getText(this, "lineal"))) {
-				graphicsPanel.getInputHistogram().setFunction(GraphicHistogram.FUNCTION_LINEAL);
+
+			if (((String) selectorsPanel.getEnhancedType().getSelectedItem())
+					.equals(RasterToolsUtil.getText(this, "lineal"))) {
+				graphicsPanel.getInputHistogram().setFunction(
+						GraphicHistogram.FUNCTION_LINEAL);
 				updatePreview();
 			}
-			
-			if(((String)selectorsPanel.getEnhancedType().getSelectedItem()).equals(RasterToolsUtil.getText(this, "gaussian"))) {
+
+			if (((String) selectorsPanel.getEnhancedType().getSelectedItem())
+					.equals(RasterToolsUtil.getText(this, "gaussian"))) {
 
 			}
-			
-			if(((String)selectorsPanel.getEnhancedType().getSelectedItem()).equals(RasterToolsUtil.getText(this, "logaritmic"))) {
-				graphicsPanel.getInputHistogram().setFunction(GraphicHistogram.FUNCTION_LOGARIT);
+
+			if (((String) selectorsPanel.getEnhancedType().getSelectedItem())
+					.equals(RasterToolsUtil.getText(this, "logaritmic"))) {
+				graphicsPanel.getInputHistogram().setFunction(
+						GraphicHistogram.FUNCTION_LOGARIT);
 				updatePreview();
 			}
-			
-			if(((String)selectorsPanel.getEnhancedType().getSelectedItem()).equals(RasterToolsUtil.getText(this, "exponential"))) {
-				graphicsPanel.getInputHistogram().setFunction(GraphicHistogram.FUNCTION_EXPONENT);
+
+			if (((String) selectorsPanel.getEnhancedType().getSelectedItem())
+					.equals(RasterToolsUtil.getText(this, "exponential"))) {
+				graphicsPanel.getInputHistogram().setFunction(
+						GraphicHistogram.FUNCTION_EXPONENT);
 				updatePreview();
 			}
-			
-			if(((String)selectorsPanel.getEnhancedType().getSelectedItem()).equals(RasterToolsUtil.getText(this, "equalization"))) {
-				graphicsPanel.getInputHistogram().setFunction(GraphicHistogram.FUNCTION_NONE);
-				int[] renderBands = enhancedDialog.getLayer().getRender().getRenderBands();
+
+			if (((String) selectorsPanel.getEnhancedType().getSelectedItem())
+					.equals(RasterToolsUtil.getText(this, "equalization"))) {
+				graphicsPanel.getInputHistogram().setFunction(
+						GraphicHistogram.FUNCTION_NONE);
+				int[] renderBands = enhancedDialog.getLayer().getRender()
+						.getRenderBands();
 				String values = "";
-				for (int i = 0; i < renderBands.length; i++) 
+				for (int i = 0; i < renderBands.length; i++)
 					values += renderBands[i] + " ";
 				values = values.trim();
 				Params params = new Params();
-				params.setParam("Histogram", graphicsPanel.getHistogram(), -1, null);
+				params.setParam("Histogram", graphicsPanel.getHistogram(), -1,
+						null);
 				params.setParam("RenderBands", values, -1, null);
-				params.setParam("EcualizedBands", new int[]{0, 1, 2}, -1, null);
-								
-				filteredPreview.addNewParam("equalization", params, EqualizationFilter.class);				
+				params.setParam("EcualizedBands", new int[] { 0, 1, 2 }, -1,
+						null);
+
+				filteredPreview.addNewParam("equalization", params,
+						EqualizationFilter.class);
 				updatePreview();
 			}
-			
-			if(((String)selectorsPanel.getEnhancedType().getSelectedItem()).equals(RasterToolsUtil.getText(this, "square_root"))) {
-				graphicsPanel.getInputHistogram().setFunction(GraphicHistogram.FUNCTION_SQUARE_ROOT);
+
+			if (((String) selectorsPanel.getEnhancedType().getSelectedItem())
+					.equals(RasterToolsUtil.getText(this, "square_root"))) {
+				graphicsPanel.getInputHistogram().setFunction(
+						GraphicHistogram.FUNCTION_SQUARE_ROOT);
 				updatePreview();
 			}
-			
-			if(((String)selectorsPanel.getEnhancedType().getSelectedItem()).equals(RasterToolsUtil.getText(this, "level_slice"))) {
+
+			if (((String) selectorsPanel.getEnhancedType().getSelectedItem())
+					.equals(RasterToolsUtil.getText(this, "level_slice"))) {
 				graphicsPanel.setLevelsEnabled(true);
-				graphicsPanel.getInputHistogram().setFunction(GraphicHistogram.FUNCTION_DENSITY);
+				graphicsPanel.getInputHistogram().setFunction(
+						GraphicHistogram.FUNCTION_DENSITY);
 
 				// Establece el numero de niveles en el cuadro de texto
-				HistogramStatus status = graphicsPanel.getInputHistogram().getHistogramStatus(HistogramGraphicBase.DRAWED);
-				graphicsPanel.getLevels().setValue(new Long(((DensitySlicingLine) status.getBaseFunction()).getLevels()));
+				HistogramStatus status = graphicsPanel.getInputHistogram()
+						.getHistogramStatus(HistogramGraphicBase.DRAWED);
+				graphicsPanel.getLevels().setValue(
+						new Long(
+								((DensitySlicingLine) status.getBaseFunction())
+										.getLevels()));
 				updatePreview();
 			}
 		}
-		
-		//Cambio de tipo (estandar/acumulado)
-		if(e.getSource() == selectorsPanel.getHistogramType()) {
-			if(((String)selectorsPanel.getHistogramType().getSelectedItem()).equals(RasterToolsUtil.getText(this, "standard"))) {
-				
+
+		// Cambio de tipo (estandar/acumulado)
+		if (e.getSource() == selectorsPanel.getHistogramType()) {
+			if (((String) selectorsPanel.getHistogramType().getSelectedItem())
+					.equals(RasterToolsUtil.getText(this, "standard"))) {
+
 			}
-			
-			if(((String)selectorsPanel.getHistogramType().getSelectedItem()).equals(RasterToolsUtil.getText(this, "cumulative"))) {
-				
+
+			if (((String) selectorsPanel.getHistogramType().getSelectedItem())
+					.equals(RasterToolsUtil.getText(this, "cumulative"))) {
+
 			}
 		}
-		
-		//Cambio en el número de niveles
-		if(e.getSource() == graphicsPanel.getLevels()) {
-			Long lValue = (Long)graphicsPanel.getLevels().getValue();
+
+		// Cambio en el número de niveles
+		if (e.getSource() == graphicsPanel.getLevels()) {
+			Long lValue = (Long) graphicsPanel.getLevels().getValue();
 			int value = lValue.intValue();
-			if(value > 30 || value < 2) {
-				RasterToolsUtil.messageBoxInfo(RasterToolsUtil.getText(this, "range_wrong") + " [2-30]", null);
-				if(value > 30)
+			if (value > 30 || value < 2) {
+				RasterToolsUtil.messageBoxInfo(
+						RasterToolsUtil.getText(this, "range_wrong")
+								+ " [2-30]", null);
+				if (value > 30)
 					value = 30;
-				if(value < 2)
+				if (value < 2)
 					value = 2;
 			}
 			graphicsPanel.getLevels().setValue(new Long(value));
@@ -270,41 +339,52 @@ public class EnhancedListener implements ActionListener, IGCanvasListener, Butto
 				graphicsPanel.getInputHistogram().setLevel(value);
 				updatePreview();
 			} catch (NumberFormatException exc) {
-				//No asignamos el nivel
+				// No asignamos el nivel
 			}
 		}
 	}
-	
+
 	/**
 	 * Actualiza el combo de EnhancedType para que este seleccionado siempre el
 	 * item que corresponde con la grafica mostrada en ese momento
 	 */
 	private void updateTypeSelected() {
-		HistogramStatus status = graphicsPanel.getInputHistogram().getHistogramStatus(HistogramGraphicBase.DRAWED);
+		HistogramStatus status = graphicsPanel.getInputHistogram()
+				.getHistogramStatus(HistogramGraphicBase.DRAWED);
 
-		if (status.getBaseFunction().getClass().equals(DensitySlicingLine.class))
-			selectorsPanel.setSelectedEnhancedType(RasterToolsUtil.getText(this, "level_slice"));
+		if (status.getBaseFunction().getClass()
+				.equals(DensitySlicingLine.class))
+			selectorsPanel.setSelectedEnhancedType(RasterToolsUtil.getText(
+					this, "level_slice"));
 
 		if (status.getBaseFunction().getClass().equals(StraightLine.class))
-			selectorsPanel.setSelectedEnhancedType(RasterToolsUtil.getText(this, "lineal"));
+			selectorsPanel.setSelectedEnhancedType(RasterToolsUtil.getText(
+					this, "lineal"));
 
-		if (status.getBaseFunction().getClass().equals(EqualizationFilter.class))
-			selectorsPanel.setSelectedEnhancedType(RasterToolsUtil.getText(this, "equalization"));
+		if (status.getBaseFunction().getClass()
+				.equals(EqualizationFilter.class))
+			selectorsPanel.setSelectedEnhancedType(RasterToolsUtil.getText(
+					this, "equalization"));
 
 		if (status.getBaseFunction().getClass().equals(SquareRootPowLine.class))
-			selectorsPanel.setSelectedEnhancedType(RasterToolsUtil.getText(this, "square_root"));
+			selectorsPanel.setSelectedEnhancedType(RasterToolsUtil.getText(
+					this, "square_root"));
 
-		if (status.getBaseFunction().getClass().equals(LogaritmicExponentialLine.class)) {
+		if (status.getBaseFunction().getClass()
+				.equals(LogaritmicExponentialLine.class)) {
 			if (((StraightLine) status.getBaseFunction()).getValueFunction() >= 0)
-				selectorsPanel.setSelectedEnhancedType(RasterToolsUtil.getText(this, "logaritmic"));
+				selectorsPanel.setSelectedEnhancedType(RasterToolsUtil.getText(
+						this, "logaritmic"));
 			else
-				selectorsPanel.setSelectedEnhancedType(RasterToolsUtil.getText(this, "exponential"));
+				selectorsPanel.setSelectedEnhancedType(RasterToolsUtil.getText(
+						this, "exponential"));
 		}
 	}
-	
+
 	/**
-	 * En la primera carga se define cada banda en los histogramas, para dejarlo en
-	 * su estado logico.
+	 * En la primera carga se define cada banda en los histogramas, para dejarlo
+	 * en su estado logico.
+	 * 
 	 * @param stretch
 	 * @param band
 	 */
@@ -312,69 +392,80 @@ public class EnhancedListener implements ActionListener, IGCanvasListener, Butto
 		boolean firstBand = ((band == HistogramGraphicBase.GRAY) || (band == HistogramGraphicBase.RED));
 
 		graphicsPanel.getInputHistogram().setHistogramDrawed(band);
-		
+
 		BaseFunction baseFunction = null;
 		HistogramStatus status;
 		status = graphicsPanel.getInputHistogram().getHistogramStatus(band);
 		if (status == null)
 			return;
-		
+
 		switch (stretch.functionType) {
-			case 0:
-				if (firstBand) {
-					selectorsPanel.getEnhancedType().setSelectedItem(RasterToolsUtil.getText(this, "lineal"));
-					graphicsPanel.setLevelsEnabled(false);
-				}
-				baseFunction = new StraightLine(status.getBaseFunction().getColor());
-				((StraightLine) baseFunction).clearSquares();
-				for (int i = 0; i < stretch.stretchIn.length; i++) {
-					((StraightLine) baseFunction).addSquare(
-						(stretch.stretchIn[i] - stretch.minValue) / (stretch.maxValue - stretch.minValue),
+		case 0:
+			if (firstBand) {
+				selectorsPanel.getEnhancedType().setSelectedItem(
+						RasterToolsUtil.getText(this, "lineal"));
+				graphicsPanel.setLevelsEnabled(false);
+			}
+			baseFunction = new StraightLine(status.getBaseFunction().getColor());
+			((StraightLine) baseFunction).clearSquares();
+			for (int i = 0; i < stretch.stretchIn.length; i++) {
+				((StraightLine) baseFunction).addSquare(
+						(stretch.stretchIn[i] - stretch.minValue)
+								/ (stretch.maxValue - stretch.minValue),
 						stretch.stretchOut[i] / 255.0D);
-				}
-				break;
-			case 1:
-				if (firstBand) {
-					if (stretch.valueFunction >= 0)
-						selectorsPanel.getEnhancedType().setSelectedItem(RasterToolsUtil.getText(this, "logaritmic"));
-					else
-						selectorsPanel.getEnhancedType().setSelectedItem(RasterToolsUtil.getText(this, "exponential"));
-					graphicsPanel.setLevelsEnabled(false);
-				}
-				baseFunction = new LogaritmicExponentialLine(status.getBaseFunction().getColor(), stretch.valueFunction);
-				break;
-			case 2:
-				if (firstBand) {
-					selectorsPanel.getEnhancedType().setSelectedItem(RasterToolsUtil.getText(this, "square_root"));
-					graphicsPanel.setLevelsEnabled(false);
-				}
-				baseFunction = new SquareRootPowLine(status.getBaseFunction().getColor(), stretch.valueFunction);
-				break;
-			case 3:
-				if (firstBand) {
-					selectorsPanel.getEnhancedType().setSelectedItem(RasterToolsUtil.getText(this, "level_slice"));
-					graphicsPanel.setLevelsEnabled(true);
-				}
-				baseFunction = new DensitySlicingLine(status.getBaseFunction().getColor(), (int) stretch.valueFunction);
-				break;
+			}
+			break;
+		case 1:
+			if (firstBand) {
+				if (stretch.valueFunction >= 0)
+					selectorsPanel.getEnhancedType().setSelectedItem(
+							RasterToolsUtil.getText(this, "logaritmic"));
+				else
+					selectorsPanel.getEnhancedType().setSelectedItem(
+							RasterToolsUtil.getText(this, "exponential"));
+				graphicsPanel.setLevelsEnabled(false);
+			}
+			baseFunction = new LogaritmicExponentialLine(status
+					.getBaseFunction().getColor(), stretch.valueFunction);
+			break;
+		case 2:
+			if (firstBand) {
+				selectorsPanel.getEnhancedType().setSelectedItem(
+						RasterToolsUtil.getText(this, "square_root"));
+				graphicsPanel.setLevelsEnabled(false);
+			}
+			baseFunction = new SquareRootPowLine(status.getBaseFunction()
+					.getColor(), stretch.valueFunction);
+			break;
+		case 3:
+			if (firstBand) {
+				selectorsPanel.getEnhancedType().setSelectedItem(
+						RasterToolsUtil.getText(this, "level_slice"));
+				graphicsPanel.setLevelsEnabled(true);
+			}
+			baseFunction = new DensitySlicingLine(status.getBaseFunction()
+					.getColor(), (int) stretch.valueFunction);
+			break;
 		}
 		if (baseFunction != null) {
 			status.setBaseFunction(baseFunction);
 			graphicsPanel.getInputHistogram().setHistogramDrawed(band);
 		}
 	}
-	
+
 	/**
 	 * En la primera carga se han de establecer todos los histogramas de entrada
 	 * a sus valores correspondientes segun el filtro.
 	 */
 	public void firstLoad() {
-		RasterFilterList rasterFilterList = ((FLyrRasterSE) enhancedDialog.getLayer()).getRenderFilterList();
+		RasterFilterList rasterFilterList = ((FLyrRasterSE) enhancedDialog
+				.getLayer()).getRenderFilterList();
 
-		LinearStretchEnhancementFilter filter = (LinearStretchEnhancementFilter) rasterFilterList.getByName(LinearStretchEnhancementFilter.names[0]);
+		LinearStretchEnhancementFilter filter = (LinearStretchEnhancementFilter) rasterFilterList
+				.getByName(LinearStretchEnhancementFilter.names[0]);
 		if (filter != null) {
 			LinearStretchParams stretch = filter.getStretchs();
-			
+
 			firstLoadBand(stretch.blue, HistogramGraphicBase.BLUE);
 			firstLoadBand(stretch.green, HistogramGraphicBase.GREEN);
 			firstLoadBand(stretch.red, HistogramGraphicBase.RED);
@@ -383,7 +474,7 @@ public class EnhancedListener implements ActionListener, IGCanvasListener, Butto
 		}
 		graphicsPanel.getInputHistogram().repaint();
 	}
-	
+
 	/**
 	 * Coge los datos que hay en los histogramas y los aplica a la vista previa
 	 */
@@ -393,17 +484,21 @@ public class EnhancedListener implements ActionListener, IGCanvasListener, Butto
 	}
 
 	/**
-	 * Coge los datos que hay en los histogramas y los aplica en el histograma de salida
+	 * Coge los datos que hay en los histogramas y los aplica en el histograma
+	 * de salida
 	 */
 	private void updateHistogramOut() {
 		updateTypeSelected();
 		enhancedManager.updatePreview();
 		enhancedManager.updateHistogramOut();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.beans.canvas.IGCanvasListener#actionDataChanged(org.gvsig.raster.beans.canvas.GCanvasEvent)
+	 * 
+	 * @see
+	 * org.gvsig.raster.beans.canvas.IGCanvasListener#actionDataChanged(org.
+	 * gvsig.raster.beans.canvas.GCanvasEvent)
 	 */
 	public void actionDataChanged(GCanvasEvent e) {
 		if (e.getKey().equals("minmax")) {
@@ -418,7 +513,10 @@ public class EnhancedListener implements ActionListener, IGCanvasListener, Butto
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.beans.canvas.IGCanvasListener#actionDataDragged(org.gvsig.raster.beans.canvas.GCanvasEvent)
+	 * 
+	 * @see
+	 * org.gvsig.raster.beans.canvas.IGCanvasListener#actionDataDragged(org.
+	 * gvsig.raster.beans.canvas.GCanvasEvent)
 	 */
 	public void actionDataDragged(GCanvasEvent e) {
 		if (e.getKey().equals("minmax")) {
@@ -433,31 +531,35 @@ public class EnhancedListener implements ActionListener, IGCanvasListener, Butto
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener#actionButtonPressed(org.gvsig.gui.beans.buttonspanel.ButtonsPanelEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener#actionButtonPressed
+	 * (org.gvsig.gui.beans.buttonspanel.ButtonsPanelEvent)
 	 */
 	public void actionButtonPressed(ButtonsPanelEvent e) {
 		switch (e.getButton()) {
-			/*case ButtonsPanel.BUTTON_ACCEPT:
-				apply();
-				enhancedDialog.close();
-				break;*/
-			case ButtonsPanel.BUTTON_CANCEL:
-				cancel();
-				break;
-			case ButtonsPanel.BUTTON_APPLY:
-				apply();
-				break;
-			case ButtonsPanel.BUTTON_CLOSE:
-				enhancedDialog.close();
-				break;
+		/*
+		 * case ButtonsPanel.BUTTON_ACCEPT: apply(); enhancedDialog.close();
+		 * break;
+		 */
+		case ButtonsPanel.BUTTON_CANCEL:
+			cancel();
+			break;
+		case ButtonsPanel.BUTTON_APPLY:
+			apply();
+			break;
+		case ButtonsPanel.BUTTON_CLOSE:
+			enhancedDialog.close();
+			break;
 		}
 	}
-	
+
 	/**
 	 * Que acciones se ejecutaran al haber presionado el botón aceptar o aplicar
 	 */
 	public void apply() {
-		IRasterDataSource raster = ((FLyrRasterSE) enhancedDialog.getLayer()).getDataSource();
+		IRasterDataSource raster = ((FLyrRasterSE) enhancedDialog.getLayer())
+				.getDataSource();
 		if (raster == null)
 			return;
 
@@ -468,19 +570,27 @@ public class EnhancedListener implements ActionListener, IGCanvasListener, Butto
 				return;
 		}
 
-		//Rendering rendering = ((FLyrRasterSE) getFilterPanel().getLayer()).getRender();
-		IRasterRendering rendering = (IRasterRendering) enhancedDialog.getLayer();
+		// Rendering rendering = ((FLyrRasterSE)
+		// getFilterPanel().getLayer()).getRender();
+		IRasterRendering rendering = (IRasterRendering) enhancedDialog
+				.getLayer();
 
-		// Array para guardar los filtros que se van a usar en forma de ParamStruct
-		ArrayList listFilterUsed = enhancedDialog.getFilteredPreview().applyFilters(rendering);
+		// Array para guardar los filtros que se van a usar en forma de
+		// ParamStruct
+		ArrayList listFilterUsed = enhancedDialog.getFilteredPreview()
+				.applyFilters(rendering);
 
 		if (enhancedDialog.getNewOrSaveLayerPanel().isOnlyViewSelected()) {
 			try {
-				FilterProcess.addSelectedFilters(rendering.getRenderFilterList(), listFilterUsed);
-				((FLyrRasterSE) enhancedDialog.getLayer()).setRenderFilterList(rendering.getRenderFilterList());
+				FilterProcess.addSelectedFilters(
+						rendering.getRenderFilterList(), listFilterUsed);
+				((FLyrRasterSE) enhancedDialog.getLayer())
+						.setRenderFilterList(rendering.getRenderFilterList());
 				enhancedDialog.getLayer().getMapContext().invalidate();
 			} catch (FilterTypeException e) {
-				RasterToolsUtil.messageBoxError(PluginServices.getText(this, "error_adding_filters"), this, e);
+				RasterToolsUtil.messageBoxError(
+						PluginServices.getText(this, "error_adding_filters"),
+						this, e);
 			}
 		} else {
 			FilterProcess filterProcess = new FilterProcess();
@@ -488,13 +598,14 @@ public class EnhancedListener implements ActionListener, IGCanvasListener, Butto
 			filterProcess.addParam("rendering", rendering);
 			filterProcess.addParam("filename", path);
 			filterProcess.addParam("rasterdatasource", raster);
-			filterProcess.addParam("layer", ((FLyrRasterSE) enhancedDialog.getLayer()));
+			filterProcess.addParam("layer",
+					((FLyrRasterSE) enhancedDialog.getLayer()));
 			filterProcess.addParam("listfilterused", listFilterUsed);
 			filterProcess.addParam("onlyrenderbands", Boolean.TRUE);
 			filterProcess.start();
 		}
 	}
-	
+
 	/**
 	 * Volvemos todo a la normalidad cuando se cancela
 	 */
@@ -504,7 +615,6 @@ public class EnhancedListener implements ActionListener, IGCanvasListener, Butto
 			enhancedDialog.getLayer().getMapContext().invalidate();
 		}
 	}
-	
 
 	/**
 	 * Acciones que se realizan al finalizar de crear los recortes de imagen.
@@ -513,25 +623,28 @@ public class EnhancedListener implements ActionListener, IGCanvasListener, Butto
 	public void loadLayerInToc(String fileName) {
 		if (!enhancedDialog.getNewOrSaveLayerPanel().isNewLayerSelected())
 			return;
-		if(!new File(fileName).exists())
+		if (!new File(fileName).exists())
 			return;
 		try {
-			RasterToolsUtil.loadLayer(enhancedDialog.getViewName(), fileName, null);
+			RasterToolsUtil.loadLayer(enhancedDialog.getViewName(), fileName,
+					null);
 		} catch (RasterNotLoadException e) {
 			RasterToolsUtil.messageBoxError("error_cargar_capa", this, e);
 		}
 
-		if(enhancedDialog != null)
+		if (enhancedDialog != null)
 			enhancedDialog.getNewOrSaveLayerPanel().updateNewLayerText();
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.IProcessActions#end(java.lang.Object)
 	 */
 	public void end(Object param) {
 		loadLayerInToc((String) param);
 	}
-	
-	public void interrupted() {}
+
+	public void interrupted() {
+	}
 }

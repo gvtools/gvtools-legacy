@@ -28,58 +28,68 @@ import com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener;
 import com.iver.cit.gvsig.project.documents.view.gui.IView;
 
 /**
- * Behavior para que se añada a los Behavior del Mapcontrol y poder
- * gestionar el evento de mover el ratón sobre la vista de gvSIG.
- *
+ * Behavior para que se añada a los Behavior del Mapcontrol y poder gestionar el
+ * evento de mover el ratón sobre la vista de gvSIG.
+ * 
  * 12-may-2007
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class PixelIncreaseBehavior extends Behavior {
 
 	private PixelIncreaseDialog dialog = null;
-	
+
 	/**
 	 * Constructor. Asigna el dialogo
+	 * 
 	 * @param dialog
 	 */
 	public PixelIncreaseBehavior(PixelIncreaseDialog dialog) {
 		this.dialog = dialog;
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.IBehavior#getListener()
 	 */
 	public ToolListener getListener() {
 		return null;
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.IBehavior#mouseMoved(java.awt.event.MouseEvent)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.IBehavior#mouseMoved(java.awt.
+	 * event.MouseEvent)
 	 */
 	public void mouseMoved(MouseEvent e) throws BehaviorException {
 		IView view = null;
 		IWindow active = PluginServices.getMDIManager().getActiveWindow();
-		if(active instanceof IView) {
-			//System.out.println(((IView)active).getMapControl().getX() + " " + ((IView)active).getMapControl().getWidth());
-			//System.out.println(((IView)active).getMapControl().getY() + " " + ((IView)active).getMapControl().getHeight());
-			//((IView)active).getMapControl().getCurrentMapTool().ge
+		if (active instanceof IView) {
+			// System.out.println(((IView)active).getMapControl().getX() + " " +
+			// ((IView)active).getMapControl().getWidth());
+			// System.out.println(((IView)active).getMapControl().getY() + " " +
+			// ((IView)active).getMapControl().getHeight());
+			// ((IView)active).getMapControl().getCurrentMapTool().ge
 			dialog.setClear(false);
-			view = (IView)active;
-			if(!dialog.getView().equals(view))
+			view = (IView) active;
+			if (!dialog.getView().equals(view))
 				dialog.setView(view);
-			//Calcula la posición donde se empezará a dibujar en el componente. Para ello en ancho y el alto del componente
-			//se ponen en la misma escala que la vista (w / scale), se calcula el punto medio del componente y se le resta el punto seleccionado
-			//en la vista
+			// Calcula la posición donde se empezará a dibujar en el componente.
+			// Para ello en ancho y el alto del componente
+			// se ponen en la misma escala que la vista (w / scale), se calcula
+			// el punto medio del componente y se le resta el punto seleccionado
+			// en la vista
 			int pX = ((dialog.getWidth() / dialog.getScale()) >> 1) - e.getX();
 			int pY = ((dialog.getHeight() / dialog.getScale()) >> 1) - e.getY();
-			dialog.pixX = (int)e.getPoint().getX();
-			dialog.pixY = (int)e.getPoint().getY();
+			dialog.pixX = (int) e.getPoint().getX();
+			dialog.pixY = (int) e.getPoint().getY();
 			dialog.setPosX(pX);
 			dialog.setPosY(pY);
 			dialog.repaint();
-		}	
+		}
 	}
 
 }

@@ -58,21 +58,30 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  */
 /**
  * It parses a gml:BoundingShapeType object. Example:
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class BoundedByTypeBinding extends org.gvsig.gpe.gml.parser.v2.geometries.BoundedByTypeBinding {
+public class BoundedByTypeBinding extends
+		org.gvsig.gpe.gml.parser.v2.geometries.BoundedByTypeBinding {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.bindings.v2.geometries.BoundedByTypeBinding#parseTag(org.xmlpull.v1.XmlPullParser, org.gvsig.gpe.gml.GPEDefaultGmlParser, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.bindings.v2.geometries.BoundedByTypeBinding#parseTag
+	 * (org.xmlpull.v1.XmlPullParser, org.gvsig.gpe.gml.GPEDefaultGmlParser,
+	 * java.lang.String)
 	 */
-	protected Object parseTag(IXmlStreamReader parser,GPEDefaultGmlParser handler, QName tag) throws XmlStreamException, IOException{
+	protected Object parseTag(IXmlStreamReader parser,
+			GPEDefaultGmlParser handler, QName tag) throws XmlStreamException,
+			IOException {
 		Object bbox = super.parseTag(parser, handler, tag);
-		if (bbox != null){
+		if (bbox != null) {
 			return bbox;
 		}
-		if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_ENVELOPE)){
-			bbox = handler.getProfile().getEnvelopeTypeBinding().parse(parser, handler);
+		if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_ENVELOPE)) {
+			bbox = handler.getProfile().getEnvelopeTypeBinding()
+					.parse(parser, handler);
 		}
 		return bbox;
 	}

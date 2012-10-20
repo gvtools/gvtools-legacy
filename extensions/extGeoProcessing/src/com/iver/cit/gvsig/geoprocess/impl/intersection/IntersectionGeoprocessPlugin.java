@@ -42,36 +42,36 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: IntersectionGeoprocessPlugin.java 21232 2008-06-05 14:03:49Z azabala $
-* $Log$
-* Revision 1.8  2007-09-19 16:07:09  jaume
-* removed unnecessary imports
-*
-* Revision 1.7  2007/06/20 10:50:32  jmvivo
-* Modificación para estandarizar la busqueda de los html de descripciones.
-* También se controla que, si no existe la descripción en el idioma corriente se usará el inglés.
-*
-* Revision 1.6  2007/03/06 16:47:58  caballero
-* Exceptions
-*
-* Revision 1.5  2006/09/15 10:42:54  caballero
-* extensibilidad de documentos
-*
-* Revision 1.4  2006/08/29 07:56:30  cesar
-* Rename the *View* family of classes to *Window* (ie: SingletonView to SingletonWindow, ViewInfo to WindowInfo, etc)
-*
-* Revision 1.3  2006/08/29 07:21:09  cesar
-* Rename com.iver.cit.gvsig.fmap.Fmap class to com.iver.cit.gvsig.fmap.MapContext
-*
-* Revision 1.2  2006/08/11 16:30:38  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/06/27 16:11:41  azabala
-* toString() added to Plugin interface to force textual representation of geoprocess plugins
-*
-*
-*/
+ *
+ * $Id: IntersectionGeoprocessPlugin.java 21232 2008-06-05 14:03:49Z azabala $
+ * $Log$
+ * Revision 1.8  2007-09-19 16:07:09  jaume
+ * removed unnecessary imports
+ *
+ * Revision 1.7  2007/06/20 10:50:32  jmvivo
+ * Modificación para estandarizar la busqueda de los html de descripciones.
+ * También se controla que, si no existe la descripción en el idioma corriente se usará el inglés.
+ *
+ * Revision 1.6  2007/03/06 16:47:58  caballero
+ * Exceptions
+ *
+ * Revision 1.5  2006/09/15 10:42:54  caballero
+ * extensibilidad de documentos
+ *
+ * Revision 1.4  2006/08/29 07:56:30  cesar
+ * Rename the *View* family of classes to *Window* (ie: SingletonView to SingletonWindow, ViewInfo to WindowInfo, etc)
+ *
+ * Revision 1.3  2006/08/29 07:21:09  cesar
+ * Rename com.iver.cit.gvsig.fmap.Fmap class to com.iver.cit.gvsig.fmap.MapContext
+ *
+ * Revision 1.2  2006/08/11 16:30:38  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/06/27 16:11:41  azabala
+ * toString() added to Plugin interface to force textual representation of geoprocess plugins
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.intersection;
 
 import java.net.URL;
@@ -86,32 +86,30 @@ import com.iver.cit.gvsig.geoprocess.core.gui.GeoProcessingOverlayPanel2;
 import com.iver.cit.gvsig.geoprocess.core.gui.IGeoprocessUserEntries;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
-public class IntersectionGeoprocessPlugin extends GeoprocessPluginAbstract implements IGeoprocessPlugin {
-	
-	//FIXME Esto es comun a todos los geoprocesos de overlay 
-	//lo llevamos a una clase abstracta ?
+public class IntersectionGeoprocessPlugin extends GeoprocessPluginAbstract
+		implements IGeoprocessPlugin {
+
+	// FIXME Esto es comun a todos los geoprocesos de overlay
+	// lo llevamos a una clase abstracta ?
 	private static String analisisPkg;
 	private static String overlayPkg;
 	private static String geoprocessName;
-	
-	static{
+
+	static {
 		analisisPkg = PluginServices.getText(null, "Analisis");
 		overlayPkg = PluginServices.getText(null, "Overlay");
 		geoprocessName = PluginServices.getText(null, "Interseccion");
 	}
-	
-	
-	
 
 	public IGeoprocessUserEntries getGeoprocessPanel() {
-		View vista = (View)PluginServices.getMDIManager().getActiveWindow();
+		View vista = (View) PluginServices.getMDIManager().getActiveWindow();
 		MapContext mapContext = vista.getModel().getMapContext();
-        FLayers layers = mapContext.getLayers();
-        String titleText = PluginServices.getText(this,
-		"Interseccion._Introduccion_de_datos");
-        GeoProcessingOverlayPanel2 dataSelectionPanel = 
-			new GeoProcessingOverlayPanel2(layers, titleText);
-        return dataSelectionPanel;
+		FLayers layers = mapContext.getLayers();
+		String titleText = PluginServices.getText(this,
+				"Interseccion._Introduccion_de_datos");
+		GeoProcessingOverlayPanel2 dataSelectionPanel = new GeoProcessingOverlayPanel2(
+				layers, titleText);
+		return dataSelectionPanel;
 	}
 
 	public URL getImgDescription() {
@@ -126,9 +124,8 @@ public class IntersectionGeoprocessPlugin extends GeoprocessPluginAbstract imple
 		return analisisPkg + "/" + overlayPkg + "/" + geoprocessName;
 	}
 
-	public String toString(){
+	public String toString() {
 		return geoprocessName;
 	}
 
 }
-

@@ -40,62 +40,62 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: AbstractFillSymbol.java 29132 2009-06-02 09:57:46Z vcaballero $
-* $Log$
-* Revision 1.10  2007-09-19 16:20:45  jaume
-* removed unnecessary imports
-*
-* Revision 1.9  2007/08/09 10:39:41  jaume
-* first round of found bugs fixed
-*
-* Revision 1.8  2007/03/28 16:48:14  jaume
-* *** empty log message ***
-*
-* Revision 1.7  2007/03/21 11:37:00  jaume
-* *** empty log message ***
-*
-* Revision 1.6  2007/03/13 16:58:36  jaume
-* Added QuantityByCategory (Multivariable legend) and some bugfixes in symbols
-*
-* Revision 1.5  2007/03/09 11:20:56  jaume
-* Advanced symbology (start committing)
-*
-* Revision 1.3.2.2  2007/02/21 16:09:02  jaume
-* *** empty log message ***
-*
-* Revision 1.3.2.1  2007/02/16 10:54:12  jaume
-* multilayer splitted to multilayerline, multilayermarker,and  multilayerfill
-*
-* Revision 1.3  2007/01/24 17:58:22  jaume
-* new features and architecture error fixes
-*
-* Revision 1.2  2007/01/11 12:17:34  jaume
-* *** empty log message ***
-*
-* Revision 1.1  2007/01/10 16:31:36  jaume
-* *** empty log message ***
-*
-* Revision 1.6  2006/12/04 17:13:39  fjp
-* *** empty log message ***
-*
-* Revision 1.5  2006/11/14 11:10:27  jaume
-* *** empty log message ***
-*
-* Revision 1.4  2006/11/09 18:39:05  jaume
-* *** empty log message ***
-*
-* Revision 1.3  2006/11/06 07:33:54  jaume
-* javadoc, source style
-*
-* Revision 1.2  2006/10/31 16:16:34  jaume
-* *** empty log message ***
-*
-* Revision 1.1  2006/10/30 19:30:35  jaume
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: AbstractFillSymbol.java 29132 2009-06-02 09:57:46Z vcaballero $
+ * $Log$
+ * Revision 1.10  2007-09-19 16:20:45  jaume
+ * removed unnecessary imports
+ *
+ * Revision 1.9  2007/08/09 10:39:41  jaume
+ * first round of found bugs fixed
+ *
+ * Revision 1.8  2007/03/28 16:48:14  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.7  2007/03/21 11:37:00  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.6  2007/03/13 16:58:36  jaume
+ * Added QuantityByCategory (Multivariable legend) and some bugfixes in symbols
+ *
+ * Revision 1.5  2007/03/09 11:20:56  jaume
+ * Advanced symbology (start committing)
+ *
+ * Revision 1.3.2.2  2007/02/21 16:09:02  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.3.2.1  2007/02/16 10:54:12  jaume
+ * multilayer splitted to multilayerline, multilayermarker,and  multilayerfill
+ *
+ * Revision 1.3  2007/01/24 17:58:22  jaume
+ * new features and architecture error fixes
+ *
+ * Revision 1.2  2007/01/11 12:17:34  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1  2007/01/10 16:31:36  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.6  2006/12/04 17:13:39  fjp
+ * *** empty log message ***
+ *
+ * Revision 1.5  2006/11/14 11:10:27  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.4  2006/11/09 18:39:05  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.3  2006/11/06 07:33:54  jaume
+ * javadoc, source style
+ *
+ * Revision 1.2  2006/10/31 16:16:34  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/10/30 19:30:35  jaume
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.core.symbols;
 
 import java.awt.Color;
@@ -105,14 +105,14 @@ import com.iver.cit.gvsig.fmap.core.CartographicSupportToolkit;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 
-
 /**
  * Abstract class that any FILL SYMBOL should extend
- *
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
-public abstract class AbstractFillSymbol extends AbstractSymbol implements IFillSymbol {
+public abstract class AbstractFillSymbol extends AbstractSymbol implements
+		IFillSymbol {
 	private boolean hasFill = true;
 	private boolean hasOutline = true;
 	private Color color = null;
@@ -132,7 +132,8 @@ public abstract class AbstractFillSymbol extends AbstractSymbol implements IFill
 		return rgb;
 	}
 
-	public void getPixExtentPlus(FShape shp, float[] distances, ViewPort viewPort, int dpi) {
+	public void getPixExtentPlus(FShape shp, float[] distances,
+			ViewPort viewPort, int dpi) {
 		if (getOutline() != null) {
 			getOutline().getPixExtentPlus(shp, distances, viewPort, dpi);
 		} else {
@@ -158,8 +159,10 @@ public abstract class AbstractFillSymbol extends AbstractSymbol implements IFill
 	}
 
 	public int getFillAlpha() {
-		// TODO debatir si es correcto o no (por ejemplo cuando hablamos de LineFillSymbol's
-		if (color == null) return 255;
+		// TODO debatir si es correcto o no (por ejemplo cuando hablamos de
+		// LineFillSymbol's
+		if (color == null)
+			return 255;
 		return color.getAlpha();
 	}
 
@@ -172,11 +175,7 @@ public abstract class AbstractFillSymbol extends AbstractSymbol implements IFill
 	public double toCartographicSize(ViewPort viewPort, double dpi, FShape shp) {
 		if (getOutline() != null) {
 			double oldSize = getOutline().getLineWidth();
-			setCartographicSize(getCartographicSize(
-					viewPort,
-					dpi,
-					shp),
-					shp);
+			setCartographicSize(getCartographicSize(viewPort, dpi, shp), shp);
 			return oldSize;
 		}
 		return 0;
@@ -190,7 +189,6 @@ public abstract class AbstractFillSymbol extends AbstractSymbol implements IFill
 		this.hasFill = hasFill;
 	}
 
-
 	public boolean hasOutline() {
 		return hasOutline;
 	}
@@ -199,14 +197,10 @@ public abstract class AbstractFillSymbol extends AbstractSymbol implements IFill
 		this.hasOutline = hasOutline;
 	}
 
-
 	public double getCartographicSize(ViewPort viewPort, double dpi, FShape shp) {
 		if (getOutline() != null) {
-			return CartographicSupportToolkit.
-						getCartographicLength(this,
-							getOutline().getLineWidth(),
-							viewPort,
-							dpi);
+			return CartographicSupportToolkit.getCartographicLength(this,
+					getOutline().getLineWidth(), viewPort, dpi);
 		}
 		return 0;
 	}

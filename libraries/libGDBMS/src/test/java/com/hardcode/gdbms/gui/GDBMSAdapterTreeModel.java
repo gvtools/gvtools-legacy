@@ -3,25 +3,24 @@
  */
 package com.hardcode.gdbms.gui;
 
-import com.hardcode.gdbms.engine.instruction.Adapter;
-import com.hardcode.gdbms.engine.instruction.Utilities;
-
 import java.util.Enumeration;
 import java.util.Hashtable;
 
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 
+import com.hardcode.gdbms.engine.instruction.Adapter;
+import com.hardcode.gdbms.engine.instruction.Utilities;
 
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public class GDBMSAdapterTreeModel extends DefaultTreeModel {
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param arg0
 	 * @param arg1
 	 */
@@ -31,7 +30,7 @@ public class GDBMSAdapterTreeModel extends DefaultTreeModel {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param arg0
 	 */
 	public GDBMSAdapterTreeModel(TreeNode arg0) {
@@ -40,8 +39,9 @@ public class GDBMSAdapterTreeModel extends DefaultTreeModel {
 
 	/**
 	 * Crea un nuevo GDBMSAdapterTreeModel.
-	 *
-	 * @param root DOCUMENT ME!
+	 * 
+	 * @param root
+	 *            DOCUMENT ME!
 	 */
 	public GDBMSAdapterTreeModel(Adapter root) {
 		super(null);
@@ -50,8 +50,9 @@ public class GDBMSAdapterTreeModel extends DefaultTreeModel {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param root DOCUMENT ME!
+	 * 
+	 * @param root
+	 *            DOCUMENT ME!
 	 */
 	public void setTree(Adapter root) {
 		this.setRoot(new AdapterNode(root));
@@ -59,7 +60,7 @@ public class GDBMSAdapterTreeModel extends DefaultTreeModel {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @author Fernando González Cortés
 	 */
 	public class AdapterNode implements TreeNode {
@@ -67,8 +68,9 @@ public class GDBMSAdapterTreeModel extends DefaultTreeModel {
 
 		/**
 		 * Crea un nuevo AdapterNode.
-		 *
-		 * @param n DOCUMENT ME!
+		 * 
+		 * @param n
+		 *            DOCUMENT ME!
 		 */
 		public AdapterNode(Adapter n) {
 			node = n;
@@ -137,7 +139,7 @@ public class GDBMSAdapterTreeModel extends DefaultTreeModel {
 
 		/**
 		 * DOCUMENT ME!
-		 *
+		 * 
 		 * @return DOCUMENT ME!
 		 */
 		public String toString() {

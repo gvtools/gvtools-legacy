@@ -49,7 +49,6 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 import java.awt.image.VolatileImage;
 
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
@@ -59,20 +58,20 @@ import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.LayoutRectangleListener;
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.LayoutToolListener;
 
-
 /**
  * Behaviour que espera un listener de tipo LayoutRectangleListener.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LayoutRectangleBehavior extends LayoutBehavior {
 	private LayoutRectangleListener listener;
-	private boolean dragged=false;
+	private boolean dragged = false;
 
 	/**
 	 * Crea un nuevo RectangleBehavior.
-	 *
-	 * @param zili listener.
+	 * 
+	 * @param zili
+	 *            listener.
 	 */
 	public LayoutRectangleBehavior(LayoutRectangleListener lrl) {
 		listener = lrl;
@@ -82,7 +81,7 @@ public class LayoutRectangleBehavior extends LayoutBehavior {
 	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#paintComponent(java.awt.Graphics)
 	 */
 	public void paintComponent(Graphics g) {
-//		long t1 = System.currentTimeMillis();
+		// long t1 = System.currentTimeMillis();
 
 		VolatileImage image = createVolatileImage();
 		Graphics gh = image.createGraphics();
@@ -90,14 +89,14 @@ public class LayoutRectangleBehavior extends LayoutBehavior {
 		gh.fillRect(0, 0, image.getWidth(), image.getHeight());
 
 		getLayoutControl().getLayoutDraw().drawRectangle((Graphics2D) gh);
-		gh.drawImage(getLayoutControl().getImage(), 0,0, null);
-		gh.drawImage(getLayoutControl().getImgRuler(), 0,0, null);
-//		long t2 = System.currentTimeMillis();
+		gh.drawImage(getLayoutControl().getImage(), 0, 0, null);
+		gh.drawImage(getLayoutControl().getImgRuler(), 0, 0, null);
+		// long t2 = System.currentTimeMillis();
 
-//		BufferedImage img = getLayoutControl().getImage();
-//		BufferedImage imgRuler=getLayoutControl().getImgRuler();
-//		g.drawImage(img, 0, 0, getLayoutControl());
-//		g.drawImage(imgRuler, 0, 0, getLayoutControl());
+		// BufferedImage img = getLayoutControl().getImage();
+		// BufferedImage imgRuler=getLayoutControl().getImgRuler();
+		// g.drawImage(img, 0, 0, getLayoutControl());
+		// g.drawImage(imgRuler, 0, 0, getLayoutControl());
 		gh.setColor(Color.black);
 		gh.setXORMode(Color.white);
 
@@ -105,65 +104,73 @@ public class LayoutRectangleBehavior extends LayoutBehavior {
 		Rectangle r = new Rectangle();
 
 		// Dibujamos el actual
-		if (dragged && (getLayoutControl().getFirstPoint() != null) && (getLayoutControl().getLastPoint() != null)) {
-			r.setFrameFromDiagonal(getLayoutControl().getFirstPoint(), getLayoutControl().getLastPoint());
+		if (dragged && (getLayoutControl().getFirstPoint() != null)
+				&& (getLayoutControl().getLastPoint() != null)) {
+			r.setFrameFromDiagonal(getLayoutControl().getFirstPoint(),
+					getLayoutControl().getLastPoint());
 			gh.drawRect(r.x, r.y, r.width, r.height);
 		}
-		 IFFrame[] frames = getLayoutControl().getLayoutContext().getFFrameSelected();
-	        for (int i = 0; i < frames.length; i++) {
-	            gh.setColor(Color.black);
-	            frames[i].drawHandlers((Graphics2D) gh);
-	        }
+		IFFrame[] frames = getLayoutControl().getLayoutContext()
+				.getFFrameSelected();
+		for (int i = 0; i < frames.length; i++) {
+			gh.setColor(Color.black);
+			frames[i].drawHandlers((Graphics2D) gh);
+		}
 		gh.setPaintMode();
-//		getLayoutControl().drawCursor(gh);
+		// getLayoutControl().drawCursor(gh);
 		g.drawImage(image, 0, 0, null);
-//		long t3 = System.currentTimeMillis();
-//		System.out.println("t1 = " + (t2-t1) + " t2=" + (t3-t2));
-
+		// long t3 = System.currentTimeMillis();
+		// System.out.println("t1 = " + (t2-t1) + " t2=" + (t3-t2));
 
 	}
 
 	/**
 	 * Reimplementación del método mousePressed de Behavior.
-	 *
-	 * @param e MouseEvent
+	 * 
+	 * @param e
+	 *            MouseEvent
 	 * @throws BehaviorException
 	 */
 	public void mousePressed(MouseEvent e) throws BehaviorException {
 		super.mousePressed(e);
 		if (listener.cancelDrawing()) {
-			//getLayout().cancelDrawing();
+			// getLayout().cancelDrawing();
 		}
 		getLayoutControl().repaint();
 	}
 
 	/**
 	 * Reimplementación del método mouseReleased de Behavior.
-	 *
-	 * @param e MouseEvent
-	 *
-	 * @throws BehaviorException Excepción lanzada cuando el Behavior.
+	 * 
+	 * @param e
+	 *            MouseEvent
+	 * 
+	 * @throws BehaviorException
+	 *             Excepción lanzada cuando el Behavior.
 	 */
 	public void mouseReleased(MouseEvent e) throws BehaviorException {
 		super.mouseReleased(e);
-	    dragged=false;
-		if (getLayoutControl().getFirstPoint() == null) return;
+		dragged = false;
+		if (getLayoutControl().getFirstPoint() == null)
+			return;
 		Point2D p1;
 		Point2D p2;
 		Point pScreen = getLayoutControl().getLastPoint();
 
 		AffineTransform at = getLayoutControl().getAT();
 
-		p1 = FLayoutUtilities.toSheetPoint(getLayoutControl().getFirstPoint(), at);
+		p1 = FLayoutUtilities.toSheetPoint(getLayoutControl().getFirstPoint(),
+				at);
 		p2 = FLayoutUtilities.toSheetPoint(pScreen, at);
 
 		if (e.getButton() == MouseEvent.BUTTON1) {
-			//	Fijamos el nuevo extent
+			// Fijamos el nuevo extent
 			Rectangle2D.Double r = new Rectangle2D.Double();
 			r.setFrameFromDiagonal(p1, p2);
 
 			Rectangle2D rectPixel = new Rectangle();
-			rectPixel.setFrameFromDiagonal(getLayoutControl().getFirstPoint(), pScreen);
+			rectPixel.setFrameFromDiagonal(getLayoutControl().getFirstPoint(),
+					pScreen);
 
 			RectangleEvent event = new RectangleEvent(r, e, rectPixel);
 			listener.rectangle(event);
@@ -173,13 +180,14 @@ public class LayoutRectangleBehavior extends LayoutBehavior {
 
 	/**
 	 * Reimplementación del método mouseDragged de Behavior.
-	 *
-	 * @param e MouseEvent
+	 * 
+	 * @param e
+	 *            MouseEvent
 	 * @throws BehaviorException
 	 */
 	public void mouseDragged(MouseEvent e) throws BehaviorException {
 		super.mouseDragged(e);
-		dragged=true;
+		dragged = true;
 		getLayoutControl().repaint();
 	}
 

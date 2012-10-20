@@ -18,25 +18,27 @@
  */
 package org.gvsig.raster.grid.filter.bands;
 
-
 /**
  * Filtro de conversión de datos RGB a HSL para tipo de datos byte.
- *
+ * 
  * @version 06/06/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class HSLToRGBByteFilter extends HSLToRGBFilter {
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.bands.ColorTableFilter#process(int, int)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.bands.ColorTableFilter#process(int,
+	 * int)
 	 */
 	public void process(int col, int line) throws InterruptedException {
 		byte[] value = new byte[3];
-		for (int i = 0; i < renderBands.length; i++) 
+		for (int i = 0; i < renderBands.length; i++)
 			value[i] = raster.getElemByte(line, col, renderBands[i]);
-		int[] rgb = colorConversion.HSLtoRGB((value[0] & 0xff), (value[1] & 0xff), (value[2] & 0xff));
+		int[] rgb = colorConversion.HSLtoRGB((value[0] & 0xff),
+				(value[1] & 0xff), (value[2] & 0xff));
 		for (int band = 0; band < 3; band++)
-			value[band] = (byte)(((byte)rgb[band]) & 0xff);
+			value[band] = (byte) (((byte) rgb[band]) & 0xff);
 		rasterResult.setElemByte(line, col, value);
 	}
 

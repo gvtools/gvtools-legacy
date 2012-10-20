@@ -49,157 +49,203 @@ import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 
-/** 
- * <p><code>FGraphic</code> defines a graphic symbol.</p>
+/**
+ * <p>
+ * <code>FGraphic</code> defines a graphic symbol.
+ * </p>
  * 
- * <p>That symbol represents a geometry capable to be painted, with an identifier, and can, optionally,
- *  have attached a tag that can be a text or an object.</p> 
+ * <p>
+ * That symbol represents a geometry capable to be painted, with an identifier,
+ * and can, optionally, have attached a tag that can be a text or an object.
+ * </p>
  */
 public class FGraphic {
 	/**
-	 * <p>Identifies this graphic symbol.</p>
+	 * <p>
+	 * Identifies this graphic symbol.
+	 * </p>
 	 * 
 	 * @see #getIdSymbol()
 	 * @see #setIdSymbol(int)
 	 */
 	int idSymbol;
-    
-    /**
-     * <p>Geometry of this graphic symbol.</p>
-     * 
-     * @see #getGeom()
-     * @see #setGeom(IGeometry)
-     */
+
+	/**
+	 * <p>
+	 * Geometry of this graphic symbol.
+	 * </p>
+	 * 
+	 * @see #getGeom()
+	 * @see #setGeom(IGeometry)
+	 */
 	IGeometry geom;
-    
-    /**
-     * <p>Optional text associated to this graphic symbol as a tag.</p>
-     * 
-     * @see #getTag()
-     * @see #setTag(String)
-     */
+
+	/**
+	 * <p>
+	 * Optional text associated to this graphic symbol as a tag.
+	 * </p>
+	 * 
+	 * @see #getTag()
+	 * @see #setTag(String)
+	 */
 	String tag;
-    
-    /**
-     * <p>Optional object <i>(example: an icon)</i> associated to this graphic symbol as a tag.</p>
-     * 
-     * @see #getObjectTag()
-     * @see #setObjectTag(Object)
-     */
+
+	/**
+	 * <p>
+	 * Optional object <i>(example: an icon)</i> associated to this graphic
+	 * symbol as a tag.
+	 * </p>
+	 * 
+	 * @see #getObjectTag()
+	 * @see #setObjectTag(Object)
+	 */
 	Object objectTag;
 
-    /**
-     * <p>Creates a <code>geom</code> type <code>FGraphic</code> instance, identified by <code>idSymbol</code>.</p> 
-     *
-     * @param geom the geometry that this symbol will represent
-     * @param idSymbol this geometry identifier
-     */
-	public FGraphic(IGeometry geom, int idSymbol)
-	{
+	/**
+	 * <p>
+	 * Creates a <code>geom</code> type <code>FGraphic</code> instance,
+	 * identified by <code>idSymbol</code>.
+	 * </p>
+	 * 
+	 * @param geom
+	 *            the geometry that this symbol will represent
+	 * @param idSymbol
+	 *            this geometry identifier
+	 */
+	public FGraphic(IGeometry geom, int idSymbol) {
 		this.idSymbol = idSymbol;
 		this.geom = geom;
 	}
 
-    /**
-     * <p>Gets the text tag associated to this symbol.</p>
-     * 
-     * @return the text tag associated to this symbol, or <code>null</code> if undefined
-     * 
-     * @see #setTag(String)
-     */
+	/**
+	 * <p>
+	 * Gets the text tag associated to this symbol.
+	 * </p>
+	 * 
+	 * @return the text tag associated to this symbol, or <code>null</code> if
+	 *         undefined
+	 * 
+	 * @see #setTag(String)
+	 */
 	public String getTag() {
 		return tag;
 	}
 
-    /**
-     * <p>Sets a text tag associated to this symbol.</p>
-     * 
-     * @param tag a text tag associated to this symbol
-     * 
-     * @see #getTag()
-     */
+	/**
+	 * <p>
+	 * Sets a text tag associated to this symbol.
+	 * </p>
+	 * 
+	 * @param tag
+	 *            a text tag associated to this symbol
+	 * 
+	 * @see #getTag()
+	 */
 	public void setTag(String tag) {
 		this.tag = tag;
 	}
 
-    /**
-     * <p>Gets the geometry of this symbol.</p>
-     * 
-     * @return an object indicating this component's geometry
-     * 
-     * @see #setGeom(IGeometry)
-     */
+	/**
+	 * <p>
+	 * Gets the geometry of this symbol.
+	 * </p>
+	 * 
+	 * @return an object indicating this component's geometry
+	 * 
+	 * @see #setGeom(IGeometry)
+	 */
 	public IGeometry getGeom() {
 		return geom;
 	}
 
-    /**
-     * <p>Replaces the geometry of this symbol by <code>geom</code></p>.
-     * 
-     * @param geom an object indicating this symbol geometry
-     * 
-     * @see #getGeom()
-     */
+	/**
+	 * <p>
+	 * Replaces the geometry of this symbol by <code>geom</code>
+	 * </p>
+	 * .
+	 * 
+	 * @param geom
+	 *            an object indicating this symbol geometry
+	 * 
+	 * @see #getGeom()
+	 */
 	public void setGeom(IGeometry geom) {
 		this.geom = geom;
 	}
 
-    /**
-     * <p>Gets the identifier of this symbol.</p>
-     * 
-     * @return the identifier of this symbol
-     * 
-     * @see #setIdSymbol(int)
-     */
+	/**
+	 * <p>
+	 * Gets the identifier of this symbol.
+	 * </p>
+	 * 
+	 * @return the identifier of this symbol
+	 * 
+	 * @see #setIdSymbol(int)
+	 */
 	public int getIdSymbol() {
 		return idSymbol;
 	}
 
-    /**
-     * <p>Replaces the identifier of this symbol by <code>idSymbol</code></p>
-     *     
-     * @param idSymbol the new identifier
-     * 
-     * @see #getIdSymbol()
-     */
+	/**
+	 * <p>
+	 * Replaces the identifier of this symbol by <code>idSymbol</code>
+	 * </p>
+	 * 
+	 * @param idSymbol
+	 *            the new identifier
+	 * 
+	 * @see #getIdSymbol()
+	 */
 	public void setIdSymbol(int idSymbol) {
 		this.idSymbol = idSymbol;
 	}
 
 	/**
-     * <p>Defines the default logic of drawing a graphic symbol.</p>
-     * 
-     * <p>Using the rendering defined in <code>g</code>, if <code>theSymbol</code> is visible,
-     *  that symbol will be drawn in <code>viewPort</code>.</p>
-     * 
-     * @param g for rendering 2-dimensional shapes, text and images on the Java(tm) platform
-     * @param viewPort information for drawing this graphic item
-     * @param theSymbol the symbol that will be drawn 
-     */
-	public void draw(Graphics2D g, ViewPort viewPort, ISymbol theSymbol )
-	{
-		if (theSymbol.isShapeVisible())
-		{
+	 * <p>
+	 * Defines the default logic of drawing a graphic symbol.
+	 * </p>
+	 * 
+	 * <p>
+	 * Using the rendering defined in <code>g</code>, if <code>theSymbol</code>
+	 * is visible, that symbol will be drawn in <code>viewPort</code>.
+	 * </p>
+	 * 
+	 * @param g
+	 *            for rendering 2-dimensional shapes, text and images on the
+	 *            Java(tm) platform
+	 * @param viewPort
+	 *            information for drawing this graphic item
+	 * @param theSymbol
+	 *            the symbol that will be drawn
+	 */
+	public void draw(Graphics2D g, ViewPort viewPort, ISymbol theSymbol) {
+		if (theSymbol.isShapeVisible()) {
 			IGeometry cloneGeom = geom.cloneGeometry();
-			cloneGeom.draw(g,viewPort,theSymbol, null);
+			cloneGeom.draw(g, viewPort, theSymbol, null);
 		}
 	}
 
-    /**
-     * <p>Gets the object tag associated to this symbol.</p>
-     * 
-     * @return the object tag associated to this symbol, or <code>null</code> if  undefined
-     * 
-     * @see #setObjectTag(Object)
-     */
+	/**
+	 * <p>
+	 * Gets the object tag associated to this symbol.
+	 * </p>
+	 * 
+	 * @return the object tag associated to this symbol, or <code>null</code> if
+	 *         undefined
+	 * 
+	 * @see #setObjectTag(Object)
+	 */
 	public Object getObjectTag() {
 		return objectTag;
 	}
 
 	/**
-	 * <p>Sets an object tag associated to this symbol.</p>
+	 * <p>
+	 * Sets an object tag associated to this symbol.
+	 * </p>
 	 * 
-	 * @param objectTag the object tag associated to this symbol
+	 * @param objectTag
+	 *            the object tag associated to this symbol
 	 * 
 	 * @see #getObjectTag()
 	 */

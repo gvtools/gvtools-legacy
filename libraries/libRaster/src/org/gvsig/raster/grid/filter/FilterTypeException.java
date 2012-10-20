@@ -19,28 +19,30 @@
 package org.gvsig.raster.grid.filter;
 
 /**
- * Excepción lanzada por un filtro o proceso. Cuando es lanzada significa que los
- * tipos de datos entre los filtros de la pila son incompatibles.
+ * Excepción lanzada por un filtro o proceso. Cuando es lanzada significa que
+ * los tipos de datos entre los filtros de la pila son incompatibles.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
 public class FilterTypeException extends Exception {
 	private static final long serialVersionUID = 5187136969233163574L;
 
 	/**
 	 * Constructor. Asigna el texto de la excepción
+	 * 
 	 * @param msg
 	 */
-	public FilterTypeException(String msg){
+	public FilterTypeException(String msg) {
 		super(msg);
 	}
-	
+
 	/**
 	 * Constructor. Asigna el texto de la excepción y la excepción generica.
+	 * 
 	 * @param msg
 	 */
-	public FilterTypeException(String msg, Exception e){
+	public FilterTypeException(String msg, Exception e) {
 		super(msg, e);
 	}
 }

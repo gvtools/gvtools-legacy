@@ -13,7 +13,7 @@ public class AllTests {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for com.iver.utiles");
-		//$JUnit-BEGIN$
+		// $JUnit-BEGIN$
 		suite.addTestSuite(DoubleUtilitiesTest.class);
 		suite.addTestSuite(TestBinarySearchUsingFirstCharacters.class);
 		suite.addTestSuite(TestExtensionPoint.class);
@@ -22,7 +22,7 @@ public class AllTests {
 		suite.addTestSuite(TestStringUtilities.class);
 		suite.addTestSuite(TestVectorUtilities.class);
 		suite.addTestSuite(TestXMLEntity.class);
-		//$JUnit-END$
+		// $JUnit-END$
 		return suite;
 	}
 

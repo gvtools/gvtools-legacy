@@ -36,6 +36,7 @@ import org.gvsig.raster.gui.wizards.FileOpenRaster;
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
+
 /**
  * Obtiene el panel con las opciones a realizar con la proyección. Nos ofrece
  * las siguientes posibilidades:
@@ -47,21 +48,22 @@ import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
  * </UL>
  * 
  * 07/04/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class RasterProjectionActionsPanel extends DefaultButtonsPanel {
 	private static final long serialVersionUID = -3868504818382448187L;
 
-	public static boolean selectAllFiles         = false;
-	private JPanel        buttonsPanel           = null;
-	private ButtonGroup   group                  = new ButtonGroup();
-	private JRadioButton  changeViewProjection   = null;
-	private JRadioButton  reproject              = null;
-	private JRadioButton  ignoreRasterProjection = null;
-	private JRadioButton  notLoad                = null;
-	private JCheckBox     allfiles               = null;
-	private FLyrRasterSE  lyr                    = null;
-	
+	public static boolean selectAllFiles = false;
+	private JPanel buttonsPanel = null;
+	private ButtonGroup group = new ButtonGroup();
+	private JRadioButton changeViewProjection = null;
+	private JRadioButton reproject = null;
+	private JRadioButton ignoreRasterProjection = null;
+	private JRadioButton notLoad = null;
+	private JCheckBox allfiles = null;
+	private FLyrRasterSE lyr = null;
+
 	/**
 	 * Constructor. Llama al inicializador de componentes gráficos.
 	 */
@@ -71,7 +73,7 @@ public class RasterProjectionActionsPanel extends DefaultButtonsPanel {
 		init(lyr.getName());
 		setSelection(FileOpenRaster.defaultActionLayer);
 	}
-	
+
 	/**
 	 * Inicialización de componentes gráficos.
 	 */
@@ -79,19 +81,28 @@ public class RasterProjectionActionsPanel extends DefaultButtonsPanel {
 		BorderLayout bl = new BorderLayout();
 		bl.setVgap(5);
 		setLayout(bl);
-		add(new JLabel("<html><b>" + lyrName + "</b><BR><BR>" + PluginServices.getText(this, "dif_proj") + "</html>"), BorderLayout.NORTH);
+		add(new JLabel("<html><b>" + lyrName + "</b><BR><BR>"
+				+ PluginServices.getText(this, "dif_proj") + "</html>"),
+				BorderLayout.NORTH);
 		add(getButtonsActionPanel(), BorderLayout.CENTER);
 		add(getCheckOption(), BorderLayout.SOUTH);
 	}
-		
+
 	/**
 	 * Obtiene el panel con los botones se selección de opción.
+	 * 
 	 * @return JPanel
 	 */
 	private JPanel getButtonsActionPanel() {
 		if (buttonsPanel == null) {
 			buttonsPanel = new JPanel();
-			buttonsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, PluginServices.getText(this, "proj_options"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			buttonsPanel
+					.setBorder(javax.swing.BorderFactory.createTitledBorder(
+							null,
+							PluginServices.getText(this, "proj_options"),
+							javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+							javax.swing.border.TitledBorder.DEFAULT_POSITION,
+							null, null));
 
 			group.add(getIgnoreRasterProjectionButton());
 			group.add(getChangeViewProjectionButton());
@@ -101,80 +112,91 @@ public class RasterProjectionActionsPanel extends DefaultButtonsPanel {
 			buttonsPanel.setLayout(new GridBagLayout());
 			GridBagConstraints gbc = new GridBagConstraints();
 			gbc.insets = new java.awt.Insets(0, 5, 5, 0);
-			
+
 			gbc.gridx = 0;
 			gbc.gridy = 0;
 			gbc.weightx = 1;
 			gbc.anchor = GridBagConstraints.WEST;
 			buttonsPanel.add(getIgnoreRasterProjectionButton(), gbc);
-			
+
 			gbc.gridy = 1;
 			buttonsPanel.add(getReprojectButton(), gbc);
-			
+
 			gbc.gridy = 2;
 			buttonsPanel.add(getChangeViewProjectionButton(), gbc);
-			
+
 			gbc.gridy = 3;
 			buttonsPanel.add(getNotLoadButton(), gbc);
 		}
 		return buttonsPanel;
 	}
-	
+
 	/**
 	 * Obtiene el botón de cambio de projección de la vista
+	 * 
 	 * @return
 	 */
 	private JRadioButton getChangeViewProjectionButton() {
-		if(changeViewProjection == null) {
-			changeViewProjection = new JRadioButton(PluginServices.getText(this, "change_view_proj"));
-			
-			IWindow activeWindow = PluginServices.getMDIManager().getActiveWindow();
-			if (activeWindow instanceof BaseView) {		
+		if (changeViewProjection == null) {
+			changeViewProjection = new JRadioButton(PluginServices.getText(
+					this, "change_view_proj"));
+
+			IWindow activeWindow = PluginServices.getMDIManager()
+					.getActiveWindow();
+			if (activeWindow instanceof BaseView) {
 				BaseView activeView = (BaseView) activeWindow;
-				if (activeView.getMapControl().getMapContext().getLayers().getLayersCount() >= 1)
+				if (activeView.getMapControl().getMapContext().getLayers()
+						.getLayersCount() >= 1)
 					changeViewProjection.setEnabled(false);
 			}
 		}
 		return changeViewProjection;
 	}
-	
+
 	/**
 	 * Obtiene el botón de cambio de reproyección
+	 * 
 	 * @return
 	 */
 	private JRadioButton getReprojectButton() {
-		if(reproject == null) {
-			reproject = new JRadioButton(PluginServices.getText(this, "reproject"));
+		if (reproject == null) {
+			reproject = new JRadioButton(PluginServices.getText(this,
+					"reproject"));
 			reproject.setEnabled(lyr.isReproyectable());
 		}
 		return reproject;
 	}
-	
+
 	/**
 	 * Obtiene el botón de ignorar la proyección del raster
+	 * 
 	 * @return
 	 */
 	private JRadioButton getIgnoreRasterProjectionButton() {
-		if(ignoreRasterProjection == null) {
-			ignoreRasterProjection = new JRadioButton(PluginServices.getText(this, "ignore_raster_proj"));
+		if (ignoreRasterProjection == null) {
+			ignoreRasterProjection = new JRadioButton(PluginServices.getText(
+					this, "ignore_raster_proj"));
 		}
 		return ignoreRasterProjection;
 	}
-	
+
 	/**
 	 * Obtiene el botón de no cargar el raster.
+	 * 
 	 * @return
 	 */
 	private JRadioButton getNotLoadButton() {
-		if(notLoad == null) {
+		if (notLoad == null) {
 			notLoad = new JRadioButton(PluginServices.getText(this, "not_load"));
 		}
 		return notLoad;
 	}
-	
+
 	/**
 	 * Obtiene la selección del panel
-	 * @return entero con la selección. Esta representada por las constantes de FileOpenRaster.
+	 * 
+	 * @return entero con la selección. Esta representada por las constantes de
+	 *         FileOpenRaster.
 	 */
 	public int getSelection() {
 		if (getChangeViewProjectionButton().isSelected())
@@ -187,10 +209,13 @@ public class RasterProjectionActionsPanel extends DefaultButtonsPanel {
 			return FileOpenRaster.NOTLOAD;
 		return -1;
 	}
-	
+
 	/**
 	 * Asigna una selección de opción
-	 * @param entero con la selección. Esta representada por las constantes de FileOpenRaster.
+	 * 
+	 * @param entero
+	 *            con la selección. Esta representada por las constantes de
+	 *            FileOpenRaster.
 	 */
 	public void setSelection(int value) {
 		if (value == FileOpenRaster.CHANGE_VIEW_PROJECTION)
@@ -202,9 +227,10 @@ public class RasterProjectionActionsPanel extends DefaultButtonsPanel {
 		if (value == FileOpenRaster.NOTLOAD)
 			getNotLoadButton().setSelected(true);
 	}
-	
+
 	/**
 	 * Obtiene el check con la opción de aplicar a todos los ficheros
+	 * 
 	 * @return
 	 */
 	public JCheckBox getCheckOption() {
@@ -212,4 +238,4 @@ public class RasterProjectionActionsPanel extends DefaultButtonsPanel {
 			allfiles = new JCheckBox(PluginServices.getText(this, "apply_all"));
 		return allfiles;
 	}
-} 
+}

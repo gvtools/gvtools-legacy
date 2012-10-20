@@ -57,7 +57,10 @@
 package com.iver.cit.gvsig.fmap;
 
 /**
- * <p><code>ErrorEvent</code> stores all necessary information of an error produced on a layer.</p>
+ * <p>
+ * <code>ErrorEvent</code> stores all necessary information of an error produced
+ * on a layer.
+ * </p>
  * 
  * @see FMapEvent
  * 
@@ -67,44 +70,57 @@ package com.iver.cit.gvsig.fmap;
  */
 public class ErrorEvent extends FMapEvent {
 	/**
-	 * <p>Extra information about the error, like which layer was produced.</p>
+	 * <p>
+	 * Extra information about the error, like which layer was produced.
+	 * </p>
 	 * 
 	 * @see #getMessage()
 	 */
 	private String message;
-    
-    /**
-     * <p>Exception associated to the error produced.</p>
-     * 
-     * @see #getException()
-     */
+
+	/**
+	 * <p>
+	 * Exception associated to the error produced.
+	 * </p>
+	 * 
+	 * @see #getException()
+	 */
 	private Exception exception;
 
-    /**
-     * <p>Constructs an <code>ErrorEvent</code> with the specified, detailed message as extra information, and the exception thrown.</p>
-     * 
-     * @param message detailed error information
-     * @param e the exception thrown when the error was produced
-     */
-	public ErrorEvent(String message, Exception e){
+	/**
+	 * <p>
+	 * Constructs an <code>ErrorEvent</code> with the specified, detailed
+	 * message as extra information, and the exception thrown.
+	 * </p>
+	 * 
+	 * @param message
+	 *            detailed error information
+	 * @param e
+	 *            the exception thrown when the error was produced
+	 */
+	public ErrorEvent(String message, Exception e) {
 		this.message = message;
 		this.exception = e;
 	}
 
-    /**
-     * <p>Gets the <code>Exception</code> associated to the error produced.</p>
-     * 
-     * @return the exception thrown when the error was produced
-     */
+	/**
+	 * <p>
+	 * Gets the <code>Exception</code> associated to the error produced.
+	 * </p>
+	 * 
+	 * @return the exception thrown when the error was produced
+	 */
 	public Exception getException() {
 		return exception;
 	}
 
-    /**
-     * <p>Gets detailed message with extra information.</p>
-     * 
-     * @return the detail message with extra information
-     */
+	/**
+	 * <p>
+	 * Gets detailed message with extra information.
+	 * </p>
+	 * 
+	 * @return the detail message with extra information
+	 */
 	public String getMessage() {
 		return message;
 	}

@@ -34,140 +34,141 @@ import com.vividsolutions.jump.feature.Feature;
 import com.vividsolutions.jump.feature.FeatureSchema;
 
 /**
- * Adapts a gvSIG's feature source (ReadableVectorial) to OpenJUMP Api,
- * so it can create OpenJUMP's features with gvSIG' drivers.
+ * Adapts a gvSIG's feature source (ReadableVectorial) to OpenJUMP Api, so it
+ * can create OpenJUMP's features with gvSIG' drivers.
  * 
  * Based in OrbisCAD work, adapted to work with gvSIG' drivers architecture.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class FeatureAdapter implements Feature, Comparable {
 
-    private ReadableVectorial rv;
+	private ReadableVectorial rv;
 
-    private int index;
+	private int index;
 
-    public FeatureAdapter(ReadableVectorial rv, int index) {
-        this.rv = rv;
-        this.index = index;
-    }
+	public FeatureAdapter(ReadableVectorial rv, int index) {
+		this.rv = rv;
+		this.index = index;
+	}
 
-    @Override
-    public int hashCode() {
-        return index;
-    }
+	@Override
+	public int hashCode() {
+		return index;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof FeatureAdapter) {
-            FeatureAdapter fa = (FeatureAdapter) obj;
-            if ((fa.index == index)) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
-    public void setAttributes(Object[] attributes) {
-    }
-
-    public void setSchema(FeatureSchema schema) {
-    }
-
-    public int getID() {
-        return index;
-    }
-
-    public void setAttribute(int attributeIndex, Object newAttribute) {
-    }
-
-    public void setAttribute(String attributeName, Object newAttribute) {
-    }
-
-    public void setGeometry(Geometry geometry) {
-    }
-
-    public Object getAttribute(int i) {
-        try {
-            return rv.getRecordset().getFieldValue(index, i);
-        } catch (ReadDriverException e) {
-        	 throw new RuntimeException(e);
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof FeatureAdapter) {
+			FeatureAdapter fa = (FeatureAdapter) obj;
+			if ((fa.index == index)) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
 		}
-    }
+	}
 
-    public Object getAttribute(String name) {
-        try {
-            return rv.getRecordset().getFieldValue(index, rv.getRecordset().getFieldIndexByName(name));
-        } catch (ReadDriverException e) {
-        	 throw new RuntimeException(e);
+	public void setAttributes(Object[] attributes) {
+	}
+
+	public void setSchema(FeatureSchema schema) {
+	}
+
+	public int getID() {
+		return index;
+	}
+
+	public void setAttribute(int attributeIndex, Object newAttribute) {
+	}
+
+	public void setAttribute(String attributeName, Object newAttribute) {
+	}
+
+	public void setGeometry(Geometry geometry) {
+	}
+
+	public Object getAttribute(int i) {
+		try {
+			return rv.getRecordset().getFieldValue(index, i);
+		} catch (ReadDriverException e) {
+			throw new RuntimeException(e);
 		}
-    }
+	}
 
-    public String getString(int attributeIndex) {
-        return null;
-    }
+	public Object getAttribute(String name) {
+		try {
+			return rv.getRecordset().getFieldValue(index,
+					rv.getRecordset().getFieldIndexByName(name));
+		} catch (ReadDriverException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-    public int getInteger(int attributeIndex) {
-        return 0;
-    }
+	public String getString(int attributeIndex) {
+		return null;
+	}
 
-    public double getDouble(int attributeIndex) {
-        return 0;
-    }
+	public int getInteger(int attributeIndex) {
+		return 0;
+	}
 
-    public String getString(String attributeName) {
-        return null;
-    }
+	public double getDouble(int attributeIndex) {
+		return 0;
+	}
 
-    public Geometry getGeometry() {
-        try {
+	public String getString(String attributeName) {
+		return null;
+	}
+
+	public Geometry getGeometry() {
+		try {
 			return NewFConverter.toJtsGeometry(rv.getShape(index));
 		} catch (ExpansionFileReadException e) {
-			 throw new RuntimeException(e);
+			throw new RuntimeException(e);
 		} catch (ReadDriverException e) {
-			 throw new RuntimeException(e);
+			throw new RuntimeException(e);
 		}
-    }
+	}
 
-    public FeatureSchema getSchema() {
-        return new FeatureSchemaAdapter(rv);
-    }
+	public FeatureSchema getSchema() {
+		return new FeatureSchemaAdapter(rv);
+	}
 
-    public Object clone() {
-        BasicFeature ret = new BasicFeature(getSchema());
-        ret.setAttributes(getAttributes());
+	public Object clone() {
+		BasicFeature ret = new BasicFeature(getSchema());
+		ret.setAttributes(getAttributes());
 
-        return ret;
-    }
+		return ret;
+	}
 
-    public Feature clone(boolean deep) {
-        return (Feature) clone();
-    }
+	public Feature clone(boolean deep) {
+		return (Feature) clone();
+	}
 
-    public Object[] getAttributes() {
-        Object[] atts = new Object[getSchema().getAttributeCount()];
-        for (int i = 0; i < atts.length; i++) {
-            atts[i] = getAttribute(i);
-        }
+	public Object[] getAttributes() {
+		Object[] atts = new Object[getSchema().getAttributeCount()];
+		for (int i = 0; i < atts.length; i++) {
+			atts[i] = getAttribute(i);
+		}
 
-        return atts;
-    }
+		return atts;
+	}
 
-    public int compareTo(Object o) {
-        if (o instanceof FeatureAdapter) {
-            FeatureAdapter fa = (FeatureAdapter) o;
-            if (fa.rv != rv) {
-                return -1;
-            } else {
-                return fa.index - index;
-            }
-        } else {
-            return -1;
-        }
-    }
+	public int compareTo(Object o) {
+		if (o instanceof FeatureAdapter) {
+			FeatureAdapter fa = (FeatureAdapter) o;
+			if (fa.rv != rv) {
+				return -1;
+			} else {
+				return fa.index - index;
+			}
+		} else {
+			return -1;
+		}
+	}
 
 }

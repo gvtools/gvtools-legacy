@@ -79,8 +79,9 @@ import org.gvsig.gpe.containers.Layer;
  *
  */
 /**
- * This class must be implementend by all the classes that
- * implements a GPE reader Parser. 
+ * This class must be implementend by all the classes that implements a GPE
+ * reader Parser.
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public abstract class GPEReaderBaseTest extends TestCase {
@@ -88,136 +89,137 @@ public abstract class GPEReaderBaseTest extends TestCase {
 	private GPEParser parser = null;
 	private GPEContentHandler contenHandler = null;
 	private GPEErrorHandler errorHandler = null;
-	private String parserName="FORMAT VERSION";
-	private String parserDescription="default parser description";
-	
-	
-	public void setUp() throws Exception{
+	private String parserName = "FORMAT VERSION";
+	private String parserDescription = "default parser description";
+
+	public void setUp() throws Exception {
 		System.out.println("INFO: Parser registrado");
 		file = new File(getFile());
-		System.out.println("INFO: Abriendo Fichero: "+file.getName());
-		assertEquals(GPEFactory.accept(file.toURI()),true);
+		System.out.println("INFO: Abriendo Fichero: " + file.getName());
+		assertEquals(GPEFactory.accept(file.toURI()), true);
 		System.out.println("INFO: Existe parser registrado para el fomato ");
 		parser = GPEFactory.createParserByClass(getGPEParserClass().getName());
 		System.out.println("INFO: Creado el parser ");
 		assertNotNull(parser);
 	}
-	
+
 	/**
-	 * This test parses the file and make the 
-	 * asserts.
+	 * This test parses the file and make the asserts.
+	 * 
 	 * @throws Exception
 	 */
-	public void testParse() throws Exception{
+	public void testParse() throws Exception {
 		parseFile();
-		parseInputStream();		
+		parseInputStream();
 	}
-	
+
 	/**
 	 * Parses the file
 	 */
-	private void parseFile(){
+	private void parseFile() {
 		System.out.println("INFO: PARSING THE FILE...");
-		parser.parse(getContenHandler() , getErrorHandler(), file.toURI());
+		parser.parse(getContenHandler(), getErrorHandler(), file.toURI());
 		System.out.println("INFO: ¡¡¡ SUCCESS !!!");
 		makeAsserts();
 	}
-	
+
 	/**
 	 * Parses the file like an inputstream
+	 * 
 	 * @throws FileNotFoundException
 	 */
-	private void parseInputStream() throws Exception{
+	private void parseInputStream() throws Exception {
 		InputStream is = getInputStream();
 		errorHandler = null;
 		contenHandler = null;
 		System.out.println("INFO: PARSING THE INPUTSTREAM...");
-		parser.parse(getContenHandler() , getErrorHandler(), is);
+		parser.parse(getContenHandler(), getErrorHandler(), is);
 		System.out.println("INFO: ¡¡¡ SUCCESS !!!");
 		makeAsserts();
-	}	
-	
+	}
+
 	/**
-	 * This method has to be override by the tests that use
-	 * other InputStream (KMZ...)
+	 * This method has to be override by the tests that use other InputStream
+	 * (KMZ...)
+	 * 
 	 * @return
 	 * @throws FileNotFoundException
 	 */
-	public InputStream getInputStream() throws Exception{
+	public InputStream getInputStream() throws Exception {
 		return new FileInputStream(new File(getFile()));
 	}
-	
+
 	/**
-	 * This method must be used by the subclasses
-	 * to make the comparations. With getLayers
-	 * it can retrieve the parsed layers
+	 * This method must be used by the subclasses to make the comparations. With
+	 * getLayers it can retrieve the parsed layers
 	 */
 	public abstract void makeAsserts();
-	
+
 	/**
-	 * Each test must to return its parser name
-	 * to register it before to start the parsing
-	 * process
+	 * Each test must to return its parser name to register it before to start
+	 * the parsing process
 	 */
-	public String getGPEParserName(){
+	public String getGPEParserName() {
 		return parserName;
 	}
-	
+
 	/**
-	 * Each test must to return its parser description
-	 * to register it before to start the parsing
-	 * process
+	 * Each test must to return its parser description to register it before to
+	 * start the parsing process
 	 */
-	public String getGPEParserDescription(){
-		return parserDescription ;
+	public String getGPEParserDescription() {
+		return parserDescription;
 	}
+
 	/**
-	 * Each test must to return its parser name
-	 * to register it before to start the parsing
-	 * process
+	 * Each test must to return its parser name to register it before to start
+	 * the parsing process
 	 */
-	public void setGPEParserName(String name){
-		parserName=name;
+	public void setGPEParserName(String name) {
+		parserName = name;
 	}
-	
+
 	/**
-	 * Each test must to return its parser description
-	 * to register it before to start the parsing
-	 * process
+	 * Each test must to return its parser description to register it before to
+	 * start the parsing process
 	 */
-	public void setGPEParserDescription(String description){
-		parserDescription=description;
+	public void setGPEParserDescription(String description) {
+		parserDescription = description;
 	}
+
 	/**
-	 * Each test must to return its parser class
-	 * that will be used to create new parsers.
+	 * Each test must to return its parser class that will be used to create new
+	 * parsers.
 	 */
 	public abstract Class getGPEParserClass();
-	
+
 	/**
 	 * Gets the GML file to open
+	 * 
 	 * @return
 	 */
 	public abstract String getFile();
-	
+
 	/**
 	 * Gets a list of parsed layers
+	 * 
 	 * @return
 	 */
-	public Layer[] getLayers(){
-		ArrayList layers = ((GPEContentHandlerTest)parser.getContentHandler()).getLayers();
+	public Layer[] getLayers() {
+		ArrayList layers = ((GPEContentHandlerTest) parser.getContentHandler())
+				.getLayers();
 		Layer[] aLayers = new Layer[layers.size()];
-		for (int i=0 ; i<layers.size() ; i++){
-			aLayers[i] = (Layer)layers.get(i);
+		for (int i = 0; i < layers.size(); i++) {
+			aLayers[i] = (Layer) layers.get(i);
 		}
 		return aLayers;
 	}
-	
+
 	/**
 	 * @return the contenHandler
 	 */
 	public GPEContentHandler getContenHandler() {
-		if (contenHandler == null){
+		if (contenHandler == null) {
 			contenHandler = new GPEContentHandlerTest();
 		}
 		return contenHandler;
@@ -227,10 +229,10 @@ public abstract class GPEReaderBaseTest extends TestCase {
 	 * @return the errorHandler
 	 */
 	public GPEErrorHandler getErrorHandler() {
-		if (errorHandler == null){
+		if (errorHandler == null) {
 			errorHandler = new GPEErrorHandlerTest();
 		}
 		return errorHandler;
 	}
-	
+
 }

@@ -70,14 +70,17 @@ import com.iver.cit.gvsig.fmap.drivers.WFSDriverException;
  */
 public class FMapWFSDriverFactory {
 	private static Hashtable drivers = new Hashtable();
-	
-	private FMapWFSDriverFactory() { }
-	
-	static public final FMapWFSDriver getFMapDriverForURL(URL url) throws ConnectException, IOException, WFSDriverException {
-		//The driver cant be linked with one URL because it has the features to load
+
+	private FMapWFSDriverFactory() {
+	}
+
+	static public final FMapWFSDriver getFMapDriverForURL(URL url)
+			throws ConnectException, IOException, WFSDriverException {
+		// The driver cant be linked with one URL because it has the features to
+		// load
 		FMapWFSDriver drv = null;
 		if (drv == null) {
-			drv = new FMapWFSDriver();			
+			drv = new FMapWFSDriver();
 			drv.getCapabilities(url);
 			drivers.put(url, drv);
 		}

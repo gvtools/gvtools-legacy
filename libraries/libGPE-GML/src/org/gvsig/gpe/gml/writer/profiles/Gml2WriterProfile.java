@@ -73,9 +73,9 @@ import org.gvsig.gpe.gml.writer.v2.geometries.PolygonWriter;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class Gml2WriterProfile extends DefaultWriterProfile{
+public class Gml2WriterProfile extends DefaultWriterProfile {
 	protected FeatureCollectionWriter featureCollectionWriter = null;
-	protected NameWriter nameWriter = null;	
+	protected NameWriter nameWriter = null;
 	protected DescriptionWriter descriptionWriter = null;
 	protected GeometryMemberWriter geometryMemberWriter = null;
 	protected BoundedByWriter boundedByWriter = null;
@@ -100,21 +100,24 @@ public class Gml2WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getNameWriter()
 	 */
-	public NameWriter getNameWriter(){
-		if (nameWriter == null){
+	public NameWriter getNameWriter() {
+		if (nameWriter == null) {
 			nameWriter = new NameWriter();
 		}
 		return nameWriter;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getDescriptionWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getDescriptionWriter()
 	 */
-	public DescriptionWriter getDescriptionWriter(){
-		if (descriptionWriter == null){
+	public DescriptionWriter getDescriptionWriter() {
+		if (descriptionWriter == null) {
 			descriptionWriter = new DescriptionWriter();
 		}
 		return descriptionWriter;
@@ -122,21 +125,26 @@ public class Gml2WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getGeometryMemberWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getGeometryMemberWriter
+	 * ()
 	 */
-	public GeometryMemberWriter getGeometryMemberWriter(){
-		if (geometryMemberWriter == null){
+	public GeometryMemberWriter getGeometryMemberWriter() {
+		if (geometryMemberWriter == null) {
 			geometryMemberWriter = new GeometryMemberWriter();
 		}
 		return geometryMemberWriter;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getBoundedByWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getBoundedByWriter()
 	 */
 	public BoundedByWriter getBoundedByWriter() {
-		if (boundedByWriter == null){
+		if (boundedByWriter == null) {
 			boundedByWriter = new BoundedByWriter();
 		}
 		return boundedByWriter;
@@ -144,10 +152,11 @@ public class Gml2WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getBoxWriter()
 	 */
 	public BoxWriter getBoxWriter() {
-		if (boxWriter == null){
+		if (boxWriter == null) {
 			boxWriter = new BoxWriter();
 		}
 		return boxWriter;
@@ -155,10 +164,11 @@ public class Gml2WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getCoordWriter()
 	 */
 	public CoordWriter getCoordWriter() {
-		if (coordWriter == null){
+		if (coordWriter == null) {
 			coordWriter = new CoordWriter();
 		}
 		return coordWriter;
@@ -166,10 +176,12 @@ public class Gml2WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getCoordinatesWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getCoordinatesWriter()
 	 */
 	public CoordinatesWriter getCoordinatesWriter() {
-		if (coordinatesWriter == null){
+		if (coordinatesWriter == null) {
 			coordinatesWriter = new CoordinatesWriter();
 		}
 		return coordinatesWriter;
@@ -177,10 +189,11 @@ public class Gml2WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getElementWriter()
 	 */
 	public ElementWriter getElementWriter() {
-		if (elementWriter == null){
+		if (elementWriter == null) {
 			elementWriter = new ElementWriter();
 		}
 		return elementWriter;
@@ -188,21 +201,26 @@ public class Gml2WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getFeatureMemberWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getFeatureMemberWriter()
 	 */
 	public FeatureMemberWriter getFeatureMemberWriter() {
-		if (featureMemberWriter == null){
+		if (featureMemberWriter == null) {
 			featureMemberWriter = new FeatureMemberWriter();
 		}
 		return featureMemberWriter;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getInnerBoundaryIsWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getInnerBoundaryIsWriter
+	 * ()
 	 */
 	public InnerBoundaryIsWriter getInnerBoundaryIsWriter() {
-		if (innerBoundaryIsWriter == null){
+		if (innerBoundaryIsWriter == null) {
 			innerBoundaryIsWriter = new InnerBoundaryIsWriter();
 		}
 		return innerBoundaryIsWriter;
@@ -210,10 +228,13 @@ public class Gml2WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getLineStringMemeberWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getLineStringMemeberWriter
+	 * ()
 	 */
 	public LineStringMemberWriter getLineStringMemeberWriter() {
-		if (lineStringMemberWriter == null){
+		if (lineStringMemberWriter == null) {
 			lineStringMemberWriter = new LineStringMemberWriter();
 		}
 		return lineStringMemberWriter;
@@ -221,10 +242,12 @@ public class Gml2WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getLineStringWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getLineStringWriter()
 	 */
 	public LineStringWriter getLineStringWriter() {
-		if (lineStringWriter == null){
+		if (lineStringWriter == null) {
 			lineStringWriter = new LineStringWriter();
 		}
 		return lineStringWriter;
@@ -232,10 +255,12 @@ public class Gml2WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getLinearRingWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getLinearRingWriter()
 	 */
 	public LinearRingWriter getLinearRingWriter() {
-		if (linearRingWriter == null){
+		if (linearRingWriter == null) {
 			linearRingWriter = new LinearRingWriter();
 		}
 		return linearRingWriter;
@@ -243,10 +268,12 @@ public class Gml2WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getMultiGeometryWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getMultiGeometryWriter()
 	 */
 	public MultiGeometryWriter getMultiGeometryWriter() {
-		if (multiGeometryWriter == null){
+		if (multiGeometryWriter == null) {
 			multiGeometryWriter = new MultiGeometryWriter();
 		}
 		return multiGeometryWriter;
@@ -254,10 +281,13 @@ public class Gml2WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getMultiLineStringWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getMultiLineStringWriter
+	 * ()
 	 */
 	public MultiLineStringWriter getMultiLineStringWriter() {
-		if (multiLineStringWriter == null){
+		if (multiLineStringWriter == null) {
 			multiLineStringWriter = new MultiLineStringWriter();
 		}
 		return multiLineStringWriter;
@@ -265,10 +295,12 @@ public class Gml2WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getMultiPointWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getMultiPointWriter()
 	 */
 	public MultiPointWriter getMultiPointWriter() {
-		if (multiPointWriter == null){
+		if (multiPointWriter == null) {
 			multiPointWriter = new MultiPointWriter();
 		}
 		return multiPointWriter;
@@ -276,10 +308,12 @@ public class Gml2WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getMultiPolygonWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getMultiPolygonWriter()
 	 */
 	public MultiPolygonWriter getMultiPolygonWriter() {
-		if (multiPolygonWriter == null){
+		if (multiPolygonWriter == null) {
 			multiPolygonWriter = new MultiPolygonWriter();
 		}
 		return multiPolygonWriter;
@@ -287,10 +321,13 @@ public class Gml2WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getOuterBoundaryIsWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getOuterBoundaryIsWriter
+	 * ()
 	 */
 	public OuterBoundaryIsWriter getOuterBoundaryIsWriter() {
-		if (outerBoundaryIsWriter == null){
+		if (outerBoundaryIsWriter == null) {
 			outerBoundaryIsWriter = new OuterBoundaryIsWriter();
 		}
 		return outerBoundaryIsWriter;
@@ -298,10 +335,12 @@ public class Gml2WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getPointMemberWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getPointMemberWriter()
 	 */
 	public PointMemberWriter getPointMemberWriter() {
-		if (pointMemberWriter == null){
+		if (pointMemberWriter == null) {
 			pointMemberWriter = new PointMemberWriter();
 		}
 		return pointMemberWriter;
@@ -309,10 +348,11 @@ public class Gml2WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getPointWriter()
 	 */
 	public PointWriter getPointWriter() {
-		if (pointWriter == null){
+		if (pointWriter == null) {
 			pointWriter = new PointWriter();
 		}
 		return pointWriter;
@@ -320,10 +360,12 @@ public class Gml2WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getPolygonMemberWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getPolygonMemberWriter()
 	 */
 	public PolygonMemberWriter getPolygonMemberWriter() {
-		if (polygonMemberWriter == null){
+		if (polygonMemberWriter == null) {
 			polygonMemberWriter = new PolygonMemberWriter();
 		}
 		return polygonMemberWriter;
@@ -331,10 +373,11 @@ public class Gml2WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getPolygonWriter()
 	 */
 	public PolygonWriter getPolygonWriter() {
-		if (polygonWriter == null){
+		if (polygonWriter == null) {
 			polygonWriter = new PolygonWriter();
 		}
 		return polygonWriter;
@@ -342,12 +385,15 @@ public class Gml2WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getFeatureCollectionWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.profiles.IWriterProfile#getFeatureCollectionWriter
+	 * ()
 	 */
 	public FeatureCollectionWriter getFeatureCollectionWriter() {
-		if (featureCollectionWriter == null){
+		if (featureCollectionWriter == null) {
 			featureCollectionWriter = new FeatureCollectionWriter();
 		}
 		return featureCollectionWriter;
-	}	
+	}
 }

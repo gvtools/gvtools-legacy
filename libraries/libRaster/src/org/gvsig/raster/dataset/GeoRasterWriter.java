@@ -49,65 +49,71 @@ import es.gva.cit.jgdal.GdalWarp;
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public abstract class GeoRasterWriter {
-	public static final int   MODE_FILEWRITE = 1;
-	public static final int   MODE_DATAWRITE = 2;
+	public static final int MODE_FILEWRITE = 1;
+	public static final int MODE_DATAWRITE = 2;
 
-	public static TreeMap     fileFeature    = new TreeMap();
-	protected String          outFileName    = null;
-	protected String          inFileName     = null;
-	protected int             sizeWindowX    = 0;
-	protected int             sizeWindowY    = 0;
-	protected int             ulX            = 0;
-	protected int             ulY            = 0;
-	protected IDataWriter     dataWriter     = null;
-	protected int             nBands         = 0;
-	protected String          ident          = null;
-	protected String          driver         = null;
-	protected Params          driverParams   = null;
-	protected AffineTransform at             = null;
-	protected int             percent        = 0;
-	protected int             dataType       = IBuffer.TYPE_BYTE;
+	public static TreeMap fileFeature = new TreeMap();
+	protected String outFileName = null;
+	protected String inFileName = null;
+	protected int sizeWindowX = 0;
+	protected int sizeWindowY = 0;
+	protected int ulX = 0;
+	protected int ulY = 0;
+	protected IDataWriter dataWriter = null;
+	protected int nBands = 0;
+	protected String ident = null;
+	protected String driver = null;
+	protected Params driverParams = null;
+	protected AffineTransform at = null;
+	protected int percent = 0;
+	protected int dataType = IBuffer.TYPE_BYTE;
 	protected CoordinateReferenceSystem crs = null;
-	protected DatasetColorInterpretation 
-	                          colorInterp    = null;
-	protected IExternalCancellable   
-	                          extCancellable = null;
-		
+	protected DatasetColorInterpretation colorInterp = null;
+	protected IExternalCancellable extCancellable = null;
+
 	/**
 	 * Obtiene la lista de extensiones registradas
+	 * 
 	 * @return Lista de extensiones registradas o null si no hay ninguna
 	 */
 	public static String[] getDriversExtensions() {
-		ExtensionPoint extensionPoint = ExtensionPoint.getExtensionPoint("RasterWriter");
+		ExtensionPoint extensionPoint = ExtensionPoint
+				.getExtensionPoint("RasterWriter");
 		return extensionPoint.getKeys();
 	}
 
 	/**
 	 * Obtiene la lista de extensiones de ficheros sobre los que se puede salvar
-	 * en un determinado tipo de datos. Como parámetro de la función se especifica
-	 * el tipo de datos sobre el que se desea consultar. Este método consulta para
-	 * cada driver registrado que extensiones soportan un tipo.
+	 * en un determinado tipo de datos. Como parámetro de la función se
+	 * especifica el tipo de datos sobre el que se desea consultar. Este método
+	 * consulta para cada driver registrado que extensiones soportan un tipo.
 	 * 
-	 * @param dataType Tipo de datos
-	 * @param bands Numero de bandas
-	 * @param reprojectable Especifica si devuelve solo los formatos reproyectables
+	 * @param dataType
+	 *            Tipo de datos
+	 * @param bands
+	 *            Numero de bandas
+	 * @param reprojectable
+	 *            Especifica si devuelve solo los formatos reproyectables
 	 * @return Lista de extensiones registradas que soportan el tipo de datos
 	 *         pasado por parámetro.
 	 * @throws RasterDriverException
 	 */
-	public static ArrayList getExtensionsSupported(int dataType, int bands, boolean reprojectable) throws RasterDriverException {
-		ExtensionPoint extensionPoint = ExtensionPoint.getExtensionPoint("RasterWriter");
+	public static ArrayList getExtensionsSupported(int dataType, int bands,
+			boolean reprojectable) throws RasterDriverException {
+		ExtensionPoint extensionPoint = ExtensionPoint
+				.getExtensionPoint("RasterWriter");
 		Iterator iterator = extensionPoint.getIterator();
 		ArrayList result = new ArrayList();
-		while (iterator.hasNext()) {			
+		while (iterator.hasNext()) {
 			Entry entry = (Entry) iterator.next();
-			String ext = (String) entry.getKey();			
+			String ext = (String) entry.getKey();
 			Class writerClass = (Class) entry.getValue();
 			Class[] args = { String.class };
 			try {
 				Constructor hazNuevo = writerClass.getConstructor(args);
 				Object[] args2 = { ext };
-				GeoRasterWriter grw = (GeoRasterWriter) hazNuevo.newInstance(args2);
+				GeoRasterWriter grw = (GeoRasterWriter) hazNuevo
+						.newInstance(args2);
 				if (grw.isSupportedThisExtension(ext, dataType, bands)) {
 					if (reprojectable) {
 						if (GdalWarp.getDrivers().contains(grw.getDriverName()))
@@ -117,24 +123,30 @@ public abstract class GeoRasterWriter {
 					}
 				}
 			} catch (SecurityException e) {
-				throw new RasterDriverException("Error SecurityException in open");
+				throw new RasterDriverException(
+						"Error SecurityException in open");
 			} catch (NoSuchMethodException e) {
-				throw new RasterDriverException("Error NoSuchMethodException in open");
+				throw new RasterDriverException(
+						"Error NoSuchMethodException in open");
 			} catch (IllegalArgumentException e) {
-				throw new RasterDriverException("Error IllegalArgumentException in open");
+				throw new RasterDriverException(
+						"Error IllegalArgumentException in open");
 			} catch (InstantiationException e) {
-				throw new RasterDriverException("Error InstantiationException in open");
+				throw new RasterDriverException(
+						"Error InstantiationException in open");
 			} catch (IllegalAccessException e) {
-				throw new RasterDriverException("Error IllegalAccessException in open");
+				throw new RasterDriverException(
+						"Error IllegalAccessException in open");
 			} catch (InvocationTargetException e) {
 				throw new RasterDriverException("Error in open");
 			}
 		}
 		return result;
 	}
-		
+
 	/**
 	 * Obtiene la lista de tipos de driver
+	 * 
 	 * @return Lista de tipos de driver registradas o null si no hay ninguno
 	 */
 	public static String[] getDriversType() {
@@ -144,7 +156,8 @@ public abstract class GeoRasterWriter {
 		Set values = fileFeature.entrySet();
 		int i = 0;
 		for (Iterator it = values.iterator(); it.hasNext();) {
-			list[i] = ((WriteFileFormatFeatures) ((Map.Entry) it.next()).getValue()).getDriverName();
+			list[i] = ((WriteFileFormatFeatures) ((Map.Entry) it.next())
+					.getValue()).getDriverName();
 			i++;
 		}
 
@@ -153,29 +166,36 @@ public abstract class GeoRasterWriter {
 
 	/**
 	 * Obtiene el tipo de driver a partir de la extensión
-	 * @param ext Extensión
+	 * 
+	 * @param ext
+	 *            Extensión
 	 * @return Tipo
 	 */
 	public static String getDriverType(String ext) {
 		/* resolve alternate file extensions */
-		if ( ext.equals("tiff") ) {
-			return ((WriteFileFormatFeatures) fileFeature.get("tif")).getDriverName();
+		if (ext.equals("tiff")) {
+			return ((WriteFileFormatFeatures) fileFeature.get("tif"))
+					.getDriverName();
 		}
-		if ( ext.equals("jpeg") ) {
-			return ((WriteFileFormatFeatures) fileFeature.get("jpg")).getDriverName();
+		if (ext.equals("jpeg")) {
+			return ((WriteFileFormatFeatures) fileFeature.get("jpg"))
+					.getDriverName();
 		}
-		if ( ext.equals("mpr") ) {
-			return ((WriteFileFormatFeatures) fileFeature.get("mpl")).getDriverName();
+		if (ext.equals("mpr")) {
+			return ((WriteFileFormatFeatures) fileFeature.get("mpl"))
+					.getDriverName();
 		}
-		if ( ext.equals("gis") ) {
-			return ((WriteFileFormatFeatures) fileFeature.get("lan")).getDriverName();
-		}		
+		if (ext.equals("gis")) {
+			return ((WriteFileFormatFeatures) fileFeature.get("lan"))
+					.getDriverName();
+		}
 		/* all other cases (only one registered GDAL extension for format */
 		return ((WriteFileFormatFeatures) fileFeature.get(ext)).getDriverName();
 	}
 
 	/**
 	 * Devuelve el número de drivers soportados
+	 * 
 	 * @return Número de drivers soportados
 	 */
 	public static int getNDrivers() {
@@ -184,6 +204,7 @@ public abstract class GeoRasterWriter {
 
 	/**
 	 * Devuelve el número de tipos de driver registrados
+	 * 
 	 * @return Número de tipos de driver soportados
 	 */
 	public static int getNTypes() {
@@ -192,6 +213,7 @@ public abstract class GeoRasterWriter {
 
 	/**
 	 * Devuelve el identificador del driver
+	 * 
 	 * @return Identificador del driver
 	 */
 	public String getIdent() {
@@ -200,6 +222,7 @@ public abstract class GeoRasterWriter {
 
 	/**
 	 * Obtiene el nombre del driver.
+	 * 
 	 * @return Nombre del driver
 	 */
 	public String getDriverName() {
@@ -216,6 +239,7 @@ public abstract class GeoRasterWriter {
 	/**
 	 * Asigna el porcentaje de incremento. Esto es usado por el driver para
 	 * actualizar la variable percent
+	 * 
 	 * @param percent
 	 */
 	public void setPercent(int percent) {
@@ -224,6 +248,7 @@ public abstract class GeoRasterWriter {
 
 	/**
 	 * Porcentaje de escritura completado.
+	 * 
 	 * @return Entero con el porcentaje de escritura.
 	 */
 	public int getPercent() {
@@ -232,29 +257,33 @@ public abstract class GeoRasterWriter {
 
 	/**
 	 * Factoria para obtener escritores de los distintos tipos de raster.
-	 * @param fName Nombre del fichero.
+	 * 
+	 * @param fName
+	 *            Nombre del fichero.
 	 * @return GeoRasterWriter, o null si hay problemas.
 	 */
-	public static GeoRasterWriter getWriter(String fName) throws NotSupportedExtensionException, RasterDriverException {
+	public static GeoRasterWriter getWriter(String fName)
+			throws NotSupportedExtensionException, RasterDriverException {
 		String ext = RasterUtilities.getExtensionFromFileName(fName);
-		
-		/* translate alternate extensions for known drivers */		
-		if ( ext.equals("tiff") ) {
+
+		/* translate alternate extensions for known drivers */
+		if (ext.equals("tiff")) {
 			ext = "tif";
 		}
-		if ( ext.equals("jpeg") ) {
+		if (ext.equals("jpeg")) {
 			ext = "jpg";
 		}
-		if ( ext.equals("mpr") ) {
+		if (ext.equals("mpr")) {
 			ext = "mpl";
 		}
-		if ( ext.equals("gis") ) {
+		if (ext.equals("gis")) {
 			ext = "lan";
-		}		
-		
+		}
+
 		GeoRasterWriter grw = null;
 
-		ExtensionPoint extensionPoint = ExtensionPoint.getExtensionPoint("RasterWriter");
+		ExtensionPoint extensionPoint = ExtensionPoint
+				.getExtensionPoint("RasterWriter");
 
 		if (!extensionPoint.existKey(ext))
 			return grw;
@@ -268,23 +297,28 @@ public abstract class GeoRasterWriter {
 		} catch (SecurityException e) {
 			throw new RasterDriverException("Error SecurityException in open");
 		} catch (NoSuchMethodException e) {
-			throw new RasterDriverException("Error NoSuchMethodException in open");
+			throw new RasterDriverException(
+					"Error NoSuchMethodException in open");
 		} catch (IllegalArgumentException e) {
-			throw new RasterDriverException("Error IllegalArgumentException in open");
+			throw new RasterDriverException(
+					"Error IllegalArgumentException in open");
 		} catch (InstantiationException e) {
-			throw new RasterDriverException("Error InstantiationException in open");
+			throw new RasterDriverException(
+					"Error InstantiationException in open");
 		} catch (IllegalAccessException e) {
-			throw new RasterDriverException("Error IllegalAccessException in open");
+			throw new RasterDriverException(
+					"Error IllegalAccessException in open");
 		} catch (InvocationTargetException e) {
 			throw new NotSupportedExtensionException("Error in open");
 		}
 		return grw;
 	}
-	
+
 	/**
 	 * Factoria para obtener escritores de los distintos tipos de raster.
 	 * 
-	 * @param fName Nombre del fichero.
+	 * @param fName
+	 *            Nombre del fichero.
 	 * @return GeoRasterWriter, o null si hay problemas.
 	 */
 	public static GeoRasterWriter getWriter(IDataWriter dataWriter,
@@ -292,13 +326,15 @@ public abstract class GeoRasterWriter {
 			int outSizeY, int dataType, Params params,
 			CoordinateReferenceSystem crs)
 			throws NotSupportedExtensionException, RasterDriverException {
-		return GeoRasterWriter.getWriter(dataWriter, outFileName, nBands, at, outSizeX, outSizeY, dataType, params, crs, true);
+		return GeoRasterWriter.getWriter(dataWriter, outFileName, nBands, at,
+				outSizeX, outSizeY, dataType, params, crs, true);
 	}
-	
+
 	/**
 	 * Factoria para obtener escritores de los distintos tipos de raster.
 	 * 
-	 * @param fName Nombre del fichero.
+	 * @param fName
+	 *            Nombre del fichero.
 	 * @return GeoRasterWriter, o null si hay problemas.
 	 */
 	public static GeoRasterWriter getWriter(IDataWriter dataWriter,
@@ -306,25 +342,27 @@ public abstract class GeoRasterWriter {
 			int outSizeY, int dataType, Params params,
 			CoordinateReferenceSystem crs, boolean geo)
 			throws NotSupportedExtensionException, RasterDriverException {
-		String ext = outFileName.toLowerCase().substring(outFileName.lastIndexOf('.') + 1);
-		
-		/* translate alternate extensions for known drivers */		
-		if ( ext.equals("tiff") ) {
+		String ext = outFileName.toLowerCase().substring(
+				outFileName.lastIndexOf('.') + 1);
+
+		/* translate alternate extensions for known drivers */
+		if (ext.equals("tiff")) {
 			ext = "tif";
 		}
-		if ( ext.equals("jpeg") ) {
+		if (ext.equals("jpeg")) {
 			ext = "jpg";
 		}
-		if ( ext.equals("mpr") ) {
+		if (ext.equals("mpr")) {
 			ext = "mpl";
 		}
-		if ( ext.equals("gis") ) {
+		if (ext.equals("gis")) {
 			ext = "lan";
-		}		
-		
+		}
+
 		GeoRasterWriter grw = null;
 
-		ExtensionPoint extensionPoint = ExtensionPoint.getExtensionPoint("RasterWriter");
+		ExtensionPoint extensionPoint = ExtensionPoint
+				.getExtensionPoint("RasterWriter");
 
 		if (!extensionPoint.existKey(ext))
 			return grw;
@@ -336,28 +374,34 @@ public abstract class GeoRasterWriter {
 				Boolean.class };
 		try {
 			Constructor hazNuevo = clase.getConstructor(args);
-			Object [] args2 = {dataWriter, outFileName, new Integer(nBands), at, 
-								new Integer(outSizeX), new Integer(outSizeY), new Integer(dataType), 
-								params, crs, new Boolean(geo)};
+			Object[] args2 = { dataWriter, outFileName, new Integer(nBands),
+					at, new Integer(outSizeX), new Integer(outSizeY),
+					new Integer(dataType), params, crs, new Boolean(geo) };
 			grw = (GeoRasterWriter) hazNuevo.newInstance(args2);
 		} catch (SecurityException e) {
 			throw new RasterDriverException("Error SecurityException in open");
 		} catch (NoSuchMethodException e) {
-			throw new RasterDriverException("Error NoSuchMethodException in open");
+			throw new RasterDriverException(
+					"Error NoSuchMethodException in open");
 		} catch (IllegalArgumentException e) {
-			throw new RasterDriverException("Error IllegalArgumentException in open");
+			throw new RasterDriverException(
+					"Error IllegalArgumentException in open");
 		} catch (InstantiationException e) {
-			throw new RasterDriverException("Error InstantiationException in open");
+			throw new RasterDriverException(
+					"Error InstantiationException in open");
 		} catch (IllegalAccessException e) {
-			throw new RasterDriverException("Error IllegalAccessException in open");
+			throw new RasterDriverException(
+					"Error IllegalAccessException in open");
 		} catch (InvocationTargetException e) {
-			throw new NotSupportedExtensionException("Error in open. Problemas con las librerías nativas.");
+			throw new NotSupportedExtensionException(
+					"Error in open. Problemas con las librerías nativas.");
 		}
 		return grw;
 	}
 
 	/**
 	 * Obtiene los parámetros del driver.
+	 * 
 	 * @return WriterParams
 	 */
 	public Params getParams() {
@@ -366,6 +410,7 @@ public abstract class GeoRasterWriter {
 
 	/**
 	 * Asigna los parámetros del driver modificados por el cliente.
+	 * 
 	 * @param Params
 	 */
 	public void setParams(Params params) {
@@ -374,6 +419,7 @@ public abstract class GeoRasterWriter {
 
 	/**
 	 * Realiza la función de compresión a partir de un GeoRasterFile.
+	 * 
 	 * @throws IOException
 	 */
 	public abstract void fileWrite() throws IOException, InterruptedException;
@@ -381,8 +427,9 @@ public abstract class GeoRasterWriter {
 	/**
 	 * Realiza la función de compresión a partir de los datos pasados por el
 	 * cliente.
+	 * 
 	 * @throws IOException
-	 * @throws RmfSerializerException 
+	 * @throws RmfSerializerException
 	 */
 	public abstract void dataWrite() throws IOException, InterruptedException;
 
@@ -398,6 +445,7 @@ public abstract class GeoRasterWriter {
 
 	/**
 	 * Añade la proyección Wkt con la que salvar.
+	 * 
 	 * @param wkt
 	 * @throws GdalException
 	 */
@@ -405,7 +453,9 @@ public abstract class GeoRasterWriter {
 
 	/**
 	 * Asigna la interpretación de color para el fichero de salida.
-	 * @param colorInterp Interpretación de color
+	 * 
+	 * @param colorInterp
+	 *            Interpretación de color
 	 */
 	public void setColorBandsInterpretation(String[] colorInterp) {
 		if (colorInterp != null) {
@@ -418,31 +468,34 @@ public abstract class GeoRasterWriter {
 	}
 
 	/**
-	 * Método que pregunta si la extensión pasada por parámetro está soportada con
-	 * el tipo y número de bandas indicadas.
+	 * Método que pregunta si la extensión pasada por parámetro está soportada
+	 * con el tipo y número de bandas indicadas.
 	 * 
-	 * @param dataType Tipo de dato
-	 * @param bands Número de bandas
+	 * @param dataType
+	 *            Tipo de dato
+	 * @param bands
+	 *            Número de bandas
 	 * @param extensión
 	 * @return true si está soportada y false si no lo está
 	 */
 	public boolean isSupportedThisExtension(String ext, int dataType, int bands) {
-				
+
 		/* translate alternate extensions for some formats */
-		if ( ext.equals("tiff")) {
+		if (ext.equals("tiff")) {
 			ext = "tif";
 		}
-		if ( ext.equals("jpeg") ) {
+		if (ext.equals("jpeg")) {
 			ext = "jpg";
 		}
-		if ( ext.equals("mpr") ) {
+		if (ext.equals("mpr")) {
 			ext = "mpl";
 		}
-		if ( ext.equals("gis") ) {
+		if (ext.equals("gis")) {
 			ext = "lan";
-		}		
-		
-		WriteFileFormatFeatures features = (WriteFileFormatFeatures) fileFeature.get(ext);
+		}
+
+		WriteFileFormatFeatures features = (WriteFileFormatFeatures) fileFeature
+				.get(ext);
 		if (features == null)
 			return false;
 		int[] bandsSupported = features.getNBandsSupported();
@@ -459,9 +512,10 @@ public abstract class GeoRasterWriter {
 				return true;
 		return false;
 	}
-	
+
 	/**
 	 * Assigns the object to be cancelled
+	 * 
 	 * @param cancellable
 	 */
 	public void setCancellableRasterDriver(IExternalCancellable cancellable) {

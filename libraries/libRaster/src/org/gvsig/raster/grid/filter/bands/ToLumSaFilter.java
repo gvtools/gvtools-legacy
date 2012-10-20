@@ -23,24 +23,25 @@ import org.gvsig.raster.dataset.IBuffer;
 import org.gvsig.raster.dataset.Params;
 import org.gvsig.raster.grid.filter.RasterFilter;
 import org.gvsig.raster.util.ColorConversion;
+
 /**
  * <P>
  * Clase base para el filtro de Tono, Saturación y Brillo
  * </P>
- *
+ * 
  * @version 04/12/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class ToLumSaFilter extends RasterFilter {
-	protected IBuffer          rasterAlpha      = null;
-	public static String[]     names            = new String[] { "tolumsa" };
-	protected ColorConversion  colorConversion  = null;
-	protected int              out              = IBuffer.TYPE_BYTE;
-	protected double           hue              = 0;
-	protected double           luminosity       = 0;
-	protected double           saturation       = 0;
-	protected int[]            renderBands      = null;
-	
+	protected IBuffer rasterAlpha = null;
+	public static String[] names = new String[] { "tolumsa" };
+	protected ColorConversion colorConversion = null;
+	protected int out = IBuffer.TYPE_BYTE;
+	protected double hue = 0;
+	protected double luminosity = 0;
+	protected double saturation = 0;
+	protected int[] renderBands = null;
+
 	/**
 	 * Constructor
 	 */
@@ -51,46 +52,55 @@ public class ToLumSaFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#pre()
 	 */
 	public void pre() {
 		exec = true;
 		raster = (RasterBuffer) params.get("raster");
 		int[] rb = (int[]) params.get("renderBands");
-		
+
 		switch (raster.getBandCount()) {
-		case 1:renderBands = new int[]{0, 0, 0}; break;
-		case 2:renderBands = rb; break;
-		case 3:renderBands = new int[]{0, 1, 2}; break;
+		case 1:
+			renderBands = new int[] { 0, 0, 0 };
+			break;
+		case 2:
+			renderBands = rb;
+			break;
+		case 3:
+			renderBands = new int[] { 0, 1, 2 };
+			break;
 		}
-		//Mantenemos los valores de -1 ya que esas bandas no se procesan
-		for(int i = 0; i < renderBands.length; i++)
-			if(rb[i] == -1)
+		// Mantenemos los valores de -1 ya que esas bandas no se procesan
+		for (int i = 0; i < renderBands.length; i++)
+			if (rb[i] == -1)
 				renderBands[i] = -1;
-		
-		if(raster.getDataType() != IBuffer.TYPE_BYTE) {
+
+		if (raster.getDataType() != IBuffer.TYPE_BYTE) {
 			exec = false;
 			raster = rasterResult;
 			return;
 		}
-		if(params.get("hue") != null)
+		if (params.get("hue") != null)
 			hue = ((Double) params.get("hue")).doubleValue();
-		if(params.get("luminosity") != null)
+		if (params.get("luminosity") != null)
 			luminosity = ((Double) params.get("luminosity")).doubleValue();
-		if(params.get("saturation") != null)
+		if (params.get("saturation") != null)
 			saturation = ((Double) params.get("saturation")).doubleValue();
-		
-		if(raster != null) {
+
+		if (raster != null) {
 			height = raster.getHeight();
 			width = raster.getWidth();
-			rasterResult = RasterBuffer.getBuffer(IBuffer.TYPE_BYTE, raster.getWidth(), raster.getHeight(), 3, true);	
+			rasterResult = RasterBuffer.getBuffer(IBuffer.TYPE_BYTE,
+					raster.getWidth(), raster.getHeight(), 3, true);
 		}
-		if(colorConversion == null)
+		if (colorConversion == null)
 			colorConversion = new ColorConversion();
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getGroup()
 	 */
 	public String getGroup() {
@@ -99,6 +109,7 @@ public class ToLumSaFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getNames()
 	 */
 	public String[] getNames() {
@@ -107,7 +118,9 @@ public class ToLumSaFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.RasterFilter#getResult(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.RasterFilter#getResult(java.lang.String)
 	 */
 	public Object getResult(String name) {
 		if (name.equals("raster"))
@@ -117,27 +130,37 @@ public class ToLumSaFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.RasterFilter#getUIParams(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.RasterFilter#getUIParams(java.lang.String)
 	 */
 	public Params getUIParams(String nameFilter) {
 		Params params = new Params();
-		params.setParam("hue",
-				new Double(hue),
-				Params.SLIDER,
-				new String[]{ "-180", "180", "0", "10", "50"}); //min, max, valor defecto, intervalo pequeño, intervalo grande;
-		params.setParam("luminosity",
-				new Double(luminosity),
-				Params.SLIDER,
-				new String[]{ "-100", "100", "0", "10", "50"}); //min, max, valor defecto, intervalo pequeño, intervalo grande;
-		params.setParam("saturation",
-				new Double(saturation),
-				Params.SLIDER,
-				new String[]{ "-100", "100", "0", "10", "50"}); //min, max, valor defecto, intervalo pequeño, intervalo grande;
+		params.setParam("hue", new Double(hue), Params.SLIDER, new String[] {
+				"-180", "180", "0", "10", "50" }); // min, max, valor defecto,
+													// intervalo pequeño,
+													// intervalo grande;
+		params.setParam("luminosity", new Double(luminosity), Params.SLIDER,
+				new String[] { "-100", "100", "0", "10", "50" }); // min, max,
+																	// valor
+																	// defecto,
+																	// intervalo
+																	// pequeño,
+																	// intervalo
+																	// grande;
+		params.setParam("saturation", new Double(saturation), Params.SLIDER,
+				new String[] { "-100", "100", "0", "10", "50" }); // min, max,
+																	// valor
+																	// defecto,
+																	// intervalo
+																	// pequeño,
+																	// intervalo
+																	// grande;
 		return params;
 	}
 
 	public void post() {
-	
+
 	}
 
 	public void process(int x, int y) throws InterruptedException {
@@ -145,6 +168,7 @@ public class ToLumSaFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getOutRasterDataType()
 	 */
 	public int getOutRasterDataType() {
@@ -153,16 +177,19 @@ public class ToLumSaFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#isVisible()
 	 */
 	public boolean isVisible() {
-		//IRasterDataSource datasource = (IRasterDataSource)getEnv().get("MultiRasterDataset");
-		//return (datasource != null && datasource.getBandCount() >= 3);
+		// IRasterDataSource datasource =
+		// (IRasterDataSource)getEnv().get("MultiRasterDataset");
+		// return (datasource != null && datasource.getBandCount() >= 3);
 		return true;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getInRasterDataType()
 	 */
 	public int getInRasterDataType() {

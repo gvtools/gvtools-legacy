@@ -42,23 +42,22 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: MultipleFieldsDissolveCriteria.java 5918 2006-06-20 18:20:45Z azabala $
-* $Log$
-* Revision 1.1  2006-06-20 18:20:45  azabala
-* first version in cvs
-*
-* Revision 1.1  2006/05/24 21:11:14  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-*
-*/
+ *
+ * $Id: MultipleFieldsDissolveCriteria.java 5918 2006-06-20 18:20:45Z azabala $
+ * $Log$
+ * Revision 1.1  2006-06-20 18:20:45  azabala
+ * first version in cvs
+ *
+ * Revision 1.1  2006/05/24 21:11:14  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.dissolve.fmap;
 
 import java.util.Map;
 
 import com.iver.cit.gvsig.fmap.drivers.ILayerDefinition;
-
 
 public class MultipleFieldsDissolveCriteria implements IDissolveCriteria {
 
@@ -74,7 +73,7 @@ public class MultipleFieldsDissolveCriteria implements IDissolveCriteria {
 
 	public void clear() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public ILayerDefinition createLayerDefinition(Map numFields_SumFunc) {
@@ -82,9 +81,4 @@ public class MultipleFieldsDissolveCriteria implements IDissolveCriteria {
 		return null;
 	}
 
-	
-
-	
-
 }
-

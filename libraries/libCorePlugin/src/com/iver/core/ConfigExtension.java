@@ -40,47 +40,46 @@
  */
 package com.iver.core;
 
-
 /**
  */
 import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
 import com.iver.core.configExtensions.ConfigPlugins;
 
-
-
 /**
  * Extensión para abrir el diálogo de configuración de ANDAMI.
- *
+ * 
  * @author Vicente Caballero Navarro
  * @deprecated
- *
+ * 
  */
 public class ConfigExtension extends Extension {
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.Extension#execute(java.lang.String)
 	 */
 	public void execute(String actionCommand) {
-		ConfigPlugins cp=new ConfigPlugins();
+		ConfigPlugins cp = new ConfigPlugins();
 		PluginServices.getMDIManager().addWindow(cp);
 	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public boolean isVisible() {
-    	return true;
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public boolean isVisible() {
+		return true;
+	}
 
-    /**
-     * @see com.iver.mdiApp.plugins.IExtension#isEnabled()
-     */
-    public boolean isEnabled() {
-        return true;
-    }
+	/**
+	 * @see com.iver.mdiApp.plugins.IExtension#isEnabled()
+	 */
+	public boolean isEnabled() {
+		return true;
+	}
 
 	/**
 	 * @see com.iver.andami.plugins.IExtension#initialize()

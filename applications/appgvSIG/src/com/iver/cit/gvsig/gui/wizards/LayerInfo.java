@@ -42,66 +42,68 @@ package com.iver.cit.gvsig.gui.wizards;
 
 import java.util.ArrayList;
 
-
 //	Nodo[] nodos;
 public class LayerInfo {
-    public String text;
-    public String name;
-    public boolean queryable;
-    private ArrayList srs = new ArrayList();
-    
-    public ArrayList hijos = new ArrayList();
-    public LayerInfo padre;
+	public String text;
+	public String name;
+	public boolean queryable;
+	private ArrayList srs = new ArrayList();
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param srs DOCUMENT ME!
-     */
-    public void addSRS(String srs) {
-    	String[] srsArray = srs.split(" ");
-    	for (int i = 0; i < srsArray.length; i++){
+	public ArrayList hijos = new ArrayList();
+	public LayerInfo padre;
+
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param srs
+	 *            DOCUMENT ME!
+	 */
+	public void addSRS(String srs) {
+		String[] srsArray = srs.split(" ");
+		for (int i = 0; i < srsArray.length; i++) {
 			this.srs.add(srsArray[i]);
-    	}
-    }
+		}
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public ArrayList getSRSs() {
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public ArrayList getSRSs() {
 		ArrayList ret = new ArrayList();
 		ret.addAll(srs);
 
-        if (padre != null) {
-            ret.addAll(padre.getSRSs());
-        }
+		if (padre != null) {
+			ret.addAll(padre.getSRSs());
+		}
 
-        return ret;
-    }
+		return ret;
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public String toString() {
-        return text;
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public String toString() {
+		return text;
+	}
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    public boolean equals(Object obj) {
-    	try{
-	        LayerInfo objeto = (LayerInfo) obj;
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	public boolean equals(Object obj) {
+		try {
+			LayerInfo objeto = (LayerInfo) obj;
 			return this.name.equals(objeto.name);
-		}catch(ClassCastException e){
+		} catch (ClassCastException e) {
 			e.printStackTrace();
 			return false;
-		}catch (NullPointerException e) {
+		} catch (NullPointerException e) {
 			return false;
 		}
-    }
+	}
 }

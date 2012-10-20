@@ -82,16 +82,16 @@ import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 import com.iver.utiles.GenericFileFilter;
 import com.iver.utiles.XMLEntity;
 
-
 /**
  * Extensión para controlar las operaciones basicas sobre el Layout.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LayoutExtension extends Extension implements IPreferenceExtension {
-	private static Logger logger = Logger.getLogger(LayoutExtension.class.getName());
+	private static Logger logger = Logger.getLogger(LayoutExtension.class
+			.getName());
 	private Layout layout = null;
-	private static LayoutPage layoutPropertiesPage=new LayoutPage();
+	private static LayoutPage layoutPropertiesPage = new LayoutPage();
 
 	/**
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
@@ -118,43 +118,52 @@ public class LayoutExtension extends Extension implements IPreferenceExtension {
 			zooms.zoomIn();
 		} else if (s.equals("ZOOMSELECT")) {
 			zooms.zoomSelect();
-		} else if (s.equals("SAVETEMPLATE")){
+		} else if (s.equals("SAVETEMPLATE")) {
 			saveLayout();
 		}
 	}
+
 	private void saveLayout() {
-    	layout = (Layout) PluginServices.getMDIManager().getActiveWindow();
+		layout = (Layout) PluginServices.getMDIManager().getActiveWindow();
 		JFileChooser jfc = new JFileChooser();
-		jfc.addChoosableFileFilter(new GenericFileFilter("gvt",
-				PluginServices.getText(this, "plantilla")));
+		jfc.addChoosableFileFilter(new GenericFileFilter("gvt", PluginServices
+				.getText(this, "plantilla")));
 
 		if (jfc.showSaveDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
-			File file=jfc.getSelectedFile();
-			if (!(file.getPath().endsWith(".gvt") || file.getPath().endsWith(".GVT"))){
-				file=new File(file.getPath()+".gvt");
+			File file = jfc.getSelectedFile();
+			if (!(file.getPath().endsWith(".gvt") || file.getPath().endsWith(
+					".GVT"))) {
+				file = new File(file.getPath() + ".gvt");
 			}
 			if (file.exists()) {
 				int resp = JOptionPane.showConfirmDialog(
-						(Component) PluginServices.getMainFrame(),PluginServices.getText(this,"fichero_ya_existe_seguro_desea_guardarlo"),
-						PluginServices.getText(this,"guardar"), JOptionPane.YES_NO_OPTION);
+						(Component) PluginServices.getMainFrame(),
+						PluginServices.getText(this,
+								"fichero_ya_existe_seguro_desea_guardarlo"),
+						PluginServices.getText(this, "guardar"),
+						JOptionPane.YES_NO_OPTION);
 				if (resp != JOptionPane.YES_OPTION) {
 					return;
 				}
 			}
 
 			try {
-				FileOutputStream fos = new FileOutputStream(file.getAbsolutePath());
-	            OutputStreamWriter writer = new OutputStreamWriter(fos, ProjectExtension.PROJECTENCODING);
+				FileOutputStream fos = new FileOutputStream(
+						file.getAbsolutePath());
+				OutputStreamWriter writer = new OutputStreamWriter(fos,
+						ProjectExtension.PROJECTENCODING);
 				Marshaller m = new Marshaller(writer);
 				m.setEncoding(ProjectExtension.PROJECTENCODING);
-				XMLEntity xml=layout.getXMLEntity();
+				XMLEntity xml = layout.getXMLEntity();
 				xml.putProperty("followHeaderEncoding", true);
 				m.marshal(xml.getXmlTag());
 			} catch (Exception e) {
-				NotificationManager.addError(PluginServices.getText(this, "Error_guardando_la_plantilla"), e);
+				NotificationManager.addError(PluginServices.getText(this,
+						"Error_guardando_la_plantilla"), e);
 			}
 		}
 	}
+
 	/**
 	 * @see com.iver.mdiApp.plugins.IExtension#isVisible()
 	 */
@@ -166,7 +175,8 @@ public class LayoutExtension extends Extension implements IPreferenceExtension {
 		}
 
 		if (f instanceof Layout) {
-			return true; //layout.m_Display.getMapControl().getMapContext().getLayers().layerCount() > 0;
+			return true; // layout.m_Display.getMapControl().getMapContext().getLayers().layerCount()
+							// > 0;
 		}
 		return false;
 	}
@@ -178,6 +188,7 @@ public class LayoutExtension extends Extension implements IPreferenceExtension {
 		registerFFrames();
 		registerIcons();
 	}
+
 	private void registerFFrames() {
 		FFrameBasicFactory.register();
 		FFrameGraphicsFactory.register();
@@ -194,52 +205,54 @@ public class LayoutExtension extends Extension implements IPreferenceExtension {
 		FFrameGridFactory.register();
 	}
 
-	private void registerIcons(){
+	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"layout-zoom-in",
-				this.getClass().getClassLoader().getResource("images/LayoutZoomIn.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/LayoutZoomIn.png"));
 
 		PluginServices.getIconTheme().registerDefault(
 				"layout-zoom-out",
-				this.getClass().getClassLoader().getResource("images/LayoutZoomOut.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/LayoutZoomOut.png"));
 
 		PluginServices.getIconTheme().registerDefault(
 				"view-zoom-center-in",
-				this.getClass().getClassLoader().getResource("images/zoommas.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/zoommas.png"));
 
 		PluginServices.getIconTheme().registerDefault(
 				"view-zoom-center-out",
-				this.getClass().getClassLoader().getResource("images/zoommenos.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/zoommenos.png"));
 
 		PluginServices.getIconTheme().registerDefault(
 				"layout-zoom-fit",
-				this.getClass().getClassLoader().getResource("images/mundo.gif")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/mundo.gif"));
 
 		PluginServices.getIconTheme().registerDefault(
 				"layout-zoom-real",
-				this.getClass().getClassLoader().getResource("images/zoomreal.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/zoomreal.png"));
 
 		PluginServices.getIconTheme().registerDefault(
 				"layout-zoom-selected",
-				this.getClass().getClassLoader().getResource("images/zoomselect.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/zoomselect.png"));
 
 		PluginServices.getIconTheme().registerDefault(
 				"layout-pan",
-				this.getClass().getClassLoader().getResource("images/LayoutPan.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/LayoutPan.png"));
 
-		PluginServices.getIconTheme().registerDefault(
-				"save-icon",
-				this.getClass().getClassLoader().getResource("images/save.png")
-			);
+		PluginServices.getIconTheme()
+				.registerDefault(
+						"save-icon",
+						this.getClass().getClassLoader()
+								.getResource("images/save.png"));
 	}
+
 	/**
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
@@ -249,7 +262,7 @@ public class LayoutExtension extends Extension implements IPreferenceExtension {
 
 	/**
 	 * Devuelve el Layout sobre el que se opera.
-	 *
+	 * 
 	 * @return Layout.
 	 */
 	public Layout getLayout() {
@@ -257,8 +270,8 @@ public class LayoutExtension extends Extension implements IPreferenceExtension {
 	}
 
 	public IPreference[] getPreferencesPages() {
-		IPreference[] preferences=new IPreference[1];
-		preferences[0]=layoutPropertiesPage;
+		IPreference[] preferences = new IPreference[1];
+		preferences[0] = layoutPropertiesPage;
 		return preferences;
 	}
 }

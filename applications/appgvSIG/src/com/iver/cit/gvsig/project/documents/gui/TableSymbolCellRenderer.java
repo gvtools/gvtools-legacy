@@ -51,38 +51,38 @@ import javax.swing.table.TableCellRenderer;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.gui.styling.SymbolPreviewer;
 
-
 /**
  * Renderer de la edición de un registro de la tabla de símbolos.
- *
+ * 
  * @author fjp
  */
-public class TableSymbolCellRenderer extends JPanel implements TableCellRenderer {
+public class TableSymbolCellRenderer extends JPanel implements
+		TableCellRenderer {
 	private Border unselectedBorder = null;
 	private Border selectedBorder = null;
 	private boolean isBordered = true;
-	protected SymbolPreviewer preview = new SymbolPreviewer() ;
-	
+	protected SymbolPreviewer preview = new SymbolPreviewer();
+
 	/**
 	 * Crea un nuevo FCellRenderer.
-	 *
-	 * @param isBordered DOCUMENT ME!
+	 * 
+	 * @param isBordered
+	 *            DOCUMENT ME!
 	 */
 	public TableSymbolCellRenderer(boolean isBordered) {
 		this.isBordered = isBordered;
-		setOpaque(true); //MUST do this for background to show up.
+		setOpaque(true); // MUST do this for background to show up.
 	}
-	
+
 	public Component getTableCellRendererComponent(JTable table, Object value,
-		boolean isSelected, boolean hasFocus, int row, int column) {
+			boolean isSelected, boolean hasFocus, int row, int column) {
 		preview.setSymbol((ISymbol) value);
 
-		
 		if (isSelected) {
 			preview.setBackground(table.getBackground());
 			setBackground(table.getBackground());
 		}
-		
+
 		if (isBordered) {
 			if (isSelected) {
 				if (selectedBorder == null) {
@@ -98,11 +98,8 @@ public class TableSymbolCellRenderer extends JPanel implements TableCellRenderer
 				setBorder(unselectedBorder);
 			}
 		}
-		
+
 		return preview;
 	}
 
-	
-
 }
-	

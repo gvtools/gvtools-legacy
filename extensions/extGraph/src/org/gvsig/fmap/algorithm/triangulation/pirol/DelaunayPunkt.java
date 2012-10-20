@@ -31,9 +31,8 @@ import org.gvsig.fmap.algorithm.triangulation.pirol.apiTools.CollectionsTools;
  * </pre>
  * 
  * @author Ole Rahn <br>
- *         <br>
- *         FH Osnabr&uuml;ck - University of Applied Sciences Osnabr&uuml;ck,
- *         <br>
+ * <br>
+ *         FH Osnabr&uuml;ck - University of Applied Sciences Osnabr&uuml;ck, <br>
  *         Project: PIROL (2005), <br>
  *         Subproject: Daten- und Wissensmanagement
  * 

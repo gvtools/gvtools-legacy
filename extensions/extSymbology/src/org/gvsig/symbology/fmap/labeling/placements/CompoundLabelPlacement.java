@@ -40,11 +40,9 @@
  */
 package org.gvsig.symbology.fmap.labeling.placements;
 
-import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
 import com.iver.cit.gvsig.fmap.ViewPort;
-import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.IPlacementConstraints;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelClass;
@@ -52,12 +50,12 @@ import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelLocationMetrics;
 import com.iver.utiles.swing.threads.Cancellable;
 
 /**
- *
+ * 
  * CompoundLabelPlacement.java
- *
- *
+ * 
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Dec 17, 2007
- *
+ * 
  */
 public class CompoundLabelPlacement implements ILabelPlacement {
 	private ILabelPlacement[] placements;
@@ -71,12 +69,14 @@ public class CompoundLabelPlacement implements ILabelPlacement {
 		return true;
 	}
 
-
-	public ArrayList<LabelLocationMetrics> guess(LabelClass lc,
-			IGeometry geom, IPlacementConstraints constraints, double cartographicSymbolSize, Cancellable cancel, ViewPort vp) {
+	public ArrayList<LabelLocationMetrics> guess(LabelClass lc, IGeometry geom,
+			IPlacementConstraints constraints, double cartographicSymbolSize,
+			Cancellable cancel, ViewPort vp) {
 		ArrayList<LabelLocationMetrics> guessed = new ArrayList<LabelLocationMetrics>();
-		for (int i = 0; cancel != null && !cancel.isCanceled() && i < placements.length; i++) {
-			guessed.addAll(placements[i].guess(lc, geom, constraints, cartographicSymbolSize, cancel,vp));
+		for (int i = 0; cancel != null && !cancel.isCanceled()
+				&& i < placements.length; i++) {
+			guessed.addAll(placements[i].guess(lc, geom, constraints,
+					cartographicSymbolSize, cancel, vp));
 		}
 		return guessed;
 	}

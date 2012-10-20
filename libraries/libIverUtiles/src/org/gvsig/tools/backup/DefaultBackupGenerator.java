@@ -20,7 +20,7 @@ package org.gvsig.tools.backup;
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
  * MA  02110-1301, USA.
  * 
- */ 
+ */
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,17 +29,19 @@ import java.nio.channels.FileChannel;
 
 import org.gvsig.tools.backup.exceptions.BackupException;
 
-
 /**
- * <p>Performs a backup of a file, into another file at the same path (directory), with the file extension 
- *  changed to <i>.bak</i>.</p>
- *
+ * <p>
+ * Performs a backup of a file, into another file at the same path (directory),
+ * with the file extension changed to <i>.bak</i>.
+ * </p>
+ * 
  * @author Jose Ignacio Yarza (jiyarza@opensistemas.com)
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class DefaultBackupGenerator implements BackupGenerator {
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.utiles.backup.BackupGenerator#backup(java.io.File)
 	 */
 	public void backup(File source) throws BackupException {
@@ -49,22 +51,23 @@ public class DefaultBackupGenerator implements BackupGenerator {
 			if (index == -1)
 				return;
 
-			File dest = new File(source.getAbsolutePath().substring(0, index) + ".bak");
+			File dest = new File(source.getAbsolutePath().substring(0, index)
+					+ ".bak");
 
-	        // Create channel on the source
-	        FileChannel srcChannel = new FileInputStream(source).getChannel();
+			// Create channel on the source
+			FileChannel srcChannel = new FileInputStream(source).getChannel();
 
-	        // Create channel on the destination
-	        FileChannel dstChannel = new FileOutputStream(dest).getChannel();
+			// Create channel on the destination
+			FileChannel dstChannel = new FileOutputStream(dest).getChannel();
 
-	        // Copy file contents from source to destination
-	        dstChannel.transferFrom(srcChannel, 0, srcChannel.size());
+			// Copy file contents from source to destination
+			dstChannel.transferFrom(srcChannel, 0, srcChannel.size());
 
-	        // Close the channels
-	        srcChannel.close();
-	        dstChannel.close();
-	    } catch (Exception ex) {
-	    	throw new BackupException(ex.getMessage(), ex, source);
-	    }
+			// Close the channels
+			srcChannel.close();
+			dstChannel.close();
+		} catch (Exception ex) {
+			throw new BackupException(ex.getMessage(), ex, source);
+		}
 	}
 }

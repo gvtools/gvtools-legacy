@@ -40,9 +40,9 @@
  */
 package com.iver.utiles.connections;
 
-public class ConnectionTransInit extends ConnectionTrans{
+public class ConnectionTransInit extends ConnectionTrans {
 
-	 public String toString() {
-	    return getName();
-	 }
+	public String toString() {
+		return getName();
+	}
 }

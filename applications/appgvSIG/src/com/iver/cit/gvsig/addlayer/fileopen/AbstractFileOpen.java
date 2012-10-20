@@ -24,10 +24,11 @@ import java.util.ArrayList;
 import javax.swing.filechooser.FileFilter;
 
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
+
 /**
  * Clase abstracta que deben implementar todas aquellas extensiones que quieran
  * aparecer en un punto com�n del cuadro de dialogo de apertura de ficheros.
- *
+ * 
  * @version 19/11/2007
  * @author BorSanZa - Borja S�nchez Zamorano (borja.sanchez@iver.es)
  */
@@ -36,6 +37,7 @@ public abstract class AbstractFileOpen implements IFileOpen {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.addlayer.fileopen.IFileOpen#pre()
 	 */
 	public void pre() {
@@ -43,6 +45,7 @@ public abstract class AbstractFileOpen implements IFileOpen {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.addlayer.fileopen.IFileOpen#post(java.io.File)
 	 */
 	public File post(File file) throws LoadLayerException {
@@ -51,6 +54,7 @@ public abstract class AbstractFileOpen implements IFileOpen {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.wizards.IFileOpen#getFileFilter()
 	 */
 	public final ArrayList getFileFilter() {

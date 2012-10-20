@@ -106,7 +106,7 @@ import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
 import de.ios.framework.swing.NumberField;
 
-public class FFrameBoxDialog extends JPanel implements IFFrameDialog{
+public class FFrameBoxDialog extends JPanel implements IFFrameDialog {
 
 	private JPanel jPanel = null;
 	private JLabel jLabel = null;
@@ -125,85 +125,90 @@ public class FFrameBoxDialog extends JPanel implements IFFrameDialog{
 
 	/**
 	 * This is the default constructor
-	 *
-	 * @param layout Referencia al Layout.
-	 * @param fframe Referencia al fframe del cajetín.
+	 * 
+	 * @param layout
+	 *            Referencia al Layout.
+	 * @param fframe
+	 *            Referencia al fframe del cajetín.
 	 */
 	public FFrameBoxDialog(Layout layout, FFrameTable fframe) {
 		super();
 		fframebox = fframe;
-		thefframebox=(FFrameTable)fframebox.cloneFFrame(layout);
+		thefframebox = (FFrameTable) fframebox.cloneFFrame(layout);
 		m_layout = layout;
 		initialize();
 	}
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
 		this.setLayout(null);
 		this.setSize(380, 185);
 		this.add(getJPanel(), null);
-		this.add(getPRotation(),null);
+		this.add(getPRotation(), null);
 		this.add(getAcceptCancel());
 		getPRotation().setRotation(fframebox.getRotation());
 	}
 
-	private AcceptCancelPanel getAcceptCancel(){
-		if (this.acceptCancel == null){
+	private AcceptCancelPanel getAcceptCancel() {
+		if (this.acceptCancel == null) {
 			this.acceptCancel = new AcceptCancelPanel(
 					new java.awt.event.ActionListener() {
 
 						public void actionPerformed(java.awt.event.ActionEvent e) {
-							newFFrameBox=(FFrameTable)fframebox.cloneFFrame(m_layout);
+							newFFrameBox = (FFrameTable) fframebox
+									.cloneFFrame(m_layout);
 							if (getTxtNumColumns().getText().equals(""))
 								getTxtNumColumns().setText("0");
 							if (getTxtNumRows().getText().equals(""))
 								getTxtNumRows().setText("0");
-							newFFrameBox.setNumColumns(Integer.parseInt(getTxtNumColumns().getText()));
-							newFFrameBox.setNumRows(Integer.parseInt(getTxtNumRows().getText()));
-							newFFrameBox.setRotation(getPRotation().getRotation());
-							Rectangle2D r=fframebox.getBoundBox();
+							newFFrameBox.setNumColumns(Integer
+									.parseInt(getTxtNumColumns().getText()));
+							newFFrameBox.setNumRows(Integer
+									.parseInt(getTxtNumRows().getText()));
+							newFFrameBox.setRotation(getPRotation()
+									.getRotation());
+							Rectangle2D r = fframebox.getBoundBox();
 							newFFrameBox.calculateTable(r);
-							PluginServices.getMDIManager().closeWindow(FFrameBoxDialog.this);
-							//m_layout.refresh();
+							PluginServices.getMDIManager().closeWindow(
+									FFrameBoxDialog.this);
+							// m_layout.refresh();
 							isAcepted = true;
 						}
-					}
-					,
+					},
 
 					new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
-							newFFrameBox=null;
-							PluginServices.getMDIManager().closeWindow(FFrameBoxDialog.this);
+							newFFrameBox = null;
+							PluginServices.getMDIManager().closeWindow(
+									FFrameBoxDialog.this);
 						}
-					}
-			);
-			this.acceptCancel.setBounds(5,150,this.getWidth()-10,30);
+					});
+			this.acceptCancel.setBounds(5, 150, this.getWidth() - 10, 30);
 
 		}
 		return this.acceptCancel;
 	}
 
-
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel() {
 		if (jPanel == null) {
 			jLabel1 = new JLabel();
-			jLabel1.setBounds(new java.awt.Rectangle(5,32,165,19));
-			jLabel1.setText(PluginServices.getText(this,"num_filas"));
+			jLabel1.setBounds(new java.awt.Rectangle(5, 32, 165, 19));
+			jLabel1.setText(PluginServices.getText(this, "num_filas"));
 			jLabel = new JLabel();
-			jLabel.setBounds(new java.awt.Rectangle(5,8,165,19));
-			jLabel.setText(PluginServices.getText(this,"num_columnas"));
+			jLabel.setBounds(new java.awt.Rectangle(5, 8, 165, 19));
+			jLabel.setText(PluginServices.getText(this, "num_columnas"));
 			jPanel = new JPanel();
 			jPanel.setLayout(null);
-			jPanel.setBounds(new java.awt.Rectangle(12,9,220,140));
+			jPanel.setBounds(new java.awt.Rectangle(12, 9, 220, 140));
 			jPanel.add(jLabel, null);
 			jPanel.add(jLabel1, null);
 			jPanel.add(getTxtNumColumns(), null);
@@ -216,18 +221,22 @@ public class FFrameBoxDialog extends JPanel implements IFFrameDialog{
 
 	/**
 	 * This method initializes txtNumColumns
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private NumberField getTxtNumColumns() {
 		if (txtNumColumns == null) {
 			txtNumColumns = new NumberField();
 			txtNumColumns.setText(String.valueOf(fframebox.getNumColumns()));
-			txtNumColumns.setBounds(new java.awt.Rectangle(175,8,35,19));
+			txtNumColumns.setBounds(new java.awt.Rectangle(175, 8, 35, 19));
 			txtNumColumns.addKeyListener(new java.awt.event.KeyAdapter() {
 				public void keyReleased(java.awt.event.KeyEvent e) {
-					if (txtNumColumns.getIntegerValue()== null || getTxtNumColumns().getText().equals("") || getTxtNumColumns().getText().equals("0"))return;
-					thefframebox.setNumColumns(txtNumColumns.getIntegerValue().intValue());
+					if (txtNumColumns.getIntegerValue() == null
+							|| getTxtNumColumns().getText().equals("")
+							|| getTxtNumColumns().getText().equals("0"))
+						return;
+					thefframebox.setNumColumns(txtNumColumns.getIntegerValue()
+							.intValue());
 					getPBox().repaint();
 				}
 			});
@@ -237,18 +246,22 @@ public class FFrameBoxDialog extends JPanel implements IFFrameDialog{
 
 	/**
 	 * This method initializes txtNumRows
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private NumberField getTxtNumRows() {
 		if (txtNumRows == null) {
 			txtNumRows = new NumberField();
 			txtNumRows.setText(String.valueOf(fframebox.getNumRows()));
-			txtNumRows.setBounds(new java.awt.Rectangle(175,32,35,19));
+			txtNumRows.setBounds(new java.awt.Rectangle(175, 32, 35, 19));
 			txtNumRows.addKeyListener(new java.awt.event.KeyAdapter() {
 				public void keyReleased(java.awt.event.KeyEvent e) {
-					if (txtNumRows.getIntegerValue() == null || getTxtNumRows().getText().equals("") || getTxtNumRows().getText().equals("0"))return;
-						thefframebox.setNumRows(txtNumRows.getIntegerValue().intValue());
+					if (txtNumRows.getIntegerValue() == null
+							|| getTxtNumRows().getText().equals("")
+							|| getTxtNumRows().getText().equals("0"))
+						return;
+					thefframebox.setNumRows(txtNumRows.getIntegerValue()
+							.intValue());
 					getPBox().repaint();
 				}
 			});
@@ -262,8 +275,8 @@ public class FFrameBoxDialog extends JPanel implements IFFrameDialog{
 
 	public WindowInfo getWindowInfo() {
 		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODALDIALOG);
-		m_viewinfo.setTitle(PluginServices.getText(this,
-				"propiedades_cajetin"));
+		m_viewinfo
+				.setTitle(PluginServices.getText(this, "propiedades_cajetin"));
 
 		return m_viewinfo;
 	}
@@ -274,26 +287,27 @@ public class FFrameBoxDialog extends JPanel implements IFFrameDialog{
 
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPBox() {
 		if (pBox == null) {
 			pBox = new PanelBox();
 			pBox.setBackground(java.awt.Color.white);
-			pBox.setSize(new java.awt.Dimension(202,75));
-			pBox.setLocation(new java.awt.Point(5,55));
+			pBox.setSize(new java.awt.Dimension(202, 75));
+			pBox.setLocation(new java.awt.Point(5, 55));
 			pBox.addMouseListener(new java.awt.event.MouseAdapter() {
 				public void mouseReleased(java.awt.event.MouseEvent e) {
-					///Rectangle2D r = new Rectangle2D.Double(5, 5, 155, 65);
+					// /Rectangle2D r = new Rectangle2D.Double(5, 5, 155, 65);
 				}
 			});
 		}
 		return pBox;
 	}
+
 	/**
 	 * This method initializes pRotation
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPRotation getPRotation() {
@@ -303,14 +317,17 @@ public class FFrameBoxDialog extends JPanel implements IFFrameDialog{
 		}
 		return pRotation;
 	}
-	class PanelBox extends JPanel{
+
+	class PanelBox extends JPanel {
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			Rectangle2D r=new Rectangle2D.Double(5,5,this.getWidth()-10,this.getHeight()-10);
-			thefframebox.drawBox(r,(Graphics2D)g);
+			Rectangle2D r = new Rectangle2D.Double(5, 5, this.getWidth() - 10,
+					this.getHeight() - 10);
+			thefframebox.drawBox(r, (Graphics2D) g);
 		}
 
 	}
+
 	public IFFrame getFFrame() {
 		return newFFrameBox;
 	}
@@ -318,4 +335,4 @@ public class FFrameBoxDialog extends JPanel implements IFFrameDialog{
 	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

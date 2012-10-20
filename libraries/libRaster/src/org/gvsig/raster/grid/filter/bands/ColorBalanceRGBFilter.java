@@ -23,24 +23,25 @@ import org.gvsig.raster.dataset.IBuffer;
 import org.gvsig.raster.dataset.Params;
 import org.gvsig.raster.grid.filter.RasterFilter;
 import org.gvsig.raster.util.ColorConversion;
+
 /**
  * <P>
  * Clase base para los filtros de balance de color RGB
  * </P>
- *
+ * 
  * @version 30/11/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class ColorBalanceRGBFilter extends RasterFilter {
-	protected IBuffer          rasterAlpha      = null;
-	public static String[]     names            = new String[] { "colorbalancergb" };
-	protected ColorConversion  colorConversion  = null;
-	protected int              out              = IBuffer.TYPE_BYTE;
-	protected int              red              = 0;
-	protected int              green            = 0;
-	protected int              blue             = 0;
-	protected boolean          luminosity       = false;
-	protected int[]            renderBands      = null;
+	protected IBuffer rasterAlpha = null;
+	public static String[] names = new String[] { "colorbalancergb" };
+	protected ColorConversion colorConversion = null;
+	protected int out = IBuffer.TYPE_BYTE;
+	protected int red = 0;
+	protected int green = 0;
+	protected int blue = 0;
+	protected boolean luminosity = false;
+	protected int[] renderBands = null;
 
 	/**
 	 * Constructor
@@ -52,50 +53,61 @@ public class ColorBalanceRGBFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#pre()
 	 */
 	public void pre() {
 		exec = true;
 		raster = (RasterBuffer) params.get("raster");
 		int[] rb = (int[]) params.get("renderBands");
-		
+
 		switch (raster.getBandCount()) {
-		case 1:renderBands = new int[]{0, 0, 0}; break;
-		case 2:renderBands = rb; break;
-		case 3:renderBands = new int[]{0, 1, 2}; break;
+		case 1:
+			renderBands = new int[] { 0, 0, 0 };
+			break;
+		case 2:
+			renderBands = rb;
+			break;
+		case 3:
+			renderBands = new int[] { 0, 1, 2 };
+			break;
 		}
-		//Mantenemos los valores de -1 ya que esas bandas no se procesan
-		for(int i = 0; i < renderBands.length; i++)
-			if(rb[i] == -1)
+		// Mantenemos los valores de -1 ya que esas bandas no se procesan
+		for (int i = 0; i < renderBands.length; i++)
+			if (rb[i] == -1)
 				renderBands[i] = -1;
-										
-		if(raster.getDataType() != IBuffer.TYPE_BYTE) {
+
+		if (raster.getDataType() != IBuffer.TYPE_BYTE) {
 			exec = false;
 			raster = rasterResult;
 			return;
 		}
-		if(params.get("red") != null)
+		if (params.get("red") != null)
 			red = ((Integer) params.get("red")).intValue();
-		if(params.get("green") != null)
+		if (params.get("green") != null)
 			green = ((Integer) params.get("green")).intValue();
-		if(params.get("blue") != null)
+		if (params.get("blue") != null)
 			blue = ((Integer) params.get("blue")).intValue();
-		if(params.get("luminosity") != null)
+		if (params.get("luminosity") != null)
 			luminosity = ((Boolean) params.get("luminosity")).booleanValue();
-		if(raster != null) {
+		if (raster != null) {
 			height = raster.getHeight();
 			width = raster.getWidth();
-			if(raster.getBandCount() >= 3)
-				rasterResult = RasterBuffer.getBuffer(IBuffer.TYPE_BYTE, raster.getWidth(), raster.getHeight(), raster.getBandCount(), true);
+			if (raster.getBandCount() >= 3)
+				rasterResult = RasterBuffer.getBuffer(IBuffer.TYPE_BYTE,
+						raster.getWidth(), raster.getHeight(),
+						raster.getBandCount(), true);
 			else
-				rasterResult = RasterBuffer.getBuffer(IBuffer.TYPE_BYTE, raster.getWidth(), raster.getHeight(), 3, true);
+				rasterResult = RasterBuffer.getBuffer(IBuffer.TYPE_BYTE,
+						raster.getWidth(), raster.getHeight(), 3, true);
 		}
-		if(colorConversion == null)
+		if (colorConversion == null)
 			colorConversion = new ColorConversion();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getGroup()
 	 */
 	public String getGroup() {
@@ -104,6 +116,7 @@ public class ColorBalanceRGBFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getNames()
 	 */
 	public String[] getNames() {
@@ -112,7 +125,9 @@ public class ColorBalanceRGBFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.RasterFilter#getResult(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.RasterFilter#getResult(java.lang.String)
 	 */
 	public Object getResult(String name) {
 		if (name.equals("raster"))
@@ -122,25 +137,28 @@ public class ColorBalanceRGBFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.RasterFilter#getUIParams(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.RasterFilter#getUIParams(java.lang.String)
 	 */
 	public Params getUIParams(String nameFilter) {
 		Params params = new Params();
-		params.setParam("red",
-				new Integer(red),
-				Params.SLIDER,
-				new String[]{ "0", "100", "0", "5", "25"}); //min, max, valor defecto, intervalo pequeño, intervalo grande;
-		params.setParam("green",
-				new Integer(green),
-				Params.SLIDER,
-				new String[]{ "0", "100", "0", "5", "25"}); //min, max, valor defecto, intervalo pequeño, intervalo grande;
-		params.setParam("blue",
-				new Integer(blue),
-				Params.SLIDER,
-				new String[]{ "0", "100", "0", "5", "25"}); //min, max, valor defecto, intervalo pequeño, intervalo grande;
-		params.setParam("luminosity",
-				new Boolean(luminosity),
-				Params.CHECK,
+		params.setParam("red", new Integer(red), Params.SLIDER, new String[] {
+				"0", "100", "0", "5", "25" }); // min, max, valor defecto,
+												// intervalo pequeño, intervalo
+												// grande;
+		params.setParam("green", new Integer(green), Params.SLIDER,
+				new String[] { "0", "100", "0", "5", "25" }); // min, max, valor
+																// defecto,
+																// intervalo
+																// pequeño,
+																// intervalo
+																// grande;
+		params.setParam("blue", new Integer(blue), Params.SLIDER, new String[] {
+				"0", "100", "0", "5", "25" }); // min, max, valor defecto,
+												// intervalo pequeño, intervalo
+												// grande;
+		params.setParam("luminosity", new Boolean(luminosity), Params.CHECK,
 				null);
 
 		return params;
@@ -154,6 +172,7 @@ public class ColorBalanceRGBFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getOutRasterDataType()
 	 */
 	public int getOutRasterDataType() {
@@ -162,6 +181,7 @@ public class ColorBalanceRGBFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#isVisible()
 	 */
 	public boolean isVisible() {
@@ -170,6 +190,7 @@ public class ColorBalanceRGBFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getInRasterDataType()
 	 */
 	public int getInRasterDataType() {

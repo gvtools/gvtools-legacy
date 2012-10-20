@@ -52,5 +52,5 @@ public class GroupingErrorException extends Exception {
 
 	public GroupingErrorException(Throwable cause) {
 		super(cause);
-	}	
+	}
 }

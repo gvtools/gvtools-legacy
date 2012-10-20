@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 
 import com.iver.utiles.BrowserControl;
 
-public class Help  {
+public class Help {
 	private static final Logger logger = Logger.getLogger("org.gvsig");
 	private static final String WIKI_URL = "http://gvsigce.sourceforge.net/wiki";
 
@@ -32,4 +32,3 @@ public class Help  {
 		}
 	}
 }
-

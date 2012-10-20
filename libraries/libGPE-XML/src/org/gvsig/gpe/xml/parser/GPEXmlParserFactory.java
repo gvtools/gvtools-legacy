@@ -1,9 +1,7 @@
 package org.gvsig.gpe.xml.parser;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Enumeration;
 import java.util.Iterator;
 
 import javax.xml.stream.XMLStreamException;
@@ -76,59 +74,68 @@ import org.gvsig.gpe.xml.stream.stax.StaxXmlStreamWriter;
  */
 public class GPEXmlParserFactory {
 	private static ClassLoader classLoader = null;
-	
-    /**
-	 * @param classLoader the classLoader to set
+
+	/**
+	 * @param classLoader
+	 *            the classLoader to set
 	 */
 	public static void setClassLoader(ClassLoader classLoader) {
 		GPEXmlParserFactory.classLoader = classLoader;
 	}
-    
+
 	private static Iterator availableParserFactories() {
-        if (classLoader != null){
-        	return sun.misc.Service.providers(IXmlStreamReaderFactory.class, classLoader);
-        }else{
-        	return sun.misc.Service.providers(IXmlStreamReaderFactory.class);
-        }       
-        
-    }
-    
-    /**
-     * @return the parser
-     * @throws XMLStreamException
-     */
-    public static IXmlStreamReader getParser(final String mimeType, final InputStream in) throws XmlStreamException {
-        Iterator parserFactories = availableParserFactories();
-        IXmlStreamReaderFactory factory;
-        while(parserFactories.hasNext()){
-            factory = (IXmlStreamReaderFactory) parserFactories.next();
-            if(factory.canParse(mimeType)){
-                return factory.createParser(mimeType, in);
-            }
-        }
-        //TODO update the GVSIG classpath to use SPI!!!
-        return new KxmlXmlParserFactory().createParser(mimeType, in);
-        //throw new XmlStreamException("ERROR: no xml parser factory found able to parse content type: " + mimeType);
-    }    
-    
-    private static Iterator availableWriterFactories() {
-        Iterator providers = sun.misc.Service.providers(IXmlStreamWriterFactory.class);
-        return providers;
-    }
-    
-    public static IXmlStreamWriter getWriter(final String mimeType, final OutputStream os) throws XmlStreamException, IllegalArgumentException
-    {
-    	Iterator writerFactories = availableWriterFactories();
-    	IXmlStreamWriterFactory factory;
-        while(writerFactories.hasNext()){
-            factory = (IXmlStreamWriterFactory) writerFactories.next();
-            if(factory.canWrite(mimeType)){
-                return factory.createWriter(mimeType, os);
-            }
-        }
-        //TODO update the GVSIG classpath to use SPI!!!
-        return new StaxXmlStreamWriter(os);
-        //throw new XmlStreamException("ERROR: no xml writer factory found able to write content type: " + mimeType);
-    }
+		if (classLoader != null) {
+			return sun.misc.Service.providers(IXmlStreamReaderFactory.class,
+					classLoader);
+		} else {
+			return sun.misc.Service.providers(IXmlStreamReaderFactory.class);
+		}
+
+	}
+
+	/**
+	 * @return the parser
+	 * @throws XMLStreamException
+	 */
+	public static IXmlStreamReader getParser(final String mimeType,
+			final InputStream in) throws XmlStreamException {
+		Iterator parserFactories = availableParserFactories();
+		IXmlStreamReaderFactory factory;
+		while (parserFactories.hasNext()) {
+			factory = (IXmlStreamReaderFactory) parserFactories.next();
+			if (factory.canParse(mimeType)) {
+				return factory.createParser(mimeType, in);
+			}
+		}
+		// TODO update the GVSIG classpath to use SPI!!!
+		return new KxmlXmlParserFactory().createParser(mimeType, in);
+		// throw new
+		// XmlStreamException("ERROR: no xml parser factory found able to parse content type: "
+		// + mimeType);
+	}
+
+	private static Iterator availableWriterFactories() {
+		Iterator providers = sun.misc.Service
+				.providers(IXmlStreamWriterFactory.class);
+		return providers;
+	}
+
+	public static IXmlStreamWriter getWriter(final String mimeType,
+			final OutputStream os) throws XmlStreamException,
+			IllegalArgumentException {
+		Iterator writerFactories = availableWriterFactories();
+		IXmlStreamWriterFactory factory;
+		while (writerFactories.hasNext()) {
+			factory = (IXmlStreamWriterFactory) writerFactories.next();
+			if (factory.canWrite(mimeType)) {
+				return factory.createWriter(mimeType, os);
+			}
+		}
+		// TODO update the GVSIG classpath to use SPI!!!
+		return new StaxXmlStreamWriter(os);
+		// throw new
+		// XmlStreamException("ERROR: no xml writer factory found able to write content type: "
+		// + mimeType);
+	}
 
 }

@@ -58,9 +58,8 @@ import es.gva.cit.gazetteer.querys.FeatureType;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class GazetteerCapabilities extends DiscoveryServiceCapabilities{
+public class GazetteerCapabilities extends DiscoveryServiceCapabilities {
 	private FeatureType[] featureTypes = null;
-	
 
 	/**
 	 * @return the featureTypes
@@ -70,12 +69,11 @@ public class GazetteerCapabilities extends DiscoveryServiceCapabilities{
 	}
 
 	/**
-	 * @param featureTypes the featureTypes to set
+	 * @param featureTypes
+	 *            the featureTypes to set
 	 */
 	public void setFeatureTypes(FeatureType[] featureTypes) {
 		this.featureTypes = featureTypes;
 	}
 
-	
-	
 }

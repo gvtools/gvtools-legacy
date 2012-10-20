@@ -30,66 +30,80 @@ import org.gvsig.georeferencing.ui.zoom.IGraphicLayer;
 import org.gvsig.georeferencing.ui.zoom.ViewControl;
 
 /**
- * Clase de la que heredan los dialogos de vista y zoom que utilizan 
- * el ViewControl. Contiene métodos generales para el acceso a información
- * del control.
+ * Clase de la que heredan los dialogos de vista y zoom que utilizan el
+ * ViewControl. Contiene métodos generales para el acceso a información del
+ * control.
  * 
  * 20/01/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public abstract class BaseZoomView extends JPanel {
 	private static final long serialVersionUID = -8041978144045965049L;
 
 	protected ViewControl zoomPixelControl = null;
-	
+
 	/**
 	 * Obtiene el graphics del canvas
+	 * 
 	 * @return
 	 */
 	public Graphics2D getCanvasGraphic() {
 		return (Graphics2D) zoomPixelControl.getCanvas().getGraphics();
 	}
-	
+
 	/**
 	 * Obtiene el ancho del canvas
-	 * @return 
+	 * 
+	 * @return
 	 */
 	public int getCanvasWidth() {
 		return zoomPixelControl.getCanvasWith();
 	}
-	
+
 	/**
 	 * Obtiene el alto del canvas
+	 * 
 	 * @return
 	 */
 	public int getCanvasHeight() {
 		return zoomPixelControl.getCanvasHeight();
 	}
-	
+
 	/**
 	 * Asigna los parámetros de dibujado para el raster
-	 * @param img Buffer con un área de datos
-	 * @param ext Rectangle2D del área de datos dada 
-	 * @param pixelSize Tamaño de pixel
-	 * @param center Punto del área de datos donde se quiere centrar el dibujado del buffer
+	 * 
+	 * @param img
+	 *            Buffer con un área de datos
+	 * @param ext
+	 *            Rectangle2D del área de datos dada
+	 * @param pixelSize
+	 *            Tamaño de pixel
+	 * @param center
+	 *            Punto del área de datos donde se quiere centrar el dibujado
+	 *            del buffer
 	 */
-	public abstract void setDrawParams(BufferedImage img, Rectangle2D ext, double pixelSize, Point2D center);
-	
+	public abstract void setDrawParams(BufferedImage img, Rectangle2D ext,
+			double pixelSize, Point2D center);
+
 	/**
-	 * Añade una capa gráfica al canvas. Esta debe heredar de IGraphicLayer
-	 * para que pueda ser dibujada sobre el mismo.
+	 * Añade una capa gráfica al canvas. Esta debe heredar de IGraphicLayer para
+	 * que pueda ser dibujada sobre el mismo.
+	 * 
 	 * @param gl
 	 */
 	public abstract void addGraphicLayer(IGraphicLayer graphicLayer);
-	
+
 	/**
 	 * Obtiene el panel de control de la vista
+	 * 
 	 * @return
 	 */
 	public abstract ViewControl getControl();
-			
+
 	/**
 	 * Obtiene el canvas asociado
+	 * 
 	 * @return CanvasZone
 	 */
 	public CanvasZone getCanvas() {

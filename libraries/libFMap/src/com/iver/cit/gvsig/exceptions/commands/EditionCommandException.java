@@ -4,14 +4,15 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import org.gvsig.exceptions.BaseException;
+
 /**
  * @author Vicente Caballero Navarro
  */
 public class EditionCommandException extends BaseException {
- 
+
 	private String layer = null;
 
-	public EditionCommandException(String layer,Throwable exception) {
+	public EditionCommandException(String layer, Throwable exception) {
 		this.layer = layer;
 		init();
 		initCause(exception);
@@ -24,7 +25,7 @@ public class EditionCommandException extends BaseException {
 
 	protected Map values() {
 		Hashtable params = new Hashtable();
-		params.put("layer",layer);
+		params.put("layer", layer);
 		return params;
 	}
 

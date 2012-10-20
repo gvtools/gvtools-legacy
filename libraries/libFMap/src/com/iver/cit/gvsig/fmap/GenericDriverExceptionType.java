@@ -42,19 +42,19 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: GenericDriverExceptionType.java 7454 2006-09-21 17:18:31Z azabala $
-* $Log$
-* Revision 1.1  2006-09-21 17:18:31  azabala
-* First version in cvs
-*
-*
-*/
+ *
+ * $Id: GenericDriverExceptionType.java 7454 2006-09-21 17:18:31Z azabala $
+ * $Log$
+ * Revision 1.1  2006-09-21 17:18:31  azabala
+ * First version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap;
 
 import com.iver.utiles.ExceptionDescription;
 
-public class GenericDriverExceptionType extends ExceptionDescription{
+public class GenericDriverExceptionType extends ExceptionDescription {
 
 	public GenericDriverExceptionType() {
 		super();
@@ -68,5 +68,3 @@ public class GenericDriverExceptionType extends ExceptionDescription{
 		return message;
 	}
 }
-
-

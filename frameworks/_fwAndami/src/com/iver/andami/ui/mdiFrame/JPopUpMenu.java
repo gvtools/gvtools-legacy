@@ -42,42 +42,44 @@ package com.iver.andami.ui.mdiFrame;
 
 import javax.swing.JPopupMenu;
 
-public class JPopUpMenu extends JPopupMenu implements EnableTextSupport{
+public class JPopUpMenu extends JPopupMenu implements EnableTextSupport {
 	private String enableText;
 	private String toolTip = super.getToolTipText();
-	
-	
+
 	/**
 	 * @return Returns the enableText.
 	 */
 	public String getEnableText() {
 		return enableText;
 	}
+
 	/**
-	 * @param enableText The enableText to set.
+	 * @param enableText
+	 *            The enableText to set.
 	 */
 	public void setEnableText(String enableText) {
 		this.enableText = enableText;
 	}
-	
-	
+
 	/**
 	 * @see java.awt.Component#setVisible(boolean)
 	 */
 	public void setEnabled(boolean aFlag) {
 		super.setEnabled(aFlag);
-		if (aFlag){
+		if (aFlag) {
 			setToolTipText(toolTip);
-		}else{
+		} else {
 			setToolTipText(enableText);
 		}
 	}
+
 	/**
 	 * @see javax.swing.JComponent#setToolTipText(java.lang.String)
 	 */
 	public void setToolTip(String text) {
 		toolTip = text;
 	}
+
 	/**
 	 * 
 	 */
@@ -85,6 +87,7 @@ public class JPopUpMenu extends JPopupMenu implements EnableTextSupport{
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
 	/**
 	 * @param label
 	 */

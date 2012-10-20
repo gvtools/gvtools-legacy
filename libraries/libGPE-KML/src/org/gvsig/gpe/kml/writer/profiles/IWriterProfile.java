@@ -70,43 +70,43 @@ import org.gvsig.gpe.kml.writer.v21.geometries.RegionWriter;
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public interface IWriterProfile {
-	
+
 	public NameWriter getNameWriter();
-	
+
 	public DescriptionWriter getDescriptionWriter();
-	
+
 	public DocumentWriter getDocumentWriter();
-	
+
 	public ElementWriter getElementWriter();
-	
+
 	public FeatureWriter getFeatureWriter();
-	
+
 	public FolderWriter getFolderWriter();
-		
+
 	public MetadataWriter getMetadataWriter();
-	
+
 	public PlaceMarkWriter getPlaceMarkWriter();
-	
+
 	public CoordinatesWriter getCoordinatesWriter();
-	
+
 	public GeometriesWriter getGeometryWriter();
-	
+
 	public InnerBoundaryIsWriter getInnerBoundaryIsWriter();
-	
+
 	public LatLonAltBoxWriter getLatLonAltBoxWriter();
-	
+
 	public LinearRingWriter getLinearRingWriter();
-	
+
 	public LineStringWriter getLineStringTypeWriter();
-	
+
 	public MultiGeometryWriter getMultiGeometryWriter();
-	
+
 	public OuterBoundaryIsWriter getOuterBoundaryIsWriter();
-	
+
 	public PointWriter getPointTypeWriter();
-	
+
 	public PolygonWriter getPolygonTypeWriter();
-	
+
 	public RegionWriter getRegionWriter();
-	
+
 }

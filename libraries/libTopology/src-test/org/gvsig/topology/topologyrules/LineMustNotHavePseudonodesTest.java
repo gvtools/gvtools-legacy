@@ -42,11 +42,13 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.topologyrules;
+
+import junit.framework.TestCase;
 
 import org.gvsig.topology.TopologyRuleDefinitionException;
 import org.gvsig.topology.util.LayerFactory;
@@ -55,45 +57,41 @@ import org.gvsig.topology.util.TestTopologyErrorContainer;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.vividsolutions.jts.io.ParseException;
 
-import junit.framework.TestCase;
-
 public class LineMustNotHavePseudonodesTest extends TestCase {
-	
-	
-	public void testLyrWithPseudonodes() throws ParseException, TopologyRuleDefinitionException{
-		FLyrVect lyr = LayerFactory.createLyrForLineMustNotHavePseudonodesTest();
-		LineMustNotHavePseudonodes rule = new LineMustNotHavePseudonodes(null, lyr, 0.5d);
+
+	public void testLyrWithPseudonodes() throws ParseException,
+			TopologyRuleDefinitionException {
+		FLyrVect lyr = LayerFactory
+				.createLyrForLineMustNotHavePseudonodesTest();
+		LineMustNotHavePseudonodes rule = new LineMustNotHavePseudonodes(null,
+				lyr, 0.5d);
 		TestTopologyErrorContainer errorContainer = new TestTopologyErrorContainer();
 		rule.setTopologyErrorContainer(errorContainer);
 		rule.checkPreconditions();
 		rule.checkRule();
 		int numberOfErrors = errorContainer.getNumberOfErrors();
 		assertTrue(numberOfErrors == 1);
-		
-		
-		
-//		LineMustNotHaveDangles rule2 = new 
-//			LineMustNotHaveDangles(null, lyr, 0.5d);
-//		errorContainer = new TestTopologyErrorContainer();
-//		rule2.setTopologyErrorContainer(errorContainer);
-//		rule2.checkPreconditions();
-//		rule2.checkRule();
-//		
-//		numberOfErrors = errorContainer.getNumberOfErrors();
-//		assertTrue(numberOfErrors == 4);
-		
-		
-		LineMustNotHaveDangles2 rule3 = new 
-			LineMustNotHaveDangles2(null, lyr, 0.5d);
+
+		// LineMustNotHaveDangles rule2 = new
+		// LineMustNotHaveDangles(null, lyr, 0.5d);
+		// errorContainer = new TestTopologyErrorContainer();
+		// rule2.setTopologyErrorContainer(errorContainer);
+		// rule2.checkPreconditions();
+		// rule2.checkRule();
+		//
+		// numberOfErrors = errorContainer.getNumberOfErrors();
+		// assertTrue(numberOfErrors == 4);
+
+		LineMustNotHaveDangles2 rule3 = new LineMustNotHaveDangles2(null, lyr,
+				0.5d);
 		errorContainer = new TestTopologyErrorContainer();
 		rule3.setTopologyErrorContainer(errorContainer);
 		rule3.checkPreconditions();
 		rule3.checkRule();
-	
+
 		numberOfErrors = errorContainer.getNumberOfErrors();
 		assertTrue(numberOfErrors == 3);
-		
+
 	}
-	
-	
+
 }

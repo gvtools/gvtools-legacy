@@ -66,39 +66,40 @@ import com.hardcode.gdbms.engine.data.driver.DriverException;
 /**
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public interface WFSDriver extends VectorialDriver{
+public interface WFSDriver extends VectorialDriver {
 	/**
 	 * Obtiene las posibilidades del servidor a partir de una URL.
-	 *
-	 * @param 
-	 * server URL.
-	 * @throws WFSDriverException 
-	 */
-	public void getCapabilities(URL server) throws WFSException;
-	
-	/**
-	 * Obtiene la informacion asociada a una feature particular.
-	 * Esta información puede ser un conjunto de campos o un
-	 * esquema que los contiene. No devuleve nada. Simplemente
-	 * actualiza la lista de features.
-	 * @param featureType
-	 * Nombre de la feature a a buscar
+	 * 
+	 * @param server
+	 *            URL.
 	 * @throws WFSDriverException
 	 */
-	public void describeFeatureType(String featureType, String nameSpace, ICancellable cancel)throws WFSException;
-	
+	public void getCapabilities(URL server) throws WFSException;
+
 	/**
-	 * The getFeature operation allows retrieval of features
-	 * from a web feature service. 
+	 * Obtiene la informacion asociada a una feature particular. Esta
+	 * información puede ser un conjunto de campos o un esquema que los
+	 * contiene. No devuleve nada. Simplemente actualiza la lista de features.
+	 * 
+	 * @param featureType
+	 *            Nombre de la feature a a buscar
+	 * @throws WFSDriverException
+	 */
+	public void describeFeatureType(String featureType, String nameSpace,
+			ICancellable cancel) throws WFSException;
+
+	/**
+	 * The getFeature operation allows retrieval of features from a web feature
+	 * service.
+	 * 
 	 * @param wfsStatus
-	 * WFS client status
-	 * @return File
-	 * GML File
+	 *            WFS client status
+	 * @return File GML File
 	 * @throws WFSDriverException
 	 */
 	public void getFeature(WFSStatus wfsStatus) throws WFSException;
-	
+
 	public void close();
-	
-    public void open() throws DriverException; 
- }
+
+	public void open() throws DriverException;
+}

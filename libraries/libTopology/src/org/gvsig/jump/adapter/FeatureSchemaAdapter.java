@@ -29,64 +29,65 @@ import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.vividsolutions.jump.feature.FeatureSchema;
 
 /**
- * JUMP's FeatureSchema implementation based in gvSIG's ReadableVectorial classes.
+ * JUMP's FeatureSchema implementation based in gvSIG's ReadableVectorial
+ * classes.
  * 
  * This adapter is based in FeatureSchemaAdapter of OrbisCAD project, modified
  * to work with gvSIG's GDBMS version.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class FeatureSchemaAdapter extends FeatureSchema {
 	private static final long serialVersionUID = 2657075042299778228L;
 	private ReadableVectorial rv;
 	private SelectableDataSource ds;
 
-    public FeatureSchemaAdapter(ReadableVectorial rv) {
-        try {
-        	this.rv = rv;
+	public FeatureSchemaAdapter(ReadableVectorial rv) {
+		try {
+			this.rv = rv;
 			this.ds = rv.getRecordset();
 		} catch (ReadDriverException e) {
 			throw new RuntimeException(e);
 		}
-    }
-    
-    public int getAttributeCount() {
-        try {
-            return ds.getFieldCount() + 1;
-        }catch (ReadDriverException e) {
-        	throw new RuntimeException(e);
+	}
+
+	public int getAttributeCount() {
+		try {
+			return ds.getFieldCount() + 1;
+		} catch (ReadDriverException e) {
+			throw new RuntimeException(e);
 		}
-    }
+	}
 
-    public String getAttributeName(int attributeIndex) {
-    	if(attributeIndex == getAttributeCount() - 1)
-    		return "GEOMETRY";
-        try {
-        	return ds.getFieldName(attributeIndex);
-        }catch (ReadDriverException e) {
-        	throw new RuntimeException(e);
+	public String getAttributeName(int attributeIndex) {
+		if (attributeIndex == getAttributeCount() - 1)
+			return "GEOMETRY";
+		try {
+			return ds.getFieldName(attributeIndex);
+		} catch (ReadDriverException e) {
+			throw new RuntimeException(e);
 		}
-    }
+	}
 
-    public int getAttributeIndex(String attributeName) {
-    	if(attributeName == "GEOMETRY")
-    		return getAttributeCount() - 1;
-        	try {
-				return ds.getFieldIndexByName(attributeName);
-			} catch (ReadDriverException e) {
-				throw new RuntimeException(e);
-			}
-    }
+	public int getAttributeIndex(String attributeName) {
+		if (attributeName == "GEOMETRY")
+			return getAttributeCount() - 1;
+		try {
+			return ds.getFieldIndexByName(attributeName);
+		} catch (ReadDriverException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-    public int getGeometryIndex() {
-    	//If users try to access geometry by getAttribute, it will be
-    	//after the last alphanumeric attribute
-        return getAttributeCount() -1;
-    }
+	public int getGeometryIndex() {
+		// If users try to access geometry by getAttribute, it will be
+		// after the last alphanumeric attribute
+		return getAttributeCount() - 1;
+	}
 
-    public ReadableVectorial getDs() {
-        return rv;
-    }
-    
+	public ReadableVectorial getDs() {
+		return rv;
+	}
+
 }

@@ -25,7 +25,7 @@ import java.util.EventObject;
  * 
  * @version 17/09/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
 public class CancelEvent extends EventObject {
 
@@ -33,6 +33,7 @@ public class CancelEvent extends EventObject {
 
 	/**
 	 * Construye un CancelEvent
+	 * 
 	 * @param source
 	 */
 	public CancelEvent(Object source) {

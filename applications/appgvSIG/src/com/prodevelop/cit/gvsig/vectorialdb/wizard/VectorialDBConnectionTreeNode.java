@@ -44,21 +44,21 @@ package com.prodevelop.cit.gvsig.vectorialdb.wizard;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-
 /**
  * Utility class used to manage the connection tree.
+ * 
  * @author jldominguez
- *
+ * 
  */
 public class VectorialDBConnectionTreeNode extends DefaultMutableTreeNode {
-    private String label;
+	private String label;
 
-    public VectorialDBConnectionTreeNode(String drvname) {
-        label = drvname;
-        setAllowsChildren(true);
-    }
+	public VectorialDBConnectionTreeNode(String drvname) {
+		label = drvname;
+		setAllowsChildren(true);
+	}
 
-    public String toString() {
-        return label;
-    }
+	public String toString() {
+		return label;
+	}
 }

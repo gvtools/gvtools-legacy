@@ -1,6 +1,5 @@
 package org.gvsig.gpe.kml.parser.profiles;
 
-
 import org.gvsig.gpe.kml.parser.v21.coordinates.CoordinatesTypeIterator;
 import org.gvsig.gpe.kml.parser.v21.coordinates.LatLonAltBoxIterator;
 import org.gvsig.gpe.kml.parser.v21.features.DocumentBinding;
@@ -22,7 +21,6 @@ import org.gvsig.gpe.kml.parser.v21.geometries.PointTypeBinding;
 import org.gvsig.gpe.kml.parser.v21.geometries.PolygonTypeBinding;
 import org.gvsig.gpe.kml.parser.v21.geometries.RegionBinding;
 import org.gvsig.gpe.kml.parser.v21.header.HeaderBinding;
-
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
@@ -73,11 +71,13 @@ import org.gvsig.gpe.kml.parser.v21.header.HeaderBinding;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class DefaultBindingProfile implements IBindingProfile{
+public class DefaultBindingProfile implements IBindingProfile {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getCoordinatesTypeBinding()
+	 * 
+	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#
+	 * getCoordinatesTypeBinding()
 	 */
 	public CoordinatesTypeIterator getCoordinatesTypeBinding() {
 		return null;
@@ -85,7 +85,10 @@ public class DefaultBindingProfile implements IBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getDocumentBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getDocumentBinding
+	 * ()
 	 */
 	public DocumentBinding getDocumentBinding() {
 		return null;
@@ -93,7 +96,10 @@ public class DefaultBindingProfile implements IBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getDoubleBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getDoubleBinding
+	 * ()
 	 */
 	public DoubleBinding getDoubleBinding() {
 		return null;
@@ -101,7 +107,10 @@ public class DefaultBindingProfile implements IBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getElementBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getElementBinding
+	 * ()
 	 */
 	public ElementBinding getElementBinding() {
 		return null;
@@ -109,7 +118,10 @@ public class DefaultBindingProfile implements IBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getFeatureBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getFeatureBinding
+	 * ()
 	 */
 	public FeatureBinding getFeatureBinding() {
 		return null;
@@ -117,7 +129,10 @@ public class DefaultBindingProfile implements IBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getFolderBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getFolderBinding
+	 * ()
 	 */
 	public FolderBinding getFolderBinding() {
 		return null;
@@ -125,7 +140,10 @@ public class DefaultBindingProfile implements IBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getGeometryBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getGeometryBinding
+	 * ()
 	 */
 	public GeometryBinding getGeometryBinding() {
 		return null;
@@ -133,7 +151,10 @@ public class DefaultBindingProfile implements IBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getHeaderBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getHeaderBinding
+	 * ()
 	 */
 	public HeaderBinding getHeaderBinding() {
 		return null;
@@ -141,7 +162,9 @@ public class DefaultBindingProfile implements IBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getInnerBoundaryIsBinding()
+	 * 
+	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#
+	 * getInnerBoundaryIsBinding()
 	 */
 	public InnerBoundaryIsBinding getInnerBoundaryIsBinding() {
 		return null;
@@ -149,7 +172,9 @@ public class DefaultBindingProfile implements IBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getLatLonAltBoxBinding()
+	 * 
+	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#
+	 * getLatLonAltBoxBinding()
 	 */
 	public LatLonAltBoxIterator getLatLonAltBoxBinding() {
 		return null;
@@ -157,7 +182,9 @@ public class DefaultBindingProfile implements IBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getLineStringTypeBinding()
+	 * 
+	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#
+	 * getLineStringTypeBinding()
 	 */
 	public LineStringTypeBinding getLineStringTypeBinding() {
 		return null;
@@ -165,7 +192,9 @@ public class DefaultBindingProfile implements IBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getLinearRingBinding()
+	 * 
+	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#
+	 * getLinearRingBinding()
 	 */
 	public LinearRingBinding getLinearRingBinding() {
 		return null;
@@ -173,7 +202,10 @@ public class DefaultBindingProfile implements IBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getLookAtBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getLookAtBinding
+	 * ()
 	 */
 	public LookAtBinding getLookAtBinding() {
 		return null;
@@ -181,7 +213,10 @@ public class DefaultBindingProfile implements IBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getMetadataBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getMetadataBinding
+	 * ()
 	 */
 	public MetadataBinding getMetadataBinding() {
 		return null;
@@ -189,7 +224,9 @@ public class DefaultBindingProfile implements IBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getMultiGeometryBinding()
+	 * 
+	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#
+	 * getMultiGeometryBinding()
 	 */
 	public MultiGeometryBinding getMultiGeometryBinding() {
 		return null;
@@ -197,7 +234,9 @@ public class DefaultBindingProfile implements IBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getOuterBoundaryIsBinding()
+	 * 
+	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#
+	 * getOuterBoundaryIsBinding()
 	 */
 	public OuterBoundaryIsBinding getOuterBoundaryIsBinding() {
 		return null;
@@ -205,7 +244,9 @@ public class DefaultBindingProfile implements IBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getPlaceMarketBinding()
+	 * 
+	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#
+	 * getPlaceMarketBinding()
 	 */
 	public PlaceMarketBinding getPlaceMarketBinding() {
 		return null;
@@ -213,7 +254,9 @@ public class DefaultBindingProfile implements IBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getPointTypeBinding()
+	 * 
+	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#
+	 * getPointTypeBinding()
 	 */
 	public PointTypeBinding getPointTypeBinding() {
 		return null;
@@ -221,7 +264,9 @@ public class DefaultBindingProfile implements IBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getPolygonTypeBinding()
+	 * 
+	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#
+	 * getPolygonTypeBinding()
 	 */
 	public PolygonTypeBinding getPolygonTypeBinding() {
 		return null;
@@ -229,7 +274,10 @@ public class DefaultBindingProfile implements IBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getRegionBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getRegionBinding
+	 * ()
 	 */
 	public RegionBinding getRegionBinding() {
 		return null;
@@ -237,7 +285,10 @@ public class DefaultBindingProfile implements IBindingProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getStyleBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.parser.bindings.profiles.IBindingProfile#getStyleBinding
+	 * ()
 	 */
 	public StyleBinding getStyleBinding() {
 		return null;

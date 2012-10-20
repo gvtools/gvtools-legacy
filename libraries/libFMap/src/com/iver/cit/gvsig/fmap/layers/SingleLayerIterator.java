@@ -44,19 +44,20 @@ import java.util.ArrayList;
 
 /**
  * @author fjp
- *
- * Class to iterate for all layers in FLayers, but assuring not FLayers is returned.
- * The layer you receive in next method is a "leaf" layer, not grouped. 
+ * 
+ *         Class to iterate for all layers in FLayers, but assuring not FLayers
+ *         is returned. The layer you receive in next method is a "leaf" layer,
+ *         not grouped.
  */
 public class SingleLayerIterator {
 
-	ArrayList singleLayers  =new ArrayList();
+	ArrayList singleLayers = new ArrayList();
 	int i = 0;
-	int subIndex = 0;	
-	public SingleLayerIterator(FLayers layers)
-	{
+	int subIndex = 0;
+
+	public SingleLayerIterator(FLayers layers) {
 		addSubLayer(layers);
-		
+
 	}
 
 	public boolean hasNext() {
@@ -64,32 +65,25 @@ public class SingleLayerIterator {
 	}
 
 	public FLayer next() {
-		FLayer aux = (FLayer) singleLayers.get(i); 
+		FLayer aux = (FLayer) singleLayers.get(i);
 		i++;
 		return aux;
 	}
-	
+
 	private void addSubLayer(FLayer lyr) {
 		FLayers layers;
-		if (lyr instanceof FLayers)
-		{
-			layers = (FLayers)lyr;
-			for (int i=0; i < layers.getLayersCount(); i++)
-			{
+		if (lyr instanceof FLayers) {
+			layers = (FLayers) lyr;
+			for (int i = 0; i < layers.getLayersCount(); i++) {
 				addSubLayer(layers.getLayer(i));
-			}			
-		}
-		else
-		{
+			}
+		} else {
 			singleLayers.add(lyr);
-		}		
+		}
 	}
-	
-	public void rewind()
-	{
-		i=0;
+
+	public void rewind() {
+		i = 0;
 	}
 
 }
-
-

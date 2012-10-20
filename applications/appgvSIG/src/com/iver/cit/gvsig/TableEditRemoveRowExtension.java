@@ -45,66 +45,65 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.plugins.Extension;
 import com.iver.andami.ui.mdiManager.IWindow;
-import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
 import com.iver.cit.gvsig.project.documents.table.gui.Table;
-
 
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class TableEditRemoveRowExtension extends Extension {
-    /**
-     * @see com.iver.andami.plugins.IExtension#initialize()
-     */
-    public void initialize() {
-    }
+	/**
+	 * @see com.iver.andami.plugins.IExtension#initialize()
+	 */
+	public void initialize() {
+	}
 
-    /**
-     * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
-     */
-    public void execute(String actionCommand) {
-        if ("REMOVEROW".equals(actionCommand)) {
-            IWindow v = PluginServices.getMDIManager().getActiveWindow();
+	/**
+	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
+	 */
+	public void execute(String actionCommand) {
+		if ("REMOVEROW".equals(actionCommand)) {
+			IWindow v = PluginServices.getMDIManager().getActiveWindow();
 
-            try {
-                ((Table) v).removeRow();
-            } catch (ReadDriverException e) {
-            	NotificationManager.addError("No se pudo elimnar la fila", e);
-			} 
-        }
-    }
+			try {
+				((Table) v).removeRow();
+			} catch (ReadDriverException e) {
+				NotificationManager.addError("No se pudo elimnar la fila", e);
+			}
+		}
+	}
 
-    /**
-     * @see com.iver.andami.plugins.IExtension#isEnabled()
-     */
-    public boolean isEnabled() {
-    	IWindow v = PluginServices.getMDIManager().getActiveWindow();
+	/**
+	 * @see com.iver.andami.plugins.IExtension#isEnabled()
+	 */
+	public boolean isEnabled() {
+		IWindow v = PluginServices.getMDIManager().getActiveWindow();
 
-        if (v == null) {
-            return false;
-        }
+		if (v == null) {
+			return false;
+		}
 
-        if (v instanceof Table) {
-            return (((Table) v).isEditing()) && ((Table) v).getSelectedRowIndices().length>0;
-        }
+		if (v instanceof Table) {
+			return (((Table) v).isEditing())
+					&& ((Table) v).getSelectedRowIndices().length > 0;
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    /**
-     * @see com.iver.andami.plugins.IExtension#isVisible()
-     */
-    public boolean isVisible() {
-        IWindow v = PluginServices.getMDIManager().getActiveWindow();
+	/**
+	 * @see com.iver.andami.plugins.IExtension#isVisible()
+	 */
+	public boolean isVisible() {
+		IWindow v = PluginServices.getMDIManager().getActiveWindow();
 
-        if (v == null) {
-            return false;
-        } else if (v instanceof Table && ((Table) v).isEditing()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+		if (v == null) {
+			return false;
+		} else if (v instanceof Table && ((Table) v).isEditing()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

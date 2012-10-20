@@ -50,7 +50,7 @@ import com.iver.utiles.swing.threads.Cancellable;
 
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FLyrAnnotation extends FLyrVect {
@@ -61,8 +61,9 @@ public class FLyrAnnotation extends FLyrVect {
 	private int indexEditing = -1;
 
 	private boolean inPixels;
-	private VectorialUniqueValueLegend vuvl=new VectorialUniqueValueLegend();
-	private Strategy strategy=null;
+	private VectorialUniqueValueLegend vuvl = new VectorialUniqueValueLegend();
+	private Strategy strategy = null;
+
 	/**
 	 * Crea un nuevo FLyrAnnotation.
 	 */
@@ -72,7 +73,7 @@ public class FLyrAnnotation extends FLyrVect {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param mapping
 	 *            DOCUMENT ME!
 	 */
@@ -90,7 +91,7 @@ public class FLyrAnnotation extends FLyrVect {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public MappingAnnotation getMapping() {
@@ -109,14 +110,14 @@ public class FLyrAnnotation extends FLyrVect {
 			boolean bDrawShapes = true;
 
 			if (bDrawShapes) {
-				if (strategy == null){
+				if (strategy == null) {
 					strategy = (AnnotationStrategy) StrategyManager
 							.getStrategy(this);
 				}
 				try {
 					g.setColor(Color.black);
 					strategy.draw(image, g, viewPort, cancel);
-					if (getISpatialIndex()==null && !isEditing()) {
+					if (getISpatialIndex() == null && !isEditing()) {
 						createSpatialIndex();
 					}
 				} catch (ReadDriverException e) {
@@ -137,18 +138,19 @@ public class FLyrAnnotation extends FLyrVect {
 	 * @throws ExpansionFileReadException
 	 * @see com.iver.cit.gvsig.fmap.layers.LayerOperations#getFullExtent()
 	 */
-	public Rectangle2D getFullExtent() throws ReadDriverException, ExpansionFileReadException {
+	public Rectangle2D getFullExtent() throws ReadDriverException,
+			ExpansionFileReadException {
 		Rectangle2D rAux;
 		// logger.debug("source.start()");
 		try {
 			getSource().start();
 		} catch (InitializeDriverException e) {
-			throw new ReadDriverException(getName(),e);
+			throw new ReadDriverException(getName(), e);
 		}
 		rAux = getSource().getFullExtent();
-			// logger.debug("source.stop()");
+		// logger.debug("source.stop()");
 		getSource().stop();
-			// Si existe reproyección, reproyectar el extent
+		// Si existe reproyección, reproyectar el extent
 		MathTransform transform = getCrsTransform();
 		if (transform != null) {
 			Point2D pt1 = new Point2D.Double(rAux.getMinX(), rAux.getMinY());
@@ -167,7 +169,8 @@ public class FLyrAnnotation extends FLyrVect {
 	 *      com.iver.utiles.swing.threads.Cancellable)
 	 */
 	public void print(Graphics2D g, ViewPort viewPort, Cancellable cancel,
-			double scale, PrintRequestAttributeSet properties) throws ReadDriverException {
+			double scale, PrintRequestAttributeSet properties)
+			throws ReadDriverException {
 		if (isVisible() && isWithinScale(scale)) {
 			Strategy strategy = StrategyManager.getStrategy(this);
 			strategy.print(g, viewPort, cancel, properties);
@@ -176,10 +179,12 @@ public class FLyrAnnotation extends FLyrVect {
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.layers.layerOperations.RandomVectorialData#queryByRect(java.awt.geom.Rectangle2D)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.layers.layerOperations.RandomVectorialData#
+	 * queryByRect(java.awt.geom.Rectangle2D)
 	 */
-	public FBitSet queryByRect(Rectangle2D rect) throws ReadDriverException, VisitorException {
+	public FBitSet queryByRect(Rectangle2D rect) throws ReadDriverException,
+			VisitorException {
 		Strategy s = StrategyManager.getStrategy(this);
 
 		return s.queryByRect(rect);
@@ -187,12 +192,12 @@ public class FLyrAnnotation extends FLyrVect {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param p
 	 *            DOCUMENT ME!
 	 * @param tolerance
 	 *            DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 * @throws DriverException
 	 *             DOCUMENT ME!
@@ -206,12 +211,12 @@ public class FLyrAnnotation extends FLyrVect {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param g
 	 *            DOCUMENT ME!
 	 * @param relationship
 	 *            DOCUMENT ME!
-	 *
+	 * 
 	 * @return FBitset
 	 */
 	public FBitSet queryByShape(IGeometry g, int relationship)
@@ -223,11 +228,11 @@ public class FLyrAnnotation extends FLyrVect {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
-	 *
+	 * 
 	 * @throws XMLException
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.FLayer#getProperties()
 	 */
 	public XMLEntity getXMLEntity() throws XMLException {
@@ -242,12 +247,13 @@ public class FLyrAnnotation extends FLyrVect {
 	 * @see com.iver.cit.gvsig.fmap.layers.FLyrDefault#setXMLEntity(com.iver.utiles.XMLEntity)
 	 */
 	public void setXMLEntity(XMLEntity xml) throws XMLException {
-		Iterator iter=xml.findChildren("className",MappingAnnotation.class.getName());
+		Iterator iter = xml.findChildren("className",
+				MappingAnnotation.class.getName());
 		if (iter.hasNext())
-			mapping = MappingAnnotation.createFromXML((XMLEntity)iter.next());
-		else{
-			//Este else para versiones anteriores a la 1.0.2.(908)
-			if (xml.getChildrenCount()==3)
+			mapping = MappingAnnotation.createFromXML((XMLEntity) iter.next());
+		else {
+			// Este else para versiones anteriores a la 1.0.2.(908)
+			if (xml.getChildrenCount() == 3)
 				mapping = MappingAnnotation.createFromXML(xml.getChild(2));
 			else
 				mapping = MappingAnnotation.createFromXML(xml.getChild(3));
@@ -260,29 +266,29 @@ public class FLyrAnnotation extends FLyrVect {
 			crs = ProjectionUtils.getCRS(xml.getStringProperty("proj"));
 		}
 
-//		VectorialAdapter adapter=null;
-//		if (xml.contains("file")){
-//			adapter = new VectorialFileAdapter(new File(xml
-//					.getStringProperty("file")));
-//		}else if (xml.contains("db")){
-//			adapter = new VectorialDBAdapter();
-//		}
-//		Driver d;
-//
-//		try {
-//			d = LayerFactory.getDM().getDriver(
-//					xml.getStringProperty("driverName"));
-//		} catch (DriverLoadException e1) {
-//			throw new XMLException(e1);
-//		}
-//
-//		adapter.setDriver((VectorialDriver) d);
-//		// TODO Meter esto dentro de la comprobación de si hay memoria
-//		if (false) {
-//		} else {
-//			setSource(adapter);
-//			setProjection(proj);
-//		}
+		// VectorialAdapter adapter=null;
+		// if (xml.contains("file")){
+		// adapter = new VectorialFileAdapter(new File(xml
+		// .getStringProperty("file")));
+		// }else if (xml.contains("db")){
+		// adapter = new VectorialDBAdapter();
+		// }
+		// Driver d;
+		//
+		// try {
+		// d = LayerFactory.getDM().getDriver(
+		// xml.getStringProperty("driverName"));
+		// } catch (DriverLoadException e1) {
+		// throw new XMLException(e1);
+		// }
+		//
+		// adapter.setDriver((VectorialDriver) d);
+		// // TODO Meter esto dentro de la comprobación de si hay memoria
+		// if (false) {
+		// } else {
+		// setSource(adapter);
+		// setProjection(proj);
+		// }
 
 		// Le asignamos también una legenda por defecto acorde con
 		// el tipo de shape que tenga. Tampoco sé si es aquí el
@@ -306,12 +312,12 @@ public class FLyrAnnotation extends FLyrVect {
 	 * Esto tiene el fallo de que obligas a una etiqueta por entidad, para poder
 	 * evitar esto, una posible solución sería que un FLabel pudiera ser una
 	 * colección de FLabel (Patrón Composite)
-	 *
+	 * 
 	 * @param lyrVect
 	 * @throws ReadDriverException
 	 * @throws DriverException
 	 */
-	private void createLabels() throws ReadDriverException{
+	private void createLabels() throws ReadDriverException {
 		SelectableDataSource ds = getRecordset();
 		try {
 			ReadableVectorial adapter = getSource();
@@ -359,29 +365,33 @@ public class FLyrAnnotation extends FLyrVect {
 				// los parámetros de posicionamiento y de allowDuplicates
 				// if (i >= 328)
 				// System.out.println("i= " + i + " " + val.toString());
-				//ArrayList values=new ArrayList(4);
-				String t=new String();
+				// ArrayList values=new ArrayList(4);
+				String t = new String();
 				Value val = ds.getFieldValue(i, fieldId);
-				t=val.toString();
-				//values.add(val);
-				if (idFieldColorText!=-1){
-					Value valColor=ds.getFieldValue(i,idFieldColorText);
-					t=t.concat(valColor.toString());
-					//values.add(valColor);
+				t = val.toString();
+				// values.add(val);
+				if (idFieldColorText != -1) {
+					Value valColor = ds.getFieldValue(i, idFieldColorText);
+					t = t.concat(valColor.toString());
+					// values.add(valColor);
 				}
-				if (idFieldTypeFontText!=-1){
-					Value valTypeFont=ds.getFieldValue(i,idFieldTypeFontText);
-					t=t.concat(valTypeFont.toString());
-					//values.add(valTypeFont);
+				if (idFieldTypeFontText != -1) {
+					Value valTypeFont = ds
+							.getFieldValue(i, idFieldTypeFontText);
+					t = t.concat(valTypeFont.toString());
+					// values.add(valTypeFont);
 				}
 
-				if (idFieldStyleFontText!=-1){
-					Value valStyleFont=ds.getFieldValue(i,idFieldStyleFontText);
-					t=t.concat(valStyleFont.toString());
-					//values.add(valStyleFont);
+				if (idFieldStyleFontText != -1) {
+					Value valStyleFont = ds.getFieldValue(i,
+							idFieldStyleFontText);
+					t = t.concat(valStyleFont.toString());
+					// values.add(valStyleFont);
 				}
-				//Value total=ValueFactory.createValue((Value[])values.toArray(new Value[0]));
-				Value total=ValueFactory.createValue(t);
+				// Value
+				// total=ValueFactory.createValue((Value[])values.toArray(new
+				// Value[0]));
+				Value total = ValueFactory.createValue(t);
 				if ((val instanceof NullValue) || (val == null)) {
 					m_labels.add(null);
 					continue;
@@ -400,59 +410,59 @@ public class FLyrAnnotation extends FLyrVect {
 
 						float height;
 						if (idFieldHeightText != -1) {
-							NumericValue h = (NumericValue) ds
-									.getFieldValue(i, idFieldHeightText);
-							height=h.floatValue();
+							NumericValue h = (NumericValue) ds.getFieldValue(i,
+									idFieldHeightText);
+							height = h.floatValue();
 							lbls[j].setHeight(height);
 						} else {
-							height=defaultSym.getFontSize();
+							height = defaultSym.getFontSize();
 							lbls[j].setHeight(height);
 						}
 
-
-
-						if (vuvl.getSymbolByValue(total)==null){
+						if (vuvl.getSymbolByValue(total) == null) {
 							Color color;
 							if (idFieldColorText != -1) {
-								NumericValue c = (NumericValue) ds.getFieldValue(
-										i, idFieldColorText);
-								color=new Color(c.intValue());
+								NumericValue c = (NumericValue) ds
+										.getFieldValue(i, idFieldColorText);
+								color = new Color(c.intValue());
 							} else {
-								color=defaultSym.getFontColor();
+								color = defaultSym.getFontColor();
 							}
 							String typeFont;
 							if (idFieldTypeFontText != -1) {
 								StringValue tf = (StringValue) ds
 										.getFieldValue(i, idFieldTypeFontText);
-								typeFont=tf.getValue();
+								typeFont = tf.getValue();
 							} else {
-								typeFont=defaultSym.getFont().getFontName();
+								typeFont = defaultSym.getFont().getFontName();
 							}
 							int style;
 							if (idFieldStyleFontText != -1) {
-								IntValue sf = (IntValue) ds
-										.getFieldValue(i, idFieldStyleFontText);
+								IntValue sf = (IntValue) ds.getFieldValue(i,
+										idFieldStyleFontText);
 								style = sf.getValue();
 							} else {
 								style = defaultSym.getFont().getStyle();
 							}
-							//FSymbol symbol=new FSymbol(FConstant.SYMBOL_TYPE_TEXT);
+							// FSymbol symbol=new
+							// FSymbol(FConstant.SYMBOL_TYPE_TEXT);
 
 							ITextSymbol symbol;
 
 							symbol = SymbologyFactory.createDefaultTextSymbol();
 
 							// casca perque ara és un ITextSymbol
-//							symbol.setFontSizeInPixels(isInPixels());
-							symbol.setFont(new Font(typeFont, style, (int)height));
+							// symbol.setFontSizeInPixels(isInPixels());
+							symbol.setFont(new Font(typeFont, style,
+									(int) height));
 							symbol.setDescription(lbls[j].getString());
-							//symbol.setFontColor(color);
+							// symbol.setFontColor(color);
 							symbol.setTextColor(color);
-							vuvl.addSymbol(total,symbol);
+							vuvl.addSymbol(total, symbol);
 						}
 
 					}
-				m_labels.add(lbls[j]);
+					m_labels.add(lbls[j]);
 
 				}
 			}
@@ -460,9 +470,9 @@ public class FLyrAnnotation extends FLyrVect {
 			ds.stop();
 			adapter.stop();
 		} catch (ExpansionFileReadException e) {
-			throw new ReadDriverException(getName(),e);
+			throw new ReadDriverException(getName(), e);
 		} catch (InitializeDriverException e) {
-			throw new ReadDriverException(getName(),e);
+			throw new ReadDriverException(getName(), e);
 		}
 
 	}
@@ -470,26 +480,27 @@ public class FLyrAnnotation extends FLyrVect {
 	public FLabel getLabel(int numReg) {
 		if (m_labels == null || numReg == -1)
 			return null;
-		if (getSource() instanceof AnnotationEditableAdapter){
-			AnnotationEditableAdapter aea=((AnnotationEditableAdapter)getSource());
-			return aea.getLabel(numReg,false);
+		if (getSource() instanceof AnnotationEditableAdapter) {
+			AnnotationEditableAdapter aea = ((AnnotationEditableAdapter) getSource());
+			return aea.getLabel(numReg, false);
 		}
-		return (FLabel)m_labels.get(numReg);
+		return (FLabel) m_labels.get(numReg);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.layers.layerOperations.RandomVectorialData#createIndex()
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.layers.layerOperations.RandomVectorialData#
+	 * createIndex()
 	 */
 	public void createSpatialIndex() {
 		// FJP: ESTO HABRÁ QUE CAMBIARLO. PARA LAS CAPAS SECUENCIALES, TENDREMOS
 		// QUE ACCEDER CON UN WHILE NEXT. (O mejorar lo de los FeatureVisitor
 		// para que acepten recorrer sin geometria, solo con rectangulos.
 
-		//AZABALA: Como no tengo claro de donde se crean las capas de textos
-		//el índice espacial creado seguirá siendo el Quadtree en memoria
-		//de JTS (QuadtreeJts es un adapter a nuestra api de indices)
+		// AZABALA: Como no tengo claro de donde se crean las capas de textos
+		// el índice espacial creado seguirá siendo el Quadtree en memoria
+		// de JTS (QuadtreeJts es un adapter a nuestra api de indices)
 		spatialIndex = new QuadtreeJts();
 		ReadableVectorial va = getSource();
 		MathTransform transform = getCrsTransform();
@@ -499,7 +510,7 @@ public class FLyrAnnotation extends FLyrVect {
 
 			for (int i = 0; i < va.getShapeCount(); i++) {
 				Rectangle2D r = null;
-				FLabel label=getLabel(i);
+				FLabel label = getLabel(i);
 				if (label != null) {
 					r = label.getBoundBox();
 				} else {
@@ -510,17 +521,17 @@ public class FLyrAnnotation extends FLyrVect {
 					r = ProjectionUtils.transform(r, transform);
 				}
 				if (r != null) {
-//					Coordinate c1 = new Coordinate(r.getMinX(), r.getMinY());
-//					Coordinate c2 = new Coordinate(r.getMaxX(), r.getMaxY());
-//					Envelope env = new Envelope(c1, c2);
-//					spatialIndex.insert(env, new Integer(i));
+					// Coordinate c1 = new Coordinate(r.getMinX(), r.getMinY());
+					// Coordinate c2 = new Coordinate(r.getMaxX(), r.getMaxY());
+					// Envelope env = new Envelope(c1, c2);
+					// spatialIndex.insert(env, new Integer(i));
 					spatialIndex.insert(r, i);
 				}
 			} // for
 			va.stop();
 		} catch (ReadDriverException e) {
 			e.printStackTrace();
-		} 
+		}
 	}
 
 	public void setSelectedEditing() throws ReadDriverException {
@@ -551,17 +562,13 @@ public class FLyrAnnotation extends FLyrVect {
 		return m_labels;
 	}
 
-
 	public void setLegend() {
 		try {
 			getSource().getRecordset().start();
-			vuvl.setClassifyingFieldNames(
-					new String[] {
-							getSource().getRecordset().getFieldName(mapping.getColumnText())
-					}
-			);
+			vuvl.setClassifyingFieldNames(new String[] { getSource()
+					.getRecordset().getFieldName(mapping.getColumnText()) });
 
-//			vuvl.setDefaultSymbol(new FSymbol(FConstant.SYMBOL_TYPE_TEXT));
+			// vuvl.setDefaultSymbol(new FSymbol(FConstant.SYMBOL_TYPE_TEXT));
 			vuvl.setDefaultSymbol(SymbologyFactory.createDefaultTextSymbol());
 			setLegend((IVectorLegend) vuvl);
 			getSource().getRecordset().stop();
@@ -576,17 +583,19 @@ public class FLyrAnnotation extends FLyrVect {
 	public Strategy getStrategy() {
 		return strategy;
 	}
+
 	public void setEditing(boolean b) throws StartEditionLayerException {
 		super.setEditing(b);
 		deleteSpatialIndex();
 	}
 
-	public static FLayer createLayerFromVect(FLyrVect layer) throws ReadDriverException, LegendLayerException{
-		FLyrAnnotation la=new FLyrAnnotation(layer.getDataSource());
+	public static FLayer createLayerFromVect(FLyrVect layer)
+			throws ReadDriverException, LegendLayerException {
+		FLyrAnnotation la = new FLyrAnnotation(layer.getDataSource());
 		la.setSource(layer.getSource());
 		la.setRecordset(layer.getRecordset());
 		la.setCrs(layer.getCrs());
-		la.setLegend((IVectorLegend)layer.getLegend());
+		la.setLegend((IVectorLegend) layer.getLegend());
 		return la;
 	}
 }

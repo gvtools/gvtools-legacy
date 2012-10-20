@@ -66,6 +66,7 @@ import org.gvsig.gpe.gml.utils.GMLTags;
 /**
  * It writes a gml:MultiLineStringType object. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;MultiLineString srsName="http://www.opengis.net/gml/srs/epsg.xml#4326"&gt;
@@ -84,14 +85,18 @@ import org.gvsig.gpe.gml.utils.GMLTags;
  * &lt;/MultiLineString&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class MultiLineStringWriter extends GeometryWriter{
+public class MultiLineStringWriter extends GeometryWriter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.v2.geometries.GeometriesWriter#getGeometryName()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.v2.geometries.GeometriesWriter#getGeometryName()
 	 */
 	public String getGeometryName() {
 		return GMLTags.GML_MULTILINESTRING.getLocalPart();

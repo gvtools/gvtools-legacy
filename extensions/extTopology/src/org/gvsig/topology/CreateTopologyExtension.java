@@ -1,4 +1,5 @@
 package org.gvsig.topology;
+
 import org.gvsig.topology.topologyrules.FMapGeometryMustBeClosed;
 import org.gvsig.topology.topologyrules.JtsValidRule;
 import org.gvsig.topology.topologyrules.LineMustNotHaveDangles2;
@@ -89,146 +90,128 @@ import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
  * $Log: 
  */
 /**
- * ANDAMI's extension to create new topologies, from toc's layers and 
- * topology rules specified by user.
+ * ANDAMI's extension to create new topologies, from toc's layers and topology
+ * rules specified by user.
  */
 public class CreateTopologyExtension extends Extension {
 
 	public void execute(String actionCommand) {
-		if(actionCommand.equalsIgnoreCase("CREATE_TOPOLOGY")){
-			com.iver.andami.ui.mdiManager.IWindow f = 
-				PluginServices.getMDIManager().getActiveWindow();
-				if (f == null) {
-					return;
-				}
-				if (f instanceof View) {
-					View vista = (View) f;
-					IProjectView model = vista.getModel();
-					MapContext mapContext = model.getMapContext();
-					NewTopologyWizard wizard = new NewTopologyWizard(mapContext);
-					wizard.getWindowInfo().setWidth(640);
-					wizard.getWindowInfo().setHeight(350);
-					wizard.getWindowInfo().setTitle(PluginServices.getText(this, "Create_Topology"));
-					PluginServices.getMDIManager().addWindow(wizard);
-				}
+		if (actionCommand.equalsIgnoreCase("CREATE_TOPOLOGY")) {
+			com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+					.getMDIManager().getActiveWindow();
+			if (f == null) {
+				return;
+			}
+			if (f instanceof View) {
+				View vista = (View) f;
+				IProjectView model = vista.getModel();
+				MapContext mapContext = model.getMapContext();
+				NewTopologyWizard wizard = new NewTopologyWizard(mapContext);
+				wizard.getWindowInfo().setWidth(640);
+				wizard.getWindowInfo().setHeight(350);
+				wizard.getWindowInfo().setTitle(
+						PluginServices.getText(this, "Create_Topology"));
+				PluginServices.getMDIManager().addWindow(wizard);
+			}
 		}
 	}
 
 	public void initialize() {
 		registerIcons();
 		registerTopologyRules();
-		
-		ThemeManagerWindow.setTabEnabledForLayer(General.class, FLayerGenericVectorial.class, true);
-		ThemeManagerWindow.setTabEnabledForLayer(LegendManager.class, FLayerGenericVectorial.class, true);
-		ThemeManagerWindow.setTabEnabledForLayer(LabelingManager.class, FLayerGenericVectorial.class, true);
+
+		ThemeManagerWindow.setTabEnabledForLayer(General.class,
+				FLayerGenericVectorial.class, true);
+		ThemeManagerWindow.setTabEnabledForLayer(LegendManager.class,
+				FLayerGenericVectorial.class, true);
+		ThemeManagerWindow.setTabEnabledForLayer(LabelingManager.class,
+				FLayerGenericVectorial.class, true);
 
 	}
-	
-	private void registerIcons(){
+
+	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"create-topology",
-				this.getClass().getClassLoader().getResource("images/create-topology.png")
-		);
-		
-		
+				this.getClass().getClassLoader()
+						.getResource("images/create-topology.png"));
+
 		PluginServices.getIconTheme().registerDefault(
 				"introductory-step-wizard",
-				this.getClass().getClassLoader().getResource("images/introductory-step-wizard.png")
-		);
+				this.getClass().getClassLoader()
+						.getResource("images/introductory-step-wizard.png"));
 	}
-	
-	private void registerTopologyRules(){
-		
-		//TODO Implementar un mecanismo que no requiera registro,
-		//sino descubrimiento
-		ExtensionPoints extensionPoints = 
-			ExtensionPointsSingleton.getInstance();
-		
-		extensionPoints.add("TopologyRules",
-								"JTSVALID", //usar una entrada en el text para esto
-							JtsValidRule.class);
-		
-		extensionPoints.add("TopologyRules",
-				"MUSTNOTHAVEREPEATED",
-			MustNotHaveRepeatedPoints.class);
-		
-		extensionPoints.add("TopologyRules",
-				"FMAPMUSTBECLOSED",
-			FMapGeometryMustBeClosed.class);
-		
-		extensionPoints.add("TopologyRules",
-				"LINENOTSELFINTERSECT",
+
+	private void registerTopologyRules() {
+
+		// TODO Implementar un mecanismo que no requiera registro,
+		// sino descubrimiento
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+
+		extensionPoints.add("TopologyRules", "JTSVALID", // usar una entrada en
+															// el text para esto
+				JtsValidRule.class);
+
+		extensionPoints.add("TopologyRules", "MUSTNOTHAVEREPEATED",
+				MustNotHaveRepeatedPoints.class);
+
+		extensionPoints.add("TopologyRules", "FMAPMUSTBECLOSED",
+				FMapGeometryMustBeClosed.class);
+
+		extensionPoints.add("TopologyRules", "LINENOTSELFINTERSECT",
 				LineMustNotSelfIntersect.class);
-		
-		extensionPoints.add("TopologyRules",
-				"LINEMUSTNOTHAVEDANGLES",
+
+		extensionPoints.add("TopologyRules", "LINEMUSTNOTHAVEDANGLES",
 				LineMustNotHaveDangles2.class);
-		
-		extensionPoints.add("TopologyRules",
-				"LINEMUSTNOTHAVEPSEUDONODES",
+
+		extensionPoints.add("TopologyRules", "LINEMUSTNOTHAVEPSEUDONODES",
 				LineMustNotHavePseudonodes.class);
-		
-		extensionPoints.add("TopologyRules",
-				"POLYGONMUSTNOTSELFINTERSECT",
+
+		extensionPoints.add("TopologyRules", "POLYGONMUSTNOTSELFINTERSECT",
 				PolygonMustNotSelfIntersect.class);
-		
-		extensionPoints.add("TopologyRules",
-				"POLYGONMUSTNOTOVERLAP",
+
+		extensionPoints.add("TopologyRules", "POLYGONMUSTNOTOVERLAP",
 				PolygonMustNotOverlap.class);
-		
-		extensionPoints.add("TopologyRules",
-				"POLYGONMUSTNOTOVERLAPWITH",
+
+		extensionPoints.add("TopologyRules", "POLYGONMUSTNOTOVERLAPWITH",
 				PolygonMustNotOverlapWith.class);
-		
-		extensionPoints.add("TopologyRules",
-				"POINTSMUSTNOTOVERLAP",
+
+		extensionPoints.add("TopologyRules", "POINTSMUSTNOTOVERLAP",
 				PointsMustNotOverlap.class);
-		
-		extensionPoints.add("TopologyRules",
-				"POLYGONSMUSTNOTHAVEGAPS",
+
+		extensionPoints.add("TopologyRules", "POLYGONSMUSTNOTHAVEGAPS",
 				PolygonMustNotHaveGaps.class);
-		
-		extensionPoints.add("TopologyRules",
-				"LYRMUSTBECONTAINED",
+
+		extensionPoints.add("TopologyRules", "LYRMUSTBECONTAINED",
 				LyrMustBeContainedByOneGeometry.class);
-		
-		extensionPoints.add("TopologyRules",
-				"LYRMUSTBECOVERED",
+
+		extensionPoints.add("TopologyRules", "LYRMUSTBECOVERED",
 				LyrMustBeCoveredByOneGeometry.class);
-		
-		extensionPoints.add("TopologyRules",
-				"LYRMUSTBEEQUAL",
+
+		extensionPoints.add("TopologyRules", "LYRMUSTBEEQUAL",
 				LyrMustBeEqual.class);
-		
-		extensionPoints.add("TopologyRules",
-				"LYRMUSTCONTAINS",
+
+		extensionPoints.add("TopologyRules", "LYRMUSTCONTAINS",
 				LyrMustContainsOneGeometry.class);
-		
-		extensionPoints.add("TopologyRules",
-				"LYRMUSTCOVERS",
+
+		extensionPoints.add("TopologyRules", "LYRMUSTCOVERS",
 				LyrMustCoversOneGeometry.class);
-		
-		extensionPoints.add("TopologyRules",
-				"LYRMUSTCROSSWITH",
+
+		extensionPoints.add("TopologyRules", "LYRMUSTCROSSWITH",
 				LyrMustCrossWith.class);
-		
-		extensionPoints.add("TopologyRules",
-				"LYRMUSTDISJOINTS",
+
+		extensionPoints.add("TopologyRules", "LYRMUSTDISJOINTS",
 				LyrMustDisjoint.class);
-		
-		extensionPoints.add("TopologyRules",
-				"LYRMUSTNOTHAVEDUPLICATES",
+
+		extensionPoints.add("TopologyRules", "LYRMUSTNOTHAVEDUPLICATES",
 				LyrMustNotHaveDuplicated.class);
-		
-		extensionPoints.add("TopologyRules",
-				"LYRMUSTTOUCH",
-				LyrMustTouch.class);
-		
-		extensionPoints.add("TopologyRules",
-				"LYRMUSTBECOVEREDBYLAYER",
+
+		extensionPoints
+				.add("TopologyRules", "LYRMUSTTOUCH", LyrMustTouch.class);
+
+		extensionPoints.add("TopologyRules", "LYRMUSTBECOVEREDBYLAYER",
 				LyrMustBeCoveredByLyr.class);
-		
-		
+
 	}
 
 	public boolean isEnabled() {
@@ -243,21 +226,21 @@ public class CreateTopologyExtension extends Extension {
 	public boolean isVisible() {
 		IWindow f = PluginServices.getMDIManager().getActiveWindow();
 		if (f == null) {
-		    return false;
+			return false;
 		}
 		if (f instanceof View) {
-		    View vista = (View) f;
-		    IProjectView model = vista.getModel();
-		    FLayers layers =  model.getMapContext().getLayers();
-		    SingleLayerIterator lyrIterator = new SingleLayerIterator(layers);
-			 while(lyrIterator.hasNext()){
-				 FLayer lyr = lyrIterator.next();
-				 if(lyr instanceof FLyrVect){
-					 if(! (lyr.getParentLayer() instanceof Topology))
-						 return true;
-				 }//if
-			 }//while
-		    return false;
+			View vista = (View) f;
+			IProjectView model = vista.getModel();
+			FLayers layers = model.getMapContext().getLayers();
+			SingleLayerIterator lyrIterator = new SingleLayerIterator(layers);
+			while (lyrIterator.hasNext()) {
+				FLayer lyr = lyrIterator.next();
+				if (lyr instanceof FLyrVect) {
+					if (!(lyr.getParentLayer() instanceof Topology))
+						return true;
+				}// if
+			}// while
+			return false;
 		}
 		return false;
 	}

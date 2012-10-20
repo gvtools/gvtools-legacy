@@ -50,32 +50,32 @@ import javax.swing.table.TableCellEditor;
 
 import com.iver.cit.gvsig.fmap.rendering.EditionManagerLegend;
 
-
-
 /**
- * Cell Editor de iconos. Controla los eventos de edición que se realicen
- * sobre la columna de iconos.
- *
+ * Cell Editor de iconos. Controla los eventos de edición que se realicen sobre
+ * la columna de iconos.
+ * 
  * @author Vicente Caballero Navarro
  */
-public class DisabledCellEditor extends IconOptionCellEditor implements TableCellEditor {
-	public DisabledCellEditor(EditionManagerLegend el,JTable tab,ImageIcon sel, ImageIcon notSel) {
-		super(el,tab,sel,notSel);
-		addMouseListener(new MouseListener(){
+public class DisabledCellEditor extends IconOptionCellEditor implements
+		TableCellEditor {
+	public DisabledCellEditor(EditionManagerLegend el, JTable tab,
+			ImageIcon sel, ImageIcon notSel) {
+		super(el, tab, sel, notSel);
+		addMouseListener(new MouseListener() {
 
 			public void mouseClicked(MouseEvent e) {
-//				if (e.getClickCount()==2){
-					int index=table.getSelectedRow();
-					if (eml.isDisable(index)) {
-						setIcon(getNotSel());
-						eml.setDisable(index,false);
+				// if (e.getClickCount()==2){
+				int index = table.getSelectedRow();
+				if (eml.isDisable(index)) {
+					setIcon(getNotSel());
+					eml.setDisable(index, false);
 
-					}else {
-						eml.setDisable(index,true);
-						setIcon(getSel());
-					}
-					stopCellEditing();
-//				}
+				} else {
+					eml.setDisable(index, true);
+					setIcon(getSel());
+				}
+				stopCellEditing();
+				// }
 				table.repaint();
 			}
 
@@ -94,16 +94,16 @@ public class DisabledCellEditor extends IconOptionCellEditor implements TableCel
 		});
 	}
 
-	//Implement the one method defined by TableCellEditor.
+	// Implement the one method defined by TableCellEditor.
 	public Component getTableCellEditorComponent(JTable table, Object value,
-		boolean isSelected, int row, int column) {
-//		if (table.getSelectedRow()==row)
-//		setSelected(true);
-//	else
+			boolean isSelected, int row, int column) {
+		// if (table.getSelectedRow()==row)
+		// setSelected(true);
+		// else
 		setSelected(isSelected);
 		if (eml.isDisable(row)) {
 			setIcon(getSel());
-		}else {
+		} else {
 			setIcon(getNotSel());
 		}
 		return this;

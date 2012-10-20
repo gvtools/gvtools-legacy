@@ -27,26 +27,28 @@ import org.gvsig.raster.grid.GridInterpolated;
  * su asignación y recuperación.
  * 
  * 31/01/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class GeorefOptions {
-	//	Opciones
-	private int                           algorithm                = Georeferencing.AFFINE;
-	private int                           degree                   = Georeferencing.DEFAULT_DEGREE;
-	private Color                         backgroundColor          = Color.BLACK;
-	private Color                         textColor                = Color.RED;
-	private boolean                       showNumber               = true;
-	private boolean                       addErrorsCSV             = false;
-	private boolean                       centerView               = false;
-	private double                        threshold                = 2.0;	
-	private int                           interpolationMethod      = GridInterpolated.INTERPOLATION_NearestNeighbour;
-	private String                        outFile                  = null;
-	private int                           type                     = Georeferencing.WITH_MAP;
-	private double                        xCellSize                = 0;
-	private double                        yCellSize                = 0;
-	
+	// Opciones
+	private int algorithm = Georeferencing.AFFINE;
+	private int degree = Georeferencing.DEFAULT_DEGREE;
+	private Color backgroundColor = Color.BLACK;
+	private Color textColor = Color.RED;
+	private boolean showNumber = true;
+	private boolean addErrorsCSV = false;
+	private boolean centerView = false;
+	private double threshold = 2.0;
+	private int interpolationMethod = GridInterpolated.INTERPOLATION_NearestNeighbour;
+	private String outFile = null;
+	private int type = Georeferencing.WITH_MAP;
+	private double xCellSize = 0;
+	private double yCellSize = 0;
+
 	/**
 	 * Obtiene el grado del polinómio
+	 * 
 	 * @return entero con el valor que representa el grado del polinómio
 	 */
 	public int getDegree() {
@@ -55,7 +57,9 @@ public class GeorefOptions {
 
 	/**
 	 * Asigna el grado del polinómio
-	 * @param entero con el valor que representa el grado del polinómio
+	 * 
+	 * @param entero
+	 *            con el valor que representa el grado del polinómio
 	 */
 	public void setDegree(int optiondegree) {
 		degree = optiondegree;
@@ -63,6 +67,7 @@ public class GeorefOptions {
 
 	/**
 	 * Obtiene el color de los gráficos
+	 * 
 	 * @return Color
 	 */
 	public Color getTextColor() {
@@ -71,15 +76,17 @@ public class GeorefOptions {
 
 	/**
 	 * Asigna el color de los gráficos
+	 * 
 	 * @param optionTextColor
 	 */
 	public void setTextColor(Color optionTextColor) {
 		textColor = optionTextColor;
 	}
-	
+
 	/**
 	 * Obtiene al algoritmo a utilizar (Transformación afín, polinómico, ...)
 	 * Las constantes están definidas en la clase Georreferencing
+	 * 
 	 * @return
 	 */
 	public int getAlgorithm() {
@@ -87,8 +94,9 @@ public class GeorefOptions {
 	}
 
 	/**
-	 * Asigna el algoritmo a utilizar (Transformación afín, polinómico, ...)
-	 * Las constantes están definidas en la clase Georreferencing
+	 * Asigna el algoritmo a utilizar (Transformación afín, polinómico, ...) Las
+	 * constantes están definidas en la clase Georreferencing
+	 * 
 	 * @param
 	 */
 	public void setAlgorithm(int optionAlgorithm) {
@@ -97,6 +105,7 @@ public class GeorefOptions {
 
 	/**
 	 * Obtiene el color de fondo de las vistas
+	 * 
 	 * @return Color
 	 */
 	public Color getBackgroundColor() {
@@ -105,6 +114,7 @@ public class GeorefOptions {
 
 	/**
 	 * Asigna el color de fondo de las vistas
+	 * 
 	 * @param optionBackgroundColor
 	 */
 	public void setBackgroundColor(Color optionBackgroundColor) {
@@ -113,6 +123,7 @@ public class GeorefOptions {
 
 	/**
 	 * Consulta si los errores se escriben en el fichero CSV
+	 * 
 	 * @return true si se escriben en el fichero y false si no se hace
 	 */
 	public boolean isAddErrorsCSV() {
@@ -121,6 +132,7 @@ public class GeorefOptions {
 
 	/**
 	 * Asigna el flag que dice si los errores se escriben en el fichero CSV
+	 * 
 	 * @param true para escribirlos en el fichero y false para no hacerlo
 	 */
 	public void setAddErrorsCSV(boolean addErrorsCSV) {
@@ -128,8 +140,9 @@ public class GeorefOptions {
 	}
 
 	/**
-	 * Consulta si está activo el flag de centrar las vistas automáticamente sobre
-	 * el punto que está seleccionado en la tabla.
+	 * Consulta si está activo el flag de centrar las vistas automáticamente
+	 * sobre el punto que está seleccionado en la tabla.
+	 * 
 	 * @return true para centrar automáticamente y false para no hacerlo
 	 */
 	public boolean isCenterView() {
@@ -137,8 +150,9 @@ public class GeorefOptions {
 	}
 
 	/**
-	 * Asigna el flag que dice si se centran las vistas automáticamente sobre
-	 * el punto que está seleccionado en la tabla.
+	 * Asigna el flag que dice si se centran las vistas automáticamente sobre el
+	 * punto que está seleccionado en la tabla.
+	 * 
 	 * @return true para centrar automáticamente y false para no hacerlo
 	 */
 	public void setCenterView(boolean centerView) {
@@ -146,7 +160,9 @@ public class GeorefOptions {
 	}
 
 	/**
-	 * Consulta el flag que informa si se muestra el número del punto en la vista
+	 * Consulta el flag que informa si se muestra el número del punto en la
+	 * vista
+	 * 
 	 * @return true si se muestra y false si no
 	 */
 	public boolean isShowNumber() {
@@ -155,6 +171,7 @@ public class GeorefOptions {
 
 	/**
 	 * Asigna el flag que dice si se muestra el número del punto en la vista
+	 * 
 	 * @param true para mostrarlo y false para no hacerlo
 	 */
 	public void setShowNumber(boolean showNumber) {
@@ -162,7 +179,9 @@ public class GeorefOptions {
 	}
 
 	/**
-	 * Obtiene el umbral de error a partir del cual se iluminan en rojo en la tabla
+	 * Obtiene el umbral de error a partir del cual se iluminan en rojo en la
+	 * tabla
+	 * 
 	 * @return double con el valor del umbral
 	 */
 	public double getThreshold() {
@@ -170,7 +189,9 @@ public class GeorefOptions {
 	}
 
 	/**
-	 * Asigna el umbral de error a partir del cual se iluminan en rojo en la tabla
+	 * Asigna el umbral de error a partir del cual se iluminan en rojo en la
+	 * tabla
+	 * 
 	 * @param double con el valor del umbral
 	 */
 	public void setThreshold(double threshold) {
@@ -179,6 +200,7 @@ public class GeorefOptions {
 
 	/**
 	 * Obtiene el método de interpolación del método polinomial
+	 * 
 	 * @return Entero contenido como constante en la clas GridInterpolation
 	 */
 	public int getInterpolationMethod() {
@@ -187,15 +209,18 @@ public class GeorefOptions {
 
 	/**
 	 * Asigna el método de interpolación del método polinomial
-	 * @param Entero contenido como constante en la clas GridInterpolation
+	 * 
+	 * @param Entero
+	 *            contenido como constante en la clas GridInterpolation
 	 */
 	public void setInterpolationMethod(int interpolationMethod) {
 		this.interpolationMethod = interpolationMethod;
 	}
-	
+
 	/**
 	 * Obtiene el fichero de salida
-	 * @return 
+	 * 
+	 * @return
 	 */
 	public String getOutFile() {
 		return outFile;
@@ -203,6 +228,7 @@ public class GeorefOptions {
 
 	/**
 	 * Asigna el fichero de salida
+	 * 
 	 * @param outputFile
 	 */
 	public void setOutFile(String outFile) {
@@ -210,8 +236,9 @@ public class GeorefOptions {
 	}
 
 	/**
-	 * Obtiene el tipo de georreferenciación especificado en las constantes de la clase
-	 * georreferencing.
+	 * Obtiene el tipo de georreferenciación especificado en las constantes de
+	 * la clase georreferencing.
+	 * 
 	 * @return
 	 */
 	public int getType() {
@@ -219,17 +246,19 @@ public class GeorefOptions {
 	}
 
 	/**
-	 * Asigna el tipo de georreferenciación especificado en las constantes de la clase
-	 * georreferencing.
+	 * Asigna el tipo de georreferenciación especificado en las constantes de la
+	 * clase georreferencing.
+	 * 
 	 * @param
 	 */
 	public void setType(int type) {
 		this.type = type;
 	}
-	
+
 	/**
 	 * Obtiene el tamaño de celda en X para la georreferenciación con remuestreo
 	 * asignada por el usuario.
+	 * 
 	 * @return
 	 */
 	public double getXCellSize() {
@@ -237,17 +266,19 @@ public class GeorefOptions {
 	}
 
 	/**
-	 * Asigna el tamaño de celda en X para la georreferenciación con remuestreo 
+	 * Asigna el tamaño de celda en X para la georreferenciación con remuestreo
 	 * asignada por el usuario.
+	 * 
 	 * @param
 	 */
 	public void setXCellSize(double cellSize) {
 		this.xCellSize = cellSize;
 	}
-	
+
 	/**
 	 * Obtiene el tamaño de celda en Y para la georreferenciación con remuestreo
 	 * asignada por el usuario.
+	 * 
 	 * @return
 	 */
 	public double getYCellSize() {
@@ -255,12 +286,12 @@ public class GeorefOptions {
 	}
 
 	/**
-	 * Asigna el tamaño de celda en Y para la georreferenciación con remuestreo 
+	 * Asigna el tamaño de celda en Y para la georreferenciación con remuestreo
 	 * asignada por el usuario.
+	 * 
 	 * @param
 	 */
 	public void setYCellSize(double cellSize) {
 		this.yCellSize = cellSize;
 	}
 }
-

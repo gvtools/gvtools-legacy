@@ -57,82 +57,84 @@ import com.iver.cit.gvsig.fmap.core.ShapeFactory;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class GPECurve extends GPEGeometry{
+public class GPECurve extends GPEGeometry {
 	private ArrayList segments = null;
-	
+
 	public GPECurve(String id, IGeometry geometry, String srs) {
-		super(id, geometry, srs);		
+		super(id, geometry, srs);
 		segments = new ArrayList();
 	}
-	
+
 	public GPECurve(String id, String srs) {
-		this(id, null, srs);		
+		this(id, null, srs);
 	}
-	
+
 	/**
-	 * Adds a segment 
+	 * Adds a segment
+	 * 
 	 * @param segment
-	 * The segment to add
+	 *            The segment to add
 	 */
-	public void addSegment(GPEGeometry segment){
+	public void addSegment(GPEGeometry segment) {
 		segments.add(segment);
 	}
-	
+
 	/**
 	 * Gets a segment
+	 * 
 	 * @param i
-	 * The segment position
-	 * @return
-	 * A Segment
+	 *            The segment position
+	 * @return A Segment
 	 */
-	public GPEGeometry getSegmentAt(int i){
-		return (GPEGeometry)segments.get(i);
+	public GPEGeometry getSegmentAt(int i) {
+		return (GPEGeometry) segments.get(i);
 	}
-	
+
 	/**
 	 * @return the number of seg
 	 */
-	public int getSegmentsSize(){
+	public int getSegmentsSize() {
 		return segments.size();
 	}
-	
+
 	/**
 	 * @return the geometry
 	 */
 	public IGeometry getIGeometry() {
 		IGeometry geom = super.getIGeometry();
-		if (geom != null){
+		if (geom != null) {
 			return geom;
 		}
 		GeneralPathX gpx = new GeneralPathX();
 		int zLength = 0;
 		boolean startPoint = true;
-		for (int i=0 ; i<segments.size() ; i++){
-			IGeometry segment = ((GPEGeometry)segments.get(i)).getIGeometry();
-			Handler[] handlers = ((FPolyline3D)segment.getInternalShape()).getSelectHandlers();
+		for (int i = 0; i < segments.size(); i++) {
+			IGeometry segment = ((GPEGeometry) segments.get(i)).getIGeometry();
+			Handler[] handlers = ((FPolyline3D) segment.getInternalShape())
+					.getSelectHandlers();
 			zLength = zLength + handlers.length;
-			for (int j=0 ; j<handlers.length ; j++){
-				if (startPoint){
-					gpx.moveTo(handlers[j].getPoint().getX(),
-							handlers[j].getPoint().getY());
+			for (int j = 0; j < handlers.length; j++) {
+				if (startPoint) {
+					gpx.moveTo(handlers[j].getPoint().getX(), handlers[j]
+							.getPoint().getY());
 					startPoint = false;
-				}else{
-					gpx.lineTo(handlers[j].getPoint().getX(),
-							handlers[j].getPoint().getY());
+				} else {
+					gpx.lineTo(handlers[j].getPoint().getX(), handlers[j]
+							.getPoint().getY());
 				}
 			}
 		}
-		//Copy the z coordinate
+		// Copy the z coordinate
 		double[] z = new double[zLength];
 		int k = 0;
-		for (int i=0 ; i<segments.size() ; i++){
-			IGeometry segment = ((GPEGeometry)segments.get(i)).getIGeometry();
-			double[] zAux = ((FPolyline3D)segment.getInternalShape()).getZs();
+		for (int i = 0; i < segments.size(); i++) {
+			IGeometry segment = ((GPEGeometry) segments.get(i)).getIGeometry();
+			double[] zAux = ((FPolyline3D) segment.getInternalShape()).getZs();
 			System.arraycopy(zAux, 0, z, k, zAux.length);
 			k = k + zAux.length;
 		}
 		geometry = ShapeFactory.createPolyline3D(gpx, z);
 		return geometry;
-	}	
+	}
 
 }

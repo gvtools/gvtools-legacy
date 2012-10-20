@@ -71,37 +71,42 @@ import com.iver.cit.gvsig.gui.styling.EditorTool;
 import com.iver.cit.gvsig.gui.styling.SymbolEditor;
 
 /**
- * PictureMarker allows the user to store and modify the properties that define a
- * <b>picture marker symbol</b>.<p>
+ * PictureMarker allows the user to store and modify the properties that define
+ * a <b>picture marker symbol</b>.
+ * <p>
  * <p>
  * This functionality is carried out thanks to a tab (simple marker)which is
- * included in the panel to edit the properities of a symbol (SymbolEditor)how is
- * explained in AbstractTypeSymbolEditor.
+ * included in the panel to edit the properities of a symbol (SymbolEditor)how
+ * is explained in AbstractTypeSymbolEditor.
  * <p>
  * First of all, in the above mentioned tab the user will have options to change
- * the files from where the pictures for the symbol are taken (one for the symbol
- * when it is not selected in the map and the other when it is done).<p>
+ * the files from where the pictures for the symbol are taken (one for the
+ * symbol when it is not selected in the map and the other when it is done).
+ * <p>
  * <p>
  * Secondly, the user will have options to modify the pictures which had been
- * selected before  (width and offset) .
- *
- *@see AbstractTypeSymbolEditor
- *@author jaume dominguez faus - jaume.dominguez@iver.es
+ * selected before (width and offset) .
+ * 
+ * @see AbstractTypeSymbolEditor
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class PictureMarker extends AbstractTypeSymbolEditor implements
-ActionListener {
+		ActionListener {
 	protected ArrayList<JPanel> tabs = new ArrayList<JPanel>();
 	protected JIncrementalNumberField txtSize;
 	protected JIncrementalNumberField txtX;
 	protected JIncrementalNumberField txtY;
-	//TODO: Comentarizado hasta que mask esté acabado
-//	protected Mask mask;
+	// TODO: Comentarizado hasta que mask esté acabado
+	// protected Mask mask;
 	protected JLabel lblFileName;
 	protected JLabel lblSelFileName;
 	private File picFile;
-	protected JLabel lblSize = new JLabel(PluginServices.getText(this, "width")+":");
-	protected JLabel lblX = new JLabel(PluginServices.getText(this, "x_offset")+":");
-	protected JLabel lblY = new JLabel(PluginServices.getText(this, "y_offset")+":");
+	protected JLabel lblSize = new JLabel(PluginServices.getText(this, "width")
+			+ ":");
+	protected JLabel lblX = new JLabel(PluginServices.getText(this, "x_offset")
+			+ ":");
+	protected JLabel lblY = new JLabel(PluginServices.getText(this, "y_offset")
+			+ ":");
 	private JButton btn;
 	private JButton btnSel;
 
@@ -117,22 +122,23 @@ ActionListener {
 			}
 			FileFilter ff = new FileFilter() {
 				public boolean accept(File f) {
-					if (f.isDirectory()) return true;
+					if (f.isDirectory())
+						return true;
 					String fName = f.getAbsolutePath();
-					if (fName!=null) {
+					if (fName != null) {
 						fName = fName.toLowerCase();
-						return fName.endsWith(".png")
-						|| fName.endsWith(".gif")
-						|| fName.endsWith(".jpg")
-						|| fName.endsWith(".jpeg")
-						|| fName.endsWith(".bmp")
-						|| fName.endsWith(".svg");
+						return fName.endsWith(".png") || fName.endsWith(".gif")
+								|| fName.endsWith(".jpg")
+								|| fName.endsWith(".jpeg")
+								|| fName.endsWith(".bmp")
+								|| fName.endsWith(".svg");
 					}
 					return false;
 				}
 
 				public String getDescription() {
-					return PluginServices.getText(this, "bitmap_and_svg_image_files");
+					return PluginServices.getText(this,
+							"bitmap_and_svg_image_files");
 				}
 			};
 			JUrlFileChooser jfc = new JUrlFileChooser(getName());
@@ -141,38 +147,39 @@ ActionListener {
 			jfc.setSelectedFile(picFile);
 			jfc.setMultiSelectionEnabled(false);
 			int returnVal = jfc.showOpenDialog(PictureMarker.this.owner);
-			if(returnVal == JFileChooser.APPROVE_OPTION) {
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
 
 				String url = jfc.getSelectedURLPath();
-				if (url == null) return;
+				if (url == null)
+					return;
 				targetLbl.setText(url);
 				fireSymbolChangedEvent();
 			}
-//			if(returnVal == JFileChooser.APPROVE_OPTION) {
-//				File myFile = jfc.getSelectedFile();
-//				lastDir = jfc.getCurrentDirectory();
-//				if (myFile != null && myFile.exists()) {
-//					if (isSelection) {
-//						selPicFile = myFile;
-//					} else {
-//						picFile = myFile;
-//					}
-//					try {
-//						targetLbl.setText(myFile.toURL().toString());
-//					} catch (MalformedURLException e1) {
-//						NotificationManager.addError(PluginServices.getText(this, "Error en la creaci?n" +
-//						"de la URL"), e1);
-//					}
-//					fireSymbolChangedEvent();
-//				}
-//			}
+			// if(returnVal == JFileChooser.APPROVE_OPTION) {
+			// File myFile = jfc.getSelectedFile();
+			// lastDir = jfc.getCurrentDirectory();
+			// if (myFile != null && myFile.exists()) {
+			// if (isSelection) {
+			// selPicFile = myFile;
+			// } else {
+			// picFile = myFile;
+			// }
+			// try {
+			// targetLbl.setText(myFile.toURL().toString());
+			// } catch (MalformedURLException e1) {
+			// NotificationManager.addError(PluginServices.getText(this,
+			// "Error en la creaci?n" +
+			// "de la URL"), e1);
+			// }
+			// fireSymbolChangedEvent();
+			// }
+			// }
 
-			btnSel.setEnabled(lblFileName.getText()!="");
+			btnSel.setEnabled(lblFileName.getText() != "");
 
 		}
 
 	};
-
 
 	public PictureMarker(SymbolEditor owner) {
 		super(owner);
@@ -180,20 +187,20 @@ ActionListener {
 	}
 
 	/**
-	 * Initializes the parameters that define a picturmarker.To do it,
-	 * a tab is created inside the SymbolEditor panel with default values
-	 *  for the different attributes of the picture marker.
+	 * Initializes the parameters that define a picturmarker.To do it, a tab is
+	 * created inside the SymbolEditor panel with default values for the
+	 * different attributes of the picture marker.
 	 */
 
 	private void initialize() {
-		JPanel myTab = new JPanel(new FlowLayout(FlowLayout.LEADING, 5,5));
+		JPanel myTab = new JPanel(new FlowLayout(FlowLayout.LEADING, 5, 5));
 		myTab.setName(PluginServices.getText(this, "picture_marker"));
 		GridBagLayoutPanel aux = new GridBagLayoutPanel();
 
 		// picture file label
 		lblFileName = new JLabel();
 		lblFileName.setFont(lblFileName.getFont().deriveFont(Font.BOLD));
-		aux.addComponent(PluginServices.getText(this, "picture_file")+":",
+		aux.addComponent(PluginServices.getText(this, "picture_file") + ":",
 				lblFileName);
 
 		// button browse
@@ -207,8 +214,8 @@ ActionListener {
 		// selection picture file
 		lblSelFileName = new JLabel();
 		lblSelFileName.setFont(lblSelFileName.getFont().deriveFont(Font.BOLD));
-		aux.addComponent(PluginServices.getText(this, "selection_picture_file")+":",
-				lblSelFileName);
+		aux.addComponent(PluginServices.getText(this, "selection_picture_file")
+				+ ":", lblSelFileName);
 
 		// button browse
 		btnSel = new JButton(PluginServices.getText(this, "browse"));
@@ -219,12 +226,12 @@ ActionListener {
 		aux.addComponent("", aux2);
 
 		// picture width
-		txtSize = new JIncrementalNumberField("5", 25, 0, Double.POSITIVE_INFINITY, 0.5);
+		txtSize = new JIncrementalNumberField("5", 25, 0,
+				Double.POSITIVE_INFINITY, 0.5);
 		aux2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		aux2.add(txtSize);
-		aux.addComponent(lblSize, aux2 );
+		aux.addComponent(lblSize, aux2);
 		txtSize.setDouble(5);
-
 
 		// picture xOffset
 		txtX = new JIncrementalNumberField("0", 25);
@@ -232,14 +239,11 @@ ActionListener {
 		aux2.add(txtX);
 		aux.addComponent(lblX, aux2);
 
-
 		// picture width
 		txtY = new JIncrementalNumberField("0", 25);
 		aux2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		aux2.add(txtY);
-		aux.addComponent(lblY,
-				aux2 );
-
+		aux.addComponent(lblY, aux2);
 
 		// initialize defaults
 		txtSize.addActionListener(this);
@@ -250,37 +254,39 @@ ActionListener {
 		myTab.add(aux);
 		tabs.add(myTab);
 
-//		mask = new Mask(this);
-//		tabs.add(mask);
+		// mask = new Mask(this);
+		// tabs.add(mask);
 	}
 
 	public ISymbol getLayer() {
 		try {
 			PictureMarkerSymbol layer = null;
 
-			if( lblFileName.getText().equals(""))
-				layer=null;
+			if (lblFileName.getText().equals(""))
+				layer = null;
 
 			else {
-				if (lblSelFileName.getText().equals("")){
-					layer =  new PictureMarkerSymbol(new URL(lblFileName.getText()),null);
-				}else {
-					layer = new PictureMarkerSymbol(new URL(lblFileName.getText()),new URL(lblSelFileName.getText()));
+				if (lblSelFileName.getText().equals("")) {
+					layer = new PictureMarkerSymbol(new URL(
+							lblFileName.getText()), null);
+				} else {
+					layer = new PictureMarkerSymbol(new URL(
+							lblFileName.getText()), new URL(
+							lblSelFileName.getText()));
 				}
 				layer.setIsShapeVisible(true);
 				layer.setSize(txtSize.getDouble());
-				layer.setOffset(new Point2D.Double(
-					txtX.getDouble(),
-					txtY.getDouble()));
-//				layer.setMask(mask.getMask());
+				layer.setOffset(new Point2D.Double(txtX.getDouble(), txtY
+						.getDouble()));
+				// layer.setMask(mask.getMask());
 			}
 
 			return layer;
 		} catch (IOException e) {
-			return SymbologyFactory.getWarningSymbol
-				(PluginServices.getText(this, "failed_acessing_files"), null, SymbolDrawingException.UNSUPPORTED_SET_OF_SETTINGS);
+			return SymbologyFactory.getWarningSymbol(
+					PluginServices.getText(this, "failed_acessing_files"),
+					null, SymbolDrawingException.UNSUPPORTED_SET_OF_SETTINGS);
 		}
-
 
 	}
 
@@ -300,7 +306,8 @@ ActionListener {
 			String fileName = null, selectionFileName = null;
 			if (layer == null) {
 				// initialize defaults
-				System.err.println(getClass().getName()+":: should be unreachable code");
+				System.err.println(getClass().getName()
+						+ ":: should be unreachable code");
 
 				size = 1D;
 				xOffset = 0D;
@@ -316,30 +323,34 @@ ActionListener {
 
 				try {
 					fileName = new URL(sym.getImagePath()).toString();
-					selectionFileName = new URL(sym.getSelImagePath()).toString();
+					selectionFileName = new URL(sym.getSelImagePath())
+							.toString();
 				} catch (MalformedURLException e) {
-					NotificationManager.addError(PluginServices.getText(this, "invalid_url"), e);
+					NotificationManager.addError(
+							PluginServices.getText(this, "invalid_url"), e);
 				}
 			}
 
 			setValues(size, xOffset, yOffset, fileName, selectionFileName);
 		} catch (IndexOutOfBoundsException ioEx) {
-			NotificationManager.addWarning("Symbol layer index out of bounds", ioEx);
+			NotificationManager.addWarning("Symbol layer index out of bounds",
+					ioEx);
 		} catch (ClassCastException ccEx) {
-			NotificationManager.addWarning("Illegal casting from " +
-					layer.getClassName() + " to " + getSymbolClass().
-					getName() + ".", ccEx);
+			NotificationManager.addWarning(
+					"Illegal casting from " + layer.getClassName() + " to "
+							+ getSymbolClass().getName() + ".", ccEx);
 
 		}
 	}
 
-	protected void setValues(double size, double xOffset, double yOffset, String fileName, String selectionFileName) {
+	protected void setValues(double size, double xOffset, double yOffset,
+			String fileName, String selectionFileName) {
 		txtSize.setDouble(size);
 		txtX.setDouble(xOffset);
 		txtY.setDouble(yOffset);
 		lblFileName.setText(fileName);
 		lblSelFileName.setText(selectionFileName);
-		btnSel.setEnabled(lblFileName.getText()!="");
+		btnSel.setEnabled(lblFileName.getText() != "");
 	}
 
 	public Class getSymbolClass() {

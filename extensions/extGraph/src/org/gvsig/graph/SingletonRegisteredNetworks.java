@@ -43,15 +43,14 @@ package org.gvsig.graph;
 import java.util.Hashtable;
 
 /**
- * @author fjp
- * TODO: Esto será necesario si creamos un objeto que 
- * contenga la capa, el grafo y los flags sobre ese grafo.
- * Cada solver, pedirá los flags a este objeto (o creará los
- * suyos propios) y luego resolverá el problema.
+ * @author fjp TODO: Esto será necesario si creamos un objeto que contenga la
+ *         capa, el grafo y los flags sobre ese grafo. Cada solver, pedirá los
+ *         flags a este objeto (o creará los suyos propios) y luego resolverá el
+ *         problema.
  */
 public class SingletonRegisteredNetworks {
 	private static SingletonRegisteredNetworks singleton;
-	
+
 	private Hashtable networks = new Hashtable();
 
 	static SingletonRegisteredNetworks getInstance() {
@@ -60,15 +59,12 @@ public class SingletonRegisteredNetworks {
 		return singleton;
 	}
 
-	
 	private SingletonRegisteredNetworks() {
-		
+
 	}
-	
-//	public void registerNetwork(IGraph graph, FLyrVect lyr) {
-//		
-//	}
-	
+
+	// public void registerNetwork(IGraph graph, FLyrVect lyr) {
+	//
+	// }
+
 }
-
-

@@ -12,7 +12,8 @@ public interface IConnection {
 
 	String getURL() throws DBException;
 
-	void setDataConnection(String connectionStr, String user, String _pw) throws DBException;
+	void setDataConnection(String connectionStr, String user, String _pw)
+			throws DBException;
 
 	String getTypeConnection();
 

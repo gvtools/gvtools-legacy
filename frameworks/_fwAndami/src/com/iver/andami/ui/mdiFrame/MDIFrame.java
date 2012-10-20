@@ -98,14 +98,13 @@ import com.iver.andami.plugins.config.generate.ToolBar;
 import com.iver.andami.ui.mdiManager.MDIManager;
 import com.iver.andami.ui.mdiManager.MDIManagerFactory;
 
-
 /**
  * Main application window.
- *
+ * 
  * @version $Revision: 35160 $
  */
 public class MDIFrame extends JFrame implements ComponentListener,
-ContainerListener, ActionListener, MainFrame {
+		ContainerListener, ActionListener, MainFrame {
 	/** DOCUMENT ME! */
 	private static Logger logger = Logger.getLogger(MDIFrame.class.getName());
 	private MDIManager mdiManager = MDIManagerFactory.createManager();
@@ -125,14 +124,14 @@ ContainerListener, ActionListener, MainFrame {
 	/** Almacena los grupos de selectableTools */
 	private HashMap buttonGroupMap = new HashMap();
 	/**
-	 * Stores the initially selected tools.
-	 * It contains pairs (String groupName, JToolBarToggleButton button)
+	 * Stores the initially selected tools. It contains pairs (String groupName,
+	 * JToolBarToggleButton button)
 	 */
 	private HashMap initialSelectedTools = new HashMap();
 
 	/**
-	 * Stores the actionCommand of the selected tool, for each group.
-	 * It contains pairs (String groupName, JToolBarToggleButton button)
+	 * Stores the actionCommand of the selected tool, for each group. It
+	 * contains pairs (String groupName, JToolBarToggleButton button)
 	 */
 	private HashMap selectedTool = null;
 	// this should be the same value defined at plugin-config.xsd
@@ -150,7 +149,7 @@ ContainerListener, ActionListener, MainFrame {
 	 */
 	private HashMap classLabels = new HashMap();
 
-	//private HashMap classControls = new HashMap();
+	// private HashMap classControls = new HashMap();
 
 	/** ProgressListeners (ver interfaz com.iver.mdiApp.ui.ProgressListener) */
 	private ArrayList progressListeners = new ArrayList();
@@ -174,8 +173,9 @@ ContainerListener, ActionListener, MainFrame {
 
 	/**
 	 * Makes some initialization tasks.
-	 *
-	 * @throws RuntimeException DOCUMENT ME!
+	 * 
+	 * @throws RuntimeException
+	 *             DOCUMENT ME!
 	 */
 	public void init() {
 		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
@@ -183,7 +183,7 @@ ContainerListener, ActionListener, MainFrame {
 			throw new RuntimeException("Not Event Dispatch Thread");
 		}
 
-		//Se a�aden los listeners del JFrame
+		// Se a�aden los listeners del JFrame
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				Launcher.closeApplication();
@@ -192,15 +192,14 @@ ContainerListener, ActionListener, MainFrame {
 		this.addComponentListener(this);
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-		//Se configura la barra de menu
+		// Se configura la barra de menu
 		setJMenuBar(menuBar);
 
-		//Se configura el layout del JFrame principal
+		// Se configura el layout del JFrame principal
 		this.getContentPane().setLayout(new BorderLayout());
 
 		/*
-		 * Se configura y se a�ade el JPanel de las barras de
-		 * herramientas
+		 * Se configura y se a�ade el JPanel de las barras de herramientas
 		 */
 		FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
 		layout.setHgap(0);
@@ -217,9 +216,10 @@ ContainerListener, ActionListener, MainFrame {
 
 		pack();
 
-		// TODO LWS Aqui deber�a cargar los valores salvados de la �ltima ejecuci�n.
+		// TODO LWS Aqui deber�a cargar los valores salvados de la �ltima
+		// ejecuci�n.
 		setSize(700, 580);
-		setLocation(10,10);
+		setLocation(10, 10);
 		setExtendedState(MAXIMIZED_BOTH);
 
 		mdiManager.init(this);
@@ -227,6 +227,7 @@ ContainerListener, ActionListener, MainFrame {
 
 	/*
 	 * (non-javadoc)
+	 * 
 	 * @see java.awt.Frame.setTitle(String title)
 	 */
 	public void setTitle(String title) {
@@ -235,32 +236,40 @@ ContainerListener, ActionListener, MainFrame {
 
 	/**
 	 * A�ade un modo de operaci�n a la caja de herramientas
-	 *
-	 * @param ext Texto del boton, si es null no aparece texto
-	 * @param ext Icono del boton, si es null no aparece icono
-	 * @param ext Extensi�n asociada al control
-	 * @param selectableTool Enable text del control
-	 *
+	 * 
+	 * @param ext
+	 *            Texto del boton, si es null no aparece texto
+	 * @param ext
+	 *            Icono del boton, si es null no aparece icono
+	 * @param ext
+	 *            Extensi�n asociada al control
+	 * @param selectableTool
+	 *            Enable text del control
+	 * 
 	 * @throws ClassNotFoundException
-	 * @throws RuntimeException DOCUMENT ME!
+	 * @throws RuntimeException
+	 *             DOCUMENT ME!
 	 */
 	public void addTool(PluginClassLoader loader, SkinExtensionType ext,
 			ToolBar toolBar, SelectableTool selectableTool)
-	throws ClassNotFoundException {
+			throws ClassNotFoundException {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			throw new RuntimeException("No Event Dispatch Thread");
 		}
 
 		// Para traducir
-		PluginServices ps = PluginServices.getPluginServices(loader.getPluginName());
+		PluginServices ps = PluginServices.getPluginServices(loader
+				.getPluginName());
 
 		JToolBarToggleButton btn;
-		ImageIcon image = PluginServices.getIconTheme().get(selectableTool.getIcon());
+		ImageIcon image = PluginServices.getIconTheme().get(
+				selectableTool.getIcon());
 
 		if (image != null) {
 			btn = new JToolBarToggleButton(selectableTool.getText(), image);
 		} else {
-			logger.error(PluginServices.getText(this, "Unable_to_find_icon") +": "+selectableTool.getIcon());
+			logger.error(PluginServices.getText(this, "Unable_to_find_icon")
+					+ ": " + selectableTool.getIcon());
 			btn = new JToolBarToggleButton(selectableTool.getText(),
 					PluginServices.getIconTheme().get(noIcon));
 		}
@@ -290,8 +299,7 @@ ContainerListener, ActionListener, MainFrame {
 		ButtonGroup group;
 		if (buttonGroupMap.containsKey(selectableTool.getGroup())) {
 			group = (ButtonGroup) buttonGroupMap.get(selectableTool.getGroup());
-		}
-		else {
+		} else {
 			group = new ButtonGroup();
 			buttonGroupMap.put(selectableTool.getGroup(), group);
 
@@ -301,7 +309,8 @@ ContainerListener, ActionListener, MainFrame {
 
 		if (selectableTool.getIsDefault()) {
 			btn.setSelected(true);
-			initialSelectedTools.put(selectableTool.getGroup(), btn.getActionCommand());
+			initialSelectedTools.put(selectableTool.getGroup(),
+					btn.getActionCommand());
 		}
 
 		controlClass.put(btn, loader.loadClass(ext.getClassName()));
@@ -325,33 +334,42 @@ ContainerListener, ActionListener, MainFrame {
 
 	/**
 	 * A�ade un bot�n a la barra de herramientas
-	 *
-	 * @param ext Texto del boton, si es null no aparece texto
-	 * @param ext Extensi�n asociada al control
-	 * @param toolBar Icono del boton, si es null no aparece texto
-	 * @param actionTool Tooltip de la barra de herramientas
-	 *
+	 * 
+	 * @param ext
+	 *            Texto del boton, si es null no aparece texto
+	 * @param ext
+	 *            Extensi�n asociada al control
+	 * @param toolBar
+	 *            Icono del boton, si es null no aparece texto
+	 * @param actionTool
+	 *            Tooltip de la barra de herramientas
+	 * 
 	 * @throws ClassNotFoundException
-	 * @throws RuntimeException DOCUMENT ME!
+	 * @throws RuntimeException
+	 *             DOCUMENT ME!
 	 */
 	public void addTool(PluginClassLoader loader, SkinExtensionType ext,
-			ToolBar toolBar, ActionTool actionTool) throws ClassNotFoundException {
+			ToolBar toolBar, ActionTool actionTool)
+			throws ClassNotFoundException {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			throw new RuntimeException("No Event Dispatch Thread");
 		}
 
 		// Para traducir los textos que vengan
-		PluginServices ps = PluginServices.getPluginServices(loader.getPluginName());
+		PluginServices ps = PluginServices.getPluginServices(loader
+				.getPluginName());
 
 		JToolBarButton btn;
-		ImageIcon image = PluginServices.getIconTheme().get(actionTool.getIcon(),ps.getClassLoader());
+		ImageIcon image = PluginServices.getIconTheme().get(
+				actionTool.getIcon(), ps.getClassLoader());
 
 		if (image != null) {
 			btn = new JToolBarButton(actionTool.getText(), image);
 		} else {
-			logger.error(PluginServices.getText(this, "Unable_to_find_icon") +": "+actionTool.getIcon());
-			btn = new JToolBarButton(actionTool.getText(),
-					PluginServices.getIconTheme().get(noIcon));
+			logger.error(PluginServices.getText(this, "Unable_to_find_icon")
+					+ ": " + actionTool.getIcon());
+			btn = new JToolBarButton(actionTool.getText(), PluginServices
+					.getIconTheme().get(noIcon));
 		}
 
 		btn.setMargin(new Insets(0, 0, 0, 0));
@@ -396,23 +414,25 @@ ContainerListener, ActionListener, MainFrame {
 	}
 
 	/**
-	 * Creates the needed menu structure to add the menu to the bar.
-	 * Returns the father which must hold the menu which was
-	 * provided as parameter.
-	 *
+	 * Creates the needed menu structure to add the menu to the bar. Returns the
+	 * father which must hold the menu which was provided as parameter.
+	 * 
 	 * Crea la estructura de men�s necesaria para a�adir el menu a la barra.
 	 * Devuelve el padre del cual debe colgar el menu que se pasa como
 	 * par�metro.
-	 *
-	 * @param menu The Menu whose support is going to be added
-	 * @param loader The plugin's class loader
-	 *
+	 * 
+	 * @param menu
+	 *            The Menu whose support is going to be added
+	 * @param loader
+	 *            The plugin's class loader
+	 * 
 	 * @return The proper father for the menu which was provided as parameter
 	 */
 	private JMenu createMenuAncestors(Menu menu, PluginClassLoader loader) {
 		MenuElement menuPadre = null;
 
-		PluginServices ps = PluginServices.getPluginServices(loader.getPluginName());
+		PluginServices ps = PluginServices.getPluginServices(loader
+				.getPluginName());
 
 		String[] menues = menu.getText().split("/");
 		ArrayList menuList = new ArrayList();
@@ -421,20 +441,19 @@ ContainerListener, ActionListener, MainFrame {
 
 		JMenu padre = null;
 
-		if (menuPadre==null) {
+		if (menuPadre == null) {
 			padre = new JMenu(ps.getText(menues[0]));
 			padre.setName(menues[0]);
 			menuBar.add(padre);
-		}
-		else if (menuPadre instanceof JMenu) {
+		} else if (menuPadre instanceof JMenu) {
 			padre = (JMenu) menuPadre;
-		}
-		else {
-			logger.error(ps.getText("error_creating_menu_Ancestor_does_not_exist"));
+		} else {
+			logger.error(ps
+					.getText("error_creating_menu_Ancestor_does_not_exist"));
 			return null;
 		}
 
-		//Se crea el resto de menus
+		// Se crea el resto de menus
 		ArrayList temp = new ArrayList();
 
 		for (int i = 1; i < (menues.length - 1); i++) {
@@ -447,18 +466,22 @@ ContainerListener, ActionListener, MainFrame {
 	}
 
 	/**
-	 * A�ade la informaci�n del menu al framework. Debido a que los men�es se
-	 * pueden introducir en un orden determinado por el usuario, pero los
+	 * A�ade la informaci�n del menu al framework. Debido a que los men�es
+	 * se pueden introducir en un orden determinado por el usuario, pero los
 	 * plugins se instalan en un orden arbitrario, primero se almacena la
 	 * informaci�n de todos los menus para luego ordenarlos y posteriormente
 	 * a�adirlos al interfaz
-	 *
-	 * @param loader Posicion del menu. Se ordena por este campo
-	 * @param ext Array con los nombres de los padres del menu
-	 * @param menu Texto del menu
-	 *
+	 * 
+	 * @param loader
+	 *            Posicion del menu. Se ordena por este campo
+	 * @param ext
+	 *            Array con los nombres de los padres del menu
+	 * @param menu
+	 *            Texto del menu
+	 * 
 	 * @throws ClassNotFoundException
-	 * @throws RuntimeException DOCUMENT ME!
+	 * @throws RuntimeException
+	 *             DOCUMENT ME!
 	 */
 	public void addMenu(PluginClassLoader loader, SkinExtensionType ext,
 			Menu menu) throws ClassNotFoundException {
@@ -468,17 +491,14 @@ ContainerListener, ActionListener, MainFrame {
 
 		JMenu menuPadre = createMenuAncestors(menu, loader);
 
-		//Se registra y a�ade el menu
-		/* String[] aux = menu.getText().split("/");
-
-        if (aux.length == 2)
-            if (aux[1].equals("----"))
-            {
-                menuPadre.addSeparator();
-                return;
-            } */
-		if (menu.getIs_separator())
-		{
+		// Se registra y a�ade el menu
+		/*
+		 * String[] aux = menu.getText().split("/");
+		 * 
+		 * if (aux.length == 2) if (aux[1].equals("----")) {
+		 * menuPadre.addSeparator(); return; }
+		 */
+		if (menu.getIs_separator()) {
 			menuPadre.addSeparator();
 			return;
 		}
@@ -490,92 +510,109 @@ ContainerListener, ActionListener, MainFrame {
 		controlClass.put(nuevoMenu, loader.loadClass(ext.getClassName()));
 	}
 
-
 	/**
-	 * Dado un array de nombres de menu, encuentra el  men�
-	 *
-	 * @param nombres DOCUMENT ME!
-	 * @param padre DOCUMENT ME!
-	 *
+	 * Dado un array de nombres de menu, encuentra el men�
+	 * 
+	 * @param nombres
+	 *            DOCUMENT ME!
+	 * @param padre
+	 *            DOCUMENT ME!
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	private javax.swing.JMenuItem getMenu(ArrayList nombres, MenuElement parent) {
 		if (parent instanceof javax.swing.JMenu) {
 			javax.swing.JMenu parentItem = (javax.swing.JMenu) parent;
 
-			for (int i=0; i<parentItem.getMenuComponentCount(); i++) {
-				if (parentItem.getMenuComponent(i).getName()!=null // not a JToolBar.Separator
-						&& parentItem.getMenuComponent(i).getName().compareTo((String)nombres.get(0)) == 0) {
+			for (int i = 0; i < parentItem.getMenuComponentCount(); i++) {
+				if (parentItem.getMenuComponent(i).getName() != null // not a
+																		// JToolBar.Separator
+						&& parentItem.getMenuComponent(i).getName()
+								.compareTo((String) nombres.get(0)) == 0) {
 					nombres.remove(0);
 					if (nombres.isEmpty()) {
 						if (parentItem.getMenuComponent(i) instanceof javax.swing.JMenuItem) {
-							return (javax.swing.JMenuItem) parentItem.getMenuComponent(i);
-						}
-						else {
-							logger.error(PluginServices.getText(this, "Menu_type_not_supported_")+" "+parentItem.getMenuComponent(i).getClass().getName());
+							return (javax.swing.JMenuItem) parentItem
+									.getMenuComponent(i);
+						} else {
+							logger.error(PluginServices.getText(this,
+									"Menu_type_not_supported_")
+									+ " "
+									+ parentItem.getMenuComponent(i).getClass()
+											.getName());
 							return null;
 						}
-					}
-					else {
-						return getMenu(nombres, (MenuElement) parentItem.getMenuComponent(i));
+					} else {
+						return getMenu(nombres,
+								(MenuElement) parentItem.getMenuComponent(i));
 					}
 				}
 			}
-		}
-		else if (parent instanceof JMenuBar) {
+		} else if (parent instanceof JMenuBar) {
 			javax.swing.JMenuBar parentItem = (javax.swing.JMenuBar) parent;
 
-			for (int i=0; i<parentItem.getMenuCount(); i++) {
-				if (parentItem.getMenu(i).getName()!=null // not a JToolBar.Separator
-						&& parentItem.getMenu(i).getName().compareTo((String)nombres.get(0)) == 0) {
+			for (int i = 0; i < parentItem.getMenuCount(); i++) {
+				if (parentItem.getMenu(i).getName() != null // not a
+															// JToolBar.Separator
+						&& parentItem.getMenu(i).getName()
+								.compareTo((String) nombres.get(0)) == 0) {
 					nombres.remove(0);
 					if (nombres.isEmpty()) {
 						if (parentItem.getMenu(i) instanceof javax.swing.JMenuItem) {
-							return (javax.swing.JMenuItem) parentItem.getMenu(i);
-						}
-						else {
-							logger.error(PluginServices.getText(this, "Menu_type_not_supported_")+" "+parentItem.getMenu(i).getClass().getName());
+							return (javax.swing.JMenuItem) parentItem
+									.getMenu(i);
+						} else {
+							logger.error(PluginServices.getText(this,
+									"Menu_type_not_supported_")
+									+ " "
+									+ parentItem.getMenu(i).getClass()
+											.getName());
 							return null;
 						}
-					}
-					else {
-						return getMenu(nombres, (MenuElement) parentItem.getMenu(i));
+					} else {
+						return getMenu(nombres,
+								(MenuElement) parentItem.getMenu(i));
 					}
 				}
 			}
-		}
-		else {
-			logger.error(PluginServices.getText(this, "Menu_type_not_supported_")+" "+parent.getClass().getName()+" "+parent.toString());
+		} else {
+			logger.error(PluginServices.getText(this,
+					"Menu_type_not_supported_")
+					+ " "
+					+ parent.getClass().getName() + " " + parent.toString());
 		}
 		return null;
 	}
 
 	/**
-	 * Crea la estructura de menus recursivamente. Por ejemplo, si se le pasa
-	 * en el par�metro nombres el array {"Search", "References", "Workspace"}
+	 * Crea la estructura de menus recursivamente. Por ejemplo, si se le pasa en
+	 * el par�metro nombres el array {"Search", "References", "Workspace"}
 	 * crear� un men� Search, un submen� del anterior que se llamar�
 	 * References y debajo de �ste �ltimo otro menu llamado Workspace
-	 *
-	 * @param nombres Array con los nombres de los men�s que se quieren crear
-	 * @param padre Menu padre de los men�s creados. Es �til porque es un
-	 * 		  algoritmo recursivo
-	 *
+	 * 
+	 * @param nombres
+	 *            Array con los nombres de los men�s que se quieren crear
+	 * @param padre
+	 *            Menu padre de los men�s creados. Es �til porque es un
+	 *            algoritmo recursivo
+	 * 
 	 * @return Devuelve el men� creado. Al final de toda la recursividad,
-	 * 		   devolver� el men� de m�s abajo en la jerarqu�a
-	 *
-	 * @throws RuntimeException DOCUMENT ME!
+	 *         devolver� el men� de m�s abajo en la jerarqu�a
+	 * 
+	 * @throws RuntimeException
+	 *             DOCUMENT ME!
 	 */
 	private JMenu createMenus(ArrayList nombres, JMenu padre) {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			throw new RuntimeException("No Event Dispatch Thread");
 		}
 
-		//si no quedan nombres de menu por crear se vuelve: caso base
+		// si no quedan nombres de menu por crear se vuelve: caso base
 		if (nombres.size() == 0) {
 			return padre;
 		}
 
-		//Se busca el menu por si ya existiera para no crearlo otra vez
+		// Se busca el menu por si ya existiera para no crearlo otra vez
 		JMenu buscado = null;
 
 		for (int i = 0; i < padre.getMenuComponentCount(); i++) {
@@ -593,15 +630,16 @@ ContainerListener, ActionListener, MainFrame {
 		}
 
 		if (buscado != null) {
-			//Si lo hemos encontrado creamos el resto
+			// Si lo hemos encontrado creamos el resto
 			nombres.remove(0);
 
 			return createMenus(nombres, buscado);
 		} else {
-			//Si no lo hemos encontrado se crea el menu, se a�ade al padre
-			//y se crea el resto
+			// Si no lo hemos encontrado se crea el menu, se a�ade al padre
+			// y se crea el resto
 			String nombre = (String) nombres.get(0);
-			JMenu menuPadre = new JMenu((String) PluginServices.getText(this, nombre));
+			JMenu menuPadre = new JMenu((String) PluginServices.getText(this,
+					nombre));
 			menuPadre.setName(nombre);
 			padre.add(menuPadre);
 
@@ -612,9 +650,9 @@ ContainerListener, ActionListener, MainFrame {
 	}
 
 	/**
-	 * M�todo invocado en respuesta a ciertos eventos de la interfaz que pueden
-	 * ocultar botones de las barras de herramientas y que redimensiona �sta
-	 * de manera conveniente para que no se oculte ninguno
+	 * M�todo invocado en respuesta a ciertos eventos de la interfaz que
+	 * pueden ocultar botones de las barras de herramientas y que redimensiona
+	 * �sta de manera conveniente para que no se oculte ninguno
 	 */
 	private void ajustarToolBar() {
 		int margen = 8;
@@ -651,7 +689,7 @@ ContainerListener, ActionListener, MainFrame {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param classesExtensions
 	 */
 	public void setClassesExtensions(HashMap classesExtensions) {
@@ -659,35 +697,40 @@ ContainerListener, ActionListener, MainFrame {
 	}
 
 	/**
-	 * M�todo de callback invocado cuando se selecciona un men� o un bot�n de
-	 * la barra de herramientas. Se busca la extensi�n asociada y se ejecuta
-	 *
-	 * @param e Evento producido
+	 * M�todo de callback invocado cuando se selecciona un men� o un bot�n
+	 * de la barra de herramientas. Se busca la extensi�n asociada y se
+	 * ejecuta
+	 * 
+	 * @param e
+	 *            Evento producido
 	 */
 	public void actionPerformed(ActionEvent e) {
 		Object control = e.getSource();
-		com.iver.andami.plugins.IExtension ext = (com.iver.andami.plugins.IExtension) classesExtensions.get((Class) controlClass.get(
-				control));
+		com.iver.andami.plugins.IExtension ext = (com.iver.andami.plugins.IExtension) classesExtensions
+				.get((Class) controlClass.get(control));
 		String actionCommand = e.getActionCommand();
 		try {
-			logger.debug(Messages.getString("Ejecutando comando: ") + actionCommand);
+			logger.debug(Messages.getString("Ejecutando comando: ")
+					+ actionCommand);
 			ext.execute(actionCommand);
 
 			try {
 				JToolBarToggleButton toggle = (JToolBarToggleButton) control;
-				ToggleButtonModel model = (ToggleButtonModel)toggle.getModel();
+				ToggleButtonModel model = (ToggleButtonModel) toggle.getModel();
 				selectedTool.put(model.getGroupName(), actionCommand);
+			} catch (ClassCastException ex) {
+			} catch (NullPointerException ex) {
 			}
-			catch (ClassCastException ex) {}
-			catch (NullPointerException ex) {}
 
 		} catch (RuntimeException t) {
-			if (ext==null) {
-				logger.error(Messages.getString("No_extension_associated_with_this_event_")+ e.getActionCommand());
+			if (ext == null) {
+				logger.error(Messages
+						.getString("No_extension_associated_with_this_event_")
+						+ e.getActionCommand());
 			}
 			NotificationManager.addError(
-					Messages.getString("PluginServices.Bug_en_el_codigo") + ": " + t.getMessage(),
-					t);
+					Messages.getString("PluginServices.Bug_en_el_codigo")
+							+ ": " + t.getMessage(), t);
 		}
 
 		enableControls();
@@ -696,10 +739,12 @@ ContainerListener, ActionListener, MainFrame {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param name DOCUMENT ME!
-	 * @param loader DOCUMENT ME!
-	 *
+	 * 
+	 * @param name
+	 *            DOCUMENT ME!
+	 * @param loader
+	 *            DOCUMENT ME!
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	private String getName(String name, PluginClassLoader loader) {
@@ -712,11 +757,14 @@ ContainerListener, ActionListener, MainFrame {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param loader DOCUMENT ME!
-	 * @param menu DOCUMENT ME!
-	 *
-	 * @throws RuntimeException DOCUMENT ME!
+	 * 
+	 * @param loader
+	 *            DOCUMENT ME!
+	 * @param menu
+	 *            DOCUMENT ME!
+	 * 
+	 * @throws RuntimeException
+	 *             DOCUMENT ME!
 	 */
 	public void addPopupMenu(PluginClassLoader loader, PopupMenu menu) {
 		if (!SwingUtilities.isEventDispatchThread()) {
@@ -725,7 +773,7 @@ ContainerListener, ActionListener, MainFrame {
 
 		String name = getName(menu.getName(), loader);
 
-		//Se crea el control popupmenu
+		// Se crea el control popupmenu
 		JPopUpMenu popupMenu = (JPopUpMenu) popupMap.get(name);
 
 		if (popupMenu == null) {
@@ -737,7 +785,7 @@ ContainerListener, ActionListener, MainFrame {
 		Menu[] menues = menu.getMenu();
 
 		for (int i = 0; i < menues.length; i++) {
-			//Se registra y a�ade el menu
+			// Se registra y a�ade el menu
 			JMenuItem nuevoMenu = createJMenuItem(loader, menues[i]);
 
 			popupMenu.add(nuevoMenu);
@@ -746,29 +794,36 @@ ContainerListener, ActionListener, MainFrame {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param loader
 	 * @param menu
-	 *
+	 * 
 	 * @return
-	 *
-	 * @throws RuntimeException DOCUMENT ME!
+	 * 
+	 * @throws RuntimeException
+	 *             DOCUMENT ME!
 	 */
 	private JMenuItem createJMenuItem(PluginClassLoader loader, Menu menu) {
 		JMenuItem nuevoMenu = null;
 
-		PluginServices ps = PluginServices.getPluginServices(loader.getPluginName());
+		PluginServices ps = PluginServices.getPluginServices(loader
+				.getPluginName());
 		String text = menu.getText();
 		text = text.substring(text.lastIndexOf('/') + 1);
 		String translatedText = ps.getText(text);
 
 		if (menu.getIcon() != null) {
-			ImageIcon image = PluginServices.getIconTheme().get(menu.getIcon(),ps.getClassLoader());
+			ImageIcon image = PluginServices.getIconTheme().get(menu.getIcon(),
+					ps.getClassLoader());
 			if (image != null) {
 				nuevoMenu = new JMenuItem(translatedText, image);
 			} else {
-				nuevoMenu = new JMenuItem(translatedText, PluginServices.getIconTheme().get(noIcon));
-				logger.error(PluginServices.getText(this, "Unable_to_find_icon") +": "+menu.getIcon());
+				nuevoMenu = new JMenuItem(translatedText, PluginServices
+						.getIconTheme().get(noIcon));
+				logger.error(PluginServices
+						.getText(this, "Unable_to_find_icon")
+						+ ": "
+						+ menu.getIcon());
 			}
 		} else {
 			nuevoMenu = new JMenuItem(translatedText);
@@ -777,22 +832,26 @@ ContainerListener, ActionListener, MainFrame {
 		if (menu.getMnemonic() != null) {
 			if (menu.getMnemonic().length() != 1) {
 				throw new RuntimeException(
-				"Mnemonic must be 1 character length");
+						"Mnemonic must be 1 character length");
 			}
 
-			nuevoMenu.setMnemonic(KeyMapping.getKey(menu.getMnemonic().charAt(0)));
+			nuevoMenu.setMnemonic(KeyMapping.getKey(menu.getMnemonic()
+					.charAt(0)));
 		}
 
 		if (menu.getKey() != null) {
 			String osName = (String) System.getProperty("os.name");
 			boolean MAC_OS_X = osName.toLowerCase().startsWith("mac os x");
 			if (MAC_OS_X) {
-				//en OS X, en vez de hardwiring la ShortcutKey, usamos el default sugerido por el OS
-				nuevoMenu.setAccelerator(KeyStroke.getKeyStroke(KeyMapping.getKey(
-						menu.getKey().charAt(0)), Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				// en OS X, en vez de hardwiring la ShortcutKey, usamos el
+				// default sugerido por el OS
+				nuevoMenu.setAccelerator(KeyStroke.getKeyStroke(KeyMapping
+						.getKey(menu.getKey().charAt(0)), Toolkit
+						.getDefaultToolkit().getMenuShortcutKeyMask()));
 			} else {
-				nuevoMenu.setAccelerator(KeyStroke.getKeyStroke(KeyMapping.getKey(
-						menu.getKey().charAt(0)), ActionEvent.ALT_MASK));
+				nuevoMenu.setAccelerator(KeyStroke.getKeyStroke(
+						KeyMapping.getKey(menu.getKey().charAt(0)),
+						ActionEvent.ALT_MASK));
 			}
 		}
 
@@ -814,11 +873,15 @@ ContainerListener, ActionListener, MainFrame {
 
 	/**
 	 * Muestra u oculta el menu de nombre 'name'
-	 *
-	 * @param name Nombre del menu que se quiere mostrar
-	 * @param x Evento de raton
-	 * @param y DOCUMENT ME!
-	 * @param c DOCUMENT ME!
+	 * 
+	 * @param name
+	 *            Nombre del menu que se quiere mostrar
+	 * @param x
+	 *            Evento de raton
+	 * @param y
+	 *            DOCUMENT ME!
+	 * @param c
+	 *            DOCUMENT ME!
 	 */
 	private void showPopupMenu(String name, int x, int y, Component c) {
 		JPopupMenu menu = (JPopupMenu) popupMap.get(name);
@@ -830,9 +893,11 @@ ContainerListener, ActionListener, MainFrame {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param name DOCUMENT ME!
-	 * @param listener DOCUMENT ME!
+	 * 
+	 * @param name
+	 *            DOCUMENT ME!
+	 * @param listener
+	 *            DOCUMENT ME!
 	 */
 	public void removePopupMenuListener(String name, ActionListener listener) {
 		JPopupMenu menu = (JPopupMenu) popupMap.get(name);
@@ -850,9 +915,10 @@ ContainerListener, ActionListener, MainFrame {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param popupName
-	 * @param c DOCUMENT ME!
+	 * @param c
+	 *            DOCUMENT ME!
 	 * @param listener
 	 * @param loader
 	 */
@@ -890,8 +956,9 @@ ContainerListener, ActionListener, MainFrame {
 	/**
 	 * Loop on the controls to enable/disable and show/hide them, according to
 	 * its associated extension
-	 *
-	 * @throws RuntimeException DOCUMENT ME!
+	 * 
+	 * @throws RuntimeException
+	 *             DOCUMENT ME!
 	 */
 	public void enableControls() {
 		if (!SwingUtilities.isEventDispatchThread()) {
@@ -916,7 +983,8 @@ ContainerListener, ActionListener, MainFrame {
 						if (PluginServices.getExclusiveUIExtension() == null) {
 							b = ext.isVisible();
 						} else {
-							b = PluginServices.getExclusiveUIExtension().isVisible(ext.getExtension());
+							b = PluginServices.getExclusiveUIExtension()
+									.isVisible(ext.getExtension());
 						}
 					}
 					Boolean visible = new Boolean(b);
@@ -925,8 +993,10 @@ ContainerListener, ActionListener, MainFrame {
 					if (visible.booleanValue()) {
 						if (PluginServices.getExclusiveUIExtension() == null) {
 							enabled = new Boolean(ext.isEnabled());
-						}else {
-							enabled = new Boolean(PluginServices.getExclusiveUIExtension().isEnabled(ext.getExtension()));
+						} else {
+							enabled = new Boolean(PluginServices
+									.getExclusiveUIExtension().isEnabled(
+											ext.getExtension()));
 						}
 
 					}
@@ -936,8 +1006,8 @@ ContainerListener, ActionListener, MainFrame {
 				}
 			} catch (Throwable e1) {
 				NotificationManager.addError(
-						Messages.getString("PluginServices.Bug_en_el_codigo") + ": " + e1.getMessage(),
-						e1);
+						Messages.getString("PluginServices.Bug_en_el_codigo")
+								+ ": " + e1.getMessage(), e1);
 				estadoExtensiones.put(ext, Boolean.FALSE);
 			}
 		}
@@ -949,10 +1019,12 @@ ContainerListener, ActionListener, MainFrame {
 			JComponent control = (JComponent) e.next();
 
 			try {
-				com.iver.andami.plugins.IExtension ext = (com.iver.andami.plugins.IExtension) classesExtensions.get((Class) controlClass.get(
-						control));
-				boolean enabled = ((Boolean) estadoExtensiones.get(ext)).booleanValue();
-				boolean visible = ((Boolean) visibilidadExtensiones.get(ext)).booleanValue();
+				com.iver.andami.plugins.IExtension ext = (com.iver.andami.plugins.IExtension) classesExtensions
+						.get((Class) controlClass.get(control));
+				boolean enabled = ((Boolean) estadoExtensiones.get(ext))
+						.booleanValue();
+				boolean visible = ((Boolean) visibilidadExtensiones.get(ext))
+						.booleanValue();
 				control.setEnabled(enabled);
 				control.setVisible(visible);
 			} catch (Exception ex) {
@@ -966,18 +1038,18 @@ ContainerListener, ActionListener, MainFrame {
 			MenuElement menu = menuBar.getMenu(i);
 			hideMenus(menu);
 			if (menu instanceof JMenu) {
-				//hide (ugly) redundant separators and assign keyboard mnemonics
-				Component[] comps = ((JMenu)menu).getMenuComponents();				
+				// hide (ugly) redundant separators and assign keyboard
+				// mnemonics
+				Component[] comps = ((JMenu) menu).getMenuComponents();
 				// mnemonics have to be unique for each top-level menu
 				char mnemonics[] = new char[comps.length];
-				if ( comps.length > 0 ) {
+				if (comps.length > 0) {
 					// Set keyboard mnemonic for this top-level entry
-					String text = ((JMenu)menu).getText();
-					char mnemonic = getMnemonic(text, mnemonics);		        
-					if (' ' != mnemonic)
-					{
-						((JMenu)menu).setMnemonic(mnemonic);
-						mnemonics[0] = mnemonic;                
+					String text = ((JMenu) menu).getText();
+					char mnemonic = getMnemonic(text, mnemonics);
+					if (' ' != mnemonic) {
+						((JMenu) menu).setMnemonic(mnemonic);
+						mnemonics[0] = mnemonic;
 					}
 				}
 				// now go through all entries in this menu, hid
@@ -994,7 +1066,8 @@ ContainerListener, ActionListener, MainFrame {
 			boolean todosOcultos = true;
 
 			for (int i = 0; i < t.getComponentCount(); i++) {
-				if (!(t.getComponent(i) instanceof JSeparator) // separators don't matter
+				if (!(t.getComponent(i) instanceof JSeparator) // separators
+																// don't matter
 						&& t.getComponent(i).isVisible()) {
 					todosOcultos = false;
 				}
@@ -1002,8 +1075,7 @@ ContainerListener, ActionListener, MainFrame {
 
 			if (todosOcultos) {
 				t.setVisible(false);
-			}
-			else {
+			} else {
 				t.setVisible(t.getAndamiVisibility());
 			}
 		}
@@ -1032,22 +1104,23 @@ ContainerListener, ActionListener, MainFrame {
 	/**
 	 * Establece la visibilidad de un menu y todos sus descendientes en la
 	 * jerarquia teniendo en cuenta la visibilidad de todos los submenus.
-	 *
-	 * @param menu Menu que se quiere visualizar
-	 *
+	 * 
+	 * @param menu
+	 *            Menu que se quiere visualizar
+	 * 
 	 * @return Devuelve true si el menu es visible y false en caso contrario
 	 */
 	private boolean hideMenus(MenuElement menu) {
 		MenuElement[] submenus = menu.getSubElements();
 
-		//Si no tiene hijos se devuelve su visibilidad
+		// Si no tiene hijos se devuelve su visibilidad
 		if (submenus.length == 0) {
 			return menu.getComponent().isVisible();
 		}
 
 		/*
-		 * Si tiene hijos se devuelve true si alg�no de ellos es visible,
-		 * pero se itera por todos ellos
+		 * Si tiene hijos se devuelve true si alg�no de ellos es visible, pero
+		 * se itera por todos ellos
 		 */
 		boolean visible = false;
 
@@ -1068,110 +1141,117 @@ ContainerListener, ActionListener, MainFrame {
 		menu.getComponent().setVisible(false);
 
 		return false;
-	}	
+	}
 
 	/**
 	 * 
-	 * Recurse through all menu elements and make sure there are no
-	 * redundant separators.
-	 * This method will make sure that a separator only becomes visible
-	 * if at least one visible non-separator menu entry preceeded it.
-	 *	 
+	 * Recurse through all menu elements and make sure there are no redundant
+	 * separators. This method will make sure that a separator only becomes
+	 * visible if at least one visible non-separator menu entry preceeded it.
+	 * 
 	 **/
-	private void hideSeparatorsAndMakeMnemonics(MenuElement menu, char[] mnemonics ) {
+	private void hideSeparatorsAndMakeMnemonics(MenuElement menu,
+			char[] mnemonics) {
 		// flag that indicates whether a separator is to be displayed or not
 		boolean allowSeparator;
 
 		allowSeparator = false; // separator not allowed as very first menu item
-		Component[] comps = ((JMenu)menu).getMenuComponents();
-		if ( comps.length < 1 ) {
-			//zero-length menu: skip
+		Component[] comps = ((JMenu) menu).getMenuComponents();
+		if (comps.length < 1) {
+			// zero-length menu: skip
 			return;
 		}
 
-		for ( int i=0; i < comps.length; i++ ) {				
-			if ( comps[i] instanceof JSeparator ) {
+		for (int i = 0; i < comps.length; i++) {
+			if (comps[i] instanceof JSeparator) {
 				// got a separator: display only if allowed at this position
-				if ( allowSeparator == true ) {
-					// look at all successive menu entries to make sure that at least one
-					// is visible and not a separator (otherwise, this separator would
-					// be the last visible item in this menu) -- we don't want that
-					comps[i].setVisible( false );
-					for ( int j = i; j < comps.length; j ++ ) {
-						if ( !(comps[j] instanceof JSeparator)) {
-							if ( comps[j].isVisible() ) {
-								comps[i].setVisible( true ); // display separator!
+				if (allowSeparator == true) {
+					// look at all successive menu entries to make sure that at
+					// least one
+					// is visible and not a separator (otherwise, this separator
+					// would
+					// be the last visible item in this menu) -- we don't want
+					// that
+					comps[i].setVisible(false);
+					for (int j = i; j < comps.length; j++) {
+						if (!(comps[j] instanceof JSeparator)) {
+							if (comps[j].isVisible()) {
+								comps[i].setVisible(true); // display separator!
 								break;
 							}
 						}
-					}						
-				} else {
-					comps[i].setVisible( false );
-				}
-				allowSeparator = false; // separator is not allowed right after another separator
-			} else {					
-				if (comps[i] instanceof JMenu) { // got a submenu: recurse through it
-					// get number of submenu components
-					Component[] scomps = ((JMenu)comps[i]).getMenuComponents();					
-					// make a new, fresh array to hold unique mnemonics for this submenu
-					char[] smnemonics = new char[scomps.length];
-					hideSeparatorsAndMakeMnemonics ( ((MenuElement)comps[i]), smnemonics );
-					if ( comps[i].isVisible() ) {
-						allowSeparator = true; // separators are OK after visible submenus
-						// Set keyboard mnemonic for this submenu
-						String text = ((JMenu)comps[i]).getText();
-						char mnemonic = getMnemonic(text, mnemonics);
-						if (' ' != mnemonic)
-						{
-							((JMenu)comps[i]).setMnemonic(mnemonic);
-							mnemonics[i] = mnemonic;                
-						}							
 					}
 				} else {
-					if ( comps[i].isVisible() ) {							
-						if ( comps[i] instanceof JMenuItem) {
+					comps[i].setVisible(false);
+				}
+				allowSeparator = false; // separator is not allowed right after
+										// another separator
+			} else {
+				if (comps[i] instanceof JMenu) { // got a submenu: recurse
+													// through it
+					// get number of submenu components
+					Component[] scomps = ((JMenu) comps[i]).getMenuComponents();
+					// make a new, fresh array to hold unique mnemonics for this
+					// submenu
+					char[] smnemonics = new char[scomps.length];
+					hideSeparatorsAndMakeMnemonics(((MenuElement) comps[i]),
+							smnemonics);
+					if (comps[i].isVisible()) {
+						allowSeparator = true; // separators are OK after
+												// visible submenus
+						// Set keyboard mnemonic for this submenu
+						String text = ((JMenu) comps[i]).getText();
+						char mnemonic = getMnemonic(text, mnemonics);
+						if (' ' != mnemonic) {
+							((JMenu) comps[i]).setMnemonic(mnemonic);
+							mnemonics[i] = mnemonic;
+						}
+					}
+				} else {
+					if (comps[i].isVisible()) {
+						if (comps[i] instanceof JMenuItem) {
 							// Set keyboard mnemonic for this menu item
-							String text = ((JMenuItem)comps[i]).getText();
+							String text = ((JMenuItem) comps[i]).getText();
 							char mnemonic = getMnemonic(text, mnemonics);
-							if (' ' != mnemonic)
-							{
-								((JMenuItem)comps[i]).setMnemonic(mnemonic);
+							if (' ' != mnemonic) {
+								((JMenuItem) comps[i]).setMnemonic(mnemonic);
 
-//								if (((JMenuItem)comps[i]).getAccelerator() == null){								
-//									char[] mnemonicsLower = new char[]{mnemonic};							
-//									((JMenuItem)comps[i]).setAccelerator(KeyStroke.getKeyStroke(KeyMapping.getKey(new String(mnemonicsLower).toLowerCase().charAt(0)), ActionEvent.ALT_MASK));
-//								}
-								mnemonics[i] = mnemonic;                
+								// if (((JMenuItem)comps[i]).getAccelerator() ==
+								// null){
+								// char[] mnemonicsLower = new char[]{mnemonic};
+								// ((JMenuItem)comps[i]).setAccelerator(KeyStroke.getKeyStroke(KeyMapping.getKey(new
+								// String(mnemonicsLower).toLowerCase().charAt(0)),
+								// ActionEvent.ALT_MASK));
+								// }
+								mnemonics[i] = mnemonic;
 							}
 						}
-						allowSeparator = true; // separators are OK after regular, visible entries
+						allowSeparator = true; // separators are OK after
+												// regular, visible entries
 					}
 				}
 			}
-		} 
+		}
 	}
 
-
 	/**
-	 * Helper functios for assigning a unique mnemomic char from
-	 * a pool of unassigned onces, stored in the array "mnemomnics"
+	 * Helper functios for assigning a unique mnemomic char from a pool of
+	 * unassigned onces, stored in the array "mnemomnics"
 	 */
-	private char getMnemonic(String text, char[] mnemonics)
-	{
+	private char getMnemonic(String text, char[] mnemonics) {
 		Vector words = new Vector();
 		StringTokenizer t = new StringTokenizer(text);
 		int maxsize = 0;
 
-		while (t.hasMoreTokens())
-		{
+		while (t.hasMoreTokens()) {
 			String word = (String) t.nextToken();
-			if (word.length() > maxsize) maxsize = word.length();
+			if (word.length() > maxsize)
+				maxsize = word.length();
 			words.addElement(word);
 		}
 		words.trimToSize();
 
-		for (int i = 0; i < maxsize; ++i)
-		{
+		for (int i = 0; i < maxsize; ++i) {
 			char mnemonic = getMnemonic(words, mnemonics, i);
 			if (' ' != mnemonic)
 				return mnemonic;
@@ -1180,28 +1260,24 @@ ContainerListener, ActionListener, MainFrame {
 		return ' ';
 	}
 
-	private char getMnemonic(Vector words, char[] mnemonics, int index)
-	{
+	private char getMnemonic(Vector words, char[] mnemonics, int index) {
 		int numwords = words.size();
 
-		for (int i = 0; i < numwords; ++i)
-		{
+		for (int i = 0; i < numwords; ++i) {
 			String word = (String) words.elementAt(i);
-			if (index >= word.length()) continue;
+			if (index >= word.length())
+				continue;
 
 			char c = word.charAt(index);
 			if (!isMnemonicExists(c, mnemonics)) {
 				/* pick only valid chars */
-				if ( c!=':' && c!='.' && c!=',' && 
-						c!=';' && c!='-' && c!='+' && 
-						c!='/' && c!='\\' && c!='\'' &&
-						c!='\"' && c!=' ' && c!='=' &&
-						c!='(' && c!=')' && c!='[' &&
-						c!=']' && c!='{' && c!='}' &&
-						c!='$' && c!='*' && c!='&' &&
-						c!='%' && c!='!' && c!='?' &&
-						c!='#' && c!='~' && c!='_' ) 
-				{
+				if (c != ':' && c != '.' && c != ',' && c != ';' && c != '-'
+						&& c != '+' && c != '/' && c != '\\' && c != '\''
+						&& c != '\"' && c != ' ' && c != '=' && c != '('
+						&& c != ')' && c != '[' && c != ']' && c != '{'
+						&& c != '}' && c != '$' && c != '*' && c != '&'
+						&& c != '%' && c != '!' && c != '?' && c != '#'
+						&& c != '~' && c != '_') {
 					return c;
 				}
 			}
@@ -1209,13 +1285,13 @@ ContainerListener, ActionListener, MainFrame {
 		return ' ';
 	}
 
-	private boolean isMnemonicExists(char c, char[] mnemonics)
-	{
+	private boolean isMnemonicExists(char c, char[] mnemonics) {
 		int num = mnemonics.length;
 		for (int i = 0; i < num; ++i)
-			if (mnemonics[i] == c) return true;
+			if (mnemonics[i] == c)
+				return true;
 		return false;
-	} 	
+	}
 
 	/**
 	 * Muestra la memoria consumida por el programa
@@ -1223,12 +1299,13 @@ ContainerListener, ActionListener, MainFrame {
 	private void showMemory() {
 		Runtime r = Runtime.getRuntime();
 		long mem = r.totalMemory() - r.freeMemory();
-		logger.debug(PluginServices.getText(this, "memory_usage") + " " + mem/1024 +" KB");
+		logger.debug(PluginServices.getText(this, "memory_usage") + " " + mem
+				/ 1024 + " KB");
 	}
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return
 	 */
 	public MDIManager getMDIManager() {
@@ -1237,29 +1314,28 @@ ContainerListener, ActionListener, MainFrame {
 
 	/**
 	 * Establece el mensaje en la barra de estado asociado a una etiqueta
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public NewStatusBar getStatusBar() {
 		return bEstado;
 	}
+
 	/**
-	 * You can use this function to select the appropiate
-	 * tool inside the toolbars
+	 * You can use this function to select the appropiate tool inside the
+	 * toolbars
 	 */
-	public void setSelectedTool(String actionCommand)
-	{
+	public void setSelectedTool(String actionCommand) {
 		setSelectedTool(defaultGroup, actionCommand);
 	}
 
 	/**
-	 * You can use this function to select the appropiate
-	 * tool inside the toolbars
+	 * You can use this function to select the appropiate tool inside the
+	 * toolbars
 	 */
-	public void setSelectedTool(String groupName, String actionCommand)
-	{
+	public void setSelectedTool(String groupName, String actionCommand) {
 		ButtonGroup group = (ButtonGroup) buttonGroupMap.get(groupName);
-		if (group==null)
+		if (group == null)
 			return;
 
 		Enumeration enumeration = group.getElements();
@@ -1274,13 +1350,13 @@ ContainerListener, ActionListener, MainFrame {
 	}
 
 	/**
-	 * You can use this function to select the appropiate
-	 * tool inside the toolbars
+	 * You can use this function to select the appropiate tool inside the
+	 * toolbars
 	 */
-	public void setSelectedTools(HashMap selectedTools)
-	{
+	public void setSelectedTools(HashMap selectedTools) {
 		selectedTool = selectedTools;
-		if (selectedTools==null) return;
+		if (selectedTools == null)
+			return;
 		Iterator groupNames = selectedTools.keySet().iterator();
 		while (groupNames.hasNext()) {
 			try {
@@ -1288,15 +1364,16 @@ ContainerListener, ActionListener, MainFrame {
 				ButtonGroup group = (ButtonGroup) buttonGroupMap.get(groupName);
 				Enumeration enumeration = group.getElements();
 				String actionCommand = (String) selectedTools.get(groupName);
-				if (actionCommand==null) continue;
+				if (actionCommand == null)
+					continue;
 				while (enumeration.hasMoreElements()) {
-					AbstractButton button = (AbstractButton) enumeration.nextElement();
+					AbstractButton button = (AbstractButton) enumeration
+							.nextElement();
 					if (button.getActionCommand().equals(actionCommand)) {
 						button.setSelected(true);
 					}
 				}
-			}
-			catch (ClassCastException ex) {
+			} catch (ClassCastException ex) {
 				logger.error("selectedTool should only contain pairs (String groupName, JToolBarToggleButton button)");
 			}
 		}
@@ -1304,7 +1381,7 @@ ContainerListener, ActionListener, MainFrame {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param clase
 	 * @param label
 	 */
@@ -1318,13 +1395,13 @@ ContainerListener, ActionListener, MainFrame {
 
 	public void addStatusBarControl(Class extensionClass, IControl control) {
 		control.addActionListener(this);
-		bEstado.addControl(control.getName(), (Component)control);
+		bEstado.addControl(control.getName(), (Component) control);
 		controlClass.put(control, extensionClass);
 	}
 
 	public void removeStatusBarControl(String name) {
 		Component c = bEstado.removeControl(name);
-		if (c!=null)
+		if (c != null)
 			controlClass.remove(c);
 	}
 
@@ -1344,13 +1421,13 @@ ContainerListener, ActionListener, MainFrame {
 
 	/**
 	 * @see com.iver.andami.ui.mdiFrame.MainFrame#addMenu(com.iver.andami.plugins.config.generate.Menu,
-	 * 		java.awt.event.ActionListener, PluginClassLoader)
+	 *      java.awt.event.ActionListener, PluginClassLoader)
 	 */
 	public void addMenu(Menu menu, ActionListener listener,
 			PluginClassLoader loader) {
 		JMenu menuPadre = createMenuAncestors(menu, loader);
 
-		//Se registra y a�ade el menu
+		// Se registra y a�ade el menu
 		JMenuItem nuevoMenu = createJMenuItem(loader, menu);
 		nuevoMenu.addMouseListener(tooltipListener);
 		nuevoMenu.addActionListener(listener);
@@ -1361,7 +1438,7 @@ ContainerListener, ActionListener, MainFrame {
 
 	/**
 	 * @see com.iver.andami.ui.mdiFrame.MainFrame#changeMenuName(java.lang.String[],
-	 * 		String, com.iver.andami.plugins.PluginClassLoader)
+	 *      String, com.iver.andami.plugins.PluginClassLoader)
 	 */
 	public void changeMenuName(String[] menu, String newName,
 			PluginClassLoader loader) {
@@ -1372,10 +1449,9 @@ ContainerListener, ActionListener, MainFrame {
 		}
 
 		javax.swing.JMenuItem newMenu = getMenu(menuList, menuBar);
-		if (newMenu==null) {
+		if (newMenu == null) {
 			throw new NoSuchMenuException(menu[0]);
-		}
-		else {
+		} else {
 			newMenu.setText(PluginServices.getText(this, newName));
 		}
 	}
@@ -1421,7 +1497,7 @@ ContainerListener, ActionListener, MainFrame {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @author $author$
 	 * @version $Revision: 35160 $
 	 */
@@ -1455,9 +1531,11 @@ ContainerListener, ActionListener, MainFrame {
 			bEstado.restaurarTexto();
 		}
 	}
+
 	public String getTitlePrefix() {
 		return titlePrefix;
 	}
+
 	public void setTitlePrefix(String titlePrefix) {
 		this.titlePrefix = titlePrefix;
 	}
@@ -1470,23 +1548,20 @@ ContainerListener, ActionListener, MainFrame {
 		return initialSelectedTools;
 	}
 
-
 	/**
-	 * Get a previously added JComponent by name. For example
-	 * you can use it if you need to obtain a JToolBar to
-	 * add some customized component.
+	 * Get a previously added JComponent by name. For example you can use it if
+	 * you need to obtain a JToolBar to add some customized component.
+	 * 
 	 * @param name
 	 * @return the JComponent or null if none has been found
 	 */
-	public JComponent getComponentByName(String name)
-	{
+	public JComponent getComponentByName(String name) {
 		Iterator e = controlClass.keySet().iterator();
 
 		while (e.hasNext()) {
 			JComponent control = (JComponent) e.next();
 			String nameCtrl = control.getName();
-			if (nameCtrl != null)
-			{
+			if (nameCtrl != null) {
 				if (nameCtrl.compareTo(name) == 0)
 					return control;
 			}
@@ -1505,12 +1580,14 @@ ContainerListener, ActionListener, MainFrame {
 	}
 
 	public SelectableToolBar[] getToolbars() {
-		return (SelectableToolBar[]) toolBarMap.values().toArray(new SelectableToolBar[0]);
+		return (SelectableToolBar[]) toolBarMap.values().toArray(
+				new SelectableToolBar[0]);
 	}
 
 	public boolean getToolbarVisibility(String name) {
-		JComponent component = PluginServices.getMainFrame().getComponentByName(name);
-		if (component!=null && component instanceof SelectableToolBar) {
+		JComponent component = PluginServices.getMainFrame()
+				.getComponentByName(name);
+		if (component != null && component instanceof SelectableToolBar) {
 			SelectableToolBar toolBar = (SelectableToolBar) component;
 			return toolBar.getAndamiVisibility();
 		}
@@ -1518,8 +1595,9 @@ ContainerListener, ActionListener, MainFrame {
 	}
 
 	public boolean setToolbarVisibility(String name, boolean visibility) {
-		JComponent component = PluginServices.getMainFrame().getComponentByName(name);
-		if (component!=null && component instanceof SelectableToolBar) {
+		JComponent component = PluginServices.getMainFrame()
+				.getComponentByName(name);
+		if (component != null && component instanceof SelectableToolBar) {
 			SelectableToolBar toolBar = (SelectableToolBar) component;
 			boolean oldVisibility = toolBar.getAndamiVisibility();
 			toolBar.setAndamiVisibility(visibility);
@@ -1531,7 +1609,7 @@ ContainerListener, ActionListener, MainFrame {
 
 	public javax.swing.JMenuItem getMenuEntry(String[] menuPath) {
 		ArrayList menu = new ArrayList();
-		for (int i=0; i<menuPath.length; i++)
+		for (int i = 0; i < menuPath.length; i++)
 			menu.add(menuPath[i]);
 		return getMenu(menu, menuBar);
 	}

@@ -22,12 +22,12 @@ package org.gvsig.raster.dataset;
  * Excepción producida cuando se intenta acceder a un fichero que no existe.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public class FileNotExistsException extends Exception{
+public class FileNotExistsException extends Exception {
 	private static final long serialVersionUID = -3022090543908771484L;
 
-	public FileNotExistsException(String msg){
+	public FileNotExistsException(String msg) {
 		super(msg);
 	}
 }

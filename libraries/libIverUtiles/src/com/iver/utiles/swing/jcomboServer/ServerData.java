@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,17 +39,18 @@
  *   dac@iver.es
  */
 package com.iver.utiles.swing.jcomboServer;
+
 import java.util.Date;
 import java.util.Properties;
 
 import com.iver.utiles.DateTime;
 
 /**
- * This class represents a data server, that can be a WMS, WFS, Catalog or
- * any kind of server. It contains the server URL and has a couple of 
- * attributes that describe the server type (serverType and serverSubType).
- * It contains the date when the server was created and the date when the server
- * was accessed last time. * 
+ * This class represents a data server, that can be a WMS, WFS, Catalog or any
+ * kind of server. It contains the server URL and has a couple of attributes
+ * that describe the server type (serverType and serverSubType). It contains the
+ * date when the server was created and the date when the server was accessed
+ * last time. *
  * 
  * @author Jorge Piera Llodra (piera_jor@gva.es)
  */
@@ -67,7 +67,7 @@ public class ServerData {
 	 * 
 	 */
 	public static final String SERVER_TYPE_GAZETTEER = "GAZETTEER";
-	
+
 	/**
 	 * 
 	 * 
@@ -168,73 +168,94 @@ public class ServerData {
 	 * 
 	 */
 	private String database = null;
-	
+
 	private Properties properies = new Properties();
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param serverAddress Server address
-	 * @param added When the server was added
-	 * @param lastAccess When the server was used last time
-	 * @param serviceType Service type
-	 * @param serviceSubType Service subtype
+	 * @param serverAddress
+	 *            Server address
+	 * @param added
+	 *            When the server was added
+	 * @param lastAccess
+	 *            When the server was used last time
+	 * @param serviceType
+	 *            Service type
+	 * @param serviceSubType
+	 *            Service subtype
 	 */
-	public  ServerData(String serverAddress, Date added, Date lastAccess, String serviceType, String serviceSubType) {        
+	public ServerData(String serverAddress, Date added, Date lastAccess,
+			String serviceType, String serviceSubType) {
 		this.added = added;
 		this.lastAccess = lastAccess;
 		this.serviceType = serviceType;
 		this.serviceSubType = serviceSubType;
 		this.serverAddress = serverAddress;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param serverAddress Server address
-	 * @param added When the server was added
-	 * @param lastAccess When the server was used last time
-	 * @param serviceType Service type
-	 * @param serviceSubType Service subtype
-	 * @param database Database name
+	 * @param serverAddress
+	 *            Server address
+	 * @param added
+	 *            When the server was added
+	 * @param lastAccess
+	 *            When the server was used last time
+	 * @param serviceType
+	 *            Service type
+	 * @param serviceSubType
+	 *            Service subtype
+	 * @param database
+	 *            Database name
 	 */
-	public  ServerData(String serverAddress, Date added, Date lastAccess, String serviceType, String serviceSubType,String database) {        
+	public ServerData(String serverAddress, Date added, Date lastAccess,
+			String serviceType, String serviceSubType, String database) {
 		this.added = added;
 		this.lastAccess = lastAccess;
 		this.serviceType = serviceType;
 		this.serviceSubType = serviceSubType;
 		this.serverAddress = serverAddress;
 		this.database = database;
-	} 
+	}
 
 	/**
 	 * Constructor for a new Server
 	 * 
 	 * 
-	 * @param serverAddress Server Address
-	 * @param serviceType Server Type
-	 * @param serviceSubType Server Subtype
+	 * @param serverAddress
+	 *            Server Address
+	 * @param serviceType
+	 *            Server Type
+	 * @param serviceSubType
+	 *            Server Subtype
 	 */
-	public  ServerData(String serverAddress, String serviceType, String serviceSubType) {        
+	public ServerData(String serverAddress, String serviceType,
+			String serviceSubType) {
 
 		this.serverAddress = serverAddress;
 		this.added = DateTime.getCurrentDate();
 		this.lastAccess = DateTime.getCurrentDate();
 		this.serviceType = serviceType;
 		this.serviceSubType = serviceSubType;
-	} 
+	}
 
 	/**
 	 * Constructor for a new Server
 	 * 
 	 * 
-	 * @param serverAddress Server Address
-	 * @param serviceType Server Type
-	 * @param serviceSubType Server Subtype
+	 * @param serverAddress
+	 *            Server Address
+	 * @param serviceType
+	 *            Server Type
+	 * @param serviceSubType
+	 *            Server Subtype
 	 */
-	public  ServerData(String serverAddress, String serviceType, String serviceSubType,String database) {        
+	public ServerData(String serverAddress, String serviceType,
+			String serviceSubType, String database) {
 
 		this.serverAddress = serverAddress;
 		this.added = DateTime.getCurrentDate();
@@ -242,16 +263,18 @@ public class ServerData {
 		this.serviceType = serviceType;
 		this.serviceSubType = serviceSubType;
 		this.database = database;
-	} 
-	
+	}
+
 	/**
 	 * Constructor for a new Server
 	 * 
 	 * 
-	 * @param serverAddress Server Address
-	 * @param serviceType Server Type
+	 * @param serverAddress
+	 *            Server Address
+	 * @param serviceType
+	 *            Server Type
 	 */
-	public  ServerData(String serverAddress, String serviceType) {        
+	public ServerData(String serverAddress, String serviceType) {
 
 		this.serverAddress = serverAddress;
 		this.added = DateTime.getCurrentDate();
@@ -259,16 +282,16 @@ public class ServerData {
 		this.serviceType = serviceType;
 		this.serviceSubType = "";
 		this.database = "";
-	} 
+	}
 
 	/**
-	 * This method updates the last access attribute. New value
-	 * is the current time.
+	 * This method updates the last access attribute. New value is the current
+	 * time.
 	 * 
 	 */
-	public void updateLastAccess() {        
+	public void updateLastAccess() {
 		lastAccess = DateTime.getCurrentDate();
-	} 
+	}
 
 	/**
 	 * The server address field have to be showed in the combo
@@ -276,9 +299,9 @@ public class ServerData {
 	 * 
 	 * @return String
 	 */
-	public String toString() {        
+	public String toString() {
 		return getServerAddress();
-	} 
+	}
 
 	/**
 	 * 
@@ -286,19 +309,20 @@ public class ServerData {
 	 * 
 	 * @return Returns the added.
 	 */
-	public Date getAdded() {        
+	public Date getAdded() {
 		return added;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param added The added to set.
+	 * @param added
+	 *            The added to set.
 	 */
-	public void setAdded(Date added) {        
+	public void setAdded(Date added) {
 		this.added = added;
-	} 
+	}
 
 	/**
 	 * 
@@ -306,19 +330,20 @@ public class ServerData {
 	 * 
 	 * @return Returns the lastAccess.
 	 */
-	public Date getLastAccess() {        
+	public Date getLastAccess() {
 		return lastAccess;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param lastAccess The lastAccess to set.
+	 * @param lastAccess
+	 *            The lastAccess to set.
 	 */
-	public void setLastAccess(Date lastAccess) {        
+	public void setLastAccess(Date lastAccess) {
 		this.lastAccess = lastAccess;
-	} 
+	}
 
 	/**
 	 * 
@@ -326,19 +351,20 @@ public class ServerData {
 	 * 
 	 * @return Returns the serverAddress.
 	 */
-	public String getServerAddress() {        
+	public String getServerAddress() {
 		return serverAddress;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param serverAddress The serverAddress to set.
+	 * @param serverAddress
+	 *            The serverAddress to set.
 	 */
-	public void setServerAddress(String serverAddress) {        
+	public void setServerAddress(String serverAddress) {
 		this.serverAddress = serverAddress;
-	} 
+	}
 
 	/**
 	 * 
@@ -346,19 +372,20 @@ public class ServerData {
 	 * 
 	 * @return Returns the serviceSubType.
 	 */
-	public String getServiceSubType() {        
+	public String getServiceSubType() {
 		return serviceSubType;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param serviceSubType The serviceSubType to set.
+	 * @param serviceSubType
+	 *            The serviceSubType to set.
 	 */
-	public void setServiceSubType(String serviceSubType) {        
+	public void setServiceSubType(String serviceSubType) {
 		this.serviceSubType = serviceSubType;
-	} 
+	}
 
 	/**
 	 * 
@@ -366,17 +393,18 @@ public class ServerData {
 	 * 
 	 * @return Returns the serviceType.
 	 */
-	public String getServiceType() {        
+	public String getServiceType() {
 		return serviceType;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param serviceType The serviceType to set.
+	 * @param serviceType
+	 *            The serviceType to set.
 	 */
-	public void setServiceType(String serviceType) {        
+	public void setServiceType(String serviceType) {
 		this.serviceType = serviceType;
 	}
 
@@ -396,18 +424,19 @@ public class ServerData {
 	}
 
 	/**
-	 * @param properies The properies to set.
+	 * @param properies
+	 *            The properies to set.
 	 */
 	public void setProperies(Properties properies) {
 		this.properies = properies;
-	} 
-	
+	}
+
 	/**
 	 * 
 	 * @param propertyName
 	 * @return
 	 */
-	public String getProperty(String propertyName){
-		return (String)getProperies().getProperty(propertyName);
+	public String getProperty(String propertyName) {
+		return (String) getProperies().getProperty(propertyName);
 	}
 }

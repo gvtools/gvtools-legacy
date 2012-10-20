@@ -4,14 +4,15 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
+
 /**
  * @author Vicente Caballero Navarro
  */
-public class ExpansionFileException extends ReadDriverException{
+public class ExpansionFileException extends ReadDriverException {
 
 	private String file = null;
 
-	public ExpansionFileException(String file,Throwable exception) {
+	public ExpansionFileException(String file, Throwable exception) {
 		super(file, exception);
 		this.file = file;
 		init();
@@ -25,7 +26,7 @@ public class ExpansionFileException extends ReadDriverException{
 
 	protected Map values() {
 		Hashtable params = new Hashtable();
-		params.put("file",file);
+		params.put("file", file);
 		return params;
 	}
 }

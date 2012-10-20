@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2006 IVER T.I. and Generalitat Valenciana.
@@ -29,79 +28,95 @@ import org.gvsig.raster.dataset.RasterDataset;
 import org.gvsig.raster.dataset.io.RasterDriverException;
 import org.gvsig.raster.datastruct.Extent;
 
-
-/** 
- * Servidor de datos de caché. Esta clase es la encargada de recuperar las páginas
- * cuando le son solicitadas. Implementará el interfaz ICacheDataSource, aunque esta
- * clase se encargará de servir páginas de solo lectura. Las páginas son servidas directamente desde
- * un RasterDataset y un objeto de este tipo representa a una sola página, por lo que tendrá asociado
- * el extent correspondiente al trozo de página que sirve.
+/**
+ * Servidor de datos de caché. Esta clase es la encargada de recuperar las
+ * páginas cuando le son solicitadas. Implementará el interfaz ICacheDataSource,
+ * aunque esta clase se encargará de servir páginas de solo lectura. Las páginas
+ * son servidas directamente desde un RasterDataset y un objeto de este tipo
+ * representa a una sola página, por lo que tendrá asociado el extent
+ * correspondiente al trozo de página que sirve.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public class CacheDataFromDriverServer implements ICacheDataSource{
-	
-	private RasterDataset			dataset = null;
-	private Extent					pageExtent = null; 
-	
+public class CacheDataFromDriverServer implements ICacheDataSource {
+
+	private RasterDataset dataset = null;
+	private Extent pageExtent = null;
+
 	/**
-	 * Constructor. 
-	 * Crea el identificador para todos los trozos de caché que se guardarán en disco. 
-	 * @param id Identificador de fichero. Si este es null se calcula uno automáticamente
-	 * @param numBand Número de banda
-	 * @param numPag Número de página
-	 * @throws RasterDriverException 
-	 * @throws NotSupportedExtensionException 
+	 * Constructor. Crea el identificador para todos los trozos de caché que se
+	 * guardarán en disco.
+	 * 
+	 * @param id
+	 *            Identificador de fichero. Si este es null se calcula uno
+	 *            automáticamente
+	 * @param numBand
+	 *            Número de banda
+	 * @param numPag
+	 *            Número de página
+	 * @throws RasterDriverException
+	 * @throws NotSupportedExtensionException
 	 */
-	public CacheDataFromDriverServer(RasterDataset dataset, int numPag, Extent extent) {
+	public CacheDataFromDriverServer(RasterDataset dataset, int numPag,
+			Extent extent) {
 		this.dataset = dataset;
 		pageExtent = extent;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.gvsig.fmap.dataaccess.cache.ICacheDataSource#loadPage(int, org.gvsig.fmap.dataaccess.cache.PageBuffer)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.fmap.dataaccess.cache.ICacheDataSource#loadPage(int,
+	 * org.gvsig.fmap.dataaccess.cache.PageBuffer)
 	 */
 	public void loadPage(PageBandBuffer pageBuffer) throws InterruptedException {
-		//Creamos un BandList con todas las bandas del fichero
+		// Creamos un BandList con todas las bandas del fichero
 		BandList bandList = new BandList();
-		for(int i = 0; i < dataset.getBandCount();i++) {
+		for (int i = 0; i < dataset.getBandCount(); i++) {
 			try {
-				Band band = new Band(dataset.getFName(), i, dataset.getDataType()[i]);
+				Band band = new Band(dataset.getFName(), i,
+						dataset.getDataType()[i]);
 				bandList.addBand(band, i);
-			} catch(BandNotFoundInListException ex) {
-				//No añadimos la banda
+			} catch (BandNotFoundInListException ex) {
+				// No añadimos la banda
 			}
 		}
 		try {
-			dataset.getWindowRaster(pageExtent.getMin().getX(), pageExtent.getMax().getY(), pageExtent.width(), pageExtent.height(), bandList, pageBuffer);
+			dataset.getWindowRaster(pageExtent.getMin().getX(), pageExtent
+					.getMax().getY(), pageExtent.width(), pageExtent.height(),
+					bandList, pageBuffer);
 		} catch (RasterDriverException e) {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.gvsig.fmap.dataaccess.cache.ICacheDataSource#savePage(int, org.gvsig.fmap.dataaccess.cache.PageBuffer)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.fmap.dataaccess.cache.ICacheDataSource#savePage(int,
+	 * org.gvsig.fmap.dataaccess.cache.PageBuffer)
 	 */
 	public void savePage(PageBandBuffer pageBuffer) throws IOException {
-		//Read Only		
+		// Read Only
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataaccess.cache.ICacheDataSource#delete()
 	 */
 	public void delete() {
-		//Read Only
+		// Read Only
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataaccess.cache.ICacheDataSource#getPath()
 	 */
 	public String getPath() {
-		if(dataset != null)
+		if (dataset != null)
 			return dataset.getFName();
 		return null;
 	}
 }
-

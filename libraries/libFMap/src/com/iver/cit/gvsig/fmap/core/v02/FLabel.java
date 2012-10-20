@@ -65,11 +65,10 @@ import com.iver.utiles.XMLEntity;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
-
 /**
  * Se utiliza para etiquetar. Las capas vectoriales tienen un arrayList
  * (m_labels) de FLabel, un FLabel por cada registro.
- *
+ * 
  * @author FJP
  */
 public class FLabel implements Cloneable {
@@ -94,15 +93,15 @@ public class FLabel implements Cloneable {
 
 	/**
 	 * Valores posibles para <code>m_Justification</code>: Left/Top = 0
-	 * Center/Top = 6                Right/Top = 12 Left/Center = 1
-	 * Center/Center = 7            Right/Center = 13 Left/Bottom = 2
-	 * Center/Bottom = 8            Right/Bottom = 14
+	 * Center/Top = 6 Right/Top = 12 Left/Center = 1 Center/Center = 7
+	 * Right/Center = 13 Left/Bottom = 2 Center/Bottom = 8 Right/Bottom = 14
 	 */
 	private byte m_Justification = LEFT_BOTTOM; // Por defecto
 	private int m_Style;
 	private Rectangle2D boundBox;
 	private Color color;
-	private static Font font=new Font("Dialog",Font.PLAIN,12);
+	private static Font font = new Font("Dialog", Font.PLAIN, 12);
+
 	/**
 	 * Crea un nuevo FLabel.
 	 */
@@ -111,8 +110,9 @@ public class FLabel implements Cloneable {
 
 	/**
 	 * Crea un nuevo FLabel.
-	 *
-	 * @param str DOCUMENT ME!
+	 * 
+	 * @param str
+	 *            DOCUMENT ME!
 	 */
 	public FLabel(String str) {
 		m_Str = str;
@@ -120,7 +120,7 @@ public class FLabel implements Cloneable {
 
 	/**
 	 * Crea un nuevo FLabel.
-	 *
+	 * 
 	 * @param str
 	 * @param pOrig
 	 * @param heightText
@@ -135,7 +135,7 @@ public class FLabel implements Cloneable {
 
 	/**
 	 * Introduce un nuevo FLabel al ya existente.
-	 *
+	 * 
 	 * @param label
 	 */
 	public void setFLabel(FLabel label) {
@@ -147,18 +147,18 @@ public class FLabel implements Cloneable {
 
 	/**
 	 * Clona el FLabel.
-	 *
+	 * 
 	 * @return Object clonado.
 	 */
 	public Object clone() {
-		FLabel label=new FLabel(m_Str, m_Orig, m_Height, m_rotation);
-		label.boundBox=(Rectangle2D)boundBox.clone();
+		FLabel label = new FLabel(m_Str, m_Orig, m_Height, m_rotation);
+		label.boundBox = (Rectangle2D) boundBox.clone();
 		return label;
 	}
 
 	/**
 	 * Devuelve la altura del Label.
-	 *
+	 * 
 	 * @return Returns the m_Height.
 	 */
 	public double getHeight() {
@@ -167,7 +167,7 @@ public class FLabel implements Cloneable {
 
 	/**
 	 * Devuelve el punto de origen.
-	 *
+	 * 
 	 * @return Returns the m_Orig.
 	 */
 	public Point2D getOrig() {
@@ -176,7 +176,7 @@ public class FLabel implements Cloneable {
 
 	/**
 	 * Devuelve la rotación.
-	 *
+	 * 
 	 * @return Returns the m_rotation.
 	 */
 	public double getRotation() {
@@ -185,7 +185,7 @@ public class FLabel implements Cloneable {
 
 	/**
 	 * Devuelve un String con el texto del Label.
-	 *
+	 * 
 	 * @return Returns the m_Str.
 	 */
 	public String getString() {
@@ -194,8 +194,9 @@ public class FLabel implements Cloneable {
 
 	/**
 	 * Introduce la altura del Label.
-	 *
-	 * @param height The m_Height to set.
+	 * 
+	 * @param height
+	 *            The m_Height to set.
 	 */
 	public void setHeight(double height) {
 		m_Height = height;
@@ -203,8 +204,9 @@ public class FLabel implements Cloneable {
 
 	/**
 	 * Introduce el punto de origen del Label.
-	 *
-	 * @param orig The m_Orig to set.
+	 * 
+	 * @param orig
+	 *            The m_Orig to set.
 	 */
 	public void setOrig(Point2D orig) {
 		m_Orig = orig;
@@ -212,8 +214,9 @@ public class FLabel implements Cloneable {
 
 	/**
 	 * Introduce la rotación a aplicar al Label.
-	 *
-	 * @param m_rotation The m_rotation to set.
+	 * 
+	 * @param m_rotation
+	 *            The m_rotation to set.
 	 */
 	public void setRotation(double m_rotation) {
 		this.m_rotation = Math.toRadians(-m_rotation);
@@ -221,8 +224,9 @@ public class FLabel implements Cloneable {
 
 	/**
 	 * Introduce el texto del Label.
-	 *
-	 * @param str The m_Str to set.
+	 * 
+	 * @param str
+	 *            The m_Str to set.
 	 */
 	public void setString(String str) {
 		m_Str = str;
@@ -230,10 +234,9 @@ public class FLabel implements Cloneable {
 
 	/**
 	 * Valores posibles para <code>m_Justification</code>: Left/Top = 0
-	 * Center/Top = 6                Right/Top = 12 Left/Center = 1
-	 * Center/Center = 7            Right/Center = 13 Left/Bottom = 2
-	 * Center/Bottom = 8            Right/Bottom = 14
-	 *
+	 * Center/Top = 6 Right/Top = 12 Left/Center = 1 Center/Center = 7
+	 * Right/Center = 13 Left/Bottom = 2 Center/Bottom = 8 Right/Bottom = 14
+	 * 
 	 * @return byte.
 	 */
 	public byte getJustification() {
@@ -242,11 +245,11 @@ public class FLabel implements Cloneable {
 
 	/**
 	 * Valores posibles para <code>m_Justification</code>: Left/Top = 0
-	 * Center/Top = 6                Right/Top = 12 Left/Center = 1
-	 * Center/Center = 7            Right/Center = 13 Left/Bottom = 2
-	 * Center/Bottom = 8            Right/Bottom = 14
-	 *
-	 * @param justification byte
+	 * Center/Top = 6 Right/Top = 12 Left/Center = 1 Center/Center = 7
+	 * Right/Center = 13 Left/Bottom = 2 Center/Bottom = 8 Right/Bottom = 14
+	 * 
+	 * @param justification
+	 *            byte
 	 */
 	public void setJustification(byte justification) {
 		m_Justification = justification;
@@ -255,12 +258,12 @@ public class FLabel implements Cloneable {
 	/**
 	 * Devuelve un Objeto XMLEntity con la información los atributos necesarios
 	 * para poder después volver a crear el objeto original.
-	 *
+	 * 
 	 * @return XMLEntity.
 	 */
 	public XMLEntity getXMLEntity() {
 		XMLEntity xml = new XMLEntity();
-		xml.putProperty("className",this.getClass().getName());
+		xml.putProperty("className", this.getClass().getName());
 		xml.setName("flabel");
 		xml.putProperty("m_Height", m_Height);
 		xml.putProperty("m_Justification", (int) m_Justification);
@@ -274,17 +277,18 @@ public class FLabel implements Cloneable {
 
 	/**
 	 * Crea un Objeto de esta clase a partir de la información del XMLEntity.
-	 *
-	 * @param xml XMLEntity
-	 *
+	 * 
+	 * @param xml
+	 *            XMLEntity
+	 * 
 	 * @return Objeto de esta clase.
 	 */
 	public static FLabel createFLabel(XMLEntity xml) {
 		FLabel label = new FLabel();
 		label.setHeight(xml.getDoubleProperty("m_Height"));
 		label.setJustification((byte) xml.getIntProperty("m_Justification"));
-		label.setOrig(new Point2D.Double(xml.getDoubleProperty("m_OrigX"),
-				xml.getDoubleProperty("m_OrigY")));
+		label.setOrig(new Point2D.Double(xml.getDoubleProperty("m_OrigX"), xml
+				.getDoubleProperty("m_OrigY")));
 		label.setString("m_Str");
 
 		return label;
@@ -292,9 +296,10 @@ public class FLabel implements Cloneable {
 
 	/**
 	 * Método estático que crea un FLabel a partir de un FShape.
-	 *
-	 * @param shp FShape.
-	 *
+	 * 
+	 * @param shp
+	 *            FShape.
+	 * 
 	 * @return nuevo FLabel creado.
 	 */
 	public static FLabel createFLabel(FShape shp) {
@@ -304,38 +309,39 @@ public class FLabel implements Cloneable {
 		FLabel label = new FLabel();
 		label.setOrig(pAux);
 		switch (shp.getShapeType()) {
-			case FShape.LINE:
-            case FShape.LINE + FShape.Z:
-            case FShape.LINE | FShape.M: 
-				PathLength pathLen = new PathLength(shp);
-				float midDistance = pathLen.lengthOfPath() / 2;
-				angle = pathLen.angleAtLength(midDistance);
+		case FShape.LINE:
+		case FShape.LINE + FShape.Z:
+		case FShape.LINE | FShape.M:
+			PathLength pathLen = new PathLength(shp);
+			float midDistance = pathLen.lengthOfPath() / 2;
+			angle = pathLen.angleAtLength(midDistance);
 
-				if (angle < 0) {
-					angle = angle + (float) (2 * Math.PI);
-				}
-				if ((angle > (Math.PI / 2)) && (angle < ((3 * Math.PI) / 2))) {
-					angle = angle - (float) Math.PI;
-				}
-				label.setRotation(Math.toDegrees(angle));
-				break;
+			if (angle < 0) {
+				angle = angle + (float) (2 * Math.PI);
+			}
+			if ((angle > (Math.PI / 2)) && (angle < ((3 * Math.PI) / 2))) {
+				angle = angle - (float) Math.PI;
+			}
+			label.setRotation(Math.toDegrees(angle));
+			break;
 		} // switch
 
 		return label;
 	}
+
 	public static Point2D createLabelPoint(Shape shp) {
 		Point2D pAux = null;
-		if (shp instanceof FShape){
-		switch (((FShape)shp).getShapeType()) {
+		if (shp instanceof FShape) {
+			switch (((FShape) shp).getShapeType()) {
 			case FShape.POINT:
-            case FShape.POINT + FShape.Z:
+			case FShape.POINT + FShape.Z:
 				pAux = new Point2D.Double(((FPoint2D) shp).getX(),
 						((FPoint2D) shp).getY());
 				return pAux;
 
 			case FShape.LINE:
-            case FShape.LINE + FShape.Z:
-            case FShape.LINE | FShape.M: 
+			case FShape.LINE + FShape.Z:
+			case FShape.LINE | FShape.M:
 				PathLength pathLen = new PathLength(shp);
 
 				// if (pathLen.lengthOfPath() < width / mT.getScaleX()) return;
@@ -344,9 +350,9 @@ public class FLabel implements Cloneable {
 				return pAux;
 
 			case FShape.POLYGON:
-			case FShape.POLYGON | FShape.M:				
-            case FShape.POLYGON + FShape.Z:
-				Geometry geo = FConverter.java2d_to_jts((FShape)shp);
+			case FShape.POLYGON | FShape.M:
+			case FShape.POLYGON + FShape.Z:
+				Geometry geo = FConverter.java2d_to_jts((FShape) shp);
 
 				if (geo == null) {
 					return null;
@@ -359,34 +365,37 @@ public class FLabel implements Cloneable {
 					return new Point2D.Double(((FPoint2D) pLabel).getX(),
 							((FPoint2D) pLabel).getY());
 				}
-		} // switch
-		}else if (shp instanceof FMultiPoint2D){
-			int num=((FMultiPoint2D)shp).getNumPoints();
-			Rectangle2D r=null;
-			if (num>0){
-				r= ((FMultiPoint2D)shp).getPoint(0).getBounds2D();
-				for (int i=1;i<num;i++){
-					FPoint2D fp=((FMultiPoint2D)shp).getPoint(i);
-					r.add(new Point2D.Double(fp.getX(),fp.getY()));
+			} // switch
+		} else if (shp instanceof FMultiPoint2D) {
+			int num = ((FMultiPoint2D) shp).getNumPoints();
+			Rectangle2D r = null;
+			if (num > 0) {
+				r = ((FMultiPoint2D) shp).getPoint(0).getBounds2D();
+				for (int i = 1; i < num; i++) {
+					FPoint2D fp = ((FMultiPoint2D) shp).getPoint(i);
+					r.add(new Point2D.Double(fp.getX(), fp.getY()));
 				}
 			}
-			if (r!=null)
-			return new Point2D.Double(r.getCenterX(),r.getCenterY());
+			if (r != null)
+				return new Point2D.Double(r.getCenterX(), r.getCenterY());
 		}
-				return null;
+		return null;
 	}
+
 	public void setTypeFont(String t) {
-		font=Font.getFont(t,font);
+		font = Font.getFont(t, font);
 	}
+
 	public int getStyle() {
 		return m_Style;
 	}
 
 	public void setBoundBox(Rectangle2D boundBox) {
-		this.boundBox=boundBox;
+		this.boundBox = boundBox;
 
 	}
-	public Rectangle2D getBoundBox(){
+
+	public Rectangle2D getBoundBox() {
 		return boundBox;
 	}
 
@@ -395,39 +404,43 @@ public class FLabel implements Cloneable {
 	}
 
 	public void setColor(int i) {
-		color=new Color(i);
+		color = new Color(i);
 	}
 
 	public Color getColor() {
 		return color;
 	}
-	/*public Font getFont(AffineTransform at,boolean isInPixels){
-		if (!isInPixels) {
-			float alturaPixels = (float) ((getHeight() * at.getScaleX())*SQUARE);
-			//Font nuevaFuente = font.deriveFont(alturaPixels);//new Font(getTypeFont(),getStyle(),(int)alturaPixels);
-			return font.deriveFont(alturaPixels);
-		}
-		//Font nuevaFuente = font.deriveFont((float)(getHeight()*SQUARE));//new Font(getTypeFont(),getStyle(),(int)(getHeight()*SQUARE));
-		return font;//font.deriveFont((float)(getHeight()*SQUARE));
-	}*/
-	public Font getFont(AffineTransform at,Font font){
-		float alturaPixels = (float) ((getHeight() * at.getScaleX())*SQUARE);
+
+	/*
+	 * public Font getFont(AffineTransform at,boolean isInPixels){ if
+	 * (!isInPixels) { float alturaPixels = (float) ((getHeight() *
+	 * at.getScaleX())*SQUARE); //Font nuevaFuente =
+	 * font.deriveFont(alturaPixels);//new
+	 * Font(getTypeFont(),getStyle(),(int)alturaPixels); return
+	 * font.deriveFont(alturaPixels); } //Font nuevaFuente =
+	 * font.deriveFont((float)(getHeight()*SQUARE));//new
+	 * Font(getTypeFont(),getStyle(),(int)(getHeight()*SQUARE)); return
+	 * font;//font.deriveFont((float)(getHeight()*SQUARE)); }
+	 */
+	public Font getFont(AffineTransform at, Font font) {
+		float alturaPixels = (float) ((getHeight() * at.getScaleX()) * SQUARE);
 		return font.deriveFont(alturaPixels);
 	}
 
 	/**
-	 * Por ahora, para extender el renderizado de etiquetas, habría que
-	 * crear otro FLabel y reimplementar este método para que haga caso
-	 * a otros símbolos. Es decir, NO usar FGraphicUtilities
+	 * Por ahora, para extender el renderizado de etiquetas, habría que crear
+	 * otro FLabel y reimplementar este método para que haga caso a otros
+	 * símbolos. Es decir, NO usar FGraphicUtilities
+	 * 
 	 * @param g
 	 * @param affineTransform
 	 * @param theShape
 	 * @param theSymbol
 	 */
-	public void draw(Graphics2D g, AffineTransform affineTransform, Shape theShape, ISymbol theSymbol) {
-        FGraphicUtilities.DrawLabel(g, affineTransform,
-                (FShape) theShape, (FSymbol) theSymbol, this);
-
+	public void draw(Graphics2D g, AffineTransform affineTransform,
+			Shape theShape, ISymbol theSymbol) {
+		FGraphicUtilities.DrawLabel(g, affineTransform, (FShape) theShape,
+				(FSymbol) theSymbol, this);
 
 	}
 

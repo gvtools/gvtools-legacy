@@ -52,65 +52,71 @@ import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.GeneralPathX;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class PointAdapter extends PolyLineAdapter {
 
 	public void paint(Graphics2D g, AffineTransform at, boolean andLastPoint) {
 	}
-	public void obtainShape(Point2D p) {
-        GeneralPathX elShape = new GeneralPathX(GeneralPathX.WIND_EVEN_ODD, 1);
-        elShape.moveTo(p.getX(), p.getY());
-        setGPX(elShape);
-    }
 
+	public void obtainShape(Point2D p) {
+		GeneralPathX elShape = new GeneralPathX(GeneralPathX.WIND_EVEN_ODD, 1);
+		elShape.moveTo(p.getX(), p.getY());
+		setGPX(elShape);
+	}
 
 	/**
-     * DOCUMENT ME!
-     *
-     * @param g DOCUMENT ME!
-     * @param at DOCUMENT ME!
-     * @param symbol DOCUMENT ME!
-     */
-    public void draw(Graphics2D g, AffineTransform at, ISymbol symbol) {
-    	symbol.draw(g,at,getShape(at), null);
-    }
-    public void print(Graphics2D g, AffineTransform at, ISymbol symbol,PrintRequestAttributeSet properties) {
-        symbol.print(g,at,getShape(at), properties);
-    }
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public FShape getShape(AffineTransform at) {
-    	FPoint2D point=new FPoint2D(getGPX().getCurrentPoint());
-    	point.transform(at);
-        return point;
-    }
-    public Rectangle2D getBounds2D(){
-        Rectangle2D r=getShape(new AffineTransform()).getBounds2D();
-        double w=r.getWidth();
-        double h=r.getHeight();
-        double x=r.getX();
-        double y=r.getY();
-        boolean modified=false;
-        if (r.getWidth()<0.5) {
-         modified=true;
-         w=1;
-         x=x-0.25;
-        }
-        if(r.getHeight()<0.5) {
-         modified=true;
-         h=1;
-//         y=y-0.5;
-        }
-        if (modified)
-         return new Rectangle2D.Double(x,y,w,h);
-        return r;
-   }
+	 * DOCUMENT ME!
+	 * 
+	 * @param g
+	 *            DOCUMENT ME!
+	 * @param at
+	 *            DOCUMENT ME!
+	 * @param symbol
+	 *            DOCUMENT ME!
+	 */
+	public void draw(Graphics2D g, AffineTransform at, ISymbol symbol) {
+		symbol.draw(g, at, getShape(at), null);
+	}
+
+	public void print(Graphics2D g, AffineTransform at, ISymbol symbol,
+			PrintRequestAttributeSet properties) {
+		symbol.print(g, at, getShape(at), properties);
+	}
+
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public FShape getShape(AffineTransform at) {
+		FPoint2D point = new FPoint2D(getGPX().getCurrentPoint());
+		point.transform(at);
+		return point;
+	}
+
+	public Rectangle2D getBounds2D() {
+		Rectangle2D r = getShape(new AffineTransform()).getBounds2D();
+		double w = r.getWidth();
+		double h = r.getHeight();
+		double x = r.getX();
+		double y = r.getY();
+		boolean modified = false;
+		if (r.getWidth() < 0.5) {
+			modified = true;
+			w = 1;
+			x = x - 0.25;
+		}
+		if (r.getHeight() < 0.5) {
+			modified = true;
+			h = 1;
+			// y=y-0.5;
+		}
+		if (modified)
+			return new Rectangle2D.Double(x, y, w, h);
+		return r;
+	}
 }

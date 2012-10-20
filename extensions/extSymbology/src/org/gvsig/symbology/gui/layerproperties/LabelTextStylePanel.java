@@ -50,27 +50,22 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
-import javax.swing.JColorChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-
-import junit.runner.SimpleTestCollector;
 
 import org.gvsig.gui.beans.swing.GridBagLayoutPanel;
 import org.gvsig.gui.beans.swing.JComboBoxFonts;
 import org.gvsig.gui.beans.swing.JIncrementalNumberField;
 
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.fmap.MapContext;
-import com.iver.cit.gvsig.fmap.core.CartographicSupport;
 import com.iver.cit.gvsig.fmap.core.symbols.ITextSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.SimpleTextSymbol;
 import com.iver.cit.gvsig.gui.JComboBoxUnits;
 import com.iver.cit.gvsig.gui.panels.ColorChooserPanel;
 import com.iver.cit.gvsig.gui.styling.JComboBoxUnitsReferenceSystem;
 
-public class LabelTextStylePanel extends JPanel implements ActionListener{
+public class LabelTextStylePanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 8351591938535233138L;
 	private ITextSymbol symbol;
 	private JComboBoxFonts cmbFont;
@@ -86,14 +81,15 @@ public class LabelTextStylePanel extends JPanel implements ActionListener{
 	public LabelTextStylePanel() {
 		setLayout(new BorderLayout(10, 2));
 		JPanel aux = new JPanel();
-		aux.setLayout(new BoxLayout(aux,BoxLayout.Y_AXIS));
+		aux.setLayout(new BoxLayout(aux, BoxLayout.Y_AXIS));
 		JPanel auxA = new JPanel();
-		aux.setBorder(BorderFactory.createTitledBorder(PluginServices.getText(this, "font")));
+		aux.setBorder(BorderFactory.createTitledBorder(PluginServices.getText(
+				this, "font")));
 		auxA.add(new JLabel(PluginServices.getText(this, "font")));
-		auxA.add(cmbFont = new JComboBoxFonts(),BorderLayout.NORTH);
+		auxA.add(cmbFont = new JComboBoxFonts(), BorderLayout.NORTH);
 		JPanel auxB = new JPanel();
 		auxB.add(new JLabel(PluginServices.getText(this, "color")));
-		auxB.add(colorFont = new ColorChooserPanel(true),BorderLayout.SOUTH);
+		auxB.add(colorFont = new ColorChooserPanel(true), BorderLayout.SOUTH);
 		cmbFont.addActionListener(this);
 		colorFont.addActionListener(this);
 		aux.add(auxA);
@@ -101,20 +97,19 @@ public class LabelTextStylePanel extends JPanel implements ActionListener{
 		add(aux, BorderLayout.WEST);
 
 		aux = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 2));
-		aux.setBorder(BorderFactory.createTitledBorder(PluginServices.getText(this, "format")));
-		rdBtnTextHeight = new JRadioButton(PluginServices.getText(this, "fixed_text_size"));
-		rdBtnFitOnTextArea = new JRadioButton(PluginServices.getText(this, "fit_on_text_area"));
+		aux.setBorder(BorderFactory.createTitledBorder(PluginServices.getText(
+				this, "format")));
+		rdBtnTextHeight = new JRadioButton(PluginServices.getText(this,
+				"fixed_text_size"));
+		rdBtnFitOnTextArea = new JRadioButton(PluginServices.getText(this,
+				"fit_on_text_area"));
 		rdBtnFitOnTextArea.addActionListener(this);
 		rdBtnTextHeight.addActionListener(this);
 		ButtonGroup g = new ButtonGroup();
 		g.add(rdBtnFitOnTextArea);
 		g.add(rdBtnTextHeight);
-		incrTextSize = new JIncrementalNumberField(
-				"1",
-				7,
-				0,
-				Double.POSITIVE_INFINITY,
-				1);
+		incrTextSize = new JIncrementalNumberField("1", 7, 0,
+				Double.POSITIVE_INFINITY, 1);
 		incrTextSize.addActionListener(this);
 		units = new JComboBoxUnits();
 		referenceSystem = new JComboBoxUnitsReferenceSystem();
@@ -138,8 +133,6 @@ public class LabelTextStylePanel extends JPanel implements ActionListener{
 		add(aux, BorderLayout.CENTER);
 	}
 
-
-
 	public void setModel(ITextSymbol textSymbol, int unit, int referenceSystem) {
 		incrTextSize.setDouble(textSymbol.getFont().getSize());
 		rdBtnTextHeight.setSelected(!textSymbol.isAutoresizeEnabled());
@@ -161,7 +154,6 @@ public class LabelTextStylePanel extends JPanel implements ActionListener{
 		return symbol;
 	}
 
-
 	public void addActionListener(ActionListener l) {
 		listeners.add(l);
 	}
@@ -175,17 +167,15 @@ public class LabelTextStylePanel extends JPanel implements ActionListener{
 
 			if (symbol != null) {
 				symbol.setAutoresizeEnabled(rdBtnFitOnTextArea.isSelected());
-				symbol.setFont(
-						new Font(
-								(String) cmbFont.getSelectedItem(),
-								Font.PLAIN,
-								(int) incrTextSize.getDouble()));
+				symbol.setFont(new Font((String) cmbFont.getSelectedItem(),
+						Font.PLAIN, (int) incrTextSize.getDouble()));
 				symbol.setTextColor(colorFont.getColor());
 				symbol.setFontSize(incrTextSize.getDouble());
-				if(symbol instanceof SimpleTextSymbol){
+				if (symbol instanceof SimpleTextSymbol) {
 					SimpleTextSymbol myText = (SimpleTextSymbol) symbol;
 					myText.setUnit(units.getSelectedUnitIndex());
-					myText.setReferenceSystem(referenceSystem.getSelectedIndex());
+					myText.setReferenceSystem(referenceSystem
+							.getSelectedIndex());
 				}
 			}
 			for (ActionListener l : listeners) {

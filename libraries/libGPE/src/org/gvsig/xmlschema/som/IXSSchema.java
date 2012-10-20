@@ -84,133 +84,134 @@ import org.w3c.dom.Document;
  *
  */
 /**
- * This interface represents a XML schema. XML Schemas 
- * express shared vocabularies and allow machines to 
- * carry out rules made by people. They provide a means 
- * for defining the structure, content and semantics of 
- * XML documents. 
+ * This interface represents a XML schema. XML Schemas express shared
+ * vocabularies and allow machines to carry out rules made by people. They
+ * provide a means for defining the structure, content and semantics of XML
+ * documents.
+ * 
  * @see http://www.w3.org/XML/Schema
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public interface IXSSchema {
-	
+
 	/**
 	 * @return The schema target namespace.
 	 */
 	public String getTargetNamespace();
-	
+
 	/**
 	 * @return The prefix for the target namespace.
 	 */
 	public String getTargetNamespacePrefix();
-	
+
 	/**
 	 * It retusn a namespace prefix
+	 * 
 	 * @param namespaceURI
-	 * Namespace URI
-	 * @return
-	 * The namespace prefix
+	 *            Namespace URI
+	 * @return The namespace prefix
 	 */
 	public String getNamespacePrefix(String namespaceURI);
-	
+
 	/**
-	 * @return the DOM document that contains the
-	 * schema information. It can be used by others 
-	 * applications to modify the schema
+	 * @return the DOM document that contains the schema information. It can be
+	 *         used by others applications to modify the schema
 	 */
 	public Document getDocument();
-	
+
 	/**
 	 * @return the XML schema elements
 	 * @throws TypeNotFoundException
 	 */
 	public Collection getElementDeclarations();
-	
+
 	/**
 	 * Search a XML schema element by name
+	 * 
 	 * @param targetNamespace
-	 * Namespace to seach the element
+	 *            Namespace to seach the element
 	 * @param elementName
-	 * Element name
-	 * @return
-	 * A XML schema element
+	 *            Element name
+	 * @return A XML schema element
 	 * @throws TypeNotFoundException
 	 */
-	public IXSElementDeclaration getElementDeclarationByName(String targetNamespace, String elementName);
-	
+	public IXSElementDeclaration getElementDeclarationByName(
+			String targetNamespace, String elementName);
+
 	/**
 	 * @return the XML schema type definitions
 	 * @throws TypeNotFoundException
 	 */
 	public Collection getTypeDefinitions();
-	
+
 	/**
 	 * Search a XML schema type definition by name
+	 * 
 	 * @param targetNamespace
-	 * Namespace to seach the element
+	 *            Namespace to seach the element
 	 * @param typeName
-	 * XML schema type name
-	 * @return
-	 * A XML schema type definition
+	 *            XML schema type name
+	 * @return A XML schema type definition
 	 * @throws TypeNotFoundException
 	 */
-	public IXSTypeDefinition getTypeByName(String targetNamespace, String typeName);
-	
+	public IXSTypeDefinition getTypeByName(String targetNamespace,
+			String typeName);
+
 	/**
 	 * It writes the schema to one OutputStream
+	 * 
 	 * @param os
-	 * OutputStream to write the file
+	 *            OutputStream to write the file
 	 * @throws SchemaWrittingException
 	 */
-	public void write(OutputStream os) throws SchemaWrittingException ;
-			
+	public void write(OutputStream os) throws SchemaWrittingException;
+
 	/**
 	 * Add a new XML schema element
+	 * 
 	 * @param name
-	 * Element name
+	 *            Element name
 	 * @param type
-	 * Element type
+	 *            Element type
 	 * @param substitutionGroup
-	 * A top-level element definition.
-	 * @return
-	 * A XML schema element
+	 *            A top-level element definition.
+	 * @return A XML schema element
 	 */
-	public IXSElementDeclaration addElement(String name, String type, String substitutionGroup);
-	
+	public IXSElementDeclaration addElement(String name, String type,
+			String substitutionGroup);
+
 	/**
 	 * Add a new XML schema element
+	 * 
 	 * @param name
-	 * Element name
+	 *            Element name
 	 * @param type
-	 * Element type
-	 * @return
-	 * A XML schema element
+	 *            Element type
+	 * @return A XML schema element
 	 */
 	public IXSElementDeclaration addElement(String name, String type);
-	
+
 	/**
 	 * Add a new XML schema Complex type
+	 * 
 	 * @param name
-	 * Type name
+	 *            Type name
 	 * @param type
-	 * See the IXSComplexType interface for possible values
+	 *            See the IXSComplexType interface for possible values
 	 * @param contentType
-	 * A complex content or a simple content
-	 * See the IXSContentType for possible values
+	 *            A complex content or a simple content See the IXSContentType
+	 *            for possible values
 	 * @param contentTypeRestriction
-	 * A extension or a restriction
-	 * @return
-	 * A xML schema complex type
+	 *            A extension or a restriction
+	 * @return A xML schema complex type
 	 */
 	public IXSComplexTypeDefinition addComplexType(String name, String type,
 			String contentType, String conteTypeRestriction);
-	
+
 	/**
-	 * @return
-	 * Return the mappings for all the schema objects that have
-	 * a class that represents them.
-	 */	
+	 * @return Return the mappings for all the schema objects that have a class
+	 *         that represents them.
+	 */
 	public SchemaObjectsMapping getObjectsMapping();
 
-	
 }

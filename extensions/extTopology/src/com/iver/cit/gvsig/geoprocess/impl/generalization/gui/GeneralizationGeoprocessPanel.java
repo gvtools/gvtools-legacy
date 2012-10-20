@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.impl.generalization.gui;
 
 import java.awt.BorderLayout;
@@ -64,17 +64,17 @@ import com.iver.cit.gvsig.geoprocess.core.fmap.GeoprocessException;
 import com.iver.cit.gvsig.geoprocess.core.gui.AbstractGeoprocessGridbagPanel;
 import com.iver.cit.gvsig.geoprocess.impl.generalization.IGeneralizationGeoprocessUserEntries;
 
-public class GeneralizationGeoprocessPanel extends AbstractGeoprocessGridbagPanel 
- 								implements IGeneralizationGeoprocessUserEntries{
+public class GeneralizationGeoprocessPanel extends
+		AbstractGeoprocessGridbagPanel implements
+		IGeneralizationGeoprocessUserEntries {
 
 	private static final long serialVersionUID = 4103406609252667142L;
 
 	private JRadioButton douglasPeuckerRadioButton;
-	
+
 	private JRadioButton topologyPreservingRadioButton;
-	
+
 	private JTextField distToleranceTextField;
-	
 
 	public GeneralizationGeoprocessPanel(FLayers arg0) {
 		super(arg0, PluginServices.getText(null, "Generalization"));
@@ -82,31 +82,31 @@ public class GeneralizationGeoprocessPanel extends AbstractGeoprocessGridbagPane
 
 	protected void addSpecificDesign() {
 		douglasPeuckerRadioButton = getDouglasPeuckerRadioButton();
-		
+
 		addComponent(douglasPeuckerRadioButton);
-		
+
 		topologyPreservingRadioButton = getTopologyPreservingRadioButton();
 		addComponent(topologyPreservingRadioButton);
-		
+
 		ButtonGroup buttonGroup = new ButtonGroup();
 		buttonGroup.add(douglasPeuckerRadioButton);
 		buttonGroup.add(topologyPreservingRadioButton);
 		douglasPeuckerRadioButton.setSelected(true);
-		
-		
+
 		JPanel aux = new JPanel(new BorderLayout());
-		String text = PluginServices.getText(this,"distTolerance")+":";
+		String text = PluginServices.getText(this, "distTolerance") + ":";
 		distToleranceTextField = getDistToleranceTextField();
-        aux.add(distToleranceTextField, BorderLayout.WEST);
-       
-        addComponent(text, aux, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5) );
-		
+		aux.add(distToleranceTextField, BorderLayout.WEST);
+
+		addComponent(text, aux, GridBagConstraints.HORIZONTAL, new Insets(5, 5,
+				5, 5));
+
 		initSelectedItemsJCheckBox();
 		updateNumSelectedFeaturesLabel();
 	}
 
 	private JTextField getDistToleranceTextField() {
-		if(this.distToleranceTextField == null){
+		if (this.distToleranceTextField == null) {
 			this.distToleranceTextField = new JTextField(15);
 		}
 		return distToleranceTextField;
@@ -114,23 +114,21 @@ public class GeneralizationGeoprocessPanel extends AbstractGeoprocessGridbagPane
 
 	protected void processLayerComboBoxStateChange(ItemEvent arg0) {
 	}
-	
+
 	private JRadioButton getDouglasPeuckerRadioButton() {
 		if (douglasPeuckerRadioButton == null) {
 			douglasPeuckerRadioButton = new JRadioButton();
 			douglasPeuckerRadioButton.setText(PluginServices.getText(this,
-					"Metodo_Douglas_Peucker")
-					+ ":");
+					"Metodo_Douglas_Peucker") + ":");
 		}
 		return douglasPeuckerRadioButton;
 	}
-	
+
 	private JRadioButton getTopologyPreservingRadioButton() {
 		if (topologyPreservingRadioButton == null) {
 			topologyPreservingRadioButton = new JRadioButton();
 			topologyPreservingRadioButton.setText(PluginServices.getText(this,
-					"Metodo_topology_preserving")
-					+ ":");
+					"Metodo_topology_preserving") + ":");
 		}
 		return topologyPreservingRadioButton;
 	}
@@ -157,4 +155,3 @@ public class GeneralizationGeoprocessPanel extends AbstractGeoprocessGridbagPane
 		return isFirstOnlySelected();
 	}
 }
-

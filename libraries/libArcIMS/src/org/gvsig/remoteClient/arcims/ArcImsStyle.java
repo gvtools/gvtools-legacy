@@ -85,247 +85,266 @@
  */
 package org.gvsig.remoteClient.arcims;
 
-import org.gvsig.remoteClient.utils.CapabilitiesTags;
-
-import org.kxml2.io.KXmlParser;
-
-import org.xmlpull.v1.XmlPullParserException;
-
 import java.io.IOException;
 
+import org.gvsig.remoteClient.utils.CapabilitiesTags;
+import org.kxml2.io.KXmlParser;
+import org.xmlpull.v1.XmlPullParserException;
 
 /**
- * <p>Defines a  style. Theme that describes the appeareance of certain layer.</p>
- *
+ * <p>
+ * Defines a style. Theme that describes the appeareance of certain layer.
+ * </p>
+ * 
  */
 public abstract class ArcImsStyle {
-    /**
-     * style name, defined in the ArcIms capabilities
-     */
-    private String name;
+	/**
+	 * style name, defined in the ArcIms capabilities
+	 */
+	private String name;
 
-    /**
-     * style title, defined in the ArcIms capabilities
-     */
-    private String title;
+	/**
+	 * style title, defined in the ArcIms capabilities
+	 */
+	private String title;
 
-    /**
-     * style abstract, defined in the ArcIms capabilities
-     */
-    private String styleAbstract;
-    private LegendURL legendURL;
+	/**
+	 * style abstract, defined in the ArcIms capabilities
+	 */
+	private String styleAbstract;
+	private LegendURL legendURL;
 
-    /**
-     * <p>Parses the STYLE tag in the ArcIms capabilities, filling the ArcImsStyle object
-     * loading the data in memory to be easily accesed</p>
-     *
-     */
-    public abstract void parse(KXmlParser parser)
-        throws IOException, XmlPullParserException;
+	/**
+	 * <p>
+	 * Parses the STYLE tag in the ArcIms capabilities, filling the ArcImsStyle
+	 * object loading the data in memory to be easily accesed
+	 * </p>
+	 * 
+	 */
+	public abstract void parse(KXmlParser parser) throws IOException,
+			XmlPullParserException;
 
-    /**
-     * Parses the legendURL tag.
-     * @param parser
-     * @throws IOException
-     * @throws XmlPullParserException
-     */
-    protected void parseLegendURL(KXmlParser parser)
-        throws IOException, XmlPullParserException {
-        int currentTag;
-        boolean end = false;
+	/**
+	 * Parses the legendURL tag.
+	 * 
+	 * @param parser
+	 * @throws IOException
+	 * @throws XmlPullParserException
+	 */
+	protected void parseLegendURL(KXmlParser parser) throws IOException,
+			XmlPullParserException {
+		int currentTag;
+		boolean end = false;
 
-        parser.require(KXmlParser.START_TAG, null, CapabilitiesTags.LEGENDURL);
-        currentTag = parser.nextTag();
+		parser.require(KXmlParser.START_TAG, null, CapabilitiesTags.LEGENDURL);
+		currentTag = parser.nextTag();
 
-        String value = new String();
-        LegendURL legend = new LegendURL();
+		String value = new String();
+		LegendURL legend = new LegendURL();
 
-        //First of all set whether the layer is Queryable reading the attribute.
-        value = parser.getAttributeValue("", CapabilitiesTags.WIDTH);
+		// First of all set whether the layer is Queryable reading the
+		// attribute.
+		value = parser.getAttributeValue("", CapabilitiesTags.WIDTH);
 
-        if (value != null) {
-            legend.width = Integer.parseInt(value);
-        }
+		if (value != null) {
+			legend.width = Integer.parseInt(value);
+		}
 
-        value = parser.getAttributeValue("", CapabilitiesTags.HEIGHT);
+		value = parser.getAttributeValue("", CapabilitiesTags.HEIGHT);
 
-        if (value != null) {
-            legend.height = Integer.parseInt(value);
-        }
+		if (value != null) {
+			legend.height = Integer.parseInt(value);
+		}
 
-        while (!end) {
-            switch (currentTag) {
-            case KXmlParser.START_TAG:
+		while (!end) {
+			switch (currentTag) {
+			case KXmlParser.START_TAG:
 
-                if (parser.getName().compareTo(CapabilitiesTags.FORMAT) == 0) {
-                    legend.format = parser.nextText();
-                } else if (parser.getName()
-                                     .compareTo(CapabilitiesTags.ONLINERESOURCE) == 0) {
-                    value = parser.getAttributeValue("",
-                            CapabilitiesTags.XLINK_TYPE);
+				if (parser.getName().compareTo(CapabilitiesTags.FORMAT) == 0) {
+					legend.format = parser.nextText();
+				} else if (parser.getName().compareTo(
+						CapabilitiesTags.ONLINERESOURCE) == 0) {
+					value = parser.getAttributeValue("",
+							CapabilitiesTags.XLINK_TYPE);
 
-                    if (value != null) {
-                        legend.onlineResource_type = value;
-                    }
+					if (value != null) {
+						legend.onlineResource_type = value;
+					}
 
-                    value = parser.getAttributeValue("",
-                            CapabilitiesTags.XLINK_HREF);
+					value = parser.getAttributeValue("",
+							CapabilitiesTags.XLINK_HREF);
 
-                    if (value != null) {
-                        legend.onlineResource_href = value;
-                    }
-                }
+					if (value != null) {
+						legend.onlineResource_href = value;
+					}
+				}
 
-                break;
+				break;
 
-            case KXmlParser.END_TAG:
+			case KXmlParser.END_TAG:
 
-                if (parser.getName().compareTo(CapabilitiesTags.LEGENDURL) == 0) {
-                    end = true;
-                }
+				if (parser.getName().compareTo(CapabilitiesTags.LEGENDURL) == 0) {
+					end = true;
+				}
 
-                break;
+				break;
 
-            case KXmlParser.TEXT:
-                break;
-            }
+			case KXmlParser.TEXT:
+				break;
+			}
 
-            if (!end) {
-                currentTag = parser.next();
-            }
-        }
+			if (!end) {
+				currentTag = parser.next();
+			}
+		}
 
-        parser.require(KXmlParser.END_TAG, null, CapabilitiesTags.LEGENDURL);
-    }
+		parser.require(KXmlParser.END_TAG, null, CapabilitiesTags.LEGENDURL);
+	}
 
-    /**
-     * gets the LegendURL OnlineResource type
-     */
-    public String getLegendURLOnlineResourceType() {
-        if (legendURL != null) {
-            return legendURL.onlineResource_type;
-        } else {
-            return null;
-        }
-    }
+	/**
+	 * gets the LegendURL OnlineResource type
+	 */
+	public String getLegendURLOnlineResourceType() {
+		if (legendURL != null) {
+			return legendURL.onlineResource_type;
+		} else {
+			return null;
+		}
+	}
 
-    /**
-     * gets the LegendURL OnlineResource href
-     */
-    public String getLegendURLOnlineResourceHRef() {
-        if (legendURL != null) {
-            return legendURL.onlineResource_href;
-        } else {
-            return null;
-        }
-    }
+	/**
+	 * gets the LegendURL OnlineResource href
+	 */
+	public String getLegendURLOnlineResourceHRef() {
+		if (legendURL != null) {
+			return legendURL.onlineResource_href;
+		} else {
+			return null;
+		}
+	}
 
-    public String getLegendURLFormat() {
-        if (legendURL != null) {
-            return legendURL.format;
-        } else {
-            return null;
-        }
-    }
+	public String getLegendURLFormat() {
+		if (legendURL != null) {
+			return legendURL.format;
+		} else {
+			return null;
+		}
+	}
 
-    public int getLegendURLWidth() {
-        if (legendURL != null) {
-            return legendURL.width;
-        }
+	public int getLegendURLWidth() {
+		if (legendURL != null) {
+			return legendURL.width;
+		}
 
-        return 0;
-    }
+		return 0;
+	}
 
-    public int getLegendURLHeight() {
-        if (legendURL != null) {
-            return legendURL.height;
-        }
+	public int getLegendURLHeight() {
+		if (legendURL != null) {
+			return legendURL.height;
+		}
 
-        return 0;
-    }
+		return 0;
+	}
 
-    /**
-     * sets LegendURL
-     */
-    protected void setLegendURL(LegendURL legendURL) {
-        this.legendURL = legendURL;
-    }
+	/**
+	 * sets LegendURL
+	 */
+	protected void setLegendURL(LegendURL legendURL) {
+		this.legendURL = legendURL;
+	}
 
-    /**
-     * <p>gets the style name</p>
-     *
-     * @return style name
-     */
-    public String getName() {
-        return name;
-    }
+	/**
+	 * <p>
+	 * gets the style name
+	 * </p>
+	 * 
+	 * @return style name
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * <p>sets the style name.</p>
-     *
-     * @param _name
-     */
-    public void setName(String _name) {
-        name = _name;
-    }
+	/**
+	 * <p>
+	 * sets the style name.
+	 * </p>
+	 * 
+	 * @param _name
+	 */
+	public void setName(String _name) {
+		name = _name;
+	}
 
-    /**
-     * <p>gets the style title</p>
-     *
-     *
-     * @return style title
-     */
-    public String getTitle() {
-        return title;
-    }
+	/**
+	 * <p>
+	 * gets the style title
+	 * </p>
+	 * 
+	 * 
+	 * @return style title
+	 */
+	public String getTitle() {
+		return title;
+	}
 
-    /**
-     * <p>Sets style title</p>
-     *
-     *
-     * @param _title
-     */
-    public void setTitle(String _title) {
-        title = _title.trim();
-    }
+	/**
+	 * <p>
+	 * Sets style title
+	 * </p>
+	 * 
+	 * 
+	 * @param _title
+	 */
+	public void setTitle(String _title) {
+		title = _title.trim();
+	}
 
-    /**
-     * <p>gets style abstract</p>
-     *
-     *
-     * @return style abstract
-     */
-    public String getAbstract() {
-        return styleAbstract;
-    }
+	/**
+	 * <p>
+	 * gets style abstract
+	 * </p>
+	 * 
+	 * 
+	 * @return style abstract
+	 */
+	public String getAbstract() {
+		return styleAbstract;
+	}
 
-    /**
-     * <p>sets style abstract</p>
-     *
-     *
-     * @param aabstract style abstract
-     */
-    public void setAbstract(String aabstract) {
-        styleAbstract = aabstract;
-    }
+	/**
+	 * <p>
+	 * sets style abstract
+	 * </p>
+	 * 
+	 * 
+	 * @param aabstract
+	 *            style abstract
+	 */
+	public void setAbstract(String aabstract) {
+		styleAbstract = aabstract;
+	}
 
-    /**
-     * <p>Inner class describing the Legend URL defined for styles in the  specifications in ArcIms</p>
-     *
-     */
-    protected class LegendURL {
-        public int width;
-        public int height;
-        public String format;
-        public String onlineResource_type;
-        public String onlineResource_href;
+	/**
+	 * <p>
+	 * Inner class describing the Legend URL defined for styles in the
+	 * specifications in ArcIms
+	 * </p>
+	 * 
+	 */
+	protected class LegendURL {
+		public int width;
+		public int height;
+		public String format;
+		public String onlineResource_type;
+		public String onlineResource_href;
 
-        public LegendURL() {
-            width = 0;
-            height = 0;
-            format = new String();
-            onlineResource_type = new String();
-            onlineResource_href = new String();
-        }
-    }
+		public LegendURL() {
+			width = 0;
+			height = 0;
+			format = new String();
+			onlineResource_type = new String();
+			onlineResource_href = new String();
+		}
+	}
 }

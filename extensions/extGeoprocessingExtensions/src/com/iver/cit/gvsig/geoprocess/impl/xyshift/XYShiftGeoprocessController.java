@@ -42,29 +42,29 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: XYShiftGeoprocessController.java 21235 2008-06-05 14:08:38Z azabala $
-* $Log$
-* Revision 1.6  2007-08-16 14:41:36  azabala
-* changes to remove UnitUtils' andami dependencies
-*
-* Revision 1.5  2006/11/29 13:11:23  jmvivo
-* Se ha añadido mas información al mensaje de error para los GeoprocessException: e.getMessage()
-*
-* Revision 1.4  2006/10/23 15:16:12  jmvivo
-* implementados el getWidth y el getHeight
-*
-* Revision 1.3  2006/08/11 17:17:55  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/06/29 17:58:31  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/06/28 18:17:21  azabala
-* first version in cvs
-*
-*
-*/
+ *
+ * $Id: XYShiftGeoprocessController.java 21235 2008-06-05 14:08:38Z azabala $
+ * $Log$
+ * Revision 1.6  2007-08-16 14:41:36  azabala
+ * changes to remove UnitUtils' andami dependencies
+ *
+ * Revision 1.5  2006/11/29 13:11:23  jmvivo
+ * Se ha añadido mas información al mensaje de error para los GeoprocessException: e.getMessage()
+ *
+ * Revision 1.4  2006/10/23 15:16:12  jmvivo
+ * implementados el getWidth y el getHeight
+ *
+ * Revision 1.3  2006/08/11 17:17:55  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/06/29 17:58:31  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/06/28 18:17:21  azabala
+ * first version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.xyshift;
 
 import java.io.File;
@@ -95,7 +95,6 @@ public class XYShiftGeoprocessController extends AbstractGeoprocessController {
 
 	private GeoprocessingXYShiftPanel2 panel;
 	private XYShiftGeoprocess xyShift;
-	
 
 	public void setView(IGeoprocessUserEntries viewPanel) {
 		this.panel = (GeoprocessingXYShiftPanel2) viewPanel;
@@ -113,13 +112,15 @@ public class XYShiftGeoprocessController extends AbstractGeoprocessController {
 			outputFile = panel.getOutputFile();
 		} catch (FileNotFoundException e3) {
 			String error = PluginServices.getText(this, "Error_entrada_datos");
-			String errorDescription = PluginServices.getText(this, "Error_seleccionar_resultado");
+			String errorDescription = PluginServices.getText(this,
+					"Error_seleccionar_resultado");
 			panel.error(errorDescription, error);
 			return false;
 		}
 		if (outputFile == null || (outputFile.getAbsolutePath().length() == 0)) {
 			String error = PluginServices.getText(this, "Error_entrada_datos");
-			String errorDescription = PluginServices.getText(this, "Error_seleccionar_resultado");
+			String errorDescription = PluginServices.getText(this,
+					"Error_seleccionar_resultado");
 			panel.error(errorDescription, error);
 			return false;
 		}
@@ -129,19 +130,22 @@ public class XYShiftGeoprocessController extends AbstractGeoprocessController {
 			}
 		}
 		xyShift = new XYShiftGeoprocess(inputLayer);
-		SHPLayerDefinition definition = 
-			(SHPLayerDefinition) xyShift.createLayerDefinition();
+		SHPLayerDefinition definition = (SHPLayerDefinition) xyShift
+				.createLayerDefinition();
 		definition.setFile(outputFile);
-		ShpSchemaManager schemaManager = new ShpSchemaManager(outputFile.getAbsolutePath());
+		ShpSchemaManager schemaManager = new ShpSchemaManager(
+				outputFile.getAbsolutePath());
 		IWriter writer = null;
 		try {
 			writer = getShpWriter(definition);
 		} catch (Exception e1) {
-			String error = PluginServices.getText(this, "Error_escritura_resultados");
-			String errorDescription = PluginServices.getText(this, "Error_preparar_escritura_resultados");
+			String error = PluginServices.getText(this,
+					"Error_escritura_resultados");
+			String errorDescription = PluginServices.getText(this,
+					"Error_preparar_escritura_resultados");
 			panel.error(errorDescription, error);
 			return false;
-		} 
+		}
 		xyShift.setResultLayerProperties(writer, schemaManager);
 		HashMap params = new HashMap();
 		boolean onlySelected = panel.isFirstOnlySelected();
@@ -152,57 +156,59 @@ public class XYShiftGeoprocessController extends AbstractGeoprocessController {
 			double yShift = panel.getYOffset();
 			params.put("yshift", new Double(yShift));
 		} catch (GeoprocessException e1) {
-			String error = PluginServices.getText(this, "Error_escritura_resultados");
-			String errorDescription = PluginServices.getText(this, "Error_preparar_escritura_resultados");
+			String error = PluginServices.getText(this,
+					"Error_escritura_resultados");
+			String errorDescription = PluginServices.getText(this,
+					"Error_preparar_escritura_resultados");
 			panel.error(errorDescription, error);
 			return false;
 		}
-		
+
 		CoordinateReferenceSystem crs = ((View) PluginServices.getMDIManager()
 				.getActiveWindow()).getMapControl().getViewPort().getCrs();
 		params.put("projection", crs);
-		
-		
-		int distanceUnits = ((View)PluginServices.
-				getMDIManager().
-				getActiveWindow()).getMapControl().getViewPort().getDistanceUnits();
+
+		int distanceUnits = ((View) PluginServices.getMDIManager()
+				.getActiveWindow()).getMapControl().getViewPort()
+				.getDistanceUnits();
 		params.put("distanceunits", new Integer(distanceUnits));
-		
-		
+
 		int mapUnits = -1;
-		if(crs instanceof ProjectedCRS){
-			mapUnits = ((View)PluginServices.
-				getMDIManager().
-				getActiveWindow()).getMapControl().getViewPort().getMapUnits();
-		}else{
+		if (crs instanceof ProjectedCRS) {
+			mapUnits = ((View) PluginServices.getMDIManager().getActiveWindow())
+					.getMapControl().getViewPort().getMapUnits();
+		} else {
 			mapUnits = 1;
 		}
 		params.put("mapunits", new Integer(mapUnits));
-		
+
 		try {
 			xyShift.setParameters(params);
 			xyShift.checkPreconditions();
 			IMonitorableTask task1 = xyShift.createTask();
-			if(task1 == null){
+			if (task1 == null) {
 				return false;
-				
+
 			}
 			AddResultLayerTask task2 = new AddResultLayerTask(xyShift);
 			task2.setLayers(layers);
-			MonitorableDecoratorMainFirst globalTask = new MonitorableDecoratorMainFirst(task1,
-					task2);
+			MonitorableDecoratorMainFirst globalTask = new MonitorableDecoratorMainFirst(
+					task1, task2);
 			if (globalTask.preprocess())
 				PluginServices.cancelableBackgroundExecution(globalTask);
-			
+
 		} catch (GeoprocessException e) {
 			String error = PluginServices.getText(this, "Error_ejecucion");
-			String errorDescription = PluginServices.getText(this, "Error_fallo_geoproceso");
-			errorDescription = "<html>" + errorDescription + ":<br>" + e.getMessage()+ "</html>";
+			String errorDescription = PluginServices.getText(this,
+					"Error_fallo_geoproceso");
+			errorDescription = "<html>" + errorDescription + ":<br>"
+					+ e.getMessage() + "</html>";
 			panel.error(errorDescription, error);
 			return false;
 		}
 		return true;
 	}
+
 	public int getWidth() {
 		return 750;
 	}
@@ -211,4 +217,3 @@ public class XYShiftGeoprocessController extends AbstractGeoprocessController {
 		return 240;
 	}
 }
-

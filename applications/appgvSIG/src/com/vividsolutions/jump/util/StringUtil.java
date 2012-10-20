@@ -46,305 +46,305 @@ import com.vividsolutions.jts.util.Assert;
  */
 public class StringUtil {
 
-    public static String s(int n) {
-        return (n != 1) ? "s" : "";
-    }
+	public static String s(int n) {
+		return (n != 1) ? "s" : "";
+	}
 
-    public static String ies(int n) {
-        return (n != 1) ? "ies" : "y";
-    }
+	public static String ies(int n) {
+		return (n != 1) ? "ies" : "y";
+	}
 
-    public static String classNameWithoutQualifiers(String className) {
-        return className.substring(
-            Math.max(className.lastIndexOf("."), className.lastIndexOf("$")) + 1);
-    }
+	public static String classNameWithoutQualifiers(String className) {
+		return className.substring(Math.max(className.lastIndexOf("."),
+				className.lastIndexOf("$")) + 1);
+	}
 
-    public static String classNameWithoutPackageQualifiers(String className) {
-        return className.substring(className.lastIndexOf(".") + 1);
-    }
+	public static String classNameWithoutPackageQualifiers(String className) {
+		return className.substring(className.lastIndexOf(".") + 1);
+	}
 
-    public static String repeat(char c, int n) {
-        StringBuffer b = new StringBuffer();
+	public static String repeat(char c, int n) {
+		StringBuffer b = new StringBuffer();
 
-        for (int i = 0; i < n; i++) {
-            b.append(c);
-        }
+		for (int i = 0; i < n; i++) {
+			b.append(c);
+		}
 
-        return b.toString();
-    }
+		return b.toString();
+	}
 
-    /**
-     *  Line-wraps s by inserting a newline instead of the first space after the nth
-     *  column. Word-wraps.
-     */
-    public static String split(String s, int n) {
-        StringBuffer b = new StringBuffer();
-        boolean wrapPending = false;
+	/**
+	 * Line-wraps s by inserting a newline instead of the first space after the
+	 * nth column. Word-wraps.
+	 */
+	public static String split(String s, int n) {
+		StringBuffer b = new StringBuffer();
+		boolean wrapPending = false;
 
-        for (int i = 0; i < s.length(); i++) {
-            if (((i % n) == 0) && (i > 0)) {
-                wrapPending = true;
-            }
+		for (int i = 0; i < s.length(); i++) {
+			if (((i % n) == 0) && (i > 0)) {
+				wrapPending = true;
+			}
 
-            char c = s.charAt(i);
+			char c = s.charAt(i);
 
-            if (wrapPending && (c == ' ')) {
-                b.append("\n");
-                wrapPending = false;
-            } else {
-                b.append(c);
-            }
-        }
+			if (wrapPending && (c == ' ')) {
+				b.append("\n");
+				wrapPending = false;
+			} else {
+				b.append(c);
+			}
+		}
 
-        return b.toString();
-    }
+		return b.toString();
+	}
 
-    public static String capitalize(String word) {
-        if (word.length() == 0) {
-            return word;
-        }
+	public static String capitalize(String word) {
+		if (word.length() == 0) {
+			return word;
+		}
 
-        return (word.charAt(0) + "").toUpperCase() + word.substring(1);
-    }
-    
-    public static String uncapitalize(String word) {
-        if (word.length() == 0) {
-            return word;
-        }
+		return (word.charAt(0) + "").toUpperCase() + word.substring(1);
+	}
 
-        return (word.charAt(0) + "").toLowerCase() + word.substring(1);        
-    }
+	public static String uncapitalize(String word) {
+		if (word.length() == 0) {
+			return word;
+		}
 
-    /**
-     * Converts the comma-delimited string into a List of trimmed strings.
-     * @param s a String with comma-delimited values
-     * @return a List of the Strings that were delimited by commas
-     */
-    public static List fromCommaDelimitedString(String s) {
-        ArrayList result = new ArrayList();
-        StringTokenizer tokenizer = new StringTokenizer(s, ",");
+		return (word.charAt(0) + "").toLowerCase() + word.substring(1);
+	}
 
-        while (tokenizer.hasMoreTokens()) {
-            result.add(tokenizer.nextToken().toString().trim());
-        }
+	/**
+	 * Converts the comma-delimited string into a List of trimmed strings.
+	 * 
+	 * @param s
+	 *            a String with comma-delimited values
+	 * @return a List of the Strings that were delimited by commas
+	 */
+	public static List fromCommaDelimitedString(String s) {
+		ArrayList result = new ArrayList();
+		StringTokenizer tokenizer = new StringTokenizer(s, ",");
 
-        return result;
-    }
+		while (tokenizer.hasMoreTokens()) {
+			result.add(tokenizer.nextToken().toString().trim());
+		}
 
-    /**
-     * Returns a List of empty Strings.
-     * @param size the size of the List to create
-     * @return a List of blank Strings
-     */
-    public static List blankStringList(int size) {
-        ArrayList list = new ArrayList();
+		return result;
+	}
 
-        for (int i = 0; i < size; i++) {
-            list.add("");
-        }
+	/**
+	 * Returns a List of empty Strings.
+	 * 
+	 * @param size
+	 *            the size of the List to create
+	 * @return a List of blank Strings
+	 */
+	public static List blankStringList(int size) {
+		ArrayList list = new ArrayList();
 
-        return list;
-    }
+		for (int i = 0; i < size; i++) {
+			list.add("");
+		}
 
-    public static String toFriendlyName(String className) {
-        return toFriendlyName(className, null);
-    }
-    
-    public static String friendlyName(Class c) {
-        return toFriendlyName(c.getName());
-    }
+		return list;
+	}
 
-    public static String toFriendlyName(String className, String substringToRemove) {
-        String name = className;
+	public static String toFriendlyName(String className) {
+		return toFriendlyName(className, null);
+	}
 
-        //Remove substring sooner rather than later because, for example,
-        //?"PlugIn" will become "Plug In". [Jon Aquino]
-        if (substringToRemove != null) {
-            name = StringUtil.replaceAll(name, substringToRemove, "");
-        }
+	public static String friendlyName(Class c) {
+		return toFriendlyName(c.getName());
+	}
 
-        name = StringUtil.classNameWithoutQualifiers(name);
-        name = insertSpaces(name);
+	public static String toFriendlyName(String className,
+			String substringToRemove) {
+		String name = className;
 
-        return name;
-    }
+		// Remove substring sooner rather than later because, for example,
+		// ?"PlugIn" will become "Plug In". [Jon Aquino]
+		if (substringToRemove != null) {
+			name = StringUtil.replaceAll(name, substringToRemove, "");
+		}
 
-    public static String insertSpaces(String s) {
-        if (s.length() < 2) {
-            return s;
-        }
+		name = StringUtil.classNameWithoutQualifiers(name);
+		name = insertSpaces(name);
 
-        String result = "";
+		return name;
+	}
 
-        for (int i = 0; i < (s.length() - 2); i++) { //-2
-            result += s.charAt(i);
+	public static String insertSpaces(String s) {
+		if (s.length() < 2) {
+			return s;
+		}
 
-            if ((Character.isLowerCase(s.charAt(i))
-                && Character.isUpperCase(s.charAt(i + 1)))
-                || (Character.isUpperCase(s.charAt(i + 1))
-                    && Character.isLowerCase(s.charAt(i + 2)))) {
-                result += " ";
-            }
-        }
+		String result = "";
 
-        result += s.charAt(s.length() - 2);
-        result += s.charAt(s.length() - 1);
+		for (int i = 0; i < (s.length() - 2); i++) { // -2
+			result += s.charAt(i);
 
-        return result.trim();
-    }
+			if ((Character.isLowerCase(s.charAt(i)) && Character.isUpperCase(s
+					.charAt(i + 1)))
+					|| (Character.isUpperCase(s.charAt(i + 1)) && Character
+							.isLowerCase(s.charAt(i + 2)))) {
+				result += " ";
+			}
+		}
 
-    /**
-     * Returns the elements of c separated by commas. If c is empty, an empty
-     * String will be returned.
-     * @param c a Collection of objects to convert to Strings and delimit by commas
-     * @return a String containing c's elements, delimited by commas
-     */
-    public static String toCommaDelimitedString(Collection c) {
-        return toDelimitedString(c, ", ");
-    }
+		result += s.charAt(s.length() - 2);
+		result += s.charAt(s.length() - 1);
 
-    /**
-     *  Returns original with all occurrences of oldSubstring replaced by
-     *  newSubstring
-     */
-    public static String replaceAll(
-        String original,
-        String oldSubstring,
-        String newSubstring) {
-        return replace(original, oldSubstring, newSubstring, true);
-    }
+		return result.trim();
+	}
 
-    /**
-     *  Returns original with occurrences of oldSubstring replaced by
-     *  newSubstring. Set all to true to replace all occurrences, or false to
-     *  replace the first occurrence only.
-     */
-    public static String replace(
-        String original,
-        String oldSubstring,
-        String newSubstring,
-        boolean all) {
-        StringBuffer b = new StringBuffer(original);
-        replace(b, oldSubstring, newSubstring, all);
+	/**
+	 * Returns the elements of c separated by commas. If c is empty, an empty
+	 * String will be returned.
+	 * 
+	 * @param c
+	 *            a Collection of objects to convert to Strings and delimit by
+	 *            commas
+	 * @return a String containing c's elements, delimited by commas
+	 */
+	public static String toCommaDelimitedString(Collection c) {
+		return toDelimitedString(c, ", ");
+	}
 
-        return b.toString();
-    }
+	/**
+	 * Returns original with all occurrences of oldSubstring replaced by
+	 * newSubstring
+	 */
+	public static String replaceAll(String original, String oldSubstring,
+			String newSubstring) {
+		return replace(original, oldSubstring, newSubstring, true);
+	}
 
-    /**
-     *  Replaces all instances of the String o with the String n in the
-     *  StringBuffer orig if all is true, or only the first instance if all is
-     *  false. Posted by Steve Chapel <schapel@breakthr.com> on UseNet
-     */
-    public static void replace(StringBuffer orig, String o, String n, boolean all) {
-        if ((orig == null) || (o == null) || (o.length() == 0) || (n == null)) {
-            throw new IllegalArgumentException("Null or zero-length String");
-        }
+	/**
+	 * Returns original with occurrences of oldSubstring replaced by
+	 * newSubstring. Set all to true to replace all occurrences, or false to
+	 * replace the first occurrence only.
+	 */
+	public static String replace(String original, String oldSubstring,
+			String newSubstring, boolean all) {
+		StringBuffer b = new StringBuffer(original);
+		replace(b, oldSubstring, newSubstring, all);
 
-        int i = 0;
+		return b.toString();
+	}
 
-        while ((i + o.length()) <= orig.length()) {
-            if (orig.substring(i, i + o.length()).equals(o)) {
-                orig.replace(i, i + o.length(), n);
+	/**
+	 * Replaces all instances of the String o with the String n in the
+	 * StringBuffer orig if all is true, or only the first instance if all is
+	 * false. Posted by Steve Chapel <schapel@breakthr.com> on UseNet
+	 */
+	public static void replace(StringBuffer orig, String o, String n,
+			boolean all) {
+		if ((orig == null) || (o == null) || (o.length() == 0) || (n == null)) {
+			throw new IllegalArgumentException("Null or zero-length String");
+		}
 
-                if (!all) {
-                    break;
-                } else {
-                    i += n.length();
-                }
-            } else {
-                i++;
-            }
-        }
-    }
+		int i = 0;
 
-    /**
-     * Returns an throwable's stack trace
-     */
-    public static String stackTrace(Throwable t) {
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        PrintStream ps = new PrintStream(os);
-        t.printStackTrace(ps);
+		while ((i + o.length()) <= orig.length()) {
+			if (orig.substring(i, i + o.length()).equals(o)) {
+				orig.replace(i, i + o.length(), n);
 
-        return os.toString();
-    }
-    
-    public static String head(String s, int lines) {
-        int newlinesEncountered = 0;
-        for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) == '\n') {
-                newlinesEncountered++;
-                if (newlinesEncountered == lines) {
-                    return s.substring(0, i);
-                }
-            }
-        }
-        return s;
-    }
+				if (!all) {
+					break;
+				} else {
+					i += n.length();
+				}
+			} else {
+				i++;
+			}
+		}
+	}
 
-    public static String limitLength(String s, int maxLength) {
-        Assert.isTrue(maxLength >= 3);
+	/**
+	 * Returns an throwable's stack trace
+	 */
+	public static String stackTrace(Throwable t) {
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(os);
+		t.printStackTrace(ps);
 
-        if (s == null) {
-            return null;
-        }
+		return os.toString();
+	}
 
-        if (s.length() > maxLength) {
-            return s.substring(0, maxLength - 3) + "...";
-        }
+	public static String head(String s, int lines) {
+		int newlinesEncountered = 0;
+		for (int i = 0; i < s.length(); i++) {
+			if (s.charAt(i) == '\n') {
+				newlinesEncountered++;
+				if (newlinesEncountered == lines) {
+					return s.substring(0, i);
+				}
+			}
+		}
+		return s;
+	}
 
-        return s;
-    }
+	public static String limitLength(String s, int maxLength) {
+		Assert.isTrue(maxLength >= 3);
 
-    public static boolean isNumber(String token) {
-        try {
-            Double.parseDouble(token);
+		if (s == null) {
+			return null;
+		}
 
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }  
+		if (s.length() > maxLength) {
+			return s.substring(0, maxLength - 3) + "...";
+		}
 
-    public static String toDelimitedString(Collection c, String delimiter) {
-        if (c.isEmpty()) {
-            return "";
-        }
+		return s;
+	}
 
-        StringBuffer result = new StringBuffer();
+	public static boolean isNumber(String token) {
+		try {
+			Double.parseDouble(token);
 
-        for (Iterator i = c.iterator(); i.hasNext();) {
-            Object o = i.next();
-            result.append(delimiter + ((o == null) ? "" : o.toString()));
-        }
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
 
-        return result.substring(delimiter.length());
-    }
+	public static String toDelimitedString(Collection c, String delimiter) {
+		if (c.isEmpty()) {
+			return "";
+		}
 
-    public static String toTimeString(long milliseconds) {
-        long remainder = milliseconds;
-        long days = remainder / 86400000;
-        remainder = remainder % 86400000;
+		StringBuffer result = new StringBuffer();
 
-        long hours = remainder / 3600000;
-        remainder = remainder % 3600000;
+		for (Iterator i = c.iterator(); i.hasNext();) {
+			Object o = i.next();
+			result.append(delimiter + ((o == null) ? "" : o.toString()));
+		}
 
-        long minutes = remainder / 60000;
-        remainder = remainder % 60000;
+		return result.substring(delimiter.length());
+	}
 
-        long seconds = remainder / 1000;
-        String s = "";
+	public static String toTimeString(long milliseconds) {
+		long remainder = milliseconds;
+		long days = remainder / 86400000;
+		remainder = remainder % 86400000;
 
-        if (days > 0) {
-            s += (days + " days ");
-        }
+		long hours = remainder / 3600000;
+		remainder = remainder % 3600000;
 
-        s
-            += (Fmt.fmt(hours, 2, Fmt.ZF)
-                + ":"
-                + Fmt.fmt(minutes, 2, Fmt.ZF)
-                + ":"
-                + Fmt.fmt(seconds, 2, Fmt.ZF));
+		long minutes = remainder / 60000;
+		remainder = remainder % 60000;
 
-        return s;
-    }
+		long seconds = remainder / 1000;
+		String s = "";
+
+		if (days > 0) {
+			s += (days + " days ");
+		}
+
+		s += (Fmt.fmt(hours, 2, Fmt.ZF) + ":" + Fmt.fmt(minutes, 2, Fmt.ZF)
+				+ ":" + Fmt.fmt(seconds, 2, Fmt.ZF));
+
+		return s;
+	}
 }

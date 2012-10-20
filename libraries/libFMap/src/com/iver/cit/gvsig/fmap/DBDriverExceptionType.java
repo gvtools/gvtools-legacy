@@ -42,42 +42,42 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: DBDriverExceptionType.java 7454 2006-09-21 17:18:31Z azabala $
-* $Log$
-* Revision 1.1  2006-09-21 17:18:31  azabala
-* First version in cvs
-*
-*
-*/
+ *
+ * $Id: DBDriverExceptionType.java 7454 2006-09-21 17:18:31Z azabala $
+ * $Log$
+ * Revision 1.1  2006-09-21 17:18:31  azabala
+ * First version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap;
 
 import com.iver.utiles.ExceptionDescription;
 
-public class DBDriverExceptionType extends ExceptionDescription{
+public class DBDriverExceptionType extends ExceptionDescription {
 
 	private String driverName;
 	private String tableName;
-	
+
 	public DBDriverExceptionType() {
 		super();
 		setCode(3);
 		setDescription("Problema accediendo a un driver de bbdd");
 	}
-	
-	public void setDriverName(String driverName){
+
+	public void setDriverName(String driverName) {
 		this.driverName = driverName;
 	}
-	
-	public void setTableName(String tableName){
+
+	public void setTableName(String tableName) {
 		this.tableName = tableName;
 	}
 
 	public String getHtmlErrorMessage() {
 		String message = "";
-		message += "<b>Error de driver de base de datos. " + "</b><br>" +
-		"Problemas con el driver " + driverName + 
-		" para acceder a la tabla "  + tableName;
+		message += "<b>Error de driver de base de datos. " + "</b><br>"
+				+ "Problemas con el driver " + driverName
+				+ " para acceder a la tabla " + tableName;
 		return message;
 	}
 }

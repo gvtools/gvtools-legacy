@@ -84,12 +84,11 @@ public class PolygonMustNotHaveGaps extends AbstractTopologyRule implements
 
 	static final String RULE_NAME = Messages.getText("must_not_have_gaps");
 
-	
-	static{
+	static {
 		automaticErrorFixes = new ArrayList<ITopologyErrorFix>();
 		automaticErrorFixes.add(new CreateNewFeatureForGapFix());
 	}
-	
+
 	private static final Color DEFAULT_ERROR_COLOR = Color.RED;
 
 	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = (MultiShapeSymbol) SymbologyFactory
@@ -99,8 +98,7 @@ public class PolygonMustNotHaveGaps extends AbstractTopologyRule implements
 	}
 
 	private MultiShapeSymbol errorSymbol = DEFAULT_ERROR_SYMBOL;
-	
-	
+
 	private List<Geometry> geometries;
 
 	/**
@@ -118,8 +116,8 @@ public class PolygonMustNotHaveGaps extends AbstractTopologyRule implements
 		setClusterTolerance(clusterTolerance);
 		geometries = new ArrayList<Geometry>();
 	}
-	
-	public PolygonMustNotHaveGaps(){
+
+	public PolygonMustNotHaveGaps() {
 		geometries = new ArrayList<Geometry>();
 	}
 
@@ -139,38 +137,38 @@ public class PolygonMustNotHaveGaps extends AbstractTopologyRule implements
 					"Error leyendo el tipo de geometria del driver", e);
 		}
 	}
-	
-	
-	public void checkRule(CancellableProgressTask progressMonitor){
+
+	public void checkRule(CancellableProgressTask progressMonitor) {
 		super.checkRule(progressMonitor);
 		findGaps();
 	}
-	
-	private void findGaps(){
-		if(geometries.size() > 0){
-			Geometry union = JtsUtil.GEOMETRY_FACTORY.
-							createGeometryCollection(geometries.toArray(new Geometry[0])).
-							buffer(0d);
+
+	private void findGaps() {
+		if (geometries.size() > 0) {
+			Geometry union = JtsUtil.GEOMETRY_FACTORY.createGeometryCollection(
+					geometries.toArray(new Geometry[0])).buffer(0d);
 			Polygon[] polygons = JtsUtil.extractPolygons(union);
 			for (int i = 0; i < polygons.length; i++) {
 				Polygon polygon = polygons[i];
 				int numberOfGaps = polygon.getNumInteriorRing();
-				for(int j = 0; j < numberOfGaps; j++){
+				for (int j = 0; j < numberOfGaps; j++) {
 					LinearRing gap = (LinearRing) polygon.getInteriorRingN(j);
-					Polygon gapPoly = JtsUtil.GEOMETRY_FACTORY.createPolygon(gap, null);
+					Polygon gapPoly = JtsUtil.GEOMETRY_FACTORY.createPolygon(
+							gap, null);
 					IGeometry errorGeometry = NewFConverter.toFMap(gapPoly);
-					TopologyError error = new TopologyError(errorGeometry, this, null, getTopology());
+					TopologyError error = new TopologyError(errorGeometry,
+							this, null, getTopology());
 					addTopologyError(error);
 				}
 			}
 		}
 	}
-	 
-	public  void checkRule(CancellableProgressTask progressMonitor, Rectangle2D rect){
+
+	public void checkRule(CancellableProgressTask progressMonitor,
+			Rectangle2D rect) {
 		super.checkRule(progressMonitor, rect);
 		findGaps();
 	}
-	
 
 	public void validateFeature(IFeature feature) {
 		IGeometry geom = feature.getGeometry();
@@ -180,8 +178,6 @@ public class PolygonMustNotHaveGaps extends AbstractTopologyRule implements
 			return;
 		geometries.add(NewFConverter.toJtsGeometry(geom));
 	}
-
-	
 
 	public double getClusterTolerance() {
 		return clusterTolerance;
@@ -216,6 +212,5 @@ public class PolygonMustNotHaveGaps extends AbstractTopologyRule implements
 	public void setErrorSymbol(MultiShapeSymbol errorSymbol) {
 		this.errorSymbol = errorSymbol;
 	}
-	
-	
+
 }

@@ -50,15 +50,12 @@ import java.awt.image.VolatileImage;
 
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
-import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
-import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrameEditableVertex;
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.LayoutMoveListener;
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.LayoutToolListener;
 
-
 /**
  * Behaviour que espera un listener de tipo MoveListener.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LayoutMoveBehavior extends LayoutBehavior {
@@ -69,8 +66,9 @@ public class LayoutMoveBehavior extends LayoutBehavior {
 
 	/**
 	 * Crea un nuevo MoveBehavior.
-	 *
-	 * @param pli listener.
+	 * 
+	 * @param pli
+	 *            listener.
 	 */
 	public LayoutMoveBehavior(LayoutMoveListener lpl) {
 		listener = lpl;
@@ -80,9 +78,9 @@ public class LayoutMoveBehavior extends LayoutBehavior {
 	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#paintComponent(java.awt.Graphics)
 	 */
 	public void paintComponent(Graphics g) {
-		m_FirstPoint=getLayoutControl().getFirstPoint();
-		m_LastPoint=getLayoutControl().getLastPoint();
-		m_PointAnt=getLayoutControl().getPointAnt();
+		m_FirstPoint = getLayoutControl().getFirstPoint();
+		m_LastPoint = getLayoutControl().getLastPoint();
+		m_PointAnt = getLayoutControl().getPointAnt();
 
 		if (getLayoutControl().getImage() != null) {
 			if ((m_FirstPoint != null) && (m_LastPoint != null)) {
@@ -90,37 +88,42 @@ public class LayoutMoveBehavior extends LayoutBehavior {
 					m_LastPoint = new Point();
 					m_PointAnt = new Point();
 				}
-				///////////
+				// /////////
 				VolatileImage image = createVolatileImage();
 				Graphics gh = image.createGraphics();
 				gh.setColor(getLayoutControl().getBackground());
 				gh.fillRect(0, 0, image.getWidth(), image.getHeight());
 
-				getLayoutControl().getLayoutDraw().drawRectangle((Graphics2D) gh);
-				gh.drawImage(getLayoutControl().getImage(), (getLayoutControl().getLastPoint().x - getLayoutControl().getPointAnt().x),
-                        (getLayoutControl().getLastPoint().y - getLayoutControl().getPointAnt().y), getLayoutControl());
+				getLayoutControl().getLayoutDraw().drawRectangle(
+						(Graphics2D) gh);
+				gh.drawImage(
+						getLayoutControl().getImage(),
+						(getLayoutControl().getLastPoint().x - getLayoutControl()
+								.getPointAnt().x), (getLayoutControl()
+								.getLastPoint().y - getLayoutControl()
+								.getPointAnt().y), getLayoutControl());
 
 				gh.setColor(Color.black);
-//				gh.setXORMode(Color.white);
-		        getLayoutControl().getLayoutDraw().drawGrid((Graphics2D) gh);
+				// gh.setXORMode(Color.white);
+				getLayoutControl().getLayoutDraw().drawGrid((Graphics2D) gh);
 
-//				long t2 = System.currentTimeMillis();
+				// long t2 = System.currentTimeMillis();
 				gh.setPaintMode();
-				getLayoutControl().getLayoutDraw().drawRuler((Graphics2D) gh, Color.black);
-				g.drawImage(image,0,0,null);
+				getLayoutControl().getLayoutDraw().drawRuler((Graphics2D) gh,
+						Color.black);
+				g.drawImage(image, 0, 0, null);
 
+				// /////////
 
-				///////////
-
-
-
-
-//				g.drawImage(getLayoutControl().getImage(),(getLayoutControl().getLastPoint().x - getLayoutControl().getPointAnt().x),
-//                        (getLayoutControl().getLastPoint().y - getLayoutControl().getPointAnt().y), getLayoutControl());
-//
-//				getLayoutControl().getLayoutDraw().drawGrid((Graphics2D) g);
-//	            getLayoutControl().getLayoutDraw().drawRuler((Graphics2D) g, Color.black);
-	        } else {
+				// g.drawImage(getLayoutControl().getImage(),(getLayoutControl().getLastPoint().x
+				// - getLayoutControl().getPointAnt().x),
+				// (getLayoutControl().getLastPoint().y -
+				// getLayoutControl().getPointAnt().y), getLayoutControl());
+				//
+				// getLayoutControl().getLayoutDraw().drawGrid((Graphics2D) g);
+				// getLayoutControl().getLayoutDraw().drawRuler((Graphics2D) g,
+				// Color.black);
+			} else {
 				super.paintComponent(g);
 			}
 		}
@@ -138,10 +141,12 @@ public class LayoutMoveBehavior extends LayoutBehavior {
 
 	/**
 	 * Reimplementación del método mouseReleased de Behavior.
-	 *
-	 * @param e MouseEvent
-	 *
-	 * @throws BehaviorException Excepción lanzada cuando el Behavior.
+	 * 
+	 * @param e
+	 *            MouseEvent
+	 * 
+	 * @throws BehaviorException
+	 *             Excepción lanzada cuando el Behavior.
 	 */
 	public void mouseReleased(MouseEvent e) throws BehaviorException {
 		super.mouseReleased(e);
@@ -152,8 +157,9 @@ public class LayoutMoveBehavior extends LayoutBehavior {
 
 	/**
 	 * Reimplementación del método mouseDragged de Behavior.
-	 *
-	 * @param e MouseEvent
+	 * 
+	 * @param e
+	 *            MouseEvent
 	 * @throws BehaviorException
 	 */
 	public void mouseDragged(MouseEvent e) throws BehaviorException {

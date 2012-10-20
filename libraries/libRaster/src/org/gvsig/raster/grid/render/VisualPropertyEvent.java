@@ -24,6 +24,7 @@ import java.util.EventObject;
  * Evento de una propiedad cuando esta cambia
  * 
  * 07/01/2008
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class VisualPropertyEvent extends EventObject {
@@ -32,11 +33,15 @@ public class VisualPropertyEvent extends EventObject {
 	private Object value = null;
 
 	/**
-	 * Constructor. Se asignan los valores de nombre y valor de la 
-	 * propiedad que ha disparado el evento.
-	 * @param source Objeto fuente
-	 * @param name Nombre de la propiedad
-	 * @param value Valor de la propiedad
+	 * Constructor. Se asignan los valores de nombre y valor de la propiedad que
+	 * ha disparado el evento.
+	 * 
+	 * @param source
+	 *            Objeto fuente
+	 * @param name
+	 *            Nombre de la propiedad
+	 * @param value
+	 *            Valor de la propiedad
 	 */
 	public VisualPropertyEvent(Object source) {
 		super(source);
@@ -44,14 +49,16 @@ public class VisualPropertyEvent extends EventObject {
 
 	/**
 	 * Obtiene el nombre de la propiedad que disparó el evento
+	 * 
 	 * @return cadena con el nombre de la propiedad que disparó el evento
 	 */
 	public String getName() {
 		return name;
 	}
-	
+
 	/**
 	 * Obtiene el valor de la propiedad antes de que se modificara.
+	 * 
 	 * @return Object con el valor de la propiedad que disparó el evento
 	 */
 	public Object getValue() {

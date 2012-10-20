@@ -1,7 +1,7 @@
 package org.gvsig.gpe.parser;
+
 import java.io.InputStream;
 import java.net.URI;
-
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
@@ -92,101 +92,101 @@ import java.net.URI;
  *
  */
 /**
- * This class has to be inherited by all the classes that 
- * implements a parser for a geographical format. IT has methods
- * to indicate the formats and the versions that is able to
- * parse.
+ * This class has to be inherited by all the classes that implements a parser
+ * for a geographical format. IT has methods to indicate the formats and the
+ * versions that is able to parse.
+ * 
  * @author Jorge Piera Llodrá (jorge.piera@iver.es)
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  */
-
 
 public abstract class GPEParser {
 	private IGPEErrorHandler errorHandler;
 	private IGPEContentHandler contentHandler;
 	private URI mainFile;
 	private InputStream is = null;
-		
-	/** 
-	 * All the GPE parser must implement an empty constructor 
+
+	/**
+	 * All the GPE parser must implement an empty constructor
 	 **/
-	public GPEParser(){
+	public GPEParser() {
 		super();
 	}
-	
+
 	/**
-	 * Method to parse a file. It cannot to throw 
-	 * any exception and it cannot to return any value.
-	 * In a future it could be implemented like a independent
+	 * Method to parse a file. It cannot to throw any exception and it cannot to
+	 * return any value. In a future it could be implemented like a independent
 	 * thread
+	 * 
 	 * @param contents
-	 * Application ContentHandler
+	 *            Application ContentHandler
 	 * @param errors
-	 * Application ErrorsHandler
+	 *            Application ErrorsHandler
 	 * @param uri
-	 * File to open
+	 *            File to open
 	 * @throws Exception
 	 */
-	public void parse(IGPEContentHandler contents, IGPEErrorHandler errors, URI uri) {
+	public void parse(IGPEContentHandler contents, IGPEErrorHandler errors,
+			URI uri) {
 		this.contentHandler = contents;
 		this.errorHandler = errors;
 		this.mainFile = uri;
 		parseURI();
-	}	
-	
+	}
+
 	/**
 	 * Parses the file from a URI
 	 */
 	protected abstract void parseURI();
 
 	/**
-	 * Method to parse an InputStream. It cannot to throw 
-	 * any exception and it cannot to return any value.
-	 * In a future it could be implemented like a independent
-	 * thread
+	 * Method to parse an InputStream. It cannot to throw any exception and it
+	 * cannot to return any value. In a future it could be implemented like a
+	 * independent thread
+	 * 
 	 * @param contents
-	 * Application ContentHandler
+	 *            Application ContentHandler
 	 * @param errors
-	 * Application ErrorsHandler
+	 *            Application ErrorsHandler
 	 * @param is
-	 * The input stream
+	 *            The input stream
 	 * @throws Exception
 	 */
-	public void parse(IGPEContentHandler contents, IGPEErrorHandler errors, InputStream is) {
+	public void parse(IGPEContentHandler contents, IGPEErrorHandler errors,
+			InputStream is) {
 		this.contentHandler = contents;
 		this.errorHandler = errors;
 		this.is = is;
 		parseStream();
 	}
-	
+
 	/**
 	 * Parses the file from an input stream
 	 */
 	protected abstract void parseStream();
-	
+
 	/**
 	 * Return if the driver can open the file
+	 * 
 	 * @param uri
-	 * File to open
-	 * @return
-	 * True if the driver is able to open it
+	 *            File to open
+	 * @return True if the driver is able to open it
 	 */
 	public abstract boolean accept(URI uri);
 
 	/**
-	 * Return the format that the driver
-	 * is able to read
+	 * Return the format that the driver is able to read
+	 * 
 	 * @return
 	 */
 	public abstract String getFormat();
-	
+
 	/**
 	 * @return the contentHandler
 	 */
 	public IGPEContentHandler getContentHandler() {
 		return contentHandler;
 	}
-
 
 	/**
 	 * @return the errorHandler
@@ -220,25 +220,29 @@ public abstract class GPEParser {
 	}
 
 	/**
-     * We need to find a better way to reuse or coupling parsers. This method was introduced for the
-     * SLD parsing to grab a single geometry from a filter.
-     * 
-     * @param is the is to set
-     * @deprecated to avoid temporal coupling
-     */
+	 * We need to find a better way to reuse or coupling parsers. This method
+	 * was introduced for the SLD parsing to grab a single geometry from a
+	 * filter.
+	 * 
+	 * @param is
+	 *            the is to set
+	 * @deprecated to avoid temporal coupling
+	 */
 	protected void setInputStream(InputStream is) {
 		this.is = is;
 	}
 
 	/**
-	 * @param errorHandler the errorHandler to set
+	 * @param errorHandler
+	 *            the errorHandler to set
 	 */
 	public void setErrorHandler(GPEErrorHandler errorHandler) {
 		this.errorHandler = errorHandler;
 	}
 
 	/**
-	 * @param contentHandler the contentHandler to set
+	 * @param contentHandler
+	 *            the contentHandler to set
 	 */
 	public void setContentHandler(GPEContentHandler contentHandler) {
 		this.contentHandler = contentHandler;

@@ -73,8 +73,9 @@ public class ReferencingExtension extends Extension {
 		View vista = (View) f;
 		if (f != null) {
 			MapControl mapControl = vista.getMapControl();
-			if(mapControl != null){
-				VectorialReferencingPanel refPanel = new VectorialReferencingPanel(mapControl.getMapContext().getLayers());
+			if (mapControl != null) {
+				VectorialReferencingPanel refPanel = new VectorialReferencingPanel(
+						mapControl.getMapContext().getLayers());
 				PluginServices.getMDIManager().addWindow(refPanel);
 			}// if
 		}
@@ -83,13 +84,13 @@ public class ReferencingExtension extends Extension {
 	public void initialize() {
 		PluginServices.getIconTheme().registerDefault(
 				"vectorial-adjust",
-				this.getClass().getClassLoader().getResource(
-						"images/vectorial-adjust.gif"));
+				this.getClass().getClassLoader()
+						.getResource("images/vectorial-adjust.gif"));
 
 		PluginServices.getIconTheme().registerDefault(
 				"vectorial-adjust",
-				this.getClass().getClassLoader().getResource(
-						"images/vectorial-adjust.gif"));
+				this.getClass().getClassLoader()
+						.getResource("images/vectorial-adjust.gif"));
 	}
 
 	public boolean isEnabled() {

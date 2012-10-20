@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.errorfixes;
 
 import java.util.ArrayList;
@@ -76,33 +76,32 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.LineSegment;
 
 public class ExtendDangleFixTest extends TestCase {
-	
-	public void testExtendSegment(){
-		
+
+	public void testExtendSegment() {
+
 		Coordinate c0 = new Coordinate(0, 0);
 		Coordinate c1 = new Coordinate(1, 1);
-		
+
 		LineSegment segment = new LineSegment(c0, c1);
-		
+
 		Coordinate newCoord = JtsUtil.extentLineSegment(segment, 50d);
-		
+
 		double length = c0.distance(newCoord);
-		
-//		assertTrue(length == 51);
-		
+
+		// assertTrue(length == 51);
+
 		Coordinate c2 = new Coordinate(-1, -1);
 		segment = new LineSegment(c0, c2);
 		newCoord = JtsUtil.extentLineSegment(segment, 50d);
-		
+
 		length = c0.distance(newCoord);
-		
+
 		assertTrue(length >= 51);
-		
-		
+
 	}
-	
-	public void testExtendDangleFix() throws BaseException{
-		
+
+	public void testExtendDangleFix() throws BaseException {
+
 		GeneralPathX gpx = new GeneralPathX();
 		gpx.moveTo(190, 200);
 		gpx.lineTo(260, 130);
@@ -111,67 +110,67 @@ public class ExtendDangleFixTest extends TestCase {
 		gpx.lineTo(470, 220);
 		gpx.lineTo(530, 240);
 		FGeometry geometry = (FGeometry) ShapeFactory.createPolyline2D(gpx);
-		
-		
+
 		GeneralPathX gpx2 = new GeneralPathX();
 		gpx2.moveTo(860, 70);
 		gpx2.lineTo(970, 120);
 		gpx2.lineTo(1000, 220);
 		gpx2.lineTo(920, 300);
-		//gpx2.lineTo(470, 220); Cuando varios rectangulos contienen un mismo punto, 
-		//el operador NNearest solo devuelve el primero que se insertara en el indice
-		gpx2.lineTo( 1000, 370);
+		// gpx2.lineTo(470, 220); Cuando varios rectangulos contienen un mismo
+		// punto,
+		// el operador NNearest solo devuelve el primero que se insertara en el
+		// indice
+		gpx2.lineTo(1000, 370);
 		FGeometry geometry2 = (FGeometry) ShapeFactory.createPolyline2D(gpx2);
-		
+
 		double searchRadius = 400d;
-		
+
 		Value[] values1 = new Value[1];
 		values1[0] = ValueFactory.createValue(5d);
-		
+
 		Value[] values2 = new Value[1];
 		values2[0] = ValueFactory.createValue(199d);
-		
+
 		DefaultFeature f1 = new DefaultFeature(geometry, values1, "0");
 		DefaultFeature f2 = new DefaultFeature(geometry2, values2, "1");
-		
+
 		List<IFeature> features = new ArrayList<IFeature>();
 		features.add(f1);
 		features.add(f2);
-		LayerDefinition def = new LayerDefinition(){
-			public int getShapeType(){
+		LayerDefinition def = new LayerDefinition() {
+			public int getShapeType() {
 				return FShape.LINE;
-			}	
-			
+			}
+
 		};
-		def.setFieldsDesc(new FieldDescription[]{});
-		FeatureCollectionMemoryDriver driver = new FeatureCollectionMemoryDriver("", features, def);
-		FLyrVect lyr = (FLyrVect) com.iver.cit.gvsig.fmap.layers.LayerFactory.
-											createLayer("",
-													driver, 
-													null);
-		
-		Topology topo = new Topology(null, null, 0.2d, 0, new SimpleTopologyErrorContainer());
-		
-		LineMustNotHaveDangles violatedRule = new LineMustNotHaveDangles(topo, lyr, 0.1d);
-		
-		FGeometry dangleGeometry  =  (FGeometry) ShapeFactory.createPoint2D(530, 240);
-		TopologyError error = new TopologyError(dangleGeometry, violatedRule, f1, topo);
+		def.setFieldsDesc(new FieldDescription[] {});
+		FeatureCollectionMemoryDriver driver = new FeatureCollectionMemoryDriver(
+				"", features, def);
+		FLyrVect lyr = (FLyrVect) com.iver.cit.gvsig.fmap.layers.LayerFactory
+				.createLayer("", driver, null);
+
+		Topology topo = new Topology(null, null, 0.2d, 0,
+				new SimpleTopologyErrorContainer());
+
+		LineMustNotHaveDangles violatedRule = new LineMustNotHaveDangles(topo,
+				lyr, 0.1d);
+
+		FGeometry dangleGeometry = (FGeometry) ShapeFactory.createPoint2D(530,
+				240);
+		TopologyError error = new TopologyError(dangleGeometry, violatedRule,
+				f1, topo);
 		topo.addTopologyError(error);
-		
+
 		new ExtendDangleToNearestVertexFix(searchRadius).fix(error);
-		
+
 		assertTrue(topo.getNumberOfErrors() == 0);
-		
+
 		f1.setGeometry(geometry);
 		topo.addTopologyError(error);
-		
+
 		new ExtendDangleToNearestBoundaryPointFix(searchRadius).fix(error);
-		
+
 		assertTrue(topo.getNumberOfErrors() == 0);
-		
-		
-		
-		
-		
+
 	}
 }

@@ -1,14 +1,12 @@
 package com.hardcode.gdbms.engine.data.indexes.hashMap;
 
 import java.io.IOException;
-
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public class DiskPositionIterator implements PositionIterator {
@@ -18,15 +16,19 @@ public class DiskPositionIterator implements PositionIterator {
 
 	/**
 	 * Crea un nuevo DiskPositionIterator.
-	 *
-	 * @param channel DOCUMENT ME!
-	 * @param positionCount DOCUMENT ME!
-	 * @param value DOCUMENT ME!
-	 *
-	 * @throws IOException DOCUMENT ME!
+	 * 
+	 * @param channel
+	 *            DOCUMENT ME!
+	 * @param positionCount
+	 *            DOCUMENT ME!
+	 * @param value
+	 *            DOCUMENT ME!
+	 * 
+	 * @throws IOException
+	 *             DOCUMENT ME!
 	 */
 	public DiskPositionIterator(FileChannel channel, int positionCount,
-		Object value) throws IOException {
+			Object value) throws IOException {
 		this.buffer = ByteBuffer.allocate(DiskIndex.RECORD_SIZE);
 		this.channel = channel;
 
@@ -53,12 +55,13 @@ public class DiskPositionIterator implements PositionIterator {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
-	 *
+	 * 
 	 * @throws IOException
-	 * @throws RuntimeException DOCUMENT ME!
-	 *
+	 * @throws RuntimeException
+	 *             DOCUMENT ME!
+	 * 
 	 * @see com.hardcode.gdbms.engine.data.indexes.hashMap.PositionIterator#next()
 	 */
 	public int next() throws IOException {

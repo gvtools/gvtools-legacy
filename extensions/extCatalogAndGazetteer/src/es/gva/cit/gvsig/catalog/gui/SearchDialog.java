@@ -64,51 +64,54 @@ import es.gva.cit.catalog.utils.Frames;
 
 /**
  * This class is used to search a record using the catalog client
+ * 
  * @author luisw
  * @modified by Jorge Piera
  */
-public class SearchDialog extends SearchDialogPanel implements
-IWindow,ViewPortListener {    
+public class SearchDialog extends SearchDialogPanel implements IWindow,
+		ViewPortListener {
 	public WindowInfo m_windowInfo = null;
 	public ConnectDialog parentDialog = null;
 	public JDialog frame = null;
 
 	public SearchDialog(CatalogClient client, Object serverConnectFrame) {
-		super(client,serverConnectFrame);
-		parentDialog = (ConnectDialog)serverConnectFrame;
-		setViewChangeListener();		
+		super(client, serverConnectFrame);
+		parentDialog = (ConnectDialog) serverConnectFrame;
+		setViewChangeListener();
 		loadViewPortCoordinates();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.View#getViewInfo()
 	 */
 	public WindowInfo getWindowInfo() {
-		if (m_windowInfo == null){
+		if (m_windowInfo == null) {
 			m_windowInfo = new WindowInfo(WindowInfo.PALETTE);
-			m_windowInfo.setTitle(Messages.getText("gazetteer_search") + " [" +
-					getCurrentServer() + "]");		
+			m_windowInfo.setTitle(Messages.getText("gazetteer_search") + " ["
+					+ getCurrentServer() + "]");
 			m_windowInfo.setHeight(80);
 			m_windowInfo.setWidth(525);
 		}
 		return m_windowInfo;
 
 	}
-	public Object getWindowProfile(){
+
+	public Object getWindowProfile() {
 		return WindowInfo.TOOL_PROFILE;
 	}
 
 	protected void showResultsActionPerformed(GetRecordsReply recordsReply) {
-		JDialog panel = new JDialog((Frame) PluginServices.getMainFrame(), false);
-		Frames.centerFrame(panel,620,420);
-		panel.setTitle(Messages.getText( "search_results")); 
+		JDialog panel = new JDialog((Frame) PluginServices.getMainFrame(),
+				false);
+		Frames.centerFrame(panel, 620, 420);
+		panel.setTitle(Messages.getText("search_results"));
 		panel.setResizable(false);
-		ShowResultsDialog dialog = new ShowResultsDialog(panel,
-				client,
-				recordsReply,
-				1);
+		ShowResultsDialog dialog = new ShowResultsDialog(panel, client,
+				recordsReply, 1);
 		panel.getContentPane().add(dialog);
-		panel.setVisible(true); 
+		panel.setVisible(true);
 	}
 
 	protected void closeButtonActionPerformed() {
@@ -117,29 +120,30 @@ IWindow,ViewPortListener {
 
 	/**
 	 * Size button action performed
-	 */	 
-	protected void resizeButtonActionPerformed(){
-		if (isMinimized){
-			frame.setSize(frame.getWidth(),495);
+	 */
+	protected void resizeButtonActionPerformed() {
+		if (isMinimized) {
+			frame.setSize(frame.getWidth(), 495);
 			getLowerPanel().setVisible(true);
 			getUpperPanel().setUpIcon();
-		}else{
-			frame.setSize(frame.getWidth(),165);
-			getLowerPanel().setVisible(false);	 			
+		} else {
+			frame.setSize(frame.getWidth(), 165);
+			getLowerPanel().setVisible(false);
 			getUpperPanel().setDownIcon();
 		}
 		isMinimized = !isMinimized;
 	}
+
 	/**
 	 * Return button action
 	 */
-	protected void lastButtonActionPerformed() {  
+	protected void lastButtonActionPerformed() {
 		closeJDialog();
-		ConnectDialog serverConnect = (ConnectDialog)serverConnectFrame;
+		ConnectDialog serverConnect = (ConnectDialog) serverConnectFrame;
 		serverConnect.setVisible(true);
 		serverConnect.getControlsPanel().enableSearchButton(false);
 		PluginServices.getMDIManager().addWindow(serverConnect);
-	} 
+	}
 
 	public void closeJDialog() {
 		frame.setVisible(false);
@@ -147,37 +151,37 @@ IWindow,ViewPortListener {
 
 	/**
 	 * This method loads the view coordinates to the catalog search dialog
-	 *
+	 * 
 	 */
-	private void loadViewPortCoordinates(){
-		BaseView activeView = 
-			(BaseView) PluginServices.getMDIManager().getActiveWindow();
+	private void loadViewPortCoordinates() {
+		BaseView activeView = (BaseView) PluginServices.getMDIManager()
+				.getActiveWindow();
 
-		Rectangle2D r2d= activeView.getMapControl().getViewPort().getExtent();
+		Rectangle2D r2d = activeView.getMapControl().getViewPort().getExtent();
 
-		try{
-			getLowerPanel().setCoordinates(new Coordinates(r2d.getMinX(),
-					r2d.getMaxY(),
-					r2d.getMaxX(),
-					r2d.getMinY()));
-		}catch(NullPointerException E){
-			//We cant retrieve the coordinates if it doesn't 
-			//exist a loaded layer
+		try {
+			getLowerPanel().setCoordinates(
+					new Coordinates(r2d.getMinX(), r2d.getMaxY(),
+							r2d.getMaxX(), r2d.getMinY()));
+		} catch (NullPointerException E) {
+			// We cant retrieve the coordinates if it doesn't
+			// exist a loaded layer
 		}
 	}
+
 	/*
 	 * This method joins the viewPort event to the listener
 	 */
-	private void setViewChangeListener(){
-		BaseView activeView = 
-			(BaseView) PluginServices.getMDIManager().getActiveWindow();
+	private void setViewChangeListener() {
+		BaseView activeView = (BaseView) PluginServices.getMDIManager()
+				.getActiveWindow();
 
 		activeView.getMapControl().getViewPort().addViewPortListener(this);
 
 	}
 
 	public void extentChanged(ExtentEvent e) {
-		loadViewPortCoordinates();   
+		loadViewPortCoordinates();
 
 	}
 
@@ -187,10 +191,10 @@ IWindow,ViewPortListener {
 	}
 
 	public void projectionChanged(ProjectionEvent e) {
-		loadViewPortCoordinates();		
+		loadViewPortCoordinates();
 	}
 
 	public void setFrame(JDialog frame) {
 		this.frame = frame;
-	} 	 	    
+	}
 }

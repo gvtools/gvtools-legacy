@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.errorfixes;
 
 import java.util.ArrayList;
@@ -66,21 +66,22 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
 public class CreateNewFeatureForGapFix extends AbstractTopologyErrorFix {
 
-	
-	public List<IFeature>[] fixAlgorithm(TopologyError error) throws BaseException {
+	public List<IFeature>[] fixAlgorithm(TopologyError error)
+			throws BaseException {
 		IGeometry errorGeometry = error.getGeometry();
 		FLyrVect originLyr = error.getOriginLayer();
 		int numFields = originLyr.getRecordset().getFieldCount();
 		Value[] newValues = new Value[numFields];
-		for(int i = 0; i < numFields; i++){
+		for (int i = 0; i < numFields; i++) {
 			newValues[i] = ValueFactory.createNullValue();
 		}
-		String newId = error.getOriginLayer().getSource().getShapeCount()+"";
-		DefaultFeature newFeature = new DefaultFeature(errorGeometry, newValues, newId );
-		
+		String newId = error.getOriginLayer().getSource().getShapeCount() + "";
+		DefaultFeature newFeature = new DefaultFeature(errorGeometry,
+				newValues, newId);
+
 		List<IFeature> firstLyrFeatures = new ArrayList<IFeature>();
 		firstLyrFeatures.add(newFeature);
-		return (List<IFeature>[]) new List[]{firstLyrFeatures};
+		return (List<IFeature>[]) new List[] { firstLyrFeatures };
 	}
 
 	public void fix(TopologyError error) throws BaseException {

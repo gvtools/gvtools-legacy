@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.gvsig.exceptions.BaseException;
 
-
 public class DriverLoadException extends BaseException {
 
 	/**
@@ -14,13 +13,15 @@ public class DriverLoadException extends BaseException {
 		super();
 
 	}
+
 	/**
 	 * @param message
 	 */
 	public DriverLoadException(String message) {
-//		super(message);
+		// super(message);
 
 	}
+
 	protected Map values() {
 		// TODO Auto-generated method stub
 		return null;

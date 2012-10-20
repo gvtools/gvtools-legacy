@@ -42,57 +42,53 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: LegendDriverExceptionType.java 13879 2007-09-19 16:18:59Z jaume $
-* $Log$
-* Revision 1.3  2007-09-19 16:18:59  jaume
-* nothing important
-*
-* Revision 1.2  2007/05/28 15:36:42  jaume
-* *** empty log message ***
-*
-* Revision 1.1  2006/09/21 17:18:31  azabala
-* First version in cvs
-*
-*
-*/
+ *
+ * $Id: LegendDriverExceptionType.java 13879 2007-09-19 16:18:59Z jaume $
+ * $Log$
+ * Revision 1.3  2007-09-19 16:18:59  jaume
+ * nothing important
+ *
+ * Revision 1.2  2007/05/28 15:36:42  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/09/21 17:18:31  azabala
+ * First version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap;
 
 import com.iver.utiles.ExceptionDescription;
 
-public class LegendDriverExceptionType extends ExceptionDescription{
+public class LegendDriverExceptionType extends ExceptionDescription {
 
 	String driverName;
 	String legendLabelField;
 	String legendHeightField;
 	String legendRotationField;
 
-
 	public LegendDriverExceptionType(String errorDescription) {
 		super();
 		setCode(1);
-		setDescription("error al crear la leyenda de una capa "+
-				errorDescription != null ? errorDescription : "");
+		setDescription("error al crear la leyenda de una capa "
+				+ errorDescription != null ? errorDescription : "");
 	}
-	
 
 	public String getHtmlErrorMessage() {
 		String message = "";
-		message += "<b>Error al construir la leyenda:</b><br>" +
-		"Se ha producido un error al tratar de generar la leyenda con el driver " +
-			driverName +"<br>";
+		message += "<b>Error al construir la leyenda:</b><br>"
+				+ "Se ha producido un error al tratar de generar la leyenda con el driver "
+				+ driverName + "<br>";
 
 		message += "Los campos de la capa empleados para construir la leyenda son:<br>";
-		message += "<ol>" +
-					"<li> Texto: " + legendLabelField + "</li>"+
-					"<li> Angulo: " + legendRotationField + "</li>"+
-					"<li> Altura de texto: " + legendHeightField + "</li>";
+		message += "<ol>" + "<li> Texto: " + legendLabelField + "</li>"
+				+ "<li> Angulo: " + legendRotationField + "</li>"
+				+ "<li> Altura de texto: " + legendHeightField + "</li>";
 		return message;
 	}
 
 	public void setDriverName(String driverName) {
 		this.driverName = driverName;
 	}
-
 
 }

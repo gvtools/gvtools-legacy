@@ -43,59 +43,57 @@ package org.gvsig.remotesensing.principalcomponents;
 import Jama.Matrix;
 
 /**
- * Representa las stadísticas necesarias para generar un raster transformado por 
+ * Representa las stadísticas necesarias para generar un raster transformado por
  * el método de Análisis de Componentes principales.
  * 
  * @author Diego Guerrero Sevilla (diego.guerrero@uclm.es)
- *
+ * 
  */
 public class PCStatistics {
-	
-	private Matrix 			autoVectorsMatrix 	= null;
-	private Matrix 			coVarMatrix 		= null;
-	private double			autovalues[]		= null;
-	
+
+	private Matrix autoVectorsMatrix = null;
+	private Matrix coVarMatrix = null;
+	private double autovalues[] = null;
+
 	/**
 	 * Constructor.
 	 * 
-	 * @param autoVectorsMatrix Matriz de autovectores.
-	 * @param autovalues Array de autovalores.
-	 * @param coVarMatrix Matriz de Covarianza.
+	 * @param autoVectorsMatrix
+	 *            Matriz de autovectores.
+	 * @param autovalues
+	 *            Array de autovalores.
+	 * @param coVarMatrix
+	 *            Matriz de Covarianza.
 	 */
-	public PCStatistics(Matrix autoVectorsMatrix, double[] autovalues, Matrix coVarMatrix) {
+	public PCStatistics(Matrix autoVectorsMatrix, double[] autovalues,
+			Matrix coVarMatrix) {
 		this.autoVectorsMatrix = autoVectorsMatrix;
 		this.autovalues = autovalues;
 		this.coVarMatrix = coVarMatrix;
 	}
 
-
 	public Matrix getAutoVectorsMatrix() {
 		return autoVectorsMatrix;
 	}
-
 
 	public void setAutoVectorsMatrix(Matrix autoVectorsMatrix) {
 		this.autoVectorsMatrix = autoVectorsMatrix;
 	}
 
-
 	public Matrix getCoVarMatrix() {
 		return coVarMatrix;
 	}
-
 
 	public void setCoVarMatrix(Matrix coVarMatrix) {
 		this.coVarMatrix = coVarMatrix;
 	}
 
-
 	public double[] getAutovalues() {
 		return autovalues;
 	}
 
-
 	public void setAutovalors(double[] autovalors) {
 		this.autovalues = autovalors;
 	}
-	
+
 }

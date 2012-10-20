@@ -3,10 +3,7 @@ package es.gva.cit.gvsig.catalog;
 import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
 import com.iver.cit.gvsig.About;
-import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.gui.panels.FPanelAbout;
-
-import es.gva.cit.catalog.CatalogAP;
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
@@ -58,23 +55,25 @@ import es.gva.cit.catalog.CatalogAP;
  *
  */
 /**
- * This class implements the About message for the 
- * catalog and gazetteer clients
+ * This class implements the About message for the catalog and gazetteer clients
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class CatalogClientAboutExtension extends Extension{
+public class CatalogClientAboutExtension extends Extension {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String actionCommand) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
@@ -84,16 +83,17 @@ public class CatalogClientAboutExtension extends Extension{
 		java.net.URL aboutURL = this.getClass().getResource("/about.htm");
 		panelAbout.addAboutUrl(PluginServices.getText(this, "Catalog"),
 				aboutURL);
-		//Register the icons
+		// Register the icons
 		PluginServices.getIconTheme().registerDefault(
 				"catalog-search",
-				getClass().getClassLoader().getResource("images/SearchButton.png")
-				); 
+				getClass().getClassLoader().getResource(
+						"images/SearchButton.png"));
 
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
@@ -103,6 +103,7 @@ public class CatalogClientAboutExtension extends Extension{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {

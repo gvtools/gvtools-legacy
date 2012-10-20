@@ -26,11 +26,12 @@ import org.gvsig.gui.beans.treelist.TreeListContainer;
 import org.gvsig.raster.beans.previewbase.IUserPanelInterface;
 import org.gvsig.raster.util.RasterToolsUtil;
 import org.gvsig.rastertools.filter.FilterListener;
+
 /**
- * Es el panel central del panel de filtros. Se compone de dos partes.
- * El lateral izquierdo contiene la lista de filtros posibles y filtros seleccionados
- * La parte derecha contiene las opciones de los filtros
- * En la parte de abajo tenemos el fichero de salida.
+ * Es el panel central del panel de filtros. Se compone de dos partes. El
+ * lateral izquierdo contiene la lista de filtros posibles y filtros
+ * seleccionados La parte derecha contiene las opciones de los filtros En la
+ * parte de abajo tenemos el fichero de salida.
  * 
  * @version 22/02/2008
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
@@ -38,22 +39,23 @@ import org.gvsig.rastertools.filter.FilterListener;
 public class FilterMainPanel extends JPanel implements IUserPanelInterface {
 	private static final long serialVersionUID = -406089078173595028L;
 	private TreeListContainer treeListContainer = null;
-	private JPanel            centralPanel      = null;
-	private FilterListener    filterListener    = null;
+	private JPanel centralPanel = null;
+	private FilterListener filterListener = null;
 
 	public FilterMainPanel(FilterListener filterListener) {
 		this.filterListener = filterListener;
 		initialize();
 	}
-	
+
 	private void initialize() {
 		setLayout(new BorderLayout(5, 5));
 		add(getTreeListContainer(), BorderLayout.WEST);
 		add(getCentralPanel(), BorderLayout.CENTER);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.beans.previewbase.IUserPanelInterface#getPanel()
 	 */
 	public JPanel getPanel() {
@@ -62,6 +64,7 @@ public class FilterMainPanel extends JPanel implements IUserPanelInterface {
 
 	/**
 	 * This method initializes jPanel
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	public TreeListContainer getTreeListContainer() {
@@ -70,14 +73,17 @@ public class FilterMainPanel extends JPanel implements IUserPanelInterface {
 			treeListContainer.getTree().expandRow(0);
 			treeListContainer.addTreeListListener(filterListener);
 			treeListContainer.addChangeSelectionListener(filterListener);
-			treeListContainer.setAddToolTipText(RasterToolsUtil.getText(this, "anadir_filtro"));
-			treeListContainer.setDelToolTipText(RasterToolsUtil.getText(this, "eliminar_filtro"));
+			treeListContainer.setAddToolTipText(RasterToolsUtil.getText(this,
+					"anadir_filtro"));
+			treeListContainer.setDelToolTipText(RasterToolsUtil.getText(this,
+					"eliminar_filtro"));
 		}
 		return treeListContainer;
 	}
 
 	/**
 	 * Obtener y generar el JPanel central que contendrá las propiedades
+	 * 
 	 * @return
 	 */
 	public JPanel getCentralPanel() {
@@ -87,9 +93,10 @@ public class FilterMainPanel extends JPanel implements IUserPanelInterface {
 		}
 		return centralPanel;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.beans.previewbase.IUserPanelInterface#getTitle()
 	 */
 	public String getTitle() {

@@ -64,7 +64,7 @@ import org.gvsig.gpe.kml.parser.profiles.Kml2_1_BindingProfile;
 /**
  * @author Jorge Piera Llodrá (jorge.piera@iver.es)
  */
-public class GPEKmz2_1_Parser extends GPEDeafultKmlParser{
+public class GPEKmz2_1_Parser extends GPEDeafultKmlParser {
 
 	public GPEKmz2_1_Parser() {
 		super();
@@ -73,6 +73,7 @@ public class GPEKmz2_1_Parser extends GPEDeafultKmlParser{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.GPEParser#getDescription()
 	 */
 	public String getDescription() {
@@ -81,6 +82,7 @@ public class GPEKmz2_1_Parser extends GPEDeafultKmlParser{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.GPEParser#getName()
 	 */
 	public String getName() {
@@ -89,26 +91,29 @@ public class GPEKmz2_1_Parser extends GPEDeafultKmlParser{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.GPEParser#getFormat()
 	 */
-	public String getFormat() {		
-		return "application/zip; subtype=kml/2.1";		
+	public String getFormat() {
+		return "application/zip; subtype=kml/2.1";
 	}
-	
+
 	/**
-	 * It creates an InputStream. The Kml file can have the
-	 * KML or the KMZ extension
+	 * It creates an InputStream. The Kml file can have the KML or the KMZ
+	 * extension
+	 * 
 	 * @return
 	 * @throws KmlException
 	 */
-	protected InputStream createInputStream(File file){
-		//KMZ
+	protected InputStream createInputStream(File file) {
+		// KMZ
 		try {
 			FileInputStream fis = new FileInputStream(file);
-			ZipInputStream zis = new ZipInputStream(new BufferedInputStream(fis));
+			ZipInputStream zis = new ZipInputStream(
+					new BufferedInputStream(fis));
 			ZipEntry entry = null;
-			while((entry = zis.getNextEntry()) != null){
-				if (!entry.isDirectory()){
+			while ((entry = zis.getNextEntry()) != null) {
+				if (!entry.isDirectory()) {
 					ZipFile fz = new ZipFile(file);
 					return fz.getInputStream(entry);
 				}
@@ -122,16 +127,17 @@ public class GPEKmz2_1_Parser extends GPEDeafultKmlParser{
 		}
 		return null;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.GPEParser#accept(java.io.File)
 	 */
 	public boolean accept(URI uri) {
-		if (uri.getPath().toUpperCase().endsWith("KMZ")){
+		if (uri.getPath().toUpperCase().endsWith("KMZ")) {
 			return true;
 		}
 		return false;
-	}		
+	}
 
 }

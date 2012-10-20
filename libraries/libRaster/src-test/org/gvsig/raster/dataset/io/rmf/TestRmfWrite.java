@@ -45,23 +45,25 @@ import org.gvsig.raster.datastruct.ViewPortData;
 import org.gvsig.raster.datastruct.serializer.ColorTableRmfSerializer;
 import org.gvsig.raster.datastruct.serializer.HistogramRmfSerializer;
 import org.gvsig.raster.datastruct.serializer.NoDataRmfSerializer;
+
 /**
- * Test de escritura de ficheros rmf.
- * Escribe un fichero rmf con distintos bloques y a continuación le pasa un
- * test de lectura para comprobar que se ha generado bien.
- *
+ * Test de escritura de ficheros rmf. Escribe un fichero rmf con distintos
+ * bloques y a continuación le pasa un test de lectura para comprobar que se ha
+ * generado bien.
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class TestRmfWrite extends BaseTestCase {
-	private RmfBlocksManager manager    = null;
-	private String           baseDir    = "./test-images/";
-	private String           path       = baseDir + "miniRaster25x24.tif";
-	private String           pathGif    = baseDir + "gifTransparente.gif";
-	private String           pathJpg    = baseDir + "03AUG23153350-M2AS-000000122423_01_P001-BROWSE.jpg";
-	private Histogram        histogram  = null;
-	private ColorTable       colorTable = null;
-	private RasterDataset    f          = null;
-	private RasterDataset    f2         = null;
+	private RmfBlocksManager manager = null;
+	private String baseDir = "./test-images/";
+	private String path = baseDir + "miniRaster25x24.tif";
+	private String pathGif = baseDir + "gifTransparente.gif";
+	private String pathJpg = baseDir
+			+ "03AUG23153350-M2AS-000000122423_01_P001-BROWSE.jpg";
+	private Histogram histogram = null;
+	private ColorTable colorTable = null;
+	private RasterDataset f = null;
+	private RasterDataset f2 = null;
 
 	static {
 		RasterLibrary.wakeUp();
@@ -141,7 +143,8 @@ public class TestRmfWrite extends BaseTestCase {
 		p1.leftViewPort = new ViewPortData();
 		p1.leftViewPort.setExtent(new Extent(30032.3, 2103.3, 50023.3, 1234.3));
 		p1.rightViewPort = new ViewPortData();
-		p1.rightViewPort.setExtent(new Extent(30032.3, 2103.3, 50023.3, 1234.3));
+		p1.rightViewPort
+				.setExtent(new Extent(30032.3, 2103.3, 50023.3, 1234.3));
 		p1.leftCenterPoint = new Point2D.Double(24223.3, 3244.2);
 		p1.rightCenterPoint = new Point2D.Double(2433.3, 6244.2);
 		GeoPoint p2 = new GeoPoint();
@@ -150,27 +153,31 @@ public class TestRmfWrite extends BaseTestCase {
 		p2.leftViewPort = new ViewPortData();
 		p2.leftViewPort.setExtent(new Extent(30032.3, 2103.3, 50023.3, 1234.3));
 		p2.rightViewPort = new ViewPortData();
-		p2.rightViewPort.setExtent(new Extent(30032.3, 2103.3, 50023.3, 1234.3));
+		p2.rightViewPort
+				.setExtent(new Extent(30032.3, 2103.3, 50023.3, 1234.3));
 		p2.leftCenterPoint = new Point2D.Double(24223.3, 3244.2);
 		p2.rightCenterPoint = new Point2D.Double(2433.3, 6244.2);
 
 		p1.leftViewPort.pxSize = new Point2D.Double(32, 34);
-		
+
 		GeoPointList list = new GeoPointList();
 		list.add(p1);
 		list.add(p2);
-		GeoPointListRmfSerializer ser4 = new GeoPointListRmfSerializer(list, p1.leftViewPort);
+		GeoPointListRmfSerializer ser4 = new GeoPointListRmfSerializer(list,
+				p1.leftViewPort);
 		manager.addClient(ser4);
 
 		// Valor NoData
-		NoDataRmfSerializer ser5 = new NoDataRmfSerializer(new NoData(5450.0, 2));
+		NoDataRmfSerializer ser5 = new NoDataRmfSerializer(
+				new NoData(5450.0, 2));
 		manager.addClient(ser5);
 
 		// Interpretación de color
 		DatasetColorInterpretation ci = f.getColorInterpretation();
 		ci.setColorInterpValue(0, DatasetColorInterpretation.BLUE_BAND);
 		ci.setColorInterpValue(2, DatasetColorInterpretation.RED_BAND);
-		ColorInterpretationRmfSerializer ser6 = new ColorInterpretationRmfSerializer(f.getColorInterpretation());
+		ColorInterpretationRmfSerializer ser6 = new ColorInterpretationRmfSerializer(
+				f.getColorInterpretation());
 		manager.addClient(ser6);
 
 		try {

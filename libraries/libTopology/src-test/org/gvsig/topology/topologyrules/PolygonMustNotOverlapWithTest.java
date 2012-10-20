@@ -42,11 +42,13 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.topologyrules;
+
+import junit.framework.TestCase;
 
 import org.gvsig.topology.TopologyRuleDefinitionException;
 import org.gvsig.topology.util.LayerFactory;
@@ -55,18 +57,15 @@ import org.gvsig.topology.util.TestTopologyErrorContainer;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.vividsolutions.jts.io.ParseException;
 
-import junit.framework.TestCase;
-
 public class PolygonMustNotOverlapWithTest extends TestCase {
-	public void testDontOverlaps() throws ParseException, TopologyRuleDefinitionException{
-		FLyrVect[] lyrs = 
-			LayerFactory.createPolygonForMustNotOverlapWithTest();
-		
-		PolygonMustNotOverlapWith rule = 
-			new PolygonMustNotOverlapWith(null,lyrs[0] , lyrs[1], 0.1d);
-		
-		TestTopologyErrorContainer errorContainer = 
-			new TestTopologyErrorContainer();
+	public void testDontOverlaps() throws ParseException,
+			TopologyRuleDefinitionException {
+		FLyrVect[] lyrs = LayerFactory.createPolygonForMustNotOverlapWithTest();
+
+		PolygonMustNotOverlapWith rule = new PolygonMustNotOverlapWith(null,
+				lyrs[0], lyrs[1], 0.1d);
+
+		TestTopologyErrorContainer errorContainer = new TestTopologyErrorContainer();
 		rule.setTopologyErrorContainer(errorContainer);
 		rule.checkPreconditions();
 		rule.checkRule();

@@ -96,6 +96,7 @@ import org.gvsig.gpe.xml.utils.XMLAttributesIterator;
 /**
  * This class parses a PlaceMark tag. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;Placemark&gt;
@@ -107,7 +108,9 @@ import org.gvsig.gpe.xml.utils.XMLAttributesIterator;
  * &lt;/Placemark&gt;
  * </code>
  * </pre>
+ * 
  * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#placemark
  */
@@ -115,80 +118,107 @@ public class PlaceMarketBinding {
 
 	/**
 	 * It parses the PlaceMark tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * A Feature
-	 * @throws IOException 
-	 * @throws XmlStreamException 
-	 * @throws XmlStreamException 
-	 * @throws IOException 
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return A Feature
+	 * @throws IOException
+	 * @throws XmlStreamException
+	 * @throws XmlStreamException
+	 * @throws IOException
 	 */
-	public static Object parse(IXmlStreamReader parser,GPEDeafultKmlParser handler) throws XmlStreamException, IOException{
+	public static Object parse(IXmlStreamReader parser,
+			GPEDeafultKmlParser handler) throws XmlStreamException, IOException {
 		boolean endFeature = false;
-		int currentTag;		
+		int currentTag;
 
-		XMLAttributesIterator attributesIterator = new XMLAttributesIterator(parser);
-		
-		String id = handler.getProfile().getFeatureBinding().getID(parser, handler);
-		Object feature = handler.getContentHandler().startFeature(id, parser.getName().getNamespaceURI(), null, attributesIterator, null);
-		
+		XMLAttributesIterator attributesIterator = new XMLAttributesIterator(
+				parser);
+
+		String id = handler.getProfile().getFeatureBinding()
+				.getID(parser, handler);
+		Object feature = handler.getContentHandler().startFeature(id,
+				parser.getName().getNamespaceURI(), null, attributesIterator,
+				null);
+
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.NAME)){
+				if (CompareUtils.compareWithNamespace(tag, Kml2_1_Tags.NAME)) {
 					parser.next();
-					handler.getContentHandler().addNameToFeature(parser.getText(), feature);
-				}else if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.DESCRIPTION)){
+					handler.getContentHandler().addNameToFeature(
+							parser.getText(), feature);
+				} else if (CompareUtils.compareWithNamespace(tag,
+						Kml2_1_Tags.DESCRIPTION)) {
 					parser.next();
 					String description = parser.getText();
-				}else if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.VISIBILITY)){
+				} else if (CompareUtils.compareWithNamespace(tag,
+						Kml2_1_Tags.VISIBILITY)) {
 					parser.next();
 					String visibility = parser.getText();
-				}else if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.LOOKAT)){
-					 handler.getProfile().getLookAtBinding().parse(parser, handler);
-				}else if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.STYLEURL)){
+				} else if (CompareUtils.compareWithNamespace(tag,
+						Kml2_1_Tags.LOOKAT)) {
+					handler.getProfile().getLookAtBinding()
+							.parse(parser, handler);
+				} else if (CompareUtils.compareWithNamespace(tag,
+						Kml2_1_Tags.STYLEURL)) {
 					parser.next();
 					String styleURL = parser.getText();
-				}else if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.POINT)){
-					Object point =  handler.getProfile().getPointTypeBinding().parse(parser, handler);
-					handler.getContentHandler().addGeometryToFeature(point, feature);
-				}else if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.LINESTRING)){
-					Object lineString =  handler.getProfile().getLineStringTypeBinding().parse(parser, handler);
-					handler.getContentHandler().addGeometryToFeature(lineString, feature);
-				}else if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.POLYGON)){
-					Object polygon =  handler.getProfile().getPolygonTypeBinding().parse(parser, handler);
-					handler.getContentHandler().addGeometryToFeature(polygon, feature);
-				}else if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.MULTIGEOMETRY)){
-					Object multiGeometry =  handler.getProfile().getMultiGeometryBinding().parse(parser, handler);
-					handler.getContentHandler().addGeometryToFeature(multiGeometry, feature);
-				}else if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.REGION)){
-					Object bbox =  handler.getProfile().getRegionBinding().parse(parser, handler);
-				}else if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.METADATA)){
+				} else if (CompareUtils.compareWithNamespace(tag,
+						Kml2_1_Tags.POINT)) {
+					Object point = handler.getProfile().getPointTypeBinding()
+							.parse(parser, handler);
+					handler.getContentHandler().addGeometryToFeature(point,
+							feature);
+				} else if (CompareUtils.compareWithNamespace(tag,
+						Kml2_1_Tags.LINESTRING)) {
+					Object lineString = handler.getProfile()
+							.getLineStringTypeBinding().parse(parser, handler);
+					handler.getContentHandler().addGeometryToFeature(
+							lineString, feature);
+				} else if (CompareUtils.compareWithNamespace(tag,
+						Kml2_1_Tags.POLYGON)) {
+					Object polygon = handler.getProfile()
+							.getPolygonTypeBinding().parse(parser, handler);
+					handler.getContentHandler().addGeometryToFeature(polygon,
+							feature);
+				} else if (CompareUtils.compareWithNamespace(tag,
+						Kml2_1_Tags.MULTIGEOMETRY)) {
+					Object multiGeometry = handler.getProfile()
+							.getMultiGeometryBinding().parse(parser, handler);
+					handler.getContentHandler().addGeometryToFeature(
+							multiGeometry, feature);
+				} else if (CompareUtils.compareWithNamespace(tag,
+						Kml2_1_Tags.REGION)) {
+					Object bbox = handler.getProfile().getRegionBinding()
+							.parse(parser, handler);
+				} else if (CompareUtils.compareWithNamespace(tag,
+						Kml2_1_Tags.METADATA)) {
 					MetadataBinding.parse(parser, handler, feature);
 				}
 				break;
 			case IXmlStreamReader.END_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.PLACEMARK)){						
+				if (CompareUtils.compareWithNamespace(tag,
+						Kml2_1_Tags.PLACEMARK)) {
 					endFeature = true;
 					handler.getContentHandler().endFeature(feature);
 				}
 				break;
-			case IXmlStreamReader.CHARACTERS:					
+			case IXmlStreamReader.CHARACTERS:
 
 				break;
 			}
-			if (!endFeature){					
+			if (!endFeature) {
 				currentTag = parser.next();
 				tag = parser.getName();
 			}
-		}			
+		}
 
 		return feature;
 	}

@@ -82,28 +82,31 @@ import org.gvsig.xmlschema.utils.SchemaTags;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class XSComponentImpl extends XSNodeImpl implements IXSComponent{
+public abstract class XSComponentImpl extends XSNodeImpl implements
+		IXSComponent {
 	private IXSSchema schema = null;
-	
+
 	public XSComponentImpl(IXSSchema schema) {
 		super();
-		this.schema = schema;		
+		this.schema = schema;
 	}
 
 	public QName getQName() {
-		return new QName(schema.getTargetNamespace(), getElement().getAttribute(SchemaTags.NAME));
+		return new QName(schema.getTargetNamespace(), getElement()
+				.getAttribute(SchemaTags.NAME));
 	}
 
 	public IXSSchema getSchema() {
 		return schema;
-	}	
-	
+	}
+
 	/**
 	 * Get all the subeleemnts of a XML node
+	 * 
 	 * @return
 	 * @throws TypeNotFoundException
 	 */
-	public Collection getItems(){
-		return new SchemaCollection(getSchema(),getElement());
+	public Collection getItems() {
+		return new SchemaCollection(getSchema(), getElement());
 	}
 }

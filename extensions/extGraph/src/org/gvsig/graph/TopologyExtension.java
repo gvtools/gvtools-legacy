@@ -84,7 +84,7 @@ import com.vividsolutions.jts.planargraph.NodeMap;
 /**
  * @author fjp Primera prueba acerca de la creación de polígonos a partir de una
  *         capa de líneas
- *
+ * 
  */
 public class TopologyExtension extends Extension {
 
@@ -140,19 +140,19 @@ public class TopologyExtension extends Extension {
 
 	}
 
-	private void doTriangulation(FLyrVect lv) throws BaseException
-			{
+	private void doTriangulation(FLyrVect lv) throws BaseException {
 		View v = (View) PluginServices.getMDIManager().getActiveWindow();
 		MapControl mc = v.getMapControl();
 
 		FBitSet bitSet = lv.getRecordset().getSelection();
 		Rectangle2D fullExtent = lv.getFullExtent();
-	    Simplex initialTriangle = new Simplex(new Pnt[] {
-	            new Pnt(fullExtent.getX(), fullExtent.getY()),
-	            new Pnt(fullExtent.getMaxX(), fullExtent.getY()),
-	            new Pnt(fullExtent.getCenterX(),  fullExtent.getMaxY())});
+		Simplex initialTriangle = new Simplex(new Pnt[] {
+				new Pnt(fullExtent.getX(), fullExtent.getY()),
+				new Pnt(fullExtent.getMaxX(), fullExtent.getY()),
+				new Pnt(fullExtent.getCenterX(), fullExtent.getMaxY()) });
 
-		DelaunayTriangulation triangulator = new DelaunayTriangulation(initialTriangle);
+		DelaunayTriangulation triangulator = new DelaunayTriangulation(
+				initialTriangle);
 
 		for (int i = bitSet.nextSetBit(0); i >= 0; i = bitSet.nextSetBit(i + 1)) {
 			IGeometry g = lv.getSource().getShape(i);
@@ -239,12 +239,12 @@ public class TopologyExtension extends Extension {
 			Collection polygons = topologyBuilder.buildPolygons();
 			Iterator it = polygons.iterator();
 			GraphicLayer graphicLayer = mc.getMapContext().getGraphicsLayer();
-			
-			int idSymbolPol = graphicLayer
-					.addSymbol(new SimpleFillSymbol());
-			int idSymbolCutEdge = graphicLayer.addSymbol(new SimpleLineSymbol());
+
+			int idSymbolPol = graphicLayer.addSymbol(new SimpleFillSymbol());
+			int idSymbolCutEdge = graphicLayer
+					.addSymbol(new SimpleLineSymbol());
 			int idSymbolDangle = graphicLayer.addSymbol(new SimpleLineSymbol());
-//					FShape.LINE, Color.RED));
+			// FShape.LINE, Color.RED));
 			while (it.hasNext()) {
 				Polygon pol = (Polygon) it.next();
 				IGeometry gAux = FConverter.jts_to_igeometry(pol);
@@ -285,7 +285,7 @@ public class TopologyExtension extends Extension {
 	 * Node. We also fill a map Node-numOccurrences. Dangle and Fuzzy nodes will
 	 * be those that have an occurrence count = 1. (Node with degree cero in
 	 * graph's language)
-	 *
+	 * 
 	 * @param lyr
 	 * @throws DriverException
 	 * @throws DriverIOException
@@ -367,9 +367,9 @@ public class TopologyExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-//		IWindow v = PluginServices.getMDIManager().getActiveWindow();
-//		if (v instanceof View)
-//			return true;
+		// IWindow v = PluginServices.getMDIManager().getActiveWindow();
+		// if (v instanceof View)
+		// return true;
 		return false;
 	}
 

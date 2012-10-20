@@ -63,38 +63,41 @@ public class SingleFlagListener implements PointListener {
 	public static final int TO_ARC = 0;
 	public static final int TO_NODE = 1;
 	public static int pixelTolerance = 10;
-    private MapControl mapCtrl;
-    private int idSymbolFlag = -1;
-    private Cursor cur = java.awt.Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+	private MapControl mapCtrl;
+	private int idSymbolFlag = -1;
+	private Cursor cur = java.awt.Cursor
+			.getPredefinedCursor(Cursor.HAND_CURSOR);
 	private int mode;
 
-    
-    public SingleFlagListener(MapControl mc) {
-        this.mapCtrl = mc;
-    }
+	public SingleFlagListener(MapControl mc) {
+		this.mapCtrl = mc;
+	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.fmap.tools.Listeners.PointListener#point(org.gvsig.fmap.tools
+	 * .Events.PointEvent) The PointEvent method bring you a point in pixel
+	 * coordinates. You need to transform it to world coordinates. The class to
+	 * do conversions is ViewPort, obtained thru the MapContext of mapCtrl.
+	 */
+	public void point(PointEvent event) throws BehaviorException {
 
-    /* (non-Javadoc)
-     * @see org.gvsig.fmap.tools.Listeners.PointListener#point(org.gvsig.fmap.tools.Events.PointEvent)
-     * The PointEvent method bring you a point in pixel coordinates. You
-     * need to transform it to world coordinates. The class to do conversions
-     * is ViewPort, obtained thru the MapContext of mapCtrl.
-     */
-    public void point(PointEvent event) throws BehaviorException {
-        
-        Point2D pReal = mapCtrl.getMapContext().getViewPort().toMapPoint(event.getPoint());
-        
-		SingleLayerIterator it = new SingleLayerIterator(mapCtrl.getMapContext().getLayers());
-		while (it.hasNext())
-		{
+		Point2D pReal = mapCtrl.getMapContext().getViewPort()
+				.toMapPoint(event.getPoint());
+
+		SingleLayerIterator it = new SingleLayerIterator(mapCtrl
+				.getMapContext().getLayers());
+		while (it.hasNext()) {
 			FLayer aux = it.next();
 			if (!aux.isActive())
 				continue;
 			Network net = (Network) aux.getProperty("network");
-			
-			if ( net != null)
-			{
-				double realTol = mapCtrl.getViewPort().toMapDistance(pixelTolerance);
+
+			if (net != null) {
+				double realTol = mapCtrl.getViewPort().toMapDistance(
+						pixelTolerance);
 				GvFlag flag;
 				try {
 					net.removeFlags();
@@ -102,10 +105,11 @@ public class SingleFlagListener implements PointListener {
 					if (mode == TO_ARC)
 						flag = net.addFlag(pReal.getX(), pReal.getY(), realTol);
 					else
-						flag = net.addFlagToNode(pReal.getX(), pReal.getY(), realTol);
-					if (flag == null)
-					{
-						JOptionPane.showMessageDialog(null, PluginServices.getText(this, "point_not_on_the_network"));
+						flag = net.addFlagToNode(pReal.getX(), pReal.getY(),
+								realTol);
+					if (flag == null) {
+						JOptionPane.showMessageDialog(null, PluginServices
+								.getText(this, "point_not_on_the_network"));
 						return;
 					}
 					NetworkUtils.addGraphicFlag(mapCtrl, flag);
@@ -115,32 +119,27 @@ public class SingleFlagListener implements PointListener {
 					e.printStackTrace();
 					NotificationManager.addError(e);
 				}
-				
+
 			}
 		}
-        
-        
-    }
 
-    public Cursor getCursor() {
-        return cur;
-    }
-
-    public boolean cancelDrawing() {
-        return false;
-    }
-
-
-	public void pointDoubleClick(PointEvent event) throws BehaviorException {
-		
 	}
 
+	public Cursor getCursor() {
+		return cur;
+	}
+
+	public boolean cancelDrawing() {
+		return false;
+	}
+
+	public void pointDoubleClick(PointEvent event) throws BehaviorException {
+
+	}
 
 	public void setMode(int mode) {
 		this.mode = mode;
-		
+
 	}
 
 }
-
-

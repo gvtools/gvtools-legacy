@@ -44,22 +44,30 @@ import java.awt.geom.Rectangle2D;
 
 import com.iver.utiles.XMLEntity;
 
-
 /**
- * <p><code>ExtentHistory</code> is designed for managing a history of extents.</p>
+ * <p>
+ * <code>ExtentHistory</code> is designed for managing a history of extents.
+ * </p>
  * 
- * <p>Note: An <i>extent</i> is a rectangular area, with information of its top-left 2D corner.</p>
- *
+ * <p>
+ * Note: An <i>extent</i> is a rectangular area, with information of its
+ * top-left 2D corner.
+ * </p>
+ * 
  * @author Vicente Caballero Navarro
  */
 public class ExtentHistory {
 	/**
-	 * <p>Maximum number of extents that can store.</p>
+	 * <p>
+	 * Maximum number of extents that can store.
+	 * </p>
 	 */
 	private int NUMREC;
-	
+
 	/**
-	 * <p>Array with the extents.</p>
+	 * <p>
+	 * Array with the extents.
+	 * </p>
 	 * 
 	 * @see #hasPrevious()
 	 * @see #put(Rectangle2D)
@@ -67,9 +75,11 @@ public class ExtentHistory {
 	 * @see #removePrev()
 	 */
 	private Rectangle2D[] extents;
-	
+
 	/**
-	 * <p>Number of extents stored.</p>
+	 * <p>
+	 * Number of extents stored.
+	 * </p>
 	 * 
 	 * @see #hasPrevious()
 	 * @see #put(Rectangle2D)
@@ -79,7 +89,10 @@ public class ExtentHistory {
 	private int num = 0;
 
 	/**
-	 * <p>Creates a new instance of <code>ExtentsHistory</code> with an history of 10 extents.</p>
+	 * <p>
+	 * Creates a new instance of <code>ExtentsHistory</code> with an history of
+	 * 10 extents.
+	 * </p>
 	 */
 	public ExtentHistory() {
 		NUMREC = 10;
@@ -87,18 +100,25 @@ public class ExtentHistory {
 	}
 
 	/**
-	 * <p>Creates a new instance of <code>ExtentsHistory</code> with an history of <code>numEntries</code> extents.</p>
-	 *
-	 * @param numEntries the maximum number of extents that will store the instance
+	 * <p>
+	 * Creates a new instance of <code>ExtentsHistory</code> with an history of
+	 * <code>numEntries</code> extents.
+	 * </p>
+	 * 
+	 * @param numEntries
+	 *            the maximum number of extents that will store the instance
 	 */
 	public ExtentHistory(int numEntries) {
 		NUMREC = numEntries;
 	}
 
 	/**
-	 * <p>Appends the specified extent to the end of this history.</p>
-	 *
-	 * @param ext the new extent
+	 * <p>
+	 * Appends the specified extent to the end of this history.
+	 * </p>
+	 * 
+	 * @param ext
+	 *            the new extent
 	 * 
 	 * @see #get()
 	 * @see #hasPrevious()
@@ -119,9 +139,12 @@ public class ExtentHistory {
 	}
 
 	/**
-	 * <p>Returns <code>true</code> if there are extents registered.</p>
-	 *
-	 * @return <code>true</code> if there are extents registered; <code>false</code> otherwise
+	 * <p>
+	 * Returns <code>true</code> if there are extents registered.
+	 * </p>
+	 * 
+	 * @return <code>true</code> if there are extents registered;
+	 *         <code>false</code> otherwise
 	 * 
 	 * @see #put(Rectangle2D)
 	 * @see #removePrev()
@@ -132,8 +155,10 @@ public class ExtentHistory {
 	}
 
 	/**
-	 * <p>Returns the last extent in the history.</p>
-	 *
+	 * <p>
+	 * Returns the last extent in the history.
+	 * </p>
+	 * 
 	 * @return the last extent in the history
 	 * 
 	 * @see #put(Rectangle2D)
@@ -146,8 +171,10 @@ public class ExtentHistory {
 	}
 
 	/**
-	 * <p>Extracts (removing) the last extent from the history.</p>
-	 *
+	 * <p>
+	 * Extracts (removing) the last extent from the history.
+	 * </p>
+	 * 
 	 * @return last extent in the history
 	 * 
 	 * @see #hasPrevious()
@@ -158,19 +185,25 @@ public class ExtentHistory {
 	}
 
 	/**
-	 * <p>Returns an XML entity with information of this object. All information is stored as properties:<br></p>
-	 * <p><b>Properties:</b>
+	 * <p>
+	 * Returns an XML entity with information of this object. All information is
+	 * stored as properties:<br>
+	 * </p>
+	 * <p>
+	 * <b>Properties:</b>
 	 * <ul>
-	 *  <li><i>className</i>: name of this class.
-	 *  <li><i>num</i>: number of extents registered.
-	 *  <li><i>numrec</i>: maximum number of extents that can register.
-	 *  <li><i>extentiX</i>: X coordinate of the upper left corner of the rectangle that defines the area.
-	 *  <li><i>extentiY</i>: Y coordinate of the upper left corner of the rectangle that defines the area.
-	 *  <li><i>extentiW</i>: width of the rectangle that defines the area.
-	 *  <li><i>extentiH</i>: height of the rectangle that defines the area.
+	 * <li><i>className</i>: name of this class.
+	 * <li><i>num</i>: number of extents registered.
+	 * <li><i>numrec</i>: maximum number of extents that can register.
+	 * <li><i>extentiX</i>: X coordinate of the upper left corner of the
+	 * rectangle that defines the area.
+	 * <li><i>extentiY</i>: Y coordinate of the upper left corner of the
+	 * rectangle that defines the area.
+	 * <li><i>extentiW</i>: width of the rectangle that defines the area.
+	 * <li><i>extentiH</i>: height of the rectangle that defines the area.
 	 * </ul>
 	 * </p>
-	 *
+	 * 
 	 * @return XML entity that represents this object
 	 * 
 	 * @see #createFromXML(XMLEntity)
@@ -179,7 +212,7 @@ public class ExtentHistory {
 	 */
 	public XMLEntity getXMLEntity() {
 		XMLEntity xml = new XMLEntity();
-		xml.putProperty("className",this.getClass().getName());
+		xml.putProperty("className", this.getClass().getName());
 		xml.putProperty("num", num);
 		xml.putProperty("numrec", NUMREC);
 
@@ -196,7 +229,7 @@ public class ExtentHistory {
 	}
 
 	/**
-	 * @see #createFromXML(XMLEntity) 
+	 * @see #createFromXML(XMLEntity)
 	 */
 	public static ExtentHistory createFromXML03(XMLEntity xml) {
 		ExtentHistory eh = new ExtentHistory();
@@ -205,13 +238,15 @@ public class ExtentHistory {
 
 		for (int i = 0; i < eh.NUMREC; i++) {
 			try {
-				eh.extents[i] = new Rectangle2D.Double(xml.getDoubleProperty(
-						"extent" + i + "X"),
+				eh.extents[i] = new Rectangle2D.Double(
+						xml.getDoubleProperty("extent" + i + "X"),
 						xml.getDoubleProperty("extent" + i + "Y"),
 						xml.getDoubleProperty("extent" + i + "W"),
 						xml.getDoubleProperty("extent" + i + "H"));
 			} catch (Exception e) {
-				///System.out.println("En las ExtentHistory =" + e); //TODO o se captura de alguna forma o se mete un nuevo parametro en el xml para saber exactamente cuantos rectágulos se han añadido.
+				// /System.out.println("En las ExtentHistory =" + e); //TODO o
+				// se captura de alguna forma o se mete un nuevo parametro en el
+				// xml para saber exactamente cuantos rectágulos se han añadido.
 			}
 		}
 
@@ -219,12 +254,16 @@ public class ExtentHistory {
 	}
 
 	/**
-	 * <p>Binds the information in the XML entity argument to create and return an <code>ExtentHistory</code>
-	 *  object.</p>
-	 *
-	 * @param xml an XML entity of a <code>ExtentHistory</code>
-	 *
-	 * @return an <code>ExtentHistory</code> object with the information of the <code>xml</code> argument
+	 * <p>
+	 * Binds the information in the XML entity argument to create and return an
+	 * <code>ExtentHistory</code> object.
+	 * </p>
+	 * 
+	 * @param xml
+	 *            an XML entity of a <code>ExtentHistory</code>
+	 * 
+	 * @return an <code>ExtentHistory</code> object with the information of the
+	 *         <code>xml</code> argument
 	 * 
 	 * @see #getXMLEntity()
 	 */
@@ -235,13 +274,15 @@ public class ExtentHistory {
 
 		for (int i = 0; i < eh.NUMREC; i++) {
 			try {
-				eh.extents[i] = new Rectangle2D.Double(xml.getDoubleProperty(
-						"extent" + i + "X"),
+				eh.extents[i] = new Rectangle2D.Double(
+						xml.getDoubleProperty("extent" + i + "X"),
 						xml.getDoubleProperty("extent" + i + "Y"),
 						xml.getDoubleProperty("extent" + i + "W"),
 						xml.getDoubleProperty("extent" + i + "H"));
 			} catch (Exception e) {
-				///System.out.println("En las ExtentHistory =" + e); //TODO o se captura de alguna forma o se mete un nuevo parametro en el xml para saber exactamente cuantos rectágulos se han añadido.
+				// /System.out.println("En las ExtentHistory =" + e); //TODO o
+				// se captura de alguna forma o se mete un nuevo parametro en el
+				// xml para saber exactamente cuantos rectágulos se han añadido.
 			}
 		}
 

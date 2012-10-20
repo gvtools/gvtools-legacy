@@ -47,8 +47,8 @@
  */
 package com.iver.andami.persistence.generate;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
 import org.exolab.castor.xml.Marshaller;
@@ -57,136 +57,132 @@ import org.exolab.castor.xml.Unmarshaller;
 /**
  * Class PluginsStatus.
  * 
- * @version $Revision: 5275 $ $Date: 2006-05-19 08:41:50 +0200 (Fri, 19 May 2006) $
+ * @version $Revision: 5275 $ $Date: 2006-05-19 08:41:50 +0200 (Fri, 19 May
+ *          2006) $
  */
 public class PluginsStatus implements java.io.Serializable {
 
+	// --------------------------/
+	// - Class/Member Variables -/
+	// --------------------------/
 
-      //--------------------------/
-     //- Class/Member Variables -/
-    //--------------------------/
+	/**
+	 * Field _plugin
+	 */
+	private com.iver.andami.persistence.generate.Plugin _plugin;
 
-    /**
-     * Field _plugin
-     */
-    private com.iver.andami.persistence.generate.Plugin _plugin;
+	/**
+	 * Field _toolBars
+	 */
+	private com.iver.andami.persistence.generate.ToolBars _toolBars;
 
-    /**
-     * Field _toolBars
-     */
-    private com.iver.andami.persistence.generate.ToolBars _toolBars;
+	// ----------------/
+	// - Constructors -/
+	// ----------------/
 
+	public PluginsStatus() {
+		super();
+	} // -- com.iver.andami.persistence.generate.PluginsStatus()
 
-      //----------------/
-     //- Constructors -/
-    //----------------/
+	// -----------/
+	// - Methods -/
+	// -----------/
 
-    public PluginsStatus() {
-        super();
-    } //-- com.iver.andami.persistence.generate.PluginsStatus()
+	/**
+	 * Returns the value of field 'plugin'.
+	 * 
+	 * @return the value of field 'plugin'.
+	 */
+	public com.iver.andami.persistence.generate.Plugin getPlugin() {
+		return this._plugin;
+	} // -- com.iver.andami.persistence.generate.Plugin getPlugin()
 
+	/**
+	 * Returns the value of field 'toolBars'.
+	 * 
+	 * @return the value of field 'toolBars'.
+	 */
+	public com.iver.andami.persistence.generate.ToolBars getToolBars() {
+		return this._toolBars;
+	} // -- com.iver.andami.persistence.generate.ToolBars getToolBars()
 
-      //-----------/
-     //- Methods -/
-    //-----------/
+	/**
+	 * Method isValid
+	 */
+	public boolean isValid() {
+		try {
+			validate();
+		} catch (org.exolab.castor.xml.ValidationException vex) {
+			return false;
+		}
+		return true;
+	} // -- boolean isValid()
 
-    /**
-     * Returns the value of field 'plugin'.
-     * 
-     * @return the value of field 'plugin'.
-     */
-    public com.iver.andami.persistence.generate.Plugin getPlugin()
-    {
-        return this._plugin;
-    } //-- com.iver.andami.persistence.generate.Plugin getPlugin() 
+	/**
+	 * Method marshal
+	 * 
+	 * @param out
+	 */
+	public void marshal(java.io.Writer out)
+			throws org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
 
-    /**
-     * Returns the value of field 'toolBars'.
-     * 
-     * @return the value of field 'toolBars'.
-     */
-    public com.iver.andami.persistence.generate.ToolBars getToolBars()
-    {
-        return this._toolBars;
-    } //-- com.iver.andami.persistence.generate.ToolBars getToolBars() 
+		Marshaller.marshal(this, out);
+	} // -- void marshal(java.io.Writer)
 
-    /**
-     * Method isValid
-     */
-    public boolean isValid()
-    {
-        try {
-            validate();
-        }
-        catch (org.exolab.castor.xml.ValidationException vex) {
-            return false;
-        }
-        return true;
-    } //-- boolean isValid() 
+	/**
+	 * Method marshal
+	 * 
+	 * @param handler
+	 */
+	public void marshal(org.xml.sax.ContentHandler handler)
+			throws java.io.IOException, org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
 
-    /**
-     * Method marshal
-     * 
-     * @param out
-     */
-    public void marshal(java.io.Writer out)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        
-        Marshaller.marshal(this, out);
-    } //-- void marshal(java.io.Writer) 
+		Marshaller.marshal(this, handler);
+	} // -- void marshal(org.xml.sax.ContentHandler)
 
-    /**
-     * Method marshal
-     * 
-     * @param handler
-     */
-    public void marshal(org.xml.sax.ContentHandler handler)
-        throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        
-        Marshaller.marshal(this, handler);
-    } //-- void marshal(org.xml.sax.ContentHandler) 
+	/**
+	 * Sets the value of field 'plugin'.
+	 * 
+	 * @param plugin
+	 *            the value of field 'plugin'.
+	 */
+	public void setPlugin(com.iver.andami.persistence.generate.Plugin plugin) {
+		this._plugin = plugin;
+	} // -- void setPlugin(com.iver.andami.persistence.generate.Plugin)
 
-    /**
-     * Sets the value of field 'plugin'.
-     * 
-     * @param plugin the value of field 'plugin'.
-     */
-    public void setPlugin(com.iver.andami.persistence.generate.Plugin plugin)
-    {
-        this._plugin = plugin;
-    } //-- void setPlugin(com.iver.andami.persistence.generate.Plugin) 
+	/**
+	 * Sets the value of field 'toolBars'.
+	 * 
+	 * @param toolBars
+	 *            the value of field 'toolBars'.
+	 */
+	public void setToolBars(
+			com.iver.andami.persistence.generate.ToolBars toolBars) {
+		this._toolBars = toolBars;
+	} // -- void setToolBars(com.iver.andami.persistence.generate.ToolBars)
 
-    /**
-     * Sets the value of field 'toolBars'.
-     * 
-     * @param toolBars the value of field 'toolBars'.
-     */
-    public void setToolBars(com.iver.andami.persistence.generate.ToolBars toolBars)
-    {
-        this._toolBars = toolBars;
-    } //-- void setToolBars(com.iver.andami.persistence.generate.ToolBars) 
+	/**
+	 * Method unmarshal
+	 * 
+	 * @param reader
+	 */
+	public static java.lang.Object unmarshal(java.io.Reader reader)
+			throws org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
+		return (com.iver.andami.persistence.generate.PluginsStatus) Unmarshaller
+				.unmarshal(
+						com.iver.andami.persistence.generate.PluginsStatus.class,
+						reader);
+	} // -- java.lang.Object unmarshal(java.io.Reader)
 
-    /**
-     * Method unmarshal
-     * 
-     * @param reader
-     */
-    public static java.lang.Object unmarshal(java.io.Reader reader)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        return (com.iver.andami.persistence.generate.PluginsStatus) Unmarshaller.unmarshal(com.iver.andami.persistence.generate.PluginsStatus.class, reader);
-    } //-- java.lang.Object unmarshal(java.io.Reader) 
-
-    /**
-     * Method validate
-     */
-    public void validate()
-        throws org.exolab.castor.xml.ValidationException
-    {
-        org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
-        validator.validate(this);
-    } //-- void validate() 
+	/**
+	 * Method validate
+	 */
+	public void validate() throws org.exolab.castor.xml.ValidationException {
+		org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
+		validator.validate(this);
+	} // -- void validate()
 
 }

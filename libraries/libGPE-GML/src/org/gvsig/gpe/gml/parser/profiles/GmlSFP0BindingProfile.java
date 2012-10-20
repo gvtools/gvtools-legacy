@@ -70,7 +70,7 @@ import org.gvsig.gpe.gml.parser.v2.geometries.PolygonTypeBinding;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class GmlSFP0BindingProfile extends Gml2BindingProfile{
+public class GmlSFP0BindingProfile extends Gml2BindingProfile {
 	protected PosTypeIterator posTypeIterator = new PosTypeIterator();
 	protected EnvelopeTypeBinding envelopeTypeBinding = new EnvelopeTypeBinding();
 	protected LowerCornerTypeBinding lowerCornerTypeBinding = new LowerCornerTypeBinding();
@@ -91,155 +91,175 @@ public class GmlSFP0BindingProfile extends Gml2BindingProfile{
 	protected org.gvsig.gpe.gml.parser.sfp0.geometries.MultiPolygonTypeBinding multiPolygonTypeBinding = new org.gvsig.gpe.gml.parser.sfp0.geometries.MultiPolygonTypeBinding();
 	protected org.gvsig.gpe.gml.parser.sfp0.geometries.PolygonMemberTypeBinding polygonMemberTypeBinding = new org.gvsig.gpe.gml.parser.sfp0.geometries.PolygonMemberTypeBinding();
 	protected org.gvsig.gpe.gml.parser.sfp0.geometries.PolygonTypeBinding polygonTypeBinding = new org.gvsig.gpe.gml.parser.sfp0.geometries.PolygonTypeBinding();
-	
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.DefaultProfile#getPosTypeBinding()
 	 */
 	public PosTypeIterator getPosTypeBinding() {
 		return posTypeIterator;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getEnvelopeTypeBinding()
 	 */
 	public EnvelopeTypeBinding getEnvelopeTypeBinding() {
 		return envelopeTypeBinding;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getLowerCornerTypeBinding()
 	 */
 	public LowerCornerTypeBinding getLowerCornerTypeBinding() {
 		return lowerCornerTypeBinding;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getLowerCornerTypeBinding()
 	 */
 	public UpperCornerTypeBinding getUpperCornerTypeBinding() {
 		return upperCornerTypeBinding;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.profiles.DefaultProfile#getCurvePropertyTypeBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.profiles.DefaultProfile#getCurvePropertyTypeBinding()
 	 */
 	public CurvePropertyTypeBinding getCurvePropertyTypeBinding() {
 		return curvePropertyTypeBinding;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getPosListTypeBinding()
 	 */
 	public PosListTypeIterator getPosListTypeBinding() {
 		return posListTypeIterator;
 	}
-	
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getCurveTypeBinding()
 	 */
 	public CurveTypeBinding getCurveTypeBinding() {
 		return curveTypeBinding;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getSegmentsTypeBinding()
 	 */
 	public SegmentsTypeBinding getSegmentsTypeBinding() {
 		return segmentsTypeBinding;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getGeometryBinding()
 	 */
 	public GeometryBinding getGeometryBinding() {
 		return geometryBinding;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getBoundedByTypeBinding()
 	 */
 	public BoundedByTypeBinding getBoundedByTypeBinding() {
 		return boundedByTypeBinding;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getPointTypeBinding()
 	 */
 	public PointTypeBinding getPointTypeBinding() {
 		return pointTypeBinding;
 	}
-	
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.Gml2Profile#getLinearRingTypeBinding()
 	 */
 	public LinearRingTypeBinding getLinearRingTypeBinding() {
 		return linearRingTypeBinding;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.Gml2Profile#getLineStringTypeBinding()
-	*/
+	 */
 	public LineStringTypeBinding getLineStringTypeBinding() {
 		return lineStringTypeBinding;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getMultiPolygonTypeBinding()
 	 */
 	public MultiPolygonTypeBinding getMultiPolygonTypeBinding() {
 		return multiPolygonTypeBinding;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.Gml2Profile#getPolygonMemberTypeBinding()
 	 */
 	public PolygonMemberTypeBinding getPolygonMemberTypeBinding() {
 		return polygonMemberTypeBinding;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getPolygonTypeBinding()
 	 */
 	public PolygonTypeBinding getPolygonTypeBinding() {
 		return polygonTypeBinding;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.DefaultProfile#getExteriorTypeBinding()
 	 */
 	public ExteriorTypeBinding getExteriorTypeBinding() {
 		return exteriorTypeBinding;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getInteriorTypeBinding()
 	 */
 	public InteriorTypeBinding getInteriorTypeBinding() {
 		return interiorTypeBinding;
 	}
-	
-	/* (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.parser.profiles.DefaultBindingProfile#getMultiCurveTypeBinding()
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.gpe.gml.parser.profiles.DefaultBindingProfile#
+	 * getMultiCurveTypeBinding()
 	 */
 	public MultiCurveTypeBinding getMultiCurveTypeBinding() {
 		return multiCurveTypeBinding;

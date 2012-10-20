@@ -26,15 +26,17 @@ import javax.swing.JOptionPane;
 
 import org.gvsig.quickInfo.i18n.Messages;
 
-
 /**
- * <p>Tests the method {@link FormatDecimalNumber FormatDecimalNumber}</p>
- *
+ * <p>
+ * Tests the method {@link FormatDecimalNumber FormatDecimalNumber}
+ * </p>
+ * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class TestFormatDecimalNumber {
 	/**
-	 * Tests the method {@link FormatDecimalNumbe#formatDecimal(double) FormatDecimalNumbe#formatDecimal(double)}
+	 * Tests the method {@link FormatDecimalNumbe#formatDecimal(double)
+	 * FormatDecimalNumbe#formatDecimal(double)}
 	 * 
 	 * @param args
 	 */
@@ -44,59 +46,61 @@ public class TestFormatDecimalNumber {
 			System.out.println(num);
 			System.out.println(FormatDecimalNumber.formatDecimal(num));
 			System.out.println("----------------------------");
-			
+
 			num = 0.00000123412341234123412351235123451235123;
 			System.out.println(num);
 			System.out.println(FormatDecimalNumber.formatDecimal(num));
 			System.out.println("----------------------------");
-			
+
 			num = 123412341234123412351235123451235123.0;
 			System.out.println(num);
 			System.out.println(FormatDecimalNumber.formatDecimal(num));
 			System.out.println("----------------------------");
-	
+
 			num = -123;
 			System.out.println(num);
 			System.out.println(FormatDecimalNumber.formatDecimal(num));
 			System.out.println("----------------------------");
-	
+
 			num = 0.00123;
 			System.out.println(num);
 			System.out.println(FormatDecimalNumber.formatDecimal(num));
 			System.out.println("----------------------------");
-	
+
 			num = -0.923;
 			System.out.println(num);
 			System.out.println(FormatDecimalNumber.formatDecimal(num));
 			System.out.println("----------------------------");
-	
+
 			num = 0.0000225;
 			System.out.println(num);
 			System.out.println(FormatDecimalNumber.formatDecimal(num));
 			System.out.println("----------------------------");
-	
+
 			num = 0.00000225;
 			System.out.println(num);
 			System.out.println(FormatDecimalNumber.formatDecimal(num));
 			System.out.println("----------------------------");
-	
+
 			num = 1234567890;
 			System.out.println(num);
 			System.out.println(FormatDecimalNumber.formatDecimal(num));
 			System.out.println("----------------------------");
-			
+
 			num = 1223456789;
 			System.out.println(num);
 			System.out.println(FormatDecimalNumber.formatDecimal(num));
 			System.out.println("----------------------------");
-	
+
 			num = 12.2345678901E9;
 			System.out.println(num);
 			System.out.println(FormatDecimalNumber.formatDecimal(num));
 			System.out.println("----------------------------");
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, Messages.getText("An_exception_happened"), Messages.getText("Error"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null,
+					Messages.getText("An_exception_happened"),
+					Messages.getText("Error"), JOptionPane.ERROR_MESSAGE);
 		}
 
 		return;

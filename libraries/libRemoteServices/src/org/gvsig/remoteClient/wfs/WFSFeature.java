@@ -74,141 +74,160 @@ import org.gvsig.remoteClient.utils.BoundaryBox;
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
 public class WFSFeature {
-	 private String	name = null;
-	 private String	title = null;
-	 private String	_abstract = null;
-	 private Vector srs = new Vector();
-	 private BoundaryBox latLonBbox = null;
-	 private Hashtable bBoxes = new Hashtable();
-	 private Vector fields = new Vector();
-	 private Vector keywords = new Vector();
-	 private XMLNameSpace namespace = null;
-	 
-	 public WFSFeature(){
-		
-	 }
-	 
-	 public WFSFeature(String name){
-		 this.name = name;
-	 }
-	 
+	private String name = null;
+	private String title = null;
+	private String _abstract = null;
+	private Vector srs = new Vector();
+	private BoundaryBox latLonBbox = null;
+	private Hashtable bBoxes = new Hashtable();
+	private Vector fields = new Vector();
+	private Vector keywords = new Vector();
+	private XMLNameSpace namespace = null;
+
+	public WFSFeature() {
+
+	}
+
+	public WFSFeature(String name) {
+		this.name = name;
+	}
+
 	/**
 	 * @return Returns the fields.
 	 */
 	public Vector getFields() {
 		return fields;
 	}
+
 	/**
-	 * @param fields The fields to set.
+	 * @param fields
+	 *            The fields to set.
 	 */
 	public void setFields(Vector fields) {
 		this.fields = fields;
 	}
+
 	/**
 	 * @return Returns the _abstract.
 	 */
 	public String getAbstract() {
 		return _abstract;
 	}
+
 	/**
-	 * @param _abstract The _abstract to set.
+	 * @param _abstract
+	 *            The _abstract to set.
 	 */
 	public void setAbstract(String _abstract) {
 		this._abstract = _abstract;
-	}	
-	
+	}
+
 	/**
 	 * @return Returns the name.
 	 */
 	public String getName() {
 		return name;
 	}
-	
+
 	/**
-	 * @param name The name to set.
+	 * @param name
+	 *            The name to set.
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	/**
 	 * @return Returns the title.
 	 */
 	public String getTitle() {
-		if ((title == null) ||
-		(title.equals(""))){
+		if ((title == null) || (title.equals(""))) {
 			return name;
 		}
 		return title;
 	}
-	
+
 	/**
-	 * @param title The title to set.
+	 * @param title
+	 *            The title to set.
 	 */
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+
 	/**
 	 * @return Returns the latLonBbox.
 	 */
 	public BoundaryBox getLatLonBbox() {
 		return latLonBbox;
 	}
+
 	/**
-	 * @param latLonBbox The latLonBbox to set.
+	 * @param latLonBbox
+	 *            The latLonBbox to set.
 	 */
 	public void setLatLonBbox(BoundaryBox latLonBbox) {
 		this.latLonBbox = latLonBbox;
 	}
+
 	/**
 	 * @return Returns the keywords.
 	 */
 	public Vector getKeywords() {
 		return keywords;
 	}
-	
-	public void addKeyword(String keyword){
+
+	public void addKeyword(String keyword) {
 		keywords.add(keyword);
 	}
+
 	/**
 	 * @return Returns the srs.
 	 */
 	public Vector getSrs() {
 		return srs;
 	}
-	
-	public void addSRS(String key){
+
+	public void addSRS(String key) {
 		if (!this.srs.contains(key))
-    		srs.add(key);
+			srs.add(key);
 	}
-	
-	 /**
-     * <p>Adds a bbox to the Bboxes vector</p>
-     * @param bbox
-     */
-    public void addBBox(BoundaryBox bbox) {
-        bBoxes.put(bbox.getSrs(), bbox);
-    } 
-    
-    /**
-     * <p>returns the bbox with that id in the Bboxes vector</p> 
-     * @param id 
-     */
-    public BoundaryBox getBbox(String id) {
-    	return (BoundaryBox)bBoxes.get(id);
-    }
+
+	/**
+	 * <p>
+	 * Adds a bbox to the Bboxes vector
+	 * </p>
+	 * 
+	 * @param bbox
+	 */
+	public void addBBox(BoundaryBox bbox) {
+		bBoxes.put(bbox.getSrs(), bbox);
+	}
+
+	/**
+	 * <p>
+	 * returns the bbox with that id in the Bboxes vector
+	 * </p>
+	 * 
+	 * @param id
+	 */
+	public BoundaryBox getBbox(String id) {
+		return (BoundaryBox) bBoxes.get(id);
+	}
+
 	/**
 	 * @return Returns the namespace.
 	 */
 	public XMLNameSpace getNamespace() {
 		return namespace;
 	}
+
 	/**
-	 * @param namespace The namespace to set.
+	 * @param namespace
+	 *            The namespace to set.
 	 */
 	public void setNamespace(XMLNameSpace namespace) {
 		this.namespace = namespace;
-	} 
-	
-}    
+	}
+
+}

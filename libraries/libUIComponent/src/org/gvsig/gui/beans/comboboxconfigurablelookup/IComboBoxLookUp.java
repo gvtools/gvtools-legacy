@@ -1,4 +1,5 @@
 package org.gvsig.gui.beans.comboboxconfigurablelookup;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -41,15 +42,18 @@ package org.gvsig.gui.beans.comboboxconfigurablelookup;
  */
 
 /**
- * <p>Interface for all the models which will allow look up items
- *  using a text.</p>
+ * <p>
+ * Interface for all the models which will allow look up items using a text.
+ * </p>
  * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  * @version 07/02/2008
  */
 public interface IComboBoxLookUp {
 	/**
-	 * <p>Sets the text for search items.</p>
+	 * <p>
+	 * Sets the text for search items.
+	 * </p>
 	 */
 	public void setTextWritten(String text);
 }

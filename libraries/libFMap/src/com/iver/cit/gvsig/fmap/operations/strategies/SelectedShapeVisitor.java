@@ -52,21 +52,23 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.AlphanumericData;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class SelectedShapeVisitor implements FeatureVisitor {
-	private SelectableDataSource sds=null;
-	private ArrayList fgs=new ArrayList();
+	private SelectableDataSource sds = null;
+	private ArrayList fgs = new ArrayList();
 	private BitSet bitset;
+
 	/**
-	 * @see com.iver.cit.gvsig.fmap.operations.strategies.FeatureVisitor#visit(com.iver.cit.gvsig.fmap.core.IGeometry, int)
+	 * @see com.iver.cit.gvsig.fmap.operations.strategies.FeatureVisitor#visit(com.iver.cit.gvsig.fmap.core.IGeometry,
+	 *      int)
 	 */
-	public void visit(IGeometry g, int index) throws VisitorException, ProcessVisitorException {
-		if (bitset.get(index)){
+	public void visit(IGeometry g, int index) throws VisitorException,
+			ProcessVisitorException {
+		if (bitset.get(index)) {
 			fgs.add(g);
 		}
 	}
@@ -88,7 +90,8 @@ public class SelectedShapeVisitor implements FeatureVisitor {
 				e.printStackTrace();
 			}
 			try {
-				bitset = ((AlphanumericData) layer).getRecordset().getSelection();
+				bitset = ((AlphanumericData) layer).getRecordset()
+						.getSelection();
 			} catch (ReadDriverException e) {
 				e.printStackTrace();
 			}
@@ -98,13 +101,16 @@ public class SelectedShapeVisitor implements FeatureVisitor {
 		return false;
 
 	}
-	public IGeometry[] getSelectedGeometries(){
-		return (IGeometry[])fgs.toArray(new IGeometry[0]);
+
+	public IGeometry[] getSelectedGeometries() {
+		return (IGeometry[]) fgs.toArray(new IGeometry[0]);
 	}
-	public SelectableDataSource getSelectableDataSource(){
+
+	public SelectableDataSource getSelectableDataSource() {
 		return sds;
 	}
-	public BitSet getBitSet(){
+
+	public BitSet getBitSet() {
 		return bitset;
 	}
 

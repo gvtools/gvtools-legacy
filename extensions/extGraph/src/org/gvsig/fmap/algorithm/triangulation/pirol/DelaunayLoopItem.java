@@ -9,51 +9,53 @@
  */
 package org.gvsig.fmap.algorithm.triangulation.pirol;
 
-
 /**
- * Class tha describes the needed values to start an iteration in the culculation
- * of a delaunay diagramm.
+ * Class tha describes the needed values to start an iteration in the
+ * culculation of a delaunay diagramm.
  * 
- * @author Ole Rahn
+ * @author Ole Rahn <br>
  * <br>
- * <br>FH Osnabr&uuml;ck - University of Applied Sciences Osnabr&uuml;ck,
- * <br>Project: PIROL (2005),
- * <br>Subproject: Daten- und Wissensmanagement
+ *         FH Osnabr&uuml;ck - University of Applied Sciences Osnabr&uuml;ck, <br>
+ *         Project: PIROL (2005), <br>
+ *         Subproject: Daten- und Wissensmanagement
  * 
  * @version $Rev: 2446 $s
  */
 public class DelaunayLoopItem {
-    private int triangleCount;
-    private DelaunayPunkt punkt1, punkt2, alterPunkt;
-    
-    public DelaunayLoopItem(DelaunayPunkt punkt1, DelaunayPunkt punkt2, DelaunayPunkt alterPunkt,
-            int triangleCount) {
-        super();
-        this.punkt1 = punkt1;
-        this.punkt2 = punkt2;
-        this.alterPunkt = alterPunkt;
-        this.triangleCount = triangleCount;
-    }
-    
-    public DelaunayLoopItem(DelaunayPunkt punkt1, DelaunayPunkt punkt2, DelaunayPunkt alterPunkt) {
-        super();
-        this.punkt1 = punkt1;
-        this.punkt2 = punkt2;
-        this.alterPunkt = alterPunkt;
-        this.triangleCount = -1;
-    }
-    
-    
-    public DelaunayPunkt getAlterPunkt() {
-        return alterPunkt;
-    }
-    public DelaunayPunkt getPunkt1() {
-        return punkt1;
-    }
-    public DelaunayPunkt getPunkt2() {
-        return punkt2;
-    }
-    public int getTriangleCount() {
-        return triangleCount;
-    }
+	private int triangleCount;
+	private DelaunayPunkt punkt1, punkt2, alterPunkt;
+
+	public DelaunayLoopItem(DelaunayPunkt punkt1, DelaunayPunkt punkt2,
+			DelaunayPunkt alterPunkt, int triangleCount) {
+		super();
+		this.punkt1 = punkt1;
+		this.punkt2 = punkt2;
+		this.alterPunkt = alterPunkt;
+		this.triangleCount = triangleCount;
+	}
+
+	public DelaunayLoopItem(DelaunayPunkt punkt1, DelaunayPunkt punkt2,
+			DelaunayPunkt alterPunkt) {
+		super();
+		this.punkt1 = punkt1;
+		this.punkt2 = punkt2;
+		this.alterPunkt = alterPunkt;
+		this.triangleCount = -1;
+	}
+
+	public DelaunayPunkt getAlterPunkt() {
+		return alterPunkt;
+	}
+
+	public DelaunayPunkt getPunkt1() {
+		return punkt1;
+	}
+
+	public DelaunayPunkt getPunkt2() {
+		return punkt2;
+	}
+
+	public int getTriangleCount() {
+		return triangleCount;
+	}
 }

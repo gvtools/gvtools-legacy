@@ -28,8 +28,8 @@ import com.vividsolutions.jump.feature.FeatureCollectionWrapper;
 
 public class FeatureCollectionWrapperAdapter extends FeatureCollectionWrapper {
 
-    public FeatureCollectionWrapperAdapter(FeatureCollection fc) {
-        super(fc);
-    }
+	public FeatureCollectionWrapperAdapter(FeatureCollection fc) {
+		super(fc);
+	}
 
 }

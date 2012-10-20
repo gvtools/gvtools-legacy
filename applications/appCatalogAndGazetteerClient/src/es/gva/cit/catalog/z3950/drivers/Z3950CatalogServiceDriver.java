@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.catalog.z3950.drivers;
+
 import java.io.ByteArrayInputStream;
 import java.net.URI;
 import java.util.ArrayList;
@@ -67,53 +67,70 @@ public class Z3950CatalogServiceDriver extends AbstractCatalogServiceDriver {
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.drivers.IDiscoveryServiceDriver#getCapabilities(java.net.URI)
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.drivers.IDiscoveryServiceDriver#getCapabilities
+	 * (java.net.URI)
 	 */
-	public DiscoveryServiceCapabilities getCapabilities(URI uri) {        
-		Collection nodes = new ArrayList();;
+	public DiscoveryServiceCapabilities getCapabilities(URI uri) {
+		Collection nodes = new ArrayList();
+		;
 		Z3950Messages messages = new Z3950Messages(this);
-		String message = messages.getCapabilities(new Z3950Protocol().openConnection(
-				uri));
-		ByteArrayInputStream buffer = new ByteArrayInputStream(message.getBytes());
+		String message = messages.getCapabilities(new Z3950Protocol()
+				.openConnection(uri));
+		ByteArrayInputStream buffer = new ByteArrayInputStream(
+				message.getBytes());
 		nodes.add(XMLTree.xmlToTree(buffer));
 
-		setServerAnswerReady(XMLTree.searchNodeValue((XMLNode)nodes.toArray()[0], "Servidor"));
+		setServerAnswerReady(XMLTree.searchNodeValue(
+				(XMLNode) nodes.toArray()[0], "Servidor"));
 		CatalogCapabilities capabilities = new CatalogCapabilities();
 		capabilities.setVersion("3.0");
 		return capabilities;
-	} 
+	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#getRecords(java.net.URI, es.gva.cit.catalogClient.querys.Query, int)
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#getRecords(java
+	 * .net.URI, es.gva.cit.catalogClient.querys.Query, int)
 	 */
-	public GetRecordsReply getRecords(URI uri, CatalogQuery query, int firstRecord) {        
+	public GetRecordsReply getRecords(URI uri, CatalogQuery query,
+			int firstRecord) {
 		setQuery(query);
 		Z3950Messages messages = new Z3950Messages(this);
-		String message = messages.getRecords(getQuery(),Z3950Protocol.getDatabase(uri));
+		String message = messages.getRecords(getQuery(),
+				Z3950Protocol.getDatabase(uri));
 		System.out.println(message);
-		new Z3950Protocol().doQuery(getRecordsReply(), uri, message, firstRecord);		
+		new Z3950Protocol().doQuery(getRecordsReply(), uri, message,
+				firstRecord);
 		return getRecordsReply();
-	} 
+	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#isProtocolSupported(java.net.URI)
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#isProtocolSupported
+	 * (java.net.URI)
 	 */
-	public boolean isProtocolSupported(URI uri) {        
+	public boolean isProtocolSupported(URI uri) {
 		return new Z3950Protocol().isProtocolSupported(uri);
-	} 
+	}
 
 	/**
-	 * @return 
+	 * @return
 	 */
-	public String getQueryProfile() {        
+	public String getQueryProfile() {
 		return "Z3950";
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#getServiceName()
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#getServiceName()
 	 */
 	public String getServiceName() {
 		return ServerData.SERVER_SUBTYPE_CATALOG_Z3950;
@@ -121,7 +138,9 @@ public class Z3950CatalogServiceDriver extends AbstractCatalogServiceDriver {
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#getDefaultPort()
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#getDefaultPort()
 	 */
 	public int getDefaultPort() {
 		return 2100;
@@ -129,9 +148,11 @@ public class Z3950CatalogServiceDriver extends AbstractCatalogServiceDriver {
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#getDefaultSchema()
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#getDefaultSchema()
 	 */
 	public String getDefaultSchema() {
 		return "z3950";
-	} 
+	}
 }

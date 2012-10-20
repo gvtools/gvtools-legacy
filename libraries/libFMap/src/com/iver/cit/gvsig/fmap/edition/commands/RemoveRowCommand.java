@@ -12,12 +12,13 @@ public class RemoveRowCommand extends AbstractCommand {
 
 	private EditableAdapter efs;
 	private int index;
-	private int sourceType=EditionEvent.GRAPHIC;
-	public RemoveRowCommand(EditableAdapter ef,int i,int sourceType){
+	private int sourceType = EditionEvent.GRAPHIC;
+
+	public RemoveRowCommand(EditableAdapter ef, int i, int sourceType) {
 		super();
-		efs=ef;
-		index=i;
-		this.sourceType=sourceType;
+		efs = ef;
+		index = i;
+		this.sourceType = sourceType;
 	}
 
 	/**
@@ -26,8 +27,9 @@ public class RemoveRowCommand extends AbstractCommand {
 	 * @see com.iver.cit.gvsig.fmap.edition.Command#undo()
 	 */
 	public void undo() throws EditionCommandException {
-		efs.undoRemoveRow(index,sourceType);
+		efs.undoRemoveRow(index, sourceType);
 	}
+
 	/**
 	 * @throws IOException
 	 * @throws DriverIOException
@@ -35,10 +37,10 @@ public class RemoveRowCommand extends AbstractCommand {
 	 */
 	public void redo() throws EditionCommandException {
 		try {
-			efs.doRemoveRow(index,sourceType);
+			efs.doRemoveRow(index, sourceType);
 		} catch (ReadDriverException e) {
-			throw new EditionCommandException(efs.getWriter().getName(),e);
-		} 
+			throw new EditionCommandException(efs.getWriter().getName(), e);
+		}
 	}
 
 	public String getType() {

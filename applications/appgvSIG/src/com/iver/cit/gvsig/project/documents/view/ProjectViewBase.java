@@ -31,8 +31,8 @@ import com.iver.cit.gvsig.project.documents.table.ProjectTableFactory;
 import com.iver.cit.gvsig.project.documents.view.info.gui.HTMLInfoToolPanel;
 import com.iver.cit.gvsig.project.documents.view.toolListeners.LinkListener;
 
-public abstract class ProjectViewBase extends ProjectDocument implements ErrorListener,
-		IProjectView {
+public abstract class ProjectViewBase extends ProjectDocument implements
+		ErrorListener, IProjectView {
 
 	protected MapContext mapOverViewContext;
 	protected MapContext mapContext;
@@ -41,11 +41,13 @@ public abstract class ProjectViewBase extends ProjectDocument implements ErrorLi
 	protected String m_selectedField = null;
 
 	// OVERRIDE THESE
-	public IWindow getProperties() { return null;}
+	public IWindow getProperties() {
+		return null;
+	}
 
 	/**
 	 * Gets the FMap's contexts of the main map in the view.
-	 *
+	 * 
 	 * @return
 	 */
 	public MapContext getMapContext() {
@@ -53,9 +55,9 @@ public abstract class ProjectViewBase extends ProjectDocument implements ErrorLi
 	}
 
 	/**
-	 * Gets the FMap's context from the locator, which is the
-	 * small map in the left-bottom corner of the View.
-	 *
+	 * Gets the FMap's context from the locator, which is the small map in the
+	 * left-bottom corner of the View.
+	 * 
 	 * @return
 	 */
 	public MapContext getMapOverViewContext() {
@@ -72,46 +74,57 @@ public abstract class ProjectViewBase extends ProjectDocument implements ErrorLi
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param fmap DOCUMENT ME!
+	 * 
+	 * @param fmap
+	 *            DOCUMENT ME!
 	 */
 	public void setMapOverViewContext(MapContext fmap) {
 		mapOverViewContext = fmap;
 		mapOverViewContext.setCrs(mapContext.getCrs());
 	}
 
-	public void showErrors(){
-		if (mapContext.getLayersError().size()>0){
-			String layersError="";
-			for (int i=0;i<mapContext.getLayersError().size();i++){
-				layersError=layersError+"\n"+(String)mapContext.getLayersError().get(i);
+	public void showErrors() {
+		if (mapContext.getLayersError().size() > 0) {
+			String layersError = "";
+			for (int i = 0; i < mapContext.getLayersError().size(); i++) {
+				layersError = layersError + "\n"
+						+ (String) mapContext.getLayersError().get(i);
 			}
-			JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),
-					PluginServices.getText(this,"fallo_capas")+" : \n"+
-					layersError);
+			JOptionPane.showMessageDialog(
+					(Component) PluginServices.getMainFrame(),
+					PluginServices.getText(this, "fallo_capas") + " : \n"
+							+ layersError);
 		}
 	}
 
 	/**
-	 * Reports to the user a bundle of driver exceptions produced in the
-	 * same atomic MapContext transaction
+	 * Reports to the user a bundle of driver exceptions produced in the same
+	 * atomic MapContext transaction
 	 */
-	public void reportDriverExceptions(String introductoryText, List driverExceptions) {
-		HtmlWindow htmlPanel = new HtmlWindow(570, 600, PluginServices.getText(this,"driver_error"));
+	public void reportDriverExceptions(String introductoryText,
+			List driverExceptions) {
+		HtmlWindow htmlPanel = new HtmlWindow(570, 600, PluginServices.getText(
+				this, "driver_error"));
 		String htmlText = "";
-		if(introductoryText == null){
-			htmlText += "<h2 text=\"#000080\">"+PluginServices.getText(this,"se_han_producido_los_siguientes_errores_durante_la_carga_de_las_capas")+"</h2>";
-		}else{
+		if (introductoryText == null) {
+			htmlText += "<h2 text=\"#000080\">"
+					+ PluginServices
+							.getText(this,
+									"se_han_producido_los_siguientes_errores_durante_la_carga_de_las_capas")
+					+ "</h2>";
+		} else {
 			htmlText += introductoryText;
 		}
 		int numErrors = driverExceptions.size();
-		for(int i = 0; i < numErrors; i++){
-			//htmlText += "<br>\n";
+		for (int i = 0; i < numErrors; i++) {
+			// htmlText += "<br>\n";
 			BaseException exception = (BaseException) driverExceptions.get(i);
-			htmlText +="<p text=\"#550080\">_________________________________________________________________________________________</p>";
-			htmlText += "<h3>"+PluginServices.getText(this,exception.getMessageKey())+"</h3>";
-			htmlText += "<p>"+exception.getMessage()+"</p>";
-			htmlText +="<p text=\"#550080\">_________________________________________________________________________________________</p>";
+			htmlText += "<p text=\"#550080\">_________________________________________________________________________________________</p>";
+			htmlText += "<h3>"
+					+ PluginServices.getText(this, exception.getMessageKey())
+					+ "</h3>";
+			htmlText += "<p>" + exception.getMessage() + "</p>";
+			htmlText += "<p text=\"#550080\">_________________________________________________________________________________________</p>";
 		}
 
 		System.out.println(htmlText);
@@ -123,16 +136,18 @@ public abstract class ProjectViewBase extends ProjectDocument implements ErrorLi
 
 	/**
 	 * HtmlInfoToolPanel that implements IWindow
+	 * 
 	 * @author azabala
-	 *
+	 * 
 	 */
 	class HtmlWindow extends JPanel implements IWindow {
-		private HTMLInfoToolPanel htmlPanel=new HTMLInfoToolPanel();
+		private HTMLInfoToolPanel htmlPanel = new HTMLInfoToolPanel();
 		WindowInfo viewInfo = null;
-		public HtmlWindow(int width, int height, String windowTitle){
+
+		public HtmlWindow(int width, int height, String windowTitle) {
 			htmlPanel.setBackground(Color.white);
-			JScrollPane scrollPane=new JScrollPane(htmlPanel);
-			scrollPane.setPreferredSize(new Dimension(width-30,height-30));
+			JScrollPane scrollPane = new JScrollPane(htmlPanel);
+			scrollPane.setPreferredSize(new Dimension(width - 30, height - 30));
 			this.add(scrollPane);
 			viewInfo = new WindowInfo(WindowInfo.MODELESSDIALOG);
 			viewInfo.setTitle(windowTitle);
@@ -161,7 +176,7 @@ public abstract class ProjectViewBase extends ProjectDocument implements ErrorLi
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public CoordinateReferenceSystem getOverViewCrs() {
@@ -175,7 +190,7 @@ public abstract class ProjectViewBase extends ProjectDocument implements ErrorLi
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public String getExtLink() {
@@ -184,7 +199,7 @@ public abstract class ProjectViewBase extends ProjectDocument implements ErrorLi
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public int getTypeLink() {
@@ -192,48 +207,54 @@ public abstract class ProjectViewBase extends ProjectDocument implements ErrorLi
 	}
 
 	/**
-     * Se selecciona la extensión para realizar cuando se quiera el link.
-     *
-     * @param s nombre del campo.
-     */
+	 * Se selecciona la extensión para realizar cuando se quiera el link.
+	 * 
+	 * @param s
+	 *            nombre del campo.
+	 */
 	public void setExtLink(String s) {
 		m_extLink = s;
 	}
 
 	/**
-     * Se selecciona el tipo de fichero para realizar cuando se quiera el link.
-     *
-     * @param i tipo de fichero.
-     */
+	 * Se selecciona el tipo de fichero para realizar cuando se quiera el link.
+	 * 
+	 * @param i
+	 *            tipo de fichero.
+	 */
 	public void setTypeLink(int i) {
 		m_typeLink = i;
 	}
 
 	public void afterRemove() {
-		FLayers layers=this.getMapContext().getLayers();
+		FLayers layers = this.getMapContext().getLayers();
 
-		for (int i = layers.getLayersCount()-1; i>=0; i--){
-        	try {
-        		if (layers.getLayer(i) instanceof AlphanumericData){
-                    Project project = ((ProjectExtension)PluginServices.getExtension(ProjectExtension.class)).getProject();
-                    ProjectTable pt = project.getTable((AlphanumericData) layers.getLayer(i));
+		for (int i = layers.getLayersCount() - 1; i >= 0; i--) {
+			try {
+				if (layers.getLayer(i) instanceof AlphanumericData) {
+					Project project = ((ProjectExtension) PluginServices
+							.getExtension(ProjectExtension.class)).getProject();
+					ProjectTable pt = project
+							.getTable((AlphanumericData) layers.getLayer(i));
 
-                    ArrayList tables = project.getDocumentsByType(ProjectTableFactory.registerName);
-                    for (int j = 0; j < tables.size(); j++) {
-                        if (tables.get(j) == pt){
-                            project.delDocument((ProjectDocument)tables.get(j));
-                            break;
-                        }
-                    }
+					ArrayList tables = project
+							.getDocumentsByType(ProjectTableFactory.registerName);
+					for (int j = 0; j < tables.size(); j++) {
+						if (tables.get(j) == pt) {
+							project.delDocument((ProjectDocument) tables.get(j));
+							break;
+						}
+					}
 
-                    PluginServices.getMDIManager().closeSingletonWindow(pt);
-                }
-                layers.getLayer(i).getParentLayer().removeLayer(layers.getLayer(i));
-                PluginServices.getMainFrame().enableControls();
-        	} catch (CancelationException e1) {
-    			e1.printStackTrace();
-    		}
-    	}
+					PluginServices.getMDIManager().closeSingletonWindow(pt);
+				}
+				layers.getLayer(i).getParentLayer()
+						.removeLayer(layers.getLayer(i));
+				PluginServices.getMainFrame().enableControls();
+			} catch (CancelationException e1) {
+				e1.printStackTrace();
+			}
+		}
 
 	}
 
@@ -242,25 +263,25 @@ public abstract class ProjectViewBase extends ProjectDocument implements ErrorLi
 
 	}
 
-
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param c DOCUMENT ME!
+	 * 
+	 * @param c
+	 *            DOCUMENT ME!
 	 */
 	public void setBackColor(Color c) {
-//		getMapContext().getViewPort().addViewPortListener(getMapContext()
-	//													   .getEventBuffer());
+		// getMapContext().getViewPort().addViewPortListener(getMapContext()
+		// .getEventBuffer());
 		getMapContext().getViewPort().setBackColor(c);
-		//getMapContext().getViewPort().removeViewPortListener(getMapContext()
-			//												  .getEventBuffer());
+		// getMapContext().getViewPort().removeViewPortListener(getMapContext()
+		// .getEventBuffer());
 	}
 
 	/**
-	 * Se selecciona el nombre del campo para realizar cuando se quiera el
-	 * link.
-	 *
-	 * @param s nombre del campo.
+	 * Se selecciona el nombre del campo para realizar cuando se quiera el link.
+	 * 
+	 * @param s
+	 *            nombre del campo.
 	 */
 	public void setSelectedField(String s) {
 		m_selectedField = s;
@@ -268,7 +289,7 @@ public abstract class ProjectViewBase extends ProjectDocument implements ErrorLi
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public String getSelectedField() {
@@ -276,23 +297,24 @@ public abstract class ProjectViewBase extends ProjectDocument implements ErrorLi
 	}
 
 	public void errorThrown(ErrorEvent e) {
-			JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),
-					PluginServices.getText(this,"fallo_capas")+" : \n"+
-					e.getMessage());
+		JOptionPane.showMessageDialog(
+				(Component) PluginServices.getMainFrame(),
+				PluginServices.getText(this, "fallo_capas") + " : \n"
+						+ e.getMessage());
 
 	}
 
 	public boolean isLocked() {
-		if(super.isLocked()) return true;
+		if (super.isLocked())
+			return true;
 		FLayers layers = getMapContext().getLayers();
-		for(int i=0; i<layers.getLayersCount(); i++){
+		for (int i = 0; i < layers.getLayersCount(); i++) {
 			FLayer layer = layers.getLayer(i);
-			if (layer.isEditing()){
+			if (layer.isEditing()) {
 				return true;
 			}
 		}
 		return false;
 	}
-
 
 }

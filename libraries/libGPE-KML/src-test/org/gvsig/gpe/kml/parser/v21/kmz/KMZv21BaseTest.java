@@ -58,26 +58,29 @@ import org.gvsig.gpe.kml.parser.v21.kml.KMLBaseTest;
 /**
  * @author Jorge Piera Llodrá (jorge.piera@iver.es)
  */
-public abstract class KMZv21BaseTest extends KMLBaseTest{
+public abstract class KMZv21BaseTest extends KMLBaseTest {
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.readers.GPEReaderBaseTest#getInputStream()
 	 */
 	public InputStream getInputStream() throws Exception {
 		FileInputStream fis = new FileInputStream(getFile());
 		ZipInputStream zis = new ZipInputStream(new BufferedInputStream(fis));
 		ZipEntry entry = null;
-		while((entry = zis.getNextEntry()) != null){
-			if (!entry.isDirectory()){
+		while ((entry = zis.getNextEntry()) != null) {
+			if (!entry.isDirectory()) {
 				ZipFile fz = new ZipFile(getFile());
 				return fz.getInputStream(entry);
 			}
 		}
 		throw new Exception();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEParserClass()
 	 */
 	public Class getGPEParserClass() {

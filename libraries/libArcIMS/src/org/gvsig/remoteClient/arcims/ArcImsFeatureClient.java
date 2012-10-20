@@ -43,75 +43,76 @@
 
 package org.gvsig.remoteClient.arcims;
 
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+
 import org.gvsig.remoteClient.arcims.exceptions.ArcImsException;
 import org.gvsig.remoteClient.exceptions.ServerErrorException;
 
-import java.awt.geom.Rectangle2D;
-
-import java.util.ArrayList;
-
-
 /**
  * Class that connects with ArcIMS and retrieves a Feature Layer
+ * 
  * @author jsanz
- *
+ * 
  */
 public class ArcImsFeatureClient extends ArcImsClientP {
-    public ArcImsFeatureClient(String host, String service, String serviceType) {
-        super(host, service, serviceType);
-    }
+	public ArcImsFeatureClient(String host, String service, String serviceType) {
+		super(host, service, serviceType);
+	}
 
-    /**
-     * Requests a map
-     * @param status
-     * @return
-     * @throws ArcImsException
-     * @throws ServerErrorException
-     */
-    public ArrayList getMap(ArcImsVectStatus status)
-        throws ArcImsException, ServerErrorException {
-        return ((ArcImsProtFeatureHandler) handler).getMap(status);
-    }
+	/**
+	 * Requests a map
+	 * 
+	 * @param status
+	 * @return
+	 * @throws ArcImsException
+	 * @throws ServerErrorException
+	 */
+	public ArrayList getMap(ArcImsVectStatus status) throws ArcImsException,
+			ServerErrorException {
+		return ((ArcImsProtFeatureHandler) handler).getMap(status);
+	}
 
-    /**
-     * Requests service extent in view coordinates
-     * @param status
-     * @param subfields
-     * @return
-     * @throws ArcImsException
-     * @throws ServerErrorException
-     */
-    public Rectangle2D getLayerExtent(ArcImsVectStatus status)
-        throws ArcImsException, ServerErrorException {
-        return ((ArcImsProtFeatureHandler) handler).getLayerExtent(status);
-    }
+	/**
+	 * Requests service extent in view coordinates
+	 * 
+	 * @param status
+	 * @param subfields
+	 * @return
+	 * @throws ArcImsException
+	 * @throws ServerErrorException
+	 */
+	public Rectangle2D getLayerExtent(ArcImsVectStatus status)
+			throws ArcImsException, ServerErrorException {
+		return ((ArcImsProtFeatureHandler) handler).getLayerExtent(status);
+	}
 
-    /**
-     * @param status
-     * @param subfields
-     * @param where
-     * @param envelope
-     * @return
-     * @throws ArcImsException
-     */
-    public ArrayList getAttributes(ArcImsVectStatus status, String[] subfields,
-        String where, Rectangle2D envelope) throws ArcImsException {
-        return ((ArcImsProtFeatureHandler) handler).getAttributes(status,
-            subfields, where, envelope);
-    }
+	/**
+	 * @param status
+	 * @param subfields
+	 * @param where
+	 * @param envelope
+	 * @return
+	 * @throws ArcImsException
+	 */
+	public ArrayList getAttributes(ArcImsVectStatus status, String[] subfields,
+			String where, Rectangle2D envelope) throws ArcImsException {
+		return ((ArcImsProtFeatureHandler) handler).getAttributes(status,
+				subfields, where, envelope);
+	}
 
-    /**
-     * @param status
-     * @param subfields
-     * @param where
-     * @param envelope
-     * @return
-     * @throws ArcImsException
-     */
-    public ArrayList getAttributesWithEnvelope(ArcImsVectStatus status,
-        String[] subfields, String where, Rectangle2D envelope)
-        throws ArcImsException {
-        return ((ArcImsProtFeatureHandler) handler).getAttributesWithEnvelope(status,
-            subfields, where, envelope);
-    }
+	/**
+	 * @param status
+	 * @param subfields
+	 * @param where
+	 * @param envelope
+	 * @return
+	 * @throws ArcImsException
+	 */
+	public ArrayList getAttributesWithEnvelope(ArcImsVectStatus status,
+			String[] subfields, String where, Rectangle2D envelope)
+			throws ArcImsException {
+		return ((ArcImsProtFeatureHandler) handler).getAttributesWithEnvelope(
+				status, subfields, where, envelope);
+	}
 }

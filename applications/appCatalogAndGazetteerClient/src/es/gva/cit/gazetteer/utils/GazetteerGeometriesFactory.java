@@ -70,9 +70,10 @@ import es.gva.cit.gazetteer.querys.Feature;
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class GazetteerGeometriesFactory {
-	private static Logger logger = Logger.getLogger(GazetteerGeometriesFactory.class);
+	private static Logger logger = Logger
+			.getLogger(GazetteerGeometriesFactory.class);
 	private String attName = null;
-		
+
 	public GazetteerGeometriesFactory(String attName) {
 		super();
 		this.attName = attName;
@@ -80,42 +81,49 @@ public class GazetteerGeometriesFactory {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.remoteClient.gml.factories.IGeometriesFactory#createGeometry(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.gml.factories.IGeometriesFactory#createGeometry
+	 * (java.lang.String)
 	 */
 	public Object createGeometry(String gmlGeometry) {
 		GMLReader reader = new GMLReader();
 		try {
-			Geometry geom = reader.read(gmlGeometry,new GeometryFactory());
+			Geometry geom = reader.read(gmlGeometry, new GeometryFactory());
 			Point point = geom.getInteriorPoint();
-			return new Point2D.Double(point.getX(),point.getY());
-		}  catch (Exception e){
-			logger.error("Can't parse: " + gmlGeometry,e);
+			return new Point2D.Double(point.getX(), point.getY());
+		} catch (Exception e) {
+			logger.error("Can't parse: " + gmlGeometry, e);
 		}
 		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.remoteClient.gml.factories.IGeometriesFactory#createMultipoint2D(double[], double[])
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.gml.factories.IGeometriesFactory#createMultipoint2D
+	 * (double[], double[])
 	 */
 	public Object createMultipoint2D(double[] x, double[] y) {
 		double xTotal = 0;
 		double yTotal = 0;
-		for (int i=0 ; i<x.length ; i++){
+		for (int i = 0; i < x.length; i++) {
 			xTotal = xTotal + x[i];
 			yTotal = yTotal + y[i];
 		}
-		if (x.length > 0){
-			return new Point2D.Double(xTotal/x.length,
-					yTotal/y.length);
+		if (x.length > 0) {
+			return new Point2D.Double(xTotal / x.length, yTotal / y.length);
 		}
-		return new Point2D.Double(0,
-				0);
+		return new Point2D.Double(0, 0);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.remoteClient.gml.factories.IGeometriesFactory#createPoint2D(java.awt.geom.Point2D)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.gml.factories.IGeometriesFactory#createPoint2D
+	 * (java.awt.geom.Point2D)
 	 */
 	public Object createPoint2D(Point2D point) {
 		return point;
@@ -123,47 +131,55 @@ public class GazetteerGeometriesFactory {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.remoteClient.gml.factories.IGeometriesFactory#createPoint2D(double, double)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.gml.factories.IGeometriesFactory#createPoint2D
+	 * (double, double)
 	 */
 	public Object createPoint2D(double x, double y) {
-		return new Point2D.Double(x,y);
+		return new Point2D.Double(x, y);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.remoteClient.gml.factories.IGeometriesFactory#createSimpleFeature(java.lang.String, org.gvsig.remoteClient.gml.types.IXMLType, java.util.Map, java.lang.Object)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.gml.factories.IGeometriesFactory#createSimpleFeature
+	 * (java.lang.String, org.gvsig.remoteClient.gml.types.IXMLType,
+	 * java.util.Map, java.lang.Object)
 	 */
-	public Object createSimpleFeature(String element, IXMLType type,Map values,Object geometry) {
+	public Object createSimpleFeature(String element, IXMLType type,
+			Map values, Object geometry) {
 		String sGeoname = element;
-		if (attName != null){
-			if (values.get(attName) != null){
-				ArrayList array = (ArrayList)values.get(attName);
-				if (array.size() > 0){
-					sGeoname = (String)array.get(0);
+		if (attName != null) {
+			if (values.get(attName) != null) {
+				ArrayList array = (ArrayList) values.get(attName);
+				if (array.size() > 0) {
+					sGeoname = (String) array.get(0);
 				}
 			}
-		}		
-		return new Feature(null,
-				sGeoname,
-				sGeoname,
-				(Point2D)geometry);
+		}
+		return new Feature(null, sGeoname, sGeoname, (Point2D) geometry);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.remoteClient.gml.factories.IGeometriesFactory#createPolygon2D(double[], double[])
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.gml.factories.IGeometriesFactory#createPolygon2D
+	 * (double[], double[])
 	 */
 	public Object createPolygon2D(double[] x, double[] y) {
 		double avX = 0;
 		double avY = 0;
-		for (int i=0 ; i<x.length ; i++){
+		for (int i = 0; i < x.length; i++) {
 			avX = avX + x[i];
 			avY = avY + y[i];
 		}
-		if (x.length > 0){
-			avX = avX/x.length;
-			avY = avY/y.length;
+		if (x.length > 0) {
+			avX = avX / x.length;
+			avY = avY / y.length;
 		}
-		return new Point2D.Double(avX, avY);		
+		return new Point2D.Double(avX, avY);
 	}
 }

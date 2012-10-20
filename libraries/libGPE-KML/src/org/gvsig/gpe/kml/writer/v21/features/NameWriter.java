@@ -61,32 +61,39 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  *
  *
  */
-/** This class writes name tag. Example:
+/**
+ * This class writes name tag. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;gml:name&gt;GML tag name&lt;/gml:name&gt;
  * </code>
  * </pre>
+ * 
  * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#name
  */
 public class NameWriter {
-	
+
 	/**
 	 * Writes the name tag and its value
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param name
-	 * The name value
+	 *            The name value
 	 * @throws IOException
 	 */
-	public void write(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor hanlder, String name) throws IOException{
+	public void write(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor hanlder, String name)
+			throws IOException {
 		writer.writeStartElement(Kml2_1_Tags.NAME);
 		writer.writeValue(name);
-		writer.writeEndElement();		
+		writer.writeEndElement();
 	}
 }

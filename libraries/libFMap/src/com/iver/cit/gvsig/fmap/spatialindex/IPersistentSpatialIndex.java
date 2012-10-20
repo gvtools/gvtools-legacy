@@ -42,43 +42,44 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: IPersistentSpatialIndex.java 5416 2006-05-24 21:57:42Z azabala $
-* $Log$
-* Revision 1.2  2006-05-24 21:57:42  azabala
-* añadidos comentarios
-*
-* Revision 1.1  2006/05/01 18:38:41  azabala
-* primera version en cvs del api de indices espaciales
-*
-*
-*/
+ *
+ * $Id: IPersistentSpatialIndex.java 5416 2006-05-24 21:57:42Z azabala $
+ * $Log$
+ * Revision 1.2  2006-05-24 21:57:42  azabala
+ * añadidos comentarios
+ *
+ * Revision 1.1  2006/05/01 18:38:41  azabala
+ * primera version en cvs del api de indices espaciales
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.spatialindex;
+
 /**
  * An spatial index based in persistent data stores.
  * 
  * @author azabala
- *
+ * 
  */
 public interface IPersistentSpatialIndex extends ISpatialIndex {
 	/**
 	 * It makes persistent all changes applied to Spatial Index
-	 *
+	 * 
 	 */
 	public void flush();
+
 	/**
 	 * Checks if the persistent store of this spatial index exists
+	 * 
 	 * @return
 	 */
 	public boolean exists();
-	
+
 	public void load() throws SpatialIndexException;
-	
+
 	/**
-	 * Frees resources of persistent data store
-	 * (closes files, etc)
-	 *
+	 * Frees resources of persistent data store (closes files, etc)
+	 * 
 	 */
 	public void close();
 }
-

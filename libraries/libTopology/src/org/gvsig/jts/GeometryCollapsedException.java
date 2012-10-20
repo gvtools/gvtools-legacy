@@ -42,31 +42,30 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id$
-* $Log$
-*
-*/
+ *
+ * $Id$
+ * $Log$
+ *
+ */
 package org.gvsig.jts;
 
 public class GeometryCollapsedException extends Exception {
-	
+
 	private static final long serialVersionUID = -575190699248392367L;
 
 	public GeometryCollapsedException(String text, Exception e) {
-		super(text,e);
+		super(text, e);
 	}
-	
-	public GeometryCollapsedException(String text){
+
+	public GeometryCollapsedException(String text) {
 		super(text);
 	}
-	
-	public GeometryCollapsedException(){
+
+	public GeometryCollapsedException() {
 		super();
 	}
-	
-	public GeometryCollapsedException(Exception e){
+
+	public GeometryCollapsedException(Exception e) {
 		super(e);
 	}
 }
-

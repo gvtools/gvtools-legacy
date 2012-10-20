@@ -64,55 +64,62 @@ public class WFSOperation {
 	public static final int LOCKFEATURE = 4;
 	public static final int PROTOCOL_GET = 0;
 	public static final int PROTOCOL_POST = 1;
-	private static Hashtable operations;	
+	private static Hashtable operations;
 	//
 	private int operationName;
 	private String onlineResource;
-	
-	static{
+
+	static {
 		operations = new Hashtable();
-		operations.put(CapabilitiesTags.GETCAPABILITIES,new Integer(GETCAPABILITIES));
-		operations.put(CapabilitiesTags.WFS_DESCRIBEFEATURETYPE,new Integer(DESCRIBEFEATURETYPE));
-		operations.put(CapabilitiesTags.WFS_GETFEATURE,new Integer(GETFEATURE));
-		operations.put(CapabilitiesTags.WFS_TRANSACTION,new Integer(TRANSACTION));
-		operations.put(CapabilitiesTags.WFS_LOCKFEATURE,new Integer(LOCKFEATURE));
+		operations.put(CapabilitiesTags.GETCAPABILITIES, new Integer(
+				GETCAPABILITIES));
+		operations.put(CapabilitiesTags.WFS_DESCRIBEFEATURETYPE, new Integer(
+				DESCRIBEFEATURETYPE));
+		operations
+				.put(CapabilitiesTags.WFS_GETFEATURE, new Integer(GETFEATURE));
+		operations.put(CapabilitiesTags.WFS_TRANSACTION, new Integer(
+				TRANSACTION));
+		operations.put(CapabilitiesTags.WFS_LOCKFEATURE, new Integer(
+				LOCKFEATURE));
 	}
-	
+
 	/**
 	 * Return if the operation is registered
+	 * 
 	 * @param op
-	 * The operation name
-	 * @return
-	 * The operation code
+	 *            The operation name
+	 * @return The operation code
 	 */
-	public static int getOperation(String op){
-		if (operations.get(op)  != null){
-			return ((Integer)operations.get(op)).intValue();
+	public static int getOperation(String op) {
+		if (operations.get(op) != null) {
+			return ((Integer) operations.get(op)).intValue();
 		}
 		return -1;
 	}
-	
+
 	public WFSOperation(int operationName) {
 		super();
-		this.operationName = operationName;		
-	}		
+		this.operationName = operationName;
+	}
 
 	public WFSOperation(int operationName, String onlineResource) {
 		this.onlineResource = onlineResource;
-	}	
-	
+	}
+
 	/**
 	 * @return Returns the onlineResource.
 	 */
 	public String getOnlineResource() {
 		return onlineResource;
 	}
+
 	/**
-	 * @param onlineResource The onlineResource to set.
+	 * @param onlineResource
+	 *            The onlineResource to set.
 	 */
 	public void setOnlineResource(String onlineResource) {
 		this.onlineResource = onlineResource;
-	}	
+	}
 
 	/**
 	 * @return Returns the operationName.
@@ -120,12 +127,12 @@ public class WFSOperation {
 	public int getOperationName() {
 		return operationName;
 	}
-	
+
 	/**
-	 * @param operationName The operationName to set.
+	 * @param operationName
+	 *            The operationName to set.
 	 */
 	public void setOperationName(int operationName) {
 		this.operationName = operationName;
-	}		
+	}
 }
-

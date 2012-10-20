@@ -1,6 +1,5 @@
 package com.iver.cit.gvsig.graphtests;
 
-
 import java.io.File;
 
 import junit.framework.TestCase;
@@ -47,10 +46,10 @@ public class TestLoader_and_ShortestPath extends TestCase {
 		net.setLayer(lyr);
 		net.setGraph(g);
 		solver.setNetwork(net);
-		
+
 		ShortestPathSolverAStar solverAstar = new ShortestPathSolverAStar();
 		solverAstar.setNetwork(net);
-		
+
 		try {
 
 			// Primer punto
@@ -77,9 +76,9 @@ public class TestLoader_and_ShortestPath extends TestCase {
 
 			System.out.println("ASTAR dist =" + resul2.getLength()
 					+ " meters. msecs: " + (t2 - t1));
-			
+
 			assertEquals(resul.getLength(), resul2.getLength(), 0.0);
-			
+
 			JungGraph jG = new JungGraph(g);
 			// Probamos la algoritmia: distancia entre nodo 1 y nodo 1000
 			DijkstraShortestPath distCalculator = new DijkstraShortestPath(jG,
@@ -98,10 +97,10 @@ public class TestLoader_and_ShortestPath extends TestCase {
 			System.out.println(vOrig + " - " + vEnd);
 			System.out.println(vOrig.getX() + ", " + vOrig.getY() + " - "
 					+ vEnd.getX() + ", " + vEnd.getY());
-			
+
 			assertEquals(resul.getLength(), dist.doubleValue(), 0.4);
-			
-//			net.addTurnCost(idArcOrigin, idArcDestination, newCost);
+
+			// net.addTurnCost(idArcOrigin, idArcDestination, newCost);
 
 		} catch (GraphException e) {
 			// TODO Auto-generated catch block
@@ -111,8 +110,7 @@ public class TestLoader_and_ShortestPath extends TestCase {
 	}
 
 	/*
-	 * Test method for
-	 * 'org.gvsig.graph.core.NetworkLoader.loadNetwork()'
+	 * Test method for 'org.gvsig.graph.core.NetworkLoader.loadNetwork()'
 	 */
 	public void DONT_TEST_testLoadNetwork() {
 		// if (true) return;
@@ -165,7 +163,7 @@ public class TestLoader_and_ShortestPath extends TestCase {
 	protected void setUp() throws Exception {
 		// Setup de los drivers
 		LayerFactory
-		.setDriversPath("../_fwAndami/gvSIG/extensiones/com.iver.cit.gvsig/drivers");
+				.setDriversPath("../_fwAndami/gvSIG/extensiones/com.iver.cit.gvsig/drivers");
 
 		// Setup del factory de DataSources
 		dsf = LayerFactory.getDataSourceFactory();

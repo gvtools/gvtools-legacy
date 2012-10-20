@@ -56,9 +56,10 @@ import org.gvsig.rastertools.filter.FilterListener;
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
+
 /**
  * Dialogo para los filtros de raster.
- *
+ * 
  * @version 30/05/2007
  * @author Nacho Brodin <brodin_ign@gva.es>
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
@@ -66,56 +67,64 @@ import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 public class FilterPanel extends JPanel implements IPreviewRenderProcess {
 	private static final long serialVersionUID = 7152780112689637266L;
 
-	private PreviewBasePanel       previewBasePanel    = null;
-	private FLyrRasterSE           layer               = null;
-	private FilterListener         filterListener      = null;
-	private PropertiesComponent    propertiesComponent = null;
+	private PreviewBasePanel previewBasePanel = null;
+	private FLyrRasterSE layer = null;
+	private FilterListener filterListener = null;
+	private PropertiesComponent propertiesComponent = null;
 
-	private LayerVisualStatusList  status              = new LayerVisualStatusList();
-	private JCheckBox              jCBShowFilters      = null;
-	private String                 viewName            = null;
-	private JPanel                 jPanelOptions       = null;
-	private FilterMainPanel        filterMain          = null;
-	private FilterDialog           filterDialog        = null;
-	private CreateLayerPanel       newLayerPanel       = null;
-	private boolean                showPreview         = true;	
+	private LayerVisualStatusList status = new LayerVisualStatusList();
+	private JCheckBox jCBShowFilters = null;
+	private String viewName = null;
+	private JPanel jPanelOptions = null;
+	private FilterMainPanel filterMain = null;
+	private FilterDialog filterDialog = null;
+	private CreateLayerPanel newLayerPanel = null;
+	private boolean showPreview = true;
 
 	/**
 	 * Constructor
-	 * @param width Ancho del panel
-	 * @param height Alto del panel
+	 * 
+	 * @param width
+	 *            Ancho del panel
+	 * @param height
+	 *            Alto del panel
 	 */
 	public FilterPanel(FLyrRasterSE layer, FilterDialog filterDialog) {
 		this.filterDialog = filterDialog;
 		setLayer(layer);
 		initialize();
 	}
-	
+
 	private void initialize() {
 		translate();
 		setLayout(new BorderLayout());
 		add(getPreviewBasePanel(), BorderLayout.CENTER);
 	}
-	
+
 	/**
 	 * Seccion donde irán todas las traducciones invariables del componente
 	 */
 	private void translate() {
-		getCBShowFilters().setText(PluginServices.getText(this, "aplicar_vista_previa"));
+		getCBShowFilters().setText(
+				PluginServices.getText(this, "aplicar_vista_previa"));
 	}
-	
+
 	/**
 	 * Obtiene el panel con el histograma
+	 * 
 	 * @return HistogramPanel
 	 */
 	private PreviewBasePanel getPreviewBasePanel() {
 		if (previewBasePanel == null) {
 			ArrayList list = new ArrayList();
 			list.add(getMainPanel());
-			previewBasePanel = new PreviewBasePanel(ButtonsPanel.BUTTONS_APPLYCLOSE, list, null, panelOptions(), this, (FLyrRasterSE) layer);
-			
-			previewBasePanel.getButtonsPanel().addButton(Messages.getText("reset"), ButtonsPanel.BUTTON_CANCEL);
-			
+			previewBasePanel = new PreviewBasePanel(
+					ButtonsPanel.BUTTONS_APPLYCLOSE, list, null,
+					panelOptions(), this, (FLyrRasterSE) layer);
+
+			previewBasePanel.getButtonsPanel().addButton(
+					Messages.getText("reset"), ButtonsPanel.BUTTON_CANCEL);
+
 			previewBasePanel.setPreviewSize(new Dimension(230, 215));
 			previewBasePanel.addButtonPressedListener(filterDialog);
 		}
@@ -136,6 +145,7 @@ public class FilterPanel extends JPanel implements IPreviewRenderProcess {
 
 	/**
 	 * Devuelve el panel de Opciones, en caso de no existir, lo crea.
+	 * 
 	 * @return
 	 */
 	private JPanel panelOptions() {
@@ -158,7 +168,8 @@ public class FilterPanel extends JPanel implements IPreviewRenderProcess {
 			gridBagConstraints.gridy = 4;
 			gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints.insets = new Insets(3, 3, 3, 3);
-			jPanelOptions.add(getNewLayerPanel().getJPanel(), gridBagConstraints);
+			jPanelOptions.add(getNewLayerPanel().getJPanel(),
+					gridBagConstraints);
 
 			gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
@@ -170,7 +181,7 @@ public class FilterPanel extends JPanel implements IPreviewRenderProcess {
 
 		return jPanelOptions;
 	}
-	
+
 	public CreateLayerPanel getNewLayerPanel() {
 		if (newLayerPanel == null) {
 			newLayerPanel = new CreateLayerPanel(layer);
@@ -183,62 +194,81 @@ public class FilterPanel extends JPanel implements IPreviewRenderProcess {
 	 */
 	private void menuBuild() {
 		Hashtable keys = new Hashtable();
-		RasterFilterList filterList = ((FLyrRasterSE) layer).getRenderFilterList();
-		// Creamos un stackManager para recorrer los filtros registrados en gvSIG
-		RasterFilterListManager stackManager = new RasterFilterListManager(filterList);
+		RasterFilterList filterList = ((FLyrRasterSE) layer)
+				.getRenderFilterList();
+		// Creamos un stackManager para recorrer los filtros registrados en
+		// gvSIG
+		RasterFilterListManager stackManager = new RasterFilterListManager(
+				filterList);
 
 		int count = 0;
 		RasterFilter obj = null;
 
 		for (int i = 0; i < stackManager.getRasterFilterList().size(); i++) {
-			Class classFilter = (Class) stackManager.getRasterFilterList().get(i);
+			Class classFilter = (Class) stackManager.getRasterFilterList().get(
+					i);
 
 			try {
 				obj = (RasterFilter) classFilter.newInstance();
 
 				initFilter(obj);
-				
+
 				if (!obj.isVisible())
 					continue;
-				
+
 				// Crear grupos de los filtros
-				if (!keys.containsKey(PluginServices.getText(this, new String(obj.getGroup())))) {
-					keys.put(PluginServices.getText(this, new String(obj.getGroup())), obj);
-					getMainPanel().getTreeListContainer().addClass(PluginServices.getText(this, new String(obj.getGroup())), count);
+				if (!keys.containsKey(PluginServices.getText(this, new String(
+						obj.getGroup())))) {
+					keys.put(
+							PluginServices.getText(this,
+									new String(obj.getGroup())), obj);
+					getMainPanel().getTreeListContainer().addClass(
+							PluginServices.getText(this,
+									new String(obj.getGroup())), count);
 					count++;
-						
+
 				}
 				// Crear cada entrada de los filtro
 				String[] names = obj.getNames();
 				for (int j = 0; j < names.length; j++) {
 					obj.setName(names[j]);
-					getFilterListener().addNewParam(names[j], initFilterParam(obj.getUIParams(names[j])), classFilter);
-					getMainPanel().getTreeListContainer().addEntry(PluginServices.getText(this, names[j]), PluginServices.getText(this, obj.getGroup()), names[j]);
+					getFilterListener().addNewParam(names[j],
+							initFilterParam(obj.getUIParams(names[j])),
+							classFilter);
+					getMainPanel().getTreeListContainer().addEntry(
+							PluginServices.getText(this, names[j]),
+							PluginServices.getText(this, obj.getGroup()),
+							names[j]);
 				}
 			} catch (InstantiationException e) {
-				RasterToolsUtil.debug("No se ha podido meter el filtro en la lista", this, e);
+				RasterToolsUtil.debug(
+						"No se ha podido meter el filtro en la lista", this, e);
 			} catch (IllegalAccessException e) {
-				RasterToolsUtil.debug("No se ha podido meter el filtro en la lista", this, e);
+				RasterToolsUtil.debug(
+						"No se ha podido meter el filtro en la lista", this, e);
 			}
 		}
 
 		getMainPanel().getTreeListContainer().getTree().expandRow(0);
 	}
-	
+
 	/**
 	 * Pasamos los parametros basicos a un filtro
+	 * 
 	 * @param filter
 	 */
 	private void initFilter(RasterFilter filter) {
 		if (layer != null) {
-			filter.getEnv().put("MultiRasterDataset", ((FLyrRasterSE) layer).getDataSource());
+			filter.getEnv().put("MultiRasterDataset",
+					((FLyrRasterSE) layer).getDataSource());
 			filter.getEnv().put("initRaster", layer);
 		}
 	}
-	
+
 	/**
-	 * Sirve para añadir mas parametros genericos por defecto al panel, de momento
-	 * solo he puesto para activar o desactivar un filtro.
+	 * Sirve para añadir mas parametros genericos por defecto al panel, de
+	 * momento solo he puesto para activar o desactivar un filtro.
+	 * 
 	 * @param params
 	 * @return
 	 */
@@ -249,30 +279,33 @@ public class FilterPanel extends JPanel implements IPreviewRenderProcess {
 		params.getParams().add(0, param);
 		return params;
 	}
-	
+
 	/**
 	 * Comprueba que el nombre del filtro esta cargado en las extensiones
+	 * 
 	 * @param filter
 	 * @return
 	 */
 	private boolean hasThisFilter(String filter) {
 		RasterFilterList filterList = new RasterFilterList();
-		RasterFilterListManager stackManager = new RasterFilterListManager(filterList);
-	
+		RasterFilterListManager stackManager = new RasterFilterListManager(
+				filterList);
+
 		boolean error;
 		RasterFilter obj = null;
-	
+
 		for (int i = 0; i < stackManager.getRasterFilterList().size(); i++) {
-			Class classFilter = (Class) stackManager.getRasterFilterList().get(i);
+			Class classFilter = (Class) stackManager.getRasterFilterList().get(
+					i);
 			error = true;
-	
+
 			try {
 				obj = (RasterFilter) classFilter.newInstance();
 				error = false;
 			} catch (InstantiationException e) {
 			} catch (IllegalAccessException e) {
 			}
-	
+
 			if (!error) {
 				String[] names = obj.getNames();
 				for (int j = 0; j < names.length; j++)
@@ -286,6 +319,7 @@ public class FilterPanel extends JPanel implements IPreviewRenderProcess {
 	/**
 	 * Definir el FLayer del panel, haciendo todas las cargas necesarias despues
 	 * de especificarlo.
+	 * 
 	 * @param layer
 	 */
 	private void setLayer(FLyrRasterSE layer) {
@@ -294,49 +328,61 @@ public class FilterPanel extends JPanel implements IPreviewRenderProcess {
 
 		this.layer = layer;
 		getPreviewBasePanel().setLayer(layer);
-	
+
 		// Construimos el arbol de filtros
 		menuBuild();
-	
-		BaseView view = (BaseView) PluginServices.getMDIManager().getActiveWindow();
-		viewName = PluginServices.getMDIManager().getWindowInfo(view).getTitle();
-	
-		//Comprobamos que el raster de salida no exceda los 4GB que es el máximo 
-		//admisible por un TIFF. Si es así se hace un setCompress para salvar en JPEG2000
-		long sizeB = (long)((((FLyrRasterSE) layer).getPxWidth() * ((FLyrRasterSE) layer).getPxWidth() * ((FLyrRasterSE) layer).getBandCount())); 
-		int sizeMB = (int)(sizeB / 1048576);
-		if(sizeMB >= 4096) {
+
+		BaseView view = (BaseView) PluginServices.getMDIManager()
+				.getActiveWindow();
+		viewName = PluginServices.getMDIManager().getWindowInfo(view)
+				.getTitle();
+
+		// Comprobamos que el raster de salida no exceda los 4GB que es el
+		// máximo
+		// admisible por un TIFF. Si es así se hace un setCompress para salvar
+		// en JPEG2000
+		long sizeB = (long) ((((FLyrRasterSE) layer).getPxWidth()
+				* ((FLyrRasterSE) layer).getPxWidth() * ((FLyrRasterSE) layer)
+				.getBandCount()));
+		int sizeMB = (int) (sizeB / 1048576);
+		if (sizeMB >= 4096) {
 			RasterToolsUtil.messageBoxInfo("file_too_big", this);
 			getNewLayerPanel().setCompress(true);
 		}
-	
+
 		RasterFilterList rfl = ((FLyrRasterSE) layer).getRenderFilterList();
 		status.getVisualStatus(((FLyrRasterSE) layer));
-	
-		//Carga el listado de filtros que ya estaban aplicados en la capa al abrir
-		 
+
+		// Carga el listado de filtros que ya estaban aplicados en la capa al
+		// abrir
+
 		int i = 0;
 		boolean filters = false;
 		while (rfl.get(i) != null) {
-			DefaultListModel list = (DefaultListModel) getMainPanel().getTreeListContainer().getListModel();
+			DefaultListModel list = (DefaultListModel) getMainPanel()
+					.getTreeListContainer().getListModel();
 			if (rfl.get(i).isVisible() && hasThisFilter(rfl.get(i).getName())) {
-				list.addElement(PluginServices.getText(this, rfl.get(i).getName()));
+				list.addElement(PluginServices.getText(this, rfl.get(i)
+						.getName()));
 				for (int j = 0; j < getFilterListener().getParamsList().size(); j++) {
-					if (((ParamStruct) getFilterListener().getParamsList().get(j)).getFilterName().equals(rfl.get(i).getName())) {
+					if (((ParamStruct) getFilterListener().getParamsList().get(
+							j)).getFilterName().equals(rfl.get(i).getName())) {
 						filters = true;
 						initFilter(rfl.get(i));
-						((ParamStruct) getFilterListener().getParamsList().get(j)).setFilterParam(initFilterParam(rfl.get(i).getUIParams(rfl.get(i).getName())));
+						((ParamStruct) getFilterListener().getParamsList().get(
+								j)).setFilterParam(initFilterParam(rfl.get(i)
+								.getUIParams(rfl.get(i).getName())));
 					}
 				}
 			}
 			i++;
 		}
-	
+
 		// Si existen filtros ya en la capa, pondremos los RadioButton para que
 		// los cambios se hagan sobre la visualización
 		if (filters)
 			getNewLayerPanel().setOnlyView(true);
-	
+
 		// Selecciona el primer item del arbol
 		TreeListContainer lc = getMainPanel().getTreeListContainer();
 		lc.getTree().expandRow(1);
@@ -347,7 +393,10 @@ public class FilterPanel extends JPanel implements IPreviewRenderProcess {
 		if (filterMain == null) {
 			filterMain = new FilterMainPanel(getFilterListener());
 			JPanel panel = getNewLayerPanel().getFileNamePanel();
-			panel.setBorder(BorderFactory.createTitledBorder(null, PluginServices.getText(this, "nombre_capa"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+			panel.setBorder(BorderFactory.createTitledBorder(null,
+					PluginServices.getText(this, "nombre_capa"),
+					TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, null));
 			filterMain.getCentralPanel().add(panel, BorderLayout.SOUTH);
 		}
 		return filterMain;
@@ -368,16 +417,18 @@ public class FilterPanel extends JPanel implements IPreviewRenderProcess {
 	public void apply() {
 		filterListener.accept();
 	}
-	
+
 	/**
-	 * Obtener el PropertiesComponent del panel de filtros, en caso de no existir,
-	 * lo crea.
+	 * Obtener el PropertiesComponent del panel de filtros, en caso de no
+	 * existir, lo crea.
+	 * 
 	 * @return
 	 */
 	public PropertiesComponent getPropertiesComponent() {
 		if (propertiesComponent == null) {
 			propertiesComponent = new PropertiesComponent();
-			getMainPanel().getCentralPanel().add(propertiesComponent, BorderLayout.CENTER);
+			getMainPanel().getCentralPanel().add(propertiesComponent,
+					BorderLayout.CENTER);
 
 			propertiesComponent.addStateChangedListener(getFilterListener());
 		}
@@ -385,38 +436,49 @@ public class FilterPanel extends JPanel implements IPreviewRenderProcess {
 	}
 
 	/**
-	 * Asignar un nuevo componente de PropertiesComponent, eliminando el anterior
-	 * que hubiera.
+	 * Asignar un nuevo componente de PropertiesComponent, eliminando el
+	 * anterior que hubiera.
+	 * 
 	 * @param component
 	 * @param name
 	 */
-	public void setNewPropertiesComponent(PropertiesComponent component, String name) {
+	public void setNewPropertiesComponent(PropertiesComponent component,
+			String name) {
 		getPropertiesComponent().setVisible(false);
 		this.remove(propertiesComponent);
 		propertiesComponent = null;
 		propertiesComponent = component;
-		getMainPanel().getCentralPanel().add(propertiesComponent, BorderLayout.CENTER);
+		getMainPanel().getCentralPanel().add(propertiesComponent,
+				BorderLayout.CENTER);
 		propertiesComponent.addStateChangedListener(getFilterListener());
 		setTitle(name);
 		this.validate();
 	}
-	
+
 	/**
 	 * Asigna el título al panel
-	 * @param title Título del panel
+	 * 
+	 * @param title
+	 *            Título del panel
 	 */
 	public void setTitle(String title) {
-		getPropertiesComponent().setBorder(BorderFactory.createTitledBorder(null, PluginServices.getText(this, "filtro_de") + " " + PluginServices.getText(this, title), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+		getPropertiesComponent().setBorder(
+				BorderFactory.createTitledBorder(null,
+						PluginServices.getText(this, "filtro_de") + " "
+								+ PluginServices.getText(this, title),
+						javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+						javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+						null));
 	}
-	
+
 	/**
 	 * Devuelve el estado de los filtros inicial
+	 * 
 	 * @return VisualStatusLayerStack
 	 */
 	public LayerVisualStatusList getLayerVisualStatus() {
 		return status;
 	}
-	
 
 	/**
 	 * Actualizamos la vista previa
@@ -424,15 +486,15 @@ public class FilterPanel extends JPanel implements IPreviewRenderProcess {
 	public void refreshPreview() {
 		getPreviewBasePanel().refreshPreview();
 	}
-	
+
 	/**
 	 * Devuelve el FLayer asignado al panel
+	 * 
 	 * @return
 	 */
 	public FLayer getLayer() {
 		return layer;
 	}
-	
 
 	/**
 	 * @return the jLabelShowFilters
@@ -448,6 +510,7 @@ public class FilterPanel extends JPanel implements IPreviewRenderProcess {
 
 	/**
 	 * Obtiene el nombre de la vista
+	 * 
 	 * @return
 	 */
 	public String getViewName() {
@@ -455,8 +518,8 @@ public class FilterPanel extends JPanel implements IPreviewRenderProcess {
 	}
 
 	/**
-	 * Especificar el nombre de la nueva capa para el recuadro de texto asignándo
-	 * en cada llamada un nombre consecutivo.
+	 * Especificar el nombre de la nueva capa para el recuadro de texto
+	 * asignándo en cada llamada un nombre consecutivo.
 	 */
 	public void updateNewLayerText() {
 		getNewLayerPanel().updateNewLayerText();
@@ -464,29 +527,37 @@ public class FilterPanel extends JPanel implements IPreviewRenderProcess {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.beans.previewbase.IPreviewRenderProcess#process(org.gvsig.raster.hierarchy.IRasterRendering)
+	 * 
+	 * @see
+	 * org.gvsig.raster.beans.previewbase.IPreviewRenderProcess#process(org.
+	 * gvsig.raster.hierarchy.IRasterRendering)
 	 */
-	public void process(IRasterRendering rendering) throws FilterTypeException, ImageUnavailableException {
-		if(!showPreview)
-			throw new ImageUnavailableException(RasterToolsUtil.getText(this, "panel_preview_not_available"));
-		
+	public void process(IRasterRendering rendering) throws FilterTypeException,
+			ImageUnavailableException {
+		if (!showPreview)
+			throw new ImageUnavailableException(RasterToolsUtil.getText(this,
+					"panel_preview_not_available"));
+
 		getFilterListener().drawImage(rendering);
 	}
-	
+
 	/**
-	 * Obtiene el flag que informa de si se está mostrando la previsualización o no.
-	 * En caso de no mostrarse se lanza una excepción ImageUnavailableExcepcion con el 
-	 * mensaje "La previsualización no está disponible para este panel"
+	 * Obtiene el flag que informa de si se está mostrando la previsualización o
+	 * no. En caso de no mostrarse se lanza una excepción
+	 * ImageUnavailableExcepcion con el mensaje
+	 * "La previsualización no está disponible para este panel"
+	 * 
 	 * @return
 	 */
 	public boolean isShowPreview() {
 		return showPreview;
 	}
-	
+
 	/**
-	 * Asigna el flag para mostrar u ocultar la preview. En caso de no mostrarse se lanza una 
-	 * excepción ImageUnavailableExcepcion con el mensaje "La previsualización no está disponible para
-	 * este panel"
+	 * Asigna el flag para mostrar u ocultar la preview. En caso de no mostrarse
+	 * se lanza una excepción ImageUnavailableExcepcion con el mensaje "La
+	 * previsualización no está disponible para este panel"
+	 * 
 	 * @param showPreview
 	 */
 	public void setShowPreview(boolean showPreview) {

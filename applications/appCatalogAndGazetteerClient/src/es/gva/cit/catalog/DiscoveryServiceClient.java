@@ -11,11 +11,6 @@ import java.util.Properties;
 
 import org.apache.commons.httpclient.HttpConnection;
 
-import sun.net.www.http.HttpClient;
-
-
-import com.iver.utiles.swing.jcomboServer.ServerData;
-
 import es.gva.cit.catalog.drivers.DiscoveryServiceCapabilities;
 import es.gva.cit.catalog.drivers.IDiscoveryServiceDriver;
 import es.gva.cit.catalog.exceptions.NotSupportedProtocolException;
@@ -92,14 +87,13 @@ public class DiscoveryServiceClient {
 	 */
 	private String serverStatus = null;
 
-	public DiscoveryServiceClient(String sUri,IDiscoveryServiceDriver driver) {
+	public DiscoveryServiceClient(String sUri, IDiscoveryServiceDriver driver) {
 		setDriver(driver);
-		if (driver == null){
+		if (driver == null) {
 			serverStatus = "errorServerNotFound";
-		}else{
+		} else {
 			try {
-				this.uri = URIUtils.createUri(sUri,
-						driver.getDefaultSchema(),
+				this.uri = URIUtils.createUri(sUri, driver.getDefaultSchema(),
 						driver.getDefaultPort());
 			} catch (URISyntaxException e) {
 				serverStatus = "errorServerNotFound";
@@ -109,11 +103,13 @@ public class DiscoveryServiceClient {
 
 	/**
 	 * It make a getCapabilities operation
+	 * 
 	 * @return the service version
-	 * @throws ServerIsNotReadyException 
+	 * @throws ServerIsNotReadyException
 	 */
-	public DiscoveryServiceCapabilities getCapabilities() throws ServerIsNotReadyException {        
-		if (serverIsReady()){
+	public DiscoveryServiceCapabilities getCapabilities()
+			throws ServerIsNotReadyException {
+		if (serverIsReady()) {
 			try {
 				if (getDriver().isProtocolSupported(getUri())) {
 					capabilities = getDriver().getCapabilities(getUri());
@@ -127,62 +123,59 @@ public class DiscoveryServiceClient {
 				capabilities = new DiscoveryServiceCapabilities();
 				capabilities.setAvailable(false);
 				capabilities.setServerMessage("notSupportedVersion");
-			} 
+			}
 		}
-		return capabilities;    
-	} 
+		return capabilities;
+	}
 
 	/**
-	 * It tries if the server is ready 
-	 * @return boolean
-	 * true --> server is ready
-	 * false --> server is not ready
+	 * It tries if the server is ready
+	 * 
+	 * @return boolean true --> server is ready false --> server is not ready
 	 */
-	public boolean serverIsReady() throws ServerIsNotReadyException {        
+	public boolean serverIsReady() throws ServerIsNotReadyException {
 		Properties systemSettings = System.getProperties();
 
-
-		Object isProxyEnabled = systemSettings.get("http.proxySet"); 
-		if ((isProxyEnabled == null) || (isProxyEnabled.equals("false"))){
+		Object isProxyEnabled = systemSettings.get("http.proxySet");
+		if ((isProxyEnabled == null) || (isProxyEnabled.equals("false"))) {
 			Socket sock;
-			try{				
-				sock = new Socket(getUri().getHost(),
-						getUri().getPort());
+			try {
+				sock = new Socket(getUri().getHost(), getUri().getPort());
 			} catch (UnknownHostException e) {
 				throw new ServerIsNotReadyException(e);
 			} catch (IOException e) {
 				throw new ServerIsNotReadyException(e);
 			}
 			return (sock != null);
-		}else{
-			Object host = systemSettings.get("http.proxyHost"); 
+		} else {
+			Object host = systemSettings.get("http.proxyHost");
 			Object port = systemSettings.get("http.proxyPort");
 			Object user = systemSettings.get("http.proxyUserName");
 			Object password = systemSettings.get("http.proxyPassword");
-			if ((host != null) && (port != null)){
+			if ((host != null) && (port != null)) {
 				int iPort = 80;
-				try{
-					iPort = Integer.parseInt((String)port);
-				}catch (Exception e) {
-					//Use 80
+				try {
+					iPort = Integer.parseInt((String) port);
+				} catch (Exception e) {
+					// Use 80
 				}
-				HttpConnection connection = new HttpConnection(getUri().getHost(), 
-						getUri().getPort());
-				connection.setProxyHost((String)host);
+				HttpConnection connection = new HttpConnection(getUri()
+						.getHost(), getUri().getPort());
+				connection.setProxyHost((String) host);
 				connection.setProxyPort(iPort);
-				Authenticator.setDefault(new SimpleAuthenticator(
-                        user,password));
-				
+				Authenticator
+						.setDefault(new SimpleAuthenticator(user, password));
+
 				try {
 					connection.open();
-					connection.close();						
+					connection.close();
 				} catch (IOException e) {
-					throw new ServerIsNotReadyException(e);					
+					throw new ServerIsNotReadyException(e);
 				}
-			}			
-		}		
+			}
+		}
 		return true;
-	} 
+	}
 
 	/**
 	 * @return the server URI
@@ -196,67 +189,64 @@ public class DiscoveryServiceClient {
 	 */
 	public String getSUri() {
 		return uri.toString();
-	} 
+	}
 
 	/**
 	 * @return Returns the driver.
 	 */
-	protected IDiscoveryServiceDriver getDriver() {        
+	protected IDiscoveryServiceDriver getDriver() {
 		return driver;
 	}
 
 	/**
 	 * 
-	 * @param driver the driver to set
+	 * @param driver
+	 *            the driver to set
 	 */
 	protected void setDriver(IDiscoveryServiceDriver driver) {
 		this.driver = driver;
-	} 
+	}
 
 	/**
 	 * @return the server protocol
 	 */
-	public String getProtocol() {        
+	public String getProtocol() {
 		return driver.getServiceName();
 	}
 
 	/**
 	 * Gets the aditional panel
+	 * 
 	 * @return
 	 */
-	public SearchAditionalPropertiesPanel getAditionalSearchPanel(){
+	public SearchAditionalPropertiesPanel getAditionalSearchPanel() {
 		return driver.getAditionalSearchPanel();
 	}
 
 	/**
 	 * Gets a query
+	 * 
 	 * @return
 	 */
-	public DiscoveryServiceQuery createQuery(){
+	public DiscoveryServiceQuery createQuery() {
 		return driver.createQuery();
 	}
-	
-	private class SimpleAuthenticator
-	   extends Authenticator
-	{
-	   private String username,
-	                  password;
-	                     
-	   public SimpleAuthenticator(Object username, Object password)
-	   {
-		   if (username != null){
-			   this.username = (String)username;
-		   }
-		   if (password != null){
-			   this.password = (String)password;
-		   }
-	   }
-	   
-	   protected PasswordAuthentication getPasswordAuthentication()
-	   {
-	      return new PasswordAuthentication(
-	             username,password.toCharArray());
-	   }
+
+	private class SimpleAuthenticator extends Authenticator {
+		private String username, password;
+
+		public SimpleAuthenticator(Object username, Object password) {
+			if (username != null) {
+				this.username = (String) username;
+			}
+			if (password != null) {
+				this.password = (String) password;
+			}
+		}
+
+		protected PasswordAuthentication getPasswordAuthentication() {
+			return new PasswordAuthentication(username, password.toCharArray());
+		}
 	}
 
 }

@@ -54,6 +54,7 @@ import org.gvsig.gpe.gml.utils.GMLTags;
 /**
  * It writes a gml:MultiGeometry object. Example:
  * <p>
+ * 
  * <pre>
  * <code> 
  * &lt;MultiGeometry gid="c731" srsName="http://www.opengis.net/gml/srs/epsg.xml#4326"&gt;
@@ -81,14 +82,18 @@ import org.gvsig.gpe.gml.utils.GMLTags;
  * &lt;/MultiGeometry&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class MultiGeometryWriter extends GeometryWriter{
-	
+public class MultiGeometryWriter extends GeometryWriter {
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.v2.geometries.GeometriesWriter#getGeometryName()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.v2.geometries.GeometriesWriter#getGeometryName()
 	 */
 	public String getGeometryName() {
 		return GMLTags.GML_MULTIGEOMETRY.getLocalPart();

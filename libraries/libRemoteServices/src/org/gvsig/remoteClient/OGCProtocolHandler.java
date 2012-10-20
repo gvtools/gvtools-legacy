@@ -46,105 +46,117 @@ public abstract class OGCProtocolHandler {
 	/**
 	 * procotol handler name
 	 */
-    protected String name;
-    /**
-     * protocol handler version
-     */
-    protected String version;
-    /**
-     * host of the WMS to connect
-     */
-    protected String host;
-    /**
-     *  port number of the comunication channel of the WMS to connect
-     */
-    protected String port;    
-    
-    /**
+	protected String name;
+	/**
+	 * protocol handler version
+	 */
+	protected String version;
+	/**
+	 * host of the WMS to connect
+	 */
+	protected String host;
+	/**
+	 * port number of the comunication channel of the WMS to connect
+	 */
+	protected String port;
+
+	/**
 	 * @return Returns the host.
 	 */
 	public String getHost() {
 		return host;
 	}
+
 	/**
-	 * @param host The host to set.
+	 * @param host
+	 *            The host to set.
 	 */
 	public void setHost(String host) {
 		this.host = host;
 	}
+
 	/**
 	 * @return Returns the name.
 	 */
 	public String getName() {
 		return name;
 	}
+
 	/**
-	 * @param name The name to set.
+	 * @param name
+	 *            The name to set.
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	/**
 	 * @return Returns the port.
 	 */
 	public String getPort() {
 		return port;
 	}
+
 	/**
-	 * @param port The port to set.
+	 * @param port
+	 *            The port to set.
 	 */
 	public void setPort(String port) {
 		this.port = port;
 	}
+
 	/**
 	 * @return Returns the version.
 	 */
 	public String getVersion() {
 		return version;
 	}
+
 	/**
-	 * @param version The version to set.
+	 * @param version
+	 *            The version to set.
 	 */
 	public void setVersion(String version) {
 		this.version = version;
 	}
 
-//	/**
-//	 * @deprectated 
-//	 * (temporarily)
-//	 */
-//    protected File downloadFile(URL url, String fileName) throws IOException,ConnectException, UnknownHostException{
-//        File f = null;
-//
-//        try{
-//            f = TempFileManager.createTempFile(fileName, "tmp");
-//            System.out.println("downloading '"+url.toString()+"' to: "+f.getAbsolutePath());
-//             
-//            f.deleteOnExit();
-//            
-//        } catch (IOException io) {
-//            io.printStackTrace();
-//        }
-//        DataOutputStream dos = new DataOutputStream( new BufferedOutputStream(new FileOutputStream(f)));
-//        byte[] buffer = new byte[1024*256];
-//        InputStream is = url.openStream();
-//        long readed = 0;
-//        for (int i = is.read(buffer); i>0; i = is.read(buffer)){
-//            dos.write(buffer, 0, i);
-//            readed += i;
-//        }
-//        dos.close();
-//        /*if (!isNotAnException(f))
-//            // SI que es una excepción
-//            throw new ServerErrorResponseException();*/
-//        return f;
-//    }
+	// /**
+	// * @deprectated
+	// * (temporarily)
+	// */
+	// protected File downloadFile(URL url, String fileName) throws
+	// IOException,ConnectException, UnknownHostException{
+	// File f = null;
+	//
+	// try{
+	// f = TempFileManager.createTempFile(fileName, "tmp");
+	// System.out.println("downloading '"+url.toString()+"' to: "+f.getAbsolutePath());
+	//
+	// f.deleteOnExit();
+	//
+	// } catch (IOException io) {
+	// io.printStackTrace();
+	// }
+	// DataOutputStream dos = new DataOutputStream( new BufferedOutputStream(new
+	// FileOutputStream(f)));
+	// byte[] buffer = new byte[1024*256];
+	// InputStream is = url.openStream();
+	// long readed = 0;
+	// for (int i = is.read(buffer); i>0; i = is.read(buffer)){
+	// dos.write(buffer, 0, i);
+	// readed += i;
+	// }
+	// dos.close();
+	// /*if (!isNotAnException(f))
+	// // SI que es una excepción
+	// throw new ServerErrorResponseException();*/
+	// return f;
+	// }
 
-    
-    /**
-     * parses the data retrieved by the Capabilities XML document
-     * 
-     */
-    public abstract boolean parseCapabilities(File f);
+	/**
+	 * parses the data retrieved by the Capabilities XML document
+	 * 
+	 */
+	public abstract boolean parseCapabilities(File f);
 
 }

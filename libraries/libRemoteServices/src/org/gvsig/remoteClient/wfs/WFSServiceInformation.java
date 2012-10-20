@@ -75,12 +75,12 @@ public class WFSServiceInformation {
 	public String fax;
 	public String email;
 	public Vector formats;
-	private HashMap operationsGet; 
-	private HashMap operationsPost; 
+	private HashMap operationsGet;
+	private HashMap operationsPost;
 	private HashMap namespaces;
-	
-	public WFSServiceInformation() {  	
-		clear();     
+
+	public WFSServiceInformation() {
+		clear();
 	}
 
 	public void clear() {
@@ -104,110 +104,115 @@ public class WFSServiceInformation {
 		phone = new String();
 		fax = new String();
 		email = new String();
-		formats = new Vector();       	
-		operationsGet = new HashMap();  
-		operationsPost = new HashMap();   
+		formats = new Vector();
+		operationsGet = new HashMap();
+		operationsPost = new HashMap();
 		namespaces = new HashMap();
 	}
 
 	/**
 	 * @return Returns the online_resource.
 	 */
-	 public String getOnline_resource() {
+	public String getOnline_resource() {
 		return online_resource;
 	}
 
 	/**
 	 * Add a new supported operation
+	 * 
 	 * @param operation
-	 * The operation to support
+	 *            The operation to support
 	 * @param protocol
-	 * The HTTP protocol (Get or Post)
+	 *            The HTTP protocol (Get or Post)
 	 */
-	public void addOperation(int operation, int protocol){
-		if (protocol == WFSOperation.PROTOCOL_GET){
-			operationsGet.put(new Integer(operation),new WFSOperation(operation));
-		}else if (protocol == WFSOperation.PROTOCOL_POST){
-			operationsPost.put(new Integer(operation),new WFSOperation(operation));
+	public void addOperation(int operation, int protocol) {
+		if (protocol == WFSOperation.PROTOCOL_GET) {
+			operationsGet.put(new Integer(operation), new WFSOperation(
+					operation));
+		} else if (protocol == WFSOperation.PROTOCOL_POST) {
+			operationsPost.put(new Integer(operation), new WFSOperation(
+					operation));
 		}
 	}
-	
+
 	/**
 	 * Add a new supported operation
+	 * 
 	 * @param operation
-	 * The operation to support
+	 *            The operation to support
 	 * @param protocol
-	 * The HTTP protocol (Get or Post)
+	 *            The HTTP protocol (Get or Post)
 	 * @param onlineResource
-	 * The online resource
+	 *            The online resource
 	 */
-	public void addOperation(int operation, int protocol, String onlineResource){
-		if (protocol == WFSOperation.PROTOCOL_GET){
-			operationsGet.put(new Integer(operation),new WFSOperation(operation, onlineResource));
-		}else if (protocol == WFSOperation.PROTOCOL_POST){
-			operationsPost.put(new Integer(operation),new WFSOperation(operation, onlineResource));
+	public void addOperation(int operation, int protocol, String onlineResource) {
+		if (protocol == WFSOperation.PROTOCOL_GET) {
+			operationsGet.put(new Integer(operation), new WFSOperation(
+					operation, onlineResource));
+		} else if (protocol == WFSOperation.PROTOCOL_POST) {
+			operationsPost.put(new Integer(operation), new WFSOperation(
+					operation, onlineResource));
 		}
 	}
 
 	/**
 	 * Gest the online resource for a concrete operation
+	 * 
 	 * @param operation
-	 * The operation
+	 *            The operation
 	 * @param protocol
-	 * The HTTP protocol (Get or Post)
-	 * @return
-	 * The online resource
+	 *            The HTTP protocol (Get or Post)
+	 * @return The online resource
 	 */
-	public String getOnlineResource(int operation, int protocol){
+	public String getOnlineResource(int operation, int protocol) {
 		WFSOperation op = null;
-		if (protocol == WFSOperation.PROTOCOL_GET){
-			op = (WFSOperation)operationsGet.get(new Integer(operation));
-		}else if (protocol == WFSOperation.PROTOCOL_POST){
-			op = (WFSOperation)operationsPost.get(new Integer(operation));
+		if (protocol == WFSOperation.PROTOCOL_GET) {
+			op = (WFSOperation) operationsGet.get(new Integer(operation));
+		} else if (protocol == WFSOperation.PROTOCOL_POST) {
+			op = (WFSOperation) operationsPost.get(new Integer(operation));
 		}
-		if ((op == null) ||
-				(op.getOnlineResource() == null) || 
-				(op.getOnlineResource().equals(""))){
+		if ((op == null) || (op.getOnlineResource() == null)
+				|| (op.getOnlineResource().equals(""))) {
 			return null;
 		}
 		return op.getOnlineResource();
 	}
-	
+
 	/**
-	 * Gets the online resource for a concrete operation.
-	 * The default protocol is GET
+	 * Gets the online resource for a concrete operation. The default protocol
+	 * is GET
+	 * 
 	 * @param operation
-	 * The operation
-	 * @return
-	 * The online resource
+	 *            The operation
+	 * @return The online resource
 	 */
-	public String getOnlineResource(int operation){
+	public String getOnlineResource(int operation) {
 		return getOnlineResource(operation, WFSOperation.PROTOCOL_GET);
 	}
-	
+
 	/**
 	 * Adds a new namespace
+	 * 
 	 * @param namespacePrefix
-	 * Namespace prefix
+	 *            Namespace prefix
 	 * @param namespaceURI
-	 * Namespace URI
+	 *            Namespace URI
 	 */
-	public void addNamespace(String namespacePrefix, String namespaceURI){
+	public void addNamespace(String namespacePrefix, String namespaceURI) {
 		namespaces.put(namespacePrefix, namespaceURI);
 	}
-	
+
 	/**
 	 * Gest a namespace URI
+	 * 
 	 * @param namespaceprefix
-	 * Namespace prefix
-	 * @return
-	 * The namespace URI
+	 *            Namespace prefix
+	 * @return The namespace URI
 	 */
-	public String getNamespace(String namespaceprefix){
-		if (namespaces.containsKey(namespaceprefix)){
-			return (String)namespaces.get(namespaceprefix);
+	public String getNamespace(String namespaceprefix) {
+		if (namespaces.containsKey(namespaceprefix)) {
+			return (String) namespaces.get(namespaceprefix);
 		}
 		return null;
-	}	
+	}
 }
-

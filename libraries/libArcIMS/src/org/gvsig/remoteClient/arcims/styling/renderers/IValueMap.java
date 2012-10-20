@@ -44,11 +44,11 @@
 package org.gvsig.remoteClient.arcims.styling.renderers;
 
 public interface IValueMap {
-    public TypeValueMap getValue(int index);
+	public TypeValueMap getValue(int index);
 
-    public boolean addType(TypeValueMap value);
+	public boolean addType(TypeValueMap value);
 
-    public int valuesCount();
+	public int valuesCount();
 
-    public String toString();
+	public String toString();
 }

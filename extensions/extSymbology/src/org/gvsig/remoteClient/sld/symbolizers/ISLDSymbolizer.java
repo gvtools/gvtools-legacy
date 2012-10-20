@@ -46,50 +46,62 @@ import org.gvsig.remoteClient.gml.schemas.XMLSchemaParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
+
 /**
- * Implements an interface for SLD symbolizers in order to define methods
- * for them.<p>
- * Embedded inside of Rules (<code>SLDRule</code>), which group conditions for 
- * styling features, are Symbolizers. A Symbolizer describes how a feature is 
- * to appears on a map. The symbolizer describes not just the shape that should 
- * appear but also such graphical properties as color and opacity. A symbol is 
+ * Implements an interface for SLD symbolizers in order to define methods for
+ * them.
+ * <p>
+ * Embedded inside of Rules (<code>SLDRule</code>), which group conditions for
+ * styling features, are Symbolizers. A Symbolizer describes how a feature is to
+ * appears on a map. The symbolizer describes not just the shape that should
+ * appear but also such graphical properties as color and opacity. A symbol is
  * obtained by specifying one of a small number of different types of symbolizer
- * and then supplying parameters to override its default behaviour.<p>
- * For the moment three types of symbolizers are defined for gvSIG:<p>
- * -Line ->  (<code>SLDLineSymbolizer</code>).<p>
- * -Point -> (<code>SLDPointSymbolizer</code>).<p>
- * -Polygon -> (<code>SLDPolygonSymbolizer</code>).<p>  
+ * and then supplying parameters to override its default behaviour.
+ * <p>
+ * For the moment three types of symbolizers are defined for gvSIG:
+ * <p>
+ * -Line -> (<code>SLDLineSymbolizer</code>).
+ * <p>
+ * -Point -> (<code>SLDPointSymbolizer</code>).
+ * <p>
+ * -Polygon -> (<code>SLDPolygonSymbolizer</code>).
+ * <p>
  * 
  * @see SLDLineSymbolizer
  * @see SLDPointSymbolizer
  * @see SLDPolygonSymbolizer
- * @see http://portal.opengeospatial.org/files/?artifact_id=1188 
+ * @see http://portal.opengeospatial.org/files/?artifact_id=1188
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
 public interface ISLDSymbolizer {
 
-	public void parse(XMLSchemaParser parser)throws IOException, XmlPullParserException, LegendDriverException ;
+	public void parse(XMLSchemaParser parser) throws IOException,
+			XmlPullParserException, LegendDriverException;
+
 	/**
 	 * Returns the shape type of the SLD symbolizer
 	 * 
 	 * @return the shape type of the symbolizer
 	 */
 	int getShapeType();
+
 	/**
-	 * Creates an Specification in SLD for a symbolizer when it is going 
-	 * to be exported.
+	 * Creates an Specification in SLD for a symbolizer when it is going to be
+	 * exported.
 	 * 
 	 * @return the specification in SLD for the symbolizer.
 	 */
 	abstract String toXML();
+
 	/**
 	 * Sets the minScaleDenominator element for a symbolizer. This element
-	 * defines the low range of map-rendering scales for which the rule where 
+	 * defines the low range of map-rendering scales for which the rule where
 	 * the symbolizer appears should be applied.
 	 * 
 	 * @param maxScaleDenominator
 	 */
 	void setMinScaleDenominator(double minScaleDenominator);
+
 	/**
 	 * Sets the maxScaleDenominator element for a symbolizer. This element
 	 * defines the upper range of map-rendering scales for which the rule where
@@ -98,11 +110,13 @@ public interface ISLDSymbolizer {
 	 * @param maxScaleDenominator
 	 */
 	void setMaxScaleDenominator(double maxScaleDenominator);
-	
+
 	public double getMinScaleDenominator();
+
 	public double getMaxScaleDenominator();
-	
+
 	public String getGeometry();
-	public void setGeometry(String geometry) ;
+
+	public void setGeometry(String geometry);
 
 }

@@ -57,16 +57,15 @@ import com.iver.cit.gvsig.fmap.core.v02.FLabel;
 import com.iver.utiles.swing.threads.Cancellable;
 import com.vividsolutions.jts.geom.Geometry;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FNullGeometry extends AbstractGeometry {
 	/**
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#draw(java.awt.Graphics2D,
-	 * 		ViewPort, ISymbol)
+	 *      ViewPort, ISymbol)
 	 */
 	public void draw(Graphics2D g, ViewPort vp, ISymbol symbol) {
 	}
@@ -85,14 +84,20 @@ public class FNullGeometry extends AbstractGeometry {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#intersects(java.awt.geom.Rectangle2D)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.core.IGeometry#intersects(java.awt.geom.Rectangle2D
+	 * )
 	 */
 	public boolean intersects(Rectangle2D r) {
 		return false;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#getBounds2D()
 	 */
 	public Rectangle2D getBounds2D() {
@@ -106,13 +111,20 @@ public class FNullGeometry extends AbstractGeometry {
 		return FShape.NULL;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#draw(java.awt.Graphics2D, com.iver.cit.gvsig.fmap.ViewPort, com.iver.cit.gvsig.fmap.core.v02.FSymbol)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#draw(java.awt.Graphics2D,
+	 * com.iver.cit.gvsig.fmap.ViewPort,
+	 * com.iver.cit.gvsig.fmap.core.v02.FSymbol)
 	 */
-	public void draw(Graphics2D g, ViewPort vp, ISymbol symbol, Cancellable cancel) {
+	public void draw(Graphics2D g, ViewPort vp, ISymbol symbol,
+			Cancellable cancel) {
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#cloneGeometry()
 	 */
 	public IGeometry cloneGeometry() {
@@ -123,46 +135,54 @@ public class FNullGeometry extends AbstractGeometry {
 	public void reProject(MathTransform trans) {
 	}
 
-
 	/**
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#getPathIterator(AffineTransform)
 	 */
 	public PathIterator getPathIterator(AffineTransform at) {
-		//TODO falta implementar.
+		// TODO falta implementar.
 		return null;
 	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.core.IGeometry#fastIntersects(double, double, double, double)
-     */
-    public boolean fastIntersects(double x, double y, double w, double h) {
-        return false;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#fastIntersects(double,
+	 * double, double, double)
+	 */
+	public boolean fastIntersects(double x, double y, double w, double h) {
+		return false;
+	}
 
-    /**
-     * @see com.iver.cit.gvsig.fmap.core.IGeometry#toWKB()
-     */
-    public byte[] toWKB() throws IOException {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	/**
+	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#toWKB()
+	 */
+	public byte[] toWKB() throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.core.IGeometry#drawInts(java.awt.Graphics2D, com.iver.cit.gvsig.fmap.ViewPort, com.iver.cit.gvsig.fmap.core.v02.FSymbol)
-     */
-    public void drawInts(Graphics2D g, ViewPort vp, ISymbol symbol, Cancellable cancel) {
-        // TODO Auto-generated method stub
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#drawInts(java.awt.Graphics2D,
+	 * com.iver.cit.gvsig.fmap.ViewPort,
+	 * com.iver.cit.gvsig.fmap.core.v02.FSymbol)
+	 */
+	public void drawInts(Graphics2D g, ViewPort vp, ISymbol symbol,
+			Cancellable cancel) {
+		// TODO Auto-generated method stub
 
-    }
+	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#getHandlers(int)
 	 */
 	public Handler[] getHandlers(int type) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 	public void transform(AffineTransform at) {
 

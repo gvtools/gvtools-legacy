@@ -60,16 +60,20 @@ import javax.swing.table.TableCellEditor;
 /**
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class TreeTableCellEditor extends AbstractCellEditor implements TableCellEditor {
+public class TreeTableCellEditor extends AbstractCellEditor implements
+		TableCellEditor {
 	private TreeTable treeTable;
-	
-	public TreeTableCellEditor(TreeTable treeTable){
+
+	public TreeTableCellEditor(TreeTable treeTable) {
 		this.treeTable = treeTable;
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
-	 * @see javax.swing.table.TableCellEditor#getTableCellEditorComponent(javax.swing.JTable, java.lang.Object, boolean, int, int)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.swing.table.TableCellEditor#getTableCellEditorComponent(javax.swing
+	 * .JTable, java.lang.Object, boolean, int, int)
 	 */
 	public Component getTableCellEditorComponent(JTable table, Object value,
 			boolean isSelected, int r, int c) {

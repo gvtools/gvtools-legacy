@@ -13,16 +13,18 @@ import javax.swing.JPanel;
 import es.gva.cit.jgdal.Gdal;
 import es.gva.cit.jgdal.GdalException;
 
-public class TestJNI extends Thread{
-	
-	public class Internal extends Thread{
+public class TestJNI extends Thread {
+
+	public class Internal extends Thread {
 		public void run() {
 			System.out.println("1");
 			System.loadLibrary("jgdal");
 			Gdal g = new Gdal();
 			try {
-				g.open("/home/nacho/images/03AUG23153350-M2AS-000000122423_01_P001.TIF", 0);
-				System.out.println(g.getRasterXSize() + " " + g.getRasterYSize());
+				g.open("/home/nacho/images/03AUG23153350-M2AS-000000122423_01_P001.TIF",
+						0);
+				System.out.println(g.getRasterXSize() + " "
+						+ g.getRasterYSize());
 			} catch (GdalException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -34,7 +36,7 @@ public class TestJNI extends Thread{
 		}
 	}
 
-	public void run(){
+	public void run() {
 		JFrame frame = new JFrame();
 		frame.setSize(410, 200);
 		JPanel p = new JPanel();
@@ -51,18 +53,14 @@ public class TestJNI extends Thread{
 
 		frame.getContentPane().add(p);
 		frame.setVisible(true);
-		//frame.show();
-		
-		/*while(true){
-			try {
-				sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			System.out.println("END");
-		}*/
+		// frame.show();
+
+		/*
+		 * while(true){ try { sleep(1000); } catch (InterruptedException e) {
+		 * e.printStackTrace(); } System.out.println("END"); }
+		 */
 	}
-	
+
 	public static void main(String arg[]) {
 		TestJNI t = new TestJNI();
 		Internal t1 = t.new Internal();

@@ -45,16 +45,18 @@ import javax.swing.JComponent;
 import org.gvsig.symbology.fmap.styles.PointLabelPositioneer;
 
 import com.iver.andami.PluginServices;
+
 /**
  * Implements an editor tool which can be used to select the position for the
- * label when the user is performing a layer of points. There will be 4 different
- * precedence levels for the 8 different places where the text for the specified point
- * will be placed (see PointLabelPositioneer.java). This class implements the normal one,
- * but the user can select a high, a low or a forbidden one.
- *
- *
+ * label when the user is performing a layer of points. There will be 4
+ * different precedence levels for the 8 different places where the text for the
+ * specified point will be placed (see PointLabelPositioneer.java). This class
+ * implements the normal one, but the user can select a high, a low or a
+ * forbidden one.
+ * 
+ * 
  * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
- *
+ * 
  */
 public class PointLabelNormalPrecedenceTool extends
 		PointLabelHighPrecedenceTool {
@@ -63,7 +65,8 @@ public class PointLabelNormalPrecedenceTool extends
 		super(targetEditor);
 		precedenceValue = PointLabelPositioneer.PREFERENCE_NORMAL;
 		buttonIcon = "set-normal-precedence-point-label-icon";
-		this.getButton().setToolTipText(PluginServices.getText(this, "set_normal_precedence"));
+		this.getButton().setToolTipText(
+				PluginServices.getText(this, "set_normal_precedence"));
 	}
 
 	@Override

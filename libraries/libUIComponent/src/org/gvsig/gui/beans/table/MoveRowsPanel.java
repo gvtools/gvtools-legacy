@@ -29,27 +29,27 @@ import org.gvsig.gui.beans.table.listeners.TableListener;
 import org.gvsig.gui.util.StatusComponent;
 
 public class MoveRowsPanel extends JPanel {
-  private static final long serialVersionUID = -4496318143555472677L;
+	private static final long serialVersionUID = -4496318143555472677L;
 
-	private int             HEIGHT_BUTTONS  = 19;       // 16 estaria bien
-	private JButton         bUp             = null;
-	private JButton         bDown           = null;
-	private int             selected        = -1;
-	private int             cont            = 0;
-	private String          pathToImages    = "images/"; // "/com/iver/cit/gvsig/gui/panels/images/";
+	private int HEIGHT_BUTTONS = 19; // 16 estaria bien
+	private JButton bUp = null;
+	private JButton bDown = null;
+	private int selected = -1;
+	private int cont = 0;
+	private String pathToImages = "images/"; // "/com/iver/cit/gvsig/gui/panels/images/";
 
 	/**
-	 * Objeto para controlar el estado de los componentes visuales 
+	 * Objeto para controlar el estado de los componentes visuales
 	 */
 	private StatusComponent statusComponent = null;
-	
+
 	/**
 	 * This is the default constructor
 	 */
 	public MoveRowsPanel(TableListener tableListener) {
 		initialize(tableListener);
 	}
-	
+
 	private void initialize(TableListener tableListener) {
 		statusComponent = new StatusComponent(this);
 
@@ -66,12 +66,12 @@ public class MoveRowsPanel extends JPanel {
 		this.cont = cont;
 		checkArrows();
 	}
-	
+
 	/**
-	 * Comprueba la posición del combo para ver si tiene que
-	 * habilitar o deshabilitar las flechas de delante y detrás.
+	 * Comprueba la posición del combo para ver si tiene que habilitar o
+	 * deshabilitar las flechas de delante y detrás.
 	 */
-	private void checkArrows(){
+	private void checkArrows() {
 		if (!statusComponent.isEnabled())
 			return;
 
@@ -92,10 +92,11 @@ public class MoveRowsPanel extends JPanel {
 		} else {
 			getBDown().setEnabled(true);
 		}
-	}	
+	}
 
 	/**
 	 * This method initializes bUp
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	public JButton getBUp() {
@@ -103,16 +104,17 @@ public class MoveRowsPanel extends JPanel {
 			bUp = new JButton("");
 			bUp.setEnabled(true);
 			bUp.setPreferredSize(new Dimension(22, HEIGHT_BUTTONS));
-			bUp.setIcon(new ImageIcon(getClass().getResource(pathToImages + "up-16x16.png")));
+			bUp.setIcon(new ImageIcon(getClass().getResource(
+					pathToImages + "up-16x16.png")));
 			bUp.setActionCommand("");
 			bUp.setToolTipText(Messages.getText("subir"));
 		}
 		return bUp;
 	}
-	
 
 	/**
 	 * This method initializes bDown
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	public JButton getBDown() {
@@ -120,19 +122,20 @@ public class MoveRowsPanel extends JPanel {
 			bDown = new JButton("");
 			bDown.setEnabled(true);
 			bDown.setPreferredSize(new Dimension(22, HEIGHT_BUTTONS));
-			bDown.setIcon(new ImageIcon(getClass().getResource(pathToImages + "down-16x16.png")));
+			bDown.setIcon(new ImageIcon(getClass().getResource(
+					pathToImages + "down-16x16.png")));
 			bDown.setActionCommand("");
 			bDown.setToolTipText(Messages.getText("bajar"));
 		}
 		return bDown;
 	}
-	
+
 	/**
-	 * Esta función deshabilita todos los controles y guarda sus valores
-	 * de habilitado o deshabilitado para que cuando se ejecute restoreControlsValue
-	 * se vuelvan a quedar como estaba
+	 * Esta función deshabilita todos los controles y guarda sus valores de
+	 * habilitado o deshabilitado para que cuando se ejecute
+	 * restoreControlsValue se vuelvan a quedar como estaba
 	 */
-	public void disableAllControls(){
+	public void disableAllControls() {
 		statusComponent.setEnabled(false);
 	}
 
@@ -140,7 +143,7 @@ public class MoveRowsPanel extends JPanel {
 	 * Esta función deja los controles como estaban al ejecutar la función
 	 * disableAllControls
 	 */
-	public void restoreControlsValue(){
+	public void restoreControlsValue() {
 		statusComponent.setEnabled(true);
-	}	
+	}
 }

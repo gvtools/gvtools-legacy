@@ -42,40 +42,40 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: DriverIOExceptionType.java 7454 2006-09-21 17:18:31Z azabala $
-* $Log$
-* Revision 1.1  2006-09-21 17:18:31  azabala
-* First version in cvs
-*
-*
-*/
+ *
+ * $Id: DriverIOExceptionType.java 7454 2006-09-21 17:18:31Z azabala $
+ * $Log$
+ * Revision 1.1  2006-09-21 17:18:31  azabala
+ * First version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap;
 
 import java.io.File;
 
 import com.iver.utiles.ExceptionDescription;
 
-public class DriverIOExceptionType extends ExceptionDescription{
+public class DriverIOExceptionType extends ExceptionDescription {
 
 	private File file;
 	private String name;
-	
-	
+
 	public DriverIOExceptionType() {
 		super();
 		setCode(2);
 		setDescription("error de IO con un driver basado en fichero");
 	}
-	
-	public void setFile(File file){
+
+	public void setFile(File file) {
 		this.file = file;
 	}
 
 	public String getHtmlErrorMessage() {
 		String message = "";
-		message += "<b>Error al acceder al fichero del driver " + "</b><br>" +
-		"Error de acceso al fichero " + file.getAbsolutePath()+ " del driver " + name ;
+		message += "<b>Error al acceder al fichero del driver " + "</b><br>"
+				+ "Error de acceso al fichero " + file.getAbsolutePath()
+				+ " del driver " + name;
 		return message;
 	}
 

@@ -35,7 +35,6 @@ import org.exolab.castor.xml.ValidationException;
 
 import com.iver.andami.Launcher;
 import com.iver.andami.PluginServices;
-import com.iver.andami.config.generate.Plugin;
 import com.iver.andami.plugins.config.generate.Extension;
 import com.iver.andami.plugins.config.generate.PluginConfig;
 import com.iver.andami.preferences.AbstractPreferencePage;
@@ -57,20 +56,21 @@ public class ExtensionPage extends AbstractPreferencePage {
 	private int txtPriority;
 	private boolean changed = false;
 	private MyAction myAction = new MyAction();
+
 	/**
 	 * This is the default constructor
 	 */
 	public ExtensionPage(Extension extension) {
 		super();
 		icon = PluginServices.getIconTheme().get("emblem-work");
-		this.extension=extension;
+		this.extension = extension;
 		setParentID(ExtensionsPage.class.getName());
 		initialize();
 	}
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
@@ -95,9 +95,13 @@ public class ExtensionPage extends AbstractPreferencePage {
 	}
 
 	public void initializeValues() {
-		getChbActivar().setSelected(((Extension) Launcher.getExtension(extension.getClassName())).getActive());
+		getChbActivar().setSelected(
+				((Extension) Launcher.getExtension(extension.getClassName()))
+						.getActive());
 		getJTextField().setText(String.valueOf(extension.getPriority()));
-		getJTextArea().setText(format(((Extension) Launcher.getExtension(extension.getClassName())).getDescription(),40));
+		getJTextArea().setText(
+				format(((Extension) Launcher.getExtension(extension
+						.getClassName())).getDescription(), 40));
 		chkSelected = getChbActivar().isSelected();
 		txtPriority = extension.getPriority();
 	}
@@ -106,8 +110,9 @@ public class ExtensionPage extends AbstractPreferencePage {
 		int pri;
 		try {
 			pri = Integer.parseInt(getJTextField().getText());
-		} catch (Exception e){
-			throw new StoreException( PluginServices.getText(this, "invalid_priority_value"),e);
+		} catch (Exception e) {
+			throw new StoreException(PluginServices.getText(this,
+					"invalid_priority_value"), e);
 		}
 		extension.setActive(chbActivar.isSelected());
 		extension.setPriority(pri);
@@ -128,12 +133,18 @@ public class ExtensionPage extends AbstractPreferencePage {
 			Writer writer;
 
 			try {
-				FileOutputStream fos = new FileOutputStream(Launcher.getAndamiConfig().getPluginsDirectory() +
-						File.separator + (String) obj + File.separator +
-						"config.xml");
-				// castor uses xerces, and xerces uses UTF-8 by default, so we should use
-				// UTF-8 to create the writer, as long as we continue using castor+xerces
-				writer = new BufferedWriter(new OutputStreamWriter(fos, "UTF-8"));
+				FileOutputStream fos = new FileOutputStream(Launcher
+						.getAndamiConfig().getPluginsDirectory()
+						+ File.separator
+						+ (String) obj
+						+ File.separator
+						+ "config.xml");
+				// castor uses xerces, and xerces uses UTF-8 by default, so we
+				// should use
+				// UTF-8 to create the writer, as long as we continue using
+				// castor+xerces
+				writer = new BufferedWriter(
+						new OutputStreamWriter(fos, "UTF-8"));
 
 				try {
 					pconfig.marshal(writer);
@@ -146,10 +157,11 @@ public class ExtensionPage extends AbstractPreferencePage {
 				e.printStackTrace();
 			}
 
-			//hay que refrescar la aplicación
-			///((App)App.instance).run();
+			// hay que refrescar la aplicación
+			// /((App)App.instance).run();
 		}
 	}
+
 	/**
 	 * Lee del config.xml la configuración.
 	 */
@@ -162,32 +174,42 @@ public class ExtensionPage extends AbstractPreferencePage {
 			PluginConfig pconfig = (PluginConfig) pc.get(obj);
 
 			try {
-				String fileName = Launcher.getAndamiConfig().getPluginsDirectory() + File.separator + (String) obj + File.separator +	"config.xml";
+				String fileName = Launcher.getAndamiConfig()
+						.getPluginsDirectory()
+						+ File.separator
+						+ (String) obj
+						+ File.separator + "config.xml";
 				FileInputStream is = new FileInputStream(fileName);
-				Reader reader = com.iver.utiles.xml.XMLEncodingUtils.getReader(is);
-				if (reader==null) {
-					// the encoding was not correctly detected, use system default
+				Reader reader = com.iver.utiles.xml.XMLEncodingUtils
+						.getReader(is);
+				if (reader == null) {
+					// the encoding was not correctly detected, use system
+					// default
 					reader = new FileReader(fileName);
-				}
-				else {
+				} else {
 					// use a buffered reader to improve performance
 					reader = new BufferedReader(reader);
 				}
-				pconfig=(PluginConfig)PluginConfig.unmarshal(reader);
-				Launcher.getPluginConfig().put(obj,pconfig);
+				pconfig = (PluginConfig) PluginConfig.unmarshal(reader);
+				Launcher.getPluginConfig().put(obj, pconfig);
 			} catch (Exception e) {
 				System.out.println("Exception unmarshalPlugin " + e);
 			}
 		}
 
-		//hay que refrescar la aplicación
-		///((App)App.instance).run();
+		// hay que refrescar la aplicación
+		// /((App)App.instance).run();
 	}
+
 	public void initializeDefaults() {
 		unmarshalPlugins();
-		getChbActivar().setSelected(((Extension) Launcher.getExtension(extension.getClassName())).getActive());
+		getChbActivar().setSelected(
+				((Extension) Launcher.getExtension(extension.getClassName()))
+						.getActive());
 		getJTextField().setText(String.valueOf(extension.getPriority()));
-		getJTextArea().setText(format(((Extension) Launcher.getExtension(extension.getClassName())).getDescription(),40));
+		getJTextArea().setText(
+				format(((Extension) Launcher.getExtension(extension
+						.getClassName())).getDescription(), 40));
 	}
 
 	public ImageIcon getIcon() {
@@ -196,14 +218,17 @@ public class ExtensionPage extends AbstractPreferencePage {
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel() {
 		if (jPanel == null) {
 			jPanel = new JPanel();
 			jPanel.setLayout(new FlowLayout());
-			jPanel.setBorder(BorderFactory.createTitledBorder(null, PluginServices.getText(this, "descripcion"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+			jPanel.setBorder(BorderFactory.createTitledBorder(null,
+					PluginServices.getText(this, "descripcion"),
+					TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, null));
 			jPanel.add(getJScrollPane(), null);
 		}
 		return jPanel;
@@ -211,14 +236,16 @@ public class ExtensionPage extends AbstractPreferencePage {
 
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
-			jScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-			jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			jScrollPane
+					.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+			jScrollPane
+					.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			jScrollPane.setViewportView(getJTextArea());
 		}
 		return jScrollPane;
@@ -226,7 +253,7 @@ public class ExtensionPage extends AbstractPreferencePage {
 
 	/**
 	 * This method initializes jTextArea
-	 *
+	 * 
 	 * @return javax.swing.JTextArea
 	 */
 	private JTextArea getJTextArea() {
@@ -242,24 +269,27 @@ public class ExtensionPage extends AbstractPreferencePage {
 		}
 		return jTextArea;
 	}
+
 	/**
 	 * This method initializes chbActivar
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getChbActivar() {
 		if (chbActivar == null) {
 			chbActivar = new JCheckBox();
 			chbActivar.setSelected(true);
-			chbActivar.setText(PluginServices.getText(this, "extension_activada"));
+			chbActivar.setText(PluginServices.getText(this,
+					"extension_activada"));
 			chbActivar.addActionListener(myAction);
 		}
 
 		return chbActivar;
 	}
+
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel1() {
@@ -273,15 +303,19 @@ public class ExtensionPage extends AbstractPreferencePage {
 		}
 		return jPanel1;
 	}
+
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel2() {
 		if (jPanel2 == null) {
 			jLabel1 = new JLabel();
-			jLabel1.setText(PluginServices.getText(this, "Los_cambios_efectuados_sobre_estos_valores_se_aplicaran_al_reiniciar_la_aplicacion"));
+			jLabel1.setText(PluginServices
+					.getText(
+							this,
+							"Los_cambios_efectuados_sobre_estos_valores_se_aplicaran_al_reiniciar_la_aplicacion"));
 			jPanel2 = new JPanel();
 			jPanel2.add(jLabel1, null);
 		}
@@ -290,7 +324,7 @@ public class ExtensionPage extends AbstractPreferencePage {
 
 	/**
 	 * This method initializes jTextField
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getJTextField() {
@@ -301,37 +335,57 @@ public class ExtensionPage extends AbstractPreferencePage {
 		}
 		return jTextField;
 	}
-	/**
-     * Cuts the message text to force its lines to be shorter or equal to
-     * lineLength.
-     * @param message, the message.
-     * @param lineLength, the max line length in number of characters.
-     * @return the formated message.
-     */
-    private static String format(String message, int lineLength){
-    	if (message==null)
-         	return "";
-    	if (message.length() <= lineLength) return message;
-        String[] lines = message.split(" ");
-        String theMessage = "";
-        String line="";
-        int i=0;
-        while (i<lines.length) {
-        	while (i<lines.length && lineLength>line.length()) {
-        		line=line.concat(lines[i]+" ");
-        		i++;
-        	}
-        	theMessage=theMessage.concat(line+"\n");
-        	line="";
-        }
-        return theMessage;
-    }
 
-    private class MyAction implements ActionListener, KeyListener {
-		public void actionPerformed(ActionEvent e) { changed = true; System.out.println("actionperformed");}
-		public void keyPressed(KeyEvent e) { changed = true; System.out.println("keypressed"); }
-		public void keyReleased(KeyEvent e) { changed = true; System.out.println("keyreleased");}
-		public void keyTyped(KeyEvent e) { changed = true; System.out.println("keytyped");}
+	/**
+	 * Cuts the message text to force its lines to be shorter or equal to
+	 * lineLength.
+	 * 
+	 * @param message
+	 *            , the message.
+	 * @param lineLength
+	 *            , the max line length in number of characters.
+	 * @return the formated message.
+	 */
+	private static String format(String message, int lineLength) {
+		if (message == null)
+			return "";
+		if (message.length() <= lineLength)
+			return message;
+		String[] lines = message.split(" ");
+		String theMessage = "";
+		String line = "";
+		int i = 0;
+		while (i < lines.length) {
+			while (i < lines.length && lineLength > line.length()) {
+				line = line.concat(lines[i] + " ");
+				i++;
+			}
+			theMessage = theMessage.concat(line + "\n");
+			line = "";
+		}
+		return theMessage;
+	}
+
+	private class MyAction implements ActionListener, KeyListener {
+		public void actionPerformed(ActionEvent e) {
+			changed = true;
+			System.out.println("actionperformed");
+		}
+
+		public void keyPressed(KeyEvent e) {
+			changed = true;
+			System.out.println("keypressed");
+		}
+
+		public void keyReleased(KeyEvent e) {
+			changed = true;
+			System.out.println("keyreleased");
+		}
+
+		public void keyTyped(KeyEvent e) {
+			changed = true;
+			System.out.println("keytyped");
+		}
 	}
 
 	public boolean isValueChanged() {
@@ -341,4 +395,4 @@ public class ExtensionPage extends AbstractPreferencePage {
 	public void setChangesApplied() {
 		changed = false;
 	}
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

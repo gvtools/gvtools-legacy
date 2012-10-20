@@ -20,8 +20,10 @@ package org.gvsig.gui.beans.table;
 
 import org.gvsig.gui.beans.TestUI;
 import org.gvsig.gui.beans.table.exceptions.NotInitializeException;
+
 /**
  * Test para la clase Table
+ * 
  * @version 30/10/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
@@ -31,15 +33,16 @@ public class TestTable extends TestUI {
 
 	public TestTable() throws NotInitializeException {
 		super("TestTable");
-		String[] columnNames = {"columna 1", "columna 2", "columna 3", "columna 4"};
-		int[] columnWidths = {70, 90, 110, 130};
+		String[] columnNames = { "columna 1", "columna 2", "columna 3",
+				"columna 4" };
+		int[] columnWidths = { 70, 90, 110, 130 };
 		table = new TableContainer(columnNames, columnWidths);
 		table.initialize();
 		table.setControlVisible(true);
 		table.setMoveRowsButtonsVisible(true);
 		table.setEditable(true);
 
-		String row[] = {"", "", "", ""};
+		String row[] = { "", "", "", "" };
 		for (int i = 0; i < 10; i++) {
 			row[0] = String.valueOf(i);
 			row[1] = String.valueOf(i);
@@ -59,7 +62,7 @@ public class TestTable extends TestUI {
 	public static void main(String[] args) {
 		try {
 			new TestTable();
-		} catch (NotInitializeException ex){
+		} catch (NotInitializeException ex) {
 			System.out.println("Tabla no inicializada");
 		}
 	}

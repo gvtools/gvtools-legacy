@@ -56,122 +56,123 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
-
 /**
  * This extension adds the export-to-oracle button.
- *
+ * 
  * @author jldominguez
- *
+ * 
  */
 public class ExportOracleExtension extends Extension {
-	
-    private static Logger logger = Logger.getLogger(ExportOracleExtension.class.getName());
-    
-    public static boolean ORACLE_JAR_PRESENT = false;
 
-    public void initialize() {
-    	
-    	ORACLE_JAR_PRESENT = isOracleJarPresent();
+	private static Logger logger = Logger.getLogger(ExportOracleExtension.class
+			.getName());
 
-        // about
-        java.net.URL newurl = createResourceUrl("about/jdbc-os-about.html");
-        About claseAbout = (About) PluginServices.getExtension(com.iver.cit.gvsig.About.class);
-        claseAbout.getAboutPanel().addAboutUrl("JDBC Oracle Spatial", newurl);
-        ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
+	public static boolean ORACLE_JAR_PRESENT = false;
 
-        OraEpsgTableLoader loader = new OraEpsgTableLoader();
-        if (!loader.createOracleEpsgTable()) {
-        	logger.error("Unable to create ORA_EPSG datasource!");
-        }
-    }
+	public void initialize() {
 
-    private boolean isOracleJarPresent() {
-    	
-    	try {
-    		Class rowid_class = Class.forName("oracle.sql.ROWID");
-    	} catch (Exception ex) {
-    		logger.error("Unable to instantiate ROWID (oracle jar missing?) : " + ex.getMessage());
-    		return false;
-    	}
+		ORACLE_JAR_PRESENT = isOracleJarPresent();
+
+		// about
+		java.net.URL newurl = createResourceUrl("about/jdbc-os-about.html");
+		About claseAbout = (About) PluginServices
+				.getExtension(com.iver.cit.gvsig.About.class);
+		claseAbout.getAboutPanel().addAboutUrl("JDBC Oracle Spatial", newurl);
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+
+		OraEpsgTableLoader loader = new OraEpsgTableLoader();
+		if (!loader.createOracleEpsgTable()) {
+			logger.error("Unable to create ORA_EPSG datasource!");
+		}
+	}
+
+	private boolean isOracleJarPresent() {
+
+		try {
+			Class rowid_class = Class.forName("oracle.sql.ROWID");
+		} catch (Exception ex) {
+			logger.error("Unable to instantiate ROWID (oracle jar missing?) : "
+					+ ex.getMessage());
+			return false;
+		}
 		return true;
 	}
 
 	public void execute(String actionCommand) {
-		
-        if (actionCommand.compareToIgnoreCase("EXPORT_TO_ORACLE_SPATIAL") == 0) {
-            FLyrVect lyrv = null;
-            MapContext mx = null;
 
-            try {
-                IWindow w = PluginServices.getMDIManager().getActiveWindow();
+		if (actionCommand.compareToIgnoreCase("EXPORT_TO_ORACLE_SPATIAL") == 0) {
+			FLyrVect lyrv = null;
+			MapContext mx = null;
 
-                if (w instanceof View) {
-                    View v = (View) w;
-                    MapControl mc = v.getMapControl();
-                    mx = mc.getMapContext();
+			try {
+				IWindow w = PluginServices.getMDIManager().getActiveWindow();
 
-                    FLayer[] lyrs = mx.getLayers().getActives();
+				if (w instanceof View) {
+					View v = (View) w;
+					MapControl mc = v.getMapControl();
+					mx = mc.getMapContext();
 
-                    if (lyrs.length == 1) {
-                        FLayer lyr = lyrs[0];
+					FLayer[] lyrs = mx.getLayers().getActives();
 
-                        if (lyr instanceof FLyrVect) {
-                            lyrv = (FLyrVect) lyr;
+					if (lyrs.length == 1) {
+						FLayer lyr = lyrs[0];
 
-                            ExportToOracle export = new ExportToOracle();
-                            export.toOracle(mx, lyrv);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex) {
-            	logger.error(
-                    "Unexpected error while getting active vect layer: " +
-                    ex.getMessage());
-            	logger.error("Nothing done.");
-            }
-        }
-    }
+						if (lyr instanceof FLyrVect) {
+							lyrv = (FLyrVect) lyr;
 
-    public boolean isEnabled() {
-        return isVisible();
-    }
+							ExportToOracle export = new ExportToOracle();
+							export.toOracle(mx, lyrv);
+						}
+					}
+				}
+			} catch (Exception ex) {
+				logger.error("Unexpected error while getting active vect layer: "
+						+ ex.getMessage());
+				logger.error("Nothing done.");
+			}
+		}
+	}
 
-    /**
-     * Is visible when there is one vector layer selected
-     */
-    public boolean isVisible() {
-       
-    	if (!ORACLE_JAR_PRESENT) {
-    		return false;
-    	}
-    	// if (true) return true;
-    	
-        try {
-            IWindow w = PluginServices.getMDIManager().getActiveWindow();
+	public boolean isEnabled() {
+		return isVisible();
+	}
 
-            if (w instanceof View) {
-                View v = (View) w;
-                MapControl mc = v.getMapControl();
-                MapContext mx = mc.getMapContext();
-                FLayer[] lyrs = mx.getLayers().getActives();
+	/**
+	 * Is visible when there is one vector layer selected
+	 */
+	public boolean isVisible() {
 
-                if (lyrs.length == 1) {
-                    FLayer lyr = lyrs[0];
+		if (!ORACLE_JAR_PRESENT) {
+			return false;
+		}
+		// if (true) return true;
 
-                    if ((lyr instanceof FLyrVect) && (true)) {
-                        return true;
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            return false;
-        }
+		try {
+			IWindow w = PluginServices.getMDIManager().getActiveWindow();
 
-        return false;
-    }
+			if (w instanceof View) {
+				View v = (View) w;
+				MapControl mc = v.getMapControl();
+				MapContext mx = mc.getMapContext();
+				FLayer[] lyrs = mx.getLayers().getActives();
 
-    private java.net.URL createResourceUrl(String path) {
-        return getClass().getClassLoader().getResource(path);
-    }
+				if (lyrs.length == 1) {
+					FLayer lyr = lyrs[0];
+
+					if ((lyr instanceof FLyrVect) && (true)) {
+						return true;
+					}
+				}
+			}
+		} catch (Exception ex) {
+			return false;
+		}
+
+		return false;
+	}
+
+	private java.net.URL createResourceUrl(String path) {
+		return getClass().getClassLoader().getResource(path);
+	}
 }

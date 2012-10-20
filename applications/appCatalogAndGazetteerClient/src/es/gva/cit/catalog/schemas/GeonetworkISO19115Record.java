@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -51,41 +50,45 @@ import es.gva.cit.catalog.querys.Coordinates;
  * @author Jorge Piera Llodra (piera_jor@gva.es)
  */
 public class GeonetworkISO19115Record extends Record {
-	
-	public GeonetworkISO19115Record() {  
-		
+
+	public GeonetworkISO19115Record() {
+
 	}
-	
+
 	/**
 	 * Constructor
-	 * @param node Node with the answer
-	 * @param serverURL Server URL. Necessary to load the image (just Geonetwork)
+	 * 
+	 * @param node
+	 *            Node with the answer
+	 * @param serverURL
+	 *            Server URL. Necessary to load the image (just Geonetwork)
 	 */
-	public GeonetworkISO19115Record(URI uri,XMLNode node) {        
-		super(uri,node);
+	public GeonetworkISO19115Record(URI uri, XMLNode node) {
+		super(uri, node);
 		setTitle(XMLTree.searchNodeValue(node,
 				"dataIdInfo->idCitation->resTitle"));
 		setAbstract_(XMLTree.searchNodeValue(node, "dataIdInfo->idAbs"));
 		setPurpose(XMLTree.searchNodeValue(node, "dataIdInfo->idPurp"));
 		setKeyWords(XMLTree.searchMultipleNodeValue(node,
-		"dataIdInfo->descKeys->keyword"));
+				"dataIdInfo->descKeys->keyword"));
 		setResources(getResources("distInfo->distTranOps->onLineSrc"));
-		setFileID(XMLTree.searchNodeValue(node,"mdFileID"));
-		//Caution: getImageUrl uses serverURL and FileID!!!
-		XMLNode[] nodes = XMLTree.searchMultipleNode(node,"dataIdInfo->graphOver");
-		if ((nodes != null) && (nodes.length > 0)){
+		setFileID(XMLTree.searchNodeValue(node, "mdFileID"));
+		// Caution: getImageUrl uses serverURL and FileID!!!
+		XMLNode[] nodes = XMLTree.searchMultipleNode(node,
+				"dataIdInfo->graphOver");
+		if ((nodes != null) && (nodes.length > 0)) {
 			String imageURL = XMLTree.searchNodeValue(nodes[0], "bgFileName");
-			if (imageURL != null){
+			if (imageURL != null) {
 				setImageURL(imageURL);
 			}
-		}        
-	} 
+		}
+	}
 
 	/**
-	 * @return 
-	 * @param label 
+	 * @return
+	 * @param label
 	 */
-	private Resource[] getResources(String label) {        
+	private Resource[] getResources(String label) {
 		XMLNode[] nodes = XMLTree.searchMultipleNode(getNode(), label);
 		Coordinates coordinates = null;
 		String srs = null;
@@ -94,25 +97,26 @@ public class GeonetworkISO19115Record extends Record {
 			return null;
 		}
 		Resource[] resources = new Resource[nodes.length];
-		if (nodes.length > 0){
-			srs = XMLTree.searchNodeValue(getNode(),"refSysInfo->MdCoRefSys->refSysID->identCode");
-			coordinates = new Coordinates(XMLTree.searchNodeValue(getNode(),"dataIdInfo->geoBox->westBL"),
-					XMLTree.searchNodeValue(getNode(),"dataIdInfo->geoBox->northBL"),
-					XMLTree.searchNodeValue(getNode(),"dataIdInfo->geoBox->eastBL"),
-					XMLTree.searchNodeValue(getNode(),"dataIdInfo->geoBox->southBL"));
+		if (nodes.length > 0) {
+			srs = XMLTree.searchNodeValue(getNode(),
+					"refSysInfo->MdCoRefSys->refSysID->identCode");
+			coordinates = new Coordinates(XMLTree.searchNodeValue(getNode(),
+					"dataIdInfo->geoBox->westBL"), XMLTree.searchNodeValue(
+					getNode(), "dataIdInfo->geoBox->northBL"),
+					XMLTree.searchNodeValue(getNode(),
+							"dataIdInfo->geoBox->eastBL"),
+					XMLTree.searchNodeValue(getNode(),
+							"dataIdInfo->geoBox->southBL"));
 		}
 
-		for (int i = 0; i < resources.length; i++){
+		for (int i = 0; i < resources.length; i++) {
 			resources[i] = new Resource(XMLTree.searchNodeValue(nodes[i],
-					"linkage"),
-					XMLTree.searchNodeValue(nodes[i], "protocol"),
+					"linkage"), XMLTree.searchNodeValue(nodes[i], "protocol"),
 					XMLTree.searchNodeValue(nodes[i], "orName"),
 					XMLTree.searchNodeValue(nodes[i], "orDesc"),
 					XMLTree.searchNodeAtribute(nodes[i], "orFunct->OnFunctCd",
-					"value"),
-					srs,	
-					coordinates);
-			if (resources[i].getLinkage() == null){
+							"value"), srs, coordinates);
+			if (resources[i].getLinkage() == null) {
 				resources[i].setLinkage("");
 			}
 		}
@@ -121,16 +125,18 @@ public class GeonetworkISO19115Record extends Record {
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.schemas.discoverer.Record#accept(java.net.URI, es.gva.cit.catalogClient.metadataxml.XMLNode)
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.schemas.discoverer.Record#accept(java.net.URI,
+	 * es.gva.cit.catalogClient.metadataxml.XMLNode)
 	 */
 	public boolean accept(URI uri, XMLNode node) {
-		if (node.getName().equals("Metadata")){
-			if (XMLTree.searchNode(node, "mdFileID") != null){
+		if (node.getName().equals("Metadata")) {
+			if (XMLTree.searchNode(node, "mdFileID") != null) {
 				return true;
 			}
 		}
 		return false;
-	}     
-
+	}
 
 }

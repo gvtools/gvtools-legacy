@@ -19,42 +19,44 @@
 package org.gvsig.fmap.raster.layers;
 
 /**
- * Definición de acciones soportadas para una capa. Distintas capas que hereden de 
- * FLyrRasterSE pueden soportar distintos tipos de acciones.
+ * Definición de acciones soportadas para una capa. Distintas capas que hereden
+ * de FLyrRasterSE pueden soportar distintos tipos de acciones.
+ * 
  * @version 23/08/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
 public interface IRasterLayerActions {
 	public static int ZOOM_PIXEL_RESOLUTION = 0;
-	public static int CLIPPING              = 1;
-	public static int HISTOGRAM             = 2;
-	public static int RASTER_PROPERTIES     = 3;
-	public static int SAVEAS                = 4;
-	public static int FILTER                = 5;
-	public static int COLOR_TABLE           = 6;
-	public static int FLYRASTER_BAR_TOOLS   = 7;
-	public static int BANDS_FILE_LIST       = 8;
-	public static int BANDS_RGB             = 9;
-	public static int TRANSPARENCY          = 10;
-	public static int OPACITY               = 11;
-	public static int BRIGHTNESSCONTRAST    = 12;
-	public static int ENHANCED              = 13;
-	public static int PANSHARPENING         = 14;
-	public static int GEOLOCATION           = 15;
-	public static int CREATEOVERVIEWS       = 16;
-	public static int REPROJECT             = 17;
-	public static int SELECT_LAYER          = 18;
-	public static int SAVE_COLORINTERP      = 19;
-	public static int REMOTE_ACTIONS        = 20;
-	
-	
+	public static int CLIPPING = 1;
+	public static int HISTOGRAM = 2;
+	public static int RASTER_PROPERTIES = 3;
+	public static int SAVEAS = 4;
+	public static int FILTER = 5;
+	public static int COLOR_TABLE = 6;
+	public static int FLYRASTER_BAR_TOOLS = 7;
+	public static int BANDS_FILE_LIST = 8;
+	public static int BANDS_RGB = 9;
+	public static int TRANSPARENCY = 10;
+	public static int OPACITY = 11;
+	public static int BRIGHTNESSCONTRAST = 12;
+	public static int ENHANCED = 13;
+	public static int PANSHARPENING = 14;
+	public static int GEOLOCATION = 15;
+	public static int CREATEOVERVIEWS = 16;
+	public static int REPROJECT = 17;
+	public static int SELECT_LAYER = 18;
+	public static int SAVE_COLORINTERP = 19;
+	public static int REMOTE_ACTIONS = 20;
+
 	/**
-   * Controla si una acción está activa o no para una determinada capa. De esta
-   * forma una determinada capa puede desactivar una entrada del TOC que no le
-   * interese que aparezca.
-   * @param action Acción definida en IRasterLayerActions
-   * @return true si está activa y false si no lo está.
-   */
+	 * Controla si una acción está activa o no para una determinada capa. De
+	 * esta forma una determinada capa puede desactivar una entrada del TOC que
+	 * no le interese que aparezca.
+	 * 
+	 * @param action
+	 *            Acción definida en IRasterLayerActions
+	 * @return true si está activa y false si no lo está.
+	 */
 	public boolean isActionEnabled(int action);
 }

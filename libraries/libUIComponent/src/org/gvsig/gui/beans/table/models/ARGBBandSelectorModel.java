@@ -19,10 +19,11 @@
 package org.gvsig.gui.beans.table.models;
 
 import javax.swing.table.DefaultTableModel;
+
 /**
- * Componente tabla. Selector de bandas ARGB para la visualización. Una file consta
- * de cuatro JRadioButtons para la selección de ARGB y una entrada de texto para 
- * el nombre de la banda.
+ * Componente tabla. Selector de bandas ARGB para la visualización. Una file
+ * consta de cuatro JRadioButtons para la selección de ARGB y una entrada de
+ * texto para el nombre de la banda.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
@@ -53,10 +54,12 @@ public class ARGBBandSelectorModel extends DefaultTableModel implements IModel {
 	}
 
 	public void addNew() {
-		super.addRow(new Object[] { new Boolean(false), new Boolean(false), new Boolean(false), new Boolean(false), "" });
+		super.addRow(new Object[] { new Boolean(false), new Boolean(false),
+				new Boolean(false), new Boolean(false), "" });
 	}
 
 	public Object[] getNewLine() {
-		return new Object[] { new Boolean(false), new Boolean(false), new Boolean(false), new Boolean(false), "" };
+		return new Object[] { new Boolean(false), new Boolean(false),
+				new Boolean(false), new Boolean(false), "" };
 	}
 }

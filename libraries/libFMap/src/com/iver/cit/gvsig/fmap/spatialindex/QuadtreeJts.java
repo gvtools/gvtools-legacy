@@ -42,17 +42,17 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: QuadtreeJts.java 11288 2007-04-19 17:32:50Z azabala $
-* $Log$
-* Revision 1.2  2007-04-19 17:32:50  azabala
-* new constructor (fmap spatial index from an existing jts spatial index)
-*
-* Revision 1.1  2006/05/01 18:38:41  azabala
-* primera version en cvs del api de indices espaciales
-*
-*
-*/
+ *
+ * $Id: QuadtreeJts.java 11288 2007-04-19 17:32:50Z azabala $
+ * $Log$
+ * Revision 1.2  2007-04-19 17:32:50  azabala
+ * new constructor (fmap spatial index from an existing jts spatial index)
+ *
+ * Revision 1.1  2006/05/01 18:38:41  azabala
+ * primera version en cvs del api de indices espaciales
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.spatialindex;
 
 import java.awt.geom.Rectangle2D;
@@ -60,25 +60,25 @@ import java.util.List;
 
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.index.quadtree.Quadtree;
+
 /**
- * Adapter for ISPatialIndex gvSIG's interface to
- * JTS Quadtree.
+ * Adapter for ISPatialIndex gvSIG's interface to JTS Quadtree.
  * 
  * 
  * @author azabala
- *
+ * 
  */
 public class QuadtreeJts implements ISpatialIndex {
 	private Quadtree quadtree;
-	
-	public QuadtreeJts(){
+
+	public QuadtreeJts() {
 		quadtree = new Quadtree();
 	}
-	
-	public QuadtreeJts(Quadtree jtsidx){
+
+	public QuadtreeJts(Quadtree jtsidx) {
 		quadtree = jtsidx;
 	}
-		
+
 	public List query(Rectangle2D rect) {
 		return quadtree.query(fromRect(rect));
 	}
@@ -90,14 +90,11 @@ public class QuadtreeJts implements ISpatialIndex {
 	public void delete(Rectangle2D rect, int index) {
 		quadtree.remove(fromRect(rect), new Integer(index));
 	}
-	
-	private Envelope fromRect(Rectangle2D rect){
-		Envelope env = new Envelope(rect.getMinX(),
-				rect.getMaxX(),
-				rect.getMinY(),
-				rect.getMaxY());
+
+	private Envelope fromRect(Rectangle2D rect) {
+		Envelope env = new Envelope(rect.getMinX(), rect.getMaxX(),
+				rect.getMinY(), rect.getMaxY());
 		return env;
 	}
 
 }
-

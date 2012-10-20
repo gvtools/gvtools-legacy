@@ -47,7 +47,6 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.Date;
 
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
@@ -60,19 +59,17 @@ import org.gvsig.symbology.fmap.styles.ImageStyle;
 import org.gvsig.symbology.fmap.styles.SVGStyle;
 
 import com.iver.andami.PluginServices;
-import com.iver.andami.messages.NotificationManager;
-import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
 import com.iver.cit.gvsig.fmap.core.styles.ILabelStyle;
 import com.iver.cit.gvsig.gui.styling.EditorTool;
 import com.iver.cit.gvsig.gui.styling.StyleEditor;
-import com.iver.utiles.XMLEntity;
+
 /**
- *
+ * 
  * LabelStyleOpenBackgroundFile.java
- *
- *
+ * 
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Jan 15, 2008
- *
+ * 
  */
 public class LabelStyleOpenBackgroundFile extends EditorTool {
 
@@ -86,15 +83,15 @@ public class LabelStyleOpenBackgroundFile extends EditorTool {
 		super(targetEditor);
 	}
 
-
 	@Override
 	public AbstractButton getButton() {
 		return getBtnOpenFile();
 	}
 
 	private JButton getBtnOpenFile() {
-		if (btnOpenFile== null) {
-			btnOpenFile = new JButton(PluginServices.getIconTheme().get("project-open"));
+		if (btnOpenFile == null) {
+			btnOpenFile = new JButton(PluginServices.getIconTheme().get(
+					"project-open"));
 			btnOpenFile.setSize(EditorTool.SMALL_BTN_SIZE);
 			btnOpenFile.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -104,18 +101,20 @@ public class LabelStyleOpenBackgroundFile extends EditorTool {
 					FileFilter ff = new FileFilter() {
 
 						public boolean accept(File pathname) {
-							if (pathname.isDirectory()) return true;
-							String fileName = pathname.getAbsolutePath().toLowerCase();
-							return fileName.endsWith("jpg") ||
-								    fileName.endsWith("jpeg") ||
-									fileName.endsWith("png") ||									
-									fileName.endsWith("gif") ||
-									fileName.endsWith("svg");
+							if (pathname.isDirectory())
+								return true;
+							String fileName = pathname.getAbsolutePath()
+									.toLowerCase();
+							return fileName.endsWith("jpg")
+									|| fileName.endsWith("jpeg")
+									|| fileName.endsWith("png")
+									|| fileName.endsWith("gif")
+									|| fileName.endsWith("svg");
 						}
 
 						public String getDescription() {
-							return PluginServices.getText(
-									this, "all_supported_background_image_formats");
+							return PluginServices.getText(this,
+									"all_supported_background_image_formats");
 						}
 					};
 
@@ -124,9 +123,9 @@ public class LabelStyleOpenBackgroundFile extends EditorTool {
 						File f = jfChooser.getSelectedFile();
 						// this is a hack
 
-
-						BackgroundFileStyle bgStyle = f.getAbsolutePath().toLowerCase().endsWith("svg") ?
-							new SVGStyle() : new ImageStyle();
+						BackgroundFileStyle bgStyle = f.getAbsolutePath()
+								.toLowerCase().endsWith("svg") ? new SVGStyle()
+								: new ImageStyle();
 
 						try {
 							bgStyle.setSource(f.toURL());
@@ -166,8 +165,13 @@ public class LabelStyleOpenBackgroundFile extends EditorTool {
 		style = (ILabelStyle) objectToBeEdited;
 	}
 
-	public void mousePressed(MouseEvent e) { }
-	public void mouseReleased(MouseEvent e) { }
-	public void mouseDragged(MouseEvent e) { }
+	public void mousePressed(MouseEvent e) {
+	}
+
+	public void mouseReleased(MouseEvent e) {
+	}
+
+	public void mouseDragged(MouseEvent e) {
+	}
 
 }

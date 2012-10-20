@@ -28,22 +28,21 @@ import com.iver.cit.gvsig.fmap.rendering.LegendFactory;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.xmlEntity.generate.XmlTag;
 
-
-public class FMapGVLDriver implements IFMapLegendDriver{
+public class FMapGVLDriver implements IFMapLegendDriver {
 
 	private static final String DESCRIPTION = "gvSIG legend";
 	private static final String FILE_EXTENSION = "gvl";
 
 	public boolean accept(File f) {
-		if (f.isDirectory()) return true;
+		if (f.isDirectory())
+			return true;
 		String fName = f.getAbsolutePath();
-		if (fName!=null) {
+		if (fName != null) {
 			fName = fName.toLowerCase();
 			return fName.endsWith("." + FILE_EXTENSION);
 		}
 		return false;
 	}
-
 
 	public String getDescription() {
 		return DESCRIPTION;
@@ -53,7 +52,8 @@ public class FMapGVLDriver implements IFMapLegendDriver{
 		return FILE_EXTENSION;
 	}
 
-	public Hashtable read(FLayers layers,FLayer layer, File file) throws LegendDriverException {
+	public Hashtable read(FLayers layers, FLayer layer, File file)
+			throws LegendDriverException {
 
 		Hashtable table = new Hashtable();
 		File xmlFile = new File(file.getAbsolutePath());
@@ -65,8 +65,8 @@ public class FMapGVLDriver implements IFMapLegendDriver{
 			XmlTag tag = (XmlTag) XmlTag.unmarshal(reader);
 			ILegend myLegend = LegendFactory.createFromXML(new XMLEntity(tag));
 
-			if(myLegend != null ) {
-				//CAPA DE LINEAS
+			if (myLegend != null) {
+				// CAPA DE LINEAS
 				if (layer instanceof FLyrVect) {
 					FLyrVect m = (FLyrVect) layer;
 					IVectorLegend l = (IVectorLegend) myLegend;
@@ -76,17 +76,18 @@ public class FMapGVLDriver implements IFMapLegendDriver{
 					try {
 
 						// check shape type
-//						if (l.getShapeType() != 0 && m.getShapeType() != l.getShapeType()) {
-						//Remove the Z and the M coordinate...
+						// if (l.getShapeType() != 0 && m.getShapeType() !=
+						// l.getShapeType()) {
+						// Remove the Z and the M coordinate...
 						int shapeType = m.getShapeType();
-						if (shapeType > FShape.M){
+						if (shapeType > FShape.M) {
 							shapeType = shapeType - FShape.M;
 						}
-						if (shapeType > FShape.Z){
+						if (shapeType > FShape.Z) {
 							shapeType = shapeType - FShape.Z;
-						}						
-						if((l.getDefaultSymbol().getSymbolType() != shapeType)
-								&& !l.isSuitableForShapeType(shapeType)){
+						}
+						if ((l.getDefaultSymbol().getSymbolType() != shapeType)
+								&& !l.isSuitableForShapeType(shapeType)) {
 							errors |= LegendDriverException.LAYER_SHAPETYPE_MISMATCH;
 						}
 
@@ -94,21 +95,21 @@ public class FMapGVLDriver implements IFMapLegendDriver{
 						errors |= LegendDriverException.READ_DRIVER_EXCEPTION;
 					}
 
-
-					if(myLegend instanceof IClassifiedVectorLegend) {
+					if (myLegend instanceof IClassifiedVectorLegend) {
 						IClassifiedVectorLegend cl = (IClassifiedVectorLegend) myLegend;
 
 						String[] fNames = cl.getClassifyingFieldNames();
 						int[] fTypes = cl.getClassifyingFieldTypes();
 
-
 						try {
 							for (int i = 0; i < fNames.length; i++) {
 								SelectableDataSource sds = m.getRecordset();
-								int fieldIndex = sds.getFieldIndexByName(fNames[i]);
+								int fieldIndex = sds
+										.getFieldIndexByName(fNames[i]);
 								if (fieldIndex != -1) {
-									if(fTypes != null)
-										if(fTypes[i] !=  sds.getFieldType(fieldIndex)) {
+									if (fTypes != null)
+										if (fTypes[i] != sds
+												.getFieldType(fieldIndex)) {
 											errors |= LegendDriverException.CLASSIFICATION_FIELDS_TYPE_MISMATCH;
 										}
 								} else {
@@ -121,37 +122,38 @@ public class FMapGVLDriver implements IFMapLegendDriver{
 					}
 					if (errors == 0) {
 						table.put(layer, myLegend);
-						//return myLegend;
+						// return myLegend;
 						return table;
-					}
-					else throw new LegendDriverException(errors);
+					} else
+						throw new LegendDriverException(errors);
 				}
 			}
 		} catch (FileNotFoundException e) {
 			// should be unreachable code
-			throw new Error ("file_not_found");
+			throw new Error("file_not_found");
 		} catch (MarshalException e) {
-			throw new Error ("file_corrupt");
+			throw new Error("file_corrupt");
 		} catch (ValidationException e) {
 			// should be unreachable code
-			throw new Error ("ValidationException");
+			throw new Error("ValidationException");
 		} catch (XMLException e) {
-			throw new Error ("unsupported_legend");
+			throw new Error("unsupported_legend");
 		} finally {
 			try {
-				if (reader!=null) {
+				if (reader != null) {
 					reader.close();
 				}
 			} catch (IOException e) {
 
-				throw new Error ("file_closing_failed");
+				throw new Error("file_closing_failed");
 			}
 		}
 		return null;
 
 	}
 
-	public void write(FLayers layers, FLayer layer, ILegend legend, File file, String version) throws LegendDriverException  {
+	public void write(FLayers layers, FLayer layer, ILegend legend, File file,
+			String version) throws LegendDriverException {
 		FileWriter writer;
 		int errors = 0;
 		try {
@@ -166,7 +168,8 @@ public class FMapGVLDriver implements IFMapLegendDriver{
 		} catch (IOException e) {
 			errors |= LegendDriverException.SYSTEM_ERROR;
 		}
-		if (errors != 0) throw new LegendDriverException(errors);
+		if (errors != 0)
+			throw new LegendDriverException(errors);
 
 	}
 

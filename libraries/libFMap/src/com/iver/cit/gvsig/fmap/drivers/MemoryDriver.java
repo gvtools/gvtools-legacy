@@ -65,24 +65,23 @@ import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.ShapeFactory;
 import com.iver.cit.gvsig.fmap.operations.strategies.MemoryShapeInfo;
 
-
 /**
  * Clase abstracta para Driver en memoria.
- *
+ * 
  * @author FJP
  */
 public abstract class MemoryDriver implements VectorialDriver, ObjectDriver,
-	BoundedShapes {
+		BoundedShapes {
 	private MemoryShapeInfo memShapeInfo = new MemoryShapeInfo();
 	private ArrayList arrayGeometries = new ArrayList();
 	private Rectangle2D fullExtent;
 	private int m_Position;
 	private DefaultTableModel m_TableModel = new DefaultTableModel();
-	private int[] fieldWidth=null;
+	private int[] fieldWidth = null;
 
 	/**
 	 * Devuelve el modelo de la tabla.
-	 *
+	 * 
 	 * @return modelo de la tabla.
 	 */
 	public DefaultTableModel getTableModel() {
@@ -91,32 +90,32 @@ public abstract class MemoryDriver implements VectorialDriver, ObjectDriver,
 
 	/**
 	 * Añade un shape.
-	 *
-	 * @param geom shape.
-	 * @param row fila.
+	 * 
+	 * @param geom
+	 *            shape.
+	 * @param row
+	 *            fila.
 	 */
 	public void addGeometry(IGeometry geom, Object[] row) {
 		if (geom == null) {
 			return; // No añadimos nada
 		}
-		if(! (geom instanceof FNullGeometry)){
-			 Rectangle2D boundsShp = geom.getBounds2D();
-			 memShapeInfo.addShapeInfo (boundsShp, geom.getGeometryType());
-			 arrayGeometries.add(geom);
+		if (!(geom instanceof FNullGeometry)) {
+			Rectangle2D boundsShp = geom.getBounds2D();
+			memShapeInfo.addShapeInfo(boundsShp, geom.getGeometryType());
+			arrayGeometries.add(geom);
 			if (fullExtent == null) {
 				fullExtent = (Rectangle2D) boundsShp.clone();
 			} else {
 				fullExtent.add(boundsShp);
 			}
-		}
-		else
-		{
-			 Rectangle2D boundsShp = new Rectangle2D.Double();
-			 memShapeInfo.addShapeInfo (boundsShp, geom.getGeometryType());
-			 arrayGeometries.add(geom);
+		} else {
+			Rectangle2D boundsShp = new Rectangle2D.Double();
+			memShapeInfo.addShapeInfo(boundsShp, geom.getGeometryType());
+			arrayGeometries.add(geom);
 
 		}
-		if (fieldWidth==null) {
+		if (fieldWidth == null) {
 			initializeFieldWidth(row);
 		}
 		actualizeFieldWidth(row);
@@ -131,10 +130,10 @@ public abstract class MemoryDriver implements VectorialDriver, ObjectDriver,
 		m_Position++;
 	}
 
-
 	/**
-	 * Método de conveniencia, para poder añadir directamente un shape
-	 * o una IGeometry. (Arriba está el de añadir una IGeometry.
+	 * Método de conveniencia, para poder añadir directamente un shape o una
+	 * IGeometry. (Arriba está el de añadir una IGeometry.
+	 * 
 	 * @param shp
 	 * @param row
 	 */
@@ -149,9 +148,10 @@ public abstract class MemoryDriver implements VectorialDriver, ObjectDriver,
 
 	/**
 	 * Devuelve el extent a partir de un índice.
-	 *
-	 * @param index Índice.
-	 *
+	 * 
+	 * @param index
+	 *            Índice.
+	 * 
 	 * @return Extent.
 	 */
 	public Rectangle2D getShapeBounds(int index) throws ReadDriverException {
@@ -160,17 +160,19 @@ public abstract class MemoryDriver implements VectorialDriver, ObjectDriver,
 
 	/**
 	 * Devuelve el tipo del shape.
-	 *
-	 * @param index Índice.
-	 *
+	 * 
+	 * @param index
+	 *            Índice.
+	 * 
 	 * @return tipo del shape.
 	 */
 	public int getShapeType(int index) {
 		return memShapeInfo.getType(index);
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDriver#getShape(int)
 	 */
 	public IGeometry getShape(int index) throws ReadDriverException {
@@ -179,27 +181,34 @@ public abstract class MemoryDriver implements VectorialDriver, ObjectDriver,
 		return geom.cloneGeometry();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDriver#getShapeCount()
 	 */
 	public int getShapeCount() throws ReadDriverException {
 		return arrayGeometries.size();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDriver#getFullExtent()
 	 */
 	public Rectangle2D getFullExtent() throws ReadDriverException {
 		return fullExtent;
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDriver#getShapeType()
 	 */
 	public abstract int getShapeType();
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.hardcode.driverManager.Driver#getName()
 	 */
 	public abstract String getName();
@@ -208,131 +217,146 @@ public abstract class MemoryDriver implements VectorialDriver, ObjectDriver,
 	 * @see com.hardcode.gdbms.engine.data.ReadDriver#getFieldType(int)
 	 */
 
-/*
- * azabala, bug 666
- * Habra que estudiar como hacer, porque si una fila tiene el primer valor
- * (o todos) a NullValue, devolvera como tipo de dato Types.NULL.
- * Quizas, habra que hacer que los MemoryDriver tb tengan un ITableDefinition.
- *
- */
+	/*
+	 * azabala, bug 666 Habra que estudiar como hacer, porque si una fila tiene
+	 * el primer valor (o todos) a NullValue, devolvera como tipo de dato
+	 * Types.NULL. Quizas, habra que hacer que los MemoryDriver tb tengan un
+	 * ITableDefinition.
+	 */
 	public int getFieldType(int i) throws ReadDriverException {
-	    // TODO: Revisar esto. Por ejemplo, el long
-	    if (getRowCount() >= 1)
-        {
-            Value val = getFieldValue(0,i);
-            if (val == null)
-            	return Types.VARCHAR;
-            if (val.getSQLType() == Types.INTEGER)
-                // Sabemos que es numérico, pero no sabemos
-                // si luego habrá otra cosa.
-                return Types.FLOAT;
-            else
-                return val.getSQLType();
-        }
-        else
-        {
-            // TODO: ESTO CREO QUE NO TIENE SENTIDO. SIEMPRE DEVUELVE Object.class, lo dice en
-            // la documentación. Creo que habría que quitarlo.
-    	    if (m_TableModel.getColumnClass(i) == String.class)
-    	        return Types.VARCHAR;
-    	    if (m_TableModel.getColumnClass(i) == Float.class)
-    	        return Types.FLOAT;
-    	    if (m_TableModel.getColumnClass(i) == Double.class)
-    	        return Types.DOUBLE;
-    	    if (m_TableModel.getColumnClass(i) == Double.class)
-    	        return Types.INTEGER;
-    	    if (m_TableModel.getColumnClass(i) == Float.class)
-    	        return Types.INTEGER;
-    	    if (m_TableModel.getColumnClass(i) == Boolean.class)
-    	        return Types.BIT;
-    	    if (m_TableModel.getColumnClass(i) == Date.class)
-    	        return Types.DATE;
-        }
-	    return Types.VARCHAR;
-	    // return m_TableModel.getColumnClass(i);
-//	    throw new DriverException("Tipo no soportado: " + m_TableModel.getColumnClass(i).getName());
+		// TODO: Revisar esto. Por ejemplo, el long
+		if (getRowCount() >= 1) {
+			Value val = getFieldValue(0, i);
+			if (val == null)
+				return Types.VARCHAR;
+			if (val.getSQLType() == Types.INTEGER)
+				// Sabemos que es numérico, pero no sabemos
+				// si luego habrá otra cosa.
+				return Types.FLOAT;
+			else
+				return val.getSQLType();
+		} else {
+			// TODO: ESTO CREO QUE NO TIENE SENTIDO. SIEMPRE DEVUELVE
+			// Object.class, lo dice en
+			// la documentación. Creo que habría que quitarlo.
+			if (m_TableModel.getColumnClass(i) == String.class)
+				return Types.VARCHAR;
+			if (m_TableModel.getColumnClass(i) == Float.class)
+				return Types.FLOAT;
+			if (m_TableModel.getColumnClass(i) == Double.class)
+				return Types.DOUBLE;
+			if (m_TableModel.getColumnClass(i) == Double.class)
+				return Types.INTEGER;
+			if (m_TableModel.getColumnClass(i) == Float.class)
+				return Types.INTEGER;
+			if (m_TableModel.getColumnClass(i) == Boolean.class)
+				return Types.BIT;
+			if (m_TableModel.getColumnClass(i) == Date.class)
+				return Types.DATE;
+		}
+		return Types.VARCHAR;
+		// return m_TableModel.getColumnClass(i);
+		// throw new DriverException("Tipo no soportado: " +
+		// m_TableModel.getColumnClass(i).getName());
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.hardcode.gdbms.engine.data.ReadDriver#getFieldValue(long, int)
 	 */
 	public Value getFieldValue(long rowIndex, int fieldId)
-		throws ReadDriverException {
+			throws ReadDriverException {
 		return (Value) m_TableModel.getValueAt((int) rowIndex, fieldId);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.hardcode.gdbms.engine.data.ReadDriver#getFieldCount()
 	 */
 	public int getFieldCount() throws ReadDriverException {
 		return m_TableModel.getColumnCount();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.hardcode.gdbms.engine.data.ReadDriver#getFieldName(int)
 	 */
 	public String getFieldName(int fieldId) throws ReadDriverException {
 		return m_TableModel.getColumnName(fieldId);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.hardcode.gdbms.engine.data.ReadDriver#getRowCount()
 	 */
 	public long getRowCount() throws ReadDriverException {
 		return arrayGeometries.size();
 	}
 
-    /* (non-Javadoc)
-     * @see com.hardcode.gdbms.engine.data.driver.GDBMSDriver#setDataSourceFactory(com.hardcode.gdbms.engine.data.DataSourceFactory)
-     */
-    public void setDataSourceFactory(DataSourceFactory dsf) {
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.hardcode.gdbms.engine.data.driver.GDBMSDriver#setDataSourceFactory
+	 * (com.hardcode.gdbms.engine.data.DataSourceFactory)
+	 */
+	public void setDataSourceFactory(DataSourceFactory dsf) {
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.drivers.VectorialDriver#reLoad()
-     */
-    public void reload() throws ReloadDriverException{
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDriver#reLoad()
+	 */
+	public void reload() throws ReloadDriverException {
 		memShapeInfo = new MemoryShapeInfo();
 		arrayGeometries.clear();
-		m_TableModel= new DefaultTableModel();
+		m_TableModel = new DefaultTableModel();
 		fullExtent = null;
 		m_Position = 0;
 
-    }
-    private void initializeFieldWidth(Object[] row) {
-    	fieldWidth=new int[row.length];
-		for (int i=0;i<row.length;i++) {
-			if (row[i] instanceof StringValue && row[i]==null)
-				fieldWidth[i]=0;
-			else
-			{
+	}
+
+	private void initializeFieldWidth(Object[] row) {
+		fieldWidth = new int[row.length];
+		for (int i = 0; i < row.length; i++) {
+			if (row[i] instanceof StringValue && row[i] == null)
+				fieldWidth[i] = 0;
+			else {
 				if (row[i] == null)
 					fieldWidth[i] = 0;
 				else
-					fieldWidth[i]=((Value)row[i]).getWidth();
+					fieldWidth[i] = ((Value) row[i]).getWidth();
 			}
 		}
-    }
-    /**
-     * Actualize the width fields with StringValue.
-     * @param row
-     */
-    private void actualizeFieldWidth(Object[] row) {
-    	for (int i=0;i<row.length;i++) {
+	}
+
+	/**
+	 * Actualize the width fields with StringValue.
+	 * 
+	 * @param row
+	 */
+	private void actualizeFieldWidth(Object[] row) {
+		for (int i = 0; i < row.length; i++) {
 			if (row[i] instanceof StringValue) {
-				if (row[i]!=null) {
-					int width=((StringValue)row[i]).getWidth();
-					if (fieldWidth[i]<width) {
-						fieldWidth[i]=width;
+				if (row[i] != null) {
+					int width = ((StringValue) row[i]).getWidth();
+					if (fieldWidth[i] < width) {
+						fieldWidth[i] = width;
 					}
 				}
 			}
 		}
-    }
-    public int getFieldWidth(int fieldId){
-    	if (fieldWidth==null)
-    		return 1;
-    	return fieldWidth[fieldId];
-    }
+	}
 
+	public int getFieldWidth(int fieldId) {
+		if (fieldWidth == null)
+			return 1;
+		return fieldWidth[fieldId];
+	}
 
 }

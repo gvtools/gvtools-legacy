@@ -4,29 +4,26 @@
  */
 package com.iver.utiles.swing.threads;
 
-
 /**
  * @author alzabord
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * 
+ *         TODO To change the template for this generated type comment go to
+ *         Window - Preferences - Java - Code Style - Code Templates
  */
 public class PipeTask implements IMonitorableTask {
 
 	private IPipedTask task1;
 	private IPipedTask task2;
 	private boolean canceled = false;
-	
+
 	private IPipedTask currentTask = null;
-	
-	
-	public PipeTask(IPipedTask task1, IPipedTask task2){
+
+	public PipeTask(IPipedTask task1, IPipedTask task2) {
 		this.task1 = task1;
 		this.task2 = task2;
 		this.currentTask = task1;
 	}
-	
-	
+
 	public int getInitialStep() {
 		return 0;
 	}
@@ -44,9 +41,9 @@ public class PipeTask implements IMonitorableTask {
 	}
 
 	public String getNote() {
-		if(currentTask != null){
+		if (currentTask != null) {
 			return currentTask.getNote();
-		}else{
+		} else {
 			return "";
 		}
 	}
@@ -62,7 +59,7 @@ public class PipeTask implements IMonitorableTask {
 
 	public void run() throws Exception {
 		currentTask.run();
-		if(currentTask.isCanceled())
+		if (currentTask.isCanceled())
 			return;
 		Object result = currentTask.getResult();
 		currentTask = task2;
@@ -79,6 +76,6 @@ public class PipeTask implements IMonitorableTask {
 	}
 
 	public void finished() {
-		
+
 	}
 }

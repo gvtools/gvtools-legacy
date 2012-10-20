@@ -9,25 +9,26 @@
  */
 package org.gvsig.fmap.algorithm.triangulation.pirol.comparisonAndSorting;
 
+import org.gvsig.fmap.algorithm.triangulation.pirol.PirolPoint;
+
 /**
  * 
- * Abstract base class for sortable objects like punkt object.
- * Adds a natural ordering to those objects and allows to change what to sort for.
+ * Abstract base class for sortable objects like punkt object. Adds a natural
+ * ordering to those objects and allows to change what to sort for.
  * 
  * @author orahn
- *
- * FH Osnabrück - University of Applied Sciences Osnabrück
- * Project PIROL 2005
- * Daten- und Wissensmanagement
+ * 
+ *         FH Osnabrück - University of Applied Sciences Osnabrück Project PIROL
+ *         2005 Daten- und Wissensmanagement
  * 
  * @see PirolPoint
  */
 public abstract class Sortable implements Comparable {
 	protected int sortFor = CoordinateComparator.SORTFOR_X;
-    
-    public abstract int getSortFor();
 
-    public abstract void setSortFor(int sortFor);
+	public abstract int getSortFor();
 
-    public abstract int compareTo(Object arg0);
+	public abstract void setSortFor(int sortFor);
+
+	public abstract int compareTo(Object arg0);
 }

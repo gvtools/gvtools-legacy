@@ -42,15 +42,17 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.drivers;
+
 /**
  * Factory for AbstractDriverCollectionEntry
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public interface DriverCollectionEntryFactory {
 	public AbstractDriverCollectionEntry createCollectionEntry(int entryIdx);

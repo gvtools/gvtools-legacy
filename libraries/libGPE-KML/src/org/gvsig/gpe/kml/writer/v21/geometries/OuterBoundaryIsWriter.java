@@ -65,6 +65,7 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
 /**
  * It writes the outerBoundary tag. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;outerBoundaryIs&gt;
@@ -74,37 +75,45 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  * &lt;/outerBoundaryIs&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
- * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#outerboundaryis
+ * @see http
+ *      ://code.google.com/apis/kml/documentation/kml_tags_21.html#outerboundaryis
  */
 public class OuterBoundaryIsWriter {
-	
+
 	/**
 	 * It writes the outerBoundaryIs kml init tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param coords
-	 * A coordinates iterator. 
+	 *            A coordinates iterator.
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler,
-			ICoordinateSequence coords) throws IOException{
+	public void start(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor handler, ICoordinateSequence coords)
+			throws IOException {
 		writer.writeStartElement(Kml2_1_Tags.OUTERBOUNDARYIS);
-		handler.getProfile().getLinearRingWriter().start(writer, handler, coords);
+		handler.getProfile().getLinearRingWriter()
+				.start(writer, handler, coords);
 	}
-	
+
 	/**
 	 * It writes the outerBoundaryIs end tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @throws IOException
 	 */
-	public void end(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler) throws IOException{
+	public void end(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor handler) throws IOException {
 		handler.getProfile().getLinearRingWriter().end(writer, handler);
 		writer.writeEndElement();
 	}

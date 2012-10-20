@@ -26,79 +26,83 @@ package org.cresques.geo;
 import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
-
 import java.util.Iterator;
 import java.util.Vector;
 
-
 /**
  * Clase que representa un polígono 2D
+ * 
  * @author "Luis W. Sevilla" <sevilla_lui@gva.es>
  */
 public class Polygon2D extends Vector {
-    GeneralPath gp = null;
+	GeneralPath gp = null;
 
-    public Polygon2D() {
-        super();
-        gp = null;
-    }
+	public Polygon2D() {
+		super();
+		gp = null;
+	}
 
-    /**
-     * Añade un vertice al po?ígono
-     * @param pt        punto 2D que representa el vertice añadido
-     */
-    public void addPoint(Point2D pt) {
-        super.add(pt);
-    }
+	/**
+	 * Añade un vertice al po?ígono
+	 * 
+	 * @param pt
+	 *            punto 2D que representa el vertice añadido
+	 */
+	public void addPoint(Point2D pt) {
+		super.add(pt);
+	}
 
-    /**
-     * Dibuja el polígono
-     * @param g        Graphics sobre el que dibuja
-     * @param vp        ViewPort con la vista
-     */
-    public void draw(Graphics2D g, ViewPortData vp) {
-        newGP(vp);
-        g.draw(gp);
+	/**
+	 * Dibuja el polígono
+	 * 
+	 * @param g
+	 *            Graphics sobre el que dibuja
+	 * @param vp
+	 *            ViewPort con la vista
+	 */
+	public void draw(Graphics2D g, ViewPortData vp) {
+		newGP(vp);
+		g.draw(gp);
 
-        //g.draw(new Line2D.Double(pt,pt0));
-    }
+		// g.draw(new Line2D.Double(pt,pt0));
+	}
 
-    /**
-     *
-     * @param g
-     * @param vp
-     */
-    public void fill(Graphics2D g, ViewPortData vp) {
-        newGP(vp);
-        g.fill(gp);
-    }
+	/**
+	 * 
+	 * @param g
+	 * @param vp
+	 */
+	public void fill(Graphics2D g, ViewPortData vp) {
+		newGP(vp);
+		g.fill(gp);
+	}
 
-    /**
-     *
-     * @param vp
-     */
-    private void newGP(ViewPortData vp) {
-        //if (gp != null) return;
-        gp = new GeneralPath();
+	/**
+	 * 
+	 * @param vp
+	 */
+	private void newGP(ViewPortData vp) {
+		// if (gp != null) return;
+		gp = new GeneralPath();
 
-        Point2D pt0 = null;
-        Point2D pt = null;
-        Point2D pt1 = null;
-        Point2D.Double ptTmp = new Point2D.Double(0.0, 0.0);
-        Iterator iter = iterator();
+		Point2D pt0 = null;
+		Point2D pt = null;
+		Point2D pt1 = null;
+		Point2D.Double ptTmp = new Point2D.Double(0.0, 0.0);
+		Iterator iter = iterator();
 
-        while (iter.hasNext()) {
-            pt1 = (Point2D) iter.next();
-            vp.mat.transform(pt1, ptTmp);
+		while (iter.hasNext()) {
+			pt1 = (Point2D) iter.next();
+			vp.mat.transform(pt1, ptTmp);
 
-            if (pt0 == null) {
-                pt0 = ptTmp;
-                gp.moveTo((float) ptTmp.getX(), (float) ptTmp.getY());
-            } else {
-                gp.lineTo((float) ptTmp.getX(), (float) ptTmp.getY());
-            }
-        }
+			if (pt0 == null) {
+				pt0 = ptTmp;
+				gp.moveTo((float) ptTmp.getX(), (float) ptTmp.getY());
+			} else {
+				gp.lineTo((float) ptTmp.getX(), (float) ptTmp.getY());
+			}
+		}
 
-        gp.closePath();
-    }
+		gp.closePath();
+	}
 }

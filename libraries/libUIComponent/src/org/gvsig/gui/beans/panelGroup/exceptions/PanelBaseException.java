@@ -26,10 +26,13 @@ import org.gvsig.exceptions.BaseException;
 import org.gvsig.gui.beans.Messages;
 
 /**
- * <p>Adapts any <i>Java</i> exception produced working with panels to be dealed in as a {@link BaseException BaseException}.</p>
+ * <p>
+ * Adapts any <i>Java</i> exception produced working with panels to be dealed in
+ * as a {@link BaseException BaseException}.
+ * </p>
  * 
  * @version 11/12/2007
- * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es) 
+ * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class PanelBaseException extends BaseException {
 	private static final long serialVersionUID = -5248981827020054295L;
@@ -38,7 +41,10 @@ public class PanelBaseException extends BaseException {
 	public static final String CAUSE_MESSAGE = "CAUSE_MESSAGE";
 
 	/**
-	 * <p>Creates and initializes a new instance of <code>PanelBaseException</code>.</p>
+	 * <p>
+	 * Creates and initializes a new instance of <code>PanelBaseException</code>
+	 * .
+	 * </p>
 	 */
 	public PanelBaseException() {
 		super();
@@ -46,9 +52,13 @@ public class PanelBaseException extends BaseException {
 	}
 
 	/**
-	 * <p>Creates and initializes a new instance of <code>PanelBaseException</code>.</p>
+	 * <p>
+	 * Creates and initializes a new instance of <code>PanelBaseException</code>
+	 * .
+	 * </p>
 	 * 
-	 * @param e the exception to be wrappered
+	 * @param e
+	 *            the exception to be wrappered
 	 */
 	public PanelBaseException(Exception e) {
 		super();
@@ -57,10 +67,16 @@ public class PanelBaseException extends BaseException {
 	}
 
 	/**
-	 * <p>Creates and initializes a new instance of <code>PanelBaseException</code>.</p>
+	 * <p>
+	 * Creates and initializes a new instance of <code>PanelBaseException</code>
+	 * .
+	 * </p>
 	 * 
-	 * @param e the exception to be wrappered
-	 * @param panelLabel label of the panel which is the source of the exception wrappered
+	 * @param e
+	 *            the exception to be wrappered
+	 * @param panelLabel
+	 *            label of the panel which is the source of the exception
+	 *            wrappered
 	 */
 	public PanelBaseException(Exception e, String panelLabel) {
 		super();
@@ -71,6 +87,7 @@ public class PanelBaseException extends BaseException {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map<String, String> values() {
@@ -78,30 +95,39 @@ public class PanelBaseException extends BaseException {
 	}
 
 	/**
-	 * <p>Initializes a <code>PanelBaseException</code> with the needed information.</p>
+	 * <p>
+	 * Initializes a <code>PanelBaseException</code> with the needed
+	 * information.
+	 * </p>
 	 */
 	protected void initialize() {
 		// Identifier of this kind of exception
 		this.code = serialVersionUID;
-		
-		// Default text that explains this kind of exception. If there is no translation associated to the
-		// "messageKey" of this exception, then the value shown will be the value of "formatString".
-		this.formatString = "Error loading %(" + PANEL_LABEL + ")%(" + CAUSE_MESSAGE + ").";
 
-		 // Key to the sentence that explains this exception. That key will be use for multilingual purposes.
+		// Default text that explains this kind of exception. If there is no
+		// translation associated to the
+		// "messageKey" of this exception, then the value shown will be the
+		// value of "formatString".
+		this.formatString = "Error loading %(" + PANEL_LABEL + ")%("
+				+ CAUSE_MESSAGE + ").";
+
+		// Key to the sentence that explains this exception. That key will be
+		// use for multilingual purposes.
 		this.messageKey = "panel_base_exception";
-		
+
 		// Map with the label of the panel
 		values = new HashMap<String, String>();
 		values.put(PANEL_LABEL, Messages.getText("a_panel"));
 		values.put(CAUSE_MESSAGE, "");
-		
+
 		setTranslator(new Messages());
 	}
 
 	/**
-	 * <p>Gets the label of the panel which is the source of this exception, or
-	 *  <code>null</code> if hasn't been defined.</p>
+	 * <p>
+	 * Gets the label of the panel which is the source of this exception, or
+	 * <code>null</code> if hasn't been defined.
+	 * </p>
 	 * 
 	 * @return label of the panel which is the source of this exception
 	 */
@@ -110,29 +136,34 @@ public class PanelBaseException extends BaseException {
 	}
 
 	/**
-	 * <p>Sets the label of the panel which is the source of this exception.</p>
+	 * <p>
+	 * Sets the label of the panel which is the source of this exception.
+	 * </p>
 	 * 
-	 * @param panelLabel label of the panel which is the source of this exception
+	 * @param panelLabel
+	 *            label of the panel which is the source of this exception
 	 */
 	public void setPanelLabel(String panelLabel) {
 		if ((panelLabel.equals("")) || (panelLabel == null))
 			values.put(PANEL_LABEL, Messages.getText("a_panel"));
 		else
-			values.put(PANEL_LABEL, Messages.getText("the_panel") + " \"" + panelLabel + "\"");
+			values.put(PANEL_LABEL, Messages.getText("the_panel") + " \""
+					+ panelLabel + "\"");
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Throwable#initCause(java.lang.Throwable)
 	 */
 	public Throwable initCause(Throwable cause) {
 		Throwable t = super.initCause(cause);
-		
+
 		if ((cause == null) || (cause.getLocalizedMessage() == null))
 			values.put(CAUSE_MESSAGE, "");
 		else
 			values.put(CAUSE_MESSAGE, ": " + cause.getLocalizedMessage());
-		
+
 		return t;
 	}
 }

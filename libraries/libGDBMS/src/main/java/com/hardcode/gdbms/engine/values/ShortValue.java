@@ -2,9 +2,6 @@ package com.hardcode.gdbms.engine.values;
 
 import java.sql.Types;
 
-
-
-
 /**
  *
  */
@@ -13,8 +10,9 @@ public class ShortValue extends NumericValue {
 
 	/**
 	 * Crea un nuevo ShortValue.
-	 *
-	 * @param s DOCUMENT ME!
+	 * 
+	 * @param s
+	 *            DOCUMENT ME!
 	 */
 	ShortValue(short s) {
 		value = s;
@@ -75,20 +73,20 @@ public class ShortValue extends NumericValue {
 		return ValueFactory.SHORT;
 	}
 
-    /**
-     * @see com.hardcode.gdbms.engine.values.Value#getStringValue(com.hardcode.gdbms.engine.data.driver.ValueWriter)
-     */
-    public String getStringValue(ValueWriter writer) {
-        return writer.getStatementString(value, Types.SMALLINT);
-    }
+	/**
+	 * @see com.hardcode.gdbms.engine.values.Value#getStringValue(com.hardcode.gdbms.engine.data.driver.ValueWriter)
+	 */
+	public String getStringValue(ValueWriter writer) {
+		return writer.getStatementString(value, Types.SMALLINT);
+	}
 
-    /**
-     * @see com.hardcode.gdbms.engine.values.Value#getSQLType()
-     */
-    public int getSQLType() {
-        return Types.SMALLINT;
-    }
-    
+	/**
+	 * @see com.hardcode.gdbms.engine.values.Value#getSQLType()
+	 */
+	public int getSQLType() {
+		return Types.SMALLINT;
+	}
+
 	public int getWidth() {
 		return 2;
 	}

@@ -33,34 +33,39 @@ import org.gvsig.raster.util.RasterToolsUtil;
  * Panel de selección de tipo de georreferenciación.
  * 
  * 10/01/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class CheckOptionsPanel extends JPanel {
-	private static final long     serialVersionUID    = 1L;
-	
-	private DataInputContainer    threshold           = null;
-	private JCheckBox             showNumber          = null;
-	private JCheckBox             addErrorInCSV       = null;
-	private JCheckBox             centerPoint         = null;
-	private ColorSelector         backgroundColorSel  = null;
-	private ColorSelector         textColorSel        = null;
-		
+	private static final long serialVersionUID = 1L;
+
+	private DataInputContainer threshold = null;
+	private JCheckBox showNumber = null;
+	private JCheckBox addErrorInCSV = null;
+	private JCheckBox centerPoint = null;
+	private ColorSelector backgroundColorSel = null;
+	private ColorSelector textColorSel = null;
+
 	/**
-	 * Constructor. Asigna la lista de nombres de vistas para el selector. 
+	 * Constructor. Asigna la lista de nombres de vistas para el selector.
+	 * 
 	 * @param viewList
 	 */
 	public CheckOptionsPanel() {
 		init();
 	}
-	
+
 	/**
 	 * Acciones de inicialización del panel
 	 */
-	public void init() {	    
+	public void init() {
 		GridBagLayout gl = new GridBagLayout();
 		setLayout(gl);
-		setBorder(javax.swing.BorderFactory.createTitledBorder(null, RasterToolsUtil.getText(this, "options"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
-		
+		setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+				RasterToolsUtil.getText(this, "options"),
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.WEST;
 		gbc.insets = new Insets(0, 5, 5, 0);
@@ -68,89 +73,100 @@ public class CheckOptionsPanel extends JPanel {
 
 		gbc.gridy = 1;
 		add(getTextSelector(), gbc);
-		
+
 		gbc.weightx = 1.0;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		
+
 		gbc.gridy = 2;
 		add(getShowNumberCheck(), gbc);
-		
+
 		gbc.gridy = 3;
 		add(getAddErrorsCSVCheck(), gbc);
-		
+
 		gbc.gridy = 4;
 		add(getCenterViewCheck(), gbc);
-		
+
 		gbc.gridy = 5;
 		add(getThresholdError(), gbc);
 	}
-		
+
 	/**
 	 * Obtiene el control para selección de umbral de error
+	 * 
 	 * @return JButton
 	 */
 	public DataInputContainer getThresholdError() {
-		if(threshold == null) {
+		if (threshold == null) {
 			threshold = new DataInputContainer();
-			threshold.setLabelText(RasterToolsUtil.getText(this, "umbral_error"));
+			threshold.setLabelText(RasterToolsUtil
+					.getText(this, "umbral_error"));
 		}
 		return threshold;
 	}
-	
+
 	/**
 	 * Obtiene el selector de color para el fondo
+	 * 
 	 * @return JButton
 	 */
 	public ColorSelector getBackGroundColorSelector() {
-		if(backgroundColorSel == null) {
-			backgroundColorSel = new ColorSelector(Color.BLACK, RasterToolsUtil.getText(this, "background_color"));
+		if (backgroundColorSel == null) {
+			backgroundColorSel = new ColorSelector(Color.BLACK,
+					RasterToolsUtil.getText(this, "background_color"));
 		}
 		return backgroundColorSel;
 	}
-	
+
 	/**
 	 * Obtiene el selector de color para el texto
+	 * 
 	 * @return JButton
 	 */
 	public ColorSelector getTextSelector() {
-		if(textColorSel == null) {
-			textColorSel = new ColorSelector(Color.RED, RasterToolsUtil.getText(this, "text_color"));
+		if (textColorSel == null) {
+			textColorSel = new ColorSelector(Color.RED,
+					RasterToolsUtil.getText(this, "text_color"));
 		}
 		return textColorSel;
 	}
-	
+
 	/**
 	 * Obtiene el check de mostrar numeración
+	 * 
 	 * @return JCheckBox
 	 */
 	public JCheckBox getShowNumberCheck() {
-		if(showNumber == null) {
-			showNumber = new JCheckBox(RasterToolsUtil.getText(this, "show_number"));
+		if (showNumber == null) {
+			showNumber = new JCheckBox(RasterToolsUtil.getText(this,
+					"show_number"));
 		}
 		return showNumber;
 	}
-	
+
 	/**
 	 * Obtiene el check de añadir errores al fichero CSV o no
+	 * 
 	 * @return JCheckBox
 	 */
 	public JCheckBox getAddErrorsCSVCheck() {
-		if(addErrorInCSV == null) {
-			addErrorInCSV = new JCheckBox(RasterToolsUtil.getText(this, "add_errors_csv"));
+		if (addErrorInCSV == null) {
+			addErrorInCSV = new JCheckBox(RasterToolsUtil.getText(this,
+					"add_errors_csv"));
 		}
 		return addErrorInCSV;
 	}
-	
+
 	/**
 	 * Obtiene el check de centrar la vista sobre el punto seleccionado
+	 * 
 	 * @return JCheckBox
 	 */
 	public JCheckBox getCenterViewCheck() {
-		if(centerPoint == null) {
-			centerPoint = new JCheckBox(RasterToolsUtil.getText(this, "center_view"));
+		if (centerPoint == null) {
+			centerPoint = new JCheckBox(RasterToolsUtil.getText(this,
+					"center_view"));
 		}
 		return centerPoint;
 	}
-	
-}
 
+}

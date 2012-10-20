@@ -17,16 +17,14 @@ import com.iver.utiles.StringUtilities;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.threads.Cancellable;
 
-
 /**
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
-public class ArrowMarkerSymbol extends AbstractMarkerSymbol implements CartographicSupport {
+public class ArrowMarkerSymbol extends AbstractMarkerSymbol implements
+		CartographicSupport {
 	private ArrowMarkerSymbol symSel;
 	private double sharpeness;
 
-
-	
 	public ISymbol getSymbolForSelection() {
 		if (symSel == null) {
 			symSel = new ArrowMarkerSymbol();
@@ -36,7 +34,6 @@ public class ArrowMarkerSymbol extends AbstractMarkerSymbol implements Cartograp
 
 		return symSel;
 	}
-
 
 	public XMLEntity getXMLEntity() {
 		XMLEntity xml = new XMLEntity();
@@ -66,7 +63,9 @@ public class ArrowMarkerSymbol extends AbstractMarkerSymbol implements Cartograp
 	}
 
 	/**
-	 * To get the sharpeness attribute.It will determine the final form of the arrow
+	 * To get the sharpeness attribute.It will determine the final form of the
+	 * arrow
+	 * 
 	 * @return
 	 */
 	public double getSharpness() {
@@ -75,17 +74,20 @@ public class ArrowMarkerSymbol extends AbstractMarkerSymbol implements Cartograp
 
 	/**
 	 * To set the sharpeness.It will determine the final form of the arrow
-	 * @param sharpeness, the value of the arrow's edge angle IN RADIANS
+	 * 
+	 * @param sharpeness
+	 *            , the value of the arrow's edge angle IN RADIANS
 	 * @see #getSharpeness()
 	 */
 	public void setSharpness(double sharpeness) {
 		this.sharpeness = sharpeness;
 	}
 
-	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp, Cancellable cancel) {
+	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp,
+			Cancellable cancel) {
 
 		FPoint2D p = (FPoint2D) shp;
-		double radian_half_sharpeness = Math.toRadians(getSharpness()*.5); //
+		double radian_half_sharpeness = Math.toRadians(getSharpness() * .5); //
 
 		double size = getSize();
 		double halfHeight = size * Math.tan(radian_half_sharpeness);
@@ -95,7 +97,8 @@ public class ArrowMarkerSymbol extends AbstractMarkerSymbol implements Cartograp
 
 		g.setStroke(new BasicStroke());
 
-		if (p == null) return;
+		if (p == null)
+			return;
 		GeneralPathX gp = new GeneralPathX();
 		gp.moveTo(0, 0);
 		gp.lineTo(size, -halfHeight);

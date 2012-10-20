@@ -20,19 +20,19 @@ package org.gvsig.raster;
 
 /**
  * Acciones que puede ejecutar un proceso sobre un objeto externo. Un proceso
- * debe ser independiente de objetos que sean dependientes de su funcionalidad. Es
- * decir, cualquier extensión debe poder usar un proceso y este ejecutar metodos
- * de la funcionalidad. Esto se hace ha través de este interfaz.
+ * debe ser independiente de objetos que sean dependientes de su funcionalidad.
+ * Es decir, cualquier extensión debe poder usar un proceso y este ejecutar
+ * metodos de la funcionalidad. Esto se hace ha través de este interfaz.
  * 
  * @version 26/09/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
 public interface IProcessActions {
-	
+
 	/**
 	 * El proceso comunica que ha sido interrumpido
-	 *
+	 * 
 	 */
 	public void interrupted();
 

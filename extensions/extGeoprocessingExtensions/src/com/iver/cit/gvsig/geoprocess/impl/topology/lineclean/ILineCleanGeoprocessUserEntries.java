@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.impl.topology.lineclean;
 
 import com.iver.cit.gvsig.geoprocess.core.gui.IGeoprocessUserEntries;
@@ -53,20 +53,22 @@ import com.iver.cit.gvsig.geoprocess.core.gui.IGeoprocessUserEntries;
 /**
  * All classes that provides user entries for LineCleanGeoprocess must implement
  * this interface.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public interface ILineCleanGeoprocessUserEntries extends IGeoprocessUserEntries {
 
 	/**
-	 * Return if clean all input layers geometries or only selected
-	 * layers.
+	 * Return if clean all input layers geometries or only selected layers.
+	 * 
 	 * @return
 	 */
 	public boolean cleanOnlySelection();
-	
+
 	/**
-	 * Return if after the build process add to the TOC the error layers. 
+	 * Return if after the build process add to the TOC the error layers.
+	 * 
 	 * @return
 	 */
 	public boolean createLyrsWithErrorGeometries();

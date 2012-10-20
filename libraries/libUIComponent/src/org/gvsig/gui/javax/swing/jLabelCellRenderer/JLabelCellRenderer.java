@@ -50,33 +50,41 @@ import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
 /**
- * This class allows render a JLabel in a Cell of other graphic component (as a JList)
+ * This class allows render a JLabel in a Cell of other graphic component (as a
+ * JList)
  * 
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
-public class JLabelCellRenderer extends DefaultListCellRenderer implements ListCellRenderer<Object>, Serializable {
+public class JLabelCellRenderer extends DefaultListCellRenderer implements
+		ListCellRenderer<Object>, Serializable {
 	private static final long serialVersionUID = -3820198983465837422L;
 
-	/* (non-Javadoc)
-	 * @see javax.swing.ListCellRenderer#getListCellRendererComponent(javax.swing.JList, java.lang.Object, int, boolean, boolean)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.swing.ListCellRenderer#getListCellRendererComponent(javax.swing
+	 * .JList, java.lang.Object, int, boolean, boolean)
 	 */
-	public Component getListCellRendererComponent(JList<? extends Object> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-        /* The DefaultListCellRenderer class will take care of
-         * the JLabels text property, it's foreground and background
-         * colors, and so on.
-         */
-        super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-		
+	public Component getListCellRendererComponent(JList<? extends Object> list,
+			Object value, int index, boolean isSelected, boolean cellHasFocus) {
+		/*
+		 * The DefaultListCellRenderer class will take care of the JLabels text
+		 * property, it's foreground and background colors, and so on.
+		 */
+		super.getListCellRendererComponent(list, value, index, isSelected,
+				cellHasFocus);
+
 		// Set the text property, background and foreground color
-        if (value instanceof JLabel) {
-        	setText(((JLabel)value).getText());
-    		setBackground(((JLabel)value).getBackground());
-    		
-    		if (isSelected)
-    			setForeground(Color.red);
-    		else
-    			setForeground(((JLabel)value).getForeground());
-        }
+		if (value instanceof JLabel) {
+			setText(((JLabel) value).getText());
+			setBackground(((JLabel) value).getBackground());
+
+			if (isSelected)
+				setForeground(Color.red);
+			else
+				setForeground(((JLabel) value).getForeground());
+		}
 
 		return this;
 	}

@@ -69,6 +69,7 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * It parses a gml:innerBoundaryType object. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;innerBoundaryIs&gt;
@@ -78,52 +79,57 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  * &lt;/innerBoundaryIs&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class InnerBoundaryIsTypeBinding {
-	
+
 	/**
 	 * It parses the gml:innerBoundaryIs tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * An array of coordinates
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return An array of coordinates
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public ICoordinateIterator parse(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException  {
+	public ICoordinateIterator parse(IXmlStreamReader parser,
+			GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
 		boolean endFeature = false;
 		int currentTag;
 
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_LINEARRING)){
-					return handler.getProfile().getLinearRingTypeBinding().
-					parseCoordinates(parser, handler);
+				if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_LINEARRING)) {
+					return handler.getProfile().getLinearRingTypeBinding()
+							.parseCoordinates(parser, handler);
 				}
 				break;
 			case IXmlStreamReader.END_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_INNERBOUNDARYIS)){						
+				if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_INNERBOUNDARYIS)) {
 					endFeature = true;
 				}
 				break;
-			case IXmlStreamReader.CHARACTERS:					
+			case IXmlStreamReader.CHARACTERS:
 
 				break;
 			}
-			if (!endFeature){					
+			if (!endFeature) {
 				currentTag = parser.next();
 				tag = parser.getName();
 			}
-		}			
+		}
 		return null;
 	}
 }

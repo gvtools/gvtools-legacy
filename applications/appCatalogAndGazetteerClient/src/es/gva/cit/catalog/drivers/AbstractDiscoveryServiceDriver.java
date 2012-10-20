@@ -55,67 +55,85 @@ import es.gva.cit.catalog.ui.search.SearchAditionalPropertiesPanel;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class AbstractDiscoveryServiceDriver implements IDiscoveryServiceDriver {
+public abstract class AbstractDiscoveryServiceDriver implements
+		IDiscoveryServiceDriver {
 	private String serverAnswerReady = null;
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.drivers.IDiscoveryServiceDriver#getServerAnswerReady()
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.drivers.IDiscoveryServiceDriver#getServerAnswerReady
+	 * ()
 	 */
-	public String getServerAnswerReady() {        
+	public String getServerAnswerReady() {
 		return serverAnswerReady;
-	} 
+	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.drivers.IDiscoveryServiceDriver#setServerAnswerReady(java.lang.String)
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.drivers.IDiscoveryServiceDriver#setServerAnswerReady
+	 * (java.lang.String)
 	 */
-	public void setServerAnswerReady(String serverAnswerReady) {        
+	public void setServerAnswerReady(String serverAnswerReady) {
 		this.serverAnswerReady = serverAnswerReady;
-	} 
-	
-	
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#getDefaultPort()
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#getDefaultPort()
 	 */
 	public int getDefaultPort() {
 		return 80;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#getDefaultSchema()
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#getDefaultSchema()
 	 */
 	public String getDefaultSchema() {
 		return "http";
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#isProtocolSupported(java.net.URI)
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#isProtocolSupported
+	 * (java.net.URI)
 	 */
 	public boolean isProtocolSupported(URI uri) {
 		return true;
 	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#getAditionalSearchPanel()
-	 */
-	public SearchAditionalPropertiesPanel getAditionalSearchPanel(){
-		return null;
-	}	
 
 	/*
 	 * (non-Javadoc)
+	 * 
+	 * @see es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#
+	 * getAditionalSearchPanel()
+	 */
+	public SearchAditionalPropertiesPanel getAditionalSearchPanel() {
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
-	public String toString(){
+	public String toString() {
 		return getServiceName();
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see es.gva.cit.catalog.drivers.IDiscoveryServiceDriver#isOneServer()
 	 */
 	public ServerData getOneServer() {

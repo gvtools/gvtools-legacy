@@ -3,7 +3,6 @@ package org.gvsig.gpe.kml.warnings;
 import org.gvsig.exceptions.BaseException;
 import org.gvsig.exceptions.ListBaseException;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -68,70 +67,79 @@ import org.gvsig.exceptions.ListBaseException;
 /**
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class WarningsContainer implements IWarningsContainer{
+public class WarningsContainer implements IWarningsContainer {
 	private ListBaseException warning = null;
-	
-	public WarningsContainer(){
+
+	public WarningsContainer() {
 		warning = new WarningList();
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.remoteClient.kml.warnings.IWarningsContainer#areWarnings()
 	 */
 	public boolean areWarnings() {
-		if (warning.isEmpty()){
-			return false;						
+		if (warning.isEmpty()) {
+			return false;
 		}
 		return true;
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see org.gvsig.remoteClient.kml.warnings.IWarningsContainer#getWarningList()
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.kml.warnings.IWarningsContainer#getWarningList()
 	 */
 	public ListBaseException getWarningList() {
 		return warning;
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see org.gvsig.remoteClient.kml.warnings.IWarningsContainer#setElement(org.gvsig.exceptions.BaseException)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.kml.warnings.IWarningsContainer#setElement(org
+	 * .gvsig.exceptions.BaseException)
 	 */
 	public void setElement(BaseException war) {
-//		Only we add a warning when it is new
-		if (warning.contains(war)==false)
-		{
+		// Only we add a warning when it is new
+		if (warning.contains(war) == false) {
 			warning.add((war));
 		}
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see org.gvsig.remoteClient.kml.warnings.IWarningsContainer#getElement(int, org.gvsig.exceptions.ListBaseException)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.kml.warnings.IWarningsContainer#getElement(int,
+	 * org.gvsig.exceptions.ListBaseException)
 	 */
 	public BaseException getElement(int index, ListBaseException war) {
-//		it returns the int value of a warning or 0 if it doesn't exists
-		if (war.isEmpty()==false)
-		{
-			if (index < war.size()){
-				return (BaseException)war.get(index);
+		// it returns the int value of a warning or 0 if it doesn't exists
+		if (war.isEmpty() == false) {
+			if (index < war.size()) {
+				return (BaseException) war.get(index);
 			}
 		}
 		return null;
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see org.gvsig.remoteClient.kml.warnings.IWarningsContainer#setWarningList(org.gvsig.exceptions.ListBaseException)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.kml.warnings.IWarningsContainer#setWarningList
+	 * (org.gvsig.exceptions.ListBaseException)
 	 */
 	public void setWarningList(ListBaseException war) {
-		int i=0;
+		int i = 0;
 		BaseException info;
-		while(i < war.size()){
-			info = this.getElement(i,war);
-			if (info != null)
-			{
+		while (i < war.size()) {
+			info = this.getElement(i, war);
+			if (info != null) {
 				this.setElement(info);
 			}
 			i++;

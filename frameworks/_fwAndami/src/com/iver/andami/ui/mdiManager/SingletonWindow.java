@@ -41,35 +41,38 @@
 package com.iver.andami.ui.mdiManager;
 
 /**
- * <p>Interface which should be implemented by those windows
- * which have an identity in the application. Each
- * SingletonWindow has an associated model, which identifies
- * the window, and thus it is not possible to create two
- * SingletonWindow with the same model.</p>
+ * <p>
+ * Interface which should be implemented by those windows which have an identity
+ * in the application. Each SingletonWindow has an associated model, which
+ * identifies the window, and thus it is not possible to create two
+ * SingletonWindow with the same model.
+ * </p>
  * 
- * <p>For example,
- * if a window contains a text file, maybe it is not suitable to open
- * two windows to edit the same file. To accomplish this, the edit
- * window should implement this interface, and the model associated
- * with the window will be the path to the text file. Then, if the user
- * tries to open an already open file, the existing window containing
- * the file will be shown to the user, instead of opening a new one.</p>
- *
- * <p>When opening a new SingletonWindow, the framework works in the
- * following way: all the already open SingletonWindow are searched to try
- * to find a window which has the same model as the new one. If such window
- * is found, it is sent to the foreground and no new window is opened;
- * otherwise, the new window is shown.
- * </p>  
- *
+ * <p>
+ * For example, if a window contains a text file, maybe it is not suitable to
+ * open two windows to edit the same file. To accomplish this, the edit window
+ * should implement this interface, and the model associated with the window
+ * will be the path to the text file. Then, if the user tries to open an already
+ * open file, the existing window containing the file will be shown to the user,
+ * instead of opening a new one.
+ * </p>
+ * 
+ * <p>
+ * When opening a new SingletonWindow, the framework works in the following way:
+ * all the already open SingletonWindow are searched to try to find a window
+ * which has the same model as the new one. If such window is found, it is sent
+ * to the foreground and no new window is opened; otherwise, the new window is
+ * shown.
+ * </p>
+ * 
  * @author Fernando González Cortés
  */
 public interface SingletonWindow extends IWindow {
-    /**
-     * Gets the window model, the identity, the object which will be used
-     * to identify te window.
-     *
-     * @return Object
-     */
-    public Object getWindowModel();
+	/**
+	 * Gets the window model, the identity, the object which will be used to
+	 * identify te window.
+	 * 
+	 * @return Object
+	 */
+	public Object getWindowModel();
 }

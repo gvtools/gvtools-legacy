@@ -47,8 +47,8 @@ import javax.swing.JComboBox;
 /**
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
-public class JComboBoxFonts extends JComboBox{
-  private static final long serialVersionUID = -1096327332248927959L;
+public class JComboBoxFonts extends JComboBox {
+	private static final long serialVersionUID = -1096327332248927959L;
 
 	public JComboBoxFonts() {
 		super();
@@ -56,14 +56,16 @@ public class JComboBoxFonts extends JComboBox{
 	}
 
 	private void initialize() {
-		//	Font info is obtained from the current graphics environment.
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		// Font info is obtained from the current graphics environment.
+		GraphicsEnvironment ge = GraphicsEnvironment
+				.getLocalGraphicsEnvironment();
 
 		// --- Get an array of font names (smaller than the number of fonts)
 		String[] fontNames = ge.getAvailableFontFamilyNames();
 		for (int i = 0; i < fontNames.length; i++) {
 			addItem(fontNames[i]);
-		};
+		}
+		;
 	}
 
 }

@@ -42,17 +42,17 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: PolygonBuildGeoprocessController.java 21235 2008-06-05 14:08:38Z azabala $
-* $Log$
-* Revision 1.1  2006-12-21 17:23:27  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/12/19 19:29:30  azabala
-* first version in cvs
-*
-*
-*/
+ *
+ * $Id: PolygonBuildGeoprocessController.java 21235 2008-06-05 14:08:38Z azabala $
+ * $Log$
+ * Revision 1.1  2006-12-21 17:23:27  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/12/19 19:29:30  azabala
+ * first version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.topology.polygonbuild;
 
 import java.io.File;
@@ -79,10 +79,9 @@ public class PolygonBuildGeoprocessController extends
 
 	private IPolygonBuildGeoprocessUserEntries userEntries;
 	private PolygonBuildGeoprocess geoprocess;
-	
-	
+
 	public void setView(IGeoprocessUserEntries userEntries) {
-		this.userEntries =  (IPolygonBuildGeoprocessUserEntries) userEntries;
+		this.userEntries = (IPolygonBuildGeoprocessUserEntries) userEntries;
 	}
 
 	public IGeoprocess getGeoprocess() {
@@ -97,13 +96,15 @@ public class PolygonBuildGeoprocessController extends
 			outputFile = userEntries.getOutputFile();
 		} catch (FileNotFoundException e3) {
 			String error = PluginServices.getText(this, "Error_entrada_datos");
-			String errorDescription = PluginServices.getText(this, "Error_seleccionar_resultado");
+			String errorDescription = PluginServices.getText(this,
+					"Error_seleccionar_resultado");
 			userEntries.error(errorDescription, error);
 			return false;
 		}
 		if (outputFile == null || (outputFile.getAbsolutePath().length() == 0)) {
 			String error = PluginServices.getText(this, "Error_entrada_datos");
-			String errorDescription = PluginServices.getText(this, "Error_seleccionar_resultado");
+			String errorDescription = PluginServices.getText(this,
+					"Error_seleccionar_resultado");
 			userEntries.error(errorDescription, error);
 			return false;
 		}
@@ -112,102 +113,104 @@ public class PolygonBuildGeoprocessController extends
 				return false;
 			}
 		}
-		
+
 		geoprocess = new PolygonBuildGeoprocess(inputLayer);
 
 		SHPLayerDefinition definition = (SHPLayerDefinition) geoprocess
 				.createLayerDefinition();
 		definition.setFile(outputFile);
-		ShpSchemaManager schemaManager = new ShpSchemaManager(outputFile.getAbsolutePath());
+		ShpSchemaManager schemaManager = new ShpSchemaManager(
+				outputFile.getAbsolutePath());
 		IWriter writer = null;
 		try {
 			writer = getShpWriter(definition);
 		} catch (Exception e1) {
-			String error = PluginServices.getText(this, "Error_escritura_resultados");
-			String errorDescription = PluginServices.getText(this, "Error_preparar_escritura_resultados");
+			String error = PluginServices.getText(this,
+					"Error_escritura_resultados");
+			String errorDescription = PluginServices.getText(this,
+					"Error_preparar_escritura_resultados");
 			userEntries.error(errorDescription, error);
 			return false;
-		} 
+		}
 		geoprocess.setResultLayerProperties(writer, schemaManager);
-		
-		
+
 		HashMap params = new HashMap();
 		boolean onlySelected = userEntries.isFirstOnlySelected();
 		params.put("firstlayerselection", new Boolean(onlySelected));
-		
+
 		boolean addErrors2TOC = userEntries.createLyrsWithErrorGeometries();
 		params.put("addgroupoflyrs", new Boolean(addErrors2TOC));
-		if(addErrors2TOC){
+		if (addErrors2TOC) {
 			boolean applyDangleTol = userEntries.applyDangleTolerance();
 			params.put("applydangletol", new Boolean(applyDangleTol));
-			if(applyDangleTol){
+			if (applyDangleTol) {
 				double dangleTolerance = 0d;
 				try {
 					dangleTolerance = userEntries.getDangleTolerance();
 				} catch (GeoprocessException e) {
-					String error = PluginServices.getText(this, 
+					String error = PluginServices.getText(this,
 							"Error_entrada_datos");
-					String errorDescription = PluginServices.getText(this, 
+					String errorDescription = PluginServices.getText(this,
 							"Distancia_dangle_incorrecta");
 					userEntries.error(errorDescription, error);
 					return false;
-				}//catch
+				}// catch
 				params.put("dangletolerance", new Double(dangleTolerance));
-			}//if
-			
-			
+			}// if
+
 			boolean applySnapTol = userEntries.applySnapTolerance();
 			params.put("applysnaptol", new Boolean(applySnapTol));
-			if(applySnapTol){
+			if (applySnapTol) {
 				double snapTolerance = 0d;
 				try {
 					snapTolerance = userEntries.getDangleTolerance();
 				} catch (GeoprocessException e) {
-					String error = PluginServices.getText(this, 
+					String error = PluginServices.getText(this,
 							"Error_entrada_datos");
-					String errorDescription = PluginServices.getText(this, 
+					String errorDescription = PluginServices.getText(this,
 							"Distancia_snap_incorrecta");
 					userEntries.error(errorDescription, error);
 					return false;
-				}//catch
+				}// catch
 				params.put("snaptolerance", new Double(snapTolerance));
-			}//if
-		}//if addErrors2TOC
+			}// if
+		}// if addErrors2TOC
 		boolean computeCleanBefore = userEntries.computeCleanBefore();
 		params.put("computeclean", new Boolean(computeCleanBefore));
-		
+
 		try {
 			geoprocess.setParameters(params);
 			geoprocess.checkPreconditions();
 			IMonitorableTask task1 = geoprocess.createTask();
-			if(task1 == null){
+			if (task1 == null) {
 				return false;
-				
+
 			}
 			AddResultLayerTask task2 = new AddResultLayerTask(geoprocess);
 			task2.setLayers(layers);
-			MonitorableDecoratorMainFirst globalTask = new MonitorableDecoratorMainFirst(task1,
-					task2);
+			MonitorableDecoratorMainFirst globalTask = new MonitorableDecoratorMainFirst(
+					task1, task2);
 			if (globalTask.preprocess())
 				PluginServices.cancelableBackgroundExecution(globalTask);
-			
+
 		} catch (GeoprocessException e) {
 			String error = PluginServices.getText(this, "Error_ejecucion");
-			String errorDescription = PluginServices.getText(this, "Error_fallo_geoproceso");
+			String errorDescription = PluginServices.getText(this,
+					"Error_fallo_geoproceso");
 			userEntries.error(errorDescription, error);
 			return false;
 		}
 		return true;
 	}
 
-	//Esto mejor llevarlo al plugin no??
-	//o en su defecto al panel
+	// Esto mejor llevarlo al plugin no??
+	// o en su defecto al panel
 	public int getWidth() {
 		return 700;
 	}
+
 	public int getHeight() {
 		return 600;
 	}
 
 }
-

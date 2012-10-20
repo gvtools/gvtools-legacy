@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.catalog.ui.showresults;
+
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -57,127 +57,162 @@ import es.gva.cit.catalog.utils.Frames;
  * @author luisw
  */
 public class ShowResultsDialog extends JDialog implements WindowListener {
-    int currentRecord;
-    public es.gva.cit.catalog.ui.showresults.ShowResultsDialogPanel showResultsDialogPanel;
+	int currentRecord;
+	public es.gva.cit.catalog.ui.showresults.ShowResultsDialogPanel showResultsDialogPanel;
 
-/**
- * Crea un nuevo ShowResultsDialog.
- * @param client DOCUMENT ME!
- * @param nodes DOCUMENT ME!
- * @param currentRecord DOCUMENT ME!
- */
-    public  ShowResultsDialog(CatalogClient client, GetRecordsReply recordsReply, int currentRecord) {        
-        super();
-        this.currentRecord = currentRecord;
-        initialize(client,recordsReply);
-    } 
+	/**
+	 * Crea un nuevo ShowResultsDialog.
+	 * 
+	 * @param client
+	 *            DOCUMENT ME!
+	 * @param nodes
+	 *            DOCUMENT ME!
+	 * @param currentRecord
+	 *            DOCUMENT ME!
+	 */
+	public ShowResultsDialog(CatalogClient client,
+			GetRecordsReply recordsReply, int currentRecord) {
+		super();
+		this.currentRecord = currentRecord;
+		initialize(client, recordsReply);
+	}
 
-/**
- * This method initializes jDialog
- * 
- * 
- * @param client 
- * @param nodes 
- */
-    private void initialize(CatalogClient client, GetRecordsReply recordsReply) {        
-        Frames.centerFrame(this, 625, 425);
-        this.setSize(new Dimension(625, 425));
-        this.setTitle("Cliente de Catálogo");
-        ShowResultsDialogPanel panel = new ShowResultsDialogPanel(client,
-        		recordsReply, currentRecord);
-        panel.setParent(this);
-        getContentPane().add(panel);
-        this.setVisible(true);
-    } 
-/* (non-Javadoc)
-     * @see java.awt.event.WindowListener#windowActivated(java.awt.event.WindowEvent)
-     */
+	/**
+	 * This method initializes jDialog
+	 * 
+	 * 
+	 * @param client
+	 * @param nodes
+	 */
+	private void initialize(CatalogClient client, GetRecordsReply recordsReply) {
+		Frames.centerFrame(this, 625, 425);
+		this.setSize(new Dimension(625, 425));
+		this.setTitle("Cliente de Catálogo");
+		ShowResultsDialogPanel panel = new ShowResultsDialogPanel(client,
+				recordsReply, currentRecord);
+		panel.setParent(this);
+		getContentPane().add(panel);
+		this.setVisible(true);
+	}
 
-/**
- * 
- * 
- * 
- * @param e 
- */
-    public void windowActivated(WindowEvent e) {        
-        // TODO Auto-generated method stub
-    } 
-/* (non-Javadoc)
-     * @see java.awt.event.WindowListener#windowClosed(java.awt.event.WindowEvent)
-     */
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowActivated(java.awt.event.WindowEvent)
+	 */
 
-/**
- * 
- * 
- * 
- * @param e 
- */
-    public void windowClosed(WindowEvent e) {        
-        // TODO Auto-generated method stub
-    } 
-/* (non-Javadoc)
-     * @see java.awt.event.WindowListener#windowClosing(java.awt.event.WindowEvent)
-     */
+	/**
+	 * 
+	 * 
+	 * 
+	 * @param e
+	 */
+	public void windowActivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+	}
 
-/**
- * 
- * 
- * 
- * @param e 
- */
-    public void windowClosing(WindowEvent e) {        
-        // TODO Auto-generated method stub
-    } 
-/* (non-Javadoc)
-     * @see java.awt.event.WindowListener#windowDeactivated(java.awt.event.WindowEvent)
-     */
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowClosed(java.awt.event.WindowEvent)
+	 */
 
-/**
- * 
- * 
- * 
- * @param e 
- */
-    public void windowDeactivated(WindowEvent e) {        
-        // TODO Auto-generated method stub
-    } 
-/* (non-Javadoc)
-     * @see java.awt.event.WindowListener#windowDeiconified(java.awt.event.WindowEvent)
-     */
+	/**
+	 * 
+	 * 
+	 * 
+	 * @param e
+	 */
+	public void windowClosed(WindowEvent e) {
+		// TODO Auto-generated method stub
+	}
 
-/**
- * 
- * 
- * 
- * @param e 
- */
-    public void windowDeiconified(WindowEvent e) {        
-        // TODO Auto-generated method stub
-    } 
-/* (non-Javadoc)
-     * @see java.awt.event.WindowListener#windowIconified(java.awt.event.WindowEvent)
-     */
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowClosing(java.awt.event.WindowEvent)
+	 */
 
-/**
- * 
- * 
- * 
- * @param e 
- */
-    public void windowIconified(WindowEvent e) {        
-        // TODO Auto-generated method stub
-    } 
-/* (non-Javadoc)
-     * @see java.awt.event.WindowListener#windowOpened(java.awt.event.WindowEvent)
-     */
+	/**
+	 * 
+	 * 
+	 * 
+	 * @param e
+	 */
+	public void windowClosing(WindowEvent e) {
+		// TODO Auto-generated method stub
+	}
 
-/**
- * 
- * 
- * 
- * @param e 
- */
-    public void windowOpened(WindowEvent e) {        
-        // TODO Auto-generated method stub
-    } 
- }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowDeactivated(java.awt.event.WindowEvent
+	 * )
+	 */
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * @param e
+	 */
+	public void windowDeactivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowDeiconified(java.awt.event.WindowEvent
+	 * )
+	 */
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * @param e
+	 */
+	public void windowDeiconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowIconified(java.awt.event.WindowEvent)
+	 */
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * @param e
+	 */
+	public void windowIconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowOpened(java.awt.event.WindowEvent)
+	 */
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * @param e
+	 */
+	public void windowOpened(WindowEvent e) {
+		// TODO Auto-generated method stub
+	}
+}

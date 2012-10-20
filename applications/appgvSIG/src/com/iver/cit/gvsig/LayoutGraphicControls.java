@@ -54,16 +54,17 @@ import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.cit.gvsig.project.documents.layout.FLayoutGraphics;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
-
 /**
- * Extensión que actua sobre el Layout para controlas las diferentes
- * operaciones sobre los gráficos.
- *
+ * Extensión que actua sobre el Layout para controlas las diferentes operaciones
+ * sobre los gráficos.
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LayoutGraphicControls extends Extension {
-	private static Logger logger = Logger.getLogger(LayoutGraphicControls.class.getName());
-	private Layout layout =null;
+	private static Logger logger = Logger.getLogger(LayoutGraphicControls.class
+			.getName());
+	private Layout layout = null;
+
 	/**
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
@@ -75,7 +76,8 @@ public class LayoutGraphicControls extends Extension {
 		if (s.compareTo("AGRUPAR") == 0) {
 			layout.getLayoutContext().getEFS().startComplexCommand();
 			lg.grouping();
-			layout.getLayoutContext().getEFS().endComplexCommand(PluginServices.getText(this,"group"));
+			layout.getLayoutContext().getEFS()
+					.endComplexCommand(PluginServices.getText(this, "group"));
 			layout.getModel().setModified(true);
 		} else if (s.compareTo("DESAGRUPAR") == 0) {
 			lg.ungrouping();
@@ -114,7 +116,8 @@ public class LayoutGraphicControls extends Extension {
 		}
 
 		if (f instanceof Layout) {
-			return true; //layout.m_Display.getMapControl().getMapContext().getLayers().layerCount() > 0;
+			return true; // layout.m_Display.getMapControl().getMapContext().getLayers().layerCount()
+							// > 0;
 		}
 		return false;
 	}
@@ -126,31 +129,31 @@ public class LayoutGraphicControls extends Extension {
 		registerIcons();
 	}
 
-	private void registerIcons(){
+	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"layout-group",
-				this.getClass().getClassLoader().getResource("images/agrupar.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/agrupar.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"layout-ungroup",
-				this.getClass().getClassLoader().getResource("images/desagrupar.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/desagrupar.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"layout-bring-to-front",
-				this.getClass().getClassLoader().getResource("images/delante.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/delante.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"layout-send-to-back",
-				this.getClass().getClassLoader().getResource("images/detras.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/detras.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"layout-set-size-position",
-				this.getClass().getClassLoader().getResource("images/posicionar.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/posicionar.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"layout-add-border",
-				this.getClass().getClassLoader().getResource("images/bordear.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/bordear.png"));
 	}
 
 	/**

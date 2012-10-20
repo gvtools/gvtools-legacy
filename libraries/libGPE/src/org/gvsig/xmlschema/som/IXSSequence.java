@@ -1,6 +1,5 @@
 package org.gvsig.xmlschema.som;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -63,9 +62,9 @@ package org.gvsig.xmlschema.som;
  *
  */
 /**
- * This interface represents a XML schema sequence element. 
- * Example:
+ * This interface represents a XML schema sequence element. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;sequence
@@ -77,11 +76,12 @@ package org.gvsig.xmlschema.som;
  * &gt;/sequence&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @see http://www.w3.org/TR/xmlschema-1/#element-sequence
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public interface IXSSequence extends IXSGroup {
 
-	
 }

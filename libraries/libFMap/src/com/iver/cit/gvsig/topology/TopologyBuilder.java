@@ -63,12 +63,11 @@ import com.vividsolutions.jts.planargraph.NodeMap;
 
 /**
  * @author fjp
- *
- * This class do its job thanks to the work of Martin Davis in
- * JTS (Java Topology Suite).
- * The code is extracted from JCS (Java Conflation Suite), made by
- * Vivid Solutions (www.vividsolutions.com)
- *
+ * 
+ *         This class do its job thanks to the work of Martin Davis in JTS (Java
+ *         Topology Suite). The code is extracted from JCS (Java Conflation
+ *         Suite), made by Vivid Solutions (www.vividsolutions.com)
+ * 
  */
 public class TopologyBuilder {
 
@@ -82,103 +81,99 @@ public class TopologyBuilder {
 	private boolean nodeInputLines = false;
 	private Polygonizer polygonizer = new Polygonizer();
 
-
-	public TopologyBuilder(double fuzzy, double dangle)
-	{
+	public TopologyBuilder(double fuzzy, double dangle) {
 		fuzzyTolerance = fuzzy;
 		dangleTolerance = dangle;
 	}
 
-	private Collection getLines(FLyrVect lv) throws ReadDriverException, ExpansionFileReadException
-	  {
-	    List linesList = new ArrayList();
-	    LinearComponentExtracter lineFilter = new LinearComponentExtracter(linesList);
+	private Collection getLines(FLyrVect lv) throws ReadDriverException,
+			ExpansionFileReadException {
+		List linesList = new ArrayList();
+		LinearComponentExtracter lineFilter = new LinearComponentExtracter(
+				linesList);
 		FBitSet bitSet = lv.getRecordset().getSelection();
 
-		for(int i=bitSet.nextSetBit(0); i>=0; i=bitSet.nextSetBit(i+1)) {
+		for (int i = bitSet.nextSetBit(0); i >= 0; i = bitSet.nextSetBit(i + 1)) {
 			IGeometry g = lv.getSource().getShape(i);
 			Geometry jtsGeom = g.toJTSGeometry();
 			jtsGeom.apply(lineFilter);
 		}
 
-	    return linesList;
-	  }
+		return linesList;
+	}
 
-	  private Collection nodeLines(List lines)
-	  {
+	private Collection nodeLines(List lines) {
 
-	    Geometry linesGeom = fact.createMultiLineString(GeometryFactory.toLineStringArray(lines));
-	    Geometry empty = fact.createMultiLineString(null);
-	    Geometry noded = linesGeom.union(empty);
-	    List nodedList = new ArrayList();
-	    nodedList.add(noded);
-	    return nodedList;
-	  }
+		Geometry linesGeom = fact.createMultiLineString(GeometryFactory
+				.toLineStringArray(lines));
+		Geometry empty = fact.createMultiLineString(null);
+		Geometry noded = linesGeom.union(empty);
+		List nodedList = new ArrayList();
+		nodedList.add(noded);
+		return nodedList;
+	}
 
-
-	public Collection buildPolygons() throws ReadDriverException, ExpansionFileReadException
-	{
-	    // monitor.report("Polygonizing...");
+	public Collection buildPolygons() throws ReadDriverException,
+			ExpansionFileReadException {
+		// monitor.report("Polygonizing...");
 		if (inputLayer == null)
-			throw new RuntimeException("Please, set inputLayer before buildPolygons");
+			throw new RuntimeException(
+					"Please, set inputLayer before buildPolygons");
 
-	    statusMessage = "Polygonizing...";
+		statusMessage = "Polygonizing...";
 
-	    Collection lines;
+		Collection lines;
 		lines = getLines(inputLayer);
 
-		    Collection nodedLines = lines;
-		    if (nodeInputLines) {
-		    	statusMessage = "Noding input lines";
-		    	nodedLines = nodeLines((List) lines);
-		    }
+		Collection nodedLines = lines;
+		if (nodeInputLines) {
+			statusMessage = "Noding input lines";
+			nodedLines = nodeLines((List) lines);
+		}
 
-		    for (Iterator i = nodedLines.iterator(); i.hasNext(); ) {
-		      Geometry g = (Geometry) i.next();
-		      polygonizer.add(g);
-		    }
-		    return polygonizer.getPolygons();
-	}
-	public void buildLines()
-	{
-
+		for (Iterator i = nodedLines.iterator(); i.hasNext();) {
+			Geometry g = (Geometry) i.next();
+			polygonizer.add(g);
+		}
+		return polygonizer.getPolygons();
 	}
 
-	public List getErrorNodes() throws ReadDriverException, ExpansionFileReadException
-	{
+	public void buildLines() {
+
+	}
+
+	public List getErrorNodes() throws ReadDriverException,
+			ExpansionFileReadException {
 		NodeMap nodeMap = new NodeMap();
 		FBitSet bitSet = inputLayer.getRecordset().getSelection();
 
 		statusMessage = "Creando grafo...";
 
-		for(int i=bitSet.nextSetBit(0); i>=0; i=bitSet.nextSetBit(i+1)) {
+		for (int i = bitSet.nextSetBit(0); i >= 0; i = bitSet.nextSetBit(i + 1)) {
 			statusMessage = "Procesando registro " + i;
 			IGeometry g;
 			g = inputLayer.getSource().getShape(i);
 			Geometry jtsG = g.toJTSGeometry();
 			Coordinate[] coords = jtsG.getCoordinates();
-		    if (jtsG.isEmpty())
-		    	continue;
-		    Coordinate[] linePts = CoordinateArrays.removeRepeatedPoints(coords);
-		    Coordinate startPt = linePts[0];
-		    Coordinate endPt = linePts[linePts.length - 1];
+			if (jtsG.isEmpty())
+				continue;
+			Coordinate[] linePts = CoordinateArrays
+					.removeRepeatedPoints(coords);
+			Coordinate startPt = linePts[0];
+			Coordinate endPt = linePts[linePts.length - 1];
 
-		    NodeError nStart = (NodeError) nodeMap.find(startPt);
-		    NodeError nEnd = (NodeError) nodeMap.find(endPt);
-		    if (nStart == null)
-		    {
-		    	nStart = new NodeError(startPt);
-		    	nodeMap.add(nStart);
-		    }
-		    else
-		    	nStart.setOccurrences(nStart.getOccurrences()+1);
-		    if (nEnd == null)
-		    {
-		    	nEnd = new NodeError(endPt);
-		    	nodeMap.add(nEnd);
-		    }
-		    else
-		    	nEnd.setOccurrences(nEnd.getOccurrences()+1);
+			NodeError nStart = (NodeError) nodeMap.find(startPt);
+			NodeError nEnd = (NodeError) nodeMap.find(endPt);
+			if (nStart == null) {
+				nStart = new NodeError(startPt);
+				nodeMap.add(nStart);
+			} else
+				nStart.setOccurrences(nStart.getOccurrences() + 1);
+			if (nEnd == null) {
+				nEnd = new NodeError(endPt);
+				nodeMap.add(nEnd);
+			} else
+				nEnd.setOccurrences(nEnd.getOccurrences() + 1);
 
 		}
 
@@ -189,15 +184,13 @@ public class TopologyBuilder {
 		statusMessage = "Extrayendo fuzzy y dangle nodes...";
 		ArrayList nodeErrors = new ArrayList();
 		Iterator it = nodeMap.iterator();
-		while (it.hasNext())
-		{
+		while (it.hasNext()) {
 			NodeError node = (NodeError) it.next();
-			if (node.getOccurrences() == 1)
-			{
-				FPoint2D p = FConverter.coordinate2FPoint2D(node.getCoordinate());
+			if (node.getOccurrences() == 1) {
+				FPoint2D p = FConverter.coordinate2FPoint2D(node
+						.getCoordinate());
 				IGeometry gAux = ShapeFactory.createPoint2D(p);
 				nodeErrors.add(gAux);
-
 
 			}
 		}
@@ -242,5 +235,3 @@ public class TopologyBuilder {
 	}
 
 }
-
-

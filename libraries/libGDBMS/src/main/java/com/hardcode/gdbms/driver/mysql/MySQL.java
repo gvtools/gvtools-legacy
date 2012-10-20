@@ -42,17 +42,17 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: MySQL.java 9799 2007-01-17 19:39:59Z azabala $
-* $Log$
-* Revision 1.2  2007-01-17 19:39:59  azabala
-* bug solved in getInsertInto...(the rest of methods wont work well, because GDBMS is not thinked to work with schemas)
-*
-* Revision 1.1  2007/01/16 20:06:02  azabala
-* changes to allow edition with MySQL drivers
-*
-*
-*/
+ *
+ * $Id: MySQL.java 9799 2007-01-17 19:39:59Z azabala $
+ * $Log$
+ * Revision 1.2  2007-01-17 19:39:59  azabala
+ * bug solved in getInsertInto...(the rest of methods wont work well, because GDBMS is not thinked to work with schemas)
+ *
+ * Revision 1.1  2007/01/16 20:06:02  azabala
+ * changes to allow edition with MySQL drivers
+ *
+ *
+ */
 package com.hardcode.gdbms.driver.mysql;
 
 import java.sql.Types;
@@ -91,23 +91,22 @@ public class MySQL {
 	 * @return
 	 */
 	public String getSqlCreateSpatialTable(DBLayerDefinition dbLayerDef,
-										FieldDescription[] fieldsDescr, 
-										boolean bCreateGID) {
+			FieldDescription[] fieldsDescr, boolean bCreateGID) {
 		String result = "CREATE TABLE " + dbLayerDef.getTableName()
-					+ " (gid int(10) unsigned NOT NULL auto_increment,";
-		int j=0;
+				+ " (gid int(10) unsigned NOT NULL auto_increment,";
+		int j = 0;
 		for (int i = 0; i < dbLayerDef.getFieldNames().length; i++) {
 			int fieldType = fieldsDescr[i].getFieldType();
-			//TODO ver si XTypes me los devuelve con la sintaxis MySQL
+			// TODO ver si XTypes me los devuelve con la sintaxis MySQL
 			String strType = XTypes.fieldTypeToString(fieldType);
-			
-			//We dont allow GID field. It is a reserved field name
+
+			// We dont allow GID field. It is a reserved field name
 			if (fieldsDescr[i].getFieldName().equalsIgnoreCase("gid"))
 				continue;
-			result +=  ", " + dbLayerDef.getFieldNames()[i] + " "	+ strType;
+			result += ", " + dbLayerDef.getFieldNames()[i] + " " + strType;
 			j++;
 		}
-		result = result.substring(0, result.length()-1);
+		result = result.substring(0, result.length() - 1);
 		result += ", PRIMARY KEY(GID))";
 		return result;
 	}
@@ -117,8 +116,8 @@ public class MySQL {
 		if (value != null) {
 			if (value instanceof NullValue)
 				retString = "null";
-			else{
-			    retString = ("'" + value.toString().trim() + "'");	
+			else {
+				retString = ("'" + value.toString().trim() + "'");
 			}
 		} else {
 			retString = "null";
@@ -135,18 +134,16 @@ public class MySQL {
 	 * @param feat
 	 * @return
 	 */
-	public String getSqlInsertFeature(DBLayerDefinition dbLayerDef,
-			IRow feat) {
-		String sql = "INSERT INTO "+ 
-					dbLayerDef.getTableName() + " (";
+	public String getSqlInsertFeature(DBLayerDefinition dbLayerDef, IRow feat) {
+		String sql = "INSERT INTO " + dbLayerDef.getTableName() + " (";
 		int numAlphanumericFields = dbLayerDef.getFieldNames().length;
 		for (int i = 0; i < numAlphanumericFields; i++) {
 			String name = dbLayerDef.getFieldsDesc()[i].getFieldName();
 			if (name.equals(dbLayerDef.getFieldID()))
 				continue;
 			sql += " " + name + ",";
-		}//for
-		sql = sql.substring(0, sql.length() -1);
+		}// for
+		sql = sql.substring(0, sql.length() - 1);
 		sql += " ) VALUES (";
 		for (int j = 0; j < numAlphanumericFields; j++) {
 			String name = dbLayerDef.getFieldsDesc()[j].getFieldName();
@@ -155,54 +152,52 @@ public class MySQL {
 
 			if (isNumeric(feat.getAttribute(j)))
 				sql += feat.getAttribute(j) + ", ";
-			else{
+			else {
 				sql += format(feat.getAttribute(j)) + ", ";
 			}
-		}//for	
-		sql = sql.substring(0, sql.length() -2);	   
+		}// for
+		sql = sql.substring(0, sql.length() - 2);
 		sql += " )";
 		return sql;
 	}
 
-	
 	public String getSqlModifyFeature(DBLayerDefinition dbLayerDef, IRow feat) {
 		String sql = "UPDATE " + dbLayerDef.getTableName() + " SET";
 		int numAlphanumericFields = dbLayerDef.getFieldsDesc().length;
 		for (int i = 0; i < numAlphanumericFields; i++) {
 			FieldDescription fldDesc = dbLayerDef.getFieldsDesc()[i];
-			if (fldDesc != null){
+			if (fldDesc != null) {
 				String name = fldDesc.getFieldName();
 				if (name.equalsIgnoreCase(dbLayerDef.getFieldID()))
 					continue;
 				Value val = feat.getAttribute(i);
-				if (val != null)
-				{
-					String strAux = val.getStringValue(ValueWriter.internalValueWriter);
+				if (val != null) {
+					String strAux = val
+							.getStringValue(ValueWriter.internalValueWriter);
 					sql += " " + name + " = " + strAux + " ,";
-				}//if
-			}//if
-		}//for
-		sql = sql.substring(0, sql.length() -1);
+				}// if
+			}// if
+		}// for
+		sql = sql.substring(0, sql.length() - 1);
 		sql += " WHERE ";
-		//TODO El feature.getID() funciona? (AZO)
+		// TODO El feature.getID() funciona? (AZO)
 		sql += dbLayerDef.getFieldID() + " = " + feat.getID();
 		return sql;
 
 	}
-	
+
 	/**
 	 * It builds MySQL's delete statement
+	 * 
 	 * @param dbLayerDef
 	 * @param row
 	 * @return
 	 */
 	public String getSqlDeleteFeature(DBLayerDefinition dbLayerDef, IRow row) {
-		String sql = "DELETE FROM "
-				+ dbLayerDef.getTableName() + " WHERE ";
+		String sql = "DELETE FROM " + dbLayerDef.getTableName() + " WHERE ";
 		int indexFieldId = dbLayerDef.getIdFieldID();
 		sql += dbLayerDef.getFieldID() + " = " + row.getAttribute(indexFieldId);
 		return sql;
 	}
 
 }
-

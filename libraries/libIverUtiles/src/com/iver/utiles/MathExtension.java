@@ -1,4 +1,5 @@
 package com.iver.utiles;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -41,43 +42,53 @@ package com.iver.utiles;
  */
 
 /**
- * Some more mathematical functions that 'java.lang.Math' doesn't have:
- * - Logarithm operations: log2, log2Integer, logX, logXInteger
+ * Some more mathematical functions that 'java.lang.Math' doesn't have: -
+ * Logarithm operations: log2, log2Integer, logX, logXInteger
  * 
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
 public final class MathExtension {
-	
+
 	/**
 	 * 2-base logarithm of a
-	 * @param a The value to do the calculations
+	 * 
+	 * @param a
+	 *            The value to do the calculations
 	 * @return Logarithm in 2 base of 'a'
 	 */
 	public static double log2(double a) {
 		return (Math.log(a) / Math.log(2));
 	}
-	
+
 	/**
-	 * 2-base logarithm of a, but the result doesn't have decimals (approximated to the integer number most near by below)
-	 * @param a The value to do the calculations
+	 * 2-base logarithm of a, but the result doesn't have decimals (approximated
+	 * to the integer number most near by below)
+	 * 
+	 * @param a
+	 *            The value to do the calculations
 	 * @return Logarithm in 2 base of 'a', as an integer
 	 */
 	public static int log2Integer(double a) {
 		return (int) Math.floor(log2(a));
 	}
-	
+
 	/**
 	 * X-base logarithm of a
-	 * @param a The value to do the calculations
+	 * 
+	 * @param a
+	 *            The value to do the calculations
 	 * @return Logarithm in X base of 'a'
 	 */
 	public static double logX(double x_base, double a) {
 		return (Math.log(a) / Math.log(x_base));
 	}
-	
+
 	/**
-	 * X-base logarithm of a, but the result doesn't have decimals (approximated to the integer number most near by below)
-	 * @param a The value to do the calculations
+	 * X-base logarithm of a, but the result doesn't have decimals (approximated
+	 * to the integer number most near by below)
+	 * 
+	 * @param a
+	 *            The value to do the calculations
 	 * @return Logarithm in X base of 'a', as an integer
 	 */
 	public static int logXInteger(double x_base, double a) {

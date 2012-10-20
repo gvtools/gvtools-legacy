@@ -1,4 +1,5 @@
 package org.gvsig.gpe.containers;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -50,25 +51,28 @@ package org.gvsig.gpe.containers;
  */
 /**
  * This class represetnts a Multipoint
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class MultiPoint extends MultiGeometry{
-	
+public class MultiPoint extends MultiGeometry {
+
 	/**
 	 * Adds a new Point
+	 * 
 	 * @param point
-	 * Point to add
+	 *            Point to add
 	 */
 	public void addPoint(Point point) {
 		addGeometry(point);
 	}
-	
+
 	/**
 	 * Gets a Point at position i
+	 * 
 	 * @param i
-	 * position
+	 *            position
 	 */
 	public Point getMultiPointAt(int i) {
-		return (Point)getGeometryAt(i);
+		return (Point) getGeometryAt(i);
 	}
 }

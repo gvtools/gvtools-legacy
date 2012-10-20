@@ -55,98 +55,93 @@ import com.iver.cit.gvsig.fmap.layers.SingleLayerIterator;
 import com.iver.cit.gvsig.fmap.tools.Behavior.PointBehavior;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
-public class NetworkAddFlag extends Extension {		
-    FlagListener flagListener = null;
-    BarrierListener barrierListener = null;
+public class NetworkAddFlag extends Extension {
+	FlagListener flagListener = null;
+	BarrierListener barrierListener = null;
 	private TurnCostListener turnCostListener;
+
 	public void initialize() {
 		PluginServices.getIconTheme().registerDefault(
 				"add_flag_on_node",
-				this.getClass().getClassLoader().getResource("images/add_flag_on_node.png")
-			);		
+				this.getClass().getClassLoader()
+						.getResource("images/add_flag_on_node.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"add_flag_on_arc",
-				this.getClass().getClassLoader().getResource("images/add_flag_on_arc.png")
-			);		
+				this.getClass().getClassLoader()
+						.getResource("images/add_flag_on_arc.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"no_way",
-				this.getClass().getClassLoader().getResource("images/no_way.png")
-			);		
+				this.getClass().getClassLoader()
+						.getResource("images/no_way.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"turncost",
-				this.getClass().getClassLoader().getResource("images/turncost_16.png")
-			);		
-		
+				this.getClass().getClassLoader()
+						.getResource("images/turncost_16.png"));
+
 	}
 
 	public void execute(String actionCommand) {
 		View v = (View) PluginServices.getMDIManager().getActiveWindow();
-        MapControl mapCtrl = v.getMapControl();
+		MapControl mapCtrl = v.getMapControl();
 
-        if (!mapCtrl.hasTool("addFlag")) // We create it for the first time.
-        {
-        	flagListener = new FlagListener(mapCtrl);
-            mapCtrl.addMapTool("addFlag", new PointBehavior(flagListener));
-        }
+		if (!mapCtrl.hasTool("addFlag")) // We create it for the first time.
+		{
+			flagListener = new FlagListener(mapCtrl);
+			mapCtrl.addMapTool("addFlag", new PointBehavior(flagListener));
+		}
 
-        if (!mapCtrl.hasTool("addBarrier")) // We create it for the first time.
-        {
-        	barrierListener = new BarrierListener(mapCtrl);
-            mapCtrl.addMapTool("addBarrier", new PointBehavior(barrierListener));
-        }
+		if (!mapCtrl.hasTool("addBarrier")) // We create it for the first time.
+		{
+			barrierListener = new BarrierListener(mapCtrl);
+			mapCtrl.addMapTool("addBarrier", new PointBehavior(barrierListener));
+		}
 
-        if (!mapCtrl.hasTool("addTurnCost")) // We create it for the first time.
-        {
-        	turnCostListener = new TurnCostListener(mapCtrl);
-            mapCtrl.addMapTool("addTurnCost", new PointBehavior(turnCostListener));
-        }
+		if (!mapCtrl.hasTool("addTurnCost")) // We create it for the first time.
+		{
+			turnCostListener = new TurnCostListener(mapCtrl);
+			mapCtrl.addMapTool("addTurnCost", new PointBehavior(
+					turnCostListener));
+		}
 
-        if (actionCommand.compareTo("ADD_FLAG_TO_NETWORK") == 0)
-        {
-        	flagListener.setMode(FlagListener.TO_ARC);
-            mapCtrl.setTool("addFlag");
-        }
-        if (actionCommand.compareTo("ADD_FLAG_TO_NODE") == 0)
-        {
-        	flagListener.setMode(FlagListener.TO_NODE);
-            mapCtrl.setTool("addFlag");
-        }
-        if (actionCommand.compareTo("ADD_BARRIER") == 0)
-        {
-            mapCtrl.setTool("addBarrier");
-        }
-        if (actionCommand.compareTo("ADD_TURNCOST") == 0)
-        {
-            mapCtrl.setTool("addTurnCost");
-        }        
-      
-//        else
-//        {
-//        	JOptionPane.showMessageDialog((JComponent) PluginServices.getMDIManager().getActiveWindow(), 
-//        			"Not implemented yet");
-//        }
+		if (actionCommand.compareTo("ADD_FLAG_TO_NETWORK") == 0) {
+			flagListener.setMode(FlagListener.TO_ARC);
+			mapCtrl.setTool("addFlag");
+		}
+		if (actionCommand.compareTo("ADD_FLAG_TO_NODE") == 0) {
+			flagListener.setMode(FlagListener.TO_NODE);
+			mapCtrl.setTool("addFlag");
+		}
+		if (actionCommand.compareTo("ADD_BARRIER") == 0) {
+			mapCtrl.setTool("addBarrier");
+		}
+		if (actionCommand.compareTo("ADD_TURNCOST") == 0) {
+			mapCtrl.setTool("addTurnCost");
+		}
 
-		
+		// else
+		// {
+		// JOptionPane.showMessageDialog((JComponent)
+		// PluginServices.getMDIManager().getActiveWindow(),
+		// "Not implemented yet");
+		// }
+
 	}
 
 	public boolean isEnabled() {
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		if (window instanceof View)
-		{
+		if (window instanceof View) {
 			View v = (View) window;
-	        MapControl mapCtrl = v.getMapControl();
+			MapControl mapCtrl = v.getMapControl();
 			MapContext map = mapCtrl.getMapContext();
-			
+
 			SingleLayerIterator it = new SingleLayerIterator(map.getLayers());
-			while (it.hasNext())
-			{
+			while (it.hasNext()) {
 				FLayer aux = it.next();
 				if (!aux.isActive())
 					continue;
 				Network net = (Network) aux.getProperty("network");
-				
-				if ( net != null)
-				{
+
+				if (net != null) {
 					return true;
 				}
 			}
@@ -157,22 +152,19 @@ public class NetworkAddFlag extends Extension {
 
 	public boolean isVisible() {
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		if (window instanceof View)
-		{
+		if (window instanceof View) {
 			View v = (View) window;
-	        MapControl mapCtrl = v.getMapControl();
+			MapControl mapCtrl = v.getMapControl();
 			MapContext map = mapCtrl.getMapContext();
-			
+
 			SingleLayerIterator it = new SingleLayerIterator(map.getLayers());
-			while (it.hasNext())
-			{
+			while (it.hasNext()) {
 				FLayer aux = it.next();
 				if (!aux.isActive())
 					continue;
 				Network net = (Network) aux.getProperty("network");
-				
-				if ( net != null)
-				{
+
+				if (net != null) {
 					return true;
 				}
 			}
@@ -182,5 +174,3 @@ public class NetworkAddFlag extends Extension {
 	}
 
 }
-
-

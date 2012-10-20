@@ -34,30 +34,36 @@ import javax.swing.event.ChangeListener;
 import org.gvsig.gui.beans.doubleslider.DoubleSlider;
 import org.gvsig.gui.beans.doubleslider.DoubleSliderEvent;
 import org.gvsig.gui.beans.doubleslider.DoubleSliderListener;
+
 /**
  * Barra de deslizamiento con una ventana de texto que tiene el valor de la
  * posición de la barra. En este control podrá controlarse mediante la entrada
  * de datos por la caja de texto la posibilidad de introducir valores decimales.
- *
+ * 
  * @version 15/06/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
-public class ColorSliderTextContainer extends JPanel implements ChangeListener, DoubleSliderListener {
+public class ColorSliderTextContainer extends JPanel implements ChangeListener,
+		DoubleSliderListener {
 	private static final long serialVersionUID = 1876415954410511634L;
 	private ArrayList<DoubleSliderListener> actionCommandListeners = new ArrayList<DoubleSliderListener>();
 
-	private JPanel       pText            = null;
-	private DoubleSlider slider           = null;
-	private JSpinner     jSpinner         = null;
-	private int          min              = 0;
-	private int          max              = 255;
-	private int          defaultPos       = 0;
+	private JPanel pText = null;
+	private DoubleSlider slider = null;
+	private JSpinner jSpinner = null;
+	private int min = 0;
+	private int max = 255;
+	private int defaultPos = 0;
 
 	/**
 	 * Contructor
-	 * @param min Valor mínimo de la barra
-	 * @param max Valor máximo de la barra
-	 * @param defaultPos Posición por defecto
+	 * 
+	 * @param min
+	 *            Valor mínimo de la barra
+	 * @param max
+	 *            Valor máximo de la barra
+	 * @param defaultPos
+	 *            Posición por defecto
 	 */
 	public ColorSliderTextContainer(int min, int max, int defaultPos) {
 		super();
@@ -78,7 +84,7 @@ public class ColorSliderTextContainer extends JPanel implements ChangeListener, 
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 */
 	private void initialize() {
 		this.setLayout(new BorderLayout(5, 5));
@@ -88,7 +94,7 @@ public class ColorSliderTextContainer extends JPanel implements ChangeListener, 
 
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPText() {
@@ -104,7 +110,7 @@ public class ColorSliderTextContainer extends JPanel implements ChangeListener, 
 
 	/**
 	 * This method initializes jSlider
-	 *
+	 * 
 	 * @return javax.swing.JSlider
 	 */
 	public DoubleSlider getSlider() {
@@ -120,7 +126,7 @@ public class ColorSliderTextContainer extends JPanel implements ChangeListener, 
 
 	/**
 	 * This method initializes jTextField
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	public JSpinner getJSpinner() {
@@ -134,11 +140,12 @@ public class ColorSliderTextContainer extends JPanel implements ChangeListener, 
 		return jSpinner;
 	}
 
-	public void setComponentSize(int w, int h){
+	public void setComponentSize(int w, int h) {
 	}
 
 	/**
 	 * Obtiene el valor del control.
+	 * 
 	 * @return Valor del control en formato double.
 	 */
 	public int getValue() {
@@ -147,6 +154,7 @@ public class ColorSliderTextContainer extends JPanel implements ChangeListener, 
 
 	/**
 	 * Asigna el valor del control.
+	 * 
 	 * @return Valor del control en formato double.
 	 */
 	public void setValue(int value) {
@@ -156,15 +164,17 @@ public class ColorSliderTextContainer extends JPanel implements ChangeListener, 
 
 	/**
 	 * Activa o desactiva el control del panel
+	 * 
 	 * @param active
 	 */
-	public void setControlEnabled(boolean active){
+	public void setControlEnabled(boolean active) {
 		getSlider().setEnabled(active);
 		getJSpinner().setEnabled(active);
 	}
 
 	/**
 	 * Obtiene el valor máximo del slider
+	 * 
 	 * @return Entero con el valor máximo
 	 */
 	public int getMax() {
@@ -173,7 +183,9 @@ public class ColorSliderTextContainer extends JPanel implements ChangeListener, 
 
 	/**
 	 * Asigna el valor máximo del slider
-	 * @param Entero con el valor máximo
+	 * 
+	 * @param Entero
+	 *            con el valor máximo
 	 * @deprecated Usar setMaximum en su lugar
 	 */
 	public void setMax(int max) {
@@ -182,7 +194,9 @@ public class ColorSliderTextContainer extends JPanel implements ChangeListener, 
 
 	/**
 	 * Asigna el valor máximo del slider
-	 * @param Entero con el valor máximo
+	 * 
+	 * @param Entero
+	 *            con el valor máximo
 	 */
 	public void setMaximum(int max) {
 		this.max = max;
@@ -191,6 +205,7 @@ public class ColorSliderTextContainer extends JPanel implements ChangeListener, 
 
 	/**
 	 * Obtiene el valor mínimo del slider
+	 * 
 	 * @return Entero con el valor mínimo
 	 */
 	public int getMin() {
@@ -199,7 +214,9 @@ public class ColorSliderTextContainer extends JPanel implements ChangeListener, 
 
 	/**
 	 * Asigna el valor mínimo del slider
-	 * @param Entero con el valor mínimo
+	 * 
+	 * @param Entero
+	 *            con el valor mínimo
 	 * @deprecated Usar setMinimum
 	 */
 	public void setMin(int min) {
@@ -208,7 +225,9 @@ public class ColorSliderTextContainer extends JPanel implements ChangeListener, 
 
 	/**
 	 * Asigna el valor mínimo del slider
-	 * @param Entero con el valor mínimo
+	 * 
+	 * @param Entero
+	 *            con el valor mínimo
 	 */
 	public void setMinimum(int min) {
 		this.min = min;
@@ -224,6 +243,7 @@ public class ColorSliderTextContainer extends JPanel implements ChangeListener, 
 
 	/**
 	 * Especificar el color izquierdo del control
+	 * 
 	 * @param color
 	 */
 	public void setColor1(Color color, boolean refresh) {
@@ -232,6 +252,7 @@ public class ColorSliderTextContainer extends JPanel implements ChangeListener, 
 
 	/**
 	 * Especificar el color derecho del control
+	 * 
 	 * @param color
 	 */
 	public void setColor2(Color color, boolean refresh) {
@@ -245,7 +266,8 @@ public class ColorSliderTextContainer extends JPanel implements ChangeListener, 
 		int value = new Integer(getJSpinner().getValue().toString()).intValue();
 		if (value != getSlider().getValue())
 			getSlider().setValue(value);
-		if (new Integer(getJSpinner().getValue().toString()).intValue() != getSlider().getValue())
+		if (new Integer(getJSpinner().getValue().toString()).intValue() != getSlider()
+				.getValue())
 			getJSpinner().setValue(new Integer(getSlider().getValue()));
 
 		if (spinnerEvent)
@@ -256,7 +278,8 @@ public class ColorSliderTextContainer extends JPanel implements ChangeListener, 
 	 * Dispara el evento del cambio del control
 	 */
 	protected void callChangeValue() {
-		Iterator<DoubleSliderListener> iterator = actionCommandListeners.iterator();
+		Iterator<DoubleSliderListener> iterator = actionCommandListeners
+				.iterator();
 		while (iterator.hasNext()) {
 			DoubleSliderListener listener = iterator.next();
 			listener.actionValueChanged(new DoubleSliderEvent(this));
@@ -267,7 +290,8 @@ public class ColorSliderTextContainer extends JPanel implements ChangeListener, 
 	 * Dispara el evento del cambio del control
 	 */
 	protected void callDraggedValue() {
-		Iterator<DoubleSliderListener> iterator = actionCommandListeners.iterator();
+		Iterator<DoubleSliderListener> iterator = actionCommandListeners
+				.iterator();
 		while (iterator.hasNext()) {
 			DoubleSliderListener listener = iterator.next();
 			listener.actionValueDragged(new DoubleSliderEvent(this));
@@ -276,6 +300,7 @@ public class ColorSliderTextContainer extends JPanel implements ChangeListener, 
 
 	/**
 	 * Añadir un listener a la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void addValueChangedListener(DoubleSliderListener listener) {
@@ -285,13 +310,16 @@ public class ColorSliderTextContainer extends JPanel implements ChangeListener, 
 
 	/**
 	 * Borrar un listener de la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void removeValueChangedListener(DoubleSliderListener listener) {
 		actionCommandListeners.remove(listener);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.JComponent#setEnabled(boolean)
 	 */
 	public void setEnabled(boolean enabled) {
@@ -313,10 +341,14 @@ public class ColorSliderTextContainer extends JPanel implements ChangeListener, 
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.doubleslider.DoubleSliderListener#actionValueDragged(java.util.EventObject)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.doubleslider.DoubleSliderListener#actionValueDragged
+	 * (java.util.EventObject)
 	 */
 	boolean spinnerEvent = true;
 	int lastDragged = -1;
+
 	public void actionValueDragged(DoubleSliderEvent e) {
 		int value = getSlider().getValue();
 		if (lastDragged != value) {

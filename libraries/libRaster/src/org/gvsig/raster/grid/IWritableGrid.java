@@ -22,58 +22,71 @@ import org.gvsig.raster.buffer.BufferFactory;
 
 /**
  * Interfaz que deben implementar los grid en los que se puede escribir datos.
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public interface IWritableGrid{
-	
+public interface IWritableGrid {
+
 	public GridExtent getGridExtent();
-	
-	public void assign(byte value)throws GridException, InterruptedException;
-	
-	public void assign(short value)throws GridException, InterruptedException;
-	
-	public void assign(int value)throws GridException, InterruptedException;
-	
-	public void assign(float value)throws GridException, InterruptedException;
-	
-	public void assign(double value)throws GridException, InterruptedException;
-	
-	public void assign(BufferFactory dataSource)throws GridException;
-	
-	public void assign(Grid driver)throws GridException;
-	
-	public void addToCellValue(int x, int y, byte value) throws GridException, InterruptedException;
-	
-	public void addToCellValue(int x, int y, short value) throws GridException, InterruptedException ;
-	
-	public void addToCellValue(int x, int y, int value) throws GridException, InterruptedException ;
-	
-	public void addToCellValue(int x, int y, float value) throws GridException, InterruptedException;
-	
-	public void addToCellValue(int x, int y, double value) throws GridException, InterruptedException;
-	
+
+	public void assign(byte value) throws GridException, InterruptedException;
+
+	public void assign(short value) throws GridException, InterruptedException;
+
+	public void assign(int value) throws GridException, InterruptedException;
+
+	public void assign(float value) throws GridException, InterruptedException;
+
+	public void assign(double value) throws GridException, InterruptedException;
+
+	public void assign(BufferFactory dataSource) throws GridException;
+
+	public void assign(Grid driver) throws GridException;
+
+	public void addToCellValue(int x, int y, byte value) throws GridException,
+			InterruptedException;
+
+	public void addToCellValue(int x, int y, short value) throws GridException,
+			InterruptedException;
+
+	public void addToCellValue(int x, int y, int value) throws GridException,
+			InterruptedException;
+
+	public void addToCellValue(int x, int y, float value) throws GridException,
+			InterruptedException;
+
+	public void addToCellValue(int x, int y, double value)
+			throws GridException, InterruptedException;
+
 	public void assignNoData() throws InterruptedException;
-	
-	public void setCellValue(int x, int y, byte value)throws OutOfGridException, InterruptedException;
-	
-	public void setCellValue(int x, int y, short value)throws OutOfGridException, InterruptedException;
-	
-	public void setCellValue(int x, int y, int value)throws OutOfGridException, InterruptedException;
-	
-	public void setCellValue(int x, int y, float value)throws OutOfGridException, InterruptedException;
-	
-	public void setCellValue(int x, int y, double value)throws OutOfGridException, InterruptedException;
-	
+
+	public void setCellValue(int x, int y, byte value)
+			throws OutOfGridException, InterruptedException;
+
+	public void setCellValue(int x, int y, short value)
+			throws OutOfGridException, InterruptedException;
+
+	public void setCellValue(int x, int y, int value)
+			throws OutOfGridException, InterruptedException;
+
+	public void setCellValue(int x, int y, float value)
+			throws OutOfGridException, InterruptedException;
+
+	public void setCellValue(int x, int y, double value)
+			throws OutOfGridException, InterruptedException;
+
 	public void add(Grid driver) throws GridException;
-	
+
 	public void multiply(double dValue) throws GridException;
-	
+
 	/**
 	 * Asigna el valor que indica que una celda no tiene datos para el buffer
-	 * @param dNoDataValue Valor NoData 
+	 * 
+	 * @param dNoDataValue
+	 *            Valor NoData
 	 */
 	public void setNoDataValue(double dNoDataValue);
-	
+
 	public void setNoData(int x, int y) throws InterruptedException;
 }

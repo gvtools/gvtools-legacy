@@ -70,7 +70,7 @@ import org.gvsig.gpe.containers.MultiLineString;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class GPEMultiLineStringLayerTest extends GPEWriterBaseTest{
+public abstract class GPEMultiLineStringLayerTest extends GPEWriterBaseTest {
 	private String layerId = "l1";
 	private String srs = "EPSG:23030";
 	private String feature1Id = "f1";
@@ -78,66 +78,69 @@ public abstract class GPEMultiLineStringLayerTest extends GPEWriterBaseTest{
 	private String lineString1Id = "ls1";
 	private double[] lineString1X = generateRandomCoordinates();
 	private double[] lineString1Y = generateRandomCoordinates();
-	private double[] lineString1Z = generateRandomCoordinates();	
+	private double[] lineString1Z = generateRandomCoordinates();
 	private String lineString2Id = "ls2";
 	private double[] lineString2X = generateRandomCoordinates();
 	private double[] lineString2Y = generateRandomCoordinates();
-	private double[] lineString2Z = generateRandomCoordinates();	
+	private double[] lineString2Z = generateRandomCoordinates();
 	private String lineString3Id = "ls3";
 	private double[] lineString3X = generateRandomCoordinates();
 	private double[] lineString3Y = generateRandomCoordinates();
-	private double[] lineString3Z = generateRandomCoordinates();	
-	
+	private double[] lineString3Z = generateRandomCoordinates();
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#readObjects()
 	 */
 	public void readObjects() {
 		Layer[] layers = getLayers();
-		assertEquals(layers.length, 1);		
+		assertEquals(layers.length, 1);
 		Layer layer = layers[0];
-	
+
 		assertEquals(layer.getFeatures().size(), 1);
-		//FEATURE 1
-		Feature feature1 = (Feature)layer.getFeatures().get(0);
-		MultiLineString multiLinestring = (MultiLineString)feature1.getGeometry();
+		// FEATURE 1
+		Feature feature1 = (Feature) layer.getFeatures().get(0);
+		MultiLineString multiLinestring = (MultiLineString) feature1
+				.getGeometry();
 		assertEquals(multiLinestring.getGeometries().size(), 3);
-		GeometryAsserts.lineString(multiLinestring.getMultiLineStringAt(0), lineString1X, lineString1Y, lineString1Z);
-		GeometryAsserts.lineString(multiLinestring.getMultiLineStringAt(1), lineString2X, lineString2Y, lineString2Z);
-		GeometryAsserts.lineString(multiLinestring.getMultiLineStringAt(2), lineString3X, lineString3Y, lineString3Z);
+		GeometryAsserts.lineString(multiLinestring.getMultiLineStringAt(0),
+				lineString1X, lineString1Y, lineString1Z);
+		GeometryAsserts.lineString(multiLinestring.getMultiLineStringAt(1),
+				lineString2X, lineString2Y, lineString2Z);
+		GeometryAsserts.lineString(multiLinestring.getMultiLineStringAt(2),
+				lineString3X, lineString3Y, lineString3Z);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#writeObjects()
 	 */
 	public void writeObjects() {
 		getWriterHandler().initialize();
-		getWriterHandler().startLayer(layerId, null , null , srs, null);
+		getWriterHandler().startLayer(layerId, null, null, srs, null);
 		getWriterHandler().startFeature(feature1Id, null, null);
 		getWriterHandler().startMultiLineString(multiLineString1Id, srs);
-		getWriterHandler().startLineString(lineString1Id, new CoordinatesSequence(
-				lineString1X,
-				lineString1Y,
-				lineString1Z), 
-				srs);
-		getWriterHandler().endLineString();		
-		getWriterHandler().startLineString(lineString2Id, new CoordinatesSequence(
-				lineString2X,
-				lineString2Y,
-				lineString2Z), 
-				srs);
-		getWriterHandler().endLineString();		
-		getWriterHandler().startLineString(lineString3Id, new CoordinatesSequence(
-				lineString3X,
-				lineString3Y,
-				lineString3Z), 
-				srs);
-		getWriterHandler().endLineString();		
-		getWriterHandler().endMultiLineString();		
+		getWriterHandler().startLineString(
+				lineString1Id,
+				new CoordinatesSequence(lineString1X, lineString1Y,
+						lineString1Z), srs);
+		getWriterHandler().endLineString();
+		getWriterHandler().startLineString(
+				lineString2Id,
+				new CoordinatesSequence(lineString2X, lineString2Y,
+						lineString2Z), srs);
+		getWriterHandler().endLineString();
+		getWriterHandler().startLineString(
+				lineString3Id,
+				new CoordinatesSequence(lineString3X, lineString3Y,
+						lineString3Z), srs);
+		getWriterHandler().endLineString();
+		getWriterHandler().endMultiLineString();
 		getWriterHandler().endFeature();
 		getWriterHandler().endLayer();
-		getWriterHandler().close();	
+		getWriterHandler().close();
 	}
 
 }

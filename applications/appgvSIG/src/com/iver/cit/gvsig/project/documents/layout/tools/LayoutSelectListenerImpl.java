@@ -48,10 +48,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
-
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.AddLayer;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
 import com.iver.cit.gvsig.project.documents.layout.FLayoutGraphics;
@@ -62,27 +59,28 @@ import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrameGroupSelectabl
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.LayoutMoveListener;
 
-
 /**
- * Implementaci�n de la interfaz LayoutPanListener como herramienta para realizar una
- * selecci�n.
- *
+ * Implementaci�n de la interfaz LayoutPanListener como herramienta para
+ * realizar una selecci�n.
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LayoutSelectListenerImpl implements LayoutMoveListener {
 	public static final Image icrux = PluginServices.getIconTheme()
-	.get("crux-cursor").getImage();
-	private final Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(icrux,
-			new Point(16, 16), "");
+			.get("crux-cursor").getImage();
+	private final Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(
+			icrux, new Point(16, 16), "");
 
 	private Layout layout;
 	private Point2D m_pointSelected;
 	private int index = 0;
-	 private ArrayList lastSelect = new ArrayList();
+	private ArrayList lastSelect = new ArrayList();
+
 	/**
 	 * Crea un nuevo LayoutSelectionListenerImpl.
-	 *
-	 * @param l Layout.
+	 * 
+	 * @param l
+	 *            Layout.
 	 */
 	public LayoutSelectListenerImpl(Layout l) {
 		this.layout = l;
@@ -90,7 +88,7 @@ public class LayoutSelectListenerImpl implements LayoutMoveListener {
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.PanListener#move(java.awt.geom.Point2D,
-	 * 		java.awt.geom.Point2D)
+	 *      java.awt.geom.Point2D)
 	 */
 	public void drag(PointEvent event) {
 	}
@@ -101,7 +99,8 @@ public class LayoutSelectListenerImpl implements LayoutMoveListener {
 	public Image getImageCursor() {
 		return icrux;
 	}
-	public Cursor getCursor(){
+
+	public Cursor getCursor() {
 		return cur;
 	}
 
@@ -115,122 +114,120 @@ public class LayoutSelectListenerImpl implements LayoutMoveListener {
 	public void press(PointEvent event) throws BehaviorException {
 		m_pointSelected = event.getPoint();
 		layout.getLayoutControl().setIsReSel(true);
-		IFFrame[] fframes=layout.getLayoutContext().getFFrames();
-        for (int i = 0; i < fframes.length; i++) {
-            IFFrame fframe = fframes[i];
+		IFFrame[] fframes = layout.getLayoutContext().getFFrames();
+		for (int i = 0; i < fframes.length; i++) {
+			IFFrame fframe = fframes[i];
 
-            if (m_pointSelected != null) {
-                if (!event.getEvent().isShiftDown()) {
-                    if ((fframe.getSelected() != IFFrame.NOSELECT)) {
-                        fframe.setSelected(m_pointSelected,event.getEvent());
-                    }
-                }else if (fframe instanceof IFFrameGroupSelectable){
-                	    fframe.setSelected(m_pointSelected,event.getEvent());
-                }
-            }
+			if (m_pointSelected != null) {
+				if (!event.getEvent().isShiftDown()) {
+					if ((fframe.getSelected() != IFFrame.NOSELECT)) {
+						fframe.setSelected(m_pointSelected, event.getEvent());
+					}
+				} else if (fframe instanceof IFFrameGroupSelectable) {
+					fframe.setSelected(m_pointSelected, event.getEvent());
+				}
+			}
 
-            if (fframe.getSelected() != IFFrame.NOSELECT) {
-                layout.getLayoutControl().setIsReSel(false);
-            }
+			if (fframe.getSelected() != IFFrame.NOSELECT) {
+				layout.getLayoutControl().setIsReSel(false);
+			}
 
+		}
 
-        }
+		if ((layout.getLayoutControl().getLastPoint() != null)
+				&& (layout.getLayoutControl().getFirstPoint() != null)) {
+			layout.getLayoutControl().getLastPoint()
+					.setLocation(layout.getLayoutControl().getFirstPoint());
+		}
 
-        if ((layout.getLayoutControl().getLastPoint() != null) &&
-                (layout.getLayoutControl().getFirstPoint() != null)) {
-            layout.getLayoutControl().getLastPoint().setLocation(layout.getLayoutControl().getFirstPoint());
-        }
-
-        if (event.getEvent().getClickCount() < 2) {
-            layout.getLayoutControl().setStatus(LayoutControl.ACTUALIZADO);
-            layout.repaint();
-        }
+		if (event.getEvent().getClickCount() < 2) {
+			layout.getLayoutControl().setStatus(LayoutControl.ACTUALIZADO);
+			layout.repaint();
+		}
 
 	}
 
 	public void release(PointEvent event) throws BehaviorException {
 		layout.getLayoutControl().getLayoutFunctions().setSelect();
-        layout.getLayoutControl().refresh();
-        layout.getLayoutControl().setIsReSel(false);
+		layout.getLayoutControl().refresh();
+		layout.getLayoutControl().setIsReSel(false);
 	}
+
 	public void click(PointEvent event) {
-		 if (event.getEvent().getButton() == MouseEvent.BUTTON1) {
-                 m_pointSelected = event.getPoint();
-                 IFFrame[] fframes=layout.getLayoutContext().getFFrames();
-                 if (fframes.length > 0) {
-                     ArrayList listSelect = new ArrayList();
-                     for (int j = 0; j < fframes.length; j++) {
-                         if (fframes[j].getContains(
-                                     m_pointSelected) != IFFrame.NOSELECT) {
-                             listSelect.add(fframes[j]);
-                         }
-                     }
+		if (event.getEvent().getButton() == MouseEvent.BUTTON1) {
+			m_pointSelected = event.getPoint();
+			IFFrame[] fframes = layout.getLayoutContext().getFFrames();
+			if (fframes.length > 0) {
+				ArrayList listSelect = new ArrayList();
+				for (int j = 0; j < fframes.length; j++) {
+					if (fframes[j].getContains(m_pointSelected) != IFFrame.NOSELECT) {
+						listSelect.add(fframes[j]);
+					}
+				}
 
-                     if (listSelect.size() > 0) {
-                         for (int k = 0; k < listSelect.size(); k++) {
-                             if (((IFFrame) listSelect.get(k)).getSelected() != IFFrame.NOSELECT) {
-                                 index = listSelect.size() - k;
+				if (listSelect.size() > 0) {
+					for (int k = 0; k < listSelect.size(); k++) {
+						if (((IFFrame) listSelect.get(k)).getSelected() != IFFrame.NOSELECT) {
+							index = listSelect.size() - k;
 
-                                 break;
-                             }
-                         }
+							break;
+						}
+					}
 
-                         if (!FLayoutUtilities.isEqualList(listSelect,
-                                     lastSelect) ||
-                                 (index > (listSelect.size() - 1))) {
-                             index = 0;
-                         }
-                         for (int j = 0; j < fframes.length;
-                                 j++) {
-                             IFFrame fframe = fframes[j];
+					if (!FLayoutUtilities.isEqualList(listSelect, lastSelect)
+							|| (index > (listSelect.size() - 1))) {
+						index = 0;
+					}
+					for (int j = 0; j < fframes.length; j++) {
+						IFFrame fframe = fframes[j];
 
-                             if (!event.getEvent().isShiftDown()) {
-                                 fframe.setSelected(false);
-                             } else {
-                                 if (fframe.getSelected() != IFFrame.NOSELECT) {
-                                     if (fframe.getContains(m_pointSelected) != IFFrame.NOSELECT) {
-                                         fframe.setSelected(false);
-                                     }
-                                 }
-                             }
-                         }
+						if (!event.getEvent().isShiftDown()) {
+							fframe.setSelected(false);
+						} else {
+							if (fframe.getSelected() != IFFrame.NOSELECT) {
+								if (fframe.getContains(m_pointSelected) != IFFrame.NOSELECT) {
+									fframe.setSelected(false);
+								}
+							}
+						}
+					}
 
-                         ((IFFrame) listSelect.get((listSelect.size() - 1 -
-                             index))).setSelected(true);
-                         index++;
-                         lastSelect = listSelect;
-                     }
+					((IFFrame) listSelect.get((listSelect.size() - 1 - index)))
+							.setSelected(true);
+					index++;
+					lastSelect = listSelect;
+				}
 
-                     layout.getLayoutControl().setStatus(LayoutControl.ACTUALIZADO);
-                     layout.repaint();
+				layout.getLayoutControl().setStatus(LayoutControl.ACTUALIZADO);
+				layout.repaint();
 
-                     if (event.getEvent().getClickCount() > 1) {
-                         FLayoutGraphics flg = new FLayoutGraphics(layout);
-                         flg.openFFrameDialog();
-                         layout.getLayoutContext().updateFFrames();
-         				 layout.getLayoutContext().callLayoutDrawListeners();
-                     }
-                 }
+				if (event.getEvent().getClickCount() > 1) {
+					FLayoutGraphics flg = new FLayoutGraphics(layout);
+					flg.openFFrameDialog();
+					layout.getLayoutContext().updateFFrames();
+					layout.getLayoutContext().callLayoutDrawListeners();
+				}
+			}
 
-                 PluginServices.getMainFrame().enableControls();
-         }
+			PluginServices.getMainFrame().enableControls();
+		}
 	}
 
 	public void move(PointEvent event) throws BehaviorException {
-		 Cursor cursor = null;
-         Point2D p = event.getPoint();
-         IFFrame[] fframes=layout.getLayoutContext().getFFrameSelected();
-         for (int i = 0; i < fframes.length; i++) {
-             if (fframes[i].getContains(p)!=IFFrame.NOSELECT){
-             	cursor=fframes[i].getMapCursor(p);
-             }
-             if (cursor != null) {
-                 layout.getLayoutControl().setMapCursor(cursor);
-             }
-//             else {
-//                 layout.setMapCursor(Layout.icrux);
-//             }
-         }
-  	}
+		Cursor cursor = null;
+		Point2D p = event.getPoint();
+		IFFrame[] fframes = layout.getLayoutContext().getFFrameSelected();
+		for (int i = 0; i < fframes.length; i++) {
+			if (fframes[i].getContains(p) != IFFrame.NOSELECT) {
+				cursor = fframes[i].getMapCursor(p);
+			}
+			if (cursor != null) {
+				layout.getLayoutControl().setMapCursor(cursor);
+			}
+			// else {
+			// layout.setMapCursor(Layout.icrux);
+			// }
+		}
+	}
 
 }

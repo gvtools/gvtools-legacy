@@ -44,7 +44,7 @@ import java.awt.geom.Point2D;
 
 /**
  * Multipunto 3D.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FMultipoint3D extends FMultiPoint2D implements IGeometry3D {
@@ -52,43 +52,46 @@ public class FMultipoint3D extends FMultiPoint2D implements IGeometry3D {
 
 	/**
 	 * Crea un nuevo Multipoint3D.
-	 *
-	 * @param x Array de Xs.
-	 * @param y Array de Ys.
-	 * @param z Array de Zs.
+	 * 
+	 * @param x
+	 *            Array de Xs.
+	 * @param y
+	 *            Array de Ys.
+	 * @param z
+	 *            Array de Zs.
 	 */
 	public FMultipoint3D(double[] x, double[] y, double[] z) {
 		super(x, y);
 		this.z = z;
 	}
-	
-	//jomarlla
+
+	// jomarlla
 	public FMultipoint3D(FPoint2D[] points, double[] z) {
 		super(points);
 		this.z = z;
 	}
-	
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#cloneGeometry()
 	 */
 	public IGeometry cloneGeometry() {
 		double[] x = new double[getNumPoints()];
 		double[] y = new double[getNumPoints()];
-		for (int i=0; i < getNumPoints(); i++)
-		{
-			Point2D p=points[i].getHandlers(IGeometry.SELECTHANDLER)[0].getPoint();
+		for (int i = 0; i < getNumPoints(); i++) {
+			Point2D p = points[i].getHandlers(IGeometry.SELECTHANDLER)[0]
+					.getPoint();
 
 			x[i] = p.getX();
 			y[i] = p.getY();
 		}
-		return new FMultipoint3D(x,y,
-			(double[]) z.clone());
+		return new FMultipoint3D(x, y, (double[]) z.clone());
 	}
 
 	/**
 	 * Devuelve un array con todos los valores de Z.
-	 *
+	 * 
 	 * @return Array de Zs.
 	 */
 	public double[] getZs() {
@@ -101,10 +104,10 @@ public class FMultipoint3D extends FMultiPoint2D implements IGeometry3D {
 	public int getGeometryType() {
 		return FShape.MULTIPOINT | FShape.Z;
 	}
-	
+
 	public String toText() {
-		//TODO
+		// TODO
 		return null;
 	}
-	
+
 }

@@ -55,20 +55,22 @@ import org.gvsig.exceptions.BaseException;
  *
  */
 /**
- * It is thrown when there is an layer that can not
- * be validated using the XML Schema
+ * It is thrown when there is an layer that can not be validated using the XML
+ * Schema
+ * 
  * @author Jorge Piera Llodrá (jorge.piera@iver.es)
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  */
-public class NotSupportedLayerWarning extends BaseException{
+public class NotSupportedLayerWarning extends BaseException {
 	private static final long serialVersionUID = -6929364975278666066L;
 	private String layerName = null;
 	private String xsLayerType = null;
 	private String parentLayerName = null;
-	private String xsParentLayerType = null;	
+	private String xsParentLayerType = null;
 	private boolean hasParent = false;
 
-	public NotSupportedLayerWarning(String layerName, String xsLayerType, String parentLayerName, String xsParentLayerType) {
+	public NotSupportedLayerWarning(String layerName, String xsLayerType,
+			String parentLayerName, String xsParentLayerType) {
 		super();
 		this.layerName = layerName;
 		this.xsLayerType = xsLayerType;
@@ -77,7 +79,7 @@ public class NotSupportedLayerWarning extends BaseException{
 		hasParent = true;
 		initialize();
 	}
-	
+
 	public NotSupportedLayerWarning(String layerName, String xsLayerType) {
 		super();
 		this.layerName = layerName;
@@ -91,26 +93,27 @@ public class NotSupportedLayerWarning extends BaseException{
 	 */
 	private void initialize() {
 		messageKey = "gpe_not_supported_layer_warning";
-		if (hasParent){
-			formatString = "The layer '%(layerName)' with a XML schema " + 
-			"type '%(xsLayerType)' is not contained in the parent layer " +
-			"'%(parentLayerName)' with a XML Schema type '%(xsParentLayerType)'";
-		}else{
-			formatString = "The layer '%(layerName)' with a XML schema " + 
-			"type '%(xsLayerType)' is not valid in the XML Schema";
+		if (hasParent) {
+			formatString = "The layer '%(layerName)' with a XML schema "
+					+ "type '%(xsLayerType)' is not contained in the parent layer "
+					+ "'%(parentLayerName)' with a XML Schema type '%(xsParentLayerType)'";
+		} else {
+			formatString = "The layer '%(layerName)' with a XML schema "
+					+ "type '%(xsLayerType)' is not valid in the XML Schema";
 		}
 		code = serialVersionUID;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map values() {
 		Hashtable hash = new Hashtable();
 		hash.put("layerName", layerName);
 		hash.put("xsLayerType", xsLayerType);
-		if (hasParent){
+		if (hasParent) {
 			hash.put("parentLayerName", parentLayerName);
 			hash.put("xsParentLayerType", xsParentLayerType);
 		}

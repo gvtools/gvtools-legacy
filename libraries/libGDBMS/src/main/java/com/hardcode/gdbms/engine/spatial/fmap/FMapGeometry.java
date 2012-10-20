@@ -55,20 +55,20 @@ import com.hardcode.gdbms.engine.spatial.Renderer;
 import com.iver.cit.gvsig.fmap.core.GeneralPathX;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 
-
 public class FMapGeometry implements Geometry {
-	
+
 	private GeneralPathX gpx = new GeneralPathX();
 
 	public FMapGeometry(IGeometry g) {
 		gpx.append(g.getPathIterator(null), true);
 	}
-	
+
 	/**
-	 * @see com.hardcode.gdbms.engine.spatial.Geometry#draw(java.awt.Graphics2D, org.geotools.renderer.style.Style2D)
+	 * @see com.hardcode.gdbms.engine.spatial.Geometry#draw(java.awt.Graphics2D,
+	 *      org.geotools.renderer.style.Style2D)
 	 */
 	public void draw(Graphics2D g, Style2D style) {
-        Renderer.drawShape(g, gpx, style);
+		Renderer.drawShape(g, gpx, style);
 	}
 
 	/**

@@ -26,33 +26,37 @@ import org.gvsig.gui.beans.table.exceptions.NotInitializeException;
 
 public class CheckBoxModelTable extends TestUI implements TableModelListener {
 	private static final long serialVersionUID = -7971006561681605303L;
-	private int            w     = 400;
-	private int            h     = 200;
+	private int w = 400;
+	private int h = 200;
 	private TableContainer table = null;
 
 	public CheckBoxModelTable() throws NotInitializeException {
 		super("CheckBoxModelTable");
-		String[] columnNames = {" ", "Nombre", ""};
-		int[] columnWidths = {22, 334, 0};
+		String[] columnNames = { " ", "Nombre", "" };
+		int[] columnWidths = { 22, 334, 0 };
 		table = new TableContainer(columnNames, columnWidths);
 		table.setModel("CheckBoxModel");
 		table.initialize();
 		table.setControlVisible(false);
 		table.setMoveRowsButtonsVisible(true);
 
-		Object row[] = {"", "", ""};
+		Object row[] = { "", "", "" };
 		for (int i = 0; i < 10; i++) {
 			row[0] = new Boolean(true);
 			row[1] = String.valueOf(i);
 			row[2] = new Integer(i);
 			table.addRow(row);
-		}		
-		
+		}
+
 		table.delRow(1);
-		table.getTable().getJTable().getColumnModel().getColumn(2).setMinWidth(0);
-		table.getTable().getJTable().getColumnModel().getColumn(2).setMaxWidth(0);
-		table.getTable().getJTable().getColumnModel().getColumn(0).setMinWidth(22);
-		table.getTable().getJTable().getColumnModel().getColumn(0).setMaxWidth(22);
+		table.getTable().getJTable().getColumnModel().getColumn(2)
+				.setMinWidth(0);
+		table.getTable().getJTable().getColumnModel().getColumn(2)
+				.setMaxWidth(0);
+		table.getTable().getJTable().getColumnModel().getColumn(0)
+				.setMinWidth(22);
+		table.getTable().getJTable().getColumnModel().getColumn(0)
+				.setMaxWidth(22);
 
 		table.getModel().addTableModelListener(this);
 		getContentPane().add(table);

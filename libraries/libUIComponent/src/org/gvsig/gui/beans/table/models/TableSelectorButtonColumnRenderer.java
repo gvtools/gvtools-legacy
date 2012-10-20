@@ -28,24 +28,23 @@ import javax.swing.table.TableCellRenderer;
  * Componente tabla
  * 
  * @author Nacho Brodin (brodin_ign@gva.es)
- *
+ * 
  */
-public class TableSelectorButtonColumnRenderer extends JLabel implements TableCellRenderer {
+public class TableSelectorButtonColumnRenderer extends JLabel implements
+		TableCellRenderer {
 	private static final long serialVersionUID = 2387857417420654102L;
 
-		public TableSelectorButtonColumnRenderer() {
-        setOpaque(true);
-    }
+	public TableSelectorButtonColumnRenderer() {
+		setOpaque(true);
+	}
 
-    public Component getTableCellRendererComponent(
-                            JTable table, Object value,
-                            boolean isSelected, boolean hasFocus,
-                            int row, int column) {
-    	if(!(value instanceof String))
-    		return this;
-    	
-        setText((String)value);
-     
-        return this;
-    }
+	public Component getTableCellRendererComponent(JTable table, Object value,
+			boolean isSelected, boolean hasFocus, int row, int column) {
+		if (!(value instanceof String))
+			return this;
+
+		setText((String) value);
+
+		return this;
+	}
 }

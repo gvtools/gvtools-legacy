@@ -40,89 +40,89 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: SimpleMarkerSymbol.java 27597 2009-03-26 15:45:51Z vcaballero $
-* $Log$
-* Revision 1.19  2007-09-21 12:25:32  jaume
-* cancellation support extended down to the IGeometry and ISymbol level
-*
-* Revision 1.18  2007/09/19 16:22:04  jaume
-* removed unnecessary imports
-*
-* Revision 1.17  2007/08/09 07:32:20  jvidal
-* javadoc
-*
-* Revision 1.16  2007/07/23 06:52:25  jaume
-* default selection color refactored, moved to MapContext
-*
-* Revision 1.15  2007/07/18 06:54:35  jaume
-* continuing with cartographic support
-*
-* Revision 1.14  2007/07/03 10:58:29  jaume
-* first refactor on CartographicSupport
-*
-* Revision 1.13  2007/06/27 06:31:17  jaume
-* *** empty log message ***
-*
-* Revision 1.12  2007/06/07 06:50:40  jaume
-* *** empty log message ***
-*
-* Revision 1.11  2007/05/29 15:46:37  jaume
-* *** empty log message ***
-*
-* Revision 1.10  2007/05/28 15:36:42  jaume
-* *** empty log message ***
-*
-* Revision 1.9  2007/05/09 16:07:26  jaume
-* *** empty log message ***
-*
-* Revision 1.8  2007/05/08 08:47:40  jaume
-* *** empty log message ***
-*
-* Revision 1.7  2007/03/27 07:11:32  jaume
-* *** empty log message ***
-*
-* Revision 1.6  2007/03/13 16:58:36  jaume
-* Added QuantityByCategory (Multivariable legend) and some bugfixes in symbols
-*
-* Revision 1.5  2007/03/09 11:20:56  jaume
-* Advanced symbology (start committing)
-*
-* Revision 1.3.2.7  2007/02/21 07:34:09  jaume
-* labeling starts working
-*
-* Revision 1.3.2.6  2007/02/16 10:54:12  jaume
-* multilayer splitted to multilayerline, multilayermarker,and  multilayerfill
-*
-* Revision 1.3.2.5  2007/02/15 16:23:44  jaume
-* *** empty log message ***
-*
-* Revision 1.3.2.4  2007/02/13 16:19:19  jaume
-* graduated symbol legends (start commiting)
-*
-* Revision 1.3.2.3  2007/02/12 15:15:20  jaume
-* refactored interval legend and added graduated symbol legend
-*
-* Revision 1.3.2.2  2007/02/09 07:47:05  jaume
-* Isymbol moved
-*
-* Revision 1.3.2.1  2007/02/05 14:59:03  jaume
-* *** empty log message ***
-*
-* Revision 1.3  2007/01/25 16:25:23  jaume
-* *** empty log message ***
-*
-* Revision 1.2  2007/01/10 16:39:41  jaume
-* ISymbol now belongs to com.iver.cit.gvsig.fmap.core.symbols package
-*
-* Revision 1.1  2007/01/10 16:31:36  jaume
-* *** empty log message ***
-*
-* Revision 1.1  2006/11/14 11:10:27  jaume
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: SimpleMarkerSymbol.java 27597 2009-03-26 15:45:51Z vcaballero $
+ * $Log$
+ * Revision 1.19  2007-09-21 12:25:32  jaume
+ * cancellation support extended down to the IGeometry and ISymbol level
+ *
+ * Revision 1.18  2007/09/19 16:22:04  jaume
+ * removed unnecessary imports
+ *
+ * Revision 1.17  2007/08/09 07:32:20  jvidal
+ * javadoc
+ *
+ * Revision 1.16  2007/07/23 06:52:25  jaume
+ * default selection color refactored, moved to MapContext
+ *
+ * Revision 1.15  2007/07/18 06:54:35  jaume
+ * continuing with cartographic support
+ *
+ * Revision 1.14  2007/07/03 10:58:29  jaume
+ * first refactor on CartographicSupport
+ *
+ * Revision 1.13  2007/06/27 06:31:17  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.12  2007/06/07 06:50:40  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.11  2007/05/29 15:46:37  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.10  2007/05/28 15:36:42  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.9  2007/05/09 16:07:26  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.8  2007/05/08 08:47:40  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.7  2007/03/27 07:11:32  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.6  2007/03/13 16:58:36  jaume
+ * Added QuantityByCategory (Multivariable legend) and some bugfixes in symbols
+ *
+ * Revision 1.5  2007/03/09 11:20:56  jaume
+ * Advanced symbology (start committing)
+ *
+ * Revision 1.3.2.7  2007/02/21 07:34:09  jaume
+ * labeling starts working
+ *
+ * Revision 1.3.2.6  2007/02/16 10:54:12  jaume
+ * multilayer splitted to multilayerline, multilayermarker,and  multilayerfill
+ *
+ * Revision 1.3.2.5  2007/02/15 16:23:44  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.3.2.4  2007/02/13 16:19:19  jaume
+ * graduated symbol legends (start commiting)
+ *
+ * Revision 1.3.2.3  2007/02/12 15:15:20  jaume
+ * refactored interval legend and added graduated symbol legend
+ *
+ * Revision 1.3.2.2  2007/02/09 07:47:05  jaume
+ * Isymbol moved
+ *
+ * Revision 1.3.2.1  2007/02/05 14:59:03  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.3  2007/01/25 16:25:23  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.2  2007/01/10 16:39:41  jaume
+ * ISymbol now belongs to com.iver.cit.gvsig.fmap.core.symbols package
+ *
+ * Revision 1.1  2007/01/10 16:31:36  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/11/14 11:10:27  jaume
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.core.symbols;
 
 import java.awt.BasicStroke;
@@ -142,10 +142,11 @@ import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.threads.Cancellable;
 
 /**
- * SimpleMarkerSymbol is the most basic symbol for the representation of point objects
- * which can define its size and color apart from the rotation and the offset from a point
- * in the map.
- * @author   jaume dominguez faus - jaume.dominguez@iver.es
+ * SimpleMarkerSymbol is the most basic symbol for the representation of point
+ * objects which can define its size and color apart from the rotation and the
+ * offset from a point in the map.
+ * 
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class SimpleMarkerSymbol extends AbstractMarkerSymbol {
 
@@ -165,29 +166,32 @@ public class SimpleMarkerSymbol extends AbstractMarkerSymbol {
 	public ISymbol getSymbolForSelection() {
 		if (selectionSymbol == null) {
 			XMLEntity xml = getXMLEntity();
-			xml.putProperty("color", StringUtilities.color2String(MapContext.getSelectionColor()));
-			selectionSymbol = SymbologyFactory.
-					createSymbolFromXML(xml, getDescription()+" version for selection");
+			xml.putProperty("color", StringUtilities.color2String(MapContext
+					.getSelectionColor()));
+			selectionSymbol = SymbologyFactory.createSymbolFromXML(xml,
+					getDescription() + " version for selection");
 		}
 		return selectionSymbol;
 	}
 
-	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp, Cancellable cancel) {
+	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp,
+			Cancellable cancel) {
 		int x, y;
-//		Point2D p = new Point2D.Double(((FPoint2D) shp).getX(), ((FPoint2D) shp)
-//				.getY());
+		// Point2D p = new Point2D.Double(((FPoint2D) shp).getX(), ((FPoint2D)
+		// shp)
+		// .getY());
 		FPoint2D p = (FPoint2D) shp;
 
 		int size = (int) getSize();
 
-		int halfSize = size/2;
+		int halfSize = size / 2;
 		x = ((int) (p.getX() + getOffset().getX()) - halfSize);
 		y = ((int) (p.getY() + getOffset().getY()) - halfSize);
 
 		IMask mask = getMask();
 		if (mask != null) {
 			IFillSymbol maskShape = mask.getFillSymbol();
-//			maskShape.draw(g, null, mask.getHaloShape(shp));
+			// maskShape.draw(g, null, mask.getHaloShape(shp));
 		}
 
 		g.setColor(getColor());
@@ -215,11 +219,11 @@ public class SimpleMarkerSymbol extends AbstractMarkerSymbol {
 			x = x + halfSize;
 			y = y + halfSize;
 			genPath = new GeneralPathX();
-			genPath.moveTo(x-halfSize, y);
-			genPath.lineTo(x, y+halfSize);
-			genPath.lineTo(x+halfSize, y);
-			genPath.lineTo(x, y-halfSize);
-			genPath.lineTo(x-halfSize, y);
+			genPath.moveTo(x - halfSize, y);
+			genPath.lineTo(x, y + halfSize);
+			genPath.lineTo(x + halfSize, y);
+			genPath.lineTo(x, y - halfSize);
+			genPath.lineTo(x - halfSize, y);
 			genPath.closePath();
 			g.fill(genPath);
 			break;
@@ -227,8 +231,8 @@ public class SimpleMarkerSymbol extends AbstractMarkerSymbol {
 			x = x + halfSize;
 			y = y + halfSize;
 			genPath = new GeneralPathX();
-			genPath.moveTo(x-halfSize, y - halfSize);
-			genPath.lineTo(x+halfSize, y + halfSize);
+			genPath.moveTo(x - halfSize, y - halfSize);
+			genPath.lineTo(x + halfSize, y + halfSize);
 			genPath.moveTo(x - halfSize, y + halfSize);
 			genPath.lineTo(x + halfSize, y - halfSize);
 			g.draw(genPath);
@@ -238,10 +242,8 @@ public class SimpleMarkerSymbol extends AbstractMarkerSymbol {
 			y = y + halfSize;
 			int otherSize = (int) (size * 0.55);
 			genPath = new GeneralPathX();
-			genPath.moveTo(x - halfSize,
-				y + halfSize);
-			genPath.lineTo(x + halfSize,
-				y + halfSize);
+			genPath.moveTo(x - halfSize, y + halfSize);
+			genPath.lineTo(x + halfSize, y + halfSize);
 			genPath.lineTo(x, y - otherSize);
 			genPath.closePath();
 
@@ -251,40 +253,38 @@ public class SimpleMarkerSymbol extends AbstractMarkerSymbol {
 			x = x + halfSize;
 			y = y + halfSize;
 			genPath = new GeneralPathX();
-			genPath.moveTo(x-halfSize, y);
+			genPath.moveTo(x - halfSize, y);
 
-			genPath.lineTo(x-2*(halfSize/3), y+(halfSize/3));
-			genPath.lineTo(x-2*(halfSize/3), y+2*(halfSize/3));
-			genPath.lineTo(x-(halfSize/3), y+2*(halfSize/3));
+			genPath.lineTo(x - 2 * (halfSize / 3), y + (halfSize / 3));
+			genPath.lineTo(x - 2 * (halfSize / 3), y + 2 * (halfSize / 3));
+			genPath.lineTo(x - (halfSize / 3), y + 2 * (halfSize / 3));
 
-			genPath.lineTo(x, y+halfSize);
+			genPath.lineTo(x, y + halfSize);
 
-			genPath.lineTo(x+(halfSize/3), y+2*(halfSize/3));
-			genPath.lineTo(x+2*(halfSize/3), y+2*(halfSize/3));
-			genPath.lineTo(x+2*(halfSize/3), y+(halfSize/3));
+			genPath.lineTo(x + (halfSize / 3), y + 2 * (halfSize / 3));
+			genPath.lineTo(x + 2 * (halfSize / 3), y + 2 * (halfSize / 3));
+			genPath.lineTo(x + 2 * (halfSize / 3), y + (halfSize / 3));
 
-			genPath.lineTo(x+(halfSize), y);
+			genPath.lineTo(x + (halfSize), y);
 
-			genPath.lineTo(x+2*(halfSize/3), y-(halfSize/3));
-			genPath.lineTo(x+2*(halfSize/3), y-2*(halfSize/3));
-			genPath.lineTo(x+(halfSize/3), y-2*(halfSize/3));
+			genPath.lineTo(x + 2 * (halfSize / 3), y - (halfSize / 3));
+			genPath.lineTo(x + 2 * (halfSize / 3), y - 2 * (halfSize / 3));
+			genPath.lineTo(x + (halfSize / 3), y - 2 * (halfSize / 3));
 
-			genPath.lineTo(x, y-halfSize);
+			genPath.lineTo(x, y - halfSize);
 
-			genPath.lineTo(x-(halfSize/3), y-2*(halfSize/3));
-			genPath.lineTo(x-2*(halfSize/3), y-2*(halfSize/3));
-			genPath.lineTo(x-2*(halfSize/3), y-(halfSize/3));
+			genPath.lineTo(x - (halfSize / 3), y - 2 * (halfSize / 3));
+			genPath.lineTo(x - 2 * (halfSize / 3), y - 2 * (halfSize / 3));
+			genPath.lineTo(x - 2 * (halfSize / 3), y - (halfSize / 3));
 
-			genPath.lineTo(x-halfSize, y);
+			genPath.lineTo(x - halfSize, y);
 
 			genPath.closePath();
-
 
 			g.fill(genPath);
 
 			break;
 		}
-
 
 		if (outlined) {
 			g.setColor(outlineColor);
@@ -322,12 +322,12 @@ public class SimpleMarkerSymbol extends AbstractMarkerSymbol {
 		xml.putProperty("markerStyle", getStyle());
 
 		if (outlined) {
-			xml.putProperty("outlineColor", StringUtilities.color2String(outlineColor));
+			xml.putProperty("outlineColor",
+					StringUtilities.color2String(outlineColor));
 			xml.putProperty("outlineSize", outlineSize);
 		}
 		return xml;
 	}
-
 
 	public String getClassName() {
 		return getClass().getName();
@@ -339,20 +339,23 @@ public class SimpleMarkerSymbol extends AbstractMarkerSymbol {
 		setColor(StringUtilities.string2Color(xml.getStringProperty("color")));
 		setRotation(xml.getDoubleProperty("rotation"));
 		setOffset(new Point.Double(xml.getDoubleProperty("offsetX"),
-						xml.getDoubleProperty("offsetY")));
+				xml.getDoubleProperty("offsetY")));
 		setSize(xml.getDoubleProperty("size"));
 		setOutlined(xml.getBooleanProperty("outline"));
 		setUnit(xml.getIntProperty("unit"));
 		setReferenceSystem(xml.getIntProperty("referenceSystem"));
 		setStyle(xml.getIntProperty("markerStyle"));
 		if (hasOutline()) {
-			setOutlineColor(StringUtilities.string2Color(xml.getStringProperty("outlineColor")));
+			setOutlineColor(StringUtilities.string2Color(xml
+					.getStringProperty("outlineColor")));
 			setOutlineSize(xml.getDoubleProperty("outlineSize"));
 		}
 	}
 
 	/**
-	 * Returns true or false depending if the simple marker symbol has an outline or not.
+	 * Returns true or false depending if the simple marker symbol has an
+	 * outline or not.
+	 * 
 	 * @return Returns the outline.
 	 */
 	public boolean hasOutline() {
@@ -361,7 +364,9 @@ public class SimpleMarkerSymbol extends AbstractMarkerSymbol {
 
 	/**
 	 * Establishes the outline for the simple marker symbol.
-	 * @param outline  The outline to set.
+	 * 
+	 * @param outline
+	 *            The outline to set.
 	 */
 	public void setOutlined(boolean outlined) {
 		this.outlined = outlined;
@@ -369,7 +374,7 @@ public class SimpleMarkerSymbol extends AbstractMarkerSymbol {
 
 	/**
 	 * Returns the outline color for the symple marker symbol
-	 *
+	 * 
 	 * @return Color,outlineColor.
 	 */
 	public Color getOutlineColor() {
@@ -378,7 +383,9 @@ public class SimpleMarkerSymbol extends AbstractMarkerSymbol {
 
 	/**
 	 * Sets the outline color for the simple marker symbol
-	 * @param outlineColor, Color
+	 * 
+	 * @param outlineColor
+	 *            , Color
 	 */
 	public void setOutlineColor(Color outlineColor) {
 		this.outlineColor = outlineColor;
@@ -386,7 +393,8 @@ public class SimpleMarkerSymbol extends AbstractMarkerSymbol {
 
 	/**
 	 * Gets the size of the outline for the simple marker symbol
-	 * @return  Returns the outlineSize.
+	 * 
+	 * @return Returns the outlineSize.
 	 */
 	public double getOutlineSize() {
 		return outlineSize;
@@ -394,27 +402,32 @@ public class SimpleMarkerSymbol extends AbstractMarkerSymbol {
 
 	/**
 	 * Establishes the size for the outline of the simple marker symbol
-	 * @param outlineSize  The outlineSize to set.
+	 * 
+	 * @param outlineSize
+	 *            The outlineSize to set.
 	 */
 	public void setOutlineSize(double outlineSize) {
 		this.outlineSize = outlineSize;
 	}
 
 	/**
-	 * @return  Returns the selectionSymbol.
+	 * @return Returns the selectionSymbol.
 	 */
 	public ISymbol getSelectionSymbol() {
 		return selectionSymbol;
 	}
 
 	/**
-	 * @param selectionSymbol  The selectionSymbol to set.
+	 * @param selectionSymbol
+	 *            The selectionSymbol to set.
 	 */
 	public void setSelectionSymbol(ISymbol selectionSymbol) {
 		this.selectionSymbol = selectionSymbol;
 	}
+
 	/**
 	 * Sets the style for the simple marker symbol
+	 * 
 	 * @param style
 	 */
 	public void setStyle(int style) {
@@ -423,6 +436,7 @@ public class SimpleMarkerSymbol extends AbstractMarkerSymbol {
 
 	/**
 	 * Obtains the style for the simple marker symbol
+	 * 
 	 * @return markerStyle,int
 	 */
 	public int getStyle() {

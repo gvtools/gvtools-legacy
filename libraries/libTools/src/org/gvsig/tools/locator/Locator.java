@@ -33,81 +33,81 @@ package org.gvsig.tools.locator;
  */
 public interface Locator {
 
-    /**
-     * Returns a reference to the object with the given name.
-     * 
-     * @param name
-     *            of the object to return
-     * @return an instance of an object, or null if not found
-     * @throws LocatorException
-     *             if there is no access to the class or the class cannot be
-     *             instantiated
-     */
-    Object get(String name) throws LocatorException;
+	/**
+	 * Returns a reference to the object with the given name.
+	 * 
+	 * @param name
+	 *            of the object to return
+	 * @return an instance of an object, or null if not found
+	 * @throws LocatorException
+	 *             if there is no access to the class or the class cannot be
+	 *             instantiated
+	 */
+	Object get(String name) throws LocatorException;
 
-    /**
-     * Returns the list of names of references available through this Locator.
-     * Must return null if there are not any registered names.
-     * 
-     * @return the list of names of references
-     */
-    String[] getNames();
+	/**
+	 * Returns the list of names of references available through this Locator.
+	 * Must return null if there are not any registered names.
+	 * 
+	 * @return the list of names of references
+	 */
+	String[] getNames();
 
-    /**
-     * Registers a class related to a name. The class is used to create an
-     * instance of the object to return in the {@link #get(String)} method.
-     * 
-     * @param name
-     *            of the object to register
-     * @param clazz
-     *            the Class of the object to register
-     */
-    void register(String name, Class clazz);
+	/**
+	 * Registers a class related to a name. The class is used to create an
+	 * instance of the object to return in the {@link #get(String)} method.
+	 * 
+	 * @param name
+	 *            of the object to register
+	 * @param clazz
+	 *            the Class of the object to register
+	 */
+	void register(String name, Class clazz);
 
-    /**
-     * Registers a class related to a name. The class is used to create an
-     * instance of the object to return in the {@link #get(String)} method.
-     * 
-     * @param name
-     *            of the object to register
-     * @param description
-     *            of the object to register
-     * @param clazz
-     *            the Class of the object to register
-     */
-    void register(String name, String description, Class clazz);
+	/**
+	 * Registers a class related to a name. The class is used to create an
+	 * instance of the object to return in the {@link #get(String)} method.
+	 * 
+	 * @param name
+	 *            of the object to register
+	 * @param description
+	 *            of the object to register
+	 * @param clazz
+	 *            the Class of the object to register
+	 */
+	void register(String name, String description, Class clazz);
 
-    /**
-     * Registers an object factory related to a name. The factory is used to
-     * create an instance of the object to return in the {@link #get(String)}
-     * method.
-     * 
-     * @param name
-     *            of the object to register
-     * @param factory
-     *            the factory of objects to register
-     */
-    void register(String name, LocatorObjectFactory factory);
+	/**
+	 * Registers an object factory related to a name. The factory is used to
+	 * create an instance of the object to return in the {@link #get(String)}
+	 * method.
+	 * 
+	 * @param name
+	 *            of the object to register
+	 * @param factory
+	 *            the factory of objects to register
+	 */
+	void register(String name, LocatorObjectFactory factory);
 
-    /**
-     * Registers an object factory related to a name. The factory is used to
-     * create an instance of the object to return in the {@link #get(String)}
-     * method.
-     * 
-     * @param name
-     *            of the object to register
-     * @param description
-     *            of the object to register
-     * @param factory
-     *            the factory of objects to register
-     */
-    void register(String name, String description, LocatorObjectFactory factory);
-    
-    /**
-     * Returns the name of the Locator, for registration, logging, and other
-     * uses.
-     * 
-     * @return the name of the Locator
-     */
-    String getLocatorName();
+	/**
+	 * Registers an object factory related to a name. The factory is used to
+	 * create an instance of the object to return in the {@link #get(String)}
+	 * method.
+	 * 
+	 * @param name
+	 *            of the object to register
+	 * @param description
+	 *            of the object to register
+	 * @param factory
+	 *            the factory of objects to register
+	 */
+	void register(String name, String description, LocatorObjectFactory factory);
+
+	/**
+	 * Returns the name of the Locator, for registration, logging, and other
+	 * uses.
+	 * 
+	 * @return the name of the Locator
+	 */
+	String getLocatorName();
 }

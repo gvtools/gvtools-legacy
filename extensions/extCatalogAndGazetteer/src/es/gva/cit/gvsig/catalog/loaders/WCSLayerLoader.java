@@ -53,96 +53,99 @@ import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 import es.gva.cit.catalog.schemas.Resource;
 
 /**
- * This class is used to load a WCS  layer in gvSIG
+ * This class is used to load a WCS layer in gvSIG
  * 
  * @author Jorge Piera Llodra (piera_jor@gva.es)
  */
-public class WCSLayerLoader extends LayerLoader{
-	
-	
+public class WCSLayerLoader extends LayerLoader {
+
 	public WCSLayerLoader(Resource resource) {
 		super(resource);
 	}
-	
+
 	/**
 	 * This method loads a WSC layer from a full URL
+	 * 
 	 * @param link
-	 * @throws LayerLoaderException 
+	 * @throws LayerLoaderException
 	 */
 	public void loadLayer() throws LayerLoaderException {
 		String link = getResource().getLinkage();
 		String name = getResource().getName();
 		try {
-			FLayer flayer = createWCSLayer(link,name);
+			FLayer flayer = createWCSLayer(link, name);
 			addLayerToView(flayer);
 		} catch (IOException e) {
-			throw new LayerLoaderException(e.getMessage(),getWindowMessage());
-		} 	
-	}   	
-	
-	private FLayer createWCSLayer(String link,String name) throws IOException, LayerLoaderException {
-		Map args = initFromQueryString(link,name);
-		ExtensionPoint extensionPoint = (ExtensionPoint)ExtensionPointsSingleton.getInstance().get("CatalogLayers");
-		try {
-			return (FLayer)extensionPoint.create("OGC:WCS", args  );
-		} catch(Exception e) {
-			throw new LayerLoaderException(getErrorMessage(),getWindowMessage());
-		}		
+			throw new LayerLoaderException(e.getMessage(), getWindowMessage());
+		}
 	}
-	
+
+	private FLayer createWCSLayer(String link, String name) throws IOException,
+			LayerLoaderException {
+		Map args = initFromQueryString(link, name);
+		ExtensionPoint extensionPoint = (ExtensionPoint) ExtensionPointsSingleton
+				.getInstance().get("CatalogLayers");
+		try {
+			return (FLayer) extensionPoint.create("OGC:WCS", args);
+		} catch (Exception e) {
+			throw new LayerLoaderException(getErrorMessage(),
+					getWindowMessage());
+		}
+	}
+
 	/**
-	 * Builds a coverage starting from a full GetCoverage URL.
-	 * (Using this is not a regular function)
+	 * Builds a coverage starting from a full GetCoverage URL. (Using this is
+	 * not a regular function)
 	 */
-	private TreeMap initFromQueryString(String link,String name){
+	private TreeMap initFromQueryString(String link, String name) {
 		String host = null;
 		String queryString = null;
-		if (link.compareTo("?")==0){
-			host = link.substring(0,link.indexOf('?'));
-			queryString = link.substring(link.indexOf('?')+1);
-		}else{
+		if (link.compareTo("?") == 0) {
+			host = link.substring(0, link.indexOf('?'));
+			queryString = link.substring(link.indexOf('?') + 1);
+		} else {
 			host = link;
 			queryString = "";
 		}
-		queryString = link.substring(link.indexOf('?')+1);
-		
-		TreeMap map = new TreeMap(); 
+		queryString = link.substring(link.indexOf('?') + 1);
+
+		TreeMap map = new TreeMap();
 		String[] params = queryString.split("&");
 		for (int i = 0; i < params.length; i++) {
-			if (params[i]!= null){
+			if (params[i] != null) {
 				String[] nameValue = params[i].split("=");
-				if (nameValue.length == 1){
+				if (nameValue.length == 1) {
 					map.put(nameValue[0].toUpperCase(), "");
-				}else if(nameValue.length == 2){
+				} else if (nameValue.length == 2) {
 					map.put(nameValue[0].toUpperCase(), nameValue[1]);
 				}
 			}
 		}
-		map.put("HOST",link);
-		if ((name != null) && (!name.equals(""))){
-			map.put("COVERAGE",name);
+		map.put("HOST", link);
+		if ((name != null) && (!name.equals(""))) {
+			map.put("COVERAGE", name);
 		}
 		return map;
-	}	
-	
+	}
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see es.gva.cit.gvsig.catalogClient.loaders.LayerLoader#getErrorMessage()
 	 */
 	protected String getErrorMessage() {
-		return Messages.getText("wcsError") + ".\n" +
-		Messages.getText("link") + ": " + 
-		getResource().getLinkage();		
+		return Messages.getText("wcsError") + ".\n" + Messages.getText("link")
+				+ ": " + getResource().getLinkage();
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
-	 * @see es.gva.cit.gvsig.catalogClient.loaders.LayerLoader#getWindowMessage()
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * es.gva.cit.gvsig.catalogClient.loaders.LayerLoader#getWindowMessage()
 	 */
 	protected String getWindowMessage() {
 		return Messages.getText("wcsLoad");
 	}
-	
-	
-	
+
 }

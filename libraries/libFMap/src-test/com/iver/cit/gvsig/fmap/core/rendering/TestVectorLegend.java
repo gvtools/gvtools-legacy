@@ -55,10 +55,10 @@ import com.iver.cit.gvsig.fmap.rendering.IVectorLegend;
  * it tests all the operations supplied by this interface
  * 
  * TestVectorLegend.java
- *
+ * 
  * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Jun 12, 2008
- *
+ * 
  */
 public class TestVectorLegend extends TestCase {
 	private IVectorLegend[] legends;
@@ -84,7 +84,7 @@ public class TestVectorLegend extends TestCase {
 	public void testGetShapeType() {
 		System.out.println("TestVectorLegend.testGetShapeType()");
 		System.out.println("\t not yet implemented");
-		
+
 	}
 
 	public void testSetShapeType() {
@@ -95,10 +95,9 @@ public class TestVectorLegend extends TestCase {
 	public void testSetDefaultSymbol() {
 		System.out.println("TestVectorLegend.testSetDefaultSymbol()");
 		System.out.println("\t not yet implemented");
-		
+
 	}
 
-	
 	public void testIsUseDefaultSymbol() {
 		System.out.println("TestVectorLegend.testIsUseDefaultSymbol()");
 		System.out.println("\t not yet implemented");

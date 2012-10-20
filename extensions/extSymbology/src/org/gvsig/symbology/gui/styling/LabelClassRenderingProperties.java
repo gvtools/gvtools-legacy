@@ -79,14 +79,15 @@ import com.iver.cit.gvsig.project.documents.view.legend.gui.ISymbolSelector;
 import com.iver.utiles.swing.JComboBox;
 
 /**
- *
+ * 
  * LabelClassRenderingProperties.java
- *
- *
+ * 
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Feb 29, 2008
- *
+ * 
  */
-public class LabelClassRenderingProperties extends GridBagLayoutPanel implements ActionListener{
+public class LabelClassRenderingProperties extends GridBagLayoutPanel implements
+		ActionListener {
 	private static final long serialVersionUID = 2232555304188584038L;
 	private SymbolPreviewer previewer;
 	private JComboBox cmbExpressions;
@@ -132,9 +133,10 @@ public class LabelClassRenderingProperties extends GridBagLayoutPanel implements
 
 		private void initialize() {
 			GridBagLayoutPanel content = new GridBagLayoutPanel();
-			content.addComponent(new JLabel(" "+PluginServices.getText(this, "label_expression_help")));
+			content.addComponent(new JLabel(" "
+					+ PluginServices.getText(this, "label_expression_help")));
 			content.addComponent(
-					" "+PluginServices.getText(this, "expression")+":",
+					" " + PluginServices.getText(this, "expression") + ":",
 					getTxtExpression());
 			setLayout(new BorderLayout(5, 5));
 
@@ -158,10 +160,11 @@ public class LabelClassRenderingProperties extends GridBagLayoutPanel implements
 			WindowInfo viewInfo = new WindowInfo(WindowInfo.MODALDIALOG);
 			viewInfo.setWidth(getWidth());
 			viewInfo.setHeight(getHeight());
-			viewInfo.setTitle(PluginServices.getText(this,"label_expression_editor"));
+			viewInfo.setTitle(PluginServices.getText(this,
+					"label_expression_editor"));
 			return viewInfo;
 		}
-		
+
 		public Object getWindowProfile() {
 			return WindowInfo.DIALOG_PROFILE;
 		}
@@ -178,18 +181,17 @@ public class LabelClassRenderingProperties extends GridBagLayoutPanel implements
 
 	private void initialize() {
 		JPanel aux = new JPanel(new FlowLayout(FlowLayout.LEADING, 5, 0));
-		aux.setBorder(BorderFactory.createTitledBorder(
-				null, PluginServices.getText(this, "text_string")));
-		aux.add(new JLabel(PluginServices.getText(this, "expression")+":"));
+		aux.setBorder(BorderFactory.createTitledBorder(null,
+				PluginServices.getText(this, "text_string")));
+		aux.add(new JLabel(PluginServices.getText(this, "expression") + ":"));
 		aux.add(getCmbExpressions());
 		aux.add(getBtnEditExpression());
 		aux.setPreferredSize(new Dimension(612, 60));
 		addComponent(aux);
 
-
 		aux = new JPanel(new FlowLayout(FlowLayout.LEADING, 5, 0));
-		aux.setBorder(BorderFactory.createTitledBorder(
-				null, PluginServices.getText(this, "text_symbol")));
+		aux.setBorder(BorderFactory.createTitledBorder(null,
+				PluginServices.getText(this, "text_symbol")));
 		aux.add(getSymbolPreviewer());
 
 		JPanel aux2 = new JPanel();
@@ -203,7 +205,6 @@ public class LabelClassRenderingProperties extends GridBagLayoutPanel implements
 		addComponent(aux);
 	}
 
-
 	public void setFieldNames(String[] fieldNames) {
 		this.fieldNames = fieldNames;
 	}
@@ -215,10 +216,8 @@ public class LabelClassRenderingProperties extends GridBagLayoutPanel implements
 		String expr = lc.getStringLabelExpression();
 
 		noEvent = true;
-		if ( lc != null &&
-				expr !=null &&
-				!expr.equals("") &&
-				!exp.contains(expr)) {
+		if (lc != null && expr != null && !expr.equals("")
+				&& !exp.contains(expr)) {
 			exp.add(0, expr);
 		}
 
@@ -231,13 +230,13 @@ public class LabelClassRenderingProperties extends GridBagLayoutPanel implements
 		} else {
 			getCmbExpressions().setSelectedItem(exp.get(0));
 		}
-		noEvent  = false;
+		noEvent = false;
 	}
 
 	private JButton getBtnEditExpression() {
 		if (btnEditExpression == null) {
-			btnEditExpression = new JButton(
-					PluginServices.getText(this, "edit_expression")+"...");
+			btnEditExpression = new JButton(PluginServices.getText(this,
+					"edit_expression") + "...");
 			btnEditExpression.setName("BTNEDITEXPRESSION");
 			btnEditExpression.addActionListener(this);
 		}
@@ -259,16 +258,16 @@ public class LabelClassRenderingProperties extends GridBagLayoutPanel implements
 			expressions = new ArrayList<String>();
 			try {
 				for (int i = 0; i < fieldNames.length; i++) {
-					expressions.add("["+fieldNames[i]+"];");
+					expressions.add("[" + fieldNames[i] + "];");
 				}
 			} catch (Exception e) {
-				NotificationManager.addError(
-						PluginServices.getText(
-								this, "could_not_retreive_layer_field_names"), e);
+				NotificationManager.addError(PluginServices.getText(this,
+						"could_not_retreive_layer_field_names"), e);
 			}
 		}
 		return expressions;
 	}
+
 	private JComboBox getCmbExpressions() {
 		if (cmbExpressions == null) {
 			cmbExpressions = new JComboBox();
@@ -282,8 +281,8 @@ public class LabelClassRenderingProperties extends GridBagLayoutPanel implements
 
 	private JButton getBtnFont() {
 		if (btnFont == null) {
-			btnFont = new JButton(
-					PluginServices.getText(this,"fuente")+"...");
+			btnFont = new JButton(PluginServices.getText(this, "fuente")
+					+ "...");
 			btnFont.setName("BTNFONT");
 			btnFont.addActionListener(this);
 		}
@@ -298,7 +297,6 @@ public class LabelClassRenderingProperties extends GridBagLayoutPanel implements
 		return previewer;
 	}
 
-
 	public void setModel(LabelClass lc) {
 		this.lc = lc;
 		refreshCmbExpressions();
@@ -306,18 +304,20 @@ public class LabelClassRenderingProperties extends GridBagLayoutPanel implements
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (noEvent) return;
+		if (noEvent)
+			return;
 		Component c = (Component) e.getSource();
 		if (c.equals(btnEditExpression)) {
-			ExprEditorPanel ep = new ExprEditorPanel((String) getCmbExpressions().
-					getSelectedItem());
-			PluginServices.getMDIManager().addWindow( ep );
+			ExprEditorPanel ep = new ExprEditorPanel(
+					(String) getCmbExpressions().getSelectedItem());
+			PluginServices.getMDIManager().addWindow(ep);
 			getCmbExpressions().addItem(ep.getExpression());
 			getCmbExpressions().setSelectedItem(ep.getExpression());
-//			lc.setLabelExpression(ep.getExpression());
+			// lc.setLabelExpression(ep.getExpression());
 		} else if (c.equals(btnFont)) {
 			Font labelFont = lc.getTextSymbol().getFont();
-			Font newFont = FontChooser.showDialog(PluginServices.getText(this, "font"), labelFont);
+			Font newFont = FontChooser.showDialog(
+					PluginServices.getText(this, "font"), labelFont);
 			if (newFont != null) {
 				lc.getTextSymbol().setFont(newFont);
 			}
@@ -325,9 +325,8 @@ public class LabelClassRenderingProperties extends GridBagLayoutPanel implements
 		} else if (c.equals(btnLabelStyles)) {
 			// here open symbol selector
 
-			StyleSelector stySel = new StyleSelector(
-					lc.getLabelStyle(),
-					FShape.TEXT );
+			StyleSelector stySel = new StyleSelector(lc.getLabelStyle(),
+					FShape.TEXT);
 			stySel.setUnit(lc.getUnit());
 			stySel.setReferenceSystem(lc.getReferenceSystem());
 			PluginServices.getMDIManager().addWindow(stySel);
@@ -340,14 +339,14 @@ public class LabelClassRenderingProperties extends GridBagLayoutPanel implements
 
 			}
 		} else if (c.equals(cmbExpressions)) {
-//			lc.setLabelExpression((String) cmbExpressions.getSelectedItem());
-		} if (c.equals(btnSymbol)) {
+			// lc.setLabelExpression((String) cmbExpressions.getSelectedItem());
+		}
+		if (c.equals(btnSymbol)) {
 
 			// here open symbol selector
 
-			ISymbolSelector symSel = SymbolSelector.createSymbolSelector(lc.getTextSymbol(),
-					FShape.TEXT,
-					new SelectorFilter() {
+			ISymbolSelector symSel = SymbolSelector.createSymbolSelector(
+					lc.getTextSymbol(), FShape.TEXT, new SelectorFilter() {
 						public boolean accepts(Object obj) {
 							if (obj instanceof ISymbol) {
 								ISymbol sym = (ISymbol) obj;
@@ -376,8 +375,8 @@ public class LabelClassRenderingProperties extends GridBagLayoutPanel implements
 
 	private JButton getBtnLabelStyles() {
 		if (btnLabelStyles == null) {
-			btnLabelStyles = new JButton(
-					PluginServices.getText(this, "label_styles")+"...");
+			btnLabelStyles = new JButton(PluginServices.getText(this,
+					"label_styles") + "...");
 			btnLabelStyles.setName("BTNLABELSTYLES");
 			btnLabelStyles.addActionListener(this);
 		}
@@ -386,7 +385,8 @@ public class LabelClassRenderingProperties extends GridBagLayoutPanel implements
 
 	private void refreshTextSymbolPreviewer() {
 		ITextSymbol textSym = lc.getTextSymbol();
-		textSym.setText(PluginServices.getText(this, "GeneralLabeling.sample_text"));
+		textSym.setText(PluginServices.getText(this,
+				"GeneralLabeling.sample_text"));
 		getSymbolPreviewer().setSymbol(textSym);
 
 	}

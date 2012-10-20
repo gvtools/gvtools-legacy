@@ -69,7 +69,6 @@ import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.GeneralPathX;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.ShapeFactory;
-import com.iver.cit.gvsig.fmap.core.v02.FConverter;
 import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 import com.iver.cit.gvsig.fmap.drivers.SHPLayerDefinition;
 import com.iver.cit.gvsig.fmap.edition.DefaultRowEdited;
@@ -84,16 +83,16 @@ import com.vividsolutions.jts.geom.Geometry;
 /**
  * @author fjp
  * 
- * This class can label nodes with distances and costs to a flag. You will
- * obtain a temp shp layer with fields IdArc, IdEdge, CostOrig, DistOrig,
- * CostEnd, DistEnd, IdFlag
+ *         This class can label nodes with distances and costs to a flag. You
+ *         will obtain a temp shp layer with fields IdArc, IdEdge, CostOrig,
+ *         DistOrig, CostEnd, DistEnd, IdFlag
  * 
- * La diferencia con ServiceAreaExtractor es que esta versión escucha al
- * algoritmo Dijkstra, y va montando el shp de líneas conforme va siendo
- * explorada la red. La gran ventaja de hacerlo así es que no dependes del
- * tamaño de la red. Solo recorres los tramos y nodos que exploras, de forma que
- * si limitas el área de servicio a una distancia máxima, la red solo se explora
- * hasta esa distancia / coste.
+ *         La diferencia con ServiceAreaExtractor es que esta versión escucha al
+ *         algoritmo Dijkstra, y va montando el shp de líneas conforme va siendo
+ *         explorada la red. La gran ventaja de hacerlo así es que no dependes
+ *         del tamaño de la red. Solo recorres los tramos y nodos que exploras,
+ *         de forma que si limitas el área de servicio a una distancia máxima,
+ *         la red solo se explora hasta esa distancia / coste.
  * 
  */
 public class CompactAreaExtractor implements IDijkstraListener {
@@ -108,7 +107,7 @@ public class CompactAreaExtractor implements IDijkstraListener {
 		fieldDesc.setFieldLength(20);
 		fieldDesc.setFieldDecimalCount(5);
 		fieldsPol[0] = fieldDesc;
-		
+
 		fieldDesc = new FieldDescription();
 		fieldDesc.setFieldName("IDFLAG");
 		fieldDesc.setFieldType(Types.INTEGER);
@@ -118,14 +117,12 @@ public class CompactAreaExtractor implements IDijkstraListener {
 
 	}
 
-	
 	private Network net;
 
 	private ShpWriter shpWriterPol;
 	private File fTempPol;
 	private SHPLayerDefinition layerDefPol;
-	
-	
+
 	private HashMap<Integer, GvEdge> visitedEdges = new HashMap();
 
 	private File fTemp;
@@ -136,12 +133,12 @@ public class CompactAreaExtractor implements IDijkstraListener {
 
 	private ReadableVectorial adapter;
 
-//	private double maxCost;
+	// private double maxCost;
 
 	private Geometry serviceArea;
-	private ArrayList <Geometry> serviceAreaPolygons;
+	private ArrayList<Geometry> serviceAreaPolygons;
 
-	private double[] costs = null;	
+	private double[] costs = null;
 
 	Triangulation tri;
 	DelaunayTriangulation tri2;
@@ -155,17 +152,16 @@ public class CompactAreaExtractor implements IDijkstraListener {
 	 */
 	public CompactAreaExtractor(Network net) throws BaseException {
 		int aux = (int) (Math.random() * 1000);
-		
-		
+
 		String namePol = "tmpCompactAreaPol" + aux + ".shp";
-		fTempPol = new File(tempDirectoryPath + "/" + namePol );
-		
+		fTempPol = new File(tempDirectoryPath + "/" + namePol);
+
 		layerDefPol = new SHPLayerDefinition();
 		layerDefPol.setFile(fTempPol);
-		layerDefPol.setName(namePol);		
+		layerDefPol.setName(namePol);
 		layerDefPol.setFieldsDesc(fieldsPol);
 		layerDefPol.setShapeType(FShape.POLYGON);
-		
+
 		shpWriterPol = new ShpWriter();
 		shpWriterPol.setFile(fTempPol);
 		shpWriterPol.initialize(layerDefPol);
@@ -174,43 +170,43 @@ public class CompactAreaExtractor implements IDijkstraListener {
 		adapter = lyr.getSource();
 		adapter.start();
 
-		
-		Triangle initTri =
-            new Triangle(new Pnt(-max_value, max_value), 
-            		new Pnt(max_value, max_value),
-            		new Pnt(0, -max_value));
+		Triangle initTri = new Triangle(new Pnt(-max_value, max_value),
+				new Pnt(max_value, max_value), new Pnt(0, -max_value));
 
 		tri = new Triangulation(initTri);
-        Simplex initTri2 = new Simplex(new com.iver.cit.gvsig.topology.triangulation.Pnt[] {
-    	            new com.iver.cit.gvsig.topology.triangulation.Pnt(-max_value, max_value),
-    	            new com.iver.cit.gvsig.topology.triangulation.Pnt(max_value, max_value),
-    	            new com.iver.cit.gvsig.topology.triangulation.Pnt(0,  -max_value)});
+		Simplex initTri2 = new Simplex(
+				new com.iver.cit.gvsig.topology.triangulation.Pnt[] {
+						new com.iver.cit.gvsig.topology.triangulation.Pnt(
+								-max_value, max_value),
+						new com.iver.cit.gvsig.topology.triangulation.Pnt(
+								max_value, max_value),
+						new com.iver.cit.gvsig.topology.triangulation.Pnt(0,
+								-max_value) });
 
 		tri2 = new DelaunayTriangulation(initTri2);
-		
 
 	}
 
 	public boolean adjacentEdgeVisited(GvNode fromNode, GvEdge edge) {
-		
+
 		return false;
 	}
 
 	public boolean minimumCostNodeSelected(GvNode node) {
 		Pnt p = new Pnt(node.getX(), node.getY());
-		com.iver.cit.gvsig.topology.triangulation.Pnt p2 = new com.iver.cit.gvsig.topology.triangulation.Pnt(node.getX(), node.getY()); 
-//		tri.delaunayPlace(p);
+		com.iver.cit.gvsig.topology.triangulation.Pnt p2 = new com.iver.cit.gvsig.topology.triangulation.Pnt(
+				node.getX(), node.getY());
+		// tri.delaunayPlace(p);
 		tri2.delaunayPlace(p2);
-//		tri2.printStuff();
+		// tri2.printStuff();
 		return false; // true if we want to stop Dijkstra
 	}
 
 	public void writeServiceArea() {
-		
+
 		System.out.println("Fin de trayecto. Num. triángulos=" + tri2.size());
-		Iterator it = tri2.iterator(); 
-		while (it.hasNext())
-		{
+		Iterator it = tri2.iterator();
+		while (it.hasNext()) {
 			Simplex s = (Simplex) it.next();
 			try {
 				writeSimplex(s);
@@ -219,49 +215,41 @@ public class CompactAreaExtractor implements IDijkstraListener {
 				e.printStackTrace();
 			}
 		}
-		
-	}
 
-	private void writePolygon(int idFlag, double maxCost, Geometry jtsGeom) throws ProcessWriterVisitorException {
-		Value[] values = new Value[2];
-		values[0] = ValueFactory.createValue(maxCost);
-		values[1] = ValueFactory.createValue(idFlag);
-		
-		IGeometry geom = FConverter.jts_to_igeometry(jtsGeom);
-		DefaultFeature feat = new DefaultFeature(geom, values);
-		IRowEdited row = new DefaultRowEdited(feat, DefaultRowEdited.STATUS_ADDED, idFlag);
-		shpWriterPol.process(row);
 	}
 
 	private void writeSimplex(Simplex s) throws ProcessWriterVisitorException {
 		Value[] values = new Value[2];
 		values[0] = ValueFactory.createValue(2.0);
 		values[1] = ValueFactory.createValue(1);
-		
+
 		GeneralPathX gp = new GeneralPathX();
 		Iterator vertexIt = s.iterator();
-		com.iver.cit.gvsig.topology.triangulation.Pnt p1 = (com.iver.cit.gvsig.topology.triangulation.Pnt) vertexIt.next();
-		com.iver.cit.gvsig.topology.triangulation.Pnt p2 = (com.iver.cit.gvsig.topology.triangulation.Pnt) vertexIt.next();
-		com.iver.cit.gvsig.topology.triangulation.Pnt p3 = (com.iver.cit.gvsig.topology.triangulation.Pnt) vertexIt.next();
+		com.iver.cit.gvsig.topology.triangulation.Pnt p1 = (com.iver.cit.gvsig.topology.triangulation.Pnt) vertexIt
+				.next();
+		com.iver.cit.gvsig.topology.triangulation.Pnt p2 = (com.iver.cit.gvsig.topology.triangulation.Pnt) vertexIt
+				.next();
+		com.iver.cit.gvsig.topology.triangulation.Pnt p3 = (com.iver.cit.gvsig.topology.triangulation.Pnt) vertexIt
+				.next();
 		gp.moveTo(p1.coord(0), p1.coord(1));
 		gp.lineTo(p2.coord(0), p2.coord(1));
 		gp.lineTo(p3.coord(0), p3.coord(1));
 		gp.lineTo(p1.coord(0), p1.coord(1));
-		
+
 		IGeometry geom = ShapeFactory.createPolygon2D(gp);
 		DefaultFeature feat = new DefaultFeature(geom, values);
-		IRowEdited row = new DefaultRowEdited(feat, DefaultRowEdited.STATUS_ADDED, idFlag);
+		IRowEdited row = new DefaultRowEdited(feat,
+				DefaultRowEdited.STATUS_ADDED, idFlag);
 		shpWriterPol.process(row);
-		
+
 	}
 
-	public void closeFiles() throws StopWriterVisitorException, ReadDriverException {
-			shpWriterPol.postProcess();
-			
-			adapter.stop();
+	public void closeFiles() throws StopWriterVisitorException,
+			ReadDriverException {
+		shpWriterPol.postProcess();
 
-		
+		adapter.stop();
+
 	}
 
-	
 }

@@ -8,10 +8,9 @@ import com.hardcode.gdbms.engine.values.StringValue;
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public class DateFunction implements Function {
@@ -21,7 +20,7 @@ public class DateFunction implements Function {
 	public Value evaluate(Value[] args) throws FunctionException {
 		if ((args.length < 1) || (args.length > 2)) {
 			throw new FunctionException(
-				"use: date('date_literal'[ , date_format])");
+					"use: date('date_literal'[ , date_format])");
 		}
 
 		if (!(args[0] instanceof StringValue)) {
@@ -41,11 +40,12 @@ public class DateFunction implements Function {
 		}
 
 		try {
-			return ValueFactory.createValue(df.parse(
-					((StringValue) args[0]).getValue()));
+			return ValueFactory.createValue(df.parse(((StringValue) args[0])
+					.getValue()));
 		} catch (ParseException e) {
-			throw new FunctionException("date format must match DateFormat java class requirements",
-				e);
+			throw new FunctionException(
+					"date format must match DateFormat java class requirements",
+					e);
 		}
 	}
 
@@ -56,17 +56,17 @@ public class DateFunction implements Function {
 		return "date";
 	}
 
-    /**
-     * @see com.hardcode.gdbms.engine.function.Function#isAggregate()
-     */
-    public boolean isAggregate() {
-        return false;
-    }
+	/**
+	 * @see com.hardcode.gdbms.engine.function.Function#isAggregate()
+	 */
+	public boolean isAggregate() {
+		return false;
+	}
 
-    /**
-     * @see com.hardcode.gdbms.engine.function.Function#cloneFunction()
-     */
-    public Function cloneFunction() {
-        return new DateFunction();
-    }
+	/**
+	 * @see com.hardcode.gdbms.engine.function.Function#cloneFunction()
+	 */
+	public Function cloneFunction() {
+		return new DateFunction();
+	}
 }

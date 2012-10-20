@@ -5,16 +5,15 @@ import com.hardcode.gdbms.engine.function.FunctionException;
 import com.hardcode.gdbms.engine.function.FunctionManager;
 import com.hardcode.gdbms.engine.values.Value;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public class FunctionAdapter extends AbstractExpression implements Expression {
 	private Function function;
 
-    /**
+	/**
 	 * @see com.hardcode.gdbms.engine.instruction.Expression#getFieldName()
 	 */
 	public String getFieldName() {
@@ -25,15 +24,15 @@ public class FunctionAdapter extends AbstractExpression implements Expression {
 	 * @see com.hardcode.gdbms.engine.instruction.Expression#simplify()
 	 */
 	public void simplify() {
-		//Nunca se simplifica una función
+		// Nunca se simplifica una función
 	}
 
-	public String getFunctionName(){
-	    return getEntity().first_token.image;
+	public String getFunctionName() {
+		return getEntity().first_token.image;
 	}
 
-	public boolean isAggregated(){
-	    return FunctionManager.getFunction(getFunctionName()).isAggregate();
+	public boolean isAggregated() {
+		return FunctionManager.getFunction(getFunctionName()).isAggregate();
 	}
 
 	/**
@@ -63,18 +62,18 @@ public class FunctionAdapter extends AbstractExpression implements Expression {
 	}
 
 	/**
-     * @return
-     */
-    private Function getFunction() {
-        if (function == null) {
-            function = FunctionManager.getFunction(getFunctionName());
+	 * @return
+	 */
+	private Function getFunction() {
+		if (function == null) {
+			function = FunctionManager.getFunction(getFunctionName());
 
-        }
+		}
 
-        return function;
-    }
+		return function;
+	}
 
-    /**
+	/**
 	 * @see com.hardcode.gdbms.engine.instruction.Expression#isLiteral()
 	 */
 	public boolean isLiteral() {

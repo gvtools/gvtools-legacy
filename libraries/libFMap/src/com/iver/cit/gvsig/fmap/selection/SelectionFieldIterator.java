@@ -6,22 +6,29 @@ import java.util.NoSuchElementException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.DataSource;
 import com.hardcode.gdbms.engine.values.Value;
+
 /**
- * <p>Allows to access a field from a selection of rows in a DataSource,
- * using an Iterator interface (instead of the painful BitSet interface).</p>
+ * <p>
+ * Allows to access a field from a selection of rows in a DataSource, using an
+ * Iterator interface (instead of the painful BitSet interface).
+ * </p>
  * 
- * <p>This class is intended to smooth transition to 2.0 version, in which
- * random access has been replaced by iterators.</p>
+ * <p>
+ * This class is intended to smooth transition to 2.0 version, in which random
+ * access has been replaced by iterators.
+ * </p>
  * 
- * <p>Warning: This object is not thread-safe!!! Use external synchronization
- * if you plan to use it from different threads, otherwise it is warranted
- * to fail!!</p>
+ * <p>
+ * Warning: This object is not thread-safe!!! Use external synchronization if
+ * you plan to use it from different threads, otherwise it is warranted to
+ * fail!!
+ * </p>
  * 
  * @author Cesar Martinez Izquierdo <cesar.martinez@iver.es> 18/02/2009
  * @author IVER T.I. <http://www.iver.es> 18/02/2009
  */
-public class SelectionFieldIterator
-		implements ResettableIterator<Value>, Cloneable {
+public class SelectionFieldIterator implements ResettableIterator<Value>,
+		Cloneable {
 	DataSource ds = null;
 	BitSet selectedRows = null;
 	int fieldIndex;
@@ -31,14 +38,19 @@ public class SelectionFieldIterator
 	boolean usedNext = true;
 
 	/**
-	 * <p>Creates a new Iterator, which is able to access the provided
-	 * <code>selection</code> from <code>ds</code>.</p>
+	 * <p>
+	 * Creates a new Iterator, which is able to access the provided
+	 * <code>selection</code> from <code>ds</code>.
+	 * </p>
 	 * 
-	 * @param ds 
-	 * @param selection The selection of rows to iterate through
-	 * @param fieldIndex The index of the field to iterate on
+	 * @param ds
+	 * @param selection
+	 *            The selection of rows to iterate through
+	 * @param fieldIndex
+	 *            The index of the field to iterate on
 	 */
-	public SelectionFieldIterator(DataSource ds, BitSet selection, int fieldIndex) {
+	public SelectionFieldIterator(DataSource ds, BitSet selection,
+			int fieldIndex) {
 		this.selectedRows = selection;
 		this.ds = ds;
 		this.fieldIndex = fieldIndex;
@@ -46,25 +58,29 @@ public class SelectionFieldIterator
 	}
 
 	/**
-	 * <p>Creates a new Iterator, which is able to access the provided
-	 * <code>selection</code> from <code>ds</code>.</p>
+	 * <p>
+	 * Creates a new Iterator, which is able to access the provided
+	 * <code>selection</code> from <code>ds</code>.
+	 * </p>
 	 * 
-	 * @param ds 
-	 * @param selection The selection of rows to iterate through
-	 * @param fieldIndex The name of the field to iterate on
+	 * @param ds
+	 * @param selection
+	 *            The selection of rows to iterate through
+	 * @param fieldIndex
+	 *            The name of the field to iterate on
 	 */
-	public SelectionFieldIterator(DataSource ds, BitSet selection, String fieldName) throws ReadDriverException {
+	public SelectionFieldIterator(DataSource ds, BitSet selection,
+			String fieldName) throws ReadDriverException {
 		this(ds, selection, ds.getFieldIndexByName(fieldName));
 	}
 
 	public boolean hasNext() {
-		if (usedNext==true) {
-			currBit = selectedRows.nextSetBit(currBit+1);
-			if (currBit<0) {
+		if (usedNext == true) {
+			currBit = selectedRows.nextSetBit(currBit + 1);
+			if (currBit < 0) {
 				hasNext = false;
-			}
-			else {
-				hasNext = true; 
+			} else {
+				hasNext = true;
 			}
 			usedNext = false;
 		}

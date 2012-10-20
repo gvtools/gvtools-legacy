@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.impl.fliplines;
 
 import java.io.File;
@@ -73,7 +73,7 @@ public class FlipLinesGeoprocessController extends AbstractGeoprocessController 
 	private FlipLinesGeoprocess geoprocess;
 
 	public void setView(IGeoprocessUserEntries viewPanel) {
-		this.userEntries =  (IFlipLinesGeoprocessUserEntries) viewPanel;
+		this.userEntries = (IFlipLinesGeoprocessUserEntries) viewPanel;
 	}
 
 	public IGeoprocess getGeoprocess() {
@@ -81,7 +81,7 @@ public class FlipLinesGeoprocessController extends AbstractGeoprocessController 
 	}
 
 	public boolean launchGeoprocess() {
-/*MOVER A CLASE ABSTRACTA*/		
+		/* MOVER A CLASE ABSTRACTA */
 		final FLyrVect inputLayer = userEntries.getInputLayer();
 		FLayers layers = userEntries.getFLayers();
 		File outputFile = null;
@@ -106,16 +106,16 @@ public class FlipLinesGeoprocessController extends AbstractGeoprocessController 
 				return false;
 			}
 		}
-/*MOVER A CLASE ABSTRACTA*/		
-		
+		/* MOVER A CLASE ABSTRACTA */
+
 		geoprocess = new FlipLinesGeoprocess(inputLayer);
 
-/*MOVER A CLASE ABSTRACTA*/		
+		/* MOVER A CLASE ABSTRACTA */
 		SHPLayerDefinition definition = (SHPLayerDefinition) geoprocess
 				.createLayerDefinition();
 		definition.setFile(outputFile);
-		ShpSchemaManager schemaManager = new ShpSchemaManager(outputFile
-				.getAbsolutePath());
+		ShpSchemaManager schemaManager = new ShpSchemaManager(
+				outputFile.getAbsolutePath());
 		IWriter writer = null;
 		try {
 			writer = getShpWriter(definition);
@@ -129,16 +129,16 @@ public class FlipLinesGeoprocessController extends AbstractGeoprocessController 
 		}
 		geoprocess.setResultLayerProperties(writer, schemaManager);
 
-/*MOVER A CLASE ABSTRACTA*/	
-		
+		/* MOVER A CLASE ABSTRACTA */
+
 		HashMap params = new HashMap();
-		
+
 		boolean onlySelection = userEntries.onlyFirstLayerSelected();
 		params.put("layer_selection", new Boolean(onlySelection));
-		
-/*
- * MOVER A CLASE ABSTRACTA 
- * */		
+
+		/*
+		 * MOVER A CLASE ABSTRACTA
+		 */
 		try {
 			geoprocess.setParameters(params);
 			geoprocess.checkPreconditions();
@@ -163,8 +163,8 @@ public class FlipLinesGeoprocessController extends AbstractGeoprocessController 
 		}
 		return true;
 		/*
-		 * MOVER A CLASE ABSTRACTA 
-		 * */		
+		 * MOVER A CLASE ABSTRACTA
+		 */
 	}
 
 	public int getWidth() {

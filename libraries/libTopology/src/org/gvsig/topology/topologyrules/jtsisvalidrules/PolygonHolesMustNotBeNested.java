@@ -255,15 +255,15 @@ public class PolygonHolesMustNotBeNested extends AbstractTopologyRule {
 			}
 
 		}// for i
-		// if (!isNonNested) {
-		// IFeature[] features = {feature};
-		// Coordinate nestedPoint = nestedTester.getNestedPoint();
-		// FPoint2D pt = new FPoint2D(nestedPoint.x, nestedPoint.y);
-		// IGeometry errorGeometry = ShapeFactory.createGeometry(pt);
-		// TopologyError error = new TopologyError(errorGeometry, this,
-		// features);
-		// addTopologyError(error);
-		// }
+			// if (!isNonNested) {
+			// IFeature[] features = {feature};
+			// Coordinate nestedPoint = nestedTester.getNestedPoint();
+			// FPoint2D pt = new FPoint2D(nestedPoint.x, nestedPoint.y);
+			// IGeometry errorGeometry = ShapeFactory.createGeometry(pt);
+			// TopologyError error = new TopologyError(errorGeometry, this,
+			// features);
+			// addTopologyError(error);
+			// }
 	}
 
 	private void addError(IGeometry geo, IFeature feature) {
@@ -272,8 +272,8 @@ public class PolygonHolesMustNotBeNested extends AbstractTopologyRule {
 			violatedRule = parentRule;
 		else
 			violatedRule = this;
-		JtsValidTopologyError error = new JtsValidTopologyError(geo, violatedRule, feature,
-				topology);
+		JtsValidTopologyError error = new JtsValidTopologyError(geo,
+				violatedRule, feature, topology);
 		error.setSecondaryRule(this);
 		addTopologyError(error);
 	}

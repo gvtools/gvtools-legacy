@@ -42,10 +42,9 @@ import com.hardcode.gdbms.parser.Node;
 import com.hardcode.gdbms.parser.SimpleNode;
 import com.hardcode.gdbms.parser.Token;
 
-
 /**
  * Clase con distintos métodos de utilidad
- *
+ * 
  * @author Fernando González Cortés
  */
 public class Utilities {
@@ -62,7 +61,8 @@ public class Utilities {
 		adapters.put(ASTSQLTerm.class, TermAdapter.class);
 		adapters.put(ASTSQLUnaryExpr.class, UnaryExprAdapter.class);
 		adapters.put(ASTSQLUnion.class, UnionAdapter.class);
-		adapters.put(ASTSQLCompareExprRight.class, CompareExprRigthAdapter.class);
+		adapters.put(ASTSQLCompareExprRight.class,
+				CompareExprRigthAdapter.class);
 		adapters.put(ASTSQLCompareOp.class, CompareOpAdapter.class);
 		adapters.put(ASTSQLCustom.class, CustomAdapter.class);
 		adapters.put(ASTSQLLikeClause.class, LikeClauseAdapter.class);
@@ -93,11 +93,12 @@ public class Utilities {
 	 * Obtienen el tipo de un nodo del arbol sintáctico de entrada en caso de
 	 * que dicho nodo tenga un solo token. Si el nodo tiene varios token's se
 	 * devuelve un -1
-	 *
-	 * @param n Nodo cuyo tipo se quiere conocer
-	 *
+	 * 
+	 * @param n
+	 *            Nodo cuyo tipo se quiere conocer
+	 * 
 	 * @return Tipo del token del nodo. Una constante de la interfaz
-	 * 		   SQLEngineConstants
+	 *         SQLEngineConstants
 	 */
 	public static int getType(Node n) {
 		SimpleNode node = (SimpleNode) n;
@@ -111,9 +112,10 @@ public class Utilities {
 
 	/**
 	 * Obtiene el texto de un nodo
-	 *
-	 * @param n Nodo del cual se quiere obtener el texto
-	 *
+	 * 
+	 * @param n
+	 *            Nodo del cual se quiere obtener el texto
+	 * 
 	 * @return Texto del nodo
 	 */
 	public static String getText(Node n) {
@@ -122,16 +124,16 @@ public class Utilities {
 
 	/**
 	 * Obtiene el texto de un nodo
-	 *
-	 * @param s Nodo del cual se quiere obtener el texto
-	 *
+	 * 
+	 * @param s
+	 *            Nodo del cual se quiere obtener el texto
+	 * 
 	 * @return Texto del nodo
 	 */
 	public static String getText(SimpleNode s) {
 		String ret = "";
 
-		for (Token tok = s.first_token; tok != s.last_token.next;
-				tok = tok.next) {
+		for (Token tok = s.first_token; tok != s.last_token.next; tok = tok.next) {
 			ret += (" " + tok.image);
 		}
 
@@ -142,15 +144,18 @@ public class Utilities {
 	 * Construye un arbol de adaptadores correspondiente al arbol sintáctico
 	 * cuya raiz es el nodo que se pasa como parámetro. El árbol se construirá
 	 * mientras se encuentren clases adaptadoras. En el momento que no se
-	 * encuentre la clase adaptadora de un nodo no se seguirá profundizando
-	 * por esa rama.   Despues de la construcción del arbol se invoca el
-	 * método  calculateLiteralCondition de todos los adaptadores del arbol
-	 * que sean instancias de Expression
-	 *
-	 * @param root Nodo raiz
-	 * @param sql DOCUMENT ME!
-	 * @param ds DOCUMENT ME!
-	 *
+	 * encuentre la clase adaptadora de un nodo no se seguirá profundizando por
+	 * esa rama. Despues de la construcción del arbol se invoca el método
+	 * calculateLiteralCondition de todos los adaptadores del arbol que sean
+	 * instancias de Expression
+	 * 
+	 * @param root
+	 *            Nodo raiz
+	 * @param sql
+	 *            DOCUMENT ME!
+	 * @param ds
+	 *            DOCUMENT ME!
+	 * 
 	 * @return Adaptador raiz
 	 */
 	public static Adapter buildTree(Node root, String sql, DataSourceFactory ds) {
@@ -164,11 +169,12 @@ public class Utilities {
 
 	/**
 	 * Método recursivo para la creación del arbol de adaptadores
-	 *
-	 * @param root raiz del subárbol
-	 *
+	 * 
+	 * @param root
+	 *            raiz del subárbol
+	 * 
 	 * @return raiz del arbol creado o null si no se encuentra la clase
-	 * 		   adaptadora
+	 *         adaptadora
 	 */
 	private static Adapter recursiveBuildTree(Node root) {
 		Adapter a;
@@ -176,8 +182,8 @@ public class Utilities {
 		try {
 			a = getAdapter(root);
 		} catch (Exception e) {
-			//e.printStackTrace();
-			//No se encontró la clase adaptadora
+			// e.printStackTrace();
+			// No se encontró la clase adaptadora
 			return null;
 		}
 
@@ -191,7 +197,7 @@ public class Utilities {
 			if (child != null) {
 				child.setParent(a);
 
-				//Se encontró la clase adaptadora
+				// Se encontró la clase adaptadora
 				childs[index] = child;
 				index++;
 			}
@@ -201,7 +207,7 @@ public class Utilities {
 			System.arraycopy(childs, 0, trueChilds, 0, index);
 			a.setChilds(trueChilds);
 		} else {
-		    a.setChilds(childs);
+			a.setChilds(childs);
 		}
 
 		return a;
@@ -209,25 +215,29 @@ public class Utilities {
 
 	/**
 	 * Obtiene una instancia nueva de la clase adaptadora de un nodo
-	 *
-	 * @param node nodo de cual se quiere obtener la clase adaptadora
-	 *
+	 * 
+	 * @param node
+	 *            nodo de cual se quiere obtener la clase adaptadora
+	 * 
 	 * @return instancia de la clase adaptadora
-	 *
-	 * @throws InstantiationException Si no se puede instanciar la clase
-	 * @throws IllegalAccessException Si no se puede acceder a la clase
+	 * 
+	 * @throws InstantiationException
+	 *             Si no se puede instanciar la clase
+	 * @throws IllegalAccessException
+	 *             Si no se puede acceder a la clase
 	 */
-	private static Adapter getAdapter(Node node)
-		throws InstantiationException, IllegalAccessException {
+	private static Adapter getAdapter(Node node) throws InstantiationException,
+			IllegalAccessException {
 		return (Adapter) ((Class) adapters.get(node.getClass())).newInstance();
 	}
 
 	/**
 	 * Dada una clase devuelve el nombre de dicha clase sin el texto
 	 * correspondiente al paquete
-	 *
-	 * @param clase Clase cuyo nombre se quiere conocer
-	 *
+	 * 
+	 * @param clase
+	 *            Clase cuyo nombre se quiere conocer
+	 * 
 	 * @return nombre de la clase
 	 */
 	private static String getClassName(Class clase) {
@@ -239,11 +249,12 @@ public class Utilities {
 	/**
 	 * Devuelve true si todas las expresiones que se pasan en el array son
 	 * literales
-	 *
-	 * @param childs conjunto de adaptadores
-	 *
+	 * 
+	 * @param childs
+	 *            conjunto de adaptadores
+	 * 
 	 * @return true si se cumple que para cada elemento del array childs que es
-	 * 		   Expresion, es literal
+	 *         Expresion, es literal
 	 */
 	public static boolean checkExpressions(Adapter[] childs) {
 		for (int i = 0; i < childs.length; i++) {
@@ -260,35 +271,30 @@ public class Utilities {
 	}
 
 	/*
-	 * Establece las tablas de la instrucción y la fuente de datos resultante
-	 * de la cláusula from
-	 *
+	 * Establece las tablas de la instrucción y la fuente de datos resultante de
+	 * la cláusula from
+	 * 
 	 * @param root raiz del arbol de adaptadores donde se aplicará el método
+	 * 
 	 * @param tables tablas de la clausula from
+	 * 
 	 * @param source fuente de datos de la que obtiene los valores los objetos
-	 *                   field, resultado de la clausula from
-	 *
-	   public static void setTablesAndSource(Adapter root, DataSource[] tables,
-	           DataSource source) {
-	           if (root instanceof FieldSupport) {
-	                   FieldSupport fs = (FieldSupport) root;
-	                   fs.setDataSource(source);
-	                   fs.setTables(tables);
-	           }
-	           Adapter[] hijos = root.getChilds();
-	           for (int i = 0; i < hijos.length; i++) {
-	                   setTablesAndSource(hijos[i], tables, source);
-	           }
-	   }*
-	   public static void setTablesAndSource(Adapter root, DataSource table, DataSource source){
-	           setTablesAndSource(root, new DataSource[]{table}, source);
-	   }
+	 * field, resultado de la clausula from
+	 * 
+	 * public static void setTablesAndSource(Adapter root, DataSource[] tables,
+	 * DataSource source) { if (root instanceof FieldSupport) { FieldSupport fs
+	 * = (FieldSupport) root; fs.setDataSource(source); fs.setTables(tables); }
+	 * Adapter[] hijos = root.getChilds(); for (int i = 0; i < hijos.length;
+	 * i++) { setTablesAndSource(hijos[i], tables, source); } }* public static
+	 * void setTablesAndSource(Adapter root, DataSource table, DataSource
+	 * source){ setTablesAndSource(root, new DataSource[]{table}, source); }
 	 */
 
 	/**
 	 * Simplifica las expresiones del árbol de adaptadores
-	 *
-	 * @param root raiz del arbol que se simplifica
+	 * 
+	 * @param root
+	 *            raiz del arbol que se simplifica
 	 */
 	public static void simplify(Adapter root) {
 		if (root instanceof Expression) {

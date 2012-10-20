@@ -34,17 +34,19 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.iver.andami.PluginServices;
+
 /**
  * Panel con el slider para regular la opacidad de la capa.
- *
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
-public class TranspOpacitySliderPanel extends JPanel implements ActionListener, FocusListener, ChangeListener{
+public class TranspOpacitySliderPanel extends JPanel implements ActionListener,
+		FocusListener, ChangeListener {
 	final private static long serialVersionUID = 0;
-	private JCheckBox         cbTransparencia  = null;
-	private JCheckBox         cbOpacidad       = null;
-	private JSlider           slOpacidad       = null;
-	private JTextField        tOpacidad        = null;
+	private JCheckBox cbTransparencia = null;
+	private JCheckBox cbOpacidad = null;
+	private JSlider slOpacidad = null;
+	private JTextField tOpacidad = null;
 
 	/**
 	 * Constructor.
@@ -55,10 +57,14 @@ public class TranspOpacitySliderPanel extends JPanel implements ActionListener, 
 
 	/**
 	 * This method initializes this
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
-		setBorder(BorderFactory.createTitledBorder(null, PluginServices.getText(this, "opacidad"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+		setBorder(BorderFactory.createTitledBorder(null,
+				PluginServices.getText(this, "opacidad"),
+				TitledBorder.DEFAULT_JUSTIFICATION,
+				TitledBorder.DEFAULT_POSITION, null, null));
 		setLayout(new FlowLayout());
 		add(getOpacityCheck(), null);
 		add(getOpacitySlider(), null);
@@ -75,6 +81,7 @@ public class TranspOpacitySliderPanel extends JPanel implements ActionListener, 
 
 	/**
 	 * This method initializes jCheckBox
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	public JCheckBox getTransparencyCheck() {
@@ -89,6 +96,7 @@ public class TranspOpacitySliderPanel extends JPanel implements ActionListener, 
 
 	/**
 	 * This method initializes jCheckBox1
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	public JCheckBox getOpacityCheck() {
@@ -104,12 +112,13 @@ public class TranspOpacitySliderPanel extends JPanel implements ActionListener, 
 
 	/**
 	 * This method initializes jSlider
+	 * 
 	 * @return javax.swing.JSlider
 	 */
 	public JSlider getOpacitySlider() {
 		if (slOpacidad == null) {
 			slOpacidad = new JSlider();
-//			 slOpacidad.setPreferredSize(new java.awt.Dimension(wSlider, 16));
+			// slOpacidad.setPreferredSize(new java.awt.Dimension(wSlider, 16));
 			slOpacidad.addChangeListener(this);
 		}
 
@@ -118,6 +127,7 @@ public class TranspOpacitySliderPanel extends JPanel implements ActionListener, 
 
 	/**
 	 * This method initializes jTextField3
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	public JTextField getOpacityText() {
@@ -133,6 +143,7 @@ public class TranspOpacitySliderPanel extends JPanel implements ActionListener, 
 
 	/**
 	 * Activa/Desactiva los controles de opacidad
+	 * 
 	 * @param active
 	 */
 	public void setActiveOpacityControl(boolean active) {
@@ -144,6 +155,7 @@ public class TranspOpacitySliderPanel extends JPanel implements ActionListener, 
 	/**
 	 * Asigna el valor de opacidad a los controles de la ventana para que cuando
 	 * esta se abra tenga los valores seleccionados en la imagen.
+	 * 
 	 * @param alpha
 	 */
 	public void setOpacity(int alpha) {
@@ -174,21 +186,23 @@ public class TranspOpacitySliderPanel extends JPanel implements ActionListener, 
 			}
 		}
 
-		//Evento sobre el textfield de opacidad
+		// Evento sobre el textfield de opacidad
 		if (e.getSource().equals(getOpacityText()))
 			checkOpacityText();
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
 	 */
 	public void focusGained(FocusEvent e) {
-//	pTrans.updateTextBox();
+		// pTrans.updateTextBox();
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.FocusListener#focusLost(java.awt.event.FocusEvent)
 	 */
 	public void focusLost(FocusEvent e) {
@@ -197,13 +211,18 @@ public class TranspOpacitySliderPanel extends JPanel implements ActionListener, 
 
 	/*
 	 * (non-Javadoc)
-	 * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
+	 * 
+	 * @see
+	 * javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent
+	 * )
 	 */
 	public void stateChanged(ChangeEvent e) {
-		// Ponemos el valor del texto de la opacidad de pendiendo de la posición del
+		// Ponemos el valor del texto de la opacidad de pendiendo de la posición
+		// del
 		// Slider
 		if (e.getSource().equals(getOpacitySlider())) {
-			getOpacityText().setText(String.valueOf(getOpacitySlider().getValue()));
+			getOpacityText().setText(
+					String.valueOf(getOpacitySlider().getValue()));
 		}
 	}
 
@@ -225,9 +244,8 @@ public class TranspOpacitySliderPanel extends JPanel implements ActionListener, 
 
 			if (value > 100)
 				getOpacityText().setText("100");
-			else
-				if (value < 0)
-					getOpacityText().setText("0");
+			else if (value < 0)
+				getOpacityText().setText("0");
 
 			getOpacitySlider().setValue(value);
 		} catch (NumberFormatException exc) {

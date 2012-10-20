@@ -5,8 +5,8 @@ package com.iver.cit.gvsig.exceptions.table;
  */
 public class StopEditingTableException extends TableEditingException {
 
-	public StopEditingTableException(String table,Throwable exception) {
-		super(table,exception);
+	public StopEditingTableException(String table, Throwable exception) {
+		super(table, exception);
 		init();
 		initCause(exception);
 	}

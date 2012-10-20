@@ -47,165 +47,156 @@
  */
 package com.iver.andami.persistence.generate;
 
-  //---------------------------------/
- //- Imported classes and packages -/
 //---------------------------------/
-
+//- Imported classes and packages -/
+//---------------------------------/
 
 /**
  * Class BookmarksDescriptor.
  * 
- * @version $Revision: 5275 $ $Date: 2006-05-19 08:41:50 +0200 (Fri, 19 May 2006) $
+ * @version $Revision: 5275 $ $Date: 2006-05-19 08:41:50 +0200 (Fri, 19 May
+ *          2006) $
  */
-public class BookmarksDescriptor extends org.exolab.castor.xml.util.XMLClassDescriptorImpl {
+public class BookmarksDescriptor extends
+		org.exolab.castor.xml.util.XMLClassDescriptorImpl {
 
+	// --------------------------/
+	// - Class/Member Variables -/
+	// --------------------------/
 
-      //--------------------------/
-     //- Class/Member Variables -/
-    //--------------------------/
+	/**
+	 * Field nsPrefix
+	 */
+	private java.lang.String nsPrefix;
 
-    /**
-     * Field nsPrefix
-     */
-    private java.lang.String nsPrefix;
+	/**
+	 * Field nsURI
+	 */
+	private java.lang.String nsURI;
 
-    /**
-     * Field nsURI
-     */
-    private java.lang.String nsURI;
+	/**
+	 * Field xmlName
+	 */
+	private java.lang.String xmlName;
 
-    /**
-     * Field xmlName
-     */
-    private java.lang.String xmlName;
+	/**
+	 * Field identity
+	 */
+	private org.exolab.castor.xml.XMLFieldDescriptor identity;
 
-    /**
-     * Field identity
-     */
-    private org.exolab.castor.xml.XMLFieldDescriptor identity;
+	// ----------------/
+	// - Constructors -/
+	// ----------------/
 
+	public BookmarksDescriptor() {
+		super();
+		xmlName = "bookmarks";
 
-      //----------------/
-     //- Constructors -/
-    //----------------/
+		// -- set grouping compositor
+		setCompositorAsSequence();
+		org.exolab.castor.xml.util.XMLFieldDescriptorImpl desc = null;
+		org.exolab.castor.xml.XMLFieldHandler handler = null;
+		org.exolab.castor.xml.FieldValidator fieldValidator = null;
+		// -- initialize attribute descriptors
 
-    public BookmarksDescriptor() {
-        super();
-        xmlName = "bookmarks";
-        
-        //-- set grouping compositor
-        setCompositorAsSequence();
-        org.exolab.castor.xml.util.XMLFieldDescriptorImpl  desc           = null;
-        org.exolab.castor.xml.XMLFieldHandler              handler        = null;
-        org.exolab.castor.xml.FieldValidator               fieldValidator = null;
-        //-- initialize attribute descriptors
-        
-        //-- initialize element descriptors
-        
-        //-- _bookmark
-        desc = new org.exolab.castor.xml.util.XMLFieldDescriptorImpl(com.iver.andami.persistence.generate.Bookmark.class, "_bookmark", "bookmark", org.exolab.castor.xml.NodeType.Element);
-        handler = (new org.exolab.castor.xml.XMLFieldHandler() {
-            public java.lang.Object getValue( java.lang.Object object ) 
-                throws IllegalStateException
-            {
-                Bookmarks target = (Bookmarks) object;
-                return target.getBookmark();
-            }
-            public void setValue( java.lang.Object object, java.lang.Object value) 
-                throws IllegalStateException, IllegalArgumentException
-            {
-                try {
-                    Bookmarks target = (Bookmarks) object;
-                    target.setBookmark( (com.iver.andami.persistence.generate.Bookmark) value);
-                }
-                catch (java.lang.Exception ex) {
-                    throw new IllegalStateException(ex.toString());
-                }
-            }
-            public java.lang.Object newInstance( java.lang.Object parent ) {
-                return new com.iver.andami.persistence.generate.Bookmark();
-            }
-        } );
-        desc.setHandler(handler);
-        desc.setRequired(true);
-        desc.setMultivalued(false);
-        addFieldDescriptor(desc);
-        
-        //-- validation code for: _bookmark
-        fieldValidator = new org.exolab.castor.xml.FieldValidator();
-        fieldValidator.setMinOccurs(1);
-        { //-- local scope
-        }
-        desc.setValidator(fieldValidator);
-    } //-- com.iver.andami.persistence.generate.BookmarksDescriptor()
+		// -- initialize element descriptors
 
+		// -- _bookmark
+		desc = new org.exolab.castor.xml.util.XMLFieldDescriptorImpl(
+				com.iver.andami.persistence.generate.Bookmark.class,
+				"_bookmark", "bookmark", org.exolab.castor.xml.NodeType.Element);
+		handler = (new org.exolab.castor.xml.XMLFieldHandler() {
+			public java.lang.Object getValue(java.lang.Object object)
+					throws IllegalStateException {
+				Bookmarks target = (Bookmarks) object;
+				return target.getBookmark();
+			}
 
-      //-----------/
-     //- Methods -/
-    //-----------/
+			public void setValue(java.lang.Object object, java.lang.Object value)
+					throws IllegalStateException, IllegalArgumentException {
+				try {
+					Bookmarks target = (Bookmarks) object;
+					target.setBookmark((com.iver.andami.persistence.generate.Bookmark) value);
+				} catch (java.lang.Exception ex) {
+					throw new IllegalStateException(ex.toString());
+				}
+			}
 
-    /**
-     * Method getAccessMode
-     */
-    public org.exolab.castor.mapping.AccessMode getAccessMode()
-    {
-        return null;
-    } //-- org.exolab.castor.mapping.AccessMode getAccessMode() 
+			public java.lang.Object newInstance(java.lang.Object parent) {
+				return new com.iver.andami.persistence.generate.Bookmark();
+			}
+		});
+		desc.setHandler(handler);
+		desc.setRequired(true);
+		desc.setMultivalued(false);
+		addFieldDescriptor(desc);
 
-    /**
-     * Method getExtends
-     */
-    public org.exolab.castor.mapping.ClassDescriptor getExtends()
-    {
-        return null;
-    } //-- org.exolab.castor.mapping.ClassDescriptor getExtends() 
+		// -- validation code for: _bookmark
+		fieldValidator = new org.exolab.castor.xml.FieldValidator();
+		fieldValidator.setMinOccurs(1);
+		{ // -- local scope
+		}
+		desc.setValidator(fieldValidator);
+	} // -- com.iver.andami.persistence.generate.BookmarksDescriptor()
 
-    /**
-     * Method getIdentity
-     */
-    public org.exolab.castor.mapping.FieldDescriptor getIdentity()
-    {
-        return identity;
-    } //-- org.exolab.castor.mapping.FieldDescriptor getIdentity() 
+	// -----------/
+	// - Methods -/
+	// -----------/
 
-    /**
-     * Method getJavaClass
-     */
-    public java.lang.Class getJavaClass()
-    {
-        return com.iver.andami.persistence.generate.Bookmarks.class;
-    } //-- java.lang.Class getJavaClass() 
+	/**
+	 * Method getAccessMode
+	 */
+	public org.exolab.castor.mapping.AccessMode getAccessMode() {
+		return null;
+	} // -- org.exolab.castor.mapping.AccessMode getAccessMode()
 
-    /**
-     * Method getNameSpacePrefix
-     */
-    public java.lang.String getNameSpacePrefix()
-    {
-        return nsPrefix;
-    } //-- java.lang.String getNameSpacePrefix() 
+	/**
+	 * Method getExtends
+	 */
+	public org.exolab.castor.mapping.ClassDescriptor getExtends() {
+		return null;
+	} // -- org.exolab.castor.mapping.ClassDescriptor getExtends()
 
-    /**
-     * Method getNameSpaceURI
-     */
-    public java.lang.String getNameSpaceURI()
-    {
-        return nsURI;
-    } //-- java.lang.String getNameSpaceURI() 
+	/**
+	 * Method getIdentity
+	 */
+	public org.exolab.castor.mapping.FieldDescriptor getIdentity() {
+		return identity;
+	} // -- org.exolab.castor.mapping.FieldDescriptor getIdentity()
 
-    /**
-     * Method getValidator
-     */
-    public org.exolab.castor.xml.TypeValidator getValidator()
-    {
-        return this;
-    } //-- org.exolab.castor.xml.TypeValidator getValidator() 
+	/**
+	 * Method getJavaClass
+	 */
+	public java.lang.Class getJavaClass() {
+		return com.iver.andami.persistence.generate.Bookmarks.class;
+	} // -- java.lang.Class getJavaClass()
 
-    /**
-     * Method getXMLName
-     */
-    public java.lang.String getXMLName()
-    {
-        return xmlName;
-    } //-- java.lang.String getXMLName() 
+	/**
+	 * Method getNameSpacePrefix
+	 */
+	public java.lang.String getNameSpacePrefix() {
+		return nsPrefix;
+	} // -- java.lang.String getNameSpacePrefix()
+
+	/**
+	 * Method getNameSpaceURI
+	 */
+	public java.lang.String getNameSpaceURI() {
+		return nsURI;
+	} // -- java.lang.String getNameSpaceURI()
+
+	/**
+	 * Method getValidator
+	 */
+	public org.exolab.castor.xml.TypeValidator getValidator() {
+		return this;
+	} // -- org.exolab.castor.xml.TypeValidator getValidator()
+
+	/**
+	 * Method getXMLName
+	 */
+	public java.lang.String getXMLName() {
+		return xmlName;
+	} // -- java.lang.String getXMLName()
 
 }

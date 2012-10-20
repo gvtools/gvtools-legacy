@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.errorfixes;
 
 import java.util.ArrayList;
@@ -61,20 +61,22 @@ import com.iver.cit.gvsig.fmap.core.IGeometry;
 
 public class CompleteUndershootFix extends AbstractTopologyErrorFix {
 
-//	@SuppressWarnings("unchecked")
+	// @SuppressWarnings("unchecked")
 	public List<IFeature>[] fixAlgorithm(TopologyError topologyError) {
-		//TODO Probablemente TopologyError no necesite una referencia a los Feature
-		//que lo causaron, bastando el indice y el identificador de la capa
+		// TODO Probablemente TopologyError no necesite una referencia a los
+		// Feature
+		// que lo causaron, bastando el indice y el identificador de la capa
 		IFeature causingFeature = topologyError.getFeature1();
 		IGeometry geom = causingFeature.getGeometry();
-		double clusterTolerance = topologyError.getTopology().getClusterTolerance();
-		IGeometry correctedGeom = FGeometryUtil.closeGeometry(geom, clusterTolerance);
-		DefaultFeature df = new DefaultFeature(correctedGeom, 
-								causingFeature.getAttributes(),
-									causingFeature.getID());
+		double clusterTolerance = topologyError.getTopology()
+				.getClusterTolerance();
+		IGeometry correctedGeom = FGeometryUtil.closeGeometry(geom,
+				clusterTolerance);
+		DefaultFeature df = new DefaultFeature(correctedGeom,
+				causingFeature.getAttributes(), causingFeature.getID());
 		List<IFeature> featureList = new ArrayList<IFeature>();
 		featureList.add(df);
-		List<IFeature>[] features = new List[]{featureList};
+		List<IFeature>[] features = new List[] { featureList };
 		return features;
 	}
 

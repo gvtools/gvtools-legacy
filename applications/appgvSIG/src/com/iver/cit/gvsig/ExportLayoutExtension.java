@@ -40,26 +40,27 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: ExportLayoutExtension.java 15647 2007-10-30 12:03:52Z jmvivo $
-* $Log$
-* Revision 1.2  2006-12-20 14:40:37  caballero
-* Remodelado Layout
-*
-* Revision 1.1  2006/11/06 15:14:52  jaume
-* new extension for pdf and ps
-*
-*
-*/
+ *
+ * $Id: ExportLayoutExtension.java 15647 2007-10-30 12:03:52Z jmvivo $
+ * $Log$
+ * Revision 1.2  2006-12-20 14:40:37  caballero
+ * Remodelado Layout
+ *
+ * Revision 1.1  2006/11/06 15:14:52  jaume
+ * new extension for pdf and ps
+ *
+ *
+ */
 package com.iver.cit.gvsig;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
+
 /**
  * Extension for exporting the layout to PDF or PostScript.
- *
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class ExportLayoutExtension extends Extension {
@@ -71,16 +72,12 @@ public class ExportLayoutExtension extends Extension {
 		registerIcons();
 	}
 
-	private void registerIcons(){
-		PluginServices.getIconTheme().registerDefault(
-				"layout-export-pdf",
-				this.getClass().getClassLoader().getResource("images/pdf.png")
-			);
+	private void registerIcons() {
+		PluginServices.getIconTheme().registerDefault("layout-export-pdf",
+				this.getClass().getClassLoader().getResource("images/pdf.png"));
 
-		PluginServices.getIconTheme().registerDefault(
-				"layout-export-ps",
-				this.getClass().getClassLoader().getResource("images/ps.png")
-			);
+		PluginServices.getIconTheme().registerDefault("layout-export-ps",
+				this.getClass().getClassLoader().getResource("images/ps.png"));
 	}
 
 	/**
@@ -88,9 +85,9 @@ public class ExportLayoutExtension extends Extension {
 	 */
 	public void execute(String s) {
 		layout = (Layout) PluginServices.getMDIManager().getActiveWindow();
-		if (s.equals("PDF")){
+		if (s.equals("PDF")) {
 			layout.layoutToPDF();
-		} else if (s.equals("PS")){
+		} else if (s.equals("PS")) {
 			layout.layoutToPS();
 		}
 	}
@@ -107,9 +104,10 @@ public class ExportLayoutExtension extends Extension {
 		}
 
 		if (f instanceof Layout) {
-		//	Layout layout = (Layout) f;
+			// Layout layout = (Layout) f;
 
-			return true; //layout.m_Display.getMapControl().getMapContext().getLayers().layerCount() > 0;
+			return true; // layout.m_Display.getMapControl().getMapContext().getLayers().layerCount()
+							// > 0;
 		} else {
 			return false;
 		}

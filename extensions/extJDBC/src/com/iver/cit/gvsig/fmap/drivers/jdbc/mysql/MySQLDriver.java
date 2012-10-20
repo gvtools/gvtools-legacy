@@ -70,12 +70,11 @@ import com.iver.cit.gvsig.fmap.edition.IWriter;
 
 /**
  * @author FJP
- *
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
+ * 
+ *         TODO To change the template for this generated type comment go to
+ *         Window - Preferences - Java - Code Generation - Code and Comments
  */
-public class MySQLDriver extends DefaultJDBCDriver
-							implements IWriteable {
+public class MySQLDriver extends DefaultJDBCDriver implements IWriteable {
 
 	private static Logger logger = Logger
 			.getLogger(MySQLDriver.class.getName());
@@ -84,16 +83,9 @@ public class MySQLDriver extends DefaultJDBCDriver
 
 	private MySQLSpatialWriter writer = new MySQLSpatialWriter();
 
-	private static final String[] GEOM_SQL_TYPE_NAMES ={
-	      "GEOMETRY",
-	      "POINT",
-	      "LINESTRING",
-	      "POLYGON",
-	      "MULTIPOINT",
-	      "MULTILINESTRING",
-	      "MULTIPOLYGON",
-	      "GEOMETRYCOLLECTION",
-	};
+	private static final String[] GEOM_SQL_TYPE_NAMES = { "GEOMETRY", "POINT",
+			"LINESTRING", "POLYGON", "MULTIPOINT", "MULTILINESTRING",
+			"MULTIPOLYGON", "GEOMETRYCOLLECTION", };
 
 	/*
 	 * private int fetch_min=-1; private int fetch_max=-1;
@@ -126,8 +118,9 @@ public class MySQLDriver extends DefaultJDBCDriver
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDriver#getDriverAttributes()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.VectorialDriver#getDriverAttributes()
 	 */
 	public DriverAttributes getDriverAttributes() {
 		return null;
@@ -135,7 +128,7 @@ public class MySQLDriver extends DefaultJDBCDriver
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.hardcode.driverManager.Driver#getName()
 	 */
 	public String getName() {
@@ -168,11 +161,13 @@ public class MySQLDriver extends DefaultJDBCDriver
 	 */
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialJDBCDriver#setData(java.sql.Connection,
-	 *      java.lang.String, java.lang.String, java.lang.String, int)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.VectorialJDBCDriver#setData(java.sql.
+	 * Connection, java.lang.String, java.lang.String, java.lang.String, int)
 	 */
-	public void setData(IConnection conn, DBLayerDefinition lyrDef) throws DBException {
+	public void setData(IConnection conn, DBLayerDefinition lyrDef)
+			throws DBException {
 		this.conn = conn;
 		setLyrDef(lyrDef);
 		try {
@@ -181,15 +176,15 @@ public class MySQLDriver extends DefaultJDBCDriver
 
 			sqlOrig = "SELECT " + getTotalFields() + " FROM "
 					+ getLyrDef().getTableName() + " ";
-					// + getLyrDef().getWhereClause();
+			// + getLyrDef().getWhereClause();
 			completeWhere = getCompoundWhere(workingArea, strEPSG);
 			String sqlAux = sqlOrig + completeWhere + " ORDER BY "
 					+ getLyrDef().getFieldID();
 			logger.info("Cadena SQL:" + sqlAux);
 			sqlTotal = sqlAux;
 
-			st = ((ConnectionJDBC)conn).getConnection().createStatement(ResultSet.TYPE_FORWARD_ONLY,
-					ResultSet.CONCUR_READ_ONLY);
+			st = ((ConnectionJDBC) conn).getConnection().createStatement(
+					ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 
 			rs = st.executeQuery(sqlTotal);
 			metaData = rs.getMetaData();
@@ -204,18 +199,19 @@ public class MySQLDriver extends DefaultJDBCDriver
 			writer.setWriteAll(false);
 			writer.initialize(lyrDef);
 
-
 		} catch (SQLException e) {
-			  throw new DBException(e);
+			throw new DBException(e);
 		} catch (InitializeWriterException e) {
-			  throw new DBException(e);
+			throw new DBException(e);
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDatabaseDriver#getGeometryIterator(java.lang.String)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.VectorialDatabaseDriver#getGeometryIterator
+	 * (java.lang.String)
 	 */
 	public IFeatureIterator getFeatureIterator(String sql)
 			throws ReadDriverException {
@@ -228,25 +224,25 @@ public class MySQLDriver extends DefaultJDBCDriver
 	}
 
 	private MySqlFeatureIterator myGetFeatureIterator(String sql)
-	throws ReadDriverException {
+			throws ReadDriverException {
 		Statement st;
 		MySqlFeatureIterator geomIterator = null;
 		try {
 			logger.debug(sql);
-			st = ((ConnectionJDBC)conn).getConnection().createStatement();
+			st = ((ConnectionJDBC) conn).getConnection().createStatement();
 			// st.setFetchSize(2000);
 			ResultSet rs = st.executeQuery(sql);
 			geomIterator = new MySqlFeatureIterator(rs);
 			geomIterator.setLyrDef(getLyrDef());
 		} catch (SQLException e) {
-//			e.printStackTrace();
-//			SqlDriveExceptionType type = new SqlDriveExceptionType();
-//			type.setDriverName("MySQL Driver");
-//			type.setSql(sql);
-//			type.setLayerName(getTableName());
-//			type.setSchema(null);
-			throw new ReadDriverException("MySQL Driver",e);
-//			throw new com.iver.cit.gvsig.fmap.DriverException(e);
+			// e.printStackTrace();
+			// SqlDriveExceptionType type = new SqlDriveExceptionType();
+			// type.setDriverName("MySQL Driver");
+			// type.setSql(sql);
+			// type.setLayerName(getTableName());
+			// type.setSchema(null);
+			throw new ReadDriverException("MySQL Driver", e);
+			// throw new com.iver.cit.gvsig.fmap.DriverException(e);
 		}
 
 		return geomIterator;
@@ -254,8 +250,10 @@ public class MySQLDriver extends DefaultJDBCDriver
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDatabaseDriver#getGeometryIterator(java.awt.geom.Rectangle2D)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.VectorialDatabaseDriver#getGeometryIterator
+	 * (java.awt.geom.Rectangle2D)
 	 */
 	public IFeatureIterator getFeatureIterator(Rectangle2D r, String strEPSG)
 			throws ReadDriverException {
@@ -270,7 +268,7 @@ public class MySQLDriver extends DefaultJDBCDriver
 	 * Le pasas el rectángulo que quieres pedir. La primera vez es el
 	 * workingArea, y las siguientes una interseccion de este rectangulo con el
 	 * workingArea
-	 *
+	 * 
 	 * @param r
 	 * @param strEPSG
 	 * @return
@@ -289,9 +287,11 @@ public class MySQLDriver extends DefaultJDBCDriver
 				+ " " + yMax + ")', '" + strEPSG + "')";
 		String sqlAux;
 		if (getWhereClause().startsWith("WHERE"))
-			sqlAux = getWhereClause() + " AND " +"MBRIntersects(" + wktBox + ", " + getLyrDef().getFieldGeometry() + ")";
+			sqlAux = getWhereClause() + " AND " + "MBRIntersects(" + wktBox
+					+ ", " + getLyrDef().getFieldGeometry() + ")";
 		else
-			sqlAux = "WHERE MBRIntersects(" + wktBox + ", " + getLyrDef().getFieldGeometry() + ")";
+			sqlAux = "WHERE MBRIntersects(" + wktBox + ", "
+					+ getLyrDef().getFieldGeometry() + ")";
 		return sqlAux;
 	}
 
@@ -325,8 +325,7 @@ public class MySQLDriver extends DefaultJDBCDriver
 	/**
 	 * @see com.hardcode.gdbms.engine.data.driver.ObjectDriver#getPrimaryKeys()
 	 */
-	public int[] getPrimaryKeys()
-			throws ReadDriverException {
+	public int[] getPrimaryKeys() throws ReadDriverException {
 		return new int[] { getLyrDef().getIdFieldID() - 2 };
 	}
 
@@ -340,17 +339,18 @@ public class MySQLDriver extends DefaultJDBCDriver
 	/**
 	 * @see com.hardcode.gdbms.engine.data.driver.ObjectDriver#write(com.hardcode.gdbms.engine.data.edition.DataWare)
 	 */
-	public void write(DataWare arg0){
+	public void write(DataWare arg0) {
 		// TODO Auto-generated method stub
 
 	}
 
 	private void getTableEPSG() {
 		try {
-			Statement stAux = ((ConnectionJDBC)conn).getConnection().createStatement();
+			Statement stAux = ((ConnectionJDBC) conn).getConnection()
+					.createStatement();
 
-			String sql = "SELECT SRID(" + getLyrDef().getFieldGeometry() + ") FROM " + getTableName()
-					+ " LIMIT 1;";
+			String sql = "SELECT SRID(" + getLyrDef().getFieldGeometry()
+					+ ") FROM " + getTableName() + " LIMIT 1;";
 			ResultSet rs = stAux.executeQuery(sql);
 			rs.next();
 			originalEPSG = "" + rs.getInt(1);
@@ -375,16 +375,19 @@ public class MySQLDriver extends DefaultJDBCDriver
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDatabaseDriver#getFeatureIterator(java.awt.geom.Rectangle2D,
-	 *      java.lang.String, java.lang.String[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.VectorialDatabaseDriver#getFeatureIterator
+	 * (java.awt.geom.Rectangle2D, java.lang.String, java.lang.String[])
 	 */
 	public IFeatureIterator getFeatureIterator(Rectangle2D r, String strEPSG,
 			String[] alphaNumericFieldsNeeded) throws ReadDriverException {
 
 		DBLayerDefinition lyrDef = getLyrDef();
 		DBLayerDefinition clonedLyrDef = cloneLyrDef(lyrDef);
-		ArrayList<FieldDescription> myFieldsDesc = new ArrayList<FieldDescription>(); // = new FieldDescription[alphaNumericFieldsNeeded.length+1];
+		ArrayList<FieldDescription> myFieldsDesc = new ArrayList<FieldDescription>(); // =
+																						// new
+																						// FieldDescription[alphaNumericFieldsNeeded.length+1];
 
 		if (workingArea != null)
 			r = r.createIntersection(workingArea);
@@ -394,37 +397,34 @@ public class MySQLDriver extends DefaultJDBCDriver
 		if (alphaNumericFieldsNeeded != null) {
 			for (int i = 0; i < alphaNumericFieldsNeeded.length; i++) {
 				strAux = strAux + ", " + alphaNumericFieldsNeeded[i];
-				if (alphaNumericFieldsNeeded[i].
-						equals(lyrDef.getFieldID())){
+				if (alphaNumericFieldsNeeded[i].equals(lyrDef.getFieldID())) {
 					found = true;
 					clonedLyrDef.setIdFieldID(i);
 				}
 
-
 				FieldDescription[] fieldsDesc = lyrDef.getFieldsDesc();
-				for (int j =0; j < fieldsDesc.length; j++){
-					if (fieldsDesc[j].getFieldName().
-							equals(alphaNumericFieldsNeeded[i])){
+				for (int j = 0; j < fieldsDesc.length; j++) {
+					if (fieldsDesc[j].getFieldName().equals(
+							alphaNumericFieldsNeeded[i])) {
 						myFieldsDesc.add(fieldsDesc[j]);
 					}
 				}
-
 
 			}
 		}
 		// Nos aseguramos de pedir siempre el campo ID
 		if (found == false) {
 			strAux = strAux + ", " + lyrDef.getFieldID();
-			myFieldsDesc.add(lyrDef.getFieldsDesc()[lyrDef.getIdField(
-					lyrDef.getFieldID())]);
-			clonedLyrDef.setIdFieldID(myFieldsDesc.size()-1);
+			myFieldsDesc.add(lyrDef.getFieldsDesc()[lyrDef.getIdField(lyrDef
+					.getFieldID())]);
+			clonedLyrDef.setIdFieldID(myFieldsDesc.size() - 1);
 		}
-		clonedLyrDef.setFieldsDesc( (FieldDescription[])myFieldsDesc.toArray(new FieldDescription[]{}) );
+		clonedLyrDef.setFieldsDesc((FieldDescription[]) myFieldsDesc
+				.toArray(new FieldDescription[] {}));
 
-
-		String sqlProv = "SELECT " + strAux + " FROM "
-				+ lyrDef.getTableName() + " ";
-				// + getLyrDef().getWhereClause();
+		String sqlProv = "SELECT " + strAux + " FROM " + lyrDef.getTableName()
+				+ " ";
+		// + getLyrDef().getWhereClause();
 
 		String sqlAux;
 		sqlAux = sqlProv + getCompoundWhere(r, strEPSG);
@@ -444,97 +444,109 @@ public class MySQLDriver extends DefaultJDBCDriver
 		return writer;
 	}
 
-public String[] getTableFields(IConnection conex, String table) throws DBException {
-		try{
-		Statement st = ((ConnectionJDBC)conex).getConnection().createStatement();
-        // ResultSet rs = dbmd.getTables(catalog, null, dbLayerDefinition.getTable(), null);
-		ResultSet rs = st.executeQuery("select * from " + table + " LIMIT 1");
-		ResultSetMetaData rsmd = rs.getMetaData();
+	public String[] getTableFields(IConnection conex, String table)
+			throws DBException {
+		try {
+			Statement st = ((ConnectionJDBC) conex).getConnection()
+					.createStatement();
+			// ResultSet rs = dbmd.getTables(catalog, null,
+			// dbLayerDefinition.getTable(), null);
+			ResultSet rs = st.executeQuery("select * from " + table
+					+ " LIMIT 1");
+			ResultSetMetaData rsmd = rs.getMetaData();
 
-		String[] ret = new String[rsmd.getColumnCount()];
+			String[] ret = new String[rsmd.getColumnCount()];
 
-		for (int i = 0; i < ret.length; i++) {
-			ret[i] = rsmd.getColumnName(i+1);
-		}
+			for (int i = 0; i < ret.length; i++) {
+				ret[i] = rsmd.getColumnName(i + 1);
+			}
 
-		return ret;
-		}catch (SQLException e) {
+			return ret;
+		} catch (SQLException e) {
 			throw new DBException(e);
 		}
 	}
 
-private DBLayerDefinition cloneLyrDef(DBLayerDefinition lyrDef){
-	DBLayerDefinition clonedLyrDef = new DBLayerDefinition();
+	private DBLayerDefinition cloneLyrDef(DBLayerDefinition lyrDef) {
+		DBLayerDefinition clonedLyrDef = new DBLayerDefinition();
 
-	clonedLyrDef.setName(lyrDef.getName());
-	clonedLyrDef.setFieldsDesc(lyrDef.getFieldsDesc());
+		clonedLyrDef.setName(lyrDef.getName());
+		clonedLyrDef.setFieldsDesc(lyrDef.getFieldsDesc());
 
-	clonedLyrDef.setShapeType(lyrDef.getShapeType());
-	clonedLyrDef.setCrs(lyrDef.getCrs());
+		clonedLyrDef.setShapeType(lyrDef.getShapeType());
+		clonedLyrDef.setCrs(lyrDef.getCrs());
 
-	clonedLyrDef.setConnection(lyrDef.getConnection());
-	clonedLyrDef.setCatalogName(lyrDef.getCatalogName());
-	clonedLyrDef.setSchema(lyrDef.getSchema());
-	clonedLyrDef.setTableName(lyrDef.getTableName());
+		clonedLyrDef.setConnection(lyrDef.getConnection());
+		clonedLyrDef.setCatalogName(lyrDef.getCatalogName());
+		clonedLyrDef.setSchema(lyrDef.getSchema());
+		clonedLyrDef.setTableName(lyrDef.getTableName());
 
-	clonedLyrDef.setFieldID(lyrDef.getFieldID());
-	clonedLyrDef.setFieldGeometry(lyrDef.getFieldGeometry());
-	clonedLyrDef.setWhereClause(lyrDef.getWhereClause());
-	clonedLyrDef.setWorkingArea(lyrDef.getWorkingArea());
-	clonedLyrDef.setSRID_EPSG(lyrDef.getSRID_EPSG());
-	clonedLyrDef.setClassToInstantiate(lyrDef.getClassToInstantiate());
+		clonedLyrDef.setFieldID(lyrDef.getFieldID());
+		clonedLyrDef.setFieldGeometry(lyrDef.getFieldGeometry());
+		clonedLyrDef.setWhereClause(lyrDef.getWhereClause());
+		clonedLyrDef.setWorkingArea(lyrDef.getWorkingArea());
+		clonedLyrDef.setSRID_EPSG(lyrDef.getSRID_EPSG());
+		clonedLyrDef.setClassToInstantiate(lyrDef.getClassToInstantiate());
 
-	clonedLyrDef.setIdFieldID(lyrDef.getIdFieldID());
-	clonedLyrDef.setDimension(lyrDef.getDimension());
-	clonedLyrDef.setHost(lyrDef.getHost());
-	clonedLyrDef.setPort(lyrDef.getPort());
-	clonedLyrDef.setDataBase(lyrDef.getDataBase());
-	clonedLyrDef.setUser(lyrDef.getUser());
-	clonedLyrDef.setPassword(lyrDef.getPassword());
-	clonedLyrDef.setConnectionName(lyrDef.getConnectionName());
-	return clonedLyrDef;
-}
+		clonedLyrDef.setIdFieldID(lyrDef.getIdFieldID());
+		clonedLyrDef.setDimension(lyrDef.getDimension());
+		clonedLyrDef.setHost(lyrDef.getHost());
+		clonedLyrDef.setPort(lyrDef.getPort());
+		clonedLyrDef.setDataBase(lyrDef.getDataBase());
+		clonedLyrDef.setUser(lyrDef.getUser());
+		clonedLyrDef.setPassword(lyrDef.getPassword());
+		clonedLyrDef.setConnectionName(lyrDef.getConnectionName());
+		return clonedLyrDef;
+	}
 
-
-/**
- * Gets the table's possible geometry fields. By default, all fields can be geometry
- * fields. It should be overwritten by subclasses.
- *
- * @param conn conenction object
- * @param table_name table name
- * @return the table's possible geometry fields
- * @throws SQLException
- */
-public String[] getGeometryFieldsCandidates(IConnection conn, String table_name) throws DBException {
-	try {
-		Statement st = ((ConnectionJDBC)conn).getConnection().createStatement();
-		ResultSet rs = st.executeQuery("select * from " + table_name + " where false");
-		ResultSetMetaData rsmd = rs.getMetaData();
-		ArrayList names = new ArrayList();
-		ResultSetMetaData rsMeta = rs.getMetaData();
-		boolean isGeo;
-		for (int i = 0; i < rsMeta.getColumnCount(); i++) {
-			isGeo = false;
-			System.out.println(rsMeta.getColumnName(i+1));
-			for (int j = 0;j< GEOM_SQL_TYPE_NAMES.length;j++){
-				rsMeta.getColumnType(i+1);
-				System.out.println(rsMeta.getColumnTypeName(i+1));
-				if (GEOM_SQL_TYPE_NAMES[j].equalsIgnoreCase(rsMeta.getColumnTypeName(i+1))){
-					isGeo = true;
-					break;
+	/**
+	 * Gets the table's possible geometry fields. By default, all fields can be
+	 * geometry fields. It should be overwritten by subclasses.
+	 * 
+	 * @param conn
+	 *            conenction object
+	 * @param table_name
+	 *            table name
+	 * @return the table's possible geometry fields
+	 * @throws SQLException
+	 */
+	public String[] getGeometryFieldsCandidates(IConnection conn,
+			String table_name) throws DBException {
+		try {
+			Statement st = ((ConnectionJDBC) conn).getConnection()
+					.createStatement();
+			ResultSet rs = st.executeQuery("select * from " + table_name
+					+ " where false");
+			ResultSetMetaData rsmd = rs.getMetaData();
+			ArrayList names = new ArrayList();
+			ResultSetMetaData rsMeta = rs.getMetaData();
+			boolean isGeo;
+			for (int i = 0; i < rsMeta.getColumnCount(); i++) {
+				isGeo = false;
+				System.out.println(rsMeta.getColumnName(i + 1));
+				for (int j = 0; j < GEOM_SQL_TYPE_NAMES.length; j++) {
+					rsMeta.getColumnType(i + 1);
+					System.out.println(rsMeta.getColumnTypeName(i + 1));
+					if (GEOM_SQL_TYPE_NAMES[j].equalsIgnoreCase(rsMeta
+							.getColumnTypeName(i + 1))) {
+						isGeo = true;
+						break;
+					}
+				}
+				if (isGeo
+						|| "UNKNOWN".equalsIgnoreCase(rsMeta
+								.getColumnTypeName(i + 1))) {
+					names.add(rsMeta.getColumnName(i + 1));
 				}
 			}
-			if (isGeo || "UNKNOWN".equalsIgnoreCase(rsMeta.getColumnTypeName(i+1))){
-				names.add(rsMeta.getColumnName(i+1));
-			}
-		}
-		rsMeta = null;
-		rs.close(); st.close();
-		return (String[]) names.toArray(new String[names.size()]);
-    	} catch (SQLException e) {
+			rsMeta = null;
+			rs.close();
+			st.close();
+			return (String[]) names.toArray(new String[names.size()]);
+		} catch (SQLException e) {
 			throw new DBException(e);
 		}
-}
+	}
 
 }
 

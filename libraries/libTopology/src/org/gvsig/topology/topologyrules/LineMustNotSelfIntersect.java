@@ -78,102 +78,100 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.LineString;
 
-
 /**
- *Lines of a layer must not have self intersections.
- *JTS allows this. This is one of the restrictions that must
- *not have pseudonodos checks.
- *
+ * Lines of a layer must not have self intersections. JTS allows this. This is
+ * one of the restrictions that must not have pseudonodos checks.
+ * 
  */
-public class LineMustNotSelfIntersect extends AbstractTopologyRule 
-	implements IRuleWithClusterTolerance {
+public class LineMustNotSelfIntersect extends AbstractTopologyRule implements
+		IRuleWithClusterTolerance {
 
-	final static String RULE_NAME = Messages.getText("line_must_not_self_intersect");
-	
-	private static List<ITopologyErrorFix> automaticErrorFixes =
-		new ArrayList<ITopologyErrorFix>();
-	static{
+	final static String RULE_NAME = Messages
+			.getText("line_must_not_self_intersect");
+
+	private static List<ITopologyErrorFix> automaticErrorFixes = new ArrayList<ITopologyErrorFix>();
+	static {
 		automaticErrorFixes.add(new SplitSelfIntersectingLineFix());
 	}
-	
+
 	private static final Color DEFAULT_ERROR_COLOR = Color.YELLOW;
-	
-	
-	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = 
-		(MultiShapeSymbol) SymbologyFactory.createDefaultSymbolByShapeType(FShape.MULTI, 
-											DEFAULT_ERROR_COLOR);
-	static{
+
+	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = (MultiShapeSymbol) SymbologyFactory
+			.createDefaultSymbolByShapeType(FShape.MULTI, DEFAULT_ERROR_COLOR);
+	static {
 		DEFAULT_ERROR_SYMBOL.setDescription(RULE_NAME);
 		DEFAULT_ERROR_SYMBOL.setSize(3);
 	}
 	private double clusterTolerance;
-	
+
 	/**
 	 * Symbol for topology errors caused by a violation of this rule.
 	 */
 	private MultiShapeSymbol errorSymbol = DEFAULT_ERROR_SYMBOL;
-	
-	
-	public LineMustNotSelfIntersect(Topology topology, 
-									FLyrVect originLyr,
-									double clusterTolerance) {
+
+	public LineMustNotSelfIntersect(Topology topology, FLyrVect originLyr,
+			double clusterTolerance) {
 		super(topology, originLyr);
 		setClusterTolerance(clusterTolerance);
 	}
-	
-	public LineMustNotSelfIntersect(){}
 
-	
+	public LineMustNotSelfIntersect() {
+	}
+
 	public String getName() {
 		return RULE_NAME;
 	}
 
 	public void checkPreconditions() throws TopologyRuleDefinitionException {
 		try {
-			if( FGeometryUtil.getDimensions(this.originLyr.getShapeType()) == 0){
-				throw new TopologyRuleDefinitionException("Capa con tipo de geometria incorrecto para la regla "+this.getClassName());
+			if (FGeometryUtil.getDimensions(this.originLyr.getShapeType()) == 0) {
+				throw new TopologyRuleDefinitionException(
+						"Capa con tipo de geometria incorrecto para la regla "
+								+ this.getClassName());
 			}
 		} catch (ReadDriverException e) {
-			throw new TopologyRuleDefinitionException("Error de driver al verificar el tipo de geometria de la capa "+originLyr.getName());
+			throw new TopologyRuleDefinitionException(
+					"Error de driver al verificar el tipo de geometria de la capa "
+							+ originLyr.getName());
 		}
 	}
-
 
 	public void validateFeature(IFeature feature) {
 		IGeometry geometry = feature.getGeometry();
 		Geometry jtsGeometry = NewFConverter.toJtsGeometry(geometry);
 		process(jtsGeometry, feature);
 	}
-	
-	private void process(Geometry geometry, IFeature feature){
-		if( ! (geometry instanceof LineString) && ! (geometry instanceof GeometryCollection))
+
+	private void process(Geometry geometry, IFeature feature) {
+		if (!(geometry instanceof LineString)
+				&& !(geometry instanceof GeometryCollection))
 			return;
-		
-		if(geometry instanceof GeometryCollection){
+
+		if (geometry instanceof GeometryCollection) {
 			GeometryCollection geomCol = (GeometryCollection) geometry;
-			for(int i = 0; i < geomCol.getNumGeometries(); i++){
+			for (int i = 0; i < geomCol.getNumGeometries(); i++) {
 				Geometry geom = geomCol.getGeometryN(i);
 				process(geom, feature);
 			}
-		}else{
+		} else {
 			LineString lineString = (LineString) geometry;
-			SnapLineStringSelfIntersectionChecker checker =
-				new SnapLineStringSelfIntersectionChecker(lineString, clusterTolerance);
-			if(checker.hasSelfIntersections()){
+			SnapLineStringSelfIntersectionChecker checker = new SnapLineStringSelfIntersectionChecker(
+					lineString, clusterTolerance);
+			if (checker.hasSelfIntersections()) {
 				Coordinate[] coords = checker.getSelfIntersections();
 				double[] x = new double[coords.length];
 				double[] y = new double[coords.length];
-				for(int i = 0; i < coords.length; i++){
+				for (int i = 0; i < coords.length; i++) {
 					x[i] = coords[i].x;
 					y[i] = coords[i].y;
 				}
 				IGeometry errorGeometry = ShapeFactory.createMultipoint2D(x, y);
-				TopologyError topologyError = new TopologyError(errorGeometry, this,
-						feature, topology);
+				TopologyError topologyError = new TopologyError(errorGeometry,
+						this, feature, topology);
 				topologyError.setID(errorContainer.getErrorFid());
 				addTopologyError(topologyError);
-			}//if selfintersections
-		}	
+			}// if selfintersections
+		}
 	}
 
 	public double getClusterTolerance() {
@@ -192,7 +190,7 @@ public class LineMustNotSelfIntersect extends AbstractTopologyRule
 			return false;
 		}
 	}
-	
+
 	public List<ITopologyErrorFix> getAutomaticErrorFixes() {
 		return automaticErrorFixes;
 	}
@@ -204,13 +202,12 @@ public class LineMustNotSelfIntersect extends AbstractTopologyRule
 	public MultiShapeSymbol getErrorSymbol() {
 		return errorSymbol;
 	}
-	
+
 	public void setErrorSymbol(MultiShapeSymbol errorSymbol) {
 		this.errorSymbol = errorSymbol;
 	}
-	
-	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError){
+
+	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError) {
 		return automaticErrorFixes.get(0);
 	}
 }
- 

@@ -92,7 +92,7 @@ public class ProjectionUtils {
 	}
 
 	public static String getAbrev(CoordinateReferenceSystem crs) {
-		// TODO geotools refactoring: is this method correct? 
+		// TODO geotools refactoring: is this method correct?
 		return CRS.toSRS(crs);
 	}
 

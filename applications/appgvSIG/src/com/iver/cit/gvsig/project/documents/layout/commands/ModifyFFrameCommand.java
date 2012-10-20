@@ -44,37 +44,41 @@ import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.edition.commands.AbstractCommand;
 import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 
-public class ModifyFFrameCommand extends AbstractCommand{
-//	private AddFFrameCommand addFFrameCommand;
-//	private RemoveFFrameCommand removeFFrameCommand;
+public class ModifyFFrameCommand extends AbstractCommand {
+	// private AddFFrameCommand addFFrameCommand;
+	// private RemoveFFrameCommand removeFFrameCommand;
 	private int index;
 	private int newIndex;
 	private DefaultEditableFeatureSource defs;
 	private IFFrame frame;
-	public ModifyFFrameCommand(EditableFeatureSource efs,IFFrame frame,int index,int newIndex){
-		this.index=index;
-		this.newIndex=newIndex;
-		defs=(DefaultEditableFeatureSource)efs;
-		this.frame=frame;
-//		removeFFrameCommand=new RemoveFFrameCommand(efs,index);
-//		addFFrameCommand=new AddFFrameCommand(efs,frame,newIndex);
+
+	public ModifyFFrameCommand(EditableFeatureSource efs, IFFrame frame,
+			int index, int newIndex) {
+		this.index = index;
+		this.newIndex = newIndex;
+		defs = (DefaultEditableFeatureSource) efs;
+		this.frame = frame;
+		// removeFFrameCommand=new RemoveFFrameCommand(efs,index);
+		// addFFrameCommand=new AddFFrameCommand(efs,frame,newIndex);
 
 	}
+
 	public void undo() {
-//		removeFFrameCommand.undo();
-//		addFFrameCommand.undo();
-		defs.undoModifyFFrame(index,newIndex);
+		// removeFFrameCommand.undo();
+		// addFFrameCommand.undo();
+		defs.undoModifyFFrame(index, newIndex);
 
 	}
 
 	public void redo() {
-//		removeFFrameCommand.redo();
-//		addFFrameCommand.redo();
-		defs.redoModifyFFrame(index,newIndex,frame);
+		// removeFFrameCommand.redo();
+		// addFFrameCommand.redo();
+		defs.redoModifyFFrame(index, newIndex, frame);
 
 	}
+
 	public String getType() {
-		return PluginServices.getText(this,"modificar");
+		return PluginServices.getText(this, "modificar");
 	}
 
 }

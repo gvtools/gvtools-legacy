@@ -50,50 +50,55 @@ import org.gvsig.remoteClient.arcims.ArcImsStatus;
 import org.gvsig.remoteClient.arcims.exceptions.ArcImsException;
 import org.gvsig.remoteClient.wms.ICancellable;
 
-
 /**
  * This interface offers the functionality of an ArcIMS client.
- *
- * @see es.prodevelop.cit.gvsig.arcims.fmap.drivers.FMapRasterArcImsDriver FMapRasterArcImsDriver
+ * 
+ * @see es.prodevelop.cit.gvsig.arcims.fmap.drivers.FMapRasterArcImsDriver
+ *      FMapRasterArcImsDriver
  * @author jldominguez
  */
 public interface ArcImsDriver {
-    /**
-    * Gets the layers available on the server
-    * (the class that implements this interface will
-    * get the service name from the user)
-    *
-    * @param server ArcIMS server's URL
-    */
-    public void getCapabilities(URL server, ICancellable cancel)
-        throws ArcImsException, IOException, ProtocolException;
+	/**
+	 * Gets the layers available on the server (the class that implements this
+	 * interface will get the service name from the user)
+	 * 
+	 * @param server
+	 *            ArcIMS server's URL
+	 */
+	public void getCapabilities(URL server, ICancellable cancel)
+			throws ArcImsException, IOException, ProtocolException;
 
-    /**
-    * Gets the visual information from the layers of
-    * the required service (that is, the map itself) depending
-    * on the graphic context (coord. system, view's size, etc)
-    *
-    * @param status the graphic context in which the request is performed
-    * @return the graphic data to be viewed, that is, the map
-    */
-    public Object getMap(ArcImsStatus status)
-        throws ArcImsException, IOException, ProtocolException;
+	/**
+	 * Gets the visual information from the layers of the required service (that
+	 * is, the map itself) depending on the graphic context (coord. system,
+	 * view's size, etc)
+	 * 
+	 * @param status
+	 *            the graphic context in which the request is performed
+	 * @return the graphic data to be viewed, that is, the map
+	 */
+	public Object getMap(ArcImsStatus status) throws ArcImsException,
+			IOException, ProtocolException;
 
-    /**
-    * Gets the layer's available information on a particular xy coordinates
-    * (usually derived from a mouse click). If it's a raster layer,
-    * a request will be sent to the server asking for the data associated
-    * to the elements (polygon, line or point) which cover the clicked
-    * pixel.
-    *
-    * @param status the graphic context in which the request is performed
-    * (ccord. system, view's dimension etc.)
-    * @param i x coordinate of the queried pixel
-    * @param j y coordinate of the queried pixel
-    * @param  max_value maximun number of vector elements whose information
-    * will be retrieved.
-    * @return the available information at the given coordinates
-    */
-    public String getFeatureInfo(ArcImsStatus status, int i, int j,
-        int max_value) throws ArcImsException, IOException, ProtocolException;
+	/**
+	 * Gets the layer's available information on a particular xy coordinates
+	 * (usually derived from a mouse click). If it's a raster layer, a request
+	 * will be sent to the server asking for the data associated to the elements
+	 * (polygon, line or point) which cover the clicked pixel.
+	 * 
+	 * @param status
+	 *            the graphic context in which the request is performed (ccord.
+	 *            system, view's dimension etc.)
+	 * @param i
+	 *            x coordinate of the queried pixel
+	 * @param j
+	 *            y coordinate of the queried pixel
+	 * @param max_value
+	 *            maximun number of vector elements whose information will be
+	 *            retrieved.
+	 * @return the available information at the given coordinates
+	 */
+	public String getFeatureInfo(ArcImsStatus status, int i, int j,
+			int max_value) throws ArcImsException, IOException,
+			ProtocolException;
 }

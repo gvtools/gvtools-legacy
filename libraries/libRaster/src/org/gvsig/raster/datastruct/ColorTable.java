@@ -27,57 +27,59 @@ import org.gvsig.raster.RasterLibrary;
 import es.gva.cit.jgdal.GdalColorEntry;
 import es.gva.cit.jgdal.GdalColorTable;
 import es.gva.cit.jgdal.GdalException;
+
 /**
  * Paleta para raster. Esta consta de los valores RGB de la paleta que son
  * almacenados en un vector donde cada elemento contiene en su interior el RGB
  * completo y del vector de rangos.
- *
+ * 
  * @version 04/07/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class ColorTable implements Cloneable {
 	/**
-	 * Lista de ColorItem donde estaran todos los valores de la paleta segun
-	 * el interfaz
+	 * Lista de ColorItem donde estaran todos los valores de la paleta segun el
+	 * interfaz
 	 */
-	protected ArrayList   colorItems        = null;
+	protected ArrayList colorItems = null;
 
 	/**
 	 * Booleano que define si se interpolaran los valores de la paleta.
 	 */
-	protected boolean     interpolated      = true;
+	protected boolean interpolated = true;
 
 	/**
 	 * Lista de rangos para paletas decimales
 	 */
 
-	protected double[]    range             = null;
+	protected double[] range = null;
 	/**
 	 * Lista de valores RGB
 	 */
-	protected byte[][]    paletteByBand     = null;
+	protected byte[][] paletteByBand = null;
 
 	/**
 	 * Nombre de la clase asociada a la entrada
 	 */
-	protected String[]    nameClass         = null;
+	protected String[] nameClass = null;
 
 	/**
 	 * Nombre de la paleta
 	 */
-	protected String      name              = null;
+	protected String name = null;
 
 	/**
 	 * Ruta del fichero a la cual se asocia la paleta. Las bandas de un
 	 * GeoRasterMultiFile han de saber a que paleta van asociadas.
 	 */
-	protected String      filePath          = null;
+	protected String filePath = null;
 
-	private int           errorColor        = 8;
+	private int errorColor = 8;
 
 	/**
 	 * Constructor vacío.
+	 * 
 	 * @param name
 	 */
 	public ColorTable() {
@@ -86,6 +88,7 @@ public class ColorTable implements Cloneable {
 
 	/**
 	 * Constructor. Asigna el nombre de la paleta.
+	 * 
 	 * @param name
 	 */
 	public ColorTable(String name) {
@@ -94,7 +97,9 @@ public class ColorTable implements Cloneable {
 
 	/**
 	 * Asigna el nombre de la paleta
-	 * @param Nombre de la paleta
+	 * 
+	 * @param Nombre
+	 *            de la paleta
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -102,6 +107,7 @@ public class ColorTable implements Cloneable {
 
 	/**
 	 * Obtiene el nombre de la paleta
+	 * 
 	 * @return Nombre de la paleta
 	 */
 	public String getName() {
@@ -109,12 +115,14 @@ public class ColorTable implements Cloneable {
 	}
 
 	/**
-	 * Crea una paleta a traves de una lista de colores y se le puede especificar
-	 * si queremos que la comprima o no.
+	 * Crea una paleta a traves de una lista de colores y se le puede
+	 * especificar si queremos que la comprima o no.
+	 * 
 	 * @param colorItems
 	 * @param compress
 	 */
-	public void createPaletteFromColorItems(ArrayList colorItems, boolean compress) {
+	public void createPaletteFromColorItems(ArrayList colorItems,
+			boolean compress) {
 		this.colorItems = colorItems;
 
 		// Ordena la paleta
@@ -160,9 +168,10 @@ public class ColorTable implements Cloneable {
 
 	/**
 	 * Informa de si el color c3 se encuentra en un rango valido entre c1 y c2.
-	 * Para colores con nombre de clase se devolverá false para no eliminar nunca
-	 * ese item. Para colores con interpolacion distinta al 50% tambien
+	 * Para colores con nombre de clase se devolverá false para no eliminar
+	 * nunca ese item. Para colores con interpolacion distinta al 50% tambien
 	 * devolveremos false.
+	 * 
 	 * @param c1
 	 * @param c2
 	 * @param c3
@@ -177,10 +186,18 @@ public class ColorTable implements Cloneable {
 			return false;
 
 		double max = c2.getValue() - c1.getValue();
-		int r = c1.getColor().getRed() + (int) (((c2.getColor().getRed() - c1.getColor().getRed()) * (c3.getValue() - c1.getValue())) / max);
-		int g = c1.getColor().getGreen() + (int) (((c2.getColor().getGreen() - c1.getColor().getGreen()) * (c3.getValue() - c1.getValue())) / max);
-		int b = c1.getColor().getBlue() + (int) (((c2.getColor().getBlue() - c1.getColor().getBlue()) * (c3.getValue() - c1.getValue())) / max);
-		int a = c1.getColor().getAlpha() + (int) (((c2.getColor().getAlpha() - c1.getColor().getAlpha()) * (c3.getValue() - c1.getValue())) / max);
+		int r = c1.getColor().getRed()
+				+ (int) (((c2.getColor().getRed() - c1.getColor().getRed()) * (c3
+						.getValue() - c1.getValue())) / max);
+		int g = c1.getColor().getGreen()
+				+ (int) (((c2.getColor().getGreen() - c1.getColor().getGreen()) * (c3
+						.getValue() - c1.getValue())) / max);
+		int b = c1.getColor().getBlue()
+				+ (int) (((c2.getColor().getBlue() - c1.getColor().getBlue()) * (c3
+						.getValue() - c1.getValue())) / max);
+		int a = c1.getColor().getAlpha()
+				+ (int) (((c2.getColor().getAlpha() - c1.getColor().getAlpha()) * (c3
+						.getValue() - c1.getValue())) / max);
 		Color aux = new Color(r & 0xff, g & 0xff, b & 0xff, a & 0xff);
 
 		return isEqualColor(c3.getColor(), aux, errorColor);
@@ -201,11 +218,11 @@ public class ColorTable implements Cloneable {
 	}
 
 	/**
-	 * Borra valores duplicados de la paleta. Solo aquellos que coincidan en valor
-	 * y color.
+	 * Borra valores duplicados de la paleta. Solo aquellos que coincidan en
+	 * valor y color.
 	 */
 	public void removeDuplicatedValues() {
-		for (int i = colorItems.size() - 2 ; i >= 0; i--) {
+		for (int i = colorItems.size() - 2; i >= 0; i--) {
 			if ((i + 1) >= colorItems.size())
 				continue;
 			ColorItem colorItem = (ColorItem) colorItems.get(i + 1);
@@ -218,16 +235,20 @@ public class ColorTable implements Cloneable {
 				continue;
 			// Borraremos siempre el valor que no tenga nombre de clase, es un
 			// dato importante
-			if ((colorItem.getNameClass() == null) || (colorItem.getNameClass().length() == 0)) {
+			if ((colorItem.getNameClass() == null)
+					|| (colorItem.getNameClass().length() == 0)) {
 				colorItems.remove(i + 1);
 				continue;
 			}
-			if ((colorItem2.getNameClass() == null) || (colorItem2.getNameClass().length() == 0)) {
+			if ((colorItem2.getNameClass() == null)
+					|| (colorItem2.getNameClass().length() == 0)) {
 				colorItems.remove(i);
 				continue;
 			}
 			// Borramos solo uno de los dos si el nombre coincide
-			if ((colorItem.getNameClass() != null) || (colorItem.getNameClass().equals(colorItem2.getNameClass()))) {
+			if ((colorItem.getNameClass() != null)
+					|| (colorItem.getNameClass().equals(colorItem2
+							.getNameClass()))) {
 				colorItems.remove(i);
 				continue;
 			}
@@ -235,14 +256,14 @@ public class ColorTable implements Cloneable {
 	}
 
 	public boolean hasAlpha() {
-		for (int i = 0; i<colorItems.size(); i++) {
+		for (int i = 0; i < colorItems.size(); i++) {
 			ColorItem colorItem = (ColorItem) colorItems.get(i);
 			if (colorItem.getColor().getAlpha() != 255)
 				return true;
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Comprime la actual tabla de color
 	 */
@@ -252,6 +273,7 @@ public class ColorTable implements Cloneable {
 
 	/**
 	 * Informa de si una tabla de color se puede comprimir
+	 * 
 	 * @return
 	 */
 	public boolean isCompressible() {
@@ -262,6 +284,7 @@ public class ColorTable implements Cloneable {
 
 	/**
 	 * Coge el array pasado por parametro y lo intenta comprimir
+	 * 
 	 * @param colorItems
 	 */
 	private void compressPalette(ArrayList colorItems) {
@@ -295,6 +318,7 @@ public class ColorTable implements Cloneable {
 	 * para los ficheros que tienen una paleta asignada, como los gif, y que son
 	 * tratados por Gdal. Se pasa la tabla de color leída desde gdal y se crea
 	 * directamente un objeto Palette.
+	 * 
 	 * @param table
 	 */
 	public void createPaletteFromGdalColorTable(GdalColorTable table) {
@@ -306,10 +330,9 @@ public class ColorTable implements Cloneable {
 				ColorItem colorItem = new ColorItem();
 				colorItem.setNameClass("");
 				colorItem.setValue(iEntry);
-				colorItem.setColor(new Color(	(int) (entry.c1 & 0xff),
-																			(int) (entry.c2 & 0xff),
-																			(int) (entry.c3 & 0xff),
-																			(int) (entry.c4 & 0xff)));
+				colorItem.setColor(new Color((int) (entry.c1 & 0xff),
+						(int) (entry.c2 & 0xff), (int) (entry.c3 & 0xff),
+						(int) (entry.c4 & 0xff)));
 
 				colorItems.add(colorItem);
 			}
@@ -319,36 +342,39 @@ public class ColorTable implements Cloneable {
 		sortPalette(colorItems);
 
 		setInterpolated(false);
-		//compressPalette();
+		// compressPalette();
 		applyPalette(colorItems);
 	}
 
 	/**
 	 * Obtiene la tabla de color por banda
+	 * 
 	 * @return Paleta
 	 */
 	public byte[][] getColorTableByBand() {
 		return paletteByBand;
 	}
 
-
 	/**
 	 * Asigna una paleta
-	 * @param palette Paleta
+	 * 
+	 * @param palette
+	 *            Paleta
 	 */
 	public void setColorTable(int[] palette) {
 		paletteByBand = new byte[palette.length][3];
 		for (int i = 0; i < palette.length; i++) {
-			paletteByBand[i][0] = (byte)((palette[i] & 0x00ff0000) >> 16);
-			paletteByBand[i][1] = (byte)((palette[i] & 0x0000ff00) >> 8);
-			paletteByBand[i][2] = (byte)(palette[i] & 0x000000ff);
+			paletteByBand[i][0] = (byte) ((palette[i] & 0x00ff0000) >> 16);
+			paletteByBand[i][1] = (byte) ((palette[i] & 0x0000ff00) >> 8);
+			paletteByBand[i][2] = (byte) (palette[i] & 0x000000ff);
 		}
 	}
 
 	/**
 	 * Obtiene los nombres de las clases de la paleta
-	 * @return Array de cadenas. Cada una corresponde con un nombre de clase
-	 * que corresponde a cada rango de tipos.
+	 * 
+	 * @return Array de cadenas. Cada una corresponde con un nombre de clase que
+	 *         corresponde a cada rango de tipos.
 	 */
 	public String[] getNameClass() {
 		return nameClass;
@@ -356,8 +382,10 @@ public class ColorTable implements Cloneable {
 
 	/**
 	 * Asigna los nombres de las clases de la paleta
-	 * @param names Array de cadenas. Cada una corresponde con un nombre de clase
-	 * que corresponde a cada rango de tipos.
+	 * 
+	 * @param names
+	 *            Array de cadenas. Cada una corresponde con un nombre de clase
+	 *            que corresponde a cada rango de tipos.
 	 */
 	public void setNameClass(String[] names) {
 		nameClass = names;
@@ -365,6 +393,7 @@ public class ColorTable implements Cloneable {
 
 	/**
 	 * Obtiene la ruta del fichero al que va asociada la paleta.
+	 * 
 	 * @return Ruta del fichero al que va asociada la paleta.
 	 */
 	public String getFilePath() {
@@ -373,7 +402,9 @@ public class ColorTable implements Cloneable {
 
 	/**
 	 * Asigna la ruta del fichero al que va asociada la paleta.
-	 * @param Ruta del fichero al que va asociada la paleta.
+	 * 
+	 * @param Ruta
+	 *            del fichero al que va asociada la paleta.
 	 */
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
@@ -381,6 +412,7 @@ public class ColorTable implements Cloneable {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#clone()
 	 */
 	public Object clone() {
@@ -393,7 +425,9 @@ public class ColorTable implements Cloneable {
 		if (colorItems != null) {
 			clone.colorItems = new ArrayList();
 			for (int i = 0; i < colorItems.size(); i++) {
-				clone.colorItems.add((ColorItem) ((ColorItem) colorItems.get(i)).clone());
+				clone.colorItems
+						.add((ColorItem) ((ColorItem) colorItems.get(i))
+								.clone());
 			}
 		}
 
@@ -425,6 +459,7 @@ public class ColorTable implements Cloneable {
 
 	/**
 	 * Devuelve un color de interpolacion entre dos colores
+	 * 
 	 * @param value
 	 * @param pos
 	 * @return
@@ -442,7 +477,8 @@ public class ColorTable implements Cloneable {
 		ColorItem item1 = (ColorItem) colorItems.get(pos);
 		ColorItem item2 = (ColorItem) colorItems.get(pos + 1);
 
-		double percValue = ((value - item1.getValue()) * 100) / (item2.getValue() - item1.getValue());
+		double percValue = ((value - item1.getValue()) * 100)
+				/ (item2.getValue() - item1.getValue());
 
 		Color halfColor = new Color(
 				(item2.getColor().getRed() + item1.getColor().getRed()) >> 1,
@@ -469,24 +505,27 @@ public class ColorTable implements Cloneable {
 
 		Color newColor = new Color(
 				(int) (color1.getRed() + ((color2.getRed() - color1.getRed()) * percNew)) & 0xff,
-				(int) (color1.getGreen() + ((color2.getGreen() - color1.getGreen()) * percNew)) & 0xff,
+				(int) (color1.getGreen() + ((color2.getGreen() - color1
+						.getGreen()) * percNew)) & 0xff,
 				(int) (color1.getBlue() + ((color2.getBlue() - color1.getBlue()) * percNew)) & 0xff,
-				(int) (color1.getAlpha() + ((color2.getAlpha() - color1.getAlpha()) * percNew)) & 0xff);
-
+				(int) (color1.getAlpha() + ((color2.getAlpha() - color1
+						.getAlpha()) * percNew)) & 0xff);
 
 		return newColor;
 	}
 
 	/*
-	 * TODO: RENDIMIENTO: Incluir una heuristica que dado un valor se compare con
-	 * el valor de la mitad de la tabla y si es menor se empieza a recorrer desde
-	 * el principio sino se empieza a recorrer desde la mitad de la tabla hasta
-	 * abajo. Esto hace que se reduzca la tabla a la mitad de valores haciendo
-	 * solo una comparación.
+	 * TODO: RENDIMIENTO: Incluir una heuristica que dado un valor se compare
+	 * con el valor de la mitad de la tabla y si es menor se empieza a recorrer
+	 * desde el principio sino se empieza a recorrer desde la mitad de la tabla
+	 * hasta abajo. Esto hace que se reduzca la tabla a la mitad de valores
+	 * haciendo solo una comparación.
 	 */
 	/**
 	 * Obtiene el valor RGB para un clave entera pasada por parámetro
-	 * @param value clave de la cual se quiere obtener el valor RGB de la paleta
+	 * 
+	 * @param value
+	 *            clave de la cual se quiere obtener el valor RGB de la paleta
 	 * @return valor RGB
 	 */
 	public byte[] getRGBAByBand(double value) {
@@ -511,7 +550,8 @@ public class ColorTable implements Cloneable {
 	private void sortPalette(ArrayList colorItems) {
 		for (int i = 0; i < colorItems.size(); i++) {
 			for (int j = i + 1; j < colorItems.size(); j++) {
-				if (((ColorItem) colorItems.get(j)).getValue() < ((ColorItem) colorItems.get(i)).getValue()) {
+				if (((ColorItem) colorItems.get(j)).getValue() < ((ColorItem) colorItems
+						.get(i)).getValue()) {
 					ColorItem aux = (ColorItem) colorItems.get(i);
 					colorItems.set(i, colorItems.get(j));
 					colorItems.set(j, aux);
@@ -533,9 +573,11 @@ public class ColorTable implements Cloneable {
 		if (colorItems.size() == 0)
 			return;
 
-		// Nos preparamos para hacer las particiones, sabiendo el minimo y maximo
+		// Nos preparamos para hacer las particiones, sabiendo el minimo y
+		// maximo
 		double min = ((ColorItem) colorItems.get(0)).getValue();
-		double max = ((ColorItem) colorItems.get(colorItems.size() - 1)).getValue();
+		double max = ((ColorItem) colorItems.get(colorItems.size() - 1))
+				.getValue();
 
 		if (min > max) {
 			double aux = max;
@@ -569,8 +611,11 @@ public class ColorTable implements Cloneable {
 			} else {
 				if ((pos + 1) < colorItems.size()) {
 					double min2 = ((ColorItem) colorItems.get(pos)).getValue();
-					double max2 = ((ColorItem) colorItems.get(pos + 1)).getValue();
-					if ((min2 + ((max2 - min2) * ((ColorItem) colorItems.get(pos + 1)).getInterpolated() / 100)) < value)
+					double max2 = ((ColorItem) colorItems.get(pos + 1))
+							.getValue();
+					if ((min2 + ((max2 - min2)
+							* ((ColorItem) colorItems.get(pos + 1))
+									.getInterpolated() / 100)) < value)
 						pos++;
 				}
 				color = ((ColorItem) colorItems.get(pos)).getColor();
@@ -594,10 +639,14 @@ public class ColorTable implements Cloneable {
 		nameClass = new String[arrayColors.size()];
 
 		for (int i = 0; i < arrayColors.size(); i++) {
-			paletteByBand[i][0] = (byte) ((ColorItem) arrayColors.get(i)).getColor().getRed();
-			paletteByBand[i][1] = (byte) ((ColorItem) arrayColors.get(i)).getColor().getGreen();
-			paletteByBand[i][2] = (byte) ((ColorItem) arrayColors.get(i)).getColor().getBlue();
-			paletteByBand[i][3] = (byte) ((ColorItem) arrayColors.get(i)).getColor().getAlpha();
+			paletteByBand[i][0] = (byte) ((ColorItem) arrayColors.get(i))
+					.getColor().getRed();
+			paletteByBand[i][1] = (byte) ((ColorItem) arrayColors.get(i))
+					.getColor().getGreen();
+			paletteByBand[i][2] = (byte) ((ColorItem) arrayColors.get(i))
+					.getColor().getBlue();
+			paletteByBand[i][3] = (byte) ((ColorItem) arrayColors.get(i))
+					.getColor().getAlpha();
 			range[i] = ((ColorItem) arrayColors.get(i)).getValue();
 			nameClass[i] = ((ColorItem) arrayColors.get(i)).getNameClass();
 		}
@@ -613,6 +662,7 @@ public class ColorTable implements Cloneable {
 
 	/**
 	 * Devuelve un ArrayList con cada ColorItem de la tabla de color
+	 * 
 	 * @return
 	 */
 	public ArrayList getColorItems() {
@@ -621,6 +671,7 @@ public class ColorTable implements Cloneable {
 
 	/**
 	 * Nos indica si la paleta la ha generado con valores interpolados o no.
+	 * 
 	 * @return
 	 */
 	public boolean isInterpolated() {
@@ -629,6 +680,7 @@ public class ColorTable implements Cloneable {
 
 	/**
 	 * Definir si la paleta tendra los valores interpolados o no
+	 * 
 	 * @param interpolated
 	 */
 	public void setInterpolated(boolean interpolated) {
@@ -638,14 +690,17 @@ public class ColorTable implements Cloneable {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	public int hashCode() {
 		final int PRIME = 31;
 		int result = 1;
-		result = PRIME * result + ((colorItems == null) ? 0 : colorItems.hashCode());
+		result = PRIME * result
+				+ ((colorItems == null) ? 0 : colorItems.hashCode());
 		result = PRIME * result + errorColor;
-		result = PRIME * result + ((filePath == null) ? 0 : filePath.hashCode());
+		result = PRIME * result
+				+ ((filePath == null) ? 0 : filePath.hashCode());
 		result = PRIME * result + (interpolated ? 1231 : 1237);
 		result = PRIME * result + ((name == null) ? 0 : name.hashCode());
 		result = PRIME * result + ColorTable.hashCode(nameClass);
@@ -660,7 +715,8 @@ public class ColorTable implements Cloneable {
 			return 0;
 		int result = 1;
 		for (int index = 0; index < array.length; index++) {
-			result = PRIME * result + (array[index] == null ? 0 : array[index].hashCode());
+			result = PRIME * result
+					+ (array[index] == null ? 0 : array[index].hashCode());
 		}
 		return result;
 	}
@@ -679,6 +735,7 @@ public class ColorTable implements Cloneable {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	public boolean equals(Object obj) {
@@ -690,15 +747,16 @@ public class ColorTable implements Cloneable {
 			return false;
 		final ColorTable other = (ColorTable) obj;
 
-		if ( ((colorItems == null) && (other.colorItems != null)) ||
-				((colorItems != null) && (other.colorItems == null)) )
+		if (((colorItems == null) && (other.colorItems != null))
+				|| ((colorItems != null) && (other.colorItems == null)))
 			return false;
 
 		if (colorItems != null) {
 			if (colorItems.size() != other.colorItems.size())
 				return false;
 			for (int i = 0; i < colorItems.size(); i++) {
-				if (!((ColorItem) colorItems.get(i)).equals(other.colorItems.get(i)))
+				if (!((ColorItem) colorItems.get(i)).equals(other.colorItems
+						.get(i)))
 					return false;
 			}
 		}
@@ -732,8 +790,8 @@ public class ColorTable implements Cloneable {
 			}
 		}
 
-		if ( ((paletteByBand == null) && (other.paletteByBand != null)) ||
-				((paletteByBand != null) && (other.paletteByBand == null)) )
+		if (((paletteByBand == null) && (other.paletteByBand != null))
+				|| ((paletteByBand != null) && (other.paletteByBand == null)))
 			return false;
 
 		if (paletteByBand != null) {
@@ -748,8 +806,8 @@ public class ColorTable implements Cloneable {
 		if (!Arrays.equals(range, other.range))
 			return false;
 
-		if ( ((colorItems == null) && (other.colorItems != null)) ||
-				((colorItems != null) && (other.colorItems == null)) )
+		if (((colorItems == null) && (other.colorItems != null))
+				|| ((colorItems != null) && (other.colorItems == null)))
 			return false;
 
 		return true;
@@ -758,6 +816,7 @@ public class ColorTable implements Cloneable {
 	/**
 	 * Establece la tabla de color actual en los rangos de limite especificados
 	 * por parametros, distribuyendolo proporcionalmente.
+	 * 
 	 * @param min
 	 * @param max
 	 * @param compress
@@ -798,7 +857,9 @@ public class ColorTable implements Cloneable {
 
 		for (int i = 0; i < items.size(); i++) {
 			colorItem = (ColorItem) items.get(i);
-			colorItem.setValue(min + (((colorItem.getValue() - min2) * (max - min)) / (max2 - min2)));
+			colorItem
+					.setValue(min
+							+ (((colorItem.getValue() - min2) * (max - min)) / (max2 - min2)));
 			arrayList.add(colorItem);
 		}
 

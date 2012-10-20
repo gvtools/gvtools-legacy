@@ -17,30 +17,32 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
  */
 package org.gvsig.raster.dataset.serializer;
+
 /**
- * Excepción lanzada por los serializadores de los ficheros RMF. Este
- * se produce cuando no se puede escribir en un RMF o ha sucedido algún
- * error en su acceso.
+ * Excepción lanzada por los serializadores de los ficheros RMF. Este se produce
+ * cuando no se puede escribir en un RMF o ha sucedido algún error en su acceso.
  * 
  * @version 22/07/2008
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
-public class RmfSerializerException extends Exception{
+public class RmfSerializerException extends Exception {
 	private static final long serialVersionUID = -7057372890577482969L;
 
 	/**
 	 * Constructor. Asigna el texto de la excepción
+	 * 
 	 * @param msg
 	 */
-	public RmfSerializerException(String msg){
+	public RmfSerializerException(String msg) {
 		super(msg);
 	}
-	
+
 	/**
 	 * Constructor. Asigna el texto de la excepción y la excepción generica.
+	 * 
 	 * @param msg
 	 */
-	public RmfSerializerException(String msg, Exception e){
+	public RmfSerializerException(String msg, Exception e) {
 		super(msg, e);
 	}
 }

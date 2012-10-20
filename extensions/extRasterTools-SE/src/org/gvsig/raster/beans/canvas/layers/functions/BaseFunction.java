@@ -23,9 +23,10 @@ import java.util.ArrayList;
 
 import org.gvsig.raster.beans.canvas.DrawableElement;
 import org.gvsig.raster.beans.canvas.layers.MinMaxLines;
+
 /**
- * Todo algoritmo que queramos que implemente un realce, debe heredar de esta base
- * para poder distinguir los drawables genericos de los algoritmos.
+ * Todo algoritmo que queramos que implemente un realce, debe heredar de esta
+ * base para poder distinguir los drawables genericos de los algoritmos.
  * 
  * @version 03/03/2008
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
@@ -36,6 +37,7 @@ public abstract class BaseFunction extends DrawableElement {
 
 	/**
 	 * Especifica el limite minimo del algoritmo en forma de porcentaje
+	 * 
 	 * @param minx
 	 */
 	public void setMinX(double minx) {
@@ -44,15 +46,18 @@ public abstract class BaseFunction extends DrawableElement {
 
 	/**
 	 * Especifica el limite maximo del algoritmo en forma de porcentaje
+	 * 
 	 * @param maxx
 	 */
 	public void setMaxX(double maxx) {
 		this.maxx = maxx;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.beans.canvas.DrawableElement#paint(java.awt.Graphics)
+	 * 
+	 * @see
+	 * org.gvsig.raster.beans.canvas.DrawableElement#paint(java.awt.Graphics)
 	 */
 	protected void paint(Graphics g) {
 		ArrayList elements = canvas.getDrawableElements(MinMaxLines.class);

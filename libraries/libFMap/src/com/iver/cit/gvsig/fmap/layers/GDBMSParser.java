@@ -8,21 +8,22 @@ import com.iver.utiles.XMLEntity;
 
 /**
  * Genera eventos SAX relacionados con un XMLEntity
- *
+ * 
  * @author Fernando González Cortés
  */
 public class GDBMSParser {
 	XMLEntity xml;
 	private ContentHandler handler;
-	public GDBMSParser(XMLEntity xml){
+
+	public GDBMSParser(XMLEntity xml) {
 		this.xml = xml;
 	}
 
-	public void setContentHandler(ContentHandler handler){
+	public void setContentHandler(ContentHandler handler) {
 		this.handler = handler;
 	}
 
-	public void parse() throws SAXException{
+	public void parse() throws SAXException {
 		AttributesImpl atts = new AttributesImpl();
 		for (int i = 0; i < xml.getPropertyCount(); i++) {
 			String key = xml.getPropertyName(i);

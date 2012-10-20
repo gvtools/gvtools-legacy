@@ -20,7 +20,8 @@ import com.iver.cit.gvsig.fmap.layers.order.OrderManager;
 import com.iver.utiles.extensionPoints.ExtensionPoint;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
-public class LayerOrderPage extends AbstractPreferencePage implements ItemListener {
+public class LayerOrderPage extends AbstractPreferencePage implements
+		ItemListener {
 	private static final long serialVersionUID = 1L;
 	private ImageIcon icon = null;
 	private boolean initialized = false;
@@ -39,7 +40,8 @@ public class LayerOrderPage extends AbstractPreferencePage implements ItemListen
 		Object object = managerCombo.getSelectedItem();
 		if (object instanceof OrderManager) {
 			OrderManager manager = (OrderManager) object;
-			IExtension ext = PluginServices.getExtension(com.iver.cit.gvsig.LayerOrderExtension.class);
+			IExtension ext = PluginServices
+					.getExtension(com.iver.cit.gvsig.LayerOrderExtension.class);
 			com.iver.cit.gvsig.LayerOrderExtension orderExt = (com.iver.cit.gvsig.LayerOrderExtension) ext;
 			orderExt.setDefaultOrderManager(manager);
 		}
@@ -51,8 +53,9 @@ public class LayerOrderPage extends AbstractPreferencePage implements ItemListen
 	}
 
 	public ImageIcon getIcon() {
-		if (icon==null) {
-//			icon = new ImageIcon(this.getClass().getClassLoader().getResource("images/orderManager.png"));
+		if (icon == null) {
+			// icon = new
+			// ImageIcon(this.getClass().getClassLoader().getResource("images/orderManager.png"));
 			icon = PluginServices.getIconTheme().get("layer-order-manager");
 		}
 		return icon;
@@ -77,20 +80,24 @@ public class LayerOrderPage extends AbstractPreferencePage implements ItemListen
 	}
 
 	private void createUI() {
-		JLabel label = new JLabel(PluginServices.getText(this, "Default_order_manager"));
+		JLabel label = new JLabel(PluginServices.getText(this,
+				"Default_order_manager"));
 		managerCombo = new JComboBox();
 		try {
-			ExtensionPoint ep = 
-				(ExtensionPoint) ExtensionPointsSingleton.getInstance().
-				get(DefaultOrderManager.getExtensionPointName());
-			IExtension ext = PluginServices.getExtension(com.iver.cit.gvsig.LayerOrderExtension.class);
+			ExtensionPoint ep = (ExtensionPoint) ExtensionPointsSingleton
+					.getInstance().get(
+							DefaultOrderManager.getExtensionPointName());
+			IExtension ext = PluginServices
+					.getExtension(com.iver.cit.gvsig.LayerOrderExtension.class);
 			com.iver.cit.gvsig.LayerOrderExtension orderExt = (com.iver.cit.gvsig.LayerOrderExtension) ext;
 			String defaultManager = null;
 			if (orderExt.existsDefaultOrderManager()) {
-				// only set the item if there is a configured default order manager,
-				// otherwise we would set DefaultOrderManager() as user preference
+				// only set the item if there is a configured default order
+				// manager,
+				// otherwise we would set DefaultOrderManager() as user
+				// preference
 				defaultManager = orderExt.getDefaultOrderManager().getCode();
-				
+
 			}
 			Iterator iterator = ep.values().iterator();
 			while (iterator.hasNext()) {
@@ -98,18 +105,19 @@ public class LayerOrderPage extends AbstractPreferencePage implements ItemListen
 				if (object instanceof OrderManager) {
 					OrderManager manager = (OrderManager) object;
 					managerCombo.addItem(object);
-					if (defaultManager!=null
+					if (defaultManager != null
 							&& manager.getCode().equals(defaultManager)) {
 						managerCombo.setSelectedItem(object);
 					}
 				}
 			}
-		}
-		catch (Exception ex) {
-			PluginServices.getLogger().warn("Error getting layer order managers", ex);
+		} catch (Exception ex) {
+			PluginServices.getLogger().warn(
+					"Error getting layer order managers", ex);
 		}
 		managerCombo.addItemListener(this);
-		this.addComponent(label, managerCombo, GridBagConstraints.NONE, new Insets(8, 8, 8, 8));
+		this.addComponent(label, managerCombo, GridBagConstraints.NONE,
+				new Insets(8, 8, 8, 8));
 	}
 
 	public boolean isValueChanged() {

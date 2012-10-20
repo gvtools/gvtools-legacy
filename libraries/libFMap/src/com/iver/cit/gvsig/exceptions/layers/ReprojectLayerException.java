@@ -5,10 +5,11 @@ package com.iver.cit.gvsig.exceptions.layers;
  */
 public class ReprojectLayerException extends LoadLayerException {
 
-	public ReprojectLayerException(String l,Throwable exception) {
-		super(l,exception);
+	public ReprojectLayerException(String l, Throwable exception) {
+		super(l, exception);
 		init();
 	}
+
 	/**
 	 *
 	 */

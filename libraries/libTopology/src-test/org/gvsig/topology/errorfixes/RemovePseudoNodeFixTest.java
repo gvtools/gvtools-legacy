@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.errorfixes;
 
 import java.util.ArrayList;
@@ -79,62 +79,64 @@ import com.vividsolutions.jts.io.WKTReader;
 
 /**
  * Test for remove pseudonode fix.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class RemovePseudoNodeFixTest extends TestCase {
 	GeometryFactory factory = new GeometryFactory();
 	WKTReader wktReader = new WKTReader(factory);
-	
-	
-	public void tearDown() throws Exception{
+
+	public void tearDown() throws Exception {
 		super.tearDown();
 		factory = null;
 		wktReader = null;
 		System.gc();
 	}
-	
-	public void test1() throws ParseException, BaseException{
+
+	public void test1() throws ParseException, BaseException {
 		String wkt1 = "LINESTRING (200 80, 240 160, 300 240, 400 240)";
 		String wkt2 = "LINESTRING (400 240, 440 220, 460 240, 440 280)";
-		
+
 		Geometry g1 = wktReader.read(wkt1);
 		Geometry g2 = wktReader.read(wkt2);
-		
+
 		IGeometry ig1 = NewFConverter.toFMap(g1);
 		IGeometry ig2 = NewFConverter.toFMap(g2);
-		
+
 		Value[] values1 = new Value[1];
 		values1[0] = ValueFactory.createValue(5d);
-		
+
 		Value[] values2 = new Value[1];
 		values2[0] = ValueFactory.createValue(199d);
-		
+
 		DefaultFeature f1 = new DefaultFeature(ig1, values1, "0");
 		DefaultFeature f2 = new DefaultFeature(ig2, values2, "1");
-		
+
 		List<IFeature> features = new ArrayList<IFeature>();
 		features.add(f1);
 		features.add(f2);
-		LayerDefinition def = new LayerDefinition(){
-			public int getShapeType(){
+		LayerDefinition def = new LayerDefinition() {
+			public int getShapeType() {
 				return FShape.LINE;
-			}	
-			
+			}
+
 		};
-		def.setFieldsDesc(new FieldDescription[]{});
-		FeatureCollectionMemoryDriver driver = new FeatureCollectionMemoryDriver("", features, def);
-		FLyrVect lyr = (FLyrVect) com.iver.cit.gvsig.fmap.layers.LayerFactory.
-											createLayer("",
-													driver, 
-													null);
-		
-		Topology topo = new Topology(null, null, 0.2d, 0, new SimpleTopologyErrorContainer());
-		LineMustNotHavePseudonodes violatedRule = new LineMustNotHavePseudonodes(topo, lyr, 0.1d);
-		FGeometry fgeometry =  (FGeometry) ShapeFactory.createPoint2D(400, 240);
-		TopologyError error = new TopologyError(fgeometry, violatedRule, f1, topo);
-		
+		def.setFieldsDesc(new FieldDescription[] {});
+		FeatureCollectionMemoryDriver driver = new FeatureCollectionMemoryDriver(
+				"", features, def);
+		FLyrVect lyr = (FLyrVect) com.iver.cit.gvsig.fmap.layers.LayerFactory
+				.createLayer("", driver, null);
+
+		Topology topo = new Topology(null, null, 0.2d, 0,
+				new SimpleTopologyErrorContainer());
+		LineMustNotHavePseudonodes violatedRule = new LineMustNotHavePseudonodes(
+				topo, lyr, 0.1d);
+		FGeometry fgeometry = (FGeometry) ShapeFactory.createPoint2D(400, 240);
+		TopologyError error = new TopologyError(fgeometry, violatedRule, f1,
+				topo);
+
 		new RemovePseudoNodeFix().fix(error);
-		
+
 	}
 }

@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 import org.gvsig.gui.beans.Messages;
 import org.gvsig.gui.beans.incrementabletask.IncrementableTask;
 
-
 /* gvSIG. Geographic Information System of the Valencian Government
  *
  * Copyright (C) 2007-2008 Infrastructures and Transports Department
@@ -39,26 +38,30 @@ public class Test2ProgressPanel {
 		SampleProcess iprocess = new SampleProcess("Proceso de ejemplo",
 				Messages.getText("Ongoing_process_please_wait"));
 
-		IncrementableTask iTask = new IncrementableTask(iprocess, new ProgressPanel(false));
+		IncrementableTask iTask = new IncrementableTask(iprocess,
+				new ProgressPanel(false));
 		iTask.addIncrementableListener(iprocess);
 		iprocess.setIncrementableTask(iTask);
 
 		final SampleProcess f_iprocess = iprocess;
 		final IncrementableTask f_iTask = iTask;
-		
+
 		iTask.getProgressPanel().addComponentListener(new ComponentAdapter() {
 			/*
 			 * (non-Javadoc)
-			 * @see java.awt.event.ComponentAdapter#componentHidden(java.awt.event.ComponentEvent)
+			 * 
+			 * @see
+			 * java.awt.event.ComponentAdapter#componentHidden(java.awt.event
+			 * .ComponentEvent)
 			 */
 			public void componentHidden(ComponentEvent e) {
 				f_iTask.getProgressPanel().dispose();
 
 				/* Writes in the gvSIG log the results of the process */
-				String text = "\n- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n" +
-					"Resumen del proceso:\n" +
-					f_iprocess.getLog() +
-					"\n- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n";
+				String text = "\n- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n"
+						+ "Resumen del proceso:\n"
+						+ f_iprocess.getLog()
+						+ "\n- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n";
 				Logger.getLogger(getClass().getName()).debug(text);
 			}
 		});

@@ -31,15 +31,18 @@ import org.gvsig.georeferencing.ui.zoom.CanvasZone;
  * Herramienta de selección de zoom sobre la vista.
  * 
  * 17/01/2008
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
-public class PanTool extends BaseViewTool implements MouseListener, MouseMotionListener {
-    private Point2D                  initPoint = null;
-    private Point2D                  distance = null;
-    private Rectangle2D              result = null;
+public class PanTool extends BaseViewTool implements MouseListener,
+		MouseMotionListener {
+	private Point2D initPoint = null;
+	private Point2D distance = null;
+	private Rectangle2D result = null;
 
 	/**
 	 * Constructor. Asigna el canvas e inicializa los listeners.
+	 * 
 	 * @param canvas
 	 */
 	public PanTool(CanvasZone canvas, ToolListener listener) {
@@ -47,10 +50,13 @@ public class PanTool extends BaseViewTool implements MouseListener, MouseMotionL
 		canvas.addMouseListener(this);
 		canvas.addMouseMotionListener(this);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.georeferencing.ui.zoom.IViewTool#draw(java.awt.image.BufferedImage, java.awt.geom.Rectangle2D)
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.georeferencing.ui.zoom.IViewTool#draw(java.awt.
+	 * image.BufferedImage, java.awt.geom.Rectangle2D)
 	 */
 	public void draw(Graphics g) {
 
@@ -58,6 +64,7 @@ public class PanTool extends BaseViewTool implements MouseListener, MouseMotionL
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.rastertools.georeferencing.ui.zoom.IViewTool#getResult()
 	 */
 	public Object getResult() {
@@ -68,22 +75,24 @@ public class PanTool extends BaseViewTool implements MouseListener, MouseMotionL
 	 * Selecciona el punto inicial del cuadro del que se quiere el zoom
 	 */
 	public void mousePressed(MouseEvent e) {
-		if(isActive()) 
+		if (isActive())
 			initPoint = e.getPoint();
 	}
-	
+
 	/**
-	 * Asigna el flag que activa y desactiva la herramienta 
-	 * @param active true para activarla y false para desactivarla
+	 * Asigna el flag que activa y desactiva la herramienta
+	 * 
+	 * @param active
+	 *            true para activarla y false para desactivarla
 	 */
 	public void setActive(boolean active) {
 		this.active = active;
-		if(active)
+		if (active)
 			onTool(new ToolEvent(this));
 		else
 			offTool(new ToolEvent(this));
 	}
-	
+
 	/**
 	 * Dibujado del cuadro con el área a hacer zoom.
 	 */
@@ -92,24 +101,34 @@ public class PanTool extends BaseViewTool implements MouseListener, MouseMotionL
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
 	 */
 	public void mouseReleased(MouseEvent e) {
-		if(isActive()) {
+		if (isActive()) {
 			Point2D endPoint = e.getPoint();
 			double x = initPoint.getX() - endPoint.getX();
 			double y = initPoint.getY() - endPoint.getY();
 			distance = new Point2D.Double(x, y);
-			
-			Point2D pInit = canvas.viewCoordsToWorld(new Point2D.Double(distance.getX(), distance.getY()));
-			Point2D pEnd = canvas.viewCoordsToWorld(new Point2D.Double(distance.getX() + canvas.getVisibleRect().width, distance.getY() + canvas.getVisibleRect().height));
-			if(canvas.getMinxMaxyUL())
-				result = new Rectangle2D.Double(pInit.getX(), pEnd.getY(), Math.abs(pInit.getX() - pEnd.getX()), Math.abs(pInit.getY() - pEnd.getY()));
+
+			Point2D pInit = canvas.viewCoordsToWorld(new Point2D.Double(
+					distance.getX(), distance.getY()));
+			Point2D pEnd = canvas.viewCoordsToWorld(new Point2D.Double(distance
+					.getX() + canvas.getVisibleRect().width, distance.getY()
+					+ canvas.getVisibleRect().height));
+			if (canvas.getMinxMaxyUL())
+				result = new Rectangle2D.Double(pInit.getX(), pEnd.getY(),
+						Math.abs(pInit.getX() - pEnd.getX()), Math.abs(pInit
+								.getY() - pEnd.getY()));
 			else
-				result = new Rectangle2D.Double(pInit.getX(), pInit.getY(), Math.abs(pInit.getX() - pEnd.getX()), Math.abs(pInit.getY() - pEnd.getY()));
+				result = new Rectangle2D.Double(pInit.getX(), pInit.getY(),
+						Math.abs(pInit.getX() - pEnd.getX()), Math.abs(pInit
+								.getY() - pEnd.getY()));
 			initPoint = null;
-			for (int i = 0; i < listeners.size(); i++) 
-				((ToolListener)listeners.get(i)).endAction(new ToolEvent(this));
+			for (int i = 0; i < listeners.size(); i++)
+				((ToolListener) listeners.get(i))
+						.endAction(new ToolEvent(this));
 		}
 	}
 
@@ -122,6 +141,6 @@ public class PanTool extends BaseViewTool implements MouseListener, MouseMotionL
 	public void mouseExited(MouseEvent e) {
 	}
 
-	public void mouseMoved(MouseEvent e) {			
+	public void mouseMoved(MouseEvent e) {
 	}
 }

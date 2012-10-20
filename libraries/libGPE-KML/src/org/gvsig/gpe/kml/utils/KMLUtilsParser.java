@@ -10,7 +10,6 @@ import org.gvsig.gpe.xml.XmlProperties;
 import org.gvsig.gpe.xml.stream.IXmlStreamReader;
 import org.gvsig.gpe.xml.stream.XmlStreamException;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -100,64 +99,68 @@ import org.gvsig.gpe.xml.stream.XmlStreamException;
 public class KMLUtilsParser {
 
 	/**
-	 * It returns a HashTable with the XML attributes. It has been 
-	 * created because the parser doesn't has a getAttribiute(AttributeName)
-	 * method.
-
+	 * It returns a HashTable with the XML attributes. It has been created
+	 * because the parser doesn't has a getAttribiute(AttributeName) method.
+	 * 
 	 * @param parser
 	 * @return
-	 * @throws XmlStreamException 
+	 * @throws XmlStreamException
 	 */
-	public static Hashtable getAttributes(IXmlStreamReader parser) throws XmlStreamException{
+	public static Hashtable getAttributes(IXmlStreamReader parser)
+			throws XmlStreamException {
 		Hashtable hash = new Hashtable();
 		int num_atributos = parser.getAttributeCount();
-		for (int i=0 ; i<parser.getAttributeCount() ; i++){
+		for (int i = 0; i < parser.getAttributeCount(); i++) {
 			QName atributo = parser.getAttributeName(i);
-			String valor=parser.getAttributeValue(i);
-			if (valor!=null)
+			String valor = parser.getAttributeValue(i);
+			if (valor != null)
 				hash.put(atributo, valor);
 		}
 		return hash;
-	}	
-	
+	}
+
 	/**
 	 * Remove the blanc symbol from a tag
+	 * 
 	 * @param tag
-	 * Tag name
-	 * @return
-	 * The tag without blancs
+	 *            Tag name
+	 * @return The tag without blancs
 	 */
-	public static String removeBlancSymbol(QName tag){
-		if (tag == null){
+	public static String removeBlancSymbol(QName tag) {
+		if (tag == null) {
 			return null;
 		}
-		String blancSpace = GPEDefaults.getStringProperty(XmlProperties.DEFAULT_BLANC_SPACE);
-		if (blancSpace == null){
+		String blancSpace = GPEDefaults
+				.getStringProperty(XmlProperties.DEFAULT_BLANC_SPACE);
+		if (blancSpace == null) {
 			blancSpace = Kml2_1_Tags.DEFAULT_BLANC_SPACE;
 		}
-		// PROBLEM WITH COMPATIBILITY OF "replaceAll()" WITH IBM J9 JAVA MICROEDITION
-		return StringUtils.replaceAllString(tag.getLocalPart(), blancSpace, " ");
+		// PROBLEM WITH COMPATIBILITY OF "replaceAll()" WITH IBM J9 JAVA
+		// MICROEDITION
+		return StringUtils
+				.replaceAllString(tag.getLocalPart(), blancSpace, " ");
 		// return tag.replaceAll(blancSpace," ");
 	}
-	
+
 	/**
-	 * Replace the blancs of a tag with the
-	 * deafult blanc symbol
+	 * Replace the blancs of a tag with the deafult blanc symbol
+	 * 
 	 * @param name
-	 * @return
-	 * A tag with blancs
+	 * @return A tag with blancs
 	 */
-	public static String addBlancSymbol(QName name){
-		if (name == null){
+	public static String addBlancSymbol(QName name) {
+		if (name == null) {
 			return null;
 		}
-		String blancSpace = GPEDefaults.getStringProperty(XmlProperties.DEFAULT_BLANC_SPACE);
-		if (blancSpace == null){
+		String blancSpace = GPEDefaults
+				.getStringProperty(XmlProperties.DEFAULT_BLANC_SPACE);
+		if (blancSpace == null) {
 			blancSpace = Kml2_1_Tags.DEFAULT_BLANC_SPACE;
 		}
-		// PROBLEM WITH COMPATIBILITY OF "replaceAll()" WITH IBM J9 JAVA MICROEDITION
-		return StringUtils.replaceAllString(name.getLocalPart()," ",blancSpace);
-		//return tag.replaceAll(" ",blancSpace);
+		// PROBLEM WITH COMPATIBILITY OF "replaceAll()" WITH IBM J9 JAVA
+		// MICROEDITION
+		return StringUtils.replaceAllString(name.getLocalPart(), " ",
+				blancSpace);
+		// return tag.replaceAll(" ",blancSpace);
 	}
 }
-

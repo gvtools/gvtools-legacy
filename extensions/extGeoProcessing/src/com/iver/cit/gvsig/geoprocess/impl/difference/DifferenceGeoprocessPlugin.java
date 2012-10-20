@@ -91,25 +91,24 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
  * @author azabala
  * 
  */
-public class DifferenceGeoprocessPlugin extends GeoprocessPluginAbstract implements IGeoprocessPlugin {
+public class DifferenceGeoprocessPlugin extends GeoprocessPluginAbstract
+		implements IGeoprocessPlugin {
 
 	private static String analisisPkg;
 	private static String overlayPkg;
 	private static String geoprocessName;
-	
-	static{
+
+	static {
 		analisisPkg = PluginServices.getText(null, "Analisis");
 		overlayPkg = PluginServices.getText(null, "Overlay");
 		geoprocessName = PluginServices.getText(null, "Diferencia");
 	}
-	
-	
+
 	public IGeoprocessUserEntries getGeoprocessPanel() {
 		View vista = (View) PluginServices.getMDIManager().getActiveWindow();
 		FLayers layers = vista.getModel().getMapContext().getLayers();
 		String titleText = PluginServices.getText(this,
-				"Diferencia_Introduccion_de_datos")
-				+ ":";
+				"Diferencia_Introduccion_de_datos") + ":";
 		return new GeoProcessingOverlayPanel2(layers, titleText);
 	}
 
@@ -122,10 +121,10 @@ public class DifferenceGeoprocessPlugin extends GeoprocessPluginAbstract impleme
 	}
 
 	public String getNamespace() {
-		return analisisPkg + "/" + overlayPkg + "/"+ geoprocessName;
+		return analisisPkg + "/" + overlayPkg + "/" + geoprocessName;
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		return geoprocessName;
 	}
 

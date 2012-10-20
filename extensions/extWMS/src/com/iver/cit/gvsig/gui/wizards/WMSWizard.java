@@ -79,10 +79,9 @@ import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.jcomboServer.JComboServer;
 import com.iver.utiles.swing.jcomboServer.ServerData;
 
-
 /**
  * The WMS properties container panel.
- *
+ * 
  * @author Jaume Dominguez Faus
  */
 public class WMSWizard extends WizardPanel implements ActionListener {
@@ -107,42 +106,48 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 	protected JLabel lblServerType = null;
 	protected JLabel lblServerTypeValue = null;
 	private JCheckBox chkCaching = null;
-	private static Preferences fPrefs = Preferences.userRoot().node( "gvsig.wms-wizard" );
-	private boolean refreshing = fPrefs.getBoolean("refresh_capabilities", false);
+	private static Preferences fPrefs = Preferences.userRoot().node(
+			"gvsig.wms-wizard");
+	private boolean refreshing = fPrefs.getBoolean("refresh_capabilities",
+			false);
 	protected int firstPage;
 	private JPanel pnlName = null;
 	private ICancellable cancel = null;
-	
+
 	/**
 	 * Thread to connect to a WMS server
+	 * 
 	 * @author Nacho Brodin (nachobrodin@gmail.com)
 	 */
 	public class ConnectThread extends Thread {
-		private ICancellable             cancel      = null;
-		private WMSWizardData            wData       = null;
-		private WMSWizard                wizard      = null;
-		private String                   host        = null;
-		
-		public ConnectThread(ICancellable cancel, WMSWizardData wData, WMSWizard wizard, String host) {
+		private ICancellable cancel = null;
+		private WMSWizardData wData = null;
+		private WMSWizard wizard = null;
+		private String host = null;
+
+		public ConnectThread(ICancellable cancel, WMSWizardData wData,
+				WMSWizard wizard, String host) {
 			this.cancel = cancel;
 			this.wData = wData;
 			this.wizard = wizard;
 			this.host = host;
 		}
-		
-	    public void run() {
-	    	try {
+
+		public void run() {
+			try {
 				wData.setHost(new URL(host), refreshing, cancel);
 			} catch (ConnectionErrorLayerException e) {
-				getTxtAbstract().setText("The connection cannot be established");
+				getTxtAbstract()
+						.setText("The connection cannot be established");
 			} catch (MalformedURLException e) {
-				getTxtAbstract().setText("The connection cannot be established");
+				getTxtAbstract()
+						.setText("The connection cannot be established");
 			}
 			wizard.rellenarControles();
-	    }
+		}
 	}
 
-	public WMSWizard (WMSParamsPanel params){
+	public WMSWizard(WMSParamsPanel params) {
 
 		super();
 		firstPage = 1;
@@ -154,12 +159,16 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 		lblServerType = new JLabel();
 		lblServerType.setBounds(20, 444, 100, 20);
 		lblServerType.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-		lblServerType.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-		lblServerType.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 11));
-		lblServerType.setText(PluginServices.getText(this, "server_type")+":");
+		lblServerType
+				.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+		lblServerType.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN,
+				11));
+		lblServerType
+				.setText(PluginServices.getText(this, "server_type") + ":");
 		lblServerTypeValue = new JLabel();
 		lblServerTypeValue.setBounds(128, 444, 148, 20);
-		lblServerTypeValue.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 11));
+		lblServerTypeValue.setFont(new java.awt.Font("Arial",
+				java.awt.Font.BOLD, 11));
 		lblServerTypeValue.setText("-");
 		this.setSize(510, 468);
 		this.setLayout(null);
@@ -193,7 +202,7 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 		initialize();
 		cancel = new CancelTaskImpl();
 	}
-	
+
 	/**
 	 * This method initializes this
 	 */
@@ -203,12 +212,16 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 		lblServerType = new JLabel();
 		lblServerType.setBounds(20, 444, 100, 20);
 		lblServerType.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-		lblServerType.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-		lblServerType.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 11));
-		lblServerType.setText(PluginServices.getText(this, "server_type")+":");
+		lblServerType
+				.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+		lblServerType.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN,
+				11));
+		lblServerType
+				.setText(PluginServices.getText(this, "server_type") + ":");
 		lblServerTypeValue = new JLabel();
 		lblServerTypeValue.setBounds(128, 444, 148, 20);
-		lblServerTypeValue.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 11));
+		lblServerTypeValue.setFont(new java.awt.Font("Arial",
+				java.awt.Font.BOLD, 11));
 		lblServerTypeValue.setText("-");
 		this.setSize(510, 468);
 		this.setLayout(null);
@@ -223,9 +236,8 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 		activarVisualizarBotones();
 	}
 
-
-	protected JPanel getPanelPage2(){
-		if (wmsParamsPanel == null){
+	protected JPanel getPanelPage2() {
+		if (wmsParamsPanel == null) {
 			wmsParamsPanel = new WMSParamsPanel();
 			wmsParamsPanel.setListenerSupport(this.listenerSupport);
 			wmsParamsPanel.setBounds(0, 5, 510, 428);
@@ -239,16 +251,20 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 		}
 		return wmsParamsPanel;
 	}
+
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param host DOCUMENT ME!
+	 * 
+	 * @param host
+	 *            DOCUMENT ME!
 	 */
 	private void addHost(String host) {
 		host = host.trim();
 
-		ServerDataPersistence persistence = new ServerDataPersistence(this,ServerData.SERVER_TYPE_WMS);
-		persistence.addServerData(new ServerData(host, ServerData.SERVER_TYPE_WMS));
+		ServerDataPersistence persistence = new ServerDataPersistence(this,
+				ServerData.SERVER_TYPE_WMS);
+		persistence.addServerData(new ServerData(host,
+				ServerData.SERVER_TYPE_WMS));
 		persistence.setPersistent();
 	}
 
@@ -259,7 +275,7 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 		try {
 			String host = cmbHost.getModel().getSelectedItem().toString();
 
-			//dataSource.setHost(new URL(host), refreshing);
+			// dataSource.setHost(new URL(host), refreshing);
 			lblTitle.setText(dataSource.getTitle());
 			lblServerTypeValue.setText(dataSource.getServerType());
 			txtAbstract.setText(dataSource.getAbstract());
@@ -269,9 +285,9 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 			connected = true;
 			activarVisualizarBotones();
 		} catch (Exception e) {
-			if (e.getMessage()==null){
-				txtAbstract.setText(PluginServices.getText(this,"error"));
-			}else{
+			if (e.getMessage() == null) {
+				txtAbstract.setText(PluginServices.getText(this, "error"));
+			} else {
 				txtAbstract.setText(e.getMessage());
 			}
 			listenerSupport.callError(e);
@@ -281,19 +297,19 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 			getBtnCancel().setEnabled(false);
 		}
 	}
-	
+
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == getBtnConnect()) {
+		if (e.getSource() == getBtnConnect()) {
 			getBtnCancel().setEnabled(true);
 			getTxtAbstract().setText("Trying to connect...");
 			String host = cmbHost.getModel().getSelectedItem().toString();
-			((CancelTaskImpl)cancel).setCanceled(false);
+			((CancelTaskImpl) cancel).setCanceled(false);
 			new ConnectThread(cancel, dataSource, this, host).start();
 		}
-		
-		if(e.getSource() == getBtnCancel()) {
+
+		if (e.getSource() == getBtnCancel()) {
 			getTxtAbstract().setText("Cancelled...");
-			((CancelTaskImpl)cancel).setCanceled(true);
+			((CancelTaskImpl) cancel).setCanceled(true);
 			getBtnCancel().setEnabled(false);
 		}
 	}
@@ -316,10 +332,11 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 			getBtnSiguiente().setVisible(true);
 			getBtnAnterior().setEnabled(true);
 			getBtnAnterior().setVisible(true);
-			if (wmsParamsPanel.nextEnabledPage()==-1){
+			if (wmsParamsPanel.nextEnabledPage() == -1) {
 				getBtnSiguiente().setEnabled(false);
 			}
-			listenerSupport.callStateChanged(wmsParamsPanel.isCorrectlyConfigured());
+			listenerSupport.callStateChanged(wmsParamsPanel
+					.isCorrectlyConfigured());
 		} else if (page == wmsParamsPanel.getNumTabs()) {
 			getBtnSiguiente().setVisible(false);
 			getBtnSiguiente().setEnabled(false);
@@ -330,7 +347,7 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 
 	/**
 	 * This method initializes txtHost
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private javax.swing.JComboBox getTxtHost() {
@@ -341,38 +358,65 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 			cmbHost.setBounds(11, 26, 454, 20);
 			cmbHost.setEditable(true);
 
-			ServerDataPersistence persistence = new ServerDataPersistence(this,ServerData.SERVER_TYPE_WMS);
+			ServerDataPersistence persistence = new ServerDataPersistence(this,
+					ServerData.SERVER_TYPE_WMS);
 			ServerData[] servers = persistence.getArrayOfServerData();
 
-			if (servers.length == 0){
+			if (servers.length == 0) {
 				PluginServices ps = PluginServices.getPluginServices(this);
 				XMLEntity xml = ps.getPersistentXML();
 				try {
-					String[] oldServers = xml.getStringArrayProperty("wms-servers");
+					String[] oldServers = xml
+							.getStringArrayProperty("wms-servers");
 					servers = new ServerData[oldServers.length];
-					for (int i=0; i<oldServers.length; i++) {
-						servers[i] = new ServerData(oldServers[i],ServerData.SERVER_TYPE_WMS);
+					for (int i = 0; i < oldServers.length; i++) {
+						servers[i] = new ServerData(oldServers[i],
+								ServerData.SERVER_TYPE_WMS);
 					}
 					xml.remove("wms-servers");
 					ps.setPersistentXML(xml);
 				} catch (NotExistInXMLEntity e) {
 					// Old servers doesn't exist
 					servers = new ServerData[12];
-					servers[0] = new ServerData("http://www.idee.es/wms/IDEE-Base/IDEE-Base",ServerData.SERVER_TYPE_WMS);
-					servers[1] = new ServerData("http://wms.jpl.nasa.gov/wms.cgi",ServerData.SERVER_TYPE_WMS);
-					servers[2] = new ServerData("http://www2.dmsolutions.ca/cgi-bin/mswms_gmap?",ServerData.SERVER_TYPE_WMS);
-					servers[3] = new ServerData("http://orto.cth.gva.es/wmsconnector/com.esri.wms.Esrimap/wms_patricova",ServerData.SERVER_TYPE_WMS);
-					servers[4] = new ServerData("http://orto.cth.gva.es/wmsconnector/com.esri.wms.Esrimap/wms_parque_fondo_prug",ServerData.SERVER_TYPE_WMS);
-					servers[5] = new ServerData("http://orto.cth.gva.es/wmsconnector/com.esri.wms.Esrimap/wms_pgof",ServerData.SERVER_TYPE_WMS);
-					servers[6] = new ServerData("http://orto.cth.gva.es/wmsconnector/com.esri.wms.Esrimap/wms_urbanismo_tematicos",ServerData.SERVER_TYPE_WMS);
-					servers[7] = new ServerData("http://onearth.jpl.nasa.gov/wms.cgi",ServerData.SERVER_TYPE_WMS);
-					servers[8] = new ServerData("http://www.demis.nl/wms/wms.asp?WMS=WorldMap",ServerData.SERVER_TYPE_WMS);
-					servers[9] = new ServerData("http://aes.gsfc.nasa.gov/cgi-bin/wms",ServerData.SERVER_TYPE_WMS);
-					servers[10] = new ServerData("http://mapas.euitto.upm.es/cgi-bin/cnauticas",ServerData.SERVER_TYPE_WMS);
-					servers[11] = new ServerData("http://ovc.catastro.meh.es/Cartografia/WMS/ServidorWMS.aspx", ServerData.SERVER_TYPE_WMS);
+					servers[0] = new ServerData(
+							"http://www.idee.es/wms/IDEE-Base/IDEE-Base",
+							ServerData.SERVER_TYPE_WMS);
+					servers[1] = new ServerData(
+							"http://wms.jpl.nasa.gov/wms.cgi",
+							ServerData.SERVER_TYPE_WMS);
+					servers[2] = new ServerData(
+							"http://www2.dmsolutions.ca/cgi-bin/mswms_gmap?",
+							ServerData.SERVER_TYPE_WMS);
+					servers[3] = new ServerData(
+							"http://orto.cth.gva.es/wmsconnector/com.esri.wms.Esrimap/wms_patricova",
+							ServerData.SERVER_TYPE_WMS);
+					servers[4] = new ServerData(
+							"http://orto.cth.gva.es/wmsconnector/com.esri.wms.Esrimap/wms_parque_fondo_prug",
+							ServerData.SERVER_TYPE_WMS);
+					servers[5] = new ServerData(
+							"http://orto.cth.gva.es/wmsconnector/com.esri.wms.Esrimap/wms_pgof",
+							ServerData.SERVER_TYPE_WMS);
+					servers[6] = new ServerData(
+							"http://orto.cth.gva.es/wmsconnector/com.esri.wms.Esrimap/wms_urbanismo_tematicos",
+							ServerData.SERVER_TYPE_WMS);
+					servers[7] = new ServerData(
+							"http://onearth.jpl.nasa.gov/wms.cgi",
+							ServerData.SERVER_TYPE_WMS);
+					servers[8] = new ServerData(
+							"http://www.demis.nl/wms/wms.asp?WMS=WorldMap",
+							ServerData.SERVER_TYPE_WMS);
+					servers[9] = new ServerData(
+							"http://aes.gsfc.nasa.gov/cgi-bin/wms",
+							ServerData.SERVER_TYPE_WMS);
+					servers[10] = new ServerData(
+							"http://mapas.euitto.upm.es/cgi-bin/cnauticas",
+							ServerData.SERVER_TYPE_WMS);
+					servers[11] = new ServerData(
+							"http://ovc.catastro.meh.es/Cartografia/WMS/ServidorWMS.aspx",
+							ServerData.SERVER_TYPE_WMS);
 				}
 
-				for (int i=0 ; i<servers.length ; i++){
+				for (int i = 0; i < servers.length; i++) {
 					persistence.addServerData(servers[i]);
 				}
 				persistence.setPersistent();
@@ -380,69 +424,78 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 
 			cmbHost.setServerList(servers);
 
+			// XMLEntity xml = PluginServices.getPluginServices(this)
+			// .getPersistentXML();
+			// if (xml == null)
+			// xml = new XMLEntity();
 
-//			XMLEntity xml = PluginServices.getPluginServices(this)
-//			.getPersistentXML();
-//			if (xml == null)
-//			xml = new XMLEntity();
+			// if (!xml.contains("wms-servers")) {
+			// String[] servers = new String[11];
+			// // Begining of rubbish code
+			// //
+			// // The following block should not exist and it only will live in
+			// the
+			// // 0.6 version. It fixes an error that has been happening since
+			// the 0.4 version
+			// // and recovers the user's server data from the wrong location
+			// that has been used to use.
+			// // This code will be removed from the 0.7 version
+			// boolean bool = false;
+			// {
+			// Class gvSIGClass = AddLayer.class; // for example... (we only
+			// need to use a class that has been loaded by gvSIG's class loader
+			// XMLEntity xml2 =
+			// PluginServices.getPluginServices(PluginServices.getExtension(gvSIGClass)).getPersistentXML();
+			// if (xml2.contains("wms-servers")) {
+			// String oldServers[] = xml2.getStringArrayProperty("wms-servers");
+			// servers = new String[servers.length+oldServers.length];
+			// for (int i = 0; i < oldServers.length; i++) {
+			// servers[oldServers.length+i] = oldServers[i];
+			// }
+			// xml2.remove("wms-servers");
+			// bool = true;
+			// }
+			// }
+			// if (!bool) {
+			// // end of the rubbish code (don't forget to remove the closing
+			// bracket)
 
-//			if (!xml.contains("wms-servers")) {
-//			String[] servers = new String[11];
-//			// Begining of rubbish code
-//			//
-//			// The following block should not exist and it only will live in the
-//			// 0.6 version. It fixes an error that has been happening since the 0.4 version
-//			// and recovers the user's server data from the wrong location that has been used to use.
-//			// This code will be removed from the 0.7 version
-//			boolean bool = false;
-//			{
-//			Class gvSIGClass = AddLayer.class; // for example... (we only need to use a class that has been loaded by gvSIG's class loader
-//			XMLEntity xml2 = PluginServices.getPluginServices(PluginServices.getExtension(gvSIGClass)).getPersistentXML();
-//			if (xml2.contains("wms-servers")) {
-//			String oldServers[] = xml2.getStringArrayProperty("wms-servers");
-//			servers = new String[servers.length+oldServers.length];
-//			for (int i = 0; i < oldServers.length; i++) {
-//			servers[oldServers.length+i] = oldServers[i];
-//			}
-//			xml2.remove("wms-servers");
-//			bool = true;
-//			}
-//			}
-//			if (!bool) {
-//			// end of the rubbish code (don't forget to remove the closing bracket)
+			// servers[0] = "http://www.idee.es/wms/IDEE-Base/IDEE-Base";
+			// servers[1] = "http://wms.jpl.nasa.gov/wms.cgi";
+			// servers[2] = "http://www2.dmsolutions.ca/cgi-bin/mswms_gmap?";
+			// servers[3] = "http://demo.deegree.org:8080/deegree/wms";
+			// servers[4] =
+			// "http://orto.cth.gva.es/wmsconnector/com.esri.wms.Esrimap/wms_patricova";
+			// servers[5] =
+			// "http://orto.cth.gva.es/wmsconnector/com.esri.wms.Esrimap/wms_parque_fondo_prug";
+			// servers[6] =
+			// "http://orto.cth.gva.es/wmsconnector/com.esri.wms.Esrimap/wms_pgof";
+			// servers[7] =
+			// "http://orto.cth.gva.es/wmsconnector/com.esri.wms.Esrimap/wms_urbanismo_tematicos";
+			// servers[8] = "http://onearth.jpl.nasa.gov/wms.cgi";
+			// servers[9] = "http://www.demis.nl/wms/wms.asp?WMS=WorldMap";
+			// servers[9] = "http://aes.gsfc.nasa.gov/cgi-bin/wms";
+			// servers[10]= "http://mapas.euitto.upm.es/cgi-bin/cnauticas";
 
-//			servers[0] = "http://www.idee.es/wms/IDEE-Base/IDEE-Base";
-//			servers[1] = "http://wms.jpl.nasa.gov/wms.cgi";
-//			servers[2] = "http://www2.dmsolutions.ca/cgi-bin/mswms_gmap?";
-//			servers[3] = "http://demo.deegree.org:8080/deegree/wms";
-//			servers[4] = "http://orto.cth.gva.es/wmsconnector/com.esri.wms.Esrimap/wms_patricova";
-//			servers[5] = "http://orto.cth.gva.es/wmsconnector/com.esri.wms.Esrimap/wms_parque_fondo_prug";
-//			servers[6] = "http://orto.cth.gva.es/wmsconnector/com.esri.wms.Esrimap/wms_pgof";
-//			servers[7] = "http://orto.cth.gva.es/wmsconnector/com.esri.wms.Esrimap/wms_urbanismo_tematicos";
-//			servers[8] = "http://onearth.jpl.nasa.gov/wms.cgi";
-//			servers[9] = "http://www.demis.nl/wms/wms.asp?WMS=WorldMap";
-//			servers[9] = "http://aes.gsfc.nasa.gov/cgi-bin/wms";
-//			servers[10]= "http://mapas.euitto.upm.es/cgi-bin/cnauticas";
-
-//			} // this bracket will be removed too in version <= 0.7
-//			xml.putProperty("wms-servers", servers);
-//			}
-//			try {
-//			String[] servers = xml.getStringArrayProperty("wms-servers");
-//			for (int i = 0; i < servers.length; i++) {
-//			((DefaultComboBoxModel) cmbHost.getModel()).addElement(servers[i]);
-//			}
-//			} catch (NotExistInXMLEntity e) {
-//			}
+			// } // this bracket will be removed too in version <= 0.7
+			// xml.putProperty("wms-servers", servers);
+			// }
+			// try {
+			// String[] servers = xml.getStringArrayProperty("wms-servers");
+			// for (int i = 0; i < servers.length; i++) {
+			// ((DefaultComboBoxModel)
+			// cmbHost.getModel()).addElement(servers[i]);
+			// }
+			// } catch (NotExistInXMLEntity e) {
+			// }
 		}
 
 		return cmbHost;
 	}
 
-
 	/**
 	 * This method initializes btnDetalles
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBtnConnect() {
@@ -452,19 +505,19 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 			btnConnect.setBounds(272, 50, 100, 20);
 			btnConnect.setText(PluginServices.getText(this, "conectar"));
 			btnConnect.addActionListener(this);
-			/*btnConnect.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					rellenarControles();
-				}
-			});*/
+			/*
+			 * btnConnect.addActionListener(new java.awt.event.ActionListener()
+			 * { public void actionPerformed(java.awt.event.ActionEvent e) {
+			 * rellenarControles(); } });
+			 */
 		}
 
 		return btnConnect;
 	}
-	
+
 	/**
 	 * This method initializes btnDetalles
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private org.gvsig.gui.beans.swing.JButton getBtnCancel() {
@@ -478,11 +531,11 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 		}
 
 		return btnCancel;
-	}	
+	}
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private javax.swing.JPanel getJPanel() {
@@ -490,10 +543,11 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 			jPanel = new javax.swing.JPanel();
 			jPanel.setLayout(null);
 			jPanel.setPreferredSize(new java.awt.Dimension(470, 130));
-			jPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, PluginServices.getText(this, "description"),
+			jPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+					PluginServices.getText(this, "description"),
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					null));
 			jPanel.setBounds(2, 96, 477, 324);
 
 			jPanel.add(getJScrollPane(), null);
@@ -505,7 +559,7 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 
 	/**
 	 * This method initializes jLabel1
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getJLabel1() {
@@ -519,7 +573,7 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 
 	/**
 	 * This method initializes lblTitle
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLblTitle() {
@@ -533,7 +587,7 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private javax.swing.JScrollPane getJScrollPane() {
@@ -549,7 +603,7 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 
 	/**
 	 * This method initializes txtAbstract
-	 *
+	 * 
 	 * @return javax.swing.JTextArea
 	 */
 	private javax.swing.JTextArea getTxtAbstract() {
@@ -565,7 +619,7 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 
 	/**
 	 * This method initializes panelPage1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private javax.swing.JPanel getPanelPage1() {
@@ -584,7 +638,7 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 
 	/**
 	 * This method initializes btnSiguiente
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBtnSiguiente() {
@@ -613,7 +667,7 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 
 	/**
 	 * This method initializes btnAnterior
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBtnAnterior() {
@@ -624,16 +678,16 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 			btnAnterior.setText(PluginServices.getText(this, "anterior"));
 			btnAnterior.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					page --;
+					page--;
 					if (page > firstPage) {
 						// Tenemos que retroceder en el wcsParamsPanel
 						wmsParamsPanel.retrocedeTab();
 						page = wmsParamsPanel.currentPage() + 1;
 						activarVisualizarBotones();
-					} else if (page==firstPage){
+					} else if (page == firstPage) {
 						activarVisualizarBotones();
-						page = firstPage +1;
-						//wmsParamsPanel.limpiaWizard();
+						page = firstPage + 1;
+						// wmsParamsPanel.limpiaWizard();
 						getLblTitle().setText("-");
 						getTxtAbstract().setText("");
 						wmsParamsPanel.retrocedeTab();
@@ -642,7 +696,8 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 						getBtnSiguiente().setEnabled(false);
 						connected = false;
 					}
-					listenerSupport.callStateChanged(wmsParamsPanel.isCorrectlyConfigured());
+					listenerSupport.callStateChanged(wmsParamsPanel
+							.isCorrectlyConfigured());
 				}
 			});
 		}
@@ -652,7 +707,7 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private javax.swing.JPanel getJPanel1() {
@@ -662,7 +717,8 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 			jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(
 					null, PluginServices.getText(this, "server"),
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					null));
 			jPanel1.setBounds(2, 5, 477, 85);
 			jPanel1.add(getTxtHost(), null);
 			jPanel1.add(getBtnConnect(), null);
@@ -675,7 +731,7 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param listener
 	 */
 	public void addWizardListener(WizardListener listener) {
@@ -684,7 +740,7 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param listener
 	 */
 	public void removeWizardListener(WizardListener listener) {
@@ -693,26 +749,25 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return
 	 */
-//	public WMSWizardDataSource getDataSource() {
-//	return dataSource;
-//	}
+	// public WMSWizardDataSource getDataSource() {
+	// return dataSource;
+	// }
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param source
 	 */
-//	public void setDataSource(WMSWizardDataSource source) {
-//	dataSource = source;
-//	}
-
+	// public void setDataSource(WMSWizardDataSource source) {
+	// dataSource = source;
+	// }
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public String getSRS() {
@@ -721,7 +776,7 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public String getFormat() {
@@ -730,7 +785,7 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public TreePath[] getSelectedLayers() {
@@ -739,25 +794,24 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 * @throws ProjectionLayerException
 	 */
-	public Rectangle2D getLayersRectangle() throws ProjectionLayerException{
+	public Rectangle2D getLayersRectangle() throws ProjectionLayerException {
 		return wmsParamsPanel.getLayersRectangle();
 	}
-
-
 
 	/**
 	 * Devuelve el host que est� escrito en el cuadro de texto del host o null
 	 * en caso de que no haya nada escrito o est� mal escrito
-	 *
+	 * 
 	 * @return URL del host
 	 */
 	public URL getHost() {
 		try {
-			if ((cmbHost == null)|| (cmbHost.getModel().getSelectedItem() == null))
+			if ((cmbHost == null)
+					|| (cmbHost.getModel().getSelectedItem() == null))
 				return new URL(dataSource.getHost());
 			else
 				return new URL(cmbHost.getModel().getSelectedItem().toString());
@@ -768,13 +822,12 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return Nombre de la capa que aparece en el TOC.
 	 */
 	public String getLayerName() {
 		return wmsParamsPanel.getLayerName();
 	}
-
 
 	public void initWizard() {
 		dataSource = new WMSWizardData();
@@ -786,102 +839,106 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	protected String getLayersQuery() {
 		return wmsParamsPanel.getLayersQuery();
 	}
 
-	//gets all the layers available in the WMS
-	public FLayer getAllLayers(){
+	// gets all the layers available in the WMS
+	public FLayer getAllLayers() {
 		return wmsParamsPanel.getAllLayers();
 	}
 
-	public FLayer getLayer(){
+	public FLayer getLayer() {
 
 		return wmsParamsPanel.getLayer();
-//		if(wmsParamsPanel.getDisagregatedLayers()){
-//			return getLayerTree();
-//		}else{
-//			return getLayerPlain();
-//		}
+		// if(wmsParamsPanel.getDisagregatedLayers()){
+		// return getLayerTree();
+		// }else{
+		// return getLayerPlain();
+		// }
 	}
 
-//	private Object[] getFullPath(String name){
-//		Vector path = new Vector();
-//		WMSLayerNode layerNode;
-//		WMSLayerNode parent;
-//		for (int i = 0; i <wmsParamsPanel.getLstSelectedLayers().getModel().getSize(); i++) {
-//			layerNode = (WMSLayerNode)wmsParamsPanel.getLstSelectedLayers().getModel().getElementAt(i);
-//			if(layerNode.getName().compareTo( name ) == 0 ){
-//				path.add(layerNode);
-//				parent = (WMSLayerNode)layerNode.getParent().clone();
-//				while ( parent != null){
-//					path.add(parent);
-//					parent = (WMSLayerNode)parent.getParent().clone();
-//				}
-//			}
-//		}
-//		return path.toArray();
-//	}
+	// private Object[] getFullPath(String name){
+	// Vector path = new Vector();
+	// WMSLayerNode layerNode;
+	// WMSLayerNode parent;
+	// for (int i = 0; i
+	// <wmsParamsPanel.getLstSelectedLayers().getModel().getSize(); i++) {
+	// layerNode =
+	// (WMSLayerNode)wmsParamsPanel.getLstSelectedLayers().getModel().getElementAt(i);
+	// if(layerNode.getName().compareTo( name ) == 0 ){
+	// path.add(layerNode);
+	// parent = (WMSLayerNode)layerNode.getParent().clone();
+	// while ( parent != null){
+	// path.add(parent);
+	// parent = (WMSLayerNode)parent.getParent().clone();
+	// }
+	// }
+	// }
+	// return path.toArray();
+	// }
 
 	/**
-	 * If user does not select the chekbox Disagregate layers, will get the layer tree in WMS
+	 * If user does not select the chekbox Disagregate layers, will get the
+	 * layer tree in WMS
+	 * 
 	 * @return
 	 */
-    protected FLayer getLayerTree() {
-        LayerTree layerTree = wmsParamsPanel.getLayerStructure();
-		TreePath[] selection = (TreePath[])wmsParamsPanel.getSelectedPaths().toArray(new TreePath[0]);//layerTree.getSelectionPaths();
-		if (selection!=null){
-			return getSubTree((WMSLayerNode)layerTree.getModel().getRoot(), selection);
+	protected FLayer getLayerTree() {
+		LayerTree layerTree = wmsParamsPanel.getLayerStructure();
+		TreePath[] selection = (TreePath[]) wmsParamsPanel.getSelectedPaths()
+				.toArray(new TreePath[0]);// layerTree.getSelectionPaths();
+		if (selection != null) {
+			return getSubTree((WMSLayerNode) layerTree.getModel().getRoot(),
+					selection);
 		}
 		return null;
-    }
+	}
 
-    protected boolean nodeSelected(TreePath[] selection, WMSLayerNode node){
+	protected boolean nodeSelected(TreePath[] selection, WMSLayerNode node) {
 		for (int i = 0; i < selection.length; i++) {
 			Object[] components = selection[i].getPath();
-			for (int j=0; j < components.length ; j++)
-			{
-				if (components[j] instanceof WMSLayerNode){
-					if (((WMSLayerNode)components[j]).getTitle().compareTo(node.getTitle()) == 0){
+			for (int j = 0; j < components.length; j++) {
+				if (components[j] instanceof WMSLayerNode) {
+					if (((WMSLayerNode) components[j]).getTitle().compareTo(
+							node.getTitle()) == 0) {
 						return true;
 					}
 				}
 			}
 		}
 		return false;
-    }
+	}
 
-    /**
-     * @deprecated
-     * @param node
-     * @param selection
-     * @return
-     */
-	protected FLayer getSubTree(WMSLayerNode node, TreePath[] selection)
-	{
-		if (node.getChildren().size() > 0)
-		{
-	        //com.iver.cit.gvsig.gui.View v = (com.iver.cit.gvsig.gui.View) PluginServices.getMDIManager().getActiveView();
-	        FLayers l = new FLayers();
-	        l.setMapContext(this.getMapCtrl().getMapContext());
-	        l.setName(node.getTitle());
-			for(int i = 0; i < node.getChildren().size(); i++ ){
-				if (nodeSelected(selection, (WMSLayerNode)(node.getChildren().get(i))))
-				{
-					FLayer lyr = getSubTree((WMSLayerNode)node.getChildren().get(i), selection);
-					if(lyr != null){
+	/**
+	 * @deprecated
+	 * @param node
+	 * @param selection
+	 * @return
+	 */
+	protected FLayer getSubTree(WMSLayerNode node, TreePath[] selection) {
+		if (node.getChildren().size() > 0) {
+			// com.iver.cit.gvsig.gui.View v = (com.iver.cit.gvsig.gui.View)
+			// PluginServices.getMDIManager().getActiveView();
+			FLayers l = new FLayers();
+			l.setMapContext(this.getMapCtrl().getMapContext());
+			l.setName(node.getTitle());
+			for (int i = 0; i < node.getChildren().size(); i++) {
+				if (nodeSelected(selection,
+						(WMSLayerNode) (node.getChildren().get(i)))) {
+					FLayer lyr = getSubTree((WMSLayerNode) node.getChildren()
+							.get(i), selection);
+					if (lyr != null) {
 						l.addLayer(lyr);
 					}
 				}
 			}
 			return l;
-		}
-		else{
-			if (nodeSelected(selection, node))
-			{
+		} else {
+			if (nodeSelected(selection, node)) {
 				FLyrWMS layer = new FLyrWMS();
 				layer.setHost(getHost());
 				try {
@@ -892,56 +949,56 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 				}
 				layer.setFormat(getFormat());
 				layer.setLayerQuery(node.getName());
-		        layer.setInfoLayerQuery(getQueryableLayerQuery());
-		        layer.setSRS(getSRS());
-		        layer.setName(node.getTitle());
-		        layer.setWmsTransparency(getTransparency());
-		        layer.setStyles(getStyles());
-		        layer.setDimensions(getDimensions());
-		        layer.setDriver(getDriver());
-		        layer.setOnlineResources(getOnlineResources());
-		        layer.setFixedSize(getFixedSize());
-		        layer.setQueryable(node.isQueryable());
+				layer.setInfoLayerQuery(getQueryableLayerQuery());
+				layer.setSRS(getSRS());
+				layer.setName(node.getTitle());
+				layer.setWmsTransparency(getTransparency());
+				layer.setStyles(getStyles());
+				layer.setDimensions(getDimensions());
+				layer.setDriver(getDriver());
+				layer.setOnlineResources(getOnlineResources());
+				layer.setFixedSize(getFixedSize());
+				layer.setQueryable(node.isQueryable());
 
-		        return layer;
+				return layer;
 
-			}else{
+			} else {
 				return null;
 			}
 		}
 	}
 
 	/**
-	 * @deprecated
-	 * If user selects the chekbox Disagregate layers, will get the selected layers rendered in one
-	 * the tree structure in WMS will be lost.
+	 * @deprecated If user selects the chekbox Disagregate layers, will get the
+	 *             selected layers rendered in one the tree structure in WMS
+	 *             will be lost.
 	 * @return
 	 */
-    protected FLayer getLayerPlain(){
-        FLyrWMS layer = new FLyrWMS();
-        layer.setHost(getHost());
-        try{
-        	layer.setFullExtent(getLayersRectangle());
-        }catch(ProjectionLayerException ex)
-        {
-        	ex.printStackTrace();
-        	JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(), ex.getMessage());
-        	return null;
-        }
-        layer.setFormat(getFormat());
-        layer.setLayerQuery(getLayersQuery());
-        layer.setInfoLayerQuery(getQueryableLayerQuery());
-        layer.setSRS(getSRS());
-        layer.setName(getLayerName());
-        layer.setWmsTransparency(getTransparency());
-        layer.setStyles(getStyles());
-        layer.setDimensions(getDimensions());
-        layer.setDriver(getDriver());
-        layer.setOnlineResources(getOnlineResources());
-        layer.setFixedSize(getFixedSize());
-        layer.setQueryable(isQueryable());
-        return layer;
-    }
+	protected FLayer getLayerPlain() {
+		FLyrWMS layer = new FLyrWMS();
+		layer.setHost(getHost());
+		try {
+			layer.setFullExtent(getLayersRectangle());
+		} catch (ProjectionLayerException ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(
+					(Component) PluginServices.getMainFrame(), ex.getMessage());
+			return null;
+		}
+		layer.setFormat(getFormat());
+		layer.setLayerQuery(getLayersQuery());
+		layer.setInfoLayerQuery(getQueryableLayerQuery());
+		layer.setSRS(getSRS());
+		layer.setName(getLayerName());
+		layer.setWmsTransparency(getTransparency());
+		layer.setStyles(getStyles());
+		layer.setDimensions(getDimensions());
+		layer.setDriver(getDriver());
+		layer.setOnlineResources(getOnlineResources());
+		layer.setFixedSize(getFixedSize());
+		layer.setQueryable(isQueryable());
+		return layer;
+	}
 
 	protected boolean isQueryable() {
 		return dataSource.isQueryable();
@@ -979,7 +1036,7 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public String getQueryableLayerQuery() {
@@ -988,15 +1045,17 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 
 	/**
 	 * This method initializes chkCaching
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getChkCaching() {
 		if (chkCaching == null) {
 			chkCaching = new JCheckBox();
 			chkCaching.setBounds(7, 51, 249, 20);
-			chkCaching.setText(PluginServices.getText(this, "refresh_capabilities"));
-			chkCaching.setToolTipText(PluginServices.getText(this, "refresh_capabilities_tooltip"));
+			chkCaching.setText(PluginServices.getText(this,
+					"refresh_capabilities"));
+			chkCaching.setToolTipText(PluginServices.getText(this,
+					"refresh_capabilities_tooltip"));
 			chkCaching.setSelected(refreshing);
 			chkCaching.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -1005,7 +1064,8 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 			});
 			chkCaching.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					fPrefs.putBoolean("refresh_capabilities", chkCaching.isSelected());
+					fPrefs.putBoolean("refresh_capabilities",
+							chkCaching.isSelected());
 				}
 			});
 
@@ -1015,16 +1075,16 @@ public class WMSWizard extends WizardPanel implements ActionListener {
 
 	/**
 	 * This method initializes pnlName
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPnlName() {
 		if (pnlName == null) {
 			pnlName = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-			pnlName.setBounds(new java.awt.Rectangle(9,19,452,24));
+			pnlName.setBounds(new java.awt.Rectangle(9, 19, 452, 24));
 			pnlName.add(getJLabel1(), null);
 			pnlName.add(getLblTitle(), null);
 		}
 		return pnlName;
 	}
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

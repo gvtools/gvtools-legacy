@@ -46,324 +46,338 @@ import com.iver.cit.gvsig.fmap.edition.fieldmanagers.AbstractFieldManager;
 import com.iver.cit.gvsig.fmap.edition.writers.dbf.DbfWriter;
 import com.iver.utiles.NumberUtilities;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
-public class DBFDriver extends AbstractFieldManager implements FileDriver, IWriteable, IWriter {
-    //private File file;
-	private static Preferences prefs = Preferences.userRoot().node( "gvSIG.encoding.dbf" );
-	private static Locale ukLocale = new Locale("en", "UK"); // English, UK version
-    private DbaseFile dbf = new DbaseFile();
-    private char[] fieldTypes;
-    private DataSourceFactory dsf;
-    private DbfWriter dbfWriter = new DbfWriter();
+public class DBFDriver extends AbstractFieldManager implements FileDriver,
+		IWriteable, IWriter {
+	// private File file;
+	private static Preferences prefs = Preferences.userRoot().node(
+			"gvSIG.encoding.dbf");
+	private static Locale ukLocale = new Locale("en", "UK"); // English, UK
+																// version
+	private DbaseFile dbf = new DbaseFile();
+	private char[] fieldTypes;
+	private DataSourceFactory dsf;
+	private DbfWriter dbfWriter = new DbfWriter();
 	private File file = null;
-	private static String tempDirectoryPath = System.getProperty("java.io.tmpdir");
+	private static String tempDirectoryPath = System
+			.getProperty("java.io.tmpdir");
 	private File fTemp;
-    private ITableDefinition tableDef;
+	private ITableDefinition tableDef;
 	private Charset charSet = null;
 
-    public Charset getCharSet() {
+	public Charset getCharSet() {
 		return charSet;
 	}
 
 	public void setCharSet(Charset charSet) {
 		this.charSet = charSet;
 	}
-    /**
-     * @see com.hardcode.driverManager.Driver#getName()
-     */
-    public String getName() {
-        return "gdbms dbf driver";
-    }
 
-    /**
-     * @see com.hardcode.gdbms.engine.data.GDBMSDriver#open(java.io.File)
-     */
-    public void open(File file) throws OpenDriverException {
-    	this.file  = file;
-        try {
-        	dbf.open(file);
-        	// After opening the file, we know its charsetname
-        	setCharSet(dbf.getCharSet());
-        	fieldTypes = new char[getFieldCount()];
-        	for (int i = 0; i < fieldTypes.length; i++) {
-        		fieldTypes[i] = dbf.getFieldType(i);
-        	}
-        	int aux = (int)(Math.random() * 1000);
-        	//fTemp = new File(tempDirectoryPath + "/tmpDbf" + aux + ".dbf");
-        	if(fTemp == null) {
-        		fTemp =  new File(file.getAbsolutePath() + ".tmp.dbf");
-        		dbfWriter.setFile(fTemp);
-        	}
-        	if (charSet != null)
-        		dbfWriter.setCharset(charSet);
-        } catch (ReadDriverException e) {
-        	throw new OpenDriverException(getName(),e);
-        }
+	/**
+	 * @see com.hardcode.driverManager.Driver#getName()
+	 */
+	public String getName() {
+		return "gdbms dbf driver";
+	}
 
-    }
+	/**
+	 * @see com.hardcode.gdbms.engine.data.GDBMSDriver#open(java.io.File)
+	 */
+	public void open(File file) throws OpenDriverException {
+		this.file = file;
+		try {
+			dbf.open(file);
+			// After opening the file, we know its charsetname
+			setCharSet(dbf.getCharSet());
+			fieldTypes = new char[getFieldCount()];
+			for (int i = 0; i < fieldTypes.length; i++) {
+				fieldTypes[i] = dbf.getFieldType(i);
+			}
+			int aux = (int) (Math.random() * 1000);
+			// fTemp = new File(tempDirectoryPath + "/tmpDbf" + aux + ".dbf");
+			if (fTemp == null) {
+				fTemp = new File(file.getAbsolutePath() + ".tmp.dbf");
+				dbfWriter.setFile(fTemp);
+			}
+			if (charSet != null)
+				dbfWriter.setCharset(charSet);
+		} catch (ReadDriverException e) {
+			throw new OpenDriverException(getName(), e);
+		}
 
-    /**
-     * @see com.hardcode.gdbms.engine.data.GDBMSDriver#close()
-     */
-    public void close() throws CloseDriverException {
-        try {
+	}
+
+	/**
+	 * @see com.hardcode.gdbms.engine.data.GDBMSDriver#close()
+	 */
+	public void close() throws CloseDriverException {
+		try {
 			dbf.close();
 		} catch (IOException e) {
-			throw new CloseDriverException(getName(),e);
+			throw new CloseDriverException(getName(), e);
 		}
-    }
+	}
 
-    /**
-     * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getFieldValue(long,
-     *      int)
-     */
-    public Value getFieldValue(long rowIndex, int fieldId)
-        throws ReadDriverException {
-        // Field Type (C  or M)
-        char cfieldType = fieldTypes[fieldId];
-        int fieldType = getFieldType(fieldId);
+	/**
+	 * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getFieldValue(long,
+	 *      int)
+	 */
+	public Value getFieldValue(long rowIndex, int fieldId)
+			throws ReadDriverException {
+		// Field Type (C or M)
+		char cfieldType = fieldTypes[fieldId];
+		int fieldType = getFieldType(fieldId);
 
-    	String strValue;
+		String strValue;
 
-
-    	if (cfieldType == 'D') {
-            String date;
+		if (cfieldType == 'D') {
+			String date;
 			try {
 				date = dbf.getStringFieldValue((int) rowIndex, fieldId).trim();
 			} catch (UnsupportedEncodingException e1) {
-				throw new ReadDriverException(getName(),e1);
+				throw new ReadDriverException(getName(), e1);
 			}
-            // System.out.println(rowIndex + " data=" + date);
-            if (date.length()<8) {
-                return null;
-            }
-            String year = date.substring(0, 4);
-            String month = date.substring(4, 6);
-            String day = date.substring(6, 8);
-            DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, ukLocale);
-            /* Calendar c = Calendar.getInstance();
-            c.clear();
-            c.set(Integer.parseInt(year), Integer.parseInt(month),
-                Integer.parseInt(day));
-            c.set(Calendar.MILLISECOND, 0); */
-            String strAux = month + "/" + day + "/" + year;
-            Date dat;
-            try {
-                dat = df.parse(strAux);
-            } catch (ParseException e) {
-                throw new ReadDriverException(getName(),e);
-            }
+			// System.out.println(rowIndex + " data=" + date);
+			if (date.length() < 8) {
+				return null;
+			}
+			String year = date.substring(0, 4);
+			String month = date.substring(4, 6);
+			String day = date.substring(6, 8);
+			DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT,
+					ukLocale);
+			/*
+			 * Calendar c = Calendar.getInstance(); c.clear();
+			 * c.set(Integer.parseInt(year), Integer.parseInt(month),
+			 * Integer.parseInt(day)); c.set(Calendar.MILLISECOND, 0);
+			 */
+			String strAux = month + "/" + day + "/" + year;
+			Date dat;
+			try {
+				dat = df.parse(strAux);
+			} catch (ParseException e) {
+				throw new ReadDriverException(getName(), e);
+			}
 
-            // System.out.println("numReg = " + rowIndex + " date:" + dat.getTime());
+			// System.out.println("numReg = " + rowIndex + " date:" +
+			// dat.getTime());
 
-            return ValueFactory.createValue(dat);
-        } else {
+			return ValueFactory.createValue(dat);
+		} else {
 
-        	try {
-        		strValue = dbf.getStringFieldValue((int) rowIndex, fieldId);
-//        		System.out.println(strValue);
-    		} catch (UnsupportedEncodingException e1) {
-    			throw new BadFieldDriverException(getName(),e1);
-    		}
-   			strValue = strValue.trim();
-   			if (fieldType == Types.BOOLEAN){
-   				strValue = strValue.toLowerCase();
- 				strValue = Boolean.toString(strValue.equals("t") || strValue.equals("y"));
-   			}
+			try {
+				strValue = dbf.getStringFieldValue((int) rowIndex, fieldId);
+				// System.out.println(strValue);
+			} catch (UnsupportedEncodingException e1) {
+				throw new BadFieldDriverException(getName(), e1);
+			}
+			strValue = strValue.trim();
+			if (fieldType == Types.BOOLEAN) {
+				strValue = strValue.toLowerCase();
+				strValue = Boolean.toString(strValue.equals("t")
+						|| strValue.equals("y"));
+			}
 
-    		try {
+			try {
 				return ValueFactory.createValueByType(strValue, fieldType);
 			} catch (Exception e) {
-				if (fieldType == Types.INTEGER ||
-						fieldType == Types.BIGINT ||
-						fieldType == Types.FLOAT ||
-						fieldType == Types.DECIMAL ||
-						fieldType == Types.DOUBLE){
-					//Habria que quejarse???
+				if (fieldType == Types.INTEGER || fieldType == Types.BIGINT
+						|| fieldType == Types.FLOAT
+						|| fieldType == Types.DECIMAL
+						|| fieldType == Types.DOUBLE) {
+					// Habria que quejarse???
 					try {
 						return ValueFactory.createValueByType("0", fieldType);
 					} catch (ParseException e1) {
-						throw new BadFieldDriverException(getName(),null,String.valueOf(fieldType));
+						throw new BadFieldDriverException(getName(), null,
+								String.valueOf(fieldType));
 					}
-				}else{
+				} else {
 					// OJO: Habria que revisar el resto de tipos
 					// De momento lanzamos la excepcion
-					throw new BadFieldDriverException(getName(),null,String.valueOf(fieldType));
+					throw new BadFieldDriverException(getName(), null,
+							String.valueOf(fieldType));
 				}
 			}
 
-
-        }
-    }
-
-    /**
-     * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getFieldCount()
-     */
-    public int getFieldCount() throws ReadDriverException {
-        return dbf.getFieldCount();
-    }
-
-    /**
-     * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getFieldName(int)
-     */
-    public String getFieldName(int fieldId) throws ReadDriverException {
-        return dbf.getFieldName(fieldId);
-    }
-
-    /**
-     * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getRowCount()
-     */
-    public long getRowCount() throws ReadDriverException {
-        return dbf.getRecordCount();
-    }
-
-    /**
-     * @see com.hardcode.gdbms.engine.data.driver.FileDriver#fileAccepted(java.io.File)
-     */
-    public boolean fileAccepted(File f) {
-        return f.getAbsolutePath().toUpperCase().endsWith("DBF");
-    }
-
-    /**
-     * @see com.hardcode.gdbms.engine.data.driver.ObjectDriver#getFieldType(int)
-     */
-    public int getFieldType(int i) throws ReadDriverException {
-        char fieldType = fieldTypes[i];
-        
-        if (fieldType == 'L') {
-            return Types.BOOLEAN;
-        } else if (fieldType == 'F') {
-        	return Types.DOUBLE;
-        } else if (fieldType == 'N') {
-        	/* Numeric type is ambivalent */
-        	if (dbf.getFieldDecimalLength(i)>0 ) {        		
-        		return Types.DOUBLE;
-        	}
-        	else {        		
-        		return Types.INTEGER;
-        	}
-        } else if (fieldType == 'C') {
-            return Types.VARCHAR;
-        } else if (fieldType == 'D') {
-            return Types.DATE;
-        } else {
-            throw new BadFieldDriverException(getName(),null,String.valueOf(fieldType));
-        }
-    }
-
-    /**
-     * @see com.hardcode.gdbms.engine.data.driver.DriverCommons#setDataSourceFactory(com.hardcode.gdbms.engine.data.DataSourceFactory)
-     */
-    public void setDataSourceFactory(DataSourceFactory dsf) {
-        this.dsf = dsf;
-    }
-
-    private void writeToTemp(DataWare dataWare, File file) throws WriteDriverException, ReadDriverException {
-        DbaseFileWriterNIO dbfWrite = null;
-        DbaseFileHeaderNIO myHeader;
-        Value[] record;
-
-        try {
-            myHeader = DbaseFileHeaderNIO.createDbaseHeader(dataWare);
-
-            myHeader.setNumRecords((int) dataWare.getRowCount());
-            dbfWrite = new DbaseFileWriterNIO(myHeader,
-                    (FileChannel) getWriteChannel(file.getPath()));
-            record = new Value[dataWare.getFieldCount()];
-
-            for (int j = 0; j < dataWare.getRowCount(); j++) {
-                for (int r = 0; r < dataWare.getFieldCount(); r++) {
-                    record[r] = dataWare.getFieldValue(j, r);
-                }
-
-                dbfWrite.write(record);
-            }
-
-            dbfWrite.close();
-        } catch (IOException e) {
-            throw new WriteDriverException(getName(),e);
-        }
-
-    }
-
-    /**
-     * @throws ReadDriverException
-     * @see com.hardcode.gdbms.engine.data.driver.FileDriver#writeFile(com.hardcode.gdbms.engine.data.file.FileDataWare,
-     *      java.io.File)
-     */
-    public void writeFile(FileDataWare dataWare)
-        throws WriteDriverException, ReadDriverException {
-
-        String temp = dsf.getTempFile();
-
-        writeToTemp(dataWare, new File(temp));
-
-        try {
-            FileChannel fcout = dbf.getWriteChannel();
-            FileChannel fcin = new FileInputStream(temp).getChannel();
-
-            DriverUtilities.copy(fcin, fcout);
-        } catch (IOException e) {
-            throw new WriteDriverException(getName(),e);
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param path DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     *
-     * @throws IOException DOCUMENT ME!
-     */
-    private WritableByteChannel getWriteChannel(String path)
-        throws IOException {
-        WritableByteChannel channel;
-
-        File f = new File(path);
-
-        if (!f.exists()) {
-            System.out.println("Creando fichero " + f.getAbsolutePath());
-
-            if (!f.createNewFile()) {
-                throw new IOException("Cannot create file " + f);
-            }
-        }
-
-        RandomAccessFile raf = new RandomAccessFile(f, "rw");
-        channel = raf.getChannel();
-
-        return channel;
-    }
-
-    /* (non-Javadoc)
-     * @see com.hardcode.gdbms.engine.data.driver.FileDriver#createSource(java.lang.String, java.lang.String[], int[])
-     */
-    public void createSource(String arg0, String[] arg1, int[] arg2) throws ReadDriverException {
-        DbaseFileHeaderNIO myHeader;
-
-        int[] lengths = new int[arg2.length];
-        for (int i = 0; i < arg2.length; i++) {
-            lengths[i] = 100;
-        }
-        try {
-			myHeader = DbaseFileHeaderNIO.createDbaseHeader(arg1, arg2, lengths);
-
-        myHeader.setNumRecords(0);
-        DbaseFileWriterNIO dbfWrite = new DbaseFileWriterNIO(myHeader,
-                (FileChannel) getWriteChannel(arg0));
-        dbfWrite = new DbaseFileWriterNIO(myHeader,
-                (FileChannel) getWriteChannel(arg0));
-        } catch (IOException e) {
-			throw new ReadDriverException(getName(),e);
 		}
-    }
+	}
+
+	/**
+	 * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getFieldCount()
+	 */
+	public int getFieldCount() throws ReadDriverException {
+		return dbf.getFieldCount();
+	}
+
+	/**
+	 * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getFieldName(int)
+	 */
+	public String getFieldName(int fieldId) throws ReadDriverException {
+		return dbf.getFieldName(fieldId);
+	}
+
+	/**
+	 * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getRowCount()
+	 */
+	public long getRowCount() throws ReadDriverException {
+		return dbf.getRecordCount();
+	}
+
+	/**
+	 * @see com.hardcode.gdbms.engine.data.driver.FileDriver#fileAccepted(java.io.File)
+	 */
+	public boolean fileAccepted(File f) {
+		return f.getAbsolutePath().toUpperCase().endsWith("DBF");
+	}
+
+	/**
+	 * @see com.hardcode.gdbms.engine.data.driver.ObjectDriver#getFieldType(int)
+	 */
+	public int getFieldType(int i) throws ReadDriverException {
+		char fieldType = fieldTypes[i];
+
+		if (fieldType == 'L') {
+			return Types.BOOLEAN;
+		} else if (fieldType == 'F') {
+			return Types.DOUBLE;
+		} else if (fieldType == 'N') {
+			/* Numeric type is ambivalent */
+			if (dbf.getFieldDecimalLength(i) > 0) {
+				return Types.DOUBLE;
+			} else {
+				return Types.INTEGER;
+			}
+		} else if (fieldType == 'C') {
+			return Types.VARCHAR;
+		} else if (fieldType == 'D') {
+			return Types.DATE;
+		} else {
+			throw new BadFieldDriverException(getName(), null,
+					String.valueOf(fieldType));
+		}
+	}
+
+	/**
+	 * @see com.hardcode.gdbms.engine.data.driver.DriverCommons#setDataSourceFactory(com.hardcode.gdbms.engine.data.DataSourceFactory)
+	 */
+	public void setDataSourceFactory(DataSourceFactory dsf) {
+		this.dsf = dsf;
+	}
+
+	private void writeToTemp(DataWare dataWare, File file)
+			throws WriteDriverException, ReadDriverException {
+		DbaseFileWriterNIO dbfWrite = null;
+		DbaseFileHeaderNIO myHeader;
+		Value[] record;
+
+		try {
+			myHeader = DbaseFileHeaderNIO.createDbaseHeader(dataWare);
+
+			myHeader.setNumRecords((int) dataWare.getRowCount());
+			dbfWrite = new DbaseFileWriterNIO(myHeader,
+					(FileChannel) getWriteChannel(file.getPath()));
+			record = new Value[dataWare.getFieldCount()];
+
+			for (int j = 0; j < dataWare.getRowCount(); j++) {
+				for (int r = 0; r < dataWare.getFieldCount(); r++) {
+					record[r] = dataWare.getFieldValue(j, r);
+				}
+
+				dbfWrite.write(record);
+			}
+
+			dbfWrite.close();
+		} catch (IOException e) {
+			throw new WriteDriverException(getName(), e);
+		}
+
+	}
+
+	/**
+	 * @throws ReadDriverException
+	 * @see com.hardcode.gdbms.engine.data.driver.FileDriver#writeFile(com.hardcode.gdbms.engine.data.file.FileDataWare,
+	 *      java.io.File)
+	 */
+	public void writeFile(FileDataWare dataWare) throws WriteDriverException,
+			ReadDriverException {
+
+		String temp = dsf.getTempFile();
+
+		writeToTemp(dataWare, new File(temp));
+
+		try {
+			FileChannel fcout = dbf.getWriteChannel();
+			FileChannel fcin = new FileInputStream(temp).getChannel();
+
+			DriverUtilities.copy(fcin, fcout);
+		} catch (IOException e) {
+			throw new WriteDriverException(getName(), e);
+		}
+	}
+
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param path
+	 *            DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 * 
+	 * @throws IOException
+	 *             DOCUMENT ME!
+	 */
+	private WritableByteChannel getWriteChannel(String path) throws IOException {
+		WritableByteChannel channel;
+
+		File f = new File(path);
+
+		if (!f.exists()) {
+			System.out.println("Creando fichero " + f.getAbsolutePath());
+
+			if (!f.createNewFile()) {
+				throw new IOException("Cannot create file " + f);
+			}
+		}
+
+		RandomAccessFile raf = new RandomAccessFile(f, "rw");
+		channel = raf.getChannel();
+
+		return channel;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.hardcode.gdbms.engine.data.driver.FileDriver#createSource(java.lang
+	 * .String, java.lang.String[], int[])
+	 */
+	public void createSource(String arg0, String[] arg1, int[] arg2)
+			throws ReadDriverException {
+		DbaseFileHeaderNIO myHeader;
+
+		int[] lengths = new int[arg2.length];
+		for (int i = 0; i < arg2.length; i++) {
+			lengths[i] = 100;
+		}
+		try {
+			myHeader = DbaseFileHeaderNIO
+					.createDbaseHeader(arg1, arg2, lengths);
+
+			myHeader.setNumRecords(0);
+			DbaseFileWriterNIO dbfWrite = new DbaseFileWriterNIO(myHeader,
+					(FileChannel) getWriteChannel(arg0));
+			dbfWrite = new DbaseFileWriterNIO(myHeader,
+					(FileChannel) getWriteChannel(arg0));
+		} catch (IOException e) {
+			throw new ReadDriverException(getName(), e);
+		}
+	}
 
 	public int getFieldWidth(int i) throws ReadDriverException {
 		return dbf.getFieldLength(i);
@@ -411,18 +425,15 @@ public class DBFDriver extends AbstractFieldManager implements FileDriver, IWrit
 
 			open(file);
 
-
-
 		} catch (FileNotFoundException e) {
-			throw new StopWriterVisitorException(getName(),e);
+			throw new StopWriterVisitorException(getName(), e);
 		} catch (IOException e) {
-			throw new StopWriterVisitorException(getName(),e);
+			throw new StopWriterVisitorException(getName(), e);
 		} catch (CloseDriverException e) {
-			throw new StopWriterVisitorException(getName(),e);
+			throw new StopWriterVisitorException(getName(), e);
 		} catch (OpenDriverException e) {
-			throw new StopWriterVisitorException(getName(),e);
+			throw new StopWriterVisitorException(getName(), e);
 		}
-
 
 	}
 
@@ -439,7 +450,8 @@ public class DBFDriver extends AbstractFieldManager implements FileDriver, IWrit
 		return dbfWriter.canWriteAttribute(sqlType);
 	}
 
-	public void initialize(ITableDefinition tableDefinition) throws InitializeWriterException {
+	public void initialize(ITableDefinition tableDefinition)
+			throws InitializeWriterException {
 		dbfWriter.initialize(tableDefinition);
 
 	}
@@ -447,30 +459,29 @@ public class DBFDriver extends AbstractFieldManager implements FileDriver, IWrit
 	public ITableDefinition getTableDefinition() throws ReadDriverException {
 		tableDef = new TableDefinition();
 		int numFields;
-			numFields = getFieldCount();
-			FieldDescription[] fieldsDescrip = new FieldDescription[numFields];
-			
-			for (int i = 0; i < numFields; i++) {
-				fieldsDescrip[i] = new FieldDescription();
-				int type = getFieldType(i);
-				fieldsDescrip[i].setFieldType(type);
-				fieldsDescrip[i].setFieldName(getFieldName(i));
-				fieldsDescrip[i].setFieldLength(getFieldWidth(i));
-				if (NumberUtilities.isNumeric(type))
-				{
-					if (!NumberUtilities.isNumericInteger(type))
-						// TODO: If there is a lost in precision, this should be changed.
-						fieldsDescrip[i].setFieldDecimalCount(6);
-				}
-				else
-					fieldsDescrip[i].setFieldDecimalCount(0);
-				// TODO: ¿DEFAULTVALUE?
-				// fieldsDescrip[i].setDefaultValue(get)
-			}
+		numFields = getFieldCount();
+		FieldDescription[] fieldsDescrip = new FieldDescription[numFields];
 
-			tableDef.setFieldsDesc(fieldsDescrip);
-			return tableDef;
-//		return dbfWriter.getTableDefinition();
+		for (int i = 0; i < numFields; i++) {
+			fieldsDescrip[i] = new FieldDescription();
+			int type = getFieldType(i);
+			fieldsDescrip[i].setFieldType(type);
+			fieldsDescrip[i].setFieldName(getFieldName(i));
+			fieldsDescrip[i].setFieldLength(getFieldWidth(i));
+			if (NumberUtilities.isNumeric(type)) {
+				if (!NumberUtilities.isNumericInteger(type))
+					// TODO: If there is a lost in precision, this should be
+					// changed.
+					fieldsDescrip[i].setFieldDecimalCount(6);
+			} else
+				fieldsDescrip[i].setFieldDecimalCount(0);
+			// TODO: ¿DEFAULTVALUE?
+			// fieldsDescrip[i].setDefaultValue(get)
+		}
+
+		tableDef.setFieldsDesc(fieldsDescrip);
+		return tableDef;
+		// return dbfWriter.getTableDefinition();
 	}
 
 	public boolean canAlterTable() {
@@ -482,16 +493,19 @@ public class DBFDriver extends AbstractFieldManager implements FileDriver, IWrit
 	}
 
 	public boolean canSaveEdits() {
-		if (file.canWrite()) return true;
+		if (file.canWrite())
+			return true;
 		return false;
 
 	}
+
 	public boolean isWriteAll() {
 		// TODO: DEVOLVER FALSE SI NO HA HABIDO CAMBIOS EN LOS CAMPOS.
 		return true;
 	}
+
 	public void setFieldValue(int rowIndex, int fieldId, Object obj)
-	throws IOException {
-		dbf.setFieldValue(rowIndex,fieldId,obj);
+			throws IOException {
+		dbf.setFieldValue(rowIndex, fieldId, obj);
 	}
 }

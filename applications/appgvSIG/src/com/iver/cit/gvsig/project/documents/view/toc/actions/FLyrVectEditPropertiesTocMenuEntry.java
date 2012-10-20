@@ -12,6 +12,7 @@ import com.iver.cit.gvsig.project.Project;
 import com.iver.cit.gvsig.project.documents.view.legend.gui.ThemeManagerWindow;
 import com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction;
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -93,14 +94,14 @@ import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
  */
 /**
  * Muestra el menú de propiedades del tema.
- *
+ * 
  * @author jmorell
  */
 
-
-public class FLyrVectEditPropertiesTocMenuEntry extends AbstractTocContextMenuAction {
+public class FLyrVectEditPropertiesTocMenuEntry extends
+		AbstractTocContextMenuAction {
 	public String getGroup() {
-		return "group2"; //FIXME
+		return "group2"; // FIXME
 	}
 
 	public int getGroupOrder() {
@@ -118,7 +119,7 @@ public class FLyrVectEditPropertiesTocMenuEntry extends AbstractTocContextMenuAc
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
 		if (isTocItemBranch(item)) {
 			FLayer lyr = getNodeLayer(item);
-			if (lyr.isAvailable()){
+			if (lyr.isAvailable()) {
 				return selectedItems.length == 1;
 			}
 		}
@@ -128,22 +129,21 @@ public class FLyrVectEditPropertiesTocMenuEntry extends AbstractTocContextMenuAc
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
 		if (isTocItemBranch(item)) {
 			FLayer lyr = getNodeLayer(item);
-				if ((lyr instanceof ClassifiableVectorial)) {
-					if (!((lyr instanceof FLyrVect) &&
-							!((FLyrVect)lyr).isPropertiesMenuVisible())){
-						if (!(lyr instanceof FLyrAnnotation))
-							return true;
-					}
-
+			if ((lyr instanceof ClassifiableVectorial)) {
+				if (!((lyr instanceof FLyrVect) && !((FLyrVect) lyr)
+						.isPropertiesMenuVisible())) {
+					if (!(lyr instanceof FLyrAnnotation))
+						return true;
 				}
+
+			}
 		}
 		return false;
 
 	}
 
-
 	public void execute(ITocItem item, FLayer[] selectedItems) {
-//		long t1 = System.currentTimeMillis();
+		// long t1 = System.currentTimeMillis();
 
 		FLayer lyr = getNodeLayer(item);
 		ThemeManagerWindow fThemeManagerWindow = null;
@@ -159,15 +159,16 @@ public class FLyrVectEditPropertiesTocMenuEntry extends AbstractTocContextMenuAc
 			dlg.setModal(false);
 			dlg.pack();
 			dlg.setVisible(true);
-//			System.err.println("open properties dialog time: "+(System.currentTimeMillis()-t1));
+			// System.err.println("open properties dialog time: "+(System.currentTimeMillis()-t1));
 		} else {
-//			System.err.println("open properties dialog time: "+(System.currentTimeMillis()-t1));
-			if (fThemeManagerWindow != null){
+			// System.err.println("open properties dialog time: "+(System.currentTimeMillis()-t1));
+			if (fThemeManagerWindow != null) {
 				PluginServices.getMDIManager().addWindow(fThemeManagerWindow);
 			}
 		}
 
-		Project project=((ProjectExtension)PluginServices.getExtension(ProjectExtension.class)).getProject();
+		Project project = ((ProjectExtension) PluginServices
+				.getExtension(ProjectExtension.class)).getProject();
 		project.setModified(true);
 	}
 

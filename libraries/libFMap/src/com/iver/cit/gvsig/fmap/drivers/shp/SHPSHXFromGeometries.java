@@ -53,10 +53,9 @@ import com.iver.cit.gvsig.fmap.core.v02.FConstant;
 import com.iver.cit.gvsig.fmap.drivers.shp.write.SHPFileWrite;
 import com.iver.cit.gvsig.fmap.drivers.shp.write.ShapefileException;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class SHPSHXFromGeometries {
@@ -68,22 +67,25 @@ public class SHPSHXFromGeometries {
 
 	/**
 	 * Crea un nuevo SHPSHXFromGeometries.
-	 *
-	 * @param geometries DOCUMENT ME!
-	 * @param file DOCUMENT ME!
+	 * 
+	 * @param geometries
+	 *            DOCUMENT ME!
+	 * @param file
+	 *            DOCUMENT ME!
 	 */
 	public SHPSHXFromGeometries(IGeometry[] geometries, File file) {
 		this.geometries = geometries;
 		setFile(file);
 	}
 
-	//private FBitSet bitset = null;
-	//private int num = 0;
+	// private FBitSet bitset = null;
+	// private int num = 0;
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param f DOCUMENT ME!
+	 * 
+	 * @param f
+	 *            DOCUMENT ME!
 	 */
 	private void setFile(File f) {
 		shpPath = f.getAbsolutePath();
@@ -96,9 +98,8 @@ public class SHPSHXFromGeometries {
 	 * DOCUMENT ME!
 	 */
 
-	/*public void setType(int i) {
-	   type = i;
-	   }
+	/*
+	 * public void setType(int i) { type = i; }
 	 */
 
 	/**
@@ -108,7 +109,8 @@ public class SHPSHXFromGeometries {
 		SHPFileWrite filewrite;
 
 		try {
-			filewrite = new SHPFileWrite((FileChannel) getWriteChannel(shpPath),
+			filewrite = new SHPFileWrite(
+					(FileChannel) getWriteChannel(shpPath),
 					(FileChannel) getWriteChannel(shxPath));
 
 			if (geometries.length > 0) {
@@ -128,15 +130,16 @@ public class SHPSHXFromGeometries {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param path DOCUMENT ME!
-	 *
+	 * 
+	 * @param path
+	 *            DOCUMENT ME!
+	 * 
 	 * @return DOCUMENT ME!
-	 *
-	 * @throws IOException DOCUMENT ME!
+	 * 
+	 * @throws IOException
+	 *             DOCUMENT ME!
 	 */
-	private WritableByteChannel getWriteChannel(String path)
-		throws IOException {
+	private WritableByteChannel getWriteChannel(String path) throws IOException {
 		WritableByteChannel channel;
 
 		File f = new File(path);
@@ -145,8 +148,8 @@ public class SHPSHXFromGeometries {
 			System.out.println("Creando fichero " + f.getAbsolutePath());
 
 			if (!f.createNewFile()) {
-				System.err.print("Error al crear el fichero " +
-					f.getAbsolutePath());
+				System.err.print("Error al crear el fichero "
+						+ f.getAbsolutePath());
 				throw new IOException("Cannot create file " + f);
 			}
 		}
@@ -159,29 +162,31 @@ public class SHPSHXFromGeometries {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param geometryType DOCUMENT ME!
-	 *
+	 * 
+	 * @param geometryType
+	 *            DOCUMENT ME!
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	private int getTypeShape(int geometryType) {
-	if (geometryType>=FShape.Z){
-		switch (geometryType - FShape.Z) {
-		case (FShape.POINT):
-			return FConstant.SHAPE_TYPE_POINTZ;
+		if (geometryType >= FShape.Z) {
+			switch (geometryType - FShape.Z) {
+			case (FShape.POINT):
+				return FConstant.SHAPE_TYPE_POINTZ;
 
-		case (FShape.LINE):
-			return FConstant.SHAPE_TYPE_POLYLINEZ;
+			case (FShape.LINE):
+				return FConstant.SHAPE_TYPE_POLYLINEZ;
 
-		case FShape.POLYGON:
-			return FConstant.SHAPE_TYPE_POLYGONZ;
+			case FShape.POLYGON:
+				return FConstant.SHAPE_TYPE_POLYGONZ;
 
-		case FShape.MULTIPOINT:
-			return FConstant.SHAPE_TYPE_MULTIPOINTZ; //TODO falta aclarar cosas aquí.
-	}
+			case FShape.MULTIPOINT:
+				return FConstant.SHAPE_TYPE_MULTIPOINTZ; // TODO falta aclarar
+															// cosas aquí.
+			}
 
-	}else{
-		switch (geometryType) {
+		} else {
+			switch (geometryType) {
 			case FShape.POINT:
 				return FConstant.SHAPE_TYPE_POINT;
 
@@ -192,9 +197,10 @@ public class SHPSHXFromGeometries {
 				return FConstant.SHAPE_TYPE_POLYGON;
 
 			case FShape.MULTIPOINT:
-				return FConstant.SHAPE_TYPE_MULTIPOINT; //TODO falta aclarar cosas aquí.
+				return FConstant.SHAPE_TYPE_MULTIPOINT; // TODO falta aclarar
+														// cosas aquí.
+			}
 		}
-	}
 		return FConstant.SHAPE_TYPE_NULL;
 	}
 }

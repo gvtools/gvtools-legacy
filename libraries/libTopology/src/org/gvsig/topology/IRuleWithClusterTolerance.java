@@ -42,20 +42,22 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology;
+
 /**
- * Marker interface wich must be implemented by all these rules
- * that works with cluster tolerances.
+ * Marker interface wich must be implemented by all these rules that works with
+ * cluster tolerances.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public interface IRuleWithClusterTolerance {
 	public void setClusterTolerance(double clusterTolerance);
+
 	public double getClusterTolerance();
-		
+
 }

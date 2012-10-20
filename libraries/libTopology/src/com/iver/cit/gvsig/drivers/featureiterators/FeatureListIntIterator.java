@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.drivers.featureiterators;
 
 import java.util.List;
@@ -63,7 +63,6 @@ import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
 
 public class FeatureListIntIterator extends DefaultFeatureIterator {
 
-	
 	/**
 	 * List of indexes of records to iterate
 	 */
@@ -76,11 +75,12 @@ public class FeatureListIntIterator extends DefaultFeatureIterator {
 		super(source, sourceCrs, targetCrs, fieldNames);
 		this.listInt = listInt;
 	}
-	
-	public FeatureListIntIterator(List<Integer> listInt, ReadableVectorial source) throws ReadDriverException{
-		this(source, null, null, null, listInt );
+
+	public FeatureListIntIterator(List<Integer> listInt,
+			ReadableVectorial source) throws ReadDriverException {
+		this(source, null, null, null, listInt);
 	}
-	
+
 	public boolean hasNext() throws ReadDriverException {
 		return currentFeature < listInt.size();
 	}
@@ -91,11 +91,11 @@ public class FeatureListIntIterator extends DefaultFeatureIterator {
 			IGeometry geom = chekIfCloned(source.getShape(idx.intValue()));
 			reprojectIfNecessary(geom);
 			Value[] regAtt = getValues(currentFeature);
-			IFeature feat  = new DefaultFeature(geom, regAtt, idx.toString());
+			IFeature feat = new DefaultFeature(geom, regAtt, idx.toString());
 			currentFeature++;
 			return feat;
 		} catch (ExpansionFileReadException e) {
-			throw new ReadDriverException("",e);
-		} 
+			throw new ReadDriverException("", e);
+		}
 	}
 }

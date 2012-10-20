@@ -64,182 +64,197 @@ import com.iver.cit.gvsig.fmap.drivers.WKBParser2;
 
 /**
  * @author FJP
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
+ * 
+ *         TODO To change the template for this generated type comment go to
+ *         Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class HSQLDBDriver extends DefaultJDBCDriver {
-    private WKBParser2 parser = new WKBParser2();
-    /* private int fetch_min=-1;
-    private int fetch_max=-1; */
-    private Statement st;
-    private Rectangle2D fullExtent = null;
-    private String sqlOrig;
-    private String sqlTotal;
+	private WKBParser2 parser = new WKBParser2();
+	/*
+	 * private int fetch_min=-1; private int fetch_max=-1;
+	 */
+	private Statement st;
+	private Rectangle2D fullExtent = null;
+	private String sqlOrig;
+	private String sqlTotal;
 
-    private String strAux;
-    /**
+	private String strAux;
+
+	/**
      *
      */
-    public HSQLDBDriver() {
-    }
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.drivers.VectorialDriver#getDriverAttributes()
-     */
-    public DriverAttributes getDriverAttributes() {
-        return null;
-    }
+	public HSQLDBDriver() {
+	}
 
-    /* (non-Javadoc)
-     * @see com.hardcode.driverManager.Driver#getName()
-     */
-    public String getName() {
-        return "HSQL Spatial";
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.VectorialDriver#getDriverAttributes()
+	 */
+	public DriverAttributes getDriverAttributes() {
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.hardcode.driverManager.Driver#getName()
+	 */
+	public String getName() {
+		return "HSQL Spatial";
+	}
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.layers.ReadableVectorial#getShape(int)
 	 */
 	public IGeometry getShape(int index) throws ReadDriverException {
-	    IGeometry geom = null;
-	    boolean resul;
-	        try {
-	            // EL ABSOLUTE NO HACE QUE SE VUELVAN A LEER LAS
-	            // FILAS, ASI QUE MONTAMOS ESTA HISTORIA PARA QUE
-	            // LO HAGA
-	            // System.out.println("getShape " + index);
-	            /* if (index < fetch_min)
-	            {
-	                rs.close();
+		IGeometry geom = null;
+		boolean resul;
+		try {
+			// EL ABSOLUTE NO HACE QUE SE VUELVAN A LEER LAS
+			// FILAS, ASI QUE MONTAMOS ESTA HISTORIA PARA QUE
+			// LO HAGA
+			// System.out.println("getShape " + index);
+			/*
+			 * if (index < fetch_min) { rs.close();
+			 * 
+			 * rs = st.executeQuery(sqlOrig); fetch_min = 0; fetch_max =
+			 * rs.getFetchSize(); } while (index >= fetch_max) { rs.last(); //
+			 * forzamos una carga rs.next(); fetch_min = fetch_max; fetch_max =
+			 * fetch_max + rs.getFetchSize(); //
+			 * System.out.println("fetchSize = " + rs.getFetchSize() + " " +
+			 * fetch_min + "-" + fetch_max); } rs.absolute(index+1 - fetch_min);
+			 */
+			rs.absolute(index + 1);
+			// strAux = rs.getString(1);
+			// geom = parser.read(strAux);
+			byte[] data = rs.getBytes(1);
+			geom = parser.parse(data);
 
-	    	        rs = st.executeQuery(sqlOrig);
-	                fetch_min = 0;
-	                fetch_max = rs.getFetchSize();
-	            }
-	            while (index >= fetch_max)
-	            {
-	                rs.last();
-	                // forzamos una carga
-	                rs.next();
-	                fetch_min = fetch_max;
-	                fetch_max = fetch_max + rs.getFetchSize();
-	                // System.out.println("fetchSize = " + rs.getFetchSize() + " " + fetch_min + "-" + fetch_max);
-	            }
-	            rs.absolute(index+1 - fetch_min); */
-	            rs.absolute(index+1);
-    	        // strAux = rs.getString(1);
-    	        // geom = parser.read(strAux);
-	            byte[] data = rs.getBytes(1);
-	            geom = parser.parse(data);
+		} catch (SQLException e) {
+			throw new ReadDriverException(this.getName(), e);
+		}
 
-
-            } catch (SQLException e) {
-                throw new ReadDriverException(this.getName(),e);
-            }
-
-	    return geom;
+		return geom;
 	}
+
 	/**
 	 * @param conn
 	 * @throws DBException
 	 */
-	public void setData(IConnection conn, DBLayerDefinition lyrDef) throws DBException
-	{
-	    this.conn = conn;
-        setLyrDef(lyrDef);
-	    try {
-            sqlOrig = "SELECT " + getTotalFields() + " FROM " + getLyrDef().getTableName()
-            + " WHERE " + getLyrDef().getWhereClause();
-            // sqlOrig = getCompoundWhere(workingArea, lyrDef.getSRID_EPSG());
-            sqlOrig = sqlOrig + " ORDER BY " + getLyrDef().getFieldID();
+	public void setData(IConnection conn, DBLayerDefinition lyrDef)
+			throws DBException {
+		this.conn = conn;
+		setLyrDef(lyrDef);
+		try {
+			sqlOrig = "SELECT " + getTotalFields() + " FROM "
+					+ getLyrDef().getTableName() + " WHERE "
+					+ getLyrDef().getWhereClause();
+			// sqlOrig = getCompoundWhere(workingArea, lyrDef.getSRID_EPSG());
+			sqlOrig = sqlOrig + " ORDER BY " + getLyrDef().getFieldID();
 
-	        st = ((ConnectionJDBC)conn).getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-	        rs = st.executeQuery(sqlOrig);
-            metaData = rs.getMetaData();
-            // Le pegamos un primera pasada para poder relacionar
-            // un campo de identificador único (parecido al OID en
-            // postgresql) con el índice dentro del recordset.
-            // Esto cuando haya ediciones, no es válido, y hay
-            // que refrescarlo.
-            doRelateID_FID();
+			st = ((ConnectionJDBC) conn).getConnection().createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY);
+			rs = st.executeQuery(sqlOrig);
+			metaData = rs.getMetaData();
+			// Le pegamos un primera pasada para poder relacionar
+			// un campo de identificador único (parecido al OID en
+			// postgresql) con el índice dentro del recordset.
+			// Esto cuando haya ediciones, no es válido, y hay
+			// que refrescarlo.
+			doRelateID_FID();
 
-        } catch (SQLException e) {
-        	  throw new DBException(e);
-        }
+		} catch (SQLException e) {
+			throw new DBException(e);
+		}
 	}
 
 	/**
 	 * @throws ExpansionFileReadException
 	 * @see com.iver.cit.gvsig.fmap.layers.ReadableVectorial#getFullExtent()
 	 */
-	public Rectangle2D getFullExtent() throws ReadDriverException, ExpansionFileReadException{
-	    if (fullExtent == null)
-	    {
-    	        IFeatureIterator itGeom = getFeatureIterator("SELECT the_geom AS the_geom FROM " + getLyrDef().getTableName());
-    	        IGeometry geom;
-    	        int cont = 0;
-    	        while (itGeom.hasNext())
-    	        {
-    	            geom = itGeom.next().getGeometry();
-    	            if (cont==0)
-    	                fullExtent = geom.getBounds2D();
-    	            else
-    	                fullExtent.add(geom.getBounds2D());
-    	            cont++;
-    	        }
-        }
-	    return fullExtent;
+	public Rectangle2D getFullExtent() throws ReadDriverException,
+			ExpansionFileReadException {
+		if (fullExtent == null) {
+			IFeatureIterator itGeom = getFeatureIterator("SELECT the_geom AS the_geom FROM "
+					+ getLyrDef().getTableName());
+			IGeometry geom;
+			int cont = 0;
+			while (itGeom.hasNext()) {
+				geom = itGeom.next().getGeometry();
+				if (cont == 0)
+					fullExtent = geom.getBounds2D();
+				else
+					fullExtent.add(geom.getBounds2D());
+				cont++;
+			}
+		}
+		return fullExtent;
 	}
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.drivers.VectorialDatabaseDriver#getGeometryIterator(java.lang.String)
-     */
-    public IFeatureIterator getFeatureIterator(String sql) throws ReadDriverException {
-        Statement st;
-        HSQLDBFeatureIterator geomIterator = null;
-        try {
-            st = ((ConnectionJDBC)conn).getConnection().createStatement();
-            // st.setFetchSize(2000);
-            ResultSet rs = st.executeQuery(sql);
-            geomIterator = new HSQLDBFeatureIterator(rs);
-        } catch (SQLException e) {
-//            e.printStackTrace();
-//            SqlDriveExceptionType type = new SqlDriveExceptionType();
-//            type.setLayerName(this.getTableName());
-//            type.setDriverName(this.getName());
-//            type.setSchema(this.getLyrDef());
-//            type.setSql(sql);
-            throw new ReadDriverException(getName(),e);
-        }
 
-        return geomIterator;
-    }
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.drivers.VectorialDatabaseDriver#getGeometryIterator(java.awt.geom.Rectangle2D)
-     */
-    public IFeatureIterator getFeatureIterator(Rectangle2D r, String strEPSG) throws ReadDriverException {
-        if (workingArea != null){
-        r = r.createIntersection(workingArea);
-        }
-        double xMin = r.getMinX();
-        double yMin = r.getMinY();
-        double xMax = r.getMaxX();
-        double yMax = r.getMaxY();
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.VectorialDatabaseDriver#getGeometryIterator
+	 * (java.lang.String)
+	 */
+	public IFeatureIterator getFeatureIterator(String sql)
+			throws ReadDriverException {
+		Statement st;
+		HSQLDBFeatureIterator geomIterator = null;
+		try {
+			st = ((ConnectionJDBC) conn).getConnection().createStatement();
+			// st.setFetchSize(2000);
+			ResultSet rs = st.executeQuery(sql);
+			geomIterator = new HSQLDBFeatureIterator(rs);
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			// SqlDriveExceptionType type = new SqlDriveExceptionType();
+			// type.setLayerName(this.getTableName());
+			// type.setDriverName(this.getName());
+			// type.setSchema(this.getLyrDef());
+			// type.setSql(sql);
+			throw new ReadDriverException(getName(), e);
+		}
 
-        String wktBox = "GeomFromText('LINESTRING(" + xMin + " " + yMin + ", "
-		+ xMax + " " + yMin + ", "
-		+ xMax + " " + yMax + ", "
-		+ xMin + " " + yMax + ")', "
-		+ strEPSG + ")";
-        String sqlAux = sqlOrig;
-        if (getWhereClause().startsWith("WHERE"))
-            sqlAux += " 1=1" ;
+		return geomIterator;
+	}
 
-        return getFeatureIterator(sqlAux);
-    }
-    public void open() {
-        // TODO Auto-generated method stub
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.VectorialDatabaseDriver#getGeometryIterator
+	 * (java.awt.geom.Rectangle2D)
+	 */
+	public IFeatureIterator getFeatureIterator(Rectangle2D r, String strEPSG)
+			throws ReadDriverException {
+		if (workingArea != null) {
+			r = r.createIntersection(workingArea);
+		}
+		double xMin = r.getMinX();
+		double yMin = r.getMinY();
+		double xMax = r.getMaxX();
+		double yMax = r.getMaxY();
 
-    }
+		String wktBox = "GeomFromText('LINESTRING(" + xMin + " " + yMin + ", "
+				+ xMax + " " + yMin + ", " + xMax + " " + yMax + ", " + xMin
+				+ " " + yMax + ")', " + strEPSG + ")";
+		String sqlAux = sqlOrig;
+		if (getWhereClause().startsWith("WHERE"))
+			sqlAux += " 1=1";
+
+		return getFeatureIterator(sqlAux);
+	}
+
+	public void open() {
+		// TODO Auto-generated method stub
+
+	}
+
 	/**
 	 * @see com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver#getConnectionStringBeginning()
 	 */
@@ -247,13 +262,13 @@ public class HSQLDBDriver extends DefaultJDBCDriver {
 		return "jdbc:mysql:";
 	}
 
-    static{
-	    try {
+	static {
+		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		}
-    }
+	}
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver#getGeometryField(java.lang.String)
@@ -261,63 +276,80 @@ public class HSQLDBDriver extends DefaultJDBCDriver {
 	public String getGeometryField(String fieldName) {
 		return fieldName;
 	}
-    /**
-     * @see com.hardcode.gdbms.engine.data.driver.ObjectDriver#getPrimaryKeys()
-     */
-    public int[] getPrimaryKeys() throws ReadDriverException {
-        return null;
-    }
-    /**
-     * @see com.iver.cit.gvsig.fmap.drivers.IVectorialJDBCDriver#getDefaultPort()
-     */
-    public int getDefaultPort() {
-        return 0;
-    }
-    /**
-     * @see com.hardcode.gdbms.engine.data.driver.ObjectDriver#write(com.hardcode.gdbms.engine.data.edition.DataWare)
-     */
-    public void write(DataWare arg0) throws ReadDriverException {
-        // TODO Auto-generated method stub
 
-    }
+	/**
+	 * @see com.hardcode.gdbms.engine.data.driver.ObjectDriver#getPrimaryKeys()
+	 */
+	public int[] getPrimaryKeys() throws ReadDriverException {
+		return null;
+	}
 
-    public String getSqlTotal()
-    {
-        return sqlTotal;
-    }
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.drivers.DefaultDBDriver#getCompleteWhere()
-     */
-    public String getCompleteWhere() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.drivers.VectorialDatabaseDriver#getFeatureIterator(java.awt.geom.Rectangle2D, java.lang.String, java.lang.String[])
-     */
-    public IFeatureIterator getFeatureIterator(Rectangle2D r, String strEPSG, String[] alphaNumericFieldsNeeded) throws ReadDriverException {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	/**
+	 * @see com.iver.cit.gvsig.fmap.drivers.IVectorialJDBCDriver#getDefaultPort()
+	 */
+	public int getDefaultPort() {
+		return 0;
+	}
+
+	/**
+	 * @see com.hardcode.gdbms.engine.data.driver.ObjectDriver#write(com.hardcode.gdbms.engine.data.edition.DataWare)
+	 */
+	public void write(DataWare arg0) throws ReadDriverException {
+		// TODO Auto-generated method stub
+
+	}
+
+	public String getSqlTotal() {
+		return sqlTotal;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.drivers.DefaultDBDriver#getCompleteWhere()
+	 */
+	public String getCompleteWhere() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.VectorialDatabaseDriver#getFeatureIterator
+	 * (java.awt.geom.Rectangle2D, java.lang.String, java.lang.String[])
+	 */
+	public IFeatureIterator getFeatureIterator(Rectangle2D r, String strEPSG,
+			String[] alphaNumericFieldsNeeded) throws ReadDriverException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public boolean isWritable() {
 		// TODO Auto-generated method stub
 		return true;
 	}
-	public String[] getTableFields(IConnection conex, String table) throws DBException {
-		try{
-		Statement st = ((ConnectionJDBC)conex).getConnection().createStatement();
-        // ResultSet rs = dbmd.getTables(catalog, null, dbLayerDefinition.getTable(), null);
-		ResultSet rs = st.executeQuery("select * from " + table + " LIMIT 1");
-		ResultSetMetaData rsmd = rs.getMetaData();
 
-		String[] ret = new String[rsmd.getColumnCount()];
+	public String[] getTableFields(IConnection conex, String table)
+			throws DBException {
+		try {
+			Statement st = ((ConnectionJDBC) conex).getConnection()
+					.createStatement();
+			// ResultSet rs = dbmd.getTables(catalog, null,
+			// dbLayerDefinition.getTable(), null);
+			ResultSet rs = st.executeQuery("select * from " + table
+					+ " LIMIT 1");
+			ResultSetMetaData rsmd = rs.getMetaData();
 
-		for (int i = 0; i < ret.length; i++) {
-			ret[i] = rsmd.getColumnName(i+1);
-		}
+			String[] ret = new String[rsmd.getColumnCount()];
 
-		return ret;
-		}catch (SQLException e) {
+			for (int i = 0; i < ret.length; i++) {
+				ret[i] = rsmd.getColumnName(i + 1);
+			}
+
+			return ret;
+		} catch (SQLException e) {
 			throw new DBException(e);
 		}
 	}

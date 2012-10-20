@@ -19,6 +19,7 @@
 package org.gvsig.raster.grid.filter.enhancement;
 
 import org.gvsig.raster.dataset.IBuffer;
+
 /**
  * Filtro de realce para tipos de datos float. En el método de proceso procesa
  * un solo pixel float. Asigna su valor en relación a los datos calculados en el
@@ -31,13 +32,16 @@ public class LinearEnhancementFloatFilter extends LinearEnhancementFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.enhancement.LinearEnhancementFilter#process(int, int)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.enhancement.LinearEnhancementFilter#process
+	 * (int, int)
 	 */
 	public void process(int col, int line) throws InterruptedException {
 		for (int iBand = 0; iBand < raster.getBandCount(); iBand++) {
 			float p = raster.getElemFloat(line, col, iBand);
-			if(renderBands[iBand] < 0) {
-				rasterResult.setElem(line, col, iBand, (byte)p);
+			if (renderBands[iBand] < 0) {
+				rasterResult.setElem(line, col, iBand, (byte) p);
 				continue;
 			}
 			if (p > maxBandValue[renderBands[iBand]])
@@ -52,7 +56,9 @@ public class LinearEnhancementFloatFilter extends LinearEnhancementFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.enhancement.LinearEnhancementFilter#getInRasterDataType()
+	 * 
+	 * @see org.gvsig.raster.grid.filter.enhancement.LinearEnhancementFilter#
+	 * getInRasterDataType()
 	 */
 	public int getInRasterDataType() {
 		return IBuffer.TYPE_FLOAT;

@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.topologyrules;
 
 import java.awt.geom.Rectangle2D;
@@ -65,65 +65,68 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.precision.EnhancedPrecisionOp;
+
 /**
- * All geometries of origin layer must be covered by a group
- * of geometries of destination layer
- * (it doesnt matter if are covered by one only geometries or a
- * group of them)
+ * All geometries of origin layer must be covered by a group of geometries of
+ * destination layer (it doesnt matter if are covered by one only geometries or
+ * a group of them)
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class LyrMustBeCoveredByLyr extends LyrMustBeCoveredByOneGeometry {
 
-	static final String RULE_NAME = Messages.getText("must_be_covered_by_all_lyr");
-	
+	static final String RULE_NAME = Messages
+			.getText("must_be_covered_by_all_lyr");
+
 	static {
 		DEFAULT_ERROR_SYMBOL.setDescription(RULE_NAME);
 	}
-	
-	public LyrMustBeCoveredByLyr(Topology topology, 
-			 FLyrVect originLyr,
-			 FLyrVect destinationLyr){
+
+	public LyrMustBeCoveredByLyr(Topology topology, FLyrVect originLyr,
+			FLyrVect destinationLyr) {
 		super(topology, originLyr, destinationLyr);
 	}
 
-
-	public LyrMustBeCoveredByLyr(){
+	public LyrMustBeCoveredByLyr() {
 		super();
 	}
-	
+
 	@Override
-	protected void checkWithNeighbourhood(IFeature feature, Rectangle2D extendedBounds, IFeatureIterator neighbourhood) throws BaseException{
-		Geometry firstGeometry = NewFConverter.toJtsGeometry(feature.getGeometry());
+	protected void checkWithNeighbourhood(IFeature feature,
+			Rectangle2D extendedBounds, IFeatureIterator neighbourhood)
+			throws BaseException {
+		Geometry firstGeometry = NewFConverter.toJtsGeometry(feature
+				.getGeometry());
 		List<Geometry> neighboursGeo = new ArrayList<Geometry>();
 		while (neighbourhood.hasNext()) {
 			IFeature neighbourFeature = neighbourhood.next();
 			IGeometry geom2 = neighbourFeature.getGeometry();
-			if(acceptsDestinationGeometryType(geom2.getGeometryType())){
+			if (acceptsDestinationGeometryType(geom2.getGeometryType())) {
 				Rectangle2D rect2 = geom2.getBounds2D();
 				if (extendedBounds.intersects(rect2)) {
 					Geometry jtsGeom2 = NewFConverter.toJtsGeometry(geom2);
-					if(!checkSpatialPredicate(feature, firstGeometry, 
-														neighbourFeature, jtsGeom2 )){
+					if (!checkSpatialPredicate(feature, firstGeometry,
+							neighbourFeature, jtsGeom2)) {
 						neighboursGeo.add(jtsGeom2);
-					}else
-						return;//checks the rule
-				}//if
-			}//if
-		}//while
-		//at this point, feature is not covered by one neighbour feature
-		//we check for all the neighbourhood
+					} else
+						return;// checks the rule
+				}// if
+			}// if
+		}// while
+			// at this point, feature is not covered by one neighbour feature
+			// we check for all the neighbourhood
 		Geometry[] geometries = neighboursGeo.toArray(new Geometry[0]);
-		GeometryCollection geomCol = JtsUtil.GEOMETRY_FACTORY.createGeometryCollection(geometries);
+		GeometryCollection geomCol = JtsUtil.GEOMETRY_FACTORY
+				.createGeometryCollection(geometries);
 		Geometry buffer = geomCol.buffer(0d);
-		if(! firstGeometry.coveredBy(buffer)){
-			Geometry errorGeo = EnhancedPrecisionOp.difference(firstGeometry, buffer);
+		if (!firstGeometry.coveredBy(buffer)) {
+			Geometry errorGeo = EnhancedPrecisionOp.difference(firstGeometry,
+					buffer);
 			addTopologyError(createTopologyError(errorGeo, feature, null));
 		}
 	}
 
-	
 	@Override
 	public String getName() {
 		return RULE_NAME;

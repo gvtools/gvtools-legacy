@@ -58,7 +58,7 @@ import org.gvsig.gpe.kml.parser.profiles.Kml2_1_BindingProfile;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class GPEKml2_1_Parser extends GPEDeafultKmlParser{
+public class GPEKml2_1_Parser extends GPEDeafultKmlParser {
 
 	public GPEKml2_1_Parser() {
 		super();
@@ -67,6 +67,7 @@ public class GPEKml2_1_Parser extends GPEDeafultKmlParser{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.GPEParser#getDescription()
 	 */
 	public String getDescription() {
@@ -75,6 +76,7 @@ public class GPEKml2_1_Parser extends GPEDeafultKmlParser{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.GPEParser#getName()
 	 */
 	public String getName() {
@@ -83,38 +85,40 @@ public class GPEKml2_1_Parser extends GPEDeafultKmlParser{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.GPEParser#getFormat()
 	 */
 	public String getFormat() {
-		return "text/xml; subtype=kml/2.1";		
+		return "text/xml; subtype=kml/2.1";
 	}
-	
+
 	/**
-	 * It creates an InputStream. The Kml file can have the
-	 * KML or the KMZ extension
+	 * It creates an InputStream. The Kml file can have the KML or the KMZ
+	 * extension
+	 * 
 	 * @return
 	 * @throws KmlException
 	 */
-	protected InputStream createInputStream(File file){
-		//KML
-		try{
+	protected InputStream createInputStream(File file) {
+		// KML
+		try {
 			return new FileInputStream(file);
 		} catch (FileNotFoundException e) {
 			getErrorHandler().addError(e);
 		}
 		return null;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.GPEParser#accept(java.io.File)
 	 */
 	public boolean accept(URI uri) {
-		if (uri.getPath().toUpperCase().endsWith("KML")){				
+		if (uri.getPath().toUpperCase().endsWith("KML")) {
 			return true;
 		}
 		return false;
-	}		
-
+	}
 
 }

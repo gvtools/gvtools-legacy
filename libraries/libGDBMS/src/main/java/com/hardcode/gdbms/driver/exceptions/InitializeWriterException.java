@@ -9,7 +9,7 @@ public class InitializeWriterException extends BaseException {
 
 	private String driver = null;
 
-	public InitializeWriterException(String driver,Throwable exception) {
+	public InitializeWriterException(String driver, Throwable exception) {
 		this.driver = driver;
 		init();
 		initCause(exception);
@@ -22,7 +22,7 @@ public class InitializeWriterException extends BaseException {
 
 	protected Map values() {
 		Hashtable params = new Hashtable();
-		params.put("driver",driver);
+		params.put("driver", driver);
 		return params;
 	}
 

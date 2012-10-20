@@ -17,6 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
  */
 package org.gvsig.fmap.raster.layers;
+
 /**
  * DefaultLayerConfiguration sirve para aquellos objetos que no puedan usar la
  * configuracion de PluginServices, devolviendo siempre el valor por defecto.
@@ -28,7 +29,10 @@ public class DefaultLayerConfiguration implements IConfiguration {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.fmap.raster.conf.IConfiguration#getValueBoolean(java.lang.String, java.lang.Boolean)
+	 * 
+	 * @see
+	 * org.gvsig.fmap.raster.conf.IConfiguration#getValueBoolean(java.lang.String
+	 * , java.lang.Boolean)
 	 */
 	public Boolean getValueBoolean(String name, Boolean defaultValue) {
 		return defaultValue;
@@ -36,7 +40,10 @@ public class DefaultLayerConfiguration implements IConfiguration {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.fmap.raster.conf.IConfiguration#getValueDouble(java.lang.String, java.lang.Double)
+	 * 
+	 * @see
+	 * org.gvsig.fmap.raster.conf.IConfiguration#getValueDouble(java.lang.String
+	 * , java.lang.Double)
 	 */
 	public Double getValueDouble(String name, Double defaultValue) {
 		return defaultValue;
@@ -44,7 +51,10 @@ public class DefaultLayerConfiguration implements IConfiguration {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.fmap.raster.conf.IConfiguration#getValueFloat(java.lang.String, java.lang.Float)
+	 * 
+	 * @see
+	 * org.gvsig.fmap.raster.conf.IConfiguration#getValueFloat(java.lang.String,
+	 * java.lang.Float)
 	 */
 	public Float getValueFloat(String name, Float defaultValue) {
 		return defaultValue;
@@ -52,7 +62,10 @@ public class DefaultLayerConfiguration implements IConfiguration {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.fmap.raster.conf.IConfiguration#getValueInteger(java.lang.String, java.lang.Integer)
+	 * 
+	 * @see
+	 * org.gvsig.fmap.raster.conf.IConfiguration#getValueInteger(java.lang.String
+	 * , java.lang.Integer)
 	 */
 	public Integer getValueInteger(String name, Integer defaultValue) {
 		return defaultValue;
@@ -60,7 +73,10 @@ public class DefaultLayerConfiguration implements IConfiguration {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.fmap.raster.conf.IConfiguration#getValueLong(java.lang.String, java.lang.Long)
+	 * 
+	 * @see
+	 * org.gvsig.fmap.raster.conf.IConfiguration#getValueLong(java.lang.String,
+	 * java.lang.Long)
 	 */
 	public Long getValueLong(String name, Long defaultValue) {
 		return defaultValue;
@@ -68,7 +84,10 @@ public class DefaultLayerConfiguration implements IConfiguration {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.fmap.raster.conf.IConfiguration#getValueString(java.lang.String, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.fmap.raster.conf.IConfiguration#getValueString(java.lang.String
+	 * , java.lang.String)
 	 */
 	public String getValueString(String name, String defaultValue) {
 		return defaultValue;

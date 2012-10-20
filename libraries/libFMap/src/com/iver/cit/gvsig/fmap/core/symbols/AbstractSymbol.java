@@ -40,41 +40,41 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: AbstractSymbol.java 25776 2008-12-16 12:38:06Z vcaballero $
-* $Log$
-* Revision 1.8  2007-09-17 09:33:47  jaume
-* some multishapedsymbol bugs fixed
-*
-* Revision 1.7  2007/08/13 11:36:50  jvidal
-* javadoc
-*
-* Revision 1.6  2007/07/18 06:54:34  jaume
-* continuing with cartographic support
-*
-* Revision 1.5  2007/05/22 10:05:31  jaume
-* *** empty log message ***
-*
-* Revision 1.4  2007/03/26 14:24:13  jaume
-* implemented Print
-*
-* Revision 1.3  2007/03/09 11:20:56  jaume
-* Advanced symbology (start committing)
-*
-* Revision 1.2.2.2  2007/02/15 16:23:44  jaume
-* *** empty log message ***
-*
-* Revision 1.2.2.1  2007/02/09 07:47:04  jaume
-* Isymbol moved
-*
-* Revision 1.2  2007/01/24 17:58:22  jaume
-* new features and architecture error fixes
-*
-* Revision 1.1  2007/01/10 16:31:36  jaume
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: AbstractSymbol.java 25776 2008-12-16 12:38:06Z vcaballero $
+ * $Log$
+ * Revision 1.8  2007-09-17 09:33:47  jaume
+ * some multishapedsymbol bugs fixed
+ *
+ * Revision 1.7  2007/08/13 11:36:50  jvidal
+ * javadoc
+ *
+ * Revision 1.6  2007/07/18 06:54:34  jaume
+ * continuing with cartographic support
+ *
+ * Revision 1.5  2007/05/22 10:05:31  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.4  2007/03/26 14:24:13  jaume
+ * implemented Print
+ *
+ * Revision 1.3  2007/03/09 11:20:56  jaume
+ * Advanced symbology (start committing)
+ *
+ * Revision 1.2.2.2  2007/02/15 16:23:44  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.2.2.1  2007/02/09 07:47:04  jaume
+ * Isymbol moved
+ *
+ * Revision 1.2  2007/01/24 17:58:22  jaume
+ * new features and architecture error fixes
+ *
+ * Revision 1.1  2007/01/10 16:31:36  jaume
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.core.symbols;
 
 import com.iver.cit.gvsig.fmap.core.CartographicSupport;
@@ -82,11 +82,13 @@ import com.iver.cit.gvsig.fmap.core.CartographicSupportToolkit;
 
 /**
  * Abstract class that implements the interface the interface for symbols.It is
- * considered as the father of all XXXSymbols and will implement all the methods that
- * these classes had not developed (and correspond with one of the methods of AbstractSymbol class)
- * @author  jaume dominguez faus - jaume.dominguez@iver.es
+ * considered as the father of all XXXSymbols and will implement all the methods
+ * that these classes had not developed (and correspond with one of the methods
+ * of AbstractSymbol class)
+ * 
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
-public abstract class AbstractSymbol implements ISymbol, CartographicSupport{
+public abstract class AbstractSymbol implements ISymbol, CartographicSupport {
 	private String desc;
 	private int unit = CartographicSupportToolkit.DefaultMeasureUnit;
 	private int referenceSystem = CartographicSupportToolkit.DefaultReferenceSystem;
@@ -103,7 +105,7 @@ public abstract class AbstractSymbol implements ISymbol, CartographicSupport{
 
 	/**
 	 * @return
-	 * @uml.property  name="isShapeVisible"
+	 * @uml.property name="isShapeVisible"
 	 */
 	public final boolean isShapeVisible() {
 		return isShapeVisible;
@@ -111,6 +113,7 @@ public abstract class AbstractSymbol implements ISymbol, CartographicSupport{
 
 	/**
 	 * Sets this symbol to visible
+	 * 
 	 * @param isShapeVisible
 	 */
 	public final void setIsShapeVisible(boolean isShapeVisible) {
@@ -133,15 +136,17 @@ public abstract class AbstractSymbol implements ISymbol, CartographicSupport{
 		this.referenceSystem = system;
 
 	}
-	public boolean equals(Object obj){
-		if (!obj.getClass().equals(getClass())){
+
+	public boolean equals(Object obj) {
+		if (!obj.getClass().equals(getClass())) {
 			return false;
 		}
-		if (((ISymbol)obj).getOnePointRgb()!=getOnePointRgb()){
+		if (((ISymbol) obj).getOnePointRgb() != getOnePointRgb()) {
 			return false;
 		}
-		if (getDescription()!=null && ((ISymbol)obj).getDescription()!=null){
-			if (!((ISymbol)obj).getDescription().equals(getDescription())){
+		if (getDescription() != null
+				&& ((ISymbol) obj).getDescription() != null) {
+			if (!((ISymbol) obj).getDescription().equals(getDescription())) {
 				return false;
 			}
 		}

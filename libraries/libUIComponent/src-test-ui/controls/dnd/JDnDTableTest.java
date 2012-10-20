@@ -40,22 +40,22 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: JDnDTableTest.java 15818 2007-11-05 07:28:30Z bsanchez $
-* $Log$
-* Revision 1.2  2007-08-21 09:58:04  bsanchez
-* - Quitados imports innecesarios
-* - Quitado codigo no usado
-* - Cambio de deprecated show por setVisible(true)
-*
-* Revision 1.1  2007/08/20 08:34:46  evercher
-* He fusionado LibUI con LibUIComponents
-*
-* Revision 1.1  2006/09/27 13:34:57  jaume
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: JDnDTableTest.java 15818 2007-11-05 07:28:30Z bsanchez $
+ * $Log$
+ * Revision 1.2  2007-08-21 09:58:04  bsanchez
+ * - Quitados imports innecesarios
+ * - Quitado codigo no usado
+ * - Cambio de deprecated show por setVisible(true)
+ *
+ * Revision 1.1  2007/08/20 08:34:46  evercher
+ * He fusionado LibUI con LibUIComponents
+ *
+ * Revision 1.1  2006/09/27 13:34:57  jaume
+ * *** empty log message ***
+ *
+ *
+ */
 package controls.dnd;
 
 import java.awt.Dimension;
@@ -68,22 +68,24 @@ import org.gvsig.gui.beans.controls.dnd.JDnDList;
 import org.gvsig.gui.beans.controls.dnd.JDnDListModel;
 import org.gvsig.gui.beans.controls.dnd.JDnDTable;
 import org.gvsig.gui.beans.controls.dnd.JDnDTableModel;
+
 /**
  * El model que ha de suportar les funcions d'una JDnDTable. Encara està en
  * proves.
- *
+ * 
  * @author jaume
  */
 public class JDnDTableTest {
-	static String[] colNames = new String[] {"1234", "abcd", "qwerty"};
-	static String[][] values = new String[][] {new String[] {"a1", "a2", "a3"},
-										new String[] {"b1", "b2", "b3"},
-										new String[] {"c1", "c2", "c3"}};
+	static String[] colNames = new String[] { "1234", "abcd", "qwerty" };
+	static String[][] values = new String[][] {
+			new String[] { "a1", "a2", "a3" },
+			new String[] { "b1", "b2", "b3" },
+			new String[] { "c1", "c2", "c3" } };
 
 	public static void main(String args[]) {
 		JFrame f = new TestUI("JDnDTableTest");
 		JPanel content = new JPanel();
-		content.setPreferredSize(new Dimension(500,400));
+		content.setPreferredSize(new Dimension(500, 400));
 
 		JDnDTableModel model = new JDnDTableModel(values, colNames);
 		JDnDListModel listModel = new JDnDListModel();

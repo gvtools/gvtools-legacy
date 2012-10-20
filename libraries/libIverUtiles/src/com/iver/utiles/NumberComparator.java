@@ -42,20 +42,19 @@ package com.iver.utiles;
 
 import java.util.Comparator;
 
-
 /**
  * Comparador de numeros en orden habitual
- *
+ * 
  * @author Fernando González Cortés
  */
 public class NumberComparator implements Comparator {
-    /**
-     * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-     */
-    public int compare(Object o1, Object o2) {
-        double d1 = ((Number) o1).doubleValue();
-        double d2 = ((Number) o2).doubleValue();
+	/**
+	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+	 */
+	public int compare(Object o1, Object o2) {
+		double d1 = ((Number) o1).doubleValue();
+		double d2 = ((Number) o2).doubleValue();
 
-        return (int) (d1 - d2);
-    }
+		return (int) (d1 - d2);
+	}
 }

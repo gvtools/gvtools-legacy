@@ -2,7 +2,6 @@ package org.gvsig.fmap.drivers.gpe.reader;
 
 import org.gvsig.fmap.drivers.gpe.model.GPEFeature;
 import org.gvsig.xmlschema.som.IXSSchemaDocument;
-import org.gvsig.xmlschema.som.IXSTypeDefinition;
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
@@ -55,43 +54,39 @@ import org.gvsig.xmlschema.som.IXSTypeDefinition;
  */
 public class AddFeatureToDriver {
 	private IXSSchemaDocument schema = null;
-		
-	public AddFeatureToDriver(){
-		
+
+	public AddFeatureToDriver() {
+
 	}
 
 	/**
 	 * Add a feature to a layer
+	 * 
 	 * @param driver
-	 * The driver
+	 *            The driver
 	 * @param feature
-	 * The feature to add
+	 *            The feature to add
 	 */
-	public void addFeatureToLayer(GPEVectorialDriver driver, GPEFeature feature){
-		addFeatureToLayer_(driver, feature);		
+	public void addFeatureToLayer(GPEVectorialDriver driver, GPEFeature feature) {
+		addFeatureToLayer_(driver, feature);
 	}
 
 	/**
 	 * Add a feature to a layer
+	 * 
 	 * @param layer
-	 * The layer
+	 *            The layer
 	 * @param feature
-	 * The feature to add
+	 *            The feature to add
 	 */
-	private void addFeatureToLayer_(GPEVectorialDriver driver, GPEFeature feature){
-		IXSTypeDefinition elementType = null;
-		//If the feature has a type it will try to retrieve it
-//		if (feature.getTypeName() != null){
-//			elementType = schema.getTypeByName(feature.getTypeName());
-//		}
-		//If the type exists in the schema
-		if (elementType != null){
-			//layer.addFeature(feature, elementType);
-			driver.addFeature(feature);
-			//If the type doesn't exist in the XML schema
-		}else{
-			driver.addFeature(feature);
-		}		
+	private void addFeatureToLayer_(GPEVectorialDriver driver,
+			GPEFeature feature) {
+		// If the feature has a type it will try to retrieve it
+		// if (feature.getTypeName() != null){
+		// elementType = schema.getTypeByName(feature.getTypeName());
+		// }
+		// If the type exists in the schema
+		driver.addFeature(feature);
 	}
 
 	/**
@@ -102,12 +97,11 @@ public class AddFeatureToDriver {
 	}
 
 	/**
-	 * @param schema the schema to set
+	 * @param schema
+	 *            the schema to set
 	 */
 	public void setSchema(IXSSchemaDocument schema) {
 		this.schema = schema;
 	}
-
-
 
 }

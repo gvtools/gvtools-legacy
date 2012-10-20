@@ -1,4 +1,5 @@
 package com.iver.utiles.stringNumberUtilities;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -41,32 +42,35 @@ package com.iver.utiles.stringNumberUtilities;
  */
 
 /**
- * This class has methods for verify if an string is a number, and which kind of number.
+ * This class has methods for verify if an string is a number, and which kind of
+ * number.
  * 
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
 public class StringNumberUtilities {
-	
+
 	/**
 	 * Returns true if the word is a number; else returns false
 	 * 
-	 * @param word An string
+	 * @param word
+	 *            An string
 	 * @return A boolean value
-	 */	
+	 */
 	public static boolean isNumber(String word) {
 		return isRealNumberWithRealExponent(word);
 	}
-	
+
 	/**
 	 * Returns true if the word is a natural number; else returns false
 	 * 
-	 * @param word An string
+	 * @param word
+	 *            An string
 	 * @return A boolean value
 	 */
 	public static boolean isNaturalNumber(String word) {
 		// Remove all spaces and tabs at beginning and end
 		word = word.trim();
-		
+
 		// If no word
 		if (word.length() == 0)
 			return false;
@@ -74,22 +78,30 @@ public class StringNumberUtilities {
 		// If first symbol is '+'
 		if (word.charAt(0) == '+')
 			word = word.substring(1, word.length());
-		
+
 		if (word.length() == 0)
 			return false;
-		
+
 		// Analyse the word
 		for (int i = 0; i < word.length(); i++) {
 			switch (word.charAt(i)) {
-				case '0': case '1': case '2': case '3': case '4':
-				case '5': case '6': case '7': case '8': case '9':
-					// do nothing (continue)
-					break;
-				default:
-					return false;
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':
+				// do nothing (continue)
+				break;
+			default:
+				return false;
 			}
 		}
-		
+
 		return true;
 	}
 
@@ -98,13 +110,14 @@ public class StringNumberUtilities {
 	 * 
 	 * If it's a natural number, it's an integer number
 	 * 
-	 * @param word An string
+	 * @param word
+	 *            An string
 	 * @return A boolean value
 	 */
 	public static boolean isIntegerNumber(String word) {
 		// Remove all spaces and tabs at beginning and end
 		word = word.trim();
-		
+
 		// If no word
 		if (word.length() == 0)
 			return false;
@@ -112,119 +125,140 @@ public class StringNumberUtilities {
 		// Try to extract the natural number
 		if ((word.charAt(0) == '-') || (word.charAt(0) == '+'))
 			word = word.substring(1, word.length());
-		
+
 		return isNaturalNumber(word);
 	}
-	
+
 	/**
-	 * Returns true if the word is a real number; else returns false
-	 * It's supposed that '.' is the symbol for separate integer from decimal part
-	 *
+	 * Returns true if the word is a real number; else returns false It's
+	 * supposed that '.' is the symbol for separate integer from decimal part
+	 * 
 	 * If it's a natural or integer, it's a real number
 	 * 
-	 * @param word An string
+	 * @param word
+	 *            An string
 	 * @return A boolean value
 	 */
 	public static boolean isRealNumber(String word) {
 		// Remove all spaces and tabs at beginning and end
 		word = word.trim();
-		
+
 		int numberOfPoints = 0;
-		
+
 		// If no word
 		if (word.length() == 0)
 			return false;
-	
+
 		// Try to remove the sign of the number
 		if ((word.charAt(0) == '-') || (word.charAt(0) == '+'))
 			word = word.substring(1, word.length());
-		
+
 		if (word.length() == 0)
 			return false;
-		
+
 		// Analize the word
 		for (int i = 0; i < word.length(); i++) {
 			switch (word.charAt(i)) {
-				case '0': case '1': case '2': case '3': case '4':
-				case '5': case '6': case '7': case '8': case '9':
-					// do nothing (continue)
-					break;
-				case '.':
-					// If there was another point -> fail
-					if (numberOfPoints == 1)
-						return false;
-					else
-						numberOfPoints ++;
-					
-					break;
-				default:
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':
+				// do nothing (continue)
+				break;
+			case '.':
+				// If there was another point -> fail
+				if (numberOfPoints == 1)
 					return false;
+				else
+					numberOfPoints++;
+
+				break;
+			default:
+				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
-	
+
 	/**
-	 * Returns true if the word is a real number with or without the 'E' (or 'e') symbol for the exponent; else returns false <br>
-	 * It's supposed that '.' is the symbol for separate integer from decimal part in the base. <br>
+	 * Returns true if the word is a real number with or without the 'E' (or
+	 * 'e') symbol for the exponent; else returns false <br>
+	 * It's supposed that '.' is the symbol for separate integer from decimal
+	 * part in the base. <br>
 	 * The exponent must be an integer number
 	 * 
-	 * If it's a natural, integer or real number, it's a real number with integer exponent
-	 *  
-	 * @param word An string
+	 * If it's a natural, integer or real number, it's a real number with
+	 * integer exponent
+	 * 
+	 * @param word
+	 *            An string
 	 * @return A boolean value
 	 */
 	public static boolean isRealNumberWithIntegerExponent(String word) {
 		// Remove all spaces and tabs at beginning and end
 		word = word.trim();
-		
+
 		int numberOfPoints = 0;
-		
+
 		// If no word
 		if (word.length() == 0)
 			return false;
-	
+
 		// Try to remove the sign of the number
 		if ((word.charAt(0) == '-') || (word.charAt(0) == '+'))
 			word = word.substring(1, word.length());
 
 		if (word.length() == 0)
 			return false;
-		
+
 		// Analize the word
 		int i = 0;
-//		for (int i = 0; i < word.length(); i++) {
-		while ((i < word.length()) && (Character.toUpperCase(word.charAt(i)) != 'E')) {
+		// for (int i = 0; i < word.length(); i++) {
+		while ((i < word.length())
+				&& (Character.toUpperCase(word.charAt(i)) != 'E')) {
 			switch (word.charAt(i)) {
-				case '0': case '1': case '2': case '3': case '4':
-				case '5': case '6': case '7': case '8': case '9':
-					// do nothing (continue)
-					break;
-				case '.':
-					// If there was another point -> fail
-					if (numberOfPoints == 1)
-						return false;
-					else
-						numberOfPoints ++;
-					
-					break;
-				default:
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':
+				// do nothing (continue)
+				break;
+			case '.':
+				// If there was another point -> fail
+				if (numberOfPoints == 1)
 					return false;
+				else
+					numberOfPoints++;
+
+				break;
+			default:
+				return false;
 			}
-			
+
 			i++;
 		}
-		
+
 		if (i == word.length())
 			return true;
-		
+
 		numberOfPoints = 0;
-		
+
 		// Jump the symbol E
 		i++;
-		
+
 		if (i == word.length())
 			return false;
 
@@ -233,84 +267,104 @@ public class StringNumberUtilities {
 			word = word.substring(++i, word.length());
 			i = 0;
 		}
-		
+
 		if (word.length() == 0)
 			return false;
-		
+
 		while (i < word.length()) {
 			switch (word.charAt(i)) {
-				case '0': case '1': case '2': case '3': case '4':
-				case '5': case '6': case '7': case '8': case '9':
-					// do nothing (continue)
-					break;
-				default:
-					return false;
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':
+				// do nothing (continue)
+				break;
+			default:
+				return false;
 			}
 			i++;
 		}
-		
+
 		return true;
 	}
-	
-	
+
 	/**
-	 * Returns true if the word is a real number with or without the 'E' (or 'e') symbol for the exponent; else returns false
-	 * It's supposed that '.' is the symbol for separate integer from decimal part, in the base and the exponent of the number
+	 * Returns true if the word is a real number with or without the 'E' (or
+	 * 'e') symbol for the exponent; else returns false It's supposed that '.'
+	 * is the symbol for separate integer from decimal part, in the base and the
+	 * exponent of the number
 	 * 
-	 * If it's a natural, integer, real number or real number with integer exponent, it's a real number with real exponent
-	 *  
-	 * @param word An string
+	 * If it's a natural, integer, real number or real number with integer
+	 * exponent, it's a real number with real exponent
+	 * 
+	 * @param word
+	 *            An string
 	 * @return A boolean value
 	 */
 	public static boolean isRealNumberWithRealExponent(String word) {
 		// Remove all spaces and tabs at beginning and end
 		word = word.trim();
-		
+
 		int numberOfPoints = 0;
-		
+
 		// If no word
 		if (word.length() == 0)
 			return false;
-	
+
 		// Try to remove the sign of the number
 		if ((word.charAt(0) == '-') || (word.charAt(0) == '+'))
 			word = word.substring(1, word.length());
-		
+
 		if (word.length() == 0)
 			return false;
-		
+
 		// Analize the word
 		int i = 0;
-//		for (int i = 0; i < word.length(); i++) {
-		while ((i < word.length()) && (Character.toUpperCase(word.charAt(i)) != 'E')) {
+		// for (int i = 0; i < word.length(); i++) {
+		while ((i < word.length())
+				&& (Character.toUpperCase(word.charAt(i)) != 'E')) {
 			switch (word.charAt(i)) {
-				case '0': case '1': case '2': case '3': case '4':
-				case '5': case '6': case '7': case '8': case '9':
-					// do nothing (continue)
-					break;
-				case '.':
-					// If there was another point -> fail
-					if (numberOfPoints == 1)
-						return false;
-					else
-						numberOfPoints ++;
-					
-					break;
-				default:
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':
+				// do nothing (continue)
+				break;
+			case '.':
+				// If there was another point -> fail
+				if (numberOfPoints == 1)
 					return false;
+				else
+					numberOfPoints++;
+
+				break;
+			default:
+				return false;
 			}
-			
+
 			i++;
 		}
-		
+
 		if (i == word.length())
 			return true;
-		
+
 		numberOfPoints = 0;
-		
+
 		// Jump the symbol E
 		i++;
-		
+
 		if (i == word.length())
 			return false;
 
@@ -319,30 +373,38 @@ public class StringNumberUtilities {
 			word = word.substring(++i, word.length());
 			i = 0;
 		}
-		
+
 		if (word.length() == 0)
 			return false;
-		
+
 		while (i < word.length()) {
 			switch (word.charAt(i)) {
-				case '0': case '1': case '2': case '3': case '4':
-				case '5': case '6': case '7': case '8': case '9':
-					// do nothing (continue)
-					break;
-				case '.':
-					// If there was another point -> fail
-					if (numberOfPoints == 1)
-						return false;
-					else
-						numberOfPoints ++;
-					
-					break;
-				default:
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':
+				// do nothing (continue)
+				break;
+			case '.':
+				// If there was another point -> fail
+				if (numberOfPoints == 1)
 					return false;
+				else
+					numberOfPoints++;
+
+				break;
+			default:
+				return false;
 			}
 			i++;
 		}
-		
+
 		return true;
 	}
 }

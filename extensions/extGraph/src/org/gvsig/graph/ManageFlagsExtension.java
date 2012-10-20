@@ -66,16 +66,16 @@ public class ManageFlagsExtension extends Extension {
 	 * Component to control flags and routes
 	 * */
 	private RouteControlPanel controlPanel;
-	
-//	private String fieldType;
-//	private String fieldDist;
-//	private String fieldSense;
+
+	// private String fieldType;
+	// private String fieldDist;
+	// private String fieldSense;
 
 	public void initialize() {
 		PluginServices.getIconTheme().registerDefault(
 				"manage_flags",
-				this.getClass().getClassLoader().getResource("images/manage_flags.png")
-			);		
+				this.getClass().getClassLoader()
+						.getResource("images/manage_flags.png"));
 
 	}
 
@@ -83,68 +83,61 @@ public class ManageFlagsExtension extends Extension {
 		IView view = (View) PluginServices.getMDIManager().getActiveWindow();
 		MapControl mapControl = view.getMapControl();
 		MapContext map = mapControl.getMapContext();
-		SingleLayerIterator lyrIterator = new SingleLayerIterator(map
-				.getLayers());
+		SingleLayerIterator lyrIterator = new SingleLayerIterator(
+				map.getLayers());
 		while (lyrIterator.hasNext()) {
 			FLayer lyr = lyrIterator.next();
-			if ((lyr.isActive()) && (lyr instanceof FLyrVect))
-			{
+			if ((lyr.isActive()) && (lyr instanceof FLyrVect)) {
 				FLyrVect lyrVect = (FLyrVect) lyr;
 				Network net = (Network) lyr.getProperty("network");
 
-				if ( net != null)
-				{
+				if (net != null) {
 					manageFlags(lyrVect, mapControl);
 				}
 			}
 		}
-
 
 	}
 
 	private void manageFlags(FLyrVect lyrVect, MapControl mapControl) {
 		Network net = (Network) lyrVect.getProperty("network");
 
-		if ( net != null)
-		{
-				if(controlPanel == null)
-				{
-				
-					controlPanel = new RouteControlPanel(net);
-				}
-				controlPanel.setMapControl(mapControl, net);
-				//lo guardamos en una variable de sesion para poder recuperarlo
-				//(ejemplo: cuando borremos los flags de la red de la capa activa
-				//borraremos a su vez el contenido del control panel		
-				controlPanel = (RouteControlPanel) PluginServices.getMDIManager().addWindow(controlPanel);
-				GvSession.getInstance().put(mapControl, "RouteControlPanel", controlPanel);
-		}
-		else
-		{
-			JOptionPane.showMessageDialog((JComponent) PluginServices.getMDIManager().getActiveWindow(),
-						PluginServices.getText(this, "la_capa_no_tiene_red_asociada"));
+		if (net != null) {
+			if (controlPanel == null) {
+
+				controlPanel = new RouteControlPanel(net);
+			}
+			controlPanel.setMapControl(mapControl, net);
+			// lo guardamos en una variable de sesion para poder recuperarlo
+			// (ejemplo: cuando borremos los flags de la red de la capa activa
+			// borraremos a su vez el contenido del control panel
+			controlPanel = (RouteControlPanel) PluginServices.getMDIManager()
+					.addWindow(controlPanel);
+			GvSession.getInstance().put(mapControl, "RouteControlPanel",
+					controlPanel);
+		} else {
+			JOptionPane.showMessageDialog((JComponent) PluginServices
+					.getMDIManager().getActiveWindow(), PluginServices.getText(
+					this, "la_capa_no_tiene_red_asociada"));
 		}
 	}
 
 	public boolean isEnabled() {
-		IWindow f = PluginServices.getMDIManager()
-		 .getActiveWindow();
+		IWindow f = PluginServices.getMDIManager().getActiveWindow();
 		if (f == null) {
-		    return false;
+			return false;
 		}
 		if (f instanceof View) {
-		    View v = (View) f;
+			View v = (View) f;
 			MapContext map = v.getMapControl().getMapContext();
 			SingleLayerIterator it = new SingleLayerIterator(map.getLayers());
-			while (it.hasNext())
-			{
+			while (it.hasNext()) {
 				FLayer aux = it.next();
 				if (!aux.isActive())
 					continue;
 				Network net = (Network) aux.getProperty("network");
 
-				if ( net != null)
-				{
+				if (net != null) {
 					return true;
 				}
 			}
@@ -168,22 +161,22 @@ public class ManageFlagsExtension extends Extension {
 			MapContext mapa = model.getMapContext();
 			FLayer[] activeLayers = mapa.getLayers().getActives();
 			if (activeLayers.length > 0)
-				if (activeLayers[0] instanceof FLyrVect){
+				if (activeLayers[0] instanceof FLyrVect) {
 					FLyrVect lyrVect = (FLyrVect) activeLayers[0];
-					int shapeType ;
+					int shapeType;
 					try {
 						if (!lyrVect.isAvailable())
 							return false;
-						
+
 						shapeType = lyrVect.getShapeType();
-//						if (shapeType == FShape.LINE)
+						// if (shapeType == FShape.LINE)
 						if ((shapeType & FShape.LINE) == FShape.LINE)
 							return true;
 					} catch (ReadDriverException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				}	
+				}
 		}
 		return false;
 

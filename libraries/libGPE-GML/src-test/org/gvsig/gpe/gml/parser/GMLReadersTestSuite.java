@@ -74,7 +74,7 @@ public class GMLReadersTestSuite {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.gvsig.gpe.gml.readers");
-		//$JUnit-BEGIN$
+		// $JUnit-BEGIN$
 		suite.addTestSuite(GMLLinesReader.class);
 		suite.addTestSuite(GMLPointsReader.class);
 		suite.addTestSuite(GMLEuroroadsReader.class);
@@ -88,7 +88,7 @@ public class GMLReadersTestSuite {
 		suite.addTestSuite(GMLProvinciasIDEEReader.class);
 		suite.addTestSuite(GMLMultiPolygonTest.class);
 		suite.addTestSuite(GMLMultiLineStringTest.class);
-		//$JUnit-END$
+		// $JUnit-END$
 		return suite;
 	}
 

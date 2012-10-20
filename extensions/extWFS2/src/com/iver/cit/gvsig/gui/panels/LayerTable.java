@@ -82,169 +82,179 @@ import com.iver.cit.gvsig.fmap.layers.WFSLayerNode;
 /**
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class LayerTable extends JTable{
+public class LayerTable extends JTable {
 	public LayerTable() {
 		super();
 		setModel(new LayerTableModel());
 	}
-	
+
 	/**
 	 * Gets the selected layer
+	 * 
 	 * @return
 	 */
-	public WFSLayerNode getSelectedValue(){
+	public WFSLayerNode getSelectedValue() {
 		int selectedRow = getSelectedRow();
-		LayerTableModel model = (LayerTableModel)getModel();
+		LayerTableModel model = (LayerTableModel) getModel();
 		return model.getLayerAt(selectedRow);
 	}
-	
-	public WFSLayerNode getValueAt(int position){
-		if (position<this.getRowCount()){
-			LayerTableModel model = (LayerTableModel)getModel();
-			return model.getLayerAt(position);			
+
+	public WFSLayerNode getValueAt(int position) {
+		if (position < this.getRowCount()) {
+			LayerTableModel model = (LayerTableModel) getModel();
+			return model.getLayerAt(position);
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Adds a vector of features
+	 * 
 	 * @param features
 	 */
-	public void addFeatures(Object[] features){
-		LayerTableModel model = (LayerTableModel)getModel();
+	public void addFeatures(Object[] features) {
+		LayerTableModel model = (LayerTableModel) getModel();
 		model.deleteAllRows();
-		for (int i=0 ; i<features.length ; i++){
-			model.addRow((WFSLayerNode)features[i]);			
-		}			
-	}	
-	
+		for (int i = 0; i < features.length; i++) {
+			model.addRow((WFSLayerNode) features[i]);
+		}
+	}
+
 	/**
-	 * @param showLayerNames The showLayerNames to set.
+	 * @param showLayerNames
+	 *            The showLayerNames to set.
 	 */
 	public void setShowLayerNames(boolean showLayerNames) {
-		LayerTableModel model = (LayerTableModel)getModel();
+		LayerTableModel model = (LayerTableModel) getModel();
 		model.setShowLayerNames(showLayerNames);
 	}
-	
+
 	/**
 	 * Table model
+	 * 
 	 * @author Jorge Piera Llodrá (piera_jor@gva.es)
-	 *
+	 * 
 	 */
-	public class LayerTableModel extends AbstractTableModel{  
+	public class LayerTableModel extends AbstractTableModel {
 		private Vector layers = new Vector();
 		private boolean showLayerNames = false;
-		
+
 		/**
-		 Constructs an investment table model.
+		 * Constructs an investment table model.
 		 */
-		public LayerTableModel(){  
+		public LayerTableModel() {
 			super();
 		}
-		
+
 		/*
-		 *  (non-Javadoc)
+		 * (non-Javadoc)
+		 * 
 		 * @see javax.swing.table.TableModel#getRowCount()
 		 */
-		public int getRowCount(){  
-			return layers.size();		
+		public int getRowCount() {
+			return layers.size();
 		}
-		
+
 		/*
-		 *  (non-Javadoc)
+		 * (non-Javadoc)
+		 * 
 		 * @see javax.swing.table.TableModel#getColumnCount()
 		 */
-		public int getColumnCount(){  
+		public int getColumnCount() {
 			return 2;
 		}
-		
+
 		/*
-		 *  (non-Javadoc)
+		 * (non-Javadoc)
+		 * 
 		 * @see javax.swing.table.TableModel#getValueAt(int, int)
 		 */
-		public Object getValueAt(int rowNumber, int columnNumber){  
-			if (rowNumber < layers.size()){
-				WFSLayerNode layer = (WFSLayerNode)layers.get(rowNumber);
-				if (columnNumber == 0){
+		public Object getValueAt(int rowNumber, int columnNumber) {
+			if (rowNumber < layers.size()) {
+				WFSLayerNode layer = (WFSLayerNode) layers.get(rowNumber);
+				if (columnNumber == 0) {
 					return getLayerName(layer);
-				}else{
-					return PluginServices.getText(this,WFSUtils.getGeometry(layer));
+				} else {
+					return PluginServices.getText(this,
+							WFSUtils.getGeometry(layer));
 				}
-			}else{
+			} else {
 				return "";
 			}
-		}	
-		
+		}
+
 		/**
-		 * Returns the layer name (depending of the "show layer names"
-		 * check cob is clicked)
+		 * Returns the layer name (depending of the "show layer names" check cob
+		 * is clicked)
+		 * 
 		 * @param layer
 		 * @return
 		 */
-		private String getLayerName(WFSLayerNode layer){
-			if (showLayerNames){
-				return "[" + layer.getName() + "] " + layer.getTitle(); 
+		private String getLayerName(WFSLayerNode layer) {
+			if (showLayerNames) {
+				return "[" + layer.getName() + "] " + layer.getTitle();
 			} else {
 				return layer.getTitle();
 			}
 		}
-		
+
 		/**
 		 * Return the layer at the specified position
+		 * 
 		 * @param rowNumber
-		 * Row position
+		 *            Row position
 		 * @return
 		 */
-		public WFSLayerNode getLayerAt(int rowNumber){  
-			try{
-				return (WFSLayerNode)layers.get(rowNumber);
-			}catch (ArrayIndexOutOfBoundsException e){
+		public WFSLayerNode getLayerAt(int rowNumber) {
+			try {
+				return (WFSLayerNode) layers.get(rowNumber);
+			} catch (ArrayIndexOutOfBoundsException e) {
 				return null;
 			}
-		}	
-		
-		/**
-		 * It adds a new 
-		 * @param values
-		 * Array of column values
-		 */
-		public void addRow(WFSLayerNode layer){
-			layers.add(layer);		
-			fireTableRowsInserted(getRowCount(),getRowCount());
-			fireTableRowsUpdated(0,getRowCount());
 		}
-		
+
+		/**
+		 * It adds a new
+		 * 
+		 * @param values
+		 *            Array of column values
+		 */
+		public void addRow(WFSLayerNode layer) {
+			layers.add(layer);
+			fireTableRowsInserted(getRowCount(), getRowCount());
+			fireTableRowsUpdated(0, getRowCount());
+		}
+
 		/**
 		 * Delete all the table rows
 		 */
-		public void deleteAllRows(){
+		public void deleteAllRows() {
 			layers.clear();
 			int rows = getRowCount();
-			if (rows >= 1){
+			if (rows >= 1) {
 				fireTableRowsDeleted(0, rows - 1);
-			}		
-		}	
-		
+			}
+		}
+
 		/**
 		 * Delete all the table rows
 		 */
-		public void deleteRow(int rowPosition){
+		public void deleteRow(int rowPosition) {
 			layers.remove(rowPosition);
 			fireTableRowsDeleted(rowPosition, rowPosition);
-			fireTableRowsUpdated(0,getRowCount());				
-		}	
-		
-		
-		
+			fireTableRowsUpdated(0, getRowCount());
+		}
+
 		/*
-		 *  (non-Javadoc)
+		 * (non-Javadoc)
+		 * 
 		 * @see javax.swing.table.TableModel#getColumnName(int)
 		 */
-		public String getColumnName(int columnIndex){
-			if (columnIndex == 0){
-				return PluginServices.getText(this,"layerName");
-			}else{
-				return PluginServices.getText(this,"layerType");
+		public String getColumnName(int columnIndex) {
+			if (columnIndex == 0) {
+				return PluginServices.getText(this, "layerName");
+			} else {
+				return PluginServices.getText(this, "layerType");
 			}
 		}
 
@@ -256,7 +266,8 @@ public class LayerTable extends JTable{
 		}
 
 		/**
-		 * @param showLayerNames The showLayerNames to set.
+		 * @param showLayerNames
+		 *            The showLayerNames to set.
 		 */
 		public void setShowLayerNames(boolean showLayerNames) {
 			this.showLayerNames = showLayerNames;

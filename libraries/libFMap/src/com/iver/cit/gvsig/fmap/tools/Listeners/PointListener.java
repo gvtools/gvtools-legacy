@@ -44,31 +44,44 @@ import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
 
-
 /**
- * <p>Interface for all tools that reply for a {@link PointEvent PointEvent} produced in the 
- *  associated {@link MapControl MapControl} object, produced by a simple or double click of a button
- *  of the mouse.</p>
- *
+ * <p>
+ * Interface for all tools that reply for a {@link PointEvent PointEvent}
+ * produced in the associated {@link MapControl MapControl} object, produced by
+ * a simple or double click of a button of the mouse.
+ * </p>
+ * 
  * @author Vicente Caballero Navarro
  */
 public interface PointListener extends ToolListener {
 	/**
-	 * <p>Called when one click is pressed on the associated <code>MapControl</code>, or the location of the cursor
-	 *  of the mouse has changed on it.</p>
-	 *
-	 * @param event mouse event with the coordinates of the point selected on the associated <code>MapControl</code>
-	 *
-	 * @throws BehaviorException will be thrown when fails the process of this tool
+	 * <p>
+	 * Called when one click is pressed on the associated
+	 * <code>MapControl</code>, or the location of the cursor of the mouse has
+	 * changed on it.
+	 * </p>
+	 * 
+	 * @param event
+	 *            mouse event with the coordinates of the point selected on the
+	 *            associated <code>MapControl</code>
+	 * 
+	 * @throws BehaviorException
+	 *             will be thrown when fails the process of this tool
 	 */
 	public void point(PointEvent event) throws BehaviorException;
 
 	/**
-	 * <p>Called when a double click is pressed on the associated <code>MapControl</code>.</p>
-	 *
-	 * @param event mouse event and the coordinates of the point selected on the associated <code>MapControl</code>
-	 *
-	 * @throws BehaviorException will be thrown when fails the process of this tool
+	 * <p>
+	 * Called when a double click is pressed on the associated
+	 * <code>MapControl</code>.
+	 * </p>
+	 * 
+	 * @param event
+	 *            mouse event and the coordinates of the point selected on the
+	 *            associated <code>MapControl</code>
+	 * 
+	 * @throws BehaviorException
+	 *             will be thrown when fails the process of this tool
 	 */
 	public void pointDoubleClick(PointEvent event) throws BehaviorException;
 }

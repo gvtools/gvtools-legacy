@@ -91,13 +91,12 @@ import com.iver.utiles.XMLEntity;
 import com.iver.utiles.xmlEntity.generate.XmlTag;
 
 /**
- * Implements a list to select styles.This list
- * has the property that allows the user to stablish a filter to accept or reject
- * elements for it from a directory which is also specified when the StyleSelectorModel
- * is created.
- *
+ * Implements a list to select styles.This list has the property that allows the
+ * user to stablish a filter to accept or reject elements for it from a
+ * directory which is also specified when the StyleSelectorModel is created.
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
 public class StyleSelectorListModel extends SymbolSelectorListModel {
 
@@ -105,23 +104,34 @@ public class StyleSelectorListModel extends SymbolSelectorListModel {
 
 	/**
 	 * <p>
-	 * Creates a new instance of the model for the list in the Style Selector window
-	 * where the styles are stored in the <b>dir</b> (root directory) param.<br>
+	 * Creates a new instance of the model for the list in the Style Selector
+	 * window where the styles are stored in the <b>dir</b> (root directory)
+	 * param.<br>
 	 * </p>
-	 * <p>The <b>currentElement</b> defines which element is pre-selected.<br></p>
-	 * <p>The <b>filter</b> is a user defined filter used to know which elements in
+	 * <p>
+	 * The <b>currentElement</b> defines which element is pre-selected.<br>
+	 * </p>
+	 * <p>
+	 * The <b>filter</b> is a user defined filter used to know which elements in
 	 * the folder are accepted or rejected for this list and it is used to avoid
-	 * mixing marker styles for polygons for example.<br></p>
-	 * <p><b>fileExtension</b> param defines the extension of the file to be parsed. This
-	 * is like that to enable inheritance of this class to other file selector such
-	 * as StyleSelector.
-	 *
-	 * @param dir, the root dir where styles are located.
-	 * @param currentElemet, the element to be pre-selected.
-	 * @param filter, the filter used to show or hide some elements.
-	 * @param fileExtension, file extension used for the files to be parsed.
+	 * mixing marker styles for polygons for example.<br>
+	 * </p>
+	 * <p>
+	 * <b>fileExtension</b> param defines the extension of the file to be
+	 * parsed. This is like that to enable inheritance of this class to other
+	 * file selector such as StyleSelector.
+	 * 
+	 * @param dir
+	 *            , the root dir where styles are located.
+	 * @param currentElemet
+	 *            , the element to be pre-selected.
+	 * @param filter
+	 *            , the filter used to show or hide some elements.
+	 * @param fileExtension
+	 *            , file extension used for the files to be parsed.
 	 */
-	public StyleSelectorListModel(File dir, SelectorFilter filter, String fileExtension) {
+	public StyleSelectorListModel(File dir, SelectorFilter filter,
+			String fileExtension) {
 		super(dir, filter, fileExtension);
 		// TODO Auto-generated constructor stub
 	}
@@ -135,28 +145,30 @@ public class StyleSelectorListModel extends SymbolSelectorListModel {
 
 				XMLEntity xml;
 				try {
-					xml = new XMLEntity((XmlTag) XmlTag.unmarshal(new FileReader(ff[i])));
-					IStyle sty = SymbologyFactory.createStyleFromXML(xml, ff[i].getName());
+					xml = new XMLEntity(
+							(XmlTag) XmlTag.unmarshal(new FileReader(ff[i])));
+					IStyle sty = SymbologyFactory.createStyleFromXML(xml,
+							ff[i].getName());
 					if (sfilter.accepts(sty))
 						add(sty);
 				} catch (MarshalException e) {
-					NotificationManager.
-					addWarning("Error in file ["+ff[i].getAbsolutePath()+"]. " +
-							"File corrupted! Skiping it...", e);
+					NotificationManager.addWarning(
+							"Error in file [" + ff[i].getAbsolutePath() + "]. "
+									+ "File corrupted! Skiping it...", e);
 				} catch (ValidationException e) {
-					NotificationManager.
-					addWarning("Error validating style file ["+ff[i].getAbsolutePath()+"].", e);
+					NotificationManager.addWarning(
+							"Error validating style file ["
+									+ ff[i].getAbsolutePath() + "].", e);
 				} catch (FileNotFoundException e) {
 					// unreachable code, but anyway...
-					NotificationManager.
-					addWarning("File not found: "+ ff[i].getAbsolutePath(), e);
+					NotificationManager.addWarning(
+							"File not found: " + ff[i].getAbsolutePath(), e);
 				}
 
 			}
 		}
 		return elements;
 	}
-
 
 	public void add(Object o) {
 		TreeSet map = new TreeSet(new Comparator() {
@@ -165,14 +177,24 @@ public class StyleSelectorListModel extends SymbolSelectorListModel {
 
 				IStyle sym1 = (IStyle) o1;
 				IStyle sym2 = (IStyle) o2;
-				if (sym1.getDescription() == null && sym2.getDescription() != null) return -1;
-				if (sym1.getDescription() != null && sym2.getDescription() == null) return 1;
-				if (sym1.getDescription() == null && sym2.getDescription() == null) return 1;
+				if (sym1.getDescription() == null
+						&& sym2.getDescription() != null)
+					return -1;
+				if (sym1.getDescription() != null
+						&& sym2.getDescription() == null)
+					return 1;
+				if (sym1.getDescription() == null
+						&& sym2.getDescription() == null)
+					return 1;
 
-				int result = sym1.getDescription().compareTo(sym2.getDescription());
-				return (result!=0) ? result: 1; /* this will allow adding symbols with
-				the same value for description than
-				a previous one. */
+				int result = sym1.getDescription().compareTo(
+						sym2.getDescription());
+				return (result != 0) ? result : 1; /*
+													 * this will allow adding
+													 * symbols with the same
+													 * value for description
+													 * than a previous one.
+													 */
 			}
 
 		});

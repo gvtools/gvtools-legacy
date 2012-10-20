@@ -62,7 +62,7 @@ import org.gvsig.exceptions.BaseException;
 /**
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  */
-public class GMLParserException extends BaseException{
+public class GMLParserException extends BaseException {
 
 	private static final long serialVersionUID = 6686512038251892390L;
 
@@ -76,10 +76,10 @@ public class GMLParserException extends BaseException{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	public void init() {
-		messageKey="Gml_Parser_KXML_Error";
-		formatString="KXML Parser Error";
+		messageKey = "Gml_Parser_KXML_Error";
+		formatString = "KXML Parser Error";
 		code = serialVersionUID;
 	}
 }

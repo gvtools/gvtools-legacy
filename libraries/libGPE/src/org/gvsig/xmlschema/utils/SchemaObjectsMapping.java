@@ -70,59 +70,61 @@ import org.w3c.dom.Element;
  *
  */
 /**
- * A mapping between a xml node name and a class that
- * implements it.
+ * A mapping between a xml node name and a class that implements it.
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class SchemaObjectsMapping {
 	private Map types = null;
 	private IXSSchema schema = null;
-	
+
 	public SchemaObjectsMapping(IXSSchema schema) {
 		super();
 		this.schema = schema;
-		types = new Hashtable();		
-	}	
-	
+		types = new Hashtable();
+	}
+
 	/**
 	 * @return the supported types
 	 */
-	public Set getTypes(){
+	public Set getTypes() {
 		return types.keySet();
 	}
-	
+
 	/**
-	 * Add a new type and creates the object that will be used to 
-	 * envolve the element
+	 * Add a new type and creates the object that will be used to envolve the
+	 * element
+	 * 
 	 * @param type
-	 * Type name that will be found in the XML file
+	 *            Type name that will be found in the XML file
 	 * @param clazz
-	 * Class used to create the object that envolves the element
+	 *            Class used to create the object that envolves the element
 	 * @throws TypeNotFoundException
 	 */
-	public void addType(String type, Class clazz){
-		Class[] parameterTypes = {IXSSchema.class};
-		Object[] initargs = {schema};
+	public void addType(String type, Class clazz) {
+		Class[] parameterTypes = { IXSSchema.class };
+		Object[] initargs = { schema };
 		IXSNode node = null;
 		try {
-			 node = (IXSNode)clazz.getConstructor(parameterTypes).newInstance(initargs);
-		} catch (Exception e){
-			e.printStackTrace();			
+			node = (IXSNode) clazz.getConstructor(parameterTypes).newInstance(
+					initargs);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		types.put(type, node);
 	}
-	
+
 	/**
 	 * Returns the node
+	 * 
 	 * @param type
-	 * Type name
-	 * @return
-	 * A node with a element inside 
+	 *            Type name
+	 * @return A node with a element inside
 	 */
-	public IXSNode getNode(String type, Element element){
+	public IXSNode getNode(String type, Element element) {
 		Object obj = types.get(type);
-		if (obj != null){
-			IXSNode node = (IXSNode)obj;
+		if (obj != null) {
+			IXSNode node = (IXSNode) obj;
 			node.setElement(element);
 			return node;
 		}

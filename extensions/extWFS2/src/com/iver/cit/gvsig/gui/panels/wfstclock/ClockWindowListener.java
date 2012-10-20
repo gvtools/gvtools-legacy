@@ -54,7 +54,7 @@ import java.awt.event.ActionListener;
  */
 public class ClockWindowListener implements ActionListener {
 	private ClockPanel control = null;
-	
+
 	public ClockWindowListener(ClockPanel control) {
 		super();
 		this.control = control;
@@ -62,11 +62,14 @@ public class ClockWindowListener implements ActionListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().compareTo(ClockPanel.LOCKFEATURE_ACTIONCOMMAND) == 0){
-						
+		if (e.getActionCommand()
+				.compareTo(ClockPanel.LOCKFEATURE_ACTIONCOMMAND) == 0) {
+
 		}
 	}
 }

@@ -49,27 +49,27 @@ import org.gvsig.gpe.parser.ICoordinateIterator;
  *
  */
 /**
- * A sequence to iterate over the different parts of the
- * current geometry. 
- * <p>It is using on the writing process. The consumer application
- * has to implement this interface and send it to the writer
- * using the {@link GPEWriterHandler} interface. It is composed of
- * one {@link ICoordinatesIterator) and the {@link #getSize()} method
- * that is used in some writers to have a better performance
+ * A sequence to iterate over the different parts of the current geometry.
+ * <p>
+ * It is using on the writing process. The consumer application has to implement
+ * this interface and send it to the writer using the {@link GPEWriterHandler}
+ * interface. It is composed of one {@link ICoordinatesIterator) and the
+ * {@link #getSize()} method that is used in some writers to have a better
+ * performance
  * </p>
+ * 
  * @author Jorge Piera Llodrá (jorge.piera@iver.es)
  */
 public interface ICoordinateSequence {
-		
+
 	/**
-	 * Returns the size of the coordinates that the writer has to 
-	 * write.
+	 * Returns the size of the coordinates that the writer has to write.
 	 */
 	public int getSize();
-	 
+
 	/**
-	 * Returns the iterator necessary to retrieve all the coordinates
-	 * that compose the geometry 
+	 * Returns the iterator necessary to retrieve all the coordinates that
+	 * compose the geometry
 	 */
 	public ICoordinateIterator iterator();
 }

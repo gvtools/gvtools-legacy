@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.referencing;
 
 import java.awt.geom.Point2D;
@@ -65,20 +65,20 @@ import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
-public class LineLyrAdapter implements List<MappedPosition>{
+public class LineLyrAdapter implements List<MappedPosition> {
 
 	protected FLyrVect lineLyr;
-	
-	public LineLyrAdapter(){
+
+	public LineLyrAdapter() {
 	}
-	
-	public LineLyrAdapter(FLyrVect lyr) throws BaseException{
+
+	public LineLyrAdapter(FLyrVect lyr) throws BaseException {
 		setLayer(lyr);
 	}
-	
-	
-	public void setLayer(FLyrVect lyr) throws BaseException{
-		if((lyr.getShapeType() != FShape.LINE) && (lyr.getShapeType() != FShape.MULTI))
+
+	public void setLayer(FLyrVect lyr) throws BaseException {
+		if ((lyr.getShapeType() != FShape.LINE)
+				&& (lyr.getShapeType() != FShape.MULTI))
 			throw new IllegalArgumentException("Requiered line layer");
 		this.lineLyr = lyr;
 	}
@@ -113,7 +113,8 @@ public class LineLyrAdapter implements List<MappedPosition>{
 		MappedPosition solution = null;
 		try {
 			IGeometry geometry = lineLyr.getSource().getShape(index);
-			List<Point2D[]> points = ShapePointExtractor.extractPoints(geometry);
+			List<Point2D[]> points = ShapePointExtractor
+					.extractPoints(geometry);
 			Point2D[] firstPart = points.get(0);
 			DirectPosition2D source = new DirectPosition2D(firstPart[0]);
 			DirectPosition2D target = new DirectPosition2D(firstPart[1]);
@@ -122,7 +123,7 @@ public class LineLyrAdapter implements List<MappedPosition>{
 			e.printStackTrace();
 		} catch (ReadDriverException e) {
 			e.printStackTrace();
-		} catch(ArrayIndexOutOfBoundsException e){
+		} catch (ArrayIndexOutOfBoundsException e) {
 			e.printStackTrace();
 		}
 		return solution;
@@ -145,8 +146,9 @@ public class LineLyrAdapter implements List<MappedPosition>{
 			shapeCount = 0;
 		}
 		final int numElements = shapeCount;
-		return new Iterator<MappedPosition>(){
+		return new Iterator<MappedPosition>() {
 			int idx = 0;
+
 			public boolean hasNext() {
 				return idx < numElements;
 			}
@@ -158,7 +160,8 @@ public class LineLyrAdapter implements List<MappedPosition>{
 			}
 
 			public void remove() {
-			}};
+			}
+		};
 	}
 
 	public int lastIndexOf(Object o) {
@@ -186,7 +189,7 @@ public class LineLyrAdapter implements List<MappedPosition>{
 	}
 
 	public boolean retainAll(Collection<?> c) {
-	
+
 		return false;
 	}
 
@@ -211,7 +214,7 @@ public class LineLyrAdapter implements List<MappedPosition>{
 		MappedPosition[] solution = new MappedPosition[size];
 		Iterator<MappedPosition> iterator = iterator();
 		int idx = 0;
-		while(iterator.hasNext()){
+		while (iterator.hasNext()) {
 			MappedPosition position = iterator.next();
 			solution[idx] = position;
 			idx++;

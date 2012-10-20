@@ -20,13 +20,14 @@ package org.gvsig.raster.dataset;
 
 /**
  * Excepción cuando se intenta acceder a un fichero que no ha sido abierto
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public class FileNotOpenException extends Exception{
+public class FileNotOpenException extends Exception {
 	private static final long serialVersionUID = -6732162228052967671L;
 
-	public FileNotOpenException(String msg){
+	public FileNotOpenException(String msg) {
 		super(msg);
 	}
 }

@@ -18,13 +18,11 @@
  */
 package org.gvsig.rastertools.geolocation.listener;
 
-
 import org.gvsig.fmap.raster.layers.GeorefPanListenerImpl;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.tools.Events.MoveEvent;
-
 
 /**
  * Extensión de la clase PanListenerImpl de FMap para poder llamar a métodos de
@@ -32,13 +30,13 @@ import com.iver.cit.gvsig.fmap.tools.Events.MoveEvent;
  * 
  * @version 12/07/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
 public class GeorefPanListener extends GeorefPanListenerImpl {
 
 	/**
-	 * Constructor. 
-	 * Asigna el MapControl
+	 * Constructor. Asigna el MapControl
+	 * 
 	 * @param mapCtrl
 	 */
 	public GeorefPanListener(MapControl mapCtrl) {

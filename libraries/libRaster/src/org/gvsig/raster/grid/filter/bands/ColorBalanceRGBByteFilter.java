@@ -18,42 +18,44 @@
  */
 package org.gvsig.raster.grid.filter.bands;
 
-
 /**
  * Filtro de balance de colores para tipo de datos byte.
- *
+ * 
  * @version 30/11/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class ColorBalanceRGBByteFilter extends ColorBalanceRGBFilter {
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.bands.ColorTableFilter#process(int, int)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.bands.ColorTableFilter#process(int,
+	 * int)
 	 */
 	public void process(int col, int line) throws InterruptedException {
 		byte[] value = new byte[3];
-		for (int i = 0; i < renderBands.length; i++) 
-			if(renderBands[i] != -1)
+		for (int i = 0; i < renderBands.length; i++)
+			if (renderBands[i] != -1)
 				value[i] = raster.getElemByte(line, col, renderBands[i]);
-		
-		double lum = colorConversion.getLuminosity(value[0] & 0xff, value[1] & 0xff, value[2] & 0xff);
-		value[0] = (byte)Math.min((value[0] & 0xff) + (red >> 1), 255);
-		value[1] = (byte)Math.min((value[1] & 0xff) + (green >> 1), 255);
-		value[2] = (byte)Math.min((value[2] & 0xff) + (blue >> 1), 255);
-		
-		if(luminosity) {
-			double[] hsl = colorConversion.RGBtoHSL(value[0] & 0xff, 
-													value[1] & 0xff, 
-													value[2] & 0xff);
-			hsl[0] = (int)(255.0 * hsl[0] / 360.0 + 0.5);
+
+		double lum = colorConversion.getLuminosity(value[0] & 0xff,
+				value[1] & 0xff, value[2] & 0xff);
+		value[0] = (byte) Math.min((value[0] & 0xff) + (red >> 1), 255);
+		value[1] = (byte) Math.min((value[1] & 0xff) + (green >> 1), 255);
+		value[2] = (byte) Math.min((value[2] & 0xff) + (blue >> 1), 255);
+
+		if (luminosity) {
+			double[] hsl = colorConversion.RGBtoHSL(value[0] & 0xff,
+					value[1] & 0xff, value[2] & 0xff);
+			hsl[0] = (int) (255.0 * hsl[0] / 360.0 + 0.5);
 			hsl[1] = (int) (hsl[1] * 255. + 0.5);
 			hsl[2] = (int) (lum * 255. + 0.5);
-			int[] v1 = colorConversion.HSLtoRGB((int)(((int)hsl[0]) & 0xffffffff), 
-												(int)(((int)hsl[1]) & 0xffffffff), 
-												(int)(((int)hsl[2]) & 0xffffffff));
+			int[] v1 = colorConversion.HSLtoRGB(
+					(int) (((int) hsl[0]) & 0xffffffff),
+					(int) (((int) hsl[1]) & 0xffffffff),
+					(int) (((int) hsl[2]) & 0xffffffff));
 			byte[] v = new byte[3];
 			for (int band = 0; band < 3; band++)
-				v[band] = (byte)v1[band];
+				v[band] = (byte) v1[band];
 			rasterResult.setElemByte(line, col, v);
 		} else
 			rasterResult.setElemByte(line, col, value);

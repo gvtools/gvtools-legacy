@@ -56,185 +56,190 @@ import javax.swing.JTextArea;
 
 public class JPasswordDlg extends JDialog {
 
-    private JPanel jContentPane = null;
+	private JPanel jContentPane = null;
 
-    private JButton jButtonOK = null;
+	private JButton jButtonOK = null;
 
-    private JButton jButton1 = null;
+	private JButton jButton1 = null;
 
-    private JPasswordField jPasswordField = null;
+	private JPasswordField jPasswordField = null;
 
-    private String password = null;
+	private String password = null;
 
-    private JEditorPane jEditorPane = null;
+	private JEditorPane jEditorPane = null;
 
-    private JTextArea jLblMensaje = null;
-    
-    private WindowEventsHandler windowHandler = new WindowEventsHandler();
+	private JTextArea jLblMensaje = null;
 
-    /**
-     * This is the default constructor
-     */
-    public JPasswordDlg() {
-        super();
-        initialize();
-    }
+	private WindowEventsHandler windowHandler = new WindowEventsHandler();
 
-    class WindowEventsHandler extends WindowAdapter
-    {
+	/**
+	 * This is the default constructor
+	 */
+	public JPasswordDlg() {
+		super();
+		initialize();
+	}
 
-        /* (non-Javadoc)
-         * @see java.awt.event.WindowAdapter#windowActivated(java.awt.event.WindowEvent)
-         */
-        public void windowActivated(WindowEvent e) {
-            // TODO Auto-generated method stub
-            super.windowActivated(e);
-            jPasswordField.requestFocus();
-        }
-        
-    }
-    /**
-     * This method initializes this
-     * 
-     * @return void
-     */
-private void initialize() {
-        this.setSize(287, 172);
-        this.setModal(true);
-        this.setResizable(false);
-        this.setTitle("Enter Password");
-        this.setContentPane(getJContentPane());
-        
-        addWindowListener(windowHandler);
-    }
-    /**
-     * This method initializes jContentPane
-     * 
-     * @return javax.swing.JPanel
-     */
-    private JPanel getJContentPane() {
-        if (jContentPane == null) {
-            jContentPane = new JPanel();
-            jContentPane.setLayout(null);
-            jContentPane.add(getJButton1(), null);
-            jContentPane.add(getJButtonOK(), null);
-            jContentPane.add(getJPasswordField(), null);
-            jContentPane.add(getJLblMensaje(), null);
+	class WindowEventsHandler extends WindowAdapter {
 
-        }
-        return jContentPane;
-    }
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see
+		 * java.awt.event.WindowAdapter#windowActivated(java.awt.event.WindowEvent
+		 * )
+		 */
+		public void windowActivated(WindowEvent e) {
+			// TODO Auto-generated method stub
+			super.windowActivated(e);
+			jPasswordField.requestFocus();
+		}
 
-    /**
-     * This method initializes jButton
-     * 
-     * @return javax.swing.JButton
-     */
-    private JButton getJButtonOK() {
-        if (jButtonOK == null) {
-            jButtonOK = new JButton();
-            jButtonOK.setText("OK");
-            jButtonOK.setPreferredSize(new java.awt.Dimension(65, 23));
-            jButtonOK.setBounds(35, 110, 101, 22);
-            jButtonOK.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO
-                    // Auto-generated
-                    // Event stub
-                    // actionPerformed()
-                    password = String.copyValueOf(getJPasswordField()
-                            .getPassword());
-                    dispose();
-                }
-            });
-        }
-        return jButtonOK;
-    }
+	}
 
-    /**
-     * This method initializes jButton1
-     * 
-     * @return javax.swing.JButton
-     */
-    private JButton getJButton1() {
-        if (jButton1 == null) {
-            jButton1 = new JButton();
-            jButton1.setText("Cancel");
-            jButton1.setBounds(136, 110, 99, 22);
-            jButton1.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    password = null;
-                    dispose();
-                }
-            });
-        }
-        return jButton1;
-    }
+	/**
+	 * This method initializes this
+	 * 
+	 * @return void
+	 */
+	private void initialize() {
+		this.setSize(287, 172);
+		this.setModal(true);
+		this.setResizable(false);
+		this.setTitle("Enter Password");
+		this.setContentPane(getJContentPane());
 
-    /**
-     * This method initializes jPasswordField
-     * 
-     * @return javax.swing.JPasswordField
-     */
-    private JPasswordField getJPasswordField() {
-        if (jPasswordField == null) {
-            jPasswordField = new JPasswordField();
-            jPasswordField.setPreferredSize(new java.awt.Dimension(60, 22));
-            jPasswordField.setBounds(65, 78, 145, 21);
-            jPasswordField.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent e) {
-                    if (e.getKeyChar() == KeyEvent.VK_ENTER) {
-                        // System.out.println("INTRO");
-                        getJButtonOK().doClick();
-                    }
-                }
-            });
-        }
-        return jPasswordField;
-    }
+		addWindowListener(windowHandler);
+	}
 
-    /**
-     * @return Returns the password.
-     */
-    public String getPassword() {
-        return password;
-    }
+	/**
+	 * This method initializes jContentPane
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getJContentPane() {
+		if (jContentPane == null) {
+			jContentPane = new JPanel();
+			jContentPane.setLayout(null);
+			jContentPane.add(getJButton1(), null);
+			jContentPane.add(getJButtonOK(), null);
+			jContentPane.add(getJPasswordField(), null);
+			jContentPane.add(getJLblMensaje(), null);
 
-    public void setMessage(String str) {
-        getJLblMensaje().setText(str);
-    }
+		}
+		return jContentPane;
+	}
 
-    /**
-     * This method initializes jEditorPane
-     * 
-     * @return javax.swing.JEditorPane
-     */
-    private JEditorPane getJEditorPane() {
-        if (jEditorPane == null) {
-            jEditorPane = new JEditorPane();
-        }
-        return jEditorPane;
-    }
+	/**
+	 * This method initializes jButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getJButtonOK() {
+		if (jButtonOK == null) {
+			jButtonOK = new JButton();
+			jButtonOK.setText("OK");
+			jButtonOK.setPreferredSize(new java.awt.Dimension(65, 23));
+			jButtonOK.setBounds(35, 110, 101, 22);
+			jButtonOK.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					System.out.println("actionPerformed()"); // TODO
+					// Auto-generated
+					// Event stub
+					// actionPerformed()
+					password = String.copyValueOf(getJPasswordField()
+							.getPassword());
+					dispose();
+				}
+			});
+		}
+		return jButtonOK;
+	}
 
-    /**
-     * This method initializes jTextArea
-     * 
-     * @return javax.swing.JTextArea
-     */
-    private JTextArea getJLblMensaje() {
-        if (jLblMensaje == null) {
-            jLblMensaje = new JTextArea();
-            jLblMensaje.setEditable(false);
-            jLblMensaje.setForeground(java.awt.Color.black);
-            jLblMensaje.setBackground(java.awt.SystemColor.control);
-            jLblMensaje.setText("Mensaje");
-            jLblMensaje.setLineWrap(true);
-            jLblMensaje.setFont(new java.awt.Font("SansSerif",
-                    java.awt.Font.PLAIN, 12));
-            jLblMensaje.setPreferredSize(new java.awt.Dimension(270, 50));
-            jLblMensaje.setBounds(9, 6, 266, 68);
-            jLblMensaje.setWrapStyleWord(true);
-        }
-        return jLblMensaje;
-    }
+	/**
+	 * This method initializes jButton1
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getJButton1() {
+		if (jButton1 == null) {
+			jButton1 = new JButton();
+			jButton1.setText("Cancel");
+			jButton1.setBounds(136, 110, 99, 22);
+			jButton1.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					password = null;
+					dispose();
+				}
+			});
+		}
+		return jButton1;
+	}
+
+	/**
+	 * This method initializes jPasswordField
+	 * 
+	 * @return javax.swing.JPasswordField
+	 */
+	private JPasswordField getJPasswordField() {
+		if (jPasswordField == null) {
+			jPasswordField = new JPasswordField();
+			jPasswordField.setPreferredSize(new java.awt.Dimension(60, 22));
+			jPasswordField.setBounds(65, 78, 145, 21);
+			jPasswordField.addKeyListener(new java.awt.event.KeyAdapter() {
+				public void keyTyped(java.awt.event.KeyEvent e) {
+					if (e.getKeyChar() == KeyEvent.VK_ENTER) {
+						// System.out.println("INTRO");
+						getJButtonOK().doClick();
+					}
+				}
+			});
+		}
+		return jPasswordField;
+	}
+
+	/**
+	 * @return Returns the password.
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	public void setMessage(String str) {
+		getJLblMensaje().setText(str);
+	}
+
+	/**
+	 * This method initializes jEditorPane
+	 * 
+	 * @return javax.swing.JEditorPane
+	 */
+	private JEditorPane getJEditorPane() {
+		if (jEditorPane == null) {
+			jEditorPane = new JEditorPane();
+		}
+		return jEditorPane;
+	}
+
+	/**
+	 * This method initializes jTextArea
+	 * 
+	 * @return javax.swing.JTextArea
+	 */
+	private JTextArea getJLblMensaje() {
+		if (jLblMensaje == null) {
+			jLblMensaje = new JTextArea();
+			jLblMensaje.setEditable(false);
+			jLblMensaje.setForeground(java.awt.Color.black);
+			jLblMensaje.setBackground(java.awt.SystemColor.control);
+			jLblMensaje.setText("Mensaje");
+			jLblMensaje.setLineWrap(true);
+			jLblMensaje.setFont(new java.awt.Font("SansSerif",
+					java.awt.Font.PLAIN, 12));
+			jLblMensaje.setPreferredSize(new java.awt.Dimension(270, 50));
+			jLblMensaje.setBounds(9, 6, 266, 68);
+			jLblMensaje.setWrapStyleWord(true);
+		}
+		return jLblMensaje;
+	}
 } // @jve:decl-index=0:visual-constraint="10,10"

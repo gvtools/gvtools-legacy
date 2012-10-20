@@ -66,30 +66,30 @@ import org.gvsig.exceptions.BaseException;
 /**
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class KmlImpossibleCreateParser extends BaseException{
+public class KmlImpossibleCreateParser extends BaseException {
 	private static final long serialVersionUID = 8959337892045840876L;
 	private String nameSpace = null;
-	
+
 	public KmlImpossibleCreateParser(String nameSpace) {
 		this.nameSpace = nameSpace;
-		init();		
+		init();
 	}
-	
-	public KmlImpossibleCreateParser(String nameSpace,Throwable exception) {
+
+	public KmlImpossibleCreateParser(String nameSpace, Throwable exception) {
 		this.nameSpace = nameSpace;
 		init();
 		initCause(exception);
 	}
-	
+
 	private void init() {
 		messageKey = "error_kml_impossibleCreateParser";
 		formatString = "It has been impossibleThe to create a parser for the namespace %(nameSpace)";
-		code = serialVersionUID;		
+		code = serialVersionUID;
 	}
 
 	protected Map values() {
 		Hashtable params = new Hashtable();
-		params.put("nameSpace",nameSpace);
-		return params;		
+		params.put("nameSpace", nameSpace);
+		return params;
 	}
 }

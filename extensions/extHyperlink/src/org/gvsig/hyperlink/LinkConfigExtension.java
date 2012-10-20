@@ -52,20 +52,19 @@ import org.gvsig.hyperlink.layers.ManagerRegistry;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
-import com.iver.andami.plugins.PluginClassLoader;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
-
 /**
  * Extensión para gestionar los hiperlinks.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LinkConfigExtension extends Extension {
-	private static Logger logger = Logger.getLogger(LinkConfigExtension.class.getName());
+	private static Logger logger = Logger.getLogger(LinkConfigExtension.class
+			.getName());
 	ManagerRegistry layerManager;
 
 	/**
@@ -74,12 +73,14 @@ public class LinkConfigExtension extends Extension {
 	public void execute(String s) {
 		logger.debug("Command : " + s);
 
-		if (s.compareTo("LINK_SETTINGS")==0) {
+		if (s.compareTo("LINK_SETTINGS") == 0) {
 			View view = (View) PluginServices.getMDIManager().getActiveWindow();
-			LinkControls ext = (LinkControls) PluginServices.getExtension(LinkControls.class);
+			LinkControls ext = (LinkControls) PluginServices
+					.getExtension(LinkControls.class);
 			// init tool and load legacy config in case it has been not done
 			ext.initTool(view);
-			FLayer[] activas = view.getMapControl().getMapContext().getLayers().getActives();
+			FLayer[] activas = view.getMapControl().getMapContext().getLayers()
+					.getActives();
 			for (int i = 0; i < activas.length; i++) {
 				if (!activas[i].isAvailable()) {
 					return;
@@ -88,10 +89,11 @@ public class LinkConfigExtension extends Extension {
 				if (layerManager.hasManager(activas[i])) {
 					ConfigTab configWindow = new ConfigTab();
 					configWindow.setModel(activas[i]);
-					PluginServices.getMDIManager().addCentredWindow(configWindow);
+					PluginServices.getMDIManager().addCentredWindow(
+							configWindow);
 				}
 			}
-		
+
 		}
 	}
 
@@ -99,8 +101,8 @@ public class LinkConfigExtension extends Extension {
 	 * @see com.iver.mdiApp.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-															 .getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (f == null) {
 			return false;
@@ -108,9 +110,9 @@ public class LinkConfigExtension extends Extension {
 
 		if (f instanceof View) {
 
-		  MapContext mapa = ((View) f).getModel().getMapContext();
+			MapContext mapa = ((View) f).getModel().getMapContext();
 
-		  return mapa.getLayers().getLayersCount() > 0;
+			return mapa.getLayers().getLayersCount() > 0;
 		} else {
 			return false;
 		}
@@ -120,7 +122,8 @@ public class LinkConfigExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
-		// it will be enabled when there is only ONE active layer, and this layer
+		// it will be enabled when there is only ONE active layer, and this
+		// layer
 		// is available and has a valid ILayerLinkManager
 		View f = (View) PluginServices.getMDIManager().getActiveWindow();
 
@@ -134,7 +137,7 @@ public class LinkConfigExtension extends Extension {
 
 			FLayer[] activas = model.getMapContext().getLayers().getActives();
 
-			if(activas.length==1) {
+			if (activas.length == 1) {
 				if (activas[0].isAvailable()
 						&& layerManager.hasManager(activas[0])) {
 					return true;
@@ -145,7 +148,8 @@ public class LinkConfigExtension extends Extension {
 	}
 
 	public void initialize() {
-		LinkControls ext = (LinkControls) PluginServices.getExtension(LinkControls.class);
+		LinkControls ext = (LinkControls) PluginServices
+				.getExtension(LinkControls.class);
 		layerManager = ext.getLayerManager();
 	}
 

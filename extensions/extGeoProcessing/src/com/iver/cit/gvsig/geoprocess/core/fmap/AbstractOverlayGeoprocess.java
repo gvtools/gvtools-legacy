@@ -42,26 +42,26 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: AbstractOverlayGeoprocess.java 5412 2006-05-24 21:15:07Z azabala $
-* $Log$
-* Revision 1.1  2006-05-24 21:12:16  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.4  2006/03/14 19:34:18  azabala
-* *** empty log message ***
-*
-* Revision 1.3  2006/03/14 18:32:46  fjp
-* Cambio con LayerDefinition para que sea compatible con la definición de tablas también.
-*
-* Revision 1.2  2006/03/06 19:48:39  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/02/26 20:57:01  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: AbstractOverlayGeoprocess.java 5412 2006-05-24 21:15:07Z azabala $
+ * $Log$
+ * Revision 1.1  2006-05-24 21:12:16  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.4  2006/03/14 19:34:18  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.3  2006/03/14 18:32:46  fjp
+ * Cambio con LayerDefinition para que sea compatible con la definición de tablas también.
+ *
+ * Revision 1.2  2006/03/06 19:48:39  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/02/26 20:57:01  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core.fmap;
 
 import java.util.Map;
@@ -72,22 +72,22 @@ public abstract class AbstractOverlayGeoprocess extends AbstractGeoprocess {
 
 	public void setParameters(Map params) throws GeoprocessException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void checkPreconditions() throws GeoprocessException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void process() throws GeoprocessException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void cancel() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public ILayerDefinition createLayerDefinition() {
@@ -96,4 +96,3 @@ public abstract class AbstractOverlayGeoprocess extends AbstractGeoprocess {
 	}
 
 }
-

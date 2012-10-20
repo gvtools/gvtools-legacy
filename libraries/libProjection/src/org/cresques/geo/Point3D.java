@@ -25,60 +25,59 @@ package org.cresques.geo;
 
 import java.awt.geom.Point2D;
 
-
 /**
  * @author "Luis W. Sevilla" <sevilla_lui@gva.es>
  */
 public class Point3D extends Point2D {
-    public double X;
-    public double Y;
-    public double Z;
+	public double X;
+	public double Y;
+	public double Z;
 
-    public Point3D() {
-        setLocation(0.0, 0.0);
-    }
+	public Point3D() {
+		setLocation(0.0, 0.0);
+	}
 
-    public Point3D(double x, double y) {
-        setLocation(x, y);
-    }
+	public Point3D(double x, double y) {
+		setLocation(x, y);
+	}
 
-    public Point3D(double x, double y, double z) {
-        setLocation(x, y, z);
-    }
+	public Point3D(double x, double y, double z) {
+		setLocation(x, y, z);
+	}
 
-    public Point3D(Point2D pt) {
-        setLocation(pt.getX(), pt.getY());
-    }
+	public Point3D(Point2D pt) {
+		setLocation(pt.getX(), pt.getY());
+	}
 
-    public Point3D(Point3D pt) {
-        setLocation(pt.getX(), pt.getY(), pt.getZ());
-    }
+	public Point3D(Point3D pt) {
+		setLocation(pt.getX(), pt.getY(), pt.getZ());
+	}
 
-    public double getX() {
-        return X;
-    }
+	public double getX() {
+		return X;
+	}
 
-    public double getY() {
-        return Y;
-    }
+	public double getY() {
+		return Y;
+	}
 
-    public double getZ() {
-        return Z;
-    }
+	public double getZ() {
+		return Z;
+	}
 
-    public void setLocation(double x, double y) {
-        X = x;
-        Y = y;
-        Z = 0D;
-    }
+	public void setLocation(double x, double y) {
+		X = x;
+		Y = y;
+		Z = 0D;
+	}
 
-    public void setLocation(double x, double y, double z) {
-        X = x;
-        Y = y;
-        Z = z;
-    }
+	public void setLocation(double x, double y, double z) {
+		X = x;
+		Y = y;
+		Z = z;
+	}
 
-    public String toString() {
-        return "(" + getX() + "," + getY() + ")";
-    }
+	public String toString() {
+		return "(" + getX() + "," + getY() + ")";
+	}
 }

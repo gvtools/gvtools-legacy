@@ -25,11 +25,11 @@ package org.gvsig.gui.beans.buttonspanel;
 import java.util.EventListener;
 
 /**
- *
+ * 
  * @version 09/05/2008
- *
+ * 
  * @author BorSanZa - Borja Sanchez Zamorano (borja.sanchez@iver.es)
  */
 public interface ButtonsPanelListener extends EventListener {
-  public void actionButtonPressed(ButtonsPanelEvent e);
+	public void actionButtonPressed(ButtonsPanelEvent e);
 }

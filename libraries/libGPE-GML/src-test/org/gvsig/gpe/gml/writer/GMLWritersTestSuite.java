@@ -80,10 +80,10 @@ public class GMLWritersTestSuite {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.gvsig.gpe.gml.writers");
-		//$JUnit-BEGIN$
+		// $JUnit-BEGIN$
 		suite.addTest(GMLv2WritersTestSuite.suite());
 		suite.addTest(GMLsfp0WritersTestSuite.suite());
-		//$JUnit-END$
+		// $JUnit-END$
 		return suite;
 	}
 

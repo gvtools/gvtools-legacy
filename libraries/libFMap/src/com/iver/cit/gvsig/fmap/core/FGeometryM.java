@@ -2,7 +2,6 @@ package com.iver.cit.gvsig.fmap.core;
 
 import com.vividsolutions.jts.geom.Geometry;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -53,8 +52,9 @@ import com.vividsolutions.jts.geom.Geometry;
  *
  */
 /**
- * A Geometry with the M coordinate. It contains an FshapeM
- * that is the object that contains the geometric position.
+ * A Geometry with the M coordinate. It contains an FshapeM that is the object
+ * that contains the geometric position.
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class FGeometryM extends FGeometry implements IGeometryM {
@@ -66,33 +66,38 @@ public class FGeometryM extends FGeometry implements IGeometryM {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.gvsig.roads.fmap.core.IGeometryDS#getMs()
 	 */
 	public double[] getMs() {
-		return ((FShapeM)getInternalShape()).getMs();
+		return ((FShapeM) getInternalShape()).getMs();
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometryM#setMAt(int, double)
 	 */
 	public void setMAt(int i, double value) {
-		((FShapeM)getInternalShape()).setMAt(i, value);
+		((FShapeM) getInternalShape()).setMAt(i, value);
 	}
 
 	public boolean isDecreasing() {
-		return ((FShapeM)getInternalShape()).isDecreasing();
+		return ((FShapeM) getInternalShape()).isDecreasing();
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometryM#revertMs()
 	 */
 	public void revertMs() {
-		((FShapeM)getInternalShape()).revertMs();
+		((FShapeM) getInternalShape()).revertMs();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.FGeometry#toJTSGeometry()
 	 */
 	public Geometry toJTSGeometry() {
@@ -101,10 +106,12 @@ public class FGeometryM extends FGeometry implements IGeometryM {
 	}
 
 	public String toText() {
-		return ((FShapeM)getInternalShape()).toText();
+		return ((FShapeM) getInternalShape()).toText();
 	}
+
 	public IGeometry cloneGeometry() {
-		return new FGeometryM((FShapeM)super.cloneGeometry().getInternalShape());
+		return new FGeometryM((FShapeM) super.cloneGeometry()
+				.getInternalShape());
 	}
 
 }

@@ -37,19 +37,21 @@ import org.gvsig.raster.datastruct.ColorTable;
 import org.kxml2.io.KXmlParser;
 import org.kxml2.io.KXmlSerializer;
 import org.xmlpull.v1.XmlPullParserException;
+
 /**
- * La clase ColorTableLibraryPersistence sirve para controlar las tablas de color
- * genericas, como si fuera una libreria de tablas de color. Aquí se comprueban
- * los cambios de versión.
- *
+ * La clase ColorTableLibraryPersistence sirve para controlar las tablas de
+ * color genericas, como si fuera una libreria de tablas de color. Aquí se
+ * comprueban los cambios de versión.
+ * 
  * @version 02/07/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class ColorTableLibraryPersistence {
 
 	/**
-	 * Devuelve la lista de ficheros de paletas, si no existe el fichero devolvera
-	 * una lista vacia
+	 * Devuelve la lista de ficheros de paletas, si no existe el fichero
+	 * devolvera una lista vacia
+	 * 
 	 * @param palettesBasePath
 	 * @return
 	 */
@@ -72,6 +74,7 @@ public class ColorTableLibraryPersistence {
 	/**
 	 * Devuelve la lista de ficheros de paletas, si no existe el fichero creara
 	 * una paleta por defecto y la devolvera.
+	 * 
 	 * @param palettesBasePath
 	 * @return
 	 */
@@ -81,17 +84,21 @@ public class ColorTableLibraryPersistence {
 
 	/**
 	 * Devuelve la lista de ficheros de paletas, en caso de que no exista la
-	 * paleta y se especifique forceCreate a true, se creara la paleta por defecto.
+	 * paleta y se especifique forceCreate a true, se creara la paleta por
+	 * defecto.
+	 * 
 	 * @param palettesBasePath
 	 * @param forceCreate
 	 * @return
 	 */
-	public static ArrayList getPaletteFileList(String palettesBasePath, boolean forceCreate) {
+	public static ArrayList getPaletteFileList(String palettesBasePath,
+			boolean forceCreate) {
 		ArrayList fileList = getPaletteFileListDisc(palettesBasePath);
 
 		if (forceCreate && (fileList.size() == 0)) {
 			ColorTableLibraryPersistence persistence = new ColorTableLibraryPersistence();
-			createVersionFromXML(palettesBasePath, persistence.getDefaultPaletteXML());
+			createVersionFromXML(palettesBasePath,
+					persistence.getDefaultPaletteXML());
 			fileList = getPaletteFileListDisc(palettesBasePath);
 		}
 
@@ -100,6 +107,7 @@ public class ColorTableLibraryPersistence {
 
 	/**
 	 * Devuelve el XML de una paleta por defecto
+	 * 
 	 * @return
 	 */
 	public String getDefaultPaletteXML() {
@@ -111,7 +119,8 @@ public class ColorTableLibraryPersistence {
 			int i;
 			while (true) {
 				i = inputStream.read();
-				if (i == -1) break;
+				if (i == -1)
+					break;
 				char c = (char) i;
 				contents.append(c);
 			}
@@ -124,8 +133,9 @@ public class ColorTableLibraryPersistence {
 	}
 
 	/**
-	 * Crea los ficheros que forman la paleta de color de la version 1.1 a traves
-	 * de un XML que se le pasa por parametro
+	 * Crea los ficheros que forman la paleta de color de la version 1.1 a
+	 * traves de un XML que se le pasa por parametro
+	 * 
 	 * @param palettesPath
 	 */
 	private static void createVersionFromXML(String palettesBasePath, String xml) {
@@ -148,12 +158,15 @@ public class ColorTableLibraryPersistence {
 				if (parser.getAttributeCount() == 2) {
 					// Generar nuevo fichero
 					KXmlSerializer parserOutput = new KXmlSerializer();
-					FileOutputStream fileOutputStream = new FileOutputStream(palettesBasePath + File.separator + parser.getAttributeValue(0) + ".xml");
+					FileOutputStream fileOutputStream = new FileOutputStream(
+							palettesBasePath + File.separator
+									+ parser.getAttributeValue(0) + ".xml");
 
 					parserOutput.setOutput(fileOutputStream, null);
 					parserOutput.startDocument("UTF-8", null);
 					parserOutput.startTag(null, "ColorTable");
-					parserOutput.attribute(null, "name", parser.getAttributeValue(0));
+					parserOutput.attribute(null, "name",
+							parser.getAttributeValue(0));
 					parserOutput.attribute(null, "version", "1.1");
 
 					tag = parser.nextTag();
@@ -165,18 +178,34 @@ public class ColorTableLibraryPersistence {
 					while (tag == KXmlParser.START_TAG) {
 						parser.require(KXmlParser.START_TAG, null, "entry");
 						if (parser.getAttributeCount() == 3) {
-							String rgb = parser.getAttributeValue(1).substring(parser.getAttributeValue(1).indexOf(",") + 1, parser.getAttributeValue(1).length());
+							String rgb = parser.getAttributeValue(1)
+									.substring(
+											parser.getAttributeValue(1)
+													.indexOf(",") + 1,
+											parser.getAttributeValue(1)
+													.length());
 
-							int a = Integer.valueOf(parser.getAttributeValue(1).substring(0, parser.getAttributeValue(1).indexOf(","))).intValue();
-							int r = Integer.valueOf(rgb.substring(0, rgb.indexOf(","))).intValue();
-							int g = Integer.valueOf(rgb.substring(rgb.indexOf(",") + 1, rgb.lastIndexOf(","))).intValue();
-							int b = Integer.valueOf(rgb.substring(rgb.lastIndexOf(",") + 1, rgb.length())).intValue();
+							int a = Integer.valueOf(
+									parser.getAttributeValue(1).substring(
+											0,
+											parser.getAttributeValue(1)
+													.indexOf(","))).intValue();
+							int r = Integer.valueOf(
+									rgb.substring(0, rgb.indexOf(",")))
+									.intValue();
+							int g = Integer.valueOf(
+									rgb.substring(rgb.indexOf(",") + 1,
+											rgb.lastIndexOf(","))).intValue();
+							int b = Integer.valueOf(
+									rgb.substring(rgb.lastIndexOf(",") + 1,
+											rgb.length())).intValue();
 
 							ColorItem colorItem = new ColorItem();
 							colorItem.setColor(new Color(r, g, b, a));
 							colorItem.setInterpolated(50);
 							colorItem.setNameClass(parser.getAttributeValue(0));
-							colorItem.setValue(Double.parseDouble(parser.getAttributeValue(2)));
+							colorItem.setValue(Double.parseDouble(parser
+									.getAttributeValue(2)));
 							items.add(colorItem);
 						}
 						tag = parser.nextTag();
@@ -192,11 +221,19 @@ public class ColorTableLibraryPersistence {
 					for (int i = 0; i < items.size(); i++) {
 						ColorItem colorItem = (ColorItem) items.get(i);
 						parserOutput.startTag(null, "Color");
-						parserOutput.attribute(null, "value", String.valueOf(colorItem.getValue()));
-						parserOutput.attribute(null, "name", String.valueOf(colorItem.getNameClass()));
+						parserOutput.attribute(null, "value",
+								String.valueOf(colorItem.getValue()));
+						parserOutput.attribute(null, "name",
+								String.valueOf(colorItem.getNameClass()));
 						Color color = colorItem.getColor();
-						parserOutput.attribute(null, "rgb", String.valueOf(color.getRed() + "," + color.getGreen() + "," + color.getBlue()));
-						parserOutput.attribute(null, "interpolated", String.valueOf(colorItem.getInterpolated()));
+						parserOutput.attribute(
+								null,
+								"rgb",
+								String.valueOf(color.getRed() + ","
+										+ color.getGreen() + ","
+										+ color.getBlue()));
+						parserOutput.attribute(null, "interpolated",
+								String.valueOf(colorItem.getInterpolated()));
 						parserOutput.endTag(null, "Color");
 						parserOutput.text("\n");
 					}
@@ -204,9 +241,14 @@ public class ColorTableLibraryPersistence {
 					for (int i = 0; i < items.size(); i++) {
 						ColorItem colorItem = (ColorItem) items.get(i);
 						parserOutput.startTag(null, "Alpha");
-						parserOutput.attribute(null, "value", String.valueOf(colorItem.getValue()));
-						parserOutput.attribute(null, "alpha", String.valueOf(colorItem.getColor().getAlpha()));
-						parserOutput.attribute(null, "interpolated", String.valueOf(colorItem.getInterpolated()));
+						parserOutput.attribute(null, "value",
+								String.valueOf(colorItem.getValue()));
+						parserOutput
+								.attribute(null, "alpha", String
+										.valueOf(colorItem.getColor()
+												.getAlpha()));
+						parserOutput.attribute(null, "interpolated",
+								String.valueOf(colorItem.getInterpolated()));
 						parserOutput.endTag(null, "Alpha");
 						parserOutput.text("\n");
 					}
@@ -222,7 +264,9 @@ public class ColorTableLibraryPersistence {
 			}
 			parser.require(KXmlParser.END_TAG, null, "palettes");
 		} catch (XmlPullParserException xmlEx) {
-			System.out.println("El fichero de paletas predeterminadas no tiene la estructura correcta:\n	" + xmlEx.getMessage());
+			System.out
+					.println("El fichero de paletas predeterminadas no tiene la estructura correcta:\n	"
+							+ xmlEx.getMessage());
 		} catch (IOException e) {
 		}
 	}
@@ -230,21 +274,29 @@ public class ColorTableLibraryPersistence {
 	/**
 	 * Si existe la version de paleta 1.1, no lo actualizará, en caso contrario,
 	 * buscara la version 1.0 y si lo encuentra lo subirá a la 1.1
+	 * 
 	 * @param palettesPath
 	 */
 	public static void updateVersion_1_0_to_1_1(String palettesBasePath) {
-		// Si no existe la paleta antigua, pero si que existe la copia de seguridad,
+		// Si no existe la paleta antigua, pero si que existe la copia de
+		// seguridad,
 		// la restauramos
-		File palettesFile = new File(new File(palettesBasePath).getParent().toString() + File.separator + "palettes.xml");
+		File palettesFile = new File(new File(palettesBasePath).getParent()
+				.toString() + File.separator + "palettes.xml");
 		if (!palettesFile.exists()) {
 			// Cambiar nombre a antiguo fichero
-			File oldFile = new File(new File(palettesBasePath).getParent().toString() + File.separator + "palettes.xml~");
+			File oldFile = new File(new File(palettesBasePath).getParent()
+					.toString() + File.separator + "palettes.xml~");
 			if (oldFile.exists()) {
-				oldFile.renameTo(new File(new File(palettesBasePath).getParent().toString() + File.separator + "palettes.xml"));
+				oldFile.renameTo(new File(new File(palettesBasePath)
+						.getParent().toString()
+						+ File.separator
+						+ "palettes.xml"));
 			} else {
 				ColorTableLibraryPersistence ctlp = new ColorTableLibraryPersistence();
 				String text = ctlp.getDefaultPaletteXML();
-				palettesFile = new File(new File(palettesBasePath).getParent().toString() + File.separator + "palettes.xml");
+				palettesFile = new File(new File(palettesBasePath).getParent()
+						.toString() + File.separator + "palettes.xml");
 				try {
 					FileWriter writer = new FileWriter(palettesFile);
 					writer.write(text);
@@ -260,7 +312,8 @@ public class ColorTableLibraryPersistence {
 			return;
 
 		// Si no encontramos la paleta antigua, nos olvidamos de continuar
-		palettesFile = new File(new File(palettesBasePath).getParent().toString() + File.separator + "palettes.xml");
+		palettesFile = new File(new File(palettesBasePath).getParent()
+				.toString() + File.separator + "palettes.xml");
 		if (!palettesFile.exists())
 			return;
 
@@ -274,7 +327,8 @@ public class ColorTableLibraryPersistence {
 				int i;
 				while (true) {
 					i = inputStream.read();
-					if (i == -1) break;
+					if (i == -1)
+						break;
 					char c = (char) i;
 					contents.append(c);
 				}
@@ -294,16 +348,19 @@ public class ColorTableLibraryPersistence {
 	}
 
 	/**
-	 * Si existe la version de paleta 1.0, la actualizara a la 1.1 y renombrará la
-	 * antigua version.
+	 * Si existe la version de paleta 1.0, la actualizara a la 1.1 y renombrará
+	 * la antigua version.
+	 * 
 	 * @param palettesBasePath
 	 * @param colorTable
 	 */
-	public static void save_to_1_1(String palettesBasePath, ColorTable colorTable) {
+	public static void save_to_1_1(String palettesBasePath,
+			ColorTable colorTable) {
 		try {
 			// Generar nuevo fichero
 			KXmlSerializer parserOutput = new KXmlSerializer();
-			FileOutputStream out = new FileOutputStream(palettesBasePath + File.separator + colorTable.getName() + ".xml");
+			FileOutputStream out = new FileOutputStream(palettesBasePath
+					+ File.separator + colorTable.getName() + ".xml");
 			OutputStreamWriter writer = new OutputStreamWriter(out, "UTF8");
 			parserOutput.setOutput(writer);
 			parserOutput.startDocument("UTF-8", null);
@@ -316,14 +373,21 @@ public class ColorTableLibraryPersistence {
 			for (int i = 0; i < items.size(); i++) {
 				ColorItem colorItem = (ColorItem) items.get(i);
 				parserOutput.startTag(null, "Color");
-				parserOutput.attribute(null, "value", String.valueOf(colorItem.getValue()));
+				parserOutput.attribute(null, "value",
+						String.valueOf(colorItem.getValue()));
 				if (colorItem.getNameClass() != null)
-					parserOutput.attribute(null, "name", String.valueOf(colorItem.getNameClass()));
+					parserOutput.attribute(null, "name",
+							String.valueOf(colorItem.getNameClass()));
 				else
 					parserOutput.attribute(null, "name", "");
 				Color color = colorItem.getColor();
-				parserOutput.attribute(null, "rgb", String.valueOf(color.getRed() + "," + color.getGreen() + "," + color.getBlue()));
-				parserOutput.attribute(null, "interpolated", String.valueOf(colorItem.getInterpolated()));
+				parserOutput.attribute(
+						null,
+						"rgb",
+						String.valueOf(color.getRed() + "," + color.getGreen()
+								+ "," + color.getBlue()));
+				parserOutput.attribute(null, "interpolated",
+						String.valueOf(colorItem.getInterpolated()));
 				parserOutput.endTag(null, "Color");
 				parserOutput.text("\n");
 			}
@@ -331,9 +395,12 @@ public class ColorTableLibraryPersistence {
 			for (int i = 0; i < items.size(); i++) {
 				ColorItem colorItem = (ColorItem) items.get(i);
 				parserOutput.startTag(null, "Alpha");
-				parserOutput.attribute(null, "value", String.valueOf(colorItem.getValue()));
-				parserOutput.attribute(null, "alpha", String.valueOf(colorItem.getColor().getAlpha()));
-				parserOutput.attribute(null, "interpolated", String.valueOf(colorItem.getInterpolated()));
+				parserOutput.attribute(null, "value",
+						String.valueOf(colorItem.getValue()));
+				parserOutput.attribute(null, "alpha",
+						String.valueOf(colorItem.getColor().getAlpha()));
+				parserOutput.attribute(null, "interpolated",
+						String.valueOf(colorItem.getInterpolated()));
 				parserOutput.endTag(null, "Alpha");
 				parserOutput.text("\n");
 			}
@@ -352,16 +419,18 @@ public class ColorTableLibraryPersistence {
 
 	/**
 	 * Invocará todos los metodos de actualizaciones de version
+	 * 
 	 * @param palettesBasePath
 	 */
 	public static void updateVersion(String palettesBasePath) {
 		updateVersion_1_0_to_1_1(palettesBasePath);
-		//updateVersion_1_1_to_1_2(palettesBasePath);
+		// updateVersion_1_1_to_1_2(palettesBasePath);
 	}
 
 	/**
 	 * Devuelve el color si lo encuentra en el arraylist y lo elimina, en caso
 	 * contrario devuelve null
+	 * 
 	 * @param list
 	 * @param value
 	 * @return
@@ -376,17 +445,23 @@ public class ColorTableLibraryPersistence {
 	}
 
 	/**
-	 * Lee una paleta del fichero xml de paletas y la carga en la tabla del panel.
-	 * @param palettesPath Camino al fichero de paletas predefinidas.
-	 * @param paletteName Nombre de paleta a cargar desde el fichero xml.
+	 * Lee una paleta del fichero xml de paletas y la carga en la tabla del
+	 * panel.
+	 * 
+	 * @param palettesPath
+	 *            Camino al fichero de paletas predefinidas.
+	 * @param paletteName
+	 *            Nombre de paleta a cargar desde el fichero xml.
 	 * @return Nombre de la paleta
 	 */
-	public static String loadPalette(String palettesBasePath, String paletteFileName, ArrayList items) {
+	public static String loadPalette(String palettesBasePath,
+			String paletteFileName, ArrayList items) {
 		updateVersion(palettesBasePath);
 
 		items.clear();
 
-		File palettesFile = new File(palettesBasePath + File.separator + paletteFileName);
+		File palettesFile = new File(palettesBasePath + File.separator
+				+ paletteFileName);
 		if (!palettesFile.exists())
 			return null;
 
@@ -395,7 +470,8 @@ public class ColorTableLibraryPersistence {
 			ArrayList rows = new ArrayList();
 
 			KXmlParser parser = new KXmlParser();
-			FileInputStream in = new FileInputStream(palettesBasePath + File.separator + paletteFileName);
+			FileInputStream in = new FileInputStream(palettesBasePath
+					+ File.separator + paletteFileName);
 
 			InputStreamReader reader = new InputStreamReader(in, "UTF8");
 			parser.setInput(reader);
@@ -409,7 +485,8 @@ public class ColorTableLibraryPersistence {
 			}
 			tag = parser.nextTag();
 
-			while (!((tag == KXmlParser.END_TAG) && (parser.getName().equals("ColorTable")))) {
+			while (!((tag == KXmlParser.END_TAG) && (parser.getName()
+					.equals("ColorTable")))) {
 				try {
 					if (tag == KXmlParser.START_TAG) {
 						if (parser.getName().equals("Color")) {
@@ -417,24 +494,40 @@ public class ColorTableLibraryPersistence {
 							int a = 255;
 							for (int i = 0; i < parser.getAttributeCount(); i++) {
 								if (parser.getAttributeName(i).equals("value")) {
-									colorItem.setValue(Double.parseDouble((String) parser.getAttributeValue(i)));
-									ColorItem aux = getColorItem(rows, Double.parseDouble((String) parser.getAttributeValue(i)));
+									colorItem.setValue(Double
+											.parseDouble((String) parser
+													.getAttributeValue(i)));
+									ColorItem aux = getColorItem(rows,
+											Double.parseDouble((String) parser
+													.getAttributeValue(i)));
 									if (aux != null)
 										a = aux.getColor().getAlpha();
 								}
 								if (parser.getAttributeName(i).equals("name")) {
-									colorItem.setNameClass((String) parser.getAttributeValue(i));
+									colorItem.setNameClass((String) parser
+											.getAttributeValue(i));
 								}
 								if (parser.getAttributeName(i).equals("rgb")) {
 									String rgb = parser.getAttributeValue(i);
-									int r = Integer.valueOf(rgb.substring(0, rgb.indexOf(","))).intValue();
-									int g = Integer.valueOf(rgb.substring(rgb.indexOf(",") + 1, rgb.lastIndexOf(","))).intValue();
-									int b = Integer.valueOf(rgb.substring(rgb.lastIndexOf(",") + 1, rgb.length())).intValue();
+									int r = Integer.valueOf(
+											rgb.substring(0, rgb.indexOf(",")))
+											.intValue();
+									int g = Integer.valueOf(
+											rgb.substring(rgb.indexOf(",") + 1,
+													rgb.lastIndexOf(",")))
+											.intValue();
+									int b = Integer.valueOf(
+											rgb.substring(
+													rgb.lastIndexOf(",") + 1,
+													rgb.length())).intValue();
 
 									colorItem.setColor(new Color(r, g, b, a));
 								}
-								if (parser.getAttributeName(i).equals("interpolated")) {
-									colorItem.setInterpolated(Double.parseDouble((String) parser.getAttributeValue(i)));
+								if (parser.getAttributeName(i).equals(
+										"interpolated")) {
+									colorItem.setInterpolated(Double
+											.parseDouble((String) parser
+													.getAttributeValue(i)));
 								}
 							}
 
@@ -445,21 +538,42 @@ public class ColorTableLibraryPersistence {
 							ColorItem colorItem = new ColorItem();
 							for (int i = 0; i < parser.getAttributeCount(); i++) {
 								if (parser.getAttributeName(i).equals("value")) {
-									colorItem.setValue(Double.parseDouble((String) parser.getAttributeValue(i)));
-									ColorItem aux = getColorItem(rows, Double.parseDouble((String) parser.getAttributeValue(i)));
+									colorItem.setValue(Double
+											.parseDouble((String) parser
+													.getAttributeValue(i)));
+									ColorItem aux = getColorItem(rows,
+											Double.parseDouble((String) parser
+													.getAttributeValue(i)));
 									if (aux != null) {
-										colorItem.setNameClass(aux.getNameClass());
-										colorItem.setInterpolated(aux.getInterpolated());
-										colorItem.setColor(new Color(aux.getColor().getRed(), aux.getColor().getGreen(), aux.getColor().getBlue(), colorItem.getColor().getAlpha()));
+										colorItem.setNameClass(aux
+												.getNameClass());
+										colorItem.setInterpolated(aux
+												.getInterpolated());
+										colorItem
+												.setColor(new Color(aux
+														.getColor().getRed(),
+														aux.getColor()
+																.getGreen(),
+														aux.getColor()
+																.getBlue(),
+														colorItem.getColor()
+																.getAlpha()));
 									}
 								}
 								if (parser.getAttributeName(i).equals("alpha")) {
-									int a = Integer.parseInt(parser.getAttributeValue(i));
+									int a = Integer.parseInt(parser
+											.getAttributeValue(i));
 
-									colorItem.setColor(new Color(colorItem.getColor().getRed(), colorItem.getColor().getGreen(), colorItem.getColor().getBlue(), a));
+									colorItem.setColor(new Color(colorItem
+											.getColor().getRed(), colorItem
+											.getColor().getGreen(), colorItem
+											.getColor().getBlue(), a));
 								}
-								if (parser.getAttributeName(i).equals("interpolated")) {
-									colorItem.setInterpolated(Double.parseDouble((String) parser.getAttributeValue(i)));
+								if (parser.getAttributeName(i).equals(
+										"interpolated")) {
+									colorItem.setInterpolated(Double
+											.parseDouble((String) parser
+													.getAttributeValue(i)));
 								}
 							}
 
@@ -480,7 +594,9 @@ public class ColorTableLibraryPersistence {
 		} catch (FileNotFoundException fnfEx) {
 			fnfEx.printStackTrace();
 		} catch (XmlPullParserException xmlEx) {
-			System.out.println("El fichero de paletas predeterminadas no tiene la estructura correcta:\n	" + xmlEx.getMessage());
+			System.out
+					.println("El fichero de paletas predeterminadas no tiene la estructura correcta:\n	"
+							+ xmlEx.getMessage());
 		} catch (IOException e) {
 		}
 		return null;

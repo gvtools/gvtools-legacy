@@ -51,21 +51,21 @@ import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelLocationMetrics;
 import com.iver.utiles.swing.threads.Cancellable;
 
 /**
- *
+ * 
  * LinePlacementInTheMiddle.java
- *
- *
+ * 
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Dec 17, 2007
- *
+ * 
  */
 public class LinePlacementInTheMiddle extends AbstractLinePlacement {
 
 	public boolean isSuitableFor(IPlacementConstraints placementConstraints,
 			int shapeType) {
-		if ((shapeType%FShape.Z) == FShape.LINE) {
-			return placementConstraints != null &&
-			   placementConstraints.isInTheMiddleOfLine()
-			  /* && !placementConstraints.isFollowingLine()*/;
+		if ((shapeType % FShape.Z) == FShape.LINE) {
+			return placementConstraints != null
+					&& placementConstraints.isInTheMiddleOfLine()
+			/* && !placementConstraints.isFollowingLine() */;
 		}
 		return false;
 	}
@@ -73,11 +73,11 @@ public class LinePlacementInTheMiddle extends AbstractLinePlacement {
 	@Override
 	LabelLocationMetrics initialLocation(LabelClass lc,
 			IPlacementConstraints pc, PathLength pathLen, Cancellable cancel) {
-		if (cancel.isCanceled()) return null;
+		if (cancel.isCanceled())
+			return null;
 
 		float length = pathLen.lengthOfPath();
 		float distance = (float) (length * 0.5);
-
 
 		double theta = 0;
 		if (pc.isParallel()) {
@@ -86,21 +86,20 @@ public class LinePlacementInTheMiddle extends AbstractLinePlacement {
 
 		} else if (pc.isPerpendicular()) {
 			// get the line theta with 90 degrees
-			theta = pathLen.angleAtLength(distance) + AbstractLinePlacement.HALF_PI;
+			theta = pathLen.angleAtLength(distance)
+					+ AbstractLinePlacement.HALF_PI;
 		}
 
 		Point2D p = pathLen.pointAtLength(distance);
 
 		/*
-		 * Offset the point to a distance of the height of the
-		 * label class's height to make the label appear to
-		 * be on the line.
-		 *
+		 * Offset the point to a distance of the height of the label class's
+		 * height to make the label appear to be on the line.
 		 */
 		double x = p.getX();
 		double y = p.getY();
-		double halfHeight = lc.getBounds().getHeight()*.5;
-		double halfWidth = lc.getBounds().getWidth()*.5;
+		double halfHeight = lc.getBounds().getHeight() * .5;
+		double halfWidth = lc.getBounds().getWidth() * .5;
 
 		double sinTheta = Math.sin(theta);
 		double cosTheta = Math.cos(theta);
@@ -109,20 +108,15 @@ public class LinePlacementInTheMiddle extends AbstractLinePlacement {
 		double yOffset = halfHeight * cosTheta;
 
 		/*
-		 * now, offset the anchor point as much as need to
-		 * make the center of the label be the middle of the
-		 * line
+		 * now, offset the anchor point as much as need to make the center of
+		 * the label be the middle of the line
 		 */
 		xOffset -= halfWidth * cosTheta;
 		yOffset += halfWidth * sinTheta;
 
 		p.setLocation(x + xOffset, y - yOffset);
 
-		return new LabelLocationMetrics(
-				p,
-				theta,
-				true);
+		return new LabelLocationMetrics(p, theta, true);
 	}
 
 }
-

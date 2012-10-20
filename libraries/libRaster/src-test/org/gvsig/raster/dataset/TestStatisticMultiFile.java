@@ -28,6 +28,7 @@ import org.gvsig.raster.BaseTestCase;
 import org.gvsig.raster.RasterLibrary;
 import org.gvsig.raster.dataset.io.RasterDriverException;
 import org.gvsig.raster.dataset.properties.DatasetStatistics;
+
 /**
  * Prueba el calculo de estadisticas para un dataset con multiples ficheros.
  * Comprueba que los valores obtenidos en las estadisticas son correctos.
@@ -40,20 +41,20 @@ public class TestStatisticMultiFile extends BaseTestCase {
 	private String path1 = baseDir + "band1-30x28byte.tif";
 	private String path2 = baseDir + "band2-30x28byte.tif";
 	private String path3 = baseDir + "band3-30x28byte.tif";
-	
+
 	private RasterDataset f1 = null;
 	private RasterDataset f2 = null;
 	private RasterDataset f3 = null;
-	
+
 	static {
 		RasterLibrary.wakeUp();
 	}
-	
+
 	public void start() {
 		this.setUp();
 		this.testStack();
 	}
-	
+
 	public void setUp() {
 		System.err.println("TestStatisticMultiFile running...");
 		try {
@@ -69,13 +70,13 @@ public class TestStatisticMultiFile extends BaseTestCase {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void testStack() {
 		MultiRasterDataset grmf = new MultiRasterDataset();
 		try {
-			grmf.addDataset(new RasterDataset[]{f1});
-			grmf.addDataset(new RasterDataset[]{f2});
-			grmf.addDataset(new RasterDataset[]{f3});
+			grmf.addDataset(new RasterDataset[] { f1 });
+			grmf.addDataset(new RasterDataset[] { f2 });
+			grmf.addDataset(new RasterDataset[] { f3 });
 			try {
 				grmf.getStatistics().calcFullStatistics();
 			} catch (FileNotOpenException e) {
@@ -85,7 +86,7 @@ public class TestStatisticMultiFile extends BaseTestCase {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-//			print(grmf);
+			// print(grmf);
 			dataTestB1(grmf.getStatistics());
 			dataTestB2(grmf.getStatistics());
 			dataTestB3(grmf.getStatistics());
@@ -94,42 +95,60 @@ public class TestStatisticMultiFile extends BaseTestCase {
 		}
 	}
 
-	private void dataTestB1(DatasetStatistics stats){
-		assertEquals(new Double(stats.getMaxByteUnsigned()[0]), new Double(249.0));
-		assertEquals(new Double(stats.getMinByteUnsigned()[0]), new Double(82.0));
-		assertEquals(new Double(stats.getSecondMaxByteUnsigned()[0]), new Double(211.0));
-		assertEquals(new Double(stats.getSecondMinByteUnsigned()[0]), new Double(83.0));
-		assertEquals((int)stats.getMean()[0], 19);
-		assertEquals((int)stats.getVariance()[0], 11599);
+	private void dataTestB1(DatasetStatistics stats) {
+		assertEquals(new Double(stats.getMaxByteUnsigned()[0]), new Double(
+				249.0));
+		assertEquals(new Double(stats.getMinByteUnsigned()[0]),
+				new Double(82.0));
+		assertEquals(new Double(stats.getSecondMaxByteUnsigned()[0]),
+				new Double(211.0));
+		assertEquals(new Double(stats.getSecondMinByteUnsigned()[0]),
+				new Double(83.0));
+		assertEquals((int) stats.getMean()[0], 19);
+		assertEquals((int) stats.getVariance()[0], 11599);
 	}
-	
-	private void dataTestB2(DatasetStatistics stats){
-		assertEquals(new Double(stats.getMaxByteUnsigned()[1]), new Double(234.0));
-		assertEquals(new Double(stats.getMinByteUnsigned()[1]), new Double(49.0));
-		assertEquals(new Double(stats.getSecondMaxByteUnsigned()[1]), new Double(216.0));
-		assertEquals(new Double(stats.getSecondMinByteUnsigned()[1]), new Double(50.0));
-		assertEquals((int)stats.getMean()[1], 51);
-		assertEquals((int)stats.getVariance()[1], 7109);
+
+	private void dataTestB2(DatasetStatistics stats) {
+		assertEquals(new Double(stats.getMaxByteUnsigned()[1]), new Double(
+				234.0));
+		assertEquals(new Double(stats.getMinByteUnsigned()[1]),
+				new Double(49.0));
+		assertEquals(new Double(stats.getSecondMaxByteUnsigned()[1]),
+				new Double(216.0));
+		assertEquals(new Double(stats.getSecondMinByteUnsigned()[1]),
+				new Double(50.0));
+		assertEquals((int) stats.getMean()[1], 51);
+		assertEquals((int) stats.getVariance()[1], 7109);
 	}
-	
-	private void dataTestB3(DatasetStatistics stats){
-		assertEquals(new Double(stats.getMaxByteUnsigned()[2]), new Double(255.0));
-		assertEquals(new Double(stats.getMinByteUnsigned()[2]), new Double(28.0));
-		assertEquals(new Double(stats.getSecondMaxByteUnsigned()[2]), new Double(250.0));
-		assertEquals(new Double(stats.getSecondMinByteUnsigned()[2]), new Double(34.0));
-		assertEquals((int)stats.getMean()[2], -12);
-		assertEquals((int)stats.getVariance()[2], 7991);
+
+	private void dataTestB3(DatasetStatistics stats) {
+		assertEquals(new Double(stats.getMaxByteUnsigned()[2]), new Double(
+				255.0));
+		assertEquals(new Double(stats.getMinByteUnsigned()[2]),
+				new Double(28.0));
+		assertEquals(new Double(stats.getSecondMaxByteUnsigned()[2]),
+				new Double(250.0));
+		assertEquals(new Double(stats.getSecondMinByteUnsigned()[2]),
+				new Double(34.0));
+		assertEquals((int) stats.getMean()[2], -12);
+		assertEquals((int) stats.getVariance()[2], 7991);
 	}
-	
+
 	public void print(MultiRasterDataset grmf) {
 		for (int iBand = 0; iBand < grmf.getStatistics().getBandCount(); iBand++) {
 			System.out.println("Band " + iBand);
-			System.out.println("...Max: " + grmf.getStatistics().getMax()[iBand]);
-			System.out.println("...Min: " + grmf.getStatistics().getMin()[iBand]);
-			System.out.println("...SecondMax: " + grmf.getStatistics().getSecondMax()[iBand]);
-			System.out.println("...SecondMin: " + grmf.getStatistics().getSecondMin()[iBand]);
-			System.out.println("...Mean: " + grmf.getStatistics().getMean()[iBand]);
-			System.out.println("...Variance: " + grmf.getStatistics().getVariance()[iBand]);
+			System.out.println("...Max: "
+					+ grmf.getStatistics().getMax()[iBand]);
+			System.out.println("...Min: "
+					+ grmf.getStatistics().getMin()[iBand]);
+			System.out.println("...SecondMax: "
+					+ grmf.getStatistics().getSecondMax()[iBand]);
+			System.out.println("...SecondMin: "
+					+ grmf.getStatistics().getSecondMin()[iBand]);
+			System.out.println("...Mean: "
+					+ grmf.getStatistics().getMean()[iBand]);
+			System.out.println("...Variance: "
+					+ grmf.getStatistics().getVariance()[iBand]);
 		}
 	}
 }

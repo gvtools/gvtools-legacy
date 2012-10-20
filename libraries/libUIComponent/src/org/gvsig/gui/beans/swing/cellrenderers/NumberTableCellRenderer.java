@@ -57,7 +57,7 @@ import org.gvsig.gui.beans.swing.ValidatingTextField.Validator;
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class NumberTableCellRenderer extends DefaultTableCellRenderer {
-  private static final long serialVersionUID = -4551232953341602636L;
+	private static final long serialVersionUID = -4551232953341602636L;
 
 	private JIncrementalNumberField txt;
 
@@ -66,8 +66,6 @@ public class NumberTableCellRenderer extends DefaultTableCellRenderer {
 	private MatteBorder unselectedBorder;
 
 	private boolean acceptsDoubles;
-
-
 
 	public NumberTableCellRenderer(boolean bordered, boolean acceptsDoubles) {
 		this.isBordered = bordered;
@@ -82,7 +80,8 @@ public class NumberTableCellRenderer extends DefaultTableCellRenderer {
 	public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column) {
 		if (value == null)
-			return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			return super.getTableCellRendererComponent(table, value,
+					isSelected, hasFocus, row, column);
 
 		if (isBordered) {
 			if (isSelected) {
@@ -104,8 +103,10 @@ public class NumberTableCellRenderer extends DefaultTableCellRenderer {
 
 			JPanel content = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
 			content.setBackground(table.getBackground());
-			Validator valid = acceptsDoubles ? ValidatingTextField.DOUBLE_VALIDATOR : ValidatingTextField.INTEGER_VALIDATOR;
-			txt = new JIncrementalNumberField("", 6,valid, ValidatingTextField.NUMBER_CLEANER, 0, 80, 1);
+			Validator valid = acceptsDoubles ? ValidatingTextField.DOUBLE_VALIDATOR
+					: ValidatingTextField.INTEGER_VALIDATOR;
+			txt = new JIncrementalNumberField("", 6, valid,
+					ValidatingTextField.NUMBER_CLEANER, 0, 80, 1);
 			if (acceptsDoubles) {
 				txt.setDouble(((Double) value).doubleValue());
 			} else {
@@ -113,14 +114,16 @@ public class NumberTableCellRenderer extends DefaultTableCellRenderer {
 			}
 
 			txt.setBackground(table.getBackground());
-			// TODO figure out a way to know the cell's width to fit in the editor
-//			txt.setPreferredSize(new Dimension(
-//					table.getColumnModel().getColumn(column).getPreferredWidth(),
-//					table.getRowHeight()));
+			// TODO figure out a way to know the cell's width to fit in the
+			// editor
+			// txt.setPreferredSize(new Dimension(
+			// table.getColumnModel().getColumn(column).getPreferredWidth(),
+			// table.getRowHeight()));
 			content.add(txt);
 			return content;
 		} catch (ClassCastException ccEx) {
-			throw new RuntimeException("Trying to use a numeric cell renderer with a non-numeric datatype");
+			throw new RuntimeException(
+					"Trying to use a numeric cell renderer with a non-numeric datatype");
 		}
 
 	}

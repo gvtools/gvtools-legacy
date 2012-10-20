@@ -47,6 +47,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+
 import org.apache.log4j.Logger;
 
 import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
@@ -55,19 +56,19 @@ import com.iver.cit.gvsig.fmap.core.symbols.SymbolDrawingException;
 import com.iver.utiles.XMLEntity;
 
 /**
- * Defines methods that allows the user to create an style based in a
- * background file.For this reason, BackgroundFileStyle will
- * have a parameter that will be an string in order to specify this source file.
- *
+ * Defines methods that allows the user to create an style based in a background
+ * file.For this reason, BackgroundFileStyle will have a parameter that will be
+ * an string in order to specify this source file.
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public abstract class BackgroundFileStyle extends AbstractStyle {
 
-	public static BackgroundFileStyle createStyleByURL(URL url) throws IOException {
+	public static BackgroundFileStyle createStyleByURL(URL url)
+			throws IOException {
 		BackgroundFileStyle bgImage;
 		String l = url.toString().toLowerCase();
-		if (l.startsWith("http://") ||
-			l.startsWith("https://"))  {
+		if (l.startsWith("http://") || l.startsWith("https://")) {
 			bgImage = new RemoteFileStyle();
 		} else if (l.toLowerCase().endsWith(".svg")) {
 			bgImage = new SVGStyle();
@@ -77,36 +78,41 @@ public abstract class BackgroundFileStyle extends AbstractStyle {
 		bgImage.setSource(url);
 		return bgImage;
 	}
+
 	protected URL sourceFile;
 	protected boolean isRelativePath;
+
 	/**
 	 * Sets the file that is used as a source to create the Background
-	 * @param f, File
+	 * 
+	 * @param f
+	 *            , File
 	 * @throws IOException
 	 */
 	public abstract void setSource(URL url) throws IOException;
-    /**
-     * Gets the bounding <code>Rectangle</code> of this <code>Rectangle</code>.
-     * <p>
-     * This method is included for completeness, to parallel the
-     * <code>getBounds</code> method of
-     * {@link Component}.
-     * @return    a new <code>Rectangle</code>, equal to the
-     * bounding <code>Rectangle</code> for this <code>Rectangle</code>.
-     * @see       java.awt.Component#getBounds
-     * @see       #setBounds(Rectangle)
-     * @see       #setBounds(int, int, int, int)
-     * @since     JDK1.1
-     */
+
+	/**
+	 * Gets the bounding <code>Rectangle</code> of this <code>Rectangle</code>.
+	 * <p>
+	 * This method is included for completeness, to parallel the
+	 * <code>getBounds</code> method of {@link Component}.
+	 * 
+	 * @return a new <code>Rectangle</code>, equal to the bounding
+	 *         <code>Rectangle</code> for this <code>Rectangle</code>.
+	 * @see java.awt.Component#getBounds
+	 * @see #setBounds(Rectangle)
+	 * @see #setBounds(int, int, int, int)
+	 * @since JDK1.1
+	 */
 	public abstract Rectangle getBounds();
 
 	public XMLEntity getXMLEntity() {
 
 		XMLEntity xml = new XMLEntity();
-		String source=sourceFile.toString();
+		String source = sourceFile.toString();
 
-//		if(isRelativePath)
-//			source=sourceFile.toString().substring(SymbologyFactory.SymbolLibraryPath.length()+1);
+		// if(isRelativePath)
+		// source=sourceFile.toString().substring(SymbologyFactory.SymbolLibraryPath.length()+1);
 
 		xml.putProperty("className", getClassName());
 		xml.putProperty("source", source);
@@ -121,27 +127,33 @@ public abstract class BackgroundFileStyle extends AbstractStyle {
 			try {
 				source = new URL(strSource);
 			} catch (MalformedURLException e) {
-				File fileSource = new File(SymbologyFactory.StyleLibraryPath + File.separator + strSource);
+				File fileSource = new File(SymbologyFactory.StyleLibraryPath
+						+ File.separator + strSource);
 				source = fileSource.toURL();
 			}
 			setSource(source);
 			setDescription(xml.getStringProperty("desc"));
 		} catch (IOException ioEx) {
-			Logger.getLogger(this.getClass()).error("Can't load image '"+strSource+"'");
+			Logger.getLogger(this.getClass()).error(
+					"Can't load image '" + strSource + "'");
 		}
 
 	}
+
 	/**
 	 * Obtains the source of the file which is used to create the background
+	 * 
 	 * @return
 	 */
 	public final URL getSource() {
 		return sourceFile;
 	}
 
-	public final void drawInsideRectangle(Graphics2D g, Rectangle r) throws SymbolDrawingException {
+	public final void drawInsideRectangle(Graphics2D g, Rectangle r)
+			throws SymbolDrawingException {
 		drawInsideRectangle(g, r, true);
 	}
 
-	public abstract void drawInsideRectangle(Graphics2D g, Rectangle r, boolean keepAspectRatio) throws SymbolDrawingException ;
+	public abstract void drawInsideRectangle(Graphics2D g, Rectangle r,
+			boolean keepAspectRatio) throws SymbolDrawingException;
 }

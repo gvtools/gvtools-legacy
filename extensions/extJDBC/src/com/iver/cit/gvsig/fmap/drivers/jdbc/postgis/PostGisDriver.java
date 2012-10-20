@@ -84,7 +84,6 @@ import com.iver.cit.gvsig.fmap.drivers.DriverAttributes;
 import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 import com.iver.cit.gvsig.fmap.drivers.IConnection;
 import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
-import com.iver.cit.gvsig.fmap.drivers.WKBParser2;
 import com.iver.cit.gvsig.fmap.drivers.WKBParser3;
 import com.iver.cit.gvsig.fmap.drivers.XTypes;
 import com.iver.cit.gvsig.fmap.edition.IWriteable;
@@ -164,6 +163,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 	private static final int nbaseInt = (int) nbaseLong;
 
 	public static final String NAME = "PostGIS JDBC Driver";
+
 	// PostGIS
 	// PostGIS JDBC Driver
 
@@ -276,7 +276,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 		try {
 			((ConnectionJDBC) conn).getConnection().setAutoCommit(false);
 			sqlOrig = "SELECT " + getTotalFields() + " FROM "
-			+ getLyrDef().getComposedTableName() + " ";
+					+ getLyrDef().getComposedTableName() + " ";
 			// + getLyrDef().getWhereClause();
 			if (canReproject(strEPSG)) {
 				completeWhere = getCompoundWhere(sqlOrig, workingArea, strEPSG);
@@ -291,9 +291,9 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 
 			sqlTotal = sqlAux;
 			logger.info("Cadena SQL:" + sqlAux);
-			Statement st = ((ConnectionJDBC) conn).getConnection().createStatement(
-					ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_READ_ONLY);
+			Statement st = ((ConnectionJDBC) conn).getConnection()
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+							ResultSet.CONCUR_READ_ONLY);
 			// st.setFetchSize(FETCH_SIZE);
 			myCursorId++;
 			st.execute("declare " + getTableName() + myCursorId
@@ -312,15 +312,18 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 			writer.initialize(lyrDef);
 
 		} catch (SQLException e) {
-			
+
 			try {
 				((ConnectionJDBC) conn).getConnection().rollback();
 			} catch (SQLException e1) {
-				logger.warn("Unable to rollback connection after problem (" + e.getMessage() + ") in setData()");
+				logger.warn("Unable to rollback connection after problem ("
+						+ e.getMessage() + ") in setData()");
 			}
-			
+
 			try {
-				if (rs != null) { rs.close(); }
+				if (rs != null) {
+					rs.close();
+				}
 			} catch (SQLException e1) {
 				throw new DBException(e);
 			}
@@ -339,9 +342,10 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 				Statement s = ((ConnectionJDBC) conn).getConnection()
 						.createStatement();
 				String query = "SELECT extent(\""
-				    + getLyrDef().getFieldGeometry()
-				    + "\") AS FullExtent FROM " + getLyrDef().getComposedTableName()
-				    + " " + getCompleteWhere();
+						+ getLyrDef().getFieldGeometry()
+						+ "\") AS FullExtent FROM "
+						+ getLyrDef().getComposedTableName() + " "
+						+ getCompleteWhere();
 				ResultSet r = s.executeQuery(query);
 				r.next();
 				String strAux = r.getString(1);
@@ -433,7 +437,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 	}
 
 	public IFeatureIterator getFeatureIterator(Rectangle2D r, String strEPSG)
-	throws ReadDriverException {
+			throws ReadDriverException {
 		if (workingArea != null)
 			r = r.createIntersection(workingArea);
 
@@ -467,14 +471,15 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 		double xMax = r.getMaxX();
 		double yMax = r.getMaxY();
 		String wktBox = "GeometryFromText('LINESTRING(" + xMin + " " + yMin
-		+ ", " + xMax + " " + yMin + ", " + xMax + " " + yMax + ", "
-		+ xMin + " " + yMax + ")', " + strEPSG + ")";
+				+ ", " + xMax + " " + yMin + ", " + xMax + " " + yMax + ", "
+				+ xMin + " " + yMax + ")', " + strEPSG + ")";
 		String sqlAux;
 		if (getWhereClause().toUpperCase().indexOf("WHERE") != -1)
-		    sqlAux = getWhereClause() + " AND \"" + getLyrDef().getFieldGeometry() + "\" && " + wktBox;
+			sqlAux = getWhereClause() + " AND \""
+					+ getLyrDef().getFieldGeometry() + "\" && " + wktBox;
 		else
-		    sqlAux = "WHERE \"" + getLyrDef().getFieldGeometry() + "\" && "
-			+ wktBox;
+			sqlAux = "WHERE \"" + getLyrDef().getFieldGeometry() + "\" && "
+					+ wktBox;
 		return sqlAux;
 	}
 
@@ -492,7 +497,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 	 * int)
 	 */
 	public Value getFieldValue(long rowIndex, int idField)
-	throws ReadDriverException {
+			throws ReadDriverException {
 		boolean resul;
 		// EL ABSOLUTE NO HACE QUE SE VUELVAN A LEER LAS
 		// FILAS, ASI QUE MONTAMOS ESTA HISTORIA PARA QUE
@@ -518,11 +523,11 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 			ByteBuffer buf = ByteBuffer.wrap(byteBuf);
 			if (metaData.getColumnType(fieldId) == Types.VARCHAR)
 				return ValueFactory.createValue(aRs.getString(fieldId));
-			if (metaData.getColumnType(fieldId) == Types.CHAR){
+			if (metaData.getColumnType(fieldId) == Types.CHAR) {
 				String character = aRs.getString(fieldId);
-				if (character != null){
+				if (character != null) {
 					return ValueFactory.createValue(character.trim());
-				}else{
+				} else {
 					return ValueFactory.createValue(character);
 				}
 			}
@@ -631,7 +636,6 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 		final BigInteger nbasePow2 = getNBasePow2();
 		final BigInteger nbasePow4 = getNBasePow4();
 
-
 		byte[] buffer = new byte[8];
 
 		// System.out.println("tail = " + tail + " bytesToParse = " +
@@ -690,7 +694,6 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 			// +", valBI = "+ valBigInteger);
 		}
 
-
 		// Calculate scale offset
 		final int databaseScale = (ndigits - weight - 1) * 4; // Number of
 																// digits in
@@ -723,13 +726,12 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 			// ha habido un error previo. Es mejor poner un error y no seguir.
 			try {
 				reload();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				throw new SQLException(e);
 			}
 		}
-			
+
 		// EL ABSOLUTE NO HACE QUE SE VUELVAN A LEER LAS
 		// FILAS, ASI QUE MONTAMOS ESTA HISTORIA PARA QUE
 		// LO HAGA
@@ -739,22 +741,23 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 		if ((index >= fetch_min) && (index <= fetch_max)) {
 			// Está en el intervalo, así que lo podemos posicionar
 
-//				
-//				
-//				//jomarlla
-//				int dimension  = rs.getInt("COORD_DIMENSION");
-//				dbld.setDimension(dimension);
-				
+			//
+			//
+			// //jomarlla
+			// int dimension = rs.getInt("COORD_DIMENSION");
+			// dbld.setDimension(dimension);
+
 		} else {
 			// calculamos el intervalo correcto
 			fetch_min = (index / FETCH_SIZE) * FETCH_SIZE;
 			fetch_max = fetch_min + FETCH_SIZE - 1;
 			// y cogemos ese cacho
 			rs.close();
-			
-			Statement st = ((ConnectionJDBC)conn).getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-			ResultSet.CONCUR_READ_ONLY);
-			
+
+			Statement st = ((ConnectionJDBC) conn).getConnection()
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+							ResultSet.CONCUR_READ_ONLY);
+
 			myCursorId++;
 			st.execute("declare "
 					+ getTableName()
@@ -764,11 +767,10 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 			st.executeQuery("fetch absolute " + fetch_min + " in "
 					+ getTableName() + myCursorId
 					+ "_wkb_cursorAbsolutePosition");
-			
+
 			rs = st.executeQuery("fetch forward " + FETCH_SIZE + " in "
 					+ getTableName() + myCursorId
 					+ "_wkb_cursorAbsolutePosition");
-			
 
 		}
 		rs.absolute(index - fetch_min + 1);
@@ -780,7 +782,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 	 * @see com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver#getGeometryField(java.lang.String)
 	 */
 	public String getGeometryField(String fieldName) {
-	    return "AsEWKB(\"" + fieldName + "\", 'XDR')";
+		return "AsEWKB(\"" + fieldName + "\", 'XDR')";
 	}
 
 	/**
@@ -868,9 +870,9 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 				else if (geometryType.compareToIgnoreCase("MULTIPOLYGON") == 0)
 					shapeType = FShape.POLYGON;
 				dbld.setShapeType(shapeType);
-				
-				//jomarlla
-				int dimension  = rs.getInt("COORD_DIMENSION");
+
+				// jomarlla
+				int dimension = rs.getInt("COORD_DIMENSION");
 				dbld.setDimension(dimension);
 
 			} else {
@@ -927,14 +929,14 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 		hashRelate = new Hashtable();
 		try {
 			String strSQL = "SELECT " + getLyrDef().getFieldID() + " FROM "
-			+ getLyrDef().getComposedTableName() + " ";
+					+ getLyrDef().getComposedTableName() + " ";
 			// + getLyrDef().getWhereClause();
 			if (canReproject(strEPSG)) {
 				strSQL = strSQL
-				+ getCompoundWhere(strSQL, workingArea, strEPSG);
+						+ getCompoundWhere(strSQL, workingArea, strEPSG);
 			} else {
 				strSQL = strSQL
-				+ getCompoundWhere(strSQL, workingArea, originalEPSG);
+						+ getCompoundWhere(strSQL, workingArea, originalEPSG);
 			}
 			strSQL = strSQL + " ORDER BY " + getLyrDef().getFieldID();
 			Statement s = ((ConnectionJDBC) getConnection()).getConnection()
@@ -946,13 +948,14 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 			String gid;
 			while (r.next()) {
 				gid = r.getString(1);
-				
+
 				if (gid == null) {
-					throw new SQLException(
-							PluginServices.getText(null, "Found_null_id_in_table") + ": " +
-							getLyrDef().getComposedTableName());
+					throw new SQLException(PluginServices.getText(null,
+							"Found_null_id_in_table")
+							+ ": "
+							+ getLyrDef().getComposedTableName());
 				}
-				
+
 				Value aux = ValueFactory.createValue(gid);
 				hashRelate.put(aux, new Integer(id));
 				// System.out.println("ASOCIANDO CLAVE " + aux + " CON VALOR " +
@@ -1076,7 +1079,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 					.toArray(new FieldDescription[] {}));
 
 			String sqlProv = "SELECT " + strAux + " FROM "
-			+ lyrDef.getComposedTableName() + " ";
+					+ lyrDef.getComposedTableName() + " ";
 			// + getLyrDef().getWhereClause();
 
 			if (canReproject(strEPSG)) {
@@ -1244,44 +1247,46 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 		return strAux.toString();
 	}
 
-
 	/**
 	 * Gets all field names of a given table.
 	 * 
-	 * This method comes from DefaultJDBC.java class. Postgis driver has no method to check
-	 *  the status of the connection -if it is valid or not. So, as it's not possible to assure 
-	 *  its status, close the connection when an exception happens and re-open it on demand 
-	 *  on the proper method will solve the problems related to an invalid status.
+	 * This method comes from DefaultJDBC.java class. Postgis driver has no
+	 * method to check the status of the connection -if it is valid or not. So,
+	 * as it's not possible to assure its status, close the connection when an
+	 * exception happens and re-open it on demand on the proper method will
+	 * solve the problems related to an invalid status.
 	 * 
-	 * @param conn connection object
-	 * @param table_name table name
+	 * @param conn
+	 *            connection object
+	 * @param table_name
+	 *            table name
 	 * @return all field names of the given table
 	 * @throws SQLException
 	 */
 	@Override
-	public String[] getAllFields(IConnection conn, String table_name) throws DBException {
+	public String[] getAllFields(IConnection conn, String table_name)
+			throws DBException {
 		Statement st = null;
 		ResultSet rs = null;
 		table_name = tableNameToComposedTableName(table_name);
 
 		try {
-			st = ((ConnectionJDBC)conn).getConnection().createStatement();
+			st = ((ConnectionJDBC) conn).getConnection().createStatement();
 			rs = st.executeQuery("SELECT * FROM " + table_name + " LIMIT 1");
 			ResultSetMetaData rsmd = rs.getMetaData();
 			String[] ret = new String[rsmd.getColumnCount()];
 
 			for (int i = 0; i < ret.length; i++) {
-				ret[i] = rsmd.getColumnName(i+1);
+				ret[i] = rsmd.getColumnName(i + 1);
 			}
 
 			return ret;
 		} catch (SQLException e) {
-			// Next time  getConnection() method is called it will be re-opened.
+			// Next time getConnection() method is called it will be re-opened.
 			// @see com.iver.cit.gvsig.fmap.drivers.ConnectionJDBC.java;
 			closeConnection(conn);
 			throw new DBException(e);
-		}
-		finally {
+		} finally {
 			closeResultSet(rs);
 			closeStatement(st);
 		}
@@ -1290,44 +1295,47 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 	/**
 	 * Gets all field type names of a given table.
 	 * 
-	 * This method comes from DefaultJDBC.java class. Postgis driver has no method to check
-	 *  the status of the connection -if it is valid or not. So, as it's not possible to assure 
-	 *  its status, close the connection when an exception happens and re-open it on demand 
-	 *  on the proper method will solve the problems related to an invalid status.
+	 * This method comes from DefaultJDBC.java class. Postgis driver has no
+	 * method to check the status of the connection -if it is valid or not. So,
+	 * as it's not possible to assure its status, close the connection when an
+	 * exception happens and re-open it on demand on the proper method will
+	 * solve the problems related to an invalid status.
 	 * 
-	 * @param conn connection object
-	 * @param table_name table name
+	 * @param conn
+	 *            connection object
+	 * @param table_name
+	 *            table name
 	 * @return all field type names of the given table
 	 * @throws SQLException
 	 */
-	public String[] getAllFieldTypeNames(IConnection conn, String table_name) throws DBException {
-	    Statement st = null;
-	    ResultSet rs = null;
-	    table_name = tableNameToComposedTableName(table_name);
+	public String[] getAllFieldTypeNames(IConnection conn, String table_name)
+			throws DBException {
+		Statement st = null;
+		ResultSet rs = null;
+		table_name = tableNameToComposedTableName(table_name);
 		try {
-			st = ((ConnectionJDBC)conn).getConnection().createStatement();
+			st = ((ConnectionJDBC) conn).getConnection().createStatement();
 			rs = st.executeQuery("SELECT * FROM " + table_name + " LIMIT 1");
 			ResultSetMetaData rsmd = rs.getMetaData();
 			String[] ret = new String[rsmd.getColumnCount()];
 
 			for (int i = 0; i < ret.length; i++) {
-				ret[i] = rsmd.getColumnTypeName(i+1);
+				ret[i] = rsmd.getColumnTypeName(i + 1);
 			}
 			return ret;
 		} catch (SQLException e) {
-			// Next time  getConnection() method is called it will be re-opened.
+			// Next time getConnection() method is called it will be re-opened.
 			// @see com.iver.cit.gvsig.fmap.drivers.ConnectionJDBC.java;
 			closeConnection(conn);
 			throw new DBException(e);
-		}
-		finally{
+		} finally {
 			closeStatement(st);
 			closeResultSet(rs);
 		}
 	}
 
 	/**
-	 *
+	 * 
 	 * @param tableName
 	 * @return a string with the schema and the tableName quoted
 	 */
@@ -1351,8 +1359,11 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 
 	/**
 	 * Close a ResultSet
-	 * @param rs, the resultset to be closed
-	 * @return true if the resulset was correctly closed. false in any other case
+	 * 
+	 * @param rs
+	 *            , the resultset to be closed
+	 * @return true if the resulset was correctly closed. false in any other
+	 *         case
 	 */
 	public boolean closeResultSet(ResultSet rs) {
 		boolean error = false;
@@ -1371,8 +1382,11 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 
 	/**
 	 * Close a Statement
-	 * @param st, the statement to be closed
-	 * @return true if the  statement was correctly closed, false in any other case
+	 * 
+	 * @param st
+	 *            , the statement to be closed
+	 * @return true if the statement was correctly closed, false in any other
+	 *         case
 	 */
 	public boolean closeStatement(Statement st) {
 		boolean error = false;
@@ -1391,8 +1405,11 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 
 	/**
 	 * Close a Connection
-	 * @param conn, the  connection to be closed
-	 * @return true if the connection was correctly closed, false in any other case
+	 * 
+	 * @param conn
+	 *            , the connection to be closed
+	 * @return true if the connection was correctly closed, false in any other
+	 *         case
 	 */
 	public boolean closeConnection(IConnection conn) {
 		boolean error = false;
@@ -1412,12 +1429,15 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 	/**
 	 * Tells if user can read contents of the table.
 	 * 
-	 *  @param iconn connection with the database where the user is connected
-	 *  @param tablename to get the permissions over
-	 *  @return true if can read, either false
-	 *  @throws SQLException
+	 * @param iconn
+	 *            connection with the database where the user is connected
+	 * @param tablename
+	 *            to get the permissions over
+	 * @return true if can read, either false
+	 * @throws SQLException
 	 */
-	public boolean canRead(IConnection iconn, String tablename) throws SQLException {
+	public boolean canRead(IConnection iconn, String tablename)
+			throws SQLException {
 		String schema = null;
 		int dotPos = tablename.indexOf(".");
 		if (dotPos > -1) {
@@ -1428,13 +1448,14 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 		boolean checkTable = true;
 		if (schema != null) {
 			if (!schemasUsage.containsKey(schema)) {
-				String query = "SELECT has_schema_privilege('" + schema + "', 'USAGE') AS usg";
+				String query = "SELECT has_schema_privilege('" + schema
+						+ "', 'USAGE') AS usg";
 				Statement st = conn.createStatement();
 				ResultSet rs = st.executeQuery(query);
 				if (rs.next()) {
 					schemasUsage.put(schema, rs.getBoolean("usg"));
 				} else {
-					//this sentence should never be executed...
+					// this sentence should never be executed...
 					schemasUsage.put(schema, false);
 				}
 				rs.close();
@@ -1443,7 +1464,8 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 			checkTable = schemasUsage.get(schema);
 		}
 		if (checkTable) {
-			String query = "SELECT has_table_privilege('" + tablename + "', 'SELECT') as selct";
+			String query = "SELECT has_table_privilege('" + tablename
+					+ "', 'SELECT') as selct";
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery(query);
 			if (rs.next()) {
@@ -1451,73 +1473,75 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 			} else {
 				return false;
 			}
-		} else return false;
+		} else
+			return false;
 	}
 
-  
-	private Integer getGidFieldIndex(String ret[]){
-	    for (int i=0; i<ret.length; i++) {
-	        if (ret[i].equalsIgnoreCase("gid")) {
-	            return new Integer(i);
-	        }	    
-	    }
-	    return null;
-	}
-	
-	private void swapIndexes(String[] ret, int i, int j){
-	    if(i!=j && i>=0 && i<ret.length && j>=0 && j<ret.length){
-	        String aux = ret[i];
-	        ret[i] = ret[j];
-	        ret[j] = aux;
-	    }
+	private Integer getGidFieldIndex(String ret[]) {
+		for (int i = 0; i < ret.length; i++) {
+			if (ret[i].equalsIgnoreCase("gid")) {
+				return new Integer(i);
+			}
+		}
+		return null;
 	}
 
-	public String[] getIdFieldsCandidates(IConnection conn, String table_name) throws DBException {
-
-	    String[] ret = getAllFields(conn, table_name);
-
-	    String pk = getPrimaryKey(conn, table_name);
-
-	    if (!pk.equals("")){
-	        for (int i = 0; i < ret.length; i++) {
-	            if (pk.equals(ret[i])) {
-	                    //swap possible gid col with the first element
-	                    //in order to make it the default selection on 
-	                    //combobox
-	                    swapIndexes(ret, i, 0);
-	                    break;
-	            }
-	        }
-	    } else {
-	        Integer gidFieldIndex = getGidFieldIndex(ret);
-	        if (gidFieldIndex!=null){
-	            //swap possible gid col with the first element
-	            //in order to make it the default selection on 
-	            //combobox
-	            int index = gidFieldIndex.intValue();
-	            swapIndexes(ret, index, 0);
-	        } else {
-	            for (int i = 0; i < ret.length; i++) {
-	                if (isAutoIncrement(conn, table_name, ret[i])) {
-	                    //swap possible gid col with the first element
-	                    //in order to make it the default selection on 
-	                    //combobox
-	                    swapIndexes(ret, i, 0);
-	                    break;
-	                }
-	            }
-	        }
-	    }
-	    return ret;
+	private void swapIndexes(String[] ret, int i, int j) {
+		if (i != j && i >= 0 && i < ret.length && j >= 0 && j < ret.length) {
+			String aux = ret[i];
+			ret[i] = ret[j];
+			ret[j] = aux;
+		}
 	}
 
-	private boolean isAutoIncrement(IConnection con, String table_name, String colName) {
-		
+	public String[] getIdFieldsCandidates(IConnection conn, String table_name)
+			throws DBException {
+
+		String[] ret = getAllFields(conn, table_name);
+
+		String pk = getPrimaryKey(conn, table_name);
+
+		if (!pk.equals("")) {
+			for (int i = 0; i < ret.length; i++) {
+				if (pk.equals(ret[i])) {
+					// swap possible gid col with the first element
+					// in order to make it the default selection on
+					// combobox
+					swapIndexes(ret, i, 0);
+					break;
+				}
+			}
+		} else {
+			Integer gidFieldIndex = getGidFieldIndex(ret);
+			if (gidFieldIndex != null) {
+				// swap possible gid col with the first element
+				// in order to make it the default selection on
+				// combobox
+				int index = gidFieldIndex.intValue();
+				swapIndexes(ret, index, 0);
+			} else {
+				for (int i = 0; i < ret.length; i++) {
+					if (isAutoIncrement(conn, table_name, ret[i])) {
+						// swap possible gid col with the first element
+						// in order to make it the default selection on
+						// combobox
+						swapIndexes(ret, i, 0);
+						break;
+					}
+				}
+			}
+		}
+		return ret;
+	}
+
+	private boolean isAutoIncrement(IConnection con, String table_name,
+			String colName) {
+
 		String query = "SELECT column_default SIMILAR TO 'nextval%regclass%' AS isautoincremental "
-			+ "FROM information_schema.columns " 
-			+ "WHERE table_name = ? AND table_schema=? " 
-			+ "AND column_name=?";
-		
+				+ "FROM information_schema.columns "
+				+ "WHERE table_name = ? AND table_schema=? "
+				+ "AND column_name=?";
+
 		try {
 			// get schema and table from the composed tablename
 			String[] tokens = table_name.split("\\u002E", 2);
@@ -1529,23 +1553,22 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 				schema = tokens[0];
 				tableName = tokens[1];
 			}
-			
-			
-			Connection c = ((ConnectionJDBC)con).getConnection();
+
+			Connection c = ((ConnectionJDBC) con).getConnection();
 			PreparedStatement st = c.prepareStatement(query);
 			st.setString(1, tableName);
 			st.setString(2, schema);
 			st.setString(3, colName);
-			
+
 			ResultSet rs = st.executeQuery();
 			boolean isAutoincrement = false;
 			if (rs.next()) {
 				isAutoincrement = rs.getBoolean("isautoincremental");
 			}
-			
+
 			rs.close();
 			st.close();
-			
+
 			return isAutoincrement;
 		} catch (SQLException e) {
 			try {
@@ -1553,118 +1576,119 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 			} catch (DBException e2) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} 
+			}
 			return false;
 
 		}
-		
-		
+
 	}
 
-	   private String getPrimaryKey(IConnection con, String table_name) {
+	private String getPrimaryKey(IConnection con, String table_name) {
 
-	       String query = "SELECT column_name FROM information_schema.key_column_usage" +
-	       		" WHERE table_name=? AND table_schema=? AND constraint_name=?";
+		String query = "SELECT column_name FROM information_schema.key_column_usage"
+				+ " WHERE table_name=? AND table_schema=? AND constraint_name=?";
 
-	        try {
-	            // get schema and table from the composed tablename
-	            String[] tokens = table_name.split("\\u002E", 2);
-	            String schema = "";
-	            String tableName = "";
-	            if (tokens.length == 1) {
-	                tableName = tokens[0];
-	            } else {
-	                schema = tokens[0];
-	                tableName = tokens[1];
-	            }
-	            
-	            
-	            Connection c = ((ConnectionJDBC)con).getConnection();
-	            PreparedStatement st = c.prepareStatement(query);
-	            st.setString(1, tableName);
-	            st.setString(2, schema);
-	            st.setString(3, tableName+"_pkey");
-	            
-	            ResultSet rs = st.executeQuery();
-	            
-	            String primaryKey = "";
-	            if (rs.next()) {
-	                primaryKey = rs.getString("column_name");
-	            }
-	            
-	            rs.close();
-	            st.close();
-	            
-	            return primaryKey;
-	        } catch (SQLException e) {
-	            try {
-	                con.close();
-	            } catch (DBException e2) {
-	                // TODO Auto-generated catch block
-	                e.printStackTrace();
-	            } 
-	            return "";
-	        }
-	    }
-	   
+		try {
+			// get schema and table from the composed tablename
+			String[] tokens = table_name.split("\\u002E", 2);
+			String schema = "";
+			String tableName = "";
+			if (tokens.length == 1) {
+				tableName = tokens[0];
+			} else {
+				schema = tokens[0];
+				tableName = tokens[1];
+			}
 
-		public void validateData(IConnection _conn, DBLayerDefinition lyrDef) throws DBException {
-			
-			this.conn = _conn;
-			lyrDef.setConnection(conn);
-			setLyrDef(lyrDef);
+			Connection c = ((ConnectionJDBC) con).getConnection();
+			PreparedStatement st = c.prepareStatement(query);
+			st.setString(1, tableName);
+			st.setString(2, schema);
+			st.setString(3, tableName + "_pkey");
 
-			getTableEPSG_and_shapeType(conn, lyrDef);
+			ResultSet rs = st.executeQuery();
 
-			getLyrDef().setSRID_EPSG(originalEPSG);
+			String primaryKey = "";
+			if (rs.next()) {
+				primaryKey = rs.getString("column_name");
+			}
+
+			rs.close();
+			st.close();
+
+			return primaryKey;
+		} catch (SQLException e) {
+			try {
+				con.close();
+			} catch (DBException e2) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return "";
+		}
+	}
+
+	public void validateData(IConnection _conn, DBLayerDefinition lyrDef)
+			throws DBException {
+
+		this.conn = _conn;
+		lyrDef.setConnection(conn);
+		setLyrDef(lyrDef);
+
+		getTableEPSG_and_shapeType(conn, lyrDef);
+
+		getLyrDef().setSRID_EPSG(originalEPSG);
+
+		try {
+			((ConnectionJDBC) conn).getConnection().setAutoCommit(false);
+			sqlOrig = "SELECT " + getTotalFields() + " FROM "
+					+ getLyrDef().getComposedTableName() + " ";
+			// + getLyrDef().getWhereClause();
+			if (canReproject(strEPSG)) {
+				completeWhere = getCompoundWhere(sqlOrig, workingArea, strEPSG);
+			} else {
+				completeWhere = getCompoundWhere(sqlOrig, workingArea,
+						originalEPSG);
+			}
+			// completeWhere = getLyrDef().getWhereClause() + completeWhere;
+
+			String sqlAux = sqlOrig + completeWhere + " ORDER BY "
+					+ getLyrDef().getFieldID();
+
+			sqlTotal = sqlAux;
+			logger.info("Cadena SQL:" + sqlAux);
+			Statement st = ((ConnectionJDBC) conn).getConnection()
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+							ResultSet.CONCUR_READ_ONLY);
+			// st.setFetchSize(FETCH_SIZE);
+			// myCursorId++;
+			String temp_index_name = getTableName() + "_temp_wkb_cursor";
+			st.execute("declare " + temp_index_name
+					+ " binary scroll cursor with hold for " + sqlAux);
+			rs = st.executeQuery("fetch forward 50 in " + temp_index_name);
+			rs.close();
+			st.execute("close " + temp_index_name);
+			st.close();
+
+		} catch (SQLException e) {
 
 			try {
-				((ConnectionJDBC) conn).getConnection().setAutoCommit(false);
-				sqlOrig = "SELECT " + getTotalFields() + " FROM "
-				+ getLyrDef().getComposedTableName() + " ";
-				// + getLyrDef().getWhereClause();
-				if (canReproject(strEPSG)) {
-					completeWhere = getCompoundWhere(sqlOrig, workingArea, strEPSG);
-				} else {
-					completeWhere = getCompoundWhere(sqlOrig, workingArea,
-							originalEPSG);
-				}
-				// completeWhere = getLyrDef().getWhereClause() + completeWhere;
+				((ConnectionJDBC) conn).getConnection().rollback();
+			} catch (SQLException e1) {
+				logger.warn("Unable to rollback connection after problem ("
+						+ e.getMessage() + ") in setData()");
+			}
 
-				String sqlAux = sqlOrig + completeWhere + " ORDER BY "
-						+ getLyrDef().getFieldID();
-
-				sqlTotal = sqlAux;
-				logger.info("Cadena SQL:" + sqlAux);
-				Statement st = ((ConnectionJDBC) conn).getConnection().createStatement(
-						ResultSet.TYPE_SCROLL_INSENSITIVE,
-						ResultSet.CONCUR_READ_ONLY);
-				// st.setFetchSize(FETCH_SIZE);
-				// myCursorId++;
-				String temp_index_name = getTableName() + "_temp_wkb_cursor"; 
-				st.execute("declare " + temp_index_name + " binary scroll cursor with hold for "
-						+ sqlAux);
-				rs = st.executeQuery("fetch forward 50 in " + temp_index_name);
-				rs.close();
-				st.execute("close " + temp_index_name);
-				st.close();
-
-			} catch (SQLException e) {
-				
-				try {
-					((ConnectionJDBC) conn).getConnection().rollback();
-				} catch (SQLException e1) {
-					logger.warn("Unable to rollback connection after problem (" + e.getMessage() + ") in setData()");
+			try {
+				if (rs != null) {
+					rs.close();
 				}
-				
-				try {
-					if (rs != null) { rs.close(); }
-				} catch (SQLException e1) {
-					throw new DBException(e);
-				}
+			} catch (SQLException e1) {
 				throw new DBException(e);
 			}
+			throw new DBException(e);
 		}
+	}
 }
 
 // [eiel-gestion-conexiones]

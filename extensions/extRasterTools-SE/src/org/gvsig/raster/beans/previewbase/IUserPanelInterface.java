@@ -20,23 +20,25 @@ package org.gvsig.raster.beans.previewbase;
 
 import javax.swing.JPanel;
 
-
 /**
  * Interfaz que implementan los paneles que se incorporan al PreviewBasePanel
  * 
  * 19/02/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public interface IUserPanelInterface {
 	/**
-	 * Obtiene el título del panel. Esta será la etiqueta que se ponga en 
-	 * la pestaña del tab.
+	 * Obtiene el título del panel. Esta será la etiqueta que se ponga en la
+	 * pestaña del tab.
+	 * 
 	 * @return Cadena con el título.
 	 */
 	public String getTitle();
-	
+
 	/**
 	 * Obtiene el panel que se añade en el tab
+	 * 
 	 * @return JPanel
 	 */
 	public JPanel getPanel();

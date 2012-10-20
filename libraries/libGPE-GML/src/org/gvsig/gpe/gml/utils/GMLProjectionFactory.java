@@ -65,67 +65,69 @@ import org.gvsig.gpe.warnings.SrsUnknownWarning;
  *
  */
 /**
- * This class is used to convert a projection written 
- * using the EPSG projection to the GML projection
- * format
+ * This class is used to convert a projection written using the EPSG projection
+ * to the GML projection format
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class GMLProjectionFactory {
-	
+
 	/**
-	 * This method is used to get the GML spatial reference
-	 * system (srs) calculated from a GPE srs.
+	 * This method is used to get the GML spatial reference system (srs)
+	 * calculated from a GPE srs.
+	 * 
 	 * @param srs
-	 * GPE srs
+	 *            GPE srs
 	 * @param errorHandler
-	 * The error handler
-	 * @return
-	 * GML srs
+	 *            The error handler
+	 * @return GML srs
 	 */
-	public static String fromGPEToGML(String srs, GPEErrorHandler errorHandler){
-		if (srs != null){
-			//If the SRS's are not based on XML the srs 
-			//will be the same
-			if (!GPEDefaults.getBooleanProperty(GmlProperties.SRS_BASED_ON_XML)){
+	public static String fromGPEToGML(String srs, GPEErrorHandler errorHandler) {
+		if (srs != null) {
+			// If the SRS's are not based on XML the srs
+			// will be the same
+			if (!GPEDefaults.getBooleanProperty(GmlProperties.SRS_BASED_ON_XML)) {
 				return srs;
-			}			
-			String[] parts = org.gvsig.gpe.utils.StringUtils.splitString(srs,":");
-			//String[] parts = srs.split(":");
-			if (parts.length == 2){
-				if (parts[0].compareTo(GMLTags.SRS_EPSG_NAME) == 0){
+			}
+			String[] parts = org.gvsig.gpe.utils.StringUtils.splitString(srs,
+					":");
+			// String[] parts = srs.split(":");
+			if (parts.length == 2) {
+				if (parts[0].compareTo(GMLTags.SRS_EPSG_NAME) == 0) {
 					return GMLTags.SRS + GMLTags.SRS_EPSG + "#" + parts[1];
 				}
-			}else if(parts.length == 1){
-				//If the EPSG prefix is not found 
-				return GMLTags.SRS + GMLTags.SRS_EPSG + "#"  + parts[0];
-				
+			} else if (parts.length == 1) {
+				// If the EPSG prefix is not found
+				return GMLTags.SRS + GMLTags.SRS_EPSG + "#" + parts[0];
+
 			}
-		}	
+		}
 		errorHandler.addWarning(new SrsUnknownWarning(srs));
-		return GMLTags.SRS_UNKNOWN;	
+		return GMLTags.SRS_UNKNOWN;
 	}
-	
+
 	/**
-	 * This method is used to get the GPE spatial reference
-	 * system (srs) calculated from a GML srs.
+	 * This method is used to get the GPE spatial reference system (srs)
+	 * calculated from a GML srs.
+	 * 
 	 * @param srs
-	 * GML srs
+	 *            GML srs
 	 * @param errorHandler
-	 * The error handler
-	 * @return
-	 * GPE srs
+	 *            The error handler
+	 * @return GPE srs
 	 */
-	public static String fromGMLToGPE(String srs,IGPEErrorHandler errorHandler){
-		if (srs != null){
-			String[] parts = org.gvsig.gpe.utils.StringUtils.splitString(srs,"#");
-			//String[] parts = srs.split("#");
-			if (parts.length == 2){
-				if (parts[0].compareTo(GMLTags.SRS + GMLTags.SRS_EPSG) == 0){
+	public static String fromGMLToGPE(String srs, IGPEErrorHandler errorHandler) {
+		if (srs != null) {
+			String[] parts = org.gvsig.gpe.utils.StringUtils.splitString(srs,
+					"#");
+			// String[] parts = srs.split("#");
+			if (parts.length == 2) {
+				if (parts[0].compareTo(GMLTags.SRS + GMLTags.SRS_EPSG) == 0) {
 					return GMLTags.SRS_EPSG_NAME + ":" + parts[1];
 				}
 			}
 		}
 		errorHandler.addWarning(new SrsUnknownWarning(srs));
-		return GMLTags.SRS_UNKNOWN;	
+		return GMLTags.SRS_UNKNOWN;
 	}
 }

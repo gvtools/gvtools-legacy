@@ -25,26 +25,35 @@ import java.util.ArrayList;
 import org.gvsig.gui.beans.panelGroup.panels.AbstractPanel;
 
 /**
- * <p>Implemented to use the {@link AbstractPanelGroup AbstractPanelGroup} type desired.</p>
- * <p>This class allows having different implementations of {@link AbstractPanelGroup AbstractPanelGroup}
- * and only load in memory the class of some of them, whom have previously been imported to future use. Then, when
- * a graphical interface would need use a <code>AbstractPanelGroup</code> instance, will instance an object of the 
- * class <i>selected</i> (set previously as <i>default</i>) of the registered types in this manager.</p> 
+ * <p>
+ * Implemented to use the {@link AbstractPanelGroup AbstractPanelGroup} type
+ * desired.
+ * </p>
+ * <p>
+ * This class allows having different implementations of
+ * {@link AbstractPanelGroup AbstractPanelGroup} and only load in memory the
+ * class of some of them, whom have previously been imported to future use.
+ * Then, when a graphical interface would need use a
+ * <code>AbstractPanelGroup</code> instance, will instance an object of the
+ * class <i>selected</i> (set previously as <i>default</i>) of the registered
+ * types in this manager.
+ * </p>
  * 
  * @version 18/10/2007
- * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es) 
+ * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class PanelGroupManager implements Serializable {
 	private static final long serialVersionUID = 2059085515913026734L;
 
 	/**
-	 * Array list with the {@link AbstractPanelGroup AbstractPanelGroup} registered.
+	 * Array list with the {@link AbstractPanelGroup AbstractPanelGroup}
+	 * registered.
 	 * 
 	 * @see #registerPanelGroup(Class)
 	 * @see #deregisterPanelGroup(Class)
 	 */
 	private ArrayList<Class> registeredPanelGroups = null;
-	
+
 	/**
 	 * The {@link AbstractPanelGroup AbstractPanelGroup} type set as default.
 	 * 
@@ -54,36 +63,44 @@ public class PanelGroupManager implements Serializable {
 	private Class defaultPanelGroup = null;
 
 	/**
-	 * <p>Reference to the current manager with the <i>PanelGroup</i> registered.</p>
+	 * <p>
+	 * Reference to the current manager with the <i>PanelGroup</i> registered.
+	 * </p>
 	 */
 	private static PanelGroupManager manager = null;
 
 	/**
-	 * <p>Default constructor.</p>
+	 * <p>
+	 * Default constructor.
+	 * </p>
 	 */
 	protected PanelGroupManager() {
-		 registeredPanelGroups = new ArrayList<Class>();
+		registeredPanelGroups = new ArrayList<Class>();
 	}
-	
+
 	/**
-	 * <p>The singleton <code>PanelGroupManager</code> instance.</p>
+	 * <p>
+	 * The singleton <code>PanelGroupManager</code> instance.
+	 * </p>
 	 * 
 	 * @return current manager used, or if didn't exist any, a new one
 	 */
-	public static synchronized PanelGroupManager getManager()
-	{
-		if( manager == null ) {
-			manager = new PanelGroupManager ();
+	public static synchronized PanelGroupManager getManager() {
+		if (manager == null) {
+			manager = new PanelGroupManager();
 		}
 
 		return manager;
 	}
-	
+
 	/**
-	 * <p>Registers a new {@link AbstractPanelGroup AbstractPanelGroup} class type if it
-	 * wasn't already done.</p>
+	 * <p>
+	 * Registers a new {@link AbstractPanelGroup AbstractPanelGroup} class type
+	 * if it wasn't already done.
+	 * </p>
 	 * 
-	 * @param panelGroup the new <code>AbstractPanelGroup</code> class type to register
+	 * @param panelGroup
+	 *            the new <code>AbstractPanelGroup</code> class type to register
 	 * 
 	 * @see #deregisterPanelGroup(Class)
 	 */
@@ -94,11 +111,17 @@ public class PanelGroupManager implements Serializable {
 	}
 
 	/**
-	 * <p>Unregisters a {@link AbstractPanelGroup AbstractPanelGroup} class type if it
-	 * was previously registered.</p>
-	 * <p>If the type to unregister is the <i>default</i>, sets <i>default</i> to <code>null</code>.</p>
+	 * <p>
+	 * Unregisters a {@link AbstractPanelGroup AbstractPanelGroup} class type if
+	 * it was previously registered.
+	 * </p>
+	 * <p>
+	 * If the type to unregister is the <i>default</i>, sets <i>default</i> to
+	 * <code>null</code>.
+	 * </p>
 	 * 
-	 * @param panelGroup the <code>AbstractPanelGroup</code> class type to unregister
+	 * @param panelGroup
+	 *            the <code>AbstractPanelGroup</code> class type to unregister
 	 * 
 	 * @see #registerPanelGroup(Class)
 	 */
@@ -115,12 +138,15 @@ public class PanelGroupManager implements Serializable {
 			}
 		}
 	}
-	
+
 	/**
-	 * <p>Sets as <i>default</i> one of the {@link AbstractPanelGroup AbstractPanelGroup} class type
-	 *  previously registered.</p>
+	 * <p>
+	 * Sets as <i>default</i> one of the {@link AbstractPanelGroup
+	 * AbstractPanelGroup} class type previously registered.
+	 * </p>
 	 * 
-	 * @param panelGroup a <code>AbstractPanelGroup</code> class type
+	 * @param panelGroup
+	 *            a <code>AbstractPanelGroup</code> class type
 	 * 
 	 * @see #getPanelGroup()
 	 */
@@ -128,23 +154,30 @@ public class PanelGroupManager implements Serializable {
 		if (registeredPanelGroups.contains(panelGroup))
 			defaultPanelGroup = panelGroup;
 	}
-	
+
 	/**
-	 * <p>Gets the <i>default</i> {@link AbstractPanelGroup AbstractPanelGroup} class type.</p>
+	 * <p>
+	 * Gets the <i>default</i> {@link AbstractPanelGroup AbstractPanelGroup}
+	 * class type.
+	 * </p>
 	 * 
-	 * return the <i>default</i> <code>AbstractPanelGroup</code> class type or <code>null</code> if isn't any
+	 * return the <i>default</i> <code>AbstractPanelGroup</code> class type or
+	 * <code>null</code> if isn't any
 	 * 
-	 * @throws Exception any exception produced loading the {@link AbstractPanel AbstractPanel}
+	 * @throws Exception
+	 *             any exception produced loading the {@link AbstractPanel
+	 *             AbstractPanel}
 	 * 
 	 * @see #setDefaultType(Class)
-	 */	
-	public synchronized AbstractPanelGroup getPanelGroup(Object reference) throws Exception {
+	 */
+	public synchronized AbstractPanelGroup getPanelGroup(Object reference)
+			throws Exception {
 		try {
-			if( defaultPanelGroup != null ) {
-				return (AbstractPanelGroup) defaultPanelGroup.getConstructor(Object.class).newInstance(reference);
+			if (defaultPanelGroup != null) {
+				return (AbstractPanelGroup) defaultPanelGroup.getConstructor(
+						Object.class).newInstance(reference);
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw e;
 		}
 

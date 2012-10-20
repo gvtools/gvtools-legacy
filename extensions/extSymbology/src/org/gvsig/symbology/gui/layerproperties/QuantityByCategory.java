@@ -20,7 +20,6 @@ import org.gvsig.symbology.fmap.rendering.GraduatedSymbolLegend;
 import org.gvsig.symbology.fmap.rendering.QuantityByCategoryLegend;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
-import com.hardcode.gdbms.engine.data.DataSource;
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.ui.mdiManager.IWindow;
@@ -44,16 +43,18 @@ import com.iver.cit.gvsig.project.documents.view.legend.gui.MultipleAttributes;
 import com.iver.cit.gvsig.project.documents.view.legend.gui.SymbolTable;
 import com.iver.cit.gvsig.project.documents.view.legend.gui.VectorialInterval;
 import com.iver.utiles.swing.JComboBox;
+
 /**
- * Implements the panel of a legend where the user can compare two different characteristics
- * of a region in the map. These two "fields" will be compared, on one side,
- * using a color for the region and , on the other side, using a graduated symbol.
- * Both methods will change (the color or the size of the symbol) depending on
- * the value of the fields.
- *
+ * Implements the panel of a legend where the user can compare two different
+ * characteristics of a region in the map. These two "fields" will be compared,
+ * on one side, using a color for the region and , on the other side, using a
+ * graduated symbol. Both methods will change (the color or the size of the
+ * symbol) depending on the value of the fields.
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
-public class QuantityByCategory extends JPanel implements ILegendPanel, ActionListener {
+public class QuantityByCategory extends JPanel implements ILegendPanel,
+		ActionListener {
 	private static final long serialVersionUID = 5098346573350040756L;
 	private JPanel pnlNorth;
 	private JPanel pnlSouth;
@@ -64,12 +65,13 @@ public class QuantityByCategory extends JPanel implements ILegendPanel, ActionLi
 	private JComboBox cmbGraduatedSymbolField;
 	private JButton btnColor;
 	private JButton btnSymbol;
-//	private JButton btnDelete;
-//	private JButton btnDeleteAll;
+	// private JButton btnDelete;
+	// private JButton btnDeleteAll;
 	private QuantityByCategoryLegend legend;
 	private QuantityByCategoryLegend oldLegend;
 	private FLayer layer;
 	private SymbolTable symbolTable;
+
 	/**
 	 * Constructor method
 	 */
@@ -77,6 +79,7 @@ public class QuantityByCategory extends JPanel implements ILegendPanel, ActionLi
 		super();
 		initialize();
 	}
+
 	/**
 	 * This method initializes this
 	 */
@@ -84,12 +87,13 @@ public class QuantityByCategory extends JPanel implements ILegendPanel, ActionLi
 		this.setLayout(new BorderLayout());
 		this.setSize(490, 300);
 		this.add(getPnlNorth(), BorderLayout.NORTH);
-		this.add(getPnlSouth(),BorderLayout.CENTER);
-//		this.add(getPnlButtons(),BorderLayout.SOUTH);
+		this.add(getPnlSouth(), BorderLayout.CENTER);
+		// this.add(getPnlButtons(),BorderLayout.SOUTH);
 	}
+
 	/**
 	 * Obtains the south panel
-	 *
+	 * 
 	 * @return JPanel
 	 */
 	private JPanel getPnlSouth() {
@@ -99,49 +103,50 @@ public class QuantityByCategory extends JPanel implements ILegendPanel, ActionLi
 		}
 		return pnlSouth;
 	}
+
 	/**
 	 * Obtains the panel where the buttons will be placed
-	 *
+	 * 
 	 * @return JPanel
 	 */
-//	private JPanel getPnlButtons() {
-//		if(pnlButtons == null) {
-//			pnlButtons = new JPanel();
-//			pnlButtons.add(getButDel());
-//			pnlButtons.add(getButDelAll());
-//		}
-//		return pnlButtons;
-//	}
+	// private JPanel getPnlButtons() {
+	// if(pnlButtons == null) {
+	// pnlButtons = new JPanel();
+	// pnlButtons.add(getButDel());
+	// pnlButtons.add(getButDelAll());
+	// }
+	// return pnlButtons;
+	// }
 	/**
 	 * Obtains the button that is used to delete all the rows of the symbolTable
-	 *
+	 * 
 	 * @return JButton
 	 */
-//	private JButton getButDelAll() {
-//		if (btnDeleteAll == null) {
-//			btnDeleteAll = new JButton();
-//			btnDeleteAll.addActionListener(this);
-//			btnDeleteAll.setText(PluginServices.getText(this, "Quitar_todos"));
-//		}
-//		return btnDeleteAll;
-//	}
+	// private JButton getButDelAll() {
+	// if (btnDeleteAll == null) {
+	// btnDeleteAll = new JButton();
+	// btnDeleteAll.addActionListener(this);
+	// btnDeleteAll.setText(PluginServices.getText(this, "Quitar_todos"));
+	// }
+	// return btnDeleteAll;
+	// }
 	/**
 	 * Obtains the button that is used to delete a row of the symbolTable
-	 *
+	 * 
 	 * @return JButton
 	 */
-//	private JButton getButDel() {
-//		if (btnDelete == null) {
-//			btnDelete = new JButton();
-//			btnDelete.addActionListener(this);
-//			btnDelete.setText(PluginServices.getText(this, "Quitar"));
-//		}
-//
-//		return btnDelete;
-//	}
+	// private JButton getButDel() {
+	// if (btnDelete == null) {
+	// btnDelete = new JButton();
+	// btnDelete.addActionListener(this);
+	// btnDelete.setText(PluginServices.getText(this, "Quitar"));
+	// }
+	//
+	// return btnDelete;
+	// }
 	/**
 	 * Obtains the north panel
-	 *
+	 * 
 	 * @return JPanel
 	 */
 	private JPanel getPnlNorth() {
@@ -153,26 +158,28 @@ public class QuantityByCategory extends JPanel implements ILegendPanel, ActionLi
 
 		return pnlNorth;
 	}
+
 	/**
-	 * Obtains the panel where the user has the options to select the variation to be applied
-	 *
+	 * Obtains the panel where the user has the options to select the variation
+	 * to be applied
+	 * 
 	 * @return JPanel
 	 */
 	private JPanel getPnlColorAndSymbol() {
 		if (pnlColorAndSymbol == null) {
 			pnlColorAndSymbol = new JPanel();
-			pnlColorAndSymbol.setBorder(
-					BorderFactory.createTitledBorder(
-							null, PluginServices.getText(this, "variation_by")));
+			pnlColorAndSymbol.setBorder(BorderFactory.createTitledBorder(null,
+					PluginServices.getText(this, "variation_by")));
 			pnlColorAndSymbol.add(getBtnColor());
 			pnlColorAndSymbol.add(getBtnSymbol());
 		}
 
 		return pnlColorAndSymbol;
 	}
+
 	/**
 	 * Creates the button which is used to selecte the variation by symbol
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getBtnSymbol() {
@@ -182,9 +189,10 @@ public class QuantityByCategory extends JPanel implements ILegendPanel, ActionLi
 		}
 		return btnSymbol;
 	}
+
 	/**
 	 * Creates the button which is used to selecte the variation by color ramp
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getBtnColor() {
@@ -195,28 +203,32 @@ public class QuantityByCategory extends JPanel implements ILegendPanel, ActionLi
 
 		return btnColor;
 	}
+
 	/**
-	 * Creates the panel where the JComboBoxes to select the fields for the variation will be placed
-	 *
+	 * Creates the panel where the JComboBoxes to select the fields for the
+	 * variation will be placed
+	 * 
 	 * @return GridBagLayoutPanel
 	 */
 	private GridBagLayoutPanel getPnlFields() {
 		if (pnlFields == null) {
 			pnlFields = new GridBagLayoutPanel();
-			pnlFields.setBorder(
-					BorderFactory.createTitledBorder(
-							null, PluginServices.getText(this, "value_fields")));
+			pnlFields.setBorder(BorderFactory.createTitledBorder(null,
+					PluginServices.getText(this, "value_fields")));
+			pnlFields.addComponent(PluginServices.getText(this, "color_field"),
+					getCmbColorField());
 			pnlFields.addComponent(
-					PluginServices.getText(this, "color_field"), getCmbColorField());
-			pnlFields.addComponent(
-					PluginServices.getText(this, "symbol_field") ,getCmbGraduatedField());
+					PluginServices.getText(this, "symbol_field"),
+					getCmbGraduatedField());
 		}
 
 		return pnlFields;
 	}
+
 	/**
-	 * Creates a JComboBox where the user will select the field for the symbol variation
-	 *
+	 * Creates a JComboBox where the user will select the field for the symbol
+	 * variation
+	 * 
 	 * @return JComboBox
 	 */
 	private JComboBox getCmbGraduatedField() {
@@ -226,9 +238,11 @@ public class QuantityByCategory extends JPanel implements ILegendPanel, ActionLi
 		}
 		return cmbGraduatedSymbolField;
 	}
+
 	/**
-	 * Creates a JComboBox where the user will select the field for the color ramp variation
-	 *
+	 * Creates a JComboBox where the user will select the field for the color
+	 * ramp variation
+	 * 
 	 * @return JComboBox
 	 */
 	private JComboBox getCmbColorField() {
@@ -246,37 +260,38 @@ public class QuantityByCategory extends JPanel implements ILegendPanel, ActionLi
 		if (symbolTable != null)
 			pnlSouth.remove(symbolTable);
 
-
-		symbolTable = new SymbolTable(this, SymbolTable.INTERVALS_TYPE, FShape.MULTI);
-		pnlSouth.add(symbolTable,BorderLayout.CENTER);
+		symbolTable = new SymbolTable(this, SymbolTable.INTERVALS_TYPE,
+				FShape.MULTI);
+		pnlSouth.add(symbolTable, BorderLayout.CENTER);
 		fillFieldNames();
-
 
 		if (legend instanceof QuantityByCategoryLegend) {
 			try {
-				this.oldLegend = (QuantityByCategoryLegend) legend.cloneLegend();
+				this.oldLegend = (QuantityByCategoryLegend) legend
+						.cloneLegend();
 			} catch (XMLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			cmbColorField.setSelectedItem(this.oldLegend.getColorRampLegend().getClassifyingFieldNames()[0]);
-			cmbGraduatedSymbolField.setSelectedItem(this.oldLegend.getGraduatedSymbolLegend().getClassifyingFieldNames()[0]);
+			cmbColorField.setSelectedItem(this.oldLegend.getColorRampLegend()
+					.getClassifyingFieldNames()[0]);
+			cmbGraduatedSymbolField.setSelectedItem(this.oldLegend
+					.getGraduatedSymbolLegend().getClassifyingFieldNames()[0]);
 			symbolTable.removeAllItems();
 			symbolTable.fillTableFromSymbolList(this.oldLegend.getSymbols(),
-					this.oldLegend.getValues(),this.oldLegend.getDescriptions());
-
+					this.oldLegend.getValues(),
+					this.oldLegend.getDescriptions());
 
 		} else {
 			this.oldLegend = new QuantityByCategoryLegend();
-			this.oldLegend.setClassifyingFieldNames(
-					new String[] {
-							(String) getCmbColorField().getSelectedItem(),
-							(String) getCmbGraduatedField().getSelectedItem()
-					});
+			this.oldLegend.setClassifyingFieldNames(new String[] {
+					(String) getCmbColorField().getSelectedItem(),
+					(String) getCmbGraduatedField().getSelectedItem() });
 			try {
-				this.oldLegend.setShapeType(((FLyrVect)lyr).getShapeType());
+				this.oldLegend.setShapeType(((FLyrVect) lyr).getShapeType());
 			} catch (ReadDriverException e) {
-				NotificationManager.addError(PluginServices.getText(this, "getting_layer_shape_type"), e);
+				NotificationManager.addError(PluginServices.getText(this,
+						"getting_layer_shape_type"), e);
 			}
 		}
 	}
@@ -290,51 +305,58 @@ public class QuantityByCategory extends JPanel implements ILegendPanel, ActionLi
 		FLyrVect m = (FLyrVect) layer;
 		try {
 
-			if(this.oldLegend.getClassifyingFieldNames() != null) {
-				String[] fNames= this.oldLegend.getClassifyingFieldNames();
-				int[] fieldTypes  = new int[this.oldLegend.getClassifyingFieldNames().length];
+			if (this.oldLegend.getClassifyingFieldNames() != null) {
+				String[] fNames = this.oldLegend.getClassifyingFieldNames();
+				int[] fieldTypes = new int[this.oldLegend
+						.getClassifyingFieldNames().length];
 
 				for (int i = 0; i < this.oldLegend.getClassifyingFieldNames().length; i++) {
-					int fieldIndex = m.getSource().getRecordset().getFieldIndexByName(fNames[i]);
-					fieldTypes[i]= m.getSource().getRecordset().getFieldType(fieldIndex);
+					int fieldIndex = m.getSource().getRecordset()
+							.getFieldIndexByName(fNames[i]);
+					fieldTypes[i] = m.getSource().getRecordset()
+							.getFieldType(fieldIndex);
 				}
 
 				this.oldLegend.setClassifyingFieldTypes(fieldTypes);
 			}
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(PluginServices.getText(this, "could_not_setup_legend"), e);
+			NotificationManager.addError(
+					PluginServices.getText(this, "could_not_setup_legend"), e);
 		}
-
-
 
 		for (int row = 0; row < symbolTable.getRowCount(); row++) {
 
 			theInterval = (IInterval) symbolTable.getFieldValue(row, 1);
 			theSymbol = (ISymbol) symbolTable.getFieldValue(row, 0);
-			theSymbol.setDescription((String) symbolTable.getFieldValue(
-					row, 2));
-
+			theSymbol
+					.setDescription((String) symbolTable.getFieldValue(row, 2));
 
 			if (theSymbol instanceof IFillSymbol) {
-				this.oldLegend.getColorRampLegend().addSymbol(theInterval, theSymbol);
-			} else if (theSymbol instanceof IMarkerSymbol){
-				this.oldLegend.getGraduatedSymbolLegend().addSymbol(theInterval, theSymbol);
+				this.oldLegend.getColorRampLegend().addSymbol(theInterval,
+						theSymbol);
+			} else if (theSymbol instanceof IMarkerSymbol) {
+				this.oldLegend.getGraduatedSymbolLegend().addSymbol(
+						theInterval, theSymbol);
 			}
 
 		}
 
-		if(oldLegend.getColorRampLegend().isUseDefaultSymbol())
-			this.oldLegend.getColorRampLegend().addSymbol(new NullIntervalValue(),oldLegend.getColorRampLegend().getDefaultSymbol());
-		if(oldLegend.getGraduatedSymbolLegend().isUseDefaultSymbol())
-			this.oldLegend.getGraduatedSymbolLegend().addSymbol(new NullIntervalValue(),oldLegend.getGraduatedSymbolLegend().getDefaultSymbol());
-
+		if (oldLegend.getColorRampLegend().isUseDefaultSymbol())
+			this.oldLegend.getColorRampLegend().addSymbol(
+					new NullIntervalValue(),
+					oldLegend.getColorRampLegend().getDefaultSymbol());
+		if (oldLegend.getGraduatedSymbolLegend().isUseDefaultSymbol())
+			this.oldLegend.getGraduatedSymbolLegend().addSymbol(
+					new NullIntervalValue(),
+					oldLegend.getGraduatedSymbolLegend().getDefaultSymbol());
 
 	}
 
 	public ILegend getLegend() {
 		fillSymbolListFromTable();
 		try {
-			this.legend = (QuantityByCategoryLegend) this.oldLegend.cloneLegend();
+			this.legend = (QuantityByCategoryLegend) this.oldLegend
+					.cloneLegend();
 		} catch (XMLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -344,12 +366,13 @@ public class QuantityByCategory extends JPanel implements ILegendPanel, ActionLi
 	}
 
 	public String getDescription() {
-		return PluginServices.getText(this, "draw_quantities_for_each_category");
+		return PluginServices
+				.getText(this, "draw_quantities_for_each_category");
 	}
 
 	public ImageIcon getIcon() {
-		return new ImageIcon(this.getClass().getClassLoader().
-				getResource("images/QuantitiesByCategory.png"));
+		return new ImageIcon(this.getClass().getClassLoader()
+				.getResource("images/QuantitiesByCategory.png"));
 	}
 
 	public Class getParentClass() {
@@ -372,11 +395,12 @@ public class QuantityByCategory extends JPanel implements ILegendPanel, ActionLi
 		JComponent c = (JComponent) e.getSource();
 
 		if (c.equals(getBtnColor())) {
-			VectorialIntervalLegend colorRamp = this.oldLegend.getColorRampLegend();
+			VectorialIntervalLegend colorRamp = this.oldLegend
+					.getColorRampLegend();
 			String fieldName = (String) getCmbColorField().getSelectedItem();
 			if (!fieldName.equals(colorRamp.getClassifyingFieldNames()[0])) {
 				// if classification field has changed, clear the legend
-				colorRamp.setClassifyingFieldNames(new String[] {fieldName});
+				colorRamp.setClassifyingFieldNames(new String[] { fieldName });
 				colorRamp.clear();
 			}
 			// create a new modal window to edit the color ramp legend
@@ -384,23 +408,31 @@ public class QuantityByCategory extends JPanel implements ILegendPanel, ActionLi
 			legPanel.setData(layer, colorRamp);
 			InnerWindow window = new InnerWindow(legPanel);
 			PluginServices.getMDIManager().addWindow(window);
-			cmbColorField.setSelectedItem(colorRamp.getClassifyingFieldNames()[0].toString());
+			cmbColorField
+					.setSelectedItem(colorRamp.getClassifyingFieldNames()[0]
+							.toString());
 			ILegend newLegend = window.getLegend();
-			if(newLegend != null){
+			if (newLegend != null) {
 				this.oldLegend.getColorRampLegend().clear();
 
 				this.oldLegend.setColorRampLegend(newLegend);
 			}
 			symbolTable.removeAllItems();
 			symbolTable.fillTableFromSymbolList(this.oldLegend.getSymbols(),
-					this.oldLegend.getValues(),this.oldLegend.getDescriptions());
+					this.oldLegend.getValues(),
+					this.oldLegend.getDescriptions());
 		} else if (c.equals(getBtnSymbol())) {
-			GraduatedSymbolLegend graduatedSymbol = this.oldLegend.getGraduatedSymbolLegend();
-			String fieldName = (String) getCmbGraduatedField().getSelectedItem();
-			if (!fieldName.equals(graduatedSymbol.getClassifyingFieldNames()[0])) {
+			GraduatedSymbolLegend graduatedSymbol = this.oldLegend
+					.getGraduatedSymbolLegend();
+			String fieldName = (String) getCmbGraduatedField()
+					.getSelectedItem();
+			if (!fieldName
+					.equals(graduatedSymbol.getClassifyingFieldNames()[0])) {
 				// if classification field has changed, clear the legend
-				graduatedSymbol.setClassifyingFieldNames(new String[] {fieldName});
-				graduatedSymbol.setDefaultSymbol(SymbologyFactory.createDefaultSymbolByShapeType(FShape.POINT));
+				graduatedSymbol
+						.setClassifyingFieldNames(new String[] { fieldName });
+				graduatedSymbol.setDefaultSymbol(SymbologyFactory
+						.createDefaultSymbolByShapeType(FShape.POINT));
 				graduatedSymbol.setMinSymbolSize(1);
 				graduatedSymbol.setMaxSymbolSize(14);
 				graduatedSymbol.clear();
@@ -410,37 +442,44 @@ public class QuantityByCategory extends JPanel implements ILegendPanel, ActionLi
 			legPanel.setData(layer, graduatedSymbol);
 			InnerWindow window = new InnerWindow(legPanel);
 			PluginServices.getMDIManager().addWindow(window);
-			cmbGraduatedSymbolField.setSelectedItem(graduatedSymbol.getClassifyingFieldNames()[0].toString());
+			cmbGraduatedSymbolField.setSelectedItem(graduatedSymbol
+					.getClassifyingFieldNames()[0].toString());
 			ILegend newLegend = window.getLegend();
-			if(newLegend != null){
+			if (newLegend != null) {
 				this.oldLegend.getGraduatedSymbolLegend().clear();
 				this.oldLegend.setGraduateSymbolLegend(newLegend);
 			}
 			symbolTable.removeAllItems();
 			symbolTable.fillTableFromSymbolList(this.oldLegend.getSymbols(),
-					this.oldLegend.getValues(),this.oldLegend.getDescriptions());
+					this.oldLegend.getValues(),
+					this.oldLegend.getDescriptions());
 		}
 
 		else if (c.equals(getCmbColorField())) {
 			symbolTable.removeAllItems();
-			symbolTable.fillTableFromSymbolList(this.oldLegend.getGraduatedSymbolLegend().getSymbols(),
-					this.oldLegend.getGraduatedSymbolLegend().getValues(),this.oldLegend.getDescriptions());
+			symbolTable.fillTableFromSymbolList(this.oldLegend
+					.getGraduatedSymbolLegend().getSymbols(), this.oldLegend
+					.getGraduatedSymbolLegend().getValues(), this.oldLegend
+					.getDescriptions());
 		}
 
 		else if (c.equals(getCmbGraduatedField())) {
 			symbolTable.removeAllItems();
-			symbolTable.fillTableFromSymbolList(this.oldLegend.getColorRampLegend().getSymbols(),
-					this.oldLegend.getColorRampLegend().getValues(),this.oldLegend.getDescriptions());
+			symbolTable.fillTableFromSymbolList(this.oldLegend
+					.getColorRampLegend().getSymbols(), this.oldLegend
+					.getColorRampLegend().getValues(), this.oldLegend
+					.getDescriptions());
 		}
 
-//		if (c.equals(getButDel())) {
-//			symbolTable.removeSelectedRows();
-//		}
-//
-//		else if(c.equals(getButDelAll())) {
-//			symbolTable.removeAllItems();
-//		}
+		// if (c.equals(getButDel())) {
+		// symbolTable.removeSelectedRows();
+		// }
+		//
+		// else if(c.equals(getButDelAll())) {
+		// symbolTable.removeAllItems();
+		// }
 	}
+
 	private class InnerWindow extends JPanel implements IWindow {
 		private ActionListener okAction = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -456,11 +495,13 @@ public class QuantityByCategory extends JPanel implements ILegendPanel, ActionLi
 		private ILegend legend;
 		private ILegendPanel panel;
 		private WindowInfo wi;
+
 		public InnerWindow(ILegendPanel panel) {
 			this.panel = panel;
 			this.setLayout(new BorderLayout());
 			add((JComponent) panel, BorderLayout.NORTH);
-			add(new AcceptCancelPanel(okAction, cancelAction), BorderLayout.SOUTH);
+			add(new AcceptCancelPanel(okAction, cancelAction),
+					BorderLayout.SOUTH);
 		}
 
 		public ILegend getLegend() {
@@ -469,7 +510,8 @@ public class QuantityByCategory extends JPanel implements ILegendPanel, ActionLi
 
 		public WindowInfo getWindowInfo() {
 			if (wi == null) {
-				wi = new WindowInfo(WindowInfo.MODALDIALOG | WindowInfo.RESIZABLE);
+				wi = new WindowInfo(WindowInfo.MODALDIALOG
+						| WindowInfo.RESIZABLE);
 				JComponent c = (JComponent) panel;
 				wi.setWidth(c.getWidth());
 				wi.setHeight(c.getHeight());
@@ -482,19 +524,20 @@ public class QuantityByCategory extends JPanel implements ILegendPanel, ActionLi
 			return WindowInfo.DIALOG_PROFILE;
 		}
 
-
 	}
+
 	/**
-	 * Fills the comboboxes that are placed in the panel with the classifying field names of the layer
-	 *
+	 * Fills the comboboxes that are placed in the panel with the classifying
+	 * field names of the layer
+	 * 
 	 */
 	protected void fillFieldNames() {
 		SelectableDataSource rs = null;
 		ArrayList<String> nomFields = null;
 
 		try {
-			if (layer instanceof FLyrVect){
-				rs = ((FLyrVect)layer).getRecordset();
+			if (layer instanceof FLyrVect) {
+				rs = ((FLyrVect) layer).getRecordset();
 			} else {
 				rs = ((AlphanumericData) layer).getRecordset();
 			}
@@ -510,17 +553,16 @@ public class QuantityByCategory extends JPanel implements ILegendPanel, ActionLi
 					continue;
 				}
 
-				if ((type == Types.INTEGER) ||
-						(type == Types.DOUBLE) ||
-						(type == Types.FLOAT) ||
-						(type == Types.BIGINT)) {
+				if ((type == Types.INTEGER) || (type == Types.DOUBLE)
+						|| (type == Types.FLOAT) || (type == Types.BIGINT)) {
 					nomFields.add(rs.getFieldAlias(i).trim());
 				}
 			}
 
 			rs.stop();
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(PluginServices.getText(this, "recovering_recordset"), e);
+			NotificationManager.addError(
+					PluginServices.getText(this, "recovering_recordset"), e);
 		}
 
 		DefaultComboBoxModel cM = new DefaultComboBoxModel(nomFields.toArray());
@@ -530,12 +572,15 @@ public class QuantityByCategory extends JPanel implements ILegendPanel, ActionLi
 
 		symbolTable.removeAllItems();
 	}
+
 	/**
 	 * Checks if an specific field contains numerical data
-	 *
-	 * @param fieldType	index of the field
-	 *
-	 * @return boolean	true or false depending on the type of data (numerical or not)
+	 * 
+	 * @param fieldType
+	 *            index of the field
+	 * 
+	 * @return boolean true or false depending on the type of data (numerical or
+	 *         not)
 	 */
 	private boolean isNumericField(int fieldType) {
 		switch (fieldType) {
@@ -560,7 +605,7 @@ public class QuantityByCategory extends JPanel implements ILegendPanel, ActionLi
 			try {
 				FLyrVect lyr = (FLyrVect) layer;
 
-				if ((lyr.getShapeType()%FShape.Z) != FShape.POLYGON)
+				if ((lyr.getShapeType() % FShape.Z) != FShape.POLYGON)
 					return false;
 
 				SelectableDataSource sds;

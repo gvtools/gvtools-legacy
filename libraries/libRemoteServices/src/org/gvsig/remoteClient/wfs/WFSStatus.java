@@ -78,23 +78,24 @@ import org.gvsig.remoteClient.wfs.filters.FilterEncoding;
  */
 /**
  * The status of the current WFS connection
+ * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class WFSStatus extends RemoteClientStatus{
-	static final String LOCKACTION_ALL = "ALL"; 
-	static final String LOCKACTION_SOME = "SOME"; 
-	//WFS attributes
+public class WFSStatus extends RemoteClientStatus {
+	static final String LOCKACTION_ALL = "ALL";
+	static final String LOCKACTION_SOME = "SOME";
+	// WFS attributes
 	private String featureName = null;
 	private String namespacePrefix = null;
 	private String namespace = null;
 	private String[] fields = null;
 	private String onlineResource = null;
-	private Rectangle2D	bBox = null;
+	private Rectangle2D bBox = null;
 	private int timeout = 10000;
-	private int buffer = 100;	
+	private int buffer = 100;
 	private String filterQuery = null;
 	private String filterVisualText = null;
-	//WFS-T LockFeature attributes
+	// WFS-T LockFeature attributes
 	private String userName = null;
 	private String password = null;
 	private ArrayList featuresToLock = new ArrayList();
@@ -105,17 +106,17 @@ public class WFSStatus extends RemoteClientStatus{
 	private String lockAction = null;
 	private Rectangle2D lockedArea = null;
 	private String lockedAreaProperty = null;
-	//WFS-T Transaction
+	// WFS-T Transaction
 	private ArrayList transactions = null;
-	//If the user want to send he a lockFeature
+	// If the user want to send he a lockFeature
 	private boolean isLockFeaturesEnabled = true;
 	private boolean isSRSBasedOnXML = true;
 
-	public WFSStatus(String featureName){
+	public WFSStatus(String featureName) {
 		this(featureName, null);
 	}
 
-	public WFSStatus(String featureName,String nameSpace){
+	public WFSStatus(String featureName, String nameSpace) {
 		this.featureName = featureName;
 		this.namespacePrefix = nameSpace;
 		lockAction = LOCKACTION_ALL;
@@ -133,14 +134,13 @@ public class WFSStatus extends RemoteClientStatus{
 		return bBox;
 	}
 
-
 	/**
-	 * @param box The bBox to set.
+	 * @param box
+	 *            The bBox to set.
 	 */
 	public void setBBox(Rectangle2D box) {
 		bBox = box;
 	}
-
 
 	/**
 	 * @return Returns the buffer.
@@ -149,14 +149,13 @@ public class WFSStatus extends RemoteClientStatus{
 		return buffer;
 	}
 
-
 	/**
-	 * @param buffer The buffer to set.
+	 * @param buffer
+	 *            The buffer to set.
 	 */
 	public void setBuffer(int buffer) {
 		this.buffer = buffer;
 	}
-
 
 	/**
 	 * @return Returns the featureName.
@@ -165,9 +164,9 @@ public class WFSStatus extends RemoteClientStatus{
 		return featureName;
 	}
 
-
 	/**
-	 * @param featureName The featureName to set.
+	 * @param featureName
+	 *            The featureName to set.
 	 */
 	public void setFeatureName(String featureName) {
 		this.featureName = featureName;
@@ -177,20 +176,19 @@ public class WFSStatus extends RemoteClientStatus{
 	 * @return Returns the fields.
 	 */
 	public String[] getFields() {
-		if (fields == null){
+		if (fields == null) {
 			fields = new String[0];
 		}
 		return fields;
 	}
 
-
 	/**
-	 * @param fields The fields to set.
+	 * @param fields
+	 *            The fields to set.
 	 */
 	public void setFields(String[] fields) {
 		this.fields = fields;
 	}
-
 
 	/**
 	 * @return Returns the password.
@@ -199,14 +197,13 @@ public class WFSStatus extends RemoteClientStatus{
 		return password;
 	}
 
-
 	/**
-	 * @param password The password to set.
+	 * @param password
+	 *            The password to set.
 	 */
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
 
 	/**
 	 * @return Returns the timeout.
@@ -215,14 +212,13 @@ public class WFSStatus extends RemoteClientStatus{
 		return timeout;
 	}
 
-
 	/**
-	 * @param timeout The timeout to set.
+	 * @param timeout
+	 *            The timeout to set.
 	 */
 	public void setTimeout(int timeout) {
 		this.timeout = timeout;
 	}
-
 
 	/**
 	 * @return Returns the userName.
@@ -231,9 +227,9 @@ public class WFSStatus extends RemoteClientStatus{
 		return userName;
 	}
 
-
 	/**
-	 * @param userName The userName to set.
+	 * @param userName
+	 *            The userName to set.
 	 */
 	public void setUserName(String userName) {
 		this.userName = userName;
@@ -242,7 +238,6 @@ public class WFSStatus extends RemoteClientStatus{
 	public String getOnlineResource() {
 		return onlineResource;
 	}
-
 
 	public void setOnlineResource(String url) {
 		onlineResource = url;
@@ -256,7 +251,8 @@ public class WFSStatus extends RemoteClientStatus{
 	}
 
 	/**
-	 * @param filterQuery The filterQuery to set.
+	 * @param filterQuery
+	 *            The filterQuery to set.
 	 */
 	public void setFilterQuery(String filterQuery) {
 		this.filterQuery = filterQuery;
@@ -274,7 +270,8 @@ public class WFSStatus extends RemoteClientStatus{
 	/**
 	 * Sets the text of filtering that user will see in interface.
 	 * 
-	 * @param filterVisualText An String (that must have a WFS-Visual-Filter-Query format)
+	 * @param filterVisualText
+	 *            An String (that must have a WFS-Visual-Filter-Query format)
 	 */
 	public void setFilterVisualText(String _filterVisualText) {
 		this.filterVisualText = _filterVisualText;
@@ -288,7 +285,7 @@ public class WFSStatus extends RemoteClientStatus{
 		filter.setQualified(true);
 		filter.setNamepacePrefix(null);
 		filter.setHasBlankSpaces(false);
-		return getFilterQueryLocked(filter);	
+		return getFilterQueryLocked(filter);
 	}
 
 	/**
@@ -302,28 +299,30 @@ public class WFSStatus extends RemoteClientStatus{
 
 	/**
 	 * Create a filter encoding request
+	 * 
 	 * @param filter
 	 * @return
 	 */
-	private String getFilterQueryLocked(FilterEncoding filter){
-		if ((featuresToLock.size() == 0) && 
-				(getLockedArea() == null) &&
-				(featuresToLockPropertieName.size() == 0)){
+	private String getFilterQueryLocked(FilterEncoding filter) {
+		if ((featuresToLock.size() == 0) && (getLockedArea() == null)
+				&& (featuresToLockPropertieName.size() == 0)) {
 			return null;
 		}
-		for (int i=0 ; i<featuresToLock.size() ; i++){
+		for (int i = 0; i < featuresToLock.size(); i++) {
 			filter.addFeatureById(featuresToLock.get(i));
 		}
-		if (featuresToLockPropertieName.size() > 0){
-			for (int i=0 ; i<featuresToLockPropertieName.size() ; i++){
-				filter.addAndClause((String)featuresToLockPropertieName.get(i),
-						(String)featuresToLockPropertieValue.get(i));						
-			}				
+		if (featuresToLockPropertieName.size() > 0) {
+			for (int i = 0; i < featuresToLockPropertieName.size(); i++) {
+				filter.addAndClause(
+						(String) featuresToLockPropertieName.get(i),
+						(String) featuresToLockPropertieValue.get(i));
+			}
 		}
-		if (lockedArea != null){
-			filter.setBBox(lockedArea, lockedAreaProperty, getSrs(), AFilter.BBOX_ENCLOSES);
+		if (lockedArea != null) {
+			filter.setBBox(lockedArea, lockedAreaProperty, getSrs(),
+					AFilter.BBOX_ENCLOSES);
 		}
-		return filter.toString();	
+		return filter.toString();
 	}
 
 	/**
@@ -334,7 +333,8 @@ public class WFSStatus extends RemoteClientStatus{
 	}
 
 	/**
-	 * @param expiry the expiry to set
+	 * @param expiry
+	 *            the expiry to set
 	 */
 	public void setExpiry(int expiry) {
 		this.expiry = expiry;
@@ -370,28 +370,28 @@ public class WFSStatus extends RemoteClientStatus{
 
 	/**
 	 * Gets an transaction
+	 * 
 	 * @param i
-	 * Transaction position
-	 * @return
-	 * A transaction
+	 *            Transaction position
+	 * @return A transaction
 	 */
-	public WFSTTransaction getTransactionAt(int i){
-		if (i>getTransactionsSize()){
+	public WFSTTransaction getTransactionAt(int i) {
+		if (i > getTransactionsSize()) {
 			return null;
 		}
-		return (WFSTTransaction)transactions.get(i);
+		return (WFSTTransaction) transactions.get(i);
 	}
 
 	/**
 	 * Adds a new transaction
-	 * @param transactions the transactions to add
+	 * 
+	 * @param transactions
+	 *            the transactions to add
 	 */
 	public WFSTTransaction createTransaction(String version) {
-		WFSTTransaction transaction = WFSTransactionFactory.createTransaction(version,
-				getFeatureName(),
-				getNamespacePrefix(),
-				getNamespace(),
-				featuresLocked);
+		WFSTTransaction transaction = WFSTransactionFactory.createTransaction(
+				version, getFeatureName(), getNamespacePrefix(),
+				getNamespace(), featuresLocked);
 		transactions.add(transaction);
 		return transaction;
 	}
@@ -405,16 +405,16 @@ public class WFSStatus extends RemoteClientStatus{
 
 	/**
 	 * Gets an identifier of a feature that is blocked
+	 * 
 	 * @param i
-	 * The id position
-	 * @return
-	 * The Id
+	 *            The id position
+	 * @return The Id
 	 */
-	public String getFeatureToLockAt(int i){
-		if (i>featuresToLock.size()){
+	public String getFeatureToLockAt(int i) {
+		if (i > featuresToLock.size()) {
 			return null;
 		}
-		return (String)featuresToLock.get(i);
+		return (String) featuresToLock.get(i);
 	}
 
 	/**
@@ -429,8 +429,9 @@ public class WFSStatus extends RemoteClientStatus{
 
 	/**
 	 * Adds a new feature locked
+	 * 
 	 * @param idFeature
-	 * the feature id
+	 *            the feature id
 	 */
 	public void addFeatureToLock(String idFeature) {
 		featuresToLock.add(idFeature);
@@ -438,10 +439,11 @@ public class WFSStatus extends RemoteClientStatus{
 
 	/**
 	 * Adds a new feature locked
+	 * 
 	 * @param idFeature
-	 * the feature id
+	 *            the feature id
 	 */
-	public void addFeatureToLock(String propertyName, String propertyValue){
+	public void addFeatureToLock(String propertyName, String propertyValue) {
 		featuresToLockPropertieName.add(propertyName);
 		featuresToLockPropertieValue.add(propertyValue);
 	}
@@ -455,22 +457,23 @@ public class WFSStatus extends RemoteClientStatus{
 
 	/**
 	 * Gets an identifier tha is blocked
+	 * 
 	 * @param i
-	 * The id position
-	 * @return
-	 * The Id
+	 *            The id position
+	 * @return The Id
 	 */
-	public String getFeatureLockedAt(int i){
-		if (i>featuresLocked.size()){
+	public String getFeatureLockedAt(int i) {
+		if (i > featuresLocked.size()) {
 			return null;
 		}
-		return (String)featuresLocked.get(i);
+		return (String) featuresLocked.get(i);
 	}
 
 	/**
 	 * Adds a new Id
+	 * 
 	 * @param idLocked
-	 * the idLocked to add
+	 *            the idLocked to add
 	 */
 	public void addFeatureLocked(String lockId) {
 		featuresLocked.add(lockId);
@@ -484,7 +487,8 @@ public class WFSStatus extends RemoteClientStatus{
 	}
 
 	/**
-	 * @param lockedArea the lockedArea to set
+	 * @param lockedArea
+	 *            the lockedArea to set
 	 */
 	public void setLockedArea(Rectangle2D lockedArea, String lockedAreaProperty) {
 		this.lockedArea = lockedArea;
@@ -494,38 +498,40 @@ public class WFSStatus extends RemoteClientStatus{
 	/**
 	 * @return the namespace prefix
 	 */
-	public String getNamespacePrefix(){
+	public String getNamespacePrefix() {
 		return namespacePrefix;
 	}
 
 	/**
 	 * @return the namespace URL
 	 */
-	public String getNamespace(){
+	public String getNamespace() {
 		return namespace;
 	}
 
 	/**
-	 * @param namespaceprefix the namespaceprefix to set
+	 * @param namespaceprefix
+	 *            the namespaceprefix to set
 	 */
 	public void setNamespacePrefix(String namespacePrefix) {
 		this.namespacePrefix = namespacePrefix;
 	}
 
 	/**
-	 * @param namespace the namespace to set
+	 * @param namespace
+	 *            the namespace to set
 	 */
 	public void setNamespace(String namespace) {
 		this.namespace = namespace;
-		if (namespace != null){
+		if (namespace != null) {
 			int index = namespace.indexOf(":");
-			if (index > -1){
+			if (index > -1) {
 				namespacePrefix = namespace.substring(0, index);
 				namespace = namespace.substring(index, namespace.length());
 			}
-		}		
+		}
 	}
-	
+
 	/**
 	 * @return the isLockFeaturesEnabled
 	 */
@@ -534,7 +540,8 @@ public class WFSStatus extends RemoteClientStatus{
 	}
 
 	/**
-	 * @param isLockFeaturesEnabled the isLockFeaturesEnabled to set
+	 * @param isLockFeaturesEnabled
+	 *            the isLockFeaturesEnabled to set
 	 */
 	public void setLockFeaturesEnabled(boolean isLockFeaturesEnabled) {
 		this.isLockFeaturesEnabled = isLockFeaturesEnabled;
@@ -548,7 +555,8 @@ public class WFSStatus extends RemoteClientStatus{
 	}
 
 	/**
-	 * @param isSRSBasedOnXML the isSRSBasedOnXML to set
+	 * @param isSRSBasedOnXML
+	 *            the isSRSBasedOnXML to set
 	 */
 	public void setSRSBasedOnXML(boolean isSRSBasedOnXML) {
 		this.isSRSBasedOnXML = isSRSBasedOnXML;

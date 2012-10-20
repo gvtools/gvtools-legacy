@@ -31,6 +31,7 @@ import org.gvsig.raster.datastruct.ColorTable;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
 import org.kxml2.io.KXmlParser;
 import org.xmlpull.v1.XmlPullParserException;
+
 /**
  * <P>
  * Clase para convertir a XML una tabla de color y obtener la tabla desde XML.
@@ -48,14 +49,14 @@ import org.xmlpull.v1.XmlPullParserException;
  * &nbsp;&lt;Alpha value="0.0" number="255" interpolated="50"/><BR>
  * &nbsp;&lt;NoData rgba="#"><BR>
  * &lt;/ColorTable><BR>
- *
+ * 
  * @version 23/04/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class ColorTableRmfSerializer extends ClassSerializer {
 	private final String MAIN_TAG = "ColorTable";
 
-	private ColorTable  colorTable = null;
+	private ColorTable colorTable = null;
 
 	/**
 	 * Registra ColorTableRmfSerializer en los puntos de extension de Serializer
@@ -64,10 +65,12 @@ public class ColorTableRmfSerializer extends ClassSerializer {
 		ExtensionPoint point = ExtensionPoint.getExtensionPoint("Serializer");
 		point.register("ColorTable", ColorTableRmfSerializer.class);
 	}
-	
+
 	/**
 	 * Constructor. Asigna la tabla a serializar.
-	 * @param ColorTable tabla a convertir en XML
+	 * 
+	 * @param ColorTable
+	 *            tabla a convertir en XML
 	 */
 	public ColorTableRmfSerializer(ColorTable colorTable) {
 		this.colorTable = colorTable;
@@ -82,6 +85,7 @@ public class ColorTableRmfSerializer extends ClassSerializer {
 	/**
 	 * Devuelve el color si lo encuentra en el arraylist y lo elimina, en caso
 	 * contrario devuelve null
+	 * 
 	 * @param list
 	 * @param value
 	 * @return
@@ -97,6 +101,7 @@ public class ColorTableRmfSerializer extends ClassSerializer {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.io.rmf.IRmfBlock#read(java.lang.String)
 	 */
 	public void read(String xml) throws ParsingException {
@@ -128,62 +133,99 @@ public class ColorTableRmfSerializer extends ClassSerializer {
 
 				while (tag != KXmlParser.END_DOCUMENT) {
 					switch (tag) {
-						case KXmlParser.START_TAG:
-							if (parser.getName().equals("Color")) {
-								ColorItem colorItem = new ColorItem();
-								int a = 255;
-								for (int i = 0; i < parser.getAttributeCount(); i++) {
-									if (parser.getAttributeName(i).equals("value")) {
-										colorItem.setValue(Double.parseDouble((String) parser.getAttributeValue(i)));
-										ColorItem aux = getColorItem(rows, Double.parseDouble((String) parser.getAttributeValue(i)));
-										if (aux != null)
-											a = aux.getColor().getAlpha();
-									}
-									if (parser.getAttributeName(i).equals("name")) {
-										colorItem.setNameClass((String) parser.getAttributeValue(i));
-									}
-									if (parser.getAttributeName(i).equals("rgb")) {
-										String rgb = parser.getAttributeValue(i);
-										int r = Integer.valueOf(rgb.substring(0, rgb.indexOf(","))).intValue();
-										int g = Integer.valueOf(rgb.substring(rgb.indexOf(",") + 1, rgb.lastIndexOf(","))).intValue();
-										int b = Integer.valueOf(rgb.substring(rgb.lastIndexOf(",") + 1, rgb.length())).intValue();
-
-										colorItem.setColor(new Color(r, g, b, a));
-									}
-									if (parser.getAttributeName(i).equals("interpolated")) {
-										colorItem.setInterpolated(Double.parseDouble((String) parser.getAttributeValue(i)));
-									}
+					case KXmlParser.START_TAG:
+						if (parser.getName().equals("Color")) {
+							ColorItem colorItem = new ColorItem();
+							int a = 255;
+							for (int i = 0; i < parser.getAttributeCount(); i++) {
+								if (parser.getAttributeName(i).equals("value")) {
+									colorItem.setValue(Double
+											.parseDouble((String) parser
+													.getAttributeValue(i)));
+									ColorItem aux = getColorItem(rows,
+											Double.parseDouble((String) parser
+													.getAttributeValue(i)));
+									if (aux != null)
+										a = aux.getColor().getAlpha();
 								}
-
-								rows.add(colorItem);
-								break;
-							}
-							if (parser.getName().equals("Alpha")) {
-								ColorItem colorItem = new ColorItem();
-								for (int i = 0; i < parser.getAttributeCount(); i++) {
-									if (parser.getAttributeName(i).equals("value")) {
-										colorItem.setValue(Double.parseDouble((String) parser.getAttributeValue(i)));
-										ColorItem aux = getColorItem(rows, Double.parseDouble((String) parser.getAttributeValue(i)));
-										if (aux != null) {
-											colorItem.setNameClass(aux.getNameClass());
-											colorItem.setInterpolated(aux.getInterpolated());
-											colorItem.setColor(new Color(aux.getColor().getRed(), aux.getColor().getGreen(), aux.getColor().getBlue(), colorItem.getColor().getAlpha()));
-										}
-									}
-									if (parser.getAttributeName(i).equals("alpha")) {
-										int a = Integer.parseInt(parser.getAttributeValue(i));
-
-										colorItem.setColor(new Color(colorItem.getColor().getRed(), colorItem.getColor().getGreen(), colorItem.getColor().getBlue(), a));
-									}
-									if (parser.getAttributeName(i).equals("interpolated")) {
-										colorItem.setInterpolated(Double.parseDouble((String) parser.getAttributeValue(i)));
-									}
+								if (parser.getAttributeName(i).equals("name")) {
+									colorItem.setNameClass((String) parser
+											.getAttributeValue(i));
 								}
+								if (parser.getAttributeName(i).equals("rgb")) {
+									String rgb = parser.getAttributeValue(i);
+									int r = Integer.valueOf(
+											rgb.substring(0, rgb.indexOf(",")))
+											.intValue();
+									int g = Integer.valueOf(
+											rgb.substring(rgb.indexOf(",") + 1,
+													rgb.lastIndexOf(",")))
+											.intValue();
+									int b = Integer.valueOf(
+											rgb.substring(
+													rgb.lastIndexOf(",") + 1,
+													rgb.length())).intValue();
 
-								rows.add(colorItem);
-								break;
+									colorItem.setColor(new Color(r, g, b, a));
+								}
+								if (parser.getAttributeName(i).equals(
+										"interpolated")) {
+									colorItem.setInterpolated(Double
+											.parseDouble((String) parser
+													.getAttributeValue(i)));
+								}
 							}
+
+							rows.add(colorItem);
 							break;
+						}
+						if (parser.getName().equals("Alpha")) {
+							ColorItem colorItem = new ColorItem();
+							for (int i = 0; i < parser.getAttributeCount(); i++) {
+								if (parser.getAttributeName(i).equals("value")) {
+									colorItem.setValue(Double
+											.parseDouble((String) parser
+													.getAttributeValue(i)));
+									ColorItem aux = getColorItem(rows,
+											Double.parseDouble((String) parser
+													.getAttributeValue(i)));
+									if (aux != null) {
+										colorItem.setNameClass(aux
+												.getNameClass());
+										colorItem.setInterpolated(aux
+												.getInterpolated());
+										colorItem
+												.setColor(new Color(aux
+														.getColor().getRed(),
+														aux.getColor()
+																.getGreen(),
+														aux.getColor()
+																.getBlue(),
+														colorItem.getColor()
+																.getAlpha()));
+									}
+								}
+								if (parser.getAttributeName(i).equals("alpha")) {
+									int a = Integer.parseInt(parser
+											.getAttributeValue(i));
+
+									colorItem.setColor(new Color(colorItem
+											.getColor().getRed(), colorItem
+											.getColor().getGreen(), colorItem
+											.getColor().getBlue(), a));
+								}
+								if (parser.getAttributeName(i).equals(
+										"interpolated")) {
+									colorItem.setInterpolated(Double
+											.parseDouble((String) parser
+													.getAttributeValue(i)));
+								}
+							}
+
+							rows.add(colorItem);
+							break;
+						}
+						break;
 					}
 
 					tag = parser.next();
@@ -204,6 +246,7 @@ public class ColorTableRmfSerializer extends ClassSerializer {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.io.rmf.IRmfBlock#write()
 	 */
 	public String write() {
@@ -212,7 +255,10 @@ public class ColorTableRmfSerializer extends ClassSerializer {
 		if (colorTable == null)
 			return "";
 
-		b.append("<" + MAIN_TAG + " name=\"" + colorTable.getName() + "\" interpolated=\"" + (colorTable.isInterpolated()?"1":"0") + "\" version=\"1.1\">\n");
+		b.append("<" + MAIN_TAG + " name=\"" + colorTable.getName()
+				+ "\" interpolated=\""
+				+ (colorTable.isInterpolated() ? "1" : "0")
+				+ "\" version=\"1.1\">\n");
 
 		for (int i = 0; i < colorTable.getColorItems().size(); i++) {
 			b.append("\t<Color");
@@ -220,7 +266,8 @@ public class ColorTableRmfSerializer extends ClassSerializer {
 			b.append(" value=\"" + colorItem.getValue() + "\"");
 			b.append(" name=\"" + colorItem.getNameClass() + "\"");
 			Color c = colorItem.getColor();
-			b.append(" rgb=\"" + c.getRed() + "," + c.getGreen() + "," + c.getBlue() + "\"");
+			b.append(" rgb=\"" + c.getRed() + "," + c.getGreen() + ","
+					+ c.getBlue() + "\"");
 			b.append(" interpolated=\"" + colorItem.getInterpolated() + "\"");
 			b.append("/>\n");
 		}
@@ -241,6 +288,7 @@ public class ColorTableRmfSerializer extends ClassSerializer {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.io.rmf.IRmfBlock#getResult()
 	 */
 	public Object getResult() {
@@ -249,6 +297,7 @@ public class ColorTableRmfSerializer extends ClassSerializer {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.io.rmf.IRmfBlock#getMainTag()
 	 */
 	public String getMainTag() {

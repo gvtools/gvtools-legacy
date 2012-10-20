@@ -46,10 +46,9 @@ import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.cit.gvsig.project.documents.table.ProjectTable;
 import com.iver.cit.gvsig.project.documents.table.gui.Table;
 
-
 /**
  * Extensión para borrar los link existentes entre tablas.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class RemoveTableLink extends Extension {
@@ -66,7 +65,7 @@ public class RemoveTableLink extends Extension {
 	public void execute(String actionCommand) {
 		Table t = (Table) PluginServices.getMDIManager().getActiveWindow();
 		ProjectTable pt = t.getModel();
-		pt.removeLinkTable();//restoreDataSource();
+		pt.removeLinkTable();// restoreDataSource();
 		t.getModel().setModified(true);
 	}
 

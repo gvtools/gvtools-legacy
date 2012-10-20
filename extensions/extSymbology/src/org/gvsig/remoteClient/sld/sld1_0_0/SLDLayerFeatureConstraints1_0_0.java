@@ -50,10 +50,12 @@ import org.xmlpull.v1.XmlPullParserException;
 import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
 
 /**
- * Implements the LayerFeatureConstraints element of an SLD implementation specification 
- * (version 1.0.0).<p>
- * The LayerFeatureConstraints element is used to specify what features of what feature
- * types are to be rendered in a layer.<p>
+ * Implements the LayerFeatureConstraints element of an SLD implementation
+ * specification (version 1.0.0).
+ * <p>
+ * The LayerFeatureConstraints element is used to specify what features of what
+ * feature types are to be rendered in a layer.
+ * <p>
  * 
  * @see SLDFeatureTypeConstraint1_0_0
  * @see http://portal.opengeospatial.org/files/?artifact_id=1188
@@ -62,24 +64,24 @@ import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
  */
 public class SLDLayerFeatureConstraints1_0_0 extends SLDLayerFeatureConstraints {
 
-	
-	public void parse(XMLSchemaParser parser, int cuTag, String expressionType) throws IOException, XmlPullParserException, LegendDriverException {
+	public void parse(XMLSchemaParser parser, int cuTag, String expressionType)
+			throws IOException, XmlPullParserException, LegendDriverException {
 		int currentTag;
 		boolean end = false;
 
-		parser.require(XMLSchemaParser.START_TAG, null, SLDTags.LAYER_FEATURE_CONST);
+		parser.require(XMLSchemaParser.START_TAG, null,
+				SLDTags.LAYER_FEATURE_CONST);
 		currentTag = parser.next();
 
-		while (!end)
-		{
-			switch(currentTag)
-			{
+		while (!end) {
+			switch (currentTag) {
 			case XMLSchemaParser.START_TAG:
-				if (parser.getName().compareTo(SLDTags.FEATURETYPECONSTRAINT)==0) {
+				if (parser.getName().compareTo(SLDTags.FEATURETYPECONSTRAINT) == 0) {
 					SLDFeatureTypeConstraint1_0_0 featTypeCons = new SLDFeatureTypeConstraint1_0_0();
-					featTypeCons.parse(parser,currentTag,null);
+					featTypeCons.parse(parser, currentTag, null);
 					if (featTypeCons.getFilter() == null)
-						throw new LegendDriverException (LegendDriverException.PARSE_LEGEND_FILE_ERROR);
+						throw new LegendDriverException(
+								LegendDriverException.PARSE_LEGEND_FILE_ERROR);
 					addFeatureTypeConstraint(featTypeCons);
 				}
 				break;
@@ -94,13 +96,13 @@ public class SLDLayerFeatureConstraints1_0_0 extends SLDLayerFeatureConstraints 
 				currentTag = parser.next();
 		}
 
-		parser.require(XMLSchemaParser.END_TAG, null, SLDTags.LAYER_FEATURE_CONST);		
+		parser.require(XMLSchemaParser.END_TAG, null,
+				SLDTags.LAYER_FEATURE_CONST);
 	}
 
 	public String toXML() {
 		// TODO Auto-generated method stub
-		throw new Error ("Not yet implemented");
+		throw new Error("Not yet implemented");
 	}
-	
-	
+
 }

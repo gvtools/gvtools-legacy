@@ -46,18 +46,19 @@ import java.awt.Rectangle;
  */
 
 /**
- * Allows center a component (Ex. JInternalFrame, JFrame, etc.) respect its parent component
+ * Allows center a component (Ex. JInternalFrame, JFrame, etc.) respect its
+ * parent component
  * 
  * Exceptions:<br>
  * <ul>
- *  <li>If the component is a JDialog -> better use:<br>
- *      jDialog.setLocationRelativeTo(parentComponent);</li>
- *  <li>If the component is a JFrame or a JWindow -> better use:<br>
- *      jFrame.setSize(width, height);<br>
- *      jFrame.setLocationRelativeTo(null);<br>
- *    or<br>
- *      jWindow.setSize(width, height);<br>
- *      jWindow.setLocationRelativeTo(null);</li> 
+ * <li>If the component is a JDialog -> better use:<br>
+ * jDialog.setLocationRelativeTo(parentComponent);</li>
+ * <li>If the component is a JFrame or a JWindow -> better use:<br>
+ * jFrame.setSize(width, height);<br>
+ * jFrame.setLocationRelativeTo(null);<br>
+ * or<br>
+ * jWindow.setSize(width, height);<br>
+ * jWindow.setLocationRelativeTo(null);</li>
  * </ul>
  * 
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
@@ -65,53 +66,57 @@ import java.awt.Rectangle;
 public class CenterComponent {
 
 	/**
-	 * Centers a component (Ex. JInternalFrame, JFrame, etc.) according its size and the bounds of its parent<br>
+	 * Centers a component (Ex. JInternalFrame, JFrame, etc.) according its size
+	 * and the bounds of its parent<br>
 	 * 
 	 * Exceptions:<br>
 	 * <ul>
-	 *  <li>If the component is a JDialog -> better use:<br>
-	 *      jDialog.setLocationRelativeTo(parentComponent);</li>
-	 *  <li>If the component is a JFrame or a JWindow -> better use:<br>
-	 *      jFrame.setSize(width, height);<br>
-	 *      jFrame.setLocationRelativeTo(null);<br>
-	 *    or<br>
-	 *      jWindow.setSize(width, height);<br>
-	 *      jWindow.setLocationRelativeTo(null);</li>
+	 * <li>If the component is a JDialog -> better use:<br>
+	 * jDialog.setLocationRelativeTo(parentComponent);</li>
+	 * <li>If the component is a JFrame or a JWindow -> better use:<br>
+	 * jFrame.setSize(width, height);<br>
+	 * jFrame.setLocationRelativeTo(null);<br>
+	 * or<br>
+	 * jWindow.setSize(width, height);<br>
+	 * jWindow.setLocationRelativeTo(null);</li>
 	 * </ul>
-	 *
-  	 * @param component The component to center 
-	 * @param parentBounds Bounds of the parent of the component.
+	 * 
+	 * @param component
+	 *            The component to center
+	 * @param parentBounds
+	 *            Bounds of the parent of the component.
 	 */
-	public static void centerComponent(Component component, Rectangle parentBounds) {
+	public static void centerComponent(Component component,
+			Rectangle parentBounds) {
 		final int DefaultXMargin = 20;
 		final int DefaultYMargin = 20;
 		final int MinimumXMargin = 10;
 		final int MinimumYMargin = 10;
-		
+
 		// The top-left square of JComponent reference
 		Point newReferencePoint = new Point();
-		newReferencePoint.x = (parentBounds.x + (parentBounds.width - component.getWidth()) / 2);
-		newReferencePoint.y = (parentBounds.y + (parentBounds.height - component.getHeight()) / 2);
-		
-		// Calculate the new point reference (Assure that the top-left corner is showed)
-		if (newReferencePoint.x < 0)
-		{
+		newReferencePoint.x = (parentBounds.x + (parentBounds.width - component
+				.getWidth()) / 2);
+		newReferencePoint.y = (parentBounds.y + (parentBounds.height - component
+				.getHeight()) / 2);
+
+		// Calculate the new point reference (Assure that the top-left corner is
+		// showed)
+		if (newReferencePoint.x < 0) {
 			if (newReferencePoint.x > MinimumXMargin)
 				newReferencePoint.x = DefaultXMargin;
 			else
 				newReferencePoint.x = 0;
 		}
-			
-			
-		if (newReferencePoint.y < 0)
-		{
+
+		if (newReferencePoint.y < 0) {
 			if (newReferencePoint.y > MinimumYMargin)
 				newReferencePoint.y = DefaultYMargin;
 			else
 				newReferencePoint.y = 0;
-		}			
+		}
 
 		// Set the new location for this JComponent object
 		component.setLocation(newReferencePoint);
-	}	
+	}
 }

@@ -48,7 +48,9 @@ public class TestNormAlgorithm extends TestCase {
 	public void setUp() {
 	}
 
-	public void testSplitChain() throws MarshalException, FileNotFoundException, UnsupportedEncodingException, ValidationException, XMLException {
+	public void testSplitChain() throws MarshalException,
+			FileNotFoundException, UnsupportedEncodingException,
+			ValidationException, XMLException {
 
 		log.info("TestNormAlgorithm. Test splits strings");
 
@@ -190,10 +192,10 @@ public class TestNormAlgorithm extends TestCase {
 
 		assertEquals(5.548, Double.parseDouble(((String) r8.get(0)).trim()));
 		assertEquals(5478.254, Double.parseDouble(((String) r8.get(1)).trim()));
-		assertEquals(0.24578457, Double
-				.parseDouble(((String) r8.get(2)).trim()));
-		assertEquals(256.21450045, Double.parseDouble(((String) r8.get(3))
-				.trim()));
+		assertEquals(0.24578457,
+				Double.parseDouble(((String) r8.get(2)).trim()));
+		assertEquals(256.21450045,
+				Double.parseDouble(((String) r8.get(3)).trim()));
 
 		log.info("TestNormAlgorithm. Test finished");
 	}
@@ -246,7 +248,9 @@ public class TestNormAlgorithm extends TestCase {
 
 	}
 
-	private List<String> parser(File f, String chain) throws MarshalException, FileNotFoundException, UnsupportedEncodingException, ValidationException, XMLException {
+	private List<String> parser(File f, String chain) throws MarshalException,
+			FileNotFoundException, UnsupportedEncodingException,
+			ValidationException, XMLException {
 		NormalizationPattern pat = new NormalizationPattern();
 		pat.loadFromXML(f);
 		NormAlgorithm na = new NormAlgorithm(pat);

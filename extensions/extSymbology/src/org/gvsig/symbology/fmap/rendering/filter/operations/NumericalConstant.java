@@ -45,11 +45,12 @@ import java.util.Hashtable;
 
 import com.hardcode.gdbms.engine.values.Value;
 import com.iver.cit.gvsig.fmap.Messages;
+
 /**
  * Implements the funcionality of a double constant
- *
+ * 
  * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
- *
+ * 
  */
 public class NumericalConstant extends Operator {
 	private double doubleValue;
@@ -60,16 +61,13 @@ public class NumericalConstant extends Operator {
 		return OperationTags.NUMERIC_VALUE;
 	}
 
-
-
-	public NumericalConstant(Object  value,Hashtable<String, Value> symbol_table) {
+	public NumericalConstant(Object value, Hashtable<String, Value> symbol_table) {
 
 		super(symbol_table);
 
-		if(value instanceof Integer) {
+		if (value instanceof Integer) {
 			integerValue = Integer.valueOf(value.toString());
-		}
-		else if (value instanceof Double) {
+		} else if (value instanceof Double) {
 			doubleValue = Double.valueOf(value.toString());
 			isDoubleValue = true;
 		}
@@ -78,12 +76,11 @@ public class NumericalConstant extends Operator {
 
 	public Object evaluate() {
 
-		if(isDoubleValue)
+		if (isDoubleValue)
 			return doubleValue;
 		return integerValue;
 
 	}
-
 
 	public String getDescription() {
 		return Messages.getString(OperationTags.CONSTANT);
@@ -104,7 +101,6 @@ public class NumericalConstant extends Operator {
 		throw new RuntimeException("Cannot add arguments to a constant");
 	}
 
-
 	public String getPattern() {
 		return null;
 	}
@@ -117,23 +113,19 @@ public class NumericalConstant extends Operator {
 		return;
 	}
 
-
 	public void check() throws ExpressionException {
 		return;
 	}
 
-
 	public Object getValue() {
-		if(isDoubleValue)
+		if (isDoubleValue)
 			return doubleValue;
 		return integerValue;
 	}
 
-
 	public boolean isDoubleValue() {
 		return isDoubleValue;
 	}
-
 
 	public void setDoubleValue(boolean isDoubleValue) {
 		this.isDoubleValue = isDoubleValue;

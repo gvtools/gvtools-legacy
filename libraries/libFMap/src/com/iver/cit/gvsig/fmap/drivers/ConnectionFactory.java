@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
@@ -49,80 +48,88 @@ import com.iver.utiles.extensionPoints.ExtensionPoint;
 import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
-
 /**
  * Connection Factory
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class ConnectionFactory {
-    private static ArrayList connections = new ArrayList();
-//    private static HashMap lastConnections=new HashMap();
-    /**
-     * DOCUMENT ME!
-     *
-     * @param connectionStr DOCUMENT ME!
-     * @param user DOCUMENT ME!
-     * @param _pw DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     *
-     * @throws DBException DOCUMENT ME!
-     */
-    public static IConnection createConnection(String connectionStr,
-        String user, String _pw) throws DBException {
-        IConnection connection = null;
-        try{
-        if (connectionStr.startsWith("jdbc")) {
-            connection = new ConnectionJDBC();
-            connection.setDataConnection(connectionStr, user, _pw);
-            return connection;
-        } else {
-//        	if (lastConnections.containsKey(connectionStr))
-//        		return (IConnection)lastConnections.get(connectionStr);
+	private static ArrayList connections = new ArrayList();
 
-            refreshExtensionPointsConnections();
+	// private static HashMap lastConnections=new HashMap();
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param connectionStr
+	 *            DOCUMENT ME!
+	 * @param user
+	 *            DOCUMENT ME!
+	 * @param _pw
+	 *            DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 * 
+	 * @throws DBException
+	 *             DOCUMENT ME!
+	 */
+	public static IConnection createConnection(String connectionStr,
+			String user, String _pw) throws DBException {
+		IConnection connection = null;
+		try {
+			if (connectionStr.startsWith("jdbc")) {
+				connection = new ConnectionJDBC();
+				connection.setDataConnection(connectionStr, user, _pw);
+				return connection;
+			} else {
+				// if (lastConnections.containsKey(connectionStr))
+				// return (IConnection)lastConnections.get(connectionStr);
 
-            IConnection[] conns = (IConnection[]) connections.toArray(new IConnection[0]);
-            String type = connectionStr.substring(0,connectionStr.indexOf(":"));
+				refreshExtensionPointsConnections();
 
-            for (int i = 0; i < conns.length; i++) {
-                if (conns[i].getTypeConnection().equals(type)) {
-                    connection=conns[i];
-                	connection.setDataConnection(connectionStr, user, _pw);
-//                	lastConnections.put(connectionStr,connection);
-                	return connection;
-                }
-            }
-        }
-        }catch (Exception e) {
+				IConnection[] conns = (IConnection[]) connections
+						.toArray(new IConnection[0]);
+				String type = connectionStr.substring(0,
+						connectionStr.indexOf(":"));
+
+				for (int i = 0; i < conns.length; i++) {
+					if (conns[i].getTypeConnection().equals(type)) {
+						connection = conns[i];
+						connection.setDataConnection(connectionStr, user, _pw);
+						// lastConnections.put(connectionStr,connection);
+						return connection;
+					}
+				}
+			}
+		} catch (Exception e) {
 			throw new DBException(e);
 		}
-        return connection;
-    }
+		return connection;
+	}
 
-    /**
-     * DOCUMENT ME!
-     */
-    private static void refreshExtensionPointsConnections() {
-        connections.clear();
+	/**
+	 * DOCUMENT ME!
+	 */
+	private static void refreshExtensionPointsConnections() {
+		connections.clear();
 
-        ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
-        ExtensionPoint extensionPoint = (ExtensionPoint) extensionPoints.get(
-                "databaseconnections");
-        Iterator iterator = extensionPoint.keySet().iterator();
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+		ExtensionPoint extensionPoint = (ExtensionPoint) extensionPoints
+				.get("databaseconnections");
+		Iterator iterator = extensionPoint.keySet().iterator();
 
-        while (iterator.hasNext()) {
-            try {
-                IConnection obj = (IConnection) extensionPoint.create((String) iterator.next());
-                connections.add(obj);
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (ClassCastException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+		while (iterator.hasNext()) {
+			try {
+				IConnection obj = (IConnection) extensionPoint
+						.create((String) iterator.next());
+				connections.add(obj);
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (ClassCastException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }

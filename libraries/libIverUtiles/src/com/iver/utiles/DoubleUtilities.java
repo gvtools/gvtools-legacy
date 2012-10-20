@@ -60,51 +60,51 @@ import java.text.DecimalFormatSymbols;
  */
 /**
  * This class has some methods to manage "Doubles"
+ * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
 public class DoubleUtilities {
 	/**
-	 * Formats a double with an specified number of decimals. It 
-	 * removes the separator character of the integer part. 
+	 * Formats a double with an specified number of decimals. It removes the
+	 * separator character of the integer part.
+	 * 
 	 * @param value
-	 * Separator char of the integer part
+	 *            Separator char of the integer part
 	 * @param decimalSeparator
-	 * Separator char of the decimal part
+	 *            Separator char of the decimal part
 	 * @param decimalsNumber
-	 * Number of decimals
-	 * @return
-	 * The formatted double
+	 *            Number of decimals
+	 * @return The formatted double
 	 */
-	public static double format(double value,
-			char decimalSeparator,
-			int decimalsNumber){
-			
+	public static double format(double value, char decimalSeparator,
+			int decimalsNumber) {
+
 		DecimalFormat dFormat = new DecimalFormat("#");
 		DecimalFormatSymbols dFormatSymbols = new DecimalFormatSymbols();
-		
+
 		dFormatSymbols.setDecimalSeparator(decimalSeparator);
 		dFormat.setMaximumFractionDigits(decimalsNumber);
 		dFormat.setMaximumFractionDigits(decimalsNumber);
 		dFormat.setDecimalFormatSymbols(dFormatSymbols);
 		double d = Double.parseDouble(dFormat.format(value));
-		return Double.parseDouble(dFormat.format(value));		
+		return Double.parseDouble(dFormat.format(value));
 	}
 
 	/**
-	 * Formats a double with an specified number of decimals. 
+	 * Formats a double with an specified number of decimals.
+	 * 
 	 * @param num
-	 * Value to tail
+	 *            Value to tail
 	 * @param n
-	 * Number of decimals
-	 * @return
-	 * The formatted double
+	 *            Number of decimals
+	 * @return The formatted double
 	 */
-    public static double format(double num, int n){
-    	long m = (long)Math.pow(10, n);
-        num *= m;
-        long aux = ((long)num);
-        num = (double)((double)aux / (double)m);
-        return num;
-    }
+	public static double format(double num, int n) {
+		long m = (long) Math.pow(10, n);
+		num *= m;
+		long aux = ((long) num);
+		num = (double) ((double) aux / (double) m);
+		return num;
+	}
 
 }

@@ -78,13 +78,12 @@ import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
  * Proceso para la obtención de una imagen mosaico a partir de un conjunto de
  * imágenes por el metodo de degradado (Feathering).
  * 
- * @params
- * <LI>FLyrRasterSE[] "inputRasterLayers": Capas raster de entrada</LI>
- * <LI>String "outputPath": Ruta completa al fichero de salida del proceso</LI>
+ * @params <LI>FLyrRasterSE[] "inputRasterLayers": Capas raster de entrada</LI>
+ *         <LI>String "outputPath": Ruta completa al fichero de salida del
+ *         proceso</LI>
  * 
- * @result
- * <LI>FLyrRasterSE: Capa raster con el resultado del mosaico</LI>
- *
+ * @result <LI>FLyrRasterSE: Capa raster con el resultado del mosaico</LI>
+ * 
  * @author Diego Guerrero Sevilla (diego.guerrero@uclm.es)
  * 
  */
@@ -102,14 +101,14 @@ public class FeatherProcessBuff extends RasterProcess {
 
 	private Grid resultGrid = null;
 	private GridExtent resultGridExtent = null;
-	private int resultPxWidth, resultPxHeight= 0;
+	private int resultPxWidth, resultPxHeight = 0;
 	private int resultbandCount = 0;
 
 	private WriterBufferServer writerBufferServer = null;
 	private String fileName = null;
 	int percent = 0;
 
-	//Variables auxiliares:
+	// Variables auxiliares:
 	private double distances[] = null;
 	private byte values[] = null;
 	double value = 0;
@@ -117,12 +116,13 @@ public class FeatherProcessBuff extends RasterProcess {
 	private int bandCount = 0;
 	private double noDataValue = 0;
 	private double result[] = null;
-	
+
 	private GeoRasterWriter grw;
 
 	public void init() {
 
-		insertLineLog(PluginServices.getText(this, "preparando_entrada")+"...");
+		insertLineLog(PluginServices.getText(this, "preparando_entrada")
+				+ "...");
 		// Obtener las capas que intervienen en el mosaico.
 		inputRasterLayers = (FLyrRasterSE[]) getParam("inputRasterLayers");
 
@@ -137,18 +137,17 @@ public class FeatherProcessBuff extends RasterProcess {
 		Rectangle2D.union(inputExtents[0], inputExtents[1], resultExtent);
 
 		/*
-		// TODO: Contemplar el caso de capas con distinto tamaño de celda.
-		double cellSizeX = inputRasterLayers[0].getAffineTransform()
-				.getScaleX();
-		double cellSizeY = inputRasterLayers[0].getAffineTransform()
-				.getScaleY();
-		*/
+		 * // TODO: Contemplar el caso de capas con distinto tamaño de celda.
+		 * double cellSizeX = inputRasterLayers[0].getAffineTransform()
+		 * .getScaleX(); double cellSizeY =
+		 * inputRasterLayers[0].getAffineTransform() .getScaleY();
+		 */
 		double cellSizeX = getMinCellSize()[0];
 		double cellSizeY = getMinCellSize()[1];
 
 		resultGridExtent = new GridExtent(new Extent(resultExtent), cellSizeX,
 				cellSizeY);
-		
+
 		resultPxWidth = resultGridExtent.getNX();
 		resultPxHeight = resultGridExtent.getNY();
 
@@ -156,7 +155,7 @@ public class FeatherProcessBuff extends RasterProcess {
 		try {
 			resultGrid = new Grid(resultGridExtent, resultGridExtent,
 					IBuffer.TYPE_BYTE, new int[] { 0, 1, 2 });
-			//resultGrid.setNoDataValue(0);
+			// resultGrid.setNoDataValue(0);
 			resultbandCount = resultGrid.getBandCount();
 		} catch (RasterBufferInvalidException e) {
 			RasterToolsUtil.messageBoxError("error_datos_entrada", this, e);
@@ -168,14 +167,18 @@ public class FeatherProcessBuff extends RasterProcess {
 	}
 
 	private double[] getMinCellSize() {
-		double minCellSize[] = new double[2]; 
-		minCellSize[0]=Double.MAX_VALUE;
-		minCellSize[1]=Double.MAX_VALUE;
-		for (int i = 0; i< inputRasterLayers.length; i++) {
-			if(Math.abs(inputRasterLayers[i].getAffineTransform().getScaleX())<Math.abs(minCellSize[0]))
-				minCellSize[0]=inputRasterLayers[i].getAffineTransform().getScaleX();
-			if(Math.abs(inputRasterLayers[i].getAffineTransform().getScaleY())<Math.abs(minCellSize[1]))
-				minCellSize[1]=inputRasterLayers[i].getAffineTransform().getScaleY();
+		double minCellSize[] = new double[2];
+		minCellSize[0] = Double.MAX_VALUE;
+		minCellSize[1] = Double.MAX_VALUE;
+		for (int i = 0; i < inputRasterLayers.length; i++) {
+			if (Math.abs(inputRasterLayers[i].getAffineTransform().getScaleX()) < Math
+					.abs(minCellSize[0]))
+				minCellSize[0] = inputRasterLayers[i].getAffineTransform()
+						.getScaleX();
+			if (Math.abs(inputRasterLayers[i].getAffineTransform().getScaleY()) < Math
+					.abs(minCellSize[1]))
+				minCellSize[1] = inputRasterLayers[i].getAffineTransform()
+						.getScaleY();
 		}
 		return minCellSize;
 	}
@@ -190,42 +193,60 @@ public class FeatherProcessBuff extends RasterProcess {
 
 		inputBuffers = new IBuffer[inputRasterLayers.length];
 		for (int l = 0; l < inputRasterLayers.length; l++) {
-			
+
 			dsetCopy = inputRasterLayers[l].getDataSource().newDataset();
 			BufferFactory bufferFactory = new BufferFactory(dsetCopy);
-			GridExtent gridExtent = new GridExtent(resultGridExtent.getMin().getX(),
-					resultGridExtent.getMin().getY(),
-					resultGridExtent.getMax().getX(),
-					resultGridExtent.getMax().getY(),
-					 inputRasterLayers[l].getAffineTransform().getScaleX(),
-					 inputRasterLayers[l].getAffineTransform().getScaleY());
+			GridExtent gridExtent = new GridExtent(resultGridExtent.getMin()
+					.getX(), resultGridExtent.getMin().getY(), resultGridExtent
+					.getMax().getX(), resultGridExtent.getMax().getY(),
+					inputRasterLayers[l].getAffineTransform().getScaleX(),
+					inputRasterLayers[l].getAffineTransform().getScaleY());
 			try {
 				bufferFactory.setAdjustToExtent(false);
-				//bufferFactory.setNoDataToFill(resultGrid.getNoDataValue());
-				bufferFactory.setNoDataToFill(inputRasterLayers[l].getNoDataValue());
+				// bufferFactory.setNoDataToFill(resultGrid.getNoDataValue());
+				bufferFactory.setNoDataToFill(inputRasterLayers[l]
+						.getNoDataValue());
 				bufferFactory.setReadOnly(true);
-				bufferFactory.setDrawableBands(inputRasterLayers[l].getRenderBands());
-				/*bufferFactory.setAreaOfInterest(resultGridExtent.getMin().getX(), resultGridExtent.getMax().getY(), 
-						resultGridExtent.getMax().getX(), resultGridExtent.getMin().getY(), resultGridExtent.getNX(),resultGridExtent.getNY());*/
-				bufferFactory.setAreaOfInterest(gridExtent.getMin().getX(), gridExtent.getMax().getY(), 
-						gridExtent.getMax().getX(), gridExtent.getMin().getY(), gridExtent.getNX(),gridExtent.getNY());
-				
+				bufferFactory.setDrawableBands(inputRasterLayers[l]
+						.getRenderBands());
+				/*
+				 * bufferFactory.setAreaOfInterest(resultGridExtent.getMin().getX
+				 * (), resultGridExtent.getMax().getY(),
+				 * resultGridExtent.getMax().getX(),
+				 * resultGridExtent.getMin().getY(),
+				 * resultGridExtent.getNX(),resultGridExtent.getNY());
+				 */
+				bufferFactory.setAreaOfInterest(gridExtent.getMin().getX(),
+						gridExtent.getMax().getY(), gridExtent.getMax().getX(),
+						gridExtent.getMin().getY(), gridExtent.getNX(),
+						gridExtent.getNY());
+
 			} catch (InvalidSetViewException e) {
-				RasterToolsUtil.messageBoxError(PluginServices.getText(this, "error_datos_entrada"), this, e);	
+				RasterToolsUtil.messageBoxError(
+						PluginServices.getText(this, "error_datos_entrada"),
+						this, e);
 			} catch (RasterDriverException e) {
-				RasterToolsUtil.messageBoxError(PluginServices.getText(this, "error_datos_entrada"), this, e);	
+				RasterToolsUtil.messageBoxError(
+						PluginServices.getText(this, "error_datos_entrada"),
+						this, e);
 			}
-			
-			//Obtenere el burffer interpolado:
+
+			// Obtenere el burffer interpolado:
 			inputBuffers[l] = bufferFactory.getRasterBuf();
-			inputBuffers[l] = ((RasterBuffer)inputBuffers[l]).getAdjustedWindow(resultGridExtent.getNX(), resultGridExtent.getNY(), BufferInterpolation.INTERPOLATION_Bilinear);
-			
-			//Aplicar filtro de realce si es necesario:
-			
-			if(inputBuffers[l].getDataType()!=DataBuffer.TYPE_BYTE){
+			inputBuffers[l] = ((RasterBuffer) inputBuffers[l])
+					.getAdjustedWindow(resultGridExtent.getNX(),
+							resultGridExtent.getNY(),
+							BufferInterpolation.INTERPOLATION_Bilinear);
+
+			// Aplicar filtro de realce si es necesario:
+
+			if (inputBuffers[l].getDataType() != DataBuffer.TYPE_BYTE) {
 				LinearStretchParams leParams = null;
 				try {
-					leParams = LinearStretchParams.createStandardParam(inputRasterLayers[l].getRenderBands(), 0.0, bufferFactory.getDataSource().getStatistics(), false);
+					leParams = LinearStretchParams.createStandardParam(
+							inputRasterLayers[l].getRenderBands(), 0.0,
+							bufferFactory.getDataSource().getStatistics(),
+							false);
 				} catch (FileNotOpenException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -233,59 +254,67 @@ public class FeatherProcessBuff extends RasterProcess {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			
-				RasterFilter linearStretchEnhancementFilter = EnhancementStretchListManager.createEnhancedFilter(leParams, bufferFactory.getDataSource().getStatistics(),
-						inputRasterLayers[l].getRenderBands(), false);
-				linearStretchEnhancementFilter.addParam("raster", inputBuffers[l]);
+
+				RasterFilter linearStretchEnhancementFilter = EnhancementStretchListManager
+						.createEnhancedFilter(leParams, bufferFactory
+								.getDataSource().getStatistics(),
+								inputRasterLayers[l].getRenderBands(), false);
+				linearStretchEnhancementFilter.addParam("raster",
+						inputBuffers[l]);
 				linearStretchEnhancementFilter.execute();
-				
-				inputBuffers[l] = (IBuffer)linearStretchEnhancementFilter.getResult("raster");
+
+				inputBuffers[l] = (IBuffer) linearStretchEnhancementFilter
+						.getResult("raster");
 			}
 		}
 
 		// Recorrido del grid resultante
-		insertLineLog(PluginServices.getText(this, "realizando_degradado")+"...");
+		insertLineLog(PluginServices.getText(this, "realizando_degradado")
+				+ "...");
 		for (int col = 0; col < resultPxWidth; col++) {
-			percent = col*100/resultPxWidth; 
+			percent = col * 100 / resultPxWidth;
 			for (int row = 0; row < resultPxHeight; row++) {
 				try {
 					setValue(col, row);
 				} catch (OutOfGridException e) {
-					RasterToolsUtil.messageBoxError(PluginServices.getText(
-							this, "bad_access_grid"), this, e);
+					RasterToolsUtil.messageBoxError(
+							PluginServices.getText(this, "bad_access_grid"),
+							this, e);
 				}
 			}
 		}
-		
+
 		// Se liberan los buffers
-		for(int i=0; i<inputRasterLayers.length;i++)
+		for (int i = 0; i < inputRasterLayers.length; i++)
 			inputBuffers[i].free();
-		
+
 		createLayer();
 		if (externalActions != null)
 			externalActions.end(outputRasterLayer);
 	}
 
 	private void createLayer() {
-		insertLineLog(PluginServices.getText(this, "escribiendo_resultado")+"...");
-		
+		insertLineLog(PluginServices.getText(this, "escribiendo_resultado")
+				+ "...");
+
 		writerBufferServer = new WriterBufferServer(resultGrid.getRasterBuf());
-		AffineTransform aTransform = new AffineTransform(resultGridExtent
-				.getCellSizeX(), 0.0, 0.0, resultGridExtent.getCellSizeY(),
-				resultGridExtent.getMin().getX(), resultGridExtent.getMax()
-						.getY());
+		AffineTransform aTransform = new AffineTransform(
+				resultGridExtent.getCellSizeX(), 0.0, 0.0,
+				resultGridExtent.getCellSizeY(), resultGridExtent.getMin()
+						.getX(), resultGridExtent.getMax().getY());
 		try {
 			grw = GeoRasterWriter.getWriter(writerBufferServer, fileName,
-					resultGrid.getBandCount(), aTransform, resultGridExtent
-							.getNX(), resultGridExtent.getNY(), resultGrid
-							.getDataType(), GeoRasterWriter.getWriter(fileName)
-							.getParams(), inputRasterLayers[0].getCrs());
+					resultGrid.getBandCount(), aTransform,
+					resultGridExtent.getNX(), resultGridExtent.getNY(),
+					resultGrid.getDataType(),
+					GeoRasterWriter.getWriter(fileName).getParams(),
+					inputRasterLayers[0].getCrs());
 			grw.dataWrite();
 			grw.writeClose();
 			resultGrid.getRasterBuf().free();
 			outputRasterLayer = FLyrRasterSE.createLayer("outputLayer",
 					fileName, inputRasterLayers[0].getCrs());
-				
+
 		} catch (NotSupportedExtensionException e) {
 			RasterToolsUtil.messageBoxError(PluginServices.getText(this,
 					"error_writer_notsupportedextension"), this, e);
@@ -293,8 +322,8 @@ public class FeatherProcessBuff extends RasterProcess {
 			RasterToolsUtil.messageBoxError(PluginServices.getText(this,
 					"raster_buffer_invalid_extension"), this, e);
 		} catch (IOException e) {
-			RasterToolsUtil.messageBoxError(PluginServices.getText(this,
-					"error_writer"), this, e);
+			RasterToolsUtil.messageBoxError(
+					PluginServices.getText(this, "error_writer"), this, e);
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 		} catch (LoadLayerException e) {
@@ -302,7 +331,8 @@ public class FeatherProcessBuff extends RasterProcess {
 		}
 	}
 
-	private void setValue(int col, int row) throws OutOfGridException, InterruptedException {
+	private void setValue(int col, int row) throws OutOfGridException,
+			InterruptedException {
 		// ¿Está el punto en la intersección?
 		Point2D worldCoords = rasterToWorld(col, row);
 		if (intersection.contains(worldCoords)) {
@@ -311,15 +341,17 @@ public class FeatherProcessBuff extends RasterProcess {
 		}
 		byte value = 0;
 		for (int g = 0; g < inputBuffers.length; g++) {
-			if (inputExtents[g].contains(worldCoords)){
+			if (inputExtents[g].contains(worldCoords)) {
 				for (int band = 0; band < inputBuffers[g].getBandCount(); band++) {
-					value = (byte)RemoteSensingUtils.getCellValueInLayerCoords(inputBuffers[g], col, row, band);
+					value = (byte) RemoteSensingUtils
+							.getCellValueInLayerCoords(inputBuffers[g], col,
+									row, band);
 					resultGrid.setBandToOperate(band);
-					if ((byte)inputBuffers[g].getNoDataValue() != value) {
+					if ((byte) inputBuffers[g].getNoDataValue() != value) {
 						resultGrid.setCellValue(col, row, value);
 					} else {
-						resultGrid.setCellValue(col, row, (byte) resultGrid
-								.getNoDataValue());
+						resultGrid.setCellValue(col, row,
+								(byte) resultGrid.getNoDataValue());
 					}
 				}
 				return;
@@ -327,7 +359,8 @@ public class FeatherProcessBuff extends RasterProcess {
 		}
 	}
 
-	private void setFeatherValue(int col, int row) throws OutOfGridException, InterruptedException {
+	private void setFeatherValue(int col, int row) throws OutOfGridException,
+			InterruptedException {
 		Point2D worldPoint = rasterToWorld(col, row);
 
 		totalD = 0;
@@ -346,13 +379,14 @@ public class FeatherProcessBuff extends RasterProcess {
 
 			value = 0;
 			bandCount = inputBuffers[i].getBandCount();
-			noDataValue = (byte)inputBuffers[i].getNoDataValue();
+			noDataValue = (byte) inputBuffers[i].getNoDataValue();
 			for (int band = 0; band < resultbandCount; band++) {
-					if (band < bandCount){
-						value = RemoteSensingUtils.getCellValueInLayerCoords(inputBuffers[i], col,row, band);
-						if (noDataValue!=value)
-							result[band] = result[band] + value * distances[i];
-					}
+				if (band < bandCount) {
+					value = RemoteSensingUtils.getCellValueInLayerCoords(
+							inputBuffers[i], col, row, band);
+					if (noDataValue != value)
+						result[band] = result[band] + value * distances[i];
+				}
 			}
 		}
 
@@ -364,7 +398,7 @@ public class FeatherProcessBuff extends RasterProcess {
 			result[band] = 0;
 		}
 	}
-	
+
 	public Object getResult() {
 		return outputRasterLayer;
 	}
@@ -372,7 +406,7 @@ public class FeatherProcessBuff extends RasterProcess {
 	public int getPercent() {
 		if (grw != null)
 			return grw.getPercent();
-		
+
 		return percent;
 	}
 
@@ -396,57 +430,57 @@ public class FeatherProcessBuff extends RasterProcess {
 		else
 			borders[0][0] = null;
 
-		border = new Line2D.Double(inputExtents[0].getMaxX(), inputExtents[0]
-				.getMaxY(), inputExtents[0].getMaxX(), inputExtents[0]
-				.getMinY());
+		border = new Line2D.Double(inputExtents[0].getMaxX(),
+				inputExtents[0].getMaxY(), inputExtents[0].getMaxX(),
+				inputExtents[0].getMinY());
 		if (inputExtents[1].intersectsLine(border))
 			borders[0][1] = border;
 		else
 			borders[0][1] = null;
 
-		border = new Line2D.Double(inputExtents[0].getMaxX(), inputExtents[0]
-				.getMinY(), inputExtents[0].getMinX(), inputExtents[0]
-				.getMinY());
+		border = new Line2D.Double(inputExtents[0].getMaxX(),
+				inputExtents[0].getMinY(), inputExtents[0].getMinX(),
+				inputExtents[0].getMinY());
 		if (inputExtents[1].intersectsLine(border))
 			borders[0][2] = border;
 		else
 			borders[0][2] = null;
 
-		border = new Line2D.Double(inputExtents[0].getMinX(), inputExtents[0]
-				.getMinY(), inputExtents[0].getMinX(), inputExtents[0]
-				.getMaxY());
+		border = new Line2D.Double(inputExtents[0].getMinX(),
+				inputExtents[0].getMinY(), inputExtents[0].getMinX(),
+				inputExtents[0].getMaxY());
 		if (inputExtents[1].intersectsLine(border))
 			borders[0][3] = border;
 		else
 			borders[0][3] = null;
 
-		border = new Line2D.Double(inputExtents[1].getMinX(), inputExtents[1]
-				.getMaxY(), inputExtents[1].getMaxX(), inputExtents[1]
-				.getMinY());
+		border = new Line2D.Double(inputExtents[1].getMinX(),
+				inputExtents[1].getMaxY(), inputExtents[1].getMaxX(),
+				inputExtents[1].getMinY());
 		if (inputExtents[0].intersectsLine(border))
 			borders[1][0] = border;
 		else
 			borders[1][0] = null;
 
-		border = new Line2D.Double(inputExtents[1].getMaxX(), inputExtents[1]
-				.getMaxY(), inputExtents[1].getMaxX(), inputExtents[1]
-				.getMinY());
+		border = new Line2D.Double(inputExtents[1].getMaxX(),
+				inputExtents[1].getMaxY(), inputExtents[1].getMaxX(),
+				inputExtents[1].getMinY());
 		if (inputExtents[0].intersectsLine(border))
 			borders[1][1] = border;
 		else
 			borders[1][1] = null;
 
-		border = new Line2D.Double(inputExtents[1].getMaxX(), inputExtents[1]
-				.getMinY(), inputExtents[1].getMinX(), inputExtents[1]
-				.getMinY());
+		border = new Line2D.Double(inputExtents[1].getMaxX(),
+				inputExtents[1].getMinY(), inputExtents[1].getMinX(),
+				inputExtents[1].getMinY());
 		if (inputExtents[0].intersectsLine(border))
 			borders[1][2] = border;
 		else
 			borders[1][2] = null;
 
-		border = new Line2D.Double(inputExtents[1].getMinX(), inputExtents[1]
-				.getMinY(), inputExtents[1].getMinX(), inputExtents[1]
-				.getMaxY());
+		border = new Line2D.Double(inputExtents[1].getMinX(),
+				inputExtents[1].getMinY(), inputExtents[1].getMinX(),
+				inputExtents[1].getMaxY());
 		if (inputExtents[0].intersectsLine(border))
 			borders[1][3] = border;
 		else

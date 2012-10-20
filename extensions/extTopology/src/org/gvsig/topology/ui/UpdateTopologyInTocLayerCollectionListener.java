@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.ui;
 
 import org.gvsig.topology.Topology;
@@ -57,56 +57,55 @@ import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.LayerCollectionEvent;
 import com.iver.cit.gvsig.fmap.layers.LayerCollectionListener;
 import com.iver.cit.gvsig.fmap.layers.LayerPositionEvent;
+
 /**
  * LayerCollectionListener which updates the toc.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
-public class UpdateTopologyInTocLayerCollectionListener implements LayerCollectionListener {
-	
+public class UpdateTopologyInTocLayerCollectionListener implements
+		LayerCollectionListener {
+
 	/**
 	 * MapContext associated to the TOC
 	 */
 	MapContext mapContext;
-	
+
 	/**
 	 * topology to update
 	 */
 	Topology topology;
-	
-	
+
 	public UpdateTopologyInTocLayerCollectionListener(MapContext mapContext,
 			Topology topology) {
 		this.mapContext = mapContext;
 		this.topology = topology;
 	}
 
-	public void layerAdded(
-			LayerCollectionEvent e) {
+	public void layerAdded(LayerCollectionEvent e) {
 		mapContext.endAtomicEvent();
 	}
-	
-	//workaround to avoid bug "automatic error correction crashes
-	//when layers has been edited"
-//	private void checkNoEditioManagerRegistered(){
-		//Esto valdria si FLayers tuviese un metodo getLayerCollectionListeners
-//		LayerListener[] listeners = topology.getParentLayer().getLayerListeners()();
-//		for(int i = 0; i < listeners.length; i++){
-//			if(listeners[i] instanceof EditionManager)
-//				topology.getParentLayer().removeLayerListener(listeners[i]);
-//		}
-//	}
 
-	public void layerAdding(
-			LayerCollectionEvent e)
-			throws CancelationException {
-		
+	// workaround to avoid bug "automatic error correction crashes
+	// when layers has been edited"
+	// private void checkNoEditioManagerRegistered(){
+	// Esto valdria si FLayers tuviese un metodo getLayerCollectionListeners
+	// LayerListener[] listeners =
+	// topology.getParentLayer().getLayerListeners()();
+	// for(int i = 0; i < listeners.length; i++){
+	// if(listeners[i] instanceof EditionManager)
+	// topology.getParentLayer().removeLayerListener(listeners[i]);
+	// }
+	// }
+
+	public void layerAdding(LayerCollectionEvent e) throws CancelationException {
+
 		try {
 			mapContext.beginAtomicEvent();
 			FLayers rootLyrs = mapContext.getLayers();
-//			checkNoEditioManagerRegistered();	
-			rootLyrs.replaceLayer(topology.getName(),topology);
+			// checkNoEditioManagerRegistered();
+			rootLyrs.replaceLayer(topology.getName(), topology);
 		} catch (LoadLayerException e1) {
 			e1.printStackTrace();
 		}
@@ -116,36 +115,32 @@ public class UpdateTopologyInTocLayerCollectionListener implements LayerCollecti
 		mapContext.endAtomicEvent();
 	}
 
-	public void layerMoving(LayerPositionEvent e)
-			throws CancelationException {
+	public void layerMoving(LayerPositionEvent e) throws CancelationException {
 		try {
 			mapContext.beginAtomicEvent();
-//			checkNoEditioManagerRegistered();
-			mapContext.getLayers().replaceLayer(topology.getName(),topology);
+			// checkNoEditioManagerRegistered();
+			mapContext.getLayers().replaceLayer(topology.getName(), topology);
 		} catch (LoadLayerException e1) {
 			e1.printStackTrace();
 		}
 	}
 
-	public void layerRemoved(
-			LayerCollectionEvent e) {
+	public void layerRemoved(LayerCollectionEvent e) {
 		mapContext.endAtomicEvent();
 	}
 
-	public void layerRemoving(
-			LayerCollectionEvent e)
+	public void layerRemoving(LayerCollectionEvent e)
 			throws CancelationException {
 		try {
 			mapContext.beginAtomicEvent();
-//			checkNoEditioManagerRegistered();
-			mapContext.getLayers().replaceLayer(topology.getName(),topology);
+			// checkNoEditioManagerRegistered();
+			mapContext.getLayers().replaceLayer(topology.getName(), topology);
 		} catch (LoadLayerException e1) {
 			e1.printStackTrace();
 		}
 	}
 
-	public void visibilityChanged(
-			LayerCollectionEvent e)
+	public void visibilityChanged(LayerCollectionEvent e)
 			throws CancelationException {
 	}
 

@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.catalog.ui.search;
+
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
@@ -58,121 +58,158 @@ public class SearchDialog extends JFrame implements WindowListener {
 	/**
 	 * Crea un nuevo SearchDialog.
 	 * 
-	 * @param cliente DOCUMENT ME!
+	 * @param cliente
+	 *            DOCUMENT ME!
 	 * 
-	 * @param client 
-	 * @param isMinimized DOCUMENT ME!
-	 * @param title DOCUMENT ME!
+	 * @param client
+	 * @param isMinimized
+	 *            DOCUMENT ME!
+	 * @param title
+	 *            DOCUMENT ME!
 	 */
-	public  SearchDialog(CatalogClient client, Object serverConnectFrame) {        
+	public SearchDialog(CatalogClient client, Object serverConnectFrame) {
 		super();
 		initialize(client, serverConnectFrame);
-	} 
+	}
 
 	/**
 	 * This method initializes jDialog
-	 * @param client 
-	 * @param isMinimized DOCUMENT ME!
-	 * @param title DOCUMENT ME!
+	 * 
+	 * @param client
+	 * @param isMinimized
+	 *            DOCUMENT ME!
+	 * @param title
+	 *            DOCUMENT ME!
 	 */
-	private void initialize(CatalogClient client, Object serverConnectFrame) {        
+	private void initialize(CatalogClient client, Object serverConnectFrame) {
 		setBounds(0, 0, 525, 165);
 		this.setTitle("Búsqueda de Catálogo");
 		setName("search");
-		SearchDialogPanel panel = new SearchDialogPanel(client,serverConnectFrame);
+		SearchDialogPanel panel = new SearchDialogPanel(client,
+				serverConnectFrame);
 		panel.setParent(this);
 		getContentPane().add(panel);
 		setVisible(true);
-	} 
-	/* (non-Javadoc)
-	 * @see java.awt.event.WindowListener#windowActivated(java.awt.event.WindowEvent)
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowActivated(java.awt.event.WindowEvent)
 	 */
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param e 
+	 * @param e
 	 */
-	public void windowActivated(WindowEvent e) {        
+	public void windowActivated(WindowEvent e) {
 		// your code here
-	} 
-	/* (non-Javadoc)
-	 * @see java.awt.event.WindowListener#windowClosed(java.awt.event.WindowEvent)
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowClosed(java.awt.event.WindowEvent)
 	 */
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param e 
+	 * @param e
 	 */
-	public void windowClosed(WindowEvent e) {        
+	public void windowClosed(WindowEvent e) {
 		System.exit(0);
-	} 
-	/* (non-Javadoc)
-	 * @see java.awt.event.WindowListener#windowClosed(java.awt.event.WindowEvent)
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowClosed(java.awt.event.WindowEvent)
 	 */
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param arg0 
+	 * @param arg0
 	 */
-	public void windowClosing(WindowEvent arg0) {        
+	public void windowClosing(WindowEvent arg0) {
 		System.exit(0);
-	} 
-	/* (non-Javadoc)
-	 * @see java.awt.event.WindowListener#windowDeactivated(java.awt.event.WindowEvent)
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowDeactivated(java.awt.event.WindowEvent
+	 * )
 	 */
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param e 
+	 * @param e
 	 */
-	public void windowDeactivated(WindowEvent e) {        
+	public void windowDeactivated(WindowEvent e) {
 		// your code here
-	} 
-	/* (non-Javadoc)
-	 * @see java.awt.event.WindowListener#windowDeiconified(java.awt.event.WindowEvent)
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowDeiconified(java.awt.event.WindowEvent
+	 * )
 	 */
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param e 
+	 * @param e
 	 */
-	public void windowDeiconified(WindowEvent e) {        
+	public void windowDeiconified(WindowEvent e) {
 		// your code here
-	} 
-	/* (non-Javadoc)
-	 * @see java.awt.event.WindowListener#windowIconified(java.awt.event.WindowEvent)
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowIconified(java.awt.event.WindowEvent)
 	 */
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param e 
+	 * @param e
 	 */
-	public void windowIconified(WindowEvent e) {        
+	public void windowIconified(WindowEvent e) {
 		// your code here
-	} 
-	/* (non-Javadoc)
-	 * @see java.awt.event.WindowListener#windowOpened(java.awt.event.WindowEvent)
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowOpened(java.awt.event.WindowEvent)
 	 */
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param e 
+	 * @param e
 	 */
-	public void windowOpened(WindowEvent e) {        
+	public void windowOpened(WindowEvent e) {
 		// your code here
-	} 
+	}
 }

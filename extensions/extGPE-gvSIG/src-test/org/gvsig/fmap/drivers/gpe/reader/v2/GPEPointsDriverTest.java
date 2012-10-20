@@ -55,18 +55,20 @@ public class GPEPointsDriverTest extends GPEParserTest {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.gpe.GPEDriverTest#getFile()
 	 */
 	public String getFile() {
-		return "../extGPE-gvSIG" + File.separatorChar +
-			"testdata" + File.separatorChar + "GML-points.gml";
+		return "../extGPE-gvSIG" + File.separatorChar + "testdata"
+				+ File.separatorChar + "GML-points.gml";
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.gpe.GPEDriverTest#makeAsserts()
 	 */
 	public void makeAsserts() throws Exception {
-		assertEquals(getLayer().getSource().getDriver().getShapeCount(),25);		
+		assertEquals(getLayer().getSource().getDriver().getShapeCount(), 25);
 	}
 }

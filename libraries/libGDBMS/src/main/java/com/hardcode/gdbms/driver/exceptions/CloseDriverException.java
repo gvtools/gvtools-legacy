@@ -1,12 +1,12 @@
 package com.hardcode.gdbms.driver.exceptions;
 
-
 public class CloseDriverException extends ReadDriverException {
 
-	public CloseDriverException(String l,Throwable exception) {
-		super(l,exception);
+	public CloseDriverException(String l, Throwable exception) {
+		super(l, exception);
 		init();
 	}
+
 	/**
 	 *
 	 */

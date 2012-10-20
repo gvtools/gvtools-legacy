@@ -46,26 +46,26 @@ import org.gvsig.gui.beans.defaultbuttonspanel.DefaultButtonsPanel;
 /**
  * <code>ProgressPanel</code>. Muestra una ventana de diálogo para representar
  * una barra de progreso con su ventana de registro.
- *
+ * 
  * @version 15/07/2008
- *
+ * 
  * @author BorSanZa - Borja Sanchez Zamorano (borja.sanchez@iver.es)
  */
 public class ProgressPanel extends JDialog {
 	private static final long serialVersionUID = 4321011219898234352L;
 
-	private JPanel              jPanel              = null;
-	private JLabel              jLabel              = null;
-	private JLabel              jLabel1             = null;
-	private JPanel              jPanel1             = null;
-	private JPanel              njp                 = null;
+	private JPanel jPanel = null;
+	private JLabel jLabel = null;
+	private JLabel jLabel1 = null;
+	private JPanel jPanel1 = null;
+	private JPanel njp = null;
 	private DefaultButtonsPanel defaultButtonsPanel = null;
-	private JProgressBar        jProgressBar        = null;
-	private JScrollPane         jScrollPane         = null;
-	private JTextPane           jTextPane           = null;
-	private LogControl          text                = new LogControl();
-	private long                startTime           = System.currentTimeMillis();
-	private boolean             showPause           = true;
+	private JProgressBar jProgressBar = null;
+	private JScrollPane jScrollPane = null;
+	private JTextPane jTextPane = null;
+	private LogControl text = new LogControl();
+	private long startTime = System.currentTimeMillis();
+	private boolean showPause = true;
 
 	/**
 	 * Constructor
@@ -80,7 +80,7 @@ public class ProgressPanel extends JDialog {
 		this.showPause = showPause;
 		initialize();
 	}
-	
+
 	/**
 	 * @see JDialog#JDialog(Dialog, boolean)
 	 */
@@ -92,7 +92,8 @@ public class ProgressPanel extends JDialog {
 	/**
 	 * @see JDialog#JDialog(Dialog, String, boolean, GraphicsConfiguration)
 	 */
-	public ProgressPanel(Dialog owner, String title, boolean modal,	GraphicsConfiguration gc) throws HeadlessException {
+	public ProgressPanel(Dialog owner, String title, boolean modal,
+			GraphicsConfiguration gc) throws HeadlessException {
 		super(owner, title, modal, gc);
 		initialize();
 	}
@@ -133,7 +134,8 @@ public class ProgressPanel extends JDialog {
 	/**
 	 * @see JDialog#JDialog(Frame, String, boolean, GraphicsConfiguration)
 	 */
-	public ProgressPanel(Frame owner, String title, boolean modal, GraphicsConfiguration gc) {
+	public ProgressPanel(Frame owner, String title, boolean modal,
+			GraphicsConfiguration gc) {
 		super(owner, title, modal, gc);
 		initialize();
 	}
@@ -161,8 +163,8 @@ public class ProgressPanel extends JDialog {
 	public ProgressPanel(Frame owner) throws HeadlessException {
 		super(owner);
 		initialize();
-	}	
-	
+	}
+
 	/**
 	 * This method initializes this
 	 */
@@ -178,15 +180,14 @@ public class ProgressPanel extends JDialog {
 		showLog(false);
 		setPercent(0);
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setLocation(
-				(int) (d.getWidth() - this.getWidth()) >> 1,
+		this.setLocation((int) (d.getWidth() - this.getWidth()) >> 1,
 				(int) (d.getHeight() - this.getHeight()) >> 1);
 		this.setVisible(true);
 	}
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel() {
@@ -204,7 +205,7 @@ public class ProgressPanel extends JDialog {
 
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel1() {
@@ -226,8 +227,10 @@ public class ProgressPanel extends JDialog {
 	}
 
 	public void showLog(boolean visible) {
-		getButtonsPanel().getButton(ButtonsPanel.BUTTON_SEEDETAILS).setVisible(!visible);
-		getButtonsPanel().getButton(ButtonsPanel.BUTTON_HIDEDETAILS).setVisible(visible);
+		getButtonsPanel().getButton(ButtonsPanel.BUTTON_SEEDETAILS).setVisible(
+				!visible);
+		getButtonsPanel().getButton(ButtonsPanel.BUTTON_HIDEDETAILS)
+				.setVisible(visible);
 		jScrollPane.setVisible(visible);
 
 		this.setIgnoreRepaint(true);
@@ -244,11 +247,15 @@ public class ProgressPanel extends JDialog {
 
 	public void showPause(boolean visible) {
 		if (showPause) {
-			getButtonsPanel().getButton(ButtonsPanel.BUTTON_RESTART).setVisible(!visible);
-			getButtonsPanel().getButton(ButtonsPanel.BUTTON_PAUSE).setVisible(visible);
+			getButtonsPanel().getButton(ButtonsPanel.BUTTON_RESTART)
+					.setVisible(!visible);
+			getButtonsPanel().getButton(ButtonsPanel.BUTTON_PAUSE).setVisible(
+					visible);
 		} else {
-			getButtonsPanel().getButton(ButtonsPanel.BUTTON_RESTART).setVisible(false);
-			getButtonsPanel().getButton(ButtonsPanel.BUTTON_PAUSE).setVisible(false);
+			getButtonsPanel().getButton(ButtonsPanel.BUTTON_RESTART)
+					.setVisible(false);
+			getButtonsPanel().getButton(ButtonsPanel.BUTTON_PAUSE).setVisible(
+					false);
 		}
 	}
 
@@ -258,47 +265,50 @@ public class ProgressPanel extends JDialog {
 	public ButtonsPanel getButtonsPanel() {
 		return getDefaultButtonsPanel().getButtonsPanel();
 	}
-	
+
 	/**
 	 * This method initializes DefaultButtonsPanel
-	 *
+	 * 
 	 * @return DefaultButtonsPanel
 	 */
 	public DefaultButtonsPanel getDefaultButtonsPanel() {
 		if (defaultButtonsPanel == null) {
-			defaultButtonsPanel = new DefaultButtonsPanel(ButtonsPanel.BUTTONS_NONE);
+			defaultButtonsPanel = new DefaultButtonsPanel(
+					ButtonsPanel.BUTTONS_NONE);
 			getButtonsPanel().addSeeDetails();
 			getButtonsPanel().addHideDetails();
 			getButtonsPanel().addPause();
 			getButtonsPanel().addRestart();
 			showPause(true);
 			getButtonsPanel().addCancel();
-			getButtonsPanel().setLayout(new java.awt.FlowLayout(FlowLayout.CENTER));
-			getButtonsPanel().addButtonPressedListener(new ButtonsPanelListener() {
-				public void actionButtonPressed(ButtonsPanelEvent e) {
-					switch (e.getButton()) {
-						case ButtonsPanel.BUTTON_SEEDETAILS:
-							showLog(true);
-							break;
-						case ButtonsPanel.BUTTON_HIDEDETAILS:
-							showLog(false);
-							break;
-						case ButtonsPanel.BUTTON_PAUSE:
-							showPause(false);
-							break;
-						case ButtonsPanel.BUTTON_RESTART:
-							showPause(true);
-							break;
-					}
-				}
-			});
+			getButtonsPanel().setLayout(
+					new java.awt.FlowLayout(FlowLayout.CENTER));
+			getButtonsPanel().addButtonPressedListener(
+					new ButtonsPanelListener() {
+						public void actionButtonPressed(ButtonsPanelEvent e) {
+							switch (e.getButton()) {
+							case ButtonsPanel.BUTTON_SEEDETAILS:
+								showLog(true);
+								break;
+							case ButtonsPanel.BUTTON_HIDEDETAILS:
+								showLog(false);
+								break;
+							case ButtonsPanel.BUTTON_PAUSE:
+								showPause(false);
+								break;
+							case ButtonsPanel.BUTTON_RESTART:
+								showPause(true);
+								break;
+							}
+						}
+					});
 		}
 		return defaultButtonsPanel;
 	}
 
 	/**
 	 * This method initializes jProgressBar
-	 *
+	 * 
 	 * @return javax.swing.JProgressBar
 	 */
 	private JProgressBar getJProgressBar() {
@@ -312,7 +322,7 @@ public class ProgressPanel extends JDialog {
 
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getJScrollPane() {
@@ -326,7 +336,7 @@ public class ProgressPanel extends JDialog {
 
 	/**
 	 * This method initializes jTextPane
-	 *
+	 * 
 	 * @return javax.swing.JTextPane
 	 */
 	private JTextPane getJTextPane() {
@@ -354,7 +364,8 @@ public class ProgressPanel extends JDialog {
 
 	public void setLog(String value) {
 		long time = (System.currentTimeMillis() - startTime) / 1000;
-		text.setText(value + "\n" + Messages.getText("tiempo_transcurrido") + ": " + time + "s");
+		text.setText(value + "\n" + Messages.getText("tiempo_transcurrido")
+				+ ": " + time + "s");
 		updateLog();
 	}
 
@@ -380,9 +391,11 @@ public class ProgressPanel extends JDialog {
 	}
 
 	/**
-	 * <p>Sets whether this panel will show a normal progress bar
-	 * or an indeterminate one.</p>
-	 *
+	 * <p>
+	 * Sets whether this panel will show a normal progress bar or an
+	 * indeterminate one.
+	 * </p>
+	 * 
 	 * @see JProgressBar.setIndeterminate(boolean)
 	 * @param indeterminate
 	 */
@@ -391,9 +404,11 @@ public class ProgressPanel extends JDialog {
 	}
 
 	/**
-	 * <p>Gets whether this panel will show a normal progress bar
-	 * or an indeterminate one.</p>
-	 *
+	 * <p>
+	 * Gets whether this panel will show a normal progress bar or an
+	 * indeterminate one.
+	 * </p>
+	 * 
 	 * @see JProgressBar.setIndeterminate(boolean)
 	 * @param indeterminate
 	 */

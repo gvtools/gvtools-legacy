@@ -55,99 +55,105 @@ import com.iver.cit.gvsig.fmap.drivers.wms.FMapWMSDriver;
 import com.iver.cit.gvsig.fmap.drivers.wms.FMapWMSDriverFactory;
 import com.iver.cit.gvsig.fmap.layers.WMSLayerNode;
 
-
 /**
  * Class holding the data shown at the wms wizards
- *
+ * 
  * @author Jaume Dominguez Faus
  */
-public class WMSWizardData { // should implemement any kind of wizard data interface?
-    private String title;
-    private String theAbstract;
-    private WMSLayerNode layer;
-    private String[] formats;
-    private String serverVersion;
-    private FMapWMSDriver wms = null;
-    private Hashtable onlineResources = null;
+public class WMSWizardData { // should implemement any kind of wizard data
+								// interface?
+	private String title;
+	private String theAbstract;
+	private WMSLayerNode layer;
+	private String[] formats;
+	private String serverVersion;
+	private FMapWMSDriver wms = null;
+	private Hashtable onlineResources = null;
 
-    /**
-     * @return Returns the serverVersion.
-     */
-    public String getServerVersion() {
-        return serverVersion;
-    }
-    public String getHost(){
-        return wms.getHost();
-    }
+	/**
+	 * @return Returns the serverVersion.
+	 */
+	public String getServerVersion() {
+		return serverVersion;
+	}
 
-    public void setHost(URL host, boolean override, ICancellable cancel) throws ConnectionErrorLayerException{
-        try {
-        	wms = FMapWMSDriverFactory.getFMapDriverForURL(host);
+	public String getHost() {
+		return wms.getHost();
+	}
 
-        	// Send a getCapabilities request;
-        	if (!wms.connect(override, cancel))
-        		throw new ConnectionErrorLayerException(layer.getName(),null);
-        } catch (ConnectException e) {
-        	throw new ConnectionErrorLayerException(layer.getName(),e);
-        	//JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(), PluginServices.getText(this,"server_timeout"));
-			//return;
+	public void setHost(URL host, boolean override, ICancellable cancel)
+			throws ConnectionErrorLayerException {
+		try {
+			wms = FMapWMSDriverFactory.getFMapDriverForURL(host);
+
+			// Send a getCapabilities request;
+			if (!wms.connect(override, cancel))
+				throw new ConnectionErrorLayerException(layer.getName(), null);
+		} catch (ConnectException e) {
+			throw new ConnectionErrorLayerException(layer.getName(), e);
+			// JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),
+			// PluginServices.getText(this,"server_timeout"));
+			// return;
 		} catch (IOException e) {
-			throw new ConnectionErrorLayerException(layer.getName(),e);
-			//JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(), PluginServices.getText(this, "wms_cant_connect"));
-			//return;
+			throw new ConnectionErrorLayerException(layer.getName(), e);
+			// JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),
+			// PluginServices.getText(this, "wms_cant_connect"));
+			// return;
 		}
-        if (wms.getAbstract()  != null)
-            theAbstract = wms.getAbstract();
-        
-        if (wms.getServiceTitle()  != null)
-            title = wms.getServiceTitle();
+		if (wms.getAbstract() != null)
+			theAbstract = wms.getAbstract();
 
-        Vector f = wms.getFormats();
-        ArrayList formatos = new ArrayList();
-        for (int i = 0; i < f.size(); i++) {
-        	formatos.add(f.elementAt(i));
-        }
-        formats = (String[]) formatos.toArray(new String[0]);
-        serverVersion = (wms.getVersion() == null) ? "" : wms.getVersion();
-        onlineResources = wms.getOnlineResources();
-        layer = wms.getLayersTree(); // LayersTree as they are defined in the Capabilities document
-    }
+		if (wms.getServiceTitle() != null)
+			title = wms.getServiceTitle();
 
-    public String getAbstract() {
-        return theAbstract;
-    }
+		Vector f = wms.getFormats();
+		ArrayList formatos = new ArrayList();
+		for (int i = 0; i < f.size(); i++) {
+			formatos.add(f.elementAt(i));
+		}
+		formats = (String[]) formatos.toArray(new String[0]);
+		serverVersion = (wms.getVersion() == null) ? "" : wms.getVersion();
+		onlineResources = wms.getOnlineResources();
+		layer = wms.getLayersTree(); // LayersTree as they are defined in the
+										// Capabilities document
+	}
 
-    public String[] getFormats() {
-        return formats;
-    }
+	public String getAbstract() {
+		return theAbstract;
+	}
 
-    public WMSLayerNode getLayer() {
-        return layer;
-    }
+	public String[] getFormats() {
+		return formats;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public WMSLayerNode getLayer() {
+		return layer;
+	}
 
-    public String getServerType() {
-    	if (serverVersion==null) return "WMS";
-        return "WMS "+serverVersion;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public Hashtable getOnlineResources() {
+	public String getServerType() {
+		if (serverVersion == null)
+			return "WMS";
+		return "WMS " + serverVersion;
+	}
+
+	public Hashtable getOnlineResources() {
 		return onlineResources;
 	}
 
-    public Rectangle2D getBoundingBox(String[] layerNames, String srs) {
-        return wms.getLayersExtent(layerNames, srs);
-    }
+	public Rectangle2D getBoundingBox(String[] layerNames, String srs) {
+		return wms.getLayersExtent(layerNames, srs);
+	}
 
 	public FMapWMSDriver getDriver() {
 		return wms;
 	}
 
-    public boolean isQueryable() {
-    	return wms.isQueryable();
-    }
+	public boolean isQueryable() {
+		return wms.isQueryable();
+	}
 
 }

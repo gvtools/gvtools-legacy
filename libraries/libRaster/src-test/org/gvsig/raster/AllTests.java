@@ -27,12 +27,12 @@ import org.gvsig.raster.buffer.TDSDoubleAdjustToExtentGdal;
 import org.gvsig.raster.buffer.TDSIntBufferGdal;
 import org.gvsig.raster.buffer.TDSIntEcw;
 import org.gvsig.raster.buffer.TDSIntGdal;
-import org.gvsig.raster.buffer.TestNotAdjustToExtent;
 import org.gvsig.raster.buffer.TestBufferInterpolation;
 import org.gvsig.raster.buffer.TestDataSourceMultiFile;
 import org.gvsig.raster.buffer.TestGdalByteHistogram;
 import org.gvsig.raster.buffer.TestGdalByteMultiBandHistogram;
 import org.gvsig.raster.buffer.TestGdalFloatHistogram;
+import org.gvsig.raster.buffer.TestNotAdjustToExtent;
 import org.gvsig.raster.buffer.cache.TestAssignInterchangeBandsCache;
 import org.gvsig.raster.buffer.cache.TestRasterCache;
 import org.gvsig.raster.buffer.cache.TestRasterReadOnlyBuffer;
@@ -73,13 +73,14 @@ public class AllTests {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.gvsig.raster");
-		//$JUnit-BEGIN$
-		
+		// $JUnit-BEGIN$
+
 		suite.addTestSuite(TestColorTable.class);
 
-//		En linux y en windows dan valores distintos al pedir un ecw interpolado		
-//		suite.addTestSuite(TDSDoubleAdjustToExtentBufferEcw.class);
-	
+		// En linux y en windows dan valores distintos al pedir un ecw
+		// interpolado
+		// suite.addTestSuite(TDSDoubleAdjustToExtentBufferEcw.class);
+
 		suite.addTestSuite(TDSDoubleAdjustToExtentBufferGdal.class);
 		suite.addTestSuite(TDSDoubleAdjustToExtentEcw.class);
 		suite.addTestSuite(TDSDoubleAdjustToExtentGdal.class);
@@ -88,8 +89,9 @@ public class AllTests {
 		suite.addTestSuite(TDSIntBufferGdal.class);
 		suite.addTestSuite(TestDataSourceMultiFile.class);
 
-//    No se debe usar este test ya que los valores que da en los arrays son ilogicos
-//		suite.addTestSuite(TestIOMemoryRasterDriver.class);
+		// No se debe usar este test ya que los valores que da en los arrays son
+		// ilogicos
+		// suite.addTestSuite(TestIOMemoryRasterDriver.class);
 
 		suite.addTestSuite(TestGdalByteHistogram.class);
 		suite.addTestSuite(TestHistogramSerializer.class);
@@ -117,11 +119,10 @@ public class AllTests {
 		suite.addTestSuite(TestRasterFilterList.class);
 
 		suite.addTestSuite(FormatArrayRenderTest.class);
-		
+
 		/*
-		 * Other Tests present in libRaster (cesar)
-		 * Remove them from here and the src-test dir if they are not
-		 * useful anymore.
+		 * Other Tests present in libRaster (cesar) Remove them from here and
+		 * the src-test dir if they are not useful anymore.
 		 */
 		suite.addTestSuite(TestAdjustExtentToRotateRaster.class);
 		suite.addTestSuite(TestNotAdjustToExtent.class);
@@ -143,8 +144,8 @@ public class AllTests {
 		suite.addTestSuite(TestStructCache.class);
 		suite.addTestSuite(TestWorldCoordHDDPages.class);
 		suite.addTestSuite(TestAssignInterchangeBandsCache.class);
-		
-		//$JUnit-END$
+
+		// $JUnit-END$
 		return suite;
 	}
 }

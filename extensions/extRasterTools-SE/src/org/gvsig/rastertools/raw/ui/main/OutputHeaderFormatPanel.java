@@ -30,6 +30,7 @@ import org.gvsig.rastertools.raw.tools.VRTFormatOptions;
 
 import com.iver.andami.PluginServices;
 import com.iver.utiles.swing.JComboBox;
+
 /**
  * This class implements one part of the open raw file panel. It contains the
  * combobox to select the "output header format".
@@ -37,22 +38,22 @@ import com.iver.utiles.swing.JComboBox;
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
 public class OutputHeaderFormatPanel extends JPanel {
-  private static final long serialVersionUID = 1244938224958397171L;
-	private JPanel    labelsPanel            = null;
-	private JPanel    fieldsPanel            = null;
-	private JPanel    OutputFormatTextPanel  = null;
-	private JPanel    outputFormatLabelPanel = null;
-	private JLabel    outputFormatLabel      = null;
-	private JComboBox outputFormatText       = null;
-	private final int WIDTH                  = 510;
-	private final int HEIGHT                 = 25;
-	private final int LABELS_PANEL_WIDTH     = 250;
-	private final int TEXTS_PANEL_WIDTH      = 250;
-	private final int LABELS_WIDTH           = 245;
-	private final int LABELS_HEIGHT          = 19;
-	private final int TEXTS_WIDTH            = 245;
-	private final int TEXTS_HEIGHT           = 19;
-	
+	private static final long serialVersionUID = 1244938224958397171L;
+	private JPanel labelsPanel = null;
+	private JPanel fieldsPanel = null;
+	private JPanel OutputFormatTextPanel = null;
+	private JPanel outputFormatLabelPanel = null;
+	private JLabel outputFormatLabel = null;
+	private JComboBox outputFormatText = null;
+	private final int WIDTH = 510;
+	private final int HEIGHT = 25;
+	private final int LABELS_PANEL_WIDTH = 250;
+	private final int TEXTS_PANEL_WIDTH = 250;
+	private final int LABELS_WIDTH = 245;
+	private final int LABELS_HEIGHT = 19;
+	private final int TEXTS_WIDTH = 245;
+	private final int TEXTS_HEIGHT = 19;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -63,6 +64,7 @@ public class OutputHeaderFormatPanel extends JPanel {
 
 	/**
 	 * This method initializes this
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
@@ -73,19 +75,22 @@ public class OutputHeaderFormatPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes jPanel3	
-	 * @return javax.swing.JPanel	
+	 * This method initializes jPanel3
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getOutputFormatLabelPanel() {
 		if (outputFormatLabelPanel == null) {
 			outputFormatLabel = new JLabel();
-			outputFormatLabel.setText(PluginServices.getText(this, "output_header_format"));
+			outputFormatLabel.setText(PluginServices.getText(this,
+					"output_header_format"));
 			FlowLayout flowLayout4 = new FlowLayout();
 			flowLayout4.setHgap(0);
 			flowLayout4.setAlignment(FlowLayout.LEFT);
 			flowLayout4.setVgap(1);
 			outputFormatLabelPanel = new JPanel();
-			outputFormatLabelPanel.setPreferredSize(new Dimension(LABELS_WIDTH, LABELS_HEIGHT));
+			outputFormatLabelPanel.setPreferredSize(new Dimension(LABELS_WIDTH,
+					LABELS_HEIGHT));
 			outputFormatLabelPanel.setLayout(flowLayout4);
 			outputFormatLabelPanel.add(outputFormatLabel, null);
 		}
@@ -93,34 +98,39 @@ public class OutputHeaderFormatPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes jPanel	
-	 * @return javax.swing.JPanel	
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getLabelsPanel() {
 		if (labelsPanel == null) {
 			labelsPanel = new JPanel();
-			labelsPanel.setPreferredSize(new Dimension(LABELS_PANEL_WIDTH, HEIGHT));
+			labelsPanel.setPreferredSize(new Dimension(LABELS_PANEL_WIDTH,
+					HEIGHT));
 			labelsPanel.add(getOutputFormatLabelPanel(), null);
 		}
 		return labelsPanel;
 	}
 
 	/**
-	 * This method initializes jPanel	
-	 * @return javax.swing.JPanel	
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getFieldsPanel() {
 		if (fieldsPanel == null) {
 			fieldsPanel = new JPanel();
-			fieldsPanel.setPreferredSize(new Dimension(TEXTS_PANEL_WIDTH, HEIGHT));
+			fieldsPanel.setPreferredSize(new Dimension(TEXTS_PANEL_WIDTH,
+					HEIGHT));
 			fieldsPanel.add(getOutputFormatTextPanel(), null);
 		}
 		return fieldsPanel;
 	}
 
 	/**
-	 * This method initializes jPanel	
-	 * @return javax.swing.JPanel	
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getOutputFormatTextPanel() {
 		if (OutputFormatTextPanel == null) {
@@ -129,7 +139,8 @@ public class OutputHeaderFormatPanel extends JPanel {
 			flowLayout.setAlignment(FlowLayout.LEFT);
 			flowLayout.setVgap(1);
 			OutputFormatTextPanel = new JPanel();
-			OutputFormatTextPanel.setPreferredSize(new Dimension(TEXTS_WIDTH, TEXTS_HEIGHT));
+			OutputFormatTextPanel.setPreferredSize(new Dimension(TEXTS_WIDTH,
+					TEXTS_HEIGHT));
 			OutputFormatTextPanel.setLayout(flowLayout);
 			OutputFormatTextPanel.add(getOutputFormatText(), null);
 		}
@@ -137,22 +148,27 @@ public class OutputHeaderFormatPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes pronunciacionText	
-	 * @return javax.swing.JTextField	
+	 * This method initializes pronunciacionText
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JComboBox getOutputFormatText() {
 		if (outputFormatText == null) {
-			outputFormatText = new JComboBox(VRTFormatOptions.getOutputHeaderFormats());
-			outputFormatText.setPreferredSize(new Dimension(TEXTS_WIDTH, TEXTS_HEIGHT));
+			outputFormatText = new JComboBox(
+					VRTFormatOptions.getOutputHeaderFormats());
+			outputFormatText.setPreferredSize(new Dimension(TEXTS_WIDTH,
+					TEXTS_HEIGHT));
 		}
 		return outputFormatText;
 	}
 
 	/**
 	 * gets the selected outputformat
+	 * 
 	 * @return
 	 */
 	public String getOutputHeaderFormat() {
-		return ((VRTFormatOptions.UIOption) getOutputFormatText().getSelectedItem()).getVrtOptionName();
+		return ((VRTFormatOptions.UIOption) getOutputFormatText()
+				.getSelectedItem()).getVrtOptionName();
 	}
 }

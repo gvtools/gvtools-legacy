@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
@@ -55,71 +54,79 @@ import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.fmap.rendering.Annotation_Legend;
 import com.iver.cit.gvsig.gui.panels.annotation.ConfigureLabel;
 
-
 /**
  * Dialog to create a new annotation layer.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class Annotation_Modify extends FinishAction {
-    private JWizardComponents myWizardComponents;
-    private Annotation_Layer layerAnnotation;
+	private JWizardComponents myWizardComponents;
+	private Annotation_Layer layerAnnotation;
 
-    public Annotation_Modify(JWizardComponents wizardComponents,
-        MapContext map, Annotation_Layer layerAnnotation) {
-        super(wizardComponents);
-        this.layerAnnotation = layerAnnotation;
-        myWizardComponents = wizardComponents;
-    }
+	public Annotation_Modify(JWizardComponents wizardComponents,
+			MapContext map, Annotation_Layer layerAnnotation) {
+		super(wizardComponents);
+		this.layerAnnotation = layerAnnotation;
+		myWizardComponents = wizardComponents;
+	}
 
-    /**
-     * DOCUMENT ME!
-     */
-    public void performAction() {
-        myWizardComponents.getFinishButton().setEnabled(false);
+	/**
+	 * DOCUMENT ME!
+	 */
+	public void performAction() {
+		myWizardComponents.getFinishButton().setEnabled(false);
 
-        Annotation_FieldSelect panel1 = (Annotation_FieldSelect) myWizardComponents.getWizardPanel(0);
-        Annotation_ConfigureLabel panel2 = (Annotation_ConfigureLabel) myWizardComponents.getWizardPanel(1);
+		Annotation_FieldSelect panel1 = (Annotation_FieldSelect) myWizardComponents
+				.getWizardPanel(0);
+		Annotation_ConfigureLabel panel2 = (Annotation_ConfigureLabel) myWizardComponents
+				.getWizardPanel(1);
 
-        SelectableDataSource source;
-        Annotation_Mapping mapping = new Annotation_Mapping();
+		SelectableDataSource source;
+		Annotation_Mapping mapping = new Annotation_Mapping();
 
-        try {
-            source = this.layerAnnotation.getRecordset();
+		try {
+			source = this.layerAnnotation.getRecordset();
 
-            mapping.setColumnText(source.getFieldIndexByName(panel1.getField()));
+			mapping.setColumnText(source.getFieldIndexByName(panel1.getField()));
 
-            if (!panel2.getAngleFieldName().equals(ConfigureLabel.TEXT_FOR_DEFAULT_VALUE)) {
-                mapping.setColumnRotate(source.getFieldIndexByName(
-                        panel2.getAngleFieldName()));
-            }
+			if (!panel2.getAngleFieldName().equals(
+					ConfigureLabel.TEXT_FOR_DEFAULT_VALUE)) {
+				mapping.setColumnRotate(source.getFieldIndexByName(panel2
+						.getAngleFieldName()));
+			}
 
-            if (!panel2.getColorFieldName().equals(ConfigureLabel.TEXT_FOR_DEFAULT_VALUE)) {
-                mapping.setColumnColor(source.getFieldIndexByName(
-                        panel2.getColorFieldName()));
-            }
+			if (!panel2.getColorFieldName().equals(
+					ConfigureLabel.TEXT_FOR_DEFAULT_VALUE)) {
+				mapping.setColumnColor(source.getFieldIndexByName(panel2
+						.getColorFieldName()));
+			}
 
-            if (!panel2.getSizeFieldName().equals(ConfigureLabel.TEXT_FOR_DEFAULT_VALUE)) {
-                mapping.setColumnHeight(source.getFieldIndexByName(
-                        panel2.getSizeFieldName()));
-            }
-//            AttrInTableLabelingStrategy labeling = new AttrInTableLabelingStrategy();
-            ((Annotation_Legend)layerAnnotation.getLegend()).setUnits(panel2.getCmbUnits().getSelectedUnitIndex());
-//        	labeling.setUnit(panel2.getCmbUnits().getSelectedUnitIndex());
-//        	this.layerAnnotation.setLabelingStrategy(labeling);
-//            ((FSymbol) this.layerAnnotation.getLegend().getDefaultSymbol()).setFontSizeInPixels(panel2.sizeUnitsInPixels());
+			if (!panel2.getSizeFieldName().equals(
+					ConfigureLabel.TEXT_FOR_DEFAULT_VALUE)) {
+				mapping.setColumnHeight(source.getFieldIndexByName(panel2
+						.getSizeFieldName()));
+			}
+			// AttrInTableLabelingStrategy labeling = new
+			// AttrInTableLabelingStrategy();
+			((Annotation_Legend) layerAnnotation.getLegend()).setUnits(panel2
+					.getCmbUnits().getSelectedUnitIndex());
+			// labeling.setUnit(panel2.getCmbUnits().getSelectedUnitIndex());
+			// this.layerAnnotation.setLabelingStrategy(labeling);
+			// ((FSymbol)
+			// this.layerAnnotation.getLegend().getDefaultSymbol()).setFontSizeInPixels(panel2.sizeUnitsInPixels());
 
-            this.layerAnnotation.deleteSpatialIndex();
+			this.layerAnnotation.deleteSpatialIndex();
 
-            if (!panel2.getFontFieldName().equals(ConfigureLabel.TEXT_FOR_DEFAULT_VALUE)) {
-                mapping.setColumnTypeFont(source.getFieldIndexByName(
-                        panel2.getFontFieldName()));
-            }
-        } catch (ReadDriverException e) {
-        	NotificationManager.addError(e);
+			if (!panel2.getFontFieldName().equals(
+					ConfigureLabel.TEXT_FOR_DEFAULT_VALUE)) {
+				mapping.setColumnTypeFont(source.getFieldIndexByName(panel2
+						.getFontFieldName()));
+			}
+		} catch (ReadDriverException e) {
+			NotificationManager.addError(e);
 		}
 
-        try {
+		try {
 			this.layerAnnotation.setMapping(mapping);
 		} catch (LegendLayerException e) {
 			NotificationManager.addError(e);
@@ -127,6 +134,6 @@ public class Annotation_Modify extends FinishAction {
 			NotificationManager.addError(e);
 		}
 
-        this.myWizardComponents.getCancelAction().performAction();
-    }
+		this.myWizardComponents.getCancelAction().performAction();
+	}
 }

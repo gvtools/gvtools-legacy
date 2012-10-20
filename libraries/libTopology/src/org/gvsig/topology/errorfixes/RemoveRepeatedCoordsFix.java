@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.errorfixes;
 
 import java.util.ArrayList;
@@ -64,21 +64,21 @@ import com.vividsolutions.jts.geom.Geometry;
 
 public class RemoveRepeatedCoordsFix extends AbstractTopologyErrorFix {
 
-	public List<IFeature>[] fixAlgorithm(TopologyError error) throws BaseException {
+	public List<IFeature>[] fixAlgorithm(TopologyError error)
+			throws BaseException {
 		IFeature originFeature = error.getFeature1();
-		Geometry jtsGeo = NewFConverter.toJtsGeometry(originFeature.getGeometry());
+		Geometry jtsGeo = NewFConverter.toJtsGeometry(originFeature
+				.getGeometry());
 		RepeatedPointTester cleaner = new RepeatedPointTester();
 		Geometry correctedJts = cleaner.removeRepeatedPoints(jtsGeo);
 		IGeometry correctedGeometry = NewFConverter.toFMap(correctedJts);
-		IFeature newFeature = new DefaultFeature(correctedGeometry, 
-									originFeature.getAttributes(), 
-									originFeature.getID());
+		IFeature newFeature = new DefaultFeature(correctedGeometry,
+				originFeature.getAttributes(), originFeature.getID());
 		List<IFeature> editedFeatures = new ArrayList<IFeature>();
 		editedFeatures.add(newFeature);
-		return (List<IFeature>[]) new List[]{editedFeatures};
+		return (List<IFeature>[]) new List[] { editedFeatures };
 	}
 
-	
 	public String getEditionDescription() {
 		return Messages.getText("REMOVE_REPEATED_COORDS_FIX");
 	}

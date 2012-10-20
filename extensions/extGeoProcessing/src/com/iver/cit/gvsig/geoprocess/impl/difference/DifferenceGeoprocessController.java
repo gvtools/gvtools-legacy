@@ -42,50 +42,50 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: DifferenceGeoprocessController.java 29576 2009-06-26 10:38:37Z jmvivo $
-* $Log$
-* Revision 1.6  2006-11-29 13:11:23  jmvivo
-* Se ha añadido mas información al mensaje de error para los GeoprocessException: e.getMessage()
-*
-* Revision 1.5  2006/10/23 10:29:03  caballero
-* ancho y alto del panel
-*
-* Revision 1.4  2006/08/11 16:20:24  azabala
-* *** empty log message ***
-*
-* Revision 1.3  2006/07/21 09:10:34  azabala
-* fixed bug 608: user doesnt enter any result file to the geoprocess panel
-*
-* Revision 1.2  2006/06/29 07:33:57  fjp
-* Cambios ISchemaManager y IFieldManager por terminar
-*
-* Revision 1.1  2006/06/20 18:20:45  azabala
-* first version in cvs
-*
-* Revision 1.5  2006/06/12 19:15:38  azabala
-* cambios para poder trabajar en geoprocessing con capas MULTI (jdbc, etc)
-*
-* Revision 1.4  2006/06/08 18:23:56  azabala
-* cambios para considerar las capas DB como espacialmente indexadas (aunque la referencia de ISpatialIndex sea null)
-*
-* Revision 1.3  2006/06/02 18:21:28  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/05/25 08:21:48  jmvivo
-* Añadida peticion de confirmacion para sobreescribir el fichero de salida, si este ya existiera
-*
-* Revision 1.1  2006/05/24 21:11:50  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.2  2006/05/08 15:35:32  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/04/11 17:55:51  azabala
-* primera version en cvs
-*
-*
-*/
+ *
+ * $Id: DifferenceGeoprocessController.java 29576 2009-06-26 10:38:37Z jmvivo $
+ * $Log$
+ * Revision 1.6  2006-11-29 13:11:23  jmvivo
+ * Se ha añadido mas información al mensaje de error para los GeoprocessException: e.getMessage()
+ *
+ * Revision 1.5  2006/10/23 10:29:03  caballero
+ * ancho y alto del panel
+ *
+ * Revision 1.4  2006/08/11 16:20:24  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.3  2006/07/21 09:10:34  azabala
+ * fixed bug 608: user doesnt enter any result file to the geoprocess panel
+ *
+ * Revision 1.2  2006/06/29 07:33:57  fjp
+ * Cambios ISchemaManager y IFieldManager por terminar
+ *
+ * Revision 1.1  2006/06/20 18:20:45  azabala
+ * first version in cvs
+ *
+ * Revision 1.5  2006/06/12 19:15:38  azabala
+ * cambios para poder trabajar en geoprocessing con capas MULTI (jdbc, etc)
+ *
+ * Revision 1.4  2006/06/08 18:23:56  azabala
+ * cambios para considerar las capas DB como espacialmente indexadas (aunque la referencia de ISpatialIndex sea null)
+ *
+ * Revision 1.3  2006/06/02 18:21:28  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/05/25 08:21:48  jmvivo
+ * Añadida peticion de confirmacion para sobreescribir el fichero de salida, si este ya existiera
+ *
+ * Revision 1.1  2006/05/24 21:11:50  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.2  2006/05/08 15:35:32  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/04/11 17:55:51  azabala
+ * primera version en cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.difference;
 
 import java.io.File;
@@ -112,12 +112,11 @@ import com.iver.utiles.swing.threads.MonitorableDecoratorMainFirst;
 public class DifferenceGeoprocessController extends
 		AbstractGeoprocessController {
 
-
 	private OverlayPanelIF geoProcessingDifferencePanel;
 	private DifferenceGeoprocess difference;
+
 	public void setView(IGeoprocessUserEntries viewPanel) {
-		geoProcessingDifferencePanel =
-			(OverlayPanelIF) viewPanel;
+		geoProcessingDifferencePanel = (OverlayPanelIF) viewPanel;
 	}
 
 	public IGeoprocess getGeoprocess() {
@@ -133,13 +132,15 @@ public class DifferenceGeoprocessController extends
 			outputFile = geoProcessingDifferencePanel.getOutputFile();
 		} catch (FileNotFoundException e3) {
 			String error = PluginServices.getText(this, "Error_entrada_datos");
-			String errorDescription = PluginServices.getText(this, "Error_seleccionar_resultado");
+			String errorDescription = PluginServices.getText(this,
+					"Error_seleccionar_resultado");
 			geoProcessingDifferencePanel.error(errorDescription, error);
 			return false;
 		}
 		if (outputFile == null || (outputFile.getAbsolutePath().length() == 0)) {
 			String error = PluginServices.getText(this, "Error_entrada_datos");
-			String errorDescription = PluginServices.getText(this, "Error_seleccionar_resultado");
+			String errorDescription = PluginServices.getText(this,
+					"Error_seleccionar_resultado");
 			geoProcessingDifferencePanel.error(errorDescription, error);
 			return false;
 		}
@@ -149,37 +150,40 @@ public class DifferenceGeoprocessController extends
 		SHPLayerDefinition definition = (SHPLayerDefinition) diff
 				.createLayerDefinition();
 		definition.setFile(outputFile);
-		ShpSchemaManager schemaManager = new ShpSchemaManager(outputFile.getAbsolutePath());
+		ShpSchemaManager schemaManager = new ShpSchemaManager(
+				outputFile.getAbsolutePath());
 		IWriter writer = null;
 		try {
 			writer = getShpWriter(definition);
 		} catch (Exception e1) {
-			String error = PluginServices.getText(this, "Error_escritura_resultados");
-			String errorDescription = PluginServices.getText(this, "Error_preparar_escritura_resultados");
+			String error = PluginServices.getText(this,
+					"Error_escritura_resultados");
+			String errorDescription = PluginServices.getText(this,
+					"Error_preparar_escritura_resultados");
 			geoProcessingDifferencePanel.error(errorDescription, error);
 			return false;
 		}
 
-
 		boolean found = false;
-		if (writer instanceof MultiShpWriter){
+		if (writer instanceof MultiShpWriter) {
 			MultiShpWriter mWriter = (MultiShpWriter) writer;
 
-			if (mWriter.getPointsFile().exists()){
+			if (mWriter.getPointsFile().exists()) {
 				found = true;
 			}
-			if (mWriter.getLinesFile().exists()){
+			if (mWriter.getLinesFile().exists()) {
 				found = true;
 			}
-			if (mWriter.getPolygonsFile().exists()){
+			if (mWriter.getPolygonsFile().exists()) {
 				found = true;
 			}
 
-		} else{
+		} else {
 			found = outputFile.exists();
 		}
-		if (found){
-			if (!geoProcessingDifferencePanel.askForOverwriteOutputFile(outputFile)) {
+		if (found) {
+			if (!geoProcessingDifferencePanel
+					.askForOverwriteOutputFile(outputFile)) {
 				return false;
 			}
 		}
@@ -201,39 +205,41 @@ public class DifferenceGeoprocessController extends
 			diff.checkPreconditions();
 
 			IMonitorableTask task1 = diff.createTask();
-			if(task1 == null){
+			if (task1 == null) {
 				return false;
 
 			}
 			AddResultLayerTask task2 = new AddResultLayerTask(diff);
 			task2.setLayers(layers);
-			MonitorableDecoratorMainFirst globalTask = new MonitorableDecoratorMainFirst(task1,
-					task2);
-			if(!overlayLayer.isSpatiallyIndexed()){
-				final IMonitorableTask sptIdxTask =
-					geoProcessingDifferencePanel.askForSpatialIndexCreation(overlayLayer);
-				if(sptIdxTask != null){
-					PluginServices.backgroundExecution(
-							new Runnable(){
+			MonitorableDecoratorMainFirst globalTask = new MonitorableDecoratorMainFirst(
+					task1, task2);
+			if (!overlayLayer.isSpatiallyIndexed()) {
+				final IMonitorableTask sptIdxTask = geoProcessingDifferencePanel
+						.askForSpatialIndexCreation(overlayLayer);
+				if (sptIdxTask != null) {
+					PluginServices.backgroundExecution(new Runnable() {
 						public void run() {
-							PluginServices.
-							cancelableBackgroundExecution(sptIdxTask);
-						}}
-					);
+							PluginServices
+									.cancelableBackgroundExecution(sptIdxTask);
+						}
+					});
 				}
-			}//if
+			}// if
 			if (globalTask.preprocess())
 				PluginServices.cancelableBackgroundExecution(globalTask);
 
 		} catch (GeoprocessException e) {
 			String error = PluginServices.getText(this, "Error_ejecucion");
-			String errorDescription = PluginServices.getText(this, "Error_fallo_geoproceso");
-			errorDescription = "<html>" + errorDescription + ":<br>" + e.getMessage()+ "</html>";
+			String errorDescription = PluginServices.getText(this,
+					"Error_fallo_geoproceso");
+			errorDescription = "<html>" + errorDescription + ":<br>"
+					+ e.getMessage() + "</html>";
 			geoProcessingDifferencePanel.error(errorDescription, error);
 			return false;
 		}
 		return true;
 	}
+
 	public int getWidth() {
 		return 700;
 	}
@@ -242,4 +248,3 @@ public class DifferenceGeoprocessController extends
 		return 300;
 	}
 }
-

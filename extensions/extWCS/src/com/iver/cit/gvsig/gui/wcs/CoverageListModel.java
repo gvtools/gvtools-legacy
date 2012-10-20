@@ -47,68 +47,62 @@ import javax.swing.AbstractListModel;
 
 import com.iver.cit.gvsig.fmap.layers.WCSLayer;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Jaume - jaume.dominguez@iver.es
  */
 public class CoverageListModel extends AbstractListModel {
-    private ArrayList nodos = new ArrayList();
+	private ArrayList nodos = new ArrayList();
 
+	public boolean addElement(WCSLayer elemento) {
+		if (elemento == null) {
+			return false;
+		}
 
-    public boolean addElement(WCSLayer elemento) {
-        if (elemento == null) {
-            return false;
-        }
+		for (int i = 0; i < nodos.size(); i++) {
+			if (((WCSLayer) nodos.get(i)).equals(elemento)) {
+				return false;
+			}
+		}
 
-        for (int i = 0; i < nodos.size(); i++) {
-            if (((WCSLayer) nodos.get(i)).equals(elemento)) {
-                return false;
-            }
-        }
+		nodos.add(elemento);
 
-        nodos.add(elemento);
+		fireContentsChanged(this, nodos.size() - 1, nodos.size() - 1);
 
-        fireContentsChanged(this, nodos.size() - 1, nodos.size() - 1);
+		return true;
+	}
 
-        return true;
-    }
-
-	public void clear(){
+	public void clear() {
 		nodos.clear();
 		fireContentsChanged(this, 0, 0);
 	}
 
+	public WCSLayer delElement(int index) {
+		WCSLayer ret = (WCSLayer) nodos.remove(index);
+		this.fireContentsChanged(this, index, index);
 
-    public WCSLayer delElement(int index) {
-    	WCSLayer ret = (WCSLayer) nodos.remove(index);
-        this.fireContentsChanged(this, index, index);
+		return ret;
+	}
 
-        return ret;
-    }
+	public void delElements(Collection c) {
+		nodos.removeAll(c);
+		this.fireContentsChanged(this, 0, nodos.size());
+	}
 
-    public void delElements(Collection c) {
-        nodos.removeAll(c);
-        this.fireContentsChanged(this, 0, nodos.size());
-    }
+	public int getSize() {
+		return nodos.size();
+	}
 
-    public int getSize() {
-        return nodos.size();
-    }
+	public Object getElementAt(int index) {
+		return ((WCSLayer) nodos.get(index));
+	}
 
+	public WCSLayer[] getElements() {
+		return (WCSLayer[]) nodos.toArray(new WCSLayer[0]);
+	}
 
-    public Object getElementAt(int index) {
-        return ((WCSLayer) nodos.get(index));
-    }
-
-
-    public WCSLayer[] getElements() {
-        return (WCSLayer[]) nodos.toArray(new WCSLayer[0]);
-    }
-
-
-    public WCSLayer getLayerInfo(int index) {
-        return (WCSLayer) nodos.get(index);
-    }
+	public WCSLayer getLayerInfo(int index) {
+		return (WCSLayer) nodos.get(index);
+	}
 }

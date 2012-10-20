@@ -29,48 +29,55 @@ import java.awt.event.MouseEvent;
 import org.gvsig.raster.beans.canvas.DrawableElement;
 
 /**
- * Capa con líneas verticales que seccionan en tramos. Puede definirse el número de tramos 
- * y estos son dibujados equidistantes. La capa es capaz de recibir eventos de ratón 
- * para variar la posición de los tramos pinchando y arrastrando estos.
+ * Capa con líneas verticales que seccionan en tramos. Puede definirse el número
+ * de tramos y estos son dibujados equidistantes. La capa es capaz de recibir
+ * eventos de ratón para variar la posición de los tramos pinchando y
+ * arrastrando estos.
  * 
  * 07/08/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class StretchLayer extends DrawableElement {
-	private StretchLayerDataModel  stretchs       = new StretchLayerDataModel();
-	
-	/*Configuración del trazo*/
-	private int                    border         = 2;
-	private BasicStroke            stroke         = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, new float[]{5.0f}, 0.0f);
+	private StretchLayerDataModel stretchs = new StretchLayerDataModel();
+
+	/* Configuración del trazo */
+	private int border = 2;
+	private BasicStroke stroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT,
+			BasicStroke.JOIN_MITER, 10.0f, new float[] { 5.0f }, 0.0f);
 	/**
 	 * Flag que cuando está a true evita que los extremos puedan ser desplazados
-	 */  
-	private boolean                fixExtreme     = false;
+	 */
+	private boolean fixExtreme = false;
 	/**
 	 * Eje seleccionado para su arrastre
 	 */
-	private int                    axisSelected   = -1;
+	private int axisSelected = -1;
 	/**
 	 * Distancia entre el punto pinchado y la posición real del eje en X
 	 */
-	private double                 distance       = 0;
+	private double distance = 0;
 	/**
 	 * Flag que informa de cuando se está arrastrando un eje
 	 */
-	private boolean                draggingAxis   = false;
-	
+	private boolean draggingAxis = false;
+
 	/**
 	 * Asigna el color de las líneas que representan los tramos
-	 * @param c Color de los intervalos sobre el gráfico
-	 * @param n Número de intervalos inicial
+	 * 
+	 * @param c
+	 *            Color de los intervalos sobre el gráfico
+	 * @param n
+	 *            Número de intervalos inicial
 	 */
 	public StretchLayer(Color c, int n) {
-		setColor(c); 
+		setColor(c);
 		stretchs.generate(n);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.beans.canvas.DrawableElement#firstActions()
 	 */
 	public void firstActions() {
@@ -78,51 +85,64 @@ public class StretchLayer extends DrawableElement {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.beans.canvas.DrawableElement#firstDrawActions()
 	 */
 	public void firstDrawActions() {
 	}
 
 	/**
-	 * Asigna el valor del flag que bloquea los extremos para que no puedan ser 
+	 * Asigna el valor del flag que bloquea los extremos para que no puedan ser
 	 * desplazados por el usuario.
-	 * @param fe true para fijar los extremos y false para desbloquearlos
+	 * 
+	 * @param fe
+	 *            true para fijar los extremos y false para desbloquearlos
 	 */
 	public void fixExtreme(boolean fe) {
 		this.fixExtreme = fe;
 	}
-	
+
 	/**
 	 * Convierte un valor entre 0 y 1 a posición en píxeles
-	 * @param value Valor entre 0 y 1
+	 * 
+	 * @param value
+	 *            Valor entre 0 y 1
 	 * @return Posición en píxeles
 	 */
 	private int percentToPixel(double value) {
-		return (int) Math.round(canvas.getCanvasMinX() + border + ((canvas.getCanvasMaxX() - canvas.getCanvasMinX() - (border * 2)) * value));
+		return (int) Math
+				.round(canvas.getCanvasMinX()
+						+ border
+						+ ((canvas.getCanvasMaxX() - canvas.getCanvasMinX() - (border * 2)) * value));
 	}
 
 	/**
 	 * Convierte un valor en píxeles a un rango entre 0 y 1
-	 * @param Posición en píxeles
-	 * @return  Valor entre 0 y 1
+	 * 
+	 * @param Posición
+	 *            en píxeles
+	 * @return Valor entre 0 y 1
 	 */
 	private double pixelToPercent(int pixel) {
-		return ((double) (pixel - canvas.getCanvasMinX() - border) / (double) (canvas.getCanvasMaxX() - canvas.getCanvasMinX() - (border * 2)));
+		return ((double) (pixel - canvas.getCanvasMinX() - border) / (double) (canvas
+				.getCanvasMaxX() - canvas.getCanvasMinX() - (border * 2)));
 	}
-		
+
 	/**
 	 * Obtiene la lista de valores de los tramos en forma de array de double
+	 * 
 	 * @return double[]
 	 */
 	public double[] getDoubleValues() {
-		double[] list =  new double[stretchs.size()];
-		for (int i = 0; i < stretchs.size(); i++) 
-			list[i] = ((Double)stretchs.get(i)).doubleValue();
+		double[] list = new double[stretchs.size()];
+		for (int i = 0; i < stretchs.size(); i++)
+			list[i] = ((Double) stretchs.get(i)).doubleValue();
 		return list;
 	}
-	
+
 	/**
 	 * Obtiene la lista de valores de los tramos en forma de ArrayList
+	 * 
 	 * @return ArrayList
 	 */
 	public StretchLayerDataModel getStretchDataModel() {
@@ -131,7 +151,9 @@ public class StretchLayer extends DrawableElement {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.beans.canvas.DrawableElement#paint(java.awt.Graphics)
+	 * 
+	 * @see
+	 * org.gvsig.raster.beans.canvas.DrawableElement#paint(java.awt.Graphics)
 	 */
 	protected void paint(Graphics g) {
 		g.setColor(color);
@@ -141,29 +163,34 @@ public class StretchLayer extends DrawableElement {
 		g2.setStroke(stroke);
 
 		for (int i = 0; i < stretchs.size(); i++) {
-			double value = ((Double)stretchs.get(i)).doubleValue();
+			double value = ((Double) stretchs.get(i)).doubleValue();
 			double v = percentToPixel(value);
-			g2.drawLine((int)v, canvas.getCanvasMinY(), (int)v, canvas.getCanvasMaxY());	
+			g2.drawLine((int) v, canvas.getCanvasMinY(), (int) v,
+					canvas.getCanvasMaxY());
 		}
 
 		g2.setStroke(stroke2);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.beans.canvas.DrawableElement#mouseMoved(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * org.gvsig.raster.beans.canvas.DrawableElement#mouseMoved(java.awt.event
+	 * .MouseEvent)
 	 */
 	public boolean mouseMoved(MouseEvent e) {
 		int begin = 0;
-		int end =  stretchs.size();
-		if(fixExtreme) {
-			begin ++;
-			end --;
+		int end = stretchs.size();
+		if (fixExtreme) {
+			begin++;
+			end--;
 		}
-		
-		if (e.getY() > canvas.getCanvasMinY() && e.getY() < canvas.getCanvasMaxY()) {
+
+		if (e.getY() > canvas.getCanvasMinY()
+				&& e.getY() < canvas.getCanvasMaxY()) {
 			for (int i = begin; i < end; i++) {
-				double value = ((Double)stretchs.get(i)).doubleValue();
+				double value = ((Double) stretchs.get(i)).doubleValue();
 				double axisX = percentToPixel(value);
 				axisSelected = i;
 				if (e.getX() >= (axisX - 3) && e.getX() <= (axisX + 3)) {
@@ -179,20 +206,23 @@ public class StretchLayer extends DrawableElement {
 		axisSelected = -1;
 		return true;
 	}
-	
+
 	/**
 	 * <P>
-	 * Al pulsar botón izquierdo, si cursor está sobre una línea se captura esta 
-	 * para su arrastre. Si no está sobre una línea se añade una a la lista en el 
-	 * punto que se ha pinchado
-	 * </p><p>
-	 * Al pulsar botón derecho, si el cursor está sobre una línea esta se elimina.
+	 * Al pulsar botón izquierdo, si cursor está sobre una línea se captura esta
+	 * para su arrastre. Si no está sobre una línea se añade una a la lista en
+	 * el punto que se ha pinchado
+	 * </p>
+	 * <p>
+	 * Al pulsar botón derecho, si el cursor está sobre una línea esta se
+	 * elimina.
 	 * </p>
 	 */
 	public boolean mousePressed(MouseEvent e) {
-		if(e.getButton() == MouseEvent.BUTTON1) {
-			if(axisSelected >= 0) {
-				double linePoint = ((Double)stretchs.get(axisSelected)).doubleValue();
+		if (e.getButton() == MouseEvent.BUTTON1) {
+			if (axisSelected >= 0) {
+				double linePoint = ((Double) stretchs.get(axisSelected))
+						.doubleValue();
 				distance = pixelToPercent(e.getX()) - linePoint;
 				draggingAxis = true;
 			} else {
@@ -200,32 +230,35 @@ public class StretchLayer extends DrawableElement {
 				canvas.repaint();
 			}
 		}
-		if(e.getButton() == MouseEvent.BUTTON3) {
-			if(axisSelected >= 0 && axisSelected < stretchs.size()) {
+		if (e.getButton() == MouseEvent.BUTTON3) {
+			if (axisSelected >= 0 && axisSelected < stretchs.size()) {
 				stretchs.remove(axisSelected);
 				canvas.repaint();
 			}
 		}
-		return true;	
+		return true;
 	}
-	
+
 	/**
 	 * Inicializamos la distancia
 	 */
 	public boolean mouseReleased(MouseEvent e) {
 		draggingAxis = false;
-		//Ordenamos el array de valores por si se ha desordenado al mover los ejes
+		// Ordenamos el array de valores por si se ha desordenado al mover los
+		// ejes
 		stretchs.sort();
 		canvas.callDataChanged("moveline", this);
 		return true;
 	}
 
 	/**
-	 * Cuando se ha pinchado un punto y se arrastra se define aquí su comportamiento.
+	 * Cuando se ha pinchado un punto y se arrastra se define aquí su
+	 * comportamiento.
 	 */
 	public boolean mouseDragged(MouseEvent e) {
-		if(draggingAxis) {
-			double linePoint = ((Double)stretchs.get(axisSelected)).doubleValue();
+		if (draggingAxis) {
+			double linePoint = ((Double) stretchs.get(axisSelected))
+					.doubleValue();
 			linePoint = pixelToPercent(e.getX()) + distance;
 			stretchs.set(axisSelected, new Double(linePoint));
 			canvas.repaint();

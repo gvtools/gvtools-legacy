@@ -42,20 +42,22 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: GeometrySnapperTest.java 14152 2007-09-27 19:12:46Z azabala $
-* $Log: GeometrySnapperTest.java,v $
-* Revision 1.2  2007/09/10 14:42:13  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2007/09/06 16:32:02  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: GeometrySnapperTest.java 14152 2007-09-27 19:12:46Z azabala $
+ * $Log: GeometrySnapperTest.java,v $
+ * Revision 1.2  2007/09/10 14:42:13  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2007/09/06 16:32:02  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package org.gvsig.topology;
 
 import java.util.ArrayList;
+
+import junit.framework.TestCase;
 
 import org.gvsig.jts.GeometrySnapper;
 
@@ -66,23 +68,19 @@ import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
 
-
-import junit.framework.TestCase;
-
 public class GeometrySnapperTest extends TestCase {
 
 	GeometryFactory factory = new GeometryFactory();
 	WKTReader wktReader = new WKTReader(factory);
-	
-	
-	public void tearDown() throws Exception{
+
+	public void tearDown() throws Exception {
 		super.tearDown();
 		factory = null;
 		wktReader = null;
 		System.gc();
 	}
-	
-	public void testAverageSnap1(){
+
+	public void testAverageSnap1() {
 		Coordinate coord1 = new Coordinate(0, 0);
 		Coordinate coord2 = new Coordinate(100, 100);
 		Coordinate coord3 = new Coordinate(200, 200);
@@ -90,41 +88,37 @@ public class GeometrySnapperTest extends TestCase {
 		coords.add(coord1);
 		coords.add(coord2);
 		coords.add(coord3);
-		int[] weights = {1,1,1};//all coordinates with the same weight
-		
+		int[] weights = { 1, 1, 1 };// all coordinates with the same weight
+
 		GeometrySnapper snapper = new GeometrySnapper(0.1d);
 		Coordinate averageCoord = snapper.snapAverage(coords, weights);
-		
-		assertTrue(averageCoord.x == (0 + 100 + 200)/3);
-		
-		
-		int[] weights2 = {1,2,2, 1};//first coordinate with double weight
+
+		assertTrue(averageCoord.x == (0 + 100 + 200) / 3);
+
+		int[] weights2 = { 1, 2, 2, 1 };// first coordinate with double weight
 		coords.add(new Coordinate(0.5, 1.27));
 		averageCoord = snapper.snapAverage(coords, weights2);
-		//snapped point is nearest to the coord with higher weight
-		assertTrue(coord1.distance(averageCoord) < coord3.distance(averageCoord));
+		// snapped point is nearest to the coord with higher weight
+		assertTrue(coord1.distance(averageCoord) < coord3
+				.distance(averageCoord));
 	}
-	
-	
-	public void testSnapManyGeometries() throws ParseException{
+
+	public void testSnapManyGeometries() throws ParseException {
 		String linestring1 = "LINESTRING (280 80, 380 240, 620 360, 820 220, 600 140, 560 240, 420 180)";
 		String linestring2 = "LINESTRING (280.001 79.999, 420.21 179.999)";
-		
+
 		LineString geo1 = (LineString) wktReader.read(linestring1);
 		LineString geo2 = (LineString) wktReader.read(linestring2);
-		
+
 		GeometrySnapper snapper = new GeometrySnapper(0.6);
-		LineString[] geometries = {geo1, geo2};
-		int[] weights = {1,0};
+		LineString[] geometries = { geo1, geo2 };
+		int[] weights = { 1, 0 };
 		Geometry[] snappedGeometries = snapper.snap(geometries, weights);
-		for(int i = 0; i < snappedGeometries.length; i++){
+		for (int i = 0; i < snappedGeometries.length; i++) {
 			System.out.println(snappedGeometries[i].toText());
 		}
 		LineString geo2orig = (LineString) wktReader.read(linestring2);
 		assertTrue(!geo2orig.equals(geo1));
 	}
-	
-	
-	
-}
 
+}

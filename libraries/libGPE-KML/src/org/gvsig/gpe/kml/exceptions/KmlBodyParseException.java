@@ -70,28 +70,28 @@ import org.gvsig.exceptions.BaseException;
 public class KmlBodyParseException extends BaseException {
 	private static final long serialVersionUID = -5567393168169723909L;
 	private File m_File = null;
-	
-	public KmlBodyParseException() {		
-		init();		
+
+	public KmlBodyParseException() {
+		init();
 	}
-	
+
 	public KmlBodyParseException(Throwable exception) {
 		init();
 		initCause(exception);
 	}
-	
+
 	private void init() {
 		messageKey = "error_kml_body";
 		formatString = "Error parsing the Kml body file";
-		code = serialVersionUID;		
+		code = serialVersionUID;
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map values() {
 		return new Hashtable();
 	}
 }
-

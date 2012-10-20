@@ -77,12 +77,11 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  *
  */
 /**
- *  A LineString is a special curve that consists of a
- *  single segment with linear interpolation. It is defined
- *  by two or more coordinate tuples, with linear interpolation
- *  between them.
- *  It parses a gml:LineStringType object. Example:
+ * A LineString is a special curve that consists of a single segment with linear
+ * interpolation. It is defined by two or more coordinate tuples, with linear
+ * interpolation between them. It parses a gml:LineStringType object. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;LineString&gt;
@@ -91,63 +90,68 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  * &lt;/LineString&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class LineStringTypeBinding extends GeometryBinding{
-	
+public class LineStringTypeBinding extends GeometryBinding {
+
 	/**
 	 * It parses the gml:LineQName tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * A line
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return A line
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public Object parse(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
+	public Object parse(IXmlStreamReader parser, GPEDefaultGmlParser handler)
+			throws XmlStreamException, IOException {
 		boolean endFeature = false;
 		int currentTag;
 		Object lineString = null;
-			
+
 		super.setAtributtes(parser, handler.getErrorHandler());
 
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
 				lineString = parseTag(parser, handler, tag, id, srsName);
-				//The parser pointer is in the </gml:LoneString> tag
-			 	if (lineString != null){
-			 		return lineString;
-			 	}
-			 	break;
+				// The parser pointer is in the </gml:LoneString> tag
+				if (lineString != null) {
+					return lineString;
+				}
+				break;
 			case IXmlStreamReader.END_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_LINESTRING)){	
+				if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_LINESTRING)) {
 					endFeature = true;
 					handler.getContentHandler().endLineString(lineString);
 				}
 				break;
-			case IXmlStreamReader.CHARACTERS:					
+			case IXmlStreamReader.CHARACTERS:
 
 				break;
 			}
-			if (!endFeature){					
+			if (!endFeature) {
 				currentTag = parser.next();
 				tag = parser.getName();
 			}
-		}		
+		}
 
-		return lineString;	
+		return lineString;
 	}
-	
+
 	/**
 	 * It parses next tag
+	 * 
 	 * @param parser
 	 * @param handler
 	 * @param tag
@@ -157,20 +161,24 @@ public class LineStringTypeBinding extends GeometryBinding{
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	protected Object parseTag(IXmlStreamReader parser,GPEDefaultGmlParser handler, QName tag, String id, String srsName) throws XmlStreamException, IOException{
+	protected Object parseTag(IXmlStreamReader parser,
+			GPEDefaultGmlParser handler, QName tag, String id, String srsName)
+			throws XmlStreamException, IOException {
 		Object lineString = null;
-		if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_COORDINATES)){
-			CoordinatesTypeIterator coordinatesIteartor = handler.getProfile().getCoordinatesTypeBinding();
-			coordinatesIteartor.initialize(parser, handler,GMLTags.GML_LINESTRING);
+		if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_COORDINATES)) {
+			CoordinatesTypeIterator coordinatesIteartor = handler.getProfile()
+					.getCoordinatesTypeBinding();
+			coordinatesIteartor.initialize(parser, handler,
+					GMLTags.GML_LINESTRING);
 			lineString = handler.getContentHandler().startLineString(id,
-					coordinatesIteartor,								
-					srsName);						
-		}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_COORD)){
-			CoordTypeIterator coordinatesIteartor = handler.getProfile().getCoordTypeBinding();
-			coordinatesIteartor.initialize(parser, handler,GMLTags.GML_LINESTRING);
+					coordinatesIteartor, srsName);
+		} else if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_COORD)) {
+			CoordTypeIterator coordinatesIteartor = handler.getProfile()
+					.getCoordTypeBinding();
+			coordinatesIteartor.initialize(parser, handler,
+					GMLTags.GML_LINESTRING);
 			lineString = handler.getContentHandler().startLineString(id,
-					coordinatesIteartor,								
-					srsName);			
+					coordinatesIteartor, srsName);
 		}
 		return lineString;
 	}

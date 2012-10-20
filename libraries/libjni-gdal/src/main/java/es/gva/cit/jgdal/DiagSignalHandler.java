@@ -17,6 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
  */
 package es.gva.cit.jgdal;
+
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,37 +31,38 @@ import sun.misc.Signal;
 import sun.misc.SignalHandler;
 
 class DiagSignalHandler implements SignalHandler {
-			 
-		private SignalHandler oldHandler;
-		private static boolean active = false;
 
-		//Static method to install the signal handler
-		public static DiagSignalHandler install(String signalName) {
-			Signal diagSignal = new Signal(signalName);
-				DiagSignalHandler diagHandler = new DiagSignalHandler();
-			diagHandler.oldHandler = Signal.handle(diagSignal,diagHandler);
-				return diagHandler;
-		}
-		// Signal handler method
-		public void handle(Signal sig) {
-	if(active)
-		return;
-	active = true;
-	JFrame frame = new JFrame();
-	frame.setSize(400, 150);
-	JPanel p = new JPanel();
-	JLabel l = new JLabel("SIGSEGV signal handler. Signal: " + sig);
-	p.setLayout(new BorderLayout());
-	JButton b = new JButton("Close");
-	b.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			System.out.println("Handler test");
-		}
-	});
-	p.add(l, BorderLayout.NORTH);
-	p.add(b, BorderLayout.SOUTH);
+	private SignalHandler oldHandler;
+	private static boolean active = false;
 
-	frame.getContentPane().add(p);
-	frame.show();
-		 }
+	// Static method to install the signal handler
+	public static DiagSignalHandler install(String signalName) {
+		Signal diagSignal = new Signal(signalName);
+		DiagSignalHandler diagHandler = new DiagSignalHandler();
+		diagHandler.oldHandler = Signal.handle(diagSignal, diagHandler);
+		return diagHandler;
+	}
+
+	// Signal handler method
+	public void handle(Signal sig) {
+		if (active)
+			return;
+		active = true;
+		JFrame frame = new JFrame();
+		frame.setSize(400, 150);
+		JPanel p = new JPanel();
+		JLabel l = new JLabel("SIGSEGV signal handler. Signal: " + sig);
+		p.setLayout(new BorderLayout());
+		JButton b = new JButton("Close");
+		b.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Handler test");
+			}
+		});
+		p.add(l, BorderLayout.NORTH);
+		p.add(b, BorderLayout.SOUTH);
+
+		frame.getContentPane().add(p);
+		frame.show();
+	}
 }

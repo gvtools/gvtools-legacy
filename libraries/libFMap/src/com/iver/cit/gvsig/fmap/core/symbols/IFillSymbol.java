@@ -65,28 +65,30 @@ import com.iver.cit.gvsig.fmap.core.CartographicSupport;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 
 /**
- * Interface that extends ISymbol interface in order to define methods for
- * fill symbols which can manage specific attributes of them.
- *
- *
+ * Interface that extends ISymbol interface in order to define methods for fill
+ * symbols which can manage specific attributes of them.
+ * 
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 
-public interface IFillSymbol extends ISymbol, CartographicSupport{
+public interface IFillSymbol extends ISymbol, CartographicSupport {
 
 	public abstract boolean isSuitableFor(IGeometry geom);
 
 	public abstract int getOnePointRgb();
 
 	/**
-	 * Sets the color that will be used to draw the filling pattern of this symbol.
-	 *
+	 * Sets the color that will be used to draw the filling pattern of this
+	 * symbol.
+	 * 
 	 * @param Color
 	 */
 	public abstract void setFillColor(Color color);
 
 	/**
 	 * Sets the color of the outline.
+	 * 
 	 * @deprectated will be substituted by setOutline(AbstractLineSymbol);
 	 * @param color
 	 */
@@ -99,21 +101,24 @@ public interface IFillSymbol extends ISymbol, CartographicSupport{
 
 	/**
 	 * Obtains the ILineSymbol interface of the outline
+	 * 
 	 * @return the outline,ILineSymbol.
 	 */
 	public abstract ILineSymbol getOutline();
+
 	/**
 	 * Obtains the transparency of the fill symbol
+	 * 
 	 * @return the transparency of the fill symbol
 	 */
 
 	public abstract int getFillAlpha();
 
 	public abstract boolean hasFill();
-	
+
 	public abstract void setHasFill(boolean hasFill);
-	
+
 	public abstract boolean hasOutline();
-	
+
 	public abstract void setHasOutline(boolean hasOutline);
 }

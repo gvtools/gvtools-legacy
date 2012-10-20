@@ -21,6 +21,7 @@ import com.iver.cit.gvsig.project.documents.view.legend.gui.ISymbolSelector;
 import com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction;
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
 import com.iver.cit.gvsig.project.documents.view.toc.TocItemLeaf;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -100,7 +101,7 @@ import com.iver.cit.gvsig.project.documents.view.toc.TocItemLeaf;
  */
 public class ChangeSymbolTocMenuEntry extends AbstractTocContextMenuAction {
 	public String getGroup() {
-		return "group1"; //FIXME
+		return "group1"; // FIXME
 	}
 
 	public int getGroupOrder() {
@@ -127,22 +128,25 @@ public class ChangeSymbolTocMenuEntry extends AbstractTocContextMenuAction {
 
 		boolean showDialog = isTocItemLeaf(item);
 
-		if (!showDialog) return;
+		if (!showDialog)
+			return;
 
 		try {
-			if(!(selectedItems[0] instanceof FLyrVect))
-                return;
+			if (!(selectedItems[0] instanceof FLyrVect))
+				return;
 			FLyrVect layer = (FLyrVect) selectedItems[0];
 			ISymbol oldSymbol = ((TocItemLeaf) item).getSymbol();
 			// patch, figure out an ellegant way to solve this
 			if (oldSymbol instanceof MultiLayerFillSymbol) {
 				MultiLayerFillSymbol ms = (MultiLayerFillSymbol) oldSymbol;
 				for (int i = 0; i < ms.getLayerCount(); i++) {
-					if (ms.getLayer(i).getClassName().equals("org.gvsig.symbology.symbols.DotDensityFillSymbol")) {
+					if (ms.getLayer(i)
+							.getClassName()
+							.equals("org.gvsig.symbology.symbols.DotDensityFillSymbol")) {
 						/*
 						 * since dot density symbol works together with the
-						 * legend, there is no way to edit it from the symbol selector and editor
-						 * we have to break now!
+						 * legend, there is no way to edit it from the symbol
+						 * selector and editor we have to break now!
 						 */
 						return;
 					}
@@ -150,22 +154,24 @@ public class ChangeSymbolTocMenuEntry extends AbstractTocContextMenuAction {
 			}
 			// end patch
 
-
 			int shapeType = ((IVectorLegend) layer.getLegend()).getShapeType();
 			if (shapeType == 0) {
-				Logger.getLogger(ChangeNameTocMenuEntry.class).debug("Error legend "+layer.getLegend()+" does not have shapetype initialized");
+				Logger.getLogger(ChangeNameTocMenuEntry.class).debug(
+						"Error legend " + layer.getLegend()
+								+ " does not have shapetype initialized");
 				shapeType = layer.getShapeType();
 			}
 
 			ISymbolSelector symSel = null;
 
 			try {
-				symSel = SymbolSelector.createSymbolSelector(oldSymbol, shapeType);
+				symSel = SymbolSelector.createSymbolSelector(oldSymbol,
+						shapeType);
 			} catch (IllegalArgumentException iaEx) {
 				/*
-				 * this usually happens when the Legend has a composed
-				 * symbol that collides with the normal operation and
-				 * it only can be changed from the panel of the legend
+				 * this usually happens when the Legend has a composed symbol
+				 * that collides with the normal operation and it only can be
+				 * changed from the panel of the legend
 				 */
 				// TODO throw a signal and show a warning message box telling
 				// that the operation cannot be performed
@@ -192,20 +198,25 @@ public class ChangeSymbolTocMenuEntry extends AbstractTocContextMenuAction {
 						ss.setDefaultSymbol(newSymbol);
 					}
 				} catch (Exception e) {
-					NotificationManager.addWarning(PluginServices.getText(this, "skipped_symbol_changed_for_layer")+": "+theLayer.getName(), e);
+					NotificationManager.addWarning(
+							PluginServices.getText(this,
+									"skipped_symbol_changed_for_layer")
+									+ ": "
+									+ theLayer.getName(), e);
 				}
 
 			}
-		     // refresh view treak
+			// refresh view treak
 			MapContext mc = layer.getMapContext();
 			mc.invalidate();
-			Project project=((ProjectExtension)PluginServices.getExtension(ProjectExtension.class)).getProject();
+			Project project = ((ProjectExtension) PluginServices
+					.getExtension(ProjectExtension.class)).getProject();
 			project.setModified(true);
 			mc.callLegendChanged();
 
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(PluginServices.getText(this, "getting_shape_type"), e);
+			NotificationManager.addError(
+					PluginServices.getText(this, "getting_shape_type"), e);
 		}
 	}
 }
-

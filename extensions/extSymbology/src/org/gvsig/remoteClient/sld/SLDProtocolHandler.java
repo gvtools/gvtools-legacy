@@ -50,22 +50,23 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
 
-
-
-
 /**
- * Implements the main class for the SLD implementation specification (version 1.0.0)
- * which starts the parsing of the styled layer descriptor document in order to store
- * all the information that it has inside and transform it into objects.<p>
+ * Implements the main class for the SLD implementation specification (version
+ * 1.0.0) which starts the parsing of the styled layer descriptor document in
+ * order to store all the information that it has inside and transform it into
+ * objects.
+ * <p>
  * 
- * An SLD document is defined as a sequence of styled layers.<p>
- * The version attribute gives the SLD version an SLD document, to facilitate backward
- * compatibility with static documents stored in various different versions of an SLD
- * spec.<p>
+ * An SLD document is defined as a sequence of styled layers.
+ * <p>
+ * The version attribute gives the SLD version an SLD document, to facilitate
+ * backward compatibility with static documents stored in various different
+ * versions of an SLD spec.
+ * <p>
  * 
- * The Styled layers can correspond to either named layers or user-defined layers,
- * which are described in subsequent sections. There may be any number of either type
- * of styled layer, including zero, mixed in any order.
+ * The Styled layers can correspond to either named layers or user-defined
+ * layers, which are described in subsequent sections. There may be any number
+ * of either type of styled layer, including zero, mixed in any order.
  * 
  * @see http://portal.opengeospatial.org/files/?artifact_id=1188
  * 
@@ -73,33 +74,36 @@ import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
  */
 public abstract class SLDProtocolHandler {
 
-	
 	protected String name;
 	private String version;
-	protected ArrayList<ISLDLayer> layers = new ArrayList<ISLDLayer>(); ; 
+	protected ArrayList<ISLDLayer> layers = new ArrayList<ISLDLayer>();;
 
-	public abstract void parse(File f) throws IOException, XmlPullParserException, LegendDriverException;
-	
-	public String detectVersion(File f) throws XmlPullParserException, IOException, LegendDriverException {
+	public abstract void parse(File f) throws IOException,
+			XmlPullParserException, LegendDriverException;
+
+	public String detectVersion(File f) throws XmlPullParserException,
+			IOException, LegendDriverException {
 		int tag;
 		XMLSchemaParser xmlSchemaParser = null;
 		xmlSchemaParser = new XMLSchemaParser();
 
-
 		xmlSchemaParser.setInput(f);
 		xmlSchemaParser.nextTag();
-		if ( xmlSchemaParser.getEventType() != xmlSchemaParser.END_DOCUMENT ) {
+		if (xmlSchemaParser.getEventType() != xmlSchemaParser.END_DOCUMENT) {
 
-			String value = xmlSchemaParser.getAttributeValue("",SLDTags.VERSION_ATTR);
+			String value = xmlSchemaParser.getAttributeValue("",
+					SLDTags.VERSION_ATTR);
 			return value;
-		} 
-		
-		throw new LegendDriverException(LegendDriverException.READ_DRIVER_EXCEPTION);
+		}
+
+		throw new LegendDriverException(
+				LegendDriverException.READ_DRIVER_EXCEPTION);
 	}
-	
+
 	public ArrayList<ISLDLayer> getLayers() {
 		return layers;
 	}
+
 	public void setLayers(ArrayList<ISLDLayer> layers) {
 		this.layers = layers;
 	}
@@ -107,12 +111,15 @@ public abstract class SLDProtocolHandler {
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getVersion() {
 		return version;
 	}
+
 	public void setVersion(String version) {
 		this.version = version;
 	}

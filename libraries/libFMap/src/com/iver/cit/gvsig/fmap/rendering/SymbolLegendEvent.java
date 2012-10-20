@@ -45,27 +45,37 @@ import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.layers.LegendEvent;
 
 /**
- * <p>Event produced when changes one of the symbols of a classified legend.</p>
- *
+ * <p>
+ * Event produced when changes one of the symbols of a classified legend.
+ * </p>
+ * 
  * @see FMapEvent
  * @author Vicente Caballero Navarro
  */
 public class SymbolLegendEvent extends ClassificationLegendEvent {
-/**
-	 * <p>Previous symbol style.</p>
+	/**
+	 * <p>
+	 * Previous symbol style.
+	 * </p>
 	 */
 	private ISymbol oldSymbol;
-	
+
 	/**
-	 * <p>New symbol style.</p>
+	 * <p>
+	 * New symbol style.
+	 * </p>
 	 */
 	private ISymbol newSymbol;
 
 	/**
-	 * <p>Creates a new symbol legend event.</p>
-	 *
-	 * @param oldValue previous symbol style
-	 * @param newValue new symbol style
+	 * <p>
+	 * Creates a new symbol legend event.
+	 * </p>
+	 * 
+	 * @param oldValue
+	 *            previous symbol style
+	 * @param newValue
+	 *            new symbol style
 	 */
 	public SymbolLegendEvent(ISymbol oldSymbol, ISymbol newSymbol) {
 		this.oldSymbol = oldSymbol;
@@ -73,8 +83,10 @@ public class SymbolLegendEvent extends ClassificationLegendEvent {
 	}
 
 	/**
-	 * <p>Gets the previous symbol style.</p>
-	 *
+	 * <p>
+	 * Gets the previous symbol style.
+	 * </p>
+	 * 
 	 * @return the previous symbol style
 	 */
 	public ISymbol getOldSymbol() {
@@ -82,8 +94,10 @@ public class SymbolLegendEvent extends ClassificationLegendEvent {
 	}
 
 	/**
-	 * <p>Gets the new symbol style.</p>
-	 *
+	 * <p>
+	 * Gets the new symbol style.
+	 * </p>
+	 * 
 	 * @return the new symbol style
 	 */
 	public ISymbol getNewSymbol() {
@@ -91,7 +105,9 @@ public class SymbolLegendEvent extends ClassificationLegendEvent {
 	}
 
 	/**
-	 * <p>Returns the type of this legend event.</p>
+	 * <p>
+	 * Returns the type of this legend event.
+	 * </p>
 	 * 
 	 * @return the type of this legend event
 	 * 

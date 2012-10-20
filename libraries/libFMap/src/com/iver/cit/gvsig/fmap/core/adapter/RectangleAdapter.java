@@ -44,47 +44,44 @@ import java.awt.geom.Point2D;
 
 import com.iver.cit.gvsig.fmap.core.GeneralPathX;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class RectangleAdapter extends PolygonAdapter {
-   /**
-     * DOCUMENT ME!
-     *
-     * @param p DOCUMENT ME!
-     */
-    public void obtainShape(Point2D p) {
-    	Point2D[] points=getPoints();
-        GeneralPathX elShape = new GeneralPathX(GeneralPathX.WIND_EVEN_ODD,
-                points.length);
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param p
+	 *            DOCUMENT ME!
+	 */
+	public void obtainShape(Point2D p) {
+		Point2D[] points = getPoints();
+		GeneralPathX elShape = new GeneralPathX(GeneralPathX.WIND_EVEN_ODD,
+				points.length);
 
-        if (points.length > 0) {
-            elShape.moveTo(((Point2D) points[0]).getX(),
-                ((Point2D) points[0]).getY());
-        }
+		if (points.length > 0) {
+			elShape.moveTo(((Point2D) points[0]).getX(),
+					((Point2D) points[0]).getY());
+		}
 
-        if (points.length > 0) {
-            elShape.lineTo(p.getX(), ((Point2D) points[0]).getY());
-            elShape.lineTo(p.getX(), p.getY());
-            elShape.lineTo(((Point2D) points[0]).getX(), p.getY());
-            elShape.lineTo(((Point2D) points[0]).getX(),
-                ((Point2D) points[0]).getY());
-        }
+		if (points.length > 0) {
+			elShape.lineTo(p.getX(), ((Point2D) points[0]).getY());
+			elShape.lineTo(p.getX(), p.getY());
+			elShape.lineTo(((Point2D) points[0]).getX(), p.getY());
+			elShape.lineTo(((Point2D) points[0]).getX(),
+					((Point2D) points[0]).getY());
+		}
 
-        setGPX(elShape);
-    }
+		setGPX(elShape);
+	}
 
-    /*  public int addPoint(Point2D point) {
-       if (points.size()==0){
-               points.add(point);
-       }else{
-               points.add(new Point2D.Double(point.getX(),((Point2D) points.get(0)).getY()));
-           points.add(point);
-           points.add(new Point2D.Double(((Point2D) points.get(0)).getX(),point.getY()));
-       }
-       return points.size();
-       }*/
+	/*
+	 * public int addPoint(Point2D point) { if (points.size()==0){
+	 * points.add(point); }else{ points.add(new
+	 * Point2D.Double(point.getX(),((Point2D) points.get(0)).getY()));
+	 * points.add(point); points.add(new Point2D.Double(((Point2D)
+	 * points.get(0)).getX(),point.getY())); } return points.size(); }
+	 */
 }

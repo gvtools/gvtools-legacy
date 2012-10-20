@@ -45,10 +45,9 @@ import com.iver.cit.gvsig.project.documents.layout.LayoutContext;
 import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 import com.iver.cit.gvsig.project.documents.layout.gui.dialogs.FPositionDialog;
 
-
 /**
  * Modifica la posición y tamaño del fframe seleccionado.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class PositionLayoutMenuEntry extends AbstractLayoutContextMenuAction {
@@ -68,22 +67,26 @@ public class PositionLayoutMenuEntry extends AbstractLayoutContextMenuAction {
 		return PluginServices.getText(this, "tamano_posicion");
 	}
 
-	public boolean isEnabled(LayoutContext layoutContext, IFFrame[] selectedFrames) {
+	public boolean isEnabled(LayoutContext layoutContext,
+			IFFrame[] selectedFrames) {
 		return true;
 	}
 
-	public boolean isVisible(LayoutContext layoutContext, IFFrame[] selectedFrames) {
-		if (selectedFrames.length==1 && !(getLayout().getLayoutControl().getGeometryAdapter().getPoints().length>0)) {
+	public boolean isVisible(LayoutContext layoutContext,
+			IFFrame[] selectedFrames) {
+		if (selectedFrames.length == 1
+				&& !(getLayout().getLayoutControl().getGeometryAdapter()
+						.getPoints().length > 0)) {
 			return true;
 		}
 		return false;
 	}
 
-
 	public void execute(LayoutContext layoutContext, IFFrame[] selectedFrames) {
-		if (selectedFrames.length!=0){
-			for (int i=0;i<selectedFrames.length;i++){
-				FPositionDialog positiondialog = new FPositionDialog(getLayout(),selectedFrames[i]);
+		if (selectedFrames.length != 0) {
+			for (int i = 0; i < selectedFrames.length; i++) {
+				FPositionDialog positiondialog = new FPositionDialog(
+						getLayout(), selectedFrames[i]);
 				PluginServices.getMDIManager().addWindow(positiondialog);
 			}
 		}

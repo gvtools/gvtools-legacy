@@ -26,48 +26,66 @@
 
 package org.gvsig.jogr;
 
-
-/** 
+/**
  * 
- * @author Nacho Brodin <brodin_ign@gva.es>.<BR> Equipo de desarrollo gvSIG.<BR> http://www.gvsig.gva.es
+ * @author Nacho Brodin <brodin_ign@gva.es>.<BR>
+ *         Equipo de desarrollo gvSIG.<BR>
+ *         http://www.gvsig.gva.es
  * @version 0.0
  * @link http://www.gvsig.gva.es
  */
 
-public class OGRFieldType{
-	
+public class OGRFieldType {
+
 	private int tipo;
-	
+
 	/**
 	 * Asigna el tipo
-	 * @param tipo	tipo
+	 * 
+	 * @param tipo
+	 *            tipo
 	 */
-	
-	public void setType(int tipo){this.tipo=tipo;}
-	
+
+	public void setType(int tipo) {
+		this.tipo = tipo;
+	}
+
 	/**
 	 * Devuelve el tipo
+	 * 
 	 * @return tipo
 	 */
-	
-	public int getType(){return tipo;}
-	
+
+	public int getType() {
+		return tipo;
+	}
+
 	/**
 	 * Devuelve el tipo en formato cadena
+	 * 
 	 * @return tipo
 	 */
-	
-	public String getStringType(){
-		switch(tipo){
-		 case 0:return new String("Integer");
-		 case 1:return new String("IntegerList");
-		 case 2:return new String("Real");
-		 case 3:return new String("RealList");
-		 case 4:return new String("String");
-		 case 5:return new String("StringList");
-		 case 6:return new String("WideString");
-		 case 7:return new String("WideStringList");
-		 case 8:return new String("Binary");
+
+	public String getStringType() {
+		switch (tipo) {
+		case 0:
+			return new String("Integer");
+		case 1:
+			return new String("IntegerList");
+		case 2:
+			return new String("Real");
+		case 3:
+			return new String("RealList");
+		case 4:
+			return new String("String");
+		case 5:
+			return new String("StringList");
+		case 6:
+			return new String("WideString");
+		case 7:
+			return new String("WideStringList");
+		case 8:
+			return new String("Binary");
 		}
 		return null;
 	}

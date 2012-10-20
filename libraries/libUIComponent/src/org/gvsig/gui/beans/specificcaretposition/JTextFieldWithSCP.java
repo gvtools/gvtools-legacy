@@ -8,7 +8,6 @@ import javax.swing.text.Document;
 import org.gvsig.gui.awt.event.specificCaretPosition.ISpecificCaretPosition;
 import org.gvsig.gui.awt.event.specificCaretPosition.SpecificCaretPositionListeners;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -51,13 +50,15 @@ import org.gvsig.gui.awt.event.specificCaretPosition.SpecificCaretPositionListen
  */
 
 /**
- * This class is a JTextField with two listeners that allow authomatically reset the caret
- *   position of this component to left (LEFT_POSITIONS), right (RIGHT_POSITIONS) or like JTextField (LIKE_JTEXTCOMPONENT) (do nothing).
- *   By default is to left. 
+ * This class is a JTextField with two listeners that allow authomatically reset
+ * the caret position of this component to left (LEFT_POSITIONS), right
+ * (RIGHT_POSITIONS) or like JTextField (LIKE_JTEXTCOMPONENT) (do nothing). By
+ * default is to left.
  * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
-public class JTextFieldWithSCP extends JTextField implements ISpecificCaretPosition, Serializable {
+public class JTextFieldWithSCP extends JTextField implements
+		ISpecificCaretPosition, Serializable {
 	private static final long serialVersionUID = -7873719783491147038L;
 
 	private int caretPositionMode;
@@ -70,16 +71,17 @@ public class JTextFieldWithSCP extends JTextField implements ISpecificCaretPosit
 		caretPositionMode = LEFT_POSITIONS;
 		initialize();
 	}
-	
+
 	/**
-	 * @see JTextField#JTextField(javax.swing.text.Document, java.lang.String, int)
+	 * @see JTextField#JTextField(javax.swing.text.Document, java.lang.String,
+	 *      int)
 	 */
 	public JTextFieldWithSCP(Document doc, String text, int columns) {
 		super(doc, text, columns);
 		caretPositionMode = LEFT_POSITIONS;
 		initialize();
 	}
-	
+
 	/**
 	 * @see JTextField#JTextField(int)
 	 */
@@ -88,7 +90,7 @@ public class JTextFieldWithSCP extends JTextField implements ISpecificCaretPosit
 		caretPositionMode = LEFT_POSITIONS;
 		initialize();
 	}
-	
+
 	/**
 	 * @see JTextField#JTextField(java.lang.String)
 	 */
@@ -97,7 +99,7 @@ public class JTextFieldWithSCP extends JTextField implements ISpecificCaretPosit
 		caretPositionMode = LEFT_POSITIONS;
 		initialize();
 	}
-	
+
 	/**
 	 * @see JTextField#JTextField(java.lang.String, int)
 	 */
@@ -106,57 +108,69 @@ public class JTextFieldWithSCP extends JTextField implements ISpecificCaretPosit
 		caretPositionMode = LEFT_POSITIONS;
 		initialize();
 	}
-//
-//	/**
-//	 * @see JTextField#JTextField()
-//   * @param position The position of text that will be seen (LEFT_POSITIONS, RIGHT_POSITIONS or LIKE_JTEXTCOMPONENT)
-//	 */
-//	public JTextFieldWithSpecificCaretPosition(int position) {
-//		super();
-//		caretPositionMode = position;
-//		initialize();
-//	}
-	
+
+	//
+	// /**
+	// * @see JTextField#JTextField()
+	// * @param position The position of text that will be seen (LEFT_POSITIONS,
+	// RIGHT_POSITIONS or LIKE_JTEXTCOMPONENT)
+	// */
+	// public JTextFieldWithSpecificCaretPosition(int position) {
+	// super();
+	// caretPositionMode = position;
+	// initialize();
+	// }
+
 	/**
-	 * @see JTextField#JTextField(javax.swing.text.Document, java.lang.String, int)
-	 * @param position The position of text that will be seen (LEFT_POSITIONS, RIGHT_POSITIONS or LIKE_JTEXTCOMPONENT)
+	 * @see JTextField#JTextField(javax.swing.text.Document, java.lang.String,
+	 *      int)
+	 * @param position
+	 *            The position of text that will be seen (LEFT_POSITIONS,
+	 *            RIGHT_POSITIONS or LIKE_JTEXTCOMPONENT)
 	 */
-	public JTextFieldWithSCP(Document doc, String text, int columns, int position) {
+	public JTextFieldWithSCP(Document doc, String text, int columns,
+			int position) {
 		super(doc, text, columns);
 		caretPositionMode = position;
 		initialize();
 	}
-	
+
 	/**
 	 * @see JTextField#JTextField(int)
-	 * @param position The position of text that will be seen (LEFT_POSITIONS, RIGHT_POSITIONS or LIKE_JTEXTCOMPONENT)
+	 * @param position
+	 *            The position of text that will be seen (LEFT_POSITIONS,
+	 *            RIGHT_POSITIONS or LIKE_JTEXTCOMPONENT)
 	 */
 	public JTextFieldWithSCP(int columns, int position) {
 		super(columns);
 		caretPositionMode = position;
 		initialize();
 	}
-	
+
 	/**
 	 * @see JTextField#JTextField(java.lang.String)
-	 * @param position The position of text that will be seen (LEFT_POSITIONS, RIGHT_POSITIONS or LIKE_JTEXTCOMPONENT)
+	 * @param position
+	 *            The position of text that will be seen (LEFT_POSITIONS,
+	 *            RIGHT_POSITIONS or LIKE_JTEXTCOMPONENT)
 	 */
 	public JTextFieldWithSCP(int position, String text) {
 		super(text);
 		caretPositionMode = position;
 		initialize();
 	}
-	
+
 	/**
 	 * @see JTextField#JTextField(java.lang.String, int)
-	 * @param position The position of text that will be seen (LEFT_POSITIONS, RIGHT_POSITIONS or LIKE_JTEXTCOMPONENT)
+	 * @param position
+	 *            The position of text that will be seen (LEFT_POSITIONS,
+	 *            RIGHT_POSITIONS or LIKE_JTEXTCOMPONENT)
 	 */
 	public JTextFieldWithSCP(String text, int columns, int position) {
 		super(text, columns);
 		caretPositionMode = position;
 		initialize();
 	}
-	
+
 	/**
 	 * This method adds three listeners to this component:
 	 */
@@ -165,16 +179,20 @@ public class JTextFieldWithSCP extends JTextField implements ISpecificCaretPosit
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see org.gvsig.gui.awt.event.ISpecificCaretPosition#getCaretPositionMode()
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gui.awt.event.ISpecificCaretPosition#getCaretPositionMode()
 	 */
 	public int getCaretPositionMode() {
 		return caretPositionMode;
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see org.gvsig.gui.awt.event.ISpecificCaretPosition#setCaretPositionMode(int)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gui.awt.event.ISpecificCaretPosition#setCaretPositionMode(int)
 	 */
 	public void setCaretPositionMode(int caretPositionMode) {
 		this.caretPositionMode = caretPositionMode;

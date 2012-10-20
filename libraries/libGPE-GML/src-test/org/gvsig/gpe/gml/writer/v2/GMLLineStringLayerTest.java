@@ -75,6 +75,7 @@ import org.gvsig.gpe.writer.GPELineStringLayerTest;
 public class GMLLineStringLayerTest extends GPELineStringLayerTest {
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEParserClass()
 	 */
 	public Class getGPEParserClass() {
@@ -83,6 +84,7 @@ public class GMLLineStringLayerTest extends GPELineStringLayerTest {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEWriterHandlerClass()
 	 */
 	public Class getGPEWriterHandlerClass() {
@@ -90,4 +92,3 @@ public class GMLLineStringLayerTest extends GPELineStringLayerTest {
 	}
 
 }
-

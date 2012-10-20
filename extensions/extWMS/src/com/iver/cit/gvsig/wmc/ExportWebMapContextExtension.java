@@ -143,7 +143,7 @@ import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 /**
  * Extension to export a view with WMS layers to a OGC's Web Map Context XML
  * file
- *
+ * 
  * @author jaume domínguez faus - jaume.dominguez@iver.es
  * @author laura díaz sánchez - laura.diaz@iver.es
  */
@@ -173,7 +173,8 @@ public class ExportWebMapContextExtension extends Extension {
 			PluginServices.getMDIManager().addWindow(mc);
 
 		} else if (actionCommand.equals("DO_EXPORT")) {
-			// Here the target file is produced (called from the WebMapContextSettingsPanel)
+			// Here the target file is produced (called from the
+			// WebMapContextSettingsPanel)
 			String xml = mc.getXML();
 			File f = mc.getTargetFile();
 			if (xml != null) {
@@ -184,8 +185,9 @@ public class ExportWebMapContextExtension extends Extension {
 	}
 
 	/**
-	 * Takes a File object and its XML contents and stores it as a regular
-	 * file in the file system.
+	 * Takes a File object and its XML contents and stores it as a regular file
+	 * in the file system.
+	 * 
 	 * @param f
 	 * @param xml
 	 */
@@ -219,7 +221,7 @@ public class ExportWebMapContextExtension extends Extension {
 		IWindow f = PluginServices.getMDIManager().getActiveWindow();
 		if (f instanceof BaseView) {
 			BaseView v = (BaseView) f;
-			if (v != null && v  instanceof BaseView) {
+			if (v != null && v instanceof BaseView) {
 				// Check if the active contains WMS layers. If so, this view
 				// will be the one to be exported.
 				FLayers lyrs = v.getMapControl().getMapContext().getLayers();
@@ -237,7 +239,8 @@ public class ExportWebMapContextExtension extends Extension {
 		// see what about the others. In this case, no view is set to be
 		// the exported one.
 		viewToExport = null;
-		ArrayList views = project.getDocumentsByType(ProjectViewFactory.registerName);
+		ArrayList views = project
+				.getDocumentsByType(ProjectViewFactory.registerName);
 		for (int i = 0; i < views.size(); i++) {
 			ProjectView v = ((ProjectView) views.get(i));
 			if (v != null) {
@@ -260,19 +263,21 @@ public class ExportWebMapContextExtension extends Extension {
 	 * </p>
 	 * <p>
 	 * A view is exportable to WebMapContext if it contains at least one FLyrWMS
-	 * and in a near future, any other OGC layer such as WCS, WFS, and so on. Only
-	 * these layers will be exported. Other kind of layers are ignored since they
-	 * are out of the OGC premises.
+	 * and in a near future, any other OGC layer such as WCS, WFS, and so on.
+	 * Only these layers will be exported. Other kind of layers are ignored
+	 * since they are out of the OGC premises.
 	 * </p>
+	 * 
 	 * @return
 	 */
 	private ProjectView[] getExportableViews() {
 		Project project = ((ProjectExtension) PluginServices
 				.getExtension(ProjectExtension.class)).getProject();
 
-		ArrayList views = project.getDocumentsByType(ProjectViewFactory.registerName);
+		ArrayList views = project
+				.getDocumentsByType(ProjectViewFactory.registerName);
 		ArrayList exportableViews = new ArrayList();
-		if (viewToExport!=null)
+		if (viewToExport != null)
 			exportableViews.add(viewToExport.getModel());
 
 		for (int i = 0; i < views.size(); i++) {

@@ -109,50 +109,51 @@ import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 
-public abstract class AbstractIntervalLegend extends AbstractClassifiedVectorLegend implements IVectorialIntervalLegend{
+public abstract class AbstractIntervalLegend extends
+		AbstractClassifiedVectorLegend implements IVectorialIntervalLegend {
 	protected int shapeType;
 
 	public static final int EQUAL_INTERVALS = 0;
 	public static final int NATURAL_INTERVALS = 1;
 	public static final int QUANTILE_INTERVALS = 2;
-	protected TreeMap<Object, ISymbol> symbols = new TreeMap<Object, ISymbol>
-	(new Comparator<Object>() {
-		public int compare(Object o1, Object o2) {
-			if ((o1 != null) && (o2 != null)) {
-				if (o1 instanceof NullIntervalValue &&
-						o2 instanceof NullIntervalValue) {
+	protected TreeMap<Object, ISymbol> symbols = new TreeMap<Object, ISymbol>(
+			new Comparator<Object>() {
+				public int compare(Object o1, Object o2) {
+					if ((o1 != null) && (o2 != null)) {
+						if (o1 instanceof NullIntervalValue
+								&& o2 instanceof NullIntervalValue) {
+							return 0;
+						}
+
+						if (o2 instanceof NullIntervalValue) {
+							return 1;
+						}
+
+						if (o1 instanceof NullIntervalValue) {
+							return -1;
+						}
+
+						FInterval i2 = (FInterval) o2;
+						FInterval i1 = (FInterval) o1;
+
+						if (i1.getMin() > i2.getMin()) {
+							return 1;
+						}
+
+						if (i1.getMin() < i2.getMin()) {
+							return -1;
+						}
+						if (i1.getMax() < i2.getMax()) {
+							return -1;
+						}
+						if (i1.getMax() > i2.getMax()) {
+							return 1;
+						}
+					}
+
 					return 0;
 				}
-
-				if (o2 instanceof NullIntervalValue) {
-					return 1;
-				}
-
-				if (o1 instanceof NullIntervalValue) {
-					return -1;
-				}
-
-				FInterval i2 = (FInterval) o2;
-				FInterval i1 = (FInterval) o1;
-
-				if (i1.getMin() > i2.getMin()) {
-					return 1;
-				}
-
-				if (i1.getMin() < i2.getMin()) {
-					return -1;
-				}
-				if (i1.getMax() < i2.getMax()) {
-					return -1;
-				}
-				if (i1.getMax() > i2.getMax()) {
-					return 1;
-				}
-			}
-
-			return 0;
-		}
-	});
+			});
 	protected ArrayList<Object> keys = new ArrayList<Object>();
 	protected int index = 0;
 	protected String[] fieldNames;
@@ -178,7 +179,6 @@ public abstract class AbstractIntervalLegend extends AbstractClassifiedVectorLeg
 		IInterval interval = getInterval(val);
 		ISymbol theSymbol = getSymbolByInterval(interval);
 
-
 		if (theSymbol != null) {
 			return theSymbol;
 		} else if (useDefaultSymbol) {
@@ -188,10 +188,10 @@ public abstract class AbstractIntervalLegend extends AbstractClassifiedVectorLeg
 		return null;
 	}
 
-
 	public ISymbol getSymbolByFeature(IFeature feat) {
-//		Value val = feat.getAttribute(FLyrVect.forTestOnlyVariableUseIterators_REMOVE_THIS_FIELD
-//				? 0 :fieldId);
+		// Value val =
+		// feat.getAttribute(FLyrVect.forTestOnlyVariableUseIterators_REMOVE_THIS_FIELD
+		// ? 0 :fieldId);
 		Value val = feat.getAttribute(0);
 		IInterval interval = getInterval(val);
 		ISymbol theSymbol = getSymbolByInterval(interval);
@@ -199,22 +199,20 @@ public abstract class AbstractIntervalLegend extends AbstractClassifiedVectorLeg
 		return theSymbol;
 	}
 
-
-	public FInterval[] calculateIntervals(DataSource recordSet, String fieldName, int numIntervalos, int shapeType)
-	throws ReadDriverException, LegendLayerException {
+	public FInterval[] calculateIntervals(DataSource recordSet,
+			String fieldName, int numIntervalos, int shapeType)
+			throws ReadDriverException, LegendLayerException {
 		logger.debug("elRs.start()");
 		recordSet.start();
 
 		int idField = -1;
 
-		setClassifyingFieldNames(new String[] {fieldName});
+		setClassifyingFieldNames(new String[] { fieldName });
 
 		String[] fieldNames = getClassifyingFieldNames();
 
-
 		idField = recordSet.getFieldIndexByName(fieldNames[0]);
 
-		
 		if (idField == -1) {
 			logger.error("Campo no reconocido " + fieldNames);
 
@@ -224,8 +222,8 @@ public abstract class AbstractIntervalLegend extends AbstractClassifiedVectorLeg
 		double minValue = Double.MAX_VALUE;
 		double maxValue = Double.NEGATIVE_INFINITY;
 
-		VectorialIntervalLegend auxLegend = LegendFactory.
-		createVectorialIntervalLegend(shapeType);
+		VectorialIntervalLegend auxLegend = LegendFactory
+				.createVectorialIntervalLegend(shapeType);
 
 		Value clave;
 
@@ -234,11 +232,11 @@ public abstract class AbstractIntervalLegend extends AbstractClassifiedVectorLeg
 
 			IInterval interval = auxLegend.getInterval(clave);
 
-			////Comprobar que no esta repetido y no hace falta introducir en el hashtable el campo junto con el simbolo.
+			// //Comprobar que no esta repetido y no hace falta introducir en el
+			// hashtable el campo junto con el simbolo.
 			if (auxLegend.getSymbolByInterval(interval) == null) {
-				//si no esta creado el simbolo se crea
+				// si no esta creado el simbolo se crea
 				double valor = 0;
-
 
 				if (clave instanceof IntValue) {
 					valor = ((IntValue) clave).getValue();
@@ -249,10 +247,12 @@ public abstract class AbstractIntervalLegend extends AbstractClassifiedVectorLeg
 				} else if (clave instanceof LongValue) {
 					valor = ((LongValue) clave).getValue();
 				} else if (clave instanceof DateValue) {
-					//TODO POR IMPLEMENTAR
-					///valorDate = elRs.getFieldValueAsDate(idField);
-					///if (valorDate.before(minValueDate)) minValueDate = valorDate;
-					///if (valorDate.after(maxValueDate)) maxValueDate = valorDate;
+					// TODO POR IMPLEMENTAR
+					// /valorDate = elRs.getFieldValueAsDate(idField);
+					// /if (valorDate.before(minValueDate)) minValueDate =
+					// valorDate;
+					// /if (valorDate.after(maxValueDate)) maxValueDate =
+					// valorDate;
 				} else if (clave instanceof NullValue) {
 					continue;
 				}
@@ -270,8 +270,8 @@ public abstract class AbstractIntervalLegend extends AbstractClassifiedVectorLeg
 		FInterval[] intervalArray = null;
 		switch (getIntervalType()) {
 		case VectorialIntervalLegend.EQUAL_INTERVALS:
-			intervalArray = calculateEqualIntervals(numIntervalos,
-					minValue, maxValue, fieldName);
+			intervalArray = calculateEqualIntervals(numIntervalos, minValue,
+					maxValue, fieldName);
 
 			break;
 
@@ -282,8 +282,8 @@ public abstract class AbstractIntervalLegend extends AbstractClassifiedVectorLeg
 			break;
 
 		case VectorialIntervalLegend.QUANTILE_INTERVALS:
-			intervalArray = calculateQuantileIntervals(recordSet, numIntervalos,
-					minValue, maxValue, fieldName);
+			intervalArray = calculateQuantileIntervals(recordSet,
+					numIntervalos, minValue, maxValue, fieldName);
 
 			break;
 		}
@@ -291,19 +291,23 @@ public abstract class AbstractIntervalLegend extends AbstractClassifiedVectorLeg
 		return intervalArray;
 	}
 
-
 	/**
 	 * EQUAL INTERVAL Devuelve un Array con el n�mero de intervalos que se
 	 * quieren crear. Los intervalos se crean con un tama�o igual entre ellos.
-	 * @param numIntervals n�mero de intervalos
-	 * @param minValue Valor m�nimo.
-	 * @param maxValue Valor m�ximo.
-	 * @param fieldName Nombre del campo
-	 *
+	 * 
+	 * @param numIntervals
+	 *            n�mero de intervalos
+	 * @param minValue
+	 *            Valor m�nimo.
+	 * @param maxValue
+	 *            Valor m�ximo.
+	 * @param fieldName
+	 *            Nombre del campo
+	 * 
 	 * @return Array con los intervalos.
 	 */
-	private FInterval[] calculateEqualIntervals(int numIntervals, double minValue,
-			double maxValue, String fieldName) {
+	private FInterval[] calculateEqualIntervals(int numIntervals,
+			double minValue, double maxValue, String fieldName) {
 		FInterval[] theIntervalArray = new FInterval[numIntervals];
 		double step = (maxValue - minValue) / numIntervals;
 
@@ -311,12 +315,12 @@ public abstract class AbstractIntervalLegend extends AbstractClassifiedVectorLeg
 			theIntervalArray[0] = new FInterval(minValue, minValue + step);
 
 			for (int i = 1; i < (numIntervals - 1); i++) {
-				theIntervalArray[i] = new FInterval(minValue + (i * step) +
-						0.01, minValue + ((i + 1) * step));
+				theIntervalArray[i] = new FInterval(minValue + (i * step)
+						+ 0.01, minValue + ((i + 1) * step));
 			}
 
-			theIntervalArray[numIntervals - 1] = new FInterval(minValue +
-					((numIntervals - 1) * step) + 0.01, maxValue);
+			theIntervalArray[numIntervals - 1] = new FInterval(minValue
+					+ ((numIntervals - 1) * step) + 0.01, maxValue);
 		} else {
 			theIntervalArray[0] = new FInterval(minValue, maxValue);
 		}
@@ -327,30 +331,36 @@ public abstract class AbstractIntervalLegend extends AbstractClassifiedVectorLeg
 	/**
 	 * NATURAL INTERVAL Devuelve un Array con el n�mero de intervalos que se
 	 * quieren crear. Los intervalos se distribuyen de forma natural.
-	 *
-	 * @param numIntervals n�mero de intervalos
-	 * @param minValue Valor m�nimo.
-	 * @param maxValue Valor m�ximo.
-	 * @param fieldName Nombre del campo
-	 *
+	 * 
+	 * @param numIntervals
+	 *            n�mero de intervalos
+	 * @param minValue
+	 *            Valor m�nimo.
+	 * @param maxValue
+	 *            Valor m�ximo.
+	 * @param fieldName
+	 *            Nombre del campo
+	 * 
 	 * @return Array con los intervalos.
 	 * @throws LegendLayerException
 	 */
-	private FInterval[] calculateNaturalIntervals(DataSource recordSet, int numIntervals, double minValue,
-			double maxValue, String fieldName) throws LegendLayerException {
+	private FInterval[] calculateNaturalIntervals(DataSource recordSet,
+			int numIntervals, double minValue, double maxValue, String fieldName)
+			throws LegendLayerException {
 		NaturalIntervalGenerator intervalGenerator = new NaturalIntervalGenerator(
 				recordSet, fieldName, numIntervals);
 
 		try {
 			intervalGenerator.generarIntervalos();
 		} catch (ReadDriverException e) {
-			throw new LegendLayerException(Messages.getString("failed_calculating_intervals"), e);
+			throw new LegendLayerException(
+					Messages.getString("failed_calculating_intervals"), e);
 		}
 
 		int numIntervalsGen = intervalGenerator.getNumIntervals() - 1;
 
 		if (numIntervalsGen == -1) {
-			//TODO cuando no puede calcular los intervalos.
+			// TODO cuando no puede calcular los intervalos.
 			numIntervalsGen = 1;
 		}
 
@@ -361,12 +371,13 @@ public abstract class AbstractIntervalLegend extends AbstractClassifiedVectorLeg
 					intervalGenerator.getValorRuptura(0));
 
 			for (int i = 1; i < (numIntervalsGen - 1); i++) {
-				theIntervalArray[i] = new FInterval(intervalGenerator.getValInit(i -
-						1), intervalGenerator.getValorRuptura(i));
+				theIntervalArray[i] = new FInterval(
+						intervalGenerator.getValInit(i - 1),
+						intervalGenerator.getValorRuptura(i));
 			}
 
-			theIntervalArray[numIntervalsGen - 1] = new FInterval(intervalGenerator.getValInit(numIntervalsGen -
-					2), maxValue);
+			theIntervalArray[numIntervalsGen - 1] = new FInterval(
+					intervalGenerator.getValInit(numIntervalsGen - 2), maxValue);
 		} else {
 			theIntervalArray[numIntervalsGen - 1] = new FInterval(minValue,
 					maxValue);
@@ -378,25 +389,32 @@ public abstract class AbstractIntervalLegend extends AbstractClassifiedVectorLeg
 	/**
 	 * QUANTILE INTERVAL Devuelve un Array con el n�mero de intervalos que se
 	 * quieren crear. Los intervalos se distribuyen de forma quantile.
+	 * 
 	 * @param recordSet
-	 *
-	 * @param numIntervals n�mero de intervalos
-	 * @param minValue Valor m�nimo.
-	 * @param maxValue Valor m�ximo.
-	 * @param fieldName Nombre del campo
-	 *
+	 * 
+	 * @param numIntervals
+	 *            n�mero de intervalos
+	 * @param minValue
+	 *            Valor m�nimo.
+	 * @param maxValue
+	 *            Valor m�ximo.
+	 * @param fieldName
+	 *            Nombre del campo
+	 * 
 	 * @return Array con los intervalos.
 	 * @throws LegendLayerException
 	 */
-	private FInterval[] calculateQuantileIntervals(DataSource recordSet, int numIntervals, double minValue,
-			double maxValue, String fieldName) throws LegendLayerException {
+	private FInterval[] calculateQuantileIntervals(DataSource recordSet,
+			int numIntervals, double minValue, double maxValue, String fieldName)
+			throws LegendLayerException {
 		QuantileIntervalGenerator intervalGenerator = new QuantileIntervalGenerator(
 				recordSet, fieldName, numIntervals);
 
 		try {
 			intervalGenerator.generarIntervalos();
 		} catch (ReadDriverException e) {
-			throw new LegendLayerException(Messages.getString("failed_calculating_intervals"), e);
+			throw new LegendLayerException(
+					Messages.getString("failed_calculating_intervals"), e);
 		}
 
 		int numIntervalsGen = intervalGenerator.getNumIntervalGen();
@@ -407,12 +425,13 @@ public abstract class AbstractIntervalLegend extends AbstractClassifiedVectorLeg
 					intervalGenerator.getValRuptura(0));
 
 			for (int i = 1; i < (numIntervalsGen - 1); i++) {
-				theIntervalArray[i] = new FInterval(intervalGenerator.getValInit(i -
-						1), intervalGenerator.getValRuptura(i));
+				theIntervalArray[i] = new FInterval(
+						intervalGenerator.getValInit(i - 1),
+						intervalGenerator.getValRuptura(i));
 			}
 
-			theIntervalArray[numIntervalsGen - 1] = new FInterval(intervalGenerator.getValInit(numIntervalsGen -
-					2), maxValue);
+			theIntervalArray[numIntervalsGen - 1] = new FInterval(
+					intervalGenerator.getValInit(numIntervalsGen - 2), maxValue);
 		} else {
 			theIntervalArray[numIntervalsGen - 1] = new FInterval(minValue,
 					maxValue);
@@ -423,7 +442,7 @@ public abstract class AbstractIntervalLegend extends AbstractClassifiedVectorLeg
 
 	public ISymbol getSymbolByInterval(IInterval key) {
 
-		if (key == null){
+		if (key == null) {
 			if (isUseDefaultSymbol())
 				return defaultSymbol;
 			return null;
@@ -448,7 +467,6 @@ public abstract class AbstractIntervalLegend extends AbstractClassifiedVectorLeg
 		return descriptions;
 	}
 
-
 	public Object[] getValues() {
 		return symbols.keySet().toArray();
 	}
@@ -469,7 +487,8 @@ public abstract class AbstractIntervalLegend extends AbstractClassifiedVectorLeg
 
 	public void setDefaultSymbol(ISymbol s) {
 		ISymbol old = defaultSymbol;
-		if (s == null) throw new NullPointerException("Default symbol cannot be null");
+		if (s == null)
+			throw new NullPointerException("Default symbol cannot be null");
 		defaultSymbol = s;
 		fireDefaultSymbolChangedEvent(new SymbolLegendEvent(old, defaultSymbol));
 	}
@@ -479,30 +498,29 @@ public abstract class AbstractIntervalLegend extends AbstractClassifiedVectorLeg
 	}
 
 	public ISymbol getDefaultSymbol() {
-		NullIntervalValue niv=new NullIntervalValue();
+		NullIntervalValue niv = new NullIntervalValue();
 		if (symbols.containsKey(niv))
-			return (ISymbol)symbols.get(niv);
+			return (ISymbol) symbols.get(niv);
 
-		if(defaultSymbol==null)
-			defaultSymbol=SymbologyFactory.createDefaultSymbolByShapeType(shapeType);
+		if (defaultSymbol == null)
+			defaultSymbol = SymbologyFactory
+					.createDefaultSymbolByShapeType(shapeType);
 		return defaultSymbol;
 	}
 
-
-	public void setDataSource(DataSource ds)
-	throws FieldNotFoundException, ReadDriverException {
-//		if (!FLyrVect.forTestOnlyVariableUseIterators_REMOVE_THIS_FIELD) {
-//			/*
-//			 * when we move definitely to feature iterators this
-//			 * method
-//			 */
-//			dataSource = ds;
-//			ds.start();
-//			fieldId = ds.getFieldIndexByName(fieldNames[0]);
-//			ds.stop();
-//		}
+	public void setDataSource(DataSource ds) throws FieldNotFoundException,
+			ReadDriverException {
+		// if (!FLyrVect.forTestOnlyVariableUseIterators_REMOVE_THIS_FIELD) {
+		// /*
+		// * when we move definitely to feature iterators this
+		// * method
+		// */
+		// dataSource = ds;
+		// ds.start();
+		// fieldId = ds.getFieldIndexByName(fieldNames[0]);
+		// ds.stop();
+		// }
 	}
-
 
 	public IInterval getInterval(Value v) {
 		for (int i = 0; i < keys.size(); i++) {
@@ -518,7 +536,6 @@ public abstract class AbstractIntervalLegend extends AbstractClassifiedVectorLeg
 		this.intervalType = intervalType;
 	}
 
-
 	public int getIntervalType() {
 		return intervalType;
 	}
@@ -527,21 +544,16 @@ public abstract class AbstractIntervalLegend extends AbstractClassifiedVectorLeg
 		useDefaultSymbol = b;
 	}
 
-
 	public boolean isUseDefaultSymbol() {
 		return useDefaultSymbol;
 	}
 
-
 	public void delSymbol(Object obj) {
 		keys.remove(obj);
 		symbols.remove(obj);
-		fireClassifiedSymbolChangeEvent(
-				new SymbolLegendEvent(
-						symbols.remove(obj),
-						null));
+		fireClassifiedSymbolChangeEvent(new SymbolLegendEvent(
+				symbols.remove(obj), null));
 	}
-
 
 	public void replace(ISymbol oldSymbol, ISymbol newSymbol) {
 		if (symbols.containsValue(oldSymbol)) {
@@ -551,8 +563,8 @@ public abstract class AbstractIntervalLegend extends AbstractClassifiedVectorLeg
 				if (symbols.get(key).equals(oldSymbol)) {
 					symbols.remove(key);
 					symbols.put(key, newSymbol);
-					fireClassifiedSymbolChangeEvent(
-							new SymbolLegendEvent(oldSymbol, newSymbol));
+					fireClassifiedSymbolChangeEvent(new SymbolLegendEvent(
+							oldSymbol, newSymbol));
 				}
 			}
 		}

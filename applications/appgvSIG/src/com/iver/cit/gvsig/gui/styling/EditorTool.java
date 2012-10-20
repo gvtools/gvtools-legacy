@@ -49,34 +49,35 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 
-import com.iver.cit.gvsig.fmap.core.styles.IStyle;
-
 /**
  * Abstract class that specifies the methods that are useful for the edition.
- * Most of them are methods in relation with mouse events in order to control its
- * position, what button is pressed and so on.
- *
+ * Most of them are methods in relation with mouse events in order to control
+ * its position, what button is pressed and so on.
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public abstract class EditorTool implements MouseListener, MouseMotionListener {
 
 	public static final Dimension SMALL_BTN_SIZE = new Dimension(68, 34);
 	protected JComponent owner;
+
 	/**
 	 * Constructor method
-	 *
+	 * 
 	 * @param targetEditor
 	 */
 	public EditorTool(JComponent targetEditor) {
 		super();
 		owner = targetEditor;
 	}
+
 	/**
 	 * Returns the cursor
 	 */
 	public abstract Cursor getCursor();
 
-	public void mouseClicked(MouseEvent e) {}
+	public void mouseClicked(MouseEvent e) {
+	}
 
 	public void mouseEntered(MouseEvent e) {
 		owner.setCursor(getCursor());
@@ -86,11 +87,14 @@ public abstract class EditorTool implements MouseListener, MouseMotionListener {
 		owner.setCursor(Cursor.getDefaultCursor());
 	}
 
-	public void mouseMoved(MouseEvent e) { }
+	public void mouseMoved(MouseEvent e) {
+	}
 
 	public abstract AbstractButton getButton();
 
 	public abstract boolean isSuitableFor(Object obj);
+
 	public abstract String getID();
+
 	public abstract void setModel(Object objectToBeEdited);
 }

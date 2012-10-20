@@ -26,7 +26,7 @@
 
 package org.gvsig.fmap.algorithm.triangulation.visad;
 
-import java.util.*;
+import java.util.Random;
 
 /*
  * The Delaunay triangulation/tetrahedralization algorithm in this class is

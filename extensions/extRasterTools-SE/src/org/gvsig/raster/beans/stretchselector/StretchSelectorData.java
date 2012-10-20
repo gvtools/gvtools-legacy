@@ -24,28 +24,31 @@ import java.util.Observable;
  * Modelo de datos para el componente de selección de lista de tramos.
  * 
  * 06/08/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class StretchSelectorData extends Observable {
-	private String         size                 = "255";
-	private String         number               = "1";
-	private String         min                  = "0";
-	private String         max                  = "255";
-	
+	private String size = "255";
+	private String number = "1";
+	private String min = "0";
+	private String max = "255";
+
 	/**
 	 * Devuelve el número de tramos
+	 * 
 	 * @return
 	 */
 	public int getStretchNumber() {
 		try {
-			return (int)Double.parseDouble(number);
+			return (int) Double.parseDouble(number);
 		} catch (NumberFormatException e) {
 			return 0;
 		}
 	}
-	
+
 	/**
 	 * Devuelve el tamaño de tramo
+	 * 
 	 * @return
 	 */
 	public double getStretchSize() {
@@ -55,9 +58,10 @@ public class StretchSelectorData extends Observable {
 			return 0;
 		}
 	}
-	
+
 	/**
 	 * Devuelve el minimo
+	 * 
 	 * @return
 	 */
 	public double getMinimum() {
@@ -70,6 +74,7 @@ public class StretchSelectorData extends Observable {
 
 	/**
 	 * Devuelve el maximo
+	 * 
 	 * @return
 	 */
 	public double getMaximum() {
@@ -79,10 +84,11 @@ public class StretchSelectorData extends Observable {
 			return 0;
 		}
 	}
-	
+
 	/**
 	 * Obtiene el valor máximo del intervalo
-	 * @return 
+	 * 
+	 * @return
 	 */
 	public String getMax() {
 		return max;
@@ -90,6 +96,7 @@ public class StretchSelectorData extends Observable {
 
 	/**
 	 * Asigna el valor máximo del intervalo
+	 * 
 	 * @param max
 	 */
 	public void setMax(String max) {
@@ -98,6 +105,7 @@ public class StretchSelectorData extends Observable {
 
 	/**
 	 * Obtiene el valor mínimo del intervalo
+	 * 
 	 * @return
 	 */
 	public String getMin() {
@@ -106,6 +114,7 @@ public class StretchSelectorData extends Observable {
 
 	/**
 	 * Asigna el valor mínimo del intervalo
+	 * 
 	 * @param min
 	 */
 	public void setMin(String min) {
@@ -114,38 +123,42 @@ public class StretchSelectorData extends Observable {
 
 	/**
 	 * Obtiene el valor del tamaño de intervalo
+	 * 
 	 * @return
 	 */
 	public String getIntervalSize() {
 		return size;
 	}
-	
+
 	/**
 	 * Asigna el valor de tamaño de intervalo
+	 * 
 	 * @param interval
 	 */
 	public void setIntervalSize(String size) {
 		this.size = size;
 		updateObservers();
 	}
-	
+
 	/**
 	 * Obtiene el número de intervalos
+	 * 
 	 * @return
 	 */
 	public String getNumber() {
 		return number;
 	}
-	
+
 	/**
 	 * Asigna el número de intervalos
+	 * 
 	 * @param number
 	 */
 	public void setNumber(String number) {
 		this.number = number;
 		updateObservers();
 	}
-	
+
 	/**
 	 * Actualiza datos y llama al update de los observadores
 	 */

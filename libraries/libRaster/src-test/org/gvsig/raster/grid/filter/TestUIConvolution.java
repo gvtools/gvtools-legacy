@@ -21,21 +21,22 @@ package org.gvsig.raster.grid.filter;
 import javax.swing.JFrame;
 
 import org.gvsig.raster.grid.filter.convolution.ConvolutionUI;
+
 /**
  * Clase para poder ver la ventana de las Tablas de color
- *
+ * 
  * @version 28/09/2007
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class TestUIConvolution {
-	private JFrame 			frame = new JFrame();
+	private JFrame frame = new JFrame();
 
 	public TestUIConvolution() {
 		super();
 		initialize();
 	}
 
-	public static void main(String[] args){
+	public static void main(String[] args) {
 		new TestUIConvolution();
 	}
 

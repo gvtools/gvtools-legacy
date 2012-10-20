@@ -35,7 +35,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.filechooser.FileFilter;
 
 import org.gvsig.fmap.raster.layers.FLyrRasterSE;
 import org.gvsig.raster.RasterLibrary;
@@ -51,6 +50,7 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.Utilities;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.cit.gvsig.addlayer.fileopen.FileOpenWizard;
+
 /**
  * 
  * @version 18/06/2008
@@ -58,16 +58,16 @@ import com.iver.cit.gvsig.addlayer.fileopen.FileOpenWizard;
  */
 public class NewLayerPanel implements PropertyListener {
 	private static final long serialVersionUID = -8569485642371687008L;
-	private JPanel       panel              = null;
-	private JRadioButton jRBFileGenerate    = null;
-	private JRadioButton jRBOpenMemory      = null;
-	private JTextField   filenameTextField  = null;
-	private JLabel       labelFilename      = null;
-	private JPanel       panelNameFile      = null;
-	private boolean      compress           = false;
-	private FLyrRasterSE lyr                = null;
-	private boolean      onlyReprojectables = false;
-	
+	private JPanel panel = null;
+	private JRadioButton jRBFileGenerate = null;
+	private JRadioButton jRBOpenMemory = null;
+	private JTextField filenameTextField = null;
+	private JLabel labelFilename = null;
+	private JPanel panelNameFile = null;
+	private boolean compress = false;
+	private FLyrRasterSE lyr = null;
+	private boolean onlyReprojectables = false;
+
 	/**
 	 * Constructor de un CreateLayerPanel
 	 */
@@ -76,9 +76,10 @@ public class NewLayerPanel implements PropertyListener {
 		initialize();
 		translate();
 	}
-	
+
 	/**
 	 * Devuelve el panel principal
+	 * 
 	 * @return
 	 */
 	public JPanel getJPanel() {
@@ -87,7 +88,7 @@ public class NewLayerPanel implements PropertyListener {
 		}
 		return panel;
 	}
-	
+
 	private void initialize() {
 		ButtonGroup buttonGroup2;
 		GridBagConstraints gridBagConstraints;
@@ -111,37 +112,44 @@ public class NewLayerPanel implements PropertyListener {
 		gridBagConstraints.insets = new Insets(3, 3, 3, 3);
 		getJPanel().add(getRadioOpenMemory(), gridBagConstraints);
 	}
-	
+
 	/**
 	 * Seccion donde irán todas las traducciones invariables del componente
 	 */
 	private void translate() {
-		getRadioFileGenerate().setText(PluginServices.getText(this, "generar_fichero"));
-		getRadioOpenMemory().setText(PluginServices.getText(this, "abrir_memoria"));
-		getLabelFilename().setText(PluginServices.getText(this, "nombre_capa") + ":");
+		getRadioFileGenerate().setText(
+				PluginServices.getText(this, "generar_fichero"));
+		getRadioOpenMemory().setText(
+				PluginServices.getText(this, "abrir_memoria"));
+		getLabelFilename().setText(
+				PluginServices.getText(this, "nombre_capa") + ":");
 	}
-	
+
 	/**
 	 * Devuelve el JRadioButton de generar fichero
+	 * 
 	 * @return
 	 */
 	public JRadioButton getRadioFileGenerate() {
 		if (jRBFileGenerate == null) {
 			jRBFileGenerate = new JRadioButton();
-			jRBFileGenerate.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+			jRBFileGenerate.setBorder(BorderFactory.createEmptyBorder(0, 0, 0,
+					0));
 			jRBFileGenerate.setMargin(new Insets(0, 0, 0, 0));
 		}
 		return jRBFileGenerate;
 	}
-	
+
 	/**
 	 * Devuelve el JRadioButton de Abrir en memoria
+	 * 
 	 * @return
 	 */
 	public JRadioButton getRadioOpenMemory() {
 		if (jRBOpenMemory == null) {
 			jRBOpenMemory = new JRadioButton();
-			jRBOpenMemory.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+			jRBOpenMemory
+					.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 			jRBOpenMemory.setMargin(new Insets(0, 0, 0, 0));
 
 			jRBOpenMemory.addItemListener(new ItemListener() {
@@ -153,24 +161,25 @@ public class NewLayerPanel implements PropertyListener {
 		}
 		return jRBOpenMemory;
 	}
-	
+
 	/**
 	 * This method initializes filenameTextField
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getFilenameTextField() {
 		if (filenameTextField == null) {
 			filenameTextField = new JTextField();
-			filenameTextField.setPreferredSize(new Dimension(100, filenameTextField.getPreferredSize().height));
+			filenameTextField.setPreferredSize(new Dimension(100,
+					filenameTextField.getPreferredSize().height));
 			RasterLibrary.addOnlyLayerNameListener(this);
 		}
 		return filenameTextField;
 	}
-	
+
 	/**
 	 * This method initializes jPNameFile
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	public JPanel getFileNamePanel() {
@@ -182,26 +191,28 @@ public class NewLayerPanel implements PropertyListener {
 		}
 		return panelNameFile;
 	}
-	
+
 	private JLabel getLabelFilename() {
 		if (labelFilename == null) {
 			labelFilename = new JLabel();
 		}
 		return labelFilename;
 	}
-	
+
 	/**
-	 * Establece si esta habilitado o no el cuadro de texto de entrada de nombre de
-	 * fichero
+	 * Establece si esta habilitado o no el cuadro de texto de entrada de nombre
+	 * de fichero
+	 * 
 	 * @param value
 	 */
 	public void setFilenameEnabled(boolean value) {
 		getFilenameTextField().setEnabled(value);
 		getLabelFilename().setEnabled(value);
 	}
-	
+
 	/**
 	 * Poner los estados de los RadioButton en caso de que cambien de valor
+	 * 
 	 * @param evt
 	 */
 	protected void jRBOpenMemoryStateChanged(ItemEvent evt) {
@@ -211,56 +222,68 @@ public class NewLayerPanel implements PropertyListener {
 			setFilenameEnabled(false);
 		}
 	}
-	
+
 	/**
-	 * Especificar el nombre de la nueva capa para el recuadro de texto asignando
-	 * en cada llamada un nombre consecutivo.
+	 * Especificar el nombre de la nueva capa para el recuadro de texto
+	 * asignando en cada llamada un nombre consecutivo.
 	 */
 	public void updateNewLayerText() {
 		getFilenameTextField().setText(RasterLibrary.getOnlyLayerName());
 	}
-	
+
 	/**
 	 * Establece el texto de la etiqueta del nombre de fichero
+	 * 
 	 * @param text
 	 */
 	public void setLabelFilename(String text) {
 		getLabelFilename().setText(text);
 	}
-	
+
 	/**
-	 * Asigna un valor para el parámetro que informa de si el raster de salida hay
-	 * que comprimirlo o no. Este valor es necesario cuando el raster de salida 
-	 * es mayor de 4G ya que no se puede crear un tiff tan grande.
-	 * @param compress true para comprimir el raster de salida y false para no hacerlo.
+	 * Asigna un valor para el parámetro que informa de si el raster de salida
+	 * hay que comprimirlo o no. Este valor es necesario cuando el raster de
+	 * salida es mayor de 4G ya que no se puede crear un tiff tan grande.
+	 * 
+	 * @param compress
+	 *            true para comprimir el raster de salida y false para no
+	 *            hacerlo.
 	 */
 	public void setCompress(boolean compress) {
 		this.compress = compress;
 	}
-	
+
 	/**
 	 * Devuelve la ruta del fichero donde se va a guardar, en caso de guardarse
 	 * en memoria, calcula el nombre sin preguntar y devuelve la ruta.
+	 * 
 	 * @return
 	 */
 	public String getFileSelected() {
 		String path = "";
 		if (getRadioFileGenerate().isSelected()) {
-			JFileChooser chooser = new JFileChooser(FileOpenWizard.getLastPath());
-			chooser.setDialogTitle(PluginServices.getText(this, "seleccionar_fichero"));
+			JFileChooser chooser = new JFileChooser(
+					FileOpenWizard.getLastPath());
+			chooser.setDialogTitle(PluginServices.getText(this,
+					"seleccionar_fichero"));
 
 			// Añadimos las extensiones que hayan sido registradas en el driver
 			ArrayList extList = new ArrayList();
 			try {
-				extList = GeoRasterWriter.getExtensionsSupported(((IRasterGeoOperations) lyr).getDataType()[0], ((IRasterGeoOperations) lyr).getBandCount(), onlyReprojectables);
+				extList = GeoRasterWriter.getExtensionsSupported(
+						((IRasterGeoOperations) lyr).getDataType()[0],
+						((IRasterGeoOperations) lyr).getBandCount(),
+						onlyReprojectables);
 			} catch (RasterDriverException e2) {
-				RasterToolsUtil.messageBoxError("error_extensiones_soportadas", chooser, e2);
+				RasterToolsUtil.messageBoxError("error_extensiones_soportadas",
+						chooser, e2);
 				return null;
 			}
-			
+
 			ExtendedFileFilter selected = null;
 			for (int i = 0; i < extList.size(); i++) {
-				ExtendedFileFilter filter = new ExtendedFileFilter((String) extList.get(i));
+				ExtendedFileFilter filter = new ExtendedFileFilter(
+						(String) extList.get(i));
 				if (extList.get(i).equals("tif")) {
 					selected = filter;
 					filter.addExtension((String) "tiff");
@@ -273,7 +296,7 @@ public class NewLayerPanel implements PropertyListener {
 				}
 				if (extList.get(i).equals("lan")) {
 					filter.addExtension((String) "gis");
-				}				
+				}
 				chooser.addChoosableFileFilter(filter);
 			}
 			if (selected != null)
@@ -281,18 +304,25 @@ public class NewLayerPanel implements PropertyListener {
 
 			// Cargamos el panel de propiedades en el selector
 			chooser.setAcceptAllFileFilterUsed(false);
-			
+
 			IWindow w = PluginServices.getMDIManager().getActiveWindow();
-			
+
 			if (!(w instanceof Component))
 				w = null;
 
- 			if (chooser.showSaveDialog((Component) w) != JFileChooser.APPROVE_OPTION)
- 				return null;
+			if (chooser.showSaveDialog((Component) w) != JFileChooser.APPROVE_OPTION)
+				return null;
 
-			FileOpenWizard.setLastPath(chooser.getSelectedFile().getPath().substring(0, chooser.getSelectedFile().getPath().lastIndexOf(File.separator)));
+			FileOpenWizard.setLastPath(chooser
+					.getSelectedFile()
+					.getPath()
+					.substring(
+							0,
+							chooser.getSelectedFile().getPath()
+									.lastIndexOf(File.separator)));
 
-			ExtendedFileFilter fileFilter = (ExtendedFileFilter) chooser.getFileFilter();
+			ExtendedFileFilter fileFilter = (ExtendedFileFilter) chooser
+					.getFileFilter();
 			path = fileFilter.getNormalizedFilename(chooser.getSelectedFile());
 		} else {
 
@@ -301,24 +331,27 @@ public class NewLayerPanel implements PropertyListener {
 				RasterLibrary.usesOnlyLayerName();
 
 			if (!compress)
-				path = Utilities.createTempDirectory() + File.separator + file + ".tif";
+				path = Utilities.createTempDirectory() + File.separator + file
+						+ ".tif";
 			else
-				path = Utilities.createTempDirectory() + File.separator + file + ".jp2";
+				path = Utilities.createTempDirectory() + File.separator + file
+						+ ".jp2";
 			updateNewLayerText();
 		}
 		return path;
 	}
-	
+
 	/**
-	 * Cuando alguien ha cambiado la propiedad del nombre de la 
-	 * capa se actualiza automáticamente
+	 * Cuando alguien ha cambiado la propiedad del nombre de la capa se
+	 * actualiza automáticamente
 	 */
 	public void actionValueChanged(PropertyEvent e) {
 		updateNewLayerText();
 	}
-	
+
 	/**
-	 * @param onlyReprojectables the onlyReprojectables to set
+	 * @param onlyReprojectables
+	 *            the onlyReprojectables to set
 	 */
 	public void setOnlyReprojectables(boolean onlyReprojectables) {
 		this.onlyReprojectables = onlyReprojectables;

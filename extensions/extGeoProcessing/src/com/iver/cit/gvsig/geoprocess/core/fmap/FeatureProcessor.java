@@ -42,23 +42,23 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: FeatureProcessor.java 10626 2007-03-06 16:55:54Z caballero $
-* $Log$
-* Revision 1.2  2007-03-06 16:47:58  caballero
-* Exceptions
-*
-* Revision 1.1  2006/05/24 21:12:16  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.2  2006/03/05 20:00:09  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/02/26 20:55:55  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: FeatureProcessor.java 10626 2007-03-06 16:55:54Z caballero $
+ * $Log$
+ * Revision 1.2  2007-03-06 16:47:58  caballero
+ * Exceptions
+ *
+ * Revision 1.1  2006/05/24 21:12:16  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.2  2006/03/05 20:00:09  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/02/26 20:55:55  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core.fmap;
 
 import com.iver.cit.gvsig.exceptions.visitors.StartVisitorException;
@@ -68,7 +68,8 @@ import com.iver.cit.gvsig.fmap.core.IRow;
 
 public interface FeatureProcessor {
 	public void processFeature(IRow feature) throws VisitorException;
+
 	public void finish() throws StopVisitorException;
+
 	public void start() throws StartVisitorException;
 }
-

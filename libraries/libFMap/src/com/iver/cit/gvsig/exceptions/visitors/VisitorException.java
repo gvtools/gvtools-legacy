@@ -46,27 +46,39 @@ import java.util.Map;
 import org.gvsig.exceptions.BaseException;
 
 /**
- * <p>The information of a layer or group of layers is accessed using the *strategy* and *visitor* software patterns. If
- *  any problem is produced accessing that information in that way, a <code>VisitException</code> will be produced.</p>
- *
+ * <p>
+ * The information of a layer or group of layers is accessed using the
+ * *strategy* and *visitor* software patterns. If any problem is produced
+ * accessing that information in that way, a <code>VisitException</code> will be
+ * produced.
+ * </p>
+ * 
  * @author Vicente Caballero Navarro
  */
 public class VisitorException extends BaseException {
 	private String layer = null;
+
 	/**
- 	 * <p>Constructs an visitor exception with the specified cause, and the layer where this exception was produced.</p>
- 	 * 
- 	 * @param layer the layer affected
-	 * @param exception an exception with the cause
+	 * <p>
+	 * Constructs an visitor exception with the specified cause, and the layer
+	 * where this exception was produced.
+	 * </p>
+	 * 
+	 * @param layer
+	 *            the layer affected
+	 * @param exception
+	 *            an exception with the cause
 	 */
-	public VisitorException(String layer,Throwable exception) {
+	public VisitorException(String layer, Throwable exception) {
 		this.layer = layer;
 		init();
 		initCause(exception);
 	}
 
 	/**
-	 * <p>Prepares the messages to display.</p>
+	 * <p>
+	 * Prepares the messages to display.
+	 * </p>
 	 */
 	private void init() {
 		messageKey = "error_visitor";
@@ -75,11 +87,12 @@ public class VisitorException extends BaseException {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map values() {
 		Hashtable params = new Hashtable();
-		params.put("layer",layer);
+		params.put("layer", layer);
 		return params;
 	}
 }

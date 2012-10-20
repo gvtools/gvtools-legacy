@@ -54,27 +54,31 @@ import org.gvsig.raster.util.process.FilterProcess;
 import org.gvsig.rastertools.filter.ui.FilterPanel;
 
 import com.iver.andami.PluginServices;
+
 /**
  * <code>FilterListener</code> es la clase donde se procesará gran parte del
  * código que controla el panel para el manejo de un layer en la aplicación de
  * filtros.
- *
+ * 
  * @version 24/05/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
-public class FilterListener implements ActionListener, TreeListComponentListener, TreeListChangeListener, PropertiesComponentListener, FilterUIListener, IProcessActions {
-	private FilterPanel filterPanel  = null;
-	private int          actualParam  = -1;
-	private ArrayList    paramsList   = new ArrayList();
+public class FilterListener implements ActionListener,
+		TreeListComponentListener, TreeListChangeListener,
+		PropertiesComponentListener, FilterUIListener, IProcessActions {
+	private FilterPanel filterPanel = null;
+	private int actualParam = -1;
+	private ArrayList paramsList = new ArrayList();
 
 	/**
 	 * Construye un FilterListener especificando el FilterPanel asociado
+	 * 
 	 * @param filterDialog
 	 */
 	public FilterListener(FilterPanel filterPanel) {
 		this.filterPanel = filterPanel;
 	}
-	
+
 	/**
 	 * Asignamos los valores del PropertiesComponent al Params seleccionado
 	 */
@@ -82,9 +86,11 @@ public class FilterListener implements ActionListener, TreeListComponentListener
 		if (actualParam == -1)
 			return;
 
-		ArrayList listValues = getFilterPanel().getPropertiesComponent().getValues();
+		ArrayList listValues = getFilterPanel().getPropertiesComponent()
+				.getValues();
 
-		Params params = ((ParamStruct) paramsList.get(actualParam)).getFilterParam();
+		Params params = ((ParamStruct) paramsList.get(actualParam))
+				.getFilterParam();
 		for (int j = 0; j < listValues.size(); j++) {
 			PropertyStruct ps = (PropertyStruct) listValues.get(j);
 			params.changeParamValue(ps.getKey(), ps.getNewValue());
@@ -93,20 +99,23 @@ public class FilterListener implements ActionListener, TreeListComponentListener
 
 	/**
 	 * Obtener la posición del Param seleccionado en el ArrayList
+	 * 
 	 * @param filterName
 	 * @return
 	 */
 	private int getParamSelected(String filterName) {
 		for (int i = 0; i < paramsList.size(); i++) {
-			if (((ParamStruct) paramsList.get(i)).getFilterName().equals(filterName))
+			if (((ParamStruct) paramsList.get(i)).getFilterName().equals(
+					filterName))
 				return i;
 		}
 		return -1;
 	}
 
 	/**
-	 * Cambiar el panel de propiedades central por el nuevo panel, segun el filtro
-	 * seleccionado que se pasa por parámetro.
+	 * Cambiar el panel de propiedades central por el nuevo panel, segun el
+	 * filtro seleccionado que se pasa por parámetro.
+	 * 
 	 * @param filter
 	 */
 	public void changePanel(String filter) {
@@ -118,22 +127,28 @@ public class FilterListener implements ActionListener, TreeListComponentListener
 		PropertiesComponent propertiesComponent = new PropertiesComponent();
 
 		if (posParam != -1) {
-			Params params = ((ParamStruct) paramsList.get(actualParam)).getFilterParam();
+			Params params = ((ParamStruct) paramsList.get(actualParam))
+					.getFilterParam();
 			if (params != null) {
 				Param paramPanel = params.getParamById("Panel");
-				if(paramPanel != null && paramPanel.defaultValue instanceof RegistrableFilterListener)
-					((RegistrableFilterListener)paramPanel.defaultValue).addFilterUIListener(this);
-				RasterToolsUtil.loadPropertiesFromWriterParams(propertiesComponent, params, new String[]{"FilterName"});
+				if (paramPanel != null
+						&& paramPanel.defaultValue instanceof RegistrableFilterListener)
+					((RegistrableFilterListener) paramPanel.defaultValue)
+							.addFilterUIListener(this);
+				RasterToolsUtil.loadPropertiesFromWriterParams(
+						propertiesComponent, params,
+						new String[] { "FilterName" });
 			}
 		}
 		getFilterPanel().setNewPropertiesComponent(propertiesComponent, filter);
 	}
 
 	/**
-	 * Añadir un nuevo Params a la lista de Params que podemos manejar. Un Params
-	 * equivale a un filtro cargado. El hecho de trabajar con Params y no con
-	 * filtros, simplifica totalmente el panel. Sin tener que depender de los
-	 * filtros nada más que para el momento de dibujado o guardado.
+	 * Añadir un nuevo Params a la lista de Params que podemos manejar. Un
+	 * Params equivale a un filtro cargado. El hecho de trabajar con Params y no
+	 * con filtros, simplifica totalmente el panel. Sin tener que depender de
+	 * los filtros nada más que para el momento de dibujado o guardado.
+	 * 
 	 * @param name
 	 * @param params
 	 * @param classFilter
@@ -148,7 +163,9 @@ public class FilterListener implements ActionListener, TreeListComponentListener
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.propertiespanel.PropertiesComponentListener#actionChangeProperties(java.util.EventObject)
+	 * 
+	 * @see org.gvsig.gui.beans.propertiespanel.PropertiesComponentListener#
+	 * actionChangeProperties(java.util.EventObject)
 	 */
 	public void actionChangeProperties(EventObject e) {
 		RefreshDataProperties();
@@ -157,7 +174,10 @@ public class FilterListener implements ActionListener, TreeListComponentListener
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.treelist.listeners.TreeListChangeListener#actionChangeSelection(org.gvsig.gui.beans.treelist.event.TreeListChangeEvent)
+	 * 
+	 * @see org.gvsig.gui.beans.treelist.listeners.TreeListChangeListener#
+	 * actionChangeSelection
+	 * (org.gvsig.gui.beans.treelist.event.TreeListChangeEvent)
 	 */
 	public void actionChangeSelection(TreeListChangeEvent e) {
 		changePanel(e.getItem());
@@ -165,7 +185,9 @@ public class FilterListener implements ActionListener, TreeListComponentListener
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
 		getFilterPanel().refreshPreview();
@@ -173,7 +195,10 @@ public class FilterListener implements ActionListener, TreeListComponentListener
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.treelist.listeners.TreeListComponentListener#elementAdded(org.gvsig.gui.beans.treelist.event.TreeListEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.treelist.listeners.TreeListComponentListener#elementAdded
+	 * (org.gvsig.gui.beans.treelist.event.TreeListEvent)
 	 */
 	public void elementAdded(TreeListEvent e) {
 		getFilterPanel().refreshPreview();
@@ -181,7 +206,10 @@ public class FilterListener implements ActionListener, TreeListComponentListener
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.treelist.listeners.TreeListComponentListener#elementMoved(org.gvsig.gui.beans.treelist.event.TreeListEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.treelist.listeners.TreeListComponentListener#elementMoved
+	 * (org.gvsig.gui.beans.treelist.event.TreeListEvent)
 	 */
 	public void elementMoved(TreeListEvent e) {
 		getFilterPanel().refreshPreview();
@@ -189,7 +217,9 @@ public class FilterListener implements ActionListener, TreeListComponentListener
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.treelist.listeners.TreeListComponentListener#elementRemoved(org.gvsig.gui.beans.treelist.event.TreeListEvent)
+	 * 
+	 * @see org.gvsig.gui.beans.treelist.listeners.TreeListComponentListener#
+	 * elementRemoved(org.gvsig.gui.beans.treelist.event.TreeListEvent)
 	 */
 	public void elementRemoved(TreeListEvent e) {
 		getFilterPanel().refreshPreview();
@@ -204,7 +234,9 @@ public class FilterListener implements ActionListener, TreeListComponentListener
 
 	/**
 	 * Aqui se seleccionan que filtros se van a aplicar y se devuelven en forma
-	 * de ArrayList tanto para el dibujado como cuando aceptan o aplican el panel.
+	 * de ArrayList tanto para el dibujado como cuando aceptan o aplican el
+	 * panel.
+	 * 
 	 * @param rendering
 	 * @return
 	 */
@@ -213,10 +245,12 @@ public class FilterListener implements ActionListener, TreeListComponentListener
 
 		RasterFilterList filterList = new RasterFilterList();
 		filterList.setEnv(rendering.getRenderFilterList().getEnv());
-		RasterFilterListManager stackManager = new RasterFilterListManager(filterList);
+		RasterFilterListManager stackManager = new RasterFilterListManager(
+				filterList);
 
 		// Conservamos filtros no visibles ya existentes
-		ArrayList filtersInit =  getFilterPanel().getLayerVisualStatus().getLast().getFilterStatus();
+		ArrayList filtersInit = getFilterPanel().getLayerVisualStatus()
+				.getLast().getFilterStatus();
 		for (int i = 0; i < filtersInit.size(); i++) {
 			// Si es visible no hacemos nada
 			if (((RasterFilter) filtersInit.get(i)).isVisible())
@@ -224,15 +258,19 @@ public class FilterListener implements ActionListener, TreeListComponentListener
 
 			RasterFilter obj = null;
 			for (int j = 0; j < stackManager.getRasterFilterList().size(); j++) {
-				Class classFilter = (Class) stackManager.getRasterFilterList().get(j);
+				Class classFilter = (Class) stackManager.getRasterFilterList()
+						.get(j);
 				try {
 					obj = (RasterFilter) classFilter.newInstance();
-					if (obj.getName().equals(((RasterFilter) filtersInit.get(i)).getName()))
+					if (obj.getName().equals(
+							((RasterFilter) filtersInit.get(i)).getName()))
 						break;
 				} catch (InstantiationException e) {
-					RasterToolsUtil.messageBoxError("error_creando_filtro", this, e);
+					RasterToolsUtil.messageBoxError("error_creando_filtro",
+							this, e);
 				} catch (IllegalAccessException e) {
-					RasterToolsUtil.messageBoxError("error_creando_filtro", this, e);
+					RasterToolsUtil.messageBoxError("error_creando_filtro",
+							this, e);
 				}
 			}
 
@@ -242,15 +280,22 @@ public class FilterListener implements ActionListener, TreeListComponentListener
 
 			// Si no es visible tenemos que conservar el filtro
 			try {
-				Params params = (Params) ((RasterFilter) filtersInit.get(i)).getUIParams(((RasterFilter) filtersInit.get(i)).getName()).clone();
+				Params params = (Params) ((RasterFilter) filtersInit.get(i))
+						.getUIParams(
+								((RasterFilter) filtersInit.get(i)).getName())
+						.clone();
 				// Añado el parametro RenderBands a los parametros del filtro
-				String rgb = rendering.getRenderBands()[0] + " " + rendering.getRenderBands()[1] + " " + rendering.getRenderBands()[2];
+				String rgb = rendering.getRenderBands()[0] + " "
+						+ rendering.getRenderBands()[1] + " "
+						+ rendering.getRenderBands()[2];
 				params.setParam("RenderBands", rgb, 0, null);
-				params.setParam("alphaBand", new Integer(rendering.getAlphaBandNumber()), 0, null);
-				
+				params.setParam("alphaBand",
+						new Integer(rendering.getAlphaBandNumber()), 0, null);
+
 				ParamStruct newParam = new ParamStruct();
 				newParam.setFilterClass(obj.getClass());
-				newParam.setFilterName(((RasterFilter) filtersInit.get(i)).getName());
+				newParam.setFilterName(((RasterFilter) filtersInit.get(i))
+						.getName());
 				newParam.setFilterParam(params);
 				listFilterUsed.add(newParam);
 			} catch (CloneNotSupportedException e) {
@@ -258,28 +303,41 @@ public class FilterListener implements ActionListener, TreeListComponentListener
 		}
 
 		// Metemos los filtros seleccionados en el panel
-		ListModel list = getFilterPanel().getMainPanel().getTreeListContainer().getListModel();
+		ListModel list = getFilterPanel().getMainPanel().getTreeListContainer()
+				.getListModel();
 		for (int i = 0; i < list.getSize(); i++) {
-			Hashtable hastTable = getFilterPanel().getMainPanel().getTreeListContainer().getMap();
+			Hashtable hastTable = getFilterPanel().getMainPanel()
+					.getTreeListContainer().getMap();
 			for (int j = 0; j < paramsList.size(); j++) {
 				boolean active = true;
-				Param param = ((ParamStruct) paramsList.get(j)).getFilterParam().getParamById("enabled");
-				if ((param != null) &&
-					param.defaultValue instanceof Boolean &&
-					((((Boolean)param.defaultValue).booleanValue()) == false))
+				Param param = ((ParamStruct) paramsList.get(j))
+						.getFilterParam().getParamById("enabled");
+				if ((param != null)
+						&& param.defaultValue instanceof Boolean
+						&& ((((Boolean) param.defaultValue).booleanValue()) == false))
 					active = false;
 				if (active) {
-					if (((ParamStruct) paramsList.get(j)).getFilterName().equals(hastTable.get(list.getElementAt(i)))) {
+					if (((ParamStruct) paramsList.get(j)).getFilterName()
+							.equals(hastTable.get(list.getElementAt(i)))) {
 						try {
-							Params params = (Params) ((ParamStruct) paramsList.get(j)).getFilterParam().clone();
-							// Añado el parametro RenderBands a los parametros del filtro
-							String rgb = rendering.getRenderBands()[0] + " " + rendering.getRenderBands()[1] + " " + rendering.getRenderBands()[2];
+							Params params = (Params) ((ParamStruct) paramsList
+									.get(j)).getFilterParam().clone();
+							// Añado el parametro RenderBands a los parametros
+							// del filtro
+							String rgb = rendering.getRenderBands()[0] + " "
+									+ rendering.getRenderBands()[1] + " "
+									+ rendering.getRenderBands()[2];
 							params.setParam("RenderBands", rgb, 0, null);
-							params.setParam("alphaBand", new Integer(rendering.getAlphaBandNumber()), 0, null);
+							params.setParam(
+									"alphaBand",
+									new Integer(rendering.getAlphaBandNumber()),
+									0, null);
 
 							ParamStruct newParam = new ParamStruct();
-							newParam.setFilterClass(((ParamStruct) paramsList.get(j)).getFilterClass());
-							newParam.setFilterName(((ParamStruct) paramsList.get(j)).getFilterName());
+							newParam.setFilterClass(((ParamStruct) paramsList
+									.get(j)).getFilterClass());
+							newParam.setFilterName(((ParamStruct) paramsList
+									.get(j)).getFilterName());
 							newParam.setFilterParam(params);
 							listFilterUsed.add(newParam);
 						} catch (CloneNotSupportedException e) {
@@ -293,27 +351,38 @@ public class FilterListener implements ActionListener, TreeListComponentListener
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.imagenavigator.IClientImageNavigator#drawImage(java.awt.Graphics2D, double, double, double, double, double, int, int)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.imagenavigator.IClientImageNavigator#drawImage(java
+	 * .awt.Graphics2D, double, double, double, double, double, int, int)
 	 */
 	public void drawImage(IRasterRendering rendering) {
 		rendering.getRenderFilterList().clear();
 
 		if (getFilterPanel().getCBShowFilters().isSelected()) {
 			RasterFilterList filterList = rendering.getRenderFilterList();
-			RasterFilterListManager stackManager = new RasterFilterListManager(filterList);
+			RasterFilterListManager stackManager = new RasterFilterListManager(
+					filterList);
 
 			ArrayList listFilterUsed = applyFilters(rendering);
 			ArrayList exc = new ArrayList();
 			for (int i = 0; i < listFilterUsed.size(); i++) {
-				IRasterFilterListManager filterManager = stackManager.getManagerByFilterClass(((ParamStruct) listFilterUsed.get(i)).getFilterClass());
+				IRasterFilterListManager filterManager = stackManager
+						.getManagerByFilterClass(((ParamStruct) listFilterUsed
+								.get(i)).getFilterClass());
 				try {
-					filterManager.addFilter(((ParamStruct) listFilterUsed.get(i)).getFilterClass(), ((ParamStruct) listFilterUsed.get(i)).getFilterParam());
+					filterManager.addFilter(((ParamStruct) listFilterUsed
+							.get(i)).getFilterClass(),
+							((ParamStruct) listFilterUsed.get(i))
+									.getFilterParam());
 				} catch (FilterTypeException e) {
 					exc.add(e);
 				}
 			}
-			if(exc.size() != 0) {
-				RasterToolsUtil.messageBoxError(PluginServices.getText(this, "error_adding_filters"), this, exc);
+			if (exc.size() != 0) {
+				RasterToolsUtil.messageBoxError(
+						PluginServices.getText(this, "error_adding_filters"),
+						this, exc);
 				exc.clear();
 			}
 		}
@@ -323,7 +392,8 @@ public class FilterListener implements ActionListener, TreeListComponentListener
 	 * Que acciones se ejecutaran al haber presionado el botón aceptar o aplicar
 	 */
 	public void accept() {
-		IRasterDataSource raster = ((FLyrRasterSE) getFilterPanel().getLayer()).getDataSource();
+		IRasterDataSource raster = ((FLyrRasterSE) getFilterPanel().getLayer())
+				.getDataSource();
 		if (raster == null)
 			return;
 
@@ -334,19 +404,26 @@ public class FilterListener implements ActionListener, TreeListComponentListener
 				return;
 		}
 
-		//Rendering rendering = ((FLyrRasterSE) getFilterPanel().getLayer()).getRender();
-		IRasterRendering rendering = (IRasterRendering) getFilterPanel().getLayer();
+		// Rendering rendering = ((FLyrRasterSE)
+		// getFilterPanel().getLayer()).getRender();
+		IRasterRendering rendering = (IRasterRendering) getFilterPanel()
+				.getLayer();
 
-		// Array para guardar los filtros que se van a usar en forma de ParamStruct
+		// Array para guardar los filtros que se van a usar en forma de
+		// ParamStruct
 		ArrayList listFilterUsed = applyFilters(rendering);
 
 		if (filterPanel.getNewLayerPanel().isOnlyViewSelected()) {
 			try {
-				FilterProcess.addSelectedFilters(rendering.getRenderFilterList(), listFilterUsed);
-				((FLyrRasterSE) getFilterPanel().getLayer()).setRenderFilterList(rendering.getRenderFilterList());
+				FilterProcess.addSelectedFilters(
+						rendering.getRenderFilterList(), listFilterUsed);
+				((FLyrRasterSE) getFilterPanel().getLayer())
+						.setRenderFilterList(rendering.getRenderFilterList());
 				getFilterPanel().getLayer().getMapContext().invalidate();
 			} catch (FilterTypeException e) {
-				RasterToolsUtil.messageBoxError(PluginServices.getText(this, "error_adding_filters"), this, e);
+				RasterToolsUtil.messageBoxError(
+						PluginServices.getText(this, "error_adding_filters"),
+						this, e);
 			}
 		} else {
 			FilterProcess filterProcess = new FilterProcess();
@@ -354,7 +431,8 @@ public class FilterListener implements ActionListener, TreeListComponentListener
 			filterProcess.addParam("rendering", rendering);
 			filterProcess.addParam("filename", path);
 			filterProcess.addParam("rasterdatasource", raster);
-			filterProcess.addParam("layer", ((FLyrRasterSE) getFilterPanel().getLayer()));
+			filterProcess.addParam("layer", ((FLyrRasterSE) getFilterPanel()
+					.getLayer()));
 			filterProcess.addParam("listfilterused", listFilterUsed);
 			filterProcess.start();
 		}
@@ -362,6 +440,7 @@ public class FilterListener implements ActionListener, TreeListComponentListener
 
 	/**
 	 * Devuelve el FilterPanel asociado al FilterListener
+	 * 
 	 * @return
 	 */
 	public FilterPanel getFilterPanel() {
@@ -375,21 +454,25 @@ public class FilterListener implements ActionListener, TreeListComponentListener
 	public void loadLayerInToc(String fileName) {
 		if (!getFilterPanel().getNewLayerPanel().isNewLayerSelected())
 			return;
-		if(!new File(fileName).exists())
+		if (!new File(fileName).exists())
 			return;
 		try {
-			RasterToolsUtil.loadLayer(getFilterPanel().getViewName(), fileName, null);
+			RasterToolsUtil.loadLayer(getFilterPanel().getViewName(), fileName,
+					null);
 		} catch (RasterNotLoadException e) {
 			RasterToolsUtil.messageBoxError("error_cargar_capa", this, e);
 		}
 
-		if(filterPanel != null)
+		if (filterPanel != null)
 			filterPanel.updateNewLayerText();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.FilterUIListener#actionValuesCompleted(java.util.EventObject)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.FilterUIListener#actionValuesCompleted(java
+	 * .util.EventObject)
 	 */
 	public void actionValuesCompleted(EventObject e) {
 		actionChangeProperties(e);
@@ -397,11 +480,13 @@ public class FilterListener implements ActionListener, TreeListComponentListener
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.rastertools.IProcessActions#end(java.lang.Object)
 	 */
 	public void end(Object param) {
 		loadLayerInToc((String) param);
 	}
 
-	public void interrupted() {}
+	public void interrupted() {
+	}
 }

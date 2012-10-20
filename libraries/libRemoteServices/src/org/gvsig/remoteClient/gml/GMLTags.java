@@ -1,4 +1,5 @@
 package org.gvsig.remoteClient.gml;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -58,8 +59,7 @@ package org.gvsig.remoteClient.gml;
  *
  */
 /**
- * Class containing a description for all the TAGS defined in 
- * the GML File
+ * Class containing a description for all the TAGS defined in the GML File
  * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
@@ -84,8 +84,8 @@ public class GMLTags {
 	public static final String GML_COORDINATES_CS = "cs";
 	public static final String GML_COORDINATES_TS = "ts";
 	public static final String GML_SRS_NAME = "srsName";
-	
-	//GML types
+
+	// GML types
 	public static final String GML_POINT = "Point";
 	public static final String GML_MUNTILINE = "MultiLineString";
 }

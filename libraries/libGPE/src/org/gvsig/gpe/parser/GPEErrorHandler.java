@@ -67,35 +67,37 @@ import java.util.ArrayList;
  *
  */
 /**
- * This class is a common implementation for all
- * the application error handlers.
+ * This class is a common implementation for all the application error handlers.
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  */
 public abstract class GPEErrorHandler implements IGPEErrorHandler {
 	private ArrayList errors = null;
 	private ArrayList warnings = null;
-		
+
 	public GPEErrorHandler() {
 		super();
 		errors = new ArrayList();
 		warnings = new ArrayList();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.IGPEErrorHandler#addError(java.lang.Throwable)
 	 */
 	public void addError(Throwable e) {
-		errors.add(e);			
+		errors.add(e);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.IGPEErrorHandler#addWarning(java.lang.Throwable)
 	 */
 	public void addWarning(Throwable e) {
-		warnings.add(e);		
+		warnings.add(e);
 	}
 
 	/**
@@ -111,27 +113,27 @@ public abstract class GPEErrorHandler implements IGPEErrorHandler {
 	public int getWarningsSize() {
 		return warnings.size();
 	}
-	
+
 	/**
 	 * Get a error
+	 * 
 	 * @param i
-	 * Error position
-	 * @return
-	 * The exception
+	 *            Error position
+	 * @return The exception
 	 */
 	public Throwable getErrorAt(int i) {
-		return (Throwable)errors.get(i);
+		return (Throwable) errors.get(i);
 	}
 
 	/**
 	 * Get a warning
+	 * 
 	 * @param i
-	 * Warning position
-	 * @return
-	 * The warning exception
+	 *            Warning position
+	 * @return The warning exception
 	 */
 	public Throwable getWarningAt(int i) {
 		return (Throwable) warnings.get(i);
-	}	
+	}
 
 }

@@ -47,8 +47,6 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 import java.sql.Types;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -58,14 +56,12 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.apache.log4j.Logger;
 import org.gvsig.gui.beans.swing.GridBagLayoutPanel;
-import org.gvsig.gui.beans.swing.JBlank;
 import org.gvsig.gui.beans.swing.JButton;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -74,7 +70,6 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.cit.gvsig.exceptions.layers.LegendLayerException;
 import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
-import com.iver.cit.gvsig.fmap.core.styles.IMarkerFillPropertiesStyle;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
@@ -87,20 +82,17 @@ import com.iver.cit.gvsig.fmap.rendering.IInterval;
 import com.iver.cit.gvsig.fmap.rendering.ILegend;
 import com.iver.cit.gvsig.fmap.rendering.LegendFactory;
 import com.iver.cit.gvsig.fmap.rendering.NullIntervalValue;
-import com.iver.cit.gvsig.fmap.rendering.NullUniqueValue;
 import com.iver.cit.gvsig.fmap.rendering.VectorialIntervalLegend;
-import com.iver.cit.gvsig.fmap.rendering.VectorialUniqueValueLegend;
 import com.iver.cit.gvsig.gui.panels.ColorChooserPanel;
-import com.iver.cit.gvsig.gui.styling.JComboBoxColorScheme;
-
 
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
-public class VectorialInterval extends JPanel implements ILegendPanel{
-	protected static Logger logger = Logger.getLogger(VectorialInterval.class.getName());
+public class VectorialInterval extends JPanel implements ILegendPanel {
+	protected static Logger logger = Logger.getLogger(VectorialInterval.class
+			.getName());
 	private GridBagLayoutPanel pnlGeneral = null;
 	protected JComboBox cmbField = null;
 	protected JTextField txtNumIntervals = null;
@@ -124,6 +116,7 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 	private JPanel pnlNorth;
 	protected JSymbolPreviewButton defaultSymbolPrev;
 	private GridBagLayoutPanel defaultSymbolPanel = new GridBagLayoutPanel();
+
 	/**
 	 * This is the default constructor
 	 */
@@ -155,25 +148,25 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 
 	/**
 	 * This method initializes panelN
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getGeneralPanel() {
 		if (pnlGeneral == null) {
 			pnlGeneral = new GridBagLayoutPanel();
-			pnlGeneral.setBorder(BorderFactory.
-					createTitledBorder(null,
-							PluginServices.getText(this, "fields")));
-			pnlGeneral.addComponent(PluginServices.getText(this, "Campo_de_clasificacion"),
+			pnlGeneral.setBorder(BorderFactory.createTitledBorder(null,
+					PluginServices.getText(this, "fields")));
+			pnlGeneral.addComponent(
+					PluginServices.getText(this, "Campo_de_clasificacion"),
 					getCmbFields());
-			pnlGeneral.addComponent(PluginServices.getText(this, "tipo_de_intervalo"),
+			pnlGeneral.addComponent(
+					PluginServices.getText(this, "tipo_de_intervalo"),
 					getCmbIntervalTypes());
 
 			JPanel aux = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
 			aux.add(getTxtNumIntervals());
-			pnlGeneral.addComponent(PluginServices.getText(this, "No_de_intervalos"),
-					aux);
-
+			pnlGeneral.addComponent(
+					PluginServices.getText(this, "No_de_intervalos"), aux);
 
 			defaultSymbolPanel.add(getChkDefaultvalues(), null);
 			pnlGeneral.addComponent(defaultSymbolPanel);
@@ -185,9 +178,8 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 	public JPanel getOptionPanel() {
 		if (optionPanel == null) {
 			optionPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-			optionPanel.setBorder(BorderFactory.
-					createTitledBorder(null,
-							PluginServices.getText(this, "color_ramp")));
+			optionPanel.setBorder(BorderFactory.createTitledBorder(null,
+					PluginServices.getText(this, "color_ramp")));
 
 			GridBagLayoutPanel aux = new GridBagLayoutPanel();
 			aux.addComponent(PluginServices.getText(this, "Color_inicio"),
@@ -203,9 +195,10 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 		getPnlNorth().remove(getOptionPanel());
 		getPnlNorth().add(p, BorderLayout.NORTH);
 	}
+
 	/**
 	 * This method initializes jComboBox
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getCmbFields() {
@@ -221,7 +214,7 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 
 	/**
 	 * This method initializes txtNumIntervals
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getTxtNumIntervals() {
@@ -235,13 +228,14 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 
 	/**
 	 * This method initializes colorChooserPanel
-	 *
+	 * 
 	 * @return com.iver.cit.gvsig.gui.Panels.ColorChooserPanel
 	 */
 	private ColorChooserPanel getColorChooserPanel() {
 		if (colorChooserPanel == null) {
 			colorChooserPanel = new ColorChooserPanel();
-			colorChooserPanel.setBounds(new java.awt.Rectangle(108, 49, 54, 20));
+			colorChooserPanel
+					.setBounds(new java.awt.Rectangle(108, 49, 54, 20));
 			colorChooserPanel.setAlpha(255);
 			colorChooserPanel.setColor(Color.red);
 		}
@@ -251,13 +245,14 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 
 	/**
 	 * This method initializes colorChooserPanel1
-	 *
+	 * 
 	 * @return com.iver.cit.gvsig.gui.Panels.ColorChooserPanel
 	 */
 	private ColorChooserPanel getColorChooserPanel1() {
 		if (colorChooserPanel1 == null) {
 			colorChooserPanel1 = new ColorChooserPanel();
-			colorChooserPanel1.setBounds(new java.awt.Rectangle(251, 49, 54, 20));
+			colorChooserPanel1
+					.setBounds(new java.awt.Rectangle(251, 49, 54, 20));
 			colorChooserPanel1.setAlpha(255);
 			colorChooserPanel1.setColor(Color.blue);
 		}
@@ -267,25 +262,27 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 
 	/**
 	 * This method initializes chkdefaultvalues
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	protected JCheckBox getChkDefaultvalues() {
 		if (chkdefaultvalues == null) {
 			chkdefaultvalues = new JCheckBox();
 			chkdefaultvalues.setText(PluginServices.getText(this,
-			"resto_valores")+": ");
-			chkdefaultvalues.setBounds(new java.awt.Rectangle(342, 26, 141, 20));
+					"resto_valores") + ": ");
+			chkdefaultvalues
+					.setBounds(new java.awt.Rectangle(342, 26, 141, 20));
 			chkdefaultvalues.setSelected(false);
-			chkdefaultvalues.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if (chkdefaultvalues.isSelected()) {
-						auxLegend.useDefaultSymbol(true);
-					} else {
-						auxLegend.useDefaultSymbol(false);
-					}
-				}
-			});
+			chkdefaultvalues
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							if (chkdefaultvalues.isSelected()) {
+								auxLegend.useDefaultSymbol(true);
+							} else {
+								auxLegend.useDefaultSymbol(false);
+							}
+						}
+					});
 		}
 
 		return chkdefaultvalues;
@@ -293,7 +290,7 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 
 	/**
 	 * This method initializes jComboBox1
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	protected JComboBox getCmbIntervalTypes() {
@@ -301,11 +298,12 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 			cmbFieldType = new JComboBox();
 			cmbFieldType.setActionCommand("INTERVAL_TYPE");
 			cmbFieldType.addActionListener(listener);
-			cmbFieldType.addItem(PluginServices.getText(this, "equal_intervals"));
+			cmbFieldType.addItem(PluginServices
+					.getText(this, "equal_intervals"));
 			cmbFieldType.addItem(PluginServices.getText(this,
-			"natural_intervals"));
+					"natural_intervals"));
 			cmbFieldType.addItem(PluginServices.getText(this,
-			"quantile_intervals"));
+					"quantile_intervals"));
 			cmbFieldType.setVisible(true);
 		}
 
@@ -314,7 +312,7 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 
 	/**
 	 * This method initializes panelS
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	protected JPanel getPnlButtons() {
@@ -332,7 +330,7 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 
 	/**
 	 * This method initializes bintervals
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	protected JButton getBintervals() {
@@ -341,7 +339,7 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 			bintervals.setActionCommand("ADD_ALL_VALUES");
 			bintervals.addActionListener(listener);
 			bintervals.setText(PluginServices.getText(this,
-			"Calcular_intervalos"));
+					"Calcular_intervalos"));
 		}
 
 		return bintervals;
@@ -349,7 +347,7 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 
 	/**
 	 * This method initializes bInsert
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	protected JButton getBInsert() {
@@ -365,7 +363,7 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 
 	/**
 	 * This method initializes bDelAll
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	protected JButton getBDelAll() {
@@ -381,7 +379,7 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 
 	/**
 	 * This method initializes bDel
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	protected JButton getBDel() {
@@ -394,7 +392,6 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 
 		return bDel;
 	}
-
 
 	/**
 	 * Damos una primera pasada para saber los l�mites inferior y superior y
@@ -412,7 +409,7 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 
 			FInterval interval;
 			NumberFormat.getInstance().setMaximumFractionDigits(2);
-			//theLegend.clear();
+			// theLegend.clear();
 			auxLegend.clear();
 
 			int r;
@@ -435,7 +432,8 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 			stepG = (endColor.getGreen() - g) / arrayIntervalos.length;
 			stepB = (endColor.getBlue() - b) / arrayIntervalos.length;
 
-			auxLegend = LegendFactory.createVectorialIntervalLegend(layer.getShapeType());
+			auxLegend = LegendFactory.createVectorialIntervalLegend(layer
+					.getShapeType());
 			auxLegend.setStartColor(startColor);
 			auxLegend.setEndColor(endColor);
 			auxLegend.setIntervalType(getCmbIntervalTypes().getSelectedIndex());
@@ -447,34 +445,37 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 			for (int k = 0; k < arrayIntervalos.length; k++) {
 				interval = arrayIntervalos[k];
 
-				ISymbol theSymbol = SymbologyFactory.createDefaultSymbolByShapeType(
-						symbolType,
-						new Color(r, g, b));
-				theSymbol.setDescription(NumberFormat.getInstance().format(interval.getMin()) +
-						" - " +
-						NumberFormat.getInstance().format(interval.getMax()));
+				ISymbol theSymbol = SymbologyFactory
+						.createDefaultSymbolByShapeType(symbolType, new Color(
+								r, g, b));
+				theSymbol.setDescription(NumberFormat.getInstance().format(
+						interval.getMin())
+						+ " - "
+						+ NumberFormat.getInstance().format(interval.getMax()));
 
-				//////////////////////////////////////
+				// ////////////////////////////////////
 				// CALCULAMOS UN COLOR APROPIADO
 				r = r + stepR;
 				g = g + stepG;
 				b = b + stepB;
 
-				/////////////////////////////////
+				// ///////////////////////////////
 				auxLegend.addSymbol(interval, theSymbol);
-				System.out.println("addSymbol = " + interval +
-						" theSymbol = " + theSymbol.getDescription());
+				System.out.println("addSymbol = " + interval + " theSymbol = "
+						+ theSymbol.getDescription());
 				numSymbols++;
 
 				if (numSymbols > 100) {
-					int resp = JOptionPane.showConfirmDialog(this,
-							PluginServices.getText(this, "mas_de_100_simbolos"),
-							PluginServices.getText(this, "quiere_continuar"),
-							JOptionPane.YES_NO_OPTION,
-							JOptionPane.WARNING_MESSAGE);
+					int resp = JOptionPane
+							.showConfirmDialog(this, PluginServices.getText(
+									this, "mas_de_100_simbolos"),
+									PluginServices.getText(this,
+											"quiere_continuar"),
+									JOptionPane.YES_NO_OPTION,
+									JOptionPane.WARNING_MESSAGE);
 
-					if ((resp == JOptionPane.NO_OPTION) ||
-							(resp == JOptionPane.DEFAULT_OPTION)) {
+					if ((resp == JOptionPane.NO_OPTION)
+							|| (resp == JOptionPane.DEFAULT_OPTION)) {
 						return;
 					}
 				}
@@ -482,15 +483,19 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 				// }
 			} // for
 
-			System.out.println("Num. Simbolos = " +
-					auxLegend.getValues().length);
+			System.out.println("Num. Simbolos = "
+					+ auxLegend.getValues().length);
 			symbolTable.fillTableFromSymbolList(auxLegend.getSymbols(),
-					auxLegend.getValues(),auxLegend.getDescriptions());
+					auxLegend.getValues(), auxLegend.getDescriptions());
 
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(PluginServices.getText(this, "could_not_get_shape_type"), e);
+			NotificationManager
+					.addError(PluginServices.getText(this,
+							"could_not_get_shape_type"), e);
 		} catch (LegendLayerException e) {
-			NotificationManager.addError(PluginServices.getText(this, "failed_computing_intervals"), e);
+			NotificationManager.addError(
+					PluginServices.getText(this, "failed_computing_intervals"),
+					e);
 		}
 
 		bDelAll.setEnabled(true);
@@ -501,26 +506,23 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 		int intervalCount = 1;
 		// ensure the interval value is an integer greather than 0
 		try {
-			intervalCount = (int) Double.
-			parseDouble(txtNumIntervals.getText());
-			if (intervalCount<1) {
+			intervalCount = (int) Double.parseDouble(txtNumIntervals.getText());
+			if (intervalCount < 1) {
 				throw new Exception();
 			}
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(this,
-					PluginServices.getText(this, "invalid_interval_count_value"));
+			JOptionPane.showMessageDialog(this, PluginServices.getText(this,
+					"invalid_interval_count_value"));
 			return null;
 		}
 
 		try {
 
 			return auxLegend.calculateIntervals(
-					//return theLegend.calculateIntervals(
+					// return theLegend.calculateIntervals(
 					((AlphanumericData) layer).getRecordset(),
-					(String) cmbField.getSelectedItem(),
-					intervalCount,
-					layer.getShapeType()
-			);
+					(String) cmbField.getSelectedItem(), intervalCount,
+					layer.getShapeType());
 		} catch (ReadDriverException e) {
 			return null;
 		}
@@ -532,16 +534,17 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 		try {
 			shapeType = this.layer.getShapeType();
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(PluginServices.getText(this, "generating_intervals"), e);
+			NotificationManager.addError(
+					PluginServices.getText(this, "generating_intervals"), e);
 		}
 
 		if (symbolTable != null)
 			pnlCenter.remove(symbolTable);
 
-
 		getDefaultSymbolPrev(shapeType);
 
-		symbolTable = new SymbolTable(this, SymbolTable.INTERVALS_TYPE, shapeType);
+		symbolTable = new SymbolTable(this, SymbolTable.INTERVALS_TYPE,
+				shapeType);
 		pnlCenter.add(symbolTable);
 		fillFieldNames();
 
@@ -553,17 +556,20 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 				e.printStackTrace();
 			}
 			chkdefaultvalues.setSelected(auxLegend.isUseDefaultSymbol());
-			cmbField.getModel().setSelectedItem(auxLegend.getClassifyingFieldNames()[0]);
+			cmbField.getModel().setSelectedItem(
+					auxLegend.getClassifyingFieldNames()[0]);
 			symbolTable.fillTableFromSymbolList(auxLegend.getSymbols(),
-					auxLegend.getValues(),auxLegend.getDescriptions());
+					auxLegend.getValues(), auxLegend.getDescriptions());
 			colorChooserPanel.setColor(auxLegend.getStartColor());
 			colorChooserPanel1.setColor(auxLegend.getEndColor());
 			colorChooserPanel.repaint();
 			colorChooserPanel1.repaint();
-			if(auxLegend.isUseDefaultSymbol())
-				txtNumIntervals.setText(String.valueOf(auxLegend.getSymbols().length - 1));
+			if (auxLegend.isUseDefaultSymbol())
+				txtNumIntervals
+						.setText(String.valueOf(auxLegend.getSymbols().length - 1));
 			else
-				txtNumIntervals.setText(String.valueOf(auxLegend.getSymbols().length));
+				txtNumIntervals
+						.setText(String.valueOf(auxLegend.getSymbols().length));
 		} else {
 			// Si la capa viene con otro tipo de leyenda, creamos
 			// una nueva del tipo que maneja este panel
@@ -576,10 +582,10 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 	}
 
 	public void getDefaultSymbolPrev(int shapeType) {
-		if(defaultSymbolPrev == null){
+		if (defaultSymbolPrev == null) {
 			defaultSymbolPrev = new JSymbolPreviewButton(shapeType);
-			defaultSymbolPrev.setPreferredSize(new Dimension(110,20));
-			defaultSymbolPanel.add(defaultSymbolPrev,null);
+			defaultSymbolPrev.setPreferredSize(new Dimension(110, 20));
+			defaultSymbolPanel.add(defaultSymbolPrev, null);
 		}
 	}
 
@@ -588,13 +594,13 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 		ArrayList nomFields = null;
 
 		try {
-//			rs = ((FLyrVect) layer).getSource().getRecordset();
+			// rs = ((FLyrVect) layer).getSource().getRecordset();
 			rs = ((FLyrVect) layer).getRecordset();
 			logger.debug("rs.start()");
 			rs.start();
 
 			nomFields = new ArrayList();
-			int fieldCount=rs.getFieldCount();
+			int fieldCount = rs.getFieldCount();
 			int type;
 			for (int i = 0; i < fieldCount; i++) {
 				type = rs.getFieldType(i);
@@ -603,17 +609,16 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 					continue;
 				}
 
-				if ((type == Types.INTEGER) ||
-						(type == Types.DOUBLE) ||
-						(type == Types.FLOAT) ||
-						(type == Types.BIGINT)) {
+				if ((type == Types.INTEGER) || (type == Types.DOUBLE)
+						|| (type == Types.FLOAT) || (type == Types.BIGINT)) {
 					nomFields.add(rs.getFieldAlias(i));
 				}
 			}
 
 			rs.stop();
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(PluginServices.getText(this, "recovering_recordset"), e);
+			NotificationManager.addError(
+					PluginServices.getText(this, "recovering_recordset"), e);
 		}
 
 		DefaultComboBoxModel cM = new DefaultComboBoxModel(nomFields.toArray());
@@ -628,7 +633,7 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 	public ILegend getLegend() {
 		fillSymbolListFromTable();
 
-		if(defaultSymbolPrev.getSymbol() != null)
+		if (defaultSymbolPrev.getSymbol() != null)
 			auxLegend.setDefaultSymbol(defaultSymbolPrev.getSymbol());
 
 		auxLegend.useDefaultSymbol(chkdefaultvalues.isSelected());
@@ -643,8 +648,8 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 	}
 
 	/**
-	 * A partir de los registros de la tabla, regenera el FRenderer. (No solo
-	 * el symbolList, si no tambi�n el arrayKeys y el defaultRenderer
+	 * A partir de los registros de la tabla, regenera el FRenderer. (No solo el
+	 * symbolList, si no tambi�n el arrayKeys y el defaultRenderer
 	 */
 
 	protected void fillSymbolListFromTable() {
@@ -655,7 +660,7 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 		auxLegend.clear();
 
 		String fieldName = (String) cmbField.getSelectedItem();
-		auxLegend.setClassifyingFieldNames(new String[] {fieldName});
+		auxLegend.setClassifyingFieldNames(new String[] { fieldName });
 
 		auxLegend.useDefaultSymbol(chkdefaultvalues.isSelected());
 
@@ -664,15 +669,15 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 
 			rs = ((AlphanumericData) layer).getRecordset();
 			rs.start();
-			auxLegend.setClassifyingFieldTypes(new int[] {rs.getFieldType(rs.getFieldIndexByName(fieldName))});
+			auxLegend.setClassifyingFieldTypes(new int[] { rs.getFieldType(rs
+					.getFieldIndexByName(fieldName)) });
 			logger.debug("rs.start()");
 			rs.stop();
 
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(PluginServices.getText(this, "recovering_recordset"), e);
+			NotificationManager.addError(
+					PluginServices.getText(this, "recovering_recordset"), e);
 		}
-
-
 
 		for (int row = 0; row < symbolTable.getRowCount(); row++) {
 			if (!(symbolTable.getFieldValue(row, 1) instanceof FInterval)) {
@@ -689,18 +694,19 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 			}
 		}
 
-		if(chkdefaultvalues.isSelected()){
-			if(defaultSymbolPrev.getSymbol() != null){
-				String description = PluginServices.getText(this,"default");
+		if (chkdefaultvalues.isSelected()) {
+			if (defaultSymbolPrev.getSymbol() != null) {
+				String description = PluginServices.getText(this, "default");
 				defaultSymbolPrev.getSymbol().setDescription(description);
-				auxLegend.addSymbol(new NullIntervalValue(), defaultSymbolPrev.getSymbol());
+				auxLegend.addSymbol(new NullIntervalValue(),
+						defaultSymbolPrev.getSymbol());
 			}
 		}
 	}
 
 	/**
 	 * This method initializes panelC
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPnlCenter() {
@@ -713,7 +719,7 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 
 	/**
 	 * Listener.
-	 *
+	 * 
 	 * @author Vicente Caballero Navarro
 	 */
 	class MyListener implements ActionListener {
@@ -721,67 +727,73 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("ActionEvent con " + e.getActionCommand());
 
-			//modificar el combobox de valor
+			// modificar el combobox de valor
 			if (e.getActionCommand() == "FIELD_SELECTED") {
 				fieldSelectedActionPerformed((JComboBox) e.getSource());
 			} else if (e.getActionCommand() == "INTERVAL_TYPE") {
 				JComboBox cb = (JComboBox) e.getSource();
 
-				//if ((theLegend != null) &&
+				// if ((theLegend != null) &&
 				if ((auxLegend != null) &&
-						//    (cb.getSelectedIndex() != theLegend.getIntervalType())) {
+				// (cb.getSelectedIndex() != theLegend.getIntervalType())) {
 						(cb.getSelectedIndex() != auxLegend.getIntervalType())) {
-					//theLegend.setIntervalType(cb.getSelectedIndex());
+					// theLegend.setIntervalType(cb.getSelectedIndex());
 					auxLegend.setIntervalType(cb.getSelectedIndex());
 					symbolTable.removeAllItems();
 				}
 			}
 
-			//A�adir todos los elementos por valor
+			// A�adir todos los elementos por valor
 			if (e.getActionCommand() == "ADD_ALL_VALUES") {
 				fillTableValues();
 			}
 
-			//A�adir un �nico elemento
+			// A�adir un �nico elemento
 			if (e.getActionCommand() == "ADD_VALUE") {
 				try {
-					symbolTable.addTableRecord(
-							SymbologyFactory.createDefaultSymbolByShapeType(layer.getShapeType()),
-							new FInterval(0, 0),"0 - 0");
+					symbolTable.addTableRecord(SymbologyFactory
+							.createDefaultSymbolByShapeType(layer
+									.getShapeType()), new FInterval(0, 0),
+							"0 - 0");
 				} catch (ReadDriverException e1) {
-					NotificationManager.addError(PluginServices.getText(this, "could_not_get_shape_type"), e1);
+					NotificationManager.addError(PluginServices.getText(this,
+							"could_not_get_shape_type"), e1);
 				}
 
 			}
 
-			//Vacia la tabla
+			// Vacia la tabla
 			if (e.getActionCommand() == "REMOVE_ALL") {
 				symbolTable.removeAllItems();
 			}
 
-			//Quitar solo el elemento seleccionado
+			// Quitar solo el elemento seleccionado
 			if (e.getActionCommand() == "REMOVE") {
 				symbolTable.removeSelectedRows();
 			}
 		}
 	}
 
-	protected void fieldSelectedActionPerformed(JComboBox cb){
+	protected void fieldSelectedActionPerformed(JComboBox cb) {
 		String fieldName = (String) cb.getSelectedItem();
 		System.out.println("Nombre del campo: " + fieldName);
 		symbolTable.removeAllItems();
 
-		//theLegend.setClassifyingFieldNames(new String[] {fieldName});
-		auxLegend.setClassifyingFieldNames(new String[] {fieldName});
+		// theLegend.setClassifyingFieldNames(new String[] {fieldName});
+		auxLegend.setClassifyingFieldNames(new String[] { fieldName });
 	}
 
 	public String getDescription() {
-		return PluginServices.getText(this,"Muestra_los_elementos_de_la_capa_usando_una_gama_de_colores_en_funcion_del_valor_de_un_determinado_campo_de_atributos") + ".";
+		return PluginServices
+				.getText(
+						this,
+						"Muestra_los_elementos_de_la_capa_usando_una_gama_de_colores_en_funcion_del_valor_de_un_determinado_campo_de_atributos")
+				+ ".";
 	}
 
 	public ImageIcon getIcon() {
-		return new ImageIcon(this.getClass().getClassLoader().
-				getResource("images/Intervalos.png"));
+		return new ImageIcon(this.getClass().getClassLoader()
+				.getResource("images/Intervalos.png"));
 	}
 
 	public Class getParentClass() {
@@ -789,7 +801,7 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 	}
 
 	public String getTitle() {
-		return PluginServices.getText(this,"Intervalos");
+		return PluginServices.getText(this, "Intervalos");
 	}
 
 	public JPanel getPanel() {
@@ -817,6 +829,7 @@ public class VectorialInterval extends JPanel implements ILegendPanel{
 		}
 
 	}
+
 	public boolean isSuitableFor(FLayer layer) {
 
 		if (layer instanceof FLyrVect) {

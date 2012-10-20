@@ -61,9 +61,9 @@ import org.gvsig.gpe.warnings.NotSupportedElementWarning;
  *
  */
 /**
- * This class is used to test the warning that is
- * thrown when the consumer application tries to write
- * an element that is not in the XML schema 
+ * This class is used to test the warning that is thrown when the consumer
+ * application tries to write an element that is not in the XML schema
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public abstract class GPENotSupportedElementTest extends GPENotSupportedSchema {
@@ -87,59 +87,55 @@ public abstract class GPENotSupportedElementTest extends GPENotSupportedSchema {
 	private Boolean element3Value = new Boolean(false);
 	private String element4Name = "Size";
 	private Integer element4Value = new Integer(100000);
-	//Schema 
+	// Schema
 	private String xsFeature1Name = "city";
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#readObjects()
 	 */
 	public void readObjects() {
 		Layer[] layers = getLayers();
-		assertEquals(layers.length, 1);		
+		assertEquals(layers.length, 1);
 		Layer layer = layers[0];
-	
+
 		assertEquals(layer.getFeatures().size(), 1);
-		//FEATURE 1
-		Feature feature1 = (Feature)layer.getFeatures().get(0);
-		
+		// FEATURE 1
+		Feature feature1 = (Feature) layer.getFeatures().get(0);
+
 		boolean elementNotSupported = false;
-		for (int i=0 ; i<getErrorHandler().getWarningsSize() ; i++){
-			if (getErrorHandler().getWarningAt(i) instanceof NotSupportedElementWarning){
+		for (int i = 0; i < getErrorHandler().getWarningsSize(); i++) {
+			if (getErrorHandler().getWarningAt(i) instanceof NotSupportedElementWarning) {
 				elementNotSupported = true;
-			}			
+			}
 		}
 		assertTrue(elementNotSupported);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#writeObjects()
 	 */
 	public void writeObjects() {
 		getWriterHandler().initialize();
-		getWriterHandler().startLayer(layer1Id, null, layer1Name, layer1Description, layer1Srs);
+		getWriterHandler().startLayer(layer1Id, null, layer1Name,
+				layer1Description, layer1Srs);
 		getWriterHandler().startFeature(feature1Id, null, feature1Name);
-		getWriterHandler().startPoint(point1Id, new CoordinatesSequence(point1X, point1Y, point1Z), layer1Srs);
-		getWriterHandler().endPoint();	
-		getWriterHandler().startElement(namespace,
-				element1Name,
-				element1Value);
+		getWriterHandler().startPoint(point1Id,
+				new CoordinatesSequence(point1X, point1Y, point1Z), layer1Srs);
+		getWriterHandler().endPoint();
+		getWriterHandler().startElement(namespace, element1Name, element1Value);
 		getWriterHandler().endElement();
-		getWriterHandler().startElement(namespace,
-				element2Name,
-				element2Value);
+		getWriterHandler().startElement(namespace, element2Name, element2Value);
 		getWriterHandler().endElement();
-		getWriterHandler().startElement(namespace,
-				element3Name,
-				element3Value);
+		getWriterHandler().startElement(namespace, element3Name, element3Value);
 		getWriterHandler().endElement();
-		getWriterHandler().startElement(namespace,
-				element4Name,
-				element4Value);
+		getWriterHandler().startElement(namespace, element4Name, element4Value);
 		getWriterHandler().endElement();
-		getWriterHandler().endFeature();		
+		getWriterHandler().endFeature();
 		getWriterHandler().endLayer();
-		getWriterHandler().close();		
+		getWriterHandler().close();
 	}
 }

@@ -1,7 +1,6 @@
 package com.iver.cit.gvsig;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
-import com.hardcode.gdbms.engine.data.driver.DriverException;
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.plugins.Extension;
@@ -22,13 +21,15 @@ public class AutoCompletePolygonExtension extends Extension {
 		CADExtension.addCADTool("_autocompletepolygon", theTool);
 		registerIcons();
 	}
-	private void registerIcons(){
+
+	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"edition-geometry-autocompletepolygon",
-				this.getClass().getClassLoader().getResource("images/polygon_autocomplete.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/polygon_autocomplete.png"));
 
 	}
+
 	public void execute(String actionCommand) {
 		CADExtension.initFocus();
 		if (actionCommand.equals("AUTOCOMPLETE_POLYGON")) {

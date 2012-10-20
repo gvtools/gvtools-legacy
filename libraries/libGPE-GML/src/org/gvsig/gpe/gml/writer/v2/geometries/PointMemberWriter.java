@@ -74,6 +74,7 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
 /**
  * It writes a gml:pointMemberType object. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;pointMember&gt;
@@ -83,47 +84,56 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  * &lt;/pointMember&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class PointMemberWriter extends GeometryWriter{
-	
+public class PointMemberWriter extends GeometryWriter {
+
 	/**
 	 * It writes a gml:PointMember init tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param id
-	 * Geometry ID
+	 *            Geometry ID
 	 * @param coords
-	 * A coordinates sequence
+	 *            A coordinates sequence
 	 * @param srs
-	 * Spatial reference system
+	 *            Spatial reference system
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor handler, String id, 
-			ICoordinateSequence coords, String srs) throws IOException{
+	public void start(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler, String id,
+			ICoordinateSequence coords, String srs) throws IOException {
 		writer.writeStartElement(GMLTags.GML_NAMESPACE_URI, getGeometryName());
-		handler.getProfile().getPointWriter().start(writer, handler, id, coords, srs);	
+		handler.getProfile().getPointWriter()
+				.start(writer, handler, id, coords, srs);
 	}
-	
+
 	/**
 	 * It writes a gml:Point end tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @throws IOException
 	 */
-	public void end(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor handler) throws IOException{
+	public void end(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler) throws IOException {
 		handler.getProfile().getPointWriter().end(writer, handler);
 		writer.writeEndElement();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.v2.geometries.GeometryWriter#getGeometryName()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.v2.geometries.GeometryWriter#getGeometryName()
 	 */
 	public String getGeometryName() {
 		return GMLTags.GML_POINTMEMBER.getLocalPart();

@@ -18,13 +18,12 @@
  */
 package org.gvsig.gui.beans.table.models;
 
-
 /**
  * Interfaz que implementan los modelos de tabla
  * 
  * @author Nacho Brodin (brodin_ign@gva.es)
- *
+ * 
  */
-public interface IModel{
-    public Object[] getNewLine();
+public interface IModel {
+	public Object[] getNewLine();
 }

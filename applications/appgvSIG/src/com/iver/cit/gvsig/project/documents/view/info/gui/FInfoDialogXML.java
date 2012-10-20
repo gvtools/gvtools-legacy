@@ -49,35 +49,36 @@ import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.utiles.xmlViewer.XMLViewer;
 
-
 /**
  * Diálogo utilizado para mostrar la infromación.
- *
- * @author fernando To change the template for this generated type comment go
- * 		   to Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and
- * 		   Comments
+ * 
+ * @author fernando To change the template for this generated type comment go to
+ *         Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 public class FInfoDialogXML extends XMLViewer implements IWindow {
 
-
-	public FInfoDialogXML(){
+	public FInfoDialogXML() {
 		super();
-		setNamesColumn(new String[]{PluginServices.getText(this, "Atributo"), PluginServices.getText(this, "Valor")});
+		setNamesColumn(new String[] { PluginServices.getText(this, "Atributo"),
+				PluginServices.getText(this, "Valor") });
 		setSize(500, 375);
 	}
+
 	/**
 	 * @see com.iver.mdiApp.ui.MDIManager.IWindow#windowActivated()
 	 */
 	public void viewActivated() {
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.mdiApp.ui.MDIManager.View#getViewInfo()
 	 */
 	public WindowInfo getWindowInfo() {
-		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODELESSDIALOG |
-				WindowInfo.RESIZABLE | WindowInfo.PALETTE);
-		m_viewinfo.setWidth(getWidth()+8);
+		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODELESSDIALOG
+				| WindowInfo.RESIZABLE | WindowInfo.PALETTE);
+		m_viewinfo.setWidth(getWidth() + 8);
 		m_viewinfo.setHeight(getHeight());
 		m_viewinfo.setTitle(PluginServices.getText(this,
 				"Identificar_Resultados"));
@@ -91,6 +92,7 @@ public class FInfoDialogXML extends XMLViewer implements IWindow {
 	public Object getViewModel() {
 		return "FInfoDialogXML";
 	}
+
 	public Object getWindowProfile() {
 		return WindowInfo.PROPERTIES_PROFILE;
 	}

@@ -5,7 +5,7 @@ import com.hardcode.gdbms.engine.values.Value;
 
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class NullIntervalValue implements IInterval {
@@ -19,7 +19,10 @@ public class NullIntervalValue implements IInterval {
 	 */
 	public NullIntervalValue() {
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.rendering.IInterval#toString()
 	 */
 	public String toString() {

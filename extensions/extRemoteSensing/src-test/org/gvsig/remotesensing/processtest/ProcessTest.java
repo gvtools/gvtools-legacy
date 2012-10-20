@@ -12,8 +12,8 @@ public class ProcessTest {
 		IncrementableTask incrementableTask = new IncrementableTask(process);
 		process.setIncrementableTask(incrementableTask);
 		incrementableTask.showWindow();
-	    process.start();
-		incrementableTask.start();	
+		process.start();
+		incrementableTask.start();
 
 	}
 

@@ -56,21 +56,21 @@ import com.iver.cit.gvsig.gui.panels.wfsttimewarning.TimeWarningWindow;
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class TimeWarningWindowTest {
-	
+
 	public static void main(String[] args) {
-		TimeWarningWindow panel = new TimeWarningWindow(null,null,null,null);
+		TimeWarningWindow panel = new TimeWarningWindow(null, null, null, null);
 		createFrame(panel);
-	}	
-	
-	private static void createFrame(Component component){
+	}
+
+	private static void createFrame(Component component) {
 		JFrame f = new JFrame();
 		f.addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-            	System.exit(0);
-            }
-        });
-		f.getContentPane().add(component);	    
-		f.setBounds(0,0,300,400);
+			public void windowClosing(java.awt.event.WindowEvent evt) {
+				System.exit(0);
+			}
+		});
+		f.getContentPane().add(component);
+		f.setBounds(0, 0, 300, 400);
 		f.setVisible(true);
 	}
 }

@@ -18,47 +18,49 @@
  */
 package org.gvsig.gui.beans.treelist.event;
 
-
 /**
- * Event para el TreeListComponentListener
- * Nacho Brodin (brodin_ign@gva.es)
+ * Event para el TreeListComponentListener Nacho Brodin (brodin_ign@gva.es)
  */
 
 public class TreeListEvent {
-	
+
 	private String elementAdded = null;
 	private String elementRemoved = null;
 	private String sourceElement = null;
 	private String DestElement = null;
 	private int positionSourceElement = -1;
 	private int positionDestElement = -1;
-	
+
 	/**
 	 * Obtiene el elemento añadido
+	 * 
 	 * @return Elemento añadido
 	 */
 	public String getElementAdded() {
 		return elementAdded;
 	}
-	
+
 	/**
 	 * Asigna el elemento añadido
+	 * 
 	 * @param elementAdded
 	 */
 	public void setElementAdded(String elementAdded) {
 		this.elementAdded = elementAdded;
 	}
-	
+
 	/**
 	 * Obtiene el elemento eliminado
+	 * 
 	 * @return Elemento eliminado
 	 */
 	public String getElementRemoved() {
 		return elementRemoved;
 	}
-	
+
 	/**
 	 * Asigna el elemento eliminado
+	 * 
 	 * @param elementRemoved
 	 */
 	public void setElementRemoved(String elementRemoved) {
@@ -67,6 +69,7 @@ public class TreeListEvent {
 
 	/**
 	 * Obtiene el elemento de destino
+	 * 
 	 * @return Elemento de destino
 	 */
 	public String getDestElement() {
@@ -75,6 +78,7 @@ public class TreeListEvent {
 
 	/**
 	 * Asigna el elemento de destino
+	 * 
 	 * @param destElement
 	 */
 	public void setDestElement(String destElement) {
@@ -83,6 +87,7 @@ public class TreeListEvent {
 
 	/**
 	 * Obtiene la posición del elemento de destino
+	 * 
 	 * @return Elemento de destino
 	 */
 	public int getPositionDestElement() {
@@ -91,6 +96,7 @@ public class TreeListEvent {
 
 	/**
 	 * Asigna la posición del elemento de destino
+	 * 
 	 * @param positionDestElement
 	 */
 	public void setPositionDestElement(int positionDestElement) {
@@ -99,6 +105,7 @@ public class TreeListEvent {
 
 	/**
 	 * Obtiene la posición del elemento de origen
+	 * 
 	 * @return Elemento de origen
 	 */
 	public int getPositionSourceElement() {
@@ -107,6 +114,7 @@ public class TreeListEvent {
 
 	/**
 	 * Asigna la posición del elemento de origen
+	 * 
 	 * @param positionSourceElement
 	 */
 	public void setPositionSourceElement(int positionSourceElement) {
@@ -115,6 +123,7 @@ public class TreeListEvent {
 
 	/**
 	 * Obtiene el elemento de origen
+	 * 
 	 * @return Elemento de origen
 	 */
 	public String getSourceElement() {
@@ -123,16 +132,17 @@ public class TreeListEvent {
 
 	/**
 	 * Asigna el elemento de origen
+	 * 
 	 * @param sourceElement
 	 */
 	public void setSourceElement(String sourceElement) {
 		this.sourceElement = sourceElement;
 	}
-	
+
 	/**
 	 * Resetea los valores
 	 */
-	public void resetValues(){
+	public void resetValues() {
 		elementAdded = null;
 		elementRemoved = null;
 		sourceElement = null;

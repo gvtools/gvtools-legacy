@@ -1,19 +1,17 @@
 package com.hardcode.gdbms.engine.data.indexes;
 
+import java.io.IOException;
+import java.util.Stack;
+
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.DataSource;
 import com.hardcode.gdbms.engine.instruction.IncompatibleTypesException;
 import com.hardcode.gdbms.engine.values.BooleanValue;
 import com.hardcode.gdbms.engine.values.Value;
 
-import java.io.IOException;
-
-import java.util.Stack;
-
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public class QuickSort {
@@ -23,16 +21,19 @@ public class QuickSort {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param ini DOCUMENT ME!
-	 * @param fin DOCUMENT ME!
-	 *
+	 * 
+	 * @param ini
+	 *            DOCUMENT ME!
+	 * @param fin
+	 *            DOCUMENT ME!
+	 * 
 	 * @return DOCUMENT ME!
-	 * @throws ReadDriverException TODO
-	 * @throws IOException 
+	 * @throws ReadDriverException
+	 *             TODO
+	 * @throws IOException
 	 */
-	private long partition(long ini, long fin)
-		throws ReadDriverException, IOException {
+	private long partition(long ini, long fin) throws ReadDriverException,
+			IOException {
 		long first = ini;
 		long last = fin;
 
@@ -44,9 +45,9 @@ public class QuickSort {
 		long down = last;
 
 		while (up < down) {
-			//Encuentra el primer valor > que el pivote
+			// Encuentra el primer valor > que el pivote
 			while (compare(pivot,
-						dataSource.getFieldValue(ret.getIndex(up), fieldId)) <= 0) {
+					dataSource.getFieldValue(ret.getIndex(up), fieldId)) <= 0) {
 				up++;
 
 				if (up > fin) {
@@ -54,9 +55,9 @@ public class QuickSort {
 				}
 			}
 
-			//Encuentra el primer valor <= que el pivote
+			// Encuentra el primer valor <= que el pivote
 			while (compare(pivot,
-						dataSource.getFieldValue(ret.getIndex(down), fieldId)) > 0) {
+					dataSource.getFieldValue(ret.getIndex(down), fieldId)) > 0) {
 				down--;
 
 				if (down < ini) {
@@ -80,13 +81,16 @@ public class QuickSort {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param o1 DOCUMENT ME!
-	 * @param o2 DOCUMENT ME!
-	 *
+	 * 
+	 * @param o1
+	 *            DOCUMENT ME!
+	 * @param o2
+	 *            DOCUMENT ME!
+	 * 
 	 * @return DOCUMENT ME!
-	 *
-	 * @throws RuntimeException DOCUMENT ME!
+	 * 
+	 * @throws RuntimeException
+	 *             DOCUMENT ME!
 	 */
 	private int compare(Object o1, Object o2) {
 		Value v1 = (Value) o1;
@@ -102,22 +106,27 @@ public class QuickSort {
 			}
 		} catch (IncompatibleTypesException e) {
 			throw new RuntimeException(
-				"Como incompatibles si se indexa sobre la misma columna?");
+					"Como incompatibles si se indexa sobre la misma columna?");
 		}
 	}
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param v DOCUMENT ME!
-	 * @param fieldId DOCUMENT ME!
-	 * @param low DOCUMENT ME!
-	 * @param high DOCUMENT ME!
+	 * 
+	 * @param v
+	 *            DOCUMENT ME!
+	 * @param fieldId
+	 *            DOCUMENT ME!
+	 * @param low
+	 *            DOCUMENT ME!
+	 * @param high
+	 *            DOCUMENT ME!
 	 * @throws IOException
-	 * @throws ReadDriverException TODO
+	 * @throws ReadDriverException
+	 *             TODO
 	 */
 	public void quickSort(DataSource v, int fieldId, long low, long high)
-		throws IOException, ReadDriverException {
+			throws IOException, ReadDriverException {
 		dataSource = v;
 		this.fieldId = fieldId;
 
@@ -148,7 +157,7 @@ public class QuickSort {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return Returns the indexes.
 	 */
 	public FixedIndexSet getIndexes() {
@@ -157,7 +166,7 @@ public class QuickSort {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @author Fernando González Cortés
 	 */
 	public class Intervalo {
@@ -166,9 +175,11 @@ public class QuickSort {
 
 		/**
 		 * Crea un nuevo Intervalo.
-		 *
-		 * @param ini DOCUMENT ME!
-		 * @param fin DOCUMENT ME!
+		 * 
+		 * @param ini
+		 *            DOCUMENT ME!
+		 * @param fin
+		 *            DOCUMENT ME!
 		 */
 		public Intervalo(long ini, long fin) {
 			this.ini = ini;

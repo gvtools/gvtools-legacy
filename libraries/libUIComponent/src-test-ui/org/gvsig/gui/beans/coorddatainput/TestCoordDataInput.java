@@ -26,8 +26,9 @@ import javax.swing.JTextField;
 
 import org.gvsig.gui.beans.TestUI;
 import org.gvsig.gui.beans.coordinatespanel.CoordinatesPanel;
+
 /**
- *
+ * 
  * @version 06/09/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */

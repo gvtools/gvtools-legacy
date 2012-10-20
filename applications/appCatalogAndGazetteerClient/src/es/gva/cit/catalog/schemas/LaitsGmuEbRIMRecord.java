@@ -55,49 +55,48 @@ import es.gva.cit.catalog.querys.Coordinates;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class LaitsGmuEbRIMRecord extends Record{
+public class LaitsGmuEbRIMRecord extends Record {
 	private static final String ROOT = "laitscsw:DataGranule";
 
-	public  LaitsGmuEbRIMRecord() {        
+	public LaitsGmuEbRIMRecord() {
 
 	}
 
-	public  LaitsGmuEbRIMRecord(URI uri, XMLNode node) {        
-		super(uri,node);
+	public LaitsGmuEbRIMRecord(URI uri, XMLNode node) {
+		super(uri, node);
 		setTitle(node.searchNodeValue("name"));
 		setAbstract_(node.searchNodeValue("description"));
 		setPurpose(null);
 		setKeyWords(null);
 		setResources(getResources("OnlineAccessURLs->OnlineAccessURL"));
-		setFileID(node.getAttribute("id"));	       
+		setFileID(node.getAttribute("id"));
 		setImageURL(node.searchNodeValue("previewURL"));
-	} 	
-	
-	private Resource[] getResources(String label) {        
+	}
+
+	private Resource[] getResources(String label) {
 		XMLNode[] nodes = XMLTree.searchMultipleNode(getNode(), label);
-		
+
 		if (nodes == null) {
 			return null;
 		}
-		
+
 		Coordinates coordinates = null;
-		String srs = XMLTree.searchNodeValue(getNode(),"ogc:BBOX->referenceSystemNameCode");
-		coordinates = new Coordinates(XMLTree.searchNodeValue(getNode(),"ogc:BBOX->westBoundingCoordinate"),
-				XMLTree.searchNodeValue(getNode(),"ogc:BBOX->northBoundingCoordinate"),
-				XMLTree.searchNodeValue(getNode(),"ogc:BBOX->eastBoundingCoordinate"),
-				XMLTree.searchNodeValue(getNode(),"ogc:BBOX->southBoundingCoordinate"));
-			
+		String srs = XMLTree.searchNodeValue(getNode(),
+				"ogc:BBOX->referenceSystemNameCode");
+		coordinates = new Coordinates(XMLTree.searchNodeValue(getNode(),
+				"ogc:BBOX->westBoundingCoordinate"), XMLTree.searchNodeValue(
+				getNode(), "ogc:BBOX->northBoundingCoordinate"),
+				XMLTree.searchNodeValue(getNode(),
+						"ogc:BBOX->eastBoundingCoordinate"),
+				XMLTree.searchNodeValue(getNode(),
+						"ogc:BBOX->southBoundingCoordinate"));
+
 		Resource[] resources = new Resource[nodes.length];
-		
-		for (int i = 0; i < resources.length; i++){
+
+		for (int i = 0; i < resources.length; i++) {
 			resources[i] = new Resource(nodes[i].searchNodeValue("URL"),
-					Resource.DOWNLOAD,
-					null,
-					null,
-					null,
-					srs,
-					coordinates);
-			if (resources[i].getLinkage() == null){
+					Resource.DOWNLOAD, null, null, null, srs, coordinates);
+			if (resources[i].getLinkage() == null) {
 				resources[i].setLinkage("");
 			}
 
@@ -105,16 +104,18 @@ public class LaitsGmuEbRIMRecord extends Record{
 		return resources;
 	}
 
-
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.schemas.discoverer.Record#accept(java.net.URI, es.gva.cit.catalogClient.metadataxml.XMLNode)
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.schemas.discoverer.Record#accept(java.net.URI,
+	 * es.gva.cit.catalogClient.metadataxml.XMLNode)
 	 */
 	public boolean accept(URI uri, XMLNode node) {
 		System.out.println(node.getName());
-		if (node.getName().equals(ROOT)){
+		if (node.getName().equals(ROOT)) {
 			return true;
 		}
 		return false;
-	} 
+	}
 }

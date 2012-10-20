@@ -43,65 +43,84 @@ package com.iver.cit.gvsig.fmap.tools.Events;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 
-
 /**
- * <p><code>MoveEvent</code> is used to notify a movement of the mouse between two points 2D.</p>
- *
+ * <p>
+ * <code>MoveEvent</code> is used to notify a movement of the mouse between two
+ * points 2D.
+ * </p>
+ * 
  * @author Vicente Caballero Navarro
  */
 public class MoveEvent {
 	/**
-	 * <p>Initial position of the drag & drop movement.</p>
+	 * <p>
+	 * Initial position of the drag & drop movement.
+	 * </p>
 	 */
 	private Point2D from;
-    
-    /**
-     * <p>Final position of the drag & drop movement.</p>
-     */
+
+	/**
+	 * <p>
+	 * Final position of the drag & drop movement.
+	 * </p>
+	 */
 	private Point2D to;
-    
-    /**
-     * <p>Mouse event that has been the cause of creating this one.</p> 
-     */
+
+	/**
+	 * <p>
+	 * Mouse event that has been the cause of creating this one.
+	 * </p>
+	 */
 	private MouseEvent event;
 
-    /**
-     * <p>Creates a new <code>MoveEvent</code> with all necessary data.</p>
-     *
-	 * @param from initial 2D position of the movement
-	 * @param to final 2D position of the movement
-	 * @param e mouse event that has been the cause of creating this one
-     */
-    public MoveEvent(Point2D from, Point2D to, MouseEvent e) {
-        this.from = from;
-        this.to = to;
-        event = e;
-    }
+	/**
+	 * <p>
+	 * Creates a new <code>MoveEvent</code> with all necessary data.
+	 * </p>
+	 * 
+	 * @param from
+	 *            initial 2D position of the movement
+	 * @param to
+	 *            final 2D position of the movement
+	 * @param e
+	 *            mouse event that has been the cause of creating this one
+	 */
+	public MoveEvent(Point2D from, Point2D to, MouseEvent e) {
+		this.from = from;
+		this.to = to;
+		event = e;
+	}
 
 	/**
-	 * <p>Gets the initial 2D position of the movement.</p>
-	 *
+	 * <p>
+	 * Gets the initial 2D position of the movement.
+	 * </p>
+	 * 
 	 * @return initial 2D position of the movement
 	 */
-    public Point2D getFrom() {
-        return from;
-    }
+	public Point2D getFrom() {
+		return from;
+	}
 
 	/**
-	 * <p>Gets the final 2D position of the movement.</p>
-	 *
+	 * <p>
+	 * Gets the final 2D position of the movement.
+	 * </p>
+	 * 
 	 * @return final 2D position of the movement
 	 */
-    public Point2D getTo() {
-        return to;
-    }
+	public Point2D getTo() {
+		return to;
+	}
 
-    /**
-	 * <p>Gets the event that has been the cause of creating this one.</p>
+	/**
+	 * <p>
+	 * Gets the event that has been the cause of creating this one.
+	 * </p>
 	 * 
 	 * @return mouse event that has been the cause of creating this one
-     */
-    public MouseEvent getEvent() {
+	 */
+	public MouseEvent getEvent() {
 		return event;
 	}
 }

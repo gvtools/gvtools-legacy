@@ -64,7 +64,6 @@ public class TestServiceArea2 extends TestCase {
 	Network net;
 	IGraph g;
 
-
 	protected void setUp() throws Exception {
 		super.setUp();
 		// Setup de los drivers
@@ -77,11 +76,11 @@ public class TestServiceArea2 extends TestCase {
 		File shpFile = new File("test_files/ejes.shp");
 		lyr = (FLyrVect) LayerFactory.createLayer("Ejes", "gvSIG shp driver",
 				shpFile, crs);
-		
+
 		NetworkRedLoader netLoader = new NetworkRedLoader();
 		netLoader.setNetFile(new File("test_files/ejes.net"));
 		g = netLoader.loadNetwork();
-		
+
 		net = new Network();
 	}
 
@@ -90,33 +89,33 @@ public class TestServiceArea2 extends TestCase {
 		net.setLayer(lyr);
 		net.setGraph(g);
 		solver.setNetwork(net);
-		
+
 		ServiceAreaExtractor2 extractor = new ServiceAreaExtractor2(net);
-		
-		//		 Source flag
+
+		// Source flag
 		GvFlag sourceFlag = net.createFlag(441901, 4475977, 10);
 		net.addFlag(sourceFlag);
 		solver.setSourceFlag(sourceFlag);
 		solver.addListener(extractor);
 
-		//		 Destination flags
+		// Destination flags
 		// NONE: We will use dijkstra algorithm to label network
 		// and extract (after) the visited arcs.
-//		net.addFlag(441901, 4475977, 10);
-//		net.addFlag(442830, 4476201, 200);
-//		net.addFlag(442673, 4475125, 200);
+		// net.addFlag(441901, 4475977, 10);
+		// net.addFlag(442830, 4476201, 200);
+		// net.addFlag(442673, 4475125, 200);
 		extractor.setIdFlag(0);
 		extractor.setDoCompactArea(true);
 		long t1 = System.currentTimeMillis();
 		solver.putDestinationsOnNetwork(net.getFlags());
 		solver.setExploreAllNetwork(true);
 		solver.setMaxDistance(4000.0);
-		double[] costs = {1000.0, 2000.0}; 		
+		double[] costs = { 1000.0, 2000.0 };
 		extractor.setCosts(costs);
-		
+
 		solver.calculate();
 		extractor.writeServiceArea();
-		
+
 		// En este punto tenemos la red "etiquetada" con los pesos
 		// y distancias. Hay 2 opciones: recorrer toda la capa
 		// y copiar los registros que nos interesan (opción fácil)
@@ -126,21 +125,18 @@ public class TestServiceArea2 extends TestCase {
 		// Primero opción fácil
 		// Recorremos la capa, vemos en qué intervalo cae cada
 		// entidad y escribimos un shape.
-		extractor.closeFiles(); // 2000 en unidades de coste. Normalmente serán segundos
+		extractor.closeFiles(); // 2000 en unidades de coste. Normalmente serán
+								// segundos
 		solver.removeDestinationsFromNetwork(net.getFlags());
 		// TODO: También puede ser interesante fijar un límite en distancia, no
 		// en tiempo
-		
+
 		extractor.getBorderPoints();
-		
+
 		long t2 = System.currentTimeMillis();
-		System.out.println("tiempo:" + (t2-t1));
-		
+		System.out.println("tiempo:" + (t2 - t1));
+
 		// assertEquals(dist.doubleValue(), 8887, 0);
-
-		
-		
-
 
 	}
 

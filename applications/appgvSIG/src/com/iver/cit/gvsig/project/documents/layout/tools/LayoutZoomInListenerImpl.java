@@ -46,33 +46,30 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 
-import javax.swing.ImageIcon;
-
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.AddLayer;
 import com.iver.cit.gvsig.fmap.tools.Events.RectangleEvent;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.LayoutRectangleListener;
 
-
 /**
  * Implementaci�n de la interfaz LayoutRectangleListener como herramienta para
  * realizar un zoom m�s.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LayoutZoomInListenerImpl implements LayoutRectangleListener {
 	private static final Image iLayoutzoomin = PluginServices.getIconTheme()
-		.get("layout-zoom-in-cursor").getImage();
-	private final Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(iLayoutzoomin,
-			new Point(16, 16), "");
+			.get("layout-zoom-in-cursor").getImage();
+	private final Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(
+			iLayoutzoomin, new Point(16, 16), "");
 
 	private Layout layout;
 
 	/**
 	 * Crea un nuevo LayoutRectangleListenerImpl.
-	 *
-	 * @param s Layout.
+	 * 
+	 * @param s
+	 *            Layout.
 	 */
 	public LayoutZoomInListenerImpl(Layout l) {
 		this.layout = l;
@@ -83,16 +80,17 @@ public class LayoutZoomInListenerImpl implements LayoutRectangleListener {
 	 */
 	public void rectangle(RectangleEvent event) {
 		if (event.getEvent().getButton() != MouseEvent.BUTTON3) {
-            layout.getLayoutControl().setLastPoint();
-        }
+			layout.getLayoutControl().setLastPoint();
+		}
 
-        if (event.getEvent().getButton() == MouseEvent.BUTTON1) {
-            Point p1 = layout.getLayoutControl().getFirstPoint();
-            Point p2 = new Point(event.getEvent().getX(), event.getEvent().getY());
+		if (event.getEvent().getButton() == MouseEvent.BUTTON1) {
+			Point p1 = layout.getLayoutControl().getFirstPoint();
+			Point p2 = new Point(event.getEvent().getX(), event.getEvent()
+					.getY());
 
-            layout.getLayoutControl().getLayoutZooms().setZoomIn(p1, p2);
-            layout.getLayoutControl().refresh();
-        }
+			layout.getLayoutControl().getLayoutZooms().setZoomIn(p1, p2);
+			layout.getLayoutControl().refresh();
+		}
 	}
 
 	/**
@@ -101,14 +99,16 @@ public class LayoutZoomInListenerImpl implements LayoutRectangleListener {
 	public Image getImageCursor() {
 		return iLayoutzoomin;
 	}
-	public Cursor getCursor(){
+
+	public Cursor getCursor() {
 		return cur;
 	}
+
 	/**
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#cancelDrawing()
 	 */
 	public boolean cancelDrawing() {
-	    System.out.println("cancelDrawing del ZoomOutListenerImpl");
+		System.out.println("cancelDrawing del ZoomOutListenerImpl");
 		return true;
 	}
 }

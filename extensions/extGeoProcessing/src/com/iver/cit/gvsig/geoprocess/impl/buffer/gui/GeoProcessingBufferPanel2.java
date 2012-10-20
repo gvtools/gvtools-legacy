@@ -83,66 +83,56 @@ import com.iver.cit.gvsig.geoprocess.core.fmap.XTypes;
 import com.iver.cit.gvsig.geoprocess.core.gui.AbstractGeoprocessGridbagPanel;
 
 public class GeoProcessingBufferPanel2 extends AbstractGeoprocessGridbagPanel
-						implements BufferPanelIF {
+		implements BufferPanelIF {
 
-
-
-	//first row->radio button and text field to entry dists
+	// first row->radio button and text field to entry dists
 	JRadioButton distanceBufferRadioButton;
 	JTextField bufferDistanceTextField;
 
-	//second row: field values, combo with fields
+	// second row: field values, combo with fields
 	JRadioButton attributeBufferRadioButton;
 	JComboBox layerFieldsComboBox;
 
-	//third row: user selections
+	// third row: user selections
 	JCheckBox dissolveEntitiesJCheckBox;
 	JCheckBox endCapCheckBox;
 
-	//more user selections
+	// more user selections
 	JLabel typeBufferLabel;
 	JComboBox typeBufferComboBox;
 	JLabel radialBufferLabel;
 	JSpinner radialBufferSpinner;
 
-
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 */
 	public GeoProcessingBufferPanel2(FLayers layers) {
 		super(layers, PluginServices.getText(null,
-				"Areas_de_influencia._Introduccion_de_datos")
-				+ ":");
+				"Areas_de_influencia._Introduccion_de_datos") + ":");
 	}
 
 	protected void addSpecificDesign() {
 		Insets insets = new Insets(5, 5, 5, 5);
 
-		//row of constant distance radio button and text field
+		// row of constant distance radio button and text field
 		this.distanceBufferRadioButton = new JRadioButton();
 		this.distanceBufferRadioButton.setText(PluginServices.getText(this,
-				"Area_de_influencia_definida_por_una_distancia")
-				+ ":");
+				"Area_de_influencia_definida_por_una_distancia") + ":");
 		this.distanceBufferRadioButton
 				.addActionListener(new java.awt.event.ActionListener() {
 					public void actionPerformed(java.awt.event.ActionEvent e) {
 						constantDistanceSelected();
 					}
-				}
-		);
+				});
 		this.bufferDistanceTextField = new JTextField();
-		addComponent(distanceBufferRadioButton,
-				bufferDistanceTextField,
-				GridBagConstraints.BOTH,
-				insets);
+		addComponent(distanceBufferRadioButton, bufferDistanceTextField,
+				GridBagConstraints.BOTH, insets);
 
-
-		//row of attribute based distance and fields combo box
+		// row of attribute based distance and fields combo box
 		this.attributeBufferRadioButton = new JRadioButton();
 		this.attributeBufferRadioButton.setText(PluginServices.getText(this,
-				"Area_de_influencia_definida_por_un_campo")
-				+ ":");
+				"Area_de_influencia_definida_por_un_campo") + ":");
 		this.attributeBufferRadioButton.setBounds(new java.awt.Rectangle(2, 41,
 				287, 21));
 		this.attributeBufferRadioButton
@@ -157,18 +147,13 @@ public class GeoProcessingBufferPanel2 extends AbstractGeoprocessGridbagPanel
 		DefaultComboBoxModel defaultModel = new DefaultComboBoxModel(
 				getFieldNames());
 		this.layerFieldsComboBox.setModel(defaultModel);
-		addComponent(attributeBufferRadioButton,
-							layerFieldsComboBox,
-							GridBagConstraints.BOTH,
-							insets);
+		addComponent(attributeBufferRadioButton, layerFieldsComboBox,
+				GridBagConstraints.BOTH, insets);
 		ButtonGroup buttonGroup = new ButtonGroup();
 		buttonGroup.add(distanceBufferRadioButton);
 		buttonGroup.add(attributeBufferRadioButton);
 
-
-
-
-		//row of options check boxes
+		// row of options check boxes
 		this.dissolveEntitiesJCheckBox = new JCheckBox();
 		this.dissolveEntitiesJCheckBox.setText(PluginServices.getText(this,
 				"Disolver_entidades"));
@@ -176,25 +161,20 @@ public class GeoProcessingBufferPanel2 extends AbstractGeoprocessGridbagPanel
 		this.endCapCheckBox = new JCheckBox();
 		this.endCapCheckBox.setText(PluginServices.getText(this,
 				"No_usar_buffer_redondeado"));
-		addComponent(dissolveEntitiesJCheckBox,
-								endCapCheckBox,
-								GridBagConstraints.NONE,
-								insets);
+		addComponent(dissolveEntitiesJCheckBox, endCapCheckBox,
+				GridBagConstraints.NONE, insets);
 
 		this.typeBufferLabel = new JLabel();
-		this.typeBufferLabel.setText(PluginServices
-				.getText(this, "Crear_Buffer"));
+		this.typeBufferLabel.setText(PluginServices.getText(this,
+				"Crear_Buffer"));
 
 		this.typeBufferComboBox = new JComboBox();
 		this.typeBufferComboBox.addItem(BUFFER_INSIDE);
 		this.typeBufferComboBox.addItem(BUFFER_OUTSIDE);
 		this.typeBufferComboBox.addItem(BUFFER_INSIDE_OUTSIDE);
 		this.typeBufferComboBox.setSelectedItem(BUFFER_OUTSIDE);
-		addComponent(typeBufferLabel,
-					typeBufferComboBox,
-					GridBagConstraints.NONE,
-					insets);
-
+		addComponent(typeBufferLabel, typeBufferComboBox,
+				GridBagConstraints.NONE, insets);
 
 		this.radialBufferLabel = new JLabel();
 		this.radialBufferLabel.setText(PluginServices.getText(this,
@@ -202,8 +182,8 @@ public class GeoProcessingBufferPanel2 extends AbstractGeoprocessGridbagPanel
 		Integer one = new Integer(1);
 		Integer two = new Integer(2);
 		Integer three = new Integer(3);
-		SpinnerListModel listModel = new SpinnerListModel(new Integer[] {
-				one, two, three });
+		SpinnerListModel listModel = new SpinnerListModel(new Integer[] { one,
+				two, three });
 		this.radialBufferSpinner = new JSpinner(listModel);
 		this.radialBufferSpinner.setBounds(new java.awt.Rectangle(298, 3, 137,
 				19));
@@ -212,10 +192,8 @@ public class GeoProcessingBufferPanel2 extends AbstractGeoprocessGridbagPanel
 				.getEditor()).getTextField();
 		tf.setEditable(false);
 		tf.setBackground(Color.white);
-		addComponent(radialBufferLabel,
-					radialBufferSpinner,
-					GridBagConstraints.BOTH,
-					insets);
+		addComponent(radialBufferLabel, radialBufferSpinner,
+				GridBagConstraints.BOTH, insets);
 
 		initSelectedItemsJCheckBox();
 		updateNumSelectedFeaturesLabel();
@@ -223,29 +201,25 @@ public class GeoProcessingBufferPanel2 extends AbstractGeoprocessGridbagPanel
 		this.layerFieldsComboBox.setEnabled(false);
 		this.verifyTypeBufferComboEnabled();
 
-
-
-
 	}
 
 	/**
 	 * Returns the number of radial buffers selected by user (by now, only a
 	 * maximum of three radial buffers allowed)
-	 *
+	 * 
 	 * @return
 	 */
 	public int getNumberOfRadialBuffers() {
 		return ((Integer) this.radialBufferSpinner.getValue()).intValue();
 	}
 
-	private JTextField getBufferDistanceTextField(){
+	private JTextField getBufferDistanceTextField() {
 		return this.bufferDistanceTextField;
 	}
 
-	private JComboBox getLayerFieldsComboBox(){
+	private JComboBox getLayerFieldsComboBox() {
 		return this.layerFieldsComboBox;
 	}
-
 
 	public void constantDistanceSelected() {
 		getBufferDistanceTextField().setEnabled(true);
@@ -258,7 +232,6 @@ public class GeoProcessingBufferPanel2 extends AbstractGeoprocessGridbagPanel
 		getLayerFieldsComboBox().setEnabled(true);
 
 	}
-
 
 	public String getTypePolygonBuffer() {
 		return (String) this.typeBufferComboBox.getSelectedItem();
@@ -287,9 +260,9 @@ public class GeoProcessingBufferPanel2 extends AbstractGeoprocessGridbagPanel
 	}
 
 	protected void processLayerComboBoxStateChange(ItemEvent e) {
-//		 Cambiar el estado del CheckBox
-//		lo comento pq esto se ha añadido a la clase padre
-//		initSelectedItemsJCheckBox();
+		// Cambiar el estado del CheckBox
+		// lo comento pq esto se ha añadido a la clase padre
+		// initSelectedItemsJCheckBox();
 
 		// Cambiar el estado del layerFieldsComboBox
 		DefaultComboBoxModel defaultModel = new DefaultComboBoxModel(
@@ -298,7 +271,7 @@ public class GeoProcessingBufferPanel2 extends AbstractGeoprocessGridbagPanel
 		verifyTypeBufferComboEnabled();
 	}
 
-	private void verifyTypeBufferComboEnabled(){
+	private void verifyTypeBufferComboEnabled() {
 		String layerName = (String) this.layersComboBox.getSelectedItem();
 		FLyrVect layer = (FLyrVect) this.layers.getLayer(layerName);
 		boolean enable = false;
@@ -334,7 +307,8 @@ public class GeoProcessingBufferPanel2 extends AbstractGeoprocessGridbagPanel
 	}
 
 	public String getAttributeDistanceField() throws GeoprocessException {
-		String attributeField = (String) this.layerFieldsComboBox.getSelectedItem();
+		String attributeField = (String) this.layerFieldsComboBox
+				.getSelectedItem();
 		FLyrVect selectedLayer = getInputLayer();
 		try {
 			SelectableDataSource selectable = selectedLayer.getRecordset();

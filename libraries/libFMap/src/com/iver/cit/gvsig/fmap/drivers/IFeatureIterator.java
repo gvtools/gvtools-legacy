@@ -48,18 +48,22 @@ import com.iver.cit.gvsig.fmap.core.IFeature;
 
 /**
  * @author FJP
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
+ * 
+ *         TODO To change the template for this generated type comment go to
+ *         Window - Preferences - Java - Code Generation - Code and Comments
  */
 public interface IFeatureIterator {
-    boolean hasNext() throws ReadDriverException;
-    IFeature next() throws ReadDriverException;
-    /**
-     * Use it when you finish to use the iterator
-     * (Specially when Cancel the iteration).
-     * @throws ReadDriverException TODO
-     */
-    void closeIterator() throws ReadDriverException;
+	boolean hasNext() throws ReadDriverException;
+
+	IFeature next() throws ReadDriverException;
+
+	/**
+	 * Use it when you finish to use the iterator (Specially when Cancel the
+	 * iteration).
+	 * 
+	 * @throws ReadDriverException
+	 *             TODO
+	 */
+	void closeIterator() throws ReadDriverException;
 
 }

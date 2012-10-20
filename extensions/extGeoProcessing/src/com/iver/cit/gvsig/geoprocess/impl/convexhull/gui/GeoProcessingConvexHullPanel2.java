@@ -42,14 +42,14 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: GeoProcessingConvexHullPanel2.java 6748 2006-08-11 16:20:24Z azabala $
-* $Log$
-* Revision 1.1  2006-08-11 16:20:24  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: GeoProcessingConvexHullPanel2.java 6748 2006-08-11 16:20:24Z azabala $
+ * $Log$
+ * Revision 1.1  2006-08-11 16:20:24  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.convexhull.gui;
 
 import java.awt.event.ItemEvent;
@@ -66,17 +66,14 @@ public class GeoProcessingConvexHullPanel2 extends
 	 * 
 	 */
 	public GeoProcessingConvexHullPanel2(FLayers layers) {
-		super(layers, 
-			PluginServices.
-				getText(null, 
-			"Convex_Hull._Introduccion_de_datos"));
+		super(layers, PluginServices.getText(null,
+				"Convex_Hull._Introduccion_de_datos"));
 	}
-	
-	public boolean isConvexHullOnlySelected(){
+
+	public boolean isConvexHullOnlySelected() {
 		return super.isFirstOnlySelected();
 	}
-	
-	
+
 	protected void addSpecificDesign() {
 		initSelectedItemsJCheckBox();
 		updateNumSelectedFeaturesLabel();
@@ -86,4 +83,3 @@ public class GeoProcessingConvexHullPanel2 extends
 	}
 
 }
-

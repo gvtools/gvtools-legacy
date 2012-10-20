@@ -46,20 +46,24 @@ import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.PolygonSelectionListener;
 import com.iver.cit.gvsig.fmap.tools.Events.MeasureEvent;
 
-
 /**
- * <p>Inherits {@link PolygonSelectionListener PolygonSelectionListener} enabling/disabling special
- *  controls for managing the data selected.</p>
- *
+ * <p>
+ * Inherits {@link PolygonSelectionListener PolygonSelectionListener}
+ * enabling/disabling special controls for managing the data selected.
+ * </p>
+ * 
  * @see PolygonSelectionListener
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class PolygonSelectListener extends PolygonSelectionListener {
 	/**
- 	 * <p>Creates a new <code>PolygonSelectListener</code> object.</p>
-	 *
-	 * @param mapCtrl the <code>MapControl</code> where is drawn the polyline
+	 * <p>
+	 * Creates a new <code>PolygonSelectListener</code> object.
+	 * </p>
+	 * 
+	 * @param mapCtrl
+	 *            the <code>MapControl</code> where is drawn the polyline
 	 */
 	public PolygonSelectListener(MapControl mapCtrl) {
 		super(mapCtrl);
@@ -67,7 +71,10 @@ public class PolygonSelectListener extends PolygonSelectionListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.PolygonSelectionListener#polylineFinished(com.iver.cit.gvsig.fmap.tools.Events.MeasureEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.PolygonSelectionListener#polylineFinished
+	 * (com.iver.cit.gvsig.fmap.tools.Events.MeasureEvent)
 	 */
 	public void polylineFinished(MeasureEvent event) throws BehaviorException {
 		super.polylineFinished(event);

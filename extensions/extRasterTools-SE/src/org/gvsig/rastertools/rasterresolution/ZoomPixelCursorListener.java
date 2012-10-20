@@ -39,23 +39,24 @@ import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
 import com.iver.cit.gvsig.fmap.tools.Listeners.PointListener;
 
-
 /**
- * Listener para la tool de zoom a la resolución del raster. Este es el encargado de recibir
- * la petición desde la vista y calcular las coordenadas del raster.
- *
+ * Listener para la tool de zoom a la resolución del raster. Este es el
+ * encargado de recibir la petición desde la vista y calcular las coordenadas
+ * del raster.
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class ZoomPixelCursorListener implements PointListener {
-	private final Image 	img = new ImageIcon(MapControl.class.getResource(
-											"images/ZoomPixelCursor.gif")).getImage();
-	private Cursor 			cur = Toolkit.getDefaultToolkit().createCustomCursor(	img,
-																					new Point(16, 16), "");
-	private MapControl 		mapCtrl;
-
+	private final Image img = new ImageIcon(
+			MapControl.class.getResource("images/ZoomPixelCursor.gif"))
+			.getImage();
+	private Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(img,
+			new Point(16, 16), "");
+	private MapControl mapCtrl;
 
 	/**
 	 * Constructor. Asigna el MapControl
+	 * 
 	 * @param mc
 	 */
 	public ZoomPixelCursorListener(MapControl mc) {
@@ -63,12 +64,15 @@ public class ZoomPixelCursorListener implements PointListener {
 	}
 
 	/**
-	 * Evento de selección de punto sobre la vista. Aquin se calcularán las coordenadas
-	 * y dimensiones de la petición centrando la petición en el punto pinchado en la vista.
+	 * Evento de selección de punto sobre la vista. Aquin se calcularán las
+	 * coordenadas y dimensiones de la petición centrando la petición en el
+	 * punto pinchado en la vista.
 	 */
 	public void point(PointEvent event) throws BehaviorException {
-		Point2D pReal = mapCtrl.getMapContext().getViewPort().toMapPoint(event.getPoint());
-		//Point imagePoint = new Point((int) event.getPoint().getX(), (int) event.getPoint().getY());
+		Point2D pReal = mapCtrl.getMapContext().getViewPort()
+				.toMapPoint(event.getPoint());
+		// Point imagePoint = new Point((int) event.getPoint().getX(), (int)
+		// event.getPoint().getY());
 		ViewPort v = mapCtrl.getMapContext().getViewPort();
 
 		FLayer[] actives = mapCtrl.getMapContext().getLayers().getActives();
@@ -79,42 +83,47 @@ public class ZoomPixelCursorListener implements PointListener {
 			NotificationManager.addError("Error al obtener el extent", e1);
 		}
 
-		ArrayList attr = ((FLyrRasterSE)actives[0]).getAttributes();
+		ArrayList attr = ((FLyrRasterSE) actives[0]).getAttributes();
 		int width = 0, height = 0;
-		for (int i=0; i<attr.size(); i++) {
-			Object[] a = (Object []) attr.get(i);
+		for (int i = 0; i < attr.size(); i++) {
+			Object[] a = (Object[]) attr.get(i);
 			if (a[0].toString().equals("Width"))
-				width = ((Integer)a[1]).intValue();
+				width = ((Integer) a[1]).intValue();
 			if (a[0].toString().equals("Height"))
-				height = ((Integer)a[1]).intValue();
+				height = ((Integer) a[1]).intValue();
 		}
 
-
-		if(	ext != null &&
-				width != 0 &&
-				height != 0){
+		if (ext != null && width != 0 && height != 0) {
 
 			double wcOriginCenterX = pReal.getX();
 			double wcOriginCenterY = pReal.getY();
 
-			//Hallamos la relación entre el pixel y las WC a partir de la imagen de la capa
-			double relacionPixelWcWidth =  (ext.getMaxX() - ext.getMinX())/width;
-			double relacionPixelWcHeight = (ext.getMaxY() - ext.getMinY())/height;
-			//double desplazamientoX = ext.getMinX();
-			//double desplazamientoY = ext.getMinY();
+			// Hallamos la relación entre el pixel y las WC a partir de la
+			// imagen de la capa
+			double relacionPixelWcWidth = (ext.getMaxX() - ext.getMinX())
+					/ width;
+			double relacionPixelWcHeight = (ext.getMaxY() - ext.getMinY())
+					/ height;
+			// double desplazamientoX = ext.getMinX();
+			// double desplazamientoY = ext.getMinY();
 
-			double wcOriginX = wcOriginCenterX - ((v.getImageWidth()*relacionPixelWcWidth)/2);
-			double wcOriginY = wcOriginCenterY - ((v.getImageHeight()*relacionPixelWcHeight)/2);
+			double wcOriginX = wcOriginCenterX
+					- ((v.getImageWidth() * relacionPixelWcWidth) / 2);
+			double wcOriginY = wcOriginCenterY
+					- ((v.getImageHeight() * relacionPixelWcHeight) / 2);
 
 			double wcDstMinX = wcOriginX;
 			double wcDstMinY = wcOriginY;
-			double wcDstMaxX = wcDstMinX + (v.getImageWidth()*relacionPixelWcWidth);
-			double wcDstMaxY = wcDstMinY + (v.getImageHeight()*relacionPixelWcHeight);
+			double wcDstMaxX = wcDstMinX
+					+ (v.getImageWidth() * relacionPixelWcWidth);
+			double wcDstMaxY = wcDstMinY
+					+ (v.getImageHeight() * relacionPixelWcHeight);
 
 			double wcDstWidth = wcDstMaxX - wcDstMinX;
 			double wcDstHeight = wcDstMaxY - wcDstMinY;
 
-			ext = new Rectangle2D.Double(wcDstMinX, wcDstMinY, wcDstWidth, wcDstHeight);
+			ext = new Rectangle2D.Double(wcDstMinX, wcDstMinY, wcDstWidth,
+					wcDstHeight);
 			mapCtrl.getMapContext().getViewPort().setExtent(ext);
 		}
 	}

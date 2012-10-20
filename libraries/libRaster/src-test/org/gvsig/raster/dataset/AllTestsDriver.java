@@ -9,7 +9,7 @@ public class AllTestsDriver {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.gvsig.fmap.driver");
-		//$JUnit-BEGIN$
+		// $JUnit-BEGIN$
 		suite.addTestSuite(TestReadLineEcw.class);
 		suite.addTestSuite(TestStatisticMultiFile.class);
 		suite.addTestSuite(TestStatistics.class);
@@ -20,7 +20,7 @@ public class AllTestsDriver {
 		suite.addTestSuite(TestReadBlockMrSID.class);
 		suite.addTestSuite(TestGetWindowRasterMrSID.class);
 		suite.addTestSuite(TestGetWindowRasterBufferSizeMrSID.class);
-		//$JUnit-END$
+		// $JUnit-END$
 		return suite;
 	}
 

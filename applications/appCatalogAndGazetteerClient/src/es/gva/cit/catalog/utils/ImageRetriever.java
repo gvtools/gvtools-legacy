@@ -64,42 +64,43 @@ import es.gva.cit.catalog.schemas.Record;
  */
 public class ImageRetriever {
 	private static File defaultFile = new File("images/IcoRecord.png");
-	
-	public static BufferedImage getImageUrl(Record record) {        
+
+	public static BufferedImage getImageUrl(Record record) {
 		BufferedImage img = null;
 		String imageURL = record.getImageURL();
-		
-		//Normal Procedure       
+
+		// Normal Procedure
 		img = getImage(imageURL);
-		if (img != null){
+		if (img != null) {
 			record.setImage(img);
 			return img;
 		}
-		
+
 		try {
 			return ImageIO.read(defaultFile);
 		} catch (IOException e2) {
 			System.out.println("Default image cant be loaded");
 			return null;
-		}  
+		}
 	}
 
 	/**
 	 * It gets an image from a URL
 	 * 
 	 * 
-	 * @return 
-	 * @param sUrl String with the image URL
+	 * @return
+	 * @param sUrl
+	 *            String with the image URL
 	 */
-	protected static BufferedImage getImage(String sUrl) {        
+	protected static BufferedImage getImage(String sUrl) {
 		try {
 			URL Url = new URL(sUrl);
 			return ImageIO.read(Url);
 		} catch (MalformedURLException e) {
 			System.out.println("The image URL is not valid: " + sUrl);
-		} catch (IOException e1) {			
+		} catch (IOException e1) {
 			System.out.println("The image cant be loaded: " + sUrl);
 		}
 		return null;
-	} 
+	}
 }

@@ -55,42 +55,44 @@ import org.gvsig.exceptions.BaseException;
  *
  */
 /**
- * This warning is throwed when the first and 
- * the last coordinates of a Polygon have not the
- * same value. It is a warning, because the application
- * could close the polygon
+ * This warning is throwed when the first and the last coordinates of a Polygon
+ * have not the same value. It is a warning, because the application could close
+ * the polygon
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class PolygonNotClosedWarning extends BaseException{
+public class PolygonNotClosedWarning extends BaseException {
 	private static final long serialVersionUID = -7711784191638191730L;
-	private double[] x  = null;
-	private double[] y  = null;
-	private double[] z  = null;
-	
+	private double[] x = null;
+	private double[] y = null;
+	private double[] z = null;
+
 	/**
 	 * Constructor
+	 * 
 	 * @param coordinates
-	 * Polygon coordinates
+	 *            Polygon coordinates
 	 */
-	public PolygonNotClosedWarning(double[][] coordinates){
+	public PolygonNotClosedWarning(double[][] coordinates) {
 		this.x = coordinates[0];
 		this.y = coordinates[1];
 		this.z = coordinates[2];
 		initialize();
 	}
-	
+
 	/**
 	 * Costructor
+	 * 
 	 * @param x
-	 * Coordinate X
+	 *            Coordinate X
 	 * @param y
-	 * Coordinate Y
+	 *            Coordinate Y
 	 * @param z
-	 * Coordinate Z
+	 *            Coordinate Z
 	 */
-	public PolygonNotClosedWarning(double[] x, double[] y, double[] z){
+	public PolygonNotClosedWarning(double[] x, double[] y, double[] z) {
 		this.x = x;
-		this.y = y ;
+		this.y = y;
 		this.z = z;
 		initialize();
 	}
@@ -100,13 +102,14 @@ public class PolygonNotClosedWarning extends BaseException{
 	 */
 	private void initialize() {
 		messageKey = "gpe_polygon_not_closed_warning";
-		formatString = "The polygon is not closed. The first coordinate is" +
-				" %(X0),%(Y0),%(Z0) and the last one is %(X1),%(Y1),%(Z1)";				
+		formatString = "The polygon is not closed. The first coordinate is"
+				+ " %(X0),%(Y0),%(Z0) and the last one is %(X1),%(Y1),%(Z1)";
 		code = serialVersionUID;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map values() {

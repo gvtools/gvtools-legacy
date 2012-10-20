@@ -45,20 +45,24 @@ import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.tools.ZoomInListenerImpl;
 import com.iver.cit.gvsig.fmap.tools.Events.RectangleEvent;
 
-
 /**
- * <p>Inherits {@link ZoomInListenerImpl ZoomInListenerImpl} enabling/disabling special
- *  controls for managing the data selected.</p>
- *
+ * <p>
+ * Inherits {@link ZoomInListenerImpl ZoomInListenerImpl} enabling/disabling
+ * special controls for managing the data selected.
+ * </p>
+ * 
  * @see ZoomInListenerImpl
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class ZoomInListener extends ZoomInListenerImpl {
 	/**
-	 * <p>Creates a new <code>ZoomInListener</code> object.</p>
+	 * <p>
+	 * Creates a new <code>ZoomInListener</code> object.
+	 * </p>
 	 * 
-	 * @param mapCtrl the <code>MapControl</code> where be applied the changes
+	 * @param mapCtrl
+	 *            the <code>MapControl</code> where be applied the changes
 	 */
 	public ZoomInListener(MapControl mapCtrl) {
 		super(mapCtrl);
@@ -66,11 +70,14 @@ public class ZoomInListener extends ZoomInListenerImpl {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.ZoomInListenerImpl#rectangle(com.iver.cit.gvsig.fmap.tools.Events.RectangleEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.ZoomInListenerImpl#rectangle(com.iver.cit
+	 * .gvsig.fmap.tools.Events.RectangleEvent)
 	 */
 	public void rectangle(RectangleEvent event) {
 		super.rectangle(event);
 		if (PluginServices.getMainFrame() != null)
-		    PluginServices.getMainFrame().enableControls();
+			PluginServices.getMainFrame().enableControls();
 	}
 }

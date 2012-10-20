@@ -31,7 +31,8 @@ import org.gvsig.raster.dataset.io.GdalWriter;
 public class GTiffFeatures extends WriteFileFormatFeatures {
 
 	public GTiffFeatures() {
-		super(GdalDriver.FORMAT_GTiff, "tif", new int[] { -1 }, new int[] { 0, 1, 2, 3, 4, 5 }, GdalWriter.class);
+		super(GdalDriver.FORMAT_GTiff, "tif", new int[] { -1 }, new int[] { 0,
+				1, 2, 3, 4, 5 }, GdalWriter.class);
 	}
 
 	/**
@@ -39,21 +40,13 @@ public class GTiffFeatures extends WriteFileFormatFeatures {
 	 */
 	public void loadParams() {
 		super.loadParams();
-		driverParams.setParam(
-				"photometric", 
-				new Integer(3), 
-				Params.CHOICE, 
-				new String[]{"YCBR", "MINISBLACK", "MINISWHITE", "RGB", "CMYK", "CIELAB", "ICCLAB", "ITULAB", "CBCR"});
-		driverParams.setParam(
-				"interleave", 
-				new Integer(0), 
-				Params.CHOICE, 
-				new String[]{ "BAND", "PIXEL"});
-		driverParams.setParam(
-				"compression", 
-				new Integer(3),
-				Params.CHOICE, 
-				new String[]{"LZW", "PACKBITS", "DEFLATE", "NONE"});
+		driverParams.setParam("photometric", new Integer(3), Params.CHOICE,
+				new String[] { "YCBR", "MINISBLACK", "MINISWHITE", "RGB",
+						"CMYK", "CIELAB", "ICCLAB", "ITULAB", "CBCR" });
+		driverParams.setParam("interleave", new Integer(0), Params.CHOICE,
+				new String[] { "BAND", "PIXEL" });
+		driverParams.setParam("compression", new Integer(3), Params.CHOICE,
+				new String[] { "LZW", "PACKBITS", "DEFLATE", "NONE" });
 		driverParams.setParam("tfw", new Boolean("false"), Params.CHECK, null);
 	}
 }

@@ -89,65 +89,67 @@
  */
 package org.gvsig.remoteClient.arcims;
 
-
 /**
  * Extended class to implement specific vectorial state information
+ * 
  * @author jsanz
- *
+ * 
  */
 public class ArcImsVectStatus extends ArcImsStatus {
-    private String where;
-    private String[] subfields;
+	private String where;
+	private String[] subfields;
 
-    /**
+	/**
      *
      */
-    public ArcImsVectStatus() {
-        super();
-        where = "";
-        subfields = new String[1];
-        subfields[0] = "#ALL#";
-    }
+	public ArcImsVectStatus() {
+		super();
+		where = "";
+		subfields = new String[1];
+		subfields[0] = "#ALL#";
+	}
 
-    public Object clone() {
-        ArcImsVectStatus avs = new ArcImsVectStatus();
-        avs = (ArcImsVectStatus) super.clone();
-        avs.setWhere(this.getWhere());
-        avs.setSubfields(this.getSubfields());
+	public Object clone() {
+		ArcImsVectStatus avs = new ArcImsVectStatus();
+		avs = (ArcImsVectStatus) super.clone();
+		avs.setWhere(this.getWhere());
+		avs.setSubfields(this.getSubfields());
 
-        return avs;
-    }
+		return avs;
+	}
 
-    /**
-     * @return Returns the where.
-     */
-    public String getWhere() {
-        return where;
-    }
+	/**
+	 * @return Returns the where.
+	 */
+	public String getWhere() {
+		return where;
+	}
 
-    /**
-     * @param where The where to set.
-     */
-    public void setWhere(String where) {
-        this.where = where;
-    }
+	/**
+	 * @param where
+	 *            The where to set.
+	 */
+	public void setWhere(String where) {
+		this.where = where;
+	}
 
-    /**
-     * @return Returns the subfields.
-     */
-    public String[] getSubfields() {
-        return subfields;
-    }
+	/**
+	 * @return Returns the subfields.
+	 */
+	public String[] getSubfields() {
+		return subfields;
+	}
 
-    /**
-     * @param subfields The subfields to set.
-     */
-    public void setSubfields(String[] subfields) {
-        if (subfields == null) {
-            subfields = new String[1];
-            subfields[0] = "#ALL#";
-        }
+	/**
+	 * @param subfields
+	 *            The subfields to set.
+	 */
+	public void setSubfields(String[] subfields) {
+		if (subfields == null) {
+			subfields = new String[1];
+			subfields[0] = "#ALL#";
+		}
 
-        this.subfields = subfields;
-    }
+		this.subfields = subfields;
+	}
 }

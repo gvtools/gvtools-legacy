@@ -31,8 +31,8 @@
  */
 
 /* CVS MESSAGES:
-*
-*/
+ *
+ */
 package com.iver.cit.gvsig.gui.preferencespage;
 
 import java.nio.charset.Charset;
@@ -43,7 +43,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 
 import org.apache.log4j.Logger;
 
@@ -56,12 +55,12 @@ import com.iver.cit.gvsig.fmap.drivers.shp.DbaseFileNIO;
 import com.iver.utiles.swing.JComboBox;
 
 /**
- * @author Fjp
- * TODO: To be developed in future releases.
- *
+ * @author Fjp TODO: To be developed in future releases.
+ * 
  */
 public class DbfDefaultEncodingPage extends AbstractPreferencePage {
-	private static Preferences prefs = Preferences.userRoot().node( "gvSIG.encoding.dbf" );
+	private static Preferences prefs = Preferences.userRoot().node(
+			"gvSIG.encoding.dbf");
 	private JTextArea jTextArea = null;
 	private JComboBox cmbDefaultDbfCharset;
 	private DbfEncodings dbfEncodings = DbfEncodings.getInstance();
@@ -69,30 +68,35 @@ public class DbfDefaultEncodingPage extends AbstractPreferencePage {
 
 	public DbfDefaultEncodingPage() {
 		super();
-		icon = new ImageIcon(this.getClass().getClassLoader().getResource("images/icu_logo_encoding.gif"));
+		icon = new ImageIcon(this.getClass().getClassLoader()
+				.getResource("images/icu_logo_encoding.gif"));
 		addComponent(getJTextArea());
-		int[] ids=dbfEncodings.getSupportedDbfLanguageIDs();
-		String[] encodings=new String[ids.length-1];
-		for (int i=1;i<ids.length;i++){
-			encodings[i-1]=dbfEncodings.getCharsetForDbfId(ids[i]);
+		int[] ids = dbfEncodings.getSupportedDbfLanguageIDs();
+		String[] encodings = new String[ids.length - 1];
+		for (int i = 1; i < ids.length; i++) {
+			encodings[i - 1] = dbfEncodings.getCharsetForDbfId(ids[i]);
 		}
 
-		addComponent(PluginServices.getText(this, "dbf_default_encoding") + ":",
-			cmbDefaultDbfCharset = new JComboBox(encodings));
+		addComponent(
+				PluginServices.getText(this, "dbf_default_encoding") + ":",
+				cmbDefaultDbfCharset = new JComboBox(encodings));
 	}
 
 	public void initializeValues() {
 		if (prefs.get("dbf_encoding", null) != null) {
-			String charsetName=prefs.get("dbf_encoding", DbaseFile.getDefaultCharset().toString());
-			Charset newDefaultCharset=null;
-			try{
+			String charsetName = prefs.get("dbf_encoding", DbaseFile
+					.getDefaultCharset().toString());
+			Charset newDefaultCharset = null;
+			try {
 				newDefaultCharset = Charset.forName(charsetName);
-			}catch (UnsupportedCharsetException e) {
-				JOptionPane.showMessageDialog(null, "Unsupported CharSet for the System");
-				Logger.getLogger(this.getClass()).warn(e.getLocalizedMessage(), e);
+			} catch (UnsupportedCharsetException e) {
+				JOptionPane.showMessageDialog(null,
+						"Unsupported CharSet for the System");
+				Logger.getLogger(this.getClass()).warn(e.getLocalizedMessage(),
+						e);
 				newDefaultCharset = Charset.defaultCharset();
 			}
-	//		Charset newDefaultCharset = Charset.forName(charsetName);
+			// Charset newDefaultCharset = Charset.forName(charsetName);
 			cmbDefaultDbfCharset.setSelectedItem(charsetName);
 			DbaseFile.setDefaultCharset(newDefaultCharset);
 			DbaseFileNIO.setDefaultCharset(newDefaultCharset);
@@ -111,56 +115,56 @@ public class DbfDefaultEncodingPage extends AbstractPreferencePage {
 		return this;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.preferences.AbstractPreferencePage#storeValues()
 	 */
 	public void storeValues() throws StoreException {
-		String charsetName = (String)cmbDefaultDbfCharset.getSelectedItem();
-		if (Charset.isSupported(charsetName))
-		{
+		String charsetName = (String) cmbDefaultDbfCharset.getSelectedItem();
+		if (Charset.isSupported(charsetName)) {
 			prefs.put("dbf_encoding", charsetName);
 			Charset newDefaultCharset = Charset.forName(charsetName);
 			DbaseFile.setDefaultCharset(newDefaultCharset);
 			DbaseFileNIO.setDefaultCharset(newDefaultCharset);
-		}
-		else
-		{
+		} else {
 			if (cmbDefaultDbfCharset.getSelectedIndex() == 0) {
 				prefs.remove("dbf_encoding");
 				DbaseFile.setDefaultCharset(null);
 				DbaseFileNIO.setDefaultCharset(null);
-			}
-			else
+			} else
 				throw new StoreException("Bad charsetName");
 		}
-
 
 		// ¿Guardar en alguna clase el charset?
 	}
 
 	public void initializeDefaults() {
-		cmbDefaultDbfCharset.setSelectedItem(dbfEncodings.getCharsetForDbfId(0));
+		cmbDefaultDbfCharset
+				.setSelectedItem(dbfEncodings.getCharsetForDbfId(0));
 	}
 
 	public ImageIcon getIcon() {
 		return icon;
 	}
+
 	/**
 	 * This method initializes jTextArea
-	 *
+	 * 
 	 * @return javax.swing.JTextArea
 	 */
 	private JTextArea getJTextArea() {
 		if (jTextArea == null) {
 			jTextArea = new JTextArea();
-			jTextArea.setBounds(new java.awt.Rectangle(13,7,285,57));
+			jTextArea.setBounds(new java.awt.Rectangle(13, 7, 285, 57));
 			jTextArea.setForeground(java.awt.Color.black);
 			jTextArea.setBackground(java.awt.SystemColor.control);
 			jTextArea.setRows(3);
 			jTextArea.setWrapStyleWord(true);
 			jTextArea.setLineWrap(true);
 			jTextArea.setEditable(false);
-			jTextArea.setText(PluginServices.getText(this,"default_charset_name_for_dbf"));
+			jTextArea.setText(PluginServices.getText(this,
+					"default_charset_name_for_dbf"));
 		}
 		return jTextArea;
 	}

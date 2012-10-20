@@ -57,24 +57,26 @@ import org.gvsig.gpe.writer.GPEWriterHandler;
  */
 public class GPEWriterFileFilter extends FileFilter {
 	private GPEWriterHandler writer = null;
-	
-	public GPEWriterFileFilter(GPEWriterHandler writer){
+
+	public GPEWriterFileFilter(GPEWriterHandler writer) {
 		this.writer = writer;
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see javax.swing.filechooser.FileFilter#accept(java.io.File)
-	 */
-	public boolean accept(File f) {
-		//if (f.isDirectory()){
-			return true;
-		//}
-		//return writer.accept(f.toURI());
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
+	 * @see javax.swing.filechooser.FileFilter#accept(java.io.File)
+	 */
+	public boolean accept(File f) {
+		// if (f.isDirectory()){
+		return true;
+		// }
+		// return writer.accept(f.toURI());
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.filechooser.FileFilter#getDescription()
 	 */
 	public String getDescription() {
@@ -82,4 +84,3 @@ public class GPEWriterFileFilter extends FileFilter {
 	}
 
 }
-

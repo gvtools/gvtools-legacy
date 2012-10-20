@@ -8,10 +8,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.TableModel;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public class Frame extends JFrame {
@@ -29,8 +28,9 @@ public class Frame extends JFrame {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param t DOCUMENT ME!
+	 * 
+	 * @param t
+	 *            DOCUMENT ME!
 	 */
 	public void setTableModel(TableModel t) {
 		getTable().setModel(t);
@@ -44,20 +44,20 @@ public class Frame extends JFrame {
 		this.setContentPane(getJContentPane());
 		this.setTitle("JFrame");
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
-				public void windowClosing(java.awt.event.WindowEvent e) {
-					try {
-						((GDBMSTableModel) getTable().getModel()).getDataSource()
-						 .stop();
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}
+			public void windowClosing(java.awt.event.WindowEvent e) {
+				try {
+					((GDBMSTableModel) getTable().getModel()).getDataSource()
+							.stop();
+				} catch (Exception e1) {
+					e1.printStackTrace();
 				}
-			});
+			}
+		});
 	}
 
 	/**
 	 * This method initializes jContentPane
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private javax.swing.JPanel getJContentPane() {
@@ -72,7 +72,7 @@ public class Frame extends JFrame {
 
 	/**
 	 * This method initializes table
-	 *
+	 * 
 	 * @return javax.swing.JTable
 	 */
 	private JTable getTable() {
@@ -85,7 +85,7 @@ public class Frame extends JFrame {
 
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getJScrollPane() {

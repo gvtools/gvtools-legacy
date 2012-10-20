@@ -40,22 +40,24 @@ import org.gvsig.raster.util.PropertyEvent;
 import org.gvsig.raster.util.PropertyListener;
 
 import com.iver.andami.PluginServices;
+
 /**
- *
+ * 
  * @version 25/09/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
-public class ClippingOptionsPanel extends JPanel implements PropertyListener, ItemListener, ActionListener {
+public class ClippingOptionsPanel extends JPanel implements PropertyListener,
+		ItemListener, ActionListener {
 	private static final long serialVersionUID = 7299254074235648334L;
-	private JPanel     jPNameFile           = null;
-	private JPanel     jPNameDirectory      = null;
-	private JCheckBox  jCheckBox            = null;
-	private JCheckBox  jCheckLoadLayerInToc = null;
-	private JButton    jBChooseDirectory    = null;
-	private JLabel     jLabelDirectory      = null;
-	private JCheckBox  jCheckSaveFile       = null;
-	private JTextField filenameTextField    = null;
-	private JTextField directoryTextField   = null;
+	private JPanel jPNameFile = null;
+	private JPanel jPNameDirectory = null;
+	private JCheckBox jCheckBox = null;
+	private JCheckBox jCheckLoadLayerInToc = null;
+	private JButton jBChooseDirectory = null;
+	private JLabel jLabelDirectory = null;
+	private JCheckBox jCheckSaveFile = null;
+	private JTextField filenameTextField = null;
+	private JTextField directoryTextField = null;
 
 	public ClippingOptionsPanel() {
 		initialize();
@@ -84,8 +86,8 @@ public class ClippingOptionsPanel extends JPanel implements PropertyListener, It
 		gridBagConstraints.gridy = 2;
 		gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 		gridBagConstraints.insets = new java.awt.Insets(2, 5, 2, 5);
-		//Preguntamos al acabar para que no nos peten la aplicación
-		//add(getCbLoadLayerInToc(), gridBagConstraints);
+		// Preguntamos al acabar para que no nos peten la aplicación
+		// add(getCbLoadLayerInToc(), gridBagConstraints);
 
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 0;
@@ -106,12 +108,14 @@ public class ClippingOptionsPanel extends JPanel implements PropertyListener, It
 
 	/**
 	 * This method initializes jPNameFile
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPNameFile() {
 		if (jPNameFile == null) {
 			jPNameFile = new JPanel();
-			jPNameFile.add(new JLabel(PluginServices.getText(this, "nombre_capas") + ":"));
+			jPNameFile.add(new JLabel(PluginServices.getText(this,
+					"nombre_capas") + ":"));
 			jPNameFile.add(getFilenameTextField());
 		}
 		return jPNameFile;
@@ -119,6 +123,7 @@ public class ClippingOptionsPanel extends JPanel implements PropertyListener, It
 
 	/**
 	 * This method initializes jPNameFile
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPNameDirectory() {
@@ -149,12 +154,14 @@ public class ClippingOptionsPanel extends JPanel implements PropertyListener, It
 
 	/**
 	 * This method initializes jCheckLoadLayerInToc
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	public JCheckBox getCbLoadLayerInToc() {
 		if (jCheckLoadLayerInToc == null) {
 			jCheckLoadLayerInToc = new JCheckBox();
-			jCheckLoadLayerInToc.setText(PluginServices.getText(this, "cargar_en_toc"));
+			jCheckLoadLayerInToc.setText(PluginServices.getText(this,
+					"cargar_en_toc"));
 			jCheckLoadLayerInToc.setSelected(true);
 			jCheckLoadLayerInToc.setEnabled(false);
 			jCheckLoadLayerInToc.addItemListener(this);
@@ -164,19 +171,21 @@ public class ClippingOptionsPanel extends JPanel implements PropertyListener, It
 
 	/**
 	 * This method initializes jCheckBox
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	public JCheckBox getCbOneLyrPerBand() {
 		if (jCheckBox == null) {
 			jCheckBox = new JCheckBox();
-			jCheckBox.setText(PluginServices.getText(this, "crear_1_capa_por_banda"));
+			jCheckBox.setText(PluginServices.getText(this,
+					"crear_1_capa_por_banda"));
 		}
 		return jCheckBox;
 	}
 
 	/**
-	 * Cada vez que cambia un checkbox de cargar en toc o guardar en fichero, nos
-	 * aseguramos de que no pueden estar las dos opciones desmarcadas
+	 * Cada vez que cambia un checkbox de cargar en toc o guardar en fichero,
+	 * nos aseguramos de que no pueden estar las dos opciones desmarcadas
 	 */
 	public void itemStateChanged(ItemEvent e) {
 		getCbLoadLayerInToc().setEnabled(true);
@@ -193,7 +202,8 @@ public class ClippingOptionsPanel extends JPanel implements PropertyListener, It
 
 	private JButton getJBChooseDirectory() {
 		if (jBChooseDirectory == null) {
-			jBChooseDirectory = new JButton(PluginServices.getText(this, "cambiar_ruta"));
+			jBChooseDirectory = new JButton(PluginServices.getText(this,
+					"cambiar_ruta"));
 			jBChooseDirectory.setEnabled(false);
 		}
 		return jBChooseDirectory;
@@ -201,7 +211,8 @@ public class ClippingOptionsPanel extends JPanel implements PropertyListener, It
 
 	private JLabel getJLabelDirectory() {
 		if (jLabelDirectory == null) {
-			jLabelDirectory = new JLabel(PluginServices.getText(this, "ruta") + ":");
+			jLabelDirectory = new JLabel(PluginServices.getText(this, "ruta")
+					+ ":");
 			jLabelDirectory.setEnabled(false);
 		}
 		return jLabelDirectory;
@@ -209,13 +220,14 @@ public class ClippingOptionsPanel extends JPanel implements PropertyListener, It
 
 	/**
 	 * This method initializes jCheckSaveFile
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	public JCheckBox getCbSaveFile() {
 		if (jCheckSaveFile == null) {
 			jCheckSaveFile = new JCheckBox();
-			jCheckSaveFile.setText(PluginServices.getText(this, "guardar_en_disco"));
+			jCheckSaveFile.setText(PluginServices.getText(this,
+					"guardar_en_disco"));
 			jCheckSaveFile.addItemListener(this);
 		}
 		return jCheckSaveFile;
@@ -223,13 +235,14 @@ public class ClippingOptionsPanel extends JPanel implements PropertyListener, It
 
 	/**
 	 * This method initializes filenameTextField
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	public JTextField getFilenameTextField() {
 		if (filenameTextField == null) {
 			filenameTextField = new JTextField();
-			filenameTextField.setPreferredSize(new Dimension(150, filenameTextField.getPreferredSize().height));
+			filenameTextField.setPreferredSize(new Dimension(150,
+					filenameTextField.getPreferredSize().height));
 			RasterLibrary.addOnlyLayerNameListener(this);
 		}
 		return filenameTextField;
@@ -237,16 +250,18 @@ public class ClippingOptionsPanel extends JPanel implements PropertyListener, It
 
 	/**
 	 * This method initializes filenameTextField
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	public JTextField getDirectoryTextField() {
 		if (directoryTextField == null) {
 			directoryTextField = new JTextField();
-			directoryTextField.setText(JFileChooser.getLastPath(this.getClass().getName(), (File) null).toString());
+			directoryTextField.setText(JFileChooser.getLastPath(
+					this.getClass().getName(), (File) null).toString());
 			directoryTextField.setEditable(false);
 			directoryTextField.setEnabled(false);
-			directoryTextField.setPreferredSize(new Dimension(200, directoryTextField.getPreferredSize().height));
+			directoryTextField.setPreferredSize(new Dimension(200,
+					directoryTextField.getPreferredSize().height));
 		}
 		return directoryTextField;
 	}
@@ -255,27 +270,30 @@ public class ClippingOptionsPanel extends JPanel implements PropertyListener, It
 	 * Accion que sucede cuando se pulsa el boton de cambiar directorio
 	 */
 	public void actionPerformed(ActionEvent e) {
-		JFileChooser chooser = new JFileChooser(this.getClass().getName(), new File(getDirectoryTextField().getText()));
+		JFileChooser chooser = new JFileChooser(this.getClass().getName(),
+				new File(getDirectoryTextField().getText()));
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		chooser.setDialogTitle(PluginServices.getText(this, "seleccionar_directorio"));
+		chooser.setDialogTitle(PluginServices.getText(this,
+				"seleccionar_directorio"));
 
 		if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
-			getDirectoryTextField().setText(chooser.getSelectedFile().toString());
+			getDirectoryTextField().setText(
+					chooser.getSelectedFile().toString());
 		else
 			chooser.setLastPath(new File(getDirectoryTextField().getText()));
 	}
 
 	/**
-	 * Especificar el nombre de la nueva capa para el recuadro de texto asignándo
-	 * en cada llamada un nombre consecutivo.
+	 * Especificar el nombre de la nueva capa para el recuadro de texto
+	 * asignándo en cada llamada un nombre consecutivo.
 	 */
 	public void updateNewLayerText() {
 		filenameTextField.setText(RasterLibrary.getOnlyLayerName());
 	}
 
 	/**
-	 * Cuando alguien ha cambiado la propiedad del nombre de la 
-	 * capa se actualiza automáticamente
+	 * Cuando alguien ha cambiado la propiedad del nombre de la capa se
+	 * actualiza automáticamente
 	 */
 	public void actionValueChanged(PropertyEvent e) {
 		updateNewLayerText();

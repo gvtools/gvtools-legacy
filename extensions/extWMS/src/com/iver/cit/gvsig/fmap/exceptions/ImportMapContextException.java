@@ -40,28 +40,32 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: ImportMapContextException.java 6500 2006-07-21 11:51:13Z jaume $
-* $Log$
-* Revision 1.1  2006-07-21 11:51:13  jaume
-* improved appearance in wms panel and a wmc bug fixed
-*
-*
-*/
+ *
+ * $Id: ImportMapContextException.java 6500 2006-07-21 11:51:13Z jaume $
+ * $Log$
+ * Revision 1.1  2006-07-21 11:51:13  jaume
+ * improved appearance in wms panel and a wmc bug fixed
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.exceptions;
+
 /**
  * Exception representing an error in the process of importing a Web Map Context
- * file into gvSIG.<br><br>
- *
- * The error can be critical or not defining if the process can be finished with the
- * intervention of the user of otherwise it is impossible.<br><br>
- *
- * You should check the <b>isCritical()</b> method in order to know if you can continue
- * importing data or not. If the answer of this method is <b>true</b>, aborting the
- * process is strongly encouraged; or execute further instructions at your own risk.
- *
+ * file into gvSIG.<br>
+ * <br>
+ * 
+ * The error can be critical or not defining if the process can be finished with
+ * the intervention of the user of otherwise it is impossible.<br>
+ * <br>
+ * 
+ * You should check the <b>isCritical()</b> method in order to know if you can
+ * continue importing data or not. If the answer of this method is <b>true</b>,
+ * aborting the process is strongly encouraged; or execute further instructions
+ * at your own risk.
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
 public class ImportMapContextException extends Exception {
 	private boolean critical;
@@ -72,10 +76,12 @@ public class ImportMapContextException extends Exception {
 	}
 
 	/**
-	 * If <b>true</b> then the elements could be created but with inconsistent values that
-	 * the user can fix modifying its properties. <br><br>
-	 *
+	 * If <b>true</b> then the elements could be created but with inconsistent
+	 * values that the user can fix modifying its properties. <br>
+	 * <br>
+	 * 
 	 * If <b>false</b> then it is not possible to create the elements.
+	 * 
 	 * @return
 	 */
 	public boolean isCritical() {

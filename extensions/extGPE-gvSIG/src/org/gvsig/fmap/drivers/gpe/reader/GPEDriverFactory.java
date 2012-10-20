@@ -54,25 +54,24 @@ import org.gvsig.gpe.parser.GPEParser;
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class GPEDriverFactory {
-	
+
 	/**
-	 * Creates a new FMap contentHandler. This method will be deleted
-	 * on gvSIG 1.2. 
+	 * Creates a new FMap contentHandler. This method will be deleted on gvSIG
+	 * 1.2.
+	 * 
 	 * @param errorHandler
-	 * The error handler
+	 *            The error handler
 	 * @param parser
-	 * The GP parser
-	 * @return
-	 * One FMAP ContentHandler
+	 *            The GP parser
+	 * @return One FMAP ContentHandler
 	 */
-	public static GPEVectorialDriver createDriver(
-			GPEParser parser){
+	public static GPEVectorialDriver createDriver(GPEParser parser) {
 		GPEVectorialDriver driver = null;
-		if (parser instanceof GPEDefaultGmlParser){
-			driver = new GMLVectorialDriver(); 
-		}else if (parser instanceof GPEDeafultKmlParser){
+		if (parser instanceof GPEDefaultGmlParser) {
+			driver = new GMLVectorialDriver();
+		} else if (parser instanceof GPEDeafultKmlParser) {
 			driver = new KMLVectorialDriver();
 		}
 		return driver;
-	}	
+	}
 }

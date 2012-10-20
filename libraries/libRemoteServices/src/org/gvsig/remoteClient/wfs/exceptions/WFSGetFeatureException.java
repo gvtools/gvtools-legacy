@@ -50,22 +50,25 @@ import java.util.Map;
  *
  */
 /**
- * This exception is thrown when there is a problem 
- * with the GetFeature operation
+ * This exception is thrown when there is a problem with the GetFeature
+ * operation
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class WFSGetFeatureException extends WFSException{
+public class WFSGetFeatureException extends WFSException {
 	private static final long serialVersionUID = 1L;
 
-	public WFSGetFeatureException(Throwable e){
+	public WFSGetFeatureException(Throwable e) {
 		initCause(e);
 		initialize();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.gvsig.crstoslr.exceptions.LRSToCRSBaseException#initialize()
-	 */ 
+	 * 
+	 * @see
+	 * com.iver.gvsig.crstoslr.exceptions.LRSToCRSBaseException#initialize()
+	 */
 	protected void initialize() {
 		messageKey = "wfs_getFeature_excpetion";
 		formatString = "Exception with the GetFeature operation";
@@ -74,6 +77,7 @@ public class WFSGetFeatureException extends WFSException{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map values() {

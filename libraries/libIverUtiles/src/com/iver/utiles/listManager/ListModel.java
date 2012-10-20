@@ -44,7 +44,7 @@ import java.util.Vector;
 
 /**
  * Modelo del control ListManager
- *
+ * 
  * @author Fernando González Cortés
  */
 public interface ListModel extends javax.swing.ListModel {
@@ -52,34 +52,40 @@ public interface ListModel extends javax.swing.ListModel {
 	 * Removes the element at the specified position in this Vector. shifts any
 	 * subsequent elements to the left (subtracts one from their indices).
 	 * Returns the element that was removed from the Vector.
-	 *
-	 * @param i Índice del elemento que se quiere eliminar
-	 *
+	 * 
+	 * @param i
+	 *            Índice del elemento que se quiere eliminar
+	 * 
 	 * @return Objeto eliminado
-	 *
-	 * @throws ArrayIndexOutOfBoundsException Si el índice está fuera del array
+	 * 
+	 * @throws ArrayIndexOutOfBoundsException
+	 *             Si el índice está fuera del array
 	 */
 	public Object remove(int i) throws ArrayIndexOutOfBoundsException;
 
 	/**
 	 * Inserts the specified element at the specified position in this Vector.
-	 * Shifts the element currently at that position (if any) and any
-	 * subsequent elements to the right (adds one to their indices).
-	 *
-	 * @param i index at which the specified element is to be inserted.
-	 * @param o element to be inserted.
+	 * Shifts the element currently at that position (if any) and any subsequent
+	 * elements to the right (adds one to their indices).
+	 * 
+	 * @param i
+	 *            index at which the specified element is to be inserted.
+	 * @param o
+	 *            element to be inserted.
 	 */
 	public void insertAt(int i, Object o);
 
 	/**
 	 * Appends the specified element to the end of this Vector
-	 *
-	 * @param o element to be appended to this Vector
+	 * 
+	 * @param o
+	 *            element to be appended to this Vector
 	 */
 	public void add(Object o);
 
 	/**
 	 * Obtains the objects that are in the model
+	 * 
 	 * @return Vector with the objetos
 	 */
 	public Vector getObjects();

@@ -50,7 +50,8 @@ import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
 
 public interface VectorialSecuencial {
 
-    // public int getRowIndexByFID(IFeature FID);
-    public IFeatureIterator getFeatureIterator(Rectangle2D r, String strEPSG) throws DriverException;
-    
+	// public int getRowIndexByFID(IFeature FID);
+	public IFeatureIterator getFeatureIterator(Rectangle2D r, String strEPSG)
+			throws DriverException;
+
 }

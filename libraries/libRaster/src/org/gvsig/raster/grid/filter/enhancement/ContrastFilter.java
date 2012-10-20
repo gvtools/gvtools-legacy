@@ -22,14 +22,15 @@ import org.gvsig.raster.buffer.RasterBuffer;
 import org.gvsig.raster.dataset.IBuffer;
 import org.gvsig.raster.dataset.Params;
 import org.gvsig.raster.grid.filter.RasterFilter;
+
 /**
  * Clase base para todos los filtros de contraste
- *
+ * 
  * @version 31/05/2007
- * @author Miguel Ángel Querol Carratalá  (miguelangel.querol@iver.es)
+ * @author Miguel Ángel Querol Carratalá (miguelangel.querol@iver.es)
  */
 public class ContrastFilter extends RasterFilter {
-	public static String[]	names = new String[] {"contrast"};
+	public static String[] names = new String[] { "contrast" };
 
 	/**
 	 * Variable que contendra el incremento del contraste.
@@ -37,15 +38,16 @@ public class ContrastFilter extends RasterFilter {
 	int incrContraste = 0;
 
 	/**
-	 * Constructor. Llama al constructor de la clase base y asigna el
-	 * nombre del filtro.
+	 * Constructor. Llama al constructor de la clase base y asigna el nombre del
+	 * filtro.
 	 */
-	public ContrastFilter(){
+	public ContrastFilter() {
 		setName(names[0]);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#pre()
 	 */
 	public void pre() {
@@ -55,11 +57,14 @@ public class ContrastFilter extends RasterFilter {
 		height = raster.getHeight();
 		width = raster.getWidth();
 		incrContraste = ((Integer) params.get("incrContraste")).intValue();
-		rasterResult = RasterBuffer.getBuffer(IBuffer.TYPE_BYTE, raster.getWidth(), raster.getHeight(), raster.getBandCount(), true);
+		rasterResult = RasterBuffer.getBuffer(IBuffer.TYPE_BYTE,
+				raster.getWidth(), raster.getHeight(), raster.getBandCount(),
+				true);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#post()
 	 */
 	public void post() {
@@ -69,14 +74,16 @@ public class ContrastFilter extends RasterFilter {
 
 	/**
 	 * Obtiene el incremento de contraster que se está aplicando
+	 * 
 	 * @return entero que representa el incremento de contraste aplicado.
 	 */
-	public int getContrastIncrease(){
+	public int getContrastIncrease() {
 		return this.incrContraste;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.IRasterFilter#getGroup()
 	 */
 	public String getGroup() {
@@ -85,19 +92,25 @@ public class ContrastFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.IRasterFilter#getParams()
 	 */
 	public Params getUIParams(String nameFilter) {
 		Params params = new Params();
-		params.setParam("Contrast",
-				new Integer(incrContraste),
-				Params.SLIDER,
-				new String[]{ "-255", "255", "50", "1", "25" }); //min, max, valor defecto, intervalo pequeño, intervalo grande;
+		params.setParam("Contrast", new Integer(incrContraste), Params.SLIDER,
+				new String[] { "-255", "255", "50", "1", "25" }); // min, max,
+																	// valor
+																	// defecto,
+																	// intervalo
+																	// pequeño,
+																	// intervalo
+																	// grande;
 		return params;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getInRasterDataType()
 	 */
 	public int getInRasterDataType() {
@@ -106,6 +119,7 @@ public class ContrastFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getOutRasterDataType()
 	 */
 	public int getOutRasterDataType() {
@@ -114,7 +128,10 @@ public class ContrastFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.enhancement.ContrastFilter#getResult(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.enhancement.ContrastFilter#getResult(java
+	 * .lang.String)
 	 */
 	public Object getResult(String name) {
 		if (name.equals("raster")) {
@@ -127,6 +144,7 @@ public class ContrastFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#process(int, int)
 	 */
 	public void process(int x, int y) throws InterruptedException {
@@ -134,20 +152,32 @@ public class ContrastFilter extends RasterFilter {
 
 	/**
 	 * Algoritmo de contraste
-	 * @param px valor de la banda
+	 * 
+	 * @param px
+	 *            valor de la banda
 	 * @return valor de la banda con el algoritmo aplicado
 	 */
 	protected int calcContrast(int px) {
 		int result;
 		int diferencia = 127 - px;
 		if (incrContraste >= 0) {
-			result = (int) (px - (0.02 * diferencia * incrContraste)); // ((5.0 * 0.1) / 25) = 0.02
+			result = (int) (px - (0.02 * diferencia * incrContraste)); // ((5.0
+																		// *
+																		// 0.1)
+																		// / 25)
+																		// =
+																		// 0.02
 		} else {
-			result = (int) (px - (0.004 * diferencia * incrContraste)); // (0.1 / 25) = 0.004;
+			result = (int) (px - (0.004 * diferencia * incrContraste)); // (0.1
+																		// / 25)
+																		// =
+																		// 0.004;
 			if (px < 127) {
-				if (result > 127) result = 127;
+				if (result > 127)
+					result = 127;
 			} else {
-				if (result < 127) result = 127;
+				if (result < 127)
+					result = 127;
 			}
 		}
 		if (result < 0)
@@ -161,6 +191,7 @@ public class ContrastFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getNames()
 	 */
 	public String[] getNames() {

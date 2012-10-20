@@ -1,4 +1,5 @@
 package org.gvsig.gpe.containers;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -56,45 +57,55 @@ package org.gvsig.gpe.containers;
  */
 public class Point extends Geometry {
 	private double[] coordinates;
-		
+
 	/**
 	 * @return the x
 	 */
 	public double getX() {
 		return coordinates[0];
 	}
+
 	/**
-	 * @param x the x to set
+	 * @param x
+	 *            the x to set
 	 */
 	public void setX(double x) {
 		coordinates[0] = x;
 	}
+
 	/**
 	 * @return the y
 	 */
 	public double getY() {
 		return coordinates[1];
 	}
+
 	/**
-	 * @param y the y to set
+	 * @param y
+	 *            the y to set
 	 */
 	public void setY(double y) {
 		coordinates[1] = y;
 	}
+
 	/**
 	 * @return the z
 	 */
 	public double getZ() {
 		return coordinates[2];
 	}
+
 	/**
-	 * @param z the z to set
+	 * @param z
+	 *            the z to set
 	 */
 	public void setZ(double z) {
 		coordinates[2] = z;
 	}
+
 	/**
-	 * @param coordinates the coordinates to set
+	 * @param coordinates
+	 *            the coordinates to set
 	 */
 	public void setCoordinates(double[] coordinates) {
 		this.coordinates = coordinates;

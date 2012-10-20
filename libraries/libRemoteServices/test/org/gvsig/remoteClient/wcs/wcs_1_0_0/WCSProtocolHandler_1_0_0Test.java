@@ -68,14 +68,15 @@ package org.gvsig.remoteClient.wcs.wcs_1_0_0;
 import java.io.File;
 
 import junit.framework.TestCase;
+
 /**
  * 
  * @author jaume
- *
+ * 
  */
 public class WCSProtocolHandler_1_0_0Test extends TestCase {
 	WCSProtocolHandler1_0_0 handler1, handler2, handler3, handler4;
-	
+
 	public void setUp() {
 		System.out.println("Setting up test..");
 		handler1 = new WCSProtocolHandler1_0_0();
@@ -83,20 +84,27 @@ public class WCSProtocolHandler_1_0_0Test extends TestCase {
 		handler3 = new WCSProtocolHandler1_0_0();
 		handler4 = new WCSProtocolHandler1_0_0();
 	}
-	
-	
-	
+
 	public void testParsing() {
 		long t1 = System.currentTimeMillis();
-		assertTrue(handler1.parseCapabilities(new File("testdata/wcs/WCS-hypnosGetCapabilities.xml")));
-		assertTrue(handler1.parseDescribeCoverage(new File("testdata/wcs/WCS-hypnosDescribeCoverage.xml")));
-		assertTrue(handler2.parseCapabilities(new File("testdata/wcs/WCS-simonCITCostasGetCapabilities.xml")));
-		assertTrue(handler2.parseDescribeCoverage(new File("testdata/wcs/WCS-simonCITCostasDescribeCoverage.xml")));
-		assertTrue(handler3.parseCapabilities(new File("testdata/wcs/WCS-simonCITSpotGetCapabilities.xml")));
-		assertTrue(handler3.parseDescribeCoverage(new File("testdata/wcs/WCS-simonCITSpotDescribeCoverage.xml")));
-		assertTrue(handler4.parseCapabilities(new File("testdata/wcs/WCS-ionicGetCapabilities.xml")));
-		assertTrue(handler4.parseDescribeCoverage(new File("testdata/wcs/WCS-ionicDescribeCoverage.xml")));
+		assertTrue(handler1.parseCapabilities(new File(
+				"testdata/wcs/WCS-hypnosGetCapabilities.xml")));
+		assertTrue(handler1.parseDescribeCoverage(new File(
+				"testdata/wcs/WCS-hypnosDescribeCoverage.xml")));
+		assertTrue(handler2.parseCapabilities(new File(
+				"testdata/wcs/WCS-simonCITCostasGetCapabilities.xml")));
+		assertTrue(handler2.parseDescribeCoverage(new File(
+				"testdata/wcs/WCS-simonCITCostasDescribeCoverage.xml")));
+		assertTrue(handler3.parseCapabilities(new File(
+				"testdata/wcs/WCS-simonCITSpotGetCapabilities.xml")));
+		assertTrue(handler3.parseDescribeCoverage(new File(
+				"testdata/wcs/WCS-simonCITSpotDescribeCoverage.xml")));
+		assertTrue(handler4.parseCapabilities(new File(
+				"testdata/wcs/WCS-ionicGetCapabilities.xml")));
+		assertTrue(handler4.parseDescribeCoverage(new File(
+				"testdata/wcs/WCS-ionicDescribeCoverage.xml")));
 		long t2 = System.currentTimeMillis();
-		System.out.println("Test parsing done with apparently no errors in "+ (t2-(float)t1)/1000+" seconds");
+		System.out.println("Test parsing done with apparently no errors in "
+				+ (t2 - (float) t1) / 1000 + " seconds");
 	}
 }

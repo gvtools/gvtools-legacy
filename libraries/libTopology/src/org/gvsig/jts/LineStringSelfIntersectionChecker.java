@@ -85,15 +85,12 @@ public class LineStringSelfIntersectionChecker {
 
 	protected GeometryGraph graph;
 
-
 	protected boolean hasInitialized = false;
 
 	protected Coordinate[] selfIntersections;
 
 	protected double snapTolerance;
 
-	
-	
 	public LineStringSelfIntersectionChecker(LineString lineString,
 			double snapTolerance) {
 		this.lineString = lineString;
@@ -101,7 +98,6 @@ public class LineStringSelfIntersectionChecker {
 		this.graph = new GeometryGraph(0, lineString);
 	}
 
-	
 	public LineStringSelfIntersectionChecker(LineString lineString) {
 		this(lineString, DEFAULT_SNAP_TOLERANCE);
 	}
@@ -130,38 +126,33 @@ public class LineStringSelfIntersectionChecker {
 	 * @return
 	 */
 	public boolean isProper(Coordinate coordinate) {
-		if (lineString instanceof LinearRing){
-//			return coordinate.equals2D(lineString.getCoordinateN(0));
-			//in a LinearRing first and last point must be equals
-			return SnapCGAlgorithms.snapEquals2D(coordinate, lineString
-					.getCoordinateN(0), snapTolerance);
-			
+		if (lineString instanceof LinearRing) {
+			// return coordinate.equals2D(lineString.getCoordinateN(0));
+			// in a LinearRing first and last point must be equals
+			return SnapCGAlgorithms.snapEquals2D(coordinate,
+					lineString.getCoordinateN(0), snapTolerance);
+
 		}
-		
-		
-		
-		
-		
-		
-		
-		
+
 		else {
 			boolean solution = false;
-//			boolean solution = graph.isBoundaryNode(0, coordinate);
-//			if (!solution) {
-				// one more try: see the coordinates of the extremes
-				// this is needed becase the labeling process for closed
-				// linestring
-				// dont gives us the desired results
-				if (SnapCGAlgorithms.snapEquals2D(coordinate, lineString.getCoordinateN(0), snapTolerance) || 
-					SnapCGAlgorithms.snapEquals2D(coordinate, lineString.getCoordinateN(lineString.getNumPoints() - 1), snapTolerance)) 
-				{
-					//the coordinate is equal to one of the nodes of a lineString
-					//if the lineString is not closed, it could not be proper
-					if(JtsUtil.isClosed(lineString, snapTolerance))
-						solution = true;
-				}// if
-//			}// if
+			// boolean solution = graph.isBoundaryNode(0, coordinate);
+			// if (!solution) {
+			// one more try: see the coordinates of the extremes
+			// this is needed becase the labeling process for closed
+			// linestring
+			// dont gives us the desired results
+			if (SnapCGAlgorithms.snapEquals2D(coordinate,
+					lineString.getCoordinateN(0), snapTolerance)
+					|| SnapCGAlgorithms.snapEquals2D(coordinate, lineString
+							.getCoordinateN(lineString.getNumPoints() - 1),
+							snapTolerance)) {
+				// the coordinate is equal to one of the nodes of a lineString
+				// if the lineString is not closed, it could not be proper
+				if (JtsUtil.isClosed(lineString, snapTolerance))
+					solution = true;
+			}// if
+				// }// if
 			return solution;
 		}// else
 	}
@@ -169,24 +160,24 @@ public class LineStringSelfIntersectionChecker {
 	// TODO Add snap tolerance concept
 	// trick extracted from JTS examples
 	// TODO REVISAR CUAL ES MEJOR, initialize o initialize2
-//	private void initialize2() {
-//		List endPtList = new ArrayList();
-//		endPtList.add(lineString.getCoordinateN(0));
-//		endPtList.add(lineString.getCoordinateN(lineString.getNumPoints() - 1));
-//		Coordinate[] endPts = CoordinateArrays.toCoordinateArray(endPtList);
-//		Geometry lineStringNodes = new GeometryFactory()
-//				.createMultiPoint(endPts);
-//		Geometry nodedLine = lineString.union(lineStringNodes);
-//		List endPtList2 = new ArrayList();
-//		endPtList2.add(((LineString) nodedLine).getCoordinateN(0));
-//		endPtList2.add(((LineString) nodedLine).getCoordinateN(lineString
-//				.getNumPoints() - 1));
-//		Coordinate[] endPts2 = CoordinateArrays.toCoordinateArray(endPtList2);
-//		Geometry lineStringNodes2 = new GeometryFactory()
-//				.createMultiPoint(endPts2);
-//		Geometry selfs = lineStringNodes.difference(lineStringNodes2);
-//		selfIntersections = selfs.getCoordinates();
-//	}
+	// private void initialize2() {
+	// List endPtList = new ArrayList();
+	// endPtList.add(lineString.getCoordinateN(0));
+	// endPtList.add(lineString.getCoordinateN(lineString.getNumPoints() - 1));
+	// Coordinate[] endPts = CoordinateArrays.toCoordinateArray(endPtList);
+	// Geometry lineStringNodes = new GeometryFactory()
+	// .createMultiPoint(endPts);
+	// Geometry nodedLine = lineString.union(lineStringNodes);
+	// List endPtList2 = new ArrayList();
+	// endPtList2.add(((LineString) nodedLine).getCoordinateN(0));
+	// endPtList2.add(((LineString) nodedLine).getCoordinateN(lineString
+	// .getNumPoints() - 1));
+	// Coordinate[] endPts2 = CoordinateArrays.toCoordinateArray(endPtList2);
+	// Geometry lineStringNodes2 = new GeometryFactory()
+	// .createMultiPoint(endPts2);
+	// Geometry selfs = lineStringNodes.difference(lineStringNodes2);
+	// selfIntersections = selfs.getCoordinates();
+	// }
 
 	// TODO Add snap tolerance concept
 	// this algorithm has been designed by us
@@ -195,7 +186,7 @@ public class LineStringSelfIntersectionChecker {
 		SnappingCoordinateMap selfIntersectionsMap = new SnappingCoordinateMap(
 				snapTolerance);
 		List edges = computeSelfNodes();
-//		List edges = computeSelfNodesWithSnap();
+		// List edges = computeSelfNodesWithSnap();
 		Iterator i = edges.iterator();
 		while (i.hasNext()) {// for each edge graph
 			Edge e = (Edge) i.next();
@@ -206,8 +197,8 @@ public class LineStringSelfIntersectionChecker {
 					if (!selfIntersectionsMap.containsKey(ei.coord)) {
 						selfIntersectionsList.add(ei.coord);
 						selfIntersectionsMap.put(ei.coord, ei.coord);
-					}//if
-				}//if
+					}// if
+				}// if
 			}// for
 		}// while
 		int numSelfIntersections = selfIntersectionsList.size();
@@ -241,21 +232,20 @@ public class LineStringSelfIntersectionChecker {
 		esi.computeIntersections(edges, si, true);
 		return edges;
 	}
-	
-	
-//	private List computeSelfNodesWithSnap() {
-//		LineIntersector li = new SnapLineIntersector(snapTolerance);
-//		SegmentIntersector si = new SegmentIntersector(li, true, false);
-//		SnapSimpleMCSweepLineIntersector esi = new SnapSimpleMCSweepLineIntersector();
-//		List edges = new ArrayList();
-//		Iterator edgesIt = graph.getEdgeIterator();
-//		while (edgesIt.hasNext()) {
-//			edges.add(edgesIt.next());
-//		}
-//		esi.computeIntersections(edges, si, true);
-//		return edges;
-//	}
-	
+
+	// private List computeSelfNodesWithSnap() {
+	// LineIntersector li = new SnapLineIntersector(snapTolerance);
+	// SegmentIntersector si = new SegmentIntersector(li, true, false);
+	// SnapSimpleMCSweepLineIntersector esi = new
+	// SnapSimpleMCSweepLineIntersector();
+	// List edges = new ArrayList();
+	// Iterator edgesIt = graph.getEdgeIterator();
+	// while (edgesIt.hasNext()) {
+	// edges.add(edgesIt.next());
+	// }
+	// esi.computeIntersections(edges, si, true);
+	// return edges;
+	// }
 
 	/**
 	 * Returns the self intersections of the linestring

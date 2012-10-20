@@ -1,4 +1,3 @@
-
 /*
  * The Unified Mapping Platform (JUMP) is an extensible, interactive GUI 
  * for visualizing and manipulating spatial features with geometry and attributes.
@@ -39,132 +38,133 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-
 /**
- * A List that ignores duplicates. Note: performance is not optimized - a simple linear
- * search is performed.
+ * A List that ignores duplicates. Note: performance is not optimized - a simple
+ * linear search is performed.
  */
 public class UniqueList implements List {
-    private List list;
+	private List list;
 
-    /**
-     * Creates a UniqueList.
-     */
-    public UniqueList() {
-        this(new ArrayList());
-    }
+	/**
+	 * Creates a UniqueList.
+	 */
+	public UniqueList() {
+		this(new ArrayList());
+	}
 
-    /**
-     * Creates a UniqueList backed by the given List.
-     * @param list a List that will be this UniqueList's underlying List
-     */
-    public UniqueList(List list) {
-        this.list = list;
-    }
+	/**
+	 * Creates a UniqueList backed by the given List.
+	 * 
+	 * @param list
+	 *            a List that will be this UniqueList's underlying List
+	 */
+	public UniqueList(List list) {
+		this.list = list;
+	}
 
-    public int size() {
-        return list.size();
-    }
+	public int size() {
+		return list.size();
+	}
 
-    public boolean isEmpty() {
-        return list.isEmpty();
-    }
+	public boolean isEmpty() {
+		return list.isEmpty();
+	}
 
-    public boolean contains(Object o) {
-        return list.contains(o);
-    }
+	public boolean contains(Object o) {
+		return list.contains(o);
+	}
 
-    public Iterator iterator() {
-        return list.iterator();
-    }
+	public Iterator iterator() {
+		return list.iterator();
+	}
 
-    public Object[] toArray() {
-        return list.toArray();
-    }
+	public Object[] toArray() {
+		return list.toArray();
+	}
 
-    public Object[] toArray(Object[] a) {
-        return list.toArray(a);
-    }
+	public Object[] toArray(Object[] a) {
+		return list.toArray(a);
+	}
 
-    public boolean add(Object o) {
-        if (list.contains(o)) {
-            return false;
-        }
+	public boolean add(Object o) {
+		if (list.contains(o)) {
+			return false;
+		}
 
-        return list.add(o);
-    }
+		return list.add(o);
+	}
 
-    public boolean remove(Object o) {
-        return list.remove(o);
-    }
+	public boolean remove(Object o) {
+		return list.remove(o);
+	}
 
-    public boolean containsAll(Collection c) {
-        return list.containsAll(c);
-    }
+	public boolean containsAll(Collection c) {
+		return list.containsAll(c);
+	}
 
-    public boolean addAll(Collection c) {
-    	return addAll(size(), c);
-    }
+	public boolean addAll(Collection c) {
+		return addAll(size(), c);
+	}
 
-    public boolean addAll(int index, Collection c) {
+	public boolean addAll(int index, Collection c) {
 		ArrayList itemsToAdd = new ArrayList(c);
 		itemsToAdd.removeAll(this);
-		return list.addAll(index, itemsToAdd);    	
-    }
+		return list.addAll(index, itemsToAdd);
+	}
 
-    public boolean removeAll(Collection c) {
-        return list.removeAll(c);
-    }
+	public boolean removeAll(Collection c) {
+		return list.removeAll(c);
+	}
 
-    public boolean retainAll(Collection c) {
-        return list.retainAll(c);
-    }
+	public boolean retainAll(Collection c) {
+		return list.retainAll(c);
+	}
 
-    public void clear() {
-        list.clear();
-    }
+	public void clear() {
+		list.clear();
+	}
 
-    public boolean equals(Object o) {
-        return list.equals(o);
-    }
+	public boolean equals(Object o) {
+		return list.equals(o);
+	}
 
-    public Object get(int index) {
-        return list.get(index);
-    }
+	public Object get(int index) {
+		return list.get(index);
+	}
 
-    public Object set(int index, Object element) {
-        return list.set(index, element);
-    }
+	public Object set(int index, Object element) {
+		return list.set(index, element);
+	}
 
-    public void add(int index, Object element) {
-        if (list.contains(element)) {
-            return;
-        }
+	public void add(int index, Object element) {
+		if (list.contains(element)) {
+			return;
+		}
 
-        list.add(index, element);
-    }
+		list.add(index, element);
+	}
 
-    public Object remove(int index) {
-        return list.remove(index);
-    }
+	public Object remove(int index) {
+		return list.remove(index);
+	}
 
-    public int indexOf(Object o) {
-        return list.indexOf(o);
-    }
+	public int indexOf(Object o) {
+		return list.indexOf(o);
+	}
 
-    public int lastIndexOf(Object o) {
-        return list.lastIndexOf(o);
-    }
+	public int lastIndexOf(Object o) {
+		return list.lastIndexOf(o);
+	}
 
-    public ListIterator listIterator() {
-        return list.listIterator();
-    }
+	public ListIterator listIterator() {
+		return list.listIterator();
+	}
 
-    public ListIterator listIterator(int index) {
-        return list.listIterator(index);
-    }
+	public ListIterator listIterator(int index) {
+		return list.listIterator(index);
+	}
 
-    public List subList(int fromIndex, int toIndex) {
-        return list.subList(fromIndex, toIndex);
-    }
+	public List subList(int fromIndex, int toIndex) {
+		return list.subList(fromIndex, toIndex);
+	}
 }

@@ -38,16 +38,17 @@ import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.cit.gvsig.project.documents.view.toolListeners.StatusBarListener;
 
-
 /**
- * <p>Extension to add support for selecting the geometries of the active vector layers that
- *  intersect with a circle defined by the user.</p>
- *
+ * <p>
+ * Extension to add support for selecting the geometries of the active vector
+ * layers that intersect with a circle defined by the user.
+ * </p>
+ * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class SelectByCircleExtension extends Extension {
 	public static final String CIRCLE_SELECTION_TOOL_NAME = "circleSelection";
-	
+
 	/*
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
@@ -57,31 +58,40 @@ public class SelectByCircleExtension extends Extension {
 
 	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
-			"circle-cursor-icon",
-			this.getClass().getClassLoader().getResource("images/circle-cursor-icon.png")
-		);
-		
+				"circle-cursor-icon",
+				this.getClass().getClassLoader()
+						.getResource("images/circle-cursor-icon.png"));
+
 		PluginServices.getIconTheme().registerDefault(
-			"select-by-circle-icon",
-			this.getClass().getClassLoader().getResource("images/select-by-circle-icon.png")
-		); 
+				"select-by-circle-icon",
+				this.getClass().getClassLoader()
+						.getResource("images/select-by-circle-icon.png"));
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String actionCommand) {
-		if (actionCommand.equals("SELCIRCLE") ) {
+		if (actionCommand.equals("SELCIRCLE")) {
 			IWindow view = PluginServices.getMDIManager().getActiveWindow();
 			if (view instanceof View) {
 				// Selection by circle
-				MapControl mc = ((View)view).getMapControl();
+				MapControl mc = ((View) view).getMapControl();
 
-				// If current's view MapControl doesn't have the "CircleSelection" tool, adds it
-				if (!mc.getNamesMapTools().containsKey(CIRCLE_SELECTION_TOOL_NAME))	{
-					CircleSelectListener circleSelListener = new CircleSelectListener(mc);
-					mc.addMapTool(CIRCLE_SELECTION_TOOL_NAME, new Behavior[] {new CircleSelectionBehavior(circleSelListener), new MouseMovementBehavior(new StatusBarListener(mc))});
+				// If current's view MapControl doesn't have the
+				// "CircleSelection" tool, adds it
+				if (!mc.getNamesMapTools().containsKey(
+						CIRCLE_SELECTION_TOOL_NAME)) {
+					CircleSelectListener circleSelListener = new CircleSelectListener(
+							mc);
+					mc.addMapTool(CIRCLE_SELECTION_TOOL_NAME,
+							new Behavior[] {
+									new CircleSelectionBehavior(
+											circleSelListener),
+									new MouseMovementBehavior(
+											new StatusBarListener(mc)) });
 				}
 
 				mc.setTool(CIRCLE_SELECTION_TOOL_NAME);
@@ -93,7 +103,8 @@ public class SelectByCircleExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (f == null) {
 			return false;
@@ -114,7 +125,8 @@ public class SelectByCircleExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (f == null) {
 			return false;
@@ -130,8 +142,9 @@ public class SelectByCircleExtension extends Extension {
 
 			for (int i = 0; i < layers.length; i++) {
 				layer = layers[i];
-				
-				if ((layer instanceof FLyrVect) && (layer.isAvailable()) && (layer.isActive()))
+
+				if ((layer instanceof FLyrVect) && (layer.isAvailable())
+						&& (layer.isActive()))
 					return true;
 			}
 		}

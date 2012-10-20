@@ -42,50 +42,50 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: LineCleanGeoprocess.java 24094 2008-10-19 07:44:04Z azabala $
-* $Log$
-* Revision 1.4  2007-07-12 11:10:24  azabala
-* bug 2617 solved (clean fails with multilinestring geometries)
-*
-* Revision 1.3  2007/05/15 07:23:26  cesar
-* Add the finished method for execution from Event Dispatch Thread
-*
-* Revision 1.2  2007/03/06 16:48:14  caballero
-* Exceptions
-*
-* Revision 1.1  2006/12/21 17:23:27  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/12/04 19:42:23  azabala
-* *** empty log message ***
-*
-* Revision 1.8  2006/11/14 18:34:16  azabala
-* *** empty log message ***
-*
-* Revision 1.7  2006/11/14 18:00:57  azabala
-* internationalized texts
-*
-* Revision 1.6  2006/11/13 20:41:08  azabala
-* *** empty log message ***
-*
-* Revision 1.5  2006/11/10 13:22:57  azabala
-* better syncronization of clean and build network (use of pipetask)
-*
-* Revision 1.4  2006/11/09 21:08:32  azabala
-* *** empty log message ***
-*
-* Revision 1.3  2006/10/19 16:06:48  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/10/17 18:25:53  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/10/10 18:50:17  azabala
-* First version in CVS
-*
-*
-*/
+ *
+ * $Id: LineCleanGeoprocess.java 24094 2008-10-19 07:44:04Z azabala $
+ * $Log$
+ * Revision 1.4  2007-07-12 11:10:24  azabala
+ * bug 2617 solved (clean fails with multilinestring geometries)
+ *
+ * Revision 1.3  2007/05/15 07:23:26  cesar
+ * Add the finished method for execution from Event Dispatch Thread
+ *
+ * Revision 1.2  2007/03/06 16:48:14  caballero
+ * Exceptions
+ *
+ * Revision 1.1  2006/12/21 17:23:27  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/12/04 19:42:23  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.8  2006/11/14 18:34:16  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.7  2006/11/14 18:00:57  azabala
+ * internationalized texts
+ *
+ * Revision 1.6  2006/11/13 20:41:08  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.5  2006/11/10 13:22:57  azabala
+ * better syncronization of clean and build network (use of pipetask)
+ *
+ * Revision 1.4  2006/11/09 21:08:32  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.3  2006/10/19 16:06:48  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/10/17 18:25:53  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/10/10 18:50:17  azabala
+ * First version in CVS
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.topology.lineclean.fmap;
 
 import java.io.File;
@@ -125,15 +125,13 @@ public class LineCleanGeoprocess extends AbstractGeoprocess {
 	 */
 	private ILayerDefinition resultLayerDefinition;
 
-
 	/**
 	 * flag to only clip selection of input layer
 	 */
 	private boolean onlyFirstLayerSelection = false;
-	
+
 	/**
-	 * flag to mark if must create a layer with the detected
-	 * pseudonodes
+	 * flag to mark if must create a layer with the detected pseudonodes
 	 */
 	private boolean createLyrsWithErrorGeometries = false;
 
@@ -151,22 +149,21 @@ public class LineCleanGeoprocess extends AbstractGeoprocess {
 	 */
 	FeaturePersisterProcessor2 intersectsProcessor;
 
-
-	public LineCleanGeoprocess(FLyrVect inputLayer){
+	public LineCleanGeoprocess(FLyrVect inputLayer) {
 		this.firstLayer = inputLayer;
 	}
 
-
 	public void setParameters(Map params) throws GeoprocessException {
-		Boolean firstLayerSelection = (Boolean) params.get("firstlayerselection");
+		Boolean firstLayerSelection = (Boolean) params
+				.get("firstlayerselection");
 		if (firstLayerSelection != null)
-			this.onlyFirstLayerSelection =
-				firstLayerSelection.booleanValue();
-		
-		Boolean createLyrsWithError = (Boolean) params.get("createlayerswitherrors");
+			this.onlyFirstLayerSelection = firstLayerSelection.booleanValue();
+
+		Boolean createLyrsWithError = (Boolean) params
+				.get("createlayerswitherrors");
 		if (createLyrsWithError != null)
-			this.createLyrsWithErrorGeometries =
-				createLyrsWithError.booleanValue();
+			this.createLyrsWithErrorGeometries = createLyrsWithError
+					.booleanValue();
 
 	}
 
@@ -178,13 +175,12 @@ public class LineCleanGeoprocess extends AbstractGeoprocess {
 					"Operacion de CLEAN sin especificar capa de resultados");
 		}
 		try {
-			if(firstLayer.getSource().getShapeCount() == 0){
-				throw new GeoprocessException(
-				"Capa de entrada vacia");
+			if (firstLayer.getSource().getShapeCount() == 0) {
+				throw new GeoprocessException("Capa de entrada vacia");
 			}
 		} catch (ReadDriverException e) {
 			throw new GeoprocessException(
-			"Error al verificar si la capa está vacía");
+					"Error al verificar si la capa está vacía");
 		}
 	}
 
@@ -199,8 +195,8 @@ public class LineCleanGeoprocess extends AbstractGeoprocess {
 	public ILayerDefinition createLayerDefinition() {
 		if (resultLayerDefinition == null) {
 			try {
-				resultLayerDefinition = DefinitionUtils.
-							createLayerDefinition(firstLayer);
+				resultLayerDefinition = DefinitionUtils
+						.createLayerDefinition(firstLayer);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -208,8 +204,7 @@ public class LineCleanGeoprocess extends AbstractGeoprocess {
 		return resultLayerDefinition;
 	}
 
-
-	class LineCleanTask extends AbstractMonitorableTask implements IPipedTask{
+	class LineCleanTask extends AbstractMonitorableTask implements IPipedTask {
 
 		private LineCleanTask() {
 			setInitialStep(0);
@@ -233,9 +228,9 @@ public class LineCleanGeoprocess extends AbstractGeoprocess {
 		}
 
 		/**
-		 * Verifies cancelation events, and return a boolean flag if processes must
-		 * be stopped for this cancelations events.
-		 *
+		 * Verifies cancelation events, and return a boolean flag if processes
+		 * must be stopped for this cancelations events.
+		 * 
 		 * @param cancel
 		 * @param va
 		 * @param visitor
@@ -253,16 +248,12 @@ public class LineCleanGeoprocess extends AbstractGeoprocess {
 			return false;
 		}
 
-
 		public void run() throws Exception {
-			processor =
-				new FeaturePersisterProcessor2(writer);
+			processor = new FeaturePersisterProcessor2(writer);
 
 			intersectionsWriter = new ShpWriter();
-			String temp = System.getProperty("java.io.tmpdir") +
-					"/intersections_" +
-					System.currentTimeMillis() +
-					".shp";
+			String temp = System.getProperty("java.io.tmpdir")
+					+ "/intersections_" + System.currentTimeMillis() + ".shp";
 			File newFile = new File(temp);
 			((ShpWriter) intersectionsWriter).setFile(newFile);
 
@@ -281,28 +272,24 @@ public class LineCleanGeoprocess extends AbstractGeoprocess {
 			intersectFields[1].setFieldType(XTypes.INTEGER);
 			intersectDefinition.setFieldsDesc(intersectFields);
 
-			((ShpWriter) intersectionsWriter).initialize(
-					(LayerDefinition) intersectDefinition);
+			((ShpWriter) intersectionsWriter)
+					.initialize((LayerDefinition) intersectDefinition);
 			((SHPLayerDefinition) intersectDefinition).setFile(newFile);
 
-			ShpSchemaManager interSchMg =
-				new ShpSchemaManager(newFile.getAbsolutePath());
+			ShpSchemaManager interSchMg = new ShpSchemaManager(
+					newFile.getAbsolutePath());
 			interSchMg.createSchema(intersectDefinition);
 
-			intersectsProcessor = new
-				FeaturePersisterProcessor2(intersectionsWriter);
+			intersectsProcessor = new FeaturePersisterProcessor2(
+					intersectionsWriter);
 
 			FBitSet selection = null;
-			SnappingCoordinateMap coordMap =
-				new SnappingCoordinateMap(LineCleanVisitor.DEFAULT_SNAP);
-			LineCleanVisitor visitor =
-				new LineCleanVisitor(processor,
-						             intersectsProcessor,
-						onlyFirstLayerSelection,
-						resultLayerDefinition,
-						intersectDefinition,
-						firstLayer,
-						firstLayer.getRecordset(), coordMap);
+			SnappingCoordinateMap coordMap = new SnappingCoordinateMap(
+					LineCleanVisitor.DEFAULT_SNAP);
+			LineCleanVisitor visitor = new LineCleanVisitor(processor,
+					intersectsProcessor, onlyFirstLayerSelection,
+					resultLayerDefinition, intersectDefinition, firstLayer,
+					firstLayer.getRecordset(), coordMap);
 
 			try {
 				processor.start();
@@ -310,18 +297,19 @@ public class LineCleanGeoprocess extends AbstractGeoprocess {
 
 				ReadableVectorial va = firstLayer.getSource();
 				va.start();
-				for (int i = 0; i < va.getShapeCount(); i++) {// for each geometry
+				for (int i = 0; i < va.getShapeCount(); i++) {// for each
+																// geometry
 					if (verifyCancelation(va)) {
 						intersectsProcessor.finish();
 						return;
 					}
-					if(selection != null){
+					if (selection != null) {
 						if (selection.get(i)) {
-								reportStep();
-								visitor.visit(va.getShape(i), i);
+							reportStep();
+							visitor.visit(va.getShape(i), i);
 						}
 
-					}else{
+					} else {
 						reportStep();
 						visitor.visit(va.getShape(i), i);
 					}
@@ -330,7 +318,6 @@ public class LineCleanGeoprocess extends AbstractGeoprocess {
 				processor.finish();
 				intersectsProcessor.finish();
 
-
 			} catch (ReadDriverException e) {
 				e.printStackTrace();
 			}
@@ -338,10 +325,11 @@ public class LineCleanGeoprocess extends AbstractGeoprocess {
 
 		// TODO INTERNACIONALIZAR LOS MENSAJES
 		public String getNote() {
-			String cleaningText = PluginServices.getText(this, "Limpiando_lineas");
+			String cleaningText = PluginServices.getText(this,
+					"Limpiando_lineas");
 			String of = PluginServices.getText(this, "de");
-			return cleaningText + " " + getCurrentStep() + " "
-					+ of + " " + getFinishStep();
+			return cleaningText + " " + getCurrentStep() + " " + of + " "
+					+ getFinishStep();
 		}
 
 		public void cancel() {
@@ -349,7 +337,9 @@ public class LineCleanGeoprocess extends AbstractGeoprocess {
 			LineCleanGeoprocess.this.cancel();
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see com.iver.utiles.swing.threads.IPipedTask#getResult()
 		 */
 		public Object getResult() {
@@ -360,15 +350,20 @@ public class LineCleanGeoprocess extends AbstractGeoprocess {
 			}
 		}
 
-		/* (non-Javadoc)
-		 * @see com.iver.utiles.swing.threads.IPipedTask#setEntry(java.lang.Object)
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see
+		 * com.iver.utiles.swing.threads.IPipedTask#setEntry(java.lang.Object)
 		 */
 		public void setEntry(Object object) {
 			// TODO Auto-generated method stub
 
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see com.iver.utiles.swing.threads.IMonitorableTask#finished()
 		 */
 		public void finished() {
@@ -377,28 +372,24 @@ public class LineCleanGeoprocess extends AbstractGeoprocess {
 		}
 	}
 
-
 	public IMonitorableTask createTask() {
 		return new LineCleanTask();
 	}
 
-
 	public FLayer getResult() throws GeoprocessException {
 		FLyrVect cleanedLayer = (FLyrVect) createLayerFrom(this.writer);
 		FLyrVect pseudonodes = null;
-		
-		if(this.createLyrsWithErrorGeometries){
+
+		if (this.createLyrsWithErrorGeometries) {
 			pseudonodes = (FLyrVect) createLayerFrom(this.intersectionsWriter);
 			try {
-				if(pseudonodes.getSource().getShapeCount() != 0){
-	
-					MapContext map = ((View)PluginServices.getMDIManager().
-														getActiveWindow()).
-														getModel().
-														getMapContext();
-					FLayers solution = new FLayers();//(map,null);
+				if (pseudonodes.getSource().getShapeCount() != 0) {
+
+					MapContext map = ((View) PluginServices.getMDIManager()
+							.getActiveWindow()).getModel().getMapContext();
+					FLayers solution = new FLayers();// (map,null);
 					solution.setMapContext(map);
-					solution.setName(this.firstLayer.getName()+"_cleaned");
+					solution.setName(this.firstLayer.getName() + "_cleaned");
 					solution.addLayer(cleanedLayer);
 					solution.addLayer(pseudonodes);
 					return solution;
@@ -406,10 +397,9 @@ public class LineCleanGeoprocess extends AbstractGeoprocess {
 			} catch (ReadDriverException e) {
 				throw new GeoprocessException("Error de lectura de datos");
 			}
-		}//if
-		
+		}// if
+
 		return cleanedLayer;
 	}
 
 }
-

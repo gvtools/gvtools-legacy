@@ -42,29 +42,29 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: SumFuncListModel.java 6745 2006-08-11 16:12:27Z azabala $
-* $Log$
-* Revision 1.3  2006-08-11 16:12:27  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/06/20 18:19:43  azabala
-* refactorización para que todos los nuevos geoprocesos cuelguen del paquete impl
-*
-* Revision 1.1  2006/05/24 21:13:09  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.3  2006/05/08 15:37:08  azabala
-* bug fixed
-*
-* Revision 1.2  2006/04/07 19:00:58  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/03/05 19:56:06  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: SumFuncListModel.java 6745 2006-08-11 16:12:27Z azabala $
+ * $Log$
+ * Revision 1.3  2006-08-11 16:12:27  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/06/20 18:19:43  azabala
+ * refactorización para que todos los nuevos geoprocesos cuelguen del paquete impl
+ *
+ * Revision 1.1  2006/05/24 21:13:09  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.3  2006/05/08 15:37:08  azabala
+ * bug fixed
+ *
+ * Revision 1.2  2006/04/07 19:00:58  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/03/05 19:56:06  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core.gui;
 
 import java.util.Map;
@@ -72,10 +72,11 @@ import java.util.Map;
 import javax.swing.AbstractListModel;
 
 import com.iver.cit.gvsig.geoprocess.core.fmap.SummarizationFunction;
+
 /**
  * 
  * @author azabala
- *
+ * 
  */
 public class SumFuncListModel extends AbstractListModel {
 
@@ -98,9 +99,11 @@ public class SumFuncListModel extends AbstractListModel {
 		String fieldName = fieldNames[arg0];
 		SummarizationFunction[] functions = (SummarizationFunction[]) nfield_sumFunctions
 				.get(fieldName);
-		if ( (functions == null) || functions.length == 0)
-			return new SumarizeFunctionListEntry(null, arg0);//We use a blank space for an error of
-		
+		if ((functions == null) || functions.length == 0)
+			return new SumarizeFunctionListEntry(null, arg0);// We use a blank
+																// space for an
+																// error of
+
 		for (int i = 0; i < functions.length - 1; i++) {
 			key += functions[i].toString();
 			key += ",";
@@ -108,33 +111,33 @@ public class SumFuncListModel extends AbstractListModel {
 		key += functions[functions.length - 1].toString();
 		return new SumarizeFunctionListEntry(key, arg0);
 	}
-	
-	class SumarizeFunctionListEntry{
+
+	class SumarizeFunctionListEntry {
 		int index;
 		String entry;
-		
-		SumarizeFunctionListEntry(String entry, int index){
+
+		SumarizeFunctionListEntry(String entry, int index) {
 			this.entry = entry;
 			this.index = index;
 		}
-		public int hashCode(){
+
+		public int hashCode() {
 			return 1;
 		}
-		
-		public String toString(){
+
+		public String toString() {
 			String prefix = index + " - ";
-			if(entry == null)
+			if (entry == null)
 				return prefix;
 			else
 				return prefix + entry;
 		}
-		
-		public boolean equals(Object o){
-			if(!( o instanceof SumarizeFunctionListEntry))
+
+		public boolean equals(Object o) {
+			if (!(o instanceof SumarizeFunctionListEntry))
 				return false;
-			return ((SumarizeFunctionListEntry)o).entry.equals(entry);
+			return ((SumarizeFunctionListEntry) o).entry.equals(entry);
 		}
 	}
 
 }
-

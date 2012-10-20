@@ -49,8 +49,8 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.awt.geom.Point2D.Double;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 import javax.print.attribute.PrintRequestAttributeSet;
@@ -69,10 +69,9 @@ import com.iver.cit.gvsig.project.documents.layout.fframes.gui.dialogs.IFFrameDi
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 import com.iver.utiles.XMLEntity;
 
-
 /**
  * FFrame básica que contiene una FFrame de cualquier tipo.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FFrameBasic extends FFrame {
@@ -80,125 +79,137 @@ public class FFrameBasic extends FFrame {
 	private FFrameGraphics fframeGraphics;
 	private IFFrame fframe;
 
+	public void setRectangle(Rectangle2D r) {
+		FFrameGraphics graphics = (FFrameGraphics) FrameFactory
+				.createFrameFromName(FFrameGraphicsFactory.registerName);
+		graphics.setLayout(getLayout());
+		PolygonAdapter pa = new PolygonAdapter();
+		pa.addPoint(new Point2D.Double(r.getX(), r.getY()));
+		pa.addPoint(new Point2D.Double(r.getMaxX(), r.getY()));
+		pa.addPoint(new Point2D.Double(r.getMaxX(), r.getMaxY()));
+		pa.addPoint(new Point2D.Double(r.getX(), r.getMaxY()));
+		pa.addPoint(new Point2D.Double(r.getX(), r.getY()));
+		pa.end();
+		graphics.setGeometryAdapter(pa);
+		graphics.setBoundBox(r);
 
-	public void setRectangle(Rectangle2D r){
-		FFrameGraphics graphics =(FFrameGraphics)FrameFactory.createFrameFromName(FFrameGraphicsFactory.registerName);
-       graphics.setLayout(getLayout());
-        PolygonAdapter pa=new PolygonAdapter();
-        pa.addPoint(new Point2D.Double(r.getX(),r.getY()));
-        pa.addPoint(new Point2D.Double(r.getMaxX(),r.getY()));
-        pa.addPoint(new Point2D.Double(r.getMaxX(),r.getMaxY()));
-        pa.addPoint(new Point2D.Double(r.getX(),r.getMaxY()));
-        pa.addPoint(new Point2D.Double(r.getX(),r.getY()));
-        pa.end();
-        graphics.setGeometryAdapter(pa);
-        graphics.setBoundBox(r);
+		/*
+		 * jaume; moved to ISymbol FSymbol symbol=new
+		 * FSymbol(FShape.POLYGON,Color.black); symbol.setColor(new
+		 * Color(255,255,255,0)); symbol.setOutlineColor(Color.black);
+		 */
 
-        /*
-         * jaume; moved to ISymbol
-         * FSymbol symbol=new FSymbol(FShape.POLYGON,Color.black);
-         * symbol.setColor(new Color(255,255,255,0));
-         * symbol.setOutlineColor(Color.black);
-         */
-
-        IFillSymbol symbol= SymbologyFactory.createDefaultFillSymbol();
-        symbol.setFillColor(new Color(255,255,255,0));
-        SimpleLineSymbol blackOutline = new SimpleLineSymbol();
-        blackOutline.setLineColor(Color.BLACK);
-        symbol.setOutline(blackOutline);
-        graphics.setFSymbol(symbol);
-        graphics.setType(FShape.LINE);
-        setFframeGraphics(graphics);
+		IFillSymbol symbol = SymbologyFactory.createDefaultFillSymbol();
+		symbol.setFillColor(new Color(255, 255, 255, 0));
+		SimpleLineSymbol blackOutline = new SimpleLineSymbol();
+		blackOutline.setLineColor(Color.BLACK);
+		symbol.setOutline(blackOutline);
+		graphics.setFSymbol(symbol);
+		graphics.setType(FShape.LINE);
+		setFframeGraphics(graphics);
 	}
-	public FFrameBasic(){
+
+	public FFrameBasic() {
 
 	}
+
 	/**
-     * Método que dibuja sobre el graphics que se le pasa como parámetro, según
-     * la transformada afin que se debe de aplicar y el rectángulo que se debe
-     * de dibujar.
-     *
-     * @param g Graphics
-     * @param at Transformada afin.
-     * @param rv rectángulo sobre el que hacer un clip.
-     * @param imgBase Imagen para acelerar el dibujado.
-     */
-    public void draw(Graphics2D g, AffineTransform at, Rectangle2D rv,
-        BufferedImage imgBase) {
-    	fframeGraphics.draw(g,at,rv,imgBase);
-    	if (fframe!=null)
-    		fframe.draw(g,at,rv,imgBase);
-    }
+	 * Método que dibuja sobre el graphics que se le pasa como parámetro, según
+	 * la transformada afin que se debe de aplicar y el rectángulo que se debe
+	 * de dibujar.
+	 * 
+	 * @param g
+	 *            Graphics
+	 * @param at
+	 *            Transformada afin.
+	 * @param rv
+	 *            rectángulo sobre el que hacer un clip.
+	 * @param imgBase
+	 *            Imagen para acelerar el dibujado.
+	 */
+	public void draw(Graphics2D g, AffineTransform at, Rectangle2D rv,
+			BufferedImage imgBase) {
+		fframeGraphics.draw(g, at, rv, imgBase);
+		if (fframe != null)
+			fframe.draw(g, at, rv, imgBase);
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     *
-     * @throws SaveException
-     *
-     * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#getXMLEntity()
-     */
-    public XMLEntity getXMLEntity() throws SaveException {
-        XMLEntity xml = super.getXMLEntity();
-        xml.addChild(fframeGraphics.getXMLEntity());
-        if (fframe!=null)
-        	xml.addChild(fframe.getXMLEntity());
-        return xml;
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 * 
+	 * @throws SaveException
+	 * 
+	 * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#getXMLEntity()
+	 */
+	public XMLEntity getXMLEntity() throws SaveException {
+		XMLEntity xml = super.getXMLEntity();
+		xml.addChild(fframeGraphics.getXMLEntity());
+		if (fframe != null)
+			xml.addChild(fframe.getXMLEntity());
+		return xml;
+	}
 
-    /**
-     * Incorpora los atributos del XMLEntity en el objeto actual.
-     *
-     * @param xml XMLEntity
-     * @param l Referencia al Layout.
-     */
-    public void setXMLEntity03(XMLEntity xml, Layout l) {
-    }
+	/**
+	 * Incorpora los atributos del XMLEntity en el objeto actual.
+	 * 
+	 * @param xml
+	 *            XMLEntity
+	 * @param l
+	 *            Referencia al Layout.
+	 */
+	public void setXMLEntity03(XMLEntity xml, Layout l) {
+	}
 
-    /**
-     * Incorpora los atributos del XMLEntity en el objeto actual.
-     *
-     * @param xml XMLEntity
-     */
-    public void setXMLEntity(XMLEntity xml) {
-    	ProjectExtension pe=(ProjectExtension)PluginServices.getExtension(ProjectExtension.class);
-    	Project project=pe.getProject();
-    	try {
-			FFrameGraphics fframeGraphics = (FFrameGraphics)createFromXML(xml.getChild(0),project,null);
+	/**
+	 * Incorpora los atributos del XMLEntity en el objeto actual.
+	 * 
+	 * @param xml
+	 *            XMLEntity
+	 */
+	public void setXMLEntity(XMLEntity xml) {
+		ProjectExtension pe = (ProjectExtension) PluginServices
+				.getExtension(ProjectExtension.class);
+		Project project = pe.getProject();
+		try {
+			FFrameGraphics fframeGraphics = (FFrameGraphics) createFromXML(
+					xml.getChild(0), project, null);
 			this.setFframeGraphics(fframeGraphics);
 		} catch (OpenException e1) {
 			e1.printStackTrace();
 		}
-		if (xml.getChildrenCount()>1){
-    		try {
-				IFFrame fframe=FFrame.createFromXML(xml.getChild(1),project,null);
+		if (xml.getChildrenCount() > 1) {
+			try {
+				IFFrame fframe = FFrame.createFromXML(xml.getChild(1), project,
+						null);
 				this.setFframe(fframe);
-    		} catch (OpenException e) {
+			} catch (OpenException e) {
 				e.printStackTrace();
 			}
-    	}
-    }
+		}
+	}
 
-    /**
-     * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#getNameFFrame()
-     */
-    public String getNameFFrame() {
-        return PluginServices.getText(this, "base") + num;
-    }
+	/**
+	 * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#getNameFFrame()
+	 */
+	public String getNameFFrame() {
+		return PluginServices.getText(this, "base") + num;
+	}
 
-    /**
-     * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#print(java.awt.Graphics2D,
-     *      java.awt.geom.AffineTransform)
-     */
-    public void print(Graphics2D g, AffineTransform at,FShape shape, PrintRequestAttributeSet printingProperties) {
-//    	fframeGraphics.setPrintingProperties(printingProperties);
-    	fframeGraphics.print(g,at,shape, printingProperties);
-//    	fframeGraphics.setPrintingProperties(null);
-    	if (fframe!=null) {
-    		fframe.print(g,at,shape, printingProperties);
-    	}
-    }
+	/**
+	 * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#print(java.awt.Graphics2D,
+	 *      java.awt.geom.AffineTransform)
+	 */
+	public void print(Graphics2D g, AffineTransform at, FShape shape,
+			PrintRequestAttributeSet printingProperties) {
+		// fframeGraphics.setPrintingProperties(printingProperties);
+		fframeGraphics.print(g, at, shape, printingProperties);
+		// fframeGraphics.setPrintingProperties(null);
+		if (fframe != null) {
+			fframe.print(g, at, shape, printingProperties);
+		}
+	}
 
 	public IFFrame getFframe() {
 		return fframe;
@@ -221,9 +232,10 @@ public class FFrameBasic extends FFrame {
 	}
 
 	public IFFrame cloneFFrame(Layout layout) {
-		FFrameBasic basic=new FFrameBasic();
-		basic.setFframeGraphics((FFrameGraphics)fframeGraphics.cloneFFrame(layout));
-		if (fframe!=null)
+		FFrameBasic basic = new FFrameBasic();
+		basic.setFframeGraphics((FFrameGraphics) fframeGraphics
+				.cloneFFrame(layout));
+		if (fframe != null)
 			basic.setFframe(fframe.cloneFFrame(layout));
 		return basic;
 	}
@@ -289,11 +301,11 @@ public class FFrameBasic extends FFrame {
 	}
 
 	public void setBoundBox(Rectangle2D r) {
-		if (getFframeGraphics()!=null)
+		if (getFframeGraphics() != null)
 			getFframeGraphics().setBoundBox(r);
 		if (getFframe() != null)
 			getFframe().setBoundBox(r);
-		//super.setBoundBox(r);
+		// super.setBoundBox(r);
 	}
 
 	public void setLevel(int l) {
@@ -316,8 +328,8 @@ public class FFrameBasic extends FFrame {
 		fframeGraphics.setSelected(b);
 	}
 
-	public void setSelected(Point2D p,MouseEvent e) {
-		fframeGraphics.setSelected(p,e);
+	public void setSelected(Point2D p, MouseEvent e) {
+		fframeGraphics.setSelected(p, e);
 	}
 
 	public void setTag(String s) {
@@ -327,10 +339,12 @@ public class FFrameBasic extends FFrame {
 	public void updateRect(Rectangle2D r, AffineTransform at) {
 		getFframeGraphics().updateRect(r, at);
 	}
+
 	public void cloneActions(IFFrame frame) {
 		// TODO Auto-generated method stub
 
 	}
+
 	public IFFrameDialog getPropertyDialog() {
 		// TODO Auto-generated method stub
 		return null;

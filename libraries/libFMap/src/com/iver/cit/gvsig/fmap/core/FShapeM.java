@@ -1,6 +1,5 @@
 package com.iver.cit.gvsig.fmap.core;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -51,42 +50,44 @@ package com.iver.cit.gvsig.fmap.core;
  *
  */
 /**
- * This interface has to be implemented by all the 
- * shapes that has a M value in its nodes. It will be
- * possible to manage the M coordinate for every node.
+ * This interface has to be implemented by all the shapes that has a M value in
+ * its nodes. It will be possible to manage the M coordinate for every node.
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public interface FShapeM extends FShape {
-			
+
 	/**
 	 * @return if the M coordinates are decreasing
 	 */
 	public boolean isDecreasing();
-		
+
 	/**
 	 * @return the M value for each node
 	 */
 	double[] getMs();
-	
+
 	/**
 	 * Sets the M value at a position
+	 * 
 	 * @param i
-	 * Position of the node
+	 *            Position of the node
 	 * @param value
-	 * The M value to set
+	 *            The M value to set
 	 */
 	void setMAt(int i, double value);
-	
+
 	/**
 	 * Revert the Ms
 	 */
 	public void revertMs();
-	
+
 	/**
-	 * Return the geometry like text. It is added because JTS doesn't support the M
-	 * coordinate
+	 * Return the geometry like text. It is added because JTS doesn't support
+	 * the M coordinate
+	 * 
 	 * @return
 	 */
 	public String toText();
-	
+
 }

@@ -1,10 +1,11 @@
 package com.graphbuilder.struc;
 
 /**
-Bag is a container of objects using an array.  The Bag is designed to be as light weight as possible.
-It only contains a reference to an array and a size counter.  In methods that accept both an Object and
-an int as parameters, the Object is always specified first.
-*/
+ * Bag is a container of objects using an array. The Bag is designed to be as
+ * light weight as possible. It only contains a reference to an array and a size
+ * counter. In methods that accept both an Object and an int as parameters, the
+ * Object is always specified first.
+ */
 public class Bag {
 
 	protected Object[] data = null;
@@ -23,7 +24,9 @@ public class Bag {
 			throw new IllegalArgumentException("data array cannot be null.");
 
 		if (size < 0 || size > data.length)
-			throw new IllegalArgumentException("required: (size >= 0 && size <= data.length) but: (size = " + size + ", data.length = " + data.length + ")");
+			throw new IllegalArgumentException(
+					"required: (size >= 0 && size <= data.length) but: (size = "
+							+ size + ", data.length = " + data.length + ")");
 
 		this.data = data;
 		this.size = size;
@@ -39,14 +42,18 @@ public class Bag {
 
 	public void setSize(int s) {
 		if (s < 0 || s > data.length)
-			throw new IllegalArgumentException("required: (size >= 0 && size <= data.length) but: (size = " + size + ", data.length = " + data.length + ")");
+			throw new IllegalArgumentException(
+					"required: (size >= 0 && size <= data.length) but: (size = "
+							+ size + ", data.length = " + data.length + ")");
 
 		size = s;
 	}
 
 	public void insert(Object o, int index) {
 		if (index < 0 || index > size)
-			throw new IllegalArgumentException("required: (index >= 0 && index <= size) but: (index = " + index + ", size = " + size + ")");
+			throw new IllegalArgumentException(
+					"required: (index >= 0 && index <= size) but: (index = "
+							+ index + ", size = " + size + ")");
 
 		ensureCapacity(size + 1);
 
@@ -78,27 +85,25 @@ public class Bag {
 	}
 
 	private int find(Object o, int i, boolean forward) {
-		if (i < 0 || i >= size) return -1;
+		if (i < 0 || i >= size)
+			return -1;
 
 		if (forward) {
 			if (o == null) {
 				for (; i < size; i++)
 					if (data[i] == null)
 						return i;
-			}
-			else {
+			} else {
 				for (; i < size; i++)
 					if (o.equals(data[i]))
 						return i;
 			}
-		}
-		else {
+		} else {
 			if (o == null) {
 				for (; i >= 0; i--)
 					if (data[i] == null)
 						return i;
-			}
-			else {
+			} else {
 				for (; i >= 0; i--)
 					if (o.equals(data[i]))
 						return i;
@@ -116,12 +121,14 @@ public class Bag {
 
 	public Object remove(int index) {
 		if (index < 0 || index >= size)
-			throw new IllegalArgumentException("required: (index >= 0 && index < size) but: (index = " + index + ", size = " + size + ")");
+			throw new IllegalArgumentException(
+					"required: (index >= 0 && index < size) but: (index = "
+							+ index + ", size = " + size + ")");
 
 		Object o = data[index];
 
 		for (int i = index + 1; i < size; i++)
-			data[i-1] = data[i];
+			data[i - 1] = data[i];
 
 		data[--size] = null;
 		return o;
@@ -129,14 +136,18 @@ public class Bag {
 
 	public Object get(int index) {
 		if (index < 0 || index >= size)
-			throw new IllegalArgumentException("required: (index >= 0 && index < size) but: (index = " + index + ", size = " + size + ")");
+			throw new IllegalArgumentException(
+					"required: (index >= 0 && index < size) but: (index = "
+							+ index + ", size = " + size + ")");
 
 		return data[index];
 	}
 
 	public Object set(Object o, int index) {
 		if (index < 0 || index >= size)
-			throw new IllegalArgumentException("required: (index >= 0 && index < size) but: (index = " + index + ", size = " + size + ")");
+			throw new IllegalArgumentException(
+					"required: (index >= 0 && index < size) but: (index = "
+							+ index + ", size = " + size + ")");
 
 		Object old = data[index];
 		data[index] = o;

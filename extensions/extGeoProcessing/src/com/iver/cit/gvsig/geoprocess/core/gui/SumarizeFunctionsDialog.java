@@ -90,15 +90,17 @@ import com.iver.cit.gvsig.geoprocess.core.fmap.MaxFunction;
 import com.iver.cit.gvsig.geoprocess.core.fmap.MinFunction;
 import com.iver.cit.gvsig.geoprocess.core.fmap.SumFunction;
 import com.iver.cit.gvsig.geoprocess.core.fmap.SummarizationFunction;
+
 /**
- * Component to select sumarization functions
- * to numeric fields.
+ * Component to select sumarization functions to numeric fields.
+ * 
  * @author azabala
  * 
- * FIXME Internationalize texts
- *
+ *         FIXME Internationalize texts
+ * 
  */
-public class SumarizeFunctionsDialog extends JDialog implements SumarizeFuntDialogIF{
+public class SumarizeFunctionsDialog extends JDialog implements
+		SumarizeFuntDialogIF {
 	private static final long serialVersionUID = 6085468284091604644L;
 	private JPanel jContentPane = null;
 	private JPanel maxJPanel = null;
@@ -116,11 +118,12 @@ public class SumarizeFunctionsDialog extends JDialog implements SumarizeFuntDial
 	private JButton okButton = null;
 
 	private List selectedFunctions;
+
 	/**
 	 * This is the default constructor
 	 */
 	public SumarizeFunctionsDialog() {
-		super((JFrame)PluginServices.getMainFrame(), true);
+		super((JFrame) PluginServices.getMainFrame(), true);
 		initialize();
 	}
 
@@ -145,28 +148,28 @@ public class SumarizeFunctionsDialog extends JDialog implements SumarizeFuntDial
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.insets = new java.awt.Insets(7,79,21,73);
+			gridBagConstraints5.insets = new java.awt.Insets(7, 79, 21, 73);
 			gridBagConstraints5.gridx = 0;
 			gridBagConstraints5.gridy = 2;
 			gridBagConstraints5.ipadx = 2;
 			gridBagConstraints5.gridwidth = 2;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-			gridBagConstraints4.insets = new java.awt.Insets(7,14,7,27);
+			gridBagConstraints4.insets = new java.awt.Insets(7, 14, 7, 27);
 			gridBagConstraints4.gridy = 1;
 			gridBagConstraints4.ipadx = 8;
 			gridBagConstraints4.gridx = 1;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.insets = new java.awt.Insets(18,13,6,29);
+			gridBagConstraints3.insets = new java.awt.Insets(18, 13, 6, 29);
 			gridBagConstraints3.gridy = 0;
 			gridBagConstraints3.ipadx = -1;
 			gridBagConstraints3.gridx = 1;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			gridBagConstraints2.insets = new java.awt.Insets(6,31,8,12);
+			gridBagConstraints2.insets = new java.awt.Insets(6, 31, 8, 12);
 			gridBagConstraints2.gridy = 1;
 			gridBagConstraints2.ipadx = 2;
 			gridBagConstraints2.gridx = 0;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.insets = new java.awt.Insets(18,29,6,12);
+			gridBagConstraints1.insets = new java.awt.Insets(18, 29, 6, 12);
 			gridBagConstraints1.gridy = 0;
 			gridBagConstraints1.gridx = 0;
 			jContentPane = new JPanel();
@@ -181,9 +184,9 @@ public class SumarizeFunctionsDialog extends JDialog implements SumarizeFuntDial
 	}
 
 	/**
-	 * This method initializes maxJPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes maxJPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getMaxJPanel() {
 		if (maxJPanel == null) {
@@ -198,9 +201,9 @@ public class SumarizeFunctionsDialog extends JDialog implements SumarizeFuntDial
 	}
 
 	/**
-	 * This method initializes maxCheckBox	
-	 * 	
-	 * @return javax.swing.JCheckBox	
+	 * This method initializes maxCheckBox
+	 * 
+	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getMaxCheckBox() {
 		if (maxCheckBox == null) {
@@ -210,9 +213,9 @@ public class SumarizeFunctionsDialog extends JDialog implements SumarizeFuntDial
 	}
 
 	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel() {
 		if (jPanel == null) {
@@ -227,9 +230,9 @@ public class SumarizeFunctionsDialog extends JDialog implements SumarizeFuntDial
 	}
 
 	/**
-	 * This method initializes minCheckBox	
-	 * 	
-	 * @return javax.swing.JCheckBox	
+	 * This method initializes minCheckBox
+	 * 
+	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getMinCheckBox() {
 		if (minCheckBox == null) {
@@ -239,15 +242,14 @@ public class SumarizeFunctionsDialog extends JDialog implements SumarizeFuntDial
 	}
 
 	/**
-	 * This method initializes jPanel1	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes jPanel1
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel1() {
 		if (jPanel1 == null) {
 			avgLabel = new JLabel();
-			String media = 
-				PluginServices.getText(this, "Media");
+			String media = PluginServices.getText(this, "Media");
 			avgLabel.setText(media);
 			jPanel1 = new JPanel();
 			jPanel1.add(avgLabel, null);
@@ -257,9 +259,9 @@ public class SumarizeFunctionsDialog extends JDialog implements SumarizeFuntDial
 	}
 
 	/**
-	 * This method initializes jCheckBox	
-	 * 	
-	 * @return javax.swing.JCheckBox	
+	 * This method initializes jCheckBox
+	 * 
+	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getJCheckBox() {
 		if (avgCheckBox == null) {
@@ -269,9 +271,9 @@ public class SumarizeFunctionsDialog extends JDialog implements SumarizeFuntDial
 	}
 
 	/**
-	 * This method initializes jPanel2	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes jPanel2
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel2() {
 		if (jPanel2 == null) {
@@ -286,9 +288,9 @@ public class SumarizeFunctionsDialog extends JDialog implements SumarizeFuntDial
 	}
 
 	/**
-	 * This method initializes jCheckBox	
-	 * 	
-	 * @return javax.swing.JCheckBox	
+	 * This method initializes jCheckBox
+	 * 
+	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getJCheckBox2() {
 		if (sumCheckBox == null) {
@@ -298,47 +300,48 @@ public class SumarizeFunctionsDialog extends JDialog implements SumarizeFuntDial
 	}
 
 	/**
-	 * This method initializes okButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes okButton
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getOkButton() {
 		if (okButton == null) {
 			okButton = new JButton();
 			String ok = PluginServices.getText(this, "Aceptar");
 			okButton.setText(ok);
-			okButton.addActionListener(new ActionListener(){
+			okButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					ok();
-				}});
+				}
+			});
 		}
 		return okButton;
 	}
 
 	public void ok() {
-		
-		if(minCheckBox.isSelected()){
+
+		if (minCheckBox.isSelected()) {
 			selectedFunctions.add(new MinFunction());
 		}
-		if(maxCheckBox.isSelected()){
+		if (maxCheckBox.isSelected()) {
 			selectedFunctions.add(new MaxFunction());
 		}
-		if(avgCheckBox.isSelected()){
+		if (avgCheckBox.isSelected()) {
 			selectedFunctions.add(new AverageFunction());
 		}
-		if(sumCheckBox.isSelected()){
+		if (sumCheckBox.isSelected()) {
 			selectedFunctions.add(new SumFunction());
 		}
 		this.dispose();
-		
+
 	}
 
 	public SummarizationFunction[] getFunctions() {
-		SummarizationFunction[] solution =
-			new SummarizationFunction[selectedFunctions.size()];
+		SummarizationFunction[] solution = new SummarizationFunction[selectedFunctions
+				.size()];
 		selectedFunctions.toArray(solution);
 		return solution;
-		
+
 	}
 
 	public void resetCheckbox() {
@@ -347,7 +350,7 @@ public class SumarizeFunctionsDialog extends JDialog implements SumarizeFuntDial
 		avgCheckBox.setSelected(false);
 		sumCheckBox.setSelected(false);
 		selectedFunctions.clear();
-		
+
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="76,15"
+} // @jve:decl-index=0:visual-constraint="76,15"

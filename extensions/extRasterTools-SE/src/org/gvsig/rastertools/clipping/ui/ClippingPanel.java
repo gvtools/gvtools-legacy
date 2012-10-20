@@ -37,43 +37,48 @@ import org.gvsig.rastertools.clipping.panels.ClippingSelectionPanel;
 import org.gvsig.rastertools.clipping.ui.listener.ClippingPanelListener;
 
 import com.iver.andami.PluginServices;
+
 /**
  * <code>ClippingPanel</code>. Interfaz de usuario para el recorte de rasters.
- *
+ * 
  * @version 17/04/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class ClippingPanel extends DefaultButtonsPanel implements Observer {
-	private static final long         serialVersionUID = 3078196473228467834L;
+	private static final long serialVersionUID = 3078196473228467834L;
 
-	private ClippingDialog            clippingDialog       = null;
+	private ClippingDialog clippingDialog = null;
 
-	private JTabbedPane               jTabbedPane1         = null;
+	private JTabbedPane jTabbedPane1 = null;
 
-	private ClippingCoordinatesPanel  coordinatesPanel     = null;
-	private ClippingResolutionPanel   resolutionPanel      = null;
-	private ClippingSelectionPanel    selectionPanel       = null;
-	private ClippingOptionsPanel      optionsPanel         = null;
+	private ClippingCoordinatesPanel coordinatesPanel = null;
+	private ClippingResolutionPanel resolutionPanel = null;
+	private ClippingSelectionPanel selectionPanel = null;
+	private ClippingOptionsPanel optionsPanel = null;
 
-	private ClippingPanelListener     clippingPanelListener = null;
+	private ClippingPanelListener clippingPanelListener = null;
 
 	/**
 	 * Crea un nuevo <code>ClippingPanel</code>
+	 * 
 	 * @param clippingDialog
 	 */
 	public ClippingPanel(ClippingDialog clippingDialog) {
 		super(ButtonsPanel.BUTTONS_ACCEPTCANCELAPPLY);
-		getButtonsPanel().getButton(ButtonsPanel.BUTTON_ACCEPT).setEnabled(false);
-		getButtonsPanel().getButton(ButtonsPanel.BUTTON_APPLY).setEnabled(false);
+		getButtonsPanel().getButton(ButtonsPanel.BUTTON_ACCEPT).setEnabled(
+				false);
+		getButtonsPanel().getButton(ButtonsPanel.BUTTON_APPLY)
+				.setEnabled(false);
 
 		this.clippingDialog = clippingDialog;
 
 		initialize();
 	}
-	
+
 	/**
-	 * Asigna el gestor de eventos y añade los listener a los controles
-	 * que lo necesiten 
+	 * Asigna el gestor de eventos y añade los listener a los controles que lo
+	 * necesiten
+	 * 
 	 * @param list
 	 */
 	public void setClippingListener(ClippingPanelListener list) {
@@ -81,9 +86,10 @@ public class ClippingPanel extends DefaultButtonsPanel implements Observer {
 		addListeners(clippingPanelListener);
 		getCoordinatesPanel().setClippingListener(clippingPanelListener);
 	}
-	
+
 	/**
 	 * Añade listeners a los controles que lo necesitan
+	 * 
 	 * @param list
 	 */
 	private void addListeners(ClippingPanelListener list) {
@@ -93,9 +99,10 @@ public class ClippingPanel extends DefaultButtonsPanel implements Observer {
 		getResolutionPanel().getButtonRestore().addActionListener(list);
 		addButtonPressedListener(list);
 	}
-		
+
 	/**
 	 * Obtener el <code>ClippingDialog</code> asociado a este objeto.
+	 * 
 	 * @return ClippingDialog
 	 */
 	public ClippingDialog getClippingDialog() {
@@ -108,22 +115,27 @@ public class ClippingPanel extends DefaultButtonsPanel implements Observer {
 	private void initialize() {
 		JPanel jPanel = null;
 		jTabbedPane1 = new JTabbedPane();
-		
-		jTabbedPane1.addTab(PluginServices.getText(this, "coordenadas_recorte"), getCoordinatesPanel());
+
+		jTabbedPane1.addTab(
+				PluginServices.getText(this, "coordenadas_recorte"),
+				getCoordinatesPanel());
 
 		jPanel = new JPanel();
 		jPanel.setLayout(new BorderLayout());
 		jPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
 		jPanel.add(getResolutionPanel());
-		jTabbedPane1.addTab(PluginServices.getText(this, "resolucion_espacial"), jPanel);
+		jTabbedPane1.addTab(
+				PluginServices.getText(this, "resolucion_espacial"), jPanel);
 
-		jTabbedPane1.addTab(PluginServices.getText(this, "seleccion_bandas"), getSelectionPanel());
+		jTabbedPane1.addTab(PluginServices.getText(this, "seleccion_bandas"),
+				getSelectionPanel());
 
 		jPanel = new JPanel();
 		jPanel.setLayout(new BorderLayout());
 		jPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
 		jPanel.add(getOptionsPanel());
-		jTabbedPane1.addTab(PluginServices.getText(this, "otras_opciones"), jPanel);
+		jTabbedPane1.addTab(PluginServices.getText(this, "otras_opciones"),
+				jPanel);
 
 		setLayout(new BorderLayout());
 		add(jTabbedPane1, BorderLayout.CENTER);
@@ -135,10 +147,10 @@ public class ClippingPanel extends DefaultButtonsPanel implements Observer {
 		}
 		return coordinatesPanel;
 	}
-	
+
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	public ClippingResolutionPanel getResolutionPanel() {
@@ -151,7 +163,7 @@ public class ClippingPanel extends DefaultButtonsPanel implements Observer {
 
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	public ClippingSelectionPanel getSelectionPanel() {
@@ -163,7 +175,7 @@ public class ClippingPanel extends DefaultButtonsPanel implements Observer {
 
 	/**
 	 * This method initializes jOptions
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	public ClippingOptionsPanel getOptionsPanel() {
@@ -174,10 +186,10 @@ public class ClippingPanel extends DefaultButtonsPanel implements Observer {
 	}
 
 	double textWidth, textHeight;
-	
+
 	/**
-	 * Almacena el estado actual del ancho y alto para poder restaurarlo
-	 * si lo necesitamos.
+	 * Almacena el estado actual del ancho y alto para poder restaurarlo si lo
+	 * necesitamos.
 	 */
 	public void saveStatus(ClippingData data) {
 		textWidth = data.getPxWidth();
@@ -194,21 +206,28 @@ public class ClippingPanel extends DefaultButtonsPanel implements Observer {
 	}
 
 	/**
-	 * Actualiza los valores de los paneles cuando los datos de ClippingData varian
-	 * @param o 
+	 * Actualiza los valores de los paneles cuando los datos de ClippingData
+	 * varian
+	 * 
+	 * @param o
 	 * @param arg
 	 */
 	public void update(Observable o, Object arg) {
-		if(!(o instanceof ClippingData))
+		if (!(o instanceof ClippingData))
 			return;
-		ClippingData data = (ClippingData)o;
-		
+		ClippingData data = (ClippingData) o;
+
 		clippingPanelListener.setEnableValueChangedEvent(false);
 		getResolutionPanel().setWidthText(Math.round(data.getPxWidth()), 0);
 		getResolutionPanel().setHeightText(Math.round(data.getPxHeight()), 0);
-		getCoordinatesPanel().setCoordReal(RasterUtilities.getCoord(data.getUlxWc(), data.getUlyWc(), data.getLrxWc(), data.getLryWc(), ClippingData.DEC));
-		getCoordinatesPanel().setCoordPixel(RasterUtilities.getCoord(data.getPxMinX(), data.getPxMinY(), data.getPxMaxX(), data.getPxMaxY(), ClippingData.DEC));
-		getResolutionPanel().setCellSizeText(data.getCellSize(), ClippingData.DEC);
+		getCoordinatesPanel().setCoordReal(
+				RasterUtilities.getCoord(data.getUlxWc(), data.getUlyWc(),
+						data.getLrxWc(), data.getLryWc(), ClippingData.DEC));
+		getCoordinatesPanel().setCoordPixel(
+				RasterUtilities.getCoord(data.getPxMinX(), data.getPxMinY(),
+						data.getPxMaxX(), data.getPxMaxY(), ClippingData.DEC));
+		getResolutionPanel().setCellSizeText(data.getCellSize(),
+				ClippingData.DEC);
 		clippingPanelListener.setEnableValueChangedEvent(true);
 	}
 }

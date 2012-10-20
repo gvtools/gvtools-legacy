@@ -2,21 +2,23 @@ package com.iver.utiles.swing.wizard;
 
 /**
  * Visión que tienen los escuchadores de eventos sobre el Wizard
- *
+ * 
  * @author Fernando González Cortés
  */
 public interface WizardControl {
 	/**
 	 * Activa el paso al siguiente paso del asistente
-	 *
-	 * @param enabled si se habilita o no
+	 * 
+	 * @param enabled
+	 *            si se habilita o no
 	 */
 	public abstract void enableNext(boolean enabled);
 
 	/**
 	 * Activa el paso al paso anterior del asistente
-	 *
-	 * @param enabled si se habilita o no
+	 * 
+	 * @param enabled
+	 *            si se habilita o no
 	 */
 	public abstract void enableBack(boolean enabled);
 
@@ -31,11 +33,10 @@ public interface WizardControl {
 	public abstract void backStep();
 
 	/**
-	 * Se cancela el asistente. Esta operación no tiene ningún efecto, salvo
-	 * que se disparará el evento de cancelado. El resultado de esto dependerá
-	 * de las implementaciones que haya escuchando el evento. Generalmente
-	 * deberá haber un objeto que al escuchar este evento cerrará el
-	 * asistente.
+	 * Se cancela el asistente. Esta operación no tiene ningún efecto, salvo que
+	 * se disparará el evento de cancelado. El resultado de esto dependerá de
+	 * las implementaciones que haya escuchando el evento. Generalmente deberá
+	 * haber un objeto que al escuchar este evento cerrará el asistente.
 	 */
 	public abstract void cancel();
 
@@ -50,7 +51,7 @@ public interface WizardControl {
 
 	/**
 	 * Obtiene el paso actual del asistente
-	 *
+	 * 
 	 * @return Paso actual del asistente
 	 */
 	public abstract Step getCurrentStep();

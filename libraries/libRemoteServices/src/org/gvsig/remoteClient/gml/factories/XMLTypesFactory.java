@@ -83,8 +83,8 @@ import org.gvsig.remoteClient.gml.types.XMLSimpleType;
  *
  */
 /**
- * GML and XML types factory. All the types that are
- * located in the schemas must be registered here
+ * GML and XML types factory. All the types that are located in the schemas must
+ * be registered here
  * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
@@ -92,110 +92,134 @@ import org.gvsig.remoteClient.gml.types.XMLSimpleType;
  */
 public class XMLTypesFactory {
 	private static Hashtable types = new Hashtable();
-		
-	static{
-		types.put(XMLSimpleType.STRING.toUpperCase(),new XMLSimpleType(XMLSimpleType.STRING));
-		types.put(XMLSimpleType.INTEGER.toUpperCase(),new XMLSimpleType(XMLSimpleType.INTEGER));
-		types.put(XMLSimpleType.INT.toUpperCase(),new XMLSimpleType(XMLSimpleType.INT));
-		types.put(XMLSimpleType.DOUBLE.toUpperCase(),new XMLSimpleType(XMLSimpleType.DOUBLE));
-		types.put(XMLSimpleType.FLOAT.toUpperCase(),new XMLSimpleType(XMLSimpleType.FLOAT));
-		types.put(XMLSimpleType.BOOLEAN.toUpperCase(),new XMLSimpleType(XMLSimpleType.BOOLEAN));
-		types.put(XMLSimpleType.LONG.toUpperCase(),new XMLSimpleType(XMLSimpleType.LONG));
-		types.put(XMLSimpleType.DECIMAL.toUpperCase(),new XMLSimpleType(XMLSimpleType.DECIMAL));
-		types.put(XMLSimpleType.SHORT.toUpperCase(),new XMLSimpleType(XMLSimpleType.SHORT));
-		types.put(XMLSimpleType.DATETIME.toUpperCase(),new XMLSimpleType(XMLSimpleType.DATETIME));
-		types.put(GMLGeometryType.POINT.toUpperCase(),new GMLGeometryType(GMLGeometryType.POINT));
-		types.put(GMLGeometryType.MULTIPOINT.toUpperCase(),new GMLGeometryType(GMLGeometryType.MULTIPOINT));
-		types.put(GMLGeometryType.LINE.toUpperCase(),new GMLGeometryType(GMLGeometryType.LINE));
-		types.put(GMLGeometryType.MULTILINE.toUpperCase(),new GMLGeometryType(GMLGeometryType.MULTILINE));
-		types.put(GMLGeometryType.POLYGON.toUpperCase(),new GMLGeometryType(GMLGeometryType.POLYGON));
-		types.put(GMLGeometryType.MULTIPOLYGON.toUpperCase(),new GMLGeometryType(GMLGeometryType.MULTIPOLYGON));
-		types.put(GMLGeometryType.GEOMETRY.toUpperCase(),new GMLGeometryType(GMLGeometryType.GEOMETRY));
-		types.put(GMLGeometryType.MULTIGEOMETRY.toUpperCase(),new GMLGeometryType(GMLGeometryType.MULTIGEOMETRY));
-		types.put(GMLGeometryType.SURFACE.toUpperCase(),new GMLGeometryType(GMLGeometryType.SURFACE));
-		types.put(GMLGeometryType.MULTISURFACE.toUpperCase(),new GMLGeometryType(GMLGeometryType.MULTISURFACE));
+
+	static {
+		types.put(XMLSimpleType.STRING.toUpperCase(), new XMLSimpleType(
+				XMLSimpleType.STRING));
+		types.put(XMLSimpleType.INTEGER.toUpperCase(), new XMLSimpleType(
+				XMLSimpleType.INTEGER));
+		types.put(XMLSimpleType.INT.toUpperCase(), new XMLSimpleType(
+				XMLSimpleType.INT));
+		types.put(XMLSimpleType.DOUBLE.toUpperCase(), new XMLSimpleType(
+				XMLSimpleType.DOUBLE));
+		types.put(XMLSimpleType.FLOAT.toUpperCase(), new XMLSimpleType(
+				XMLSimpleType.FLOAT));
+		types.put(XMLSimpleType.BOOLEAN.toUpperCase(), new XMLSimpleType(
+				XMLSimpleType.BOOLEAN));
+		types.put(XMLSimpleType.LONG.toUpperCase(), new XMLSimpleType(
+				XMLSimpleType.LONG));
+		types.put(XMLSimpleType.DECIMAL.toUpperCase(), new XMLSimpleType(
+				XMLSimpleType.DECIMAL));
+		types.put(XMLSimpleType.SHORT.toUpperCase(), new XMLSimpleType(
+				XMLSimpleType.SHORT));
+		types.put(XMLSimpleType.DATETIME.toUpperCase(), new XMLSimpleType(
+				XMLSimpleType.DATETIME));
+		types.put(GMLGeometryType.POINT.toUpperCase(), new GMLGeometryType(
+				GMLGeometryType.POINT));
+		types.put(GMLGeometryType.MULTIPOINT.toUpperCase(),
+				new GMLGeometryType(GMLGeometryType.MULTIPOINT));
+		types.put(GMLGeometryType.LINE.toUpperCase(), new GMLGeometryType(
+				GMLGeometryType.LINE));
+		types.put(GMLGeometryType.MULTILINE.toUpperCase(), new GMLGeometryType(
+				GMLGeometryType.MULTILINE));
+		types.put(GMLGeometryType.POLYGON.toUpperCase(), new GMLGeometryType(
+				GMLGeometryType.POLYGON));
+		types.put(GMLGeometryType.MULTIPOLYGON.toUpperCase(),
+				new GMLGeometryType(GMLGeometryType.MULTIPOLYGON));
+		types.put(GMLGeometryType.GEOMETRY.toUpperCase(), new GMLGeometryType(
+				GMLGeometryType.GEOMETRY));
+		types.put(GMLGeometryType.MULTIGEOMETRY.toUpperCase(),
+				new GMLGeometryType(GMLGeometryType.MULTIGEOMETRY));
+		types.put(GMLGeometryType.SURFACE.toUpperCase(), new GMLGeometryType(
+				GMLGeometryType.SURFACE));
+		types.put(GMLGeometryType.MULTISURFACE.toUpperCase(),
+				new GMLGeometryType(GMLGeometryType.MULTISURFACE));
 	}
-	
+
 	/**
 	 * Gets a type by name
+	 * 
 	 * @param type
-	 * Type name
+	 *            Type name
 	 * @return
 	 */
-	public static IXMLType getType(String type){
-		IXMLType xmlType = (IXMLType)types.get(type.toUpperCase());
-		if (xmlType == null){
-			xmlType = getTypeWithOutNameSpace(type);			
+	public static IXMLType getType(String type) {
+		IXMLType xmlType = (IXMLType) types.get(type.toUpperCase());
+		if (xmlType == null) {
+			xmlType = getTypeWithOutNameSpace(type);
 		}
-		return xmlType;		
+		return xmlType;
 	}
-	
+
 	/**
-	 * This method is used to solve some mistakes. It doesn't
-	 * consider the namespace
+	 * This method is used to solve some mistakes. It doesn't consider the
+	 * namespace
+	 * 
 	 * @param type
 	 * @return
 	 */
-	public static IXMLType getTypeWithOutNameSpace(String type){
+	public static IXMLType getTypeWithOutNameSpace(String type) {
 		Set keys = types.keySet();
 		Iterator it = keys.iterator();
 		String[] typeParts = type.split(":");
 		String typeAux = type;
-		if (typeParts.length > 1){
+		if (typeParts.length > 1) {
 			typeAux = typeParts[1];
 		}
-		while(it.hasNext()){
-			String key = (String)it.next();
+		while (it.hasNext()) {
+			String key = (String) it.next();
 			String[] parts = key.split(":");
-			if (parts.length > 1){
-				if (parts[parts.length-1].compareTo(typeAux.toUpperCase())==0){
-					return (IXMLType)types.get(key);
+			if (parts.length > 1) {
+				if (parts[parts.length - 1].compareTo(typeAux.toUpperCase()) == 0) {
+					return (IXMLType) types.get(key);
 				}
 			}
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Adds a new type
+	 * 
 	 * @param type
-	 * type to add 
+	 *            type to add
 	 */
-	private static void addType(IXMLType type){
-		types.put(type.getName().toUpperCase(),type);
-	}	
-	
+	private static void addType(IXMLType type) {
+		types.put(type.getName().toUpperCase(), type);
+	}
+
 	/**
 	 * Adds a complex type
+	 * 
 	 * @param nameSpace
-	 * NameSpace where is located
+	 *            NameSpace where is located
 	 * @param name
-	 * Complex type name
+	 *            Complex type name
 	 * @return
 	 */
-	public static XMLComplexType addComplexType(String nameSpace,String name){
+	public static XMLComplexType addComplexType(String nameSpace, String name) {
 		XMLComplexType complexType = new XMLComplexType(name);
 		addType(complexType);
 		return complexType;
 	}
-	
-	public static XMLSimpleType addSimpleType(String name,String type){
-		XMLSimpleType simpleType = new XMLSimpleType(name,type);
-		types.put(name.toUpperCase(),simpleType);
+
+	public static XMLSimpleType addSimpleType(String name, String type) {
+		XMLSimpleType simpleType = new XMLSimpleType(name, type);
+		types.put(name.toUpperCase(), simpleType);
 		return simpleType;
 	}
 
 	/**
 	 * Just for degug. It prints all the registred components.
 	 */
-	public static void printTypes(){
+	public static void printTypes() {
 		System.out.println("*** TIPOS ***");
 		Object[] keys = types.keySet().toArray();
-		for (int i=0 ; i<types.size() ; i++){
-			IXMLType type = (IXMLType)types.get(keys[i]);
+		for (int i = 0; i < types.size(); i++) {
+			IXMLType type = (IXMLType) types.get(keys[i]);
 			System.out.print("NAME: " + type.getName());
 			System.out.print(" TYPE: " + type.getType() + "\n");
 		}
 	}
-	
+
 }

@@ -59,16 +59,16 @@ public class Bbox {
 	private ArrayList coordinates = null;
 	private int dimension = 0;
 	private String srs;
-	
-	public Bbox(int dimension){
+
+	public Bbox(int dimension) {
 		this.dimension = dimension;
 		coordinates = new ArrayList();
 	}
-	
-	public void addCoordinate(double[] coordinate){
+
+	public void addCoordinate(double[] coordinate) {
 		coordinates.add(coordinate);
 	}
-	
+
 	/**
 	 * @return the dimension
 	 */
@@ -76,64 +76,69 @@ public class Bbox {
 		return dimension;
 	}
 
-	public double getMinX(){
-		return ((double[])(coordinates.get(0)))[0];
+	public double getMinX() {
+		return ((double[]) (coordinates.get(0)))[0];
 	}
-	
-	public double getMaxX(){
-		return ((double[])(coordinates.get(1)))[0];
+
+	public double getMaxX() {
+		return ((double[]) (coordinates.get(1)))[0];
 	}
-	
-	public double getMinY(){
-		return ((double[])(coordinates.get(0)))[1];
+
+	public double getMinY() {
+		return ((double[]) (coordinates.get(0)))[1];
 	}
-	
-	public double getMaxY(){
-		return ((double[])(coordinates.get(1)))[1];
+
+	public double getMaxY() {
+		return ((double[]) (coordinates.get(1)))[1];
 	}
-	
-	public double getMinZ(){
-		if (dimension < 3){
+
+	public double getMinZ() {
+		if (dimension < 3) {
 			return 0.0;
 		}
-		return ((double[])(coordinates.get(0)))[2];
+		return ((double[]) (coordinates.get(0)))[2];
 	}
-	
-	public double getMaxZ(){
-		if (dimension < 3){
+
+	public double getMaxZ() {
+		if (dimension < 3) {
 			return 0.0;
 		}
-		return ((double[])(coordinates.get(1)))[2];
+		return ((double[]) (coordinates.get(1)))[2];
 	}
-	
-	public double getMinCoordinate(int dimension){
-		return ((double[])(coordinates.get(0)))[dimension];
+
+	public double getMinCoordinate(int dimension) {
+		return ((double[]) (coordinates.get(0)))[dimension];
 	}
-	
-	public double getMaxCoordinate(int dimension){
-		return ((double[])(coordinates.get(1)))[dimension];
+
+	public double getMaxCoordinate(int dimension) {
+		return ((double[]) (coordinates.get(1)))[dimension];
 	}
-	
+
 	/**
 	 * @return the id
 	 */
 	public String getId() {
 		return id;
 	}
+
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	public void setId(String id) {
 		this.id = id;
 	}
+
 	/**
 	 * @return the srs
 	 */
 	public String getSrs() {
 		return srs;
 	}
+
 	/**
-	 * @param srs the srs to set
+	 * @param srs
+	 *            the srs to set
 	 */
 	public void setSrs(String srs) {
 		this.srs = srs;

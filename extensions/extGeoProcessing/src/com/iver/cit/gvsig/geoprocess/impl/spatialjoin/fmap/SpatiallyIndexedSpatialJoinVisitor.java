@@ -72,7 +72,6 @@ import java.util.List;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.driver.DriverException;
-import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
 import com.iver.cit.gvsig.exceptions.visitors.ProcessVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.VisitorException;
 import com.iver.cit.gvsig.fmap.core.IFeature;
@@ -89,9 +88,9 @@ import com.vividsolutions.jts.geom.Geometry;
  * spatial index with nearest neighbour searching capabilities.<br>
  * By now, RTreeSptLib is the only spatial index that is also a
  * INearestNeigbourFinder implementation. <br>
- *
+ * 
  * @author azabala
- *
+ * 
  */
 public class SpatiallyIndexedSpatialJoinVisitor extends
 		NearestSpatialJoinVisitor {
@@ -115,7 +114,7 @@ public class SpatiallyIndexedSpatialJoinVisitor extends
 
 	/**
 	 * Constructor
-	 *
+	 * 
 	 * @param sourceLayer
 	 * @param targetLayer
 	 * @param processor
@@ -142,7 +141,8 @@ public class SpatiallyIndexedSpatialJoinVisitor extends
 	 * Processes a Feature of source layer, looking for its nearest feature of
 	 * target layer and taking attributes from it
 	 */
-	public void visit(IGeometry g, int sourceIndex) throws VisitorException, ProcessVisitorException {
+	public void visit(IGeometry g, int sourceIndex) throws VisitorException,
+			ProcessVisitorException {
 		if (g == null)
 			return;
 		try {
@@ -171,13 +171,14 @@ public class SpatiallyIndexedSpatialJoinVisitor extends
 			}// for
 			rv.stop();
 			if (targetIndex == -1)
-				throw new ProcessVisitorException(targetRecordset.getName(),null,
+				throw new ProcessVisitorException(targetRecordset.getName(),
+						null,
 						"Problemas durante el spatial join, no se encontró un vecino mas proximo");
 			IFeature joinedFeature = createFeature(g, sourceIndex, targetIndex,
 					nearestDistance);
 			this.featureProcessor.processFeature(joinedFeature);
 		} catch (ReadDriverException e) {
-			throw new ProcessVisitorException(targetRecordset.getName(),e,
+			throw new ProcessVisitorException(targetRecordset.getName(), e,
 					"Error de driver al escribir un feature resultante de un spatial join");
 		}
 

@@ -63,79 +63,87 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  *
  */
 /**
-* It parses a gml:multiPointTProperty object. Example:
-* <p>
-* <pre>
-* <code> 
-* &lt;multiPointProperty&gt;
-* &lt;MultiPoint&gt;
-* &lt;pointMember&gt;
-* &lt;Point gid="P6776"&gt;
-* &lt;coord&gt;&lt;X&gt;50.0&lt;/X&gt;&lt;Y&gt;50.0&lt;/Y&gt;&lt;/coord&gt;
-* &lt;/Point&gt;
-* &lt;/pointMember&gt;
-* &lt;pointMember&gt;
-* &lt;Point gid="P6777"&gt;
-* &lt;coord&gt;&lt;X&gt;50.0&lt;/X&gt;&lt;Y&gt;50.0&lt;/Y&gt;&lt;/coord&gt;
-* &lt;/Point&gt;
-* &lt;/pointMember&gt;
-* &lt;MultiPoint&gt;
-* &lt;/multiPointProperty&gt;
-* </code>
-* </pre>
-* </p> 
-* @author Jorge Piera LLodrá (jorge.piera@iver.es)
-*/
-public class MultiPointPropertyTypeBinding extends GeometryBinding{
-	
+ * It parses a gml:multiPointTProperty object. Example:
+ * <p>
+ * 
+ * <pre>
+ * <code> 
+ * &lt;multiPointProperty&gt;
+ * &lt;MultiPoint&gt;
+ * &lt;pointMember&gt;
+ * &lt;Point gid="P6776"&gt;
+ * &lt;coord&gt;&lt;X&gt;50.0&lt;/X&gt;&lt;Y&gt;50.0&lt;/Y&gt;&lt;/coord&gt;
+ * &lt;/Point&gt;
+ * &lt;/pointMember&gt;
+ * &lt;pointMember&gt;
+ * &lt;Point gid="P6777"&gt;
+ * &lt;coord&gt;&lt;X&gt;50.0&lt;/X&gt;&lt;Y&gt;50.0&lt;/Y&gt;&lt;/coord&gt;
+ * &lt;/Point&gt;
+ * &lt;/pointMember&gt;
+ * &lt;MultiPoint&gt;
+ * &lt;/multiPointProperty&gt;
+ * </code>
+ * </pre>
+ * 
+ * </p>
+ * 
+ * @author Jorge Piera LLodrá (jorge.piera@iver.es)
+ */
+public class MultiPointPropertyTypeBinding extends GeometryBinding {
+
 	/**
 	 * It parses the gml:multiPointProperty tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * A multipoint
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return A multipoint
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public Object parse(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
+	public Object parse(IXmlStreamReader parser, GPEDefaultGmlParser handler)
+			throws XmlStreamException, IOException {
 		boolean endFeature = false;
 		int currentTag;
-		Object multiPoint = null;		
-		
+		Object multiPoint = null;
+
 		super.setAtributtes(parser, handler.getErrorHandler());
-		
+
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-					if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTIPOINT)){
-						multiPoint = handler.getProfile().getMultiPointTypeBinding().
-						parse(parser, handler);						
-					}
-					break;
-				case IXmlStreamReader.END_ELEMENT:
-					if ((CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTIPOINTPROPERTY))||
-					(CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTILOCATION))||
-					(CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTICENTEROF))||
-					(CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTIPOSITION))){						
-						endFeature = true;							
-					}
-					break;
-				case IXmlStreamReader.CHARACTERS:					
-					
-					break;
+				if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_MULTIPOINT)) {
+					multiPoint = handler.getProfile()
+							.getMultiPointTypeBinding().parse(parser, handler);
 				}
-				if (!endFeature){					
-					currentTag = parser.next();
-					tag = parser.getName();
+				break;
+			case IXmlStreamReader.END_ELEMENT:
+				if ((CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_MULTIPOINTPROPERTY))
+						|| (CompareUtils.compareWithNamespace(tag,
+								GMLTags.GML_MULTILOCATION))
+						|| (CompareUtils.compareWithNamespace(tag,
+								GMLTags.GML_MULTICENTEROF))
+						|| (CompareUtils.compareWithNamespace(tag,
+								GMLTags.GML_MULTIPOSITION))) {
+					endFeature = true;
 				}
-			}			
-		return multiPoint;	
+				break;
+			case IXmlStreamReader.CHARACTERS:
+
+				break;
+			}
+			if (!endFeature) {
+				currentTag = parser.next();
+				tag = parser.getName();
+			}
+		}
+		return multiPoint;
 	}
 }
-

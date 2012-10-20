@@ -49,10 +49,9 @@ import com.iver.utiles.IPersistence;
 import com.iver.utiles.XMLEntity;
 
 /**
- * Class ZSort is used in order to store information about the symbols
- * which are placed in the Z axis (because a level of symbols has been
- * used).
- *
+ * Class ZSort is used in order to store information about the symbols which are
+ * placed in the Z axis (because a level of symbols has been used).
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class ZSort implements IPersistence, LegendContentsChangedListener {
@@ -72,31 +71,30 @@ public class ZSort implements IPersistence, LegendContentsChangedListener {
 			symbols = ((IClassifiedLegend) legend).getSymbols();
 
 		} else {
-			symbols = new ISymbol[] {legend.getDefaultSymbol()};
+			symbols = new ISymbol[] { legend.getDefaultSymbol() };
 		}
 		matrix = new int[symbols.length][];
 
 		for (int i = 0; i < symbols.length; i++) {
 			this.symbols.put(symbols[i], i);
-			int rowLength =  symbols[i] instanceof IMultiLayerSymbol ?
-                  	 ((IMultiLayerSymbol) symbols[i]).getLayerCount() :
-	                 1;
+			int rowLength = symbols[i] instanceof IMultiLayerSymbol ? ((IMultiLayerSymbol) symbols[i])
+					.getLayerCount() : 1;
 			matrix[i] = new int[rowLength];
 		}
 		legend.addLegendListener(this);
 	}
 
-	private void addSymbol(ISymbol sym){
-		if(!symbols.contains(sym)){
-			int rowLength =  sym instanceof IMultiLayerSymbol ?
-					((IMultiLayerSymbol) sym).getLayerCount() : 1;
-			int[][] auxMatrix = new int[matrix.length+1][];
+	private void addSymbol(ISymbol sym) {
+		if (!symbols.contains(sym)) {
+			int rowLength = sym instanceof IMultiLayerSymbol ? ((IMultiLayerSymbol) sym)
+					.getLayerCount() : 1;
+			int[][] auxMatrix = new int[matrix.length + 1][];
 			int newIndex = matrix.length;
-			for (int i=0; i<newIndex; i++){
+			for (int i = 0; i < newIndex; i++) {
 				auxMatrix[i] = matrix[i];
 			}
 			int[] row = new int[rowLength];
-			for (int i=0; i<rowLength; i++){
+			for (int i = 0; i < rowLength; i++) {
 				row[i] = 0;
 			}
 			auxMatrix[newIndex] = row;
@@ -121,13 +119,11 @@ public class ZSort implements IPersistence, LegendContentsChangedListener {
 		xml.putProperty("className", getClassName());
 
 		/*
-		 * ADVICE:
-		 * don't try to persist symbols!!
-		 * they are already persisted by the legend!!!
+		 * ADVICE: don't try to persist symbols!! they are already persisted by
+		 * the legend!!!
 		 */
 
 		xml.putProperty("usingZSort", isUsingZSort());
-
 
 		String strMatrix = "";
 		for (int i = 0; i < matrix.length; i++) {
@@ -147,9 +143,8 @@ public class ZSort implements IPersistence, LegendContentsChangedListener {
 		setUsingZSort(xml.getBooleanProperty("usingZSort"));
 
 		/*
-		 * ADVICE:
-		 * don't try to initialize the symbols!!
-		 * they must be initialized by the legend!!!
+		 * ADVICE: don't try to initialize the symbols!! they must be
+		 * initialized by the legend!!!
 		 */
 
 		String strMatrix = xml.getStringProperty("matrix");
@@ -165,7 +160,6 @@ public class ZSort implements IPersistence, LegendContentsChangedListener {
 		}
 	}
 
-
 	public int getLevelCount() {
 		int count = -1;
 		for (int i = 0; i < matrix.length; i++) {
@@ -176,7 +170,6 @@ public class ZSort implements IPersistence, LegendContentsChangedListener {
 		return count + 1;
 	}
 
-
 	public void setUsingZSort(boolean usingZSort) {
 		this.usingZSort = usingZSort;
 	}
@@ -184,7 +177,6 @@ public class ZSort implements IPersistence, LegendContentsChangedListener {
 	public void setLevels(ISymbol sym, int[] values) {
 		setLevels(symbols.get(sym), values);
 	}
-
 
 	public void setLevels(int row, int[] values) {
 		matrix[row] = values;
@@ -198,7 +190,7 @@ public class ZSort implements IPersistence, LegendContentsChangedListener {
 			ISymbol[] theSymbols = getSymbols();
 			for (int i = 0; i < theSymbols.length; i++) {
 				ISymbol auxSymbol = theSymbols[i];
-				if (auxSymbol.equals(sym)){
+				if (auxSymbol.equals(sym)) {
 					return getLevels(symbols.get(auxSymbol));
 				}
 			}
@@ -206,21 +198,17 @@ public class ZSort implements IPersistence, LegendContentsChangedListener {
 		return null;
 	}
 
-
 	public int[] getLevels(int row) {
 		return matrix[row];
 	}
-
 
 	public boolean isUsingZSort() {
 		return usingZSort;
 	}
 
-
 	public ISymbol[] getSymbols() {
 		return symbols.keySet().toArray(new ISymbol[0]);
 	}
-
 
 	public String[] getDescriptions() {
 		ISymbol[] symbols = getSymbols();
@@ -230,17 +218,17 @@ public class ZSort implements IPersistence, LegendContentsChangedListener {
 		}
 		return descs;
 	}
-	
+
 	public void copyLevels(ZSort zsort) {
 		ISymbol[] syms = zsort.getSymbols();
-		for (int i=0; i<syms.length; i++){
+		for (int i = 0; i < syms.length; i++) {
 			ISymbol sym = syms[i];
 			int[] levels = zsort.getLevels(sym);
-			if (levels!=null){
+			if (levels != null) {
 				ISymbol[] mySymbols = getSymbols();
 				for (int j = 0; j < mySymbols.length; j++) {
 					ISymbol auxSymbol = mySymbols[j];
-					if (auxSymbol.equals(sym)){
+					if (auxSymbol.equals(sym)) {
 						setLevels(auxSymbol, levels);
 					}
 				}
@@ -248,48 +236,44 @@ public class ZSort implements IPersistence, LegendContentsChangedListener {
 		}
 	}
 
-
 	/*
-	 * [PACO] Comentarizado porque no hace lo que se esperaría de él.
-	 * Si tenemos una leyenda con un simbolo Multilayer compuesto
-	 * por, entre otros, un simbolo simple que coincide con otro de
-	 * los simbolos de la leyenda, este metodo devuelve el nivel
-	 * del símbolo que encuentra primero.
-	 *
-	 * Se ha eliminado cualquier referencia a este metodo en el resto
-	 * del workspace, sustituyendola convenientemente por
-	 * referencias a getLevels.
+	 * [PACO] Comentarizado porque no hace lo que se esperaría de él. Si tenemos
+	 * una leyenda con un simbolo Multilayer compuesto por, entre otros, un
+	 * simbolo simple que coincide con otro de los simbolos de la leyenda, este
+	 * metodo devuelve el nivel del símbolo que encuentra primero.
+	 * 
+	 * Se ha eliminado cualquier referencia a este metodo en el resto del
+	 * workspace, sustituyendola convenientemente por referencias a getLevels.
 	 */
-//	public int getSymbolLevel(ISymbol layer) {
-//		ISymbol[] theSymbols = getSymbols();
-//
-//		for (int i = 0; i < theSymbols.length; i++) {
-//			ISymbol mySymbol = theSymbols[i];
-//
-//			if (mySymbol instanceof IMultiLayerSymbol) {
-//				IMultiLayerSymbol multiSym = (IMultiLayerSymbol) mySymbol;
-//				for (int j = 0; j < multiSym.getLayerCount(); j++) {
-//					ISymbol myInnerSymbol = multiSym.getLayer(j);
-//					if (myInnerSymbol.equals(layer)) {
-//						int row = symbols.get(multiSym);
-//						return matrix[row][j];
-//					}
-//				}
-//			} else {
-//				if (mySymbol.equals(layer)){
-//					return matrix[symbols.get(mySymbol)][0];
-//				}
-//			}
-//		}
-//
-////		return 0;
-//		return -1;
-//	}
-
+	// public int getSymbolLevel(ISymbol layer) {
+	// ISymbol[] theSymbols = getSymbols();
+	//
+	// for (int i = 0; i < theSymbols.length; i++) {
+	// ISymbol mySymbol = theSymbols[i];
+	//
+	// if (mySymbol instanceof IMultiLayerSymbol) {
+	// IMultiLayerSymbol multiSym = (IMultiLayerSymbol) mySymbol;
+	// for (int j = 0; j < multiSym.getLayerCount(); j++) {
+	// ISymbol myInnerSymbol = multiSym.getLayer(j);
+	// if (myInnerSymbol.equals(layer)) {
+	// int row = symbols.get(multiSym);
+	// return matrix[row][j];
+	// }
+	// }
+	// } else {
+	// if (mySymbol.equals(layer)){
+	// return matrix[symbols.get(mySymbol)][0];
+	// }
+	// }
+	// }
+	//
+	// // return 0;
+	// return -1;
+	// }
 
 	public int getTopLevelIndexAllowed() {
 		ISymbol[] symbols = getSymbols();
-		int count=0;
+		int count = 0;
 		for (int i = 0; i < symbols.length; i++) {
 			if (symbols[i] instanceof IMultiLayerSymbol) {
 				IMultiLayerSymbol mSymbol = (IMultiLayerSymbol) symbols[i];
@@ -305,18 +289,18 @@ public class ZSort implements IPersistence, LegendContentsChangedListener {
 		String out = "Symbols:\n---------\n\n";
 		ISymbol[] syms = getSymbols();
 		for (int i = 0; i < syms.length; i++) {
-			out += syms.getClass()+":\t"+syms[i].getDescription();
+			out += syms.getClass() + ":\t" + syms[i].getDescription();
 		}
 		out += "\nMatrix:\n--------\n\n";
 		out += "    \t";
 		for (int i = 0; i < getTopLevelIndexAllowed(); i++) {
-			out += "column"+i+"\t\t";
+			out += "column" + i + "\t\t";
 		}
 		out += "\n";
 		for (int i = 0; i < matrix.length; i++) {
-			out += "row "+i+":\t";
+			out += "row " + i + ":\t";
 			for (int j = 0; j < matrix[i].length; j++) {
-				out += matrix[i][j]+"\t\t";
+				out += matrix[i][j] + "\t\t";
 			}
 			out += "\n";
 		}
@@ -324,11 +308,12 @@ public class ZSort implements IPersistence, LegendContentsChangedListener {
 	}
 
 	private void replaceSymbol(ISymbol oldSymbol, ISymbol newSymbol) {
-		if (oldSymbol == newSymbol) return;
+		if (oldSymbol == newSymbol)
+			return;
 
-		if(oldSymbol != null){
+		if (oldSymbol != null) {
 			Integer value = symbols.get(oldSymbol);
-			if (value != null){
+			if (value != null) {
 				if (newSymbol == null) {
 					// emptying
 					symbols.remove(oldSymbol);
@@ -339,40 +324,40 @@ public class ZSort implements IPersistence, LegendContentsChangedListener {
 					symbols.put(newSymbol, value);
 
 					// update matrix values if need
-					int newArrayLength = newSymbol instanceof IMultiLayerSymbol ?
-							((IMultiLayerSymbol) newSymbol).getLayerCount() : 1;
+					int newArrayLength = newSymbol instanceof IMultiLayerSymbol ? ((IMultiLayerSymbol) newSymbol)
+							.getLayerCount() : 1;
 
-							int[] newRow = new int[newArrayLength];
-							if (matrix[value].length == newArrayLength) {
-								/*
-								 * the new row is exactly the same long than the
-								 * old one. Will use the old values
-								 */
-								newRow = matrix[value];
-							} else	if (matrix[value].length < newArrayLength) {
-								/*
-								 * the new row is larger than the old one,
-								 * let's copy all the first values and fill
-								 * the rest with the last copied value
-								 */
-								int val=0;
-								for (int i = 0; i < newRow.length; i++) {
-									if (i<matrix[value].length) {
-										val = matrix[value][i];
-									}
-
-									newRow[i] = val;
-								}
-							} else if (matrix[value].length > newArrayLength) {
-								/*
-								 * the new row is smaller than the old one,
-								 * let's copy the first values
-								 */
-								for (int i = 0; i < newRow.length; i++) {
-									newRow[i] = matrix[value][i];
-								}
+					int[] newRow = new int[newArrayLength];
+					if (matrix[value].length == newArrayLength) {
+						/*
+						 * the new row is exactly the same long than the old
+						 * one. Will use the old values
+						 */
+						newRow = matrix[value];
+					} else if (matrix[value].length < newArrayLength) {
+						/*
+						 * the new row is larger than the old one, let's copy
+						 * all the first values and fill the rest with the last
+						 * copied value
+						 */
+						int val = 0;
+						for (int i = 0; i < newRow.length; i++) {
+							if (i < matrix[value].length) {
+								val = matrix[value][i];
 							}
-							matrix[value] = newRow;
+
+							newRow[i] = val;
+						}
+					} else if (matrix[value].length > newArrayLength) {
+						/*
+						 * the new row is smaller than the old one, let's copy
+						 * the first values
+						 */
+						for (int i = 0; i < newRow.length; i++) {
+							newRow[i] = matrix[value][i];
+						}
+					}
+					matrix[value] = newRow;
 				}
 			}
 		} else {
@@ -384,7 +369,6 @@ public class ZSort implements IPersistence, LegendContentsChangedListener {
 		replaceSymbol(e.getOldSymbol(), e.getNewSymbol());
 		return true;
 	}
-
 
 	public boolean classifiedSymbolChange(SymbolLegendEvent e) {
 		replaceSymbol(e.getOldSymbol(), e.getNewSymbol());
@@ -404,11 +388,9 @@ public class ZSort implements IPersistence, LegendContentsChangedListener {
 		return false;
 	}
 
-
 	public void legendCleared(LegendClearEvent event) {
-//		this.usingZSort = false;
-//		symbols.clear();
-//		matrix = null;
+		// this.usingZSort = false;
+		// symbols.clear();
+		// matrix = null;
 	}
 }
-

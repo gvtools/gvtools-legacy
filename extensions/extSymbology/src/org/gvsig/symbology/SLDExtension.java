@@ -40,7 +40,6 @@
  */
 package org.gvsig.symbology;
 
-
 import org.gvsig.symbology.fmap.drivers.sld.FMapSLDDriver;
 
 import com.iver.andami.plugins.Extension;
@@ -54,15 +53,16 @@ import com.iver.cit.gvsig.project.documents.view.legend.gui.VectorFilterExpressi
  * 
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
-public class SLDExtension extends Extension{
+public class SLDExtension extends Extension {
 
-	public void execute(String actionCommand) {	
+	public void execute(String actionCommand) {
 	}
 
 	public void initialize() {
 		LegendManager.addLegendDriver(FMapSLDDriver.class);
 		LegendManager.addLegendPage(VectorFilterExpression.class);
-		SymbolTable.addCellEditor("expressions", new ExpressionFieldCellEditor());
+		SymbolTable.addCellEditor("expressions",
+				new ExpressionFieldCellEditor());
 
 	}
 

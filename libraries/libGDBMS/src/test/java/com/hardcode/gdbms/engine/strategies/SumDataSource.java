@@ -9,15 +9,14 @@ import com.hardcode.gdbms.engine.data.persistence.OperationLayerMemento;
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
 
-
-class SumDataSource extends OperationDataSource{
+class SumDataSource extends OperationDataSource {
 
 	private double sum;
-	
-	public SumDataSource(double n){
+
+	public SumDataSource(double n) {
 		sum = n;
 	}
-	
+
 	/**
 	 * @see com.hardcode.gdbms.engine.data.FieldNameAccess#getFieldIndexByName(java.lang.String)
 	 */
@@ -29,9 +28,11 @@ class SumDataSource extends OperationDataSource{
 	}
 
 	/**
-	 * @see com.hardcode.gdbms.engine.data.driver.ObjectDriver#getFieldValue(long, int)
+	 * @see com.hardcode.gdbms.engine.data.driver.ObjectDriver#getFieldValue(long,
+	 *      int)
 	 */
-	public Value getFieldValue(long rowIndex, int fieldId) throws ReadDriverException {
+	public Value getFieldValue(long rowIndex, int fieldId)
+			throws ReadDriverException {
 		return ValueFactory.createValue(sum);
 	}
 
@@ -79,8 +80,7 @@ class SumDataSource extends OperationDataSource{
 	 * @see com.hardcode.gdbms.engine.data.DataSource#getMemento()
 	 */
 	public Memento getMemento() throws MementoException {
-		return new OperationLayerMemento(getName(),
-			new Memento[0], getSQL());
+		return new OperationLayerMemento(getName(), new Memento[0], getSQL());
 	}
 
 	public int getFieldWidth(int i) throws ReadDriverException {

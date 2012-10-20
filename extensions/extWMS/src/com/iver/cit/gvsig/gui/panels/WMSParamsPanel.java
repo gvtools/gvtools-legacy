@@ -93,29 +93,29 @@ import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 
 /**
  * This class implements the map option panel.
- *
+ * 
  * It includes a set of Listeners that implement some control rules which
  * refresh the component values that depends on those selected in the other
  * components to avoid to choose an invalid set of options. It also includes a
  * method (isCorrectlyConfigured()) that checks if the current set of values is
  * enough to correctly launch a GetMap request.
- *
+ * 
  * The information is obtained from a WMSWizardDataSource object.
- *
- *
+ * 
+ * 
  * Esta clase implementa el panel de opciones disponibles sobre el mapa
- *
+ * 
  * Incluye una serie de Listeners que implementan unas reglas de control que
  * refrescan los valores de componentes cuyos valores dependen de aqu�llos
- * seleccionados en otros componentes para evitar que se escoja una combinaci�n
- * de opciones err�nea as� como una funci�n (isCorrectlyConfigured()) que
- * comprueba si la combinaci�n escogida actualmente es suficiente para lanzar
- * una operaci�n GetMap correctamente.
- *
+ * seleccionados en otros componentes para evitar que se escoja una
+ * combinaci�n de opciones err�nea as� como una funci�n
+ * (isCorrectlyConfigured()) que comprueba si la combinaci�n escogida
+ * actualmente es suficiente para lanzar una operaci�n GetMap correctamente.
+ * 
  * La informaci�n obtiene a partir de un objeto WMSWizardDataSource.
- *
+ * 
  * @author jaume - jaume dominguez faus
- *
+ * 
  */
 public class WMSParamsPanel extends WizardPanel {
 	private JScrollPane jScrollPane1 = null;
@@ -195,7 +195,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * This method initializes panelPage2
-	 *
+	 * 
 	 * @return Panel
 	 */
 	private void initialize() {
@@ -207,7 +207,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * This method initializes jPanel2
-	 *
+	 * 
 	 * @return Panel
 	 */
 	private JPanel getJPanel2() {
@@ -236,7 +236,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * This method initializes jPanel4
-	 *
+	 * 
 	 * @return Panel
 	 */
 	private JPanel getJPanel4() {
@@ -257,7 +257,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * This method initializes jPanel3
-	 *
+	 * 
 	 * @return Panel
 	 */
 	private JPanel getTabFormats() {
@@ -273,7 +273,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * This method initializes jScrollPane1
-	 *
+	 * 
 	 * @return ScrollPane
 	 */
 	private JScrollPane getJScrollPane1() {
@@ -289,7 +289,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * This method initializes btnDel
-	 *
+	 * 
 	 * @return Button
 	 */
 	private JButton getBtnDel() {
@@ -311,7 +311,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * This method initializes btnAdd
-	 *
+	 * 
 	 * @return Button
 	 */
 	private JButton getBtnAdd() {
@@ -333,7 +333,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * This method initializes jScrollPane5
-	 *
+	 * 
 	 * @return ScrollPane
 	 */
 	private JScrollPane getJScrollPane5() {
@@ -349,7 +349,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * This method initializes jTextField
-	 *
+	 * 
 	 * @return TextField
 	 */
 	private JTextField getJTxtNomCapa() {
@@ -369,7 +369,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * This method initializes jScrollPane6
-	 *
+	 * 
 	 * @return ScrollPane
 	 */
 	private JScrollPane getJScrollPane6() {
@@ -385,7 +385,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * This method initializes jScrollPane2
-	 *
+	 * 
 	 * @return ScrollPane
 	 */
 	private JScrollPane getJScrollPane2() {
@@ -401,7 +401,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * Gets the available layers in WMS maintaining the tree structure
-	 *
+	 * 
 	 * @return
 	 */
 	public LayerTree getLayerStructure() {
@@ -410,7 +410,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * This method initializes treeLayers
-	 *
+	 * 
 	 * @return Tree
 	 */
 	private LayerTree getTreeLayers() {
@@ -458,7 +458,7 @@ public class WMSParamsPanel extends WizardPanel {
 	/**
 	 * This method checks for the options selected within the configuration
 	 * dialog are correct and enough to perform a GetMap request.
-	 *
+	 * 
 	 * @return true if you're done, false if not.
 	 */
 	public boolean isCorrectlyConfigured() {
@@ -534,7 +534,7 @@ public class WMSParamsPanel extends WizardPanel {
 	/**
 	 * Fires a notification to this wizard listeners telling them if the
 	 * configuration is fair enough to send a GetMap request.
-	 *
+	 * 
 	 * @param b
 	 */
 	private void fireWizardComplete(boolean b) {
@@ -555,7 +555,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * Refreshes the info tab
-	 *
+	 * 
 	 */
 	public void refreshInfo() {
 		getTabInfo().refresh(dataSource, selectedLayersVector(),
@@ -619,7 +619,7 @@ public class WMSParamsPanel extends WizardPanel {
 	/**
 	 * Takes the array of selected layers and a vector containing the style
 	 * names and set them as selected in the styles panel
-	 *
+	 * 
 	 * @param selectedLayers
 	 * @param styles
 	 */
@@ -635,7 +635,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * Gets the currently shown style tree.
-	 *
+	 * 
 	 * @return
 	 */
 	private StyleTree getStyleTree() {
@@ -688,7 +688,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * This method initializes lstSelectedLayers
-	 *
+	 * 
 	 * @return List
 	 */
 	public LayerList getLstSelectedLayers() {
@@ -716,26 +716,22 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * This method initializes lstSRSs
-	 *
+	 * 
 	 * @return JList
 	 */
 	public JList getLstSRSs() {
 		if (lstSRSs == null) {
 			lstSRSs = new JList();
 			lstSRSs.setModel(new SRSListModel());
-			lstSRSs
-					.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-			lstSRSs
-					.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-						public void valueChanged(
-								javax.swing.event.ListSelectionEvent e) {
-							int i = lstSRSs.getSelectedIndex();
-							if (i != -1)
-								oldSRS = (String) lstSRSs.getModel()
-										.getElementAt(i);
-							fireWizardComplete(isCorrectlyConfigured());
-						}
-					});
+			lstSRSs.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+			lstSRSs.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+				public void valueChanged(javax.swing.event.ListSelectionEvent e) {
+					int i = lstSRSs.getSelectedIndex();
+					if (i != -1)
+						oldSRS = (String) lstSRSs.getModel().getElementAt(i);
+					fireWizardComplete(isCorrectlyConfigured());
+				}
+			});
 		}
 
 		return lstSRSs;
@@ -743,7 +739,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * This method initializes lstFormats
-	 *
+	 * 
 	 * @return List
 	 */
 	public JList getLstFormats() {
@@ -847,7 +843,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * Returns the current selected SRS.
-	 *
+	 * 
 	 * @return
 	 */
 	public String getSRS() {
@@ -856,7 +852,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * Returns the name of the layer that the user has typed-in
-	 *
+	 * 
 	 * @return
 	 */
 	public String getLayerName() {
@@ -888,16 +884,17 @@ public class WMSParamsPanel extends WizardPanel {
 			rect = dataSource.getBoundingBox(layerNames, latLonID);
 			if (rect == null) {
 				rect = dataSource.getBoundingBox(layerNames, "CRS:84");
-				if(rect == null)
+				if (rect == null)
 					return null;
 			}
-			
-			if(getSRS() == null)
-				throw new ProjectionLayerException(getName(),null);
-			
+
+			if (getSRS() == null)
+				throw new ProjectionLayerException(getName(), null);
+
 			CoordinateReferenceSystem reqProj = ProjectionUtils
 					.getCRS(getSRS());
-			CoordinateReferenceSystem latLonProj = ProjectionUtils.getCRS(latLonID);
+			CoordinateReferenceSystem latLonProj = ProjectionUtils
+					.getCRS(latLonID);
 			if ((reqProj != null) && (latLonProj != null)) {
 				MathTransform trans = ProjectionUtils.getCrsTransform(
 						latLonProj, reqProj);
@@ -905,10 +902,11 @@ public class WMSParamsPanel extends WizardPanel {
 				reprojectedRect = ProjectionUtils.transform(rect, trans);
 				rect = reprojectedRect;
 			} else {
-//				throw new ProjectionLayerException(PluginServices.getText(this,
-//						"cannotReproject")
-//						+ " " + getSRS() + " -> " + latLonID);
-				throw new ProjectionLayerException(getName(),null);
+				// throw new
+				// ProjectionLayerException(PluginServices.getText(this,
+				// "cannotReproject")
+				// + " " + getSRS() + " -> " + latLonID);
+				throw new ProjectionLayerException(getName(), null);
 			}
 		}
 
@@ -925,7 +923,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * The piece of the GetMap request that has the layer names.
-	 *
+	 * 
 	 * @return
 	 */
 	public String getQueryableLayerQuery() {
@@ -956,9 +954,9 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * Returns the index of the CRS within the CRS list.
-	 *
+	 * 
 	 * Devuelve la posicion que ocupa el CRS en la lista de CRS
-	 *
+	 * 
 	 * @param crs
 	 * @return The CRS's index if it exists, -1 if it not exists.
 	 */
@@ -973,11 +971,11 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * Returns the index of the format within the formats list.
-	 *
+	 * 
 	 * Devuelve la posicion que ocupa el formato en la lista de formatos
-	 *
+	 * 
 	 * @param format
-	 *
+	 * 
 	 * @return The format's index if it exists, -1 if it not exists.
 	 */
 	public int getFormatIndex(String format) {
@@ -992,7 +990,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * This method initializes jTabbedPane
-	 *
+	 * 
 	 * @return TabbedPane
 	 */
 	public JTabbedPane getJTabbedPane() {
@@ -1032,7 +1030,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return Panel
 	 */
 	private JPanel getTabLayers() {
@@ -1047,7 +1045,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return Panel
 	 */
 	private JPanel getJPanel1() {
@@ -1068,7 +1066,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * This method initializes jPanel5
-	 *
+	 * 
 	 * @return Panel
 	 */
 	private JPanel getJPanel5() {
@@ -1088,7 +1086,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * This method initializes jPanel6
-	 *
+	 * 
 	 * @return Panel
 	 */
 	private StylesPanel getTabStyle() {
@@ -1111,9 +1109,9 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * Sets the focus to the tab next to the current one.
-	 *
+	 * 
 	 * Enfoca a la solapa siguiente a la actualmente enfocada del TabbedPane
-	 *
+	 * 
 	 */
 	public void avanzaTab() {
 		int currentPage = currentPage();
@@ -1125,9 +1123,9 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * Sets the focus to the tab previous to the current one.
-	 *
+	 * 
 	 * Enfoca a la solapa anterior a la actualmente enfocada del TabbedPane
-	 *
+	 * 
 	 */
 	public void retrocedeTab() {
 		this.getJTabbedPane().setSelectedIndex(previousEnabledPage());
@@ -1136,9 +1134,9 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * Returns the index of the current tab.
-	 *
+	 * 
 	 * Devuelve el �ndice de la p�gina actual del wizard.
-	 *
+	 * 
 	 * @return
 	 */
 	public int currentPage() {
@@ -1147,9 +1145,9 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * Returns the tab amount that the WMSParamsPanel currently have
-	 *
+	 * 
 	 * Devuelve el n�mero de solapas que tiene actualmente el WMSParamsPanel
-	 *
+	 * 
 	 * @return int
 	 */
 	public int getNumTabs() {
@@ -1164,7 +1162,7 @@ public class WMSParamsPanel extends WizardPanel {
 	 * Devuelve el �ndice de la anterior p�gina habilitada del wizard o -1
 	 * si no hay ninguna.
 	 * </p>
-	 *
+	 * 
 	 * @return The index, or -1 if there is no one.
 	 */
 	public int previousEnabledPage() {
@@ -1189,7 +1187,7 @@ public class WMSParamsPanel extends WizardPanel {
 	 * Devuelve el �ndice de la siguiente p�gina habilitada del wizard o -1
 	 * si no hay ninguna.
 	 * </p>
-	 *
+	 * 
 	 * @return The index, or -1 if there is no one.
 	 */
 	public int nextEnabledPage() {
@@ -1207,7 +1205,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * Selects/deselects the transparency checkbox.
-	 *
+	 * 
 	 * @param b
 	 */
 	public void setTransparent(boolean b) {
@@ -1216,7 +1214,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * This method initializes chkTrasparency
-	 *
+	 * 
 	 * @return CheckBox
 	 */
 	private JCheckBox getChkTransparency() {
@@ -1240,7 +1238,7 @@ public class WMSParamsPanel extends WizardPanel {
 	 * Returns a vector of strings containing the styles selected for the
 	 * layers. A blank style is correct and means that default style will be
 	 * used.
-	 *
+	 * 
 	 * @return Vector
 	 */
 	public Vector getStyles() {
@@ -1249,7 +1247,7 @@ public class WMSParamsPanel extends WizardPanel {
 		for (int i = 0; i < layers.length; i++) {
 			FMapWMSStyle sty = layers[i].getSelectedStyle();
 			String s = (sty != null) ? sty.name : "";
-			v.add(0,s);
+			v.add(0, s);
 		}
 		return v;
 	}
@@ -1260,7 +1258,7 @@ public class WMSParamsPanel extends WizardPanel {
 		for (int i = 0; i < layers.length; i++) {
 			if (layers[i].getName().equalsIgnoreCase(layerName)) {
 				FMapWMSStyle sty = layers[i].getSelectedStyle();
-//				String s = (sty != null) ? sty.name : "";
+				// String s = (sty != null) ? sty.name : "";
 				v.add(sty);
 				return v;
 			}
@@ -1270,7 +1268,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * This method initializes tabInfo
-	 *
+	 * 
 	 * @return Panel
 	 */
 	private InfoPanel getTabInfo() {
@@ -1294,7 +1292,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * This method initializes tabDimension
-	 *
+	 * 
 	 * @return Panel
 	 */
 	private DimensionPanel getTabDimensions() {
@@ -1343,8 +1341,8 @@ public class WMSParamsPanel extends WizardPanel {
 		if (node.getChildren().size() > 0) {
 			FLayers l = null;
 			if (this.getMapCtrl() == null) {
-				BaseView v = (BaseView) PluginServices
-						.getMDIManager().getActiveWindow();
+				BaseView v = (BaseView) PluginServices.getMDIManager()
+						.getActiveWindow();
 				l = new FLayers();
 				l.setMapContext(v.getMapControl().getMapContext());
 			} else {
@@ -1404,7 +1402,7 @@ public class WMSParamsPanel extends WizardPanel {
 		if (getDisagregatedLayers()) {
 			return getLayerTree();
 		} else {
-			if(dataSource == null) 
+			if (dataSource == null)
 				return null;
 			return getLayerPlain();
 		}
@@ -1413,7 +1411,7 @@ public class WMSParamsPanel extends WizardPanel {
 	/**
 	 * If user does not select the chekbox Disagregate layers, will get the
 	 * layer tree in WMS
-	 *
+	 * 
 	 * @return
 	 */
 	protected FLayer getLayerTree() {
@@ -1446,8 +1444,8 @@ public class WMSParamsPanel extends WizardPanel {
 		if (node.getChildren().size() > 0) {
 			FLayers l = null;
 			if (this.getMapCtrl() == null) {
-				BaseView v = (BaseView) PluginServices
-						.getMDIManager().getActiveWindow();
+				BaseView v = (BaseView) PluginServices.getMDIManager()
+						.getActiveWindow();
 				l = new FLayers();
 				l.setMapContext(v.getMapControl().getMapContext());
 			} else {
@@ -1457,8 +1455,8 @@ public class WMSParamsPanel extends WizardPanel {
 
 			l.setName(node.getTitle());
 			for (int i = 0; i < node.getChildren().size(); i++) {
-				if (nodeSelected(selection, (WMSLayerNode) (node.getChildren()
-						.get(i)))) {
+				if (nodeSelected(selection,
+						(WMSLayerNode) (node.getChildren().get(i)))) {
 					FLayer lyr = getSubTree((WMSLayerNode) node.getChildren()
 							.get(i), selection);
 					if (lyr != null) {
@@ -1493,7 +1491,7 @@ public class WMSParamsPanel extends WizardPanel {
 				layer.setOnlineResources(getDriver().getOnlineResources());
 				layer.setFixedSize(getFixedSize());
 				layer.setQueryable(node.isQueryable());
-				//layer.setQueryable(dataSource.isQueryable());
+				// layer.setQueryable(dataSource.isQueryable());
 				return layer;
 
 			} else {
@@ -1505,7 +1503,7 @@ public class WMSParamsPanel extends WizardPanel {
 	/**
 	 * If user selects the chekbox Disagregate layers, will get the selected
 	 * layers rendered in one the tree structure in WMS will be lost.
-	 *
+	 * 
 	 * @return
 	 */
 	protected FLayer getLayerPlain() {
@@ -1516,8 +1514,8 @@ public class WMSParamsPanel extends WizardPanel {
 			layer.setHost(new URL(dataSource.getHost()));
 		} catch (ProjectionLayerException ex) {
 			ex.printStackTrace();
-			JOptionPane.showMessageDialog((Component) PluginServices
-					.getMainFrame(), ex.getMessage());
+			JOptionPane.showMessageDialog(
+					(Component) PluginServices.getMainFrame(), ex.getMessage());
 			return null;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -1535,7 +1533,7 @@ public class WMSParamsPanel extends WizardPanel {
 		layer.setOnlineResources(getDriver().getOnlineResources());
 		layer.setFixedSize(getFixedSize());
 
-		//layer.setQueryable(node.isQueryable());
+		// layer.setQueryable(node.isQueryable());
 		layer.setQueryable(dataSource.isQueryable());
 		return layer;
 	}
@@ -1552,7 +1550,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * This method initializes chkExtendedNames
-	 *
+	 * 
 	 * @return CheckBox
 	 */
 	private JCheckBox getChkExtendedNames() {
@@ -1587,7 +1585,7 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * This method initializes btnUp
-	 *
+	 * 
 	 * @return Button
 	 */
 	private JButton getBtnUp() {
@@ -1608,14 +1606,15 @@ public class WMSParamsPanel extends WizardPanel {
 					}
 				}
 			});
-			btnUp.setIcon(PluginServices.getIconTheme().get("aplication-preferences-uparrow"));
+			btnUp.setIcon(PluginServices.getIconTheme().get(
+					"aplication-preferences-uparrow"));
 		}
 		return btnUp;
 	}
 
 	/**
 	 * This method initializes btnDown
-	 *
+	 * 
 	 * @return Button
 	 */
 	private JButton getBtnDown() {
@@ -1639,8 +1638,8 @@ public class WMSParamsPanel extends WizardPanel {
 					}
 				}
 			});
-			btnDown.setIcon(PluginServices.getIconTheme()
-					.get("aplication-preferences-downarrow"));
+			btnDown.setIcon(PluginServices.getIconTheme().get(
+					"aplication-preferences-downarrow"));
 		}
 		return btnDown;
 	}
@@ -1659,14 +1658,14 @@ public class WMSParamsPanel extends WizardPanel {
 
 	/**
 	 * This method initializes chkDisagregate
-	 *
+	 * 
 	 * @return CheckBox
 	 */
 	private JCheckBox getChkDisagregate() {
 		if (chkDisagregate == null) {
 
 			chkDisagregate = new JCheckBox();
-			chkDisagregate.setBounds(new java.awt.Rectangle(19,276,269,20));
+			chkDisagregate.setBounds(new java.awt.Rectangle(19, 276, 269, 20));
 			chkDisagregate.setText(PluginServices.getText(this,
 					"disagregate_layers"));
 			chkDisagregate.setSelected(false);

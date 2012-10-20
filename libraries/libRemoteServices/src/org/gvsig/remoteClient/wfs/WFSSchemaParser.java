@@ -60,28 +60,29 @@ import org.xmlpull.v1.XmlPullParserException;
  */
 public class WFSSchemaParser extends KXmlParser {
 	private String schema = "";
-	
-	public WFSSchemaParser(){
+
+	public WFSSchemaParser() {
 		super();
 	}
-	
-	public WFSSchemaParser(String schema){
+
+	public WFSSchemaParser(String schema) {
 		this.schema = schema;
 	}
-	
+
 	/**
-	 * It gets the schema from a tag. The schema is separated
-	 * of the tag name by ":".
+	 * It gets the schema from a tag. The schema is separated of the tag name by
+	 * ":".
+	 * 
 	 * @param tag
 	 */
-	public void setSchemaFromMainTag(String tag){
+	public void setSchemaFromMainTag(String tag) {
 		int pos = tag.indexOf(":");
-		if (pos > 0){
-			this.schema = tag.substring(0,pos);
-		}else{
+		if (pos > 0) {
+			this.schema = tag.substring(0, pos);
+		} else {
 			this.schema = "";
 		}
-	}	
+	}
 
 	/**
 	 * @return Returns the schema.
@@ -91,50 +92,55 @@ public class WFSSchemaParser extends KXmlParser {
 	}
 
 	/**
-	 * @param schema The schema to set.
+	 * @param schema
+	 *            The schema to set.
 	 */
 	public void setSchema(String schema) {
 		this.schema = schema;
-	}	
-	
+	}
+
 	/**
 	 * Returns a SCHEMA:TAG
+	 * 
 	 * @param tag
 	 * @return SCHEMA:TAG
 	 */
-	private String getTag(String tag){
-		if (tag == null){
+	private String getTag(String tag) {
+		if (tag == null) {
 			return null;
 		}
-		if ((schema == null) || (schema.equals(""))){
+		if ((schema == null) || (schema.equals(""))) {
 			return tag;
 		}
 		return schema + ":" + tag;
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
-	 * @see org.xmlpull.v1.XmlPullParser#require(int, java.lang.String, java.lang.String)
+	 * (non-Javadoc)
+	 * 
+	 * @see org.xmlpull.v1.XmlPullParser#require(int, java.lang.String,
+	 * java.lang.String)
 	 */
 	public void require(int type, String namespace, String name)
-		throws XmlPullParserException, IOException{
-		super.require(type,namespace,getTag(name));
+			throws XmlPullParserException, IOException {
+		super.require(type, namespace, getTag(name));
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see org.xmlpull.v1.XmlPullParser#getName()
 	 */
-	public String getName(){
-		try{
-		String name = super.getName();
-		if ((schema != null) || (!(schema.equals("")))){
-			return name.substring(name.indexOf(":") + 1,name.length());
-		}
-		return name;
-		}catch (NullPointerException e){
+	public String getName() {
+		try {
+			String name = super.getName();
+			if ((schema != null) || (!(schema.equals("")))) {
+				return name.substring(name.indexOf(":") + 1, name.length());
+			}
+			return name;
+		} catch (NullPointerException e) {
 			return "";
 		}
 	}
-	
+
 }

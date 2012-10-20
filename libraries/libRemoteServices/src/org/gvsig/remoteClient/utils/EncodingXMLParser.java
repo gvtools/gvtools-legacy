@@ -3,11 +3,8 @@ package org.gvsig.remoteClient.utils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.StringBufferInputStream;
 import java.io.StringReader;
 
 import org.kxml2.io.KXmlParser;
@@ -60,21 +57,21 @@ import org.xmlpull.v1.XmlPullParserException;
  *
  */
 /**
- * This class is a XML pull parser that discover and manage
- * the file encoding
+ * This class is a XML pull parser that discover and manage the file encoding
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class EncodingXMLParser extends KXmlParser{
+public class EncodingXMLParser extends KXmlParser {
 
 	/**
-	 * This method reads the first bytes of the file and
-	 * try to discover the file encoding. It parses the file
-	 * with retrieved encoding.
+	 * This method reads the first bytes of the file and try to discover the
+	 * file encoding. It parses the file with retrieved encoding.
+	 * 
 	 * @param file
-	 * @throws XmlPullParserException 
-	 * @throws IOException 
+	 * @throws XmlPullParserException
+	 * @throws IOException
 	 */
-	public void setInput(File file) throws XmlPullParserException, IOException{
+	public void setInput(File file) throws XmlPullParserException, IOException {
 		FileReader reader = null;
 		reader = new FileReader(file);
 		BufferedReader br = new BufferedReader(reader);
@@ -86,7 +83,7 @@ public class EncodingXMLParser extends KXmlParser{
 
 		// patch for ArcIMS + WMS connector > 9.0 bug
 		int a = string.toLowerCase().indexOf("<?xml");
-		if (a !=-1){
+		if (a != -1) {
 			string = string.substring(a, string.length());
 		}
 		// end patch
@@ -94,18 +91,17 @@ public class EncodingXMLParser extends KXmlParser{
 		StringBuffer st = new StringBuffer(string);
 		String searchText = "encoding=\"";
 		int index = st.indexOf(searchText);
-		if (index>-1) {
-			st.delete(0, index+searchText.length());
+		if (index > -1) {
+			st.delete(0, index + searchText.length());
 			encoding = st.substring(0, st.indexOf("\""));
-		}			
-		
-		if (a > 0){
+		}
+
+		if (a > 0) {
 			// patch for ArcIMS + WMS connector > 9.0 bug
 			super.setInput(new StringReader(string));
 			// end patch
-		}else{
-			super.setInput( new FileInputStream(file), encoding);
+		} else {
+			super.setInput(new FileInputStream(file), encoding);
 		}
 	}
 }
-

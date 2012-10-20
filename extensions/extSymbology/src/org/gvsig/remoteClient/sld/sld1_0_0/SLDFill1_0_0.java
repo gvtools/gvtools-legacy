@@ -52,80 +52,81 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
 import com.iver.cit.gvsig.fmap.rendering.XmlBuilder;
+
 /**
- * Implements the Fill element of an SLD implementation specification (version 
- * 1.0.0).<p>
- * The Fill element specifies how the area of the geometry will be filled.
- * There are two types of fills, solid-color and repeated GraphicFill. The repeated 
- * graphic fill is selected only if the GraphicFill element is present. If the Fill
- * element is omitted from its parent element, then no fill will be rendered. The 
- * GraphicFill and CssParameter elements are discussed in conjunction with the 
- * Stroke element in Section 11.1.3. Here, the CssParameter names are �fill� 
- * instead of �stroke� and �fill-opacity� instead of �stroke-opacity�. None of the
- * other CssParameters in Stroke are available for filling and the default value
- * for the fill color in this context is 50% gray (value �#808080�).
+ * Implements the Fill element of an SLD implementation specification (version
+ * 1.0.0).
+ * <p>
+ * The Fill element specifies how the area of the geometry will be filled. There
+ * are two types of fills, solid-color and repeated GraphicFill. The repeated
+ * graphic fill is selected only if the GraphicFill element is present. If the
+ * Fill element is omitted from its parent element, then no fill will be
+ * rendered. The GraphicFill and CssParameter elements are discussed in
+ * conjunction with the Stroke element in Section 11.1.3. Here, the CssParameter
+ * names are �fill� instead of �stroke� and �fill-opacity� instead
+ * of �stroke-opacity�. None of the other CssParameters in Stroke are
+ * available for filling and the default value for the fill color in this
+ * context is 50% gray (value �#808080�).
  * 
  * @see SLDFill1_0_0
  * @see http://portal.opengeospatial.org/files/?artifact_id=1188
  * 
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
-public class SLDFill1_0_0 extends SLDFill{
+public class SLDFill1_0_0 extends SLDFill {
 
-
-
-	public void parse(XMLSchemaParser parser,int cuTag, String expressionType)throws IOException, XmlPullParserException, LegendDriverException  {
-		int currentTag;		
+	public void parse(XMLSchemaParser parser, int cuTag, String expressionType)
+			throws IOException, XmlPullParserException, LegendDriverException {
+		int currentTag;
 		boolean end = false;
 		currentTag = parser.next();
 
 		expressionColor.setLiteral("#808080");
 
-
-		while (!end)
-		{
-			switch(currentTag)
-			{
+		while (!end) {
+			switch (currentTag) {
 			case XMLSchemaParser.START_TAG:
-				if (parser.getName().compareTo(SLDTags.GRAPHICFILL)==0 ||
-						parser.getName().compareTo(SLDTags.GRAPHICSTROKE)==0	) {
+				if (parser.getName().compareTo(SLDTags.GRAPHICFILL) == 0
+						|| parser.getName().compareTo(SLDTags.GRAPHICSTROKE) == 0) {
 					SLDGraphic1_0_0 fillGraphic = new SLDGraphic1_0_0();
-					fillGraphic.parse(parser,currentTag,parser.getName());
+					fillGraphic.parse(parser, currentTag, parser.getName());
 					setFillGraphic(fillGraphic);
 
-				}
-				else if (parser.getName().compareTo(SLDTags.CSSPARAMETER)==0) {
-					if(parser.getAttributeValue("", SLDTags.NAME_ATTR).compareTo(SLDTags.FILL_ATTR)==0) {
+				} else if (parser.getName().compareTo(SLDTags.CSSPARAMETER) == 0) {
+					if (parser.getAttributeValue("", SLDTags.NAME_ATTR)
+							.compareTo(SLDTags.FILL_ATTR) == 0) {
 						FExpression expressionColor = new FExpression();
 
 						try {
-							expressionColor.parse(parser, parser.nextTag(),parser.getName());
-						}
-						catch(XmlPullParserException e) {
+							expressionColor.parse(parser, parser.nextTag(),
+									parser.getName());
+						} catch (XmlPullParserException e) {
 							String s = parser.getText().trim();
 							expressionColor.setLiteral(s);
 						}
 
 						if (!SLDUtils.isColor(expressionColor.getLiteral()))
-							throw new LegendDriverException(LegendDriverException.PARSE_LEGEND_FILE_ERROR);
+							throw new LegendDriverException(
+									LegendDriverException.PARSE_LEGEND_FILE_ERROR);
 						setExpressionColor(expressionColor);
 
-					}
-					else if(parser.getAttributeValue("", SLDTags.NAME_ATTR).compareTo(SLDTags.FILLOPACITY_ATTR)==0) {
-						
-						FExpression expressionOpacity =  new FExpression();
-						
+					} else if (parser.getAttributeValue("", SLDTags.NAME_ATTR)
+							.compareTo(SLDTags.FILLOPACITY_ATTR) == 0) {
+
+						FExpression expressionOpacity = new FExpression();
+
 						try {
-							expressionOpacity.parse(parser,parser.nextTag(), parser.getName());
-						}
-						catch(XmlPullParserException e) {
+							expressionOpacity.parse(parser, parser.nextTag(),
+									parser.getName());
+						} catch (XmlPullParserException e) {
 							String s = parser.getText().trim();
 							expressionOpacity.setLiteral(s);
 						}
 
 						if (!SLDUtils.isANumber(expressionOpacity.getLiteral()))
-							throw new LegendDriverException(LegendDriverException.PARSE_LEGEND_FILE_ERROR);
-						
+							throw new LegendDriverException(
+									LegendDriverException.PARSE_LEGEND_FILE_ERROR);
+
 						setExpressionOpacity(expressionOpacity);
 					}
 				}
@@ -145,8 +146,6 @@ public class SLDFill1_0_0 extends SLDFill{
 
 	}
 
-	
-
 	public String toXML() {
 
 		XmlBuilder xmlBuilder = new XmlBuilder();
@@ -155,15 +154,19 @@ public class SLDFill1_0_0 extends SLDFill{
 		if (getFillGraphic() != null)
 			xmlBuilder.writeRaw(getFillGraphic().toXML());
 
-		if(getExpressionColor().getLiteral() != null){
-			xmlBuilder.openTag(SLDTags.CSSPARAMETER,SLDTags.NAME_ATTR,SLDTags.FILL_ATTR);
-			xmlBuilder.writeTag(FilterTags.LITERAL, getExpressionColor().getLiteral());
+		if (getExpressionColor().getLiteral() != null) {
+			xmlBuilder.openTag(SLDTags.CSSPARAMETER, SLDTags.NAME_ATTR,
+					SLDTags.FILL_ATTR);
+			xmlBuilder.writeTag(FilterTags.LITERAL, getExpressionColor()
+					.getLiteral());
 			xmlBuilder.closeTag();
 
 		}
-		if(getExpressionOpacity().getLiteral() != null){
-			xmlBuilder.openTag(SLDTags.CSSPARAMETER,SLDTags.NAME_ATTR,SLDTags.FILLOPACITY_ATTR);
-			xmlBuilder.writeTag(FilterTags.LITERAL,getExpressionOpacity().getLiteral());
+		if (getExpressionOpacity().getLiteral() != null) {
+			xmlBuilder.openTag(SLDTags.CSSPARAMETER, SLDTags.NAME_ATTR,
+					SLDTags.FILLOPACITY_ATTR);
+			xmlBuilder.writeTag(FilterTags.LITERAL, getExpressionOpacity()
+					.getLiteral());
 			xmlBuilder.closeTag();
 
 		}

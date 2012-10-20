@@ -56,269 +56,267 @@ import javax.swing.border.LineBorder;
 import com.vividsolutions.jts.util.Assert;
 
 /**
- * Warning: This class can parse a wide variety of formats. This flexibility is fine for parsing user
- * input because the user immediately sees whether the parser is correct and can fix it if
- * necessary. However, GML files are advised to stick with a safe format like yyyy-MM-dd.
- * yy/MM/dd is not as safe because while 99/03/04 will be parsed as yyyy/MM/dd, 
- * 02/03/04 will be parsed as MM/dd/yyyy (because MM/dd/yyyy appears earlier than yyyy/MM/dd
- * in FlexibleDateParser.txt).
+ * Warning: This class can parse a wide variety of formats. This flexibility is
+ * fine for parsing user input because the user immediately sees whether the
+ * parser is correct and can fix it if necessary. However, GML files are advised
+ * to stick with a safe format like yyyy-MM-dd. yy/MM/dd is not as safe because
+ * while 99/03/04 will be parsed as yyyy/MM/dd, 02/03/04 will be parsed as
+ * MM/dd/yyyy (because MM/dd/yyyy appears earlier than yyyy/MM/dd in
+ * FlexibleDateParser.txt).
  */
 public class FlexibleDateParser {
-    private static Collection lenientFormatters = null;
-    private static Collection unlenientFormatters = null;
-    //CellEditor used to be a static field CELL_EDITOR, but I was getting
-    //problems calling it from ESETextField (it simply didn't appear).
-    //The problems vanished when I turned it into a static class. I didn't
-    //investigate further. [Jon Aquino]
-    public static final class CellEditor extends DefaultCellEditor {
-        public CellEditor() {
-            super(new JTextField());
-        }
-        private Object value;
-        private FlexibleDateParser parser = new FlexibleDateParser();
+	private static Collection lenientFormatters = null;
+	private static Collection unlenientFormatters = null;
 
-        public boolean stopCellEditing() {
-            try {
-                value = parser.parse((String) super.getCellEditorValue(), true);
-            } catch (Exception e) {
-                ((JComponent) getComponent()).setBorder(new LineBorder(Color.red));
+	// CellEditor used to be a static field CELL_EDITOR, but I was getting
+	// problems calling it from ESETextField (it simply didn't appear).
+	// The problems vanished when I turned it into a static class. I didn't
+	// investigate further. [Jon Aquino]
+	public static final class CellEditor extends DefaultCellEditor {
+		public CellEditor() {
+			super(new JTextField());
+		}
 
-                return false;
-            }
+		private Object value;
+		private FlexibleDateParser parser = new FlexibleDateParser();
 
-            return super.stopCellEditing();
-        }
+		public boolean stopCellEditing() {
+			try {
+				value = parser.parse((String) super.getCellEditorValue(), true);
+			} catch (Exception e) {
+				((JComponent) getComponent()).setBorder(new LineBorder(
+						Color.red));
 
-        public Component getTableCellEditorComponent(
-            JTable table,
-            Object value,
-            boolean isSelected,
-            int row,
-            int column) {
-            this.value = null;
-            ((JComponent) getComponent()).setBorder(new LineBorder(Color.black));
+				return false;
+			}
 
-            return super.getTableCellEditorComponent(
-                table,
-                format((Date) value),
-                isSelected,
-                row,
-                column);
-        }
+			return super.stopCellEditing();
+		}
 
-        private String format(Date date) {
-            return (date == null) ? "" : formatter.format(date);
-        }
+		public Component getTableCellEditorComponent(JTable table,
+				Object value, boolean isSelected, int row, int column) {
+			this.value = null;
+			((JComponent) getComponent())
+					.setBorder(new LineBorder(Color.black));
 
-        public Object getCellEditorValue() {
-            return value;
-        }
+			return super.getTableCellEditorComponent(table,
+					format((Date) value), isSelected, row, column);
+		}
 
-        //Same formatter as used by JTable.DateRenderer. [Jon Aquino]
-        private DateFormat formatter = DateFormat.getDateInstance();
-    };
+		private String format(Date date) {
+			return (date == null) ? "" : formatter.format(date);
+		}
 
-    private boolean verbose = false;
+		public Object getCellEditorValue() {
+			return value;
+		}
 
-    private Collection sortByComplexity(Collection patterns) {
-        //Least complex to most complex. [Jon Aquino]
-        TreeSet sortedPatterns = new TreeSet(new Comparator() {
-            public int compare(Object o1, Object o2) {
-                int result = complexity(o1.toString()) - complexity(o2.toString());
-                if (result == 0) {
-                    //The two patterns have the same level of complexity.
-                    //Sort by order of appearance (e.g. to resolve
-                    //MM/dd/yyyy vs dd/MM/yyyy [Jon Aquino]
-                    result = ((Pattern) o1).index - ((Pattern) o2).index;
-                }
-                return result;
-            }
+		// Same formatter as used by JTable.DateRenderer. [Jon Aquino]
+		private DateFormat formatter = DateFormat.getDateInstance();
+	};
 
-            private TreeSet uniqueCharacters = new TreeSet();
+	private boolean verbose = false;
 
-            private int complexity(String pattern) {
-                uniqueCharacters.clear();
+	private Collection sortByComplexity(Collection patterns) {
+		// Least complex to most complex. [Jon Aquino]
+		TreeSet sortedPatterns = new TreeSet(new Comparator() {
+			public int compare(Object o1, Object o2) {
+				int result = complexity(o1.toString())
+						- complexity(o2.toString());
+				if (result == 0) {
+					// The two patterns have the same level of complexity.
+					// Sort by order of appearance (e.g. to resolve
+					// MM/dd/yyyy vs dd/MM/yyyy [Jon Aquino]
+					result = ((Pattern) o1).index - ((Pattern) o2).index;
+				}
+				return result;
+			}
 
-                for (int i = 0; i < pattern.length(); i++) {
-                    if (("" + pattern.charAt(i)).trim().length() > 0) {
-                        uniqueCharacters.add("" + pattern.charAt(i));
-                    }
-                }
+			private TreeSet uniqueCharacters = new TreeSet();
 
-                return uniqueCharacters.size();
-            }
-        });
-        sortedPatterns.addAll(patterns);
+			private int complexity(String pattern) {
+				uniqueCharacters.clear();
 
-        return sortedPatterns;
-    }
+				for (int i = 0; i < pattern.length(); i++) {
+					if (("" + pattern.charAt(i)).trim().length() > 0) {
+						uniqueCharacters.add("" + pattern.charAt(i));
+					}
+				}
 
-    private Collection lenientFormatters() {
-        if (lenientFormatters == null) {
-            load();
-        }
+				return uniqueCharacters.size();
+			}
+		});
+		sortedPatterns.addAll(patterns);
 
-        return lenientFormatters;
-    }
+		return sortedPatterns;
+	}
 
-    private Collection unlenientFormatters() {
-        if (unlenientFormatters == null) {
-            load();
-        }
+	private Collection lenientFormatters() {
+		if (lenientFormatters == null) {
+			load();
+		}
 
-        return unlenientFormatters;
-    }
+		return lenientFormatters;
+	}
 
-    /**
-     * @return null if s is empty
-     */
-    public Date parse(String s, boolean lenient) throws ParseException {
-        if (s.trim().length() == 0) {
-            return null;
-        }
-        //The deprecated Date#parse method is actually pretty flexible. [Jon Aquino]
-        try {
-            if (verbose) {
-                System.out.println(s + " -- Date constructor");
-            }
-            return new Date(s);
-        } catch (Exception e) {
-            //Eat it. [Jon Aquino]
-        }
+	private Collection unlenientFormatters() {
+		if (unlenientFormatters == null) {
+			load();
+		}
 
-        try {
-            return parse(s, unlenientFormatters());
-        } catch (ParseException e) {
-            if (lenient) {
-                return parse(s, lenientFormatters());
-            }
+		return unlenientFormatters;
+	}
 
-            throw e;
-        }
-    }
+	/**
+	 * @return null if s is empty
+	 */
+	public Date parse(String s, boolean lenient) throws ParseException {
+		if (s.trim().length() == 0) {
+			return null;
+		}
+		// The deprecated Date#parse method is actually pretty flexible. [Jon
+		// Aquino]
+		try {
+			if (verbose) {
+				System.out.println(s + " -- Date constructor");
+			}
+			return new Date(s);
+		} catch (Exception e) {
+			// Eat it. [Jon Aquino]
+		}
 
-    private Date parse(String s, Collection formatters) throws ParseException {
-        ParseException firstParseException = null;
+		try {
+			return parse(s, unlenientFormatters());
+		} catch (ParseException e) {
+			if (lenient) {
+				return parse(s, lenientFormatters());
+			}
 
-        for (Iterator i = formatters.iterator(); i.hasNext();) {
-            SimpleDateFormat formatter = (SimpleDateFormat) i.next();
+			throw e;
+		}
+	}
 
-            if (verbose) {
-                System.out.println(
-                    s
-                        + " -- "
-                        + formatter.toPattern()
-                        + (formatter.isLenient() ? "lenient" : ""));
-            }
+	private Date parse(String s, Collection formatters) throws ParseException {
+		ParseException firstParseException = null;
 
-            try {
-                return parse(s, formatter);
-            } catch (ParseException e) {
-                if (firstParseException == null) {
-                    firstParseException = e;
-                }
-            }
-        }
+		for (Iterator i = formatters.iterator(); i.hasNext();) {
+			SimpleDateFormat formatter = (SimpleDateFormat) i.next();
 
-        throw firstParseException;
-    }
+			if (verbose) {
+				System.out.println(s + " -- " + formatter.toPattern()
+						+ (formatter.isLenient() ? "lenient" : ""));
+			}
 
-    private Date parse(String s, SimpleDateFormat formatter) throws ParseException {
-        ParsePosition pos = new ParsePosition(0);
-        Date date = formatter.parse(s, pos);
+			try {
+				return parse(s, formatter);
+			} catch (ParseException e) {
+				if (firstParseException == null) {
+					firstParseException = e;
+				}
+			}
+		}
 
-        if (pos.getIndex() == 0) {
-            throw new ParseException(
-                "Unparseable date: \"" + s + "\"",
-                pos.getErrorIndex());
-        }
+		throw firstParseException;
+	}
 
-        //SimpleDateFormat ignores trailing characters in the pattern string that it
-        //doesn't need. Don't allow it to ignore any characters. [Jon Aquino]
-        if (pos.getIndex() != s.length()) {
-            throw new ParseException(
-                "Unparseable date: \"" + s + "\"",
-                pos.getErrorIndex());
-        }
+	private Date parse(String s, SimpleDateFormat formatter)
+			throws ParseException {
+		ParsePosition pos = new ParsePosition(0);
+		Date date = formatter.parse(s, pos);
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
+		if (pos.getIndex() == 0) {
+			throw new ParseException("Unparseable date: \"" + s + "\"",
+					pos.getErrorIndex());
+		}
 
-        if ((calendar.get(Calendar.YEAR) == 1970) && (s.indexOf("70") == -1)) {
-            calendar.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR));
-        }
+		// SimpleDateFormat ignores trailing characters in the pattern string
+		// that it
+		// doesn't need. Don't allow it to ignore any characters. [Jon Aquino]
+		if (pos.getIndex() != s.length()) {
+			throw new ParseException("Unparseable date: \"" + s + "\"",
+					pos.getErrorIndex());
+		}
 
-        return calendar.getTime();
-    }
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
 
-    private static class Pattern {
-        private String pattern;
-        private int index;
-        public Pattern(String pattern, int index) {
-            this.pattern = pattern;
-            this.index = index;
-        }
-        public String toString() {
-            return pattern;
-        }
-    }
+		if ((calendar.get(Calendar.YEAR) == 1970) && (s.indexOf("70") == -1)) {
+			calendar.set(Calendar.YEAR,
+					Calendar.getInstance().get(Calendar.YEAR));
+		}
 
-    private void load() {
-        if (lenientFormatters == null) {
-            InputStream inputStream =
-                getClass().getResourceAsStream("FlexibleDateParser.txt");
+		return calendar.getTime();
+	}
 
-            try {
-                try {
-                    Collection patterns = new ArrayList();
-                    int index = 0;
-                    for (Iterator i = FileUtil.getContents(inputStream).iterator();
-                        i.hasNext();
-                        ) {
-                        String line = ((String) i.next()).trim();
+	private static class Pattern {
+		private String pattern;
+		private int index;
 
-                        if (line.startsWith("#")) {
-                            continue;
-                        }
+		public Pattern(String pattern, int index) {
+			this.pattern = pattern;
+			this.index = index;
+		}
 
-                        if (line.length() == 0) {
-                            continue;
-                        }
+		public String toString() {
+			return pattern;
+		}
+	}
 
-                        patterns.add(new Pattern(line, index));
-                        index++;
-                    }
+	private void load() {
+		if (lenientFormatters == null) {
+			InputStream inputStream = getClass().getResourceAsStream(
+					"FlexibleDateParser.txt");
 
-                    unlenientFormatters = toFormatters(false, patterns);
-                    lenientFormatters = toFormatters(true, patterns);
-                } finally {
-                    inputStream.close();
-                }
-            } catch (IOException e) {
-                Assert.shouldNeverReachHere(e.toString());
-            }
-        }
-    }
+			try {
+				try {
+					Collection patterns = new ArrayList();
+					int index = 0;
+					for (Iterator i = FileUtil.getContents(inputStream)
+							.iterator(); i.hasNext();) {
+						String line = ((String) i.next()).trim();
 
-    private Collection toFormatters(boolean lenient, Collection patterns) {
-        ArrayList formatters = new ArrayList();
-        //Sort from least complex to most complex; otherwise, ddMMMyyyy 
-        //instead of MMMd will match "May 15". [Jon Aquino]
-        for (Iterator i = sortByComplexity(patterns).iterator(); i.hasNext();) {
-            Pattern pattern = (Pattern) i.next();
-            SimpleDateFormat formatter = new SimpleDateFormat(pattern.pattern);
-            formatter.setLenient(lenient);
-            formatters.add(formatter);
-        }
+						if (line.startsWith("#")) {
+							continue;
+						}
 
-        return formatters;
-    }
+						if (line.length() == 0) {
+							continue;
+						}
 
-    public static void main(String[] args) throws Exception {
-        System.out.println(DateFormat.getDateInstance().parse("03-Mar-1998"));
-    }
+						patterns.add(new Pattern(line, index));
+						index++;
+					}
 
-    public void setVerbose(boolean b) {
-        verbose = b;
-    }
+					unlenientFormatters = toFormatters(false, patterns);
+					lenientFormatters = toFormatters(true, patterns);
+				} finally {
+					inputStream.close();
+				}
+			} catch (IOException e) {
+				Assert.shouldNeverReachHere(e.toString());
+			}
+		}
+	}
+
+	private Collection toFormatters(boolean lenient, Collection patterns) {
+		ArrayList formatters = new ArrayList();
+		// Sort from least complex to most complex; otherwise, ddMMMyyyy
+		// instead of MMMd will match "May 15". [Jon Aquino]
+		for (Iterator i = sortByComplexity(patterns).iterator(); i.hasNext();) {
+			Pattern pattern = (Pattern) i.next();
+			SimpleDateFormat formatter = new SimpleDateFormat(pattern.pattern);
+			formatter.setLenient(lenient);
+			formatters.add(formatter);
+		}
+
+		return formatters;
+	}
+
+	public static void main(String[] args) throws Exception {
+		System.out.println(DateFormat.getDateInstance().parse("03-Mar-1998"));
+	}
+
+	public void setVerbose(boolean b) {
+		verbose = b;
+	}
 }

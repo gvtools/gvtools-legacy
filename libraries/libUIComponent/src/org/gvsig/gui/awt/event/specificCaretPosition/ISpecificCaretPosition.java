@@ -1,4 +1,5 @@
 package org.gvsig.gui.awt.event.specificCaretPosition;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -42,7 +43,7 @@ package org.gvsig.gui.awt.event.specificCaretPosition;
 
 /**
  * Interface with the prototype of methods to have a component with an specific
- *   caret position
+ * caret position
  * 
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
@@ -50,18 +51,21 @@ public interface ISpecificCaretPosition {
 	public static final int LEFT_POSITIONS = 1;
 	public static final int RIGHT_POSITIONS = 2;
 	public static final int LIKE_JTEXTCOMPONENT = 3;
-	
+
 	/**
 	 * Gets the position of text that will be seen
-	 *
-	 * @return The position of text that will be seen (LEFT_POSITIONS, RIGHT_POSITIONS or LIKE_JTEXTCOMPONENT)
+	 * 
+	 * @return The position of text that will be seen (LEFT_POSITIONS,
+	 *         RIGHT_POSITIONS or LIKE_JTEXTCOMPONENT)
 	 */
 	public int getCaretPositionMode();
 
 	/**
 	 * Sets the position of text that will be seen
 	 * 
-	 * @param caretPositionMode The position of text that will be seen (LEFT_POSITIONS, RIGHT_POSITIONS or LIKE_JTEXTCOMPONENT)
+	 * @param caretPositionMode
+	 *            The position of text that will be seen (LEFT_POSITIONS,
+	 *            RIGHT_POSITIONS or LIKE_JTEXTCOMPONENT)
 	 */
 	public void setCaretPositionMode(int caretPositionMode);
 }

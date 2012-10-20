@@ -40,35 +40,35 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: TestXMLEntity.java 10602 2007-03-05 11:15:50Z jaume $
-* $Log$
-* Revision 1.7  2007-03-05 11:15:43  jaume
-* *** empty log message ***
-*
-* Revision 1.6  2007/03/05 10:03:12  jaume
-* *** empty log message ***
-*
-* Revision 1.5  2007/03/05 09:00:11  jaume
-* *** empty log message ***
-*
-* Revision 1.4  2007/03/02 13:35:56  jaume
-* *** empty log message ***
-*
-* Revision 1.3  2007/03/02 13:27:32  jaume
-* *** empty log message ***
-*
-* Revision 1.2  2007/03/02 13:24:53  jaume
-* *** empty log message ***
-*
-* Revision 1.1  2007/03/02 13:23:50  jaume
-* *** empty log message ***
-*
-* Revision 1.1  2006/08/29 06:18:17  jaume
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: TestXMLEntity.java 10602 2007-03-05 11:15:50Z jaume $
+ * $Log$
+ * Revision 1.7  2007-03-05 11:15:43  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.6  2007/03/05 10:03:12  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.5  2007/03/05 09:00:11  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.4  2007/03/02 13:35:56  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.3  2007/03/02 13:27:32  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.2  2007/03/02 13:24:53  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1  2007/03/02 13:23:50  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/08/29 06:18:17  jaume
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.utiles;
 
 import java.io.File;
@@ -88,12 +88,10 @@ public class TestXMLEntity extends TestCase {
 		x2 = new XMLEntity();
 		x3 = new XMLEntity();
 
-		
 		final Object obj1 = new XMLEntity();
 		final Object obj2 = new XMLEntity();
 		final Object obj3 = "StringClass";
 
-		
 		x1.putProperty("boolean1", false);
 		x1.putProperty("boolean2", true);
 
@@ -115,8 +113,7 @@ public class TestXMLEntity extends TestCase {
 		x1.putProperty("object1", obj1);
 		x1.putProperty("object2", obj2);
 
-
-		//----- x1 == x2
+		// ----- x1 == x2
 		x2.putProperty("boolean1", false);
 		x2.putProperty("boolean2", true);
 
@@ -138,8 +135,7 @@ public class TestXMLEntity extends TestCase {
 		x2.putProperty("object1", obj1);
 		x2.putProperty("object2", obj2);
 
-		
-		//----- x1 != x3
+		// ----- x1 != x3
 
 		x3.putProperty("boolean1", false);
 		x3.putProperty("boolean2", true);
@@ -161,24 +157,21 @@ public class TestXMLEntity extends TestCase {
 
 		x3.putProperty("object1", obj1);
 		x3.putProperty("object2", obj3);
-		
-		
+
 		XmlTag tag;
 		try {
-			tag = (XmlTag) XmlTag.unmarshal(
-					new FileReader(new File("testdata/sample.gvp")));
+			tag = (XmlTag) XmlTag.unmarshal(new FileReader(new File(
+					"testdata/sample.gvp")));
 			gvp1 = new XMLEntity(tag);
-			
-			tag = (XmlTag) XmlTag.unmarshal(
-					new FileReader(new File("testdata/sample2.gvp")));
+
+			tag = (XmlTag) XmlTag.unmarshal(new FileReader(new File(
+					"testdata/sample2.gvp")));
 			gvp2 = new XMLEntity(tag);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		 
+
 	}
 
 	public void testEquality() {
@@ -188,17 +181,15 @@ public class TestXMLEntity extends TestCase {
 		assertFalse(x2.equals(x3));
 	}
 
-	
 	public void testHash() {
 		final long x1Hash = x1.hash();
 		final long x2Hash = x2.hash();
 		final long x3Hash = x3.hash();
-		
+
 		assertTrue("x1 should be equals to x2", x1Hash == x2Hash);
 		assertTrue("x1 should be distinct to x3", x1Hash != x3Hash);
 	}
-	
-	
+
 	public void testSkippedProperties() {
 		x1.putProperty("skipped1", true, false);
 		x1.putProperty("skipped2", 1, false);
@@ -206,14 +197,14 @@ public class TestXMLEntity extends TestCase {
 		x1.putProperty("skipped4", 1F, false);
 		x1.putProperty("skipped5", 1L, false);
 		x1.putProperty("skipped6", "bla bla", false);
-		
+
 		x2.putProperty("skipped1", false, false);
 		x2.putProperty("skipped2", 2, false);
 		x2.putProperty("skipped3", 2D, false);
 		x2.putProperty("skipped4", 2F, false);
 		x2.putProperty("skipped5", 2L, false);
 		x2.putProperty("skipped6", "bla bla bleitor", false);
-		
+
 		x3.putProperty("skipped1", false, false);
 		x3.putProperty("skipped2", 2, false);
 		x3.putProperty("skipped3", 2D, false);
@@ -221,30 +212,28 @@ public class TestXMLEntity extends TestCase {
 		x3.putProperty("skipped5", 2L, false);
 		x3.putProperty("skipped6", "bla bla bleitor", false);
 
-		
-		
 		final long x1Hash = x1.hash();
 		final long x2Hash = x2.hash();
 		final long x3Hash = x3.hash();
-		
+
 		assertTrue("x1 should be equals to x2", x1Hash == x2Hash);
 		assertTrue("x1 should be distinct to x3", x1Hash != x3Hash);
 		assertTrue("x2 should be distinct to x3", x2Hash != x3Hash);
-		
+
 		x1.remove("skipped1");
 		x1.remove("skipped2");
 		x1.remove("skipped3");
 		x1.remove("skipped4");
 		x1.remove("skipped5");
 		x1.remove("skipped6");
-		
+
 		x2.remove("skipped1");
 		x2.remove("skipped2");
 		x2.remove("skipped3");
 		x2.remove("skipped4");
 		x2.remove("skipped5");
 		x2.remove("skipped6");
-		
+
 		x3.remove("skipped1");
 		x3.remove("skipped2");
 		x3.remove("skipped3");
@@ -252,8 +241,6 @@ public class TestXMLEntity extends TestCase {
 		x3.remove("skipped5");
 		x3.remove("skipped6");
 	}
-	
-	
 
 	public void testNonSkippedProperties() {
 		x1.putProperty("non_skipped1", true, true);
@@ -262,7 +249,7 @@ public class TestXMLEntity extends TestCase {
 		x1.putProperty("non_skipped4", 1F, true);
 		x1.putProperty("non_skipped5", 1L, true);
 		x1.putProperty("non_skipped6", "bla bla", true);
-		
+
 		x3.putProperty("non_skipped1", false, true);
 		x3.putProperty("non_skipped2", 2, true);
 		x3.putProperty("non_skipped3", 2D, true);
@@ -276,16 +263,15 @@ public class TestXMLEntity extends TestCase {
 		x2.putProperty("non_skipped4", 2F, true);
 		x2.putProperty("non_skipped5", 2L, true);
 		x2.putProperty("non_skipped6", "bla bla bleitor", true);
-		
+
 		final long x1Hash = x1.hash();
 		final long x2Hash = x2.hash();
 		final long x3Hash = x3.hash();
-		
+
 		assertFalse("x1 should be distinct to x2", x1Hash == x2Hash);
 		assertFalse("x1 should be distinct to x3", x1Hash == x3Hash);
 		assertFalse("x2 should be distinct to x3", x2Hash == x3Hash);
-		
-		
+
 		// restore the XMEntities to the initial state and ensure that
 		// passes the tests again
 		x1.remove("non_skipped1");
@@ -294,25 +280,24 @@ public class TestXMLEntity extends TestCase {
 		x1.remove("non_skipped4");
 		x1.remove("non_skipped5");
 		x1.remove("non_skipped6");
-		
+
 		x2.remove("non_skipped1");
 		x2.remove("non_skipped2");
 		x2.remove("non_skipped3");
 		x2.remove("non_skipped4");
 		x2.remove("non_skipped5");
 		x2.remove("non_skipped6");
-		
+
 		x3.remove("non_skipped1");
 		x3.remove("non_skipped2");
 		x3.remove("non_skipped3");
 		x3.remove("non_skipped4");
 		x3.remove("non_skipped5");
 		x3.remove("non_skipped6");
-		
+
 		testHash();
 		testEquality();
 	}
-	
 
 	public void testEquivalentProjects() {
 		final long x1Hash = gvp1.hash();
@@ -320,32 +305,34 @@ public class TestXMLEntity extends TestCase {
 
 		assertTrue("x1 should be equals to x2", x1Hash == x2Hash);
 	}
-	
+
 	public void testBenchMark() {
-		long t_ini, t_unmarshal, t_buildXMLEntity, t_computeHash ;
+		long t_ini, t_unmarshal, t_buildXMLEntity, t_computeHash;
 		t_ini = System.currentTimeMillis();
 		XmlTag tag;
 		try {
-			File f= new File("testdata/big.gvp");
-			tag = (XmlTag) XmlTag.unmarshal(
-					new FileReader(f));
+			File f = new File("testdata/big.gvp");
+			tag = (XmlTag) XmlTag.unmarshal(new FileReader(f));
 			t_unmarshal = System.currentTimeMillis() - t_ini;
-			
+
 			gvp1 = new XMLEntity(tag);
-			t_buildXMLEntity = System.currentTimeMillis() - t_unmarshal- t_ini;
+			t_buildXMLEntity = System.currentTimeMillis() - t_unmarshal - t_ini;
 
 			long hash = gvp1.hash();
-			t_computeHash = System.currentTimeMillis() - t_buildXMLEntity- t_ini;
-			
-			assertTrue("BenchMark ("+f.getAbsolutePath()+" "+f.length()/1024+"Kb):" +
-					"\t-unmarshal time: "+t_unmarshal+" milliseconds\n" +
-					"\t-build XMLEntity time: "+t_buildXMLEntity+" milliseconds\n" +
-					"\t-compute hash time: "+t_computeHash+" milliseconds",t_computeHash < 500);
-			
+			t_computeHash = System.currentTimeMillis() - t_buildXMLEntity
+					- t_ini;
+
+			assertTrue("BenchMark (" + f.getAbsolutePath() + " " + f.length()
+					/ 1024 + "Kb):" + "\t-unmarshal time: " + t_unmarshal
+					+ " milliseconds\n" + "\t-build XMLEntity time: "
+					+ t_buildXMLEntity + " milliseconds\n"
+					+ "\t-compute hash time: " + t_computeHash
+					+ " milliseconds", t_computeHash < 500);
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 }

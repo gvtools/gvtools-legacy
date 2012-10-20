@@ -51,6 +51,6 @@ import org.gvsig.gpe.parser.GPEErrorHandler;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class FmapErrorHandler extends GPEErrorHandler{
+public class FmapErrorHandler extends GPEErrorHandler {
 
 }

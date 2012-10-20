@@ -44,12 +44,11 @@ import edu.uci.ics.jung.graph.ArchetypeEdge;
 import edu.uci.ics.jung.graph.decorators.NumberEdgeValue;
 
 /**
- * @author fjp
- * Suponemos que edge es de tipo FEdge, que extiendo ArchetypeEdge
- *
+ * @author fjp Suponemos que edge es de tipo FEdge, que extiendo ArchetypeEdge
+ * 
  */
 public class EdgeWeightLabeller implements NumberEdgeValue {
-		
+
 	public Number getNumber(ArchetypeEdge e) {
 		FEdge fe = (FEdge) e;
 		double weight = fe.getWeight();
@@ -62,5 +61,3 @@ public class EdgeWeightLabeller implements NumberEdgeValue {
 	}
 
 }
-
-

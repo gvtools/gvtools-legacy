@@ -3,7 +3,6 @@ package es.gva.cit.catalog.csw.messages;
 import es.gva.cit.catalog.csw.drivers.profiles.CSWAbstractProfile;
 import es.gva.cit.catalog.csw.parsers.CSWConstants;
 import es.gva.cit.catalog.languages.FilterEncoding;
-import es.gva.cit.catalog.utils.Strings;
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
@@ -54,46 +53,57 @@ import es.gva.cit.catalog.utils.Strings;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class CSWMessages0_9_0 extends CSWAbstractMessages{
+public class CSWMessages0_9_0 extends CSWAbstractMessages {
 	private static final String TYPENAMES = "Dataset";
 	private static final String ESCAPECHAR = "escape";
-	
+
 	public CSWMessages0_9_0(CSWAbstractProfile profile) {
-		super(profile);		
+		super(profile);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalog.csw.messages.CSWAbstractMessages#getContraintVersion()
+	 * 
+	 * @see
+	 * es.gva.cit.catalog.csw.messages.CSWAbstractMessages#getContraintVersion()
 	 */
 	protected String getContraintVersion() {
 		return CSWConstants.CONSTRAINT_VERSION_0_9_0;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalog.csw.messages.CSWAbstractMessages#createGetRecordsQuery()
+	 * 
+	 * @see
+	 * es.gva.cit.catalog.csw.messages.CSWAbstractMessages#createGetRecordsQuery
+	 * ()
 	 */
-	protected String createGetRecordsQuery(){
+	protected String createGetRecordsQuery() {
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("<" + CSWConstants.CSW_NAMESPACE + ":" + CSWConstants.QUERY + " ");
+		buffer.append("<" + CSWConstants.CSW_NAMESPACE + ":"
+				+ CSWConstants.QUERY + " ");
 		buffer.append(CSWConstants.TYPENAMES + "=\"" + TYPENAMES + "\"");
 		buffer.append(">");
-		buffer.append("<" + CSWConstants.CSW_NAMESPACE + ":" + CSWConstants.ELEMENTSETNAME + " ");
+		buffer.append("<" + CSWConstants.CSW_NAMESPACE + ":"
+				+ CSWConstants.ELEMENTSETNAME + " ");
 		buffer.append(CSWConstants.TYPENAMES + "=\"" + TYPENAMES + "\"");
 		buffer.append(">");
 		buffer.append(CSWConstants.FULL);
-		buffer.append("</" + CSWConstants.CSW_NAMESPACE + ":" + CSWConstants.ELEMENTSETNAME + ">");
+		buffer.append("</" + CSWConstants.CSW_NAMESPACE + ":"
+				+ CSWConstants.ELEMENTSETNAME + ">");
 		buffer.append(createGetRecordsConstraint());
-		buffer.append("</" + CSWConstants.CSW_NAMESPACE + ":" + CSWConstants.QUERY + ">");
+		buffer.append("</" + CSWConstants.CSW_NAMESPACE + ":"
+				+ CSWConstants.QUERY + ">");
 		return buffer.toString();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalog.csw.messages.CSWAbstractMessages#getFilterEncoding()
+	 * 
+	 * @see
+	 * es.gva.cit.catalog.csw.messages.CSWAbstractMessages#getFilterEncoding()
 	 */
-	protected FilterEncoding getFilterEncoding(){
+	protected FilterEncoding getFilterEncoding() {
 		FilterEncoding filter = super.getFilterEncoding();
 		filter.setEscapeCharLabel(ESCAPECHAR);
 		return filter;

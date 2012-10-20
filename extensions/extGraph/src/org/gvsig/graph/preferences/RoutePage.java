@@ -105,23 +105,25 @@ public class RoutePage extends AbstractPreferencePage {
 	private JButton btnChangeSymbol;
 
 	public RoutePage() {
-		icon = new ImageIcon(this.getClass().getClassLoader().getResource(
-				"images/net-analyst-icon.png"));
+		icon = new ImageIcon(this.getClass().getClassLoader()
+				.getResource("images/net-analyst-icon.png"));
 		symbolPreview = new SymbolPreviewer();
 		symbolPreview.setPreferredSize(new Dimension(100, 100));
 		symbolPreview.setBorder(BorderFactory.createBevelBorder(1));
 
 		JPanel aux = new JPanel();
 		aux.add(symbolPreview);
-		addComponent(PluginServices.getText(this, "use_symbol") +":", aux);
+		addComponent(PluginServices.getText(this, "use_symbol") + ":", aux);
 		aux = new JPanel();
-		aux.add(btnChangeSymbol = new JButton(PluginServices.getText(this, "change")));
+		aux.add(btnChangeSymbol = new JButton(PluginServices.getText(this,
+				"change")));
 		btnChangeSymbol.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ISymbolSelector symbSelec = SymbolSelector.createSymbolSelector(null, FShape.LINE);
+				ISymbolSelector symbSelec = SymbolSelector
+						.createSymbolSelector(null, FShape.LINE);
 				PluginServices.getMDIManager().addWindow(symbSelec);
 				ISymbol sym = (ISymbol) symbSelec.getSelectedObject();
-				if (sym!=null)
+				if (sym != null)
 					symbolPreview.setSymbol(sym);
 			}
 		});

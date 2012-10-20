@@ -20,38 +20,37 @@ import com.iver.andami.Launcher;
 import com.iver.andami.PluginServices;
 
 /**
- * This class controls the icon theme. Contains two themes, the first is a default
- * theme and the second is the current theme. When it creates the class the default and
- * the current theme are the same. Allows change the current theme, register a new theme,
- * delete one,... and all the methods that the <code>Collection</code> interface contains.
- * The themes are stored in an ArrayList.
- *
+ * This class controls the icon theme. Contains two themes, the first is a
+ * default theme and the second is the current theme. When it creates the class
+ * the default and the current theme are the same. Allows change the current
+ * theme, register a new theme, delete one,... and all the methods that the
+ * <code>Collection</code> interface contains. The themes are stored in an
+ * ArrayList.
+ * 
  * @author eustaquio
  */
-public class IconThemeManager implements Collection{
+public class IconThemeManager implements Collection {
 
 	private IIconTheme def;
 	private IIconTheme current;
 	private File themesDir = null;
-	ArrayList<IIconTheme> themes=new ArrayList<IIconTheme>();
+	ArrayList<IIconTheme> themes = new ArrayList<IIconTheme>();
 	private final String themeDefinitionFile = "theme.xml";
 	private static IconThemeManager iconThemeManager = null;
 
-	public static IconThemeManager getIconThemeManager(){
-		if (iconThemeManager == null){
+	public static IconThemeManager getIconThemeManager() {
+		if (iconThemeManager == null) {
 			iconThemeManager = new IconThemeManager();
 		}
 		return iconThemeManager;
 	}
 
-
-
-
 	/**
 	 * Default constructor. Creates a iconThemeMemory by default and assigns it
-	 * like default and current. The default theme is add to the themes ArrayList.
+	 * like default and current. The default theme is add to the themes
+	 * ArrayList.
 	 */
-	public IconThemeManager(){
+	public IconThemeManager() {
 		IconThemeMemory aux = new IconThemeMemory(null);
 		def = aux;
 		def.setName("Default");
@@ -62,65 +61,72 @@ public class IconThemeManager implements Collection{
 
 	/**
 	 * Gets the default theme
+	 * 
 	 * @return the default theme.
 	 */
-	public IIconTheme getDefault(){
+	public IIconTheme getDefault() {
 		return def;
 	}
 
 	/**
 	 * Sets the iconTheme like current theme
+	 * 
 	 * @param iconTheme
 	 */
-	public void setCurrent(IIconTheme iconTheme){
-		if(themes.contains(iconTheme)){
+	public void setCurrent(IIconTheme iconTheme) {
+		if (themes.contains(iconTheme)) {
 			current = iconTheme;
-			//saveConfig(current);
-		}else{
+			// saveConfig(current);
+		} else {
 			register(iconTheme);
 			current = iconTheme;
-			//saveConfig(current);
+			// saveConfig(current);
 		}
 	}
 
 	/**
 	 * Gets the current theme
+	 * 
 	 * @return current the current theme
 	 */
-	public IIconTheme getCurrent(){
+	public IIconTheme getCurrent() {
 		return current;
 	}
 
 	/**
 	 * Stores a icon theme that receives like a parametre
+	 * 
 	 * @param iconTheme
 	 */
-	public void register(IIconTheme iconTheme){
+	public void register(IIconTheme iconTheme) {
 		themes.add(iconTheme);
 		iconTheme.setDefault(def);
 	}
 
 	/**
-	 * Returns the theme that has been registered with the name that receives like
-	 * parameter
+	 * Returns the theme that has been registered with the name that receives
+	 * like parameter
+	 * 
 	 * @param themeName
 	 * @return the theme that contains like name in its properties the parameter
 	 */
-	public IIconTheme getTheme(String themeName){
-		for(int i = 0; i<themes.size();i++){
-			if(themes.get(i).getName().equals(themeName)) return themes.get(i);
+	public IIconTheme getTheme(String themeName) {
+		for (int i = 0; i < themes.size(); i++) {
+			if (themes.get(i).getName().equals(themeName))
+				return themes.get(i);
 		}
 		return null;
 	}
 
 	/**
 	 * Set the directory to read the icon themes.
-	 *
-	 * @param themesDir The directory in which the icon themes
-	 * are stored
-	 *
-	 * @throws FileNotFoundException If the provided directory does not
-	 * exist or is not a directory
+	 * 
+	 * @param themesDir
+	 *            The directory in which the icon themes are stored
+	 * 
+	 * @throws FileNotFoundException
+	 *             If the provided directory does not exist or is not a
+	 *             directory
 	 */
 	public void setThemesDir(File themesDir) throws FileNotFoundException {
 		if (!themesDir.exists() || !themesDir.isDirectory())
@@ -130,6 +136,7 @@ public class IconThemeManager implements Collection{
 
 	/**
 	 * Gets the themes directory
+	 * 
 	 * @return
 	 */
 	public File getThemesDir() {
@@ -137,24 +144,27 @@ public class IconThemeManager implements Collection{
 	}
 
 	/**
-	 *
-	 * Save the provided theme as default in the configuration file.
-	 * This will not change the default theme for this session, it will
-	 * just write the new selection in the configuration file (for
-	 * the next session).
-	 *
-	 * @param info The theme to be set as default for next session.
+	 * 
+	 * Save the provided theme as default in the configuration file. This will
+	 * not change the default theme for this session, it will just write the new
+	 * selection in the configuration file (for the next session).
+	 * 
+	 * @param info
+	 *            The theme to be set as default for next session.
 	 */
 	private void saveConfig(IIconTheme info) {
-		if (getThemesDir()==null || info==null || info.getResource()==null)
+		if (getThemesDir() == null || info == null
+				|| info.getResource() == null)
 			return;
-		com.iver.andami.config.generate.AndamiOptions options = Launcher.getAndamiConfig().getAndamiOptions();
-		if (options==null) {
+		com.iver.andami.config.generate.AndamiOptions options = Launcher
+				.getAndamiConfig().getAndamiOptions();
+		if (options == null) {
 			options = new com.iver.andami.config.generate.AndamiOptions();
 			Launcher.getAndamiConfig().setAndamiOptions(options);
 		}
-		com.iver.andami.config.generate.IconTheme themeConfig = options.getIconTheme();
-		if (themeConfig==null) {
+		com.iver.andami.config.generate.IconTheme themeConfig = options
+				.getIconTheme();
+		if (themeConfig == null) {
 			themeConfig = new com.iver.andami.config.generate.IconTheme();
 			options.setIconTheme(themeConfig);
 		}
@@ -162,12 +172,11 @@ public class IconThemeManager implements Collection{
 		themeConfig.setName(info.getName());
 		themeConfig.setDescription(info.getDescription());
 		themeConfig.setVersion(info.getVersion());
-		if (info.getResource()!=null) {
+		if (info.getResource() != null) {
 			if (info.getResource() instanceof File) {
 				File resource = (File) info.getResource();
 				themeConfig.setResource(resource.getName());
-			}
-			else if (info.getResource() instanceof ZipFile) {
+			} else if (info.getResource() instanceof ZipFile) {
 				ZipFile resource = (ZipFile) info.getResource();
 				themeConfig.setResource(resource.getName());
 			}
@@ -176,19 +185,23 @@ public class IconThemeManager implements Collection{
 
 	/**
 	 * Gets the Icon theme stored in the configuration
+	 * 
 	 * @return IIconTheme
 	 */
 	public IIconTheme getIconThemeFromConfig() {
-		if (Launcher.getAndamiConfig().getAndamiOptions()==null
-				|| Launcher.getAndamiConfig().getAndamiOptions().getIconTheme()==null
-				|| Launcher.getAndamiConfig().getAndamiOptions().getIconTheme().getResource()==null)
+		if (Launcher.getAndamiConfig().getAndamiOptions() == null
+				|| Launcher.getAndamiConfig().getAndamiOptions().getIconTheme() == null
+				|| Launcher.getAndamiConfig().getAndamiOptions().getIconTheme()
+						.getResource() == null)
 			return null;
 
-		com.iver.andami.config.generate.IconTheme selectedTheme = Launcher.getAndamiConfig().getAndamiOptions().getIconTheme();
+		com.iver.andami.config.generate.IconTheme selectedTheme = Launcher
+				.getAndamiConfig().getAndamiOptions().getIconTheme();
 
 		try {
 			setThemesDir(new File(selectedTheme.getBasedir()));
-			File themeFile = new File(selectedTheme.getBasedir()+File.separator+selectedTheme.getResource());
+			File themeFile = new File(selectedTheme.getBasedir()
+					+ File.separator + selectedTheme.getResource());
 			if (themeFile.exists()) {
 				IIconTheme info;
 				try {
@@ -199,38 +212,45 @@ public class IconThemeManager implements Collection{
 				} catch (ZipException e) {
 					// ZIPPED theme failed, try to load from directory
 					if (themeFile.isFile() && themeFile.canRead()) {
-						info = readInfoFromDir(new File(selectedTheme.getResource()));
+						info = readInfoFromDir(new File(
+								selectedTheme.getResource()));
 						return info;
 					}
-				} catch (IOException e) {}
+				} catch (IOException e) {
+				}
 			}
-		} catch (FileNotFoundException e1) {}
+		} catch (FileNotFoundException e1) {
+		}
 		return null;
 	}
 
 	/**
 	 * Gets the base name of a entry
+	 * 
 	 * @param fullname
 	 * @return
 	 */
 	private String basename(String fullname) {
-		String[] parts = fullname.split(File.separator+"|/");
-		return parts[parts.length-1];
+		String[] parts = fullname.split(File.separator + "|/");
+		return parts[parts.length - 1];
 	}
 
 	/**
 	 * Returns an icon theme from a file that receives like a parameter
+	 * 
 	 * @param zipFile
 	 * @return
 	 * @throws ZipException
 	 * @throws IOException
 	 */
-	private IconThemeZip readInfoFromZip(File zipFile) throws ZipException, IOException {
+	private IconThemeZip readInfoFromZip(File zipFile) throws ZipException,
+			IOException {
 		return readInfoFromZip(new ZipFile(zipFile));
 	}
 
 	/**
 	 * Returns an icon theme from a zip file that receives like a parameter
+	 * 
 	 * @param zipFile
 	 * @return IconThemeZip
 	 * @throws IOException
@@ -238,9 +258,10 @@ public class IconThemeManager implements Collection{
 	private IconThemeZip readInfoFromZip(ZipFile zipFile) throws IOException {
 		IconThemeZip themeInfo;
 		Enumeration entries = zipFile.entries();
-		ZipEntry xmlEntry=null, dirEntry=null;
+		ZipEntry xmlEntry = null, dirEntry = null;
 		// search for theme.xml and the directory names
-		while (entries.hasMoreElements() && (xmlEntry==null||dirEntry==null)) {
+		while (entries.hasMoreElements()
+				&& (xmlEntry == null || dirEntry == null)) {
 			ZipEntry entry = (ZipEntry) entries.nextElement();
 			if (entry.isDirectory()) {
 				dirEntry = entry;
@@ -252,28 +273,28 @@ public class IconThemeManager implements Collection{
 
 		try {
 			// try with the XML file
-			if (xmlEntry!=null) {
+			if (xmlEntry != null) {
 				themeInfo = readXML(zipFile.getInputStream(xmlEntry));
-				if (themeInfo.getDescription()==null)
+				if (themeInfo.getDescription() == null)
 					themeInfo.setDescription(zipFile.getName());
-				if (themeInfo.getName()==null)
+				if (themeInfo.getName() == null)
 					themeInfo.setName(themeInfo.getDescription());
 				themeInfo.setResource(zipFile);
 				return themeInfo;
 			}
 		} catch (XmlPullParserException e) {
-			PluginServices.getLogger().error("Error loading theme "+zipFile.getName()+". ", e);
+			PluginServices.getLogger().error(
+					"Error loading theme " + zipFile.getName() + ". ", e);
 		}
 
 		themeInfo = new IconThemeZip(def);
 		themeInfo.setResource(zipFile);
 		// now try with the directory
-		if (dirEntry!=null) {
+		if (dirEntry != null) {
 			themeInfo.setName(dirEntry.getName());
 			themeInfo.setDescription(dirEntry.getName());
 			return themeInfo;
-		}
-		else { // otherwise just use the zipName
+		} else { // otherwise just use the zipName
 			themeInfo.setName(zipFile.getName());
 			themeInfo.setDescription(zipFile.getName());
 			return themeInfo;
@@ -282,26 +303,28 @@ public class IconThemeManager implements Collection{
 
 	/**
 	 * Read the properties of IconThemeZip from a XML
+	 * 
 	 * @param xmlStream
 	 * @return IconThemeZip
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private IconThemeZip readXML(InputStream xmlStream) throws XmlPullParserException, IOException {
+	private IconThemeZip readXML(InputStream xmlStream)
+			throws XmlPullParserException, IOException {
 		KXmlParser parser = new KXmlParser();
 		// we use null encoding, in this way kxml2 tries to detect the encoding
 		parser.setInput(xmlStream, null);
-		IconThemeZip themeInfo=new IconThemeZip(def);
-		for (parser.next(); parser.getEventType()!=KXmlParser.END_DOCUMENT; parser.next()) {
-			// este bucle externo recorre las etiquetas de primer y segundo nivel
-			if (parser.getEventType()==KXmlParser.START_TAG) {
+		IconThemeZip themeInfo = new IconThemeZip(def);
+		for (parser.next(); parser.getEventType() != KXmlParser.END_DOCUMENT; parser
+				.next()) {
+			// este bucle externo recorre las etiquetas de primer y segundo
+			// nivel
+			if (parser.getEventType() == KXmlParser.START_TAG) {
 				if (parser.getName().equals("name")) {
 					themeInfo.setName(parser.nextText());
-				}
-				else if (parser.getName().equals("description")) {
+				} else if (parser.getName().equals("description")) {
 					themeInfo.setDescription(parser.nextText());
-				}
-				else if (parser.getName().equals("version")) {
+				} else if (parser.getName().equals("version")) {
 					themeInfo.setVersion(parser.nextText());
 				}
 			}
@@ -311,25 +334,27 @@ public class IconThemeManager implements Collection{
 
 	/**
 	 * Returns a IconThemeDir from a directory
+	 * 
 	 * @param dir
 	 * @return
 	 */
-	private IconThemeDir readInfoFromDir(File dir){
-		File themeDefinition = new File(dir + File.separator + themeDefinitionFile);
+	private IconThemeDir readInfoFromDir(File dir) {
+		File themeDefinition = new File(dir + File.separator
+				+ themeDefinitionFile);
 		IconThemeDir themeInfo;
 		try {
 			// try reading the XML file
 			if (themeDefinition.exists() && themeDefinition.isFile()) {
 				themeInfo = readXMLDir(new FileInputStream(themeDefinition));
-				if (themeInfo.getDescription()==null)
+				if (themeInfo.getDescription() == null)
 					themeInfo.setDescription(dir.getName());
-				if (themeInfo.getName()==null)
+				if (themeInfo.getName() == null)
 					themeInfo.setName(themeInfo.getDescription());
 				themeInfo.setResource(dir);
 				return themeInfo;
 			}
-		} catch (IOException e) {}
-		catch (XmlPullParserException e) {
+		} catch (IOException e) {
+		} catch (XmlPullParserException e) {
 			e.printStackTrace();
 		}
 		// the XML parsing failed, just show the dir name
@@ -342,26 +367,28 @@ public class IconThemeManager implements Collection{
 
 	/**
 	 * Read the properties of IconThemeDir from a XML
+	 * 
 	 * @param xmlStream
 	 * @return
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private IconThemeDir readXMLDir(InputStream xmlStream) throws XmlPullParserException, IOException {
+	private IconThemeDir readXMLDir(InputStream xmlStream)
+			throws XmlPullParserException, IOException {
 		KXmlParser parser = new KXmlParser();
 		// we use null encoding, in this way kxml2 tries to detect the encoding
 		parser.setInput(xmlStream, null);
-		IconThemeDir themeInfo=new IconThemeDir(def);
-		for (parser.next(); parser.getEventType()!=KXmlParser.END_DOCUMENT; parser.next()) {
-			// este bucle externo recorre las etiquetas de primer y segundo nivel
-			if (parser.getEventType()==KXmlParser.START_TAG) {
+		IconThemeDir themeInfo = new IconThemeDir(def);
+		for (parser.next(); parser.getEventType() != KXmlParser.END_DOCUMENT; parser
+				.next()) {
+			// este bucle externo recorre las etiquetas de primer y segundo
+			// nivel
+			if (parser.getEventType() == KXmlParser.START_TAG) {
 				if (parser.getName().equals("name")) {
 					themeInfo.setName(parser.nextText());
-				}
-				else if (parser.getName().equals("description")) {
+				} else if (parser.getName().equals("description")) {
 					themeInfo.setDescription(parser.nextText());
-				}
-				else if (parser.getName().equals("version")) {
+				} else if (parser.getName().equals("version")) {
 					themeInfo.setVersion(parser.nextText());
 				}
 			}
@@ -370,23 +397,29 @@ public class IconThemeManager implements Collection{
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#size()
 	 */
 	public int size() {
 		return themes.size();
 	}
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#isEmpty()
 	 */
 	public boolean isEmpty() {
-		if (themes.size()==0)return true;
-		else return false;
+		if (themes.size() == 0)
+			return true;
+		else
+			return false;
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#contains(java.lang.Object)
 	 */
 	public boolean contains(Object o) {
@@ -394,7 +427,8 @@ public class IconThemeManager implements Collection{
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Iterable#iterator()
 	 */
 	public Iterator iterator() {
@@ -402,7 +436,8 @@ public class IconThemeManager implements Collection{
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#toArray()
 	 */
 	public Object[] toArray() {
@@ -410,7 +445,8 @@ public class IconThemeManager implements Collection{
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#toArray(Object[] a)
 	 */
 	public Object[] toArray(Object[] a) {
@@ -418,7 +454,8 @@ public class IconThemeManager implements Collection{
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#remove(java.lang.Object)
 	 */
 	public boolean add(Object o) {
@@ -426,7 +463,8 @@ public class IconThemeManager implements Collection{
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#remove(java.lang.Object)
 	 */
 	public boolean remove(Object o) {
@@ -434,7 +472,8 @@ public class IconThemeManager implements Collection{
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#containsAll(Collection)
 	 */
 	public boolean containsAll(Collection c) {
@@ -442,7 +481,8 @@ public class IconThemeManager implements Collection{
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#addAll(Collection)
 	 */
 	public boolean addAll(Collection c) {
@@ -450,7 +490,8 @@ public class IconThemeManager implements Collection{
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#removeAll(Collection)
 	 */
 	public boolean removeAll(Collection c) {
@@ -458,7 +499,8 @@ public class IconThemeManager implements Collection{
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#retainAll(Collection)
 	 */
 	public boolean retainAll(Collection c) {
@@ -466,7 +508,8 @@ public class IconThemeManager implements Collection{
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#clear()
 	 */
 	public void clear() {

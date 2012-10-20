@@ -43,81 +43,85 @@ package com.iver.utiles;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public class DefaultCharSet implements SymbolSet {
-    private HashSet caracteres = new HashSet();
-    private ArrayList intervalos = new ArrayList();
+	private HashSet caracteres = new HashSet();
+	private ArrayList intervalos = new ArrayList();
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param c DOCUMENT ME!
-     */
-    public void addCharacter(char c) {
-        caracteres.add(new Character(c));
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param c
+	 *            DOCUMENT ME!
+	 */
+	public void addCharacter(char c) {
+		caracteres.add(new Character(c));
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param c1 DOCUMENT ME!
-     * @param c2 DOCUMENT ME!
-     */
-    public void addInterval(char c1, char c2) {
-        intervalos.add(new Interval(c1, c2));
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param c1
+	 *            DOCUMENT ME!
+	 * @param c2
+	 *            DOCUMENT ME!
+	 */
+	public void addInterval(char c1, char c2) {
+		intervalos.add(new Interval(c1, c2));
+	}
 
-    /**
-     * @see com.iver.utiles.SymbolSet#contains(char)
-     */
-    public boolean contains(char c) {
-        if (caracteres.contains(new Character(c))) {
-            return true;
-        }
+	/**
+	 * @see com.iver.utiles.SymbolSet#contains(char)
+	 */
+	public boolean contains(char c) {
+		if (caracteres.contains(new Character(c))) {
+			return true;
+		}
 
-        for (int i = 0; i < intervalos.size(); i++) {
-            if (((Interval) intervalos.get(i)).contains(c)) {
-                return true;
-            }
-        }
+		for (int i = 0; i < intervalos.size(); i++) {
+			if (((Interval) intervalos.get(i)).contains(c)) {
+				return true;
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @author Fernando González Cortés
-     */
-    public class Interval implements SymbolSet {
-        public int ini;
-        public int fin;
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @author Fernando González Cortés
+	 */
+	public class Interval implements SymbolSet {
+		public int ini;
+		public int fin;
 
-        /**
-         * Crea un nuevo Interval.
-         *
-         * @param c1 DOCUMENT ME!
-         * @param c2 DOCUMENT ME!
-         */
-        public Interval(char c1, char c2) {
-            ini = c1;
-            fin = c2;
-        }
+		/**
+		 * Crea un nuevo Interval.
+		 * 
+		 * @param c1
+		 *            DOCUMENT ME!
+		 * @param c2
+		 *            DOCUMENT ME!
+		 */
+		public Interval(char c1, char c2) {
+			ini = c1;
+			fin = c2;
+		}
 
-        /**
-         * @see com.iver.utiles.SymbolSet#contains(char)
-         */
-        public boolean contains(char c) {
-            if ((ini <= c) && (c <= fin)) {
-                return true;
-            }
+		/**
+		 * @see com.iver.utiles.SymbolSet#contains(char)
+		 */
+		public boolean contains(char c) {
+			if ((ini <= c) && (c <= fin)) {
+				return true;
+			}
 
-            return false;
-        }
-    }
+			return false;
+		}
+	}
 }

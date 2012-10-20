@@ -31,7 +31,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ComplexNotification {
-	private List list=new ArrayList();
+	private List list = new ArrayList();
+
 	public Iterator getIterator() {
 		return list.iterator();
 	}
@@ -40,7 +41,7 @@ public class ComplexNotification {
 		list.add(arg);
 	}
 
-	protected void dispose(){
+	protected void dispose() {
 
 	}
 

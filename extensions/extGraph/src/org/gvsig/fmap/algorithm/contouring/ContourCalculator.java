@@ -36,12 +36,9 @@ import org.gvsig.fmap.algorithm.triangulation.Triangle;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.CoordinateList;
-import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineSegment;
 import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.operation.linemerge.LineSequencer;
-import com.vividsolutions.jts.operation.polygonize.Polygonizer;
 
 public class ContourCalculator {
 	private TIN tin;
@@ -64,42 +61,43 @@ public class ContourCalculator {
 					Coordinate[] segment = tri.getSegmentZ(height);
 					// Checkeamos coordenadas
 					if (segment[0] == segment[1]) {
-						if (tri.containsZ(height - 0.1))
-						{
+						if (tri.containsZ(height - 0.1)) {
 							segment = tri.getSegmentZ(height - 0.1);
-						}
-						else
+						} else
 							continue;
 					}
-					LineString lineString = geomFactory.createLineString(segment);
+					LineString lineString = geomFactory
+							.createLineString(segment);
 					segmentList.add(lineString);
 
-//					TriEdge edgeIn = tri.getEdgeContainingZ(height);
-//					if (edgeIn != null) {
-//						gp = new CoordinateList();
-//						firstPoint = edgeIn.getPointOnZ(height);
-//						lastPoint = tri.getNextPoint(firstPoint, height);
-//						gp.add(firstPoint, true);
-//						gp.add(lastPoint, false);
-//					}
-//					if (gp.size() > 1) {
-//						LineString lineString = geomFactory.createLineString(gp.toCoordinateArray());
-//						segmentList.add(lineString);
-//					}
-//					else {
-//						System.out.println("stop!!");
-//					}
+					// TriEdge edgeIn = tri.getEdgeContainingZ(height);
+					// if (edgeIn != null) {
+					// gp = new CoordinateList();
+					// firstPoint = edgeIn.getPointOnZ(height);
+					// lastPoint = tri.getNextPoint(firstPoint, height);
+					// gp.add(firstPoint, true);
+					// gp.add(lastPoint, false);
+					// }
+					// if (gp.size() > 1) {
+					// LineString lineString =
+					// geomFactory.createLineString(gp.toCoordinateArray());
+					// segmentList.add(lineString);
+					// }
+					// else {
+					// System.out.println("stop!!");
+					// }
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				System.out.println("ContourCalculator.getContour(): " + e.getMessage());
+				System.out.println("ContourCalculator.getContour(): "
+						+ e.getMessage());
 			}
 			iTri++;
 		}
 		return segmentList;
 
 	}
-	
+
 	// TODO:
 	public Collection<LineString> getContour_Complex_BAD(double height) {
 		CoordinateList gp = null;
@@ -117,20 +115,26 @@ public class ContourCalculator {
 							if (firstPoint == null) { // initialize contour line
 								gp = new CoordinateList();
 								firstPoint = edgeIn.getPointOnZ(height);
-								lastPoint = tri.getNextPoint(firstPoint, height);
-								lastSegment = new LineSegment(firstPoint, lastPoint);
+								lastPoint = tri
+										.getNextPoint(firstPoint, height);
+								lastSegment = new LineSegment(firstPoint,
+										lastPoint);
 								gp.add(firstPoint, true);
 								gp.add(lastPoint, false);
 							}
 							boolean bExit = false;
 							do {
-								Triangle nextTri = findNeighbourg(tri, lastSegment);
+								Triangle nextTri = findNeighbourg(tri,
+										lastSegment);
 								if (nextTri != null) {
 									Coordinate auxC = new Coordinate(lastPoint);
-									lastPoint = nextTri.getNextPoint(lastPoint, height);
-									lastSegment = new LineSegment(auxC, lastPoint);
+									lastPoint = nextTri.getNextPoint(lastPoint,
+											height);
+									lastSegment = new LineSegment(auxC,
+											lastPoint);
 									gp.add(lastPoint, true);
-									double dAux = firstPoint.distance(lastPoint);
+									double dAux = firstPoint
+											.distance(lastPoint);
 									if (dAux < 1e-8) {
 										gp.closeRing();
 										bExit = true;
@@ -141,7 +145,9 @@ public class ContourCalculator {
 
 							} while (bExit == false);
 							if (gp.size() > 2) {
-								LineString lineString = geomFactory.createLineString(gp.toCoordinateArray());
+								LineString lineString = geomFactory
+										.createLineString(gp
+												.toCoordinateArray());
 								contourList.add(lineString);
 							}
 							firstPoint = null;
@@ -159,12 +165,10 @@ public class ContourCalculator {
 	}
 
 	/**
-	 * Find the triangle side by side with edgeIn 
-	 * Options: 
-	 * 1.- lastPoint on edge, and we exit by other edge.
-	 * 2.- lastPoint on vertex, and we exit by other edge.
-	 * 3.- lastPoint on vertex, and we exit by other vertex.
-	 * 4.- lastPoint on edge, and we exit by a vertex.
+	 * Find the triangle side by side with edgeIn Options: 1.- lastPoint on
+	 * edge, and we exit by other edge. 2.- lastPoint on vertex, and we exit by
+	 * other edge. 3.- lastPoint on vertex, and we exit by other vertex. 4.-
+	 * lastPoint on edge, and we exit by a vertex.
 	 * 
 	 * @param tri
 	 * @param lastSegment
@@ -183,26 +187,26 @@ public class ContourCalculator {
 		ArrayList<Triangle> aux = new ArrayList<Triangle>();
 		if (d1 < 1E-8) {
 			getEdgeNeighbours(s1, aux);
-		}
-		else if (d2 < 1E-8) {
+		} else if (d2 < 1E-8) {
 			getEdgeNeighbours(s2, aux);
-		}
-		else if (d3 < 1E-8) {
+		} else if (d3 < 1E-8) {
 			getEdgeNeighbours(s3, aux);
 		}
-		
+
 		// We choose a point "a little further on lastSegment"
 		// and try if it is inside neighbourg triangles
 		Coordinate pointOut = lastSegment.pointAlong(1.001);
-		for (Triangle theNextTriangle: aux) {
-			if (theNextTriangle == tri) continue; // We avoid to test the original triangle.
-			if (theNextTriangle.isVisited()) continue;
+		for (Triangle theNextTriangle : aux) {
+			if (theNextTriangle == tri)
+				continue; // We avoid to test the original triangle.
+			if (theNextTriangle.isVisited())
+				continue;
 			if (theNextTriangle.contains(pointOut))
 				return theNextTriangle;
 		}
 		return null;
 	}
-	
+
 	private void getEdgeNeighbours(TriEdge s1, ArrayList<Triangle> aux) {
 		List<Triangle> l1 = tin.getTrianglesRelatedTo(s1.getV1());
 		List<Triangle> l2 = tin.getTrianglesRelatedTo(s1.getV2());

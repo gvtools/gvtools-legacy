@@ -43,23 +43,30 @@ package com.iver.cit.gvsig.fmap.rendering;
 import com.iver.cit.gvsig.fmap.layers.LegendEvent;
 
 /**
- * <p>Event produced on a classified legend.</p>
- *
+ * <p>
+ * Event produced on a classified legend.
+ * </p>
+ * 
  * @author Vicente Caballero Navarro
  * @author jaume domimguez faus - jaume.dominguez@iver.es
  */
 public class ClassificationLegendEvent extends LegendEvent {
 	/**
-	 * <p>Gets the index of the class where the classification has changed.</p>
-	 *
+	 * <p>
+	 * Gets the index of the class where the classification has changed.
+	 * </p>
+	 * 
 	 * @return index of the class where the classification has changed
 	 */
 	public int getClassIndex() {
-		//TODO Implementar bien
+		// TODO Implementar bien
 		return -1;
 	}
+
 	/**
-	 * <p>Returns the type of this legend event.</p>
+	 * <p>
+	 * Returns the type of this legend event.
+	 * </p>
 	 * 
 	 * @return type of this legend event
 	 * 

@@ -25,6 +25,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import com.iver.andami.PluginServices;
+
 /**
  * Panel con los botones para la selección de transparencia.
  * 
@@ -32,7 +33,7 @@ import com.iver.andami.PluginServices;
  */
 public class TransparencySelectionPanel extends JPanel {
 	private static final long serialVersionUID = -8601512178169707418L;
-	private JButton areaViewSelectionButton  = null;
+	private JButton areaViewSelectionButton = null;
 	private JButton pixelViewSelectionButton = null;
 
 	/**
@@ -44,10 +45,14 @@ public class TransparencySelectionPanel extends JPanel {
 
 	/**
 	 * This method initializes this
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
-		setBorder(javax.swing.BorderFactory.createTitledBorder(null, PluginServices.getText(this, "transp_selection"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+		setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+				PluginServices.getText(this, "transp_selection"),
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
 		FlowLayout fl = new FlowLayout();
 		fl.setAlignment(FlowLayout.LEFT);
 		setLayout(fl);

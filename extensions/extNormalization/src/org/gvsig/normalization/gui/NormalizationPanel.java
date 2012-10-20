@@ -1349,11 +1349,11 @@ public class NormalizationPanel extends javax.swing.JPanel implements IWindow,
 
 			boolean pass = true;
 			String[] values = { "!", "\"", "#", "$", "%", "&", "\'", "(", ")",
-					"*", "+", ",", "/", ";", "<", "=", ">", "?", "@", "[",
-					"]", "^", "´", "`", "}", "{", "~" };
+					"*", "+", ",", "/", ";", "<", "=", ">", "?", "@", "[", "]",
+					"^", "´", "`", "}", "{", "~" };
 
 			int len = tx.length();
-			String s = tx.substring(len-1);
+			String s = tx.substring(len - 1);
 			for (int j = 0; j < values.length; j++) {
 				String val = values[j];
 				if (s.contains(val)) {
@@ -1366,22 +1366,22 @@ public class NormalizationPanel extends javax.swing.JPanel implements IWindow,
 				updateGUI();
 				setDirty(false);
 				int posi2 = jTextFieldName.getText().trim().length();
-				if(posi2>=posi){
+				if (posi2 >= posi) {
 					jTextFieldName.setCaretPosition(posi);
-				}else{
+				} else {
 					jTextFieldName.setCaretPosition(posi);
 				}
 			} else {
 				jTextFieldName.setText(preFieldName);
 				int dist = jTextFieldName.getText().trim().length();
-				if(posi>=dist){
-					jTextFieldName.setCaretPosition(posi-1);
-				}else{
+				if (posi >= dist) {
+					jTextFieldName.setCaretPosition(posi - 1);
+				} else {
 					jTextFieldName.setCaretPosition(posi);
 				}
 			}
 		}
-		
+
 	}
 
 	/**
@@ -1953,8 +1953,8 @@ public class NormalizationPanel extends javax.swing.JPanel implements IWindow,
 		}
 		DefaultTableModel dtm1 = null;
 		if (!isFile) {
-			dtm1 = new DefaultTableModel(data, new String[] { this.model
-					.getFieldToNormalize() }) {
+			dtm1 = new DefaultTableModel(data,
+					new String[] { this.model.getFieldToNormalize() }) {
 
 				private static final long serialVersionUID = -7429493540158414622L;
 

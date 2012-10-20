@@ -17,6 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
  */
 package org.gvsig.raster.datastruct;
+
 /**
  * Excepción lanzada cuando hay problemas con los rangos de transparencia. Puede
  * darse distintos casos, cadenas de entrada erroneas o valores fuera de rango.
@@ -26,7 +27,7 @@ package org.gvsig.raster.datastruct;
 public class TransparencyRangeException extends Exception {
 	private static final long serialVersionUID = 5826704800356644999L;
 
-	public TransparencyRangeException(String msg){
+	public TransparencyRangeException(String msg) {
 		super(msg);
 	}
 }

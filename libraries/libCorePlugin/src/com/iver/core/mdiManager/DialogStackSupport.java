@@ -50,44 +50,44 @@ import org.apache.log4j.Logger;
 
 import com.iver.andami.ui.mdiFrame.MDIFrame;
 
-
 /**
  *
  */
-public class DialogStackSupport{
-    /** log */
-    private static Logger logger = Logger.getLogger(DialogStackSupport.class.getName());
+public class DialogStackSupport {
+	/** log */
+	private static Logger logger = Logger.getLogger(DialogStackSupport.class
+			.getName());
 
-    /** Pila de diálogos modales mostrados */
-    private ArrayList dialogStack = new ArrayList(0);
+	/** Pila de diálogos modales mostrados */
+	private ArrayList dialogStack = new ArrayList(0);
 
-    private ArrayList dialogCursors = new ArrayList(0);
+	private ArrayList dialogCursors = new ArrayList(0);
 
-    public DialogStackSupport(MDIFrame frame){
-    }
+	public DialogStackSupport(MDIFrame frame) {
+	}
 
-    public void pushDialog(JDialog dlg){
-    	dialogStack.add(dlg);
-    }
+	public void pushDialog(JDialog dlg) {
+		dialogStack.add(dlg);
+	}
 
-    public JDialog popDialog(){
-    	int dialogStackSize=dialogStack.size();
-    	if (dialogStackSize<1)
-    		return null;
-    	return (JDialog) dialogStack.remove(dialogStackSize - 1);
-    }
+	public JDialog popDialog() {
+		int dialogStackSize = dialogStack.size();
+		if (dialogStackSize < 1)
+			return null;
+		return (JDialog) dialogStack.remove(dialogStackSize - 1);
+	}
 
 	/**
 	 * @return
 	 */
 	public void setWaitCursor() {
-        dialogCursors.clear();
+		dialogCursors.clear();
 		for (Iterator iter = dialogStack.iterator(); iter.hasNext();) {
 			JDialog dlg = (JDialog) iter.next();
-            dialogCursors.add(dlg.getCursor());
+			dialogCursors.add(dlg.getCursor());
 			dlg.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
- 	        dlg.getGlassPane().setVisible(true);
- 	   }
+			dlg.getGlassPane().setVisible(true);
+		}
 	}
 
 	/**
@@ -97,9 +97,9 @@ public class DialogStackSupport{
 		for (Iterator iter = dialogStack.iterator(); iter.hasNext();) {
 			JDialog dlg = (JDialog) iter.next();
 
-            // TODO: RECUPERAR EL CURSOR
-            dlg.setCursor(null);
-		    dlg.getGlassPane().setVisible(false);
+			// TODO: RECUPERAR EL CURSOR
+			dlg.setCursor(null);
+			dlg.getGlassPane().setVisible(false);
 		}
 	}
 }

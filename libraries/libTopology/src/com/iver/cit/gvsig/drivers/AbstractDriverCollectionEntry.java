@@ -42,27 +42,28 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.drivers;
+
 /**
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public abstract class AbstractDriverCollectionEntry {
-	
+
 	protected int driverIdx;
-	
-	public int getDriverIdx(){
+
+	public int getDriverIdx() {
 		return driverIdx;
 	}
-	
-	public void setDriverIdx(int driverIdx){
+
+	public void setDriverIdx(int driverIdx) {
 		this.driverIdx = driverIdx;
 	}
-	
+
 	public abstract Object getUserData();
 }

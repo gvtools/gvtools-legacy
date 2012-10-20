@@ -6,9 +6,9 @@ import org.gvsig.remotesensing.decisiontrees.DecisionTreeNode;
 
 public class DecisionTreesTest extends TestCase {
 
-	protected void setUp(){
+	protected void setUp() {
 	}
-	
+
 	public void start() {
 		this.setUp();
 		this.testStack();
@@ -27,7 +27,7 @@ public class DecisionTreesTest extends TestCase {
 		left.getLeftChild().setClassID(0);
 		left.getRightChild().setClassID(1);
 		root.getRightChild().setClassID(2);
-		
+
 		/*
 		 * Asignación de valores a las variables y ejecución
 		 */
@@ -36,8 +36,8 @@ public class DecisionTreesTest extends TestCase {
 		root.setVarValue("c", new Integer(3));
 		root.setVarValue("d", new Integer(4));
 		int resultClass = root.execute();
-		assertEquals(2,resultClass,0.0);
-		
+		assertEquals(2, resultClass, 0.0);
+
 		/*
 		 * Asignación de valores a las variables y ejecución
 		 */
@@ -46,8 +46,8 @@ public class DecisionTreesTest extends TestCase {
 		root.setVarValue("c", new Integer(3));
 		root.setVarValue("d", new Integer(4));
 		resultClass = root.execute();
-		assertEquals(0,resultClass,0.0);
-		
+		assertEquals(0, resultClass, 0.0);
+
 		/*
 		 * Asignación de valores a las variables y ejecución
 		 */
@@ -56,11 +56,11 @@ public class DecisionTreesTest extends TestCase {
 		root.setVarValue("c", new Integer(6));
 		root.setVarValue("d", new Integer(4));
 		resultClass = root.execute();
-		assertEquals(2,resultClass,0.0);
-		
+		assertEquals(2, resultClass, 0.0);
+
 		/*
 		 * Cálculo del tamaño del árbol;
 		 */
-		assertEquals(5,root.size(),0.0);
+		assertEquals(5, root.size(), 0.0);
 	}
 }

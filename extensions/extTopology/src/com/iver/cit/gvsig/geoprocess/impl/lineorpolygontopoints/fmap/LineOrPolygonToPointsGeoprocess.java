@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.impl.lineorpolygontopoints.fmap;
 
 import java.awt.geom.Point2D;
@@ -87,22 +87,20 @@ import com.vividsolutions.jts.geom.Coordinate;
 
 /**
  * Geoprocess to convert a linear vectorial layer in a point vectorial layer.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
-public class LineOrPolygonToPointsGeoprocess extends AbstractMonitorableGeoprocess {
+public class LineOrPolygonToPointsGeoprocess extends
+		AbstractMonitorableGeoprocess {
 
-	private static Logger logger = Logger.getLogger(LineOrPolygonToPointsGeoprocess.class
-			.getName());
-	
-	
-	
+	private static Logger logger = Logger
+			.getLogger(LineOrPolygonToPointsGeoprocess.class.getName());
+
 	private LayerDefinition resultLayerDefinition;
-	
+
 	private SnappingCoordinateMap coordinateMap;
-	
-	
-	
+
 	public LineOrPolygonToPointsGeoprocess(FLyrVect inputLayer) {
 		this.firstLayer = inputLayer;
 	}
@@ -110,20 +108,22 @@ public class LineOrPolygonToPointsGeoprocess extends AbstractMonitorableGeoproce
 	public void checkPreconditions() throws GeoprocessException {
 		int lyrDimensions;
 		try {
-			lyrDimensions = FGeometryUtil.getDimensions(firstLayer.getShapeType());
-		
-			if(lyrDimensions < 1)
+			lyrDimensions = FGeometryUtil.getDimensions(firstLayer
+					.getShapeType());
+
+			if (lyrDimensions < 1)
 				throw new GeoprocessException(
-					"Geoproceso convertir polígonos o lineas a puntos con capa de puntos");
-		
+						"Geoproceso convertir polígonos o lineas a puntos con capa de puntos");
+
 		} catch (ReadDriverException e) {
-			throw new GeoprocessException("Error intentando acceder al tipo de geometria de capa vectorial");
+			throw new GeoprocessException(
+					"Error intentando acceder al tipo de geometria de capa vectorial");
 		}
 
 	}
 
 	public ILayerDefinition createLayerDefinition() {
-		if(resultLayerDefinition == null){
+		if (resultLayerDefinition == null) {
 			ILayerDefinition resultLayerDefinition = new SHPLayerDefinition();
 			resultLayerDefinition.setShapeType(XTypes.POINT);
 			FieldDescription[] fields = new FieldDescription[1];
@@ -138,21 +138,17 @@ public class LineOrPolygonToPointsGeoprocess extends AbstractMonitorableGeoproce
 		return resultLayerDefinition;
 	}
 
-	
-
 	public void setParameters(Map params) throws GeoprocessException {
 		Boolean onlySelection = (Boolean) params.get("layer_selection");
 		if (onlySelection != null)
 			this.operateOnlyWithSelection = onlySelection.booleanValue();
-		
+
 		double clusterTolerance = 0d;
 		Double clusterToleranceD = (Double) params.get("cluster_tolerance");
 		if (clusterToleranceD != null)
 			clusterTolerance = clusterToleranceD.doubleValue();
 		this.coordinateMap = new SnappingCoordinateMap(clusterTolerance);
 	}
-
-	
 
 	public void process(CancellableProgressTask progressMonitor)
 			throws GeoprocessException {
@@ -176,42 +172,48 @@ public class LineOrPolygonToPointsGeoprocess extends AbstractMonitorableGeoproce
 
 		try {
 			IFeatureIterator featureIterator = null;
-			if(this.operateOnlyWithSelection){
+			if (this.operateOnlyWithSelection) {
 				FBitSet selection = firstLayer.getRecordset().getSelection();
-	        	featureIterator = new FeatureBitsetIterator(selection, firstLayer.getSource());
-			}else{
+				featureIterator = new FeatureBitsetIterator(selection,
+						firstLayer.getSource());
+			} else {
 				featureIterator = firstLayer.getSource().getFeatureIterator();
 			}
-			
+
 			int numNewFeatures = 0;
-			while(featureIterator.hasNext()){
+			while (featureIterator.hasNext()) {
 				IFeature feature = featureIterator.next();
 				IGeometry fmapGeo = feature.getGeometry();
-				
-				List<Point2D[]> pointsParts = ShapePointExtractor.extractPoints(fmapGeo);
-				for(int i = 0; i < pointsParts.size(); i++){
+
+				List<Point2D[]> pointsParts = ShapePointExtractor
+						.extractPoints(fmapGeo);
+				for (int i = 0; i < pointsParts.size(); i++) {
 					Point2D[] points = pointsParts.get(i);
-					for(int j = 0; j < points.length; j++){
+					for (int j = 0; j < points.length; j++) {
 						Point2D pt = points[j];
 						Coordinate coord = new Coordinate(pt.getX(), pt.getY());
 						if (coordinateMap.containsKey(coord))
 							continue;
 						else {
 							coordinateMap.put(coord, coord);
-							IGeometry newGeometry = ShapeFactory.createPoint2D(coord.x, coord.y);
-							Value fid = ValueFactory.createValue(numNewFeatures);
-							Value relatedFid = ValueFactory.createValue(Integer.parseInt(feature.getID()));
-							Value[] attrs = new Value[]{fid, relatedFid};
-							DefaultFeature newFeature = new DefaultFeature(newGeometry, attrs, new UID().toString());
+							IGeometry newGeometry = ShapeFactory.createPoint2D(
+									coord.x, coord.y);
+							Value fid = ValueFactory
+									.createValue(numNewFeatures);
+							Value relatedFid = ValueFactory.createValue(Integer
+									.parseInt(feature.getID()));
+							Value[] attrs = new Value[] { fid, relatedFid };
+							DefaultFeature newFeature = new DefaultFeature(
+									newGeometry, attrs, new UID().toString());
 							featureProcessor.processFeature(newFeature);
 							numNewFeatures++;
 						}
-					}//for j
-				}//for i
-				if(progressMonitor != null)
+					}// for j
+				}// for i
+				if (progressMonitor != null)
 					progressMonitor.reportStep();
-			}//while
-			
+			}// while
+
 			featureProcessor.finish();
 			if (progressMonitor != null) {
 				progressMonitor.finished();
@@ -225,13 +227,11 @@ public class LineOrPolygonToPointsGeoprocess extends AbstractMonitorableGeoproce
 					"Error al acceder a la informacion del driver dentro del geoproceso",
 					e);
 		} catch (Exception e) {
-		throw new GeoprocessException(
-				"Error al acceder a la informacion del driver dentro del geoproceso",
-				e);
-	} 
+			throw new GeoprocessException(
+					"Error al acceder a la informacion del driver dentro del geoproceso",
+					e);
+		}
 	}
-	
-	
 
 	public void initialize(CancellableProgressTask progressMonitor)
 			throws GeoprocessException {

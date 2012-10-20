@@ -42,22 +42,22 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: TopologyRuleDefinitionException.java 14154 2007-09-27 19:14:16Z azabala $
-* $Log: TopologyRuleDefinitionException.java,v $
-* Revision 1.1  2007/09/19 09:05:06  azabala
-* first version in cvs
-*
-*
-*/
+ *
+ * $Id: TopologyRuleDefinitionException.java 14154 2007-09-27 19:14:16Z azabala $
+ * $Log: TopologyRuleDefinitionException.java,v $
+ * Revision 1.1  2007/09/19 09:05:06  azabala
+ * first version in cvs
+ *
+ *
+ */
 package org.gvsig.topology;
 
-
 /**
- * Exception throwed when a topology rule is wrong defined.
- * (its preconditions are violated: type of geometry, etc.)
+ * Exception throwed when a topology rule is wrong defined. (its preconditions
+ * are violated: type of geometry, etc.)
+ * 
  * @author azabala
- *
+ * 
  */
 public class TopologyRuleDefinitionException extends Exception {
 
@@ -66,21 +66,17 @@ public class TopologyRuleDefinitionException extends Exception {
 	public TopologyRuleDefinitionException(String text, Exception e) {
 		super(e);
 	}
-	
-	public TopologyRuleDefinitionException(){
+
+	public TopologyRuleDefinitionException() {
 		super();
 	}
-	
-	
-	
-	public TopologyRuleDefinitionException(String text){
+
+	public TopologyRuleDefinitionException(String text) {
 		super(text);
 	}
-	
-	public TopologyRuleDefinitionException(Exception e){
+
+	public TopologyRuleDefinitionException(Exception e) {
 		super(e);
 	}
-	
-	
-}
 
+}

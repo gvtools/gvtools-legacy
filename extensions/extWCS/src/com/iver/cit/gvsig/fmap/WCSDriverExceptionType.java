@@ -42,17 +42,17 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: WCSDriverExceptionType.java 9217 2006-12-05 16:27:15Z fdiaz $
-* $Log$
-* Revision 1.2  2006-12-05 16:27:06  fdiaz
-* *** empty log message ***
-*
-* Revision 1.1  2006/09/21 17:56:43  azabala
-* First version in cvs
-*
-*
-*/
+ *
+ * $Id: WCSDriverExceptionType.java 9217 2006-12-05 16:27:15Z fdiaz $
+ * $Log$
+ * Revision 1.2  2006-12-05 16:27:06  fdiaz
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/09/21 17:56:43  azabala
+ * First version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap;
 
 import org.gvsig.remoteClient.wcs.WCSStatus;
@@ -62,18 +62,18 @@ import com.iver.utiles.ExceptionDescription;
 public class WCSDriverExceptionType extends ExceptionDescription {
 
 	WCSStatus status;
-	
-	public WCSDriverExceptionType(){
+
+	public WCSDriverExceptionType() {
 		super(60, "Error al acceder a un servicio WCS");
-		
+
 	}
-	
+
 	public String getHtmlErrorMessage() {
 		String message = "<p><b>Error en una petición a servidor WCS</b></p>";
 		message += "Información adicional:<br>";
 		message += "Mensaje del error: " + status.getMessage();
 		message += "Dirección: " + status.getOnlineResource();
-		message += "<br> Parámetros: "+status.getParameters();
+		message += "<br> Parámetros: " + status.getParameters();
 		return message;
 	}
 
@@ -86,4 +86,3 @@ public class WCSDriverExceptionType extends ExceptionDescription {
 	}
 
 }
-

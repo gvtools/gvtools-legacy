@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,53 +39,62 @@
  *   dac@iver.es
  */
 package es.gva.cit.gazetteer.drivers;
+
 import java.net.URI;
 
 import es.gva.cit.catalog.drivers.IDiscoveryServiceDriver;
 import es.gva.cit.gazetteer.querys.Feature;
 import es.gva.cit.gazetteer.querys.FeatureTypeAttribute;
 import es.gva.cit.gazetteer.querys.GazetteerQuery;
+
 /**
- * This interface contains the common methods that have to be
- * implemented by all the gazetteer drivers.
+ * This interface contains the common methods that have to be implemented by all
+ * the gazetteer drivers.
  * 
  * 
  * @author Jorge Piera Llodra (piera_jor@gva.es)
  */
-public interface IGazetteerServiceDriver extends IDiscoveryServiceDriver{
+public interface IGazetteerServiceDriver extends IDiscoveryServiceDriver {
 	/**
 	 * It returns feature properties
-	 * @param uri Server URI
-	 * @param feature Feature name
+	 * 
+	 * @param uri
+	 *            Server URI
+	 * @param feature
+	 *            Feature name
 	 * @return Array of the attributes of a feature
 	 */
-	public FeatureTypeAttribute[] describeFeatureType(URI uri, String featureType) throws Exception;
-	
+	public FeatureTypeAttribute[] describeFeatureType(URI uri,
+			String featureType) throws Exception;
+
 	/**
-	 * There are protocols that need to invoke the describeFeatureType
-	 * operation before to do a getFeature.
-	 * @return if the describeFeatureType operation is needed. 
+	 * There are protocols that need to invoke the describeFeatureType operation
+	 * before to do a getFeature.
+	 * 
+	 * @return if the describeFeatureType operation is needed.
 	 */
 	public boolean isDescribeFeatureTypeNeeded();
-	
+
 	/**
 	 * It returns the foubd records
-	 * @param uri Server URI
-	 * @param query Query with the search parameters
+	 * 
+	 * @param uri
+	 *            Server URI
+	 * @param query
+	 *            Query with the search parameters
 	 * @return The features
-	 */	
+	 */
 	public Feature[] getFeature(URI uri, GazetteerQuery query) throws Exception;
-		
+
 	/**
 	 * @return the projection
 	 */
 	public String getProjection();
 
 	/**
-	 * @param projection the projection to set
+	 * @param projection
+	 *            the projection to set
 	 */
 	public void setProjection(String projection);
 
 }
-
-

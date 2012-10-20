@@ -50,84 +50,86 @@ import org.gvsig.remoteClient.arcims.styling.symbols.IArcIMSSymbol;
 import org.gvsig.remoteClient.arcims.styling.symbols.SymbolUtils;
 import org.gvsig.remoteClient.arcims.utils.ServiceInfoTags;
 
-
 /**
  * @author jsanz
- *
+ * 
  */
-public class SimpleLabelRenderer extends SimpleRenderer
-    implements ILabelRenderer {
-    public static final String TAG = ServiceInfoTags.tSIMPLELABELRENDERER;
-    private String rotationalangles;
-    private String field;
+public class SimpleLabelRenderer extends SimpleRenderer implements
+		ILabelRenderer {
+	public static final String TAG = ServiceInfoTags.tSIMPLELABELRENDERER;
+	private String rotationalangles;
+	private String field;
 
-    public SimpleLabelRenderer(String mfield, IArcIMSSymbol symbol) {
-        super(symbol);
-        this.field = mfield;
-        rotationalangles = "";
-    }
+	public SimpleLabelRenderer(String mfield, IArcIMSSymbol symbol) {
+		super(symbol);
+		this.field = mfield;
+		rotationalangles = "";
+	}
 
-    /**
-     * Generates an XML representation of the Renderer
-     */
-    public String toString() {
-        return "<" + SimpleLabelRenderer.TAG + getParam() + ">\r\n" +
-        symbol.toString() + "</" + SimpleLabelRenderer.TAG + ">\r\n";
-    }
+	/**
+	 * Generates an XML representation of the Renderer
+	 */
+	public String toString() {
+		return "<" + SimpleLabelRenderer.TAG + getParam() + ">\r\n"
+				+ symbol.toString() + "</" + SimpleLabelRenderer.TAG + ">\r\n";
+	}
 
-    private String getParam() {
-        String param = "";
+	private String getParam() {
+		String param = "";
 
-        if (SymbolUtils.isVoid(rotationalangles)) {
-            param += (" rotationalangles=\"" + rotationalangles + "\"");
-        }
+		if (SymbolUtils.isVoid(rotationalangles)) {
+			param += (" rotationalangles=\"" + rotationalangles + "\"");
+		}
 
-        if (SymbolUtils.isVoid(field)) {
-            param += (" field=\"" + field + "\"");
-        }
+		if (SymbolUtils.isVoid(field)) {
+			param += (" field=\"" + field + "\"");
+		}
 
-        return param;
-    }
+		return param;
+	}
 
-    /**
-     * @return Returns the textSymbol.
-     */
-    public IArcIMSSymbol getTextSymbol() {
-        return symbol;
-    }
+	/**
+	 * @return Returns the textSymbol.
+	 */
+	public IArcIMSSymbol getTextSymbol() {
+		return symbol;
+	}
 
-    /**
-     * @param textSymbol The textSymbol to set.
-     */
-    public void setTextSymbol(IArcIMSSymbol textSymbol) {
-        this.symbol = textSymbol;
-    }
+	/**
+	 * @param textSymbol
+	 *            The textSymbol to set.
+	 */
+	public void setTextSymbol(IArcIMSSymbol textSymbol) {
+		this.symbol = textSymbol;
+	}
 
-    /**
-     * @return Returns the labelField.
-     */
-    public String getField() {
-        return field;
-    }
+	/**
+	 * @return Returns the labelField.
+	 */
+	public String getField() {
+		return field;
+	}
 
-    /**
-     * @param labelField The labelField to set.
-     */
-    public void setField(String field) {
-        this.field = field;
-    }
+	/**
+	 * @param labelField
+	 *            The labelField to set.
+	 */
+	public void setField(String field) {
+		this.field = field;
+	}
 
-    /**
-     * @return Returns the rotationalAngles.
-     */
-    public String getRotationalangles() {
-        return rotationalangles;
-    }
+	/**
+	 * @return Returns the rotationalAngles.
+	 */
+	public String getRotationalangles() {
+		return rotationalangles;
+	}
 
-    /**
-     * @param rotationalAngles The rotationalAngles to set.
-     */
-    public void setRotationalangles(String rotationalAngles) {
-        this.rotationalangles = rotationalAngles;
-    }
+	/**
+	 * @param rotationalAngles
+	 *            The rotationalAngles to set.
+	 */
+	public void setRotationalangles(String rotationalAngles) {
+		this.rotationalangles = rotationalAngles;
+	}
 }

@@ -28,12 +28,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.gvsig.gui.beans.slidertext.SliderTextContainer;
+
 /**
- * Añade una etiqueta al componente Slider ajustando el tamaño del componente
- * a la longitud de la etiqueta. Al redimensionar el componente varia el tamaño
+ * Añade una etiqueta al componente Slider ajustando el tamaño del componente a
+ * la longitud de la etiqueta. Al redimensionar el componente varia el tamaño
  * del slider
  * 
- * @author Nacho Brodin(nachobrodin@gmail.com) 
+ * @author Nacho Brodin(nachobrodin@gmail.com)
  */
 public class LabelSliderTextContainer extends SliderTextContainer {
 	private static final long serialVersionUID = -4617272063786945078L;
@@ -41,18 +42,26 @@ public class LabelSliderTextContainer extends SliderTextContainer {
 	private JPanel pLabel = null;
 
 	/**
-	 * Constructor	
-	 * @param min Valor mínimo del slider
-	 * @param max Valor máximo del slider
-	 * @param defaultPos Posición inicial
-	 * @param up Si es true el texto se coloca sobre el componente y si es false a la izquierda 
-	 * @param txt Texto de la etiqueta
+	 * Constructor
+	 * 
+	 * @param min
+	 *            Valor mínimo del slider
+	 * @param max
+	 *            Valor máximo del slider
+	 * @param defaultPos
+	 *            Posición inicial
+	 * @param up
+	 *            Si es true el texto se coloca sobre el componente y si es
+	 *            false a la izquierda
+	 * @param txt
+	 *            Texto de la etiqueta
 	 */
-	public LabelSliderTextContainer(int min, int max, int defaultPos, boolean up, String txt){
+	public LabelSliderTextContainer(int min, int max, int defaultPos,
+			boolean up, String txt) {
 		super(min, max, defaultPos);
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-		gridBagConstraints1.insets = new Insets(0,0,0,0);
-		if(!up)
+		gridBagConstraints1.insets = new Insets(0, 0, 0, 0);
+		if (!up)
 			super.add(getPLabel(up), BorderLayout.WEST);
 		else
 			super.add(getPLabel(up), BorderLayout.NORTH);
@@ -60,19 +69,19 @@ public class LabelSliderTextContainer extends SliderTextContainer {
 	}
 
 	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPLabel(boolean up) {
 		if (pLabel == null) {
 			pLabel = new JPanel();
-			if(!up){
+			if (!up) {
 				GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 				gridBagConstraints1.insets = new java.awt.Insets(0, 10, 8, 0);
 				pLabel.setLayout(new GridBagLayout());
 				pLabel.add(getLName(), gridBagConstraints1);
-			}else{
+			} else {
 				FlowLayout fl = new FlowLayout();
 				fl.setAlignment(FlowLayout.LEFT);
 				pLabel.setLayout(fl);
@@ -85,26 +94,29 @@ public class LabelSliderTextContainer extends SliderTextContainer {
 
 	/**
 	 * This method initializes JLabel
+	 * 
 	 * @return
 	 */
-	public JLabel getLName(){
-		if(lName == null)
+	public JLabel getLName() {
+		if (lName == null)
 			lName = new JLabel();
 		return lName;
 	}
 
 	/**
 	 * Asigna el texto de la etiqueta
-	 * @param Texto de la etiqueta
+	 * 
+	 * @param Texto
+	 *            de la etiqueta
 	 */
-	public void setName(String name){
+	public void setName(String name) {
 		lName.setText(name);
 	}
 
 	/**
 	 * Activa o desactiva el control
 	 */
-	public void setControlEnabled(boolean active){
+	public void setControlEnabled(boolean active) {
 		this.lName.setEnabled(active);
 		super.setControlEnabled(active);
 	}

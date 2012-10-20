@@ -51,10 +51,11 @@ import org.gvsig.raster.datastruct.GeoPointList;
 
 import Jama.Matrix;
 
-/**Test que prueba la el proceso de geotransfornmcion dados una serie de puntos de
- * control.  Compara los coeficientes obtenidos para el polinomio de transformacion  
- * (de coordenadas pixel a coordenadas mapa para las X), con los obtenidos 
- * manualmente, resolviendo por el método de Cramer.
+/**
+ * Test que prueba la el proceso de geotransfornmcion dados una serie de puntos
+ * de control. Compara los coeficientes obtenidos para el polinomio de
+ * transformacion (de coordenadas pixel a coordenadas mapa para las X), con los
+ * obtenidos manualmente, resolviendo por el método de Cramer.
  * 
  * 
  * @author aMuÑoz (alejandro.munoz@uclm.es)
@@ -63,82 +64,69 @@ import Jama.Matrix;
 public class TGeoTransformProcessPixelToMapXTest extends TestCase {
 
 	private GeoPointList gpl = new GeoPointList();
-	private double geoPoints[][] ={{ 1369.000000  	,	2985.750000	},
-								   { 1673.500000  	,   2803.250000	},
-								   { 2092.500000 	,   2933.250000	},
-							       }; 
-								   
-	private double imagePoints[][]={{ 577.500000     ,	2427.500000 },
-									{ 803.000000     ,  2235.500000 },
-									{ 1165.500000    ,  2285.250000	},
-									};
+	private double geoPoints[][] = { { 1369.000000, 2985.750000 },
+			{ 1673.500000, 2803.250000 }, { 2092.500000, 2933.250000 }, };
+
+	private double imagePoints[][] = { { 577.500000, 2427.500000 },
+			{ 803.000000, 2235.500000 }, { 1165.500000, 2285.250000 }, };
+
 	public void start() {
 		this.testStack();
 	}
-	
-	
+
 	public void testStack() {
 		System.err.println("TGeoTransformProcessPixelToMapXTest running...");
-		
-		for(int i=0;i<geoPoints.length;i++)
-		{
-			Point2D  pW = new Point2D.Double(geoPoints[i][0],geoPoints[i][1]);
-			Point2D  pP = new Point2D.Double(imagePoints[i][0],imagePoints[i][1]);
+
+		for (int i = 0; i < geoPoints.length; i++) {
+			Point2D pW = new Point2D.Double(geoPoints[i][0], geoPoints[i][1]);
+			Point2D pP = new Point2D.Double(imagePoints[i][0],
+					imagePoints[i][1]);
 			gpl.add(new GeoPoint(pP, pW));
 		}
-		
+
 		GeoTransformProcess proceso = new GeoTransformProcess();
 		proceso.addParam("gpcs", gpl);
 		proceso.addParam("orden", new Integer(1));
 		proceso.init();
 		proceso.process();
-		
-		GeoTransformDataResult resultado= (GeoTransformDataResult) proceso.getResult();
-		
-		// Estimacion de los coeficientes de forma manual, siquiento la teoria del manual de Jose Gonzalez
-		 
+
+		GeoTransformDataResult resultado = (GeoTransformDataResult) proceso
+				.getResult();
+
+		// Estimacion de los coeficientes de forma manual, siquiento la teoria
+		// del manual de Jose Gonzalez
+
 		// Matriz para el ejmplo correspondiente a la figura 2.20
-		double M[][]={
-				{3,			2546,			6948.25},
-				{2546,		2336705.5,		5860446.625},
-				{6948.25,	5860446.625,	16112584.0625}
-					};
+		double M[][] = { { 3, 2546, 6948.25 },
+				{ 2546, 2336705.5, 5860446.625 },
+				{ 6948.25, 5860446.625, 16112584.0625 } };
 		Matrix m_M = new Matrix(M);
-		double det= m_M.det();
-		
-		
-		double A0[][]={
-				{5135,				2546,			6948.25},
-				{4573226.75,		2336705.5,		5860446.625},
-				{11846242.375,	    5860446.625,	16112584.0625}
-		};
-		Matrix m_A0= new Matrix (A0);
-		double coef0= m_A0.det()/det;
-		
-		
-		
-		double A1[][]={
-				{3,			5135,			6948.25},
-				{2546,		4573226.75,		5860446.625},
-				{6948.25,	11846242.375,	16112584.0625}
-		};
-		Matrix m_A1= new Matrix (A1);
-		double coef1= m_A1.det()/det;
-		
-		double A2[][]={
-				{3,			2546,			5135},
-				{2546,		2336705.5,		4573226.75},
-				{6948.25,	5860446.625,	   11846242.375}
-				};
-			
-		Matrix m_A2= new Matrix (A2);
-		double coef2= m_A2.det()/det;
-		
-		// Comprobacion de los coeficientes obtenidos tras el proceso con los determinados de forma manual
-		
-		assertEquals(coef0, resultado.getPixelToMapCoefX()[0],0.1);
-		assertEquals(coef1, resultado.getPixelToMapCoefX()[1],0.1);
-		assertEquals(coef2, resultado.getPixelToMapCoefX()[2],0.1);
-		
+		double det = m_M.det();
+
+		double A0[][] = { { 5135, 2546, 6948.25 },
+				{ 4573226.75, 2336705.5, 5860446.625 },
+				{ 11846242.375, 5860446.625, 16112584.0625 } };
+		Matrix m_A0 = new Matrix(A0);
+		double coef0 = m_A0.det() / det;
+
+		double A1[][] = { { 3, 5135, 6948.25 },
+				{ 2546, 4573226.75, 5860446.625 },
+				{ 6948.25, 11846242.375, 16112584.0625 } };
+		Matrix m_A1 = new Matrix(A1);
+		double coef1 = m_A1.det() / det;
+
+		double A2[][] = { { 3, 2546, 5135 }, { 2546, 2336705.5, 4573226.75 },
+				{ 6948.25, 5860446.625, 11846242.375 } };
+
+		Matrix m_A2 = new Matrix(A2);
+		double coef2 = m_A2.det() / det;
+
+		// Comprobacion de los coeficientes obtenidos tras el proceso con los
+		// determinados de forma manual
+
+		assertEquals(coef0, resultado.getPixelToMapCoefX()[0], 0.1);
+		assertEquals(coef1, resultado.getPixelToMapCoefX()[1], 0.1);
+		assertEquals(coef2, resultado.getPixelToMapCoefX()[2], 0.1);
+
 	}
 }

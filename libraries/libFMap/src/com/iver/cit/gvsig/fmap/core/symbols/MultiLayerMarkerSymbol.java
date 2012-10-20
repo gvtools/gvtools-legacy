@@ -40,59 +40,59 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: MultiLayerMarkerSymbol.java 34263 2010-12-14 11:40:17Z vcaballero $
-* $Log$
-* Revision 1.17  2007-09-21 12:25:32  jaume
-* cancellation support extended down to the IGeometry and ISymbol level
-*
-* Revision 1.16  2007/09/19 16:21:32  jaume
-* removed unnecessary imports
-*
-* Revision 1.13  2007/09/17 14:16:11  jaume
-* multilayer symbols sizing bug fixed
-*
-* Revision 1.12  2007/09/17 11:37:55  jaume
-* fixed multilayermarkersymbol unit symbol
-*
-* Revision 1.11  2007/08/09 07:57:51  jvidal
-* javadoc
-*
-* Revision 1.10  2007/07/18 06:54:34  jaume
-* continuing with cartographic support
-*
-* Revision 1.9  2007/07/03 10:58:29  jaume
-* first refactor on CartographicSupport
-*
-* Revision 1.8  2007/06/29 13:07:01  jaume
-* +PictureLineSymbol
-*
-* Revision 1.7  2007/06/07 06:50:40  jaume
-* *** empty log message ***
-*
-* Revision 1.6  2007/05/08 08:47:40  jaume
-* *** empty log message ***
-*
-* Revision 1.5  2007/04/17 07:01:53  bsanchez
-* - Corregido fallo de Double.MIN_VALUE por Double.NEGATIVE_INFINITY comentado por Victor Olaya.
-*
-* Revision 1.4  2007/03/29 16:02:01  jaume
-* *** empty log message ***
-*
-* Revision 1.3  2007/03/26 14:26:02  jaume
-* implemented Print
-*
-* Revision 1.2  2007/03/09 11:20:57  jaume
-* Advanced symbology (start committing)
-*
-* Revision 1.1.2.2  2007/02/21 07:34:08  jaume
-* labeling starts working
-*
-* Revision 1.1.2.1  2007/02/16 10:54:12  jaume
-* multilayer splitted to multilayerline, multilayermarker,and  multilayerfill
-*
-*
-*/
+ *
+ * $Id: MultiLayerMarkerSymbol.java 34263 2010-12-14 11:40:17Z vcaballero $
+ * $Log$
+ * Revision 1.17  2007-09-21 12:25:32  jaume
+ * cancellation support extended down to the IGeometry and ISymbol level
+ *
+ * Revision 1.16  2007/09/19 16:21:32  jaume
+ * removed unnecessary imports
+ *
+ * Revision 1.13  2007/09/17 14:16:11  jaume
+ * multilayer symbols sizing bug fixed
+ *
+ * Revision 1.12  2007/09/17 11:37:55  jaume
+ * fixed multilayermarkersymbol unit symbol
+ *
+ * Revision 1.11  2007/08/09 07:57:51  jvidal
+ * javadoc
+ *
+ * Revision 1.10  2007/07/18 06:54:34  jaume
+ * continuing with cartographic support
+ *
+ * Revision 1.9  2007/07/03 10:58:29  jaume
+ * first refactor on CartographicSupport
+ *
+ * Revision 1.8  2007/06/29 13:07:01  jaume
+ * +PictureLineSymbol
+ *
+ * Revision 1.7  2007/06/07 06:50:40  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.6  2007/05/08 08:47:40  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.5  2007/04/17 07:01:53  bsanchez
+ * - Corregido fallo de Double.MIN_VALUE por Double.NEGATIVE_INFINITY comentado por Victor Olaya.
+ *
+ * Revision 1.4  2007/03/29 16:02:01  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.3  2007/03/26 14:26:02  jaume
+ * implemented Print
+ *
+ * Revision 1.2  2007/03/09 11:20:57  jaume
+ * Advanced symbology (start committing)
+ *
+ * Revision 1.1.2.2  2007/02/21 07:34:08  jaume
+ * labeling starts working
+ *
+ * Revision 1.1.2.1  2007/02/16 10:54:12  jaume
+ * multilayer splitted to multilayerline, multilayermarker,and  multilayerfill
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.core.symbols;
 
 import java.awt.Color;
@@ -111,22 +111,26 @@ import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.threads.Cancellable;
+
 /**
- * MultiLayerMarkerSymbol allows to group several marker symbols (xxxMarkerSymbol
- * implementing IMarkerSymbol)in one and treat it as an only one symbol.
- *
+ * MultiLayerMarkerSymbol allows to group several marker symbols
+ * (xxxMarkerSymbol implementing IMarkerSymbol)in one and treat it as an only
+ * one symbol.
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
-public class MultiLayerMarkerSymbol extends AbstractMarkerSymbol implements IMarkerSymbol, IMultiLayerSymbol {
+public class MultiLayerMarkerSymbol extends AbstractMarkerSymbol implements
+		IMarkerSymbol, IMultiLayerSymbol {
 	private IMarkerSymbol[] layers = new IMarkerSymbol[0];
 	private MultiLayerMarkerSymbol selectionSymbol;
 	private Point2D offset = new Point2D.Double();
 	private double rotation;
 	private double markerSize;
+
 	public Color getColor() {
 		/*
-		 * a multilayer symbol does not define any color, the color
-		 * of each layer is defined by the layer itself
+		 * a multilayer symbol does not define any color, the color of each
+		 * layer is defined by the layer itself
 		 */
 		return null;
 	}
@@ -138,7 +142,6 @@ public class MultiLayerMarkerSymbol extends AbstractMarkerSymbol implements IMar
 	public double getRotation() {
 		return rotation;
 	}
-
 
 	public void setColor(Color color) {
 		/*
@@ -157,12 +160,12 @@ public class MultiLayerMarkerSymbol extends AbstractMarkerSymbol implements IMar
 		this.rotation = rotation;
 	}
 
-
 	public double getSize() {
 		double myMarkerSize = 0;
 
 		for (int i = 0; i < getLayerCount(); i++) {
-			myMarkerSize = Math.max(myMarkerSize, ((IMarkerSymbol) getLayer(i)).getSize());
+			myMarkerSize = Math.max(myMarkerSize,
+					((IMarkerSymbol) getLayer(i)).getSize());
 		}
 
 		if (markerSize != myMarkerSize)
@@ -177,8 +180,9 @@ public class MultiLayerMarkerSymbol extends AbstractMarkerSymbol implements IMar
 			this.markerSize = size;
 			for (int i = 0; i < layers.length; i++) {
 				double lSize = layers[i].getSize();
-				layers[i].setSize(lSize*scale);
-				AffineTransform auxT = AffineTransform.getScaleInstance(scale, scale);
+				layers[i].setSize(lSize * scale);
+				AffineTransform auxT = AffineTransform.getScaleInstance(scale,
+						scale);
 				Point2D auxP = new Point2D.Double();
 				auxT.transform(layers[i].getOffset(), auxP);
 				layers[i].setOffset(auxP);
@@ -186,19 +190,23 @@ public class MultiLayerMarkerSymbol extends AbstractMarkerSymbol implements IMar
 		}
 	}
 
-	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp, Cancellable cancel) {
+	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp,
+			Cancellable cancel) {
 		FPoint2D p = (FPoint2D) shp;
 		g.rotate(rotation, p.getX(), p.getY());
-		for (int i = 0; (cancel==null || !cancel.isCanceled()) && i < layers.length; i++) {
+		for (int i = 0; (cancel == null || !cancel.isCanceled())
+				&& i < layers.length; i++) {
 			layers[i].draw(g, affineTransform, shp, cancel);
 		}
 		g.rotate(-rotation, p.getX(), p.getY());
 	}
 
-	public void drawInsideRectangle(Graphics2D g, AffineTransform scaleInstance, Rectangle r, PrintRequestAttributeSet properties) throws SymbolDrawingException {
+	public void drawInsideRectangle(Graphics2D g,
+			AffineTransform scaleInstance, Rectangle r,
+			PrintRequestAttributeSet properties) throws SymbolDrawingException {
 		g.rotate(rotation, r.getCenterX(), r.getCenterY());
 		for (int i = 0; i < layers.length; i++) {
-			if (layers[i]!=null)
+			if (layers[i] != null)
 				layers[i].drawInsideRectangle(g, scaleInstance, r, properties);
 		}
 		g.rotate(-rotation, r.getCenterX(), r.getCenterY());
@@ -206,12 +214,12 @@ public class MultiLayerMarkerSymbol extends AbstractMarkerSymbol implements IMar
 
 	public int getOnePointRgb() {
 		// will paint only the last layer pixel
-		return layers[layers.length-1].getOnePointRgb();
+		return layers[layers.length - 1].getOnePointRgb();
 	}
 
 	public void getPixExtentPlus(FShape shp, float[] distances,
 			ViewPort viewPort, int dpi) {
-		float[] myDistances = new float[] {0,0};
+		float[] myDistances = new float[] { 0, 0 };
 		distances[0] = 0;
 		distances[1] = 0;
 		for (int i = 0; i < layers.length; i++) {
@@ -233,14 +241,13 @@ public class MultiLayerMarkerSymbol extends AbstractMarkerSymbol implements IMar
 
 	}
 
-
 	public XMLEntity getXMLEntity() {
 		XMLEntity xml = new XMLEntity();
 
 		xml.putProperty("className", getClass().getName());
 		xml.putProperty("isShapeVisible", isShapeVisible());
 		xml.putProperty("desc", getDescription());
-		xml.putProperty("size",	getSize());
+		xml.putProperty("size", getSize());
 		xml.putProperty("unit", getUnit());
 		xml.putProperty("referenceSystem", getReferenceSystem());
 		for (int i = 0; i < layers.length; i++) {
@@ -250,9 +257,8 @@ public class MultiLayerMarkerSymbol extends AbstractMarkerSymbol implements IMar
 	}
 
 	public boolean isSuitableFor(IGeometry geom) {
-		return (geom.getGeometryType()%FShape.Z) == FShape.POINT;
+		return (geom.getGeometryType() % FShape.Z) == FShape.POINT;
 	}
-
 
 	public String getClassName() {
 		return getClass().getName();
@@ -265,19 +271,21 @@ public class MultiLayerMarkerSymbol extends AbstractMarkerSymbol implements IMar
 		setUnit(xml.getIntProperty("unit"));
 		setReferenceSystem(xml.getIntProperty("referenceSystem"));
 		for (int i = 0; i < xml.getChildrenCount(); i++) {
-			addLayer((IMarkerSymbol) SymbologyFactory.createSymbolFromXML(xml.getChild(i), "layer" + i));
+			addLayer((IMarkerSymbol) SymbologyFactory.createSymbolFromXML(
+					xml.getChild(i), "layer" + i));
 		}
 	}
 
-
-	public void print(Graphics2D g, AffineTransform at, FShape shape, PrintRequestAttributeSet properties) {
+	public void print(Graphics2D g, AffineTransform at, FShape shape,
+			PrintRequestAttributeSet properties) {
 		for (int i = 0; i < layers.length; i++) {
 			layers[i].print(g, at, shape, properties);
 		}
 
 	}
 
-	public void setLayer(int index, ISymbol layer) throws IndexOutOfBoundsException {
+	public void setLayer(int index, ISymbol layer)
+			throws IndexOutOfBoundsException {
 		layers[index] = (IMarkerSymbol) layer;
 	}
 
@@ -288,11 +296,11 @@ public class MultiLayerMarkerSymbol extends AbstractMarkerSymbol implements IMar
 	}
 
 	public ISymbol getLayer(int layerIndex) {
-//		try{
-			return layers[layerIndex];
-//		} catch (Exception e) {
-//			return null;
-//		}
+		// try{
+		return layers[layerIndex];
+		// } catch (Exception e) {
+		// return null;
+		// }
 	}
 
 	public int getLayerCount() {
@@ -303,8 +311,10 @@ public class MultiLayerMarkerSymbol extends AbstractMarkerSymbol implements IMar
 		addLayer(newLayer, layers.length);
 	}
 
-	public void addLayer(ISymbol newLayer, int layerIndex) throws IndexOutOfBoundsException {
-		if (newLayer == null )/*|| newLayer instanceof ILabelStyle)*/ return; // null or symbols that are styles are not allowed
+	public void addLayer(ISymbol newLayer, int layerIndex)
+			throws IndexOutOfBoundsException {
+		if (newLayer == null)/* || newLayer instanceof ILabelStyle) */
+			return; // null or symbols that are styles are not allowed
 
 		IMarkerSymbol newMarker = (IMarkerSymbol) newLayer;
 		if (getLayerCount() == 0) {
@@ -312,21 +322,23 @@ public class MultiLayerMarkerSymbol extends AbstractMarkerSymbol implements IMar
 
 			setReferenceSystem(newMarker.getReferenceSystem());
 			markerSize = newMarker.getSize();
-			//setSize(newMarker.getSize());
+			// setSize(newMarker.getSize());
 			setUnit(newMarker.getUnit());
 		} else {
 			if (newMarker.getSize() > getSize()) {
-				//setSize(newMarker.getSize());
+				// setSize(newMarker.getSize());
 				markerSize = newMarker.getSize();
 			}
 			newMarker.setReferenceSystem(getReferenceSystem());
 			newMarker.setUnit(getUnit());
 		}
-		selectionSymbol = null; /* forces the selection symbol to be re-created
-		 						 * next time it is required
-		 						 */
+		selectionSymbol = null; /*
+								 * forces the selection symbol to be re-created
+								 * next time it is required
+								 */
 		if (layerIndex < 0 || layers.length < layerIndex)
-			throw new IndexOutOfBoundsException(layerIndex+" < 0 or "+layerIndex+" > "+layers.length);
+			throw new IndexOutOfBoundsException(layerIndex + " < 0 or "
+					+ layerIndex + " > " + layers.length);
 		ArrayList<ISymbol> newLayers = new ArrayList<ISymbol>();
 		for (int i = 0; i < layers.length; i++) {
 			newLayers.add(layers[i]);
@@ -335,7 +347,8 @@ public class MultiLayerMarkerSymbol extends AbstractMarkerSymbol implements IMar
 			newLayers.add(layerIndex, newLayer);
 			layers = (IMarkerSymbol[]) newLayers.toArray(new IMarkerSymbol[0]);
 		} catch (ArrayStoreException asEx) {
-			throw new ClassCastException(newLayer.getClassName()+" is not an IMarkerSymbol");
+			throw new ClassCastException(newLayer.getClassName()
+					+ " is not an IMarkerSymbol");
 		}
 	}
 
@@ -348,7 +361,7 @@ public class MultiLayerMarkerSymbol extends AbstractMarkerSymbol implements IMar
 			lst.add(layers[i]);
 		}
 		boolean contains = lst.remove(layer);
-		layers = (IMarkerSymbol[])lst.toArray(new IMarkerSymbol[0]);
+		layers = (IMarkerSymbol[]) lst.toArray(new IMarkerSymbol[0]);
 		return contains;
 	}
 
@@ -369,7 +382,8 @@ public class MultiLayerMarkerSymbol extends AbstractMarkerSymbol implements IMar
 	}
 
 	public void setAlpha(int alpha) {
-		// first, get the biggest alpha in the layers and the index if such layer
+		// first, get the biggest alpha in the layers and the index if such
+		// layer
 		int maxAlpha = Integer.MIN_VALUE;
 		int maxAlphaLayerIndex = 0;
 		for (int i = 0; i < layers.length; i++) {
@@ -386,9 +400,10 @@ public class MultiLayerMarkerSymbol extends AbstractMarkerSymbol implements IMar
 			int g = layers[i].getColor().getGreen();
 			int b = layers[i].getColor().getBlue();
 
-			if (i!=maxAlphaLayerIndex) {
-				double scaledAlpha = (double) layers[i].getColor().getAlpha()/maxAlpha;
-				int myAlpha = (int) (alpha*scaledAlpha);
+			if (i != maxAlphaLayerIndex) {
+				double scaledAlpha = (double) layers[i].getColor().getAlpha()
+						/ maxAlpha;
+				int myAlpha = (int) (alpha * scaledAlpha);
 				if (myAlpha == 0)
 					myAlpha = 1;
 				layers[i].setColor(new Color(r, g, b, myAlpha));

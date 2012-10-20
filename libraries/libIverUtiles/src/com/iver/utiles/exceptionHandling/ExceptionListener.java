@@ -41,18 +41,22 @@
 package com.iver.utiles.exceptionHandling;
 
 /**
- * <p><code>ExceptionListener</code> defines the way to notify a listener
- *  that an error or exception throwable by the Java Virtual Machine
- *  has been produced.</p>
+ * <p>
+ * <code>ExceptionListener</code> defines the way to notify a listener that an
+ * error or exception throwable by the Java Virtual Machine has been produced.
+ * </p>
  * 
  * @see Throwable
  */
 public interface ExceptionListener {
 	/**
-	 * <p>Notifies a listener that an error or exception throwable by the Java Virtual Machine
-     *  has been produced.</p> 
+	 * <p>
+	 * Notifies a listener that an error or exception throwable by the Java
+	 * Virtual Machine has been produced.
+	 * </p>
 	 * 
-	 * @param t an error or exception in the Java language
+	 * @param t
+	 *            an error or exception in the Java language
 	 */
 	public void exceptionThrown(Throwable t);
 }

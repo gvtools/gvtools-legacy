@@ -41,21 +41,25 @@ import org.gvsig.rastertools.vectorizacion.stretch.ui.StretchPanel;
  * Listener para el panel de selección de tramos
  * 
  * 08/08/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
-public class StretchListener implements ActionListener, IGCanvasListener, TableModelListener, KeyListener {
-	private FLyrRasterSE         lyr           = null;
-	private StretchPanel         panel         = null;
-	private StretchProcess       process       = null;
-	private StretchData          data          = null;
+public class StretchListener implements ActionListener, IGCanvasListener,
+		TableModelListener, KeyListener {
+	private FLyrRasterSE lyr = null;
+	private StretchPanel panel = null;
+	private StretchProcess process = null;
+	private StretchData data = null;
 	private StretchPreviewRender previewRender = null;
-	private PreviewBasePanel     previewPanel  = null;
-	
+	private PreviewBasePanel previewPanel = null;
+
 	/**
 	 * Constructor. Asigna el panel asociado al listener
+	 * 
 	 * @param panel
 	 */
-	public StretchListener(FLyrRasterSE lyr, StretchPanel panel, StretchData data) {
+	public StretchListener(FLyrRasterSE lyr, StretchPanel panel,
+			StretchData data) {
 		this.panel = panel;
 		this.lyr = lyr;
 		this.data = data;
@@ -64,10 +68,10 @@ public class StretchListener implements ActionListener, IGCanvasListener, TableM
 		panel.getLoadButton().addActionListener(this);
 		panel.getLoadButton().addKeyListener(this);
 		panel.registerListener(BasePanel.KEYLISTENER, this);
-		
+
 		process = new StretchProcess(null);
 		process.setSourceLayer(lyr);
-		
+
 		initActions();
 	}
 
@@ -75,7 +79,7 @@ public class StretchListener implements ActionListener, IGCanvasListener, TableM
 	 * Acciones de inicialización del componente
 	 */
 	private void initActions() {
-		if(lyr == null)
+		if (lyr == null)
 			return;
 		double min = lyr.getDataSource().getStatistics().getMinimun();
 		double max = lyr.getDataSource().getStatistics().getMaximun();
@@ -92,58 +96,64 @@ public class StretchListener implements ActionListener, IGCanvasListener, TableM
 		panel.getModel().setShiftAndDistance(min, max - min);
 		data.updateObservers();
 	}
-	
+
 	/**
 	 * Obtiene el render de la preview asociada
+	 * 
 	 * @return IPreviewRenderProcess
 	 */
 	public StretchPreviewRender getPreviewRender() {
-		if(previewRender == null)
+		if (previewRender == null)
 			previewRender = new StretchPreviewRender(lyr, data);
 		return previewRender;
 	}
-	
+
 	/**
 	 * Asigna el panel con la previsualización
+	 * 
 	 * @param prev
 	 */
 	public void setPreviewPanel(PreviewBasePanel prev) {
 		this.previewPanel = prev;
 		refreshPreview();
 	}
-	
+
 	/**
-	 * Método para refresco de preview. Este puede no existir en caso de 
-	 * usarse la funcionalidad de forma independiente por lo que habrá que
-	 * comprobar si existe antes del refresco.
+	 * Método para refresco de preview. Este puede no existir en caso de usarse
+	 * la funcionalidad de forma independiente por lo que habrá que comprobar si
+	 * existe antes del refresco.
 	 */
 	public void refreshPreview() {
-		if(previewPanel != null) {
-			/*while(RasterTaskQueue.getProcessCount() > 0)
-				try {
-					Thread.sleep(500);
-				} catch (InterruptedException e) {
-				}*/
+		if (previewPanel != null) {
+			/*
+			 * while(RasterTaskQueue.getProcessCount() > 0) try {
+			 * Thread.sleep(500); } catch (InterruptedException e) { }
+			 */
 			previewPanel.refreshPreview();
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == panel.getLoadButton()) {
+		if (e.getSource() == panel.getLoadButton()) {
 			double min = panel.getStretchSelectorPanel().getData().getMinimum();
 			double max = panel.getStretchSelectorPanel().getData().getMaximum();
-			if(panel.getStretchSelectorPanel().getIntervalSize().isSelected()) 
-				data.setSizeInterval(panel.getStretchSelectorPanel().getData().getStretchSize());
-			
-			if(panel.getStretchSelectorPanel().getIntervalNumber().isSelected()) 
-				data.setNInterval(panel.getStretchSelectorPanel().getData().getStretchNumber());
-			
+			if (panel.getStretchSelectorPanel().getIntervalSize().isSelected())
+				data.setSizeInterval(panel.getStretchSelectorPanel().getData()
+						.getStretchSize());
+
+			if (panel.getStretchSelectorPanel().getIntervalNumber()
+					.isSelected())
+				data.setNInterval(panel.getStretchSelectorPanel().getData()
+						.getStretchNumber());
+
 			panel.getModel().setShiftAndDistance(min, max - min);
-			
+
 			panel.getCanvas().repaint();
 			panel.getTable().updateUI();
 			refreshPreview();
@@ -151,24 +161,26 @@ public class StretchListener implements ActionListener, IGCanvasListener, TableM
 	}
 
 	/**
-	 * Asigna el interfaz para que el proceso ejectute las acciones de finalización
-	 * al acabar.
+	 * Asigna el interfaz para que el proceso ejectute las acciones de
+	 * finalización al acabar.
+	 * 
 	 * @param endActions
 	 */
 	public void setProcessActions(IProcessActions endActions) {
-		if(process != null)
+		if (process != null)
 			process.setProcessActions(endActions);
 	}
-	
+
 	/**
 	 * Asigna la capa fuente para el proceso
+	 * 
 	 * @param lyr
 	 */
 	public void setProcessSource(FLyrRasterSE lyr) {
-		if(process != null)
+		if (process != null)
 			process.setSourceLayer(lyr);
 	}
-	
+
 	/**
 	 * Aplica las acciones
 	 */
@@ -180,10 +192,13 @@ public class StretchListener implements ActionListener, IGCanvasListener, TableM
 		}
 		refreshPreview();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.beans.canvas.IGCanvasListener#actionDataChanged(org.gvsig.raster.beans.canvas.GCanvasEvent)
+	 * 
+	 * @see
+	 * org.gvsig.raster.beans.canvas.IGCanvasListener#actionDataChanged(org.
+	 * gvsig.raster.beans.canvas.GCanvasEvent)
 	 */
 	public void actionDataChanged(GCanvasEvent e) {
 		panel.getTable().updateUI();
@@ -192,14 +207,19 @@ public class StretchListener implements ActionListener, IGCanvasListener, TableM
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.beans.canvas.IGCanvasListener#actionDataDragged(org.gvsig.raster.beans.canvas.GCanvasEvent)
+	 * 
+	 * @see
+	 * org.gvsig.raster.beans.canvas.IGCanvasListener#actionDataDragged(org.
+	 * gvsig.raster.beans.canvas.GCanvasEvent)
 	 */
 	public void actionDataDragged(GCanvasEvent e) {
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see javax.swing.event.TableModelListener#tableChanged(javax.swing.event.TableModelEvent)
+	 * 
+	 * @see javax.swing.event.TableModelListener#tableChanged(javax.swing.event.
+	 * TableModelEvent)
 	 */
 	public void tableChanged(TableModelEvent e) {
 		panel.getCanvas().repaint();
@@ -208,6 +228,7 @@ public class StretchListener implements ActionListener, IGCanvasListener, TableM
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
 	 */
 	public void keyPressed(KeyEvent e) {
@@ -215,10 +236,11 @@ public class StretchListener implements ActionListener, IGCanvasListener, TableM
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
 	 */
 	public void keyReleased(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			actionPerformed(new ActionEvent(panel.getLoadButton(), 0, null));
 			refreshPreview();
 		}
@@ -226,6 +248,7 @@ public class StretchListener implements ActionListener, IGCanvasListener, TableM
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.KeyListener#keyTyped(java.awt.event.KeyEvent)
 	 */
 	public void keyTyped(KeyEvent e) {

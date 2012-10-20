@@ -42,9 +42,10 @@ package com.iver.cit.gvsig.fmap.layers;
 
 import com.iver.cit.gvsig.fmap.FMapEvent;
 
-
 /**
- * <p>Event associated to a selection on a vector layer.</p>
+ * <p>
+ * Event associated to a selection on a vector layer.
+ * </p>
  * 
  * @see FMapEvent
  */

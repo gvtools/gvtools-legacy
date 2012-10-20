@@ -46,16 +46,18 @@ import org.xml.sax.SAXException;
 
 import com.iver.utiles.xmlViewer.MultipleXMLContent;
 import com.iver.utiles.xmlViewer.XMLViewer;
+
 public class Sample extends JFrame {
 
 	private javax.swing.JPanel jContentPane = null;
 
 	private XMLViewer XMLViewer = null;
+
 	/**
-	 * This method initializes XMLViewer	
-	 * 	
-	 * @return com.iver.utiles.xmlViewer.XMLViewer	
-	 */    
+	 * This method initializes XMLViewer
+	 * 
+	 * @return com.iver.utiles.xmlViewer.XMLViewer
+	 */
 	private XMLViewer getXMLViewer() {
 		if (XMLViewer == null) {
 			XMLViewer = new XMLViewer();
@@ -71,11 +73,13 @@ public class Sample extends JFrame {
 		}
 		return XMLViewer;
 	}
- 	public static void main(String[] args) {
- 		Sample s = new Sample();
- 		s.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
- 		s.show();
+
+	public static void main(String[] args) {
+		Sample s = new Sample();
+		s.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		s.show();
 	}
+
 	/**
 	 * This is the default constructor
 	 */
@@ -83,23 +87,25 @@ public class Sample extends JFrame {
 		super();
 		initialize();
 	}
+
 	/**
 	 * This method initializes this
 	 * 
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(300,200);
+		this.setSize(300, 200);
 		this.setContentPane(getJContentPane());
 		this.setTitle("JFrame");
 	}
+
 	/**
 	 * This method initializes jContentPane
 	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private javax.swing.JPanel getJContentPane() {
-		if(jContentPane == null) {
+		if (jContentPane == null) {
 			jContentPane = new javax.swing.JPanel();
 			jContentPane.setLayout(new java.awt.BorderLayout());
 			jContentPane.add(getXMLViewer(), java.awt.BorderLayout.CENTER);

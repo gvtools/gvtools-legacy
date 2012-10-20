@@ -26,23 +26,25 @@ import org.gvsig.gui.beans.buttonspanel.ButtonsPanel;
 import org.gvsig.gui.beans.buttonspanel.ButtonsPanelEvent;
 import org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener;
 import org.gvsig.raster.util.RasterToolsUtil;
+
 /**
  * Panel principal del dialogo de finalización del salvado a raster. En el se
  * muestra la información de nombre de fichero, tamaño de este, tiempo de la
  * operación, etc...
  * 
  * Para mostrar un fichero solo hay que usar el metodo estatico show.
- *
+ * 
  * @version 19/06/2008
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class EndInfoDialog implements ButtonsPanelListener {
-	private JFrame               frame         = null;
-	private EndInfoPanel         infoPanel     = null;
+	private JFrame frame = null;
+	private EndInfoPanel infoPanel = null;
 	static private EndInfoDialog endInfoDialog = null;
 
 	/**
 	 * Obtiene el panel con la información de finalización
+	 * 
 	 * @return EndInfoPanel
 	 */
 	private EndInfoPanel getInfoPanel() {
@@ -62,11 +64,11 @@ public class EndInfoDialog implements ButtonsPanelListener {
 		}
 		return frame;
 	}
-	
+
 	static public void show(String fileName, long time) {
 		if (!new File(fileName).exists())
 			return;
-		
+
 		if ((endInfoDialog == null) || (!endInfoDialog.getFrame().isVisible()))
 			endInfoDialog = new EndInfoDialog();
 		endInfoDialog.getInfoPanel().addFile(fileName, time);

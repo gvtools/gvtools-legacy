@@ -49,11 +49,10 @@ import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.fmap.layers.SelectionEvent;
 import com.iver.cit.gvsig.fmap.layers.SelectionListener;
 
-
 /**
  * Listener que está pendiente de la selección que se haga sobre la tabla para
  * poder seleccionar de la tabla linkada los registros oportunos.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LinkSelectionListener implements SelectionListener {
@@ -61,24 +60,28 @@ public class LinkSelectionListener implements SelectionListener {
 	private SelectableDataSource modelo2;
 	private int index1;
 	private int index2;
-	private boolean isChanging=false;
+	private boolean isChanging = false;
 
 	/**
 	 * Crea un nuevo LinkSelectionListener. Donde se pasan como parámetros dos
 	 * SelectableDataSource, el primero de ellos(model1), representa la tabla
-	 * sobre la que al seleccionar algún registro buscaremos en el modelo2
-	 * para ver el valor del campo s1 y compararlo con el valor del campo s2 y
-	 * de esta forma seleccionar instantanemente los registros oportunos en la
+	 * sobre la que al seleccionar algún registro buscaremos en el modelo2 para
+	 * ver el valor del campo s1 y compararlo con el valor del campo s2 y de
+	 * esta forma seleccionar instantanemente los registros oportunos en la
 	 * tabla al que se representa con el modelo2.
-	 *
-	 * @param model1 SelectableDataSource de la tabla sobre la que se efectua
-	 * 		  el link.
-	 * @param model2 SelectableDataSource de la tabla linkada.
-	 * @param s1 nombre del campo de la tabla donde se efectua el link.
-	 * @param s2 nombre del campo de la tabla linkada.
+	 * 
+	 * @param model1
+	 *            SelectableDataSource de la tabla sobre la que se efectua el
+	 *            link.
+	 * @param model2
+	 *            SelectableDataSource de la tabla linkada.
+	 * @param s1
+	 *            nombre del campo de la tabla donde se efectua el link.
+	 * @param s2
+	 *            nombre del campo de la tabla linkada.
 	 */
 	public LinkSelectionListener(SelectableDataSource model1,
-		SelectableDataSource model2, String s1, String s2) {
+			SelectableDataSource model2, String s1, String s2) {
 		modelo1 = model1;
 		modelo2 = model2;
 
@@ -89,28 +92,27 @@ public class LinkSelectionListener implements SelectionListener {
 			e.printStackTrace();
 		}
 
-		//field1 = s1;
-		//field2 = s2;
+		// field1 = s1;
+		// field2 = s2;
 	}
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.layers.LegendListener#selectionChanged(com.iver.cit.gvsig.fmap.layers.LayerEvent)
 	 */
 	public void selectionChanged(SelectionEvent e) {
-		if (isChanging){
+		if (isChanging) {
 			return;
 		}
-		isChanging=true;
+		isChanging = true;
 		FBitSet bs1 = modelo1.getSelection();
-		FBitSet bs2 = new FBitSet(); //(FBitSet)modelo2.getSelection().clone();
+		FBitSet bs2 = new FBitSet(); // (FBitSet)modelo2.getSelection().clone();
 		HashMap idx = new HashMap(bs1.cardinality());
-		//int index1 = -1;
-		//int index2 = -1;
+		// int index1 = -1;
+		// int index2 = -1;
 
 		try {
-			//		Construimos el índice
-			for (int i = bs1.nextSetBit(0); i >= 0;
-					i = bs1.nextSetBit(i + 1)) {
+			// Construimos el índice
+			for (int i = bs1.nextSetBit(0); i >= 0; i = bs1.nextSetBit(i + 1)) {
 				Value v = modelo1.getFieldValue((long) i, index1);
 
 				if (idx.get(v) == null) {
@@ -135,9 +137,9 @@ public class LinkSelectionListener implements SelectionListener {
 		}
 
 		// this applies the selection to the linked table
-		if (modelo1!=modelo2)
+		if (modelo1 != modelo2)
 			modelo2.setSelection(bs2);
-		isChanging=false;
-		//modelo2.fireSelectionEvents();
+		isChanging = false;
+		// modelo2.fireSelectionEvents();
 	}
 }

@@ -33,16 +33,17 @@ import com.iver.andami.PluginServices;
  * 
  * @version 24/04/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
 public class WriterPropertiesListener implements ButtonsPanelListener {
 
 	private WriterPropertiesDialog dialog = null;
 	private Params params = null;
 	private PropertiesComponent pComp = null;
-	
+
 	/**
 	 * Constructor
+	 * 
 	 * @param dialog
 	 */
 	public WriterPropertiesListener(WriterPropertiesDialog dialog, Params params) {
@@ -51,9 +52,13 @@ public class WriterPropertiesListener implements ButtonsPanelListener {
 		this.pComp = dialog.getPropertiesPanel().getPropertiesComponent();
 		RasterToolsUtil.loadPropertiesFromWriterParams(pComp, params, null);
 	}
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener#actionButtonPressed(org.gvsig.gui.beans.buttonspanel.ButtonsPanelEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener#actionButtonPressed
+	 * (org.gvsig.gui.beans.buttonspanel.ButtonsPanelEvent)
 	 */
 	public void actionButtonPressed(ButtonsPanelEvent e) {
 		switch (e.getButton()) {
@@ -66,7 +71,7 @@ public class WriterPropertiesListener implements ButtonsPanelListener {
 			PluginServices.getMDIManager().closeWindow(dialog);
 			break;
 		}
-		
+
 	}
 
 }

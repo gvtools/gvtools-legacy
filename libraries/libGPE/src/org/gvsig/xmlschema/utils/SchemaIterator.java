@@ -66,6 +66,7 @@ import org.w3c.dom.NodeList;
  */
 /**
  * To retrieve the DOM element children
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class SchemaIterator implements Iterator {
@@ -73,26 +74,28 @@ public class SchemaIterator implements Iterator {
 	private SchemaObjectsMapping collectionTypes = null;
 	private String currentNode = null;
 	int index = -1;
-	
-	public SchemaIterator(NodeList nodeList, SchemaObjectsMapping collectionTypes){
+
+	public SchemaIterator(NodeList nodeList,
+			SchemaObjectsMapping collectionTypes) {
 		this.nodeList = nodeList;
 		this.collectionTypes = collectionTypes;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Iterator#hasNext()
 	 */
 	public boolean hasNext() {
 		boolean nextFound = false;
-		index ++;
-		while ((!nextFound) && (index < nodeList.getLength())){
+		index++;
+		while ((!nextFound) && (index < nodeList.getLength())) {
 			Node node = nodeList.item(index);
-			if(node.getNodeType() == Node.ELEMENT_NODE){
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Iterator it = collectionTypes.getTypes().iterator();
-				while (it.hasNext()){
-					String type = (String)it.next();
-					if (SchemaUtils.matches(node, SchemaTags.XS_NS, type)){
+				while (it.hasNext()) {
+					String type = (String) it.next();
+					if (SchemaUtils.matches(node, SchemaTags.XS_NS, type)) {
 						currentNode = type;
 						return true;
 					}
@@ -105,21 +108,24 @@ public class SchemaIterator implements Iterator {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Iterator#next()
 	 */
 	public Object next() {
-		if ((index > -1) && (index < nodeList.getLength())){
-			return collectionTypes.getNode(currentNode, (Element)nodeList.item(index));
+		if ((index > -1) && (index < nodeList.getLength())) {
+			return collectionTypes.getNode(currentNode,
+					(Element) nodeList.item(index));
 		}
 		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Iterator#remove()
 	 */
 	public void remove() {
-		throw new UnsupportedOperationException();		
+		throw new UnsupportedOperationException();
 	}
 
 }

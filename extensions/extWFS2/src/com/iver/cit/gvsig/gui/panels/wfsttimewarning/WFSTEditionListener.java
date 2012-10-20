@@ -1,13 +1,8 @@
 package com.iver.cit.gvsig.gui.panels.wfsttimewarning;
 
-import java.awt.Component;
-
-import javax.swing.JOptionPane;
-
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.FLyrWFS;
 import com.iver.cit.gvsig.fmap.layers.LayerEvent;
-import com.iver.cit.gvsig.fmap.layers.LayerListener;
 import com.iver.cit.gvsig.fmap.layers.WFSLayerListener;
 import com.iver.cit.gvsig.gui.panels.wfstclock.ClockWindow;
 
@@ -63,17 +58,20 @@ import com.iver.cit.gvsig.gui.panels.wfstclock.ClockWindow;
 public class WFSTEditionListener extends WFSLayerListener {
 	private ClockWindow clockWindow = null;
 
-	public WFSTEditionListener(){
+	public WFSTEditionListener() {
 		super();
 	}
 
-	public WFSTEditionListener(FLyrWFS wfsLayer){
+	public WFSTEditionListener(FLyrWFS wfsLayer) {
 		super(wfsLayer);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.layers.LayerListener#activationChanged(com.iver.cit.gvsig.fmap.layers.LayerEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.LayerListener#activationChanged(com.iver
+	 * .cit.gvsig.fmap.layers.LayerEvent)
 	 */
 	public void activationChanged(LayerEvent e) {
 
@@ -81,32 +79,35 @@ public class WFSTEditionListener extends WFSLayerListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.layers.LayerListener#editionChanged(com.iver.cit.gvsig.fmap.layers.LayerEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.LayerListener#editionChanged(com.iver.
+	 * cit.gvsig.fmap.layers.LayerEvent)
 	 */
 	public void editionChanged(LayerEvent e) {
-		//If is not a WFST session
-		if (!wfsLayer.isWfstEditing()){
-//			if (wfsLayer.isEditing()){
-//			JOptionPane.showMessageDialog(
-//					(Component) PluginServices.getMDIManager().getActiveWindow(),
-//					PluginServices.getText(this, "this_layer_is_not_self_editable"),
-//					PluginServices.getText(this, "warning_title"),
-//					JOptionPane.WARNING_MESSAGE);
-//			}
-		}//Is a WFST session
-		else{
-			if (wfsLayer.isEditing()){
-				//If the server don't uses the lockFeature operation
-				if (wfsLayer.getWfstExpiryTime() < 0){
-					//The LockFeature operation is not send
-				}//The clock window has to be opened
-				else{
+		// If is not a WFST session
+		if (!wfsLayer.isWfstEditing()) {
+			// if (wfsLayer.isEditing()){
+			// JOptionPane.showMessageDialog(
+			// (Component) PluginServices.getMDIManager().getActiveWindow(),
+			// PluginServices.getText(this, "this_layer_is_not_self_editable"),
+			// PluginServices.getText(this, "warning_title"),
+			// JOptionPane.WARNING_MESSAGE);
+			// }
+		}// Is a WFST session
+		else {
+			if (wfsLayer.isEditing()) {
+				// If the server don't uses the lockFeature operation
+				if (wfsLayer.getWfstExpiryTime() < 0) {
+					// The LockFeature operation is not send
+				}// The clock window has to be opened
+				else {
 					clockWindow = new ClockWindow(wfsLayer);
 					clockWindow.startTime();
 					PluginServices.getMDIManager().addWindow(clockWindow);
 				}
-			}else{
-				if (clockWindow != null){
+			} else {
+				if (clockWindow != null) {
 					clockWindow.setClosed();
 					PluginServices.getMDIManager().closeWindow(clockWindow);
 				}
@@ -117,7 +118,10 @@ public class WFSTEditionListener extends WFSLayerListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.layers.LayerListener#nameChanged(com.iver.cit.gvsig.fmap.layers.LayerEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.LayerListener#nameChanged(com.iver.cit
+	 * .gvsig.fmap.layers.LayerEvent)
 	 */
 	public void nameChanged(LayerEvent e) {
 
@@ -125,7 +129,10 @@ public class WFSTEditionListener extends WFSLayerListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.layers.LayerListener#visibilityChanged(com.iver.cit.gvsig.fmap.layers.LayerEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.LayerListener#visibilityChanged(com.iver
+	 * .cit.gvsig.fmap.layers.LayerEvent)
 	 */
 	public void visibilityChanged(LayerEvent e) {
 
@@ -133,6 +140,6 @@ public class WFSTEditionListener extends WFSLayerListener {
 
 	public void drawValueChanged(LayerEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

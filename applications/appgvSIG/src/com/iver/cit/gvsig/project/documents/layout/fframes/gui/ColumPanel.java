@@ -44,24 +44,27 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
-public class ColumPanel extends JPanel{
-	private int numColum=1;
-	//private Rectangle[] rectangles; 
-	public ColumPanel(){
-		setBounds(new java.awt.Rectangle(230,135,132,68));
+public class ColumPanel extends JPanel {
+	private int numColum = 1;
+
+	// private Rectangle[] rectangles;
+	public ColumPanel() {
+		setBounds(new java.awt.Rectangle(230, 135, 132, 68));
 		setBackground(java.awt.Color.white);
 		setNumColum(numColum);
 	}
+
 	public void setNumColum(int j) {
-		numColum=j;
-		//rectangles=new Rectangle[numColum];
-		for (int i=0;i<numColum;i++){
-			
+		numColum = j;
+		// rectangles=new Rectangle[numColum];
+		for (int i = 0; i < numColum; i++) {
+
 		}
 	}
+
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-	
+
 	}
 
 }

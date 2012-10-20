@@ -27,6 +27,7 @@ import java.util.ArrayList;
 
 import org.gvsig.raster.beans.canvas.DrawableElement;
 import org.gvsig.raster.util.MathUtils;
+
 /**
  * Capa para GCanvas que muestra el maximo y minimo de una banda
  * 
@@ -42,6 +43,7 @@ public class InfoLayer extends DrawableElement {
 
 	/**
 	 * Creacion de un InfoLayer especificando el color
+	 * 
 	 * @param c
 	 */
 	public InfoLayer(Color c) {
@@ -54,9 +56,10 @@ public class InfoLayer extends DrawableElement {
 	public void firstActions() {
 		canvas.addBorder(0, 15, 0, 15);
 	}
-	
+
 	/**
 	 * Establecer los valores maximo y minimo para dicha capa
+	 * 
 	 * @param min
 	 * @param max
 	 */
@@ -67,36 +70,49 @@ public class InfoLayer extends DrawableElement {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.beans.canvas.DrawableElement#paint(java.awt.Graphics)
+	 * 
+	 * @see
+	 * org.gvsig.raster.beans.canvas.DrawableElement#paint(java.awt.Graphics)
 	 */
 	protected void paint(Graphics g) {
-		
+
 		Graphics2D graphics2 = (Graphics2D) g;
 
-		RenderingHints hints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		hints.add(new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY));
+		RenderingHints hints = new RenderingHints(
+				RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		hints.add(new RenderingHints(RenderingHints.KEY_RENDERING,
+				RenderingHints.VALUE_RENDER_QUALITY));
 		graphics2.setRenderingHints(hints);
 
 		graphics2.setColor(color);
 		graphics2.setFont(new java.awt.Font("Times", 1, 12));
-		
+
 		String min2 = MathUtils.clipDecimals(min, 1) + "";
 		String max2 = MathUtils.clipDecimals(max, 1) + "";
 
-		Rectangle2D rectangle2D = graphics2.getFontMetrics().getStringBounds(max2, g);
-		
-		graphics2.drawString(min2, canvas.getCanvasMinX(), canvas.getCanvasMinX() + 12);
-		graphics2.drawString(max2, (int) (canvas.getWidth() - rectangle2D.getWidth() - canvas.getCanvasMinX()), canvas.getCanvasMinX() + 12);
-		
+		Rectangle2D rectangle2D = graphics2.getFontMetrics().getStringBounds(
+				max2, g);
+
+		graphics2.drawString(min2, canvas.getCanvasMinX(),
+				canvas.getCanvasMinX() + 12);
+		graphics2.drawString(max2,
+				(int) (canvas.getWidth() - rectangle2D.getWidth() - canvas
+						.getCanvasMinX()), canvas.getCanvasMinX() + 12);
+
 		if (statusRight != null) {
-			rectangle2D = graphics2.getFontMetrics().getStringBounds(statusRight, g);
-			graphics2.drawString(statusRight, (int) (canvas.getWidth() - rectangle2D.getWidth() - canvas.getCanvasMinX()), (int) canvas.getHeight() - canvas.getCanvasMinX());
+			rectangle2D = graphics2.getFontMetrics().getStringBounds(
+					statusRight, g);
+			graphics2.drawString(statusRight, (int) (canvas.getWidth()
+					- rectangle2D.getWidth() - canvas.getCanvasMinX()),
+					(int) canvas.getHeight() - canvas.getCanvasMinX());
 		}
 
 		if (statusLeft != null) {
-			graphics2.drawString(statusLeft, canvas.getCanvasMinX(), (int) canvas.getHeight() - canvas.getCanvasMinX());
+			graphics2.drawString(statusLeft, canvas.getCanvasMinX(),
+					(int) canvas.getHeight() - canvas.getCanvasMinX());
 		}
-		
+
 		ArrayList list = canvas.getDrawableElements(MinMaxLines.class);
 		if (list.size() > 0) {
 			MinMaxLines minMaxLines = (MinMaxLines) list.get(0);
@@ -114,7 +130,8 @@ public class InfoLayer extends DrawableElement {
 				double totalmin = 0.0D;
 				double totalmax = 0.0D;
 				for (int i = 0; i < ds.length; i++) {
-					double value = min + (((double) (i * (max - min))) / (double) (ds.length - 1.0D));
+					double value = min
+							+ (((double) (i * (max - min))) / (double) (ds.length - 1.0D));
 					total += ds[i];
 					if (minP > value)
 						totalmin += ds[i];
@@ -132,13 +149,16 @@ public class InfoLayer extends DrawableElement {
 			rectangle2D = graphics2.getFontMetrics().getStringBounds(max2, g);
 
 			if (statusLeft == null)
-				graphics2.drawString(min2, canvas.getCanvasMinX(), (int) canvas.getHeight() - canvas.getCanvasMinX());
+				graphics2.drawString(min2, canvas.getCanvasMinX(),
+						(int) canvas.getHeight() - canvas.getCanvasMinX());
 
 			if (statusRight == null)
-				graphics2.drawString(max2, (int) (canvas.getWidth() - rectangle2D.getWidth() - canvas.getCanvasMinX()), (int) canvas.getHeight() - canvas.getCanvasMinX());
+				graphics2.drawString(max2, (int) (canvas.getWidth()
+						- rectangle2D.getWidth() - canvas.getCanvasMinX()),
+						(int) canvas.getHeight() - canvas.getCanvasMinX());
 		}
 	}
-	
+
 	/**
 	 * @return the min
 	 */
@@ -152,20 +172,23 @@ public class InfoLayer extends DrawableElement {
 	public double getMax() {
 		return max;
 	}
-	
+
 	/**
-	 * @param status the status to set
+	 * @param status
+	 *            the status to set
 	 */
 	public void setStatusRight(String statusRight) {
 		this.statusRight = statusRight;
 	}
-	
+
 	/**
-	 * @param statusLeft the statusLeft to set
+	 * @param statusLeft
+	 *            the statusLeft to set
 	 */
 	public void setStatusLeft(String statusLeft) {
 		this.statusLeft = statusLeft;
 	}
-	
-	public void firstDrawActions() {}
+
+	public void firstDrawActions() {
+	}
 }

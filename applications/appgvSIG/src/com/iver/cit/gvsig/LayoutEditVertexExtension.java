@@ -47,38 +47,39 @@ import com.iver.andami.plugins.Extension;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
-
 /**
  * Extensión que contiene todas las herramientas de edición.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LayoutEditVertexExtension extends Extension {
-    private static Logger logger = Logger.getLogger(LayoutEditVertexExtension.class.getName());
-    private Layout layout = null;
+	private static Logger logger = Logger
+			.getLogger(LayoutEditVertexExtension.class.getName());
+	private Layout layout = null;
 
-    /**
-     * DOCUMENT ME!
-     */
-    public void initialize() {
-        // TODO Auto-generated method stub
-    	registerIcons();
-    }
+	/**
+	 * DOCUMENT ME!
+	 */
+	public void initialize() {
+		// TODO Auto-generated method stub
+		registerIcons();
+	}
 
-    private void registerIcons(){
-    	PluginServices.getIconTheme().registerDefault(
-    			"layout-edit-vertex",
-				this.getClass().getClassLoader().getResource("images/Select1.png")
-			);
-    }
+	private void registerIcons() {
+		PluginServices.getIconTheme().registerDefault(
+				"layout-edit-vertex",
+				this.getClass().getClassLoader()
+						.getResource("images/Select1.png"));
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param s DOCUMENT ME!
-     */
-    public void execute(String s) {
-    	layout = (Layout) PluginServices.getMDIManager().getActiveWindow();
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param s
+	 *            DOCUMENT ME!
+	 */
+	public void execute(String s) {
+		layout = (Layout) PluginServices.getMDIManager().getActiveWindow();
 
 		logger.debug("Comand : " + s);
 		if (s.compareTo("VERTEX") == 0) {
@@ -87,51 +88,52 @@ public class LayoutEditVertexExtension extends Extension {
 		}
 	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public boolean isEnabled() {
-    	IWindow f = PluginServices.getMDIManager().getActiveWindow();
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public boolean isEnabled() {
+		IWindow f = PluginServices.getMDIManager().getActiveWindow();
 
 		if (f == null) {
 			return false;
 		}
 
 		if (f instanceof Layout) {
-			Layout layout=(Layout)f;
-			if (layout.getLayoutContext().isEditable()){
+			Layout layout = (Layout) f;
+			if (layout.getLayoutContext().isEditable()) {
 				return true;
-//				IFFrame[] fframes = layout.getFFrames();
-//				for (int i = 0; i < fframes.length; i++) {
-//					if (fframes[i].getSelected() != IFFrame.NOSELECT
-//							&& fframes[i] instanceof IFFrameEditableVertex) {
-//						return true;
-//					}
-//				}
+				// IFFrame[] fframes = layout.getFFrames();
+				// for (int i = 0; i < fframes.length; i++) {
+				// if (fframes[i].getSelected() != IFFrame.NOSELECT
+				// && fframes[i] instanceof IFFrameEditableVertex) {
+				// return true;
+				// }
+				// }
 			}
 		}
 		return false;
-    }
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public boolean isVisible() {
-        IWindow f = PluginServices.getMDIManager().getActiveWindow();
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public boolean isVisible() {
+		IWindow f = PluginServices.getMDIManager().getActiveWindow();
 
-        if (f == null) {
-            return false;
-        }
+		if (f == null) {
+			return false;
+		}
 
-        if (f instanceof Layout) {
-            //	Layout layout = (Layout) f;
-            return true; //layout.m_Display.getMapControl().getMapContext().getLayers().layerCount() > 0;
-        } else {
-            return false;
-        }
-    }
+		if (f instanceof Layout) {
+			// Layout layout = (Layout) f;
+			return true; // layout.m_Display.getMapControl().getMapContext().getLayers().layerCount()
+							// > 0;
+		} else {
+			return false;
+		}
+	}
 }

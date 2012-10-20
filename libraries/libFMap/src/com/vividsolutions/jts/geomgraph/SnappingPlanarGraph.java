@@ -16,8 +16,8 @@ import com.vividsolutions.jts.geom.Location;
 /**
  * @author alzabord
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ *         TODO To change the template for this generated type comment go to
+ *         Window - Preferences - Java - Code Style - Code Templates
  */
 public class SnappingPlanarGraph extends PlanarGraph {
 
@@ -29,7 +29,6 @@ public class SnappingPlanarGraph extends PlanarGraph {
 
 	protected List edgeEndList = new ArrayList();
 
-	
 	/**
 	 * For nodes in the Collection, link the DirectedEdges at the node that are
 	 * in the result. This allows clients to link only a subset of nodes in the
@@ -39,7 +38,7 @@ public class SnappingPlanarGraph extends PlanarGraph {
 	public static void linkResultDirectedEdges(Collection nodes) {
 		for (Iterator nodeit = nodes.iterator(); nodeit.hasNext();) {
 			Node node = (Node) nodeit.next();
-			DirectedEdgeStar edgeStar =  (DirectedEdgeStar) node.getEdges();
+			DirectedEdgeStar edgeStar = (DirectedEdgeStar) node.getEdges();
 			edgeStar.linkResultDirectedEdges();
 		}
 	}
@@ -47,12 +46,10 @@ public class SnappingPlanarGraph extends PlanarGraph {
 	public SnappingPlanarGraph(NodeFactory nodeFact, double tolerance) {
 		nodes = new SnappingNodeMap(nodeFact, tolerance);
 	}
-	
 
 	public SnappingPlanarGraph(double tolerance) {
 		nodes = new SnappingNodeMap(new NodeFactory(), tolerance);
 	}
-	
 
 	public Iterator getEdgeIterator() {
 		return edges.iterator();
@@ -61,7 +58,6 @@ public class SnappingPlanarGraph extends PlanarGraph {
 	public Collection getEdgeEnds() {
 		return edgeEndList;
 	}
-	
 
 	public boolean isBoundaryNode(int geomIndex, Coordinate coord) {
 		Node node = nodes.find(coord);
@@ -76,15 +72,11 @@ public class SnappingPlanarGraph extends PlanarGraph {
 	protected void insertEdge(Edge e) {
 		edges.add(e);
 	}
-	
 
-	
 	public void add(EdgeEnd e) {
 		nodes.add(e);
 		edgeEndList.add(e);
 	}
-	
-	
 
 	public Iterator getNodeIterator() {
 		return nodes.iterator();
@@ -109,10 +101,8 @@ public class SnappingPlanarGraph extends PlanarGraph {
 		return nodes.find(coord);
 	}
 
-	
 	/**
-	 * Add a set of edges to the graph. 
-	 * For each edge two DirectedEdges will be
+	 * Add a set of edges to the graph. For each edge two DirectedEdges will be
 	 * created. DirectedEdges are NOT linked by this method.
 	 */
 	public void addEdges(List edgesToAdd) {
@@ -124,7 +114,8 @@ public class SnappingPlanarGraph extends PlanarGraph {
 			SnapDirectedEdge de2 = new SnapDirectedEdge(e, false);
 			de1.setSym(de2);
 			de2.setSym(de1);
-//IMPORTAR VER QUE PASA AQUÍ: Para cada nuevo Edge, construye un EdgeEnd que puede dar a lugar a un nodo y que origina un Edge
+			// IMPORTAR VER QUE PASA AQUÍ: Para cada nuevo Edge, construye un
+			// EdgeEnd que puede dar a lugar a un nodo y que origina un Edge
 			add(de1);
 			add(de2);
 		}
@@ -220,29 +211,29 @@ public class SnappingPlanarGraph extends PlanarGraph {
 			return true;
 		return false;
 	}
-	
-	public void dump(){
+
+	public void dump() {
 		System.out.println("EDGES");
 		Iterator it = this.getEdgeIterator();
-		while(it.hasNext()){
+		while (it.hasNext()) {
 			Edge e = (Edge) it.next();
 			e.print(System.out);
 			System.out.println("");
 		}
 		System.out.println("NODES");
 		it = this.getNodeIterator();
-		while(it.hasNext()){
+		while (it.hasNext()) {
 			Node node = (Node) it.next();
 			System.out.println(node.getCoordinate());
 			System.out.println(node.getLabel());
 			List edges = node.getEdges().getEdges();
-			for(int z = 0; z < edges.size(); z++){
+			for (int z = 0; z < edges.size(); z++) {
 				EdgeEnd ee = (EdgeEnd) edges.get(z);
 				Label eeL = ee.getLabel();
 				System.out.println(ee.toString() + "," + eeL.toString());
 			}
 		}
-//		nodes.dump();
+		// nodes.dump();
 	}
 
 }

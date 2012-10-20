@@ -5,16 +5,12 @@
 
 package com.ermapper.ecw;
 
+public class JNCSException extends Exception {
 
-public class JNCSException extends Exception
-{
+	public JNCSException() {
+	}
 
-    public JNCSException()
-    {
-    }
-
-    public JNCSException(String s)
-    {
-        super(s);
-    }
+	public JNCSException(String s) {
+		super(s);
+	}
 }

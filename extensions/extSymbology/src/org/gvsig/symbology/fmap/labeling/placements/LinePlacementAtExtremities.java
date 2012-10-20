@@ -51,21 +51,23 @@ import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelLocationMetrics;
 import com.iver.utiles.swing.threads.Cancellable;
 
 /**
- *
+ * 
  * LinePlacementAtExtremities.java
- *
- *
+ * 
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Dec 17, 2007
- *
+ * 
  */
 public class LinePlacementAtExtremities extends AbstractLinePlacement {
 
-	public LabelLocationMetrics initialLocation(LabelClass lc, IPlacementConstraints pc, PathLength pathLen, Cancellable cancel) {
-		if (cancel.isCanceled()) return null;
+	public LabelLocationMetrics initialLocation(LabelClass lc,
+			IPlacementConstraints pc, PathLength pathLen, Cancellable cancel) {
+		if (cancel.isCanceled())
+			return null;
 
 		float distance = 0;
 		if (pc.isAtTheEndOfLine()) {
-			distance = (float) (pathLen.lengthOfPath()) ;
+			distance = (float) (pathLen.lengthOfPath());
 		}
 
 		Point2D p = pathLen.pointAtLength(distance);
@@ -77,18 +79,17 @@ public class LinePlacementAtExtremities extends AbstractLinePlacement {
 
 		} else if (pc.isPerpendicular()) {
 			// get the line theta with 90 degrees
-			theta = pathLen.angleAtLength(distance) + AbstractLinePlacement.HALF_PI;
+			theta = pathLen.angleAtLength(distance)
+					+ AbstractLinePlacement.HALF_PI;
 		}
 
 		/*
-		 * Offset the point to a distance of the height of the
-		 * label class's height to make the label appear to
-		 * be on the line.
-		 *
+		 * Offset the point to a distance of the height of the label class's
+		 * height to make the label appear to be on the line.
 		 */
 		double x = p.getX();
 		double y = p.getY();
-		double halfHeight = lc.getBounds().getHeight()*.5;
+		double halfHeight = lc.getBounds().getHeight() * .5;
 
 		double sinTheta = Math.sin(theta);
 		double cosTheta = Math.cos(theta);
@@ -103,16 +104,16 @@ public class LinePlacementAtExtremities extends AbstractLinePlacement {
 
 		p.setLocation(x + xOffset, y - yOffset);
 
-		return new LabelLocationMetrics(
-				p,
-				theta,
-				true);
+		return new LabelLocationMetrics(p, theta, true);
 	}
 
 	public boolean isSuitableFor(IPlacementConstraints placementConstraints,
 			int shapeType) {
-		if ((shapeType%FShape.Z) == FShape.LINE) {
-			return placementConstraints != null/* && !placementConstraints.isFollowingLine()*/
+		if ((shapeType % FShape.Z) == FShape.LINE) {
+			return placementConstraints != null/*
+												 * && !placementConstraints.
+												 * isFollowingLine()
+												 */
 					&& (placementConstraints.isAtTheBeginingOfLine() || placementConstraints
 							.isAtTheEndOfLine());
 		}

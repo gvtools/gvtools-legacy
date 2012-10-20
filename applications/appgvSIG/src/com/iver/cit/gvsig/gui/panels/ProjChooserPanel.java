@@ -37,44 +37,48 @@ public class ProjChooserPanel extends CRSSelectPanel {
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
-        this.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 0));
-        setPreferredSize(new java.awt.Dimension(330,35));
-        this.setSize(new java.awt.Dimension(330,23));
-        this.add(getJLblProjName(), null);
-        this.add(getJLblProj(), null);
-        this.add(getJBtnChangeProj(), null);
+		this.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 0));
+		setPreferredSize(new java.awt.Dimension(330, 35));
+		this.setSize(new java.awt.Dimension(330, 23));
+		this.add(getJLblProjName(), null);
+		this.add(getJLblProj(), null);
+		this.add(getJBtnChangeProj(), null);
 		initBtnChangeProj();
 	}
 
 	private void initBtnChangeProj() {
-		getJBtnChangeProj().addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				okPressed = false;
-				
-				ISelectCrsPanel csSelect = getUIFactory().getSelectCrsPanel(currentCrs, true);
+		getJBtnChangeProj().addActionListener(
+				new java.awt.event.ActionListener() {
+					public void actionPerformed(java.awt.event.ActionEvent e) {
+						okPressed = false;
 
-		        PluginServices.getMDIManager().addWindow(csSelect);
+						ISelectCrsPanel csSelect = getUIFactory()
+								.getSelectCrsPanel(currentCrs, true);
 
-		        if (csSelect.isOkPressed()) {
-		        	currentCrs = csSelect.getCrs();
-		        	jLblProj.setText(ProjectionUtils.getAbrev(currentCrs));
-		        	okPressed = true;
-		        	if (actionListener != null) {
-		        		actionListener.actionPerformed(e);
-		        	}
-		        }
-			}
-		});
+						PluginServices.getMDIManager().addWindow(csSelect);
+
+						if (csSelect.isOkPressed()) {
+							currentCrs = csSelect.getCrs();
+							jLblProj.setText(ProjectionUtils
+									.getAbrev(currentCrs));
+							okPressed = true;
+							if (actionListener != null) {
+								actionListener.actionPerformed(e);
+							}
+						}
+					}
+				});
 	}
 
 	public JLabel getJLblProjName() {
 		if (jLblProjName == null) {
-	        jLblProjName = new JLabel("Proyeccion actual");
-			jLblProjName.setText(PluginServices.getText(this,"__proyeccion_actual")); //$NON-NLS-1$
+			jLblProjName = new JLabel("Proyeccion actual");
+			jLblProjName.setText(PluginServices.getText(this,
+					"__proyeccion_actual")); //$NON-NLS-1$
 		}
 		return jLblProjName;
 	}
@@ -85,45 +89,50 @@ public class ProjChooserPanel extends CRSSelectPanel {
 
 	public JLabel getJLblProj() {
 		if (jLblProj == null) {
-	        jLblProj = new JLabel();
-	        if (currentCrs!=null)
+			jLblProj = new JLabel();
+			if (currentCrs != null)
 				jLblProj.setText(ProjectionUtils.getAbrev(currentCrs));
 		}
 		return jLblProj;
 	}
+
 	public void addBtnChangeProjActionListener(java.awt.event.ActionListener al) {
 		jBtnChangeProj.addActionListener(al);
 	}
 
 	/**
 	 * This method initializes jButton
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	public JButton getJBtnChangeProj() {
 		if (jBtnChangeProj == null) {
 			jBtnChangeProj = new JButton();
 			jBtnChangeProj.setText("..."); //$NON-NLS-1$
-			jBtnChangeProj.setPreferredSize(new java.awt.Dimension(26,26));
+			jBtnChangeProj.setPreferredSize(new java.awt.Dimension(26, 26));
 		}
 		return jBtnChangeProj;
 	}
+
 	/**
 	 * @return Returns the curProj.
 	 */
 	public CoordinateReferenceSystem getCurrentCrs() {
 		return currentCrs;
 	}
+
 	/**
-	 * @param curProj The curProj to set.
+	 * @param curProj
+	 *            The curProj to set.
 	 */
 	public void setCurrentCrs(CoordinateReferenceSystem curProj) {
 		this.currentCrs = curProj;
 	}
+
 	/**
 	 * @return Returns the okPressed.
 	 */
 	public boolean isOkPressed() {
 		return okPressed;
 	}
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

@@ -52,14 +52,15 @@ import org.gvsig.gpe.gml.parser.profiles.GmlSFP0BindingProfile;
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class GPEGmlSFP0Parser extends GPEDefaultGmlParser {
-	
+
 	public GPEGmlSFP0Parser() {
 		super();
 		setProfile(new GmlSFP0BindingProfile());
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.GPEParser#getDescription()
 	 */
 	public String getDescription() {
@@ -68,18 +69,20 @@ public class GPEGmlSFP0Parser extends GPEDefaultGmlParser {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.GPEParser#getName()
 	 */
 	public String getName() {
 		return "GML v3.1.2 with the SFP";
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.GPEParser#getFormat()
 	 */
 	public String getFormat() {
-		//Añadir los parsers de los formatos soportados!!!
-		return "text/xml; subtype=gml/3.2";		
+		// Añadir los parsers de los formatos soportados!!!
+		return "text/xml; subtype=gml/3.2";
 	}
 }

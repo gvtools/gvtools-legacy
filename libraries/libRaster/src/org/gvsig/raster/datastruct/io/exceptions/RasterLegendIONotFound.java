@@ -17,9 +17,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
  */
 package org.gvsig.raster.datastruct.io.exceptions;
+
 /**
  * Excepcion para tratar cuando no se encuentra un RasterLegend.
- *
+ * 
  * @version 21/11/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */

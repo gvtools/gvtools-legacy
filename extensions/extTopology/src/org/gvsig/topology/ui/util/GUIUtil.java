@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.ui.util;
 
 import java.awt.Component;
@@ -70,59 +70,62 @@ import com.iver.utiles.GenericFileFilter;
  * GUI utility class.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class GUIUtil {
-	
+
 	public static final String DEFAULT_TOPO_FILES_DIRECTORY = "";
-	
+
 	private static GUIUtil _instance = new GUIUtil();
-	
+
 	private String topologyFilesDirectory;
-	
-	
-	public static GUIUtil getInstance(){
+
+	public static GUIUtil getInstance() {
 		return _instance;
 	}
-	
+
 	/**
-	 * Shows an internationalized message to the user with a JOptionPanel
-	 * dialog
-	 * @param message key of the message in the language file
-	 * @param title key of the title in the language file
+	 * Shows an internationalized message to the user with a JOptionPanel dialog
+	 * 
+	 * @param message
+	 *            key of the message in the language file
+	 * @param title
+	 *            key of the title in the language file
 	 */
-	public  void messageBox(String message, String title){
-		JFrame parentComponent = (JFrame)PluginServices.getMainFrame();
-		JOptionPane.showMessageDialog(parentComponent, 
-				PluginServices.getText(null,message), 
-				PluginServices.getText(null, title),
-				JOptionPane.ERROR_MESSAGE); 
+	public void messageBox(String message, String title) {
+		JFrame parentComponent = (JFrame) PluginServices.getMainFrame();
+		JOptionPane.showMessageDialog(parentComponent,
+				PluginServices.getText(null, message),
+				PluginServices.getText(null, title), JOptionPane.ERROR_MESSAGE);
 	}
-	
-	public boolean optionMessage(String message, String title){
-		JFrame parentComponent = (JFrame)PluginServices.getMainFrame();
-		int userEntry = JOptionPane.showConfirmDialog(parentComponent, 
-														message, 
-														title, 
-														JOptionPane.YES_NO_OPTION);
+
+	public boolean optionMessage(String message, String title) {
+		JFrame parentComponent = (JFrame) PluginServices.getMainFrame();
+		int userEntry = JOptionPane.showConfirmDialog(parentComponent, message,
+				title, JOptionPane.YES_NO_OPTION);
 		return userEntry == JOptionPane.YES_OPTION;
 	}
-	
+
 	/**
 	 * Opens a JFileChooser to allows user to select a file from the filesystem.
 	 * 
-	 * @param extension of the desired files to show in the dialog
+	 * @param extension
+	 *            of the desired files to show in the dialog
 	 * @return string path of the selected file
 	 */
-	public  String selectFile(String extFilter, String description, boolean forOpen) {
-		JFileChooser jfc = new JFileChooser("TOPOLOGY_FILES", getFilesDirectory());
+	public String selectFile(String extFilter, String description,
+			boolean forOpen) {
+		JFileChooser jfc = new JFileChooser("TOPOLOGY_FILES",
+				getFilesDirectory());
 		jfc.addChoosableFileFilter(new GenericFileFilter(extFilter, description));
-		
+
 		int userEntry = -1;
-		if(forOpen){
-			userEntry = jfc.showOpenDialog((Component) PluginServices.getMainFrame());
-		}else{
-			userEntry = jfc.showSaveDialog((Component) PluginServices.getMainFrame());
+		if (forOpen) {
+			userEntry = jfc.showOpenDialog((Component) PluginServices
+					.getMainFrame());
+		} else {
+			userEntry = jfc.showSaveDialog((Component) PluginServices
+					.getMainFrame());
 		}
 		if (userEntry == JFileChooser.APPROVE_OPTION) {
 			if (jfc.getSelectedFile() != null) {
@@ -131,17 +134,18 @@ public class GUIUtil {
 		}// if
 		return null;
 	}
-	
+
 	/**
 	 * Ask the user to overwrite an existing file
+	 * 
 	 * @param outputFile
 	 * @return
 	 */
 	/*
-	 * This method is copied from AbstractGeoprocessController class,
-	 * from extGeoprocessing project.
-	 * */
-	
+	 * This method is copied from AbstractGeoprocessController class, from
+	 * extGeoprocessing project.
+	 */
+
 	public boolean askForOverwriteOutputFile(File outputFile) {
 		String title = PluginServices.getText(this, "Sobreescribir_fichero");
 		String confirmDialogText = PluginServices.getText(this,
@@ -153,62 +157,64 @@ public class GUIUtil {
 						"Sobreescribir_fichero_Pregunta_2");
 		return optionMessage(confirmDialogText, title);
 	}
-	
+
 	/**
 	 * Adds a Topology to the view TOC.
+	 * 
 	 * @param mapContext
 	 * @param lyrs
 	 * @param newTopology
 	 */
-	public  void addTopologyToTOC(MapContext mapContext, List lyrs, Topology newTopology){
+	public void addTopologyToTOC(MapContext mapContext, List lyrs,
+			Topology newTopology) {
 		mapContext.beginAtomicEvent();
-		for(int i = 0; i < lyrs.size(); i++){
+		for (int i = 0; i < lyrs.size(); i++) {
 			FLyrVect lyr = (FLyrVect) lyrs.get(i);
 			mapContext.getLayers().removeLayer(lyr);
 		}
 		mapContext.getLayers().addLayer(newTopology);
 		mapContext.endAtomicEvent();
 	}
-	
-	public void updateTopologyInToc(MapContext mapContext, Topology topology){
+
+	public void updateTopologyInToc(MapContext mapContext, Topology topology) {
 		mapContext.beginAtomicEvent();
 		mapContext.getLayers().removeLayer(topology);
 		List newTopoLyrs = topology.getLayers();
 		addTopologyToTOC(mapContext, newTopoLyrs, topology);
 		mapContext.endAtomicEvent();
 	}
-	
-	private GUIUtil(){
+
+	private GUIUtil() {
 		topologyFilesDirectory = DEFAULT_TOPO_FILES_DIRECTORY;
 	}
-	
-	public void setFilesDirectory(String filesDirectory){
+
+	public void setFilesDirectory(String filesDirectory) {
 		this.topologyFilesDirectory = filesDirectory;
 	}
-	
-	public String getFilesDirectory(){
+
+	public String getFilesDirectory() {
 		return topologyFilesDirectory;
 	}
-		
-	public Window getParentWindow(Component component){
+
+	public Window getParentWindow(Component component) {
 		return (Window) getParentOfType(component, Window.class);
 	}
-	
-	public Container getParentOfType(Component component, Class<?> parentType){
+
+	public Container getParentOfType(Component component, Class<?> parentType) {
 		Container solution = null;
 		Container parent = component.getParent();
-		while(parent != null && !(parentType.isAssignableFrom(parent.getClass())))
+		while (parent != null
+				&& !(parentType.isAssignableFrom(parent.getClass())))
 			parent = parent.getParent();
 		solution = parent;
 		return solution;
 	}
-	
+
 	public void centerDialog(Container d, MDIFrame mainFrame) {
-        int offSetX = d.getWidth() / 2;
-        int offSetY = d.getHeight() / 2;
-        d.setLocation((mainFrame.getWidth() / 2) - offSetX, (mainFrame
-                .getHeight() / 2)
-                - offSetY);
-    }
-	
+		int offSetX = d.getWidth() / 2;
+		int offSetY = d.getHeight() / 2;
+		d.setLocation((mainFrame.getWidth() / 2) - offSetX,
+				(mainFrame.getHeight() / 2) - offSetY);
+	}
+
 }

@@ -114,16 +114,18 @@ public class IncrementalTinVoronoiStrategy extends AbstractVoronoiStrategy {
 				onlySelection);
 		iterateTriangles(triangulator, new TriangleDTVisitor() {
 			int idx = 0;
+
 			public void visit(TriangleDT t) {
 				Point2D a = new Point2D.Double(t.A.x, t.A.y);
 				Point2D b = new Point2D.Double(t.B.x, t.B.y);
 				Point2D c = new Point2D.Double(t.C.x, t.C.y);
-				
+
 				FTriangle triangle = new FTriangle(a, b, c);
 				Value fid = ValueFactory.createValue(idx);
 				Value associatedVertex = ValueFactory.createValue(idx);
 				Value[] values = new Value[] { fid, associatedVertex };
-				TriangleFeature feature = new TriangleFeature(triangle, values, new UID().toString());
+				TriangleFeature feature = new TriangleFeature(triangle, values,
+						new UID().toString());
 				solution.add(feature);
 				idx++;
 			}

@@ -62,6 +62,7 @@ public class GMLFeatureWithComplexElementTest extends
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEParserClass()
 	 */
 	public Class getGPEParserClass() {
@@ -70,11 +71,11 @@ public class GMLFeatureWithComplexElementTest extends
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEWriterHandlerClass()
 	 */
 	public Class getGPEWriterHandlerClass() {
 		return org.gvsig.gpe.gml.writer.GPEGmlv2WriterHandlerImplementor.class;
 	}
-
 
 }

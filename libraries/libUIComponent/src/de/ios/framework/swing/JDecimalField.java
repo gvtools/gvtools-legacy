@@ -20,7 +20,6 @@
  *
  */
 
-
 package de.ios.framework.swing;
 
 import java.math.BigDecimal;
@@ -33,8 +32,9 @@ import de.ios.framework.basic.BigDecimalFormat;
 
 /**
  * Input Field for decimal Numbers, supported Objects: BigDecimal.
- * Implementation of several Listener-Interfaces by the Basic-Class only for internal use!
- * For further description
+ * Implementation of several Listener-Interfaces by the Basic-Class only for
+ * internal use! For further description
+ * 
  * @see JIoSTextField
  * @version $Id: JDecimalField.java 13136 2007-08-20 08:38:34Z evercher $
  */
@@ -43,10 +43,12 @@ public class JDecimalField extends JIoSTextField {
 	private static final long serialVersionUID = -600056966056029618L;
 
 	/** Input-Field-Size in Columns. */
-	public static final int    DEFAULT_LENGTH = 10;
+	public static final int DEFAULT_LENGTH = 10;
 
 	/** Limited Character-Set of this Field. */
-	private static final String DECIMAL_CHARSET = "0123456789TMtm"; // additional read from DecimalFormatSymbols
+	private static final String DECIMAL_CHARSET = "0123456789TMtm"; // additional
+																	// read from
+																	// DecimalFormatSymbols
 
 	/** The Parse-Formater. */
 	protected BigDecimalFormat parseFormater = null;
@@ -64,104 +66,101 @@ public class JDecimalField extends JIoSTextField {
 	/** auto-down-scaling? */
 	protected boolean doAutoDownScaling = true;
 
-
 	/**
 	 * Default Constructor.
 	 */
 	public JDecimalField() {
-		this( DEFAULT_LENGTH );
-		//super(DECIMAL_CHARSET);
+		this(DEFAULT_LENGTH);
+		// super(DECIMAL_CHARSET);
 	}
-
 
 	/**
 	 * Constructor.
-	 * @param cols number of columns of input field
+	 * 
+	 * @param cols
+	 *            number of columns of input field
 	 */
 	public JDecimalField(int cols) {
-		super( cols, DECIMAL_CHARSET );
+		super(cols, DECIMAL_CHARSET);
 	}
-
 
 	/**
 	 * Constructor
-	 * @param cols length of the field
-	 * @param _scale precision of this field. _scale == -1 means no scaling!
+	 * 
+	 * @param cols
+	 *            length of the field
+	 * @param _scale
+	 *            precision of this field. _scale == -1 means no scaling!
 	 */
 	public JDecimalField(int cols, int _scale) {
-		this( cols );
-		setScale( _scale );
+		this(cols);
+		setScale(_scale);
 	}
-
 
 	/**
 	 * Constructor defining the auto-formating and illegal-value-focus-keeping.
 	 */
-	public JDecimalField( boolean _autoFormat, boolean _keepFocus ) {
-		this( DEFAULT_LENGTH, _autoFormat, _keepFocus );
+	public JDecimalField(boolean _autoFormat, boolean _keepFocus) {
+		this(DEFAULT_LENGTH, _autoFormat, _keepFocus);
 	}
-
 
 	/**
 	 * Constructor defining the auto-formating and illegal-value-focus-keeping.
 	 */
-	public JDecimalField( int cols, boolean _autoFormat, boolean _keepFocus ) {
-		super( cols, DECIMAL_CHARSET, _autoFormat, _keepFocus );
+	public JDecimalField(int cols, boolean _autoFormat, boolean _keepFocus) {
+		super(cols, DECIMAL_CHARSET, _autoFormat, _keepFocus);
 	}
-
 
 	/**
 	 * Internal Method for setting the DecimalFormat.
 	 */
 	protected void defineDecimalFormat() {
-		String s1 = getScaleFormat( minscale );
-		String s2 = getScaleFormat( maxscale );
+		String s1 = getScaleFormat(minscale);
+		String s2 = getScaleFormat(maxscale);
 		if (s1.length() < s2.length())
-			s1 += s2.substring( s1.length() );
-		parseFormater = new BigDecimalFormat( s1 );
+			s1 += s2.substring(s1.length());
+		parseFormater = new BigDecimalFormat(s1);
 		if (firstInit) {
-			setCharSet( getCharSet()+getFormatChars() );
+			setCharSet(getCharSet() + getFormatChars());
 			firstInit = false;
 		}
 	}
 
 	/**
 	 * Sets the specific Format
-	 *
-	 * @param formater the Formater for the decimal values
+	 * 
+	 * @param formater
+	 *            the Formater for the decimal values
 	 */
 	public void setBigDecimalFormat(BigDecimalFormat format) {
 		parseFormater = format;
 	}
 
 	protected String getFormatChars() {
-		DecimalFormatSymbols decFormSym = parseFormater.getDecimalFormatSymbols();
-		return
-		""+
-		decFormSym.getDecimalSeparator()+
-		decFormSym.getGroupingSeparator()+
-		decFormSym.getMinusSign();
+		DecimalFormatSymbols decFormSym = parseFormater
+				.getDecimalFormatSymbols();
+		return "" + decFormSym.getDecimalSeparator()
+				+ decFormSym.getGroupingSeparator() + decFormSym.getMinusSign();
 	}
-
 
 	/**
 	 * Get a Scale-Format-String (up to Scale 20).
 	 */
-	protected String getScaleFormat( int scale ) {
-		return ",##0." + ((scale < 0)
-				? "########################################"
-						: ("0000000000000000000000000000000000000000".substring(0, scale)));
+	protected String getScaleFormat(int scale) {
+		return ",##0."
+				+ ((scale < 0) ? "########################################"
+						: ("0000000000000000000000000000000000000000"
+								.substring(0, scale)));
 	}
-
 
 	/**
 	 * Detect the proper scale to set.
 	 */
-	protected int detectScale( BigDecimal bd ) {
+	protected int detectScale(BigDecimal bd) {
 		if (bd == null)
 			return -1;
 		int ns, ms, s = bd.scale();
-		if      ((minscale != -1) && (s < minscale))
+		if ((minscale != -1) && (s < minscale))
 			ns = minscale;
 		else if ((maxscale != -1) && (s > maxscale))
 			ns = maxscale;
@@ -170,50 +169,49 @@ public class JDecimalField extends JIoSTextField {
 		if (doAutoDownScaling) {
 			ms = (minscale == -1) ? 0 : minscale;
 			if (ms < ns) {
-				String bs = ((s == ns) ? bd : bd.setScale(ns, roundMode)).toString();
+				String bs = ((s == ns) ? bd : bd.setScale(ns, roundMode))
+						.toString();
 				int c;
-				for (c = 1; (c <= (ns-ms)) && (bs.charAt(bs.length()-c) == '0'); c++)
+				for (c = 1; (c <= (ns - ms))
+						&& (bs.charAt(bs.length() - c) == '0'); c++)
 					;
-				ns = ns-c+1;
+				ns = ns - c + 1;
 			}
 		}
 		return (ns == s) ? -1 : ns;
 	}
 
-
 	/**
 	 * Get a formater for a scale.
 	 */
-	protected BigDecimalFormat getFormater( int scale ) {
-		return new BigDecimalFormat( getScaleFormat( scale ) );
+	protected BigDecimalFormat getFormater(int scale) {
+		return new BigDecimalFormat(getScaleFormat(scale));
 	}
 
 	/**
 	 * Sets the scale of the field.
 	 */
-	public JDecimalField setScale( int _scale ) {
-		return setScale( _scale, _scale );
+	public JDecimalField setScale(int _scale) {
+		return setScale(_scale, _scale);
 	}
-
 
 	/**
 	 * Sets the min. and max. scale of the field.
 	 */
-	public JDecimalField setScale( int _minscale, int _maxscale ) {
-		return setScale( _minscale, _maxscale, doAutoDownScaling );
+	public JDecimalField setScale(int _minscale, int _maxscale) {
+		return setScale(_minscale, _maxscale, doAutoDownScaling);
 	}
-
 
 	/**
 	 * Sets the min. and max. scale of the field.
 	 */
-	public JDecimalField setScale( int _minscale, int _maxscale, boolean _autoDownScale ) {
-		minscale          = _minscale;
-		maxscale          = _maxscale;
+	public JDecimalField setScale(int _minscale, int _maxscale,
+			boolean _autoDownScale) {
+		minscale = _minscale;
+		maxscale = _maxscale;
 		doAutoDownScaling = _autoDownScale;
 		return this;
 	}
-
 
 	/**
 	 * Gets the (min.) scale of the field.
@@ -222,14 +220,12 @@ public class JDecimalField extends JIoSTextField {
 		return minscale;
 	}
 
-
 	/**
 	 * Gets the min. scale of the field.
 	 */
 	public int getMinScale() {
 		return minscale;
 	}
-
 
 	/**
 	 * Gets the max. scale of the field.
@@ -238,19 +234,19 @@ public class JDecimalField extends JIoSTextField {
 		return maxscale;
 	}
 
-
 	/**
 	 * Set the rounding-mode.
+	 * 
 	 * @see java.math.BigDecimal
 	 */
-	public JDecimalField setRoundMode( int _mode ) {
+	public JDecimalField setRoundMode(int _mode) {
 		roundMode = _mode;
 		return this;
 	}
 
-
 	/**
 	 * Get the rounding-mode.
+	 * 
 	 * @see java.math.BigDecimal
 	 */
 	public int getRoundMode() {
@@ -260,16 +256,16 @@ public class JDecimalField extends JIoSTextField {
 	/**
 	 * Set the Value.
 	 */
-	public void setValue( BigDecimal value ) {
+	public void setValue(BigDecimal value) {
 		defineDecimalFormat();
 		if (value == null)
-			setText( null );
+			setText(null);
 		else {
-			int sc = detectScale( value );
-			setText( getFormater(sc).formatBD( (sc <0) ? value : value.setScale( sc, roundMode ) ) );
+			int sc = detectScale(value);
+			setText(getFormater(sc).formatBD(
+					(sc < 0) ? value : value.setScale(sc, roundMode)));
 		}
 	}
-
 
 	/**
 	 * Get the Value.
@@ -277,26 +273,29 @@ public class JDecimalField extends JIoSTextField {
 	public BigDecimal getValue() {
 		String dc = getFormatedText();
 		try {
-			return createBigDecimal( dc );
-		} catch (NumberFormatException e) { // If this happens, the formatValue()-Method is buggy!
+			return createBigDecimal(dc);
+		} catch (NumberFormatException e) { // If this happens, the
+											// formatValue()-Method is buggy!
 			e.printStackTrace();
-		} catch (ParseException e) { // If this happens, the formatValue()-Method is buggy!
+		} catch (ParseException e) { // If this happens, the
+										// formatValue()-Method is buggy!
 			e.printStackTrace();
 		}
 		return null;
 
 	}
 
-
 	/**
-	 * Format the Value (automatically called on lostFocus, manually called on getValue/Date()).
-	 * @return false, if formating fails due to an illegal Value
-	 * (results in keeping the Focus, if requested by setKeepFocusOnIllegalValue).
+	 * Format the Value (automatically called on lostFocus, manually called on
+	 * getValue/Date()).
+	 * 
+	 * @return false, if formating fails due to an illegal Value (results in
+	 *         keeping the Focus, if requested by setKeepFocusOnIllegalValue).
 	 */
 	public boolean formatValue() {
 		String dc = getNullText();
 		try {
-			setValue( createBigDecimal( dc ) );
+			setValue(createBigDecimal(dc));
 			return true;
 		} catch (NumberFormatException e) {
 			return false;
@@ -305,44 +304,39 @@ public class JDecimalField extends JIoSTextField {
 		}
 	}
 
-
 	/**
 	 * Create a BigDecimal from a formated Text.
 	 */
-	protected BigDecimal createBigDecimal( String s )
-	throws NumberFormatException, ParseException {
+	protected BigDecimal createBigDecimal(String s)
+			throws NumberFormatException, ParseException {
 		BigDecimal bd;
 
 		defineDecimalFormat();
 		if (s == null)
 			return null;
 		s = s.trim();
-		while ( s.endsWith("-") )
-			s = s.substring( 0, s.length()-1 ).trim();
-		if ( s.length() == 0 )
+		while (s.endsWith("-"))
+			s = s.substring(0, s.length() - 1).trim();
+		if (s.length() == 0)
 			return null;
 		else {
 			s = s.toUpperCase();
 			if (s.endsWith("T"))
-				s = s.substring(0, s.length()-1)+"000";
-			else  if (s.endsWith("M"))
-				s = s.substring(0, s.length()-1)+"000000";
-			bd = (BigDecimal)parseFormater.parse( s );
+				s = s.substring(0, s.length() - 1) + "000";
+			else if (s.endsWith("M"))
+				s = s.substring(0, s.length() - 1) + "000000";
+			bd = (BigDecimal) parseFormater.parse(s);
 		}
-		int sc = detectScale( bd );
-		return ( (sc < 0)
-				? bd
-						: bd.setScale( sc, roundMode ) );
+		int sc = detectScale(bd);
+		return ((sc < 0) ? bd : bd.setScale(sc, roundMode));
 	}
-
 
 	/**
 	 * Handle a document-event.
 	 */
-	protected void handleDocumentEvent( DocumentEvent evt ) {
+	protected void handleDocumentEvent(DocumentEvent evt) {
 		defineDecimalFormat();
-		super.handleDocumentEvent( evt );
+		super.handleDocumentEvent(evt);
 	}
 
 }
-

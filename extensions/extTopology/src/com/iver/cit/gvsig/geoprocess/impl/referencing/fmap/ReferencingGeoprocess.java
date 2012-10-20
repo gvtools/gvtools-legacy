@@ -140,7 +140,7 @@ public class ReferencingGeoprocess extends AbstractMonitorableGeoprocess {
 	public void setParameters(Map params) throws GeoprocessException {
 		mathTransform = (MathTransform) params.get("mathTransform");
 		hasAuxiliarLyrs = ((Boolean) params.get("hasAuxiliar")).booleanValue();
-		if(hasAuxiliarLyrs){
+		if (hasAuxiliarLyrs) {
 			this.auxiliarLyrs = (FLyrVect[]) params.get("auxiliarLyrs");
 		}
 	}
@@ -255,12 +255,13 @@ public class ReferencingGeoprocess extends AbstractMonitorableGeoprocess {
 				+ ReferencingUtil.getInstance()
 						.getNumberOfSpatialAdjustSessions();
 		FLayers adjustSessionLyrs = (FLayers) rootLyrs.getLayer(folderName);
-		if (adjustSessionLyrs == null){
+		if (adjustSessionLyrs == null) {
 			adjustSessionLyrs = new FLayers();
 			adjustSessionLyrs.setMapContext(map);
 			adjustSessionLyrs.setParentLayer(map.getLayers());
 			adjustSessionLyrs.setName(folderName);
-			System.err.println("Error, geoproceso ajuste espacial sin capa de links");
+			System.err
+					.println("Error, geoproceso ajuste espacial sin capa de links");
 		}
 		if (hasAuxiliarLyrs && auxiliarLyrs != null) {
 			int position = 0;
@@ -268,10 +269,10 @@ public class ReferencingGeoprocess extends AbstractMonitorableGeoprocess {
 				adjustSessionLyrs.addLayer(position, auxiliarLyrs[i]);
 				position++;
 			}
-		} 
-		
+		}
+
 		adjustSessionLyrs.addLayer(super.getResult());
-		
+
 		map.invalidate();
 		return adjustSessionLyrs;
 	}

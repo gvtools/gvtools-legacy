@@ -51,11 +51,14 @@ import org.gvsig.gpe.gml.utils.GMLTags;
 /**
  * @author Jorge Piera Llodrá (jorge.piera@iver.es)
  */
-public class MultiPolygonWriter extends org.gvsig.gpe.gml.writer.v2.geometries.MultiPolygonWriter {
-	
+public class MultiPolygonWriter extends
+		org.gvsig.gpe.gml.writer.v2.geometries.MultiPolygonWriter {
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.v2.geometries.GeometriesWriter#getGeometryName()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.v2.geometries.GeometriesWriter#getGeometryName()
 	 */
 	public String getGeometryName() {
 		return GMLTags.GML_MULTISURFACE.getLocalPart();

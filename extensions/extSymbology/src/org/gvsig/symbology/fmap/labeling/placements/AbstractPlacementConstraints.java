@@ -40,63 +40,66 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: AbstractPlacementConstraints.java 13884 2007-09-19 16:26:04Z jaume $
-* $Log$
-* Revision 1.8  2007-09-19 16:25:39  jaume
-* ReadExpansionFileException removed from this context and removed unnecessary imports
-*
-* Revision 1.7  2007/04/18 15:35:11  jaume
-* *** empty log message ***
-*
-* Revision 1.6  2007/04/13 12:42:45  jaume
-* *** empty log message ***
-*
-* Revision 1.5  2007/04/13 11:59:30  jaume
-* *** empty log message ***
-*
-* Revision 1.4  2007/04/12 16:01:11  jaume
-* *** empty log message ***
-*
-* Revision 1.3  2007/04/11 16:01:08  jaume
-* maybe a label placer refactor
-*
-* Revision 1.2  2007/03/09 08:33:43  jaume
-* *** empty log message ***
-*
-* Revision 1.1.2.2  2007/02/15 16:23:44  jaume
-* *** empty log message ***
-*
-* Revision 1.1.2.1  2007/02/09 07:47:05  jaume
-* Isymbol moved
-*
-* Revision 1.1.2.3  2007/02/02 16:21:24  jaume
-* start commiting labeling stuff
-*
-* Revision 1.1.2.2  2007/02/01 11:42:47  jaume
-* *** empty log message ***
-*
-* Revision 1.1.2.1  2007/01/30 18:10:45  jaume
-* start commiting labeling stuff
-*
-* Revision 1.1.2.1  2007/01/26 13:49:03  jaume
-* *** empty log message ***
-*
-*
-*/
-
+ *
+ * $Id: AbstractPlacementConstraints.java 13884 2007-09-19 16:26:04Z jaume $
+ * $Log$
+ * Revision 1.8  2007-09-19 16:25:39  jaume
+ * ReadExpansionFileException removed from this context and removed unnecessary imports
+ *
+ * Revision 1.7  2007/04/18 15:35:11  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.6  2007/04/13 12:42:45  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.5  2007/04/13 11:59:30  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.4  2007/04/12 16:01:11  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.3  2007/04/11 16:01:08  jaume
+ * maybe a label placer refactor
+ *
+ * Revision 1.2  2007/03/09 08:33:43  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1.2.2  2007/02/15 16:23:44  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1.2.1  2007/02/09 07:47:05  jaume
+ * Isymbol moved
+ *
+ * Revision 1.1.2.3  2007/02/02 16:21:24  jaume
+ * start commiting labeling stuff
+ *
+ * Revision 1.1.2.2  2007/02/01 11:42:47  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1.2.1  2007/01/30 18:10:45  jaume
+ * start commiting labeling stuff
+ *
+ * Revision 1.1.2.1  2007/01/26 13:49:03  jaume
+ * *** empty log message ***
+ *
+ *
+ */
 
 package org.gvsig.symbology.fmap.labeling.placements;
+
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.IPlacementConstraints;
 import com.iver.utiles.XMLEntity;
 
 /**
- * @author  jaume dominguez faus - jaume.dominguez@iver.es
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
-public abstract class AbstractPlacementConstraints implements Cloneable, IPlacementConstraints {
-	// CAUTION, THIS IS A CLONEABLE OBJECT, DON'T FORGET TO 
+public abstract class AbstractPlacementConstraints implements Cloneable,
+		IPlacementConstraints {
+	// CAUTION, THIS IS A CLONEABLE OBJECT, DON'T FORGET TO
 	// UPDATE clone() METHOD WHEN ADDING FIELDS
-	private int duplicateLabelsMode = ONE_LABEL_PER_FEATURE_PART; // default duplicate treatment
+	private int duplicateLabelsMode = ONE_LABEL_PER_FEATURE_PART; // default
+																	// duplicate
+																	// treatment
 	private int placementMode;
 	private boolean belowTheLine;
 	private boolean aboveTheLine;
@@ -104,51 +107,46 @@ public abstract class AbstractPlacementConstraints implements Cloneable, IPlacem
 	private boolean pageOriented;
 	private int locationAlongLine;
 	private boolean fitInsidePolygon;
-	// CAUTION, THIS IS A CLONEABLE OBJECT, DON'T FORGET TO 
+
+	// CAUTION, THIS IS A CLONEABLE OBJECT, DON'T FORGET TO
 	// UPDATE clone() METHOD WHEN ADDING FIELDS
-	
-	
-	
+
 	public void setDuplicateLabelsMode(int mode) {
-		if (mode != REMOVE_DUPLICATE_LABELS &&
-			mode != ONE_LABEL_PER_FEATURE &&
-			mode != ONE_LABEL_PER_FEATURE_PART)
-			throw new IllegalArgumentException(
-					"Only REMOVE_DUPLICATE_LABELS, " +
-					"ONE_LABEL_PER_FEATURE " +
-					"or ONE_LABEL_PER_FEATURE_PARTS allowed");
+		if (mode != REMOVE_DUPLICATE_LABELS && mode != ONE_LABEL_PER_FEATURE
+				&& mode != ONE_LABEL_PER_FEATURE_PART)
+			throw new IllegalArgumentException("Only REMOVE_DUPLICATE_LABELS, "
+					+ "ONE_LABEL_PER_FEATURE "
+					+ "or ONE_LABEL_PER_FEATURE_PARTS allowed");
 		this.duplicateLabelsMode = mode;
 	}
 
 	public void setPlacementMode(int mode) {
 		if (this instanceof PointPlacementConstraints) {
-			if (mode != OFFSET_HORIZONTALY_AROUND_THE_POINT &&
-				mode != ON_TOP_OF_THE_POINT &&
-				mode != AT_SPECIFIED_ANGLE &&
-				mode != AT_ANGLE_SPECIFIED_BY_A_FIELD)
+			if (mode != OFFSET_HORIZONTALY_AROUND_THE_POINT
+					&& mode != ON_TOP_OF_THE_POINT
+					&& mode != AT_SPECIFIED_ANGLE
+					&& mode != AT_ANGLE_SPECIFIED_BY_A_FIELD)
 				throw new IllegalArgumentException(
-						"Only OFFSET_HORIZONTALY_AROUND_THE_POINT, " +
-						"ON_TOP_OF_THE_POINT, " +
-						"AT_SPECIFIED_ANGLE " +
-						"or AT_ANGLE_SPECIFIED_BY_A_FIELD allowed for points: "+ mode);
+						"Only OFFSET_HORIZONTALY_AROUND_THE_POINT, "
+								+ "ON_TOP_OF_THE_POINT, "
+								+ "AT_SPECIFIED_ANGLE "
+								+ "or AT_ANGLE_SPECIFIED_BY_A_FIELD allowed for points: "
+								+ mode);
 		}
 
 		if (this instanceof PolygonPlacementConstraints) {
-			if (mode != HORIZONTAL &&
-				mode != PARALLEL )
-					throw new IllegalArgumentException(
-							"Only HORIZONTAL, " +
-							"or PARALLEL allowed for polygons: "+ mode);
+			if (mode != HORIZONTAL && mode != PARALLEL)
+				throw new IllegalArgumentException("Only HORIZONTAL, "
+						+ "or PARALLEL allowed for polygons: " + mode);
 		}
 
 		if (this instanceof LinePlacementConstraints) {
-					if (mode != HORIZONTAL &&
-				mode != PARALLEL &&
-				mode != FOLLOWING_LINE &&
-				mode != PERPENDICULAR)
+			if (mode != HORIZONTAL && mode != PARALLEL
+					&& mode != FOLLOWING_LINE && mode != PERPENDICULAR)
 				throw new IllegalArgumentException(
-						"Only HORIZONTAL, PARALLEL," +
-						"FOLLOWING_LINE, or PERPENDICULAR allowed for lines: "+ mode);
+						"Only HORIZONTAL, PARALLEL,"
+								+ "FOLLOWING_LINE, or PERPENDICULAR allowed for lines: "
+								+ mode);
 		}
 		this.placementMode = mode;
 	}
@@ -158,11 +156,11 @@ public abstract class AbstractPlacementConstraints implements Cloneable, IPlacem
 	}
 
 	public boolean isPerpendicular() {
-		return placementMode  == PERPENDICULAR;
+		return placementMode == PERPENDICULAR;
 	}
 
 	public boolean isFollowingLine() {
-		return placementMode  == FOLLOWING_LINE;
+		return placementMode == FOLLOWING_LINE;
 	}
 
 	public boolean isParallel() {
@@ -174,7 +172,9 @@ public abstract class AbstractPlacementConstraints implements Cloneable, IPlacem
 	}
 
 	/**
-	 * Tells if the place mode selected is to put the label over the <b>POINT</b>
+	 * Tells if the place mode selected is to put the label over the
+	 * <b>POINT</b>
+	 * 
 	 * @return boolean
 	 */
 	public boolean isOnTopOfThePoint() {
@@ -224,7 +224,7 @@ public abstract class AbstractPlacementConstraints implements Cloneable, IPlacem
 	public boolean isInTheMiddleOfLine() {
 		return locationAlongLine == AT_THE_MIDDLE_OF_THE_LINE;
 	}
-	
+
 	public boolean isAtBestOfLine() {
 		return locationAlongLine == AT_BEST_OF_LINE;
 	}
@@ -243,13 +243,14 @@ public abstract class AbstractPlacementConstraints implements Cloneable, IPlacem
 
 	public void setLocationAlongTheLine(int location) {
 		if (location != IPlacementConstraints.AT_THE_MIDDLE_OF_THE_LINE
-			&& location != IPlacementConstraints.AT_THE_BEGINING_OF_THE_LINE
-			&& location != IPlacementConstraints.AT_THE_END_OF_THE_LINE
-			&& location != IPlacementConstraints.AT_BEST_OF_LINE) {
-			throw new IllegalArgumentException("Only IPlacementConstraints.AT_THE_MIDDLE_OF_THE_LINE, " +
-					"IPlacementConstraints.AT_THE_BEGINING_OF_THE_LINE, or " +
-					"IPlacementConstraints.AT_THE_END_OF_THE_LINE, or " +
-					"IPlacementConstraints.AT_BEST_OF_LINE values are allowed" );
+				&& location != IPlacementConstraints.AT_THE_BEGINING_OF_THE_LINE
+				&& location != IPlacementConstraints.AT_THE_END_OF_THE_LINE
+				&& location != IPlacementConstraints.AT_BEST_OF_LINE) {
+			throw new IllegalArgumentException(
+					"Only IPlacementConstraints.AT_THE_MIDDLE_OF_THE_LINE, "
+							+ "IPlacementConstraints.AT_THE_BEGINING_OF_THE_LINE, or "
+							+ "IPlacementConstraints.AT_THE_END_OF_THE_LINE, or "
+							+ "IPlacementConstraints.AT_BEST_OF_LINE values are allowed");
 		}
 		this.locationAlongLine = location;
 	}
@@ -277,19 +278,19 @@ public abstract class AbstractPlacementConstraints implements Cloneable, IPlacem
 		locationAlongLine = xml.getIntProperty("locationAlongLine");
 		setFitInsidePolygon(xml.getBooleanProperty("fitInsidePolygon"));
 	}
-	
+
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		try {
 			AbstractPlacementConstraints clone = getClass().newInstance();
-			clone.aboveTheLine        = this.aboveTheLine;
-			clone.belowTheLine        = this.belowTheLine;
+			clone.aboveTheLine = this.aboveTheLine;
+			clone.belowTheLine = this.belowTheLine;
 			clone.duplicateLabelsMode = this.duplicateLabelsMode;
-			clone.fitInsidePolygon    = this.fitInsidePolygon;
-			clone.locationAlongLine   = this.locationAlongLine;
-			clone.onTheLine           = this.onTheLine;
-			clone.pageOriented        = this.pageOriented;
-			clone.placementMode       = this.placementMode;
+			clone.fitInsidePolygon = this.fitInsidePolygon;
+			clone.locationAlongLine = this.locationAlongLine;
+			clone.onTheLine = this.onTheLine;
+			clone.pageOriented = this.pageOriented;
+			clone.placementMode = this.placementMode;
 			return clone;
 		} catch (Exception e) {
 			throw new CloneNotSupportedException(e.getMessage());

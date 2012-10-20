@@ -67,50 +67,55 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  *
  */
 /**
- * This is an abstract element and cannot be used 
- * directly in a KML file. Document, Folder, NetworkLink,
- * Placemark, GroundOverLay and ScreenOverlay inherit from
- * it. It writes the common attributes
+ * This is an abstract element and cannot be used directly in a KML file.
+ * Document, Folder, NetworkLink, Placemark, GroundOverLay and ScreenOverlay
+ * inherit from it. It writes the common attributes
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#feature
  */
 public class FeatureWriter {
-	
+
 	/**
-	 * It writes the init tag and the common attributes
-	 * for a Document, Folder, NetworkLink, Placemark, 
-	 * GroundOverLay or a ScreenOverlay.
+	 * It writes the init tag and the common attributes for a Document, Folder,
+	 * NetworkLink, Placemark, GroundOverLay or a ScreenOverlay.
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param id
-	 * Feature ID
+	 *            Feature ID
 	 * @param tagName
-	 * Feature type
+	 *            Feature type
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler, String id, QName tagName) throws IOException{
+	public void start(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor handler, String id, QName tagName)
+			throws IOException {
 		writer.writeStartElement(tagName);
-		if (id != null){
+		if (id != null) {
 			writer.writeStartAttribute(Kml2_1_Tags.ID);
-			writer.writeValue(id);			
+			writer.writeValue(id);
 		}
 		writer.writeEndAttributes();
 	}
-	
+
 	/**
-	 * It writes the end tag of a Document, Folder, NetworkLink, 
-	 * Placemark, GroundOverLay or a ScreenOverlay.
+	 * It writes the end tag of a Document, Folder, NetworkLink, Placemark,
+	 * GroundOverLay or a ScreenOverlay.
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param tagName
-	 * Feature type
+	 *            Feature type
 	 * @throws IOException
 	 */
-	public void end(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor hanlder, QName tagName) throws IOException{
-		writer.writeEndElement();		
+	public void end(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor hanlder, QName tagName)
+			throws IOException {
+		writer.writeEndElement();
 	}
 }

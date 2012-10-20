@@ -67,13 +67,14 @@ import org.gvsig.xmlschema.som.IXSElementDeclaration;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class CityGMLSchemaReaderTest extends SchemaReaderBaseTest{
+public class CityGMLSchemaReaderTest extends SchemaReaderBaseTest {
 	private String targetNamespace = "http://www.citygml.org/citygml/1/0/0";
 	private String genericCityElement = "GenericCityObject";
 	private String genericCityType = "GenericCityObjectType";
-		
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.reader.SchemaReaderBaseTest#getFile()
 	 */
 	public String getFile() {
@@ -82,13 +83,16 @@ public class CityGMLSchemaReaderTest extends SchemaReaderBaseTest{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.reader.SchemaReaderBaseTest#makeAsserts()
 	 */
-	public void makeAsserts(){
-		IXSElementDeclaration element = getSchema().getElementDeclarationByName(targetNamespace, genericCityElement);		
+	public void makeAsserts() {
+		IXSElementDeclaration element = getSchema()
+				.getElementDeclarationByName(targetNamespace,
+						genericCityElement);
 		assertEquals(element.getQName().getLocalPart(), genericCityElement);
 		assertTrue(element.getTypeDefinition() instanceof IXSComplexTypeDefinition);
-	
+
 	}
 
 }

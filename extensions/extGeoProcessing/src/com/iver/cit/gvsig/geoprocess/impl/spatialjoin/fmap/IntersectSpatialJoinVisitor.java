@@ -86,7 +86,6 @@ import java.util.Map;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
-import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
 import com.iver.cit.gvsig.exceptions.visitors.ProcessVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.StartVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.StopVisitorException;
@@ -109,16 +108,15 @@ import com.iver.cit.gvsig.geoprocess.core.fmap.XTypes;
 
 /**
  * This visitor implements Intersect Geometry Spatial Join.
- *
+ * 
  * It is a particular case of 1-M relationship (a feature of layer A always be
- * related to M feature of layer B)
- * It allows to apply a sumarization function over numeric values of target
- * layer (sum, avg, min, max). If it doesnt find any feature of target layer
- * wich intersects with a given feature of source layer, these values will have
- * 0d value.
- *
+ * related to M feature of layer B) It allows to apply a sumarization function
+ * over numeric values of target layer (sum, avg, min, max). If it doesnt find
+ * any feature of target layer wich intersects with a given feature of source
+ * layer, these values will have 0d value.
+ * 
  * @author azabala
- *
+ * 
  */
 public class IntersectSpatialJoinVisitor implements SpatialJoinVisitor {
 
@@ -163,9 +161,8 @@ public class IntersectSpatialJoinVisitor implements SpatialJoinVisitor {
 	private boolean onlySecondLyrSelection;
 
 	public IntersectSpatialJoinVisitor(FLyrVect sourceLayer,
-										FLyrVect targetLayer,
-										Map fields_sumarizeFunct,
-										FeatureProcessor processor) throws ReadDriverException {
+			FLyrVect targetLayer, Map fields_sumarizeFunct,
+			FeatureProcessor processor) throws ReadDriverException {
 		this.sourceLayer = sourceLayer;
 		this.sourceRecordset = sourceLayer.getRecordset();
 		this.featureProcessor = processor;
@@ -174,13 +171,14 @@ public class IntersectSpatialJoinVisitor implements SpatialJoinVisitor {
 		this.visitor = new IntersectsFinderFeatureVisitor(fields_sumarizeFunc);
 	}
 
-	public void visit(IGeometry g, int index) throws VisitorException, ProcessVisitorException {
-		if(g == null)
+	public void visit(IGeometry g, int index) throws VisitorException,
+			ProcessVisitorException {
+		if (g == null)
 			return;
 		IFeature solution = null;
 		visitor.setQueryGeometry(g.toJTSGeometry());
 		try {
-			if(onlySecondLyrSelection)
+			if (onlySecondLyrSelection)
 				visitor.setSelection(targetRecordset.getSelection());
 			strategy.process(visitor, g.getBounds2D());
 			solution = createFeature(g, index, visitor.getNumIntersections());
@@ -188,27 +186,26 @@ public class IntersectSpatialJoinVisitor implements SpatialJoinVisitor {
 			resetFunctions();
 			visitor.clearIntersections();
 		} catch (ReadDriverException e) {
-			throw new ProcessVisitorException(targetRecordset.getName(),e,
+			throw new ProcessVisitorException(targetRecordset.getName(), e,
 					"Error al buscar las intersecciones de una geometria durante un spatial join");
-		} 
+		}
 	}
 
 	public String getProcessDescription() {
 		return "Spatial joining by intersects criteria";
 	}
 
-	public void resetFunctions(){
+	public void resetFunctions() {
 		Iterator fieldsIt = fields_sumarizeFunc.keySet().iterator();
 		while (fieldsIt.hasNext()) {
 			String field = (String) fieldsIt.next();
-			SummarizationFunction[] functions =
-				(SummarizationFunction[]) fields_sumarizeFunc.get(field);
+			SummarizationFunction[] functions = (SummarizationFunction[]) fields_sumarizeFunc
+					.get(field);
 			for (int i = 0; i < functions.length; i++) {
 				functions[i].reset();
 			}// for
 		}// while
 	}
-
 
 	private IFeature createFeature(IGeometry g, int index, int numIntersections)
 			throws ReadDriverException {
@@ -218,12 +215,12 @@ public class IntersectSpatialJoinVisitor implements SpatialJoinVisitor {
 		for (int i = 0; i < numSourceFields; i++) {
 			values.add(sourceRecordset.getFieldValue(index, i));
 		}
-		//target layer
+		// target layer
 		Iterator fieldsIt = fields_sumarizeFunc.keySet().iterator();
 		while (fieldsIt.hasNext()) {
 			String field = (String) fieldsIt.next();
-			SummarizationFunction[] functions =
-				(SummarizationFunction[]) fields_sumarizeFunc.get(field);
+			SummarizationFunction[] functions = (SummarizationFunction[]) fields_sumarizeFunc
+					.get(field);
 			for (int i = 0; i < functions.length; i++) {
 				values.add(functions[i].getSumarizeValue());
 			}// for
@@ -245,13 +242,12 @@ public class IntersectSpatialJoinVisitor implements SpatialJoinVisitor {
 		return true;
 	}
 
-
-	public ILayerDefinition getResultLayerDefinition(){
-		if(this.resultLayerDefinition == null){
+	public ILayerDefinition getResultLayerDefinition() {
+		if (this.resultLayerDefinition == null) {
 			ArrayList fields = new ArrayList();
 			resultLayerDefinition = new SHPLayerDefinition();
-			//result layer will be exactly similar to firstLayer with
-			//new attributes
+			// result layer will be exactly similar to firstLayer with
+			// new attributes
 			try {
 				resultLayerDefinition.setShapeType(sourceLayer.getShapeType());
 			} catch (ReadDriverException e) {
@@ -259,7 +255,7 @@ public class IntersectSpatialJoinVisitor implements SpatialJoinVisitor {
 				e.printStackTrace();
 			}
 
-			//first layer attributes
+			// first layer attributes
 			int numFields = 0;
 			try {
 				numFields = sourceRecordset.getFieldCount();
@@ -269,65 +265,68 @@ public class IntersectSpatialJoinVisitor implements SpatialJoinVisitor {
 			}
 
 			FieldDescription fieldDesc = null;
-			for(int i = 0; i < numFields; i++){
+			for (int i = 0; i < numFields; i++) {
 				fieldDesc = new FieldDescription();
 				try {
 					fieldDesc.setFieldName(sourceRecordset.getFieldName(i));
 					int fieldType = sourceRecordset.getFieldType(i);
 					fieldDesc.setFieldType(fieldType);
-					fieldDesc.setFieldLength(DefinitionUtils.
-							getDataTypeLength(fieldType));
-					fieldDesc.setFieldDecimalCount(DefinitionUtils.NUM_DECIMALS);
+					fieldDesc.setFieldLength(DefinitionUtils
+							.getDataTypeLength(fieldType));
+					fieldDesc
+							.setFieldDecimalCount(DefinitionUtils.NUM_DECIMALS);
 				} catch (ReadDriverException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				fields.add(fieldDesc);
-			}//for
+			}// for
 
-			//target layer attributes
+			// target layer attributes
 			Iterator fieldsIt = fields_sumarizeFunc.keySet().iterator();
-			while(fieldsIt.hasNext()){
+			while (fieldsIt.hasNext()) {
 				String field = (String) fieldsIt.next();
-				SummarizationFunction[] functions =
-					(SummarizationFunction[]) fields_sumarizeFunc.get(field);
-				for(int i = 0; i < functions.length; i++){
+				SummarizationFunction[] functions = (SummarizationFunction[]) fields_sumarizeFunc
+						.get(field);
+				for (int i = 0; i < functions.length; i++) {
 					fieldDesc = new FieldDescription();
-//					to avoid truncation of field names (f.example shp)
-					//we only catch three first letters
+					// to avoid truncation of field names (f.example shp)
+					// we only catch three first letters
 					String shortName = null;
-					if(field.length() > 3)
-						shortName = field.substring(0,3);
+					if (field.length() > 3)
+						shortName = field.substring(0, 3);
 					else
 						shortName = field;
-					fieldDesc.setFieldName(
-							shortName + "_" + functions[i].toString());
+					fieldDesc.setFieldName(shortName + "_"
+							+ functions[i].toString());
 					fieldDesc.setFieldType(XTypes.DOUBLE);
-					int fieldLenght = DefinitionUtils.getDataTypeLength(XTypes.DOUBLE);
+					int fieldLenght = DefinitionUtils
+							.getDataTypeLength(XTypes.DOUBLE);
 					fieldDesc.setFieldLength(fieldLenght);
-					fieldDesc.setFieldDecimalCount(DefinitionUtils.NUM_DECIMALS);
+					fieldDesc
+							.setFieldDecimalCount(DefinitionUtils.NUM_DECIMALS);
 					fields.add(fieldDesc);
-				}//for
-			}//while
+				}// for
+			}// while
 
-			//finally, we add to the result schema of M-N spatial join
-			//the number of features intersected of layer b
+			// finally, we add to the result schema of M-N spatial join
+			// the number of features intersected of layer b
 			fieldDesc = new FieldDescription();
 			fieldDesc.setFieldName("NUM_RELA");
 			fieldDesc.setFieldType(XTypes.INTEGER);
-			fieldDesc.setFieldLength(DefinitionUtils.
-					getDataTypeLength(XTypes.INTEGER));
+			fieldDesc.setFieldLength(DefinitionUtils
+					.getDataTypeLength(XTypes.INTEGER));
 			fields.add(fieldDesc);
 
 			FieldDescription[] fieldsDesc = null;
-			if(fields.size() == 0){
+			if (fields.size() == 0) {
 				fieldsDesc = new FieldDescription[0];
-			}else{
+			} else {
 				fieldsDesc = new FieldDescription[fields.size()];
 				fields.toArray(fieldsDesc);
 			}
 			resultLayerDefinition.setFieldsDesc(fieldsDesc);
-		}//if result == null
+		}// if result == null
 		return resultLayerDefinition;
 	}
 

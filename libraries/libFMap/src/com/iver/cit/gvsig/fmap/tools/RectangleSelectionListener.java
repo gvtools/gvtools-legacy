@@ -57,19 +57,22 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.tools.Events.RectangleEvent;
 import com.iver.cit.gvsig.fmap.tools.Listeners.RectangleListener;
 
-
 /**
- * <p>Listener that selects all features of the active and vector layers which intersect with the defined
- *  rectangle area in the associated {@link MapControl MapControl} object.</p>
- *
+ * <p>
+ * Listener that selects all features of the active and vector layers which
+ * intersect with the defined rectangle area in the associated
+ * {@link MapControl MapControl} object.
+ * </p>
+ * 
  * @author Vicente Caballero Navarro
  */
 public class RectangleSelectionListener implements RectangleListener {
 	/**
 	 * The image to display when the cursor is active.
 	 */
-	private final Image img = new ImageIcon(MapControl.class.getResource(
-				"images/RectSelectCursor.gif")).getImage();
+	private final Image img = new ImageIcon(
+			MapControl.class.getResource("images/RectSelectCursor.gif"))
+			.getImage();
 
 	/**
 	 * The cursor used to work with this tool listener.
@@ -85,9 +88,12 @@ public class RectangleSelectionListener implements RectangleListener {
 	private MapControl mapCtrl;
 
 	/**
-  	 * <p>Creates a new <code>RectangleSelectionListener</code> object.</p>
-	 *
-	 * @param mc the <code>MapControl</code> where is defined the rectangle
+	 * <p>
+	 * Creates a new <code>RectangleSelectionListener</code> object.
+	 * </p>
+	 * 
+	 * @param mc
+	 *            the <code>MapControl</code> where is defined the rectangle
 	 */
 	public RectangleSelectionListener(MapControl mc) {
 		this.mapCtrl = mc;
@@ -95,25 +101,27 @@ public class RectangleSelectionListener implements RectangleListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.RectangleListener#rectangle(com.iver.cit.gvsig.fmap.tools.Events.RectangleEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.RectangleListener#rectangle(com
+	 * .iver.cit.gvsig.fmap.tools.Events.RectangleEvent)
 	 */
 	public void rectangle(RectangleEvent event) throws BehaviorException {
 		try {
 			// mapCtrl.getMapContext().selectByRect(event.getWorldCoordRect());
-            Rectangle2D rect = event.getWorldCoordRect();
-            FLayer[] actives = mapCtrl.getMapContext()
-                .getLayers().getActives();
-            for (int i=0; i < actives.length; i++)
-            {
-                if (actives[i] instanceof FLyrVect) {
-                    FLyrVect lyrVect = (FLyrVect) actives[i];
-                    FBitSet oldBitSet = lyrVect.getSource().getRecordset().getSelection();
-                    FBitSet newBitSet = lyrVect.queryByRect(rect);
-                    if (event.getEvent().isControlDown())
-                        newBitSet.xor(oldBitSet);
-                    lyrVect.getRecordset().setSelection(newBitSet);
-                }
-            }
+			Rectangle2D rect = event.getWorldCoordRect();
+			FLayer[] actives = mapCtrl.getMapContext().getLayers().getActives();
+			for (int i = 0; i < actives.length; i++) {
+				if (actives[i] instanceof FLyrVect) {
+					FLyrVect lyrVect = (FLyrVect) actives[i];
+					FBitSet oldBitSet = lyrVect.getSource().getRecordset()
+							.getSelection();
+					FBitSet newBitSet = lyrVect.queryByRect(rect);
+					if (event.getEvent().isControlDown())
+						newBitSet.xor(oldBitSet);
+					lyrVect.getRecordset().setSelection(newBitSet);
+				}
+			}
 
 		} catch (ReadDriverException e) {
 			throw new BehaviorException("No se pudo hacer la selección");
@@ -124,6 +132,7 @@ public class RectangleSelectionListener implements RectangleListener {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#getCursor()
 	 */
 	public Cursor getCursor() {
@@ -132,6 +141,7 @@ public class RectangleSelectionListener implements RectangleListener {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#cancelDrawing()
 	 */
 	public boolean cancelDrawing() {

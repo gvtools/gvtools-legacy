@@ -63,38 +63,49 @@
 package com.iver.cit.gvsig.fmap.core.symbols;
 
 /**
- * Allows to create multi layer symbols using the composition of
- * several symbols of the same type.Depending on the type of the symbols that are
- * used to compose the final symbol, the user will have MultiLayerMarkerSymbol,
+ * Allows to create multi layer symbols using the composition of several symbols
+ * of the same type.Depending on the type of the symbols that are used to
+ * compose the final symbol, the user will have MultiLayerMarkerSymbol,
  * MultiLayerLineSymbol,...
- *
+ * 
  */
 
 public interface IMultiLayerSymbol extends ISymbol {
 
 	/**
 	 * Establishes a concret symbol for a layer
-	 *
-	 * @param index, index of the layer
-	 * @param layer, symbol to be "applied" to the layer
+	 * 
+	 * @param index
+	 *            , index of the layer
+	 * @param layer
+	 *            , symbol to be "applied" to the layer
 	 * @throws IndexOutOfBoundsException
 	 */
 	public abstract void setLayer(int index, ISymbol layer)
-	throws IndexOutOfBoundsException;
+			throws IndexOutOfBoundsException;
+
 	/**
 	 * Changes the position of two layers in a multilayersymbol
-	 * @param index1, index of the layer
-	 * @param index2, index of the layer
+	 * 
+	 * @param index1
+	 *            , index of the layer
+	 * @param index2
+	 *            , index of the layer
 	 */
 	public abstract void swapLayers(int index1, int index2);
+
 	/**
-	 * Obtains  the symbol that "contains" a layer whose index is the argument of the method.
+	 * Obtains the symbol that "contains" a layer whose index is the argument of
+	 * the method.
+	 * 
 	 * @param layerIndex
 	 * @return
 	 */
 	public abstract ISymbol getLayer(int layerIndex);
+
 	/**
 	 * Returns the number of layers
+	 * 
 	 * @return int
 	 */
 	public abstract int getLayerCount();
@@ -102,19 +113,25 @@ public interface IMultiLayerSymbol extends ISymbol {
 	/**
 	 * Stacks a new symbol to the symbol list. The symbol is appended to the
 	 * list and, in terms of use, it will be the last symbol to be processed.
-	 * @param ISymbol newLayer
+	 * 
+	 * @param ISymbol
+	 *            newLayer
 	 */
 	public abstract void addLayer(ISymbol newLayer);
+
 	/**
 	 * Stacks a new symbol to the symbol list. The symbol is appended to the
 	 * list in the specified position.
-	 * @param ISymbol newLayer
+	 * 
+	 * @param ISymbol
+	 *            newLayer
 	 */
 	public abstract void addLayer(ISymbol newLayer, int layerIndex)
-	throws IndexOutOfBoundsException;
+			throws IndexOutOfBoundsException;
 
 	/**
 	 * TODO maybe push it up to ISymbol
+	 * 
 	 * @param layer
 	 * @return true if this symbol contains the removed one
 	 */

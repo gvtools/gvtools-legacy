@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.gazetteer.querys;
+
 import es.gva.cit.catalog.querys.Coordinates;
 import es.gva.cit.catalog.querys.DiscoveryServiceQuery;
 import es.gva.cit.catalog.utils.CatalogConstants;
@@ -47,9 +47,10 @@ import es.gva.cit.catalog.utils.CatalogConstants;
 /**
  * This class contains all the queryable fields that the user interface
  * supports.
+ * 
  * @author Jorge Piera Llodra (piera_jor@gva.es)
  */
-public class GazetteerQuery extends DiscoveryServiceQuery{
+public class GazetteerQuery extends DiscoveryServiceQuery {
 	private String name;
 	private String nameFilter;
 	private String fieldAttribute;
@@ -59,18 +60,19 @@ public class GazetteerQuery extends DiscoveryServiceQuery{
 	private boolean isCoordinatesClicked;
 	private GazetteerOptions options;
 	public java.util.Collection thesaurusName = new java.util.ArrayList();
-	
 
 	/**
-	 * @param name 
-	 * @param nameFilter 
-	 * @param feature 
-	 * @param fieldAttribute 
-	 * @param recsByPage 
-	 * @param coordinates 
-	 * @param coordinatesFilter 
+	 * @param name
+	 * @param nameFilter
+	 * @param feature
+	 * @param fieldAttribute
+	 * @param recsByPage
+	 * @param coordinates
+	 * @param coordinatesFilter
 	 */
-	public GazetteerQuery(String name, String nameFilter, FeatureType[] feature, String fieldAttribute, int recsByPage, Coordinates coordinates, String coordinatesFilter) {        
+	public GazetteerQuery(String name, String nameFilter,
+			FeatureType[] feature, String fieldAttribute, int recsByPage,
+			Coordinates coordinates, String coordinatesFilter) {
 		super();
 		this.name = name;
 		this.nameFilter = nameFilter;
@@ -80,22 +82,25 @@ public class GazetteerQuery extends DiscoveryServiceQuery{
 		this.coordinates = coordinates;
 		this.coordinatesFilter = coordinatesFilter;
 		options = new GazetteerOptions();
-	} 
+	}
 
 	/**
 	 * Constructor
 	 */
-	public  GazetteerQuery() {        
+	public GazetteerQuery() {
 		super();
-		options = new GazetteerOptions();		
-	} 
+		options = new GazetteerOptions();
+	}
 
 	/**
 	 * To search a place by name
-	 * @param name Place name
-	 * @param description Thesaurus description
+	 * 
+	 * @param name
+	 *            Place name
+	 * @param description
+	 *            Thesaurus description
 	 */
-	public  GazetteerQuery(String name, String description) {        
+	public GazetteerQuery(String name, String description) {
 		super();
 		FeatureType[] thesaurus = new FeatureType[1];
 		thesaurus[0] = new FeatureType();
@@ -105,141 +110,151 @@ public class GazetteerQuery extends DiscoveryServiceQuery{
 		setFeatures(thesaurus);
 		this.recsByPage = 100;
 		this.coordinates = null;
-		this.coordinatesFilter = null;		
-	} 
+		this.coordinatesFilter = null;
+	}
 
 	/**
 	 * @return Returns the coordinates.
 	 */
-	public Coordinates getCoordinates() {        
+	public Coordinates getCoordinates() {
 		return coordinates;
-	} 
+	}
 
 	/**
-	 * @param coordinates The coordinates to set.
+	 * @param coordinates
+	 *            The coordinates to set.
 	 */
-	public void setCoordinates(Coordinates coordinates) {        
+	public void setCoordinates(Coordinates coordinates) {
 		this.coordinates = coordinates;
-	} 
+	}
 
 	/**
 	 * @return Returns the coordinatesFilter.
 	 */
-	public String getCoordinatesFilter() {        
+	public String getCoordinatesFilter() {
 		return coordinatesFilter;
-	} 
+	}
 
 	/**
-	 * @param coordinatesFilter The coordinatesFilter to set.
+	 * @param coordinatesFilter
+	 *            The coordinatesFilter to set.
 	 */
-	public void setCoordinatesFilter(String coordinatesFilter) {        
+	public void setCoordinatesFilter(String coordinatesFilter) {
 		this.coordinatesFilter = coordinatesFilter;
-	} 
+	}
 
 	/**
 	 * @return Returns the feature.
 	 */
-	public FeatureType[] getFeatures() {        
+	public FeatureType[] getFeatures() {
 		FeatureType[] aux = new FeatureType[thesaurusName.size()];
-		for (int i=0 ; i<aux.length ; i++){
-			aux[i] = (FeatureType)thesaurusName.toArray()[i];
+		for (int i = 0; i < aux.length; i++) {
+			aux[i] = (FeatureType) thesaurusName.toArray()[i];
 		}
-		return aux;  
-	} 
+		return aux;
+	}
 
 	/**
-	 * @param feature The feature to set.
-	 * @param features The feature to set.
+	 * @param feature
+	 *            The feature to set.
+	 * @param features
+	 *            The feature to set.
 	 */
-	public void setFeatures(FeatureType[] features) {        
+	public void setFeatures(FeatureType[] features) {
 		this.thesaurusName = new java.util.ArrayList();
-		if (features == null){
+		if (features == null) {
 			return;
 		}
-		for (int i=0 ; i<features.length ; i++){
+		for (int i = 0; i < features.length; i++) {
 			this.thesaurusName.add(features[i]);
-		}     
-	} 
+		}
+	}
 
 	/**
 	 * @return Returns the name.
 	 */
-	public String getName() {        
+	public String getName() {
 		return name;
-	} 
+	}
 
 	/**
-	 * @param name The name to set.
+	 * @param name
+	 *            The name to set.
 	 */
-	public void setName(String name) {        
+	public void setName(String name) {
 		this.name = name;
-	} 
+	}
 
 	/**
 	 * @return Returns the nameFilter.
 	 */
-	public String getNameFilter() {        
+	public String getNameFilter() {
 		return nameFilter;
-	} 
+	}
 
 	/**
-	 * @param nameFilter The nameFilter to set.
+	 * @param nameFilter
+	 *            The nameFilter to set.
 	 */
-	public void setNameFilter(String nameFilter) {        
+	public void setNameFilter(String nameFilter) {
 		this.nameFilter = nameFilter;
-	} 
+	}
 
 	/**
 	 * @return Returns the recsByPage.
 	 */
-	public int getRecsByPage() {        
+	public int getRecsByPage() {
 		return recsByPage;
-	} 
+	}
 
 	/**
-	 * @param recsByPage The recsByPage to set.
+	 * @param recsByPage
+	 *            The recsByPage to set.
 	 */
-	public void setRecsByPage(int recsByPage) {        
+	public void setRecsByPage(int recsByPage) {
 		this.recsByPage = recsByPage;
-	} 
+	}
 
 	/**
 	 * @return Returns the fieldAttribute.
 	 */
-	public String getFieldAttribute() {        
+	public String getFieldAttribute() {
 		return fieldAttribute;
-	} 
+	}
 
 	/**
-	 * @param fieldAttribute The fieldAttribute to set.
+	 * @param fieldAttribute
+	 *            The fieldAttribute to set.
 	 */
-	public void setFieldAttribute(String fieldAttribute) {        
+	public void setFieldAttribute(String fieldAttribute) {
 		this.fieldAttribute = fieldAttribute;
-	} 
+	}
 
 	/**
 	 * @return Returns the isCoordinatesClicked.
 	 */
-	public boolean isCoordinatesClicked() {        
+	public boolean isCoordinatesClicked() {
 		return isCoordinatesClicked;
-	} 
+	}
 
 	/**
-	 * @param isCoordinatesClicked The isCoordinatesClicked to set.
+	 * @param isCoordinatesClicked
+	 *            The isCoordinatesClicked to set.
 	 */
-	public void setCoordinatesClicked(boolean isCoordinatesClicked) {        
+	public void setCoordinatesClicked(boolean isCoordinatesClicked) {
 		this.isCoordinatesClicked = isCoordinatesClicked;
 	}
 
 	/**
 	 * @return the gaazetter options
-	 */	
+	 */
 	public GazetteerOptions getOptions() {
 		return options;
 	}
 
 	/**
 	 * Set the options
+	 * 
 	 * @param options
 	 */
 	public void setOptions(GazetteerOptions options) {

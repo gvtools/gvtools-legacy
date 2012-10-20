@@ -3,7 +3,6 @@ package com.iver.cit.gvsig.fmap.core;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -54,8 +53,8 @@ import java.util.ArrayList;
  *
  */
 /**
- * This factory is used to create geoemtries with the M 
- * coordinate
+ * This factory is used to create geoemtries with the M coordinate
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class ShapeMFactory {
@@ -64,15 +63,14 @@ public class ShapeMFactory {
 		return new FGeometryM(new FPoint2DM(x, y, m));
 	}
 
-
 	/**
 	 * Creates a Polyline in 2D with the M coordinate
+	 * 
 	 * @param gp
-	 * Coordinates to create the polyline
+	 *            Coordinates to create the polyline
 	 * @param ms
-	 * Array with the M values
-	 * @return
-	 * A Geometry with Ms
+	 *            Array with the M values
+	 * @return A Geometry with Ms
 	 */
 	public static IGeometryM createPolyline2DM(GeneralPathX gp, double[] ms) {
 		return new FGeometryM(new FPolyline2DM(gp, ms));
@@ -86,47 +84,50 @@ public class ShapeMFactory {
 
 		int count = data.getInt();
 		GeneralPathX gp = new GeneralPathX();
-		//double[] ms = new double[count - 1];
-		//ArrayList alMs = new ArrayList();
+		// double[] ms = new double[count - 1];
+		// ArrayList alMs = new ArrayList();
 
 		ArrayList<Double> ms = new ArrayList<Double>();
-		//		        ArrayList<Double> ms_aux = null;
-		//		        double[] ms = null;      //Intento de evitar el tener que encapsular las m's en
-		//		        double[] ms_aux = null;  //objetos Double y de tener que recorrer un ArrayList
+		// ArrayList<Double> ms_aux = null;
+		// double[] ms = null; //Intento de evitar el tener que encapsular las
+		// m's en
+		// double[] ms_aux = null; //objetos Double y de tener que recorrer un
+		// ArrayList
 		int ms_lentgh = 0;
 
-		for (int i=0; i < count; i++) {
+		for (int i = 0; i < count; i++) {
 			parseTypeAndSRID(data);
 			FPoint2DM[] points = parsePointArray(data);
-			//		            ms_aux = new double[ms_lentgh + points.length];
+			// ms_aux = new double[ms_lentgh + points.length];
 
 			gp.moveTo(points[0].getX(), points[0].getY());
-			//alMs.add(new Double(points[0].getM()));
-			//		            ms_aux[ms_lentgh + 0] = points[0].getM();
+			// alMs.add(new Double(points[0].getM()));
+			// ms_aux[ms_lentgh + 0] = points[0].getM();
 			ms.add(points[0].getM());
 
-			for (int j = 1; j< points.length; j++) {
+			for (int j = 1; j < points.length; j++) {
 				ms.add(points[j].getM());
-				//		             ms_aux[ms_lentgh + j] = points[j].getM();
+				// ms_aux[ms_lentgh + j] = points[j].getM();
 				gp.lineTo(points[j].getX(), points[j].getY());
-			} 
+			}
 
-			//ms[i] = points[i].getM();
-			//		            if (ms != null) {
-			//		             System.arraycopy(ms, 0, ms_aux, ms.length, ms.length);
-			//		            }
-			//		            ms = ms_aux;
-			//		            ms_lentgh = ms.length;
-			//		            ms_aux = null;
-		}//for
+			// ms[i] = points[i].getM();
+			// if (ms != null) {
+			// System.arraycopy(ms, 0, ms_aux, ms.length, ms.length);
+			// }
+			// ms = ms_aux;
+			// ms_lentgh = ms.length;
+			// ms_aux = null;
+		}// for
 
-
-		// OJO: Para ahorrarme esto tendría que modificar la clase FPolyline2DM para
-		//      que las ms se almacenaran como objetos Double en lugar de usar el tipo
-		//      primitivo double.
+		// OJO: Para ahorrarme esto tendría que modificar la clase FPolyline2DM
+		// para
+		// que las ms se almacenaran como objetos Double en lugar de usar el
+		// tipo
+		// primitivo double.
 		double[] aMs = new double[ms.size()];
 		for (int i = 0; i < ms.size(); i++) {
-			aMs[i] = ((Double)ms.get(i)).doubleValue();
+			aMs[i] = ((Double) ms.get(i)).doubleValue();
 		}
 
 		return new FGeometryM(new FPolyline2DM(gp, aMs));
@@ -136,19 +137,19 @@ public class ShapeMFactory {
 		return new FGeometryM(new FPolygon2DM(gp, pM));
 	}
 
-
 	public static IGeometry createMultipoint2DM(double[] x, double[] y,
-			double[] m) {		
+			double[] m) {
 		throw new UnsupportedOperationException();
 	}
 
 	private static void parseTypeAndSRID(ByteBuffer data) {
-		byte endian = data.get(); //skip and test endian flag
-		/* if (endian != data.endian) {
-            throw new IllegalArgumentException("Endian inconsistency!");
-        } */
+		byte endian = data.get(); // skip and test endian flag
+		/*
+		 * if (endian != data.endian) { throw new
+		 * IllegalArgumentException("Endian inconsistency!"); }
+		 */
 		int typeword = data.getInt();
-		int realtype = typeword & 0x1FFFFFFF; //cut off high flag bits
+		int realtype = typeword & 0x1FFFFFFF; // cut off high flag bits
 
 		boolean gHaveZ = (typeword & 0x80000000) != 0;
 		boolean gHaveM = (typeword & 0x40000000) != 0;
@@ -184,7 +185,6 @@ public class ShapeMFactory {
 		double M = data.getDouble();
 
 		return new FPoint2DM(X, Y, M);
-	}   
-
+	}
 
 }

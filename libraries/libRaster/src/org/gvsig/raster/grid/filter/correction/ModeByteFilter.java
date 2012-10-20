@@ -24,11 +24,12 @@ import org.gvsig.raster.buffer.RasterBuffer;
  * Proceso que aplica el filtro de Moda a un raster de tipo byte
  * 
  * 23/07/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class ModeByteFilter extends ModeFilter {
-	private int[]                   window = null;
-	private int                     tempValue       = 0;
+	private int[] window = null;
+	private int tempValue = 0;
 
 	public ModeByteFilter() {
 		super();
@@ -36,6 +37,7 @@ public class ModeByteFilter extends ModeFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.correction.MedianFilter#pre()
 	 */
 	public void pre() {
@@ -45,7 +47,9 @@ public class ModeByteFilter extends ModeFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.correction.MedianFilter#process(int, int)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.correction.MedianFilter#process(int,
+	 * int)
 	 */
 	public void process(int col, int line) throws InterruptedException {
 		for (int band = 0; band < raster.getBandCount(); band++) {
@@ -53,31 +57,32 @@ public class ModeByteFilter extends ModeFilter {
 			count = 0;
 			for (int i = -halfSide; i <= halfSide; i++) {
 				for (int j = -halfSide; j <= halfSide; j++) {
-					if ((col + i >= 0) && (line + j >= 0) && (col + i < width) && (line + j < height)) {
+					if ((col + i >= 0) && (line + j >= 0) && (col + i < width)
+							&& (line + j < height)) {
 						window[k] = raster.getElemByte(line + j, col + i, band) & 0xff;
-						if(i == -halfSide && j == -halfSide) 
+						if (i == -halfSide && j == -halfSide)
 							tempValue = window[k];
-						if(tempValue == window[k])
-							count ++;
+						if (tempValue == window[k])
+							count++;
 						k++;
 					}
 				}
 			}
 
-			if(count > sizeWindow)
+			if (count > sizeWindow)
 				return;
-			
+
 			k = 1;
-			while(k < window.length) {
+			while (k < window.length) {
 				int auxCount = 0;
 				for (int i = k; i < window.length; i++) {
-					if(window[i] == window[k])
-						auxCount ++;
+					if (window[i] == window[k])
+						auxCount++;
 				}
-				if(auxCount > count) {
+				if (auxCount > count) {
 					count = auxCount;
 					tempValue = window[k];
-					if(count > sizeWindow)
+					if (count > sizeWindow)
 						return;
 				}
 				k++;
@@ -88,7 +93,10 @@ public class ModeByteFilter extends ModeFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.correction.MedianFilter#getInRasterDataType()
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.correction.MedianFilter#getInRasterDataType
+	 * ()
 	 */
 	public int getInRasterDataType() {
 		return RasterBuffer.TYPE_BYTE;
@@ -96,6 +104,7 @@ public class ModeByteFilter extends ModeFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getOutRasterDataType()
 	 */
 	public int getOutRasterDataType() {

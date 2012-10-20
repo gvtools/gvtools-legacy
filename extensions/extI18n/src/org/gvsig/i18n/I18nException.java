@@ -37,50 +37,50 @@ import com.iver.andami.messages.NotificationManager;
  */
 public class I18nException extends Exception {
 
-    private static final long serialVersionUID = 2877056472517898602L;
-    
-    private String key;
+	private static final long serialVersionUID = 2877056472517898602L;
 
-    /**
-     * Creates a new exception with an error message.
-     * 
-     * @param message
-     *            the error message
-     * @param key
-     *            the i18n key to localize the exception message
-     */
-    public I18nException(String message, String key) {
-	super(message);
-	this.key = key;
-    }
+	private String key;
 
-    /**
-     * Creates a new exception with an error message and a cause exception.
-     * 
-     * @param message
-     *            the error message
-     * @param key
-     *            the i18n key to localize the exception message
-     * @param cause
-     *            the error that caused the exception
-     */
-    public I18nException(String message, String key, Throwable cause) {
-	super(message, cause);
-	this.key = key;
-    }
-    
-    public String getLocalizedMessage() {
-	String msg = Messages.getText(key);
-	if (msg.equals(key)) {
-	    msg = getMessage();
+	/**
+	 * Creates a new exception with an error message.
+	 * 
+	 * @param message
+	 *            the error message
+	 * @param key
+	 *            the i18n key to localize the exception message
+	 */
+	public I18nException(String message, String key) {
+		super(message);
+		this.key = key;
 	}
-	return msg;
-    }
 
-    /**
-     * Show the exception error in through the NotificationManager.
-     */
-    public void showError() {
-	NotificationManager.addError(getLocalizedMessage(), this);
-    }
+	/**
+	 * Creates a new exception with an error message and a cause exception.
+	 * 
+	 * @param message
+	 *            the error message
+	 * @param key
+	 *            the i18n key to localize the exception message
+	 * @param cause
+	 *            the error that caused the exception
+	 */
+	public I18nException(String message, String key, Throwable cause) {
+		super(message, cause);
+		this.key = key;
+	}
+
+	public String getLocalizedMessage() {
+		String msg = Messages.getText(key);
+		if (msg.equals(key)) {
+			msg = getMessage();
+		}
+		return msg;
+	}
+
+	/**
+	 * Show the exception error in through the NotificationManager.
+	 */
+	public void showError() {
+		NotificationManager.addError(getLocalizedMessage(), this);
+	}
 }

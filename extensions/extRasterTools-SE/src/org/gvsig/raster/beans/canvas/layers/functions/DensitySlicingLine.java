@@ -20,40 +20,46 @@ package org.gvsig.raster.beans.canvas.layers.functions;
 
 import java.awt.Color;
 import java.awt.event.MouseEvent;
+
 /**
- * Representa una línea escalonada para el realce de density slicing.
- * Esta hereda de StraightLine porque es básicamente la misma pero con una
- * forma determinada.
+ * Representa una línea escalonada para el realce de density slicing. Esta
+ * hereda de StraightLine porque es básicamente la misma pero con una forma
+ * determinada.
  * 
  * 11/03/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class DensitySlicingLine extends StraightLine {
 	public static final int DEFAULT_LEVELS = 6;
 
-	private int             levels         = DEFAULT_LEVELS;
-	
+	private int levels = DEFAULT_LEVELS;
+
 	/**
 	 * Constructor. Asigna el valor de color a la línea
-	 * @param c Color
+	 * 
+	 * @param c
+	 *            Color
 	 */
 	public DensitySlicingLine(Color c) {
 		this(c, DEFAULT_LEVELS);
 	}
-	
+
 	/**
 	 * Constructor. Asigna el valor de color a la línea
-	 * @param c Color
+	 * 
+	 * @param c
+	 *            Color
 	 */
 	public DensitySlicingLine(Color c, int levels) {
 		super(c);
 		setShowSquares(false);
 		setShape(levels);
 	}
-	
+
 	/**
-	 * Pone la forma a la línea escalonada dependiendo del número de 
-	 * escalones existentes.
+	 * Pone la forma a la línea escalonada dependiendo del número de escalones
+	 * existentes.
 	 * 
 	 * @param levels
 	 */
@@ -90,47 +96,70 @@ public class DensitySlicingLine extends StraightLine {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.beans.canvas.layers.functions.StraightLine#getFunctionType()
+	 * 
+	 * @see
+	 * org.gvsig.raster.beans.canvas.layers.functions.StraightLine#getFunctionType
+	 * ()
 	 */
 	public int getFunctionType() {
 		return 3;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.beans.canvas.layers.functions.StraightLine#getValueFunction()
+	 * 
+	 * @see
+	 * org.gvsig.raster.beans.canvas.layers.functions.StraightLine#getValueFunction
+	 * ()
 	 */
 	public double getValueFunction() {
 		return levels;
 	}
-	
-	/* (non-Javadoc)
-	 * @see org.gvsig.raster.beans.canvas.layers.functions.StraightLine#mouseDragged(java.awt.event.MouseEvent)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.raster.beans.canvas.layers.functions.StraightLine#mouseDragged
+	 * (java.awt.event.MouseEvent)
 	 */
 	public boolean mouseDragged(MouseEvent e) {
 		return true;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.gvsig.raster.beans.canvas.layers.functions.StraightLine#mouseMoved(java.awt.event.MouseEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.raster.beans.canvas.layers.functions.StraightLine#mouseMoved
+	 * (java.awt.event.MouseEvent)
 	 */
 	public boolean mouseMoved(MouseEvent e) {
 		return true;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.gvsig.raster.beans.canvas.layers.functions.StraightLine#mousePressed(java.awt.event.MouseEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.raster.beans.canvas.layers.functions.StraightLine#mousePressed
+	 * (java.awt.event.MouseEvent)
 	 */
 	public boolean mousePressed(MouseEvent e) {
 		return true;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.gvsig.raster.beans.canvas.layers.functions.StraightLine#mouseReleased(java.awt.event.MouseEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.raster.beans.canvas.layers.functions.StraightLine#mouseReleased
+	 * (java.awt.event.MouseEvent)
 	 */
 	public boolean mouseReleased(MouseEvent e) {
 		return true;
 	}
 
-	public void firstDrawActions() {}
+	public void firstDrawActions() {
+	}
 }

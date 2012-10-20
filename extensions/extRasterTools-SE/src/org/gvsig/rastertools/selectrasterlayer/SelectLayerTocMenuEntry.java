@@ -39,12 +39,14 @@ import com.iver.cit.gvsig.project.documents.view.toolListeners.StatusBarListener
 /**
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
-public class SelectLayerTocMenuEntry extends AbstractTocContextMenuAction implements IGenericToolBarMenuItem {
-	static private SelectLayerTocMenuEntry singleton  = null;
+public class SelectLayerTocMenuEntry extends AbstractTocContextMenuAction
+		implements IGenericToolBarMenuItem {
+	static private SelectLayerTocMenuEntry singleton = null;
 	FLayer lyr = null;
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.project.documents.IContextMenuAction#getGroup()
 	 */
 	public String getGroup() {
@@ -52,15 +54,18 @@ public class SelectLayerTocMenuEntry extends AbstractTocContextMenuAction implem
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.IContextMenuAction#getGroupOrder()
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.IContextMenuAction#getGroupOrder()
 	 */
 	public int getGroupOrder() {
 		return 0;
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.project.documents.IContextMenuAction#getOrder()
 	 */
 	public int getOrder() {
@@ -68,15 +73,17 @@ public class SelectLayerTocMenuEntry extends AbstractTocContextMenuAction implem
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.project.documents.IContextMenuAction#getText()
 	 */
 	public String getText() {
 		return RasterToolsUtil.getText(this, "seleccionar_capas_raster");
 	}
-	
+
 	/**
 	 * Devuelve un objeto unico a dicha clase
+	 * 
 	 * @return
 	 */
 	static public SelectLayerTocMenuEntry getSingleton() {
@@ -86,16 +93,24 @@ public class SelectLayerTocMenuEntry extends AbstractTocContextMenuAction implem
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
 		return true;
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -104,41 +119,47 @@ public class SelectLayerTocMenuEntry extends AbstractTocContextMenuAction implem
 		if (!(selectedItems[0] instanceof FLyrRasterSE))
 			return false;
 
-		return ((FLyrRasterSE) selectedItems[0]).isActionEnabled(IRasterLayerActions.SELECT_LAYER);
+		return ((FLyrRasterSE) selectedItems[0])
+				.isActionEnabled(IRasterLayerActions.SELECT_LAYER);
 	}
 
 	/**
-	 * Método que se ejecuta cuando se pulsa la entrada en el menú contextual del TOC 
-	 * correspondiente a "Zoom a la resolución del raster". Aquí se creará el mapTool si 
-	 * no se ha hecho antes y se cargará.
+	 * Método que se ejecuta cuando se pulsa la entrada en el menú contextual
+	 * del TOC correspondiente a "Zoom a la resolución del raster". Aquí se
+	 * creará el mapTool si no se ha hecho antes y se cargará.
 	 */
 	public void execute(ITocItem item, FLayer[] selectedItems) {
-		BaseView theView = (BaseView) PluginServices.getMDIManager().getActiveWindow();
+		BaseView theView = (BaseView) PluginServices.getMDIManager()
+				.getActiveWindow();
 		MapControl mapCtrl = theView.getMapControl();
 
-		// Listener de eventos de movimiento que pone las coordenadas del ratón en
+		// Listener de eventos de movimiento que pone las coordenadas del ratón
+		// en
 		// la barra de estado
 		StatusBarListener sbl = new StatusBarListener(mapCtrl);
 
 		loadSelectRasterListener(mapCtrl, sbl);
 		mapCtrl.setTool("selectRasterLayer");
 	}
-	
+
 	/**
 	 * Carga el listener de selección de raster en el MapControl.
 	 */
-	private void loadSelectRasterListener(MapControl mapCtrl, StatusBarListener sbl) {
+	private void loadSelectRasterListener(MapControl mapCtrl,
+			StatusBarListener sbl) {
 		if (mapCtrl.getNamesMapTools().get("selectRasterLayer") == null) {
 			SelectImageListener sil = new SelectImageListener(mapCtrl);
-			mapCtrl.addMapTool("selectRasterLayer", new Behavior[] { new PointBehavior(sil), new MouseMovementBehavior(sbl) });
+			mapCtrl.addMapTool("selectRasterLayer", new Behavior[] {
+					new PointBehavior(sil), new MouseMovementBehavior(sbl) });
 			mapCtrl.setTool("selectRasterLayer");
 		}
 	}
 
-	
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.generictoolbar.IGenericToolBarMenuItem#getIcon()
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.generictoolbar.IGenericToolBarMenuItem#getIcon()
 	 */
 	public Icon getIcon() {
 		return PluginServices.getIconTheme().get("select-raster");

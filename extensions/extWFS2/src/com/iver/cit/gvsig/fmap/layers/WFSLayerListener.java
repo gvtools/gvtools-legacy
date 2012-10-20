@@ -1,6 +1,5 @@
 package com.iver.cit.gvsig.fmap.layers;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -52,12 +51,12 @@ package com.iver.cit.gvsig.fmap.layers;
  */
 public abstract class WFSLayerListener implements LayerListener {
 	protected FLyrWFS wfsLayer = null;
-	
-	public WFSLayerListener(){
-		super();		
+
+	public WFSLayerListener() {
+		super();
 	}
-	
-	public WFSLayerListener(FLyrWFS wfsLayer){
+
+	public WFSLayerListener(FLyrWFS wfsLayer) {
 		super();
 		this.wfsLayer = wfsLayer;
 	}
@@ -70,11 +69,11 @@ public abstract class WFSLayerListener implements LayerListener {
 	}
 
 	/**
-	 * @param wfsLayer the wfsLayer to set
+	 * @param wfsLayer
+	 *            the wfsLayer to set
 	 */
 	public void setWfsLayer(FLyrWFS wfsLayer) {
 		this.wfsLayer = wfsLayer;
 	}
 
-	
 }

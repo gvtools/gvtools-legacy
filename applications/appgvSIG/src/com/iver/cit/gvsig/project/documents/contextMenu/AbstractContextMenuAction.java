@@ -19,7 +19,7 @@ public abstract class AbstractContextMenuAction implements IContextMenuAction {
 	public int getGroupOrder() {
 		return 50;
 	}
-	
+
 	public int getOrder() {
 		return 0;
 	}
@@ -29,5 +29,4 @@ public abstract class AbstractContextMenuAction implements IContextMenuAction {
 		return null;
 	}
 
-	
 }

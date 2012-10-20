@@ -24,18 +24,23 @@ import java.awt.event.MouseMotionListener;
 import java.awt.geom.Rectangle2D;
 
 /**
- * Interfaz  de dibujado de capas sobre ZoomControl
- * 22/12/2007
+ * Interfaz de dibujado de capas sobre ZoomControl 22/12/2007
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public interface IGraphicLayer extends MouseListener, MouseMotionListener {
 
 	/**
 	 * Dibujado del gráfico
-	 * @param g Graphics2D
-	 * @param ext Rectangle2D del área de dibujado
-	 * @param w Ancho en píxeles del área de dibujado
-	 * @param h Alto en píxeles del área de dibujado
+	 * 
+	 * @param g
+	 *            Graphics2D
+	 * @param ext
+	 *            Rectangle2D del área de dibujado
+	 * @param w
+	 *            Ancho en píxeles del área de dibujado
+	 * @param h
+	 *            Alto en píxeles del área de dibujado
 	 */
 	public void draw(Graphics2D g, Rectangle2D ext, int w, int h);
 }

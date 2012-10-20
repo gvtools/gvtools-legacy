@@ -23,8 +23,8 @@ package org.gvsig.quickInfo;
  */
 
 /**
- *
- *
+ * 
+ * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class GeometryIDInfo { // implements Comparable, Comparator {
@@ -35,36 +35,37 @@ public class GeometryIDInfo { // implements Comparable, Comparator {
 		this.id = id;
 		hasInfo = true; // by default has info
 	}
-	
+
 	public GeometryIDInfo(String id, boolean hasInfo) {
 		this.id = id;
 		this.hasInfo = hasInfo;
 	}
-	
+
 	public String getID() {
 		return id;
 	}
-	
+
 	public boolean hasInfo() {
 		return hasInfo;
 	}
-	
+
 	public void setHasInfo(boolean b) {
 		hasInfo = b;
 	}
-//
-//	public int compareTo(Object arg0) {
-//		return id.compareTo((String)arg0);
-//	}
-//
-//	public int compare(Object arg0, Object arg1) {
-//		return ((String)arg0.toString()).compareTo((String)arg1.toString());
-//	}
+
+	//
+	// public int compareTo(Object arg0) {
+	// return id.compareTo((String)arg0);
+	// }
+	//
+	// public int compare(Object arg0, Object arg1) {
+	// return ((String)arg0.toString()).compareTo((String)arg1.toString());
+	// }
 
 	public String toString() {
 		return id;
 	}
-	
+
 	public boolean equals(GeometryIDInfo obj) {
 		return id.compareTo(obj.toString()) == 0;
 	}

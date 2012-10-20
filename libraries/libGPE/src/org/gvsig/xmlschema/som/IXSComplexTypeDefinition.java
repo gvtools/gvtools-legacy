@@ -70,9 +70,9 @@ import org.gvsig.xmlschema.utils.SchemaTags;
  *
  */
 /**
- * This interface represents a XML schema complex type element. 
- * Example:
+ * This interface represents a XML schema complex type element. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;complexType
@@ -87,7 +87,9 @@ import org.gvsig.xmlschema.utils.SchemaTags;
  * &lt;/complexType&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @see http://www.w3.org/TR/xmlschema-1/#Complex_Type_Definition_details
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
@@ -95,44 +97,44 @@ public interface IXSComplexTypeDefinition extends IXSTypeDefinition {
 	public static final String SEQUENCE = SchemaTags.SEQUENCE;
 	public static final String CHOICE = SchemaTags.CHOICE;
 	public static final String ALL = SchemaTags.ALL;
-	public static final String GROUP = SchemaTags.GROUP;		
-		
+	public static final String GROUP = SchemaTags.GROUP;
+
 	/**
 	 * Add a element to the complex type
+	 * 
 	 * @param name
-	 * Element name
+	 *            Element name
 	 * @param typeName
-	 * Element type name
+	 *            Element type name
 	 * @param nillable
-	 * If is nillable
+	 *            If is nillable
 	 * @param minOccurs
-	 * The minimum numebr of elements
+	 *            The minimum numebr of elements
 	 * @param maxOccurs
-	 * The maximum numbre of elements
-	 * @return
-	 * The XML schema element
+	 *            The maximum numbre of elements
+	 * @return The XML schema element
 	 */
-	public IXSElementDeclaration addElement(String name, String typeName, boolean nillable, int minOccurs, int maxOccurs);
-	
+	public IXSElementDeclaration addElement(String name, String typeName,
+			boolean nillable, int minOccurs, int maxOccurs);
+
 	/**
 	 * Add a element to the complex type
+	 * 
 	 * @param name
-	 * Element name
+	 *            Element name
 	 * @param typeName
-	 * Element type name
-	 * @return
-	 * The XML schema element
+	 *            Element type name
+	 * @return The XML schema element
 	 */
 	public IXSElementDeclaration addElement(String name, String typeName);
-	
+
 	/**
 	 * @return the content type (simple or complex)
 	 */
 	public IXSContentType getContentType();
-	
+
 	/**
-	 @return the group elements. Can be a group, a 
-	 sequence, a choice or a all
+	 * @return the group elements. Can be a group, a sequence, a choice or a all
 	 */
 	public IXSGroup getGroup();
 }

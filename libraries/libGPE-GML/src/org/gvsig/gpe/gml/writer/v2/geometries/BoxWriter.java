@@ -68,6 +68,7 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
 /**
  * It writes a gml:BoxType object. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;gml:Box srsName="http://www.opengis.net/gml/srs/epsg.xml#4326"&gt;
@@ -76,34 +77,40 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  * &lt;/gml:Box&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class BoxWriter extends GeometryWriter {
 
 	/**
 	 * It writes a gml:Box init tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param id
-	 * Geometry ID
+	 *            Geometry ID
 	 * @param coords
-	 * A coordinates sequence
+	 *            A coordinates sequence
 	 * @param srs
-	 * Spatial reference system
+	 *            Spatial reference system
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor handler, String id, 
-			ICoordinateSequence coords, String srs) throws IOException{
+	public void start(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler, String id,
+			ICoordinateSequence coords, String srs) throws IOException {
 		super.start(writer, handler, id, srs);
-		handler.getProfile().getCoordWriter().write(writer,handler, coords);			
+		handler.getProfile().getCoordWriter().write(writer, handler, coords);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.v2.geometries.GeometriesWriter#getGeometryName()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.v2.geometries.GeometriesWriter#getGeometryName()
 	 */
 	public String getGeometryName() {
 		return GMLTags.GML_BOX.getLocalPart();

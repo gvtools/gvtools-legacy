@@ -25,55 +25,63 @@ import org.gvsig.raster.datastruct.Extent;
  * Parámetro de inicialización del driver MemoryRasterDriver.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public class MemoryRasterDriverParam implements IRegistrableRasterFormat{
+public class MemoryRasterDriverParam implements IRegistrableRasterFormat {
 	private final String id = "memory";
 	private IBuffer buffer = null;
 	private Extent extent = null;
-	
+
 	/**
 	 * Constructor vacio
 	 */
 	public MemoryRasterDriverParam() {
 	}
-	
+
 	/**
 	 * Contructor
-	 * @param buf buffer del driver
-	 * @param ext extensión del buffer
+	 * 
+	 * @param buf
+	 *            buffer del driver
+	 * @param ext
+	 *            extensión del buffer
 	 */
 	public MemoryRasterDriverParam(IBuffer buf, Extent ext) {
 		this.buffer = buf;
 		this.extent = ext;
 	}
-	
+
 	/**
 	 * Obtiene el buffer de datos
+	 * 
 	 * @return IBuffer
 	 */
 	public IBuffer getBuffer() {
 		return buffer;
 	}
-	
+
 	/**
 	 * Asigna el buffer de datos
-	 * @param buffer IBuffer
+	 * 
+	 * @param buffer
+	 *            IBuffer
 	 */
 	public void setBuffer(IBuffer buffer) {
 		this.buffer = buffer;
 	}
-	
+
 	/**
 	 * Obtiene la extensión del buffer de datos
+	 * 
 	 * @return Extent
 	 */
 	public Extent getExtent() {
 		return extent;
 	}
-	
+
 	/**
 	 * Asigna la extensión del buffer de datos
+	 * 
 	 * @param extent
 	 */
 	public void setExtent(Extent extent) {
@@ -82,10 +90,11 @@ public class MemoryRasterDriverParam implements IRegistrableRasterFormat{
 
 	/**
 	 * Obtiene el identificador del driver
-	 * @return String 
+	 * 
+	 * @return String
 	 */
 	public String getFormatID() {
 		return id;
 	}
-	
+
 }

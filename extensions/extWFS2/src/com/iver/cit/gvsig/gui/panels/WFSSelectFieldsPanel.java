@@ -142,7 +142,9 @@ import com.iver.cit.gvsig.gui.panels.fieldstree.TreeTableModelWithCheckBoxes;
  */
 
 /**
- * <p>Panel with the fields of the feature selected of the current layer.</p>
+ * <p>
+ * Panel with the fields of the feature selected of the current layer.
+ * </p>
  * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
@@ -160,7 +162,8 @@ public class WFSSelectFieldsPanel extends AbstractWFSPanel {
 	/**
 	 * Gets the name space of the layer which contains the fields stored
 	 * 
-	 * @return the namespace name space of the layer which contains the fields stored
+	 * @return the namespace name space of the layer which contains the fields
+	 *         stored
 	 */
 	public String getNamespace() {
 		return namespace;
@@ -169,14 +172,14 @@ public class WFSSelectFieldsPanel extends AbstractWFSPanel {
 	/**
 	 * Creates a new WFS select fields panel.
 	 */
-	public WFSSelectFieldsPanel(){
+	public WFSSelectFieldsPanel() {
 		super();
 		initialize();
 	}
 
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getFieldsScroll() {
@@ -185,61 +188,76 @@ public class WFSSelectFieldsPanel extends AbstractWFSPanel {
 			fieldsScroll.setLocation(new java.awt.Point(6, 20));
 			fieldsScroll.setSize(new java.awt.Dimension(472, 361));
 			fieldsScroll.setViewportView(getFieldsTreeTable());
-	    	MultiLineToolTip tip = new MultiLineToolTip();
-	    	tip.setComponent(fieldsScroll);
-			fieldsScroll.setToolTipText(PluginServices.getText(fieldsScroll, "fields_Selection_Info"));
+			MultiLineToolTip tip = new MultiLineToolTip();
+			tip.setComponent(fieldsScroll);
+			fieldsScroll.setToolTipText(PluginServices.getText(fieldsScroll,
+					"fields_Selection_Info"));
 		}
 		return fieldsScroll;
 	}
 
 	/**
 	 * This method initializes lstTemps
-	 *
+	 * 
 	 * @return javax.swing.JList
 	 */
 	public FieldsTreeTable getFieldsTreeTable() {
 		if (fieldsTreeTable == null) {
 			model = new TreeTableModelWithCheckBoxes();
-			fieldsTreeTable = new FieldsTreeTable(model,this);
+			fieldsTreeTable = new FieldsTreeTable(model, this);
 			fieldsTreeTable.setLocation(new java.awt.Point(7, 4));
 			fieldsTreeTable.setSize(new java.awt.Dimension(482, 304));
-			fieldsTreeTable.setToolTipText(PluginServices.getText(fieldsTreeTable, "fields_Selection_Info"));
-			
+			fieldsTreeTable.setToolTipText(PluginServices.getText(
+					fieldsTreeTable, "fields_Selection_Info"));
+
 			// If user has changed the fields selection in the same layer
-			fieldsTreeTable.addPropertyChangeListener(new PropertyChangeListener() {
-				/*
-				 *  (non-Javadoc)
-				 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
-				 */
-				public void propertyChange(PropertyChangeEvent evt) {
-					// If the selection of the fields of the layer has changed
-					if (evt.getPropertyName().compareTo("tableCellEditor") == 0) {
-						fieldsSelectedOfSameLayerHasChanged = true;						
-					}					
-					else if (evt.getPropertyName().compareTo("selectionModel") == 0) { // If the layer has changed
-						fieldsSelectedOfSameLayerHasChanged = false;
-					}
-				}
-			});
+			fieldsTreeTable
+					.addPropertyChangeListener(new PropertyChangeListener() {
+						/*
+						 * (non-Javadoc)
+						 * 
+						 * @see
+						 * java.beans.PropertyChangeListener#propertyChange(
+						 * java.beans.PropertyChangeEvent)
+						 */
+						public void propertyChange(PropertyChangeEvent evt) {
+							// If the selection of the fields of the layer has
+							// changed
+							if (evt.getPropertyName().compareTo(
+									"tableCellEditor") == 0) {
+								fieldsSelectedOfSameLayerHasChanged = true;
+							} else if (evt.getPropertyName().compareTo(
+									"selectionModel") == 0) { // If the layer
+																// has changed
+								fieldsSelectedOfSameLayerHasChanged = false;
+							}
+						}
+					});
 		}
 		return fieldsTreeTable;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.gui.panels.AbstractWFSPanel#refresh(com.iver.cit.gvsig.fmap.layers.WFSLayerNode)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.gui.panels.AbstractWFSPanel#refresh(com.iver.cit.gvsig
+	 * .fmap.layers.WFSLayerNode)
 	 */
-	public void refresh(WFSLayerNode feature){
-		setFields(feature);	
+	public void refresh(WFSLayerNode feature) {
+		setFields(feature);
 		setSelectedFields(feature);
 	}
 
 	/**
-	 * <p>Updates the inner tree table with the fields of the layer.</p>
-	 *
-	 * @param feature node with the fields
+	 * <p>
+	 * Updates the inner tree table with the fields of the layer.
+	 * </p>
+	 * 
+	 * @param feature
+	 *            node with the fields
 	 */
-	private void setFields(WFSLayerNode feature){
+	private void setFields(WFSLayerNode feature) {
 		Vector<Object> fields = feature.getFields();
 
 		// If there are no fields
@@ -253,37 +271,40 @@ public class WFSSelectFieldsPanel extends AbstractWFSPanel {
 	}
 
 	/**
-	 * <p>Changes to enabled the selection value of the selected fields.</p>
+	 * <p>
+	 * Changes to enabled the selection value of the selected fields.
+	 * </p>
 	 * 
-	 * @param feature node with the fields 
+	 * @param feature
+	 *            node with the fields
 	 */
-	public void setSelectedFields(WFSLayerNode feature){
+	public void setSelectedFields(WFSLayerNode feature) {
 		Vector<Object> selectedFields = feature.getSelectedFields();
 		getFieldsTreeTable().setSelectedFields(selectedFields);
 	}
-	
+
 	/**
 	 * Gets the name of the field which is a geometry
 	 * 
 	 * @return name of the field which is a geometry
 	 */
-	public String getGeometryFieldName(){
-		return getFieldsTreeTable().getGeometryField();		
+	public String getGeometryFieldName() {
+		return getFieldsTreeTable().getGeometryField();
 	}
 
 	/**
 	 * Gets only the selected fields.
-	 *
+	 * 
 	 * @return the selected fields
 	 */
-	public XMLElement[] getSelectedFields(){
+	public XMLElement[] getSelectedFields() {
 		return fieldsTreeTable.getSelectedElements();
 	}
 
 	/**
-	 * This method initializes treeTablePanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes treeTablePanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getTreeTablePanel() {
 		if (treeTablePanel == null) {
@@ -292,16 +313,20 @@ public class WFSSelectFieldsPanel extends AbstractWFSPanel {
 			treeTablePanel.setLocation(new java.awt.Point(7, 4));
 			treeTablePanel.setSize(new java.awt.Dimension(484, 387));
 			treeTablePanel.add(getFieldsScroll(), null);
-			treeTablePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, PluginServices.getText(this, "select_fields"),
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			treeTablePanel
+					.setBorder(javax.swing.BorderFactory.createTitledBorder(
+							null,
+							PluginServices.getText(this, "select_fields"),
+							javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+							javax.swing.border.TitledBorder.DEFAULT_POSITION,
+							null, null));
 		}
 		return treeTablePanel;
 	}
 
 	/**
-	 * Returns true if user has changed the selection of some field of the same layer; else returns false
+	 * Returns true if user has changed the selection of some field of the same
+	 * layer; else returns false
 	 * 
 	 * @return A boolean value
 	 */
@@ -310,17 +335,20 @@ public class WFSSelectFieldsPanel extends AbstractWFSPanel {
 	}
 
 	/**
-	 * <p>Changes the status to applied.</p>
+	 * <p>
+	 * Changes the status to applied.
+	 * </p>
 	 * 
-	 * @param applicable a boolean value
+	 * @param applicable
+	 *            a boolean value
 	 */
 	public void setApplicable(boolean applicable) {
 		IPanelGroup panelGroup = getPanelGroup();
-		
+
 		if (panelGroup == null)
 			return;
-		
-		((WFSParamsPanel)panelGroup).setApplicable(applicable);
+
+		((WFSParamsPanel) panelGroup).setApplicable(applicable);
 	}
 
 	/**
@@ -331,12 +359,13 @@ public class WFSSelectFieldsPanel extends AbstractWFSPanel {
 	public void resetFieldsSelectedOfSameLayerHasChanged() {
 		this.fieldsSelectedOfSameLayerHasChanged = false;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.gui.panels.AbstractWFSPanel#initialize()
 	 */
-	protected void initialize(){
+	protected void initialize() {
 		setLabel(PluginServices.getText(this, "fields_uppercase_first"));
 		setLabelGroup(PluginServices.getText(this, "wfs"));
 		this.setLayout(null);
@@ -381,16 +410,17 @@ public class WFSSelectFieldsPanel extends AbstractWFSPanel {
 		public JScrollPaneML(int vsbPolicy, int hsbPolicy) {
 			super(vsbPolicy, hsbPolicy);
 		}
-		
+
 		/*
 		 * (non-Javadoc)
+		 * 
 		 * @see javax.swing.JComponent#createToolTip()
 		 */
-	    public JToolTip createToolTip() {
-	    	// Multiline support
-	    	MultiLineToolTip tip = new MultiLineToolTip();
-	    	tip.setComponent(this);
-	    	return tip;
-	    }
+		public JToolTip createToolTip() {
+			// Multiline support
+			MultiLineToolTip tip = new MultiLineToolTip();
+			tip.setComponent(this);
+			return tip;
+		}
 	}
 }

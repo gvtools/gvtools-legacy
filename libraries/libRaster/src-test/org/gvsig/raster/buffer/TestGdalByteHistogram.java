@@ -26,22 +26,23 @@ import org.gvsig.raster.dataset.NotSupportedExtensionException;
 import org.gvsig.raster.dataset.RasterDataset;
 import org.gvsig.raster.dataset.io.RasterDriverException;
 import org.gvsig.raster.datastruct.Histogram;
+
 /**
- * Test a un histograma de una imagen de 3 bandas de un byte por dato leido con gdal. 
- * El test comprueba valores a lo largo de todo el histograma
+ * Test a un histograma de una imagen de 3 bandas de un byte por dato leido con
+ * gdal. El test comprueba valores a lo largo de todo el histograma
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class TestGdalByteHistogram extends TestCase {
 	private String baseDir = "./test-images/";
-	private String path = baseDir + "histograma.bmp";	
-	private RasterDataset f = null;	
-	
+	private String path = baseDir + "histograma.bmp";
+	private RasterDataset f = null;
+
 	public void start() {
 		this.setUp();
 		this.testStack();
 	}
-	
+
 	public void setUp() {
 		System.err.println("TestGdalByteHistogram running...");
 	}
@@ -49,7 +50,7 @@ public class TestGdalByteHistogram extends TestCase {
 	static {
 		RasterLibrary.wakeUp();
 	}
-	
+
 	public void testStack() {
 		try {
 			f = RasterDataset.open(null, path);
@@ -58,7 +59,7 @@ public class TestGdalByteHistogram extends TestCase {
 		} catch (RasterDriverException e) {
 			e.printStackTrace();
 		}
-//		ds = new BufferFactory(f);
+		// ds = new BufferFactory(f);
 		Histogram histogram = null;
 		try {
 			histogram = f.getHistogram().getHistogram();
@@ -70,46 +71,46 @@ public class TestGdalByteHistogram extends TestCase {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-//		print(histogram);
+		// print(histogram);
 		resultTest(histogram);
 	}
-	
+
 	private void resultTest(Histogram histogram) {
 		for (int i = 0; i <= 255; i++) {
 			switch (i) {
-				case 0:
-					assertEquals((int) histogram.getHistogramValue(0, i), 1);
-					break;
-				case 1:
-					assertEquals((int) histogram.getHistogramValue(0, i), 2);
-					break;
-				case 2:
-					assertEquals((int) histogram.getHistogramValue(0, i), 3);
-					break;
-				case 126:
-					assertEquals((int) histogram.getHistogramValue(0, i), 4);
-					break;
-				case 127:
-					assertEquals((int) histogram.getHistogramValue(0, i), 5);
-					break;
-				case 128:
-					assertEquals((int) histogram.getHistogramValue(0, i), 6);
-					break;
-				case 129:
-					assertEquals((int) histogram.getHistogramValue(0, i), 7);
-					break;
-				case 253:
-					assertEquals((int) histogram.getHistogramValue(0, i), 8);
-					break;
-				case 254:
-					assertEquals((int) histogram.getHistogramValue(0, i), 9);
-					break;
-				case 255:
-					assertEquals((int) histogram.getHistogramValue(0, i), 10);
-					break;
-				default:
-					assertEquals((int) histogram.getHistogramValue(0, i), 0);
-					break;
+			case 0:
+				assertEquals((int) histogram.getHistogramValue(0, i), 1);
+				break;
+			case 1:
+				assertEquals((int) histogram.getHistogramValue(0, i), 2);
+				break;
+			case 2:
+				assertEquals((int) histogram.getHistogramValue(0, i), 3);
+				break;
+			case 126:
+				assertEquals((int) histogram.getHistogramValue(0, i), 4);
+				break;
+			case 127:
+				assertEquals((int) histogram.getHistogramValue(0, i), 5);
+				break;
+			case 128:
+				assertEquals((int) histogram.getHistogramValue(0, i), 6);
+				break;
+			case 129:
+				assertEquals((int) histogram.getHistogramValue(0, i), 7);
+				break;
+			case 253:
+				assertEquals((int) histogram.getHistogramValue(0, i), 8);
+				break;
+			case 254:
+				assertEquals((int) histogram.getHistogramValue(0, i), 9);
+				break;
+			case 255:
+				assertEquals((int) histogram.getHistogramValue(0, i), 10);
+				break;
+			default:
+				assertEquals((int) histogram.getHistogramValue(0, i), 0);
+				break;
 			}
 		}
 	}

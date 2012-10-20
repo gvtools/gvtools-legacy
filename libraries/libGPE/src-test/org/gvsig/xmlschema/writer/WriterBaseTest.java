@@ -103,45 +103,49 @@ public abstract class WriterBaseTest extends TestCase {
 		return elementsFactory;
 	}
 
-	public void setUp() throws SchemaCreationException{
+	public void setUp() throws SchemaCreationException {
 		documentBuilder = SchemaDocumentBuilder.getInstance();
-		schema = documentBuilder.createXSSchema(getNamespaceURI(),getNamespacePrefix());	
+		schema = documentBuilder.createXSSchema(getNamespaceURI(),
+				getNamespacePrefix());
 		elementsFactory = DOMObjectsFactory.getInstance();
 	}
-	
-	public void tearDown() throws Exception{
+
+	public void tearDown() throws Exception {
 		new File(fileName).delete();
 	}
-	
-	public void testCompare() throws SchemaWrittingException, ParserConfigurationException, SAXException, IOException, SchemaCreationException{
+
+	public void testCompare() throws SchemaWrittingException,
+			ParserConfigurationException, SAXException, IOException,
+			SchemaCreationException {
 		writeSchema();
 		schema.write(new FileOutputStream(fileName));
-		schema = SchemaDocumentBuilder.getInstance().parse(new FileInputStream(fileName));
+		schema = SchemaDocumentBuilder.getInstance().parse(
+				new FileInputStream(fileName));
 		readSchema();
-	}	
-	
+	}
+
 	/**
 	 * @return the schema
 	 */
 	public IXSSchema getSchema() {
 		return schema;
 	}
-	
-	public String getNamespaceURI(){
+
+	public String getNamespaceURI() {
 		return "http://www.gvsig.org/cit";
 	}
-	
+
 	/**
 	 * Gets the namespace prefix
+	 * 
 	 * @return
 	 */
-	public String getNamespacePrefix(){
+	public String getNamespacePrefix() {
 		return "cit";
 	}
-	
-	public abstract void writeSchema();
-	
-	public abstract void readSchema();
 
+	public abstract void writeSchema();
+
+	public abstract void readSchema();
 
 }

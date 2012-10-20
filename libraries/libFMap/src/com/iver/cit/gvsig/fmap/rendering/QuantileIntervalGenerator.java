@@ -51,10 +51,9 @@ import com.hardcode.gdbms.engine.values.LongValue;
 import com.hardcode.gdbms.engine.values.ShortValue;
 import com.hardcode.gdbms.engine.values.Value;
 
-
 /**
  * Calcula los intervalos en función del número de intervalos que se pidan.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class QuantileIntervalGenerator {
@@ -67,13 +66,16 @@ public class QuantileIntervalGenerator {
 
 	/**
 	 * Crea un nuevo QuantileIntervalGenerator.
-	 *
-	 * @param layer DOCUMENT ME!
-	 * @param field DOCUMENT ME!
-	 * @param numIntervals DOCUMENT ME!
+	 * 
+	 * @param layer
+	 *            DOCUMENT ME!
+	 * @param field
+	 *            DOCUMENT ME!
+	 * @param numIntervals
+	 *            DOCUMENT ME!
 	 */
 	public QuantileIntervalGenerator(DataSource recordSet, String field,
-		int numIntervals) {
+			int numIntervals) {
 		sds = recordSet;
 		msFieldName = field;
 		miNumIntervalosSolicitados = numIntervals;
@@ -81,21 +83,21 @@ public class QuantileIntervalGenerator {
 
 	/**
 	 * Genera los intervalos.
-	 *
+	 * 
 	 */
-	public void generarIntervalos()
-		throws ReadDriverException {
+	public void generarIntervalos() throws ReadDriverException {
 		ArrayList ordenadas = new ArrayList();
 		ArrayList coincidencias = new ArrayList();
 		int pos = sds.getFieldIndexByName(msFieldName);
 		mdaValoresRuptura = new double[miNumIntervalosSolicitados - 1];
 		mdaValInit = new double[miNumIntervalosSolicitados - 1];
 
-		//int MARGEN = 5;
+		// int MARGEN = 5;
 		for (int i = 0; i < sds.getRowCount(); i++) {
-			insertarEnVector(ordenadas, coincidencias, sds.getFieldValue(i, pos));
+			insertarEnVector(ordenadas, coincidencias,
+					sds.getFieldValue(i, pos));
 		}
-		
+
 		int index = 0;
 		int posj = 0;
 
@@ -107,15 +109,18 @@ public class QuantileIntervalGenerator {
 				index = index + auxcoin;
 
 				if (x <= index) {
-					mdaValoresRuptura[i - 1] = getValue((Value) ordenadas.get(j));
+					mdaValoresRuptura[i - 1] = getValue((Value) ordenadas
+							.get(j));
 
-					/*index = (int) ((x + (auxcoin / miNumIntervalosSolicitados)) -
-					   1);
+					/*
+					 * index = (int) ((x + (auxcoin /
+					 * miNumIntervalosSolicitados)) - 1);
 					 */
 					posj = j + 1;
 
 					if (posj < ordenadas.size()) {
-						mdaValInit[i - 1] = getValue((Value) ordenadas.get(posj));
+						mdaValInit[i - 1] = getValue((Value) ordenadas
+								.get(posj));
 					} else {
 						mdaValInit[i - 1] = getValue((Value) ordenadas.get(j));
 					}
@@ -126,10 +131,10 @@ public class QuantileIntervalGenerator {
 				}
 			}
 
-			//double value=getValue(sds.getFieldValue(x,pos));
+			// double value=getValue(sds.getFieldValue(x,pos));
 		}
 
-		//}
+		// }
 	}
 
 	/**
@@ -138,16 +143,19 @@ public class QuantileIntervalGenerator {
 	 * vdValorAInsertar. Para hallar la posición se realiza una búsqueda
 	 * binaria. Si se trata de un elemento que ya está en el vector devolvemos
 	 * el índice que le corresponde en rlIndiceCorrespondiente y false en
-	 * rbNuevoElemento. Si se trata de un nuevo elemento que hay que
-	 * insertar... devolvemos el índice en el que iría y True en
-	 * rbNuevoElemento En caso de que ocurra algún error devuelve false
-	 *
-	 * @param rVectorDatos ArrayList con los datos.
-	 * @param coincidencia índice.
-	 * @param vdValorAInsertar Valor a insertar.
+	 * rbNuevoElemento. Si se trata de un nuevo elemento que hay que insertar...
+	 * devolvemos el índice en el que iría y True en rbNuevoElemento En caso de
+	 * que ocurra algún error devuelve false
+	 * 
+	 * @param rVectorDatos
+	 *            ArrayList con los datos.
+	 * @param coincidencia
+	 *            índice.
+	 * @param vdValorAInsertar
+	 *            Valor a insertar.
 	 */
 	protected void insertarEnVector(ArrayList rVectorDatos,
-		ArrayList coincidencia, Value vdValorAInsertar) {
+			ArrayList coincidencia, Value vdValorAInsertar) {
 		int llIndiceIzq;
 		int llIndiceDer;
 		int llMedio;
@@ -164,25 +172,29 @@ public class QuantileIntervalGenerator {
 
 		llIndiceIzq = 0;
 		llIndiceDer = rVectorDatos.size() - 1;
-		llMedio = (llIndiceIzq + llIndiceDer) / 2; //'División entera!
+		llMedio = (llIndiceIzq + llIndiceDer) / 2; // 'División entera!
 
 		while (llIndiceIzq <= llIndiceDer) {
-			//'Coger el valor situado en la mitad de la zona de búsqueda como valor de comparación
+			// 'Coger el valor situado en la mitad de la zona de búsqueda como
+			// valor de comparación
 			ldValorComparacion = getValue((Value) rVectorDatos.get(llMedio));
 
-			//'Si el valor a insertar es mayor que el valor de comparación...
+			// 'Si el valor a insertar es mayor que el valor de comparación...
 			if (valorAInsertar > ldValorComparacion) {
-				//      'La zona de búsqueda queda restringida a la parte de la derecha
+				// 'La zona de búsqueda queda restringida a la parte de la
+				// derecha
 				llIndiceIzq = llMedio + 1;
 				llMedio = (llIndiceIzq + llIndiceDer) / 2;
 
-				//    'Si el valor a insertar es menor que el valor de comparación...
+				// 'Si el valor a insertar es menor que el valor de
+				// comparación...
 			} else if (valorAInsertar < ldValorComparacion) {
-				//          'La zona de búsqueda queda restringida a la parte de la derecha
+				// 'La zona de búsqueda queda restringida a la parte de la
+				// derecha
 				llIndiceDer = llMedio - 1;
 				llMedio = (llIndiceIzq + llIndiceDer) / 2;
 
-				//        'Si el valor de comparación coincide con el valor a insertar
+				// 'Si el valor de comparación coincide con el valor a insertar
 			} else if (valorAInsertar == ldValorComparacion) {
 				indice = llMedio;
 
@@ -195,13 +207,16 @@ public class QuantileIntervalGenerator {
 			}
 		}
 
-		//  'Nota:
-		//  'En este caso (cuando en rbNuevoElemento se devuelve True) lo que hay que hacer al salir de esta función
-		//  'es añadir un nuevo elemento al vector y desplazar todos los valores correspondientes a partir de rlIndiceCorrespondiente
-		//  '¿Dónde va el nuevo elemento?
-		//  'El último sitio estudiado viene dado por el valor de llMedio.
-		//  'Si el valor a insertar es menor que el valor almacenado en la posición llMedio, el nuevo valor deberá ir a su izquierda.
-		//  'Si fuera mayor debería ir a su derecha.
+		// 'Nota:
+		// 'En este caso (cuando en rbNuevoElemento se devuelve True) lo que hay
+		// que hacer al salir de esta función
+		// 'es añadir un nuevo elemento al vector y desplazar todos los valores
+		// correspondientes a partir de rlIndiceCorrespondiente
+		// '¿Dónde va el nuevo elemento?
+		// 'El último sitio estudiado viene dado por el valor de llMedio.
+		// 'Si el valor a insertar es menor que el valor almacenado en la
+		// posición llMedio, el nuevo valor deberá ir a su izquierda.
+		// 'Si fuera mayor debería ir a su derecha.
 		ldValorComparacion = getValue((Value) rVectorDatos.get(llMedio));
 
 		if (valorAInsertar > ldValorComparacion) {
@@ -216,9 +231,10 @@ public class QuantileIntervalGenerator {
 
 	/**
 	 * Devuelve el valor en un double del Value que se pasa como parámetro.
-	 *
-	 * @param value Value.
-	 *
+	 * 
+	 * @param value
+	 *            Value.
+	 * 
 	 * @return valor.
 	 */
 	protected double getValue(Value value) {
@@ -230,7 +246,7 @@ public class QuantileIntervalGenerator {
 			return ((FloatValue) value).floatValue();
 		} else if (value instanceof ShortValue) {
 			return ((ShortValue) value).shortValue();
-		} else if (value instanceof DoubleValue){
+		} else if (value instanceof DoubleValue) {
 			return ((DoubleValue) value).doubleValue();
 		}
 		return 0;
@@ -240,9 +256,10 @@ public class QuantileIntervalGenerator {
 	/**
 	 * Devuelve el valor del punto de ruptura según el índice que se pasa como
 	 * parámetro.
-	 *
-	 * @param index índice del punto de ruptura.
-	 *
+	 * 
+	 * @param index
+	 *            índice del punto de ruptura.
+	 * 
 	 * @return valor.
 	 */
 	public double getValRuptura(int index) {
@@ -251,9 +268,10 @@ public class QuantileIntervalGenerator {
 
 	/**
 	 * Devuelve el valor inicial de cada intervalo.
-	 *
-	 * @param index índice del intervalo.
-	 *
+	 * 
+	 * @param index
+	 *            índice del intervalo.
+	 * 
 	 * @return valor del intervalo.
 	 */
 	public double getValInit(int index) {
@@ -262,7 +280,7 @@ public class QuantileIntervalGenerator {
 
 	/**
 	 * Devuelve el número de intervalos que se han generado.
-	 *
+	 * 
 	 * @return Número de intervalos generados.
 	 */
 	public int getNumIntervalGen() {

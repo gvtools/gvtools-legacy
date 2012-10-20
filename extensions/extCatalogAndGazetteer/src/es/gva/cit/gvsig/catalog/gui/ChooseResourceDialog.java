@@ -61,41 +61,40 @@ import es.gva.cit.gvsig.catalog.loaders.LayerLoaderException;
  * 
  * @author Jorge Piera Llodra (piera_jor@gva.es)
  */
-public class ChooseResourceDialog extends ChooseResourceDialogPanel
-implements IWindow {
-	
+public class ChooseResourceDialog extends ChooseResourceDialogPanel implements
+		IWindow {
+
 	/**
 	 * @param resources
-	 * Found resources array
+	 *            Found resources array
 	 */
 	public ChooseResourceDialog(Collection resources) {
 		super(resources);
-	}   
-	
+	}
+
 	public WindowInfo getWindowInfo() {
 		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODALDIALOG);
 		m_viewinfo.setTitle(getName());
 		return m_viewinfo;
 	}
-	
-	
-	public Object getWindowProfile(){
+
+	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
-	
+
 	public void closeButtonActionPerformed() {
 		closeJDialog();
 	}
-	
+
 	public void closeJDialog() {
 		setVisible(true);
 		PluginServices.getMDIManager().closeWindow(ChooseResourceDialog.this);
 	}
-	
+
 	/**
 	 * This method is invocated when a resource button is clicked
 	 */
-	public void resourceButtonActionPerformed(Resource resource){
+	public void resourceButtonActionPerformed(Resource resource) {
 		LayerLoader loader = null;
 		try {
 			loader = LayerLoader.getLoader(resource);
@@ -103,12 +102,12 @@ implements IWindow {
 				loader.loadLayer();
 			} else {
 				JOptionPane.showMessageDialog(this,
-						Messages.getText("pluginNotFound") ,
-						Messages.getText("pluginNotFoundTitle"),			
-						JOptionPane.INFORMATION_MESSAGE);	
+						Messages.getText("pluginNotFound"),
+						Messages.getText("pluginNotFoundTitle"),
+						JOptionPane.INFORMATION_MESSAGE);
 				return;
 			}
-			
+
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -128,16 +127,9 @@ implements IWindow {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (LayerLoaderException e) {
-			JOptionPane.showMessageDialog(this,
-					e.getMessage(),
-					e.getWindowMessage(),			
-					JOptionPane.ERROR_MESSAGE);	
-		}		
+			JOptionPane.showMessageDialog(this, e.getMessage(),
+					e.getWindowMessage(), JOptionPane.ERROR_MESSAGE);
+		}
 		closeJDialog();
-	}   
+	}
 }
-
-
-
-
-

@@ -74,32 +74,32 @@ public class SnappingCoordinateMap extends Hashtable {
 		}
 
 		public boolean equals(Object obj) {
-			if(! (obj instanceof SnapCoordinate))
+			if (!(obj instanceof SnapCoordinate))
 				return false;
 			SnapCoordinate other = (SnapCoordinate) obj;
 			return other.distance(this) <= snapTolerance;
-		} 
+		}
 
 		public int hashCode() {
-//			 int result = 17;
-//			 double xs = simplify(x);
-//			 double ys = simplify(y);
-//			 result = 37 * result + hashCode(xs);
-//			 result = 37 * result + hashCode(ys);
-//			 return result;
-				
-			return 1; // this is not efficient. look for a hash algorithm to ensure
-			//all points in the same tolerance radius returns the same hash code
+			// int result = 17;
+			// double xs = simplify(x);
+			// double ys = simplify(y);
+			// result = 37 * result + hashCode(xs);
+			// result = 37 * result + hashCode(ys);
+			// return result;
+
+			return 1; // this is not efficient. look for a hash algorithm to
+						// ensure
+			// all points in the same tolerance radius returns the same hash
+			// code
 		}
-		
-		public double simplify(double coordinate){
-			if(scaleFactor == 0d)
+
+		public double simplify(double coordinate) {
+			if (scaleFactor == 0d)
 				return coordinate;
 			return Math.round(coordinate * scaleFactor) / scaleFactor;
 		}
 	}
-	
-	
 
 	private double snapTolerance;
 	private double scaleFactor;
@@ -107,7 +107,7 @@ public class SnappingCoordinateMap extends Hashtable {
 	public SnappingCoordinateMap(double snapTolerance) {
 		super();
 		this.snapTolerance = snapTolerance;
-		if(snapTolerance != 0d)
+		if (snapTolerance != 0d)
 			this.scaleFactor = 1d / snapTolerance;
 	}
 
@@ -133,30 +133,27 @@ public class SnappingCoordinateMap extends Hashtable {
 				return 0;
 		}
 	}
-	
-	
-	public Object put(Object key, Object obj){
-		if(! (key instanceof Coordinate) )
+
+	public Object put(Object key, Object obj) {
+		if (!(key instanceof Coordinate))
 			return null;
-		return super.put(new SnapCoordinate((Coordinate)key),
-				obj);
+		return super.put(new SnapCoordinate((Coordinate) key), obj);
 	}
-	
-	public Object get(Object key){
-		if(! (key instanceof Coordinate) )
+
+	public Object get(Object key) {
+		if (!(key instanceof Coordinate))
 			return null;
-		return super.get(new SnapCoordinate((Coordinate)key));
+		return super.get(new SnapCoordinate((Coordinate) key));
 	}
-	
-	public boolean containsKey(Object key){
-		if(! (key instanceof Coordinate) )
+
+	public boolean containsKey(Object key) {
+		if (!(key instanceof Coordinate))
 			return false;
-		return super.containsKey(new SnapCoordinate((Coordinate)key));
+		return super.containsKey(new SnapCoordinate((Coordinate) key));
 	}
-	
-	public static void main(String[] args){
-		SnappingCoordinateMap map = 
-			new SnappingCoordinateMap(0.1);
+
+	public static void main(String[] args) {
+		SnappingCoordinateMap map = new SnappingCoordinateMap(0.1);
 		Coordinate c0 = new Coordinate(0, 0);
 		Coordinate c1 = new Coordinate(0.01, 0.01);
 		Coordinate c2 = new Coordinate(0.31, 0.41);
@@ -170,7 +167,7 @@ public class SnappingCoordinateMap extends Hashtable {
 		System.out.println(map.size());
 		java.util.Set values = map.entrySet();
 		System.out.println(values.size());
-		
+
 	}
 
 }

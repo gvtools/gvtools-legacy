@@ -52,29 +52,28 @@ import com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol;
 import com.iver.utiles.swing.JComboBox;
 
 /**
- * JComboBox used by the user to select the different styles of simple marker symbols.
- * The available options are: circle style,square style,cross style, diamond style,x style
- * and triangle style.
- *
+ * JComboBox used by the user to select the different styles of simple marker
+ * symbols. The available options are: circle style,square style,cross style,
+ * diamond style,x style and triangle style.
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
-public class JComboBoxSimpleMarkeStyles extends JComboBox{
+public class JComboBoxSimpleMarkeStyles extends JComboBox {
 	private Color symColor = Color.BLACK;
 	private Color outlineColor = Color.BLACK;
 	private boolean outlined = false;
 	static MyItem[] pointTypes = new MyItem[] {
-		new MyItem(SimpleMarkerSymbol.CIRCLE_STYLE),
-		new MyItem(SimpleMarkerSymbol.SQUARE_STYLE),
-		new MyItem(SimpleMarkerSymbol.CROSS_STYLE),
-		new MyItem(SimpleMarkerSymbol.DIAMOND_STYLE),
-		new MyItem(SimpleMarkerSymbol.X_STYLE),
-		new MyItem(SimpleMarkerSymbol.TRIANGLE_STYLE),
-		new MyItem(SimpleMarkerSymbol.STAR_STYLE),
-	};
+			new MyItem(SimpleMarkerSymbol.CIRCLE_STYLE),
+			new MyItem(SimpleMarkerSymbol.SQUARE_STYLE),
+			new MyItem(SimpleMarkerSymbol.CROSS_STYLE),
+			new MyItem(SimpleMarkerSymbol.DIAMOND_STYLE),
+			new MyItem(SimpleMarkerSymbol.X_STYLE),
+			new MyItem(SimpleMarkerSymbol.TRIANGLE_STYLE),
+			new MyItem(SimpleMarkerSymbol.STAR_STYLE), };
 
 	/**
 	 * Constructor method
-	 *
+	 * 
 	 */
 
 	public JComboBoxSimpleMarkeStyles() {
@@ -87,8 +86,10 @@ public class JComboBoxSimpleMarkeStyles extends JComboBox{
 		setEditable(false);
 		setRenderer(new ListCellRenderer() {
 
-			public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-				SymbolPreviewer preview = new SymbolPreviewer() ;
+			public Component getListCellRendererComponent(JList list,
+					Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				SymbolPreviewer preview = new SymbolPreviewer();
 				SimpleMarkerSymbol mySymbol = new SimpleMarkerSymbol();
 				mySymbol.setColor(symColor);
 				mySymbol.setOutlined(outlined);
@@ -101,11 +102,11 @@ public class JComboBoxSimpleMarkeStyles extends JComboBox{
 
 				mySymbol.setUnit(-1); // pixel
 				mySymbol.setSize(10);
-				preview.setForeground(UIManager.getColor(isSelected
-						? "ComboBox.selectionForeground"
+				preview.setForeground(UIManager
+						.getColor(isSelected ? "ComboBox.selectionForeground"
 								: "ComboBox.foreground"));
-				preview.setBackground(UIManager.getColor(isSelected
-						? "ComboBox.selectionBackground"
+				preview.setBackground(UIManager
+						.getColor(isSelected ? "ComboBox.selectionBackground"
 								: "ComboBox.background"));
 				preview.setSymbol(mySymbol);
 				preview.setSize(preview.getWidth(), 20);
@@ -117,7 +118,9 @@ public class JComboBoxSimpleMarkeStyles extends JComboBox{
 
 	/**
 	 * Establishes the color of the simple marker symbol.
-	 * @param c,Color
+	 * 
+	 * @param c
+	 *            ,Color
 	 */
 	public void setSymbolColor(Color c) {
 		this.symColor = c;
@@ -125,10 +128,12 @@ public class JComboBoxSimpleMarkeStyles extends JComboBox{
 
 	/**
 	 * Sets the color for the outline of the simple marker symbol
-	 * @param c,Color
+	 * 
+	 * @param c
+	 *            ,Color
 	 */
 	public void setOutlineColor(Color c) {
-		outlined = c!=null;
+		outlined = c != null;
 		outlineColor = c;
 	}
 
@@ -147,16 +152,18 @@ public class JComboBoxSimpleMarkeStyles extends JComboBox{
 		super.setSelectedItem(item);
 	}
 }
+
 /**
- * Used to store the different options that the JComboBoxsimplemarkerStyles shows to
- * the user.
- *
+ * Used to store the different options that the JComboBoxsimplemarkerStyles
+ * shows to the user.
+ * 
  */
 class MyItem {
 	int style;
 
 	/**
 	 * Constructor method
+	 * 
 	 * @param style
 	 */
 	MyItem(int style) {
@@ -166,7 +173,7 @@ class MyItem {
 	public boolean equals(Object obj) {
 		if (obj instanceof Integer) {
 			Integer integer = (Integer) obj;
-			return integer.intValue()==style;
+			return integer.intValue() == style;
 		}
 
 		if (obj instanceof MyItem) {

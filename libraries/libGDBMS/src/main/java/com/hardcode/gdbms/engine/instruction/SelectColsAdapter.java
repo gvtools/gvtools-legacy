@@ -5,7 +5,7 @@ package com.hardcode.gdbms.engine.instruction;
 
 /**
  * Adaptador
- *
+ * 
  * @author Fernando González Cortés
  */
 public class SelectColsAdapter extends Adapter {
@@ -13,7 +13,7 @@ public class SelectColsAdapter extends Adapter {
 
 	/**
 	 * Devuelve si se utilizó el modificado DISTINCT
-	 *
+	 * 
 	 * @return boolean
 	 */
 	public boolean isDistinct() {
@@ -28,7 +28,7 @@ public class SelectColsAdapter extends Adapter {
 
 	/**
 	 * Obtiene las expresiones de los campos
-	 *
+	 * 
 	 * @return
 	 */
 	public Expression[] getFieldsExpression() {
@@ -43,7 +43,7 @@ public class SelectColsAdapter extends Adapter {
 
 	/**
 	 * Obtiene los alias de los campos
-	 *
+	 * 
 	 * @return
 	 */
 	public String[] getFieldsAlias() {

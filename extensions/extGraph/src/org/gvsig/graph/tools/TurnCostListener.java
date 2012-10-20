@@ -81,15 +81,16 @@ public class TurnCostListener implements PointListener {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.gvsig.fmap.tools.Listeners.PointListener#point(org.gvsig.fmap.tools.Events.PointEvent)
-	 *      The PointEvent method bring you a point in pixel coordinates. You
-	 *      need to transform it to world coordinates. The class to do
-	 *      conversions is ViewPort, obtained thru the MapContext of mapCtrl.
+	 * @see
+	 * org.gvsig.fmap.tools.Listeners.PointListener#point(org.gvsig.fmap.tools
+	 * .Events.PointEvent) The PointEvent method bring you a point in pixel
+	 * coordinates. You need to transform it to world coordinates. The class to
+	 * do conversions is ViewPort, obtained thru the MapContext of mapCtrl.
 	 */
 	public void point(PointEvent event) throws BehaviorException {
 
-		Point2D pReal = mapCtrl.getMapContext().getViewPort().toMapPoint(
-				event.getPoint());
+		Point2D pReal = mapCtrl.getMapContext().getViewPort()
+				.toMapPoint(event.getPoint());
 
 		SingleLayerIterator it = new SingleLayerIterator(mapCtrl
 				.getMapContext().getLayers());
@@ -97,7 +98,7 @@ public class TurnCostListener implements PointListener {
 			FLayer aux = it.next();
 			if (!aux.isActive())
 				continue;
-			Network net = (Network) aux.getProperty("network");			
+			Network net = (Network) aux.getProperty("network");
 
 			if (net != null) {
 				Point2D nearestPoint = new Point2D.Double();
@@ -106,34 +107,37 @@ public class TurnCostListener implements PointListener {
 				int idArc = net.findClosestArc(pReal.getX(), pReal.getY(),
 						realTol, nearestPoint);
 				if (idArc == -1) {
-					JOptionPane.showMessageDialog((Component) PluginServices.getMDIManager().getActiveWindow()
-							, PluginServices.getText(null, "point_not_on_the_network"));
+					JOptionPane.showMessageDialog((Component) PluginServices
+							.getMDIManager().getActiveWindow(), PluginServices
+							.getText(null, "point_not_on_the_network"));
 					return;
 				}
-				if (idFrom == -1)
-				{
+				if (idFrom == -1) {
 					idFrom = idArc;
 					return;
 				}
-				if (idArc == idFrom) return;
+				if (idArc == idFrom)
+					return;
 				idTo = idArc;
-				String auxCost = JOptionPane.showInputDialog(PluginServices.getText(null,
-						"New_turncost") + ":" + PluginServices.getText(null, "turn_prohibited_minus_1"), "-1");
-				if (auxCost == null)
-				{
+				String auxCost = JOptionPane.showInputDialog(
+						PluginServices.getText(null, "New_turncost")
+								+ ":"
+								+ PluginServices.getText(null,
+										"turn_prohibited_minus_1"), "-1");
+				if (auxCost == null) {
 					idFrom = -1;
 					return;
 				}
 				double cost = Double.parseDouble(auxCost);
 				GvTurn turnCost = net.addTurnCost(idFrom, idTo, cost);
-				if (turnCost == null)
-				{
-					JOptionPane.showMessageDialog((Component) PluginServices.getMDIManager().getActiveWindow()
-							, PluginServices.getText(null, "no_conection_between_arcs"));
+				if (turnCost == null) {
+					JOptionPane.showMessageDialog((Component) PluginServices
+							.getMDIManager().getActiveWindow(), PluginServices
+							.getText(null, "no_conection_between_arcs"));
 
 					return;
 				}
-				
+
 				GraphicLayer graphicLayer = mapCtrl.getMapContext()
 						.getGraphicsLayer();
 				if (idSymbolTurnCost == -1) {
@@ -142,13 +146,14 @@ public class TurnCostListener implements PointListener {
 					simFlag.setSizeInPixels(true);
 					simFlag.setSize(16);
 					ImageIcon icon = new ImageIcon(this.getClass()
-							.getClassLoader().getResource("images/turncost_16.png"));
+							.getClassLoader()
+							.getResource("images/turncost_16.png"));
 					simFlag.setIcon(icon.getImage());
 
 					idSymbolTurnCost = graphicLayer.addSymbol(simFlag);
 				}
-				IGeometry gAux = ShapeFactory.createPoint2D(nearestPoint.getX(),
-						nearestPoint.getY());
+				IGeometry gAux = ShapeFactory.createPoint2D(
+						nearestPoint.getX(), nearestPoint.getY());
 				FGraphic graphic = new FGraphic(gAux, idSymbolTurnCost);
 				graphic.setTag("BARRIER");
 				graphic.setObjectTag(turnCost);

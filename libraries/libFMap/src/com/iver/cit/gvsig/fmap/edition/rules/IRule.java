@@ -44,15 +44,17 @@ import com.iver.cit.gvsig.fmap.core.IRow;
 
 /**
  * @author fjp
- *
- * Interfaz que vamos a usar para validar antes de añadir, borrar o modificar features
+ * 
+ *         Interfaz que vamos a usar para validar antes de añadir, borrar o
+ *         modificar features
  */
 public interface IRule {
 	String getName();
+
 	String getDescription();
+
 	int getPriority();
-	boolean validate(IRow row,int sourceType);
+
+	boolean validate(IRow row, int sourceType);
 
 }
-
-

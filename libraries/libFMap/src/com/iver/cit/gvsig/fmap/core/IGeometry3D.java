@@ -43,10 +43,10 @@ package com.iver.cit.gvsig.fmap.core;
 /**
  * Interfaz necesaria para aportar los valores de Z en el caso de que las
  * geometrías contenidas sean en 3D.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
-public interface IGeometry3D extends IGeometry{
+public interface IGeometry3D extends IGeometry {
 	/**
 	 * Devuelve un array con el valor de todas las Zs.
 	 */

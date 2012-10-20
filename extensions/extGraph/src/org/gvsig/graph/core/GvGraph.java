@@ -48,17 +48,16 @@ public class GvGraph implements IGraph {
 	private ArrayList edges;
 	private Hashtable indexArcsEdges;
 
-	public GvGraph()
-	{
+	public GvGraph() {
 		nodes = new ArrayList();
 		edges = new ArrayList();
-		indexArcsEdges = new Hashtable();		
+		indexArcsEdges = new Hashtable();
 	}
 
 	public GvGraph(int numArcs, int numEdges, int numNodes) {
 		nodes = new ArrayList<GvNode>(numNodes);
 		edges = new ArrayList<GvEdge>(numEdges);
-		indexArcsEdges = new Hashtable<Integer, EdgePair>(numArcs);					
+		indexArcsEdges = new Hashtable<Integer, EdgePair>(numArcs);
 	}
 
 	public GvNode getNodeByID(int idNode) {
@@ -79,7 +78,7 @@ public class GvGraph implements IGraph {
 
 	public EdgePair getEdgesByIdArc(int idArc) {
 		// if (idArc < indexArcsEdges.size())
-			return (EdgePair) indexArcsEdges.get(new Integer(idArc));
+		return (EdgePair) indexArcsEdges.get(new Integer(idArc));
 		// return null;
 	}
 
@@ -89,40 +88,39 @@ public class GvGraph implements IGraph {
 
 	public void addNode(GvNode node) {
 		nodes.add(node);
-		
+
 	}
 
 	public void addEdgePair(int idArc, EdgePair edgePair) {
-//		assert(indexArcsEdges.size() == edgePair.idArc);
+		// assert(indexArcsEdges.size() == edgePair.idArc);
 		Object aux = indexArcsEdges.put(new Integer(idArc), edgePair);
 		// assert(aux == null);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.graph.core.IGraph#removeEdge(int)
 	 */
 	public void removeEdge(int idEdge) {
 		// TODO: Solo se usa para edges añadidos debido a la incorporación
-		// de flags. Si se usara para los otros arcos, habría que 
+		// de flags. Si se usara para los otros arcos, habría que
 		// revisar indexArcsEdges para ver si es necesario quitarlo
 		// también de ahí.
 		edges.remove(idEdge);
 	}
 
 	public void removeNode(int idNode) {
-		nodes.remove(idNode);		
+		nodes.remove(idNode);
 	}
 
-//	public void addEdge(int i, GvEdge edge) {
-//		edges.set(i, edge);
-//		
-//	}
-//	public void addNode(int i, GvNode node) {
-//		nodes.set(i, node);
-//		
-//	}
-	
-	
+	// public void addEdge(int i, GvEdge edge) {
+	// edges.set(i, edge);
+	//
+	// }
+	// public void addNode(int i, GvNode node) {
+	// nodes.set(i, node);
+	//
+	// }
+
 }
-
-

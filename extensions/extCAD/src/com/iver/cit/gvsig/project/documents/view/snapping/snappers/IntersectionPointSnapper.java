@@ -1,19 +1,13 @@
 package com.iver.cit.gvsig.project.documents.view.snapping.snappers;
 
 import java.awt.Graphics;
-import java.awt.geom.Line2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import sun.security.action.GetLongAction;
-
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.fmap.core.FPolyline2D;
-import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.v02.FConverter;
 import com.iver.cit.gvsig.project.documents.view.snapping.AbstractSnapper;
@@ -40,7 +34,7 @@ public class IntersectionPointSnapper extends AbstractSnapper implements
 	 * (non-Javadoc)
 	 * 
 	 * @see com.iver.cit.gvsig.gui.cad.snapping.ISnapper#getSnapPoint(Point2D
-	 *      point, IGeometry geom,double tolerance, Point2D lastPointEntered)
+	 * point, IGeometry geom,double tolerance, Point2D lastPointEntered)
 	 */
 	public Point2D getSnapPoint(Point2D point, IGeometry geom,
 			double tolerance, Point2D lastPointEntered) {
@@ -50,18 +44,20 @@ public class IntersectionPointSnapper extends AbstractSnapper implements
 		// si algún punto de esa intersección cae
 		// dentro de ese rectángulo.
 		// OJO: No convertimos todas las geometrías ni calculamos la
-		// intersección de todas las geometrías. Si no se quiere que se haga snapping a los puntos contiguos, habría que meter un if para no 
-		// incluirlos en la lista de candidatos (si comparten un punto, no añadirlo a la lista).
-//		if (!(geom.getInternalShape() instanceof FPolyline2D)) {
-//			return null;
-//		}
+		// intersección de todas las geometrías. Si no se quiere que se haga
+		// snapping a los puntos contiguos, habría que meter un if para no
+		// incluirlos en la lista de candidatos (si comparten un punto, no
+		// añadirlo a la lista).
+		// if (!(geom.getInternalShape() instanceof FPolyline2D)) {
+		// return null;
+		// }
 		Point2D result = null;
 		if (geometries == null) {
 			return null;
 		}
 		Coordinate c = new Coordinate(point.getX(), point.getY());
-		Rectangle2D.Double r = new Rectangle2D.Double(point.getX(), point
-				.getY(), tolerance, tolerance);
+		Rectangle2D.Double r = new Rectangle2D.Double(point.getX(),
+				point.getY(), tolerance, tolerance);
 		// Lista con los segmentos candidatos
 		ArrayList candidates = new ArrayList();
 		for (int i = 0; i < geometries.size(); i++) {
@@ -133,22 +129,22 @@ public class IntersectionPointSnapper extends AbstractSnapper implements
 		return lineSegments;
 	}
 
-//	private Point2D intersects(IGeometry g1, IGeometry g2, Point2D point,
-//			double tolerance) {
-//		Geometry g1JTS = g1.toJTSGeometry();
-//		Geometry g2JTS = g2.toJTSGeometry();
-//		// if (g1JTS.getNumPoints()>maxPointsGeom ||
-//		// g2JTS.getNumPoints()>maxPointsGeom){
-//		// return null;
-//		// }
-//		Geometry intersection = g1JTS.intersection(g2JTS);
-//		IGeometry g = FConverter.jts_to_igeometry(intersection);
-//
-//		if (g != null && g.getGeometryType() == FShape.POINT) {
-//			return g.getHandlers(IGeometry.SELECTHANDLER)[0].getPoint();
-//		}
-//		return null;
-//	}
+	// private Point2D intersects(IGeometry g1, IGeometry g2, Point2D point,
+	// double tolerance) {
+	// Geometry g1JTS = g1.toJTSGeometry();
+	// Geometry g2JTS = g2.toJTSGeometry();
+	// // if (g1JTS.getNumPoints()>maxPointsGeom ||
+	// // g2JTS.getNumPoints()>maxPointsGeom){
+	// // return null;
+	// // }
+	// Geometry intersection = g1JTS.intersection(g2JTS);
+	// IGeometry g = FConverter.jts_to_igeometry(intersection);
+	//
+	// if (g != null && g.getGeometryType() == FShape.POINT) {
+	// return g.getHandlers(IGeometry.SELECTHANDLER)[0].getPoint();
+	// }
+	// return null;
+	// }
 
 	/**
 	 * DOCUMENT ME!
@@ -291,7 +287,7 @@ public class IntersectionPointSnapper extends AbstractSnapper implements
 	 * (non-Javadoc)
 	 * 
 	 * @see com.iver.cit.gvsig.gui.cad.snapping.ISnapper#draw(java.awt.Graphics,
-	 *      java.awt.geom.Point2D)
+	 * java.awt.geom.Point2D)
 	 */
 	public void draw(Graphics g, Point2D pPixels) {
 		g.setColor(getColor());

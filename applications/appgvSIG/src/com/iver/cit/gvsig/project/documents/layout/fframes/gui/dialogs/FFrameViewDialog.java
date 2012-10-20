@@ -65,17 +65,17 @@ import com.iver.cit.gvsig.project.documents.layout.fframes.gui.JPRotation;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 import com.iver.cit.gvsig.project.documents.view.ProjectView;
 
-
 /**
  * Diálogo para añadir una vista al Layout.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 	private javax.swing.JPanel jContentPane = null;
 	private javax.swing.JLabel lVistas = null;
 	private javax.swing.JScrollPane jScrollPane = null;
-	private javax.swing.JList liVistas = null; //  @jve:visual-info  decl-index=0 visual-constraint="98,-3"
+	private javax.swing.JList liVistas = null; // @jve:visual-info decl-index=0
+												// visual-constraint="98,-3"
 	private javax.swing.JCheckBox chbEnlaceVivo = null;
 	private javax.swing.JLabel lEscala = null;
 	private javax.swing.JComboBox cbEscala = null;
@@ -91,18 +91,21 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 	private javax.swing.JComboBox cbCalidad = null;
 	private ProjectView m_projectView = null;
 	private Rectangle2D rect = new Rectangle2D.Double();
-	private FFrameView fframeview = null; //new FFrameView();
+	private FFrameView fframeview = null; // new FFrameView();
 	private Layout m_layout = null;
 	private boolean isAcepted = false;
 	private JPRotation rotation = null;
-	private FFrameView newFFrameView=null;
+	private FFrameView newFFrameView = null;
 	private javax.swing.JButton bGrid = null;
 	private javax.swing.JCheckBox chbShowGrid = null;
+
 	/**
 	 * This is the default constructor
-	 *
-	 * @param layout Referencia al Layout.
-	 * @param fframe Referencia al fframe vista.
+	 * 
+	 * @param layout
+	 *            Referencia al Layout.
+	 * @param fframe
+	 *            Referencia al fframe vista.
 	 */
 	public FFrameViewDialog(Layout layout, FFrameView fframe) {
 		super();
@@ -120,17 +123,18 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 		this.setSize(478, 269);
 
 		if (fframeview.getTypeScale() == 0 || fframeview.getTypeScale() == 1) {
-				getTEscalaNumerica().setEnabled(false);
-			}else{
-				getTEscalaNumerica().setEnabled(true);
-			}
+			getTEscalaNumerica().setEnabled(false);
+		} else {
+			getTEscalaNumerica().setEnabled(true);
+		}
 		getPRotation().setRotation(fframeview.getRotation());
 	}
 
 	/**
 	 * Inserta el rectángulo que ocupará el fframe vista.
-	 *
-	 * @param r Rectángulo.
+	 * 
+	 * @param r
+	 *            Rectángulo.
 	 */
 	public void setRectangle(Rectangle2D r) {
 		rect.setRect(r);
@@ -138,7 +142,7 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes jContentPane
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private javax.swing.JPanel getJContentPane() {
@@ -173,7 +177,7 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes lVistas
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLVistas() {
@@ -189,7 +193,7 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private javax.swing.JScrollPane getJScrollPane() {
@@ -205,7 +209,7 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes liVistas
-	 *
+	 * 
 	 * @return javax.swing.JList
 	 */
 	private javax.swing.JList getLiVistas() {
@@ -217,49 +221,59 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 			for (int i = 0; i < liVistas.getModel().getSize(); i++) {
 				if (fframeview.getMapContext() != null) {
 
-					ProjectView pvaux= (ProjectView) liVistas.getModel()
-														  .getElementAt(i);
+					ProjectView pvaux = (ProjectView) liVistas.getModel()
+							.getElementAt(i);
 
-					if (pvaux.getMapContext().equals(fframeview.getMapContext())) {
+					if (pvaux.getMapContext()
+							.equals(fframeview.getMapContext())) {
 						liVistas.setSelectedIndex(i);
-						m_projectView= (ProjectView) liVistas.getModel()
-						  .getElementAt(i);
+						m_projectView = (ProjectView) liVistas.getModel()
+								.getElementAt(i);
 					}
 				}
 			}
 
 			liVistas.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-					private int selectIndex=-1;
-					private Rectangle2D boundBox;
-					public void valueChanged(
-						javax.swing.event.ListSelectionEvent e) {
-						int selectInt = ((JList)e.getSource()).getSelectedIndex();
-						if (selectInt!=selectIndex){
-							selectIndex=selectInt;
-							if (selectIndex==-1)
-								return;
+				private int selectIndex = -1;
+				private Rectangle2D boundBox;
+
+				public void valueChanged(javax.swing.event.ListSelectionEvent e) {
+					int selectInt = ((JList) e.getSource()).getSelectedIndex();
+					if (selectInt != selectIndex) {
+						selectIndex = selectInt;
+						if (selectIndex == -1)
+							return;
 						m_projectView = (ProjectView) liVistas.getModel()
-															  .getElementAt(selectInt);
+								.getElementAt(selectInt);
 
-						getCbEscala().setSelectedItem(PluginServices.getText(this, "automatico"));
-						boundBox=FLayoutUtilities.toSheetRect(rect, m_layout.getLayoutControl().getAT());
-//						fframeview.setBoundBox(FLayoutUtilities.toSheetRect(
-//								rect, m_layout.getAT()));
+						getCbEscala().setSelectedItem(
+								PluginServices.getText(this, "automatico"));
+						boundBox = FLayoutUtilities.toSheetRect(rect, m_layout
+								.getLayoutControl().getAT());
+						// fframeview.setBoundBox(FLayoutUtilities.toSheetRect(
+						// rect, m_layout.getAT()));
 
-//						fframeview.setView(m_projectView);
-//
-//						fframeview.setMapUnits(m_projectView.getMapContext()
-//															.getViewPort()
-//															.getMapUnits());
-						ViewPort vp=m_projectView.getMapContext().getViewPort().cloneViewPort();
-						vp.setImageSize(new Dimension((int)rect.getWidth(),(int)rect.getHeight()));
-						getTEscalaNumerica().setText(String.valueOf(FLayoutUtilities.getScaleView(vp,
-				                boundBox.getWidth(), FLayoutUtilities.fromSheetDistance(boundBox.getWidth(),m_layout.getLayoutControl().getAT()))));
-//						getTEscalaNumerica().setText(String.valueOf(
-//								fframeview.getScale()));
+						// fframeview.setView(m_projectView);
+						//
+						// fframeview.setMapUnits(m_projectView.getMapContext()
+						// .getViewPort()
+						// .getMapUnits());
+						ViewPort vp = m_projectView.getMapContext()
+								.getViewPort().cloneViewPort();
+						vp.setImageSize(new Dimension((int) rect.getWidth(),
+								(int) rect.getHeight()));
+						getTEscalaNumerica().setText(
+								String.valueOf(FLayoutUtilities.getScaleView(
+										vp, boundBox.getWidth(),
+										FLayoutUtilities.fromSheetDistance(
+												boundBox.getWidth(), m_layout
+														.getLayoutControl()
+														.getAT()))));
+						// getTEscalaNumerica().setText(String.valueOf(
+						// fframeview.getScale()));
 					}
-					}
-				});
+				}
+			});
 		}
 
 		return liVistas;
@@ -267,7 +281,7 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes chbEnlaceVivo
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	private javax.swing.JCheckBox getChbEnlaceVivo() {
@@ -278,11 +292,16 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 			chbEnlaceVivo.setSelected(fframeview.getLinked());
 			chbEnlaceVivo.setLocation(10, 75);
 			chbEnlaceVivo.setEnabled(true);
-			chbEnlaceVivo.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
-					}
-				});
+			chbEnlaceVivo
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							System.out.println("actionPerformed()"); // TODO
+																		// Auto-generated
+																		// Event
+																		// stub
+																		// actionPerformed()
+						}
+					});
 		}
 
 		return chbEnlaceVivo;
@@ -290,7 +309,7 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes lEscala
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLEscala() {
@@ -306,12 +325,13 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes cbEscala
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private javax.swing.JComboBox getCbEscala() {
 		if (cbEscala == null) {
-			//String[] s={"Automático","Conservar escala de visualización","Escala especificada por el usuario"};
+			// String[]
+			// s={"Automático","Conservar escala de visualización","Escala especificada por el usuario"};
 			cbEscala = new javax.swing.JComboBox();
 			cbEscala.setSize(220, 20);
 			cbEscala.addItem(PluginServices.getText(this, "automatico"));
@@ -320,23 +340,24 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 			cbEscala.addItem(PluginServices.getText(this, "escala_usuario"));
 			cbEscala.setSelectedIndex(fframeview.getTypeScale());
 
-			if (fframeview.getTypeScale() == 0 || fframeview.getTypeScale() == 1) {
+			if (fframeview.getTypeScale() == 0
+					|| fframeview.getTypeScale() == 1) {
 				getTEscalaNumerica().setEnabled(false);
-			}else{
+			} else {
 				getTEscalaNumerica().setEnabled(true);
 			}
 
 			cbEscala.setPreferredSize(new java.awt.Dimension(200, 20));
 			cbEscala.setLocation(100, 105);
 			cbEscala.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						if (cbEscala.getSelectedIndex() == 2) {
-							getTEscalaNumerica().setEnabled(true);
-						} else {
-							getTEscalaNumerica().setEnabled(false);
-						}
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if (cbEscala.getSelectedIndex() == 2) {
+						getTEscalaNumerica().setEnabled(true);
+					} else {
+						getTEscalaNumerica().setEnabled(false);
 					}
-				});
+				}
+			});
 		}
 
 		return cbEscala;
@@ -344,7 +365,7 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes lEscalaNumerica
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLEscalaNumerica() {
@@ -360,7 +381,7 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes tEscalaNumerica
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private javax.swing.JTextField getTEscalaNumerica() {
@@ -381,7 +402,7 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes lExtension
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLExtension() {
@@ -398,12 +419,12 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes cbExtension
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private javax.swing.JComboBox getCbExtension() {
 		if (cbExtension == null) {
-			//String[] s={"Rellenar marco de la vista","Recorte a vista"};
+			// String[] s={"Rellenar marco de la vista","Recorte a vista"};
 			cbExtension = new javax.swing.JComboBox();
 			cbExtension.setSize(220, 20);
 			cbExtension.addItem(PluginServices.getText(this,
@@ -421,14 +442,15 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes jLabel4
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLVisualizacion() {
 		if (lVisualizacion == null) {
 			lVisualizacion = new javax.swing.JLabel();
 			lVisualizacion.setSize(86, 16);
-			lVisualizacion.setText(PluginServices.getText(this, "visualizacion"));
+			lVisualizacion.setText(PluginServices
+					.getText(this, "visualizacion"));
 			lVisualizacion.setLocation(10, 180);
 			lVisualizacion.setVisible(false);
 		}
@@ -438,15 +460,16 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes cbVisualizacion
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private javax.swing.JComboBox getCbVisualizacion() {
 		if (cbVisualizacion == null) {
-			//String[] s={"Cuando activo","Siempre"};
+			// String[] s={"Cuando activo","Siempre"};
 			cbVisualizacion = new javax.swing.JComboBox();
 			cbVisualizacion.setSize(220, 20);
-			cbVisualizacion.addItem(PluginServices.getText(this, "cuando_activo"));
+			cbVisualizacion.addItem(PluginServices.getText(this,
+					"cuando_activo"));
 			cbVisualizacion.addItem(PluginServices.getText(this, "siempre"));
 			cbVisualizacion.setSelectedIndex(fframeview.getViewing());
 			cbVisualizacion.setPreferredSize(new java.awt.Dimension(200, 20));
@@ -460,7 +483,7 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes jButton
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getbAceptar() {
@@ -468,68 +491,74 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 			bAceptar = new javax.swing.JButton();
 			bAceptar.setSize(85, 26);
 			bAceptar.setText(PluginServices.getText(this, "Aceptar"));
-			bAceptar.setBounds(new java.awt.Rectangle(109,223,85,26));
+			bAceptar.setBounds(new java.awt.Rectangle(109, 223, 85, 26));
 			bAceptar.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						newFFrameView=(FFrameView)fframeview.cloneFFrame(m_layout);
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					newFFrameView = (FFrameView) fframeview
+							.cloneFFrame(m_layout);
+					newFFrameView.setBoundBox(FLayoutUtilities.toSheetRect(
+							rect, m_layout.getLayoutControl().getAT()));
+					newFFrameView.setRotation(getPRotation().getRotation());
+					if (m_projectView != null) {
+						newFFrameView
+								.setLinked(getChbEnlaceVivo().isSelected());
+						newFFrameView.setName(m_projectView.getName());
+
+						newFFrameView.setTypeScale(getCbEscala()
+								.getSelectedIndex());
+						newFFrameView.setScale(Double
+								.parseDouble(getTEscalaNumerica().getText()));
+						newFFrameView.setView(m_projectView);
+
+						// fframeview.setFMap(m_projectView.getMapContext());
+						newFFrameView.setExtension(getCbExtension()
+								.getSelectedIndex());
+						newFFrameView.setViewing(getCbVisualizacion()
+								.getSelectedIndex());
+						newFFrameView.setQuality(getCbCalidad()
+								.getSelectedIndex());
+						if (fframeview.getGrid() != null) {
+							((FFrameGrid) fframeview.getGrid())
+									.setLayout(m_layout);
+							((FFrameGrid) fframeview.getGrid())
+									.setFFrameDependence(newFFrameView);
+							// ((FFrameGrid)grid).setBoundBox();
+							newFFrameView.setGrid(fframeview.getGrid());
+						}
+						newFFrameView.showGrid(getChbShowGrid().isSelected());
+
 						newFFrameView.setBoundBox(FLayoutUtilities.toSheetRect(
 								rect, m_layout.getLayoutControl().getAT()));
-						newFFrameView.setRotation(getPRotation().getRotation());
-						if (m_projectView != null) {
-							newFFrameView.setLinked(getChbEnlaceVivo().isSelected());
-							newFFrameView.setName(m_projectView.getName());
 
-							newFFrameView.setTypeScale(getCbEscala()
-														.getSelectedIndex());
-							newFFrameView.setScale(Double.parseDouble(
-									getTEscalaNumerica().getText()));
-							newFFrameView.setView(m_projectView);
-
-							//fframeview.setFMap(m_projectView.getMapContext());
-							newFFrameView.setExtension(getCbExtension()
-														.getSelectedIndex());
-							newFFrameView.setViewing(getCbVisualizacion()
-													  .getSelectedIndex());
-							newFFrameView.setQuality(getCbCalidad()
-													  .getSelectedIndex());
-							if (fframeview.getGrid()!=null){
-								((FFrameGrid)fframeview.getGrid()).setLayout(m_layout);
-								((FFrameGrid)fframeview.getGrid()).setFFrameDependence(newFFrameView);
-//								((FFrameGrid)grid).setBoundBox();
-								newFFrameView.setGrid(fframeview.getGrid());
-							}
-							newFFrameView.showGrid(getChbShowGrid().isSelected());
-
-							newFFrameView.setBoundBox(FLayoutUtilities.toSheetRect(
-									rect, m_layout.getLayoutControl().getAT()));
-
-							/*        for (int i=0;i<m_layout.getFFrames().size();i++){
-							   IFFrame fframe=(IFFrame)m_layout.getFFrames().get(i);
-							   if (fframe instanceof FFrameScaleBar){
-							           if (((FFrameScaleBar)fframe).getFFrameView()==fframeview){
-							           if (getJComboBox().getSelectedIndex()!=0){
-							           ((FFrameScaleBar)fframe).setIsFixed(true);
-							           ((FFrameScaleBar)fframe).setScaleView(Long.parseLong(getJTextField().getText()));
-							           }else{
-							                   ((FFrameScaleBar)fframe).setIsFixed(false);
-							           }
-
-							           }
-							   }
-
-
-							   }
-							 */
-						}
-
-						isAcepted = true;
-
-						//}else{
-						//	isAcepted=false;
-						//}
-						PluginServices.getMDIManager().closeWindow(FFrameViewDialog.this);
+						/*
+						 * for (int i=0;i<m_layout.getFFrames().size();i++){
+						 * IFFrame fframe=(IFFrame)m_layout.getFFrames().get(i);
+						 * if (fframe instanceof FFrameScaleBar){ if
+						 * (((FFrameScaleBar
+						 * )fframe).getFFrameView()==fframeview){ if
+						 * (getJComboBox().getSelectedIndex()!=0){
+						 * ((FFrameScaleBar)fframe).setIsFixed(true);
+						 * ((FFrameScaleBar
+						 * )fframe).setScaleView(Long.parseLong(getJTextField
+						 * ().getText())); }else{
+						 * ((FFrameScaleBar)fframe).setIsFixed(false); }
+						 * 
+						 * } }
+						 * 
+						 * 
+						 * }
+						 */
 					}
-				});
+
+					isAcepted = true;
+
+					// }else{
+					// isAcepted=false;
+					// }
+					PluginServices.getMDIManager().closeWindow(
+							FFrameViewDialog.this);
+				}
+			});
 		}
 
 		return bAceptar;
@@ -537,7 +566,7 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes bCancelar
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBCancelar() {
@@ -545,13 +574,14 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 			bCancelar = new javax.swing.JButton();
 			bCancelar.setSize(85, 26);
 			bCancelar.setText(PluginServices.getText(this, "Cancelar"));
-			bCancelar.setBounds(new java.awt.Rectangle(207,223,85,26));
+			bCancelar.setBounds(new java.awt.Rectangle(207, 223, 85, 26));
 			bCancelar.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						newFFrameView=null;
-						PluginServices.getMDIManager().closeWindow(FFrameViewDialog.this);
-					}
-				});
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					newFFrameView = null;
+					PluginServices.getMDIManager().closeWindow(
+							FFrameViewDialog.this);
+				}
+			});
 		}
 
 		return bCancelar;
@@ -559,7 +589,7 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes lCalidad
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLCalidad() {
@@ -575,12 +605,12 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes cbCalidad
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private javax.swing.JComboBox getCbCalidad() {
 		if (cbCalidad == null) {
-			//String[] s={"Presentación","Borrador"};
+			// String[] s={"Presentación","Borrador"};
 			cbCalidad = new javax.swing.JComboBox();
 			cbCalidad.setSize(220, 20);
 			cbCalidad.addItem(PluginServices.getText(this, "presentacion"));
@@ -593,13 +623,15 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 		return cbCalidad;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.mdiApp.ui.MDIManager.View#getViewInfo()
 	 */
 	public WindowInfo getWindowInfo() {
 		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODALDIALOG);
 
-		//vi.setResizable(false);
+		// vi.setResizable(false);
 		m_viewinfo.setTitle(PluginServices.getText(this,
 				"propiedades_marco_vista"));
 
@@ -621,7 +653,7 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes rotation
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPRotation getPRotation() {
@@ -635,40 +667,40 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 	public IFFrame getFFrame() {
 		return newFFrameView;
 	}
+
 	/**
 	 * This method initializes bGrid
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getBGrid() {
 		if (bGrid == null) {
 			bGrid = new JButton();
-			bGrid.setBounds(new java.awt.Rectangle(207,186,85,26));
-			bGrid.setText(PluginServices.getText(this,"configurar"));
+			bGrid.setBounds(new java.awt.Rectangle(207, 186, 85, 26));
+			bGrid.setText(PluginServices.getText(this, "configurar"));
 			bGrid.addActionListener(new java.awt.event.ActionListener() {
 
-
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					FFrameGridFactory gridFactory=new FFrameGridFactory();
+					FFrameGridFactory gridFactory = new FFrameGridFactory();
 					FFrameGrid fframe = null;
 
-					if (fframeview.getGrid() != null){
-						fframe = (FFrameGrid)fframeview.getGrid();
-					}else{
-						fframe = (FFrameGrid)gridFactory.createFrame();
+					if (fframeview.getGrid() != null) {
+						fframe = (FFrameGrid) fframeview.getGrid();
+					} else {
+						fframe = (FFrameGrid) gridFactory.createFrame();
 						fframe.setLayout(m_layout);
 						fframe.setFFrameDependence(fframeview);
 					}
 
-
-					FFrameGridDialog fframedialog = new FFrameGridDialog(m_layout, fframe,fframeview);
-//					fframedialog.setFFrameView(fframeview);
+					FFrameGridDialog fframedialog = new FFrameGridDialog(
+							m_layout, fframe, fframeview);
+					// fframedialog.setFFrameView(fframeview);
 					if (fframedialog != null) {
-				            PluginServices.getMDIManager().addWindow(fframedialog);
-				        }
-				    IFFrame newFrame= fframedialog.getFFrame();
-				    if (newFrame!=null) {
-				    	fframeview.setGrid(newFrame);
+						PluginServices.getMDIManager().addWindow(fframedialog);
+					}
+					IFFrame newFrame = fframedialog.getFFrame();
+					if (newFrame != null) {
+						fframeview.setGrid(newFrame);
 					}
 				}
 			});
@@ -678,19 +710,20 @@ public class FFrameViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes chbShowGrid
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getChbShowGrid() {
 		if (chbShowGrid == null) {
 			chbShowGrid = new JCheckBox();
-			chbShowGrid.setBounds(new java.awt.Rectangle(13,191,181,21));
+			chbShowGrid.setBounds(new java.awt.Rectangle(13, 191, 181, 21));
 			chbShowGrid.setSelected(fframeview.isShowGrid());
-			chbShowGrid.setText(PluginServices.getText(this,"Show_grid"));
+			chbShowGrid.setText(PluginServices.getText(this, "Show_grid"));
 		}
 		return chbShowGrid;
 	}
+
 	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

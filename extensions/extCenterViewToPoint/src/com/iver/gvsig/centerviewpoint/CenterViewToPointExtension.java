@@ -56,77 +56,89 @@ import com.iver.gvsig.centerviewtopoint.gui.InputCoordinatesPanel;
 /**
  * The CenterViewToPointExtension class allows to center the View over a
  * concrete point given by its coordinates.
- *
+ * 
  * @author jmorell
  */
 public class CenterViewToPointExtension extends Extension {
 	private View vista;
-	public static Color COLOR=Color.red;
-    /* (non-Javadoc)
-     * @see com.iver.andami.plugins.Extension#inicializar()
-     */
-    public void initialize() {
-        // TODO Auto-generated method stub
-    	PluginServices.getIconTheme().registerDefault(
+	public static Color COLOR = Color.red;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.andami.plugins.Extension#inicializar()
+	 */
+	public void initialize() {
+		// TODO Auto-generated method stub
+		PluginServices.getIconTheme().registerDefault(
 				"view-center-to-point",
-				this.getClass().getClassLoader().getResource("images/centerviewtopoint.png")
-			);
-    }
+				this.getClass().getClassLoader()
+						.getResource("images/centerviewtopoint.png"));
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.andami.plugins.Extension#execute(java.lang.String)
-     */
-    public void execute(String actionCommand) {
-		vista = (View)PluginServices.getMDIManager().getActiveWindow();
-        MapContext mapContext = vista.getModel().getMapContext();
-        InputCoordinatesPanel dataSelectionPanel = new InputCoordinatesPanel(mapContext);
-        //dataSelectionPanel.setColor(color);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.andami.plugins.Extension#execute(java.lang.String)
+	 */
+	public void execute(String actionCommand) {
+		vista = (View) PluginServices.getMDIManager().getActiveWindow();
+		MapContext mapContext = vista.getModel().getMapContext();
+		InputCoordinatesPanel dataSelectionPanel = new InputCoordinatesPanel(
+				mapContext);
+		// dataSelectionPanel.setColor(color);
 		PluginServices.getMDIManager().addWindow(dataSelectionPanel);
-    }
+	}
 
-    public View getView(){
-    	return vista;
-    }
-    /* (non-Javadoc)
-     * @see com.iver.andami.plugins.Extension#isEnabled()
-     */
-    public boolean isEnabled() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-		 .getActiveWindow();
+	public View getView() {
+		return vista;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.andami.plugins.Extension#isEnabled()
+	 */
+	public boolean isEnabled() {
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (f == null) {
-		    return false;
+			return false;
 		}
 		if (f.getClass() == View.class) {
-		    View vista = (View) f;
-		    IProjectView model = vista.getModel();
-		    MapContext mapa = model.getMapContext();
-		    FLayers layers = mapa.getLayers();
-		    for (int i=0;i < layers.getLayersCount();i++) {
-               if (layers.getLayer(i).isAvailable()) return true;
-		    }
+			View vista = (View) f;
+			IProjectView model = vista.getModel();
+			MapContext mapa = model.getMapContext();
+			FLayers layers = mapa.getLayers();
+			for (int i = 0; i < layers.getLayersCount(); i++) {
+				if (layers.getLayer(i).isAvailable())
+					return true;
+			}
 		}
 		return false;
 
-    }
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.andami.plugins.Extension#isVisible()
-     */
-    public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-		 .getActiveWindow();
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.andami.plugins.Extension#isVisible()
+	 */
+	public boolean isVisible() {
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (f == null) {
-		    return false;
+			return false;
 		}
 		if (f.getClass() == View.class) {
-		    View vista = (View) f;
-		    IProjectView model = vista.getModel();
-		    MapContext mapa = model.getMapContext();
-            if (mapa.getLayers().getLayersCount() > 0) {
-                return true;
-            }
-            return false;
-        }
+			View vista = (View) f;
+			IProjectView model = vista.getModel();
+			MapContext mapa = model.getMapContext();
+			if (mapa.getLayers().getLayersCount() > 0) {
+				return true;
+			}
+			return false;
+		}
 		return false;
 	}
 

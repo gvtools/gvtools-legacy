@@ -21,14 +21,16 @@ package org.gvsig.raster.grid.render;
 import java.util.EventListener;
 
 /**
- * Listener con los eventos que puede disparar una propiedad cuando esta cambia. 
+ * Listener con los eventos que puede disparar una propiedad cuando esta cambia.
  * 
  * 07/01/2008
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public interface VisualPropertyListener extends EventListener {
 	/**
 	 * Evento que se dispara cuando cambia el valor de la propiedad.
+	 * 
 	 * @param e
 	 */
 	public void visualPropertyValueChanged(VisualPropertyEvent e);

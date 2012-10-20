@@ -5,22 +5,18 @@
 
 package com.ermapper.util;
 
+public class JNCSScreenPoint {
 
-public class JNCSScreenPoint
-{
+	public JNCSScreenPoint() {
+		x = 0;
+		y = 0;
+	}
 
-    public JNCSScreenPoint()
-    {
-        x = 0;
-        y = 0;
-    }
+	public JNCSScreenPoint(int i, int j) {
+		x = i;
+		y = j;
+	}
 
-    public JNCSScreenPoint(int i, int j)
-    {
-        x = i;
-        y = j;
-    }
-
-    public int x;
-    public int y;
+	public int x;
+	public int y;
 }

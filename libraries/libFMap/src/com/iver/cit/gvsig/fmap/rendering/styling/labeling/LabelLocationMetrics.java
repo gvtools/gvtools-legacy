@@ -46,34 +46,34 @@ import java.awt.geom.Point2D;
 /**
  * 
  * LabelLocationMetrics.java
- *
+ * 
  * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Dec 17, 2007
- *
+ * 
  */
 public class LabelLocationMetrics {
 	private Point2D anchor;
 	private double rotation;
 	private boolean isFixed;
-	
+
 	public LabelLocationMetrics(Point2D anchor, double rotation, boolean isFixed) {
 		this.anchor = anchor;
 		this.rotation = rotation;
 		this.isFixed = isFixed;
 	}
-	
+
 	public Point2D getAnchor() {
 		return anchor;
 	}
-	
+
 	public void setAnchor(Point anchor) {
 		this.anchor = anchor;
 	}
-	
+
 	public double getRotation() {
 		return rotation;
 	}
-	
+
 	public void setRotation(double rotation) {
 		this.rotation = rotation;
 	}
@@ -81,6 +81,5 @@ public class LabelLocationMetrics {
 	public boolean isFixed() {
 		return isFixed;
 	}
-	
-	
+
 }

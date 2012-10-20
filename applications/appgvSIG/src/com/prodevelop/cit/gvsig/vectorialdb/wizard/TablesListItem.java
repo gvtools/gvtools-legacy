@@ -58,127 +58,134 @@ import com.iver.cit.gvsig.fmap.drivers.IConnection;
 import com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver;
 import com.iver.cit.gvsig.gui.panels.CRSSelectPanel;
 
-
 /**
  * Utility class that represents a table list item as a selectable check box.
- *
+ * 
  * @author jldominguez
- *
+ * 
  */
 public class TablesListItem extends TablesListItemSimple {
-	
-    
-    private UserSelectedFieldsPanel selectedFieldsPanel = null;
-    private UserTableSettingsPanel tableSettingsPanel = null;
-    private IVectorialDatabaseDriver driver = null;
 
-    private MapControl mc;
-    private WizardVectorialDB parent = null;
-    private boolean activated = false;
-    private CRSSelectPanel jPanelProj;
+	private UserSelectedFieldsPanel selectedFieldsPanel = null;
+	private UserTableSettingsPanel tableSettingsPanel = null;
+	private IVectorialDatabaseDriver driver = null;
 
-    public TablesListItem(String name, IVectorialDatabaseDriver drv, IConnection _conn,
-        MapControl _mc, WizardVectorialDB _parent) {
-    	
-    	super(name, null,  _conn);
-        setText(name);
-        driver = drv;
-        mc = _mc;
-        parent = _parent;
-    }
+	private MapControl mc;
+	private WizardVectorialDB parent = null;
+	private boolean activated = false;
+	private CRSSelectPanel jPanelProj;
 
-    public void activate() {
-        activated = true;
-        selectedFieldsPanel.loadValues();
-        tableSettingsPanel.loadValues();
-    }
+	public TablesListItem(String name, IVectorialDatabaseDriver drv,
+			IConnection _conn, MapControl _mc, WizardVectorialDB _parent) {
 
-    public boolean isActivated() {
-        return activated;
-    }
+		super(name, null, _conn);
+		setText(name);
+		driver = drv;
+		mc = _mc;
+		parent = _parent;
+	}
 
-    /**
-     * Tells whether this item prevents the wizard from being in a valid final state.
-     * @return whether this item prevents the wizard from being in a valid final state.
-     */
-    public boolean disturbsWizardValidity() {
-        if (isSelected()) {
-            return (!hasValidValues());
-        }
-        else {
-            return false;
-        }
-    }
+	public void activate() {
+		activated = true;
+		selectedFieldsPanel.loadValues();
+		tableSettingsPanel.loadValues();
+	}
 
-    private boolean hasValidValues() {
-        return tableSettingsPanel.hasValidValues();
-    }
+	public boolean isActivated() {
+		return activated;
+	}
 
+	/**
+	 * Tells whether this item prevents the wizard from being in a valid final
+	 * state.
+	 * 
+	 * @return whether this item prevents the wizard from being in a valid final
+	 *         state.
+	 */
+	public boolean disturbsWizardValidity() {
+		if (isSelected()) {
+			return (!hasValidValues());
+		} else {
+			return false;
+		}
+	}
 
-    public void setEnabledPanels(boolean b) {
-        selectedFieldsPanel.enableControls(b);
-        tableSettingsPanel.enableControls(b);
-    }
+	private boolean hasValidValues() {
+		return tableSettingsPanel.hasValidValues();
+	}
 
-    public UserSelectedFieldsPanel getUserSelectedFieldsPanel()
-        throws DBException {
-        if (selectedFieldsPanel == null) {
-            String[] allf = driver.getAllFields(conn, tableName);
-            String[] allt = driver.getAllFieldTypeNames(conn, tableName);
-            selectedFieldsPanel = new UserSelectedFieldsPanel(allf, allt, true,
-                    parent);
-        }
+	public void setEnabledPanels(boolean b) {
+		selectedFieldsPanel.enableControls(b);
+		tableSettingsPanel.enableControls(b);
+	}
 
-        return selectedFieldsPanel;
-    }
+	public UserSelectedFieldsPanel getUserSelectedFieldsPanel()
+			throws DBException {
+		if (selectedFieldsPanel == null) {
+			String[] allf = driver.getAllFields(conn, tableName);
+			String[] allt = driver.getAllFieldTypeNames(conn, tableName);
+			selectedFieldsPanel = new UserSelectedFieldsPanel(allf, allt, true,
+					parent);
+		}
 
-    public UserTableSettingsPanel getUserTableSettingsPanel(String espView)
-        throws DBException {
-        if (tableSettingsPanel == null) {
+		return selectedFieldsPanel;
+	}
 
-        	String[] ids = new String[0];
-        	try {
-        		ids = driver.getIdFieldsCandidates(conn, tableName);
-        	} catch (DBException se) {
-        		String msg = PluginServices.getText(this, "id_not_available") + " " + tableName
-        		+ ":\n" + se.getMessage();
-        		String title = PluginServices.getText(this, "id_error");
-        		JOptionPane.showMessageDialog(parent, msg, title, JOptionPane.ERROR_MESSAGE);
-        		setSelected(false);
-        		throw se;
-        	}
+	public UserTableSettingsPanel getUserTableSettingsPanel(String espView)
+			throws DBException {
+		if (tableSettingsPanel == null) {
 
-        	String[] geos = new String[0];
-        	try {
-        		geos = driver.getGeometryFieldsCandidates(conn, tableName);
-        	} catch (DBException se) {
-        		String msg = PluginServices.getText(this, "geo_field_not_available")
-        		+ ":\n" + PluginServices.getText(this, se.getMessage()) + ": " + tableName;
-        		String title = PluginServices.getText(this, "geo_field_error");
-        		JOptionPane.showMessageDialog(parent, msg, title, JOptionPane.ERROR_MESSAGE);
-        		setSelected(false);
-        		throw se;
-        	}
+			String[] ids = new String[0];
+			try {
+				ids = driver.getIdFieldsCandidates(conn, tableName);
+			} catch (DBException se) {
+				String msg = PluginServices.getText(this, "id_not_available")
+						+ " " + tableName + ":\n" + se.getMessage();
+				String title = PluginServices.getText(this, "id_error");
+				JOptionPane.showMessageDialog(parent, msg, title,
+						JOptionPane.ERROR_MESSAGE);
+				setSelected(false);
+				throw se;
+			}
 
-            int ids_size = ids.length;
-            FieldComboItem[] ids_ci = new FieldComboItem[ids_size];
+			String[] geos = new String[0];
+			try {
+				geos = driver.getGeometryFieldsCandidates(conn, tableName);
+			} catch (DBException se) {
+				String msg = PluginServices.getText(this,
+						"geo_field_not_available")
+						+ ":\n"
+						+ PluginServices.getText(this, se.getMessage())
+						+ ": "
+						+ tableName;
+				String title = PluginServices.getText(this, "geo_field_error");
+				JOptionPane.showMessageDialog(parent, msg, title,
+						JOptionPane.ERROR_MESSAGE);
+				setSelected(false);
+				throw se;
+			}
 
-            for (int i = 0; i < ids_size; i++)
-                ids_ci[i] = new FieldComboItem(ids[i]);
+			int ids_size = ids.length;
+			FieldComboItem[] ids_ci = new FieldComboItem[ids_size];
 
-            int geos_size = geos.length;
-            FieldComboItem[] geos_ci = new FieldComboItem[geos_size];
+			for (int i = 0; i < ids_size; i++)
+				ids_ci[i] = new FieldComboItem(ids[i]);
 
-            for (int i = 0; i < geos_size; i++)
-                geos_ci[i] = new FieldComboItem(geos[i]);
+			int geos_size = geos.length;
+			FieldComboItem[] geos_ci = new FieldComboItem[geos_size];
 
-            tableSettingsPanel = new UserTableSettingsPanel(ids_ci, geos_ci,
-            		  tableName, mc, true, parent, projectionPanel(espView,ids_ci,geos_ci));
-        }
+			for (int i = 0; i < geos_size; i++)
+				geos_ci[i] = new FieldComboItem(geos[i]);
 
-        return tableSettingsPanel;
-    }
-    public CRSSelectPanel projectionPanel(String espView,
+			tableSettingsPanel = new UserTableSettingsPanel(ids_ci, geos_ci,
+					tableName, mc, true, parent, projectionPanel(espView,
+							ids_ci, geos_ci));
+		}
+
+		return tableSettingsPanel;
+	}
+
+	public CRSSelectPanel projectionPanel(String espView,
 			FieldComboItem[] ids_ci, FieldComboItem[] geos_ci) {
 		CoordinateReferenceSystem crs = AddLayerDialog.getLastCrs();
 		if (driver instanceof ICanReproject) {
@@ -196,11 +203,11 @@ public class TablesListItem extends TablesListItemSimple {
 				}
 				lyrDef.setSchema(schema);
 				lyrDef.setTableName(tableName);
-				if (ids_ci.length > 0){
+				if (ids_ci.length > 0) {
 					String fidField = ids_ci[0].toString();
 					lyrDef.setFieldID(fidField);
 				}
-				if (geos_ci.length > 0){
+				if (geos_ci.length > 0) {
 					String geomField = geos_ci[0].toString();
 					lyrDef.setFieldGeometry(geomField);
 				}
@@ -209,14 +216,13 @@ public class TablesListItem extends TablesListItemSimple {
 				lyrDef.setSRID_EPSG(strEPSG);
 				((ICanReproject) driver).setDestProjection(strEPSG);
 
-
-				String srcProjection = ((ICanReproject) driver).getSourceProjection(conn,
-						lyrDef);
+				String srcProjection = ((ICanReproject) driver)
+						.getSourceProjection(conn, lyrDef);
 				if (srcProjection != null && srcProjection.length() > 0
 						&& !srcProjection.equals("-1")) {
 
 					crs = ProjectionUtils.getCRS("EPSG:" + srcProjection);
-				} else{
+				} else {
 					crs = null;
 				}
 			} catch (Exception e) {
@@ -225,26 +231,27 @@ public class TablesListItem extends TablesListItemSimple {
 		}
 		return getJPanelProj(crs);
 	}
-    private CRSSelectPanel getJPanelProj(CoordinateReferenceSystem crs) {
-//		if (jPanelProj == null) {
-//			IProjection proj = CRSFactory.getCRS("EPSG:23030");
-//			if (PluginServices.getMainFrame() != null) {
-//				proj = FOpenDialog.getLastProjection();
-//			}
-			jPanelProj = CRSSelectPanel.getPanel(crs);
 
-			jPanelProj.setTransPanelActive(true);
-			jPanelProj.setBounds(new java.awt.Rectangle(210, 22, 280, 32));
-			jPanelProj.setPreferredSize(new java.awt.Dimension(448,35));
-			jPanelProj.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-			        if (jPanelProj.isOkPressed()) {
-			        	AddLayerDialog.setLastCrs(jPanelProj.getCurrentCrs());
-			        }
+	private CRSSelectPanel getJPanelProj(CoordinateReferenceSystem crs) {
+		// if (jPanelProj == null) {
+		// IProjection proj = CRSFactory.getCRS("EPSG:23030");
+		// if (PluginServices.getMainFrame() != null) {
+		// proj = FOpenDialog.getLastProjection();
+		// }
+		jPanelProj = CRSSelectPanel.getPanel(crs);
+
+		jPanelProj.setTransPanelActive(true);
+		jPanelProj.setBounds(new java.awt.Rectangle(210, 22, 280, 32));
+		jPanelProj.setPreferredSize(new java.awt.Dimension(448, 35));
+		jPanelProj.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+				if (jPanelProj.isOkPressed()) {
+					AddLayerDialog.setLastCrs(jPanelProj.getCurrentCrs());
 				}
-			});
+			}
+		});
 
-//		}
+		// }
 
 		return jPanelProj;
 	}

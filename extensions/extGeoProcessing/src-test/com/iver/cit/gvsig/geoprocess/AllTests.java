@@ -11,10 +11,10 @@ public class AllTests {
 	public static Test suite() {
 		TestSuite suite = new TestSuite(
 				"Test for com.iver.cit.gvsig.geoprocess");
-		//$JUnit-BEGIN$
+		// $JUnit-BEGIN$
 		suite.addTestSuite(BufferTest.class);
 		suite.addTestSuite(DifferenceTest.class);
-		//$JUnit-END$
+		// $JUnit-END$
 		return suite;
 	}
 

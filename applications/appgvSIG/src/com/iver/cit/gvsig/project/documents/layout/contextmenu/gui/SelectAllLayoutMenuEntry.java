@@ -44,10 +44,9 @@ import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.project.documents.layout.LayoutContext;
 import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 
-
 /**
  * Realiza selección de todos los FFrames del Layout.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class SelectAllLayoutMenuEntry extends AbstractLayoutContextMenuAction {
@@ -67,21 +66,22 @@ public class SelectAllLayoutMenuEntry extends AbstractLayoutContextMenuAction {
 		return PluginServices.getText(this, "seleccionar_todos");
 	}
 
-	public boolean isEnabled(LayoutContext layoutContext, IFFrame[] selectedFrames) {
+	public boolean isEnabled(LayoutContext layoutContext,
+			IFFrame[] selectedFrames) {
 		return true;
 	}
 
-	public boolean isVisible(LayoutContext layoutContext, IFFrame[] selectedFrames) {
-		if (!(getLayout().getLayoutControl().getGeometryAdapter().getPoints().length>0))
+	public boolean isVisible(LayoutContext layoutContext,
+			IFFrame[] selectedFrames) {
+		if (!(getLayout().getLayoutControl().getGeometryAdapter().getPoints().length > 0))
 			return true;
 		return false;
 	}
 
-
 	public void execute(LayoutContext layoutContext, IFFrame[] selectedFrames) {
-		IFFrame[] fframes=layoutContext.getFFrames();
+		IFFrame[] fframes = layoutContext.getFFrames();
 		for (int i = fframes.length - 1; i >= 0; i--) {
-			IFFrame fframe =fframes[i];
+			IFFrame fframe = fframes[i];
 			fframe.setSelected(true);
 		}
 		layoutContext.callLayoutDrawListeners();

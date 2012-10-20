@@ -45,10 +45,10 @@ import com.iver.cit.gvsig.project.documents.layout.LayoutContext;
 import com.iver.cit.gvsig.project.documents.layout.fframes.FFrameLegend;
 import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 
-
 /**
- * Realiza una simplificación de una leyenda previamente seleccionada en símbolos y textos.
- *
+ * Realiza una simplificación de una leyenda previamente seleccionada en
+ * símbolos y textos.
+ * 
  * @author Vicente Caballero Navarro
  */
 public class SimplifyLayoutMenuEntry extends AbstractLayoutContextMenuAction {
@@ -68,19 +68,22 @@ public class SimplifyLayoutMenuEntry extends AbstractLayoutContextMenuAction {
 		return PluginServices.getText(this, "simplificar_leyenda");
 	}
 
-	public boolean isEnabled(LayoutContext layoutContext, IFFrame[] selectedFrames) {
+	public boolean isEnabled(LayoutContext layoutContext,
+			IFFrame[] selectedFrames) {
 		return true;
 	}
 
-	public boolean isVisible(LayoutContext layoutContext, IFFrame[] selectedFrames) {
-		for (int i=0;i<selectedFrames.length;i++) {
-			if (selectedFrames[i] instanceof FFrameLegend && !(getLayout().getLayoutControl().getGeometryAdapter().getPoints().length>0)) {
+	public boolean isVisible(LayoutContext layoutContext,
+			IFFrame[] selectedFrames) {
+		for (int i = 0; i < selectedFrames.length; i++) {
+			if (selectedFrames[i] instanceof FFrameLegend
+					&& !(getLayout().getLayoutControl().getGeometryAdapter()
+							.getPoints().length > 0)) {
 				return true;
 			}
 		}
 		return false;
 	}
-
 
 	public void execute(LayoutContext layoutContext, IFFrame[] selectedFrames) {
 		layoutContext.getEFS().startComplexCommand();
@@ -90,7 +93,8 @@ public class SimplifyLayoutMenuEntry extends AbstractLayoutContextMenuAction {
 				((FFrameLegend) fframe).toFFrames(layoutContext);
 			}
 		}
-		layoutContext.getEFS().endComplexCommand(PluginServices.getText(this,"simplify"));
+		layoutContext.getEFS().endComplexCommand(
+				PluginServices.getText(this, "simplify"));
 		layoutContext.callLayoutDrawListeners();
 	}
 }

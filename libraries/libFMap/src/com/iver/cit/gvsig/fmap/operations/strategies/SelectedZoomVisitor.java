@@ -51,10 +51,9 @@ import com.iver.cit.gvsig.fmap.layers.FBitSet;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.AlphanumericData;
 
-
 /**
  * Visitor de zoom a lo seleccionado.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class SelectedZoomVisitor implements FeatureVisitor {
@@ -63,15 +62,18 @@ public class SelectedZoomVisitor implements FeatureVisitor {
 
 	/**
 	 * Inicializa el visitor.
-	 *
-	 * @param layer Capa.
-	 *
+	 * 
+	 * @param layer
+	 *            Capa.
+	 * 
 	 * @return True si se inicializa correctamente.
 	 */
 	public boolean start(FLayer layer) throws StartVisitorException {
-		if (layer instanceof AlphanumericData) {//TODO Esta comprobación se hacia con Selectable
+		if (layer instanceof AlphanumericData) {// TODO Esta comprobación se
+												// hacia con Selectable
 			try {
-				bitset = ((AlphanumericData) layer).getRecordset().getSelection();
+				bitset = ((AlphanumericData) layer).getRecordset()
+						.getSelection();
 			} catch (ReadDriverException e) {
 				e.printStackTrace();
 			}
@@ -84,17 +86,19 @@ public class SelectedZoomVisitor implements FeatureVisitor {
 
 	/**
 	 * Finaliza el visitor.
-	 *
-	 * @param layer Capa.
+	 * 
+	 * @param layer
+	 *            Capa.
 	 */
 	public void stop(FLayer layer) throws VisitorException {
 	}
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.operations.strategies.FeatureVisitor#visit(com.iver.cit.gvsig.fmap.core.IGeometry,
-	 * 		int)
+	 *      int)
 	 */
-	public void visit(IGeometry g, int index) throws VisitorException, ProcessVisitorException {
+	public void visit(IGeometry g, int index) throws VisitorException,
+			ProcessVisitorException {
 		if (bitset.get(index)) {
 			if (rectangle == null) {
 				rectangle = (Rectangle2D) g.getBounds2D().clone();
@@ -107,7 +111,7 @@ public class SelectedZoomVisitor implements FeatureVisitor {
 	/**
 	 * Devuelve el Extent de los shapes seleccionados, y si no hay ningún shape
 	 * seleccionado devuelve null.
-	 *
+	 * 
 	 * @return Extent de los shapes seleccionados.
 	 */
 	public Rectangle2D getSelectBound() {

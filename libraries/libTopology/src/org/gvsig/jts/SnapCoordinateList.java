@@ -62,7 +62,7 @@ import com.vividsolutions.jts.geom.CoordinateList;
  * 
  * 
  * FIXME There could be coordinates non consecutives at a distance slower than
- * snap tolerance. 
+ * snap tolerance.
  * 
  * @author azabala
  * 
@@ -72,8 +72,7 @@ public class SnapCoordinateList extends CoordinateList {
 	private static final long serialVersionUID = 8784078431309170433L;
 
 	private double snapTolerance;
-	
-	
+
 	public SnapCoordinateList(double snapTolerance) {
 		super();
 		this.snapTolerance = snapTolerance;
@@ -82,13 +81,11 @@ public class SnapCoordinateList extends CoordinateList {
 	public SnapCoordinateList(Coordinate[] coord, double snapTolerance) {
 		super();
 		this.snapTolerance = snapTolerance;
-		add(coord, false);//by default doesnt allow repeated coords
+		add(coord, false);// by default doesnt allow repeated coords
 	}
 
-	
-	public SnapCoordinateList(Coordinate[] coord, 
-							double snapTolerance, 
-							boolean allowRepeated) {
+	public SnapCoordinateList(Coordinate[] coord, double snapTolerance,
+			boolean allowRepeated) {
 		super();
 		this.snapTolerance = snapTolerance;
 		add(coord, allowRepeated);
@@ -105,30 +102,31 @@ public class SnapCoordinateList extends CoordinateList {
 	public void add(Coordinate coord, boolean allowRepeated) {
 		// don't add duplicate coordinates
 		if (!allowRepeated) {
-// with this code we only filter consecutive snapped points			
-//			if (size() >= 1) {
-//				Coordinate last = (Coordinate) get(size() - 1);
-//				if(SnapCGAlgorithms.snapEquals2D(last, coord, snapTolerance))
-//					return;
-//			}//if
+			// with this code we only filter consecutive snapped points
+			// if (size() >= 1) {
+			// Coordinate last = (Coordinate) get(size() - 1);
+			// if(SnapCGAlgorithms.snapEquals2D(last, coord, snapTolerance))
+			// return;
+			// }//if
 			int size = size();
 			/*
-			 If size == 1, we check the existing point,
-			 if size > 1, we dont check the first point (because closed geometries
-			 musnt snap the first and last point
-			 * */
-			if(size > 1){
-				for(int i = 1; i < size; i++){
+			 * If size == 1, we check the existing point, if size > 1, we dont
+			 * check the first point (because closed geometries musnt snap the
+			 * first and last point
+			 */
+			if (size > 1) {
+				for (int i = 1; i < size; i++) {
 					Coordinate coordinate = (Coordinate) get(i);
-					if(SnapCGAlgorithms.snapEquals2D(coordinate, coord, snapTolerance))
+					if (SnapCGAlgorithms.snapEquals2D(coordinate, coord,
+							snapTolerance))
 						return;
 				}
-			}else if(size == 1){
+			} else if (size == 1) {
 				Coordinate last = (Coordinate) get(0);
-				if(SnapCGAlgorithms.snapEquals2D(last, coord, snapTolerance))
+				if (SnapCGAlgorithms.snapEquals2D(last, coord, snapTolerance))
 					return;
 			}
-		}//if
+		}// if
 		super.add(coord);
 	}
 }

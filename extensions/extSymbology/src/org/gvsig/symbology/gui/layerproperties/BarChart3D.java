@@ -41,10 +41,7 @@
 package org.gvsig.symbology.gui.layerproperties;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.Types;
-import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -53,27 +50,21 @@ import javax.swing.JPanel;
 import org.gvsig.gui.beans.swing.GridBagLayoutPanel;
 import org.gvsig.gui.beans.swing.JIncrementalNumberField;
 import org.gvsig.symbology.fmap.rendering.BarChart3DLegend;
-import org.gvsig.symbology.fmap.symbols.BarChart3DSymbol;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.fmap.core.FShape;
-import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.fmap.rendering.ILegend;
-import com.iver.cit.gvsig.gui.styling.EditorTool;
-import com.iver.cit.gvsig.gui.styling.SymbolEditor;
-import com.iver.cit.gvsig.project.documents.view.legend.gui.ILegendPanel;
 
 /**
  * 
  * BarChart3D.java
- *
+ * 
  * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Jul 18, 2008
- *
+ * 
  */
 public class BarChart3D extends ProportionalSymbols {
 	private JIncrementalNumberField incrSize;
@@ -90,7 +81,6 @@ public class BarChart3D extends ProportionalSymbols {
 	public ImageIcon getIcon() {
 		return null;
 	}
-
 
 	public ILegend getLegend() {
 		return null;
@@ -115,9 +105,11 @@ public class BarChart3D extends ProportionalSymbols {
 	/**
 	 * Checks if an specific field contains numerical data
 	 * 
-	 * @param fieldType	index of the field
+	 * @param fieldType
+	 *            index of the field
 	 * 
-	 * @return boolean	true or false depending on the type of data (numerical or not)
+	 * @return boolean true or false depending on the type of data (numerical or
+	 *         not)
 	 */
 	private boolean isNumericField(int fieldType) {
 		switch (fieldType) {
@@ -160,38 +152,30 @@ public class BarChart3D extends ProportionalSymbols {
 	private void initialize() {
 		{
 			GridBagLayoutPanel p = new GridBagLayoutPanel();
-			p.setBorder(BorderFactory.createTitledBorder(PluginServices.getText(this, "pie_properties")));
-			p.addComponent(
-					PluginServices.getText(this, "size"),
-					incrSize = new JIncrementalNumberField(
-							"25",
-							7,
-							0.001,
-							Double.POSITIVE_INFINITY,
-							1)
-			);
+			p.setBorder(BorderFactory.createTitledBorder(PluginServices
+					.getText(this, "pie_properties")));
+			p.addComponent(PluginServices.getText(this, "size"),
+					incrSize = new JIncrementalNumberField("25", 7, 0.001,
+							Double.POSITIVE_INFINITY, 1));
 
 			((JPanel) getComponent(0)).add(p, BorderLayout.SOUTH);
 		}
 	}
 
-
-	/*	@Override
-	public ISymbol getLayer() {
-		BarChart3DSymbol layer = new BarChart3DSymbol();
-		layer.setSize(incrSize.getDouble());
-		layer.setRowKeys(new String[] { "row1", "row2", "row3" });
-		layer.setColumnKeys(new String[] { "col1", "col2", "col3" });
-		layer.setValues( new double[] { 23, 61, 16 });
-
-		return layer;
-	}*/
+	/*
+	 * @Override public ISymbol getLayer() { BarChart3DSymbol layer = new
+	 * BarChart3DSymbol(); layer.setSize(incrSize.getDouble());
+	 * layer.setRowKeys(new String[] { "row1", "row2", "row3" });
+	 * layer.setColumnKeys(new String[] { "col1", "col2", "col3" });
+	 * layer.setValues( new double[] { 23, 61, 16 });
+	 * 
+	 * return layer; }
+	 */
 
 	@Override
 	public String getName() {
 		return PluginServices.getText(this, "barchart_3D");
 	}
-
 
 	public void setData(FLayer lyr, ILegend legend) {
 		// TODO Auto-generated method stub

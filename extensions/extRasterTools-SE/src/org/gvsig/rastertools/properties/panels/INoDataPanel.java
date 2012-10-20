@@ -17,8 +17,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
  */
 package org.gvsig.rastertools.properties.panels;
+
 /**
- * Interfaz que debe implementar el panel que quiere recibir los eventos del 
+ * Interfaz que debe implementar el panel que quiere recibir los eventos del
  * cambio de valores noData en el panel NoDataPanel.
  * 
  * @version 21/05/2008
@@ -26,8 +27,9 @@ package org.gvsig.rastertools.properties.panels;
  */
 public interface INoDataPanel {
 	/**
-	 * Evento que se lanza cuando cambia el origen del NoDataValue.
-	 * Posibles valores: General, Banda o personalizado
+	 * Evento que se lanza cuando cambia el origen del NoDataValue. Posibles
+	 * valores: General, Banda o personalizado
+	 * 
 	 * @param noDataPanel
 	 * @param newIndex
 	 */
@@ -35,6 +37,7 @@ public interface INoDataPanel {
 
 	/**
 	 * Evento que se lanza cuando cambia la seleccion de una banda en el combo
+	 * 
 	 * @param noDataPanel
 	 * @param newIndex
 	 */

@@ -53,35 +53,38 @@ import org.gvsig.rastertools.properties.control.BandSelectorListener;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
+
 /**
  * Selecciona las bandas visibles en un raster. Contiene una tabla con una fila
  * por cada banda de la imagen. Por medio de checkbox se selecciona para cada
  * RGB que banda de la imagen será visualizada.
- *
-
+ * 
+ * 
  * @author Nacho Brodin (brodin_ign@gva.es)
  */
-public class BandSelectorPanel extends AbstractPanel implements TableModelListener {
-	final private static long       serialVersionUID = -3370601314380922368L;
+public class BandSelectorPanel extends AbstractPanel implements
+		TableModelListener {
+	final private static long serialVersionUID = -3370601314380922368L;
 
-	private final String[]          columnNames       = { "A", "R", "G", "B", "Band" };
-	private final int[]             columnWidths      = { 22, 22, 22, 22, 334 };
+	private final String[] columnNames = { "A", "R", "G", "B", "Band" };
+	private final int[] columnWidths = { 22, 22, 22, 22, 334 };
 
-	FLayer                          fLayer = null;
+	FLayer fLayer = null;
 
-	private BandSelectorFileList    fileList          = null;
+	private BandSelectorFileList fileList = null;
 
-	// Ultima y penultima columnas activadas del jtable para cuando hay 2 bandas seleccionadas en el combo
-	private int[]                   col               = { 0, 1 };
-	private BandSelectorListener    panelListener     = null;
-	private IRasterProperties       prop              = null;
-	private IRasterDataset          dataset           = null;
-	private IRasterRendering        render            = null;
-	private TableContainer          table             = null;
-	private JButton                 saveButton        = null;
+	// Ultima y penultima columnas activadas del jtable para cuando hay 2 bandas
+	// seleccionadas en el combo
+	private int[] col = { 0, 1 };
+	private BandSelectorListener panelListener = null;
+	private IRasterProperties prop = null;
+	private IRasterDataset dataset = null;
+	private IRasterRendering render = null;
+	private TableContainer table = null;
+	private JButton saveButton = null;
 
-	private JPanel                  buttonsPanel      = null;
-	private JComboBox		        jComboBox = null;
+	private JPanel buttonsPanel = null;
+	private JComboBox jComboBox = null;
 
 	/**
 	 * This method initializes
@@ -94,7 +97,7 @@ public class BandSelectorPanel extends AbstractPanel implements TableModelListen
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	protected void initialize() {
@@ -102,37 +105,39 @@ public class BandSelectorPanel extends AbstractPanel implements TableModelListen
 		setLayout(new GridBagLayout());
 		gbc.insets = new Insets(0, 0, 0, 0);
 		gbc.fill = GridBagConstraints.BOTH;
-		
+
 		gbc.weightx = 1.0;
 		gbc.weighty = 1.0;
 		add(getFileList(), gbc);
-		
+
 		gbc.gridy = 1;
 		add(getARGBTable(), gbc);
-		
+
 		gbc.weighty = 0;
 		gbc.gridy = 2;
 		gbc.fill = GridBagConstraints.EAST;
 		gbc.anchor = GridBagConstraints.EAST;
 		gbc.insets = new Insets(0, 0, 0, 8);
 		add(getButtonsPanel(), gbc);
-		
-		this.setPreferredSize(new Dimension(100, 80)); 
+
+		this.setPreferredSize(new Dimension(100, 80));
 		super.setLabel(PluginServices.getText(this, "bands_panel"));
 	}
-	
+
 	/**
 	 * Obtiene el panel que contiene la lista de ficheros por banda.
+	 * 
 	 * @return Panel FileList
 	 */
 	public BandSelectorFileList getFileList() {
-		if (fileList == null) 
+		if (fileList == null)
 			fileList = new BandSelectorFileList();
 		return fileList;
 	}
-	
+
 	/**
 	 * Obtiene la Tabla
+	 * 
 	 * @return Tabla de bandas de la imagen
 	 */
 	public TableContainer getARGBTable() {
@@ -147,9 +152,10 @@ public class BandSelectorPanel extends AbstractPanel implements TableModelListen
 		}
 		return table;
 	}
-	
+
 	/**
-	 * Obtiene el Panel con botón de salvado y selector de bandas. 
+	 * Obtiene el Panel con botón de salvado y selector de bandas.
+	 * 
 	 * @return JPanel
 	 */
 	public JPanel getButtonsPanel() {
@@ -169,8 +175,12 @@ public class BandSelectorPanel extends AbstractPanel implements TableModelListen
 			gbc.insets = new Insets(0, 8, 0, 0);
 			gbc.fill = GridBagConstraints.BOTH;
 			gbc.gridx = 1;
-			getNumBandSelectorCombo().setMinimumSize(new Dimension(50, getNumBandSelectorCombo().getMinimumSize().height));
-			getNumBandSelectorCombo().setPreferredSize(new Dimension(50, getNumBandSelectorCombo().getMinimumSize().height));
+			getNumBandSelectorCombo().setMinimumSize(
+					new Dimension(50, getNumBandSelectorCombo()
+							.getMinimumSize().height));
+			getNumBandSelectorCombo().setPreferredSize(
+					new Dimension(50, getNumBandSelectorCombo()
+							.getMinimumSize().height));
 			buttonsPanel.add(getNumBandSelectorCombo(), gbc);
 
 			gbc = new GridBagConstraints();
@@ -182,9 +192,10 @@ public class BandSelectorPanel extends AbstractPanel implements TableModelListen
 		}
 		return buttonsPanel;
 	}
-	
+
 	/**
 	 * Obtiene el combo del selector del número de bandas
+	 * 
 	 * @return JComboBox
 	 */
 	public JComboBox getNumBandSelectorCombo() {
@@ -197,28 +208,31 @@ public class BandSelectorPanel extends AbstractPanel implements TableModelListen
 
 		return jComboBox;
 	}
-	
+
 	/**
-	 * Botón de salvar la interpretación de color seleccionada como predeterminada en 
-	 * la capa
+	 * Botón de salvar la interpretación de color seleccionada como
+	 * predeterminada en la capa
+	 * 
 	 * @return JButton
 	 */
 	public JButton getSaveButton() {
-		if(saveButton == null) {
+		if (saveButton == null) {
 			saveButton = new JButton(RasterToolsUtil.getText(this, "save"));
-			saveButton.setToolTipText(RasterToolsUtil.getText(this, "save_color_interpretation"));
+			saveButton.setToolTipText(RasterToolsUtil.getText(this,
+					"save_color_interpretation"));
 			saveButton.addActionListener(panelListener);
 		}
 		return saveButton;
 	}
-	
+
 	/**
 	 * Añade la lista de georasterfiles a la tabla
-	 *
+	 * 
 	 * @param files
-	 * @throws NotInitializeException 
+	 * @throws NotInitializeException
 	 */
-	public void addFiles(IRasterDataSource mDataset) throws NotInitializeException {
+	public void addFiles(IRasterDataSource mDataset)
+			throws NotInitializeException {
 		getFileList().clear();
 		clear();
 		for (int i = 0; i < mDataset.getDatasetCount(); i++) {
@@ -262,38 +276,53 @@ public class BandSelectorPanel extends AbstractPanel implements TableModelListen
 
 	/**
 	 * Elimina un fichero de la lista
-	 * @param file Nombre del fichero a eliminar
+	 * 
+	 * @param file
+	 *            Nombre del fichero a eliminar
 	 */
 	public void removeFile(String file) {
 		getFileList().removeFName(file);
 
-		for (int i = 0; i < ((DefaultTableModel) getARGBTable().getModel()).getRowCount(); i++) {
-			// Si el fichero borrado estaba seleccionado como banda visible. Pasaremos
-			// esta visibilidad a la banda inmediata superior y si esta acción produce
+		for (int i = 0; i < ((DefaultTableModel) getARGBTable().getModel())
+				.getRowCount(); i++) {
+			// Si el fichero borrado estaba seleccionado como banda visible.
+			// Pasaremos
+			// esta visibilidad a la banda inmediata superior y si esta acción
+			// produce
 			// una excepción (porque no hay) se pasa al inmediato inferior.
-			if (((String) ((DefaultTableModel) getARGBTable().getModel()).getValueAt(i, 4)).endsWith(file)) {
+			if (((String) ((DefaultTableModel) getARGBTable().getModel())
+					.getValueAt(i, 4)).endsWith(file)) {
 				try {
-					if (((Boolean) ((DefaultTableModel) getARGBTable().getModel()).getValueAt(i, 0)).booleanValue()) {
-						((DefaultTableModel) getARGBTable().getModel()).setValueAt(new Boolean(true), i - 1, 1);
+					if (((Boolean) ((DefaultTableModel) getARGBTable()
+							.getModel()).getValueAt(i, 0)).booleanValue()) {
+						((DefaultTableModel) getARGBTable().getModel())
+								.setValueAt(new Boolean(true), i - 1, 1);
 					}
 				} catch (ArrayIndexOutOfBoundsException exc) {
-					((DefaultTableModel) getARGBTable().getModel()).setValueAt(new Boolean(true), i + 1, 1);
+					((DefaultTableModel) getARGBTable().getModel()).setValueAt(
+							new Boolean(true), i + 1, 1);
 				}
 
 				try {
-					if (((Boolean) ((DefaultTableModel) getARGBTable().getModel()).getValueAt(i, 1)).booleanValue()) {
-						((DefaultTableModel) getARGBTable().getModel()).setValueAt(new Boolean(true), i - 1, 2);
+					if (((Boolean) ((DefaultTableModel) getARGBTable()
+							.getModel()).getValueAt(i, 1)).booleanValue()) {
+						((DefaultTableModel) getARGBTable().getModel())
+								.setValueAt(new Boolean(true), i - 1, 2);
 					}
 				} catch (ArrayIndexOutOfBoundsException exc) {
-					((DefaultTableModel) getARGBTable().getModel()).setValueAt(new Boolean(true), i + 1, 2);
+					((DefaultTableModel) getARGBTable().getModel()).setValueAt(
+							new Boolean(true), i + 1, 2);
 				}
 
 				try {
-					if (((Boolean) ((DefaultTableModel) getARGBTable().getModel()).getValueAt(i, 2)).booleanValue()) {
-						((DefaultTableModel) getARGBTable().getModel()).setValueAt(new Boolean(true), i - 1, 3);
+					if (((Boolean) ((DefaultTableModel) getARGBTable()
+							.getModel()).getValueAt(i, 2)).booleanValue()) {
+						((DefaultTableModel) getARGBTable().getModel())
+								.setValueAt(new Boolean(true), i - 1, 3);
 					}
 				} catch (ArrayIndexOutOfBoundsException exc) {
-					((DefaultTableModel) getARGBTable().getModel()).setValueAt(new Boolean(true), i + 1, 3);
+					((DefaultTableModel) getARGBTable().getModel()).setValueAt(
+							new Boolean(true), i + 1, 3);
 				}
 
 				((DefaultTableModel) getARGBTable().getModel()).removeRow(i);
@@ -303,12 +332,12 @@ public class BandSelectorPanel extends AbstractPanel implements TableModelListen
 		panelListener.setNewBandsPositionInRendering();
 		evaluateControlsEnabled();
 	}
-	
+
 	/**
 	 * Evalua la habilitación o desabilitación de controles
 	 */
 	public void evaluateControlsEnabled() {
-		if(getFileList().getNFiles() > 1)
+		if (getFileList().getNFiles() > 1)
 			getSaveButton().setEnabled(false);
 		else
 			getSaveButton().setEnabled(true);
@@ -316,8 +345,9 @@ public class BandSelectorPanel extends AbstractPanel implements TableModelListen
 
 	/**
 	 * Cuando cambiamos el combo de seleccion de numero de bandas a visualizar
-	 * debemos resetear la tabla de checkbox para que no haya activados más de los
-	 * permitidos
+	 * debemos resetear la tabla de checkbox para que no haya activados más de
+	 * los permitidos
+	 * 
 	 * @param mode
 	 */
 	public void resetMode(int mode) {
@@ -330,18 +360,18 @@ public class BandSelectorPanel extends AbstractPanel implements TableModelListen
 		// Asignamos los valores
 		if (getNBands() >= 1) {
 			switch (mode) {
-				case 3:
-					int b = 2;
-					if (getNBands() < 3)
-						b = getNBands() - 1;
-					model.setValueAt(Boolean.TRUE, b, 3);
-				case 2:
-					int g = 1;
-					if (getNBands() == 1)
-						g = 0;
-					model.setValueAt(Boolean.TRUE, g, 2);
-				case 1:
-					model.setValueAt(Boolean.TRUE, 0, 1);
+			case 3:
+				int b = 2;
+				if (getNBands() < 3)
+					b = getNBands() - 1;
+				model.setValueAt(Boolean.TRUE, b, 3);
+			case 2:
+				int g = 1;
+				if (getNBands() == 1)
+					g = 0;
+				model.setValueAt(Boolean.TRUE, g, 2);
+			case 1:
+				model.setValueAt(Boolean.TRUE, 0, 1);
 			}
 		}
 
@@ -352,15 +382,14 @@ public class BandSelectorPanel extends AbstractPanel implements TableModelListen
 	/**
 	 * Añade una banda a la tabla bandas de la imagen asignandole un nombre y
 	 * valor a los checkbox
-	 * @param bandName Nombre de la banda
-	 * @throws NotInitializeException 
+	 * 
+	 * @param bandName
+	 *            Nombre de la banda
+	 * @throws NotInitializeException
 	 */
 	private void addBand(String bandName) throws NotInitializeException {
-		Object[] row = {	new Boolean(false), 
-							new Boolean(false), 
-							new Boolean(false), 
-							new Boolean(false), 
-							bandName };
+		Object[] row = { new Boolean(false), new Boolean(false),
+				new Boolean(false), new Boolean(false), bandName };
 		getARGBTable().addRow(row);
 	}
 
@@ -368,7 +397,8 @@ public class BandSelectorPanel extends AbstractPanel implements TableModelListen
 	 * Elimina todas las entradas de la tabla de bandas.
 	 */
 	private void clear() {
-		int rows = ((DefaultTableModel) getARGBTable().getModel()).getRowCount();
+		int rows = ((DefaultTableModel) getARGBTable().getModel())
+				.getRowCount();
 		if (rows > 0) {
 			for (int i = 0; i < rows; i++)
 				((DefaultTableModel) getARGBTable().getModel()).removeRow(0);
@@ -377,7 +407,7 @@ public class BandSelectorPanel extends AbstractPanel implements TableModelListen
 
 	/**
 	 * Obtiene el número de bandas de la lista
-	 *
+	 * 
 	 * @return
 	 */
 	public int getNBands() {
@@ -386,36 +416,43 @@ public class BandSelectorPanel extends AbstractPanel implements TableModelListen
 
 	/**
 	 * Obtiene el nombre de la banda de la posición i de la tabla
-	 *
+	 * 
 	 * @param i
 	 * @return
 	 */
 	public String getBandName(int i) {
-		String s = (String) ((DefaultTableModel) getARGBTable().getModel()).getValueAt(i, 3);
+		String s = (String) ((DefaultTableModel) getARGBTable().getModel())
+				.getValueAt(i, 3);
 		return s.substring(s.lastIndexOf("[8U]") + 5, s.length());
 	}
 
 	/**
 	 * Mantiene la asignación entre R, G o B y la banda de la imagen que le
 	 * corresponde
-	 *
-	 * @param nBand Banda de la imagen que corresponde
-	 * @param flag R, G o B se selecciona por medio de un flag que los identifica
+	 * 
+	 * @param nBand
+	 *            Banda de la imagen que corresponde
+	 * @param flag
+	 *            R, G o B se selecciona por medio de un flag que los identifica
 	 */
 	public void assignBand(int nBand, int flag) {
 		Boolean t = new Boolean(true);
 		try {
 			if ((flag & RasterDataset.ALPHA_BAND) == RasterDataset.ALPHA_BAND)
-				((DefaultTableModel) getARGBTable().getModel()).setValueAt(t, nBand, 0);
-			
+				((DefaultTableModel) getARGBTable().getModel()).setValueAt(t,
+						nBand, 0);
+
 			if ((flag & RasterDataset.RED_BAND) == RasterDataset.RED_BAND)
-				((DefaultTableModel) getARGBTable().getModel()).setValueAt(t, nBand, 1);
+				((DefaultTableModel) getARGBTable().getModel()).setValueAt(t,
+						nBand, 1);
 
 			if ((flag & RasterDataset.GREEN_BAND) == RasterDataset.GREEN_BAND)
-				((DefaultTableModel) getARGBTable().getModel()).setValueAt(t, nBand, 2);
+				((DefaultTableModel) getARGBTable().getModel()).setValueAt(t,
+						nBand, 2);
 
 			if ((flag & RasterDataset.BLUE_BAND) == RasterDataset.BLUE_BAND)
-				((DefaultTableModel) getARGBTable().getModel()).setValueAt(t, nBand, 3);
+				((DefaultTableModel) getARGBTable().getModel()).setValueAt(t,
+						nBand, 3);
 		} catch (ArrayIndexOutOfBoundsException e) {
 
 		}
@@ -423,18 +460,20 @@ public class BandSelectorPanel extends AbstractPanel implements TableModelListen
 
 	/**
 	 * Obtiene la correspondencia entre el R, G o B y la banda asignada
-	 *
-	 * @param flag R, G o B se selecciona por medio de un flag que los identifica
+	 * 
+	 * @param flag
+	 *            R, G o B se selecciona por medio de un flag que los identifica
 	 * @return Banda de la imagen asignada al flag pasado por parámetro
 	 */
 	public int getAssignedBand(int flag) {
-		DefaultTableModel model = ((DefaultTableModel) getARGBTable().getModel());
+		DefaultTableModel model = ((DefaultTableModel) getARGBTable()
+				.getModel());
 		if ((flag & RasterDataset.ALPHA_BAND) == RasterDataset.ALPHA_BAND) {
 			for (int nBand = 0; nBand < getARGBTable().getModel().getRowCount(); nBand++)
 				if (((Boolean) model.getValueAt(nBand, 0)).booleanValue())
 					return nBand;
 		}
-		
+
 		if ((flag & RasterDataset.RED_BAND) == RasterDataset.RED_BAND) {
 			for (int nBand = 0; nBand < getARGBTable().getModel().getRowCount(); nBand++)
 				if (((Boolean) model.getValueAt(nBand, 1)).booleanValue())
@@ -458,39 +497,48 @@ public class BandSelectorPanel extends AbstractPanel implements TableModelListen
 
 	/**
 	 * Obtiene la interpretación de color por número de banda
-	 * @param nBand Número de banda
-	 * @return Interpretación de color. Constante definida en DatasetColorInterpretation
+	 * 
+	 * @param nBand
+	 *            Número de banda
+	 * @return Interpretación de color. Constante definida en
+	 *         DatasetColorInterpretation
 	 */
 	public String getColorInterpretationByBand(int nBand) {
-		DefaultTableModel model = ((DefaultTableModel) getARGBTable().getModel());
+		DefaultTableModel model = ((DefaultTableModel) getARGBTable()
+				.getModel());
 		try {
 			for (int iBand = 0; iBand < getARGBTable().getRowCount(); iBand++) {
 				for (int col = 0; col < 4; col++) {
-					if(((Boolean) model.getValueAt(nBand, col)).booleanValue()) {
+					if (((Boolean) model.getValueAt(nBand, col)).booleanValue()) {
 						switch (col) {
-						case 0: return DatasetColorInterpretation.ALPHA_BAND; 
-						case 1: return DatasetColorInterpretation.RED_BAND; 
-						case 2: return DatasetColorInterpretation.GREEN_BAND;
-						case 3: return DatasetColorInterpretation.BLUE_BAND; 
+						case 0:
+							return DatasetColorInterpretation.ALPHA_BAND;
+						case 1:
+							return DatasetColorInterpretation.RED_BAND;
+						case 2:
+							return DatasetColorInterpretation.GREEN_BAND;
+						case 3:
+							return DatasetColorInterpretation.BLUE_BAND;
 						}
 					}
-				}	
+				}
 			}
 		} catch (NotInitializeException e) {
 			RasterToolsUtil.messageBoxError("table_not_initialize", this, e);
 		}
 		return DatasetColorInterpretation.UNDEF_BAND;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see javax.swing.event.TableModelListener#tableChanged(javax.swing.event.TableModelEvent)
+	 * 
+	 * @see javax.swing.event.TableModelListener#tableChanged(javax.swing.event.
+	 * TableModelEvent)
 	 */
 	public void tableChanged(TableModelEvent e) {
 		getARGBTable().revalidate();
 		revalidate();
 	}
-
 
 	/**
 	 * Activa o desactiva la funcionalidad
@@ -510,8 +558,8 @@ public class BandSelectorPanel extends AbstractPanel implements TableModelListen
 		getARGBTable().setEnabled(enabled);
 
 		// TODO: Mirar el setVisible...
-		if (!fLyrRasterSE.isActionEnabled(IRasterLayerActions.BANDS_FILE_LIST) &&
-				!fLyrRasterSE.isActionEnabled(IRasterLayerActions.BANDS_RGB))
+		if (!fLyrRasterSE.isActionEnabled(IRasterLayerActions.BANDS_FILE_LIST)
+				&& !fLyrRasterSE.isActionEnabled(IRasterLayerActions.BANDS_RGB))
 			setVisible(false);
 		else
 			setVisible(true);
@@ -520,14 +568,17 @@ public class BandSelectorPanel extends AbstractPanel implements TableModelListen
 	}
 
 	/**
-	 * Lee desde el renderizador las bandas que se han dibujado y en que posición se ha hecho.
+	 * Lee desde el renderizador las bandas que se han dibujado y en que
+	 * posición se ha hecho.
 	 */
 	public void readDrawedBands() {
 		if (prop.getRender() != null) {
 			int[] renderBands = render.getRenderBands();
 			GridTransparency transp = render.getRenderTransparency();
-			if(transp != null && transp.isTransparencyActive() && transp.getAlphaBandNumber() != -1)
-				this.assignBand(transp.getAlphaBandNumber(), RasterDataset.ALPHA_BAND);
+			if (transp != null && transp.isTransparencyActive()
+					&& transp.getAlphaBandNumber() != -1)
+				this.assignBand(transp.getAlphaBandNumber(),
+						RasterDataset.ALPHA_BAND);
 			for (int i = 0; i < renderBands.length; i++) {
 				if (renderBands[i] >= 0) {
 					switch (i) {
@@ -535,7 +586,8 @@ public class BandSelectorPanel extends AbstractPanel implements TableModelListen
 						this.assignBand(renderBands[i], RasterDataset.RED_BAND);
 						break;
 					case 1:
-						this.assignBand(renderBands[i], RasterDataset.GREEN_BAND);
+						this.assignBand(renderBands[i],
+								RasterDataset.GREEN_BAND);
 						break;
 					case 2:
 						this.assignBand(renderBands[i], RasterDataset.BLUE_BAND);
@@ -548,6 +600,7 @@ public class BandSelectorPanel extends AbstractPanel implements TableModelListen
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.panels.IPanel#accept()
 	 */
 	public void accept() {
@@ -586,33 +639,36 @@ public class BandSelectorPanel extends AbstractPanel implements TableModelListen
 			aux.add(new Integer(renderBands[i]));
 		}
 		int alphaBand = render.getRenderTransparency().getAlphaBandNumber();
-		getPanelGroup().getProperties().put("alphaBand", new Integer(alphaBand));
+		getPanelGroup().getProperties()
+				.put("alphaBand", new Integer(alphaBand));
 		getPanelGroup().getProperties().put("renderBands", aux);
 	}
-
 
 	/**
 	 * Deja la capa en el último estado guardado y la refresca
 	 */
 	public void restoreStatus() {
-		ArrayList aux = (ArrayList) getPanelGroup().getProperties().get("renderBands");
-		Integer alphaBand = (Integer) getPanelGroup().getProperties().get("alphaBand");
-		
+		ArrayList aux = (ArrayList) getPanelGroup().getProperties().get(
+				"renderBands");
+		Integer alphaBand = (Integer) getPanelGroup().getProperties().get(
+				"alphaBand");
+
 		int[] renderBands = new int[aux.size()];
 		for (int i = 0; i < aux.size(); i++)
 			renderBands[i] = ((Integer) aux.get(i)).intValue();
 
 		render.setRenderBands(renderBands);
-		if(alphaBand != null) {
+		if (alphaBand != null) {
 			// Ultima transparencia aplicada en el renderizador
 			GridTransparency gt = render.getRenderTransparency();
-			if(gt != null) 
+			if (gt != null)
 				gt.setTransparencyBand(alphaBand.intValue());
 
 			// Transparencia del dataset
-//			Transparency t = ((FLyrRasterSE) fLayer).getDataSource().getTransparencyFilesStatus();
-//			if (t != null)
-//				t.setTransparencyBand(alphaBand.intValue());
+			// Transparency t = ((FLyrRasterSE)
+			// fLayer).getDataSource().getTransparencyFilesStatus();
+			// if (t != null)
+			// t.setTransparencyBand(alphaBand.intValue());
 		}
 
 		if (fLayer != null)
@@ -621,6 +677,7 @@ public class BandSelectorPanel extends AbstractPanel implements TableModelListen
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.panels.IPanel#cancel()
 	 */
 	public void cancel() {
@@ -632,7 +689,9 @@ public class BandSelectorPanel extends AbstractPanel implements TableModelListen
 
 	/**
 	 * Activa y desactiva el control
-	 * @param enabled true para activar y false para desactivar
+	 * 
+	 * @param enabled
+	 *            true para activar y false para desactivar
 	 */
 	public void setEnabled(boolean enabled) {
 		if (panelListener != null)
@@ -640,10 +699,13 @@ public class BandSelectorPanel extends AbstractPanel implements TableModelListen
 		getARGBTable().setEnabled(enabled);
 		getFileList().setEnabled(enabled);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.panelGroup.panels.AbstractPanel#setReference(java.lang.Object)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.panelGroup.panels.AbstractPanel#setReference(java
+	 * .lang.Object)
 	 */
 	public void setReference(Object ref) {
 		super.setReference(ref);
@@ -661,16 +723,16 @@ public class BandSelectorPanel extends AbstractPanel implements TableModelListen
 		if (fLayer instanceof IRasterProperties)
 			prop = (IRasterProperties) fLayer;
 
-		//Si tiene tabla de color inicializamos solamente
+		// Si tiene tabla de color inicializamos solamente
 		if (fLayer instanceof IRasterRendering) {
-			render = (IRasterRendering)fLayer;
+			render = (IRasterRendering) fLayer;
 			if (((IRasterRendering) fLayer).existColorTable()) {
 				panelListener.init(null, null, fLayer);
 				return;
 			}
 		}
 
-		//Si no tiene tabla de color se añaden los ficheros e inicializamos
+		// Si no tiene tabla de color se añaden los ficheros e inicializamos
 		if (fLayer instanceof IRasterDataset) {
 			dataset = (IRasterDataset) fLayer;
 			try {
@@ -683,8 +745,15 @@ public class BandSelectorPanel extends AbstractPanel implements TableModelListen
 		panelListener.init(dataset, prop, fLayer);
 	}
 
-	public void componentHidden(ComponentEvent e) {}
-	public void componentShown(ComponentEvent e) {}
-	public void componentMoved(ComponentEvent e) {}
-	public void selected() {}
+	public void componentHidden(ComponentEvent e) {
+	}
+
+	public void componentShown(ComponentEvent e) {
+	}
+
+	public void componentMoved(ComponentEvent e) {
+	}
+
+	public void selected() {
+	}
 }

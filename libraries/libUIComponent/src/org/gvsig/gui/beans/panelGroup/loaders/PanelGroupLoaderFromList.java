@@ -31,20 +31,29 @@ import org.gvsig.gui.beans.panelGroup.panels.AbstractPanel;
 import org.gvsig.gui.beans.panelGroup.panels.IPanel;
 
 /**
- * <p>Panel loader version that doesn't load the panels, only stores and returns them.</p>
- * <p>This loader is useful to mask the load of panels and eliminate the dependence to the extension
- *  points, and, consequently, the dependence between the <i>libUIComponents</i> project to other
- *  projects.</p>
- * <p>This loader is used together with {@link PanelGroupLoaderUtilities PanelGroupLoaderUtilities} (allocated
- * in other project), that is which really loads the panels. First use <code>PanelGroupLoaderUtilities</code>
- * and after <code>PanelGroupLoaderFromList</code>.</p> 
+ * <p>
+ * Panel loader version that doesn't load the panels, only stores and returns
+ * them.
+ * </p>
+ * <p>
+ * This loader is useful to mask the load of panels and eliminate the dependence
+ * to the extension points, and, consequently, the dependence between the
+ * <i>libUIComponents</i> project to other projects.
+ * </p>
+ * <p>
+ * This loader is used together with {@link PanelGroupLoaderUtilities
+ * PanelGroupLoaderUtilities} (allocated in other project), that is which really
+ * loads the panels. First use <code>PanelGroupLoaderUtilities</code> and after
+ * <code>PanelGroupLoaderFromList</code>.
+ * </p>
  * 
  * @see IPanelGroupLoader
- *
+ * 
  * @version 15/10/2007
- * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es) 
+ * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
-public class PanelGroupLoaderFromList implements IPanelGroupLoader, Serializable {
+public class PanelGroupLoaderFromList implements IPanelGroupLoader,
+		Serializable {
 	private static final long serialVersionUID = 3066607004928429045L;
 
 	/**
@@ -53,42 +62,50 @@ public class PanelGroupLoaderFromList implements IPanelGroupLoader, Serializable
 	 * @see #loadPanels()
 	 */
 	private Class<IPanel>[] list;
-	
+
 	/**
-	 * <p>Initializes this loader with the panels.</p>
+	 * <p>
+	 * Initializes this loader with the panels.
+	 * </p>
 	 * 
-	 * @param list array with the panels that this loader supposedly load
+	 * @param list
+	 *            array with the panels that this loader supposedly load
 	 */
 	public PanelGroupLoaderFromList(Class<IPanel>[] list) {
 		this.list = list;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.panelGroup.loaders.IPanelGroupLoader#loadPanels(java.util.ArrayList)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.panelGroup.loaders.IPanelGroupLoader#loadPanels(java
+	 * .util.ArrayList)
 	 */
-	public void loadPanels(ArrayList<IPanel> panels) throws ListCouldntLoadPanelException {
+	public void loadPanels(ArrayList<IPanel> panels)
+			throws ListCouldntLoadPanelException {
 		if (list == null)
 			return;
 
 		ListCouldntLoadPanelException lCLPException = null;
 		AbstractPanel panel = null;
-		
-		for (int i = 0; i< list.length; i++) {
+
+		for (int i = 0; i < list.length; i++) {
 			if (list[i] != null) {
 				try {
 					panel = null;
 					panel = (AbstractPanel) list[i].newInstance();
 					panels.add(panel);
 				} catch (Exception e) {
-					Logger.getLogger(getClass().getName()).debug(Messages.getText("panel_loading_exception"), e);
-					
-					if ( lCLPException == null ) {
+					Logger.getLogger(getClass().getName()).debug(
+							Messages.getText("panel_loading_exception"), e);
+
+					if (lCLPException == null) {
 						lCLPException = new ListCouldntLoadPanelFromListException();
 					}
 
 					PanelBaseException bew = null;
-					
+
 					if (panel == null)
 						bew = new PanelBaseException(e, "");
 					else
@@ -99,33 +116,41 @@ public class PanelGroupLoaderFromList implements IPanelGroupLoader, Serializable
 			}
 		}
 
-		if ( lCLPException != null ) {
+		if (lCLPException != null) {
 			throw lCLPException;
 		}
 	}
 
 	/**
-	 * <p>Exception produced when fails the load of a panel by a loader of type <code>PanelGroupLoaderFromList</code>.</p>
+	 * <p>
+	 * Exception produced when fails the load of a panel by a loader of type
+	 * <code>PanelGroupLoaderFromList</code>.
+	 * </p>
 	 * 
 	 * @version 27/11/2007
-	 * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es) 
+	 * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
 	 */
-	public class ListCouldntLoadPanelFromListException extends ListCouldntLoadPanelException {
+	public class ListCouldntLoadPanelFromListException extends
+			ListCouldntLoadPanelException {
 		private static final long serialVersionUID = -8607556361881436022L;
 
 		/**
-		 * <p>Creates an initializes a new instance of <code>ListCouldntLoadPanelFromListException</code>.</p> 
+		 * <p>
+		 * Creates an initializes a new instance of
+		 * <code>ListCouldntLoadPanelFromListException</code>.
+		 * </p>
 		 */
 		public ListCouldntLoadPanelFromListException() {
 			super();
-			
+
 			this.code = serialVersionUID;
 			this.formatString = "Couldn't load some panels from a list of classes:";
 			this.messageKey = "couldnt_load_panels_from_list_exception";
 		}
-		
+
 		/*
 		 * (non-Javadoc)
+		 * 
 		 * @see org.gvsig.exceptions.BaseException#values()
 		 */
 		protected Map<String, String> values() {
@@ -133,4 +158,3 @@ public class PanelGroupLoaderFromList implements IPanelGroupLoader, Serializable
 		}
 	}
 }
-

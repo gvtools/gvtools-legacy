@@ -31,15 +31,17 @@ import org.gvsig.raster.RasterLibrary;
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
+
 /**
  * <code>ClippingDialog</code>. Creación de la ventana de recorte para gvSIG.
- *
+ * 
  * @version 17/04/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
-public class ClippingDialog extends JPanel implements IWindow, ButtonsPanelListener {
-	private static final long  serialVersionUID = -5374834293534046986L;
-	private String             name             = null;
+public class ClippingDialog extends JPanel implements IWindow,
+		ButtonsPanelListener {
+	private static final long serialVersionUID = -5374834293534046986L;
+	private String name = null;
 
 	/**
 	 * Panel de recortado de imagen que está en la libreria raster
@@ -48,8 +50,11 @@ public class ClippingDialog extends JPanel implements IWindow, ButtonsPanelListe
 
 	/**
 	 * Constructor
-	 * @param width Ancho
-	 * @param height Alto
+	 * 
+	 * @param width
+	 *            Ancho
+	 * @param height
+	 *            Alto
 	 */
 	public ClippingDialog(int width, int height, String name) {
 		this.name = name;
@@ -61,6 +66,7 @@ public class ClippingDialog extends JPanel implements IWindow, ButtonsPanelListe
 
 	/**
 	 * Obtiene el panel con el histograma
+	 * 
 	 * @return HistogramPanel
 	 */
 	public ClippingPanel getClippingPanel() {
@@ -73,6 +79,7 @@ public class ClippingDialog extends JPanel implements IWindow, ButtonsPanelListe
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindow#getWindowInfo()
 	 */
 	public WindowInfo getWindowInfo() {
@@ -90,7 +97,8 @@ public class ClippingDialog extends JPanel implements IWindow, ButtonsPanelListe
 	 */
 	public void close() {
 		try {
-			RasterLibrary.removeOnlyLayerNameListener(getClippingPanel().getOptionsPanel());
+			RasterLibrary.removeOnlyLayerNameListener(getClippingPanel()
+					.getOptionsPanel());
 			PluginServices.getMDIManager().closeWindow(this);
 		} catch (ArrayIndexOutOfBoundsException e) {
 			// Si la ventana no se puede eliminar no hacemos nada
@@ -99,7 +107,10 @@ public class ClippingDialog extends JPanel implements IWindow, ButtonsPanelListe
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener#actionButtonPressed(org.gvsig.gui.beans.buttonspanel.ButtonsPanelEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener#actionButtonPressed
+	 * (org.gvsig.gui.beans.buttonspanel.ButtonsPanelEvent)
 	 */
 	public void actionButtonPressed(ButtonsPanelEvent e) {
 		if (e.getButton() == ButtonsPanel.BUTTON_CLOSE) {

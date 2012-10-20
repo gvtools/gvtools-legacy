@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.gazetteer.ui.showresults;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -71,42 +71,44 @@ public class ShowResultsDialogPanel extends JPanel implements ActionListener {
 	protected GazetteerQuery query = null;
 
 	/**
-	 * @param client 
-	 * @param features 
-	 * @param recordsByPage 
-	 * @param translator 
+	 * @param client
+	 * @param features
+	 * @param recordsByPage
+	 * @param translator
 	 */
-	public ShowResultsDialogPanel(GazetteerClient client, Feature[] features, int recordsByPage, GazetteerQuery query) {        
+	public ShowResultsDialogPanel(GazetteerClient client, Feature[] features,
+			int recordsByPage, GazetteerQuery query) {
 		this.client = client;
 		this.currentPage = 1;
 		this.recordsByPage = recordsByPage;
 		this.query = query;
-		initialize(client,features,recordsByPage);     
-	} 
+		initialize(client, features, recordsByPage);
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param client 
-	 * @param features 
-	 * @param recordsByPage 
+	 * @param client
+	 * @param features
+	 * @param recordsByPage
 	 */
-	public void initialize(GazetteerClient client, Feature[] features, int recordsByPage) {        
+	public void initialize(GazetteerClient client, Feature[] features,
+			int recordsByPage) {
 		this.featuresLength = features.length;
 		this.currentPage = 1;
 		this.recordsByPage = recordsByPage;
-		ppalPanel = new ShowResultsPanel(features,getNumPages(),recordsByPage);
+		ppalPanel = new ShowResultsPanel(features, getNumPages(), recordsByPage);
 		setDefaultButtonListeners();
 
 		add(ppalPanel);
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 */
-	private void setDefaultButtonListeners() {        
+	private void setDefaultButtonListeners() {
 		nextButton = ppalPanel.getNextButton();
 		lastButton = ppalPanel.getLastButton();
 		mapButton = ppalPanel.getMapButton();
@@ -116,47 +118,47 @@ public class ShowResultsDialogPanel extends JPanel implements ActionListener {
 		lastButton.addActionListener(this);
 		mapButton.addActionListener(this);
 		closeButton.addActionListener(this);
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param e 
+	 * @param e
 	 */
-	public void actionPerformed(ActionEvent e) {        
+	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("next")) {
 			nextButtonActionPerformed();
-		} 
+		}
 		if (e.getActionCommand().equals("last")) {
 			lastButtonActionPerformed();
-		} 
+		}
 		if (e.getActionCommand().equals("localize")) {
 			loadButtonActionPerformed();
-		} 
+		}
 		if (e.getActionCommand().equals("close")) {
 			closeButtonActionPerformed();
 		}
 
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @return 
+	 * @return
 	 */
-	private int getNumPages() {        
+	private int getNumPages() {
 		if ((featuresLength % recordsByPage) == 0)
-			return featuresLength/recordsByPage;
-		return (featuresLength/recordsByPage) + 1;
-	} 
+			return featuresLength / recordsByPage;
+		return (featuresLength / recordsByPage) + 1;
+	}
 
 	/**
 	 * 
 	 * 
 	 */
-	public void nextButtonActionPerformed() {        
+	public void nextButtonActionPerformed() {
 		this.currentPage = this.currentPage + 1;
 
 		if (this.currentPage == getNumPages()) {
@@ -165,16 +167,15 @@ public class ShowResultsDialogPanel extends JPanel implements ActionListener {
 			nextButton.setEnabled(true);
 		}
 		lastButton.setEnabled(true);
-		ppalPanel.actualizaLabel(currentPage,recordsByPage);
+		ppalPanel.actualizaLabel(currentPage, recordsByPage);
 
-
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 */
-	public void lastButtonActionPerformed() {        
+	public void lastButtonActionPerformed() {
 		this.currentPage = this.currentPage - 1;
 		if (this.currentPage == 1) {
 			lastButton.setEnabled(false);
@@ -183,41 +184,43 @@ public class ShowResultsDialogPanel extends JPanel implements ActionListener {
 		}
 		nextButton.setEnabled(true);
 
-		ppalPanel.actualizaLabel(currentPage,recordsByPage);
+		ppalPanel.actualizaLabel(currentPage, recordsByPage);
 
-
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 */
-	public void loadButtonActionPerformed() {        
+	public void loadButtonActionPerformed() {
 		Feature feature = ppalPanel.getFeature();
 
-		if (feature != null){
+		if (feature != null) {
 			System.out.println("ID: " + feature.getId());
 			System.out.println("NAME: " + feature.getName());
 			System.out.println("DESCRIPTION: " + feature.getDescription());
-			System.out.println("COORDINATES: X=" + feature.getCoordinates().getX() + " Y=" + feature.getCoordinates().getY());
+			System.out.println("COORDINATES: X="
+					+ feature.getCoordinates().getX() + " Y="
+					+ feature.getCoordinates().getY());
 		}
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 */
-	public void closeButtonActionPerformed() {        
+	public void closeButtonActionPerformed() {
 		parent.setVisible(false);
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param parent The parent to set.
+	 * @param parent
+	 *            The parent to set.
 	 */
-	public void setParent(JDialog parent) {        
+	public void setParent(JDialog parent) {
 		this.parent = parent;
-	} 
+	}
 }

@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.jump.adapter;
 
 import java.sql.Types;
@@ -61,59 +61,57 @@ import com.vividsolutions.jump.feature.FeatureSchema;
  * gvSIG's LayerDefinition implementation based in an openjump's feature schema.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
-public class FeatureSchemaLayerDefinitionAdapter extends LayerDefinition{
-	
-	
+public class FeatureSchemaLayerDefinitionAdapter extends LayerDefinition {
+
 	FeatureSchema featureSchema;
-	
-	
-	public FeatureSchemaLayerDefinitionAdapter(FeatureSchema featureSchema){
+
+	public FeatureSchemaLayerDefinitionAdapter(FeatureSchema featureSchema) {
 		this.featureSchema = featureSchema;
 	}
-	
+
 	public FieldDescription[] getFieldsDesc() {
-		
+
 		int numFields = featureSchema.getAttributeCount();
-		List<FieldDescription> solution = new ArrayList<FieldDescription>(); 
-		for(int i = 0; i < numFields; i++){
+		List<FieldDescription> solution = new ArrayList<FieldDescription>();
+		for (int i = 0; i < numFields; i++) {
 			String name = featureSchema.getAttributeName(i);
 			AttributeType type = featureSchema.getAttributeType(i);
-			if(type == AttributeType.GEOMETRY)
-				continue;//LayerDefintion doestn consideer geometry types
-			
-			if(type == AttributeType.OBJECT)
+			if (type == AttributeType.GEOMETRY)
+				continue;// LayerDefintion doestn consideer geometry types
+
+			if (type == AttributeType.OBJECT)
 				continue;
 			FieldDescription fieldDesc = new FieldDescription();
 			fieldDesc.setFieldName(name);
 			convert(fieldDesc, type);
 			solution.add(fieldDesc);
 		}
-		FieldDescription[] fieldDescArray = new FieldDescription[solution.size()];
+		FieldDescription[] fieldDescArray = new FieldDescription[solution
+				.size()];
 		solution.toArray(fieldDescArray);
 		return fieldDescArray;
 	}
 
-	
-	public static void convert(FieldDescription fieldDescription, AttributeType type) {
-		if(type == AttributeType.STRING){
+	public static void convert(FieldDescription fieldDescription,
+			AttributeType type) {
+		if (type == AttributeType.STRING) {
 			fieldDescription.setFieldType(Types.VARCHAR);
-		}else if(type == AttributeType.DOUBLE){
+		} else if (type == AttributeType.DOUBLE) {
 			fieldDescription.setFieldType(Types.REAL);
 			fieldDescription.setFieldLength(14);
 			fieldDescription.setFieldDecimalCount(5);
-		}else if(type == AttributeType.INTEGER){
+		} else if (type == AttributeType.INTEGER) {
 			fieldDescription.setFieldType(Types.INTEGER);
-		}else if(type == AttributeType.DATE){
+		} else if (type == AttributeType.DATE) {
 			fieldDescription.setFieldType(Types.DATE);
 		}
-		
+
 	}
 
 	public void setFieldsDesc(FieldDescription[] fieldsDesc) {
 		this.fieldsDesc = fieldsDesc;
 	}
-
 
 }

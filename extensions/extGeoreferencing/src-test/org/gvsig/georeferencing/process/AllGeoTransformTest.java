@@ -45,20 +45,19 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 public class AllGeoTransformTest extends TestCase {
-	
+
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test GeoTransformProcess");
-		//$JUnit-BEGIN$
-		
+		// $JUnit-BEGIN$
+
 		suite.addTestSuite(TestGeoTransformProcess.class);
 		suite.addTestSuite(TGeoTransformProcessPixelToMapXTest.class);
 		suite.addTestSuite(TGeoTransformProcessPixelToMapYTest.class);
 		suite.addTestSuite(TGeoTransformProcessMapToPixelXTest.class);
 		suite.addTestSuite(TGeoTransformProcessMapToPixelYTest.class);
 		suite.addTestSuite(TGeotransformProcessRMS.class);
-		//$JUnit-END$
+		// $JUnit-END$
 		return suite;
 	}
 
 }
-

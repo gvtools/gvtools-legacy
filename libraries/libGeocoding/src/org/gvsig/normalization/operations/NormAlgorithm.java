@@ -369,8 +369,6 @@ public class NormAlgorithm {
 				String cadena = (String) chains.get(i);
 				if (cadena.length() > 0 || cadena != null) {
 					aux = cadena.replace(txsep, "");
-				} else {
-					aux = "";
 				}
 			}
 			postChain.add(aux);
@@ -601,7 +599,7 @@ public class NormAlgorithm {
 		String out = str3;
 		for (int i = 0; i < str3.length(); i++) {
 			out = testSep(out, sep);
-		}		
+		}
 
 		return out.length() == 0;
 	}

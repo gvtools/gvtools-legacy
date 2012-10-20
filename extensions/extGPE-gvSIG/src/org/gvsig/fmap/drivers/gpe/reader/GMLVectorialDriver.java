@@ -53,11 +53,12 @@ import org.gvsig.gpe.gml.parser.GPEGmlSFP0Parser;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class GMLVectorialDriver extends GPEVectorialDriver{
+public class GMLVectorialDriver extends GPEVectorialDriver {
 	public static final String DRIVERNAME = "gvSIG GML Memory Driver";
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.hardcode.driverManager.Driver#getName()
 	 */
 	public String getName() {
@@ -66,6 +67,7 @@ public class GMLVectorialDriver extends GPEVectorialDriver{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.gpe.reader.IGPEDriver#getGPEParser()
 	 */
 	public ArrayList getGPEParsers() {

@@ -41,10 +41,10 @@
 package org.gvsig.remotesensing.gridmath;
 
 /**
- * No se ha asignado valor a las variables en un JEP. 
+ * No se ha asignado valor a las variables en un JEP.
  * 
  * @author Diego Guerrero Sevilla (diego.guerrero@uclm.es)
- * @version 19/10/2007 
+ * @version 19/10/2007
  */
 
 public class NoAssignedVarsException extends Exception {

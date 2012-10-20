@@ -34,56 +34,63 @@ import org.gvsig.raster.util.RasterToolsUtil;
  * Panel con los controles de generación de lineas de contorno.
  * 
  * 09/06/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class ContourLinesPanel extends BasePanel implements ActionListener {
-	private static final long         serialVersionUID  = 1L;
-	private DataInputContainer        distance          = null;
-	private boolean                   enabled           = true;
+	private static final long serialVersionUID = 1L;
+	private DataInputContainer distance = null;
+	private boolean enabled = true;
 
 	/**
-	 *Inicializa componentes gráficos y traduce
+	 * Inicializa componentes gráficos y traduce
 	 */
 	public ContourLinesPanel() {
-		//init();
+		// init();
 		translate();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#init()
 	 */
 	protected void init() {
 		setLayout(new GridBagLayout());
-		setBorder(BorderFactory.createTitledBorder(null, RasterToolsUtil.getText(this, "contourlines"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+		setBorder(BorderFactory.createTitledBorder(null,
+				RasterToolsUtil.getText(this, "contourlines"),
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.weightx = 1;
 		gbc.insets = new Insets(0, 0, 0, 0);
-		
-		//add(getActive(), gbc);
-		
+
+		// add(getActive(), gbc);
+
 		gbc.gridy = 1;
 		add(getDistance(), gbc);
-		
-		//getActive().addActionListener(this);
+
+		// getActive().addActionListener(this);
 		setComponentEnabled(false);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#translate()
 	 */
 	protected void translate() {
-		
+
 	}
-	
+
 	/**
 	 * Obtiene la barra deslizadora con el radio del filtro de paso alto
+	 * 
 	 * @return CheckSliderTextContainer
 	 */
 	public DataInputContainer getDistance() {
-		if(distance == null) {
+		if (distance == null) {
 			distance = new DataInputContainer();
 			distance.setLabelText(RasterToolsUtil.getText(this, "distance"));
 		}
@@ -98,14 +105,15 @@ public class ContourLinesPanel extends BasePanel implements ActionListener {
 	}
 
 	/**
-	 * Activa o desactiva el componente. El estado de activación y desactivación de un
-	 * componente depende de los controles que contiene. En este caso activa o desactiva
-	 * la barra de incremento.
+	 * Activa o desactiva el componente. El estado de activación y desactivación
+	 * de un componente depende de los controles que contiene. En este caso
+	 * activa o desactiva la barra de incremento.
+	 * 
 	 * @param enabled
 	 */
 	public void setComponentEnabled(boolean enabled) {
 		getDistance().setControlEnabled(enabled);
-		//getActive().setSelected(enabled);
+		// getActive().setSelected(enabled);
 		this.enabled = !enabled;
 	}
 }

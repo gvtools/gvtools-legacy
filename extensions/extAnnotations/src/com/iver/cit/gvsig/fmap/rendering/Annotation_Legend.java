@@ -52,16 +52,15 @@ import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.ITextSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.SimpleTextSymbol;
-import com.iver.cit.gvsig.fmap.core.v02.FSymbol;
 import com.iver.cit.gvsig.fmap.layers.XMLException;
 import com.iver.utiles.XMLEntity;
 
 /**
  * Leyenda vectorial para labels.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
-public class Annotation_Legend extends AbstractLegend implements IVectorLegend{
+public class Annotation_Legend extends AbstractLegend implements IVectorLegend {
 	private String fieldName;
 
 	protected int fieldId = -1;
@@ -72,28 +71,29 @@ public class Annotation_Legend extends AbstractLegend implements IVectorLegend{
 
 	private String labelFieldRotation;
 
-	private ITextSymbol defaultSymbol = SymbologyFactory.createDefaultTextSymbol();
+	private ITextSymbol defaultSymbol = SymbologyFactory
+			.createDefaultTextSymbol();
 
 	private int shapeType;
 
 	private boolean useDefaultSymbol = false;
 
-//	private boolean overwrite=true;
+	// private boolean overwrite=true;
 
-	private boolean avoidoverlapping=false;
+	private boolean avoidoverlapping = false;
 
-	private boolean deloverlapping=false;
+	private boolean deloverlapping = false;
 
 	private boolean isFontInPixels;
 
-	private boolean pointVisible=true;
+	private boolean pointVisible = true;
 
 	private int units = CartographicSupportToolkit.DefaultMeasureUnit;
 
 	public Annotation_Legend() {
-		isFontInPixels=true;
+		isFontInPixels = true;
 		defaultSymbol.setTextColor(Color.black);
-		((SimpleTextSymbol)defaultSymbol).setRotation(0);
+		((SimpleTextSymbol) defaultSymbol).setRotation(0);
 		defaultSymbol.setFontSize(10);
 	}
 
@@ -140,7 +140,7 @@ public class Annotation_Legend extends AbstractLegend implements IVectorLegend{
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.rendering.VectorialLegend#getLabelField()
 	 */
 	public String getLabelField() {
@@ -164,7 +164,7 @@ public class Annotation_Legend extends AbstractLegend implements IVectorLegend{
 	/**
 	 * @see com.iver.cit.gvsig.fmap.rendering.VectorialLegend#getSymbol(int)
 	 */
-	public ISymbol getSymbol(int recordIndex){
+	public ISymbol getSymbol(int recordIndex) {
 		return null;
 	}
 
@@ -172,10 +172,10 @@ public class Annotation_Legend extends AbstractLegend implements IVectorLegend{
 	 * Devuelve un símbolo a partir de una IFeature. OJO!! Cuando usamos un
 	 * feature iterator de base de datos el único campo que vendrá rellenado es
 	 * el de fieldID. Los demás vendrán a nulos para ahorra tiempo de creación.
-	 *
+	 * 
 	 * @param feat
 	 *            IFeature
-	 *
+	 * 
 	 * @return Símbolo.
 	 */
 	public ISymbol getSymbolByFeature(IFeature feat) {
@@ -207,13 +207,13 @@ public class Annotation_Legend extends AbstractLegend implements IVectorLegend{
 		xml.putProperty("labelfield", labelFieldName);
 		xml.putProperty("labelFieldHeight", labelFieldHeight);
 		xml.putProperty("labelFieldRotation", labelFieldRotation);
-		xml.putProperty("avoidoverlapping",avoidoverlapping);
-		xml.putProperty("deloverlapping",deloverlapping);
+		xml.putProperty("avoidoverlapping", avoidoverlapping);
+		xml.putProperty("deloverlapping", deloverlapping);
 
-//		xml.putProperty("overwrite",overwrite);
+		// xml.putProperty("overwrite",overwrite);
 		xml.putProperty("units", units);
-		xml.putProperty("isFontInPixels",isFontInPixels);
-		xml.putProperty("pointVisible",pointVisible);
+		xml.putProperty("isFontInPixels", isFontInPixels);
+		xml.putProperty("pointVisible", pointVisible);
 
 		xml.putProperty("useDefaultSymbol", useDefaultSymbol);
 		xml.addChild(getDefaultSymbol().getXMLEntity());
@@ -222,7 +222,7 @@ public class Annotation_Legend extends AbstractLegend implements IVectorLegend{
 
 	/**
 	 * Inserta el XMLEntity.
-	 *
+	 * 
 	 * @param xml
 	 *            XMLEntity.
 	 */
@@ -232,7 +232,7 @@ public class Annotation_Legend extends AbstractLegend implements IVectorLegend{
 
 	/**
 	 * Inserta el XMLEntity.
-	 *
+	 * 
 	 * @param xml
 	 *            XMLEntity.
 	 */
@@ -250,9 +250,9 @@ public class Annotation_Legend extends AbstractLegend implements IVectorLegend{
 		}
 
 		useDefaultSymbol = xml.getBooleanProperty("useDefaultSymbol");
-		if (xml.contains("avoidoverlapping")){
-			avoidoverlapping=xml.getBooleanProperty("avoidoverlapping");
-			deloverlapping=xml.getBooleanProperty("deloverlapping");
+		if (xml.contains("avoidoverlapping")) {
+			avoidoverlapping = xml.getBooleanProperty("avoidoverlapping");
+			deloverlapping = xml.getBooleanProperty("deloverlapping");
 		}
 		if (xml.contains("pointVisible")) {
 			pointVisible = xml.getBooleanProperty("pointVisible");
@@ -261,17 +261,18 @@ public class Annotation_Legend extends AbstractLegend implements IVectorLegend{
 			units = xml.getIntProperty("units");
 		}
 		if (xml.contains("isFontInPixels")) {
-			isFontInPixels=xml.getBooleanProperty("isFontInPixels");
-			defaultSymbol = (ITextSymbol)SymbologyFactory.createSymbolFromXML(xml.getChild(0),"default symbol");
+			isFontInPixels = xml.getBooleanProperty("isFontInPixels");
+			defaultSymbol = (ITextSymbol) SymbologyFactory.createSymbolFromXML(
+					xml.getChild(0), "default symbol");
 
+		} else {
+			ITextSymbol symbol = (ITextSymbol) SymbologyFactory
+					.createSymbolFromXML(xml.getChild(0), "default symbol");
+			isFontInPixels = ((CartographicSupport) symbol).getUnit() == -1;
+			pointVisible = symbol.isShapeVisible();
+			defaultSymbol = (SimpleTextSymbol) SymbologyFactory
+					.createDefaultTextSymbol();
 		}
-		else {
-			ITextSymbol symbol = (ITextSymbol)SymbologyFactory.createSymbolFromXML(xml.getChild(0),"default symbol");
-			isFontInPixels =((CartographicSupport)symbol).getUnit()==-1;
-			pointVisible=symbol.isShapeVisible();
-			defaultSymbol=(SimpleTextSymbol)SymbologyFactory.createDefaultTextSymbol();
-		}
-
 
 	}
 
@@ -284,8 +285,10 @@ public class Annotation_Legend extends AbstractLegend implements IVectorLegend{
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.rendering.VectorialLegend#setDataSource(com.hardcode.gdbms.engine.data.DataSource)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.rendering.VectorialLegend#setDataSource(com.hardcode
+	 * .gdbms.engine.data.DataSource)
 	 */
 	public void setDataSource(DataSource ds) {
 		// try {
@@ -300,8 +303,10 @@ public class Annotation_Legend extends AbstractLegend implements IVectorLegend{
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.rendering.UniqueValueLegend#getSymbolByValue(com.hardcode.gdbms.engine.values.Value)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.rendering.UniqueValueLegend#getSymbolByValue(
+	 * com.hardcode.gdbms.engine.values.Value)
 	 */
 	public ISymbol getSymbolByValue(Value key) {
 		return null;
@@ -309,7 +314,7 @@ public class Annotation_Legend extends AbstractLegend implements IVectorLegend{
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.rendering.VectorialLegend#getShapeType()
 	 */
 	public int getShapeType() {
@@ -318,8 +323,9 @@ public class Annotation_Legend extends AbstractLegend implements IVectorLegend{
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.rendering.VectorialLegend#getLabelHeightField()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.rendering.VectorialLegend#getLabelHeightField()
 	 */
 	public String getLabelHeightField() {
 		return labelFieldHeight;
@@ -327,7 +333,7 @@ public class Annotation_Legend extends AbstractLegend implements IVectorLegend{
 
 	/**
 	 * Inserta el alto de campo.
-	 *
+	 * 
 	 * @param str
 	 *            alto.
 	 */
@@ -337,8 +343,9 @@ public class Annotation_Legend extends AbstractLegend implements IVectorLegend{
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.rendering.VectorialLegend#getLabelRotationField()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.rendering.VectorialLegend#getLabelRotationField()
 	 */
 	public String getLabelRotationField() {
 		return labelFieldRotation;
@@ -346,7 +353,7 @@ public class Annotation_Legend extends AbstractLegend implements IVectorLegend{
 
 	/**
 	 * Inserta rotación.
-	 *
+	 * 
 	 * @param str
 	 *            Rotación.
 	 */
@@ -356,7 +363,7 @@ public class Annotation_Legend extends AbstractLegend implements IVectorLegend{
 
 	/**
 	 * Introduce si se tiene que representar el resto de valores o no.
-	 *
+	 * 
 	 * @param b
 	 *            True si se utiliza el resto de valores.
 	 */
@@ -366,7 +373,7 @@ public class Annotation_Legend extends AbstractLegend implements IVectorLegend{
 
 	/**
 	 * Devuelve si se utiliza o no el resto de valores para representarse.
-	 *
+	 * 
 	 * @return True si se utiliza el resto de valores.
 	 */
 	public boolean isUseDefaultSymbol() {
@@ -376,7 +383,7 @@ public class Annotation_Legend extends AbstractLegend implements IVectorLegend{
 	/**
 	 * Elimina el símbolo que tiene como clave el valor que se pasa como
 	 * parámetro.
-	 *
+	 * 
 	 * @param key
 	 *            clave.
 	 */
@@ -385,7 +392,7 @@ public class Annotation_Legend extends AbstractLegend implements IVectorLegend{
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.rendering.VectorialLegend#getUsedFields()
 	 */
 	public String[] getUsedFields() {
@@ -412,14 +419,15 @@ public class Annotation_Legend extends AbstractLegend implements IVectorLegend{
 		// TODO Auto-generated method stub
 		return null;
 	}
-//	public void setIsOverWrite(boolean b) {
-//		overwrite=b;
-//
-//	}
 
-//	public boolean isOverWrite() {
-//		return overwrite;
-//	}
+	// public void setIsOverWrite(boolean b) {
+	// overwrite=b;
+	//
+	// }
+
+	// public boolean isOverWrite() {
+	// return overwrite;
+	// }
 
 	public boolean isAvoidOverLapping() {
 		return avoidoverlapping;
@@ -446,6 +454,7 @@ public class Annotation_Legend extends AbstractLegend implements IVectorLegend{
 		// TODO Auto-generated method stub
 
 	}
+
 	public String getClassName() {
 		return this.getClass().getName();
 	}
@@ -463,7 +472,7 @@ public class Annotation_Legend extends AbstractLegend implements IVectorLegend{
 	}
 
 	public void setUnits(int units) {
-		if(units == -1){
+		if (units == -1) {
 			this.isFontInPixels = true;
 		} else {
 			this.isFontInPixels = false;
@@ -472,7 +481,7 @@ public class Annotation_Legend extends AbstractLegend implements IVectorLegend{
 	}
 
 	public void setPointVisible(boolean b) {
-		this.pointVisible=b;
+		this.pointVisible = b;
 
 	}
 

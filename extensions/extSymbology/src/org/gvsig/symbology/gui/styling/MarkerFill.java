@@ -173,28 +173,33 @@ import com.iver.cit.gvsig.gui.styling.SymbolEditor;
 import com.iver.cit.gvsig.gui.styling.SymbolSelector;
 import com.iver.cit.gvsig.project.documents.view.legend.gui.ISymbolSelector;
 import com.iver.cit.gvsig.project.documents.view.legend.gui.JSymbolPreviewButton;
+
 /**
- * <b>MarkerFill</b> allows the user to store and modify the properties that fills a
- * polygon with a padding made of markers and an outline<p>
+ * <b>MarkerFill</b> allows the user to store and modify the properties that
+ * fills a polygon with a padding made of markers and an outline
  * <p>
- * This functionality is carried out thanks to two tabs (marker fill and MarkerFillProperties)
- * which are included in the panel to edit the properities of a symbol (SymbolEditor)
- * how is explained in AbstractTypeSymbolEditor.<p>
  * <p>
- * The first tab (marker fill)permits the user to select the marker for the padding and
- * other options such as the color for the fill (<b>btnChooseMarker</b>),to select the
- * ouline (<b>btnOutline</b>)and the distribution (grid or random) of the marker inside
- * the padding (<b>rdGrid,rdRandom</b>).
+ * This functionality is carried out thanks to two tabs (marker fill and
+ * MarkerFillProperties) which are included in the panel to edit the properities
+ * of a symbol (SymbolEditor) how is explained in AbstractTypeSymbolEditor.
  * <p>
- * The second tab is implementes as a MarkerFillProperties class and offers the possibilities
- * to change the separtion and the offset.
- *
- *
- *@see MarkerFillProperties
- *@see AbstractTypeSymbolEditor
- *@author jaume dominguez faus - jaume.dominguez@iver.es
+ * <p>
+ * The first tab (marker fill)permits the user to select the marker for the
+ * padding and other options such as the color for the fill
+ * (<b>btnChooseMarker</b>),to select the ouline (<b>btnOutline</b>)and the
+ * distribution (grid or random) of the marker inside the padding
+ * (<b>rdGrid,rdRandom</b>).
+ * <p>
+ * The second tab is implementes as a MarkerFillProperties class and offers the
+ * possibilities to change the separtion and the offset.
+ * 
+ * 
+ * @see MarkerFillProperties
+ * @see AbstractTypeSymbolEditor
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
-public class MarkerFill extends AbstractTypeSymbolEditor implements ActionListener,ChangeListener {
+public class MarkerFill extends AbstractTypeSymbolEditor implements
+		ActionListener, ChangeListener {
 	private ArrayList<JPanel> tabs = new ArrayList<JPanel>();
 	private ColorChooserPanel markerCC;
 	private JButton btnChooseMarker;
@@ -212,6 +217,7 @@ public class MarkerFill extends AbstractTypeSymbolEditor implements ActionListen
 
 	/**
 	 * constructor method
+	 * 
 	 * @param owner
 	 */
 	public MarkerFill(SymbolEditor owner) {
@@ -220,13 +226,13 @@ public class MarkerFill extends AbstractTypeSymbolEditor implements ActionListen
 	}
 
 	/**
-	 * Initializes the parameters that allows the user to fill the padding of
-	 * a polygon with a style made of markers.To do it, two tabs are created (marker
-	 * fill and MarkerFillProperties)inside the SymbolEditor panel with default values
-	 * for the different attributes.
+	 * Initializes the parameters that allows the user to fill the padding of a
+	 * polygon with a style made of markers.To do it, two tabs are created
+	 * (marker fill and MarkerFillProperties)inside the SymbolEditor panel with
+	 * default values for the different attributes.
 	 */
 	private void initialize() {
-//		GridLayout layout;
+		// GridLayout layout;
 		JPanel myTab;
 		// Marker fill tab
 
@@ -241,8 +247,9 @@ public class MarkerFill extends AbstractTypeSymbolEditor implements ActionListen
 			markerCC.addActionListener(this);
 			aux.add(markerCC);
 
-			p.addComponent(PluginServices.getText(this, "color")+":", aux);
-			btnChooseMarker = new JButton(PluginServices.getText(this, "choose_marker"));
+			p.addComponent(PluginServices.getText(this, "color") + ":", aux);
+			btnChooseMarker = new JButton(PluginServices.getText(this,
+					"choose_marker"));
 			btnChooseMarker.addActionListener(this);
 			aux = new JPanel(new FlowLayout(FlowLayout.LEADING, 5, 5));
 			aux.add(btnChooseMarker);
@@ -262,8 +269,7 @@ public class MarkerFill extends AbstractTypeSymbolEditor implements ActionListen
 			rdGrid.setSelected(true);
 			p.addComponent("", aux);
 
-
-			JPanel myTab2 = new JPanel(new FlowLayout(FlowLayout.LEADING, 5,5));
+			JPanel myTab2 = new JPanel(new FlowLayout(FlowLayout.LEADING, 5, 5));
 			GridBagLayoutPanel aux3 = new GridBagLayoutPanel();
 
 			JPanel aux2 = new JPanel();
@@ -272,17 +278,21 @@ public class MarkerFill extends AbstractTypeSymbolEditor implements ActionListen
 			aux2.add(btnOutline);
 
 			aux3.addComponent(new JBlank(10, 10));
-			useBorder = new JCheckBox(PluginServices.getText(this, "use_outline"));
+			useBorder = new JCheckBox(PluginServices.getText(this,
+					"use_outline"));
 			aux3.addComponent(useBorder, aux2);
 			aux3.addComponent(new JBlank(10, 10));
 
 			sldOutlineTransparency = new JSlider();
 			sldOutlineTransparency.setValue(100);
-			aux3.addComponent(PluginServices.getText(this, "outline")+":",
+			aux3.addComponent(PluginServices.getText(this, "outline") + ":",
 					aux2);
-			aux3.addComponent(PluginServices.getText(this, "outline_opacity")+":", sldOutlineTransparency);
-			txtOutlineWidth = new JIncrementalNumberField("", 25, 0, Double.MAX_VALUE, 1);
-			aux3.addComponent(PluginServices.getText(this, "outline_width")+":", txtOutlineWidth);
+			aux3.addComponent(PluginServices.getText(this, "outline_opacity")
+					+ ":", sldOutlineTransparency);
+			txtOutlineWidth = new JIncrementalNumberField("", 25, 0,
+					Double.MAX_VALUE, 1);
+			aux3.addComponent(PluginServices.getText(this, "outline_width")
+					+ ":", txtOutlineWidth);
 			myTab2.add(aux3);
 
 			p.addComponent("", myTab2);
@@ -303,7 +313,8 @@ public class MarkerFill extends AbstractTypeSymbolEditor implements ActionListen
 
 	public void refreshControls(ISymbol layer) {
 		if (layer == null) {
-			System.err.println(getClass().getName()+":: should be unreachable code");
+			System.err.println(getClass().getName()
+					+ ":: should be unreachable code");
 			// set defaults
 			markerCC.setColor(Color.BLACK);
 			rdGrid.setSelected(true);
@@ -318,24 +329,23 @@ public class MarkerFill extends AbstractTypeSymbolEditor implements ActionListen
 			panelStyle.setModel(mfs.getMarkerFillProperties());
 			markerCC.setColor(marker.getColor());
 
-			//outline
+			// outline
 			sldOutlineTransparency.removeChangeListener(this);
 
-			outline=mfs.getOutline();
+			outline = mfs.getOutline();
 			btnOutline.setSymbol(outline);
 			useBorder.setSelected(mfs.hasOutline());
 
 			if (outline != null) {
 				outlineAlpha = outline.getAlpha();
-				sldOutlineTransparency.setValue((int)((outlineAlpha/255D)*100));
+				sldOutlineTransparency
+						.setValue((int) ((outlineAlpha / 255D) * 100));
 				txtOutlineWidth.setDouble(outline.getLineWidth());
 			} else {
 				sldOutlineTransparency.setValue(100);
 			}
 
 			sldOutlineTransparency.addChangeListener(this);
-
-
 
 		}
 	}
@@ -352,11 +362,13 @@ public class MarkerFill extends AbstractTypeSymbolEditor implements ActionListen
 
 		JComponent comp = (JComponent) e.getSource();
 		if (comp.equals(btnChooseMarker)) {
-			ISymbolSelector symSelect = SymbolSelector.createSymbolSelector(marker, FShape.POINT);
+			ISymbolSelector symSelect = SymbolSelector.createSymbolSelector(
+					marker, FShape.POINT);
 			PluginServices.getMDIManager().addWindow(symSelect);
 			marker = (AbstractMarkerSymbol) symSelect.getSelectedObject();
 
-			if (marker == null) return;
+			if (marker == null)
+				return;
 
 		}
 
@@ -370,7 +382,7 @@ public class MarkerFill extends AbstractTypeSymbolEditor implements ActionListen
 				ILineSymbol outline = (ILineSymbol) sym;
 				if (outline != null)
 					txtOutlineWidth.setDouble(outline.getLineWidth());
-				}
+			}
 
 		}
 
@@ -384,10 +396,11 @@ public class MarkerFill extends AbstractTypeSymbolEditor implements ActionListen
 	public ISymbol getLayer() {
 		MarkerFillSymbol mfs = new MarkerFillSymbol();
 		IMarkerFillPropertiesStyle prop = panelStyle.getMarkerFillProperties();
-		prop.setFillStyle(rdGrid.isSelected() ?
-				IMarkerFillPropertiesStyle.GRID_FILL : IMarkerFillPropertiesStyle.RANDOM_FILL);
+		prop.setFillStyle(rdGrid.isSelected() ? IMarkerFillPropertiesStyle.GRID_FILL
+				: IMarkerFillPropertiesStyle.RANDOM_FILL);
 
-		IMarkerSymbol myMarker = (IMarkerSymbol ) SymbologyFactory.createSymbolFromXML(marker.getXMLEntity(), "theMarker");
+		IMarkerSymbol myMarker = (IMarkerSymbol) SymbologyFactory
+				.createSymbolFromXML(marker.getXMLEntity(), "theMarker");
 
 		mfs.setMarker(myMarker);
 		mfs.setMarkerFillProperties(prop);
@@ -395,7 +408,7 @@ public class MarkerFill extends AbstractTypeSymbolEditor implements ActionListen
 		mfs.setHasOutline(useBorder.isSelected());
 		outline = (ILineSymbol) btnOutline.getSymbol();
 
-		if (outline!=null) {
+		if (outline != null) {
 			outline.setLineWidth(txtOutlineWidth.getDouble());
 			outline.setAlpha(outlineAlpha);
 		}
@@ -413,7 +426,7 @@ public class MarkerFill extends AbstractTypeSymbolEditor implements ActionListen
 		Object s = e.getSource();
 
 		if (s.equals(sldOutlineTransparency)) {
-			outlineAlpha = (int) (255*(sldOutlineTransparency.getValue()/100.0));
+			outlineAlpha = (int) (255 * (sldOutlineTransparency.getValue() / 100.0));
 		}
 
 		outline = (ILineSymbol) btnOutline.getSymbol();

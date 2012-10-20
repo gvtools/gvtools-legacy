@@ -25,28 +25,28 @@ public class AllTestsDataAccess {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.gvsig.fmap.dataaccess");
-		//$JUnit-BEGIN$
+		// $JUnit-BEGIN$
 		suite.addTestSuite(TDSIntBufferGdal.class);
-		//suite.addTestSuite(TDSIntBufferEcw.class);
-		//suite.addTestSuite(TDSIntBufferMrSID.class);
-		
+		// suite.addTestSuite(TDSIntBufferEcw.class);
+		// suite.addTestSuite(TDSIntBufferMrSID.class);
+
 		suite.addTestSuite(TDSIntGdal.class);
 		suite.addTestSuite(TDSIntEcw.class);
-		//suite.addTestSuite(TDSIntMrSID.class);
-		
+		// suite.addTestSuite(TDSIntMrSID.class);
+
 		suite.addTestSuite(TDSDoubleAdjustToExtentGdal.class);
 		suite.addTestSuite(TDSDoubleAdjustToExtentEcw.class);
-		//suite.addTestSuite(TDSDoubleAdjustToExtentMrSID.class);
-		
+		// suite.addTestSuite(TDSDoubleAdjustToExtentMrSID.class);
+
 		suite.addTestSuite(TDSDoubleAdjustToExtentBufferEcw.class);
 		suite.addTestSuite(TDSDoubleAdjustToExtentBufferGdal.class);
-		//suite.addTestSuite(TDSDoubleAdjustToExtentBufferMrSID.class);
-		
+		// suite.addTestSuite(TDSDoubleAdjustToExtentBufferMrSID.class);
+
 		suite.addTestSuite(TestDataSourceMultiFile.class);
 		suite.addTestSuite(TestGdalByteHistogram.class);
-		//suite.addTestSuite(TestGdalByteMultiBandHistogram.class);
-		//suite.addTestSuite(TestGdalFloatHistogram.class);
-		//$JUnit-END$
+		// suite.addTestSuite(TestGdalByteMultiBandHistogram.class);
+		// suite.addTestSuite(TestGdalFloatHistogram.class);
+		// $JUnit-END$
 		return suite;
 	}
 

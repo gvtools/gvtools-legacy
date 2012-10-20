@@ -33,22 +33,24 @@ import java.util.Iterator;
 import javax.swing.JComponent;
 
 import org.gvsig.gui.beans.colorchooser.ColorChooserListener;
+
 /**
- *
+ * 
  * @version 03/08/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
-public class ColorButton extends JComponent implements MouseListener, ColorChooserListener {
+public class ColorButton extends JComponent implements MouseListener,
+		ColorChooserListener {
 	private static final long serialVersionUID = 6003841064431749542L;
 
 	private ArrayList<ColorButtonListener> actionCommandListeners = new ArrayList<ColorButtonListener>();
 
-	private Color             color            = Color.black;
+	private Color color = Color.black;
 	private ColorButtonDialog colorButtonPanel = null;
-	private Image             bufferImage      = null;
-	private int               width            = 0;
-	private int               height           = 0;
-	private Graphics          bufferGraphics   = null;
+	private Image bufferImage = null;
+	private int width = 0;
+	private int height = 0;
+	private Graphics bufferGraphics = null;
 
 	public ColorButton() {
 		setPreferredSize(new Dimension(40, 22));
@@ -68,6 +70,7 @@ public class ColorButton extends JComponent implements MouseListener, ColorChoos
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
 	 */
 	public void mousePressed(MouseEvent e) {
@@ -96,6 +99,7 @@ public class ColorButton extends JComponent implements MouseListener, ColorChoos
 	/**
 	 * Crea un graphics con las dimensiones del componente si no estaba creado y
 	 * lo devuelve para poder usarlo para dibujar en él.
+	 * 
 	 * @return Graphics
 	 */
 	private Graphics getBufferGraphics() {
@@ -136,8 +140,10 @@ public class ColorButton extends JComponent implements MouseListener, ColorChoos
 						if ((i + j) % 2 == 0)
 							getBufferGraphics().setColor(Color.white);
 						else
-							getBufferGraphics().setColor(new Color(204, 204, 204));
-						getBufferGraphics().fillRect(1 + i * 4, 1 + j * 4, 4, 4);
+							getBufferGraphics().setColor(
+									new Color(204, 204, 204));
+						getBufferGraphics()
+								.fillRect(1 + i * 4, 1 + j * 4, 4, 4);
 					}
 				}
 			}
@@ -173,6 +179,7 @@ public class ColorButton extends JComponent implements MouseListener, ColorChoos
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.JComponent#paint(java.awt.Graphics)
 	 */
 	public void paint(Graphics g) {
@@ -183,6 +190,7 @@ public class ColorButton extends JComponent implements MouseListener, ColorChoos
 
 	/**
 	 * Añadir un listener a la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void addValueChangedListener(ColorButtonListener listener) {
@@ -192,6 +200,7 @@ public class ColorButton extends JComponent implements MouseListener, ColorChoos
 
 	/**
 	 * Borrar un listener de la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void removeValueChangedListener(ColorButtonListener listener) {
@@ -202,7 +211,8 @@ public class ColorButton extends JComponent implements MouseListener, ColorChoos
 	 * Invocar a los eventos asociados al componente
 	 */
 	private void callValueChangedListeners() {
-		Iterator<ColorButtonListener> acIterator = actionCommandListeners.iterator();
+		Iterator<ColorButtonListener> acIterator = actionCommandListeners
+				.iterator();
 		while (acIterator.hasNext()) {
 			ColorButtonListener listener = acIterator.next();
 			listener.actionValueChanged(new ColorButtonEvent(this));
@@ -213,16 +223,23 @@ public class ColorButton extends JComponent implements MouseListener, ColorChoos
 	 * Invocar a los eventos asociados al componente
 	 */
 	private void callValueDraggedListeners() {
-		Iterator<ColorButtonListener> acIterator = actionCommandListeners.iterator();
+		Iterator<ColorButtonListener> acIterator = actionCommandListeners
+				.iterator();
 		while (acIterator.hasNext()) {
 			ColorButtonListener listener = acIterator.next();
 			listener.actionValueDragged(new ColorButtonEvent(this));
 		}
 	}
 
+	public void mouseClicked(MouseEvent e) {
+	}
 
-	public void mouseClicked(MouseEvent e) {}
-	public void mouseReleased(MouseEvent e) {}
-	public void mouseEntered(MouseEvent e) {}
-	public void mouseExited(MouseEvent e) {}
+	public void mouseReleased(MouseEvent e) {
+	}
+
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	public void mouseExited(MouseEvent e) {
+	}
 }

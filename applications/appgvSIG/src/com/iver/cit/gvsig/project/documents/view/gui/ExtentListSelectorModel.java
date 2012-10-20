@@ -50,14 +50,13 @@ import javax.swing.event.ListDataListener;
 
 import com.iver.cit.gvsig.project.Project;
 
-
-
-public class ExtentListSelectorModel implements ListModel, PropertyChangeListener {
+public class ExtentListSelectorModel implements ListModel,
+		PropertyChangeListener {
 
 	private Project project;
 	private ArrayList listeners = new ArrayList();
 
-	public ExtentListSelectorModel(Project p){
+	public ExtentListSelectorModel(Project p) {
 		project = p;
 	}
 
@@ -75,8 +74,12 @@ public class ExtentListSelectorModel implements ListModel, PropertyChangeListene
 		return project.getExtents()[arg0];
 	}
 
-	/* (non-Javadoc)
-	 * @see javax.swing.ListModel#addListDataListener(javax.swing.event.ListDataListener)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.swing.ListModel#addListDataListener(javax.swing.event.ListDataListener
+	 * )
 	 */
 	public void addListDataListener(ListDataListener arg0) {
 		listeners.add(arg0);
@@ -89,18 +92,23 @@ public class ExtentListSelectorModel implements ListModel, PropertyChangeListene
 		listeners.remove(arg0);
 	}
 
-	/* (non-Javadoc)
-	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.
+	 * PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent change) {
-		if (change.getPropertyName().equals("addExtent")){
-			ListDataEvent event = new ListDataEvent(this, ListDataEvent.INTERVAL_ADDED, 0, getSize());
-			for (int i = 0; i < listeners.size(); i++){
+		if (change.getPropertyName().equals("addExtent")) {
+			ListDataEvent event = new ListDataEvent(this,
+					ListDataEvent.INTERVAL_ADDED, 0, getSize());
+			for (int i = 0; i < listeners.size(); i++) {
 				((ListDataListener) listeners.get(i)).intervalAdded(event);
 			}
-		}else{
-			ListDataEvent event = new ListDataEvent(this, ListDataEvent.INTERVAL_ADDED, 0, getSize());
-			for (int i = 0; i < listeners.size(); i++){
+		} else {
+			ListDataEvent event = new ListDataEvent(this,
+					ListDataEvent.INTERVAL_ADDED, 0, getSize());
+			for (int i = 0; i < listeners.size(); i++) {
 				((ListDataListener) listeners.get(i)).intervalRemoved(event);
 			}
 		}

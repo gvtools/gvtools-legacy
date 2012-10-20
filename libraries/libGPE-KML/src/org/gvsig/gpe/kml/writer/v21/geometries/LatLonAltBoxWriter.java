@@ -65,6 +65,7 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
 /**
  * This class writes a LatLonAltBox Kml tag. Example:
  * <p>
+ * 
  * <pre>
  * <code> 
  * &lt;LatLonAltBox&gt;
@@ -77,31 +78,37 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  * &lt;/LatLonAltBox&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
- * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#latlonaltbox
+ * @see http
+ *      ://code.google.com/apis/kml/documentation/kml_tags_21.html#latlonaltbox
  */
 public class LatLonAltBoxWriter {
-	
+
 	/**
 	 * It writes the LatLonAltBox init tag and its fields
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param coords
-	 * A coordinates iterator. 
+	 *            A coordinates iterator.
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler, 
-			ICoordinateSequence coords) throws IOException{
+	public void start(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor handler, ICoordinateSequence coords)
+			throws IOException {
 		double[] minBuffer = new double[coords.iterator().getDimension()];
 		double[] maxBuffer = new double[coords.iterator().getDimension()];
-		//TODO what happends if the length is < 3!!! If the iterator only has 1 element
-		if (coords.iterator().hasNext()){
+		// TODO what happends if the length is < 3!!! If the iterator only has 1
+		// element
+		if (coords.iterator().hasNext()) {
 			coords.iterator().next(minBuffer);
 		}
-		if (coords.iterator().hasNext()){
+		if (coords.iterator().hasNext()) {
 			coords.iterator().next(maxBuffer);
 		}
 		writer.writeStartElement(Kml2_1_Tags.LATLONALTBOX);
@@ -118,31 +125,32 @@ public class LatLonAltBoxWriter {
 		writer.writeValue(minBuffer[0]);
 		writer.writeEndElement();
 		writer.writeStartElement(Kml2_1_Tags.MINALTITUDE);
-		if (minBuffer.length > 2){
+		if (minBuffer.length > 2) {
 			writer.writeValue(minBuffer[2]);
-		}else{
+		} else {
 			writer.writeValue(0.0);
-		}	
+		}
 		writer.writeEndElement();
 		writer.writeStartElement(Kml2_1_Tags.MAXALTITUDE);
-		if (maxBuffer.length > 2){
+		if (maxBuffer.length > 2) {
 			writer.writeValue(maxBuffer[2]);
-		}else{
+		} else {
 			writer.writeValue(0.0);
 		}
 		writer.writeEndElement();
 	}
-	
+
 	/**
-	/**
-	 * It writes the LatLonAltBox end tag and its fields
+	 * /** It writes the LatLonAltBox end tag and its fields
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @throws IOException
 	 */
-	public void end(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor hanlder) throws IOException{
+	public void end(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor hanlder) throws IOException {
 		writer.writeEndElement();
 	}
 }

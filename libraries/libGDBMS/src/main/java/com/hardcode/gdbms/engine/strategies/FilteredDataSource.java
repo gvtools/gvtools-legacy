@@ -16,11 +16,10 @@ import com.hardcode.gdbms.engine.instruction.SemanticException;
 import com.hardcode.gdbms.engine.values.BooleanValue;
 import com.hardcode.gdbms.engine.values.Value;
 
-
 /**
  * Representa una fuente de datos que contiene una cláusula where mediante la
  * cual se filtran los campos
- *
+ * 
  * @author Fernando González Cortés
  */
 public class FilteredDataSource extends OperationDataSource {
@@ -30,17 +29,21 @@ public class FilteredDataSource extends OperationDataSource {
 
 	/**
 	 * Creates a new FilteredDataSource object.
-	 *
-	 * @param source DataSource que se va a filtrar
-	 * @param whereExpression Expresión de la cláusula where
+	 * 
+	 * @param source
+	 *            DataSource que se va a filtrar
+	 * @param whereExpression
+	 *            Expresión de la cláusula where
 	 */
 	public FilteredDataSource(DataSource source, Expression whereExpression) {
 		this.source = source;
 		this.whereExpression = whereExpression;
 	}
 
-    public Value[] aggregatedFilter(Expression[] fields) throws IncompatibleTypesException, EvaluationException, ReadDriverException {
-        Value[] aggregatedValues = new Value[fields.length];
+	public Value[] aggregatedFilter(Expression[] fields)
+			throws IncompatibleTypesException, EvaluationException,
+			ReadDriverException {
+		Value[] aggregatedValues = new Value[fields.length];
 		indexes = IndexFactory.createVariableIndex();
 		try {
 			indexes.open();
@@ -61,23 +64,26 @@ public class FilteredDataSource extends OperationDataSource {
 
 			indexes.indexSetComplete();
 		} catch (IOException e1) {
-			throw new ReadDriverException(getName(),e1);
+			throw new ReadDriverException(getName(), e1);
 		}
 		return aggregatedValues;
-    }
+	}
 
-    /**
+	/**
 	 * Método que construye el array de índices de las posiciones que las filas
 	 * filtradas ocupan en el DataSource origen
-     * @throws SemanticException Si se produce algún error semántico al evaluar
-	 * 		   la expresión
-     * @throws EvaluationException If the expression evaluation fails
-     * @throws ReadDriverException TODO
-     * @throws IncompatibleTypesException Si la expresión where no evalua a
-	 * 		   booleano
+	 * 
+	 * @throws SemanticException
+	 *             Si se produce algún error semántico al evaluar la expresión
+	 * @throws EvaluationException
+	 *             If the expression evaluation fails
+	 * @throws ReadDriverException
+	 *             TODO
+	 * @throws IncompatibleTypesException
+	 *             Si la expresión where no evalua a booleano
 	 */
-	public void filtrar()
-		throws SemanticException, EvaluationException, ReadDriverException {
+	public void filtrar() throws SemanticException, EvaluationException,
+			ReadDriverException {
 		indexes = IndexFactory.createVariableIndex();
 		try {
 			indexes.open();
@@ -95,7 +101,7 @@ public class FilteredDataSource extends OperationDataSource {
 
 			indexes.indexSetComplete();
 		} catch (IOException e1) {
-			throw new ReadDriverException(getName(),e1);
+			throw new ReadDriverException(getName(), e1);
 		}
 	}
 
@@ -115,7 +121,7 @@ public class FilteredDataSource extends OperationDataSource {
 		try {
 			indexes.close();
 		} catch (IOException e) {
-			throw new ReadDriverException(getName(),e);
+			throw new ReadDriverException(getName(), e);
 		}
 	}
 
@@ -128,14 +134,14 @@ public class FilteredDataSource extends OperationDataSource {
 
 	/**
 	 * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getFieldValue(long,
-	 * 		int)
+	 *      int)
 	 */
 	public Value getFieldValue(long rowIndex, int fieldId)
-		throws ReadDriverException {
+			throws ReadDriverException {
 		try {
 			return source.getFieldValue(indexes.getIndex(rowIndex), fieldId);
 		} catch (IOException e) {
-			throw new ReadDriverException(getName(),e);
+			throw new ReadDriverException(getName(), e);
 		}
 	}
 
@@ -162,11 +168,11 @@ public class FilteredDataSource extends OperationDataSource {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
-	 *
+	 * 
 	 * @throws IOException
-	 *
+	 * 
 	 * @see com.hardcode.gdbms.engine.data.DataSource#getWhereFilter()
 	 */
 	public long[] getWhereFilter() throws IOException {
@@ -185,7 +191,7 @@ public class FilteredDataSource extends OperationDataSource {
 	 */
 	public Memento getMemento() throws MementoException {
 		return new OperationLayerMemento(getName(),
-			new Memento[] { source.getMemento() }, getSQL());
+				new Memento[] { source.getMemento() }, getSQL());
 	}
 
 	public int getFieldWidth(int i) throws ReadDriverException {

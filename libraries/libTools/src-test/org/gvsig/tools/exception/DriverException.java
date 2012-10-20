@@ -29,38 +29,38 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DriverException extends BaseException {
-	
-	private static final long serialVersionUID = -8985920349210629999L;
-	
-    private static final String KEY = "Error_in_the_driver_%(driverName)s";
 
-    private static final String MESSAGE = "Error in the driver %(driverName)s";
-	
+	private static final long serialVersionUID = -8985920349210629999L;
+
+	private static final String KEY = "Error_in_the_driver_%(driverName)s";
+
+	private static final String MESSAGE = "Error in the driver %(driverName)s";
+
 	private String driverName;
-	
+
 	public DriverException(String driverName) {
 		super(MESSAGE, KEY, serialVersionUID);
 		this.driverName = driverName;
 	}
-	
+
 	public DriverException(String driverName, Throwable cause) {
-        super(MESSAGE, cause, KEY, serialVersionUID);
+		super(MESSAGE, cause, KEY, serialVersionUID);
 		this.driverName = driverName;
 	}
-    
-    public DriverException(String driverName, String message, Throwable cause,
-            String key, long code) {
-        super(message, cause, key, code);
-        this.driverName = driverName;
-    }
+
+	public DriverException(String driverName, String message, Throwable cause,
+			String key, long code) {
+		super(message, cause, key, code);
+		this.driverName = driverName;
+	}
 
 	public String getDriverName() {
 		return driverName;
 	}
-	
+
 	protected Map values() {
 		HashMap values = new HashMap();
-		values.put("driverName",this.driverName);
+		values.put("driverName", this.driverName);
 		return values;
 	}
 }

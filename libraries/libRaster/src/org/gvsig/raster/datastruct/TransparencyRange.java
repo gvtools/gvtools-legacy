@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import org.gvsig.raster.dataset.RasterDataset;
+
 /**
  * Clase que representa a un conjunto de pixeles con transparencia. Incluye los
  * rangos de transparencia para cada banda, la cadena que va en la lista y la
@@ -29,16 +30,16 @@ import org.gvsig.raster.dataset.RasterDataset;
  * transparentes todos los pixeles que cumplan con R con G y con B. Un Or
  * significará que tendrán transparencia todos los pixeles que cumplan con R con
  * G o con B.
- *
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class TransparencyRange implements Cloneable {
-	private String  strEntry = null;
-	private int[]   red      = null;
-	private int[]   green    = null;
-	private int[]   blue     = null;
-	private boolean and      = true;
-	private int     alpha    = 0;
+	private String strEntry = null;
+	private int[] red = null;
+	private int[] green = null;
+	private int[] blue = null;
+	private boolean and = true;
+	private int alpha = 0;
 
 	/**
 	 * Constructor
@@ -48,7 +49,9 @@ public class TransparencyRange implements Cloneable {
 
 	/**
 	 * Crea un objeto TransparencyRange a partir de una cadena bien formada
-	 * @param value cadena bien formada que representa un intervalo
+	 * 
+	 * @param value
+	 *            cadena bien formada que representa un intervalo
 	 */
 	public TransparencyRange(String value) {
 		try {
@@ -62,11 +65,12 @@ public class TransparencyRange implements Cloneable {
 		}
 	}
 
-	
 	/**
-	 * Obtiene la operación  utilizada
-	 * @param and Si es true significa que se usa un AND y false implica
-	 * que se usa un OR
+	 * Obtiene la operación utilizada
+	 * 
+	 * @param and
+	 *            Si es true significa que se usa un AND y false implica que se
+	 *            usa un OR
 	 */
 	public boolean isAnd() {
 		return and;
@@ -74,8 +78,10 @@ public class TransparencyRange implements Cloneable {
 
 	/**
 	 * Asigna la operación AND como la utilizada
-	 * @param and booleano que si está a true significa que el la operación
-	 * AND es la utilizada como operación.
+	 * 
+	 * @param and
+	 *            booleano que si está a true significa que el la operación AND
+	 *            es la utilizada como operación.
 	 */
 	public void setAnd(boolean and) {
 		this.and = and;
@@ -83,18 +89,27 @@ public class TransparencyRange implements Cloneable {
 
 	/**
 	 * Obtiene el intervalo de valores correspondiente a la banda del azul
-	 * @return Array bidimensional de enteros correspondiente a la banda del azul
+	 * 
+	 * @return Array bidimensional de enteros correspondiente a la banda del
+	 *         azul
 	 */
 	public int[] getBlue() {
 		return blue;
 	}
 
 	/**
-	 * Asigna los intervalos de valores correspondientes a las bandas del
-	 * rojo, azul y verde
-	 * @param red Array bidimensional de enteros correspondiente a la banda del rojo
-	 * @param green Array bidimensional de enteros correspondiente a la banda del verde
-	 * @param blue Array bidimensional de enteros correspondiente a la banda del azul
+	 * Asigna los intervalos de valores correspondientes a las bandas del rojo,
+	 * azul y verde
+	 * 
+	 * @param red
+	 *            Array bidimensional de enteros correspondiente a la banda del
+	 *            rojo
+	 * @param green
+	 *            Array bidimensional de enteros correspondiente a la banda del
+	 *            verde
+	 * @param blue
+	 *            Array bidimensional de enteros correspondiente a la banda del
+	 *            azul
 	 */
 	public void setRGB(int[] red, int[] green, int[] blue) {
 		this.red = red;
@@ -104,7 +119,10 @@ public class TransparencyRange implements Cloneable {
 
 	/**
 	 * Asigna el intervalo de valores correspondiente a la banda del azul
-	 * @param blue Array bidimensional de enteros correspondiente a la banda del azul
+	 * 
+	 * @param blue
+	 *            Array bidimensional de enteros correspondiente a la banda del
+	 *            azul
 	 */
 	public void setBlue(int[] blue) {
 		this.blue = blue;
@@ -112,7 +130,9 @@ public class TransparencyRange implements Cloneable {
 
 	/**
 	 * Obtiene el intervalo de valores correspondiente a la banda del verde
-	 * @return Array bidimensional de enteros correspondiente a la banda del verde
+	 * 
+	 * @return Array bidimensional de enteros correspondiente a la banda del
+	 *         verde
 	 */
 	public int[] getGreen() {
 		return green;
@@ -120,7 +140,10 @@ public class TransparencyRange implements Cloneable {
 
 	/**
 	 * Asigna el intervalo de valores correspondiente a la banda del verde
-	 * @param green Array bidimensional de enteros correspondiente a la banda del verde
+	 * 
+	 * @param green
+	 *            Array bidimensional de enteros correspondiente a la banda del
+	 *            verde
 	 */
 	public void setGreen(int[] green) {
 		this.green = green;
@@ -128,7 +151,9 @@ public class TransparencyRange implements Cloneable {
 
 	/**
 	 * Obtiene el intervalo de valores correspondiente a la banda del rojo
-	 * @return Array bidimensional de enteros correspondiente a la banda del rojo
+	 * 
+	 * @return Array bidimensional de enteros correspondiente a la banda del
+	 *         rojo
 	 */
 	public int[] getRed() {
 		return red;
@@ -136,7 +161,10 @@ public class TransparencyRange implements Cloneable {
 
 	/**
 	 * Asigna el intervalo de valores correspondiente a la banda del rojo
-	 * @param red Array bidimensional de enteros correspondiente a la banda del rojo
+	 * 
+	 * @param red
+	 *            Array bidimensional de enteros correspondiente a la banda del
+	 *            rojo
 	 */
 	public void setRed(int[] red) {
 		this.red = red;
@@ -144,6 +172,7 @@ public class TransparencyRange implements Cloneable {
 
 	/**
 	 * Obtiene la cadena que representa una entrada en la tabla.
+	 * 
 	 * @return Cadena que representa una entrada en la tabla
 	 */
 	public String getStrEntry() {
@@ -152,83 +181,93 @@ public class TransparencyRange implements Cloneable {
 
 	/**
 	 * Asigna la cadena que representa una entrada en la tabla.
-	 * @param strEntry Cadena que representa una entrada en la tabla.
+	 * 
+	 * @param strEntry
+	 *            Cadena que representa una entrada en la tabla.
 	 */
 	public void setStrEntry(String strEntry) {
 		this.strEntry = strEntry;
 	}
 
-
 	/**
-	 * Esta función valida la cadena de entrada por medio de una máquina de estados. Valida las
-	 * siguientes posibilidades en la cadena de entrada:
-	 * <LI>
-	 * <UL>(valor_rojo) & (Valor_verde) & (Valor_azul)</UL>
-	 * <UL>(valor_rojo) | (Valor_verde) | (Valor_azul)</UL>
-	 * </LI>
-	 * Despues de la validación parsea el contenido y carga los parámetros r,g,b con los
-	 * intervalos de valores. Estos parámetros deben ser pasados como arrays de enteros de
-	 * dos elementos.
+	 * Esta función valida la cadena de entrada por medio de una máquina de
+	 * estados. Valida las siguientes posibilidades en la cadena de entrada: <LI>
+	 * <UL>
+	 * (valor_rojo) & (Valor_verde) & (Valor_azul)
+	 * </UL>
+	 * <UL>
+	 * (valor_rojo) | (Valor_verde) | (Valor_azul)
+	 * </UL>
+	 * </LI> Despues de la validación parsea el contenido y carga los parámetros
+	 * r,g,b con los intervalos de valores. Estos parámetros deben ser pasados
+	 * como arrays de enteros de dos elementos.
+	 * 
 	 * @param values
-	 * @param r	Intervalo de rojo
-	 * @param g Intervalo de verde
-	 * @param b Intervalo de azul
-	 * @return Devuelve true si la operación usada en los intervalos es un AND y false si es un OR
+	 * @param r
+	 *            Intervalo de rojo
+	 * @param g
+	 *            Intervalo de verde
+	 * @param b
+	 *            Intervalo de azul
+	 * @return Devuelve true si la operación usada en los intervalos es un AND y
+	 *         false si es un OR
 	 */
-	public static boolean stringToInterval(String values, int[] r, int[] g, int[] b) throws IOException {
+	public static boolean stringToInterval(String values, int[] r, int[] g,
+			int[] b) throws IOException {
 		int status = 0;
 		int countAnd = 0, countOr = 0;
 		boolean and = true;
 		for (int i = 0; i < values.length(); i++) {
 			char c = values.charAt(i);
 			switch (status) {
-				case 0:
-					if (c == ' ')
-						status = 0;
-					else if ((c >= 48 && c <= 57) || c == '*')
-						status = 1;
-					else
-						status = 4;
-					break;
-				case 1:
-					if ((c >= 48 && c <= 57) || (c == ' '))
-						status = 1;
-					else if (c == ':')
-						status = 2;
-					else if (c == '&') {
-						status = 0;
-						countAnd++;
-					} else if (c == '|') {
-						status = 0;
-						countOr++;
-					} else
-						status = 4;
-					break;
-				case 2:
-					if (c >= 48 && c <= 57)
-						status = 3;
-					else
-						status = 4;
-					break;
-				case 3:
-					if ((c >= 48 && c <= 57) || (c == ' '))
-						status = 3;
-					else if (c == '&') {
-						status = 0;
-						countAnd++;
-					} else if (c == '|') {
-						status = 0;
-						countOr++;
-					} else
-						status = 4;
-					break;
-				case 4:
-					throw new IOException("Error en la cadena de entrada " + status);
+			case 0:
+				if (c == ' ')
+					status = 0;
+				else if ((c >= 48 && c <= 57) || c == '*')
+					status = 1;
+				else
+					status = 4;
+				break;
+			case 1:
+				if ((c >= 48 && c <= 57) || (c == ' '))
+					status = 1;
+				else if (c == ':')
+					status = 2;
+				else if (c == '&') {
+					status = 0;
+					countAnd++;
+				} else if (c == '|') {
+					status = 0;
+					countOr++;
+				} else
+					status = 4;
+				break;
+			case 2:
+				if (c >= 48 && c <= 57)
+					status = 3;
+				else
+					status = 4;
+				break;
+			case 3:
+				if ((c >= 48 && c <= 57) || (c == ' '))
+					status = 3;
+				else if (c == '&') {
+					status = 0;
+					countAnd++;
+				} else if (c == '|') {
+					status = 0;
+					countOr++;
+				} else
+					status = 4;
+				break;
+			case 4:
+				throw new IOException("Error en la cadena de entrada " + status);
 			}
 		}
 
 		// Si el analisis es correcto parseamos
-		if ((status == 1 || status == 3) && ((countAnd == 2 && countOr == 0) || (countAnd == 0 && countOr == 2))) {
+		if ((status == 1 || status == 3)
+				&& ((countAnd == 2 && countOr == 0) || (countAnd == 0 && countOr == 2))) {
 			String[] s = values.split(" & ");
 			if (s.length < 3) {
 				s = values.split(" \\| ");
@@ -277,18 +316,21 @@ public class TransparencyRange implements Cloneable {
 	}
 
 	/**
-	 * Carga la cadena StrEntry leyendo los valores en los vectores que representa los intervalos.
+	 * Carga la cadena StrEntry leyendo los valores en los vectores que
+	 * representa los intervalos.
 	 */
-	public void loadStrEntryFromValues(){
+	public void loadStrEntryFromValues() {
 		String separator = " | ";
 		if (and)
 			separator = " & ";
-		strEntry = String.valueOf(red[0] + separator+ green[0] + separator + blue[0]);
+		strEntry = String.valueOf(red[0] + separator + green[0] + separator
+				+ blue[0]);
 	}
 
 	/**
 	 * Obtiene el alpha asociado al rango. Por defecto es de 0, es decir
 	 * totalmente transparente pero puede asociarsele un valor distinto
+	 * 
 	 * @return Alpha asociado
 	 */
 	public int getAlpha() {
@@ -298,7 +340,9 @@ public class TransparencyRange implements Cloneable {
 	/**
 	 * Asigna el alpha asociado al rango. Por defecto es de 0, es decir
 	 * totalmente transparente pero puede asociarsele un valor distinto
-	 * @param alpha asociado
+	 * 
+	 * @param alpha
+	 *            asociado
 	 */
 	public void setAlpha(int alpha) {
 		this.alpha = alpha;
@@ -306,21 +350,29 @@ public class TransparencyRange implements Cloneable {
 
 	/**
 	 * Realiza la unión entre el intervalo actual y el pasado por parámetro
-	 * @param interval intervalo pasado
+	 * 
+	 * @param interval
+	 *            intervalo pasado
 	 * @param rgb
 	 * @return union de intervalos
 	 */
 	public int[] union(int[] interval, int rgb) {
 		switch (rgb) {
-			case RasterDataset.RED_BAND:
-				if ((red[1] >= interval[0] && red[0] <= interval[0]) || (red[0] <= interval[1] && red[0] >= interval[0]))
-					return new int[] { Math.min(red[0], interval[0]), Math.max(red[1], interval[1]) };
-			case RasterDataset.GREEN_BAND:
-				if ((green[1] >= interval[0] && green[0] <= interval[0]) || (green[0] <= interval[1] && green[0] >= interval[0]))
-					return new int[] { Math.min(green[0], interval[0]), Math.max(green[1], interval[1]) };
-			case RasterDataset.BLUE_BAND:
-				if ((blue[1] >= interval[0] && blue[0] <= interval[0]) || (blue[0] <= interval[1] && blue[0] >= interval[0]))
-					return new int[] { Math.min(blue[0], interval[0]), Math.max(blue[1], interval[1]) };
+		case RasterDataset.RED_BAND:
+			if ((red[1] >= interval[0] && red[0] <= interval[0])
+					|| (red[0] <= interval[1] && red[0] >= interval[0]))
+				return new int[] { Math.min(red[0], interval[0]),
+						Math.max(red[1], interval[1]) };
+		case RasterDataset.GREEN_BAND:
+			if ((green[1] >= interval[0] && green[0] <= interval[0])
+					|| (green[0] <= interval[1] && green[0] >= interval[0]))
+				return new int[] { Math.min(green[0], interval[0]),
+						Math.max(green[1], interval[1]) };
+		case RasterDataset.BLUE_BAND:
+			if ((blue[1] >= interval[0] && blue[0] <= interval[0])
+					|| (blue[0] <= interval[1] && blue[0] >= interval[0]))
+				return new int[] { Math.min(blue[0], interval[0]),
+						Math.max(blue[1], interval[1]) };
 		}
 		return null;
 	}
@@ -328,7 +380,7 @@ public class TransparencyRange implements Cloneable {
 	/**
 	 * Muestra los datos del objeto para depuración.
 	 */
-	public void show(){
+	public void show() {
 		if (getRed() != null)
 			System.out.println(getRed()[0] + " " + getRed()[1]);
 		if (getGreen() != null)
@@ -342,6 +394,7 @@ public class TransparencyRange implements Cloneable {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#clone()
 	 */
 	public Object clone() {
@@ -374,10 +427,11 @@ public class TransparencyRange implements Cloneable {
 		result = PRIME * result + TransparencyRange.hashCode(blue);
 		result = PRIME * result + TransparencyRange.hashCode(green);
 		result = PRIME * result + TransparencyRange.hashCode(red);
-		result = PRIME * result + ((strEntry == null) ? 0 : strEntry.hashCode());
+		result = PRIME * result
+				+ ((strEntry == null) ? 0 : strEntry.hashCode());
 		return result;
 	}
-	
+
 	private static int hashCode(int[] array) {
 		final int PRIME = 31;
 		if (array == null)

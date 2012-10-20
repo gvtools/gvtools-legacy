@@ -46,15 +46,14 @@
  */
 package com.iver.cit.gvsig.fmap.core.v02;
 
-
 /**
-  * Clase utilizada para almacenar las variables estáticas.
- *
+ * Clase utilizada para almacenar las variables estáticas.
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FConstant {
 	/** Nombre de las unidades de medida, utilizadas. */
-//	public static String[] NAMES = null;
+	// public static String[] NAMES = null;
 	public final static int SHAPE_TYPE_NULL = 0;
 	public final static int SHAPE_TYPE_POINT = 1;
 	public final static int SHAPE_TYPE_POLYLINE = 3;
@@ -99,7 +98,7 @@ public class FConstant {
 	public final static int SYMBOL_STYLE_FILL_LIGHTGRAYFILL = 10;
 	public final static int SYMBOL_STYLE_FILL_DARKGRAYFILL = 11;
 
-	//	Para símbolos de tipo Punto
+	// Para símbolos de tipo Punto
 	public final static int SYMBOL_STYLE_MARKER_CIRCLE = 30;
 	public final static int SYMBOL_STYLE_MARKER_SQUARE = 31;
 	public final static int SYMBOL_STYLE_MARKER_TRIANGLE = 32;
@@ -126,47 +125,44 @@ public class FConstant {
 	public final static int SYMBOL_STYLE_TEXTALIGNMENT_CENTERED = 96;
 	public final static int SYMBOL_STYLE_TEXTALIGNMENT_JUSTIFY = 97;
 
-
-//	/**
-//	 * If you want to obtain a 12-pixel height font you have to apply this
-//	 * scale factor. <br>
-//	 * So, it would be: <br>
-//	 * 	<b> font.setSize(FONT_SCALE_FACTOR*size)</b>
-//	 */
-//	public static final double FONT_HEIGHT_SCALE_FACTOR = 1.4;
+	// /**
+	// * If you want to obtain a 12-pixel height font you have to apply this
+	// * scale factor. <br>
+	// * So, it would be: <br>
+	// * <b> font.setSize(FONT_SCALE_FACTOR*size)</b>
+	// */
+	// public static final double FONT_HEIGHT_SCALE_FACTOR = 1.4;
 	/*
 	 * Esto parece un error, tal vez se pensó sólo en el tamaño de las
-	 * mayúsculas, sin tener en cuenta que alguna letras (j, g, q) tienen 
-	 * descendente y que si medimos un texto en vertical desde la parte
-	 * superior de una mayúscula a la parte inferior de una minúscula con 
-	 * descendente no es necesario aplicar este factor de corrección. 
+	 * mayúsculas, sin tener en cuenta que alguna letras (j, g, q) tienen
+	 * descendente y que si medimos un texto en vertical desde la parte superior
+	 * de una mayúscula a la parte inferior de una minúscula con descendente no
+	 * es necesario aplicar este factor de corrección.
 	 */
-	public static final double DEGREE_TO_RADIANS = Math.PI/180D;
-
+	public static final double DEGREE_TO_RADIANS = Math.PI / 180D;
 
 	static {
 		new FConstant();
 	}
 
 	/**
-	 * 050211, jmorell: Se han añadido los Grados.
-	 * Crea un nuevo FConstant.
+	 * 050211, jmorell: Se han añadido los Grados. Crea un nuevo FConstant.
 	 */
-//	public FConstant() {
-//		if (NAMES == null) {
-//			int i = 0;
-//			NAMES = new String[11];
-//			NAMES[i++] = "Kilometros";
-//			NAMES[i++] = "Metros";
-//			NAMES[i++] = "Centimetros";
-//			NAMES[i++] = "Milimetros";
-//			NAMES[i++] = "Millas";
-//			NAMES[i++] = "Yardas";
-//			NAMES[i++] = "Pies";
-//			NAMES[i++] = "Pulgadas";
-//			NAMES[i++] = "Grados";
-//			NAMES[i++] = "Coordenadas";
-//			NAMES[i++] = "Decimetros";
-//		}
-//	}
+	// public FConstant() {
+	// if (NAMES == null) {
+	// int i = 0;
+	// NAMES = new String[11];
+	// NAMES[i++] = "Kilometros";
+	// NAMES[i++] = "Metros";
+	// NAMES[i++] = "Centimetros";
+	// NAMES[i++] = "Milimetros";
+	// NAMES[i++] = "Millas";
+	// NAMES[i++] = "Yardas";
+	// NAMES[i++] = "Pies";
+	// NAMES[i++] = "Pulgadas";
+	// NAMES[i++] = "Grados";
+	// NAMES[i++] = "Coordenadas";
+	// NAMES[i++] = "Decimetros";
+	// }
+	// }
 }

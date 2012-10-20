@@ -68,10 +68,10 @@ import com.iver.cit.gvsig.project.documents.view.legend.gui.ThemeManagerWindow;
 
 /**
  * @author FJP
- *
- * Dialog to config the locator
+ * 
+ *         Dialog to config the locator
  */
-public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
+public class FPanelLocConfig extends JPanel implements ActionListener, IWindow {
 
 	private static final long serialVersionUID = -2271914332135260143L;
 	private javax.swing.JLabel jLabel = null;
@@ -87,7 +87,7 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 	private BasicArrowButton jBtnUp;
 	private BasicArrowButton jBtnDown;
 
-	public FPanelLocConfig( MapControl mc) {
+	public FPanelLocConfig(MapControl mc) {
 		super();
 		mapCtrl = mc;
 		initialize();
@@ -95,18 +95,16 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 		updateControls(null);
 	}
 
-	private void refreshList()
-	{
+	private void refreshList() {
 		DefaultListModel lstModel = (DefaultListModel) getJList().getModel();
 		lstModel.clear();
-		for (int i=mapCtrl.getMapContext().getLayers().getLayersCount()-1; i >=0; i--)
-		{
+		for (int i = mapCtrl.getMapContext().getLayers().getLayersCount() - 1; i >= 0; i--) {
 			FLayer lyr = mapCtrl.getMapContext().getLayers().getLayer(i);
 			lstModel.addElement(lyr.getName());
 		}
 	}
 
-	private  void initialize() {
+	private void initialize() {
 		this.setLayout(null);
 		this.setSize(555, 210);
 		this.add(getJLabel(), null);
@@ -119,12 +117,12 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 	private javax.swing.JLabel getJLabel() {
 		if (jLabel == null) {
 			jLabel = new javax.swing.JLabel();
-			jLabel.setText(PluginServices.getText(this,"Capas_del_localizador")+":");
+			jLabel.setText(PluginServices
+					.getText(this, "Capas_del_localizador") + ":");
 			jLabel.setBounds(10, 15, 132, 25);
 		}
 		return jLabel;
 	}
-
 
 	public javax.swing.JList getJList() {
 		if (jList == null) {
@@ -143,18 +141,15 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 		return jList;
 	}
 
-	private void updateControls(javax.swing.event.ListSelectionEvent e)
-	{
+	private void updateControls(javax.swing.event.ListSelectionEvent e) {
 		DefaultListModel lstModel = (DefaultListModel) getJList().getModel();
 		int selIndex = jList.getSelectedIndex();
 		jBtnDown.setEnabled(false);
 		jBtnUp.setEnabled(false);
 
-		if (selIndex != -1)
-		{
-			if (lstModel.getSize() > 1)
-			{
-				if (selIndex < (lstModel.getSize()-1))
+		if (selIndex != -1) {
+			if (lstModel.getSize() > 1) {
+				if (selIndex < (lstModel.getSize() - 1))
 					jBtnDown.setEnabled(true);
 
 				if (selIndex > 0)
@@ -163,7 +158,6 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 
 		}
 
-
 	}
 
 	private BasicArrowButton getJBtnUp() {
@@ -171,7 +165,7 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 			jBtnUp = new javax.swing.plaf.basic.BasicArrowButton(
 					javax.swing.SwingConstants.NORTH);
 			jBtnUp.setBounds(374, 49, 25, 23);
-			jBtnUp.setToolTipText(PluginServices.getText(this,"Subir_capa"));
+			jBtnUp.setToolTipText(PluginServices.getText(this, "Subir_capa"));
 			jBtnUp.addActionListener(this);
 			jBtnUp.setActionCommand("UP");
 
@@ -179,13 +173,12 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 		return jBtnUp;
 	}
 
-
 	private BasicArrowButton getJBtnDown() {
 		if (jBtnDown == null) {
 			jBtnDown = new javax.swing.plaf.basic.BasicArrowButton(
 					javax.swing.SwingConstants.SOUTH);
 			jBtnDown.setBounds(374, 164, 25, 23);
-			jBtnDown.setToolTipText(PluginServices.getText(this,"Bajar_capa"));
+			jBtnDown.setToolTipText(PluginServices.getText(this, "Bajar_capa"));
 			jBtnDown.setActionCommand("DOWN");
 			jBtnDown.addActionListener(this);
 		}
@@ -195,7 +188,8 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 	private JButton getJBtnAddLayer() {
 		if (jBtnAddLayer == null) {
 			jBtnAddLayer = new JButton();
-			jBtnAddLayer.setText(PluginServices.getText(this,"Anadir_capa")+"...");
+			jBtnAddLayer.setText(PluginServices.getText(this, "Anadir_capa")
+					+ "...");
 			jBtnAddLayer.addActionListener(this);
 			jBtnAddLayer.setActionCommand("ADD_LAYER");
 		}
@@ -205,7 +199,8 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 	private JButton getJBtnRemoveLayer() {
 		if (jBtnRemoveLayer == null) {
 			jBtnRemoveLayer = new JButton();
-			jBtnRemoveLayer.setText(PluginServices.getText(this,"Quitar_capa")+"...");
+			jBtnRemoveLayer.setText(PluginServices.getText(this, "Quitar_capa")
+					+ "...");
 			jBtnRemoveLayer.addActionListener(this);
 			jBtnRemoveLayer.setActionCommand("REMOVE_LAYER");
 
@@ -213,11 +208,11 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 		return jBtnRemoveLayer;
 	}
 
-
 	private JButton getJBtnEditLegend() {
 		if (jBtnEditLegend == null) {
 			jBtnEditLegend = new JButton();
-			jBtnEditLegend.setText(PluginServices.getText(this,"Editar_leyenda")+"...");
+			jBtnEditLegend.setText(PluginServices.getText(this,
+					"Editar_leyenda") + "...");
 			jBtnEditLegend.addActionListener(this);
 			jBtnEditLegend.setActionCommand("EDIT_LEGEND");
 		}
@@ -227,7 +222,7 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 	private JButton getJBtnCancel() {
 		if (jBtnCancel == null) {
 			jBtnCancel = new JButton();
-			jBtnCancel.setText(PluginServices.getText(this,"Cerrar"));
+			jBtnCancel.setText(PluginServices.getText(this, "Cerrar"));
 			jBtnCancel.setActionCommand("CANCEL");
 			jBtnCancel.addActionListener(this);
 
@@ -235,145 +230,139 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 		return jBtnCancel;
 	}
 
-
-	public void actionPerformed(ActionEvent e)
-	{
+	public void actionPerformed(ActionEvent e) {
 		DefaultListModel lstModel = (DefaultListModel) getJList().getModel();
 		FLayers theLayers = mapCtrl.getMapContext().getLayers();
-       // IProjection proj = null;
+		// IProjection proj = null;
 
-		int numLayers = theLayers.getLayersCount()-1;
+		int numLayers = theLayers.getLayersCount() - 1;
 
-		if (e.getActionCommand() == "CANCEL")
-		{
-			if (PluginServices.getMainFrame() != null)
-			{
-				PluginServices.getMDIManager().closeWindow(FPanelLocConfig.this);
-			}
-			else
-			{
-				((JDialog) (getParent().getParent().getParent().getParent())).dispose();
+		if (e.getActionCommand() == "CANCEL") {
+			if (PluginServices.getMainFrame() != null) {
+				PluginServices.getMDIManager()
+						.closeWindow(FPanelLocConfig.this);
+			} else {
+				((JDialog) (getParent().getParent().getParent().getParent()))
+						.dispose();
 			}
 		}
-		if (e.getActionCommand() == "ADD_LAYER")
-		{
-            AddLayer addLayer = (AddLayer)PluginServices.getExtension( AddLayer.class);//new AddLayer();
-            //addLayer.initialize();
-            addLayer.addLayers(mapCtrl);
-	        refreshList();
-	        updateControls(null);
-          
-            if (mapCtrl instanceof MapOverview){
-            	((MapOverview)mapCtrl).refreshExtent();
-            }
+		if (e.getActionCommand() == "ADD_LAYER") {
+			AddLayer addLayer = (AddLayer) PluginServices
+					.getExtension(AddLayer.class);// new AddLayer();
+			// addLayer.initialize();
+			addLayer.addLayers(mapCtrl);
+			refreshList();
+			updateControls(null);
 
- 		}
-		if (e.getActionCommand() == "REMOVE_LAYER")
-		{
-			if (jList.getSelectedIndex() != -1)
-			{
-				theLayers.removeLayer((String) lstModel.get(jList.getSelectedIndex()));
+			if (mapCtrl instanceof MapOverview) {
+				((MapOverview) mapCtrl).refreshExtent();
+			}
+
+		}
+		if (e.getActionCommand() == "REMOVE_LAYER") {
+			if (jList.getSelectedIndex() != -1) {
+				theLayers.removeLayer((String) lstModel.get(jList
+						.getSelectedIndex()));
 				lstModel.remove(jList.getSelectedIndex());
-				///mapCtrl.drawMap();
+				// /mapCtrl.drawMap();
 				updateControls(null);
-				  if (mapCtrl instanceof MapOverview){
-                	((MapOverview)mapCtrl).refreshExtent();
-                }
+				if (mapCtrl instanceof MapOverview) {
+					((MapOverview) mapCtrl).refreshExtent();
+				}
 				PluginServices.getMainFrame().enableControls();
 			}
 		}
-		if (e.getActionCommand() == "EDIT_LEGEND")
-		{
+		if (e.getActionCommand() == "EDIT_LEGEND") {
 			int idSelec = jList.getSelectedIndex();
-			if (idSelec != -1)
-			{
+			if (idSelec != -1) {
 				FLayer lyr = theLayers.getLayer((String) lstModel.get(idSelec));
-				if (lyr instanceof Classifiable)
-				{
-					ThemeManagerWindow m_LegendEditor = new ThemeManagerWindow(lyr/*, mapCtrl.getMapContext()*/);
+				if (lyr instanceof Classifiable) {
+					ThemeManagerWindow m_LegendEditor = new ThemeManagerWindow(
+							lyr/* , mapCtrl.getMapContext() */);
 					theLayers.setActive(false);
 					lyr.setActive(true);
 					if (PluginServices.getMainFrame() == null) {
 						JDialog dlg = new JDialog();
 
-						m_LegendEditor.setPreferredSize(m_LegendEditor.getSize());
+						m_LegendEditor.setPreferredSize(m_LegendEditor
+								.getSize());
 						dlg.getContentPane().add(m_LegendEditor);
 						dlg.setModal(true);
 						dlg.pack();
 						dlg.show();
 
 					} else {
-						PluginServices.getMDIManager().addWindow(m_LegendEditor);
+						PluginServices.getMDIManager()
+								.addWindow(m_LegendEditor);
 					}
-				}
-				else
-				{
-					JOptionPane.showMessageDialog(null, PluginServices.getText(this,"Solo_para_capas_vectoriales")+".");
+				} else {
+					JOptionPane.showMessageDialog(
+							null,
+							PluginServices.getText(this,
+									"Solo_para_capas_vectoriales") + ".");
 				}
 
 			}
 
 		}
-		if (e.getActionCommand() == "UP")
-		{
+		if (e.getActionCommand() == "UP") {
 			int idSelec = jList.getSelectedIndex();
-		    int fromIndex = idSelec;
-		    int toIndex = idSelec-1;
-		        FLayer aux = theLayers.getLayer((String) lstModel.get(fromIndex));
-		        try {
-					theLayers.moveTo(numLayers-fromIndex, numLayers-toIndex);
-				} catch (CancelationException e1) {
-					e1.printStackTrace();
-				}
+			int fromIndex = idSelec;
+			int toIndex = idSelec - 1;
+			FLayer aux = theLayers.getLayer((String) lstModel.get(fromIndex));
+			try {
+				theLayers.moveTo(numLayers - fromIndex, numLayers - toIndex);
+			} catch (CancelationException e1) {
+				e1.printStackTrace();
+			}
 
-		        lstModel.remove(fromIndex);
-		        lstModel.add(toIndex,aux.getName());
+			lstModel.remove(fromIndex);
+			lstModel.add(toIndex, aux.getName());
 
-		        jList.setSelectedIndex(toIndex);
+			jList.setSelectedIndex(toIndex);
 
-		        ///mapCtrl.drawMap();
+			// /mapCtrl.drawMap();
 		}
-		if (e.getActionCommand() == "DOWN")
-		{
+		if (e.getActionCommand() == "DOWN") {
 			int idSelec = jList.getSelectedIndex();
-		    int fromIndex = idSelec;
-		    int toIndex = idSelec+1;
-		        FLayer aux = theLayers.getLayer((String) lstModel.get(fromIndex));
-		        try {
-		        	theLayers.moveTo(numLayers-fromIndex, numLayers-toIndex);
-				} catch (CancelationException e1) {
-					e1.printStackTrace();
-				}
+			int fromIndex = idSelec;
+			int toIndex = idSelec + 1;
+			FLayer aux = theLayers.getLayer((String) lstModel.get(fromIndex));
+			try {
+				theLayers.moveTo(numLayers - fromIndex, numLayers - toIndex);
+			} catch (CancelationException e1) {
+				e1.printStackTrace();
+			}
 
-		        lstModel.remove(fromIndex);
-		        lstModel.add(toIndex,aux.getName());
+			lstModel.remove(fromIndex);
+			lstModel.add(toIndex, aux.getName());
 
-		        jList.setSelectedIndex(toIndex);
+			jList.setSelectedIndex(toIndex);
 
-		        ///mapCtrl.drawMap();
+			// /mapCtrl.drawMap();
 		}
-
 
 	}
 
 	public WindowInfo getWindowInfo() {
-		if (m_viewinfo==null){
-    			m_viewinfo=new WindowInfo(WindowInfo.MODELESSDIALOG);
-			m_viewinfo.setTitle(PluginServices.getText(this,"Configurar_localizador"));
-			m_viewinfo.setWidth(this.getWidth()+8);
-			m_viewinfo.setHeight(this.getHeight()+8);
+		if (m_viewinfo == null) {
+			m_viewinfo = new WindowInfo(WindowInfo.MODELESSDIALOG);
+			m_viewinfo.setTitle(PluginServices.getText(this,
+					"Configurar_localizador"));
+			m_viewinfo.setWidth(this.getWidth() + 8);
+			m_viewinfo.setHeight(this.getHeight() + 8);
 		}
-			return m_viewinfo;
-		}
+		return m_viewinfo;
+	}
 
 	public void viewActivated() {
 	}
 
-
 	private JPanel getJPanel() {
 		if (pnlButtons == null) {
 			pnlButtons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 5));
-			pnlButtons.setBounds(new java.awt.Rectangle(0,200, this.getWidth(),37));
+			pnlButtons.setBounds(new java.awt.Rectangle(0, 200,
+					this.getWidth(), 37));
 			pnlButtons.add(getJBtnAddLayer(), null);
 			pnlButtons.add(getJBtnRemoveLayer(), null);
 			pnlButtons.add(getJBtnEditLegend(), null);
@@ -381,7 +370,6 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 		}
 		return pnlButtons;
 	}
-
 
 	public MapControl getMapCtrl() {
 		return mapCtrl;
@@ -391,4 +379,4 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 		return WindowInfo.DIALOG_PROFILE;
 	}
 
-        }
+}

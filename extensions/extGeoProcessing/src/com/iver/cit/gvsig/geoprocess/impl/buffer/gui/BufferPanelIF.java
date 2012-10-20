@@ -42,32 +42,32 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: BufferPanelIF.java 6747 2006-08-11 16:18:48Z azabala $
-* $Log$
-* Revision 1.3  2006-08-11 16:14:02  azabala
-* refactoring to make logic independent from UI
-*
-* Revision 1.2  2006/07/21 09:10:34  azabala
-* fixed bug 608: user doesnt enter any result file to the geoprocess panel
-*
-* Revision 1.1  2006/06/20 18:20:45  azabala
-* first version in cvs
-*
-* Revision 1.1  2006/05/24 21:14:55  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.3  2006/04/11 18:01:45  azabala
-* añadido metodo getFLayers
-*
-* Revision 1.2  2006/02/17 15:56:48  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/02/12 21:01:40  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: BufferPanelIF.java 6747 2006-08-11 16:18:48Z azabala $
+ * $Log$
+ * Revision 1.3  2006-08-11 16:14:02  azabala
+ * refactoring to make logic independent from UI
+ *
+ * Revision 1.2  2006/07/21 09:10:34  azabala
+ * fixed bug 608: user doesnt enter any result file to the geoprocess panel
+ *
+ * Revision 1.1  2006/06/20 18:20:45  azabala
+ * first version in cvs
+ *
+ * Revision 1.1  2006/05/24 21:14:55  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.3  2006/04/11 18:01:45  azabala
+ * añadido metodo getFLayers
+ *
+ * Revision 1.2  2006/02/17 15:56:48  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/02/12 21:01:40  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.buffer.gui;
 
 import java.io.File;
@@ -79,14 +79,13 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.geoprocess.core.fmap.GeoprocessException;
 
 /**
- * Models  funtionality of GeoProcessingBufferPanel
- * GUI component.
+ * Models funtionality of GeoProcessingBufferPanel GUI component.
  * 
  * @author azabala
- *
+ * 
  */
 public interface BufferPanelIF {
-	
+
 	/*
 	 * Constants to indicate how to create buffers on polygonal geometries
 	 */
@@ -95,26 +94,39 @@ public interface BufferPanelIF {
 	public final String BUFFER_INSIDE_OUTSIDE = PluginServices.getText(null,
 			"Dentro_y_fuera");
 	public final String BUFFER_OUTSIDE = PluginServices.getText(null, "Fuera");
-	
-	public void openResultFile();
-	public void constantDistanceSelected();
-	public void attributeDistanceSelected();
-	
-	public File getOutputFile() throws FileNotFoundException;
-	public FLyrVect getInputLayer();
-	public FLayers getFLayers();
-	public boolean isConstantDistanceSelected();
-	public boolean isAttributeDistanceSelected();
-	public double getConstantDistance() throws GeoprocessException;
-	public String getAttributeDistanceField()throws GeoprocessException;
-	public boolean isBufferOnlySelected();
-	public boolean isDissolveBuffersSelected();
-	
-	public void error(String errorDescription, String error);
-	public boolean askForOverwriteOutputFile(File file);
-	public int getNumberOfRadialBuffers();
-	public String getTypePolygonBuffer();
-	public boolean isSquareCap();
-	
-}
 
+	public void openResultFile();
+
+	public void constantDistanceSelected();
+
+	public void attributeDistanceSelected();
+
+	public File getOutputFile() throws FileNotFoundException;
+
+	public FLyrVect getInputLayer();
+
+	public FLayers getFLayers();
+
+	public boolean isConstantDistanceSelected();
+
+	public boolean isAttributeDistanceSelected();
+
+	public double getConstantDistance() throws GeoprocessException;
+
+	public String getAttributeDistanceField() throws GeoprocessException;
+
+	public boolean isBufferOnlySelected();
+
+	public boolean isDissolveBuffersSelected();
+
+	public void error(String errorDescription, String error);
+
+	public boolean askForOverwriteOutputFile(File file);
+
+	public int getNumberOfRadialBuffers();
+
+	public String getTypePolygonBuffer();
+
+	public boolean isSquareCap();
+
+}

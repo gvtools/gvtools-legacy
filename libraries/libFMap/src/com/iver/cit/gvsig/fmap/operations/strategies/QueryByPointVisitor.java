@@ -50,10 +50,9 @@ import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.layers.FBitSet;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 
-
 /**
  * Query by point Visitor.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class QueryByPointVisitor implements FeatureVisitor {
@@ -62,11 +61,12 @@ public class QueryByPointVisitor implements FeatureVisitor {
 	private FLayer layer = null;
 	private FBitSet bitset = null;
 	private Rectangle2D recPoint = null;
+
 	// private ICoordTrans ct = null;
 
 	/**
 	 * Devuelve un FBitSet con los índices de los registros de la consulta.
-	 *
+	 * 
 	 * @return FBitSet con los índices de la consulta.
 	 */
 	public FBitSet getBitSet() {
@@ -75,8 +75,9 @@ public class QueryByPointVisitor implements FeatureVisitor {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param layer DOCUMENT ME!
+	 * 
+	 * @param layer
+	 *            DOCUMENT ME!
 	 */
 	public void setLayer(FLayer layer) {
 		this.layer = layer;
@@ -85,8 +86,9 @@ public class QueryByPointVisitor implements FeatureVisitor {
 
 	/**
 	 * Inserta la tolerancia que se aplica en la selección.
-	 *
-	 * @param t tolerancia.
+	 * 
+	 * @param t
+	 *            tolerancia.
 	 */
 	public void setTolerance(double t) {
 		tolerance = t;
@@ -94,8 +96,9 @@ public class QueryByPointVisitor implements FeatureVisitor {
 
 	/**
 	 * Inserta el punto de consulta.
-	 *
-	 * @param p punto de consulta.
+	 * 
+	 * @param p
+	 *            punto de consulta.
 	 */
 	public void setQueriedPoint(Point2D p) {
 		point = p;
@@ -103,14 +106,16 @@ public class QueryByPointVisitor implements FeatureVisitor {
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.operations.strategies.FeatureVisitor#visit(com.iver.cit.gvsig.fmap.core.IGeometry,
-	 * 		int)
+	 *      int)
 	 */
-	public void visit(IGeometry g, int index) throws VisitorException, ProcessVisitorException {
-		if (g==null)return;
-		/* if (ct != null) {
-			g.reProject(ct);
-		} */
-		
+	public void visit(IGeometry g, int index) throws VisitorException,
+			ProcessVisitorException {
+		if (g == null)
+			return;
+		/*
+		 * if (ct != null) { g.reProject(ct); }
+		 */
+
 		if (g.intersects(recPoint)) {
 			bitset.set(index, true);
 		} else {

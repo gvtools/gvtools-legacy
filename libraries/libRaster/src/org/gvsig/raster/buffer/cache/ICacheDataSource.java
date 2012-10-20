@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2006 IVER T.I. and Generalitat Valenciana.
@@ -22,42 +21,50 @@ package org.gvsig.raster.buffer.cache;
 import java.io.IOException;
 
 /**
- * Interfaz que debe implementar una fuente de datos de un cache. Las fuentes
- * de datos deben interpretar la estructura de la cache para que cuando se les
+ * Interfaz que debe implementar una fuente de datos de un cache. Las fuentes de
+ * datos deben interpretar la estructura de la cache para que cuando se les
  * solicite una página de la caché sepan que extent de la fuente de datos deben
- * cargar en el buffer. 
+ * cargar en el buffer.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public interface ICacheDataSource{	
+public interface ICacheDataSource {
 	/**
-	 * Carga una página especificada en el parámetro nPag con los datos necesarios. La
-	 * petición que ha de hacerse se calcula previamente con la estructura de la caché.
-	 *   
-	 * @param nPag Número de página a cargar
-	 * @param pageBuffer Buffer de datos a cargar.
+	 * Carga una página especificada en el parámetro nPag con los datos
+	 * necesarios. La petición que ha de hacerse se calcula previamente con la
+	 * estructura de la caché.
+	 * 
+	 * @param nPag
+	 *            Número de página a cargar
+	 * @param pageBuffer
+	 *            Buffer de datos a cargar.
 	 */
 	public void loadPage(PageBandBuffer pageBuffer) throws InterruptedException;
-	
+
 	/**
-	 * Salva una página especificada en el parámetro nPag a disco. La
-	 * petición que ha de hacerse se calcula previamente con la estructura de la caché.
-	 *   
-	 * @param nPag Número de página a salvar
-	 * @param pageBuffer Buffer de datos a salvar.
+	 * Salva una página especificada en el parámetro nPag a disco. La petición
+	 * que ha de hacerse se calcula previamente con la estructura de la caché.
+	 * 
+	 * @param nPag
+	 *            Número de página a salvar
+	 * @param pageBuffer
+	 *            Buffer de datos a salvar.
 	 * @throws IOException
 	 */
-	public void savePage(PageBandBuffer pageBuffer)throws IOException, InterruptedException;
-	
+	public void savePage(PageBandBuffer pageBuffer) throws IOException,
+			InterruptedException;
+
 	/**
 	 * Elimina la fuente de datos de disco
+	 * 
 	 * @throws IOException
 	 */
-	public void delete()throws IOException;
-	
+	public void delete() throws IOException;
+
 	/**
 	 * Obtiene la ruta a la fuente de datos
+	 * 
 	 * @return Cadena con la ruta a la fuente de datos
 	 */
 	public String getPath();

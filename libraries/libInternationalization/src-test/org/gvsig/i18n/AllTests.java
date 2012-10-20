@@ -7,9 +7,9 @@ public class AllTests {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.gvsig.i18n");
-		//$JUnit-BEGIN$
+		// $JUnit-BEGIN$
 		suite.addTestSuite(TestMessages.class);
-		//$JUnit-END$
+		// $JUnit-END$
 		return suite;
 	}
 

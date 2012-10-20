@@ -43,10 +43,9 @@ package com.iver.cit.gvsig;
 import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
 
-
 /**
  * Extensión que abre la ventana de gestor de proyecto.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class ViewProjectWindow extends Extension {
@@ -55,7 +54,8 @@ public class ViewProjectWindow extends Extension {
 	 */
 	public void execute(String arg0) {
 		if (arg0.equals("SHOW")) {
-			ProjectExtension pe = (ProjectExtension) PluginServices.getExtension(com.iver.cit.gvsig.ProjectExtension.class);
+			ProjectExtension pe = (ProjectExtension) PluginServices
+					.getExtension(com.iver.cit.gvsig.ProjectExtension.class);
 			pe.showProjectWindow();
 		}
 	}
@@ -67,8 +67,9 @@ public class ViewProjectWindow extends Extension {
 	}
 
 	public void postInitialize() {
-		
+
 	}
+
 	/**
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */

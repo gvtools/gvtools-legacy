@@ -77,7 +77,8 @@ import org.gvsig.xmlschema.som.IXSContentType;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class GPEFeatureWithSequenceElementTest extends GPEWriterWithSchemaBaseTest {
+public abstract class GPEFeatureWithSequenceElementTest extends
+		GPEWriterWithSchemaBaseTest {
 	private String namespace = "http://www,gvsig.org/cit";
 	private String layerId = "l1";
 	private String layerName = "Points Layer";
@@ -96,15 +97,15 @@ public abstract class GPEFeatureWithSequenceElementTest extends GPEWriterWithSch
 	private String element2Value = "USA";
 	private String element3Name = "Capital";
 	private Boolean element3Value = new Boolean(false);
-	//Schema 
+	// Schema
 	private String xsLayerName = "cities";
 	private String xsLayerType = "citiesType";
-	private String xsLayerType_ = IXSComplexTypeDefinition.SEQUENCE;	
+	private String xsLayerType_ = IXSComplexTypeDefinition.SEQUENCE;
 	private String xsFeature1Name = "city";
-	private String xsFeature1Type = "cityType";	
-	private String xsFeature1Type_ = IXSComplexTypeDefinition.SEQUENCE;	
+	private String xsFeature1Type = "cityType";
+	private String xsFeature1Type_ = IXSComplexTypeDefinition.SEQUENCE;
 	private String xsFeature1ContentType = IXSContentType.WITOUT_CONTENT;
-	private String xsFeature1ContentRestriction = IXSContentType.WITOUT_RESTRICTION;	
+	private String xsFeature1ContentRestriction = IXSContentType.WITOUT_RESTRICTION;
 	private String xsFeature1Element1Name = "Population";
 	private String xsFeature1Element1Type = "xs:integer";
 	private String xsFeature1Element2Name = "Country";
@@ -112,78 +113,71 @@ public abstract class GPEFeatureWithSequenceElementTest extends GPEWriterWithSch
 	private String xsFeature1Element3Name = "Capital";
 	private String xsFeature1Element3Type = "xs:boolean";
 
-	
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#readObjects()
 	 */
 	public void readObjects() {
 		Layer[] layers = getLayers();
-		assertEquals(layers.length, 1);		
+		assertEquals(layers.length, 1);
 		Layer layer = layers[0];
-	
+
 		assertEquals(layer.getFeatures().size(), 1);
-		//FEATURE 1
-		Feature feature1 = (Feature)layer.getFeatures().get(0);
+		// FEATURE 1
+		Feature feature1 = (Feature) layer.getFeatures().get(0);
 		Element element1 = feature1.getElementAt(0);
 		assertEquals(element1.getName(), element1Name);
 		assertEquals(element1.getValue(), element1Value);
-		//assertEquals(element1.getType(), element1Type);
+		// assertEquals(element1.getType(), element1Type);
 		Element element2 = feature1.getElementAt(1);
 		assertEquals(element2.getName(), element2Name);
 		assertEquals(element2.getValue(), element2Value);
-		//assertEquals(element2.getType(), element2Type);
+		// assertEquals(element2.getType(), element2Type);
 		Element element3 = feature1.getElementAt(2);
 		assertEquals(element3.getName(), element3Name);
 		assertEquals(element3.getValue(), element3Value);
-		//assertEquals(element3.getType(), element3Type);
-		
+		// assertEquals(element3.getType(), element3Type);
+
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#writeObjects()
 	 */
 	public void writeObjects() {
 		getWriterHandler().initialize();
-		getWriterHandler().startLayer(layerId, null, layerName, layerDescription, layerSrs);
+		getWriterHandler().startLayer(layerId, null, layerName,
+				layerDescription, layerSrs);
 		getWriterHandler().startFeature(feature1Id, null, feature1Name);
-		getWriterHandler().startPoint(point1Id, new CoordinatesSequence(point1X, point1Y, point1Z), layerSrs);
-		getWriterHandler().endPoint();	
-		getWriterHandler().startElement(namespace,
-				element1Name,
-				element1Value);
+		getWriterHandler().startPoint(point1Id,
+				new CoordinatesSequence(point1X, point1Y, point1Z), layerSrs);
+		getWriterHandler().endPoint();
+		getWriterHandler().startElement(namespace, element1Name, element1Value);
 		getWriterHandler().endElement();
-		getWriterHandler().startElement(namespace,
-				element2Name,
-				element2Value);
+		getWriterHandler().startElement(namespace, element2Name, element2Value);
 		getWriterHandler().endElement();
-		getWriterHandler().startElement(namespace,
-				element3Name,
-				element3Value);
+		getWriterHandler().startElement(namespace, element3Name, element3Value);
 		getWriterHandler().endElement();
-		getWriterHandler().endFeature();		
+		getWriterHandler().endFeature();
 		getWriterHandler().endLayer();
-		getWriterHandler().close();		
+		getWriterHandler().close();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.schemas.GPEWriterWithSchemaBaseTest#writeSchema()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writers.schemas.GPEWriterWithSchemaBaseTest#writeSchema()
 	 */
-	public void writeSchema(){
-		getSchema().addElement(
-				xsFeature1Name,
-				xsFeature1Type);			
-		IXSComplexTypeDefinition complexType = getSchema().addComplexType(xsFeature1Type, xsFeature1Type_, xsFeature1ContentType, xsFeature1ContentRestriction);
-		complexType.addElement(
-				xsFeature1Element1Name,
-				xsFeature1Element1Type);		
-		complexType.addElement(
-				xsFeature1Element2Name,
-				xsFeature1Element2Type);	
-		complexType.addElement(
-				xsFeature1Element3Name,
-				xsFeature1Element3Type);
-	}	
+	public void writeSchema() {
+		getSchema().addElement(xsFeature1Name, xsFeature1Type);
+		IXSComplexTypeDefinition complexType = getSchema().addComplexType(
+				xsFeature1Type, xsFeature1Type_, xsFeature1ContentType,
+				xsFeature1ContentRestriction);
+		complexType.addElement(xsFeature1Element1Name, xsFeature1Element1Type);
+		complexType.addElement(xsFeature1Element2Name, xsFeature1Element2Type);
+		complexType.addElement(xsFeature1Element3Name, xsFeature1Element3Type);
+	}
 }

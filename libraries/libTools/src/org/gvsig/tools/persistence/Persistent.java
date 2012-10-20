@@ -4,7 +4,7 @@ public interface Persistent {
 
 	/**
 	 * Get the persistent state of the object and append to the passed state.
-	 *
+	 * 
 	 * @param state
 	 */
 	public void getState(PersistentState state) throws PersistenceException;

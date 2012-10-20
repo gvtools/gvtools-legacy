@@ -20,9 +20,10 @@ package org.gvsig.raster.datastruct;
 
 import org.gvsig.raster.RasterLibrary;
 import org.gvsig.raster.dataset.IBuffer;
+
 /**
- * Clase NoData que contiene el valor noData, el tipo de datos en el que se maneja
- * y si esta asignado por el usuario, es de la capa o esta desactivado.
+ * Clase NoData que contiene el valor noData, el tipo de datos en el que se
+ * maneja y si esta asignado por el usuario, es de la capa o esta desactivado.
  * 
  * @version 11/07/2008
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
@@ -30,13 +31,13 @@ import org.gvsig.raster.dataset.IBuffer;
 public class NoData {
 	double value = 0;
 	int type = -1;
-	
+
 	/**
 	 * Constructor vacio
 	 */
 	public NoData() {
 	}
-	
+
 	/**
 	 * Constructor con todos los parametros posibles
 	 * 
@@ -46,30 +47,31 @@ public class NoData {
 	 */
 	public NoData(double noData, int type, int dataType) {
 		switch (dataType) {
-			case IBuffer.TYPE_BYTE:
-				setValue((byte) noData);
-				break;
-			case IBuffer.TYPE_FLOAT:
-				setValue((float) noData);
-				break;
-			case IBuffer.TYPE_USHORT:
-			case IBuffer.TYPE_INT:
-				setValue((int) noData);
-				break;
-			case IBuffer.TYPE_SHORT:
-				setValue((short) noData);
-				break;
-			default:
-				setValue(noData);
-				break;
+		case IBuffer.TYPE_BYTE:
+			setValue((byte) noData);
+			break;
+		case IBuffer.TYPE_FLOAT:
+			setValue((float) noData);
+			break;
+		case IBuffer.TYPE_USHORT:
+		case IBuffer.TYPE_INT:
+			setValue((int) noData);
+			break;
+		case IBuffer.TYPE_SHORT:
+			setValue((short) noData);
+			break;
+		default:
+			setValue(noData);
+			break;
 		}
 		setType(type);
 		if (noData != getValue())
 			setType(RasterLibrary.NODATATYPE_DISABLED);
 	}
-	
+
 	/**
-	 * Constructor con el valor noData y si esta activo, suponiendo que es double. 
+	 * Constructor con el valor noData y si esta activo, suponiendo que es
+	 * double.
 	 * 
 	 * @param noData
 	 * @param type
@@ -77,7 +79,7 @@ public class NoData {
 	public NoData(double noData, int type) {
 		this(noData, type, IBuffer.TYPE_DOUBLE);
 	}
-	
+
 	/**
 	 * @return the noData
 	 */
@@ -86,7 +88,8 @@ public class NoData {
 	}
 
 	/**
-	 * @param noData the noData to set
+	 * @param noData
+	 *            the noData to set
 	 */
 	public void setValue(double noData) {
 		this.value = noData;
@@ -100,7 +103,8 @@ public class NoData {
 	}
 
 	/**
-	 * @param enabled the enabled to set
+	 * @param enabled
+	 *            the enabled to set
 	 */
 	public void setType(int type) {
 		this.type = type;

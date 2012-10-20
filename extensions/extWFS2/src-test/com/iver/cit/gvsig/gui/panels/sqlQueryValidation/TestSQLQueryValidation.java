@@ -44,16 +44,17 @@ import junit.framework.TestCase;
  */
 
 /**
- * Tests the methods of the class SQLQueryValidation
- *    (This class is made without inner static methods for don't create problems to Zql, in this way,
- *     it's possible to add more tests, with or without long queries.)
+ * Tests the methods of the class SQLQueryValidation (This class is made without
+ * inner static methods for don't create problems to Zql, in this way, it's
+ * possible to add more tests, with or without long queries.)
  * 
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
- public class TestSQLQueryValidation extends TestCase{
-	
+public class TestSQLQueryValidation extends TestCase {
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see junit.framework.TestCase#setUp()
 	 */
 	protected void setUp() throws Exception {
@@ -61,33 +62,34 @@ import junit.framework.TestCase;
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see junit.framework.TestCase#tearDown()
 	 */
 	protected void tearDown() throws Exception {
 		super.tearDown();
 	}
-	
+
 	/**
 	 * A test (Correct)
 	 */
 	public void test1() {
 		String query = "SELECT r.name, f.id FROM room r, flat f WHERE (r.user_name LIKE 'P%') AND (r.flat = f.id) AND (r.color_wall LIKE 'white') AND (r.height < 2.20);";
-		
+
 		System.out.println("¿Es válida '" + query + "' ?");
-		SQLQueryValidation sqlQueryValidation = new SQLQueryValidation(query, false);
+		SQLQueryValidation sqlQueryValidation = new SQLQueryValidation(query,
+				false);
 
 		if (sqlQueryValidation.validateQuery()) {
 			System.out.println("Yes.");
-		}
-		else {
+		} else {
 			System.out.println("No.");
 			System.out.println(sqlQueryValidation.getErrorPositionAsMessage());
 			System.out.println(sqlQueryValidation.getErrorMessage());
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test (Correct)
 	 */
@@ -95,12 +97,12 @@ import junit.framework.TestCase;
 		String query = "SELECT * FROM House;";
 
 		System.out.println("¿Es válida '" + query + "' ?");
-		SQLQueryValidation sqlQueryValidation = new SQLQueryValidation(query, false);
+		SQLQueryValidation sqlQueryValidation = new SQLQueryValidation(query,
+				false);
 
 		if (sqlQueryValidation.validateQuery()) {
 			System.out.println("Yes.");
-		}
-		else {
+		} else {
 			System.out.println("No.");
 			System.out.println(sqlQueryValidation.getErrorPositionAsMessage());
 			System.out.println(sqlQueryValidation.getErrorMessage());
@@ -115,19 +117,19 @@ import junit.framework.TestCase;
 		String query = "SELECT a* FROM House;";
 
 		System.out.println("¿Es válida '" + query + "' ?");
-		SQLQueryValidation sqlQueryValidation = new SQLQueryValidation(query, false);
+		SQLQueryValidation sqlQueryValidation = new SQLQueryValidation(query,
+				false);
 
 		if (sqlQueryValidation.validateQuery()) {
 			System.out.println("Yes.");
-		}
-		else {
+		} else {
 			System.out.println("No.");
 			System.out.println(sqlQueryValidation.getErrorPositionAsMessage());
 			System.out.println(sqlQueryValidation.getErrorMessage());
 			fail();
 		}
 	}
-	
+
 	/**
 	 * A test (Correct)
 	 */
@@ -135,12 +137,12 @@ import junit.framework.TestCase;
 		String query = "SELECT * FROM House;";
 
 		System.out.println("¿Es válida '" + query + "' ?");
-		SQLQueryValidation sqlQueryValidation = new SQLQueryValidation(query, false);
+		SQLQueryValidation sqlQueryValidation = new SQLQueryValidation(query,
+				false);
 
 		if (sqlQueryValidation.validateQuery()) {
 			System.out.println("Yes.");
-		}
-		else {
+		} else {
 			System.out.println("No.");
 			System.out.println(sqlQueryValidation.getErrorPositionAsMessage());
 			System.out.println(sqlQueryValidation.getErrorMessage());
@@ -155,12 +157,12 @@ import junit.framework.TestCase;
 		String query = "r.level = f.level AND r.user_name LIKE \'P%\';";
 
 		System.out.println("¿Es válida '" + query + "' ?");
-		SQLQueryValidation sqlQueryValidation = new SQLQueryValidation(query, true);
+		SQLQueryValidation sqlQueryValidation = new SQLQueryValidation(query,
+				true);
 
 		if (sqlQueryValidation.validateQuery()) {
 			System.out.println("Yes.");
-		}
-		else {
+		} else {
 			System.out.println("No.");
 			System.out.println(sqlQueryValidation.getErrorPositionAsMessage());
 			System.out.println(sqlQueryValidation.getErrorMessage());
@@ -175,16 +177,16 @@ import junit.framework.TestCase;
 		String query = "r.level = f.level a e3 w 	q3 	 º32	9'}97AND r.user_name LIKE \'P%\';";
 
 		System.out.println("¿Es válida '" + query + "' ?");
-		SQLQueryValidation sqlQueryValidation = new SQLQueryValidation(query, true);
+		SQLQueryValidation sqlQueryValidation = new SQLQueryValidation(query,
+				true);
 
 		if (sqlQueryValidation.validateQuery()) {
 			System.out.println("Yes.");
-		}
-		else {
+		} else {
 			System.out.println("No.");
 			System.out.println(sqlQueryValidation.getErrorPositionAsMessage());
-			System.out.println(sqlQueryValidation.getErrorMessage());			
+			System.out.println(sqlQueryValidation.getErrorMessage());
 			fail();
 		}
 	}
- }
+}

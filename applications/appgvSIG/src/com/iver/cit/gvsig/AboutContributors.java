@@ -50,26 +50,28 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
 import com.iver.cit.gvsig.gui.panels.FPanelAbout;
 
-
 /**
- * Adds a new tab in the about dialog. This tab contains a 
- * table with a list of contributors.
+ * Adds a new tab in the about dialog. This tab contains a table with a list of
+ * contributors.
  * 
  * 22/10/2009
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class AboutContributors extends Extension {
-	
-    /*
-     * (non-Javadoc)
-     * @see com.iver.andami.plugins.IExtension#isEnabled()
-     */
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.andami.plugins.IExtension#isEnabled()
+	 */
 	public boolean isEnabled() {
 		return false;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
@@ -78,21 +80,25 @@ public class AboutContributors extends Extension {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
-		About about = (About)PluginServices.getExtension(About.class);
+		About about = (About) PluginServices.getExtension(About.class);
 		FPanelAbout panelAbout = about.getAboutPanel();
-		java.net.URL aboutURL = this.getClass().getResource("/about_contrib.htm");
-	    panelAbout.addAboutUrl(PluginServices.getText(this, "others"), aboutURL);
+		java.net.URL aboutURL = this.getClass().getResource(
+				"/about_contrib.htm");
+		panelAbout
+				.addAboutUrl(PluginServices.getText(this, "others"), aboutURL);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String actionCommand) {
-		
+
 	}
-   
+
 }

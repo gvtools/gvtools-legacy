@@ -36,27 +36,29 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.gvsig.gui.beans.controls.IControl;
+
 /**
- * Boton destinado a ser usado en un JToolBar que ofrece un desplegable de 
- * items de menu.
- *
+ * Boton destinado a ser usado en un JToolBar que ofrece un desplegable de items
+ * de menu.
+ * 
  * @version 06/02/2008
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
-public class ComboButton extends JButton implements IControl, MouseListener, MouseMotionListener, ActionListener {
+public class ComboButton extends JButton implements IControl, MouseListener,
+		MouseMotionListener, ActionListener {
 	private static final long serialVersionUID = -1412453774004951410L;
-	private JPopupMenu popMenu         = new JPopupMenu();
-	private static int BORDER          = 6;
-	private int        offsetTrianglex = -4;
-	private int        offsetTriangley = -4;
-	private int        triangleWidth   = 8;
-	private int        triangleHeight  = 7;
-	private boolean    showToolTipText = true;
-	private boolean    showMenuAlways  = true;
-	private boolean    alwaysMenuOnClick = false;
-	
+	private JPopupMenu popMenu = new JPopupMenu();
+	private static int BORDER = 6;
+	private int offsetTrianglex = -4;
+	private int offsetTriangley = -4;
+	private int triangleWidth = 8;
+	private int triangleHeight = 7;
+	private boolean showToolTipText = true;
+	private boolean showMenuAlways = true;
+	private boolean alwaysMenuOnClick = false;
+
 	private ArrayList<ComboButtonListener> actionCommandListeners = new ArrayList<ComboButtonListener>();
-	
+
 	/**
 	 * Indica si en la siguiente agregacion de un item ha de llevar un separador
 	 * previo
@@ -68,7 +70,7 @@ public class ComboButton extends JButton implements IControl, MouseListener, Mou
 		addMouseMotionListener(this);
 		addActionListener(this);
 	}
-	
+
 	/**
 	 * @deprecated Mantego el metodo para posibles compatibilidades
 	 * @param mode
@@ -92,17 +94,19 @@ public class ComboButton extends JButton implements IControl, MouseListener, Mou
 		setIcon(mi.getIcon());
 		setToolTipText(mi.getText());
 		setActionCommand(mi.getActionCommand());
-//		requestFocus();
+		// requestFocus();
 	}
-	
+
 	public void setSelectedItem(String actionCommand) {
 		for (int i = 0; i < popMenu.getSubElements().length; i++) {
-			if (((JMenuItem) popMenu.getSubElements()[i].getComponent()).getActionCommand().equals(actionCommand)) {
-				selectItem((JMenuItem) popMenu.getSubElements()[i].getComponent());
+			if (((JMenuItem) popMenu.getSubElements()[i].getComponent())
+					.getActionCommand().equals(actionCommand)) {
+				selectItem((JMenuItem) popMenu.getSubElements()[i]
+						.getComponent());
 				break;
 			}
 		}
-//		popMenu.requestFocus();
+		// popMenu.requestFocus();
 	}
 
 	/**
@@ -111,9 +115,10 @@ public class ComboButton extends JButton implements IControl, MouseListener, Mou
 	public void clearButtons() {
 		popMenu.removeAll();
 	}
-	
+
 	/**
 	 * Añade un JMenuItem al menu desplegable
+	 * 
 	 * @param menu
 	 */
 	public void addButton(JButton menu) {
@@ -123,7 +128,7 @@ public class ComboButton extends JButton implements IControl, MouseListener, Mou
 		mi.setEnabled(menu.isEnabled());
 		mi.setActionCommand(menu.getActionCommand());
 		mi.addActionListener(this);
-		
+
 		if (nextSeparator) {
 			popMenu.addSeparator();
 			nextSeparator = false;
@@ -149,6 +154,7 @@ public class ComboButton extends JButton implements IControl, MouseListener, Mou
 
 	/**
 	 * Muestra/Oculta el menu
+	 * 
 	 * @param flag
 	 */
 	public void setPopupVisible(boolean flag) {
@@ -163,14 +169,17 @@ public class ComboButton extends JButton implements IControl, MouseListener, Mou
 
 	public void setAction(ActionEvent action) {
 		for (int i = 0; i < popMenu.getSubElements().length; i++) {
-			if (((JMenuItem) popMenu.getSubElements()[i].getComponent()).getActionCommand().equals(action.getActionCommand())) {
-				((JMenuItem) popMenu.getSubElements()[i].getComponent()).doClick();
+			if (((JMenuItem) popMenu.getSubElements()[i].getComponent())
+					.getActionCommand().equals(action.getActionCommand())) {
+				((JMenuItem) popMenu.getSubElements()[i].getComponent())
+						.doClick();
 			}
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.controls.IControl#setValue(java.lang.Object)
 	 */
 	public Object setValue(Object value) {
@@ -179,11 +188,14 @@ public class ComboButton extends JButton implements IControl, MouseListener, Mou
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
 		for (int i = 0; i < popMenu.getSubElements().length; i++) {
-			if (e.getSource() instanceof JMenuItem && popMenu.getSubElements()[i] == e.getSource()) {
+			if (e.getSource() instanceof JMenuItem
+					&& popMenu.getSubElements()[i] == e.getSource()) {
 				selectItem((JMenuItem) e.getSource());
 				callComboButtonClickedListeners();
 				return;
@@ -193,6 +205,7 @@ public class ComboButton extends JButton implements IControl, MouseListener, Mou
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.JComponent#paint(java.awt.Graphics)
 	 */
 	public void paint(Graphics g) {
@@ -200,7 +213,8 @@ public class ComboButton extends JButton implements IControl, MouseListener, Mou
 
 		Graphics2D g2 = (Graphics2D) g;
 		if (showMenuAlways || popMenu.getSubElements().length > 1) {
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+					RenderingHints.VALUE_ANTIALIAS_ON);
 			// draw little arrow (for popup menu)
 			drawTriangle(g2);
 		}
@@ -246,7 +260,7 @@ public class ComboButton extends JButton implements IControl, MouseListener, Mou
 			if (x > (BORDER + offsetTrianglex + triangleWidth))
 				return false;
 		}
-	
+
 		if (offsetTriangley < 0) {
 			if (y < (this.getHeight() - BORDER + offsetTriangley))
 				return false;
@@ -260,6 +274,7 @@ public class ComboButton extends JButton implements IControl, MouseListener, Mou
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
 	 */
 	public void mousePressed(MouseEvent e) {
@@ -269,9 +284,10 @@ public class ComboButton extends JButton implements IControl, MouseListener, Mou
 		else
 			callComboButtonClickedListeners();
 	}
-	
+
 	/**
 	 * Añadir un listener a la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void addComboButtonClickedListener(ComboButtonListener listener) {
@@ -281,17 +297,19 @@ public class ComboButton extends JButton implements IControl, MouseListener, Mou
 
 	/**
 	 * Borrar un listener de la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void removeComboButtonClickedListener(ComboButtonListener listener) {
 		actionCommandListeners.remove(listener);
 	}
-	
+
 	/**
 	 * Invocar a los eventos asociados al componente
 	 */
 	private void callComboButtonClickedListeners() {
-		Iterator<ComboButtonListener> acIterator = actionCommandListeners.iterator();
+		Iterator<ComboButtonListener> acIterator = actionCommandListeners
+				.iterator();
 		while (acIterator.hasNext()) {
 			ComboButtonListener listener = acIterator.next();
 			listener.actionComboButtonClicked(new ComboButtonEvent(this));
@@ -300,6 +318,7 @@ public class ComboButton extends JButton implements IControl, MouseListener, Mou
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.JComponent#getToolTipText()
 	 */
 	public String getToolTipText() {
@@ -307,10 +326,13 @@ public class ComboButton extends JButton implements IControl, MouseListener, Mou
 			return super.getToolTipText();
 		return null;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent
+	 * )
 	 */
 	public void mouseDragged(MouseEvent e) {
 		if (popupTriangleClicked(e.getX(), e.getY()))
@@ -319,7 +341,9 @@ public class ComboButton extends JButton implements IControl, MouseListener, Mou
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
 	 */
 	public void mouseMoved(MouseEvent e) {
 		showToolTipText = !popMenu.isShowing();
@@ -327,6 +351,7 @@ public class ComboButton extends JButton implements IControl, MouseListener, Mou
 
 	/**
 	 * Devuelve si esta visible siempre
+	 * 
 	 * @return the showMenuAlways
 	 */
 	public boolean isShowMenuAlways() {
@@ -334,20 +359,28 @@ public class ComboButton extends JButton implements IControl, MouseListener, Mou
 	}
 
 	/**
-	 * Especifica si el menu se ha de visualizar siempre o solo cuando haya mas de
-	 * un item
-	 * @param showMenuAlways the showMenuAlways to set
+	 * Especifica si el menu se ha de visualizar siempre o solo cuando haya mas
+	 * de un item
+	 * 
+	 * @param showMenuAlways
+	 *            the showMenuAlways to set
 	 */
 	public void setShowMenuAlways(boolean showMenuAlways) {
 		this.showMenuAlways = showMenuAlways;
 	}
-	
+
 	public void mouseReleased(MouseEvent e) {
-		
+
 	}
-	public void mouseClicked(MouseEvent e) {}
-	public void mouseEntered(MouseEvent arg0) {}
-	public void mouseExited(MouseEvent arg0) {}
+
+	public void mouseClicked(MouseEvent e) {
+	}
+
+	public void mouseEntered(MouseEvent arg0) {
+	}
+
+	public void mouseExited(MouseEvent arg0) {
+	}
 
 	/**
 	 * @return the alwaysMenuOnClick
@@ -357,7 +390,8 @@ public class ComboButton extends JButton implements IControl, MouseListener, Mou
 	}
 
 	/**
-	 * @param alwaysMenuOnClick the alwaysMenuOnClick to set
+	 * @param alwaysMenuOnClick
+	 *            the alwaysMenuOnClick to set
 	 */
 	public void setAlwaysMenuOnClick(boolean alwaysMenuOnClick) {
 		this.alwaysMenuOnClick = alwaysMenuOnClick;

@@ -166,7 +166,7 @@ public class EditionPreferencePage extends AbstractPreferencePage {
 				else
 					rec.maxFeat = new Integer(0);
 			}
-			changed  =true;
+			changed = true;
 			super.setValueAt(aValue, rowIndex, columnIndex);
 		}
 
@@ -194,7 +194,7 @@ public class EditionPreferencePage extends AbstractPreferencePage {
 
 	/**
 	 * This method initializes
-	 *
+	 * 
 	 */
 	public EditionPreferencePage() {
 		super();
@@ -211,7 +211,7 @@ public class EditionPreferencePage extends AbstractPreferencePage {
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 */
 	private void initialize() {
 		BorderLayout layout = new BorderLayout();
@@ -223,7 +223,7 @@ public class EditionPreferencePage extends AbstractPreferencePage {
 		jLabelCache
 				.setText(PluginServices.getText(this, "capas_edition_cache"));
 		jLabelCache.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-		jLabelCache.setPreferredSize(new java.awt.Dimension(500,20));
+		jLabelCache.setPreferredSize(new java.awt.Dimension(500, 20));
 		jLabelCache.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 		jLabel1 = new JLabel();
 		jLabel1.setText("pixels");
@@ -238,7 +238,7 @@ public class EditionPreferencePage extends AbstractPreferencePage {
 		jLabel.setPreferredSize(new java.awt.Dimension(28, 20));
 		jLabel.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
 
-		this.setSize(new java.awt.Dimension(502,288));
+		this.setSize(new java.awt.Dimension(502, 288));
 		this.setPreferredSize(this.getSize());
 		this.add(getJPanelNord(), BorderLayout.NORTH);
 
@@ -262,25 +262,25 @@ public class EditionPreferencePage extends AbstractPreferencePage {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.gui.preferences.IPreference#initializeValues()
 	 */
 	public void initializeValues() {
 		TableModel tm = getJTableSnapping().getModel();
 		EditionManager edManager = CADExtension.getEditionManager();
-		FLayer layerActive=layers.getActives()[0];
+		FLayer layerActive = layers.getActives()[0];
 		VectorialLayerEdited lyrEd = (VectorialLayerEdited) edManager
-			.getLayerEdited(layerActive);
-		ArrayList layersToSnap=lyrEd.getLayersToSnap();
-		ArrayList layersVect=new ArrayList();
+				.getLayerEdited(layerActive);
+		ArrayList layersToSnap = lyrEd.getLayersToSnap();
+		ArrayList layersVect = new ArrayList();
 		for (int i = 0; i < layers.getLayersCount(); i++) {
-			FLayer layer=layers.getLayer(i);
+			FLayer layer = layers.getLayer(i);
 			if (layer instanceof FLyrVect) {
 				layersVect.add(layer);
 			}
 		}
 		for (int i = 0; i < layersVect.size(); i++) {
-			FLyrVect lv=(FLyrVect)layersVect.get(i);
+			FLyrVect lv = (FLyrVect) layersVect.get(i);
 			tm.setValueAt(lv.getName(), i, 1);
 			tm.setValueAt(layersToSnap.contains(lv), i, 0);
 			tm.setValueAt(lv.getSpatialCache().getMaxFeatures(), i, 2);
@@ -323,14 +323,14 @@ public class EditionPreferencePage extends AbstractPreferencePage {
 
 		while (it.hasNext()) {
 			FLayer aux = it.next();
-			if (aux instanceof FLyrVect)
-			{
+			if (aux instanceof FLyrVect) {
 				FLyrVect lyrVect = (FLyrVect) aux;
 				// Inicializamos todas
 				lyrVect.setSpatialCacheEnabled(false);
 				if (aux.isActive())
 					if (aux.isEditing()) {
-						// Sobre la capa en edición siempre se puede hacer snapping
+						// Sobre la capa en edición siempre se puede hacer
+						// snapping
 						lyrVect.setSpatialCacheEnabled(true);
 						VectorialLayerEdited lyrEd = (VectorialLayerEdited) edManager
 								.getLayerEdited(aux);
@@ -348,23 +348,25 @@ public class EditionPreferencePage extends AbstractPreferencePage {
 			FLayer aux = it.next();
 			if (aux.isEditing())
 				if (aux instanceof FLyrVect) {
-						VectorialLayerEdited lyrEd = (VectorialLayerEdited) edManager
-								.getLayerEdited(aux);
-						for (int i=0; i<lyrEd.getLayersToSnap().size(); i++)
-						{
-							FLyrVect lyrVect = (FLyrVect) lyrEd.getLayersToSnap().get(i);
-							lyrVect.setSpatialCacheEnabled(true);
-						}
+					VectorialLayerEdited lyrEd = (VectorialLayerEdited) edManager
+							.getLayerEdited(aux);
+					for (int i = 0; i < lyrEd.getLayersToSnap().size(); i++) {
+						FLyrVect lyrVect = (FLyrVect) lyrEd.getLayersToSnap()
+								.get(i);
+						lyrVect.setSpatialCacheEnabled(true);
+					}
 
 				}
 
 		} // while
 		mapContext.invalidate();
-		try{
-			SelectionCADTool.tolerance = Integer.parseInt(getJTxtTolerance().getText());
+		try {
+			SelectionCADTool.tolerance = Integer.parseInt(getJTxtTolerance()
+					.getText());
 
-		}catch (Exception e) {
-			throw new StoreException(PluginServices.getText(this, "tolerancia_incorrecta"),e);
+		} catch (Exception e) {
+			throw new StoreException(PluginServices.getText(this,
+					"tolerancia_incorrecta"), e);
 		}
 	}
 
@@ -397,7 +399,7 @@ public class EditionPreferencePage extends AbstractPreferencePage {
 
 	/**
 	 * This method initializes jTxtTolerance
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getJTxtTolerance() {
@@ -409,9 +411,17 @@ public class EditionPreferencePage extends AbstractPreferencePage {
 			jTxtTolerance.setText("4");
 			jTxtTolerance.setBounds(new java.awt.Rectangle(142, 8, 39, 15));
 			jTxtTolerance.addKeyListener(new KeyListener() {
-               	public void keyPressed(KeyEvent e) { changed = true; }
-				public void keyReleased(KeyEvent e) { changed = true; }
-				public void keyTyped(KeyEvent e){ changed = true; }
+				public void keyPressed(KeyEvent e) {
+					changed = true;
+				}
+
+				public void keyReleased(KeyEvent e) {
+					changed = true;
+				}
+
+				public void keyTyped(KeyEvent e) {
+					changed = true;
+				}
 			});
 		}
 		return jTxtTolerance;
@@ -419,26 +429,26 @@ public class EditionPreferencePage extends AbstractPreferencePage {
 
 	/**
 	 * This method initializes jSeparator
-	 *
+	 * 
 	 * @return javax.swing.JSeparator
 	 */
 	private JSeparator getJSeparator() {
 		if (jSeparator == null) {
 			jSeparator = new JSeparator();
-			jSeparator.setPreferredSize(new java.awt.Dimension(200,2));
+			jSeparator.setPreferredSize(new java.awt.Dimension(200, 2));
 		}
 		return jSeparator;
 	}
 
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
-			jScrollPane.setPreferredSize(new java.awt.Dimension(500,419));
+			jScrollPane.setPreferredSize(new java.awt.Dimension(500, 419));
 			jScrollPane.setViewportView(getJTableSnapping());
 		}
 		return jScrollPane;
@@ -446,7 +456,7 @@ public class EditionPreferencePage extends AbstractPreferencePage {
 
 	/**
 	 * This method initializes jTableSnapping
-	 *
+	 * 
 	 * @return javax.swing.JTable
 	 */
 	private JTable getJTableSnapping() {
@@ -470,9 +480,17 @@ public class EditionPreferencePage extends AbstractPreferencePage {
 			// jTableSnapping.setModel(tm);
 			// jTableSnapping.setTableHeader(head);
 			jTableSnapping.addKeyListener(new KeyListener() {
-               	public void keyPressed(KeyEvent e) { changed = true; }
-				public void keyReleased(KeyEvent e) { changed = true; }
-				public void keyTyped(KeyEvent e){ changed = true; }
+				public void keyPressed(KeyEvent e) {
+					changed = true;
+				}
+
+				public void keyReleased(KeyEvent e) {
+					changed = true;
+				}
+
+				public void keyTyped(KeyEvent e) {
+					changed = true;
+				}
 			});
 		}
 		return jTableSnapping;
@@ -480,7 +498,7 @@ public class EditionPreferencePage extends AbstractPreferencePage {
 
 	/**
 	 * This method initializes jPanelNord
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanelNord() {
@@ -500,7 +518,7 @@ public class EditionPreferencePage extends AbstractPreferencePage {
 
 	/**
 	 * This method initializes jPanelCache
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanelCache() {
@@ -521,5 +539,5 @@ public class EditionPreferencePage extends AbstractPreferencePage {
 		changed = false;
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="14,10"
+} // @jve:decl-index=0:visual-constraint="14,10"
 

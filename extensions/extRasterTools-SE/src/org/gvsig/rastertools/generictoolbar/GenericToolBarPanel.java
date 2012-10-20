@@ -43,6 +43,7 @@ import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
 
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
+
 /**
  * Componente que contiene los objetos visuales de la barra de herramientas
  * generica
@@ -50,20 +51,22 @@ import com.iver.cit.gvsig.fmap.layers.FLayers;
  * @version 13/02/2008
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
-public class GenericToolBarPanel extends JToolBar implements ComboButtonListener, ActionListener, MouseListener, ItemListener {
+public class GenericToolBarPanel extends JToolBar implements
+		ComboButtonListener, ActionListener, MouseListener, ItemListener {
 	private static final long serialVersionUID = -4382962282970490523L;
 	private JComboBoxConfigurableLookUp jCBCLU = null;
 	private ComboButton buttonGroup = new ComboButton();
 	private ComboButton buttonMenu = new ComboButton();
 	private FLayers lastLayers = null;
-	
+
 	public GenericToolBarPanel() {
 		super("GenericToolBarPanel");
 		initialize();
 	}
-	
-	/**	
+
+	/**
 	 * Especifica que las capas de la vista han cambiado.
+	 * 
 	 * @param layers
 	 */
 	public void setLayers(FLayers layers) {
@@ -71,23 +74,27 @@ public class GenericToolBarPanel extends JToolBar implements ComboButtonListener
 
 		getComboBoxConfigurableLookUp().setBlockPopupHided(true);
 		getComboBoxConfigurableLookUp().removeAllItems();
-		
+
 		ArrayList lyrs = RasterToolsUtil.getLayerList(layers, null);
-		for (int i = 0; i < lyrs.size(); i++) 
-			getComboBoxConfigurableLookUp().addItem(((FLayer)lyrs.get(i)).getName());
+		for (int i = 0; i < lyrs.size(); i++)
+			getComboBoxConfigurableLookUp().addItem(
+					((FLayer) lyrs.get(i)).getName());
 
 		if (layers.getActives().length > 0) {
-			getComboBoxConfigurableLookUp().setSelectedItem(layers.getActives()[0].getName());
+			getComboBoxConfigurableLookUp().setSelectedItem(
+					layers.getActives()[0].getName());
 		} else {
 			if (layers.getLayersCount() > 0)
-				getComboBoxConfigurableLookUp().setSelectedItem(layers.getLayer(0).getName());
+				getComboBoxConfigurableLookUp().setSelectedItem(
+						layers.getLayer(0).getName());
 		}
 		reloadSubMenu();
 		getComboBoxConfigurableLookUp().setBlockPopupHided(false);
 	}
-	
+
 	/**
 	 * Devuelve un combo de busqueda de items.
+	 * 
 	 * @return
 	 */
 	private JComboBoxConfigurableLookUp getComboBoxConfigurableLookUp() {
@@ -96,9 +103,12 @@ public class GenericToolBarPanel extends JToolBar implements ComboButtonListener
 			jCBCLU.setOnlyOneColorOnText(true);
 			jCBCLU.setPrototypeDisplayValue(" ");
 			if (jCBCLU.getModel() instanceof DefaultComboBoxConfigurableLookUpModel) {
-				((DefaultComboBoxConfigurableLookUpModel) jCBCLU.getModel()).setShowAllItemsInListBox(false);
-				((DefaultComboBoxConfigurableLookUpModel) jCBCLU.getModel()).setLookUpAgent(new BinarySearch());
-				((DefaultComboBoxConfigurableLookUpModel) jCBCLU.getModel()).setCaseSensitive(false);
+				((DefaultComboBoxConfigurableLookUpModel) jCBCLU.getModel())
+						.setShowAllItemsInListBox(false);
+				((DefaultComboBoxConfigurableLookUpModel) jCBCLU.getModel())
+						.setLookUpAgent(new BinarySearch());
+				((DefaultComboBoxConfigurableLookUpModel) jCBCLU.getModel())
+						.setCaseSensitive(false);
 				jCBCLU.setToForceSelectAnItem(true);
 				jCBCLU.setDisplayAllItemsWithArrowButton(true);
 			}
@@ -106,7 +116,7 @@ public class GenericToolBarPanel extends JToolBar implements ComboButtonListener
 		}
 		return jCBCLU;
 	}
-	
+
 	private void initialize() {
 		buttonGroup.addComboButtonClickedListener(this);
 		buttonGroup.setName("Menu principal");
@@ -114,18 +124,18 @@ public class GenericToolBarPanel extends JToolBar implements ComboButtonListener
 		buttonGroup.setAlwaysMenuOnClick(true);
 		reloadMenuGroup();
 		add(buttonGroup);
-		
+
 		buttonMenu.addComboButtonClickedListener(this);
 		buttonMenu.setName("Submenus");
 		buttonMenu.addMouseListener(this);
 		buttonMenu.setMargin(new Insets(0, 0, 0, 0));
 		reloadMenuGroup();
 		add(buttonMenu);
-		
+
 		add(getComboBoxConfigurableLookUp());
 		this.setRollover(true);
 	}
-	
+
 	/**
 	 * Recarga los items del menu global dejando seleccionado el item que habia
 	 * previamente, en caso de que exista
@@ -134,13 +144,15 @@ public class GenericToolBarPanel extends JToolBar implements ComboButtonListener
 		FLayer[] layers = new FLayer[] { getLayerSelected() };
 		ButtonItems buttonItems = new ButtonItems(buttonGroup, layers);
 
-		ExtensionPoint extensionPoint = ExtensionPoint.getExtensionPoint("GenericToolBarGroup");
+		ExtensionPoint extensionPoint = ExtensionPoint
+				.getExtensionPoint("GenericToolBarGroup");
 		Iterator iterator = extensionPoint.getIterator();
 		while (iterator.hasNext()) {
 			Entry entry = (Entry) iterator.next();
 			Object object = entry.getValue();
 			if (object instanceof IGenericToolBarMenuItem)
-				buttonItems.addButton((IGenericToolBarMenuItem) object, (String) entry.getKey());
+				buttonItems.addButton((IGenericToolBarMenuItem) object,
+						(String) entry.getKey());
 		}
 		buttonItems.refresh();
 		reloadSubMenu();
@@ -153,7 +165,8 @@ public class GenericToolBarPanel extends JToolBar implements ComboButtonListener
 	public void reloadSubMenu() {
 		FLayer[] layers = new FLayer[] { getLayerSelected() };
 		ButtonItems buttonItems = new ButtonItems(buttonMenu, layers);
-		ExtensionPoint extensionPoint = ExtensionPoint.getExtensionPoint("GenericToolBarMenu");
+		ExtensionPoint extensionPoint = ExtensionPoint
+				.getExtensionPoint("GenericToolBarMenu");
 		Iterator iterator = extensionPoint.getIterator();
 		while (iterator.hasNext()) {
 			Entry entry = (Entry) iterator.next();
@@ -170,6 +183,7 @@ public class GenericToolBarPanel extends JToolBar implements ComboButtonListener
 
 	/**
 	 * Devuelve el layer seleccionado en el combobox
+	 * 
 	 * @return
 	 */
 	public FLayer getLayerSelected() {
@@ -177,25 +191,31 @@ public class GenericToolBarPanel extends JToolBar implements ComboButtonListener
 			return null;
 		ArrayList lyrs = RasterToolsUtil.getLayerList(lastLayers, null);
 		for (int i = 0; i < lyrs.size(); i++) {
-			if (((FLayer)lyrs.get(i)).getName().equals(getComboBoxConfigurableLookUp().getEditor().getItem())) 
-				return (FLayer)lyrs.get(i);
+			if (((FLayer) lyrs.get(i)).getName().equals(
+					getComboBoxConfigurableLookUp().getEditor().getItem()))
+				return (FLayer) lyrs.get(i);
 		}
 		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == getComboBoxConfigurableLookUp()) {
-//			selectLayerInTOC(lastLayers, (String) getComboBoxConfigurableLookUp().getSelectedItem());
+			// selectLayerInTOC(lastLayers, (String)
+			// getComboBoxConfigurableLookUp().getSelectedItem());
 		}
 	}
-	
-		/*
+
+	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionComboButtonClicked(ComboButtonEvent e) {
 		if (e.getSource() == buttonGroup) {
@@ -203,11 +223,13 @@ public class GenericToolBarPanel extends JToolBar implements ComboButtonListener
 			return;
 		}
 		if (e.getSource() == buttonMenu) {
-			ExtensionPoint extensionPoint = ExtensionPoint.getExtensionPoint("GenericToolBarMenu");
+			ExtensionPoint extensionPoint = ExtensionPoint
+					.getExtensionPoint("GenericToolBarMenu");
 			Iterator iterator = extensionPoint.getIterator();
 			while (iterator.hasNext()) {
 				Entry entry = (Entry) iterator.next();
-				if (!entry.getKey().equals(((JButton) e.getSource()).getActionCommand()))
+				if (!entry.getKey().equals(
+						((JButton) e.getSource()).getActionCommand()))
 					continue;
 				Object object = entry.getValue();
 				if (object instanceof IGenericToolBarMenuItem) {
@@ -229,60 +251,71 @@ public class GenericToolBarPanel extends JToolBar implements ComboButtonListener
 			return;
 		}
 	}
-	
+
 	/**
 	 * Selecciona una capa en el TOC
+	 * 
 	 * @param layers
 	 * @param nameLayer
 	 */
-//	private void selectLayerInTOC(FLayers layers, String nameLayer) {
-//		if (layers == null)
-//			return;
-//		for (int i = 0; i < layers.getLayersCount(); i++) {
-//			if (layers.getLayer(i) instanceof FLayers) {
-//				selectLayerInTOC((FLayers) layers.getLayer(i), nameLayer);
-//			} else {
-//				if (layers.getLayer(i) instanceof FLayer) {
-//					FLayer layer = ((FLayer) layers.getLayer(i));
-//					if (layer.getName().equals(nameLayer) && !layer.isActive()) {
-//						layer.setActive(true);
-//					}
-//				}
-//			}
-//		}
-//	}
+	// private void selectLayerInTOC(FLayers layers, String nameLayer) {
+	// if (layers == null)
+	// return;
+	// for (int i = 0; i < layers.getLayersCount(); i++) {
+	// if (layers.getLayer(i) instanceof FLayers) {
+	// selectLayerInTOC((FLayers) layers.getLayer(i), nameLayer);
+	// } else {
+	// if (layers.getLayer(i) instanceof FLayer) {
+	// FLayer layer = ((FLayer) layers.getLayer(i));
+	// if (layer.getName().equals(nameLayer) && !layer.isActive()) {
+	// layer.setActive(true);
+	// }
+	// }
+	// }
+	// }
+	// }
 
 	/**
-	 * Recargo el menu cada vez que entra el raton en el boton, para ahorrar tiempo en
-	 * la visualizacion del mismo
+	 * Recargo el menu cada vez que entra el raton en el boton, para ahorrar
+	 * tiempo en la visualizacion del mismo
 	 */
 	public void mouseEntered(MouseEvent e) {
 		this.reloadSubMenu();
 	}
 
 	public void itemStateChanged(ItemEvent e) {
-//		if (e.getStateChange() != ItemEvent.SELECTED)
-//			return;
-//
-//		FLayer layer = getLayerSelected();
-//
-//		if (layer == null)
-//			return;
-//		
-//		FLayers layers = lastLayers;
-//		for(int i = 0; i < layers.getLayersCount(); i++)
-//			layers.getLayer(i).setActive(false);
-//
-//		layer.setActive(true);
-//		View view = (View) PluginServices.getMDIManager().getActiveWindow();
-//		JScrollBar verticalBar = view.getTOC().getJScrollPane().getVerticalScrollBar();
-//		double widthPerEntry = verticalBar.getMaximum() / layer.getMapContext().getLayers().getLayersCount();
-//		verticalBar.setValue((int)widthPerEntry * (layer.getMapContext().getLayers().getLayersCount() - pos - 1));
+		// if (e.getStateChange() != ItemEvent.SELECTED)
+		// return;
+		//
+		// FLayer layer = getLayerSelected();
+		//
+		// if (layer == null)
+		// return;
+		//
+		// FLayers layers = lastLayers;
+		// for(int i = 0; i < layers.getLayersCount(); i++)
+		// layers.getLayer(i).setActive(false);
+		//
+		// layer.setActive(true);
+		// View view = (View) PluginServices.getMDIManager().getActiveWindow();
+		// JScrollBar verticalBar =
+		// view.getTOC().getJScrollPane().getVerticalScrollBar();
+		// double widthPerEntry = verticalBar.getMaximum() /
+		// layer.getMapContext().getLayers().getLayersCount();
+		// verticalBar.setValue((int)widthPerEntry *
+		// (layer.getMapContext().getLayers().getLayersCount() - pos - 1));
 	}
 
-	public void mouseClicked(MouseEvent e) {}
-	public void mouseExited(MouseEvent e) {}
-	public void mousePressed(MouseEvent e) {}
-	public void mouseReleased(MouseEvent e) {}
+	public void mouseClicked(MouseEvent e) {
+	}
+
+	public void mouseExited(MouseEvent e) {
+	}
+
+	public void mousePressed(MouseEvent e) {
+	}
+
+	public void mouseReleased(MouseEvent e) {
+	}
 
 }

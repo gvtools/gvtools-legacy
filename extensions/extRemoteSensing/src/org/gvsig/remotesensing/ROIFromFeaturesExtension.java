@@ -64,71 +64,81 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
  * Extensión para el Cálculo de Raster (Band Math)
  * 
  * @author Diego Guerrero Sevilla (diego.guerrero@uclm.es)
- *
+ * 
  */
 public class ROIFromFeaturesExtension extends Extension {
 
 	public void initialize() {
-		
+
 	}
 
 	public void execute(String actionCommand) {
-		if (actionCommand.equals("roi_from_features")){
-			com.iver.andami.ui.mdiManager.IWindow activeWindow = PluginServices.getMDIManager().getActiveWindow();
+		if (actionCommand.equals("roi_from_features")) {
+			com.iver.andami.ui.mdiManager.IWindow activeWindow = PluginServices
+					.getMDIManager().getActiveWindow();
 
-			//si la ventana activa es de tipo Vista 
+			// si la ventana activa es de tipo Vista
 			if (activeWindow instanceof View) {
 				View view = (View) activeWindow;
 				MapContext mapContext = view.getModel().getMapContext();
 				FLyrVect flyrVect = null;
 				FLyrRasterSE flyrRaster = null;
-				for (int i = 0; i < mapContext.getLayers().getActives().length; i++){
+				for (int i = 0; i < mapContext.getLayers().getActives().length; i++) {
 					if (mapContext.getLayers().getActives()[i] instanceof FLyrVect)
-						flyrVect = (FLyrVect) mapContext.getLayers().getActives()[i];
+						flyrVect = (FLyrVect) mapContext.getLayers()
+								.getActives()[i];
 					if (mapContext.getLayers().getActives()[i] instanceof FLyrRasterSE)
-						flyrRaster = (FLyrRasterSE) mapContext.getLayers().getActives()[i];
+						flyrRaster = (FLyrRasterSE) mapContext.getLayers()
+								.getActives()[i];
 				}
-				
-				if (flyrRaster != null && flyrVect != null){
+
+				if (flyrRaster != null && flyrVect != null) {
 					Grid grid = null;
-	            	BufferFactory dataSource = flyrRaster.getBufferFactory();
-					 
-					int bands[]=null;	
-					bands = new  int [flyrRaster.getBandCount()];
-					for(int i=0; i<flyrRaster.getBandCount();i++)
-						bands[i]=i;	
+					BufferFactory dataSource = flyrRaster.getBufferFactory();
+
+					int bands[] = null;
+					bands = new int[flyrRaster.getBandCount()];
+					for (int i = 0; i < flyrRaster.getBandCount(); i++)
+						bands[i] = i;
 					try {
-						grid = new Grid(dataSource, bands);	
+						grid = new Grid(dataSource, bands);
 					} catch (RasterBufferInvalidException e) {
-							e.printStackTrace();
+						e.printStackTrace();
 					}
 					VectorialROI roi = new VectorialROI(grid);
 					try {
 						FBitSet fbs = flyrVect.getRecordset().getSelection();
-						if(fbs.cardinality()>0){
-							for(int i=fbs.nextSetBit(0); i>=0; i=fbs.nextSetBit(i+1)) {
-								roi.addGeometry(flyrVect.getSource().getFeature(i).getGeometry());
+						if (fbs.cardinality() > 0) {
+							for (int i = fbs.nextSetBit(0); i >= 0; i = fbs
+									.nextSetBit(i + 1)) {
+								roi.addGeometry(flyrVect.getSource()
+										.getFeature(i).getGeometry());
 							}
-							JOptionPane.showMessageDialog(null,
-									"Mean: "+roi.getMeanValue()+"Max: "+roi.getMaxValue()+"Min: "+roi.getMinValue(), "ROI Statistics",
+							JOptionPane.showMessageDialog(
+									null,
+									"Mean: " + roi.getMeanValue() + "Max: "
+											+ roi.getMaxValue() + "Min: "
+											+ roi.getMinValue(),
+									"ROI Statistics",
 									JOptionPane.WARNING_MESSAGE);
 						}
 					} catch (ReadDriverException e) {
 						e.printStackTrace();
-					}catch (GridException e) {
-						RasterToolsUtil.messageBoxError("error_cargar_capa", this, e);
+					} catch (GridException e) {
+						RasterToolsUtil.messageBoxError("error_cargar_capa",
+								this, e);
 					}
-					
-				}
-				else{
-					
+
+				} else {
+
 				}
 			}
 		}
 	}
 
 	public boolean isEnabled() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (f == null) {
 			return false;
 		}
@@ -137,15 +147,16 @@ public class ROIFromFeaturesExtension extends Extension {
 			IProjectView model = vista.getModel();
 			MapContext mapa = model.getMapContext();
 			FLayers layers = mapa.getLayers();
-			for (int i = 0; i < layers.getLayersCount(); i++) 
-				if (layers.getLayer(i) instanceof FLyrRasterSE) 
+			for (int i = 0; i < layers.getLayersCount(); i++)
+				if (layers.getLayer(i) instanceof FLyrRasterSE)
 					return true;
 		}
 		return false;
 	}
 
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (f == null) {
 			return false;
 		}

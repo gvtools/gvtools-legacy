@@ -52,7 +52,6 @@ import java.awt.geom.Rectangle2D;
 
 import javax.print.attribute.PrintRequestAttributeSet;
 
-import com.iver.cit.gvsig.fmap.core.FPoint2D;
 import com.iver.cit.gvsig.fmap.core.FPolygon2D;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.GeneralPathX;
@@ -67,15 +66,15 @@ import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.threads.Cancellable;
 
 /**
- *
- * Allows the user to fill a polygon with a gradient color.This gradient
- * can be painted with 4 different methods (linal, rectangular, circular and
- * buffered) and, for each one will be possible to modify its angle, percentage
- * and intervals.
- *
+ * 
+ * Allows the user to fill a polygon with a gradient color.This gradient can be
+ * painted with 4 different methods (linal, rectangular, circular and buffered)
+ * and, for each one will be possible to modify its angle, percentage and
+ * intervals.
+ * 
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
-public class GradientFillSymbol  extends AbstractFillSymbol {
+public class GradientFillSymbol extends AbstractFillSymbol {
 
 	private GradientFillSymbol gradsym;
 	private SimpleFillSymbol sfs = new SimpleFillSymbol();
@@ -83,69 +82,80 @@ public class GradientFillSymbol  extends AbstractFillSymbol {
 	private double angle;
 	private double percentage = 100;
 	private int intervals;
-	private Color[] gradientColor=null;
+	private Color[] gradientColor = null;
 
 	private int style;
 	private PrintRequestAttributeSet properties;
 
 	public ISymbol getSymbolForSelection() {
 
-		if (gradsym==null)gradsym=new GradientFillSymbol();
+		if (gradsym == null)
+			gradsym = new GradientFillSymbol();
 		return gradsym;
 
 	}
 
-
-	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp, Cancellable cancel) {
+	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp,
+			Cancellable cancel) {
 
 		Rectangle2D bounds = shp.getBounds();
-		double radius = Math.abs(Math.max(bounds.getHeight(), bounds.getWidth()));
+		double radius = Math
+				.abs(Math.max(bounds.getHeight(), bounds.getWidth()));
 		double centerX = bounds.getCenterX();
 		double centerY = bounds.getCenterY();
 
-		if(gradientColor != null)
+		if (gradientColor != null)
 			setFillColor(gradientColor[0]);
 		g.fill(shp);
 
 		g.setClip(shp);
 
 		if (radius <= 1) {
-			if(gradientColor != null)
+			if (gradientColor != null)
 				g.setColor(gradientColor[0]);
-			g.drawLine((int) centerX, (int) centerY, (int) centerX, (int) centerY);
+			g.drawLine((int) centerX, (int) centerY, (int) centerX,
+					(int) centerY);
 			return;
 		}
 
-		/*Creation of a new shape depending on the style of the gradient*/
+		/* Creation of a new shape depending on the style of the gradient */
 		Shape myShape = null;
-		if (style==0) {//Style=buffered
+		if (style == 0) {// Style=buffered
 			myShape = shp;
-		} else if (style==1) {//Style=lineal
-			myShape = new Line2D.Double(bounds.getMinX(), bounds.getMaxY(), bounds.getMaxX(), bounds.getMaxY());
-		} else	if (style==2) {//Style=circular
-			myShape = new Ellipse2D.Double(bounds.getMinX(), bounds.getMinY(), radius, radius);
-		} else if (style==3) {//Style=rectangular
+		} else if (style == 1) {// Style=lineal
+			myShape = new Line2D.Double(bounds.getMinX(), bounds.getMaxY(),
+					bounds.getMaxX(), bounds.getMaxY());
+		} else if (style == 2) {// Style=circular
+			myShape = new Ellipse2D.Double(bounds.getMinX(), bounds.getMinY(),
+					radius, radius);
+		} else if (style == 3) {// Style=rectangular
 			myShape = shp.getBounds();
 		}
 
-		if (intervals == 0) intervals = 1;
+		if (intervals == 0)
+			intervals = 1;
 
-		/*The variable separation will be used to specify the width of the line*/
-		int separation=(int) Math.abs(Math.min(bounds.getHeight(), bounds.getWidth()))/(int)intervals;
-		/*If the style is linal the separation will be double*/
-		if (style==1)separation*=2;
+		/* The variable separation will be used to specify the width of the line */
+		int separation = (int) Math.abs(Math.min(bounds.getHeight(),
+				bounds.getWidth()))
+				/ (int) intervals;
+		/* If the style is linal the separation will be double */
+		if (style == 1)
+			separation *= 2;
 
-		/*If the user wants to apply a rotation*/
+		/* If the user wants to apply a rotation */
 		boolean bRotate = angle != 0;
 
-		/*All the intervals are painted*/
-		for (int i = intervals; (cancel==null || !cancel.isCanceled()) && i>0 ; i--) {
-			BasicStroke stroke = new BasicStroke((float) (separation*i*percentage*0.01)+1);
+		/* All the intervals are painted */
+		for (int i = intervals; (cancel == null || !cancel.isCanceled())
+				&& i > 0; i--) {
+			BasicStroke stroke = new BasicStroke((float) (separation * i
+					* percentage * 0.01) + 1);
 
-			FShape fShape = new FPolygon2D(
-					new GeneralPathX(stroke.createStrokedShape(myShape)));
+			FShape fShape = new FPolygon2D(new GeneralPathX(
+					stroke.createStrokedShape(myShape)));
 
-			double cenX,cenY;
+			double cenX, cenY;
 			cenX = fShape.getBounds().getCenterX();
 			cenY = fShape.getBounds().getCenterY();
 
@@ -154,13 +164,13 @@ public class GradientFillSymbol  extends AbstractFillSymbol {
 				g.translate(cenX, cenY);
 				g.rotate(angle);
 
-				fShape.transform(AffineTransform.getTranslateInstance(-cenX,-cenY));
+				fShape.transform(AffineTransform.getTranslateInstance(-cenX,
+						-cenY));
 
 			}
-			if(gradientColor != null)
-				sfs.setFillColor(gradientColor[i-1]);
+			if (gradientColor != null)
+				sfs.setFillColor(gradientColor[i - 1]);
 			sfs.draw(g, affineTransform, fShape, cancel);
-
 
 			if (bRotate) {
 
@@ -171,7 +181,7 @@ public class GradientFillSymbol  extends AbstractFillSymbol {
 
 		g.setClip(null);
 
-		/*If an outline exists it is painted*/
+		/* If an outline exists it is painted */
 		ILineSymbol outLineSymbol = getOutline();
 		if (outLineSymbol != null && hasOutline())
 			outLineSymbol.draw(g, affineTransform, shp, null);
@@ -185,13 +195,13 @@ public class GradientFillSymbol  extends AbstractFillSymbol {
 		xml.putProperty("desc", getDescription());
 		xml.putProperty("isShapeVisible", isShapeVisible());
 		xml.putProperty("angle", angle);
-		xml.putProperty("intervals",intervals);
+		xml.putProperty("intervals", intervals);
 		xml.putProperty("percentage", percentage);
 		xml.putProperty("style", style);
 		xml.putProperty("referenceSystem", getReferenceSystem());
 		xml.putProperty("unit", getUnit());
 
-		if(gradientColor != null){
+		if (gradientColor != null) {
 			String[] strColors = new String[gradientColor.length];
 			for (int i = 0; i < strColors.length; i++) {
 				strColors[i] = StringUtilities.color2String(gradientColor[i]);
@@ -200,12 +210,13 @@ public class GradientFillSymbol  extends AbstractFillSymbol {
 		}
 
 		Color c2 = getFillColor();
-		if (c2!=null)
-			xml.putProperty("color", StringUtilities.color2String(getFillColor()));
+		if (c2 != null)
+			xml.putProperty("color",
+					StringUtilities.color2String(getFillColor()));
 
 		ILineSymbol outline = getOutline();
 
-		if (outline!=null) {
+		if (outline != null) {
 			XMLEntity xmlOutline = outline.getXMLEntity();
 			xmlOutline.putProperty("id", "outline");
 			xml.addChild(xmlOutline);
@@ -219,8 +230,8 @@ public class GradientFillSymbol  extends AbstractFillSymbol {
 	public void setXMLEntity(XMLEntity xml) {
 
 		if (xml.contains("color"))
-			setFillColor(StringUtilities.string2Color(xml.getStringProperty("color")));
-
+			setFillColor(StringUtilities.string2Color(xml
+					.getStringProperty("color")));
 
 		setDescription(xml.getStringProperty("desc"));
 		setIsShapeVisible(xml.getBooleanProperty("isShapeVisible"));
@@ -228,7 +239,7 @@ public class GradientFillSymbol  extends AbstractFillSymbol {
 		setStyle(xml.getIntProperty("style"));
 		setIntervals(xml.getIntProperty("intervals"));
 		setPercentage(xml.getDoubleProperty("percentage"));
-		if(xml.contains("gradientColor")){
+		if (xml.contains("gradientColor")) {
 			String[] strColors = xml.getStringArrayProperty("gradientColor");
 
 			Color[] cc = new Color[strColors.length];
@@ -241,8 +252,8 @@ public class GradientFillSymbol  extends AbstractFillSymbol {
 
 		XMLEntity xmlOutline = xml.firstChild("id", "outline");
 		if (xmlOutline != null) {
-			setOutline((ILineSymbol) SymbologyFactory.
-					createSymbolFromXML(xmlOutline, "outline"));
+			setOutline((ILineSymbol) SymbologyFactory.createSymbolFromXML(
+					xmlOutline, "outline"));
 		}
 
 		if (xml.contains("unit")) { // remove this line when done
@@ -253,47 +264,50 @@ public class GradientFillSymbol  extends AbstractFillSymbol {
 			// reference system (for outline)
 			setReferenceSystem(xml.getIntProperty("referenceSystem"));
 		}
-		//has Outline
-		if(xml.contains("hasOutline"))
+		// has Outline
+		if (xml.contains("hasOutline"))
 			setHasOutline(xml.getBooleanProperty("hasOutline"));
 	}
-
-
-
 
 	public int getSymbolType() {
 		return FShape.POLYGON;
 	}
 
-	public void drawInsideRectangle(Graphics2D g,AffineTransform scaleInstance, Rectangle r, PrintRequestAttributeSet properties) throws SymbolDrawingException {
-		if (properties==null)
+	public void drawInsideRectangle(Graphics2D g,
+			AffineTransform scaleInstance, Rectangle r,
+			PrintRequestAttributeSet properties) throws SymbolDrawingException {
+		if (properties == null)
 			draw(g, null, new FPolygon2D(new GeneralPathX(r)), null);
 		else
-			print(g, new AffineTransform(), new FPolygon2D(new GeneralPathX(r)), properties);
+			print(g, new AffineTransform(),
+					new FPolygon2D(new GeneralPathX(r)), properties);
 	}
-
 
 	public String getClassName() {
 		return getClass().getName();
 	}
 
-	public void print(Graphics2D g, AffineTransform at, FShape shape, PrintRequestAttributeSet properties) {
-		this.properties=properties;
-        draw(g, at, shape, null);
-        this.properties=null;
+	public void print(Graphics2D g, AffineTransform at, FShape shape,
+			PrintRequestAttributeSet properties) {
+		this.properties = properties;
+		draw(g, at, shape, null);
+		this.properties = null;
 	}
 
 	/**
-	 * Defines the angle for the rotation of the image when it is added to create the
-	 * padding
-	 *
+	 * Defines the angle for the rotation of the image when it is added to
+	 * create the padding
+	 * 
 	 * @return angle
 	 */
 	public double getAngle() {
 		return angle;
 	}
+
 	/**
-	 * Sets the angle for the rotation of the image when it is added to create the padding
+	 * Sets the angle for the rotation of the image when it is added to create
+	 * the padding
+	 * 
 	 * @param angle
 	 */
 	public void setAngle(double angle) {
@@ -305,7 +319,7 @@ public class GradientFillSymbol  extends AbstractFillSymbol {
 	}
 
 	public void setPercentage(double percentage) {
-		this.percentage= percentage;
+		this.percentage = percentage;
 	}
 
 	public int getIntervals() {
@@ -313,26 +327,27 @@ public class GradientFillSymbol  extends AbstractFillSymbol {
 	}
 
 	public void setIntervals(int intervals) {
-		this.intervals= intervals;
+		this.intervals = intervals;
 	}
 
-	public int getStyle(){
+	public int getStyle() {
 
 		return style;
 
 	}
+
 	public void setStyle(int style) {
 
-		this.style=style;
+		this.style = style;
 	}
 
-	public Color[] getGradientColor(){
+	public Color[] getGradientColor() {
 
 		return gradientColor;
 	}
 
 	public void setGradientColor(Color[] gradientcolor) {
-		this.gradientColor=gradientcolor;
+		this.gradientColor = gradientcolor;
 	}
 
 }

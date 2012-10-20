@@ -43,13 +43,12 @@
  */
 package com.iver.cit.gvsig.fmap.core;
 
-
 /**
- * Simple Feature. Inspired by Jump. Without schema, user
- * should get schema information from layer.
+ * Simple Feature. Inspired by Jump. Without schema, user should get schema
+ * information from layer.
  */
 public interface IFeature extends IRow {
-    IGeometry getGeometry();
+	IGeometry getGeometry();
 
-	void setGeometry(IGeometry geom);   
+	void setGeometry(IGeometry geom);
 }

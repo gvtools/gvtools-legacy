@@ -28,6 +28,7 @@ import com.hardcode.gdbms.engine.data.driver.FileDriver;
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
+
 /**
  * Clase para definir que ficheros aceptara la extension vectorial, es necesario
  * para el JFileChooser
@@ -55,33 +56,33 @@ public class VectorialFileFilter extends FileFilter {
 		if (driver instanceof FileDriver)
 			return ((FileDriver) driver).fileAccepted(f);
 
-		throw new RuntimeException(PluginServices.getText(this, "Tipo_no_reconocido"));
+		throw new RuntimeException(PluginServices.getText(this,
+				"Tipo_no_reconocido"));
 	}
 
-	
 	/**
 	 * @see javax.swing.filechooser.FileFilter#getDescription()
-	 *
-	 * Returns a description more useful for file selection
-	 * dialogs if the driver type is known.
+	 * 
+	 *      Returns a description more useful for file selection dialogs if the
+	 *      driver type is known.
 	 */
-	public String getDescription() {		
+	public String getDescription() {
 		/* translate known driver names */
-		if ( ((Driver) driver).getName() == "gvSIG shp driver" ) {
-			return ( PluginServices.getText(this, "Ficheros_SHP") );
+		if (((Driver) driver).getName() == "gvSIG shp driver") {
+			return (PluginServices.getText(this, "Ficheros_SHP"));
 		}
-		if ( ((Driver) driver).getName() == "gvSIG GML Memory Driver" ) {
-			return ( PluginServices.getText(this, "gml_files") );
-		}		
-		if ( ((Driver) driver).getName() == "gvSIG KML Memory Driver" ) {
-			return ( PluginServices.getText(this, "Ficheros_KML") );
-		}		
-		
+		if (((Driver) driver).getName() == "gvSIG GML Memory Driver") {
+			return (PluginServices.getText(this, "gml_files"));
+		}
+		if (((Driver) driver).getName() == "gvSIG KML Memory Driver") {
+			return (PluginServices.getText(this, "Ficheros_KML"));
+		}
+
 		/*
 		 * Unknown: return default string.
 		 */
-		return ((Driver) driver).getName();	
-	
+		return ((Driver) driver).getName();
+
 	}
-	
+
 }

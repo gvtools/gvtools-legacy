@@ -74,9 +74,9 @@ import com.iver.utiles.swing.threads.CancellableMonitorable;
 
 /**
  * @author FJP
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
+ * 
+ *         TODO To change the template for this generated type comment go to
+ *         Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class DBStrategy extends DefaultStrategy {
 
@@ -84,19 +84,26 @@ public class DBStrategy extends DefaultStrategy {
 		super(capa);
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.operations.strategies.Strategy#draw(java.awt.image.BufferedImage, java.awt.Graphics2D, com.iver.cit.gvsig.fmap.ViewPort, com.iver.cit.gvsig.fmap.operations.Cancellable)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.operations.strategies.Strategy#draw(java.awt.
+	 * image.BufferedImage, java.awt.Graphics2D,
+	 * com.iver.cit.gvsig.fmap.ViewPort,
+	 * com.iver.cit.gvsig.fmap.operations.Cancellable)
 	 */
-	public void draw(BufferedImage image, Graphics2D g, ViewPort viewPort, Cancellable cancel) throws ReadDriverException {
+	public void draw(BufferedImage image, Graphics2D g, ViewPort viewPort,
+			Cancellable cancel) throws ReadDriverException {
 		// Nos aprovechamos del SQL para lanzar la consulta
 		// teniendo en cuenta el boundingbox que toca.
 		FLyrVect lyr = (FLyrVect) getCapa();
 		ISpatialDB dbAdapter = (ISpatialDB) ((FLyrVect) capa).getSource();
-		//IVectorialDatabaseDriver dbDriver = (IVectorialDatabaseDriver) dbAdapter.getDriver();
+		// IVectorialDatabaseDriver dbDriver = (IVectorialDatabaseDriver)
+		// dbAdapter.getDriver();
 		try {
 			dbAdapter.start();
-			Selectable selectable=lyr.getRecordset();
+			Selectable selectable = lyr.getRecordset();
 			MathTransform trans = lyr.getCrsTransform();
 			FBitSet bitSet = selectable.getSelection();
 
@@ -108,8 +115,7 @@ public class DBStrategy extends DefaultStrategy {
 			// de los campos además del rectángulo que pides.
 			String[] usedFields = null;
 			IClassifiedVectorLegend l = null;
-			if (lyr.getLegend() instanceof IClassifiedVectorLegend)
-			{
+			if (lyr.getLegend() instanceof IClassifiedVectorLegend) {
 				l = (IClassifiedVectorLegend) lyr.getLegend();
 
 				usedFields = l.getClassifyingFieldNames();
@@ -121,40 +127,32 @@ public class DBStrategy extends DefaultStrategy {
 				rectAux = ProjectionUtils.transform(rectAux, trans.inverse());
 			}
 
-
-
-			IFeatureIterator geomIt = dbAdapter.getFeatureIterator(rectAux, strEPSG, usedFields);
-			if (geomIt == null)
-			{
+			IFeatureIterator geomIt = dbAdapter.getFeatureIterator(rectAux,
+					strEPSG, usedFields);
+			if (geomIt == null) {
 				// dbAdapter.stop();
 				return;
 			}
 
-
 			DriverAttributes attr = dbAdapter.getDriverAttributes();
 			boolean bMustClone = false;
-			if (attr != null)
-			{
-				if (attr.isLoadedInMemory())
-				{
+			if (attr != null) {
+				if (attr.isLoadedInMemory()) {
 					bMustClone = attr.isLoadedInMemory();
 				}
 			}
-
 
 			int i;
 			ISymbol symbol;
 			SpatialCache cache = lyr.getSpatialCache();
 			cache.clearAll();
-			while (geomIt.hasNext())
-			{
+			while (geomIt.hasNext()) {
 				if (cancel.isCanceled()) {
 					geomIt.closeIterator();
 					break;
 				}
 				IFeature feat = geomIt.next();
-				if (feat == null)
-				{
+				if (feat == null) {
 					continue;
 				}
 				IGeometry geom = feat.getGeometry();
@@ -172,7 +170,8 @@ public class DBStrategy extends DefaultStrategy {
 				// Value val = feat.getAttribute(0);
 				symbol = l.getSymbolByFeature(feat);
 				// symbol = l.getSymbol(i);
-				if (symbol == null) continue;
+				if (symbol == null)
+					continue;
 				if (bitSet.get(i)) {
 					symbol = symbol.getSymbolForSelection();
 				}
@@ -185,7 +184,7 @@ public class DBStrategy extends DefaultStrategy {
 				}
 
 				// symbol = l.getDefaultSymbol();
-				geom.drawInts(g,viewPort, symbol, null);
+				geom.drawInts(g, viewPort, symbol, null);
 
 			}
 			dbAdapter.stop();
@@ -196,72 +195,74 @@ public class DBStrategy extends DefaultStrategy {
 		}
 
 	}
+
 	/**
-	 * Processes features of layer whose geometries would
-	 * intersect rectangle passed as param by calling visitor's
-	 * visit method.
-	 *
-	 * FIXME FeatureVisitor is designed to work with memory and
-	 * file drivers (visit(IGeometry, index), and to work with
-	 * geometries (thats the reason for not to create Values, instead
-	 * of pass an index)
-	 *
-	 * But DBDrivers recovers IGeometry and Values in dbAdapter.getFeatureIterator
-	 * method. We must add a visit(Feature) method to FeatureVisitor.
+	 * Processes features of layer whose geometries would intersect rectangle
+	 * passed as param by calling visitor's visit method.
+	 * 
+	 * FIXME FeatureVisitor is designed to work with memory and file drivers
+	 * (visit(IGeometry, index), and to work with geometries (thats the reason
+	 * for not to create Values, instead of pass an index)
+	 * 
+	 * But DBDrivers recovers IGeometry and Values in
+	 * dbAdapter.getFeatureIterator method. We must add a visit(Feature) method
+	 * to FeatureVisitor.
+	 * 
 	 * @throws ExpansionFileReadException
-	 *
-	 *
+	 * 
+	 * 
 	 */
-	public void process(FeatureVisitor visitor, Rectangle2D rect, CancellableMonitorable cancel)
-	throws ReadDriverException, ExpansionFileReadException, VisitorException{
+	public void process(FeatureVisitor visitor, Rectangle2D rect,
+			CancellableMonitorable cancel) throws ReadDriverException,
+			ExpansionFileReadException, VisitorException {
 		FLyrVect lyr = (FLyrVect) getCapa();
-		if (visitor.start(lyr)){
+		if (visitor.start(lyr)) {
 			ISpatialDB dbAdapter = (ISpatialDB) ((FLyrVect) capa).getSource();
-			IVectorialDatabaseDriver dbDriver = (IVectorialDatabaseDriver) dbAdapter.getDriver();
+			IVectorialDatabaseDriver dbDriver = (IVectorialDatabaseDriver) dbAdapter
+					.getDriver();
 			try {
 				dbAdapter.start();
 			} catch (InitializeDriverException e) {
-				throw new ReadDriverException(getCapa().getName(),e);
+				throw new ReadDriverException(getCapa().getName(), e);
 			}
 			MathTransform trans = lyr.getCrsTransform();
 			String strEPSG = ProjectionUtils.getAbrev(lyr.getCrs());
 			Rectangle2D rectAux = rect;
 			if (trans != null) {
 				try {
-					rectAux = ProjectionUtils.transform(rectAux, trans.inverse());
+					rectAux = ProjectionUtils.transform(rectAux,
+							trans.inverse());
 				} catch (NoninvertibleTransformException e) {
 					throw new ReadDriverException(getCapa().getName(), e);
 				}
 			}
-			IFeatureIterator geomIt = dbAdapter.getFeatureIterator(rectAux, strEPSG, null);
-			if (geomIt == null){
+			IFeatureIterator geomIt = dbAdapter.getFeatureIterator(rectAux,
+					strEPSG, null);
+			if (geomIt == null) {
 				return;
 			}
 			DriverAttributes attr = dbAdapter.getDriverAttributes();
 			boolean bMustClone = false;
-			if (attr != null)
-			{
-				if (attr.isLoadedInMemory())
-				{
+			if (attr != null) {
+				if (attr.isLoadedInMemory()) {
 					bMustClone = attr.isLoadedInMemory();
-				}//if
-			}//if
+				}// if
+			}// if
 			int i;
-			while (geomIt.hasNext())
-			{
-				if(cancel != null){
+			while (geomIt.hasNext()) {
+				if (cancel != null) {
 					cancel.reportStep();
 				}
 				IFeature feat = geomIt.next();
 				IGeometry geom = feat.getGeometry();
 				if (trans != null) {
-					if (bMustClone){
+					if (bMustClone) {
 						geom = geom.cloneGeometry();
-					}//if
+					}// if
 					geom.reProject(trans);
-				}//if
+				}// if
 				i = dbDriver.getRowIndexByFID(feat);
-				if (geom.intersects(rect)){
+				if (geom.intersects(rect)) {
 					visitor.visit(geom, i);
 				}
 			}
@@ -270,15 +271,21 @@ public class DBStrategy extends DefaultStrategy {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.operations.strategies.DefaultStrategy#queryByRect(java.awt.geom.Rectangle2D)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.operations.strategies.DefaultStrategy#queryByRect
+	 * (java.awt.geom.Rectangle2D)
 	 */
-	public FBitSet queryByRect(Rectangle2D rect, CancellableMonitorable cancel) throws ReadDriverException, VisitorException {
+	public FBitSet queryByRect(Rectangle2D rect, CancellableMonitorable cancel)
+			throws ReadDriverException, VisitorException {
 		// Nos aprovechamos del SQL para lanzar la consulta
 		// teniendo en cuenta el boundingbox que toca.
 		FLyrVect lyr = (FLyrVect) getCapa();
 		ISpatialDB dbAdapter = (ISpatialDB) ((FLyrVect) capa).getSource();
-		//        IVectorialDatabaseDriver dbDriver = (IVectorialDatabaseDriver) dbAdapter.getDriver();
+		// IVectorialDatabaseDriver dbDriver = (IVectorialDatabaseDriver)
+		// dbAdapter.getDriver();
 		try {
 			dbAdapter.start();
 			MathTransform trans = lyr.getCrsTransform();
@@ -290,33 +297,26 @@ public class DBStrategy extends DefaultStrategy {
 
 			FBitSet selection = new FBitSet();
 
-			IFeatureIterator geomIt = dbAdapter.getFeatureIterator(rectAux, strEPSG, null);
-			if (geomIt == null)
-			{
+			IFeatureIterator geomIt = dbAdapter.getFeatureIterator(rectAux,
+					strEPSG, null);
+			if (geomIt == null) {
 				return selection;
 			}
 
-
 			DriverAttributes attr = dbAdapter.getDriverAttributes();
 			boolean bMustClone = false;
-			if (attr != null)
-			{
-				if (attr.isLoadedInMemory())
-				{
+			if (attr != null) {
+				if (attr.isLoadedInMemory()) {
 					bMustClone = attr.isLoadedInMemory();
 				}
 			}
 
-
 			int i;
 
-			while (geomIt.hasNext())
-			{
-				if(cancel != null)
-				{
+			while (geomIt.hasNext()) {
+				if (cancel != null) {
 					cancel.reportStep();
-					if(cancel.isCanceled())
-					{
+					if (cancel.isCanceled()) {
 						dbAdapter.stop();
 						return selection;
 					}
@@ -338,9 +338,9 @@ public class DBStrategy extends DefaultStrategy {
 
 			return selection;
 		} catch (InitializeDriverException e) {
-			throw new ReadDriverException(getCapa().getName(),e);
+			throw new ReadDriverException(getCapa().getName(), e);
 		} catch (NoninvertibleTransformException e) {
-			throw new ReadDriverException(getCapa().getName(),e);
+			throw new ReadDriverException(getCapa().getName(), e);
 		}
 	}
 }

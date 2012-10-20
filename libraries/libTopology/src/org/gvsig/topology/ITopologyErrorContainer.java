@@ -56,61 +56,63 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.XMLException;
 import com.iver.utiles.XMLEntity;
 
-
 /**
- *All  classes that contains TopologyError must 
- *implement this interface.
+ * All classes that contains TopologyError must implement this interface.
  */
-public interface ITopologyErrorContainer extends Cloneable{
- 
-	public static final int ONLY_ERRORS = 0;//TODO QUITAR
-	 
+public interface ITopologyErrorContainer extends Cloneable {
+
+	public static final int ONLY_ERRORS = 0;// TODO QUITAR
+
 	public static final int ONLY_EXCEPTIONS = 1;
-	 
+
 	public static final int BOTH_ERROR_EXCEPTIONS = 2;
-	
+
 	/**
 	 * Adds a topology error to the container.
+	 * 
 	 * @param topologyError
 	 */
 	public void addTopologyError(TopologyError topologyError);
-	
+
 	/**
 	 * Returns the number of topology errors contained.
+	 * 
 	 * @return
 	 */
 	public int getNumberOfErrors();
-	
+
 	/**
 	 * Returns the number of errors that has been marked as exceptions
+	 * 
 	 * @return
 	 */
 	public int getNumberOfExceptions();
-	
+
 	/**
 	 * Clear all contained errors.
 	 */
 	public void clear();
-	
+
 	/**
 	 * Returns the topology error at position index.
+	 * 
 	 * @param index
 	 * @return
 	 */
 	public TopologyError getTopologyError(int index);
-	
+
 	/**
-	 *Returns the contained errors. In function
-	 *of the specified params, returned errors 
-	 *will be reprojected, filtered by rule, geometry type,
-	 *etc.
+	 * Returns the contained errors. In function of the specified params,
+	 * returned errors will be reprojected, filtered by rule, geometry type,
+	 * etc.
 	 */
 	public List<TopologyError> getTopologyErrors(String ruleName,
 			int shapeType, FLyrVect sourceLayer,
 			CoordinateReferenceSystem desiredCrs, boolean includeExceptions);
-	
+
 	/**
 	 * Returns the contained errors filtered by violated rule.
+	 * 
 	 * @param ruleName
 	 * @param desiredProjection
 	 * @param includeExceptions
@@ -118,9 +120,10 @@ public interface ITopologyErrorContainer extends Cloneable{
 	 */
 	public List<TopologyError> getTopologyErrorsByRule(String ruleName,
 			CoordinateReferenceSystem desiredCrs, boolean includeExceptions);
-	
+
 	/**
 	 * Returns the contained errors filtered by type of error geometry.
+	 * 
 	 * @param shapeType
 	 * @param desiredProjection
 	 * @param includeExceptions
@@ -128,9 +131,10 @@ public interface ITopologyErrorContainer extends Cloneable{
 	 */
 	public List<TopologyError> getTopologyErrorsByShapeType(int shapeType,
 			CoordinateReferenceSystem desiredCrs, boolean includeExceptions);
-	
+
 	/**
 	 * Returns the contained errors filtered by layer that causes the error.
+	 * 
 	 * @param layer
 	 * @param desiredProjection
 	 * @param includeExceptions
@@ -138,54 +142,58 @@ public interface ITopologyErrorContainer extends Cloneable{
 	 */
 	public List<TopologyError> getTopologyErrorsByLyr(FLyrVect layer,
 			CoordinateReferenceSystem desiredCrs, boolean includeExceptions);
-	
+
 	/**
 	 * Marks an error as an exception.
 	 * 
-	 * @param error to mark as an exception
+	 * @param error
+	 *            to mark as an exception
 	 */
 	public void markAsTopologyException(TopologyError topologyError);
-	
+
 	/**
-	 * Mark the given error (until now consideer as an exception) as "not tolered".
+	 * Mark the given error (until now consideer as an exception) as
+	 * "not tolered".
 	 * 
-	 * @param topologyError error to adds to the not tolered errors list.
+	 * @param topologyError
+	 *            error to adds to the not tolered errors list.
 	 */
 	public void demoteToError(TopologyError topologyError);
-	
+
 	public void removeErrorsByLayer(FLyrVect layer);
-	
+
 	public void removeErrorsByRule(String ruleName);
-	
+
 	/**
-	 * Removes the passed TopologyError
-	 * (usually as result of a topology fix operation)
+	 * Removes the passed TopologyError (usually as result of a topology fix
+	 * operation)
+	 * 
 	 * @param topologyError
 	 */
 	public void removeError(TopologyError topologyError);
+
 	/**
-	 * Returns an unique identifier for the error in the container
-	 * context.
+	 * Returns an unique identifier for the error in the container context.
+	 * 
 	 * @return
 	 */
-	public  String getErrorFid();
-	
+	public String getErrorFid();
+
 	/**
 	 * XML Castor's persistence method.
+	 * 
 	 * @param xml
 	 * @throws XMLException
 	 */
 	public void setXMLEntity(XMLEntity xml) throws XMLException;
-	
+
 	public XMLEntity getXMLEntity() throws XMLException;
 
 	public Object clone();
-	
-	
+
 	public FLyrVect getAsFMapLayer(String name, CoordinateReferenceSystem crs);
-	
+
 	public void setTopology(Topology topology);
-	
+
 	public Topology getTopology();
 }
- 

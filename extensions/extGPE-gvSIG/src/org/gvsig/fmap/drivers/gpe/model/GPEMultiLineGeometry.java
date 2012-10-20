@@ -55,18 +55,19 @@ import com.iver.cit.gvsig.fmap.core.ShapeFactory;
 public class GPEMultiLineGeometry extends GPEMultiGeometry {
 
 	public GPEMultiLineGeometry(String id, String srs) {
-		super(id, srs);		
+		super(id, srs);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.fmap.drivers.gpe.model.GPEMultiGeometry#getIGeometry()
 	 */
 	public IGeometry getIGeometry() {
-		if (geometry == null){
+		if (geometry == null) {
 			geometry = ShapeFactory.createPolyline2D(createGeneralXPath());
 		}
 		return geometry;
 	}
-	
+
 }

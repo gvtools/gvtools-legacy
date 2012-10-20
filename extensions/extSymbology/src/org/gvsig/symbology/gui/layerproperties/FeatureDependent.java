@@ -79,7 +79,8 @@ import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.ILabelingMethod;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelClass;
 
-public class FeatureDependent extends AbstractLabelingMethodPanel implements ActionListener{
+public class FeatureDependent extends AbstractLabelingMethodPanel implements
+		ActionListener {
 	private static final long serialVersionUID = 5493451803343695650L;
 	private static int NAME_FIELD_INDEX = 0;
 	private static int PREVIEW_FIELD_INDEX = 1;
@@ -101,9 +102,8 @@ public class FeatureDependent extends AbstractLabelingMethodPanel implements Act
 
 	@Override
 	public String getName() {
-		return PluginServices.getText(
-				this,
-		"define_classes_of_features_and_label_each_differently")+".";
+		return PluginServices.getText(this,
+				"define_classes_of_features_and_label_each_differently") + ".";
 	}
 
 	@Override
@@ -111,16 +111,15 @@ public class FeatureDependent extends AbstractLabelingMethodPanel implements Act
 		return FeatureDependentLabeled.class;
 	}
 
-
 	private JCheckBox getChkDefinePriorities() {
 		if (chkDefinePriorities == null) {
-			chkDefinePriorities = new JCheckBox(PluginServices.getText(this, "label_priority"));
+			chkDefinePriorities = new JCheckBox(PluginServices.getText(this,
+					"label_priority"));
 			chkDefinePriorities.addActionListener(this);
 			chkDefinePriorities.setName("CHK_DEFINE_PRIORITIES");
 		}
 		return chkDefinePriorities;
 	}
-
 
 	private JButton getBtnDelClass() {
 		if (btnDelClass == null) {
@@ -142,7 +141,8 @@ public class FeatureDependent extends AbstractLabelingMethodPanel implements Act
 
 	private JButton getBtnMoveUpClass() {
 		if (btnMoveUpClass == null) {
-			btnMoveUpClass = new JButton(PluginServices.getText(this, "move_up"));
+			btnMoveUpClass = new JButton(
+					PluginServices.getText(this, "move_up"));
 			btnMoveUpClass.setName("BTNMOVEUPCLASS");
 			btnMoveUpClass.addActionListener(this);
 		}
@@ -151,7 +151,8 @@ public class FeatureDependent extends AbstractLabelingMethodPanel implements Act
 
 	private JButton getBtnMoveDownClass() {
 		if (btnMoveDownClass == null) {
-			btnMoveDownClass = new JButton(PluginServices.getText(this, "move_down"));
+			btnMoveDownClass = new JButton(PluginServices.getText(this,
+					"move_down"));
 			btnMoveDownClass.setName("BTNMOVEDOWNCLASS");
 			btnMoveDownClass.addActionListener(this);
 		}
@@ -160,49 +161,54 @@ public class FeatureDependent extends AbstractLabelingMethodPanel implements Act
 
 	private JScrollPane getCenterScrl() {
 
-			scrlPan = new JScrollPane(getTblClasses());
-			scrlPan.setPreferredSize(new Dimension(180, 300));
+		scrlPan = new JScrollPane(getTblClasses());
+		scrlPan.setPreferredSize(new Dimension(180, 300));
 
 		return scrlPan;
 	}
 
-
 	private JTable getTblClasses() {
 
-			tblClasses = new JTable(new LabelClassTableModel());
+		tblClasses = new JTable(new LabelClassTableModel());
 		tblClasses.setRowHeight(50);
 		tblClasses.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tblClasses.addMouseListener(new MouseAdapter() {
-			int prevRow =-1;
+			int prevRow = -1;
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
-					if (!tblClasses.isEnabled()){
-						return;
-					}
-					int col = tblClasses.getColumnModel().getColumnIndexAtX(e.getX());
-					int row = (int) ((e.getY()-tblClasses.getLocation().getY()) / tblClasses.getRowHeight());
-					if(!(row > tblClasses.getRowCount()-1 || col > tblClasses.getColumnCount()-1))
-					{
-						openEditor = (row == prevRow && e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2
-						) ;
-						prevRow = row;
-						if (openEditor)
-							tblClasses.editCellAt(row, col);
-					}
+				if (!tblClasses.isEnabled()) {
+					return;
 				}
+				int col = tblClasses.getColumnModel().getColumnIndexAtX(
+						e.getX());
+				int row = (int) ((e.getY() - tblClasses.getLocation().getY()) / tblClasses
+						.getRowHeight());
+				if (!(row > tblClasses.getRowCount() - 1 || col > tblClasses
+						.getColumnCount() - 1)) {
+					openEditor = (row == prevRow
+							&& e.getButton() == MouseEvent.BUTTON1 && e
+							.getClickCount() == 2);
+					prevRow = row;
+					if (openEditor)
+						tblClasses.editCellAt(row, col);
+				}
+			}
 		});
 
 		tblClasses.getModel().addTableModelListener(new TableModelListener() {
 
 			public void tableChanged(TableModelEvent e) {
-				if (!tblClasses.isEnabled()){
+				if (!tblClasses.isEnabled()) {
 					return;
 				}
 
-				if(e.getColumn() == VISIBLE_FIELD_INDEX){
+				if (e.getColumn() == VISIBLE_FIELD_INDEX) {
 					System.err.println("ahora toca cambiar la visibilidad");
-					LabelClass oldLc = (LabelClass) tblClasses.getValueAt(e.getFirstRow(), PREVIEW_FIELD_INDEX);
-					oldLc.setVisible(Boolean.valueOf(tblClasses.getValueAt(e.getFirstRow(), VISIBLE_FIELD_INDEX).toString()));
+					LabelClass oldLc = (LabelClass) tblClasses.getValueAt(
+							e.getFirstRow(), PREVIEW_FIELD_INDEX);
+					oldLc.setVisible(Boolean.valueOf(tblClasses.getValueAt(
+							e.getFirstRow(), VISIBLE_FIELD_INDEX).toString()));
 				}
 			}
 
@@ -210,96 +216,120 @@ public class FeatureDependent extends AbstractLabelingMethodPanel implements Act
 
 		TableColumnModel cm = tblClasses.getColumnModel();
 
-		tblClasses.getColumnModel().getColumn(PREVIEW_FIELD_INDEX).setCellRenderer(new TableCellRenderer() {
+		tblClasses.getColumnModel().getColumn(PREVIEW_FIELD_INDEX)
+				.setCellRenderer(new TableCellRenderer() {
 
-			public Component getTableCellRendererComponent(JTable table,
-					Object value, boolean isSelected, boolean hasFocus,
-					int row, int column) {
-				LabelClassPreview lcPr = new LabelClassPreview();
-				lcPr.setLabelClass((LabelClass) value);
-				return lcPr;
-			}
+					public Component getTableCellRendererComponent(
+							JTable table, Object value, boolean isSelected,
+							boolean hasFocus, int row, int column) {
+						LabelClassPreview lcPr = new LabelClassPreview();
+						lcPr.setLabelClass((LabelClass) value);
+						return lcPr;
+					}
 
-		});
-		tblClasses.getColumnModel().getColumn(VISIBLE_FIELD_INDEX).setCellRenderer(new BooleanTableCellRenderer(false));
-		tblClasses.getColumnModel().getColumn(LABEL_EXPRESSION_FIELD_INDEX).setCellRenderer(new TableCellRenderer() {
-			public Component getTableCellRendererComponent(JTable table,
-					Object value, boolean isSelected, boolean hasFocus,
-					int row, int column) {
-				String expr = null;
-				if (value != null)
-					expr = (String) value;
-				if (expr == null)
-					expr = LabelExpressionParser.tokenFor(LabelExpressionParser.EOEXPR);
+				});
+		tblClasses.getColumnModel().getColumn(VISIBLE_FIELD_INDEX)
+				.setCellRenderer(new BooleanTableCellRenderer(false));
+		tblClasses.getColumnModel().getColumn(LABEL_EXPRESSION_FIELD_INDEX)
+				.setCellRenderer(new TableCellRenderer() {
+					public Component getTableCellRendererComponent(
+							JTable table, Object value, boolean isSelected,
+							boolean hasFocus, int row, int column) {
+						String expr = null;
+						if (value != null)
+							expr = (String) value;
+						if (expr == null)
+							expr = LabelExpressionParser
+									.tokenFor(LabelExpressionParser.EOEXPR);
 
-//				expr = expr.replaceAll(LabelExpressionParser.tokenFor(LabelExpressionParser.EOFIELD), " | ");
-				expr = expr.substring(0, expr.length()-1);
-				return new JLabel("<html><p>"+expr+"</p></html>", JLabel.CENTER);
-			}
-		});
+						// expr =
+						// expr.replaceAll(LabelExpressionParser.tokenFor(LabelExpressionParser.EOFIELD),
+						// " | ");
+						expr = expr.substring(0, expr.length() - 1);
+						return new JLabel("<html><p>" + expr + "</p></html>",
+								JLabel.CENTER);
+					}
+				});
 
 		// the editors
 
 		for (int i = 0; i < tblClasses.getColumnModel().getColumnCount(); i++) {
-			if (i!= VISIBLE_FIELD_INDEX) {
-				tblClasses.getColumnModel().getColumn(i).setCellEditor(new LabelClassCellEditor());
+			if (i != VISIBLE_FIELD_INDEX) {
+				tblClasses.getColumnModel().getColumn(i)
+						.setCellEditor(new LabelClassCellEditor());
 			} else {
-				tblClasses.getColumnModel().getColumn(VISIBLE_FIELD_INDEX).
-				setCellEditor(new BooleanTableCellEditor(tblClasses));
+				tblClasses.getColumnModel().getColumn(VISIBLE_FIELD_INDEX)
+						.setCellEditor(new BooleanTableCellEditor(tblClasses));
 			}
 		}
-		((DefaultTableModel)tblClasses.getModel()).fireTableDataChanged();
+		((DefaultTableModel) tblClasses.getModel()).fireTableDataChanged();
 		repaint();
 
 		return tblClasses;
 	}
 
-
-	private class LabelClassCellEditor extends AbstractCellEditor implements TableCellEditor {
+	private class LabelClassCellEditor extends AbstractCellEditor implements
+			TableCellEditor {
 		private static final long serialVersionUID = 6399823783851437400L;
 
-		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+		public Component getTableCellEditorComponent(JTable table,
+				Object value, boolean isSelected, int row, int column) {
 			if (openEditor) {
-				LabelClass oldLc = (LabelClass) tblClasses.getValueAt(row, PREVIEW_FIELD_INDEX);
-				oldLc.setVisible(Boolean.valueOf(tblClasses.getValueAt(row, VISIBLE_FIELD_INDEX).toString()));
-				LabelClassProperties lcProp = new LabelClassProperties(fieldNames, fieldTypes);
-				oldLc.setTexts(new String[] {oldLc.getName()});
+				LabelClass oldLc = (LabelClass) tblClasses.getValueAt(row,
+						PREVIEW_FIELD_INDEX);
+				oldLc.setVisible(Boolean.valueOf(tblClasses.getValueAt(row,
+						VISIBLE_FIELD_INDEX).toString()));
+				LabelClassProperties lcProp = new LabelClassProperties(
+						fieldNames, fieldTypes);
+				oldLc.setTexts(new String[] { oldLc.getName() });
 				lcProp.setLabelClass(oldLc);
-				PluginServices.getMDIManager()
-				.addWindow(lcProp);
+				PluginServices.getMDIManager().addWindow(lcProp);
 				LabelClass newLc = lcProp.getLabelClass();
 
-				LabelClassTableModel m = (LabelClassTableModel) tblClasses.getModel();
+				LabelClassTableModel m = (LabelClassTableModel) tblClasses
+						.getModel();
 				Boolean changeDone = false;
 
 				if (!(oldLc.getName().equals(newLc.getName())))
-					if(!checSameLablClassName(m,newLc.getName())){
+					if (!checSameLablClassName(m, newLc.getName())) {
 
-						m.setValueAt(newLc.getStringLabelExpression(), row, LABEL_EXPRESSION_FIELD_INDEX);
+						m.setValueAt(newLc.getStringLabelExpression(), row,
+								LABEL_EXPRESSION_FIELD_INDEX);
 						m.setValueAt(newLc.getName(), row, NAME_FIELD_INDEX);
 						m.setValueAt(newLc, row, PREVIEW_FIELD_INDEX);
-						m.setValueAt(newLc.getSQLQuery(), row, FILTER_FIELD_INDEX);
-						m.setValueAt(newLc.isVisible(), row, VISIBLE_FIELD_INDEX);
-						fireEditingStopped(); //Make the renderer reappear.
+						m.setValueAt(newLc.getSQLQuery(), row,
+								FILTER_FIELD_INDEX);
+						m.setValueAt(newLc.isVisible(), row,
+								VISIBLE_FIELD_INDEX);
+						fireEditingStopped(); // Make the renderer reappear.
+						changeDone = true;
+					} else {
+						JOptionPane
+								.showMessageDialog(
+										tblClasses,
+										PluginServices
+												.getText(this,
+														"cannot_exist_two_label_classes_with_the_same_name")
+												+ "\n", PluginServices.getText(
+												this, "error"),
+										JOptionPane.ERROR_MESSAGE);
 						changeDone = true;
 					}
-					else {
-						JOptionPane.showMessageDialog(tblClasses, PluginServices.getText(this, "cannot_exist_two_label_classes_with_the_same_name")+"\n",PluginServices.getText(this,"error"),JOptionPane.ERROR_MESSAGE);
-						changeDone = true;
-					}
-				if (!changeDone){
-					m.setValueAt(newLc.getStringLabelExpression(), row, LABEL_EXPRESSION_FIELD_INDEX);
+				if (!changeDone) {
+					m.setValueAt(newLc.getStringLabelExpression(), row,
+							LABEL_EXPRESSION_FIELD_INDEX);
 					m.setValueAt(newLc.getName(), row, NAME_FIELD_INDEX);
 					m.setValueAt(newLc, row, PREVIEW_FIELD_INDEX);
 					m.setValueAt(newLc.getSQLQuery(), row, FILTER_FIELD_INDEX);
 					m.setValueAt(newLc.isVisible(), row, VISIBLE_FIELD_INDEX);
-					fireEditingStopped(); //Make the renderer reappear.
+					fireEditingStopped(); // Make the renderer reappear.
 					changeDone = true;
 				}
 			}
 
 			method.clearAllClasses();
-			LabelClass[] classes = ((LabelClassTableModel)tblClasses.getModel()).toLabelClassArray();
+			LabelClass[] classes = ((LabelClassTableModel) tblClasses
+					.getModel()).toLabelClassArray();
 			for (int i = 0; i < classes.length; i++) {
 				method.addLabelClass(classes[i]);
 			}
@@ -314,15 +344,13 @@ public class FeatureDependent extends AbstractLabelingMethodPanel implements Act
 
 	}
 
-
 	private boolean checSameLablClassName(LabelClassTableModel mod, String name) {
 		for (int i = 0; i < mod.getRowCount(); i++) {
-			if(name.equals(mod.getLabelAtRow(i).getName()))
+			if (name.equals(mod.getLabelAtRow(i).getName()))
 				return true;
 		}
 		return false;
 	}
-
 
 	private class LabelClassTableModel extends DefaultTableModel {
 		private static final long serialVersionUID = -9152998982339430209L;
@@ -333,9 +361,7 @@ public class FeatureDependent extends AbstractLabelingMethodPanel implements Act
 				PluginServices.getText(this, "preview"),
 				PluginServices.getText(this, "filter"),
 				PluginServices.getText(this, "label_expression"),
-				PluginServices.getText(this, "visible"),
-		};
-
+				PluginServices.getText(this, "visible"), };
 
 		public LabelClassTableModel() {
 			super();
@@ -346,7 +372,8 @@ public class FeatureDependent extends AbstractLabelingMethodPanel implements Act
 				values[i][PREVIEW_FIELD_INDEX] = labelClasses[i];
 				values[i][NAME_FIELD_INDEX] = labelClasses[i].getName();
 				values[i][FILTER_FIELD_INDEX] = labelClasses[i].getSQLQuery();
-				values[i][LABEL_EXPRESSION_FIELD_INDEX] = labelClasses[i].getStringLabelExpression();
+				values[i][LABEL_EXPRESSION_FIELD_INDEX] = labelClasses[i]
+						.getStringLabelExpression();
 				values[i][VISIBLE_FIELD_INDEX] = labelClasses[i].isVisible();
 			}
 			setDataVector(values, classesTableFieldNames);
@@ -382,11 +409,12 @@ public class FeatureDependent extends AbstractLabelingMethodPanel implements Act
 
 		public void setClassArray(LabelClass[] classes) {
 			for (int i = 0; i < classes.length; i++) {
-					setValueAt(classes[i],i,PREVIEW_FIELD_INDEX);
-					setValueAt(classes[i].getName(),i,NAME_FIELD_INDEX);
-					setValueAt(classes[i].getSQLQuery(),i,FILTER_FIELD_INDEX);
-					setValueAt(classes[i].getStringLabelExpression(),i,LABEL_EXPRESSION_FIELD_INDEX);
-					setValueAt(classes[i].isVisible(),i,VISIBLE_FIELD_INDEX);
+				setValueAt(classes[i], i, PREVIEW_FIELD_INDEX);
+				setValueAt(classes[i].getName(), i, NAME_FIELD_INDEX);
+				setValueAt(classes[i].getSQLQuery(), i, FILTER_FIELD_INDEX);
+				setValueAt(classes[i].getStringLabelExpression(), i,
+						LABEL_EXPRESSION_FIELD_INDEX);
+				setValueAt(classes[i].isVisible(), i, VISIBLE_FIELD_INDEX);
 			}
 
 		}
@@ -396,24 +424,23 @@ public class FeatureDependent extends AbstractLabelingMethodPanel implements Act
 	@Override
 	protected void initializePanel() {
 
-			setLayout(new BorderLayout());
-			JPanel panel = new JPanel(new BorderLayout());
-			buttonPanel = new GridBagLayoutPanel();
-			buttonPanel.addComponent(getBtnAddClass());
-			buttonPanel.addComponent(getBtnDelClass());
-			buttonPanel.addComponent(new JBlank(10, 10));
-			buttonPanel.addComponent(getBtnMoveUpClass());
-			buttonPanel.addComponent(getBtnMoveDownClass());
-			panel.add(buttonPanel, BorderLayout.EAST);
-			panel.add(getChkDefinePriorities(), BorderLayout.NORTH);
-			panel.add(getCenterScrl(), BorderLayout.CENTER);
-			add(panel,BorderLayout.CENTER);
-		}
-
+		setLayout(new BorderLayout());
+		JPanel panel = new JPanel(new BorderLayout());
+		buttonPanel = new GridBagLayoutPanel();
+		buttonPanel.addComponent(getBtnAddClass());
+		buttonPanel.addComponent(getBtnDelClass());
+		buttonPanel.addComponent(new JBlank(10, 10));
+		buttonPanel.addComponent(getBtnMoveUpClass());
+		buttonPanel.addComponent(getBtnMoveDownClass());
+		panel.add(buttonPanel, BorderLayout.EAST);
+		panel.add(getChkDefinePriorities(), BorderLayout.NORTH);
+		panel.add(getCenterScrl(), BorderLayout.CENTER);
+		add(panel, BorderLayout.CENTER);
+	}
 
 	@Override
-	public void fillPanel(ILabelingMethod method, SelectableDataSource dataSource)
-	throws ReadDriverException {
+	public void fillPanel(ILabelingMethod method,
+			SelectableDataSource dataSource) throws ReadDriverException {
 		fieldNames = dataSource.getFieldNames();
 		fieldTypes = new int[fieldNames.length];
 		for (int i = 0; i < fieldTypes.length; i++) {
@@ -426,41 +453,45 @@ public class FeatureDependent extends AbstractLabelingMethodPanel implements Act
 		repaint();
 	}
 
-	private void swapClass(int classIndex, int targetPos,int numOfElements) {
+	private void swapClass(int classIndex, int targetPos, int numOfElements) {
 
-		LabelClass[] classes = ((LabelClassTableModel)tblClasses.getModel()).toLabelClassArray();
+		LabelClass[] classes = ((LabelClassTableModel) tblClasses.getModel())
+				.toLabelClassArray();
 		LabelClass aux = classes[targetPos];
 		classes[targetPos] = classes[classIndex];
 		classes[classIndex] = aux;
-		((LabelClassTableModel)tblClasses.getModel()).setClassArray(classes);
+		((LabelClassTableModel) tblClasses.getModel()).setClassArray(classes);
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (method == null) return;
+		if (method == null)
+			return;
 
-
-		JComponent c = (JComponent)e.getSource();
-		LabelClassTableModel mod = ((LabelClassTableModel) tblClasses.getModel());
+		JComponent c = (JComponent) e.getSource();
+		LabelClassTableModel mod = ((LabelClassTableModel) tblClasses
+				.getModel());
 
 		if (c.equals(btnAddClass)) {
 
 			LabelClass newClass = new LabelClass();
-			String name = PluginServices.getText(this, "labeling")+
-			String.valueOf(1);
+			String name = PluginServices.getText(this, "labeling")
+					+ String.valueOf(1);
 
 			int count = 0;
-			while(checSameLablClassName(mod,name)){
+			while (checSameLablClassName(mod, name)) {
 				count++;
-				name = PluginServices.getText(this, "labeling")+
-				String.valueOf(count);
+				name = PluginServices.getText(this, "labeling")
+						+ String.valueOf(count);
 			}
 			newClass.setName(name);
-			mod.addRow(new Object[] {newClass.getName(), newClass, newClass.getSQLQuery(), newClass.getStringLabelExpression(), newClass.isVisible()});
+			mod.addRow(new Object[] { newClass.getName(), newClass,
+					newClass.getSQLQuery(),
+					newClass.getStringLabelExpression(), newClass.isVisible() });
 		} else if (c.equals(btnDelClass)) {
-			if (mod.getRowCount()>=1) {
+			if (mod.getRowCount() >= 1) {
 				int[] sRows = tblClasses.getSelectedRows();
 
-				for (int i = sRows.length-1; i >= 0 ; i--) {
+				for (int i = sRows.length - 1; i >= 0; i--) {
 					mod.removeRow(sRows[i]);
 				}
 			}
@@ -468,47 +499,49 @@ public class FeatureDependent extends AbstractLabelingMethodPanel implements Act
 
 			method.setDefinesPriorities(chkDefinePriorities.isSelected());
 
-		} else  if (c.equals(chkLabel)) {
+		} else if (c.equals(chkLabel)) {
 			int[] sRows = tblClasses.getSelectedRows();
-			for (int i = sRows.length-1; i >= 0 ; i--) {
+			for (int i = sRows.length - 1; i >= 0; i--) {
 				LabelClass lc = mod.getLabelAtRow(i);
 				lc.setVisible(chkLabel.isSelected());
 			}
 
 		} else if (c.equals(btnMoveUpClass)) {
 			int[] indices = tblClasses.getSelectedRows();
-			if (indices.length>0) {
+			if (indices.length > 0) {
 				int classIndex = indices[0];
-				int targetPos = Math.max(0, classIndex-1);
-				swapClass(classIndex, targetPos,indices.length);
+				int targetPos = Math.max(0, classIndex - 1);
+				swapClass(classIndex, targetPos, indices.length);
 			}
 
 		} else if (c.equals(btnMoveDownClass)) {
 			int[] indices = tblClasses.getSelectedRows();
-			if (indices.length>0) {
-				int classIndex = indices[indices.length-1];
-				int targetPos = Math.min(tblClasses.getRowCount()-1, classIndex+1);
-				swapClass(classIndex, targetPos,indices.length);
+			if (indices.length > 0) {
+				int classIndex = indices[indices.length - 1];
+				int targetPos = Math.min(tblClasses.getRowCount() - 1,
+						classIndex + 1);
+				swapClass(classIndex, targetPos, indices.length);
 			}
 
-		}else if (c.equals(btnDelClass)) {
+		} else if (c.equals(btnDelClass)) {
 			int[] indices = tblClasses.getSelectedRows();
-			if (indices.length>0) {
+			if (indices.length > 0) {
 				int classIndex = indices[0];
 				int targetPos = Math.min(tblClasses.getRowCount(), classIndex);
-				swapClass(classIndex, targetPos,indices.length);
+				swapClass(classIndex, targetPos, indices.length);
 			}
 		}
 
-
 		mod.fireTableDataChanged();
 		method.clearAllClasses();
-		LabelClass[] classes = ((LabelClassTableModel)tblClasses.getModel()).toLabelClassArray();
+		LabelClass[] classes = ((LabelClassTableModel) tblClasses.getModel())
+				.toLabelClassArray();
 		for (int i = 0; i < classes.length; i++) {
 			method.addLabelClass(classes[i]);
 		}
 		repaint();
 	}
+
 	public void propertyChange(PropertyChangeEvent evt) {
 		// TODO Auto-generated method stub
 
@@ -524,10 +557,5 @@ public class FeatureDependent extends AbstractLabelingMethodPanel implements Act
 		scrlPan.setEnabled(enabled);
 		tblClasses.setEnabled(enabled);
 	}
-
-
-
-
-
 
 }

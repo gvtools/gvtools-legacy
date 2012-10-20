@@ -51,54 +51,52 @@ import javax.swing.JToggleButton;
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.SingletonWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
-import com.iver.cit.gvsig.AddLayer;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
-
 
 /**
  * Contenedor de los botones necesarios para alinear, desplazar y cambiar el
  * tama�o de los fframes.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FAlignDialog extends JPanel implements SingletonWindow {
-	private static final ImageIcon ileft = PluginServices.getIconTheme()
-		.get("text-left-icon");
+	private static final ImageIcon ileft = PluginServices.getIconTheme().get(
+			"text-left-icon");
 	private static final ImageIcon icenterV = PluginServices.getIconTheme()
-		.get("text-center-v-icon");
+			.get("text-center-v-icon");
 
-	private static final ImageIcon iright = PluginServices.getIconTheme()
-		.get("text-right-icon");
-	private static final ImageIcon iup = PluginServices.getIconTheme()
-		.get("text-up-icon");
-	private static final ImageIcon icenterH= PluginServices.getIconTheme()
-		.get("text-center-h-icon");
-	private static final ImageIcon idown = PluginServices.getIconTheme()
-		.get("text-down-icon");
-	private static final ImageIcon idistUp = PluginServices.getIconTheme()
-		.get("text-distup-icon");
+	private static final ImageIcon iright = PluginServices.getIconTheme().get(
+			"text-right-icon");
+	private static final ImageIcon iup = PluginServices.getIconTheme().get(
+			"text-up-icon");
+	private static final ImageIcon icenterH = PluginServices.getIconTheme()
+			.get("text-center-h-icon");
+	private static final ImageIcon idown = PluginServices.getIconTheme().get(
+			"text-down-icon");
+	private static final ImageIcon idistUp = PluginServices.getIconTheme().get(
+			"text-distup-icon");
 	private static final ImageIcon idistCenterH = PluginServices.getIconTheme()
-		.get("text-distcenterh-icon");
+			.get("text-distcenterh-icon");
 	private static final ImageIcon idistDown = PluginServices.getIconTheme()
-		.get("text-distdown-icon");
+			.get("text-distdown-icon");
 	private static final ImageIcon idistLeft = PluginServices.getIconTheme()
-		.get("text-distleft-icon");
+			.get("text-distleft-icon");
 	private static final ImageIcon idistCenterV = PluginServices.getIconTheme()
-		.get("text-distcenterv-icon");
+			.get("text-distcenterv-icon");
 	private static final ImageIcon idistRight = PluginServices.getIconTheme()
-		.get("text-distright-icon");
+			.get("text-distright-icon");
 	private static final ImageIcon isizeWidth = PluginServices.getIconTheme()
-		.get("text-size-width-icon");
+			.get("text-size-width-icon");
 	private static final ImageIcon isizeHeight = PluginServices.getIconTheme()
-		.get("text-size-height-icon");
+			.get("text-size-height-icon");
 	private static final ImageIcon isizeOther = PluginServices.getIconTheme()
-		.get("text-size-other-icon");
+			.get("text-size-other-icon");
 	private static final ImageIcon ispaceRight = PluginServices.getIconTheme()
-		.get("text-space-right-icon");
-	private static final ImageIcon ispaceDown =PluginServices.getIconTheme()
-		.get("text-space-down-icon");
+			.get("text-space-right-icon");
+	private static final ImageIcon ispaceDown = PluginServices.getIconTheme()
+			.get("text-space-down-icon");
 	private static final ImageIcon iinLayout = PluginServices.getIconTheme()
-		.get("text-inlayout-icon");
+			.get("text-inlayout-icon");
 
 	private javax.swing.JButton bleft = null;
 	private javax.swing.JButton bcenterV = null;
@@ -127,8 +125,9 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 
 	/**
 	 * This is the default constructor
-	 *
-	 * @param layout Referencia al Layout.
+	 * 
+	 * @param layout
+	 *            Referencia al Layout.
 	 */
 	public FAlignDialog(Layout layout) {
 		super();
@@ -207,7 +206,7 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 
 	/**
 	 * This method initializes bleft
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBleft() {
@@ -215,7 +214,8 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 			bleft = new javax.swing.JButton();
 			bleft.setSize(24, 24);
 			bleft.setIcon(ileft);
-			bleft.setToolTipText(PluginServices.getText(this,"desplaza_los_elementos_seleccionados_a_la_izquierda"));
+			bleft.setToolTipText(PluginServices.getText(this,
+					"desplaza_los_elementos_seleccionados_a_la_izquierda"));
 			bleft.setLocation(10, 30);
 			bleft.setPreferredSize(new java.awt.Dimension(30, 30));
 		}
@@ -225,7 +225,7 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 
 	/**
 	 * This method initializes bcenterV
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBcenterV() {
@@ -233,7 +233,9 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 			bcenterV = new javax.swing.JButton();
 			bcenterV.setSize(24, 24);
 			bcenterV.setIcon(icenterV);
-			bcenterV.setToolTipText(PluginServices.getText(this,"desplaza_los_elementos_seleccionados_al_centro_por_el_eje_x"));
+			bcenterV.setToolTipText(PluginServices
+					.getText(this,
+							"desplaza_los_elementos_seleccionados_al_centro_por_el_eje_x"));
 			bcenterV.setLocation(35, 30);
 			bcenterV.setPreferredSize(new java.awt.Dimension(39, 20));
 		}
@@ -243,7 +245,7 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 
 	/**
 	 * This method initializes bright
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBright() {
@@ -251,7 +253,8 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 			bright = new javax.swing.JButton();
 			bright.setSize(24, 24);
 			bright.setIcon(iright);
-			bright.setToolTipText(PluginServices.getText(this,"desplaza_los_elementos_seleccionados_a_la_derecha"));
+			bright.setToolTipText(PluginServices.getText(this,
+					"desplaza_los_elementos_seleccionados_a_la_derecha"));
 			bright.setLocation(60, 30);
 		}
 
@@ -260,7 +263,7 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 
 	/**
 	 * This method initializes bup
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBup() {
@@ -268,7 +271,8 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 			bup = new javax.swing.JButton();
 			bup.setSize(24, 24);
 			bup.setIcon(iup);
-			bup.setToolTipText(PluginServices.getText(this,"desplaza_los_elementos_seleccionados_hacia_arriba"));
+			bup.setToolTipText(PluginServices.getText(this,
+					"desplaza_los_elementos_seleccionados_hacia_arriba"));
 			bup.setLocation(100, 30);
 		}
 
@@ -277,7 +281,7 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 
 	/**
 	 * This method initializes bcenterH
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBcenterH() {
@@ -285,7 +289,9 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 			bcenterH = new javax.swing.JButton();
 			bcenterH.setSize(24, 24);
 			bcenterH.setIcon(icenterH);
-			bcenterH.setToolTipText(PluginServices.getText(this,"desplaza_los_elementos_seleccionados_al_centro_por_el_eje_y"));
+			bcenterH.setToolTipText(PluginServices
+					.getText(this,
+							"desplaza_los_elementos_seleccionados_al_centro_por_el_eje_y"));
 			bcenterH.setLocation(125, 30);
 		}
 
@@ -294,7 +300,7 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 
 	/**
 	 * This method initializes bdown
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBdown() {
@@ -302,7 +308,8 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 			bdown = new javax.swing.JButton();
 			bdown.setSize(24, 24);
 			bdown.setIcon(idown);
-			bdown.setToolTipText(PluginServices.getText(this,"desplaza_los_elementos_seleccionados_hacia_abajo"));
+			bdown.setToolTipText(PluginServices.getText(this,
+					"desplaza_los_elementos_seleccionados_hacia_abajo"));
 			bdown.setLocation(150, 30);
 		}
 
@@ -311,7 +318,7 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 
 	/**
 	 * This method initializes bdistUp
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBdistUp() {
@@ -319,7 +326,10 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 			bdistUp = new javax.swing.JButton();
 			bdistUp.setSize(24, 24);
 			bdistUp.setIcon(idistUp);
-			bdistUp.setToolTipText(PluginServices.getText(this,"distribuye_los_elementos_seleccionados_de_forma_equidistante_de_arriba_hacia_abajo"));
+			bdistUp.setToolTipText(PluginServices
+					.getText(
+							this,
+							"distribuye_los_elementos_seleccionados_de_forma_equidistante_de_arriba_hacia_abajo"));
 			bdistUp.setLocation(100, 73);
 		}
 
@@ -328,7 +338,7 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 
 	/**
 	 * This method initializes lAlineamiento
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLAlineamiento() {
@@ -344,7 +354,7 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 
 	/**
 	 * This method initializes lDistribuir
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLDistribuir() {
@@ -359,7 +369,7 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 
 	/**
 	 * This method initializes bdistcenterV
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBdistcenterV() {
@@ -367,7 +377,10 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 			bdistcenterV = new javax.swing.JButton();
 			bdistcenterV.setSize(24, 24);
 			bdistcenterV.setIcon(idistCenterH);
-			bdistcenterV.setToolTipText(PluginServices.getText(this,"distribuye_los_elementos_seleccionados_de_forma_equidistante_y_vertical"));
+			bdistcenterV
+					.setToolTipText(PluginServices
+							.getText(this,
+									"distribuye_los_elementos_seleccionados_de_forma_equidistante_y_vertical"));
 			bdistcenterV.setLocation(125, 73);
 		}
 
@@ -376,7 +389,7 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 
 	/**
 	 * This method initializes bdistDown
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBdistDown() {
@@ -384,7 +397,11 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 			bdistDown = new javax.swing.JButton();
 			bdistDown.setSize(24, 24);
 			bdistDown.setIcon(idistDown);
-			bdistDown.setToolTipText(PluginServices.getText(this,"distribuye_los_elementos_seleccionados_de_forma_equidistante_de_abajo_hacia_arriba"));
+			bdistDown
+					.setToolTipText(PluginServices
+							.getText(
+									this,
+									"distribuye_los_elementos_seleccionados_de_forma_equidistante_de_abajo_hacia_arriba"));
 			bdistDown.setLocation(150, 73);
 		}
 
@@ -393,7 +410,7 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 
 	/**
 	 * This method initializes bdistLeft
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBdistLeft() {
@@ -401,7 +418,11 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 			bdistLeft = new javax.swing.JButton();
 			bdistLeft.setSize(24, 24);
 			bdistLeft.setIcon(idistLeft);
-			bdistLeft.setToolTipText(PluginServices.getText(this,"distribuye_los_elementos_seleccionados_de_forma_equidistante_de_izquierda_a_derecha"));
+			bdistLeft
+					.setToolTipText(PluginServices
+							.getText(
+									this,
+									"distribuye_los_elementos_seleccionados_de_forma_equidistante_de_izquierda_a_derecha"));
 			bdistLeft.setLocation(10, 73);
 		}
 
@@ -410,7 +431,7 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 
 	/**
 	 * This method initializes bdistcenterH
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBdistcenterH() {
@@ -418,7 +439,10 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 			bdistcenterH = new javax.swing.JButton();
 			bdistcenterH.setSize(24, 24);
 			bdistcenterH.setIcon(idistCenterV);
-			bdistcenterH.setToolTipText(PluginServices.getText(this,"distribuye_los_elementos_seleccionados_de_forma_equidistante_y_horizontal"));
+			bdistcenterH
+					.setToolTipText(PluginServices
+							.getText(this,
+									"distribuye_los_elementos_seleccionados_de_forma_equidistante_y_horizontal"));
 			bdistcenterH.setLocation(35, 73);
 		}
 
@@ -427,14 +451,18 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 
 	/**
 	 * This method initializes bdistRight
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBdistRight() {
 		if (bdistRight == null) {
 			bdistRight = new javax.swing.JButton();
 			bdistRight.setIcon(idistRight);
-			bdistRight.setToolTipText(PluginServices.getText(this,"distribuye_los_elementos_seleccionados_de_forma_equidistante_de_derecha_a_izquierda"));
+			bdistRight
+					.setToolTipText(PluginServices
+							.getText(
+									this,
+									"distribuye_los_elementos_seleccionados_de_forma_equidistante_de_derecha_a_izquierda"));
 			bdistRight.setBounds(60, 73, 24, 24);
 		}
 
@@ -443,7 +471,7 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 
 	/**
 	 * This method initializes lTamano
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLTamano() {
@@ -458,14 +486,18 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 
 	/**
 	 * This method initializes bsizecenterV
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBsizecenterV() {
 		if (bsizecenterV == null) {
 			bsizecenterV = new javax.swing.JButton();
 			bsizecenterV.setIcon(isizeWidth);
-			bsizecenterV.setToolTipText(PluginServices.getText(this,"cambiar_el_ancho_de_los_elementos_seleccionados_hasta_coincidir_con_el_mas_ancho"));
+			bsizecenterV
+					.setToolTipText(PluginServices
+							.getText(
+									this,
+									"cambiar_el_ancho_de_los_elementos_seleccionados_hasta_coincidir_con_el_mas_ancho"));
 			bsizecenterV.setBounds(10, 115, 24, 24);
 		}
 
@@ -474,14 +506,18 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 
 	/**
 	 * This method initializes bsizecenterH
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBsizecenterH() {
 		if (bsizecenterH == null) {
 			bsizecenterH = new javax.swing.JButton();
 			bsizecenterH.setIcon(isizeHeight);
-			bsizecenterH.setToolTipText(PluginServices.getText(this,"cambiar_el_alto_de_los_elementos_seleccionados_hasta_coincidir_con_el_mas_alto"));
+			bsizecenterH
+					.setToolTipText(PluginServices
+							.getText(
+									this,
+									"cambiar_el_alto_de_los_elementos_seleccionados_hasta_coincidir_con_el_mas_alto"));
 			bsizecenterH.setBounds(35, 115, 24, 24);
 		}
 
@@ -490,14 +526,18 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 
 	/**
 	 * This method initializes bsizeother
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBsizeother() {
 		if (bsizeother == null) {
 			bsizeother = new javax.swing.JButton();
 			bsizeother.setIcon(isizeOther);
-			bsizeother.setToolTipText(PluginServices.getText(this,"cambiar_el_tamano_de_los_elementos_seleccionados_hasta_coincidir_con_el_mas_grande"));
+			bsizeother
+					.setToolTipText(PluginServices
+							.getText(
+									this,
+									"cambiar_el_tamano_de_los_elementos_seleccionados_hasta_coincidir_con_el_mas_grande"));
 			bsizeother.setBounds(60, 115, 24, 24);
 		}
 
@@ -506,14 +546,15 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 
 	/**
 	 * This method initializes bspaceRight
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBspaceRight() {
 		if (bspaceRight == null) {
 			bspaceRight = new javax.swing.JButton();
 			bspaceRight.setIcon(ispaceRight);
-			bspaceRight.setToolTipText(PluginServices.getText(this,"distribuye_el_espacio_entre_los_elementos_en_horizontal"));
+			bspaceRight.setToolTipText(PluginServices.getText(this,
+					"distribuye_el_espacio_entre_los_elementos_en_horizontal"));
 			bspaceRight.setBounds(125, 115, 24, 24);
 		}
 
@@ -522,14 +563,15 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 
 	/**
 	 * This method initializes bspaceDown
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBspaceDown() {
 		if (bspaceDown == null) {
 			bspaceDown = new javax.swing.JButton();
 			bspaceDown.setIcon(ispaceDown);
-			bspaceDown.setToolTipText(PluginServices.getText(this,"distribuye_el_espacio_entre_los_elementos_en_vertical"));
+			bspaceDown.setToolTipText(PluginServices.getText(this,
+					"distribuye_el_espacio_entre_los_elementos_en_vertical"));
 			bspaceDown.setBounds(150, 115, 24, 24);
 		}
 
@@ -538,7 +580,7 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 
 	/**
 	 * This method initializes lEspacio
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLEspacio() {
@@ -553,7 +595,7 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 
 	/**
 	 * This method initializes lEnElMapa
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLEnElMapa() {
@@ -568,14 +610,15 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 
 	/**
 	 * This method initializes binLayout
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JToggleButton getBinLayout() {
 		if (binLayout == null) {
 			binLayout = new JToggleButton();
 			binLayout.setIcon(iinLayout);
-			binLayout.setToolTipText(PluginServices.getText(this,"distribuir_elementos_sobre_todo_el_layout"));
+			binLayout.setToolTipText(PluginServices.getText(this,
+					"distribuir_elementos_sobre_todo_el_layout"));
 			binLayout.setBounds(199, 58, 51, 41);
 		}
 
@@ -593,7 +636,8 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 	 * @see com.iver.mdiApp.ui.MDIManager.IWindow#getWindowInfo()
 	 */
 	public WindowInfo getWindowInfo() {
-		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODELESSDIALOG|WindowInfo.PALETTE);
+		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODELESSDIALOG
+				| WindowInfo.PALETTE);
 		m_viewinfo.setTitle(PluginServices.getText(this, "alinear"));
 
 		return m_viewinfo;
@@ -608,4 +652,4 @@ public class FAlignDialog extends JPanel implements SingletonWindow {
 	public Object getWindowProfile() {
 		return WindowInfo.PROPERTIES_PROFILE;
 	}
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

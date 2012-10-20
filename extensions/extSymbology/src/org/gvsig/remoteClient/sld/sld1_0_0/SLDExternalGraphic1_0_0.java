@@ -46,50 +46,48 @@ import java.net.URL;
 import org.gvsig.remoteClient.gml.schemas.XMLSchemaParser;
 import org.gvsig.remoteClient.sld.SLDExternalGraphic;
 import org.gvsig.remoteClient.sld.SLDTags;
-import org.gvsig.remoteClient.sld.filterEncoding.FilterTags;
 import org.xmlpull.v1.XmlPullParserException;
 
 import com.iver.cit.gvsig.fmap.rendering.XmlBuilder;
 
 /**
  * Implements the ExternalGraphic element of an SLD implementation specification
- * (version 1.0.0).<p>
- * The ExternalGraphic element allows a reference to be made to an external graphic
- * file with a Web URL. The onlineResource sub-element gives the URL and the format
- * sub-element identifies the expected document MIME type of a succesful fetch. Knowing
- * the MIME type in advance allows the styler to select the best-supported format
- * from the list of URLs with the equivalent content. Users should avoid referencing
- * external graphics that may change at arbitrary times. Graphic should be static
- * when al all possible.
- *
+ * (version 1.0.0).
+ * <p>
+ * The ExternalGraphic element allows a reference to be made to an external
+ * graphic file with a Web URL. The onlineResource sub-element gives the URL and
+ * the format sub-element identifies the expected document MIME type of a
+ * succesful fetch. Knowing the MIME type in advance allows the styler to select
+ * the best-supported format from the list of URLs with the equivalent content.
+ * Users should avoid referencing external graphics that may change at arbitrary
+ * times. Graphic should be static when al all possible.
+ * 
  * @see http://portal.opengeospatial.org/files/?artifact_id=1188
- *
+ * 
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
-*/
+ */
 public class SLDExternalGraphic1_0_0 extends SLDExternalGraphic {
 
-	
-	public void parse(XMLSchemaParser parser, int cuTag, String expressionType)throws IOException, XmlPullParserException  {
+	public void parse(XMLSchemaParser parser, int cuTag, String expressionType)
+			throws IOException, XmlPullParserException {
 		int currentTag;
 		boolean end = false;
 
 		parser.require(XMLSchemaParser.START_TAG, null, SLDTags.EXTERNALGRAPHIC);
 		currentTag = parser.next();
 
-		while (!end)
-		{
-			switch(currentTag)
-			{
+		while (!end) {
+			switch (currentTag) {
 			case XMLSchemaParser.START_TAG:
-				if (parser.getName().compareTo(SLDTags.ONLINE_RESOURCE)==0) {
+				if (parser.getName().compareTo(SLDTags.ONLINE_RESOURCE) == 0) {
 					for (int i = 0; i < parser.getAttributeCount(); i++) {
-						if (parser.getAttributeName(i).compareTo(SLDTags.XLINK_HREF) == 0) {
+						if (parser.getAttributeName(i).compareTo(
+								SLDTags.XLINK_HREF) == 0) {
 							URL myURL = new URL(parser.getAttributeValue(i));
 							addOnlineResource(myURL);
 						}
 					}
-				}
-				else if (parser.getName().compareTo(SLDTags.FORMAT)==0) {
+				} else if (parser.getName().compareTo(SLDTags.FORMAT) == 0) {
 					setFormat(parser.nextText());
 				}
 				break;
@@ -111,9 +109,10 @@ public class SLDExternalGraphic1_0_0 extends SLDExternalGraphic {
 	public String toXML() {
 		XmlBuilder xmlBuilder = new XmlBuilder();
 		xmlBuilder.openTag(SLDTags.EXTERNALGRAPHIC);
-		xmlBuilder.writeRaw("<"+SLDTags.ONLINE_RESOURCE+" "+SLDTags.XLINK_HREF+"= \""+
-				getOnlineResource().get(0)+"\"/>");
-		if(getFormat() != null) {
+		xmlBuilder.writeRaw("<" + SLDTags.ONLINE_RESOURCE + " "
+				+ SLDTags.XLINK_HREF + "= \"" + getOnlineResource().get(0)
+				+ "\"/>");
+		if (getFormat() != null) {
 			xmlBuilder.writeTag(SLDTags.FORMAT, getFormat());
 		}
 		xmlBuilder.closeTag();

@@ -27,12 +27,14 @@ import org.gvsig.gui.beans.Messages;
 import org.gvsig.gui.beans.panelGroup.IPanelGroup;
 
 /**
- * <p>If an object of type {@link IPanelGroup IPanelGroup} tries to load a panel that its preferred sized
- *  hasn't been initialized, (not the default preferred size), then an exception of this kind will be
- *  launched.</p>
+ * <p>
+ * If an object of type {@link IPanelGroup IPanelGroup} tries to load a panel
+ * that its preferred sized hasn't been initialized, (not the default preferred
+ * size), then an exception of this kind will be launched.
+ * </p>
  * 
  * @version 28/11/2007
- * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es) 
+ * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class PanelWithNoPreferredSizeDefinedException extends BaseException {
 	private static final long serialVersionUID = 3953831724578904518L;
@@ -40,18 +42,25 @@ public class PanelWithNoPreferredSizeDefinedException extends BaseException {
 	public static final String PANEL_LABEL = "PANEL_LABEL";
 
 	/**
-	 * <p>Creates an initializes a new instance of <code>PanelWithNoPreferredSizedDefinedException</code>.</p>
+	 * <p>
+	 * Creates an initializes a new instance of
+	 * <code>PanelWithNoPreferredSizedDefinedException</code>.
+	 * </p>
 	 */
 	public PanelWithNoPreferredSizeDefinedException() {
 		super();
 
 		initialize();
 	}
-	
+
 	/**
-	 * <p>Creates an initializes a new instance of <code>PanelWithNoPreferredSizedDefinedException</code>.</p>
+	 * <p>
+	 * Creates an initializes a new instance of
+	 * <code>PanelWithNoPreferredSizedDefinedException</code>.
+	 * </p>
 	 * 
-	 * @param panelLabel label of the panel which is the source of this exception
+	 * @param panelLabel
+	 *            label of the panel which is the source of this exception
 	 */
 	public PanelWithNoPreferredSizeDefinedException(String panelLabel) {
 		super();
@@ -61,21 +70,28 @@ public class PanelWithNoPreferredSizeDefinedException extends BaseException {
 		// Sets the needed information
 		setPanelLabel(panelLabel);
 	}
-	
+
 	/**
-	 * <p>Initializes a <code>PanelBaseException</code> with the needed information.</p>
+	 * <p>
+	 * Initializes a <code>PanelBaseException</code> with the needed
+	 * information.
+	 * </p>
 	 */
 	protected void initialize() {
 		// Identifier of this kind of exception
 		this.code = serialVersionUID;
-		
-		// Default text that explains this kind of exception. If there is no translation associated to the
-		// "messageKey" of this exception, then the value shown will be the value of "formatString".
-		this.formatString = "Panel with label \"%(" + PANEL_LABEL + ")\" without preferred size defined.";
 
-		 // Key to the sentence that explains this exception. That key will be use for multilingual purposes.
+		// Default text that explains this kind of exception. If there is no
+		// translation associated to the
+		// "messageKey" of this exception, then the value shown will be the
+		// value of "formatString".
+		this.formatString = "Panel with label \"%(" + PANEL_LABEL
+				+ ")\" without preferred size defined.";
+
+		// Key to the sentence that explains this exception. That key will be
+		// use for multilingual purposes.
 		this.messageKey = "panel_without_preferred_size_defined_exception";
-		
+
 		// Map with the label of the panel
 		values = new HashMap<String, String>();
 		values.put(PANEL_LABEL, "");
@@ -85,6 +101,7 @@ public class PanelWithNoPreferredSizeDefinedException extends BaseException {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map<String, String> values() {
@@ -92,8 +109,10 @@ public class PanelWithNoPreferredSizeDefinedException extends BaseException {
 	}
 
 	/**
-	 * <p>Gets the label of the panel which is the source of this exception, or
-	 *  <code>null</code> if hasn't been defined.</p>
+	 * <p>
+	 * Gets the label of the panel which is the source of this exception, or
+	 * <code>null</code> if hasn't been defined.
+	 * </p>
 	 * 
 	 * @return label of the panel which is the source of this exception
 	 */
@@ -102,9 +121,12 @@ public class PanelWithNoPreferredSizeDefinedException extends BaseException {
 	}
 
 	/**
-	 * <p>Sets the label of the panel which is the source of this exception.</p>
+	 * <p>
+	 * Sets the label of the panel which is the source of this exception.
+	 * </p>
 	 * 
-	 * @param panelLabel label of the panel which is the source of this exception
+	 * @param panelLabel
+	 *            label of the panel which is the source of this exception
 	 */
 	public void setPanelLabel(String panelLabel) {
 		if (panelLabel == null)

@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.impl.referencing;
 
 import java.io.File;
@@ -69,7 +69,8 @@ import com.iver.cit.gvsig.geoprocess.impl.referencing.fmap.ReferencingGeoprocess
 import com.iver.utiles.swing.threads.IMonitorableTask;
 import com.iver.utiles.swing.threads.MonitorableDecoratorMainFirst;
 
-public class ReferencingGeoprocessController extends AbstractGeoprocessController {
+public class ReferencingGeoprocessController extends
+		AbstractGeoprocessController {
 
 	private IReferencingGeoprocessUserEntries userEntries;
 	private ReferencingGeoprocess geoprocess;
@@ -83,7 +84,7 @@ public class ReferencingGeoprocessController extends AbstractGeoprocessControlle
 	}
 
 	public boolean launchGeoprocess() {
-/*MOVER A CLASE ABSTRACTA*/		
+		/* MOVER A CLASE ABSTRACTA */
 		final FLyrVect inputLayer = userEntries.getInputLayer();
 		FLayers layers = userEntries.getFLayers();
 		File outputFile = null;
@@ -108,16 +109,16 @@ public class ReferencingGeoprocessController extends AbstractGeoprocessControlle
 				return false;
 			}
 		}
-/*MOVER A CLASE ABSTRACTA*/		
-		
+		/* MOVER A CLASE ABSTRACTA */
+
 		geoprocess = new ReferencingGeoprocess(inputLayer);
 
-/*MOVER A CLASE ABSTRACTA*/		
+		/* MOVER A CLASE ABSTRACTA */
 		SHPLayerDefinition definition = (SHPLayerDefinition) geoprocess
 				.createLayerDefinition();
 		definition.setFile(outputFile);
-		ShpSchemaManager schemaManager = new ShpSchemaManager(outputFile
-				.getAbsolutePath());
+		ShpSchemaManager schemaManager = new ShpSchemaManager(
+				outputFile.getAbsolutePath());
 		IWriter writer = null;
 		try {
 			writer = getShpWriter(definition);
@@ -131,28 +132,30 @@ public class ReferencingGeoprocessController extends AbstractGeoprocessControlle
 		}
 		geoprocess.setResultLayerProperties(writer, schemaManager);
 
-/*MOVER A CLASE ABSTRACTA*/	
-		
+		/* MOVER A CLASE ABSTRACTA */
+
 		HashMap params = new HashMap();
 		MathTransform mathTransform;
 		try {
 			mathTransform = userEntries.getMathTransform();
 			params.put("mathTransform", mathTransform);
 		} catch (GeoprocessException e1) {
-			String error = PluginServices.getText(this,"Error_calculo_transformacion");
-			userEntries.error( PluginServices.getText(this, "Error_calculo_transformacion"), error);
+			String error = PluginServices.getText(this,
+					"Error_calculo_transformacion");
+			userEntries.error(PluginServices.getText(this,
+					"Error_calculo_transformacion"), error);
 			return false;
 		}
-		
+
 		boolean hasAuxiliarLyrs = userEntries.hasAuxiliarLyrs();
 		params.put("hasAuxiliar", new Boolean(hasAuxiliarLyrs));
-		if(hasAuxiliarLyrs){
+		if (hasAuxiliarLyrs) {
 			params.put("auxiliarLyrs", userEntries.getAuxiliarLyrs());
 		}
-		
-/*
- * MOVER A CLASE ABSTRACTA 
- * */		
+
+		/*
+		 * MOVER A CLASE ABSTRACTA
+		 */
 		try {
 			geoprocess.setParameters(params);
 			geoprocess.checkPreconditions();
@@ -177,8 +180,8 @@ public class ReferencingGeoprocessController extends AbstractGeoprocessControlle
 		}
 		return true;
 		/*
-		 * MOVER A CLASE ABSTRACTA 
-		 * */		
+		 * MOVER A CLASE ABSTRACTA
+		 */
 	}
 
 	public int getWidth() {

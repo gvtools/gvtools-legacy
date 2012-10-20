@@ -55,7 +55,6 @@ import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.utiles.swing.JComboBox;
 
-
 public class SelectionByTheme extends JPanel implements IWindow {
 	public static final int EQUALS = 0;
 	public static final int DISJOINT = 1;
@@ -66,14 +65,14 @@ public class SelectionByTheme extends JPanel implements IWindow {
 	public static final int CONTAINS = 6;
 	public static final int OVERLAPS = 7;
 	public final String[] textosAcciones = new String[] {
-    PluginServices.getText(this, "Sean_iguales_a"), //"sean iguales a",
-    PluginServices.getText(this, "Sean_disjuntos_a"), //"sean disjuntos a",
-    PluginServices.getText(this, "Intersecten_con"), //"intersecten con",
-    PluginServices.getText(this, "Toquen"), //"toquen",
-    PluginServices.getText(this, "Crucen_con"), //"crucen con",
-    PluginServices.getText(this, "Contengan"), //"contengan",
-    PluginServices.getText(this, "Esten_contenidos_en"), //"estén contenidos en",
-    PluginServices.getText(this, "Se_superponen_a"), //"se superponen a"
+			PluginServices.getText(this, "Sean_iguales_a"), // "sean iguales a",
+			PluginServices.getText(this, "Sean_disjuntos_a"), // "sean disjuntos a",
+			PluginServices.getText(this, "Intersecten_con"), // "intersecten con",
+			PluginServices.getText(this, "Toquen"), // "toquen",
+			PluginServices.getText(this, "Crucen_con"), // "crucen con",
+			PluginServices.getText(this, "Contengan"), // "contengan",
+			PluginServices.getText(this, "Esten_contenidos_en"), // "estén contenidos en",
+			PluginServices.getText(this, "Se_superponen_a"), // "se superponen a"
 	};
 
 	private SelectionByThemeModel dataSource = null;
@@ -90,6 +89,7 @@ public class SelectionByTheme extends JPanel implements IWindow {
 	private JButton btnAdd = null;
 	private JButton btnFrom = null;
 	private JButton btnCancel = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -97,9 +97,10 @@ public class SelectionByTheme extends JPanel implements IWindow {
 		super();
 		initialize();
 	}
+
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
@@ -111,13 +112,14 @@ public class SelectionByTheme extends JPanel implements IWindow {
 		this.add(new JLabel(), BorderLayout.SOUTH);
 		this.setSize(540, 95);
 	}
+
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return JPanel
 	 */
 	private JPanel getJPanel() {
-		if(jPanel == null) {
+		if (jPanel == null) {
 			jPanel = new JPanel();
 			java.awt.FlowLayout layFlowLayout1 = new java.awt.FlowLayout();
 			layFlowLayout1.setVgap(30);
@@ -130,140 +132,158 @@ public class SelectionByTheme extends JPanel implements IWindow {
 		}
 		return jPanel;
 	}
+
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return JPanel
 	 */
 	private JPanel getJPanel1() {
-		if(jPanel1 == null) {
+		if (jPanel1 == null) {
 			jPanel1 = new JPanel();
 			jPanel1.setLayout(new GridLayout(4, 1, 5, 5));
 			jPanel1.add(getBtnNew(), null);
 			jPanel1.add(getBtnAdd(), null);
 			jPanel1.add(getBtnFrom(), null);
 			jPanel1.add(getBtnCancel(), null);
-			jPanel1.setPreferredSize(new java.awt.Dimension(200,220));
+			jPanel1.setPreferredSize(new java.awt.Dimension(200, 220));
 		}
 		return jPanel1;
 	}
+
 	/**
 	 * This method initializes jLabel
-	 *
+	 * 
 	 * @return JLabel
 	 */
 	private JLabel getJLabel() {
-		if(jLabel == null) {
+		if (jLabel == null) {
 			jLabel = new JLabel();
-			jLabel.setText(PluginServices.getText(this, "Seleccionar_de_las_capas_activas_los_elementos_que") + "... ");
+			jLabel.setText(PluginServices.getText(this,
+					"Seleccionar_de_las_capas_activas_los_elementos_que")
+					+ "... ");
 		}
 		return jLabel;
 	}
+
 	/**
 	 * This method initializes cmbAction
-	 *
+	 * 
 	 * @return JComboBox
 	 */
 	private JComboBox getCmbAction() {
-		if(cmbAction == null) {
+		if (cmbAction == null) {
 			cmbAction = new JComboBox();
-			cmbAction.setPreferredSize(new java.awt.Dimension(200,20));
-			DefaultComboBoxModel model = new DefaultComboBoxModel(textosAcciones);
+			cmbAction.setPreferredSize(new java.awt.Dimension(200, 20));
+			DefaultComboBoxModel model = new DefaultComboBoxModel(
+					textosAcciones);
 			cmbAction.setModel(model);
 		}
 		return cmbAction;
 	}
+
 	/**
 	 * This method initializes jLabel1
-	 *
+	 * 
 	 * @return JLabel
 	 */
 	private JLabel getJLabel1() {
-		if(jLabel1 == null) {
+		if (jLabel1 == null) {
 			jLabel1 = new JLabel();
-			jLabel1.setText(PluginServices.getText(this, "Elementos_seleccionados_de_la_capa"));
+			jLabel1.setText(PluginServices.getText(this,
+					"Elementos_seleccionados_de_la_capa"));
 		}
 		return jLabel1;
 	}
+
 	/**
 	 * This method initializes cmbCapas
-	 *
+	 * 
 	 * @return JComboBox
 	 */
 	private JComboBox getCmbCapas() {
-		if(cmbCapas == null) {
+		if (cmbCapas == null) {
 			cmbCapas = new JComboBox();
-			cmbCapas.setPreferredSize(new java.awt.Dimension(200,20));
+			cmbCapas.setPreferredSize(new java.awt.Dimension(200, 20));
 		}
 		return cmbCapas;
 	}
+
 	/**
 	 * This method initializes btnNew
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getBtnNew() {
-		if(btnNew == null) {
+		if (btnNew == null) {
 			btnNew = new JButton();
 			btnNew.setText(PluginServices.getText(this, "Nuevo_conjunto"));
-			btnNew.setMargin(new java.awt.Insets(2,2,2,2));
+			btnNew.setMargin(new java.awt.Insets(2, 2, 2, 2));
 			btnNew.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					callNewListeners(cmbCapas.getSelectedIndex(), cmbAction.getSelectedIndex());
+					callNewListeners(cmbCapas.getSelectedIndex(),
+							cmbAction.getSelectedIndex());
 				}
 			});
 		}
 		return btnNew;
 	}
+
 	/**
 	 * This method initializes btnAdd
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getBtnAdd() {
-		if(btnAdd == null) {
+		if (btnAdd == null) {
 			btnAdd = new JButton();
 			btnAdd.setText(PluginServices.getText(this, "Anadir_al_conjunto"));
-			btnAdd.setMargin(new java.awt.Insets(2,2,2,2));
+			btnAdd.setMargin(new java.awt.Insets(2, 2, 2, 2));
 			btnAdd.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					callAddToListeners(cmbCapas.getSelectedIndex(), cmbAction.getSelectedIndex());
+					callAddToListeners(cmbCapas.getSelectedIndex(),
+							cmbAction.getSelectedIndex());
 				}
 			});
 		}
 		return btnAdd;
 	}
+
 	/**
 	 * This method initializes btnFrom
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getBtnFrom() {
-		if(btnFrom == null) {
+		if (btnFrom == null) {
 			btnFrom = new JButton();
-			btnFrom.setText(PluginServices.getText(this, "Seleccionar_del_conjunto"));
-			btnFrom.setMargin(new java.awt.Insets(2,2,2,2));
+			btnFrom.setText(PluginServices.getText(this,
+					"Seleccionar_del_conjunto"));
+			btnFrom.setMargin(new java.awt.Insets(2, 2, 2, 2));
 			btnFrom.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					callFromListeners(cmbCapas.getSelectedIndex(), cmbAction.getSelectedIndex());
+					callFromListeners(cmbCapas.getSelectedIndex(),
+							cmbAction.getSelectedIndex());
 				}
 			});
 		}
 		return btnFrom;
 	}
+
 	/**
 	 * This method initializes btnCancel
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getBtnCancel() {
-		if(btnCancel == null) {
+		if (btnCancel == null) {
 			btnCancel = new JButton();
 			btnCancel.setText(PluginServices.getText(this, "Cancel"));
-			btnCancel.setMargin(new java.awt.Insets(2,2,2,2));
+			btnCancel.setMargin(new java.awt.Insets(2, 2, 2, 2));
 			btnCancel.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					PluginServices.getMDIManager().closeWindow(SelectionByTheme.this);
+					PluginServices.getMDIManager().closeWindow(
+							SelectionByTheme.this);
 				}
 			});
 		}
@@ -282,56 +302,60 @@ public class SelectionByTheme extends JPanel implements IWindow {
 	 */
 	public void setModel(SelectionByThemeModel source) {
 		dataSource = source;
-		String[] nameLayers = new String[dataSource.getLayers().getLayersCount()];
-		for (int i=0; i < nameLayers.length; i++)
+		String[] nameLayers = new String[dataSource.getLayers()
+				.getLayersCount()];
+		for (int i = 0; i < nameLayers.length; i++)
 			nameLayers[i] = dataSource.getLayers().getLayer(i).getName();
-		DefaultComboBoxModel model =
-			new DefaultComboBoxModel(nameLayers);
+		DefaultComboBoxModel model = new DefaultComboBoxModel(nameLayers);
 		cmbCapas.setModel(model);
 	}
+
 	/**
 	 * @see com.iver.mdiApp.ui.MDIManager.IWindow#getWindowInfo()
 	 */
 	public WindowInfo getWindowInfo() {
 		WindowInfo vi = new WindowInfo(WindowInfo.MODALDIALOG);
-		vi.setWidth(this.getWidth()+8);
+		vi.setWidth(this.getWidth() + 8);
 		vi.setHeight(this.getHeight());
 		vi.setTitle(PluginServices.getText(this, "Seleccion_por_capa"));
 		return vi;
 	}
 
-	private void callNewListeners(int selection, int actionCode){
-		for (int i = 0; i < listeners.size();
-				i++) {
-			SelectionByThemeListener l = (SelectionByThemeListener) listeners.get(i);
-			l.newSet(dataSource.getLayers().getActives(), dataSource.getLayers().getLayer(selection), actionCode);
+	private void callNewListeners(int selection, int actionCode) {
+		for (int i = 0; i < listeners.size(); i++) {
+			SelectionByThemeListener l = (SelectionByThemeListener) listeners
+					.get(i);
+			l.newSet(dataSource.getLayers().getActives(), dataSource
+					.getLayers().getLayer(selection), actionCode);
 		}
 
 	}
 
-	private void callAddToListeners(int selection, int actionCode){
-		for (int i = 0; i < listeners.size();
-				i++) {
-			SelectionByThemeListener l = (SelectionByThemeListener) listeners.get(i);
-			l.addToSet(dataSource.getLayers().getActives(), dataSource.getLayers().getLayer(selection), actionCode);
+	private void callAddToListeners(int selection, int actionCode) {
+		for (int i = 0; i < listeners.size(); i++) {
+			SelectionByThemeListener l = (SelectionByThemeListener) listeners
+					.get(i);
+			l.addToSet(dataSource.getLayers().getActives(), dataSource
+					.getLayers().getLayer(selection), actionCode);
 		}
 
 	}
 
-	private void callFromListeners(int selection, int actionCode){
-		for (int i = 0; i < listeners.size();
-				i++) {
-			SelectionByThemeListener l = (SelectionByThemeListener) listeners.get(i);
-			l.fromSet(dataSource.getLayers().getActives(), dataSource.getLayers().getLayer(selection), actionCode);
+	private void callFromListeners(int selection, int actionCode) {
+		for (int i = 0; i < listeners.size(); i++) {
+			SelectionByThemeListener l = (SelectionByThemeListener) listeners
+					.get(i);
+			l.fromSet(dataSource.getLayers().getActives(), dataSource
+					.getLayers().getLayer(selection), actionCode);
 		}
 
 	}
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param arg0
-	 *
+	 * 
 	 * @return
 	 */
 	public boolean addSelectionListener(SelectionByThemeListener arg0) {
@@ -340,21 +364,23 @@ public class SelectionByTheme extends JPanel implements IWindow {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param arg0
-	 *
+	 * 
 	 * @return
 	 */
 	public boolean removeSelectionListener(SelectionByThemeListener arg0) {
 		return listeners.remove(arg0);
 	}
+
 	/**
 	 * @see com.iver.mdiApp.ui.MDIManager.IWindow#windowActivated()
 	 */
 	public void viewActivated() {
 	}
+
 	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
 
-}  //  @jve:visual-info  decl-index=0 visual-constraint="10,10"
+} // @jve:visual-info decl-index=0 visual-constraint="10,10"

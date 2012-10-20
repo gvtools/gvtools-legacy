@@ -62,7 +62,7 @@ import com.hardcode.gdbms.parser.SimpleNode;
  * createRandomDataSource. Además proporciona un método para ejecutar consultas
  * SQL a partir de la instrucción como cadena o a partir de la instrucción como
  * árbol de adaptadores
- *
+ * 
  * @author Fernando González Cortés
  */
 public class DataSourceFactory {
@@ -108,13 +108,14 @@ public class DataSourceFactory {
 
 	/**
 	 * Get's a unique id in the tableSource and nameOperationDataSource key sets
-	 *
+	 * 
 	 * @return unique id
 	 */
 	private String getUID() {
 		UID uid = new UID();
 
-		String name = "gdbms" + uid.toString().replace(':','_').replace('-','_');
+		String name = "gdbms"
+				+ uid.toString().replace(':', '_').replace('-', '_');
 		return name;
 	}
 
@@ -128,10 +129,11 @@ public class DataSourceFactory {
 
 	/**
 	 * Removes the association between the name and the data sources
-	 *
+	 * 
 	 * @param ds
 	 *            Name of the data source to remove
-	 * @throws WriteDriverException TODO
+	 * @throws WriteDriverException
+	 *             TODO
 	 * @throws RuntimeException
 	 *             If there is no data source registered with that name
 	 */
@@ -148,10 +150,11 @@ public class DataSourceFactory {
 
 	/**
 	 * Removes de View of the data source 'ds'
-	 *
+	 * 
 	 * @param ds
 	 *            DataSource whose view will be deleted
-	 * @throws ReadDriverException TODO
+	 * @throws ReadDriverException
+	 *             TODO
 	 */
 	private void clearView(DBDataSource ds) throws ReadDriverException {
 		DBTableSourceInfo dbInfo = (DBTableSourceInfo) ds.getSourceInfo();
@@ -161,7 +164,9 @@ public class DataSourceFactory {
 
 	/**
 	 * Removes the views created at query delegation
-	 * @throws ReadDriverException TODO
+	 * 
+	 * @throws ReadDriverException
+	 *             TODO
 	 */
 	public void clearViews() throws ReadDriverException {
 		Iterator i = sourceInfoServerViewInfo.values().iterator();
@@ -178,7 +183,7 @@ public class DataSourceFactory {
 	 * Añade una fuente de datos de objeto. Dado un objeto que implemente la
 	 * interfaz del driver, se toma como fuente de datos y se le asocia un
 	 * nombre
-	 *
+	 * 
 	 * @param rd
 	 *            objeto con la información
 	 * @param name
@@ -194,10 +199,10 @@ public class DataSourceFactory {
 	 * Añade una fuente de datos de objeto. Dado un objeto que implemente la
 	 * interfaz del driver, se toma como fuente de datos y se le asocia un
 	 * nombre
-	 *
+	 * 
 	 * @param rd
 	 *            objeto con la información
-	 *
+	 * 
 	 * @return the name of the data source
 	 */
 	public String addDataSource(ObjectDriver rd) {
@@ -210,7 +215,7 @@ public class DataSourceFactory {
 	/**
 	 * Adds a new data source to the system. If the file doesn't exists it is
 	 * created when necessary
-	 *
+	 * 
 	 * @param driverName
 	 *            Nombre del driver asociado a la fuente de datos
 	 * @param name
@@ -232,7 +237,7 @@ public class DataSourceFactory {
 	 * Añade un origen de datos de fichero al sistema. Cuando se cree un
 	 * DataSource mediante la invocación createRandomDataSource(String) se
 	 * creará una instancia del driver cuyo nombre es driverName
-	 *
+	 * 
 	 * @param driverName
 	 *            Nombre del driver asociado a la fuente de datos
 	 * @param name
@@ -249,11 +254,11 @@ public class DataSourceFactory {
 
 	/**
 	 * Gets a FileSourceInfo with the values passed in the parameters
-	 *
+	 * 
 	 * @param driverName
 	 * @param name
 	 * @param file
-	 *
+	 * 
 	 * @return FileSourceInfo
 	 */
 	private FileSourceInfo getFileSourceInfo(FileSourceInfo info,
@@ -268,7 +273,7 @@ public class DataSourceFactory {
 
 	/**
 	 * Adds a spatial file data source to the system.
-	 *
+	 * 
 	 * @param driverName
 	 *            driver used to obtain the data
 	 * @param name
@@ -285,12 +290,12 @@ public class DataSourceFactory {
 
 	/**
 	 * Adds a spatial file data source to the system.
-	 *
+	 * 
 	 * @param driverName
 	 *            driver used to obtain the data
 	 * @param file
 	 *            file with the data
-	 *
+	 * 
 	 * @return String Generated name of the added data source
 	 */
 	public String addSpatialFileDataSource(String driverName, String file) {
@@ -304,12 +309,12 @@ public class DataSourceFactory {
 	 * Añade un origen de datos de fichero al sistema. Cuando se cree un
 	 * DataSource mediante la invocación createRandomDataSource(String) se
 	 * creará una instancia del driver cuyo nombre es driverName
-	 *
+	 * 
 	 * @param driverName
 	 *            Nombre del driver asociado a la fuente de datos
 	 * @param file
 	 *            Fichero con los datos
-	 *
+	 * 
 	 * @return Nombre único que se asocia a la tabla
 	 */
 	public String addFileDataSource(String driverName, String file) {
@@ -322,10 +327,10 @@ public class DataSourceFactory {
 	/**
 	 * Obtiene la información de la fuente de datos cuyo nombre se pasa como
 	 * parámetro
-	 *
+	 * 
 	 * @param dataSourceName
 	 *            Nombre de la base de datos
-	 *
+	 * 
 	 * @return Debido a las distintas formas en las que se puede registrar un
 	 *         datasource, se devuelve un Object, que podrá ser una instancia de
 	 *         DataSourceFactory.FileDriverInfo, DataSourceFactory.DBDriverInfo
@@ -338,10 +343,10 @@ public class DataSourceFactory {
 	public void addSourceInfo(String name, SourceInfo info) {
 		tableSource.put(name, info);
 	}
-	
+
 	/**
 	 * Gets the information of all data sources registered in the system
-	 *
+	 * 
 	 * @return DriverInfo[]
 	 */
 	public SourceInfo[] getDriverInfos() {
@@ -358,7 +363,7 @@ public class DataSourceFactory {
 
 	/**
 	 * Añade un origen de datos de base de datos al sistema
-	 *
+	 * 
 	 * @param name
 	 *            Nombre de la tabla con el que se hará referencia en las
 	 *            instrucciones
@@ -392,16 +397,15 @@ public class DataSourceFactory {
 		nameTable.put(name, tableName);
 	}
 
-
 	/**
 	 * Añade un origen de datos de base de datos al sistema
-	 *
+	 * 
 	 * @param name
 	 *            Nombre de la tabla con el que se hará referencia en las
 	 *            instrucciones
 	 * @param Connection
-	 *            Conexion JDBC a la Base de datos ya abierta (el DataSource
-	 *            la usara, pero no la abrira/cerrara)
+	 *            Conexion JDBC a la Base de datos ya abierta (el DataSource la
+	 *            usara, pero no la abrira/cerrara)
 	 * @param tableName
 	 *            Nombre de la tabla en la base de datos
 	 * @param driverInfo
@@ -409,21 +413,17 @@ public class DataSourceFactory {
 	 *            información. Se escogerá el driver cuyo valor de retorno del
 	 *            método getType coincida con este valor
 	 */
-	public void addDBDataSourceByTable(String name, Connection connection, String tableName,
-			String driverInfo) {
+	public void addDBDataSourceByTable(String name, Connection connection,
+			String tableName, String driverInfo) {
 		DBTableSourceInfo info = new DBTableSourceInfo();
-		fillDBTableSourceInfo(info, name, connection,
-				tableName, driverInfo);
+		fillDBTableSourceInfo(info, name, connection, tableName, driverInfo);
 		tableSource.put(name, info);
 		nameTable.put(name, tableName);
 	}
 
-
-
-
 	/**
 	 * Fills the info struct with the values passed in the parameters
-	 *
+	 * 
 	 * @param info
 	 *            struct to populate
 	 * @param name
@@ -460,7 +460,7 @@ public class DataSourceFactory {
 
 	/**
 	 * Fills the info struct with the values passed in the parameters
-	 *
+	 * 
 	 * @param info
 	 *            struct to populate
 	 * @param name
@@ -489,21 +489,14 @@ public class DataSourceFactory {
 		info.password = "";
 		info.dbName = "";
 		info.dbms = "";
-		info.connection= conection;
+		info.connection = conection;
 		info.tableName = tableName;
 		info.driverName = driverInfo;
 	}
 
-
-
-
-
-
-
-
 	/**
 	 * Adds a spatial database data source
-	 *
+	 * 
 	 * @param name
 	 *            Name of the data source
 	 * @param host
@@ -534,12 +527,11 @@ public class DataSourceFactory {
 		nameTable.put(name, tableName);
 	}
 
-
 	/**
 	 * Adds a spatial database data source
-	 *
+	 * 
 	 * @param connection
-	 *
+	 * 
 	 * @param tableName
 	 *            table name
 	 * @param geometryFieldName
@@ -547,26 +539,18 @@ public class DataSourceFactory {
 	 * @param driverInfo
 	 *            name of the driver used to access the data
 	 */
-	public void addSpatialDBDataSource(String name, Connection connection, String tableName,
-			String geometryFieldName, String driverInfo) {
+	public void addSpatialDBDataSource(String name, Connection connection,
+			String tableName, String geometryFieldName, String driverInfo) {
 		SpatialDBTableSourceInfo info = new SpatialDBTableSourceInfo();
-		fillDBTableSourceInfo(info, name, connection,
-				tableName, driverInfo);
+		fillDBTableSourceInfo(info, name, connection, tableName, driverInfo);
 		info.geometryField = geometryFieldName;
 		tableSource.put(name, info);
 		nameTable.put(name, tableName);
 	}
 
-
-
-
-
-
-
-
 	/**
 	 * Adds a spatial database data source
-	 *
+	 * 
 	 * @param host
 	 *            host where the data is
 	 * @param port
@@ -583,7 +567,7 @@ public class DataSourceFactory {
 	 *            name of the field that has the geometry
 	 * @param driverInfo
 	 *            name of the driver used to access the data
-	 *
+	 * 
 	 * @return generated name of the added data source
 	 */
 	public String addSpatialDBDataSource(String host, int port, String user,
@@ -596,37 +580,32 @@ public class DataSourceFactory {
 		return ret;
 	}
 
-
 	/**
 	 * Adds a spatial database data source
-	 *
+	 * 
 	 * @param connection
-	 *
+	 * 
 	 * @param tableName
 	 *            table name
 	 * @param geometryFieldName
 	 *            name of the field that has the geometry
 	 * @param driverInfo
 	 *            name of the driver used to access the data
-	 *
+	 * 
 	 * @return generated name of the added data source
 	 */
-	public String addSpatialDBDataSource(Connection connection, String tableName,
-			String geometryFieldName, String driverInfo) {
+	public String addSpatialDBDataSource(Connection connection,
+			String tableName, String geometryFieldName, String driverInfo) {
 		String ret = getUID();
-		addSpatialDBDataSource(ret, connection,
-				tableName, geometryFieldName, driverInfo);
+		addSpatialDBDataSource(ret, connection, tableName, geometryFieldName,
+				driverInfo);
 
 		return ret;
 	}
 
-
-
-
-
 	/**
 	 * Añade un origen de datos de base de datos al sistema
-	 *
+	 * 
 	 * @param host
 	 *            Cadena de conexión para conectar con el sgbd donde se
 	 *            encuentra la tabla
@@ -646,7 +625,7 @@ public class DataSourceFactory {
 	 *            Información para saber qué driver debe acceder a la
 	 *            información. Se escogerá el driver cuyo valor de retorno del
 	 *            método getType coincida con este valor
-	 *
+	 * 
 	 * @return Nombre de la tabla con el que se hará referencia en las
 	 *         instrucciones
 	 */
@@ -659,55 +638,33 @@ public class DataSourceFactory {
 		return name;
 	}
 
-
-
 	/**
 	 * Añade un origen de datos de base de datos al sistema
-	 *
+	 * 
 	 * @param connection
-	 *            Conexion JDBC abierta a la base de datos(el DataSource
-	 *            usara la conexion, pero no la abrira/cerrara)
+	 *            Conexion JDBC abierta a la base de datos(el DataSource usara
+	 *            la conexion, pero no la abrira/cerrara)
 	 * @param tableName
 	 *            Nombre de la tabla en la base de datos
 	 * @param driverInfo
 	 *            Información para saber qué driver debe acceder a la
 	 *            información. Se escogerá el driver cuyo valor de retorno del
 	 *            método getType coincida con este valor
-	 *
+	 * 
 	 * @return Nombre de la tabla con el que se hará referencia en las
 	 *         instrucciones
 	 */
-	public String addDBDataSourceByTable(Connection connection, String tableName, String driverInfo) {
+	public String addDBDataSourceByTable(Connection connection,
+			String tableName, String driverInfo) {
 		String name = getUID();
-		addDBDataSourceByTable(name, connection,
-				tableName, driverInfo);
+		addDBDataSourceByTable(name, connection, tableName, driverInfo);
 
 		return name;
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	/**
 	 * Añade un origen de datos de base de datos al sistema
-	 *
+	 * 
 	 * @param name
 	 *            Nombre de la tabla con el que se hará referencia en las
 	 *            instrucciones
@@ -748,16 +705,15 @@ public class DataSourceFactory {
 		tableSource.put(name, info);
 	}
 
-
 	/**
 	 * Añade un origen de datos de base de datos al sistema
-	 *
+	 * 
 	 * @param name
 	 *            Nombre de la tabla con el que se hará referencia en las
 	 *            instrucciones
 	 * @param connection
-	 *            Conexion de JDBC a la base de datos ya abierta (el
-	 *            DataSource la usara, pero no la abrira/cerrara)
+	 *            Conexion de JDBC a la base de datos ya abierta (el DataSource
+	 *            la usara, pero no la abrira/cerrara)
 	 * @param sql
 	 *            Instrucción SQL que define los datos de la tabla
 	 * @param driverInfo
@@ -765,8 +721,8 @@ public class DataSourceFactory {
 	 *            información. Se escogerá el driver cuyo valor de retorno del
 	 *            método getType coincida con este valor
 	 */
-	public void addDBDataSourceBySQL(String name, Connection connection, String sql,
-			String driverInfo) {
+	public void addDBDataSourceBySQL(String name, Connection connection,
+			String sql, String driverInfo) {
 		DBQuerySourceInfo info = new DBQuerySourceInfo();
 		info.name = name;
 		info.host = "";
@@ -774,22 +730,16 @@ public class DataSourceFactory {
 		info.user = "";
 		info.password = "";
 		info.dbName = "";
-		info.dbms ="";
+		info.dbms = "";
 		info.connection = connection;
 		info.sql = sql;
 		info.driverName = driverInfo;
 		tableSource.put(name, info);
 	}
 
-
-
-
-
-
-
 	/**
 	 * Añade un origen de datos de base de datos al sistema
-	 *
+	 * 
 	 * @param host
 	 *            Cadena de conexión para conectar con el sgbd donde se
 	 *            encuentra la tabla
@@ -809,7 +759,7 @@ public class DataSourceFactory {
 	 *            Información para saber qué driver debe acceder a la
 	 *            información. Se escogerá el driver cuyo valor de retorno del
 	 *            método getType coincida con este valor
-	 *
+	 * 
 	 * @return Nombre de la tabla con el que se hará referencia en las
 	 *         instrucciones
 	 */
@@ -824,38 +774,37 @@ public class DataSourceFactory {
 
 	/**
 	 * Añade un origen de datos de base de datos al sistema
-	 *
+	 * 
 	 * @param connection
-	 *            Conexion de JDBC ya abierta (el DataSource la usara
-	 *            pero no la abrira/cerrara)
+	 *            Conexion de JDBC ya abierta (el DataSource la usara pero no la
+	 *            abrira/cerrara)
 	 * @param sql
 	 *            Instrucción SQL que define los datos de la tabla
 	 * @param driverInfo
 	 *            Información para saber qué driver debe acceder a la
 	 *            información. Se escogerá el driver cuyo valor de retorno del
 	 *            método getType coincida con este valor
-	 *
+	 * 
 	 * @return Nombre de la tabla con el que se hará referencia en las
 	 *         instrucciones
 	 */
-	public String addDBDataSourceBySQL(Connection connection, String sql, String driverInfo) {
+	public String addDBDataSourceBySQL(Connection connection, String sql,
+			String driverInfo) {
 		String ret = getUID();
-		addDBDataSourceBySQL(ret, connection, sql,
-				driverInfo);
+		addDBDataSourceBySQL(ret, connection, sql, driverInfo);
 
 		return ret;
 	}
 
-
 	/**
 	 * Cambia el nombre de una fuente de datos. Las consultas SQL que se
 	 * ejecuten con el nombre anterior fallarán
-	 *
+	 * 
 	 * @param oldName
 	 *            Nombre actual de la fuente de datos que se quiere cambiar
 	 * @param newName
 	 *            Nombre que se le quiere poner a la fuente de datos
-	 *
+	 * 
 	 * @throws NoSuchTableException
 	 *             Si no hay ninguna fuente de datos de nombre 'oldName'
 	 */
@@ -867,12 +816,11 @@ public class DataSourceFactory {
 			// may be a operation layer DataSource
 			OperationDataSource ret = (OperationDataSource) nameOperationDataSource
 					.remove(oldName);
-			if (ret == null){
+			if (ret == null) {
 				throw new NoSuchTableException(oldName);
 
 			}
 			nameOperationDataSource.put(newName, ret);
-
 
 		} else {
 
@@ -883,12 +831,12 @@ public class DataSourceFactory {
 	/**
 	 * Gets the data source passed by adding the AutomaticDataSource decorator
 	 * if factory mode is AUTOMATIC.
-	 *
+	 * 
 	 * @param ds
 	 *            DataSource
 	 * @param mode
 	 *            opening mode
-	 *
+	 * 
 	 * @return DataSource
 	 */
 	private DataSource getModedDataSource(DataSource ds, int mode) {
@@ -903,7 +851,7 @@ public class DataSourceFactory {
 	 * Sets the minimum delay between accesses needed to close the DataSource.
 	 * If accesses are delayed more than 'delay' the DataSource MAY be closed.
 	 * Only applies when the mode is set to AUTOMATIC_MODE
-	 *
+	 * 
 	 * @param delay
 	 *            time un milliseconds
 	 */
@@ -915,17 +863,19 @@ public class DataSourceFactory {
 	 * Dado el nombre de una tabla, se busca la fuente de datos asociada a dicha
 	 * tabla y se obtiene un datasource adecuado en funcion del tipo de fuente
 	 * de datos accediendo al subsistema de drivers
-	 *
+	 * 
 	 * @param tableName
 	 *            Nombre de la fuente de datos
-	 *
+	 * 
 	 * @return DataSource que accede a dicha fuente
 	 * @throws DriverLoadException
 	 * @throws NoSuchTableException
-	 * @throws ReadDriverException TODO
+	 * @throws ReadDriverException
+	 *             TODO
 	 */
 	public DataSource createRandomDataSource(String tableName)
-			throws DriverLoadException, NoSuchTableException, ReadDriverException {
+			throws DriverLoadException, NoSuchTableException,
+			ReadDriverException {
 		return createRandomDataSource(tableName, tableName, MANUAL_OPENING);
 	}
 
@@ -933,7 +883,7 @@ public class DataSourceFactory {
 	 * Dado el nombre de una tabla, se busca la fuente de datos asociada a dicha
 	 * tabla y se obtiene un datasource adecuado en funcion del tipo de fuente
 	 * de datos accediendo al subsistema de drivers
-	 *
+	 * 
 	 * @param tableName
 	 *            Nombre de la fuente de datos
 	 * @param mode
@@ -941,14 +891,16 @@ public class DataSourceFactory {
 	 *            automatically and closes after a while. It can be closed
 	 *            manually. MANUAL_OPENING -> the DataSource opens and closes
 	 *            manually
-	 *
+	 * 
 	 * @return DataSource que accede a dicha fuente
 	 * @throws DriverLoadException
 	 * @throws NoSuchTableException
-	 * @throws ReadDriverException TODO
+	 * @throws ReadDriverException
+	 *             TODO
 	 */
 	public DataSource createRandomDataSource(String tableName, int mode)
-			throws DriverLoadException, NoSuchTableException, ReadDriverException {
+			throws DriverLoadException, NoSuchTableException,
+			ReadDriverException {
 		return createRandomDataSource(tableName, tableName, mode);
 	}
 
@@ -957,12 +909,12 @@ public class DataSourceFactory {
 	 * tabla y se obtiene un datasource adecuado en funcion del tipo de fuente
 	 * de datos accediendo al subsistema de drivers. Se utiliza internamente
 	 * como nombre del DataSource el alias que se pasa como parámetro
-	 *
+	 * 
 	 * @param tableName
 	 *            Nombre de la fuente de datos
 	 * @param tableAlias
 	 *            Alias que tiene el DataSource en una instrucción
-	 *
+	 * 
 	 * @return DataSource que accede a dicha fuente de datos si la fuente de
 	 *         datos es alfanumérica o SpatialDataSource si la fuente de datos
 	 *         es espacial
@@ -970,12 +922,14 @@ public class DataSourceFactory {
 	 *             Si no hay una fuente de datos registrada con ese nombre
 	 * @throws DriverLoadException
 	 *             Si hay algún error con el sistema de carga de drivers
-	 * @throws ReadDriverException TODO
+	 * @throws ReadDriverException
+	 *             TODO
 	 * @throws RuntimeException
 	 *             bug
 	 */
 	public DataSource createRandomDataSource(String tableName, String tableAlias)
-			throws NoSuchTableException, DriverLoadException, ReadDriverException {
+			throws NoSuchTableException, DriverLoadException,
+			ReadDriverException {
 		return createRandomDataSource(tableName, tableAlias, MANUAL_OPENING);
 	}
 
@@ -984,14 +938,14 @@ public class DataSourceFactory {
 	 * tabla y se obtiene un datasource adecuado en funcion del tipo de fuente
 	 * de datos accediendo al subsistema de drivers. Se utiliza internamente
 	 * como nombre del DataSource el alias que se pasa como parámetro
-	 *
+	 * 
 	 * @param tableName
 	 *            Nombre de la fuente de datos
 	 * @param tableAlias
 	 *            Alias que tiene el DataSource en una instrucción
 	 * @param mode
 	 *            openning mode
-	 *
+	 * 
 	 * @return DataSource que accede a dicha fuente de datos si la fuente de
 	 *         datos es alfanumérica o SpatialDataSource si la fuente de datos
 	 *         es espacial
@@ -999,7 +953,8 @@ public class DataSourceFactory {
 	 *             Si no hay una fuente de datos registrada con ese nombre
 	 * @throws DriverLoadException
 	 *             Si hay algún error con el sistema de carga de drivers
-	 * @throws ReadDriverException TODO
+	 * @throws ReadDriverException
+	 *             TODO
 	 * @throws RuntimeException
 	 *             bug
 	 */
@@ -1033,11 +988,10 @@ public class DataSourceFactory {
 
 			if (info instanceof FileCreationSourceInfo) {
 				FileCreationSourceInfo creationInfo = (FileCreationSourceInfo) info;
-					if (!new File(creationInfo.file).exists()) {
-						((FileDriver) d).createSource(creationInfo.file,
-								creationInfo.fieldNames,
-								creationInfo.fieldTypes);
-					}
+				if (!new File(creationInfo.file).exists()) {
+					((FileDriver) d).createSource(creationInfo.file,
+							creationInfo.fieldNames, creationInfo.fieldTypes);
+				}
 			}
 
 			FileDataSource adapter;
@@ -1061,8 +1015,9 @@ public class DataSourceFactory {
 			Driver d = this.getDriver(driverInfo);
 
 			((GDBMSDriver) d).setDataSourceFactory(this);
-			return getModedDataSource(getDataSourceByQuery(dbInfo.sql,
-					(AlphanumericDBDriver) d, dbInfo), mode);
+			return getModedDataSource(
+					getDataSourceByQuery(dbInfo.sql, (AlphanumericDBDriver) d,
+							dbInfo), mode);
 		} else if (info instanceof DBTableSourceInfo) {
 			DBTableSourceInfo dbInfo = (DBTableSourceInfo) info;
 
@@ -1096,19 +1051,19 @@ public class DataSourceFactory {
 			DataSourceInfo dsi = (DataSourceInfo) info;
 			return new AutomaticDataSource(dsi.dataSource, delay);
 		} else {
-			
+
 			throw new RuntimeException();
 		}
 	}
 
 	/**
 	 * Creates a DataSource from a memento object with the manual opening mode
-	 *
+	 * 
 	 * @param m
 	 *            memento
-	 *
+	 * 
 	 * @return DataSource
-	 *
+	 * 
 	 * @throws RuntimeException
 	 *             If the DataSource class cannot be instatiated
 	 */
@@ -1119,14 +1074,14 @@ public class DataSourceFactory {
 	/**
 	 * Creates a DataSource from a memento object with the specified opening
 	 * mode
-	 *
+	 * 
 	 * @param m
 	 *            memento
 	 * @param mode
 	 *            opening mode
-	 *
+	 * 
 	 * @return DataSource
-	 *
+	 * 
 	 * @throws RuntimeException
 	 *             If the DataSource class cannot be instatiated
 	 */
@@ -1135,8 +1090,8 @@ public class DataSourceFactory {
 			DataSourceLayerMemento mem = (DataSourceLayerMemento) m;
 
 			try {
-				return createRandomDataSource(mem.getTableName(), mem
-						.getTableAlias(), mode);
+				return createRandomDataSource(mem.getTableName(),
+						mem.getTableAlias(), mode);
 			} catch (DriverLoadException e) {
 				throw new RuntimeException(
 						"La información guardada no es consistente", e);
@@ -1173,10 +1128,10 @@ public class DataSourceFactory {
 	/**
 	 * Devuelve true si todas las tablas provienen del mismo data base
 	 * management system
-	 *
+	 * 
 	 * @param tables
 	 *            Array de tablas
-	 *
+	 * 
 	 * @return boolean
 	 */
 	private boolean sameDBMS(DataSource[] tables) {
@@ -1202,37 +1157,39 @@ public class DataSourceFactory {
 	/**
 	 * A partir de una instrucción select se encarga de obtener el DataSource
 	 * resultado de la ejecución de dicha instrucción
-	 *
+	 * 
 	 * @param instr
 	 *            Instrucción select origen del datasource
 	 * @param mode
 	 *            opening mode
-	 *
+	 * 
 	 * @return DataSource que accede a los datos resultado de ejecutar la select
 	 * @throws DriverLoadException
 	 * @throws SemanticException
 	 *             Si la instrucción tiene errores semánticos
 	 * @throws EvaluationException
 	 *             If there's an error evaluating any expression
-	 * @throws ReadDriverException TODO
+	 * @throws ReadDriverException
+	 *             TODO
 	 */
 	public DataSource createRandomDataSource(SelectAdapter instr, int mode)
-			throws DriverLoadException, SemanticException,
-			EvaluationException, ReadDriverException {
+			throws DriverLoadException, SemanticException, EvaluationException,
+			ReadDriverException {
 		return getModedDataSource(getDataSource(instr), mode);
 	}
 
 	/**
 	 * Creates a view in the database management system that hosts the data
 	 * source 'dbds'. The view is defined by the sql parameter
-	 *
+	 * 
 	 * @param dbds
 	 *            DataSource used to execute the query
 	 * @param sql
 	 *            The SQL query defining the view
-	 *
+	 * 
 	 * @return Name of the view
-	 * @throws ReadDriverException TODO
+	 * @throws ReadDriverException
+	 *             TODO
 	 * @throws DriverException
 	 *             If the view cannot be created
 	 */
@@ -1264,16 +1221,17 @@ public class DataSourceFactory {
 	/**
 	 * Gets a DataSource implementation with the sql instruction as the data
 	 * source by creating a view in the underlaying datasource management system
-	 *
+	 * 
 	 * @param sql
 	 *            Instruction definig the data source
 	 * @param driver
 	 *            Driver used to access the data source
 	 * @param dbInfo
 	 *            data source info
-	 *
+	 * 
 	 * @return DataSource
-	 * @throws ReadDriverException TODO
+	 * @throws ReadDriverException
+	 *             TODO
 	 */
 	private DBDataSource getDataSourceByQuery(String sql,
 			AlphanumericDBDriver driver, DBTableSourceInfo dbInfo)
@@ -1306,14 +1264,15 @@ public class DataSourceFactory {
 	/**
 	 * A partir de una instrucción select se encarga de obtener el DataSource
 	 * resultado de la ejecución de dicha instrucción
-	 *
+	 * 
 	 * @param instr
 	 *            Instrucción select origen del datasource
-	 *
+	 * 
 	 * @return DataSource que accede a los datos resultado de ejecutar la select
 	 * @throws SemanticException
 	 * @throws EvaluationException
-	 * @throws ReadDriverException TODO
+	 * @throws ReadDriverException
+	 *             TODO
 	 * @throws RuntimeException
 	 *             bug
 	 */
@@ -1358,16 +1317,17 @@ public class DataSourceFactory {
 	/**
 	 * Translates the table references by changind the gdbms name with the
 	 * underlaying database management system table name
-	 *
+	 * 
 	 * @param instr
 	 *            root of the adapted tree
 	 * @param tables
 	 *            DataSources involved in the instruction
-	 *
+	 * 
 	 * @return The translated sql query
 	 * @throws SemanticException
 	 *             If the instruction is not semantically correct
-	 * @throws ReadDriverException TODO
+	 * @throws ReadDriverException
+	 *             TODO
 	 */
 	private String translateInstruction(Adapter instr, DataSource[] tables)
 			throws SemanticException, ReadDriverException {
@@ -1381,14 +1341,15 @@ public class DataSourceFactory {
 
 	/**
 	 * Gets the name of the table where the field is in
-	 *
+	 * 
 	 * @param fieldName
 	 *            field whose table wants to be guessed
 	 * @param tables
 	 *            tables involved in the search
-	 *
+	 * 
 	 * @return table name
-	 * @throws ReadDriverException TODO
+	 * @throws ReadDriverException
+	 *             TODO
 	 * @throws SemanticException
 	 */
 	private String guessTableName(String fieldName, DataSource[] tables)
@@ -1420,7 +1381,7 @@ public class DataSourceFactory {
 	/**
 	 * Translates the table references by changind the gdbms name with the
 	 * underlaying database management system table name
-	 *
+	 * 
 	 * @param adapter
 	 *            adapter processed
 	 * @param instrNameDBName
@@ -1430,7 +1391,8 @@ public class DataSourceFactory {
 	 *            tables involved in the instruction
 	 * @throws SemanticException
 	 *             If the instruction is not semantically correct
-	 * @throws ReadDriverException TODO
+	 * @throws ReadDriverException
+	 *             TODO
 	 */
 	private void translateColRefs(Adapter adapter, HashMap instrNameDBName,
 			DataSource[] tables) throws SemanticException, ReadDriverException {
@@ -1458,7 +1420,7 @@ public class DataSourceFactory {
 	/**
 	 * Translates the table references by changind the gdbms name with the
 	 * underlaying database management system table name
-	 *
+	 * 
 	 * @param adapter
 	 *            adapter processed
 	 * @param instrNameDBName
@@ -1492,12 +1454,12 @@ public class DataSourceFactory {
 
 	/**
 	 * Obtiene el DataSource resultado de ejecutar la instrucción de union
-	 *
+	 * 
 	 * @param instr
 	 *            instrucción de union
 	 * @param mode
 	 *            opening mode
-	 *
+	 * 
 	 * @return DataSource
 	 * @throws SemanticException
 	 *             Si la instrucción tiene errores semánticos
@@ -1506,20 +1468,21 @@ public class DataSourceFactory {
 	 * @throws ParseException
 	 *             If there is a select statement embeeded in the union
 	 *             statement and its parse fails
-	 * @throws ReadDriverException TODO
+	 * @throws ReadDriverException
+	 *             TODO
 	 */
 	public DataSource createRandomDataSource(UnionAdapter instr, int mode)
-			throws SemanticException,
-			EvaluationException, ParseException, ReadDriverException {
+			throws SemanticException, EvaluationException, ParseException,
+			ReadDriverException {
 		return getModedDataSource(getDataSource(instr), mode);
 	}
 
 	/**
 	 * Obtiene el DataSource resultado de ejecutar la instrucción de union
-	 *
+	 * 
 	 * @param instr
 	 *            instrucción de union
-	 *
+	 * 
 	 * @return DataSource
 	 * @throws SemanticException
 	 *             Si la instrucción tiene errores semánticos
@@ -1528,11 +1491,12 @@ public class DataSourceFactory {
 	 *             statement and its parse fails
 	 * @throws EvaluationException
 	 *             If there's any problem during expresion evaluation
-	 * @throws ReadDriverException TODO
+	 * @throws ReadDriverException
+	 *             TODO
 	 */
 	private DataSource getDataSource(UnionAdapter instr)
-			throws SemanticException,
-			ParseException, EvaluationException, ReadDriverException {
+			throws SemanticException, ParseException, EvaluationException,
+			ReadDriverException {
 		try {
 			Strategy strategy = StrategyManager.getStrategy(instr);
 
@@ -1544,21 +1508,21 @@ public class DataSourceFactory {
 
 			return ret;
 		} catch (DriverLoadException e) {
-			throw new ReadDriverException("DataSourceFactory",e);
+			throw new ReadDriverException("DataSourceFactory", e);
 		}
 
 	}
 
 	/**
 	 * Creates a DataSource as a result of a custom query
-	 *
+	 * 
 	 * @param instr
 	 *            Root node of the adapter tree of the custom query instruction
 	 * @param mode
 	 *            opening mode
-	 *
+	 * 
 	 * @return DataSource with the custom query result
-	 *
+	 * 
 	 * @throws SemanticException
 	 *             if there is any semantic error in the instruction
 	 */
@@ -1569,12 +1533,12 @@ public class DataSourceFactory {
 
 	/**
 	 * Creates a DataSource as a result of a custom query
-	 *
+	 * 
 	 * @param instr
 	 *            Root node of the adapter tree of the custom query instruction
-	 *
+	 * 
 	 * @return DataSource with the custom query result
-	 *
+	 * 
 	 * @throws SemanticException
 	 *             if there is any semantic error in the instruction
 	 */
@@ -1593,12 +1557,12 @@ public class DataSourceFactory {
 	/**
 	 * Ejecuta la instrucción SQL que se pasa como parámetro obteniendo un
 	 * DataSource con el resultado de la ejecución
-	 *
+	 * 
 	 * @param sql
 	 *            instrucción sql que se quiere ejecutar
 	 * @param mode
 	 *            opening mode
-	 *
+	 * 
 	 * @return DataSource con el resultado
 	 * @throws ParseException
 	 *             Si se produce un error de parse de la instrucción
@@ -1608,11 +1572,12 @@ public class DataSourceFactory {
 	 *             Si la instrucción tiene algún error semántico
 	 * @throws EvaluationException
 	 *             If there's an error evaluating any expression
-	 * @throws ReadDriverException TODO
+	 * @throws ReadDriverException
+	 *             TODO
 	 */
 	public DataSource executeSQL(String sql, int mode) throws ParseException,
-			DriverLoadException, SemanticException,
-			EvaluationException, ReadDriverException {
+			DriverLoadException, SemanticException, EvaluationException,
+			ReadDriverException {
 		ByteArrayInputStream bytes = new ByteArrayInputStream(sql.getBytes());
 		SQLEngine parser = new SQLEngine(bytes);
 
@@ -1647,29 +1612,31 @@ public class DataSourceFactory {
 	/**
 	 * Establece el DriverManager que se usará para instanciar DataSource's.
 	 * Este metodo debe ser invocado antes que ningún otro
-	 *
+	 * 
 	 * @param dm
 	 *            El manager que se encarga de cargar los drivers
 	 */
 	public void setDriverManager(DriverManager dm) {
 		this.dm = dm;
 	}
+
 	/**
 	 * Establece el WriterManager que se usará para instanciar DataSource's.
 	 * Este metodo debe ser invocado antes que ningún otro
-	 *
+	 * 
 	 * @param dm
 	 *            El manager que se encarga de cargar los drivers
 	 */
 	public void setWriterManager(WriterManager wm) {
 		this.wm = wm;
 	}
+
 	/**
 	 * Get's the module with the specified name
-	 *
+	 * 
 	 * @param name
 	 *            name of the wanted module
-	 *
+	 * 
 	 * @return instance of the module
 	 */
 	public Object getModule(String name) {
@@ -1678,7 +1645,7 @@ public class DataSourceFactory {
 
 	/**
 	 * Registers a module in the system with the specified name
-	 *
+	 * 
 	 * @param name
 	 *            name of the module
 	 * @param instance
@@ -1690,27 +1657,29 @@ public class DataSourceFactory {
 
 	/**
 	 * Gets a driver manager reference
-	 *
+	 * 
 	 * @return DriverManagers.
 	 */
 	public DriverManager getDriverManager() {
 		return dm;
 	}
+
 	/**
 	 * Gets a writer manager reference
-	 *
+	 * 
 	 * @return WriterManagers.
 	 */
 	public WriterManager getWriterManager() {
 		return wm;
 	}
+
 	/**
 	 * Sets if this factory will check for delegating instructions at the server
 	 * (true) or will execute all queries internally (false). By delegating at
 	 * the server, lots of queries will be defined in the database management
 	 * system where the execution is delegated. Invoke clearViews to remove all
 	 * created views.
-	 *
+	 * 
 	 * @param b
 	 */
 	public void setDelegating(boolean b) {
@@ -1719,7 +1688,7 @@ public class DataSourceFactory {
 
 	/**
 	 * Creates a new table on the specified database
-	 *
+	 * 
 	 * @param database
 	 *            name of the database where the table will be created
 	 * @param pkNames
@@ -1728,9 +1697,9 @@ public class DataSourceFactory {
 	 *            names of the fields
 	 * @param types
 	 *            types of the fields. Must have the same length than names
-	 *
+	 * 
 	 * @return the table name
-	 *
+	 * 
 	 * @throws SQLException
 	 *             if the creation fails
 	 */
@@ -1748,19 +1717,21 @@ public class DataSourceFactory {
 
 	/**
 	 * Frees all resources used during execution
+	 * 
 	 * @throws SQLException
 	 *             If cannot free internal resources
-	 * @throws ReadDriverException TODO
+	 * @throws ReadDriverException
+	 *             TODO
 	 */
-	public void finalizeThis()  throws SQLException, ReadDriverException {
+	public void finalizeThis() throws SQLException, ReadDriverException {
 
 		try {
 			clearViews();
 		} finally {
 			Connection c = null;
 			try {
-				c = java.sql.DriverManager.getConnection(
-						"jdbc:hsqldb:file:", "", "");
+				c = java.sql.DriverManager.getConnection("jdbc:hsqldb:file:",
+						"", "");
 			} catch (Exception e) {
 				return;
 			}
@@ -1774,7 +1745,7 @@ public class DataSourceFactory {
 
 	/**
 	 * Initializes the system.
-	 *
+	 * 
 	 * @throws InitializationException
 	 *             If the initialization
 	 */
@@ -1784,10 +1755,10 @@ public class DataSourceFactory {
 
 	/**
 	 * Initializes the system
-	 *
+	 * 
 	 * @param tempDir
 	 *            temporary directory to write data
-	 *
+	 * 
 	 * @throws InitializationException
 	 *             If the initialization fails
 	 */
@@ -1809,7 +1780,7 @@ public class DataSourceFactory {
 	/**
 	 * Gets the URL of a file in the temporary directory. Does not creates any
 	 * file
-	 *
+	 * 
 	 * @return String
 	 */
 	public String getTempFile() {
@@ -1818,10 +1789,9 @@ public class DataSourceFactory {
 	}
 
 	/**
-	 * Registra alias de nombres de los drivers
-	 * por si ha sido necesario modificar el nombre
-	 * de alguno, y se necesita compatibilidad
-	 *
+	 * Registra alias de nombres de los drivers por si ha sido necesario
+	 * modificar el nombre de alguno, y se necesita compatibilidad
+	 * 
 	 */
 	private void fillDriversNamesAliases() {
 
@@ -1829,7 +1799,7 @@ public class DataSourceFactory {
 
 	private Driver getDriver(String name) throws DriverLoadException {
 		if (this.driversNamesAliases.containsKey(name)) {
-			name = (String)this.driversNamesAliases.get(name);
+			name = (String) this.driversNamesAliases.get(name);
 		}
 		return null;
 
@@ -1846,7 +1816,7 @@ public class DataSourceFactory {
 
 		/**
 		 * Crea un nuevo ServerViewInfo.
-		 *
+		 * 
 		 * @param ds
 		 *            DOCUMENT ME!
 		 * @param name

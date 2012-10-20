@@ -42,24 +42,23 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: ITask.java 4419 2006-03-14 19:35:13Z azabala $
-* $Log$
-* Revision 1.1  2006-03-14 19:23:42  azabala
-* *** empty log message ***
-*
-*
-*/
-package com.iver.utiles.swing.threads;
-/**
- * Base interface for generic tasks.
- * At origin we are going to use Runnable,
- * but we are interested in the possibility
- * of launch explicit exceptions
- * @author azabala
  *
+ * $Id: ITask.java 4419 2006-03-14 19:35:13Z azabala $
+ * $Log$
+ * Revision 1.1  2006-03-14 19:23:42  azabala
+ * *** empty log message ***
+ *
+ *
+ */
+package com.iver.utiles.swing.threads;
+
+/**
+ * Base interface for generic tasks. At origin we are going to use Runnable, but
+ * we are interested in the possibility of launch explicit exceptions
+ * 
+ * @author azabala
+ * 
  */
 public interface ITask {
 	public void run() throws Exception;
 }
-

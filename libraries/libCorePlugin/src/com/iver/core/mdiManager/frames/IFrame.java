@@ -49,119 +49,126 @@ import java.awt.Rectangle;
 
 /**
  * This interface is a model for CorePlugin windows. When CorePlugin receives an
- * IWindow object, it creates a JInternalFrame or a JDialog, depending on
- * the specified properties.
+ * IWindow object, it creates a JInternalFrame or a JDialog, depending on the
+ * specified properties.
  * 
- * This interface allows coreplugin to talk to JInternalFrames and JDialogs in
- * a uniform way.
+ * This interface allows coreplugin to talk to JInternalFrames and JDialogs in a
+ * uniform way.
  * 
  * @author Cesar Martinez Izquierdo <cesar.martinez@iver.es>
  */
 public interface IFrame {
-    /**
-     * Gets the title property
-     *
-     * @return
-     */
+	/**
+	 * Gets the title property
+	 * 
+	 * @return
+	 */
 	public String getTitle();
-	
-    /**
-     * Sets the title property.
-     *
-     * @param title The new title.
-     */
+
+	/**
+	 * Sets the title property.
+	 * 
+	 * @param title
+	 *            The new title.
+	 */
 	public void setTitle(String title);
 
-    /**
-     * Returns the current x coordinate of the window's origin.
-     *
-     * @return Returns the value (in pixels) of the x coordinate
-     * of the window's origin.
-     */
-    public int getX();
-	
-    /**
-     * Sets the value of the x coordinate for the origin of the associated
-     * window.
-     * 
-     * @param x The value (in pixels) of the x coordinate
-     */
-    public void setX(int x);
-    
-    /**
-     * Returns the current y coordinate of the window's origin.
-     *
-     * @return Returns the value (in pixels) of the y coordinate
-     * of the window's origin.
-     */
-    public int getY();
-	
-    /**
-     * Sets the value of the y coordinate for the origin of the associated
-     * window.
-     * 
-     * @param y The value (in pixels) of the y coordinate
-     */
-    public void setY(int y);
-    
-    /**
-     * Gets the window height.
-     *
-     * @return The window height (in pixels).
-     */
-    public int getHeight();
+	/**
+	 * Returns the current x coordinate of the window's origin.
+	 * 
+	 * @return Returns the value (in pixels) of the x coordinate of the window's
+	 *         origin.
+	 */
+	public int getX();
 
-    /**
-     * Gets the window width.
-     *
-     * @return The window width (in pixels).
-     */
-    public int getWidth();
-    
-    /**
-     * Sets the window height.
-     *
-     * @param The window height (in pixels)
-     */
-    public void setHeight(int height);
-    
-    /**
-     * Sets the window width.
-     *
-     * @param The window width (in pixels)
-     */
-    public void setWidth(int width);
-    
-    /**
-     * Gets the minimum allowed size for this window.
-     * 
-     * @return minSize The minimum allowed size for this window.
-     */
+	/**
+	 * Sets the value of the x coordinate for the origin of the associated
+	 * window.
+	 * 
+	 * @param x
+	 *            The value (in pixels) of the x coordinate
+	 */
+	public void setX(int x);
+
+	/**
+	 * Returns the current y coordinate of the window's origin.
+	 * 
+	 * @return Returns the value (in pixels) of the y coordinate of the window's
+	 *         origin.
+	 */
+	public int getY();
+
+	/**
+	 * Sets the value of the y coordinate for the origin of the associated
+	 * window.
+	 * 
+	 * @param y
+	 *            The value (in pixels) of the y coordinate
+	 */
+	public void setY(int y);
+
+	/**
+	 * Gets the window height.
+	 * 
+	 * @return The window height (in pixels).
+	 */
+	public int getHeight();
+
+	/**
+	 * Gets the window width.
+	 * 
+	 * @return The window width (in pixels).
+	 */
+	public int getWidth();
+
+	/**
+	 * Sets the window height.
+	 * 
+	 * @param The
+	 *            window height (in pixels)
+	 */
+	public void setHeight(int height);
+
+	/**
+	 * Sets the window width.
+	 * 
+	 * @param The
+	 *            window width (in pixels)
+	 */
+	public void setWidth(int width);
+
+	/**
+	 * Gets the minimum allowed size for this window.
+	 * 
+	 * @return minSize The minimum allowed size for this window.
+	 */
 	public Dimension getMinimumSize();
-	
-    /**
-     * Sets the minimum allowed size for this window. If null is provided,
-     * the minimum size is disabled (and thus
-     * the window can be resized to any size).
-     * 
-     * @param minSize The minimum allowed size for this window.
-     */
+
+	/**
+	 * Sets the minimum allowed size for this window. If null is provided, the
+	 * minimum size is disabled (and thus the window can be resized to any
+	 * size).
+	 * 
+	 * @param minSize
+	 *            The minimum allowed size for this window.
+	 */
 	public void setMinimumSize(Dimension minSize);
-	
-    /**
-     * Gets the window bounds.
-     * 
-     * @return The window bounds.
-     */
-    public Rectangle getBounds();
-    
-    /**
-     * Sets the window bounds.
-     * 
-     * @param bounds The window bounds.
-     */
-    public void setBounds(Rectangle bounds);
-    
-    public void setLocation(int x, int y);
-	
+
+	/**
+	 * Gets the window bounds.
+	 * 
+	 * @return The window bounds.
+	 */
+	public Rectangle getBounds();
+
+	/**
+	 * Sets the window bounds.
+	 * 
+	 * @param bounds
+	 *            The window bounds.
+	 */
+	public void setBounds(Rectangle bounds);
+
+	public void setLocation(int x, int y);
+
 }

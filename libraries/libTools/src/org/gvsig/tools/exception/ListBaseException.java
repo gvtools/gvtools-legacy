@@ -33,33 +33,41 @@ import java.util.ListIterator;
 
 /**
  * @author Equipo de desarrollo de gvSIG
- *
+ * 
  */
-public abstract class ListBaseException extends BaseException implements List{
+public abstract class ListBaseException extends BaseException implements List {
 	private List exceptions = new ArrayList();
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#size()
 	 */
 	public int size() {
 		return this.exceptions.size();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#isEmpty()
 	 */
 	public boolean isEmpty() {
 		return this.exceptions.isEmpty();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#contains(java.lang.Object)
 	 */
 	public boolean contains(Object arg0) {
 		return this.exceptions.contains(arg0);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#toArray()
 	 */
 	public Object[] toArray() {
@@ -82,7 +90,9 @@ public abstract class ListBaseException extends BaseException implements List{
 		return this.exceptions.add(arg0);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#remove(java.lang.Object)
 	 */
 	public boolean remove(Object arg0) {
@@ -130,14 +140,18 @@ public abstract class ListBaseException extends BaseException implements List{
 		return this.exceptions.retainAll(arg0);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#clear()
 	 */
 	public void clear() {
 		this.exceptions.clear();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.List#get(int)
 	 */
 	public Object get(int arg0) {
@@ -161,75 +175,93 @@ public abstract class ListBaseException extends BaseException implements List{
 		this.exceptions.add(arg0, arg1);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.List#remove(int)
 	 */
 	public Object remove(int arg0) {
 		return this.exceptions.remove(arg0);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.List#indexOf(java.lang.Object)
 	 */
 	public int indexOf(Object arg0) {
 		return this.exceptions.indexOf(arg0);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.List#lastIndexOf(java.lang.Object)
 	 */
 	public int lastIndexOf(Object arg0) {
 		return this.exceptions.lastIndexOf(arg0);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.List#listIterator()
 	 */
 	public ListIterator listIterator() {
 		return this.exceptions.listIterator();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.List#listIterator(int)
 	 */
 	public ListIterator listIterator(int arg0) {
 		return this.exceptions.listIterator(arg0);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.List#subList(int, int)
 	 */
 	public List subList(int arg0, int arg1) {
 		return this.exceptions.subList(arg0, arg1);
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Throwable#getMessage()
 	 */
 	public String getMessage() {
 		String msg = super.getMessage();
 		Exception bex;
-		Iterator iter=this.exceptions.iterator();
+		Iterator iter = this.exceptions.iterator();
 		while (iter.hasNext()) {
 			bex = (Exception) iter.next();
 			msg = msg + "\n  " + bex.getMessage();
 		}
 		return msg;
 	}
-	
-	public String getLocalizedMessage(IExceptionTranslator exceptionTranslator, int indent) {
+
+	public String getLocalizedMessage(IExceptionTranslator exceptionTranslator,
+			int indent) {
 		String msg = super.getLocalizedMessage(exceptionTranslator, indent);
 		Exception bex;
-		Iterator iter=this.exceptions.iterator();
+		Iterator iter = this.exceptions.iterator();
 		while (iter.hasNext()) {
 			bex = (Exception) iter.next();
-			if( bex instanceof BaseException ) {
-				msg = msg + "\n  " + ((BaseException)bex).getLocalizedMessage(exceptionTranslator, indent);				
+			if (bex instanceof BaseException) {
+				msg = msg
+						+ "\n  "
+						+ ((BaseException) bex).getLocalizedMessage(
+								exceptionTranslator, indent);
 			} else {
 				msg = msg + "\n  " + bex.getLocalizedMessage();
 			}
 		}
-		return BaseException.insertBlanksAtStart(msg,indent);
+		return BaseException.insertBlanksAtStart(msg, indent);
 	}
 
 }

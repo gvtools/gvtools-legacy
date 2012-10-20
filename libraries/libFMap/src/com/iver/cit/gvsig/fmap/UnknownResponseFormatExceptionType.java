@@ -42,17 +42,17 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: UnknownResponseFormatExceptionType.java 7491 2006-09-22 08:09:01Z ldiaz $
-* $Log$
-* Revision 1.2  2006-09-22 08:09:01  ldiaz
-* set/get de layerName y driverName pasan a ExceptionDescription en iverUtiles
-*
-* Revision 1.1  2006/09/21 17:18:31  azabala
-* First version in cvs
-*
-*
-*/
+ *
+ * $Id: UnknownResponseFormatExceptionType.java 7491 2006-09-22 08:09:01Z ldiaz $
+ * $Log$
+ * Revision 1.2  2006-09-22 08:09:01  ldiaz
+ * set/get de layerName y driverName pasan a ExceptionDescription en iverUtiles
+ *
+ * Revision 1.1  2006/09/21 17:18:31  azabala
+ * First version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap;
 
 import java.net.URL;
@@ -65,50 +65,55 @@ public class UnknownResponseFormatExceptionType extends ExceptionDescription {
 	String protocol;
 	String format;
 	String layerName;
-	
-	public UnknownResponseFormatExceptionType(){
+
+	public UnknownResponseFormatExceptionType() {
 		super(20, "Formato de respuesta desconocido");
 	}
+
 	public String getHtmlErrorMessage() {
 		String message = "<p><b>Formato de respuesto desconocido</b></p>";
 		message += "<br>Información adicional:</b>";
 		message += "<ul>";
-		message += "<li>Capa: " + getLayerName()+"</li>";
-		message += "<li>Driver: " + getLayerName()+"</li>";
-		message += "<li>Formato: " + getFormat()+"</li>";
-		message += "<li>Protocolo: " + getProtocol()+"</li>";
-		message += "<li>Host: " + getHost().toString()+"</li>";
+		message += "<li>Capa: " + getLayerName() + "</li>";
+		message += "<li>Driver: " + getLayerName() + "</li>";
+		message += "<li>Formato: " + getFormat() + "</li>";
+		message += "<li>Protocolo: " + getProtocol() + "</li>";
+		message += "<li>Host: " + getHost().toString() + "</li>";
 		message += "</ul>";
 		return message;
-	
+
 	}
 
 	public String getLayerName() {
 		return layerName;
 	}
-	
-	public void setLayerName(String layerName){
+
+	public void setLayerName(String layerName) {
 		this.layerName = layerName;
 	}
-	
+
 	public String getFormat() {
 		return format;
 	}
+
 	public void setFormat(String format) {
 		this.format = format;
 	}
+
 	public URL getHost() {
 		return host;
 	}
+
 	public void setHost(URL host) {
 		this.host = host;
 	}
+
 	public String getProtocol() {
 		return protocol;
 	}
+
 	public void setProtocol(String protocol) {
 		this.protocol = protocol;
 	}
 
 }
-

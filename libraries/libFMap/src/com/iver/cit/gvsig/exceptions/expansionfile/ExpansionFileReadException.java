@@ -4,18 +4,19 @@ import com.iver.cit.gvsig.fmap.edition.ExpansionFile;
 
 /**
  * Exception thrown when an error ocurred in an access to the ExpansionFile.
- * Typically an ExpansionFileReadExpection is thrown when the current layer
- * is being edited.
- *
+ * Typically an ExpansionFileReadExpection is thrown when the current layer is
+ * being edited.
+ * 
  * @see ExpansionFile
  * @author Vicente Caballero Navarro
  */
 public class ExpansionFileReadException extends ExpansionFileException {
 
-	public ExpansionFileReadException(String l,Throwable exception) {
-		super(l,exception);
+	public ExpansionFileReadException(String l, Throwable exception) {
+		super(l, exception);
 		init();
 	}
+
 	/**
 	 *
 	 */

@@ -8,6 +8,7 @@ import org.gvsig.remoteClient.wfs.WFSClient;
 import org.gvsig.remoteClient.wfs.WFSStatus;
 
 import com.iver.cit.gvsig.fmap.layers.WFSLayerNode;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -80,42 +81,42 @@ public class WFSTest extends TestCase {
 	private String feature;
 	private String fields;
 	private String fieldTypes;
-	
+
 	protected void setUp() throws Exception {
-//		sUrl = "http://sercartlin:8080/geoserver/wfs?REQUEST=getCapabilities&SERVICE=WFS";
-//		feature = "topp:states";
-//		fields="tipo,municipio,the_geom";	
-//		sUrl = "http://simon.coput.gva.es:2000/cgi-bin/mapserv483?map=/etc/mapserver/interno/wfs.map&REQUEST=getCapabilities&SERVICE=WFS";
-//		feature = "cit:hidro_lin_300k";
-//		fields="color,codigo";
+		// sUrl =
+		// "http://sercartlin:8080/geoserver/wfs?REQUEST=getCapabilities&SERVICE=WFS";
+		// feature = "topp:states";
+		// fields="tipo,municipio,the_geom";
+		// sUrl =
+		// "http://simon.coput.gva.es:2000/cgi-bin/mapserv483?map=/etc/mapserver/interno/wfs.map&REQUEST=getCapabilities&SERVICE=WFS";
+		// feature = "cit:hidro_lin_300k";
+		// fields="color,codigo";
 		sUrl = "http://www2.dmsolutions.ca/cgi-bin/mswfs_gmap";
 		feature = "grid";
 		fields = "msGeometry,F_CODE";
 		fieldTypes = "gml:GeometryPropertyType,string";
-		
 
-	}	
-	
-	
-	public void testWFS() throws Exception{
+	}
+
+	public void testWFS() throws Exception {
 		WFSClient remoteServicesClient = new WFSClient(sUrl);
 		File file = remoteServicesClient.getFeature(getStatus(), false, null);
 		System.out.println("Fin descarga");
-//		WFSFeatureLayer fl = new WFSFeatureLayer(file,
-//				getNode(),
-//				getStatus());
-//		IFeatureIterator iterator = fl.getIterator();		
-//		System.out.println("Fin parseo");
-//		int i=0;
-//		while (iterator.hasNext()){
-//			IFeature feat = iterator.next();
-////			IGeometry geom = feat.getGeometry();
-//			i++;
-//		}
-//		System.out.println("Encontradas " + i + " Features");
+		// WFSFeatureLayer fl = new WFSFeatureLayer(file,
+		// getNode(),
+		// getStatus());
+		// IFeatureIterator iterator = fl.getIterator();
+		// System.out.println("Fin parseo");
+		// int i=0;
+		// while (iterator.hasNext()){
+		// IFeature feat = iterator.next();
+		// // IGeometry geom = feat.getGeometry();
+		// i++;
+		// }
+		// System.out.println("Encontradas " + i + " Features");
 	}
-	
-	private WFSStatus getStatus(){
+
+	private WFSStatus getStatus() {
 		WFSStatus status = new WFSStatus(feature);
 		status.setFields(fields.split(","));
 		status.setUserName("");
@@ -124,19 +125,19 @@ public class WFSTest extends TestCase {
 		status.setBuffer(1000);
 		return status;
 	}
-	
-	private WFSLayerNode[] getNode(){
+
+	private WFSLayerNode[] getNode() {
 		WFSLayerNode[] layers = new WFSLayerNode[1];
 		layers[0] = new WFSLayerNode();
 		layers[0].setName(feature);
 		String[] vfields = fields.split(",");
 		String[] vfieldTypes = fieldTypes.split(",");
-//		for (int i=0 ; i<vfields.length ; i++){
-//			IXMLType attribute = new IXMLType();
-//			attribute.setName(vfields[i]);
-//			attribute.setType(vfieldTypes[i]);
-//			layers[0].getFields().add(attribute);
-//		}
+		// for (int i=0 ; i<vfields.length ; i++){
+		// IXMLType attribute = new IXMLType();
+		// attribute.setName(vfields[i]);
+		// attribute.setType(vfieldTypes[i]);
+		// layers[0].getFields().add(attribute);
+		// }
 		return layers;
 	}
 }

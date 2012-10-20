@@ -43,18 +43,18 @@ package com.iver.cit.gvsig.project.documents.layout.tools.listener;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Events.RectangleEvent;
 
-
 /**
  * Interfaz listener de rectángulo.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public interface LayoutRectangleListener extends LayoutToolListener {
 	/**
 	 * Invocado cuando el usuario selecciona un rectángulo en la vista.
-	 *
-	 * @param event Rectangle.
-	 *
+	 * 
+	 * @param event
+	 *            Rectangle.
+	 * 
 	 * @throws BehaviorException
 	 */
 	public void rectangle(RectangleEvent event) throws BehaviorException;

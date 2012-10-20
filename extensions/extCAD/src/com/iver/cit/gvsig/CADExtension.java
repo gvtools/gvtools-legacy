@@ -84,42 +84,44 @@ import com.iver.utiles.console.jedit.JEditTextArea;
 /**
  * Extensión dedicada a controlar las diferentes operaciones sobre el editado de
  * una capa.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
-public class CADExtension extends Extension implements IPreferenceExtension{
-	private static HashMap adapters=new HashMap();
+public class CADExtension extends Extension implements IPreferenceExtension {
+	private static HashMap adapters = new HashMap();
 
 	private static View view;
 
 	private MapControl mapControl;
-	private static CADToolAdapter adapter=null;
-	private EditingPage editingPage=new EditingPage();
+	private static CADToolAdapter adapter = null;
+	private EditingPage editingPage = new EditingPage();
 
 	public static CADToolAdapter getCADToolAdapter(FLayer layer) {
-		IWindow[] windows=PluginServices.getMDIManager().getAllWindows();
+		IWindow[] windows = PluginServices.getMDIManager().getAllWindows();
 		for (int i = 0; i < windows.length; i++) {
-			IWindow window=windows[i];
-			if (window instanceof View){
-				View v=(View)window;
-				if (v.getModel().getMapContext().equals(layer.getMapContext())){
+			IWindow window = windows[i];
+			if (window instanceof View) {
+				View v = (View) window;
+				if (v.getModel().getMapContext().equals(layer.getMapContext())) {
 					if (!adapters.containsKey(v.getModel())) {
-						adapters.put(v.getModel(),new CADToolAdapter());
+						adapters.put(v.getModel(), new CADToolAdapter());
 					}
-					return (CADToolAdapter)adapters.get(v.getModel());
+					return (CADToolAdapter) adapters.get(v.getModel());
 				}
 			}
 		}
 		return null;
 	}
+
 	public static CADToolAdapter getCADToolAdapter() {
-		com.iver.andami.ui.mdiManager.IWindow view=PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow view = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (view instanceof View) {
-			View v=(View)view;
+			View v = (View) view;
 			if (!adapters.containsKey(v.getModel())) {
-				adapters.put(v.getModel(),new CADToolAdapter());
+				adapters.put(v.getModel(), new CADToolAdapter());
 			}
-			adapter=(CADToolAdapter)adapters.get(v.getModel());
+			adapter = (CADToolAdapter) adapters.get(v.getModel());
 			return adapter;
 		}
 		return adapter;
@@ -132,28 +134,27 @@ public class CADExtension extends Extension implements IPreferenceExtension{
 	public void initialize() {
 
 		// Registramos los Popup menus:
-        MenuEntry.register();
-        Snapping.register();
+		MenuEntry.register();
+		Snapping.register();
 		// Fijamos que los símbolos de dibujo tengan outline
 		// TODO: Esto se debe configurar en el cuadro de diálogo de preferencias
-// jaume, this should be unnecessary
-//		CADTool.drawingSymbol.setOutlined(true);
-//		CADTool.drawingSymbol.setOutlineColor(CADTool.drawingSymbol.getColor().darker());
-//		CADTool.modifySymbol.setOutlined(true);
-//		CADTool.modifySymbol.setOutlineColor(CADTool.modifySymbol.getColor().darker());
-//		CADTool.selectSymbol.setOutlined(true);
-//		CADTool.selectSymbol.setOutlineColor(CADTool.selectSymbol.getColor().darker());
-
+		// jaume, this should be unnecessary
+		// CADTool.drawingSymbol.setOutlined(true);
+		// CADTool.drawingSymbol.setOutlineColor(CADTool.drawingSymbol.getColor().darker());
+		// CADTool.modifySymbol.setOutlined(true);
+		// CADTool.modifySymbol.setOutlineColor(CADTool.modifySymbol.getColor().darker());
+		// CADTool.selectSymbol.setOutlined(true);
+		// CADTool.selectSymbol.setOutlineColor(CADTool.selectSymbol.getColor().darker());
 
 		CopyCADTool copy = new CopyCADTool();
 		RotateCADTool rotate = new RotateCADTool();
 		ScaleCADTool scale = new ScaleCADTool();
-		SymmetryCADTool symmetry=new SymmetryCADTool();
+		SymmetryCADTool symmetry = new SymmetryCADTool();
 		addCADTool("_copy", copy);
 		addCADTool("_rotate", rotate);
 		addCADTool("_scale", scale);
 		addCADTool("_symmetry", symmetry);
-	// Registramos las teclas de acceso rápido que vamos a usar.
+		// Registramos las teclas de acceso rápido que vamos a usar.
 
 		KeyStroke key = KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0);
 		RefentAccelerator accRef = new RefentAccelerator();
@@ -171,7 +172,6 @@ public class CADExtension extends Extension implements IPreferenceExtension{
 		ForceCursorAccelerator accForce = new ForceCursorAccelerator();
 		PluginServices.registerKeyStroke(key, accForce);
 
-
 		KeyboardFocusManager kfm = KeyboardFocusManager
 				.getCurrentKeyboardFocusManager();
 		kfm.addKeyEventPostProcessor(new myKeyEventPostProcessor());
@@ -179,21 +179,22 @@ public class CADExtension extends Extension implements IPreferenceExtension{
 		registerIcons();
 	}
 
-	private void registerIcons(){
-		PluginServices.getIconTheme().registerDefault(
-				"edition-geometry-copy",
-				this.getClass().getClassLoader().getResource("images/Copy.png")
-			);
+	private void registerIcons() {
+		PluginServices.getIconTheme()
+				.registerDefault(
+						"edition-geometry-copy",
+						this.getClass().getClassLoader()
+								.getResource("images/Copy.png"));
 
 		PluginServices.getIconTheme().registerDefault(
 				"edition-geometry-symmetry",
-				this.getClass().getClassLoader().getResource("images/Symmetry.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/Symmetry.png"));
 
 		PluginServices.getIconTheme().registerDefault(
 				"edition-geometry-rotate",
-				this.getClass().getClassLoader().getResource("images/Rotation.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/Rotation.png"));
 
 		PluginServices.getIconTheme().registerDefault(
 				"edition-geometry-scale",
@@ -238,11 +239,11 @@ public class CADExtension extends Extension implements IPreferenceExtension{
 				|| s.equals("_symmetry") || s.equals("_rotate")
 				|| s.equals("_stretch") || s.equals("_scale")
 				|| s.equals("_extend") || s.equals("_trim")
-				|| s.equals("_unit")
-				|| s.equals("_chaflan") || s.equals("_join")) {
+				|| s.equals("_unit") || s.equals("_chaflan")
+				|| s.equals("_join")) {
 			setCADTool(s, true);
 		}
-		CADToolAdapter cta=getCADToolAdapter();
+		CADToolAdapter cta = getCADToolAdapter();
 		cta.configureMenu();
 	}
 
@@ -251,8 +252,8 @@ public class CADExtension extends Extension implements IPreferenceExtension{
 	}
 
 	public static void setCADTool(String text, boolean showCommand) {
-		CADToolAdapter cta=getCADToolAdapter();
-		CADTool ct=cta.getCADTool(text);
+		CADToolAdapter cta = getCADToolAdapter();
+		CADTool ct = cta.getCADTool(text);
 
 		if (ct == null)
 			throw new RuntimeException("No such cad tool");
@@ -262,9 +263,10 @@ public class CADExtension extends Extension implements IPreferenceExtension{
 		ct.init();
 		if (showCommand) {
 			if (PluginServices.getMDIManager().getActiveWindow() instanceof View) {
-				View vista = (View) PluginServices.getMDIManager().getActiveWindow();
+				View vista = (View) PluginServices.getMDIManager()
+						.getActiveWindow();
 				vista.getConsolePanel().addText("\n" + ct.getName(),
-					JConsole.COMMAND);
+						JConsole.COMMAND);
 				cta.askQuestion();
 			}
 		}
@@ -273,7 +275,7 @@ public class CADExtension extends Extension implements IPreferenceExtension{
 	}
 
 	public static CADTool getCADTool() {
-		CADToolAdapter cta=getCADToolAdapter();
+		CADToolAdapter cta = getCADToolAdapter();
 		return cta.getCadTool();
 	}
 
@@ -315,8 +317,10 @@ public class CADExtension extends Extension implements IPreferenceExtension{
 
 		/*
 		 * (non-Javadoc)
-		 *
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+		 * 
+		 * @see
+		 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent
+		 * )
 		 */
 		public void actionPerformed(ActionEvent e) {
 			view.focusConsole(key);
@@ -335,7 +339,7 @@ public class CADExtension extends Extension implements IPreferenceExtension{
 		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 		 */
 		public void actionPerformed(ActionEvent e) {
-			CADToolAdapter cta=getCADToolAdapter();
+			CADToolAdapter cta = getCADToolAdapter();
 			cta.keyPressed(actionCommand);
 		}
 
@@ -343,19 +347,19 @@ public class CADExtension extends Extension implements IPreferenceExtension{
 
 	/**
 	 * @author fjp
-	 *
-	 * La idea es usar esto para recibir lo que el usuario escribe y enviarlo a
-	 * la consola de la vista para que salga por allí.
+	 * 
+	 *         La idea es usar esto para recibir lo que el usuario escribe y
+	 *         enviarlo a la consola de la vista para que salga por allí.
 	 */
 	private class myKeyEventPostProcessor implements KeyEventPostProcessor {
 
 		public boolean postProcessKeyEvent(KeyEvent e) {
 			// System.out.println("KeyEvent e = " + e);
-			CADToolAdapter cta=getCADToolAdapter();
+			CADToolAdapter cta = getCADToolAdapter();
 			if ((cta == null) || (view == null))
 				return false;
 
-			if (cta.getMapControl() == null){
+			if (cta.getMapControl() == null) {
 				return false;
 			}
 
@@ -372,26 +376,24 @@ public class CADExtension extends Extension implements IPreferenceExtension{
 					// QUE NO ES EL DE CONSOLA
 					if (!(e.getSource() instanceof JTable))
 						view.focusConsole("");
-				}
-				else if ((!e.isActionKey() && e.getKeyCode()!=KeyEvent.VK_TAB)) {
-						//if (Character.isLetterOrDigit(e.getKeyChar())) {
-							Character keyChar = new Character(e.getKeyChar());
-							if (e.getComponent().getName() != null) {
-								System.out
-										.println("Evento de teclado desde el componente "
-												+ e.getComponent().getName());
-								if (!e.getComponent().getName().equals(
-										"CADConsole")) {
-									view.focusConsole(keyChar + "");
-								}
-							} else {
-								if (!(e.getComponent() instanceof JTextComponent)) {
-									view.focusConsole(keyChar + "");
-								}
-							}
-						//}
+				} else if ((!e.isActionKey() && e.getKeyCode() != KeyEvent.VK_TAB)) {
+					// if (Character.isLetterOrDigit(e.getKeyChar())) {
+					Character keyChar = new Character(e.getKeyChar());
+					if (e.getComponent().getName() != null) {
+						System.out
+								.println("Evento de teclado desde el componente "
+										+ e.getComponent().getName());
+						if (!e.getComponent().getName().equals("CADConsole")) {
+							view.focusConsole(keyChar + "");
+						}
+					} else {
+						if (!(e.getComponent() instanceof JTextComponent)) {
+							view.focusConsole(keyChar + "");
+						}
 					}
+					// }
 				}
+			}
 			return false;
 		}
 
@@ -400,30 +402,34 @@ public class CADExtension extends Extension implements IPreferenceExtension{
 	/*
 	 * private void registerKeyStrokes(){ for (char key = '0'; key <= '9';
 	 * key++){ Character keyChar = new Character(key);
-	 * mapControl.getInputMap(MapControl.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key),
-	 * keyChar); mapControl.getActionMap().put(keyChar, new
-	 * KeyAction(keyChar+"")); } for (char key = 'a'; key <= 'z'; key++){
-	 * Character keyChar = new Character(key);
-	 * mapControl.getInputMap(MapControl.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key),
-	 * keyChar); mapControl.getActionMap().put(keyChar, new
-	 * KeyAction(keyChar+"")); } for (char key = 'A'; key <= 'Z'; key++){
-	 * Character keyChar = new Character(key);
-	 * mapControl.getInputMap(MapControl.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key),
-	 * keyChar); mapControl.getActionMap().put(keyChar, new
-	 * KeyAction(keyChar+"")); }
-	 * //this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,
-	 * 0), "enter"); //this.getActionMap().put("enter", new MyAction("enter"));
-	 * Character keyChar = new
+	 * mapControl.getInputMap(MapControl
+	 * .WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key), keyChar);
+	 * mapControl.getActionMap().put(keyChar, new KeyAction(keyChar+"")); } for
+	 * (char key = 'a'; key <= 'z'; key++){ Character keyChar = new
+	 * Character(key);
+	 * mapControl.getInputMap(MapControl.WHEN_IN_FOCUSED_WINDOW).
+	 * put(KeyStroke.getKeyStroke(key), keyChar);
+	 * mapControl.getActionMap().put(keyChar, new KeyAction(keyChar+"")); } for
+	 * (char key = 'A'; key <= 'Z'; key++){ Character keyChar = new
+	 * Character(key);
+	 * mapControl.getInputMap(MapControl.WHEN_IN_FOCUSED_WINDOW).
+	 * put(KeyStroke.getKeyStroke(key), keyChar);
+	 * mapControl.getActionMap().put(keyChar, new KeyAction(keyChar+"")); }
+	 * //this
+	 * .getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent
+	 * .VK_ENTER, 0), "enter"); //this.getActionMap().put("enter", new
+	 * MyAction("enter")); Character keyChar = new
 	 * Character(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0).getKeyChar());
-	 * mapControl.getInputMap(MapControl.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,
-	 * 0),keyChar); mapControl.getActionMap().put(keyChar, new KeyAction(""));
-	 *  // El espacio como si fuera INTRO Character keyCharSpace = new
-	 * Character(' ');
-	 * mapControl.getInputMap(MapControl.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('
-	 * '), keyCharSpace); mapControl.getActionMap().put(keyCharSpace, new
-	 * KeyAction(""));
-	 *
-	 *  }
+	 * mapControl
+	 * .getInputMap(MapControl.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke
+	 * (KeyEvent.VK_ENTER, 0),keyChar); mapControl.getActionMap().put(keyChar,
+	 * new KeyAction("")); // El espacio como si fuera INTRO Character
+	 * keyCharSpace = new Character(' ');
+	 * mapControl.getInputMap(MapControl.WHEN_IN_FOCUSED_WINDOW
+	 * ).put(KeyStroke.getKeyStroke(' '), keyCharSpace);
+	 * mapControl.getActionMap().put(keyCharSpace, new KeyAction(""));
+	 * 
+	 * }
 	 */
 	private static JPopupMenu popup = new JPopupMenu();
 
@@ -438,7 +444,7 @@ public class CADExtension extends Extension implements IPreferenceExtension{
 		menu.setVisible(true);
 		menu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CADToolAdapter cta=getCADToolAdapter();
+				CADToolAdapter cta = getCADToolAdapter();
 				cta.transition(e.getActionCommand());
 			}
 		});
@@ -462,7 +468,7 @@ public class CADExtension extends Extension implements IPreferenceExtension{
 	 * @return Returns the editionManager.
 	 */
 	public static EditionManager getEditionManager() {
-		CADToolAdapter cta=getCADToolAdapter();
+		CADToolAdapter cta = getCADToolAdapter();
 		return cta.getEditionManager();
 	}
 
@@ -473,20 +479,22 @@ public class CADExtension extends Extension implements IPreferenceExtension{
 	public static void initFocus() {
 		view = (View) PluginServices.getMDIManager().getActiveWindow();
 		MapControl mapControl = view.getMapControl();
-		CADToolAdapter cta=getCADToolAdapter();
-		if (!mapControl.getNamesMapTools().containsKey("cadtooladapter")){
-			// StatusBarListener sbl=new StatusBarListener(view.getMapControl());
-			// mapControl.addMapTool("cadtooladapter",  new Behavior[]{adapter,new MouseMovementBehavior(sbl)});
+		CADToolAdapter cta = getCADToolAdapter();
+		if (!mapControl.getNamesMapTools().containsKey("cadtooladapter")) {
+			// StatusBarListener sbl=new
+			// StatusBarListener(view.getMapControl());
+			// mapControl.addMapTool("cadtooladapter", new
+			// Behavior[]{adapter,new MouseMovementBehavior(sbl)});
 			mapControl.addMapTool("cadtooladapter", cta);
 		}
 		// view.getMapControl().setTool("cadtooladapter");
-		JEditTextArea jeta=view.getConsolePanel().getTxt();
+		JEditTextArea jeta = view.getConsolePanel().getTxt();
 		jeta.requestFocusInWindow();
 		jeta.setCaretPosition(jeta.getText().length());
 
 		view.addConsoleListener("cad", new ResponseListener() {
 			public void acceptResponse(String response) {
-				CADToolAdapter cta=getCADToolAdapter();
+				CADToolAdapter cta = getCADToolAdapter();
 				cta.textEntered(response);
 				// TODO:
 				// FocusManager fm=FocusManager.getCurrentManager();
@@ -502,8 +510,8 @@ public class CADExtension extends Extension implements IPreferenceExtension{
 	}
 
 	public IPreference[] getPreferencesPages() {
-		IPreference[] preferences=new IPreference[1];
-		preferences[0]=editingPage;
+		IPreference[] preferences = new IPreference[1];
+		preferences[0] = editingPage;
 		return preferences;
 	}
 }

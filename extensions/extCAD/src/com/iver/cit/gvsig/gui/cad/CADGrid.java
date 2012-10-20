@@ -47,11 +47,10 @@ import java.awt.geom.Rectangle2D;
 
 import com.iver.cit.gvsig.fmap.ViewPort;
 
-
 /**
- * Clase encargada de gestionar las diferentes operaciones que se realizan
- * sobre el grid.
- *
+ * Clase encargada de gestionar las diferentes operaciones que se realizan sobre
+ * el grid.
+ * 
  * @author Vicente Caballero Navarro
  */
 public class CADGrid {
@@ -63,39 +62,39 @@ public class CADGrid {
 
 	/**
 	 * Inserta el viewPort.
-	 *
+	 * 
 	 * @param vp
 	 */
 	public void setViewPort(ViewPort vp) {
 		viewport = vp;
 
-//		if (gridSize == 0) {
-//			gridSize = viewport.toMapDistance(25);
-//		}
+		// if (gridSize == 0) {
+		// gridSize = viewport.toMapDistance(25);
+		// }
 	}
 
 	/**
-	 * Ajusta un punto de la imagen que se pasa como  parámetro al handler más
-	 * cercano si se encuentra lo suficientemente  cerca y devuelve la
-	 * distancia del punto original al punto ajustado
-	 *
+	 * Ajusta un punto de la imagen que se pasa como parámetro al handler más
+	 * cercano si se encuentra lo suficientemente cerca y devuelve la distancia
+	 * del punto original al punto ajustado
+	 * 
 	 * @param point
-	 *
+	 * 
 	 * @return Distancia del punto que se pasa como parámetro al punto ajustado
 	 */
 	public double adjustToGrid(Point2D point) {
 		if (adjustGrid) {
 			Point2D auxp = new Point2D.Double(0, 0);
-			double x = ((point.getX() + gridSizeX) % gridSizeX) -
-				((auxp.getX()) % gridSizeX);
-			double y = ((point.getY() + gridSizeY) % gridSizeY) -
-				((auxp.getY()) % gridSizeY);
+			double x = ((point.getX() + gridSizeX) % gridSizeX)
+					- ((auxp.getX()) % gridSizeX);
+			double y = ((point.getY() + gridSizeY) % gridSizeY)
+					- ((auxp.getY()) % gridSizeY);
 			Point2D p = (Point2D) point.clone();
-			if (x>gridSizeX/2){
-				x=x-gridSizeX;
+			if (x > gridSizeX / 2) {
+				x = x - gridSizeX;
 			}
-			if (y>gridSizeY/2){
-				y=y-gridSizeY;
+			if (y > gridSizeY / 2) {
+				y = y - gridSizeY;
 			}
 			point.setLocation((point.getX() - x), (point.getY() - y));
 			return p.distance(point);
@@ -105,8 +104,9 @@ public class CADGrid {
 
 	/**
 	 * Dibuja el grid sobre el graphics que se pasa como parámetro
-	 *
-	 * @param g Graphics sobre el que dibujar el grid.
+	 * 
+	 * @param g
+	 *            Graphics sobre el que dibujar el grid.
 	 */
 	public void drawGrid(Graphics g) {
 		if (!grid) {
@@ -140,8 +140,9 @@ public class CADGrid {
 	/**
 	 * Inserta un boolean que indica si se utiliza o no el grid y de esta forma
 	 * dibujarse.
-	 *
-	 * @param b boolean
+	 * 
+	 * @param b
+	 *            boolean
 	 */
 	public void setShowGrid(boolean b) {
 		grid = b;
@@ -149,7 +150,7 @@ public class CADGrid {
 
 	/**
 	 * Devuelve true si se usa el grid.
-	 *
+	 * 
 	 * @return True si se usa el grid.
 	 */
 	public boolean isShowGrid() {
@@ -159,8 +160,9 @@ public class CADGrid {
 	/**
 	 * Inserta un boolean que indica si se ajusta o no al grid y de esta forma
 	 * dibujarse.
-	 *
-	 * @param b boolean
+	 * 
+	 * @param b
+	 *            boolean
 	 */
 	public void setAdjustGrid(boolean b) {
 		adjustGrid = b;
@@ -168,7 +170,7 @@ public class CADGrid {
 
 	/**
 	 * Devuelve true si se ha de ajustar al grid.
-	 *
+	 * 
 	 * @return True si se está ajustando al grid.
 	 */
 	public boolean isAdjustGrid() {
@@ -178,12 +180,15 @@ public class CADGrid {
 	public double getGridSizeX() {
 		return gridSizeX;
 	}
+
 	public double getGridSizeY() {
 		return gridSizeY;
 	}
+
 	public void setGridSizeX(double gridSize) {
 		this.gridSizeX = gridSize;
 	}
+
 	public void setGridSizeY(double gridSize) {
 		this.gridSizeY = gridSize;
 	}

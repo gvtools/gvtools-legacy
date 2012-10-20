@@ -22,9 +22,10 @@ import java.awt.Color;
 
 import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
+
 /**
  * Componente tabla
- *
+ * 
  * @author Nacho Brodin (brodin_ign@gva.es)
  */
 public class TableButtonModel extends DefaultTableModel implements IModel {

@@ -19,7 +19,8 @@ import com.iver.cit.gvsig.fmap.drivers.ITableDefinition;
 
 public class FooDriver implements AlphanumericDBDriver {
 
-	public Connection getConnection(String host, int port, String dbName, String user, String password) throws SQLException {
+	public Connection getConnection(String host, int port, String dbName,
+			String user, String password) throws SQLException {
 		return new FooConnection();
 	}
 
@@ -36,7 +37,8 @@ public class FooDriver implements AlphanumericDBDriver {
 		return tablename;
 	}
 
-	public Value getFieldValue(long rowIndex, int fieldId) throws ReadDriverException {
+	public Value getFieldValue(long rowIndex, int fieldId)
+			throws ReadDriverException {
 		GeneralPath gp = new GeneralPath();
 		gp.moveTo(10.0, 10.0);
 		gp.lineTo(10.0, 20.0);
@@ -52,7 +54,9 @@ public class FooDriver implements AlphanumericDBDriver {
 	}
 
 	public String getFieldName(int fieldId) throws ReadDriverException {
-		if (fieldId != 1) throw new BadFieldDriverException(getName(),null,String.valueOf(fieldId));
+		if (fieldId != 1)
+			throw new BadFieldDriverException(getName(), null,
+					String.valueOf(fieldId));
 		return "Geometría";
 	}
 
@@ -61,7 +65,9 @@ public class FooDriver implements AlphanumericDBDriver {
 	}
 
 	public int getFieldType(int i) throws ReadDriverException {
-		if (i != 1) throw new BadFieldDriverException(getName(),null,String.valueOf(i));
+		if (i != 1)
+			throw new BadFieldDriverException(getName(), null,
+					String.valueOf(i));
 		return PTTypes.GEOMETRY;
 	}
 
@@ -118,7 +124,9 @@ public class FooDriver implements AlphanumericDBDriver {
 	}
 
 	public int getFieldWidth(int i) throws ReadDriverException {
-		if (i != 1) throw new BadFieldDriverException(getName(),null,String.valueOf(i));
+		if (i != 1)
+			throw new BadFieldDriverException(getName(), null,
+					String.valueOf(i));
 		return 1;
 	}
 

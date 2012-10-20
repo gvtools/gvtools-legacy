@@ -22,9 +22,10 @@ import org.gvsig.raster.beans.canvas.layers.functions.StraightLine;
 import org.gvsig.raster.dataset.Params;
 import org.gvsig.raster.grid.filter.enhancement.LinearStretchEnhancementFilter;
 import org.gvsig.rastertools.enhanced.graphics.HistogramGraphicBase;
+import org.gvsig.rastertools.enhanced.graphics.HistogramGraphicBase.HistogramStatus;
 import org.gvsig.rastertools.enhanced.graphics.InputHistogram;
 import org.gvsig.rastertools.enhanced.graphics.OutputHistogram;
-import org.gvsig.rastertools.enhanced.graphics.HistogramGraphicBase.HistogramStatus;
+
 /**
  * Manager para actualizar la vista previa y el histograma de salida del cuadro
  * de realce
@@ -33,22 +34,24 @@ import org.gvsig.rastertools.enhanced.graphics.HistogramGraphicBase.HistogramSta
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class EnhancedHistogramController {
-	private InputHistogram  inputHistogram  = null;
+	private InputHistogram inputHistogram = null;
 	private OutputHistogram outputHistogram = null;
-	private EnhancedDialog  enhancedDialog  = null;
+	private EnhancedDialog enhancedDialog = null;
 
-	public EnhancedHistogramController(InputHistogram inputHistogram, OutputHistogram outputHistogram, EnhancedDialog enhancedDialog) {
+	public EnhancedHistogramController(InputHistogram inputHistogram,
+			OutputHistogram outputHistogram, EnhancedDialog enhancedDialog) {
 		this.inputHistogram = inputHistogram;
 		this.outputHistogram = outputHistogram;
 		this.enhancedDialog = enhancedDialog;
 	}
-	
+
 	public void updatePreview() {
 		Params params = new Params();
 
-//		Double min = Double.valueOf(0.0D);
+		// Double min = Double.valueOf(0.0D);
 		boolean rgb = enhancedDialog.getGraphicsPanel().getRGB().isSelected();
-		HistogramStatus histogram = inputHistogram.getHistogramStatus(HistogramGraphicBase.GRAY);
+		HistogramStatus histogram = inputHistogram
+				.getHistogramStatus(HistogramGraphicBase.GRAY);
 		if (enhancedDialog.getLayer().isRenderingAsGray()) {
 			if (histogram.getBaseFunction() instanceof StraightLine) {
 				StraightLine line = (StraightLine) histogram.getBaseFunction();
@@ -56,94 +59,118 @@ public class EnhancedHistogramController {
 				if (rgb)
 					valuesIn = line.getInValues(0, 255);
 				else
-					valuesIn = line.getInValues(histogram.getMin(), histogram.getMax());
+					valuesIn = line.getInValues(histogram.getMin(),
+							histogram.getMax());
 				int[] valuesOut = line.getOutValues();
 				params.setParam("StretchInRed", valuesIn, -1, null);
 				params.setParam("StretchOutRed", valuesOut, -1, null);
-				params.setParam("StretchRedFunctionType", Integer.valueOf(line.getFunctionType()), -1, null);
-				params.setParam("StretchRedValueFunction", Double.valueOf(line.getValueFunction()), -1, null);
+				params.setParam("StretchRedFunctionType",
+						Integer.valueOf(line.getFunctionType()), -1, null);
+				params.setParam("StretchRedValueFunction",
+						Double.valueOf(line.getValueFunction()), -1, null);
 				params.setParam("StretchInGreen", valuesIn, -1, null);
 				params.setParam("StretchOutGreen", valuesOut, -1, null);
-				params.setParam("StretchGreenFunctionType", Integer.valueOf(line.getFunctionType()), -1, null);
-				params.setParam("StretchGreenValueFunction", Double.valueOf(line.getValueFunction()), -1, null);
+				params.setParam("StretchGreenFunctionType",
+						Integer.valueOf(line.getFunctionType()), -1, null);
+				params.setParam("StretchGreenValueFunction",
+						Double.valueOf(line.getValueFunction()), -1, null);
 				params.setParam("StretchInBlue", valuesIn, -1, null);
 				params.setParam("StretchOutBlue", valuesOut, -1, null);
-				params.setParam("StretchBlueFunctionType", Integer.valueOf(line.getFunctionType()), -1, null);
-				params.setParam("StretchBlueValueFunction", Double.valueOf(line.getValueFunction()), -1, null);
+				params.setParam("StretchBlueFunctionType",
+						Integer.valueOf(line.getFunctionType()), -1, null);
+				params.setParam("StretchBlueValueFunction",
+						Double.valueOf(line.getValueFunction()), -1, null);
 			}
 		} else {
-			histogram = inputHistogram.getHistogramStatus(HistogramGraphicBase.RED);
+			histogram = inputHistogram
+					.getHistogramStatus(HistogramGraphicBase.RED);
 			if (histogram != null) {
 				if (histogram.getBaseFunction() instanceof StraightLine) {
-					StraightLine line = (StraightLine) histogram.getBaseFunction();
+					StraightLine line = (StraightLine) histogram
+							.getBaseFunction();
 					double[] valuesIn;
 					if (rgb)
 						valuesIn = line.getInValues(0, 255);
 					else
-						valuesIn = line.getInValues(histogram.getMin(), histogram.getMax());
+						valuesIn = line.getInValues(histogram.getMin(),
+								histogram.getMax());
 					int[] valuesOut = line.getOutValues();
 
 					params.setParam("StretchInRed", valuesIn, -1, null);
 					params.setParam("StretchOutRed", valuesOut, -1, null);
-					params.setParam("StretchRedFunctionType", Integer.valueOf(line.getFunctionType()), -1, null);
-					params.setParam("StretchRedValueFunction", Double.valueOf(line.getValueFunction()), -1, null);
+					params.setParam("StretchRedFunctionType",
+							Integer.valueOf(line.getFunctionType()), -1, null);
+					params.setParam("StretchRedValueFunction",
+							Double.valueOf(line.getValueFunction()), -1, null);
 				}
 			}
-			histogram = inputHistogram.getHistogramStatus(HistogramGraphicBase.GREEN);
+			histogram = inputHistogram
+					.getHistogramStatus(HistogramGraphicBase.GREEN);
 			if (histogram != null) {
 				if (histogram.getBaseFunction() instanceof StraightLine) {
-					StraightLine line = (StraightLine) histogram.getBaseFunction();
+					StraightLine line = (StraightLine) histogram
+							.getBaseFunction();
 					double[] valuesIn;
 					if (rgb)
 						valuesIn = line.getInValues(0, 255);
 					else
-						valuesIn = line.getInValues(histogram.getMin(), histogram.getMax());
+						valuesIn = line.getInValues(histogram.getMin(),
+								histogram.getMax());
 					int[] valuesOut = line.getOutValues();
 
 					params.setParam("StretchInGreen", valuesIn, -1, null);
 					params.setParam("StretchOutGreen", valuesOut, -1, null);
-					params.setParam("StretchGreenFunctionType", Integer.valueOf(line.getFunctionType()), -1, null);
-					params.setParam("StretchGreenValueFunction", Double.valueOf(line.getValueFunction()), -1, null);
+					params.setParam("StretchGreenFunctionType",
+							Integer.valueOf(line.getFunctionType()), -1, null);
+					params.setParam("StretchGreenValueFunction",
+							Double.valueOf(line.getValueFunction()), -1, null);
 				}
 			}
-			histogram = inputHistogram.getHistogramStatus(HistogramGraphicBase.BLUE);
+			histogram = inputHistogram
+					.getHistogramStatus(HistogramGraphicBase.BLUE);
 			if (histogram != null) {
 				if (histogram.getBaseFunction() instanceof StraightLine) {
-					StraightLine line = (StraightLine) histogram.getBaseFunction();
+					StraightLine line = (StraightLine) histogram
+							.getBaseFunction();
 					double[] valuesIn;
 					if (rgb)
 						valuesIn = line.getInValues(0, 255);
 					else
-						valuesIn = line.getInValues(histogram.getMin(), histogram.getMax());
+						valuesIn = line.getInValues(histogram.getMin(),
+								histogram.getMax());
 					int[] valuesOut = line.getOutValues();
 
 					params.setParam("StretchInBlue", valuesIn, -1, null);
 					params.setParam("StretchOutBlue", valuesOut, -1, null);
-					params.setParam("StretchBlueFunctionType", Integer.valueOf(line.getFunctionType()), -1, null);
-					params.setParam("StretchBlueValueFunction", Double.valueOf(line.getValueFunction()), -1, null);
+					params.setParam("StretchBlueFunctionType",
+							Integer.valueOf(line.getFunctionType()), -1, null);
+					params.setParam("StretchBlueValueFunction",
+							Double.valueOf(line.getValueFunction()), -1, null);
 				}
 			}
 		}
-		
-		params.setParam("TailTrimRedMin",   Double.valueOf(0.0D), -1, null);
-		params.setParam("TailTrimRedMax",   Double.valueOf(0.0D), -1, null);
+
+		params.setParam("TailTrimRedMin", Double.valueOf(0.0D), -1, null);
+		params.setParam("TailTrimRedMax", Double.valueOf(0.0D), -1, null);
 		params.setParam("TailTrimGreenMin", Double.valueOf(0.0D), -1, null);
 		params.setParam("TailTrimGreenMax", Double.valueOf(0.0D), -1, null);
-		params.setParam("TailTrimBlueMin",  Double.valueOf(0.0D), -1, null);
-		params.setParam("TailTrimBlueMax",  Double.valueOf(0.0D), -1, null);
+		params.setParam("TailTrimBlueMin", Double.valueOf(0.0D), -1, null);
+		params.setParam("TailTrimBlueMax", Double.valueOf(0.0D), -1, null);
 
 		params.setParam("RGB", new Boolean(rgb), -1, null);
 		String render = "";
 		for (int i = 0; i < enhancedDialog.getLayer().getRenderBands().length; i++) {
 			if (render != "")
 				render += " ";
-			render = render + "" + enhancedDialog.getLayer().getRenderBands()[i];
+			render = render + ""
+					+ enhancedDialog.getLayer().getRenderBands()[i];
 		}
 		params.setParam("RenderBands", render, -1, null);
 
 		enhancedDialog.getFilteredPreview().getParamsList().clear();
-		enhancedDialog.getFilteredPreview().addNewParam("enhanced_stretch", params, LinearStretchEnhancementFilter.class);
-		
+		enhancedDialog.getFilteredPreview().addNewParam("enhanced_stretch",
+				params, LinearStretchEnhancementFilter.class);
+
 		enhancedDialog.getPreviewBasePanel().refreshPreview();
 	}
 
@@ -151,14 +178,16 @@ public class EnhancedHistogramController {
 	 * Actualiza el histograma de salida del cuadro de realce
 	 */
 	public void updateHistogramOut() {
-		HistogramStatus histogram = inputHistogram.getHistogramStatus(HistogramGraphicBase.DRAWED);
+		HistogramStatus histogram = inputHistogram
+				.getHistogramStatus(HistogramGraphicBase.DRAWED);
 		if (histogram != null) {
 			if (histogram.getBaseFunction() instanceof StraightLine) {
 				StraightLine line = (StraightLine) histogram.getBaseFunction();
 				double[] valuesIn = line.getPercentInValues();
 				double[] valuesOut = line.getPercentOutValues();
 
-				double origenHistogram[] = inputHistogram.getHistogramStatus(HistogramGraphicBase.DRAWED).getHistogram();
+				double origenHistogram[] = inputHistogram.getHistogramStatus(
+						HistogramGraphicBase.DRAWED).getHistogram();
 				double newHistogram[] = new double[origenHistogram.length];
 
 				for (int i = 0; i < newHistogram.length; i++)
@@ -168,11 +197,13 @@ public class EnhancedHistogramController {
 				double p;
 				for (int i = 0; i < origenHistogram.length; i++) {
 					p = (((double) i) / (origenHistogram.length - 1.0D));
-					
+
 					for (int j = 0; j < (valuesIn.length - 1); j++) {
-						if (valuesIn[j] == valuesIn[j + 1]) continue;
+						if (valuesIn[j] == valuesIn[j + 1])
+							continue;
 						if (p >= valuesIn[j] && p <= valuesIn[j + 1]) {
-							p = valuesOut[j] + ((valuesOut[j + 1] - valuesOut[j]) * ((p - valuesIn[j]) / (valuesIn[j + 1] - valuesIn[j])));
+							p = valuesOut[j]
+									+ ((valuesOut[j + 1] - valuesOut[j]) * ((p - valuesIn[j]) / (valuesIn[j + 1] - valuesIn[j])));
 							break;
 						}
 					}
@@ -186,7 +217,8 @@ public class EnhancedHistogramController {
 					newHistogram[pos] += origenHistogram[i];
 				}
 
-				HistogramStatus histogramOut = outputHistogram.getHistogramStatus(HistogramGraphicBase.DRAWED);
+				HistogramStatus histogramOut = outputHistogram
+						.getHistogramStatus(HistogramGraphicBase.DRAWED);
 				histogramOut.setHistogram(newHistogram);
 				histogramOut.setLimits(0.0D, 255.0D);
 				outputHistogram.repaint();

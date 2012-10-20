@@ -59,16 +59,16 @@ import org.gvsig.fmap.drivers.gpe.reader.v2.GPEPolygonsDriverTest;
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class GPEAllTests {
-	
+
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for gvSIG and GPE");
-		//$JUnit-BEGIN$
+		// $JUnit-BEGIN$
 		suite.addTestSuite(GPEPointsDriverTest.class);
 		suite.addTestSuite(GPELinesDriverTest.class);
 		suite.addTestSuite(GPEPolygonsDriverTest.class);
 		suite.addTestSuite(GPEEuroRoadsTest.class);
-		suite.addTestSuite(GPEMultipleLayerTest.class);		
-		//$JUnit-END$
+		suite.addTestSuite(GPEMultipleLayerTest.class);
+		// $JUnit-END$
 		return suite;
 	}
 

@@ -45,10 +45,9 @@ import com.iver.cit.gvsig.project.documents.layout.LayoutContext;
 import com.iver.cit.gvsig.project.documents.layout.LayoutKeyEvent;
 import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 
-
 /**
  * Pega el FFrame ya copiado previamente.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class PasteLayoutMenuEntry extends AbstractLayoutContextMenuAction {
@@ -68,16 +67,19 @@ public class PasteLayoutMenuEntry extends AbstractLayoutContextMenuAction {
 		return PluginServices.getText(this, "paste");
 	}
 
-	public boolean isEnabled(LayoutContext layoutContext, IFFrame[] selectedFrames) {
+	public boolean isEnabled(LayoutContext layoutContext,
+			IFFrame[] selectedFrames) {
 		return true;
 	}
 
-	public boolean isVisible(LayoutContext layoutContext, IFFrame[] selectedFrames) {
-		if (LayoutKeyEvent.hasSelection() && !(getLayout().getLayoutControl().getGeometryAdapter().getPoints().length>0))
+	public boolean isVisible(LayoutContext layoutContext,
+			IFFrame[] selectedFrames) {
+		if (LayoutKeyEvent.hasSelection()
+				&& !(getLayout().getLayoutControl().getGeometryAdapter()
+						.getPoints().length > 0))
 			return true;
 		return false;
 	}
-
 
 	public void execute(LayoutContext layoutContext, IFFrame[] selectedFrames) {
 		LayoutKeyEvent.paste(getLayout());

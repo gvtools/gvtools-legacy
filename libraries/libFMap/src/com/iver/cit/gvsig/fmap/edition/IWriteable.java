@@ -42,19 +42,17 @@ package com.iver.cit.gvsig.fmap.edition;
 
 /**
  * @author fjp
- *
- * Interfaz que deben implementar los drivers que son capaces de escribir
- * sobre la fuente de datos en la que están. (Ejemplo, abres una tabla
- * dbf, la pones en edición, y puedes terminar edición guardando
- * sobre el dbf original.
+ * 
+ *         Interfaz que deben implementar los drivers que son capaces de
+ *         escribir sobre la fuente de datos en la que están. (Ejemplo, abres
+ *         una tabla dbf, la pones en edición, y puedes terminar edición
+ *         guardando sobre el dbf original.
  * 
  */
 public interface IWriteable {
 	/**
-	 * @return the writer for this driver. Check if it is null. If null, 
-	 * you cannot write over the driver's source.
+	 * @return the writer for this driver. Check if it is null. If null, you
+	 *         cannot write over the driver's source.
 	 */
 	IWriter getWriter();
 }
-
-

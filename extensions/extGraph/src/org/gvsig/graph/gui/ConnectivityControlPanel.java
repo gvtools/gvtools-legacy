@@ -38,10 +38,15 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.SystemColor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -78,23 +83,14 @@ import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.core.FShape;
-import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.layers.FBitSet;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.SingleLayerIterator;
 import com.iver.cit.gvsig.fmap.tools.Behavior.PointBehavior;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.text.NumberFormat;
-import java.util.Locale;
-
 public class ConnectivityControlPanel extends JPanel implements IWindow,
-			IWindowListener, IFlagListener {
+		IWindowListener, IFlagListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel jPanelSouth = null;
@@ -128,7 +124,7 @@ public class ConnectivityControlPanel extends JPanel implements IWindow,
 	private String lastSelectedTool;
 	private JLabel jLblTolerance = null;
 	private JTextField jTxtTolerance = null;
-	
+
 	/**
 	 * This is the default constructor
 	 */
@@ -265,7 +261,8 @@ public class ConnectivityControlPanel extends JPanel implements IWindow,
 		if (jTextArea == null) {
 			jTextArea = new JTextArea();
 			jTextArea.setPreferredSize(new Dimension(100, 40));
-			jTextArea.setText(PluginServices.getText(this, "connectivity_analysis"));
+			jTextArea.setText(PluginServices.getText(this,
+					"connectivity_analysis"));
 			jTextArea.setEditable(false);
 			jTextArea.setLineWrap(true);
 		}
@@ -277,7 +274,7 @@ public class ConnectivityControlPanel extends JPanel implements IWindow,
 			jTxtOriginPointX = new JTextField();
 			jTxtOriginPointX.setBounds(new Rectangle(112, 16, 92, 20));
 			jTxtOriginPointX.setHorizontalAlignment(JTextField.RIGHT);
-			
+
 		}
 		return jTxtOriginPointX;
 	}
@@ -300,17 +297,18 @@ public class ConnectivityControlPanel extends JPanel implements IWindow,
 		if (jToggleButtonSetFlag == null) {
 			jToggleButtonSetFlag = new JToggleButton();
 			jToggleButtonSetFlag.setIcon(new ImageIcon(this.getClass()
-					.getClassLoader().getResource(
-							"images/disconnect_co_004.gif")));
+					.getClassLoader()
+					.getResource("images/disconnect_co_004.gif")));
 			jToggleButtonSetFlag.setSize(new Dimension(22, 22));
 			jToggleButtonSetFlag.setLocation(new Point(311, 16));
-			jToggleButtonSetFlag.setToolTipText(PluginServices.getText(this, "set_source_flag"));
+			jToggleButtonSetFlag.setToolTipText(PluginServices.getText(this,
+					"set_source_flag"));
 			ItemListener itemListener = new ItemListener() {
 				public void itemStateChanged(ItemEvent itemEvent) {
 					int state = itemEvent.getStateChange();
 					if (state == ItemEvent.SELECTED) {
 						doSelectTool();
-					} else {						
+					} else {
 						System.out.println("Deselected");
 					}
 				}
@@ -323,12 +321,13 @@ public class ConnectivityControlPanel extends JPanel implements IWindow,
 
 	protected void doSelectTool() {
 		System.out.println("Selected");
-		if (!mapCtrl.hasTool("addSingleFlag")) // We create it for the first time.
-        {
-        	flagListener = new SingleFlagListener(mapCtrl);
-        	flagListener.setMode(FlagListener.TO_ARC);
-            mapCtrl.addMapTool("addSingleFlag", new PointBehavior(flagListener));
-        }
+		if (!mapCtrl.hasTool("addSingleFlag")) // We create it for the first
+												// time.
+		{
+			flagListener = new SingleFlagListener(mapCtrl);
+			flagListener.setMode(FlagListener.TO_ARC);
+			mapCtrl.addMapTool("addSingleFlag", new PointBehavior(flagListener));
+		}
 		MapContext map = mapCtrl.getMapContext();
 		SingleLayerIterator it = new SingleLayerIterator(map.getLayers());
 		FLyrVect layer = null;
@@ -342,9 +341,9 @@ public class ConnectivityControlPanel extends JPanel implements IWindow,
 				net.addFlagListener(this);
 			}
 		}
-		
-        mapCtrl.setTool("addSingleFlag");
-		
+
+		mapCtrl.setTool("addSingleFlag");
+
 	}
 
 	/**
@@ -395,46 +394,48 @@ public class ConnectivityControlPanel extends JPanel implements IWindow,
 					// use associated layer to put flags.
 					String layerName = (String) getJCboAssociatedLayer()
 							.getSelectedItem();
-					layer = (FLyrVect) map.getLayers().getLayer(
-							layerName);
-					
-					double tolerance = Double.parseDouble(getJTxtTolerance().getText());
+					layer = (FLyrVect) map.getLayers().getLayer(layerName);
+
+					double tolerance = Double.parseDouble(getJTxtTolerance()
+							.getText());
 
 					try {
-						PluginServices.getMainFrame().getStatusBar().setInfoText(_T("putting_flags_on_network"));
+						PluginServices.getMainFrame().getStatusBar()
+								.setInfoText(_T("putting_flags_on_network"));
 						PluginServices.getMDIManager().setWaitCursor();
 						flags = NetworkUtils.putFlagsOnNetwork(layer, net,
 								tolerance);
 						PluginServices.getMDIManager().restoreCursor();
-						PluginServices.getMainFrame().getStatusBar().setInfoText(_T("ready"));
+						PluginServices.getMainFrame().getStatusBar()
+								.setInfoText(_T("ready"));
 					} catch (BaseException e) {
 						PluginServices.getMDIManager().restoreCursor();
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-						JOptionPane.showMessageDialog((Component) PluginServices.getMDIManager().getActiveWindow(),
-								e.getMessage());
+						JOptionPane.showMessageDialog(
+								(Component) PluginServices.getMDIManager()
+										.getActiveWindow(), e.getMessage());
 						return;
 					}
 				}
-				selectListener = new SelectDijkstraListener(net, mapCtrl
-						.getMapContext());
+				selectListener = new SelectDijkstraListener(net,
+						mapCtrl.getMapContext());
 				selectListener.startSelection();
 				try {
 					net.getLayer().getRecordset().clearSelection();
 					if (layer != null)
 						layer.getRecordset().clearSelection();
-					
+
 					if (getJRadioBtnNormalDirection().isSelected()) {
 						OneToManySolver solver = new OneToManySolver();
 						doSolve(net, selectListener, solver);
-					}
-					else {
+					} else {
 						ReverseOneToManySolver solver = new ReverseOneToManySolver();
 						doSolve(net, selectListener, solver);
 					}
-//					if (flags != null)
-//						for (int i=0; i < flags.length; i++)
-//							net.removeFlag(flags[i]);
+					// if (flags != null)
+					// for (int i=0; i < flags.length; i++)
+					// net.removeFlag(flags[i]);
 				} catch (GraphException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -446,7 +447,8 @@ public class ConnectivityControlPanel extends JPanel implements IWindow,
 				if (flags != null) {
 					for (int i = 0; i < flags.length; i++) {
 						if (flags[i].getCost() != -1) {
-							Integer index = (Integer) flags[i].getProperties().get("rec");
+							Integer index = (Integer) flags[i].getProperties()
+									.get("rec");
 							FBitSet bs;
 							try {
 								bs = layer.getRecordset().getSelection();
@@ -464,24 +466,25 @@ public class ConnectivityControlPanel extends JPanel implements IWindow,
 		} // WHILE
 	}
 
+	private void doSolve(Network net, IDijkstraListener selectListener,
+			OneToManySolver solver) throws GraphException {
 
-	private void doSolve(Network net, IDijkstraListener selectListener, OneToManySolver solver)
-			throws GraphException {
-		
 		solver.setNetwork(net);
 		solver.addListener(selectListener);
-		try {			
+		try {
 			if (getJChkBoxUseMaxCost().isSelected()) {
-				solver.setMaxCost(Double.parseDouble(getJTxtMaxCost().getText()));
+				solver.setMaxCost(Double
+						.parseDouble(getJTxtMaxCost().getText()));
 			}
 			if (getJChkBoxUseMaxDist().isSelected()) {
-				solver.setMaxDistance(Double
-						.parseDouble(getJTxtMaxDist().getText()));
+				solver.setMaxDistance(Double.parseDouble(getJTxtMaxDist()
+						.getText()));
 			}
-		}
-		catch (NumberFormatException e) {
-			JOptionPane.showMessageDialog(this, PluginServices.getText(this,
-					"error_parsering_number:") + e.getMessage());
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(
+					this,
+					PluginServices.getText(this, "error_parsering_number:")
+							+ e.getMessage());
 			return;
 		}
 		solver.addListener(selectListener);
@@ -489,16 +492,18 @@ public class ConnectivityControlPanel extends JPanel implements IWindow,
 		try {
 			double x = Double.parseDouble(getJTxtOriginPointX().getText());
 			double y = Double.parseDouble(getJTxtOriginPointY().getText());
-			double tol = mapCtrl.getViewPort().toMapDistance(FlagListener.pixelTolerance);
+			double tol = mapCtrl.getViewPort().toMapDistance(
+					FlagListener.pixelTolerance);
 			sourceFlag = net.createFlag(x, y, tol);
 			if (sourceFlag == null) {
-				JOptionPane.showMessageDialog(this, _T("Error positioning point on network."));
-				return;				
+				JOptionPane.showMessageDialog(this,
+						_T("Error positioning point on network."));
+				return;
 			}
 			solver.setSourceFlag(sourceFlag);
-		}
-		catch (NumberFormatException e) {
-			JOptionPane.showMessageDialog(this, _T("Error in origin coordinates:" + e.getMessage()));
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(this,
+					_T("Error in origin coordinates:" + e.getMessage()));
 			return;
 		}
 		long t1 = System.currentTimeMillis();
@@ -685,18 +690,21 @@ public class ConnectivityControlPanel extends JPanel implements IWindow,
 					continue;
 				Network net = (Network) aux.getProperty("network");
 				if (net != null) {
-					GvFlag[] flags = net.getFlags(); 
+					GvFlag[] flags = net.getFlags();
 					if (flags.length == 1) {
-						NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);
+						NumberFormat nf = NumberFormat
+								.getInstance(Locale.ENGLISH);
 						nf.setGroupingUsed(false);
 						nf.setMaximumFractionDigits(6);
-						String auxX = nf.format(flags[0].getOriginalPoint().getX());
-						String auxY = nf.format(flags[0].getOriginalPoint().getY());
+						String auxX = nf.format(flags[0].getOriginalPoint()
+								.getX());
+						String auxY = nf.format(flags[0].getOriginalPoint()
+								.getY());
 						getJTxtOriginPointX().setText(auxX);
 						getJTxtOriginPointY().setText(auxY);
 					}
 				}
-				
+
 			}
 		}
 	}
@@ -708,12 +716,12 @@ public class ConnectivityControlPanel extends JPanel implements IWindow,
 
 	public void windowActivated() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void windowClosed() {
 		this.mapCtrl.setTool(lastSelectedTool);
-		
+
 	}
 
 	public void flagsChanged(int reason) {
@@ -728,29 +736,33 @@ public class ConnectivityControlPanel extends JPanel implements IWindow,
 					continue;
 				Network net = (Network) aux.getProperty("network");
 				if (net != null) {
-					GvFlag[] flags = net.getFlags(); 
+					GvFlag[] flags = net.getFlags();
 					if (flags.length == 1) {
-						NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);
+						NumberFormat nf = NumberFormat
+								.getInstance(Locale.ENGLISH);
 						nf.setGroupingUsed(false);
 						nf.setMaximumFractionDigits(6);
-						String auxX = nf.format(flags[0].getOriginalPoint().getX());
-						String auxY = nf.format(flags[0].getOriginalPoint().getY());
+						String auxX = nf.format(flags[0].getOriginalPoint()
+								.getX());
+						String auxY = nf.format(flags[0].getOriginalPoint()
+								.getY());
 						getJTxtOriginPointX().setText(auxX);
 						getJTxtOriginPointY().setText(auxY);
 					}
 				}
 			} // while
 		}
-		
+
 	}
+
 	private String _T(String str) {
 		return PluginServices.getText(this, str);
 	}
 
 	/**
-	 * This method initializes jTxtTolerance	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes jTxtTolerance
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getJTxtTolerance() {
 		if (jTxtTolerance == null) {

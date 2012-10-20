@@ -33,20 +33,20 @@ package org.gvsig.tools.locator;
  */
 public class ReferenceNotRegisteredException extends LocatorException {
 
-    private static final long serialVersionUID = 2459965470774180326L;
+	private static final long serialVersionUID = 2459965470774180326L;
 
-    private static final String KEY = "reference_not_registered_exception";
+	private static final String KEY = "reference_not_registered_exception";
 
-    private static final String MESSAGE = "The reference %(referenceName) has "
-            + "not registered any Class or Factory in the Locator %(locatorName)";
+	private static final String MESSAGE = "The reference %(referenceName) has "
+			+ "not registered any Class or Factory in the Locator %(locatorName)";
 
-    public ReferenceNotRegisteredException(String referenceName, Locator locator) {
-        super(MESSAGE, KEY, serialVersionUID, referenceName, locator);
-    }
+	public ReferenceNotRegisteredException(String referenceName, Locator locator) {
+		super(MESSAGE, KEY, serialVersionUID, referenceName, locator);
+	}
 
-    public ReferenceNotRegisteredException(Throwable cause,
-            String referenceName, Locator locator) {
-        super(MESSAGE, cause, KEY, serialVersionUID, referenceName, locator);
-    }
+	public ReferenceNotRegisteredException(Throwable cause,
+			String referenceName, Locator locator) {
+		super(MESSAGE, cause, KEY, serialVersionUID, referenceName, locator);
+	}
 
 }

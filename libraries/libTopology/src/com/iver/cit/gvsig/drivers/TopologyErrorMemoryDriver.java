@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.drivers;
 
 import java.awt.geom.Rectangle2D;
@@ -72,53 +72,51 @@ import com.iver.cit.gvsig.fmap.drivers.DriverAttributes;
 import com.iver.cit.gvsig.fmap.drivers.VectorialDriver;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
-public class TopologyErrorMemoryDriver implements VectorialDriver, 
-													ObjectDriver,
-													BoundedShapes {
+public class TopologyErrorMemoryDriver implements VectorialDriver,
+		ObjectDriver, BoundedShapes {
 
 	public static final Rectangle2D EMPTY_FULL_EXTENT = new Rectangle2D.Double();
-	
+
 	public static final String LEGEND_FIELD = Messages.getText("Rule_type");
-	
+
 	/**
 	 * Number of fields to show
 	 * */
 	private static final int NUMBER_OF_FIELDS = 7;
-	
+
 	private static final int DEFAULT_FIELD_LENGTH = 20;
-	
+
 	private DriverAttributes attr = new DriverAttributes();
-	
+
 	/**
-     * Name of the data source of this driver
-     */
+	 * Name of the data source of this driver
+	 */
 	String name;
-	
+
 	ITopologyErrorContainer errorContainer;
-	
-	
-	
+
 	/**
 	 * Full extent of all features
 	 */
 	Rectangle2D fullExtent;
-	
-	
-	
+
 	/**
-	 * Constructor 
-	 * @param name descriptive name of the data source
-	 * @param features collection of features in memory
-	 * @param definition definition of the layer of these features
+	 * Constructor
+	 * 
+	 * @param name
+	 *            descriptive name of the data source
+	 * @param features
+	 *            collection of features in memory
+	 * @param definition
+	 *            definition of the layer of these features
 	 */
 	public TopologyErrorMemoryDriver(String name,
-								ITopologyErrorContainer errorContainer){
+			ITopologyErrorContainer errorContainer) {
 		this.name = name;
 		this.errorContainer = errorContainer;
 		attr.setLoadedInMemory(true);
 		computeFullExtent();
 	}
-	
 
 	public int getShapeType() {
 		return FShape.MULTI;
@@ -128,86 +126,82 @@ public class TopologyErrorMemoryDriver implements VectorialDriver,
 		return name;
 	}
 
-
 	public int getShapeCount() throws ReadDriverException {
 		return errorContainer.getNumberOfErrors();
 	}
 
-
-
-	public Rectangle2D getFullExtent() throws ReadDriverException, ExpansionFileReadException {
-		if(fullExtent == null){
-			//collection is empty
+	public Rectangle2D getFullExtent() throws ReadDriverException,
+			ExpansionFileReadException {
+		if (fullExtent == null) {
+			// collection is empty
 			return EMPTY_FULL_EXTENT;
 		}
 		return fullExtent;
 	}
 
-
 	public IGeometry getShape(int index) throws ReadDriverException {
-		if(index <  errorContainer.getNumberOfErrors())
-			return  errorContainer.getTopologyError(index).getGeometry();
+		if (index < errorContainer.getNumberOfErrors())
+			return errorContainer.getTopologyError(index).getGeometry();
 		else
 			return null;
 	}
 
-
 	public void reload() throws ReloadDriverException {
 	}
-	
+
 	public DriverAttributes getDriverAttributes() {
 		return attr;
 	}
-
 
 	public boolean isWritable() {
 		return false;
 	}
 
-
 	public int[] getPrimaryKeys() throws ReadDriverException {
 		return null;
 	}
 
-
-	public void write(DataWare dataWare) throws WriteDriverException, ReadDriverException {
+	public void write(DataWare dataWare) throws WriteDriverException,
+			ReadDriverException {
 	}
-
 
 	public void setDataSourceFactory(DataSourceFactory dsf) {
 	}
 
-
-	public Value getFieldValue(long rowIndex, int fieldId) throws ReadDriverException {
+	public Value getFieldValue(long rowIndex, int fieldId)
+			throws ReadDriverException {
 		TopologyError feature = errorContainer.getTopologyError((int) rowIndex);
 		Value solution = null;
-		switch(fieldId){
+		switch (fieldId) {
 		case 0:
-			solution = ValueFactory.createValue(feature.getViolatedRule().getName());
+			solution = ValueFactory.createValue(feature.getViolatedRule()
+					.getName());
 			break;
 		case 1:
-			solution = ValueFactory.createValue(feature.getOriginLayer().getName());
+			solution = ValueFactory.createValue(feature.getOriginLayer()
+					.getName());
 			break;
 		case 2:
 			FLyrVect destinationLyr = feature.getDestinationLayer();
-			if(destinationLyr != null)
-				solution = ValueFactory.createValue(feature.getDestinationLayer().getName());
+			if (destinationLyr != null)
+				solution = ValueFactory.createValue(feature
+						.getDestinationLayer().getName());
 			else
 				solution = ValueFactory.createNullValue();
 			break;
 		case 3:
 			solution = ValueFactory.createValue(feature.getShapeTypeAsText());
 			break;
-		case 4://TODO Algunos errores tienen el feature1 y el feature2 a null
+		case 4:// TODO Algunos errores tienen el feature1 y el feature2 a null
 			IFeature feature1 = feature.getFeature1();
-			if(feature1 != null)
+			if (feature1 != null)
 				solution = ValueFactory.createValue(feature1.getID());
 			else
 				solution = ValueFactory.createNullValue();
 			break;
 		case 5:
 			IFeature feature2 = feature.getFeature2();
-			if(feature2 != null)
+			if (feature2 != null)
 				solution = ValueFactory.createValue(feature2.getID());
 			else
 				solution = ValueFactory.createNullValue();
@@ -219,15 +213,13 @@ public class TopologyErrorMemoryDriver implements VectorialDriver,
 		return solution;
 	}
 
-
 	public int getFieldCount() throws ReadDriverException {
 		return NUMBER_OF_FIELDS;
 	}
 
-
 	public String getFieldName(int fieldId) throws ReadDriverException {
 		String solution = "";
-		switch(fieldId){
+		switch (fieldId) {
 		case 0:
 			solution = Messages.getText("Rule_type");
 			break;
@@ -253,15 +245,13 @@ public class TopologyErrorMemoryDriver implements VectorialDriver,
 		return solution;
 	}
 
-
 	public long getRowCount() throws ReadDriverException {
 		return getShapeCount();
 	}
 
-
 	public int getFieldType(int i) throws ReadDriverException {
 		int fieldType = -1;
-		switch(i){
+		switch (i) {
 		case 0:
 		case 1:
 		case 2:
@@ -272,34 +262,32 @@ public class TopologyErrorMemoryDriver implements VectorialDriver,
 			fieldType = Types.NUMERIC;
 		case 6:
 			fieldType = Types.BOOLEAN;
-			
+
 		}
 		return fieldType;
 	}
-
 
 	public int getFieldWidth(int i) throws ReadDriverException {
 		return DEFAULT_FIELD_LENGTH;
 	}
 
-
-	public Rectangle2D getShapeBounds(int index) throws ReadDriverException, ExpansionFileReadException {
+	public Rectangle2D getShapeBounds(int index) throws ReadDriverException,
+			ExpansionFileReadException {
 		IGeometry geometry = getShape(index);
 		return geometry.getBounds2D();
 	}
-
 
 	public int getShapeType(int index) throws ReadDriverException {
 		IGeometry geometry = getShape(index);
 		return geometry.getGeometryType();
 	}
-	
+
 	private void computeFullExtent() {
-		
-		for(int i = 0; i < errorContainer.getNumberOfErrors(); i++){
+
+		for (int i = 0; i < errorContainer.getNumberOfErrors(); i++) {
 			IFeature feature = errorContainer.getTopologyError(i);
 			Rectangle2D rAux = feature.getGeometry().getBounds2D();
-			if(fullExtent == null)
+			if (fullExtent == null)
 				fullExtent = rAux;
 			else
 				fullExtent.add(rAux);

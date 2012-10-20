@@ -40,71 +40,71 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id$
-* $Log$
-* Revision 1.9  2006/11/21 10:59:45  fjp
-* Fallo proxy con usuario y contraseña
-*
-* Revision 1.8  2006/11/20 17:29:43  fjp
-* Fallo proxy con usuario y contraseña
-*
-* Revision 1.7  2006/10/18 07:55:43  jaume
-* *** empty log message ***
-*
-* Revision 1.6  2006/08/22 12:23:05  jaume
-* improved perfomance when saving changes
-*
-* Revision 1.5  2006/08/22 07:37:17  jaume
-* *** empty log message ***
-*
-* Revision 1.4  2006/08/04 11:45:12  caballero
-* lanzo una excepción cuando falla el método storeValues
-*
-* Revision 1.3  2006/07/31 10:02:31  jaume
-* *** empty log message ***
-*
-* Revision 1.2  2006/06/13 07:43:08  fjp
-* Ajustes sobre los cuadros de dialogos de preferencias
-*
-* Revision 1.1  2006/06/12 16:04:28  caballero
-* Preferencias
-*
-* Revision 1.11  2006/06/06 10:26:31  jaume
-* *** empty log message ***
-*
-* Revision 1.10  2006/06/05 17:07:17  jaume
-* *** empty log message ***
-*
-* Revision 1.9  2006/06/05 17:00:44  jaume
-* *** empty log message ***
-*
-* Revision 1.8  2006/06/05 16:57:59  jaume
-* *** empty log message ***
-*
-* Revision 1.7  2006/06/05 14:45:06  jaume
-* *** empty log message ***
-*
-* Revision 1.6  2006/06/05 11:00:09  jaume
-* *** empty log message ***
-*
-* Revision 1.5  2006/06/05 10:39:02  jaume
-* *** empty log message ***
-*
-* Revision 1.4  2006/06/05 10:13:40  jaume
-* *** empty log message ***
-*
-* Revision 1.3  2006/06/05 10:06:08  jaume
-* *** empty log message ***
-*
-* Revision 1.2  2006/06/05 09:51:56  jaume
-* *** empty log message ***
-*
-* Revision 1.1  2006/06/02 10:50:18  jaume
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id$
+ * $Log$
+ * Revision 1.9  2006/11/21 10:59:45  fjp
+ * Fallo proxy con usuario y contraseña
+ *
+ * Revision 1.8  2006/11/20 17:29:43  fjp
+ * Fallo proxy con usuario y contraseña
+ *
+ * Revision 1.7  2006/10/18 07:55:43  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.6  2006/08/22 12:23:05  jaume
+ * improved perfomance when saving changes
+ *
+ * Revision 1.5  2006/08/22 07:37:17  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.4  2006/08/04 11:45:12  caballero
+ * lanzo una excepción cuando falla el método storeValues
+ *
+ * Revision 1.3  2006/07/31 10:02:31  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/06/13 07:43:08  fjp
+ * Ajustes sobre los cuadros de dialogos de preferencias
+ *
+ * Revision 1.1  2006/06/12 16:04:28  caballero
+ * Preferencias
+ *
+ * Revision 1.11  2006/06/06 10:26:31  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.10  2006/06/05 17:07:17  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.9  2006/06/05 17:00:44  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.8  2006/06/05 16:57:59  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.7  2006/06/05 14:45:06  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.6  2006/06/05 11:00:09  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.5  2006/06/05 10:39:02  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.4  2006/06/05 10:13:40  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.3  2006/06/05 10:06:08  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/06/05 09:51:56  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/06/02 10:50:18  jaume
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.core.preferences.network;
 
 import java.awt.event.ActionEvent;
@@ -128,10 +128,13 @@ import com.iver.andami.preferences.StoreException;
 
 public class FirewallPage extends AbstractPreferencePage {
 
-	// Quizá en vez de usar un prefs cada vez deberíamos de tener una clase gvSIG.java
-	// donde se guarden todas las preferencias, queda más limpio y más claro si se hace
+	// Quizá en vez de usar un prefs cada vez deberíamos de tener una clase
+	// gvSIG.java
+	// donde se guarden todas las preferencias, queda más limpio y más claro si
+	// se hace
 	// un: gvSIG.getProperty("gvsig.connection") que lo de abajo.
-	private static Preferences prefs = Preferences.userRoot().node( "gvsig.connection" );
+	private static Preferences prefs = Preferences.userRoot().node(
+			"gvsig.connection");
 	private JCheckBox httpEnabled;
 	private JTextField httpHost;
 	private JTextField httpPort;
@@ -158,37 +161,43 @@ public class FirewallPage extends AbstractPreferencePage {
 
 	public FirewallPage() {
 		super();
-		//icon = new ImageIcon(this.getClass().getClassLoader().getResource("images/shield.png"));
-		icon=PluginServices.getIconTheme().get("aplication-preferences-firewall");
+		// icon = new
+		// ImageIcon(this.getClass().getClassLoader().getResource("images/shield.png"));
+		icon = PluginServices.getIconTheme().get(
+				"aplication-preferences-firewall");
 		setParentID(NetworkPage.id);
-//		 checkbox
+		// checkbox
 		addComponent(httpEnabled = new JCheckBox(PluginServices.getText(this,
-			"options.firewall.http.enabled")));
+				"options.firewall.http.enabled")));
 		// proxy host
-		addComponent(PluginServices.getText(this, "options.firewall.http.host") + ":",
-			httpHost = new JTextField("", 15));
+		addComponent(PluginServices.getText(this, "options.firewall.http.host")
+				+ ":", httpHost = new JTextField("", 15));
 		// proxy port
-		addComponent(PluginServices.getText(this, "options.firewall.http.port") + ":",
-			httpPort = new JTextField("", 15));
+		addComponent(PluginServices.getText(this, "options.firewall.http.port")
+				+ ":", httpPort = new JTextField("", 15));
 		// proxy username
-		addComponent(PluginServices.getText(this, "options.firewall.http.user") + ":",
-			httpUser = new JTextField("", 15));
+		addComponent(PluginServices.getText(this, "options.firewall.http.user")
+				+ ":", httpUser = new JTextField("", 15));
 		// proxy password
-		addComponent(PluginServices.getText(this, "options.firewall.http.password") + ":",
-			httpPass = new JPasswordField("", 15));
+		addComponent(
+				PluginServices.getText(this, "options.firewall.http.password")
+						+ ":", httpPass = new JPasswordField("", 15));
 		// no proxy for
-		addComponent(PluginServices.getText(this, "options.firewall.http.nonProxy") + ":",
-			httpNonProxy = new JTextField("", 15));
+		addComponent(
+				PluginServices.getText(this, "options.firewall.http.nonProxy")
+						+ ":", httpNonProxy = new JTextField("", 15));
 
-//		 checkbox
+		// checkbox
 		addComponent(socksEnabled = new JCheckBox(PluginServices.getText(this,
-			"options.firewall.socks.enabled")));
+				"options.firewall.socks.enabled")));
 		// proxy host
-		addComponent(PluginServices.getText(this, "options.firewall.socks.host") + ":",
-			socksHost = new JTextField("", 15));
+		addComponent(
+				PluginServices.getText(this, "options.firewall.socks.host")
+						+ ":", socksHost = new JTextField("", 15));
 		// proxy port
-		addComponent(PluginServices.getText(this, "options.firewall.socks.port") + ":",
-			socksPort = new JTextField("", 15));
+		addComponent(
+				PluginServices.getText(this, "options.firewall.socks.port")
+						+ ":", socksPort = new JTextField("", 15));
 
 	}
 
@@ -197,26 +206,24 @@ public class FirewallPage extends AbstractPreferencePage {
 		boolean enabled = prefs.getBoolean("firewall.http.enabled", false);
 		httpEnabled.setSelected(enabled);
 		httpHost.setEnabled(enabled);
-		httpHost.setText(prefs.get("firewall.http.host",""));
+		httpHost.setText(prefs.get("firewall.http.host", ""));
 		httpPort.setEnabled(enabled);
-		httpPort.setText(prefs.get("firewall.http.port",""));
+		httpPort.setText(prefs.get("firewall.http.port", ""));
 		httpUser.setEnabled(enabled);
-		httpUser.setText(prefs.get("firewall.http.user",""));
+		httpUser.setText(prefs.get("firewall.http.user", ""));
 		httpPass.setEnabled(enabled);
-		httpPass.setText(prefs.get("firewall.http.password",""));
+		httpPass.setText(prefs.get("firewall.http.password", ""));
 		httpNonProxy.setEnabled(enabled);
-		httpNonProxy.setText(prefs.get("firewall.http.nonProxyHosts",""));
-
+		httpNonProxy.setText(prefs.get("firewall.http.nonProxyHosts", ""));
 
 		httpEnabled.addActionListener(new ActionHandler());
-
 
 		enabled = prefs.getBoolean("firewall.socks.enabled", false);
 		socksEnabled.setSelected(enabled);
 		socksHost.setEnabled(enabled);
-		socksHost.setText(prefs.get("firewall.socks.host",""));
+		socksHost.setText(prefs.get("firewall.socks.host", ""));
 		socksPort.setEnabled(enabled);
-		socksPort.setText(prefs.get("firewall.socks.port",""));
+		socksPort.setText(prefs.get("firewall.socks.port", ""));
 
 		socksEnabled.addActionListener(new ActionHandler());
 
@@ -234,24 +241,23 @@ public class FirewallPage extends AbstractPreferencePage {
 		return this;
 	}
 
-	public String createURL(String host, String port){
+	public String createURL(String host, String port) {
 		StringBuffer strUrl = new StringBuffer();
 		// add "http://" prefix if it wasn't included.
-		strUrl.append(host.toLowerCase().startsWith("http://")
-				? host.toLowerCase() : "http://"+ host.toLowerCase());
+		strUrl.append(host.toLowerCase().startsWith("http://") ? host
+				.toLowerCase() : "http://" + host.toLowerCase());
 
 		// add port
-		strUrl.append(!port.equals("")
-				? ":" + port : "");
+		strUrl.append(!port.equals("") ? ":" + port : "");
 		return strUrl.toString();
 	}
-	
-	public void storeValues() throws StoreException{
+
+	public void storeValues() throws StoreException {
 		Properties systemSettings = System.getProperties();
 		URL httpURL, socksURL;
 
 		try {
-			
+
 			httpURL = new URL(createURL(httpHost.getText(), httpPort.getText()));
 			prefs.putBoolean("firewall.http.enabled", httpEnabled.isSelected());
 			prefs.put("firewall.http.host", httpHost.getText());
@@ -266,7 +272,7 @@ public class FirewallPage extends AbstractPreferencePage {
 			if (httpEnabled.isSelected()) {
 				systemSettings.put("http.proxySet", "true");
 				systemSettings.put("http.proxyHost", httpURL.getHost());
-				systemSettings.put("http.proxyPort", httpURL.getPort()+"");
+				systemSettings.put("http.proxyPort", httpURL.getPort() + "");
 				systemSettings.put("http.proxyUserName", proxyUser);
 				systemSettings.put("http.proxyPassword", proxyPassword);
 				systemSettings.put("http.nonProxyHosts", httpNonProxyHosts);
@@ -286,30 +292,32 @@ public class FirewallPage extends AbstractPreferencePage {
 			}
 
 			System.setProperties(systemSettings);
-			if (proxyUser != null )
-			{
-				Authenticator.setDefault(new ProxyAuth(proxyUser,
-				                                proxyPassword));
+			if (proxyUser != null) {
+				Authenticator
+						.setDefault(new ProxyAuth(proxyUser, proxyPassword));
 			} else {
 				Authenticator.setDefault(new ProxyAuth("", ""));
 			}
 
 		} catch (MalformedURLException e) {
 			if (httpEnabled.isSelected()) {
-				throw new StoreException(PluginServices.getText(this, "options.firewall.http.incorrect_host"),e);
+				throw new StoreException(PluginServices.getText(this,
+						"options.firewall.http.incorrect_host"), e);
 			}
 		}
 
 		try {
-			socksURL = new URL(createURL(socksHost.getText(), socksPort.getText()));
+			socksURL = new URL(createURL(socksHost.getText(),
+					socksPort.getText()));
 
-			prefs.putBoolean("firewall.socks.enabled", socksEnabled.isSelected());
+			prefs.putBoolean("firewall.socks.enabled",
+					socksEnabled.isSelected());
 			prefs.put("firewall.socks.host", socksHost.getText());
 			prefs.put("firewall.socks.port", socksPort.getText());
 
 			if (socksEnabled.isSelected()) {
 				systemSettings.put("socksProxyHost", socksURL.getHost());
-				systemSettings.put("socksProxyPort", socksURL.getPort()+"");
+				systemSettings.put("socksProxyPort", socksURL.getPort() + "");
 			} else {
 				systemSettings.remove("socksProxyHost");
 				systemSettings.remove("socksProxyPort");
@@ -319,7 +327,8 @@ public class FirewallPage extends AbstractPreferencePage {
 
 		} catch (MalformedURLException e) {
 			if (socksEnabled.isSelected()) {
-				throw new StoreException(PluginServices.getText(this, "options.firewall.socks.incorrect_host"),e);
+				throw new StoreException(PluginServices.getText(this,
+						"options.firewall.socks.incorrect_host"), e);
 			}
 		}
 	}
@@ -360,6 +369,5 @@ public class FirewallPage extends AbstractPreferencePage {
 	public void setChangesApplied() {
 		setChanged(false);
 	}
-
 
 }

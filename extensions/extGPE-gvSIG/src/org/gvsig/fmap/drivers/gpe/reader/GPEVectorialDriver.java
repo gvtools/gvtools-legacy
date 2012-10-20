@@ -84,12 +84,12 @@ import com.iver.cit.gvsig.fmap.drivers.VectorialDriver;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class GPEVectorialDriver implements IGPEDriver, VectorialDriver, ObjectDriver,
-BoundedShapes{
+public abstract class GPEVectorialDriver implements IGPEDriver,
+		VectorialDriver, ObjectDriver, BoundedShapes {
 	private Rectangle2D extent = null;
-	//The data
+	// The data
 	private HashMap features = null;
-	private int numFeatures = 0; 
+	private int numFeatures = 0;
 	private ArrayList parsers = null;
 	private CoordinateReferenceSystem crs = null;
 	private File m_Fich;
@@ -97,18 +97,18 @@ BoundedShapes{
 	private DriverAttributes attributes = null;
 
 	GPEVectorialDriver() {
-		super();	
+		super();
 		features = new HashMap();
 		GPEParser[] registeredParsers = GPERegister.getAllParsers();
 		parsers = new ArrayList();
-		for (int i=0 ; i<registeredParsers.length ; i++){
-			for (int j=0 ; j<getGPEParsers().size() ; j++){
-				if (registeredParsers[i].getClass() == getGPEParsers().get(j)){
+		for (int i = 0; i < registeredParsers.length; i++) {
+			for (int j = 0; j < getGPEParsers().size(); j++) {
+				if (registeredParsers[i].getClass() == getGPEParsers().get(j)) {
 					parsers.add(registeredParsers[i]);
 				}
 			}
 		}
-	}	
+	}
 
 	/**
 	 * @return the parser
@@ -125,7 +125,8 @@ BoundedShapes{
 	}
 
 	/**
-	 * @param crs the projection to set
+	 * @param crs
+	 *            the projection to set
 	 */
 	public void setCrs(CoordinateReferenceSystem crs) {
 		this.crs = crs;
@@ -133,23 +134,24 @@ BoundedShapes{
 
 	/**
 	 * Add a new feature in the layer
+	 * 
 	 * @param feature
-	 * The feature to add
+	 *            The feature to add
 	 */
 	public void addFeature(GPEFeature feature) {
 		IGeometry geometry = getGeometry(feature);
-		//if the geometry exists
-		if (geometry != null){
-			//Update the extent
+		// if the geometry exists
+		if (geometry != null) {
+			// Update the extent
 			Rectangle2D boundsShp = geometry.getBounds2D();
 			if (extent == null) {
 				extent = boundsShp;
 			} else {
 				extent.add(boundsShp);
 			}
-			//Set the geometry
+			// Set the geometry
 			feature.getGeometry().setReprojectedGeometry(geometry);
-			//Set the attributes
+			// Set the attributes
 			features.put(new Integer(numFeatures), feature);
 			numFeatures++;
 		}
@@ -157,29 +159,30 @@ BoundedShapes{
 
 	/**
 	 * Gets the geometry
+	 * 
 	 * @param feature
-	 * The feature to add
+	 *            The feature to add
 	 */
-	private IGeometry getGeometry(GPEFeature feature){
-		GPEGeometry gpeGeometry = ((GPEFeature)feature).getGeometry();
-		if (gpeGeometry != null){
+	private IGeometry getGeometry(GPEFeature feature) {
+		GPEGeometry gpeGeometry = ((GPEFeature) feature).getGeometry();
+		if (gpeGeometry != null) {
 			CoordinateReferenceSystem geomCrs = null;
-			if (gpeGeometry.getSrs() != null){
-				try{
+			if (gpeGeometry.getSrs() != null) {
+				try {
 					geomCrs = ProjectionUtils.getCRS(gpeGeometry.getSrs());
-				}catch(Exception e){
-					//If the CRS factory has an error.
-				}				
+				} catch (Exception e) {
+					// If the CRS factory has an error.
+				}
 			}
-			if (geomCrs == null){
+			if (geomCrs == null) {
 				return gpeGeometry.getIGeometry();
-			}else{
-				if (crs == null){
+			} else {
+				if (crs == null) {
 					return gpeGeometry.getIGeometry();
-				}else{
-					if (geomCrs.getName().equals(crs.getName())){
+				} else {
+					if (geomCrs.getName().equals(crs.getName())) {
 						return gpeGeometry.getIGeometry();
-					}else{
+					} else {
 						MathTransform trans = ProjectionUtils.getCrsTransform(
 								geomCrs, crs);
 						FShape shape = (FShape) gpeGeometry.getIGeometry()
@@ -195,42 +198,51 @@ BoundedShapes{
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.drivers.gpe.reader.IGPEDriver#setExtent(java.awt.geom.Rectangle2D)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.gpe.reader.IGPEDriver#setExtent(java.
+	 * awt.geom.Rectangle2D)
 	 */
 	public void setExtent(Rectangle2D extent) {
-		this.extent = extent;		
+		this.extent = extent;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDriver#getDriverAttributes()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.VectorialDriver#getDriverAttributes()
 	 */
 	public DriverAttributes getDriverAttributes() {
-		if (attributes == null){
+		if (attributes == null) {
 			attributes = new DriverAttributes();
-			attributes.setLoadedInMemory(true);			
+			attributes.setLoadedInMemory(true);
 		}
 		return attributes;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDriver#getFullExtent()
 	 */
-	public Rectangle2D getFullExtent(){
+	public Rectangle2D getFullExtent() {
 		return extent;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDriver#getShape(int)
 	 */
 	public IGeometry getShape(int index) {
-		return ((GPEFeature)features.get(new Integer(index))).getGeometry().getReprojectedGeometry();
+		return ((GPEFeature) features.get(new Integer(index))).getGeometry()
+				.getReprojectedGeometry();
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDriver#getShapeCount()
 	 */
 	public int getShapeCount() {
@@ -239,6 +251,7 @@ BoundedShapes{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDriver#getShapeType()
 	 */
 	public int getShapeType() {
@@ -247,6 +260,7 @@ BoundedShapes{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDriver#isWritable()
 	 */
 	public boolean isWritable() {
@@ -255,16 +269,18 @@ BoundedShapes{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDriver#reload()
 	 */
 	public void reload() {
-		numFeatures = 0; 
+		numFeatures = 0;
 		features.clear();
 		extent = null;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.hardcode.gdbms.engine.data.driver.ObjectDriver#getPrimaryKeys()
 	 */
 	public int[] getPrimaryKeys() {
@@ -273,15 +289,21 @@ BoundedShapes{
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.hardcode.gdbms.engine.data.driver.ObjectDriver#write(com.hardcode.gdbms.engine.data.edition.DataWare)
+	 * 
+	 * @see
+	 * com.hardcode.gdbms.engine.data.driver.ObjectDriver#write(com.hardcode
+	 * .gdbms.engine.data.edition.DataWare)
 	 */
-	public void write(DataWare dataWare) {		
+	public void write(DataWare dataWare) {
 
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.hardcode.gdbms.engine.data.driver.GDBMSDriver#setDataSourceFactory(com.hardcode.gdbms.engine.data.DataSourceFactory)
+	 * 
+	 * @see
+	 * com.hardcode.gdbms.engine.data.driver.GDBMSDriver#setDataSourceFactory
+	 * (com.hardcode.gdbms.engine.data.DataSourceFactory)
 	 */
 	public void setDataSourceFactory(DataSourceFactory dsf) {
 		// TODO Auto-generated method stub
@@ -290,11 +312,12 @@ BoundedShapes{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getFieldCount()
 	 */
 	public int getFieldCount() {
-		if (features.size() > 0){
-			GPEFeature feature = (GPEFeature)features.get(new Integer(0));
+		if (features.size() > 0) {
+			GPEFeature feature = (GPEFeature) features.get(new Integer(0));
 			return feature.getelements().size() + 1;
 		}
 		return 1;
@@ -302,18 +325,19 @@ BoundedShapes{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getFieldName(int)
 	 */
 	public String getFieldName(int fieldId) {
-		if (fieldId == getFieldCount()-1){
+		if (fieldId == getFieldCount() - 1) {
 			return "fid";
 		}
-		if (features.size() > 0){
-			GPEFeature feature = (GPEFeature)features.get(new Integer(0));
+		if (features.size() > 0) {
+			GPEFeature feature = (GPEFeature) features.get(new Integer(0));
 			Iterator it = feature.getelements().keySet().iterator();
 			String fieldName = null;
-			for (int i=0 ; i<=fieldId ; i++){
-				fieldName = (String)it.next();
+			for (int i = 0; i <= fieldId; i++) {
+				fieldName = (String) it.next();
 			}
 			return fieldName;
 		}
@@ -322,14 +346,15 @@ BoundedShapes{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getFieldType(int)
 	 */
 	public int getFieldType(int i) {
-		if (i == getFieldCount()-1){
+		if (i == getFieldCount() - 1) {
 			return Types.VARCHAR;
 		}
-		if (getRowCount() > 1){
-			Value value = getFieldValue(0,i);
+		if (getRowCount() > 1) {
+			Value value = getFieldValue(0, i);
 			return value.getSQLType();
 		}
 		return Types.VARCHAR;
@@ -337,16 +362,19 @@ BoundedShapes{
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getFieldValue(long, int)
+	 * 
+	 * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getFieldValue(long,
+	 * int)
 	 */
 	public Value getFieldValue(long rowIndex, int fieldId) {
-		GPEFeature feature = (GPEFeature)features.get(new Integer((int)rowIndex));
-		if (fieldId == getFieldCount()-1){
+		GPEFeature feature = (GPEFeature) features.get(new Integer(
+				(int) rowIndex));
+		if (fieldId == getFieldCount() - 1) {
 			return feature.getId();
 		}
 		String attName = getFieldName(fieldId);
-		GPEElement element = (GPEElement)feature.getelements().get(attName);
-		if (element != null){
+		GPEElement element = (GPEElement) feature.getelements().get(attName);
+		if (element != null) {
 			return element.getValue();
 		}
 		return ValueFactory.createValue("");
@@ -354,6 +382,7 @@ BoundedShapes{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getFieldWidth(int)
 	 */
 	public int getFieldWidth(int i) {
@@ -362,6 +391,7 @@ BoundedShapes{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getRowCount()
 	 */
 	public long getRowCount() {
@@ -370,22 +400,26 @@ BoundedShapes{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.BoundedShapes#getShapeBounds(int)
 	 */
-	public Rectangle2D getShapeBounds(int index){
-		return ((GPEFeature)features.get(new Integer(index))).getGeometry().getShapeBounds();
+	public Rectangle2D getShapeBounds(int index) {
+		return ((GPEFeature) features.get(new Integer(index))).getGeometry()
+				.getShapeBounds();
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.BoundedShapes#getShapeType(int)
 	 */
-	public int getShapeType(int index){
+	public int getShapeType(int index) {
 		return FShape.MULTI;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver#close()
 	 */
 	public void close() {
@@ -394,6 +428,7 @@ BoundedShapes{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver#getFile()
 	 */
 	public File getFile() {
@@ -402,30 +437,30 @@ BoundedShapes{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver#initialize()
 	 */
 	public void initialize() {
 		FmapErrorHandler errorHandler = FmapHandlerFactory.createErrorHandler();
-		DefaultFmapContentHandler contentHandler = FmapHandlerFactory.createContentHandler(errorHandler,
-				this);		
-		
+		DefaultFmapContentHandler contentHandler = FmapHandlerFactory
+				.createContentHandler(errorHandler, this);
+
 		GPEParser parser = null;
-		for (int i=0 ; i<parsers.size() ; i++){
-			if (((GPEParser)parsers.get(i)).accept(getFile().toURI())){
-				parser = (GPEParser)parsers.get(i);
+		for (int i = 0; i < parsers.size(); i++) {
+			if (((GPEParser) parsers.get(i)).accept(getFile().toURI())) {
+				parser = (GPEParser) parsers.get(i);
 			}
 		}
-		if (parser == null){
-			parser = (GPEParser)parsers.get(0);
+		if (parser == null) {
+			parser = (GPEParser) parsers.get(0);
 		}
-		parser.parse(contentHandler,
-				errorHandler,
-				getFile().toURI());		
-		//TODO patch to support multilayer on KML
-		if (getName().equals(KMLVectorialDriver.DRIVERNAME)){
-			if (isWarningShowed == false){
-				JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),
-						PluginServices.getText(this,"gpe_gvsig_dont_support_multilayer"));
+		parser.parse(contentHandler, errorHandler, getFile().toURI());
+		// TODO patch to support multilayer on KML
+		if (getName().equals(KMLVectorialDriver.DRIVERNAME)) {
+			if (isWarningShowed == false) {
+				JOptionPane.showMessageDialog((Component) PluginServices
+						.getMainFrame(), PluginServices.getText(this,
+						"gpe_gvsig_dont_support_multilayer"));
 				isWarningShowed = true;
 			}
 		}
@@ -433,7 +468,9 @@ BoundedShapes{
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver#open(java.io.File)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver#open(java.io.File)
 	 */
 	public void open(File f) {
 		m_Fich = f;
@@ -441,30 +478,33 @@ BoundedShapes{
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver#accept(java.io.File)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver#accept(java.io.File)
 	 */
 	public boolean accept(File f) {
-		if (f.isDirectory()){
+		if (f.isDirectory()) {
 			return true;
 		}
-		for (int i=0 ; i<parsers.size() ; i++){
-			if (((GPEParser)parsers.get(i)).accept(f.toURI())){
+		for (int i = 0; i < parsers.size(); i++) {
+			if (((GPEParser) parsers.get(i)).accept(f.toURI())) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.gpe.reader.IGPEDriver#getTypeName()
 	 */
 	public String getTypeName() {
-		if (features.size() > 0){
-			GPEFeature feature = (GPEFeature)features.get(new Integer(0));
+		if (features.size() > 0) {
+			GPEFeature feature = (GPEFeature) features.get(new Integer(0));
 			return feature.getName();
 		}
 		return null;
 	}
-
 
 }

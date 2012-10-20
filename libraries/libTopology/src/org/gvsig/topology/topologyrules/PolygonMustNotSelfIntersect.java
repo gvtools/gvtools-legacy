@@ -93,28 +93,24 @@ public class PolygonMustNotSelfIntersect extends AbstractTopologyRule implements
 	static final String RULE_NAME = Messages
 			.getText("polygon_must_not_self_intersect");
 
-	private static List<ITopologyErrorFix> automaticErrorFixes =
-		new ArrayList<ITopologyErrorFix>();
-	static{
+	private static List<ITopologyErrorFix> automaticErrorFixes = new ArrayList<ITopologyErrorFix>();
+	static {
 		automaticErrorFixes.add(new SplitSelfIntersectingPolygonFix());
 	}
-	
+
 	private static final Color DEFAULT_ERROR_COLOR = new Color(100, 0, 84);
-	
-	
-	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = 
-		(MultiShapeSymbol) SymbologyFactory.createDefaultSymbolByShapeType(FShape.MULTI, 
-											DEFAULT_ERROR_COLOR);
-	static{
+
+	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = (MultiShapeSymbol) SymbologyFactory
+			.createDefaultSymbolByShapeType(FShape.MULTI, DEFAULT_ERROR_COLOR);
+	static {
 		DEFAULT_ERROR_SYMBOL.setDescription(RULE_NAME);
 		DEFAULT_ERROR_SYMBOL.setSize(5);
 	}
-	
+
 	private MultiShapeSymbol errorSymbol = DEFAULT_ERROR_SYMBOL;
-	
+
 	private double clusterTolerance;
 
-	
 	public PolygonMustNotSelfIntersect(Topology topology, FLyrVect originLyr,
 			double clusterTolerance) {
 		super(topology, originLyr);
@@ -142,7 +138,7 @@ public class PolygonMustNotSelfIntersect extends AbstractTopologyRule implements
 	public void validateFeature(IFeature feature) {
 		IGeometry geom = feature.getGeometry();
 		int shapeType = geom.getGeometryType();
-		if(FGeometryUtil.getDimensions(shapeType) != 2)
+		if (FGeometryUtil.getDimensions(shapeType) != 2)
 			return;
 		Geometry jtsGeom = NewFConverter.toJtsGeometry(geom);
 		process(jtsGeom, feature);
@@ -199,10 +195,10 @@ public class PolygonMustNotSelfIntersect extends AbstractTopologyRule implements
 
 				FMultiPoint2D multiPoint = new FMultiPoint2D(x, y);
 				TopologyError topologyError = new TopologyError(multiPoint,
-													this, feature, topology);
+						this, feature, topology);
 				topologyError.setID(errorContainer.getErrorFid());
 				addTopologyError(topologyError);
-			}//if
+			}// if
 		}// if polygon
 	}
 
@@ -221,7 +217,7 @@ public class PolygonMustNotSelfIntersect extends AbstractTopologyRule implements
 			return false;
 		}
 	}
-	
+
 	public List<ITopologyErrorFix> getAutomaticErrorFixes() {
 		return automaticErrorFixes;
 	}
@@ -233,12 +229,12 @@ public class PolygonMustNotSelfIntersect extends AbstractTopologyRule implements
 	public MultiShapeSymbol getErrorSymbol() {
 		return errorSymbol;
 	}
-	
+
 	public void setErrorSymbol(MultiShapeSymbol errorSymbol) {
 		this.errorSymbol = errorSymbol;
 	}
-	
-	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError){
+
+	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError) {
 		return automaticErrorFixes.get(0);
 	}
 }

@@ -58,34 +58,38 @@ import org.gvsig.gpe.xml.stream.XmlStreamException;
 /**
  * This class parses the gml:description tag. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;gml:description&gt;GML tag desciption&lt;/gml:description&gt;
  * </code>
  * </pre>
+ * 
  * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class DescriptionBinding{
-	
+public class DescriptionBinding {
+
 	/**
 	 * It parses the gml:description tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * The description
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return The description
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public String parse(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
-		//Put the pointer into the value tag
+	public String parse(IXmlStreamReader parser, GPEDefaultGmlParser handler)
+			throws XmlStreamException, IOException {
+		// Put the pointer into the value tag
 		parser.next();
-		//Retrieve the value
+		// Retrieve the value
 		String description = parser.getText();
-		//Put the value into the end tag
+		// Put the value into the end tag
 		parser.next();
 		return description;
 	}

@@ -116,7 +116,7 @@ import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
 /**
  * Clase que representa un proyecto de openSIG
- *
+ * 
  * @author Fernando Gonz�lez Cort�s
  */
 public class Project implements Serializable, PropertyChangeListener {
@@ -156,7 +156,7 @@ public class Project implements Serializable, PropertyChangeListener {
 	private String comments = "";
 
 	private Color selectionColor = null;
-	
+
 	private boolean isAbsolutePath = true;
 
 	// private ArrayList views = new ArrayList();
@@ -182,23 +182,24 @@ public class Project implements Serializable, PropertyChangeListener {
 	 * each containing a XML version of a WindowInfo object.
 	 */
 	private Iterator initialWindowProperties = null;
-	
-	private static PathGenerator pathGenerator=PathGenerator.getInstance();
 
-	private TreeMap<ProjectDocument,Integer> sortedDocuments = new TreeMap<ProjectDocument,Integer>(new Comparator() {
-		public int compare(Object o1, Object o2) {
-			if ((o1 != null) && (o2 != null)) {
-				int priority1 = ((ProjectDocument) o1)
-						.getProjectDocumentFactory().getPriority();
-				int priority2 = ((ProjectDocument) o2)
-						.getProjectDocumentFactory().getPriority();
-				if (priority1 >= priority2)
-					return 1;
-				return -1;
-			}
-			return 0;
-		}
-	}); // Para poder ordenar
+	private static PathGenerator pathGenerator = PathGenerator.getInstance();
+
+	private TreeMap<ProjectDocument, Integer> sortedDocuments = new TreeMap<ProjectDocument, Integer>(
+			new Comparator() {
+				public int compare(Object o1, Object o2) {
+					if ((o1 != null) && (o2 != null)) {
+						int priority1 = ((ProjectDocument) o1)
+								.getProjectDocumentFactory().getPriority();
+						int priority2 = ((ProjectDocument) o2)
+								.getProjectDocumentFactory().getPriority();
+						if (priority1 >= priority2)
+							return 1;
+						return -1;
+					}
+					return 0;
+				}
+			}); // Para poder ordenar
 
 	/**
 	 * Creates a new Project object.
@@ -210,7 +211,7 @@ public class Project implements Serializable, PropertyChangeListener {
 		creationDate = DateFormat.getDateInstance().format(new Date());
 		modificationDate = creationDate;
 		setSelectionColor(getDefaultSelectionColor());
-		getDefaultCrs(); //For initialize it
+		getDefaultCrs(); // For initialize it
 		// signatureAtStartup = computeSignature();
 
 		/*
@@ -222,7 +223,7 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * Obtiene la fecha de creaci�n del proyecto
-	 *
+	 * 
 	 * @return
 	 */
 	public String getCreationDate() {
@@ -231,7 +232,7 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * Obtiene el nombre del proyecto
-	 *
+	 * 
 	 * @return
 	 */
 	public String getName() {
@@ -239,7 +240,8 @@ public class Project implements Serializable, PropertyChangeListener {
 	}
 
 	// /**
-	// * Obtiene la ruta completa del fichero donde se guardo por �ltima vez el
+	// * Obtiene la ruta completa del fichero donde se guardo por �ltima vez
+	// el
 	// * proyecto
 	// *
 	// * @return
@@ -249,36 +251,36 @@ public class Project implements Serializable, PropertyChangeListener {
 	// }
 
 	/**
-	 * Asigna la fecha de creaci�n del proyecto. Este m�todo tiene sentido s�lo
-	 * por que al recuperar la fecha del XML hay que asignarla al objeto
+	 * Asigna la fecha de creaci�n del proyecto. Este m�todo tiene sentido
+	 * s�lo por que al recuperar la fecha del XML hay que asignarla al objeto
 	 * proyecto de alguna manera. La fecha se asigna en el constructor y no se
 	 * deber�a de modificar nunca
-	 *
+	 * 
 	 * @param string
 	 */
 	public void setCreationDate(String string) {
 		creationDate = string;
-		//modified = true;
+		// modified = true;
 		change.firePropertyChange("", null, null);
 	}
 
 	/**
 	 * Establece el nombre del proyecto
-	 *
+	 * 
 	 * @param string
 	 */
 	public void setName(String string) {
 		name = string;
-		//modified = true;
+		// modified = true;
 		change.firePropertyChange("", null, null);
 	}
 
 	/**
 	 * Devuelve a partir de la capa la tabla asociada.
-	 *
+	 * 
 	 * @param co
 	 *            Capa.
-	 *
+	 * 
 	 * @return ProjectTable de la tabla asociada.
 	 */
 	public ProjectTable getTable(AlphanumericData co) {
@@ -298,7 +300,7 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * Devuelve a partir del nombre la tabla asociada.
-	 *
+	 * 
 	 * @param name
 	 *            Nombre.
 	 * @deprecated utilizar getProjectDocumentByName(...);
@@ -320,33 +322,37 @@ public class Project implements Serializable, PropertyChangeListener {
 	}
 
 	private boolean isModifiedDocuments() {
-		ProjectDocument[] documents=(ProjectDocument[])getDocuments().toArray(new ProjectDocument[0]);
-		for (int i=0;i<documents.length;i++) {
+		ProjectDocument[] documents = (ProjectDocument[]) getDocuments()
+				.toArray(new ProjectDocument[0]);
+		for (int i = 0; i < documents.length; i++) {
 			if (documents[i].isModified()) {
 				return true;
 			}
 		}
 		return false;
 	}
-//	/**
-//	 * Devuelve true si el proyecto (o alguna tabla, vista o mapa que contiene)
-//	 * fue modificado
-//	 *
-//	 * @return
-//	 */
-//	public boolean isModified() {
-//		if ((this.getDocuments().size() == 0) && !modified && !isModifiedDocuments()) {
-//			return false;
-//		}
-//		return true;
-//		// /return modified; TODO El atributo modified solo detecta cuando se
-//		// elimina o a�ade una vista,
-//		// /mapa o tabla pero no cuando se modifican.
-//	}
+
+	// /**
+	// * Devuelve true si el proyecto (o alguna tabla, vista o mapa que
+	// contiene)
+	// * fue modificado
+	// *
+	// * @return
+	// */
+	// public boolean isModified() {
+	// if ((this.getDocuments().size() == 0) && !modified &&
+	// !isModifiedDocuments()) {
+	// return false;
+	// }
+	// return true;
+	// // /return modified; TODO El atributo modified solo detecta cuando se
+	// // elimina o a�ade una vista,
+	// // /mapa o tabla pero no cuando se modifican.
+	// }
 
 	/**
 	 * Obtiene los comentarios
-	 *
+	 * 
 	 * @return
 	 */
 	public String getComments() {
@@ -355,7 +361,7 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * Obtiene la fecha de la �ltima modificaci�n
-	 *
+	 * 
 	 * @return
 	 */
 	public String getModificationDate() {
@@ -364,7 +370,7 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * Obtiene el propietario del proyecto
-	 *
+	 * 
 	 * @return
 	 */
 	public String getOwner() {
@@ -373,47 +379,48 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * Establece una cadena como comentarios al proyecto
-	 *
+	 * 
 	 * @param string
 	 */
 	public void setComments(String string) {
 		comments = string;
-		//modified = true;
+		// modified = true;
 		change.firePropertyChange("", null, null);
 	}
 
 	/**
 	 * Establece la fecha de la �ltima modificaci�n
-	 *
+	 * 
 	 * @param string
 	 */
 	public void setModificationDate(String string) {
 		modificationDate = string;
-		//modified = true;
+		// modified = true;
 		change.firePropertyChange("", null, null);
 	}
 
 	/**
 	 * Establece el propietario del proyecto
-	 *
+	 * 
 	 * @param string
 	 */
 	public void setOwner(String string) {
 		owner = string;
-		//modified = true;
+		// modified = true;
 		change.firePropertyChange("", null, null);
 	}
 
 	/**
 	 * Establece el flag de modificado del proyecto
-	 *
+	 * 
 	 * @param b
 	 */
 	public void setModified(boolean b) {
 		modified = b;
-		if (modified==false) {
-			ProjectDocument[] documents=(ProjectDocument[])getDocuments().toArray(new ProjectDocument[0]);
-			for (int i=0;i<documents.length;i++) {
+		if (modified == false) {
+			ProjectDocument[] documents = (ProjectDocument[]) getDocuments()
+					.toArray(new ProjectDocument[0]);
+			for (int i = 0; i < documents.length; i++) {
 				documents[i].setModified(false);
 			}
 		}
@@ -421,7 +428,7 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * Obtiene el color de selecci�n que se usar� en el proyecto
-	 *
+	 * 
 	 * @return
 	 */
 	public Color getSelectionColor() {
@@ -433,19 +440,19 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * Establece el color de selecci�n
-	 *
+	 * 
 	 * @param color
 	 */
 	public void setSelectionColor(Color color) {
 		selectionColor = color;
 		MapContext.setSelectionColor(color);
-		//modified = true;
+		// modified = true;
 		change.firePropertyChange("selectionColor", null, color);
 	}
 
 	/**
 	 * Obtiene el color como un entero para su serializaci�n a XML
-	 *
+	 * 
 	 * @return
 	 */
 	public String getColor() {
@@ -453,47 +460,48 @@ public class Project implements Serializable, PropertyChangeListener {
 	}
 
 	/**
-	 * M�todo invocado al recuperar de XML para establecer el color de seleccion
-	 * del proyecto
-	 *
+	 * M�todo invocado al recuperar de XML para establecer el color de
+	 * seleccion del proyecto
+	 * 
 	 * @param color
 	 *            Entero que representa un color
 	 */
 	public void setColor(String color) {
-		//modified = true;
+		// modified = true;
 		selectionColor = StringUtilities.string2Color(color);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
+	 * 
+	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.
+	 * PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
-		//this.modified = true;
+		// this.modified = true;
 		change.firePropertyChange(evt);
 	}
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param arg1
 	 */
 	public void addExtent(ProjectExtent arg1) {
 		extents.add(arg1);
-		//modified = true;
+		// modified = true;
 		change.firePropertyChange("addExtent", null, null);
 	}
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param arg0
-	 *
+	 * 
 	 * @return
 	 */
 	public Object removeExtent(int arg0) {
-		//modified = true;
+		// modified = true;
 		change.firePropertyChange("delExtent", null, null);
 
 		return extents.remove(arg0);
@@ -501,7 +509,7 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public ProjectExtent[] getExtents() {
@@ -510,26 +518,26 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * Metodo que a�ade una nueva camera a la lista de cameras
-	 *
+	 * 
 	 * @param arg1
 	 *            camera introducida
 	 */
 	public void addCamera(Object arg1) {
 		this.cameras.add(arg1);
-		//modified = true;
+		// modified = true;
 		change.firePropertyChange("addCamera", null, null);
 	}
 
 	/**
 	 * Metodo que borra de la lisat un elemento seleccionado
-	 *
+	 * 
 	 * @param arg0
 	 *            indice del elemento que se va a borrar
-	 *
+	 * 
 	 * @return resultado de la operacion de borrado
 	 */
 	public Object removeCamera(int arg0) {
-		//modified = true;
+		// modified = true;
 		change.firePropertyChange("delCamera", null, null);
 
 		return this.cameras.remove(arg0);
@@ -537,7 +545,7 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * Metodo que devuelve la lista de cameras
-	 *
+	 * 
 	 * @return lista de objetos de tipo camera
 	 */
 	public Object[] getCameras() {
@@ -546,7 +554,7 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param arg0
 	 */
 	public synchronized void addPropertyChangeListener(
@@ -556,7 +564,7 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @deprecated utilizar getDocument(String s);
 	 * @return
 	 */
@@ -566,7 +574,7 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @deprecated utilizar getDocument(String s);
 	 * @return
 	 */
@@ -576,7 +584,7 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @deprecated utilizar getDocument(String s);
 	 * @return
 	 */
@@ -586,7 +594,7 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * A�ade un mapa al proyecto
-	 *
+	 * 
 	 * @deprecated utilizar addDocument(ProjectDocument pD);
 	 * @param m
 	 */
@@ -596,7 +604,7 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * Elimina un mapa del proyecto
-	 *
+	 * 
 	 * @deprecated utilizar delDocument(ProjectDocument pD);
 	 * @param i
 	 *            indice del mapa
@@ -608,7 +616,7 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * A�ade una tabla al proyecto
-	 *
+	 * 
 	 * @deprecated utilizar addDocument(ProjectDocument pD);
 	 * @param t
 	 */
@@ -618,7 +626,7 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * Elimina una tabla del proyecto
-	 *
+	 * 
 	 * @deprecated utilizar delDocument(ProjectDocument pD);
 	 * @param i
 	 *            indice de la tabla
@@ -630,7 +638,7 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * A�ade una vista al proyecto
-	 *
+	 * 
 	 * @deprecated utilizar addDocument(ProjectDocument pD);
 	 * @param v
 	 */
@@ -640,7 +648,7 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * Elimina una tabla del proyecto
-	 *
+	 * 
 	 * @deprecated utilizar delDocument(ProjectDocument pD);
 	 * @param i
 	 *            indice del proyecto
@@ -652,9 +660,9 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
-	 *
+	 * 
 	 * @throws DriverException
 	 * @throws XMLException
 	 */
@@ -665,7 +673,7 @@ public class Project implements Serializable, PropertyChangeListener {
 		xml.putProperty("comments", getComments());
 		xml.putProperty("creationDate", creationDate);
 		xml.putProperty("isAbsolutePath", isAbsolutePath);
-		
+
 		int numExtents = extents.size();
 		xml.putProperty("numExtents", numExtents);
 
@@ -686,9 +694,9 @@ public class Project implements Serializable, PropertyChangeListener {
 		// BORRADO. Hay que probar a borrarlos cuando se
 		// borra una tabla y cuando se borra una capa.
 		try {
-//			cleanBadReferences();
-		}catch (Exception e) {
-			NotificationManager.addError("clean_bad_references",e);
+			// cleanBadReferences();
+		} catch (Exception e) {
+			NotificationManager.addError("clean_bad_references", e);
 		}
 		SourceInfo[] infos = LayerFactory.getDataSourceFactory()
 				.getDriverInfos();
@@ -716,7 +724,7 @@ public class Project implements Serializable, PropertyChangeListener {
 		 * XMLEntity xmlchild=((ProjectView) views.get(i)).getXMLEntity();
 		 * xml.addChild(xmlchild); numViews++; } catch (SaveException e) {
 		 * e.showError(); } } xml.putProperty("numViews", numViews);
-		 *
+		 * 
 		 * int numMaps=0; for (int i = 0; i < maps.size(); i++) { try {
 		 * XMLEntity xmlchild=((ProjectMap) maps.get(i)).getXMLEntity();
 		 * xml.addChild(xmlchild); numMaps++; } catch (SaveException e) {
@@ -725,13 +733,13 @@ public class Project implements Serializable, PropertyChangeListener {
 		xml.putProperty("modificationDate", modificationDate);
 		xml.putProperty("name", name, false);
 		xml.putProperty("owner", owner);
-		xml.putProperty("selectionColor", StringUtilities
-				.color2String(selectionColor));
+		xml.putProperty("selectionColor",
+				StringUtilities.color2String(selectionColor));
 		/*
 		 * int numTables=0; for (int i = 0; i < tables.size(); i++) { try {
 		 * XMLEntity xmlchild=((ProjectTable) tables.get(i)).getXMLEntity();
 		 * xml.addChild(xmlchild); numTables++; } catch (SaveException e) {
-		 *
+		 * 
 		 * e.showError(); } } xml.putProperty("numTables", numTables);
 		 */
 		xml.putProperty("projection", ProjectionUtils.getAbrev(defaultCrs));
@@ -768,16 +776,18 @@ public class Project implements Serializable, PropertyChangeListener {
 					windowProperties = wi.getXMLEntity();
 					windowProperties.putProperty("documentType",
 							ProjectMapFactory.registerName, false);
-					windowProperties.putProperty("documentName", layoutWindow
-							.getName(), false);
+					windowProperties.putProperty("documentName",
+							layoutWindow.getName(), false);
 					windowProperties.putProperty("zPosition", winIndex, false);
 					propertyList.addChild(windowProperties);
 				} else if (windowList[winIndex] instanceof ProjectWindow) {
 					projectWindowSaved = true;
 					windowProperties = wi.getXMLEntity();
 					windowProperties
-							.putProperty("className",
-									"com.iver.cit.gvsig.project.document.gui.ProjectWindow", false);
+							.putProperty(
+									"className",
+									"com.iver.cit.gvsig.project.document.gui.ProjectWindow",
+									false);
 					windowProperties.putProperty("zPosition", winIndex, false);
 					propertyList.addChild(windowProperties);
 				} else if (windowList[winIndex] instanceof SingletonWindow) { // for
@@ -793,20 +803,24 @@ public class Project implements Serializable, PropertyChangeListener {
 								.getWindowModel();
 						windowProperties = wi.getXMLEntity();
 						windowProperties.putProperty("documentType", doc
-								.getProjectDocumentFactory().getRegisterName(), false);
+								.getProjectDocumentFactory().getRegisterName(),
+								false);
 						windowProperties.putProperty("documentName",
 								((ProjectDocument) viewWindow.getWindowModel())
 										.getName(), false);
-						windowProperties.putProperty("zPosition", winIndex, false);
+						windowProperties.putProperty("zPosition", winIndex,
+								false);
 
-						// TODO this will be generalized to all ProjectDocuments as soon as possible
-//						if (viewWindow instanceof BaseView) {
-//							BaseView win = (BaseView) viewWindow;
-//							windowProperties.addChild(win.getWindowData().getXMLEntity());
-//						}
+						// TODO this will be generalized to all ProjectDocuments
+						// as soon as possible
+						// if (viewWindow instanceof BaseView) {
+						// BaseView win = (BaseView) viewWindow;
+						// windowProperties.addChild(win.getWindowData().getXMLEntity());
+						// }
 						if (viewWindow instanceof IDocumentWindow) {
 							IDocumentWindow win = (IDocumentWindow) viewWindow;
-							windowProperties.addChild(win.getWindowData().getXMLEntity());
+							windowProperties.addChild(win.getWindowData()
+									.getXMLEntity());
 						}
 
 						propertyList.addChild(windowProperties);
@@ -829,8 +843,10 @@ public class Project implements Serializable, PropertyChangeListener {
 					windowProperties = wi.getXMLEntity();
 					if (windowProperties != null) {
 						windowProperties
-								.putProperty("className",
-										"com.iver.cit.gvsig.project.document.gui.ProjectWindow", false);
+								.putProperty(
+										"className",
+										"com.iver.cit.gvsig.project.document.gui.ProjectWindow",
+										false);
 						propertyList.addChild(windowProperties);
 					}
 				}
@@ -855,8 +871,9 @@ public class Project implements Serializable, PropertyChangeListener {
 		for (childNumb = xml.getChildrenCount() - 1; childNumb >= 0; childNumb--) {
 			child = xml.getChild(childNumb);
 			if (child.contains("zPosition")) {
-				orderedProperties.put(new Integer(-child
-						.getIntProperty("zPosition")), child); // reverse the
+				orderedProperties.put(
+						new Integer(-child.getIntProperty("zPosition")), child); // reverse
+																					// the
 				// order, so
 				// that we add
 				// the back
@@ -903,7 +920,7 @@ public class Project implements Serializable, PropertyChangeListener {
 			childNumb += xml.getIntProperty("data-source-count");
 		int limit = 0;
 		if (xml.contains("numViews"))
-			limit = xml.getIntProperty("numViews")+childNumb;
+			limit = xml.getIntProperty("numViews") + childNumb;
 
 		XMLEntity view;
 		for (int i = childNumb; i < limit; i++) {
@@ -915,8 +932,8 @@ public class Project implements Serializable, PropertyChangeListener {
 					&& child.contains("name")
 					&& child.getStringProperty("name").equals(
 							"ViewInfoProperties")) {
-				child.putProperty("documentName", view
-						.getStringProperty("name"));
+				child.putProperty("documentName",
+						view.getStringProperty("name"));
 				child.putProperty("documentType",
 						ProjectViewFactory.registerName);
 				windowList.add(child);
@@ -941,8 +958,8 @@ public class Project implements Serializable, PropertyChangeListener {
 						&& child.contains("name")
 						&& child.getStringProperty("name").equals(
 								"ViewInfoProperties")) {
-					child.putProperty("documentName", map
-							.getStringProperty("name"));
+					child.putProperty("documentName",
+							map.getStringProperty("name"));
 					child.putProperty("documentType",
 							ProjectMapFactory.registerName);
 					windowList.add(child);
@@ -957,7 +974,7 @@ public class Project implements Serializable, PropertyChangeListener {
 	 * Restores the size, position and order of the windows, according to
 	 * variable initialWindowProperties. If this variable is null, the method
 	 * just opens the project manager window.
-	 *
+	 * 
 	 */
 	public void restoreWindowProperties() {
 		boolean projectWindowRestored = false;
@@ -986,20 +1003,23 @@ public class Project implements Serializable, PropertyChangeListener {
 								.getStringProperty("documentType");
 						ProjectDocument pd = this.getProjectDocumentByName(
 								documentName, documentType);
-						if (pd==null) continue;
+						if (pd == null)
+							continue;
 						IWindow win = null;
 						if (pd instanceof ProjectDocument
-								&& child.getChildrenCount()>0
-								&& child.getChild(0).getName().equals("windowData")) {
-							// this will be generalized to all ProjectDocuments as soon as possible
+								&& child.getChildrenCount() > 0
+								&& child.getChild(0).getName()
+										.equals("windowData")) {
+							// this will be generalized to all ProjectDocuments
+							// as soon as possible
 							WindowData windowData = new WindowData();
 							windowData.setXMLEntity(child.getChild(0));
 							pd.storeWindowData(windowData);
-							win = ((ProjectDocument)pd).createWindow();
+							win = ((ProjectDocument) pd).createWindow();
 						} else {
 							win = pd.createWindow();
 						}
-						if (win == null){
+						if (win == null) {
 							continue;
 						}
 						PluginServices.getMDIManager().addWindow(win);
@@ -1009,15 +1029,14 @@ public class Project implements Serializable, PropertyChangeListener {
 				} else if (child.contains("className") // restore the position
 						// of the project
 						// manager window
-						&& child
-								.getStringProperty("className")
-								.equals(
-										"com.iver.cit.gvsig.project.document.gui.ProjectWindow")
+						&& child.getStringProperty("className")
+								.equals("com.iver.cit.gvsig.project.document.gui.ProjectWindow")
 						&& child.contains("name")
 						&& child.getStringProperty("name").equals(
 								"ViewInfoProperties")) {
 					WindowInfo wi = WindowInfo.createFromXMLEntity(child);
-					// don't restore size for ProjectManager window, as it's not resizable
+					// don't restore size for ProjectManager window, as it's not
+					// resizable
 					wi.setHeight(-1);
 					wi.setWidth(-1);
 					ProjectExtension pe = (ProjectExtension) PluginServices
@@ -1045,10 +1064,10 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param xml
 	 *            DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 * @throws XMLException
 	 * @throws DriverException
@@ -1078,8 +1097,8 @@ public class Project implements Serializable, PropertyChangeListener {
 				numDocuments = numViews + numMaps + numTables;
 			}
 			for (int i = numExtents; i < numDocuments + numExtents; i++) {
-				ProjectDocument pD = ProjectDocument.createFromXML03(xml
-						.getChild(i), p);
+				ProjectDocument pD = ProjectDocument.createFromXML03(
+						xml.getChild(i), p);
 				p.addDocument(pD);
 				p.sortedDocuments.put(pD, new Integer(i));
 			}
@@ -1096,7 +1115,7 @@ public class Project implements Serializable, PropertyChangeListener {
 			}
 
 			p.modificationDate = xml.getStringProperty("modificationDate");
-			//p.modified = xml.getBooleanProperty("modified");
+			// p.modified = xml.getBooleanProperty("modified");
 			p.name = xml.getStringProperty("name");
 			p.owner = xml.getStringProperty("owner");
 			p.selectionColor = StringUtilities.string2Color(xml
@@ -1113,12 +1132,12 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param xml
 	 *            DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
-	 *
+	 * 
 	 * @throws XMLException
 	 * @throws DriverException
 	 * @throws DriverIOException
@@ -1133,11 +1152,11 @@ public class Project implements Serializable, PropertyChangeListener {
 		try {
 			p.comments = xml.getStringProperty("comments");
 			p.creationDate = xml.getStringProperty("creationDate");
-			PathGenerator pg=PathGenerator.getInstance();
-			if (xml.contains("isAbsolutePath")){
-				p.isAbsolutePath=xml.getBooleanProperty("isAbsolutePath");
+			PathGenerator pg = PathGenerator.getInstance();
+			if (xml.contains("isAbsolutePath")) {
+				p.isAbsolutePath = xml.getBooleanProperty("isAbsolutePath");
 				pg.setIsAbsolutePath(p.isAbsolutePath);
-			}else{
+			} else {
 				pg.setIsAbsolutePath(true);
 			}
 			int numExtents = xml.getIntProperty("numExtents");
@@ -1189,16 +1208,17 @@ public class Project implements Serializable, PropertyChangeListener {
 				int numTables = xml.getIntProperty("numTables");
 				numDocuments = numViews + numMaps + numTables;
 			}
-			int i=0;
+			int i = 0;
 			for (i = childNumber; i < (numDocuments + childNumber); i++) {
 				try {
-					ProjectDocument pD = ProjectDocument.createFromXML(xml
-							.getChild(i), p);
+					ProjectDocument pD = ProjectDocument.createFromXML(
+							xml.getChild(i), p);
 					p.addDocument(pD);
 					p.sortedDocuments.put(pD, new Integer(i));
 				} catch (OpenException e) {
-					XMLEntity childXML=xml.getChild(i);
-					e.showMessageError(childXML.getName()+"\n  "+childXML.getStringProperty("className"));
+					XMLEntity childXML = xml.getChild(i);
+					e.showMessageError(childXML.getName() + "\n  "
+							+ childXML.getStringProperty("className"));
 				}
 			}
 			ProjectDocument[] sortDocKeys = (ProjectDocument[]) p.sortedDocuments
@@ -1206,21 +1226,23 @@ public class Project implements Serializable, PropertyChangeListener {
 			Integer[] sortDocValues = (Integer[]) p.sortedDocuments.values()
 					.toArray(new Integer[0]);
 
-			i=0;
-			for ( i = 0; i < sortDocValues.length; i++) {
+			i = 0;
+			for (i = 0; i < sortDocValues.length; i++) {
 				try {
 					sortDocKeys[i].setXMLEntity(xml.getChild(sortDocValues[i]
 							.intValue()));
 				} catch (OpenException e) {
 					p.delDocument(sortDocKeys[i]);
-					XMLEntity childXML=xml.getChild(sortDocValues[i].intValue());
-					e.showMessageError(childXML.getName()+"\n  "+childXML.getStringProperty("className"));
+					XMLEntity childXML = xml.getChild(sortDocValues[i]
+							.intValue());
+					e.showMessageError(childXML.getName() + "\n  "
+							+ childXML.getStringProperty("className"));
 				}
 			}
 			childNumber += numDocuments;
 
 			p.modificationDate = xml.getStringProperty("modificationDate");
-			//p.modified = xml.getBooleanProperty("modified");
+			// p.modified = xml.getBooleanProperty("modified");
 			p.name = xml.getStringProperty("name");
 			p.owner = xml.getStringProperty("owner");
 			p.selectionColor = StringUtilities.string2Color(xml
@@ -1276,18 +1298,18 @@ public class Project implements Serializable, PropertyChangeListener {
 				try {
 					if ((((ProjectTable) tables.get(i)).getLinkTable() != null)
 							&& ((ProjectTable) tables.get(i)).getLinkTable()
-							.equals(
-									((ProjectTable) tables.get(j))
-									.getModelo().getRecordset()
-									.getName())) {
+									.equals(((ProjectTable) tables.get(j))
+											.getModelo().getRecordset()
+											.getName())) {
 						LinkSelectionListener lsl;
 
-						lsl = new LinkSelectionListener(((ProjectTable) tables
-								.get(i)).getModelo().getRecordset(),
+						lsl = new LinkSelectionListener(
+								((ProjectTable) tables.get(i)).getModelo()
+										.getRecordset(),
 								((ProjectTable) tables.get(j)).getModelo()
-								.getRecordset(), ((ProjectTable) tables
-										.get(i)).getField1(),
-										((ProjectTable) tables.get(i)).getField2());
+										.getRecordset(),
+								((ProjectTable) tables.get(i)).getField1(),
+								((ProjectTable) tables.get(i)).getField2());
 
 						(((ProjectTable) tables.get(i)).getModelo()
 								.getRecordset()).addSelectionListener(lsl);
@@ -1302,12 +1324,12 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * Obtiene la vista que contiene a la capa que se pasa como par�metro
-	 *
+	 * 
 	 * @param layer
 	 *            Capa cuya vista se quiere obtener
-	 *
+	 * 
 	 * @return
-	 *
+	 * 
 	 * @throws RuntimeException
 	 *             Si la capa que se pasa como par�metro no se encuentra en
 	 *             ninguna vista
@@ -1321,13 +1343,14 @@ public class Project implements Serializable, PropertyChangeListener {
 				return pView.getName();
 		}
 
-		throw new RuntimeException("The layer '"+layer.getName()+"' is not in a view");
+		throw new RuntimeException("The layer '" + layer.getName()
+				+ "' is not in a view");
 	}
 
 	public boolean isView(FLayers layers, FLayer layer) {
 		for (int i = 0; i < layers.getLayersCount(); i++) {
 			if (layers.getLayer(i) instanceof FLayers) {
-				if (isView((FLayers) layers.getLayer(i), layer)){
+				if (isView((FLayers) layers.getLayer(i), layer)) {
 					return true;
 				}
 			}
@@ -1342,24 +1365,24 @@ public class Project implements Serializable, PropertyChangeListener {
 	 * Devuelve la vista cuyo nombre coincide (sensible a mayusculas) con el que
 	 * se pasa como par�metro. Devuelve null si no hay ninguna vista con ese
 	 * nombre
-	 *
+	 * 
 	 * @param viewName
 	 *            Nombre de la vista que se quiere obtener
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	/*
 	 * public ProjectView getViewByName(String viewName) { ArrayList
 	 * views=getDocuments(PluginServices.getText(this,"Vista")); Object o =
 	 * getProjectDocumentByName(viewName, PluginServices.getText(this,"Vista"));
-	 *
+	 * 
 	 * if (o == null) { return null; }
-	 *
+	 * 
 	 * return (ProjectView) o; }
 	 */
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public CoordinateReferenceSystem getCrs() {
@@ -1370,7 +1393,7 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param defaultProjection
 	 *            DOCUMENT ME!
 	 */
@@ -1380,7 +1403,7 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * Sets the projection used when no projection is defined
-	 *
+	 * 
 	 * @param defaultCrs
 	 *            DOCUMENT ME!
 	 */
@@ -1389,9 +1412,9 @@ public class Project implements Serializable, PropertyChangeListener {
 	}
 
 	public static CoordinateReferenceSystem getDefaultCrs() {
-		if (defaultCrs == null){
-			XMLEntity xml = PluginServices.getPluginServices("com.iver.cit.gvsig")
-			.getPersistentXML();
+		if (defaultCrs == null) {
+			XMLEntity xml = PluginServices.getPluginServices(
+					"com.iver.cit.gvsig").getPersistentXML();
 
 			// Default Projection
 			String projCode = null;
@@ -1410,12 +1433,12 @@ public class Project implements Serializable, PropertyChangeListener {
 	 * Obtiene un documento a partir de su nombre y el nombre de registro en el
 	 * pointExtension, este �ltimo se puede obtener del
 	 * Project****Factory.registerName.
-	 *
+	 * 
 	 * @param name
 	 *            Nombre del documento
 	 * @param type
 	 *            nombre de registro en el extensionPoint
-	 *
+	 * 
 	 * @return Documento
 	 */
 	public ProjectDocument getProjectDocumentByName(String name, String type) {
@@ -1433,33 +1456,33 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param name
-	 *
+	 * 
 	 * @return
 	 */
 	/*
 	 * public ProjectTable getTableByName(String name) { ArrayList
 	 * tables=getDocuments(PluginServices.getText(this,"Tabla")); Object o =
 	 * getProjectElementByName(name, tables);
-	 *
+	 * 
 	 * if (o == null) { return null; }
-	 *
+	 * 
 	 * return (ProjectTable) o; }
 	 */
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param name
-	 *
+	 * 
 	 * @return
 	 */
 	/*
 	 * public ProjectMap getLayoutByName(String name) { Object o =
 	 * getProjectElementByName(name, maps);
-	 *
+	 * 
 	 * if (o == null) { return null; }
-	 *
+	 * 
 	 * return (ProjectMap) o; }
 	 */
 	public SelectableDataSource getDataSourceByLayer(FLayer layer)
@@ -1468,14 +1491,13 @@ public class Project implements Serializable, PropertyChangeListener {
 		SelectableDataSource dataSource = null;
 		for (int i = 0; i < tables.size(); i++) {
 			ProjectTable pt = (ProjectTable) tables.get(i);
-			if (pt.getOriginal() == ((AlphanumericData) layer)
-					.getRecordset()) {
+			if (pt.getOriginal() == ((AlphanumericData) layer).getRecordset()) {
 				dataSource = pt.getModelo().getRecordset();
 				break;
 			} else if (pt.getModelo() == ((AlphanumericData) layer)
 					.getRecordset()) {
-					dataSource = pt.getModelo().getRecordset();
-					break;
+				dataSource = pt.getModelo().getRecordset();
+				break;
 			}
 		}
 
@@ -1491,10 +1513,10 @@ public class Project implements Serializable, PropertyChangeListener {
 	/**
 	 * Recorremos las capas y las tablas del proyecto, y creamos una lista con
 	 * todos los datasources de GDBMS que estamos usando. Luego recorremos los
-	 * que est�n registrados, y borramos aquellos que no est�n siendo usados, es
-	 * decir, aquellos que no est�n en nuestra lista (un Hash con clave el
-	 * nombre del GDBMS)
-	 *
+	 * que est�n registrados, y borramos aquellos que no est�n siendo
+	 * usados, es decir, aquellos que no est�n en nuestra lista (un Hash con
+	 * clave el nombre del GDBMS)
+	 * 
 	 */
 	private void cleanBadReferences() {
 		ArrayList tables = getDocumentsByType(ProjectTableFactory.registerName);
@@ -1505,10 +1527,9 @@ public class Project implements Serializable, PropertyChangeListener {
 			for (i = 0; i < tables.size(); i++) {
 				ProjectTable t = (ProjectTable) tables.get(i);
 				SelectableDataSource ds;
-				if (t.getModelo() == null){
+				if (t.getModelo() == null) {
 					/*
-					 * if a broken table was found
-					 * we don't clean any source
+					 * if a broken table was found we don't clean any source
 					 */
 					return;
 				}
@@ -1529,14 +1550,14 @@ public class Project implements Serializable, PropertyChangeListener {
 		try {
 			for (i = 0; i < views.size(); i++) {
 				pv = (ProjectView) views.get(i);
-				this.findLayersVectDataSorces(pv.getMapContext(), usedDataSources);
+				this.findLayersVectDataSorces(pv.getMapContext(),
+						usedDataSources);
 
 				MapContext aux = pv.getMapOverViewContext();
 				if (aux != null) {
-					if (!this.findLayersVectDataSorces(aux, usedDataSources)){
+					if (!this.findLayersVectDataSorces(aux, usedDataSources)) {
 						/*
-						 * if a broken layer was found
-						 * we don't clean any source
+						 * if a broken layer was found we don't clean any source
 						 */
 						return;
 					}
@@ -1558,26 +1579,26 @@ public class Project implements Serializable, PropertyChangeListener {
 			for (i = 0; i < maps.size(); i++) {
 				pm = (ProjectMap) maps.get(i);
 				fframes = pm.getModel().getLayoutContext().getFFrames();
-				for (j=0;j < fframes.length; j++){
-					if (!(fframes[j] instanceof FFrameView)){
+				for (j = 0; j < fframes.length; j++) {
+					if (!(fframes[j] instanceof FFrameView)) {
 						continue;
 					}
-					if (!this.findLayersVectDataSorces(((FFrameView)fframes[i]).getMapContext(), usedDataSources)){
+					if (!this.findLayersVectDataSorces(
+							((FFrameView) fframes[i]).getMapContext(),
+							usedDataSources)) {
 						/*
-						 * if a broken layer was found
-						 * we don't clean any source
+						 * if a broken layer was found we don't clean any source
 						 */
 						return;
 
 					}
-				} //for j
+				} // for j
 
 			} // for i
 
 		} catch (ReadDriverException e) {
 			e.printStackTrace();
 		}
-
 
 		// Recorremos los dataSources y los borramos si no
 		// los estamos usando.
@@ -1604,17 +1625,19 @@ public class Project implements Serializable, PropertyChangeListener {
 	}
 
 	/**
-	 * Find DataSorces of the layers in the mapContext and store them in dataSourcesMap
-	 *
+	 * Find DataSorces of the layers in the mapContext and store them in
+	 * dataSourcesMap
+	 * 
 	 * @param mapContext
 	 * @param dataSourcesMap
 	 * @return false if find a no Available layer
 	 * @throws ReadDriverException
 	 */
-	private boolean findLayersVectDataSorces(MapContext mapContext,Map dataSourcesMap) throws ReadDriverException{
-		LayersIterator iter = new LayersIterator(mapContext.getLayers()){
+	private boolean findLayersVectDataSorces(MapContext mapContext,
+			Map dataSourcesMap) throws ReadDriverException {
+		LayersIterator iter = new LayersIterator(mapContext.getLayers()) {
 
-			//@Override
+			// @Override
 			public boolean evaluate(FLayer layer) {
 				if (!(layer instanceof FLyrVect))
 					return false;
@@ -1623,15 +1646,17 @@ public class Project implements Serializable, PropertyChangeListener {
 
 		};
 		FLyrVect layer;
-		while (iter.hasNext()){
-			layer = (FLyrVect)iter.nextLayer();
-			if (!layer.isAvailable()){
+		while (iter.hasNext()) {
+			layer = (FLyrVect) iter.nextLayer();
+			if (!layer.isAvailable()) {
 				return false;
 			}
 
-			dataSourcesMap.put(layer.getRecordset().getName(), layer.getRecordset());
-			if (layer.isJoined()){
-				dataSourcesMap.put(layer.getSource().getRecordset().getName(),layer.getSource().getRecordset());
+			dataSourcesMap.put(layer.getRecordset().getName(),
+					layer.getRecordset());
+			if (layer.isJoined()) {
+				dataSourcesMap.put(layer.getSource().getRecordset().getName(),
+						layer.getSource().getRecordset());
 			}
 
 		}
@@ -1640,7 +1665,7 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 * @throws SaveException
 	 * @throws XMLException
@@ -1673,7 +1698,7 @@ public class Project implements Serializable, PropertyChangeListener {
 					xml.putProperty("normalY", vi.getNormalY());
 					xml.putProperty("normalWidth", vi.getNormalWidth());
 					xml.putProperty("normalHeight", vi.getNormalHeight());
-}
+				}
 			} catch (Exception e) {
 				throw new SaveException(e, this.getClass().getName());
 			}
@@ -1693,10 +1718,10 @@ public class Project implements Serializable, PropertyChangeListener {
 			boolean maximized = xml.getBooleanProperty("isMaximized");
 			result.setMaximized(maximized);
 			if (maximized == true) {
-				result.setNormalBounds(xml.getIntProperty("normalX"), xml
-						.getIntProperty("normalY"), xml
-						.getIntProperty("normalWidth"), xml
-						.getIntProperty("normalHeight"));
+				result.setNormalBounds(xml.getIntProperty("normalX"),
+						xml.getIntProperty("normalY"),
+						xml.getIntProperty("normalWidth"),
+						xml.getIntProperty("normalHeight"));
 			} else {
 				result.setNormalBounds(result.getBounds());
 			}
@@ -1716,7 +1741,7 @@ public class Project implements Serializable, PropertyChangeListener {
 			FileSourceInfo vfdi = (FileSourceInfo) di;
 			child.putProperty("type", "otherDriverFile");
 			child.putProperty("gdbmsname", vfdi.name);
-			if (vfdi.file!=null)
+			if (vfdi.file != null)
 				child.putProperty("file", pathGenerator.getPath(vfdi.file));
 			else
 				child.putProperty("file", vfdi.file);
@@ -1741,10 +1766,10 @@ public class Project implements Serializable, PropertyChangeListener {
 	/**
 	 * Devuelve un arrayList con todos los documentos del tipo especificado como
 	 * par�metro.
-	 *
+	 * 
 	 * @param registerName
 	 *            nombre de registro en el extensionPoint
-	 *
+	 * 
 	 * @return Documentos del tipo especificado
 	 */
 	public ArrayList<ProjectDocument> getDocumentsByType(String registerName) {
@@ -1765,7 +1790,7 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * Devuelve un arrayList con todos los documentos.
-	 *
+	 * 
 	 * @return Documentos
 	 */
 	public ArrayList<ProjectDocument> getDocuments() {
@@ -1780,14 +1805,14 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * Inserta un documento.
-	 *
+	 * 
 	 * @param doc
 	 *            Documento
 	 */
 	public void addDocument(ProjectDocument doc) {
 		documents.add(doc);
 		doc.addPropertyChangeListener(this);
-		//modified = true;
+		// modified = true;
 		change.firePropertyChange("addDocument", "", doc);
 		doc.setProject(this, 0);
 		doc.afterAdd();
@@ -1795,13 +1820,13 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * Borra un documento.
-	 *
+	 * 
 	 * @param doc
 	 *            Documento
 	 */
 	public void delDocument(ProjectDocument doc) {
 		documents.remove(doc);
-		//modified = true;
+		// modified = true;
 		change.firePropertyChange("", null, null);
 		doc.afterRemove();
 	}
@@ -1809,7 +1834,7 @@ public class Project implements Serializable, PropertyChangeListener {
 	/**
 	 * Sets the default selection color that will be used in subsequent
 	 * projects.
-	 *
+	 * 
 	 * @param color
 	 */
 	public static void setDefaultSelectionColor(Color color) {
@@ -1819,7 +1844,7 @@ public class Project implements Serializable, PropertyChangeListener {
 	/**
 	 * Returns the current default selection color defined which is the color
 	 * defined when the user does not define any other one
-	 *
+	 * 
 	 * @return java.awt.Color
 	 */
 	public static Color getDefaultSelectionColor() {
@@ -1835,7 +1860,7 @@ public class Project implements Serializable, PropertyChangeListener {
 	/**
 	 * Returns the user's default map units. This is the cartography data
 	 * distance units.
-	 *
+	 * 
 	 * @return int (index of the <b>Attributes.NAMES array</b>)
 	 */
 	public static int getDefaultMapUnits() {
@@ -1855,7 +1880,8 @@ public class Project implements Serializable, PropertyChangeListener {
 					}
 				}
 			}
-			if (defaultMapUnits == -1 || defaultMapUnits >= MapContext.getDistanceNames().length)
+			if (defaultMapUnits == -1
+					|| defaultMapUnits >= MapContext.getDistanceNames().length)
 				defaultMapUnits = MapContext.getDistancePosition("Metros");
 		}
 		return defaultMapUnits;
@@ -1864,7 +1890,7 @@ public class Project implements Serializable, PropertyChangeListener {
 	/**
 	 * Returns the user's default view units for measuring distances. This is
 	 * the units that the user will see in the status bar of the view.
-	 *
+	 * 
 	 * @return int (index of the <b>Attributes.NAMES array</b>)
 	 */
 	public static int getDefaultDistanceUnits() {
@@ -1885,15 +1911,17 @@ public class Project implements Serializable, PropertyChangeListener {
 					}
 				}
 			}
-			if (defaultDistanceUnits == -1 || defaultDistanceUnits >= MapContext.getDistanceNames().length)
+			if (defaultDistanceUnits == -1
+					|| defaultDistanceUnits >= MapContext.getDistanceNames().length)
 				defaultDistanceUnits = MapContext.getDistancePosition("Metros");
 		}
 		return defaultDistanceUnits;
 	}
+
 	/**
-	 * Returns the user's default view units for measuring areas. This is
-	 * the units that the user will see in the status bar of the view.
-	 *
+	 * Returns the user's default view units for measuring areas. This is the
+	 * units that the user will see in the status bar of the view.
+	 * 
 	 * @return int (index of the <b>Attributes.NAMES array</b>)
 	 */
 	public static int getDefaultDistanceArea() {
@@ -1901,8 +1929,7 @@ public class Project implements Serializable, PropertyChangeListener {
 			XMLEntity xml = PluginServices.getPluginServices(
 					"com.iver.cit.gvsig").getPersistentXML();
 			if (xml.contains("DefaultDistanceArea")) {
-				defaultDistanceArea = xml
-						.getIntProperty("DefaultDistanceArea");
+				defaultDistanceArea = xml.getIntProperty("DefaultDistanceArea");
 			} else {
 				// first app run case
 				String[] unitNames = MapContext.getAreaNames();
@@ -1914,15 +1941,17 @@ public class Project implements Serializable, PropertyChangeListener {
 					}
 				}
 			}
-			if (defaultDistanceArea == -1 || defaultDistanceArea >= MapContext.getAreaNames().length){
-				defaultDistanceArea=getDefaultDistanceUnits();
+			if (defaultDistanceArea == -1
+					|| defaultDistanceArea >= MapContext.getAreaNames().length) {
+				defaultDistanceArea = getDefaultDistanceUnits();
 			}
 		}
 		return defaultDistanceArea;
 	}
+
 	/**
 	 * Sets the default map unit (the units used by the data).
-	 *
+	 * 
 	 * @param mapUnits
 	 */
 	public static void setDefaultMapUnits(int mapUnits) {
@@ -1931,20 +1960,22 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * Sets the default distance units (the units shown in the status bar)
-	 *
+	 * 
 	 * @param distanceUnits
 	 */
 	public static void setDefaultDistanceUnits(int distanceUnits) {
 		defaultDistanceUnits = distanceUnits;
 	}
+
 	/**
 	 * Sets the default distance area (the units shown in the status bar)
-	 *
+	 * 
 	 * @param distanceUnits
 	 */
 	public static void setDefaultDistanceArea(int distanceArea) {
 		defaultDistanceArea = distanceArea;
 	}
+
 	public String exportToXML() throws SaveException {
 		XMLEntity xml = this.newExportXMLRootNode();
 
@@ -1973,22 +2004,23 @@ public class Project implements Serializable, PropertyChangeListener {
 		throw new Exception("Not Implemented");
 		/*
 		 * // FIXME: ?? Exceptions XMLEntity xmlEntity = new XMLEntity();
-		 *
+		 * 
 		 * try { xmlEntity.parse(xml); } catch (Exception e) { throw new
 		 * Exception(e); }
-		 *
+		 * 
 		 * if (!checkExportXMLRootNode(xmlEntity)) { throw new Exception("Check
 		 * Error"); //FIXME: traducir }
-		 *
+		 * 
 		 * int i;
-		 *
+		 * 
 		 * XMLEntity xmlDocumentRoot; ProjectDocument document = null;
-		 * ProjectDocumentFactory documentFactory = null; for (i=0;i<xmlEntity.getChildrenCount();i++) {
-		 * xmlDocumentRoot = xmlEntity.getChild(i); if
-		 * (!xmlDocumentRoot.contains("type")) { throw new Exception("Document
-		 * root "+i+ "error"); } documentFactory =
-		 * Project.getProjectDocumentFactory(xmlDocumentRoot.getStringProperty("type"));
-		 * int j; }
+		 * ProjectDocumentFactory documentFactory = null; for
+		 * (i=0;i<xmlEntity.getChildrenCount();i++) { xmlDocumentRoot =
+		 * xmlEntity.getChild(i); if (!xmlDocumentRoot.contains("type")) { throw
+		 * new Exception("Document root "+i+ "error"); } documentFactory =
+		 * Project
+		 * .getProjectDocumentFactory(xmlDocumentRoot.getStringProperty("type"
+		 * )); int j; }
 		 */
 
 	}
@@ -2141,8 +2173,10 @@ public class Project implements Serializable, PropertyChangeListener {
 			if (xmlDataSource.getStringProperty("type").equals(
 					"otherDriverFile")) {
 				LayerFactory.getDataSourceFactory().addFileDataSource(
-						xmlDataSource.getStringProperty("driverName"), name,
-						pathGenerator.getAbsolutePath(xmlDataSource.getStringProperty("file")));
+						xmlDataSource.getStringProperty("driverName"),
+						name,
+						pathGenerator.getAbsolutePath(xmlDataSource
+								.getStringProperty("file")));
 
 			} else if (xmlDataSource.getStringProperty("type").equals(
 					"sameDriverFile")) {
@@ -2209,14 +2243,15 @@ public class Project implements Serializable, PropertyChangeListener {
 		return pde;
 	}
 
-	 public boolean hasChanged() {
-		 // we return true if the project is not empty (until we have a better method...)
-		 if ((this.getDocuments().size() != 0) || modified) {
-			 return true;
-		 }
-		 return false;
-//		 return signatureAtStartup != getXMLEntity().hash();
-	 }
+	public boolean hasChanged() {
+		// we return true if the project is not empty (until we have a better
+		// method...)
+		if ((this.getDocuments().size() != 0) || modified) {
+			return true;
+		}
+		return false;
+		// return signatureAtStartup != getXMLEntity().hash();
+	}
 
 	public void setSignature(long hash) {
 		signatureAtStartup = hash;
@@ -2227,6 +2262,6 @@ public class Project implements Serializable, PropertyChangeListener {
 	}
 
 	public void setIsAbsolutePath(boolean selected) {
-		isAbsolutePath=selected;
+		isAbsolutePath = selected;
 	}
 }

@@ -51,11 +51,12 @@ import com.iver.cit.gvsig.fmap.layers.FLayers;
 
 /**
  * @author fjp
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
+ * 
+ *         TODO To change the template for this generated type comment go to
+ *         Window - Preferences - Java - Code Generation - Code and Comments
  */
 public interface ITocOrderListener {
-	void orderChanged(int oldPos, int newPos,FLayers lpd);
-	void parentChanged(FLayers lpo,FLayers lpd,FLayer ls);
+	void orderChanged(int oldPos, int newPos, FLayers lpd);
+
+	void parentChanged(FLayers lpo, FLayers lpd, FLayer ls);
 }

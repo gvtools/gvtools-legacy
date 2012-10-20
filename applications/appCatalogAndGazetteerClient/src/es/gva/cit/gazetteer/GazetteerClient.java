@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.gazetteer;
+
 import es.gva.cit.catalog.DiscoveryServiceClient;
 import es.gva.cit.gazetteer.drivers.GazetteerCapabilities;
 import es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver;
@@ -49,75 +49,81 @@ import es.gva.cit.gazetteer.querys.FeatureTypeAttribute;
 import es.gva.cit.gazetteer.querys.GazetteerQuery;
 
 /**
- * This class represents a gazetteer client. It must be created to
- * use the gazetteer service 
+ * This class represents a gazetteer client. It must be created to use the
+ * gazetteer service
+ * 
  * @author Jorge Piera Llodra (piera_jor@gva.es)
  */
-public class GazetteerClient extends DiscoveryServiceClient{
-	
+public class GazetteerClient extends DiscoveryServiceClient {
+
 	public GazetteerClient(String uri, IGazetteerServiceDriver driver) {
-		super(uri, driver);		
+		super(uri, driver);
 	}
 
 	/**
 	 * @return the feature types
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public FeatureType[] getFeatureTypes() throws Exception {
-		return ((GazetteerCapabilities)getCapabilities()).getFeatureTypes();
+		return ((GazetteerCapabilities) getCapabilities()).getFeatureTypes();
 	}
 
 	/**
-	 * This method makes the describeFeatureType
-	 * operation
+	 * This method makes the describeFeatureType operation
+	 * 
 	 * @param featureName
-	 * Feature name
+	 *            Feature name
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
-	public FeatureTypeAttribute[] describeFeatureType(String featureName) throws Exception{
-		return ((IGazetteerServiceDriver)getDriver()).describeFeatureType(getUri(), featureName);
+	public FeatureTypeAttribute[] describeFeatureType(String featureName)
+			throws Exception {
+		return ((IGazetteerServiceDriver) getDriver()).describeFeatureType(
+				getUri(), featureName);
 	}
-	
+
 	/**
-	 * @return if the describeFeatureType operation is
-	 * supported by the driver
+	 * @return if the describeFeatureType operation is supported by the driver
 	 */
-	public boolean isDescribeFeatureTypeNeeded(){
-		return ((IGazetteerServiceDriver)getDriver()).isDescribeFeatureTypeNeeded();
+	public boolean isDescribeFeatureTypeNeeded() {
+		return ((IGazetteerServiceDriver) getDriver())
+				.isDescribeFeatureTypeNeeded();
 	}
 
 	/**
 	 * This method implements the getFeature operation
-	 * @return 
-	 * A result collection
-	 * @param query 
-	 * The results query
-	 * @throws Exception 
+	 * 
+	 * @return A result collection
+	 * @param query
+	 *            The results query
+	 * @throws Exception
 	 */
-	public Feature[] getFeature(GazetteerQuery query) throws Exception {        
-		return ((IGazetteerServiceDriver)getDriver()).getFeature(getUri(), query);
-	} 	
+	public Feature[] getFeature(GazetteerQuery query) throws Exception {
+		return ((IGazetteerServiceDriver) getDriver()).getFeature(getUri(),
+				query);
+	}
 
 	/**
 	 * This method is used to create a new Query
-	 * @return 
+	 * 
+	 * @return
 	 */
-	public GazetteerQuery createNewQuery() {        
-		return new GazetteerQuery();   
-	} 	
-	
+	public GazetteerQuery createNewQuery() {
+		return new GazetteerQuery();
+	}
+
 	/**
 	 * @return the projection
 	 */
 	public String getProjection() {
-		return ((IGazetteerServiceDriver)getDriver()).getProjection();
+		return ((IGazetteerServiceDriver) getDriver()).getProjection();
 	}
 
 	/**
-	 * @param projection the projection to set
+	 * @param projection
+	 *            the projection to set
 	 */
 	public void setProjection(String projection) {
-		((IGazetteerServiceDriver)getDriver()).setProjection(projection);
-	} 
+		((IGazetteerServiceDriver) getDriver()).setProjection(projection);
+	}
 }

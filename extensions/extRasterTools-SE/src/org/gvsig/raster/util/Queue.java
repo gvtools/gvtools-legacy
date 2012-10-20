@@ -46,8 +46,7 @@ import java.util.Vector;
 
 /**
  * A simple FIFO queue class which causes the calling thread to wait if the
- * queue is empty and notifies threads that are waiting when it is not
- * empty.
+ * queue is empty and notifies threads that are waiting when it is not empty.
  * 
  * @author Anil V (akv@eng.sun.com)
  */
@@ -74,12 +73,11 @@ public class Queue {
 				wait();
 			} catch (InterruptedException ex) {
 			}
-			return get();
+		return get();
 	}
 
 	/**
-	 * Get the first object out of the queue. Return null if the queue is
-	 * empty.
+	 * Get the first object out of the queue. Return null if the queue is empty.
 	 */
 	public synchronized Object get() {
 		Object object = peek();

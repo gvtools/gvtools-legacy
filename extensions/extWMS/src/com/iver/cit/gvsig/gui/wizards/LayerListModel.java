@@ -47,95 +47,94 @@ import javax.swing.AbstractListModel;
 
 import com.iver.cit.gvsig.fmap.layers.WMSLayerNode;
 
-
-
 /**
  * NO SE USA
- *
+ * 
  * @author Fernando González Cortés
  */
 public class LayerListModel extends AbstractListModel {
-    private ArrayList nodos = new ArrayList();
+	private ArrayList nodos = new ArrayList();
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param elemento DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    
-    public boolean addElement(WMSLayerNode elemento) {
-        if (elemento == null) {
-            return false;
-        }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param elemento
+	 *            DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
 
-        for (int i = 0; i < nodos.size(); i++) {
-            if (((WMSLayerNode) nodos.get(i)).equals(elemento)) {
-                return false;
-            }
-        }
+	public boolean addElement(WMSLayerNode elemento) {
+		if (elemento == null) {
+			return false;
+		}
 
-        nodos.add(elemento);
+		for (int i = 0; i < nodos.size(); i++) {
+			if (((WMSLayerNode) nodos.get(i)).equals(elemento)) {
+				return false;
+			}
+		}
 
-        fireContentsChanged(this, nodos.size() - 1, nodos.size() - 1);
+		nodos.add(elemento);
 
-        return true;
-    }
+		fireContentsChanged(this, nodos.size() - 1, nodos.size() - 1);
 
-	public void clear(){
-		nodos.clear();
-		fireContentsChanged(this, 0, 0);
-        
-        
+		return true;
 	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param index DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public WMSLayerNode delElement(int index) {
-        WMSLayerNode ret = (WMSLayerNode) nodos.remove(index);
-        this.fireContentsChanged(this, index, index);
+	public void clear() {
+		nodos.clear();
+		fireContentsChanged(this, 0, 0);
 
-        return ret;
-    }
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param c DOCUMENT ME!
-     */
-    public void delElements(Collection c) {
-        nodos.removeAll(c);
-        this.fireContentsChanged(this, 0, nodos.size());
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param index
+	 *            DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public WMSLayerNode delElement(int index) {
+		WMSLayerNode ret = (WMSLayerNode) nodos.remove(index);
+		this.fireContentsChanged(this, index, index);
 
-    /**
-     * @see javax.swing.ListModel#getSize()
-     */
-    public int getSize() {
-        return nodos.size();
-    }
+		return ret;
+	}
 
-    /**
-     * @see javax.swing.ListModel#getElementAt(int)
-     */
-    public Object getElementAt(int index) {
-        return ((WMSLayerNode) nodos.get(index)).getTitle();
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param c
+	 *            DOCUMENT ME!
+	 */
+	public void delElements(Collection c) {
+		nodos.removeAll(c);
+		this.fireContentsChanged(this, 0, nodos.size());
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public WMSLayerNode[] getElements() {
-        return (WMSLayerNode[]) nodos.toArray(new WMSLayerNode[0]);
-    }
+	/**
+	 * @see javax.swing.ListModel#getSize()
+	 */
+	public int getSize() {
+		return nodos.size();
+	}
 
+	/**
+	 * @see javax.swing.ListModel#getElementAt(int)
+	 */
+	public Object getElementAt(int index) {
+		return ((WMSLayerNode) nodos.get(index)).getTitle();
+	}
+
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public WMSLayerNode[] getElements() {
+		return (WMSLayerNode[]) nodos.toArray(new WMSLayerNode[0]);
+	}
 
 }

@@ -160,18 +160,20 @@ import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.threads.Cancellable;
 
 /**
- *
+ * 
  * GeneralLabelingStrategy.java
- *
- *
+ * 
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Jan 4, 2008
- *
+ * 
  */
-public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,CartographicSupport {
+public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,
+		CartographicSupport {
 	public static IPlacementConstraints DefaultPointPlacementConstraints = new PointPlacementConstraints();
 	public static IPlacementConstraints DefaultLinePlacementConstraints = new LinePlacementConstraints();
 	public static IPlacementConstraints DefaultPolygonPlacementConstraints = new PolygonPlacementConstraints();
-	private static String[] NO_TEXT = {PluginServices.getText(null, "text_field")};
+	private static String[] NO_TEXT = { PluginServices.getText(null,
+			"text_field") };
 	private static MultiShapePlacementConstraints DefaultMultiShapePlacementConstratints = new MultiShapePlacementConstraints();
 	private ILabelingMethod method;
 	private IPlacementConstraints placementConstraints;
@@ -182,7 +184,10 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 	private int unit;
 	private int referenceSystem;
 	private double sizeAfter;
-	private boolean printMode = false; /* indicate whether output is for a print product (PDF, PS, ...) */
+	private boolean printMode = false; /*
+										 * indicate whether output is for a
+										 * print product (PDF, PS, ...)
+										 */
 
 	public void setLayer(FLayer layer) throws ReadDriverException {
 		FLyrVect l = (FLyrVect) layer;
@@ -197,36 +202,39 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 		this.method = method;
 	}
 
-	private class GeometryItem{
+	private class GeometryItem {
 		public IGeometry geom = null;
 		public int weigh = 0;
 		public double savedPerimeter;
 
-		public GeometryItem(IGeometry geom, int weigh){
+		public GeometryItem(IGeometry geom, int weigh) {
 			this.geom = geom;
 			this.weigh = weigh;
 			this.savedPerimeter = 0;
 		}
 	}
-	public void draw(BufferedImage mapImage, Graphics2D mapGraphics,
-			ViewPort viewPort,	Cancellable cancel, double dpi) throws ReadDriverException {
-		int x = (int)viewPort.getOffset().getX();
-		int y = (int)viewPort.getOffset().getY();
-//		boolean bVisualFXEnabled = false; // if true, the user can see how the labeling is drawing up
 
-		//offsets for page generation (PDF, PS, direct printing)
+	public void draw(BufferedImage mapImage, Graphics2D mapGraphics,
+			ViewPort viewPort, Cancellable cancel, double dpi)
+			throws ReadDriverException {
+		int x = (int) viewPort.getOffset().getX();
+		int y = (int) viewPort.getOffset().getY();
+		// boolean bVisualFXEnabled = false; // if true, the user can see how
+		// the labeling is drawing up
+
+		// offsets for page generation (PDF, PS, direct printing)
 		int print_offset_x = x;
 		int print_offset_y = y;
 		if (printMode) {
-			//for printing, we never offset the labels themselves
+			// for printing, we never offset the labels themselves
 			x = 0;
 			y = 0;
 			printMode = false;
-		}		
+		}
 
 		TreeMap<String[], GeometryItem> labelsToPlace = null;
-		parseTime =0;
-//		long t1 = System.currentTimeMillis();
+		parseTime = 0;
+		// long t1 = System.currentTimeMillis();
 		String[] usedFields = getUsedFields();
 
 		int notPlacedCount = 0;
@@ -235,33 +243,34 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 		/*
 		 * Get the label placement solvers according the user's settings
 		 */
-		ILabelPlacement placement = PlacementManager.getPlacement(getPlacementConstraints(), layer.getShapeType());
-
+		ILabelPlacement placement = PlacementManager.getPlacement(
+				getPlacementConstraints(), layer.getShapeType());
 
 		BufferedImage targetBI;
 		Graphics2D targetGr;
 
-
 		/*
-		 * get an ordered set of the LabelClasses up on the
-		 * label priority
+		 * get an ordered set of the LabelClasses up on the label priority
 		 */
 		LabelClass[] lcs = method.getLabelClasses();
-		TreeSet<LabelClass> ts = new TreeSet<LabelClass>(new LabelClassComparatorByPriority());
+		TreeSet<LabelClass> ts = new TreeSet<LabelClass>(
+				new LabelClassComparatorByPriority());
 
-		for (int i = 0; i < lcs.length; i++) ts.add(lcs[i]);
+		for (int i = 0; i < lcs.length; i++)
+			ts.add(lcs[i]);
 
-		if (ts.size()==0) return;
+		if (ts.size() == 0)
+			return;
 
 		/*
-		 * now we have an ordered set, it is only need to give a pass
-		 * for each label class to render by priorities.
-		 *
-		 * If no priorities were defined, the following loop only executes
-		 * once
+		 * now we have an ordered set, it is only need to give a pass for each
+		 * label class to render by priorities.
+		 * 
+		 * If no priorities were defined, the following loop only executes once
 		 */
 		for (LabelClass lc : ts) {
-			IFeatureIterator it =  method.getFeatureIteratorByLabelClass(layer, lc, viewPort, usedFields);
+			IFeatureIterator it = method.getFeatureIteratorByLabelClass(layer,
+					lc, viewPort, usedFields);
 
 			// duplicates treatment stuff
 			/* handle the duplicates mode */
@@ -269,7 +278,8 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 			if (duplicateMode == IPlacementConstraints.REMOVE_DUPLICATE_LABELS) {
 				// we need to register the labels already placed
 
-				labelsToPlace = new TreeMap<String[], GeometryItem>(new RemoveDuplicatesComparator());
+				labelsToPlace = new TreeMap<String[], GeometryItem>(
+						new RemoveDuplicatesComparator());
 			}
 
 			boolean bLabelsReallocatable = !isAllowingOverlap();
@@ -279,28 +289,26 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 			if (bLabelsReallocatable) {
 				int width = viewPort.getImageWidth() + print_offset_x;
 
-				if(width<0){
+				if (width < 0) {
 					width = 1;
 				}
 				int height = viewPort.getImageHeight() + print_offset_y;
-				if(height<0){
+				if (height < 0) {
 					height = 1;
 				}
-				if (mapImage!=null)
-					overlapDetectImage = new BufferedImage(
-							mapImage.getWidth()  + print_offset_x,
-							mapImage.getHeight()  + print_offset_y,
-							BufferedImage.TYPE_INT_ARGB
-				);
+				if (mapImage != null)
+					overlapDetectImage = new BufferedImage(mapImage.getWidth()
+							+ print_offset_x, mapImage.getHeight()
+							+ print_offset_y, BufferedImage.TYPE_INT_ARGB);
 				else
 					overlapDetectImage = new BufferedImage(
 							viewPort.getImageWidth() + print_offset_x,
 							viewPort.getImageHeight() + print_offset_y,
-							BufferedImage.TYPE_INT_ARGB
-					);
+							BufferedImage.TYPE_INT_ARGB);
 
 				overlapDetectGraphics = overlapDetectImage.createGraphics();
-				overlapDetectGraphics.setRenderingHints(mapGraphics.getRenderingHints());
+				overlapDetectGraphics.setRenderingHints(mapGraphics
+						.getRenderingHints());
 			}
 			if (bLabelsReallocatable) {
 				targetBI = overlapDetectImage;
@@ -311,55 +319,75 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 				targetGr = mapGraphics;
 			}
 
-			while ( !cancel.isCanceled() && it.hasNext()) {
+			while (!cancel.isCanceled() && it.hasNext()) {
 				IFeature feat = it.next();
 				IGeometry geom = feat.getGeometry();
-				if (geom==null || geom instanceof FNullGeometry) // we don't need to label null geometries
+				if (geom == null || geom instanceof FNullGeometry) // we don't
+																	// need to
+																	// label
+																	// null
+																	// geometries
 					continue;
 
-				if (!setupLabel(feat, lc, cancel, usedFields, viewPort, dpi, duplicateMode)){ //, placedLabels)){
+				if (!setupLabel(feat, lc, cancel, usedFields, viewPort, dpi,
+						duplicateMode)) { // , placedLabels)){
 					continue;
 				}
 
 				String[] texts = lc.getTexts();
-//				System.out.println(texts[0]);
+				// System.out.println(texts[0]);
 				if (duplicateMode == IPlacementConstraints.REMOVE_DUPLICATE_LABELS) {
-					// check if this text (so label) is already present in the map
+					// check if this text (so label) is already present in the
+					// map
 
 					GeometryItem item = labelsToPlace.get(texts);
-					if (item == null){
+					if (item == null) {
 						item = new GeometryItem(geom, 0);
 						labelsToPlace.put(texts, item);
 					}
-					if (item.geom != null){
+					if (item.geom != null) {
 						notPlacedCount++;
-						if(geom.getGeometryType() != FShape.POINT){
-							// FJP: Cambiamos la unión por una comprobación de longitud, por ejemplo.
-							// La geometría con mayor longitud del bounding box será la que etiquetamos.
-							// Será inexacto, pero más rápido. Solo lo queremos para saber qué entidad etiquetamos
-							// El problema con la unión es que para líneas va muy mal (no sabes lo que te va
-							// a etiquetar, y para polígonos será muy lenta. De todas formas, habría que evitar
+						if (geom.getGeometryType() != FShape.POINT) {
+							// FJP: Cambiamos la unión por una comprobación de
+							// longitud, por ejemplo.
+							// La geometría con mayor longitud del bounding box
+							// será la que etiquetamos.
+							// Será inexacto, pero más rápido. Solo lo queremos
+							// para saber qué entidad etiquetamos
+							// El problema con la unión es que para líneas va
+							// muy mal (no sabes lo que te va
+							// a etiquetar, y para polígonos será muy lenta. De
+							// todas formas, habría que evitar
 							// la conversión al JTS.
-//							Geometry jtsGeom = item.geom.toJTSGeometry().union(geom.toJTSGeometry());
-//							if (jtsGeom instanceof LineString) {
-//								CoordinateSequence cs = ((LineString) (jtsGeom)).getCoordinateSequence();
-//								CoordinateSequences.reverse(cs);
-//								jtsGeom = new LineString(cs, null);
-//							}
-//							item.geom = FConverter.jts_to_igeometry(jtsGeom);
+							// Geometry jtsGeom =
+							// item.geom.toJTSGeometry().union(geom.toJTSGeometry());
+							// if (jtsGeom instanceof LineString) {
+							// CoordinateSequence cs = ((LineString)
+							// (jtsGeom)).getCoordinateSequence();
+							// CoordinateSequences.reverse(cs);
+							// jtsGeom = new LineString(cs, null);
+							// }
+							// item.geom = FConverter.jts_to_igeometry(jtsGeom);
 
 							Rectangle2D auxBox = geom.getBounds2D();
-							double perimeterAux = 2*auxBox.getWidth() + 2*auxBox.getHeight();
+							double perimeterAux = 2 * auxBox.getWidth() + 2
+									* auxBox.getHeight();
 							if (perimeterAux > item.savedPerimeter) {
-								item.geom = geom; //FConverter.jts_to_igeometry(jtsGeom);
+								item.geom = geom; // FConverter.jts_to_igeometry(jtsGeom);
 								item.savedPerimeter = perimeterAux;
 							}
 						} else {
 							int weigh = item.weigh;
-							FPoint2D pointFromLabel = (FPoint2D)item.geom.getInternalShape();
-							item.geom = ShapeFactory.createPoint2D(
-									(pointFromLabel.getX()*weigh + ((FPoint2D)geom.getInternalShape()).getX())/(weigh+1),
-									(pointFromLabel.getY()*weigh + ((FPoint2D)geom.getInternalShape()).getY())/(weigh+1));
+							FPoint2D pointFromLabel = (FPoint2D) item.geom
+									.getInternalShape();
+							item.geom = ShapeFactory
+									.createPoint2D(
+											(pointFromLabel.getX() * weigh + ((FPoint2D) geom
+													.getInternalShape()).getX())
+													/ (weigh + 1),
+											(pointFromLabel.getY() * weigh + ((FPoint2D) geom
+													.getInternalShape()).getY())
+													/ (weigh + 1));
 						}
 					} else {
 						item.geom = geom;
@@ -370,111 +398,109 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 					if (isOnePoint(viewPort, geom)) {
 						continue;
 					}
-//					lc.toCartographicSize(viewPort, dpi, null);
+					// lc.toCartographicSize(viewPort, dpi, null);
 
-					drawLabelInGeom(targetBI, targetGr, lc, placement, viewPort, geom, cancel, dpi, bLabelsReallocatable);
+					drawLabelInGeom(targetBI, targetGr, lc, placement,
+							viewPort, geom, cancel, dpi, bLabelsReallocatable);
 					placedCount++;
 				}
 			}
 			if (duplicateMode == IPlacementConstraints.REMOVE_DUPLICATE_LABELS) {
 				Iterator<String[]> textsIt = labelsToPlace.keySet().iterator();
-				while ( !cancel.isCanceled() && textsIt.hasNext()) {
+				while (!cancel.isCanceled() && textsIt.hasNext()) {
 					notPlacedCount++;
 					String[] texts = textsIt.next();
 
 					GeometryItem item = labelsToPlace.get(texts);
-					if(item != null){
+					if (item != null) {
 						lc.setTexts(texts);
 						// Check if size is a pixel
 						if (isOnePoint(viewPort, item.geom)) {
 							continue;
 						}
 
-//						lc.toCartographicSize(viewPort, dpi, null);
-						drawLabelInGeom(targetBI, targetGr, lc, placement, viewPort, item.geom, cancel, dpi, bLabelsReallocatable);
+						// lc.toCartographicSize(viewPort, dpi, null);
+						drawLabelInGeom(targetBI, targetGr, lc, placement,
+								viewPort, item.geom, cancel, dpi,
+								bLabelsReallocatable);
 					}
 				}
 			}
 
 			if (bLabelsReallocatable) {
 				targetGr.translate(x, y);
-				if (mapImage!=null)
-					((Graphics2D)mapImage.getGraphics()).drawImage(overlapDetectImage, null, null);
+				if (mapImage != null)
+					((Graphics2D) mapImage.getGraphics()).drawImage(
+							overlapDetectImage, null, null);
 				else
 					mapGraphics.drawImage(overlapDetectImage, null, null);
 			}
 
-
 		}
-//		double totalTime = (System.currentTimeMillis()-t1);
-//
-//		int total = placedCount+notPlacedCount;
-//
-//		if (total>0)
-//		Logger.getLogger(getClass()).info("Labeled layer '"+layer.getName()+
-//		"' "+totalTime/1000D+" seconds. "+placedCount+"/"+total+
-//		" labels placed ("+NumberFormat.getInstance().
-//		format(100*placedCount/(double) total)+"%)");
-//
-//		if (cancel.isCanceled()) {
-//			Logger.getLogger(getClass()).info("Layer labeling canceled: '"+
-//					layer.getName()+"'");
-//		} else {
-//			Logger.getLogger(getClass()).info("Total labels parse time = "+
-//					parseTime+" ("+NumberFormat.getInstance().
-//					format(parseTime*100/totalTime)+"%)");
-//		}
+		// double totalTime = (System.currentTimeMillis()-t1);
+		//
+		// int total = placedCount+notPlacedCount;
+		//
+		// if (total>0)
+		// Logger.getLogger(getClass()).info("Labeled layer '"+layer.getName()+
+		// "' "+totalTime/1000D+" seconds. "+placedCount+"/"+total+
+		// " labels placed ("+NumberFormat.getInstance().
+		// format(100*placedCount/(double) total)+"%)");
+		//
+		// if (cancel.isCanceled()) {
+		// Logger.getLogger(getClass()).info("Layer labeling canceled: '"+
+		// layer.getName()+"'");
+		// } else {
+		// Logger.getLogger(getClass()).info("Total labels parse time = "+
+		// parseTime+" ("+NumberFormat.getInstance().
+		// format(parseTime*100/totalTime)+"%)");
+		// }
 
 	}
-	private void drawLabelInGeom(BufferedImage targetBI, Graphics2D targetGr, LabelClass lc,
-			ILabelPlacement placement, ViewPort viewPort, IGeometry geom, Cancellable cancel,
-			double dpi, boolean bLabelsReallocatable){
+
+	private void drawLabelInGeom(BufferedImage targetBI, Graphics2D targetGr,
+			LabelClass lc, ILabelPlacement placement, ViewPort viewPort,
+			IGeometry geom, Cancellable cancel, double dpi,
+			boolean bLabelsReallocatable) {
 
 		lc.toCartographicSize(viewPort, dpi, null);
 
 		ArrayList<LabelLocationMetrics> llm = null;
 
-		llm = placement.guess(
-				lc,
-				geom,
-				getPlacementConstraints(),
-				0,
-				cancel,viewPort);
+		llm = placement.guess(lc, geom, getPlacementConstraints(), 0, cancel,
+				viewPort);
 
 		setReferenceSystem(lc.getReferenceSystem());
 		setUnit(lc.getUnit());
 
 		/*
-		 *  Esto provoca errores en el calculo del tamaño de la LabelClass
-		 * así que se ha diferido el calculo del tamaño con que debería
-		 * dibujarse el texto justo hasta el momento en que se dibuja éste,
-		 * en el metodo draw de la LabelClass.
-		 *
-		 * FIXME: Mantengo el código viejo comentarizado para enfatizar
-		 * este comentario. Eliminar cuando se asuma que es correcto el cambio.
-		 *
+		 * Esto provoca errores en el calculo del tamaño de la LabelClass así
+		 * que se ha diferido el calculo del tamaño con que debería dibujarse el
+		 * texto justo hasta el momento en que se dibuja éste, en el metodo draw
+		 * de la LabelClass.
+		 * 
+		 * FIXME: Mantengo el código viejo comentarizado para enfatizar este
+		 * comentario. Eliminar cuando se asuma que es correcto el cambio.
 		 */
 
-//		double sizeBefore = lc.getTextSymbol().getFont().getSize();
+		// double sizeBefore = lc.getTextSymbol().getFont().getSize();
 
-//		sizeAfter = CartographicSupportToolkit.getCartographicLength(this,
-//				sizeBefore,
-//				viewPort,
-//				MapContext.getScreenDPI());
-
+		// sizeAfter = CartographicSupportToolkit.getCartographicLength(this,
+		// sizeBefore,
+		// viewPort,
+		// MapContext.getScreenDPI());
 
 		/*
-		 * search if there is room left by the previous and
-		 * with more priority labels, then check the current
-		 * level
+		 * search if there is room left by the previous and with more priority
+		 * labels, then check the current level
 		 */
-//		if (
-		lookupAndPlaceLabel(targetBI, targetGr, llm,
-				placement, lc, geom, viewPort, cancel,	bLabelsReallocatable);  //{
+		// if (
+		lookupAndPlaceLabel(targetBI, targetGr, llm, placement, lc, geom,
+				viewPort, cancel, bLabelsReallocatable); // {
 
-//			lc.getTextSymbol().setFontSize(sizeBefore);
-//		}
-//		lc.toCartographicSize(viewPort, dpi, null);
+		// lc.getTextSymbol().setFontSize(sizeBefore);
+		// }
+		// lc.toCartographicSize(viewPort, dpi, null);
 
 	}
 
@@ -487,7 +513,7 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 
 	private boolean lookupAndPlaceLabel(BufferedImage bi, Graphics2D g,
 			ArrayList<LabelLocationMetrics> llm, ILabelPlacement placement,
-			LabelClass lc, IGeometry geom,	ViewPort viewPort,
+			LabelClass lc, IGeometry geom, ViewPort viewPort,
 			Cancellable cancel, boolean bLabelsReallocatable) {
 		int i;
 
@@ -495,8 +521,8 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 			LabelLocationMetrics labelMetrics = llm.get(i);
 
 			IPlacementConstraints pc = getPlacementConstraints();
-			if(pc instanceof MultiShapePlacementConstraints){
-				MultiShapePlacementConstraints mpc = (MultiShapePlacementConstraints)pc;
+			if (pc instanceof MultiShapePlacementConstraints) {
+				MultiShapePlacementConstraints mpc = (MultiShapePlacementConstraints) pc;
 				int shapeType = geom.getGeometryType();
 				switch (shapeType % FShape.Z) {
 				case FShape.POINT:
@@ -514,22 +540,24 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 			/*
 			 * Ver comentario en el metodo drawLabelInGeom
 			 */
-//			lc.getTextSymbol().setFontSize(sizeAfter);// * FConstant.FONT_HEIGHT_SCALE_FACTOR);
+			// lc.getTextSymbol().setFontSize(sizeAfter);// *
+			// FConstant.FONT_HEIGHT_SCALE_FACTOR);
 			if (bLabelsReallocatable) {
 				if (!isOverlapping(bi, lc.getShape(labelMetrics))) {
 
-					if(!pc.isFollowingLine()){
-						lc.draw(g, labelMetrics, (FShape) geom.getInternalShape());
-					}
-					else{
+					if (!pc.isFollowingLine()) {
+						lc.draw(g, labelMetrics,
+								(FShape) geom.getInternalShape());
+					} else {
 						SmartTextSymbolLabelClass smsLc = new SmartTextSymbolLabelClass();
-						SmartTextSymbol sms = new SmartTextSymbol(lc.getTextSymbol(),pc);
+						SmartTextSymbol sms = new SmartTextSymbol(
+								lc.getTextSymbol(), pc);
 
-						double sizeBefore = lc.getTextSymbol().getFont().getSize();
-						double sizeAfter = CartographicSupportToolkit.getCartographicLength(this,
-								sizeBefore,
-								viewPort,
-								MapContext.getScreenDPI());
+						double sizeBefore = lc.getTextSymbol().getFont()
+								.getSize();
+						double sizeAfter = CartographicSupportToolkit
+								.getCartographicLength(this, sizeBefore,
+										viewPort, MapContext.getScreenDPI());
 						sms.setFontSize(sizeAfter);
 
 						smsLc.setTextSymbol(sms);
@@ -541,18 +569,17 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 					return true;
 				}
 			} else {
-				if(!pc.isFollowingLine()){
+				if (!pc.isFollowingLine()) {
 					lc.draw(g, labelMetrics, null);
-				}
-				else{
+				} else {
 					SmartTextSymbolLabelClass smsLc = new SmartTextSymbolLabelClass();
-					SmartTextSymbol sms = new SmartTextSymbol(lc.getTextSymbol(),pc);
+					SmartTextSymbol sms = new SmartTextSymbol(
+							lc.getTextSymbol(), pc);
 
 					double sizeBefore = lc.getTextSymbol().getFont().getSize();
-					double sizeAfter = CartographicSupportToolkit.getCartographicLength(this,
-							sizeBefore,
-							viewPort,
-							MapContext.getScreenDPI());
+					double sizeAfter = CartographicSupportToolkit
+							.getCartographicLength(this, sizeBefore, viewPort,
+									MapContext.getScreenDPI());
 					sms.setFontSize(sizeAfter);
 
 					smsLc.setTextSymbol(sms);
@@ -568,31 +595,33 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 	}
 
 	/**
-	 * Divide una cadena de caracteres por el caracter dos puntos siempre que no esté entre comillas.
-	 *
+	 * Divide una cadena de caracteres por el caracter dos puntos siempre que no
+	 * esté entre comillas.
+	 * 
 	 * @param str
 	 *            Cadena de caracteres
-	 *
+	 * 
 	 * @return String[]
-	 *
+	 * 
 	 */
-	private String[] divideExpression(String str){
+	private String[] divideExpression(String str) {
 		ArrayList<String> r = new ArrayList<String>();
 		boolean inQuotationMarks = false;
 		int lastIndex = 0;
-		for(int i=0; i<str.length(); i++){
-			if(str.substring(i, i+1).compareTo("\"")==0){
+		for (int i = 0; i < str.length(); i++) {
+			if (str.substring(i, i + 1).compareTo("\"") == 0) {
 				inQuotationMarks = !inQuotationMarks;
 				continue;
 			}
-			if(str.substring(i, i+1).compareTo(":")==0 && !inQuotationMarks){
-				if(lastIndex < i){
+			if (str.substring(i, i + 1).compareTo(":") == 0
+					&& !inQuotationMarks) {
+				if (lastIndex < i) {
 					r.add(str.substring(lastIndex, i));
 				}
-				lastIndex = i+1;
+				lastIndex = i + 1;
 			}
 		}
-		if(lastIndex < str.length()-1){
+		if (lastIndex < str.length() - 1) {
 			r.add(str.substring(lastIndex));
 		}
 		String[] result = new String[r.size()];
@@ -603,25 +632,26 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 	/**
 	 * Compute the texts to show in the label and store them in LabelClass.
 	 */
-	@SuppressWarnings("unchecked")
 	private boolean setupLabel(IFeature feat, LabelClass lc,
 			Cancellable cancel, String[] usedFields, ViewPort viewPort,
-			double dpi, int duplicateMode){//, TreeSet<?> placedLabels) {
+			double dpi, int duplicateMode) {// , TreeSet<?> placedLabels) {
 
-//		Value[] vv = feat.getAttributes();
+		// Value[] vv = feat.getAttributes();
 		String expr = lc.getStringLabelExpression();
 
 		long pt1 = System.currentTimeMillis();
 		String[] texts = NO_TEXT;
 		ArrayList<String> preTexts = new ArrayList<String>();
-//		String[] texts = {PluginServices.getText(this, "text_field")};
+		// String[] texts = {PluginServices.getText(this, "text_field")};
 		try {
 
 			for (int i = 0; !cancel.isCanceled() && i < usedFields.length; i++) {
 				try {
-					int index = layer.getSource().getRecordset().getFieldIndexByName(usedFields[i]);
-					if(index != -1)
-						symbol_table.put(usedFields[i], feat.getAttribute(index));
+					int index = layer.getSource().getRecordset()
+							.getFieldIndexByName(usedFields[i]);
+					if (index != -1)
+						symbol_table.put(usedFields[i],
+								feat.getAttribute(index));
 				} catch (ReadDriverException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -630,28 +660,31 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 
 			if (expr != null) {
 
-				if(expr.equals("") || expr.equals(LabelExpressionParser.tokenFor(LabelExpressionParser.EOEXPR)))
+				if (expr.equals("")
+						|| expr.equals(LabelExpressionParser
+								.tokenFor(LabelExpressionParser.EOEXPR)))
 					expr = texts[0];
 
 				/*
-				 * FIXME: Esto es un parche.
-				 * Parece que el LabelExpresionParser no es capaz de
-				 * de dividir convenientemente una expression compuesta por varias expresiones
-				 * separadas por ":".
-				 * Habría que arreglar (con tiempo) el evaluador, pero,
-				 * de momento, rodeamos el problema.
+				 * FIXME: Esto es un parche. Parece que el LabelExpresionParser
+				 * no es capaz de de dividir convenientemente una expression
+				 * compuesta por varias expresiones separadas por ":". Habría
+				 * que arreglar (con tiempo) el evaluador, pero, de momento,
+				 * rodeamos el problema.
 				 */
 				String[] multiexpr = divideExpression(expr);
-				for(int i=0; i<multiexpr.length; i++){
+				for (int i = 0; i < multiexpr.length; i++) {
 					expr = multiexpr[i];
-					if(!expr.endsWith(";")) expr += ";";
-					// parse (if it hasn't been parsed yet) and evaluate the expression
+					if (!expr.endsWith(";"))
+						expr += ";";
+					// parse (if it hasn't been parsed yet) and evaluate the
+					// expression
 					Expression evaluator = getEvaluator(expr);
 					Object labelContents = evaluator.evaluate();
-					if (labelContents!=null) {
+					if (labelContents != null) {
 						if (String[].class.equals(labelContents.getClass())) {
-							for(int j=0; j<((String[]) labelContents).length;j++){
-								preTexts.add(((String[])labelContents)[j]);
+							for (int j = 0; j < ((String[]) labelContents).length; j++) {
+								preTexts.add(((String[]) labelContents)[j]);
 							}
 						} else {
 							preTexts.add(labelContents.toString());
@@ -660,7 +693,7 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 				}
 				texts = new String[preTexts.size()];
 				preTexts.toArray(texts);
-				parseTime += System.currentTimeMillis()-pt1;
+				parseTime += System.currentTimeMillis() - pt1;
 			}
 			lc.setTexts(texts);
 
@@ -670,6 +703,7 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 		}
 		return true;
 	}
+
 	private Hashtable<String, Value> symbol_table = new Hashtable<String, Value>();
 	private Hashtable<String, Expression> evaluators = new Hashtable<String, Expression>();
 
@@ -677,7 +711,7 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 		Expression expr = evaluators.get(strExpr);
 		if (expr == null) {
 			LabelExpressionParser p = new LabelExpressionParser(
-					new StringReader(strExpr),symbol_table);
+					new StringReader(strExpr), symbol_table);
 
 			try {
 				p.LabelExpression();
@@ -691,26 +725,28 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 	}
 
 	private boolean isOverlapping(BufferedImage bi, FShape labelShape) {
-		if (labelShape==null)
+		if (labelShape == null)
 			return false;
 		Rectangle2D rPixels = labelShape.getBounds2D();
-		for (int i= (int) rPixels.getX(); i<=rPixels.getMaxX(); i++){
-			for (int j= (int) rPixels.getY(); j<=rPixels.getMaxY(); j++){
+		for (int i = (int) rPixels.getX(); i <= rPixels.getMaxX(); i++) {
+			for (int j = (int) rPixels.getY(); j <= rPixels.getMaxY(); j++) {
 
-				if (!labelShape.contains(i, j) // contains seems to don't detect points placed in the rectangle boundaries
+				if (!labelShape.contains(i, j) // contains seems to don't detect
+												// points placed in the
+												// rectangle boundaries
 						&& !labelShape.intersects(i, j, i, j)) {
 					continue;
 				}
 
-				if (i<0 || j<0) {
+				if (i < 0 || j < 0) {
 					continue;
 				}
 
-				if (bi.getWidth()<i+1 || bi.getHeight()<j+1) {
+				if (bi.getWidth() < i + 1 || bi.getHeight() < j + 1) {
 					continue;
 				}
 
-				if (bi.getRGB(i,j)!=0){
+				if (bi.getRGB(i, j) != 0) {
 					return true;
 				}
 			}
@@ -721,18 +757,19 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 	private boolean isOnePoint(ViewPort viewPort, IGeometry geom) {
 		boolean onePoint = false;
 		int shapeType = geom.getGeometryType();
-		if ((shapeType % FShape.Z)!=FShape.POINT && (shapeType % FShape.Z) !=FShape.MULTIPOINT) {
+		if ((shapeType % FShape.Z) != FShape.POINT
+				&& (shapeType % FShape.Z) != FShape.MULTIPOINT) {
 
 			Rectangle2D geomBounds = geom.getBounds2D();
-//			ICoordTrans ct = layer.getCoordTrans();
-//
-//			if (ct!=null) {
-//				geomBounds = ct.convert(geomBounds);
-//			}
+			// ICoordTrans ct = layer.getCoordTrans();
+			//
+			// if (ct!=null) {
+			// geomBounds = ct.convert(geomBounds);
+			// }
 
 			double dist1Pixel = viewPort.getDist1pixel();
-			onePoint = (geomBounds.getWidth() <= dist1Pixel
-					&& geomBounds.getHeight() <= dist1Pixel);
+			onePoint = (geomBounds.getWidth() <= dist1Pixel && geomBounds
+					.getHeight() <= dist1Pixel);
 		}
 		return onePoint;
 	}
@@ -746,10 +783,10 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 		xml.putProperty("labelingStrategy", "labelingStrategy");
 		xml.putProperty("className", getClassName());
 		xml.putProperty("allowsOverlapping", allowOverlapping);
-//		xml.putProperty("minScaleView", minScaleView);
-//		xml.putProperty("maxScaleView", maxScaleView);
+		// xml.putProperty("minScaleView", minScaleView);
+		// xml.putProperty("maxScaleView", maxScaleView);
 
-		if (method!=null) {
+		if (method != null) {
 			XMLEntity methodEntity = method.getXMLEntity();
 			methodEntity.putProperty("id", "LabelingMethod");
 			xml.addChild(methodEntity);
@@ -777,14 +814,14 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 			allowOverlapping = xml.getBooleanProperty("allowsOverlapping");
 		}
 
-
 		if (aux != null) {
 			method = LabelingFactory.createMethodFromXML(aux);
 		}
 
 		aux = xml.firstChild("id", "PlacementConstraints");
 		if (aux != null) {
-			placementConstraints = LabelingFactory.createPlacementConstraintsFromXML(aux);
+			placementConstraints = LabelingFactory
+					.createPlacementConstraintsFromXML(aux);
 		}
 
 		aux = xml.firstChild("id", "ZoomConstraints");
@@ -815,9 +852,12 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 			case FShape.POLYGON:
 				return DefaultPolygonPlacementConstraints;
 			case FShape.MULTI:
-				DefaultMultiShapePlacementConstratints.setPointConstraints(DefaultPointPlacementConstraints);
-				DefaultMultiShapePlacementConstratints.setLineConstraints(DefaultLinePlacementConstraints);
-				DefaultMultiShapePlacementConstratints.setPolygonConstraints(DefaultPolygonPlacementConstraints);
+				DefaultMultiShapePlacementConstratints
+						.setPointConstraints(DefaultPointPlacementConstraints);
+				DefaultMultiShapePlacementConstratints
+						.setLineConstraints(DefaultLinePlacementConstraints);
+				DefaultMultiShapePlacementConstratints
+						.setPolygonConstraints(DefaultPolygonPlacementConstraints);
 				return DefaultMultiShapePlacementConstratints;
 			}
 
@@ -839,48 +879,48 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 		this.zoomConstraints = constraints;
 	}
 
-	public void print(Graphics2D g, ViewPort viewPort, Cancellable cancel, PrintRequestAttributeSet properties) throws ReadDriverException {
+	public void print(Graphics2D g, ViewPort viewPort, Cancellable cancel,
+			PrintRequestAttributeSet properties) throws ReadDriverException {
 		double dpi = 100;
 
-		PrintQuality resolution=(PrintQuality)properties.get(PrintQuality.class);
-		if (resolution.equals(PrintQuality.NORMAL)){
+		PrintQuality resolution = (PrintQuality) properties
+				.get(PrintQuality.class);
+		if (resolution.equals(PrintQuality.NORMAL)) {
 			dpi = 300;
-		} else if (resolution.equals(PrintQuality.HIGH)){
+		} else if (resolution.equals(PrintQuality.HIGH)) {
 			dpi = 600;
-		} else if (resolution.equals(PrintQuality.DRAFT)){
+		} else if (resolution.equals(PrintQuality.DRAFT)) {
 			dpi = 72;
 		}
 
-		viewPort.setOffset(new Point2D.Double(0,0));	
-		
+		viewPort.setOffset(new Point2D.Double(0, 0));
+
 		/* signal printing output */
 		printMode = true;
 
-		draw(null,g,viewPort,cancel,dpi);
+		draw(null, g, viewPort, cancel, dpi);
 	}
 
 	public String[] getUsedFields() {
 		LabelClass[] lcs = method.getLabelClasses();
 		ArrayList<String> fieldNames = new ArrayList<String>();
 		for (int i = 0; i < lcs.length; i++) {
-			if(lcs[i].getLabelExpressions() != null){
+			if (lcs[i].getLabelExpressions() != null) {
 				for (int j = 0; j < lcs[i].getLabelExpressions().length; j++) {
 					String expr = lcs[i].getLabelExpressions()[j];
 					int start;
-					while (expr != null &&
-							(start = expr.indexOf("[")) != -1) {
+					while (expr != null && (start = expr.indexOf("[")) != -1) {
 						int end = expr.indexOf("]");
-						String field = expr.substring(start+1, end).trim();
+						String field = expr.substring(start + 1, end).trim();
 						if (!fieldNames.contains(field))
 							fieldNames.add(field);
-						expr = expr.substring(end+1, expr.length());
+						expr = expr.substring(end + 1, expr.length());
 					}
 				}
 			}
 		}
 		return fieldNames.toArray(new String[fieldNames.size()]);
 	}
-
 
 	public boolean shouldDrawLabels(double scale) {
 		double minScaleView = -1;

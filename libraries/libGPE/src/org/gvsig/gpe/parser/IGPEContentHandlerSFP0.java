@@ -1,4 +1,5 @@
 package org.gvsig.gpe.parser;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -51,71 +52,74 @@ package org.gvsig.gpe.parser;
 public interface IGPEContentHandlerSFP0 {
 
 	/**
-	 * This method indicates that the parser has found a curve. 
+	 * This method indicates that the parser has found a curve.
+	 * 
 	 * @param id
-	 * curve identifier
+	 *            curve identifier
 	 * @param coords
-	 * A coordinates iterator
+	 *            A coordinates iterator
 	 * @param srs
-	 * Spatial reference system
-	 * @return
-	 * Consumer application object that represents a lineString 
+	 *            Spatial reference system
+	 * @return Consumer application object that represents a lineString
 	 */
 	public Object startCurve(String id, ICoordinateIterator coords, String srs);
-	
+
 	/**
-	 * This method indicates that the parser has found a curve. 
+	 * This method indicates that the parser has found a curve.
+	 * 
 	 * @param id
-	 * curve identifier
+	 *            curve identifier
 	 * @param srs
-	 * Spatial reference system
-	 * @return
-	 * Consumer application object that represents a lineString 
+	 *            Spatial reference system
+	 * @return Consumer application object that represents a lineString
 	 */
 	public Object startCurve(String id, String srs);
 
 	/**
-     * It is thrown when the Curve has been completely parsed.
+	 * It is thrown when the Curve has been completely parsed.
+	 * 
 	 * @param Curve
-	 * Consumer application object that represents a Curve 
+	 *            Consumer application object that represents a Curve
 	 */
 	public void endCurve(Object Curve);
-	
+
 	/**
 	 * It adds a segment to a curve.
+	 * 
 	 * @param segment
-	 * The segment to add
+	 *            The segment to add
 	 * @param curve
-	 * The curve
+	 *            The curve
 	 */
 	public void addSegmentToCurve(Object segment, Object curve);
-	
+
 	/**
-	 * This method indicates that the parser has found a multiCurve. 
+	 * This method indicates that the parser has found a multiCurve.
+	 * 
 	 * @param id
-	 * MultyCurve identifier
+	 *            MultyCurve identifier
 	 * @param srs
-	 * Spatial reference system
-	 * @return
-	 * Consumer application object that represents a multiCurve 
+	 *            Spatial reference system
+	 * @return Consumer application object that represents a multiCurve
 	 */
 	public Object startMultiCurve(String id, String srs);
-	
+
 	/**
 	 * It is thrown when the multiCurve has been completely parsed
+	 * 
 	 * @param multiCurve
-	 * Consumer application object that represents a multiCurve
+	 *            Consumer application object that represents a multiCurve
 	 */
 	public void endMultiCurve(Object multiCurve);
-	
+
 	/**
 	 * It is thrown to add a curve to one multiCurve.
+	 * 
 	 * @param curve
-     * Consumer application object that represents a curve
+	 *            Consumer application object that represents a curve
 	 * @param multiCurve
-	 * Consumer application object that represents a multiCurve
+	 *            Consumer application object that represents a multiCurve
 	 */
 	public void addCurveToMultiCurve(Object curve, Object multiCurve);
-		
-	
+
 }

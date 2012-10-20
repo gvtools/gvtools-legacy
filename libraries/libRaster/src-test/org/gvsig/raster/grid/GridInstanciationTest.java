@@ -31,6 +31,7 @@ import org.gvsig.raster.datastruct.Extent;
 /**
  * 
  * 10/06/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class GridInstanciationTest extends TestCase {
@@ -38,25 +39,25 @@ public class GridInstanciationTest extends TestCase {
 	private String path1 = baseDir + "miniRaster28x25F32.tif";
 	private String outImage = "prueba.asc";
 	private IRasterDataSource f1 = null;
-	private Grid grid = null; 
-	
-	static{
+	private Grid grid = null;
+
+	static {
 		RasterLibrary.wakeUp();
 	}
-	
-	public void start(){
+
+	public void start() {
 		this.setUp();
 		this.testStack();
 	}
-	
+
 	public void setUp() {
 		System.err.println("GridInstanciationTest running...");
 		try {
 			f1 = MultiRasterDataset.open(null, path1);
 			Extent ext = f1.getExtent();
-			GridExtent windowExtent = new GridExtent(ext, 5, -5);		
-			grid = new Grid(f1, new int[]{0, 1, 2}, windowExtent);
-			
+			GridExtent windowExtent = new GridExtent(ext, 5, -5);
+			grid = new Grid(f1, new int[] { 0, 1, 2 }, windowExtent);
+
 			grid.loadWriterData();
 			grid.ExportToArcViewASCIIFile(outImage);
 		} catch (NotSupportedExtensionException e) {
@@ -69,8 +70,8 @@ public class GridInstanciationTest extends TestCase {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void testStack() {
-		
+
 	}
 }

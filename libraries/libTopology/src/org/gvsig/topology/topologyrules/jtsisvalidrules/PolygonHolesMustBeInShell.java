@@ -70,8 +70,6 @@ import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
 import com.iver.cit.gvsig.fmap.core.symbols.MultiShapeSymbol;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.utiles.XMLEntity;
-import com.vividsolutions.jts.algorithm.PointInRing;
-import com.vividsolutions.jts.algorithms.SnapCGAlgorithms;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
@@ -84,68 +82,46 @@ import com.vividsolutions.jts.geomgraph.GeometryGraph;
 import com.vividsolutions.jts.precision.EnhancedPrecisionOp;
 
 /**
- * This rule checks that all polygon holes must be contained in the exterior shell.
+ * This rule checks that all polygon holes must be contained in the exterior
+ * shell.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class PolygonHolesMustBeInShell extends AbstractTopologyRule {
-	
-    private static List<ITopologyErrorFix> automaticErrorFixes = new ArrayList<ITopologyErrorFix>();
-	
-    private static String RULE_NAME = Messages.getText("POLYGON_HOLES_MUST_BE_IN_SHELL");
-	
+
+	private static List<ITopologyErrorFix> automaticErrorFixes = new ArrayList<ITopologyErrorFix>();
+
+	private static String RULE_NAME = Messages
+			.getText("POLYGON_HOLES_MUST_BE_IN_SHELL");
+
 	private static final Color DEFAULT_ERROR_COLOR = Color.BLACK;
 
-	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = 
-		(MultiShapeSymbol) SymbologyFactory.createDefaultSymbolByShapeType(FShape.MULTI, 
-																DEFAULT_ERROR_COLOR);
+	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = (MultiShapeSymbol) SymbologyFactory
+			.createDefaultSymbolByShapeType(FShape.MULTI, DEFAULT_ERROR_COLOR);
 	static {
 		DEFAULT_ERROR_SYMBOL.setDescription(RULE_NAME);
 	}
 
-
-
 	private MultiShapeSymbol errorSymbol;
-	
-	private double snapTolerance;
-	
-	private JtsValidRule parentRule;
-	
-	/**
-	 * Implementation of PointInRing that applies snap tolerance
-	 * 
-	 * TODO Move to an external class 
-	 */
-	private class SnapPointInRing implements PointInRing {
 
-		LinearRing ring;
-		double snapTolerance;
-		
-		
-		
-		SnapPointInRing(LinearRing ring, double snapTolerance){
-			this.ring = ring;
-			this.snapTolerance = snapTolerance;
-		}
-		
-		public boolean isInside(Coordinate pt) {
-			return SnapCGAlgorithms.isPointInRing(pt, ring.getCoordinates(), snapTolerance);
-		}
-		
-	}
-	
-	public PolygonHolesMustBeInShell(Topology topology, FLyrVect originLyr, double snapTolerance){
+	private double snapTolerance;
+
+	private JtsValidRule parentRule;
+
+	public PolygonHolesMustBeInShell(Topology topology, FLyrVect originLyr,
+			double snapTolerance) {
 		super(topology, originLyr);
 		this.snapTolerance = snapTolerance;
 	}
-	
-	public PolygonHolesMustBeInShell(FLyrVect originLyr, double snapTolerance){
+
+	public PolygonHolesMustBeInShell(FLyrVect originLyr, double snapTolerance) {
 		this(null, originLyr, snapTolerance);
 	}
-	
-	public PolygonHolesMustBeInShell(){}
-	
+
+	public PolygonHolesMustBeInShell() {
+	}
+
 	public String getName() {
 		return RULE_NAME;
 	}
@@ -153,51 +129,56 @@ public class PolygonHolesMustBeInShell extends AbstractTopologyRule {
 	public void checkPreconditions() throws TopologyRuleDefinitionException {
 		try {
 			int shapeType = this.originLyr.getShapeType();
-			if(shapeType == FShape.POLYGON || shapeType == FShape.MULTI)
+			if (shapeType == FShape.POLYGON || shapeType == FShape.MULTI)
 				throw new TopologyRuleDefinitionException();
 		} catch (ReadDriverException e) {
 			e.printStackTrace();
-			throw new TopologyRuleDefinitionException("Error leyendo el tipo de geometria del driver",e);
-		}	
-	
-	
+			throw new TopologyRuleDefinitionException(
+					"Error leyendo el tipo de geometria del driver", e);
+		}
+
 	}
 
 	public void validateFeature(IFeature feature) {
 		Geometry jtsGeo = feature.getGeometry().toJTSGeometry();
 		if (jtsGeo instanceof Polygon) {
-			checkHolesInShell((Polygon)jtsGeo, new GeometryGraph(0, jtsGeo), feature);
+			checkHolesInShell((Polygon) jtsGeo, new GeometryGraph(0, jtsGeo),
+					feature);
 		} else if (jtsGeo instanceof MultiPolygon) {
-			MultiPolygon multiPoly = (MultiPolygon)jtsGeo;
-			for(int i = 0; i < multiPoly.getNumGeometries(); i++){
+			MultiPolygon multiPoly = (MultiPolygon) jtsGeo;
+			for (int i = 0; i < multiPoly.getNumGeometries(); i++) {
 				Polygon polygon = (Polygon) multiPoly.getGeometryN(i);
-				checkHolesInShell( polygon, new GeometryGraph(0, polygon), feature);
+				checkHolesInShell(polygon, new GeometryGraph(0, polygon),
+						feature);
 			}
-		}else if(jtsGeo instanceof GeometryCollection){
-			MultiPolygon multiPoly = JtsUtil.convertToMultiPolygon((GeometryCollection)jtsGeo);
-			for(int i = 0; i < multiPoly.getNumGeometries(); i++){
+		} else if (jtsGeo instanceof GeometryCollection) {
+			MultiPolygon multiPoly = JtsUtil
+					.convertToMultiPolygon((GeometryCollection) jtsGeo);
+			for (int i = 0; i < multiPoly.getNumGeometries(); i++) {
 				Polygon polygon = (Polygon) multiPoly.getGeometryN(i);
-				checkHolesInShell( polygon, new GeometryGraph(0, polygon), feature);
+				checkHolesInShell(polygon, new GeometryGraph(0, polygon),
+						feature);
 			}
 		}
 	}
 
-	private void checkHolesInShell(Polygon p, GeometryGraph graph, IFeature feature) {
+	private void checkHolesInShell(Polygon p, GeometryGraph graph,
+			IFeature feature) {
 		LinearRing shell = (LinearRing) p.getExteriorRing();
 		Polygon shellAsPoly = null;
-//		PointInRing pir = null;
-//		if(snapTolerance == 0d)
-//			pir = new MCPointInRing(shell);
-//		else
-//			pir = new SnapPointInRing(shell, snapTolerance);
+		// PointInRing pir = null;
+		// if(snapTolerance == 0d)
+		// pir = new MCPointInRing(shell);
+		// else
+		// pir = new SnapPointInRing(shell, snapTolerance);
 
 		for (int i = 0; i < p.getNumInteriorRing(); i++) {
 			LinearRing hole = (LinearRing) p.getInteriorRingN(i);
-			
-			//TODO Probably this wont work if we dont use 
-			//libFMap's SnappingGeometryGraph
-			List<Coordinate> holePts = findPtNotNode(hole.getCoordinates(), shell,
-					graph);
+
+			// TODO Probably this wont work if we dont use
+			// libFMap's SnappingGeometryGraph
+			List<Coordinate> holePts = findPtNotNode(hole.getCoordinates(),
+					shell, graph);
 			/*
 			 * If no non-node hole vertex can be found, the hole must split the
 			 * polygon into disconnected interiors. This will be caught by a
@@ -207,62 +188,54 @@ public class PolygonHolesMustBeInShell extends AbstractTopologyRule {
 				return;
 
 			/*
-			List<Coordinate> outsideCoordinates = new ArrayList<Coordinate>();
-			for(int j = 0; j < holePts.size(); j++){
-				Coordinate coordinate = holePts.get(j);
-				boolean outside = !pir.isInside(coordinate);
-				if (outside) {
-					outsideCoordinates.add(coordinate);
-				}
-			}//for
-			
-			int outsideCoordsSize = outsideCoordinates.size();
-			if( outsideCoordsSize > 0){
-				Coordinate start = outsideCoordinates.get(0);
-				GeneralPathX gpx = new GeneralPathX();
-				gpx.moveTo(start.x, start.y);
-				for(int j = 1; j < outsideCoordsSize; j++){
-					Coordinate coord = outsideCoordinates.get(j);
-					gpx.lineTo(coord.x, coord.y);
-				}
-				Coordinate end = outsideCoordinates.get(outsideCoordsSize - 1);
-				if(! SnapCGAlgorithms.snapEquals2D(start, end, snapTolerance)){
-					gpx.closePath();
-				}
-				IGeometry igeo = ShapeFactory.createPolygon2D(gpx);
-				IFeature[] features = {feature};
-				TopologyError topologyError = new TopologyError(igeo, this, features);
-				addTopologyError(topologyError);
-			}//if
-			*/
-			
-			//At this point hole is not contained in shell
-			if(shellAsPoly == null){
-				shellAsPoly = JtsUtil.GEOMETRY_FACTORY.createPolygon(shell, null);
+			 * List<Coordinate> outsideCoordinates = new
+			 * ArrayList<Coordinate>(); for(int j = 0; j < holePts.size(); j++){
+			 * Coordinate coordinate = holePts.get(j); boolean outside =
+			 * !pir.isInside(coordinate); if (outside) {
+			 * outsideCoordinates.add(coordinate); } }//for
+			 * 
+			 * int outsideCoordsSize = outsideCoordinates.size(); if(
+			 * outsideCoordsSize > 0){ Coordinate start =
+			 * outsideCoordinates.get(0); GeneralPathX gpx = new GeneralPathX();
+			 * gpx.moveTo(start.x, start.y); for(int j = 1; j <
+			 * outsideCoordsSize; j++){ Coordinate coord =
+			 * outsideCoordinates.get(j); gpx.lineTo(coord.x, coord.y); }
+			 * Coordinate end = outsideCoordinates.get(outsideCoordsSize - 1);
+			 * if(! SnapCGAlgorithms.snapEquals2D(start, end, snapTolerance)){
+			 * gpx.closePath(); } IGeometry igeo =
+			 * ShapeFactory.createPolygon2D(gpx); IFeature[] features =
+			 * {feature}; TopologyError topologyError = new TopologyError(igeo,
+			 * this, features); addTopologyError(topologyError); }//if
+			 */
+
+			// At this point hole is not contained in shell
+			if (shellAsPoly == null) {
+				shellAsPoly = JtsUtil.GEOMETRY_FACTORY.createPolygon(shell,
+						null);
 			}
-			
-			Polygon holeAsPoly = JtsUtil.GEOMETRY_FACTORY.createPolygon(hole, null);
-			Geometry errorGeometry = EnhancedPrecisionOp.difference(shellAsPoly, holeAsPoly);
+
+			Polygon holeAsPoly = JtsUtil.GEOMETRY_FACTORY.createPolygon(hole,
+					null);
+			Geometry errorGeometry = EnhancedPrecisionOp.difference(
+					shellAsPoly, holeAsPoly);
 			IGeometry errorGeo = NewFConverter.toFMap(errorGeometry);
 			AbstractTopologyRule violatedRule = null;
-			if(this.parentRule != null)
+			if (this.parentRule != null)
 				violatedRule = parentRule;
 			else
 				violatedRule = this;
-			JtsValidTopologyError topologyError = 
-				new JtsValidTopologyError(errorGeo, violatedRule, feature, topology);
+			JtsValidTopologyError topologyError = new JtsValidTopologyError(
+					errorGeo, violatedRule, feature, topology);
 			topologyError.setSecondaryRule(this);
 			addTopologyError(topologyError);
-			
-		}//for holes
+
+		}// for holes
 	}
 
-	
-	//TODO Move to a util class (repeated code)
-	List<Coordinate> findPtNotNode(Coordinate[] testCoords, 
-								LinearRing searchRing,
-								GeometryGraph graph) {
-		
+	// TODO Move to a util class (repeated code)
+	List<Coordinate> findPtNotNode(Coordinate[] testCoords,
+			LinearRing searchRing, GeometryGraph graph) {
+
 		List<Coordinate> solution = new ArrayList<Coordinate>();
 		// find edge corresponding to searchRing.
 		Edge searchEdge = graph.findEdge(searchRing);
@@ -275,22 +248,22 @@ public class PolygonHolesMustBeInShell extends AbstractTopologyRule {
 			if (!eiList.isIntersection(pt))
 				solution.add(pt);
 		}
-		if(solution.size() == 0)
+		if (solution.size() == 0)
 			return null;
-		else 
+		else
 			return solution;
 	}
-	
-	public XMLEntity getXMLEntity(){
+
+	public XMLEntity getXMLEntity() {
 		XMLEntity xml = super.getXMLEntity();
 		xml.putProperty("snapTolerance", snapTolerance);
 		return xml;
 	}
-	    
-	public void setXMLEntity(XMLEntity xml){
+
+	public void setXMLEntity(XMLEntity xml) {
 		super.setXMLEntity(xml);
-		
-		if(xml.contains("snapTolerance")){
+
+		if (xml.contains("snapTolerance")) {
 			snapTolerance = xml.getDoubleProperty("snapTolerance");
 		}
 	}
@@ -302,7 +275,7 @@ public class PolygonHolesMustBeInShell extends AbstractTopologyRule {
 	public void setParentRule(JtsValidRule parentRule) {
 		this.parentRule = parentRule;
 	}
-	
+
 	public boolean acceptsOriginLyr(FLyrVect lyr) {
 		try {
 			return FGeometryUtil.getDimensions(lyr.getShapeType()) == 2;

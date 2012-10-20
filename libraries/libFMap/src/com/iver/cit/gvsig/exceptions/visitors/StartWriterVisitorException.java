@@ -1,12 +1,11 @@
 package com.iver.cit.gvsig.exceptions.visitors;
 
-
 /**
  * @author Vicente Caballero Navarro
  */
 public class StartWriterVisitorException extends StartVisitorException {
-	public StartWriterVisitorException(String layer,Throwable exception) {
-		super(layer,exception);
+	public StartWriterVisitorException(String layer, Throwable exception) {
+		super(layer, exception);
 		init();
 		// initCause(exception);
 	}

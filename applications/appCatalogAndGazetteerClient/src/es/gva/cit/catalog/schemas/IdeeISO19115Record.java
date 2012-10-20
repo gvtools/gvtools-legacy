@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.catalog.schemas;
+
 import java.net.URI;
 
 import es.gva.cit.catalog.metadataxml.XMLNode;
@@ -53,34 +53,41 @@ import es.gva.cit.catalog.metadataxml.XMLTree;
  */
 public class IdeeISO19115Record extends Record {
 
-	public  IdeeISO19115Record() {   
+	public IdeeISO19115Record() {
 
 	}
+
 	/**
-	 * @param node 
+	 * @param node
 	 */
-	public  IdeeISO19115Record(URI uri,XMLNode node) {        
+	public IdeeISO19115Record(URI uri, XMLNode node) {
 		super(uri, node);
-		setTitle(XMLTree.searchNodeValue(node,
-				"recordData->MD_Metadata->identificationInfo->MD_DataIdentification->citation->CI_Citation->title"));
-		setAbstract_(XMLTree.searchNodeValue(node,
-		"recordData->MD_Metadata->identificationInfo->MD_DataIdentification->abstract"));
-		setPurpose(XMLTree.searchNodeValue(node,
-		"recordData->MD_Metadata->identificationInfo->MD_DataIdentification->purpose"));
-		setKeyWords(XMLTree.searchMultipleNodeValue(node,
-		"recordData->MD_Metadata->identificationInfo->MD_DataIdentification->descriptiveKeywords->MD_Keywords->keyword"));
-		//this.setResources(getResources(node,""));
-	} 
+		setTitle(XMLTree
+				.searchNodeValue(
+						node,
+						"recordData->MD_Metadata->identificationInfo->MD_DataIdentification->citation->CI_Citation->title"));
+		setAbstract_(XMLTree
+				.searchNodeValue(node,
+						"recordData->MD_Metadata->identificationInfo->MD_DataIdentification->abstract"));
+		setPurpose(XMLTree
+				.searchNodeValue(node,
+						"recordData->MD_Metadata->identificationInfo->MD_DataIdentification->purpose"));
+		setKeyWords(XMLTree
+				.searchMultipleNodeValue(
+						node,
+						"recordData->MD_Metadata->identificationInfo->MD_DataIdentification->descriptiveKeywords->MD_Keywords->keyword"));
+		// this.setResources(getResources(node,""));
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @return 
-	 * @param node 
-	 * @param label 
+	 * @return
+	 * @param node
+	 * @param label
 	 */
-	public Resource[] getResources(XMLNode node, String label) {        
+	public Resource[] getResources(XMLNode node, String label) {
 		XMLNode[] nodes = XMLTree.searchMultipleNode(node, label);
 		if (nodes == null) {
 			return null;
@@ -92,22 +99,24 @@ public class IdeeISO19115Record extends Record {
 					XMLTree.searchNodeValue(nodes[i], ""),
 					XMLTree.searchNodeValue(nodes[i], ""),
 					XMLTree.searchNodeAtribute(nodes[i], "", ""),
-					XMLTree.searchNodeValue(nodes[i],""),
-					null);
+					XMLTree.searchNodeValue(nodes[i], ""), null);
 		return resources;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.schemas.discoverer.Record#accept(java.net.URI, es.gva.cit.catalogClient.metadataxml.XMLNode)
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.schemas.discoverer.Record#accept(java.net.URI,
+	 * es.gva.cit.catalogClient.metadataxml.XMLNode)
 	 */
 	public boolean accept(URI uri, XMLNode node) {
-		if (node.getName().equals("record")){
-			if (XMLTree.searchNode(node, "recordData" + 
-					XMLTree.SEPARATOR + "MD_Metadata") != null){
+		if (node.getName().equals("record")) {
+			if (XMLTree.searchNode(node, "recordData" + XMLTree.SEPARATOR
+					+ "MD_Metadata") != null) {
 				return true;
 			}
 		}
 		return false;
-	} 
+	}
 }

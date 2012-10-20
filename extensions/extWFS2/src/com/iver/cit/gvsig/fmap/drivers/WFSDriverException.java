@@ -62,12 +62,13 @@ import com.iver.andami.PluginServices;
 /**
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class WFSDriverException extends WFSException{
+public class WFSDriverException extends WFSException {
 	public static final String EXC_LAYER_DOESNT_EXIST = "cantLoad";
 	private String message = "";
-	
+
 	public String getMessage() {
-		return PluginServices.getText(this, "wfs_server_error")+"\n"+ format(message, 200);
+		return PluginServices.getText(this, "wfs_server_error") + "\n"
+				+ format(message, 200);
 	}
 
 	/**
@@ -79,60 +80,62 @@ public class WFSDriverException extends WFSException{
 
 	/**
 	 * Crea WFSException.
-	 *
+	 * 
 	 * @param message
 	 */
 	public WFSDriverException(String message) {
-        super();
-        this.message = message;
+		super();
+		this.message = message;
 	}
-	
 
 	/**
-	  * Crea WMSException.
-	 *
+	 * Crea WMSException.
+	 * 
 	 * @param cause
 	 */
 	public WFSDriverException(Throwable cause) {
 		super(cause);
 	}
-	
-	 /**
-     * Cuts the message text to force its lines to be shorter or equal to 
-     * lineLength.
-     * @param message, the message.
-     * @param lineLength, the max line length in number of characters.
-     * @return the formated message.
-     */
-    private static String format(String message, int lineLength){
-       	if (message.length() <= lineLength) return message;
-        String[] lines = message.split("\n");
-        String theMessage = "";
-        for (int i = 0; i < lines.length; i++) {
-            String line = lines[i].trim();
-            if (line.length()<lineLength)
-                theMessage += line+"\n";
-            else {
-                String[] chunks = line.split(" ");
-                String newLine = "";
-                for (int j = 0; j < chunks.length; j++) {
-                    int currentLength = newLine.length();
-                    chunks[j] = chunks[j].trim();
-                    if (chunks[j].length()==0)
-                        continue;
-                    if ((currentLength + chunks[j].length() + " ".length()) <= lineLength)
-                        newLine += chunks[j] + " ";
-                    else {
-                        newLine += "\n"+chunks[j]+" ";
-                        theMessage += newLine;
-                        newLine = "";
-                    }
-                }
-                
-            }
-        }
-        return theMessage;
-    }
 
+	/**
+	 * Cuts the message text to force its lines to be shorter or equal to
+	 * lineLength.
+	 * 
+	 * @param message
+	 *            , the message.
+	 * @param lineLength
+	 *            , the max line length in number of characters.
+	 * @return the formated message.
+	 */
+	private static String format(String message, int lineLength) {
+		if (message.length() <= lineLength)
+			return message;
+		String[] lines = message.split("\n");
+		String theMessage = "";
+		for (int i = 0; i < lines.length; i++) {
+			String line = lines[i].trim();
+			if (line.length() < lineLength)
+				theMessage += line + "\n";
+			else {
+				String[] chunks = line.split(" ");
+				String newLine = "";
+				for (int j = 0; j < chunks.length; j++) {
+					int currentLength = newLine.length();
+					chunks[j] = chunks[j].trim();
+					if (chunks[j].length() == 0)
+						continue;
+					if ((currentLength + chunks[j].length() + " ".length()) <= lineLength)
+						newLine += chunks[j] + " ";
+					else {
+						newLine += "\n" + chunks[j] + " ";
+						theMessage += newLine;
+						newLine = "";
+					}
+				}
+
+			}
+		}
+		return theMessage;
+	}
 
 }

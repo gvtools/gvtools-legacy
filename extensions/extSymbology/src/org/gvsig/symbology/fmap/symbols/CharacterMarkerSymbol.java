@@ -211,12 +211,12 @@ import com.iver.utiles.StringUtilities;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.threads.Cancellable;
 
-
 /**
- * Allows to use a source of TrueType characters  to define the marker that will
- * substitute the symbol.If the picture is defined in a source, the performance is
- * more agile.
- * @author   jaume dominguez faus - jaume.dominguez@iver.es
+ * Allows to use a source of TrueType characters to define the marker that will
+ * substitute the symbol.If the picture is defined in a source, the performance
+ * is more agile.
+ * 
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class CharacterMarkerSymbol extends AbstractMarkerSymbol {
 	private Font font = new Font("Arial", Font.PLAIN, 20);
@@ -227,7 +227,7 @@ public class CharacterMarkerSymbol extends AbstractMarkerSymbol {
 
 	/**
 	 * Creates a new instance of CharacterMarker with default values
-	 *
+	 * 
 	 */
 	public CharacterMarkerSymbol() {
 		super();
@@ -237,13 +237,13 @@ public class CharacterMarkerSymbol extends AbstractMarkerSymbol {
 	 * Creates a new instance of CharacterMarker specifying the marker source
 	 * font, the character code corresponding to the symbol, and the color that
 	 * will be used in rendering time.
-	 *
-	 * @param font -
-	 *            src Font
-	 * @param charCode -
-	 *            character code of the symbol for this font
-	 * @param color -
-	 *            color to be used in when rendering.
+	 * 
+	 * @param font
+	 *            - src Font
+	 * @param charCode
+	 *            - character code of the symbol for this font
+	 * @param color
+	 *            - color to be used in when rendering.
 	 */
 	public CharacterMarkerSymbol(Font font, int charCode, Color color) {
 		super();
@@ -251,15 +251,19 @@ public class CharacterMarkerSymbol extends AbstractMarkerSymbol {
 		unicode = charCode;
 		setColor(color);
 	}
+
 	/**
 	 * Returns the font that will be used to define the symbol
+	 * 
 	 * @return font
 	 */
 	public Font getFont() {
 		return font;
 	}
+
 	/**
 	 * Sets the font that will be used to define the symbol
+	 * 
 	 * @return font
 	 */
 	public void setFont(Font font) {
@@ -269,14 +273,16 @@ public class CharacterMarkerSymbol extends AbstractMarkerSymbol {
 	public ISymbol getSymbolForSelection() {
 		if (selectionSymbol == null) {
 			XMLEntity xml = getXMLEntity();
-			xml.putProperty("color", StringUtilities.color2String(MapContext.getSelectionColor()));
-			selectionSymbol = SymbologyFactory.createSymbolFromXML(xml, getDescription() + " version for selection.");
+			xml.putProperty("color", StringUtilities.color2String(MapContext
+					.getSelectionColor()));
+			selectionSymbol = SymbologyFactory.createSymbolFromXML(xml,
+					getDescription() + " version for selection.");
 		}
 		return selectionSymbol;
 	}
-	
-	
-	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp, Cancellable cancel) {
+
+	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp,
+			Cancellable cancel) {
 		g.setColor(getColor());
 		double theta = getRotation();
 
@@ -287,18 +293,21 @@ public class CharacterMarkerSymbol extends AbstractMarkerSymbol {
 		if (size < 0.0001) {
 			return;
 		}
-		Point2D p = new Point2D.Double(((FPoint2D) shp).getX(), ((FPoint2D) shp)
-				.getY());
+		Point2D p = new Point2D.Double(((FPoint2D) shp).getX(),
+				((FPoint2D) shp).getY());
 
 		if (isVisuallyCorrected()) {
 			size *= visualCorrection.sizeScale;
-			p.setLocation(p.getX() - xOffset*size*visualCorrection.xOffsetScale, p.getY() - yOffset*size*visualCorrection.yOffsetScale);
+			p.setLocation(p.getX() - xOffset * size
+					* visualCorrection.xOffsetScale, p.getY() - yOffset * size
+					* visualCorrection.yOffsetScale);
 
 		}
-		g.setFont(getFont().deriveFont((float)size));
+		g.setFont(getFont().deriveFont((float) size));
 
-		g.translate((int) (p.getX() + xOffset), (int) (p.getY()  + yOffset));
-		if (theta != 0)	g.rotate(theta);
+		g.translate((int) (p.getX() + xOffset), (int) (p.getY() + yOffset));
+		if (theta != 0)
+			g.rotate(theta);
 
 		char[] text = new char[] { (char) unicode };
 
@@ -306,19 +315,19 @@ public class CharacterMarkerSymbol extends AbstractMarkerSymbol {
 		if (mask != null) {
 			FontRenderContext frc = g.getFontRenderContext();
 
-			GlyphVector gv = font.createGlyphVector(frc, text );
+			GlyphVector gv = font.createGlyphVector(frc, text);
 
 			Shape markerShape = gv.getOutline(0, 0);
-			mask.
-			 	getFillSymbol().
-			 		draw(g, null, mask.getHaloShape(markerShape), cancel);
+			mask.getFillSymbol().draw(g, null, mask.getHaloShape(markerShape),
+					cancel);
 
 		}
-		g.drawChars(text, 0, text.length, - (int) (size*0.4), (int) (size*0.4));
+		g.drawChars(text, 0, text.length, -(int) (size * 0.4),
+				(int) (size * 0.4));
 
-
-		if (theta!=0) g.rotate(-theta);
-		g.translate(-(int) (p.getX() + xOffset), - (int) (p.getY() + yOffset));
+		if (theta != 0)
+			g.rotate(-theta);
+		g.translate(-(int) (p.getX() + xOffset), -(int) (p.getY() + yOffset));
 	}
 
 	public XMLEntity getXMLEntity() {
@@ -366,11 +375,11 @@ public class CharacterMarkerSymbol extends AbstractMarkerSymbol {
 		return xml;
 	}
 
-	
-
 	/**
 	 * Sets the unicode for a symbol represented by a character
-	 * @param symbol, int
+	 * 
+	 * @param symbol
+	 *            , int
 	 */
 	public void setUnicode(int symbol) {
 		this.unicode = symbol;
@@ -378,6 +387,7 @@ public class CharacterMarkerSymbol extends AbstractMarkerSymbol {
 
 	/**
 	 * Obtains the unicode for a symbol
+	 * 
 	 * @return unicode, int
 	 */
 	public int getUnicode() {
@@ -391,13 +401,13 @@ public class CharacterMarkerSymbol extends AbstractMarkerSymbol {
 	public void setXMLEntity(XMLEntity xml) {
 		setColor(StringUtilities.string2Color(xml.getStringProperty("color")));
 		Point p = new Point();
-		p.setLocation(xml.getDoubleProperty("xOffset"), xml.getDoubleProperty("yOffset"));
+		p.setLocation(xml.getDoubleProperty("xOffset"),
+				xml.getDoubleProperty("yOffset"));
 
 		setDescription(xml.getStringProperty("desc"));
 		size = xml.getDoubleProperty("size");
 		font = new Font(xml.getStringProperty("font"),
-				xml.getIntProperty("fontStyle"),
-				(int) size);
+				xml.getIntProperty("fontStyle"), (int) size);
 		setIsShapeVisible(xml.getBooleanProperty("isShapeVisible"));
 		unicode = xml.getIntProperty("symbolCode");
 		setOffset(p);
@@ -406,7 +416,8 @@ public class CharacterMarkerSymbol extends AbstractMarkerSymbol {
 		setUnit(xml.getIntProperty("unit"));
 	}
 
-	public void print(Graphics2D g, AffineTransform at, FShape shape) throws ReadDriverException {
+	public void print(Graphics2D g, AffineTransform at, FShape shape)
+			throws ReadDriverException {
 		// TODO Implement it
 		throw new Error("Not yet implemented!");
 
@@ -420,41 +431,45 @@ public class CharacterMarkerSymbol extends AbstractMarkerSymbol {
 		this.size = size;
 		font = new Font(font.getName(), font.getStyle(), (int) Math.round(size));
 	}
+
 	/**
-	 * Returns true of false depending if the character marker symbol selected is visually
-	 * corrected.That is, if the character has been properly scaled to use a specific number
-	 * of pixels to be represented.
-	 *
+	 * Returns true of false depending if the character marker symbol selected
+	 * is visually corrected.That is, if the character has been properly scaled
+	 * to use a specific number of pixels to be represented.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isVisuallyCorrected() {
 		return visualCorrection != null;
 	}
+
 	/**
-	 * Sets the visual correction for a character in order to scale it if it is necessary.
-	 *
+	 * Sets the visual correction for a character in order to scale it if it is
+	 * necessary.
+	 * 
 	 * @return boolean
 	 */
 	public void setVisuallyCorrected(boolean visuallyCorrected) {
 		if (visuallyCorrected && visualCorrection == null) {
-			CharacterMarkerSymbol clone = (CharacterMarkerSymbol) SymbologyFactory.createSymbolFromXML(getXMLEntity(), getDescription());
+			CharacterMarkerSymbol clone = (CharacterMarkerSymbol) SymbologyFactory
+					.createSymbolFromXML(getXMLEntity(), getDescription());
 			int frameSize = 200;
 			double symbolSize = 100;
-			BufferedImage bi = new BufferedImage(frameSize, frameSize, BufferedImage.TYPE_INT_ARGB);
+			BufferedImage bi = new BufferedImage(frameSize, frameSize,
+					BufferedImage.TYPE_INT_ARGB);
 			Graphics2D aGraphics = bi.createGraphics();
-			clone.setOffset(new Point2D.Double(0,0));
+			clone.setOffset(new Point2D.Double(0, 0));
 			clone.setSize(symbolSize);
 			clone.setColor(Color.PINK);
 
-
 			// draw it at center of the image
-			FPoint2D pCenter =  new FPoint2D(frameSize/2,frameSize/2);
+			FPoint2D pCenter = new FPoint2D(frameSize / 2, frameSize / 2);
 			clone.draw(aGraphics, new AffineTransform(), pCenter, null);
 
-			int realTop    = -1;
+			int realTop = -1;
 			int realBottom = -1;
-			int realLeft   = -1;
-			int realRight  = -1;
+			int realLeft = -1;
+			int realRight = -1;
 
 			// let's see where the highest pixel is in Y-axis
 			boolean done = false;
@@ -469,8 +484,8 @@ public class CharacterMarkerSymbol extends AbstractMarkerSymbol {
 
 			// let's see where the lowest pixel is in Y-axis
 			done = false;
-			for (int j =  bi.getHeight()-1; !done &&  j >= 0; j--) {
-				for (int i = 0; !done &&  i < bi.getWidth(); i++) {
+			for (int j = bi.getHeight() - 1; !done && j >= 0; j--) {
+				for (int i = 0; !done && i < bi.getWidth(); i++) {
 					if (bi.getRGB(i, j) != 0) {
 						realBottom = i;
 						done = true;
@@ -480,8 +495,8 @@ public class CharacterMarkerSymbol extends AbstractMarkerSymbol {
 
 			// let's see where the first pixel at left is in X-axis
 			done = false;
-			for (int i = 0; !done &&  i < bi.getWidth(); i++) {
-				for (int j = 0; !done &&  j < bi.getHeight(); j++) {
+			for (int i = 0; !done && i < bi.getWidth(); i++) {
+				for (int j = 0; !done && j < bi.getHeight(); j++) {
 					if (bi.getRGB(i, j) != 0) {
 						realLeft = i;
 						done = true;
@@ -491,41 +506,45 @@ public class CharacterMarkerSymbol extends AbstractMarkerSymbol {
 
 			// let's see where the first pixel at right is in X-axis
 			done = false;
-			for (int i = bi.getWidth()-1; !done &&  i >=0 ; i--) {
-				for (int j = 0; !done &&  j < bi.getHeight(); j++) {
+			for (int i = bi.getWidth() - 1; !done && i >= 0; i--) {
+				for (int j = 0; !done && j < bi.getHeight(); j++) {
 					if (bi.getRGB(i, j) != 0) {
 						realRight = i;
 						done = true;
 					}
 				}
 			}
-			
-			int realWidth = bi.getWidth() - realRight-realLeft;
+
+			int realWidth = bi.getWidth() - realRight - realLeft;
 			int realHeight = bi.getHeight() - realBottom - realTop;
 
 			visualCorrection = new VisualCorrection();
-			
-			if (realBottom!=-1 && realTop!=-1 && realLeft!=-1 && realRight != -1) {
+
+			if (realBottom != -1 && realTop != -1 && realLeft != -1
+					&& realRight != -1) {
 				double correctingSize = Math.max(realHeight, realWidth);
 				visualCorrection.sizeScale = clone.getSize() / correctingSize;
 			}
 
-			if (realLeft!=-1 && realRight!=-1) {
-				double correctingCenterX = (((realWidth)*0.5)+realLeft);
-				double correctingCenterY = (((realHeight)*0.5)+realBottom);
-				visualCorrection.xOffsetScale = (pCenter.getX() - correctingCenterX) / frameSize;
-				visualCorrection.yOffsetScale = (pCenter.getY() - correctingCenterY) / frameSize;
+			if (realLeft != -1 && realRight != -1) {
+				double correctingCenterX = (((realWidth) * 0.5) + realLeft);
+				double correctingCenterY = (((realHeight) * 0.5) + realBottom);
+				visualCorrection.xOffsetScale = (pCenter.getX() - correctingCenterX)
+						/ frameSize;
+				visualCorrection.yOffsetScale = (pCenter.getY() - correctingCenterY)
+						/ frameSize;
 			}
 		} else {
 			visualCorrection = null;
 		}
 	}
+
 	/**
-	 * Class to be used for the methods that control the visual correction of a character.
-	 * This visual correction has the responsibility of modify the dimensions of the
-	 * character to be used as a symbol(in case that the user wants to use more or less
-	 * pixels to represent it )
-	 *
+	 * Class to be used for the methods that control the visual correction of a
+	 * character. This visual correction has the responsibility of modify the
+	 * dimensions of the character to be used as a symbol(in case that the user
+	 * wants to use more or less pixels to represent it )
+	 * 
 	 */
 	private class VisualCorrection {
 		double xOffsetScale = 1;

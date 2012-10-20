@@ -52,7 +52,7 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 /**
  * Extensión que gestiona la inserción de líneas en edición.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class InsertLineExtension extends Extension {
@@ -66,22 +66,22 @@ public class InsertLineExtension extends Extension {
 	public void initialize() {
 		line = new LineCADTool();
 		CADExtension.addCADTool("_line", line);
-		ArcCADTool arc=new ArcCADTool();
+		ArcCADTool arc = new ArcCADTool();
 		CADExtension.addCADTool("_arc", arc);
 
 		registerIcons();
 	}
 
-	private void registerIcons(){
-		PluginServices.getIconTheme().registerDefault(
-				"edition-geometry-insert-line",
-				this.getClass().getClassLoader().getResource("images/Rect.png")
-			);
+	private void registerIcons() {
+		PluginServices.getIconTheme()
+				.registerDefault(
+						"edition-geometry-insert-line",
+						this.getClass().getClassLoader()
+								.getResource("images/Rect.png"));
 
 		PluginServices.getIconTheme().registerDefault(
 				"edition-insert-geometry-arc",
-				this.getClass().getClassLoader().getResource("images/Arc.png")
-			);
+				this.getClass().getClassLoader().getResource("images/Arc.png"));
 	}
 
 	/**
@@ -89,11 +89,10 @@ public class InsertLineExtension extends Extension {
 	 */
 	public void execute(String s) {
 		CADExtension.initFocus();
-		if (s.equals("_line")||
-				s.equals("_arc")) {
-        	CADExtension.setCADTool(s,true);
-        	CADExtension.getEditionManager().setMapControl(mapControl);
-        }
+		if (s.equals("_line") || s.equals("_arc")) {
+			CADExtension.setCADTool(s, true);
+			CADExtension.getEditionManager().setMapControl(mapControl);
+		}
 		CADExtension.getCADToolAdapter().configureMenu();
 	}
 
@@ -106,14 +105,15 @@ public class InsertLineExtension extends Extension {
 			if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE) {
 				view = (View) PluginServices.getMDIManager().getActiveWindow();
 				mapControl = view.getMapControl();
-				if (CADExtension.getEditionManager().getActiveLayerEdited()==null)
+				if (CADExtension.getEditionManager().getActiveLayerEdited() == null)
 					return false;
-				FLyrVect lv=(FLyrVect)CADExtension.getEditionManager().getActiveLayerEdited().getLayer();
+				FLyrVect lv = (FLyrVect) CADExtension.getEditionManager()
+						.getActiveLayerEdited().getLayer();
 				if (line.isApplicable(lv.getShapeType()))
 					return true;
 			}
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 		return false;
 	}

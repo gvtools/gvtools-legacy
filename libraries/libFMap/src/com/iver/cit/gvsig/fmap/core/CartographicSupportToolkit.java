@@ -50,46 +50,52 @@ public class CartographicSupportToolkit {
 
 	/**
 	 * Calculates the distance in pixels corresponding to the provided length,
-	 * according to the current rendering context (output dpi, map scale, map units) and the
-	 * symbol cartographic settings (unit, size, and unit reference system).
-	 *
-	 * @param cartographicElement CartographicSupport object which contains the reference system
-	 * and the measuring units for the provided length
-	 * @param length The length to be computed in pixels. The length is supposed to be
-	 * provided in the units defined in the cartographicElement
-	 * @param viewPort The viewport, which defines the relationship between pixels and maps units
-	 * @param dpi The resolution (dots per inch) of the target display device
-	 * (printer, screen, etc)
+	 * according to the current rendering context (output dpi, map scale, map
+	 * units) and the symbol cartographic settings (unit, size, and unit
+	 * reference system).
+	 * 
+	 * @param cartographicElement
+	 *            CartographicSupport object which contains the reference system
+	 *            and the measuring units for the provided length
+	 * @param length
+	 *            The length to be computed in pixels. The length is supposed to
+	 *            be provided in the units defined in the cartographicElement
+	 * @param viewPort
+	 *            The viewport, which defines the relationship between pixels
+	 *            and maps units
+	 * @param dpi
+	 *            The resolution (dots per inch) of the target display device
+	 *            (printer, screen, etc)
 	 * @return The distance in pixels corresponding to the provided length
 	 */
 	public static double getCartographicLength(
-			CartographicSupport cartographicElement,
-			double length,
-			ViewPort viewPort,
-			double _dpi) {
-		
+			CartographicSupport cartographicElement, double length,
+			ViewPort viewPort, double _dpi) {
+
 		int unit = cartographicElement.getUnit();
 		double lengthInPixel = length;
-		
+
 		double zoomed_dpi = viewPort.getZoomFactor() * _dpi;
 
 		if (unit != -1) {
-			double[] trans2Meter=MapContext.getDistanceTrans2Meter();
+			double[] trans2Meter = MapContext.getDistanceTrans2Meter();
 			if (cartographicElement.getReferenceSystem() == CartographicSupport.WORLD) {
-				double dist1PixelInMeters = viewPort.getDist1pixel()*trans2Meter[viewPort.getMapUnits()];
-				double realWidthMeter = length*trans2Meter[unit];
-				lengthInPixel = realWidthMeter/dist1PixelInMeters;
+				double dist1PixelInMeters = viewPort.getDist1pixel()
+						* trans2Meter[viewPort.getMapUnits()];
+				double realWidthMeter = length * trans2Meter[unit];
+				lengthInPixel = realWidthMeter / dist1PixelInMeters;
 			} else if (cartographicElement.getReferenceSystem() == CartographicSupport.PAPER) {
-				double lengthInInches = 1/trans2Meter[7]*trans2Meter[unit]*length;
-				lengthInPixel = lengthInInches*zoomed_dpi;
-				// double physical_dpi = getDpiFromViewPort(viewPort); 
+				double lengthInInches = 1 / trans2Meter[7] * trans2Meter[unit]
+						* length;
+				lengthInPixel = lengthInInches * zoomed_dpi;
+				// double physical_dpi = getDpiFromViewPort(viewPort);
 				// lengthInPixel = lengthInInches*physical_dpi;
 			}
-		} else{
-			double scale=zoomed_dpi/72;
-			lengthInPixel=lengthInPixel*scale;
+		} else {
+			double scale = zoomed_dpi / 72;
+			lengthInPixel = lengthInPixel * scale;
 		}
-		return  (lengthInPixel);
+		return (lengthInPixel);
 
 	}
 
@@ -105,5 +111,3 @@ public class CartographicSupportToolkit {
 	public static int DefaultReferenceSystem = CartographicSupport.WORLD;
 
 }
-
-

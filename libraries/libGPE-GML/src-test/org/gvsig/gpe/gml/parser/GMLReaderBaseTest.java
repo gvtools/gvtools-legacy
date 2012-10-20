@@ -68,13 +68,14 @@ import org.gvsig.gpe.parser.GPEReaderBaseTest;
  */
 public abstract class GMLReaderBaseTest extends GPEReaderBaseTest {
 
-	//Aqui se le pasa la clase 
+	// Aqui se le pasa la clase
 	public Class getGPEParserClass() {
 		return org.gvsig.gpe.gml.parser.GPEGmlSFP0Parser.class;
 	}
 
 	/**
 	 * Return if the GML has a schema
+	 * 
 	 * @return
 	 */
 	public abstract boolean hasSchema();

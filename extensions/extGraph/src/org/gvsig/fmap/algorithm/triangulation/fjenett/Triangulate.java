@@ -40,7 +40,6 @@ package org.gvsig.fmap.algorithm.triangulation.fjenett;
  * 
  */
 
-
 class IEDGE {
 	int p1, p2;
 
@@ -49,7 +48,6 @@ class IEDGE {
 		p2 = -1;
 	}
 }
-
 
 public class Triangulate {
 

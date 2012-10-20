@@ -31,25 +31,26 @@ import javax.swing.JLabel;
 import org.gvsig.gui.beans.checkslidertext.CheckSliderTextContainer;
 import org.gvsig.raster.util.BasePanel;
 import org.gvsig.raster.util.RasterToolsUtil;
+
 /**
- * Panel con los controles de generación de lineas de contorno usando
- * la libreria de Potrace
+ * Panel con los controles de generación de lineas de contorno usando la
+ * libreria de Potrace
  * 
  * @version 18/09/2008
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class PotracePanel extends BasePanel {
 	private static final long serialVersionUID = 9192151992995371080L;
-	private CheckSliderTextContainer bezierPoints          = null;
-	private JComboBox                policy                = null;
-	private JCheckBox                curveOptimization     = null;
-	private JFormattedTextField      despeckle             = null;
-	private JFormattedTextField      cornerThreshold       = null;
-	private JFormattedTextField      optimizationTolerance = null;
-	private JFormattedTextField      outputQuantization    = null;
+	private CheckSliderTextContainer bezierPoints = null;
+	private JComboBox policy = null;
+	private JCheckBox curveOptimization = null;
+	private JFormattedTextField despeckle = null;
+	private JFormattedTextField cornerThreshold = null;
+	private JFormattedTextField optimizationTolerance = null;
+	private JFormattedTextField outputQuantization = null;
 
 	/**
-	 *Inicializa componentes gráficos y traduce
+	 * Inicializa componentes gráficos y traduce
 	 */
 	public PotracePanel() {
 		init();
@@ -58,12 +59,16 @@ public class PotracePanel extends BasePanel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#init()
 	 */
 	protected void init() {
 		GridBagConstraints gbc;
 		setLayout(new GridBagLayout());
-		setBorder(BorderFactory.createTitledBorder(null, RasterToolsUtil.getText(this, "potracelines"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+		setBorder(BorderFactory.createTitledBorder(null,
+				RasterToolsUtil.getText(this, "potracelines"),
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
 
 		int line = 0;
 
@@ -75,7 +80,7 @@ public class PotracePanel extends BasePanel {
 		gbc.gridwidth = 2;
 		gbc.insets = new Insets(5, 5, 2, 2);
 		add(getBezierPoints(), gbc);
-		
+
 		line++;
 		gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.EAST;
@@ -83,7 +88,7 @@ public class PotracePanel extends BasePanel {
 		gbc.gridy = line;
 		gbc.insets = new Insets(2, 5, 2, 2);
 		add(new JLabel(RasterToolsUtil.getText(this, "policy") + ":"), gbc);
-		
+
 		gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.WEST;
 		gbc.fill = GridBagConstraints.BOTH;
@@ -99,7 +104,7 @@ public class PotracePanel extends BasePanel {
 		gbc.gridy = line;
 		gbc.insets = new Insets(2, 5, 2, 2);
 		add(new JLabel(RasterToolsUtil.getText(this, "despeckle") + ":"), gbc);
-		
+
 		gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.WEST;
 		gbc.fill = GridBagConstraints.BOTH;
@@ -114,8 +119,9 @@ public class PotracePanel extends BasePanel {
 		gbc.gridx = 0;
 		gbc.gridy = line;
 		gbc.insets = new Insets(2, 5, 2, 2);
-		add(new JLabel(RasterToolsUtil.getText(this, "corner_threshold") + ":"), gbc);
-		
+		add(new JLabel(RasterToolsUtil.getText(this, "corner_threshold") + ":"),
+				gbc);
+
 		gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.WEST;
 		gbc.fill = GridBagConstraints.BOTH;
@@ -130,8 +136,9 @@ public class PotracePanel extends BasePanel {
 		gbc.gridx = 0;
 		gbc.gridy = line;
 		gbc.insets = new Insets(2, 5, 2, 2);
-		add(new JLabel(RasterToolsUtil.getText(this, "optimization_tolerance") + ":"), gbc);
-		
+		add(new JLabel(RasterToolsUtil.getText(this, "optimization_tolerance")
+				+ ":"), gbc);
+
 		gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.WEST;
 		gbc.fill = GridBagConstraints.BOTH;
@@ -146,8 +153,9 @@ public class PotracePanel extends BasePanel {
 		gbc.gridx = 0;
 		gbc.gridy = line;
 		gbc.insets = new Insets(2, 5, 2, 2);
-		add(new JLabel(RasterToolsUtil.getText(this, "output_quantization") + ":"), gbc);
-		
+		add(new JLabel(RasterToolsUtil.getText(this, "output_quantization")
+				+ ":"), gbc);
+
 		gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.WEST;
 		gbc.fill = GridBagConstraints.BOTH;
@@ -155,15 +163,16 @@ public class PotracePanel extends BasePanel {
 		gbc.gridy = line;
 		gbc.insets = new Insets(2, 2, 2, 5);
 		add(getOutputQuantization(), gbc);
-		
+
 		line++;
 		gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.EAST;
 		gbc.gridx = 0;
 		gbc.gridy = line;
 		gbc.insets = new Insets(2, 5, 5, 2);
-		add(new JLabel(RasterToolsUtil.getText(this, "curve_optimization") + ":"), gbc);
-		
+		add(new JLabel(RasterToolsUtil.getText(this, "curve_optimization")
+				+ ":"), gbc);
+
 		gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.WEST;
 		gbc.fill = GridBagConstraints.BOTH;
@@ -175,25 +184,28 @@ public class PotracePanel extends BasePanel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#translate()
 	 */
 	protected void translate() {
-		
+
 	}
 
 	/**
-	 * Activa o desactiva el componente. El estado de activación y desactivación de un
-	 * componente depende de los controles que contiene. En este caso activa o desactiva
-	 * todos los componentes que tiene dentro.
+	 * Activa o desactiva el componente. El estado de activación y desactivación
+	 * de un componente depende de los controles que contiene. En este caso
+	 * activa o desactiva todos los componentes que tiene dentro.
+	 * 
 	 * @param enabled
 	 */
 	public void setComponentEnabled(boolean enabled) {
 		this.getPolicy().setEnabled(enabled);
 		this.getBezierPoints().setControlEnabled(enabled);
 	}
-	
+
 	/**
-	 * Obtiene el check de activo 
+	 * Obtiene el check de activo
+	 * 
 	 * @return JCheckBox
 	 */
 	public JComboBox getPolicy() {
@@ -212,18 +224,22 @@ public class PotracePanel extends BasePanel {
 	}
 
 	/**
-	 * Obtiene el Slider que controla el numero de puntos en las curvas de bezier
+	 * Obtiene el Slider que controla el numero de puntos en las curvas de
+	 * bezier
+	 * 
 	 * @return
 	 */
 	public CheckSliderTextContainer getBezierPoints() {
 		if (bezierPoints == null) {
-			bezierPoints = new CheckSliderTextContainer(2, 100, 7, false, RasterToolsUtil.getText(this, "points"), true, false, false);
+			bezierPoints = new CheckSliderTextContainer(2, 100, 7, false,
+					RasterToolsUtil.getText(this, "points"), true, false, false);
 		}
 		return bezierPoints;
 	}
-	
+
 	/**
 	 * Obtiene el check de la curva de optimizacion
+	 * 
 	 * @return
 	 */
 	public JCheckBox getCurveOptimization() {
@@ -233,7 +249,7 @@ public class PotracePanel extends BasePanel {
 		}
 		return curveOptimization;
 	}
-	
+
 	/**
 	 * @return the despeckle
 	 */

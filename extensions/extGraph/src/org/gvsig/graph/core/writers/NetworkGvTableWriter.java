@@ -64,7 +64,7 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 
 public class NetworkGvTableWriter extends AbstractNetworkWriter {
-	
+
 	private IWriter nodeWriter;
 
 	private IWriter edgeWriter;
@@ -85,12 +85,11 @@ public class NetworkGvTableWriter extends AbstractNetworkWriter {
 		fieldY.setFieldName("Y");
 		fieldY.setFieldType(Types.DOUBLE);
 		fieldY.setFieldDecimalCount(2);
-		
+
 		nodeFields[0] = fieldNodeId;
 		nodeFields[1] = fieldX;
 		nodeFields[2] = fieldY;
 
-		
 		// Set up fields for table edges
 		edgeFields = new FieldDescription[7];
 
@@ -102,7 +101,7 @@ public class NetworkGvTableWriter extends AbstractNetworkWriter {
 		FieldDescription fieldDirection = new FieldDescription();
 		fieldDirection.setFieldName("Direction");
 		fieldDirection.setFieldType(Types.SMALLINT);
-		
+
 		FieldDescription fieldNodeOrigin = new FieldDescription();
 		fieldNodeOrigin.setFieldName("NodeOrigin");
 		fieldNodeOrigin.setFieldType(Types.INTEGER);
@@ -117,11 +116,11 @@ public class NetworkGvTableWriter extends AbstractNetworkWriter {
 		FieldDescription fieldDistanceDist = new FieldDescription();
 		fieldDistanceDist.setFieldName("Dist");
 		fieldDistanceDist.setFieldType(Types.DOUBLE);
-		
+
 		FieldDescription fieldDistanceCost = new FieldDescription();
 		fieldDistanceCost.setFieldName("Cost");
 		fieldDistanceCost.setFieldType(Types.DOUBLE);
-		
+
 		edgeFields[0] = fieldArcID;
 		edgeFields[1] = fieldDirection;
 		edgeFields[2] = fieldNodeOrigin;
@@ -129,8 +128,9 @@ public class NetworkGvTableWriter extends AbstractNetworkWriter {
 		edgeFields[4] = fieldType;
 		edgeFields[5] = fieldDistanceDist;
 		edgeFields[6] = fieldDistanceCost;
-		
+
 	}
+
 	public void writeNetwork() throws BaseException {
 		double distance;
 		double cost;
@@ -144,144 +144,141 @@ public class NetworkGvTableWriter extends AbstractNetworkWriter {
 		// PARA SABER SI ESTÁ MÁS CERCA DE UN NODO O DEL OTRO.
 
 		createFields();
-		
+
 		VectorialAdapter adapter = (VectorialAdapter) lyr.getSource();
 
-			int numEntities = adapter.getShapeCount();
-			Hashtable nodeHash = new Hashtable();
+		int numEntities = adapter.getShapeCount();
+		Hashtable nodeHash = new Hashtable();
 
-			SelectableDataSource sds = lyr.getRecordset();
-			
-			int senseFieldIndex = -1;
-			int distFieldIndex = -1;
-			int typeFieldIndex = -1;
-			int costFieldIndex = -1;
-			
-			if (fieldSense != null)
-				senseFieldIndex = sds.getFieldIndexByName(fieldSense);
-			if (fieldDist != null)
-				distFieldIndex = sds.getFieldIndexByName(fieldDist);
-			if (fieldType != null)
-				typeFieldIndex = sds.getFieldIndexByName(fieldType);
-			if (fieldCost != null)
-				costFieldIndex = sds.getFieldIndexByName(fieldCost);
+		SelectableDataSource sds = lyr.getRecordset();
 
-			// We create a table definition for node table.
-			ITableDefinition nodesTableDef = new TableDefinition();
-			nodesTableDef.setFieldsDesc(nodeFields);
-			nodesTableDef.setName("Nodes");
+		int senseFieldIndex = -1;
+		int distFieldIndex = -1;
+		int typeFieldIndex = -1;
+		int costFieldIndex = -1;
 
-			// We create a table definition for edges table.
-			ITableDefinition edgeTableDef = new TableDefinition();
-			edgeTableDef.setFieldsDesc(edgeFields);
-			edgeTableDef.setName("Edges");
+		if (fieldSense != null)
+			senseFieldIndex = sds.getFieldIndexByName(fieldSense);
+		if (fieldDist != null)
+			distFieldIndex = sds.getFieldIndexByName(fieldDist);
+		if (fieldType != null)
+			typeFieldIndex = sds.getFieldIndexByName(fieldType);
+		if (fieldCost != null)
+			costFieldIndex = sds.getFieldIndexByName(fieldCost);
 
-			nodeWriter.initialize(nodesTableDef);
-			edgeWriter.initialize(edgeTableDef);
-			
-			nodeWriter.preProcess();
-			edgeWriter.preProcess();
-			
-			edgeCount = 0;
-			nodeCount = 0; 
-			
-			NumericValue valAux = null;
+		// We create a table definition for node table.
+		ITableDefinition nodesTableDef = new TableDefinition();
+		nodesTableDef.setFieldsDesc(nodeFields);
+		nodesTableDef.setName("Nodes");
 
-			for (i = 0; i < numEntities; i++) {
-				IGeometry geom = adapter.getShape(i);
-				Geometry jtsGeom = geom.toJTSGeometry();
-				Coordinate[] coords = jtsGeom.getCoordinates();
-				Coordinate c1 = coords[0];
-				Coordinate c2 = coords[coords.length - 1];
+		// We create a table definition for edges table.
+		ITableDefinition edgeTableDef = new TableDefinition();
+		edgeTableDef.setFieldsDesc(edgeFields);
+		edgeTableDef.setName("Edges");
 
-				NodeGv nodeAux;
-				if (!nodeHash.containsKey(c1)) // No está.
-				{
-					idNodo1 = nodeCount++;
-					nodeAux = new NodeGv(c1, idNodo1);
-					nodeHash.put(c1, nodeAux);
-					writeNode(nodeAux);
-				} else {
-					nodeAux = (NodeGv) nodeHash.get(c1);
-				}
-				idNodo1 = nodeAux.getId().intValue();
+		nodeWriter.initialize(nodesTableDef);
+		edgeWriter.initialize(edgeTableDef);
 
-				if (!nodeHash.containsKey(c2)) // No está.
-				{
-					idNodo2 = nodeCount++;
-					nodeAux = new NodeGv(c2, idNodo2);
-					nodeHash.put(c2, nodeAux);
-					writeNode(nodeAux);
-				} else {
-					nodeAux = (NodeGv) nodeHash.get(c2);
-				}
-				idNodo2 = nodeAux.getId().intValue();
+		nodeWriter.preProcess();
+		edgeWriter.preProcess();
 
-				if (typeFieldIndex != -1)
-					valAux = (NumericValue) sds.getFieldValue(i, typeFieldIndex);
-				else
-					valAux = ValueFactory.createValue(0); // no hay tipo
-				arcType = valAux.shortValue();
-				// TipoTramo = DBFReadIntegerAttribute(hDBF, i, indiceCampo1);
-				
-				if (distFieldIndex != -1)
-					valAux = (NumericValue) sds.getFieldValue(i, distFieldIndex);
-				else
-					valAux = ValueFactory.createValue(jtsGeom.getLength());
-				distance = valAux.floatValue();
-				// Distancia = (float) DBFReadDoubleAttribute(hDBF, i,
-				// indiceCampo2);
-				if (costFieldIndex != -1)
-				{
-					valAux = (NumericValue) sds.getFieldValue(i, costFieldIndex);
-					cost = valAux.doubleValue();
-				}
-				else
-					cost = distance;
-				
-				direction = -1;
+		edgeCount = 0;
+		nodeCount = 0;
 
-				if (senseFieldIndex == -1)
-					direction = 3; // 3-> Doble sentido, 1-> según viene, 2 ->
-				// al revés, cualquier otro valor-> No hay
-				// arco
-				else {
-					valAux = (NumericValue) sds.getFieldValue(i,
-							senseFieldIndex);
-					direction = valAux.shortValue();
-				}
-				
-				if (direction == 3) {
-					sentidoDigit = 1; // En esa dirección
-					writeEdge(i, sentidoDigit, idNodo1, idNodo2, arcType,
-							distance, cost);
-					edgeCount++;
+		NumericValue valAux = null;
 
-					sentidoDigit = 0;
-					writeEdge(i, sentidoDigit, idNodo2, idNodo1, arcType,
-							distance, cost);
-					edgeCount++;
+		for (i = 0; i < numEntities; i++) {
+			IGeometry geom = adapter.getShape(i);
+			Geometry jtsGeom = geom.toJTSGeometry();
+			Coordinate[] coords = jtsGeom.getCoordinates();
+			Coordinate c1 = coords[0];
+			Coordinate c2 = coords[coords.length - 1];
 
-				}
-				if (direction == 1) {
-					sentidoDigit = 1; // En esa dirección
-					writeEdge(i, sentidoDigit, idNodo1, idNodo2, arcType,
-							distance, cost);
-					edgeCount++;
-				}
-				if (direction == 2) {
-					sentidoDigit = 0;
-					writeEdge(i, sentidoDigit, idNodo2, idNodo1, arcType,
-							distance, cost);
-					edgeCount++;
+			NodeGv nodeAux;
+			if (!nodeHash.containsKey(c1)) // No está.
+			{
+				idNodo1 = nodeCount++;
+				nodeAux = new NodeGv(c1, idNodo1);
+				nodeHash.put(c1, nodeAux);
+				writeNode(nodeAux);
+			} else {
+				nodeAux = (NodeGv) nodeHash.get(c1);
+			}
+			idNodo1 = nodeAux.getId().intValue();
 
-				}
+			if (!nodeHash.containsKey(c2)) // No está.
+			{
+				idNodo2 = nodeCount++;
+				nodeAux = new NodeGv(c2, idNodo2);
+				nodeHash.put(c2, nodeAux);
+				writeNode(nodeAux);
+			} else {
+				nodeAux = (NodeGv) nodeHash.get(c2);
+			}
+			idNodo2 = nodeAux.getId().intValue();
+
+			if (typeFieldIndex != -1)
+				valAux = (NumericValue) sds.getFieldValue(i, typeFieldIndex);
+			else
+				valAux = ValueFactory.createValue(0); // no hay tipo
+			arcType = valAux.shortValue();
+			// TipoTramo = DBFReadIntegerAttribute(hDBF, i, indiceCampo1);
+
+			if (distFieldIndex != -1)
+				valAux = (NumericValue) sds.getFieldValue(i, distFieldIndex);
+			else
+				valAux = ValueFactory.createValue(jtsGeom.getLength());
+			distance = valAux.floatValue();
+			// Distancia = (float) DBFReadDoubleAttribute(hDBF, i,
+			// indiceCampo2);
+			if (costFieldIndex != -1) {
+				valAux = (NumericValue) sds.getFieldValue(i, costFieldIndex);
+				cost = valAux.doubleValue();
+			} else
+				cost = distance;
+
+			direction = -1;
+
+			if (senseFieldIndex == -1)
+				direction = 3; // 3-> Doble sentido, 1-> según viene, 2 ->
+			// al revés, cualquier otro valor-> No hay
+			// arco
+			else {
+				valAux = (NumericValue) sds.getFieldValue(i, senseFieldIndex);
+				direction = valAux.shortValue();
+			}
+
+			if (direction == 3) {
+				sentidoDigit = 1; // En esa dirección
+				writeEdge(i, sentidoDigit, idNodo1, idNodo2, arcType, distance,
+						cost);
+				edgeCount++;
+
+				sentidoDigit = 0;
+				writeEdge(i, sentidoDigit, idNodo2, idNodo1, arcType, distance,
+						cost);
+				edgeCount++;
+
+			}
+			if (direction == 1) {
+				sentidoDigit = 1; // En esa dirección
+				writeEdge(i, sentidoDigit, idNodo1, idNodo2, arcType, distance,
+						cost);
+				edgeCount++;
+			}
+			if (direction == 2) {
+				sentidoDigit = 0;
+				writeEdge(i, sentidoDigit, idNodo2, idNodo1, arcType, distance,
+						cost);
+				edgeCount++;
 
 			}
 
-			nodeWriter.postProcess();
-			edgeWriter.postProcess();
-		
+		}
+
+		nodeWriter.postProcess();
+		edgeWriter.postProcess();
+
 	}
 
 	private void writeEdge(int id, short sense, int idNodeOrig, int idNodeEnd,
@@ -300,7 +297,7 @@ public class NetworkGvTableWriter extends AbstractNetworkWriter {
 
 		edgeWriter.process(editedRow);
 	}
-	
+
 	private void writeNode(NodeGv node) throws VisitorException {
 		Value[] values = new Value[nodeFields.length];
 		int id = node.getId().intValue();
@@ -311,7 +308,7 @@ public class NetworkGvTableWriter extends AbstractNetworkWriter {
 		IRowEdited editedRow = new DefaultRowEdited(myRow,
 				DefaultRowEdited.STATUS_ADDED, id);
 
-		nodeWriter.process(editedRow);	
+		nodeWriter.process(editedRow);
 	}
 
 	public void setEdgeWriter(IWriter edgeWriter) {
@@ -322,7 +319,4 @@ public class NetworkGvTableWriter extends AbstractNetworkWriter {
 		this.nodeWriter = nodeWriter;
 	}
 
-
 }
-
-

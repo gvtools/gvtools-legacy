@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.topologyrules.jtsisvalidrules;
 
 import java.awt.geom.Point2D;
@@ -69,17 +69,17 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
  * Checks if geometry coordinates are valid.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
-public class GeometryMustHaveValidCoordinates extends AbstractTopologyRule{
-	
+public class GeometryMustHaveValidCoordinates extends AbstractTopologyRule {
+
 	private JtsValidRule parentRule;
-	
+
 	static final List<ITopologyErrorFix> automaticFixes = new ArrayList<ITopologyErrorFix>();
-	
-	
+
 	/**
 	 * Constructor
+	 * 
 	 * @param topology
 	 * @param originLyr
 	 */
@@ -87,45 +87,51 @@ public class GeometryMustHaveValidCoordinates extends AbstractTopologyRule{
 			FLyrVect originLyr) {
 		super(topology, originLyr);
 	}
-	
-	public GeometryMustHaveValidCoordinates(FLyrVect originLyr){
+
+	public GeometryMustHaveValidCoordinates(FLyrVect originLyr) {
 		super(originLyr);
 	}
-	
-	public GeometryMustHaveValidCoordinates(){}
-	
-	
+
+	public GeometryMustHaveValidCoordinates() {
+	}
+
 	public String getName() {
 		return Messages.getText("GEOMETRY_MUST_HAVE_VALID_COORDINATES");
 	}
-	
-	public void checkPreconditions() throws TopologyRuleDefinitionException {}
-	
+
+	public void checkPreconditions() throws TopologyRuleDefinitionException {
+	}
+
 	public void validateFeature(IFeature feature) {
-		Handler[] handlers = feature.getGeometry().getHandlers(IGeometry.SELECTHANDLER);
-		for(int i = 0; i < handlers.length; i++){
+		Handler[] handlers = feature.getGeometry().getHandlers(
+				IGeometry.SELECTHANDLER);
+		for (int i = 0; i < handlers.length; i++) {
 			Point2D pt = handlers[i].getPoint();
-			if(! isValid(pt)){
-				 IGeometry fgeo = feature.getGeometry();
-		    	 AbstractTopologyRule violatedRule = null;
-		    	 if(this.parentRule != null)
-		    		 violatedRule = parentRule;
-		    	 else
-		    		 violatedRule = this;
-				 JtsValidTopologyError topologyError = 
-		    		 new JtsValidTopologyError(fgeo, violatedRule, feature, topology);
-		    	 topologyError.setSecondaryRule(this);
-		    	 errorContainer.addTopologyError(topologyError);
+			if (!isValid(pt)) {
+				IGeometry fgeo = feature.getGeometry();
+				AbstractTopologyRule violatedRule = null;
+				if (this.parentRule != null)
+					violatedRule = parentRule;
+				else
+					violatedRule = this;
+				JtsValidTopologyError topologyError = new JtsValidTopologyError(
+						fgeo, violatedRule, feature, topology);
+				topologyError.setSecondaryRule(this);
+				errorContainer.addTopologyError(topologyError);
 			}
-		}//for	
-	} 
-	
-	private boolean isValid(Point2D coord){
-	  if (Double.isNaN(coord.getX())) return false;
-	  if (Double.isInfinite(coord.getX())) return false;
-	  if (Double.isNaN(coord.getY())) return false;
-	  if (Double.isInfinite(coord.getY())) return false;
-	  return true;
+		}// for
+	}
+
+	private boolean isValid(Point2D coord) {
+		if (Double.isNaN(coord.getX()))
+			return false;
+		if (Double.isInfinite(coord.getX()))
+			return false;
+		if (Double.isNaN(coord.getY()))
+			return false;
+		if (Double.isInfinite(coord.getY()))
+			return false;
+		return true;
 	}
 
 	public JtsValidRule getParentRule() {
@@ -151,5 +157,4 @@ public class GeometryMustHaveValidCoordinates extends AbstractTopologyRule{
 	public MultiShapeSymbol getErrorSymbol() {
 		return null;
 	}
-  }
-
+}

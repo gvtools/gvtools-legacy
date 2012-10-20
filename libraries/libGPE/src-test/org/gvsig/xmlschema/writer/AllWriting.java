@@ -71,12 +71,12 @@ public class AllWriting {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.gvsig.gpe.schema.writer");
-		//$JUnit-BEGIN$
+		// $JUnit-BEGIN$
 		suite.addTestSuite(SequenceWrittingTest.class);
 		suite.addTestSuite(ElementWritingTest.class);
 		suite.addTestSuite(ChoiceWritingTest.class);
 		suite.addTestSuite(ElementWithComplexTypesWrittingTest.class);
-		//$JUnit-END$
+		// $JUnit-END$
 		return suite;
 	}
 

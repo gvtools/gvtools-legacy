@@ -47,7 +47,6 @@ import com.iver.cit.gvsig.exceptions.visitors.VisitorException;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 
-
 /**
  * Interfaz que ofrece los métodos para iniciar, finalizar y visitar una
  * feature.
@@ -55,46 +54,56 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 public interface FeatureVisitor {
 	/**
 	 * Recibe las geometrías a medida que se van recorriendo en la estrategia.
-	 *
-	 * @param g Geometría que se recorre
-	 * @param index índice de la geometría
+	 * 
+	 * @param g
+	 *            Geometría que se recorre
+	 * @param index
+	 *            índice de la geometría
 	 * @throws ReadDriverException
-	 * @throws VisitorException TODO
-	 * @throws ProcessVisitorException TODO
+	 * @throws VisitorException
+	 *             TODO
+	 * @throws ProcessVisitorException
+	 *             TODO
 	 */
-	void visit(IGeometry g, int index) throws ReadDriverException, VisitorException, ProcessVisitorException;
+	void visit(IGeometry g, int index) throws ReadDriverException,
+			VisitorException, ProcessVisitorException;
 
 	// void visit(IFeature feat) throws VisitException;
 
-
 	/**
 	 * All FeatureVisitor is linked with a call to Strategy.processXXX method.
-	 * It represents an iterative process over all (or some) features of a Layer.
-	 * This method returns a descriptive text of the process that a visitor makes.
-	 *
+	 * It represents an iterative process over all (or some) features of a
+	 * Layer. This method returns a descriptive text of the process that a
+	 * visitor makes.
+	 * 
 	 * FIXME Internacionalizamos el mensaje???
+	 * 
 	 * @return
 	 */
-	 String getProcessDescription();
+	String getProcessDescription();
 
 	/**
 	 * Método invocado al finalizar las visitas con el fin de que se puedan
 	 * liberar los recursos reservados en start
-	 *
-	 * @param layer Capa sobre la que se actua
-	 * @throws VisitorException TODO
+	 * 
+	 * @param layer
+	 *            Capa sobre la que se actua
+	 * @throws VisitorException
+	 *             TODO
 	 */
 	void stop(FLayer layer) throws VisitorException;
 
 	/**
 	 * Método invocado antes de las visitas para que el visitor pueda reservar
 	 * algún tipo de recurso que sea necesario
-	 *
-	 * @param layer Capa sobre la que se actúa
-	 *
-	 * @return Devuelve true si el visitor se puede aplicar sobre la capa que
-	 * 		   se pasa como parámetro
-	 * @throws StartVisitorException TODO
+	 * 
+	 * @param layer
+	 *            Capa sobre la que se actúa
+	 * 
+	 * @return Devuelve true si el visitor se puede aplicar sobre la capa que se
+	 *         pasa como parámetro
+	 * @throws StartVisitorException
+	 *             TODO
 	 */
 	boolean start(FLayer layer) throws StartVisitorException;
 }

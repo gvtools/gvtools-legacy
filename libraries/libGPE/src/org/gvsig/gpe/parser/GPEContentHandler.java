@@ -100,17 +100,16 @@ import org.gvsig.gpe.warnings.FeatureNotSupportedWarning;
  *
  */
 /**
- * This class is a common implementation for all
- * the application content handlers. It has an attribute
- * with the geographical file schema. It has a default
- * implementation for all the methods defined by the 
- * IGPEContentHandler.
+ * This class is a common implementation for all the application content
+ * handlers. It has an attribute with the geographical file schema. It has a
+ * default implementation for all the methods defined by the IGPEContentHandler.
+ * 
  * @author Jorge Piera Llodrá (jorge.piera@iver.es)
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  */
 public abstract class GPEContentHandler implements IGPEContentHandler {
 	private IGPEErrorHandler errorHandler = null;
-	
+
 	/**
 	 * @return the errorHandler
 	 */
@@ -119,7 +118,8 @@ public abstract class GPEContentHandler implements IGPEContentHandler {
 	}
 
 	/**
-	 * @param errorHandler the errorHandler to set
+	 * @param errorHandler
+	 *            the errorHandler to set
 	 */
 	public void setErrorHandler(IGPEErrorHandler errorHandler) {
 		this.errorHandler = errorHandler;
@@ -127,39 +127,51 @@ public abstract class GPEContentHandler implements IGPEContentHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.IGPEContentHandler#addBboxToFeature(java.lang.Object, java.lang.Object)
+	 * 
+	 * @see org.gvsig.gpe.IGPEContentHandler#addBboxToFeature(java.lang.Object,
+	 * java.lang.Object)
 	 */
 	public void addBboxToFeature(Object bbox, Object feature) {
-		addNotSupportedWarning(FeatureNotSupportedWarning.FEATUEWITHBBOX);		
+		addNotSupportedWarning(FeatureNotSupportedWarning.FEATUEWITHBBOX);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.IGPEContentHandler#addBboxToLayer(java.lang.Object, java.lang.Object)
+	 * 
+	 * @see org.gvsig.gpe.IGPEContentHandler#addBboxToLayer(java.lang.Object,
+	 * java.lang.Object)
 	 */
 	public void addBboxToLayer(Object bbox, Object layer) {
-		addNotSupportedWarning(FeatureNotSupportedWarning.LAYERWITHBBOX);				
+		addNotSupportedWarning(FeatureNotSupportedWarning.LAYERWITHBBOX);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.IGPEContentHandler#addDescriptionToLayer(java.lang.String, java.lang.Object)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.IGPEContentHandler#addDescriptionToLayer(java.lang.String,
+	 * java.lang.Object)
 	 */
 	public void addDescriptionToLayer(String description, Object layer) {
-		addNotSupportedWarning(FeatureNotSupportedWarning.LAYERWITHDESCRIPTION);				
+		addNotSupportedWarning(FeatureNotSupportedWarning.LAYERWITHDESCRIPTION);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.IGPEContentHandler#addElementToFeature(java.lang.Object, java.lang.Object)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.IGPEContentHandler#addElementToFeature(java.lang.Object,
+	 * java.lang.Object)
 	 */
 	public void addElementToFeature(Object element, Object feature) {
-		addNotSupportedWarning(FeatureNotSupportedWarning.FEATUREWITHELEMENTS);				
+		addNotSupportedWarning(FeatureNotSupportedWarning.FEATUREWITHELEMENTS);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.IGPEContentHandler#addFeatureToLayer(java.lang.Object, java.lang.Object)
+	 * 
+	 * @see org.gvsig.gpe.IGPEContentHandler#addFeatureToLayer(java.lang.Object,
+	 * java.lang.Object)
 	 */
 	public void addFeatureToLayer(Object feature, Object layer) {
 		addNotSupportedWarning(FeatureNotSupportedWarning.LAYERWITHFEATURES);
@@ -167,7 +179,10 @@ public abstract class GPEContentHandler implements IGPEContentHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.IGPEContentHandler#addGeometryToFeature(java.lang.Object, java.lang.Object)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.IGPEContentHandler#addGeometryToFeature(java.lang.Object,
+	 * java.lang.Object)
 	 */
 	public void addGeometryToFeature(Object geometry, Object feature) {
 		addNotSupportedWarning(FeatureNotSupportedWarning.FEATUREWITHGEOMETRY);
@@ -175,7 +190,10 @@ public abstract class GPEContentHandler implements IGPEContentHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.IGPEContentHandler#addInnerPolygonToPolygon(java.lang.Object, java.lang.Object)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.IGPEContentHandler#addInnerPolygonToPolygon(java.lang.Object
+	 * , java.lang.Object)
 	 */
 	public void addInnerPolygonToPolygon(Object innerPolygon, Object Polygon) {
 		addNotSupportedWarning(FeatureNotSupportedWarning.POLYGONWITHINNERPOLYGON);
@@ -183,7 +201,9 @@ public abstract class GPEContentHandler implements IGPEContentHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.IGPEContentHandler#addNameToFeature(java.lang.String, java.lang.Object)
+	 * 
+	 * @see org.gvsig.gpe.IGPEContentHandler#addNameToFeature(java.lang.String,
+	 * java.lang.Object)
 	 */
 	public void addNameToFeature(String name, Object feature) {
 		addNotSupportedWarning(FeatureNotSupportedWarning.FEATUREWITHNAME);
@@ -191,7 +211,9 @@ public abstract class GPEContentHandler implements IGPEContentHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.IGPEContentHandler#addNameToLayer(java.lang.String, java.lang.Object)
+	 * 
+	 * @see org.gvsig.gpe.IGPEContentHandler#addNameToLayer(java.lang.String,
+	 * java.lang.Object)
 	 */
 	public void addNameToLayer(String name, Object layer) {
 		addNotSupportedWarning(FeatureNotSupportedWarning.LAYERWITHNAME);
@@ -199,16 +221,21 @@ public abstract class GPEContentHandler implements IGPEContentHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.IGPEContentHandler#addParentElementToElement(java.lang.Object, java.lang.Object)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.IGPEContentHandler#addParentElementToElement(java.lang.
+	 * Object, java.lang.Object)
 	 */
 	public void addParentElementToElement(Object parent, Object element) {
 		addNotSupportedWarning(FeatureNotSupportedWarning.ELEMENTWITHCHILDREN);
 	}
-	
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.IGPEContentHandler#addParentLayerToLayer(java.lang.Object, java.lang.Object)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.IGPEContentHandler#addParentLayerToLayer(java.lang.Object,
+	 * java.lang.Object)
 	 */
 	public void addParentLayerToLayer(Object parent, Object layer) {
 		addNotSupportedWarning(FeatureNotSupportedWarning.LAYERWITHCHILDREN);
@@ -216,7 +243,9 @@ public abstract class GPEContentHandler implements IGPEContentHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.IGPEContentHandler#addSrsToLayer(java.lang.String, java.lang.Object)
+	 * 
+	 * @see org.gvsig.gpe.IGPEContentHandler#addSrsToLayer(java.lang.String,
+	 * java.lang.Object)
 	 */
 	public void addSrsToLayer(String srs, Object Layer) {
 		addNotSupportedWarning(FeatureNotSupportedWarning.LAYERWITHSRS);
@@ -224,79 +253,90 @@ public abstract class GPEContentHandler implements IGPEContentHandler {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.IGPEContentHandler#endBbox(java.lang.Object)
 	 */
 	public void endBbox(Object bbox) {
-				
+
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.IGPEContentHandler#endElement(java.lang.Object)
 	 */
 	public void endElement(Object element) {
-		
+
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.IGPEContentHandler#endFeature(java.lang.Object)
 	 */
 	public void endFeature(Object feature) {
-		
+
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.IGPEContentHandler#endInnerPolygon(java.lang.Object)
 	 */
 	public void endInnerPolygon(Object innerPolygon) {
-		
+
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.IGPEContentHandler#endLayer(java.lang.Object)
 	 */
 	public void endLayer(Object layer) {
-		
+
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.IGPEContentHandler#endLineString(java.lang.Object)
 	 */
 	public void endLineString(Object lineString) {
-		
+
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.IGPEContentHandler#endLinearRing(java.lang.Object)
 	 */
 	public void endLinearRing(Object linearRing) {
-		
+
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.IGPEContentHandler#endPoint(java.lang.Object)
 	 */
 	public void endPoint(Object point) {
-		
+
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.IGPEContentHandler#endPolygon(java.lang.Object)
 	 */
 	public void endPolygon(Object Polygon) {
-		
+
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.parser.IGPEContentHandler#startBbox(java.lang.String, org.gvsig.gpe.parser.ICoordinateIterator, java.lang.String)
+	 * 
+	 * @see org.gvsig.gpe.parser.IGPEContentHandler#startBbox(java.lang.String,
+	 * org.gvsig.gpe.parser.ICoordinateIterator, java.lang.String)
 	 */
 	public Object startBbox(String id, ICoordinateIterator coords, String srs) {
 		addNotSupportedWarning(FeatureNotSupportedWarning.BBOXCREATION);
@@ -305,71 +345,103 @@ public abstract class GPEContentHandler implements IGPEContentHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.parser.IGPEContentHandler#startElement(java.lang.String, java.lang.String, java.lang.Object, org.gvsig.gpe.parser.IAttributesIterator, java.lang.Object)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.parser.IGPEContentHandler#startElement(java.lang.String,
+	 * java.lang.String, java.lang.Object,
+	 * org.gvsig.gpe.parser.IAttributesIterator, java.lang.Object)
 	 */
-	public Object startElement(String namespace, String name, Object value, IAttributesIterator attributes,Object parentElement) {
+	public Object startElement(String namespace, String name, Object value,
+			IAttributesIterator attributes, Object parentElement) {
 		addNotSupportedWarning(FeatureNotSupportedWarning.ELEMENTCREATION);
 		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.parser.IGPEContentHandler#startFeature(java.lang.String, java.lang.String, java.lang.String, org.gvsig.gpe.parser.IAttributesIterator, java.lang.Object)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.parser.IGPEContentHandler#startFeature(java.lang.String,
+	 * java.lang.String, java.lang.String,
+	 * org.gvsig.gpe.parser.IAttributesIterator, java.lang.Object)
 	 */
-	public Object startFeature(String id, String namespace, String name, IAttributesIterator attributes, Object layer) {
+	public Object startFeature(String id, String namespace, String name,
+			IAttributesIterator attributes, Object layer) {
 		addNotSupportedWarning(FeatureNotSupportedWarning.FEATURECREATION);
 		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.parser.IGPEContentHandler#startInnerPolygon(java.lang.String, org.gvsig.gpe.parser.ICoordinateIterator, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.parser.IGPEContentHandler#startInnerPolygon(java.lang.String
+	 * , org.gvsig.gpe.parser.ICoordinateIterator, java.lang.String)
 	 */
-	public Object startInnerPolygon(String id, ICoordinateIterator coords, String srs) {
+	public Object startInnerPolygon(String id, ICoordinateIterator coords,
+			String srs) {
 		addNotSupportedWarning(FeatureNotSupportedWarning.INNERBOUNDARYCREATION);
 		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.parser.IGPEContentHandler#startLayer(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, org.gvsig.gpe.parser.IAttributesIterator, java.lang.Object, java.lang.Object)
+	 * 
+	 * @see org.gvsig.gpe.parser.IGPEContentHandler#startLayer(java.lang.String,
+	 * java.lang.String, java.lang.String, java.lang.String, java.lang.String,
+	 * org.gvsig.gpe.parser.IAttributesIterator, java.lang.Object,
+	 * java.lang.Object)
 	 */
-	public Object startLayer(String id, String namespace, String name, String description, String srs, IAttributesIterator attributes, Object parentLayer, Object bBox) {
+	public Object startLayer(String id, String namespace, String name,
+			String description, String srs, IAttributesIterator attributes,
+			Object parentLayer, Object bBox) {
 		addNotSupportedWarning(FeatureNotSupportedWarning.LAYERCREATION);
 		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.parser.IGPEContentHandler#startLineString(java.lang.String, org.gvsig.gpe.parser.ICoordinateIterator, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.parser.IGPEContentHandler#startLineString(java.lang.String,
+	 * org.gvsig.gpe.parser.ICoordinateIterator, java.lang.String)
 	 */
-	public Object startLineString(String id, ICoordinateIterator coords, String srs) {
+	public Object startLineString(String id, ICoordinateIterator coords,
+			String srs) {
 		addNotSupportedWarning(FeatureNotSupportedWarning.LINESTRINGCREATION);
 		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.parser.IGPEContentHandler#startLinearRing(java.lang.String, org.gvsig.gpe.parser.ICoordinateIterator, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.parser.IGPEContentHandler#startLinearRing(java.lang.String,
+	 * org.gvsig.gpe.parser.ICoordinateIterator, java.lang.String)
 	 */
-	public Object startLinearRing(String id, ICoordinateIterator coords, String srs) {
+	public Object startLinearRing(String id, ICoordinateIterator coords,
+			String srs) {
 		addNotSupportedWarning(FeatureNotSupportedWarning.LINEARRINGCREATION);
 		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.parser.IGPEContentHandler#startPoint(java.lang.String, org.gvsig.gpe.parser.ICoordinateIterator, java.lang.String)
+	 * 
+	 * @see org.gvsig.gpe.parser.IGPEContentHandler#startPoint(java.lang.String,
+	 * org.gvsig.gpe.parser.ICoordinateIterator, java.lang.String)
 	 */
 	public Object startPoint(String id, ICoordinateIterator coords, String srs) {
 		addNotSupportedWarning(FeatureNotSupportedWarning.POINTCREATION);
 		return null;
 	}
 
-
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.parser.IGPEContentHandler#startPolygon(java.lang.String, org.gvsig.gpe.parser.ICoordinateIterator, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.parser.IGPEContentHandler#startPolygon(java.lang.String,
+	 * org.gvsig.gpe.parser.ICoordinateIterator, java.lang.String)
 	 */
 	public Object startPolygon(String id, ICoordinateIterator coords, String srs) {
 		addNotSupportedWarning(FeatureNotSupportedWarning.POLYGONCREATION);
@@ -378,110 +450,138 @@ public abstract class GPEContentHandler implements IGPEContentHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.IGPEContentHandler#addGeometryToMultiGeometry(java.lang.Object, java.lang.Object)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.IGPEContentHandler#addGeometryToMultiGeometry(java.lang
+	 * .Object, java.lang.Object)
 	 */
 	public void addGeometryToMultiGeometry(Object geometry, Object multiGeometry) {
-		
+
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.IGPEContentHandlerSFP0#addCurveToMultiCurve(java.lang.Object, java.lang.Object)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.IGPEContentHandlerSFP0#addCurveToMultiCurve(java.lang.Object
+	 * , java.lang.Object)
 	 */
 	public void addCurveToMultiCurve(Object curve, Object multiCurve) {
-		
+
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.IGPEContentHandlerSFP0#startMultiCurve(java.lang.String, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.IGPEContentHandlerSFP0#startMultiCurve(java.lang.String,
+	 * java.lang.String)
 	 */
 	public Object startMultiCurve(String id, String srs) {
 		addNotSupportedWarning(FeatureNotSupportedWarning.MULTICURVECREATION);
 		return null;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.IGPEContentHandlerSFP0#endMultiCurve(java.lang.Object)
 	 */
 	public void endMultiCurve(Object multiCurve) {
-		
+
 	}
-	
-	
-	public Object startCurve(String id, ICoordinateIterator coords, String srs){
+
+	public Object startCurve(String id, ICoordinateIterator coords, String srs) {
 		addNotSupportedWarning(FeatureNotSupportedWarning.CURVECREATION);
 		return null;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.IGPEContentHandlerSFP0#endCurve(java.lang.Object)
 	 */
 	public void endCurve(Object Curve) {
-		
-	}
-		
-	/*
-	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.IGPEContentHandler#addLineStringToMultiLineString(java.lang.Object, java.lang.Object)
-	 */
-	public void addLineStringToMultiLineString(Object lineString, Object multiLineString) {
-		
+
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.IGPEContentHandler#addPointToMultiPoint(java.lang.Object, java.lang.Object)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.IGPEContentHandler#addLineStringToMultiLineString(java.
+	 * lang.Object, java.lang.Object)
+	 */
+	public void addLineStringToMultiLineString(Object lineString,
+			Object multiLineString) {
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.IGPEContentHandler#addPointToMultiPoint(java.lang.Object,
+	 * java.lang.Object)
 	 */
 	public void addPointToMultiPoint(Object point, Object multiPoint) {
-		
+
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.IGPEContentHandler#addPolygonToMultiPolygon(java.lang.Object, java.lang.Object)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.IGPEContentHandler#addPolygonToMultiPolygon(java.lang.Object
+	 * , java.lang.Object)
 	 */
 	public void addPolygonToMultiPolygon(Object polygon, Object multiPolygon) {
-		
+
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.IGPEContentHandler#endMultiGeometry(java.lang.Object)
 	 */
 	public void endMultiGeometry(Object multiGeometry) {
-		
+
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.IGPEContentHandler#endMultiLineString(java.lang.Object)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.IGPEContentHandler#endMultiLineString(java.lang.Object)
 	 */
 	public void endMultiLineString(Object multiLineString) {
-		
+
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.IGPEContentHandler#endMultiPoint(java.lang.Object)
 	 */
 	public void endMultiPoint(Object multiPoint) {
-		
+
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.IGPEContentHandler#endMultiPolygon(java.lang.Object)
 	 */
 	public void endMultiPolygon(Object multiPolygon) {
-		
+
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.IGPEContentHandler#startMultiGeometry(java.lang.String, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.IGPEContentHandler#startMultiGeometry(java.lang.String,
+	 * java.lang.String)
 	 */
 	public Object startMultiGeometry(String id, String srs) {
 		addNotSupportedWarning(FeatureNotSupportedWarning.MULTIGEOMETRYCREATION);
@@ -490,7 +590,10 @@ public abstract class GPEContentHandler implements IGPEContentHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.IGPEContentHandler#startMultiLineString(java.lang.String, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.IGPEContentHandler#startMultiLineString(java.lang.String,
+	 * java.lang.String)
 	 */
 	public Object startMultiLineString(String id, String srs) {
 		addNotSupportedWarning(FeatureNotSupportedWarning.MULTILINESTRINGCREATION);
@@ -499,7 +602,9 @@ public abstract class GPEContentHandler implements IGPEContentHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.IGPEContentHandler#startMultiPoint(java.lang.String, java.lang.String)
+	 * 
+	 * @see org.gvsig.gpe.IGPEContentHandler#startMultiPoint(java.lang.String,
+	 * java.lang.String)
 	 */
 	public Object startMultiPoint(String id, String srs) {
 		addNotSupportedWarning(FeatureNotSupportedWarning.MULTIPOINTCREATION);
@@ -508,45 +613,56 @@ public abstract class GPEContentHandler implements IGPEContentHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.IGPEContentHandler#startMultiPolygon(java.lang.String, java.lang.String)
+	 * 
+	 * @see org.gvsig.gpe.IGPEContentHandler#startMultiPolygon(java.lang.String,
+	 * java.lang.String)
 	 */
 	public Object startMultiPolygon(String id, String srs) {
 		addNotSupportedWarning(FeatureNotSupportedWarning.MULTIPOLYGONCREATION);
 		return null;
 	}
-	
-	
+
 	/**
-	 * This method adds a warning message into the ErrorHandler
-	 * to indicate that the application doesn't supports 
-	 * the especified objects
+	 * This method adds a warning message into the ErrorHandler to indicate that
+	 * the application doesn't supports the especified objects
+	 * 
 	 * @param objectName
-	 * Object name that is not supported
+	 *            Object name that is not supported
 	 */
-	private void addNotSupportedWarning(String objectName){
-		if (errorHandler != null){
+	private void addNotSupportedWarning(String objectName) {
+		if (errorHandler != null) {
 			errorHandler.addWarning(new FeatureNotSupportedWarning(objectName));
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.gvsig.gpe.IGPEContentHandlerSFP0#addSegmentToCurve(java.lang.Object, java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.IGPEContentHandlerSFP0#addSegmentToCurve(java.lang.Object,
+	 * java.lang.Object)
 	 */
 	public void addSegmentToCurve(Object segment, Object curve) {
-				
+
 	}
 
-	/* (non-Javadoc)
-	 * @see org.gvsig.gpe.IGPEContentHandlerSFP0#startCurve(java.lang.String, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.gpe.IGPEContentHandlerSFP0#startCurve(java.lang.String,
+	 * java.lang.String)
 	 */
 	public Object startCurve(String id, String srs) {
 		addNotSupportedWarning(FeatureNotSupportedWarning.CURVECREATION);
 		return null;
 	}
-	
-	
-	/* (non-Javadoc)
-	 * @see org.gvsig.gpe.parser.IGPEContentHandler#startMetadata(java.lang.String, java.lang.String, org.gvsig.gpe.parser.IAttributesIterator)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.parser.IGPEContentHandler#startMetadata(java.lang.String,
+	 * java.lang.String, org.gvsig.gpe.parser.IAttributesIterator)
 	 */
 	public Object startMetadata(String type, String data,
 			IAttributesIterator attributes) {
@@ -554,8 +670,12 @@ public abstract class GPEContentHandler implements IGPEContentHandler {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.gvsig.gpe.parser.IGPEContentHandler#startTime(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Object, java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.gpe.parser.IGPEContentHandler#startTime(java.lang.String,
+	 * java.lang.String, java.lang.String, java.lang.String, java.lang.Object,
+	 * java.lang.Object)
 	 */
 	public Object startTime(String name, String description, String type,
 			String time, Object previous, Object next) {
@@ -563,46 +683,66 @@ public abstract class GPEContentHandler implements IGPEContentHandler {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.gvsig.gpe.parser.IGPEContentHandler#startTime(java.lang.String, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.gpe.parser.IGPEContentHandler#startTime(java.lang.String,
+	 * java.lang.String)
 	 */
 	public Object startTime(String type, String time) {
 		addNotSupportedWarning(FeatureNotSupportedWarning.METADATACREATION);
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.gvsig.gpe.parser.IGPEContentHandler#addMetadataToFeature(java.lang.Object, java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.parser.IGPEContentHandler#addMetadataToFeature(java.lang
+	 * .Object, java.lang.Object)
 	 */
 	public void addMetadataToFeature(Object metadata, Object feature) {
-		addNotSupportedWarning(FeatureNotSupportedWarning.FEATUREWITHMETADATA);	
+		addNotSupportedWarning(FeatureNotSupportedWarning.FEATUREWITHMETADATA);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.gvsig.gpe.parser.IGPEContentHandler#addMetadataToMetadata(java.lang.Object, java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.parser.IGPEContentHandler#addMetadataToMetadata(java.lang
+	 * .Object, java.lang.Object)
 	 */
 	public void addMetadataToMetadata(Object metadata, Object parent) {
-		addNotSupportedWarning(FeatureNotSupportedWarning.METADATAWITHCHILDREN);	
+		addNotSupportedWarning(FeatureNotSupportedWarning.METADATAWITHCHILDREN);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.gvsig.gpe.parser.IGPEContentHandler#addTimeToFeature(java.lang.Object, java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.parser.IGPEContentHandler#addTimeToFeature(java.lang.Object
+	 * , java.lang.Object)
 	 */
 	public void addTimeToFeature(Object time, Object feature) {
-		addNotSupportedWarning(FeatureNotSupportedWarning.FEATUREWITHTIME);		
+		addNotSupportedWarning(FeatureNotSupportedWarning.FEATUREWITHTIME);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.gvsig.gpe.parser.IGPEContentHandler#endMetadata(java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.parser.IGPEContentHandler#endMetadata(java.lang.Object)
 	 */
 	public void endMetadata(Object metadata) {
-				
+
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.IGPEContentHandler#endTime(java.lang.Object)
 	 */
 	public void endTime(Object time) {
-				
-	}	
+
+	}
 }

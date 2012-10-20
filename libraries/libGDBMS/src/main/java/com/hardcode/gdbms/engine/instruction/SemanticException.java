@@ -2,7 +2,7 @@ package com.hardcode.gdbms.engine.instruction;
 
 /**
  * Clase base de las excepciones semánticas
- *
+ * 
  * @author Fernando González Cortés
  */
 public class SemanticException extends Exception {
@@ -15,7 +15,7 @@ public class SemanticException extends Exception {
 
 	/**
 	 * Creates a new SemanticException object.
-	 *
+	 * 
 	 * @param arg0
 	 */
 	public SemanticException(String arg0) {
@@ -24,7 +24,7 @@ public class SemanticException extends Exception {
 
 	/**
 	 * Creates a new SemanticException object.
-	 *
+	 * 
 	 * @param arg0
 	 */
 	public SemanticException(Throwable arg0) {
@@ -33,7 +33,7 @@ public class SemanticException extends Exception {
 
 	/**
 	 * Creates a new SemanticException object.
-	 *
+	 * 
 	 * @param arg0
 	 * @param arg1
 	 */

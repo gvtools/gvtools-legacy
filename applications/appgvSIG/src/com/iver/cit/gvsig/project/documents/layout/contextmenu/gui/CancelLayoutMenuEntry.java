@@ -46,12 +46,11 @@ import com.iver.cit.gvsig.project.documents.layout.LayoutContext;
 import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.ILayoutGraphicListener;
 
-
 /**
-* Cancela los graficos que se esten insertando sobre el Layout.
-*
-* @author Vicente Caballero Navarro
-*/
+ * Cancela los graficos que se esten insertando sobre el Layout.
+ * 
+ * @author Vicente Caballero Navarro
+ */
 public class CancelLayoutMenuEntry extends AbstractLayoutContextMenuAction {
 	public String getGroup() {
 		return "geometries";
@@ -69,26 +68,32 @@ public class CancelLayoutMenuEntry extends AbstractLayoutContextMenuAction {
 		return PluginServices.getText(this, "cancel");
 	}
 
-	public boolean isEnabled(LayoutContext layoutContext, IFFrame[] selectedFrames) {
+	public boolean isEnabled(LayoutContext layoutContext,
+			IFFrame[] selectedFrames) {
 		return true;
 	}
 
-	public boolean isVisible(LayoutContext layoutContext, IFFrame[] selectedFrames) {
-		String currentLayout=getLayout().getLayoutControl().getCurrentTool();
-		if ((currentLayout.equals("layoutaddpolyline") ||
-				currentLayout.equals("layoutaddpolygon")||
-				currentLayout.equals("layoutaddcircle")||
-				currentLayout.equals("layoutaddline")||
-				currentLayout.equals("layoutaddrectangle")) &&
-				getLayout().getLayoutControl().getGeometryAdapter().getPoints().length>0){
+	public boolean isVisible(LayoutContext layoutContext,
+			IFFrame[] selectedFrames) {
+		String currentLayout = getLayout().getLayoutControl().getCurrentTool();
+		if ((currentLayout.equals("layoutaddpolyline")
+				|| currentLayout.equals("layoutaddpolygon")
+				|| currentLayout.equals("layoutaddcircle")
+				|| currentLayout.equals("layoutaddline") || currentLayout
+					.equals("layoutaddrectangle"))
+				&& getLayout().getLayoutControl().getGeometryAdapter()
+						.getPoints().length > 0) {
 			return true;
 		}
 		return false;
 	}
+
 	public void execute(LayoutContext layoutContext, IFFrame[] selectedFrames) {
 		if (getLayout().getLayoutControl().getCurrentLayoutTool().getListener() instanceof ILayoutGraphicListener) {
-			GeometryAdapter ga=((ILayoutGraphicListener)getLayout().getLayoutControl().getCurrentLayoutTool().getListener()).createGeometryAdapter();
-    		getLayout().getLayoutControl().setGeometryAdapter(ga);
-    	}
+			GeometryAdapter ga = ((ILayoutGraphicListener) getLayout()
+					.getLayoutControl().getCurrentLayoutTool().getListener())
+					.createGeometryAdapter();
+			getLayout().getLayoutControl().setGeometryAdapter(ga);
+		}
 	}
 }

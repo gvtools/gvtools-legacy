@@ -45,22 +45,24 @@ import com.iver.andami.plugins.Extension;
 import com.iver.cit.gvsig.exceptions.commands.EditionCommandException;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
-public class LayoutUndoExtension extends Extension{
+public class LayoutUndoExtension extends Extension {
 
 	public void initialize() {
 		registerIcons();
 	}
 
-	private void registerIcons(){
-		PluginServices.getIconTheme().registerDefault(
-				"layout-undo",
-				this.getClass().getClassLoader().getResource("images/Undo.png")
-			);
+	private void registerIcons() {
+		PluginServices.getIconTheme()
+				.registerDefault(
+						"layout-undo",
+						this.getClass().getClassLoader()
+								.getResource("images/Undo.png"));
 	}
 
 	public void execute(String actionCommand) {
-		Layout layout=(Layout)PluginServices.getMDIManager().getActiveWindow();
-		if (actionCommand.equals("UNDO")){
+		Layout layout = (Layout) PluginServices.getMDIManager()
+				.getActiveWindow();
+		if (actionCommand.equals("UNDO")) {
 			try {
 				layout.getLayoutContext().getEFS().undo();
 			} catch (EditionCommandException e) {
@@ -73,16 +75,18 @@ public class LayoutUndoExtension extends Extension{
 	}
 
 	public boolean isEnabled() {
-		if (PluginServices.getMDIManager().getActiveWindow() instanceof Layout){
-			Layout layout=(Layout)PluginServices.getMDIManager().getActiveWindow();
-			if (layout.getLayoutContext().getEFS().moreUndoCommands() && layout.getLayoutContext().isEditable())
+		if (PluginServices.getMDIManager().getActiveWindow() instanceof Layout) {
+			Layout layout = (Layout) PluginServices.getMDIManager()
+					.getActiveWindow();
+			if (layout.getLayoutContext().getEFS().moreUndoCommands()
+					&& layout.getLayoutContext().isEditable())
 				return true;
 		}
 		return false;
 	}
 
 	public boolean isVisible() {
-		if (PluginServices.getMDIManager().getActiveWindow() instanceof Layout){
+		if (PluginServices.getMDIManager().getActiveWindow() instanceof Layout) {
 			return true;
 		}
 		return false;

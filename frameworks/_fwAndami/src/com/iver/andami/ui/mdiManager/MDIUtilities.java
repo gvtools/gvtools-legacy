@@ -44,11 +44,10 @@ package com.iver.andami.ui.mdiManager;
  * 
  */
 public class MDIUtilities {
-public static void checkWindowInfo(WindowInfo vi){
-    if ((vi.isModal()) && (!vi.isVisible())) {
-        throw new RuntimeException("A modal dialog cannot be visible=false");
-    }
+	public static void checkWindowInfo(WindowInfo vi) {
+		if ((vi.isModal()) && (!vi.isVisible())) {
+			throw new RuntimeException("A modal dialog cannot be visible=false");
+		}
 
-
-}
+	}
 }

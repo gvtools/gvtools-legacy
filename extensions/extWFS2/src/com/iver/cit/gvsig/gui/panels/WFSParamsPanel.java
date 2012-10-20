@@ -205,8 +205,11 @@ import com.iver.cit.gvsig.gui.wizards.WFSWizardData;
  */
 
 /**
- * <p>Container of the WFS panels, that works as a {@linkplain TabbedPanel TabbedPanel}.</p>
- *
+ * <p>
+ * Container of the WFS panels, that works as a {@linkplain TabbedPanel
+ * TabbedPanel}.
+ * </p>
+ * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
@@ -214,7 +217,7 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 	private static final long serialVersionUID = 150328995058481516L;
 
 	private WFSWizardData wizardData;
-	
+
 	// Tab positions
 	private int infoTabPosition = -1;
 	private int featureTabPosition = -1;
@@ -222,7 +225,7 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 	private int optionsTabPosition = -1;
 	private int filterTabPosition = -1;
 	private int areaTabPosition = -1;
-	
+
 	// Tabs
 	private WFSInfoPanel infoPanel = null;
 	private WFSSelectFeaturePanel featurePanel = null;
@@ -230,7 +233,7 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 	private WFSOptionsPanel optionsPanel = null;
 	private WFSFilterPanel filterPanel = null;
 	private WFSAreaPanel areaPanel = null;
-	
+
 	static {
 		// Registers this class as a "PanelGroup" type
 		PanelGroupManager.getManager().registerPanelGroup(WFSParamsPanel.class);
@@ -241,7 +244,7 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 
 	/**
 	 * This method initializes jTabbedPane
-	 *
+	 * 
 	 * @return javax.swing.JTabbedPane
 	 */
 	public WFSParamsPanel(Object reference) {
@@ -251,6 +254,7 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.tabbedPanel.TabbedPanel#initialize()
 	 */
 	protected void initialize() {
@@ -276,14 +280,14 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 	/**
 	 * Sets the focus to the tab previous to the current one.
 	 */
-	public void goToPreviousTab(){
+	public void goToPreviousTab() {
 		setSelectedIndex(previousEnabledPage());
 	}
 
 	/**
 	 * @see JTabbedPane#getSelectedIndex()
 	 */
-	public int getSelectedIndex(){
+	public int getSelectedIndex() {
 		return this.getJTabbedPane().getSelectedIndex();
 	}
 
@@ -311,7 +315,7 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 
 	/**
 	 * This method initializes featurePanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	public WFSSelectFeaturePanel getFeaturesPanel() {
@@ -326,7 +330,7 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 
 	/**
 	 * This method initializes fieldsPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	public WFSSelectFieldsPanel getFieldsPanel() {
@@ -341,7 +345,7 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 
 	/**
 	 * This method initializes optionsPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	public WFSOptionsPanel getOptionsPanel() {
@@ -359,7 +363,7 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	public WFSFilterPanel getFilterPanel(){
+	public WFSFilterPanel getFilterPanel() {
 		if (filterPanel != null)
 			return filterPanel;
 
@@ -377,7 +381,7 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 	public WFSAreaPanel getAreaPanel() {
 		if (areaPanel != null)
 			return areaPanel;
-	
+
 		if (areaTabPosition == -1)
 			return null;
 
@@ -385,9 +389,11 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 	}
 
 	/**
-	 * Verifies that the selected parameters are enough to request the coverage to the server.
+	 * Verifies that the selected parameters are enough to request the coverage
+	 * to the server.
 	 * 
-	 * @return boolean <code>true</code> if its correctly configured; otherwise returns <code>false</code>
+	 * @return boolean <code>true</code> if its correctly configured; otherwise
+	 *         returns <code>false</code>
 	 */
 	public boolean isCorretlyConfigured() {
 		if (featureTabPosition == -1) {
@@ -413,37 +419,40 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.panelGroup.tabbedPanel.TabbedPanel#loadPanel(org.gvsig.gui.beans.panelGroup.panels.IPanel)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.panelGroup.tabbedPanel.TabbedPanel#loadPanel(org.
+	 * gvsig.gui.beans.panelGroup.panels.IPanel)
 	 */
 	protected void loadPanel(IPanel panel) {
 		super.loadPanel(panel);
-		
-		if (((AbstractPanel)panel).getClass() ==  WFSInfoPanel.class) {
+
+		if (((AbstractPanel) panel).getClass() == WFSInfoPanel.class) {
 			infoTabPosition = getPanelInGUICount() - 1;
 			return;
 		}
 
-		if (((AbstractPanel)panel).getClass() ==  WFSSelectFeaturePanel.class) {
+		if (((AbstractPanel) panel).getClass() == WFSSelectFeaturePanel.class) {
 			featureTabPosition = getPanelInGUICount() - 1;
 			return;
 		}
 
-		if (((AbstractPanel)panel).getClass() ==  WFSSelectFieldsPanel.class) {
+		if (((AbstractPanel) panel).getClass() == WFSSelectFieldsPanel.class) {
 			fieldsTabPosition = getPanelInGUICount() - 1;
 			return;
 		}
 
-		if (((AbstractPanel)panel).getClass() ==  WFSOptionsPanel.class) {
+		if (((AbstractPanel) panel).getClass() == WFSOptionsPanel.class) {
 			optionsTabPosition = getPanelInGUICount() - 1;
 			return;
 		}
 
-		if (((AbstractPanel)panel).getClass() ==  WFSFilterPanel.class) {
+		if (((AbstractPanel) panel).getClass() == WFSFilterPanel.class) {
 			filterTabPosition = getPanelInGUICount() - 1;
 			return;
 		}
 
-		if (((AbstractPanel)panel).getClass() ==  WFSAreaPanel.class) {
+		if (((AbstractPanel) panel).getClass() == WFSAreaPanel.class) {
 			areaTabPosition = getPanelInGUICount() - 1;
 			return;
 		}
@@ -452,17 +461,18 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 	/**
 	 * Refresh all the panels with the WFS capabilities information.
 	 */
-	public void refreshCapabilitiesInfo(){
+	public void refreshCapabilitiesInfo() {
 		WFSLayerNode selectedNode = getFeaturesPanel().getWFSLayerNode();
 		if (selectedNode != null) {
-			selectedNode.setSelectedFields(getFieldsPanel().getSelectedFields());
+			selectedNode
+					.setSelectedFields(getFieldsPanel().getSelectedFields());
 		} else {
 			getFeaturesPanel().refresh(null);
 		}
 		wizardData.setUserName(getOptionsPanel().getUserName());
 		wizardData.setBuffer(getOptionsPanel().getBuffer());
 		wizardData.setTimeOut(getOptionsPanel().getTimeout());
-		
+
 		getInfoPanel().refresh(selectedNode);
 	}
 
@@ -477,8 +487,9 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 
 	/**
 	 * Sets the information used to add or load a WFS layer.
-	 *
-	 * @param wizardData information used to add or load a WFS layer
+	 * 
+	 * @param wizardData
+	 *            information used to add or load a WFS layer
 	 */
 	public void setWizardData(WFSWizardData wizardData) {
 		this.wizardData = wizardData;
@@ -486,7 +497,7 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 
 	/**
 	 * Returns the next enabled tab's index, or -1 if there isn't any.
-	 *
+	 * 
 	 * @return The index or -1 if there is no one.
 	 */
 	public int nextPageEnabled() {
@@ -496,8 +507,8 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 		if (currentPage == nPages)
 			return -1;
 
-		for (int i = currentPage + 1; i < nPages; i++){
-			if (getJTabbedPane().isEnabledAt(i)){
+		for (int i = currentPage + 1; i < nPages; i++) {
+			if (getJTabbedPane().isEnabledAt(i)) {
 				return i;
 			}
 		}
@@ -507,7 +518,7 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 
 	/**
 	 * Returns the index of the current tab.
-	 *
+	 * 
 	 * @return index of the current tab
 	 */
 	public int currentPage() {
@@ -516,7 +527,7 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 
 	/**
 	 * Returns the index of the previous enabled tab.
-	 *
+	 * 
 	 * @return The index, or -1 if there is no one.
 	 */
 	public int previousEnabledPage() {
@@ -544,7 +555,8 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.gui.WizardPanel#initWizard()
 	 */
 	public void initWizard() {
@@ -552,7 +564,8 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.gui.WizardPanel#execute()
 	 */
 	public void execute() {
@@ -560,7 +573,8 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.gui.ILayerPanel#getLayer()
 	 */
 	public FLayer getLayer() {
@@ -581,21 +595,31 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 		Rectangle2D bbox = getAreaPanel().getExtent();
 
 		if (getAreaPanel().hasUserDefinedAnArea()) {
-			// If user has written some invalid data in the coordinates text fields of the area tab
-			if ((bbox == null) && (getAreaPanel().areThereSomeCoordinatesWritten())) {
+			// If user has written some invalid data in the coordinates text
+			// fields of the area tab
+			if ((bbox == null)
+					&& (getAreaPanel().areThereSomeCoordinatesWritten())) {
 				// Notify to user that no filter area will be applied
-				JOptionPane.showMessageDialog(null, PluginServices.getText(null, "no_filter_area_will_be_applied_in_the_load_of_the_layer"), PluginServices.getText(null, "warning"), JOptionPane.WARNING_MESSAGE);
+				JOptionPane
+						.showMessageDialog(
+								null,
+								PluginServices
+										.getText(null,
+												"no_filter_area_will_be_applied_in_the_load_of_the_layer"),
+								PluginServices.getText(null, "warning"),
+								JOptionPane.WARNING_MESSAGE);
 			}
 		}
 
 		layer.setBbox(bbox);
 		String BboxPropertyName = getFieldsPanel().getGeometryFieldName();
-		
+
 		layer.setBboxPropertyName(BboxPropertyName);
-		
+
 		// Set the filter subconsultation that layer is
 		layer.setFieldsQuery(getLayerNode().getFilter());
-		layer.setVisualFilterQuery(getFilterPanel().getFilterExpressionFromInterface());
+		layer.setVisualFilterQuery(getFilterPanel()
+				.getFilterExpressionFromInterface());
 		layer.setWfsDriver(wizardData.getDriver());
 		return layer;
 	}
@@ -608,12 +632,14 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 
 		if (obj == null)
 			return;
-		
-		// When we start to connect to a server -> the interface is the dialog WFSWizard
+
+		// When we start to connect to a server -> the interface is the dialog
+		// WFSWizard
 		if (obj instanceof WFSWizard)
-			((WFSWizard)this.getParent()).doClickOnNextButton();
+			((WFSWizard) this.getParent()).doClickOnNextButton();
 		else {
-			// When we are modifying a loaded layer -> the interface is the dialog WFSPropsDialog
+			// When we are modifying a loaded layer -> the interface is the
+			// dialog WFSPropsDialog
 			this.advanceCurrentTab();
 		}
 	}
@@ -625,7 +651,8 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 		int currentTabIndex = this.getJTabbedPane().getSelectedIndex();
 
 		// Ensure we can select next tab
-		if ((currentTabIndex != -1) && (currentTabIndex < (values().size() -1)))
+		if ((currentTabIndex != -1)
+				&& (currentTabIndex < (values().size() - 1)))
 			setSelectedIndex(currentTabIndex + 1);
 	}
 
@@ -634,18 +661,20 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 	 */
 	public void refreshWFSSelectFeaturePanel() {
 		WFSSelectFeaturePanel panel = getFeaturesPanel();
-		
+
 		if (panel != null) {
 			panel.refresh(null);
 		}
 	}
 
 	/**
-	 * Gets the node of the layer selected as a feature, with the selected fields and the filter defined.
+	 * Gets the node of the layer selected as a feature, with the selected
+	 * fields and the filter defined.
 	 * 
-	 * @return gets the node of the layer selected as a feature, with the selected fields and the filter defined
+	 * @return gets the node of the layer selected as a feature, with the
+	 *         selected fields and the filter defined
 	 */
-	private WFSLayerNode getLayerNode(){
+	private WFSLayerNode getLayerNode() {
 		WFSLayerNode layerNode = getFeaturesPanel().getWFSLayerNode();
 		layerNode.setSelectedFields(getFieldsPanel().getSelectedFields());
 
@@ -653,39 +682,43 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 		String query = getFilterPanel().getQuery();
 		if (query == null) {
 			layerNode.setFilter("");
-			
+
 			// Removes filter expression from the JTextArea
 			getFilterPanel().removeFilterExpression();
-			
+
 			// Notify to user that no filter will be applied
-			JOptionPane.showMessageDialog(null, PluginServices.getText(null, "no_filter_will_be_applied_in_the_load_of_the_layer"), PluginServices.getText(null, "warning"), JOptionPane.WARNING_MESSAGE);
-		}
-		else {
+			JOptionPane.showMessageDialog(null, PluginServices.getText(null,
+					"no_filter_will_be_applied_in_the_load_of_the_layer"),
+					PluginServices.getText(null, "warning"),
+					JOptionPane.WARNING_MESSAGE);
+		} else {
 			layerNode.setFilter(query);
 		}
-		
+
 		return layerNode;
 	}
-	
+
 	/**
-	 * Refresh all the panels every time that a different layer is selected. The info panel is refreshed every time the user 
-	 * makes a click on it.
+	 * Refresh all the panels every time that a different layer is selected. The
+	 * info panel is refreshed every time the user makes a click on it.
 	 * 
-	 * @param layer the selected layer
+	 * @param layer
+	 *            the selected layer
 	 */
-	public void refresh(WFSLayerNode layer){
+	public void refresh(WFSLayerNode layer) {
 		boolean hasFields = false;
 
-		if (layer!=null){
-		//Update the layer information
-			layer = (WFSLayerNode)wizardData.getFeatureInfo(layer.getName(), layer.getNameSpace());
+		if (layer != null) {
+			// Update the layer information
+			layer = (WFSLayerNode) wizardData.getFeatureInfo(layer.getName(),
+					layer.getNameSpace());
 
 			// If there is no fields -> disable not necessary tabs
 			if (layer.getFields().size() == 0) {
 				setApplicable(false);
 				hasFields = false;
-			}else{	
-				getFieldsPanel().refresh(layer);			
+			} else {
+				getFieldsPanel().refresh(layer);
 				getOptionsPanel().refresh(layer);
 				getFilterPanel().refresh(layer);
 				getAreaPanel().refresh(layer);
@@ -695,34 +728,43 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 
 		enableDefaultTabs(hasFields);
 	}
-	
+
 	/**
 	 * Changes the <i>enable</i> status of the "<i>apply</i>" button
 	 * 
-	 * @param isApplicable the <i>enable</i> status of the "<i>apply</i>" button
+	 * @param isApplicable
+	 *            the <i>enable</i> status of the "<i>apply</i>" button
 	 */
-	public void setApplicable(boolean isApplicable){
+	public void setApplicable(boolean isApplicable) {
 		setEnabledApplyButton(isApplicable);
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.IButtonsPanel#setEnabledApplyButton(boolean)
-	 */
-	public void setEnabledApplyButton(boolean b) {
-		super.setEnabledApplyButton(b);
-	
-		Container parent = getParent();
-		
-		if ((parent != null) && (parent instanceof WizardPanel))
-			((WizardPanel)parent).callStateChanged(b);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.panelGroup.AbstractPanelGroup#loadPanels(org.gvsig.gui.beans.panelGroup.loaders.IPanelGroupLoader)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.IButtonsPanel#setEnabledApplyButton(
+	 * boolean)
 	 */
-	public void loadPanels(IPanelGroupLoader loader) throws ListCouldntAddPanelException, EmptyPanelGroupException, EmptyPanelGroupGUIException {
+	public void setEnabledApplyButton(boolean b) {
+		super.setEnabledApplyButton(b);
+
+		Container parent = getParent();
+
+		if ((parent != null) && (parent instanceof WizardPanel))
+			((WizardPanel) parent).callStateChanged(b);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.panelGroup.AbstractPanelGroup#loadPanels(org.gvsig
+	 * .gui.beans.panelGroup.loaders.IPanelGroupLoader)
+	 */
+	public void loadPanels(IPanelGroupLoader loader)
+			throws ListCouldntAddPanelException, EmptyPanelGroupException,
+			EmptyPanelGroupGUIException {
 		// This code will be executed when is creating the dialog of properties
 		if (getReference() != null) {
 			FLyrWFS lyr = (FLyrWFS) getReference();
@@ -731,31 +773,33 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 			dataSource.setDriver(lyr.getWfsDriver());
 
 			setWizardData(dataSource);
-			
+
 			super.loadPanels(loader);
 
 			HashMap<String, Object> info = lyr.getProperties();
-			setSelectedFeature((WFSLayerNode)info.get("wfsLayerNode"));
-			setStatus((WFSStatus)info.get("status"));
+			setSelectedFeature((WFSLayerNode) info.get("wfsLayerNode"));
+			setStatus((WFSStatus) info.get("status"));
 			setLayerName(lyr.getName());
 			setVisible(true);
 			refreshInfo();
-			
+
 			return;
 		}
 
 		// This will executed when is adding a new WFS layer:
 		super.loadPanels(loader);
 	}
-	
-	///// BEGIN: METHODS FOR INITIALIZE THIS PANEL AS A COMPONENT OF A PROPERTIES DIALOG /////
-	
+
+	// /// BEGIN: METHODS FOR INITIALIZE THIS PANEL AS A COMPONENT OF A
+	// PROPERTIES DIALOG /////
+
 	/**
 	 * Sets the selected feature.
 	 * 
-	 * @param layerNode node of the selected feature
+	 * @param layerNode
+	 *            node of the selected feature
 	 */
-	public void setSelectedFeature(WFSLayerNode layerNode){
+	public void setSelectedFeature(WFSLayerNode layerNode) {
 		getFeaturesPanel().setSelectedFeature(layerNode);
 		getFieldsPanel().setSelectedFields(layerNode);
 		getFilterPanel().refresh(layerNode);
@@ -764,11 +808,13 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 	/**
 	 * Sets the status of the options and filter panels.
 	 * 
-	 * @param status the status of the options and filter panels
+	 * @param status
+	 *            the status of the options and filter panels
 	 */
 	public void setStatus(WFSStatus status) {
 		getOptionsPanel().setStatus(status);
-		getFilterPanel().setFilterExpressionIntoInterface(status.getFilterVisualText());
+		getFilterPanel().setFilterExpressionIntoInterface(
+				status.getFilterVisualText());
 	}
 
 	/**
@@ -779,13 +825,15 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 	}
 
 	/**
-	 * Updates the information stored at the wizard's data and <i>info</i> panel.
+	 * Updates the information stored at the wizard's data and <i>info</i>
+	 * panel.
 	 */
-	public void refreshInfo(){
+	public void refreshInfo() {
 		WFSLayerNode selectedNode = getFeaturesPanel().getSelectedFeature();
 
 		if (selectedNode != null) {
-			selectedNode.setSelectedFields(getFieldsPanel().getSelectedFields());
+			selectedNode
+					.setSelectedFields(getFieldsPanel().getSelectedFields());
 		}
 
 		wizardData.setUserName(getOptionsPanel().getUserName());
@@ -793,5 +841,6 @@ public class WFSParamsPanel extends TabbedPanel implements ILayerPanel {
 		wizardData.setTimeOut(getOptionsPanel().getTimeout());
 		getInfoPanel().refresh(selectedNode);
 	}
-	///// END: METHODS FOR INITIALIZE THIS PANEL AS A COMPONENT OF A PROPERTIES DIALOG /////
+	// /// END: METHODS FOR INITIALIZE THIS PANEL AS A COMPONENT OF A PROPERTIES
+	// DIALOG /////
 }

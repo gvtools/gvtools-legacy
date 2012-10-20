@@ -40,15 +40,12 @@
  */
 package com.iver.cit.gvsig.project.documents.view.toolListeners;
 
-
 import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.geom.Point2D;
 import java.text.NumberFormat;
-
-import javax.swing.ImageIcon;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.MapContext;
@@ -58,24 +55,26 @@ import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Events.MeasureEvent;
 import com.iver.cit.gvsig.fmap.tools.Listeners.CircleListener;
 
-
 /**
- * <p>Listener for tools that measure using a circular area, displaying
- *   its radius at the status bar of the application's main frame.</p>
- *
+ * <p>
+ * Listener for tools that measure using a circular area, displaying its radius
+ * at the status bar of the application's main frame.
+ * </p>
+ * 
  * @see CircleListener
- *
+ * 
  * @author Laura
  */
 public class CircleMeasureListener implements CircleListener {
 	/**
 	 * The image to display when the cursor is active.
 	 */
-	private final Image img = PluginServices.getIconTheme().get("cursor-query-distance").getImage();
+	private final Image img = PluginServices.getIconTheme()
+			.get("cursor-query-distance").getImage();
 
 	/**
 	 * The cursor used to work with this tool listener.
-	 *
+	 * 
 	 * @see #getCursor()
 	 */
 	private Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(img,
@@ -87,9 +86,12 @@ public class CircleMeasureListener implements CircleListener {
 	private MapControl mapCtrl;
 
 	/**
-	 * <p>Creates a new listener for measure circular areas.</p>
-	 *
-	 * @param mc the <code>MapControl</code> object where the measures are made
+	 * <p>
+	 * Creates a new listener for measure circular areas.
+	 * </p>
+	 * 
+	 * @param mc
+	 *            the <code>MapControl</code> object where the measures are made
 	 */
 	public CircleMeasureListener(MapControl mc) {
 		this.mapCtrl = mc;
@@ -97,7 +99,10 @@ public class CircleMeasureListener implements CircleListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.CircleListener#circle(com.iver.cit.gvsig.fmap.tools.Events.MeasureEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.CircleListener#circle(com.iver
+	 * .cit.gvsig.fmap.tools.Events.MeasureEvent)
 	 */
 	public void circle(MeasureEvent event) throws BehaviorException {
 		double dist = 0;
@@ -113,26 +118,40 @@ public class CircleMeasureListener implements CircleListener {
 			Point2D p2 = new Point2D.Double(event.getXs()[i + 1].doubleValue(),
 					event.getYs()[i + 1].doubleValue());
 
-			///dist = vp.toMapDistance((int) p.distance(p2));
+			// /dist = vp.toMapDistance((int) p.distance(p2));
 			dist = vp.distanceWorld(p, p2);
 			distAll += dist;
 		}
-		//System.out.println("Distancia = " + dist + " Distancia Total = " +
-		//	(distAll));
+		// System.out.println("Distancia = " + dist + " Distancia Total = " +
+		// (distAll));
 		NumberFormat nf = NumberFormat.getInstance();
-        nf.setMaximumFractionDigits(2);
-        if (PluginServices.getMainFrame() != null)
-        {
-        	double[] trans2Meter=MapContext.getDistanceTrans2Meter();
-            PluginServices.getMainFrame().getStatusBar().setMessage("4",
-    			"Dist:" + nf.format(dist/trans2Meter[mapCtrl.getViewPort().getDistanceUnits()]) + "");
-    		PluginServices.getMainFrame().getStatusBar().setMessage("5",
-    			"Total:" + nf.format(distAll/trans2Meter[mapCtrl.getViewPort().getDistanceUnits()]) + "");
-        }
+		nf.setMaximumFractionDigits(2);
+		if (PluginServices.getMainFrame() != null) {
+			double[] trans2Meter = MapContext.getDistanceTrans2Meter();
+			PluginServices
+					.getMainFrame()
+					.getStatusBar()
+					.setMessage(
+							"4",
+							"Dist:"
+									+ nf.format(dist
+											/ trans2Meter[mapCtrl.getViewPort()
+													.getDistanceUnits()]) + "");
+			PluginServices
+					.getMainFrame()
+					.getStatusBar()
+					.setMessage(
+							"5",
+							"Total:"
+									+ nf.format(distAll
+											/ trans2Meter[mapCtrl.getViewPort()
+													.getDistanceUnits()]) + "");
+		}
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#getCursor()
 	 */
 	public Cursor getCursor() {
@@ -141,6 +160,7 @@ public class CircleMeasureListener implements CircleListener {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#cancelDrawing()
 	 */
 	public boolean cancelDrawing() {

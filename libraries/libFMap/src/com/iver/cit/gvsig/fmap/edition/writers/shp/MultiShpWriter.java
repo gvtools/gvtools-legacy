@@ -25,7 +25,7 @@ import com.iver.utiles.FileUtils;
 /**
  * This writer wraps three ShpWriters, one for points, one for lines and one for
  * polygons geometry types. <br>
- *
+ * 
  * It allows you to save a FLyrVect with MULTI shape type in SHP file format
  * (that doesnt allow to mix different geometry types). To do that, this IWriter
  * creates a different SHP file for any geometry type, in a transparent manner
@@ -41,7 +41,7 @@ import com.iver.utiles.FileUtils;
  * writer.process(feature);
  * writer.postProcess();
  * </code>
- *
+ * 
  */
 public class MultiShpWriter implements IWriter {
 	/**
@@ -73,7 +73,7 @@ public class MultiShpWriter implements IWriter {
 	/**
 	 * Returns all ShpWriter's created by this wrapper (only those wich writes a
 	 * type of the processed geometries)
-	 *
+	 * 
 	 * @return
 	 */
 	public IWriter[] getWriters() {
@@ -102,7 +102,7 @@ public class MultiShpWriter implements IWriter {
 	/**
 	 * Give access to the Writer that processes polygon geometries (and creates
 	 * it if it hasnt yet)
-	 *
+	 * 
 	 * @return
 	 * @throws EditionException
 	 */
@@ -119,17 +119,17 @@ public class MultiShpWriter implements IWriter {
 			try {
 				polygons.initialize(newDefinition);
 			} catch (InitializeWriterException e) {
-				throw new ProcessWriterVisitorException(getName(),e);
+				throw new ProcessWriterVisitorException(getName(), e);
 			}
 
 			try {
-				getSchemaManager(polygons, polygonsFile)
-						.createSchema(newDefinition);
+				getSchemaManager(polygons, polygonsFile).createSchema(
+						newDefinition);
 			} catch (SchemaEditionException e) {
-				throw new ProcessWriterVisitorException(getName(),e);
+				throw new ProcessWriterVisitorException(getName(), e);
 			}
 
-			//AZABALA: no si si es neceario
+			// AZABALA: no si si es neceario
 			polygons.preProcess();
 		}
 		return polygons;
@@ -139,7 +139,7 @@ public class MultiShpWriter implements IWriter {
 	 * Given a Writer, and the file where we want to save persistent features,
 	 * it returns an associated ISchemaManager (whose responsability is to
 	 * create the new schema-for files create the new files)
-	 *
+	 * 
 	 * @param writer
 	 * @param file
 	 * @return
@@ -155,7 +155,7 @@ public class MultiShpWriter implements IWriter {
 	 * of the initial. It is useful to avoid local changes made by individual
 	 * Writers to the definition affects the others writers (for example, change
 	 * the shape type of the writer)
-	 *
+	 * 
 	 * @param definition
 	 * @return
 	 */
@@ -174,7 +174,7 @@ public class MultiShpWriter implements IWriter {
 	/**
 	 * Give access to the Writer that processes line geometries (and creates it
 	 * if it hasnt yet)
-	 *
+	 * 
 	 * @return
 	 * @throws EditionException
 	 */
@@ -192,9 +192,9 @@ public class MultiShpWriter implements IWriter {
 				getSchemaManager(lines, linesFile).createSchema(newDefinition);
 				lines.preProcess();
 			} catch (InitializeWriterException e) {
-				throw new ProcessWriterVisitorException(getName(),e);
+				throw new ProcessWriterVisitorException(getName(), e);
 			} catch (SchemaEditionException e) {
-				throw new ProcessWriterVisitorException(getName(),e);
+				throw new ProcessWriterVisitorException(getName(), e);
 			}
 		}
 		return lines;
@@ -203,12 +203,12 @@ public class MultiShpWriter implements IWriter {
 	/**
 	 * Give access to the Writer that processes point geometries (and creates it
 	 * if it hasnt yet)
-	 *
+	 * 
 	 * @return
 	 * @throws EditionException
 	 */
 
-	private IWriter getPointsWriter() throws VisitorException{
+	private IWriter getPointsWriter() throws VisitorException {
 		if (points == null) {
 			points = new ShpWriter();
 			SHPLayerDefinition newDefinition = (SHPLayerDefinition) cloneDef(layerDefinition);
@@ -219,13 +219,14 @@ public class MultiShpWriter implements IWriter {
 			((ShpWriter) points).setFile(pointsFile);
 			try {
 				points.initialize(newDefinition);
-				getSchemaManager(points, pointsFile).createSchema(newDefinition);
+				getSchemaManager(points, pointsFile)
+						.createSchema(newDefinition);
 			} catch (InitializeWriterException e) {
-				throw new ProcessWriterVisitorException(getName(),e);
+				throw new ProcessWriterVisitorException(getName(), e);
 			} catch (SchemaEditionException e) {
-				throw new ProcessWriterVisitorException(getName(),e);
+				throw new ProcessWriterVisitorException(getName(), e);
 			}
-				points.preProcess();
+			points.preProcess();
 		}
 		return points;
 	}
@@ -256,7 +257,7 @@ public class MultiShpWriter implements IWriter {
 
 	/**
 	 * Sets the file where save the results
-	 *
+	 * 
 	 * @param f
 	 */
 	public void setFile(File f) {
@@ -294,15 +295,14 @@ public class MultiShpWriter implements IWriter {
 	public boolean canAlterTable() {
 		return true;
 	}
+
 	public boolean canSaveEdits() throws VisitorException {
-		if (getPointsWriter().canSaveEdits())
-			{
-				if (getLinesWriter().canSaveEdits())
-				{
-					if (getPolygonsWriter().canSaveEdits())
-						return true;
-				}
+		if (getPointsWriter().canSaveEdits()) {
+			if (getLinesWriter().canSaveEdits()) {
+				if (getPolygonsWriter().canSaveEdits())
+					return true;
 			}
+		}
 		return false;
 	}
 
@@ -311,21 +311,21 @@ public class MultiShpWriter implements IWriter {
 	}
 
 	public File getPolygonsFile() {
-		if (polygonsFile == null){
+		if (polygonsFile == null) {
 			polygonsFile = new File(file + "_POL.shp");
 		}
 		return polygonsFile;
 	}
 
 	public File getLinesFile() {
-		if (linesFile == null){
+		if (linesFile == null) {
 			linesFile = new File(file + "_LIN.shp");
 		}
 		return linesFile;
 	}
 
 	public File getPointsFile() {
-		if (pointsFile == null){
+		if (pointsFile == null) {
 			pointsFile = new File(file + "_PT.shp");
 		}
 		return pointsFile;

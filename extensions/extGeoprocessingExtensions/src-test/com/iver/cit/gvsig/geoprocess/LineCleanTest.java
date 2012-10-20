@@ -22,6 +22,7 @@ import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.geoprocess.core.fmap.GeoprocessException;
 import com.iver.cit.gvsig.geoprocess.core.fmap.XTypes;
 import com.iver.cit.gvsig.geoprocess.impl.topology.lineclean.fmap.LineCleanGeoprocess;
+
 /*
  * Created on 13-jun-2007
  *
@@ -86,51 +87,53 @@ public class LineCleanTest extends TestCase {
 
 	static CoordinateReferenceSystem DEFAULT_CRS = ProjectionUtils
 			.getCRS("EPSG:23030");
-	
-	
+
 	protected void setUp() throws Exception {
 		URL url = LineCleanTest.class.getResource("testdata");
 		if (url == null)
-			throw new Exception("No se encuentra el directorio con datos de prueba");
+			throw new Exception(
+					"No se encuentra el directorio con datos de prueba");
 
 		baseDataPath = new File(url.getFile());
 		if (!baseDataPath.exists())
-			throw new Exception("No se encuentra el directorio con datos de prueba");
+			throw new Exception(
+					"No se encuentra el directorio con datos de prueba");
 
 		baseDriversPath = new File(fwAndamiDriverPath);
 		if (!baseDriversPath.exists())
-			throw new Exception("Can't find drivers path: " + fwAndamiDriverPath);
+			throw new Exception("Can't find drivers path: "
+					+ fwAndamiDriverPath);
 
 		LayerFactory.setDriversPath(baseDriversPath.getAbsolutePath());
 		LayerFactory.setWritersPath(baseDriversPath.getAbsolutePath());
-		
+
 	}
 
-
-	public static  FLayer newLayer(String fileName,
-									   String driverName)
-								throws LoadLayerException {
+	public static FLayer newLayer(String fileName, String driverName)
+			throws LoadLayerException {
 		File file = new File(baseDataPath, fileName);
-		return LayerFactory.createLayer(fileName,
-										driverName,
-										file, DEFAULT_CRS);
+		return LayerFactory
+				.createLayer(fileName, driverName, file, DEFAULT_CRS);
 	}
-	
-	
-	public void test1() throws LoadLayerException, InitializeWriterException, GeoprocessException{
-		FLyrVect inputLayer = (FLyrVect) newLayer("carrilbici.shp", SHP_DRIVER_NAME);
-		File outputFile = new File(baseDataPath+"/test1result.shp");
+
+	public void test1() throws LoadLayerException, InitializeWriterException,
+			GeoprocessException {
+		FLyrVect inputLayer = (FLyrVect) newLayer("carrilbici.shp",
+				SHP_DRIVER_NAME);
+		File outputFile = new File(baseDataPath + "/test1result.shp");
 		LineCleanGeoprocess geoprocess = new LineCleanGeoprocess(inputLayer);
-		SHPLayerDefinition definition = (SHPLayerDefinition) geoprocess.createLayerDefinition();
+		SHPLayerDefinition definition = (SHPLayerDefinition) geoprocess
+				.createLayerDefinition();
 		definition.setFile(outputFile);
-		ShpSchemaManager schemaManager = new ShpSchemaManager(outputFile.getAbsolutePath());
+		ShpSchemaManager schemaManager = new ShpSchemaManager(
+				outputFile.getAbsolutePath());
 		IWriter writer = null;
 		int shapeType = definition.getShapeType();
-		if(shapeType != XTypes.MULTI){
+		if (shapeType != XTypes.MULTI) {
 			writer = new ShpWriter();
 			((ShpWriter) writer).setFile(definition.getFile());
 			writer.initialize(definition);
-		}else{
+		} else {
 			writer = new MultiShpWriter();
 			((MultiShpWriter) writer).setFile(definition.getFile());
 			writer.initialize(definition);
@@ -142,7 +145,5 @@ public class LineCleanTest extends TestCase {
 		geoprocess.checkPreconditions();
 		geoprocess.process();
 	}
-	
 
 }
-

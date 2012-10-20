@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.impl.fliplines;
 
 import java.net.URL;
@@ -60,26 +60,27 @@ import com.iver.cit.gvsig.geoprocess.impl.fliplines.gui.FlipLinesGeoprocessPanel
 import com.iver.cit.gvsig.geoprocess.manager.GeoprocessManager;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
-public class FlipLinesGeoprocessPlugin extends GeoprocessPluginAbstract  implements IGeoprocessPlugin {
+public class FlipLinesGeoprocessPlugin extends GeoprocessPluginAbstract
+		implements IGeoprocessPlugin {
 
 	private static String topologyPkg;
 	private static String geoprocessName;
 	private static String topologyPkgDesc;
-	
-	static{		
+
+	static {
 		topologyPkg = PluginServices.getText(null, "Topology");
 		geoprocessName = PluginServices.getText(null, "Flip_Lines");
-		topologyPkgDesc = PluginServices.getText(null, "Topology_Desc");		
-		GeoprocessManager.
-		registerPackageDescription(topologyPkg, topologyPkgDesc);				
-	}	
-	
-	
+		topologyPkgDesc = PluginServices.getText(null, "Topology_Desc");
+		GeoprocessManager.registerPackageDescription(topologyPkg,
+				topologyPkgDesc);
+	}
+
 	public IGeoprocessUserEntries getGeoprocessPanel() {
-		com.iver.andami.ui.mdiManager.IWindow view = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow view = PluginServices
+				.getMDIManager().getActiveWindow();
 		View vista = (View) view;
 		FLayers layers = vista.getModel().getMapContext().getLayers();
-		return  new FlipLinesGeoprocessPanel(layers);
+		return new FlipLinesGeoprocessPanel(layers);
 	}
 
 	public URL getImgDescription() {
@@ -91,12 +92,11 @@ public class FlipLinesGeoprocessPlugin extends GeoprocessPluginAbstract  impleme
 		return new FlipLinesGeoprocessController();
 	}
 
-	
 	public String getNamespace() {
 		return topologyPkg + "/" + geoprocessName;
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		return geoprocessName;
 	}
 

@@ -53,134 +53,128 @@ import java.util.Hashtable;
  */
 
 /************************************************************
- * class < Geometries >										*
- * It contains the standard tags specified in GML 2.x		*
- * Also, it has functions to parse geometry tags.			*
- * This class help us with the "gml" namespace.				*
- * 															*
- * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)	*
+ * class < Geometries > * It contains the standard tags specified in GML 2.x *
+ * Also, it has functions to parse geometry tags. * This class help us with the
+ * "gml" namespace. * *
+ * 
+ * @author Carlos Sánchez Periñán (sanchez_carper@gva.es) *
  ************************************************************/
-public class GMLGeometries{
-	//It has all the drawable geometries
+public class GMLGeometries {
+	// It has all the drawable geometries
 	private static Hashtable geometries = new Hashtable();
-	//It has all the tags of GML that it specifies a feature
+	// It has all the tags of GML that it specifies a feature
 	private static Hashtable features = new Hashtable();
-	
-	static{
-		//complex geometry elements
-		geometries.put("_Geometry","");
-		geometries.put("_GeometryCollection","");
-		geometries.put("geometryMember","");
-		geometries.put("pointMember","");
-		geometries.put("lineStringMember","");
-		geometries.put("polygonMember","");
-		geometries.put("outerBoundaryIs","");
-		geometries.put("innerBoundaryIs","");
-		//primitive geometry elements
-		geometries.put("Point","");
-		geometries.put("LineString","");
-		geometries.put("LinearRing","");
-		geometries.put("Polygon","");
-		geometries.put("Box","");
-		//aggregate geometry elements
-		geometries.put("MultiGeometry","");
-		geometries.put("MultiPoint","");
-		geometries.put("MultiLineString","");
-		geometries.put("MultiPolygon","");
-		//coordinate elements
-		geometries.put("coord","");
-		geometries.put("X","");
-		geometries.put("Y","");
-		geometries.put("Z","");
-		geometries.put("coordinates","");
-		//this attribute gives the location where an element is defined
-		geometries.put("remoteSchema","");
+
+	static {
+		// complex geometry elements
+		geometries.put("_Geometry", "");
+		geometries.put("_GeometryCollection", "");
+		geometries.put("geometryMember", "");
+		geometries.put("pointMember", "");
+		geometries.put("lineStringMember", "");
+		geometries.put("polygonMember", "");
+		geometries.put("outerBoundaryIs", "");
+		geometries.put("innerBoundaryIs", "");
+		// primitive geometry elements
+		geometries.put("Point", "");
+		geometries.put("LineString", "");
+		geometries.put("LinearRing", "");
+		geometries.put("Polygon", "");
+		geometries.put("Box", "");
+		// aggregate geometry elements
+		geometries.put("MultiGeometry", "");
+		geometries.put("MultiPoint", "");
+		geometries.put("MultiLineString", "");
+		geometries.put("MultiPolygon", "");
+		// coordinate elements
+		geometries.put("coord", "");
+		geometries.put("X", "");
+		geometries.put("Y", "");
+		geometries.put("Z", "");
+		geometries.put("coordinates", "");
+		// this attribute gives the location where an element is defined
+		geometries.put("remoteSchema", "");
 	}
-	static{
-		//features
-		features.put("_Feature","");
-		features.put("_FeatureCollection","");
-		features.put("featureMember","");
-		//some basic geometric properties of features
-		features.put("_geometryProperty","");
-		features.put("geometryProperty","");
-		features.put("boundedBy","");
-		features.put("pointProperty","");
-		features.put("polygonProperty","");
-		features.put("lineStringProperty","");
-		features.put("multiPointProperty","");
-		features.put("multiLineStringProperty","");
-		features.put("multiPolygonProperty","");
-		features.put("multiGeometryProperty","");
-		//common aliases for geometry properties
-		features.put("location","");
-		features.put("centerOf","");
-		features.put("position","");
-		features.put("extentOf","");
-		features.put("coverage","");
-		features.put("edgeOf","");
-		features.put("centerLineOf","");
-		features.put("multiLocation","");
-		features.put("multiCenterOf","");
-		features.put("multiPosition","");
-		features.put("multiCenterLineOf","");
-		features.put("multiEdgeOf","");
-		features.put("multiCoverage","");
-		features.put("multiExtentOf","");
-		//common feature descriptors
-		features.put("description","");
-		features.put("name","");
+	static {
+		// features
+		features.put("_Feature", "");
+		features.put("_FeatureCollection", "");
+		features.put("featureMember", "");
+		// some basic geometric properties of features
+		features.put("_geometryProperty", "");
+		features.put("geometryProperty", "");
+		features.put("boundedBy", "");
+		features.put("pointProperty", "");
+		features.put("polygonProperty", "");
+		features.put("lineStringProperty", "");
+		features.put("multiPointProperty", "");
+		features.put("multiLineStringProperty", "");
+		features.put("multiPolygonProperty", "");
+		features.put("multiGeometryProperty", "");
+		// common aliases for geometry properties
+		features.put("location", "");
+		features.put("centerOf", "");
+		features.put("position", "");
+		features.put("extentOf", "");
+		features.put("coverage", "");
+		features.put("edgeOf", "");
+		features.put("centerLineOf", "");
+		features.put("multiLocation", "");
+		features.put("multiCenterOf", "");
+		features.put("multiPosition", "");
+		features.put("multiCenterLineOf", "");
+		features.put("multiEdgeOf", "");
+		features.put("multiCoverage", "");
+		features.put("multiExtentOf", "");
+		// common feature descriptors
+		features.put("description", "");
+		features.put("name", "");
 	}
 
 	private String tag;
-	
+
 	/**
 	 * Class constructor
 	 **/
-	public GMLGeometries(String actual){
+	public GMLGeometries(String actual) {
 		this.tag = actual;
 	}
-	
+
 	/**
-	 * It search a tag in the both of GML hashtables
-	 * 	-if it isn't, then returns false.
-	 * 	-else it is a GML 2.x stardard tag and return true
+	 * It search a tag in the both of GML hashtables -if it isn't, then returns
+	 * false. -else it is a GML 2.x stardard tag and return true
 	 * 
 	 * @return boolean
 	 **/
-	public boolean isGML(){
+	public boolean isGML() {
 		boolean ok;
-		if (isGeometryGML()==true){
-			ok=true;
-		}
-		else if (isFeatureGML()==true){
-			ok=true;
-		}
-		else{
-			ok=false;
+		if (isGeometryGML() == true) {
+			ok = true;
+		} else if (isFeatureGML() == true) {
+			ok = true;
+		} else {
+			ok = false;
 		}
 		return (ok);
 	}
-	
+
 	/**
-	 * It search a tag in the geometry hashtable
-	 * 	-if it isn't, then returns false.
-	 * 	-else it is a GML 2.x stardard geometry and return true
+	 * It search a tag in the geometry hashtable -if it isn't, then returns
+	 * false. -else it is a GML 2.x stardard geometry and return true
 	 * 
 	 * @return boolean
 	 **/
-	public boolean isGeometryGML(){
-		return (geometries.get(tag)!=null);
+	public boolean isGeometryGML() {
+		return (geometries.get(tag) != null);
 	}
-	
+
 	/**
-	 * It search a tag in the feature hashtable
-	 * 	-if it isn't, then returns false.
-	 * 	-else it is a GML 2.x stardard feature tag and return true
+	 * It search a tag in the feature hashtable -if it isn't, then returns
+	 * false. -else it is a GML 2.x stardard feature tag and return true
 	 * 
 	 * @return boolean
 	 **/
-	public boolean isFeatureGML(){
-		return (features.get(tag)!=null);
+	public boolean isFeatureGML() {
+		return (features.get(tag) != null);
 	}
 }

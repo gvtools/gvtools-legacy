@@ -1,6 +1,5 @@
 package org.gvsig.remoteClient.wfs.edition;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -51,24 +50,26 @@ package org.gvsig.remoteClient.wfs.edition;
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class WFSTDeleteOperation extends WFSTOperation {
-			
+
 	WFSTDeleteOperation(String typename, String filterEncoding) {
-		super(typename, filterEncoding);		
+		super(typename, filterEncoding);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.remoteClient.wfs.edition.IWFSTOperation#getOperationName()
 	 */
 	public String getOperationName() {
 		return "Delete";
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.remoteClient.wfs.edition.WFSTOperation#hasTypeName()
 	 */
-	protected boolean hasTypeName(){
+	protected boolean hasTypeName() {
 		return true;
 	}
 }

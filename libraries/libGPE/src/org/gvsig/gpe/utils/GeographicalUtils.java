@@ -1,4 +1,5 @@
 package org.gvsig.gpe.utils;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -49,8 +50,8 @@ package org.gvsig.gpe.utils;
  *
  */
 /**
- * This class contains some utils to manage
- * geographical properties
+ * This class contains some utils to manage geographical properties
+ * 
  * @author Jorge Piera Llodrá (jorge.piera@iver.es)
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  */
@@ -58,35 +59,34 @@ public class GeographicalUtils {
 
 	/**
 	 * It tries if a polygon is closed
+	 * 
 	 * @param x
-	 * X coordinates 
+	 *            X coordinates
 	 * @param y
-	 * Y coordinates 
+	 *            Y coordinates
 	 * @param z
-	 * Z coordinates 
-	 * @return
-	 * <true> if the polygon is close.
+	 *            Z coordinates
+	 * @return <true> if the polygon is close.
 	 */
-	public static boolean isClosed(double[] x, double[] y,double[] z){
-		if ((x[0] != x[x.length - 1]) ||
-				(y[0] != y[y.length - 1]) ||
-				(z[0] != z[z.length - 1])){
+	public static boolean isClosed(double[] x, double[] y, double[] z) {
+		if ((x[0] != x[x.length - 1]) || (y[0] != y[y.length - 1])
+				|| (z[0] != z[z.length - 1])) {
 			return false;
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Closes a polygon
+	 * 
 	 * @param x
-	 * Polygon coordinates
-	 * @return
-	 * A closed polygon
+	 *            Polygon coordinates
+	 * @return A closed polygon
 	 */
-	public static double[] closePolygon(double[] x){
+	public static double[] closePolygon(double[] x) {
 		double[] xClosed = new double[x.length + 1];
 		System.arraycopy(x, 0, xClosed, 0, x.length);
-		xClosed[xClosed.length -1] = x[0];
+		xClosed[xClosed.length - 1] = x[0];
 		return xClosed;
 	}
 }

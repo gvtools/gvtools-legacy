@@ -42,19 +42,23 @@ import com.iver.cit.gvsig.project.documents.view.toolListeners.StatusBarListener
  * Punto de entrada para la funcionalidad de salvar a raster
  * 
  * 22/07/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
-public class SaveRasterTocMenuEntry extends AbstractTocContextMenuAction implements IGenericToolBarMenuItem {
-	static private SaveRasterTocMenuEntry singleton  = null;
+public class SaveRasterTocMenuEntry extends AbstractTocContextMenuAction
+		implements IGenericToolBarMenuItem {
+	static private SaveRasterTocMenuEntry singleton = null;
 
 	/**
 	 * Nadie puede crear una instancia a esta clase única, hay que usar el
 	 * getSingleton()
 	 */
-	private SaveRasterTocMenuEntry() {}
+	private SaveRasterTocMenuEntry() {
+	}
 
 	/**
 	 * Devuelve un objeto unico a dicha clase
+	 * 
 	 * @return
 	 */
 	static public SaveRasterTocMenuEntry getSingleton() {
@@ -62,9 +66,13 @@ public class SaveRasterTocMenuEntry extends AbstractTocContextMenuAction impleme
 			singleton = new SaveRasterTocMenuEntry();
 		return singleton;
 	}
+
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getGroup()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getGroup()
 	 */
 	public String getGroup() {
 		return "RasterExport";
@@ -72,7 +80,10 @@ public class SaveRasterTocMenuEntry extends AbstractTocContextMenuAction impleme
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getGroupOrder()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getGroupOrder()
 	 */
 	public int getGroupOrder() {
 		return 50;
@@ -80,7 +91,10 @@ public class SaveRasterTocMenuEntry extends AbstractTocContextMenuAction impleme
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getOrder()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getOrder()
 	 */
 	public int getOrder() {
 		return 0;
@@ -88,6 +102,7 @@ public class SaveRasterTocMenuEntry extends AbstractTocContextMenuAction impleme
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.project.documents.IContextMenuAction#getText()
 	 */
 	public String getText() {
@@ -96,7 +111,11 @@ public class SaveRasterTocMenuEntry extends AbstractTocContextMenuAction impleme
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
 		return true;
@@ -104,10 +123,15 @@ public class SaveRasterTocMenuEntry extends AbstractTocContextMenuAction impleme
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (f == null)
 			return false;
 
@@ -115,7 +139,7 @@ public class SaveRasterTocMenuEntry extends AbstractTocContextMenuAction impleme
 			BaseView vista = (BaseView) f;
 			IProjectView model = vista.getModel();
 			MapContext mapa = model.getMapContext();
-			if (mapa.getLayers().getLayersCount() > 0) 
+			if (mapa.getLayers().getLayersCount() > 0)
 				return true;
 		}
 
@@ -124,20 +148,25 @@ public class SaveRasterTocMenuEntry extends AbstractTocContextMenuAction impleme
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#execute(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #execute(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public void execute(ITocItem item, FLayer[] selectedItems) {
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
 		BaseView theView = null;
-		
-		if(window instanceof BaseView)
+
+		if (window instanceof BaseView)
 			theView = (BaseView) window;
 		else
 			return;
-		
+
 		MapControl mapCtrl = theView.getMapControl();
 
-		// Listener de eventos de movimiento que pone las coordenadas del ratón en
+		// Listener de eventos de movimiento que pone las coordenadas del ratón
+		// en
 		// la barra de estado
 		StatusBarListener sbl = new StatusBarListener(mapCtrl);
 
@@ -145,21 +174,26 @@ public class SaveRasterTocMenuEntry extends AbstractTocContextMenuAction impleme
 		loadSaveRasterListener(mapCtrl, sbl);
 		mapCtrl.setTool("saveRaster");
 	}
-	
+
 	/**
 	 * Carga el listener de salvar a raster en el MapControl.
 	 */
-	private void loadSaveRasterListener(MapControl m_MapControl, StatusBarListener sbl) {
+	private void loadSaveRasterListener(MapControl m_MapControl,
+			StatusBarListener sbl) {
 		// Si no se ha cargado el listener aún lo cargamos.
 		if (m_MapControl.getNamesMapTools().get("saveRaster") == null) {
 			SaveRasterListener srl = new SaveRasterListener(m_MapControl);
-			m_MapControl.addMapTool("saveRaster", new Behavior[] { new RectangleBehavior(srl), new MouseMovementBehavior(sbl) });
+			m_MapControl.addMapTool("saveRaster",
+					new Behavior[] { new RectangleBehavior(srl),
+							new MouseMovementBehavior(sbl) });
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.generictoolbar.IGenericToolBarMenuItem#getIcon()
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.generictoolbar.IGenericToolBarMenuItem#getIcon()
 	 */
 	public Icon getIcon() {
 		return PluginServices.getIconTheme().get("save-raster");

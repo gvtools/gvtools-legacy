@@ -1,4 +1,3 @@
-
 /*
  * The Unified Mapping Platform (JUMP) is an extensible, interactive GUI
  * for visualizing and manipulating spatial features with geometry and attributes.
@@ -80,86 +79,89 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
-
 /**
  * Displays a colour.
  */
 public class ColorPanel extends JPanel {
-    private Color fillColor = Color.red;
-    private Color lineColor = Color.green;
-    private int margin = 0;
+	private Color fillColor = Color.red;
+	private Color lineColor = Color.green;
+	private int margin = 0;
 
-    public ColorPanel() {
-        setBackground(Color.white);
-    }
+	public ColorPanel() {
+		setBackground(Color.white);
+	}
 
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
 
-        //Before I simply set the ColorPanel's background colour. But I found this
-        //caused weird paint effects e.g. a second copy of the panel appearing
-        //at the top left corner of the rendered image. [Jon Aquino].
-        //<<TODO:DESIGN>> Use the GraphicsState class [Jon Aquino]
-        Color originalColor = g.getColor();
-        g.setColor(getBackground());
-        ((Graphics2D)g).setStroke(fillStroke);
-        g.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
-        g.setColor(fillColor);
-        g.fillRect(margin, margin, getWidth() - 1 - margin - margin,
-            getHeight() - 1 - margin - margin);
+		// Before I simply set the ColorPanel's background colour. But I found
+		// this
+		// caused weird paint effects e.g. a second copy of the panel appearing
+		// at the top left corner of the rendered image. [Jon Aquino].
+		// <<TODO:DESIGN>> Use the GraphicsState class [Jon Aquino]
+		Color originalColor = g.getColor();
+		g.setColor(getBackground());
+		((Graphics2D) g).setStroke(fillStroke);
+		g.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
+		g.setColor(fillColor);
+		g.fillRect(margin, margin, getWidth() - 1 - margin - margin,
+				getHeight() - 1 - margin - margin);
 
-        if (lineColor != null) {
-            g.setColor(lineColor);
-            ((Graphics2D)g).setStroke(lineStroke);
+		if (lineColor != null) {
+			g.setColor(lineColor);
+			((Graphics2D) g).setStroke(lineStroke);
 
-            //-1 to ensure the rectangle doesn't extend past the panel [Jon Aquino]
-            g.drawRect(margin, margin, getWidth() - 1 - margin - margin,
-                getHeight() - 1 - margin - margin);
-        }
+			// -1 to ensure the rectangle doesn't extend past the panel [Jon
+			// Aquino]
+			g.drawRect(margin, margin, getWidth() - 1 - margin - margin,
+					getHeight() - 1 - margin - margin);
+		}
 
-        //<<TODO:DESIGN>> Put the next line in a finally block [Jon Aquino]
-        g.setColor(originalColor);
-    }
+		// <<TODO:DESIGN>> Put the next line in a finally block [Jon Aquino]
+		g.setColor(originalColor);
+	}
 
-    /** Workaround for bug 4238829 in the Java bug database */
-    public void setBounds(int x, int y, int w, int h) {
-        super.setBounds(x, y, w, h);
-        validate();
-    }
+	/** Workaround for bug 4238829 in the Java bug database */
+	public void setBounds(int x, int y, int w, int h) {
+		super.setBounds(x, y, w, h);
+		validate();
+	}
 
-    public void setFillColor(Color fillColor) {
-        this.fillColor = fillColor;
-    }
+	public void setFillColor(Color fillColor) {
+		this.fillColor = fillColor;
+	}
 
-    /**
-     * @param lineColor the new line colour, or null to not draw the line
-     */
-    public void setLineColor(Color lineColor) {
-        this.lineColor = lineColor;
-    }
+	/**
+	 * @param lineColor
+	 *            the new line colour, or null to not draw the line
+	 */
+	public void setLineColor(Color lineColor) {
+		this.lineColor = lineColor;
+	}
 
-    public void setMargin(int margin) {
-        this.margin = margin;
-    }
-    public Color getFillColor() {
-        return fillColor;
-    }
+	public void setMargin(int margin) {
+		this.margin = margin;
+	}
 
-    public Color getLineColor() {
-        return lineColor;
-    }
-    
-    private BasicStroke fillStroke = new BasicStroke(1);
-    private int lineWidth = 1;
-    private BasicStroke lineStroke = new BasicStroke(lineWidth);
-    
-    public void setLineWidth(int lineWidth) {
-        lineStroke = new BasicStroke(lineWidth);
-        this.lineWidth = lineWidth;
-    }
-    
-    public int getLineWidth() {
-        return lineWidth;
-    }
+	public Color getFillColor() {
+		return fillColor;
+	}
+
+	public Color getLineColor() {
+		return lineColor;
+	}
+
+	private BasicStroke fillStroke = new BasicStroke(1);
+	private int lineWidth = 1;
+	private BasicStroke lineStroke = new BasicStroke(lineWidth);
+
+	public void setLineWidth(int lineWidth) {
+		lineStroke = new BasicStroke(lineWidth);
+		this.lineWidth = lineWidth;
+	}
+
+	public int getLineWidth() {
+		return lineWidth;
+	}
 
 }

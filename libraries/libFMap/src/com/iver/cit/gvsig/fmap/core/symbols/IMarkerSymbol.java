@@ -87,66 +87,81 @@ import java.awt.geom.Point2D;
 import com.iver.cit.gvsig.fmap.core.CartographicSupport;
 import com.iver.cit.gvsig.fmap.core.styles.IMask;
 
-
 /**
- * Represents an ISymbol that draws a <b>marker symbol</b>.It has the different methods to obtain or
- * define the attributes of a marker such as rotation, offset, size, color and
- * IMask.
- *
- * @author   jaume dominguez faus - jaume.dominguez@iver.es
+ * Represents an ISymbol that draws a <b>marker symbol</b>.It has the different
+ * methods to obtain or define the attributes of a marker such as rotation,
+ * offset, size, color and IMask.
+ * 
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public interface IMarkerSymbol extends ISymbol, CartographicSupport {
 
 	/**
 	 * Returns the rotation of the marker symbol
+	 * 
 	 * @return double (rotation)
 	 */
 	public abstract double getRotation();
+
 	/**
 	 * Sets the rotation of the marker symbol
+	 * 
 	 * @param rotation
 	 */
 	public abstract void setRotation(double rotation);
+
 	/**
 	 * Gets the offset for a marker symbol
+	 * 
 	 * @return Point2D
 	 */
 	public abstract Point2D getOffset();
+
 	/**
 	 * Establishes the offset currently set for the marker symbol.
+	 * 
 	 * @param offset
 	 */
 	public abstract void setOffset(Point2D offset);
+
 	/**
 	 * Obtains the size of a marker symbol
-	 *
+	 * 
 	 */
 	public abstract double getSize();
+
 	/**
 	 * Sets the size of marker symbol
+	 * 
 	 * @param size
 	 */
 	public abstract void setSize(double size);
 
 	/**
 	 * Returns the color of the marker symbol.
+	 * 
 	 * @return Color
 	 */
 	public abstract Color getColor();
 
 	/**
 	 * Establishes a color for the marker symbol
+	 * 
 	 * @param color
 	 */
 	public abstract void setColor(Color color);
+
 	/**
-	 *
+	 * 
 	 * @return the mask of the symbol
 	 */
 	public abstract IMask getMask();
+
 	/**
 	 * Defines a mask for the symbol
-	 * @param mask,IMask
+	 * 
+	 * @param mask
+	 *            ,IMask
 	 */
 	public abstract void setMask(IMask mask);
 

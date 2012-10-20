@@ -54,85 +54,91 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.cit.gvsig.project.documents.view.tool.Annotation_ModifyListener;
 import com.iver.cit.gvsig.project.documents.view.toolListeners.StatusBarListener;
 
-
 /**
- * Class that extends of the tool InfoToolExtension and
- * override the methods that interests us to change its behavior.
- *
+ * Class that extends of the tool InfoToolExtension and override the methods
+ * that interests us to change its behavior.
+ * 
  * @author Vicente Caballero Navarro
  */
-public class Annotation_ToolExtension
-    extends com.iver.cit.gvsig.InfoToolExtension {
+public class Annotation_ToolExtension extends
+		com.iver.cit.gvsig.InfoToolExtension {
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String s) {
-        IWindow window = PluginServices.getMDIManager().getActiveWindow();
+		IWindow window = PluginServices.getMDIManager().getActiveWindow();
 
-        if (window instanceof View) {
-            MapControl mapCtrl = ((View) window).getMapControl();
+		if (window instanceof View) {
+			MapControl mapCtrl = ((View) window).getMapControl();
 
-            if (s.compareTo("MODIFYANNOTATION") == 0) {
-                if (mapCtrl.getMapTool("centerviewtopoint") == null) {
-                    StatusBarListener sbl = new StatusBarListener(mapCtrl);
-                    Annotation_ModifyListener chl = new Annotation_ModifyListener(mapCtrl);
-                    mapCtrl.addMapTool("modifyannotation",
-                        new Behavior[] {
-                            new PointBehavior(chl),
-                            new MouseMovementBehavior(sbl)
-                        });
-                }
-            }
+			if (s.compareTo("MODIFYANNOTATION") == 0) {
+				if (mapCtrl.getMapTool("centerviewtopoint") == null) {
+					StatusBarListener sbl = new StatusBarListener(mapCtrl);
+					Annotation_ModifyListener chl = new Annotation_ModifyListener(
+							mapCtrl);
+					mapCtrl.addMapTool("modifyannotation", new Behavior[] {
+							new PointBehavior(chl),
+							new MouseMovementBehavior(sbl) });
+				}
+			}
 
-   			if (s.compareTo("MODIFYANNOTATION") == 0) {
-   				mapCtrl.setTool("modifyannotation");
-   			}
-        }
-    }
+			if (s.compareTo("MODIFYANNOTATION") == 0) {
+				mapCtrl.setTool("modifyannotation");
+			}
+		}
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.andami.plugins.IExtension#initialize()
-     */
-    public void initialize() {
-        super.initialize();
-        
-        registerIcons();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.andami.plugins.IExtension#initialize()
+	 */
+	public void initialize() {
+		super.initialize();
 
-    private void registerIcons(){
-    	
-    	PluginServices.getIconTheme().registerDefault(
+		registerIcons();
+	}
+
+	private void registerIcons() {
+
+		PluginServices.getIconTheme().registerDefault(
 				"ext-annotation",
-				this.getClass().getClassLoader().getResource("images/Annotation.png")
-			);
-    }
-    
-    /* (non-Javadoc)
-     * @see com.iver.andami.plugins.IExtension#isEnabled()
-     */
-    public boolean isEnabled() {
-        return super.isEnabled();
-    }
+				this.getClass().getClassLoader()
+						.getResource("images/Annotation.png"));
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.andami.plugins.IExtension#isVisible()
-     */
-    public boolean isVisible() {
-        IWindow window = PluginServices.getMDIManager().getActiveWindow();
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.andami.plugins.IExtension#isEnabled()
+	 */
+	public boolean isEnabled() {
+		return super.isEnabled();
+	}
 
-        if (window instanceof View) {
-            MapContext mapContext = ((View) window).getMapControl()
-                                     .getMapContext();
-            FLayer[] layers=mapContext.getLayers().getActives();
-            for (int i=0;i<layers.length;i++){
-            	if (layers[i] instanceof Annotation_Layer){
-            		if (layers[i].isEditing())
-            			return true;
-            	}
-            }
-        }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.andami.plugins.IExtension#isVisible()
+	 */
+	public boolean isVisible() {
+		IWindow window = PluginServices.getMDIManager().getActiveWindow();
 
-        return false;
+		if (window instanceof View) {
+			MapContext mapContext = ((View) window).getMapControl()
+					.getMapContext();
+			FLayer[] layers = mapContext.getLayers().getActives();
+			for (int i = 0; i < layers.length; i++) {
+				if (layers[i] instanceof Annotation_Layer) {
+					if (layers[i].isEditing())
+						return true;
+				}
+			}
+		}
+
+		return false;
 	}
 }

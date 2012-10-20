@@ -54,7 +54,7 @@ import com.iver.utiles.XMLEntity;
 
 /**
  * Interface for the style of a mask.
- *
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public interface IMask extends IStyle {
@@ -71,14 +71,13 @@ public interface IMask extends IStyle {
 
 	/**
 	 * Class that implements the methods of the IMask interface showed above.
-	 *
+	 * 
 	 * @author jaume dominguez faus - jaume.dominguez@iver.es
-	 *
+	 * 
 	 */
 	class BasicMask extends AbstractStyle implements IMask {
 		private double size;
 		private IFillSymbol fill;
-
 
 		public double getSize() {
 			return size;
@@ -104,9 +103,13 @@ public interface IMask extends IStyle {
 		}
 
 		public FShape getHaloShape(Shape shp) {
-			BasicStroke stroke = new BasicStroke((int) /*falta CartographicSupport*/getSize());
+			BasicStroke stroke = new BasicStroke((int) /*
+														 * falta
+														 * CartographicSupport
+														 */getSize());
 			Shape myShp = stroke.createStrokedShape(shp);
-			FShape haloShape = new FPolygon2D(new GeneralPathX(myShp.getBounds2D()));
+			FShape haloShape = new FPolygon2D(new GeneralPathX(
+					myShp.getBounds2D()));
 
 			return haloShape;
 		}

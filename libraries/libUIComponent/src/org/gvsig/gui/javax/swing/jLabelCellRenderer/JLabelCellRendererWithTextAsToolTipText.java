@@ -47,46 +47,56 @@ import java.io.Serializable;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
+
 /**
- * This class allows render a JLabel in a Cell of other graphic component (as a JList) and
- * if mouse is on this cell, a tool tip text with the text value will be shown
+ * This class allows render a JLabel in a Cell of other graphic component (as a
+ * JList) and if mouse is on this cell, a tool tip text with the text value will
+ * be shown
  * 
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
-public class JLabelCellRendererWithTextAsToolTipText extends JLabelCellRenderer implements ListCellRenderer<Object>, Serializable {
+public class JLabelCellRendererWithTextAsToolTipText extends JLabelCellRenderer
+		implements ListCellRenderer<Object>, Serializable {
 	private static final long serialVersionUID = 4799667459274027212L;
 
-	/* (non-Javadoc)
-	 * @see javax.swing.ListCellRenderer#getListCellRendererComponent(javax.swing.JList, java.lang.Object, int, boolean, boolean)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.swing.ListCellRenderer#getListCellRendererComponent(javax.swing
+	 * .JList, java.lang.Object, int, boolean, boolean)
 	 */
-	public Component getListCellRendererComponent(JList<? extends Object> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-        /* The DefaultListCellRenderer class will take care of
-         * the JLabels text property, it's foreground and background
-         * colors, and so on.
-         */
-        super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-		
+	public Component getListCellRendererComponent(JList<? extends Object> list,
+			Object value, int index, boolean isSelected, boolean cellHasFocus) {
+		/*
+		 * The DefaultListCellRenderer class will take care of the JLabels text
+		 * property, it's foreground and background colors, and so on.
+		 */
+		super.getListCellRendererComponent(list, value, index, isSelected,
+				cellHasFocus);
+
 		// Set the text property, background and foreground color
-        if (value instanceof JLabel) {
-        	setText(((JLabel)value).getText());
-    		setBackground(((JLabel)value).getBackground());
-    		
-    		if (isSelected)
-    			setForeground(Color.red);
-    		else
-    			setForeground(((JLabel)value).getForeground());
-        }
-        
+		if (value instanceof JLabel) {
+			setText(((JLabel) value).getText());
+			setBackground(((JLabel) value).getBackground());
+
+			if (isSelected)
+				setForeground(Color.red);
+			else
+				setForeground(((JLabel) value).getForeground());
+		}
+
 		return this;
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.JLabel#setText(java.lang.String)
 	 */
 	public void setText(String text) {
 		super.setText(text);
-		
+
 		// Set as tool tip text for this cell, it's text value
 		if (text != null)
 			super.setToolTipText(text);

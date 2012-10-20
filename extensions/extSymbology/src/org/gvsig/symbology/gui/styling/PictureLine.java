@@ -54,30 +54,32 @@ import com.iver.cit.gvsig.fmap.core.symbols.SymbolDrawingException;
 import com.iver.cit.gvsig.gui.styling.SymbolEditor;
 
 /**
- * PictureLine initializes the properties that define a
- * <b>picture marker symbol</b> and are showed in the tab created by
- * PictureMarker which is called simple marker.<p>
+ * PictureLine initializes the properties that define a <b>picture marker
+ * symbol</b> and are showed in the tab created by PictureMarker which is called
+ * simple marker.
+ * <p>
  * <p>
  * Moreover, PictureLine has other methods such as getSymbolClass,getName,
  * refreshControls and getLayer.
- *
- *
- *@author jaume dominguez faus - jaume.dominguez@iver.es
+ * 
+ * 
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class PictureLine extends PictureMarker {
 	public PictureLine(SymbolEditor owner) {
 		super(owner);
 		initialize();
 	}
+
 	/**
 	 * Initializes the values in the tab
-	 *
+	 * 
 	 */
 	private void initialize() {
-//		tabs.remove(mask);
-		lblSize.setText(PluginServices.getText(this, "width")+":");
-		lblX.setText(PluginServices.getText(this, "scale")+" X:");
-		lblY.setText(PluginServices.getText(this, "scale")+" Y:");
+		// tabs.remove(mask);
+		lblSize.setText(PluginServices.getText(this, "width") + ":");
+		lblX.setText(PluginServices.getText(this, "scale") + " X:");
+		lblY.setText(PluginServices.getText(this, "scale") + " Y:");
 		txtX.setMinValue(0.1);
 		txtX.setMaxValue(Double.POSITIVE_INFINITY);
 		txtX.setStep(0.1);
@@ -106,7 +108,8 @@ public class PictureLine extends PictureMarker {
 
 			if (layer == null) {
 				// initialize defaults
-				System.err.println(getClass().getName()+":: should be unreachable code");
+				System.err.println(getClass().getName()
+						+ ":: should be unreachable code");
 
 				size = 1D;
 				xScale = 1D;
@@ -122,21 +125,23 @@ public class PictureLine extends PictureMarker {
 
 				try {
 					fileName = new URL(sym.getImagePath()).toString();
-					selectionFileName =new URL(sym.getSelImagePath()).toString();
+					selectionFileName = new URL(sym.getSelImagePath())
+							.toString();
 				} catch (MalformedURLException e) {
-					NotificationManager.addError(PluginServices.getText(this, "Error en la creaci?n" +
-					"de la URL"), e);
+					NotificationManager.addError(PluginServices.getText(this,
+							"Error en la creaci?n" + "de la URL"), e);
 				}
 
 			}
 
 			setValues(size, xScale, yScale, fileName, selectionFileName);
 		} catch (IndexOutOfBoundsException ioEx) {
-			NotificationManager.addWarning("Symbol layer index out of bounds", ioEx);
+			NotificationManager.addWarning("Symbol layer index out of bounds",
+					ioEx);
 		} catch (ClassCastException ccEx) {
-			NotificationManager.addWarning("Illegal casting from " +
-					layer.getClassName() + " to " + getSymbolClass().
-					getName() + ".", ccEx);
+			NotificationManager.addWarning(
+					"Illegal casting from " + layer.getClassName() + " to "
+							+ getSymbolClass().getName() + ".", ccEx);
 
 		}
 	}
@@ -146,14 +151,16 @@ public class PictureLine extends PictureMarker {
 		try {
 			PictureLineSymbol layer = null;
 
-
-			if(lblFileName.getText().equals("") )
-				layer=null;
+			if (lblFileName.getText().equals(""))
+				layer = null;
 
 			else {
-				layer =  new PictureLineSymbol(new URL(lblFileName.getText()),null);
+				layer = new PictureLineSymbol(new URL(lblFileName.getText()),
+						null);
 				if (!lblSelFileName.getText().equals(""))
-					layer = new PictureLineSymbol(new URL(lblFileName.getText()),new URL(lblSelFileName.getText()));
+					layer = new PictureLineSymbol(
+							new URL(lblFileName.getText()), new URL(
+									lblSelFileName.getText()));
 
 				layer.setIsShapeVisible(true);
 				layer.setLineWidth(txtSize.getDouble());
@@ -163,8 +170,9 @@ public class PictureLine extends PictureMarker {
 
 			return layer;
 		} catch (IOException e) {
-			return SymbologyFactory.getWarningSymbol
-				(PluginServices.getText(this, "failed_acessing_files"), null, SymbolDrawingException.UNSUPPORTED_SET_OF_SETTINGS);
+			return SymbologyFactory.getWarningSymbol(
+					PluginServices.getText(this, "failed_acessing_files"),
+					null, SymbolDrawingException.UNSUPPORTED_SET_OF_SETTINGS);
 		}
 
 	}

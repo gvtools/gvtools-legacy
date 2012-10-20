@@ -5,10 +5,11 @@ package com.iver.cit.gvsig.exceptions.layers;
  */
 public class URLLayerException extends LoadLayerException {
 
-	public URLLayerException(String l,Throwable exception) {
-		super(l,exception);
+	public URLLayerException(String l, Throwable exception) {
+		super(l, exception);
 		init();
 	}
+
 	/**
 	 *
 	 */

@@ -12,7 +12,6 @@ import org.gvsig.gpe.xml.XmlProperties;
 import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
 import org.gvsig.gpe.xml.utils.XMLTags;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -63,102 +62,122 @@ import org.gvsig.gpe.xml.utils.XMLTags;
  * @author Jorge Piera Llodrá (jorge.piera@iver.es)
  */
 public class FeatureCollectionWriter {
-	
+
 	/**
 	 * It writes the FeatureCollection init tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param id
-	 * Feature id
+	 *            Feature id
 	 * @param namespace
-	 * Feature namespace
+	 *            Feature namespace
 	 * @param name
-	 * Feature name
+	 *            Feature name
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor handler, String fid, 
-			String namespace, String name) throws IOException{
+	public void start(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler, String fid,
+			String namespace, String name) throws IOException {
 		String myName = GMLUtilsParser.addBlancSymbol(name);
 		String myNamespace = namespace;
-		if (name == null){
+		if (name == null) {
 			QName qname = GMLUtilsParser.createDefaultFeatureCollection();
 			myName = qname.getLocalPart();
 			myNamespace = qname.getNamespaceURI();
-		}else if (namespace == null){
-			myNamespace = GPEDefaults.getStringProperty(XmlProperties.DEFAULT_NAMESPACE_URI);
+		} else if (namespace == null) {
+			myNamespace = GPEDefaults
+					.getStringProperty(XmlProperties.DEFAULT_NAMESPACE_URI);
 		}
 		writer.writeStartElement(myNamespace, myName);
-		if (fid != null){
+		if (fid != null) {
 			writer.writeStartAttribute(GMLTags.GML_FID);
 			writer.writeValue(fid);
 		}
-		//Write namespaces: this functionality must be implemented on the writer, not here!!!
-		writer.writeStartAttribute(XMLTags.XML_NAMESPACE_URI, 
-				XMLTags.XML_NAMESPACE_PREFIX + ":" + XMLTags.XML_SCHEMA_INSTANCE_NAMESPACE_PREFIX);
+		// Write namespaces: this functionality must be implemented on the
+		// writer, not here!!!
+		writer.writeStartAttribute(XMLTags.XML_NAMESPACE_URI,
+				XMLTags.XML_NAMESPACE_PREFIX + ":"
+						+ XMLTags.XML_SCHEMA_INSTANCE_NAMESPACE_PREFIX);
 		writer.writeValue(XMLTags.XML_SCHEMA_INSTANCE_NAMESPACE_URI);
-		
-		writer.writeStartAttribute(XMLTags.XML_NAMESPACE_URI, 
-				XMLTags.XML_NAMESPACE_PREFIX + ":" + XMLTags.XML_XLINK_NAMESPACE_PREFIX);
-		writer.writeValue(XMLTags.XML_XLINK_NAMESPACE_URI);
-		
-		writer.writeStartAttribute(XMLTags.XML_NAMESPACE_URI, 
-				XMLTags.XML_NAMESPACE_PREFIX + ":" + GMLTags.GML_NAMESPACE_PREFIX);
-		writer.writeValue(GMLTags.GML_NAMESPACE_URI);	
 
-		writer.writeStartAttribute(XMLTags.XML_NAMESPACE_URI, 
-				XMLTags.XML_NAMESPACE_PREFIX + ":" + GPEDefaults.getStringProperty(XmlProperties.DEFAULT_NAMESPACE_PREFIX));
-		writer.writeValue(GPEDefaults.getStringProperty(XmlProperties.DEFAULT_NAMESPACE_URI));		
-		
-		writer.writeStartAttribute(XMLTags.XML_SCHEMA_INSTANCE_NAMESPACE_URI, 
-				XMLTags.XML_SCHEMA_INSTANCE_NAMESPACE_PREFIX + ":" + XMLTags.XML_SCHEMA_LOCATION);
-		String schemaLocation = GPEDefaults.getStringProperty(XmlProperties.DEFAULT_NAMESPACE_URI) + 
-				" " + GPEDefaults.getStringProperty(XmlProperties.XSD_SCHEMA_FILE);
-		writer.writeValue(schemaLocation);			
+		writer.writeStartAttribute(XMLTags.XML_NAMESPACE_URI,
+				XMLTags.XML_NAMESPACE_PREFIX + ":"
+						+ XMLTags.XML_XLINK_NAMESPACE_PREFIX);
+		writer.writeValue(XMLTags.XML_XLINK_NAMESPACE_URI);
+
+		writer.writeStartAttribute(XMLTags.XML_NAMESPACE_URI,
+				XMLTags.XML_NAMESPACE_PREFIX + ":"
+						+ GMLTags.GML_NAMESPACE_PREFIX);
+		writer.writeValue(GMLTags.GML_NAMESPACE_URI);
+
+		writer.writeStartAttribute(
+				XMLTags.XML_NAMESPACE_URI,
+				XMLTags.XML_NAMESPACE_PREFIX
+						+ ":"
+						+ GPEDefaults
+								.getStringProperty(XmlProperties.DEFAULT_NAMESPACE_PREFIX));
+		writer.writeValue(GPEDefaults
+				.getStringProperty(XmlProperties.DEFAULT_NAMESPACE_URI));
+
+		writer.writeStartAttribute(XMLTags.XML_SCHEMA_INSTANCE_NAMESPACE_URI,
+				XMLTags.XML_SCHEMA_INSTANCE_NAMESPACE_PREFIX + ":"
+						+ XMLTags.XML_SCHEMA_LOCATION);
+		String schemaLocation = GPEDefaults
+				.getStringProperty(XmlProperties.DEFAULT_NAMESPACE_URI)
+				+ " "
+				+ GPEDefaults.getStringProperty(XmlProperties.XSD_SCHEMA_FILE);
+		writer.writeValue(schemaLocation);
 	}
-	
+
 	/**
 	 * It writes the FeatureCollection init tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param id
-	 * Feature id
+	 *            Feature id
 	 * @param namespace
-	 * Feature namespace
+	 *            Feature namespace
 	 * @param name
-	 * Feature name
+	 *            Feature name
 	 * @param description
-	 * The feature collection decription
+	 *            The feature collection decription
 	 * @param srs
-	 * The feature collection srs
+	 *            The feature collection srs
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor handler, String fid, 
-			String namespace, String name, String description, String srs) throws IOException{
+	public void start(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler, String fid,
+			String namespace, String name, String description, String srs)
+			throws IOException {
 		start(writer, handler, fid, namespace, name);
-		writer.writeEndAttributes();	
+		writer.writeEndAttributes();
 		handler.getProfile().getNameWriter().write(writer, handler, name);
-		handler.getProfile().getDescriptionWriter().write(writer, handler, description);
+		handler.getProfile().getDescriptionWriter()
+				.write(writer, handler, description);
 	}
-	
+
 	/**
 	 * It writes a Feature end tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param namespace
-	 * Feature namespace
+	 *            Feature namespace
 	 * @param name
-	 * Feature name
+	 *            Feature name
 	 * @throws IOException
 	 */
-	public void end(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor handler) throws IOException{
+	public void end(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler) throws IOException {
 		writer.writeEndElement();
 	}
-	
-	
+
 }

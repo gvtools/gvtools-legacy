@@ -45,7 +45,6 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import javax.swing.ButtonGroup;
-import org.gvsig.gui.beans.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -57,15 +56,16 @@ import javax.swing.JTextField;
 import org.gvsig.gui.beans.DefaultBean;
 import org.gvsig.gui.beans.Pager;
 import org.gvsig.gui.beans.listeners.BeanListener;
+import org.gvsig.gui.beans.swing.JButton;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.IFMapWMSDimension;
 
 /**
  * This is the Dimensions tab of the WMS wizard.
- *
+ * 
  * @author jaume
- *
+ * 
  */
 public class DimensionPanel extends DefaultBean {
 	static private final int SINGLE_VALUE = 0;
@@ -106,7 +106,7 @@ public class DimensionPanel extends DefaultBean {
 	 * Will contain the settings for a getMap query which are just text. Since
 	 * only one Dimension definition expression is allowed the key for this hash
 	 * map is the dimension name.
-	 *
+	 * 
 	 * <b>key:</b> dimension name as string <br>
 	 * <b>value:</b> dimension value as string
 	 */
@@ -122,7 +122,7 @@ public class DimensionPanel extends DefaultBean {
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
@@ -138,7 +138,7 @@ public class DimensionPanel extends DefaultBean {
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private Pager getJPanel() {
@@ -158,7 +158,7 @@ public class DimensionPanel extends DefaultBean {
 
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel1() {
@@ -194,7 +194,7 @@ public class DimensionPanel extends DefaultBean {
 
 	/**
 	 * This method initializes jRadioButton
-	 *
+	 * 
 	 * @return javax.swing.JRadioButton
 	 */
 	private JRadioButton getRdBtnSingleValue() {
@@ -214,7 +214,7 @@ public class DimensionPanel extends DefaultBean {
 
 	/**
 	 * This method initializes jRadioButton1
-	 *
+	 * 
 	 * @return javax.swing.JRadioButton
 	 */
 	private JRadioButton getRdBtnMultipleValue() {
@@ -236,7 +236,7 @@ public class DimensionPanel extends DefaultBean {
 
 	/**
 	 * This method initializes jRadioButton2
-	 *
+	 * 
 	 * @return javax.swing.JRadioButton
 	 */
 	private JRadioButton getRdBtnInterval() {
@@ -257,7 +257,7 @@ public class DimensionPanel extends DefaultBean {
 
 	/**
 	 * This method initializes btnAdd
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getBtnAdd() {
@@ -322,8 +322,8 @@ public class DimensionPanel extends DefaultBean {
 			 * representing points which are computed and obtained from the
 			 * application. This ensures that it is a valid value. Depending on
 			 * what is being inserted (single value, interval, or multiple
-			 * values) the array will contain one, two or more Integer.
-			 *  - An user custom expression. The user decides to type-in its own
+			 * values) the array will contain one, two or more Integer. - An
+			 * user custom expression. The user decides to type-in its own
 			 * expression, and the application assumes that that expression is
 			 * correct and just uses it.
 			 */
@@ -336,10 +336,11 @@ public class DimensionPanel extends DefaultBean {
 				type = Value.INDEXES;
 				val = (Integer[]) indices.toArray(new Integer[0]);
 			}
-			//settings.put(currentDimension, new Value(type, mode, val));
-			if ((type == Value.EXPR && !((String) val).equals(""))	||
-				(type == Value.INDEXES && ((Integer[]) val).length>0)){
-				settings.put(currentDimension.getName(), new Value(type, mode, val, currentDimension));
+			// settings.put(currentDimension, new Value(type, mode, val));
+			if ((type == Value.EXPR && !((String) val).equals(""))
+					|| (type == Value.INDEXES && ((Integer[]) val).length > 0)) {
+				settings.put(currentDimension.getName(), new Value(type, mode,
+						val, currentDimension));
 
 			}
 			callValueChanged(getDimensions());
@@ -364,7 +365,8 @@ public class DimensionPanel extends DefaultBean {
 			if (val != null) {
 				if (val.type == Value.INDEXES) {
 					Integer[] ints = val.getIndexes();
-					String separator = val.getMode() == MULTIPLE_VALUE ? "," : "/";
+					String separator = val.getMode() == MULTIPLE_VALUE ? ","
+							: "/";
 					String s = "";
 					for (int j = 0; j < ints.length; j++) {
 						s += currentDimension.valueAt(ints[j].intValue());
@@ -379,8 +381,8 @@ public class DimensionPanel extends DefaultBean {
 
 			IFMapWMSDimension d = val.getOwner();
 			// Handle units and unit symbols
-			String unitSymbol = (d !=null) ? d.getUnitSymbol() : null;
-			String unit = (d !=null) ? d.getUnit() : null;
+			String unitSymbol = (d != null) ? d.getUnitSymbol() : null;
+			String unit = (d != null) ? d.getUnit() : null;
 			if (unit != null && !unit.equals(""))
 				unit = PluginServices.getText(this, "in") + " " + unit;
 			else
@@ -397,8 +399,8 @@ public class DimensionPanel extends DefaultBean {
 					+ color
 					+ ">"
 					+ "    <td width=\"92\" height=\"18\" bgcolor=\"#D6D6D6\" align=\"right\"><font face=\""
-					+ font + "\" size=\"3\">" + "		<b>" + name
-					+ "</b>" + " " + unit + unitSymbol + "</font>" + "	 </td>"
+					+ font + "\" size=\"3\">" + "		<b>" + name + "</b>" + " "
+					+ unit + unitSymbol + "</font>" + "	 </td>"
 					+ "    <td width=\"268\"><font face=\"" + font
 					+ "\" size=\"3\">" + dimValue + "</font></td>" + "  </tr>";
 			switchColor = !switchColor;
@@ -414,7 +416,7 @@ public class DimensionPanel extends DefaultBean {
 
 	/**
 	 * This method initializes txt
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getTxt() {
@@ -432,7 +434,7 @@ public class DimensionPanel extends DefaultBean {
 
 	/**
 	 * This method initializes scrlDimension
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getScrlDimension() {
@@ -446,7 +448,7 @@ public class DimensionPanel extends DefaultBean {
 
 	/**
 	 * This method initializes jList
-	 *
+	 * 
 	 * @return javax.swing.JList
 	 */
 	private JList getLstDimensions() {
@@ -456,13 +458,17 @@ public class DimensionPanel extends DefaultBean {
 					.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 			lstDimensions
 					.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-						public void valueChanged(javax.swing.event.ListSelectionEvent e) {
-							try{
-								if (currentDimension != dim[lstDimensions.getSelectedIndex()]) {
+						public void valueChanged(
+								javax.swing.event.ListSelectionEvent e) {
+							try {
+								if (currentDimension != dim[lstDimensions
+										.getSelectedIndex()]) {
 									indices.clear();
-									currentDimension = dim[lstDimensions.getSelectedIndex()];
+									currentDimension = dim[lstDimensions
+											.getSelectedIndex()];
 								}
-							} catch (ArrayIndexOutOfBoundsException ex) {}
+							} catch (ArrayIndexOutOfBoundsException ex) {
+							}
 							refreshEditionPanel();
 						}
 					});
@@ -471,7 +477,7 @@ public class DimensionPanel extends DefaultBean {
 	}
 
 	protected void refreshEditionPanel() {
-		//Value val = (Value) settings.get(currentDimension);
+		// Value val = (Value) settings.get(currentDimension);
 		Value val = (Value) settings.get(currentDimension.getName());
 		if (val == null) {
 			lblValueText.setText(currentDimension.valueAt(0));
@@ -511,21 +517,19 @@ public class DimensionPanel extends DefaultBean {
 
 	/**
 	 * This method initializes editionPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getEditionPanel() {
 		if (editionPanel == null) {
 			editionPanel = new JPanel();
 			editionPanel
-					.setBorder(javax.swing.BorderFactory
-							.createTitledBorder(
-									null,
-									PluginServices.getText(this,
-											"settings_editor"),
-									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, null));
+					.setBorder(javax.swing.BorderFactory.createTitledBorder(
+							null,
+							PluginServices.getText(this, "settings_editor"),
+							javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+							javax.swing.border.TitledBorder.DEFAULT_POSITION,
+							null, null));
 
 			editionPanel.setLayout(null);
 			editionPanel.setBounds(9, 150, 480, 232);
@@ -538,7 +542,7 @@ public class DimensionPanel extends DefaultBean {
 
 	/**
 	 * This method initializes scrDimInfo
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getScrDimInfo() {
@@ -552,7 +556,7 @@ public class DimensionPanel extends DefaultBean {
 
 	/**
 	 * This method initializes infoEditor
-	 *
+	 * 
 	 * @return javax.swing.JEditorPane
 	 */
 	private JEditorPane getInfoEditor() {
@@ -565,7 +569,7 @@ public class DimensionPanel extends DefaultBean {
 
 	/**
 	 * This method initializes valuePanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getValuePanel() {
@@ -587,7 +591,7 @@ public class DimensionPanel extends DefaultBean {
 
 	/**
 	 * This method initializes btnSet
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getBtnSet() {
@@ -606,7 +610,7 @@ public class DimensionPanel extends DefaultBean {
 
 	/**
 	 * This method initializes btnClear
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getBtnClear() {
@@ -623,7 +627,8 @@ public class DimensionPanel extends DefaultBean {
 		return btnClear;
 	}
 
-	public void addDimension(IFMapWMSDimension d) throws IllegalArgumentException {
+	public void addDimension(IFMapWMSDimension d)
+			throws IllegalArgumentException {
 		d.compile();
 
 		if (dim == null) {
@@ -658,18 +663,18 @@ public class DimensionPanel extends DefaultBean {
 			Value val = ((Value) settings.get(key));
 
 			if (val.getType() == Value.EXPR)
-				v.add((String)key + "="
-						+ (String) val.getValue());
+				v.add((String) key + "=" + (String) val.getValue());
 			else {
 				String values = "";
-				String separator = (val.getMode() == MULTIPLE_VALUE) ? ","	: "/";
+				String separator = (val.getMode() == MULTIPLE_VALUE) ? ","
+						: "/";
 				Integer[] indexes = val.getIndexes();
 				for (int j = 0; j < indexes.length; j++) {
 					values += val.getOwner().valueAt(indexes[j].intValue());
 					if (j < indexes.length - 1)
 						values += separator;
 				}
-				v.add((String)key + "=" + values);
+				v.add((String) key + "=" + values);
 			}
 			i++;
 		}
@@ -680,12 +685,12 @@ public class DimensionPanel extends DefaultBean {
 	 * Sets the value for a Dimension given by the dimension name. The value is
 	 * set as a plain text expressions and the panel will not keep track of what
 	 * position represents this value.
-	 *
+	 * 
 	 * @param name
 	 * @param value
 	 */
 	public void setDimensionValue(String name, String value) {
-		for (int i = 0; dim!=null && i < dim.length; i++) {
+		for (int i = 0; dim != null && i < dim.length; i++) {
 			if (dim[i].getName().equals(name)) {
 				int myMode;
 				if (value.indexOf(",") != -1)
@@ -695,7 +700,7 @@ public class DimensionPanel extends DefaultBean {
 				else
 					myMode = SINGLE_VALUE;
 				Value val = new Value(Value.EXPR, myMode, value, null);
-				//settings.put(dim[i], val);
+				// settings.put(dim[i], val);
 				settings.put(name, val);
 			}
 		}
@@ -710,8 +715,6 @@ public class DimensionPanel extends DefaultBean {
 		private Object value;
 		private IFMapWMSDimension owner;
 
-
-
 		public Value(int type, int mode, Object value, IFMapWMSDimension owner) {
 			this.type = type;
 			this.valueMode = mode;
@@ -723,14 +726,14 @@ public class DimensionPanel extends DefaultBean {
 		 * Returns the type of the contained value.<br>
 		 * Possible values are:
 		 * <ol>
-		 * <li> <b>Value.INDEXES</b>, which means that the value is an Integer
+		 * <li><b>Value.INDEXES</b>, which means that the value is an Integer
 		 * array that should be used to compute the actual value by using the
-		 * method IFMapWMSDimension.valueAt(int i). </li>
-		 * <li> <b>Value.EXPR</b>. If the value type is this, then the value is
-		 * a plain String that can be directly used as much it should represent
-		 * a valid value for the WMS server. </li>
+		 * method IFMapWMSDimension.valueAt(int i).</li>
+		 * <li><b>Value.EXPR</b>. If the value type is this, then the value is a
+		 * plain String that can be directly used as much it should represent a
+		 * valid value for the WMS server.</li>
 		 * </ol>
-		 *
+		 * 
 		 * @return int
 		 */
 		public int getType() {
@@ -740,6 +743,7 @@ public class DimensionPanel extends DefaultBean {
 		/**
 		 * Array of indexes that compose this value expression. Use it only when
 		 * type is INDEXES.
+		 * 
 		 * @return
 		 */
 		public Integer[] getIndexes() {
@@ -748,6 +752,7 @@ public class DimensionPanel extends DefaultBean {
 
 		/**
 		 * Expression of this value, if its type is EXPR
+		 * 
 		 * @return
 		 */
 		public String getExpr() {
@@ -756,8 +761,9 @@ public class DimensionPanel extends DefaultBean {
 
 		/**
 		 * The mode of the value.
-		 * @return one of DimensionPanel.SINGLE_VALUE, DimensionPanel.MULTIPLE_VALUE
-		 * 	   or DimensionPanel.INTERVAL
+		 * 
+		 * @return one of DimensionPanel.SINGLE_VALUE,
+		 *         DimensionPanel.MULTIPLE_VALUE or DimensionPanel.INTERVAL
 		 */
 		public int getMode() {
 			return valueMode;
@@ -766,6 +772,7 @@ public class DimensionPanel extends DefaultBean {
 		public Object getValue() {
 			return value;
 		}
+
 		/**
 		 * Returns a reference to the IFMapDimension that owns this dimension.
 		 */

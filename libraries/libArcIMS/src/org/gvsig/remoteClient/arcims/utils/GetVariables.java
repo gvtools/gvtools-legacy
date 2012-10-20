@@ -46,32 +46,31 @@
  */
 package org.gvsig.remoteClient.arcims.utils;
 
-
 /**
- * Class that stores commands and variables used in GET queries
- * to an ArcIMS Server
+ * Class that stores commands and variables used in GET queries to an ArcIMS
+ * Server
+ * 
  * @author jsanz
- *
+ * 
  */
 public class GetVariables {
-    // Commands
-    public static final String COMMAND = "Cmd";
-    public static final String SERVICENAME = "ServiceName";
-    public static final String CUSTOMSERVICE = "CustomService";
+	// Commands
+	public static final String COMMAND = "Cmd";
+	public static final String SERVICENAME = "ServiceName";
+	public static final String CUSTOMSERVICE = "CustomService";
 
-    // Values
-    public static final String PING = "Ping";
-    public static final String GETVERSION = "GetVersion";
-    public static final String CATALOG = "catalog";
-    public static final String QUERY = "Query";
+	// Values
+	public static final String PING = "Ping";
+	public static final String GETVERSION = "GetVersion";
+	public static final String CATALOG = "catalog";
+	public static final String QUERY = "Query";
 
-    //Candidate Servlets
-    public static final String[] SERVLETS;
+	// Candidate Servlets
+	public static final String[] SERVLETS;
 
-    static {
-        SERVLETS = new String[] {
-                new String(""), new String("/servlet/com.esri.esrimap.Esrimap"),
-                new String("/scripts/esrimap.dll"), new String("/.esrimap")
-            };
-    }
+	static {
+		SERVLETS = new String[] { new String(""),
+				new String("/servlet/com.esri.esrimap.Esrimap"),
+				new String("/scripts/esrimap.dll"), new String("/.esrimap") };
+	}
 }

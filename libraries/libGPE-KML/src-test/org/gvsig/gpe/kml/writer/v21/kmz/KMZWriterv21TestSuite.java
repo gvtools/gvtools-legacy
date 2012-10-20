@@ -74,7 +74,7 @@ public class KMZWriterv21TestSuite {
 	public static Test suite() {
 		TestSuite suite = new TestSuite(
 				"Test for org.gvsig.gpe.kml.writers.kmz");
-		//$JUnit-BEGIN$
+		// $JUnit-BEGIN$
 		suite.addTestSuite(KMZPointsLayerTest.class);
 		suite.addTestSuite(KMZLayerWithNameTest.class);
 		suite.addTestSuite(KMZLayerWithDescriptionTest.class);
@@ -92,7 +92,7 @@ public class KMZWriterv21TestSuite {
 		suite.addTestSuite(KMZPolygonAutomaticallyClosedTest.class);
 		suite.addTestSuite(KMZFeatureWithElementsTest.class);
 		suite.addTestSuite(KMZFeatureWithComplexElementTest.class);
-		//$JUnit-END$
+		// $JUnit-END$
 		return suite;
 	}
 

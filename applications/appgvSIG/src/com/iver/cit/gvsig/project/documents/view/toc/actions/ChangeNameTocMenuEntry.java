@@ -8,7 +8,6 @@ import com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuActio
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
 import com.iver.cit.gvsig.project.documents.view.toc.gui.ChangeName;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -66,12 +65,12 @@ import com.iver.cit.gvsig.project.documents.view.toc.gui.ChangeName;
  */
 /**
  * Realiza un cambio de nombre en la capa seleccionada
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class ChangeNameTocMenuEntry extends AbstractTocContextMenuAction {
 	public String getGroup() {
-		return "group1"; //FIXME
+		return "group1"; // FIXME
 	}
 
 	public int getGroupOrder() {
@@ -94,14 +93,15 @@ public class ChangeNameTocMenuEntry extends AbstractTocContextMenuAction {
 		return isTocItemBranch(item);
 	}
 
-
 	public void execute(ITocItem item, FLayer[] selectedItems) {
 		FLayer lyr = getNodeLayer(item);
-		if (!lyr.isAvailable()) return;
-		ChangeName chn=new ChangeName(lyr.getName());
+		if (!lyr.isAvailable())
+			return;
+		ChangeName chn = new ChangeName(lyr.getName());
 		PluginServices.getMDIManager().addWindow(chn);
 		lyr.setName(chn.getName());
-		Project project=((ProjectExtension)PluginServices.getExtension(ProjectExtension.class)).getProject();
+		Project project = ((ProjectExtension) PluginServices
+				.getExtension(ProjectExtension.class)).getProject();
 		project.setModified(true);
 	}
 }

@@ -123,7 +123,7 @@ public class JoinedTableNormalization extends TableNormalization implements
 			log.error("ERROR initializing the dbf file", e1);
 			update("ERROR.errorwrittingdbf");
 			return false;
-		}		
+		}
 
 		DefaultRowEdited dre;
 		for (int i = 0; i < getRowCount(); i++) {
@@ -177,7 +177,7 @@ public class JoinedTableNormalization extends TableNormalization implements
 	}
 
 	/**
-	 * @throws ReadDriverException 
+	 * @throws ReadDriverException
 	 * 
 	 */
 	protected void fillValues(Value[] vals, List<String> splitString, int row)
@@ -211,7 +211,8 @@ public class JoinedTableNormalization extends TableNormalization implements
 			cadena = cadena.trim();
 			tipoCampo = driver.getFieldType(posi);
 			// create values
-			vals[posi] = createValue(row, tipoCampo, posNameNewFields[j], cadena);
+			vals[posi] = createValue(row, tipoCampo, posNameNewFields[j],
+					cadena);
 		}
 	}
 

@@ -41,62 +41,75 @@ import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
  * Proceso para la generación de la imagen intermedia dividida en tramos.
  * 
  * 19/08/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class StretchProcess implements IProcessActions {
-	private FLyrRasterSE                  sourceLayer       = null;
-	private IProcessActions               endActions        = null;
-	
+	private FLyrRasterSE sourceLayer = null;
+	private IProcessActions endActions = null;
+
 	/**
 	 * Asigna el objeto para informar que el proceso ha terminado
+	 * 
 	 * @param endActions
 	 */
 	public StretchProcess(IProcessActions endActions) {
 		this.endActions = endActions;
 	}
-	
+
 	/**
-	 * Aplica el proceso de filtrado sobre una capa dando como resultado otra capa
+	 * Aplica el proceso de filtrado sobre una capa dando como resultado otra
+	 * capa
+	 * 
 	 * @throws FilterTypeException
 	 */
-	public void stretchProcess(StretchPreviewRender prevRender, StretchData data ) throws FilterTypeException {
-		if(sourceLayer == null)
+	public void stretchProcess(StretchPreviewRender prevRender, StretchData data)
+			throws FilterTypeException {
+		if (sourceLayer == null)
 			return;
 		sourceLayer.setRenderBands(sourceLayer.getRenderBands());
 
 		RasterProcess filterProcess = new FilterProcess();
 		filterProcess.setActions(this);
 		filterProcess.addParam("rendering", sourceLayer);
-		String tempRaster = RasterLibrary.tempCacheDirectoryPath + File.separator + RasterLibrary.usesOnlyLayerName();
+		String tempRaster = RasterLibrary.tempCacheDirectoryPath
+				+ File.separator + RasterLibrary.usesOnlyLayerName();
 		filterProcess.addParam("filename", tempRaster + ".tif");
 		filterProcess.addParam("rasterdatasource", sourceLayer.getDataSource());
-		filterProcess.addParam("listfilterused", getParamStruct(sourceLayer, prevRender, data));
+		filterProcess.addParam("listfilterused",
+				getParamStruct(sourceLayer, prevRender, data));
 		filterProcess.addParam("onlyrenderbands", Boolean.TRUE);
 		filterProcess.addParam("layer", sourceLayer);
 		filterProcess.start();
 	}
-	
+
 	/**
 	 * Obtiene la lista de parámetros de los filtros añadidos
-	 * @param lyr Capa raster
+	 * 
+	 * @param lyr
+	 *            Capa raster
 	 * @return ArrayList
 	 */
-	public ArrayList getParamStruct(FLyrRasterSE lyr, StretchPreviewRender prevRender, StretchData data) {
+	public ArrayList getParamStruct(FLyrRasterSE lyr,
+			StretchPreviewRender prevRender, StretchData data) {
 		RasterFilterList filterList = new RasterFilterList();
 		filterList.setInitDataType(lyr.getDataType()[0]);
-		RasterFilterListManager filterManager = new RasterFilterListManager(filterList);
-		
+		RasterFilterListManager filterManager = new RasterFilterListManager(
+				filterList);
+
 		try {
 			prevRender.addPosterization(filterManager, lyr);
 		} catch (FilterTypeException e1) {
-			RasterToolsUtil.messageBoxError(RasterToolsUtil.getText(null, "noposterization"), null, e1);
+			RasterToolsUtil.messageBoxError(
+					RasterToolsUtil.getText(null, "noposterization"), null, e1);
 		}
-		
+
 		return getParams(filterList);
 	}
-	
+
 	/**
 	 * A partir de una lista de filtros devuelve un array con sus parámetros
+	 * 
 	 * @param filterList
 	 * @return ArrayList
 	 */
@@ -104,12 +117,13 @@ public class StretchProcess implements IProcessActions {
 		ArrayList listFilterUsed = new ArrayList();
 		for (int i = 0; i < filterList.lenght(); i++) {
 			try {
-				RasterFilter filter = (RasterFilter)filterList.get(i);
-				Params params = (Params) filter.getUIParams(filter.getName()).clone();
-			
+				RasterFilter filter = (RasterFilter) filterList.get(i);
+				Params params = (Params) filter.getUIParams(filter.getName())
+						.clone();
+
 				ParamStruct newParam = new ParamStruct();
 				Class c = null;
-				if(filter instanceof LinearStretchEnhancementFilter)
+				if (filter instanceof LinearStretchEnhancementFilter)
 					c = LinearStretchEnhancementFilter.class;
 				newParam.setFilterClass(c);
 				newParam.setFilterName(filter.getName());
@@ -117,28 +131,32 @@ public class StretchProcess implements IProcessActions {
 				listFilterUsed.add(newParam);
 			} catch (CloneNotSupportedException e) {
 			}
-		}		
+		}
 		return listFilterUsed;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.IProcessActions#end(java.lang.Object)
 	 */
 	public void end(Object param) {
 		FLyrRasterSE grayConv = null;
 		try {
-			if(param instanceof String)
-				grayConv = FLyrRasterSE.createLayer(RasterLibrary.getOnlyLayerName(), (String)param, sourceLayer.getCrs());
+			if (param instanceof String)
+				grayConv = FLyrRasterSE.createLayer(
+						RasterLibrary.getOnlyLayerName(), (String) param,
+						sourceLayer.getCrs());
 		} catch (LoadLayerException e) {
 			RasterToolsUtil.messageBoxError("error_generating_layer", null, e);
 		}
-		if(endActions != null)
-			endActions.end(new Object[]{this, grayConv});
+		if (endActions != null)
+			endActions.end(new Object[] { this, grayConv });
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.IProcessActions#interrupted()
 	 */
 	public void interrupted() {
@@ -146,15 +164,17 @@ public class StretchProcess implements IProcessActions {
 
 	/**
 	 * Asigna la capa fuente
+	 * 
 	 * @param sourceLayer
 	 */
 	public void setSourceLayer(FLyrRasterSE sourceLayer) {
 		this.sourceLayer = sourceLayer;
 	}
-	
+
 	/**
-	 * Asigna el interfaz para que el proceso ejectute las acciones de finalización
-	 * al acabar.
+	 * Asigna el interfaz para que el proceso ejectute las acciones de
+	 * finalización al acabar.
+	 * 
 	 * @param endActions
 	 */
 	public void setProcessActions(IProcessActions endActions) {

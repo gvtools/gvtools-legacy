@@ -78,21 +78,21 @@ import com.iver.cit.gvsig.geoprocess.core.fmap.SummarizationFunction;
 import com.iver.cit.gvsig.geoprocess.core.fmap.XTypes;
 import com.iver.cit.gvsig.geoprocess.core.gui.AbstractGeoprocessPanel;
 import com.iver.cit.gvsig.geoprocess.core.gui.NumericFieldListModel;
+import com.iver.cit.gvsig.geoprocess.core.gui.NumericFieldListModel.NumericFieldListEntry;
 import com.iver.cit.gvsig.geoprocess.core.gui.SumFuncListModel;
 import com.iver.cit.gvsig.geoprocess.core.gui.SumarizeFunctionsDialog;
-import com.iver.cit.gvsig.geoprocess.core.gui.NumericFieldListModel.NumericFieldListEntry;
 import com.iver.utiles.GenericFileFilter;
 
 /**
  * Panel to work with DissolveGeoprocess in Geoprocessing Wizard.
- *
+ * 
  * Precondition: all inputs layer of constructor must be FLyrVect
- *
+ * 
  * @author azabala
- *
+ * 
  */
-public class GeoProcessingDissolvePanel extends AbstractGeoprocessPanel implements
-		DissolvePanelIF, IWindow {
+public class GeoProcessingDissolvePanel extends AbstractGeoprocessPanel
+		implements DissolvePanelIF, IWindow {
 
 	private static final long serialVersionUID = 1L;
 
@@ -100,12 +100,10 @@ public class GeoProcessingDissolvePanel extends AbstractGeoprocessPanel implemen
 
 	private JLabel inputCoverJLabel = null;
 	/**
-	 * Allows user to specify if a dissolve precondition
-	 * in two polygons with the same dissolve field value must
-	 * be spatial adjacency
+	 * Allows user to specify if a dissolve precondition in two polygons with
+	 * the same dissolve field value must be spatial adjacency
 	 */
 	private JCheckBox onlySelectedItemsJCheckBox = null;
-
 
 	private JLabel dissolveFieldJLabel = null;
 	/**
@@ -147,12 +145,13 @@ public class GeoProcessingDissolvePanel extends AbstractGeoprocessPanel implemen
 	private JLabel jLabel2 = null;
 
 	private JCheckBox adjacencyCheckbox = null;
+
 	/**
 	 * This constructor initializes the set of layers
-	 *
+	 * 
 	 * TODO PRECONDITION: check for only FLyrVect layers
-	 *
-	 *
+	 * 
+	 * 
 	 */
 	public GeoProcessingDissolvePanel(FLayers layers) {
 		super();
@@ -162,27 +161,24 @@ public class GeoProcessingDissolvePanel extends AbstractGeoprocessPanel implemen
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
 		dissolveFieldJLabel = new JLabel();
 		dissolveFieldJLabel.setBounds(5, 93, 180, 22);
 		dissolveFieldJLabel.setText(PluginServices.getText(this,
-				"Campo_para_disolver")
-				+ ":");
+				"Campo_para_disolver") + ":");
 		inputCoverJLabel = new JLabel();
 		inputCoverJLabel.setBounds(5, 36, 191, 22);
 		inputCoverJLabel.setText(PluginServices.getText(this,
-				"Cobertura_de_entrada")
-				+ ":");
+				"Cobertura_de_entrada") + ":");
 		titleJLabel = new JLabel();
 		titleJLabel.setBounds(5, 5, 208, 22);
 		titleJLabel.setText(PluginServices.getText(this,
-				"Disolver._Introduccion_de_datos")
-				+ ":");
+				"Disolver._Introduccion_de_datos") + ":");
 		this.setLayout(null);
-		this.setBounds(new java.awt.Rectangle(0,0,486,377));
+		this.setBounds(new java.awt.Rectangle(0, 0, 486, 377));
 		this.add(titleJLabel, null);
 		this.add(inputCoverJLabel, null);
 		this.add(getInputCoverJComboBox(), null);
@@ -215,11 +211,11 @@ public class GeoProcessingDissolvePanel extends AbstractGeoprocessPanel implemen
 	}
 
 	/**
-	 * Says if adjacency checkbox has been checked by
-	 * user
+	 * Says if adjacency checkbox has been checked by user
+	 * 
 	 * @return
 	 */
-	public boolean onlyAdjacentSelected(){
+	public boolean onlyAdjacentSelected() {
 		return adjacencyCheckbox.isSelected();
 	}
 
@@ -242,7 +238,7 @@ public class GeoProcessingDissolvePanel extends AbstractGeoprocessPanel implemen
 
 	/**
 	 * This method initializes inputCoverJComboBox
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getInputCoverJComboBox() {
@@ -252,19 +248,18 @@ public class GeoProcessingDissolvePanel extends AbstractGeoprocessPanel implemen
 					getLayerNames());
 			layersComboBox.setModel(defaultModel);
 			layersComboBox.setBounds(144, 36, 241, 22);
-			layersComboBox
-					.addItemListener(new java.awt.event.ItemListener() {
-						public void itemStateChanged(java.awt.event.ItemEvent e) {
-							inputLayerSelectedChange();
-						}
-					});
+			layersComboBox.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					inputLayerSelectedChange();
+				}
+			});
 		}
 		return layersComboBox;
 	}
 
 	/**
 	 * This method initializes onlySelectedItemsJCheckBox
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getOnlySelectedItemsJCheckBox() {
@@ -279,7 +274,7 @@ public class GeoProcessingDissolvePanel extends AbstractGeoprocessPanel implemen
 
 	/**
 	 * This method initializes dissolveFieldJComboBox
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getDissolveFieldJComboBox() {
@@ -295,7 +290,7 @@ public class GeoProcessingDissolvePanel extends AbstractGeoprocessPanel implemen
 
 	/**
 	 * This method initializes additionalOperationsJScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getAdditionalOperationsJScrollPane() {
@@ -304,14 +299,15 @@ public class GeoProcessingDissolvePanel extends AbstractGeoprocessPanel implemen
 			additionalOperationsJScrollPane
 					.setViewportView(getNumericFieldJList());
 			additionalOperationsJScrollPane.setEnabled(false);
-			additionalOperationsJScrollPane.setBounds(new java.awt.Rectangle(14,36,139,112));
+			additionalOperationsJScrollPane.setBounds(new java.awt.Rectangle(
+					14, 36, 139, 112));
 		}
 		return additionalOperationsJScrollPane;
 	}
 
 	/**
 	 * This method initializes numericFieldJList
-	 *
+	 * 
 	 * @return javax.swing.JList
 	 */
 	private JList getNumericFieldJList() {
@@ -321,10 +317,9 @@ public class GeoProcessingDissolvePanel extends AbstractGeoprocessPanel implemen
 		return numericFieldJList;
 	}
 
-
 	/**
 	 * This method initializes outputCoverJButton
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getOutputCoverJButton() {
@@ -346,9 +341,7 @@ public class GeoProcessingDissolvePanel extends AbstractGeoprocessPanel implemen
 		// Create an utility class
 		JFileChooser jfc = new JFileChooser();
 		// FIXME Internationalize "Ficheros SHP" String
-		jfc
-				.addChoosableFileFilter(new GenericFileFilter("shp",
-						"Ficheros SHP"));
+		jfc.addChoosableFileFilter(new GenericFileFilter("shp", "Ficheros SHP"));
 		if (jfc.showSaveDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
 			File file = jfc.getSelectedFile();
 			if (!(file.getPath().endsWith(".shp") || file.getPath().endsWith(
@@ -373,8 +366,8 @@ public class GeoProcessingDissolvePanel extends AbstractGeoprocessPanel implemen
 	}
 
 	/**
-	 * Returns numeric fields' names of the selected input layer.
-	 * Needed to say user where he could apply sumarization functions.
+	 * Returns numeric fields' names of the selected input layer. Needed to say
+	 * user where he could apply sumarization functions.
 	 */
 	public String[] getInputLayerNumericFields() {
 		String[] solution;
@@ -400,13 +393,14 @@ public class GeoProcessingDissolvePanel extends AbstractGeoprocessPanel implemen
 
 	/**
 	 * This method initializes sumarizationFunctionScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getSumarizationFunctionScrollPane() {
 		if (sumarizationFunctionScrollPane == null) {
 			sumarizationFunctionScrollPane = new JScrollPane();
-			sumarizationFunctionScrollPane.setBounds(new java.awt.Rectangle(314,36,139,112));
+			sumarizationFunctionScrollPane.setBounds(new java.awt.Rectangle(
+					314, 36, 139, 112));
 			sumarizationFunctionScrollPane
 					.setViewportView(getSumarizeFunctionsJList());
 
@@ -417,7 +411,7 @@ public class GeoProcessingDissolvePanel extends AbstractGeoprocessPanel implemen
 	/**
 	 * Returns a list with SumarizationFunctions for each numerical field of
 	 * field lists (in the same order).
-	 *
+	 * 
 	 * @return
 	 */
 	private JList getSumarizeFunctionsJList() {
@@ -429,7 +423,7 @@ public class GeoProcessingDissolvePanel extends AbstractGeoprocessPanel implemen
 
 	/**
 	 * This method initializes sumFunctionSelectionJButton
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getSumFunctionSelectionJButton() {
@@ -437,7 +431,8 @@ public class GeoProcessingDissolvePanel extends AbstractGeoprocessPanel implemen
 			sumFunctionSelectionJButton = new JButton();
 			sumFunctionSelectionJButton.setText(PluginServices.getText(this,
 					"Escoger_Fun_Resumen"));
-			sumFunctionSelectionJButton.setBounds(new java.awt.Rectangle(171,69,116,22));
+			sumFunctionSelectionJButton.setBounds(new java.awt.Rectangle(171,
+					69, 116, 22));
 			sumFunctionSelectionJButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					openSumarizeFunction();
@@ -482,11 +477,12 @@ public class GeoProcessingDissolvePanel extends AbstractGeoprocessPanel implemen
 		sumarizeFuncDialog.setVisible(true);
 		SummarizationFunction[] functions = sumarizeFuncDialog.getFunctions();
 
-		NumericFieldListEntry fieldName = (NumericFieldListEntry) this.numericFieldJList.getSelectedValue();
-		if(fieldName.getKey() != null  ){
-			if(!fieldName.getKey().equals(""))
-					nField_sumFuntionList.put(fieldName.getKey(), functions);
-	    }
+		NumericFieldListEntry fieldName = (NumericFieldListEntry) this.numericFieldJList
+				.getSelectedValue();
+		if (fieldName.getKey() != null) {
+			if (!fieldName.getKey().equals(""))
+				nField_sumFuntionList.put(fieldName.getKey(), functions);
+		}
 		this.nField_sumFuntionList.put(fieldName.getKey(), functions);
 
 		// Hay que refrescar la lista y el listModel
@@ -520,24 +516,24 @@ public class GeoProcessingDissolvePanel extends AbstractGeoprocessPanel implemen
 	public WindowInfo getWindowInfo() {
 		if (viewInfo == null) {
 			viewInfo = new WindowInfo(WindowInfo.MODALDIALOG);
-			viewInfo.setTitle(PluginServices.getText(this,
-					"Disolver"));
+			viewInfo.setTitle(PluginServices.getText(this, "Disolver"));
 		}
 		return viewInfo;
 	}
-	public Object getWindowProfile(){
+
+	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
 
 	/**
 	 * This method initializes resultLayerPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getResultLayerPanel() {
 		if (resultLayerPanel == null) {
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.insets = new java.awt.Insets(14,3,9,4);
+			gridBagConstraints3.insets = new java.awt.Insets(14, 3, 9, 4);
 			gridBagConstraints3.gridy = 0;
 			gridBagConstraints3.ipadx = 47;
 			gridBagConstraints3.ipady = 6;
@@ -549,21 +545,25 @@ public class GeoProcessingDissolvePanel extends AbstractGeoprocessPanel implemen
 			gridBagConstraints2.ipadx = 173;
 			gridBagConstraints2.ipady = 2;
 			gridBagConstraints2.weightx = 1.0;
-			gridBagConstraints2.insets = new java.awt.Insets(14,4,9,7);
+			gridBagConstraints2.insets = new java.awt.Insets(14, 4, 9, 7);
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.insets = new java.awt.Insets(14,7,9,21);
+			gridBagConstraints1.insets = new java.awt.Insets(14, 7, 9, 21);
 			gridBagConstraints1.gridy = 0;
 			gridBagConstraints1.ipadx = 11;
 			gridBagConstraints1.ipady = -4;
 			gridBagConstraints1.gridx = 2;
 			jLabel = new JLabel();
-			jLabel.setText(PluginServices.getText(this, "Cobertura_de_salida") + ":");
+			jLabel.setText(PluginServices.getText(this, "Cobertura_de_salida")
+					+ ":");
 			resultLayerPanel = new JPanel();
 			resultLayerPanel.setLayout(new GridBagLayout());
-			resultLayerPanel.setBounds(new java.awt.Rectangle(4,296,465,45));
-			resultLayerPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
+			resultLayerPanel.setBounds(new java.awt.Rectangle(4, 296, 465, 45));
+			resultLayerPanel
+					.setBorder(javax.swing.BorderFactory
+							.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
 			resultLayerPanel.add(getOutputCoverJButton(), gridBagConstraints1);
-			resultLayerPanel.add(getFileNameResultTextField(), gridBagConstraints2);
+			resultLayerPanel.add(getFileNameResultTextField(),
+					gridBagConstraints2);
 			resultLayerPanel.add(jLabel, gridBagConstraints3);
 		}
 		return resultLayerPanel;
@@ -571,24 +571,30 @@ public class GeoProcessingDissolvePanel extends AbstractGeoprocessPanel implemen
 
 	/**
 	 * This method initializes sumarizeAttributesPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getSumarizeAttributesPanel() {
 		if (sumarizeAttributesPanel == null) {
 			jLabel2 = new JLabel();
-			jLabel2.setText(PluginServices.getText(this, "Funciones_Sumarizacion"));
-			jLabel2.setBounds(new java.awt.Rectangle(294,9,159,18));
+			jLabel2.setText(PluginServices.getText(this,
+					"Funciones_Sumarizacion"));
+			jLabel2.setBounds(new java.awt.Rectangle(294, 9, 159, 18));
 			jLabel1 = new JLabel();
 			jLabel1.setText(PluginServices.getText(this, "Atributos_Numericos"));
-			jLabel1.setBounds(new java.awt.Rectangle(13,9,171,18));
+			jLabel1.setBounds(new java.awt.Rectangle(13, 9, 171, 18));
 			sumarizeAttributesPanel = new JPanel();
 			sumarizeAttributesPanel.setLayout(null);
-			sumarizeAttributesPanel.setBounds(new java.awt.Rectangle(5,142,465,151));
-			sumarizeAttributesPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
-			sumarizeAttributesPanel.add(getAdditionalOperationsJScrollPane(), null);
+			sumarizeAttributesPanel.setBounds(new java.awt.Rectangle(5, 142,
+					465, 151));
+			sumarizeAttributesPanel
+					.setBorder(javax.swing.BorderFactory
+							.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
+			sumarizeAttributesPanel.add(getAdditionalOperationsJScrollPane(),
+					null);
 			sumarizeAttributesPanel.add(getSumFunctionSelectionJButton(), null);
-			sumarizeAttributesPanel.add(getSumarizationFunctionScrollPane(), null);
+			sumarizeAttributesPanel.add(getSumarizationFunctionScrollPane(),
+					null);
 			sumarizeAttributesPanel.add(jLabel1, null);
 			sumarizeAttributesPanel.add(jLabel2, null);
 		}
@@ -597,16 +603,18 @@ public class GeoProcessingDissolvePanel extends AbstractGeoprocessPanel implemen
 
 	/**
 	 * This method initializes adjacencyCheckbox
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getAdjacencyCheckbox() {
 		if (adjacencyCheckbox == null) {
 			adjacencyCheckbox = new JCheckBox();
-			adjacencyCheckbox.setBounds(new java.awt.Rectangle(7,121,263,18));
-			adjacencyCheckbox.setText(PluginServices.getText(this, "Solo_disolver_adyacentes"));
+			adjacencyCheckbox
+					.setBounds(new java.awt.Rectangle(7, 121, 263, 18));
+			adjacencyCheckbox.setText(PluginServices.getText(this,
+					"Solo_disolver_adyacentes"));
 		}
 		return adjacencyCheckbox;
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="13,12"
+} // @jve:decl-index=0:visual-constraint="13,12"

@@ -6,6 +6,7 @@ import java.awt.event.KeyListener;
 import java.text.DecimalFormat;
 
 import javax.swing.JTextField;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -55,45 +56,46 @@ import javax.swing.JTextField;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class ClockText extends JTextField implements KeyListener{
+public class ClockText extends JTextField implements KeyListener {
 	String value = "";
 	DecimalFormat format = new DecimalFormat("#");
 
-	public ClockText(){
+	public ClockText() {
 		super("10");
-		addKeyListener(this);	
+		addKeyListener(this);
 
 	}
 
 	/**
 	 * @return the expiry time
 	 */
-	public int getExpiryTime(){
+	public int getExpiryTime() {
 		try {
 			return Integer.parseInt(getText());
-		} catch (NumberFormatException nfe){
+		} catch (NumberFormatException nfe) {
 			return 0;
 		}
 	}
 
 	/**
-	 * Change the background color. It means
-	 * a warning
+	 * Change the background color. It means a warning
 	 */
-	public void setWarning(){
+	public void setWarning() {
 		setForeground(Color.RED);
 	}
-	
+
 	/**
 	 * Sets the expiry time
+	 * 
 	 * @param i
 	 */
 	public void setExpiryTime(int i) {
-		setText(String.valueOf(i));		
+		setText(String.valueOf(i));
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
 	 */
 	public void keyPressed(KeyEvent e) {
@@ -102,18 +104,20 @@ public class ClockText extends JTextField implements KeyListener{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
 	 */
 	public void keyReleased(KeyEvent e) {
-		try{
+		try {
 			Integer.parseInt(getText());
-		}catch(Exception ex){
+		} catch (Exception ex) {
 			setText(value);
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.KeyListener#keyTyped(java.awt.event.KeyEvent)
 	 */
 	public void keyTyped(KeyEvent e) {

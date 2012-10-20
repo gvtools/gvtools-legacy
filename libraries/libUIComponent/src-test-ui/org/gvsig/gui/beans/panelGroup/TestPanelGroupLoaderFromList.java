@@ -29,15 +29,19 @@ import org.gvsig.gui.beans.panelGroup.panels.IPanel;
 import org.gvsig.gui.beans.panelGroup.samples.Samples_Data;
 
 /**
- * <p>Tests {@link PanelGroupLoaderUtilities PanelGroupLoaderUtilities} and {@link PanelGroupLoaderFromList PanelGroupLoaderFromList}.</p>
+ * <p>
+ * Tests {@link PanelGroupLoaderUtilities PanelGroupLoaderUtilities} and
+ * {@link PanelGroupLoaderFromList PanelGroupLoaderFromList}.
+ * </p>
  * 
  * @version 16/10/2007
- * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es) 
+ * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class TestPanelGroupLoaderFromList extends TestCase {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see junit.framework.TestCase#setUp()
 	 */
 	protected void setUp() throws Exception {
@@ -46,6 +50,7 @@ public class TestPanelGroupLoaderFromList extends TestCase {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see junit.framework.TestCase#tearDown()
 	 */
 	protected void tearDown() throws Exception {
@@ -53,18 +58,21 @@ public class TestPanelGroupLoaderFromList extends TestCase {
 	}
 
 	/**
-	 * <p>Test, results must be valid.</p>
+	 * <p>
+	 * Test, results must be valid.
+	 * </p>
 	 */
 	public void test() {
 		try {
-			PanelGroupLoaderFromList loader = new PanelGroupLoaderFromList(Samples_Data.TEST2_CLASSES);
+			PanelGroupLoaderFromList loader = new PanelGroupLoaderFromList(
+					Samples_Data.TEST2_CLASSES);
 			ArrayList<IPanel> panels = new ArrayList<IPanel>();
 
 			loader.loadPanels(panels);
 
 			// Check that has loaded all panels
 			assertEquals(Samples_Data.TEST2_CLASSES.length, panels.size());
-			
+
 			int i = 0;
 
 			while (i < Samples_Data.TEST2_CLASSES.length) {

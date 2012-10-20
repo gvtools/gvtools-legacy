@@ -53,8 +53,8 @@ import com.hardcode.gdbms.engine.spatial.fmap.AbstractFMapFileDriver;
 import com.iver.cit.gvsig.fmap.drivers.shp.IndexedShpDriver;
 import com.iver.cit.gvsig.fmap.layers.VectorialFileAdapter;
 
-
-public class FMapShapefileDriver extends AbstractFMapFileDriver implements SpatialFileDriver {
+public class FMapShapefileDriver extends AbstractFMapFileDriver implements
+		SpatialFileDriver {
 
 	/**
 	 * @see com.hardcode.gdbms.engine.data.driver.FileDriver#open(java.io.File)
@@ -79,6 +79,6 @@ public class FMapShapefileDriver extends AbstractFMapFileDriver implements Spati
 		return "FMap ShapeFile Driver";
 	}
 
-    public void setDataSourceFactory(DataSourceFactory dsf) {
-    }
+	public void setDataSourceFactory(DataSourceFactory dsf) {
+	}
 }

@@ -55,9 +55,9 @@ import junit.framework.TestSuite;
 public class GMLsfp0WritersTestSuite {
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.gvsig.gpe.gml.writers");
-		//$JUnit-BEGIN$
-		suite.addTestSuite(GMLPolygonsLayerTest.class);	
-		//$JUnit-END$
+		// $JUnit-BEGIN$
+		suite.addTestSuite(GMLPolygonsLayerTest.class);
+		// $JUnit-END$
 		return suite;
 	}
 }

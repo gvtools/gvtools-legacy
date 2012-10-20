@@ -90,66 +90,65 @@ public abstract class GPEFeatureWithElementsTest extends GPEWriterBaseTest {
 	private String element3Name = "Capital";
 	private String element3Value = "false";
 	private String element3Type = TypeUtils.getXSType(element3Value.getClass());
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#readObjects()
 	 */
 	public void readObjects() {
 		Layer[] layers = getLayers();
-		assertEquals(layers.length, 1);		
+		assertEquals(layers.length, 1);
 		Layer layer = layers[0];
-	
+
 		assertEquals(layer.getFeatures().size(), 1);
-		//FEATURE 1
-		Feature feature1 = (Feature)layer.getFeatures().get(0);
+		// FEATURE 1
+		Feature feature1 = (Feature) layer.getFeatures().get(0);
 		Element element1 = feature1.getElementAt(0);
 		assertEquals(element1.getName(), element1Name);
 		assertEquals(element1.getValue(), element1Value.toString());
-		//assertEquals(element1.getType(), element1Type);
+		// assertEquals(element1.getType(), element1Type);
 		Element element2 = feature1.getElementAt(1);
 		assertEquals(element2.getName(), element2Name);
 		assertEquals(element2.getValue(), element2Value.toString());
-		//assertEquals(element2.getType(), element2Type);
+		// assertEquals(element2.getType(), element2Type);
 		Element element3 = feature1.getElementAt(2);
 		assertEquals(element3.getName(), element3Name);
 		assertEquals(element3.getValue(), element3Value.toString());
-		//assertEquals(element3.getType(), element3Type);
-		
+		// assertEquals(element3.getType(), element3Type);
+
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#writeObjects()
 	 */
 	public void writeObjects() {
 		getWriterHandler().initialize();
-		getWriterHandler().startLayer(layerId, null, layerName, layerDescription, srs);
+		getWriterHandler().startLayer(layerId, null, layerName,
+				layerDescription, srs);
 		getWriterHandler().startFeature(feature1Id, null, feature1Name);
-		getWriterHandler().startPoint(point1Id, new CoordinatesSequence(point1X, point1Y, point1Z), srs);
-		getWriterHandler().endPoint();	
-		getWriterHandler().startElement(namespace,
-				element1Name,
-				element1Value);
+		getWriterHandler().startPoint(point1Id,
+				new CoordinatesSequence(point1X, point1Y, point1Z), srs);
+		getWriterHandler().endPoint();
+		getWriterHandler().startElement(namespace, element1Name, element1Value);
 		getWriterHandler().endElement();
-		getWriterHandler().startElement(namespace,
-				element2Name,
-				element2Value);
+		getWriterHandler().startElement(namespace, element2Name, element2Value);
 		getWriterHandler().endElement();
-		getWriterHandler().startElement(namespace,
-				element3Name,
-				element3Value);
+		getWriterHandler().startElement(namespace, element3Name, element3Value);
 		getWriterHandler().endElement();
-		getWriterHandler().endFeature();		
+		getWriterHandler().endFeature();
 		getWriterHandler().endLayer();
-		getWriterHandler().close();		
+		getWriterHandler().close();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getSchemaPath()
 	 */
-	protected String getSchemaPath(){
+	protected String getSchemaPath() {
 		return new File("testdata/cities.xsd").getAbsolutePath();
 	}
 }

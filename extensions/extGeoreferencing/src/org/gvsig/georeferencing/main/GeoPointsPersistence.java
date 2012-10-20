@@ -44,17 +44,18 @@ import org.gvsig.raster.util.RasterToolsUtil;
 
 import com.iver.andami.PluginServices;
 
-
 /**
  * Operaciones de lectura y escritura en disco de puntos de control.
  * 
  * 26/12/2007
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class GeoPointsPersistence {
-	
+
 	/**
 	 * Salva a rmf la lista de puntos
+	 * 
 	 * @param pointList
 	 * @param parent
 	 * @param dataset
@@ -66,22 +67,25 @@ public class GeoPointsPersistence {
 		GeoPointList geoPointList = new GeoPointList();
 		for (int i = 0; i < pointList.size(); i++)
 			geoPointList.add(((GPGraphic) pointList.get(i)).getGeoPoint());
-		
+
 		try {
 			for (int i = 0; i < dataset.getDatasetCount(); i++)
-				dataset.getDataset(i)[0].saveObjectToRmf(GeoPointList.class, geoPointList);
+				dataset.getDataset(i)[0].saveObjectToRmf(GeoPointList.class,
+						geoPointList);
 		} catch (RmfSerializerException e) {
 			RasterToolsUtil.messageBoxError("error_salvando_rmf", null, e);
 		}
 	}
-	
+
 	/**
 	 * Carga desde el rmf asociado los puntos de control guardados si los tiene
+	 * 
 	 * @param pointList
 	 * @param parent
 	 * @param dataset
 	 */
-	public void loadFromRMF(IRasterDataSource dataset, LayersPointManager layerPointsManager, GCPTablePanel tablePanel) {
+	public void loadFromRMF(IRasterDataSource dataset,
+			LayersPointManager layerPointsManager, GCPTablePanel tablePanel) {
 		try {
 			if (!RasterToolsUtil.messageBoxYesOrNot("eliminar_puntos", null))
 				return;
@@ -91,16 +95,19 @@ public class GeoPointsPersistence {
 			tablePanel.removeAllPoints();
 
 			// Cargamos los puntos leídos del RMF
-			GeoPointList pointList = (GeoPointList) dataset.getDataset(0)[0].loadObjectFromRmf(GeoPointList.class, null);
-			if(pointList == null) {
+			GeoPointList pointList = (GeoPointList) dataset.getDataset(0)[0]
+					.loadObjectFromRmf(GeoPointList.class, null);
+			if (pointList == null) {
 				RasterToolsUtil.messageBoxInfo("no_points_to_load", null);
 				return;
 			}
-			
+
 			for (int i = 0; i < pointList.size(); i++) {
 				GeoPoint point = pointList.get(i);
-				long id = layerPointsManager.addPoint(point.mapPoint, point.pixelPoint);
-				tablePanel.addRow(true, point.mapPoint, point.pixelPoint, 0, 0, 0, 0, id);
+				long id = layerPointsManager.addPoint(point.mapPoint,
+						point.pixelPoint);
+				tablePanel.addRow(true, point.mapPoint, point.pixelPoint, 0, 0,
+						0, 0, id);
 			}
 			layerPointsManager.calcPointsNumeration(tablePanel);
 			tablePanel.updateErrors();
@@ -110,23 +117,24 @@ public class GeoPointsPersistence {
 			RasterToolsUtil.messageBoxError("table_not_initialize", tablePanel);
 		}
 	}
-	
+
 	/**
 	 * Función que se ejecuta al pulsar el botón de export a ascii
 	 */
 	public void exportToCSV(ArrayList pointList, boolean error) {
 		for (int i = 0; i < pointList.size(); i++) {
-			if(!(pointList.get(i) instanceof GPGraphic))
+			if (!(pointList.get(i) instanceof GPGraphic))
 				return;
 		}
 
 		JFileChooser chooser = new JFileChooser();
-		chooser.setDialogTitle(RasterToolsUtil.getText(this, "seleccionar_fichero"));
+		chooser.setDialogTitle(RasterToolsUtil.getText(this,
+				"seleccionar_fichero"));
 
 		int returnVal = chooser.showSaveDialog(null);
-		if(returnVal == JFileChooser.APPROVE_OPTION){
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			String fName = chooser.getSelectedFile().toString();
-			if(!fName.endsWith(".csv"))
+			if (!fName.endsWith(".csv"))
 				fName = fName + ".csv";
 			saveCSVPointList(fName, pointList, error);
 		}
@@ -135,15 +143,17 @@ public class GeoPointsPersistence {
 	/**
 	 * Función que se ejecuta al pulsar el botón de importar desde CSV
 	 */
-	public void importFromCSV(LayersPointManager layerPointsManager, GCPTablePanel tablePanel) {
+	public void importFromCSV(LayersPointManager layerPointsManager,
+			GCPTablePanel tablePanel) {
 		JFileChooser chooser = new JFileChooser();
-		chooser.setDialogTitle(RasterToolsUtil.getText(this, "seleccionar_fichero"));
+		chooser.setDialogTitle(RasterToolsUtil.getText(this,
+				"seleccionar_fichero"));
 		ExtendedFileFilter fileFilter = null;
 
 		fileFilter = new ExtendedFileFilter();
 		fileFilter.addExtension("csv");
 		fileFilter.setDescription(PluginServices.getText(this, "Ficheros_csv"));
-			
+
 		chooser.addChoosableFileFilter(fileFilter);
 
 		if (fileFilter != null)
@@ -152,71 +162,80 @@ public class GeoPointsPersistence {
 		int returnVal = chooser.showOpenDialog(null);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File f = chooser.getSelectedFile();
-			if(!f.exists()) {
+			if (!f.exists()) {
 				RasterToolsUtil.messageBoxError("error_file_not_found", null);
 				return;
 			}
-			if(!RasterToolsUtil.messageBoxYesOrNot("eliminar_puntos", null))
+			if (!RasterToolsUtil.messageBoxYesOrNot("eliminar_puntos", null))
 				return;
-			loadCSVPointList(f.getAbsolutePath(), layerPointsManager, tablePanel);
+			loadCSVPointList(f.getAbsolutePath(), layerPointsManager,
+					tablePanel);
 			tablePanel.updateErrors();
 		}
 	}
-	
+
 	/**
 	 * Crea el fichero Ascii con la lista de puntos y la salva a disco
+	 * 
 	 * @param file
 	 */
-	public void saveCSVPointList(String file, ArrayList pointList, boolean error){
-		try{
-			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
-			if(error)
+	public void saveCSVPointList(String file, ArrayList pointList, boolean error) {
+		try {
+			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
+					new FileOutputStream(file)));
+			if (error)
 				out.write("\"Pt\",\"X\",\"Y\",\"X'\",\"Y'\",\"ErrX\",\"ErrY\",\"RMS\"\n");
 			else
 				out.write("\"Pt\",\"X\",\"Y\",\"X'\",\"Y'\"\n");
 
-			for(int i = 0; i < pointList.size(); i++) {
-				GeoPoint geoPoint =  (GeoPoint)((GPGraphic)pointList.get(i)).getGeoPoint();
-				String point = i + "," +
-								geoPoint.pixelPoint.getX() + "," +
-								geoPoint.pixelPoint.getY() + "," +
-								geoPoint.mapPoint.getX() + "," +
-								geoPoint.mapPoint.getY();
+			for (int i = 0; i < pointList.size(); i++) {
+				GeoPoint geoPoint = (GeoPoint) ((GPGraphic) pointList.get(i))
+						.getGeoPoint();
+				String point = i + "," + geoPoint.pixelPoint.getX() + ","
+						+ geoPoint.pixelPoint.getY() + ","
+						+ geoPoint.mapPoint.getX() + ","
+						+ geoPoint.mapPoint.getY();
 				String errorTxt = "";
-				try{
-					errorTxt = geoPoint.getErrorX() + "," + geoPoint.getErrorY() + "," + geoPoint.getRms();
-					if(error)
+				try {
+					errorTxt = geoPoint.getErrorX() + ","
+							+ geoPoint.getErrorY() + "," + geoPoint.getRms();
+					if (error)
 						out.write(point + "," + errorTxt + "\n");
 					else
 						out.write(point + "\n");
-				}catch(ArrayIndexOutOfBoundsException ex){
+				} catch (ArrayIndexOutOfBoundsException ex) {
 					out.write(point + "\n");
 				}
 			}
 			out.close();
-		}catch(FileNotFoundException ex){
-			//No salvamos el csv
-		}catch(IOException ex){
-			//No salvamos el csv
+		} catch (FileNotFoundException ex) {
+			// No salvamos el csv
+		} catch (IOException ex) {
+			// No salvamos el csv
 		}
 	}
-	
+
 	/**
 	 * Crea la lista de puntos a partir de un fichero CSV
+	 * 
 	 * @param file
 	 */
-	private void loadCSVPointList(String file, LayersPointManager layerPointsManager, GCPTablePanel tablePanel){
-		try{
-			BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+	private void loadCSVPointList(String file,
+			LayersPointManager layerPointsManager, GCPTablePanel tablePanel) {
+		try {
+			BufferedReader in = new BufferedReader(new InputStreamReader(
+					new FileInputStream(file)));
 			String line = in.readLine();
 			int nPoint = 0;
-			while(line != null) {
-				if(nPoint == 0) {
-					if(!line.equals("\"Pt\",\"X\",\"Y\",\"X'\",\"Y'\",\"ErrX\",\"ErrY\",\"RMS\"") && 
-							!line.equals("\"Pt\",\"X\",\"Y\",\"X'\",\"Y'\"") && 
-							!line.equals("\"Pt\",\"X\",\"Y\",\"X'\",\"Y'\",\"Z\",\"ErrX\",\"ErrY\",\"RMS\"") &&
-							!line.equals("\"Pt\",\"X\",\"Y\",\"X'\",\"Y'\",\"Z\"")) {
-						RasterToolsUtil.messageBoxError("error_point_file", null);
+			while (line != null) {
+				if (nPoint == 0) {
+					if (!line
+							.equals("\"Pt\",\"X\",\"Y\",\"X'\",\"Y'\",\"ErrX\",\"ErrY\",\"RMS\"")
+							&& !line.equals("\"Pt\",\"X\",\"Y\",\"X'\",\"Y'\"")
+							&& !line.equals("\"Pt\",\"X\",\"Y\",\"X'\",\"Y'\",\"Z\",\"ErrX\",\"ErrY\",\"RMS\"")
+							&& !line.equals("\"Pt\",\"X\",\"Y\",\"X'\",\"Y'\",\"Z\"")) {
+						RasterToolsUtil.messageBoxError("error_point_file",
+								null);
 						return;
 					} else {
 						layerPointsManager.removeAllPoints();
@@ -225,27 +244,27 @@ public class GeoPointsPersistence {
 				} else {
 					double x = 0D, y = 0D, xx = 0D, yy = 0D;
 					String[] tokens = line.split(",");
-						for(int tok = 0; tok < tokens.length; tok++){
-							try{
-								if(tok == 1)
-									x = Double.parseDouble(tokens[tok]);
-								if(tok == 2)
-									y = Double.parseDouble(tokens[tok]);
-								if(tok == 3)
-									xx = Double.parseDouble(tokens[tok]);
-								if(tok == 4)
-									yy = Double.parseDouble(tokens[tok]);
-							}catch(NumberFormatException ex){
-								break;
-							}
+					for (int tok = 0; tok < tokens.length; tok++) {
+						try {
+							if (tok == 1)
+								x = Double.parseDouble(tokens[tok]);
+							if (tok == 2)
+								y = Double.parseDouble(tokens[tok]);
+							if (tok == 3)
+								xx = Double.parseDouble(tokens[tok]);
+							if (tok == 4)
+								yy = Double.parseDouble(tokens[tok]);
+						} catch (NumberFormatException ex) {
+							break;
 						}
-					
-					if(x == 0 && y == 0 && xx == 0 && yy == 0){
+					}
+
+					if (x == 0 && y == 0 && xx == 0 && yy == 0) {
 						line = in.readLine();
 						continue;
 					}
-	
-						Point2D p = new Point2D.Double();
+
+					Point2D p = new Point2D.Double();
 					p.setLocation(x, y);
 					Point2D m = new Point2D.Double();
 					m.setLocation(xx, yy);
@@ -257,11 +276,11 @@ public class GeoPointsPersistence {
 			}
 			in.close();
 			layerPointsManager.calcPointsNumeration(tablePanel);
-		} catch(FileNotFoundException ex){
-			//No salvamos el csv
-		} catch(IOException ex){
-			//No salvamos el csv
-		} catch(NotInitializeException ex){
+		} catch (FileNotFoundException ex) {
+			// No salvamos el csv
+		} catch (IOException ex) {
+			// No salvamos el csv
+		} catch (NotInitializeException ex) {
 			RasterToolsUtil.messageBoxError("table_not_initialize", tablePanel);
 		}
 	}

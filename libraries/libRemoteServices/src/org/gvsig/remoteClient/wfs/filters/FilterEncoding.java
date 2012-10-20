@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package org.gvsig.remoteClient.wfs.filters;
+
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -48,12 +48,12 @@ import java.util.Set;
 import org.gvsig.remoteClient.wfs.filters.BinaryTree.Node;
 
 /**
- * This class implements the Filter Encoding Language. It is used to
- * create querys in this language
+ * This class implements the Filter Encoding Language. It is used to create
+ * querys in this language
  * 
- * Name: OpenGIS® Filter Encoding Implementation Specification
- * Version: 1.1.0
- * Project Document: OGC 04-095 
+ * Name: OpenGIS® Filter Encoding Implementation Specification Version: 1.1.0
+ * Project Document: OGC 04-095
+ * 
  * @see http://portal.opengeospatial.org/files/?artifact_id=8340
  * 
  * @author Jorge Piera Llodra (piera_jor@gva.es)
@@ -63,21 +63,21 @@ public class FilterEncoding extends AFilter {
 	public static final int RELATIONSHIP_VAUES = 1;
 
 	private StringBuffer currentQuery = null;
-	//Operation types
+	// Operation types
 	private static final int OPERATION_PROPERTYNAME = 0;
 	private static final int OPERATION_LITERAL = 1;
-	//Filter namespace. (typically "ogc")
+	// Filter namespace. (typically "ogc")
 	private String namepacePrefix = null;
-	//If the Filter can have blanckSpaces
+	// If the Filter can have blanckSpaces
 	private boolean hasBlankSpaces = true;
 	private String defaultBlankSpace = "%20";
-	//This character must be replaced by any set of characters (typically "*")
+	// This character must be replaced by any set of characters (typically "*")
 	private String wildCardChar = null;
-	//This character must be replaced by one character (typically "?")
+	// This character must be replaced by one character (typically "?")
 	private String singleChar = null;
-	//Escape character (typically "\")
+	// Escape character (typically "\")
 	private String escapeChar = null;
-	//Default values
+	// Default values
 	public static final String DEFAULT_NAMESPACE_PREFIX = "ogc";
 	public static final String DEFAULT_WILDCARD = "*";
 	public static final String DEFAULT_SINGLECHAR = "?";
@@ -96,143 +96,153 @@ public class FilterEncoding extends AFilter {
 	 * 
 	 * 
 	 * @param namepacePrefix
-	 * Filter namespace. (typically "ogc")
-	 * @param wildCardChar 
-	 * This character must be replaced by any set of characters (typically "*")
-	 * @param singleChar 
-	 * This character must be replaced by one character (typically "?")
-	 * @param escape 
-	 * Escape character
-	 * @param filterAttribute Sometimes, "Field" label needs an attribute.
+	 *            Filter namespace. (typically "ogc")
+	 * @param wildCardChar
+	 *            This character must be replaced by any set of characters
+	 *            (typically "*")
+	 * @param singleChar
+	 *            This character must be replaced by one character (typically
+	 *            "?")
+	 * @param escape
+	 *            Escape character
+	 * @param filterAttribute
+	 *            Sometimes, "Field" label needs an attribute.
 	 */
-	public FilterEncoding(ISQLExpressionFormat formatter,String namesPacePrefix, String wildCard, String singleChar, String escape, Hashtable filterAttributes) {        
+	public FilterEncoding(ISQLExpressionFormat formatter,
+			String namesPacePrefix, String wildCard, String singleChar,
+			String escape, Hashtable filterAttributes) {
 		super(formatter);
-		if (namesPacePrefix == null){
+		if (namesPacePrefix == null) {
 			setQualified(false);
-		}else{
+		} else {
 			setQualified(true);
 		}
 		this.wildCardChar = wildCard;
 		this.singleChar = singleChar;
 		this.escapeChar = escape;
 		this.filterAttributes = filterAttributes;
-	} 
-
+	}
 
 	/**
 	 * Create a new Filter Encoding Parser
+	 * 
 	 * @param formatter
 	 */
-	public FilterEncoding(ISQLExpressionFormat formatter) {        
-		this(formatter,null,DEFAULT_WILDCARD,DEFAULT_SINGLECHAR,
-				DEFAULT_ESCAPE,new Hashtable());
-	} 
+	public FilterEncoding(ISQLExpressionFormat formatter) {
+		this(formatter, null, DEFAULT_WILDCARD, DEFAULT_SINGLECHAR,
+				DEFAULT_ESCAPE, new Hashtable());
+	}
 
 	/**
 	 * Create a new Filter Encoding Parser
 	 */
-	public FilterEncoding() {        
-		this(new DefaultSQLExpressionFormat());		
-	} 
+	public FilterEncoding() {
+		this(new DefaultSQLExpressionFormat());
+	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see org.gvsig.remoteClient.filterEncoding.QueryLanguage#toString(org.gvsig.remoteClient.filterEncoding.BinaryTree)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.filterEncoding.QueryLanguage#toString(org.gvsig
+	 * .remoteClient.filterEncoding.BinaryTree)
 	 */
 	protected String toString(BinaryTree tree) {
-		//If is a filter by ids...
+		// If is a filter by ids...
 		StringBuffer idQuery = null;
-		if (getIds() != null){
+		if (getIds() != null) {
 			idQuery = new StringBuffer();
 			ArrayList ids = getIds();
-			for (int i=0 ; i<ids.size() ; i++){
-				if (ids.get(i) != null){
+			for (int i = 0; i < ids.size(); i++) {
+				if (ids.get(i) != null) {
 					Hashtable attributes = new Hashtable();
-					attributes.put("fid","\"" + ids.get(i).toString() + "\"");
+					attributes.put("fid", "\"" + ids.get(i).toString() + "\"");
 					idQuery.append(setTag("FeatureId", attributes, null));
 				}
 			}
 			return enclosesWithFilterTag(idQuery.toString());
 		}
-		//If is a filter by attributes...
+		// If is a filter by attributes...
 		String filterQuery = null;
-		if ((tree.getRoot() == null) && (getBbox() == null)){
+		if ((tree.getRoot() == null) && (getBbox() == null)) {
 			return null;
 		}
-		if (tree.getRoot() != null){
+		if (tree.getRoot() != null) {
 			currentQuery = new StringBuffer();
 			filterQuery = getFilterNode(tree.getRoot());
-			if (getBbox() == null){
+			if (getBbox() == null) {
 				return enclosesWithFilterTag(filterQuery);
 			}
 		}
-		//If is a filter by area
+		// If is a filter by area
 		String bboxQuery = null;
-		if (getBbox() != null){
+		if (getBbox() != null) {
 			bboxQuery = enterLabel(getBboxPropertyName(), "PropertyName");
 			bboxQuery = bboxQuery + new GMLBBox().createBBOX(getBbox());
 			bboxQuery = enterLabel(bboxQuery, "Within");
-			if (tree.getRoot() == null){
+			if (tree.getRoot() == null) {
 				return enclosesWithFilterTag(bboxQuery);
 			}
-		}		
+		}
 		return enclosesWithFilterTag(filterQuery + bboxQuery);
 	}
 
 	/**
 	 * Gets the filter code from a node
+	 * 
 	 * @param node
 	 */
-	private String getFilterNode(Node node){
-		if (node.isField()){
+	private String getFilterNode(Node node) {
+		if (node.isField()) {
 			return getExpression(node.getValue());
-		}else{
+		} else {
 			String left = "";
 			String rigth = "";
-			if (node.getLeftNode() != null){
+			if (node.getLeftNode() != null) {
 				left = getFilterNode(node.getLeftNode());
 			}
-			if (node.getRigthNode() != null){
+			if (node.getRigthNode() != null) {
 				rigth = getFilterNode(node.getRigthNode());
 			}
 			int operationCode = getLogicalOperator(node.getValue());
 			String operation = getLogicalOperator(operationCode);
-			return enterLabel(left+rigth, operation);
-		}		
-	}   
+			return enterLabel(left + rigth, operation);
+		}
+	}
 
 	/**
-	 * Parses a expresion like 'A op B' and returns the
-	 * expresion using the filter encoding language
+	 * Parses a expresion like 'A op B' and returns the expresion using the
+	 * filter encoding language
+	 * 
 	 * @param expression
 	 * @return
 	 */
-	private String getExpression(String expression){
+	private String getExpression(String expression) {
 		String[] words = expression.split(" ");
-		//Param
+		// Param
 		String param = words[0];
-		if (param.charAt(0) == '"'){
-			param = param.substring(1,param.length());
+		if (param.charAt(0) == '"') {
+			param = param.substring(1, param.length());
 		}
-		if (param.charAt(param.length()-1) == '"'){
-			param = param.substring(0,param.length()-1);
+		if (param.charAt(param.length() - 1) == '"') {
+			param = param.substring(0, param.length() - 1);
 		}
-		//Operator
+		// Operator
 		String operator = words[1];
-		//Value
-		String value = words[2];		
-		for (int i=3 ; i<words.length ; i++){
+		// Value
+		String value = words[2];
+		for (int i = 3; i < words.length; i++) {
 			value = value + " " + words[i];
 		}
-		if (value.charAt(0) == '\''){
-			value = value.substring(1,value.length());
+		if (value.charAt(0) == '\'') {
+			value = value.substring(1, value.length());
 		}
-		if (value.charAt(value.length()-1) == '\''){
-			value = value.substring(0,value.length()-1);
+		if (value.charAt(value.length() - 1) == '\'') {
+			value = value.substring(0, value.length() - 1);
 		}
 		int operatorCode = getRelationalOperator(operator);
 		operator = getRelationalOperator(operatorCode);
-		return createExpression(operator,param,value);
+		return createExpression(operator, param, value);
 	}
 
 	/**
@@ -240,14 +250,19 @@ public class FilterEncoding extends AFilter {
 	 * 
 	 * 
 	 * @return The part of the query
-	 * @param property Possible Values: PropertIsLike, PropertyIsLess, PropertyIsGreater,... See
-	 * the Filter Encoding documentation
-	 * @param parameter Parameter name
-	 * @param value Parameter value
-	 * @param type Values: "P" (to comparate two propertyes) or "L" (to comparate one property
-	 * and one literal value)
+	 * @param property
+	 *            Possible Values: PropertIsLike, PropertyIsLess,
+	 *            PropertyIsGreater,... See the Filter Encoding documentation
+	 * @param parameter
+	 *            Parameter name
+	 * @param value
+	 *            Parameter value
+	 * @param type
+	 *            Values: "P" (to comparate two propertyes) or "L" (to comparate
+	 *            one property and one literal value)
 	 */
-	private String createExpression(String property, String parameter, String value) {        
+	private String createExpression(String property, String parameter,
+			String value) {
 		String cadena = "";
 		cadena = "<" + namepacePrefix + property;
 		if (property.equals("PropertyIsLike")) {
@@ -264,61 +279,62 @@ public class FilterEncoding extends AFilter {
 		cadena = cadena + ">" + enterLabel(parameter, "PropertyName");
 		cadena = cadena + enterLabel(value, "Literal");
 		return cadena + "</" + namepacePrefix + property + ">";
-	} 	
+	}
 
 	/**
 	 * Envuelve a una pregunta con una etiqueta
 	 * 
 	 * 
 	 * @return String : parte de la query en el lenguaje soportado
-	 * @param pregunta Pregunta a envolver
-	 * @param etiqueta Nombre de la etiqueta
+	 * @param pregunta
+	 *            Pregunta a envolver
+	 * @param etiqueta
+	 *            Nombre de la etiqueta
 	 */
-	private String enterLabel(String value, String tagName) {        
+	private String enterLabel(String value, String tagName) {
 		if (tagName.equals("Filter") && (!(filterAttributes.isEmpty()))) {
-			return setTag(tagName,filterAttributes,value);
+			return setTag(tagName, filterAttributes, value);
 		} else {
-			return setTag(tagName,null,value);
+			return setTag(tagName, null, value);
 		}
-	} 
+	}
 
 	/**
 	 * Envolves a value with an XML tag
 	 * 
-	 * @return String
-	 * XML tag with its value
-	 * @param tagName 
-	 * XML tag name
+	 * @return String XML tag with its value
+	 * @param tagName
+	 *            XML tag name
 	 * @param attributes
-	 * XML tag attributes
-	 * @param value 
-	 * Tag value
+	 *            XML tag attributes
+	 * @param value
+	 *            Tag value
 	 */
-	public String setTag(String tagName, Hashtable attributes, String value) {        
+	public String setTag(String tagName, Hashtable attributes, String value) {
 		StringBuffer tag = new StringBuffer();
 
 		tag.append("<");
 		tag.append(namepacePrefix);
-		tag.append(tagName);    	
-		if (attributes != null){
+		tag.append(tagName);
+		if (attributes != null) {
 			Set keys = attributes.keySet();
-			if (attributes.size() > 0){
+			if (attributes.size() > 0) {
 				Iterator it = keys.iterator();
-				while (it.hasNext()){
-					String key = (String)it.next();
-					if (hasBlankSpaces){
+				while (it.hasNext()) {
+					String key = (String) it.next();
+					if (hasBlankSpaces) {
 						tag.append(" ");
-					}else{
+					} else {
 						tag.append(defaultBlankSpace);
 					}
-					tag.append(key + "=" + (String)attributes.get(key));
+					tag.append(key + "=" + (String) attributes.get(key));
 
 				}
 			}
 		}
-		if (value == null){
+		if (value == null) {
 			tag.append("/>");
-		}else{
+		} else {
 			tag.append(">" + value);
 			tag.append("</");
 			tag.append(namepacePrefix);
@@ -328,19 +344,19 @@ public class FilterEncoding extends AFilter {
 		return tag.toString();
 	}
 
-
 	/**
 	 * Encloses a query with the filter tag
+	 * 
 	 * @param query
 	 * @return
 	 */
-	private String enclosesWithFilterTag(String query){
+	private String enclosesWithFilterTag(String query) {
 		StringBuffer filter = new StringBuffer();
 		filter.append("<" + namepacePrefix + "Filter");
-		if (!isQualified){
+		if (!isQualified) {
 			filter.append("%20");
 			filter.append("xmlns:ogc=\"http://www.opengis.net/ogc\"%20");
-			filter.append("xmlns:gml=\"http://www.opengis.net/gml\"%20"); 
+			filter.append("xmlns:gml=\"http://www.opengis.net/gml\"%20");
 			filter.append("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"%20");
 			filter.append("xsi:schemaLocation=\"http://www.opengis.net/ogc%20../filter/1.0.0/filter.xsd%20http://www.opengis.net/gml%20../gml/2.1.2/geometry.xsd\"");
 		}
@@ -351,11 +367,14 @@ public class FilterEncoding extends AFilter {
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see org.gvsig.remoteClient.filterEncoding.AQueryLanguage#getLogicOperator(int)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.filterEncoding.AQueryLanguage#getLogicOperator
+	 * (int)
 	 */
 	public String getLogicalOperator(int operator) {
-		switch (operator){
+		switch (operator) {
 		case LOGICAL_OPERATOR_AND:
 			return "And";
 		case LOGICAL_OPERATOR_OR:
@@ -364,15 +383,18 @@ public class FilterEncoding extends AFilter {
 			return "Not";
 		default:
 			return "And";
-		}    
-	} 
+		}
+	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see org.gvsig.remoteClient.filterEncoding.AQueryLanguage#getRelationalOperator(int)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.filterEncoding.AQueryLanguage#getRelationalOperator
+	 * (int)
 	 */
 	public String getRelationalOperator(int operator) {
-		switch (operator){
+		switch (operator) {
 		case RELATIONAL_OPERATOR_IS_EQUALS_TO:
 			return "PropertyIsEqualTo";
 		case RELATIONAL_OPERATOR_IS_NOT_EQUALS_TO:
@@ -397,11 +419,14 @@ public class FilterEncoding extends AFilter {
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see org.gvsig.remoteClient.filterEncoding.AQueryLanguage#getGeometricOperator(int)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.filterEncoding.AQueryLanguage#getGeometricOperator
+	 * (int)
 	 */
 	public String getGeometricOperator(int operator) {
-		switch (operator){
+		switch (operator) {
 		case GEOMETRIC_OPERATOR_EQUALS:
 			return "Equals";
 		case GEOMETRIC_OPERATOR_DISJOINT:
@@ -426,7 +451,7 @@ public class FilterEncoding extends AFilter {
 			return "BBOX";
 		default:
 			return "Equals";
-		} 
+		}
 
 	}
 
@@ -435,32 +460,33 @@ public class FilterEncoding extends AFilter {
 	}
 
 	/**
-	 * @param isQualified the isQualified to set
+	 * @param isQualified
+	 *            the isQualified to set
 	 */
 	public void setQualified(boolean isQualified) {
 		this.isQualified = isQualified;
-		if (isQualified){
+		if (isQualified) {
 			namepacePrefix = DEFAULT_NAMESPACE_PREFIX + ":";
-		}else{
+		} else {
 			namepacePrefix = "";
 		}
 	}
 
-
 	/**
-	 * @param namepacePrefix the namepacePrefix to set
+	 * @param namepacePrefix
+	 *            the namepacePrefix to set
 	 */
 	public void setNamepacePrefix(String namepacePrefix) {
-		if ((namepacePrefix == null) || (namepacePrefix.equals(""))){
+		if ((namepacePrefix == null) || (namepacePrefix.equals(""))) {
 			this.namepacePrefix = "";
-		}else{
+		} else {
 			this.namepacePrefix = namepacePrefix + ":";
 		}
 	}
 
-
 	/**
-	 * @param hasBlankSpaces the hasBlankSpaces to set
+	 * @param hasBlankSpaces
+	 *            the hasBlankSpaces to set
 	 */
 	public void setHasBlankSpaces(boolean hasBlankSpaces) {
 		this.hasBlankSpaces = hasBlankSpaces;

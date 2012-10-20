@@ -45,11 +45,12 @@ import java.util.Hashtable;
 
 import com.hardcode.gdbms.engine.values.Value;
 import com.iver.cit.gvsig.fmap.Messages;
+
 /**
  * Implements the funcionality of a Boolean constant
- *
+ * 
  * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
- *
+ * 
  */
 public class BooleanConstant extends Operator {
 	private boolean value;
@@ -58,17 +59,15 @@ public class BooleanConstant extends Operator {
 		return OperationTags.BOOLEAN_VALUE;
 	}
 
-	public BooleanConstant(String value,Hashtable<String, Value> symbol_table) {
+	public BooleanConstant(String value, Hashtable<String, Value> symbol_table) {
 		super(symbol_table);
-		this.value=new Boolean(value);
+		this.value = new Boolean(value);
 
 	}
-
 
 	public Object evaluate() {
 		return value;
 	}
-
 
 	public String getDescription() {
 		return Messages.getString(OperationTags.CONSTANT);
@@ -88,25 +87,25 @@ public class BooleanConstant extends Operator {
 		throw new RuntimeException("Cannot add arguments to a constant");
 	}
 
-
 	public String getPattern() {
 		return null;
 	}
 
-	public ArrayList<Expression> getArguments() {return null;}
+	public ArrayList<Expression> getArguments() {
+		return null;
+	}
 
-	public void setArguments(ArrayList<Expression> arguments) {return;}
-
+	public void setArguments(ArrayList<Expression> arguments) {
+		return;
+	}
 
 	public void check() throws ExpressionException {
 		return;
 	}
 
-
 	public boolean isValue() {
 		return value;
 	}
-
 
 	public boolean getValue() {
 		return value;

@@ -21,10 +21,10 @@ package org.gvsig.gui.beans.openfile;
 import javax.swing.JFrame;
 
 public class TestOpenFile {
-	private int               w     = 510;
-	private int               h     = 90;
-	private JFrame            frame = new JFrame();
-	private OpenFileContainer open  = null;
+	private int w = 510;
+	private int h = 90;
+	private JFrame frame = new JFrame();
+	private OpenFileContainer open = null;
 
 	public TestOpenFile() {
 		open = new OpenFileContainer();

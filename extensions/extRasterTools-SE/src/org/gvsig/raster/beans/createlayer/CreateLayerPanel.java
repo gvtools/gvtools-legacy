@@ -32,6 +32,7 @@ import javax.swing.JRadioButton;
 import org.gvsig.fmap.raster.layers.FLyrRasterSE;
 
 import com.iver.andami.PluginServices;
+
 /**
  * Panel para unificar las propiedades de generacion de capas nuevas en ficheros
  * o solo en visualizacion.
@@ -41,11 +42,11 @@ import com.iver.andami.PluginServices;
  */
 public class CreateLayerPanel {
 	private static final long serialVersionUID = 3921564127360827156L;
-	private JPanel        panel         = null;
-	private JRadioButton  jRBOnlyView   = null;
-	private JRadioButton  jRBNewLayer   = null;
+	private JPanel panel = null;
+	private JRadioButton jRBOnlyView = null;
+	private JRadioButton jRBNewLayer = null;
 	private NewLayerPanel panelNewLayer = null;
-	private FLyrRasterSE  lyr           = null;
+	private FLyrRasterSE lyr = null;
 
 	/**
 	 * Constructor de un CreateLayerPanel
@@ -55,9 +56,10 @@ public class CreateLayerPanel {
 		initialize();
 		translate();
 	}
-	
+
 	/**
 	 * Devuelve el panel principal
+	 * 
 	 * @return
 	 */
 	public JPanel getJPanel() {
@@ -71,10 +73,11 @@ public class CreateLayerPanel {
 	 * Seccion donde irán todas las traducciones invariables del componente
 	 */
 	private void translate() {
-		getRadioOnlyView().setText(PluginServices.getText(this, "solo_visualizacion"));
+		getRadioOnlyView().setText(
+				PluginServices.getText(this, "solo_visualizacion"));
 		getRadioNewLayer().setText(PluginServices.getText(this, "capa_nueva"));
 	}
-	
+
 	/**
 	 * Inicializar el panel de CreateLayer
 	 */
@@ -83,7 +86,7 @@ public class CreateLayerPanel {
 		GridBagConstraints gridBagConstraints;
 
 		getJPanel().setLayout(new GridBagLayout());
-		
+
 		buttonGroup1 = new ButtonGroup();
 		buttonGroup1.add(getRadioOnlyView());
 
@@ -102,7 +105,7 @@ public class CreateLayerPanel {
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		gridBagConstraints.insets = new Insets(3, 3, 3, 3);
 		getJPanel().add(getRadioNewLayer(), gridBagConstraints);
-		
+
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 2;
@@ -110,15 +113,16 @@ public class CreateLayerPanel {
 		gridBagConstraints.insets = new Insets(3, 3, 3, 3);
 		getJPanel().add(getPanelNewLayer().getJPanel(), gridBagConstraints);
 	}
-	
+
 	public NewLayerPanel getPanelNewLayer() {
 		if (panelNewLayer == null)
 			panelNewLayer = new NewLayerPanel(lyr);
 		return panelNewLayer;
 	}
-	
+
 	/**
 	 * Poner los estados de los RadioButton en caso de que cambien de valor
+	 * 
 	 * @param evt
 	 */
 	private void jRBNewLayerStateChanged(ItemEvent evt) {
@@ -138,6 +142,7 @@ public class CreateLayerPanel {
 
 	/**
 	 * Especifica si se generara solo en la vista o se guardara en un fichero
+	 * 
 	 * @param enabled
 	 */
 	public void setOnlyView(boolean enabled) {
@@ -146,6 +151,7 @@ public class CreateLayerPanel {
 
 	/**
 	 * Devuelve el JRadioButton de Solo vista
+	 * 
 	 * @return
 	 */
 	private JRadioButton getRadioOnlyView() {
@@ -156,9 +162,10 @@ public class CreateLayerPanel {
 		}
 		return jRBOnlyView;
 	}
-	
+
 	/**
 	 * Devuelve el JRadioButton de nueva capa
+	 * 
 	 * @return
 	 */
 	private JRadioButton getRadioNewLayer() {
@@ -175,24 +182,25 @@ public class CreateLayerPanel {
 		}
 		return jRBNewLayer;
 	}
-	
+
 	/**
 	 * This method initializes jPNameFile
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	public JPanel getFileNamePanel() {
 		return getPanelNewLayer().getFileNamePanel();
 	}
-	
+
 	/**
 	 * Establece el texto de la etiqueta del nombre de fichero
+	 * 
 	 * @param text
 	 */
 	public void setLabelFilename(String text) {
 		getPanelNewLayer().setLabelFilename(text);
 	}
-	
+
 	public boolean isNewLayerSelected() {
 		return getRadioNewLayer().isSelected();
 	}
@@ -200,26 +208,30 @@ public class CreateLayerPanel {
 	public boolean isOnlyViewSelected() {
 		return getRadioOnlyView().isSelected();
 	}
-	
+
 	/**
-	 * Asigna un valor para el parámetro que informa de si el raster de salida hay
-	 * que comprimirlo o no. Este valor es necesario cuando el raster de salida 
-	 * es mayor de 4G ya que no se puede crear un tiff tan grande.
-	 * @param compress true para comprimir el raster de salida y false para no hacerlo.
+	 * Asigna un valor para el parámetro que informa de si el raster de salida
+	 * hay que comprimirlo o no. Este valor es necesario cuando el raster de
+	 * salida es mayor de 4G ya que no se puede crear un tiff tan grande.
+	 * 
+	 * @param compress
+	 *            true para comprimir el raster de salida y false para no
+	 *            hacerlo.
 	 */
 	public void setCompress(boolean compress) {
 		getPanelNewLayer().setCompress(compress);
 	}
-	
+
 	/**
 	 * Devuelve la ruta del fichero donde se va a guardar, en caso de guardarse
 	 * en memoria, calcula el nombre sin preguntar y devuelve la ruta.
+	 * 
 	 * @return
 	 */
 	public String getFileSelected() {
 		return getPanelNewLayer().getFileSelected();
 	}
-	
+
 	public void updateNewLayerText() {
 		getPanelNewLayer().updateNewLayerText();
 	}

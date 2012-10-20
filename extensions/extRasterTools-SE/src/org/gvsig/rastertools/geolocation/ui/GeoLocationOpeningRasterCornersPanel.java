@@ -37,26 +37,26 @@ import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.ViewPort;
 
 /**
- * Panel de geolocalización. Este muestra las esquinas superior derecha e 
+ * Panel de geolocalización. Este muestra las esquinas superior derecha e
  * inferior izquierda.
  * 
  * @version 12/12/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public class GeoLocationOpeningRasterCornersPanel extends GeolocationBaseClassPanel {
-	private static final long          serialVersionUID = -7797379892312214949L;
-	private DataInputContainer	       ulx = null;
-	private DataInputContainer	       uly = null;
-	private DataInputContainer	       lrx = null;
-	private DataInputContainer	       lry = null;
-		
-	private JPanel			           coordsULPanel = null;
-	private JPanel			           coordsLRPanel = null;
-	
-	private String                     pathToImages = "images/";
+public class GeoLocationOpeningRasterCornersPanel extends
+		GeolocationBaseClassPanel {
+	private static final long serialVersionUID = -7797379892312214949L;
+	private DataInputContainer ulx = null;
+	private DataInputContainer uly = null;
+	private DataInputContainer lrx = null;
+	private DataInputContainer lry = null;
 
-	
+	private JPanel coordsULPanel = null;
+	private JPanel coordsLRPanel = null;
+
+	private String pathToImages = "images/";
+
 	/**
 	 * Constructor
 	 */
@@ -64,79 +64,83 @@ public class GeoLocationOpeningRasterCornersPanel extends GeolocationBaseClassPa
 		this.listener = list;
 		GridBagLayout gl = new GridBagLayout();
 		this.setLayout(gl);
-		setBorder(javax.swing.BorderFactory.createTitledBorder(null, PluginServices.getText(this, "geolocation"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+		setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+				PluginServices.getText(this, "geolocation"),
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
 		ulx = new DataInputContainer();
-		ulx.setLabelText(PluginServices.getText(this,"ux"));
+		ulx.setLabelText(PluginServices.getText(this, "ux"));
 		ulx.addValueChangedListener(listener);
 		ulx.addKeyListener(listener);
-		
+
 		uly = new DataInputContainer();
-		uly.setLabelText(PluginServices.getText(this,"uy"));
+		uly.setLabelText(PluginServices.getText(this, "uy"));
 		uly.addValueChangedListener(listener);
 		uly.addKeyListener(listener);
-		
+
 		lrx = new DataInputContainer();
-		lrx.setLabelText(PluginServices.getText(this,"ux"));
+		lrx.setLabelText(PluginServices.getText(this, "ux"));
 		lrx.addValueChangedListener(listener);
 		lrx.addKeyListener(listener);
-				
+
 		lry = new DataInputContainer();
-		lry.setLabelText(PluginServices.getText(this,"uy"));
+		lry.setLabelText(PluginServices.getText(this, "uy"));
 		lry.addValueChangedListener(listener);
 		lry.addKeyListener(listener);
-		
+
 		GridLayout l = new GridLayout(2, 1);
 		l.setVgap(2);
-		
+
 		coordsULPanel = new JPanel(l);
 		coordsLRPanel = new JPanel(l);
-		
+
 		init();
 	}
-	
+
 	/**
 	 * Inicialización de los componentes gráficos del panel.
 	 */
-	private void init() {		
+	private void init() {
 		JPanel p1 = new JPanel(new BorderLayout());
 		p1.add(getIcoUL(), BorderLayout.WEST);
 		p1.add(ulx, BorderLayout.CENTER);
-		
+
 		JPanel p2 = new JPanel(new BorderLayout());
 		p2.add(getIcoUL(), BorderLayout.WEST);
 		p2.add(uly, BorderLayout.CENTER);
-		
+
 		coordsULPanel.add(p1);
 		coordsULPanel.add(p2);
-		
+
 		JPanel p3 = new JPanel(new BorderLayout());
 		p3.add(getIcoLR(), BorderLayout.WEST);
 		p3.add(lrx, BorderLayout.CENTER);
-		
+
 		JPanel p4 = new JPanel(new BorderLayout());
 		p4.add(getIcoLR(), BorderLayout.WEST);
 		p4.add(lry, BorderLayout.CENTER);
-		
+
 		coordsLRPanel.add(p3);
 		coordsLRPanel.add(p4);
-		
+
 		GridBagConstraints gbc = new GridBagConstraints();
-		
+
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.weightx = 1.0;
-		
+
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.insets = new java.awt.Insets(1, 1, 1, 1);
 		this.add(coordsULPanel, gbc);
-		
+
 		gbc.gridy = 1;
-		this.add(coordsLRPanel, gbc);		
+		this.add(coordsLRPanel, gbc);
 	}
-	
+
 	/**
-	 * Asigna la capa raster del raster seleccionado en el TOC en base 
-	 * al cual se asigna la georreferenciación al dialogo.
+	 * Asigna la capa raster del raster seleccionado en el TOC en base al cual
+	 * se asigna la georreferenciación al dialogo.
+	 * 
 	 * @param lyr
 	 */
 	public void setParams(FLyrRasterSE lyr, ViewPort vp) {
@@ -144,39 +148,51 @@ public class GeoLocationOpeningRasterCornersPanel extends GeolocationBaseClassPa
 		setViewPort(vp);
 		loadTransform(lyr.getAffineTransform());
 	}
-	
+
 	/**
 	 * Obtiene el JLabel con el icono de la esquina superior
+	 * 
 	 * @return JLabel
 	 */
-	private JLabel getIcoUL(){
-		return new JLabel(new ImageIcon(getClass().getResource(pathToImages + "upleft.png")));
+	private JLabel getIcoUL() {
+		return new JLabel(new ImageIcon(getClass().getResource(
+				pathToImages + "upleft.png")));
 	}
 
 	/**
 	 * Obtiene el JLabel con el icono de la esquina inferior
+	 * 
 	 * @return JLabel
 	 */
-	private JLabel getIcoLR(){
-		return new JLabel(new ImageIcon(getClass().getResource(pathToImages + "downright.png")));
+	private JLabel getIcoLR() {
+		return new JLabel(new ImageIcon(getClass().getResource(
+				pathToImages + "downright.png")));
 	}
-	
+
 	/**
 	 * Carga los parámetros en el dialogo a partir de la capa
-	 * @param lyr Capa raster
+	 * 
+	 * @param lyr
+	 *            Capa raster
 	 */
 	public void loadTransform(AffineTransform at) {
 		listener.setEnableValueChangeEvent(false);
 		setUlx(String.valueOf(MathUtils.format(at.getTranslateX(), tailValue)));
 		setUly(String.valueOf(MathUtils.format(at.getTranslateY(), tailValue)));
-		setLrx(String.valueOf(MathUtils.format(at.getTranslateX() + (at.getScaleX() * getLayer().getPxWidth()), tailValue)));
-		setLry(String.valueOf(MathUtils.format(at.getTranslateY() + (at.getScaleY()  * getLayer().getPxHeight()), tailValue)));		
+		setLrx(String
+				.valueOf(MathUtils.format(at.getTranslateX()
+						+ (at.getScaleX() * getLayer().getPxWidth()), tailValue)));
+		setLry(String.valueOf(MathUtils.format(
+				at.getTranslateY()
+						+ (at.getScaleY() * getLayer().getPxHeight()),
+				tailValue)));
 		listener.setEnableValueChangeEvent(true);
 	}
 
 	/**
 	 * Asigna la coordenada superior izquierda
-	 * @param ulx 
+	 * 
+	 * @param ulx
 	 */
 	public void setUlx(String ulx) {
 		this.ulx.setValue(ulx);
@@ -184,14 +200,16 @@ public class GeoLocationOpeningRasterCornersPanel extends GeolocationBaseClassPa
 
 	/**
 	 * Asigna la coordenada superior derecha
-	 * @param ulx 
+	 * 
+	 * @param ulx
 	 */
 	public void setUly(String uly) {
 		this.uly.setValue(uly);
 	}
-	
+
 	/**
 	 * Asigna la coordenada inferior derecha
+	 * 
 	 * @param lrx
 	 */
 	public void setLrx(String lrx) {
@@ -200,14 +218,16 @@ public class GeoLocationOpeningRasterCornersPanel extends GeolocationBaseClassPa
 
 	/**
 	 * Asigna la coordenada superior derecha
-	 * @param lrx 
+	 * 
+	 * @param lrx
 	 */
 	public void setLry(String lry) {
 		this.lry.setValue(lry);
 	}
-	
+
 	/**
 	 * Obtiene la X de la coordenada superior izquierda
+	 * 
 	 * @return
 	 */
 	public DataInputContainer getUlx() {
@@ -216,6 +236,7 @@ public class GeoLocationOpeningRasterCornersPanel extends GeolocationBaseClassPa
 
 	/**
 	 * Obtiene la Y de la coordenada superior izquierda
+	 * 
 	 * @return
 	 */
 	public DataInputContainer getUly() {
@@ -224,7 +245,9 @@ public class GeoLocationOpeningRasterCornersPanel extends GeolocationBaseClassPa
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.geolocation.ui.GeolocationBaseClassPanel#getPsx()
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.geolocation.ui.GeolocationBaseClassPanel#getPsx()
 	 */
 	public DataInputContainer getPsx() {
 		DataInputContainer d = new DataInputContainer();
@@ -240,7 +263,9 @@ public class GeoLocationOpeningRasterCornersPanel extends GeolocationBaseClassPa
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.geolocation.ui.GeolocationBaseClassPanel#getPsy()
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.geolocation.ui.GeolocationBaseClassPanel#getPsy()
 	 */
 	public DataInputContainer getPsy() {
 		DataInputContainer d = new DataInputContainer();
@@ -256,7 +281,9 @@ public class GeoLocationOpeningRasterCornersPanel extends GeolocationBaseClassPa
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.geolocation.ui.GeolocationBaseClassPanel#getRotx()
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.geolocation.ui.GeolocationBaseClassPanel#getRotx()
 	 */
 	public DataInputContainer getRotx() {
 		DataInputContainer d = new DataInputContainer();
@@ -266,7 +293,9 @@ public class GeoLocationOpeningRasterCornersPanel extends GeolocationBaseClassPa
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.geolocation.ui.GeolocationBaseClassPanel#getRoty()
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.geolocation.ui.GeolocationBaseClassPanel#getRoty()
 	 */
 	public DataInputContainer getRoty() {
 		DataInputContainer d = new DataInputContainer();

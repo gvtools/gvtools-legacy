@@ -17,74 +17,83 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
  */
 package org.gvsig.raster.grid.filter;
+
 /**
- * Este interfaz es implementado por el ancestro de cualquier filtro o el propio filtro.
- * Contiene las operaciones necesarias para su ejecución a través de la pila de filtros.
- *
+ * Este interfaz es implementado por el ancestro de cualquier filtro o el propio
+ * filtro. Contiene las operaciones necesarias para su ejecución a través de la
+ * pila de filtros.
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public interface IRasterFilter {
-		/**
-		 * Acciones a realizar antes de la ejecución del filtro
-		 */
-		public void pre();
+	/**
+	 * Acciones a realizar antes de la ejecución del filtro
+	 */
+	public void pre();
 
-		/**
-		 * Ejecución de la función process de todo el filtro.
-		 * @throws InterruptedException
-		 *
-		 */
-		public void execute() throws InterruptedException;
+	/**
+	 * Ejecución de la función process de todo el filtro.
+	 * 
+	 * @throws InterruptedException
+	 * 
+	 */
+	public void execute() throws InterruptedException;
 
-		/**
-		 * Procesa la posición x,y del raster
-		 * @param x posición X
-		 * @param y posición Y
-		 * @throws InterruptedException 
-		 */
-		public void process(int x, int y) throws InterruptedException;
+	/**
+	 * Procesa la posición x,y del raster
+	 * 
+	 * @param x
+	 *            posición X
+	 * @param y
+	 *            posición Y
+	 * @throws InterruptedException
+	 */
+	public void process(int x, int y) throws InterruptedException;
 
-		/**
-		 * Acciones a realizar después de la ejecución del filtro
-		 */
-		public void post();
+	/**
+	 * Acciones a realizar después de la ejecución del filtro
+	 */
+	public void post();
 
-		/**
-		 * Parámetros pasados al filtro en forma de nombre de parámetro y objeto que
-		 * representa al parámetro. Este puede ser cualquier tipo de variable u objeto.
-		 *
-		 * Parámetros obligatorios:
-		 *         inRaster (IRaster)
-		 * parámetros obligatorios (si se da el caso)
-		 *         previousFilter (IRasterFilter)
-		 *
-		 * @param name
-		 * @param value
-		 */
-		public void addParam(String name, Object value);
+	/**
+	 * Parámetros pasados al filtro en forma de nombre de parámetro y objeto que
+	 * representa al parámetro. Este puede ser cualquier tipo de variable u
+	 * objeto.
+	 * 
+	 * Parámetros obligatorios: inRaster (IRaster) parámetros obligatorios (si
+	 * se da el caso) previousFilter (IRasterFilter)
+	 * 
+	 * @param name
+	 * @param value
+	 */
+	public void addParam(String name, Object value);
 
-		/**
-		 * Devuelve los resultados despues de la ejecución del filtro.
-		 * @param name
-		 * @return
-		 */
-		public Object getResult(String name);
+	/**
+	 * Devuelve los resultados despues de la ejecución del filtro.
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public Object getResult(String name);
 
-		/**
-		 * Obtiene el tipo de datos de entrada al filtro
-		 * @return Tipo de dato
-		 */
-		public int getInRasterDataType();
+	/**
+	 * Obtiene el tipo de datos de entrada al filtro
+	 * 
+	 * @return Tipo de dato
+	 */
+	public int getInRasterDataType();
 
-		/**
-		 * Obtiene el tipo de datos de salida del filtro
-		 * @return Tipo de dato
-		 */
-		public int getOutRasterDataType();
+	/**
+	 * Obtiene el tipo de datos de salida del filtro
+	 * 
+	 * @return Tipo de dato
+	 */
+	public int getOutRasterDataType();
 
-		/**
-		 * Obtiene el grupo del filtro
-		 * @return
-		 */
-		public String getGroup();
+	/**
+	 * Obtiene el grupo del filtro
+	 * 
+	 * @return
+	 */
+	public String getGroup();
 }

@@ -42,6 +42,8 @@ package com.iver.cit.gvsig.gui.filter;
 
 public interface ExpressionListener {
 	public void newSet(String expression);
+
 	public void addToSet(String expression);
+
 	public void fromSet(String expression);
 }

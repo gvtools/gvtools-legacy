@@ -54,49 +54,51 @@ import com.iver.cit.gvsig.project.documents.table.gui.Table;
  * 
  * @author IVER T.I. <http://www.iver.es> 01/02/2009
  */
-public class TableSummarizeExtension extends Extension  {
+public class TableSummarizeExtension extends Extension {
 
 	public void execute(String actionCommand) {
-		try{
-			
+		try {
+
 			IWindow v = PluginServices.getMDIManager().getActiveWindow();
-		    if (v instanceof Table){
-		    	
-				Table table = (Table) PluginServices.getMDIManager().getActiveWindow();
-				 try {
-					DataSource sds = table.getModel().getModelo().getRecordset();
+			if (v instanceof Table) {
+
+				Table table = (Table) PluginServices.getMDIManager()
+						.getActiveWindow();
+				try {
+					DataSource sds = table.getModel().getModelo()
+							.getRecordset();
 					BitSet indices = table.getSelectedFieldIndices();
 					SummarizeForm st = new SummarizeForm();
-					if (indices.cardinality()>0) {
+					if (indices.cardinality() > 0) {
 						st.show(table, sds.getFieldName(indices.nextSetBit(0)));
-					}
-					else {
+					} else {
 						st.show(table);
 					}
 				} catch (ReadDriverException e) {
-					NotificationManager.showMessageError(PluginServices.getText(this, "Summarize_Error_accessing_the_table"), e);
+					NotificationManager.showMessageError(PluginServices
+							.getText(this,
+									"Summarize_Error_accessing_the_table"), e);
 				}
-		    }
-		} 
-		catch (Exception e){
-			NotificationManager.showMessageError(PluginServices.getText(this, "Unknown_summarize_error"), e);
+			}
+		} catch (Exception e) {
+			NotificationManager.showMessageError(
+					PluginServices.getText(this, "Unknown_summarize_error"), e);
 		}
 	}
 
 	public void initialize() {
 		initilializeIcons();
 	}
-	
-	private void initilializeIcons(){
-		PluginClassLoader loader = PluginServices.getPluginServices(this).getClassLoader();
+
+	private void initilializeIcons() {
+		PluginClassLoader loader = PluginServices.getPluginServices(this)
+				.getClassLoader();
 		PluginServices.getIconTheme().registerDefault(
 				"tableSummarize-statistics",
-				loader.getResource("images/tableSummarize16.png")
-			);
+				loader.getResource("images/tableSummarize16.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"tableSummarize-statistics-22x22",
-				loader.getResource("images/tableSummarize22.png")
-			);
+				loader.getResource("images/tableSummarize22.png"));
 	}
 
 	/**
@@ -104,26 +106,24 @@ public class TableSummarizeExtension extends Extension  {
 	 */
 	public boolean isEnabled() {
 		return true;
-//		IWindow v = PluginServices.getMDIManager().getActiveWindow();
-//
-//		if (v == null) {
-//			return false;
-//		}
-//
-//		if (v instanceof Table) {
-//			Table table = (Table) v;
-//			return doIsEnabled(table);
-//		}
+		// IWindow v = PluginServices.getMDIManager().getActiveWindow();
+		//
+		// if (v == null) {
+		// return false;
+		// }
+		//
+		// if (v instanceof Table) {
+		// Table table = (Table) v;
+		// return doIsEnabled(table);
+		// }
 	}
 
-//	protected boolean doIsEnabled(Table table){
-//		BitSet indices = table.getSelectedFieldIndices();
-//		//one column must be selected to activate the extension button
-//		if (indices.cardinality() == 1) return true;
-//		else return false;
-//	}
-	
-
+	// protected boolean doIsEnabled(Table table){
+	// BitSet indices = table.getSelectedFieldIndices();
+	// //one column must be selected to activate the extension button
+	// if (indices.cardinality() == 1) return true;
+	// else return false;
+	// }
 
 	/**
 	 * @see com.iver.andami.plugins.IExtension#isVisible()

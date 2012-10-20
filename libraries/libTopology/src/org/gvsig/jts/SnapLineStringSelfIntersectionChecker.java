@@ -42,14 +42,14 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: SnapLineStringSelfIntersectionChecker.java 14154 2007-09-27 19:14:16Z azabala $
-* $Log: SnapLineStringSelfIntersectionChecker.java,v $
-* Revision 1.1  2007/09/14 17:35:52  azabala
-* first version in cvs
-*
-*
-*/
+ *
+ * $Id: SnapLineStringSelfIntersectionChecker.java 14154 2007-09-27 19:14:16Z azabala $
+ * $Log: SnapLineStringSelfIntersectionChecker.java,v $
+ * Revision 1.1  2007/09/14 17:35:52  azabala
+ * first version in cvs
+ *
+ *
+ */
 package org.gvsig.jts;
 
 import java.util.ArrayList;
@@ -62,8 +62,8 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geomgraph.Edge;
 import com.vividsolutions.jts.geomgraph.EdgeIntersectionList;
-import com.vividsolutions.jts.geomgraph.SnappingGeometryGraph;
 import com.vividsolutions.jts.geomgraph.SnapEdgeIntersectionList.SnapEdgeIntersectNode;
+import com.vividsolutions.jts.geomgraph.SnappingGeometryGraph;
 import com.vividsolutions.jts.geomgraph.index.SegmentIntersector;
 import com.vividsolutions.jts.geomgraph.index.SnapSimpleMCSweepLineIntersector;
 import com.vividsolutions.jts.operation.overlay.SnapLineIntersector;
@@ -74,15 +74,13 @@ public class SnapLineStringSelfIntersectionChecker extends
 	public SnapLineStringSelfIntersectionChecker(LineString lineString,
 			double snapTolerance) {
 		super(lineString, snapTolerance);
-		this.graph = new SnappingGeometryGraph(snapTolerance,0, lineString);
+		this.graph = new SnappingGeometryGraph(snapTolerance, 0, lineString);
 	}
 
-	
 	public SnapLineStringSelfIntersectionChecker(LineString lineString) {
 		this(lineString, DEFAULT_SNAP_TOLERANCE);
 	}
 
-	
 	protected void initialize() {
 		ArrayList selfIntersectionsList = new ArrayList();
 		SnappingCoordinateMap selfIntersectionsMap = new SnappingCoordinateMap(
@@ -93,14 +91,15 @@ public class SnapLineStringSelfIntersectionChecker extends
 			Edge e = (Edge) i.next();
 			EdgeIntersectionList eiList = e.getEdgeIntersectionList();
 			for (Iterator eiIt = eiList.iterator(); eiIt.hasNext();) {
-				Object obj =  eiIt.next();
+				Object obj = eiIt.next();
 				SnapEdgeIntersectNode ei = (SnapEdgeIntersectNode) obj;
 				if (!isProper(ei.getCoordinate())) {
 					if (!selfIntersectionsMap.containsKey(ei.getCoordinate())) {
 						selfIntersectionsList.add(ei.getCoordinate());
-						selfIntersectionsMap.put(ei.getCoordinate(), ei.getCoordinate());
-					}//if
-				}//if
+						selfIntersectionsMap.put(ei.getCoordinate(),
+								ei.getCoordinate());
+					}// if
+				}// if
 			}// for
 		}// while
 		int numSelfIntersections = selfIntersectionsList.size();
@@ -110,9 +109,6 @@ public class SnapLineStringSelfIntersectionChecker extends
 		}
 	}
 
-
-	
-	
 	private List computeSelfNodesWithSnap() {
 		LineIntersector li = new SnapLineIntersector(snapTolerance);
 		SegmentIntersector si = new SegmentIntersector(li, true, false);
@@ -125,21 +121,17 @@ public class SnapLineStringSelfIntersectionChecker extends
 		esi.computeIntersections(edges, si, true);
 		return edges;
 	}
-	
 
-	
-
-//	public Geometry[] clean() {
-//		if (!hasInitialized) {
-//			initialize();
-//			hasInitialized = true;
-//		}// if
-//		if (selfIntersections == null && selfIntersections.length < 1)
-//			return new Geometry[] { lineString };
-//		else
-//			return LineStringSplitter.removeSelfIntersections(lineString,
-//					selfIntersections, snapTolerance);
-//	}
+	// public Geometry[] clean() {
+	// if (!hasInitialized) {
+	// initialize();
+	// hasInitialized = true;
+	// }// if
+	// if (selfIntersections == null && selfIntersections.length < 1)
+	// return new Geometry[] { lineString };
+	// else
+	// return LineStringSplitter.removeSelfIntersections(lineString,
+	// selfIntersections, snapTolerance);
+	// }
 
 }
-

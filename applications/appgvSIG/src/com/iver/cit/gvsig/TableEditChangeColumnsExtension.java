@@ -49,74 +49,74 @@ import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 import com.iver.cit.gvsig.project.documents.table.gui.Table;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class TableEditChangeColumnsExtension extends Extension {
-    /**
-     * @see com.iver.andami.plugins.IExtension#initialize()
-     */
-    public void initialize() {
-    }
+	/**
+	 * @see com.iver.andami.plugins.IExtension#initialize()
+	 */
+	public void initialize() {
+	}
 
-    /**
-     * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
-     */
-    public void execute(String actionCommand) {
-        IWindow v = PluginServices.getMDIManager().getActiveWindow();
-        Table t = (Table) v;
-        if ("REMOVECOLUMN".equals(actionCommand)) {
-            t.removeColumn();
+	/**
+	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
+	 */
+	public void execute(String actionCommand) {
+		IWindow v = PluginServices.getMDIManager().getActiveWindow();
+		Table t = (Table) v;
+		if ("REMOVECOLUMN".equals(actionCommand)) {
+			t.removeColumn();
 
-        }
-        if ("ADDCOLUMN".equals(actionCommand)) {
-        	FieldDescription newField = new FieldDescription();
-        	newField.setDefaultValue(ValueFactory.createValue("default"));
-        	newField.setFieldName("prueba");
-        	newField.setFieldType(Types.VARCHAR);
-        	newField.setFieldLength(20);
+		}
+		if ("ADDCOLUMN".equals(actionCommand)) {
+			FieldDescription newField = new FieldDescription();
+			newField.setDefaultValue(ValueFactory.createValue("default"));
+			newField.setFieldName("prueba");
+			newField.setFieldType(Types.VARCHAR);
+			newField.setFieldLength(20);
 
-            t.addColumn(newField);
-        }
-        if ("RENAMECOLUMN".equals(actionCommand)) {
-        	// TODO RENAME
-            // t.addColumn();
-        }
-        
-    }
+			t.addColumn(newField);
+		}
+		if ("RENAMECOLUMN".equals(actionCommand)) {
+			// TODO RENAME
+			// t.addColumn();
+		}
 
-    /**
-     * @see com.iver.andami.plugins.IExtension#isEnabled()
-     */
-    public boolean isEnabled() {
-    	IWindow v = PluginServices.getMDIManager().getActiveWindow();
+	}
 
-        if (v == null) {
-            return false;
-        }
+	/**
+	 * @see com.iver.andami.plugins.IExtension#isEnabled()
+	 */
+	public boolean isEnabled() {
+		IWindow v = PluginServices.getMDIManager().getActiveWindow();
 
-        if (v instanceof Table) {
-            return (((Table) v).isEditing()) && ((Table) v).getSelectedFieldIndices().cardinality()>0;
-        }
+		if (v == null) {
+			return false;
+		}
 
-        return false;
-    }
+		if (v instanceof Table) {
+			return (((Table) v).isEditing())
+					&& ((Table) v).getSelectedFieldIndices().cardinality() > 0;
+		}
 
-    /**
-     * @see com.iver.andami.plugins.IExtension#isVisible()
-     */
-    public boolean isVisible() {
-        IWindow v = PluginServices.getMDIManager().getActiveWindow();
+		return false;
+	}
 
-        if (v == null) {
-            return false;
-        } else if (v instanceof Table && ((Table) v).isEditing()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+	/**
+	 * @see com.iver.andami.plugins.IExtension#isVisible()
+	 */
+	public boolean isVisible() {
+		IWindow v = PluginServices.getMDIManager().getActiveWindow();
+
+		if (v == null) {
+			return false;
+		} else if (v instanceof Table && ((Table) v).isEditing()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

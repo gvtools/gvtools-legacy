@@ -46,8 +46,6 @@ package com.iver.cit.gvsig.fmap.drivers.jdbc.postgis;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Types;
 
@@ -73,13 +71,11 @@ import com.iver.cit.gvsig.fmap.drivers.DBLayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.DefaultJDBCDriver;
 import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 import com.iver.cit.gvsig.fmap.drivers.XTypes;
-import com.iver.utiles.console.jedit.SQLTokenMarker;
 import com.vividsolutions.jts.geom.Geometry;
 
 /**
- * @author fjp
- * Necesitamos que esta clase no trabaje con funciones estáticas
- * porque puede haber capas que provengan de distintas bases de datos.
+ * @author fjp Necesitamos que esta clase no trabaje con funciones estáticas
+ *         porque puede haber capas que provengan de distintas bases de datos.
  */
 public class PostGIS {
 
@@ -87,7 +83,7 @@ public class PostGIS {
 
 	/**
 	 * Mover esto a IverUtiles
-	 *
+	 * 
 	 * @param val
 	 * @return
 	 */
@@ -111,27 +107,30 @@ public class PostGIS {
 	/**
 	 * @param dbLayerDef
 	 * @param fieldsDescr
-	 * @param bCreateGID @DEPRECATED
+	 * @param bCreateGID
+	 *            @DEPRECATED
 	 * @return
 	 */
 	public String getSqlCreateSpatialTable(DBLayerDefinition dbLayerDef,
 			FieldDescription[] fieldsDescr, boolean bCreateGID) {
 
 		String resul;
-		/* boolean bExistGID = false;
-		for (int i = 0; i < dbLayerDef.getFieldNames().length; i++) {
-			if (dbLayerDef.getFieldNames()[i].equalsIgnoreCase("gid")) {
-				bExistGID = true;
-				break;
-			}
-		} */
-		/* if (bExistGID) // Usamos el existente y no añadimos ninguno nosotros
-			resul = "CREATE TABLE " + dbLayerDef.getTableName() + " (";
-		else */
-		// FJP: NUEVO: NO TOLERAMOS CAMPOS QUE SE LLAMEN GID. Lo reservamos para uso nuestro.
-		resul = "CREATE TABLE " + dbLayerDef.getComposedTableName()
-					+ " ( " + "\""+dbLayerDef.getFieldID()+"\"" +" serial PRIMARY KEY ";
-		int j=0;
+		/*
+		 * boolean bExistGID = false; for (int i = 0; i <
+		 * dbLayerDef.getFieldNames().length; i++) { if
+		 * (dbLayerDef.getFieldNames()[i].equalsIgnoreCase("gid")) { bExistGID =
+		 * true; break; } }
+		 */
+		/*
+		 * if (bExistGID) // Usamos el existente y no añadimos ninguno nosotros
+		 * resul = "CREATE TABLE " + dbLayerDef.getTableName() + " ("; else
+		 */
+		// FJP: NUEVO: NO TOLERAMOS CAMPOS QUE SE LLAMEN GID. Lo reservamos para
+		// uso nuestro.
+		resul = "CREATE TABLE " + dbLayerDef.getComposedTableName() + " ( "
+				+ "\"" + dbLayerDef.getFieldID() + "\""
+				+ " serial PRIMARY KEY ";
+		int j = 0;
 		for (int i = 0; i < dbLayerDef.getFieldNames().length; i++) {
 			int fieldType = fieldsDescr[i].getFieldType();
 			String strType = XTypes.fieldTypeToString(fieldType);
@@ -139,9 +138,11 @@ public class PostGIS {
 			 * if (fieldType == Types.VARCHAR) strType = strType + "(" +
 			 * fieldsDescr[i].getFieldLength() + ")";
 			 */
-			if (fieldsDescr[i].getFieldName().equalsIgnoreCase(dbLayerDef.getFieldID()))
+			if (fieldsDescr[i].getFieldName().equalsIgnoreCase(
+					dbLayerDef.getFieldID()))
 				continue;
-			resul = resul + ", " + "\""+dbLayerDef.getFieldNames()[i]+"\"" + " "	+ strType;
+			resul = resul + ", " + "\"" + dbLayerDef.getFieldNames()[i] + "\""
+					+ " " + strType;
 			j++;
 		}
 		resul = resul + ");";
@@ -171,17 +172,17 @@ public class PostGIS {
 		}
 
 		String schema = dbLayerDef.getSchema();
-		if (schema == null || schema.equals("")){
+		if (schema == null || schema.equals("")) {
 			schema = " current_schema()::Varchar ";
 		} else {
-			schema = "'" +schema + "'";
+			schema = "'" + schema + "'";
 		}
 
-		String result = "SELECT AddGeometryColumn("
-				+ schema + ", '"
+		String result = "SELECT AddGeometryColumn(" + schema + ", '"
 				+ dbLayerDef.getTableName() + "', '"
 				+ dbLayerDef.getFieldGeometry() + "', "
-				+ DefaultJDBCDriver.removePrefix(dbLayerDef.getSRID_EPSG()) + ", '" + strGeometryFieldType + "', "
+				+ DefaultJDBCDriver.removePrefix(dbLayerDef.getSRID_EPSG())
+				+ ", '" + strGeometryFieldType + "', "
 				+ dbLayerDef.getDimension() + ");";
 
 		return result;
@@ -192,10 +193,10 @@ public class PostGIS {
 	 * should be a string or a number. To perform an insert strings need quotes
 	 * around them, and numbers work fine with quotes, so this method can be
 	 * called on unknown objects.
-	 *
+	 * 
 	 * @param value
 	 *            The object to add quotes to.
-	 *
+	 * 
 	 * @return a string representation of the object with quotes.
 	 */
 	protected String addQuotes(Object value) {
@@ -215,8 +216,10 @@ public class PostGIS {
 	}
 
 	/**
-	 * FIXME: Maybe we don't need to test if encoding to the database is possible or not. This conversion may be slow.
-	 * But in the other hand, the user may be able to store his data and don't loose all the changes...
+	 * FIXME: Maybe we don't need to test if encoding to the database is
+	 * possible or not. This conversion may be slow. But in the other hand, the
+	 * user may be able to store his data and don't loose all the changes...
+	 * 
 	 * @param obj
 	 * @return
 	 */
@@ -228,9 +231,9 @@ public class PostGIS {
 
 		try {
 			PrintStream printStream = new PrintStream(out, true, toEncode);
-			printStream.print(aux);			
+			printStream.print(aux);
 			aux2 = out.toString(toEncode);
-//			System.out.println(aux + " " + aux2);
+			// System.out.println(aux + " " + aux2);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -243,7 +246,7 @@ public class PostGIS {
 	 * Based in code from JUMP (VividSolutions) and Geotools Things to be aware:
 	 * We always will use Spatial Tables with Unique ID. IFeature has the same
 	 * field order than dbLayerDef.getFieldNames()
-	 *
+	 * 
 	 * @param dbLayerDef
 	 * @param feat
 	 * @return
@@ -263,7 +266,7 @@ public class PostGIS {
 			// existsUnique)) {
 			if (name.equals(dbLayerDef.getFieldID()))
 				continue;
-			sqlBuf.append(" " + "\""+name+"\"" + ",");
+			sqlBuf.append(" " + "\"" + name + "\"" + ",");
 			// }
 		}
 		sqlBuf.append(" \"" + dbLayerDef.getFieldGeometry() + "\"");
@@ -276,69 +279,88 @@ public class PostGIS {
 			if (name.equals(dbLayerDef.getFieldID()))
 				continue;
 
-			if (isNumeric(feat.getAttribute(j))){
+			if (isNumeric(feat.getAttribute(j))) {
 				sqlBuf.append(feat.getAttribute(j) + ", ");
-			}else if(feat.getAttribute(j).getSQLType() == Types.DATE){
-				//If the field is a date, the driver can not use the client encoding.
-				//It uses the same encoding that the user has written on the table
-				sqlBuf.append(addQuotes(((DateValue)feat.getAttribute(j)).getValue().toString()) + ", ");
-			}else{
+			} else if (feat.getAttribute(j).getSQLType() == Types.DATE) {
+				// If the field is a date, the driver can not use the client
+				// encoding.
+				// It uses the same encoding that the user has written on the
+				// table
+				sqlBuf.append(addQuotes(((DateValue) feat.getAttribute(j))
+						.getValue().toString()) + ", ");
+			} else {
 				sqlBuf.append(addQuotes(feat.getAttribute(j)) + ", ");
 			}
 		}
-		IGeometry geometry=feat.getGeometry();
-		int type=dbLayerDef.getShapeType();
-		if (geometry.getGeometryType()!=type){
-			if (type==FShape.POLYGON){
-				geometry=ShapeFactory.createPolygon2D(new GeneralPathX(geometry.getInternalShape()));
-			}else if (type==FShape.LINE){
-				geometry=ShapeFactory.createPolyline2D(new GeneralPathX(geometry.getInternalShape()));
-			}else if (type==(FShape.POLYGON|FShape.Z)){
-				geometry=ShapeFactory.createPolygon3D(new GeneralPathX(geometry.getInternalShape()),((IGeometry3D)geometry).getZs());
-			}else if (type==(FShape.LINE|FShape.Z)){
-				geometry=ShapeFactory.createPolyline3D(new GeneralPathX(geometry.getInternalShape()),((IGeometry3D)geometry).getZs());
-			}else if (type==(FShape.LINE|FShape.M)){ //MCoord
-				geometry=ShapeMFactory.createPolyline2DM(new GeneralPathX(geometry.getInternalShape()),((IGeometryM)geometry).getMs()); //MCoord
+		IGeometry geometry = feat.getGeometry();
+		int type = dbLayerDef.getShapeType();
+		if (geometry.getGeometryType() != type) {
+			if (type == FShape.POLYGON) {
+				geometry = ShapeFactory.createPolygon2D(new GeneralPathX(
+						geometry.getInternalShape()));
+			} else if (type == FShape.LINE) {
+				geometry = ShapeFactory.createPolyline2D(new GeneralPathX(
+						geometry.getInternalShape()));
+			} else if (type == (FShape.POLYGON | FShape.Z)) {
+				geometry = ShapeFactory.createPolygon3D(new GeneralPathX(
+						geometry.getInternalShape()), ((IGeometry3D) geometry)
+						.getZs());
+			} else if (type == (FShape.LINE | FShape.Z)) {
+				geometry = ShapeFactory.createPolyline3D(new GeneralPathX(
+						geometry.getInternalShape()), ((IGeometry3D) geometry)
+						.getZs());
+			} else if (type == (FShape.LINE | FShape.M)) { // MCoord
+				geometry = ShapeMFactory.createPolyline2DM(new GeneralPathX(
+						geometry.getInternalShape()), ((IGeometryM) geometry)
+						.getMs()); // MCoord
 			}
 		}
-		
+
 		if (!isCorrectGeometry(geometry, type))
-			throw new ProcessVisitorException("incorrect_geometry",new Exception());
-		//MCoord
+			throw new ProcessVisitorException("incorrect_geometry",
+					new Exception());
+		// MCoord
 		if (((type & FShape.M) != 0) && ((type & FShape.MULTIPOINT) == 0)) {
 			sqlBuf.append(" GeometryFromText( '"
-					+ ((FShapeM)geometry.getInternalShape()).toText() + "', "
-					+ DefaultJDBCDriver.removePrefix(dbLayerDef.getSRID_EPSG()) + ")");
+					+ ((FShapeM) geometry.getInternalShape()).toText() + "', "
+					+ DefaultJDBCDriver.removePrefix(dbLayerDef.getSRID_EPSG())
+					+ ")");
 		} else
-			//ZCoord
-			if ((type & FShape.Z) != 0) {
-				if ((type & FShape.MULTIPOINT) != 0) {
-					//TODO: Metodo toText 3D o 2DM 					
-				} else {
-				//Its not a multipoint
+		// ZCoord
+		if ((type & FShape.Z) != 0) {
+			if ((type & FShape.MULTIPOINT) != 0) {
+				// TODO: Metodo toText 3D o 2DM
+			} else {
+				// Its not a multipoint
 				sqlBuf.append(" GeometryFromText( '"
-						+ ((FShape3D)feat.getGeometry().getInternalShape()).toText() + "', "
-						+ DefaultJDBCDriver.removePrefix(dbLayerDef.getSRID_EPSG()) + ")");
-				}
+						+ ((FShape3D) feat.getGeometry().getInternalShape())
+								.toText()
+						+ "', "
+						+ DefaultJDBCDriver.removePrefix(dbLayerDef
+								.getSRID_EPSG()) + ")");
+			}
 
-			}	
-			//XYCoord
-			else {
-				Geometry jtsGeom=geometry.toJTSGeometry();
-				if (jtsGeom==null || !isCorrectType(jtsGeom, type)){
-					throw new ProcessVisitorException("incorrect_geometry",new Exception());
-				}
-				
-		
-			//If they layer is a 2D layer writing a 2D geometry will throw an error
-			//With st_force_3d it is avoid		
-			if (dbLayerDef.getDimension() == 3) sqlBuf.append("ST_Force_3D (");
-			
-			sqlBuf.append(" GeometryFromText( '"
-				+ jtsGeom.toText() + "', "
-				+ DefaultJDBCDriver.removePrefix(dbLayerDef.getSRID_EPSG()) + ")");
+		}
+		// XYCoord
+		else {
+			Geometry jtsGeom = geometry.toJTSGeometry();
+			if (jtsGeom == null || !isCorrectType(jtsGeom, type)) {
+				throw new ProcessVisitorException("incorrect_geometry",
+						new Exception());
+			}
 
-			if (dbLayerDef.getDimension() == 3) sqlBuf.append(")");			
+			// If they layer is a 2D layer writing a 2D geometry will throw an
+			// error
+			// With st_force_3d it is avoid
+			if (dbLayerDef.getDimension() == 3)
+				sqlBuf.append("ST_Force_3D (");
+
+			sqlBuf.append(" GeometryFromText( '" + jtsGeom.toText() + "', "
+					+ DefaultJDBCDriver.removePrefix(dbLayerDef.getSRID_EPSG())
+					+ ")");
+
+			if (dbLayerDef.getDimension() == 3)
+				sqlBuf.append(")");
 		}
 
 		// sqlBuf.deleteCharAt(sqlBuf.lastIndexOf(","));
@@ -348,21 +370,24 @@ public class PostGIS {
 	}
 
 	private boolean isCorrectType(Geometry jtsGeom, int type) {
-		if (FShape.POLYGON==type){
-			if (!jtsGeom.getGeometryType().equals("MultiPolygon") && !jtsGeom.getGeometryType().equals("Polygon") )
+		if (FShape.POLYGON == type) {
+			if (!jtsGeom.getGeometryType().equals("MultiPolygon")
+					&& !jtsGeom.getGeometryType().equals("Polygon"))
 				return false;
 		}
 		return true;
 	}
 
 	private boolean isCorrectGeometry(IGeometry geometry, int type) {
-		if (FShape.POLYGON==type){
-			FPolygon2D polygon = (FPolygon2D)geometry.getInternalShape();
-			if (!(polygon.getBounds2D().getWidth()>0 && polygon.getBounds2D().getHeight()>0))
+		if (FShape.POLYGON == type) {
+			FPolygon2D polygon = (FPolygon2D) geometry.getInternalShape();
+			if (!(polygon.getBounds2D().getWidth() > 0 && polygon.getBounds2D()
+					.getHeight() > 0))
 				return false;
-		}else if (FShape.LINE==type){
-			FPolyline2D line = (FPolyline2D)geometry.getInternalShape();
-			if (!(line.getBounds2D().getWidth()>0 || line.getBounds2D().getHeight()>0))
+		} else if (FShape.LINE == type) {
+			FPolyline2D line = (FPolyline2D) geometry.getInternalShape();
+			if (!(line.getBounds2D().getWidth() > 0 || line.getBounds2D()
+					.getHeight() > 0))
 				return false;
 		}
 
@@ -379,11 +404,11 @@ public class PostGIS {
 		return sql;
 	}
 
-	public String getSqlModifyFeature(DBLayerDefinition dbLayerDef, IFeature feat) {
+	public String getSqlModifyFeature(DBLayerDefinition dbLayerDef,
+			IFeature feat) {
 		/*
-		 	UPDATE weather
-		 	SET temp_hi = temp_hi - 2,  temp_lo = temp_lo - 2
-		 	WHERE date > '1994-11-28';
+		 * UPDATE weather SET temp_hi = temp_hi - 2, temp_lo = temp_lo - 2 WHERE
+		 * date > '1994-11-28';
 		 */
 		StringBuffer sqlBuf = new StringBuffer("UPDATE "
 				+ dbLayerDef.getComposedTableName() + " SET");
@@ -392,65 +417,75 @@ public class PostGIS {
 
 		for (int i = 0; i < numAlphanumericFields; i++) {
 			FieldDescription fldDesc = dbLayerDef.getFieldsDesc()[i];
-			if (fldDesc != null)
-			{
+			if (fldDesc != null) {
 				String name = fldDesc.getFieldName();
 				// El campo gid no lo actualizamos.
 				if (name.equalsIgnoreCase(dbLayerDef.getFieldID()))
 					continue;
 				Value val = feat.getAttribute(i);
-				if (val != null)
-				{
-					String strAux = val.getStringValue(ValueWriter.internalValueWriter);
-					sqlBuf.append(" " + "\""+name+"\"" + " = " + strAux + " ,");
+				if (val != null) {
+					String strAux = val
+							.getStringValue(ValueWriter.internalValueWriter);
+					sqlBuf.append(" " + "\"" + name + "\"" + " = " + strAux
+							+ " ,");
 				}
 			}
 		}
-		//If pos > 0 there is at least one field..
+		// If pos > 0 there is at least one field..
 		int pos = sqlBuf.lastIndexOf(",");
-		if (pos > -1){
+		if (pos > -1) {
 			sqlBuf.deleteCharAt(pos);
 		}
-		if (feat.getGeometry() != null)
-		{
-			if (pos > -1){
+		if (feat.getGeometry() != null) {
+			if (pos > -1) {
 				sqlBuf.append(",");
 			}
 			sqlBuf.append(" \"" + dbLayerDef.getFieldGeometry() + "\"");
 			sqlBuf.append(" = ");
-			//MCoord
+			// MCoord
 			int type = feat.getGeometry().getGeometryType();
 			if (((type & FShape.M) != 0) && ((type & FShape.MULTIPOINT) == 0)) {
 				sqlBuf.append(" GeometryFromText( '"
-						+ ((FShapeM)feat.getGeometry().getInternalShape()).toText() + "', "
-						+ DefaultJDBCDriver.removePrefix(dbLayerDef.getSRID_EPSG()) + ")");
+						+ ((FShapeM) feat.getGeometry().getInternalShape())
+								.toText()
+						+ "', "
+						+ DefaultJDBCDriver.removePrefix(dbLayerDef
+								.getSRID_EPSG()) + ")");
 			} else
-				
-			//ZCoord
-				if ((type & FShape.Z) != 0) {
-					if ((type & FShape.MULTIPOINT) != 0) {
-						//TODO: Metodo toText 3D o 2DM 											
-					} else {
-					//Its not a multipoint
+
+			// ZCoord
+			if ((type & FShape.Z) != 0) {
+				if ((type & FShape.MULTIPOINT) != 0) {
+					// TODO: Metodo toText 3D o 2DM
+				} else {
+					// Its not a multipoint
 					sqlBuf.append(" GeometryFromText( '"
-							+ ((FShape3D)feat.getGeometry().getInternalShape()).toText() + "', "
-							+ DefaultJDBCDriver.removePrefix(dbLayerDef.getSRID_EPSG()) + ")");
-					}
-					
+							+ ((FShape3D) feat.getGeometry().getInternalShape())
+									.toText()
+							+ "', "
+							+ DefaultJDBCDriver.removePrefix(dbLayerDef
+									.getSRID_EPSG()) + ")");
 				}
-			
-			//XYCoord
-			else{
-				
-				//If they layer is a 2D layer writing a 2D geometry will throw an error
-				//With st_force_3d it is avoid		
-				if (dbLayerDef.getDimension() == 3) sqlBuf.append("ST_Force_3D (");
-				
+
+			}
+
+			// XYCoord
+			else {
+
+				// If they layer is a 2D layer writing a 2D geometry will throw
+				// an error
+				// With st_force_3d it is avoid
+				if (dbLayerDef.getDimension() == 3)
+					sqlBuf.append("ST_Force_3D (");
+
 				sqlBuf.append(" GeometryFromText( '"
-				+ feat.getGeometry().toJTSGeometry().toText() + "', "
-				+ DefaultJDBCDriver.removePrefix(dbLayerDef.getSRID_EPSG()) + ")");
-				
-				if (dbLayerDef.getDimension() == 3) sqlBuf.append(")");
+						+ feat.getGeometry().toJTSGeometry().toText()
+						+ "', "
+						+ DefaultJDBCDriver.removePrefix(dbLayerDef
+								.getSRID_EPSG()) + ")");
+
+				if (dbLayerDef.getDimension() == 3)
+					sqlBuf.append(")");
 			}
 		}
 		sqlBuf.append(" WHERE ");
@@ -461,10 +496,11 @@ public class PostGIS {
 	}
 
 	/**
-	 * TODO: NECESITAMOS OTRO MÉTODO PARA BORRAR CORRECTAMENTE.
-	 *	 Esto provocará errores, ya que getID que viene en un row no
-	 *	 nos sirve dentro de un writer para modificar y/o borrar entidades
-	 *	 Por ahora, cojo el ID del campo que me indica el dbLayerDef
+	 * TODO: NECESITAMOS OTRO MÉTODO PARA BORRAR CORRECTAMENTE. Esto provocará
+	 * errores, ya que getID que viene en un row no nos sirve dentro de un
+	 * writer para modificar y/o borrar entidades Por ahora, cojo el ID del
+	 * campo que me indica el dbLayerDef
+	 * 
 	 * @param dbLayerDef
 	 * @param row
 	 * @return
@@ -479,7 +515,8 @@ public class PostGIS {
 				+ dbLayerDef.getComposedTableName() + " WHERE ");
 		String sql = null;
 		int indexFieldId = dbLayerDef.getIdFieldID();
-		sqlBuf.append("\""+dbLayerDef.getFieldID()+"\"" + " = " + row.getAttribute(indexFieldId));
+		sqlBuf.append("\"" + dbLayerDef.getFieldID() + "\"" + " = "
+				+ row.getAttribute(indexFieldId));
 		sql = sqlBuf.toString();
 
 		return sql;
@@ -488,7 +525,8 @@ public class PostGIS {
 	public String getEncoding() {
 		return toEncode;
 	}
-	public void setEncoding(String toEncode){
+
+	public void setEncoding(String toEncode) {
 		if (toEncode.compareToIgnoreCase("SQL_ASCII") == 0) {
 			this.toEncode = "ASCII";
 		} else if (toEncode.compareToIgnoreCase("WIN1252") == 0) {
@@ -500,19 +538,19 @@ public class PostGIS {
 		}
 	}
 
-	static String escapeFieldName(String name){
-		if (!name.toLowerCase().equals(name)){
-			return "\""+name.trim()+"\"";
+	static String escapeFieldName(String name) {
+		if (!name.toLowerCase().equals(name)) {
+			return "\"" + name.trim() + "\"";
 		}
-		if (!name.matches("[a-z][\\d\\S\\w]*")){
-			return "\""+name.trim()+"\"";
+		if (!name.matches("[a-z][\\d\\S\\w]*")) {
+			return "\"" + name.trim() + "\"";
 		}
-		if (name.indexOf(":")>0){
-			return "\""+name.trim()+"\"";
+		if (name.indexOf(":") > 0) {
+			return "\"" + name.trim() + "\"";
 		}
-		//si es una palabra reservada lo escapamos
-		if (PostgresReservedWords.isReserved(name)){
-			return "\""+name.trim()+"\"";
+		// si es una palabra reservada lo escapamos
+		if (PostgresReservedWords.isReserved(name)) {
+			return "\"" + name.trim() + "\"";
 		}
 		return name;
 	}

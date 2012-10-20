@@ -127,8 +127,6 @@ import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import org.gvsig.gui.beans.swing.GridBagLayoutPanel;
 import org.gvsig.gui.beans.swing.JIncrementalNumberField;
@@ -155,9 +153,9 @@ import com.iver.cit.gvsig.project.documents.view.legend.gui.JSymbolPreviewButton
 import com.iver.cit.gvsig.project.documents.view.legend.gui.Quantities;
 
 /**
- *
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
 public class DotDensity extends JPanel implements ILegendPanel {
 	private static final int MAX_VALUE_COUNT = 300;
@@ -180,7 +178,6 @@ public class DotDensity extends JPanel implements ILegendPanel {
 	private double maxDotSize = 0;
 	private double b, a; // line function params where: y = bx + a
 	private int valueCount;
-
 
 	private NumberFormat nf = NumberFormat.getInstance();
 	{
@@ -213,20 +210,22 @@ public class DotDensity extends JPanel implements ILegendPanel {
 				int fieldIndex = sds.getFieldIndexByName(fieldName);
 
 				long rowCount = sds.getRowCount();
-				valueCount = (rowCount > MAX_VALUE_COUNT) ? MAX_VALUE_COUNT : (int) rowCount;
+				valueCount = (rowCount > MAX_VALUE_COUNT) ? MAX_VALUE_COUNT
+						: (int) rowCount;
 
 				double maxValue = Double.MIN_VALUE;
 				double minValue = Double.MAX_VALUE;
 				for (int i = 0; i < valueCount; i++) {
-					double value = ((NumericValue) sds.getFieldValue(i,fieldIndex)).doubleValue();
-					if (value < minValue){
+					double value = ((NumericValue) sds.getFieldValue(i,
+							fieldIndex)).doubleValue();
+					if (value < minValue) {
 						minValue = value;
 					}
-					if (value > maxValue){
+					if (value > maxValue) {
 						maxValue = value;
 					}
 				}
-				b = (maxValue - minValue)/(valueCount);
+				b = (maxValue - minValue) / (valueCount);
 				a = minValue;
 
 				buttonsListener.actionPerformed(null);
@@ -236,6 +235,7 @@ public class DotDensity extends JPanel implements ILegendPanel {
 			}
 		}
 	};
+
 	private ActionListener buttonsListener = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			int oldValue = getSldDensity().getValue();
@@ -247,9 +247,9 @@ public class DotDensity extends JPanel implements ILegendPanel {
 			} else if (getRdBtnMedium().isSelected()) {
 				newValue = 50;
 			}
-			if (oldValue == newValue){
+			if (oldValue == newValue) {
 				sldListener.stateChanged(null);
-			} else{
+			} else {
 				getSldDensity().setValue(newValue);
 			}
 		}
@@ -257,11 +257,11 @@ public class DotDensity extends JPanel implements ILegendPanel {
 	private JPanel centerPanel = null;
 	private JSlider sldDensity = null;
 
-	private boolean dotValueChanging= false;
+	private boolean dotValueChanging = false;
 
 	private ChangeListener sldListener = new ChangeListener() {
 		public void stateChanged(ChangeEvent e) {
-			if (dotValueChanging){
+			if (dotValueChanging) {
 				return;
 			}
 
@@ -273,23 +273,20 @@ public class DotDensity extends JPanel implements ILegendPanel {
 
 	};
 
-
-	private ActionListener nmbrDotValueListener = new ActionListener(){
+	private ActionListener nmbrDotValueListener = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-			if (dotValueChanging){
+			if (dotValueChanging) {
 				return;
 			}
 
 			dotValueChanging = true;
 			double dotValue = getNmbrDotValue().getDouble();
-			if (dotValue < 0) dotValue = 0;
+			if (dotValue < 0)
+				dotValue = 0;
 			int result = dotValueToSldValue(dotValue);
 			getSldDensity().setValue(result);
 			dotValueChanging = false;
 		}
-
-
-
 
 	};
 	private ColorChooserPanel jcc;
@@ -304,24 +301,24 @@ public class DotDensity extends JPanel implements ILegendPanel {
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 */
 	private void initialize() {
 		this.setLayout(new BorderLayout());
-		this.setSize(new java.awt.Dimension(492,278));
+		this.setSize(new java.awt.Dimension(492, 278));
 		this.add(getNorthPanel(), java.awt.BorderLayout.NORTH);
 		this.add(getCenterPanel(), java.awt.BorderLayout.CENTER);
 	}
 
-	private double sldValueToDotValue(int value){
-		int quantileIndex = (valueCount*value)/100;
-		double d = (b*quantileIndex+a); // /50; // ¿por qué el 50?
+	private double sldValueToDotValue(int value) {
+		int quantileIndex = (valueCount * value) / 100;
+		double d = (b * quantileIndex + a); // /50; // ¿por qué el 50?
 		return d;
 	}
 
-	private int dotValueToSldValue(double value){
-		int quantileIndex = (int)Math.round((value-a)/b);
-		int result = 100*quantileIndex/valueCount;
+	private int dotValueToSldValue(double value) {
+		int quantileIndex = (int) Math.round((value - a) / b);
+		int result = 100 * quantileIndex / valueCount;
 		return result;
 	}
 
@@ -334,7 +331,8 @@ public class DotDensity extends JPanel implements ILegendPanel {
 			e1.printStackTrace();
 		}
 		try {
-			//Para evitar los campos no pertenecientes a la fuente original de la capa.
+			// Para evitar los campos no pertenecientes a la fuente original de
+			// la capa.
 			// SelectableDataSource sds = layer.getSource().getRecordset();
 			// FJP: Otra vez con soporte del join
 			SelectableDataSource sds = layer.getRecordset();
@@ -348,8 +346,9 @@ public class DotDensity extends JPanel implements ILegendPanel {
 			}
 			if (!(legend instanceof DotDensityLegend)) {
 				legend = new DotDensityLegend();
-				((DotDensityLegend) legend).setClassifyingFieldNames(
-						new String[] {(String) cmbLegendField.getItemAt(0)});
+				((DotDensityLegend) legend)
+						.setClassifyingFieldNames(new String[] { (String) cmbLegendField
+								.getItemAt(0) });
 				((DotDensityLegend) legend).setShapeType(layer.getShapeType());
 			}
 
@@ -357,14 +356,16 @@ public class DotDensity extends JPanel implements ILegendPanel {
 
 			initializing = false; // enables events to the combo box
 
-			cmbLegendField.setSelectedItem(theLegend.getClassifyingFieldNames()[0]);
+			cmbLegendField
+					.setSelectedItem(theLegend.getClassifyingFieldNames()[0]);
 			try {
 				getDotColorChooserPanel().setColor(theLegend.getDotColor());
 			} catch (NullPointerException npEx) {
 				getDotColorChooserPanel().setColor(Color.RED);
 			}
 			try {
-				getBackgroundColorChooserPanel().setColor(theLegend.getBGColor());
+				getBackgroundColorChooserPanel().setColor(
+						theLegend.getBGColor());
 			} catch (NullPointerException npEx) {
 				getDotColorChooserPanel().setColor(Color.WHITE);
 			}
@@ -373,7 +374,7 @@ public class DotDensity extends JPanel implements ILegendPanel {
 			try {
 				double dotValue = theLegend.getDotValue();
 				if (dotValue <= 0)
-					dotValue = sldValueToDotValue(50);//100;
+					dotValue = sldValueToDotValue(50);// 100;
 				getNmbrDotValue().setDouble(dotValue);
 				dotValueChanging = true;
 				getSldDensity().setValue(dotValueToSldValue(dotValue));
@@ -419,8 +420,11 @@ public class DotDensity extends JPanel implements ILegendPanel {
 			int shapeType = layer.getShapeType();
 
 			// shapeType should be always polygon
-			if ((shapeType%FShape.Z) != FShape.POLYGON) {
-				NotificationManager.addError(PluginServices.getText(this, "cannot_apply_to_a_non_polygon_layer"), new Exception());
+			if ((shapeType % FShape.Z) != FShape.POLYGON) {
+				NotificationManager
+						.addError(PluginServices.getText(this,
+								"cannot_apply_to_a_non_polygon_layer"),
+								new Exception());
 			}
 
 			// check if the field exists (this is probably dead code)
@@ -433,28 +437,32 @@ public class DotDensity extends JPanel implements ILegendPanel {
 			double dotValue;
 			double dotSize;
 			try {
-//				dotValue = Double.parseDouble(nmbrDotValue.getText());
+				// dotValue = Double.parseDouble(nmbrDotValue.getText());
 				dotValue = nmbrDotValue.getDouble();
 			} catch (Exception e) {
-//				dotValue = nf.parse(nmbrDotValue.getText()).doubleValue();
+				// dotValue = nf.parse(nmbrDotValue.getText()).doubleValue();
 				dotValue = nmbrDotValue.getDouble();
 			}
 			if (dotValue == 0)
 				dotValue = 1;
 			try {
-//				dotSize = Double.parseDouble(numDotSize.getText());
+				// dotSize = Double.parseDouble(numDotSize.getText());
 				dotSize = numDotSize.getDouble();
 			} catch (Exception e) {
-//				dotSize = nf.parse(numDotSize.getText()).doubleValue();
+				// dotSize = nf.parse(numDotSize.getText()).doubleValue();
 				dotSize = numDotSize.getDouble();
 			}
 
-			if (max/dotValue > 50000) {
-				int option = JOptionPane.showConfirmDialog(this,
-						PluginServices.getText(this, "looks_like_too_low_value_for_this_field_may_cause_system_to_run_slow"),
-						PluginServices.getText(this, "warning"),
-						JOptionPane.OK_CANCEL_OPTION);
-				if (option	== JOptionPane.CANCEL_OPTION)
+			if (max / dotValue > 50000) {
+				int option = JOptionPane
+						.showConfirmDialog(
+								this,
+								PluginServices
+										.getText(this,
+												"looks_like_too_low_value_for_this_field_may_cause_system_to_run_slow"),
+								PluginServices.getText(this, "warning"),
+								JOptionPane.OK_CANCEL_OPTION);
+				if (option == JOptionPane.CANCEL_OPTION)
 					return oldLegend;
 			}
 
@@ -463,17 +471,19 @@ public class DotDensity extends JPanel implements ILegendPanel {
 			densitySymbol.setDotSize(dotSize);
 			densitySymbol.setDotColor(getDotColorChooserPanel().getColor());
 
-			// create a simple-fill symbol over which the dot density will be drawn
+			// create a simple-fill symbol over which the dot density will be
+			// drawn
 			SimpleFillSymbol fillSymbol = new SimpleFillSymbol();
-			fillSymbol.setFillColor(getBackgroundColorChooserPanel().getColor());
+			fillSymbol
+					.setFillColor(getBackgroundColorChooserPanel().getColor());
 			fillSymbol.setOutline((ILineSymbol) getBtnOutline().getSymbol());
 
 			// combine both the DotDensitySymbol and the SimpleFillSymbol in
 			// MultiLayerSymbol so they will be paint as a unique ISymbol
 			MultiLayerFillSymbol symbol = new MultiLayerFillSymbol();
-			symbol.setDescription(
-					"DotDensitySymbol" + PluginServices.getText(this, "in_layer") +
-					": '"+layer.getName()+"'");
+			symbol.setDescription("DotDensitySymbol"
+					+ PluginServices.getText(this, "in_layer") + ": '"
+					+ layer.getName() + "'");
 			symbol.addLayer(fillSymbol);
 			symbol.addLayer(densitySymbol);
 
@@ -481,12 +491,14 @@ public class DotDensity extends JPanel implements ILegendPanel {
 			legend.addSymbol(ValueFactory.createValue("theSymbol"), symbol);
 			legend.setDefaultSymbol(symbol);
 			legend.setDotValue(dotValue);
-			legend.setClassifyingFieldNames(new String[] {fieldName});
+			legend.setClassifyingFieldNames(new String[] { fieldName });
 			legend.setBGColor(getBackgroundColorChooserPanel().getColor());
 			legend.setDotColor(getDotColorChooserPanel().getColor());
 
 		} catch (Exception e) {
-			NotificationManager.addError(PluginServices.getText(this, "could_not_setup_legend")+".", e);
+			NotificationManager.addError(
+					PluginServices.getText(this, "could_not_setup_legend")
+							+ ".", e);
 		}
 		return legend;
 
@@ -494,14 +506,15 @@ public class DotDensity extends JPanel implements ILegendPanel {
 
 	/**
 	 * This method initializes centerPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getNorthPanel() {
 		if (northPanel == null) {
 			lblLabellingField = new JLabel();
-			lblLabellingField.setText(PluginServices.getText(this, "labeling_field")+".");
-			northPanel = new JPanel(new FlowLayout(FlowLayout.LEADING,15,0));
+			lblLabellingField.setText(PluginServices.getText(this,
+					"labeling_field") + ".");
+			northPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 15, 0));
 			northPanel.add(lblLabellingField, null);
 			northPanel.add(getCmbLegendField(), null);
 
@@ -511,7 +524,7 @@ public class DotDensity extends JPanel implements ILegendPanel {
 
 	private ColorChooserPanel getDotColorChooserPanel() {
 		if (jcc == null) {
-			jcc = new ColorChooserPanel() ;
+			jcc = new ColorChooserPanel();
 			jcc.setAlpha(255);
 		}
 		return jcc;
@@ -519,13 +532,13 @@ public class DotDensity extends JPanel implements ILegendPanel {
 
 	/**
 	 * This method initializes southPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getDensityButtonsPanel() {
 		if (densityButtonsPanel == null) {
 			densityButtonsPanel = new GridBagLayoutPanel();
-			LayoutManager layout = new FlowLayout(FlowLayout.LEADING, 0,0);
+			LayoutManager layout = new FlowLayout(FlowLayout.LEADING, 0, 0);
 			JPanel aux = new JPanel(layout);
 			aux.add(getNumDotSize());
 			densityButtonsPanel.addComponent(
@@ -533,7 +546,7 @@ public class DotDensity extends JPanel implements ILegendPanel {
 			aux = new JPanel(layout);
 			aux.add(getNmbrDotValue());
 			densityButtonsPanel.addComponent(
-					PluginServices.getText(this,"dot_value"), aux);
+					PluginServices.getText(this, "dot_value"), aux);
 			aux = new JPanel(layout);
 			aux.add(getDotColorChooserPanel());
 			densityButtonsPanel.addComponent(
@@ -552,7 +565,7 @@ public class DotDensity extends JPanel implements ILegendPanel {
 
 	private ColorChooserPanel getBackgroundColorChooserPanel() {
 		if (jccBackground == null) {
-			jccBackground = new ColorChooserPanel() ;
+			jccBackground = new ColorChooserPanel();
 			jccBackground.setColor(Color.WHITE);
 			jccBackground.setAlpha(255);
 		}
@@ -569,24 +582,24 @@ public class DotDensity extends JPanel implements ILegendPanel {
 
 	/**
 	 * This method initializes pnlDensities
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPnlDensities() {
 		if (pnlDensities == null) {
-			pnlDensities = new JPanel(new BorderLayout(5,0));
+			pnlDensities = new JPanel(new BorderLayout(5, 0));
 			pnlDensities.setBorder(BorderFactory.createTitledBorder(null,
 					PluginServices.getText(this, "densities")));
 			JPanel aux2 = new JPanel();
 			JPanel aux;
-			aux = new JPanel(new GridLayout(1,3));
+			aux = new JPanel(new GridLayout(1, 3));
 			aux.add(new JLabel(PluginServices.getText(this, "low")));
 			aux.add(new JLabel(PluginServices.getText(this, "medium")));
 			aux.add(new JLabel(PluginServices.getText(this, "high")));
 
 			aux2.add(aux);
 
-			aux = new JPanel(new GridLayout(1,3));
+			aux = new JPanel(new GridLayout(1, 3));
 			aux.add(getRdBtnLow());
 			aux.add(getRdBtnMedium());
 			aux.add(getRdBtnHigh());
@@ -607,10 +620,9 @@ public class DotDensity extends JPanel implements ILegendPanel {
 		return pnlDensities;
 	}
 
-
 	/**
 	 * This method initializes cmbLegendField
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getCmbLegendField() {
@@ -623,12 +635,13 @@ public class DotDensity extends JPanel implements ILegendPanel {
 
 	/**
 	 * This method initializes rdBtnHigh
-	 *
+	 * 
 	 * @return javax.swing.JRadioButton
 	 */
 	private JRadioButton getRdBtnHigh() {
 		if (rdBtnHigh == null) {
-			rdBtnHigh = new JRadioButton(PluginServices.getIconTheme().get("high-density"));
+			rdBtnHigh = new JRadioButton(PluginServices.getIconTheme().get(
+					"high-density"));
 			rdBtnHigh.addActionListener(buttonsListener);
 		}
 		return rdBtnHigh;
@@ -636,13 +649,13 @@ public class DotDensity extends JPanel implements ILegendPanel {
 
 	/**
 	 * This method initializes rdBtnMedium
-	 *
+	 * 
 	 * @return javax.swing.JRadioButton
 	 */
 	private JRadioButton getRdBtnMedium() {
 		if (rdBtnMedium == null) {
-			rdBtnMedium = new JRadioButton(PluginServices.getIconTheme()
-					.get("medium-density"));
+			rdBtnMedium = new JRadioButton(PluginServices.getIconTheme().get(
+					"medium-density"));
 			rdBtnMedium.addActionListener(buttonsListener);
 		}
 		return rdBtnMedium;
@@ -650,12 +663,13 @@ public class DotDensity extends JPanel implements ILegendPanel {
 
 	/**
 	 * This method initializes rdBtnMax
-	 *
+	 * 
 	 * @return javax.swing.JRadioButton
 	 */
 	private JRadioButton getRdBtnLow() {
 		if (rdBtnLow == null) {
-			rdBtnLow = new JRadioButton(PluginServices.getIconTheme().get("low-density"));
+			rdBtnLow = new JRadioButton(PluginServices.getIconTheme().get(
+					"low-density"));
 			rdBtnLow.addActionListener(buttonsListener);
 		}
 		return rdBtnLow;
@@ -663,7 +677,7 @@ public class DotDensity extends JPanel implements ILegendPanel {
 
 	/**
 	 * This method initializes numDotSize
-	 *
+	 * 
 	 * @return de.ios.framework.swing.JNumberField
 	 */
 	private JIncrementalNumberField getNumDotSize() {
@@ -677,7 +691,7 @@ public class DotDensity extends JPanel implements ILegendPanel {
 
 	/**
 	 * This method initializes nmbrDotValue
-	 *
+	 * 
 	 * @return de.ios.framework.swing.JNumberField
 	 */
 	private JIncrementalNumberField getNmbrDotValue() {
@@ -692,7 +706,7 @@ public class DotDensity extends JPanel implements ILegendPanel {
 
 	/**
 	 * This method initializes centerPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getCenterPanel() {
@@ -706,25 +720,27 @@ public class DotDensity extends JPanel implements ILegendPanel {
 
 	/**
 	 * This method initializes sldDensity
-	 *
+	 * 
 	 * @return javax.swing.JSlider
 	 */
 	private JSlider getSldDensity() {
 		if (sldDensity == null) {
 			sldDensity = new JSlider();
-			sldDensity.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+			sldDensity
+					.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 			sldDensity.addChangeListener(sldListener);
 		}
 		return sldDensity;
 	}
 
 	public String getDescription() {
-		return PluginServices.getText(this,"Defines_a_dot_density_symbol_based_on_a_field_value") + ".";
+		return PluginServices.getText(this,
+				"Defines_a_dot_density_symbol_based_on_a_field_value") + ".";
 	}
 
 	public ImageIcon getIcon() {
-		return new ImageIcon(this.getClass().getClassLoader().
-				getResource("images/DotDensity.PNG"));
+		return new ImageIcon(this.getClass().getClassLoader()
+				.getResource("images/DotDensity.PNG"));
 	}
 
 	public Class getParentClass() {
@@ -748,7 +764,7 @@ public class DotDensity extends JPanel implements ILegendPanel {
 			try {
 				FLyrVect lyr = (FLyrVect) layer;
 
-				if ((lyr.getShapeType()%FShape.Z) != FShape.POLYGON)
+				if ((lyr.getShapeType() % FShape.Z) != FShape.POLYGON)
 					return false;
 
 				SelectableDataSource sds;
@@ -766,4 +782,4 @@ public class DotDensity extends JPanel implements ILegendPanel {
 		return false;
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

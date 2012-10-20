@@ -47,8 +47,8 @@
  */
 package com.iver.andami.persistence.generate;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
 import org.exolab.castor.xml.Marshaller;
@@ -57,136 +57,130 @@ import org.exolab.castor.xml.Unmarshaller;
 /**
  * Class Window.
  * 
- * @version $Revision: 5275 $ $Date: 2006-05-19 08:41:50 +0200 (Fri, 19 May 2006) $
+ * @version $Revision: 5275 $ $Date: 2006-05-19 08:41:50 +0200 (Fri, 19 May
+ *          2006) $
  */
 public class Window implements java.io.Serializable {
 
+	// --------------------------/
+	// - Class/Member Variables -/
+	// --------------------------/
 
-      //--------------------------/
-     //- Class/Member Variables -/
-    //--------------------------/
+	/**
+	 * Field _rectangle
+	 */
+	private java.lang.String _rectangle;
 
-    /**
-     * Field _rectangle
-     */
-    private java.lang.String _rectangle;
+	/**
+	 * Field _id
+	 */
+	private java.lang.String _id;
 
-    /**
-     * Field _id
-     */
-    private java.lang.String _id;
+	// ----------------/
+	// - Constructors -/
+	// ----------------/
 
+	public Window() {
+		super();
+	} // -- com.iver.andami.persistence.generate.Window()
 
-      //----------------/
-     //- Constructors -/
-    //----------------/
+	// -----------/
+	// - Methods -/
+	// -----------/
 
-    public Window() {
-        super();
-    } //-- com.iver.andami.persistence.generate.Window()
+	/**
+	 * Returns the value of field 'id'.
+	 * 
+	 * @return the value of field 'id'.
+	 */
+	public java.lang.String getId() {
+		return this._id;
+	} // -- java.lang.String getId()
 
+	/**
+	 * Returns the value of field 'rectangle'.
+	 * 
+	 * @return the value of field 'rectangle'.
+	 */
+	public java.lang.String getRectangle() {
+		return this._rectangle;
+	} // -- java.lang.String getRectangle()
 
-      //-----------/
-     //- Methods -/
-    //-----------/
+	/**
+	 * Method isValid
+	 */
+	public boolean isValid() {
+		try {
+			validate();
+		} catch (org.exolab.castor.xml.ValidationException vex) {
+			return false;
+		}
+		return true;
+	} // -- boolean isValid()
 
-    /**
-     * Returns the value of field 'id'.
-     * 
-     * @return the value of field 'id'.
-     */
-    public java.lang.String getId()
-    {
-        return this._id;
-    } //-- java.lang.String getId() 
+	/**
+	 * Method marshal
+	 * 
+	 * @param out
+	 */
+	public void marshal(java.io.Writer out)
+			throws org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
 
-    /**
-     * Returns the value of field 'rectangle'.
-     * 
-     * @return the value of field 'rectangle'.
-     */
-    public java.lang.String getRectangle()
-    {
-        return this._rectangle;
-    } //-- java.lang.String getRectangle() 
+		Marshaller.marshal(this, out);
+	} // -- void marshal(java.io.Writer)
 
-    /**
-     * Method isValid
-     */
-    public boolean isValid()
-    {
-        try {
-            validate();
-        }
-        catch (org.exolab.castor.xml.ValidationException vex) {
-            return false;
-        }
-        return true;
-    } //-- boolean isValid() 
+	/**
+	 * Method marshal
+	 * 
+	 * @param handler
+	 */
+	public void marshal(org.xml.sax.ContentHandler handler)
+			throws java.io.IOException, org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
 
-    /**
-     * Method marshal
-     * 
-     * @param out
-     */
-    public void marshal(java.io.Writer out)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        
-        Marshaller.marshal(this, out);
-    } //-- void marshal(java.io.Writer) 
+		Marshaller.marshal(this, handler);
+	} // -- void marshal(org.xml.sax.ContentHandler)
 
-    /**
-     * Method marshal
-     * 
-     * @param handler
-     */
-    public void marshal(org.xml.sax.ContentHandler handler)
-        throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        
-        Marshaller.marshal(this, handler);
-    } //-- void marshal(org.xml.sax.ContentHandler) 
+	/**
+	 * Sets the value of field 'id'.
+	 * 
+	 * @param id
+	 *            the value of field 'id'.
+	 */
+	public void setId(java.lang.String id) {
+		this._id = id;
+	} // -- void setId(java.lang.String)
 
-    /**
-     * Sets the value of field 'id'.
-     * 
-     * @param id the value of field 'id'.
-     */
-    public void setId(java.lang.String id)
-    {
-        this._id = id;
-    } //-- void setId(java.lang.String) 
+	/**
+	 * Sets the value of field 'rectangle'.
+	 * 
+	 * @param rectangle
+	 *            the value of field 'rectangle'.
+	 */
+	public void setRectangle(java.lang.String rectangle) {
+		this._rectangle = rectangle;
+	} // -- void setRectangle(java.lang.String)
 
-    /**
-     * Sets the value of field 'rectangle'.
-     * 
-     * @param rectangle the value of field 'rectangle'.
-     */
-    public void setRectangle(java.lang.String rectangle)
-    {
-        this._rectangle = rectangle;
-    } //-- void setRectangle(java.lang.String) 
+	/**
+	 * Method unmarshal
+	 * 
+	 * @param reader
+	 */
+	public static java.lang.Object unmarshal(java.io.Reader reader)
+			throws org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
+		return (com.iver.andami.persistence.generate.Window) Unmarshaller
+				.unmarshal(com.iver.andami.persistence.generate.Window.class,
+						reader);
+	} // -- java.lang.Object unmarshal(java.io.Reader)
 
-    /**
-     * Method unmarshal
-     * 
-     * @param reader
-     */
-    public static java.lang.Object unmarshal(java.io.Reader reader)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        return (com.iver.andami.persistence.generate.Window) Unmarshaller.unmarshal(com.iver.andami.persistence.generate.Window.class, reader);
-    } //-- java.lang.Object unmarshal(java.io.Reader) 
-
-    /**
-     * Method validate
-     */
-    public void validate()
-        throws org.exolab.castor.xml.ValidationException
-    {
-        org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
-        validator.validate(this);
-    } //-- void validate() 
+	/**
+	 * Method validate
+	 */
+	public void validate() throws org.exolab.castor.xml.ValidationException {
+		org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
+		validator.validate(this);
+	} // -- void validate()
 
 }

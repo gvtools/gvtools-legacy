@@ -25,7 +25,7 @@ package org.gvsig.gui.beans.progresspanel;
 /**
  * <code>LogControl</code>. Objeto para un control básico de un log. Para añadir
  * y reemplazar la última línea añadida.
- *
+ * 
  * @version 27/03/2007
  * @author BorSanZa - Borja Sanchez Zamorano (borja.sanchez@iver.es)
  */
@@ -34,6 +34,7 @@ public class LogControl {
 
 	/**
 	 * Añade una línea al log.
+	 * 
 	 * @param line
 	 */
 	public void addLine(String line) {
@@ -44,6 +45,7 @@ public class LogControl {
 
 	/**
 	 * Reemplaza la última línea añadida al log.
+	 * 
 	 * @param line
 	 */
 	public void replaceLastLine(String line) {
@@ -56,6 +58,7 @@ public class LogControl {
 
 	/**
 	 * Establece el texto completo del log.
+	 * 
 	 * @param value
 	 */
 	public void setText(String value) {
@@ -64,6 +67,7 @@ public class LogControl {
 
 	/**
 	 * Devuelve el contenido del log.
+	 * 
 	 * @return String
 	 */
 	public String getText() {

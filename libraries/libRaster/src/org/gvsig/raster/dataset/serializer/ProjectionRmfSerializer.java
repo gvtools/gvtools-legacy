@@ -29,6 +29,7 @@ import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
 import org.kxml2.io.KXmlParser;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.xmlpull.v1.XmlPullParserException;
+
 /**
  * <P>
  * Clase para convertir a XML una proyeccion y obtener el valor desde un XML.
@@ -40,12 +41,12 @@ import org.xmlpull.v1.XmlPullParserException;
  * La estructura XML de una proyeccion es la siguiente:
  * </P>
  * <P>
- *
+ * 
  * @version 20/05/2008
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class ProjectionRmfSerializer extends ClassSerializer {
-	private final String MAIN_TAG   = "Projection";
+	private final String MAIN_TAG = "Projection";
 	private CoordinateReferenceSystem crs = null;
 
 	/**
@@ -68,6 +69,7 @@ public class ProjectionRmfSerializer extends ClassSerializer {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.io.rmf.IRmfBlock#getMainTag()
 	 */
 	public String getMainTag() {
@@ -76,6 +78,7 @@ public class ProjectionRmfSerializer extends ClassSerializer {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.io.rmf.IRmfBlock#getResult()
 	 */
 	public Object getResult() {
@@ -84,6 +87,7 @@ public class ProjectionRmfSerializer extends ClassSerializer {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.io.rmf.IRmfBlock#read(java.lang.String)
 	 */
 	public void read(String xml) throws ParsingException {
@@ -103,15 +107,16 @@ public class ProjectionRmfSerializer extends ClassSerializer {
 
 				while (tag != KXmlParser.END_DOCUMENT) {
 					switch (tag) {
-						case KXmlParser.START_TAG:
-							if (parser.getName().equals("WktProjection")) {
-								for (int i = 0; i < parser.getAttributeCount(); i++) {
-									if (parser.getAttributeName(i).equals("value")) {
-									crs = ProjectionUtils.parseWKT((String) parser
-											.getAttributeValue(i));
-									}
+					case KXmlParser.START_TAG:
+						if (parser.getName().equals("WktProjection")) {
+							for (int i = 0; i < parser.getAttributeCount(); i++) {
+								if (parser.getAttributeName(i).equals("value")) {
+									crs = ProjectionUtils
+											.parseWKT((String) parser
+													.getAttributeValue(i));
 								}
 							}
+						}
 					}
 					tag = parser.next();
 				}
@@ -126,6 +131,7 @@ public class ProjectionRmfSerializer extends ClassSerializer {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.io.rmf.IRmfBlock#write()
 	 */
 	public String write() throws IOException {

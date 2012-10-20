@@ -60,58 +60,64 @@ import org.gvsig.remoteClient.gml.schemas.XMLElement;
 /**
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class TreeTableModelWithCheckBoxes extends FieldsTreeTableModel{
+public class TreeTableModelWithCheckBoxes extends FieldsTreeTableModel {
 
 	public TreeTableModelWithCheckBoxes() {
 		super();
 	}
 
 	public TreeTableModelWithCheckBoxes(Object root) {
-		super(generateCheckBoxNodes(root));		
+		super(generateCheckBoxNodes(root));
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.tree.TreeModel#isLeaf(java.lang.Object)
-	 */ 
-	public boolean isLeaf(Object node) { 
-		CheckBoxNode leaf = (CheckBoxNode)node;	
+	 */
+	public boolean isLeaf(Object node) {
+		CheckBoxNode leaf = (CheckBoxNode) node;
 		return super.isLeaf(leaf.getElement());
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.tree.TreeModel#getChildCount(java.lang.Object)
 	 */
-	public int getChildCount(Object node) { 
-		CheckBoxNode leaf = (CheckBoxNode)node;	
+	public int getChildCount(Object node) {
+		CheckBoxNode leaf = (CheckBoxNode) node;
 		return super.getChildCount(leaf.getElement());
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.tree.TreeModel#getChild(java.lang.Object, int)
 	 */
-	public Object getChild(Object node, int i) { 
-		CheckBoxNode leaf = (CheckBoxNode)node;	
-		if (leaf.getChildren().size() > 0){
+	public Object getChild(Object node, int i) {
+		CheckBoxNode leaf = (CheckBoxNode) node;
+		if (leaf.getChildren().size() > 0) {
 			return leaf.getChildren().get(i);
 		}
 		return null;
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
-	 * @see org.gvsig.gui.beans.swing.treeTable.TreeTableModel#getValueAt(java.lang.Object, int)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.swing.treeTable.TreeTableModel#getValueAt(java.lang
+	 * .Object, int)
 	 */
 	public Object getValueAt(Object node, int column) {
-		CheckBoxNode leaf = (CheckBoxNode)node;	
-		return super.getValueAt(leaf.getElement(),column);
+		CheckBoxNode leaf = (CheckBoxNode) node;
+		return super.getValueAt(leaf.getElement(), column);
 	}
-	
-	public static Object generateCheckBoxNodes(Object root){
-		Object newRoot = new CheckBoxNode((XMLElement)root,null);
+
+	public static Object generateCheckBoxNodes(Object root) {
+		Object newRoot = new CheckBoxNode((XMLElement) root, null);
 		return newRoot;
-	}	
-	
+	}
+
 }

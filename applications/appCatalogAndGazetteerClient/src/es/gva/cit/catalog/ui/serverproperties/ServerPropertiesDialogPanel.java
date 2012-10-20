@@ -60,42 +60,48 @@ import es.gva.cit.catalog.utils.CatalogConstants;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class ServerPropertiesDialogPanel extends ServerPropertiesPanel implements ActionListener{
+public class ServerPropertiesDialogPanel extends ServerPropertiesPanel
+		implements ActionListener {
 	protected Object parentFrame;
 	protected CatalogClient client = null;
-	
-	public ServerPropertiesDialogPanel(ServerData serverData, CatalogClient client, IProfile profile, Object parentFrame) {
+
+	public ServerPropertiesDialogPanel(ServerData serverData,
+			CatalogClient client, IProfile profile, Object parentFrame) {
 		super(serverData, profile);
 		this.parentFrame = parentFrame;
 		this.client = client;
-		addActionListener(this);		
+		addActionListener(this);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().compareTo(CatalogConstants.CLOSE_BUTTON_ACTION_COMMAND)==0) {
+		if (e.getActionCommand().compareTo(
+				CatalogConstants.CLOSE_BUTTON_ACTION_COMMAND) == 0) {
 			closeButtonActionPerformed();
-		}else if (e.getActionCommand().compareTo(CatalogConstants.CANCEL_BUTTON_ACTION_COMMAND)==0) {
+		} else if (e.getActionCommand().compareTo(
+				CatalogConstants.CANCEL_BUTTON_ACTION_COMMAND) == 0) {
 			cancelButtonActionPerformed();
 		}
 	}
-	
+
 	/**
-	 *  * It is thrown the the close button is clicked
+	 * * It is thrown the the close button is clicked
 	 */
-	protected void closeButtonActionPerformed() {        
+	protected void closeButtonActionPerformed() {
 		client.setServerData(updateServerData());
-		((JFrame)parentFrame).setVisible(false);
-	} 
-	
+		((JFrame) parentFrame).setVisible(false);
+	}
+
 	/**
-	 *  * It is thrown the the close button is clicked
+	 * * It is thrown the the close button is clicked
 	 */
-	protected void cancelButtonActionPerformed() {        
-		((JFrame)parentFrame).setVisible(false);
-	} 
+	protected void cancelButtonActionPerformed() {
+		((JFrame) parentFrame).setVisible(false);
+	}
 
 }

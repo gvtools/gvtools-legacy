@@ -37,70 +37,80 @@ import com.iver.cit.gvsig.addlayer.fileopen.FileOpenWizard;
  * Panel de selección de fichero de salida.
  * 
  * 10/01/2008
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class OutFileSelectionPanel extends JPanel implements ActionListener {
-	private static final long    serialVersionUID    = 1L;
-	private JTextField           fileName            = null;
-	private JButton              bSelection          = null;
-	
+	private static final long serialVersionUID = 1L;
+	private JTextField fileName = null;
+	private JButton bSelection = null;
+
 	/**
-	 * Constructor. Asigna la lista de nombres de vistas para el selector. 
+	 * Constructor. Asigna la lista de nombres de vistas para el selector.
+	 * 
 	 * @param viewList
 	 */
 	public OutFileSelectionPanel() {
 		init();
 	}
-	
+
 	/**
 	 * Acciones de inicialización del panel
 	 */
-	public void init() {	
+	public void init() {
 		BorderLayout fl = new BorderLayout();
 		fl.setHgap(3);
 		fl.setVgap(0);
 		setLayout(fl);
-		setBorder(javax.swing.BorderFactory.createTitledBorder(null, RasterToolsUtil.getText(this, "output_file"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+		setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+				RasterToolsUtil.getText(this, "output_file"),
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
 		add(getFileName(), BorderLayout.CENTER);
 		add(getSelectFileButton(), BorderLayout.EAST);
 	}
-	
+
 	/**
 	 * Obtiene el campo con la ruta al ficheo a georreferenciar
+	 * 
 	 * @return JFormattedTextField
 	 */
 	private JTextField getFileName() {
 		if (fileName == null) {
 			String path = FileOpenWizard.getLastPath();
-			if(path == null)
+			if (path == null)
 				path = System.getProperty("user.home");
-			fileName = new JTextField(path + File.separator + RasterLibrary.usesOnlyLayerName() + ".tif");
+			fileName = new JTextField(path + File.separator
+					+ RasterLibrary.usesOnlyLayerName() + ".tif");
 			fileName.setEditable(true);
 		}
 		return fileName;
 	}
-	
+
 	/**
 	 * Obtiene el botón de selección de fichero
+	 * 
 	 * @return JButton
-		*/
+	 */
 	private JButton getSelectFileButton() {
-		if(bSelection == null) {
-			bSelection = new JButton(RasterToolsUtil.getText(this, "directorio"));
+		if (bSelection == null) {
+			bSelection = new JButton(
+					RasterToolsUtil.getText(this, "directorio"));
 			bSelection.addActionListener(this);
 		}
 		return bSelection;
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == getSelectFileButton()) {
+		if (e.getSource() == getSelectFileButton()) {
 			selectDirectory();
 		}
 	}
-	
+
 	/**
 	 * Muestra el dialogo de selección de fichero para la carga de la capa
 	 * raster en los formatos definidos para georreferenciar.
+	 * 
 	 * @return Capa raster cargada o null si no se consigue ninguna
 	 */
 	private void selectDirectory() {
@@ -108,16 +118,15 @@ public class OutFileSelectionPanel extends JPanel implements ActionListener {
 		chooser.setAcceptAllFileFilterUsed(false);
 		chooser.isDirectorySelectionEnabled();
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		
-		
+
 		int returnVal = chooser.showOpenDialog(null);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			String outPath = chooser.getSelectedFile().getAbsolutePath();
 			String fileName = RasterLibrary.getOnlyLayerName() + ".tif";
 			int index = getFileName().getText().lastIndexOf(File.separator);
-			if(index != -1)
+			if (index != -1)
 				fileName = getFileName().getText().substring(index + 1);
-			if(outPath.compareTo(File.separator) == 0)
+			if (outPath.compareTo(File.separator) == 0)
 				getFileName().setText(outPath + fileName);
 			else
 				getFileName().setText(outPath + File.separator + fileName);
@@ -125,19 +134,21 @@ public class OutFileSelectionPanel extends JPanel implements ActionListener {
 		}
 		return;
 	}
-	
-	//-------Consulta de propiedades seleccionadas---------
-	
+
+	// -------Consulta de propiedades seleccionadas---------
+
 	/**
-	 * Obtiene el fichero seleccionado 
+	 * Obtiene el fichero seleccionado
+	 * 
 	 * @return String con el nombre del fichero seleccionado
 	 */
 	public String getOutFile() {
 		return getFileName().getText();
 	}
-	
+
 	/**
 	 * Asigna el fichero de salida
+	 * 
 	 * @param file
 	 */
 	public void setOutFile(String file) {

@@ -70,13 +70,13 @@ import com.iver.cit.gvsig.gui.JComboBoxUnits;
 import com.iver.cit.gvsig.gui.panels.ColorChooserPanel;
 import com.iver.cit.gvsig.gui.styling.JComboBoxUnitsReferenceSystem;
 import com.iver.cit.gvsig.gui.utils.FontChooser;
-import com.iver.cit.gvsig.project.Project;
 import com.iver.utiles.swing.JComboBox;
 
-public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPanel{
+public class AttrInTableLabeling extends JPanel implements
+		ILabelingStrategyPanel {
 	private static final long serialVersionUID = 8229927418031917075L;
-	private static final String NO_FIELD_ITEM = "-- " +
-	PluginServices.getText(LabelingManager.class, "none") + " --";
+	private static final String NO_FIELD_ITEM = "-- "
+			+ PluginServices.getText(LabelingManager.class, "none") + " --";
 	private String[] fieldNames;
 	private String[] numericFieldNames;
 	private String[] integerFieldNames;
@@ -108,28 +108,31 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 		GridBagLayoutPanel panel = new GridBagLayoutPanel();
 
 		GridBagLayoutPanel aux = new GridBagLayoutPanel();
-		aux.addComponent(PluginServices.getText(this, "field_to_be_labeled") + ":", getCmbTextField());
+		aux.addComponent(PluginServices.getText(this, "field_to_be_labeled")
+				+ ":", getCmbTextField());
 		aux.addComponent(getRdBtnHeightField(), getCmbHeightField());
 		aux.addComponent(getRdBtnFixedHeight(), getTxtHeightField());
-		aux.addComponent(PluginServices.getText(this, "rotation_height") + ":", getCmbRotationField());
-		aux.addComponent(PluginServices.getText(this, "units") + ":", getCmbUnits());
-		aux.addComponent(PluginServices.getText(this,""),getCmbReferenceSystem());
+		aux.addComponent(PluginServices.getText(this, "rotation_height") + ":",
+				getCmbRotationField());
+		aux.addComponent(PluginServices.getText(this, "units") + ":",
+				getCmbUnits());
+		aux.addComponent(PluginServices.getText(this, ""),
+				getCmbReferenceSystem());
 		panel.add(aux);
 
 		aux = new GridBagLayoutPanel();
-		aux.addComponent(getChooseFontBut(),new JBlank(20,20));
+		aux.addComponent(getChooseFontBut(), new JBlank(20, 20));
 		GridBagLayoutPanel aux2 = new GridBagLayoutPanel();
-		aux2.setBorder(BorderFactory.createTitledBorder(null,PluginServices.getText(this,"color")));
-		aux2.addComponent(getRdBtnFixedColor(),getColorChooser());
-		aux2.addComponent(getRdBtnColorField(),getCmbColorField());
+		aux2.setBorder(BorderFactory.createTitledBorder(null,
+				PluginServices.getText(this, "color")));
+		aux2.addComponent(getRdBtnFixedColor(), getColorChooser());
+		aux2.addComponent(getRdBtnColorField(), getCmbColorField());
 		aux.addComponent(aux2);
 
-		panel.add(new JBlank(20,20));
+		panel.add(new JBlank(20, 20));
 		panel.add(aux);
 
-
 		add(panel);
-
 
 		ButtonGroup group = new ButtonGroup();
 		group.add(getRdBtnFixedHeight());
@@ -139,22 +142,21 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 		colorGroup.add(getRdBtnFixedColor());
 		colorGroup.add(getRdBtnColorField());
 
-//		getRdBtnHeightField().setEnabled(true);
+		// getRdBtnHeightField().setEnabled(true);
 	}
 
-
 	private ColorChooserPanel getColorChooser() {
-		if (colorChooser == null){
+		if (colorChooser == null) {
 			colorChooser = new ColorChooserPanel(true);
 		}
 		return colorChooser;
 	}
 
 	private JButton getChooseFontBut() {
-		if(chooseFontBut == null){
-			chooseFontBut = new JButton(PluginServices.getText(this,"font"));
-			chooseFontBut.setPreferredSize(new Dimension(80,10));
-			chooseFontBut.addActionListener(new ActionListener(){
+		if (chooseFontBut == null) {
+			chooseFontBut = new JButton(PluginServices.getText(this, "font"));
+			chooseFontBut.setPreferredSize(new Dimension(80, 10));
+			chooseFontBut.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
 					Font newFont;
@@ -174,7 +176,8 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 
 	private JRadioButton getRdBtnFixedHeight() {
 		if (rdBtnFixedHeight == null) {
-			rdBtnFixedHeight = new JRadioButton(PluginServices.getText(this, "fixed_height") + ":");
+			rdBtnFixedHeight = new JRadioButton(PluginServices.getText(this,
+					"fixed_height") + ":");
 			rdBtnFixedHeight.setSelected(true);
 			rdBtnFixedHeight.setName("RDFIXEDHEIGHT");
 		}
@@ -184,7 +187,8 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 
 	private JRadioButton getRdBtnHeightField() {
 		if (rdBtnHeightField == null) {
-			rdBtnHeightField = new JRadioButton(PluginServices.getText(this, "text_height_field") + ":");
+			rdBtnHeightField = new JRadioButton(PluginServices.getText(this,
+					"text_height_field") + ":");
 			rdBtnHeightField.setSelected(false);
 			rdBtnHeightField.setName("RDHEIGHTFIELD");
 		}
@@ -194,7 +198,8 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 
 	private JRadioButton getRdBtnFixedColor() {
 		if (rdBtnFixedColor == null) {
-			rdBtnFixedColor = new JRadioButton(PluginServices.getText(this, "fixed_color") + ":");
+			rdBtnFixedColor = new JRadioButton(PluginServices.getText(this,
+					"fixed_color") + ":");
 			rdBtnFixedColor.setSelected(true);
 			rdBtnFixedColor.setName("RDFIXEDCOLOR");
 		}
@@ -204,7 +209,8 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 
 	private JRadioButton getRdBtnColorField() {
 		if (rdBtnColorField == null) {
-			rdBtnColorField = new JRadioButton(PluginServices.getText(this, "color_field") + ":");
+			rdBtnColorField = new JRadioButton(PluginServices.getText(this,
+					"color_field") + ":");
 			rdBtnColorField.setSelected(false);
 			rdBtnColorField.setName("RDCOLORFIELD");
 		}
@@ -221,8 +227,8 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 		return cmbUnits;
 	}
 
-	private JComboBoxUnitsReferenceSystem getCmbReferenceSystem(){
-		if(cmbReferenceSystem == null){
+	private JComboBoxUnitsReferenceSystem getCmbReferenceSystem() {
+		if (cmbReferenceSystem == null) {
 			cmbReferenceSystem = new JComboBoxUnitsReferenceSystem();
 			cmbReferenceSystem.setName("CMBREFSYST");
 		}
@@ -240,22 +246,22 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 
 	private void refreshControls() {
 		// When the attributes are in the table -----
-		//      field with the text
+		// field with the text
 		refreshCmbTextField();
 
-		//      field with the rotation
+		// field with the rotation
 		refreshCmbRotationField();
 
-		//      field with the text height or the text size
+		// field with the text height or the text size
 		refreshTextHeight();
 
-		//		the text size unit name
+		// the text size unit name
 		refreshCmbUnits();
 
 		refreshCmbRefSystem();
-		//		the font for the text
+		// the font for the text
 		refreshFont();
-		//		the color for the font
+		// the color for the font
 		refreshColorFont();
 	}
 
@@ -286,7 +292,6 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 		return cmbTextField;
 	}
 
-
 	private JTextField getTxtHeightField() {
 		if (txtHeightField == null) {
 			txtHeightField = new JTextField(10);
@@ -314,34 +319,36 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 		AttrInTableLabelingStrategy strategy = new AttrInTableLabelingStrategy();
 		strategy.setLayer(layer);
 
-		if(getCmbHeightField().getItemCount() > 0 && !rdBtnFixedHeight.isSelected())
-			strategy.setHeightField(
-				(String) getCmbHeightField().getSelectedItem());
-		if(getCmbRotationField().getItemCount() > 0)
-			if(!getCmbRotationField().getSelectedItem().equals(NO_FIELD_ITEM))
-				strategy.setRotationField(
-						(String) getCmbRotationField().getSelectedItem());
+		if (getCmbHeightField().getItemCount() > 0
+				&& !rdBtnFixedHeight.isSelected())
+			strategy.setHeightField((String) getCmbHeightField()
+					.getSelectedItem());
+		if (getCmbRotationField().getItemCount() > 0)
+			if (!getCmbRotationField().getSelectedItem().equals(NO_FIELD_ITEM))
+				strategy.setRotationField((String) getCmbRotationField()
+						.getSelectedItem());
 			else
 				strategy.setRotationField(null);
 
-		if(getCmbTextField().getItemCount() > 0)
-			strategy.setTextField(
-				(String) getCmbTextField().getSelectedItem());
+		if (getCmbTextField().getItemCount() > 0)
+			strategy.setTextField((String) getCmbTextField().getSelectedItem());
 
 		strategy.setUsesFixedSize(getRdBtnFixedHeight().isSelected());
 		strategy.setFixedSize(fixedSize);
 
-		if(getCmbUnits().getItemCount() > 0)
+		if (getCmbUnits().getItemCount() > 0)
 			strategy.setUnit(getCmbUnits().getSelectedUnitIndex());
-		if(getCmbReferenceSystem().getItemCount() > 0)
-			strategy.setReferenceSystem(getCmbReferenceSystem().getSelectedIndex());
+		if (getCmbReferenceSystem().getItemCount() > 0)
+			strategy.setReferenceSystem(getCmbReferenceSystem()
+					.getSelectedIndex());
 
 		strategy.setUsesFixedColor(getRdBtnFixedColor().isSelected());
 		strategy.setFixedColor(getColorChooser().getColor());
 
-		if(getCmbColorField().getItemCount() > 0 && !rdBtnFixedColor.isSelected())
-			strategy.setColorField((String) getCmbColorField().getSelectedItem());
-
+		if (getCmbColorField().getItemCount() > 0
+				&& !rdBtnFixedColor.isSelected())
+			strategy.setColorField((String) getCmbColorField()
+					.getSelectedItem());
 
 		strategy.setFont(labelFont);
 		return strategy;
@@ -380,22 +387,21 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 				numericFieldNames = l.toArray(new String[l.size()]);
 				integerFieldNames = lColors.toArray(new String[lColors.size()]);
 			} catch (ReadDriverException e) {
-				NotificationManager.addError(PluginServices.getText(this, "accessing_file_structure"), e);
+				NotificationManager.addError(PluginServices.getText(this,
+						"accessing_file_structure"), e);
 			}
-
 
 			refreshControls();
 		}
 	}
 
-
-	private void refreshColorFont(){
+	private void refreshColorFont() {
 
 		getCmbColorField().removeAllItems();
 
-		boolean enabled = integerFieldNames.length>0;
-//		getCmbColorField().setEnabled(enabled);
-//		getRdBtnColorField().setEnabled(enabled);
+		boolean enabled = integerFieldNames.length > 0;
+		// getCmbColorField().setEnabled(enabled);
+		// getRdBtnColorField().setEnabled(enabled);
 
 		if (!enabled) {
 			getRdBtnFixedColor().setSelected(true);
@@ -406,7 +412,8 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 		}
 
 		if (layer.getLabelingStrategy() instanceof AttrInTableLabelingStrategy) {
-			AttrInTableLabelingStrategy aux = (AttrInTableLabelingStrategy) layer.getLabelingStrategy();
+			AttrInTableLabelingStrategy aux = (AttrInTableLabelingStrategy) layer
+					.getLabelingStrategy();
 			try {
 
 				getRdBtnFixedColor().setSelected(aux.usesFixedColor());
@@ -418,15 +425,17 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 
 			} catch (ReadDriverException e) {
 				// should never happen
-				NotificationManager.addWarning(PluginServices.getText(this, "could_not_restore_color_field"), e);
+				NotificationManager.addWarning(PluginServices.getText(this,
+						"could_not_restore_color_field"), e);
 			}
 		}
 	}
 
-	private void refreshFont(){
+	private void refreshFont() {
 
 		if (layer.getLabelingStrategy() instanceof AttrInTableLabelingStrategy) {
-			AttrInTableLabelingStrategy aux = (AttrInTableLabelingStrategy) layer.getLabelingStrategy();
+			AttrInTableLabelingStrategy aux = (AttrInTableLabelingStrategy) layer
+					.getLabelingStrategy();
 			labelFont = aux.getFont();
 		}
 	}
@@ -434,7 +443,8 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 	private void refreshCmbUnits() {
 
 		if (layer.getLabelingStrategy() instanceof AttrInTableLabelingStrategy) {
-			AttrInTableLabelingStrategy aux = (AttrInTableLabelingStrategy) layer.getLabelingStrategy();
+			AttrInTableLabelingStrategy aux = (AttrInTableLabelingStrategy) layer
+					.getLabelingStrategy();
 			getCmbUnits().setSelectedUnitIndex(aux.getUnit());
 		}
 	}
@@ -442,7 +452,8 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 	private void refreshCmbRefSystem() {
 
 		if (layer.getLabelingStrategy() instanceof AttrInTableLabelingStrategy) {
-			AttrInTableLabelingStrategy aux = (AttrInTableLabelingStrategy) layer.getLabelingStrategy();
+			AttrInTableLabelingStrategy aux = (AttrInTableLabelingStrategy) layer
+					.getLabelingStrategy();
 			getCmbReferenceSystem().setSelectedIndex(aux.getReferenceSystem());
 		}
 	}
@@ -450,9 +461,9 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 	private void refreshTextHeight() {
 		getCmbHeightField().removeAllItems();
 
-		boolean enabled = numericFieldNames.length>0;
-//		getCmbHeightField().setEnabled(enabled);
-//		getRdBtnHeightField().setEnabled(enabled);
+		boolean enabled = numericFieldNames.length > 0;
+		// getCmbHeightField().setEnabled(enabled);
+		// getRdBtnHeightField().setEnabled(enabled);
 
 		if (!enabled) {
 			getRdBtnFixedHeight().setSelected(true);
@@ -463,7 +474,8 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 		}
 
 		if (layer.getLabelingStrategy() instanceof AttrInTableLabelingStrategy) {
-			AttrInTableLabelingStrategy aux = (AttrInTableLabelingStrategy) layer.getLabelingStrategy();
+			AttrInTableLabelingStrategy aux = (AttrInTableLabelingStrategy) layer
+					.getLabelingStrategy();
 			try {
 				getTxtHeightField().setText(String.valueOf(aux.getFixedSize()));
 				getRdBtnFixedHeight().setSelected(aux.usesFixedSize());
@@ -474,7 +486,8 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 
 			} catch (ReadDriverException e) {
 				// should never happen
-				NotificationManager.addWarning(PluginServices.getText(this, "could_not_restore_text_height_field"), e);
+				NotificationManager.addWarning(PluginServices.getText(this,
+						"could_not_restore_text_height_field"), e);
 			}
 		}
 
@@ -488,13 +501,16 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 		}
 
 		if (layer.getLabelingStrategy() instanceof AttrInTableLabelingStrategy) {
-			AttrInTableLabelingStrategy aux = (AttrInTableLabelingStrategy) layer.getLabelingStrategy();
+			AttrInTableLabelingStrategy aux = (AttrInTableLabelingStrategy) layer
+					.getLabelingStrategy();
 			try {
 				String item = aux.getRotationField();
-				getCmbRotationField().setSelectedItem(item != null? item : NO_FIELD_ITEM);
+				getCmbRotationField().setSelectedItem(
+						item != null ? item : NO_FIELD_ITEM);
 			} catch (ReadDriverException e) {
 				// should never happen
-				NotificationManager.addWarning(PluginServices.getText(this, "could_not_restore_rotation_field"), e);
+				NotificationManager.addWarning(PluginServices.getText(this,
+						"could_not_restore_rotation_field"), e);
 			}
 		}
 	}
@@ -506,19 +522,23 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 		}
 
 		if (layer.getLabelingStrategy() instanceof AttrInTableLabelingStrategy) {
-			AttrInTableLabelingStrategy aux = (AttrInTableLabelingStrategy) layer.getLabelingStrategy();
+			AttrInTableLabelingStrategy aux = (AttrInTableLabelingStrategy) layer
+					.getLabelingStrategy();
 			try {
 				String item = aux.getTextField();
-				getCmbTextField().setSelectedItem(item != null? item : NO_FIELD_ITEM);
+				getCmbTextField().setSelectedItem(
+						item != null ? item : NO_FIELD_ITEM);
 			} catch (ReadDriverException e) {
 				// should never happen
-				NotificationManager.addWarning(PluginServices.getText(this, "could_not_restore_text_field"), e);
+				NotificationManager.addWarning(PluginServices.getText(this,
+						"could_not_restore_text_field"), e);
 			}
 		}
 	}
 
 	public String getLabelingStrategyName() {
-		return PluginServices.getText(this, "label_attributes_defined_in_table");
+		return PluginServices
+				.getText(this, "label_attributes_defined_in_table");
 	}
 
 	public Class getLabelingStrategyClass() {

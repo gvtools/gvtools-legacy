@@ -44,7 +44,6 @@ import javax.swing.Icon;
 import org.gvsig.fmap.raster.layers.FLyrRasterSE;
 import org.gvsig.fmap.raster.layers.ILayerState;
 import org.gvsig.raster.gui.IGenericToolBarMenuItem;
-import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
 import org.gvsig.remotesensing.gridmath.gui.GridMathDialog;
 
 import com.iver.andami.PluginServices;
@@ -55,44 +54,50 @@ import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
+
 /**
  * Extensión para el Cálculo de Raster (Band Math)
  * 
  * @author Diego Guerrero Sevilla (diego.guerrero@uclm.es)
  */
-public class GridCalculatorExtension extends Extension implements IGenericToolBarMenuItem {
+public class GridCalculatorExtension extends Extension implements
+		IGenericToolBarMenuItem {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
-		
+
 		/* NEW: disable Grid Calculator tool for now */
 		return;
 
-		/* NEW
-		ExtensionPoint extensionPoint = ExtensionPoint.getExtensionPoint("GenericToolBarMenu");
-		extensionPoint.register("GridCalculator", this);
-
-		PluginServices.getIconTheme().register(
-				"calculator-icon",
-				this.getClass().getClassLoader().getResource("images/calculator.png")
-			);
-		END (NEW) */
+		/*
+		 * NEW ExtensionPoint extensionPoint =
+		 * ExtensionPoint.getExtensionPoint("GenericToolBarMenu");
+		 * extensionPoint.register("GridCalculator", this);
+		 * 
+		 * PluginServices.getIconTheme().register( "calculator-icon",
+		 * this.getClass().getClassLoader().getResource("images/calculator.png")
+		 * ); END (NEW)
+		 */
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String actionCommand) {
 		if (actionCommand.equals("band_math")) {
-			com.iver.andami.ui.mdiManager.IWindow activeWindow = PluginServices.getMDIManager().getActiveWindow();
+			com.iver.andami.ui.mdiManager.IWindow activeWindow = PluginServices
+					.getMDIManager().getActiveWindow();
 
 			// si la ventana activa es de tipo Vista
 			if (activeWindow instanceof View) {
-				GridMathDialog calculatorDialog = new GridMathDialog((View) activeWindow);
+				GridMathDialog calculatorDialog = new GridMathDialog(
+						(View) activeWindow);
 				// Mostrar la calculadora.
 				PluginServices.getMDIManager().addWindow(calculatorDialog);
 			}
@@ -101,10 +106,12 @@ public class GridCalculatorExtension extends Extension implements IGenericToolBa
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (f == null) {
 			return false;
 		}
@@ -122,10 +129,12 @@ public class GridCalculatorExtension extends Extension implements IGenericToolBa
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (f == null) {
 			return false;
 		}
@@ -141,7 +150,11 @@ public class GridCalculatorExtension extends Extension implements IGenericToolBa
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#execute(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * org.gvsig.raster.gui.IGenericToolBarMenuItem#execute(com.iver.cit.gvsig
+	 * .project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public void execute(ITocItem item, FLayer[] selectedItems) {
 		this.execute("band_math");
@@ -149,6 +162,7 @@ public class GridCalculatorExtension extends Extension implements IGenericToolBa
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getGroup()
 	 */
 	public String getGroup() {
@@ -157,6 +171,7 @@ public class GridCalculatorExtension extends Extension implements IGenericToolBa
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getIcon()
 	 */
 	public Icon getIcon() {
@@ -165,6 +180,7 @@ public class GridCalculatorExtension extends Extension implements IGenericToolBa
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getOrder()
 	 */
 	public int getOrder() {
@@ -173,6 +189,7 @@ public class GridCalculatorExtension extends Extension implements IGenericToolBa
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getText()
 	 */
 	public String getText() {
@@ -181,7 +198,11 @@ public class GridCalculatorExtension extends Extension implements IGenericToolBa
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * org.gvsig.raster.gui.IGenericToolBarMenuItem#isEnabled(com.iver.cit.gvsig
+	 * .project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -198,7 +219,11 @@ public class GridCalculatorExtension extends Extension implements IGenericToolBa
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * org.gvsig.raster.gui.IGenericToolBarMenuItem#isVisible(com.iver.cit.gvsig
+	 * .project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -206,12 +231,13 @@ public class GridCalculatorExtension extends Extension implements IGenericToolBa
 
 		if (!(selectedItems[0] instanceof FLyrRasterSE))
 			return false;
-		
+
 		return true;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getGroupOrder()
 	 */
 	public int getGroupOrder() {

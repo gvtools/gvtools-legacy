@@ -25,6 +25,7 @@ import org.gvsig.raster.gui.IGenericToolBarMenuItem;
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
+
 /**
  * Clase que implementa un IGenericToolBarMenuItem para evitar tener que crear
  * clases para items de menu sencillas
@@ -33,12 +34,12 @@ import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class GenericToolBarMenuItem implements IGenericToolBarMenuItem {
-	private String text  = "";
-	private int    order = 0;
-	private int    groupOrder = 0;
-	private Icon   icon  = null;
+	private String text = "";
+	private int order = 0;
+	private int groupOrder = 0;
+	private Icon icon = null;
 	private String group = "";
-	
+
 	public GenericToolBarMenuItem(String text, Icon icon) {
 		this(text, icon, "", 0);
 	}
@@ -47,7 +48,8 @@ public class GenericToolBarMenuItem implements IGenericToolBarMenuItem {
 		this(text, PluginServices.getIconTheme().get("blank-icon"), "", 0);
 	}
 
-	public GenericToolBarMenuItem(String text, Icon icon, String group, int order) {
+	public GenericToolBarMenuItem(String text, Icon icon, String group,
+			int order) {
 		this.text = text;
 		this.order = order;
 		this.icon = icon;
@@ -57,22 +59,25 @@ public class GenericToolBarMenuItem implements IGenericToolBarMenuItem {
 	public GenericToolBarMenuItem(String text, Icon icon, String group) {
 		this(text, icon, group, 0);
 	}
-	
+
 	public GenericToolBarMenuItem(String text, Icon icon, int order) {
 		this(text, icon, "", 0);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getGroup()
 	 */
 	public String getGroup() {
 		return group;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.generictoolbar.IGenericToolBarMenuItem#getOrder()
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.generictoolbar.IGenericToolBarMenuItem#getOrder()
 	 */
 	public int getOrder() {
 		return order;
@@ -80,7 +85,9 @@ public class GenericToolBarMenuItem implements IGenericToolBarMenuItem {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.generictoolbar.IGenericToolBarMenuItem#getText()
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.generictoolbar.IGenericToolBarMenuItem#getText()
 	 */
 	public String getText() {
 		return text;
@@ -88,15 +95,21 @@ public class GenericToolBarMenuItem implements IGenericToolBarMenuItem {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.generictoolbar.IGenericToolBarMenuItem#getIcon()
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.generictoolbar.IGenericToolBarMenuItem#getIcon()
 	 */
 	public Icon getIcon() {
 		return icon;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * org.gvsig.raster.gui.IGenericToolBarMenuItem#isEnabled(com.iver.cit.gvsig
+	 * .project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
 		return true;
@@ -104,7 +117,11 @@ public class GenericToolBarMenuItem implements IGenericToolBarMenuItem {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * org.gvsig.raster.gui.IGenericToolBarMenuItem#isVisible(com.iver.cit.gvsig
+	 * .project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
 		return true;
@@ -112,6 +129,7 @@ public class GenericToolBarMenuItem implements IGenericToolBarMenuItem {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getGroupOrder()
 	 */
 	public int getGroupOrder() {
@@ -120,7 +138,12 @@ public class GenericToolBarMenuItem implements IGenericToolBarMenuItem {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#execute(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * org.gvsig.raster.gui.IGenericToolBarMenuItem#execute(com.iver.cit.gvsig
+	 * .project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
-	public void execute(ITocItem item, FLayer[] selectedItems) {}
+	public void execute(ITocItem item, FLayer[] selectedItems) {
+	}
 }

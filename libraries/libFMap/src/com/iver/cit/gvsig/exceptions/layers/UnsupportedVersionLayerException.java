@@ -40,17 +40,17 @@
  */
 package com.iver.cit.gvsig.exceptions.layers;
 
-
 /**
  * Excepción provocada por el WMS.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class UnsupportedVersionLayerException extends LoadLayerException {
-	public UnsupportedVersionLayerException(String l,Throwable exception) {
-		super(l,exception);
+	public UnsupportedVersionLayerException(String l, Throwable exception) {
+		super(l, exception);
 		init();
 	}
+
 	/**
 	 *
 	 */

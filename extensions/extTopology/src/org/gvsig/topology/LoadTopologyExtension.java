@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology;
 
 import java.util.HashMap;
@@ -68,42 +68,48 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
  * ANDAMI's extension to load a topology from an XML file.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
-public class LoadTopologyExtension extends Extension implements IPreferenceExtension{
+public class LoadTopologyExtension extends Extension implements
+		IPreferenceExtension {
 
 	TopologyPreferences topologyPreferences = new TopologyPreferences();
-	
+
 	public void execute(String actionCommand) {
-		if(actionCommand.equalsIgnoreCase("LOAD_TOPOLOGY")){
-			com.iver.andami.ui.mdiManager.IWindow f = 
-				PluginServices.getMDIManager().getActiveWindow();
+		if (actionCommand.equalsIgnoreCase("LOAD_TOPOLOGY")) {
+			com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+					.getMDIManager().getActiveWindow();
 			View vista = (View) f;
 			IProjectView model = vista.getModel();
 			MapContext mapContext = model.getMapContext();
-			String selectedFile = GUIUtil.getInstance().selectFile("xml", 
+			String selectedFile = GUIUtil.getInstance().selectFile("xml",
 					PluginServices.getText(this, "Ficheros_XML"), true);
-			if(selectedFile == null || selectedFile.equals("")){
-				GUIUtil.getInstance().
-				messageBox("Message_not_selected_topology_file", "Message_error_loading_topology");
+			if (selectedFile == null || selectedFile.equals("")) {
+				GUIUtil.getInstance().messageBox(
+						"Message_not_selected_topology_file",
+						"Message_error_loading_topology");
 				return;
 			}
 			Map<String, Object> storageParams = new HashMap<String, Object>();
 			storageParams.put(TopologyPersister.FILE_PARAM_NAME, selectedFile);
-			//TODO Hacer la carga de la topologia en un ITask para no dejar la GUI
-			//congelada. Además, chequear que las capas que se referencian existen,
-			//y si no están en el TOC se cargan
-			Topology newTopology = TopologyPersister.load(mapContext, storageParams);
+			// TODO Hacer la carga de la topologia en un ITask para no dejar la
+			// GUI
+			// congelada. Además, chequear que las capas que se referencian
+			// existen,
+			// y si no están en el TOC se cargan
+			Topology newTopology = TopologyPersister.load(mapContext,
+					storageParams);
 			List newTopoLyrs = newTopology.getLayers();
-			GUIUtil.getInstance().addTopologyToTOC(mapContext, newTopoLyrs, newTopology);
+			GUIUtil.getInstance().addTopologyToTOC(mapContext, newTopoLyrs,
+					newTopology);
 		}
 	}
 
 	public void initialize() {
 		PluginServices.getIconTheme().registerDefault(
 				"load-topology",
-				this.getClass().getClassLoader().getResource("images/load-topology.png")
-		);
+				this.getClass().getClassLoader()
+						.getResource("images/load-topology.png"));
 	}
 
 	public boolean isEnabled() {
@@ -113,16 +119,16 @@ public class LoadTopologyExtension extends Extension implements IPreferenceExten
 	public boolean isVisible() {
 		IWindow f = PluginServices.getMDIManager().getActiveWindow();
 		if (f == null) {
-		    return false;
+			return false;
 		}
 		if (f instanceof View) {
-		    return true;
+			return true;
 		}
 		return false;
 	}
 
 	public IPreference[] getPreferencesPages() {
-		IPreference[] preferences=new IPreference[1];
+		IPreference[] preferences = new IPreference[1];
 		preferences[0] = topologyPreferences;
 		return preferences;
 	}

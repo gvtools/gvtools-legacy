@@ -15,27 +15,24 @@ public class JoinFeatureIterator extends DefaultFeatureIterator implements
 	protected IFeatureIterator it;
 	protected ISpatialDB dbAdapter = null;
 
-	public JoinFeatureIterator(FLyrVect layer, ViewPort viewPort, String[] fields) throws ReadDriverException {
+	public JoinFeatureIterator(FLyrVect layer, ViewPort viewPort,
+			String[] fields) throws ReadDriverException {
 		String[] none = new String[0];
 		if (layer.getSource() instanceof ISpatialDB) {
-			
-			it = layer.getSource().getFeatureIterator(
-					viewPort.getAdjustedExtent(),
-					none,
-					viewPort.getCrs(),
-					true);
+
+			it = layer.getSource()
+					.getFeatureIterator(viewPort.getAdjustedExtent(), none,
+							viewPort.getCrs(), true);
 			dbAdapter = (ISpatialDB) layer.getSource();
-		}
-		else {
+		} else {
 			it = layer.getSource().getFeatureIterator(
-					viewPort.getAdjustedExtent(),
-					fields,
-					viewPort.getCrs(),
+					viewPort.getAdjustedExtent(), fields, viewPort.getCrs(),
 					true);
 			if (it instanceof DefaultFeatureIterator) {
-				((DefaultFeatureIterator) it).setRecordset(layer.getRecordset());
+				((DefaultFeatureIterator) it)
+						.setRecordset(layer.getRecordset());
 			}
-			
+
 		}
 		this.fieldNames = fields;
 		this.recordset = layer.getRecordset();

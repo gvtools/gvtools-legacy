@@ -49,10 +49,9 @@ import java.io.FileFilter;
 
 import javax.swing.AbstractListModel;
 
-
 /**
  * Modelo de la Lista de Templates a seleccionar.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class ListTemplateModel extends AbstractListModel {
@@ -62,9 +61,10 @@ public class ListTemplateModel extends AbstractListModel {
 	 * Añade los templates a la lista.
 	 */
 	public void addTemplates(File dir) {
-		templates=dir.listFiles(new FileFilter(){
+		templates = dir.listFiles(new FileFilter() {
 			public boolean accept(File pathname) {
-				return pathname.getAbsolutePath().toLowerCase().endsWith(".gvt");
+				return pathname.getAbsolutePath().toLowerCase()
+						.endsWith(".gvt");
 			}
 
 		});

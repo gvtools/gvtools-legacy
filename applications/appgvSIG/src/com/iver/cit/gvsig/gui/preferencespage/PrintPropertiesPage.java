@@ -40,14 +40,14 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: PrintPropertiesPage.java 15647 2007-10-30 12:03:52Z jmvivo $
-* $Log$
-* Revision 1.1  2006-10-18 07:57:47  jaume
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: PrintPropertiesPage.java 15647 2007-10-30 12:03:52Z jmvivo $
+ * $Log$
+ * Revision 1.1  2006-10-18 07:57:47  jaume
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.gui.preferencespage;
 
 import java.awt.Dimension;
@@ -65,7 +65,7 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.preferences.AbstractPreferencePage;
 import com.iver.andami.preferences.StoreException;
 
-public class PrintPropertiesPage extends AbstractPreferencePage{
+public class PrintPropertiesPage extends AbstractPreferencePage {
 
 	private static final boolean FACTORY_DEFAULT_LANDSCAPED_PAGE = true;
 	protected static String id = PrintPropertiesPage.class.getName();
@@ -82,16 +82,20 @@ public class PrintPropertiesPage extends AbstractPreferencePage{
 		super();
 		setParentID(LayoutPage.class.getName());
 		icon = PluginServices.getIconTheme().get("prepare-page-icon");
-		rdBtnPortraitPage = new JRadioButton(PluginServices.getText(this, "options.layout.paper_properties.portrait"));
-		ImageIcon portrait = PluginServices.getIconTheme().get("portrait-page-setup");
-		rdBtnLandscapePage = new JRadioButton(PluginServices.getText(this, "options.layout.paper_properties.landscaped"));
-		ImageIcon landscape = PluginServices.getIconTheme().get("landscape-page-setup");
+		rdBtnPortraitPage = new JRadioButton(PluginServices.getText(this,
+				"options.layout.paper_properties.portrait"));
+		ImageIcon portrait = PluginServices.getIconTheme().get(
+				"portrait-page-setup");
+		rdBtnLandscapePage = new JRadioButton(PluginServices.getText(this,
+				"options.layout.paper_properties.landscaped"));
+		ImageIcon landscape = PluginServices.getIconTheme().get(
+				"landscape-page-setup");
 
 		ButtonGroup group = new ButtonGroup();
 		group.add(rdBtnLandscapePage);
 		group.add(rdBtnPortraitPage);
 
-		JPanel aux = new JPanel(new GridLayout(2,2,10,0));
+		JPanel aux = new JPanel(new GridLayout(2, 2, 10, 0));
 		aux.setPreferredSize(new Dimension(200, 150));
 		aux.setSize(200, 150);
 		aux.add(new JLabel(landscape));
@@ -99,10 +103,11 @@ public class PrintPropertiesPage extends AbstractPreferencePage{
 		aux.add(rdBtnLandscapePage);
 		aux.add(rdBtnPortraitPage);
 
-		addComponent(new JLabel(PluginServices.
-			getText(this, "options.layout.paper_properties.paper_direction")));
+		addComponent(new JLabel(PluginServices.getText(this,
+				"options.layout.paper_properties.paper_direction")));
 		addComponent("", aux);
-		addComponent(chkCustomMargins = new JCheckBox(PluginServices.getText(this, "personalizar_margenes")));
+		addComponent(chkCustomMargins = new JCheckBox(PluginServices.getText(
+				this, "personalizar_margenes")));
 
 		JPanel aux2 = new JPanel(new GridLayout(2, 4, 10, 3));
 		aux2.add(new JLabel(PluginServices.getText(this, "Superior")));
@@ -131,7 +136,8 @@ public class PrintPropertiesPage extends AbstractPreferencePage{
 	}
 
 	public String getTitle() {
-		return PluginServices.getText(this, "options.layout.paper_properties.title");
+		return PluginServices.getText(this,
+				"options.layout.paper_properties.title");
 	}
 
 	public JPanel getPanel() {

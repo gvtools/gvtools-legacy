@@ -66,31 +66,31 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 /**
  * @author Francisco José Peñarrubia (fjp@scolab.es)
- *
- * ODMatrixControlPanel sets selectedWriter to allow multiple export formats
+ * 
+ *         ODMatrixControlPanel sets selectedWriter to allow multiple export
+ *         formats
  */
 public class ODMatrixExtension extends Extension {
-
-
 
 	private static ArrayList<IODMatrixFileWriter> odMatrixWriters = new ArrayList<IODMatrixFileWriter>();
 
 	private static IODMatrixFileWriter selectedWriter;
-	
+
 	public static void registerOdMatrixFormat(IODMatrixFileWriter w) {
 		odMatrixWriters.add(w);
 	}
-	
+
 	public static IODMatrixFileWriter[] getOdMatrixWriters() {
-		return (IODMatrixFileWriter[]) odMatrixWriters.toArray(new IODMatrixFileWriter[0]);
+		return (IODMatrixFileWriter[]) odMatrixWriters
+				.toArray(new IODMatrixFileWriter[0]);
 	}
-	
+
 	public void initialize() {
 		PluginServices.getIconTheme().registerDefault(
 				"odmatrix",
-				this.getClass().getClassLoader().getResource("images/odmatrix.png")
-			);		
-		
+				this.getClass().getClassLoader()
+						.getResource("images/odmatrix.png"));
+
 		ODMatrixFileWriter4cols f1 = new ODMatrixFileWriter4cols();
 		ODMatrixFileWriter4cols_minutes_km f2 = new ODMatrixFileWriter4cols_minutes_km();
 		ODMatrixFileWriterRFormat f3 = new ODMatrixFileWriterRFormat();
@@ -100,95 +100,106 @@ public class ODMatrixExtension extends Extension {
 	}
 
 	public void execute(String actionCommand) {
-		
+
 		View v = (View) PluginServices.getMDIManager().getActiveWindow();
 		MapContext map = v.getMapControl().getMapContext();
 		SingleLayerIterator it = new SingleLayerIterator(map.getLayers());
 
 		if (actionCommand.equals("ODMATRIX")) {
-			while (it.hasNext())
-			{
+			while (it.hasNext()) {
 				FLayer aux = it.next();
 				if (!aux.isActive())
 					continue;
 				Network net = (Network) aux.getProperty("network");
 
-				if ( net != null)
-				{
+				if (net != null) {
 					OdMatrixControlPanel ctrlDlg = new OdMatrixControlPanel();
 					try {
 						ctrlDlg.setMapContext(map);
 						PluginServices.getMDIManager().addWindow(ctrlDlg);
 						if (ctrlDlg.isOkPressed()) {
-							if (net.getLayer().getISpatialIndex() == null)
-							{
-								System.out.println("Calculando índice espacial (QuadTree, que es más rápido)...");
+							if (net.getLayer().getISpatialIndex() == null) {
+								System.out
+										.println("Calculando índice espacial (QuadTree, que es más rápido)...");
 								net.getLayer().setISpatialIndex(
-										NetworkUtils.createJtsQuadtree(net.getLayer()));
-								System.out.println("Indice espacial calculado.");
+										NetworkUtils.createJtsQuadtree(net
+												.getLayer()));
+								System.out
+										.println("Indice espacial calculado.");
 							}
 							FLyrVect layerOrigins = ctrlDlg.getOriginsLayer();
-							FLyrVect layerDestinations = ctrlDlg.getDestinationsLayer();
+							FLyrVect layerDestinations = ctrlDlg
+									.getDestinationsLayer();
 							boolean bSameLayer = false;
 							if (layerOrigins == layerDestinations)
 								bSameLayer = true;
 							double tolerance = ctrlDlg.getTolerance();
-							GvFlag[] originFlags = NetworkUtils.putFlagsOnNetwork(layerOrigins,
-									net, tolerance);
-							GvFlag[] destinationFlags = null; 
+							GvFlag[] originFlags = NetworkUtils
+									.putFlagsOnNetwork(layerOrigins, net,
+											tolerance);
+							GvFlag[] destinationFlags = null;
 							if (bSameLayer)
 								destinationFlags = originFlags;
 							else
-								destinationFlags = NetworkUtils.putFlagsOnNetwork(layerDestinations, net, tolerance);
-							
-							File selectedFile = new File(ctrlDlg.getGeneratedFile());
-							
-							
-							selectedWriter = odMatrixWriters.get(ctrlDlg.getFileFormat());
-							
-							ODMatrixTask task = new ODMatrixTask(net, originFlags, destinationFlags,
+								destinationFlags = NetworkUtils
+										.putFlagsOnNetwork(layerDestinations,
+												net, tolerance);
+
+							File selectedFile = new File(
+									ctrlDlg.getGeneratedFile());
+
+							selectedWriter = odMatrixWriters.get(ctrlDlg
+									.getFileFormat());
+
+							ODMatrixTask task = new ODMatrixTask(net,
+									originFlags, destinationFlags,
 									selectedFile, selectedWriter);
 							PluginServices.cancelableBackgroundExecution(task);
-							// calculateOdMatrix(net, originFlags, destinationFlags, selectedFile);
-							
-							// TODO: ASK THE USER IF HE WANTS TO SAVE FLAGS TO AVOID PUTTING POINTS
+							// calculateOdMatrix(net, originFlags,
+							// destinationFlags, selectedFile);
+
+							// TODO: ASK THE USER IF HE WANTS TO SAVE FLAGS TO
+							// AVOID PUTTING POINTS
 							// ON NETWORK AGAIN
-							
+
 							return;
 						} // isOkPressed
 					} catch (BaseException e) {
 						e.printStackTrace();
 						if (e.getCode() == GraphException.FLAG_OUT_NETWORK) {
-							JOptionPane.showMessageDialog((Component) PluginServices.getMainFrame(), PluginServices.getText(null, "there_are_points_outside_the_tolerance"));
-//							NotificationManager.addError(e.getFormatString(), e);
+							JOptionPane
+									.showMessageDialog(
+											(Component) PluginServices
+													.getMainFrame(),
+											PluginServices
+													.getText(null,
+															"there_are_points_outside_the_tolerance"));
+							// NotificationManager.addError(e.getFormatString(),
+							// e);
 						}
 					}
 
 				}
-			} 
+			}
 		}
-		
 
 	}
-	
+
 	public boolean isEnabled() {
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		if (window instanceof View)
-		{
+		if (window instanceof View) {
 			View v = (View) window;
-	        MapControl mapCtrl = v.getMapControl();
+			MapControl mapCtrl = v.getMapControl();
 			MapContext map = mapCtrl.getMapContext();
-			
+
 			SingleLayerIterator it = new SingleLayerIterator(map.getLayers());
-			while (it.hasNext())
-			{
+			while (it.hasNext()) {
 				FLayer aux = it.next();
 				if (!aux.isActive())
 					continue;
 				Network net = (Network) aux.getProperty("network");
-				
-				if ( net != null)
-				{
+
+				if (net != null) {
 					return true;
 				}
 			}
@@ -197,10 +208,9 @@ public class ODMatrixExtension extends Extension {
 	}
 
 	public boolean isVisible() {
-		IWindow f = PluginServices.getMDIManager()
-		 .getActiveWindow();
+		IWindow f = PluginServices.getMDIManager().getActiveWindow();
 		if (f == null) {
-		    return false;
+			return false;
 		}
 		if (f instanceof View) {
 			return true;
@@ -217,7 +227,4 @@ public class ODMatrixExtension extends Extension {
 		ODMatrixExtension.selectedWriter = selectedWriter;
 	}
 
-
 }
-
-

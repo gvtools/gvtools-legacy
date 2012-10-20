@@ -42,26 +42,26 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: CancellableMonitorable.java 5317 2006-05-22 10:36:54Z fjp $
-* $Log$
-* Revision 1.1  2006-05-22 10:31:55  fjp
-* Monitorable tasks easy
-*
-* Revision 1.1  2006/03/09 18:26:19  azabala
-* *** empty log message ***
-*
-*
-*/
-package com.iver.utiles.swing.threads;
-/**
- * Marked interface to model classes that
- * must be Cancellable (cancels processes)
- * and Monitorable (monitor processes)
- * @author azabala
  *
+ * $Id: CancellableMonitorable.java 5317 2006-05-22 10:36:54Z fjp $
+ * $Log$
+ * Revision 1.1  2006-05-22 10:31:55  fjp
+ * Monitorable tasks easy
+ *
+ * Revision 1.1  2006/03/09 18:26:19  azabala
+ * *** empty log message ***
+ *
+ *
+ */
+package com.iver.utiles.swing.threads;
+
+/**
+ * Marked interface to model classes that must be Cancellable (cancels
+ * processes) and Monitorable (monitor processes)
+ * 
+ * @author azabala
+ * 
  */
 public interface CancellableMonitorable extends Cancellable, Monitorable {
 
 }
-

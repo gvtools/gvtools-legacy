@@ -89,9 +89,8 @@ import com.vividsolutions.jts.geom.Envelope;
  * ShpWriter o algo así) podriamos gestionar con caché multinivel casi cualquier
  * cosa.
  * 
- * Ademas, la clave de la cache tiene que ser un String
- * (debe haber un bug). Por eso hago lo de pasar a String
- * al cachear a partir de idx (put(idx+"")
+ * Ademas, la clave de la cache tiene que ser un String (debe haber un bug). Por
+ * eso hago lo de pasar a String al cachear a partir de idx (put(idx+"")
  * 
  * @author azabala
  * 
@@ -108,54 +107,49 @@ public class SpatialCacheImpl implements SpatialCache {
 	private Cache cache;
 
 	private RTree rtree;
-	
+
 	private static SpatialCacheImpl instance;
-	
-	
-	public static SpatialCacheImpl getInstance() throws IOException{
-		if(instance == null){
+
+	public static SpatialCacheImpl getInstance() throws IOException {
+		if (instance == null) {
 			instance = new SpatialCacheImpl();
 		}
 		return instance;
 	}
-	
+
 	/**
-	 * It's a singleton cache because is an only recurse for all the system.
-	 * Any thread, window or graphical component could use it to saves spatial
+	 * It's a singleton cache because is an only recurse for all the system. Any
+	 * thread, window or graphical component could use it to saves spatial
 	 * objects.
+	 * 
 	 * @throws IOException
 	 * 
-	 * TODO Key cache must be based in feature id and a layer id
-	 * (by now is only based in feature id)
+	 *             TODO Key cache must be based in feature id and a layer id (by
+	 *             now is only based in feature id)
 	 */
-	private SpatialCacheImpl()throws IOException{
+	private SpatialCacheImpl() throws IOException {
 		CacheManager manager = CacheManager.create();
-		String tempPath = 
-			System.getProperty("java.io.tmpdir");
-		cache = new Cache("gvsig.geospatial",
-				DEFAULT_CACHE_SIZE,
-				DEFAULT_EVICTION_POLICY,
-				overflowToDisk,
-				tempPath,// disk store path
-				eternal,
-				60,// time to live
+		String tempPath = System.getProperty("java.io.tmpdir");
+		cache = new Cache("gvsig.geospatial", DEFAULT_CACHE_SIZE,
+				DEFAULT_EVICTION_POLICY, overflowToDisk, tempPath,// disk store
+																	// path
+				eternal, 60,// time to live
 				60,// time to idle
 				false, // disk persistent
-				0,
-				null);
+				0, null);
 		manager.addCache(cache);
-		rtree = new RTree(tempPath,"gvsig.geospatial_idx");
+		rtree = new RTree(tempPath, "gvsig.geospatial_idx");
 		rtree.create();
 		rtree.open();
 	}
 
 	public Serializable getElement(long idx) {
-		//esto es una guarreria pq no se q le pasa
-		//a EHCache (no funciona bien)
-		Element element = cache.get((idx+""));
-		if(element != null)
+		// esto es una guarreria pq no se q le pasa
+		// a EHCache (no funciona bien)
+		Element element = cache.get((idx + ""));
+		if (element != null)
 			return element.getValue();
-		else 
+		else
 			return null;
 	}
 
@@ -165,7 +159,7 @@ public class SpatialCacheImpl implements SpatialCache {
 	public List getCandidatesIndexes(Envelope rect) {
 		ArrayList solution = new ArrayList();
 		Iterator idxIterator = rtree.iterator(rect);
-		while(idxIterator.hasNext()){
+		while (idxIterator.hasNext()) {
 			solution.add(idxIterator.next());
 		}
 		return solution;
@@ -177,7 +171,7 @@ public class SpatialCacheImpl implements SpatialCache {
 	}
 
 	public void put(long idx, Envelope env, Serializable object) {
-		cache.put(new Element((idx+""), object));
+		cache.put(new Element((idx + ""), object));
 		rtree.write(env, idx);
 	}
 

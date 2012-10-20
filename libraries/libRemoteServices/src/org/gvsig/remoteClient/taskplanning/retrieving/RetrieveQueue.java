@@ -12,8 +12,8 @@ import org.gvsig.remoteClient.taskplanning.IRunnableTask;
 import org.gvsig.remoteClient.taskplanning.ITaskPlanner;
 
 /**
- * @author jaume dominguez faus - jaume.dominguez@iver.es
- * 		   Luis W. Sevilla (sevilla_lui@gva.es)
+ * @author jaume dominguez faus - jaume.dominguez@iver.es Luis W. Sevilla
+ *         (sevilla_lui@gva.es)
  */
 public class RetrieveQueue implements IQueue {
 	private String hostName;
@@ -22,7 +22,7 @@ public class RetrieveQueue implements IQueue {
 	private boolean waiting;
 	private ITaskPlanner taskPlanner;
 	private Worker worker;
-	
+
 	/**
 	 * 
 	 */
@@ -32,8 +32,7 @@ public class RetrieveQueue implements IQueue {
 		worker = new Worker();
 		new Thread(worker).start();
 	}
-	
-	
+
 	public IRunnableTask put(IRunnableTask task) {
 		tasks.add(task);
 		if (waiting) {
@@ -43,7 +42,7 @@ public class RetrieveQueue implements IQueue {
 		}
 		return task;
 	}
-	
+
 	public IRunnableTask take() {
 		if (tasks.isEmpty()) {
 			synchronized (this) {
@@ -55,18 +54,14 @@ public class RetrieveQueue implements IQueue {
 				}
 			}
 		}
-		return getTaskPlanner().nextTask() ;
+		return getTaskPlanner().nextTask();
 	}
-	
-	
-	
+
 	public boolean isEmpty() {
 		synchronized (this) {
 			return tasks.isEmpty() && !worker.r.isRunning();
 		}
 	}
-	
-	
 
 	public ITaskPlanner getTaskPlanner() {
 		if (taskPlanner == null) {
@@ -75,21 +70,17 @@ public class RetrieveQueue implements IQueue {
 		return taskPlanner;
 	}
 
-
 	public void setTaskPlanner(ITaskPlanner planner) {
 		taskPlanner = planner;
 	}
-
 
 	public void pause() {
 		waiting = true;
 	}
 
-
 	public void resume() {
 		waiting = false;
 	}
-
 
 	public Vector getTasks() {
 		return tasks;
@@ -97,7 +88,8 @@ public class RetrieveQueue implements IQueue {
 
 	private class Worker implements Runnable {
 		URLRetrieveTask r;
-		int i = 0; 
+		int i = 0;
+
 		public void run() {
 			while (true) {
 				r = (URLRetrieveTask) take();
@@ -108,10 +100,10 @@ public class RetrieveQueue implements IQueue {
 
 	protected URLRetrieveTask getURLPreviousRequest(URLRequest request) {
 		// Is the one currently running?
-		/*URLRetrieveTask aux = (URLRetrieveTask) worker.r;
-		if (request.equals(aux.getRequest())) {
-				return aux;
-		}*/	
+		/*
+		 * URLRetrieveTask aux = (URLRetrieveTask) worker.r; if
+		 * (request.equals(aux.getRequest())) { return aux; }
+		 */
 		// Is one of those in the queue?
 		for (int i = 0; i < tasks.size(); i++) {
 			URLRetrieveTask task = (URLRetrieveTask) tasks.get(i);

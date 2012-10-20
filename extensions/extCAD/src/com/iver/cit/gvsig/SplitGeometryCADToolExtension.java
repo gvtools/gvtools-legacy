@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id:
-* $Log:
-*/
+ *
+ * $Id:
+ * $Log:
+ */
 package com.iver.cit.gvsig;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -60,9 +60,9 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 /**
  * CAD extension to split geometries from a digitized linear geometry.
- *
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class SplitGeometryCADToolExtension extends Extension {
 
@@ -70,60 +70,60 @@ public class SplitGeometryCADToolExtension extends Extension {
 	private MapControl mapControl;
 	private SplitGeometryCADTool cadTool;
 
-
 	public void execute(String actionCommand) {
 		CADExtension.initFocus();
 		if (actionCommand.equals(SplitGeometryCADTool.SPLIT_GEOMETRY_TOOL_NAME)) {
-        	CADExtension.setCADTool(SplitGeometryCADTool.SPLIT_GEOMETRY_TOOL_NAME, true);
-        }
+			CADExtension.setCADTool(
+					SplitGeometryCADTool.SPLIT_GEOMETRY_TOOL_NAME, true);
+		}
 		CADExtension.getEditionManager().setMapControl(mapControl);
 		CADExtension.getCADToolAdapter().configureMenu();
 	}
 
 	public void initialize() {
 		cadTool = new SplitGeometryCADTool();
-		CADExtension.addCADTool(SplitGeometryCADTool.SPLIT_GEOMETRY_TOOL_NAME, cadTool);
+		CADExtension.addCADTool(SplitGeometryCADTool.SPLIT_GEOMETRY_TOOL_NAME,
+				cadTool);
 		registerIcons();
 	}
 
-	private void registerIcons(){
-		PluginServices.getIconTheme().registerDefault("split-geometry",
-													   this.getClass().
-													   getClassLoader().
-													   getResource("images/split-poly.png")
-		);
+	private void registerIcons() {
+		PluginServices.getIconTheme().registerDefault(
+				"split-geometry",
+				this.getClass().getClassLoader()
+						.getResource("images/split-poly.png"));
 	}
 
 	/**
-	 * Returns if this Edit CAD tool is visible.
-	 * For this, there must be an active vectorial editing lyr in the TOC, which geometries'
-	 * dimension would must be linear or polygonal, and with at least one selected geometry.
-	 *
+	 * Returns if this Edit CAD tool is visible. For this, there must be an
+	 * active vectorial editing lyr in the TOC, which geometries' dimension
+	 * would must be linear or polygonal, and with at least one selected
+	 * geometry.
+	 * 
 	 */
 	public boolean isEnabled() {
 		try {
-			if (EditionUtilities.getEditionStatus() ==
-				EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE) {
-					this.view = (View) PluginServices.getMDIManager().getActiveWindow();
-					mapControl = view.getMapControl();
-					if (CADExtension.getEditionManager().getActiveLayerEdited() == null)
-						return false;
-					FLyrVect lv = (FLyrVect) CADExtension.
-											getEditionManager().
-											getActiveLayerEdited().
-											getLayer();
-					int geometryDimensions = getDimensions(lv.getShapeType());
-					if(geometryDimensions <= 0)
-						return false;
+			if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE) {
+				this.view = (View) PluginServices.getMDIManager()
+						.getActiveWindow();
+				mapControl = view.getMapControl();
+				if (CADExtension.getEditionManager().getActiveLayerEdited() == null)
+					return false;
+				FLyrVect lv = (FLyrVect) CADExtension.getEditionManager()
+						.getActiveLayerEdited().getLayer();
+				int geometryDimensions = getDimensions(lv.getShapeType());
+				if (geometryDimensions <= 0)
+					return false;
 
-					return lv.getRecordset().getSelection().cardinality() != 0;
+				return lv.getRecordset().getSelection().cardinality() != 0;
 			}
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 			return false;
 		}
 		return true;
 	}
+
 	private static int getDimensions(int shapeType) {
 		switch (shapeType) {
 		case FShape.ARC:

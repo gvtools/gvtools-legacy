@@ -130,15 +130,14 @@ import com.iver.utiles.swing.threads.IMonitorableTask;
 /**
  * This geoprocess computes diference geometries of two overlay polygon layers.
  * Difference of two geometries is the set of point of one geometry that the
- * other geometry doesnt have.
- * By analogy, this geoprocess computes difference geometries between vectorial
- * layers.
- *
+ * other geometry doesnt have. By analogy, this geoprocess computes difference
+ * geometries between vectorial layers.
+ * 
  * @author azabala
- *
+ * 
  */
-public class DifferenceGeoprocess extends AbstractGeoprocess
-					implements IOverlayGeoprocess {
+public class DifferenceGeoprocess extends AbstractGeoprocess implements
+		IOverlayGeoprocess {
 
 	/**
 	 * overlay layer
@@ -196,35 +195,32 @@ public class DifferenceGeoprocess extends AbstractGeoprocess
 			throw new GeoprocessException(
 					"Operacion de interseccion sin especificar capa de resultados");
 		}
-		/*AZABALA: PERMITIMOS CAPAS DE PUNTOS, LINEAS Y DE POLIGONOS
-		try {
-			if (firstLayer.getShapeType() != XTypes.POLYGON
-					&& firstLayer.getShapeType() != XTypes.MULTI) {
-				throw new GeoprocessException(
-						"Primera capa de interseccion no es de polígonos");
-			}
-			if (overlayLayer.getShapeType() != XTypes.POLYGON
-					&& overlayLayer.getShapeType() != XTypes.MULTI) {
-				throw new GeoprocessException(
-						"Segunda capa de interseccion no es de polígonos");
-			}
-		} catch (ReadDriverException e) {
-			throw new GeoprocessException(
-			"Error al tratar de chequear si las capas a intersectar son de polígonos");
-		}
-		*/
+		/*
+		 * AZABALA: PERMITIMOS CAPAS DE PUNTOS, LINEAS Y DE POLIGONOS try { if
+		 * (firstLayer.getShapeType() != XTypes.POLYGON &&
+		 * firstLayer.getShapeType() != XTypes.MULTI) { throw new
+		 * GeoprocessException(
+		 * "Primera capa de interseccion no es de polígonos"); } if
+		 * (overlayLayer.getShapeType() != XTypes.POLYGON &&
+		 * overlayLayer.getShapeType() != XTypes.MULTI) { throw new
+		 * GeoprocessException(
+		 * "Segunda capa de interseccion no es de polígonos"); } } catch
+		 * (ReadDriverException e) { throw new GeoprocessException(
+		 * "Error al tratar de chequear si las capas a intersectar son de polígonos"
+		 * ); }
+		 */
 
 	}
 
-
-	//FIXME La unica diferencia entre este geoproceso y el intersection
-	//es que usa visitors distintos
-	//REDISEÑAR TODOS LOS OVERLAYGEOPROCESS
+	// FIXME La unica diferencia entre este geoproceso y el intersection
+	// es que usa visitors distintos
+	// REDISEÑAR TODOS LOS OVERLAYGEOPROCESS
 	public void process() throws GeoprocessException {
 		try {
 			new DifferenceMonitorableTask().run();
-		}catch (DriverIOException e) {
-			throw new GeoprocessException("Error de lectura de driver durante geoproceso diferencia");
+		} catch (DriverIOException e) {
+			throw new GeoprocessException(
+					"Error de lectura de driver durante geoproceso diferencia");
 		}
 	}
 
@@ -240,8 +236,10 @@ public class DifferenceGeoprocess extends AbstractGeoprocess
 	public ILayerDefinition createLayerDefinition() {
 		if (resultLayerDefinition == null) {
 			try {
-				resultLayerDefinition = DefinitionUtils.createLayerDefinition(firstLayer);
-				//All overlay geoprocesses could generate various kind of geometry types
+				resultLayerDefinition = DefinitionUtils
+						.createLayerDefinition(firstLayer);
+				// All overlay geoprocesses could generate various kind of
+				// geometry types
 				resultLayerDefinition.setShapeType(FShape.MULTI);
 			} catch (Exception e) {
 				// TODO Quizas createLayerDefinition deberia lanzar
@@ -256,39 +254,41 @@ public class DifferenceGeoprocess extends AbstractGeoprocess
 		try {
 			return new DifferenceMonitorableTask();
 		} catch (DriverIOException e) {
-			//FIXME Debe lanzar excepcion createTask ?
+			// FIXME Debe lanzar excepcion createTask ?
 			return null;
 		}
 	}
 
 	/**
-	 * IMonitorableTask that allows to run diff geoprocess in background,
-	 * with cancelation requests.
-	 *
+	 * IMonitorableTask that allows to run diff geoprocess in background, with
+	 * cancelation requests.
+	 * 
 	 * @author azabala
-	 *
+	 * 
 	 */
 	class DifferenceMonitorableTask implements IMonitorableTask {
 		private CancellableMonitorable cancelMonitor = null;
-		String DIFFERENCE_MESSAGE = PluginServices.getText(this, "Mensaje_difference");
-		String DIFFERENCE_NOTE = PluginServices.getText(this, "Mensaje_procesando_diferencia");
+		String DIFFERENCE_MESSAGE = PluginServices.getText(this,
+				"Mensaje_difference");
+		String DIFFERENCE_NOTE = PluginServices.getText(this,
+				"Mensaje_procesando_diferencia");
 		String OF = PluginServices.getText(this, "De");
 		private boolean finished = false;
 
 		DifferenceMonitorableTask() throws DriverIOException {
 			initialize();
 		}
+
 		void initialize() throws DriverIOException {
 			cancelMonitor = createCancelMonitor();
 		}
 
 		private CancellableMonitorable createCancelMonitor() {
-			DefaultCancellableMonitorable monitor = new
-							DefaultCancellableMonitorable();
+			DefaultCancellableMonitorable monitor = new DefaultCancellableMonitorable();
 			monitor.setInitialStep(0);
-			//Really its undeterminated, but so we must to process all
-			//elements of first layer (or selection) we are going to
-			//consideer determinated
+			// Really its undeterminated, but so we must to process all
+			// elements of first layer (or selection) we are going to
+			// consideer determinated
 			monitor.setDeterminatedProcess(true);
 			int numSteps = 0;
 			if (onlyFirstLayerSelection) {
@@ -329,10 +329,8 @@ public class DifferenceGeoprocess extends AbstractGeoprocess
 		}
 
 		public String getNote() {
-			return DIFFERENCE_NOTE + " " +
-			getCurrentStep() + " "+
-			OF + " "+
-			getFinishStep();
+			return DIFFERENCE_NOTE + " " + getCurrentStep() + " " + OF + " "
+					+ getFinishStep();
 		}
 
 		public void cancel() {
@@ -342,18 +340,18 @@ public class DifferenceGeoprocess extends AbstractGeoprocess
 
 		public void run() throws GeoprocessException {
 			try {
-				if (!(writer instanceof MultiShpWriter)){
+				if (!(writer instanceof MultiShpWriter)) {
 					schemaManager.createSchema(createLayerDefinition());
 				}
 				writer.preProcess();
-				Strategy strategy =
-					StrategyManager.getStrategy(firstLayer);
-				FeaturePersisterProcessor2 featureProcessor =
-					new FeaturePersisterProcessor2(writer);
-				Strategy overlayStrategy =
-					StrategyManager.getStrategy(overlayLayer);
+				Strategy strategy = StrategyManager.getStrategy(firstLayer);
+				FeaturePersisterProcessor2 featureProcessor = new FeaturePersisterProcessor2(
+						writer);
+				Strategy overlayStrategy = StrategyManager
+						.getStrategy(overlayLayer);
 				DifferenceVisitor visitor = new DifferenceVisitor(overlayLayer,
-						featureProcessor, overlayStrategy, onlyClipLayerSelection);
+						featureProcessor, overlayStrategy,
+						onlyClipLayerSelection);
 				visitor.setLayerDefinition(resultLayerDefinition);
 				if (onlyFirstLayerSelection) {
 					strategy.process(visitor, firstLayer.getRecordset()
@@ -367,13 +365,13 @@ public class DifferenceGeoprocess extends AbstractGeoprocess
 						"Error al procesar el feature de una capa durante el geoproceso interseccion");
 			} catch (SchemaEditionException e) {
 				throw new GeoprocessException(
-					"Error al crear el esquema/fichero de la nueva capa");
+						"Error al crear el esquema/fichero de la nueva capa");
 			} catch (ReadDriverException e) {
 				throw new GeoprocessException(
-					"Error de driver al calcular el geoproceso interseccion");
+						"Error de driver al calcular el geoproceso interseccion");
 			} catch (VisitorException e) {
 				throw new GeoprocessException(
-					"Error de driver al calcular el geoproceso interseccion");
+						"Error de driver al calcular el geoproceso interseccion");
 			} finally {
 				finished = true;
 			}
@@ -390,7 +388,10 @@ public class DifferenceGeoprocess extends AbstractGeoprocess
 		public boolean isFinished() {
 			return finished;
 		}
-		/* (non-Javadoc)
+
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see com.iver.utiles.swing.threads.IMonitorableTask#finished()
 		 */
 		public void finished() {

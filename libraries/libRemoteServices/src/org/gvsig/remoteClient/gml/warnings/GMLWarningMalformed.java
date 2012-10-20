@@ -56,14 +56,14 @@ import org.gvsig.remoteClient.gml.exceptions.GMLException;
 /**
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  */
-public class GMLWarningMalformed extends GMLException{
+public class GMLWarningMalformed extends GMLException {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 3061826648337677594L;
-	
-	public GMLWarningMalformed(){
+
+	public GMLWarningMalformed() {
 		init();
 	}
 
@@ -71,9 +71,10 @@ public class GMLWarningMalformed extends GMLException{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	public void init() {
-		messageKey="gml_warning_malformed_file";
-		formatString="GML isn't a W3C standard";
+		messageKey = "gml_warning_malformed_file";
+		formatString = "GML isn't a W3C standard";
 		code = serialVersionUID;
 	}
 }

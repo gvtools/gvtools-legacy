@@ -39,6 +39,7 @@
  *   dac@iver.es
  */
 package com.iver.cit.gvsig.fmap.core.adapter;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
@@ -55,90 +56,98 @@ import com.iver.cit.gvsig.fmap.core.symbols.ILineSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol;
 
-
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class CircleAdapter extends GeometryAdapter {
-    private Point2D pointPosition = new Point2D.Double();
-    private AffineTransform identity = new AffineTransform();
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public FShape getShape(AffineTransform at) {
-    	GeneralPathX polyLine = new GeneralPathX(new FPolygon2D(getGPX()));
-    	polyLine.transform(at);
-    	return new FPolygon2D(polyLine);
-    }
+	private Point2D pointPosition = new Point2D.Double();
+	private AffineTransform identity = new AffineTransform();
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param g DOCUMENT ME!
-     * @param at DOCUMENT ME!
-     * @param symbol DOCUMENT ME!
-     */
-    public void draw(Graphics2D g, AffineTransform at, ISymbol symbol) {
-    	FShape shapeAux=getShape(at);
-    	symbol.draw(g,at,shapeAux, null);
-        // FGraphicUtilities.DrawShape(g, at, shapeAux, symbol);
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public FShape getShape(AffineTransform at) {
+		GeneralPathX polyLine = new GeneralPathX(new FPolygon2D(getGPX()));
+		polyLine.transform(at);
+		return new FPolygon2D(polyLine);
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param g DOCUMENT ME!
-     * @param at DOCUMENT ME!
-     * @param andLastPoint DOCUMENT ME!
-     */
-    public void paint(Graphics2D g, AffineTransform at, boolean andLastPoint) {
-        if (getPoints().length > 0) {
-            if (andLastPoint) {
-                obtainShape(pointPosition);
-            }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param g
+	 *            DOCUMENT ME!
+	 * @param at
+	 *            DOCUMENT ME!
+	 * @param symbol
+	 *            DOCUMENT ME!
+	 */
+	public void draw(Graphics2D g, AffineTransform at, ISymbol symbol) {
+		FShape shapeAux = getShape(at);
+		symbol.draw(g, at, shapeAux, null);
+		// FGraphicUtilities.DrawShape(g, at, shapeAux, symbol);
+	}
 
-            FShape shapeAux=getShape(at);
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param g
+	 *            DOCUMENT ME!
+	 * @param at
+	 *            DOCUMENT ME!
+	 * @param andLastPoint
+	 *            DOCUMENT ME!
+	 */
+	public void paint(Graphics2D g, AffineTransform at, boolean andLastPoint) {
+		if (getPoints().length > 0) {
+			if (andLastPoint) {
+				obtainShape(pointPosition);
+			}
 
-            ILineSymbol symbol = SymbologyFactory.createDefaultLineSymbol();
-            SimpleLineSymbol redOutline = new SimpleLineSymbol();
-            redOutline.setLineColor(Color.red);
-            symbol.draw(g, identity, shapeAux, null);
-        }
-    }
+			FShape shapeAux = getShape(at);
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param p DOCUMENT ME!
-     */
-    public void pointPosition(Point2D p) {
-        pointPosition = p;
-    }
+			ILineSymbol symbol = SymbologyFactory.createDefaultLineSymbol();
+			SimpleLineSymbol redOutline = new SimpleLineSymbol();
+			redOutline.setLineColor(Color.red);
+			symbol.draw(g, identity, shapeAux, null);
+		}
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param p DOCUMENT ME!
-     */
-    public void obtainShape(Point2D p) {
-        Point2D[] points = getPoints();
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param p
+	 *            DOCUMENT ME!
+	 */
+	public void pointPosition(Point2D p) {
+		pointPosition = p;
+	}
 
-        double x = ((Point2D) points[0]).getX(); //-(pointPosition.getX()-((Point2D)points.get(0)).getX());
-        double y = ((Point2D) points[0]).getY(); //-(pointPosition.getY()-((Point2D)points.get(0)).getY());
-        double r = p.distance((Point2D) points[0]);
-        Ellipse2D ellipse = new Ellipse2D.Double(x - r, y - r, 2. * r, 2. * r);
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param p
+	 *            DOCUMENT ME!
+	 */
+	public void obtainShape(Point2D p) {
+		Point2D[] points = getPoints();
 
-        setGPX(new GeneralPathX(ellipse));
-    }
+		double x = ((Point2D) points[0]).getX(); // -(pointPosition.getX()-((Point2D)points.get(0)).getX());
+		double y = ((Point2D) points[0]).getY(); // -(pointPosition.getY()-((Point2D)points.get(0)).getY());
+		double r = p.distance((Point2D) points[0]);
+		Ellipse2D ellipse = new Ellipse2D.Double(x - r, y - r, 2. * r, 2. * r);
 
-	public void print(Graphics2D g, AffineTransform at, ISymbol symbol, PrintRequestAttributeSet properties) {
-		FShape shapeAux=getShape(at);
-    	symbol.print(g,at,shapeAux, properties);
+		setGPX(new GeneralPathX(ellipse));
+	}
+
+	public void print(Graphics2D g, AffineTransform at, ISymbol symbol,
+			PrintRequestAttributeSet properties) {
+		FShape shapeAux = getShape(at);
+		symbol.print(g, at, shapeAux, properties);
 	}
 
 }

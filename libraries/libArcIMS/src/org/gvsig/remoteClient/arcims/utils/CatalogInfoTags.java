@@ -43,20 +43,19 @@
 
 package org.gvsig.remoteClient.arcims.utils;
 
-
 /**
- * This class provides a list of TAGS to be used
- * when parsing a ARCIMS-RESPOND-SERVICES  element,
- * after a request with the parameter: "ServiceName=catalog"
- *
+ * This class provides a list of TAGS to be used when parsing a
+ * ARCIMS-RESPOND-SERVICES element, after a request with the parameter:
+ * "ServiceName=catalog"
+ * 
  * */
 public class CatalogInfoTags {
-    public final static String SERVICES = "SERVICES";
-    public final static String SERVICE = "SERVICE";
-    public final static String SERVICE_ATT_NAME = "NAME";
-    public final static String SERVICE_ATT_STATUS = "STATUS";
-    public final static String SERVICE_ATT_TYPE = "TYPE";
-    public final static String METADATA_SERVICE = "METADATASERVER";
-    public final static String ENABLED = "ENABLED";
-    public final static String DISABLED = "DISABLED";
+	public final static String SERVICES = "SERVICES";
+	public final static String SERVICE = "SERVICE";
+	public final static String SERVICE_ATT_NAME = "NAME";
+	public final static String SERVICE_ATT_STATUS = "STATUS";
+	public final static String SERVICE_ATT_TYPE = "TYPE";
+	public final static String METADATA_SERVICE = "METADATASERVER";
+	public final static String ENABLED = "ENABLED";
+	public final static String DISABLED = "DISABLED";
 }

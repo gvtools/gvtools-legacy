@@ -43,18 +43,23 @@ package com.iver.cit.gvsig.fmap.layers.layerOperations;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 
-
 /**
- * <p>All layers which need offer a table with alphanumeric data,
- *  must implement this interface.</p>
+ * <p>
+ * All layers which need offer a table with alphanumeric data, must implement
+ * this interface.
+ * </p>
  */
 public interface AlphanumericData {
 	/**
-	 * <p>Gets the associated table of the layer.</p>
-	 *
-	 * @return data source that represents the table with alphanumeric data associated to this layer.
-	 *
-	 * @throws ReadDriverException if fails the driver reading the data.
+	 * <p>
+	 * Gets the associated table of the layer.
+	 * </p>
+	 * 
+	 * @return data source that represents the table with alphanumeric data
+	 *         associated to this layer.
+	 * 
+	 * @throws ReadDriverException
+	 *             if fails the driver reading the data.
 	 */
 	SelectableDataSource getRecordset() throws ReadDriverException;
 }

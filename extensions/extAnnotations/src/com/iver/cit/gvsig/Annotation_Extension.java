@@ -67,7 +67,7 @@ import com.iver.cit.gvsig.project.documents.view.legend.preferences.Annotation_P
 
 /**
  * Extension to create an annotation layer.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class Annotation_Extension extends Extension implements
@@ -85,26 +85,28 @@ public class Annotation_Extension extends Extension implements
 
 		ThemeManagerWindow.addPage(PanelLegendAnnotation.class);
 
-		ThemeManagerWindow.setTabEnabledForLayer(General.class, Annotation_Layer.class, true);
-		ThemeManagerWindow.setTabEnabledForLayer(PanelLegendAnnotation.class, Annotation_Layer.class, true);
+		ThemeManagerWindow.setTabEnabledForLayer(General.class,
+				Annotation_Layer.class, true);
+		ThemeManagerWindow.setTabEnabledForLayer(PanelLegendAnnotation.class,
+				Annotation_Layer.class, true);
 		registerIcons();
 	}
 
-	private void registerIcons(){
+	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"ext-annotation-pack-graphics",
-				this.getClass().getClassLoader().getResource("images/package_graphics.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/package_graphics.png"));
 
 		PluginServices.getIconTheme().registerDefault(
 				"annotation-properties",
-				Annotation_Preferences.class.getClassLoader().getResource("images/AnnotationProperties.png")
-			);
+				Annotation_Preferences.class.getClassLoader().getResource(
+						"images/AnnotationProperties.png"));
 
 		PluginServices.getIconTheme().registerDefault(
 				"annotation-modify",
-				this.getClass().getClassLoader().getResource("images/ModifyAnnotationCursor.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/ModifyAnnotationCursor.png"));
 	}
 
 	/**
@@ -112,12 +114,13 @@ public class Annotation_Extension extends Extension implements
 	 */
 	public void execute(String actionCommand) {
 		if ("ANNOTATIONLAYER".equals(actionCommand)) {
-			ImageIcon Logo=PluginServices.getIconTheme().get("ext-annotation-pack-graphics");
+			ImageIcon Logo = PluginServices.getIconTheme().get(
+					"ext-annotation-pack-graphics");
 
 			SimpleWizard wizard = new SimpleWizard(Logo);
 
 			FLyrVect lv = (FLyrVect) map.getLayers().getActives()[0];
-			Annotation_Layer la=null;
+			Annotation_Layer la = null;
 			try {
 				la = Annotation_Layer.createLayerFromVect(lv);
 			} catch (ReadDriverException e) {
@@ -125,8 +128,8 @@ public class Annotation_Extension extends Extension implements
 			}
 			la.setName(lv.getName());
 
-			Annotation_FieldSelect panel1 = new Annotation_FieldSelect(wizard
-					.getWizardComponents(), la);
+			Annotation_FieldSelect panel1 = new Annotation_FieldSelect(
+					wizard.getWizardComponents(), la);
 			Annotation_ConfigureLabel panel2 = new Annotation_ConfigureLabel(
 					wizard.getWizardComponents(), la);
 
@@ -198,6 +201,6 @@ public class Annotation_Extension extends Extension implements
 	}
 
 	public IPreference[] getPreferencesPages() {
-		return new IPreference[] {ap};
+		return new IPreference[] { ap };
 	}
 }

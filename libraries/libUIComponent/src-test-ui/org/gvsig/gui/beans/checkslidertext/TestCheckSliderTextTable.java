@@ -23,11 +23,12 @@ import org.gvsig.gui.beans.slidertext.listeners.SliderEvent;
 import org.gvsig.gui.beans.slidertext.listeners.SliderListener;
 
 public class TestCheckSliderTextTable implements SliderListener {
-	private TestUI                   frame  = new TestUI("TestCheckSliderTextTable");
+	private TestUI frame = new TestUI("TestCheckSliderTextTable");
 	private CheckSliderTextContainer slider = null;
 
 	public TestCheckSliderTextTable() {
-		slider = new CheckSliderTextContainer(0, 10, 5, false, "Activar", false, true, true);
+		slider = new CheckSliderTextContainer(0, 10, 5, false, "Activar",
+				false, true, true);
 		slider.setDecimal(false);
 		slider.setBorder("Cabecera");
 		slider.addValueChangedListener(this);

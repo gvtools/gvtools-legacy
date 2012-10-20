@@ -74,19 +74,18 @@ import javax.swing.JProgressBar;
 import org.gvsig.i18n.Messages;
 
 /**
- * Dialog that shows the evolution of the execution of a
- * ITask.
- * If this ITask is a defined task (we know the number of steps
- * it must do) it shows a progress bar.
+ * Dialog that shows the evolution of the execution of a ITask. If this ITask is
+ * a defined task (we know the number of steps it must do) it shows a progress
+ * bar.
  * 
  * If it doesnt, progress bar is filling and emptying
+ * 
  * @author azabala
- *
+ * 
  */
-public class UndefinedProgressMonitor extends JDialog 
-	implements IProgressMonitorIF{
+public class UndefinedProgressMonitor extends JDialog implements
+		IProgressMonitorIF {
 
-	
 	private static final long serialVersionUID = 8776505862813807891L;
 	private JPanel jContentPane = null;
 	private JLabel mainTitleLabel = null;
@@ -103,13 +102,14 @@ public class UndefinedProgressMonitor extends JDialog
 		super();
 		initialize();
 	}
+
 	/**
-	 * Constructor which specify the dialog title 
-	 * (for example:processing, etc)
+	 * Constructor which specify the dialog title (for example:processing, etc)
+	 * 
 	 * @param parent
 	 * @param title
 	 */
-	public UndefinedProgressMonitor(Frame parent, String title){
+	public UndefinedProgressMonitor(Frame parent, String title) {
 		super(parent, false);
 		this.title = title;
 		initialize();
@@ -120,7 +120,7 @@ public class UndefinedProgressMonitor extends JDialog
 	 * 
 	 * @return void
 	 * 
-	 * FIXME Internationalize this
+	 *         FIXME Internationalize this
 	 */
 	private void initialize() {
 		this.setSize(318, 181);
@@ -136,13 +136,13 @@ public class UndefinedProgressMonitor extends JDialog
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.insets = new java.awt.Insets(6,97,18,125);
+			gridBagConstraints3.insets = new java.awt.Insets(6, 97, 18, 125);
 			gridBagConstraints3.gridy = 3;
 			gridBagConstraints3.ipadx = 4;
 			gridBagConstraints3.ipady = -4;
 			gridBagConstraints3.gridx = 0;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			gridBagConstraints2.insets = new java.awt.Insets(11,43,5,32);
+			gridBagConstraints2.insets = new java.awt.Insets(11, 43, 5, 32);
 			gridBagConstraints2.gridy = 2;
 			gridBagConstraints2.ipadx = 109;
 			gridBagConstraints2.ipady = 4;
@@ -151,25 +151,27 @@ public class UndefinedProgressMonitor extends JDialog
 			gridBagConstraints2.anchor = java.awt.GridBagConstraints.CENTER;
 			gridBagConstraints2.gridx = 0;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.insets = new java.awt.Insets(9,43,8,32);
+			gridBagConstraints1.insets = new java.awt.Insets(9, 43, 8, 32);
 			gridBagConstraints1.gridy = 1;
 			gridBagConstraints1.ipadx = 180;
 			gridBagConstraints1.ipady = 0;
 			gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints1.gridx = 0;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.insets = new java.awt.Insets(10,43,8,32);
+			gridBagConstraints.insets = new java.awt.Insets(10, 43, 8, 32);
 			gridBagConstraints.gridy = 0;
 			gridBagConstraints.ipadx = 148;
 			gridBagConstraints.ipady = 11;
 			gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints.gridx = 0;
 			noteLabel = new JLabel();
-			noteLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12));
+			noteLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.PLAIN,
+					12));
 			noteLabel.setText("noteLabel");
 			mainTitleLabel = new JLabel();
 			mainTitleLabel.setText("mainTittleLabel");
-			mainTitleLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12));
+			mainTitleLabel.setFont(new java.awt.Font("Dialog",
+					java.awt.Font.BOLD, 12));
 			jContentPane = new JPanel();
 			jContentPane.setLayout(new GridBagLayout());
 			jContentPane.add(mainTitleLabel, gridBagConstraints);
@@ -181,9 +183,9 @@ public class UndefinedProgressMonitor extends JDialog
 	}
 
 	/**
-	 * This method initializes jProgressBar	
-	 * 	
-	 * @return javax.swing.JProgressBar	
+	 * This method initializes jProgressBar
+	 * 
+	 * @return javax.swing.JProgressBar
 	 */
 	private JProgressBar getJProgressBar() {
 		if (jProgressBar == null) {
@@ -193,9 +195,9 @@ public class UndefinedProgressMonitor extends JDialog
 	}
 
 	/**
-	 * This method initializes cancelButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes cancelButton
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getCancelButton() {
 		if (cancelButton == null) {
@@ -267,9 +269,9 @@ public class UndefinedProgressMonitor extends JDialog
 		canceled = true;
 	}
 
-//	public void taskInBackground() {
-//		//setModal(false);
-//	}
+	// public void taskInBackground() {
+	// //setModal(false);
+	// }
 
 	public boolean isCanceled() {
 		return canceled == true;
@@ -283,4 +285,4 @@ public class UndefinedProgressMonitor extends JDialog
 		this.setVisible(true);
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="30,10"
+} // @jve:decl-index=0:visual-constraint="30,10"

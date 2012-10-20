@@ -15,7 +15,7 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
  * Panel para edición de nodos en la herramiento de árbole de decisión
  * 
  * @author Diego Guerrero Sevilla (diego.guerrero@uclm.es)
- *
+ * 
  */
 public class ExpressionEditorPanel extends DefaultButtonsPanel {
 
@@ -23,15 +23,16 @@ public class ExpressionEditorPanel extends DefaultButtonsPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 9078436882539529331L;
-	
-	private CalculatorPanel 					calculatorPanel = null;
-	ExpressionEditorDialog 						expressionEditorDialog = null;
-	private View 								view = null;
-	private DecisionTreePanel 					decisionTreePanel = null;
-	private ExpressionEditorPanelListener 		listener = null;
-	private DecisionTreeNode 					decisionTreenode = null;
 
-	public ExpressionEditorPanel(ExpressionEditorDialog expressionEditorDialog, DecisionTreePanel decisionTreePanel) {
+	private CalculatorPanel calculatorPanel = null;
+	ExpressionEditorDialog expressionEditorDialog = null;
+	private View view = null;
+	private DecisionTreePanel decisionTreePanel = null;
+	private ExpressionEditorPanelListener listener = null;
+	private DecisionTreeNode decisionTreenode = null;
+
+	public ExpressionEditorPanel(ExpressionEditorDialog expressionEditorDialog,
+			DecisionTreePanel decisionTreePanel) {
 		super(ButtonsPanel.BUTTONS_ACCEPTCANCEL);
 		this.expressionEditorDialog = expressionEditorDialog;
 		this.decisionTreePanel = decisionTreePanel;
@@ -39,38 +40,35 @@ public class ExpressionEditorPanel extends DefaultButtonsPanel {
 		initialize();
 	}
 
-	
 	private void initialize() {
-		setLayout(new BorderLayout(5,5));
-		add(getCalculatorPanel(),BorderLayout.CENTER);
+		setLayout(new BorderLayout(5, 5));
+		add(getCalculatorPanel(), BorderLayout.CENTER);
 		listener = new ExpressionEditorPanelListener(this);
 		DefaultGraphCell cell = getDecisionTreePanel().getSelectedCell();
 		Object userObject = cell.getUserObject();
 		cell.setUserObject("   ");
-		if(userObject instanceof DecisionTreeNode){
-			decisionTreenode = (DecisionTreeNode)userObject;
-			getCalculatorPanel().getJTextExpression().setText(decisionTreenode.getExpression());
+		if (userObject instanceof DecisionTreeNode) {
+			decisionTreenode = (DecisionTreeNode) userObject;
+			getCalculatorPanel().getJTextExpression().setText(
+					decisionTreenode.getExpression());
 		}
 		this.addButtonPressedListener(listener);
 	}
-	
+
 	public CalculatorPanel getCalculatorPanel() {
-		if (calculatorPanel == null){
+		if (calculatorPanel == null) {
 			calculatorPanel = new CalculatorPanel(view, false);
 		}
 		return calculatorPanel;
 	}
 
-
 	public ExpressionEditorDialog getExpressionEditorDialog() {
 		return expressionEditorDialog;
 	}
 
-
 	public DecisionTreePanel getDecisionTreePanel() {
 		return decisionTreePanel;
 	}
-
 
 	public DecisionTreeNode getDecisionTreenode() {
 		return decisionTreenode;

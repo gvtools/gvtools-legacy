@@ -57,40 +57,40 @@ import javax.swing.table.TableCellEditor;
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
 
-
 /**
  * Cell Editor sobre los valores únicos.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class ValueCellEditor extends JTextField implements TableCellEditor {
 	private ArrayList listeners = new ArrayList();
-	//private Value initialValue;
+
+	// private Value initialValue;
 
 	/**
 	 * Crea un nuevo FLabelCellEditor.
 	 */
 	public ValueCellEditor() {
 		addKeyListener(new KeyAdapter() {
-				public void keyReleased(KeyEvent e) {
-					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-						stopCellEditing();
-					} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-						cancelCellEditing();
-					}
+			public void keyReleased(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					stopCellEditing();
+				} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+					cancelCellEditing();
 				}
-			});
+			}
+		});
 	}
 
-	//Implement the one CellEditor method that AbstractCellEditor doesn't.
+	// Implement the one CellEditor method that AbstractCellEditor doesn't.
 	public Object getCellEditorValue() {
 		return getValue(getText());
 	}
 
-	//Implement the one method defined by TableCellEditor.
+	// Implement the one method defined by TableCellEditor.
 	public Component getTableCellEditorComponent(JTable table, Object value,
-		boolean isSelected, int row, int column) {
-		//initialValue=(Value)value;
+			boolean isSelected, int row, int column) {
+		// initialValue=(Value)value;
 		if (value == null) {
 			setText("");
 		} else {
@@ -104,9 +104,9 @@ public class ValueCellEditor extends JTextField implements TableCellEditor {
 	 * @see javax.swing.CellEditor#cancelCellEditing()
 	 */
 	public void cancelCellEditing() {
-		//if (initialValue != null) {
-		//	setText(initialValue.toString());
-		//}
+		// if (initialValue != null) {
+		// setText(initialValue.toString());
+		// }
 
 		for (int i = 0; i < listeners.size(); i++) {
 			CellEditorListener l = (CellEditorListener) listeners.get(i);
@@ -158,14 +158,15 @@ public class ValueCellEditor extends JTextField implements TableCellEditor {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param s DOCUMENT ME!
-	 *
+	 * 
+	 * @param s
+	 *            DOCUMENT ME!
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	private Value getValue(String s) {
 		Value val = null;
-		//Value cero = null;
+		// Value cero = null;
 
 		try {
 			try {
@@ -201,36 +202,28 @@ public class ValueCellEditor extends JTextField implements TableCellEditor {
 			e.printStackTrace();
 		}
 
-		/*try {
-		   if (v instanceof DoubleValue) {
-		           val = ValueFactory.createValue(Double.parseDouble(s));
-		           cero = ValueFactory.createValue((double) 0);
-		   } else if (v instanceof StringValue) {
-		           val = ValueFactory.createValue(s);
-		           cero = ValueFactory.createValue((String) "");
-		   } else if (v instanceof LongValue) {
-		           val = ValueFactory.createValue(Long.parseLong(s));
-		           cero = ValueFactory.createValue((long) 0);
-		   } else if (v instanceof IntValue) {
-		           val = ValueFactory.createValue(Integer.parseInt(s));
-		           cero = ValueFactory.createValue((int) 0);
-		   } else if (v instanceof FloatValue) {
-		           val = ValueFactory.createValue(Float.parseFloat(s));
-		           cero = ValueFactory.createValue((float) 0);
-		   } else if (v instanceof ShortValue) {
-		           val = ValueFactory.createValue(Short.parseShort(s));
-		           cero = ValueFactory.createValue((short) 0);
-		   } else if (v instanceof BooleanValue) {
-		           val = ValueFactory.createValue(Boolean.getBoolean(s));
-		           cero = ValueFactory.createValue((boolean) false);
-		   } else if (v instanceof DateValue) {
-		           val = ValueFactory.createValue(Date.parse(s));
-		           cero = ValueFactory.createValue((Date) new Date());
-		   }
-		   } catch (NumberFormatException e) {
-		           ///JOptionPane.showMessageDialog(null, PluginServices...getText(this,"Formato de número erroneo")+".");
-		           return cero;
-		   }
+		/*
+		 * try { if (v instanceof DoubleValue) { val =
+		 * ValueFactory.createValue(Double.parseDouble(s)); cero =
+		 * ValueFactory.createValue((double) 0); } else if (v instanceof
+		 * StringValue) { val = ValueFactory.createValue(s); cero =
+		 * ValueFactory.createValue((String) ""); } else if (v instanceof
+		 * LongValue) { val = ValueFactory.createValue(Long.parseLong(s)); cero
+		 * = ValueFactory.createValue((long) 0); } else if (v instanceof
+		 * IntValue) { val = ValueFactory.createValue(Integer.parseInt(s)); cero
+		 * = ValueFactory.createValue((int) 0); } else if (v instanceof
+		 * FloatValue) { val = ValueFactory.createValue(Float.parseFloat(s));
+		 * cero = ValueFactory.createValue((float) 0); } else if (v instanceof
+		 * ShortValue) { val = ValueFactory.createValue(Short.parseShort(s));
+		 * cero = ValueFactory.createValue((short) 0); } else if (v instanceof
+		 * BooleanValue) { val =
+		 * ValueFactory.createValue(Boolean.getBoolean(s)); cero =
+		 * ValueFactory.createValue((boolean) false); } else if (v instanceof
+		 * DateValue) { val = ValueFactory.createValue(Date.parse(s)); cero =
+		 * ValueFactory.createValue((Date) new Date()); } } catch
+		 * (NumberFormatException e) { ///JOptionPane.showMessageDialog(null,
+		 * PluginServices...getText(this,"Formato de número erroneo")+".");
+		 * return cero; }
 		 */
 		return val;
 	}

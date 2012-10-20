@@ -43,18 +43,18 @@ package com.iver.cit.gvsig.fmap.edition.fieldmanagers;
 public class RenameFieldCommand implements FieldCommand {
 	String antName;
 	String newName;
-	public RenameFieldCommand(String antName, String newName)
-	{
+
+	public RenameFieldCommand(String antName, String newName) {
 		this.antName = antName;
 		this.newName = newName;
 	}
+
 	public String getAntName() {
 		return antName;
 	}
+
 	public String getNewName() {
 		return newName;
 	}
 
 }
-
-

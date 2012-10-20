@@ -47,8 +47,8 @@
  */
 package com.iver.utiles.xmlEntity.generate;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
 import org.exolab.castor.xml.Marshaller;
@@ -57,136 +57,130 @@ import org.exolab.castor.xml.Unmarshaller;
 /**
  * Class Property.
  * 
- * @version $Revision: 8515 $ $Date: 2006-11-06 08:30:00 +0100 (Mon, 06 Nov 2006) $
+ * @version $Revision: 8515 $ $Date: 2006-11-06 08:30:00 +0100 (Mon, 06 Nov
+ *          2006) $
  */
 public class Property implements java.io.Serializable {
 
+	// --------------------------/
+	// - Class/Member Variables -/
+	// --------------------------/
 
-      //--------------------------/
-     //- Class/Member Variables -/
-    //--------------------------/
+	/**
+	 * Field _key
+	 */
+	private java.lang.String _key;
 
-    /**
-     * Field _key
-     */
-    private java.lang.String _key;
+	/**
+	 * Field _value
+	 */
+	private java.lang.String _value;
 
-    /**
-     * Field _value
-     */
-    private java.lang.String _value;
+	// ----------------/
+	// - Constructors -/
+	// ----------------/
 
+	public Property() {
+		super();
+	} // -- com.iver.utiles.xmlEntity.generate.Property()
 
-      //----------------/
-     //- Constructors -/
-    //----------------/
+	// -----------/
+	// - Methods -/
+	// -----------/
 
-    public Property() {
-        super();
-    } //-- com.iver.utiles.xmlEntity.generate.Property()
+	/**
+	 * Returns the value of field 'key'.
+	 * 
+	 * @return the value of field 'key'.
+	 */
+	public java.lang.String getKey() {
+		return this._key;
+	} // -- java.lang.String getKey()
 
+	/**
+	 * Returns the value of field 'value'.
+	 * 
+	 * @return the value of field 'value'.
+	 */
+	public java.lang.String getValue() {
+		return this._value;
+	} // -- java.lang.String getValue()
 
-      //-----------/
-     //- Methods -/
-    //-----------/
+	/**
+	 * Method isValid
+	 */
+	public boolean isValid() {
+		try {
+			validate();
+		} catch (org.exolab.castor.xml.ValidationException vex) {
+			return false;
+		}
+		return true;
+	} // -- boolean isValid()
 
-    /**
-     * Returns the value of field 'key'.
-     * 
-     * @return the value of field 'key'.
-     */
-    public java.lang.String getKey()
-    {
-        return this._key;
-    } //-- java.lang.String getKey() 
+	/**
+	 * Method marshal
+	 * 
+	 * @param out
+	 */
+	public void marshal(java.io.Writer out)
+			throws org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
 
-    /**
-     * Returns the value of field 'value'.
-     * 
-     * @return the value of field 'value'.
-     */
-    public java.lang.String getValue()
-    {
-        return this._value;
-    } //-- java.lang.String getValue() 
+		Marshaller.marshal(this, out);
+	} // -- void marshal(java.io.Writer)
 
-    /**
-     * Method isValid
-     */
-    public boolean isValid()
-    {
-        try {
-            validate();
-        }
-        catch (org.exolab.castor.xml.ValidationException vex) {
-            return false;
-        }
-        return true;
-    } //-- boolean isValid() 
+	/**
+	 * Method marshal
+	 * 
+	 * @param handler
+	 */
+	public void marshal(org.xml.sax.ContentHandler handler)
+			throws java.io.IOException, org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
 
-    /**
-     * Method marshal
-     * 
-     * @param out
-     */
-    public void marshal(java.io.Writer out)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        
-        Marshaller.marshal(this, out);
-    } //-- void marshal(java.io.Writer) 
+		Marshaller.marshal(this, handler);
+	} // -- void marshal(org.xml.sax.ContentHandler)
 
-    /**
-     * Method marshal
-     * 
-     * @param handler
-     */
-    public void marshal(org.xml.sax.ContentHandler handler)
-        throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        
-        Marshaller.marshal(this, handler);
-    } //-- void marshal(org.xml.sax.ContentHandler) 
+	/**
+	 * Sets the value of field 'key'.
+	 * 
+	 * @param key
+	 *            the value of field 'key'.
+	 */
+	public void setKey(java.lang.String key) {
+		this._key = key;
+	} // -- void setKey(java.lang.String)
 
-    /**
-     * Sets the value of field 'key'.
-     * 
-     * @param key the value of field 'key'.
-     */
-    public void setKey(java.lang.String key)
-    {
-        this._key = key;
-    } //-- void setKey(java.lang.String) 
+	/**
+	 * Sets the value of field 'value'.
+	 * 
+	 * @param value
+	 *            the value of field 'value'.
+	 */
+	public void setValue(java.lang.String value) {
+		this._value = value;
+	} // -- void setValue(java.lang.String)
 
-    /**
-     * Sets the value of field 'value'.
-     * 
-     * @param value the value of field 'value'.
-     */
-    public void setValue(java.lang.String value)
-    {
-        this._value = value;
-    } //-- void setValue(java.lang.String) 
+	/**
+	 * Method unmarshal
+	 * 
+	 * @param reader
+	 */
+	public static java.lang.Object unmarshal(java.io.Reader reader)
+			throws org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
+		return (com.iver.utiles.xmlEntity.generate.Property) Unmarshaller
+				.unmarshal(com.iver.utiles.xmlEntity.generate.Property.class,
+						reader);
+	} // -- java.lang.Object unmarshal(java.io.Reader)
 
-    /**
-     * Method unmarshal
-     * 
-     * @param reader
-     */
-    public static java.lang.Object unmarshal(java.io.Reader reader)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        return (com.iver.utiles.xmlEntity.generate.Property) Unmarshaller.unmarshal(com.iver.utiles.xmlEntity.generate.Property.class, reader);
-    } //-- java.lang.Object unmarshal(java.io.Reader) 
-
-    /**
-     * Method validate
-     */
-    public void validate()
-        throws org.exolab.castor.xml.ValidationException
-    {
-        org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
-        validator.validate(this);
-    } //-- void validate() 
+	/**
+	 * Method validate
+	 */
+	public void validate() throws org.exolab.castor.xml.ValidationException {
+		org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
+		validator.validate(this);
+	} // -- void validate()
 
 }

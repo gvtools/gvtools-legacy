@@ -9,10 +9,9 @@ import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.DataSource;
 import com.hardcode.gdbms.engine.data.indexes.FixedIndexSet;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public class IndexedGDBMSTableModel extends AbstractTableModel {
@@ -21,9 +20,11 @@ public class IndexedGDBMSTableModel extends AbstractTableModel {
 
 	/**
 	 * Crea un nuevo IndexedGDBMSTableModel.
-	 *
-	 * @param ds DOCUMENT ME!
-	 * @param fis DOCUMENT ME!
+	 * 
+	 * @param ds
+	 *            DOCUMENT ME!
+	 * @param fis
+	 *            DOCUMENT ME!
 	 */
 	public IndexedGDBMSTableModel(DataSource ds, FixedIndexSet fis) {
 		source = ds;
@@ -32,8 +33,9 @@ public class IndexedGDBMSTableModel extends AbstractTableModel {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param ds DOCUMENT ME!
+	 * 
+	 * @param ds
+	 *            DOCUMENT ME!
 	 */
 	public void setDataSource(DataSource ds) {
 		source = ds;
@@ -76,7 +78,7 @@ public class IndexedGDBMSTableModel extends AbstractTableModel {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return Returns the source.
 	 */
 	public DataSource getDataSource() {

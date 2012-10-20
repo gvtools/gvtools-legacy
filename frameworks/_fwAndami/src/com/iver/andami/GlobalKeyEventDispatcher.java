@@ -49,56 +49,50 @@ import javax.swing.KeyStroke;
 public class GlobalKeyEventDispatcher implements KeyEventDispatcher {
 	private static GlobalKeyEventDispatcher globalKeyDispatcher = null;
 	private static Hashtable registeredKeys = new Hashtable();
-	static GlobalKeyEventDispatcher getInstance()
-	{
+
+	static GlobalKeyEventDispatcher getInstance() {
 		if (globalKeyDispatcher == null)
 			globalKeyDispatcher = new GlobalKeyEventDispatcher();
 		return globalKeyDispatcher;
 	}
 
 	public void registerKeyStroke(KeyStroke key, KeyEventDispatcher disp)
-		throws RuntimeException
-	{
-		if (registeredKeys.containsKey(key))
-		{
+			throws RuntimeException {
+		if (registeredKeys.containsKey(key)) {
 			KeyEventDispatcher a = (KeyEventDispatcher) registeredKeys.get(key);
-			throw new RuntimeException("Error: La tecla " + key +
-					" ya está asignada al action" + a);
+			throw new RuntimeException("Error: La tecla " + key
+					+ " ya está asignada al action" + a);
 		}
 		registeredKeys.put(key, disp);
 	}
 
-    public void removeKeyStrokeBinding(KeyStroke key) {
-    	registeredKeys.remove(key);
-    }
+	public void removeKeyStrokeBinding(KeyStroke key) {
+		registeredKeys.remove(key);
+	}
 
-    public void removeAll() {
-    	registeredKeys.clear();
-    }
+	public void removeAll() {
+		registeredKeys.clear();
+	}
 
-    public KeyEventDispatcher getListenerAssignedTo(KeyStroke key)
-    {
-    	return (KeyEventDispatcher) registeredKeys.get(key);
-    }
+	public KeyEventDispatcher getListenerAssignedTo(KeyStroke key) {
+		return (KeyEventDispatcher) registeredKeys.get(key);
+	}
 
-
-	private GlobalKeyEventDispatcher()
-	{
+	private GlobalKeyEventDispatcher() {
 
 	}
+
 	public boolean dispatchKeyEvent(KeyEvent e) {
-		KeyStroke key = KeyStroke.getKeyStroke(e.getKeyCode(), e.getModifiers());
+		KeyStroke key = KeyStroke
+				.getKeyStroke(e.getKeyCode(), e.getModifiers());
 		KeyEventDispatcher a = getListenerAssignedTo(key);
 
-		if (a!=null)
-		{
-			//System.err.println("DEBUG: KeyEvent " + e +
-			//		".Antes de ejecutar action=" + a);
+		if (a != null) {
+			// System.err.println("DEBUG: KeyEvent " + e +
+			// ".Antes de ejecutar action=" + a);
 			return a.dispatchKeyEvent(e);
 		}
 		return false;
 	}
 
 }
-
-

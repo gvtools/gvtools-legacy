@@ -49,22 +49,29 @@ import com.iver.andami.messages.NotificationManager;
 public class SaveException extends BaseException {
 	private Exception e;
 	private String c;
+
 	public SaveException(Exception e, String c) {
-		this.e=e;
-		this.c=c;
+		this.e = e;
+		this.c = c;
 	}
+
 	public SaveException() {
 		// TODO Auto-generated constructor stub
 	}
-	public void showError(){
-		NotificationManager.addError("Fallo guardando el Proyecto en : "+c,e);
+
+	public void showError() {
+		NotificationManager
+				.addError("Fallo guardando el Proyecto en : " + c, e);
 	}
-	public void showInfo(){
-		NotificationManager.addInfo("Guardando el Proyecto en : "+c,e);
+
+	public void showInfo() {
+		NotificationManager.addInfo("Guardando el Proyecto en : " + c, e);
 	}
-	public void showWarning(){
-		NotificationManager.addWarning("Guardando el Proyecto en : "+c,e);
+
+	public void showWarning() {
+		NotificationManager.addWarning("Guardando el Proyecto en : " + c, e);
 	}
+
 	protected Map values() {
 		// TODO Auto-generated method stub
 		return null;

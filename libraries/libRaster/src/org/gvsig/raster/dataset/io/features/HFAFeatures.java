@@ -21,35 +21,33 @@ package org.gvsig.raster.dataset.io.features;
 import org.gvsig.raster.dataset.Params;
 import org.gvsig.raster.dataset.io.GdalDriver;
 import org.gvsig.raster.dataset.io.GdalWriter;
+
 /**
- * Caracteristicas del formato HFA (.img) de Erdas para escritura.
- * Soporta enteros de 8, 16 y 32 bits y datos en coma flotante de 32 y 64 bits
- * con cualquier número de bandas.
+ * Caracteristicas del formato HFA (.img) de Erdas para escritura. Soporta
+ * enteros de 8, 16 y 32 bits y datos en coma flotante de 32 y 64 bits con
+ * cualquier número de bandas.
  * 
  * @version 04/06/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
- //TODO: Mirar si se pueden generar con piramides
+// TODO: Mirar si se pueden generar con piramides
 public class HFAFeatures extends WriteFileFormatFeatures {
-	
+
 	public HFAFeatures() {
-		super(GdalDriver.FORMAT_HFA, "img", new int[] { -1 }, new int[] { 0, 1, 2, 3, 4, 5 }, GdalWriter.class);
+		super(GdalDriver.FORMAT_HFA, "img", new int[] { -1 }, new int[] { 0, 1,
+				2, 3, 4, 5 }, GdalWriter.class);
 	}
-	
+
 	/**
 	 * Carga los parámetros de este driver.
 	 */
 	public void loadParams() {
 		super.loadParams();
 
-		driverParams.setParam("rrd", 
-				new Integer(1), 
-				Params.CHOICE, 
-				new String[]{ "YES", "NO"});
+		driverParams.setParam("rrd", new Integer(1), Params.CHOICE,
+				new String[] { "YES", "NO" });
 
-		driverParams.setParam("compress", 
-				new Integer(1), 
-				Params.CHOICE, 
-				new String[]{"YES", "NO"});
+		driverParams.setParam("compress", new Integer(1), Params.CHOICE,
+				new String[] { "YES", "NO" });
 	}
 }

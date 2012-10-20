@@ -47,10 +47,7 @@ import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 
-import javax.swing.ImageIcon;
-
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.AddLayer;
 import com.iver.cit.gvsig.fmap.core.adapter.GeometryAdapter;
 import com.iver.cit.gvsig.fmap.core.adapter.PointAdapter;
 import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
@@ -61,26 +58,26 @@ import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.ILayoutGraphicListener;
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.LayoutPointListener;
 
-
 /**
- * Implementaci�n de la interfaz LayoutPointListener como herramienta para realizar
- * un zoom menos.
- *
+ * Implementaci�n de la interfaz LayoutPointListener como herramienta para
+ * realizar un zoom menos.
+ * 
  * @author Vicente Caballero Navarro
  */
-public class LayoutAddPointListenerImpl implements LayoutPointListener, ILayoutGraphicListener {
+public class LayoutAddPointListenerImpl implements LayoutPointListener,
+		ILayoutGraphicListener {
 	public static final Image iPoint = PluginServices.getIconTheme()
-		.get("point-cursor").getImage();
-	private final Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(iPoint,
-			new Point(16, 16), "");
-
+			.get("point-cursor").getImage();
+	private final Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(
+			iPoint, new Point(16, 16), "");
 
 	private Layout layout;
 
 	/**
 	 * Crea un nuevo LayoutZoomOutListenerImpl.
-	 *
-	 * @param mapControl MapControl.
+	 * 
+	 * @param mapControl
+	 *            MapControl.
 	 */
 	public LayoutAddPointListenerImpl(Layout l) {
 		this.layout = l;
@@ -101,7 +98,8 @@ public class LayoutAddPointListenerImpl implements LayoutPointListener, ILayoutG
 	public Image getImageCursor() {
 		return iPoint;
 	}
-	public Cursor getCursor(){
+
+	public Cursor getCursor() {
 		return cur;
 	}
 
@@ -109,7 +107,7 @@ public class LayoutAddPointListenerImpl implements LayoutPointListener, ILayoutG
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#cancelDrawing()
 	 */
 	public boolean cancelDrawing() {
-	    System.out.println("cancelDrawing del ZoomOutListenerImpl");
+		System.out.println("cancelDrawing del ZoomOutListenerImpl");
 		return true;
 	}
 
@@ -120,20 +118,24 @@ public class LayoutAddPointListenerImpl implements LayoutPointListener, ILayoutG
 
 	public void endGraphic() {
 		layout.getLayoutControl().addGeometryAdapterPoint();
-    	layout.getLayoutControl().getGeometryAdapter().end();
-        PluginServices.getMainFrame().enableControls();
-        FFrameGraphics fframe =(FFrameGraphics)FrameFactory.createFrameFromName(FFrameGraphicsFactory.registerName);
+		layout.getLayoutControl().getGeometryAdapter().end();
+		PluginServices.getMainFrame().enableControls();
+		FFrameGraphics fframe = (FFrameGraphics) FrameFactory
+				.createFrameFromName(FFrameGraphicsFactory.registerName);
 
 		fframe.setLayout(layout);
-        fframe.setGeometryAdapter(layout.getLayoutControl().getGeometryAdapter());
+		fframe.setGeometryAdapter(layout.getLayoutControl()
+				.getGeometryAdapter());
 		fframe.update(FFrameGraphics.POINT, layout.getLayoutControl().getAT());
-		Rectangle2D r=layout.getLayoutControl().getGeometryAdapter().getBounds2D();
-		double d=0.5;//FLayoutUtilities.toSheetDistance(50,layout.getAT());
-		r=new Rectangle2D.Double(r.getX()-(d/2),r.getY()-d,d*2,d*2);
+		Rectangle2D r = layout.getLayoutControl().getGeometryAdapter()
+				.getBounds2D();
+		double d = 0.5;// FLayoutUtilities.toSheetDistance(50,layout.getAT());
+		r = new Rectangle2D.Double(r.getX() - (d / 2), r.getY() - d, d * 2,
+				d * 2);
 		fframe.setBoundBox(r);
-		layout.getLayoutContext().addFFrame(fframe, true,true);
+		layout.getLayoutContext().addFFrame(fframe, true, true);
 		layout.getLayoutControl().setGeometryAdapter(new PointAdapter());
-        layout.getLayoutControl().refresh();
+		layout.getLayoutControl().refresh();
 	}
 
 	public GeometryAdapter createGeometryAdapter() {

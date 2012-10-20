@@ -122,14 +122,15 @@ import com.iver.cit.gvsig.geoprocess.core.fmap.IOverlayGeoprocess;
 import com.iver.utiles.swing.threads.CancellableMonitorable;
 import com.iver.utiles.swing.threads.DefaultCancellableMonitorable;
 import com.iver.utiles.swing.threads.IMonitorableTask;
+
 /**
  * Computes intersection between two layers.
- *
+ * 
  * @author azabala
- *
+ * 
  */
-public class IntersectionGeoprocess extends AbstractGeoprocess
-								implements IOverlayGeoprocess {
+public class IntersectionGeoprocess extends AbstractGeoprocess implements
+		IOverlayGeoprocess {
 
 	/**
 	 * overlay layer
@@ -151,7 +152,7 @@ public class IntersectionGeoprocess extends AbstractGeoprocess
 	 */
 	private boolean onlyClipLayerSelection = false;
 
-	public IntersectionGeoprocess(FLyrVect inputLayer){
+	public IntersectionGeoprocess(FLyrVect inputLayer) {
 		setFirstOperand(inputLayer);
 	}
 
@@ -179,30 +180,28 @@ public class IntersectionGeoprocess extends AbstractGeoprocess
 
 	public void checkPreconditions() throws GeoprocessException {
 		if (firstLayer == null)
-			throw new GeoprocessException("Interseccion: capa de entrada a null");
+			throw new GeoprocessException(
+					"Interseccion: capa de entrada a null");
 		if (overlayLayer == null)
 			throw new GeoprocessException("Interseccion: capa de union a null");
 		if (this.writer == null || this.schemaManager == null) {
 			throw new GeoprocessException(
 					"Operacion de interseccion sin especificar capa de resultados");
 		}
-		/*azabala: interseccion con cualquier tipo de capa
-		try {
-			if ((firstLayer.getShapeType() != XTypes.POLYGON) &&
-(firstLayer.getShapeType() != XTypes.MULTI)) {
-				throw new GeoprocessException(
-						"Primera capa de interseccion no es de polígonos");
-			}
-			if ((overlayLayer.getShapeType() != XTypes.POLYGON) &&
-(overlayLayer.getShapeType() != XTypes.MULTI))  {
-				throw new GeoprocessException(
-						"Segunda capa de interseccion no es de polígonos");
-			}
-		} catch (ReadDriverException e) {
-			throw new GeoprocessException(
-					"Error al tratar de chequear si las capas a intersectar son de polígonos");
-		}
-		*/
+		/*
+		 * azabala: interseccion con cualquier tipo de capa try { if
+		 * ((firstLayer.getShapeType() != XTypes.POLYGON) &&
+		 * (firstLayer.getShapeType() != XTypes.MULTI)) { throw new
+		 * GeoprocessException(
+		 * "Primera capa de interseccion no es de polígonos"); } if
+		 * ((overlayLayer.getShapeType() != XTypes.POLYGON) &&
+		 * (overlayLayer.getShapeType() != XTypes.MULTI)) { throw new
+		 * GeoprocessException(
+		 * "Segunda capa de interseccion no es de polígonos"); } } catch
+		 * (ReadDriverException e) { throw new GeoprocessException(
+		 * "Error al tratar de chequear si las capas a intersectar son de polígonos"
+		 * ); }
+		 */
 
 	}
 
@@ -210,10 +209,10 @@ public class IntersectionGeoprocess extends AbstractGeoprocess
 		try {
 			new IntersectionMonitorableTask().run();
 		} catch (ReadDriverException e) {
-			throw new GeoprocessException("Error de acceso a driver durante geoproceso interseccion");
+			throw new GeoprocessException(
+					"Error de acceso a driver durante geoproceso interseccion");
 		}
 	}
-
 
 	public void cancel() {
 		try {
@@ -227,13 +226,16 @@ public class IntersectionGeoprocess extends AbstractGeoprocess
 	public ILayerDefinition createLayerDefinition() {
 		if (resultLayerDefinition == null) {
 			try {
-				if(onlyClipLayerSelection)
-					if(onlyFirstLayerSelection)
-						resultLayerDefinition = DefinitionUtils.mergeLayerDefinitions(firstLayer,overlayLayer);
+				if (onlyClipLayerSelection)
+					if (onlyFirstLayerSelection)
+						resultLayerDefinition = DefinitionUtils
+								.mergeLayerDefinitions(firstLayer, overlayLayer);
 					else
-						resultLayerDefinition = DefinitionUtils.mergeLayerDefinitions(overlayLayer, firstLayer);
+						resultLayerDefinition = DefinitionUtils
+								.mergeLayerDefinitions(overlayLayer, firstLayer);
 				else
-					resultLayerDefinition = DefinitionUtils.mergeLayerDefinitions(firstLayer, overlayLayer);
+					resultLayerDefinition = DefinitionUtils
+							.mergeLayerDefinitions(firstLayer, overlayLayer);
 				resultLayerDefinition.setShapeType(FShape.MULTI);
 			} catch (Exception e) {
 				// TODO Quizas createLayerDefinition deberia lanzar
@@ -244,7 +246,6 @@ public class IntersectionGeoprocess extends AbstractGeoprocess
 		return resultLayerDefinition;
 	}
 
-
 	public IMonitorableTask createTask() {
 		try {
 			return new IntersectionMonitorableTask();
@@ -254,33 +255,36 @@ public class IntersectionGeoprocess extends AbstractGeoprocess
 	}
 
 	/**
-	 * IMonitorableTask that allows to run intersection geoprocess in background,
-	 * with cancelation requests.
-	 *
+	 * IMonitorableTask that allows to run intersection geoprocess in
+	 * background, with cancelation requests.
+	 * 
 	 * @author azabala
-	 *
+	 * 
 	 */
 	class IntersectionMonitorableTask implements IMonitorableTask {
 		private CancellableMonitorable cancelMonitor = null;
-		String INTERSECTION_MESSAGE = PluginServices.getText(this, "Mensaje_interseccion");
-		String INTERSECTION_NOTE = PluginServices.getText(this, "Mensaje_procesando_interseccion");
+		String INTERSECTION_MESSAGE = PluginServices.getText(this,
+				"Mensaje_interseccion");
+		String INTERSECTION_NOTE = PluginServices.getText(this,
+				"Mensaje_procesando_interseccion");
 		String OF = PluginServices.getText(this, "De");
 		private boolean finished = false;
 
-		IntersectionMonitorableTask() throws ReadDriverException  {
+		IntersectionMonitorableTask() throws ReadDriverException {
 			initialize();
 		}
+
 		void initialize() throws ReadDriverException {
 			cancelMonitor = createCancelMonitor();
 		}
 
-		private CancellableMonitorable createCancelMonitor() throws ReadDriverException {
-			DefaultCancellableMonitorable monitor = new
-							DefaultCancellableMonitorable();
+		private CancellableMonitorable createCancelMonitor()
+				throws ReadDriverException {
+			DefaultCancellableMonitorable monitor = new DefaultCancellableMonitorable();
 			monitor.setInitialStep(0);
-			//Really its undeterminated, but  we must to process all
-			//elements of first layer (or selection) we are going to
-			//consideer determinated
+			// Really its undeterminated, but we must to process all
+			// elements of first layer (or selection) we are going to
+			// consideer determinated
 			monitor.setDeterminatedProcess(true);
 			int numSteps = 0;
 			if (onlyFirstLayerSelection) {
@@ -289,7 +293,7 @@ public class IntersectionGeoprocess extends AbstractGeoprocess
 			} else {
 				numSteps = firstLayer.getSource().getShapeCount();
 			}
-			if(onlyClipLayerSelection) {
+			if (onlyClipLayerSelection) {
 				FBitSet selection = overlayLayer.getRecordset().getSelection();
 				numSteps = selection.cardinality();
 			} else {
@@ -316,59 +320,60 @@ public class IntersectionGeoprocess extends AbstractGeoprocess
 		}
 
 		public String getNote() {
-			return INTERSECTION_NOTE + " " +
-			getCurrentStep() + " " +
-			OF + " "
-			+ getFinishStep();
+			return INTERSECTION_NOTE + " " + getCurrentStep() + " " + OF + " "
+					+ getFinishStep();
 		}
 
 		public void cancel() {
 			((DefaultCancellableMonitorable) cancelMonitor).setCanceled(true);
-			//This does this geoprocess athomic. In this
-			//call we remove result files
+			// This does this geoprocess athomic. In this
+			// call we remove result files
 			IntersectionGeoprocess.this.cancel();
 		}
 
 		public void run() throws GeoprocessException {
 
 			try {
-				//Prepare the result
-				if (!(writer instanceof MultiShpWriter)){
+				// Prepare the result
+				if (!(writer instanceof MultiShpWriter)) {
 					schemaManager.createSchema(createLayerDefinition());
 				}
 				writer.preProcess();
-				Strategy strategy =
-					StrategyManager.getStrategy(firstLayer);
-				Strategy overlayStrategy =
-					StrategyManager.getStrategy(overlayLayer);
-				FeaturePersisterProcessor2 featureProcessor =
-					new FeaturePersisterProcessor2(writer);
+				Strategy strategy = StrategyManager.getStrategy(firstLayer);
+				Strategy overlayStrategy = StrategyManager
+						.getStrategy(overlayLayer);
+				FeaturePersisterProcessor2 featureProcessor = new FeaturePersisterProcessor2(
+						writer);
 				IntersectVisitor visitor = new IntersectVisitor(overlayLayer,
-															featureProcessor,
-															overlayStrategy,
-															onlyClipLayerSelection);
-				if(onlyFirstLayerSelection){
-					strategy.process(visitor,
-						firstLayer.getRecordset().getSelection(),
-						cancelMonitor);
-				}else if(onlyClipLayerSelection){
-					IntersectVisitor visitor2 = new IntersectVisitor(firstLayer,featureProcessor,strategy,onlyFirstLayerSelection);
-					overlayStrategy.process(visitor2, overlayLayer.getRecordset().getSelection(), cancelMonitor);
-				}
-				else {
+						featureProcessor, overlayStrategy,
+						onlyClipLayerSelection);
+				if (onlyFirstLayerSelection) {
+					strategy.process(visitor, firstLayer.getRecordset()
+							.getSelection(), cancelMonitor);
+				} else if (onlyClipLayerSelection) {
+					IntersectVisitor visitor2 = new IntersectVisitor(
+							firstLayer, featureProcessor, strategy,
+							onlyFirstLayerSelection);
+					overlayStrategy.process(visitor2, overlayLayer
+							.getRecordset().getSelection(), cancelMonitor);
+				} else {
 					strategy.process(visitor, cancelMonitor);
 				}
 
 			} catch (ReadDriverException e) {
-				throw new GeoprocessException("Error de driver al calcular el geoproceso interseccion");
+				throw new GeoprocessException(
+						"Error de driver al calcular el geoproceso interseccion");
 			} catch (ProcessVisitorException e) {
-				throw new GeoprocessException("Error al procesar el feature de una capa durante el geoproceso interseccion");
+				throw new GeoprocessException(
+						"Error al procesar el feature de una capa durante el geoproceso interseccion");
 			} catch (VisitorException e) {
-				throw new GeoprocessException("Error de driver al calcular el geoproceso interseccion");
+				throw new GeoprocessException(
+						"Error de driver al calcular el geoproceso interseccion");
 			} catch (SchemaEditionException e) {
-				throw new GeoprocessException("Error al crear el esquema/fichero de la nueva capa");
+				throw new GeoprocessException(
+						"Error al crear el esquema/fichero de la nueva capa");
 
-			}finally{
+			} finally {
 				finished = true;
 			}
 		}
@@ -384,7 +389,10 @@ public class IntersectionGeoprocess extends AbstractGeoprocess
 		public boolean isFinished() {
 			return finished;
 		}
-		/* (non-Javadoc)
+
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see com.iver.utiles.swing.threads.IMonitorableTask#finished()
 		 */
 		public void finished() {

@@ -83,33 +83,33 @@ import com.iver.utiles.XMLEntity;
  * @author Alvaro Zabala
  * 
  */
-public class SimpleTopologyErrorContainer implements ITopologyErrorContainer, Cloneable {
+public class SimpleTopologyErrorContainer implements ITopologyErrorContainer,
+		Cloneable {
 
 	private List<TopologyError> topologyErrors;
-	
+
 	private Topology topology;
-	
+
 	/**
 	 * Number of errors that has been marked as exceptions
 	 */
 	int numberOfExceptions = 0;
-	
-	
-	public SimpleTopologyErrorContainer(){
+
+	public SimpleTopologyErrorContainer() {
 		topologyErrors = new ArrayList<TopologyError>();
 	}
-	
-	public void setTopology(Topology topology){
+
+	public void setTopology(Topology topology) {
 		this.topology = topology;
 	}
-	
-	public Topology getTopology(){
+
+	public Topology getTopology() {
 		return this.topology;
 	}
-	
-	public Object clone(){
+
+	public Object clone() {
 		SimpleTopologyErrorContainer newContainer = new SimpleTopologyErrorContainer();
-		for(int i = 0; i < topologyErrors.size(); i++){
+		for (int i = 0; i < topologyErrors.size(); i++) {
 			newContainer.addTopologyError(topologyErrors.get(i));
 		}
 		newContainer.setTopology(this.topology);
@@ -121,14 +121,14 @@ public class SimpleTopologyErrorContainer implements ITopologyErrorContainer, Cl
 	}
 
 	public void demoteToError(TopologyError topologyError) {
-		if(!topologyError.isException())
+		if (!topologyError.isException())
 			return;
 		topologyError.setException(false);
 		numberOfExceptions--;
 	}
 
 	public String getErrorFid() {
-		return topologyErrors.size()+"";
+		return topologyErrors.size() + "";
 	}
 
 	public int getNumberOfErrors() {
@@ -139,10 +139,10 @@ public class SimpleTopologyErrorContainer implements ITopologyErrorContainer, Cl
 		return topologyErrors.get(index);
 	}
 
-	//FIXME Redesign getTopologyErrorsByLyr to reduce code duplication
+	// FIXME Redesign getTopologyErrorsByLyr to reduce code duplication
 	public List<TopologyError> getTopologyErrors(String ruleName,
 			int shapeType, FLyrVect sourceLayer,
-			CoordinateReferenceSystem desiredCrs, boolean includeExceptions) {		
+			CoordinateReferenceSystem desiredCrs, boolean includeExceptions) {
 		List<TopologyError> solution = new ArrayList<TopologyError>();
 		Iterator<TopologyError> iterator = topologyErrors.iterator();
 		while (iterator.hasNext()) {
@@ -172,19 +172,17 @@ public class SimpleTopologyErrorContainer implements ITopologyErrorContainer, Cl
 						.equals(sourceLayer))) {
 					continue;
 				} else {
-					errorCrs = destinationLayer.getSource()
-							.getCrs();
+					errorCrs = destinationLayer.getSource().getCrs();
 				}
 			} else {
 				errorCrs = originLayer.getSource().getCrs();
 			}
 
 			// reprojection
-			if (errorCrs != null
-					&& desiredCrs != null
-					&& !(errorCrs.getName()
-							.equals(desiredCrs.getName()))) {
-				MathTransform trans = ProjectionUtils.getCrsTransform(errorCrs, desiredCrs);
+			if (errorCrs != null && desiredCrs != null
+					&& !(errorCrs.getName().equals(desiredCrs.getName()))) {
+				MathTransform trans = ProjectionUtils.getCrsTransform(errorCrs,
+						desiredCrs);
 				error.getGeometry().reProject(trans);
 			}
 
@@ -226,7 +224,7 @@ public class SimpleTopologyErrorContainer implements ITopologyErrorContainer, Cl
 						desiredCrs);
 				error.getGeometry().reProject(trans);
 			}
-			if(layer == originLayer || layer == destinationLayer)
+			if (layer == originLayer || layer == destinationLayer)
 				solution.add(error);
 		}// while
 
@@ -246,7 +244,6 @@ public class SimpleTopologyErrorContainer implements ITopologyErrorContainer, Cl
 					continue;
 			}// if
 
-			
 			// rule name filter
 			ITopologyRule rule = error.getViolatedRule();
 			if (!rule.getName().equalsIgnoreCase(ruleName))
@@ -293,7 +290,7 @@ public class SimpleTopologyErrorContainer implements ITopologyErrorContainer, Cl
 			// shapeType filter
 			if (error.getShapeType() != shapeType)
 				continue;
-			
+
 			CoordinateReferenceSystem errorCrs = null;
 			FLyrVect originLayer = error.getOriginLayer();
 			if (originLayer == null) {
@@ -308,7 +305,8 @@ public class SimpleTopologyErrorContainer implements ITopologyErrorContainer, Cl
 			// reprojection
 			if (errorCrs != null && desiredCrs != null
 					&& !(errorCrs.getName().equals(desiredCrs.getName()))) {
-				MathTransform trans = ProjectionUtils.getCrsTransform(errorCrs, desiredCrs);
+				MathTransform trans = ProjectionUtils.getCrsTransform(errorCrs,
+						desiredCrs);
 				error.getGeometry().reProject(trans);
 			}
 			solution.add(error);
@@ -318,19 +316,18 @@ public class SimpleTopologyErrorContainer implements ITopologyErrorContainer, Cl
 	}
 
 	public void markAsTopologyException(TopologyError topologyError) {
-		if(topologyError.isException())
+		if (topologyError.isException())
 			return;
-		
+
 		topologyError.setException(true);
 		numberOfExceptions++;
-		
+
 	}
-	
+
 	public void clear() {
 		topologyErrors.clear();
 	}
 
-	
 	// IMPLEMENTATION OF IPERSISTENCE
 	public String getClassName() {
 		return this.getClass().getName();
@@ -340,16 +337,16 @@ public class SimpleTopologyErrorContainer implements ITopologyErrorContainer, Cl
 	 * Como este ErrorContainer trabaja con todo en memoria, se pueden persistir
 	 * los errores topologicos.
 	 * 
-	 * En el caso de error containers basados en drivers, se persistiría la información
-	 * necesaria para 
-	 * volver a cargar el driver (ruta del shp, tabla de bbdd, etc.)
+	 * En el caso de error containers basados en drivers, se persistiría la
+	 * información necesaria para volver a cargar el driver (ruta del shp, tabla
+	 * de bbdd, etc.)
 	 */
 	public XMLEntity getXMLEntity() {
 		XMLEntity solution = new XMLEntity();
 		solution.putProperty("className", getClassName());
 		solution.putProperty("numberOfExceptions", numberOfExceptions);
 		solution.putProperty("numberOfErrors", topologyErrors.size());
-		for(int i = 0; i < topologyErrors.size(); i++){
+		for (int i = 0; i < topologyErrors.size(); i++) {
 			TopologyError error = topologyErrors.get(i);
 			XMLEntity entity = error.getXMLEntity();
 			solution.addChild(entity);
@@ -358,19 +355,19 @@ public class SimpleTopologyErrorContainer implements ITopologyErrorContainer, Cl
 	}
 
 	public void setXMLEntity(XMLEntity xml) {
-		if(xml.contains("numberOfExceptions")){
+		if (xml.contains("numberOfExceptions")) {
 			this.numberOfExceptions = xml.getIntProperty("numberOfExceptions");
 		}
-		
-		if(xml.contains("numberOfErrors")){
+
+		if (xml.contains("numberOfErrors")) {
 			int numberOfErrors = xml.getIntProperty("numberOfErrors");
-			for(int i = 0; i < numberOfErrors; i++){
+			for (int i = 0; i < numberOfErrors; i++) {
 				XMLEntity errorXML = xml.getChild(i);
 				TopologyError error = new TopologyError(topology);
 				error.setXMLEntity(errorXML);
 				topologyErrors.add(error);
-			}//for
-		}//if
+			}// for
+		}// if
 
 	}
 
@@ -380,11 +377,11 @@ public class SimpleTopologyErrorContainer implements ITopologyErrorContainer, Cl
 
 	public void removeErrorsByLayer(FLyrVect layer) {
 		Iterator<TopologyError> iterator = topologyErrors.iterator();
-		while(iterator.hasNext()){
+		while (iterator.hasNext()) {
 			TopologyError error = iterator.next();
 			FLyrVect originLyr = error.getOriginLayer();
 			FLyrVect destinationLyr = error.getDestinationLayer();
-			if(originLyr == layer || destinationLyr == layer){
+			if (originLyr == layer || destinationLyr == layer) {
 				iterator.remove();
 			}
 		}
@@ -392,82 +389,77 @@ public class SimpleTopologyErrorContainer implements ITopologyErrorContainer, Cl
 
 	public void removeErrorsByRule(String ruleName) {
 		Iterator<TopologyError> iterator = topologyErrors.iterator();
-		while(iterator.hasNext()){
+		while (iterator.hasNext()) {
 			TopologyError error = iterator.next();
 			ITopologyRule violatedRule = error.getViolatedRule();
-			if(violatedRule.getName().equalsIgnoreCase(ruleName)){
+			if (violatedRule.getName().equalsIgnoreCase(ruleName)) {
 				iterator.remove();
 			}
 		}
 	}
-	
+
 	/**
 	 * Returns a representation of the topology errors contained in as a fmap
 	 * layer.
 	 * 
-	 * @param name name of the layer
+	 * @param name
+	 *            name of the layer
 	 * @projection projection of the layer
 	 */
 	public FLyrVect getAsFMapLayer(String name, CoordinateReferenceSystem crs) {
-		FLayerGenericVectorial solution = new
-		 	FLayerGenericVectorial();
+		FLayerGenericVectorial solution = new FLayerGenericVectorial();
 		solution.setName(name);
 		solution.setCrs(crs);
 		solution.setDriver(new TopologyErrorMemoryDriver(name, this));
 		try {
 			solution.load();
-			VectorialUniqueValueLegend defaultLegend = 
-				LegendFactory.createVectorialUniqueValueLegend(FShape.MULTI);
-			defaultLegend.setClassifyingFieldNames(new String[] {TopologyErrorMemoryDriver.LEGEND_FIELD});
-			defaultLegend.setClassifyingFieldTypes(new int[]{Types.VARCHAR});
-			defaultLegend.setDefaultSymbol(SymbologyFactory.
-					createDefaultSymbolByShapeType(FShape.MULTI, Color.BLACK));
-			
-			
-			Map<ITopologyRule, ITopologyRule> violatedRules =
-				new HashMap<ITopologyRule, ITopologyRule>();
-			
+			VectorialUniqueValueLegend defaultLegend = LegendFactory
+					.createVectorialUniqueValueLegend(FShape.MULTI);
+			defaultLegend
+					.setClassifyingFieldNames(new String[] { TopologyErrorMemoryDriver.LEGEND_FIELD });
+			defaultLegend.setClassifyingFieldTypes(new int[] { Types.VARCHAR });
+			defaultLegend.setDefaultSymbol(SymbologyFactory
+					.createDefaultSymbolByShapeType(FShape.MULTI, Color.BLACK));
+
+			Map<ITopologyRule, ITopologyRule> violatedRules = new HashMap<ITopologyRule, ITopologyRule>();
+
 			int numberOfErrors = topology.getNumberOfErrors();
-			for(int i = 0; i < numberOfErrors; i++){
+			for (int i = 0; i < numberOfErrors; i++) {
 				TopologyError error = topology.getTopologyError(i);
 				ITopologyRule violatedRule = error.getViolatedRule();
-				if(violatedRules.get(violatedRule) != null){
+				if (violatedRules.get(violatedRule) != null) {
 					continue;
-				}else{
+				} else {
 					ISymbol symbol = violatedRule.getErrorSymbol();
-					defaultLegend.addSymbol(ValueFactory.createValue(violatedRule.getName()), symbol);
+					defaultLegend.addSymbol(
+							ValueFactory.createValue(violatedRule.getName()),
+							symbol);
 				}
 			}
-			
-			
+
 			/*
-			Try to avoid legend entries for rules that hasnt been violated.
-			List<ITopologyRule> rules = topology.getAllRules();
-			//Now we are going to set a symbol for each kind of topology rule
-			ISymbol theSymbol = null;
-			for(int i = 0; i < rules.size(); i++){
-				ITopologyRule rule = rules.get(i);
-				
-				theSymbol = rule.getErrorSymbol();
-				defaultLegend.addSymbol(ValueFactory.createValue(rule.getName()), theSymbol);	
-			}//for
-			*/
-			
-			
-			
-			
+			 * Try to avoid legend entries for rules that hasnt been violated.
+			 * List<ITopologyRule> rules = topology.getAllRules(); //Now we are
+			 * going to set a symbol for each kind of topology rule ISymbol
+			 * theSymbol = null; for(int i = 0; i < rules.size(); i++){
+			 * ITopologyRule rule = rules.get(i);
+			 * 
+			 * theSymbol = rule.getErrorSymbol();
+			 * defaultLegend.addSymbol(ValueFactory.createValue(rule.getName()),
+			 * theSymbol); }//for
+			 */
+
 			solution.setLegend(defaultLegend);
-			
+
 		} catch (LoadLayerException e) {
 			e.printStackTrace();
 		}
-		
-		
+
 		return solution;
 	}
 
 	public void removeError(TopologyError topologyError) {
-		//TODO register listeners to notify this
+		// TODO register listeners to notify this
 		this.topologyErrors.remove(topologyError);
 	}
 

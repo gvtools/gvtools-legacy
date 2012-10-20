@@ -1,30 +1,14 @@
 package com.iver.cit.gvsig.project.documents.view.toc.actions;
 
-import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
-import com.iver.andami.messages.NotificationManager;
-import com.iver.cit.gvsig.ProjectExtension;
-import com.iver.cit.gvsig.fmap.edition.EditableAdapter;
-import com.iver.cit.gvsig.fmap.edition.VectorialEditableAdapter;
+import com.iver.cit.gvsig.FiltroExtension;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrAnnotation;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
-import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
-import com.iver.cit.gvsig.fmap.layers.layerOperations.AlphanumericData;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.ClassifiableVectorial;
-import com.iver.cit.gvsig.gui.filter.DefaultExpressionDataSource;
-import com.iver.cit.gvsig.gui.filter.FilterDialog;
-import com.iver.cit.gvsig.FiltroExtension;
-import com.iver.cit.gvsig.project.Project;
-import com.iver.cit.gvsig.project.ProjectFactory;
-import com.iver.cit.gvsig.project.documents.table.ProjectTable;
-import com.iver.cit.gvsig.project.documents.table.ProjectTableFactory;
-import com.iver.cit.gvsig.project.documents.table.gui.Table;
 import com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction;
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
-import com.iver.utiles.exceptionHandling.ExceptionListener;
-
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
@@ -69,13 +53,13 @@ import com.iver.utiles.exceptionHandling.ExceptionListener;
 
 /**
  * Select features in active layers using a WHERE filter on attribute data.
- *
+ * 
  * @author Benjamin Ducke
  */
 public class AttFilterTocMenuEntry extends AbstractTocContextMenuAction {
 	protected SelectableDataSource dataSource = null;
-	private String filterTitle;	
-	
+	private String filterTitle;
+
 	public String getGroup() {
 		return "attTableTOCtools";
 	}
@@ -95,7 +79,7 @@ public class AttFilterTocMenuEntry extends AbstractTocContextMenuAction {
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
 		if (isTocItemBranch(item)) {
 			FLayer lyr = getNodeLayer(item);
-			if (lyr.isAvailable()){
+			if (lyr.isAvailable()) {
 				return selectedItems.length == 1;
 			}
 		}
@@ -105,14 +89,14 @@ public class AttFilterTocMenuEntry extends AbstractTocContextMenuAction {
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
 		if (isTocItemBranch(item)) {
 			FLayer lyr = getNodeLayer(item);
-				if ((lyr instanceof ClassifiableVectorial)) {
-					if (!((lyr instanceof FLyrVect) &&
-							!((FLyrVect)lyr).isPropertiesMenuVisible())){
-						if (!(lyr instanceof FLyrAnnotation))
-							return true;
-					}
-
+			if ((lyr instanceof ClassifiableVectorial)) {
+				if (!((lyr instanceof FLyrVect) && !((FLyrVect) lyr)
+						.isPropertiesMenuVisible())) {
+					if (!(lyr instanceof FLyrAnnotation))
+						return true;
 				}
+
+			}
 		}
 		return false;
 
@@ -121,7 +105,7 @@ public class AttFilterTocMenuEntry extends AbstractTocContextMenuAction {
 	public void execute(ITocItem item, FLayer[] selectedItems) {
 
 		/* simply call the Filter extension with the right action */
-		FiltroExtension FE = null; 
+		FiltroExtension FE = null;
 		FE = new FiltroExtension();
 		FE.execute("FILTRO");
 

@@ -59,21 +59,20 @@ import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
 import com.iver.cit.gvsig.fmap.core.styles.IMask;
 import com.iver.cit.gvsig.fmap.core.symbols.IFillSymbol;
-import com.iver.cit.gvsig.gui.styling.AbstractTypeSymbolEditor;
-import com.iver.cit.gvsig.gui.styling.SymbolSelector;
 import com.iver.cit.gvsig.project.documents.view.legend.gui.ISymbolSelector;
 
 /**
- * Implements a tab to modify attributes of a mask as style,size and
- * symbol (to represent a point in the map)which can be applied to
- * symbols like simple text, simple marker,picture marker and character marker.<p>
+ * Implements a tab to modify attributes of a mask as style,size and symbol (to
+ * represent a point in the map)which can be applied to symbols like simple
+ * text, simple marker,picture marker and character marker.
+ * <p>
  * <p>
  * This tab is used several times in different places in our applicattion .For
  * this reason, in order to avoid the repetition of code, this class has been
  * created (instead of treat it like a simple tab). With this solution, the user
- * only has to refer it to use it (and do not need to create a tab and fill it again
- * and so on).
- *
+ * only has to refer it to use it (and do not need to create a tab and fill it
+ * again and so on).
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class Mask extends JPanel {
@@ -88,10 +87,12 @@ public class Mask extends JPanel {
 			owner.fireSymbolChangedEvent();
 		};
 	};
+
 	/**
-	 * Constructor method that initializes the parameters to create a tab to modify
-	 * attributes of a mask for points such as style,size and symbol (to represent a point
-	 * in the map).
+	 * Constructor method that initializes the parameters to create a tab to
+	 * modify attributes of a mask for points such as style,size and symbol (to
+	 * represent a point in the map).
+	 * 
 	 * @param owner
 	 */
 	public Mask(AbstractTypeSymbolEditor owner) {
@@ -101,7 +102,8 @@ public class Mask extends JPanel {
 		this.owner = owner;
 
 		GridBagLayoutPanel aux = new GridBagLayoutPanel();
-		aux.setBorder(BorderFactory.createTitledBorder(PluginServices.getText(this, "style")));
+		aux.setBorder(BorderFactory.createTitledBorder(PluginServices.getText(
+				this, "style")));
 		JPanel stylePanel = new JPanel(new GridLayout(2, 1));
 		stylePanel.add(getRdNone());
 		stylePanel.add(getRdHalo());
@@ -111,7 +113,7 @@ public class Mask extends JPanel {
 		group.add(getRdHalo());
 
 		JPanel aux2 = new JPanel(new FlowLayout(FlowLayout.LEADING, 5, 5));
-		aux2.add(new JLabel(PluginServices.getText(this, "size")+":"));
+		aux2.add(new JLabel(PluginServices.getText(this, "size") + ":"));
 		aux2.add(getTxtHaloSize());
 		aux2.add(getBtnHaloSymbol());
 
@@ -122,23 +124,27 @@ public class Mask extends JPanel {
 		add(aux);
 		add(aux2);
 	}
+
 	/**
 	 * Obbtains the size for the text halo.This size is taken from a
-	 * JIncrementalNumberField. If this component does not exist,
-	 * a new JIncrementalNumberField is created to specify it.
+	 * JIncrementalNumberField. If this component does not exist, a new
+	 * JIncrementalNumberField is created to specify it.
+	 * 
 	 * @return
 	 */
 	private JIncrementalNumberField getTxtHaloSize() {
 		if (txtHaloSize == null) {
-			txtHaloSize = new JIncrementalNumberField(String.valueOf(0), 5, 0, Double.MAX_VALUE, 1);
+			txtHaloSize = new JIncrementalNumberField(String.valueOf(0), 5, 0,
+					Double.MAX_VALUE, 1);
 		}
 
 		return txtHaloSize;
 	}
 
 	/**
-	 * Creates the button that allows the user to select the symbol that will substitute
-	 * a point in the map.
+	 * Creates the button that allows the user to select the symbol that will
+	 * substitute a point in the map.
+	 * 
 	 * @return
 	 */
 	private JButton getBtnHaloSymbol() {
@@ -146,8 +152,8 @@ public class Mask extends JPanel {
 			btnHaloSymbol = new JButton(PluginServices.getText(this, "symbol"));
 			btnHaloSymbol.addActionListener(new ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					ISymbolSelector symSel = SymbolSelector.createSymbolSelector(
-							fill, FShape.POLYGON);
+					ISymbolSelector symSel = SymbolSelector
+							.createSymbolSelector(fill, FShape.POLYGON);
 					PluginServices.getMDIManager().addCentredWindow(symSel);
 					fill = (IFillSymbol) symSel.getSelectedObject();
 				};
@@ -158,9 +164,10 @@ public class Mask extends JPanel {
 	}
 
 	/**
-	 * Determines if the halo style is selected.If the Radio button
-	 * that determines this information does not exist, a new radio button
-	 * is created for this purpose.
+	 * Determines if the halo style is selected.If the Radio button that
+	 * determines this information does not exist, a new radio button is created
+	 * for this purpose.
+	 * 
 	 * @return
 	 */
 	private JRadioButton getRdHalo() {
@@ -173,8 +180,9 @@ public class Mask extends JPanel {
 
 	/**
 	 * Determines if there will be no defined style for a point (without halo).
-	 * If the Radio button that determines this information does not exist,
-	 * a new radio button is created for this purpose.
+	 * If the Radio button that determines this information does not exist, a
+	 * new radio button is created for this purpose.
+	 * 
 	 * @return
 	 */
 	private JRadioButton getRdNone() {
@@ -185,8 +193,10 @@ public class Mask extends JPanel {
 
 		return rdBtnNone;
 	}
+
 	/**
 	 * Sets the graphical component that shows the properties of the model.
+	 * 
 	 * @param mask
 	 */
 	public void setModel(IMask mask) {
@@ -196,16 +206,18 @@ public class Mask extends JPanel {
 		}
 		getRdHalo().setSelected(mask != null);
 	}
+
 	/**
-	 * Returns an IMask or null depending on the option
-	 * that the user had decided (if he wants a mask or not)in the tab "mask" inside
-	 * the panel to edit the properities of a symbol (SymbolEditor).
-	 * If the user
-	 * wants it, a new IMask is created.
+	 * Returns an IMask or null depending on the option that the user had
+	 * decided (if he wants a mask or not)in the tab "mask" inside the panel to
+	 * edit the properities of a symbol (SymbolEditor). If the user wants it, a
+	 * new IMask is created.
+	 * 
 	 * @return
 	 */
 	public IMask getMask() {
-		if (!getRdHalo().isSelected()) return null;
+		if (!getRdHalo().isSelected())
+			return null;
 
 		IMask mask = new IMask.BasicMask();
 		if (fill == null) {

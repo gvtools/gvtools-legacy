@@ -44,8 +44,11 @@ import org.gvsig.remoteClient.sld.AbstractSLDSymbolizer;
 import org.gvsig.remoteClient.sld.SLDGraphic;
 
 import com.iver.cit.gvsig.fmap.core.FShape;
+
 /**
- * Implements the Point Symbolizer element of an SLD implementation specification .<p>
+ * Implements the Point Symbolizer element of an SLD implementation
+ * specification .
+ * <p>
  * 
  * A point symbolizer is used to draw "graphic" at a point.
  * 
@@ -54,7 +57,8 @@ import com.iver.cit.gvsig.fmap.core.FShape;
  * 
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
-public abstract class SLDPointSymbolizer extends AbstractSLDSymbolizer implements ISLDSymbolizer{
+public abstract class SLDPointSymbolizer extends AbstractSLDSymbolizer
+		implements ISLDSymbolizer {
 
 	protected SLDGraphic graphic;
 
@@ -65,6 +69,8 @@ public abstract class SLDPointSymbolizer extends AbstractSLDSymbolizer implement
 	public void setGraphic(SLDGraphic graphic) {
 		this.graphic = graphic;
 	}
-	
-	public int getShapeType() {return FShape.POINT; }
+
+	public int getShapeType() {
+		return FShape.POINT;
+	}
 }

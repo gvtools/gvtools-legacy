@@ -52,14 +52,16 @@ import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
  * Procesos necesarios para la conversión a escala de gris.
  * 
  * 11/07/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class GrayConversionProcess implements IProcessActions {
-	private FLyrRasterSE                  sourceLayer       = null;
-	private IProcessActions               endActions        = null;
-		
+	private FLyrRasterSE sourceLayer = null;
+	private IProcessActions endActions = null;
+
 	/**
 	 * Asigna el objeto para informar que el proceso ha terminado
+	 * 
 	 * @param endActions
 	 */
 	public GrayConversionProcess(IProcessActions endActions) {
@@ -67,122 +69,147 @@ public class GrayConversionProcess implements IProcessActions {
 	}
 
 	/**
-	 * Aplica el proceso de filtrado sobre una capa dando como resultado otra capa
+	 * Aplica el proceso de filtrado sobre una capa dando como resultado otra
+	 * capa
+	 * 
 	 * @throws FilterTypeException
 	 */
 	public void enhancedProcess(FLyrRasterSE lyr) throws FilterTypeException {
-		if(lyr == null)
+		if (lyr == null)
 			return;
 
 		RasterProcess filterProcess = new FilterProcess();
 		filterProcess.setActions(this);
 		filterProcess.addParam("rendering", lyr);
-		String tempRaster = RasterLibrary.tempCacheDirectoryPath + File.separator + RasterLibrary.usesOnlyLayerName();
+		String tempRaster = RasterLibrary.tempCacheDirectoryPath
+				+ File.separator + RasterLibrary.usesOnlyLayerName();
 		filterProcess.addParam("filename", tempRaster + ".tif");
 		filterProcess.addParam("rasterdatasource", lyr.getDataSource());
 		filterProcess.addParam("layer", lyr);
-		
+
 		RasterFilterList filterList = new RasterFilterList();
 		filterList.setInitDataType(lyr.getDataType()[0]);
-		RasterFilterListManager filterManager = new RasterFilterListManager(filterList);
-		
-		EnhancementStretchListManager elm = new EnhancementStretchListManager(filterManager);
+		RasterFilterListManager filterManager = new RasterFilterListManager(
+				filterList);
+
+		EnhancementStretchListManager elm = new EnhancementStretchListManager(
+				filterManager);
 		try {
-			elm.addEnhancedStretchFilter(LinearStretchParams.createStandardParam(lyr.getRenderBands(), 0.0, lyr.getDataSource().getStatistics(), false), 
-					lyr.getDataSource().getStatistics(), 
-					lyr.getRenderBands(), 
+			elm.addEnhancedStretchFilter(LinearStretchParams
+					.createStandardParam(lyr.getRenderBands(), 0.0, lyr
+							.getDataSource().getStatistics(), false), lyr
+					.getDataSource().getStatistics(), lyr.getRenderBands(),
 					false);
 		} catch (FileNotOpenException e) {
 			throw new FilterTypeException(e.getMessage());
 		} catch (RasterDriverException e) {
 			throw new FilterTypeException(e.getMessage());
 		}
-		
+
 		filterProcess.addParam("listfilterused", getParams(filterList));
 		filterProcess.addParam("onlyrenderbands", Boolean.TRUE);
 		filterProcess.start();
 	}
-	
+
 	/**
-	 * Aplica el proceso de filtrado sobre una capa dando como resultado otra capa
+	 * Aplica el proceso de filtrado sobre una capa dando como resultado otra
+	 * capa
+	 * 
 	 * @throws FilterTypeException
 	 */
-	public void grayScaleProcess(GrayConversionPreviewRender prevRender, GrayConversionData data ) throws FilterTypeException {
-		if(sourceLayer == null)
+	public void grayScaleProcess(GrayConversionPreviewRender prevRender,
+			GrayConversionData data) throws FilterTypeException {
+		if (sourceLayer == null)
 			return;
 		sourceLayer.setRenderBands(sourceLayer.getRenderBands());
 
 		RasterProcess filterProcess = new FilterProcess();
 		filterProcess.setActions(this);
 		filterProcess.addParam("rendering", sourceLayer);
-		String tempRaster = RasterLibrary.tempCacheDirectoryPath + File.separator + RasterLibrary.usesOnlyLayerName();
+		String tempRaster = RasterLibrary.tempCacheDirectoryPath
+				+ File.separator + RasterLibrary.usesOnlyLayerName();
 		filterProcess.addParam("filename", tempRaster + ".tif");
 		filterProcess.addParam("rasterdatasource", sourceLayer.getDataSource());
-		filterProcess.addParam("listfilterused", getParamStruct(sourceLayer, prevRender, data));
+		filterProcess.addParam("listfilterused",
+				getParamStruct(sourceLayer, prevRender, data));
 		filterProcess.addParam("onlyrenderbands", Boolean.TRUE);
 		filterProcess.start();
 	}
-		
+
 	/**
 	 * Obtiene la lista de parámetros de los filtros añadidos
-	 * @param lyr Capa raster
+	 * 
+	 * @param lyr
+	 *            Capa raster
 	 * @return ArrayList
 	 */
-	public ArrayList getParamStruct(FLyrRasterSE lyr, GrayConversionPreviewRender prevRender, GrayConversionData data) {
+	public ArrayList getParamStruct(FLyrRasterSE lyr,
+			GrayConversionPreviewRender prevRender, GrayConversionData data) {
 		RasterFilterList filterList = new RasterFilterList();
 		filterList.setInitDataType(lyr.getDataType()[0]);
-		RasterFilterListManager filterManager = new RasterFilterListManager(filterList);
+		RasterFilterListManager filterManager = new RasterFilterListManager(
+				filterList);
 		GrayScaleManager managerGrayScale = new GrayScaleManager(filterManager);
 		MedianListManager managerMedian = new MedianListManager(filterManager);
 		ModeManager managerMode = new ModeManager(filterManager);
-		EnhancementStretchListManager enhancedManager = new EnhancementStretchListManager(filterManager);
-		
-		if(lyr.getDataType()[0] != IBuffer.TYPE_BYTE) {
+		EnhancementStretchListManager enhancedManager = new EnhancementStretchListManager(
+				filterManager);
+
+		if (lyr.getDataType()[0] != IBuffer.TYPE_BYTE) {
 			try {
-				enhancedManager.addEnhancedStretchFilter(LinearStretchParams.createStandardParam(lyr.getRenderBands(), 0.0, lyr.getDataSource().getStatistics(), false), 
-						lyr.getDataSource().getStatistics(), 
-						lyr.getRenderBands(), 
+				enhancedManager.addEnhancedStretchFilter(LinearStretchParams
+						.createStandardParam(lyr.getRenderBands(), 0.0, lyr
+								.getDataSource().getStatistics(), false), lyr
+						.getDataSource().getStatistics(), lyr.getRenderBands(),
 						false);
 			} catch (FileNotOpenException e2) {
-				RasterToolsUtil.messageBoxError(RasterToolsUtil.getText(null, "noenhanced"), null, e2);
+				RasterToolsUtil.messageBoxError(
+						RasterToolsUtil.getText(null, "noenhanced"), null, e2);
 			} catch (RasterDriverException e2) {
-				RasterToolsUtil.messageBoxError(RasterToolsUtil.getText(null, "noenhanced"), null, e2);
+				RasterToolsUtil.messageBoxError(
+						RasterToolsUtil.getText(null, "noenhanced"), null, e2);
 			} catch (FilterTypeException e2) {
-				RasterToolsUtil.messageBoxError(RasterToolsUtil.getText(null, "noenhanced"), null, e2);
+				RasterToolsUtil.messageBoxError(
+						RasterToolsUtil.getText(null, "noenhanced"), null, e2);
 			}
 		}
-		
+
 		try {
 			managerGrayScale.addGrayScaleFilter(data.getBandType());
 		} catch (FilterTypeException e1) {
-			RasterToolsUtil.messageBoxError(RasterToolsUtil.getText(null, "nograyscale"), null, e1);
+			RasterToolsUtil.messageBoxError(
+					RasterToolsUtil.getText(null, "nograyscale"), null, e1);
 		}
-		
+
 		try {
 			prevRender.addPosterization(filterManager, lyr);
 		} catch (FilterTypeException e1) {
-			RasterToolsUtil.messageBoxError(RasterToolsUtil.getText(null, "noposterization"), null, e1);
+			RasterToolsUtil.messageBoxError(
+					RasterToolsUtil.getText(null, "noposterization"), null, e1);
 		}
-		
+
 		try {
-			if(data.isModeActive())
+			if (data.isModeActive())
 				managerMode.addModeFilter(data.getModeThreshold());
 		} catch (FilterTypeException e1) {
-			RasterToolsUtil.messageBoxError(RasterToolsUtil.getText(null, "nomedian"), null, e1);
+			RasterToolsUtil.messageBoxError(
+					RasterToolsUtil.getText(null, "nomedian"), null, e1);
 		}
-		
+
 		try {
-			if(data.isNoiseActive())
+			if (data.isNoiseActive())
 				managerMedian.addMedianFilter(data.getNoiseThreshold());
 		} catch (FilterTypeException e1) {
-			RasterToolsUtil.messageBoxError(RasterToolsUtil.getText(null, "nomedian"), null, e1);
+			RasterToolsUtil.messageBoxError(
+					RasterToolsUtil.getText(null, "nomedian"), null, e1);
 		}
-	
+
 		return getParams(filterList);
 	}
-	
+
 	/**
 	 * A partir de una lista de filtros devuelve un array con sus parámetros
+	 * 
 	 * @param filterList
 	 * @return ArrayList
 	 */
@@ -190,18 +217,19 @@ public class GrayConversionProcess implements IProcessActions {
 		ArrayList listFilterUsed = new ArrayList();
 		for (int i = 0; i < filterList.lenght(); i++) {
 			try {
-				RasterFilter filter = (RasterFilter)filterList.get(i);
-				Params params = (Params) filter.getUIParams(filter.getName()).clone();
-			
+				RasterFilter filter = (RasterFilter) filterList.get(i);
+				Params params = (Params) filter.getUIParams(filter.getName())
+						.clone();
+
 				ParamStruct newParam = new ParamStruct();
 				Class c = null;
-				if(filter instanceof GrayScaleFilter)
+				if (filter instanceof GrayScaleFilter)
 					c = GrayScaleFilter.class;
-				if(filter instanceof LinearStretchEnhancementFilter)
+				if (filter instanceof LinearStretchEnhancementFilter)
 					c = LinearStretchEnhancementFilter.class;
-				if(filter instanceof MedianFilter)
+				if (filter instanceof MedianFilter)
 					c = MedianFilter.class;
-				if(filter instanceof ModeFilter)
+				if (filter instanceof ModeFilter)
 					c = ModeFilter.class;
 				newParam.setFilterClass(c);
 				newParam.setFilterName(filter.getName());
@@ -209,37 +237,42 @@ public class GrayConversionProcess implements IProcessActions {
 				listFilterUsed.add(newParam);
 			} catch (CloneNotSupportedException e) {
 			}
-		}		
+		}
 		return listFilterUsed;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.IProcessActions#end(java.lang.Object)
 	 */
 	public void end(Object param) {
 		FLyrRasterSE grayConv = null;
 		try {
-			if(param instanceof String)
-				grayConv = FLyrRasterSE.createLayer(RasterLibrary.getOnlyLayerName(), (String)param, sourceLayer.getCrs());
+			if (param instanceof String)
+				grayConv = FLyrRasterSE.createLayer(
+						RasterLibrary.getOnlyLayerName(), (String) param,
+						sourceLayer.getCrs());
 		} catch (LoadLayerException e) {
 			RasterToolsUtil.messageBoxError("error_generating_layer", null, e);
 		}
-		if(endActions != null)
-			endActions.end(new Object[]{this, grayConv});
+		if (endActions != null)
+			endActions.end(new Object[] { this, grayConv });
 	}
 
 	/**
 	 * Asigna la capa fuente
+	 * 
 	 * @param sourceLayer
 	 */
 	public void setSourceLayer(FLyrRasterSE sourceLayer) {
 		this.sourceLayer = sourceLayer;
 	}
-	
+
 	/**
-	 * Asigna el interfaz para que el proceso ejectute las acciones de finalización
-	 * al acabar.
+	 * Asigna el interfaz para que el proceso ejectute las acciones de
+	 * finalización al acabar.
+	 * 
 	 * @param endActions
 	 */
 	public void setProcessActions(IProcessActions endActions) {
@@ -248,6 +281,7 @@ public class GrayConversionProcess implements IProcessActions {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.IProcessActions#interrupted(java.lang.Object)
 	 */
 	public void interrupted() {

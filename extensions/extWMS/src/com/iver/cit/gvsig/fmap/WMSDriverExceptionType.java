@@ -42,17 +42,17 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: WMSDriverExceptionType.java 13881 2007-09-19 16:22:04Z jaume $
-* $Log$
-* Revision 1.2  2007-09-19 16:15:41  jaume
-* removed unnecessary imports
-*
-* Revision 1.1  2006/09/21 17:48:18  azabala
-* First version in cvs
-*
-*
-*/
+ *
+ * $Id: WMSDriverExceptionType.java 13881 2007-09-19 16:22:04Z jaume $
+ * $Log$
+ * Revision 1.2  2007-09-19 16:15:41  jaume
+ * removed unnecessary imports
+ *
+ * Revision 1.1  2006/09/21 17:48:18  azabala
+ * First version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap;
 
 import org.gvsig.remoteClient.wms.WMSStatus;
@@ -62,17 +62,17 @@ import com.iver.utiles.ExceptionDescription;
 public class WMSDriverExceptionType extends ExceptionDescription {
 
 	WMSStatus status;
-	
-	public WMSDriverExceptionType(){
+
+	public WMSDriverExceptionType() {
 		super(65, "Error al acceder a un servicio WMS");
-		
+
 	}
-	
+
 	public String getHtmlErrorMessage() {
 		String message = "<p><b>Error en una petición a servidor WMS</b></p>";
 		message += "Información adicional:<br>";
 		message += "Dirección: " + status.getOnlineResource();
-		message += "<br> Formato: "+status.getFormat();
+		message += "<br> Formato: " + status.getFormat();
 		return message;
 	}
 
@@ -84,6 +84,4 @@ public class WMSDriverExceptionType extends ExceptionDescription {
 		this.status = wcsStatus;
 	}
 
-
 }
-

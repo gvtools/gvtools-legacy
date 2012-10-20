@@ -1,30 +1,30 @@
 /* gvSIG. Geographic Information System of the Valencian Government
-*
-* Copyright (C) 2007-2008 Infrastructures and Transports Department
-* of the Valencian Government (CIT)
-* 
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License
-* as published by the Free Software Foundation; either version 2
-* of the License, or (at your option) any later version.
-* 
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-* 
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
-* MA  02110-1301, USA.
-* 
-*/
+ *
+ * Copyright (C) 2007-2008 Infrastructures and Transports Department
+ * of the Valencian Government (CIT)
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+ * MA  02110-1301, USA.
+ * 
+ */
 
 /*
-* AUTHORS (In addition to CIT):
-* 2010 {Prodevelop}   {Task}
-*/
- 
+ * AUTHORS (In addition to CIT):
+ * 2010 {Prodevelop}   {Task}
+ */
+
 package org.gvsig.gui.beans.wizard.panel;
 
 import java.awt.BorderLayout;
@@ -41,6 +41,7 @@ import javax.swing.JProgressBar;
  * <p>
  * This panel implements a progress bar that can be added to a wizard.
  * <p>
+ * 
  * @author <a href="mailto:jpiera@gvsig.org">Jorge Piera Llodr&aacute;</a>
  */
 public class ProgressOptionPanel extends JPanel {
@@ -49,8 +50,8 @@ public class ProgressOptionPanel extends JPanel {
 	private JLabel progressLabel;
 
 	public ProgressOptionPanel() {
-		super();		
-		initComponents();		
+		super();
+		initComponents();
 	}
 
 	private void initComponents() {
@@ -58,7 +59,7 @@ public class ProgressOptionPanel extends JPanel {
 
 		JPanel northPanel = new JPanel();
 		northPanel.setLayout(new GridBagLayout());
-		
+
 		progressBar = new JProgressBar();
 		progressLabel = new JLabel();
 		pluginLabel = new JLabel();
@@ -85,29 +86,28 @@ public class ProgressOptionPanel extends JPanel {
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		gridBagConstraints.insets = new Insets(5, 2, 2, 2);
 		northPanel.add(pluginLabel, gridBagConstraints);
-		
-	    setLayout(new BorderLayout());
+
+		setLayout(new BorderLayout());
 		add(northPanel, BorderLayout.NORTH);
 	}
 
 	/**
-	 * @param plugin the plugin to set
+	 * @param plugin
+	 *            the plugin to set
 	 */
 	public void setMainText(String plugin) {
 		this.pluginLabel.setText(plugin);
-	}	
-	
+	}
+
 	public void setSecondaryText(String plugin) {
 		this.progressLabel.setText(plugin);
-	}		
-	
-	public void setProgress(int progress){
+	}
+
+	public void setProgress(int progress) {
 		progressBar.setValue(progress);
-	}	
-	
+	}
+
 	public void setExceptionText(String text, Exception e) {
-		progressLabel.setText(text);		
+		progressLabel.setText(text);
 	}
 }
-
-

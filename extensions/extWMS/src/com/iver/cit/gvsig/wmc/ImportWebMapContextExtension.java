@@ -40,62 +40,62 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: ImportWebMapContextExtension.java 18964 2008-02-14 11:50:37Z jdominguez $
-* $Log$
-* Revision 1.11  2007-03-06 17:06:43  caballero
-* Exceptions
-*
-* Revision 1.10  2006/11/28 11:46:59  cesar
-* Add support to persist the document internal layout
-*
-* Revision 1.9  2006/09/27 13:28:51  jaume
-* *** empty log message ***
-*
-* Revision 1.8  2006/09/20 10:32:15  jaume
-* remembers last location
-*
-* Revision 1.7  2006/09/15 10:44:24  caballero
-* extensibilidad de documentos
-*
-* Revision 1.6  2006/09/11 15:57:38  jaume
-* now accepts loading cml files from command line
-*
-* Revision 1.5  2006/08/29 07:56:15  cesar
-* Rename the *View* family of classes to *Window* (ie: SingletonView to SingletonWindow, ViewInfo to WindowInfo, etc)
-*
-* Revision 1.4  2006/08/29 07:13:43  cesar
-* Rename class com.iver.andami.ui.mdiManager.View to com.iver.andami.ui.mdiManager.IWindow
-*
-* Revision 1.3  2006/07/21 10:31:05  jaume
-* *** empty log message ***
-*
-* Revision 1.2  2006/05/03 11:10:54  jaume
-* *** empty log message ***
-*
-* Revision 1.1  2006/05/03 07:51:21  jaume
-* *** empty log message ***
-*
-* Revision 1.5  2006/05/02 16:12:12  jorpiell
-* Se ha cambiado la interfaz Extension por dos clases: una interfaz (IExtension) y una clase abstract(Extension). A partir de ahora todas las extensiones deben heredar de Extension
-*
-* Revision 1.4  2006/05/02 15:57:43  jaume
-* Few better javadoc
-*
-* Revision 1.3  2006/04/20 17:11:54  jaume
-* Attempting to export
-*
-* Revision 1.2  2006/04/19 16:34:29  jaume
-* *** empty log message ***
-*
-* Revision 1.1  2006/04/19 07:57:29  jaume
-* *** empty log message ***
-*
-* Revision 1.1  2006/04/12 17:10:53  jaume
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: ImportWebMapContextExtension.java 18964 2008-02-14 11:50:37Z jdominguez $
+ * $Log$
+ * Revision 1.11  2007-03-06 17:06:43  caballero
+ * Exceptions
+ *
+ * Revision 1.10  2006/11/28 11:46:59  cesar
+ * Add support to persist the document internal layout
+ *
+ * Revision 1.9  2006/09/27 13:28:51  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.8  2006/09/20 10:32:15  jaume
+ * remembers last location
+ *
+ * Revision 1.7  2006/09/15 10:44:24  caballero
+ * extensibilidad de documentos
+ *
+ * Revision 1.6  2006/09/11 15:57:38  jaume
+ * now accepts loading cml files from command line
+ *
+ * Revision 1.5  2006/08/29 07:56:15  cesar
+ * Rename the *View* family of classes to *Window* (ie: SingletonView to SingletonWindow, ViewInfo to WindowInfo, etc)
+ *
+ * Revision 1.4  2006/08/29 07:13:43  cesar
+ * Rename class com.iver.andami.ui.mdiManager.View to com.iver.andami.ui.mdiManager.IWindow
+ *
+ * Revision 1.3  2006/07/21 10:31:05  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/05/03 11:10:54  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/05/03 07:51:21  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.5  2006/05/02 16:12:12  jorpiell
+ * Se ha cambiado la interfaz Extension por dos clases: una interfaz (IExtension) y una clase abstract(Extension). A partir de ahora todas las extensiones deben heredar de Extension
+ *
+ * Revision 1.4  2006/05/02 15:57:43  jaume
+ * Few better javadoc
+ *
+ * Revision 1.3  2006/04/20 17:11:54  jaume
+ * Attempting to export
+ *
+ * Revision 1.2  2006/04/19 16:34:29  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/04/19 07:57:29  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/04/12 17:10:53  jaume
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.wmc;
 
 import java.awt.Component;
@@ -107,7 +107,6 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
 import org.gvsig.gui.beans.swing.JFileChooser;
-import org.gvsig.remoteClient.wms.ICancellable;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
@@ -131,10 +130,12 @@ public class ImportWebMapContextExtension extends Extension {
 
 	public void initialize() {
 		String[] arguments = PluginServices.getArguments();
-		if (arguments[arguments.length-1].toLowerCase().endsWith(".cml")) {
-			File wmcFile = new File(arguments[arguments.length-1]);
+		if (arguments[arguments.length - 1].toLowerCase().endsWith(".cml")) {
+			File wmcFile = new File(arguments[arguments.length - 1]);
 			if (!wmcFile.exists()) {
-				NotificationManager.addError(PluginServices.getText(this, "could_not_find_web_map_context_file"), new FileNotFoundException());
+				NotificationManager.addError(PluginServices.getText(this,
+						"could_not_find_web_map_context_file"),
+						new FileNotFoundException());
 				return;
 			}
 
@@ -147,7 +148,9 @@ public class ImportWebMapContextExtension extends Extension {
 			JFileChooser fc = new JFileChooser(WMC_FILECHOOSER_ID, lastPath);
 			fc.setFileFilter(new FileFilter() {
 				public boolean accept(File f) {
-					return f.isDirectory() || f.getAbsolutePath().toLowerCase().endsWith(WebMapContext.FILE_EXTENSION);
+					return f.isDirectory()
+							|| f.getAbsolutePath().toLowerCase()
+									.endsWith(WebMapContext.FILE_EXTENSION);
 				}
 
 				public String getDescription() {
@@ -156,7 +159,8 @@ public class ImportWebMapContextExtension extends Extension {
 			});
 			IWindow v = PluginServices.getMDIManager().getActiveWindow();
 
-			// If the current active view is a gvSIG's view, we'll keep its name to
+			// If the current active view is a gvSIG's view, we'll keep its name
+			// to
 			// show it at the JFileChooser's accessory.
 			String currentViewName;
 			if (v instanceof View)
@@ -165,7 +169,8 @@ public class ImportWebMapContextExtension extends Extension {
 				currentViewName = null;
 
 			// Create an accessory for the Web Map Context's file chooser.
-			WebMapContextFileChooserAccessory acc = new WebMapContextFileChooserAccessory(currentViewName);
+			WebMapContextFileChooserAccessory acc = new WebMapContextFileChooserAccessory(
+					currentViewName);
 
 			// Add the accessory to the file chooser
 			fc.setAccessory(acc);
@@ -173,11 +178,12 @@ public class ImportWebMapContextExtension extends Extension {
 			// Nothing else than Web Map Context files allowed
 			fc.setAcceptAllFileFilterUsed(false);
 
-			if (fc.showOpenDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION){
+			if (fc.showOpenDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
 				File f = fc.getSelectedFile();
 				readMapContextFile(f, acc.getSelectedView());
 				String fileName = f.getAbsolutePath();
-				lastPath  = fileName.substring(0, fileName.lastIndexOf(File.separatorChar));
+				lastPath = fileName.substring(0,
+						fileName.lastIndexOf(File.separatorChar));
 
 			}
 			fc = null;
@@ -185,8 +191,9 @@ public class ImportWebMapContextExtension extends Extension {
 	}
 
 	/**
-	 * Reads a WebMapContext (.cml) file and loads its layers into the destination
-	 * view.
+	 * Reads a WebMapContext (.cml) file and loads its layers into the
+	 * destination view.
+	 * 
 	 * @param wmcFile
 	 * @param dstView
 	 */
@@ -196,8 +203,7 @@ public class ImportWebMapContextExtension extends Extension {
 			wmc.readFile(wmcFile);
 		} catch (UnsupportedVersionLayerException e) {
 			JOptionPane.showMessageDialog(
-					(Component) PluginServices.getMainFrame(),
-					e.getMessage(),
+					(Component) PluginServices.getMainFrame(), e.getMessage(),
 					PluginServices.getText(this, "unsupported_version"),
 					JOptionPane.ERROR_MESSAGE);
 			return;
@@ -205,18 +211,20 @@ public class ImportWebMapContextExtension extends Extension {
 			e.printStackTrace();
 			if (e.isCritical()) {
 				// import impossible: show message and quit
-				JOptionPane.showMessageDialog(
-						(Component) PluginServices.getMainFrame(),
-						e.getMessage(),
-						PluginServices.getText(this, "problems_encountered_while_importing"),
+				JOptionPane.showMessageDialog((Component) PluginServices
+						.getMainFrame(), e.getMessage(), PluginServices
+						.getText(this, "problems_encountered_while_importing"),
 						JOptionPane.ERROR_MESSAGE);
 				return;
 			} else {
 				JOptionPane.showMessageDialog(
 						(Component) PluginServices.getMainFrame(),
-						e.getMessage() + "\n\n" +
-						PluginServices.getText(this, "edit_layer_properties_to_fix_them"),
-						PluginServices.getText(this, "problems_encountered_while_importing"),
+						e.getMessage()
+								+ "\n\n"
+								+ PluginServices.getText(this,
+										"edit_layer_properties_to_fix_them"),
+						PluginServices.getText(this,
+								"problems_encountered_while_importing"),
 						JOptionPane.ERROR_MESSAGE);
 			}
 		}
@@ -226,9 +234,11 @@ public class ImportWebMapContextExtension extends Extension {
 			// the project.
 			dstView = ProjectFactory.createView(null);
 			dstView.setName(wmc.title);
-			dstView.setComment("Created from WebMapContext file: "+wmcFile.getName());
+			dstView.setComment("Created from WebMapContext file: "
+					+ wmcFile.getName());
 
-			ProjectExtension pe = (ProjectExtension) PluginServices.getExtension(ProjectExtension.class);
+			ProjectExtension pe = (ProjectExtension) PluginServices
+					.getExtension(ProjectExtension.class);
 			Project theProject = pe.getProject();
 			theProject.addDocument(dstView);
 
@@ -245,9 +255,9 @@ public class ImportWebMapContextExtension extends Extension {
 			if (wmc.layerList.get(i) instanceof FLyrWMS) {
 				FLyrWMS layer = (FLyrWMS) wmc.layerList.get(i);
 				/*
-				 * will connect to get the online resources defined by
-				 * server, because WMC only defines the original URL for
-				 * the server but not for the operations.
+				 * will connect to get the online resources defined by server,
+				 * because WMC only defines the original URL for the server but
+				 * not for the operations.
 				 */
 				try {
 					FMapWMSDriver dr = layer.getDriver();
@@ -255,10 +265,18 @@ public class ImportWebMapContextExtension extends Extension {
 					dr.getCapabilities(layer.getHost());
 					layer.setOnlineResources(dr.getOnlineResources());
 				} catch (Exception e) {
-					NotificationManager.addInfo(PluginServices.getText(this, "connect_error")+"\n"+
-							PluginServices.getText(this, "failed_restoring_online_resource_values")+ 
-					" ["+new Date(System.currentTimeMillis()).toString()+"]",
-					e);
+					NotificationManager
+							.addInfo(
+									PluginServices.getText(this,
+											"connect_error")
+											+ "\n"
+											+ PluginServices
+													.getText(this,
+															"failed_restoring_online_resource_values")
+											+ " ["
+											+ new Date(System
+													.currentTimeMillis())
+													.toString() + "]", e);
 				}
 				dstView.getMapContext().getLayers().addLayer(layer);
 			}

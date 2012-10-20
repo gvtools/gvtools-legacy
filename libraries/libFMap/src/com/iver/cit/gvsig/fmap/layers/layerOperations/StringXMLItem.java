@@ -11,18 +11,20 @@ import com.iver.utiles.xmlViewer.TextXMLContent;
 public class StringXMLItem extends TextXMLContent implements XMLItem {
 
 	FLayer layer;
+
 	/**
 	 * @param text
 	 */
 	public StringXMLItem(String text, FLayer lyr) {
 		super(text);
 		this.layer = lyr;
-		
+
 	}
-	
-	public FLayer getLayer(){
+
+	public FLayer getLayer() {
 		return this.layer;
 	}
+
 	/**
 	 * @see com.iver.cit.gvsig.gui.toolListeners.InfoListener.XMLItem#parse(org.xml.sax.ContentHandler)
 	 */
@@ -98,8 +100,7 @@ public class StringXMLItem extends TextXMLContent implements XMLItem {
 		}
 
 		/**
-		 * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int,
-		 *      int)
+		 * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
 		 */
 		public void ignorableWhitespace(char[] arg0, int arg1, int arg2)
 				throws SAXException {

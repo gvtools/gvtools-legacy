@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.gazetteer.wfsg.parsers;
+
 import java.awt.geom.Point2D;
 
 import es.gva.cit.catalog.metadataxml.XMLNode;
@@ -64,75 +64,87 @@ public class WfsgFeatureParser {
 	 * 
 	 * 
 	 * @return Array of features
-	 * @param node XML tree that contains the getFeature Answer
-	 * @param featureType FEature selected in the thesaurus list
-	 * @param attribute Attribute to do the search
+	 * @param node
+	 *            XML tree that contains the getFeature Answer
+	 * @param featureType
+	 *            FEature selected in the thesaurus list
+	 * @param attribute
+	 *            Attribute to do the search
 	 */
-	public Feature[] parse(XMLNode node) {        
-		XMLNode[] nodeFeatures = XMLTree.searchMultipleNode(node,FEATUREMEMBER);
-		namespace = "";       
+	public Feature[] parse(XMLNode node) {
+		XMLNode[] nodeFeatures = XMLTree
+				.searchMultipleNode(node, FEATUREMEMBER);
+		namespace = "";
 
-		if ((nodeFeatures != null) && (nodeFeatures.length > 0)){
-			if (nodeFeatures[0].getSubnodes().length > 0){
+		if ((nodeFeatures != null) && (nodeFeatures.length > 0)) {
+			if (nodeFeatures[0].getSubnodes().length > 0) {
 				String nodeName = nodeFeatures[0].getSubnodes()[0].getName();
-				if (nodeName.split(":").length == 2){
+				if (nodeName.split(":").length == 2) {
 					namespace = nodeName.split(":")[0] + ":";
-				}  
-				return parseWFS(nodeFeatures,nodeName);
-			}        	
-		}       
+				}
+				return parseWFS(nodeFeatures, nodeName);
+			}
+		}
 		return null;
-	} 
+	}
 
 	/**
 	 * It parses the a WFS answer
 	 * 
 	 * 
 	 * @return Array of features
-	 * @param nodeFeatures XML tree that contains the Features
-	 * @param featureType FEature selected in the thesaurus list
-	 * @param attribute Attribute to do the search
-	 * @param geomField Field that contains the geometry
+	 * @param nodeFeatures
+	 *            XML tree that contains the Features
+	 * @param featureType
+	 *            FEature selected in the thesaurus list
+	 * @param attribute
+	 *            Attribute to do the search
+	 * @param geomField
+	 *            Field that contains the geometry
 	 */
-	public Feature[] parseWFS(XMLNode[] nodeFeatures, String featureType) {        
+	public Feature[] parseWFS(XMLNode[] nodeFeatures, String featureType) {
 		Feature[] features = new Feature[nodeFeatures.length];
 
+		for (int i = 0; i < nodeFeatures.length; i++) {
+			XMLNode nodeName = XMLTree.searchNode(nodeFeatures[i], featureType
+					+ "->" + GEOGRAPHICIDENTIFIER_NODE);
+			String name = "";
 
-		for (int i=0 ; i<nodeFeatures.length ; i++){
-			XMLNode nodeName = XMLTree.searchNode(nodeFeatures[i],featureType + "->" + GEOGRAPHICIDENTIFIER_NODE);
-			String name = "";  
-
-			if (nodeName != null){
-				if ((nodeName.getText() != null) && (!(nodeName.getText().equals("")))){
+			if (nodeName != null) {
+				if ((nodeName.getText() != null)
+						&& (!(nodeName.getText().equals("")))) {
 					name = nodeName.getText();
-				} else if ((nodeName.getCdata() != null) && (!(nodeName.getCdata().equals("")))){
-					name = nodeName.getCdata();                   
-				}       
+				} else if ((nodeName.getCdata() != null)
+						&& (!(nodeName.getCdata().equals("")))) {
+					name = nodeName.getCdata();
+				}
 			}
 
-			String id = XMLTree.searchNodeAtribute(nodeFeatures[i],featureType,"fid");
+			String id = XMLTree.searchNodeAtribute(nodeFeatures[i],
+					featureType, "fid");
 			String description = name;
-			Point2D point = getCoordinates(XMLTree.searchNodeValue(nodeFeatures[i],
-					featureType + "->" + POSITION_NODE));
+			Point2D point = getCoordinates(XMLTree.searchNodeValue(
+					nodeFeatures[i], featureType + "->" + POSITION_NODE));
 
-			features[i] = new Feature(id,name,description,point);
+			features[i] = new Feature(id, name, description, point);
 		}
 		return features;
-	} 
+	}
 
 	/**
 	 * It returns a pair of coordinates of the Feature
-	 * @return 
-	 * @param sCoordinates String that contains the coordinates
+	 * 
+	 * @return
+	 * @param sCoordinates
+	 *            String that contains the coordinates
 	 */
-	private Point2D getCoordinates(String sCoordinates) {        
-		if (sCoordinates != null){
+	private Point2D getCoordinates(String sCoordinates) {
+		if (sCoordinates != null) {
 			double x = Double.parseDouble(sCoordinates.split(",")[0]);
 			double y = Double.parseDouble(sCoordinates.split(",")[1]);
-			return new Point2D.Double(x,y);
-		}return null;    
-	} 
-
-
+			return new Point2D.Double(x, y);
+		}
+		return null;
+	}
 
 }

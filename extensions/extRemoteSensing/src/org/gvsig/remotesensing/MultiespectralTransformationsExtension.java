@@ -46,7 +46,6 @@ import org.gvsig.fmap.raster.layers.FLyrRasterSE;
 import org.gvsig.fmap.raster.layers.ILayerState;
 import org.gvsig.raster.gui.IGenericToolBarMenuItem;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
-import org.gvsig.remotesensing.classification.gui.ClassificationPanel;
 import org.gvsig.remotesensing.tasseledcap.TransformationPanel;
 
 import com.iver.andami.PluginServices;
@@ -57,71 +56,92 @@ import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
+
 /**
- * Extensión para el cálculo de  transformaciones multiespectrales.
+ * Extensión para el cálculo de transformaciones multiespectrales.
  * 
  * @author Diego Guerrero Sevilla (diego.guerrero@uclm.es)
  */
-public class MultiespectralTransformationsExtension extends Extension implements IGenericToolBarMenuItem {
+public class MultiespectralTransformationsExtension extends Extension implements
+		IGenericToolBarMenuItem {
 
-	static private MultiespectralTransformationsExtension singleton  = null;
-	
-	
+	static private MultiespectralTransformationsExtension singleton = null;
+
 	static public MultiespectralTransformationsExtension getSingleton() {
 		if (singleton == null)
 			singleton = new MultiespectralTransformationsExtension();
 		return singleton;
-	}	
-	
+	}
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
-		ExtensionPoint extensionPoint = ExtensionPoint.getExtensionPoint("GenericToolBarMenu");
+		ExtensionPoint extensionPoint = ExtensionPoint
+				.getExtensionPoint("GenericToolBarMenu");
 		extensionPoint.register("Transformations", this);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String actionCommand) {
 		if (actionCommand.equals("transformations")) {
-			com.iver.andami.ui.mdiManager.IWindow activeWindow = PluginServices.getMDIManager().getActiveWindow();
+			com.iver.andami.ui.mdiManager.IWindow activeWindow = PluginServices
+					.getMDIManager().getActiveWindow();
 
 			// si la ventana activa es de tipo Vista
 			if (activeWindow instanceof View) {
-				/* check if there is at least one multiband raster in the current view */			
+				/*
+				 * check if there is at least one multiband raster in the
+				 * current view
+				 */
 				int j = 0;
-				/* ...now check if the required number of multi-band type raster layers is present in the View */
-				for(int i=0;i<((View) activeWindow).getMapControl().getMapContext().getLayers().getLayersCount();i++){
-					if ( ((View) activeWindow).getMapControl().getMapContext().getLayers().getLayer(i) instanceof FLyrRasterSE ) {						
-						/* do a more specific type casts and count the number of bands this layer has */
-						if ( ((FLyrRasterSE) ((View) activeWindow).getMapControl().getMapContext().getLayers().getLayer(i)).getBandCount() > 1) {
+				/*
+				 * ...now check if the required number of multi-band type raster
+				 * layers is present in the View
+				 */
+				for (int i = 0; i < ((View) activeWindow).getMapControl()
+						.getMapContext().getLayers().getLayersCount(); i++) {
+					if (((View) activeWindow).getMapControl().getMapContext()
+							.getLayers().getLayer(i) instanceof FLyrRasterSE) {
+						/*
+						 * do a more specific type casts and count the number of
+						 * bands this layer has
+						 */
+						if (((FLyrRasterSE) ((View) activeWindow)
+								.getMapControl().getMapContext().getLayers()
+								.getLayer(i)).getBandCount() > 1) {
 							j++;
 						}
 					}
 				}
 				/* check if we have at least one multiband layer in this view */
-				if ( j > 0 ) {
-					TransformationPanel pcPanel = new TransformationPanel ((View)activeWindow);
-					PluginServices.getMDIManager().addWindow(pcPanel);					
+				if (j > 0) {
+					TransformationPanel pcPanel = new TransformationPanel(
+							(View) activeWindow);
+					PluginServices.getMDIManager().addWindow(pcPanel);
 				} else {
-					JOptionPane.showMessageDialog(null, 
-							PluginServices.getText (this, "ext_rs_no_multiband_layers") );
+					JOptionPane.showMessageDialog(null, PluginServices.getText(
+							this, "ext_rs_no_multiband_layers"));
 					return;
-				}								
+				}
 			}
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (f == null) {
 			return false;
 		}
@@ -139,10 +159,12 @@ public class MultiespectralTransformationsExtension extends Extension implements
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (f == null) {
 			return false;
 		}
@@ -158,7 +180,11 @@ public class MultiespectralTransformationsExtension extends Extension implements
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#execute(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * org.gvsig.raster.gui.IGenericToolBarMenuItem#execute(com.iver.cit.gvsig
+	 * .project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public void execute(ITocItem item, FLayer[] selectedItems) {
 		this.execute("transformations");
@@ -166,6 +192,7 @@ public class MultiespectralTransformationsExtension extends Extension implements
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getGroup()
 	 */
 	public String getGroup() {
@@ -174,6 +201,7 @@ public class MultiespectralTransformationsExtension extends Extension implements
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getIcon()
 	 */
 	public Icon getIcon() {
@@ -182,6 +210,7 @@ public class MultiespectralTransformationsExtension extends Extension implements
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getOrder()
 	 */
 	public int getOrder() {
@@ -190,6 +219,7 @@ public class MultiespectralTransformationsExtension extends Extension implements
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getText()
 	 */
 	public String getText() {
@@ -198,7 +228,11 @@ public class MultiespectralTransformationsExtension extends Extension implements
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * org.gvsig.raster.gui.IGenericToolBarMenuItem#isEnabled(com.iver.cit.gvsig
+	 * .project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -215,7 +249,11 @@ public class MultiespectralTransformationsExtension extends Extension implements
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * org.gvsig.raster.gui.IGenericToolBarMenuItem#isVisible(com.iver.cit.gvsig
+	 * .project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -223,12 +261,13 @@ public class MultiespectralTransformationsExtension extends Extension implements
 
 		if (!(selectedItems[0] instanceof FLyrRasterSE))
 			return false;
-		
+
 		return true;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getGroupOrder()
 	 */
 	public int getGroupOrder() {

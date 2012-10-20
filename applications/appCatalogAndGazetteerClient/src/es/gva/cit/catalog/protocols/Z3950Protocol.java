@@ -81,54 +81,56 @@ import es.gva.cit.catalog.drivers.GetRecordsReply;
 public class Z3950Protocol {
 
 	/**
-	   * Makes a query
-	   * @param url
-	   * @param object
-	   * @param firstRecord
-	   * @return
-	 * @throws IRResultSetException 
-	 * @throws SearchException 
-	   */
-	  public GetRecordsReply doQuery(GetRecordsReply recordsReply, URI uri, Object object, int firstRecord){    
-		  Z3950Connection connection = Z3950ConnectionFactory.getConnection(uri);
-		  return connection.search(recordsReply,(String)object,firstRecord);
-	 }  
+	 * Makes a query
+	 * 
+	 * @param url
+	 * @param object
+	 * @param firstRecord
+	 * @return
+	 * @throws IRResultSetException
+	 * @throws SearchException
+	 */
+	public GetRecordsReply doQuery(GetRecordsReply recordsReply, URI uri,
+			Object object, int firstRecord) {
+		Z3950Connection connection = Z3950ConnectionFactory.getConnection(uri);
+		return connection.search(recordsReply, (String) object, firstRecord);
+	}
 
-	  
-	  /**
-	   * 
-	   * @param url
-	   * @return
-	   */
-	  public String openConnection(URI uri) {      
-		  Z3950Connection connection = Z3950ConnectionFactory.getConnection(uri);
-		  return connection.connect();
-	  }
-	  
-	  /**
-	   * 
-	   * @param url
-	   * @return
-	   */
-	  public boolean isProtocolSupported(URI uri) {    
-	     Z3950Connection connection = Z3950ConnectionFactory.getConnection(uri);
-	     if (connection.connect() == null){
-	    	 return false;
-	     }
-	     return true;
-	  }
+	/**
+	 * 
+	 * @param url
+	 * @return
+	 */
+	public String openConnection(URI uri) {
+		Z3950Connection connection = Z3950ConnectionFactory.getConnection(uri);
+		return connection.connect();
+	}
 
-	  /**
-	   * Return the database
-	   * @param url
-	   * @return
-	   */
-	  public static String getDatabase(URI uri) {
-		  StringTokenizer sti = new StringTokenizer(uri.getPath(), "/");
-		  if (sti.countTokens() == 0) {
-			  return "geo";
-		  } else {
-			  return sti.nextToken();
-		  }
-	  }
+	/**
+	 * 
+	 * @param url
+	 * @return
+	 */
+	public boolean isProtocolSupported(URI uri) {
+		Z3950Connection connection = Z3950ConnectionFactory.getConnection(uri);
+		if (connection.connect() == null) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Return the database
+	 * 
+	 * @param url
+	 * @return
+	 */
+	public static String getDatabase(URI uri) {
+		StringTokenizer sti = new StringTokenizer(uri.getPath(), "/");
+		if (sti.countTokens() == 0) {
+			return "geo";
+		} else {
+			return sti.nextToken();
+		}
+	}
 }

@@ -1,10 +1,8 @@
 package com.iver.cit.gvsig.fmap.edition.wfs;
 
 import java.io.OutputStream;
-import java.io.Writer;
 
 import org.gvsig.gpe.gml.writer.GPEGmlWriterHandlerImplementor;
-import org.gvsig.gpe.xml.parser.GPEXmlParserFactory;
 import org.gvsig.gpe.xml.stream.XmlStreamException;
 import org.gvsig.gpe.xml.stream.stax.StaxXmlWriterFactory;
 
@@ -57,11 +55,13 @@ import org.gvsig.gpe.xml.stream.stax.StaxXmlWriterFactory;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class WFSTWriterHandlerImplementor extends GPEGmlWriterHandlerImplementor {
+public class WFSTWriterHandlerImplementor extends
+		GPEGmlWriterHandlerImplementor {
 	private String name = null;
 	private String description = null;
-	
-	public WFSTWriterHandlerImplementor(String name, String description, OutputStream os) {
+
+	public WFSTWriterHandlerImplementor(String name, String description,
+			OutputStream os) {
 		super();
 		this.name = name;
 		this.description = description;
@@ -76,7 +76,9 @@ public class WFSTWriterHandlerImplementor extends GPEGmlWriterHandlerImplementor
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.GPEWriterHandlerImplementor#getDefaultVersion()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writers.GPEWriterHandlerImplementor#getDefaultVersion()
 	 */
 	public String getDefaultVersion() {
 		return null;
@@ -84,6 +86,7 @@ public class WFSTWriterHandlerImplementor extends GPEGmlWriterHandlerImplementor
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.IGPEWriterHandlerImplementor#getVersions()
 	 */
 	public String[] getVersions() {

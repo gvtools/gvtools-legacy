@@ -42,67 +42,67 @@
  */
 package es.prodevelop.cit.gvsig.arcims.gui.panels.utils;
 
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.table.DefaultTableColumnModel;
+
+import org.apache.log4j.Logger;
+
 import com.iver.andami.PluginServices;
 
 import es.prodevelop.cit.gvsig.arcims.gui.panels.ServiceNamesPanel;
 
-import org.apache.log4j.Logger;
-
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.table.DefaultTableColumnModel;
-
-
 /**
  * This class detects changes on the available services list.
- *
+ * 
  * @author jldominguez
  */
 public class ServicesTableSelectionListener extends DefaultTableColumnModel {
-    private static Logger logger = Logger.getLogger(ServicesTableSelectionListener.class.getName());
-    private static final long serialVersionUID = 0;
-    private ServiceNamesPanel thePanel;
+	private static Logger logger = Logger
+			.getLogger(ServicesTableSelectionListener.class.getName());
+	private static final long serialVersionUID = 0;
+	private ServiceNamesPanel thePanel;
 
-    public ServicesTableSelectionListener(ServiceNamesPanel panel) {
-        super();
-        thePanel = panel;
-    }
+	public ServicesTableSelectionListener(ServiceNamesPanel panel) {
+		super();
+		thePanel = panel;
+	}
 
-    /**
-     * Updates local variables which keep the service's name and type. The
-     * service name must be in the first column of the table; the service type
-     * must be in the second column.
-     */
-    public void valueChanged(ListSelectionEvent e) {
-        if (e.getValueIsAdjusting()) {
-            return;
-        }
+	/**
+	 * Updates local variables which keep the service's name and type. The
+	 * service name must be in the first column of the table; the service type
+	 * must be in the second column.
+	 */
+	public void valueChanged(ListSelectionEvent e) {
+		if (e.getValueIsAdjusting()) {
+			return;
+		}
 
-        if (thePanel == null) {
-            return;
-        }
+		if (thePanel == null) {
+			return;
+		}
 
-        if (thePanel.getServicesTable() == null) {
-            return;
-        }
+		if (thePanel.getServicesTable() == null) {
+			return;
+		}
 
-        int i = thePanel.getServicesTable().getSelectedRow();
+		int i = thePanel.getServicesTable().getSelectedRow();
 
-        if (i == -1) {
-            return; // no selection
-        }
+		if (i == -1) {
+			return; // no selection
+		}
 
-        thePanel.setSelectedServiceType(ServicesTableModel.getColumnValueOfRow(
-                thePanel.getServicesTable(),
-                PluginServices.getText(this, "arcims_server_type_col_name"), i));
+		thePanel.setSelectedServiceType(ServicesTableModel.getColumnValueOfRow(
+				thePanel.getServicesTable(),
+				PluginServices.getText(this, "arcims_server_type_col_name"), i));
 
-        thePanel.setSelectedServiceName(ServicesTableModel.getColumnValueOfRow(
-                thePanel.getServicesTable(),
-                PluginServices.getText(this, "name"), i));
+		thePanel.setSelectedServiceName(ServicesTableModel.getColumnValueOfRow(
+				thePanel.getServicesTable(),
+				PluginServices.getText(this, "name"), i));
 
-        thePanel.getNextButton().setEnabled(true);
+		thePanel.getNextButton().setEnabled(true);
 
-        logger.info("New selection in services table: type = " +
-            thePanel.getSelectedServiceType() + ", name = " +
-            thePanel.getSelectedServiceName());
-    }
+		logger.info("New selection in services table: type = "
+				+ thePanel.getSelectedServiceType() + ", name = "
+				+ thePanel.getSelectedServiceName());
+	}
 }

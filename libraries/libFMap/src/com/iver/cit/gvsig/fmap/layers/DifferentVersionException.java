@@ -42,7 +42,7 @@ package com.iver.cit.gvsig.fmap.layers;
 
 /**
  * Excepción que se lanzara cunado exista un problema de versión.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class DifferentVersionException extends Exception {
@@ -55,7 +55,7 @@ public class DifferentVersionException extends Exception {
 
 	/**
 	 * Crea una nueva DifferentVersionException
-	 *
+	 * 
 	 * @param arg0
 	 */
 	public DifferentVersionException(String arg0) {
@@ -64,7 +64,7 @@ public class DifferentVersionException extends Exception {
 
 	/**
 	 * Crea una nueva DifferentVersionException
-	 *
+	 * 
 	 * @param arg0
 	 * @param arg1
 	 */
@@ -74,7 +74,7 @@ public class DifferentVersionException extends Exception {
 
 	/**
 	 * Crea una nueva DifferentVersionException
-	 *
+	 * 
 	 * @param arg0
 	 */
 	public DifferentVersionException(Throwable arg0) {

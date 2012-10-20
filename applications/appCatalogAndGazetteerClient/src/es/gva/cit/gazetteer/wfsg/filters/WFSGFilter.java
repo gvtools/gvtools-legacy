@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.gazetteer.wfsg.filters;
+
 import java.util.Vector;
 
 import org.gvsig.i18n.Messages;
@@ -57,68 +57,67 @@ import es.gva.cit.gazetteer.querys.GazetteerQuery;
  */
 public class WFSGFilter extends AbstractFilter {
 
-	public  WFSGFilter() {        
+	public WFSGFilter() {
 		super();
-	} 
-
+	}
 
 	/**
-	 * @return 
-	 * @param query 
+	 * @return
+	 * @param query
 	 */
-	public String getQuery(GazetteerQuery query) {        
+	public String getQuery(GazetteerQuery query) {
 		String pregunta = null;
 		FilterEncoding filter = new FilterEncoding();
 		filter.setEscapeCharLabel("escape");
-		
-		if (query.getName() != null) {
-			if (query.getOptions().getSearch().isWithAccents()){
-				Vector v = Strings.allWordForms(query.getName(),true);
-				for (int i=0 ; i<v.size() ; i++){
-					String str = (String)v.get(i);
-					filter.addClauses( query.getFieldAttribute(), formatName(str,query.getNameFilter()), query.getNameFilter(),
-							FilterEncoding.PROPERTY_IS_LIKE, 
-							FilterEncoding.TYPE_LITERAL,
-							FilterEncoding.OR);
-				}        		
-			}else{
-				filter.addClauses( query.getFieldAttribute(), formatName(query.getName(),query.getNameFilter()), query.getNameFilter(),
-						FilterEncoding.PROPERTY_IS_LIKE, 
-						FilterEncoding.TYPE_LITERAL,
-						FilterEncoding.AND);
-			}       	
 
+		if (query.getName() != null) {
+			if (query.getOptions().getSearch().isWithAccents()) {
+				Vector v = Strings.allWordForms(query.getName(), true);
+				for (int i = 0; i < v.size(); i++) {
+					String str = (String) v.get(i);
+					filter.addClauses(query.getFieldAttribute(),
+							formatName(str, query.getNameFilter()),
+							query.getNameFilter(),
+							FilterEncoding.PROPERTY_IS_LIKE,
+							FilterEncoding.TYPE_LITERAL, FilterEncoding.OR);
+				}
+			} else {
+				filter.addClauses(query.getFieldAttribute(),
+						formatName(query.getName(), query.getNameFilter()),
+						query.getNameFilter(), FilterEncoding.PROPERTY_IS_LIKE,
+						FilterEncoding.TYPE_LITERAL, FilterEncoding.AND);
+			}
 
 		}
 
 		/*
-        if (this.getFeature() != null) {
-            query.addClauses(equiv.getAbstract(), "*" + getAbstract() + "*",
-                "Y", "PropertyIsLike", "L");
-        }
+		 * if (this.getFeature() != null) {
+		 * query.addClauses(equiv.getAbstract(), "*" + getAbstract() + "*", "Y",
+		 * "PropertyIsLike", "L"); }
 		 */
 
-		if ((query.getCoordinates() != null) && (query.isCoordinatesClicked())){
-			filter.addBoundingBox(query.getCoordinates(), "position" , getCoordinatesOption(query.getCoordinatesFilter()));
+		if ((query.getCoordinates() != null) && (query.isCoordinatesClicked())) {
+			filter.addBoundingBox(query.getCoordinates(), "position",
+					getCoordinatesOption(query.getCoordinatesFilter()));
 		}
 
 		pregunta = filter.toString();
 		return pregunta;
-	} 
+	}
 
 	/**
 	 * This function returns true only when the user has choosen the
 	 * "Fully Outside Of" of the coordinates option.
 	 * 
 	 * 
-	 * @return 
-	 * @param translator 
-	 * @param coordinatesOption 
+	 * @return
+	 * @param translator
+	 * @param coordinatesOption
 	 */
-	public boolean getCoordinatesOption(String coordinatesOption) {        
+	public boolean getCoordinatesOption(String coordinatesOption) {
 		if (coordinatesOption.equals(Messages.getText("coordinatesContains")))
 			return false;
 
-		return true; 
-	} 
+		return true;
+	}
 }

@@ -57,8 +57,9 @@ import org.gvsig.xmlschema.utils.TypeUtils;
  *
  */
 /**
- * This test try to add a Feature with a type that doesn't exist 
- * in its layer schema
+ * This test try to add a Feature with a type that doesn't exist in its layer
+ * schema
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public abstract class GPENotSupportedFeatureTest extends GPENotSupportedSchema {
@@ -73,44 +74,45 @@ public abstract class GPENotSupportedFeatureTest extends GPENotSupportedSchema {
 	private String element1Name = "Population";
 	private Integer element1Value = new Integer(30000);
 	private String element1Type = TypeUtils.getXSType(element1Value.getClass());
-	//Schema 
+	// Schema
 	private String xsFeature1Name = "river";
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#readObjects()
 	 */
 	public void readObjects() {
 		Layer[] layers = getLayers();
-		assertEquals(layers.length, 1);		
+		assertEquals(layers.length, 1);
 		Layer layer = layers[0];
 
-		assertEquals(layer.getFeatures().size(),0);
+		assertEquals(layer.getFeatures().size(), 0);
 
 		boolean featuretNotSupported = false;
-		for (int i=0 ; i<getErrorHandler().getWarningsSize() ; i++){
-			if (getErrorHandler().getWarningAt(i) instanceof NotSupportedFeatureWarning){
+		for (int i = 0; i < getErrorHandler().getWarningsSize(); i++) {
+			if (getErrorHandler().getWarningAt(i) instanceof NotSupportedFeatureWarning) {
 				featuretNotSupported = true;
-			}			
+			}
 		}
 		assertTrue(featuretNotSupported);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#writeObjects()
 	 */
-	public void writeObjects() {			
+	public void writeObjects() {
 		getWriterHandler().initialize();
-		getWriterHandler().startLayer(layerId, null, layerName, layerDescription, layerSrs);
+		getWriterHandler().startLayer(layerId, null, layerName,
+				layerDescription, layerSrs);
 		getWriterHandler().startFeature(feature1Id, null, feature1Name);
-		getWriterHandler().startElement(namespace,
-				element1Name,
-				element1Value);
+		getWriterHandler().startElement(namespace, element1Name, element1Value);
 		getWriterHandler().endElement();
-		getWriterHandler().endFeature();		
+		getWriterHandler().endFeature();
 		getWriterHandler().endLayer();
-		getWriterHandler().close();	
+		getWriterHandler().close();
 	}
 
 }

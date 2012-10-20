@@ -44,29 +44,39 @@ import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.v02.FConstant;
 import com.iver.cit.gvsig.fmap.rendering.IRasterLegend;
 
-
 /**
- * <p>Interface that all raster layers that can be classifiable and can have associated a legend,
- *  must implement.</p>
+ * <p>
+ * Interface that all raster layers that can be classifiable and can have
+ * associated a legend, must implement.
+ * </p>
  * 
  * @see Classifiable
  */
 public interface ClassifiableRaster extends Classifiable {
 	/**
-	 * <p>Sets the layer's legend as a raster legend.</p>
-	 *
-	 * @param r the legend with raster data
-	 *
-	 * @throws DriverException if fails the driver used in this method.
+	 * <p>
+	 * Sets the layer's legend as a raster legend.
+	 * </p>
+	 * 
+	 * @param r
+	 *            the legend with raster data
+	 * 
+	 * @throws DriverException
+	 *             if fails the driver used in this method.
 	 */
 	void setLegend(IRasterLegend r);
 
 	/**
-	 * <p>Returns the type of this shape.</p>
-	 * <p>All geometry types are defined in <code>FShape</code>, and their shape equivalent in <code>FConstant</code>.</p>
-	 *
+	 * <p>
+	 * Returns the type of this shape.
+	 * </p>
+	 * <p>
+	 * All geometry types are defined in <code>FShape</code>, and their shape
+	 * equivalent in <code>FConstant</code>.
+	 * </p>
+	 * 
 	 * @return the type of this shape
-	 *
+	 * 
 	 * @see FShape
 	 * @see FConstant
 	 */

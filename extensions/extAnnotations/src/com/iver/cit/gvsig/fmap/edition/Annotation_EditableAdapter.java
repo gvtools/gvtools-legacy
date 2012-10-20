@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
@@ -75,10 +74,9 @@ import com.iver.cit.gvsig.fmap.rendering.Annotation_Legend;
 import com.iver.utiles.StringUtilities;
 import com.iver.utiles.XMLEntity;
 
-
 /**
  * Annotation Editable Adapter
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class Annotation_EditableAdapter extends VectorialEditableAdapter {
@@ -94,40 +92,39 @@ public class Annotation_EditableAdapter extends VectorialEditableAdapter {
 
 	private static String DEFAULT_ANNOTATION_COLOR = "default_annotation_color";
 
-
-
 	private Annotation_Mapping mapping;
 
-    private Annotation_Layer lyrAnnotation;
+	private Annotation_Layer lyrAnnotation;
 
-     public int doAddRow(IRow feat, int sourceType) throws ExpansionFileWriteException, ReadDriverException {
+	public int doAddRow(IRow feat, int sourceType)
+			throws ExpansionFileWriteException, ReadDriverException {
 		int position = super.doAddRow(feat, sourceType);
 		PluginServices ps = PluginServices
 				.getPluginServices("com.iver.cit.gvsig.annotation");
 		XMLEntity xml = ps.getPersistentXML();
-		String newFID=getNewFID();
-		boolean cancel = fireBeforeRowAdded(sourceType,newFID);
+		String newFID = getNewFID();
+		boolean cancel = fireBeforeRowAdded(sourceType, newFID);
 		if (cancel)
 			return -1;
 		Value[] values = feat.getAttributes();
-		if (!(values[0] instanceof NullValue &&
-				values[1] instanceof NullValue &&
-				values[2] instanceof NullValue &&
-				values[3] instanceof NullValue &&
-				values[4] instanceof NullValue &&
-				values[5] instanceof NullValue)) {
+		if (!(values[0] instanceof NullValue && values[1] instanceof NullValue
+				&& values[2] instanceof NullValue
+				&& values[3] instanceof NullValue
+				&& values[4] instanceof NullValue && values[5] instanceof NullValue)) {
 			IGeometry geom;
-			geom=((DefaultFeature)feat).getGeometry();
-			Shape shape=geom.getInternalShape();
-			Handler[] handlers=geom.getHandlers(IGeometry.SELECTHANDLER);
-			Point2D h0=handlers[0].getPoint();
+			geom = ((DefaultFeature) feat).getGeometry();
+			Shape shape = geom.getInternalShape();
+			Handler[] handlers = geom.getHandlers(IGeometry.SELECTHANDLER);
+			Point2D h0 = handlers[0].getPoint();
 			if (!(shape instanceof FPoint2D)) {
-				Point2D h1=handlers[1].getPoint();
-				double rotation=Math.toDegrees(UtilFunctions.getAngle(h0,h1));
-				values[mapping.getColumnRotate()] = ValueFactory.createValue(rotation);
+				Point2D h1 = handlers[1].getPoint();
+				double rotation = Math
+						.toDegrees(UtilFunctions.getAngle(h0, h1));
+				values[mapping.getColumnRotate()] = ValueFactory
+						.createValue(rotation);
 			}
-			geom = ShapeFactory.createPoint2D(h0.getX(),h0.getY());
-			((DefaultFeature)feat).setGeometry(geom);
+			geom = ShapeFactory.createPoint2D(h0.getX(), h0.getY());
+			((DefaultFeature) feat).setGeometry(geom);
 			return position;
 		}
 
@@ -138,8 +135,9 @@ public class Annotation_EditableAdapter extends VectorialEditableAdapter {
 		int height = Annotation_Mapping.DEFAULTHEIGHT;
 		int rotate = Annotation_Mapping.DEFAULTROTATE;
 
-		if (xml.contains(DEFAULT_ANNOTATION_COLOR)){
-			intColor = StringUtilities.string2Color(xml.getStringProperty(DEFAULT_ANNOTATION_COLOR)).getRGB();
+		if (xml.contains(DEFAULT_ANNOTATION_COLOR)) {
+			intColor = StringUtilities.string2Color(
+					xml.getStringProperty(DEFAULT_ANNOTATION_COLOR)).getRGB();
 			text = xml.getStringProperty(DEFAULT_ANNOTATION_TEXT);
 			type = xml.getStringProperty(DEFAULT_ANNOTATION_TYPEFONT);
 			style = xml.getIntProperty(DEFAULT_ANNOTATION_STYLEFONT);
@@ -152,101 +150,110 @@ public class Annotation_EditableAdapter extends VectorialEditableAdapter {
 		values[mapping.getColumnHeight()] = ValueFactory.createValue(height);
 		values[mapping.getColumnRotate()] = ValueFactory.createValue(rotate);
 		values[mapping.getColumnColor()] = ValueFactory.createValue(intColor);
-//		IGeometry geom;
-//		ViewPort vp=lyrAnnotation.getMapContext().getViewPort();
-//		geom = lyrAnnotation.getTextWrappingGeometry(height, text, rotate,
-//					position,vp);
-//		feat = new DefaultFeature(geom, values, feat.getID());
+		// IGeometry geom;
+		// ViewPort vp=lyrAnnotation.getMapContext().getViewPort();
+		// geom = lyrAnnotation.getTextWrappingGeometry(height, text, rotate,
+		// position,vp);
+		// feat = new DefaultFeature(geom, values, feat.getID());
 		return position;
 	}
 
-    public Annotation_EditableAdapter(Annotation_Layer lyrAnnotation) {
-        super();
-        this.mapping = lyrAnnotation.getAnnotatonMapping();
-        this.lyrAnnotation = lyrAnnotation;
-    }
+	public Annotation_EditableAdapter(Annotation_Layer lyrAnnotation) {
+		super();
+		this.mapping = lyrAnnotation.getAnnotatonMapping();
+		this.lyrAnnotation = lyrAnnotation;
+	}
 
-    public IRowEdited[] getFeatures(Rectangle2D r, String strEPSG) throws ReadDriverException, ExpansionFileReadException{
-        // En esta clase suponemos random access.
-        // Luego tendremos otra clase que sea VectorialEditableDBAdapter
-        // que reescribirá este método.
-//        Envelope e = FConverter.convertRectangle2DtoEnvelope(r);
-        List l = fmapSpatialIndex.query(r);
-        IRowEdited[] feats = new IRowEdited[l.size()];
+	public IRowEdited[] getFeatures(Rectangle2D r, String strEPSG)
+			throws ReadDriverException, ExpansionFileReadException {
+		// En esta clase suponemos random access.
+		// Luego tendremos otra clase que sea VectorialEditableDBAdapter
+		// que reescribirá este método.
+		// Envelope e = FConverter.convertRectangle2DtoEnvelope(r);
+		List l = fmapSpatialIndex.query(r);
+		IRowEdited[] feats = new IRowEdited[l.size()];
 
-        try {
-            for (int index = 0; index < l.size(); index++) {
-                Integer i = (Integer) l.get(index);
-                int inverse = getInversedIndex(i.intValue());
-                feats[index] = getRowAnnotation(inverse);
-            }
-        } catch (DriverIOException ex) {
-        	 throw new ReadDriverException(lyrAnnotation.getName(),ex);
-        }
+		try {
+			for (int index = 0; index < l.size(); index++) {
+				Integer i = (Integer) l.get(index);
+				int inverse = getInversedIndex(i.intValue());
+				feats[index] = getRowAnnotation(inverse);
+			}
+		} catch (DriverIOException ex) {
+			throw new ReadDriverException(lyrAnnotation.getName(), ex);
+		}
 
-        return feats;
-    }
+		return feats;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.iver.cit.gvsig.fmap.edition.IEditableSource#getRow(int)
-     */
-    public IRowEdited getRowAnnotation(int index) throws DriverIOException, ExpansionFileReadException, ReadDriverException {
-        int calculatedIndex = getCalculatedIndex(index);
-        Integer integer = new Integer(calculatedIndex);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.edition.IEditableSource#getRow(int)
+	 */
+	public IRowEdited getRowAnnotation(int index) throws DriverIOException,
+			ExpansionFileReadException, ReadDriverException {
+		int calculatedIndex = getCalculatedIndex(index);
+		Integer integer = new Integer(calculatedIndex);
 
-        // Si no está en el fichero de expansión
-        DefaultRowEdited edRow = null;
-        ViewPort vp=lyrAnnotation.getMapContext().getViewPort();
-       	IFeature f = null;
-        if (!relations.containsKey(integer)) {
-            f = ova.getFeature(calculatedIndex);
-        } else {
-            int num = ((Integer) relations.get(integer)).intValue();
-            IRowEdited aux = expansionFile.getRow(num);
-            f = (IFeature) aux.getLinkedRow().cloneRow();
-        }
-        String s = f.getID();
-        Annotation_Mapping mapping = lyrAnnotation.getAnnotatonMapping();
-        NumericValue vRotation = (NumericValue) f.getAttribute(mapping.getColumnRotate());
-        NumericValue vHeight = (NumericValue) f.getAttribute(mapping.getColumnHeight());
-        NumericValue vStyle = (NumericValue) f.getAttribute(mapping.getColumnStyleFont());
-        StringValue vType = (StringValue) f.getAttribute(mapping.getColumnTypeFont());
-        Value vText = f.getAttribute(mapping.getColumnText());
-        start();
-        IGeometry geom = getShape(index);
-        stop();
-        MathTransform trans = lyrAnnotation.getCrsTransform();
-        boolean bMustClone = false;
-        if (trans != null) {
-            if (bMustClone) {
-                geom = geom.cloneGeometry();
-            }
-            geom.reProject(trans);
-        }
-        geom.transform(vp.getAffineTransform());
-        int unit=-1;
-        if (lyrAnnotation.getLegend() instanceof Annotation_Legend) {
-        	unit = ((Annotation_Legend)lyrAnnotation.getLegend()).getUnits();
-        }
-//        if (lyrAnnotation.getLabelingStrategy()!=null)
-//        	unit=((AttrInTableLabelingStrategy)lyrAnnotation.getLabelingStrategy()).getUnit();
+		// Si no está en el fichero de expansión
+		DefaultRowEdited edRow = null;
+		ViewPort vp = lyrAnnotation.getMapContext().getViewPort();
+		IFeature f = null;
+		if (!relations.containsKey(integer)) {
+			f = ova.getFeature(calculatedIndex);
+		} else {
+			int num = ((Integer) relations.get(integer)).intValue();
+			IRowEdited aux = expansionFile.getRow(num);
+			f = (IFeature) aux.getLinkedRow().cloneRow();
+		}
+		String s = f.getID();
+		Annotation_Mapping mapping = lyrAnnotation.getAnnotatonMapping();
+		NumericValue vRotation = (NumericValue) f.getAttribute(mapping
+				.getColumnRotate());
+		NumericValue vHeight = (NumericValue) f.getAttribute(mapping
+				.getColumnHeight());
+		NumericValue vStyle = (NumericValue) f.getAttribute(mapping
+				.getColumnStyleFont());
+		StringValue vType = (StringValue) f.getAttribute(mapping
+				.getColumnTypeFont());
+		Value vText = f.getAttribute(mapping.getColumnText());
+		start();
+		IGeometry geom = getShape(index);
+		stop();
+		MathTransform trans = lyrAnnotation.getCrsTransform();
+		boolean bMustClone = false;
+		if (trans != null) {
+			if (bMustClone) {
+				geom = geom.cloneGeometry();
+			}
+			geom.reProject(trans);
+		}
+		geom.transform(vp.getAffineTransform());
+		int unit = -1;
+		if (lyrAnnotation.getLegend() instanceof Annotation_Legend) {
+			unit = ((Annotation_Legend) lyrAnnotation.getLegend()).getUnits();
+		}
+		// if (lyrAnnotation.getLabelingStrategy()!=null)
+		// unit=((AttrInTableLabelingStrategy)lyrAnnotation.getLabelingStrategy()).getUnit();
 
-        IGeometry geom1 = lyrAnnotation.getTextWrappingGeometryInPixels(unit,vHeight.floatValue(), //*FConstant.FONT_HEIGHT_SCALE_FACTOR,
-               vText.toString(), vRotation.doubleValue(),vType.getValue(),vStyle.intValue(), index, vp,geom);
-      	try {
+		IGeometry geom1 = lyrAnnotation.getTextWrappingGeometryInPixels(
+				unit,
+				vHeight.floatValue(), // *FConstant.FONT_HEIGHT_SCALE_FACTOR,
+				vText.toString(), vRotation.doubleValue(), vType.getValue(),
+				vStyle.intValue(), index, vp, geom);
+		try {
 			geom1.transform(vp.getAffineTransform().createInverse());
 		} catch (NoninvertibleTransformException e) {
-			 throw new ReadDriverException(lyrAnnotation.getName(),e);
+			throw new ReadDriverException(lyrAnnotation.getName(), e);
 		}
-      	f = new DefaultFeature(geom1, f.getAttributes(), s);
-        edRow = new DefaultRowEdited(f,
-               DefaultRowEdited.STATUS_ORIGINAL, index);
+		f = new DefaultFeature(geom1, f.getAttributes(), s);
+		edRow = new DefaultRowEdited(f, DefaultRowEdited.STATUS_ORIGINAL, index);
 
-        return edRow;
+		return edRow;
 
-    }
+	}
+
 	/**
 	 * Si se intenta modificar una geometría original de la capa en edición se
 	 * añade al fichero de expansión y se registra la posición en la que se
@@ -254,21 +261,23 @@ public class Annotation_EditableAdapter extends VectorialEditableAdapter {
 	 * fichero de expansión (por ser nueva o original pero modificada) se invoca
 	 * el método modifyGeometry y se actualiza el índice de la geometria en el
 	 * fichero.
-	 *
+	 * 
 	 * @param calculatedIndex
 	 *            DOCUMENT ME!
 	 * @param feat
 	 *            DOCUMENT ME!
-	 *
+	 * 
 	 * @return position inside ExpansionFile
 	 * @throws ReadDriverException
 	 * @throws ExpansionFileWriteException
 	 * @throws ExpansionFileReadException
-	 *
+	 * 
 	 * @throws IOException
 	 * @throws DriverIOException
 	 */
-	public int doModifyRow(int calculatedIndex, IRow feat, int sourceType) throws ReadDriverException, ExpansionFileWriteException, ExpansionFileReadException {
+	public int doModifyRow(int calculatedIndex, IRow feat, int sourceType)
+			throws ReadDriverException, ExpansionFileWriteException,
+			ExpansionFileReadException {
 		boolean cancel = fireBeforeModifyRow(feat, calculatedIndex, sourceType);
 		if (cancel)
 			return -1;
@@ -277,42 +286,49 @@ public class Annotation_EditableAdapter extends VectorialEditableAdapter {
 
 		IFeature featAnt = null;
 		IGeometry geom;
-		Value[] values=feat.getAttributes();
-		geom=((DefaultFeature)feat).getGeometry();
-		Shape shape=geom.getInternalShape();
-		Handler[] handlers=geom.getHandlers(IGeometry.SELECTHANDLER);
-		Point2D h0=handlers[0].getPoint();
+		Value[] values = feat.getAttributes();
+		geom = ((DefaultFeature) feat).getGeometry();
+		Shape shape = geom.getInternalShape();
+		Handler[] handlers = geom.getHandlers(IGeometry.SELECTHANDLER);
+		Point2D h0 = handlers[0].getPoint();
 		if (!(shape instanceof FPoint2D)) {
-			Point2D h1=handlers[1].getPoint();
-			double rotation=-Math.toDegrees(UtilFunctions.getAngle(h0,h1));
-			boolean rotate=false;
-			if (((NumericValue)values[mapping.getColumnRotate()]).intValue() != (int)rotation ) {
-				values[mapping.getColumnRotate()] = ValueFactory.createValue(rotation);
-				rotate=true;
+			Point2D h1 = handlers[1].getPoint();
+			double rotation = -Math.toDegrees(UtilFunctions.getAngle(h0, h1));
+			boolean rotate = false;
+			if (((NumericValue) values[mapping.getColumnRotate()]).intValue() != (int) rotation) {
+				values[mapping.getColumnRotate()] = ValueFactory
+						.createValue(rotation);
+				rotate = true;
 			}
 
-			Point2D h2=handlers[2].getPoint();
+			Point2D h2 = handlers[2].getPoint();
 			if (!rotate) {
-				double height=Math.sqrt(Math.pow(h2.getX()-h1.getX(),2D)+Math.pow(h2.getY()-h1.getY(),2D));
-				boolean isInPixels=((Annotation_Legend)lyrAnnotation.getLegend()).isFontSizeInPixels();
-				int annotationUnits = ((Annotation_Legend)lyrAnnotation.getLegend()).getUnits();
-				int mapUnits = lyrAnnotation.getMapContext().getViewPort().getMapUnits();
-				double[] trans2Meter = lyrAnnotation.getMapContext().getDistanceTrans2Meter();
-				double distance=height;
+				double height = Math.sqrt(Math.pow(h2.getX() - h1.getX(), 2D)
+						+ Math.pow(h2.getY() - h1.getY(), 2D));
+				boolean isInPixels = ((Annotation_Legend) lyrAnnotation
+						.getLegend()).isFontSizeInPixels();
+				int annotationUnits = ((Annotation_Legend) lyrAnnotation
+						.getLegend()).getUnits();
+				int mapUnits = lyrAnnotation.getMapContext().getViewPort()
+						.getMapUnits();
+				double[] trans2Meter = lyrAnnotation.getMapContext()
+						.getDistanceTrans2Meter();
+				double distance = height;
 				if (isInPixels) {
-					distance=lyrAnnotation.getMapContext().getViewPort().fromMapDistance(distance);
+					distance = lyrAnnotation.getMapContext().getViewPort()
+							.fromMapDistance(distance);
 				} else {
-					distance=distance
-					* trans2Meter[mapUnits]
-					/ trans2Meter[annotationUnits];
+					distance = distance * trans2Meter[mapUnits]
+							/ trans2Meter[annotationUnits];
 				}
-				values[mapping.getColumnHeight()] = ValueFactory.createValue(distance);
+				values[mapping.getColumnHeight()] = ValueFactory
+						.createValue(distance);
 			}
-			Point2D h3=handlers[3].getPoint();
-//			geom = ShapeFactory.createPoint2D(h3.getX(),h3.getY());
-			geom = ShapeFactory.createPoint2D(h0.getX(),h0.getY());
-		}else {
-			geom = ShapeFactory.createPoint2D(h0.getX(),h0.getY());
+			Point2D h3 = handlers[3].getPoint();
+			// geom = ShapeFactory.createPoint2D(h3.getX(),h3.getY());
+			geom = ShapeFactory.createPoint2D(h0.getX(), h0.getY());
+		} else {
+			geom = ShapeFactory.createPoint2D(h0.getX(), h0.getY());
 		}
 
 		feat = new DefaultFeature(geom, values, feat.getID());
@@ -327,7 +343,8 @@ public class Annotation_EditableAdapter extends VectorialEditableAdapter {
 				IGeometry g = featAnt.getGeometry();
 				Rectangle2D rAnt = g.getBounds2D();
 				Rectangle2D r = ((IFeature) feat).getGeometry().getBounds2D();
-				this.fmapSpatialIndex.delete(rAnt, new Integer(calculatedIndex));
+				this.fmapSpatialIndex
+						.delete(rAnt, new Integer(calculatedIndex));
 				this.fmapSpatialIndex.insert(r, new Integer(calculatedIndex));
 			}
 		} else {
@@ -355,7 +372,8 @@ public class Annotation_EditableAdapter extends VectorialEditableAdapter {
 				// Se modifica el índice espacial
 				Rectangle2D rAnt = featAnt.getGeometry().getBounds2D();
 				Rectangle2D r = ((IFeature) feat).getGeometry().getBounds2D();
-				this.fmapSpatialIndex.delete(rAnt, new Integer(calculatedIndex));
+				this.fmapSpatialIndex
+						.delete(rAnt, new Integer(calculatedIndex));
 				this.fmapSpatialIndex.insert(r, new Integer(calculatedIndex));
 			}
 		}

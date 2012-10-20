@@ -21,13 +21,14 @@ package org.gvsig.gui.beans.labelslidertext;
 import javax.swing.JFrame;
 
 public class TestLabelSliderTextTable {
-	private int                      w      = 375;
-	private int                      h      = 150;
-	private JFrame                   frame  = new JFrame();
+	private int w = 375;
+	private int h = 150;
+	private JFrame frame = new JFrame();
 	private LabelSliderTextContainer slider = null;
 
 	public TestLabelSliderTextTable() {
-		slider = new LabelSliderTextContainer(0, 255, 255, true, "Longaniza de nombre");
+		slider = new LabelSliderTextContainer(0, 255, 255, true,
+				"Longaniza de nombre");
 		slider.setDecimal(false);
 		slider.setBorder("Cabecera");
 		frame.getContentPane().add(slider);

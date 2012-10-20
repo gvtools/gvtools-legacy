@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
@@ -51,91 +50,92 @@ import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.layers.Annotation_Layer;
 import com.iver.cit.gvsig.project.documents.gui.Annotation_ConfigureLabel;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class Annotation_Properties extends JPanel {
-    private JPanel pNorth = null;
-    private JPanel pCenter = null;
-    private JPanel pSouth = null;
-    private Annotation_Layer al;
+	private JPanel pNorth = null;
+	private JPanel pCenter = null;
+	private JPanel pSouth = null;
+	private Annotation_Layer al;
 
-    /**
-     * This is the default constructor
-     *
-     * @param al DOCUMENT ME!
-     */
-    public Annotation_Properties(Annotation_Layer al) {
-        super();
-        this.al = al;
-        initialize();
-    }
+	/**
+	 * This is the default constructor
+	 * 
+	 * @param al
+	 *            DOCUMENT ME!
+	 */
+	public Annotation_Properties(Annotation_Layer al) {
+		super();
+		this.al = al;
+		initialize();
+	}
 
-    /**
-     * This method initializes this
-     */
-    private void initialize() {
-        this.setLayout(new BorderLayout());
-        this.setSize(300, 200);
-        this.add(getPNorth(), java.awt.BorderLayout.NORTH);
-        this.add(getPCenter(), java.awt.BorderLayout.CENTER);
-        this.add(getPSouth(), java.awt.BorderLayout.SOUTH);
-    }
+	/**
+	 * This method initializes this
+	 */
+	private void initialize() {
+		this.setLayout(new BorderLayout());
+		this.setSize(300, 200);
+		this.add(getPNorth(), java.awt.BorderLayout.NORTH);
+		this.add(getPCenter(), java.awt.BorderLayout.CENTER);
+		this.add(getPSouth(), java.awt.BorderLayout.SOUTH);
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public WindowInfo getWindowInfo() {
-        WindowInfo viewInfo = new WindowInfo(WindowInfo.MODELESSDIALOG);
-        viewInfo.setWidth(500);
-        viewInfo.setHeight(400);
-        viewInfo.setTitle(PluginServices.getText(this, "propiedades_de_la_capa"));
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public WindowInfo getWindowInfo() {
+		WindowInfo viewInfo = new WindowInfo(WindowInfo.MODELESSDIALOG);
+		viewInfo.setWidth(500);
+		viewInfo.setHeight(400);
+		viewInfo.setTitle(PluginServices
+				.getText(this, "propiedades_de_la_capa"));
 
-        return viewInfo;
-    }
+		return viewInfo;
+	}
 
-    /**
-     * This method initializes pNorth
-     *
-     * @return javax.swing.JPanel
-     */
-    private JPanel getPNorth() {
-        if (pNorth == null) {
-            pNorth = new JPanel();
-        }
+	/**
+	 * This method initializes pNorth
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getPNorth() {
+		if (pNorth == null) {
+			pNorth = new JPanel();
+		}
 
-        return pNorth;
-    }
+		return pNorth;
+	}
 
-    /**
-     * This method initializes pCenter
-     *
-     * @return javax.swing.JPanel
-     */
-    private JPanel getPCenter() {
-        if (pCenter == null) {
-            pCenter = new JPanel();
-            pCenter.add(new Annotation_ConfigureLabel(null, al));
-        }
+	/**
+	 * This method initializes pCenter
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getPCenter() {
+		if (pCenter == null) {
+			pCenter = new JPanel();
+			pCenter.add(new Annotation_ConfigureLabel(null, al));
+		}
 
-        return pCenter;
-    }
+		return pCenter;
+	}
 
-    /**
-     * This method initializes pSouth
-     *
-     * @return javax.swing.JPanel
-     */
-    private JPanel getPSouth() {
-        if (pSouth == null) {
-            pSouth = new JPanel();
-        }
+	/**
+	 * This method initializes pSouth
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getPSouth() {
+		if (pSouth == null) {
+			pSouth = new JPanel();
+		}
 
-        return pSouth;
-    }
+		return pSouth;
+	}
 }

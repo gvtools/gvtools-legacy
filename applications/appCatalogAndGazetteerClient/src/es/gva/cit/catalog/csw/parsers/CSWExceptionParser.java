@@ -1,6 +1,5 @@
 package es.gva.cit.catalog.csw.parsers;
 
-import es.gva.cit.catalog.csw.drivers.CSWCapabilities;
 import es.gva.cit.catalog.csw.drivers.CSWException;
 import es.gva.cit.catalog.metadataxml.XMLNode;
 
@@ -55,14 +54,17 @@ import es.gva.cit.catalog.metadataxml.XMLNode;
  */
 public class CSWExceptionParser {
 
-	public static CSWException parse(XMLNode node){
+	public static CSWException parse(XMLNode node) {
 		CSWException exception = new CSWException();
 		XMLNode exNode = node.searchNode(CSWConstants.OWSEXCEPTION);
-		if (exNode != null){
+		if (exNode != null) {
 			exception = new CSWException();
-			exception.setCode(exNode.searchAtribute(CSWConstants.OWSEXCEPTIONCODE));
-			exception.setSubcode(exNode.searchAtribute(CSWConstants.OWSEXCEPTIONSUBCODE));
-			exception.setReason(exNode.searchAtribute(CSWConstants.OWSEXCEPTIONREASON));
+			exception.setCode(exNode
+					.searchAtribute(CSWConstants.OWSEXCEPTIONCODE));
+			exception.setSubcode(exNode
+					.searchAtribute(CSWConstants.OWSEXCEPTIONSUBCODE));
+			exception.setReason(exNode
+					.searchAtribute(CSWConstants.OWSEXCEPTIONREASON));
 			exception.setAbstract(exNode.getText());
 		}
 		return exception;

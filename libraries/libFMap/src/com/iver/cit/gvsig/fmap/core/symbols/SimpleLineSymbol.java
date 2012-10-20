@@ -40,71 +40,71 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: SimpleLineSymbol.java 28367 2009-05-04 15:30:10Z vcaballero $
-* $Log$
-* Revision 1.16  2007-09-21 12:25:32  jaume
-* cancellation support extended down to the IGeometry and ISymbol level
-*
-* Revision 1.15  2007/09/19 16:22:04  jaume
-* removed unnecessary imports
-*
-* Revision 1.14  2007/09/17 09:33:47  jaume
-* some multishapedsymbol bugs fixed
-*
-* Revision 1.13  2007/08/09 07:38:32  jvidal
-* javadoc
-*
-* Revision 1.12  2007/07/23 06:52:55  jaume
-* Added support for arrow line decorator (start commiting)
-*
-* Revision 1.11  2007/07/18 06:54:35  jaume
-* continuing with cartographic support
-*
-* Revision 1.10  2007/06/29 13:07:01  jaume
-* +PictureLineSymbol
-*
-* Revision 1.9  2007/06/07 06:50:40  jaume
-* *** empty log message ***
-*
-* Revision 1.8  2007/05/08 08:47:40  jaume
-* *** empty log message ***
-*
-* Revision 1.7  2007/03/26 15:02:49  jaume
-* Refactored IPrintable
-*
-* Revision 1.6  2007/03/20 16:02:24  jaume
-* rename method
-*
-* Revision 1.5  2007/03/09 11:20:56  jaume
-* Advanced symbology (start committing)
-*
-* Revision 1.3.2.5  2007/02/21 07:34:09  jaume
-* labeling starts working
-*
-* Revision 1.3.2.4  2007/02/15 16:23:44  jaume
-* *** empty log message ***
-*
-* Revision 1.3.2.3  2007/02/13 16:19:19  jaume
-* graduated symbol legends (start commiting)
-*
-* Revision 1.3.2.2  2007/02/12 15:15:20  jaume
-* refactored interval legend and added graduated symbol legend
-*
-* Revision 1.3.2.1  2007/02/09 07:47:05  jaume
-* Isymbol moved
-*
-* Revision 1.3  2007/01/25 16:25:23  jaume
-* *** empty log message ***
-*
-* Revision 1.2  2007/01/24 17:58:22  jaume
-* new features and architecture error fixes
-*
-* Revision 1.1  2007/01/16 11:50:44  jaume
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: SimpleLineSymbol.java 28367 2009-05-04 15:30:10Z vcaballero $
+ * $Log$
+ * Revision 1.16  2007-09-21 12:25:32  jaume
+ * cancellation support extended down to the IGeometry and ISymbol level
+ *
+ * Revision 1.15  2007/09/19 16:22:04  jaume
+ * removed unnecessary imports
+ *
+ * Revision 1.14  2007/09/17 09:33:47  jaume
+ * some multishapedsymbol bugs fixed
+ *
+ * Revision 1.13  2007/08/09 07:38:32  jvidal
+ * javadoc
+ *
+ * Revision 1.12  2007/07/23 06:52:55  jaume
+ * Added support for arrow line decorator (start commiting)
+ *
+ * Revision 1.11  2007/07/18 06:54:35  jaume
+ * continuing with cartographic support
+ *
+ * Revision 1.10  2007/06/29 13:07:01  jaume
+ * +PictureLineSymbol
+ *
+ * Revision 1.9  2007/06/07 06:50:40  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.8  2007/05/08 08:47:40  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.7  2007/03/26 15:02:49  jaume
+ * Refactored IPrintable
+ *
+ * Revision 1.6  2007/03/20 16:02:24  jaume
+ * rename method
+ *
+ * Revision 1.5  2007/03/09 11:20:56  jaume
+ * Advanced symbology (start committing)
+ *
+ * Revision 1.3.2.5  2007/02/21 07:34:09  jaume
+ * labeling starts working
+ *
+ * Revision 1.3.2.4  2007/02/15 16:23:44  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.3.2.3  2007/02/13 16:19:19  jaume
+ * graduated symbol legends (start commiting)
+ *
+ * Revision 1.3.2.2  2007/02/12 15:15:20  jaume
+ * refactored interval legend and added graduated symbol legend
+ *
+ * Revision 1.3.2.1  2007/02/09 07:47:05  jaume
+ * Isymbol moved
+ *
+ * Revision 1.3  2007/01/25 16:25:23  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.2  2007/01/24 17:58:22  jaume
+ * new features and architecture error fixes
+ *
+ * Revision 1.1  2007/01/16 11:50:44  jaume
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.core.symbols;
 
 import java.awt.Color;
@@ -126,27 +126,30 @@ import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.threads.Cancellable;
 
 /**
- * SimpleLineSymbol is the most basic symbol for the representation of line objects.
- * Allows to define the width of the line, the color and the drawn pattern.
- *
- * @author   jaume dominguez faus - jaume.dominguez@iver.es
+ * SimpleLineSymbol is the most basic symbol for the representation of line
+ * objects. Allows to define the width of the line, the color and the drawn
+ * pattern.
+ * 
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class SimpleLineSymbol extends AbstractLineSymbol {
 	SimpleLineSymbol symbolForSelection;
 	private double width;
 
-
 	public ISymbol getSymbolForSelection() {
 		if (symbolForSelection == null) {
 			XMLEntity xml = getXMLEntity();
-			xml.putProperty("color", StringUtilities.color2String(MapContext.getSelectionColor()));
-			symbolForSelection = (SimpleLineSymbol) SymbologyFactory.
-					createSymbolFromXML(xml, getDescription()+" version for selection");
+			xml.putProperty("color", StringUtilities.color2String(MapContext
+					.getSelectionColor()));
+			symbolForSelection = (SimpleLineSymbol) SymbologyFactory
+					.createSymbolFromXML(xml, getDescription()
+							+ " version for selection");
 		}
 		return symbolForSelection;
 	}
 
-	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp, Cancellable cancel) {
+	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp,
+			Cancellable cancel) {
 		g.setStroke(getLineStyle().getStroke());
 
 		if (getLineStyle().getOffset() != 0) {
@@ -177,16 +180,17 @@ public class SimpleLineSymbol extends AbstractLineSymbol {
 		xml.putProperty("referenceSystem", getReferenceSystem());
 
 		Color c = getColor();
-		if (c!= null)
+		if (c != null)
 			xml.putProperty("color", StringUtilities.color2String(getColor()));
 
-//		setLineWidth(getLineWidth()); // not a joke
+		// setLineWidth(getLineWidth()); // not a joke
 		xml.addChild(getLineStyle().getXMLEntity());
 		return xml;
 	}
 
 	public void drawInsideRectangle(Graphics2D g,
-			AffineTransform scaleInstance, Rectangle r, PrintRequestAttributeSet properties) throws SymbolDrawingException {
+			AffineTransform scaleInstance, Rectangle r,
+			PrintRequestAttributeSet properties) throws SymbolDrawingException {
 		g.setColor(getColor());
 		g.setStroke(getLineStyle().getStroke());
 		super.drawInsideRectangle(g, scaleInstance, r, properties);
@@ -200,9 +204,10 @@ public class SimpleLineSymbol extends AbstractLineSymbol {
 		setIsShapeVisible(xml.getBooleanProperty("isShapeVisible"));
 		setDescription(xml.getStringProperty("desc"));
 		if (xml.contains("color"))
-			setLineColor(StringUtilities.
-				string2Color(xml.getStringProperty("color")));
-		setLineStyle((ILineStyle) SymbologyFactory.createStyleFromXML(xml.getChild(0), null));
+			setLineColor(StringUtilities.string2Color(xml
+					.getStringProperty("color")));
+		setLineStyle((ILineStyle) SymbologyFactory.createStyleFromXML(
+				xml.getChild(0), null));
 		setReferenceSystem(xml.getIntProperty("referenceSystem"));
 		setUnit(xml.getIntProperty("unit"));
 		width = getLineStyle().getLineWidth(); // not a joke

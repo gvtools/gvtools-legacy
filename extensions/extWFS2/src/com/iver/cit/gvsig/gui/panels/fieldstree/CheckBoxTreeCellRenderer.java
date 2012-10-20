@@ -77,50 +77,56 @@ import org.gvsig.remoteClient.gml.types.IXMLType;
 /**
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class CheckBoxTreeCellRenderer extends DefaultTreeCellRenderer{ 
+public class CheckBoxTreeCellRenderer extends DefaultTreeCellRenderer {
 	private JTree tree;
 	private FieldsTreeTable treetable;
-	
+
 	public CheckBoxTreeCellRenderer(FieldsTreeTable treetable) {
 		this.treetable = treetable;
-		this.tree = (JTree)treetable.getTree();
+		this.tree = (JTree) treetable.getTree();
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
-	 * @see javax.swing.tree.TreeCellRenderer#getTreeCellRendererComponent(javax.swing.JTree, java.lang.Object, boolean, boolean, boolean, int, boolean)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.swing.tree.TreeCellRenderer#getTreeCellRendererComponent(javax.
+	 * swing.JTree, java.lang.Object, boolean, boolean, boolean, int, boolean)
 	 */
 	public Component getTreeCellRendererComponent(JTree tree, Object value,
 			boolean selected, boolean expanded, boolean leaf, int row,
 			boolean hasFocus) {
-			int[] rows = tree.getSelectionRows();
-			TreePath path = tree.getPathForRow(row);
-			if (path != null){
-				Object node = path.getLastPathComponent();
-				if ((node != null) && (node instanceof CheckBoxNode)){
-					CheckBoxNode selectedNode = (CheckBoxNode)node;
-					if (selectedNode.getParent() == null){
-						tree.expandRow(0);
-					}
-					if (selected){
-						selectedNode.setBackground(UIManager.getColor("Tree.selectionBackground"));
-						if (hasFocus){
-							if ((selectedNode.getElement().getEntityType() == null) || 
-								!(selectedNode.getElement().getEntityType().getType() == IXMLType.GML_GEOMETRY)){
-								treetable.setApplicable(true);
-								selectedNode.setSelected(!selectedNode.isSelected());
-								selectedNode.setColor(TetraStateCheckBox.WHITE);
-							}
-						}
-					}else{
-						selectedNode.setBackground(UIManager.getColor("Tree.textBackground"));
-					}					
-					return selectedNode;
+		int[] rows = tree.getSelectionRows();
+		TreePath path = tree.getPathForRow(row);
+		if (path != null) {
+			Object node = path.getLastPathComponent();
+			if ((node != null) && (node instanceof CheckBoxNode)) {
+				CheckBoxNode selectedNode = (CheckBoxNode) node;
+				if (selectedNode.getParent() == null) {
+					tree.expandRow(0);
 				}
-			}	
-			JLabel label = new JLabel(CheckBoxNode.fillNameWithBlancs("Feature"));
+				if (selected) {
+					selectedNode.setBackground(UIManager
+							.getColor("Tree.selectionBackground"));
+					if (hasFocus) {
+						if ((selectedNode.getElement().getEntityType() == null)
+								|| !(selectedNode.getElement().getEntityType()
+										.getType() == IXMLType.GML_GEOMETRY)) {
+							treetable.setApplicable(true);
+							selectedNode
+									.setSelected(!selectedNode.isSelected());
+							selectedNode.setColor(TetraStateCheckBox.WHITE);
+						}
+					}
+				} else {
+					selectedNode.setBackground(UIManager
+							.getColor("Tree.textBackground"));
+				}
+				return selectedNode;
+			}
+		}
+		JLabel label = new JLabel(CheckBoxNode.fillNameWithBlancs("Feature"));
 		return label;
-	}	
+	}
 
-	
 }

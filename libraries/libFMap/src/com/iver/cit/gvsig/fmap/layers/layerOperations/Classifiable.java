@@ -47,30 +47,37 @@ import com.iver.cit.gvsig.fmap.drivers.shp.write.SHPFileWrite;
 import com.iver.cit.gvsig.fmap.rendering.ILegend;
 import com.iver.cit.gvsig.fmap.rendering.LegendListener;
 
-
 /**
- * <p>Interface that all layers that can be classifiable, must implement.</p> 
- * <p>The interface <code>Classifiable</code> allows classify a layer in <i>raster</i> or <i>vector</i>,
- *  and then, generates a legend.</p>
+ * <p>
+ * Interface that all layers that can be classifiable, must implement.
+ * </p>
+ * <p>
+ * The interface <code>Classifiable</code> allows classify a layer in
+ * <i>raster</i> or <i>vector</i>, and then, generates a legend.
+ * </p>
  */
 public interface Classifiable {
 	/**
-	 * Adds the specified legend listener to receive legend events from the inner legend.
-	 *  If the parameter is null, no exception is thrown and no action is performed.
-	 *
-	 * @param listener the legend listener
+	 * Adds the specified legend listener to receive legend events from the
+	 * inner legend. If the parameter is null, no exception is thrown and no
+	 * action is performed.
+	 * 
+	 * @param listener
+	 *            the legend listener
 	 * 
 	 * @see #removeLegendListener(LegendListener)
 	 */
 	void addLegendListener(LegendListener listener);
 
 	/**
-	 * Removes the specified legend listener so that it no longer receives legend events from the inner
-	 *  legend. This method performs no function, nor does it throw an exception, if the listener specified
-	 *  by the argument was not previously added to the legend. If the parameter is null, no exception is
-	 *  thrown and no action is performed.
-	 *
-	 * @param listener the legend listener
+	 * Removes the specified legend listener so that it no longer receives
+	 * legend events from the inner legend. This method performs no function,
+	 * nor does it throw an exception, if the listener specified by the argument
+	 * was not previously added to the legend. If the parameter is null, no
+	 * exception is thrown and no action is performed.
+	 * 
+	 * @param listener
+	 *            the legend listener
 	 * 
 	 * @see #addLegendListener(LegendListener)
 	 */
@@ -78,23 +85,29 @@ public interface Classifiable {
 
 	/**
 	 * Returns the inner legend.
-	 *
+	 * 
 	 * @return Legend.
 	 */
 	public ILegend getLegend();
 
 	/**
-	 * <p>Returns the type of the shape.</p>
-	 * <p>All geometry types are defined in <code>FShape</code>, and their equivalent shape in <code>FConstant</code>.
-	 *  For getting the equivalent shape of a geometry type, you must use a method like
-	 *  <code>{@linkplain SHPFileWrite#getShapeType()}</code>.</p>
-	 *
+	 * <p>
+	 * Returns the type of the shape.
+	 * </p>
+	 * <p>
+	 * All geometry types are defined in <code>FShape</code>, and their
+	 * equivalent shape in <code>FConstant</code>. For getting the equivalent
+	 * shape of a geometry type, you must use a method like
+	 * <code>{@linkplain SHPFileWrite#getShapeType()}</code>.
+	 * </p>
+	 * 
 	 * @return the type of this shape.
 	 * 
 	 * @see FShape
 	 * @see FConstant
 	 * 
-	 * @throws ReadDriverException if the driver fails reading the data.
+	 * @throws ReadDriverException
+	 *             if the driver fails reading the data.
 	 */
 	public int getShapeType() throws ReadDriverException;
 }

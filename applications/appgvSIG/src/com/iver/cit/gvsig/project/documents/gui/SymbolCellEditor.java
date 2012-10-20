@@ -58,12 +58,10 @@ import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.project.documents.view.legend.gui.PanelEditSymbol;
 
-
-
 /**
  * Cell Editor de ISymbols. Controla los eventos de edición que se realicen
  * sobre la columna de símbolos.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class SymbolCellEditor extends JButton implements TableCellEditor {
@@ -72,18 +70,19 @@ public class SymbolCellEditor extends JButton implements TableCellEditor {
 	private PanelEditSymbol symbolPanel;
 
 	public SymbolCellEditor() {
-		addMouseListener(new MouseListener(){
+		addMouseListener(new MouseListener() {
 
 			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount()==2){
+				if (e.getClickCount() == 2) {
 					symbolPanel.setSymbol(symbol);
-//					symbolPanel.setShapeType(SymbolCellEditor.this.shapeType);
+					// symbolPanel.setShapeType(SymbolCellEditor.this.shapeType);
 					symbolPanel.setShapeType(symbol.getSymbolType());
 					PluginServices.getMDIManager().addWindow(symbolPanel);
-					if (symbolPanel.isOK()){
-				    symbol = (ISymbol) symbolPanel.getSymbol();
-				    symbol.setDescription(((ISymbol) symbolPanel.getSymbol()).getDescription());
-					stopCellEditing();
+					if (symbolPanel.isOK()) {
+						symbol = (ISymbol) symbolPanel.getSymbol();
+						symbol.setDescription(((ISymbol) symbolPanel
+								.getSymbol()).getDescription());
+						stopCellEditing();
 					}
 				}
 			}
@@ -102,29 +101,28 @@ public class SymbolCellEditor extends JButton implements TableCellEditor {
 
 		});
 		addKeyListener(new KeyAdapter() {
-				public void keyReleased(KeyEvent e) {
-					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-						stopCellEditing();
-					} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-						cancelCellEditing();
-					}
+			public void keyReleased(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					stopCellEditing();
+				} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+					cancelCellEditing();
 				}
-			});
+			}
+		});
 		symbolPanel = new PanelEditSymbol();
 
 	}
 
-
-	//Implement the one CellEditor method that AbstractCellEditor doesn't.
+	// Implement the one CellEditor method that AbstractCellEditor doesn't.
 	public Object getCellEditorValue() {
 		return symbol;
 	}
 
-	//Implement the one method defined by TableCellEditor.
+	// Implement the one method defined by TableCellEditor.
 	public Component getTableCellEditorComponent(JTable table, Object value,
-		boolean isSelected, int row, int column) {
+			boolean isSelected, int row, int column) {
 		symbol = (ISymbol) value;
-//		setBackground(symbol.getColor());
+		// setBackground(symbol.getColor());
 
 		return this;
 	}
@@ -134,7 +132,7 @@ public class SymbolCellEditor extends JButton implements TableCellEditor {
 	 */
 	public void cancelCellEditing() {
 		if (symbol != null) {
-//			setBackground(symbol.getColor());
+			// setBackground(symbol.getColor());
 		}
 
 		for (int i = 0; i < listeners.size(); i++) {
@@ -146,7 +144,7 @@ public class SymbolCellEditor extends JButton implements TableCellEditor {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public boolean stopCellEditing() {
@@ -161,9 +159,10 @@ public class SymbolCellEditor extends JButton implements TableCellEditor {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param anEvent DOCUMENT ME!
-	 *
+	 * 
+	 * @param anEvent
+	 *            DOCUMENT ME!
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public boolean isCellEditable(EventObject anEvent) {
@@ -172,9 +171,10 @@ public class SymbolCellEditor extends JButton implements TableCellEditor {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param anEvent DOCUMENT ME!
-	 *
+	 * 
+	 * @param anEvent
+	 *            DOCUMENT ME!
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public boolean shouldSelectCell(EventObject anEvent) {
@@ -183,8 +183,9 @@ public class SymbolCellEditor extends JButton implements TableCellEditor {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param l DOCUMENT ME!
+	 * 
+	 * @param l
+	 *            DOCUMENT ME!
 	 */
 	public void addCellEditorListener(CellEditorListener l) {
 		listeners.add(l);
@@ -192,8 +193,9 @@ public class SymbolCellEditor extends JButton implements TableCellEditor {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param l DOCUMENT ME!
+	 * 
+	 * @param l
+	 *            DOCUMENT ME!
 	 */
 	public void removeCellEditorListener(CellEditorListener l) {
 		listeners.remove(l);

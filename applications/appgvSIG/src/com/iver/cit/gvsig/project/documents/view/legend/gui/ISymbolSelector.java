@@ -47,16 +47,18 @@ import com.iver.andami.ui.mdiManager.IWindow;
  */
 public interface ISymbolSelector extends IWindow {
 	/**
-	 * Returns the symbol selected by the user or null if none. It tries to return
-	 * the simplest possible symbol that suits the user settings.
+	 * Returns the symbol selected by the user or null if none. It tries to
+	 * return the simplest possible symbol that suits the user settings.
+	 * 
 	 * @return
 	 */
 	public Object getSelectedObject();
 
 	/**
 	 * Sets the symbol selected by the user
+	 * 
 	 * @return
 	 */
 	public void setSymbol(Object symbol);
-	
+
 }

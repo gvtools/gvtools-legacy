@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.impl.referencing.gui;
 
 import java.awt.event.ItemEvent;
@@ -78,22 +78,21 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.cit.gvsig.referencing.TransformationsRegistry;
 import com.iver.cit.gvsig.referencing.TransformationsRegistry.TransformationRegistryEntry;
 
-public class ReferencingGeoprocessPanel extends AbstractGeoprocessGridbagPanel implements IReferencingGeoprocessUserEntries{
+public class ReferencingGeoprocessPanel extends AbstractGeoprocessGridbagPanel
+		implements IReferencingGeoprocessUserEntries {
 
 	private MapControl currentView;
-	
-//	private MappedPositionContainer verrorList;
 
-//	private String controlPointsTitle;
+	// private MappedPositionContainer verrorList;
+
+	// private String controlPointsTitle;
 
 	private String transformationTitle;
 
 	private VectorErrorTable vectorErrorTable;
-	
+
 	private JComboBox transformationOptionCb;
-	
-	
-	
+
 	public ReferencingGeoprocessPanel(FLayers layers) {
 		super(layers, PluginServices.getText(null, "SPATIAL_ADJUST"));
 	}
@@ -108,73 +107,81 @@ public class ReferencingGeoprocessPanel extends AbstractGeoprocessGridbagPanel i
 			MapControl mapControl = vista.getMapControl();
 			this.currentView = mapControl;
 		}
-		
-		
-//		controlPointsTitle = PluginServices.getText(null, "Control_points");
+
+		// controlPointsTitle = PluginServices.getText(null, "Control_points");
 		transformationTitle = PluginServices.getText(null, "Transform");
-		
-	
-//		JLabel controlPointsLbl = new JLabel(controlPointsTitle);
-//		addComponent(controlPointsLbl);
-		
+
+		// JLabel controlPointsLbl = new JLabel(controlPointsTitle);
+		// addComponent(controlPointsLbl);
+
 		JComboBox cb = getTransformationOptionCb();
-		addComponent(vectorErrorTable = new VectorErrorTable(currentView, 
-														 getInputLayer(),
-														 (TransformationRegistryEntry)cb.getSelectedItem() ));
-		
-		
+		addComponent(vectorErrorTable = new VectorErrorTable(currentView,
+				getInputLayer(),
+				(TransformationRegistryEntry) cb.getSelectedItem()));
+
 		JLabel transformTitleLbl = new JLabel(transformationTitle);
 		addComponent(transformTitleLbl);
-		
+
 		addComponent(cb);
-		
+
 		initSelectedItemsJCheckBox();
 		updateNumSelectedFeaturesLabel();
 	}
-	
-	
 
-	private JComboBox getTransformationOptionCb(){
-		if(transformationOptionCb == null){
+	private JComboBox getTransformationOptionCb() {
+		if (transformationOptionCb == null) {
 			transformationOptionCb = new JComboBox();
-			
-			Collection<TransformationRegistryEntry> transforms =
-					TransformationsRegistry.getRegisteredTransforms();
+
+			Collection<TransformationRegistryEntry> transforms = TransformationsRegistry
+					.getRegisteredTransforms();
 			Iterator<TransformationRegistryEntry> it = transforms.iterator();
-			while(it.hasNext()){
+			while (it.hasNext()) {
 				transformationOptionCb.addItem(it.next());
 			}
-			
+
 			transformationOptionCb.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						TransformationRegistryEntry selectedEntry = 
-							(TransformationRegistryEntry) e.getItem();
-						try{
-//							MathTransformBuilder transformBuilder = 
-//								selectedEntry.createTransformBuilder(verrorList.getAsList());
-							vectorErrorTable.setTransformBuilderProvider(selectedEntry);
-						}catch(MismatchedSizeException exception){
-							GUIUtil.getInstance().messageBox(PluginServices.getText(this, "INCORRECT_VERROR_LINKS"), 
-									PluginServices.getText(this, "TRANSFORMATION_ERROR"));
-						}catch(MismatchedDimensionException exception){
-							GUIUtil.getInstance().messageBox(PluginServices.getText(this, "INCORRECT_VERROR_LINKS"), 
-									PluginServices.getText(this, "TRANSFORMATION_ERROR"));
-						}catch(MismatchedReferenceSystemException exception){
-							GUIUtil.getInstance().messageBox(PluginServices.getText(this, "INCORRECT_VERROR_LINKS"), 
-									PluginServices.getText(this, "TRANSFORMATION_ERROR"));
+						TransformationRegistryEntry selectedEntry = (TransformationRegistryEntry) e
+								.getItem();
+						try {
+							// MathTransformBuilder transformBuilder =
+							// selectedEntry.createTransformBuilder(verrorList.getAsList());
+							vectorErrorTable
+									.setTransformBuilderProvider(selectedEntry);
+						} catch (MismatchedSizeException exception) {
+							GUIUtil.getInstance().messageBox(
+									PluginServices.getText(this,
+											"INCORRECT_VERROR_LINKS"),
+									PluginServices.getText(this,
+											"TRANSFORMATION_ERROR"));
+						} catch (MismatchedDimensionException exception) {
+							GUIUtil.getInstance().messageBox(
+									PluginServices.getText(this,
+											"INCORRECT_VERROR_LINKS"),
+									PluginServices.getText(this,
+											"TRANSFORMATION_ERROR"));
+						} catch (MismatchedReferenceSystemException exception) {
+							GUIUtil.getInstance().messageBox(
+									PluginServices.getText(this,
+											"INCORRECT_VERROR_LINKS"),
+									PluginServices.getText(this,
+											"TRANSFORMATION_ERROR"));
 						} catch (FactoryException exception) {
-							GUIUtil.getInstance().messageBox(PluginServices.getText(this, "FACTORY_EXCEPTION"), 
-									PluginServices.getText(this, "TRANSFORMATION_ERROR"));
+							GUIUtil.getInstance().messageBox(
+									PluginServices.getText(this,
+											"FACTORY_EXCEPTION"),
+									PluginServices.getText(this,
+											"TRANSFORMATION_ERROR"));
 						}
-						
+
 					}
 				}// itemStateChange
 			});
-		}//if transformationCb
+		}// if transformationCb
 		return transformationOptionCb;
 	}
-	
+
 	@Override
 	/**
 	 * This method is called when layer combo box selection changes.
@@ -185,16 +192,17 @@ public class ReferencingGeoprocessPanel extends AbstractGeoprocessGridbagPanel i
 
 	public MathTransform getMathTransform() throws GeoprocessException {
 		try {
-//			return  ((TransformationRegistryEntry)getTransformationOptionCb().getSelectedItem()).
-//							createTransformBuilder(verrorList.getAsList()).getMathTransform();
-			MappedPositionContainer mp = this.vectorErrorTable.getVerrorContainer();
-			return  ((TransformationRegistryEntry)getTransformationOptionCb().
-															getSelectedItem()).
-															createTransformBuilder(mp.getAsList()).
-															getMathTransform();
+			// return
+			// ((TransformationRegistryEntry)getTransformationOptionCb().getSelectedItem()).
+			// createTransformBuilder(verrorList.getAsList()).getMathTransform();
+			MappedPositionContainer mp = this.vectorErrorTable
+					.getVerrorContainer();
+			return ((TransformationRegistryEntry) getTransformationOptionCb()
+					.getSelectedItem()).createTransformBuilder(mp.getAsList())
+					.getMathTransform();
 		} catch (FactoryException e) {
 			throw new GeoprocessException(e);
-		}catch(RuntimeException re){
+		} catch (RuntimeException re) {
 			re.printStackTrace();
 			throw new GeoprocessException(re);
 		}
@@ -204,31 +212,30 @@ public class ReferencingGeoprocessPanel extends AbstractGeoprocessGridbagPanel i
 		return isFirstOnlySelected();
 	}
 
-
-
 	public FLyrVect[] getAuxiliarLyrs() {
-		if(hasAuxiliarLyrs()){
-			MappedPositionContainer mp = this.vectorErrorTable.getVerrorContainer();
-			TransformationRegistryEntry transformRegistryEntry = 
-				(TransformationRegistryEntry)getTransformationOptionCb().getSelectedItem();
-			RubberSheetBuilder transformBuilder = 
-				(RubberSheetBuilder) transformRegistryEntry.createTransformBuilder(mp.getAsList());
-			FLyrVect tinLyr = ReferencingUtil.getInstance().getTinAsFMapLyr(transformBuilder, currentView.getCrs());
-			return new FLyrVect[]{tinLyr};
-		}else{
-			return new FLyrVect[]{};
+		if (hasAuxiliarLyrs()) {
+			MappedPositionContainer mp = this.vectorErrorTable
+					.getVerrorContainer();
+			TransformationRegistryEntry transformRegistryEntry = (TransformationRegistryEntry) getTransformationOptionCb()
+					.getSelectedItem();
+			RubberSheetBuilder transformBuilder = (RubberSheetBuilder) transformRegistryEntry
+					.createTransformBuilder(mp.getAsList());
+			FLyrVect tinLyr = ReferencingUtil.getInstance().getTinAsFMapLyr(
+					transformBuilder, currentView.getCrs());
+			return new FLyrVect[] { tinLyr };
+		} else {
+			return new FLyrVect[] {};
 		}
 	}
 
-
-
 	public boolean hasAuxiliarLyrs() {
-		//by now, the only transformation with auxiliar layers is Rubber Sheet Transform,
-		//being this auxiliar layer TIN formed with mapped positions.
-		TransformationRegistryEntry transformRegistryEntry = 
-			(TransformationRegistryEntry)getTransformationOptionCb().getSelectedItem();
-		return transformRegistryEntry.getName().
-			equals(PluginServices.getText(null, "RUBBER_SHEET_TRANSFORM"));
+		// by now, the only transformation with auxiliar layers is Rubber Sheet
+		// Transform,
+		// being this auxiliar layer TIN formed with mapped positions.
+		TransformationRegistryEntry transformRegistryEntry = (TransformationRegistryEntry) getTransformationOptionCb()
+				.getSelectedItem();
+		return transformRegistryEntry.getName().equals(
+				PluginServices.getText(null, "RUBBER_SHEET_TRANSFORM"));
 	}
 
 }

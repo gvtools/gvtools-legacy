@@ -32,143 +32,140 @@ import org.gvsig.raster.dataset.RasterDataset;
 import org.gvsig.raster.dataset.io.RasterDriverException;
 
 /**
- * Este test prueba la gestión de multifichero de la clase RasterMultiFile
- * y que incorpora un Grid, así como la gestión de bandas que tiene BandList
- * y que incorpora GeoRasterMultiFile.
+ * Este test prueba la gestión de multifichero de la clase RasterMultiFile y que
+ * incorpora un Grid, así como la gestión de bandas que tiene BandList y que
+ * incorpora GeoRasterMultiFile.
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public class TestDataSourceMultiFile extends TestCase{
+public class TestDataSourceMultiFile extends TestCase {
 	private String baseDir = "./test-images/";
 
 	private String path1 = baseDir + "band1-30x28byte.tif";
 	private String path2 = baseDir + "band2-30x28byte.tif";
 	private String path3 = baseDir + "band3-30x28byte.tif";
-	
+
 	private RasterDataset f1 = null;
 	private RasterDataset f2 = null;
 	private RasterDataset f3 = null;
-	
+
 	private BufferFactory ds = null;
-	
-	public void start(){
+
+	public void start() {
 		this.setUp();
 		this.testStack();
 	}
-	
-	static{
+
+	static {
 		RasterLibrary.wakeUp();
 	}
-	
+
 	public void setUp() {
 		System.err.println("TestDataSourceMultiFile running...");
 		try {
 			f1 = RasterDataset.open(null, path1);
 			f2 = RasterDataset.open(null, path2);
 			f3 = RasterDataset.open(null, path3);
-			//f4 = RasterDataset.openFile(null, path4);
+			// f4 = RasterDataset.openFile(null, path4);
 		} catch (NotSupportedExtensionException e) {
 			e.printStackTrace();
 		} catch (RasterDriverException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public void testStack(){
-	
-		//EL CONSTRUCTOR AÑADE FICHERO 1
+
+	public void testStack() {
+
+		// EL CONSTRUCTOR AÑADE FICHERO 1
 		ds = new BufferFactory(f1);
-		//Comprobación de número y nombre de ficheros
+		// Comprobación de número y nombre de ficheros
 		String[] fileList = ds.getDataSource().getNameDatasetStringList(0, 0);
 		assertEquals(fileList.length, 1);
 		assertEquals(fileList[0], path1);
-		//Comprobación de bandas
+		// Comprobación de bandas
 		String[] bandList = ds.getDataSource().getBands().getBandStringList();
 		assertEquals(bandList.length, 1);
 		assertEquals(bandList[0], path1);
-		
-		//AÑADIMOS FICHERO 2
+
+		// AÑADIMOS FICHERO 2
 		ds.addFile(f2);
 		fileList = ds.getDataSource().getNameDatasetStringList(0, 0);
-		//Comprobación de número y nombre de ficheros
+		// Comprobación de número y nombre de ficheros
 		assertEquals(fileList.length, 2);
 		assertEquals(fileList[0], path1);
 		assertEquals(fileList[1], path2);
-		//Comprobación de bandas
+		// Comprobación de bandas
 		bandList = ds.getDataSource().getBands().getBandStringList();
 		assertEquals(bandList.length, 2);
 		assertEquals(bandList[0], path1);
 		assertEquals(bandList[1], path2);
-		
-		//AÑADIMOS FICHERO 3
+
+		// AÑADIMOS FICHERO 3
 		ds.addFile(f3);
 		fileList = ds.getDataSource().getNameDatasetStringList(0, 0);
-		//Comprobación de número y nombre de ficheros
+		// Comprobación de número y nombre de ficheros
 		assertEquals(fileList.length, 3);
 		assertEquals(fileList[0], path1);
 		assertEquals(fileList[1], path2);
 		assertEquals(fileList[2], path3);
-		//Comprobación de bandas
+		// Comprobación de bandas
 		bandList = ds.getDataSource().getBands().getBandStringList();
 		assertEquals(bandList.length, 3);
 		assertEquals(bandList[0], path1);
 		assertEquals(bandList[1], path2);
 		assertEquals(bandList[2], path3);
-		//Posicion dentro del fichero
+		// Posicion dentro del fichero
 		int[] bandPos = ds.getDataSource().getBands().getBandPositionList();
-		for(int i = 0; i < bandPos.length; i++)
+		for (int i = 0; i < bandPos.length; i++)
 			assertEquals(bandPos[i], 0);
-		
-		//ELIMINAMOS FICHERO 2
+
+		// ELIMINAMOS FICHERO 2
 		ds.removeFile(f2);
 		fileList = ds.getDataSource().getNameDatasetStringList(0, 0);
-		//Comprobación de número y nombre de ficheros
+		// Comprobación de número y nombre de ficheros
 		assertEquals(fileList.length, 2);
 		assertEquals(fileList[0], path1);
 		assertEquals(fileList[1], path3);
-		//Comprobación de bandas
+		// Comprobación de bandas
 		bandList = ds.getDataSource().getBands().getBandStringList();
 		assertEquals(bandList.length, 2);
 		assertEquals(bandList[0], path1);
 		assertEquals(bandList[1], path3);
-		
-		//ELIMINAMOS FICHERO 1
+
+		// ELIMINAMOS FICHERO 1
 		ds.removeFile(f1);
 		fileList = ds.getDataSource().getNameDatasetStringList(0, 0);
-		//Comprobación de número y nombre de ficheros
+		// Comprobación de número y nombre de ficheros
 		assertEquals(fileList.length, 1);
 		assertEquals(fileList[0], path3);
-		//Comprobación de bandas
+		// Comprobación de bandas
 		bandList = ds.getDataSource().getBands().getBandStringList();
 		assertEquals(bandList.length, 1);
 		assertEquals(bandList[0], path3);
-		
-		//ELIMINAMOS FICHERO 3
+
+		// ELIMINAMOS FICHERO 3
 		ds.removeFile(f3);
 		fileList = ds.getDataSource().getNameDatasetStringList(0, 0);
-		//Comprobación de número y nombre de ficheros
+		// Comprobación de número y nombre de ficheros
 		assertEquals(fileList.length, 0);
-		//Comprobación de bandas
+		// Comprobación de bandas
 		bandList = ds.getDataSource().getBands().getBandStringList();
 		assertEquals(bandList.length, 0);
 
-		//AÑADIMOS FICHERO 4
-		/*ds.addFile(f4);
-		fileList = ds.getDataSource().getNameDatasetStringList();
-		//Comprobación de número y nombre de ficheros
-		assertEquals(fileList.length, 1);
-		assertEquals(fileList[0], path4);
-		//Comprobación de bandas
-		bandList = ds.getDataSource().getBands().getBandStringList();
-		assertEquals(bandList.length, 4);
-		assertEquals(bandList[0], path4);
-		assertEquals(bandList[1], path4);
-		assertEquals(bandList[2], path4);
-		assertEquals(bandList[3], path4);
-		//Posicion dentro del fichero
-		bandPos = ds.getDataSource().getBands().getBandPositionList();
-		for(int i = 0; i < bandPos.length; i++)
-			assertEquals(bandPos[i], i);*/
+		// AÑADIMOS FICHERO 4
+		/*
+		 * ds.addFile(f4); fileList =
+		 * ds.getDataSource().getNameDatasetStringList(); //Comprobación de
+		 * número y nombre de ficheros assertEquals(fileList.length, 1);
+		 * assertEquals(fileList[0], path4); //Comprobación de bandas bandList =
+		 * ds.getDataSource().getBands().getBandStringList();
+		 * assertEquals(bandList.length, 4); assertEquals(bandList[0], path4);
+		 * assertEquals(bandList[1], path4); assertEquals(bandList[2], path4);
+		 * assertEquals(bandList[3], path4); //Posicion dentro del fichero
+		 * bandPos = ds.getDataSource().getBands().getBandPositionList();
+		 * for(int i = 0; i < bandPos.length; i++) assertEquals(bandPos[i], i);
+		 */
 	}
 
 }

@@ -1,4 +1,5 @@
 package org.gvsig.gpe.containers;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -63,7 +64,6 @@ public class Geometry {
 	private String srs = null;
 	private int dimension = 0;
 
-
 	/**
 	 * Constructor
 	 */
@@ -82,7 +82,8 @@ public class Geometry {
 	}
 
 	/**
-	 * @param srs the srs to set
+	 * @param srs
+	 *            the srs to set
 	 */
 	public void setSrs(String srs) {
 		this.srs = srs;
@@ -96,18 +97,20 @@ public class Geometry {
 	}
 
 	/**
-	 * @param bbox the bbox to set
+	 * @param bbox
+	 *            the bbox to set
 	 */
 	public void setBbox(Bbox bbox) {
 		this.bbox = bbox;
 	}
-	
+
 	/**
-	 * @param bbox the bbox to set
+	 * @param bbox
+	 *            the bbox to set
 	 */
 	public void setBbox(Object bbox) {
-		if (bbox instanceof Bbox){
-			this.bbox = (Bbox)bbox;
+		if (bbox instanceof Bbox) {
+			this.bbox = (Bbox) bbox;
 		}
 	}
 
@@ -119,7 +122,8 @@ public class Geometry {
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	public void setId(String id) {
 		this.id = id;
@@ -137,10 +141,11 @@ public class Geometry {
 	}
 
 	/**
-	 * @param dimension the dimension to set
+	 * @param dimension
+	 *            the dimension to set
 	 */
 	public void setDimension(int dimension) {
 		this.dimension = dimension;
 	}
-	
+
 }

@@ -40,15 +40,14 @@
  */
 package com.iver.cit.gvsig.exceptions.visitors;
 
-
 /**
  * Excepción lanzada por los Visitors.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class StopVisitorException extends VisitorException {
-	public StopVisitorException(String layer,Throwable exception) {
-		super(layer,exception);
+	public StopVisitorException(String layer, Throwable exception) {
+		super(layer, exception);
 		init();
 		// initCause(exception);
 	}

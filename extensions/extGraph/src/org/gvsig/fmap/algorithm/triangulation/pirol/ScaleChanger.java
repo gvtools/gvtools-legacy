@@ -6,8 +6,8 @@
  */
 package org.gvsig.fmap.algorithm.triangulation.pirol;
 
-
 public interface ScaleChanger {
-	public double scale( double value, int dimension );
-	public double unScale( double value, int dimension );
+	public double scale(double value, int dimension);
+
+	public double unScale(double value, int dimension);
 }

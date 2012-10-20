@@ -45,34 +45,36 @@ import org.gvsig.raster.gui.preferences.combocolortable.PreferenceColorTableIcon
 import org.gvsig.raster.util.BasePanel;
 
 import com.iver.utiles.FileUtils;
+
 /**
- * PreferenceLoadLayer es una clase para la configuracion de las preferencias
- * de una capa raster.
+ * PreferenceLoadLayer es una clase para la configuracion de las preferencias de
+ * una capa raster.
  * 
  * @version 14/12/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class PreferenceLoadLayer extends BasePanel implements ActionListener {
-	private static final long    serialVersionUID      = 1L;
-	private JComboBox            comboBoxColorTable    = null;
-	private JRadioButton         radioButtonRealce     = null;
-	private JRadioButton         radioButtonColorTable = null;
-	private JLabel               labelLoadLayer        = null;
-	private ButtonGroup          buttonGroup           = null;
+	private static final long serialVersionUID = 1L;
+	private JComboBox comboBoxColorTable = null;
+	private JRadioButton radioButtonRealce = null;
+	private JRadioButton radioButtonColorTable = null;
+	private JLabel labelLoadLayer = null;
+	private ButtonGroup buttonGroup = null;
 
 	/**
-	 *Inicializa componentes gráficos y traduce
+	 * Inicializa componentes gráficos y traduce
 	 */
 	public PreferenceLoadLayer() {
 		init();
 		translate();
 	}
-	
+
 	/**
 	 * Traduce los textos de esta clase
 	 */
 	protected void translate() {
-		setBorder(BorderFactory.createTitledBorder(getText(this, "carga_capas")));
+		setBorder(BorderFactory
+				.createTitledBorder(getText(this, "carga_capas")));
 		getLabelLoadLayer().setText(getText(this, "loadlayer_aplicar") + ":");
 		getRadioButtonRealce().setText(getText(this, "realce"));
 		getRadioButtonColorTable().setText(getText(this, "tabla_color"));
@@ -115,21 +117,23 @@ public class PreferenceLoadLayer extends BasePanel implements ActionListener {
 		gridBagConstraints.insets = new Insets(2, 2, 5, 5);
 		add(getComboBoxColorTable(), gridBagConstraints);
 	}
-	
+
 	/**
 	 * Obtiene el path del fichero de paletas
+	 * 
 	 * @return
 	 */
 	public String getPalettesPath() {
-		return ( FileUtils.getAppHomeDir() + "colortable" );
+		return (FileUtils.getAppHomeDir() + "colortable");
 	}
-	
+
 	/**
-	 * Obtiene el grupo de botones 
+	 * Obtiene el grupo de botones
+	 * 
 	 * @return ButtonGroup
 	 */
 	public ButtonGroup getButtonGroup() {
-		if(buttonGroup == null)
+		if (buttonGroup == null)
 			buttonGroup = new ButtonGroup();
 		return buttonGroup;
 	}
@@ -140,7 +144,8 @@ public class PreferenceLoadLayer extends BasePanel implements ActionListener {
 			getButtonGroup().add(radioButtonRealce);
 			radioButtonRealce.addActionListener(this);
 			radioButtonRealce.setSelected(true);
-			radioButtonRealce.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+			radioButtonRealce.setBorder(BorderFactory.createEmptyBorder(0, 0,
+					0, 0));
 			radioButtonRealce.setMargin(new Insets(0, 0, 0, 0));
 		}
 		return radioButtonRealce;
@@ -151,7 +156,8 @@ public class PreferenceLoadLayer extends BasePanel implements ActionListener {
 			radioButtonColorTable = new JRadioButton();
 			getButtonGroup().add(radioButtonColorTable);
 			radioButtonColorTable.addActionListener(this);
-			radioButtonColorTable.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+			radioButtonColorTable.setBorder(BorderFactory.createEmptyBorder(0,
+					0, 0, 0));
 			radioButtonColorTable.setMargin(new Insets(0, 0, 0, 0));
 		}
 		return radioButtonColorTable;
@@ -168,11 +174,14 @@ public class PreferenceLoadLayer extends BasePanel implements ActionListener {
 		if (comboBoxColorTable == null) {
 			comboBoxColorTable = new JComboBox();
 
-			ArrayList fileList = ColorTableLibraryPersistence.getPaletteFileList(getPalettesPath());
+			ArrayList fileList = ColorTableLibraryPersistence
+					.getPaletteFileList(getPalettesPath());
 
 			for (int i = 0; i < fileList.size(); i++) {
 				ArrayList paletteItems = new ArrayList();
-				String paletteName = ColorTableLibraryPersistence.loadPalette(getPalettesPath(), (String) fileList.get(i), paletteItems);
+				String paletteName = ColorTableLibraryPersistence.loadPalette(
+						getPalettesPath(), (String) fileList.get(i),
+						paletteItems);
 
 				if (paletteItems.size() <= 0)
 					continue;
@@ -190,10 +199,14 @@ public class PreferenceLoadLayer extends BasePanel implements ActionListener {
 			}
 
 			comboBoxColorTable.setRenderer(new ListCellRenderer() {
-				public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+				public Component getListCellRendererComponent(JList list,
+						Object value, int index, boolean isSelected,
+						boolean cellHasFocus) {
 					ArrayList array = (ArrayList) value;
 
-					PaintItem paintItem = new PaintItem((String) array.get(0), (PreferenceColorTableIconPainter) array.get(1), isSelected);
+					PaintItem paintItem = new PaintItem((String) array.get(0),
+							(PreferenceColorTableIconPainter) array.get(1),
+							isSelected);
 					return paintItem;
 				}
 			});
@@ -216,8 +229,9 @@ public class PreferenceLoadLayer extends BasePanel implements ActionListener {
 
 	private boolean selectComboName(String name) {
 		if (name != null) {
-			for (int i=0; i<getComboBoxColorTable().getItemCount(); i++) {
-				if (((String) ((ArrayList) getComboBoxColorTable().getItemAt(i)).get(0)).equals(name)) {
+			for (int i = 0; i < getComboBoxColorTable().getItemCount(); i++) {
+				if (((String) ((ArrayList) getComboBoxColorTable().getItemAt(i))
+						.get(0)).equals(name)) {
 					getComboBoxColorTable().setSelectedIndex(i);
 					return true;
 				}
@@ -230,7 +244,8 @@ public class PreferenceLoadLayer extends BasePanel implements ActionListener {
 	 * Establece los valores que ha definido el usuario en los componentes
 	 */
 	public void initializeValues() {
-		String colorTable = Configuration.getValue("loadlayer_usecolortable", (String) null);
+		String colorTable = Configuration.getValue("loadlayer_usecolortable",
+				(String) null);
 
 		boolean finded = selectComboName(colorTable);
 
@@ -246,11 +261,14 @@ public class PreferenceLoadLayer extends BasePanel implements ActionListener {
 	}
 
 	/**
-	 * Guarda los valores que hay en los componentes como valores de configuracion
+	 * Guarda los valores que hay en los componentes como valores de
+	 * configuracion
 	 */
 	public void storeValues() {
 		if (getRadioButtonColorTable().isSelected())
-			Configuration.setValue("loadlayer_usecolortable", (String) ((ArrayList) getComboBoxColorTable().getSelectedItem()).get(0));
+			Configuration.setValue("loadlayer_usecolortable",
+					(String) ((ArrayList) getComboBoxColorTable()
+							.getSelectedItem()).get(0));
 		else
 			Configuration.setValue("loadlayer_usecolortable", null);
 	}

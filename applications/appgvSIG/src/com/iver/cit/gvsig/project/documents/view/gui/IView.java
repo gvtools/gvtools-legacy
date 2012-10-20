@@ -52,34 +52,33 @@ import com.iver.cit.gvsig.project.documents.view.toc.gui.TOC;
 /**
  * @author FJP
  * 
- * El motivo de tener un Interfaz IView es para poder tener aplicaciones
- * como SingleView, que permiten tener un interfaz del tipo SDI en lugar
- * de MDI.
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
+ *         El motivo de tener un Interfaz IView es para poder tener aplicaciones
+ *         como SingleView, que permiten tener un interfaz del tipo SDI en lugar
+ *         de MDI.
+ * 
+ *         TODO To change the template for this generated type comment go to
+ *         Window - Preferences - Java - Code Generation - Code and Comments
  */
 public interface IView {
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public abstract MapControl getMapControl();
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public abstract TOC getTOC();
-	
-    /**
-     * Create the internal componentes and populate the window with them.
-     * If the layout properties were set using the
-     * <code>setWindowData(WindowData)</code>
-     * method, the window will be populated according to this
-     * properties.
-     */
-	//public abstract void initialize();
+
+	/**
+	 * Create the internal componentes and populate the window with them. If the
+	 * layout properties were set using the
+	 * <code>setWindowData(WindowData)</code> method, the window will be
+	 * populated according to this properties.
+	 */
+	// public abstract void initialize();
 }

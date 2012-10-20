@@ -40,22 +40,21 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: FeatureDependentLabeled.java 10671 2007-03-09 08:33:43Z jaume $
-* $Log$
-* Revision 1.2  2007-03-09 08:33:43  jaume
-* *** empty log message ***
-*
-* Revision 1.1.2.2  2007/02/01 11:42:47  jaume
-* *** empty log message ***
-*
-* Revision 1.1.2.1  2007/01/30 18:10:45  jaume
-* start commiting labeling stuff
-*
-*
-*/
+ *
+ * $Id: FeatureDependentLabeled.java 10671 2007-03-09 08:33:43Z jaume $
+ * $Log$
+ * Revision 1.2  2007-03-09 08:33:43  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1.2.2  2007/02/01 11:42:47  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1.2.1  2007/01/30 18:10:45  jaume
+ * start commiting labeling stuff
+ *
+ *
+ */
 package org.gvsig.symbology.fmap.labeling;
-
 
 import java.util.ArrayList;
 
@@ -72,9 +71,10 @@ public class FeatureDependentLabeled implements ILabelingMethod {
 	private boolean flagDefinesPriorities;
 	private ArrayList<LabelClass> classes = new ArrayList<LabelClass>();
 
-	public void addLabelClass(LabelClass lbl) throws IllegalArgumentException{
-		if (getLabelClassByName(lbl.getName()) !=null) {
-			throw new IllegalArgumentException("A class with the same name already exists!");
+	public void addLabelClass(LabelClass lbl) throws IllegalArgumentException {
+		if (getLabelClassByName(lbl.getName()) != null) {
+			throw new IllegalArgumentException(
+					"A class with the same name already exists!");
 		}
 		classes.add(lbl);
 	}
@@ -92,10 +92,8 @@ public class FeatureDependentLabeled implements ILabelingMethod {
 		xml.putProperty("className", getClassName());
 		xml.putProperty("definesPriorities", definesPriorities());
 
-
-
 		LabelClass[] labels = getLabelClasses();
-		if (labels!=null) {
+		if (labels != null) {
 			XMLEntity xmlLabels = new XMLEntity();
 			xmlLabels.putProperty("id", "LabelClasses");
 			for (int i = 0; i < labels.length; i++) {
@@ -116,14 +114,14 @@ public class FeatureDependentLabeled implements ILabelingMethod {
 
 		XMLEntity aux = xml.firstChild("id", "defaultLabelClass");
 
-//		if (aux!=null)
-//			defaultLabel = LabelingFactory.createLabelClassFromXML(aux);
+		// if (aux!=null)
+		// defaultLabel = LabelingFactory.createLabelClassFromXML(aux);
 
 		aux = xml.firstChild("id", "LabelClasses");
-		if (aux!=null) {
+		if (aux != null) {
 			for (int i = 0; i < aux.getChildrenCount(); i++) {
-				addLabelClass(LabelingFactory.
-						createLabelClassFromXML(aux.getChild(i)));
+				addLabelClass(LabelingFactory.createLabelClassFromXML(aux
+						.getChild(i)));
 			}
 		}
 	}
@@ -137,36 +135,39 @@ public class FeatureDependentLabeled implements ILabelingMethod {
 		label.setName(newName);
 	}
 
-	public IFeatureIterator getFeatureIteratorByLabelClass(FLyrVect layer, LabelClass lc, ViewPort viewPort, String[] usedFields)
-	throws ReadDriverException {
-//		if(lc.isUseSqlQuery()){
+	public IFeatureIterator getFeatureIteratorByLabelClass(FLyrVect layer,
+			LabelClass lc, ViewPort viewPort, String[] usedFields)
+			throws ReadDriverException {
+		// if(lc.isUseSqlQuery()){
 		String sqlFields = "";
 		for (int i = 0; i < usedFields.length; i++) {
 			sqlFields += usedFields[i];
-			if (i < usedFields.length -1) sqlFields += ", ";
+			if (i < usedFields.length - 1)
+				sqlFields += ", ";
 		}
 		String fieldNames[] = layer.getSource().getRecordset().getFieldNames();
 		StringBuilder sql = new StringBuilder();
 		sql.append("select ");
-		for (int i=0; i<fieldNames.length-1; i++) {
+		for (int i = 0; i < fieldNames.length - 1; i++) {
 			sql.append(fieldNames[i]);
 			sql.append(",");
 		}
-		sql.append(fieldNames[fieldNames.length-1]);
+		sql.append(fieldNames[fieldNames.length - 1]);
 		sql.append(" from ");
 		sql.append(layer.getRecordset().getName());
-		if(lc.isUseSqlQuery()){
+		if (lc.isUseSqlQuery()) {
 			sql.append(" where ");
 			sql.append(lc.getSQLQuery());
 		}
 		sql.append(";");
-		return layer.getSource().getFeatureIterator(sql.toString(), layer.getCrs());
-//		}
-//		else {
-//			return layer.getSource().getFeatureIterator(
-//					viewPort.getAdjustedExtent(), usedFields,
-//					layer.getProjection(), true);
-//		}
+		return layer.getSource().getFeatureIterator(sql.toString(),
+				layer.getCrs());
+		// }
+		// else {
+		// return layer.getSource().getFeatureIterator(
+		// viewPort.getAdjustedExtent(), usedFields,
+		// layer.getProjection(), true);
+		// }
 	}
 
 	public boolean definesPriorities() {

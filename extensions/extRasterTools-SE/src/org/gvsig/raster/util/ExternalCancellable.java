@@ -23,17 +23,18 @@ import org.gvsig.raster.dataset.io.IExternalCancellable;
 
 public class ExternalCancellable implements IExternalCancellable {
 	private IncrementableTask task = null;
-	
+
 	public ExternalCancellable(IncrementableTask task) {
 		this.task = task;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.io.IExternalCancellable#processFinalize()
 	 */
 	public void processFinalize() {
-		if(task != null)
+		if (task != null)
 			task.processFinalize();
 	}
 }

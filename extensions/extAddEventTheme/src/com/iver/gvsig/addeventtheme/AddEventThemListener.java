@@ -19,8 +19,7 @@ import com.iver.cit.gvsig.fmap.layers.LayerEvent;
 import com.iver.cit.gvsig.fmap.layers.LayerListener;
 import com.iver.utiles.DoubleUtilities;
 
-public class AddEventThemListener implements LayerListener,IEditionListener{
-
+public class AddEventThemListener implements LayerListener, IEditionListener {
 
 	public void visibilityChanged(LayerEvent e) {
 
@@ -35,9 +34,9 @@ public class AddEventThemListener implements LayerListener,IEditionListener{
 	}
 
 	public void editionChanged(LayerEvent e) {
-		if (e.getSource().isEditing()){
-			VectorialEditableAdapter vea =
-				(VectorialEditableAdapter)((FLyrVect)e.getSource()).getSource();
+		if (e.getSource().isEditing()) {
+			VectorialEditableAdapter vea = (VectorialEditableAdapter) ((FLyrVect) e
+					.getSource()).getSource();
 			vea.addEditionListener(this);
 		}
 	}
@@ -47,42 +46,44 @@ public class AddEventThemListener implements LayerListener,IEditionListener{
 
 	}
 
-	public void beforeRowEditEvent(IRow feat,BeforeRowEditEvent e) {
+	public void beforeRowEditEvent(IRow feat, BeforeRowEditEvent e) {
 		if (EditionEvent.CHANGE_TYPE_MODIFY == e.getChangeType()) {
 			VectorialEditableAdapter vea = (VectorialEditableAdapter) e
 					.getSource();
-//			int numRow = (int) e.getNumRow();
-			//DefaultFeature df = null;
-			//df = (DefaultFeature) vea.getFeature(numRow);
+			// int numRow = (int) e.getNumRow();
+			// DefaultFeature df = null;
+			// df = (DefaultFeature) vea.getFeature(numRow);
 			if (EditionEvent.GRAPHIC == e.getSourceType()) {
 				double[] d = new double[4];
-				IGeometry g = ((DefaultFeature)feat).getGeometry();
+				IGeometry g = ((DefaultFeature) feat).getGeometry();
 				g.getPathIterator(null).currentSegment(d);
 				int[] xy = ((AddEventThemeDriver) vea.getDriver())
 						.getFieldsIndex();
-				Value[] values = ((DefaultFeature)feat).getAttributes();
-				values[xy[0]] = ValueFactory.createValue(DoubleUtilities.format(d[0],".".charAt(0),6));
-				values[xy[1]] = ValueFactory.createValue(DoubleUtilities.format(d[1],".".charAt(0),6));
-				//feat = new DefaultFeature(g, values);
-				//Value value0=vea.getRecordset().getFieldValue(numRow,xy[0]);
-				//((DoubleValue)value0).setValue(d[0]);
-				//Value value1=vea.getRecordset().getFieldValue(numRow,xy[1]);
-				//((DoubleValue)value1).setValue(d[1]);
-				//vea.setRow(numRow, df);
+				Value[] values = ((DefaultFeature) feat).getAttributes();
+				values[xy[0]] = ValueFactory.createValue(DoubleUtilities
+						.format(d[0], ".".charAt(0), 6));
+				values[xy[1]] = ValueFactory.createValue(DoubleUtilities
+						.format(d[1], ".".charAt(0), 6));
+				// feat = new DefaultFeature(g, values);
+				// Value value0=vea.getRecordset().getFieldValue(numRow,xy[0]);
+				// ((DoubleValue)value0).setValue(d[0]);
+				// Value value1=vea.getRecordset().getFieldValue(numRow,xy[1]);
+				// ((DoubleValue)value1).setValue(d[1]);
+				// vea.setRow(numRow, df);
 			} else if (EditionEvent.ALPHANUMERIC == e.getSourceType()) {
-				IGeometry g = ((DefaultFeature)feat).getGeometry();
+				IGeometry g = ((DefaultFeature) feat).getGeometry();
 				int[] xy = ((AddEventThemeDriver) vea.getDriver())
 						.getFieldsIndex();
 				NumericValue x = (NumericValue) ((DefaultFeature) feat)
 						.getAttribute(xy[0]);
 				NumericValue y = (NumericValue) ((DefaultFeature) feat)
 						.getAttribute(xy[1]);
-				g = ShapeFactory.createPoint2D(x.doubleValue(), y
-						.doubleValue());
-				((DefaultFeature)feat).setGeometry(g);
-				//feat = new DefaultFeature(g, ((DefaultFeature) feat)
-				//		.getAttributes());
-				//vea.setRow(numRow, df);
+				g = ShapeFactory
+						.createPoint2D(x.doubleValue(), y.doubleValue());
+				((DefaultFeature) feat).setGeometry(g);
+				// feat = new DefaultFeature(g, ((DefaultFeature) feat)
+				// .getAttributes());
+				// vea.setRow(numRow, df);
 			}
 		}
 	}
@@ -92,14 +93,17 @@ public class AddEventThemListener implements LayerListener,IEditionListener{
 		if (EditionEvent.CHANGE_TYPE_ADD == e.getChangeType()) {
 			if (EditionEvent.GRAPHIC == e.getSourceType()) {
 				double[] d = new double[4];
-				if (feat==null)return;
-				IGeometry g = ((DefaultFeature)feat).getGeometry();
+				if (feat == null)
+					return;
+				IGeometry g = ((DefaultFeature) feat).getGeometry();
 				g.getPathIterator(null).currentSegment(d);
 				int[] xy = ((AddEventThemeDriver) vea.getDriver())
 						.getFieldsIndex();
-				Value[] values = ((DefaultFeature)feat).getAttributes();
-				values[xy[0]] = ValueFactory.createValue(DoubleUtilities.format(d[0],".".charAt(0),6));
-				values[xy[1]] = ValueFactory.createValue(DoubleUtilities.format(d[1],".".charAt(0),6));
+				Value[] values = ((DefaultFeature) feat).getAttributes();
+				values[xy[0]] = ValueFactory.createValue(DoubleUtilities
+						.format(d[0], ".".charAt(0), 6));
+				values[xy[1]] = ValueFactory.createValue(DoubleUtilities
+						.format(d[1], ".".charAt(0), 6));
 			}
 		}
 	}
@@ -114,14 +118,16 @@ public class AddEventThemListener implements LayerListener,IEditionListener{
 
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.layers.LayerListener#drawValueChanged(com.iver.cit.gvsig.fmap.layers.LayerEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.LayerListener#drawValueChanged(com.iver
+	 * .cit.gvsig.fmap.layers.LayerEvent)
 	 */
 	public void drawValueChanged(LayerEvent e) {
 		// TODO Auto-generated method stub
 
 	}
-
-
 
 }

@@ -65,14 +65,13 @@ import com.iver.utiles.extensionPoints.ExtensionPoint;
 import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
-
 /**
  * Clase base de los elementos del proyecto (mapas, tablas y vistas)
- *
+ * 
  * @author Fernando González Cortés
  */
 public abstract class ProjectDocument implements Serializable {
-	public static HashMap<String,Integer> NUMS = new HashMap<String,Integer>();
+	public static HashMap<String, Integer> NUMS = new HashMap<String, Integer>();
 	protected PropertyChangeSupport change;
 	protected Project project;
 	protected int index;
@@ -82,11 +81,11 @@ public abstract class ProjectDocument implements Serializable {
 	protected String comment;
 	private boolean locked = false;
 	protected WindowData windowData = null;
-	private boolean isModified=false;
+	private boolean isModified = false;
 	private ProjectDocumentFactory projectDocumentFactory;
-	
+
 	private ArrayList<ProjectDocumentListener> projectDocListener = new ArrayList<ProjectDocumentListener>();
-	
+
 	/**
 	 * Creates a new ProjectElement object.
 	 */
@@ -104,7 +103,7 @@ public abstract class ProjectDocument implements Serializable {
 
 	/**
 	 * Obtiene el nombre del elemento
-	 *
+	 * 
 	 * @return
 	 */
 	public String getName() {
@@ -113,7 +112,7 @@ public abstract class ProjectDocument implements Serializable {
 
 	/**
 	 * Establece el nombre del elemento
-	 *
+	 * 
 	 * @param string
 	 */
 	public void setName(String string) {
@@ -124,7 +123,7 @@ public abstract class ProjectDocument implements Serializable {
 
 	/**
 	 * Obtiene la fecha de creación del elemento
-	 *
+	 * 
 	 * @return
 	 */
 	public String getCreationDate() {
@@ -133,7 +132,7 @@ public abstract class ProjectDocument implements Serializable {
 
 	/**
 	 * Obtiene el propietario del elemento
-	 *
+	 * 
 	 * @return
 	 */
 	public String getOwner() {
@@ -142,7 +141,7 @@ public abstract class ProjectDocument implements Serializable {
 
 	/**
 	 * Establece la fecha de creación del elemento.
-	 *
+	 * 
 	 * @param string
 	 */
 	public void setCreationDate(String string) {
@@ -152,7 +151,7 @@ public abstract class ProjectDocument implements Serializable {
 
 	/**
 	 * Establece el propietario del elemento
-	 *
+	 * 
 	 * @param string
 	 */
 	public void setOwner(String string) {
@@ -162,7 +161,7 @@ public abstract class ProjectDocument implements Serializable {
 
 	/**
 	 * Obtiene los comentarios del proyecto
-	 *
+	 * 
 	 * @return
 	 */
 	public String getComment() {
@@ -171,7 +170,7 @@ public abstract class ProjectDocument implements Serializable {
 
 	/**
 	 * Establece los comentarios del proyecto
-	 *
+	 * 
 	 * @param string
 	 */
 	public void setComment(String string) {
@@ -181,118 +180,136 @@ public abstract class ProjectDocument implements Serializable {
 
 	/**
 	 * Añade un listener para los cambios en las bounded properties
-	 *
+	 * 
 	 * @param listener
 	 */
 	public synchronized void addPropertyChangeListener(
-		PropertyChangeListener listener) {
+			PropertyChangeListener listener) {
 		change.addPropertyChangeListener(listener);
 	}
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 * @throws XMLException
 	 * @throws SaveException
 	 */
 	public XMLEntity getXMLEntity() throws SaveException {
 		XMLEntity xml = new XMLEntity();
-		try{
-		//xml.putProperty("nameRegister",this.getRegisterName());
-		xml.putProperty("className", projectDocumentFactory.getRegisterName());
-		xml.putProperty("comment", comment);
-		xml.putProperty("creationDate", creationDate);
-		xml.putProperty("name", name);
-		xml.putProperty("owner", owner);
-		}catch (Exception e) {
-			throw new SaveException(e,this.getClass().getName());
+		try {
+			// xml.putProperty("nameRegister",this.getRegisterName());
+			xml.putProperty("className",
+					projectDocumentFactory.getRegisterName());
+			xml.putProperty("comment", comment);
+			xml.putProperty("creationDate", creationDate);
+			xml.putProperty("name", name);
+			xml.putProperty("owner", owner);
+		} catch (Exception e) {
+			throw new SaveException(e, this.getClass().getName());
 		}
 		return xml;
 	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param xml DOCUMENT ME!
-     * @param p DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     * @throws XMLException
-     */
-    public static ProjectDocument createFromXML03(XMLEntity xml, Project p) throws XMLException{
-        ProjectDocument pe = null;
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param xml
+	 *            DOCUMENT ME!
+	 * @param p
+	 *            DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 * @throws XMLException
+	 */
+	public static ProjectDocument createFromXML03(XMLEntity xml, Project p)
+			throws XMLException {
+		ProjectDocument pe = null;
 
-            Class clase;
-			try {
-				clase = Class.forName(xml.getStringProperty("className"));
+		Class clase;
+		try {
+			clase = Class.forName(xml.getStringProperty("className"));
 			pe = (ProjectDocument) clase.newInstance();
-			} catch (ClassNotFoundException e) {
-	            NotificationManager.addError("Clase de ProjectElement no reconocida",
-	                    e);
-			} catch (InstantiationException e) {
-	            NotificationManager.addError("Clase de ProjectElement no reconocida",
-	                    e);
-			} catch (IllegalAccessException e) {
-	            NotificationManager.addError("Clase de ProjectElement no reconocida",
-	                    e);
-			}
+		} catch (ClassNotFoundException e) {
+			NotificationManager.addError(
+					"Clase de ProjectElement no reconocida", e);
+		} catch (InstantiationException e) {
+			NotificationManager.addError(
+					"Clase de ProjectElement no reconocida", e);
+		} catch (IllegalAccessException e) {
+			NotificationManager.addError(
+					"Clase de ProjectElement no reconocida", e);
+		}
 
-        return pe;
-    }
+		return pe;
+	}
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param xml DOCUMENT ME!
-	 * @param p DOCUMENT ME!
-	 *
+	 * 
+	 * @param xml
+	 *            DOCUMENT ME!
+	 * @param p
+	 *            DOCUMENT ME!
+	 * 
 	 * @return DOCUMENT ME!
-	 *
+	 * 
 	 * @throws XMLException
 	 * @throws DriverException
 	 * @throws DriverIOException
 	 * @throws OpenException
 	 */
 	public static ProjectDocument createFromXML(XMLEntity xml, Project p)
-		throws XMLException, OpenException {
+			throws XMLException, OpenException {
 		ProjectDocumentFactory pde = null;
-			ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
-			ExtensionPoint extPoint=((ExtensionPoint)extensionPoints.get("Documents"));
-			try {
-				pde = (ProjectDocumentFactory) extPoint.create(xml.getStringProperty("className"));
-			} catch (InstantiationException e) {
-				NotificationManager.showMessageError(PluginServices.getText(p,"documento_no_reconocido")+": "+xml.getStringProperty("className"),
-						e);
-			} catch (IllegalAccessException e) {
-				NotificationManager.showMessageError(PluginServices.getText(p,"documento_no_reconocido")+": "+xml.getStringProperty("className"),
-						e);
-			}catch (Exception e) {
-				throw new OpenException(e,xml.getStringProperty("className"));
-			}
-			if (pde==null){
-				Exception e=new Exception(PluginServices.getText(p,"documento_no_reconocido")+": "+xml.getStringProperty("className"));
-				NotificationManager.showMessageWarning(PluginServices.getText(p,"documento_no_reconocido")+": "+xml.getStringProperty("className"),e);
-				throw new OpenException(e,xml.getStringProperty("className"));
-			}
-			ProjectDocument pe=pde.create(p);
-			pe.setProjectDocumentFactory(pde);
-			return pe;
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+		ExtensionPoint extPoint = ((ExtensionPoint) extensionPoints
+				.get("Documents"));
+		try {
+			pde = (ProjectDocumentFactory) extPoint.create(xml
+					.getStringProperty("className"));
+		} catch (InstantiationException e) {
+			NotificationManager.showMessageError(
+					PluginServices.getText(p, "documento_no_reconocido") + ": "
+							+ xml.getStringProperty("className"), e);
+		} catch (IllegalAccessException e) {
+			NotificationManager.showMessageError(
+					PluginServices.getText(p, "documento_no_reconocido") + ": "
+							+ xml.getStringProperty("className"), e);
+		} catch (Exception e) {
+			throw new OpenException(e, xml.getStringProperty("className"));
+		}
+		if (pde == null) {
+			Exception e = new Exception(PluginServices.getText(p,
+					"documento_no_reconocido")
+					+ ": "
+					+ xml.getStringProperty("className"));
+			NotificationManager.showMessageWarning(
+					PluginServices.getText(p, "documento_no_reconocido") + ": "
+							+ xml.getStringProperty("className"), e);
+			throw new OpenException(e, xml.getStringProperty("className"));
+		}
+		ProjectDocument pe = pde.create(p);
+		pe.setProjectDocumentFactory(pde);
+		return pe;
 
 	}
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param xml DOCUMENT ME!
-	 * @param p DOCUMENT ME!
-	 *
+	 * 
+	 * @param xml
+	 *            DOCUMENT ME!
+	 * @param p
+	 *            DOCUMENT ME!
+	 * 
 	 * @throws XMLException
 	 * @throws OpenException
 	 * @throws ReadDriverException
 	 */
-	public void setXMLEntity(XMLEntity xml)
-		throws XMLException, OpenException, ReadDriverException{
+	public void setXMLEntity(XMLEntity xml) throws XMLException, OpenException,
+			ReadDriverException {
 
 		this.setComment(xml.getStringProperty("comment"));
 		this.setCreationDate(xml.getStringProperty("creationDate"));
@@ -303,41 +320,46 @@ public abstract class ProjectDocument implements Serializable {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param xml DOCUMENT ME!
-	 * @param p DOCUMENT ME!
-	 *
+	 * 
+	 * @param xml
+	 *            DOCUMENT ME!
+	 * @param p
+	 *            DOCUMENT ME!
+	 * 
 	 * @throws XMLException
 	 * @throws ReadDriverException
 	 * @throws DriverIOException
 	 */
-	public void setXMLEntity03(XMLEntity xml)
-		throws XMLException, ReadDriverException{
+	public void setXMLEntity03(XMLEntity xml) throws XMLException,
+			ReadDriverException {
 
-			this.setComment(xml.getStringProperty("comment"));
-			this.setCreationDate(xml.getStringProperty("creationDate"));
-			this.setName(xml.getStringProperty("name"));
-			this.setOwner(xml.getStringProperty("owner"));
+		this.setComment(xml.getStringProperty("comment"));
+		this.setCreationDate(xml.getStringProperty("creationDate"));
+		this.setName(xml.getStringProperty("name"));
+		this.setOwner(xml.getStringProperty("owner"));
 
-		}
+	}
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public Project getProject() {
 		return project;
 	}
+
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param project DOCUMENT ME!
+	 * 
+	 * @param project
+	 *            DOCUMENT ME!
 	 */
 	public void setProject(Project project, int index) {
 		this.project = project;
 		this.index = index;
 	}
+
 	public int getIndex() {
 		return index;
 	}
@@ -350,18 +372,19 @@ public abstract class ProjectDocument implements Serializable {
 	}
 
 	/**
-	 * Unlocks this element. So, from now on, it can be removed from the project.
+	 * Unlocks this element. So, from now on, it can be removed from the
+	 * project.
 	 */
 	public void unlock() {
 		locked = false;
 	}
 
 	/**
-	 * Tells whether if this project's element is locked/protected or not. A protected
-	 * element cannot be removed from the current project.
-	 *
+	 * Tells whether if this project's element is locked/protected or not. A
+	 * protected element cannot be removed from the current project.
+	 * 
 	 * @see <b>lock()</b> and <b>unlock()</b> methods.
-	 *
+	 * 
 	 * @return true if it is locked, false otherwise
 	 */
 	public boolean isLocked() {
@@ -370,29 +393,33 @@ public abstract class ProjectDocument implements Serializable {
 
 	/**
 	 * Register a ProjectViewListener.
-	 * @param  listener
-	 *         ProjectViewListener
+	 * 
+	 * @param listener
+	 *            ProjectViewListener
 	 */
 	public void addProjectViewListener(ProjectDocumentListener listener) {
-		if(this.projectDocListener.indexOf(listener) == -1)
+		if (this.projectDocListener.indexOf(listener) == -1)
 			this.projectDocListener.add(listener);
 	}
-	
+
 	/**
 	 * Throw this event when a new window is created
-	 * @param  window
-	 *         IWindow created
+	 * 
+	 * @param window
+	 *            IWindow created
 	 */
 	protected void callCreateWindow(IWindow window) {
-		for (int i = 0; i < projectDocListener.size(); i++) 
+		for (int i = 0; i < projectDocListener.size(); i++)
 			projectDocListener.get(i).windowCreated(window);
 	}
-	
-	public abstract IWindow createWindow();
-	public abstract IWindow getProperties();
-	public abstract void afterRemove();
-	public abstract void afterAdd();
 
+	public abstract IWindow createWindow();
+
+	public abstract IWindow getProperties();
+
+	public abstract void afterRemove();
+
+	public abstract void afterAdd();
 
 	public void setProjectDocumentFactory(
 			ProjectDocumentFactory projectDocumentFactory) {
@@ -403,21 +430,24 @@ public abstract class ProjectDocument implements Serializable {
 		return projectDocumentFactory;
 	}
 
-	public abstract void exportToXML(XMLEntity root, Project project)  throws SaveException ;
+	public abstract void exportToXML(XMLEntity root, Project project)
+			throws SaveException;
 
-	public abstract void importFromXML(XMLEntity root, XMLEntity typeRoot,int elementIndex ,Project project, boolean removeDocumentsFromRoot) throws XMLException, OpenException, ReadDriverException;
+	public abstract void importFromXML(XMLEntity root, XMLEntity typeRoot,
+			int elementIndex, Project project, boolean removeDocumentsFromRoot)
+			throws XMLException, OpenException, ReadDriverException;
 
-
-	public void importFromXML(XMLEntity root, XMLEntity typeRoot,int elementIndex ,Project project) throws XMLException, OpenException, ReadDriverException{
-		importFromXML(root,typeRoot, elementIndex,project,false);
+	public void importFromXML(XMLEntity root, XMLEntity typeRoot,
+			int elementIndex, Project project) throws XMLException,
+			OpenException, ReadDriverException {
+		importFromXML(root, typeRoot, elementIndex, project, false);
 	}
 
 	/**
-	 * Get the layout properties (size, position, state of the components)
-	 * of the window associated with this ProjectDocument.
-	 * This is used to re-open the window with the same properties it had
-	 * when it was closed.
-	 *
+	 * Get the layout properties (size, position, state of the components) of
+	 * the window associated with this ProjectDocument. This is used to re-open
+	 * the window with the same properties it had when it was closed.
+	 * 
 	 * @return A WindowData object storing the properties of the window.
 	 */
 	public WindowData getWindowData() {
@@ -425,10 +455,9 @@ public abstract class ProjectDocument implements Serializable {
 	}
 
 	/**
-	 * Store the layout properties (size, position, state of the components)
-	 * of the window associated with this ProjectDocument.
-	 * This is used to re-open the window with the same properties it had
-	 * when it was closed.
+	 * Store the layout properties (size, position, state of the components) of
+	 * the window associated with this ProjectDocument. This is used to re-open
+	 * the window with the same properties it had when it was closed.
 	 */
 	public void storeWindowData(WindowData data) {
 		windowData = data;
@@ -439,19 +468,21 @@ public abstract class ProjectDocument implements Serializable {
 	}
 
 	public void setModified(boolean modified) {
-		isModified=modified;
+		isModified = modified;
 	}
 
 	public static void initializeNUMS() {
 		NUMS.clear();
-		ExtensionPoints extensionPoints =
-			ExtensionPointsSingleton.getInstance();
-		ExtensionPoint extensionPoint =(ExtensionPoint)extensionPoints.get("Documents");
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+		ExtensionPoint extensionPoint = (ExtensionPoint) extensionPoints
+				.get("Documents");
 		Iterator iterator = extensionPoint.keySet().iterator();
 		while (iterator.hasNext()) {
 			try {
-				ProjectDocumentFactory documentFactory = (ProjectDocumentFactory)extensionPoint.create((String)iterator.next());
-				NUMS.put(documentFactory.getRegisterName(),new Integer(0));
+				ProjectDocumentFactory documentFactory = (ProjectDocumentFactory) extensionPoint
+						.create((String) iterator.next());
+				NUMS.put(documentFactory.getRegisterName(), new Integer(0));
 			} catch (InstantiationException e) {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {

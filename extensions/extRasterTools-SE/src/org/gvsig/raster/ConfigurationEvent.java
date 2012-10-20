@@ -19,6 +19,7 @@
 package org.gvsig.raster;
 
 import java.util.EventObject;
+
 /**
  * Estado del evento de configuración para las preferencias de Raster.
  * 
@@ -32,6 +33,7 @@ public class ConfigurationEvent extends EventObject {
 
 	/**
 	 * Constructor de un ConfigurationEvent
+	 * 
 	 * @param source
 	 * @param key
 	 * @param value

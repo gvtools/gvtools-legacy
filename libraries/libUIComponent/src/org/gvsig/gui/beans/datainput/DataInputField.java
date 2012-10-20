@@ -32,49 +32,54 @@ import java.util.Iterator;
 import javax.swing.JFormattedTextField;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
+
 /**
  * Campo de texto que controla el contenido de datos del componente y solo
- * dispara un evento cuando realmente ha cambiado su valor.<p>
+ * dispara un evento cuando realmente ha cambiado su valor.
+ * <p>
  * 
- * <b>RECOMENDABLE:</b> Usar JFormattedTextFields<p>
+ * <b>RECOMENDABLE:</b> Usar JFormattedTextFields
+ * <p>
  * 
  * Ejemplo de Sun:<br>
- * &nbsp;&nbsp;<a href="http://java.sun.com/docs/books/tutorial/uiswing/examples/components/FormatterFactoryDemoProject/src/components/FormatterFactoryDemo.java">FormatterFactoryDemo.java</a>
+ * &nbsp;&nbsp;<a href=
+ * "http://java.sun.com/docs/books/tutorial/uiswing/examples/components/FormatterFactoryDemoProject/src/components/FormatterFactoryDemo.java"
+ * >FormatterFactoryDemo.java</a>
  * 
  * @version 06/09/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class DataInputField extends Container implements PropertyChangeListener {
-  private static final long serialVersionUID = 8633824284253287604L;
+	private static final long serialVersionUID = 8633824284253287604L;
 
-	private JFormattedTextField textField              = null;
-	private ArrayList           actionChangedListeners = new ArrayList();
+	private JFormattedTextField textField = null;
+	private ArrayList actionChangedListeners = new ArrayList();
 
-	private NumberFormat        doubleDisplayFormat;
-	private NumberFormat        doubleEditFormat;
+	private NumberFormat doubleDisplayFormat;
+	private NumberFormat doubleEditFormat;
 	private boolean eventsEnabled = true;
 
-
 	/**
-  * This is the default constructor
-  */
+	 * This is the default constructor
+	 */
 	public DataInputField() {
 		setUpFormats();
 		initialize();
 	}
 
-  /**
-	 * Create and set up number formats. These objects also parse numbers input by
-	 * user.
+	/**
+	 * Create and set up number formats. These objects also parse numbers input
+	 * by user.
 	 */
-  private void setUpFormats() {
-      doubleDisplayFormat = NumberFormat.getNumberInstance();
-      doubleDisplayFormat.setMinimumFractionDigits(0);
-      doubleEditFormat = NumberFormat.getNumberInstance();
-  }
+	private void setUpFormats() {
+		doubleDisplayFormat = NumberFormat.getNumberInstance();
+		doubleDisplayFormat.setMinimumFractionDigits(0);
+		doubleEditFormat = NumberFormat.getNumberInstance();
+	}
 
 	/**
 	 * This method initializes this
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
@@ -82,18 +87,18 @@ public class DataInputField extends Container implements PropertyChangeListener 
 
 		add(getJFormattedTextField(), BorderLayout.CENTER);
 	}
-	
+
 	/**
 	 * This method initializes jTextField
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JFormattedTextField getJFormattedTextField() {
 		if (textField == null) {
 			textField = new JFormattedTextField(new DefaultFormatterFactory(
-          new NumberFormatter(doubleDisplayFormat),
-          new NumberFormatter(doubleDisplayFormat),
-          new NumberFormatter(doubleEditFormat)));
+					new NumberFormatter(doubleDisplayFormat),
+					new NumberFormatter(doubleDisplayFormat),
+					new NumberFormatter(doubleEditFormat)));
 			textField.setBackground(Color.white);
 			textField.setValue(new Double(0));
 			textField.setColumns(10);
@@ -104,19 +109,22 @@ public class DataInputField extends Container implements PropertyChangeListener 
 
 	/**
 	 * Devuelve el valor del campo de texto.
+	 * 
 	 * @return
 	 */
-	public String getValue(){
-		double value = ((Number) getJFormattedTextField().getValue()).doubleValue();
+	public String getValue() {
+		double value = ((Number) getJFormattedTextField().getValue())
+				.doubleValue();
 
 		return Double.toString(value);
 	}
 
 	/**
 	 * Habilita o deshabilita el control
+	 * 
 	 * @param en
 	 */
-	public void setControlEnabled(boolean en){
+	public void setControlEnabled(boolean en) {
 		getJFormattedTextField().setEnabled(en);
 		if (en)
 			getJFormattedTextField().setBackground(Color.white);
@@ -126,6 +134,7 @@ public class DataInputField extends Container implements PropertyChangeListener 
 
 	/**
 	 * Asigna el valor al campo de texto.
+	 * 
 	 * @return
 	 */
 	public void setValue(String value) {
@@ -136,6 +145,7 @@ public class DataInputField extends Container implements PropertyChangeListener 
 
 	/**
 	 * Añadir un listener a la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void addValueChangedListener(DataInputContainerListener listener) {
@@ -145,20 +155,22 @@ public class DataInputField extends Container implements PropertyChangeListener 
 
 	/**
 	 * Añadir un listener a la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void addKeyListener(KeyListener listener) {
 		textField.addKeyListener(listener);
 	}
-	
+
 	/**
 	 * Borrar un listener de la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void removeValueChangedListener(DataInputContainerListener listener) {
 		actionChangedListeners.remove(listener);
 	}
-	
+
 	/**
 	 * Invocar a los eventos asociados al componente
 	 */
@@ -167,12 +179,13 @@ public class DataInputField extends Container implements PropertyChangeListener 
 			return;
 		Iterator acIterator = actionChangedListeners.iterator();
 		while (acIterator.hasNext()) {
-			DataInputContainerListener listener = (DataInputContainerListener) acIterator.next();
+			DataInputContainerListener listener = (DataInputContainerListener) acIterator
+					.next();
 			listener.actionValueChanged(new EventObject(this));
 		}
 	}
 
 	public void propertyChange(PropertyChangeEvent evt) {
-	  callValueChangedListeners();
-  }
+		callValueChangedListeners();
+	}
 }

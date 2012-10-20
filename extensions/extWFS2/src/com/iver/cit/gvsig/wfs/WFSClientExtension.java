@@ -91,47 +91,60 @@ import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 /**
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class WFSClientExtension extends Extension{
+public class WFSClientExtension extends Extension {
 
 	public void initialize() {
-		System.out.println("Añado Wizard WFS2.");		
-		
+		System.out.println("Añado Wizard WFS2.");
+
 		// Adds a new tab to the "add layer" wizard for WFS layer creation
 		AddLayer.addWizard(WFSWizard.class);
-		ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
-    	//Extension to load a layer from a catalog
-		extensionPoints.add("CatalogLayers","OGC:WFS",FLyrWFS.class);
-       	//WFS properties panel
-    	extensionPoints.add("View_TocActions", "WFSProperties", new WFSPropertiesTocMenuEntry());
-    	extensionPoints.add("View_TocActions", "VectorialProperties", new WFSVectorialPropsTocMenuEntry());
-    	//WFS properties tabs:
-    	extensionPoints.add("WFSPropertiesDialog", "info", WFSInfoPanel.class);
-		extensionPoints.add("WFSPropertiesDialog", "features", WFSSelectFeaturePanel.class);
-		extensionPoints.add("WFSPropertiesDialog", "fields", WFSSelectFieldsPanel.class);
-		extensionPoints.add("WFSPropertiesDialog", "options", WFSOptionsPanel.class);
-		extensionPoints.add("WFSPropertiesDialog", "filter", WFSFilterPanel.class);
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+		// Extension to load a layer from a catalog
+		extensionPoints.add("CatalogLayers", "OGC:WFS", FLyrWFS.class);
+		// WFS properties panel
+		extensionPoints.add("View_TocActions", "WFSProperties",
+				new WFSPropertiesTocMenuEntry());
+		extensionPoints.add("View_TocActions", "VectorialProperties",
+				new WFSVectorialPropsTocMenuEntry());
+		// WFS properties tabs:
+		extensionPoints.add("WFSPropertiesDialog", "info", WFSInfoPanel.class);
+		extensionPoints.add("WFSPropertiesDialog", "features",
+				WFSSelectFeaturePanel.class);
+		extensionPoints.add("WFSPropertiesDialog", "fields",
+				WFSSelectFieldsPanel.class);
+		extensionPoints.add("WFSPropertiesDialog", "options",
+				WFSOptionsPanel.class);
+		extensionPoints.add("WFSPropertiesDialog", "filter",
+				WFSFilterPanel.class);
 		extensionPoints.add("WFSPropertiesDialog", "area", WFSAreaPanel.class);
-		
-		extensionPoints.add("WFSExtension","WFSLayerListener",WFSTEditionListener.class);
-		
-    	ThemeManagerWindow.setTabEnabledForLayer(General.class, FLyrWFS.class, true);
-		ThemeManagerWindow.setTabEnabledForLayer(LegendManager.class, FLyrWFS.class, true);
-		ThemeManagerWindow.setTabEnabledForLayer(LabelingManager.class, FLyrWFS.class, true);
 
-    	initilizeIcons();		
+		extensionPoints.add("WFSExtension", "WFSLayerListener",
+				WFSTEditionListener.class);
+
+		ThemeManagerWindow.setTabEnabledForLayer(General.class, FLyrWFS.class,
+				true);
+		ThemeManagerWindow.setTabEnabledForLayer(LegendManager.class,
+				FLyrWFS.class, true);
+		ThemeManagerWindow.setTabEnabledForLayer(LabelingManager.class,
+				FLyrWFS.class, true);
+
+		initilizeIcons();
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String actionCommand) {
 		// TODO Auto-generated method stub
-		
-	}	
+
+	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
@@ -141,100 +154,100 @@ public class WFSClientExtension extends Extension{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
+
 	/**
 	 * Prepares support for the icons that can be used in the WFS extension.
 	 */
-	void initilizeIcons(){
+	void initilizeIcons() {
 		// FLyrWFS.java
 		PluginServices.getIconTheme().registerDefault(
-	    		"WFS-icolayer",
-	    		this.getClass().getClassLoader().getResource("images/icoLayer.png")
-	    	);
+				"WFS-icolayer",
+				this.getClass().getClassLoader()
+						.getResource("images/icoLayer.png"));
 
 		// WFSAreaPanel.java
 		PluginServices.getIconTheme().registerDefault(
-	    		"edit-undo",
-	    		this.getClass().getClassLoader().getResource("images/edit-undo.png")
-	    	);
+				"edit-undo",
+				this.getClass().getClassLoader()
+						.getResource("images/edit-undo.png"));
+
+		// WFSAreaPanel.java
+		PluginServices.getIconTheme()
+				.registerDefault(
+						"WFS-move",
+						this.getClass().getClassLoader()
+								.getResource("images/move.png"));
 
 		// WFSAreaPanel.java
 		PluginServices.getIconTheme().registerDefault(
-	    		"WFS-move",
-	    		this.getClass().getClassLoader().getResource("images/move.png")
-	    	);
+				"WFS-scaling",
+				this.getClass().getClassLoader()
+						.getResource("images/scaling.png"));
+
+		// WFSAreaPanel.java
+		PluginServices.getIconTheme().registerDefault("view-pan",
+				this.getClass().getClassLoader().getResource("images/Pan.png"));
 
 		// WFSAreaPanel.java
 		PluginServices.getIconTheme().registerDefault(
-	    		"WFS-scaling",
-	    		this.getClass().getClassLoader().getResource("images/scaling.png")
-	    	);
+				"view-zoom-in",
+				this.getClass().getClassLoader()
+						.getResource("images/ZoomIn.png"));
 
 		// WFSAreaPanel.java
 		PluginServices.getIconTheme().registerDefault(
-	    		"view-pan",
-	    		this.getClass().getClassLoader().getResource("images/Pan.png")
-	    	);
+				"view-zoom-out",
+				this.getClass().getClassLoader()
+						.getResource("images/ZoomOut.png"));
 
 		// WFSAreaPanel.java
 		PluginServices.getIconTheme().registerDefault(
-	    		"view-zoom-in",
-	    		this.getClass().getClassLoader().getResource("images/ZoomIn.png")
-	    	);
+				"view-zoom-back",
+				this.getClass().getClassLoader()
+						.getResource("images/ZoomPrevio.png"));
 
 		// WFSAreaPanel.java
 		PluginServices.getIconTheme().registerDefault(
-	    		"view-zoom-out",
-	    		this.getClass().getClassLoader().getResource("images/ZoomOut.png")
-	    	);
+				"view-zoom-map-contents",
+				this.getClass().getClassLoader()
+						.getResource("images/MapContents.png"));
 
 		// WFSAreaPanel.java
 		PluginServices.getIconTheme().registerDefault(
-	    		"view-zoom-back",
-	    		this.getClass().getClassLoader().getResource("images/ZoomPrevio.png")
-	    	);
+				"view-zoom-mas",
+				this.getClass().getClassLoader()
+						.getResource("images/zoommas.png"));
 
 		// WFSAreaPanel.java
 		PluginServices.getIconTheme().registerDefault(
-	    		"view-zoom-map-contents",
-	    		this.getClass().getClassLoader().getResource("images/MapContents.png")
-	    	);
+				"view-zoom-menos",
+				this.getClass().getClassLoader()
+						.getResource("images/zoommenos.png"));
 
 		// WFSAreaPanel.java
 		PluginServices.getIconTheme().registerDefault(
-	    		"view-zoom-mas",
-	    		this.getClass().getClassLoader().getResource("images/zoommas.png")
-	    	);
+				"view-query-distance",
+				this.getClass().getClassLoader()
+						.getResource("images/Distancia.png"));
 
-		//		 WFSAreaPanel.java
+		// WFSAreaPanel.java
 		PluginServices.getIconTheme().registerDefault(
-	    		"view-zoom-menos",
-	    		this.getClass().getClassLoader().getResource("images/zoommenos.png")
-	    	);
+				"view-query-area",
+				this.getClass().getClassLoader()
+						.getResource("images/Poligono16.png"));
 
-		//		 WFSAreaPanel.java
+		// WFSAreaPanel.java
 		PluginServices.getIconTheme().registerDefault(
-	    		"view-query-distance",
-	    		this.getClass().getClassLoader().getResource("images/Distancia.png")
-	    	);
-
-		//	 	WFSAreaPanel.java
-		PluginServices.getIconTheme().registerDefault(
-	    		"view-query-area",
-	    		this.getClass().getClassLoader().getResource("images/Poligono16.png")
-	    	);
-
-		// 		WFSAreaPanel.java
-		PluginServices.getIconTheme().registerDefault(
-	    		"validate-area",
-	    		this.getClass().getClassLoader().getResource("images/validate-area.png")
-	    	);
+				"validate-area",
+				this.getClass().getClassLoader()
+						.getResource("images/validate-area.png"));
 	}
 
 }

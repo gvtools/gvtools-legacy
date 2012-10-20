@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.gazetteer.ui.search;
+
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
@@ -82,10 +82,10 @@ public class SearchDialogPanel extends JPanel implements ActionListener {
 	 * This method initializes
 	 * 
 	 * 
-	 * @param client 
-	 * @param translator 
+	 * @param client
+	 * @param translator
 	 */
-	public  SearchDialogPanel(GazetteerClient client, Object serverConnectFrame) {        
+	public SearchDialogPanel(GazetteerClient client, Object serverConnectFrame) {
 		super();
 		searchThreads = new java.util.ArrayList();
 		this.client = client;
@@ -93,215 +93,218 @@ public class SearchDialogPanel extends JPanel implements ActionListener {
 		this.serverConnectFrame = serverConnectFrame;
 		initialize();
 
-	} 
+	}
 
 	/**
 	 * This method initializes this
 	 */
-	private void initialize() {        
+	private void initialize() {
 		setLayout(new BorderLayout());
-		add(getUpperPanel(),BorderLayout.NORTH);
-		add(getLowerPanel(),BorderLayout.CENTER);
-		add(getButtonPanel(),BorderLayout.SOUTH);
+		add(getUpperPanel(), BorderLayout.NORTH);
+		add(getLowerPanel(), BorderLayout.CENTER);
+		add(getButtonPanel(), BorderLayout.SOUTH);
 		getLowerPanel().setVisible(false);
-	} 
+	}
 
 	/**
 	 * It Gets the upperPanel
-	 * @return 
+	 * 
+	 * @return
 	 */
-	public SearchUpperPanel getUpperPanel() {        
-		if (upperPanel == null){
-			upperPanel = new SearchUpperPanel(); 
+	public SearchUpperPanel getUpperPanel() {
+		if (upperPanel == null) {
+			upperPanel = new SearchUpperPanel();
 			upperPanel.addActionListener(this);
 		}
 		return upperPanel;
 
-	} 
+	}
 
 	/**
 	 * It Gets the lowePanel
-	 * @return 
+	 * 
+	 * @return
 	 */
-	public SearchLowerPanel getLowerPanel() {        
-		if (lowerPanel == null){
-			FeatureType[] types = null;			
+	public SearchLowerPanel getLowerPanel() {
+		if (lowerPanel == null) {
+			FeatureType[] types = null;
 			try {
-				types = ((GazetteerClient)client).getFeatureTypes();
+				types = ((GazetteerClient) client).getFeatureTypes();
 			} catch (Exception e) {
-				//The thesaurus will not loaded
-			}			
+				// The thesaurus will not loaded
+			}
 			lowerPanel = new SearchLowerPanel(types,
 					client.getAditionalSearchPanel());
 			lowerPanel.addResultsByPageNumber(10);
 			lowerPanel.addResultsByPageNumber(25);
 			lowerPanel.addResultsByPageNumber(50);
-			lowerPanel.addCoordinatesRelationship(
-					Messages.getText("coordinatesContains"));
-			lowerPanel.addCoordinatesRelationship(
-					Messages.getText("coordinatesFullyOutsideOf"));
+			lowerPanel.addCoordinatesRelationship(Messages
+					.getText("coordinatesContains"));
+			lowerPanel.addCoordinatesRelationship(Messages
+					.getText("coordinatesFullyOutsideOf"));
 		}
 		return lowerPanel;
-	} 
+	}
 
 	/**
 	 * Set the gazetteer client
-	 * @param 
-	 * Gazetteer client to set
+	 * 
+	 * @param Gazetteer
+	 *            client to set
 	 */
-	public void setGazetteerClient(GazetteerClient gazetteerClient) {        
+	public void setGazetteerClient(GazetteerClient gazetteerClient) {
 		this.client = gazetteerClient;
-	} 
+	}
 
 	/**
 	 * @return the buttons panel
 	 */
-	public JPanel getButtonPanel() {        
+	public JPanel getButtonPanel() {
 		if (buttonsPanel == null) {
 			buttonsPanel = new SearchButtonPanel();
-			buttonsPanel.addActionListener(this);			
+			buttonsPanel.addActionListener(this);
 		}
 		return buttonsPanel;
-	} 	
+	}
 
 	/**
-	 * @return 
+	 * @return
 	 */
-	public FeatureType getFeatureSelected() {        
+	public FeatureType getFeatureSelected() {
 		return lowerPanel.getType();
-	} 
+	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */	
-	public void actionPerformed(ActionEvent e) {        
-		if (e.getActionCommand().compareTo(CatalogConstants.SEARCH_BUTTON_ACTION_COMMAND)==0) {
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand().compareTo(
+				CatalogConstants.SEARCH_BUTTON_ACTION_COMMAND) == 0) {
 			searchButtonActionPerformed();
-		}else if (e.getActionCommand().compareTo(CatalogConstants.CLOSE_BUTTON_ACTION_COMMAND)==0){
+		} else if (e.getActionCommand().compareTo(
+				CatalogConstants.CLOSE_BUTTON_ACTION_COMMAND) == 0) {
 			closeButtonActionPerformed();
-		}else if(e.getActionCommand().compareTo(CatalogConstants.RESIZE_BUTTON_ACTION_COMMAND)==0){
+		} else if (e.getActionCommand().compareTo(
+				CatalogConstants.RESIZE_BUTTON_ACTION_COMMAND) == 0) {
 			resizeButtonActionPerformed();
-		}else if (e.getActionCommand().compareTo(CatalogConstants.CANCEL_BUTTON_ACTION_COMMAND)==0){
+		} else if (e.getActionCommand().compareTo(
+				CatalogConstants.CANCEL_BUTTON_ACTION_COMMAND) == 0) {
 			cancelSearchesButtonActionPerformed();
-		}else if (e.getActionCommand().compareTo(CatalogConstants.LAST_BUTTON_ACTION_COMMAND)==0){
+		} else if (e.getActionCommand().compareTo(
+				CatalogConstants.LAST_BUTTON_ACTION_COMMAND) == 0) {
 			lastButtonActionPerformed();
 		}
-	} 
+	}
 
 	/**
 	 * thrown when the resize button is clicked
 	 */
-	protected void resizeButtonActionPerformed() {        
-		if (isMinimized){
-			parent.setSize(parent.getWidth(),450);
+	protected void resizeButtonActionPerformed() {
+		if (isMinimized) {
+			parent.setSize(parent.getWidth(), 450);
 			parent.doLayout();
 			getLowerPanel().setVisible(true);
 			getUpperPanel().setUpIcon();
-		}else{
-			parent.setSize(parent.getWidth(),115);
-			getLowerPanel().setVisible(false);			
+		} else {
+			parent.setSize(parent.getWidth(), 115);
+			getLowerPanel().setVisible(false);
 			getUpperPanel().setDownIcon();
 		}
 		isMinimized = !isMinimized;
-	} 
+	}
 
 	/**
 	 * thrown when the search button is clicked
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 */
-	protected void searchButtonActionPerformed() {        
+	protected void searchButtonActionPerformed() {
 		FeatureType featureType = lowerPanel.getType();
-		if (client.isDescribeFeatureTypeNeeded()){
+		if (client.isDescribeFeatureTypeNeeded()) {
 			try {
 				FeatureTypeAttribute atribute = getAttribute(featureType);
-				if (atribute == null){
+				if (atribute == null) {
 					return;
-				}else{
+				} else {
 					featureAttribute = atribute.getName();
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				return;
 			}
-		}	
-		searchThread st =  new searchThread();
-		searchThreads.add(st);   
-		setCursor(new Cursor(Cursor.WAIT_CURSOR));       
-	} 
+		}
+		searchThread st = new searchThread();
+		searchThreads.add(st);
+		setCursor(new Cursor(Cursor.WAIT_CURSOR));
+	}
 
 	/**
-	 * This method open a Jdialog panel and shows a list of
-	 * attributes to choose one of them.
+	 * This method open a Jdialog panel and shows a list of attributes to choose
+	 * one of them.
+	 * 
 	 * @param featureType
-	 * Feature 
-	 * @return
-	 * The selected attribute
+	 *            Feature
+	 * @return The selected attribute
 	 * @throws Exception
 	 */
-	private FeatureTypeAttribute getAttribute(FeatureType featureType) throws Exception{
-		if ((featureType == null) || 
-				(lowerPanel.getType().getName().equals(Messages.getText("ThesaurusRoot")))){
-			JOptionPane.showMessageDialog(
-					this,
-					Messages.getText("errorNotThesaurusSelected"),
-					"WFS",
-					JOptionPane.ERROR_MESSAGE
-			);
+	private FeatureTypeAttribute getAttribute(FeatureType featureType)
+			throws Exception {
+		if ((featureType == null)
+				|| (lowerPanel.getType().getName().equals(Messages
+						.getText("ThesaurusRoot")))) {
+			JOptionPane.showMessageDialog(this,
+					Messages.getText("errorNotThesaurusSelected"), "WFS",
+					JOptionPane.ERROR_MESSAGE);
 			return null;
-		}	
-		FeatureTypeAttribute[] atributes = 
-			client.describeFeatureType(featureType.getName());
-		FeatureTypeAttribute attribute = (FeatureTypeAttribute)JOptionPane.showInputDialog(
-				this,
-				Messages.getText("chooseAttribute"),
-				null,
-				JOptionPane.PLAIN_MESSAGE,
-				null,
-				atributes,
-				featureType.getName());
-		if (attribute == null) {
-			JOptionPane.showMessageDialog(
-					this,
-					Messages.getText("chooseAttribute"),
-					"WFS",
-					JOptionPane.ERROR_MESSAGE
-			);
 		}
-		return attribute;		
+		FeatureTypeAttribute[] atributes = client
+				.describeFeatureType(featureType.getName());
+		FeatureTypeAttribute attribute = (FeatureTypeAttribute) JOptionPane
+				.showInputDialog(this, Messages.getText("chooseAttribute"),
+						null, JOptionPane.PLAIN_MESSAGE, null, atributes,
+						featureType.getName());
+		if (attribute == null) {
+			JOptionPane.showMessageDialog(this,
+					Messages.getText("chooseAttribute"), "WFS",
+					JOptionPane.ERROR_MESSAGE);
+		}
+		return attribute;
 	}
 
 	/**
 	 * thrown when the last button is clicked
 	 */
-	protected void lastButtonActionPerformed() {        
-		((JFrame)serverConnectFrame).setVisible(true);
+	protected void lastButtonActionPerformed() {
+		((JFrame) serverConnectFrame).setVisible(true);
 		parent.setVisible(false);
-	} 	
+	}
 
 	/**
 	 * thrown when the cancel button is clicked
 	 */
-	protected void cancelSearchesButtonActionPerformed() {        
-		for (int i=0 ; i<searchThreads.size() ; i++){
-			searchThread st = (searchThread)searchThreads.toArray()[i];
-			st.stop();            
-		}     
+	protected void cancelSearchesButtonActionPerformed() {
+		for (int i = 0; i < searchThreads.size(); i++) {
+			searchThread st = (searchThread) searchThreads.toArray()[i];
+			st.stop();
+		}
 		searchThreads.clear();
-		setCursor(new Cursor(Cursor.DEFAULT_CURSOR));        
-	} 
+		setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+	}
 
 	/**
 	 * thrown when the close button is clicked
 	 */
-	protected void closeButtonActionPerformed() {        
+	protected void closeButtonActionPerformed() {
 		parent.setVisible(false);
-	} 
+	}
 
 	/**
 	 * @return the selected query
 	 */
-	protected GazetteerQuery doQuery() {        
+	protected GazetteerQuery doQuery() {
 		query = client.createNewQuery();
 		query.setName(upperPanel.getName());
 		query.setNameFilter(lowerPanel.getConcordancia());
@@ -312,65 +315,65 @@ public class SearchDialogPanel extends JPanel implements ActionListener {
 		query.setCoordinatesFilter(lowerPanel.getCoordinatesOption());
 		query.setCoordinatesClicked(upperPanel.isRestrictAreaClicked());
 		query.getOptions().getAspect().setGoTo(lowerPanel.isGoToClicked());
-		query.getOptions().getAspect().setKeepOld(lowerPanel.isKeepOldClicked());
-		query.getOptions().getAspect().setPaintCurrent(lowerPanel.isMarkedPlaceClicked());
-		query.getOptions().getSearch().setWithAccents(lowerPanel.isAccentsSearchEnabled());
+		query.getOptions().getAspect()
+				.setKeepOld(lowerPanel.isKeepOldClicked());
+		query.getOptions().getAspect()
+				.setPaintCurrent(lowerPanel.isMarkedPlaceClicked());
+		query.getOptions().getSearch()
+				.setWithAccents(lowerPanel.isAccentsSearchEnabled());
 		query.setProperties(lowerPanel.getProperties());
 		return query;
-	} 
-	
+	}
+
 	/**
 	 * It returns the query that the user has selected
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 * 
 	 */
-	private void doSearch() throws Exception {        
+	private void doSearch() throws Exception {
 		features = client.getFeature(doQuery());
 		if (features == null) {
 			JOptionPane.showMessageDialog(this,
-					Messages.getText("errorGetRecords"),
-					"Error",
+					Messages.getText("errorGetRecords"), "Error",
 					JOptionPane.ERROR_MESSAGE);
 		}
-	} 
+	}
 
 	/**
-	 * Show the results 
+	 * Show the results
 	 */
-	private void showResults() {        
-		if (features.length == 0){
-			JOptionPane.showMessageDialog(this,
-					Messages.getText("anyResult"),
+	private void showResults() {
+		if (features.length == 0) {
+			JOptionPane.showMessageDialog(this, Messages.getText("anyResult"),
 					Messages.getText("gazetteer_search"),
 					JOptionPane.INFORMATION_MESSAGE);
-		}else{
+		} else {
 			showResultsActionPerformed(features);
 		}
-	} 
+	}
 
 	/**
-	 * @param features 
+	 * @param features
 	 */
-	protected void showResultsActionPerformed(Feature[] features) {        
-		new ShowResultsDialog(client,
-				features,
-				lowerPanel.getResultsByPage(),
+	protected void showResultsActionPerformed(Feature[] features) {
+		new ShowResultsDialog(client, features, lowerPanel.getResultsByPage(),
 				doQuery());
-	} 
+	}
 
 	/**
 	 * 
-	 * @param parent The parent to set.
+	 * @param parent
+	 *            The parent to set.
 	 */
-	public void setParent(JFrame parent) {        
+	public void setParent(JFrame parent) {
 		this.parent = parent;
-	} 
+	}
 
 	/**
-	 * This class is used to manage the searches.
-	 * It contains method to start and to stop a thread. It is
-	 * necessary to create because "stop" method (for the Thread class)
-	 * is deprecated.
+	 * This class is used to manage the searches. It contains method to start
+	 * and to stop a thread. It is necessary to create because "stop" method
+	 * (for the Thread class) is deprecated.
 	 * 
 	 * 
 	 * @author Jorge Piera Llodra (piera_jor@gva.es)
@@ -378,20 +381,21 @@ public class SearchDialogPanel extends JPanel implements ActionListener {
 	private class searchThread implements Runnable {
 		volatile Thread myThread = null;
 
-		public  searchThread() {        
+		public searchThread() {
 			myThread = new Thread(this);
 			myThread.start();
-		} 
+		}
 
-		public void stop() {        
+		public void stop() {
 			myThread.stop();
-		} 
+		}
 
 		/*
 		 * (non-Javadoc)
+		 * 
 		 * @see java.lang.Runnable#run()
 		 */
-		public void run() {        
+		public void run() {
 			try {
 				doSearch();
 			} catch (Exception e) {
@@ -401,10 +405,10 @@ public class SearchDialogPanel extends JPanel implements ActionListener {
 				showResults();
 			}
 			searchThreads.remove(this);
-			if (searchThreads.size() == 0){
-				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));       
+			if (searchThreads.size() == 0) {
+				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
-		} 
+		}
 	}
 
 	public GazetteerQuery getQuery() {

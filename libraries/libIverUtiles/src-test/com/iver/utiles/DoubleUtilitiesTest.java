@@ -1,6 +1,7 @@
 package com.iver.utiles;
 
 import junit.framework.TestCase;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -55,12 +56,13 @@ import junit.framework.TestCase;
  */
 /**
  * Para probar los double utilities
+ * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
 public class DoubleUtilitiesTest extends TestCase {
-	public void testDouble(){
+	public void testDouble() {
 		double numero = 1.36645345645;
-		numero = DoubleUtilities.format(numero,".".charAt(0),4);
-		assertEquals(numero,1.3665,0.00000000001);
+		numero = DoubleUtilities.format(numero, ".".charAt(0), 4);
+		assertEquals(numero, 1.3665, 0.00000000001);
 	}
 }

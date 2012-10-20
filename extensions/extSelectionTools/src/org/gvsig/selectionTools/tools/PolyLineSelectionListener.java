@@ -44,18 +44,25 @@ import com.iver.cit.gvsig.fmap.tools.Events.MeasureEvent;
 import com.iver.cit.gvsig.fmap.tools.Listeners.PolylineListener;
 
 /**
- * <p>Listener that selects all features of the active and vector layers which intersect with the defined
- *  polyline in the associated {@link MapControl MapControl} object.</p>
- *
- * <p>The selection will be produced after user finishes the creation of the polyline.</p>
- *
+ * <p>
+ * Listener that selects all features of the active and vector layers which
+ * intersect with the defined polyline in the associated {@link MapControl
+ * MapControl} object.
+ * </p>
+ * 
+ * <p>
+ * The selection will be produced after user finishes the creation of the
+ * polyline.
+ * </p>
+ * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class PolyLineSelectionListener implements PolylineListener {
 	/**
 	 * The image to display when the cursor is active.
 	 */
-	private final Image img = new ImageIcon(this.getClass().getResource("images/polyline-cursor-icon.png")).getImage();
+	private final Image img = new ImageIcon(this.getClass().getResource(
+			"images/polyline-cursor-icon.png")).getImage();
 
 	/**
 	 * The cursor used to work with this tool listener.
@@ -71,9 +78,12 @@ public class PolyLineSelectionListener implements PolylineListener {
 	private MapControl mapCtrl;
 
 	/**
- 	 * <p>Creates a new <code>PolygonSelectionListener</code> object.</p>
-	 *
-	 * @param mc the <code>MapControl</code> where is drawn the polyline
+	 * <p>
+	 * Creates a new <code>PolygonSelectionListener</code> object.
+	 * </p>
+	 * 
+	 * @param mc
+	 *            the <code>MapControl</code> where is drawn the polyline
 	 */
 	public PolyLineSelectionListener(MapControl mc) {
 		this.mapCtrl = mc;
@@ -81,6 +91,7 @@ public class PolyLineSelectionListener implements PolylineListener {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#getCursor()
 	 */
 	public Cursor getCursor() {
@@ -89,6 +100,7 @@ public class PolyLineSelectionListener implements PolylineListener {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#cancelDrawing()
 	 */
 	public boolean cancelDrawing() {
@@ -97,43 +109,60 @@ public class PolyLineSelectionListener implements PolylineListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.PolylineListener#points(com.iver.cit.gvsig.fmap.tools.Events.MeasureEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.PolylineListener#points(com.iver
+	 * .cit.gvsig.fmap.tools.Events.MeasureEvent)
 	 */
 	public void points(MeasureEvent event) throws BehaviorException {
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.PolylineListener#pointFixed(com.iver.cit.gvsig.fmap.tools.Events.MeasureEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.PolylineListener#pointFixed(com
+	 * .iver.cit.gvsig.fmap.tools.Events.MeasureEvent)
 	 */
 	public void pointFixed(MeasureEvent event) throws BehaviorException {
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.PolylineListener#polylineFinished(com.iver.cit.gvsig.fmap.tools.Events.MeasureEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.PolylineListener#polylineFinished
+	 * (com.iver.cit.gvsig.fmap.tools.Events.MeasureEvent)
 	 */
 	public void polylineFinished(MeasureEvent event) throws BehaviorException {
 		try {
-            GeneralPathX gp = event.getGP();
-            IGeometry geom = ShapeFactory.createPolyline2D(gp);
-            FLayer[] actives = mapCtrl.getMapContext().getLayers().getActives();
+			GeneralPathX gp = event.getGP();
+			IGeometry geom = ShapeFactory.createPolyline2D(gp);
+			FLayer[] actives = mapCtrl.getMapContext().getLayers().getActives();
 
-            for (int i=0; i < actives.length; i++)
-            {
-                if (actives[i] instanceof FLyrVect) {
-                    FLyrVect lyrVect = (FLyrVect) actives[i];
-                    FBitSet oldBitSet = lyrVect.getSource().getRecordset().getSelection();
-                    FBitSet newBitSet = lyrVect.queryByShape(geom, DefaultStrategy.INTERSECTS);
-                    if (event.getEvent().isControlDown())
-                        newBitSet.xor(oldBitSet);
-                    lyrVect.getRecordset().setSelection(newBitSet);
-                }
-            }
-        } catch (com.vividsolutions.jts.geom.TopologyException topEx) {
-			NotificationManager.showMessageError(PluginServices.getText(null, "Failed_selecting_geometries_by_polyline_topology_exception_explanation"), topEx);
+			for (int i = 0; i < actives.length; i++) {
+				if (actives[i] instanceof FLyrVect) {
+					FLyrVect lyrVect = (FLyrVect) actives[i];
+					FBitSet oldBitSet = lyrVect.getSource().getRecordset()
+							.getSelection();
+					FBitSet newBitSet = lyrVect.queryByShape(geom,
+							DefaultStrategy.INTERSECTS);
+					if (event.getEvent().isControlDown())
+						newBitSet.xor(oldBitSet);
+					lyrVect.getRecordset().setSelection(newBitSet);
+				}
+			}
+		} catch (com.vividsolutions.jts.geom.TopologyException topEx) {
+			NotificationManager
+					.showMessageError(
+							PluginServices
+									.getText(null,
+											"Failed_selecting_geometries_by_polyline_topology_exception_explanation"),
+							topEx);
 		} catch (Exception ex) {
-			NotificationManager.showMessageError(PluginServices.getText(null, "Failed_selecting_geometries"), ex);
+			NotificationManager
+					.showMessageError(PluginServices.getText(null,
+							"Failed_selecting_geometries"), ex);
 		}
 	}
 }

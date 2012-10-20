@@ -74,36 +74,38 @@ public class MarkerLine extends AbstractTypeSymbolEditor implements
 	private JButton btnChooseMarker;
 	private JIncrementalNumberField incrSeparation;
 	private JIncrementalNumberField incrWidth;
-	
+
 	public MarkerLine(SymbolEditor owner) {
 		super(owner);
 		initialize();
 	}
 
 	private void initialize() {
-        // Marker line tab
+		// Marker line tab
 		JPanel myTab = new JPanel();
 		myTab.setName(PluginServices.getText(this, "marker_line"));
-		
+
 		GridBagLayoutPanel aux = new GridBagLayoutPanel();
-		
+
 		// width
-		aux.addComponent(PluginServices.getText(this, "width")+":", 
-				incrWidth = new JIncrementalNumberField(String.valueOf(1), 5, 0.01, Double.MAX_VALUE, 1));
+		aux.addComponent(PluginServices.getText(this, "width") + ":",
+				incrWidth = new JIncrementalNumberField(String.valueOf(1), 5,
+						0.01, Double.MAX_VALUE, 1));
 		incrWidth.setDouble(1);
 		incrWidth.addActionListener(this);
-	
+
 		// separation
-		aux.addComponent(PluginServices.getText(this, "separation")+":", 
-				incrSeparation = new JIncrementalNumberField(String.valueOf(1), 5, 0.01, Double.MAX_VALUE, 1));
+		aux.addComponent(PluginServices.getText(this, "separation") + ":",
+				incrSeparation = new JIncrementalNumberField(String.valueOf(1),
+						5, 0.01, Double.MAX_VALUE, 1));
 		incrSeparation.setDouble(1);
 		incrSeparation.addActionListener(this);
-		btnChooseMarker = new JButton(
-				PluginServices.getText(this, "choose_marker"));
-        btnChooseMarker.addActionListener(this);
-        aux.addComponent("", btnChooseMarker);
-        myTab.add(aux);
-        tabs.add(myTab);
+		btnChooseMarker = new JButton(PluginServices.getText(this,
+				"choose_marker"));
+		btnChooseMarker.addActionListener(this);
+		aux.addComponent("", btnChooseMarker);
+		myTab.add(aux);
+		tabs.add(myTab);
 	}
 
 	public EditorTool[] getEditorTools() {
@@ -141,13 +143,16 @@ public class MarkerLine extends AbstractTypeSymbolEditor implements
 	public void actionPerformed(ActionEvent e) {
 		JComponent comp = (JComponent) e.getSource();
 		if (comp.equals(btnChooseMarker)) {
-            ISymbolSelector symSelect = SymbolSelector.createSymbolSelector(marker, FShape.POINT);
-            PluginServices.getMDIManager().addWindow(symSelect);
-            IMarkerSymbol myMarker = (IMarkerSymbol) symSelect.getSelectedObject();
+			ISymbolSelector symSelect = SymbolSelector.createSymbolSelector(
+					marker, FShape.POINT);
+			PluginServices.getMDIManager().addWindow(symSelect);
+			IMarkerSymbol myMarker = (IMarkerSymbol) symSelect
+					.getSelectedObject();
 
-            if (myMarker == null) return;
+			if (myMarker == null)
+				return;
 
-            this.marker = myMarker;
+			this.marker = myMarker;
 		}
 		fireSymbolChangedEvent();
 	}

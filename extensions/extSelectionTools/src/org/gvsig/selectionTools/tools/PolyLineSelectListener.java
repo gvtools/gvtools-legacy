@@ -27,13 +27,13 @@ import com.iver.cit.gvsig.fmap.tools.Events.MeasureEvent;
 /**
  * 
  * @version 06/04/2009
- * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es) 
+ * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class PolyLineSelectListener extends PolyLineSelectionListener {
 	public PolyLineSelectListener(MapControl mc) {
 		super(mc);
 	}
-	
+
 	public void polylineFinished(MeasureEvent event) throws BehaviorException {
 		super.polylineFinished(event);
 		PluginServices.getMainFrame().enableControls();

@@ -24,14 +24,15 @@ import javax.swing.UIManager;
 import org.gvsig.georeferencing.ui.options.GeorefOptionsPanel;
 import org.gvsig.gui.beans.buttonspanel.ButtonsPanelEvent;
 import org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener;
+
 /**
  * Test para el panel de geolocalización
- *
+ * 
  * @version 30/07/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class TestGeorefOptionsDialog implements ButtonsPanelListener {
-	private JFrame 			frame = new JFrame();
+	private JFrame frame = new JFrame();
 
 	public TestGeorefOptionsDialog() {
 		super();
@@ -40,9 +41,10 @@ public class TestGeorefOptionsDialog implements ButtonsPanelListener {
 
 	public static void main(String[] args) {
 		try {
-			UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
-		} catch( Exception e ) {
-			System.err.println( "No se puede cambiar al LookAndFeel");
+			UIManager
+					.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
+		} catch (Exception e) {
+			System.err.println("No se puede cambiar al LookAndFeel");
 		}
 		new TestGeorefOptionsDialog();
 	}

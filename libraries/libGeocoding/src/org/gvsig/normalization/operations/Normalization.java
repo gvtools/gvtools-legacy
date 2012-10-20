@@ -85,8 +85,8 @@ public interface Normalization {
 	 * @throws ValidateRowException
 	 */
 	public void fillRow(int row) throws DriverIOException, IOException,
-	ParseException, DriverException, ExpansionFileReadException,
-	ReadDriverException, ValidateRowException;
+			ParseException, DriverException, ExpansionFileReadException,
+			ReadDriverException, ValidateRowException;
 
 	/**
 	 * Tasks necessary before normalize

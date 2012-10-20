@@ -71,19 +71,19 @@ public class AverageFunction implements SummarizationFunction {
 	}
 
 	public NumericValue getSumarizeValue() {
-		if(numElements == 0)
+		if (numElements == 0)
 			return ValueFactory.createValue(0d);
-		double res = sum / (double)numElements;
+		double res = sum / (double) numElements;
 		return ValueFactory.createValue(res);
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		return "avg";
 	}
 
 	public void reset() {
 		sum = 0d;
 		numElements = 0;
-		
+
 	}
 }

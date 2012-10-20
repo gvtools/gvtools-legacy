@@ -76,71 +76,81 @@ import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
 /**
- * Menu de botón derecho para el Layout.
- * Se pueden añadir entradas facilmente desde una extensión,
- * creando una clase derivando de LayoutMenuEntry, y añadiendola en
- * estático (o en tiempo de carga de la extensión) a FPopupMenu.
+ * Menu de botón derecho para el Layout. Se pueden añadir entradas facilmente
+ * desde una extensión, creando una clase derivando de LayoutMenuEntry, y
+ * añadiendola en estático (o en tiempo de carga de la extensión) a FPopupMenu.
  * (Las entradas actuales están hechas de esa manera).
- *
+ * 
  * @author Vicente Caballero Navarro
- *
+ * 
  */
 
 public class FPopupMenu extends JPopupMenu {
-	//private static ArrayList menuEntrys = new ArrayList();
-    protected Layout layout;
-    private ExtensionPoint extensionPoint;
-    private IFFrame[] selecteds;
-    private static String extPoint="Layout_PopupActions";
-    //private JMenuItem capa;
-    // Lo de fijar la fuente es porque en linux se veía mal si no se fija.
-    // TODO: Esto no funcionará para idiomas como el chino. Hay que cambiarlo.
-    public final static Font theFont = new Font("SansSerif", Font.PLAIN, 10);
+	// private static ArrayList menuEntrys = new ArrayList();
+	protected Layout layout;
+	private ExtensionPoint extensionPoint;
+	private IFFrame[] selecteds;
+	private static String extPoint = "Layout_PopupActions";
+	// private JMenuItem capa;
+	// Lo de fijar la fuente es porque en linux se veía mal si no se fija.
+	// TODO: Esto no funcionará para idiomas como el chino. Hay que cambiarlo.
+	public final static Font theFont = new Font("SansSerif", Font.PLAIN, 10);
 
-    public static void registerExtensionPoint() {
+	public static void registerExtensionPoint() {
 
-    	ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
-    	extensionPoints.add(extPoint,"Terminate",new TerminateLayoutMenuEntry());
-    	extensionPoints.add(extPoint,"Cancel",new CancelLayoutMenuEntry());
-    	extensionPoints.add(extPoint,"Copy",new CopyLayoutMenuEntry());
-    	extensionPoints.add(extPoint,"Cut",new CutLayoutMenuEntry());
-    	extensionPoints.add(extPoint,"Paste",new PasteLayoutMenuEntry());
-    	extensionPoints.add(extPoint,"Simplify",new SimplifyLayoutMenuEntry());
-    	extensionPoints.add(extPoint,"Property",new PropertyLayoutMenuEntry());
-    	extensionPoints.add(extPoint,"SelectAll",new SelectAllLayoutMenuEntry());
-    	extensionPoints.add(extPoint,"Behind",new BehindLayoutMenuEntry());
-    	extensionPoints.add(extPoint,"Before",new BeforeLayoutMenuEntry());
-    	extensionPoints.add(extPoint,"Position",new PositionLayoutMenuEntry());
-    	extensionPoints.add(extPoint,"Refresh",new RefreshLayoutMenuEntry());
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+		extensionPoints.add(extPoint, "Terminate",
+				new TerminateLayoutMenuEntry());
+		extensionPoints.add(extPoint, "Cancel", new CancelLayoutMenuEntry());
+		extensionPoints.add(extPoint, "Copy", new CopyLayoutMenuEntry());
+		extensionPoints.add(extPoint, "Cut", new CutLayoutMenuEntry());
+		extensionPoints.add(extPoint, "Paste", new PasteLayoutMenuEntry());
+		extensionPoints
+				.add(extPoint, "Simplify", new SimplifyLayoutMenuEntry());
+		extensionPoints
+				.add(extPoint, "Property", new PropertyLayoutMenuEntry());
+		extensionPoints.add(extPoint, "SelectAll",
+				new SelectAllLayoutMenuEntry());
+		extensionPoints.add(extPoint, "Behind", new BehindLayoutMenuEntry());
+		extensionPoints.add(extPoint, "Before", new BeforeLayoutMenuEntry());
+		extensionPoints
+				.add(extPoint, "Position", new PositionLayoutMenuEntry());
+		extensionPoints.add(extPoint, "Refresh", new RefreshLayoutMenuEntry());
 
-    }
-    /**
-     * Creates a new FPopupMenu object.
-     *
-     * @param nodo DOCUMENT ME!
-     * @param vista DOCUMENT ME!
-     */
-    public FPopupMenu(Layout layout) {
-        super();
-        this.initialize(layout);
-    }
+	}
 
-    private void initialize(Layout layout) {
-        this.layout = layout;
-        this.extensionPoint = (ExtensionPoint)ExtensionPointsSingleton.getInstance().get(extPoint);
+	/**
+	 * Creates a new FPopupMenu object.
+	 * 
+	 * @param nodo
+	 *            DOCUMENT ME!
+	 * @param vista
+	 *            DOCUMENT ME!
+	 */
+	public FPopupMenu(Layout layout) {
+		super();
+		this.initialize(layout);
+	}
+
+	private void initialize(Layout layout) {
+		this.layout = layout;
+		this.extensionPoint = (ExtensionPoint) ExtensionPointsSingleton
+				.getInstance().get(extPoint);
 		this.selecteds = this.layout.getLayoutContext().getFFrameSelected();
 		IContextMenuAction[] actions = this.getActionList();
 		this.createMenuElements(actions);
-    }
+	}
 
-    private IContextMenuAction[] getActionList() {
+	private IContextMenuAction[] getActionList() {
 		ArrayList actionArrayList = new ArrayList();
 		Iterator iter = this.extensionPoint.keySet().iterator();
 		AbstractLayoutContextMenuAction action;
 		while (iter.hasNext()) {
 			action = null;
 			try {
-				action = (AbstractLayoutContextMenuAction)this.extensionPoint.create((String)iter.next());
+				action = (AbstractLayoutContextMenuAction) this.extensionPoint
+						.create((String) iter.next());
 			} catch (InstantiationException e) {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
@@ -148,41 +158,47 @@ public class FPopupMenu extends JPopupMenu {
 			}
 			if (action != null) {
 				action.setLayout(layout);
-				if (action.isVisible(null,this.selecteds)) {
+				if (action.isVisible(null, this.selecteds)) {
 					actionArrayList.add(action);
 				}
 			}
 		}
-		IContextMenuAction[] result = (IContextMenuAction[])Array.newInstance(IContextMenuAction.class,actionArrayList.size());
-		System.arraycopy(actionArrayList.toArray(),0,result,0,actionArrayList.size());
-		Arrays.sort(result,new CompareAction());
+		IContextMenuAction[] result = (IContextMenuAction[]) Array.newInstance(
+				IContextMenuAction.class, actionArrayList.size());
+		System.arraycopy(actionArrayList.toArray(), 0, result, 0,
+				actionArrayList.size());
+		Arrays.sort(result, new CompareAction());
 
 		return result;
-    }
+	}
 
-	public class CompareAction implements Comparator{
+	public class CompareAction implements Comparator {
 		public int compare(Object o1, Object o2) {
-			return this.compare((IContextMenuAction)o1,(IContextMenuAction)o2);
+			return this.compare((IContextMenuAction) o1,
+					(IContextMenuAction) o2);
 		}
 
 		public int compare(IContextMenuAction o1, IContextMenuAction o2) {
 			NumberFormat formater = NumberFormat.getInstance();
 			formater.setMinimumIntegerDigits(3);
-			String key1= ""+formater.format(o1.getGroupOrder())+o1.getGroup()+formater.format(o1.getOrder());
-			String key2= ""+formater.format(o2.getGroupOrder())+o2.getGroup()+formater.format(o2.getOrder());
+			String key1 = "" + formater.format(o1.getGroupOrder())
+					+ o1.getGroup() + formater.format(o1.getOrder());
+			String key2 = "" + formater.format(o2.getGroupOrder())
+					+ o2.getGroup() + formater.format(o2.getOrder());
 			return key1.compareTo(key2);
 		}
 	}
 
 	private void createMenuElements(IContextMenuAction[] actions) {
 		String group = null;
-		for (int i=0;i < actions.length;i++) {
+		for (int i = 0; i < actions.length; i++) {
 			IContextMenuAction action = actions[i];
-			MenuItem item = new MenuItem(action.getText(),action);
+			MenuItem item = new MenuItem(action.getText(), action);
 			item.setFont(theFont);
-			item.setEnabled(action.isEnabled(null,this.selecteds));
+			item.setEnabled(action.isEnabled(null, this.selecteds));
 			if (!action.getGroup().equals(group)) {
-				if (group != null) this.addSeparator();
+				if (group != null)
+					this.addSeparator();
 				group = action.getGroup();
 			}
 			this.add(item);
@@ -190,10 +206,10 @@ public class FPopupMenu extends JPopupMenu {
 
 	}
 
-
-	public class MenuItem extends JMenuItem implements ActionListener{
+	public class MenuItem extends JMenuItem implements ActionListener {
 		private IContextMenuAction action;
-		public MenuItem(String text,IContextMenuAction documentAction) {
+
+		public MenuItem(String text, IContextMenuAction documentAction) {
 			super(text);
 			this.action = documentAction;
 			String tip = this.action.getDescription();
@@ -204,7 +220,8 @@ public class FPopupMenu extends JPopupMenu {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			this.action.execute(layout.getLayoutContext(), FPopupMenu.this.selecteds);
+			this.action.execute(layout.getLayoutContext(),
+					FPopupMenu.this.selecteds);
 		}
 	}
 }

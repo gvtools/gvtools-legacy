@@ -119,307 +119,331 @@ import org.gvsig.gpe.writer.IGPEWriterHandlerImplementor;
  *
  */
 /**
- * This class is used to register the GPE parsers. All the 
- * parsers must be registered in this class before to be
- * used for the consumer application
+ * This class is used to register the GPE parsers. All the parsers must be
+ * registered in this class before to be used for the consumer application
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  */
 public class GPERegister {
 	private static Hashtable parsers = new Hashtable();
 	private static Hashtable writers = new Hashtable();
-	private static GPEParser gpeParser=null; 
-	
+	private static GPEParser gpeParser = null;
+
 	/**
 	 * Adds a new GPE parser
+	 * 
 	 * @param name
-	 * Driver name. It must be written like FORMAT VERSION
+	 *            Driver name. It must be written like FORMAT VERSION
 	 * @param description
-	 * Driver description. Just a descriptive text
+	 *            Driver description. Just a descriptive text
 	 * @param clazz
-	 * The parser class	
-	 * @throws ParserNotRegisteredException 
+	 *            The parser class
+	 * @throws ParserNotRegisteredException
 	 * @throws GPEParserRegisterException
 	 */
-	public static void addGpeParser(String name, String description,Class clazz) throws ParserNotRegisteredException { 
-		try{
-			if (clazz != null){
-				GPEParser parser = (GPEParser)clazz.getConstructor(null).newInstance(null);
+	public static void addGpeParser(String name, String description, Class clazz)
+			throws ParserNotRegisteredException {
+		try {
+			if (clazz != null) {
+				GPEParser parser = (GPEParser) clazz.getConstructor(null)
+						.newInstance(null);
 				parsers.put(name, parser);
-			}	
-		}catch (Exception e){
+			}
+		} catch (Exception e) {
 			throw new ParserNotRegisteredException(clazz.getName());
 		}
 	}
-	
+
 	/**
 	 * Adds a new GPE parser
+	 * 
 	 * @param clazz
-	 * The parser class	
-	 * @throws ParserNotRegisteredException 
+	 *            The parser class
+	 * @throws ParserNotRegisteredException
 	 * @throws GPEParserRegisterException
 	 */
-	public static void addGpeParser(Class clazz) throws ParserNotRegisteredException { 
-		try{
-			if (clazz != null){
-				GPEParser parser = (GPEParser)clazz.getConstructor(null).newInstance(null);
+	public static void addGpeParser(Class clazz)
+			throws ParserNotRegisteredException {
+		try {
+			if (clazz != null) {
+				GPEParser parser = (GPEParser) clazz.getConstructor(null)
+						.newInstance(null);
 				parsers.put(parser.getName(), parser);
-			}	
-		}catch (Exception e){
+			}
+		} catch (Exception e) {
 			throw new ParserNotRegisteredException(clazz.getName());
 		}
 	}
-	
+
 	/**
-	 * It loads the parsers of a parsers file. The file is
-	 * a properties file. Every line has the structure: 
-	 * Parser=Parser class
+	 * It loads the parsers of a parsers file. The file is a properties file.
+	 * Every line has the structure: Parser=Parser class
+	 * 
 	 * @param file
-	 * File that contains the parsers list
-	 * @throws IOException 
-	 * @throws FileNotFoundException 
-	 * @throws ParserNotRegisteredException 
+	 *            File that contains the parsers list
+	 * @throws IOException
+	 * @throws FileNotFoundException
+	 * @throws ParserNotRegisteredException
 	 */
-	public static void addParsersFile(File file) throws FileNotFoundException, IOException{
-		if (!file.exists()){
+	public static void addParsersFile(File file) throws FileNotFoundException,
+			IOException {
+		if (!file.exists()) {
 			return;
 		}
 		Properties properties = new Properties();
 		properties.load(new FileInputStream(file));
-		for (Enumeration e = properties.keys(); e.hasMoreElements() ; ) {
-		    String key = e.nextElement().toString();
-		    Class clazz;
+		for (Enumeration e = properties.keys(); e.hasMoreElements();) {
+			String key = e.nextElement().toString();
+			Class clazz;
 			try {
 				clazz = Class.forName(properties.getProperty(key).toString());
 				addGpeParser(clazz);
 			} catch (ClassNotFoundException ex) {
-				//Next class
+				// Next class
 			} catch (ParserNotRegisteredException ex) {
-				//Next class
-			} 	    
+				// Next class
+			}
 		}
-	}	
+	}
 
 	/**
-	 * It loads the writers of a writers file. The file is
-	 * a properties file. Every line has the structure: 
-	 * Writer=Parser class
+	 * It loads the writers of a writers file. The file is a properties file.
+	 * Every line has the structure: Writer=Parser class
+	 * 
 	 * @param file
-	 * File that contains the writers list
-	 * @throws IOException 
-	 * @throws FileNotFoundException 
+	 *            File that contains the writers list
+	 * @throws IOException
+	 * @throws FileNotFoundException
 	 */
-	public static void addWritersFile(File file) throws FileNotFoundException, IOException{
-		if (!file.exists()){
+	public static void addWritersFile(File file) throws FileNotFoundException,
+			IOException {
+		if (!file.exists()) {
 			return;
 		}
 		Properties properties = new Properties();
 		properties.load(new FileInputStream(file));
-		for (Enumeration e = properties.keys(); e.hasMoreElements() ; ) {
-		    String key = e.nextElement().toString();
-		    Class clazz;
+		for (Enumeration e = properties.keys(); e.hasMoreElements();) {
+			String key = e.nextElement().toString();
+			Class clazz;
 			try {
 				clazz = Class.forName(properties.getProperty(key).toString());
 				addGpeWriterHandler(clazz);
-			} catch (ClassNotFoundException ex){
-				//Next class
-			} catch (WriterHandlerNotRegisteredException ex){
-				//Next class
-			}		    
+			} catch (ClassNotFoundException ex) {
+				// Next class
+			} catch (WriterHandlerNotRegisteredException ex) {
+				// Next class
+			}
 		}
 	}
-	
+
 	/**
 	 * @return all the registered parsers
 	 */
-	public static GPEParser[] getAllParsers(){
+	public static GPEParser[] getAllParsers() {
 		GPEParser[] auxParsers = new GPEParser[parsers.size()];
 		Iterator it = parsers.keySet().iterator();
-		int i=0;
-		while (it.hasNext()){
-			String key = (String)it.next();
-			auxParsers[i] = (GPEParser)parsers.get(key);
+		int i = 0;
+		while (it.hasNext()) {
+			String key = (String) it.next();
+			auxParsers[i] = (GPEParser) parsers.get(key);
 			i++;
 		}
 		return auxParsers;
 	}
-		
+
 	/**
 	 * Adds a new GPEWriterHandlerImplementor
+	 * 
 	 * @param name
-	 * Driver name. It must be written like FORMAT VERSION
+	 *            Driver name. It must be written like FORMAT VERSION
 	 * @param description
-	 * Driver description. Just a descriptive text
+	 *            Driver description. Just a descriptive text
 	 * @param clazz
-	 * The parser class	
-	 * @throws WriterHandlerNotRegisteredException 
-	 * @throws GPEWriterHandlerRegisterException 
+	 *            The parser class
+	 * @throws WriterHandlerNotRegisteredException
+	 * @throws GPEWriterHandlerRegisterException
 	 */
-	public static void addGpeWriterHandler(String name, String description,Class clazz) throws WriterHandlerNotRegisteredException {
-		try{
-			if (clazz != null){
-				GPEWriterHandlerImplementor writerImplementor = (GPEWriterHandlerImplementor)clazz.getConstructor(null).newInstance(null);
+	public static void addGpeWriterHandler(String name, String description,
+			Class clazz) throws WriterHandlerNotRegisteredException {
+		try {
+			if (clazz != null) {
+				GPEWriterHandlerImplementor writerImplementor = (GPEWriterHandlerImplementor) clazz
+						.getConstructor(null).newInstance(null);
 				writers.put(name, writerImplementor);
 			}
-		}catch (Exception e){
+		} catch (Exception e) {
 			throw new WriterHandlerNotRegisteredException(clazz.getName());
 		}
 	}
-	
+
 	/**
 	 * Adds a new GPEWriterHandlerImplementor
+	 * 
 	 * @param clazz
-	 * The parser class	
-	 * @throws WriterHandlerNotRegisteredException 
-	 * @throws GPEWriterHandlerRegisterException 
+	 *            The parser class
+	 * @throws WriterHandlerNotRegisteredException
+	 * @throws GPEWriterHandlerRegisterException
 	 */
-	public static void addGpeWriterHandler(Class clazz) throws WriterHandlerNotRegisteredException {
-		try{
-			if (clazz != null){
-				GPEWriterHandlerImplementor writerImplementor = (GPEWriterHandlerImplementor)clazz.getConstructor(null).newInstance(null);
+	public static void addGpeWriterHandler(Class clazz)
+			throws WriterHandlerNotRegisteredException {
+		try {
+			if (clazz != null) {
+				GPEWriterHandlerImplementor writerImplementor = (GPEWriterHandlerImplementor) clazz
+						.getConstructor(null).newInstance(null);
 				writers.put(writerImplementor.getName(), writerImplementor);
 			}
-		}catch (Exception e){
+		} catch (Exception e) {
 			throw new WriterHandlerNotRegisteredException(clazz.getName());
 		}
 	}
-	
+
 	/**
 	 * Create a new parser from a name
+	 * 
 	 * @param name
-	 * GPEParser name
+	 *            GPEParser name
 	 * @param contenHandler
-	 * Application contenHandler usett to throw the parsing events
+	 *            Application contenHandler usett to throw the parsing events
 	 * @param errorHandler
-	 * Application errror handler used to put errors and warnings
-	 * @throws ParserCreationException 
-	 * @throws GPEParserCreationException 
+	 *            Application errror handler used to put errors and warnings
+	 * @throws ParserCreationException
+	 * @throws GPEParserCreationException
 	 */
-	public static GPEParser createParser(String name) throws ParserCreationException  {
-		if((gpeParser!=null)&&(gpeParser.getName()==name))
+	public static GPEParser createParser(String name)
+			throws ParserCreationException {
+		if ((gpeParser != null) && (gpeParser.getName() == name))
 			return gpeParser;
-		Object parser =  parsers.get(name);
-		try{
-			if (parser != null){
-				return (GPEParser)parser.getClass().getConstructor(null).newInstance(null);
-			}else{
+		Object parser = parsers.get(name);
+		try {
+			if (parser != null) {
+				return (GPEParser) parser.getClass().getConstructor(null)
+						.newInstance(null);
+			} else {
 				Exception e = new ParserNotRegisteredException(name);
 				throw new ParserCreationException(e);
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			throw new ParserCreationException(e);
 		}
-		
+
 	}
+
 	/**
 	 * Create a new parser from a name
+	 * 
 	 * @param name
-	 * GPEParser name
+	 *            GPEParser name
 	 * @param contenHandler
-	 * Application contenHandler usett to throw the parsing events
+	 *            Application contenHandler usett to throw the parsing events
 	 * @param errorHandler
-	 * Application errror handler used to put errors and warnings
-	 * @throws ParserCreationException 
-	 * @throws GPEParserCreationException 
+	 *            Application errror handler used to put errors and warnings
+	 * @throws ParserCreationException
+	 * @throws GPEParserCreationException
 	 */
-	public static GPEParser createParser() throws ParserCreationException  {
+	public static GPEParser createParser() throws ParserCreationException {
 		try {
-			if(gpeParser!=null){
-				return (GPEParser) gpeParser.getClass().getConstructor(null).newInstance(null);
-			}else{
+			if (gpeParser != null) {
+				return (GPEParser) gpeParser.getClass().getConstructor(null)
+						.newInstance(null);
+			} else {
 				Throwable e = new Exception("Fail Registering Parser");
 				throw new ParserCreationException(e);
 			}
-		}catch (Exception e){
+		} catch (Exception e) {
 			throw new ParserCreationException(e);
 		}
 	}
-		
+
 	/**
 	 * Gets the parser that can open the file (if it exists)
+	 * 
 	 * @param uri
-	 * File to open
-	 * @return
-	 * Null if the driver doesn't exist
-	 * @throws GPEParserCreationException 
-	 * @throws NoSuchMethodException 
-	 * @throws InvocationTargetException 
-	 * @throws IllegalAccessException 
-	 * @throws InstantiationException 
-	 * @throws SecurityException 
-	 * @throws IllegalArgumentException 
+	 *            File to open
+	 * @return Null if the driver doesn't exist
+	 * @throws GPEParserCreationException
+	 * @throws NoSuchMethodException
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
+	 * @throws SecurityException
+	 * @throws IllegalArgumentException
 	 */
-	public static GPEParser createParser(URI uri) throws ParserCreationException {
+	public static GPEParser createParser(URI uri)
+			throws ParserCreationException {
 		Iterator keys = parsers.keySet().iterator();
-		while (keys.hasNext()){
-			String key = (String)keys.next();
-			GPEParser parser = (GPEParser)parsers.get(key);
-			if (parser.accept(uri)){
+		while (keys.hasNext()) {
+			String key = (String) keys.next();
+			GPEParser parser = (GPEParser) parsers.get(key);
+			if (parser.accept(uri)) {
 				return createParser(key);
 			}
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Create a new content writer from a name
+	 * 
 	 * @param name
-	 * GPEWriterHandler name
-	 * GPEParser name
+	 *            GPEWriterHandler name GPEParser name
 	 * @param contenHandler
-	 * Application contenHandler usett to throw the parsing events
+	 *            Application contenHandler usett to throw the parsing events
 	 * @param errorHandler
-	 * Application errror handler used to put errors and warnings
-	 * @throws GPEWriterHandlerCreationException 	
+	 *            Application errror handler used to put errors and warnings
+	 * @throws GPEWriterHandlerCreationException
 	 */
-	public static GPEWriterHandler createWriter(String name) throws WriterHandlerCreationException{
-		Object writer =  writers.get(name);
-		try{
-			if (writer != null){
-				GPEWriterHandlerImplementor writerImplementor = (GPEWriterHandlerImplementor)writer.getClass().getConstructor(null).newInstance(null);
+	public static GPEWriterHandler createWriter(String name)
+			throws WriterHandlerCreationException {
+		Object writer = writers.get(name);
+		try {
+			if (writer != null) {
+				GPEWriterHandlerImplementor writerImplementor = (GPEWriterHandlerImplementor) writer
+						.getClass().getConstructor(null).newInstance(null);
 				return new GPEWriterHandler(writerImplementor);
-			}else{
+			} else {
 				Exception e = new WriterHandlerNotRegisteredException(name);
 				throw new WriterHandlerCreationException(e);
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			throw new WriterHandlerCreationException(e);
 		}
 	}
-	
+
 	/**
-	 * Gets all the writers that can 
+	 * Gets all the writers that can
+	 * 
 	 * @param format
 	 * @return
 	 */
-	public static ArrayList getWriterHandlerByFormat(String format){
+	public static ArrayList getWriterHandlerByFormat(String format) {
 		Iterator it = writers.keySet().iterator();
 		ArrayList possibleWriters = new ArrayList();
-		while (it.hasNext()){
-			String key = (String)it.next();
-			IGPEWriterHandlerImplementor implementor = (IGPEWriterHandlerImplementor)writers.get(key);
+		while (it.hasNext()) {
+			String key = (String) it.next();
+			IGPEWriterHandlerImplementor implementor = (IGPEWriterHandlerImplementor) writers
+					.get(key);
 			String formats = implementor.getFormat();
-			if (formats.toLowerCase().compareTo(format.toLowerCase()) == 0){
+			if (formats.toLowerCase().compareTo(format.toLowerCase()) == 0) {
 				possibleWriters.add(new GPEWriterHandler(implementor));
 			}
 		}
 		return possibleWriters;
 	}
-	
 
 	/**
 	 * Return true if exists a driver that can open the file
+	 * 
 	 * @param uri
-	 * File to open
-	 * @return
-	 * true if the driver exists
+	 *            File to open
+	 * @return true if the driver exists
 	 */
-	public static boolean accept(URI uri){
+	public static boolean accept(URI uri) {
 		Iterator keys = parsers.keySet().iterator();
-		while (keys.hasNext()){
-			GPEParser parser = (GPEParser)parsers.get(keys.next());
-			if (parser.accept(uri)){
-				gpeParser=parser;
+		while (keys.hasNext()) {
+			GPEParser parser = (GPEParser) parsers.get(keys.next());
+			if (parser.accept(uri)) {
+				gpeParser = parser;
 				return true;
 			}
 		}

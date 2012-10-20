@@ -40,29 +40,29 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: ILabelable.java 24273 2008-10-24 10:32:42Z vcaballero $
-* $Log$
-* Revision 1.2  2007-03-09 11:20:57  jaume
-* Advanced symbology (start committing)
-*
-* Revision 1.1.2.5  2007/02/15 16:23:44  jaume
-* *** empty log message ***
-*
-* Revision 1.1.2.4  2007/02/09 07:47:05  jaume
-* Isymbol moved
-*
-* Revision 1.1.2.3  2007/02/02 16:21:24  jaume
-* start commiting labeling stuff
-*
-* Revision 1.1.2.2  2007/02/01 17:46:49  jaume
-* *** empty log message ***
-*
-* Revision 1.1.2.1  2007/01/30 18:10:45  jaume
-* start commiting labeling stuff
-*
-*
-*/
+ *
+ * $Id: ILabelable.java 24273 2008-10-24 10:32:42Z vcaballero $
+ * $Log$
+ * Revision 1.2  2007-03-09 11:20:57  jaume
+ * Advanced symbology (start committing)
+ *
+ * Revision 1.1.2.5  2007/02/15 16:23:44  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1.2.4  2007/02/09 07:47:05  jaume
+ * Isymbol moved
+ *
+ * Revision 1.1.2.3  2007/02/02 16:21:24  jaume
+ * start commiting labeling stuff
+ *
+ * Revision 1.1.2.2  2007/02/01 17:46:49  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1.2.1  2007/01/30 18:10:45  jaume
+ * start commiting labeling stuff
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.core;
 
 import java.awt.Graphics2D;
@@ -75,41 +75,54 @@ import com.hardcode.gdbms.engine.data.driver.DriverException;
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.ILabelingStrategy;
 import com.iver.utiles.swing.threads.Cancellable;
+
 /**
- * This interface enables support for labeling an object such as a layer, but also others, if any. It gives support for detecting if labeling is being applied (<code>isLabeled()</code> and <code>setIsLabeled()</code>), to manage the labeling strategy (<code>getLabelingStrategy()</code> and <code>setLabelingStrategy</code>). The labeling is performed by the <code>drawLabels(..)</code> method.
- * @author   jaume dominguez faus - jaume.dominguez@iver.es
+ * This interface enables support for labeling an object such as a layer, but
+ * also others, if any. It gives support for detecting if labeling is being
+ * applied (<code>isLabeled()</code> and <code>setIsLabeled()</code>), to manage
+ * the labeling strategy (<code>getLabelingStrategy()</code> and
+ * <code>setLabelingStrategy</code>). The labeling is performed by the
+ * <code>drawLabels(..)</code> method.
+ * 
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public interface ILabelable {
 	/**
 	 * Returns <b>true</b> if labels are drawn, or <b>false</b> otherwise.
+	 * 
 	 * @return <b>boolean</b> telling if labels are drawn
 	 */
 	public boolean isLabeled();
 
 	/**
 	 * Enables or disables the label drawing.
-	 * @param isLabeled, if true then labels will be drawn
+	 * 
+	 * @param isLabeled
+	 *            , if true then labels will be drawn
 	 */
 	public void setIsLabeled(boolean isLabeled);
 
 	/**
 	 * Returns the current labeling strategy
+	 * 
 	 * @return ILabelingStrategy
 	 * @see ILabelingStrategy
 	 */
 	public ILabelingStrategy getLabelingStrategy();
 
 	/**
-	 * Sets the new labeling strategy. Changes on the results will take effect next time the drawLabels(...) method is invoked.
-	 * @param  strategy
-	 * @uml.property  name="labelingStrategy"
+	 * Sets the new labeling strategy. Changes on the results will take effect
+	 * next time the drawLabels(...) method is invoked.
+	 * 
+	 * @param strategy
+	 * @uml.property name="labelingStrategy"
 	 */
 	public void setLabelingStrategy(ILabelingStrategy strategy);
 
 	/**
-	 * Causes the labels to be drawn. The policy of process is determined by
-	 * the LabelingStrategy previously set.
-	 *
+	 * Causes the labels to be drawn. The policy of process is determined by the
+	 * LabelingStrategy previously set.
+	 * 
 	 * @param image
 	 * @param g
 	 * @param viewPort
@@ -118,7 +131,11 @@ public interface ILabelable {
 	 * @param dpi
 	 * @throws DriverException
 	 */
-	public void drawLabels(BufferedImage image, Graphics2D g, ViewPort viewPort, Cancellable cancel, double scale, double dpi) throws ReadDriverException;
+	public void drawLabels(BufferedImage image, Graphics2D g,
+			ViewPort viewPort, Cancellable cancel, double scale, double dpi)
+			throws ReadDriverException;
+
 	public void printLabels(Graphics2D g, ViewPort viewPort,
-    		Cancellable cancel, double scale, PrintRequestAttributeSet properties) throws ReadDriverException;
+			Cancellable cancel, double scale,
+			PrintRequestAttributeSet properties) throws ReadDriverException;
 }

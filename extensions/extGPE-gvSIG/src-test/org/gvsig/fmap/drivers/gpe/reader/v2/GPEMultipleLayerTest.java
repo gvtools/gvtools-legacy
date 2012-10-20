@@ -59,24 +59,26 @@ public class GPEMultipleLayerTest extends GPEParserTest {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.gpe.GPEDriverTest#getFile()
 	 */
 	public String getFile() {
-		return "../extGPE-gvSIG" + File.separatorChar +
-			"testdata" + File.separatorChar + "schools.xml";
+		return "../extGPE-gvSIG" + File.separatorChar + "testdata"
+				+ File.separatorChar + "schools.xml";
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.gpe.GPEDriverTest#makeAsserts()
 	 */
-	public void makeAsserts() throws DriverIOException, ReadDriverException{
+	public void makeAsserts() throws DriverIOException, ReadDriverException {
 		FLyrVect layer = getLayer();
-		assertEquals(layer.getSource().getShapeCount(),0);
-//		FLyrVect district28Layer = (FlyrGPEVectorial)layer.getLayer(0);
-//		FLyrVect district32Layer = (FlyrGPEVectorial)layer.getLayer(1);
-//		assertEquals(district28Layer.getDriver().getShapeCount(),3);
-//		assertEquals(district32Layer.getDriver().getShapeCount(),3);
+		assertEquals(layer.getSource().getShapeCount(), 0);
+		// FLyrVect district28Layer = (FlyrGPEVectorial)layer.getLayer(0);
+		// FLyrVect district32Layer = (FlyrGPEVectorial)layer.getLayer(1);
+		// assertEquals(district28Layer.getDriver().getShapeCount(),3);
+		// assertEquals(district32Layer.getDriver().getShapeCount(),3);
 	}
 
 }

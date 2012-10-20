@@ -42,14 +42,14 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: DifferenceTest.java 12564 2007-07-12 11:33:24Z azabala $
-* $Log$
-* Revision 1.1  2007-07-12 11:33:24  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: DifferenceTest.java 12564 2007-07-12 11:33:24Z azabala $
+ * $Log$
+ * Revision 1.1  2007-07-12 11:33:24  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.difference;
 
 import java.io.File;
@@ -60,8 +60,6 @@ import junit.framework.TestCase;
 import org.cresques.cts.ProjectionUtils;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
-import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 
 public class DifferenceTest extends TestCase {
@@ -69,48 +67,38 @@ public class DifferenceTest extends TestCase {
 	static final String fwAndamiDriverPath = "../_fwAndami/gvSIG/extensiones/com.iver.cit.gvsig/drivers";
 	private File baseDataPath;
 	private File baseDriversPath;
-	
+
 	private String SHP_DRIVER_NAME = "gvSIG shp driver";
-	
+
 	private CoordinateReferenceSystem DEFAULT_CRS = ProjectionUtils
 			.getCRS("EPSG:23030");
-	private CoordinateReferenceSystem newCrs = ProjectionUtils.getCRS("EPSG:23029");
-	
+	private CoordinateReferenceSystem newCrs = ProjectionUtils
+			.getCRS("EPSG:23029");
+
 	protected void setUp() throws Exception {
 		super.setUp();
 		URL url = this.getClass().getResource("testdata");
 		if (url == null)
-			throw new Exception("No se encuentra el directorio con datos de prueba");
+			throw new Exception(
+					"No se encuentra el directorio con datos de prueba");
 
 		baseDataPath = new File(url.getFile());
 		if (!baseDataPath.exists())
-			throw new Exception("No se encuentra el directorio con datos de prueba");
+			throw new Exception(
+					"No se encuentra el directorio con datos de prueba");
 
 		baseDriversPath = new File(fwAndamiDriverPath);
 		if (!baseDriversPath.exists())
-			throw new Exception("Can't find drivers path: " + fwAndamiDriverPath);
+			throw new Exception("Can't find drivers path: "
+					+ fwAndamiDriverPath);
 
 		LayerFactory.setDriversPath(baseDriversPath.getAbsolutePath());
 	}
 
-
-	private FLayer newLayer(String fileName, 
-									   String driverName) 
-								throws LoadLayerException {
-		File file = new File(baseDataPath, fileName);
-		return LayerFactory.createLayer(fileName, 
-										driverName, 
-										file, DEFAULT_CRS);
-	}
-	
-	
 	public void test1() {
-//		try {
-//			//pruebas de reproyeccion y seleccion de numero de campos
-//			FLyrVect lyr = (FLyrVect) newLayer("Cantabria.shp", SHP_DRIVER_NAME);
-//			lyr.setAvailable(true);
-			
-	}	
-	
+		// try {
+		// //pruebas de reproyeccion y seleccion de numero de campos
+		// FLyrVect lyr = (FLyrVect) newLayer("Cantabria.shp", SHP_DRIVER_NAME);
+		// lyr.setAvailable(true);
+	}
 }
-

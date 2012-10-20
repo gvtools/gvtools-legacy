@@ -47,7 +47,6 @@ import org.gvsig.fmap.raster.layers.ILayerState;
 import org.gvsig.raster.gui.IGenericToolBarMenuItem;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
 import org.gvsig.remotesensing.classification.gui.ClassificationPanel;
-import org.gvsig.remotesensing.mosaic.gui.MosaicDialog;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
@@ -57,57 +56,76 @@ import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
+
 /**
  * Extensión para el proceso de classificacion de una imagen
  * 
  * @author Alejandro Muñoz Sánchez (alejandro.munoz@uclm.es)
  */
-public class ClassificationExtension extends Extension implements IGenericToolBarMenuItem {
+public class ClassificationExtension extends Extension implements
+		IGenericToolBarMenuItem {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
-		ExtensionPoint extensionPoint = ExtensionPoint.getExtensionPoint("GenericToolBarMenu");
+		ExtensionPoint extensionPoint = ExtensionPoint
+				.getExtensionPoint("GenericToolBarMenu");
 		extensionPoint.register("Classification", this);
 		PluginServices.getIconTheme().register(
 				"clasificator-icon",
-				this.getClass().getClassLoader().getResource("images/color_class.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/color_class.png"));
 	}
-
-
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String actionCommand) {
-		if (actionCommand.equals("classification")){
-			com.iver.andami.ui.mdiManager.IWindow activeWindow = PluginServices.getMDIManager().getActiveWindow();
+		if (actionCommand.equals("classification")) {
+			com.iver.andami.ui.mdiManager.IWindow activeWindow = PluginServices
+					.getMDIManager().getActiveWindow();
 
-			//si la ventana activa es de tipo Vista 
-			if (activeWindow instanceof View) {				
-				/* check if there is at least one multiband raster in the current view */			
+			// si la ventana activa es de tipo Vista
+			if (activeWindow instanceof View) {
+				/*
+				 * check if there is at least one multiband raster in the
+				 * current view
+				 */
 				int j = 0;
-				/* ...now check if the required number of multi-band type raster layers is present in the View */
-				for(int i=0;i<((View) activeWindow).getMapControl().getMapContext().getLayers().getLayersCount();i++){
-					if ( ((View) activeWindow).getMapControl().getMapContext().getLayers().getLayer(i) instanceof FLyrRasterSE ) {						
-						/* do a more specific type casts and count the number of bands this layer has */
-						if ( ((FLyrRasterSE) ((View) activeWindow).getMapControl().getMapContext().getLayers().getLayer(i)).getBandCount() > 1) {
+				/*
+				 * ...now check if the required number of multi-band type raster
+				 * layers is present in the View
+				 */
+				for (int i = 0; i < ((View) activeWindow).getMapControl()
+						.getMapContext().getLayers().getLayersCount(); i++) {
+					if (((View) activeWindow).getMapControl().getMapContext()
+							.getLayers().getLayer(i) instanceof FLyrRasterSE) {
+						/*
+						 * do a more specific type casts and count the number of
+						 * bands this layer has
+						 */
+						if (((FLyrRasterSE) ((View) activeWindow)
+								.getMapControl().getMapContext().getLayers()
+								.getLayer(i)).getBandCount() > 1) {
 							j++;
 						}
 					}
 				}
 				/* check if we have at least one multiband layer in this view */
-				if ( j > 0 ) {
-					ClassificationPanel clasificationDialog =new ClassificationPanel((View)activeWindow);
-					//Mostrar la calculadora.
-					PluginServices.getMDIManager().addWindow(clasificationDialog);					
+				if (j > 0) {
+					ClassificationPanel clasificationDialog = new ClassificationPanel(
+							(View) activeWindow);
+					// Mostrar la calculadora.
+					PluginServices.getMDIManager().addWindow(
+							clasificationDialog);
 				} else {
-					JOptionPane.showMessageDialog(null, 
-							PluginServices.getText (this, "ext_rs_no_multiband_layers") );
+					JOptionPane.showMessageDialog(null, PluginServices.getText(
+							this, "ext_rs_no_multiband_layers"));
 					return;
 				}
 			}
@@ -116,10 +134,12 @@ public class ClassificationExtension extends Extension implements IGenericToolBa
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (f == null) {
 			return false;
 		}
@@ -128,8 +148,8 @@ public class ClassificationExtension extends Extension implements IGenericToolBa
 			IProjectView model = vista.getModel();
 			MapContext mapa = model.getMapContext();
 			FLayers layers = mapa.getLayers();
-			for (int i = 0; i < layers.getLayersCount(); i++) 
-				if (layers.getLayer(i) instanceof FLyrRasterSE) 
+			for (int i = 0; i < layers.getLayersCount(); i++)
+				if (layers.getLayer(i) instanceof FLyrRasterSE)
 					return true;
 		}
 		return false;
@@ -137,10 +157,12 @@ public class ClassificationExtension extends Extension implements IGenericToolBa
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (f == null) {
 			return false;
 		}
@@ -156,7 +178,11 @@ public class ClassificationExtension extends Extension implements IGenericToolBa
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#execute(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * org.gvsig.raster.gui.IGenericToolBarMenuItem#execute(com.iver.cit.gvsig
+	 * .project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public void execute(ITocItem item, FLayer[] selectedItems) {
 		this.execute("classification");
@@ -164,6 +190,7 @@ public class ClassificationExtension extends Extension implements IGenericToolBa
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getGroup()
 	 */
 	public String getGroup() {
@@ -172,6 +199,7 @@ public class ClassificationExtension extends Extension implements IGenericToolBa
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getIcon()
 	 */
 	public Icon getIcon() {
@@ -180,6 +208,7 @@ public class ClassificationExtension extends Extension implements IGenericToolBa
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getOrder()
 	 */
 	public int getOrder() {
@@ -188,6 +217,7 @@ public class ClassificationExtension extends Extension implements IGenericToolBa
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getText()
 	 */
 	public String getText() {
@@ -196,7 +226,11 @@ public class ClassificationExtension extends Extension implements IGenericToolBa
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * org.gvsig.raster.gui.IGenericToolBarMenuItem#isEnabled(com.iver.cit.gvsig
+	 * .project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -213,7 +247,11 @@ public class ClassificationExtension extends Extension implements IGenericToolBa
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * org.gvsig.raster.gui.IGenericToolBarMenuItem#isVisible(com.iver.cit.gvsig
+	 * .project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -221,12 +259,13 @@ public class ClassificationExtension extends Extension implements IGenericToolBa
 
 		if (!(selectedItems[0] instanceof FLyrRasterSE))
 			return false;
-		
+
 		return true;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getGroupOrder()
 	 */
 	public int getGroupOrder() {

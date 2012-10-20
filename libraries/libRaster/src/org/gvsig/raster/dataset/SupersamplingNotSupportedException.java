@@ -19,9 +19,9 @@
 package org.gvsig.raster.dataset;
 
 /**
- * Excepción que indica que un driver no soporta supersampling, es decir no se pueden
- * tomar muestras del contenido de un pixel en distintas posiciones.
- *
+ * Excepción que indica que un driver no soporta supersampling, es decir no se
+ * pueden tomar muestras del contenido de un pixel en distintas posiciones.
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class SupersamplingNotSupportedException extends Exception {
@@ -36,7 +36,7 @@ public class SupersamplingNotSupportedException extends Exception {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param message
 	 */
 	public SupersamplingNotSupportedException(String message) {
@@ -45,7 +45,7 @@ public class SupersamplingNotSupportedException extends Exception {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param message
 	 * @param cause
 	 */
@@ -55,7 +55,7 @@ public class SupersamplingNotSupportedException extends Exception {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param cause
 	 */
 	public SupersamplingNotSupportedException(Throwable cause) {

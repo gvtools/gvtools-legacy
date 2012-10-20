@@ -27,9 +27,10 @@ import java.util.ArrayList;
 
 import org.gvsig.gui.beans.listview.IListViewPainter;
 import org.gvsig.gui.beans.listview.ListViewItem;
+
 /**
  * Iconos de 82x28
- *
+ * 
  * @version 28/06/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
@@ -47,6 +48,7 @@ public class SmallIcon implements IListViewPainter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.graphic.listview.IListViewPainter#getName()
 	 */
 	public String getName() {
@@ -55,7 +57,9 @@ public class SmallIcon implements IListViewPainter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.graphic.listview.IListViewPainter#getPreferredSize()
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.graphic.listview.IListViewPainter#getPreferredSize()
 	 */
 	public Dimension getPreferredSize() {
 		return lastDimension;
@@ -63,10 +67,14 @@ public class SmallIcon implements IListViewPainter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.graphic.listview.IListViewPainter#paint(java.awt.Graphics2D, int, int)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.graphic.listview.IListViewPainter#paint(java.awt.
+	 * Graphics2D, int, int)
 	 */
 	public void paint(Graphics2D g, Rectangle visibleRect) {
-		int aux = (int) Math.floor(visibleRect.getWidth() / (minIconsWidth + 2));
+		int aux = (int) Math
+				.floor(visibleRect.getWidth() / (minIconsWidth + 2));
 		if (aux > items.size())
 			aux = items.size();
 		iconsWidth = (int) (Math.floor(visibleRect.getWidth() / aux) - 2);
@@ -88,22 +96,30 @@ public class SmallIcon implements IListViewPainter {
 				}
 			}
 
-			((ListViewItem) items.get(i)).getItemRectangle().setBounds(posX * (iconsWidth + 2), (posY * (iconsHeight + 2)), iconsWidth + 2, iconsHeight + 2);
-			if (((ListViewItem) items.get(i)).getItemRectangle().intersects(visibleRect)) {
+			((ListViewItem) items.get(i)).getItemRectangle().setBounds(
+					posX * (iconsWidth + 2), (posY * (iconsHeight + 2)),
+					iconsWidth + 2, iconsHeight + 2);
+			if (((ListViewItem) items.get(i)).getItemRectangle().intersects(
+					visibleRect)) {
 				if (((ListViewItem) items.get(i)).isSelected()) {
 					g.setColor(new Color(49, 106, 197));
-					g.fillRect(posX * (iconsWidth + 2), posY * (iconsHeight + 2), iconsWidth + 2, iconsHeight + 2);
+					g.fillRect(posX * (iconsWidth + 2), posY
+							* (iconsHeight + 2), iconsWidth + 2,
+							iconsHeight + 2);
 				}
 
 				Shape clip = g.getClip();
-				g.translate(posX * (iconsWidth + 2) + 1, (posY * (iconsHeight + 2)) + 1);
+				g.translate(posX * (iconsWidth + 2) + 1,
+						(posY * (iconsHeight + 2)) + 1);
 				g.setClip(0, 0, iconsWidth, iconsHeight);
 
 				if (((ListViewItem) items.get(i)).getIcon() != null)
-					((ListViewItem) items.get(i)).getIcon().paint(g, ((ListViewItem) items.get(i)).isSelected());
+					((ListViewItem) items.get(i)).getIcon().paint(g,
+							((ListViewItem) items.get(i)).isSelected());
 
 				g.setClip(clip);
-				g.translate(- (posX * (iconsWidth + 2) + 1), - ((posY * (iconsHeight + 2)) + 1));
+				g.translate(-(posX * (iconsWidth + 2) + 1),
+						-((posY * (iconsHeight + 2)) + 1));
 			}
 
 			if (height2 < ((posY + 1) * (iconsHeight + 2)))

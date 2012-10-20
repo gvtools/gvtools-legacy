@@ -24,11 +24,12 @@ import junit.framework.TestSuite;
 public class AllTestsRmf {
 
 	public static Test suite() {
-		TestSuite suite = new TestSuite("Test for org.gvsig.raster.dataset.io.rmf");
-		//$JUnit-BEGIN$
+		TestSuite suite = new TestSuite(
+				"Test for org.gvsig.raster.dataset.io.rmf");
+		// $JUnit-BEGIN$
 		suite.addTestSuite(TestRmfWrite.class);
 		suite.addTestSuite(TestRmfRead.class);
-		//$JUnit-END$
+		// $JUnit-END$
 		return suite;
 	}
 

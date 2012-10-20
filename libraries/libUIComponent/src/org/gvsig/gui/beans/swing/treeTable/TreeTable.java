@@ -77,147 +77,160 @@ import javax.swing.tree.TreeModel;
  *
  */
 /**
- * To create a new tree table it is necessary to create a new
- * treetablemodel. See the ExampleModel.java.
+ * To create a new tree table it is necessary to create a new treetablemodel.
+ * See the ExampleModel.java.
+ * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
 
 public class TreeTable extends JTable {
-  private static final long serialVersionUID = 6630322246955414756L;
+	private static final long serialVersionUID = 6630322246955414756L;
 	protected TreeTableCellRenderer tree;
-		
+
 	public TreeTable(TreeTableModel treeTableModel) {
 		super();
-	    setModel(treeTableModel);  
-	}
-	
-	public TreeTable(TreeTableModel treeTableModel,TreeCellRenderer cellRenderer,TreeCellEditor cellEditor) {
-		super();
-	    setModel(treeTableModel,cellRenderer,cellEditor);  
-	}
-	
-	public void setModel(TreeTableModel treeTableModel,TreeCellRenderer cellRenderer,TreeCellEditor cellEditor){
-		tree = new TreeTableCellRenderer(treeTableModel,this,cellRenderer,cellEditor);
-		super.setModel(new TreeTableModelAdapter(treeTableModel, tree));
-		setModel();
-	}
-	
-	public void setModel(TreeTableModel treeTableModel){
-		tree = new TreeTableCellRenderer(treeTableModel,this); 
-		super.setModel(new TreeTableModelAdapter(treeTableModel, tree));
-		setModel();
-	}
-	
-	private void setModel(){
-		// Force the JTable and JTree to share their row selection models. 
-		tree.setSelectionModel(new DefaultTreeSelectionModel() { 
-      	private static final long serialVersionUID = 2719965083562067462L;
-			// Extend the implementation of the constructor, as if: 
-			/* public this() */ {
-				setSelectionModel(listSelectionModel); 
-			} 
-		}); 
-		// Make the tree and table row heights the same. 
-		tree.setRowHeight(getRowHeight());
-		
-		// Install the tree editor renderer and editor. 
-		setDefaultRenderer(TreeTableModel.class, tree); 
-		setDefaultEditor(TreeTableModel.class, new TreeTableCellEditor());  
-		
-		setShowGrid(false);
-		setIntercellSpacing(new Dimension(0, 0)); 
-	}
-	
-	/* Workaround for BasicTableUI anomaly. Make sure the UI never tries to 
-	 * paint the editor. The UI currently uses different techniques to 
-	 * paint the renderers and editors and overriding setBounds() below 
-	 * is not the right thing to do for an editor. Returning -1 for the 
-	 * editing row in this case, ensures the editor is never painted. 
-	 */
-	public int getEditingRow() {
-		return (getColumnClass(editingColumn) == TreeTableModel.class) ? -1 : editingRow;  
+		setModel(treeTableModel);
 	}
 
-	
-	public class TreeTableCellEditor extends AbstractCellEditor implements TableCellEditor {
-		public Component getTableCellEditorComponent(JTable table, Object value,
-				boolean isSelected, int r, int c) {
+	public TreeTable(TreeTableModel treeTableModel,
+			TreeCellRenderer cellRenderer, TreeCellEditor cellEditor) {
+		super();
+		setModel(treeTableModel, cellRenderer, cellEditor);
+	}
+
+	public void setModel(TreeTableModel treeTableModel,
+			TreeCellRenderer cellRenderer, TreeCellEditor cellEditor) {
+		tree = new TreeTableCellRenderer(treeTableModel, this, cellRenderer,
+				cellEditor);
+		super.setModel(new TreeTableModelAdapter(treeTableModel, tree));
+		setModel();
+	}
+
+	public void setModel(TreeTableModel treeTableModel) {
+		tree = new TreeTableCellRenderer(treeTableModel, this);
+		super.setModel(new TreeTableModelAdapter(treeTableModel, tree));
+		setModel();
+	}
+
+	private void setModel() {
+		// Force the JTable and JTree to share their row selection models.
+		tree.setSelectionModel(new DefaultTreeSelectionModel() {
+			private static final long serialVersionUID = 2719965083562067462L;
+			// Extend the implementation of the constructor, as if:
+			/* public this() */{
+				setSelectionModel(listSelectionModel);
+			}
+		});
+		// Make the tree and table row heights the same.
+		tree.setRowHeight(getRowHeight());
+
+		// Install the tree editor renderer and editor.
+		setDefaultRenderer(TreeTableModel.class, tree);
+		setDefaultEditor(TreeTableModel.class, new TreeTableCellEditor());
+
+		setShowGrid(false);
+		setIntercellSpacing(new Dimension(0, 0));
+	}
+
+	/*
+	 * Workaround for BasicTableUI anomaly. Make sure the UI never tries to
+	 * paint the editor. The UI currently uses different techniques to paint the
+	 * renderers and editors and overriding setBounds() below is not the right
+	 * thing to do for an editor. Returning -1 for the editing row in this case,
+	 * ensures the editor is never painted.
+	 */
+	public int getEditingRow() {
+		return (getColumnClass(editingColumn) == TreeTableModel.class) ? -1
+				: editingRow;
+	}
+
+	public class TreeTableCellEditor extends AbstractCellEditor implements
+			TableCellEditor {
+		public Component getTableCellEditorComponent(JTable table,
+				Object value, boolean isSelected, int r, int c) {
 			return tree;
 		}
 	}
-	
+
 	/**
 	 * Deletes all the tree icons
-	 *
+	 * 
 	 */
-	public void deleteIcons(){
+	public void deleteIcons() {
 		setLeafIcon(null);
-	    setClosedIcon(null);
-	    setOpenIcon(null);
+		setClosedIcon(null);
+		setOpenIcon(null);
 	}
-	
+
 	/**
 	 * Sets the root visible
 	 */
-	public void setRootVisible(boolean rootVisible){
+	public void setRootVisible(boolean rootVisible) {
 		tree.setRootVisible(rootVisible);
 	}
-	
+
 	/**
 	 * Sets the leaftIcon
+	 * 
 	 * @param newIcon
 	 */
-	public void setLeafIcon(Icon newIcon){
-		TreeTableCellRenderer renderer = (TreeTableCellRenderer)getTree();
-		DefaultTreeCellRenderer treeRenderer = (DefaultTreeCellRenderer)renderer.getCellRenderer();
+	public void setLeafIcon(Icon newIcon) {
+		TreeTableCellRenderer renderer = (TreeTableCellRenderer) getTree();
+		DefaultTreeCellRenderer treeRenderer = (DefaultTreeCellRenderer) renderer
+				.getCellRenderer();
 		treeRenderer.setLeafIcon(newIcon);
 	}
-	
+
 	/**
 	 * Sets the open icon
+	 * 
 	 * @param newIcon
 	 */
-	public void setOpenIcon(Icon newIcon){
-		TreeTableCellRenderer renderer = (TreeTableCellRenderer)getTree();
-		DefaultTreeCellRenderer treeRenderer = (DefaultTreeCellRenderer)renderer.getCellRenderer();
+	public void setOpenIcon(Icon newIcon) {
+		TreeTableCellRenderer renderer = (TreeTableCellRenderer) getTree();
+		DefaultTreeCellRenderer treeRenderer = (DefaultTreeCellRenderer) renderer
+				.getCellRenderer();
 		treeRenderer.setOpenIcon(newIcon);
 	}
-	
+
 	/**
 	 * Sets the close icon
+	 * 
 	 * @param newIcon
 	 */
-	public void setClosedIcon(Icon newIcon){
-		TreeTableCellRenderer renderer = (TreeTableCellRenderer)getTree();
-		DefaultTreeCellRenderer treeRenderer = (DefaultTreeCellRenderer)renderer.getCellRenderer();
+	public void setClosedIcon(Icon newIcon) {
+		TreeTableCellRenderer renderer = (TreeTableCellRenderer) getTree();
+		DefaultTreeCellRenderer treeRenderer = (DefaultTreeCellRenderer) renderer
+				.getCellRenderer();
 		treeRenderer.setClosedIcon(newIcon);
 	}
 
 	public Component getTree() {
 		return tree;
 	}
-	
-	public int expandJTreeNode (Object node, int row){
+
+	public int expandJTreeNode(Object node, int row) {
 		TreeModel model = tree.getModel();
-		if (node != null  &&  !model.isLeaf(node)){
+		if (node != null && !model.isLeaf(node)) {
 			tree.expandRow(row);
-			for (int index = 0;	row + 1 < tree.getRowCount()  &&  index < model.getChildCount(node); index++){
+			for (int index = 0; row + 1 < tree.getRowCount()
+					&& index < model.getChildCount(node); index++) {
 				row++;
 				Object child = model.getChild(node, index);
 				if (child == null)
 					break;
 				javax.swing.tree.TreePath path;
-				while ((path = tree.getPathForRow(row)) != null  &&	path.getLastPathComponent() != child){
+				while ((path = tree.getPathForRow(row)) != null
+						&& path.getLastPathComponent() != child) {
 					tree.expandRow(row);
-					row++;					
+					row++;
 				}
 				if (path == null)
 					break;
-				row = expandJTreeNode(child, row);				
+				row = expandJTreeNode(child, row);
 			}
 		}
 		return row;
 	}
-	
-}
 
+}

@@ -56,10 +56,9 @@ import com.iver.cit.gvsig.project.documents.table.ProjectTable;
 import com.iver.cit.gvsig.project.documents.table.gui.DlgFieldManager;
 import com.iver.cit.gvsig.project.documents.table.gui.Table;
 
-
 /**
  * Extensión que abre las tablas asociadas a las vistas.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class TableManageFields extends Extension {
@@ -70,22 +69,20 @@ public class TableManageFields extends Extension {
 	public void execute(String s) {
 		IWindow v = PluginServices.getMDIManager().getActiveWindow();
 
-	    Table t = (Table) v;
-	    ProjectTable pt = t.getModel();
-	    IEditableSource ies = pt.getModelo();
-	    if (ies.getOriginalDriver() instanceof IWriteable)
-	    {
-	    	IWriteable aux = (IWriteable) ies.getOriginalDriver();
-	    	IWriter writer = aux.getWriter();
-	    	// No todos los writer pueden cambiar los campos 
-	    	if (writer.canAlterTable())
-	    	{
-//	    		IFieldManager fieldManager = (IFieldManager) writer;
-	    		DlgFieldManager dlg = new DlgFieldManager(ies);
-	    		PluginServices.getMDIManager().addWindow(dlg);
-	    	}
-	    }
-		    
+		Table t = (Table) v;
+		ProjectTable pt = t.getModel();
+		IEditableSource ies = pt.getModelo();
+		if (ies.getOriginalDriver() instanceof IWriteable) {
+			IWriteable aux = (IWriteable) ies.getOriginalDriver();
+			IWriter writer = aux.getWriter();
+			// No todos los writer pueden cambiar los campos
+			if (writer.canAlterTable()) {
+				// IFieldManager fieldManager = (IFieldManager) writer;
+				DlgFieldManager dlg = new DlgFieldManager(ies);
+				PluginServices.getMDIManager().addWindow(dlg);
+			}
+		}
+
 	}
 
 	/**
@@ -93,8 +90,8 @@ public class TableManageFields extends Extension {
 	 */
 	public void initialize() {
 	}
-	
-    public boolean isEnabled() {
+
+	public boolean isEnabled() {
 		IWindow v = PluginServices.getMDIManager().getActiveWindow();
 
 		if (v == null) {
@@ -102,28 +99,26 @@ public class TableManageFields extends Extension {
 		}
 
 		if (v instanceof Table) {
-		    Table t = (Table) v;
-		    IEditableSource ies = t.getModel().getModelo(); 
-//		    ProjectTable pt = t.getModel();
-		    if (ies.getOriginalDriver() instanceof IWriteable)
-		    {
-		    	IWriter writer = ((IWriteable) ies.getOriginalDriver()).getWriter();
-				if ((writer != null) && (writer.canAlterTable()))
-				{
-					if (ies.isEditing())
-					{
+			Table t = (Table) v;
+			IEditableSource ies = t.getModel().getModelo();
+			// ProjectTable pt = t.getModel();
+			if (ies.getOriginalDriver() instanceof IWriteable) {
+				IWriter writer = ((IWriteable) ies.getOriginalDriver())
+						.getWriter();
+				if ((writer != null) && (writer.canAlterTable())) {
+					if (ies.isEditing()) {
 						return true;
 					}
 				}
-		    }		    
+			}
 		}
 		return false;
-    }
+	}
 
-    /**
-     * @see com.iver.andami.plugins.IExtension#isVisible()
-     */
-    public boolean isVisible() {
+	/**
+	 * @see com.iver.andami.plugins.IExtension#isVisible()
+	 */
+	public boolean isVisible() {
 		IWindow v = PluginServices.getMDIManager().getActiveWindow();
 
 		if (v == null) {
@@ -131,9 +126,9 @@ public class TableManageFields extends Extension {
 		}
 
 		if (v instanceof Table) {
-		    return true;
+			return true;
 		}
 		return false;
-    }
+	}
 
 }

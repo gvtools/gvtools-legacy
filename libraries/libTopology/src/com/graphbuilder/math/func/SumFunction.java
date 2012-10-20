@@ -1,15 +1,16 @@
 package com.graphbuilder.math.func;
 
 /**
-The sum function.
-*/
+ * The sum function.
+ */
 public class SumFunction implements Function {
 
-	public SumFunction() {}
+	public SumFunction() {
+	}
 
 	/**
-	Returns the sum of the values in the array from [0, numParam).
-	*/
+	 * Returns the sum of the values in the array from [0, numParam).
+	 */
 	public double of(double[] d, int numParam) {
 		double sum = 0;
 
@@ -20,8 +21,8 @@ public class SumFunction implements Function {
 	}
 
 	/**
-	Returns true for 1 or more parameters, false otherwise.
-	*/
+	 * Returns true for 1 or more parameters, false otherwise.
+	 */
 	public boolean acceptNumParam(int numParam) {
 		return numParam > 0;
 	}

@@ -54,26 +54,27 @@ import org.gvsig.exceptions.BaseException;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class GPEXmlEmptyFileException extends BaseException{
+public class GPEXmlEmptyFileException extends BaseException {
 	private static final long serialVersionUID = 2236291706954686861L;
-	private String filename="";
+	private String filename = "";
 
 	public GPEXmlEmptyFileException(String file) {
 		init();
-		this.filename=file;
+		this.filename = file;
 	}
 
 	public GPEXmlEmptyFileException() {
-		init();		
+		init();
 	}
 
 	public GPEXmlEmptyFileException(Throwable exception) {
 		init();
 		initCause(exception);
 	}
+
 	public GPEXmlEmptyFileException(String file, Throwable exception) {
 		init();
-		this.filename=file;
+		this.filename = file;
 		initCause(exception);
 	}
 
@@ -86,22 +87,21 @@ public class GPEXmlEmptyFileException extends BaseException{
 	}
 
 	protected Map values() {
-		//Key -> value... filename -> name of the file
+		// Key -> value... filename -> name of the file
 		Hashtable params;
 		params = new Hashtable();
-		if (filename != null){
-			params.put("file",filename);
-		}		
+		if (filename != null) {
+			params.put("file", filename);
+		}
 		return params;
 	}
 
-
 	public void init() {
-		messageKey="Gml_empty_file_error";
-		if (filename != null){
-		formatString="The XML file %(file) is empty";
-		}else{
-			formatString="The XML file is empty";
+		messageKey = "Gml_empty_file_error";
+		if (filename != null) {
+			formatString = "The XML file %(file) is empty";
+		} else {
+			formatString = "The XML file is empty";
 		}
 		code = serialVersionUID;
 	}

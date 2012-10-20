@@ -59,9 +59,9 @@ import com.iver.cit.gvsig.fmap.drivers.WKBParser2;
 
 /**
  * @author FJP
- *
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
+ * 
+ *         TODO To change the template for this generated type comment go to
+ *         Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class HSQLDBFeatureIterator implements IFeatureIterator {
 	private WKBParser2 parser = new WKBParser2();
@@ -80,7 +80,7 @@ public class HSQLDBFeatureIterator implements IFeatureIterator {
 
 	/**
 	 * @throws SQLException
-	 *
+	 * 
 	 */
 	public HSQLDBFeatureIterator(ResultSet rs) {
 		// Debe ser forward only
@@ -97,7 +97,7 @@ public class HSQLDBFeatureIterator implements IFeatureIterator {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.jdbc.GeometryIterator#hasNext()
 	 */
 	public boolean hasNext() throws ReadDriverException {
@@ -108,20 +108,20 @@ public class HSQLDBFeatureIterator implements IFeatureIterator {
 			}
 			return true;
 		} catch (SQLException e) {
-//			SqlDriveExceptionType type = new SqlDriveExceptionType();
-//            type.setDriverName("HSQLDB Driver");
-//            try {
-//				type.setSql(rs.getStatement().toString());
-//			} catch (SQLException e1) {
-//				e1.printStackTrace();
-//			}
-            throw new ReadDriverException("HSQLDB Driver",e);
+			// SqlDriveExceptionType type = new SqlDriveExceptionType();
+			// type.setDriverName("HSQLDB Driver");
+			// try {
+			// type.setSql(rs.getStatement().toString());
+			// } catch (SQLException e1) {
+			// e1.printStackTrace();
+			// }
+			throw new ReadDriverException("HSQLDB Driver", e);
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.jdbc.GeometryIterator#next()
 	 */
 	public IFeature next() throws ReadDriverException {
@@ -163,36 +163,36 @@ public class HSQLDBFeatureIterator implements IFeatureIterator {
 
 			return feat;
 		} catch (SQLException e) {
-//			SqlDriveExceptionType type = new SqlDriveExceptionType();
-//            type.setDriverName("HSQLDB Driver");
-//            try {
-//				type.setSql(rs.getStatement().toString());
-//			} catch (SQLException e1) {
-//				e1.printStackTrace();
-//			}
-            throw new ReadDriverException("HSQLDB Driver",e);
+			// SqlDriveExceptionType type = new SqlDriveExceptionType();
+			// type.setDriverName("HSQLDB Driver");
+			// try {
+			// type.setSql(rs.getStatement().toString());
+			// } catch (SQLException e1) {
+			// e1.printStackTrace();
+			// }
+			throw new ReadDriverException("HSQLDB Driver", e);
 		}
 
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.IFeatureIterator#closeIterator()
 	 */
 	public void closeIterator() throws ReadDriverException {
 		try {
 			rs.close();
 		} catch (SQLException e) {
-//			SqlDriveExceptionType type = new SqlDriveExceptionType();
-//            type.setDriverName("HSQLDB Driver");
-//            try {
-//				type.setSql(rs.getStatement().toString());
-//			} catch (SQLException e1) {
-//				e1.printStackTrace();
-//			}
-            throw new ReadDriverException("HSQLDB Driver",e);
-//			throw new DriverException(e);
+			// SqlDriveExceptionType type = new SqlDriveExceptionType();
+			// type.setDriverName("HSQLDB Driver");
+			// try {
+			// type.setSql(rs.getStatement().toString());
+			// } catch (SQLException e1) {
+			// e1.printStackTrace();
+			// }
+			throw new ReadDriverException("HSQLDB Driver", e);
+			// throw new DriverException(e);
 		}
 	}
 

@@ -37,13 +37,13 @@ import javax.swing.table.TableCellRenderer;
  * @author <a href="mailto:cordin@disid.com">Cèsar Ordiñana</a>
  */
 public class RadioButtonCellRenderer extends RadioButtonCell implements
-	TableCellRenderer {
+		TableCellRenderer {
 
-    private static final long serialVersionUID = 7085349383073216796L;
+	private static final long serialVersionUID = 7085349383073216796L;
 
-    public Component getTableCellRendererComponent(JTable table, Object value,
-	    boolean isSelected, boolean hasFocus, int row, int column) {
-	return getTableCellComponent(table, value, isSelected, hasFocus, row,
-		column);
-    }
+	public Component getTableCellRendererComponent(JTable table, Object value,
+			boolean isSelected, boolean hasFocus, int row, int column) {
+		return getTableCellComponent(table, value, isSelected, hasFocus, row,
+				column);
+	}
 }

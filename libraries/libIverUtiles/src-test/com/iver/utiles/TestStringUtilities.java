@@ -44,37 +44,40 @@ import junit.framework.TestCase;
  */
 
 /**
- * This class tests some methods of the 'StringUtilities' class
- * (Now only tests the methods 'numberOfOccurrencesOfSubStringInString' and 'numberOfOccurrencesOfSubStringInStringUpToPosition')
+ * This class tests some methods of the 'StringUtilities' class (Now only tests
+ * the methods 'numberOfOccurrencesOfSubStringInString' and
+ * 'numberOfOccurrencesOfSubStringInStringUpToPosition')
  * 
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
-public class TestStringUtilities extends TestCase{
+public class TestStringUtilities extends TestCase {
 	private String word_String;
 	private String word_subString;
 	private boolean case_Sensitive;
 	private int start_position;
 	private int end_position;
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see junit.framework.TestCase#setUp()
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
 		word_String = new String();
 		word_subString = new String();
-		case_Sensitive = true; // By default, case sensitive		
+		case_Sensitive = true; // By default, case sensitive
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see junit.framework.TestCase#tearDown()
 	 */
 	protected void tearDown() throws Exception {
 		super.tearDown();
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -84,15 +87,21 @@ public class TestStringUtilities extends TestCase{
 		case_Sensitive = true;
 
 		System.out.print("Test1: El número de ocurrencias");
-		
+
 		if (case_Sensitive)
 			System.out.print(" con distinción minúsculas/mayúsculas ");
 		else
 			System.out.print(" sin distinción minúsculas/mayúsculas ");
-		
-		System.out.println("de '" + word_subString + "' en '" + word_String + " es " + StringUtilities.numberOfOccurrencesOfSubStringInString(word_String, word_subString, case_Sensitive));
+
+		System.out.println("de '"
+				+ word_subString
+				+ "' en '"
+				+ word_String
+				+ " es "
+				+ StringUtilities.numberOfOccurrencesOfSubStringInString(
+						word_String, word_subString, case_Sensitive));
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -102,13 +111,19 @@ public class TestStringUtilities extends TestCase{
 		case_Sensitive = false;
 
 		System.out.print("Test2: El número de ocurrencias");
-		
+
 		if (case_Sensitive)
 			System.out.print(" con distinción minúsculas/mayúsculas ");
 		else
 			System.out.print(" sin distinción minúsculas/mayúsculas ");
-		
-		System.out.println("de '" + word_subString + "' en '" + word_String + " es " + StringUtilities.numberOfOccurrencesOfSubStringInString(word_String, word_subString, case_Sensitive));
+
+		System.out.println("de '"
+				+ word_subString
+				+ "' en '"
+				+ word_String
+				+ " es "
+				+ StringUtilities.numberOfOccurrencesOfSubStringInString(
+						word_String, word_subString, case_Sensitive));
 	}
 
 	/**
@@ -120,13 +135,19 @@ public class TestStringUtilities extends TestCase{
 		case_Sensitive = true;
 
 		System.out.print("Test3: El número de ocurrencias");
-		
+
 		if (case_Sensitive)
 			System.out.print(" con distinción minúsculas/mayúsculas ");
 		else
 			System.out.print(" sin distinción minúsculas/mayúsculas ");
-		
-		System.out.println("de '" + word_subString + "' en '" + word_String + " es " + StringUtilities.numberOfOccurrencesOfSubStringInString(word_String, word_subString, case_Sensitive));
+
+		System.out.println("de '"
+				+ word_subString
+				+ "' en '"
+				+ word_String
+				+ " es "
+				+ StringUtilities.numberOfOccurrencesOfSubStringInString(
+						word_String, word_subString, case_Sensitive));
 	}
 
 	/**
@@ -138,13 +159,19 @@ public class TestStringUtilities extends TestCase{
 		case_Sensitive = false;
 
 		System.out.print("Test4: El número de ocurrencias");
-		
+
 		if (case_Sensitive)
 			System.out.print(" con distinción minúsculas/mayúsculas ");
 		else
 			System.out.print(" sin distinción minúsculas/mayúsculas ");
-		
-		System.out.println("de '" + word_subString + "' en '" + word_String + " es " + StringUtilities.numberOfOccurrencesOfSubStringInString(word_String, word_subString, case_Sensitive));
+
+		System.out.println("de '"
+				+ word_subString
+				+ "' en '"
+				+ word_String
+				+ " es "
+				+ StringUtilities.numberOfOccurrencesOfSubStringInString(
+						word_String, word_subString, case_Sensitive));
 	}
 
 	/**
@@ -156,13 +183,19 @@ public class TestStringUtilities extends TestCase{
 		case_Sensitive = true;
 
 		System.out.print("Test5: El número de ocurrencias");
-		
+
 		if (case_Sensitive)
 			System.out.print(" con distinción minúsculas/mayúsculas ");
 		else
 			System.out.print(" sin distinción minúsculas/mayúsculas ");
-		
-		System.out.println("de '" + word_subString + "' en '" + word_String + " es " + StringUtilities.numberOfOccurrencesOfSubStringInString(word_String, word_subString, case_Sensitive));
+
+		System.out.println("de '"
+				+ word_subString
+				+ "' en '"
+				+ word_String
+				+ " es "
+				+ StringUtilities.numberOfOccurrencesOfSubStringInString(
+						word_String, word_subString, case_Sensitive));
 	}
 
 	/**
@@ -174,15 +207,21 @@ public class TestStringUtilities extends TestCase{
 		case_Sensitive = false;
 
 		System.out.print("Test6: El número de ocurrencias");
-		
+
 		if (case_Sensitive)
 			System.out.print(" con distinción minúsculas/mayúsculas ");
 		else
 			System.out.print(" sin distinción minúsculas/mayúsculas ");
-		
-		System.out.println("de '" + word_subString + "' en '" + word_String + " es " + StringUtilities.numberOfOccurrencesOfSubStringInString(word_String, word_subString, case_Sensitive));
+
+		System.out.println("de '"
+				+ word_subString
+				+ "' en '"
+				+ word_String
+				+ " es "
+				+ StringUtilities.numberOfOccurrencesOfSubStringInString(
+						word_String, word_subString, case_Sensitive));
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -192,15 +231,21 @@ public class TestStringUtilities extends TestCase{
 		case_Sensitive = true;
 
 		System.out.print("Test7: El número de ocurrencias");
-		
+
 		if (case_Sensitive)
 			System.out.print(" con distinción minúsculas/mayúsculas ");
 		else
 			System.out.print(" sin distinción minúsculas/mayúsculas ");
-		
-		System.out.println("de '" + word_subString + "' en '" + word_String + " es " + StringUtilities.numberOfOccurrencesOfSubStringInString(word_String, word_subString, case_Sensitive));
+
+		System.out.println("de '"
+				+ word_subString
+				+ "' en '"
+				+ word_String
+				+ " es "
+				+ StringUtilities.numberOfOccurrencesOfSubStringInString(
+						word_String, word_subString, case_Sensitive));
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -210,15 +255,21 @@ public class TestStringUtilities extends TestCase{
 		case_Sensitive = true;
 
 		System.out.print("Test8: El número de ocurrencias");
-		
+
 		if (case_Sensitive)
 			System.out.print(" con distinción minúsculas/mayúsculas ");
 		else
 			System.out.print(" sin distinción minúsculas/mayúsculas ");
-		
-		System.out.println("de '" + word_subString + "' en '" + word_String + " es " + StringUtilities.numberOfOccurrencesOfSubStringInString(word_String, word_subString, case_Sensitive));
+
+		System.out.println("de '"
+				+ word_subString
+				+ "' en '"
+				+ word_String
+				+ " es "
+				+ StringUtilities.numberOfOccurrencesOfSubStringInString(
+						word_String, word_subString, case_Sensitive));
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -228,15 +279,21 @@ public class TestStringUtilities extends TestCase{
 		case_Sensitive = false;
 
 		System.out.print("Test9: El número de ocurrencias");
-		
+
 		if (case_Sensitive)
 			System.out.print(" con distinción minúsculas/mayúsculas ");
 		else
 			System.out.print(" sin distinción minúsculas/mayúsculas ");
-		
-		System.out.println("de '" + word_subString + "' en '" + word_String + " es " + StringUtilities.numberOfOccurrencesOfSubStringInString(word_String, word_subString, case_Sensitive));
+
+		System.out.println("de '"
+				+ word_subString
+				+ "' en '"
+				+ word_String
+				+ " es "
+				+ StringUtilities.numberOfOccurrencesOfSubStringInString(
+						word_String, word_subString, case_Sensitive));
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -246,15 +303,21 @@ public class TestStringUtilities extends TestCase{
 		case_Sensitive = false;
 
 		System.out.print("Test10: El número de ocurrencias");
-		
+
 		if (case_Sensitive)
 			System.out.print(" con distinción minúsculas/mayúsculas ");
 		else
 			System.out.print(" sin distinción minúsculas/mayúsculas ");
-		
-		System.out.println("de '" + word_subString + "' en '" + word_String + " es " + StringUtilities.numberOfOccurrencesOfSubStringInString(word_String, word_subString, case_Sensitive));
+
+		System.out.println("de '"
+				+ word_subString
+				+ "' en '"
+				+ word_String
+				+ " es "
+				+ StringUtilities.numberOfOccurrencesOfSubStringInString(
+						word_String, word_subString, case_Sensitive));
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -265,16 +328,27 @@ public class TestStringUtilities extends TestCase{
 		start_position = 0;
 		end_position = word_String.length();
 
-		System.out.print("Test11: El número de ocurrencias entre posiciones " + start_position + " y " + end_position);
-		
+		System.out.print("Test11: El número de ocurrencias entre posiciones "
+				+ start_position + " y " + end_position);
+
 		if (case_Sensitive)
 			System.out.print(" con distinción minúsculas/mayúsculas ");
 		else
 			System.out.print(" sin distinción minúsculas/mayúsculas ");
-		
-		System.out.println("de '" + word_subString + "' en '" + word_String + " es " + StringUtilities.numberOfOccurrencesOfSubStringInStringBetweenPositions(word_String, word_subString, case_Sensitive, start_position, end_position));
+
+		System.out
+				.println("de '"
+						+ word_subString
+						+ "' en '"
+						+ word_String
+						+ " es "
+						+ StringUtilities
+								.numberOfOccurrencesOfSubStringInStringBetweenPositions(
+										word_String, word_subString,
+										case_Sensitive, start_position,
+										end_position));
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -285,14 +359,25 @@ public class TestStringUtilities extends TestCase{
 		start_position = 20;
 		end_position = 72;
 
-		System.out.print("Test12: El número de ocurrencias entre posiciones " + start_position + " y " + end_position);
-		
+		System.out.print("Test12: El número de ocurrencias entre posiciones "
+				+ start_position + " y " + end_position);
+
 		if (case_Sensitive)
 			System.out.print(" con distinción minúsculas/mayúsculas ");
 		else
 			System.out.print(" sin distinción minúsculas/mayúsculas ");
-		
-		System.out.println("de '" + word_subString + "' en '" + word_String + " es " + StringUtilities.numberOfOccurrencesOfSubStringInStringBetweenPositions(word_String, word_subString, case_Sensitive, start_position, end_position));
+
+		System.out
+				.println("de '"
+						+ word_subString
+						+ "' en '"
+						+ word_String
+						+ " es "
+						+ StringUtilities
+								.numberOfOccurrencesOfSubStringInStringBetweenPositions(
+										word_String, word_subString,
+										case_Sensitive, start_position,
+										end_position));
 	}
 
 	/**
@@ -305,16 +390,27 @@ public class TestStringUtilities extends TestCase{
 		start_position = 20;
 		end_position = 72;
 
-		System.out.print("Test13: El número de ocurrencias entre posiciones " + start_position + " y " + end_position);
-		
+		System.out.print("Test13: El número de ocurrencias entre posiciones "
+				+ start_position + " y " + end_position);
+
 		if (case_Sensitive)
 			System.out.print(" con distinción minúsculas/mayúsculas ");
 		else
 			System.out.print(" sin distinción minúsculas/mayúsculas ");
-		
-		System.out.println("de '" + word_subString + "' en '" + word_String + " es " + StringUtilities.numberOfOccurrencesOfSubStringInStringBetweenPositions(word_String, word_subString, case_Sensitive, start_position, end_position));
+
+		System.out
+				.println("de '"
+						+ word_subString
+						+ "' en '"
+						+ word_String
+						+ " es "
+						+ StringUtilities
+								.numberOfOccurrencesOfSubStringInStringBetweenPositions(
+										word_String, word_subString,
+										case_Sensitive, start_position,
+										end_position));
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -325,16 +421,27 @@ public class TestStringUtilities extends TestCase{
 		start_position = 20;
 		end_position = 72;
 
-		System.out.print("Test14: El número de ocurrencias entre posiciones " + start_position + " y " + end_position);
-		
+		System.out.print("Test14: El número de ocurrencias entre posiciones "
+				+ start_position + " y " + end_position);
+
 		if (case_Sensitive)
 			System.out.print(" con distinción minúsculas/mayúsculas ");
 		else
 			System.out.print(" sin distinción minúsculas/mayúsculas ");
-		
-		System.out.println("de '" + word_subString + "' en '" + word_String + " es " + StringUtilities.numberOfOccurrencesOfSubStringInStringBetweenPositions(word_String, word_subString, case_Sensitive, start_position, end_position));
+
+		System.out
+				.println("de '"
+						+ word_subString
+						+ "' en '"
+						+ word_String
+						+ " es "
+						+ StringUtilities
+								.numberOfOccurrencesOfSubStringInStringBetweenPositions(
+										word_String, word_subString,
+										case_Sensitive, start_position,
+										end_position));
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -345,16 +452,27 @@ public class TestStringUtilities extends TestCase{
 		start_position = 20;
 		end_position = 72;
 
-		System.out.print("Test15: El número de ocurrencias entre posiciones " + start_position + " y " + end_position);
-		
+		System.out.print("Test15: El número de ocurrencias entre posiciones "
+				+ start_position + " y " + end_position);
+
 		if (case_Sensitive)
 			System.out.print(" con distinción minúsculas/mayúsculas ");
 		else
 			System.out.print(" sin distinción minúsculas/mayúsculas ");
-		
-		System.out.println("de '" + word_subString + "' en '" + word_String + " es " + StringUtilities.numberOfOccurrencesOfSubStringInStringBetweenPositions(word_String, word_subString, case_Sensitive, start_position, end_position));
+
+		System.out
+				.println("de '"
+						+ word_subString
+						+ "' en '"
+						+ word_String
+						+ " es "
+						+ StringUtilities
+								.numberOfOccurrencesOfSubStringInStringBetweenPositions(
+										word_String, word_subString,
+										case_Sensitive, start_position,
+										end_position));
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -365,14 +483,25 @@ public class TestStringUtilities extends TestCase{
 		start_position = 21;
 		end_position = 72;
 
-		System.out.print("Test16: El número de ocurrencias entre posiciones " + start_position + " y " + end_position);
-		
+		System.out.print("Test16: El número de ocurrencias entre posiciones "
+				+ start_position + " y " + end_position);
+
 		if (case_Sensitive)
 			System.out.print(" con distinción minúsculas/mayúsculas ");
 		else
 			System.out.print(" sin distinción minúsculas/mayúsculas ");
-		
-		System.out.println("de '" + word_subString + "' en '" + word_String + " es " + StringUtilities.numberOfOccurrencesOfSubStringInStringBetweenPositions(word_String, word_subString, case_Sensitive, start_position, end_position));
+
+		System.out
+				.println("de '"
+						+ word_subString
+						+ "' en '"
+						+ word_String
+						+ " es "
+						+ StringUtilities
+								.numberOfOccurrencesOfSubStringInStringBetweenPositions(
+										word_String, word_subString,
+										case_Sensitive, start_position,
+										end_position));
 	}
 
 	/**
@@ -385,16 +514,27 @@ public class TestStringUtilities extends TestCase{
 		start_position = 21;
 		end_position = 72;
 
-		System.out.print("Test17: El número de ocurrencias entre posiciones " + start_position + " y " + end_position);
-		
+		System.out.print("Test17: El número de ocurrencias entre posiciones "
+				+ start_position + " y " + end_position);
+
 		if (case_Sensitive)
 			System.out.print(" con distinción minúsculas/mayúsculas ");
 		else
 			System.out.print(" sin distinción minúsculas/mayúsculas ");
-		
-		System.out.println("de '" + word_subString + "' en '" + word_String + " es " + StringUtilities.numberOfOccurrencesOfSubStringInStringBetweenPositions(word_String, word_subString, case_Sensitive, start_position, end_position));
+
+		System.out
+				.println("de '"
+						+ word_subString
+						+ "' en '"
+						+ word_String
+						+ " es "
+						+ StringUtilities
+								.numberOfOccurrencesOfSubStringInStringBetweenPositions(
+										word_String, word_subString,
+										case_Sensitive, start_position,
+										end_position));
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -405,16 +545,27 @@ public class TestStringUtilities extends TestCase{
 		start_position = 21;
 		end_position = 72;
 
-		System.out.print("Test18: El número de ocurrencias entre posiciones " + start_position + " y " + end_position);
-		
+		System.out.print("Test18: El número de ocurrencias entre posiciones "
+				+ start_position + " y " + end_position);
+
 		if (case_Sensitive)
 			System.out.print(" con distinción minúsculas/mayúsculas ");
 		else
 			System.out.print(" sin distinción minúsculas/mayúsculas ");
-		
-		System.out.println("de '" + word_subString + "' en '" + word_String + " es " + StringUtilities.numberOfOccurrencesOfSubStringInStringBetweenPositions(word_String, word_subString, case_Sensitive, start_position, end_position));
+
+		System.out
+				.println("de '"
+						+ word_subString
+						+ "' en '"
+						+ word_String
+						+ " es "
+						+ StringUtilities
+								.numberOfOccurrencesOfSubStringInStringBetweenPositions(
+										word_String, word_subString,
+										case_Sensitive, start_position,
+										end_position));
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -425,13 +576,24 @@ public class TestStringUtilities extends TestCase{
 		start_position = 21;
 		end_position = 72;
 
-		System.out.print("Test19: El número de ocurrencias entre posiciones " + start_position + " y " + end_position);
-		
+		System.out.print("Test19: El número de ocurrencias entre posiciones "
+				+ start_position + " y " + end_position);
+
 		if (case_Sensitive)
 			System.out.print(" con distinción minúsculas/mayúsculas ");
 		else
 			System.out.print(" sin distinción minúsculas/mayúsculas ");
-		
-		System.out.println("de '" + word_subString + "' en '" + word_String + " es " + StringUtilities.numberOfOccurrencesOfSubStringInStringBetweenPositions(word_String, word_subString, case_Sensitive, start_position, end_position));
+
+		System.out
+				.println("de '"
+						+ word_subString
+						+ "' en '"
+						+ word_String
+						+ " es "
+						+ StringUtilities
+								.numberOfOccurrencesOfSubStringInStringBetweenPositions(
+										word_String, word_subString,
+										case_Sensitive, start_position,
+										end_position));
 	}
 }

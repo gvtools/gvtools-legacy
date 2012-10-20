@@ -57,19 +57,22 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
 import com.iver.cit.gvsig.fmap.tools.Listeners.PointListener;
 
-
 /**
- * <p>Listener that selects all features of the active, and vector layers of the associated <code>MapControl</code>
- *  that their area intersects with the point selected by a single click of any button of the mouse.</p>
- *
+ * <p>
+ * Listener that selects all features of the active, and vector layers of the
+ * associated <code>MapControl</code> that their area intersects with the point
+ * selected by a single click of any button of the mouse.
+ * </p>
+ * 
  * @author Vicente Caballero Navarro
  */
 public class PointSelectionListener implements PointListener {
 	/**
 	 * The image to display when the cursor is active.
 	 */
-	private final Image img = new ImageIcon(MapControl.class.getResource(
-				"images/PointSelectCursor.gif")).getImage();
+	private final Image img = new ImageIcon(
+			MapControl.class.getResource("images/PointSelectCursor.gif"))
+			.getImage();
 
 	/**
 	 * The cursor used to work with this tool listener.
@@ -85,9 +88,12 @@ public class PointSelectionListener implements PointListener {
 	protected MapControl mapCtrl;
 
 	/**
-	 * <p>Creates a new <code>PointSelectionListener</code> object.</p>
+	 * <p>
+	 * Creates a new <code>PointSelectionListener</code> object.
+	 * </p>
 	 * 
-	 * @param mc the <code>MapControl</code> where will be applied the changes
+	 * @param mc
+	 *            the <code>MapControl</code> where will be applied the changes
 	 */
 	public PointSelectionListener(MapControl mc) {
 		this.mapCtrl = mc;
@@ -95,29 +101,32 @@ public class PointSelectionListener implements PointListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#point(com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#point(com.iver.
+	 * cit.gvsig.fmap.tools.Events.PointEvent)
 	 */
 	public void point(PointEvent event) throws BehaviorException {
 		try {
 			// mapCtrl.getMapContext().selectByPoint(event.getPoint(), 1);
-            Point2D p = event.getPoint();
-            Point2D mapPoint = mapCtrl.getViewPort().toMapPoint((int) p.getX(), (int) p.getY());
+			Point2D p = event.getPoint();
+			Point2D mapPoint = mapCtrl.getViewPort().toMapPoint((int) p.getX(),
+					(int) p.getY());
 
-            // Tolerancia de 3 pixels
-            double tol = mapCtrl.getViewPort().toMapDistance(3);
-            FLayer[] actives = mapCtrl.getMapContext()
-            .getLayers().getActives();
-            for (int i=0; i < actives.length; i++)
-            {
-                if (actives[i] instanceof FLyrVect) {
-                    FLyrVect lyrVect = (FLyrVect) actives[i];
-                    FBitSet oldBitSet = lyrVect.getSource().getRecordset().getSelection();
-                    FBitSet newBitSet = lyrVect.queryByPoint(mapPoint, tol);
-                    if (event.getEvent().isControlDown())
-                        newBitSet.xor(oldBitSet);
-                    lyrVect.getRecordset().setSelection(newBitSet);
-                }
-            }
+			// Tolerancia de 3 pixels
+			double tol = mapCtrl.getViewPort().toMapDistance(3);
+			FLayer[] actives = mapCtrl.getMapContext().getLayers().getActives();
+			for (int i = 0; i < actives.length; i++) {
+				if (actives[i] instanceof FLyrVect) {
+					FLyrVect lyrVect = (FLyrVect) actives[i];
+					FBitSet oldBitSet = lyrVect.getSource().getRecordset()
+							.getSelection();
+					FBitSet newBitSet = lyrVect.queryByPoint(mapPoint, tol);
+					if (event.getEvent().isControlDown())
+						newBitSet.xor(oldBitSet);
+					lyrVect.getRecordset().setSelection(newBitSet);
+				}
+			}
 
 		} catch (ReadDriverException e) {
 			throw new BehaviorException("No se pudo hacer la selección");
@@ -128,6 +137,7 @@ public class PointSelectionListener implements PointListener {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#getCursor()
 	 */
 	public Cursor getCursor() {
@@ -136,6 +146,7 @@ public class PointSelectionListener implements PointListener {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#cancelDrawing()
 	 */
 	public boolean cancelDrawing() {
@@ -144,11 +155,13 @@ public class PointSelectionListener implements PointListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#pointDoubleClick(com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#pointDoubleClick
+	 * (com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
 	 */
 	public void pointDoubleClick(PointEvent event) throws BehaviorException {
 
 	}
-
 
 }

@@ -30,115 +30,131 @@ import org.gvsig.rastertools.geolocation.listener.GeoLocationPanelListener;
 
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.ViewPort;
+
 /**
- * Clase base para los paneles que tienen la geolocalización. Tiene los métodos necesarios
- * para que el listener que gestiona sus acciones sea común.
+ * Clase base para los paneles que tienen la geolocalización. Tiene los métodos
+ * necesarios para que el listener que gestiona sus acciones sea común.
  * 
  * 13/12/2007
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public abstract class GeolocationBaseClassPanel extends JPanel {
 	private static final long serialVersionUID = 1055900686557565837L;
-	private FLyrRasterSE               lyr          = null;
-	private boolean                    geolocModify = false;
-	private MapControl                 mapCtrl      = null;
-	private ViewPort                   vp           = null;
-	protected GeoLocationPanelListener listener     = null;
+	private FLyrRasterSE lyr = null;
+	private boolean geolocModify = false;
+	private MapControl mapCtrl = null;
+	private ViewPort vp = null;
+	protected GeoLocationPanelListener listener = null;
 
 	/**
 	 * Número de decimales a mostrar
 	 */
-	protected int                      tailValue    = 2;
-	
+	protected int tailValue = 2;
+
 	/**
 	 * Obtiene la capa raster asociada
+	 * 
 	 * @return
 	 */
 	public FLyrRasterSE getLayer() {
 		return this.lyr;
 	}
-	
+
 	/**
 	 * Asigna la capa raster asociada
+	 * 
 	 * @return
 	 */
 	public void setLayer(FLyrRasterSE lyr) {
 		this.lyr = lyr;
 	}
-	
+
 	/**
 	 * Obtiene el viewport de la vista en el momento de lanzar el interfaz
+	 * 
 	 * @return
 	 */
 	public ViewPort getViewPort() {
 		return this.vp;
 	}
-	
+
 	/**
 	 * Asigna el viewport de la vista en el momento de lanzar el interfaz
+	 * 
 	 * @return
 	 */
 	public void setViewPort(ViewPort vp) {
 		this.vp = vp;
 	}
-	
+
 	/**
 	 * Obtiene el MapControl
+	 * 
 	 * @return MapControl
 	 */
 	public MapControl getMapCtrl() {
 		return mapCtrl;
 	}
-	
+
 	/**
 	 * Asigna el MapControl
+	 * 
 	 * @param mapCtrl
 	 */
 	public void setMapCtrl(MapControl mapCtrl) {
 		this.mapCtrl = mapCtrl;
 	}
-	
+
 	/**
 	 * Carga los parámetros en el dialogo a partir de la capa
-	 * @param lyr Capa raster
+	 * 
+	 * @param lyr
+	 *            Capa raster
 	 */
 	public abstract void loadTransform(AffineTransform at);
-	
+
 	/**
-	 * Activa o desactiva los botones de transformación anterior y siguiente dependiendo
-	 * del estado de la lista de transformaciones.
+	 * Activa o desactiva los botones de transformación anterior y siguiente
+	 * dependiendo del estado de la lista de transformaciones.
+	 * 
 	 * @return
 	 */
-	public void activeButtons() {}
-	
+	public void activeButtons() {
+	}
+
 	/**
-	 * Asigna el flag que dice si se ha modificado la georreferenciación
-	 * y aún no se ha salvado
+	 * Asigna el flag que dice si se ha modificado la georreferenciación y aún
+	 * no se ha salvado
+	 * 
 	 * @return true si se ha modificado y false si no se ha hecho
 	 */
 	public void setModify(boolean modif) {
 		geolocModify = modif;
 	}
-	
+
 	/**
-	 * Obtiene el flag que dice si se ha modificado la georreferenciación
-	 * y aún no se ha salvado
+	 * Obtiene el flag que dice si se ha modificado la georreferenciación y aún
+	 * no se ha salvado
+	 * 
 	 * @return true si se ha modificado y false si no se ha hecho
 	 */
 	public boolean getModify() {
 		return geolocModify;
 	}
-	
+
 	/**
 	 * Obtiene el botón de aplicar
+	 * 
 	 * @return JButton
 	 */
 	public JButton getApplyButton() {
 		return null;
 	}
-	
+
 	/**
 	 * Obtiene el botón de cancelar
+	 * 
 	 * @return JButton
 	 */
 	public JButton getCancelButton() {
@@ -147,6 +163,7 @@ public abstract class GeolocationBaseClassPanel extends JPanel {
 
 	/**
 	 * Obtiene el botón de atrás
+	 * 
 	 * @return JButton
 	 */
 	public JButton getBackButton() {
@@ -155,6 +172,7 @@ public abstract class GeolocationBaseClassPanel extends JPanel {
 
 	/**
 	 * Obtiene el botón de ir a la primera transformación
+	 * 
 	 * @return JButton
 	 */
 	public JButton getFirstButton() {
@@ -163,30 +181,34 @@ public abstract class GeolocationBaseClassPanel extends JPanel {
 
 	/**
 	 * Obtiene el botón de salvar
+	 * 
 	 * @return JButton
 	 */
 	public JButton getSaveButton() {
 		return null;
 	}
-	
+
 	/**
 	 * Obtiene el botón de reset
+	 * 
 	 * @return JButton
 	 */
 	public JButton getResetButton() {
 		return null;
 	}
-	
+
 	/**
 	 * Obtiene el botón de siguiente transformación
+	 * 
 	 * @return JButton
 	 */
 	public JButton getNextButton() {
 		return null;
 	}
-	
+
 	/**
 	 * Obtiene el botón de carga de georreferenciación desde tfw
+	 * 
 	 * @return JButton
 	 */
 	public JButton getTfwLoad() {
@@ -195,58 +217,67 @@ public abstract class GeolocationBaseClassPanel extends JPanel {
 
 	/**
 	 * Obtiene el botón de centrado de raster en la vista
+	 * 
 	 * @return JButton
 	 */
 	public JButton getCenterToView() {
 		return null;
 	}
-	
+
 	/**
 	 * Obtiene el botón de recuperación del foco de la tool
+	 * 
 	 * @return JButton
 	 */
 	public JButton getFocus() {
 		return null;
 	}
-	
+
 	/**
 	 * Obtiene el tamaño de pixel en X
+	 * 
 	 * @return
 	 */
 	public abstract DataInputContainer getPsx();
 
 	/**
 	 * Obtiene el tamaño de pixel en Y
+	 * 
 	 * @return
 	 */
 	public abstract DataInputContainer getPsy();
 
 	/**
 	 * Obtiene la rotación en X
+	 * 
 	 * @return
 	 */
 	public abstract DataInputContainer getRotx();
 
 	/**
 	 * Obtiene la rotación en Y
+	 * 
 	 * @return
 	 */
 	public abstract DataInputContainer getRoty();
 
 	/**
 	 * Obtiene la X de la coordenada superior izquierda
+	 * 
 	 * @return
 	 */
 	public abstract DataInputContainer getUlx();
 
 	/**
 	 * Obtiene la Y de la coordenada superior izquierda
+	 * 
 	 * @return
 	 */
 	public abstract DataInputContainer getUly();
-		
+
 	/**
 	 * Obtiene el historico de transformaciones
+	 * 
 	 * @return Historical
 	 */
 	public Historical getHistorical() {

@@ -49,27 +49,26 @@ package com.iver.cit.gvsig.fmap.drivers;
 import com.iver.cit.gvsig.fmap.rendering.ILegend;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.ILabelingStrategy;
 
-
 /**
- * Los drivers que deseen proporcionar una leyenda por defecto deben
- * implementar este interfaz.
- *
+ * Los drivers que deseen proporcionar una leyenda por defecto deben implementar
+ * este interfaz.
+ * 
  * @author FJP
  */
 public interface WithDefaultLegend {
 	/**
 	 * Devuelve Legend por defecto.
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public abstract ILegend getDefaultLegend();
-	
+
 	/**
-	 * Returns the LabelingStrategy to be applied by default. Each
-     * strategy type depends on the layer driver and it should be
-     * the most suitable possible for the layer source labeling policy.
-     * Have a look to the concrete class that implements this interface
-     * to know what ILabelingStrategy is returned by default.
+	 * Returns the LabelingStrategy to be applied by default. Each strategy type
+	 * depends on the layer driver and it should be the most suitable possible
+	 * for the layer source labeling policy. Have a look to the concrete class
+	 * that implements this interface to know what ILabelingStrategy is returned
+	 * by default.
 	 */
 	public abstract ILabelingStrategy getDefaultLabelingStrategy();
 }

@@ -45,33 +45,31 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 
-import javax.swing.ImageIcon;
-
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.AddLayer;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.LayoutMoveListener;
 
-
 /**
- * Implementaci�n de la interfaz LayoutPanListener como herramienta para realizar el
- * zoom menos sobre una vista seleccionada.
- *
+ * Implementaci�n de la interfaz LayoutPanListener como herramienta para
+ * realizar el zoom menos sobre una vista seleccionada.
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LayoutViewZoomOutListenerImpl implements LayoutMoveListener {
-	 public static final Image izoomout = PluginServices.getIconTheme()
-	 	.get("zoom-out-cursor").getImage();
-	 private final Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(izoomout,
-				new Point(16, 16), "");
+	public static final Image izoomout = PluginServices.getIconTheme()
+			.get("zoom-out-cursor").getImage();
+	private final Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(
+			izoomout, new Point(16, 16), "");
 
 	private Layout layout;
+
 	/**
 	 * Crea un nuevo LayoutViewZoomInListenerImpl.
-	 *
-	 * @param l Layout.
+	 * 
+	 * @param l
+	 *            Layout.
 	 */
 	public LayoutViewZoomOutListenerImpl(Layout l) {
 		this.layout = l;
@@ -79,7 +77,7 @@ public class LayoutViewZoomOutListenerImpl implements LayoutMoveListener {
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.PanListener#move(java.awt.geom.Point2D,
-	 * 		java.awt.geom.Point2D)
+	 *      java.awt.geom.Point2D)
 	 */
 	public void drag(PointEvent event) {
 
@@ -91,9 +89,11 @@ public class LayoutViewZoomOutListenerImpl implements LayoutMoveListener {
 	public Image getImageCursor() {
 		return izoomout;
 	}
-	public Cursor getCursor(){
+
+	public Cursor getCursor() {
 		return cur;
 	}
+
 	/**
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#cancelDrawing()
 	 */
@@ -108,8 +108,8 @@ public class LayoutViewZoomOutListenerImpl implements LayoutMoveListener {
 	public void release(PointEvent event) throws BehaviorException {
 		layout.getLayoutControl().setLastPoint();
 		layout.getLayoutControl().setPointAnt();
-        Point p2 = event.getEvent().getPoint();
-        layout.getLayoutControl().getLayoutZooms().setViewZoomOut(p2);
+		Point p2 = event.getEvent().getPoint();
+		layout.getLayoutControl().getLayoutZooms().setViewZoomOut(p2);
 		layout.getLayoutControl().refresh();
 	}
 

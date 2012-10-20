@@ -41,62 +41,59 @@
 package org.gvsig.gui.beans.swing.cellrenderers;
 
 import java.awt.Component;
-import java.awt.FlowLayout;
 
 import javax.swing.BorderFactory;
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 
 public class StringTableCellRenderer extends DefaultTableCellRenderer {
-	  private static final long serialVersionUID = 2121615214282741840L;
+	private static final long serialVersionUID = 2121615214282741840L;
 
-		private JTextField txt;
+	private JTextField txt;
 
-		private boolean isBordered;
-		private MatteBorder selectedBorder;
-		private MatteBorder unselectedBorder;
+	private boolean isBordered;
+	private MatteBorder selectedBorder;
+	private MatteBorder unselectedBorder;
 
+	public JTextField getTextField() {
+		return txt;
+	}
 
+	public Component getTableCellRendererComponent(JTable table, Object value,
+			boolean isSelected, boolean hasFocus, int row, int column) {
+		if (value == null)
+			return super.getTableCellRendererComponent(table, value,
+					isSelected, hasFocus, row, column);
 
-		public JTextField getTextField() {
-			return txt;
-		}
-
-		public Component getTableCellRendererComponent(JTable table, Object value,
-				boolean isSelected, boolean hasFocus, int row, int column) {
-			if (value == null)
-				return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-			if (isBordered) {
-				if (isSelected) {
-					if (selectedBorder == null) {
-						selectedBorder = BorderFactory.createMatteBorder(2, 5, 2,
-								5, table.getSelectionBackground());
-					}
-
-					setBorder(selectedBorder);
-				} else {
-					if (unselectedBorder == null) {
-						unselectedBorder = BorderFactory.createMatteBorder(2, 5, 2,
-								5, table.getBackground());
-					}
-
-					setBorder(unselectedBorder);
+		if (isBordered) {
+			if (isSelected) {
+				if (selectedBorder == null) {
+					selectedBorder = BorderFactory.createMatteBorder(2, 5, 2,
+							5, table.getSelectionBackground());
 				}
-			}
-			try {
-				String v = (String) value;
-				txt = new JTextField(v);
-				txt.setBackground(table.getBackground());
-				return txt;
-			} catch (ClassCastException ccEx) {
-				throw new RuntimeException("Trying to use a Boolean cell renderer with a non-Boolean datatype");
-			}
 
+				setBorder(selectedBorder);
+			} else {
+				if (unselectedBorder == null) {
+					unselectedBorder = BorderFactory.createMatteBorder(2, 5, 2,
+							5, table.getBackground());
+				}
+
+				setBorder(unselectedBorder);
+			}
+		}
+		try {
+			String v = (String) value;
+			txt = new JTextField(v);
+			txt.setBackground(table.getBackground());
+			return txt;
+		} catch (ClassCastException ccEx) {
+			throw new RuntimeException(
+					"Trying to use a Boolean cell renderer with a non-Boolean datatype");
 		}
 
 	}
+
+}

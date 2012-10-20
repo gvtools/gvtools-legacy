@@ -44,80 +44,79 @@ import javax.swing.ButtonGroup;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 
-
 /**
  * Caja de herramientas seleccionables
  */
 public class SelectableToolBar extends JToolBar {
 	private static final long serialVersionUID = 1L;
 	/**
-     * Andami visibility: determines whether this toolbar should
-     * be shown by Andami. If it's false, the toolbar will be
-     * hidden even if its associated extension is visible.
-     */
-    private boolean _visible;
+	 * Andami visibility: determines whether this toolbar should be shown by
+	 * Andami. If it's false, the toolbar will be hidden even if its associated
+	 * extension is visible.
+	 */
+	private boolean _visible;
 
-    /**
-     * Creates a new SelectableToolBar object.
-     *
-     * @param titulo Título de la barra
-     */
-    public SelectableToolBar(String titulo) {
-        super(titulo);
-    }
+	/**
+	 * Creates a new SelectableToolBar object.
+	 * 
+	 * @param titulo
+	 *            Título de la barra
+	 */
+	public SelectableToolBar(String titulo) {
+		super(titulo);
+	}
 
-    /**
-     * Añade un boton a la caja
-     *
-     * @param btn botón a añadir.
-     */
-    public void addButton(ButtonGroup group, JToggleButton btn) {
-    	group.add(btn);
-        add(btn);
-    }
+	/**
+	 * Añade un boton a la caja
+	 * 
+	 * @param btn
+	 *            botón a añadir.
+	 */
+	public void addButton(ButtonGroup group, JToggleButton btn) {
+		group.add(btn);
+		add(btn);
+	}
 
-    /**
-     * Selects a toggleButton in this toolBar by ActionCommand
-     * @param actionCommand
-     */
-    public void setSelectedTool(String actionCommand){
-        for (int i = 0; i < getComponentCount(); i++) {
-            if (getComponent(i) instanceof JToggleButton)
-            {
-                JToggleButton toggleButton = (JToggleButton) getComponent(i);
-                String aux = toggleButton.getActionCommand();
-                if (aux != null)
-                  if (aux.equals(actionCommand)){
-                        toggleButton.setSelected(true);
-                      }
-            }
-        }
+	/**
+	 * Selects a toggleButton in this toolBar by ActionCommand
+	 * 
+	 * @param actionCommand
+	 */
+	public void setSelectedTool(String actionCommand) {
+		for (int i = 0; i < getComponentCount(); i++) {
+			if (getComponent(i) instanceof JToggleButton) {
+				JToggleButton toggleButton = (JToggleButton) getComponent(i);
+				String aux = toggleButton.getActionCommand();
+				if (aux != null)
+					if (aux.equals(actionCommand)) {
+						toggleButton.setSelected(true);
+					}
+			}
+		}
 
-    }
-    
-    /**
-     * Sets whether or not this toolbar should
-     * be shown by Andami. If it's false, the toolbar will be
-     * hidden even if its associated extension is visible.
-     * 
-     * @param visible
-     */
-    public void setAndamiVisibility(boolean visible) {
-    	_visible = visible;
-    }
-    
-    /**
-     * Gets whether this toolbar should
-     * be shown by Andami. If it's false, the toolbar will be
-     * hidden even if its associated extension is visible.
-     * 
-     * @return <code>true</code> if the toolbar should be shown
-     * when it has some visible button, <code>false</code> if
-     * the toolbar should be hidden even it it contains some
-     * buttons that should be visible according to its associated
-     * extension.
-     */
-    public boolean getAndamiVisibility() {
-    	return _visible;
-    }
+	}
+
+	/**
+	 * Sets whether or not this toolbar should be shown by Andami. If it's
+	 * false, the toolbar will be hidden even if its associated extension is
+	 * visible.
+	 * 
+	 * @param visible
+	 */
+	public void setAndamiVisibility(boolean visible) {
+		_visible = visible;
+	}
+
+	/**
+	 * Gets whether this toolbar should be shown by Andami. If it's false, the
+	 * toolbar will be hidden even if its associated extension is visible.
+	 * 
+	 * @return <code>true</code> if the toolbar should be shown when it has some
+	 *         visible button, <code>false</code> if the toolbar should be
+	 *         hidden even it it contains some buttons that should be visible
+	 *         according to its associated extension.
+	 */
+	public boolean getAndamiVisibility() {
+		return _visible;
+	}
 }

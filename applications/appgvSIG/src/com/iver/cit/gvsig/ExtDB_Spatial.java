@@ -49,38 +49,39 @@ import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 import com.prodevelop.cit.gvsig.vectorialdb.wizard.WizardVectorialDB;
 
-
 /**
  * This extension adds the export-to-oracle button.
- *
+ * 
  * @author jldominguez
- *
+ * 
  */
 public class ExtDB_Spatial extends Extension {
-    private static Logger logger = Logger.getLogger(ExtDB_Spatial.class.getName());
+	private static Logger logger = Logger.getLogger(ExtDB_Spatial.class
+			.getName());
 
-    public void initialize() { 
+	public void initialize() {
 
-//        System.out.println("Añado WizardVectorialDB.");
-        AddLayer.addWizard(WizardVectorialDB.class);
+		// System.out.println("Añado WizardVectorialDB.");
+		AddLayer.addWizard(WizardVectorialDB.class);
 
-        ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
 
-    }
+	}
 
-    public void execute(String actionCommand) {
-    }
+	public void execute(String actionCommand) {
+	}
 
-    public boolean isEnabled() {
-        return isVisible();
+	public boolean isEnabled() {
+		return isVisible();
 
-        // return true;
-    }
+		// return true;
+	}
 
-    /**
-     * Is visible when there is one vector layer selected
-     */
-    public boolean isVisible() {
-        return false;
-    }
+	/**
+	 * Is visible when there is one vector layer selected
+	 */
+	public boolean isVisible() {
+		return false;
+	}
 }

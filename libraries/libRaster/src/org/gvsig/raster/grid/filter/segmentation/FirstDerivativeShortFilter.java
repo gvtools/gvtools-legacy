@@ -19,15 +19,17 @@
 package org.gvsig.raster.grid.filter.segmentation;
 
 import org.gvsig.raster.buffer.RasterBuffer;
+
 /**
- * Filtro de primera derivada que se aplica en la imagen. Toma como entrada la imagen y el
- * umbral (cero para no umbralizar).
+ * Filtro de primera derivada que se aplica en la imagen. Toma como entrada la
+ * imagen y el umbral (cero para no umbralizar).
  * 
  * @author Diego Guerrero Sevilla <diego.guerrero@uclm.es>
  */
 public class FirstDerivativeShortFilter extends FirstDerivativeFilter {
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#process(int, int)
 	 */
 	public void process(int col, int line) throws InterruptedException {
@@ -41,11 +43,13 @@ public class FirstDerivativeShortFilter extends FirstDerivativeFilter {
 		Kernel kernel = null;
 
 		for (int band = 0; band < raster.getBandCount(); band++) {
-			if ((col - semiLado >= 0) && (line - semiLado >= 0) && (col + semiLado < width) && (line + semiLado < height)) {
+			if ((col - semiLado >= 0) && (line - semiLado >= 0)
+					&& (col + semiLado < width) && (line + semiLado < height)) {
 				// Obtener el vector con la ventanas de muestras
 				for (int j = -semiLado; j <= semiLado; j++)
 					for (int i = -semiLado; i <= semiLado; i++)
-						ventana[i + semiLado][j + semiLado] = raster.getElemShort(line + j, col + i, band) & 0xffff;
+						ventana[i + semiLado][j + semiLado] = raster
+								.getElemShort(line + j, col + i, band) & 0xffff;
 
 				kernel = new Kernel(ventana);
 
@@ -58,7 +62,8 @@ public class FirstDerivativeShortFilter extends FirstDerivativeFilter {
 					else
 						out = convoResult[1];
 				} else {
-					out = (int) Math.sqrt(Math.pow(convoResult[0], 2) + Math.pow(convoResult[1], 2));
+					out = (int) Math.sqrt(Math.pow(convoResult[0], 2)
+							+ Math.pow(convoResult[1], 2));
 				}
 
 				if (umbral > 0) {
@@ -75,14 +80,17 @@ public class FirstDerivativeShortFilter extends FirstDerivativeFilter {
 
 				rasterResult.setElem(line, col, band, (byte) out);
 			} else {
-				rasterResult.setElem(line, col, band, (byte) raster.getElemShort(line, col, band));
+				rasterResult.setElem(line, col, band,
+						(byte) raster.getElemShort(line, col, band));
 			}
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.segmentation.FirstDerivativeFilter#getInRasterDataType()
+	 * 
+	 * @see org.gvsig.raster.grid.filter.segmentation.FirstDerivativeFilter#
+	 * getInRasterDataType()
 	 */
 	public int getInRasterDataType() {
 		return RasterBuffer.TYPE_SHORT;

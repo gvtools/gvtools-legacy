@@ -51,17 +51,17 @@ import org.gvsig.remoteClient.utils.CapabilitiesTags;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class WFSTOperation implements IWFSTOperation{
-	//The table to apply the operation
+public abstract class WFSTOperation implements IWFSTOperation {
+	// The table to apply the operation
 	private String namespace = null;
 	private String typename = null;
-	//The filter to apply the operation
+	// The filter to apply the operation
 	private boolean isfiltered = true;
-	private String filterEncoding = null;	
+	private String filterEncoding = null;
 
 	WFSTOperation(String typename) {
 		super();
-		this.typename = typename;		
+		this.typename = typename;
 		isfiltered = false;
 	}
 
@@ -70,17 +70,18 @@ public abstract class WFSTOperation implements IWFSTOperation{
 		this.typename = typename;
 		this.filterEncoding = filterEncoding;
 		isfiltered = true;
-	}	
+	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.remoteClient.wfs.edition.IWFSTOperation#getRequest()
 	 */
 	public String getRequest() {
 		StringBuffer request = new StringBuffer();
 		request.append("<" + CapabilitiesTags.WFS_NAMESPACE_PREFIX + ":");
 		request.append(getOperationName());
-		if (hasTypeName()){
+		if (hasTypeName()) {
 			request.append(" typeName=\"" + typename + "\"");
 		}
 		request.append(">");
@@ -90,28 +91,28 @@ public abstract class WFSTOperation implements IWFSTOperation{
 		request.append(getOperationName() + ">");
 		return request.toString();
 	}
-	
+
 	/**
 	 * @return if the opartion has a typename
 	 */
-	protected boolean hasTypeName(){
+	protected boolean hasTypeName() {
 		return false;
 	}
 
 	/**
 	 * @return the GML
 	 */
-	protected String getGml(){
+	protected String getGml() {
 		return "";
 	}
 
 	/**
 	 * @return the filter where the operation is applied
 	 */
-	private String getFilter(){
+	private String getFilter() {
 		StringBuffer filter = new StringBuffer();
-		if (isfiltered){
-			filter.append(filterEncoding);			
+		if (isfiltered) {
+			filter.append(filterEncoding);
 		}
 		return filter.toString();
 	}

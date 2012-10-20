@@ -56,10 +56,9 @@ import com.iver.cit.gvsig.fmap.core.v02.FConstant;
 import com.iver.cit.gvsig.fmap.core.v02.FConverter;
 import com.iver.cit.gvsig.fmap.drivers.shp.SHP;
 
-
 /**
  * Elemento shape de tipo multil�nea.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class SHPMultiLine implements SHPShape {
@@ -67,7 +66,9 @@ public class SHPMultiLine implements SHPShape {
 	protected int[] parts;
 	protected FPoint2D[] points;
 	protected double[] zs;
-	//double flatness = 0.8; // Por ejemplo. Cuanto m�s peque�o, m�s segmentos necesitar� la curva
+
+	// double flatness = 0.8; // Por ejemplo. Cuanto m�s peque�o, m�s
+	// segmentos necesitar� la curva
 
 	/**
 	 * Crea un nuevo SHPMultiLine.
@@ -78,15 +79,16 @@ public class SHPMultiLine implements SHPShape {
 
 	/**
 	 * Crea un nuevo SHPMultiLine.
-	 *
-	 * @param type Tipo de multil�nea.
-	 *
+	 * 
+	 * @param type
+	 *            Tipo de multil�nea.
+	 * 
 	 * @throws ShapefileException
 	 */
 	public SHPMultiLine(int type) throws ShapefileException {
-		if ((type != FConstant.SHAPE_TYPE_POLYLINE) &&
-				(type != FConstant.SHAPE_TYPE_POLYLINEM) &&
-				(type != FConstant.SHAPE_TYPE_POLYLINEZ)) {
+		if ((type != FConstant.SHAPE_TYPE_POLYLINE)
+				&& (type != FConstant.SHAPE_TYPE_POLYLINEM)
+				&& (type != FConstant.SHAPE_TYPE_POLYLINEZ)) {
 			throw new ShapefileException("No es de tipo 3,13 ni 23");
 		}
 
@@ -108,11 +110,11 @@ public class SHPMultiLine implements SHPShape {
 		double minY = buffer.getDouble();
 		double maxX = buffer.getDouble();
 		double maxY = buffer.getDouble();
-		Rectangle2D rec = new Rectangle2D.Double(minX, minY, maxX - minX,
-				maxY - maxY);
+		Rectangle2D rec = new Rectangle2D.Double(minX, minY, maxX - minX, maxY
+				- maxY);
 
 		int numParts = buffer.getInt();
-		int numPoints = buffer.getInt(); //total number of points
+		int numPoints = buffer.getInt(); // total number of points
 
 		int[] partOffsets = new int[numParts];
 
@@ -126,13 +128,10 @@ public class SHPMultiLine implements SHPShape {
 			points[t] = new FPoint2D(buffer.getDouble(), buffer.getDouble());
 		}
 
-		/*   if (type == FConstant.SHAPE_TYPE_POLYLINEZ) {
-		   //z min, max
-		   buffer.position(buffer.position() + (2 * 8));
-		   for (int t = 0; t < numPoints; t++) {
-		       points[t].z = buffer.getDouble(); //z value
-		   }
-		   }
+		/*
+		 * if (type == FConstant.SHAPE_TYPE_POLYLINEZ) { //z min, max
+		 * buffer.position(buffer.position() + (2 * 8)); for (int t = 0; t <
+		 * numPoints; t++) { points[t].z = buffer.getDouble(); //z value } }
 		 */
 		return (IGeometry) new FPolyline2D(getGeneralPathX(points, partOffsets));
 	}
@@ -182,12 +181,12 @@ public class SHPMultiLine implements SHPShape {
 		if (m_type == FConstant.SHAPE_TYPE_POLYLINEM) {
 			buffer.putDouble(-10E40);
 			buffer.putDouble(-10E40);
-			if (geometry instanceof IGeometryM){
-				double[] ms = ((IGeometryM)geometry).getMs();
+			if (geometry instanceof IGeometryM) {
+				double[] ms = ((IGeometryM) geometry).getMs();
 				for (int t = 0; t < npoints; t++) {
 					buffer.putDouble(ms[t]);
 				}
-			}else{
+			} else {
 				for (int t = 0; t < npoints; t++) {
 					buffer.putDouble(0.0);
 				}
@@ -208,14 +207,14 @@ public class SHPMultiLine implements SHPShape {
 		if (m_type == FConstant.SHAPE_TYPE_POLYLINE) {
 			length = 44 + (4 * numlines) + (numpoints * 16);
 		} else if (m_type == FConstant.SHAPE_TYPE_POLYLINEM) {
-			length = 44 + (4 * numlines) + (numpoints * 16) +
-			(8 * numpoints) + 16;
+			length = 44 + (4 * numlines) + (numpoints * 16) + (8 * numpoints)
+					+ 16;
 		} else if (m_type == FConstant.SHAPE_TYPE_POLYLINEZ) {
-			length = 44 + (4 * numlines) + (numpoints * 16) +
-			(8 * numpoints) + 16;
+			length = 44 + (4 * numlines) + (numpoints * 16) + (8 * numpoints)
+					+ 16;
 		} else {
-			throw new IllegalStateException("Expected ShapeType of Arc, got " +
-					m_type);
+			throw new IllegalStateException("Expected ShapeType of Arc, got "
+					+ m_type);
 		}
 
 		return length;
@@ -223,10 +222,12 @@ public class SHPMultiLine implements SHPShape {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param po DOCUMENT ME!
-	 * @param pa DOCUMENT ME!
-	 *
+	 * 
+	 * @param po
+	 *            DOCUMENT ME!
+	 * @param pa
+	 *            DOCUMENT ME!
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	protected GeneralPathX getGeneralPathX(FPoint2D[] po, int[] pa) {
@@ -253,19 +254,21 @@ public class SHPMultiLine implements SHPShape {
 	 * @see com.iver.cit.gvsig.fmap.shp.SHPShape#obtainsPoints(com.iver.cit.gvsig.fmap.core.GeneralPathXIterator)
 	 */
 	public void obtainsPoints(IGeometry g) {
-		boolean is3D=false;
-		if (FConstant.SHAPE_TYPE_POLYLINEZ == m_type || FConstant.SHAPE_TYPE_POLYGONZ == m_type){
-			zs=((IGeometry3D)g).getZs();
-			is3D=true;
+		boolean is3D = false;
+		if (FConstant.SHAPE_TYPE_POLYLINEZ == m_type
+				|| FConstant.SHAPE_TYPE_POLYGONZ == m_type) {
+			zs = ((IGeometry3D) g).getZs();
+			is3D = true;
 		}
 		ArrayList arrayPoints = null;
 		ArrayList arrayParts = new ArrayList();
-		PathIterator theIterator = g.getPathIterator(null, FConverter.FLATNESS); //polyLine.getPathIterator(null, flatness);
+		PathIterator theIterator = g.getPathIterator(null, FConverter.FLATNESS); // polyLine.getPathIterator(null,
+																					// flatness);
 		double[] theData = new double[6];
 		int numParts = 0;
-		FPoint2D pFirst=null;
-		int pos=0;
-		ArrayList arrayZs=new ArrayList();
+		FPoint2D pFirst = null;
+		int pos = 0;
+		ArrayList arrayZs = new ArrayList();
 		Double firstZ = null;
 		while (!theIterator.isDone()) {
 			int theType = theIterator.currentSegment(theData);
@@ -276,23 +279,24 @@ public class SHPMultiLine implements SHPShape {
 					arrayPoints = new ArrayList();
 					arrayParts.add(new Integer(0));
 				} else {
-					if (m_type==FConstant.SHAPE_TYPE_POLYGON ||
-							m_type==FConstant.SHAPE_TYPE_POLYGONZ ||
-							m_type==FConstant.SHAPE_TYPE_POLYGONM)
-						if (!arrayPoints.get(arrayPoints.size()-1).equals(pFirst)){
-							arrayPoints.add(new FPoint2D(pFirst.getX(),
-									pFirst.getY()));
-							if (is3D){
+					if (m_type == FConstant.SHAPE_TYPE_POLYGON
+							|| m_type == FConstant.SHAPE_TYPE_POLYGONZ
+							|| m_type == FConstant.SHAPE_TYPE_POLYGONM)
+						if (!arrayPoints.get(arrayPoints.size() - 1).equals(
+								pFirst)) {
+							arrayPoints.add(new FPoint2D(pFirst.getX(), pFirst
+									.getY()));
+							if (is3D) {
 								arrayZs.add(firstZ);
 							}
 						}
 					arrayParts.add(new Integer(arrayPoints.size()));
 				}
 				numParts++;
-				pFirst=new FPoint2D(theData[0], theData[1]);
+				pFirst = new FPoint2D(theData[0], theData[1]);
 				arrayPoints.add(new FPoint2D(theData[0], theData[1]));
-				if (is3D){
-					firstZ=new Double(zs[pos]);
+				if (is3D) {
+					firstZ = new Double(zs[pos]);
 					arrayZs.add(new Double(zs[pos]));
 					pos++;
 				}
@@ -300,7 +304,7 @@ public class SHPMultiLine implements SHPShape {
 
 			case PathIterator.SEG_LINETO:
 				arrayPoints.add(new FPoint2D(theData[0], theData[1]));
-				if (is3D){
+				if (is3D) {
 					arrayZs.add(new Double(zs[pos]));
 					pos++;
 				}
@@ -317,17 +321,16 @@ public class SHPMultiLine implements SHPShape {
 				break;
 
 			case PathIterator.SEG_CLOSE:
-				if (!arrayPoints.get(arrayPoints.size()-1).equals(pFirst)){
-					arrayPoints.add(new FPoint2D(pFirst.getX(),
-							pFirst.getY()));
-					if (is3D){
+				if (!arrayPoints.get(arrayPoints.size() - 1).equals(pFirst)) {
+					arrayPoints.add(new FPoint2D(pFirst.getX(), pFirst.getY()));
+					if (is3D) {
 						arrayZs.add(firstZ);
 					}
 					// TODO: METER isM => add(firsM)
 				}
 
 				break;
-			} //end switch
+			} // end switch
 
 			theIterator.next();
 		}
@@ -337,16 +340,16 @@ public class SHPMultiLine implements SHPShape {
 		for (int i = 0; i < integers.length; i++) {
 			parts[i] = integers[i].intValue();
 		}
-		if (arrayPoints==null){
-			points=new FPoint2D[0];
+		if (arrayPoints == null) {
+			points = new FPoint2D[0];
 			return;
 		}
 		points = (FPoint2D[]) arrayPoints.toArray(new FPoint2D[0]);
-		if (is3D){
-			Double[] doubleZs=(Double[])arrayZs.toArray(new Double[0]);
-			zs=new double[doubleZs.length];
-			for (int i=0;i<doubleZs.length;i++){
-				zs[i]=doubleZs[i].doubleValue();
+		if (is3D) {
+			Double[] doubleZs = (Double[]) arrayZs.toArray(new Double[0]);
+			zs = new double[doubleZs.length];
+			for (int i = 0; i < doubleZs.length; i++) {
+				zs[i] = doubleZs[i].doubleValue();
 			}
 		}
 	}

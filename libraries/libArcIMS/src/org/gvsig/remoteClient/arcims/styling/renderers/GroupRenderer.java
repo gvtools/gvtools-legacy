@@ -46,81 +46,82 @@
  */
 package org.gvsig.remoteClient.arcims.styling.renderers;
 
-import org.gvsig.remoteClient.arcims.utils.ServiceInfoTags;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.gvsig.remoteClient.arcims.utils.ServiceInfoTags;
 
 /**
- * This renderer is used to group any other type of renderer, so
- * it's unique variable is an ArrayList of renderers and its behavior is
- * more or less as a Collection.
- *
- * This type of legend is used to group other legends and at this time
- * is not supported by gvSIG. Thus, it will be necessary to select one
- * of the inner renderers to create a valid gvSIG legend.
+ * This renderer is used to group any other type of renderer, so it's unique
+ * variable is an ArrayList of renderers and its behavior is more or less as a
+ * Collection.
+ * 
+ * This type of legend is used to group other legends and at this time is not
+ * supported by gvSIG. Thus, it will be necessary to select one of the inner
+ * renderers to create a valid gvSIG legend.
+ * 
  * @author jsanz
- *
+ * 
  */
 public class GroupRenderer extends BasicRenderer {
-    public static final String TAG = ServiceInfoTags.tGROUPRENDERER;
-    protected ArrayList renderers;
+	public static final String TAG = ServiceInfoTags.tGROUPRENDERER;
+	protected ArrayList renderers;
 
-    public GroupRenderer() {
-        this.renderers = new ArrayList();
-    }
+	public GroupRenderer() {
+		this.renderers = new ArrayList();
+	}
 
-    /**
-     * Generates an XML representation of the Renderer
-     */
-    public String toString() {
-        StringBuffer sb = new StringBuffer();
-        Iterator it = renderers.iterator();
+	/**
+	 * Generates an XML representation of the Renderer
+	 */
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		Iterator it = renderers.iterator();
 
-        while (it.hasNext()) {
-            sb.append(((Renderer) it.next()).toString());
-        }
+		while (it.hasNext()) {
+			sb.append(((Renderer) it.next()).toString());
+		}
 
-        return "<" + GroupRenderer.TAG + ">\r\n" + sb.toString() + "</" +
-        GroupRenderer.TAG + ">\r\n";
-    }
+		return "<" + GroupRenderer.TAG + ">\r\n" + sb.toString() + "</"
+				+ GroupRenderer.TAG + ">\r\n";
+	}
 
-    /**
-     * @return Returns the renderer.
-     */
-    public Renderer getRenderer(int index) {
-        return (Renderer) renderers.get(index);
-    }
+	/**
+	 * @return Returns the renderer.
+	 */
+	public Renderer getRenderer(int index) {
+		return (Renderer) renderers.get(index);
+	}
 
-    /**
-     * @param renderer The renderer to set.
-     */
-    public boolean addRender(Renderer renderer) {
-        return this.renderers.add(renderer);
-    }
+	/**
+	 * @param renderer
+	 *            The renderer to set.
+	 */
+	public boolean addRender(Renderer renderer) {
+		return this.renderers.add(renderer);
+	}
 
-    public int size() {
-        return renderers.size();
-    }
+	public int size() {
+		return renderers.size();
+	}
 
-    public void clear() {
-        this.renderers.clear();
-    }
+	public void clear() {
+		this.renderers.clear();
+	}
 
-    public boolean isEmpty() {
-        if (this.renderers != null) {
-            return this.renderers.isEmpty();
-        } else {
-            return false;
-        }
-    }
+	public boolean isEmpty() {
+		if (this.renderers != null) {
+			return this.renderers.isEmpty();
+		} else {
+			return false;
+		}
+	}
 
-    public Iterator iterator() {
-        return this.renderers.iterator();
-    }
+	public Iterator iterator() {
+		return this.renderers.iterator();
+	}
 
-    public Object[] toArray(Object[] a) {
-        return this.renderers.toArray();
-    }
+	public Object[] toArray(Object[] a) {
+		return this.renderers.toArray();
+	}
 }

@@ -71,13 +71,14 @@ public class LabelStyleRemoveLastTextField extends EditorTool {
 
 	private JButton getBtnRemoveTextField() {
 		if (btnTextField == null) {
-			btnTextField = new JButton(PluginServices.getIconTheme().get("remove-text-icon"));
+			btnTextField = new JButton(PluginServices.getIconTheme().get(
+					"remove-text-icon"));
 			btnTextField.setSize(EditorTool.SMALL_BTN_SIZE);
 			btnTextField.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					int fCount = style.getFieldCount();
-					if (fCount>0)
-						style.deleteTextFieldArea(style.getFieldCount()-1);
+					if (fCount > 0)
+						style.deleteTextFieldArea(style.getFieldCount() - 1);
 					((StyleEditor) owner).restorePreviousTool();
 					owner.repaint();
 				}
@@ -107,8 +108,13 @@ public class LabelStyleRemoveLastTextField extends EditorTool {
 		style = (ILabelStyle) objectToBeEdited;
 	}
 
-	public void mousePressed(MouseEvent e) {}
-	public void mouseReleased(MouseEvent e) {}
-	public void mouseDragged(MouseEvent e) {}
+	public void mousePressed(MouseEvent e) {
+	}
+
+	public void mouseReleased(MouseEvent e) {
+	}
+
+	public void mouseDragged(MouseEvent e) {
+	}
 
 }

@@ -57,24 +57,24 @@ import com.iver.cit.gvsig.project.documents.layout.fframes.ListWithoutOverViewMo
 import com.iver.cit.gvsig.project.documents.layout.fframes.gui.JPRotation;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
-
 /**
  * Dialog to add a new locator map to the layout
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FFrameOverViewDialog extends JPanel implements IFFrameDialog {
-	private javax.swing.JPanel jContentPane = null;  //  @jve:decl-index=0:visual-constraint="37,10"
+	private javax.swing.JPanel jContentPane = null; // @jve:decl-index=0:visual-constraint="37,10"
 	private javax.swing.JLabel lVistas = null;
 	private javax.swing.JScrollPane jScrollPane = null;
-	private javax.swing.JList liVistas = null; //  @jve:visual-info  decl-index=0 visual-constraint="98,-3"
+	private javax.swing.JList liVistas = null; // @jve:visual-info decl-index=0
+												// visual-constraint="98,-3"
 	private javax.swing.JButton bAceptar = null;
 	private javax.swing.JButton bCancelar = null;
 	private javax.swing.JLabel lCalidad = null;
 	private javax.swing.JComboBox cbCalidad = null;
 	private JCheckBox showCrossCHB;
-    private Rectangle2D rect = new Rectangle2D.Double();
-    private FFrameOverView fframeoverview = null;
+	private Rectangle2D rect = new Rectangle2D.Double();
+	private FFrameOverView fframeoverview = null;
 	private Layout m_layout = null;
 	private boolean isAcepted = false;
 	private JPRotation rotation = null;
@@ -82,17 +82,18 @@ public class FFrameOverViewDialog extends JPanel implements IFFrameDialog {
 	private FFrameView fframeDependence;
 	private FFrameView fframeview;
 
-
 	/**
 	 * This is the default constructor
-	 *
-	 * @param layout Reference to the layout
-	 * @param fframe Reference to the view fframe
+	 * 
+	 * @param layout
+	 *            Reference to the layout
+	 * @param fframe
+	 *            Reference to the view fframe
 	 */
 	public FFrameOverViewDialog(Layout layout, FFrameOverView fframe) {
 		super();
 		fframeoverview = fframe;
-		fframeDependence=(FFrameView)fframeoverview.getFFrameDependence()[0];
+		fframeDependence = (FFrameView) fframeoverview.getFFrameDependence()[0];
 		m_layout = layout;
 		initialize();
 	}
@@ -110,8 +111,9 @@ public class FFrameOverViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * Insert the rectangle which the view fframe will take up
-	 *
-	 * @param r Rectangle
+	 * 
+	 * @param r
+	 *            Rectangle
 	 */
 	public void setRectangle(Rectangle2D r) {
 		rect.setRect(r);
@@ -119,7 +121,7 @@ public class FFrameOverViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes jContentPane
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private javax.swing.JPanel getJContentPane() {
@@ -144,7 +146,8 @@ public class FFrameOverViewDialog extends JPanel implements IFFrameDialog {
 
 	private JCheckBox getShowCrossCHB() {
 		if (showCrossCHB == null) {
-			showCrossCHB = new JCheckBox(PluginServices.getText(this, "show_cross"));
+			showCrossCHB = new JCheckBox(PluginServices.getText(this,
+					"show_cross"));
 			showCrossCHB.setSelected(fframeoverview.getShowCross());
 			showCrossCHB.setSize(304, 16);
 			showCrossCHB.setLocation(14, 125);
@@ -154,7 +157,7 @@ public class FFrameOverViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes lVistas
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLVistas() {
@@ -170,7 +173,7 @@ public class FFrameOverViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private javax.swing.JScrollPane getJScrollPane() {
@@ -186,127 +189,131 @@ public class FFrameOverViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes liVistas
-	 *
+	 * 
 	 * @return javax.swing.JList
 	 */
 	private javax.swing.JList getLiVistas() {
 		if (liVistas == null) {
 			ListViewModel listmodel = new ListWithoutOverViewModel();
 
-			//listmodel.addViews();
+			// listmodel.addViews();
 			listmodel.addViews(m_layout);
 
-			///ArrayList list = listmodel.getViews();
+			// /ArrayList list = listmodel.getViews();
 			liVistas = new javax.swing.JList();
 			liVistas.setModel(listmodel);
 
 			for (int i = 0; i < liVistas.getModel().getSize(); i++) {
 				if (fframeDependence != null) {
-					fframeview = (FFrameView) liVistas.getModel().getElementAt(i);
+					fframeview = (FFrameView) liVistas.getModel().getElementAt(
+							i);
 
 					if (fframeview == fframeoverview.getFFrameDependence()[0]) {
 						liVistas.setSelectedIndex(i);
 					}
 
-					/*m_projectView=(ProjectView)liVistas.getModel().getElementAt(i);
-					   if (m_projectView.getMapContext()==fframelegend.getFMap()){
-					           liVistas.setSelectedIndex(i);
-					   }
+					/*
+					 * m_projectView=(ProjectView)liVistas.getModel().getElementAt
+					 * (i); if
+					 * (m_projectView.getMapContext()==fframelegend.getFMap()){
+					 * liVistas.setSelectedIndex(i); }
 					 */
 				}
 			}
 
 			liVistas.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-					private int selectIndex=-1;
-					public void valueChanged(
-								javax.swing.event.ListSelectionEvent e) {
-							IFFrame[] fframes=m_layout.getLayoutContext().getFFrames();
-							int selectInt =((JList) e.getSource())
-									.getSelectedIndex();
-							if (selectInt != selectIndex) {
-								selectIndex = selectInt;
-								if (selectIndex == -1)
-									return;
-								fframeview = (FFrameView) liVistas.getModel()
-										.getElementAt(selectInt);
+				private int selectIndex = -1;
 
-								for (int i = 0; i < fframes.length; i++) {
-									IFFrame f = fframes[i];
+				public void valueChanged(javax.swing.event.ListSelectionEvent e) {
+					IFFrame[] fframes = m_layout.getLayoutContext()
+							.getFFrames();
+					int selectInt = ((JList) e.getSource()).getSelectedIndex();
+					if (selectInt != selectIndex) {
+						selectIndex = selectInt;
+						if (selectIndex == -1)
+							return;
+						fframeview = (FFrameView) liVistas.getModel()
+								.getElementAt(selectInt);
 
-									if (f instanceof FFrameView) {
-										if (((FFrameView) f).getView() == fframeview
-												.getView()) {
-											fframeDependence=fframeview;
-//											fframelegend
-//													.setFFrameDependence(fframeview);
-										}
-									}
+						for (int i = 0; i < fframes.length; i++) {
+							IFFrame f = fframes[i];
+
+							if (f instanceof FFrameView) {
+								if (((FFrameView) f).getView() == fframeview
+										.getView()) {
+									fframeDependence = fframeview;
+									// fframelegend
+									// .setFFrameDependence(fframeview);
 								}
-
-								// fframelegend.setFFrameView(fframeview);
 							}
 						}
 
-					});
+						// fframelegend.setFFrameView(fframeview);
+					}
+				}
+
+			});
 		}
 
 		return liVistas;
 	}
-//	/**
-//	 * This method initializes liVistas
-//	 *
-//	 * @return javax.swing.JList
-//	 */
-//	private javax.swing.JList getLiVistas() {
-//		if (liVistas == null) {
-//			ListViewModel listmodel = new ListViewModel();
-//			listmodel.addViews();
-//			liVistas = new javax.swing.JList();
-//			liVistas.setModel(listmodel);
-//			for (int i = 0; i < liVistas.getModel().getSize(); i++) {
-//				if (fframeoverview.getMapContext() != null) {
-//
-//					ProjectView pvaux= (ProjectView) liVistas.getModel()
-//														  .getElementAt(i);
-//
-//					if (pvaux.getMapContext().equals(fframeoverview.getMapContext())) {
-//						liVistas.setSelectedIndex(i);
-//						m_projectView= (ProjectView) liVistas.getModel()
-//						  .getElementAt(i);
-//					}
-//				}
-//			}
-//
-//			liVistas.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-//					private int selectIndex=-1;
-//					public void valueChanged(
-//						javax.swing.event.ListSelectionEvent e) {
-//						int selectInt = ((JList)e.getSource()).getSelectedIndex();
-//						if (selectInt!=selectIndex){
-//							selectIndex=selectInt;
-//							if (selectIndex==-1)
-//								return;
-//						m_projectView = (ProjectView) liVistas.getModel()
-//															  .getElementAt(selectInt);
-//
-////						fframeview.setBoundBox(FLayoutUtilities.toSheetRect(
-////								rect, m_layout.getAT()));
-////						fframeview.setView(m_projectView);
-////
-////						fframeview.setMapUnits(m_projectView.getMapContext()
-////															.getViewPort()
-////															.getMapUnits());
-//					}
-//					}
-//				});
-//		}
-//
-//		return liVistas;
-//	}
+
+	// /**
+	// * This method initializes liVistas
+	// *
+	// * @return javax.swing.JList
+	// */
+	// private javax.swing.JList getLiVistas() {
+	// if (liVistas == null) {
+	// ListViewModel listmodel = new ListViewModel();
+	// listmodel.addViews();
+	// liVistas = new javax.swing.JList();
+	// liVistas.setModel(listmodel);
+	// for (int i = 0; i < liVistas.getModel().getSize(); i++) {
+	// if (fframeoverview.getMapContext() != null) {
+	//
+	// ProjectView pvaux= (ProjectView) liVistas.getModel()
+	// .getElementAt(i);
+	//
+	// if (pvaux.getMapContext().equals(fframeoverview.getMapContext())) {
+	// liVistas.setSelectedIndex(i);
+	// m_projectView= (ProjectView) liVistas.getModel()
+	// .getElementAt(i);
+	// }
+	// }
+	// }
+	//
+	// liVistas.addListSelectionListener(new
+	// javax.swing.event.ListSelectionListener() {
+	// private int selectIndex=-1;
+	// public void valueChanged(
+	// javax.swing.event.ListSelectionEvent e) {
+	// int selectInt = ((JList)e.getSource()).getSelectedIndex();
+	// if (selectInt!=selectIndex){
+	// selectIndex=selectInt;
+	// if (selectIndex==-1)
+	// return;
+	// m_projectView = (ProjectView) liVistas.getModel()
+	// .getElementAt(selectInt);
+	//
+	// // fframeview.setBoundBox(FLayoutUtilities.toSheetRect(
+	// // rect, m_layout.getAT()));
+	// // fframeview.setView(m_projectView);
+	// //
+	// // fframeview.setMapUnits(m_projectView.getMapContext()
+	// // .getViewPort()
+	// // .getMapUnits());
+	// }
+	// }
+	// });
+	// }
+	//
+	// return liVistas;
+	// }
 
 	/**
 	 * This method initializes jButton
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getbAceptar() {
@@ -317,52 +324,56 @@ public class FFrameOverViewDialog extends JPanel implements IFFrameDialog {
 			bAceptar.setLocation(59, 160);
 			bAceptar.addActionListener(new java.awt.event.ActionListener() {
 
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						newFFrameView=(FFrameOverView)fframeoverview.cloneFFrame(m_layout);
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					newFFrameView = (FFrameOverView) fframeoverview
+							.cloneFFrame(m_layout);
+					newFFrameView.setBoundBox(FLayoutUtilities.toSheetRect(
+							rect, m_layout.getLayoutControl().getAT()));
+					newFFrameView.setRotation(getPRotation().getRotation());
+					newFFrameView.setShowCross(showCrossCHB.isSelected());
+					if (fframeDependence != null) {
+						newFFrameView.setName(fframeDependence.getView()
+								.getName());
+
+						newFFrameView.setFFrameDependence(fframeDependence);
+						newFFrameView.setView(fframeDependence.getView());
+
+						newFFrameView.setQuality(getCbCalidad()
+								.getSelectedIndex());
 						newFFrameView.setBoundBox(FLayoutUtilities.toSheetRect(
 								rect, m_layout.getLayoutControl().getAT()));
-						newFFrameView.setRotation(getPRotation().getRotation());
-						newFFrameView.setShowCross(showCrossCHB.isSelected());
-						if (fframeDependence!=null) {
-							newFFrameView.setName(fframeDependence.getView().getName());
 
-							newFFrameView.setFFrameDependence(fframeDependence);
-							newFFrameView.setView(fframeDependence.getView());
-
-							newFFrameView.setQuality(getCbCalidad()
-													  .getSelectedIndex());
-							newFFrameView.setBoundBox(FLayoutUtilities.toSheetRect(
-									rect, m_layout.getLayoutControl().getAT()));
-
-							/*        for (int i=0;i<m_layout.getFFrames().size();i++){
-							   IFFrame fframe=(IFFrame)m_layout.getFFrames().get(i);
-							   if (fframe instanceof FFrameScaleBar){
-							           if (((FFrameScaleBar)fframe).getFFrameView()==fframeview){
-							           if (getJComboBox().getSelectedIndex()!=0){
-							           ((FFrameScaleBar)fframe).setIsFixed(true);
-							           ((FFrameScaleBar)fframe).setScaleView(Long.parseLong(getJTextField().getText()));
-							           }else{
-							                   ((FFrameScaleBar)fframe).setIsFixed(false);
-							           }
-
-							           }
-							   }
-
-
-							   }
-							 */
-						}
-
-						isAcepted = true;
-
-						//}else{
-						//	isAcepted=false;
-						//}
-						PluginServices.getMDIManager().closeWindow(FFrameOverViewDialog.this);
-						fframeoverview.refresh();
-						//m_layout.refresh();
+						/*
+						 * for (int i=0;i<m_layout.getFFrames().size();i++){
+						 * IFFrame fframe=(IFFrame)m_layout.getFFrames().get(i);
+						 * if (fframe instanceof FFrameScaleBar){ if
+						 * (((FFrameScaleBar
+						 * )fframe).getFFrameView()==fframeview){ if
+						 * (getJComboBox().getSelectedIndex()!=0){
+						 * ((FFrameScaleBar)fframe).setIsFixed(true);
+						 * ((FFrameScaleBar
+						 * )fframe).setScaleView(Long.parseLong(getJTextField
+						 * ().getText())); }else{
+						 * ((FFrameScaleBar)fframe).setIsFixed(false); }
+						 * 
+						 * } }
+						 * 
+						 * 
+						 * }
+						 */
 					}
-				});
+
+					isAcepted = true;
+
+					// }else{
+					// isAcepted=false;
+					// }
+					PluginServices.getMDIManager().closeWindow(
+							FFrameOverViewDialog.this);
+					fframeoverview.refresh();
+					// m_layout.refresh();
+				}
+			});
 		}
 
 		return bAceptar;
@@ -370,7 +381,7 @@ public class FFrameOverViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes bCancelar
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBCancelar() {
@@ -380,11 +391,12 @@ public class FFrameOverViewDialog extends JPanel implements IFFrameDialog {
 			bCancelar.setText(PluginServices.getText(this, "Cancelar"));
 			bCancelar.setLocation(199, 160);
 			bCancelar.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						newFFrameView=null;
-						PluginServices.getMDIManager().closeWindow(FFrameOverViewDialog.this);
-					}
-				});
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					newFFrameView = null;
+					PluginServices.getMDIManager().closeWindow(
+							FFrameOverViewDialog.this);
+				}
+			});
 		}
 
 		return bCancelar;
@@ -392,7 +404,7 @@ public class FFrameOverViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes lCalidad
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLCalidad() {
@@ -408,7 +420,7 @@ public class FFrameOverViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes cbCalidad
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private javax.swing.JComboBox getCbCalidad() {
@@ -425,13 +437,15 @@ public class FFrameOverViewDialog extends JPanel implements IFFrameDialog {
 		return cbCalidad;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.mdiApp.ui.MDIManager.View#getViewInfo()
 	 */
 	public WindowInfo getWindowInfo() {
 		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODALDIALOG);
 
-		//vi.setResizable(false);
+		// vi.setResizable(false);
 		m_viewinfo.setTitle(PluginServices.getText(this,
 				"propiedades_marco_localizador"));
 
@@ -453,7 +467,7 @@ public class FFrameOverViewDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes rotation
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPRotation getPRotation() {
@@ -471,4 +485,4 @@ public class FFrameOverViewDialog extends JPanel implements IFFrameDialog {
 	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

@@ -8,7 +8,8 @@ import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 import com.iver.utiles.extensionPoints.IExtensionBuilder;
 
-public abstract class AbstractLayoutContextMenuAction extends AbstractContextMenuAction implements IExtensionBuilder{
+public abstract class AbstractLayoutContextMenuAction extends
+		AbstractContextMenuAction implements IExtensionBuilder {
 	private Layout layout;
 
 	public Layout getLayout() {
@@ -19,15 +20,18 @@ public abstract class AbstractLayoutContextMenuAction extends AbstractContextMen
 		this.layout = layout;
 	}
 
-	public boolean isEnabled(LayoutContext layoutContext, IFFrame[] selectedFrames) {
+	public boolean isEnabled(LayoutContext layoutContext,
+			IFFrame[] selectedFrames) {
 		return true;
 	}
 
-	public boolean isVisible(LayoutContext layoutContext, IFFrame[] selectedFrames) {
+	public boolean isVisible(LayoutContext layoutContext,
+			IFFrame[] selectedFrames) {
 		return true;
 	}
 
-	public abstract void execute(LayoutContext layoutContext, IFFrame[] selectedFrames);
+	public abstract void execute(LayoutContext layoutContext,
+			IFFrame[] selectedFrames);
 
 	public Object create() {
 		return this;
@@ -44,15 +48,15 @@ public abstract class AbstractLayoutContextMenuAction extends AbstractContextMen
 	}
 
 	public boolean isEnabled(Object item, Object[] selectedItems) {
-		return isEnabled((LayoutContext)item,(IFFrame[]) selectedItems);
+		return isEnabled((LayoutContext) item, (IFFrame[]) selectedItems);
 	}
 
 	public boolean isVisible(Object item, Object[] selectedItems) {
-		return isVisible((LayoutContext)item,(IFFrame[]) selectedItems);
+		return isVisible((LayoutContext) item, (IFFrame[]) selectedItems);
 	}
 
 	public void execute(Object item, Object[] selectedItems) {
-		execute((LayoutContext)item,(IFFrame[]) selectedItems);
+		execute((LayoutContext) item, (IFFrame[]) selectedItems);
 
 	}
 

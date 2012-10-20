@@ -27,29 +27,31 @@ import javax.swing.JPanel;
 import org.gvsig.raster.dataset.Params;
 
 /**
- * Clase de la que deben heredar todos los paneles para filtros 
- * definidos por el usuario. Tiene los métodos para el registro de listeners
+ * Clase de la que deben heredar todos los paneles para filtros definidos por el
+ * usuario. Tiene los métodos para el registro de listeners
  * 
  * 28/09/2007
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class RegistrableFilterListener extends JPanel {
-	private static final long  serialVersionUID = 5528469123516861351L;
-	private ArrayList          actionCommandListeners = new ArrayList();
-	protected Params           params = null;
-	
+	private static final long serialVersionUID = 5528469123516861351L;
+	private ArrayList actionCommandListeners = new ArrayList();
+	protected Params params = null;
+
 	/**
 	 * Borrar el disparador de eventos de los botones.
+	 * 
 	 * @param listener
 	 */
 	public void removeStateChangedListener(FilterUIListener listener) {
 		actionCommandListeners.remove(listener);
 	}
 
-	
 	/**
 	 * 
-	 * Ejecución del método actionValuesCompleted en todos los filtros registrados
+	 * Ejecución del método actionValuesCompleted en todos los filtros
+	 * registrados
 	 */
 	protected void callStateChanged() {
 		Iterator acIterator = actionCommandListeners.iterator();
@@ -58,18 +60,20 @@ public class RegistrableFilterListener extends JPanel {
 			listener.actionValuesCompleted(new EventObject(this));
 		}
 	}
-	
+
 	/**
 	 * Añadir el listener para los paneles definidos por el usuario
+	 * 
 	 * @param listener
 	 */
 	public void addFilterUIListener(FilterUIListener listener) {
 		if (!actionCommandListeners.contains(listener))
 			actionCommandListeners.add(listener);
 	}
-	
+
 	/**
 	 * Obtiene los parámetros cargados por el panel
+	 * 
 	 * @return
 	 */
 	public Params getParams() {

@@ -9,9 +9,9 @@ import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.index.ItemVisitor;
 import com.vividsolutions.jts.index.quadtree.Quadtree;
 
-public class SpatialCache  {
+public class SpatialCache {
 	public int maxFeatures = 1000; // Por defecto, pero se puede cambiar
-	int fastNumTotalRegs=0;
+	int fastNumTotalRegs = 0;
 	Quadtree quadTree = new Quadtree();
 
 	public int getMaxFeatures() {
@@ -24,24 +24,24 @@ public class SpatialCache  {
 
 	/**
 	 * Método de conveniencia
-	 *
+	 * 
 	 * @param r
 	 * @param igeometry
 	 */
 	public synchronized void insert(Rectangle2D bounds, IGeometry geom) {
 		Envelope env = FConverter.convertRectangle2DtoEnvelope(bounds);
 		this.insert(env, geom);
-		//fastNumTotalRegs++;
+		// fastNumTotalRegs++;
 	}
 
-	public synchronized void query(Envelope searchEnv, ItemVisitor visitor)
-	{
+	public synchronized void query(Envelope searchEnv, ItemVisitor visitor) {
 		quadTree.query(searchEnv, visitor);
 	}
-	public synchronized List query(Envelope searchEnv)
-	{
+
+	public synchronized List query(Envelope searchEnv) {
 		return quadTree.query(searchEnv);
 	}
+
 	public void insert(Envelope itemEnv, Object item) {
 		quadTree.insert(itemEnv, item);
 		fastNumTotalRegs++;
@@ -65,8 +65,7 @@ public class SpatialCache  {
 
 	public void remove(Rectangle2D bounds, IGeometry geom) {
 		Envelope env = FConverter.convertRectangle2DtoEnvelope(bounds);
-		this.remove(env,geom);
+		this.remove(env, geom);
 	}
-
 
 }

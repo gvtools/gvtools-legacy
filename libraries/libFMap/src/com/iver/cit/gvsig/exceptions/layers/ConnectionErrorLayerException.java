@@ -40,16 +40,16 @@
  */
 package com.iver.cit.gvsig.exceptions.layers;
 
-
 /**
  * @author Vicente Caballero Navarro
  */
 public class ConnectionErrorLayerException extends LoadLayerException {
 
-	public ConnectionErrorLayerException(String l,Throwable exception) {
-		super(l,exception);
+	public ConnectionErrorLayerException(String l, Throwable exception) {
+		super(l, exception);
 		init();
 	}
+
 	/**
 	 *
 	 */

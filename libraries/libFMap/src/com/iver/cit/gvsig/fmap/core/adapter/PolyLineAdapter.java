@@ -54,99 +54,109 @@ import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
 import com.iver.cit.gvsig.fmap.core.symbols.ILineSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class PolyLineAdapter extends GeometryAdapter {
-    private Point2D pointPosition = new Point2D.Double();
-    private AffineTransform identity = new AffineTransform();
+	private Point2D pointPosition = new Point2D.Double();
+	private AffineTransform identity = new AffineTransform();
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param p DOCUMENT ME!
-     */
-    public void obtainShape(Point2D p) {
-        Point2D[] points = getPoints();
-        GeneralPathX elShape = new GeneralPathX(GeneralPathX.WIND_EVEN_ODD,
-                points.length);
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param p
+	 *            DOCUMENT ME!
+	 */
+	public void obtainShape(Point2D p) {
+		Point2D[] points = getPoints();
+		GeneralPathX elShape = new GeneralPathX(GeneralPathX.WIND_EVEN_ODD,
+				points.length);
 
-        if (points.length > 0) {
-            elShape.moveTo(((Point2D) points[0]).getX(),
-                ((Point2D) points[0]).getY());
-        }
+		if (points.length > 0) {
+			elShape.moveTo(((Point2D) points[0]).getX(),
+					((Point2D) points[0]).getY());
+		}
 
-        for (int i = 0; i < points.length; i++) {
-            elShape.lineTo(((Point2D) points[i]).getX(),
-                ((Point2D) points[i]).getY());
-        }
+		for (int i = 0; i < points.length; i++) {
+			elShape.lineTo(((Point2D) points[i]).getX(),
+					((Point2D) points[i]).getY());
+		}
 
-        if (points.length > 0) {
-            elShape.lineTo(p.getX(), p.getY());
-        }
+		if (points.length > 0) {
+			elShape.lineTo(p.getX(), p.getY());
+		}
 
-        setGPX(elShape);
-    }
+		setGPX(elShape);
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public FShape getShape(AffineTransform at) {
-    	 GeneralPathX polyLine = new GeneralPathX(new FPolyline2D(getGPX()));
-         polyLine.transform(at);
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public FShape getShape(AffineTransform at) {
+		GeneralPathX polyLine = new GeneralPathX(new FPolyline2D(getGPX()));
+		polyLine.transform(at);
 
-        return new FPolyline2D(polyLine);
-    }
+		return new FPolyline2D(polyLine);
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param g DOCUMENT ME!
-     * @param at DOCUMENT ME!
-     * @param symbol DOCUMENT ME!
-     */
-    public void draw(Graphics2D g, AffineTransform at, ISymbol symbol) {
-    	FShape shapeAux =getShape(at);
-    	symbol.draw(g,at,shapeAux, null);
-    	// FGraphicUtilities.DrawShape(g, at, shapeAux, symbol);
-    }
-    public void print(Graphics2D g, AffineTransform at, ISymbol symbol,PrintRequestAttributeSet properties) {
-    	FShape shapeAux =getShape(at);
-    	symbol.print(g,at,shapeAux, properties);
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param g
+	 *            DOCUMENT ME!
+	 * @param at
+	 *            DOCUMENT ME!
+	 * @param symbol
+	 *            DOCUMENT ME!
+	 */
+	public void draw(Graphics2D g, AffineTransform at, ISymbol symbol) {
+		FShape shapeAux = getShape(at);
+		symbol.draw(g, at, shapeAux, null);
 		// FGraphicUtilities.DrawShape(g, at, shapeAux, symbol);
-    }
-    /**
-     * DOCUMENT ME!
-     *
-     * @param g DOCUMENT ME!
-     * @param at DOCUMENT ME!
-     * @param andLastPoint DOCUMENT ME!
-     */
-    public void paint(Graphics2D g, AffineTransform at, boolean andLastPoint) {
-        if (andLastPoint) {
-            obtainShape(pointPosition);
-        }
+	}
 
-        FShape shapeAux=getShape(at);
-        //ISymbol symbol = new FSymbol(FConstant.SYMBOL_TYPE_LINE, Color.red);
-        ILineSymbol symbol = SymbologyFactory.createDefaultLineSymbol();
-        symbol.setLineColor(Color.RED);
-        symbol.draw(g, identity, shapeAux, null);
-        // FGraphicUtilities.DrawShape(g, identity, shapeAux,
-        //     new FSymbol(FConstant.SYMBOL_TYPE_LINE, Color.red));
-    }
+	public void print(Graphics2D g, AffineTransform at, ISymbol symbol,
+			PrintRequestAttributeSet properties) {
+		FShape shapeAux = getShape(at);
+		symbol.print(g, at, shapeAux, properties);
+		// FGraphicUtilities.DrawShape(g, at, shapeAux, symbol);
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param p DOCUMENT ME!
-     */
-    public void pointPosition(Point2D p) {
-        pointPosition = p;
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param g
+	 *            DOCUMENT ME!
+	 * @param at
+	 *            DOCUMENT ME!
+	 * @param andLastPoint
+	 *            DOCUMENT ME!
+	 */
+	public void paint(Graphics2D g, AffineTransform at, boolean andLastPoint) {
+		if (andLastPoint) {
+			obtainShape(pointPosition);
+		}
+
+		FShape shapeAux = getShape(at);
+		// ISymbol symbol = new FSymbol(FConstant.SYMBOL_TYPE_LINE, Color.red);
+		ILineSymbol symbol = SymbologyFactory.createDefaultLineSymbol();
+		symbol.setLineColor(Color.RED);
+		symbol.draw(g, identity, shapeAux, null);
+		// FGraphicUtilities.DrawShape(g, identity, shapeAux,
+		// new FSymbol(FConstant.SYMBOL_TYPE_LINE, Color.red));
+	}
+
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param p
+	 *            DOCUMENT ME!
+	 */
+	public void pointPosition(Point2D p) {
+		pointPosition = p;
+	}
 }

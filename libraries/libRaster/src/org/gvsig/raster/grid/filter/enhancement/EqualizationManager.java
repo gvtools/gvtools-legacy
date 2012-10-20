@@ -31,6 +31,7 @@ import org.gvsig.raster.grid.filter.RasterFilterList;
 import org.gvsig.raster.grid.filter.RasterFilterListManager;
 import org.gvsig.raster.hierarchy.IStatistics;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
+
 /**
  * Gestor de la pila de filtros para el filtro de ecualización de histograma.
  * 
@@ -38,10 +39,11 @@ import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
  */
 public class EqualizationManager implements IRasterFilterListManager {
 
-	protected RasterFilterList 			filterList = null;
+	protected RasterFilterList filterList = null;
 
 	/**
 	 * Constructor
+	 * 
 	 * @param filterListManager
 	 */
 	public EqualizationManager(RasterFilterListManager filterListManager) {
@@ -58,10 +60,12 @@ public class EqualizationManager implements IRasterFilterListManager {
 
 	/**
 	 * Añade un filtro de ecualización de histograma.
+	 * 
 	 * @param IStatistics
-	 * @throws FilterTypeException 
+	 * @throws FilterTypeException
 	 */
-	public void addEqualizationFilter(IStatistics stats, int[] renderBands, Histogram hist, int[] ecualizedBands) throws FilterTypeException {
+	public void addEqualizationFilter(IStatistics stats, int[] renderBands,
+			Histogram hist, int[] ecualizedBands) throws FilterTypeException {
 		try {
 			if (!stats.isCalculated()) {
 				try {
@@ -75,21 +79,24 @@ public class EqualizationManager implements IRasterFilterListManager {
 				}
 			}
 
-			RasterFilter filter = createEnhancedFilter(stats, renderBands, hist, ecualizedBands);
+			RasterFilter filter = createEnhancedFilter(stats, renderBands,
+					hist, ecualizedBands);
 			if (filter != null)
 				filterList.add(filter);
 		} catch (InterruptedException e) {
-			//Si se ha interrumpido no añadimos el filtro
+			// Si se ha interrumpido no añadimos el filtro
 		}
 	}
 
 	/**
 	 * Crea un filtro de Ecualización de histograma.
+	 * 
 	 * @param stats
 	 * @param renderBands
 	 * @return
 	 */
-	public static RasterFilter createEnhancedFilter(IStatistics stats, int[] renderBands, Histogram hist, int[] ecualizedBands) {
+	public static RasterFilter createEnhancedFilter(IStatistics stats,
+			int[] renderBands, Histogram hist, int[] ecualizedBands) {
 		RasterFilter filter = new EqualizationByteFilter();
 		if (filter != null) {
 			filter.addParam("stats", stats);
@@ -101,24 +108,31 @@ public class EqualizationManager implements IRasterFilterListManager {
 	}
 
 	/**
-	 * Obtiene un Array de Strings a partir de una pila de filtros. Cada elemento
-	 * del array tendrá la forma de elemento=valor.
+	 * Obtiene un Array de Strings a partir de una pila de filtros. Cada
+	 * elemento del array tendrá la forma de elemento=valor.
 	 */
-	public ArrayList getStringsFromFilterList(ArrayList filterList, RasterFilter rf) {
+	public ArrayList getStringsFromFilterList(ArrayList filterList,
+			RasterFilter rf) {
 		return filterList;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#createFilterListFromStrings(java.util.ArrayList, java.lang.String, int)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#
+	 * createFilterListFromStrings(java.util.ArrayList, java.lang.String, int)
 	 */
-	public int createFilterListFromStrings(ArrayList filters, String fil, int filteri) throws FilterTypeException {
+	public int createFilterListFromStrings(ArrayList filters, String fil,
+			int filteri) throws FilterTypeException {
 		return filteri;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList()
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList
+	 * ()
 	 */
 	public ArrayList getRasterFilterList() {
 		ArrayList filters = new ArrayList();
@@ -128,33 +142,41 @@ public class EqualizationManager implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#addFilter(java.lang.Class, org.gvsig.raster.dataset.Params)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.IRasterFilterListManager#addFilter(java.
+	 * lang.Class, org.gvsig.raster.dataset.Params)
 	 */
-	public void addFilter(Class classFilter, Params params) throws FilterTypeException {
+	public void addFilter(Class classFilter, Params params)
+			throws FilterTypeException {
 		if (classFilter.equals(EqualizationFilter.class)) {
 			int[] renderBands = { 0, 1, 2 };
 			int[] ecualizedBands = { 0, 1, 2 };
 			Histogram hist = null;
 			for (int i = 0; i < params.getNumParams(); i++) {
-				if (params.getParam(i).id.equals("RenderBands") && 
-					params.getParam(i).defaultValue instanceof String) {
-					String[] bands = new String((String) params.getParam(i).defaultValue).split(" ");
+				if (params.getParam(i).id.equals("RenderBands")
+						&& params.getParam(i).defaultValue instanceof String) {
+					String[] bands = new String(
+							(String) params.getParam(i).defaultValue)
+							.split(" ");
 					renderBands[0] = new Integer(bands[0]).intValue();
 					renderBands[1] = new Integer(bands[1]).intValue();
 					renderBands[2] = new Integer(bands[2]).intValue();
 					continue;
 				}
-				if (params.getParam(i).id.equals("Histogram") &&
-					params.getParam(i).defaultValue instanceof Histogram) {
-					hist = (Histogram)params.getParam(i).defaultValue;
+				if (params.getParam(i).id.equals("Histogram")
+						&& params.getParam(i).defaultValue instanceof Histogram) {
+					hist = (Histogram) params.getParam(i).defaultValue;
 				}
-				if (params.getParam(i).id.equals("EcualizedBands") &&
-					params.getParam(i).defaultValue instanceof int[]) {
-					ecualizedBands = (int[])params.getParam(i).defaultValue;
+				if (params.getParam(i).id.equals("EcualizedBands")
+						&& params.getParam(i).defaultValue instanceof int[]) {
+					ecualizedBands = (int[]) params.getParam(i).defaultValue;
 				}
 			}
 
-			addEqualizationFilter((IStatistics) filterList.getEnvParam("IStatistics"), renderBands, hist, ecualizedBands);
+			addEqualizationFilter(
+					(IStatistics) filterList.getEnvParam("IStatistics"),
+					renderBands, hist, ecualizedBands);
 		}
 	}
 }

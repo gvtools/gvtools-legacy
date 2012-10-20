@@ -5,10 +5,11 @@ package com.iver.cit.gvsig.exceptions.expansionfile;
  */
 public class ExpansionFileWriteException extends ExpansionFileException {
 
-	public ExpansionFileWriteException(String l,Throwable exception) {
-		super(l,exception);
+	public ExpansionFileWriteException(String l, Throwable exception) {
+		super(l, exception);
 		init();
 	}
+
 	/**
 	 *
 	 */

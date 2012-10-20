@@ -40,14 +40,14 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: ServerErrorException.java 3516 2005-12-27 17:28:15Z jaume $
-* $Log$
-* Revision 1.1  2005-12-27 17:28:15  jaume
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: ServerErrorException.java 3516 2005-12-27 17:28:15Z jaume $
+ * $Log$
+ * Revision 1.1  2005-12-27 17:28:15  jaume
+ * *** empty log message ***
+ *
+ *
+ */
 /**
  * 
  */
@@ -55,24 +55,24 @@ package org.gvsig.remoteClient.exceptions;
 
 /**
  * <p>
- * Exception thrown when an unexpected response to a request was obtained
- * from a server. It denotes that the server could not process the request
- * by a critical error and it could not answer a service-specific defined
- * exception.
+ * Exception thrown when an unexpected response to a request was obtained from a
+ * server. It denotes that the server could not process the request by a
+ * critical error and it could not answer a service-specific defined exception.
  * </p>
  * <p>
  * Use it to distinguish a server exception that is not part of a service
  * exception definition.
  * </p>
+ * 
  * @author jaume
- *
+ * 
  */
 public class ServerErrorException extends Exception {
-    public ServerErrorException(){
-        super();
-    }
-    
-    public ServerErrorException(String message){
-        super(message);
-    }
+	public ServerErrorException() {
+		super();
+	}
+
+	public ServerErrorException(String message) {
+		super(message);
+	}
 }

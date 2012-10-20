@@ -4,15 +4,14 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 import com.hardcode.gdbms.engine.values.Value;
+
 /**
  * Implements the functionality of a null constant
- *
+ * 
  * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
- *
+ * 
  */
-public class NullConstant extends Operator{
-
-
+public class NullConstant extends Operator {
 
 	public String getName() {
 		return OperationTags.NULL_CONSTANT;

@@ -29,6 +29,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+
 /**
  * @version 28/06/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
@@ -54,8 +55,9 @@ public class TestListView implements ActionListener {
 		listViewComponent.setEditable(true);
 		jScrollPane.setViewportView(listViewComponent);
 
-		for (int i=0; i<1000; i++) {
-			ListViewItem item = new ListViewItem(new RampPainter(), "Prueba-" + i);
+		for (int i = 0; i < 1000; i++) {
+			ListViewItem item = new ListViewItem(new RampPainter(), "Prueba-"
+					+ i);
 			listViewComponent.addItem(item, true);
 		}
 
@@ -116,9 +118,12 @@ public class TestListView implements ActionListener {
 	}
 
 	int id = 0;
+
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == botonAdd) {

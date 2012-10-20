@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.errorfixes;
 
 import java.util.ArrayList;
@@ -62,59 +62,61 @@ import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.vividsolutions.jts.geom.Geometry;
 
 /**
- * This fix is similar to MergeOverlap, but it works with two layers
- * intead one only layer.
+ * This fix is similar to MergeOverlap, but it works with two layers intead one
+ * only layer.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class MergeOverlapWithPolygonFix extends MergeOverlapPolygonFix {
-	
+
 	public IFeature featureToPreserve;
-	
+
 	public MergeOverlapWithPolygonFix() {
 		super();
 	}
-	
-	public List<IFeature>[] fixAlgorithm(TopologyError error) throws BaseException {
-		
+
+	public List<IFeature>[] fixAlgorithm(TopologyError error)
+			throws BaseException {
+
 		List<IFeature>[] solution = null;
-		
+
 		IGeometry errorGeometry = error.getGeometry();
 		Geometry errorGeoJts = NewFConverter.toJtsGeometry(errorGeometry);
-		
+
 		IFeature firstFeature = error.getFeature1();
-		Geometry firstJts =NewFConverter.toJtsGeometry(firstFeature.getGeometry());
-		
+		Geometry firstJts = NewFConverter.toJtsGeometry(firstFeature
+				.getGeometry());
+
 		IFeature secondFeature = error.getFeature2();
-		Geometry secondJts = NewFConverter.toJtsGeometry(secondFeature.getGeometry());
-		
+		Geometry secondJts = NewFConverter.toJtsGeometry(secondFeature
+				.getGeometry());
+
 		List<IFeature> firstLyrEditedFeatures = new ArrayList<IFeature>();
 		List<IFeature> secondLyrEditedFeatures = new ArrayList<IFeature>();
-		
-		if(featureToPreserve.getID().equals(firstFeature.getID())){
-			//we remove the overlapping area of first feature
-			firstFeature = FeatureUtil.removeOverlappingArea(firstFeature, 
-													firstJts, 
-													errorGeoJts);
-			//and adds to second feature
+
+		if (featureToPreserve.getID().equals(firstFeature.getID())) {
+			// we remove the overlapping area of first feature
+			firstFeature = FeatureUtil.removeOverlappingArea(firstFeature,
+					firstJts, errorGeoJts);
+			// and adds to second feature
 			secondJts = secondJts.union(errorGeoJts);
 			secondFeature.setGeometry(NewFConverter.toFMap(secondJts));
-		}else{
-			secondFeature = FeatureUtil.removeOverlappingArea(secondFeature, 
-					secondJts, 
-					errorGeoJts);
-			
+		} else {
+			secondFeature = FeatureUtil.removeOverlappingArea(secondFeature,
+					secondJts, errorGeoJts);
+
 			firstJts = firstJts.union(errorGeoJts);
 			firstFeature.setGeometry(NewFConverter.toFMap(firstJts));
 		}
 		firstLyrEditedFeatures.add(firstFeature);
 		secondLyrEditedFeatures.add(secondFeature);
-		
-		solution = (List<IFeature>[]) new List[]{firstLyrEditedFeatures, secondLyrEditedFeatures};
+
+		solution = (List<IFeature>[]) new List[] { firstLyrEditedFeatures,
+				secondLyrEditedFeatures };
 		return solution;
 	}
-	
+
 	public String getEditionDescription() {
 		return Messages.getText("MERGE_OVERLAP_AREA_WITH_FIX");
 	}

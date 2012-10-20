@@ -33,16 +33,17 @@ import com.iver.andami.PluginServices;
  * Selección de parámetros del cuadro de salvar a raster.
  * 
  * 04/10/2007
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
-public class SelectionParamsPanel extends JPanel{
+public class SelectionParamsPanel extends JPanel {
 	private static final long serialVersionUID = -5868836652528932347L;
-	private MethodSelectorPanel      selectorPanel = null;
-	private InputScaleDataPanel      inputScalePanel = null;
-	private InputSizePanel           inputSizePanel = null;
-	private JPanel                   northPanel = null;
-	private MethodSelectorListener   listener = null;
-	
+	private MethodSelectorPanel selectorPanel = null;
+	private InputScaleDataPanel inputScalePanel = null;
+	private InputSizePanel inputSizePanel = null;
+	private JPanel northPanel = null;
+	private MethodSelectorListener listener = null;
+
 	/**
 	 * Constructor
 	 */
@@ -53,25 +54,30 @@ public class SelectionParamsPanel extends JPanel{
 		setLayout(layout);
 		add(getCenterPanel(), BorderLayout.CENTER);
 		add(getInputSizePanel(), BorderLayout.SOUTH);
-		setBorder(javax.swing.BorderFactory.createTitledBorder(null, PluginServices.getText(this, "metodo"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("metodo", java.awt.Font.PLAIN, 10), null));
+		setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+				PluginServices.getText(this, "metodo"),
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION,
+				new java.awt.Font("metodo", java.awt.Font.PLAIN, 10), null));
 		listener = new MethodSelectorListener(this);
 	}
 
 	/**
 	 * Obtiene el listener que controla el sincronismo entre los componentes
+	 * 
 	 * @return MethodSelectorListener
 	 */
 	public MethodSelectorListener getMethodSelectorListener() {
 		return listener;
 	}
-	
+
 	/**
-	 * Obtiene el panel con el selector de método y la selección
-	 * de escala
+	 * Obtiene el panel con el selector de método y la selección de escala
+	 * 
 	 * @return JPanel
 	 */
 	public JPanel getCenterPanel() {
-		if(northPanel == null) {
+		if (northPanel == null) {
 			northPanel = new JPanel();
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.insets = new Insets(0, 10, 0, 5);
@@ -81,7 +87,7 @@ public class SelectionParamsPanel extends JPanel{
 			gridBagConstraints.fill = GridBagConstraints.BOTH;
 			gridBagConstraints.weightx = 1.0;
 			gridBagConstraints.weighty = 1.0;
-			
+
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.gridy = 0;
 			northPanel.add(getSelectorPanel(), gridBagConstraints);
@@ -95,21 +101,22 @@ public class SelectionParamsPanel extends JPanel{
 
 	/**
 	 * Obtiene el panel con la selección de escala y tamaño de pixel
+	 * 
 	 * @return InputScaleDataPanel
 	 */
 	public InputScaleDataPanel getInputScalePanel() {
-		if(inputScalePanel == null)
+		if (inputScalePanel == null)
 			inputScalePanel = new InputScaleDataPanel();
 		return inputScalePanel;
 	}
 
 	/**
-	 * Obtiene el panel con la selección de tamaño de salida
-	 * del raster
+	 * Obtiene el panel con la selección de tamaño de salida del raster
+	 * 
 	 * @return InputSizePanel
 	 */
 	public InputSizePanel getInputSizePanel() {
-		if(inputSizePanel == null)
+		if (inputSizePanel == null)
 			inputSizePanel = new InputSizePanel();
 		return inputSizePanel;
 	}
@@ -117,10 +124,11 @@ public class SelectionParamsPanel extends JPanel{
 	/**
 	 * Obtiene el panel con el selector de método de selección. Por escala,
 	 * tamaño de pixel o tamaño de imagen
+	 * 
 	 * @return MethodSelectorPanel
 	 */
 	public MethodSelectorPanel getSelectorPanel() {
-		if(selectorPanel == null)
+		if (selectorPanel == null)
 			selectorPanel = new MethodSelectorPanel();
 		return selectorPanel;
 	}

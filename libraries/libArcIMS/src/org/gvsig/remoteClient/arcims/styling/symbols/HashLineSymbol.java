@@ -46,79 +46,82 @@
  */
 package org.gvsig.remoteClient.arcims.styling.symbols;
 
-
-
 import org.gvsig.remoteClient.arcims.utils.ServiceInfoTags;
 
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 
-
 /**
- * This class is not supported at this time by gvSIG, so it will
- * be transformed in a SiumpleLine.
+ * This class is not supported at this time by gvSIG, so it will be transformed
+ * in a SiumpleLine.
+ * 
  * @author jsanz
- *
+ * 
  */
 public class HashLineSymbol extends AbstractSymbol implements IArcIMSSymbol {
-    public static final String TAG = ServiceInfoTags.tHASHLINESYMBOL;
-    private String color;
-    private String linethickness;
+	public static final String TAG = ServiceInfoTags.tHASHLINESYMBOL;
+	private String color;
+	private String linethickness;
 
-    public HashLineSymbol() {
-        color = "0,0,0";
-        linethickness = "1";
-    }
+	public HashLineSymbol() {
+		color = "0,0,0";
+		linethickness = "1";
+	}
 
-    public String toString() {
-        return "<" + TAG + getParam() + "/>\r\n";
-    }
+	public String toString() {
+		return "<" + TAG + getParam() + "/>\r\n";
+	}
 
-    /**
-     * @return Returns the color.
-     */
-    public String getColor() {
-        return color;
-    }
+	/**
+	 * @return Returns the color.
+	 */
+	public String getColor() {
+		return color;
+	}
 
-    /**
-     * @param color The color to set.
-     */
-    public void setColor(String color) {
-        this.color = color;
-    }
+	/**
+	 * @param color
+	 *            The color to set.
+	 */
+	public void setColor(String color) {
+		this.color = color;
+	}
 
-    /**
-     * @return Returns the linethickness.
-     */
-    public String getLinethickness() {
-        return linethickness;
-    }
+	/**
+	 * @return Returns the linethickness.
+	 */
+	public String getLinethickness() {
+		return linethickness;
+	}
 
-    /**
-     * @param linethickness The linethickness to set.
-     */
-    public void setLinethickness(String linethickness) {
-        this.linethickness = linethickness;
-    }
+	/**
+	 * @param linethickness
+	 *            The linethickness to set.
+	 */
+	public void setLinethickness(String linethickness) {
+		this.linethickness = linethickness;
+	}
 
-    protected String getParam() {
-        String param = "";
+	protected String getParam() {
+		String param = "";
 
-        if (SymbolUtils.isVoid(color)) {
-            param += (" color = \"" + color + "\"");
-        }
+		if (SymbolUtils.isVoid(color)) {
+			param += (" color = \"" + color + "\"");
+		}
 
-        if (SymbolUtils.isVoid(linethickness)) {
-            param += (" linethickness = \"" + linethickness + "\"");
-        }
+		if (SymbolUtils.isVoid(linethickness)) {
+			param += (" linethickness = \"" + linethickness + "\"");
+		}
 
-        return param;
-    }
+		return param;
+	}
 
-    /* (non-Javadoc)
-     * @see org.gvsig.remoteClient.arcims.styling.symbols.IArcIMSSymbol#getFSymbol()
-     */
-    public ISymbol getFSymbol() {
-        return ArcImsFSymbolFactory.getFSymbol(this);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.arcims.styling.symbols.IArcIMSSymbol#getFSymbol()
+	 */
+	public ISymbol getFSymbol() {
+		return ArcImsFSymbolFactory.getFSymbol(this);
+	}
 }

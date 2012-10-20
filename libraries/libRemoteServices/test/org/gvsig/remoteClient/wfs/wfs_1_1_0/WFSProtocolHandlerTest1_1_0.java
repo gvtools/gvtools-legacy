@@ -2,9 +2,8 @@ package org.gvsig.remoteClient.wfs.wfs_1_1_0;
 
 import java.io.File;
 
-import org.gvsig.remoteClient.wfs.wfs_1_0_0.WFSProtocolHandler1_0_0;
-
 import junit.framework.TestCase;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -59,39 +58,52 @@ import junit.framework.TestCase;
  */
 public class WFSProtocolHandlerTest1_1_0 extends TestCase {
 	WFSProtocolHandler1_1_0 handler;
-	
+
 	public void setUp() {
 		System.out.println("Setting up test..");
-		handler = new WFSProtocolHandler1_1_0();		
+		handler = new WFSProtocolHandler1_1_0();
 	}
-	
+
 	public void testParsingDescribeFeatureType1() {
-//		long t1 = System.currentTimeMillis();
-//		assertTrue(handler.parseCapabilities(new File("test/WFS-1_1_0SercartlinGetCapabilities.xml")));
-//		handler.setCurrentFeature("popplace");
-//		
-//		assertTrue(handler.parseDescribeFeatureType(new File("test/WFS-dmsolutionsDescribeFeatureType.xml"),null));
-//		long t2 = System.currentTimeMillis();
-//		System.out.println("Test parsing vivid done with apparently no errors in "+ (t2-(float)t1)/1000+" seconds");
+		// long t1 = System.currentTimeMillis();
+		// assertTrue(handler.parseCapabilities(new
+		// File("test/WFS-1_1_0SercartlinGetCapabilities.xml")));
+		// handler.setCurrentFeature("popplace");
+		//
+		// assertTrue(handler.parseDescribeFeatureType(new
+		// File("test/WFS-dmsolutionsDescribeFeatureType.xml"),null));
+		// long t2 = System.currentTimeMillis();
+		// System.out.println("Test parsing vivid done with apparently no errors in "+
+		// (t2-(float)t1)/1000+" seconds");
 	}
-	
+
 	public void testParsingDescribeFeatureType2() {
 		long t1 = System.currentTimeMillis();
-		assertTrue(handler.parseCapabilities(new File("testdata/wfs/WFS-1_1_0IDEEGetCapabilities.xml")));
+		assertTrue(handler.parseCapabilities(new File(
+				"testdata/wfs/WFS-1_1_0IDEEGetCapabilities.xml")));
 		handler.setCurrentFeature("ideewfs:VerticeRedOrdenInferior");
-		assertTrue(handler.parseDescribeFeatureType(new File("testdata/wfs/WFS-1_1_0IDEEDescribeFeatureType.xml"),null));
+		assertTrue(handler.parseDescribeFeatureType(new File(
+				"testdata/wfs/WFS-1_1_0IDEEDescribeFeatureType.xml"), null));
 		long t2 = System.currentTimeMillis();
-		Object obj = handler.getFeatures().get("ideewfs:VerticeRedOrdenInferior");
-		System.out.println("Test parsing vivid done with apparently no errors in "+ (t2-(float)t1)/1000+" seconds");
+		Object obj = handler.getFeatures().get(
+				"ideewfs:VerticeRedOrdenInferior");
+		System.out
+				.println("Test parsing vivid done with apparently no errors in "
+						+ (t2 - (float) t1) / 1000 + " seconds");
 	}
-	
+
 	public void testParsingDescribeFeatureTypeTNT() {
 		long t1 = System.currentTimeMillis();
-		assertTrue(handler.parseCapabilities(new File("testdata/wfs/WFS-1_1_0TNTGetCapabilities.xml")));
+		assertTrue(handler.parseCapabilities(new File(
+				"testdata/wfs/WFS-1_1_0TNTGetCapabilities.xml")));
 		handler.setCurrentFeature("BDLL200_Provincia");
-		assertTrue(handler.parseDescribeFeatureType(new File("testdata/wfs/WFS-1_1_0TNTDescribeFeatureType1.xml"),null));
-		assertTrue(handler.parseDescribeFeatureType(new File("testdata/wfs/WFS-1_1_0TNTDescribeFeatureType2.xml"),null));
+		assertTrue(handler.parseDescribeFeatureType(new File(
+				"testdata/wfs/WFS-1_1_0TNTDescribeFeatureType1.xml"), null));
+		assertTrue(handler.parseDescribeFeatureType(new File(
+				"testdata/wfs/WFS-1_1_0TNTDescribeFeatureType2.xml"), null));
 		long t2 = System.currentTimeMillis();
-		System.out.println("Test parsing IDEE done with apparently no errors in "+ (t2-(float)t1)/1000+" seconds");
+		System.out
+				.println("Test parsing IDEE done with apparently no errors in "
+						+ (t2 - (float) t1) / 1000 + " seconds");
 	}
 }

@@ -1,4 +1,3 @@
-
 /*
  * The Unified Mapping Platform (JUMP) is an extensible, interactive GUI
  * for visualizing and manipulating spatial features with geometry and attributes.
@@ -98,7 +97,6 @@ import javax.swing.event.ChangeListener;
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.gui.GUIUtil;
 
-
 /**
  * A custom Colour Scheme Browser - custom choices based on JColorChooser.
  */
@@ -107,34 +105,35 @@ public class ColorChooserPanel extends JPanel {
 	private GridBagLayout gridBagLayout1 = new GridBagLayout();
 	private JButton changeButton = new JButton();
 
-
-    //{DEFECT-PREVENTION} In accessors, it's better to use "workbench = newWorkbench"
-    //rather than "this.workbench = workbench", because otherwise if you misspell the
-    //argument, Java won't complain! We should do this everywhere. [Jon Aquino]
-    private JPanel outerColorPanel = new JPanel();
-    private ColorPanel colorPanel = new ColorPanel();
-    private Color color = Color.black;
-//    private int alpha;
-    private Dimension dim = new Dimension(100, 22);
-    private Dimension dim2 = new Dimension(dim.width, dim.height*2+5);
-    private ArrayList<ActionListener> actionListeners = new ArrayList<ActionListener>();
-    private boolean withTransp;
-    private boolean withTranspPerc;
+	// {DEFECT-PREVENTION} In accessors, it's better to use
+	// "workbench = newWorkbench"
+	// rather than "this.workbench = workbench", because otherwise if you
+	// misspell the
+	// argument, Java won't complain! We should do this everywhere. [Jon Aquino]
+	private JPanel outerColorPanel = new JPanel();
+	private ColorPanel colorPanel = new ColorPanel();
+	private Color color = Color.black;
+	// private int alpha;
+	private Dimension dim = new Dimension(100, 22);
+	private Dimension dim2 = new Dimension(dim.width, dim.height * 2 + 5);
+	private ArrayList<ActionListener> actionListeners = new ArrayList<ActionListener>();
+	private boolean withTransp;
+	private boolean withTranspPerc;
 	private boolean withNoFill;
-    private JCheckBox chkUseColor;
+	private JCheckBox chkUseColor;
 	private JSlider sldTransparency;
 	private JLabel lblTransparency;
 	private boolean muteSldTransparency = false;
-	private double perc = 0.392156863 ;/*100/255*/
+	private double perc = 0.392156863;/* 100/255 */
 	private ChangeListener sldAction = new ChangeListener() {
 		public void stateChanged(ChangeEvent e) {
 			if (!muteSldTransparency) {
 				int alphaValue = sldTransparency.getValue();
 				setAlpha(alphaValue);
 
-				if(withTranspPerc) {
+				if (withTranspPerc) {
 					int percValue = (int) (alphaValue * perc);
-					lblTransparency.setText( String.valueOf(percValue) + "%");
+					lblTransparency.setText(String.valueOf(percValue) + "%");
 				}
 				fireActionPerformed();
 			}
@@ -142,57 +141,63 @@ public class ColorChooserPanel extends JPanel {
 
 	};
 
-
-    public ColorChooserPanel() {
-        this(false);
-    }
-
-    /**
-	 * Constructor method
-	 *
-	 * @param withTransparencySlider boolean that specifies if the user
-	 * wants a slider with the color chooser panel to control the transparency
-	 * of the selected color.Also, it will appear a text which specifies the transparency percentage.
-	 * @param withNoFill boolean that specifies if the color chooser panel
-	 * allows a null value for the color selected (true case). If this values
-	 * is false, when the color selected is null then black color is assigned
-	 * automatically.
-	 */
-    public ColorChooserPanel(boolean withTransparencySlider) {
-    	this(withTransparencySlider,false);
-
-    }
+	public ColorChooserPanel() {
+		this(false);
+	}
 
 	/**
 	 * Constructor method
-	 *
-	 * @param withTransparencySlider boolean that specifies if the user
-	 * wants a slider with the color chooser panel to control the transparency
-	 * of the selected color.
-	 * @param withNoFill boolean that specifies if the color chooser panel
-	 * allows a null value for the color selected (true case). If this values
-	 * is false, when the color selected is null then black color is assigned
-	 * automatically.
+	 * 
+	 * @param withTransparencySlider
+	 *            boolean that specifies if the user wants a slider with the
+	 *            color chooser panel to control the transparency of the
+	 *            selected color.Also, it will appear a text which specifies the
+	 *            transparency percentage.
+	 * @param withNoFill
+	 *            boolean that specifies if the color chooser panel allows a
+	 *            null value for the color selected (true case). If this values
+	 *            is false, when the color selected is null then black color is
+	 *            assigned automatically.
+	 */
+	public ColorChooserPanel(boolean withTransparencySlider) {
+		this(withTransparencySlider, false);
+
+	}
+
+	/**
+	 * Constructor method
+	 * 
+	 * @param withTransparencySlider
+	 *            boolean that specifies if the user wants a slider with the
+	 *            color chooser panel to control the transparency of the
+	 *            selected color.
+	 * @param withNoFill
+	 *            boolean that specifies if the color chooser panel allows a
+	 *            null value for the color selected (true case). If this values
+	 *            is false, when the color selected is null then black color is
+	 *            assigned automatically.
 	 */
 	public ColorChooserPanel(boolean withTransparencySlider, boolean withNoFill) {
 
-		this.withTransp=withTransparencySlider;
-		this.withTranspPerc=withTransparencySlider;
-		this.withNoFill=withNoFill;
+		this.withTransp = withTransparencySlider;
+		this.withTranspPerc = withTransparencySlider;
+		this.withNoFill = withNoFill;
 
 		try {
 			if (withTransp) {
 				sldTransparency = new JSlider(0, 255);
 				sldTransparency.addChangeListener(sldAction);
 				int width = withNoFill ? dim2.width - 40 : dim2.width;
-				sldTransparency.setPreferredSize(new Dimension(width-5, dim2.height/2));
-				sldTransparency.setToolTipText(PluginServices.getText(this, "transparencia"));
+				sldTransparency.setPreferredSize(new Dimension(width - 5,
+						dim2.height / 2));
+				sldTransparency.setToolTipText(PluginServices.getText(this,
+						"transparencia"));
 
-				if(withTranspPerc) {
+				if (withTranspPerc) {
 					lblTransparency = new JLabel();
 					int percValue = (int) (sldTransparency.getValue() * perc);
-					lblTransparency.setText(String.valueOf(percValue) +"%");
-					lblTransparency.setPreferredSize(new Dimension(40,20));
+					lblTransparency.setText(String.valueOf(percValue) + "%");
+					lblTransparency.setPreferredSize(new Dimension(40, 20));
 				}
 
 				sldTransparency.setValue(255);
@@ -200,7 +205,7 @@ public class ColorChooserPanel extends JPanel {
 			}
 			jbInit();
 			colorPanel.setLineColor(null);
-			changeButton.setToolTipText(PluginServices.getText(this,"browse"));
+			changeButton.setToolTipText(PluginServices.getText(this, "browse"));
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -218,24 +223,24 @@ public class ColorChooserPanel extends JPanel {
 			}
 		});
 		outerColorPanel.setBorder(BorderFactory.createLoweredBevelBorder());
-		outerColorPanel.setPreferredSize(new Dimension(dim.width/2, dim.height));
+		outerColorPanel.setPreferredSize(new Dimension(dim.width / 2,
+				dim.height));
 		outerColorPanel.setBackground(Color.white);
-
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 1;
 		c.gridy = 0;
 		c.gridwidth = 2;
-		pane.add(outerColorPanel,c);
+		pane.add(outerColorPanel, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 3;
 		c.gridy = 0;
 		c.gridwidth = 1;
-		pane.add(changeButton,c);
+		pane.add(changeButton, c);
 		outerColorPanel.add(colorPanel);
 
-		if(withNoFill) {
+		if (withNoFill) {
 			chkUseColor = new JCheckBox();
 			chkUseColor.setSelected(true);
 			c.fill = GridBagConstraints.HORIZONTAL;
@@ -243,15 +248,13 @@ public class ColorChooserPanel extends JPanel {
 			c.gridx = 0;
 			c.gridy = 1;
 
-
 			chkUseColor.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					useColor_actionPerformed(e);
 				}
 			});
-			pane.add(chkUseColor,c);
+			pane.add(chkUseColor, c);
 		}
-
 
 		if (withTransp) {
 
@@ -259,15 +262,14 @@ public class ColorChooserPanel extends JPanel {
 			c.gridwidth = 3;
 			c.gridx = 1;
 			c.gridy = 1;
-			pane.add(sldTransparency,c);
+			pane.add(sldTransparency, c);
 
-
-			if(withTranspPerc) {
+			if (withTranspPerc) {
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.gridwidth = 3;
 				c.gridx = 4;
 				c.gridy = 1;
-				pane.add(lblTransparency,c);
+				pane.add(lblTransparency, c);
 			}
 
 		}
@@ -275,70 +277,81 @@ public class ColorChooserPanel extends JPanel {
 		add(pane);
 	}
 
-    private void changeButton_actionPerformed(ActionEvent e) {
-    	Color newColor = JColorChooser.showDialog(SwingUtilities.windowForComponent(this), PluginServices.getText(this,"choose_color"), color);
+	private void changeButton_actionPerformed(ActionEvent e) {
+		Color newColor = JColorChooser.showDialog(
+				SwingUtilities.windowForComponent(this),
+				PluginServices.getText(this, "choose_color"), color);
 
-        if (newColor == null) {
-            return;
-        }
+		if (newColor == null) {
+			return;
+		}
 
-        setColor(newColor);
-        fireActionPerformed();
-    }
-
-    /**
-	 * Returns true if the check box of the color chooser panel is selected.
-	 * False otherwise.
-	 * @return boolean true if the check box is selected. Otherwise, false.
-	 */
-	public boolean getUseColorisSelected() {
-		if(withNoFill)
-			return chkUseColor.isSelected();
-		return false;
-	}
-	/**
-	 * Sets the check box of the color chooser panel
-
-	 * @param b boolean true if the user wants to select it.Otherwise, false.
-	 */
-	public void setUseColorIsSelected(boolean b) {
-		if(withNoFill)
-			chkUseColor.setSelected(b);
-	}
-	/**
-	 * Controls the events when the check box of the color chooser panel
-	 * is modified
-	 *
-	 * @param e Action Event
-	 */
-	private void useColor_actionPerformed(ActionEvent e) {
-		if(chkUseColor.isSelected())
-			setColor(color);
-		else setColor(null);
+		setColor(newColor);
 		fireActionPerformed();
 	}
 
-     public void addActionListener(ActionListener l) {
-        actionListeners.add(l);
-    }
+	/**
+	 * Returns true if the check box of the color chooser panel is selected.
+	 * False otherwise.
+	 * 
+	 * @return boolean true if the check box is selected. Otherwise, false.
+	 */
+	public boolean getUseColorisSelected() {
+		if (withNoFill)
+			return chkUseColor.isSelected();
+		return false;
+	}
 
-    public void removeActionListener(ActionListener l) {
-        actionListeners.remove(l);
-    }
+	/**
+	 * Sets the check box of the color chooser panel
+	 * 
+	 * @param b
+	 *            boolean true if the user wants to select it.Otherwise, false.
+	 */
+	public void setUseColorIsSelected(boolean b) {
+		if (withNoFill)
+			chkUseColor.setSelected(b);
+	}
 
-    protected void fireActionPerformed() {
-        for (Iterator<ActionListener> i = actionListeners.iterator(); i.hasNext();) {
-            i.next().actionPerformed(new ActionEvent(this, 0, null));
-        }
-    }
+	/**
+	 * Controls the events when the check box of the color chooser panel is
+	 * modified
+	 * 
+	 * @param e
+	 *            Action Event
+	 */
+	private void useColor_actionPerformed(ActionEvent e) {
+		if (chkUseColor.isSelected())
+			setColor(color);
+		else
+			setColor(null);
+		fireActionPerformed();
+	}
+
+	public void addActionListener(ActionListener l) {
+		actionListeners.add(l);
+	}
+
+	public void removeActionListener(ActionListener l) {
+		actionListeners.remove(l);
+	}
+
+	protected void fireActionPerformed() {
+		for (Iterator<ActionListener> i = actionListeners.iterator(); i
+				.hasNext();) {
+			i.next().actionPerformed(new ActionEvent(this, 0, null));
+		}
+	}
+
 	/**
 	 * Sets the color of the chooser panel.
-	 *
-	 * @param color Color to be selected.
+	 * 
+	 * @param color
+	 *            Color to be selected.
 	 */
 	public void setColor(Color color) {
 
-		if( color != null) {
+		if (color != null) {
 			this.color = color;
 			setAlpha(color.getAlpha());
 			updateColorPanel();
@@ -347,27 +360,27 @@ public class ColorChooserPanel extends JPanel {
 	}
 
 	/**
-	 * Sets the alpha value of the color selected in the color chooser
-	 * panel.
-	 *
-	 * @param alpha Alpha value of the color.
+	 * Sets the alpha value of the color selected in the color chooser panel.
+	 * 
+	 * @param alpha
+	 *            Alpha value of the color.
 	 */
 	public void setAlpha(int alpha) {
 		muteSldTransparency = true;
 
 		if (color != null)
-			color=GUIUtil.alphaColor(color,alpha);
+			color = GUIUtil.alphaColor(color, alpha);
 
 		if (withTransp) {
 			sldTransparency.setValue(alpha);
 			sldTransparency.validate();
 			int percValue = (int) (alpha * perc);
-			lblTransparency.setText( String.valueOf(percValue)+ "%");
+			lblTransparency.setText(String.valueOf(percValue) + "%");
 		}
 
 		updateColorPanel();
 		muteSldTransparency = false;
-//		fireActionPerformed();
+		// fireActionPerformed();
 	}
 
 	public int getAlpha() {
@@ -379,15 +392,14 @@ public class ColorChooserPanel extends JPanel {
 
 	}
 
-    private void updateColorPanel() {
-        colorPanel.setFillColor(color);
-        colorPanel.repaint();
-    }
-
+	private void updateColorPanel() {
+		colorPanel.setFillColor(color);
+		colorPanel.repaint();
+	}
 
 	/**
 	 * Obtains the selected color in the color chooser panel.
-	 *
+	 * 
 	 * @return color the selected color
 	 */
 	public Color getColor() {
@@ -396,7 +408,7 @@ public class ColorChooserPanel extends JPanel {
 
 	public void disabledWithTransparency() {
 		changeButton.setEnabled(false);
-		if(withNoFill)
+		if (withNoFill)
 			chkUseColor.setEnabled(false);
 
 	}
@@ -405,13 +417,13 @@ public class ColorChooserPanel extends JPanel {
 	public void setEnabled(boolean newEnabled) {
 
 		changeButton.setEnabled(newEnabled);
-		if(withTransp) {
+		if (withTransp) {
 			sldTransparency.setEnabled(newEnabled);
 		}
-		if(withTranspPerc) {
+		if (withTranspPerc) {
 			lblTransparency.setEnabled(newEnabled);
 		}
-		if(withNoFill) {
+		if (withNoFill) {
 			chkUseColor.setEnabled(newEnabled);
 		}
 
@@ -420,12 +432,11 @@ public class ColorChooserPanel extends JPanel {
 	public static void main(String[] args) {
 		JFrame f = new JFrame();
 
-		final ColorChooserPanel ce2 = new ColorChooserPanel(true,true);
+		final ColorChooserPanel ce2 = new ColorChooserPanel(true, true);
 
 		JPanel content = new JPanel(new GridLayout(2, 1));
 
 		content.add(ce2);
-
 
 		f.setContentPane(content);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

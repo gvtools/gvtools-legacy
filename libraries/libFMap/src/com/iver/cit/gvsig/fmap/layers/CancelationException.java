@@ -41,49 +41,75 @@
 package com.iver.cit.gvsig.fmap.layers;
 
 /**
- * <p>There are classes and event handlers that allow cancel some of their operations when they are running. 
- * If fails that cancellation, a <code>CancelationException</code> exception is thrown.</p>
+ * <p>
+ * There are classes and event handlers that allow cancel some of their
+ * operations when they are running. If fails that cancellation, a
+ * <code>CancelationException</code> exception is thrown.
+ * </p>
  * 
  * @see RuntimeException
  */
 public class CancelationException extends RuntimeException {
 	/**
-	 * <p>Constructs a new cancelation exception with <code>null</code> as its detail message.
-	 *  The cause is not initialized, and may subsequently be initialized by a call to <code>initCause</code>.</p>
+	 * <p>
+	 * Constructs a new cancelation exception with <code>null</code> as its
+	 * detail message. The cause is not initialized, and may subsequently be
+	 * initialized by a call to <code>initCause</code>.
+	 * </p>
 	 */
 	public CancelationException() {
 		super();
 	}
 
 	/**
-	 * <p>Constructs a new cancelation exception with the specified detail message. The cause is not
-	 *  initialized, and may subsequently be initialized by a call to <code>initCause</code>.
+	 * <p>
+	 * Constructs a new cancelation exception with the specified detail message.
+	 * The cause is not initialized, and may subsequently be initialized by a
+	 * call to <code>initCause</code>.
 	 * 
-	 * @param message the detail message. The detail message is saved for later retrieval by the <code>getMessage()</code> method.
+	 * @param message
+	 *            the detail message. The detail message is saved for later
+	 *            retrieval by the <code>getMessage()</code> method.
 	 */
 	public CancelationException(String message) {
 		super(message);
 	}
 
 	/**
-	 * <p>Constructs a new cancelation exception with the specified detail message and cause.</p>
-	 * <p>Note that the detail message associated with cause is not automatically incorporated in this
-	 *  exception's detail message.</p>
-	 *  
-	 * @param message the detail message (which is saved for later retrieval by the <code>getMessage()</code> method).
-	 * @param cause the cause (which is saved for later retrieval by the <code>getCause()</code> method). (A <code>null</code>
-	 *  value is permitted, and indicates that the cause is nonexistent or unknown).
+	 * <p>
+	 * Constructs a new cancelation exception with the specified detail message
+	 * and cause.
+	 * </p>
+	 * <p>
+	 * Note that the detail message associated with cause is not automatically
+	 * incorporated in this exception's detail message.
+	 * </p>
+	 * 
+	 * @param message
+	 *            the detail message (which is saved for later retrieval by the
+	 *            <code>getMessage()</code> method).
+	 * @param cause
+	 *            the cause (which is saved for later retrieval by the
+	 *            <code>getCause()</code> method). (A <code>null</code> value is
+	 *            permitted, and indicates that the cause is nonexistent or
+	 *            unknown).
 	 */
 	public CancelationException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
 	/**
-	 * <p>Constructs a cancelation exception with the specified <code>cause</code> and a detail message of <code>(cause==null ?
-	 *  null : cause.toString())</code> (which typically contains the class and detailed information about cause).
-	 *  
-	 * @param cause the cause (which is saved for later retrieval by the <code>getCause()</code> method). (A <code>null</code>
-	 *  value is permitted, and indicates that the cause is nonexistent or unknown).
+	 * <p>
+	 * Constructs a cancelation exception with the specified <code>cause</code>
+	 * and a detail message of <code>(cause==null ?
+	 *  null : cause.toString())</code> (which typically contains the class and
+	 * detailed information about cause).
+	 * 
+	 * @param cause
+	 *            the cause (which is saved for later retrieval by the
+	 *            <code>getCause()</code> method). (A <code>null</code> value is
+	 *            permitted, and indicates that the cause is nonexistent or
+	 *            unknown).
 	 */
 	public CancelationException(Throwable cause) {
 		super(cause);

@@ -47,10 +47,8 @@ import java.util.ArrayList;
 import org.apache.batik.ext.awt.geom.PathLength;
 
 import com.iver.cit.gvsig.fmap.ViewPort;
-import com.iver.cit.gvsig.fmap.core.FPoint2D;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
-import com.iver.cit.gvsig.fmap.core.ShapeFactory;
 import com.iver.cit.gvsig.fmap.core.v02.FConverter;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.IPlacementConstraints;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelClass;
@@ -58,12 +56,12 @@ import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelLocationMetrics;
 import com.iver.utiles.swing.threads.Cancellable;
 
 /**
- *
+ * 
  * AbstractLinePlacement.java
- *
- *
+ * 
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Dec 17, 2007
- *
+ * 
  */
 public abstract class AbstractLinePlacement implements ILabelPlacement {
 	public static final double PI = Math.PI;
@@ -71,9 +69,9 @@ public abstract class AbstractLinePlacement implements ILabelPlacement {
 	private ArrayList<LabelLocationMetrics> guessed = new ArrayList<LabelLocationMetrics>();
 	private static final double TOLERANCE = 1E-2;
 
-
 	public ArrayList<LabelLocationMetrics> guess(LabelClass lc, IGeometry geom,
-			IPlacementConstraints pc, double cartographicSymbolSize, Cancellable cancel,ViewPort vp) {
+			IPlacementConstraints pc, double cartographicSymbolSize,
+			Cancellable cancel, ViewPort vp) {
 		guessed.clear();
 
 		FShape shp = FConverter.transformToInts(geom, vp.getAffineTransform());
@@ -82,75 +80,83 @@ public abstract class AbstractLinePlacement implements ILabelPlacement {
 
 		LabelLocationMetrics initial = initialLocation(lc, pc, pathLen, cancel);
 
-		if (cancel.isCanceled()) return CannotPlaceLabel.NO_PLACES;
+		if (cancel.isCanceled())
+			return CannotPlaceLabel.NO_PLACES;
 
 		double theta = initial.getRotation();
-
 
 		double xOffset = 0;
 		double yOffset = 0;
 		Rectangle2D bounds = lc.getBounds();
 
 		if (pc.isPageOriented()) {
-			if(theta >  HALF_PI) { // from origin to left-down
+			if (theta > HALF_PI) { // from origin to left-down
 				theta = (theta - Math.PI);
 
 				Point2D anchor = initial.getAnchor();
-//				double cosTheta = Math.cos(theta);
+				// double cosTheta = Math.cos(theta);
 				double sinTheta = Math.sin(theta);
 				double width = bounds.getWidth();
-				double height = bounds.getHeight()*1.1;
-				initial.getAnchor().setLocation(
-						anchor.getX()+ (sinTheta*width /* + cosTheta*height*/),
-						anchor.getY()- (/*cosTheta*width*/ + sinTheta*height));
-			} else if (theta < -HALF_PI ) { // from origin to left-up
-				if (Math.abs(Math.abs(theta) - HALF_PI) -TOLERANCE > 0)
-					// the condition avoids errors when segment is almost up-down vertical
+				double height = bounds.getHeight() * 1.1;
+				initial.getAnchor()
+						.setLocation(
+								anchor.getX() + (sinTheta * width /*
+																 * +
+																 * cosTheta*height
+																 */),
+								anchor.getY()
+										- (/* cosTheta*width */+sinTheta * height));
+			} else if (theta < -HALF_PI) { // from origin to left-up
+				if (Math.abs(Math.abs(theta) - HALF_PI) - TOLERANCE > 0)
+				// the condition avoids errors when segment is almost up-down
+				// vertical
 				{
 					theta = (theta + Math.PI);
 					Point2D anchor = initial.getAnchor();
 					double cosTheta = Math.cos(theta);
 					double sinTheta = Math.sin(theta);
 					double width = bounds.getWidth();
-					double height = bounds.getHeight()*1.1;
-					initial.getAnchor().setLocation(
-							anchor.getX()- (cosTheta*width/* + sinTheta*height*/),
-							anchor.getY()- (sinTheta*width + cosTheta*height));
+					double height = bounds.getHeight() * 1.1;
+					initial.getAnchor()
+							.setLocation(
+									anchor.getX() - (cosTheta * width/*
+																	 * +
+																	 * sinTheta
+																	 * *height
+																	 */),
+									anchor.getY()
+											- (sinTheta * width + cosTheta
+													* height));
 				}
 			}
 
-
 		}
 
-		if (pc.isBelowTheLine() ||
-				pc.isOnTheLine() ||
-				pc.isAboveTheLine()) {
+		if (pc.isBelowTheLine() || pc.isOnTheLine() || pc.isAboveTheLine()) {
 
-			double h = bounds.getHeight()*0.5;
+			double h = bounds.getHeight() * 0.5;
 
 			xOffset += h * Math.sin(theta);
 			yOffset += h * Math.cos(theta);
-
 
 			Point2D initialAnchor = initial.getAnchor();
 			// calculate the possibles in the inverse
 			// order to the preferred order and add it
 			// always in the first position
 			if (pc.isBelowTheLine()) {
-				Point2D anchor = new Point2D.Double(
-						initialAnchor.getX() +	-xOffset,
-						initialAnchor.getY() +	+yOffset);
+				Point2D anchor = new Point2D.Double(initialAnchor.getX()
+						+ -xOffset, initialAnchor.getY() + +yOffset);
 				guessed.add(0, new LabelLocationMetrics(anchor, theta, false));
 			}
 
 			if (pc.isOnTheLine()) {
-				guessed.add(0, new LabelLocationMetrics(initial.getAnchor(), theta, false));
+				guessed.add(0, new LabelLocationMetrics(initial.getAnchor(),
+						theta, false));
 			}
 
 			if (pc.isAboveTheLine()) {
-				Point2D anchor = new Point2D.Double(
-						initialAnchor.getX() +	+xOffset,
-						initialAnchor.getY() +  -yOffset);
+				Point2D anchor = new Point2D.Double(initialAnchor.getX()
+						+ +xOffset, initialAnchor.getY() + -yOffset);
 				guessed.add(0, new LabelLocationMetrics(anchor, theta, false));
 			}
 		} else {
@@ -160,6 +166,7 @@ public abstract class AbstractLinePlacement implements ILabelPlacement {
 		return guessed;
 	}
 
-	abstract LabelLocationMetrics initialLocation(LabelClass lc, IPlacementConstraints pc, PathLength pathLen, Cancellable cancel);
+	abstract LabelLocationMetrics initialLocation(LabelClass lc,
+			IPlacementConstraints pc, PathLength pathLen, Cancellable cancel);
 
 }

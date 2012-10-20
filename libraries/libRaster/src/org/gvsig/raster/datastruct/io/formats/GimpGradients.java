@@ -28,15 +28,16 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
-import com.iver.andami.PluginServices;
-
 import org.gvsig.raster.datastruct.ColorItem;
 import org.gvsig.raster.datastruct.ColorTable;
 import org.gvsig.raster.datastruct.io.RasterLegendIO;
+
+import com.iver.andami.PluginServices;
+
 /**
- * Clase GimpGradients sirve para importar y exportar gradientes de Gimp
- * Los ficheros de gradientes de gimp tienen la extension .ggr
- *
+ * Clase GimpGradients sirve para importar y exportar gradientes de Gimp Los
+ * ficheros de gradientes de gimp tienen la extension .ggr
+ * 
  * @version 03/12/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
@@ -45,6 +46,7 @@ public class GimpGradients extends RasterLegendIO {
 	/**
 	 * Devuelve el ColorItem asociado a una linea de un fichero de gradientes de
 	 * Gimp
+	 * 
 	 * @param strings
 	 * @param pos
 	 * @return
@@ -62,24 +64,23 @@ public class GimpGradients extends RasterLegendIO {
 		if (pos == 0)
 			item.setInterpolated((100 * (pos2 - pos1)) / (pos3 - pos1));
 		if (pos == 0)
-			item.setColor(new Color(
-				(int) (Double.valueOf(strings[3]).doubleValue() * 255.0),
-				(int) (Double.valueOf(strings[4]).doubleValue() * 255.0),
-				(int) (Double.valueOf(strings[5]).doubleValue() * 255.0),
-				(int) (Double.valueOf(strings[6]).doubleValue() * 255.0)
-				));
+			item.setColor(new Color((int) (Double.valueOf(strings[3])
+					.doubleValue() * 255.0), (int) (Double.valueOf(strings[4])
+					.doubleValue() * 255.0), (int) (Double.valueOf(strings[5])
+					.doubleValue() * 255.0), (int) (Double.valueOf(strings[6])
+					.doubleValue() * 255.0)));
 		else
-			item.setColor(new Color(
-					(int) (Double.valueOf(strings[7]).doubleValue() * 255.0),
-					(int) (Double.valueOf(strings[8]).doubleValue() * 255.0),
-					(int) (Double.valueOf(strings[9]).doubleValue() * 255.0),
-					(int) (Double.valueOf(strings[10]).doubleValue() * 255.0)
-					));
+			item.setColor(new Color((int) (Double.valueOf(strings[7])
+					.doubleValue() * 255.0), (int) (Double.valueOf(strings[8])
+					.doubleValue() * 255.0), (int) (Double.valueOf(strings[9])
+					.doubleValue() * 255.0), (int) (Double.valueOf(strings[10])
+					.doubleValue() * 255.0)));
 		return item;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.datastruct.io.RasterLegendIO#read(java.io.File)
 	 */
 	public ColorTable read(File input) throws IOException {
@@ -115,7 +116,10 @@ public class GimpGradients extends RasterLegendIO {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.datastruct.io.RasterLegendIO#write(org.gvsig.raster.datastruct.ColorTable, java.io.File)
+	 * 
+	 * @see
+	 * org.gvsig.raster.datastruct.io.RasterLegendIO#write(org.gvsig.raster.
+	 * datastruct.ColorTable, java.io.File)
 	 */
 	public void write(ColorTable colorTable, File output) throws IOException {
 		ArrayList colorItems = colorTable.getColorItems();
@@ -128,7 +132,8 @@ public class GimpGradients extends RasterLegendIO {
 
 			for (int i = 1; i < colorItems.size(); i++) {
 				double min = ((ColorItem) colorItems.get(0)).getValue();
-				double max = ((ColorItem) colorItems.get(colorItems.size() - 1)).getValue();
+				double max = ((ColorItem) colorItems.get(colorItems.size() - 1))
+						.getValue();
 
 				line = "";
 				ColorItem item1 = (ColorItem) colorItems.get(i - 1);
@@ -141,21 +146,38 @@ public class GimpGradients extends RasterLegendIO {
 				format.setMaximumFractionDigits(6);
 				format.setMinimumFractionDigits(6);
 				line += format.format(pos1).replaceAll(",", ".") + " ";
-				double interp = pos1 + (((pos2 - pos1) * item1.getInterpolated()) / 100.0);
+				double interp = pos1
+						+ (((pos2 - pos1) * item1.getInterpolated()) / 100.0);
 				line += format.format(interp).replaceAll(",", ".") + " ";
 				line += format.format(pos2).replaceAll(",", ".") + " ";
 
 				Color color = item1.getColor();
-				line += format.format(color.getRed() / 255.0).replaceAll(",", ".") + " ";
-				line += format.format(color.getGreen() / 255.0).replaceAll(",", ".") + " ";
-				line += format.format(color.getBlue() / 255.0).replaceAll(",", ".") + " ";
-				line += format.format(color.getAlpha() / 255.0).replaceAll(",", ".") + " ";
+				line += format.format(color.getRed() / 255.0).replaceAll(",",
+						".")
+						+ " ";
+				line += format.format(color.getGreen() / 255.0).replaceAll(",",
+						".")
+						+ " ";
+				line += format.format(color.getBlue() / 255.0).replaceAll(",",
+						".")
+						+ " ";
+				line += format.format(color.getAlpha() / 255.0).replaceAll(",",
+						".")
+						+ " ";
 
 				color = item2.getColor();
-				line += format.format(color.getRed() / 255.0).replaceAll(",", ".") + " ";
-				line += format.format(color.getGreen() / 255.0).replaceAll(",", ".") + " ";
-				line += format.format(color.getBlue() / 255.0).replaceAll(",", ".") + " ";
-				line += format.format(color.getAlpha() / 255.0).replaceAll(",", ".") + " ";
+				line += format.format(color.getRed() / 255.0).replaceAll(",",
+						".")
+						+ " ";
+				line += format.format(color.getGreen() / 255.0).replaceAll(",",
+						".")
+						+ " ";
+				line += format.format(color.getBlue() / 255.0).replaceAll(",",
+						".")
+						+ " ";
+				line += format.format(color.getAlpha() / 255.0).replaceAll(",",
+						".")
+						+ " ";
 
 				line += "0 0\n";
 				writer.write(line);
@@ -168,9 +190,10 @@ public class GimpGradients extends RasterLegendIO {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.datastruct.io.RasterLegendIO#getDescription()
 	 */
 	public String getDescription() {
-		return PluginServices.getText (this,"Ficheros_GGR");
+		return PluginServices.getText(this, "Ficheros_GGR");
 	}
 }

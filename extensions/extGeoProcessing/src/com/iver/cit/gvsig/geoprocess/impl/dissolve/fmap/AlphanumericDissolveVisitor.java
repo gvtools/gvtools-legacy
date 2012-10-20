@@ -84,12 +84,13 @@ import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * <p>
- * This Visitor generates a dissolve of input layer based
- * in alphanumeric criteria: it dissolves two polygons with the same
- * dissolve attribute value, and doesnt care if they are adjacent or not.
+ * This Visitor generates a dissolve of input layer based in alphanumeric
+ * criteria: it dissolves two polygons with the same dissolve attribute value,
+ * and doesnt care if they are adjacent or not.
  * </p>
+ * 
  * @author azabala
- *
+ * 
  */
 public class AlphanumericDissolveVisitor extends DissolveVisitor {
 
@@ -101,7 +102,7 @@ public class AlphanumericDissolveVisitor extends DissolveVisitor {
 	protected boolean verifyIfDissolve(DissolvedFeature f1, DissolvedFeature f2) {
 		// dissolveField is the last
 		int fieldIndex = 0;
-		if(numericField_sumarizeFunction != null)
+		if (numericField_sumarizeFunction != null)
 			fieldIndex = numericField_sumarizeFunction.keySet().size();
 		Value adjacentVal = f1.getAttribute(fieldIndex);
 		Value val = f2.getAttribute(fieldIndex);
@@ -112,13 +113,17 @@ public class AlphanumericDissolveVisitor extends DissolveVisitor {
 		return false;
 	}
 
-	class IndividualAlphaVisitor extends IndividualGeometryDissolveVisitor{
-		protected IndividualAlphaVisitor(DissolvedFeature feature, FBitSet dissolvedFeatures, Stack featuresToDissolve, Map fields_sumarize) {
-			super(feature, dissolvedFeatures, featuresToDissolve, fields_sumarize);
+	class IndividualAlphaVisitor extends IndividualGeometryDissolveVisitor {
+		protected IndividualAlphaVisitor(DissolvedFeature feature,
+				FBitSet dissolvedFeatures, Stack featuresToDissolve,
+				Map fields_sumarize) {
+			super(feature, dissolvedFeatures, featuresToDissolve,
+					fields_sumarize);
 		}
 
-		public void visit(IGeometry g, int index) throws VisitorException, ProcessVisitorException {
-			if(g == null)
+		public void visit(IGeometry g, int index) throws VisitorException,
+				ProcessVisitorException {
+			if (g == null)
 				return;
 			if (index == feature.getIndex())
 				return;
@@ -136,22 +141,25 @@ public class AlphanumericDissolveVisitor extends DissolveVisitor {
 					applySumarizeFunction(index);
 				}
 			} catch (ReadDriverException e) {
-				throw new ProcessVisitorException(recordset.getName(),e,
+				throw new ProcessVisitorException(recordset.getName(), e,
 						"Error al cargar los polígonos adyacentes durante un dissolve");
 			}
 		}
+
 		public String getProcessDescription() {
 			return "";
 		}
+
 		public void stop(FLayer layer) throws VisitorException {
 		}
+
 		public boolean start(FLayer layer) throws StartVisitorException {
 			return true;
 		}
 	}
 
-	protected Value[] dissolveGeometries(Stack toDissol,
-			List geometries) throws	ReadDriverException, VisitorException {
+	protected Value[] dissolveGeometries(Stack toDissol, List geometries)
+			throws ReadDriverException, VisitorException {
 		IndividualAlphaVisitor visitor = null;
 		DissolvedFeature feature = null;
 		while (toDissol.size() != 0) {
@@ -167,8 +175,8 @@ public class AlphanumericDissolveVisitor extends DissolveVisitor {
 				visitor.setProcessedFeature(feature);
 			}
 			strategy.process(visitor);
-			//al final de toda la pila de llamadas recursivas,
-			//geometries tendrá todas las geometrias que debemos dissolver
+			// al final de toda la pila de llamadas recursivas,
+			// geometries tendrá todas las geometrias que debemos dissolver
 			geometries.add(feature.getJtsGeometry());
 		}// while
 		Value[] values = visitor.getSumarizedValues2();

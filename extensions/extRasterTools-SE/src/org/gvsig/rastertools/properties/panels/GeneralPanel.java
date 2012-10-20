@@ -57,50 +57,51 @@ import org.gvsig.rastertools.statistics.StatisticsProcess;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
+
 /**
  * Este es el panel general de la ventana de propiedades. En el hemos metido
  * todas aquellas opciones que no sabemos en que seccion meterlas.
- *
+ * 
  * @version 15/04/2008
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
-public class GeneralPanel extends AbstractPanel implements ActionListener, INoDataPanel, IProcessActions {
+public class GeneralPanel extends AbstractPanel implements ActionListener,
+		INoDataPanel, IProcessActions {
 	private static final long serialVersionUID = -4761218260868307869L;
-	private FLayer              fLayer              = null;
+	private FLayer fLayer = null;
 
-	private JLabel              labelNotShowLayer   = null;
-	private JLabel              labelMinim          = null;
-	private JLabel              labelMaxim          = null;
-	private JCheckBox           checkBoxMinim       = null;
-	private JCheckBox           checkBoxMaxim       = null;
-	private JFormattedTextField textFieldMinim      = null;
-	private JFormattedTextField textFieldMaxim      = null;
+	private JLabel labelNotShowLayer = null;
+	private JLabel labelMinim = null;
+	private JLabel labelMaxim = null;
+	private JCheckBox checkBoxMinim = null;
+	private JCheckBox checkBoxMaxim = null;
+	private JFormattedTextField textFieldMinim = null;
+	private JFormattedTextField textFieldMaxim = null;
 
-	private NumberFormat        doubleDisplayFormat = null;
-	private NumberFormat        doubleEditFormat    = null;
-	private double              initMaxScale        = -1;
-	private double              initMinScale        = -1;
+	private NumberFormat doubleDisplayFormat = null;
+	private NumberFormat doubleEditFormat = null;
+	private double initMaxScale = -1;
+	private double initMinScale = -1;
 
-	private JButton             calcButton          = null;
-	private JPanel              scalePanel          = null;
-	private JPanel              recalcStatsPanel    = null;
-	private NoDataPanel         pNoDataPanel        = null;
-	private GridTransparency    transparency        = null;
-	
-	private JScrollPane         jScrollPane         = null;
-	private JEditorPane         jEditorPane         = null;
+	private JButton calcButton = null;
+	private JPanel scalePanel = null;
+	private JPanel recalcStatsPanel = null;
+	private NoDataPanel pNoDataPanel = null;
+	private GridTransparency transparency = null;
 
-	private final String      bgColor0        = "\"#FEEDD6\""; // light salmon
-	private final String      bgColor1        = "\"#EAEAEA\""; // light grey
-	private final String      bgColor3        = "\"#FBFFE1\""; // light yellow
-	private final String      bgColor4        = "\"#D6D6D6\""; // Gris
+	private JScrollPane jScrollPane = null;
+	private JEditorPane jEditorPane = null;
+
+	private final String bgColor0 = "\"#FEEDD6\""; // light salmon
+	private final String bgColor1 = "\"#EAEAEA\""; // light grey
+	private final String bgColor3 = "\"#FBFFE1\""; // light yellow
+	private final String bgColor4 = "\"#D6D6D6\""; // Gris
 
 	/**
 	 * Booleano que está a true cuando la fila a dibujar es par y a false cuando
 	 * es impar.
 	 */
-	private boolean           rowColor        = true;
-
+	private boolean rowColor = true;
 
 	/**
 	 * Constructor del GeneralPanel
@@ -113,8 +114,8 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 	}
 
 	/**
-	 * Create and set up number formats. These objects also parse numbers input by
-	 * user.
+	 * Create and set up number formats. These objects also parse numbers input
+	 * by user.
 	 */
 	private void setUpFormats() {
 		doubleDisplayFormat = NumberFormat.getNumberInstance();
@@ -126,13 +127,23 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 	 * Asigna todos los textos del panel en su idioma correspondiente
 	 */
 	private void translate() {
-		getJLabelNotShowLayer().setText(PluginServices.getText(this, "no_mostrar_la_capa_cuando_la_escala_sea") + ":");
-		getJLabelMinim().setText("(" + PluginServices.getText(this, "escala_maxima") + ")");
-		getJLabelMaxim().setText("(" + PluginServices.getText(this, "escala_minima") + ")");
-		getJCheckBoxMinim().setText(PluginServices.getText(this, "mayor_de") + " 1:");
-		getJCheckBoxMaxim().setText(PluginServices.getText(this, "menor_de") + " 1:");
-		getScalePanel().setBorder(BorderFactory.createTitledBorder(PluginServices.getText(this, "rango_de_escalas")));
-		getRecalcStatsPanel().setBorder(BorderFactory.createTitledBorder(PluginServices.getText(this, "stats")));
+		getJLabelNotShowLayer().setText(
+				PluginServices.getText(this,
+						"no_mostrar_la_capa_cuando_la_escala_sea") + ":");
+		getJLabelMinim().setText(
+				"(" + PluginServices.getText(this, "escala_maxima") + ")");
+		getJLabelMaxim().setText(
+				"(" + PluginServices.getText(this, "escala_minima") + ")");
+		getJCheckBoxMinim().setText(
+				PluginServices.getText(this, "mayor_de") + " 1:");
+		getJCheckBoxMaxim().setText(
+				PluginServices.getText(this, "menor_de") + " 1:");
+		getScalePanel().setBorder(
+				BorderFactory.createTitledBorder(PluginServices.getText(this,
+						"rango_de_escalas")));
+		getRecalcStatsPanel().setBorder(
+				BorderFactory.createTitledBorder(PluginServices.getText(this,
+						"stats")));
 		setLabel(PluginServices.getText(this, "general"));
 	}
 
@@ -146,7 +157,7 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 		gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 		gridBagConstraints.weightx = 1.0;
 		add(getScalePanel(), gridBagConstraints);
-		
+
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 1;
@@ -159,29 +170,33 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 		gridBagConstraints.weighty = 1.0;
 		gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
 		add(getRecalcStatsPanel(), gridBagConstraints);
-		
+
 		this.setPreferredSize(new Dimension(100, 80));
 	}
-	
+
 	/**
 	 * This method initializes TranspOpacitySliderPanel
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	public NoDataPanel getNoDataPanel() {
 		if (pNoDataPanel == null) {
 			pNoDataPanel = new NoDataPanel(this);
-			pNoDataPanel.setBorder(BorderFactory.createTitledBorder(null, PluginServices.getText(this, "nodata"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+			pNoDataPanel.setBorder(BorderFactory.createTitledBorder(null,
+					PluginServices.getText(this, "nodata"),
+					TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, null));
 			pNoDataPanel.setComboValueSetup(0);
 		}
 
 		return pNoDataPanel;
 	}
-	
+
 	public JPanel getScalePanel() {
 		if (scalePanel == null) {
 			scalePanel = new JPanel();
 			scalePanel.setLayout(new GridBagLayout());
-			
+
 			GridBagConstraints gridBagConstraints;
 
 			int y = 0;
@@ -258,7 +273,7 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 		if (recalcStatsPanel == null) {
 			recalcStatsPanel = new JPanel();
 			recalcStatsPanel.setLayout(new BorderLayout(5, 5));
-			
+
 			recalcStatsPanel.add(getJScrollPane(), BorderLayout.CENTER);
 			recalcStatsPanel.add(getCalcButton(), BorderLayout.SOUTH);
 		}
@@ -267,11 +282,13 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 
 	/**
 	 * Botón para recalcular las estadisticas.
+	 * 
 	 * @return JButton
 	 */
 	public JButton getCalcButton() {
-		if(calcButton == null) {
-			calcButton = new JButton(RasterToolsUtil.getText(this, "recalc_stats"));
+		if (calcButton == null) {
+			calcButton = new JButton(RasterToolsUtil.getText(this,
+					"recalc_stats"));
 			calcButton.addActionListener(this);
 		}
 		return calcButton;
@@ -286,10 +303,11 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 
 	private JFormattedTextField getJTextFieldMinim() {
 		if (textFieldMinim == null) {
-			textFieldMinim = new JFormattedTextField(new DefaultFormatterFactory(
-					new NumberFormatter(doubleDisplayFormat),
-					new NumberFormatter(doubleDisplayFormat),
-					new NumberFormatter(doubleEditFormat)));
+			textFieldMinim = new JFormattedTextField(
+					new DefaultFormatterFactory(new NumberFormatter(
+							doubleDisplayFormat), new NumberFormatter(
+							doubleDisplayFormat), new NumberFormatter(
+							doubleEditFormat)));
 			textFieldMinim.setEnabled(false);
 			textFieldMinim.setBackground(getBackground());
 		}
@@ -298,10 +316,11 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 
 	private JFormattedTextField getJTextFieldMaxim() {
 		if (textFieldMaxim == null) {
-			textFieldMaxim = new JFormattedTextField(new DefaultFormatterFactory(
-					new NumberFormatter(doubleDisplayFormat),
-					new NumberFormatter(doubleDisplayFormat),
-					new NumberFormatter(doubleEditFormat)));
+			textFieldMaxim = new JFormattedTextField(
+					new DefaultFormatterFactory(new NumberFormatter(
+							doubleDisplayFormat), new NumberFormatter(
+							doubleDisplayFormat), new NumberFormatter(
+							doubleEditFormat)));
 			textFieldMaxim.setEnabled(false);
 			textFieldMaxim.setBackground(getBackground());
 		}
@@ -312,7 +331,8 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 		if (checkBoxMinim == null) {
 			checkBoxMinim = new JCheckBox();
 			checkBoxMinim.addActionListener(this);
-			checkBoxMinim.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+			checkBoxMinim.setBorder(javax.swing.BorderFactory
+					.createEmptyBorder(0, 0, 0, 0));
 			checkBoxMinim.setMargin(new java.awt.Insets(0, 0, 0, 0));
 		}
 		return checkBoxMinim;
@@ -330,7 +350,8 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 		if (checkBoxMaxim == null) {
 			checkBoxMaxim = new JCheckBox();
 			checkBoxMaxim.addActionListener(this);
-			checkBoxMaxim.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+			checkBoxMaxim.setBorder(javax.swing.BorderFactory
+					.createEmptyBorder(0, 0, 0, 0));
 			checkBoxMaxim.setMargin(new java.awt.Insets(0, 0, 0, 0));
 		}
 		return checkBoxMaxim;
@@ -346,14 +367,17 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == getJCheckBoxMinim()) {
 			boolean enabled = getJCheckBoxMinim().isSelected();
 			getJLabelMinim().setEnabled(enabled);
 			getJTextFieldMinim().setEnabled(enabled);
-			getJTextFieldMinim().setBackground(enabled?Color.white: getBackground());
+			getJTextFieldMinim().setBackground(
+					enabled ? Color.white : getBackground());
 		}
 
 		if (e.getSource() == getCalcButton()) {
@@ -363,18 +387,19 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 			process.setActions(this);
 			process.start();
 		}
-		
+
 		if (e.getSource() == getJCheckBoxMaxim()) {
 			boolean enabled = getJCheckBoxMaxim().isSelected();
 			getJLabelMaxim().setEnabled(enabled);
 			getJTextFieldMaxim().setEnabled(enabled);
-			getJTextFieldMaxim().setBackground(enabled?Color.white: getBackground());
+			getJTextFieldMaxim().setBackground(
+					enabled ? Color.white : getBackground());
 		}
 	}
 
 	/**
 	 * Controla la alternatividad de colores en la tabla.
-	 *
+	 * 
 	 * @return Cadena con el color de la fila siguiente.
 	 */
 	private String getColor() {
@@ -382,25 +407,30 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 		rowColor = !rowColor;
 		return color;
 	}
-	
+
 	/**
-	 * Obtiene una entrada de la tabla en formato HTML a partir de una propiedad,
-	 * un valor y un color.
-	 *
+	 * Obtiene una entrada de la tabla en formato HTML a partir de una
+	 * propiedad, un valor y un color.
+	 * 
 	 * @param prop
-	 *          Nombre de la propiedad
+	 *            Nombre de la propiedad
 	 * @param value
-	 *          Valor
+	 *            Valor
 	 * @param color
-	 *          Color
-	 *
+	 *            Color
+	 * 
 	 * @return Entrada HTML de la tabla
 	 */
 	private String setHTMLBasicProperty(String prop, String value) {
 		String content = "<tr valign=\"top\">";
 		if (prop != null)
-			content += "<td bgcolor=" + bgColor4 + "align=\"right\" width=\"140\"><font face=\"Arial\" size=\"3\">" + prop + ":&nbsp;</font></td>";
-		content += "<td bgcolor=" + getColor() + "align=\"left\"><font face=\"Arial\" size=\"3\">" + value + "</font></td>";
+			content += "<td bgcolor="
+					+ bgColor4
+					+ "align=\"right\" width=\"140\"><font face=\"Arial\" size=\"3\">"
+					+ prop + ":&nbsp;</font></td>";
+		content += "<td bgcolor=" + getColor()
+				+ "align=\"left\"><font face=\"Arial\" size=\"3\">" + value
+				+ "</font></td>";
 		content += "</tr>";
 
 		return content;
@@ -408,37 +438,40 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 
 	/**
 	 * Obtiene una cabecera de tabla en formato HTML a partir de un titulo.
-	 *
+	 * 
 	 * @param title
-	 *          Nombre del titulo
+	 *            Nombre del titulo
 	 * @param colspan
-	 *          Numero de celdas que ocupara el titulo
-	 *
+	 *            Numero de celdas que ocupara el titulo
+	 * 
 	 * @return Entrada HTML del titulo
 	 */
 	private String setHTMLTitleTable(String title, int colspan) {
-		return
-			"<tr valign=\"middle\" >" +
-			"<td bgcolor=" + bgColor3 + " align=\"center\" colspan=\"" + colspan + "\"><font face=\"Arial\" size=\"3\"><b> " + title + "</b></font></td>" +
-			"</tr>";
+		return "<tr valign=\"middle\" >" + "<td bgcolor=" + bgColor3
+				+ " align=\"center\" colspan=\"" + colspan
+				+ "\"><font face=\"Arial\" size=\"3\"><b> " + title
+				+ "</b></font></td>" + "</tr>";
 	}
 
 	/**
 	 * Obtiene una cabecera de tabla en formato HTML a partir de un titulo.
-	 *
+	 * 
 	 * @param content
-	 *          Codigo HTML de las filas que componen la tabla.
-	 *
+	 *            Codigo HTML de las filas que componen la tabla.
+	 * 
 	 * @return Entrada HTML de la tabla completa
 	 */
 	private String setHTMLTable(String content) {
-		return "<table cellpadding=\"0\" cellspacing=\"0\" align=\"center\" width=\"100%\">" + content + "</table>";
+		return "<table cellpadding=\"0\" cellspacing=\"0\" align=\"center\" width=\"100%\">"
+				+ content + "</table>";
 	}
 
-	
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.panelGroup.panels.AbstractPanel#setReference(java.lang.Object)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.panelGroup.panels.AbstractPanel#setReference(java
+	 * .lang.Object)
 	 */
 	public void setReference(Object ref) {
 		super.setReference(ref);
@@ -474,21 +507,24 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 				getJTextFieldMinim().setBackground(Color.WHITE);
 			}
 		}
-		
+
 		refreshHTMLStatistics();
 		saveStatus();
 		setValuesFromPanelToGridTransparency();
 	}
-		
+
 	/**
-	 * Refresca el HTML del cuadro de texto de las estadisticas de todas las capas
+	 * Refresca el HTML del cuadro de texto de las estadisticas de todas las
+	 * capas
 	 */
 	private void refreshHTMLStatistics() {
 		String html = "";
 		DatasetListStatistics statistics = null;
 		try {
-			statistics = DatasetListStatistics.loadDatasetListStatistics(((FLyrRasterSE) fLayer).getDataSource());
-			if(statistics == null)
+			statistics = DatasetListStatistics
+					.loadDatasetListStatistics(((FLyrRasterSE) fLayer)
+							.getDataSource());
+			if (statistics == null)
 				return;
 		} catch (RmfSerializerException e) {
 			// Si no las consigue cargar no las mostrará
@@ -500,18 +536,24 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 			double[] min = statistics.getMin();
 			double[] variance = statistics.getVariance();
 			double[] mean = statistics.getMean();
-			
-			if(((FLyrRasterSE) fLayer).getDataType()[0] == IBuffer.TYPE_BYTE) {
+
+			if (((FLyrRasterSE) fLayer).getDataType()[0] == IBuffer.TYPE_BYTE) {
 				max = statistics.getMaxByteUnsigned();
 				min = statistics.getMinByteUnsigned();
 			}
-			
-			for (int i=0; i<max.length; i++) {
-				html += setHTMLTitleTable(RasterToolsUtil.getText(this, "band") + " " + (i + 1), 2);
-				html += setHTMLBasicProperty(RasterToolsUtil.getText(this, "minimo"), Double.valueOf(min[i]).toString());
-				html += setHTMLBasicProperty(RasterToolsUtil.getText(this, "maximo"), Double.valueOf(max[i]).toString());
-				html += setHTMLBasicProperty(RasterToolsUtil.getText(this, "media"), Double.valueOf(mean[i]).toString());
-				html += setHTMLBasicProperty(RasterToolsUtil.getText(this, "varianza"), Double.valueOf(variance[i]).toString());
+
+			for (int i = 0; i < max.length; i++) {
+				html += setHTMLTitleTable(RasterToolsUtil.getText(this, "band")
+						+ " " + (i + 1), 2);
+				html += setHTMLBasicProperty(RasterToolsUtil.getText(this,
+						"minimo"), Double.valueOf(min[i]).toString());
+				html += setHTMLBasicProperty(RasterToolsUtil.getText(this,
+						"maximo"), Double.valueOf(max[i]).toString());
+				html += setHTMLBasicProperty(
+						RasterToolsUtil.getText(this, "media"),
+						Double.valueOf(mean[i]).toString());
+				html += setHTMLBasicProperty(RasterToolsUtil.getText(this,
+						"varianza"), Double.valueOf(variance[i]).toString());
 			}
 			html = setHTMLTable(html);
 		} else {
@@ -521,10 +563,10 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 		getJEditorPane().setText(html);
 		getJEditorPane().setCaretPosition(0);
 	}
-	
+
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getJScrollPane() {
@@ -534,10 +576,10 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 		}
 		return jScrollPane;
 	}
-	
+
 	/**
 	 * This method initializes jEditorPane
-	 *
+	 * 
 	 * @return javax.swing.JEditorPane
 	 */
 	private JEditorPane getJEditorPane() {
@@ -551,6 +593,7 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.properties.dialog.IRegistrablePanel#accept()
 	 */
 	public void accept() {
@@ -567,18 +610,21 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 		if (fLayer == null || ((FLyrRasterSE) fLayer).getDataSource() == null)
 			return;
 
-		((FLyrRasterSE) fLayer).getDataSource().setNoDataValue(getNoDataPanel().getNoDataValue());
-		((FLyrRasterSE) fLayer).getDataSource().setNoDataEnabled(getNoDataPanel().getComboSetupIndex() != 0);
+		((FLyrRasterSE) fLayer).getDataSource().setNoDataValue(
+				getNoDataPanel().getNoDataValue());
+		((FLyrRasterSE) fLayer).getDataSource().setNoDataEnabled(
+				getNoDataPanel().getComboSetupIndex() != 0);
 
 		transparency.setNoData(getNoDataPanel().getNoDataValue());
 		transparency.activeNoData(getNoDataPanel().getComboSetupIndex() != 0);
-		
+
 		((FLyrRasterSE) fLayer).applyNoData();
 
-		((FLyrRasterSE) fLayer).setNoDataType(getNoDataPanel().getComboSetupIndex());
+		((FLyrRasterSE) fLayer).setNoDataType(getNoDataPanel()
+				.getComboSetupIndex());
 
 		transparency.activeTransparency();
-		
+
 		// Redibujamos
 		fLayer.getMapContext().invalidate();
 	}
@@ -596,10 +642,12 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 		double maxScale = -1;
 		double minScale = -1;
 
-		if (getJCheckBoxMaxim().isSelected() && getJTextFieldMaxim().getValue() != null)
+		if (getJCheckBoxMaxim().isSelected()
+				&& getJTextFieldMaxim().getValue() != null)
 			maxScale = ((Number) getJTextFieldMaxim().getValue()).doubleValue();
 
-		if (getJCheckBoxMinim().isSelected() && getJTextFieldMinim().getValue() != null)
+		if (getJCheckBoxMinim().isSelected()
+				&& getJTextFieldMinim().getValue() != null)
 			minScale = ((Number) getJTextFieldMinim().getValue()).doubleValue();
 
 		fLayer.setMaxScale(maxScale);
@@ -608,27 +656,32 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.properties.dialog.IRegistrablePanel#apply()
 	 */
 	public void apply() {
 		onlyApply();
 		saveStatus();
 	}
-	
+
 	/**
 	 * Guarda el estado actual del panel
 	 */
 	private void saveStatus() {
-		getPanelGroup().getProperties().put("nodatavalue", new Double(getNoDataPanel().getNoDataValue()));
-		getPanelGroup().getProperties().put("nodatatype", new Integer(((FLyrRasterSE) fLayer).getNoDataType()));
+		getPanelGroup().getProperties().put("nodatavalue",
+				new Double(getNoDataPanel().getNoDataValue()));
+		getPanelGroup().getProperties().put("nodatatype",
+				new Integer(((FLyrRasterSE) fLayer).getNoDataType()));
 	}
 
 	/**
 	 * Restaura los valores de la capa conforme estaba al abrir el panel
 	 */
 	public void restoreStatus() {
-		((FLyrRasterSE) fLayer).setNoDataValue(((Double) getPanelGroup().getProperties().get("nodatavalue")).doubleValue());
-		((FLyrRasterSE) fLayer).setNoDataType(((Integer) getPanelGroup().getProperties().get("nodatatype")).intValue());
+		((FLyrRasterSE) fLayer).setNoDataValue(((Double) getPanelGroup()
+				.getProperties().get("nodatavalue")).doubleValue());
+		((FLyrRasterSE) fLayer).setNoDataType(((Integer) getPanelGroup()
+				.getProperties().get("nodatatype")).intValue());
 
 		fLayer.setMaxScale(initMaxScale);
 		fLayer.setMinScale(initMinScale);
@@ -636,6 +689,7 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.properties.dialog.IRegistrablePanel#cancel()
 	 */
 	public void cancel() {
@@ -644,6 +698,7 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 
 	/**
 	 * Actualiza los valores del panel noData
+	 * 
 	 * @param noDataPanel
 	 */
 	public void refreshValues(NoDataPanel noDataPanel) {
@@ -653,22 +708,29 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 		}
 		noDataPanel.setEnabledComponents(noDataPanel.getComboSetupIndex() == 2);
 		switch (noDataPanel.getComboSetupIndex()) {
-			case 0: // NoData desactivado
-				noDataPanel.setNoDataValue(0);
-				break;
-			case 1: // Capa
-				((FLyrRasterSE) fLayer).getDataSource().resetNoDataValue();
-				noDataPanel.setNoDataValue(((FLyrRasterSE) fLayer).getNoDataValue());
-				break;
-			case 2: // Personalizado
-				noDataPanel.setNoDataValue(((Double)Configuration.getValue("nodata_value", new Double(RasterLibrary.defaultNoDataValue))).doubleValue());
-				break;
+		case 0: // NoData desactivado
+			noDataPanel.setNoDataValue(0);
+			break;
+		case 1: // Capa
+			((FLyrRasterSE) fLayer).getDataSource().resetNoDataValue();
+			noDataPanel
+					.setNoDataValue(((FLyrRasterSE) fLayer).getNoDataValue());
+			break;
+		case 2: // Personalizado
+			noDataPanel.setNoDataValue(((Double) Configuration.getValue(
+					"nodata_value",
+					new Double(RasterLibrary.defaultNoDataValue)))
+					.doubleValue());
+			break;
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.properties.panels.INoDataPanel#BandStateChanged(org.gvsig.rastertools.properties.panels.NoDataPanel, int)
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.properties.panels.INoDataPanel#BandStateChanged
+	 * (org.gvsig.rastertools.properties.panels.NoDataPanel, int)
 	 */
 	public void bandStateChanged(NoDataPanel noDataPanel, int newIndex) {
 		refreshValues(noDataPanel);
@@ -676,7 +738,10 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.properties.panels.INoDataPanel#SourceStateChanged(org.gvsig.rastertools.properties.panels.NoDataPanel, int)
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.properties.panels.INoDataPanel#SourceStateChanged
+	 * (org.gvsig.rastertools.properties.panels.NoDataPanel, int)
 	 */
 	public void sourceStateChanged(NoDataPanel noDataPanel, int newIndex) {
 		refreshValues(noDataPanel);
@@ -684,12 +749,16 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.IProcessActions#end(java.lang.Object)
 	 */
 	public void end(Object param) {
 		refreshHTMLStatistics();
 	}
 
-	public void selected() {}
-	public void interrupted() {}
+	public void selected() {
+	}
+
+	public void interrupted() {
+	}
 }

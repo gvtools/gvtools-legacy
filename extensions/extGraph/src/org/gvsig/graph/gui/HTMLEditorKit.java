@@ -42,17 +42,17 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: HTMLEditorKit.java 22182 2008-07-10 07:20:11Z fpenarrubia $
-* $Log$
-* Revision 1.2  2006-11-09 12:25:06  fjp
-* El fichero de red pasa a llamarse .net y se escribe sobre el directorio temporal del usuario. También se mira si existe ahí para habilitar/deshabilitar la opción de carga.
-*
-* Revision 1.1  2006/10/20 19:54:01  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: HTMLEditorKit.java 22182 2008-07-10 07:20:11Z fpenarrubia $
+ * $Log$
+ * Revision 1.2  2006-11-09 12:25:06  fjp
+ * El fichero de red pasa a llamarse .net y se escribe sobre el directorio temporal del usuario. También se mira si existe ahí para habilitar/deshabilitar la opción de carga.
+ *
+ * Revision 1.1  2006/10/20 19:54:01  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package org.gvsig.graph.gui;
 
 import javax.swing.text.Element;
@@ -63,29 +63,22 @@ import javax.swing.text.html.HTML;
 
 import org.gvsig.graph.GenerateNetworkExtension;
 
-
-
 public class HTMLEditorKit extends javax.swing.text.html.HTMLEditorKit {
-	 public ViewFactory getViewFactory() {
-		    return new HTMLFactoryX();
-		  }
+	public ViewFactory getViewFactory() {
+		return new HTMLFactoryX();
+	}
 
+	public static class HTMLFactoryX extends HTMLFactory implements ViewFactory {
 
-		  public static class HTMLFactoryX extends HTMLFactory
-		    implements ViewFactory {
-		    
-		    public View create(Element elem) {
-		      Object o = 
-		        elem.getAttributes().getAttribute(StyleConstants.NameAttribute);
-		      if (o instanceof HTML.Tag) {
-			HTML.Tag kind = (HTML.Tag) o;
-		        if (kind == HTML.Tag.IMG) 
-		          return new ImageView(elem, GenerateNetworkExtension.class );
-		      }
-		      return super.create( elem );
-		    }
-		  }
+		public View create(Element elem) {
+			Object o = elem.getAttributes().getAttribute(
+					StyleConstants.NameAttribute);
+			if (o instanceof HTML.Tag) {
+				HTML.Tag kind = (HTML.Tag) o;
+				if (kind == HTML.Tag.IMG)
+					return new ImageView(elem, GenerateNetworkExtension.class);
+			}
+			return super.create(elem);
+		}
+	}
 }
-
-
-

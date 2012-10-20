@@ -43,11 +43,10 @@ package com.iver.cit.gvsig.fmap.operations.strategies;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-
 /**
  * Estructura de datos con la información relativa a las geometrías de una
  * fuente de datos necesaria para acelerar el procesado de la capa en memoria.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class MemoryShapeInfo {
@@ -55,7 +54,7 @@ public class MemoryShapeInfo {
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.operations.strategies.ShapeInfo#addShapeInfo(java.awt.geom.Rectangle2D,
-	 * 		int)
+	 *      int)
 	 */
 	public void addShapeInfo(Rectangle2D boundingBox, int type) {
 		infos.add(new Info(boundingBox, type));
@@ -63,10 +62,10 @@ public class MemoryShapeInfo {
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.operations.strategies.ShapeInfo#addShapeInfo(int,
-	 * 		java.awt.geom.Rectangle2D, int)
+	 *      java.awt.geom.Rectangle2D, int)
 	 */
 	public void setShapeInfo(int index, Rectangle2D boundingBox, int type)
-		throws ArrayIndexOutOfBoundsException {
+			throws ArrayIndexOutOfBoundsException {
 		infos.set(index, new Info(boundingBox, type));
 	}
 
@@ -86,7 +85,7 @@ public class MemoryShapeInfo {
 
 	/**
 	 * Clase con el rectángulo y el tipo de shape.
-	 *
+	 * 
 	 * @author Vicente Caballero Navarro
 	 */
 	class Info {
@@ -95,9 +94,11 @@ public class MemoryShapeInfo {
 
 		/**
 		 * Crea un nuevo Info.
-		 *
-		 * @param rect Extent del shape.
-		 * @param type Tipo de shape.
+		 * 
+		 * @param rect
+		 *            Extent del shape.
+		 * @param type
+		 *            Tipo de shape.
 		 */
 		public Info(Rectangle2D rect, int type) {
 			this.rect = rect;
@@ -106,7 +107,7 @@ public class MemoryShapeInfo {
 
 		/**
 		 * Devuelve el extent del shape.
-		 *
+		 * 
 		 * @return Extent del shape.
 		 */
 		public Rectangle2D getRect() {
@@ -115,7 +116,7 @@ public class MemoryShapeInfo {
 
 		/**
 		 * Devuelve el tipo de shape.
-		 *
+		 * 
 		 * @return Tipo de shape.
 		 */
 		public int getType() {

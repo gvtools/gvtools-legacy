@@ -46,101 +46,105 @@
  */
 package org.gvsig.remoteClient.arcims.utils;
 
-
 /**
  * Class that represents the attributes information offered by an ArcIMS Server
+ * 
  * @author jsanz
  */
 public class FieldInformation {
-    //Constants for types
-    public final static int ID = -99;
-    public final static int SHAPE = -98;
-    public final static int BOOLEAN = -7;
-    public final static int BIGINT = -5;
-    public final static int INTEGER = 4;
-    public final static int SMALLINT = 5;
-    public final static int FLOAT = 6;
-    public final static int DOUBLE = 8;
-    public final static int STRING = 12;
-    public final static int DATE = 91;
+	// Constants for types
+	public final static int ID = -99;
+	public final static int SHAPE = -98;
+	public final static int BOOLEAN = -7;
+	public final static int BIGINT = -5;
+	public final static int INTEGER = 4;
+	public final static int SMALLINT = 5;
+	public final static int FLOAT = 6;
+	public final static int DOUBLE = 8;
+	public final static int STRING = 12;
+	public final static int DATE = 91;
 
-    /**
-     * Name of the field
-     */
-    private String name;
+	/**
+	 * Name of the field
+	 */
+	private String name;
 
-    /**
-     * Type of field (see static constants)
-     */
-    private int type;
+	/**
+	 * Type of field (see static constants)
+	 */
+	private int type;
 
-    /**
-     * Field size
-     */
-    private int size;
+	/**
+	 * Field size
+	 */
+	private int size;
 
-    /**
-     * Field precision
-     */
-    private int precision;
+	/**
+	 * Field precision
+	 */
+	private int precision;
 
-    /**
-     * @return Returns the name.
-     */
-    public String getName() {
-        return name;
-    }
+	/**
+	 * @return Returns the name.
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * @param name The name to set.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+	/**
+	 * @param name
+	 *            The name to set.
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    /**
-     * @return Returns the precision.
-     */
-    public int getPrecision() {
-        return precision;
-    }
+	/**
+	 * @return Returns the precision.
+	 */
+	public int getPrecision() {
+		return precision;
+	}
 
-    /**
-     * @param precision The precision to set.
-     */
-    public void setPrecision(int precision) {
-        this.precision = precision;
-    }
+	/**
+	 * @param precision
+	 *            The precision to set.
+	 */
+	public void setPrecision(int precision) {
+		this.precision = precision;
+	}
 
-    /**
-     * @return Returns the size.
-     */
-    public int getSize() {
-        return size;
-    }
+	/**
+	 * @return Returns the size.
+	 */
+	public int getSize() {
+		return size;
+	}
 
-    /**
-     * @param size The size to set.
-     */
-    public void setSize(int size) {
-        this.size = size;
-    }
+	/**
+	 * @param size
+	 *            The size to set.
+	 */
+	public void setSize(int size) {
+		this.size = size;
+	}
 
-    /**
-     * @return Returns the type.
-     */
-    public int getType() {
-        return type;
-    }
+	/**
+	 * @return Returns the type.
+	 */
+	public int getType() {
+		return type;
+	}
 
-    /**
-     * @param type The type to set.
-     */
-    public void setType(int type) {
-        this.type = type;
-    }
+	/**
+	 * @param type
+	 *            The type to set.
+	 */
+	public void setType(int type) {
+		this.type = type;
+	}
 
-    public String toString() {
-        return "FI: " + name + "(" + type + ")";
-    }
+	public String toString() {
+		return "FI: " + name + "(" + type + ")";
+	}
 }

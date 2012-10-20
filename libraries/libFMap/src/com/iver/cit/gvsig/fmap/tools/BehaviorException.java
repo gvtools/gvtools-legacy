@@ -43,14 +43,18 @@ package com.iver.cit.gvsig.fmap.tools;
 import com.iver.cit.gvsig.fmap.MapControl;
 
 /**
- * <p>Exception produced when fails the process that interacts with a {@link MapControl MapControl} object,
- *  using some tool.</p>
- *
+ * <p>
+ * Exception produced when fails the process that interacts with a
+ * {@link MapControl MapControl} object, using some tool.
+ * </p>
+ * 
  * @author Vicente Caballero Navarro
  */
 public class BehaviorException extends Exception {
 	/**
-	 * <p>Creates a new behavior exception with the specified detail message.</p>
+	 * <p>
+	 * Creates a new behavior exception with the specified detail message.
+	 * </p>
 	 * 
 	 * @see Exception#Exception(String)
 	 */
@@ -59,7 +63,10 @@ public class BehaviorException extends Exception {
 	}
 
 	/**
-	 * <p>Creates a new behavior exception with the specified detail message and cause.</p>
+	 * <p>
+	 * Creates a new behavior exception with the specified detail message and
+	 * cause.
+	 * </p>
 	 * 
 	 * @see Exception#Exception(String, Throwable)
 	 */

@@ -83,18 +83,19 @@ import org.w3c.dom.Element;
  */
 /**
  * This class contains methods to create DOM elements.
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class DOMObjectsFactory {
 	private static DOMObjectsFactory instance = null;
 	private String xsNamespacePrefix = null;
-	
+
 	/**
 	 * This method cretaes the singleton instance
-	 *
+	 * 
 	 */
 	private synchronized static void createInstance() {
-		if (instance == null) { 
+		if (instance == null) {
 			instance = new DOMObjectsFactory();
 		}
 	}
@@ -103,185 +104,206 @@ public class DOMObjectsFactory {
 	 * @return the factory instance
 	 */
 	public static DOMObjectsFactory getInstance() {
-		if (instance == null){
+		if (instance == null) {
 			createInstance();
 		}
 		return instance;
 	}
-	
-	public DOMObjectsFactory(){
+
+	public DOMObjectsFactory() {
 		xsNamespacePrefix = SchemaTags.XS_NS;
 	}
-	
+
 	/**
-	 * Fill the element node attributes  
+	 * Fill the element node attributes
+	 * 
 	 * @param schema
-	 * Schema that will be used to create the element
+	 *            Schema that will be used to create the element
 	 * @param name
-	 * Element name
+	 *            Element name
 	 * @param type
-	 * Element type
+	 *            Element type
 	 * @param nillable
-	 * If the element is nillable
+	 *            If the element is nillable
 	 * @param minOccurs
-	 * The min occurs
+	 *            The min occurs
 	 * @param maxOccurs
-	 * The max occurs
+	 *            The max occurs
 	 */
-	public Element createElement(IXSSchema schema, String name, String type, boolean nillable, int minOccurs, int maxOccurs){
-		Element element = schema.getDocument().createElement(addXSQname(SchemaTags.ELEMENT));
+	public Element createElement(IXSSchema schema, String name, String type,
+			boolean nillable, int minOccurs, int maxOccurs) {
+		Element element = schema.getDocument().createElement(
+				addXSQname(SchemaTags.ELEMENT));
 		element.setAttribute(SchemaTags.NAME, name);
-		if (type != null){
+		if (type != null) {
 			element.setAttribute(SchemaTags.TYPE, type);
 		}
 		element.setAttribute(SchemaTags.NILLABLE, String.valueOf(nillable));
 		String sMinOccurs = null;
-		if (minOccurs == IXSElementDeclaration.MIN_OCCURS_UNBOUNDED){
+		if (minOccurs == IXSElementDeclaration.MIN_OCCURS_UNBOUNDED) {
 			sMinOccurs = SchemaTags.UNBOUNDED;
-		}else{
+		} else {
 			sMinOccurs = String.valueOf(minOccurs);
 		}
 		element.setAttribute(SchemaTags.MIN_OCCURS, sMinOccurs);
 		String sMaxOccurs = null;
-		if (maxOccurs == IXSElementDeclaration.MAX_OCCURS_UNBOUNDED){
+		if (maxOccurs == IXSElementDeclaration.MAX_OCCURS_UNBOUNDED) {
 			sMaxOccurs = SchemaTags.UNBOUNDED;
-		}else{
+		} else {
 			sMaxOccurs = String.valueOf(maxOccurs);
-		}		
+		}
 		element.setAttribute(SchemaTags.MAX_OCCURS, sMaxOccurs);
 		return element;
 	}
-	
+
 	/**
-	 * Fill the element node attributes  
+	 * Fill the element node attributes
+	 * 
 	 * @param schema
-	 * Schema that will be used to create the element
+	 *            Schema that will be used to create the element
 	 * @param name
-	 * Element name
+	 *            Element name
 	 * @param type
-	 * Element type
+	 *            Element type
 	 * @param nillable
-	 * If the element is nillable
+	 *            If the element is nillable
 	 * @param minOccurs
-	 * The min occurs
+	 *            The min occurs
 	 * @param maxOccurs
-	 * The max occurs
+	 *            The max occurs
 	 */
-	public Element createElement(IXSSchema schema, String name, String type, String substitutionGroup){
-		Element element = schema.getDocument().createElement(addXSQname(SchemaTags.ELEMENT));
+	public Element createElement(IXSSchema schema, String name, String type,
+			String substitutionGroup) {
+		Element element = schema.getDocument().createElement(
+				addXSQname(SchemaTags.ELEMENT));
 		element.setAttribute(SchemaTags.NAME, name);
-		if (type != null){
+		if (type != null) {
 			element.setAttribute(SchemaTags.TYPE, type);
 		}
-		if (substitutionGroup != null){
+		if (substitutionGroup != null) {
 			element.setAttribute(SchemaTags.SUBSTITUTIONGROUP, type);
 		}
 		return element;
 	}
-	
+
 	/**
 	 * Creates a new ComplxType element
+	 * 
 	 * @param schema
-	 * Schema that will be used to create the element
+	 *            Schema that will be used to create the element
 	 * @param name
-	 * ComplexType name
+	 *            ComplexType name
 	 * @param type
-	 * See the IXSComplexType for possible values
+	 *            See the IXSComplexType for possible values
 	 * @param contentType
-	 * A complex content or a simple content
-	 * See the IXSContentType for possible values
+	 *            A complex content or a simple content See the IXSContentType
+	 *            for possible values
 	 * @param contentTypeRestriction
-	 * A extension or a restriction
+	 *            A extension or a restriction
 	 * @return
-	 */	
-	public Element createComplexType(IXSSchema schema, String name, String type, String contentType, String conteTypeRestriction){
-		Element eComplexType = schema.getDocument().createElement(addXSQname(SchemaTags.COMPLEX_TYPE));
-		if (name != null){
+	 */
+	public Element createComplexType(IXSSchema schema, String name,
+			String type, String contentType, String conteTypeRestriction) {
+		Element eComplexType = schema.getDocument().createElement(
+				addXSQname(SchemaTags.COMPLEX_TYPE));
+		if (name != null) {
 			eComplexType.setAttribute(SchemaTags.NAME, name);
-		}		
-		if (contentType.compareTo(IXSContentType.WITOUT_CONTENT) == 0){
-			Element eSimpleContent = schema.getDocument().createElement(addXSQname(type));
+		}
+		if (contentType.compareTo(IXSContentType.WITOUT_CONTENT) == 0) {
+			Element eSimpleContent = schema.getDocument().createElement(
+					addXSQname(type));
 			eComplexType.appendChild(eSimpleContent);
-		}else{
-			Element eContentType = schema.getDocument().createElement(addXSQname(contentType));
+		} else {
+			Element eContentType = schema.getDocument().createElement(
+					addXSQname(contentType));
 			eComplexType.appendChild(eContentType);
-			Element eRestriction = schema.getDocument().createElement(addXSQname(conteTypeRestriction));
+			Element eRestriction = schema.getDocument().createElement(
+					addXSQname(conteTypeRestriction));
 			eContentType.appendChild(eRestriction);
-			Element eSimpleContent = schema.getDocument().createElement(addXSQname(type));
+			Element eSimpleContent = schema.getDocument().createElement(
+					addXSQname(type));
 			eRestriction.appendChild(eSimpleContent);
 		}
 		return eComplexType;
-	}	
-	
+	}
+
 	/**
-	 * Adds an element to a complex type. It only will works
-	 * if the type doesn't has a simple content or a complex
-	 * content 
+	 * Adds an element to a complex type. It only will works if the type doesn't
+	 * has a simple content or a complex content
+	 * 
 	 * @param schema
-	 * XML schema
+	 *            XML schema
 	 * @param eElement
-	 * The XML schema element
+	 *            The XML schema element
 	 * @param eComplexType
-	 * The XML schema complex type
+	 *            The XML schema complex type
 	 */
-	public boolean addElementToComplexType(IXSSchema schema, Element eElement, Element eComplexType){
-		//If is a ComplexContent..
-		Element eComplexContent = SchemaUtils.searchChildByTagName(eComplexType, SchemaTags.COMPLEX_CONTENT);
-		if (eComplexContent != null){
-			Element eContentElement = findElementToWrite(schema, eComplexContent, getContentElements());
-			if (eContentElement != null){
-				//Restriction or extension
-				Element eGroup = findElementToWrite(schema, eContentElement, getGroupElements());
-				if (eGroup != null){
+	public boolean addElementToComplexType(IXSSchema schema, Element eElement,
+			Element eComplexType) {
+		// If is a ComplexContent..
+		Element eComplexContent = SchemaUtils.searchChildByTagName(
+				eComplexType, SchemaTags.COMPLEX_CONTENT);
+		if (eComplexContent != null) {
+			Element eContentElement = findElementToWrite(schema,
+					eComplexContent, getContentElements());
+			if (eContentElement != null) {
+				// Restriction or extension
+				Element eGroup = findElementToWrite(schema, eContentElement,
+						getGroupElements());
+				if (eGroup != null) {
 					eGroup.appendChild(eElement);
 					return true;
 				}
-			}			
+			}
 		}
-		//If is a simpleContent..
-		Element eSimpleContent = SchemaUtils.searchChildByTagName(eComplexType, SchemaTags.SIMPLE_CONTENT);
-		if (eSimpleContent != null){
-			Element eContentElement = findElementToWrite(schema, eSimpleContent, getContentElements());
-			if (eContentElement != null){
+		// If is a simpleContent..
+		Element eSimpleContent = SchemaUtils.searchChildByTagName(eComplexType,
+				SchemaTags.SIMPLE_CONTENT);
+		if (eSimpleContent != null) {
+			Element eContentElement = findElementToWrite(schema,
+					eSimpleContent, getContentElements());
+			if (eContentElement != null) {
 				eContentElement.appendChild(eElement);
 			}
 			return true;
 		}
-		//Else will be a group, a sequence, a choice or a all node.
-		Element eGroup = findElementToWrite(schema, eComplexType, getGroupElements());
-		if (eGroup != null){
+		// Else will be a group, a sequence, a choice or a all node.
+		Element eGroup = findElementToWrite(schema, eComplexType,
+				getGroupElements());
+		if (eGroup != null) {
 			eGroup.appendChild(eElement);
- 			return true;
+			return true;
 		}
 		return false;
-	}	
-		
+	}
+
 	/**
-	 * Find the root element to write the sub elements. 
+	 * Find the root element to write the sub elements.
+	 * 
 	 * @param schema
-	 * XML Schema
+	 *            XML Schema
 	 * @param root
-	 * Root element
+	 *            Root element
 	 * @param elements
-	 * Elements to search
+	 *            Elements to search
 	 * @return
 	 */
-	private Element findElementToWrite(IXSSchema schema, 
-			Element root,
-			String[] elements){	
-		for (int i=0 ; i<elements.length ; i++){
-			Element element = SchemaUtils.searchChildByTagName(root, elements[i]);
-			if (element != null){
+	private Element findElementToWrite(IXSSchema schema, Element root,
+			String[] elements) {
+		for (int i = 0; i < elements.length; i++) {
+			Element element = SchemaUtils.searchChildByTagName(root,
+					elements[i]);
+			if (element != null) {
 				return element;
 			}
-		}		
+		}
 		return null;
-	}	
+	}
 
 	/**
 	 * @return the group elements
 	 */
-	private String[] getGroupElements(){
+	private String[] getGroupElements() {
 		String[] groupElements = new String[4];
 		groupElements[0] = SchemaTags.SEQUENCE;
 		groupElements[1] = SchemaTags.CHOICE;
@@ -289,30 +311,31 @@ public class DOMObjectsFactory {
 		groupElements[3] = SchemaTags.GROUP;
 		return groupElements;
 	}
-	
 
 	/**
 	 * @return the content elements
 	 */
-	private String[] getContentElements(){
+	private String[] getContentElements() {
 		String[] groupElements = new String[2];
 		groupElements[0] = SchemaTags.RESTRICTION;
 		groupElements[1] = SchemaTags.EXTENSION;
 		return groupElements;
 	}
-	
+
 	/**
-	 * Uset to create the XML schema tags. It adds the
-	 * namespace prefix (xs or xsd)
+	 * Uset to create the XML schema tags. It adds the namespace prefix (xs or
+	 * xsd)
+	 * 
 	 * @param tagName
 	 * @return
 	 */
-	private String addXSQname(String tagName){
+	private String addXSQname(String tagName) {
 		return xsNamespacePrefix + ":" + tagName;
 	}
 
 	/**
-	 * @param xsNamespacePrefix the xsNamespacePrefix to set
+	 * @param xsNamespacePrefix
+	 *            the xsNamespacePrefix to set
 	 */
 	public void setXsNamespacePrefix(String xsNamespacePrefix) {
 		this.xsNamespacePrefix = xsNamespacePrefix;

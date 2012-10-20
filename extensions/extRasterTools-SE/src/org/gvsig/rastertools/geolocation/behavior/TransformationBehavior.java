@@ -31,21 +31,22 @@ import org.gvsig.fmap.raster.layers.FLyrRasterSE;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 
 /**
- * Clase base para los comportamientos de traslación, escalado, rotación y shearing de un raster.
- * Nacho Brodin (nachobrodin@gmail.com)
- *
+ * Clase base para los comportamientos de traslación, escalado, rotación y
+ * shearing de un raster. Nacho Brodin (nachobrodin@gmail.com)
+ * 
  */
 public abstract class TransformationBehavior {
 
-	private boolean                     activeTool = false;
-	protected Cursor                    defaultCursor = null;
-	protected GeoRasterBehavior         grBehavior = null;
-	protected FLyrRasterSE              lyr = null;
-	protected Color                     rectangleColor = Color.RED;
-	protected ITransformIO				trIO = null;
-	
+	private boolean activeTool = false;
+	protected Cursor defaultCursor = null;
+	protected GeoRasterBehavior grBehavior = null;
+	protected FLyrRasterSE lyr = null;
+	protected Color rectangleColor = Color.RED;
+	protected ITransformIO trIO = null;
+
 	/**
 	 * Consulta si la tool está activada o no
+	 * 
 	 * @return
 	 */
 	public boolean isActiveTool() {
@@ -54,71 +55,82 @@ public abstract class TransformationBehavior {
 
 	/**
 	 * ASigna el valor de activación de la tool
+	 * 
 	 * @param activeTool
 	 */
 	public void setActiveTool(boolean activeTool) {
 		this.activeTool = activeTool;
 	}
-	
+
 	/**
 	 * Cambia el cursor de la vista al que le pasemos por parámetro
-	 * @param c Image para el cursor
+	 * 
+	 * @param c
+	 *            Image para el cursor
 	 */
 	protected void setCursor(Image c) {
-		if(grBehavior != null)
-			grBehavior.getMapControl().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(c, new Point(16, 16), ""));
+		if (grBehavior != null)
+			grBehavior.getMapControl().setCursor(
+					Toolkit.getDefaultToolkit().createCustomCursor(c,
+							new Point(16, 16), ""));
 	}
-	
+
 	/**
-	 *  Cuando soltamos el botón del ratón desplazamos la imagen a la posición
-	 * de destino calculando el extent nuevamente.
+	 * Cuando soltamos el botón del ratón desplazamos la imagen a la posición de
+	 * destino calculando el extent nuevamente.
 	 */
 	public void mouseReleased(MouseEvent e) throws BehaviorException {
-		if(trIO != null)
+		if (trIO != null)
 			trIO.applyTransformation();
 	}
-	
+
 	/**
-	 * Asigna el objeto externo al que se le asigna la transformación 
+	 * Asigna el objeto externo al que se le asigna la transformación
+	 * 
 	 * @param io
 	 */
 	public void setITransformIO(ITransformIO io) {
 		this.trIO = io;
 	}
-	
+
 	/**
 	 * Método utilizado para el repintado del gráfico que sirve como apoyo para
-	 * las transformaciones. Cada tipo de transformación (escalado, rotado, traslación y shearing)
-	 * realiza sus acciones para redibujar este gráfico.
+	 * las transformaciones. Cada tipo de transformación (escalado, rotado,
+	 * traslación y shearing) realiza sus acciones para redibujar este gráfico.
 	 * 
-	 * @param g Graphics
+	 * @param g
+	 *            Graphics
 	 */
-	public abstract void paintComponent(Graphics g); 
-	
+	public abstract void paintComponent(Graphics g);
+
 	/**
-	 * Evento que se produce al pulsar el botón del ratón sobre la vista cuando la herramienta
-	 * de geolocalización está activa. Esto produce la activación de una de las tranformaciones
-	 * dependiendo de la posición del cursor del rastón relativa a la imagen.
-	 *  
-	 * @param e Graphics
+	 * Evento que se produce al pulsar el botón del ratón sobre la vista cuando
+	 * la herramienta de geolocalización está activa. Esto produce la activación
+	 * de una de las tranformaciones dependiendo de la posición del cursor del
+	 * rastón relativa a la imagen.
+	 * 
+	 * @param e
+	 *            Graphics
 	 */
 	public abstract void mousePressed(MouseEvent e) throws BehaviorException;
-	
+
 	/**
-	 * Evento que se produce al mover el ratón sobre la vista cuando la herramienta
-	 * de geolocalización está activa. Esto produce la variación del gráfico de apoyo para
-	 * la transformación. 
-	 *  
-	 * @param e Graphics
+	 * Evento que se produce al mover el ratón sobre la vista cuando la
+	 * herramienta de geolocalización está activa. Esto produce la variación del
+	 * gráfico de apoyo para la transformación.
+	 * 
+	 * @param e
+	 *            Graphics
 	 */
 	public abstract boolean mouseMoved(MouseEvent ev) throws BehaviorException;
-	
+
 	/**
-	 * Evento que se produce al arrastrar el ratón sobre la vista cuando la herramienta
-	 * de geolocalización está activa. Esto produce la variación del gráfico de apoyo para
-	 * la transformación.
+	 * Evento que se produce al arrastrar el ratón sobre la vista cuando la
+	 * herramienta de geolocalización está activa. Esto produce la variación del
+	 * gráfico de apoyo para la transformación.
 	 * 
-	 * @param e Graphics
+	 * @param e
+	 *            Graphics
 	 */
 	public abstract void mouseDragged(MouseEvent ev) throws BehaviorException;
 }

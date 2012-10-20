@@ -79,7 +79,6 @@ import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.ShapeFactory;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
-
 /**
  * This class has convenience methods to work simultaneusly with different
  * versions of geoapi and geotools libraries.
@@ -101,43 +100,37 @@ public class ReferencingUtil {
 	 * Number of created dialogs counter.
 	 */
 	private int numberOfAdjustSessions = 0;
-	
+
 	public static ReferencingUtil getInstance() {
 		return _instance;
 	}
-	
-	
-	
-	public  int getNumberOfSpatialAdjustSessions(){
+
+	public int getNumberOfSpatialAdjustSessions() {
 		return numberOfAdjustSessions;
 	}
-	
-	public void incrementAdjustSessions(){
+
+	public void incrementAdjustSessions() {
 		numberOfAdjustSessions++;
 	}
-
 
 	public DirectPosition create(double[] coordinates,
 			CoordinateReferenceSystem crs) {
 		double z = 0;
-		if(coordinates.length > 2)
+		if (coordinates.length > 2)
 			z = coordinates[2];
 		return new GeneralDirectPosition(coordinates[0], coordinates[1], z);
 	}
-	
-	
+
 	/*
 	 * AZABALA: We have added this method to geotools original code to work with
 	 * Shape whose coordinate's type is double, instead of floats (GeneralPathX
 	 * instead GeneralPath)
 	 */
-	public void transform(final double[] srcPts, 
-						  final int srcOff,
-						  final double[] dstPts, 
-						  final int dstOff,
-						  final /*Abstract*/MathTransform trans,
-						  final int numPts)throws TransformException {
-		
+	public void transform(final double[] srcPts, final int srcOff,
+			final double[] dstPts, final int dstOff,
+			final/* Abstract */MathTransform trans, final int numPts)
+			throws TransformException {
+
 		final int dimSource = trans.getSourceDimensions();
 		final int dimTarget = trans.getTargetDimensions();
 		final double[] tmpPts = new double[numPts
@@ -150,73 +143,73 @@ public class ReferencingUtil {
 			dstPts[dstOff + i] = (double) tmpPts[i];
 		}
 	}
-	
-	
+
 	public final IGeometry createTransformedGeometry(final IGeometry geometry,
-			 final AffineTransform preTransform,
-			 final AffineTransform postTransform,
-			 final /*Abstract*/MathTransform trans) throws TransformException, FactoryException{
-		return createTransformedGeometry(geometry, preTransform, postTransform, trans, ShapeUtilities.PARALLEL);
+			final AffineTransform preTransform,
+			final AffineTransform postTransform,
+			final/* Abstract */MathTransform trans) throws TransformException,
+			FactoryException {
+		return createTransformedGeometry(geometry, preTransform, postTransform,
+				trans, ShapeUtilities.PARALLEL);
 	}
-	
-	
+
 	public final IGeometry createTransformedGeometry(final IGeometry geometry,
-													 final AffineTransform preTransform,
-													 final AffineTransform postTransform,
-													 final /*Abstract*/MathTransform trans,
-													 final int orientation) throws TransformException, FactoryException{
+			final AffineTransform preTransform,
+			final AffineTransform postTransform,
+			final/* Abstract */MathTransform trans, final int orientation)
+			throws TransformException, FactoryException {
 		IGeometry solution = null;
-		
+
 		int dim;
 		if ((dim = trans.getSourceDimensions()) != 2
 				|| (dim = trans.getTargetDimensions()) != 2) {
 			throw new MismatchedDimensionException("mismatched dimension");
 		}
-		
-		Class<IGeometry> clazz = (Class<IGeometry>) geometry.getClass(); 
-		if(clazz.isAssignableFrom(FGeometry.class)){
+
+		Class<IGeometry> clazz = (Class<IGeometry>) geometry.getClass();
+		if (clazz.isAssignableFrom(FGeometry.class)) {
 			FGeometry fgeo = (FGeometry) geometry;
 			FShape fshape = (FShape) fgeo.getInternalShape();
-			solution = ShapeFactory.createGeometry(createTransformedGeometry(fshape, preTransform, postTransform, trans, orientation));
-		}else if(clazz.isAssignableFrom(FGeometryCollection.class)){
-			FGeometryCollection col = (FGeometryCollection)geometry;
+			solution = ShapeFactory.createGeometry(createTransformedGeometry(
+					fshape, preTransform, postTransform, trans, orientation));
+		} else if (clazz.isAssignableFrom(FGeometryCollection.class)) {
+			FGeometryCollection col = (FGeometryCollection) geometry;
 			IGeometry[] colGeoms = col.getGeometries();
 			IGeometry[] geometries = new IGeometry[colGeoms.length];
 			for (int i = 0; i < geometries.length; i++) {
-				geometries[i] = createTransformedGeometry(colGeoms[i], 
-														preTransform, 
-														postTransform, 
-														trans, orientation);
+				geometries[i] = createTransformedGeometry(colGeoms[i],
+						preTransform, postTransform, trans, orientation);
 			}
 			solution = new FGeometryCollection(geometries);
-		}else if(clazz.isAssignableFrom(FMultiPoint2D.class)){
+		} else if (clazz.isAssignableFrom(FMultiPoint2D.class)) {
 			FMultiPoint2D mPt = (FMultiPoint2D) geometry;
 			int numPt = mPt.getNumPoints();
 			FPoint2D[] solutionPt = new FPoint2D[numPt];
 			double[] trgCoords = new double[2];
-			for(int i = 0; i < numPt; i++){
+			for (int i = 0; i < numPt; i++) {
 				FPoint2D point = mPt.getPoint(i);
-				double[] srcCoords = new double[]{point.getX(), point.getY()};
+				double[] srcCoords = new double[] { point.getX(), point.getY() };
 				transform(srcCoords, 0, trgCoords, 0, trans, 1);
 				solutionPt[i] = new FPoint2D(trgCoords[0], trgCoords[1]);
 			}
 			solution = new FMultiPoint2D(solutionPt);
 		}
-//		else if(clazz.isAssignableFrom(FMultipoint3D.class)){
-//			
-//		}
-		else if(clazz.isAssignableFrom(FNullGeometry.class)){
+		// else if(clazz.isAssignableFrom(FMultipoint3D.class)){
+		//
+		// }
+		else if (clazz.isAssignableFrom(FNullGeometry.class)) {
 			solution = geometry;
 		}
-		
+
 		return solution;
 	}
-	
+
 	/**
 	 * Transform the specified FShape instance.
 	 * 
-	 * Only returns instances of FPoint2D, FPolyline2D or FPolygon2D
-	 * (for example, curves are converted to polylines applying a flatness digitizing criteria)
+	 * Only returns instances of FPoint2D, FPolyline2D or FPolygon2D (for
+	 * example, curves are converted to polylines applying a flatness digitizing
+	 * criteria)
 	 * 
 	 * @param shp
 	 * @param preTransform
@@ -227,10 +220,9 @@ public class ReferencingUtil {
 	 * @throws TransformException
 	 */
 	public final FShape createTransformedGeometry(final FShape shp,
-							final AffineTransform preTransform,
-							final AffineTransform postTransform, 
-							final /*Abstract*/MathTransform trans,
-							final int orientation)
+			final AffineTransform preTransform,
+			final AffineTransform postTransform,
+			final/* Abstract */MathTransform trans, final int orientation)
 			throws TransformException {
 		FShape solution = null;
 		int dim;
@@ -238,18 +230,18 @@ public class ReferencingUtil {
 				|| (dim = trans.getTargetDimensions()) != 2) {
 			throw new MismatchedDimensionException("mismatched dimension");
 		}
-		
+
 		final PathIterator it = shp.getPathIterator(preTransform);
-		
+
 		final GeneralPathX path = new GeneralPathX(it.getWindingRule());
 		final Point2D.Double ctrl = new Point2D.Double();
 		final double[] buffer = new double[6];
 
 		double ax = 0, ay = 0; // Coordinate of the last point before
 								// transform.
-		
+
 		double px = 0, py = 0; // Coordinate of the last point after transform.
-	
+
 		for (; !it.isDone(); it.next()) {
 			switch (it.currentSegment(buffer)) {
 			default: {
@@ -266,7 +258,7 @@ public class ReferencingUtil {
 				path.closePath();
 				continue;
 			}
-			
+
 			case PathIterator.SEG_MOVETO: {
 				/*
 				 * Transforms the single point and adds it to the path. We use
@@ -280,10 +272,10 @@ public class ReferencingUtil {
 				transform(buffer, 0, buffer, 0, trans, 1);
 				px = buffer[0];
 				py = buffer[1];
-				path.moveTo( px,  py);
+				path.moveTo(px, py);
 				continue;
 			}
-			
+
 			case PathIterator.SEG_LINETO: {
 				/*
 				 * Inserts a new control point at 'buffer[0,1]'. This control
@@ -354,7 +346,7 @@ public class ReferencingUtil {
 			 * point is colinear with the starting and ending points.
 			 */
 			transform(buffer, 0, buffer, 0, trans, 2);
-			
+
 			final Point2D ctrlPoint = ShapeUtilities.parabolicControlPoint(px,
 					py, buffer[0], buffer[1], buffer[2], buffer[3],
 					orientation, ctrl);
@@ -362,9 +354,9 @@ public class ReferencingUtil {
 			py = buffer[3];
 			if (ctrlPoint != null) {
 				assert ctrl == ctrlPoint;
-				path.quadTo(ctrl.x, ctrl.y,  px,  py);
+				path.quadTo(ctrl.x, ctrl.y, px, py);
 			} else {
-				path.lineTo( px,  py);
+				path.lineTo(px, py);
 			}
 		}
 		/*
@@ -375,58 +367,62 @@ public class ReferencingUtil {
 		if (postTransform != null) {
 			path.transform(postTransform);
 		}
-		
+
 		/*
-		 * At this point, we have a GeneralPathX with the transformation.
-		 * Now we reconstruct the original shp
-		 * */
+		 * At this point, we have a GeneralPathX with the transformation. Now we
+		 * reconstruct the original shp
+		 */
 		int numDimensions = FGeometryUtil.getXyDimensions(shp);
-		switch(numDimensions){
-			case 0:
-				List<Point2D[]> points = ShapePointExtractor.extractPoints(path.getPathIterator(null));
-				solution = new FPoint2D(points.get(0)[0]);
-				break;
-			case 1:
-				solution = new FPolyline2D(path);
-				break;
-			case 2:
-				solution = new FPolygon2D(path);
-				break;
-			
+		switch (numDimensions) {
+		case 0:
+			List<Point2D[]> points = ShapePointExtractor.extractPoints(path
+					.getPathIterator(null));
+			solution = new FPoint2D(points.get(0)[0]);
+			break;
+		case 1:
+			solution = new FPolyline2D(path);
+			break;
+		case 2:
+			solution = new FPolygon2D(path);
+			break;
+
 		}
 		return solution;
 	}
-	
-	
-	public DirectPosition truncateOrShrinkDimension(DirectPosition directPosition, int desiredDimensions){
+
+	public DirectPosition truncateOrShrinkDimension(
+			DirectPosition directPosition, int desiredDimensions) {
 		DirectPosition solution = null;
 		double[] newCoordinates = new double[desiredDimensions];
 		int pointDim = directPosition.getDimension();
-		if(pointDim < desiredDimensions){
+		if (pointDim < desiredDimensions) {
 			double[] src = directPosition.getCoordinate();
 			System.arraycopy(src, 0, newCoordinates, 0, pointDim);
-//	    	for (int i = directPosition.getCoordinates().length; i < newCoordinates.length; i++) {
-//				newCoordinates[i] = 0d;
-//			}
+			// for (int i = directPosition.getCoordinates().length; i <
+			// newCoordinates.length; i++) {
+			// newCoordinates[i] = 0d;
+			// }
 		}
-//    		throw new MismatchedDimensionException("mismatched dimension");
+		// throw new MismatchedDimensionException("mismatched dimension");
 		else if (pointDim == desiredDimensions)
 			return directPosition;
-		else{
-	    	System.arraycopy(directPosition.getCoordinate(), 0, newCoordinates, 0, desiredDimensions);
-	    	
+		else {
+			System.arraycopy(directPosition.getCoordinate(), 0, newCoordinates,
+					0, desiredDimensions);
+
 		}
 		solution = new GeneralDirectPosition(newCoordinates);
-    	return solution;
-    	
+		return solution;
+
 	}
-	
-	
-	public Point2D convert(DirectPosition position){
+
+	public Point2D convert(DirectPosition position) {
 		double[] coordinates = position.getCoordinate();
 		return new Point2D.Double(coordinates[0], coordinates[1]);
 	}
-	public FLyrVect getTinAsFMapLyr(RubberSheetBuilder rbBuilder, CoordinateReferenceSystem crs){
+
+	public FLyrVect getTinAsFMapLyr(RubberSheetBuilder rbBuilder,
+			CoordinateReferenceSystem crs) {
 		// TODO gt: lost functionality getTinAsFMapLyr
 		throw new UnsupportedOperationException();
 		// FLyrVect solution = null;

@@ -42,40 +42,40 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.referencing;
 
 import org.geotools.referencing.operation.builder.MappedPosition;
 import org.opengis.geometry.DirectPosition;
 
 /**
- * A MappedPosition which could be marked as innactive
- * (to ignore in the MathTransform computation process)
+ * A MappedPosition which could be marked as innactive (to ignore in the
+ * MathTransform computation process)
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class DisactivableMappedPosition extends MappedPosition {
 
 	private static final long serialVersionUID = -8105792848691147003L;
-	
+
 	private boolean active;
-	
+
 	public DisactivableMappedPosition(DirectPosition source,
-									 DirectPosition target) {
+			DirectPosition target) {
 		super(source, target);
 		this.active = true;
 	}
+
 	public boolean isActive() {
 		return active;
 	}
+
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-
-	
 
 }

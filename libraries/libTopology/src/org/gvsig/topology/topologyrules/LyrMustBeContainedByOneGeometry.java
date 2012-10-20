@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.topologyrules;
 
 import org.gvsig.topology.ITopologyErrorFix;
@@ -61,33 +61,30 @@ import com.vividsolutions.jts.geom.Geometry;
 public class LyrMustBeContainedByOneGeometry extends
 		LyrMustBeCoveredByOneGeometry {
 
-	
 	static final String RULE_NAME = Messages.getText("must_be_contained_by");
-	
+
 	static {
 		DEFAULT_ERROR_SYMBOL.setDescription(RULE_NAME);
 		automaticErrorFixes.add(new DeleteTopologyErrorFix());
 	}
-	
-	public LyrMustBeContainedByOneGeometry(Topology topology, 
-			 FLyrVect originLyr,
-			 FLyrVect destinationLyr){
+
+	public LyrMustBeContainedByOneGeometry(Topology topology,
+			FLyrVect originLyr, FLyrVect destinationLyr) {
 		super(topology, originLyr, destinationLyr);
 	}
 
-
-	public LyrMustBeContainedByOneGeometry(){
+	public LyrMustBeContainedByOneGeometry() {
 		super();
 	}
-	
+
 	@Override
 	protected boolean checkSpatialPredicate(IFeature feature,
 			Geometry firstGeometry, IFeature neighbourFeature, Geometry jtsGeom2) {
 		return firstGeometry.within(jtsGeom2);
 	}
-	
-	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError){
+
+	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError) {
 		return automaticErrorFixes.get(0);
 	}
-	
+
 }

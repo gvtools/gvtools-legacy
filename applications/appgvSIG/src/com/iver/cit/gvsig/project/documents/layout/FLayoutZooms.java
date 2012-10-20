@@ -56,28 +56,30 @@ import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrameUseFMap;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
-
 /**
  * Clase encargada de realizar los zooms al Layout.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FLayoutZooms {
-    private Layout layout = null;
+	private Layout layout = null;
 
-    public FLayoutZooms(Layout l) {
-        layout = l;
-    }
+	public FLayoutZooms(Layout l) {
+		layout = l;
+	}
 
-    /**
+	/**
 	 * Realiza un zoom por rectángulo o por punto con un escalado por defecto
 	 * sobre el Layout que se le pasa como parámetro.
-	 *
-	 * @param p1 punto de inicio del rectángulo.
-	 * @param p2 punto final del recángulo.
+	 * 
+	 * @param p1
+	 *            punto de inicio del rectángulo.
+	 * @param p2
+	 *            punto final del recángulo.
 	 */
-    public void setZoomIn(Point p1, Point p2) {
-    	if (java.lang.Math.abs(layout.getLayoutControl().getFirstPoint().x - p2.x) < 4) {
+	public void setZoomIn(Point p1, Point p2) {
+		if (java.lang.Math.abs(layout.getLayoutControl().getFirstPoint().x
+				- p2.x) < 4) {
 			double difw = 2;
 			setZoom(difw, p2);
 		} else {
@@ -94,9 +96,11 @@ public class FLayoutZooms {
 			}
 
 			Point2D.Double pSheet1 = FLayoutUtilities.toSheetPoint(
-					new Point2D.Double(p1.getX(), p1.getY()), layout.getLayoutControl().getAT());
+					new Point2D.Double(p1.getX(), p1.getY()), layout
+							.getLayoutControl().getAT());
 			Point2D.Double pSheet2 = FLayoutUtilities.toSheetPoint(
-					new Point2D.Double(p2.getX(), p2.getY()), layout.getLayoutControl().getAT());
+					new Point2D.Double(p2.getX(), p2.getY()), layout
+							.getLayoutControl().getAT());
 
 			double xmin;
 			double xmax;
@@ -121,19 +125,25 @@ public class FLayoutZooms {
 
 			Rectangle2D.Double rScreen = new Rectangle2D.Double();
 			Rectangle2D.Double rSheet = new Rectangle2D.Double();
-			double x = FLayoutUtilities.toSheetDistance(
-					layout.getLayoutControl().getRect().getX(), layout.getLayoutControl().getAT());
-			double y = FLayoutUtilities.toSheetDistance(
-					layout.getLayoutControl().getRect().getY(), layout.getLayoutControl().getAT());
-			double w = FLayoutUtilities.toSheetDistance(layout.getLayoutControl().getRect()
-					.getWidth(), layout.getLayoutControl().getAT());
-			double h = FLayoutUtilities.toSheetDistance(layout.getLayoutControl().getRect()
-					.getHeight(), layout.getLayoutControl().getAT());
+			double x = FLayoutUtilities.toSheetDistance(layout
+					.getLayoutControl().getRect().getX(), layout
+					.getLayoutControl().getAT());
+			double y = FLayoutUtilities.toSheetDistance(layout
+					.getLayoutControl().getRect().getY(), layout
+					.getLayoutControl().getAT());
+			double w = FLayoutUtilities.toSheetDistance(layout
+					.getLayoutControl().getRect().getWidth(), layout
+					.getLayoutControl().getAT());
+			double h = FLayoutUtilities.toSheetDistance(layout
+					.getLayoutControl().getRect().getHeight(), layout
+					.getLayoutControl().getAT());
 
 			double wv = FLayoutUtilities.toSheetDistance(layout
-					.getVisibleRect().getWidth(), layout.getLayoutControl().getAT());
+					.getVisibleRect().getWidth(), layout.getLayoutControl()
+					.getAT());
 			double hv = FLayoutUtilities.toSheetDistance(layout
-					.getVisibleRect().getHeight(), layout.getLayoutControl().getAT());
+					.getVisibleRect().getHeight(), layout.getLayoutControl()
+					.getAT());
 			double mw = xmax - xmin;
 			double mh = ymax - ymin;
 			double difw = wv / mw;
@@ -161,269 +171,290 @@ public class FLayoutZooms {
 				rSheet.height = h * difh;
 			}
 			setPointsToZoom(p1, p2);
-			rScreen.setRect(FLayoutUtilities.fromSheetRect(rSheet, layout.getLayoutControl()
-					.getAT()));
+			rScreen.setRect(FLayoutUtilities.fromSheetRect(rSheet, layout
+					.getLayoutControl().getAT()));
 			if (FLayoutUtilities.isPosible(rScreen)) {
 				layout.getLayoutControl().getRect().setRect(rScreen);
 			}
 		}
-    }
+	}
 
-   /**
+	/**
 	 * Realiza un zoom out sobre el Layout que se le pasa como parámetro.
-	 *
-	 * @param p2 punto central del rectángulo.
+	 * 
+	 * @param p2
+	 *            punto central del rectángulo.
 	 */
-    public void setZoomOut(Point p2) {
-    	double difw = 0.5;
-    	setZoom(difw,p2);
-    }
+	public void setZoomOut(Point p2) {
+		double difw = 0.5;
+		setZoom(difw, p2);
+	}
 
-    /**
+	/**
 	 * Realiza un zoom out sobre el Layout que se le pasa como parámetro.
-	 *
-	 * @param dif factor.
-	 * @param p2 punto final del recángulo.
+	 * 
+	 * @param dif
+	 *            factor.
+	 * @param p2
+	 *            punto final del recángulo.
 	 */
-    public void setZoom(double dif, Point p2) {
-        Point2D.Double pSheet2 = FLayoutUtilities.toSheetPoint(new Point2D.Double(
-                    p2.getX(), p2.getY()), layout.getLayoutControl().getAT());
-        Rectangle2D.Double rScreen = new Rectangle2D.Double();
-        Rectangle2D.Double rSheet = new Rectangle2D.Double();
+	public void setZoom(double dif, Point p2) {
+		Point2D.Double pSheet2 = FLayoutUtilities.toSheetPoint(
+				new Point2D.Double(p2.getX(), p2.getY()), layout
+						.getLayoutControl().getAT());
+		Rectangle2D.Double rScreen = new Rectangle2D.Double();
+		Rectangle2D.Double rSheet = new Rectangle2D.Double();
 
-        double difw = dif;
+		double difw = dif;
 
-        rSheet.x = (-pSheet2.getX() * difw) -
-            FLayoutUtilities.toSheetDistance(layout.getLayoutControl().getRect().getX(),
-            		layout.getLayoutControl().getAT()) +
-            FLayoutUtilities.toSheetDistance(layout.getWidth() / 2,
-            		layout.getLayoutControl().getAT());
-        rSheet.y = (-pSheet2.getY() * difw) -
-            FLayoutUtilities.toSheetDistance(layout.getLayoutControl().getRect().getY(),
-            		layout.getLayoutControl().getAT()) +
-            FLayoutUtilities.toSheetDistance(layout.getHeight() / 2,
-            		layout.getLayoutControl().getAT());
+		rSheet.x = (-pSheet2.getX() * difw)
+				- FLayoutUtilities.toSheetDistance(layout.getLayoutControl()
+						.getRect().getX(), layout.getLayoutControl().getAT())
+				+ FLayoutUtilities.toSheetDistance(layout.getWidth() / 2,
+						layout.getLayoutControl().getAT());
+		rSheet.y = (-pSheet2.getY() * difw)
+				- FLayoutUtilities.toSheetDistance(layout.getLayoutControl()
+						.getRect().getY(), layout.getLayoutControl().getAT())
+				+ FLayoutUtilities.toSheetDistance(layout.getHeight() / 2,
+						layout.getLayoutControl().getAT());
 
-        rSheet.width = FLayoutUtilities.toSheetDistance(layout.getLayoutControl().getRect()
-                                                              .getWidth(),
-                                                              layout.getLayoutControl().getAT()) * difw;
-        rSheet.height = FLayoutUtilities.toSheetDistance(layout.getLayoutControl().getRect()
-                                                               .getHeight(),
-                                                               layout.getLayoutControl().getAT()) * difw;
+		rSheet.width = FLayoutUtilities.toSheetDistance(layout
+				.getLayoutControl().getRect().getWidth(), layout
+				.getLayoutControl().getAT())
+				* difw;
+		rSheet.height = FLayoutUtilities.toSheetDistance(layout
+				.getLayoutControl().getRect().getHeight(), layout
+				.getLayoutControl().getAT())
+				* difw;
 
-        rScreen.setRect(FLayoutUtilities.fromSheetRect(rSheet, layout.getLayoutControl().getAT()));
+		rScreen.setRect(FLayoutUtilities.fromSheetRect(rSheet, layout
+				.getLayoutControl().getAT()));
 
-        if (FLayoutUtilities.isPosible(rScreen)) {
-        	layout.getLayoutControl().getRect().setRect(rScreen);
-        }
+		if (FLayoutUtilities.isPosible(rScreen)) {
+			layout.getLayoutControl().getRect().setRect(rScreen);
+		}
 
-        //		Para realizar el zoom a partir de un punto.
-        Point p1 = new Point((int) (p2.getX() -
-                (layout.getWidth() / (difw * 2))),
-                (int) (p2.getY() - (layout.getHeight() / (difw * 2))));
-        p2 = new Point((int) (p2.getX() + (layout.getWidth() / (difw * 2))),
-                (int) (p2.getY() + (layout.getHeight() / (difw * 2))));
-        setPointsToZoom(p1, p2);
-    }
-    /**
-     * Introduce los puntos de control para controlar el zoom del Layout.
-     */
-    private void setPointsToZoom(Point p1, Point p2) {
-        IFFrame[] fframes = layout.getLayoutContext().getFFrames();
+		// Para realizar el zoom a partir de un punto.
+		Point p1 = new Point(
+				(int) (p2.getX() - (layout.getWidth() / (difw * 2))),
+				(int) (p2.getY() - (layout.getHeight() / (difw * 2))));
+		p2 = new Point((int) (p2.getX() + (layout.getWidth() / (difw * 2))),
+				(int) (p2.getY() + (layout.getHeight() / (difw * 2))));
+		setPointsToZoom(p1, p2);
+	}
 
-        for (int i = 0; i < fframes.length; i++) {
-            if (fframes[i] instanceof IFFrameUseFMap) {
-                IFFrameUseFMap fframe = (IFFrameUseFMap) fframes[i];
-                if (fframe.getATMap()!=null) {
-                	Point2D px1 = FLayoutFunctions.toMapPoint(p1, fframe.getATMap());
-                	Point2D px2 = FLayoutFunctions.toMapPoint(p2, fframe.getATMap());
-                	fframe.setPointsToZoom(px1, px2);
-                }
-            }
-        }
-    }
-
-    /**
-     * Aplica el zoom real teniendo en cuenta la resolución de pantalla.
-     */
-    public void realZoom() {
-    	Preferences prefsResolution = Preferences.userRoot().node( "gvsig.configuration.screen" );
-    	double cm = layout.getLayoutContext().getAtributes().getPixXCm(layout.getLayoutControl().getRect());
-        Toolkit kit = Toolkit.getDefaultToolkit();
-        double dpi = prefsResolution.getInt("dpi",kit.getScreenResolution());
-        double dif = (cm * Attributes.PULGADA) / dpi;
-        setZoom(1 / dif,
-            new Point(layout.getWidth() / 2, layout.getHeight() / 2));
-        layout.getLayoutControl().refresh();
-    }
-
-    /**
-     * Realiza un zoom in a partir del zoom actual de la vista.
-     */
-    public void zoomIn() {
-        setZoom(2, new Point(layout.getWidth() / 2, layout.getHeight() / 2));
-        layout.getLayoutControl().refresh();
-    }
-
-    /**
-     * Realiza un zoom out a partir del zoom actual de la vista.
-     */
-    public void zoomOut() {
-        setZoom(0.5, new Point(layout.getWidth() / 2, layout.getHeight() / 2));
-        layout.getLayoutControl().refresh();
-    }
-
-    /**
-	 * Realiza un zoom a los elementos que esten seleccionados, si no hay
-	 * ningún elemento seleccionado no realiza ningún zoom
+	/**
+	 * Introduce los puntos de control para controlar el zoom del Layout.
 	 */
-    public void zoomSelect() {
-        Rectangle2D.Double recaux = null;
-        IFFrame[] fframes=layout.getLayoutContext().getFFrames();
-        for (int i = 0; i < fframes.length; i++) {
-            if (fframes[i].getSelected() != IFFrame.NOSELECT) {
-                if (recaux == null) {
-                    recaux = fframes[i].getBoundingBox(layout.getLayoutControl().getAT());
-                } else {
-                    recaux.add(fframes[i].getBoundingBox(
-                    		layout.getLayoutControl().getAT()));
-                }
-            }
-        }
+	private void setPointsToZoom(Point p1, Point p2) {
+		IFFrame[] fframes = layout.getLayoutContext().getFFrames();
 
-        if (recaux != null) {
-            Point p1 = new Point((int) recaux.x, (int) recaux.y);
-            Point p2 = new Point((int) recaux.getMaxX(), (int) recaux.getMaxY());
-            setZoomIn(p1, p2);
-            layout.getLayoutControl().refresh();
-        }
-    }
-    /**
+		for (int i = 0; i < fframes.length; i++) {
+			if (fframes[i] instanceof IFFrameUseFMap) {
+				IFFrameUseFMap fframe = (IFFrameUseFMap) fframes[i];
+				if (fframe.getATMap() != null) {
+					Point2D px1 = FLayoutFunctions.toMapPoint(p1,
+							fframe.getATMap());
+					Point2D px2 = FLayoutFunctions.toMapPoint(p2,
+							fframe.getATMap());
+					fframe.setPointsToZoom(px1, px2);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Aplica el zoom real teniendo en cuenta la resolución de pantalla.
+	 */
+	public void realZoom() {
+		Preferences prefsResolution = Preferences.userRoot().node(
+				"gvsig.configuration.screen");
+		double cm = layout.getLayoutContext().getAtributes()
+				.getPixXCm(layout.getLayoutControl().getRect());
+		Toolkit kit = Toolkit.getDefaultToolkit();
+		double dpi = prefsResolution.getInt("dpi", kit.getScreenResolution());
+		double dif = (cm * Attributes.PULGADA) / dpi;
+		setZoom(1 / dif, new Point(layout.getWidth() / 2,
+				layout.getHeight() / 2));
+		layout.getLayoutControl().refresh();
+	}
+
+	/**
+	 * Realiza un zoom in a partir del zoom actual de la vista.
+	 */
+	public void zoomIn() {
+		setZoom(2, new Point(layout.getWidth() / 2, layout.getHeight() / 2));
+		layout.getLayoutControl().refresh();
+	}
+
+	/**
+	 * Realiza un zoom out a partir del zoom actual de la vista.
+	 */
+	public void zoomOut() {
+		setZoom(0.5, new Point(layout.getWidth() / 2, layout.getHeight() / 2));
+		layout.getLayoutControl().refresh();
+	}
+
+	/**
+	 * Realiza un zoom a los elementos que esten seleccionados, si no hay ningún
+	 * elemento seleccionado no realiza ningún zoom
+	 */
+	public void zoomSelect() {
+		Rectangle2D.Double recaux = null;
+		IFFrame[] fframes = layout.getLayoutContext().getFFrames();
+		for (int i = 0; i < fframes.length; i++) {
+			if (fframes[i].getSelected() != IFFrame.NOSELECT) {
+				if (recaux == null) {
+					recaux = fframes[i].getBoundingBox(layout
+							.getLayoutControl().getAT());
+				} else {
+					recaux.add(fframes[i].getBoundingBox(layout
+							.getLayoutControl().getAT()));
+				}
+			}
+		}
+
+		if (recaux != null) {
+			Point p1 = new Point((int) recaux.x, (int) recaux.y);
+			Point p2 = new Point((int) recaux.getMaxX(), (int) recaux.getMaxY());
+			setZoomIn(p1, p2);
+			layout.getLayoutControl().refresh();
+		}
+	}
+
+	/**
 	 * Realiza un zoom a todos los elementos del layout.
 	 */
-    public void zoomAllFrames() {
-        Rectangle2D.Double recaux = null;
-        IFFrame[] fframes=layout.getLayoutControl().getLayoutContext().getFFrames();
-        for (int i = 0; i < fframes.length; i++) {
-            if (recaux == null) {
-                recaux = fframes[i].getBoundingBox(layout.getLayoutControl().getAT());
-            } else {
-                recaux.add(fframes[i].getBoundingBox(
-                		layout.getLayoutControl().getAT()));
-            }
-        }
+	public void zoomAllFrames() {
+		Rectangle2D.Double recaux = null;
+		IFFrame[] fframes = layout.getLayoutControl().getLayoutContext()
+				.getFFrames();
+		for (int i = 0; i < fframes.length; i++) {
+			if (recaux == null) {
+				recaux = fframes[i].getBoundingBox(layout.getLayoutControl()
+						.getAT());
+			} else {
+				recaux.add(fframes[i].getBoundingBox(layout.getLayoutControl()
+						.getAT()));
+			}
+		}
 
-        if (recaux != null) {
-            Point p1 = new Point((int) recaux.x, (int) recaux.y);
-            Point p2 = new Point((int) recaux.getMaxX(), (int) recaux.getMaxY());
-            setZoomIn(p1, p2);
-            layout.getLayoutControl().refresh();
-        }
-    }
+		if (recaux != null) {
+			Point p1 = new Point((int) recaux.x, (int) recaux.y);
+			Point p2 = new Point((int) recaux.getMaxX(), (int) recaux.getMaxY());
+			setZoomIn(p1, p2);
+			layout.getLayoutControl().refresh();
+		}
+	}
 
-    /**
-     * Realiza un zoom in a las vista añadidas al Layout que esten seleccionadas
-     *
-     * @param p1 Punto inicial del rectángulo
-     * @param p2 Punto final del rectángulo
-     */
-    public void setViewZoomIn(Point2D p1, Point2D p2) {
-    	IFFrame[] fframes=layout.getLayoutContext().getFFrames();
-        for (int i = 0; i < fframes.length; i++) {
-            if (fframes[i] instanceof IFFrameUseFMap) {
-                IFFrameUseFMap fframe = (IFFrameUseFMap) fframes[i];
+	/**
+	 * Realiza un zoom in a las vista añadidas al Layout que esten seleccionadas
+	 * 
+	 * @param p1
+	 *            Punto inicial del rectángulo
+	 * @param p2
+	 *            Punto final del rectángulo
+	 */
+	public void setViewZoomIn(Point2D p1, Point2D p2) {
+		IFFrame[] fframes = layout.getLayoutContext().getFFrames();
+		for (int i = 0; i < fframes.length; i++) {
+			if (fframes[i] instanceof IFFrameUseFMap) {
+				IFFrameUseFMap fframe = (IFFrameUseFMap) fframes[i];
 
-                if (((IFFrame) fframe).getSelected() != IFFrame.NOSELECT) {
-                	//IFFrameUseFMap fframeAux=(IFFrameUseFMap)((IFFrame)fframe).cloneFFrame(layout);
-                	p1 = FLayoutFunctions.toMapPoint(p1, fframe.getATMap());
-                    p2 = FLayoutFunctions.toMapPoint(p2, fframe.getATMap());
+				if (((IFFrame) fframe).getSelected() != IFFrame.NOSELECT) {
+					// IFFrameUseFMap
+					// fframeAux=(IFFrameUseFMap)((IFFrame)fframe).cloneFFrame(layout);
+					p1 = FLayoutFunctions.toMapPoint(p1, fframe.getATMap());
+					p2 = FLayoutFunctions.toMapPoint(p2, fframe.getATMap());
 
+					// Borramos el anterior
+					layout.getLayoutControl().setStatus(
+							LayoutControl.DESACTUALIZADO);
+					Rectangle2D.Double r = new Rectangle2D.Double();
 
-                    // Borramos el anterior
-                    layout.getLayoutControl().setStatus(LayoutControl.DESACTUALIZADO);
-                    Rectangle2D.Double r = new Rectangle2D.Double();
+					if (java.lang.Math.abs(p1.getX() - p2.getX()) <= 3) {
+						double nuevoX;
+						double nuevoY;
+						double cX;
+						double cY;
 
-                    if (java.lang.Math.abs(p1.getX() - p2.getX()) <= 3) {
-                        double nuevoX;
-                        double nuevoY;
-                        double cX;
-                        double cY;
+						cX = p2.getX();
+						cY = p2.getY();
 
-                        cX = p2.getX();
-                        cY = p2.getY();
+						double factor = 1 / MapContext.ZOOMINFACTOR;
 
-                        double factor = 1/MapContext.ZOOMINFACTOR;
+						Rectangle2D extent = fframe.getMapContext()
+								.getViewPort().getExtent();
+						if (extent != null) {
+							nuevoX = cX - ((extent.getWidth() * factor) / 2.0);
+							nuevoY = cY - ((extent.getHeight() * factor) / 2.0);
+							r.x = nuevoX;
+							r.y = nuevoY;
+							r.width = extent.getWidth() * factor;
+							r.height = extent.getHeight() * factor;
+						}
 
-                        Rectangle2D extent=fframe.getMapContext().getViewPort().getExtent();
-                        if (extent!=null){
-	                        nuevoX = cX -
-	                            ((extent.getWidth() * factor) / 2.0);
-	                        nuevoY = cY -
-	                            ((extent.getHeight() * factor) / 2.0);
-	                        r.x = nuevoX;
-	                        r.y = nuevoY;
-	                        r.width = extent.getWidth() * factor;
-	                        r.height = extent.getHeight() * factor;
-                        }
+						// fframeAux.setNewExtent(r);
+					} else {
+						// Fijamos el nuevo extent
 
-                        //fframeAux.setNewExtent(r);
-                    } else {
-                        //	Fijamos el nuevo extent
+						r.setFrameFromDiagonal(p1, p2);
 
-                        r.setFrameFromDiagonal(p1, p2);
+						// fframeAux.setNewExtent(r);
+					}
 
-                        //fframeAux.setNewExtent(r);
-                    }
+					/*
+					 * if (fframe.getTypeScale()!=IFFrameUseFMap.AUTOMATICO) {
+					 * fframeAux.setNewExtent(r); fframeAux.refresh();
+					 * layout.getEFS
+					 * ().modifyFFrame((IFFrame)fframe,(IFFrame)fframeAux);
+					 * ((IFFrame)fframeAux).getBoundingBox(layout.getAT());
+					 * layout.updateFFrames(); layout.setIsReSel(true); }else {
+					 */
+					fframe.setNewExtent(r);
+					fframe.refresh();
+					fframe.refreshOriginalExtent();
+					// /}
+					// Fin del else
+					// layout.repaint();
+				}
+			}
+		}
+	}
 
-                    /*if (fframe.getTypeScale()!=IFFrameUseFMap.AUTOMATICO) {
-                    	fframeAux.setNewExtent(r);
-                    	fframeAux.refresh();
-                    	layout.getEFS().modifyFFrame((IFFrame)fframe,(IFFrame)fframeAux);
-                    	((IFFrame)fframeAux).getBoundingBox(layout.getAT());
-                    	layout.updateFFrames();
-                    	layout.setIsReSel(true);
-                    }else {*/
-                    	fframe.setNewExtent(r);
-                    	fframe.refresh();
-                    	fframe.refreshOriginalExtent();
-                    ///}
-    				// Fin del else
-                    //layout.repaint();
-                }
-            }
-        }
-    }
+	/**
+	 * Realiza un zoom out a las vistas añadidas al Layout y que estén
+	 * seleccionadas
+	 * 
+	 * @param p2
+	 *            Punto central
+	 */
+	public void setViewZoomOut(Point p2) {
+		Point2D.Double pWorld;
+		IFFrame[] fframes = layout.getLayoutContext().getFFrames();
+		for (int i = 0; i < fframes.length; i++) {
+			if (fframes[i] instanceof IFFrameUseFMap) {
+				IFFrameUseFMap fframe = (IFFrameUseFMap) fframes[i];
 
-    /**
-     * Realiza un zoom out a las vistas añadidas al Layout y que estén seleccionadas
-     *
-     * @param p2 Punto central
-     */
-    public void setViewZoomOut(Point p2) {
-        Point2D.Double pWorld;
-        IFFrame[] fframes=layout.getLayoutContext().getFFrames();
-        for (int i = 0; i < fframes.length; i++) {
-            if (fframes[i] instanceof IFFrameUseFMap) {
-                IFFrameUseFMap fframe = (IFFrameUseFMap) fframes[i];
+				if (((IFFrame) fframe).getSelected() != IFFrame.NOSELECT) {
+					// IFFrameUseFMap
+					// fframeAux=(IFFrameUseFMap)((IFFrame)fframe).cloneFFrame(layout);
+					double nuevoX;
+					double nuevoY;
+					double cX;
+					double cY;
+					Point pScreen = new Point((int) p2.getX(), (int) p2.getY());
+					pWorld = FLayoutFunctions.toMapPoint(pScreen,
+							fframe.getATMap());
 
-                if (((IFFrame) fframe).getSelected() != IFFrame.NOSELECT) {
-                	//IFFrameUseFMap fframeAux=(IFFrameUseFMap)((IFFrame)fframe).cloneFFrame(layout);
-                	double nuevoX;
-                    double nuevoY;
-                    double cX;
-                    double cY;
-                    Point pScreen = new Point((int) p2.getX(), (int) p2.getY());
-                    pWorld = FLayoutFunctions.toMapPoint(pScreen,
-                            fframe.getATMap());
+					cX = pWorld.getX();
+					cY = pWorld.getY();
 
-                    cX = pWorld.getX();
-                    cY = pWorld.getY();
-
-                    double factor = 1/MapContext.ZOOMOUTFACTOR;
-                    Rectangle2D.Double r = new Rectangle2D.Double();
-                    Rectangle2D extent = fframe.getMapContext()
-						.getViewPort().getExtent();
-                    if (extent != null) {
+					double factor = 1 / MapContext.ZOOMOUTFACTOR;
+					Rectangle2D.Double r = new Rectangle2D.Double();
+					Rectangle2D extent = fframe.getMapContext().getViewPort()
+							.getExtent();
+					if (extent != null) {
 						nuevoX = cX - ((extent.getWidth() * factor) / 2.0);
 						nuevoY = cY - ((extent.getHeight() * factor) / 2.0);
 						r.x = nuevoX;
@@ -434,30 +465,32 @@ public class FLayoutZooms {
 						fframe.refresh();
 						fframe.refreshOriginalExtent();
 					}
-                }
-            }
-        }
-    }
+				}
+			}
+		}
+	}
 
-    /**
-     * Modifica los puntos de control para generar el zoom del Layout
-     *
-     * @param p1 Punto inicial
-     * @param p2 Punto final
-     */
-    public void setPan(Point p1, Point p2) {
-        IFFrame[] fframes = layout.getLayoutContext().getFFrames();
+	/**
+	 * Modifica los puntos de control para generar el zoom del Layout
+	 * 
+	 * @param p1
+	 *            Punto inicial
+	 * @param p2
+	 *            Punto final
+	 */
+	public void setPan(Point p1, Point p2) {
+		IFFrame[] fframes = layout.getLayoutContext().getFFrames();
 
-        for (int i = 0; i < fframes.length; i++) {
-            if (fframes[i] instanceof IFFrameUseFMap) {
-                IFFrameUseFMap fframe = (IFFrameUseFMap) fframes[i];
-                AffineTransform at=fframe.getATMap();
-                if (at!=null) {
-	                Point2D px1 = FLayoutFunctions.toMapPoint(p1, at);
-	                Point2D px2 = FLayoutFunctions.toMapPoint(p2, at);
-	                fframe.movePoints(px1, px2);
-                }
-            }
-        }
-    }
+		for (int i = 0; i < fframes.length; i++) {
+			if (fframes[i] instanceof IFFrameUseFMap) {
+				IFFrameUseFMap fframe = (IFFrameUseFMap) fframes[i];
+				AffineTransform at = fframe.getATMap();
+				if (at != null) {
+					Point2D px1 = FLayoutFunctions.toMapPoint(p1, at);
+					Point2D px2 = FLayoutFunctions.toMapPoint(p2, at);
+					fframe.movePoints(px1, px2);
+				}
+			}
+		}
+	}
 }

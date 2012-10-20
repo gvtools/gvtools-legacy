@@ -61,6 +61,7 @@ public class KMLFeatureWithComplexElementTest extends
 		GPEFeatureWithComplexElementTest {
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEParserClass()
 	 */
 	public Class getGPEParserClass() {
@@ -69,6 +70,7 @@ public class KMLFeatureWithComplexElementTest extends
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEWriterHandlerClass()
 	 */
 	public Class getGPEWriterHandlerClass() {

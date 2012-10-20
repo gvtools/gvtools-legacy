@@ -58,12 +58,13 @@ import org.gvsig.gui.beans.Messages;
  */
 
 /**
- * Creates a Dialog that allows users to select the date they want
- * This class is a version of JCalendarDatePanel
+ * Creates a Dialog that allows users to select the date they want This class is
+ * a version of JCalendarDatePanel
  * 
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
-public class JCalendarDateDialog extends JDialog implements IMethodsForGraphicalCalendarComponents, Serializable {
+public class JCalendarDateDialog extends JDialog implements
+		IMethodsForGraphicalCalendarComponents, Serializable {
 	private static final long serialVersionUID = -4265734997797240482L;
 	private JCalendar jCalendar = null;
 	private final int defaultWidth = 350;
@@ -77,7 +78,7 @@ public class JCalendarDateDialog extends JDialog implements IMethodsForGraphical
 	 */
 	public JCalendarDateDialog() {
 		super();
-		
+
 		this.initialize();
 	}
 
@@ -87,40 +88,45 @@ public class JCalendarDateDialog extends JDialog implements IMethodsForGraphical
 	public JCalendarDateDialog(int width, int height) {
 		super();
 
-		this.initialize();			
-			
+		this.initialize();
+
 		this.lastDimensionOfJDialog.width = width;
 		this.lastDimensionOfJDialog.height = height;
 	}
-	
+
 	/**
-	 * This method initializes this 
+	 * This method initializes this
 	 */
 	private void initialize() {
 		this.setDefaultTitle();
-				
+
 		// Initialize the attribute 'lastDimensionOfJCalendar'
-		this.lastDimensionOfJDialog = new Dimension(this.defaultWidth, this.defaultHeight);
-		
+		this.lastDimensionOfJDialog = new Dimension(this.defaultWidth,
+				this.defaultHeight);
+
 		// Resize this component to its initial size
 		this.setSizeResize(defaultWidth, defaultHeight);
-		
+
 		// Adds the jCalendar to this dialog
 		this.getContentPane().add(this.getJCalendar());
 
 		// By default there isn't maximun neither minimum dimensions
 		this.maxDimensionOfJDialog = new Dimension(-1, -1);
-		this.minDimensionOfJDialog = new Dimension(-1, -1);		
-		
-		// This allows authomatic revalidation while this component is been resized
+		this.minDimensionOfJDialog = new Dimension(-1, -1);
+
+		// This allows authomatic revalidation while this component is been
+		// resized
 		Toolkit.getDefaultToolkit().setDynamicLayout(true);
 
 		// Listener for the redimension of this component:
 		// Dimension must be between the minimum and maximum
 		this.addComponentListener(new ComponentAdapter() {
 			/*
-			 *  (non-Javadoc)
-			 * @see java.awt.event.ComponentListener#componentResized(java.awt.event.ComponentEvent)
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.ComponentListener#componentResized(java.awt.event
+			 * .ComponentEvent)
 			 */
 			public void componentResized(ComponentEvent e) {
 				boolean modified = false;
@@ -128,9 +134,10 @@ public class JCalendarDateDialog extends JDialog implements IMethodsForGraphical
 				int height = getSize().height;
 				int new_width = 0;
 				int new_height = 0;
-				
-				// If there are a minimum dimension or a maximum dimension, check the current
-				//   dimension and resize if it's nessecary
+
+				// If there are a minimum dimension or a maximum dimension,
+				// check the current
+				// dimension and resize if it's nessecary
 
 				// If this component hasn't been initialed yet
 				if ((height != 0) && (width != 0)) {
@@ -141,7 +148,7 @@ public class JCalendarDateDialog extends JDialog implements IMethodsForGraphical
 							modified = true;
 						}
 					}
-					
+
 					if (minDimensionOfJDialog.width != -1) {
 						if (width < minDimensionOfJDialog.width) {
 							new_width = minDimensionOfJDialog.width;
@@ -149,7 +156,7 @@ public class JCalendarDateDialog extends JDialog implements IMethodsForGraphical
 							modified = true;
 						}
 					}
-	
+
 					if (maxDimensionOfJDialog.height != -1) {
 						if (height > maxDimensionOfJDialog.height) {
 							new_width = width;
@@ -157,7 +164,7 @@ public class JCalendarDateDialog extends JDialog implements IMethodsForGraphical
 							modified = true;
 						}
 					}
-	
+
 					if (maxDimensionOfJDialog.width != -1) {
 						if (width > maxDimensionOfJDialog.width) {
 							new_width = maxDimensionOfJDialog.width;
@@ -165,14 +172,14 @@ public class JCalendarDateDialog extends JDialog implements IMethodsForGraphical
 							modified = true;
 						}
 					}
-					
+
 					if (modified) {
 						setResizable(false);
 						setSize(new_width, new_height);
 						setResizable(true);
 						getJCalendar().revalidate();
 					}
-					
+
 					lastDimensionOfJDialog = getSize();
 				}
 			}
@@ -182,85 +189,109 @@ public class JCalendarDateDialog extends JDialog implements IMethodsForGraphical
 	/**
 	 * Sets the initial size of this panel
 	 * 
-	 * @param width (the new Width for the panel)
-	 * @param height (the new Height for the panel)
+	 * @param width
+	 *            (the new Width for the panel)
+	 * @param height
+	 *            (the new Height for the panel)
 	 */
-	public void resizeToInitialSize()
-	{
+	public void resizeToInitialSize() {
 		getContentPane().setSize(this.defaultWidth, this.defaultHeight);
 		getJCalendar().revalidate();
 	}
 
 	/**
-	 * Sets the maximum width for this component, according a percentage of the width resolution of the screen
-	 * (If the parameter isn't > 0.0 neither -1.0 neither <= 1.0, this method doesn't apply the changes)
+	 * Sets the maximum width for this component, according a percentage of the
+	 * width resolution of the screen (If the parameter isn't > 0.0 neither -1.0
+	 * neither <= 1.0, this method doesn't apply the changes)
 	 * 
-	 * @param max_width_screen_percentage A float number > 0, or -1 if there is no limit
+	 * @param max_width_screen_percentage
+	 *            A float number > 0, or -1 if there is no limit
 	 */
-	public void setMaximumWidthScreenResolutionPercentage(double max_width_screen_percentage) {
-		int max_width = (int) Math.ceil(Toolkit.getDefaultToolkit().getScreenSize().width * max_width_screen_percentage);
-		
+	public void setMaximumWidthScreenResolutionPercentage(
+			double max_width_screen_percentage) {
+		int max_width = (int) Math.ceil(Toolkit.getDefaultToolkit()
+				.getScreenSize().width * max_width_screen_percentage);
+
 		if ((max_width > 0) || (max_width == -1)) {
 			this.maxDimensionOfJDialog.width = max_width;
 		}
 	}
-	
+
 	/**
-	 * Sets the minimum width for this component, according a percentage of the width resolution of the screen
-	 * (If the parameter isn't > 0.0 neither -1.0 neither <= 1.0, this method doesn't apply the changes)
+	 * Sets the minimum width for this component, according a percentage of the
+	 * width resolution of the screen (If the parameter isn't > 0.0 neither -1.0
+	 * neither <= 1.0, this method doesn't apply the changes)
 	 * 
-	 * @param min_width_screen_percentage A float number > 0.0 neither -1.0 neither <= 1.0, or -1 if there is no limit
+	 * @param min_width_screen_percentage
+	 *            A float number > 0.0 neither -1.0 neither <= 1.0, or -1 if
+	 *            there is no limit
 	 */
-	public void setMinimumWidthScreenResolutionPercentage(double min_width_screen_percentage) {
-		int min_width = (int) Math.ceil(Toolkit.getDefaultToolkit().getScreenSize().width * min_width_screen_percentage);
-		
+	public void setMinimumWidthScreenResolutionPercentage(
+			double min_width_screen_percentage) {
+		int min_width = (int) Math.ceil(Toolkit.getDefaultToolkit()
+				.getScreenSize().width * min_width_screen_percentage);
+
 		if ((min_width > 0) || (min_width == -1))
 			this.minDimensionOfJDialog.width = min_width;
 	}
 
 	/**
-	 * Sets the maximum height for this component, according a percentage of the height resolution of the screen
-	 * (If the parameter isn't > 0.0 neither -1.0 neither <= 1.0, this method doesn't apply the changes)
+	 * Sets the maximum height for this component, according a percentage of the
+	 * height resolution of the screen (If the parameter isn't > 0.0 neither
+	 * -1.0 neither <= 1.0, this method doesn't apply the changes)
 	 * 
-	 * @param max_width_screen_percentage A float number > 0.0 neither -1.0 neither <= 1.0, or -1 if there is no limit
+	 * @param max_width_screen_percentage
+	 *            A float number > 0.0 neither -1.0 neither <= 1.0, or -1 if
+	 *            there is no limit
 	 */
-	public void setMaximumHeightScreenResolutionPercentage(double max_height_screen_percentage) {
-		if (((max_height_screen_percentage > 0.0) && (max_height_screen_percentage <= 1.0)) || (max_height_screen_percentage == -1.0)) {
-			int max_height = (int) Math.ceil(Toolkit.getDefaultToolkit().getScreenSize().height * max_height_screen_percentage);
+	public void setMaximumHeightScreenResolutionPercentage(
+			double max_height_screen_percentage) {
+		if (((max_height_screen_percentage > 0.0) && (max_height_screen_percentage <= 1.0))
+				|| (max_height_screen_percentage == -1.0)) {
+			int max_height = (int) Math.ceil(Toolkit.getDefaultToolkit()
+					.getScreenSize().height * max_height_screen_percentage);
 			this.maxDimensionOfJDialog.height = max_height;
 		}
 	}
-	
+
 	/**
-	 * Sets the minimum height for this component, according a percentage of the height resolution of the screen
-	 * (If the parameter isn't > 0.0 neither -1.0 neither <= 1.0, this method doesn't apply the changes)
+	 * Sets the minimum height for this component, according a percentage of the
+	 * height resolution of the screen (If the parameter isn't > 0.0 neither
+	 * -1.0 neither <= 1.0, this method doesn't apply the changes)
 	 * 
-	 * @param min_width_screen_percentage A float number > 0.0 neither -1.0 neither <= 1.0, or -1 if there is no limit
+	 * @param min_width_screen_percentage
+	 *            A float number > 0.0 neither -1.0 neither <= 1.0, or -1 if
+	 *            there is no limit
 	 */
-	public void setMinimumHeightScreenResolutionPercentage(double min_height_screen_percentage) {
-		if (((min_height_screen_percentage > 0.0) && (min_height_screen_percentage <= 1.0)) || (min_height_screen_percentage == -1.0)) {
-			int min_height = (int) Math.ceil(Toolkit.getDefaultToolkit().getScreenSize().height * min_height_screen_percentage);
+	public void setMinimumHeightScreenResolutionPercentage(
+			double min_height_screen_percentage) {
+		if (((min_height_screen_percentage > 0.0) && (min_height_screen_percentage <= 1.0))
+				|| (min_height_screen_percentage == -1.0)) {
+			int min_height = (int) Math.ceil(Toolkit.getDefaultToolkit()
+					.getScreenSize().height * min_height_screen_percentage);
 			this.minDimensionOfJDialog.height = min_height;
 		}
 	}
-	
+
 	/**
-	 * Sets the maximum width for this component
-	 * (If the parameter isn't > 0 neither -1, this method doesn't apply the changes)
+	 * Sets the maximum width for this component (If the parameter isn't > 0
+	 * neither -1, this method doesn't apply the changes)
 	 * 
-	 * @param max_width A natural number > 0, or -1 if there is no limit
+	 * @param max_width
+	 *            A natural number > 0, or -1 if there is no limit
 	 */
 	public void setMaximumWidth(int max_width) {
 		if ((max_width > 0) || (max_width == -1)) {
 			this.maxDimensionOfJDialog.width = max_width;
 		}
 	}
-	
+
 	/**
-	 * Sets the minimum width for this component
-	 *  (If the parameter isn't > 0 neither -1, this method doesn't apply the changes)
+	 * Sets the minimum width for this component (If the parameter isn't > 0
+	 * neither -1, this method doesn't apply the changes)
 	 * 
-	 * @param min_width A natural number > 0, or -1 if there is no limit
+	 * @param min_width
+	 *            A natural number > 0, or -1 if there is no limit
 	 */
 	public void setMinimumWidth(int min_width) {
 		if ((min_width > 0) || (min_width == -1))
@@ -268,21 +299,23 @@ public class JCalendarDateDialog extends JDialog implements IMethodsForGraphical
 	}
 
 	/**
-	 * Sets the maximum height for this component
-	 * (If the parameter isn't > 0 neither -1, this method doesn't apply the changes)
+	 * Sets the maximum height for this component (If the parameter isn't > 0
+	 * neither -1, this method doesn't apply the changes)
 	 * 
-	 * @param max_width A natural number > 0, or -1 if there is no limit
+	 * @param max_width
+	 *            A natural number > 0, or -1 if there is no limit
 	 */
 	public void setMaximumHeight(int max_height) {
 		if ((max_height > 0) || (max_height == -1))
 			this.maxDimensionOfJDialog.height = max_height;
 	}
-	
+
 	/**
-	 * Sets the minimum height for this component
-	 *  (If the parameter isn't > 0 neither -1, this method doesn't apply the changes)
+	 * Sets the minimum height for this component (If the parameter isn't > 0
+	 * neither -1, this method doesn't apply the changes)
 	 * 
-	 * @param min_width A natural number > 0, or -1 if there is no limit
+	 * @param min_width
+	 *            A natural number > 0, or -1 if there is no limit
 	 */
 	public void setMinimumHeight(int min_height) {
 		if ((min_height > 0) || (min_height == -1))
@@ -292,61 +325,65 @@ public class JCalendarDateDialog extends JDialog implements IMethodsForGraphical
 	/**
 	 * Sets the size of this panel
 	 * 
-	 * @param width (the new Width for the panel)
-	 * @param height (the new Height for the panel)
+	 * @param width
+	 *            (the new Width for the panel)
+	 * @param height
+	 *            (the new Height for the panel)
 	 */
 	public void setSizeResize(int width, int height) {
 		this.setSize(new Dimension(width, height));
 		this.lastDimensionOfJDialog = this.getSize();
 		getJCalendar().revalidate();
 	}
-	
+
 	/**
 	 * Get the height of this panel
 	 */
-	public int getHeight()
-	{
+	public int getHeight() {
 		return this.lastDimensionOfJDialog.height;
 	}
-	
+
 	/**
 	 * Get the width of this panel
 	 */
-	public int getWidth()
-	{
+	public int getWidth() {
 		return this.lastDimensionOfJDialog.width;
 	}
-	
+
 	/**
-	 * This method initializes jCalendar	
-	 * 	
-	 * @return javax.swing.JCalendar	
+	 * This method initializes jCalendar
+	 * 
+	 * @return javax.swing.JCalendar
 	 */
 	private JCalendar getJCalendar() {
 		if (jCalendar == null) {
 			jCalendar = new JCalendar();
 			jCalendar.setToolTipText(Messages.getText("calendarSelectDate"));
 
-			try
-			{
-				jCalendar.setToolTipTextToMonthDecrButton(Messages.getText("calendarBackOneMonth"));
-				jCalendar.setToolTipTextToMonthIncrButton(Messages.getText("calendarForwardOneMonth"));
-				jCalendar.setToolTipTextToYearDecrButton(Messages.getText("calendarBackOneYear"));
-				jCalendar.setToolTipTextToYearIncrButton(Messages.getText("calendarForwardOneYear"));
+			try {
+				jCalendar.setToolTipTextToMonthDecrButton(Messages
+						.getText("calendarBackOneMonth"));
+				jCalendar.setToolTipTextToMonthIncrButton(Messages
+						.getText("calendarForwardOneMonth"));
+				jCalendar.setToolTipTextToYearDecrButton(Messages
+						.getText("calendarBackOneYear"));
+				jCalendar.setToolTipTextToYearIncrButton(Messages
+						.getText("calendarForwardOneYear"));
 
 				// Adds a date listener calendar
-				jCalendar.addDateListener(new DateListener(){
+				jCalendar.addDateListener(new DateListener() {
 					/*
-					 *  (non-Javadoc)
-					 * @see org.freixas.jcalendar.DateListener#dateChanged(org.freixas.jcalendar.DateEvent)
+					 * (non-Javadoc)
+					 * 
+					 * @see
+					 * org.freixas.jcalendar.DateListener#dateChanged(org.freixas
+					 * .jcalendar.DateEvent)
 					 */
 					public void dateChanged(DateEvent arg0) {
 						setVisible(false);
-					}				
+					}
 				});
-			}
-			catch(Exception e)
-			{
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -354,51 +391,58 @@ public class JCalendarDateDialog extends JDialog implements IMethodsForGraphical
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see org.gvsig.gui.beans.swing.textBoxWithCalendar.IMethodsForGraphicalCalendarComponents#getDate()
-	 */	
-	public Date getDate() {		
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.gui.beans.swing.textBoxWithCalendar.
+	 * IMethodsForGraphicalCalendarComponents#getDate()
+	 */
+	public Date getDate() {
 		return jCalendar.getDate();
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see org.gvsig.gui.beans.swing.textBoxWithCalendar.IMethodsForGraphicalCalendarComponents#setDate(java.util.Date)
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.gui.beans.swing.textBoxWithCalendar.
+	 * IMethodsForGraphicalCalendarComponents#setDate(java.util.Date)
 	 */
-	public void setDate(Date date)
-	{
+	public void setDate(Date date) {
 		jCalendar.setDate(date);
 	}
 
-//	/**
-//	 * Returns the date formatted
-//	 * 
-//	 * @param Date
-//	 * @return String The formatted date
-//	 */
-//	private String getFormattedDate(Date d) {
-//		return new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(d);
-//	}
-	
+	// /**
+	// * Returns the date formatted
+	// *
+	// * @param Date
+	// * @return String The formatted date
+	// */
+	// private String getFormattedDate(Date d) {
+	// return new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(d);
+	// }
+
 	/*
-	 *  (non-Javadoc)
-	 * @see org.gvsig.gui.beans.swing.textBoxWithCalendar.IMethodsForGraphicalCalendarComponents#getFormattedDate()
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.gui.beans.swing.textBoxWithCalendar.
+	 * IMethodsForGraphicalCalendarComponents#getFormattedDate()
 	 */
 	public String getFormattedDate() {
-		return new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(this.getDate());
+		return new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+				.format(this.getDate());
 	}
 
 	/**
-	 * Gets the title of the JDialog with the calendar component. The title is displayed in the JDialog's border.
-	 *
+	 * Gets the title of the JDialog with the calendar component. The title is
+	 * displayed in the JDialog's border.
+	 * 
 	 * @return Title
 	 */
 	public String getTitle() {
 		return super.getTitle();
 	}
-	
+
 	/**
-	 * Sets the title of the JDialog with the calendar component. 
+	 * Sets the title of the JDialog with the calendar component.
 	 * 
 	 * @param String
 	 */
@@ -412,7 +456,7 @@ public class JCalendarDateDialog extends JDialog implements IMethodsForGraphical
 	public void setDefaultTitle() {
 		this.setTitle(Messages.getText("calendarTitle"));
 	}
-	
+
 	/**
 	 * @see java.awt.Dialog#setModal(boolean)
 	 */

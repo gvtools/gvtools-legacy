@@ -1,42 +1,42 @@
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
-*
-* Copyright (C) 2007 Instituto de Desarrollo Regional and Generalitat Valenciana.
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License
-* as published by the Free Software Foundation; either version 2
-* of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
-*
-* For more information, contact:
-*
-*  Generalitat Valenciana
-*   Conselleria d'Infraestructures i Transport
-*   Av. Blasco Ibáñez, 50
-*   46010 VALENCIA
-*   SPAIN
-*
-*      +34 963862235
-*   gvsig@gva.es
-*      www.gvsig.gva.es
-*
-*    or
-*
-*   Instituto de Desarrollo Regional (Universidad de Castilla La-Mancha)
-*   Campus Universitario s/n
-*   02071 Alabacete
-*   Spain
-*
-*   +34 967 599 200
-*/
+ *
+ * Copyright (C) 2007 Instituto de Desarrollo Regional and Generalitat Valenciana.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
+ *
+ * For more information, contact:
+ *
+ *  Generalitat Valenciana
+ *   Conselleria d'Infraestructures i Transport
+ *   Av. Blasco Ibáñez, 50
+ *   46010 VALENCIA
+ *   SPAIN
+ *
+ *      +34 963862235
+ *   gvsig@gva.es
+ *      www.gvsig.gva.es
+ *
+ *    or
+ *
+ *   Instituto de Desarrollo Regional (Universidad de Castilla La-Mancha)
+ *   Campus Universitario s/n
+ *   02071 Alabacete
+ *   Spain
+ *
+ *   +34 967 599 200
+ */
 
 package org.gvsig.remotesensing.scatterplot.gui;
 
@@ -73,12 +73,12 @@ import com.iver.cit.gvsig.fmap.rendering.FGraphic;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 /**
- * Clase que define el panel de gestión de Rois del grafico.  
+ * Clase que define el panel de gestión de Rois del grafico.
  * 
- * @author Alejandro Muñoz Sanchez (alejandro.munoz@uclm.es)  
+ * @author Alejandro Muñoz Sanchez (alejandro.munoz@uclm.es)
  * @version 11/12/2007
  */
-public class ManagerROIChartPanel extends JPanel  implements IWindow{
+public class ManagerROIChartPanel extends JPanel implements IWindow {
 
 	private static final long serialVersionUID = 1L;
 	private ManagerROIChartPanelListener listener = null;
@@ -98,52 +98,53 @@ public class ManagerROIChartPanel extends JPanel  implements IWindow{
 	private Cursor cursor = null;
 	private String previousTool = null;
 	private ChartScaterPlotPanel scatterPlotPanel = null;
-	
 
 	/**
-	 *  Constructor del panel.
-	 *  @param scatterPlotPanel panel con el grafico asociado
+	 * Constructor del panel.
+	 * 
+	 * @param scatterPlotPanel
+	 *            panel con el grafico asociado
 	 * */
 	public ManagerROIChartPanel(ChartScaterPlotPanel scatterPlotPanel) {
 		super();
-		setSize(400,200);
-		this.scatterPlotPanel= scatterPlotPanel;
+		setSize(400, 200);
+		this.scatterPlotPanel = scatterPlotPanel;
 		setBorder(new LineBorder(Color.GRAY));
 		setLayout(new BorderLayout());
 		add(getTable(), BorderLayout.CENTER);
 		add(getControlPanel(), BorderLayout.SOUTH);
 		initialize();
-		fLayer= scatterPlotPanel.getFLayer();
+		fLayer = scatterPlotPanel.getFLayer();
 	}
 
 	/**
-	 *  Inicialización
+	 * Inicialización
 	 * */
 	private void initialize() {
 		listener = new ManagerROIChartPanelListener(this);
-		//Se añaden los listeners;
+		// Se añaden los listeners;
 		getNewRoiButtom().addActionListener(listener);
 		getDeleteButton().addActionListener(listener);
 		getExportButton().addActionListener(listener);
 		getTable().getTable().getJTable().getSelectionModel()
 				.addListSelectionListener(listener);
-		getTable().getTable().getJTable().getModel().addTableModelListener(
-				listener);
+		getTable().getTable().getJTable().getModel()
+				.addTableModelListener(listener);
 		loadROIsChart();
 	}
 
-	
 	public WindowInfo getWindowInfo() {
-		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.PALETTE| WindowInfo.RESIZABLE );
-		m_viewinfo.setTitle(PluginServices.getText(this, "regiones_interes_chart"));
+		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.PALETTE
+				| WindowInfo.RESIZABLE);
+		m_viewinfo.setTitle(PluginServices.getText(this,
+				"regiones_interes_chart"));
 		m_viewinfo.setHeight(this.getHeight());
 		m_viewinfo.setWidth(this.getWidth());
 		return m_viewinfo;
 	}
 
-		
 	/**
-	 *		Tabla de rois del grafico  
+	 * Tabla de rois del grafico
 	 * */
 	public TableContainer getTable() {
 		if (tableContainer == null) {
@@ -152,7 +153,7 @@ public class ManagerROIChartPanel extends JPanel  implements IWindow{
 					PluginServices.getText(this, "lineas"),
 					PluginServices.getText(this, "puntos"),
 					PluginServices.getText(this, "color"),
-					PluginServices.getText(this, "pixeles")};
+					PluginServices.getText(this, "pixeles") };
 			int[] columnWidths = { 50, 25, 25, 25, 45, 50 };
 			tableContainer = new TableContainer(columnNames, columnWidths);
 			tableContainer.setModel("ROIsTableModel");
@@ -163,8 +164,6 @@ public class ManagerROIChartPanel extends JPanel  implements IWindow{
 		return tableContainer;
 	}
 
-	
-	
 	public JPanel getControlPanel() {
 		if (controlPanel == null) {
 			controlPanel = new JPanel();
@@ -176,51 +175,50 @@ public class ManagerROIChartPanel extends JPanel  implements IWindow{
 		return controlPanel;
 	}
 
-	
 	// Boton de borrado
 	public JButton getDeleteButton() {
 		if (deleteRoiButton == null) {
-			deleteRoiButton = new JButton(PluginServices.getText(this, "borrar"));
+			deleteRoiButton = new JButton(
+					PluginServices.getText(this, "borrar"));
 		}
 		return deleteRoiButton;
 	}
 
-	
-	// Boton exportar 
+	// Boton exportar
 	public JButton getExportButton() {
 		if (exportRoiButtom == null) {
-			exportRoiButtom = new JButton(PluginServices.getText(this, "exportar"));
-			
+			exportRoiButtom = new JButton(PluginServices.getText(this,
+					"exportar"));
+
 		}
 		return exportRoiButtom;
 	}
 
 	public JButton getNewRoiButtom() {
-		if (newRoiButtom== null) {
+		if (newRoiButtom == null) {
 			newRoiButtom = new JButton(PluginServices.getText(this, "nuevo"));
-			
+
 		}
 		return newRoiButtom;
 	}
-	
-	
+
 	public FLayer getFLayer() {
 		return fLayer;
 	}
 
-	
 	public void setFLayer(FLayer layer) throws GridException {
-		
+
 	}
 
 	/**
-	 * Cargar las entradas en la tabla correspondientes a las ROichart ya definidas en el 
-	 * diagrama.
+	 * Cargar las entradas en la tabla correspondientes a las ROichart ya
+	 * definidas en el diagrama.
 	 */
 	public void loadROIsChart() {
-	
-		ArrayList chartRoisArray = scatterPlotPanel.getChart().getROIChartList().getList();
-		
+
+		ArrayList chartRoisArray = scatterPlotPanel.getChart()
+				.getROIChartList().getList();
+
 		if (chartRoisArray != null) {
 
 			for (Iterator iter = chartRoisArray.iterator(); iter.hasNext();) {
@@ -233,28 +231,25 @@ public class ManagerROIChartPanel extends JPanel  implements IWindow{
 		}
 	}
 
-	
 	/**
 	 * Añade la entrada en la tabla correspondiente a la roi
 	 * */
-	public void addNewRoiEntry(ROIChart roi){
+	public void addNewRoiEntry(ROIChart roi) {
 		Object row[] = ((IModel) getTable().getModel()).getNewLine();
 		row[0] = roi.getName();
-		row[4] = roi.getColor();	
+		row[4] = roi.getColor();
 		((DefaultTableModel) getTable().getModel()).addRow(row);
 		// Establece la nueva como activa en el grafico
 		getScatterPlotPanel().getChart().setActiveRoi(roi);
 		updateUI();
 	}
-	
-	
-	
+
 	public MapControl getMapControl() {
 		return mapControl;
 	}
 
 	public void selectDrawRoiTool() {
-	
+
 	}
 
 	public Grid getGrid() {
@@ -281,17 +276,14 @@ public class ManagerROIChartPanel extends JPanel  implements IWindow{
 			tableButtonsPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 			tableButtonsPanel.add(getNewRoiButtom());
 			tableButtonsPanel.add(getDeleteButton());
-			BorderLayout fL= new BorderLayout();
-			JPanel p= new JPanel();
+			BorderLayout fL = new BorderLayout();
+			JPanel p = new JPanel();
 			p.setLayout(fL);
-			p.add(getExportButton(),BorderLayout.EAST);
+			p.add(getExportButton(), BorderLayout.EAST);
 			tableButtonsPanel.add(p);
 		}
 		return tableButtonsPanel;
 	}
-
-	
-	
 
 	public Cursor getToolCursor() {
 		return cursor;
@@ -300,9 +292,6 @@ public class ManagerROIChartPanel extends JPanel  implements IWindow{
 	public View getView() {
 		return view;
 	}
-
-	
-
 
 	private HashMap getRoiGraphics() {
 		if (roiGraphics == null)
@@ -316,23 +305,29 @@ public class ManagerROIChartPanel extends JPanel  implements IWindow{
 	}
 
 	public ROIChart getROI(String roiName) {
-		return (ROIChart) getScatterPlotPanel().getChart().getROIChartList().getListRois().get(roiName);
+		return (ROIChart) getScatterPlotPanel().getChart().getROIChartList()
+				.getListRois().get(roiName);
 	}
 
 	/**
-	 * Elimina la ROI correspondiente al nombre <code>roiName</code> así
-	 * como sus objetos FGraphic asociados (borrándolos también de la vista).
-	 * (NO elimina la fila correspondiente en la tabla del panel).
+	 * Elimina la ROI correspondiente al nombre <code>roiName</code> así como
+	 * sus objetos FGraphic asociados (borrándolos también de la vista). (NO
+	 * elimina la fila correspondiente en la tabla del panel).
 	 * 
-	 * @param roiName Nombre de la ROI a eliminar.
+	 * @param roiName
+	 *            Nombre de la ROI a eliminar.
 	 */
 	public void removeROI(String roiName) {
 		boolean repaint = false;
 		getRois().remove(roiName);
 		ArrayList roiGraphics = getRoiGraphics(roiName);
 		if (roiGraphics != null) {
-			for (int i = 0; i < roiGraphics.size(); i++){
-				getMapControl().getMapContext().getGraphicsLayer().removeGraphic((FGraphic) getRoiGraphics(roiName).get(i));
+			for (int i = 0; i < roiGraphics.size(); i++) {
+				getMapControl()
+						.getMapContext()
+						.getGraphicsLayer()
+						.removeGraphic(
+								(FGraphic) getRoiGraphics(roiName).get(i));
 				repaint = true;
 			}
 			if (repaint)
@@ -351,19 +346,18 @@ public class ManagerROIChartPanel extends JPanel  implements IWindow{
 	 * tambien los símbolos de esta.
 	 */
 	public void clearRoiGraphics() {
-	/*	for (Iterator iter = getRoiGraphics().values().iterator(); iter
-				.hasNext();) {
-			ArrayList fGraphics = (ArrayList) iter.next();
-
-			for (Iterator iterator = fGraphics.iterator(); iterator.hasNext();) {
-				FGraphic fGraphic = (FGraphic) iterator.next();
-				getMapControl().getMapContext().getGraphicsLayer()
-						.removeGraphic(fGraphic);
-			}
-		}
-		if (getMapControl().getMapContext().getGraphicsLayer().getNumGraphics() == 0)
-			getMapControl().getMapContext().getGraphicsLayer()
-					.clearSymbolsGraphics();*/
+		/*
+		 * for (Iterator iter = getRoiGraphics().values().iterator(); iter
+		 * .hasNext();) { ArrayList fGraphics = (ArrayList) iter.next();
+		 * 
+		 * for (Iterator iterator = fGraphics.iterator(); iterator.hasNext();) {
+		 * FGraphic fGraphic = (FGraphic) iterator.next();
+		 * getMapControl().getMapContext().getGraphicsLayer()
+		 * .removeGraphic(fGraphic); } } if
+		 * (getMapControl().getMapContext().getGraphicsLayer().getNumGraphics()
+		 * == 0) getMapControl().getMapContext().getGraphicsLayer()
+		 * .clearSymbolsGraphics();
+		 */
 	}
 
 	public ArrayList getROIs() {
@@ -377,33 +371,35 @@ public class ManagerROIChartPanel extends JPanel  implements IWindow{
 
 	public void changeRoiName(String currentName, String newName) {
 		getROI(currentName).setName(newName);
-		scatterPlotPanel.getChart().getROIChartList().getListRois().put(newName, scatterPlotPanel.getChart().getROIChartList().getListRois().remove(currentName));
-	}
-	
-	
-	
-	public void changeRoiColor(String roiName, Color color) {
-	//	getROI(roiName).setColor(color);
-		((ROIChart)scatterPlotPanel.getChart().getROIChartList().getListRois().get(roiName)).setColor(color);
-	}
-	
-	
-	public void sortTable(){
-		
+		scatterPlotPanel
+				.getChart()
+				.getROIChartList()
+				.getListRois()
+				.put(newName,
+						scatterPlotPanel.getChart().getROIChartList()
+								.getListRois().remove(currentName));
 	}
 
-	
-	public ChartScaterPlotPanel getScatterPlotPanel(){
-		return scatterPlotPanel;
-		
+	public void changeRoiColor(String roiName, Color color) {
+		// getROI(roiName).setColor(color);
+		((ROIChart) scatterPlotPanel.getChart().getROIChartList().getListRois()
+				.get(roiName)).setColor(color);
 	}
-	
-	public ScatterPlotDiagram getDiagram(){
+
+	public void sortTable() {
+
+	}
+
+	public ChartScaterPlotPanel getScatterPlotPanel() {
+		return scatterPlotPanel;
+
+	}
+
+	public ScatterPlotDiagram getDiagram() {
 		return scatterPlotPanel.getChart();
 	}
 
-	
-	public void updateTable(){
+	public void updateTable() {
 		ROIChart roi = getDiagram().getActiveRoiChart();
 		Object row[] = ((IModel) getTable().getModel()).getNewLine();
 		row[0] = roi.getName();
@@ -413,8 +409,6 @@ public class ManagerROIChartPanel extends JPanel  implements IWindow{
 
 	public Object getWindowProfile() {
 		return WindowInfo.PROPERTIES_PROFILE;
-	}	
-	
-	
-	
+	}
+
 }

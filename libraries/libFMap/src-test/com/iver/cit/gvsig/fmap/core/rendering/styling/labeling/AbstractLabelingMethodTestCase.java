@@ -45,29 +45,35 @@ import junit.framework.TestCase;
 import com.iver.cit.gvsig.fmap.core.rendering.TestILegend;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.ILabelingMethod;
 
-public abstract /* <- MUST BE ABSTRACT ! */ class AbstractLabelingMethodTestCase extends TestCase{
+public abstract/* <- MUST BE ABSTRACT ! */class AbstractLabelingMethodTestCase
+		extends TestCase {
 	protected Class<? extends ILabelingMethod> methodClazz;
-	
-	public AbstractLabelingMethodTestCase(Class<? extends ILabelingMethod> methodClazz) {
+
+	public AbstractLabelingMethodTestCase(
+			Class<? extends ILabelingMethod> methodClazz) {
 		this.methodClazz = methodClazz;
 	}
-	
+
 	public ILabelingMethod newInstance() {
 		try {
-			ILabelingMethod method =  (ILabelingMethod) methodClazz.newInstance();
+			ILabelingMethod method = (ILabelingMethod) methodClazz
+					.newInstance();
 			initMethod(method);
 			return method;
 		} catch (InstantiationException ex) {
 			// TODO Auto-generated catch block
-			fail("Instantiating class, cannot test a non-instantiable method '"+ TestILegend.shortClassName(methodClazz)+"'");
+			fail("Instantiating class, cannot test a non-instantiable method '"
+					+ TestILegend.shortClassName(methodClazz) + "'");
 		} catch (IllegalAccessException ex) {
 			// TODO Auto-generated catch block
-			fail("Class not instantiable '"+ TestILegend.shortClassName(methodClazz)+"'");
+			fail("Class not instantiable '"
+					+ TestILegend.shortClassName(methodClazz) + "'");
 		} catch (ClassCastException ccEx) {
-			fail("Cannot test a non legend class '"+ TestILegend.shortClassName(methodClazz)+"'");
-		}			
+			fail("Cannot test a non legend class '"
+					+ TestILegend.shortClassName(methodClazz) + "'");
+		}
 		return null;
 	}
-	
+
 	public abstract void initMethod(ILabelingMethod method);
 }

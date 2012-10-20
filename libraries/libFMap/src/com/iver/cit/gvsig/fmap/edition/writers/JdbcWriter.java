@@ -16,9 +16,9 @@ import com.iver.cit.gvsig.fmap.drivers.XTypes;
 import com.iver.cit.gvsig.fmap.edition.IRowEdited;
 
 public class JdbcWriter extends AbstractWriter {
-	
+
 	private static Logger logger = Logger.getLogger(JdbcWriter.class.getName());
-	
+
 	Connection conn;
 	ResultSet rs;
 	Value[] record;
@@ -28,74 +28,72 @@ public class JdbcWriter extends AbstractWriter {
 
 	private ResultSetMetaData metaData = null;
 
-	public JdbcWriter(){
+	public JdbcWriter() {
 	}
-	public void initialize(Connection conn, ResultSet rs) throws SQLException{
+
+	public void initialize(Connection conn, ResultSet rs) throws SQLException {
 		this.conn = conn;
 		this.rs = rs;
 		metaData = rs.getMetaData();
 		System.out.println("INICIO CONEXI�N DE ESCRITURA");
 	}
+
 	public void preProcess() throws StartWriterVisitorException {
-			numRecord = 0;
-			try {
-				conn.setAutoCommit(false);
-			} catch (SQLException e) {
-				throw new StartWriterVisitorException(getName(),e);
-			}
-			/* Statement st = conn.createStatement();
-
-			if (bCreateTable) {
-				try {
-					st.execute("DROP TABLE " + lyrDef.getTableName() + ";");
-				} catch (SQLException e1) {
-					// Si no existe la tabla, no hay que borrarla.
-				}
-
-				String sqlCreate = PostGIS.getSqlCreateSpatialTable(lyrDef,
-						lyrDef.getFieldsDesc(), true);
-				System.out.println("sqlCreate =" + sqlCreate);
-				st.execute(sqlCreate);
-			} */
+		numRecord = 0;
+		try {
+			conn.setAutoCommit(false);
+		} catch (SQLException e) {
+			throw new StartWriterVisitorException(getName(), e);
+		}
+		/*
+		 * Statement st = conn.createStatement();
+		 * 
+		 * if (bCreateTable) { try { st.execute("DROP TABLE " +
+		 * lyrDef.getTableName() + ";"); } catch (SQLException e1) { // Si no
+		 * existe la tabla, no hay que borrarla. }
+		 * 
+		 * String sqlCreate = PostGIS.getSqlCreateSpatialTable(lyrDef,
+		 * lyrDef.getFieldsDesc(), true); System.out.println("sqlCreate =" +
+		 * sqlCreate); st.execute(sqlCreate); }
+		 */
 
 	}
 
-	public void process(IRowEdited editedRow) throws ProcessWriterVisitorException {
+	public void process(IRowEdited editedRow)
+			throws ProcessWriterVisitorException {
 		IRow row = editedRow.getLinkedRow();
 
 		try {
-			System.out.println("Intento escribir el registro " +
-					numRecord + " de la capa " + metaData.getTableName(1));
-			switch (editedRow.getStatus())
-			{
-    		case IRowEdited.STATUS_ADDED:
-    			record=row.getAttributes();
-    			rs.moveToInsertRow();
-    			for (int i=0; i < record.length; i++)
-    				XTypes.updateValue(rs, i, record[i]);
-    			rs.insertRow();
-    			break;
-    		case IRowEdited.STATUS_MODIFIED:
-    			record=row.getAttributes();
-    			rs.absolute(editedRow.getIndex()+1);
-    			for (int i=0; i < record.length; i++)
-    				XTypes.updateValue(rs, i, record[i]);
-    			rs.updateRow();
-    			break;
-    		case IRowEdited.STATUS_ORIGINAL:
-    			if (bWriteAll)
-    			{
-        			record=row.getAttributes();
-        			rs.moveToInsertRow();
-        			for (int i=0; i < record.length; i++)
-        				XTypes.updateValue(rs, i, record[i]);
-        			rs.insertRow();
-    			}
-    			break;
-    		case IRowEdited.STATUS_DELETED:
-    			rs.absolute(editedRow.getIndex()+1);
-        		rs.deleteRow();
-    			break;
+			System.out.println("Intento escribir el registro " + numRecord
+					+ " de la capa " + metaData.getTableName(1));
+			switch (editedRow.getStatus()) {
+			case IRowEdited.STATUS_ADDED:
+				record = row.getAttributes();
+				rs.moveToInsertRow();
+				for (int i = 0; i < record.length; i++)
+					XTypes.updateValue(rs, i, record[i]);
+				rs.insertRow();
+				break;
+			case IRowEdited.STATUS_MODIFIED:
+				record = row.getAttributes();
+				rs.absolute(editedRow.getIndex() + 1);
+				for (int i = 0; i < record.length; i++)
+					XTypes.updateValue(rs, i, record[i]);
+				rs.updateRow();
+				break;
+			case IRowEdited.STATUS_ORIGINAL:
+				if (bWriteAll) {
+					record = row.getAttributes();
+					rs.moveToInsertRow();
+					for (int i = 0; i < record.length; i++)
+						XTypes.updateValue(rs, i, record[i]);
+					rs.insertRow();
+				}
+				break;
+			case IRowEdited.STATUS_DELETED:
+				rs.absolute(editedRow.getIndex() + 1);
+				rs.deleteRow();
+				break;
 			}
 			numRecord++;
 			rs.next();
@@ -105,10 +103,10 @@ public class JdbcWriter extends AbstractWriter {
 			try {
 				conn.rollback();
 			} catch (SQLException e1) {
-				throw new ProcessWriterVisitorException(getName(),e1);
+				throw new ProcessWriterVisitorException(getName(), e1);
 			}
 
-			throw new ProcessWriterVisitorException(getName(),e);
+			throw new ProcessWriterVisitorException(getName(), e);
 		}
 
 	}
@@ -120,9 +118,9 @@ public class JdbcWriter extends AbstractWriter {
 			try {
 				conn.rollback();
 			} catch (SQLException e1) {
-				throw new StopWriterVisitorException(getName(),e1);
+				throw new StopWriterVisitorException(getName(), e1);
 			}
-			throw new StopWriterVisitorException(getName(),e);
+			throw new StopWriterVisitorException(getName(), e);
 		}
 	}
 
@@ -133,6 +131,7 @@ public class JdbcWriter extends AbstractWriter {
 	public String getName() {
 		return "JDBC Writer";
 	}
+
 	/**
 	 * @return Returns the bCreateTable.
 	 */
@@ -163,16 +162,17 @@ public class JdbcWriter extends AbstractWriter {
 		bWriteAll = writeAll;
 	}
 
-	public void close() throws SQLException
-	{
+	public void close() throws SQLException {
 		rs.close();
 		// conn.close();
 		System.out.println("CIERRO CONEXI�N DE ESCRITURA");
 	}
+
 	public boolean canAlterTable() {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
 	public boolean canSaveEdits() {
 		try {
 			return (rs.getConcurrency() == ResultSet.CONCUR_UPDATABLE);
@@ -182,6 +182,5 @@ public class JdbcWriter extends AbstractWriter {
 		}
 	}
 }
-
 
 // [eiel-gestion-conexiones]

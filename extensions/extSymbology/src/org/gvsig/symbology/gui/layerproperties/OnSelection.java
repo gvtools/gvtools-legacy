@@ -43,17 +43,16 @@ package org.gvsig.symbology.gui.layerproperties;
 import org.gvsig.symbology.fmap.labeling.OnSelectionLabeled;
 
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.fmap.rendering.styling.labeling.DefaultLabelingMethod;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.ILabelingMethod;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelClass;
 
-public class OnSelection extends DefaultLabeling{
+public class OnSelection extends DefaultLabeling {
 
 	private static final long serialVersionUID = -3619706540747109386L;
 
 	@Override
 	public String getName() {
-		return PluginServices.getText(this, "label_only_when_selected")+".";
+		return PluginServices.getText(this, "label_only_when_selected") + ".";
 	}
 
 	@Override
@@ -65,16 +64,18 @@ public class OnSelection extends DefaultLabeling{
 	public ILabelingMethod getMethod() {
 		OnSelectionLabeled myMethod = (OnSelectionLabeled) super.method;
 
-		if(myMethod == null)
+		if (myMethod == null)
 			myMethod = new OnSelectionLabeled();
 
 		LabelClass lc = null;
-		if (myMethod.getLabelClasses() != null && myMethod.getLabelClasses().length > 0) {
+		if (myMethod.getLabelClasses() != null
+				&& myMethod.getLabelClasses().length > 0) {
 			lc = myMethod.getLabelClasses()[0];
 		} else {
 			lc = new LabelClass();
 		}
-		if (super.getMethod()!=null && super.getMethod().getLabelClasses()!=null)
+		if (super.getMethod() != null
+				&& super.getMethod().getLabelClasses() != null)
 			myMethod.addLabelClass(lc);
 		return myMethod;
 	}

@@ -18,7 +18,6 @@ import com.iver.cit.gvsig.project.documents.table.ProjectTableFactory;
 import com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction;
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -94,7 +93,7 @@ import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
  */
 public class EliminarCapaTocMenuEntry extends AbstractTocContextMenuAction {
 	public String getGroup() {
-		return "group3"; //FIXME
+		return "group3"; // FIXME
 	}
 
 	public int getGroupOrder() {
@@ -121,80 +120,94 @@ public class EliminarCapaTocMenuEntry extends AbstractTocContextMenuAction {
 
 	}
 
-
 	public void execute(ITocItem item, FLayer[] selectedItems) {
-    	// 050209, jmorell: Para poder borrar todas las capas seleccionadas desde el FPopUpMenu.
-		//					Es necesario pulsar Mayúsculas a la vez que el botón derecho.
+		// 050209, jmorell: Para poder borrar todas las capas seleccionadas
+		// desde el FPopUpMenu.
+		// Es necesario pulsar Mayúsculas a la vez que el botón derecho.
 
-    	FLayer[] actives = selectedItems;
+		FLayer[] actives = selectedItems;
 
-    	int i;
-    	for (i= 0; i < actives.length;i++){
-    		if (actives[i].isEditing() && actives[i].isAvailable()){
-    			JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(), PluginServices.getText(this,"no_se_puede_borrar_una_capa_en_edicion"), PluginServices.getText(this, "eliminar_capa"), JOptionPane.WARNING_MESSAGE);
-    			return;
-    		}
-    	}
+		int i;
+		for (i = 0; i < actives.length; i++) {
+			if (actives[i].isEditing() && actives[i].isAvailable()) {
+				JOptionPane.showMessageDialog((Component) PluginServices
+						.getMainFrame(), PluginServices.getText(this,
+						"no_se_puede_borrar_una_capa_en_edicion"),
+						PluginServices.getText(this, "eliminar_capa"),
+						JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+		}
 
-    	int option=-1;
-    	if (actives.length>0) {
-    		option=JOptionPane.showConfirmDialog((Component)PluginServices.getMainFrame(),PluginServices.getText(this,"desea_borrar_la_capa"));
-    	} else {
-    		return;
-    	}
-    	if (option!=JOptionPane.OK_OPTION)
-    		return;
-    	getMapContext().beginAtomicEvent();
-    	for (i = actives.length-1; i>=0; i--){
-        	try {
-				//actives[i].getParentLayer().removeLayer(actives[i]);
-				//FLayers lyrs=getMapContext().getLayers();
-				//lyrs.addLayer(actives[i]);
+		int option = -1;
+		if (actives.length > 0) {
+			option = JOptionPane.showConfirmDialog(
+					(Component) PluginServices.getMainFrame(),
+					PluginServices.getText(this, "desea_borrar_la_capa"));
+		} else {
+			return;
+		}
+		if (option != JOptionPane.OK_OPTION)
+			return;
+		getMapContext().beginAtomicEvent();
+		for (i = actives.length - 1; i >= 0; i--) {
+			try {
+				// actives[i].getParentLayer().removeLayer(actives[i]);
+				// FLayers lyrs=getMapContext().getLayers();
+				// lyrs.addLayer(actives[i]);
 				actives[i].getParentLayer().removeLayer(actives[i]);
 
-                if (actives[i] instanceof AlphanumericData){
-                    Project project = ((ProjectExtension)PluginServices.getExtension(ProjectExtension.class)).getProject();
-                    ProjectTable pt = project.getTable((AlphanumericData) actives[i]);
+				if (actives[i] instanceof AlphanumericData) {
+					Project project = ((ProjectExtension) PluginServices
+							.getExtension(ProjectExtension.class)).getProject();
+					ProjectTable pt = project
+							.getTable((AlphanumericData) actives[i]);
 
-                    ArrayList tables = project.getDocumentsByType(ProjectTableFactory.registerName);
-                    for (int j = 0; j < tables.size(); j++) {
-                        if (tables.get(j) == pt){
-                        	project.delDocument((ProjectDocument)tables.get(j));
-                            break;
-                        }
-                    }
-
-                    PluginServices.getMDIManager().closeSingletonWindow(pt);
-                }
-
-                //Cierra todas las ventanas asociadas a la capa
-        		IWindow[] wList = PluginServices.getMDIManager().getAllWindows();
-        		for (int j = 0; j < wList.length; j++) {
-        			String name = wList[j].getWindowInfo().getAdditionalInfo();
-        			for (int k = 0; k < actives.length; k++) {
-        				if( name != null && actives != null && actives[k] != null &&
-                			actives[k].getName() != null &&
-                			name.compareTo(actives[k].getName()) == 0)
-                			PluginServices.getMDIManager().closeWindow(wList[j]);
+					ArrayList tables = project
+							.getDocumentsByType(ProjectTableFactory.registerName);
+					for (int j = 0; j < tables.size(); j++) {
+						if (tables.get(j) == pt) {
+							project.delDocument((ProjectDocument) tables.get(j));
+							break;
+						}
 					}
-        		}
 
-    		} catch (CancelationException e1) {
-    			e1.printStackTrace();
-    		}
-    	}
-    	getMapContext().endAtomicEvent();
-    	getMapContext().invalidate();
-    	Project project=((ProjectExtension)PluginServices.getExtension(ProjectExtension.class)).getProject();
+					PluginServices.getMDIManager().closeSingletonWindow(pt);
+				}
+
+				// Cierra todas las ventanas asociadas a la capa
+				IWindow[] wList = PluginServices.getMDIManager()
+						.getAllWindows();
+				for (int j = 0; j < wList.length; j++) {
+					String name = wList[j].getWindowInfo().getAdditionalInfo();
+					for (int k = 0; k < actives.length; k++) {
+						if (name != null && actives != null
+								&& actives[k] != null
+								&& actives[k].getName() != null
+								&& name.compareTo(actives[k].getName()) == 0)
+							PluginServices.getMDIManager()
+									.closeWindow(wList[j]);
+					}
+				}
+
+			} catch (CancelationException e1) {
+				e1.printStackTrace();
+			}
+		}
+		getMapContext().endAtomicEvent();
+		getMapContext().invalidate();
+		Project project = ((ProjectExtension) PluginServices
+				.getExtension(ProjectExtension.class)).getProject();
 		project.setModified(true);
-    	PluginServices.getMainFrame().enableControls();
+		PluginServices.getMainFrame().enableControls();
 		// 050209, jmorell: Así solo borra una capa (sobre la que pulsas).
-    	/*FLayer lyr = getNodeLayer();
-        try {
-        	getMapContext().getLayers().removeLayer(lyr);
-        	if (getMapContext().getLayers().getLayersCount()==0)PluginServices.getMainFrame().enableControls();
-		} catch (CancelationException e1) {
-			e1.printStackTrace();
-		}*/
-    }
+		/*
+		 * FLayer lyr = getNodeLayer(); try {
+		 * getMapContext().getLayers().removeLayer(lyr); if
+		 * (getMapContext().getLayers
+		 * ().getLayersCount()==0)PluginServices.getMainFrame
+		 * ().enableControls(); } catch (CancelationException e1) {
+		 * e1.printStackTrace(); }
+		 */
+	}
 }

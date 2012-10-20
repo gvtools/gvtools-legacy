@@ -51,15 +51,17 @@ import org.gvsig.gpe.gml.writer.profiles.GmlSFP0WriterProfile;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class GPEGmlSFP0WriterHandlerImplementor extends GPEGmlWriterHandlerImplementor{
+public class GPEGmlSFP0WriterHandlerImplementor extends
+		GPEGmlWriterHandlerImplementor {
 
 	public GPEGmlSFP0WriterHandlerImplementor() {
 		super();
 		setProfile(new GmlSFP0WriterProfile());
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writer.IGPEWriterHandlerImplementor#getDescription()
 	 */
 	public String getDescription() {
@@ -68,6 +70,7 @@ public class GPEGmlSFP0WriterHandlerImplementor extends GPEGmlWriterHandlerImple
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writer.IGPEWriterHandlerImplementor#getName()
 	 */
 	public String getName() {
@@ -75,7 +78,7 @@ public class GPEGmlSFP0WriterHandlerImplementor extends GPEGmlWriterHandlerImple
 	}
 
 	public String getFormat() {
-		return "text/xml; subtype=gml/3.1.2";	
+		return "text/xml; subtype=gml/3.1.2";
 	}
 
 }

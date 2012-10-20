@@ -5,14 +5,11 @@
 
 package com.ermapper.ecw;
 
-
 // Referenced classes of package com.ermapper.ecw:
 //            JNCSException
 
-public class JNCSReadLineException extends JNCSException
-{
+public class JNCSReadLineException extends JNCSException {
 
-    public JNCSReadLineException()
-    {
-    }
+	public JNCSReadLineException() {
+	}
 }

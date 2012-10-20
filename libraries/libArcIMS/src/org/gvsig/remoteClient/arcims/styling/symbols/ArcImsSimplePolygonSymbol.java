@@ -46,171 +46,180 @@
  */
 package org.gvsig.remoteClient.arcims.styling.symbols;
 
-
-
 import org.gvsig.remoteClient.arcims.utils.ServiceInfoTags;
 
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 
-
 /**
  * @author jsanz
- *
+ * 
  */
-public class ArcImsSimplePolygonSymbol extends AbstractSymbol implements IArcIMSSymbol {
-    public static final String TAG = ServiceInfoTags.tSIMPLEPOLYGONSYMBOL;
-    private ArcImsSimpleLineSymbol boundary;
-    private boolean hasBoundary;
-    private String fillcolor;
-    private String filltype;
-    private String filltransparency;
+public class ArcImsSimplePolygonSymbol extends AbstractSymbol implements
+		IArcIMSSymbol {
+	public static final String TAG = ServiceInfoTags.tSIMPLEPOLYGONSYMBOL;
+	private ArcImsSimpleLineSymbol boundary;
+	private boolean hasBoundary;
+	private String fillcolor;
+	private String filltype;
+	private String filltransparency;
 
-    /**
-     * @param hasBoundary Set true if the symboll will have a boundary
-     * @param fillcolor String presentation of a color
-     */
-    public ArcImsSimplePolygonSymbol() {
-        setHasBoundary(true);
-        fillcolor = "0,200,0";
-        filltransparency = "1";
-        filltype = SymbolUtils.FILL_TYPE_SOLID;
-    }
+	/**
+	 * @param hasBoundary
+	 *            Set true if the symboll will have a boundary
+	 * @param fillcolor
+	 *            String presentation of a color
+	 */
+	public ArcImsSimplePolygonSymbol() {
+		setHasBoundary(true);
+		fillcolor = "0,200,0";
+		filltransparency = "1";
+		filltype = SymbolUtils.FILL_TYPE_SOLID;
+	}
 
-    public String toString() {
-        return "<" + TAG + getParam() + "/>\r\n";
-    }
+	public String toString() {
+		return "<" + TAG + getParam() + "/>\r\n";
+	}
 
-    /**
-     * @return Returns the boundary.
-     */
-    public ArcImsSimpleLineSymbol getBoundary() {
-        return boundary;
-    }
+	/**
+	 * @return Returns the boundary.
+	 */
+	public ArcImsSimpleLineSymbol getBoundary() {
+		return boundary;
+	}
 
-    /**
-     * @param boundary The boundary to set.
-     */
-    public void setBoundary(ArcImsSimpleLineSymbol boundary) {
-        this.boundary = boundary;
-    }
+	/**
+	 * @param boundary
+	 *            The boundary to set.
+	 */
+	public void setBoundary(ArcImsSimpleLineSymbol boundary) {
+		this.boundary = boundary;
+	}
 
-    /**
-     * @return Returns the fillcolor.
-     */
-    public String getFillcolor() {
-        return fillcolor;
-    }
+	/**
+	 * @return Returns the fillcolor.
+	 */
+	public String getFillcolor() {
+		return fillcolor;
+	}
 
-    /**
-     * @param fillcolor The fillcolor to set.
-     */
-    public void setFillcolor(String fillcolor) {
-        this.fillcolor = fillcolor;
-    }
+	/**
+	 * @param fillcolor
+	 *            The fillcolor to set.
+	 */
+	public void setFillcolor(String fillcolor) {
+		this.fillcolor = fillcolor;
+	}
 
-    /**
-     * @return Returns the filltransparency.
-     */
-    public String getFilltransparency() {
-        return filltransparency;
-    }
+	/**
+	 * @return Returns the filltransparency.
+	 */
+	public String getFilltransparency() {
+		return filltransparency;
+	}
 
-    /**
-     * @param filltransparency The filltransparency to set.
-     */
-    public void setFilltransparency(String filltransparency) {
-        this.filltransparency = filltransparency;
-    }
+	/**
+	 * @param filltransparency
+	 *            The filltransparency to set.
+	 */
+	public void setFilltransparency(String filltransparency) {
+		this.filltransparency = filltransparency;
+	}
 
-    /**
-     * @return Returns the filltype.
-     */
-    public String getFilltype() {
-        return filltype;
-    }
+	/**
+	 * @return Returns the filltype.
+	 */
+	public String getFilltype() {
+		return filltype;
+	}
 
-    /**
-     * @param filltype The filltype to set.
-     */
-    public void setFilltype(String filltype) {
-        this.filltype = filltype;
-    }
+	/**
+	 * @param filltype
+	 *            The filltype to set.
+	 */
+	public void setFilltype(String filltype) {
+		this.filltype = filltype;
+	}
 
-    /**
-     * @return Returns the hasBoundary.
-     */
-    public boolean isHasBoundary() {
-        return hasBoundary;
-    }
+	/**
+	 * @return Returns the hasBoundary.
+	 */
+	public boolean isHasBoundary() {
+		return hasBoundary;
+	}
 
-    /**
-     * If hasBoundary is set true, a
-     * @param hasBoundary The hasBoundary to set.
-     */
-    public void setHasBoundary(boolean hasBoundary) {
-        this.hasBoundary = hasBoundary;
+	/**
+	 * If hasBoundary is set true, a
+	 * 
+	 * @param hasBoundary
+	 *            The hasBoundary to set.
+	 */
+	public void setHasBoundary(boolean hasBoundary) {
+		this.hasBoundary = hasBoundary;
 
-        if (!hasBoundary) {
-            boundary = null;
-        } else {
-            boundary = new ArcImsSimpleLineSymbol();
-            boundary.setColor("0,0,0");
-            boundary.setWidth("1");
-            boundary.setType(SymbolUtils.LINE_TYPE_SOLID);
-            boundary.setCaptype(SymbolUtils.CAP_TYPE_BUTT);
-            boundary.setJointype(SymbolUtils.JOIN_TYPE_ROUND);
-            boundary.setTransparency("1");
-        }
-    }
+		if (!hasBoundary) {
+			boundary = null;
+		} else {
+			boundary = new ArcImsSimpleLineSymbol();
+			boundary.setColor("0,0,0");
+			boundary.setWidth("1");
+			boundary.setType(SymbolUtils.LINE_TYPE_SOLID);
+			boundary.setCaptype(SymbolUtils.CAP_TYPE_BUTT);
+			boundary.setJointype(SymbolUtils.JOIN_TYPE_ROUND);
+			boundary.setTransparency("1");
+		}
+	}
 
-    protected String getParam() {
-        String param = "";
+	protected String getParam() {
+		String param = "";
 
-        //Checks for every parameter
-        if (hasBoundary) {
-            param += " boundary=\"true\"";
+		// Checks for every parameter
+		if (hasBoundary) {
+			param += " boundary=\"true\"";
 
-            String bColor = boundary.getColor();
-            String bType = boundary.getType();
-            String bCapType = boundary.getCaptype();
-            String bJoinType = boundary.getJointype();
+			String bColor = boundary.getColor();
+			String bType = boundary.getType();
+			String bCapType = boundary.getCaptype();
+			String bJoinType = boundary.getJointype();
 
-            if (SymbolUtils.isVoid(bColor)) {
-                param += (" boundarycolor=\"" + bColor + "\"");
-            }
+			if (SymbolUtils.isVoid(bColor)) {
+				param += (" boundarycolor=\"" + bColor + "\"");
+			}
 
-            if (SymbolUtils.isVoid(bType)) {
-                param += (" boundarytype=\"" + bType + "\"");
-            }
+			if (SymbolUtils.isVoid(bType)) {
+				param += (" boundarytype=\"" + bType + "\"");
+			}
 
-            if (SymbolUtils.isVoid(bCapType)) {
-                param += (" boundarycaptype=\"" + bCapType + "\"");
-            }
+			if (SymbolUtils.isVoid(bCapType)) {
+				param += (" boundarycaptype=\"" + bCapType + "\"");
+			}
 
-            if (SymbolUtils.isVoid(bJoinType)) {
-                param += (" boundarytype=\"" + bJoinType + "\"");
-            }
-        }
+			if (SymbolUtils.isVoid(bJoinType)) {
+				param += (" boundarytype=\"" + bJoinType + "\"");
+			}
+		}
 
-        if (SymbolUtils.isVoid(fillcolor)) {
-            param += (" fillcolor=\"" + fillcolor + "\"");
-        }
+		if (SymbolUtils.isVoid(fillcolor)) {
+			param += (" fillcolor=\"" + fillcolor + "\"");
+		}
 
-        if (SymbolUtils.isVoid(filltype)) {
-            param += (" filltype=\"" + filltype + "\"");
-        }
+		if (SymbolUtils.isVoid(filltype)) {
+			param += (" filltype=\"" + filltype + "\"");
+		}
 
-        if (SymbolUtils.isVoid(filltransparency)) {
-            param += (" filltransparency=\"" + filltransparency + "\"");
-        }
+		if (SymbolUtils.isVoid(filltransparency)) {
+			param += (" filltransparency=\"" + filltransparency + "\"");
+		}
 
-        return param;
-    }
+		return param;
+	}
 
-    /* (non-Javadoc)
-     * @see org.gvsig.remoteClient.arcims.styling.symbols.IArcIMSSymbol#getFSymbol()
-     */
-    public ISymbol getFSymbol() {
-        return ArcImsFSymbolFactory.getFSymbol(this);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.arcims.styling.symbols.IArcIMSSymbol#getFSymbol()
+	 */
+	public ISymbol getFSymbol() {
+		return ArcImsFSymbolFactory.getFSymbol(this);
+	}
 }

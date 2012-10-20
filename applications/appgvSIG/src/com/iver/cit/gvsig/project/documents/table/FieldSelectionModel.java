@@ -7,10 +7,9 @@ import com.hardcode.gdbms.engine.data.DataSource;
 import com.iver.utiles.swing.objectSelection.ObjectSelectionModel;
 import com.iver.utiles.swing.objectSelection.SelectionException;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public class FieldSelectionModel implements ObjectSelectionModel {
@@ -20,13 +19,15 @@ public class FieldSelectionModel implements ObjectSelectionModel {
 
 	/**
 	 * Crea un nuevo FirstFieldSelectionModel.
-	 *
-	 * @param ds DOCUMENT ME!
-	 * @param msg DOCUMENT ME!
-	 * @param allowedTypes DOCUMENT ME!
+	 * 
+	 * @param ds
+	 *            DOCUMENT ME!
+	 * @param msg
+	 *            DOCUMENT ME!
+	 * @param allowedTypes
+	 *            DOCUMENT ME!
 	 */
-	public FieldSelectionModel(DataSource ds, String msg,
-		int type) {
+	public FieldSelectionModel(DataSource ds, String msg, int type) {
 		this.ds = ds;
 		this.msg = msg;
 		this.type = type;
@@ -34,11 +35,11 @@ public class FieldSelectionModel implements ObjectSelectionModel {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
-	 *
+	 * 
 	 * @throws SelectionException
-	 *
+	 * 
 	 * @see com.iver.utiles.swing.objectSelection.ObjectSelectionModel#getObjects()
 	 */
 	public Object[] getObjects() throws SelectionException {
@@ -46,10 +47,11 @@ public class FieldSelectionModel implements ObjectSelectionModel {
 			ds.start();
 
 			ArrayList fields = new ArrayList();
-			int fieldCount=ds.getFieldCount();
+			int fieldCount = ds.getFieldCount();
 			for (int i = 0; i < fieldCount; i++) {
 				if (type != -1) {
-                    System.out.println(ds.getFieldName(i) + " tipo: " + ds.getFieldType(i));
+					System.out.println(ds.getFieldName(i) + " tipo: "
+							+ ds.getFieldType(i));
 					if (ds.getFieldType(i) == type) {
 						fields.add(ds.getFieldName(i));
 					}

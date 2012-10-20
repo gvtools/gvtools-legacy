@@ -48,16 +48,15 @@ import com.iver.cit.gvsig.project.documents.layout.fframes.FFrameLegend;
 import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
-
-
 /**
  * Extensión preparada para controlar las opciones que se pueden realizar sobre
  * una vista añadida en el Layout.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FFrameLegendExtension extends Extension {
-	//private static Logger logger = Logger.getLogger(FFrameViewExtension.class.getName());
+	// private static Logger logger =
+	// Logger.getLogger(FFrameViewExtension.class.getName());
 	private Layout layout = null;
 
 	/**
@@ -82,7 +81,7 @@ public class FFrameLegendExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
-		Layout l = (Layout)PluginServices.getMDIManager().getActiveWindow();
+		Layout l = (Layout) PluginServices.getMDIManager().getActiveWindow();
 		IFFrame[] fframes = l.getLayoutContext().getFFrameSelected();
 		if (!l.getLayoutContext().isEditable())
 			return false;
@@ -106,7 +105,8 @@ public class FFrameLegendExtension extends Extension {
 		}
 
 		if (f instanceof Layout) {
-			return true; //layout.m_Display.getMapControl().getMapContext().getLayers().layerCount() > 0;
+			return true; // layout.m_Display.getMapControl().getMapContext().getLayers().layerCount()
+							// > 0;
 		} else {
 			return false;
 		}

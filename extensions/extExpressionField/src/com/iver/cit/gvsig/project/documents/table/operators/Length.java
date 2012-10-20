@@ -11,28 +11,32 @@ import com.iver.cit.gvsig.project.documents.table.IOperator;
 /**
  * @author Vicente Caballero Navarro
  */
-public class Length extends AbstractOperator{
+public class Length extends AbstractOperator {
 
 	public String addText(String s) {
-		return toString()+"("+s+")";
+		return toString() + "(" + s + ")";
 	}
+
 	public String toString() {
 		return "length";
 	}
+
 	public void eval(BSFManager interpreter) throws BSFException {
-//		interpreter.eval(ExpressionFieldExtension.BEANSHELL,null,-1,-1,"int length(String value){return value.length();};");
-		interpreter.exec(ExpressionFieldExtension.JYTHON,null,-1,-1,"def length(value):\n" +
-				"  return len(value)");
+		// interpreter.eval(ExpressionFieldExtension.BEANSHELL,null,-1,-1,"int length(String value){return value.length();};");
+		interpreter.exec(ExpressionFieldExtension.JYTHON, null, -1, -1,
+				"def length(value):\n" + "  return len(value)");
 	}
+
 	public boolean isEnable() {
-		return (getType()==IOperator.STRING);
+		return (getType() == IOperator.STRING);
 	}
+
 	public String getDescription() {
-	    return PluginServices.getText(this, "parameter") + ": " +
-	    PluginServices.getText(this, "string_value") + "\n" +
-	    PluginServices.getText(this, "returns") + ": " +
-	    PluginServices.getText(this, "numeric_value") + "\n" +
-	    PluginServices.getText(this, "description") + ": " +
-	    "Returns the length of string parameter.";
+		return PluginServices.getText(this, "parameter") + ": "
+				+ PluginServices.getText(this, "string_value") + "\n"
+				+ PluginServices.getText(this, "returns") + ": "
+				+ PluginServices.getText(this, "numeric_value") + "\n"
+				+ PluginServices.getText(this, "description") + ": "
+				+ "Returns the length of string parameter.";
 	}
 }

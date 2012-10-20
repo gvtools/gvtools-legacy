@@ -55,28 +55,30 @@ import org.xmlpull.v1.XmlPullParserException;
 
 /**
  * Describes a coverage in a WCS server.
- *
+ * 
  * @author jaume dominguez faus - jaume.domingue@iver.es
- *
+ * 
  */
-public abstract class WCSCoverage implements ILayer{
-	public static final String SEPARATOR = " +"; // separator used to split list of values, usually is just a space
-    private	String			name;
-    private String			title;
-    private String			_abstract;
-    private Hashtable		bBoxes = new Hashtable();
-	private BoundaryBox		lonLatBbox;
-	public  RectifiedGrid	rg;
-	private ArrayList 		timePositions = new ArrayList();
-	public  String 			timePeriod;
-	private String 			rangeSetName;
-	private String 			rangeSetLabel;
-	public  Hashtable 		axisPool = new Hashtable();
-	private String 			nativeSRS;
-	private ArrayList 		supportedSRSs = new ArrayList();
-	private ArrayList		interpolationMethods;
-	private String 			nativeFormat;
-	private ArrayList 		formats = new ArrayList();
+public abstract class WCSCoverage implements ILayer {
+	public static final String SEPARATOR = " +"; // separator used to split list
+													// of values, usually is
+													// just a space
+	private String name;
+	private String title;
+	private String _abstract;
+	private Hashtable bBoxes = new Hashtable();
+	private BoundaryBox lonLatBbox;
+	public RectifiedGrid rg;
+	private ArrayList timePositions = new ArrayList();
+	public String timePeriod;
+	private String rangeSetName;
+	private String rangeSetLabel;
+	public Hashtable axisPool = new Hashtable();
+	private String nativeSRS;
+	private ArrayList supportedSRSs = new ArrayList();
+	private ArrayList interpolationMethods;
+	private String nativeFormat;
+	private ArrayList formats = new ArrayList();
 
 	public ArrayList getTimePositions() {
 		return timePositions;
@@ -96,13 +98,13 @@ public abstract class WCSCoverage implements ILayer{
 		formats.add(format);
 	}
 
-    public void setNativeFormat(String nativeFormat) {
-    	this.nativeFormat = nativeFormat;
-    }
+	public void setNativeFormat(String nativeFormat) {
+		this.nativeFormat = nativeFormat;
+	}
 
-    public String getNativeFormat() {
-    	return nativeFormat;
-    }
+	public String getNativeFormat() {
+		return nativeFormat;
+	}
 
 	public String getNativeSRS() {
 		return nativeSRS;
@@ -136,110 +138,130 @@ public abstract class WCSCoverage implements ILayer{
 		this.rangeSetName = rangeSetName;
 	}
 
-	/* (non-Javadoc)
-     * @see org.gvsig.remoteClient.ILayer#getName()
-     */
-    public String getName() {
-        return name;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.remoteClient.ILayer#getName()
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /* (non-Javadoc)
-     * @see org.gvsig.remoteClient.ILayer#setName(java.lang.String)
-     */
-    public void setName(String _name) {
-        name = _name;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.remoteClient.ILayer#setName(java.lang.String)
+	 */
+	public void setName(String _name) {
+		name = _name;
+	}
 
-    /* (non-Javadoc)
-     * @see org.gvsig.remoteClient.ILayer#setTitle(java.lang.String)
-     */
-    public void setTitle(String _title) {
-        title = _title;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.remoteClient.ILayer#setTitle(java.lang.String)
+	 */
+	public void setTitle(String _title) {
+		title = _title;
+	}
 
-    /* (non-Javadoc)
-     * @see org.gvsig.remoteClient.ILayer#getTitle()
-     */
-    public String getTitle() {
-        return title;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.remoteClient.ILayer#getTitle()
+	 */
+	public String getTitle() {
+		return title;
+	}
 
-    /* (non-Javadoc)
-     * @see org.gvsig.remoteClient.ILayer#getAbstract()
-     */
-    public String getAbstract() {
-        return _abstract;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.remoteClient.ILayer#getAbstract()
+	 */
+	public String getAbstract() {
+		return _abstract;
+	}
 
-    /* (non-Javadoc)
-     * @see org.gvsig.remoteClient.ILayer#setAbstract(java.lang.String)
-     */
-    public void setAbstract(String _abstract) {
-     this._abstract = _abstract;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.remoteClient.ILayer#setAbstract(java.lang.String)
+	 */
+	public void setAbstract(String _abstract) {
+		this._abstract = _abstract;
+	}
 
-    public void addBBox(BoundaryBox bBox) {
-    	bBoxes.put(bBox.getSrs(), bBox);
-    }
+	public void addBBox(BoundaryBox bBox) {
+		bBoxes.put(bBox.getSrs(), bBox);
+	}
 
-    public ArrayList getAllSrs() {
-    	ArrayList mySrs = new ArrayList();
-    	mySrs.addAll(supportedSRSs);
-    	if (!mySrs.contains(nativeSRS))
-    		mySrs.add(nativeSRS);
-    	return mySrs;
-    }
-    /**
-     * <p>returns the bbox with that id in the Bboxes vector</p>
-     * @param id
-     */
-    public BoundaryBox getBbox(String id) {
-    	if ((id.compareToIgnoreCase( CapabilitiesTags.EPSG_4326 )==0)
-    		||(id.compareToIgnoreCase( CapabilitiesTags.CRS_84)==0))
-    	{
-    		if (lonLatBbox != null)
-    		return lonLatBbox;
-    	}
+	public ArrayList getAllSrs() {
+		ArrayList mySrs = new ArrayList();
+		mySrs.addAll(supportedSRSs);
+		if (!mySrs.contains(nativeSRS))
+			mySrs.add(nativeSRS);
+		return mySrs;
+	}
 
-        return (BoundaryBox)bBoxes.get(id);
-    }
+	/**
+	 * <p>
+	 * returns the bbox with that id in the Bboxes vector
+	 * </p>
+	 * 
+	 * @param id
+	 */
+	public BoundaryBox getBbox(String id) {
+		if ((id.compareToIgnoreCase(CapabilitiesTags.EPSG_4326) == 0)
+				|| (id.compareToIgnoreCase(CapabilitiesTags.CRS_84) == 0)) {
+			if (lonLatBbox != null)
+				return lonLatBbox;
+		}
 
-    public BoundaryBox getLatLonBox() {
-        return lonLatBbox;
-    }
+		return (BoundaryBox) bBoxes.get(id);
+	}
 
-    public void setLonLatBox(BoundaryBox box) {
-        lonLatBbox = box;
-    }
+	public BoundaryBox getLatLonBox() {
+		return lonLatBbox;
+	}
 
-    public void addInterpolationMethod(String method) {
-    	if (interpolationMethods==null) interpolationMethods = new ArrayList();
-    	interpolationMethods.add(method);
-    }
+	public void setLonLatBox(BoundaryBox box) {
+		lonLatBbox = box;
+	}
 
-    public ArrayList getInterpolationMethods() {
-    	return interpolationMethods;
-    }
-    /**
-     * Parses the fragment of the XML document that describes this layer (or coverage)
-     * @param parser
-     * @throws IOException
-     * @throws XmlPullParserException
-     */
-    public abstract void parse(KXmlParser parser) throws XmlPullParserException, IOException;
+	public void addInterpolationMethod(String method) {
+		if (interpolationMethods == null)
+			interpolationMethods = new ArrayList();
+		interpolationMethods.add(method);
+	}
 
-    /**
-     * Inner class describing the Rectified Grid of this coverage.
-     *
-     * @author jaume dominguez faus - jaume.dominguez@iver.es
-     */
-    public class RectifiedGrid {
-    	private int	       dimensions;
-    	private String[]   axisNames;
-    	private int[][]    lowGridEnvelopLimits;
-    	private int[][]    highGridEnvelopLimits;
-    	private double[]   origins;
-    	private double[][] offsetVector;
+	public ArrayList getInterpolationMethods() {
+		return interpolationMethods;
+	}
+
+	/**
+	 * Parses the fragment of the XML document that describes this layer (or
+	 * coverage)
+	 * 
+	 * @param parser
+	 * @throws IOException
+	 * @throws XmlPullParserException
+	 */
+	public abstract void parse(KXmlParser parser)
+			throws XmlPullParserException, IOException;
+
+	/**
+	 * Inner class describing the Rectified Grid of this coverage.
+	 * 
+	 * @author jaume dominguez faus - jaume.dominguez@iver.es
+	 */
+	public class RectifiedGrid {
+		private int dimensions;
+		private String[] axisNames;
+		private int[][] lowGridEnvelopLimits;
+		private int[][] highGridEnvelopLimits;
+		private double[] origins;
+		private double[][] offsetVector;
 
 		public RectifiedGrid(int dimensions) {
 			this.dimensions = dimensions;
@@ -251,11 +273,11 @@ public abstract class WCSCoverage implements ILayer{
 				axisNames[0] = axisName;
 			} else {
 				String[] aux = axisNames;
-				axisNames = new String[axisNames.length+1];
+				axisNames = new String[axisNames.length + 1];
 				for (int i = 0; i < aux.length; i++) {
 					axisNames[i] = aux[i];
 				}
-				axisNames[axisNames.length-1] = axisName;
+				axisNames[axisNames.length - 1] = axisName;
 			}
 		}
 
@@ -269,11 +291,11 @@ public abstract class WCSCoverage implements ILayer{
 				lowGridEnvelopLimits[0] = lowLimit;
 			} else {
 				int[][] aux = lowGridEnvelopLimits;
-				lowGridEnvelopLimits = new int[lowGridEnvelopLimits.length+1][1];
+				lowGridEnvelopLimits = new int[lowGridEnvelopLimits.length + 1][1];
 				for (int i = 0; i < aux.length; i++) {
 					lowGridEnvelopLimits[i] = aux[i];
 				}
-				lowGridEnvelopLimits[lowGridEnvelopLimits.length-1] = lowLimit;
+				lowGridEnvelopLimits[lowGridEnvelopLimits.length - 1] = lowLimit;
 			}
 		}
 
@@ -287,11 +309,11 @@ public abstract class WCSCoverage implements ILayer{
 				highGridEnvelopLimits[0] = highLimit;
 			} else {
 				int[][] aux = highGridEnvelopLimits;
-				highGridEnvelopLimits = new int[highGridEnvelopLimits.length+1][1];
+				highGridEnvelopLimits = new int[highGridEnvelopLimits.length + 1][1];
 				for (int i = 0; i < aux.length; i++) {
 					highGridEnvelopLimits[i] = aux[i];
 				}
-				highGridEnvelopLimits[highGridEnvelopLimits.length-1] = highLimit;
+				highGridEnvelopLimits[highGridEnvelopLimits.length - 1] = highLimit;
 			}
 		}
 
@@ -313,34 +335,34 @@ public abstract class WCSCoverage implements ILayer{
 				offsetVector[0] = _offsetVector;
 			} else {
 				double[][] aux = offsetVector;
-				offsetVector = new double[offsetVector.length+1][1];
+				offsetVector = new double[offsetVector.length + 1][1];
 				for (int i = 0; i < aux.length; i++) {
 					offsetVector[i] = aux[i];
 				}
-				offsetVector[offsetVector.length-1] = _offsetVector;
+				offsetVector[offsetVector.length - 1] = _offsetVector;
 			}
 		}
 
-		public double[][] getOffsetVector(){
+		public double[][] getOffsetVector() {
 			return offsetVector;
 		}
 
 		public int getDimensionCount() {
 			return dimensions;
 		}
-    }
+	}
 
-    /**
-     * Inner class describing the Axis Description of this coverage.
-     *
-     * @author jaume dominguez faus - jaume.dominguez@iver.es
-     */
-    public class AxisDescription {
-    	private String _name;
-    	private String label;
-    	private ArrayList singleValues = new ArrayList();
-    	private String interval;
-    	private String defaultValue;
+	/**
+	 * Inner class describing the Axis Description of this coverage.
+	 * 
+	 * @author jaume dominguez faus - jaume.dominguez@iver.es
+	 */
+	public class AxisDescription {
+		private String _name;
+		private String label;
+		private ArrayList singleValues = new ArrayList();
+		private String interval;
+		private String defaultValue;
 
 		public String getDefaultValue() {
 			return defaultValue;
@@ -361,6 +383,7 @@ public abstract class WCSCoverage implements ILayer{
 		public String getLabel() {
 			return label;
 		}
+
 		public void setLabel(String label) {
 			this.label = label;
 		}
@@ -380,25 +403,26 @@ public abstract class WCSCoverage implements ILayer{
 		public void addSingleValues(String singleValue) {
 			this.singleValues.add(singleValue);
 		}
-    }
+	}
 
 	public double getResX() {
-		if (rg.offsetVector== null)
+		if (rg.offsetVector == null)
 			return -1;
 		return Math.abs(rg.offsetVector[0][0]);
 	}
 
 	public double getResY() {
-		if (rg.offsetVector== null)
+		if (rg.offsetVector == null)
 			return -1;
 
 		return Math.abs(rg.offsetVector[1][1]);
 	}
 
 	public Hashtable getBBoxes() {
-		if (bBoxes == null) return new Hashtable();
-		else return bBoxes;
+		if (bBoxes == null)
+			return new Hashtable();
+		else
+			return bBoxes;
 	}
 
 }
-

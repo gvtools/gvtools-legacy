@@ -23,20 +23,21 @@ import org.gvsig.raster.dataset.IBuffer;
 import org.gvsig.raster.dataset.Params;
 import org.gvsig.raster.grid.filter.RasterFilter;
 import org.gvsig.raster.util.ColorConversion;
+
 /**
  * <P>
- * Clase base para los filtros de conversión de HSL a RGB. La entrada será 
+ * Clase base para los filtros de conversión de HSL a RGB. La entrada será
  * siempre un raster de 3 bandas que serán tomadas como HSL.
  * </P>
- *
+ * 
  * @version 06/06/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class HSLToRGBFilter extends RasterFilter {
-	protected IBuffer          rasterAlpha      = null;
-	public static String[]     names            = new String[] { "hsltorgb" };
-	protected ColorConversion  colorConversion  = null;
-	protected int[]            renderBands      = null;
+	protected IBuffer rasterAlpha = null;
+	public static String[] names = new String[] { "hsltorgb" };
+	protected ColorConversion colorConversion = null;
+	protected int[] renderBands = null;
 
 	/**
 	 * Constructor
@@ -48,37 +49,48 @@ public class HSLToRGBFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#pre()
 	 */
 	public void pre() {
 		exec = true;
 		raster = (RasterBuffer) params.get("raster");
 		int[] rb = (int[]) params.get("renderBands");
-		
+
 		switch (raster.getBandCount()) {
-		case 1:renderBands = new int[]{0, 0, 0}; break;
-		case 2:renderBands = rb; break;
-		case 3:renderBands = new int[]{0, 1, 2}; break;
+		case 1:
+			renderBands = new int[] { 0, 0, 0 };
+			break;
+		case 2:
+			renderBands = rb;
+			break;
+		case 3:
+			renderBands = new int[] { 0, 1, 2 };
+			break;
 		}
-		//Mantenemos los valores de -1 ya que esas bandas no se procesan
-		for(int i = 0; i < renderBands.length; i++)
-			if(rb[i] == -1)
+		// Mantenemos los valores de -1 ya que esas bandas no se procesan
+		for (int i = 0; i < renderBands.length; i++)
+			if (rb[i] == -1)
 				renderBands[i] = -1;
-		
-		if(raster != null) {
+
+		if (raster != null) {
 			height = raster.getHeight();
 			width = raster.getWidth();
-			if(raster.getBandCount() >= 3)
-				rasterResult = RasterBuffer.getBuffer(IBuffer.TYPE_BYTE, raster.getWidth(), raster.getHeight(), raster.getBandCount(), true);
+			if (raster.getBandCount() >= 3)
+				rasterResult = RasterBuffer.getBuffer(IBuffer.TYPE_BYTE,
+						raster.getWidth(), raster.getHeight(),
+						raster.getBandCount(), true);
 			else
-				rasterResult = RasterBuffer.getBuffer(IBuffer.TYPE_BYTE, raster.getWidth(), raster.getHeight(), 3, true);
+				rasterResult = RasterBuffer.getBuffer(IBuffer.TYPE_BYTE,
+						raster.getWidth(), raster.getHeight(), 3, true);
 		}
-		if(colorConversion == null)
+		if (colorConversion == null)
 			colorConversion = new ColorConversion();
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getGroup()
 	 */
 	public String getGroup() {
@@ -87,6 +99,7 @@ public class HSLToRGBFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getNames()
 	 */
 	public String[] getNames() {
@@ -95,7 +108,9 @@ public class HSLToRGBFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.RasterFilter#getResult(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.RasterFilter#getResult(java.lang.String)
 	 */
 	public Object getResult(String name) {
 		if (name.equals("raster"))
@@ -105,7 +120,9 @@ public class HSLToRGBFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.RasterFilter#getUIParams(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.RasterFilter#getUIParams(java.lang.String)
 	 */
 	public Params getUIParams(String nameFilter) {
 		Params params = new Params();
@@ -113,7 +130,7 @@ public class HSLToRGBFilter extends RasterFilter {
 	}
 
 	public void post() {
-	
+
 	}
 
 	public void process(int x, int y) throws InterruptedException {
@@ -121,6 +138,7 @@ public class HSLToRGBFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getOutRasterDataType()
 	 */
 	public int getOutRasterDataType() {
@@ -129,16 +147,19 @@ public class HSLToRGBFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#isVisible()
 	 */
 	public boolean isVisible() {
-		//IRasterDataSource datasource = (IRasterDataSource)getEnv().get("MultiRasterDataset");
-		//return (datasource != null && datasource.getBandCount() >= 3);
+		// IRasterDataSource datasource =
+		// (IRasterDataSource)getEnv().get("MultiRasterDataset");
+		// return (datasource != null && datasource.getBandCount() >= 3);
 		return true;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getInRasterDataType()
 	 */
 	public int getInRasterDataType() {

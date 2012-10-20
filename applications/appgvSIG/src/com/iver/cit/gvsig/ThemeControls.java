@@ -72,14 +72,14 @@ import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.utiles.GenericFileFilter;
 
-
 /**
  * Extensi�n de operaciones sobre el tema.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class ThemeControls extends Extension {
-	private static Logger logger = Logger.getLogger(ThemeControls.class.getName());
+	private static Logger logger = Logger.getLogger(ThemeControls.class
+			.getName());
 
 	/**
 	 * @see com.iver.mdiApp.plugins.IExtension#updateUI(java.lang.String)
@@ -90,23 +90,24 @@ public class ThemeControls extends Extension {
 		MapContext mapa = model.getMapContext();
 		logger.debug("Command : " + s);
 
-        if (s.equals("SHAPE_SELECTED")) {
+		if (s.equals("SHAPE_SELECTED")) {
 			createShape(mapa);
-			 ((ProjectDocument)vista.getModel()).setModified(true);
+			((ProjectDocument) vista.getModel()).setModified(true);
 		} else if (s.equals("ZOOM_SELECT")) {
 			Rectangle2D selectedExtent = mapa.getSelectionBounds();
 
 			if (selectedExtent != null) {
 				mapa.getViewPort().setExtent(selectedExtent);
-				((ProjectDocument)vista.getModel()).setModified(true);
+				((ProjectDocument) vista.getModel()).setModified(true);
 			}
 		}
 	}
 
 	/**
 	 * Crea un nuevo shape.
-	 *
-	 * @param map FMap de donde coger las capas a copiar.
+	 * 
+	 * @param map
+	 *            FMap de donde coger las capas a copiar.
 	 */
 	private void createShape(MapContext map) {
 		if (map.getSelectionBounds() != null) {
@@ -115,43 +116,47 @@ public class ThemeControls extends Extension {
 					PluginServices.getText(this, "Shapefile")));
 
 			if (jfc.showSaveDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
-				File file=jfc.getSelectedFile();
-				if (!(file.getPath().endsWith(".shp") || file.getPath().endsWith(".SHP"))){
-					file=new File(file.getPath()+".shp");
+				File file = jfc.getSelectedFile();
+				if (!(file.getPath().endsWith(".shp") || file.getPath()
+						.endsWith(".SHP"))) {
+					file = new File(file.getPath() + ".shp");
 				}
-				//SHP.SHPFileFromSelected(map, file);
-				SelectedShapeVisitor ssv=new SelectedShapeVisitor();
+				// SHP.SHPFileFromSelected(map, file);
+				SelectedShapeVisitor ssv = new SelectedShapeVisitor();
 				try {
 					map.getLayers().process(ssv);
-					}  catch (ReadDriverException e1) {
-						throw new RuntimeException("No se espera que SelectByPointVisitor lance esta excepci�n",
-								e1);
-					} catch (VisitorException e1) {
-						throw new RuntimeException("No se espera que SelectByPointVisitor lance esta excepci�n",
-								e1);
-					}
-				IGeometry[] fgs=ssv.getSelectedGeometries();
-				SelectableDataSource sds=ssv.getSelectableDataSource();
-				BitSet bitset=ssv.getBitSet();
+				} catch (ReadDriverException e1) {
+					throw new RuntimeException(
+							"No se espera que SelectByPointVisitor lance esta excepci�n",
+							e1);
+				} catch (VisitorException e1) {
+					throw new RuntimeException(
+							"No se espera que SelectByPointVisitor lance esta excepci�n",
+							e1);
+				}
+				IGeometry[] fgs = ssv.getSelectedGeometries();
+				SelectableDataSource sds = ssv.getSelectableDataSource();
+				BitSet bitset = ssv.getBitSet();
 				try {
 					sds.start();
-					SHP.SHPFileFromGeometries(fgs,bitset,sds,file);
+					SHP.SHPFileFromGeometries(fgs, bitset, sds, file);
 					sds.stop();
 				} catch (ReadDriverException e2) {
-					NotificationManager.addError("No se pudo escribir la capa", e2);
+					NotificationManager.addError("No se pudo escribir la capa",
+							e2);
 				}
 			}
 		} // else {
 
-		//}
+		// }
 	}
 
 	/**
 	 * @see com.iver.mdiApp.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-															 .getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (f == null) {
 			return false;
@@ -160,7 +165,7 @@ public class ThemeControls extends Extension {
 		if (f instanceof View) {
 			MapContext mapa = ((View) f).getModel().getMapContext();
 
-			//View v = (View) f;
+			// View v = (View) f;
 
 			return mapa.getLayers().getLayersCount() > 0;
 		} else {
@@ -178,8 +183,10 @@ public class ThemeControls extends Extension {
 			return false;
 		}
 
-		FLayer[] selected = f.getModel().getMapContext().getLayers().getActives();
-		if (selected.length == 1 && selected[0] instanceof FLyrVect && selected[0].isAvailable()){
+		FLayer[] selected = f.getModel().getMapContext().getLayers()
+				.getActives();
+		if (selected.length == 1 && selected[0] instanceof FLyrVect
+				&& selected[0].isAvailable()) {
 			return true;
 		}
 		return false;

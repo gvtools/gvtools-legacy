@@ -70,6 +70,7 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
 /**
  * This class writes a Document kml tag. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;Document&gt;
@@ -83,7 +84,9 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  * &lt;/Document&gt;
  * </code>
  * </pre>
+ * 
  * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#document
  */
@@ -91,37 +94,45 @@ public class DocumentWriter {
 
 	/**
 	 * Writes a Document init tag and its attributes
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param id
-	 * Document id
+	 *            Document id
 	 * @param name
-	 * Document name
+	 *            Document name
 	 * @param description
-	 * Document description
+	 *            Document description
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler, String id, String name, String description) throws IOException{
-		handler.getProfile().getFeatureWriter().start(writer, handler, id, Kml2_1_Tags.DOCUMENT);
-		if (name != null){
+	public void start(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor handler, String id, String name,
+			String description) throws IOException {
+		handler.getProfile().getFeatureWriter()
+				.start(writer, handler, id, Kml2_1_Tags.DOCUMENT);
+		if (name != null) {
 			handler.getProfile().getNameWriter().write(writer, handler, name);
 		}
-		if (description != null){
-			handler.getProfile().getDescriptionWriter().write(writer, handler, description);
+		if (description != null) {
+			handler.getProfile().getDescriptionWriter()
+					.write(writer, handler, description);
 		}
 	}
 
 	/**
 	 * It writes the end Docuemnt tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @throws IOException
 	 */
-	public void end(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler) throws IOException{
-		handler.getProfile().getFeatureWriter().end(writer, handler, Kml2_1_Tags.DOCUMENT);
+	public void end(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor handler) throws IOException {
+		handler.getProfile().getFeatureWriter()
+				.end(writer, handler, Kml2_1_Tags.DOCUMENT);
 	}
 }

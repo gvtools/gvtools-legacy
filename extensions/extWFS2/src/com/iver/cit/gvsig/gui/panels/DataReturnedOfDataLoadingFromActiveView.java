@@ -51,18 +51,19 @@ import com.iver.cit.gvsig.gui.filter.DefaultExpressionDataSource;
 public class DataReturnedOfDataLoadingFromActiveView {
 	private DefaultExpressionDataSource dED = null;
 	private String filterTitle = "";
-	
+
 	/**
 	 * Constructor with 2 parameters
 	 * 
 	 * @param data
 	 * @param title
 	 */
-	public DataReturnedOfDataLoadingFromActiveView(DefaultExpressionDataSource data, String title) {
+	public DataReturnedOfDataLoadingFromActiveView(
+			DefaultExpressionDataSource data, String title) {
 		dED = data;
 		filterTitle = title;
 	}
-	
+
 	/**
 	 * Returns the title
 	 * 
@@ -71,7 +72,7 @@ public class DataReturnedOfDataLoadingFromActiveView {
 	public String getTitle() {
 		return filterTitle;
 	}
-	
+
 	/**
 	 * Returns the data
 	 * 

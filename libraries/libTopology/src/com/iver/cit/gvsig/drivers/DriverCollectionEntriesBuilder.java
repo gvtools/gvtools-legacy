@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.drivers;
 
 import java.util.HashMap;
@@ -57,27 +57,18 @@ import java.util.Map;
  * It has registered many factories, to use the most appropiate each time.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class DriverCollectionEntriesBuilder {
 	/**
 	 * Factory registry
 	 */
-	Map<Integer, DriverCollectionEntryFactory> factories =
-		new HashMap<Integer, DriverCollectionEntryFactory>();
+	Map<Integer, DriverCollectionEntryFactory> factories = new HashMap<Integer, DriverCollectionEntryFactory>();
 
-	
-	
-	
-	
-	
-	public AbstractDriverCollectionEntry createCollectionEntry(int entryType, int entryIdx) {
+	public AbstractDriverCollectionEntry createCollectionEntry(int entryType,
+			int entryIdx) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	
-	
-	
-	
+
 }

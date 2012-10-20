@@ -34,26 +34,27 @@ import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.tools.Events.RectangleEvent;
 
 /**
- *  <code>VectorizationMouseViewListener</code> es un listener del recorte de raster.
- * Al seleccionar un área sobre la vista debe cargar el cuadro con los datos de
- * coordenadas pixel, coordenadas reales, ancho y alto del raster resultante,
- * tamaño de celda.
- * 23/06/2008
+ * <code>VectorizationMouseViewListener</code> es un listener del recorte de
+ * raster. Al seleccionar un área sobre la vista debe cargar el cuadro con los
+ * datos de coordenadas pixel, coordenadas reales, ancho y alto del raster
+ * resultante, tamaño de celda. 23/06/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class ClipMouseViewListener extends SaveRasterListenerImpl {
-	private FLyrRasterSE                layer          = null;
-	private ClipData    data           = null;
-	private MapControl                  mapControl     = null;
-	private String                      currentTool    = null;
+	private FLyrRasterSE layer = null;
+	private ClipData data = null;
+	private MapControl mapControl = null;
+	private String currentTool = null;
 
 	/**
 	 * Crea un nuevo <code>ClippingMouseViewListener</code>
-	 *
+	 * 
 	 * @param mapCtrl
 	 * @param cutRasterDialog
 	 */
-	public ClipMouseViewListener(MapControl mapControl, ClipData data, FLyrRasterSE lyr) {
+	public ClipMouseViewListener(MapControl mapControl, ClipData data,
+			FLyrRasterSE lyr) {
 		super(mapControl);
 		this.data = data;
 		this.layer = lyr;
@@ -63,21 +64,24 @@ public class ClipMouseViewListener extends SaveRasterListenerImpl {
 
 	/**
 	 * Asigna la capa raster.
-	 * @param flyr Capa raster
+	 * 
+	 * @param flyr
+	 *            Capa raster
 	 */
 	public void setRasterLayer(FLyrRasterSE flyr) {
 		layer = flyr;
 	}
 
 	/**
-	 * Realiza las acciones de selección del área de recorte por medio de un rectangulo
-	 * sobre la vista.
+	 * Realiza las acciones de selección del área de recorte por medio de un
+	 * rectangulo sobre la vista.
 	 */
 	public void rectangle(RectangleEvent event) {
 		super.rectangle(event);
 
 		AffineTransform at = ((FLyrRasterSE) layer).getAffineTransform();
-		//Temporalmente cargamos las coordenadas reales para luego transformarlas a pixel
+		// Temporalmente cargamos las coordenadas reales para luego
+		// transformarlas a pixel
 		Point2D ulPx = new Point2D.Double(rect.getMinX(), rect.getMaxY());
 		Point2D lrPx = new Point2D.Double(rect.getMaxX(), rect.getMinY());
 		Point2D urPx = new Point2D.Double(rect.getMaxX(), rect.getMaxY());
@@ -88,20 +92,23 @@ public class ClipMouseViewListener extends SaveRasterListenerImpl {
 			at.inverseTransform(urPx, urPx);
 			at.inverseTransform(llPx, llPx);
 		} catch (NoninvertibleTransformException e) {
-			JOptionPane.showMessageDialog((Component) PluginServices.getMainFrame(), PluginServices.getText(this, "coordenadas_erroneas"));
+			JOptionPane.showMessageDialog(
+					(Component) PluginServices.getMainFrame(),
+					PluginServices.getText(this, "coordenadas_erroneas"));
 			return;
 		}
-		
-		Point2D[] pointList = new Point2D[]{ulPx, lrPx, urPx, llPx};
-		Point2D dim = new Point2D.Double(layer.getPxWidth(), layer.getPxHeight());
 
-		//Comprobamos si la selección está fuera del área
-		if(isOutside(ulPx, lrPx)) {
+		Point2D[] pointList = new Point2D[] { ulPx, lrPx, urPx, llPx };
+		Point2D dim = new Point2D.Double(layer.getPxWidth(),
+				layer.getPxHeight());
+
+		// Comprobamos si la selección está fuera del área
+		if (isOutside(ulPx, lrPx)) {
 			data.setOutOfArea();
 			return;
 		}
 
-		//Ajustamos los puntos al área en pixeles del raster
+		// Ajustamos los puntos al área en pixeles del raster
 		RasterUtilities.adjustToPixelSize(pointList, dim);
 
 		double minX = Math.min(ulPx.getX(), lrPx.getX());
@@ -109,31 +116,37 @@ public class ClipMouseViewListener extends SaveRasterListenerImpl {
 		double minY = Math.min(ulPx.getY(), lrPx.getY());
 		double maxY = Math.max(ulPx.getY(), lrPx.getY());
 
-		//Convertimos nuevamente a coordenadas reales
+		// Convertimos nuevamente a coordenadas reales
 		Point2D ulWc = new Point2D.Double();
 		Point2D lrWc = new Point2D.Double();
 		at.transform(new Point2D.Double(minX, minY), ulWc);
 		at.transform(new Point2D.Double(maxX + 1, maxY + 1), lrWc);
 
-		data.setCoorRealFromDouble(ulWc.getX(), ulWc.getY(), lrWc.getX(), lrWc.getY());
+		data.setCoorRealFromDouble(ulWc.getX(), ulWc.getY(), lrWc.getX(),
+				lrWc.getY());
 		data.setCoorPixelFromDouble(minX, minY, maxX, maxY);
-			
+
 		if (currentTool != null)
 			mapControl.setTool(currentTool);
 	}
 
 	/**
 	 * Comprueba si la selección del punto está fuera del área del raster.
-	 * @param ulPx Coordenada superior izquierda en pixeles
-	 * @param lrPx Corrdenada inferior derecha en pixeles
-	 * @return true si la selección del punto está fuera del raster y false si no lo está
+	 * 
+	 * @param ulPx
+	 *            Coordenada superior izquierda en pixeles
+	 * @param lrPx
+	 *            Corrdenada inferior derecha en pixeles
+	 * @return true si la selección del punto está fuera del raster y false si
+	 *         no lo está
 	 */
 	private boolean isOutside(Point2D ulPx, Point2D lrPx) {
 		double minX = Math.min(ulPx.getX(), lrPx.getX());
 		double minY = Math.min(ulPx.getY(), lrPx.getY());
 		double maxX = Math.max(ulPx.getX(), lrPx.getX());
 		double maxY = Math.max(ulPx.getY(), lrPx.getY());
-		if(minX >= layer.getPxWidth() || minY >= layer.getPxHeight() || maxX < 0 || maxY < 0)
+		if (minX >= layer.getPxWidth() || minY >= layer.getPxHeight()
+				|| maxX < 0 || maxY < 0)
 			return true;
 		return false;
 	}

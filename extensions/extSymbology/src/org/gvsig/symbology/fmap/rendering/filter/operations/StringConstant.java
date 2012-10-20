@@ -44,35 +44,30 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 import com.hardcode.gdbms.engine.values.Value;
+
 /**
  * Implements the funcionality of a String constant
- *
+ * 
  * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
- *
+ * 
  */
-public class StringConstant extends Operator
-{
+public class StringConstant extends Operator {
 	private String value;
-
 
 	public String getName() {
 		return OperationTags.STRING_CONSTANT;
 	}
 
-
-	public StringConstant(String value,Hashtable<String, Value> symbol_table)
-	{
+	public StringConstant(String value, Hashtable<String, Value> symbol_table) {
 		super(symbol_table);
 		this.value = value;
 	}
 
-	public void addArgument(Expression function)
-	{
+	public void addArgument(Expression function) {
 		throw new RuntimeException("Cannot add an argument to a constant");
 	}
 
-	public void addArgument(int index, Expression expression)
-	{
+	public void addArgument(int index, Expression expression) {
 		throw new RuntimeException("Cannot add an argument to a constant");
 	}
 
@@ -99,6 +94,5 @@ public class StringConstant extends Operator
 	public String getValue() {
 		return value;
 	}
-
 
 }

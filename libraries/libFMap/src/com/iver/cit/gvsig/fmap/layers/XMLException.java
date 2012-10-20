@@ -45,21 +45,27 @@ import java.util.Map;
 import org.gvsig.exceptions.BaseException;
 
 /**
- * <p>Exception produced persisting objects.
+ * <p>
+ * Exception produced persisting objects.
  * 
- * <p>The processes used to execute it are named <i>Marshall</i> (object to XML representation)
- *  and <i>Unmarshall</i> (XML representation to object). If one of this processes fails, then a <code>XMLException</code> will be
- *  produced.</p>
- *
+ * <p>
+ * The processes used to execute it are named <i>Marshall</i> (object to XML
+ * representation) and <i>Unmarshall</i> (XML representation to object). If one
+ * of this processes fails, then a <code>XMLException</code> will be produced.
+ * </p>
+ * 
  * @author Vicente Caballero Navarro
  */
 public class XMLException extends BaseException {
 	private static final long serialVersionUID = 1L;
 
 	/**
- 	 * <p>Constructs an XML exception with the specified cause.</p>
- 	 *   
-	 * @param e an exception with the cause
+	 * <p>
+	 * Constructs an XML exception with the specified cause.
+	 * </p>
+	 * 
+	 * @param e
+	 *            an exception with the cause
 	 */
 	public XMLException(Throwable e) {
 		init();
@@ -67,7 +73,9 @@ public class XMLException extends BaseException {
 	}
 
 	/**
-	 * <p>Prepares the messages to display.</p>
+	 * <p>
+	 * Prepares the messages to display.
+	 * </p>
 	 */
 	private void init() {
 		messageKey = "exception_loading_or_creating_a_xml";
@@ -76,6 +84,7 @@ public class XMLException extends BaseException {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map values() {

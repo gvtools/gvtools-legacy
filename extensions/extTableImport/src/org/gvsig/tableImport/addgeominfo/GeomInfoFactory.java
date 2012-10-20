@@ -30,18 +30,25 @@ import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.core.FShape;
 
 /**
- * <p>Creates the particular {@link GeomInfo GeomInfo} by its name and type.</p>
- *
+ * <p>
+ * Creates the particular {@link GeomInfo GeomInfo} by its name and type.
+ * </p>
+ * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class GeomInfoFactory {
 	/**
-	 * <p>Creates a <code>JLabel</code> that represents a geometric information,
-	 *  and stores the configuration parameters.</p> 
+	 * <p>
+	 * Creates a <code>JLabel</code> that represents a geometric information,
+	 * and stores the configuration parameters.
+	 * </p>
 	 * 
-	 * @param text the text of the label
-	 * @param name the name of the label
-	 * @param type the type of the geometry
+	 * @param text
+	 *            the text of the label
+	 * @param name
+	 *            the name of the label
+	 * @param type
+	 *            the type of the geometry
 	 * 
 	 * @return the new object
 	 * 
@@ -51,23 +58,23 @@ public class GeomInfoFactory {
 		ImageIcon icon = null;
 
 		switch (type) {
-			case FShape.POLYGON:
-				icon = PluginServices.getIconTheme().get("Polygon");
-				return new GeomInfo(icon, text, name, type);
-			case FShape.LINE:
-				icon = PluginServices.getIconTheme().get("Rect");
-				return new GeomInfo(icon, text, name, type);
-			case FShape.MULTIPOINT:
-				icon = PluginServices.getIconTheme().get("MultiPoint");
-				return new GeomInfo(icon, text, name, type);
-			case FShape.POINT:
-				icon = PluginServices.getIconTheme().get("Point");
-				return new GeomInfo(icon, text, name, type);
-			case FShape.MULTI: // Don't used
-				icon = PluginServices.getIconTheme().get("multi-icon");
-				return new GeomInfo(icon, text, name, type);
-			default:
-				throw new IllegalArgumentException();
+		case FShape.POLYGON:
+			icon = PluginServices.getIconTheme().get("Polygon");
+			return new GeomInfo(icon, text, name, type);
+		case FShape.LINE:
+			icon = PluginServices.getIconTheme().get("Rect");
+			return new GeomInfo(icon, text, name, type);
+		case FShape.MULTIPOINT:
+			icon = PluginServices.getIconTheme().get("MultiPoint");
+			return new GeomInfo(icon, text, name, type);
+		case FShape.POINT:
+			icon = PluginServices.getIconTheme().get("Point");
+			return new GeomInfo(icon, text, name, type);
+		case FShape.MULTI: // Don't used
+			icon = PluginServices.getIconTheme().get("multi-icon");
+			return new GeomInfo(icon, text, name, type);
+		default:
+			throw new IllegalArgumentException();
 		}
 	}
 }

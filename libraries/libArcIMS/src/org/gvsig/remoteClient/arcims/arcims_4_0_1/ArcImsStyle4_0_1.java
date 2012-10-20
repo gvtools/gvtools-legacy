@@ -43,66 +43,72 @@
 
 package org.gvsig.remoteClient.arcims.arcims_4_0_1;
 
-import org.gvsig.remoteClient.utils.CapabilitiesTags;
-
-import org.kxml2.io.KXmlParser;
-
-import org.xmlpull.v1.XmlPullParserException;
-
 import java.io.IOException;
 
+import org.gvsig.remoteClient.utils.CapabilitiesTags;
+import org.kxml2.io.KXmlParser;
+import org.xmlpull.v1.XmlPullParserException;
 
 /**
- * <p>Represents the layer style defined by the Specifications for ArcIms 4.0.1</p>
- *
+ * <p>
+ * Represents the layer style defined by the Specifications for ArcIms 4.0.1
+ * </p>
+ * 
  */
 public class ArcImsStyle4_0_1 extends org.gvsig.remoteClient.arcims.ArcImsStyle {
-    /**
-     * <p>URL pointing to the legend for a layer with this style</p>
-     */
+	/**
+	 * <p>
+	 * URL pointing to the legend for a layer with this style
+	 * </p>
+	 */
 
-    /**
-     * <p>Parses the STYLE TAG according with the OGC Specifications for the ArcIms 1.1.1</p>
-     */
-    public void parse(KXmlParser parser)
-        throws IOException, XmlPullParserException {
-        int currentTag;
-        boolean end = false;
+	/**
+	 * <p>
+	 * Parses the STYLE TAG according with the OGC Specifications for the ArcIms
+	 * 1.1.1
+	 * </p>
+	 */
+	public void parse(KXmlParser parser) throws IOException,
+			XmlPullParserException {
+		int currentTag;
+		boolean end = false;
 
-        parser.require(KXmlParser.START_TAG, null, CapabilitiesTags.STYLE);
-        currentTag = parser.nextTag();
+		parser.require(KXmlParser.START_TAG, null, CapabilitiesTags.STYLE);
+		currentTag = parser.nextTag();
 
-        while (!end) {
-            switch (currentTag) {
-            case KXmlParser.START_TAG:
+		while (!end) {
+			switch (currentTag) {
+			case KXmlParser.START_TAG:
 
-                if (parser.getName().compareTo(CapabilitiesTags.NAME) == 0) {
-                    setName(parser.nextText());
-                } else if (parser.getName().compareTo(CapabilitiesTags.TITLE) == 0) {
-                    setTitle(parser.nextText());
-                } else if (parser.getName().compareTo(CapabilitiesTags.ABSTRACT) == 0) {
-                    setAbstract(parser.nextText());
-                } else if (parser.getName().compareTo(CapabilitiesTags.LEGENDURL) == 0) {
-                    break;
-                }
+				if (parser.getName().compareTo(CapabilitiesTags.NAME) == 0) {
+					setName(parser.nextText());
+				} else if (parser.getName().compareTo(CapabilitiesTags.TITLE) == 0) {
+					setTitle(parser.nextText());
+				} else if (parser.getName()
+						.compareTo(CapabilitiesTags.ABSTRACT) == 0) {
+					setAbstract(parser.nextText());
+				} else if (parser.getName().compareTo(
+						CapabilitiesTags.LEGENDURL) == 0) {
+					break;
+				}
 
-            case KXmlParser.END_TAG:
+			case KXmlParser.END_TAG:
 
-                if (parser.getName().compareTo(CapabilitiesTags.STYLE) == 0) {
-                    end = true;
-                }
+				if (parser.getName().compareTo(CapabilitiesTags.STYLE) == 0) {
+					end = true;
+				}
 
-                break;
+				break;
 
-            case KXmlParser.TEXT:
-                break;
-            }
+			case KXmlParser.TEXT:
+				break;
+			}
 
-            if (!end) {
-                currentTag = parser.next();
-            }
-        }
+			if (!end) {
+				currentTag = parser.next();
+			}
+		}
 
-        parser.require(KXmlParser.END_TAG, null, CapabilitiesTags.STYLE);
-    }
+		parser.require(KXmlParser.END_TAG, null, CapabilitiesTags.STYLE);
+	}
 }

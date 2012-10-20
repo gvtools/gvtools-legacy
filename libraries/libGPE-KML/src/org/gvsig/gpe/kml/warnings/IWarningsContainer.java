@@ -3,7 +3,6 @@ package org.gvsig.gpe.kml.warnings;
 import org.gvsig.exceptions.BaseException;
 import org.gvsig.exceptions.ListBaseException;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -70,30 +69,37 @@ import org.gvsig.exceptions.ListBaseException;
  */
 public interface IWarningsContainer {
 	/**
-	 * This method return true if there aren't warnings else returns false 
+	 * This method return true if there aren't warnings else returns false
+	 * 
 	 * @return boolean
 	 */
 	public boolean areWarnings();
+
 	/**
-	 * This method return the list of warnings parsing the file 
+	 * This method return the list of warnings parsing the file
+	 * 
 	 * @return ArrayList of warnings
 	 */
 	public ListBaseException getWarningList();
-	
+
 	/**
-	 * This method inserts a new warning into the list 
+	 * This method inserts a new warning into the list
+	 * 
 	 * @args int new warning
 	 */
 	public void setElement(BaseException war);
+
 	/**
-	 * This method returns a warning from the list 
+	 * This method returns a warning from the list
+	 * 
 	 * @args int index
 	 * @return int warning
 	 */
 	public BaseException getElement(int index, ListBaseException war);
-	
+
 	/**
-	 * This method inserts a new warning list 
+	 * This method inserts a new warning list
+	 * 
 	 * @args int new warning
 	 */
 	public void setWarningList(ListBaseException war);

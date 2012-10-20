@@ -70,89 +70,91 @@ import com.vividsolutions.jts.precision.EnhancedPrecisionOp;
 
 public class CreateFeatureOverlapPolygonFix extends AbstractTopologyErrorFix {
 
-	
-	public List<IFeature>[] fixAlgorithm(TopologyError error) throws BaseException {
+	public List<IFeature>[] fixAlgorithm(TopologyError error)
+			throws BaseException {
 		IGeometry errorGeometry = error.getGeometry();
 		Geometry errorGeoJts = NewFConverter.toJtsGeometry(errorGeometry);
-		
-		
+
 		IFeature firstFeature = error.getFeature1();
-		Geometry firstJts = NewFConverter.toJtsGeometry(firstFeature.getGeometry());
+		Geometry firstJts = NewFConverter.toJtsGeometry(firstFeature
+				.getGeometry());
 		Geometry[] first = null;
-		if(firstJts instanceof GeometryCollection){
+		if (firstJts instanceof GeometryCollection) {
 			first = JtsUtil.extractGeometries((GeometryCollection) firstJts);
-		}else
-			first = new Geometry[]{firstJts} ;
-		
-		
+		} else
+			first = new Geometry[] { firstJts };
+
 		Geometry[] second = null;
-		if(errorGeoJts instanceof GeometryCollection){
-			second = JtsUtil.extractGeometries((GeometryCollection) errorGeoJts);
-		}else
-		{
-			second = new Geometry[]{errorGeoJts};
+		if (errorGeoJts instanceof GeometryCollection) {
+			second = JtsUtil
+					.extractGeometries((GeometryCollection) errorGeoJts);
+		} else {
+			second = new Geometry[] { errorGeoJts };
 		}
-		
-		
+
 		for (int i = 0; i < first.length; i++) {
 			Geometry geom = first[i];
 			Geometry partialSolution = null;
 			for (int j = 0; j < second.length; j++) {
 				Geometry aux = EnhancedPrecisionOp.difference(geom, second[j]);
-				if(partialSolution == null)
+				if (partialSolution == null)
 					partialSolution = aux;
 				else
-					partialSolution = EnhancedPrecisionOp.union(partialSolution, aux);
-			}//for
+					partialSolution = EnhancedPrecisionOp.union(
+							partialSolution, aux);
+			}// for
 			first[i] = partialSolution;
-		}//for i
-		
-		Geometry newFirstJts = JtsUtil.GEOMETRY_FACTORY.createGeometryCollection(first);
+		}// for i
+
+		Geometry newFirstJts = JtsUtil.GEOMETRY_FACTORY
+				.createGeometryCollection(first);
 		IGeometry newFirst = NewFConverter.toFMap(newFirstJts);
-		
+
 		IFeature secondFeature = error.getFeature2();
-		Geometry secondJts = NewFConverter.toJtsGeometry(secondFeature.getGeometry());
+		Geometry secondJts = NewFConverter.toJtsGeometry(secondFeature
+				.getGeometry());
 		Geometry[] third = null;
-		if(secondJts instanceof GeometryCollection){
+		if (secondJts instanceof GeometryCollection) {
 			third = JtsUtil.extractGeometries((GeometryCollection) secondJts);
-		}else
-		{
-			third = new Geometry[]{secondJts};
+		} else {
+			third = new Geometry[] { secondJts };
 		}
-		
+
 		for (int i = 0; i < third.length; i++) {
 			Geometry geom = third[i];
 			Geometry partialSolution = null;
 			for (int j = 0; j < second.length; j++) {
 				Geometry aux = EnhancedPrecisionOp.difference(geom, second[j]);
-				if(partialSolution == null)
+				if (partialSolution == null)
 					partialSolution = aux;
 				else
-					partialSolution = EnhancedPrecisionOp.union(partialSolution, aux);
-			}//for
+					partialSolution = EnhancedPrecisionOp.union(
+							partialSolution, aux);
+			}// for
 			third[i] = partialSolution;
-		}//for i
-		Geometry newThirdJts = JtsUtil.GEOMETRY_FACTORY.createGeometryCollection(third);
+		}// for i
+		Geometry newThirdJts = JtsUtil.GEOMETRY_FACTORY
+				.createGeometryCollection(third);
 		IGeometry newThird = NewFConverter.toFMap(newThirdJts);
-		
-		
+
 		firstFeature.setGeometry(newFirst);
 		secondFeature.setGeometry(newThird);
-		
+
 		int valueLenght = firstFeature.getAttributes().length;
 		Value[] newValues = new Value[valueLenght];
-		for(int i = 0; i < valueLenght; i++){
+		for (int i = 0; i < valueLenght; i++) {
 			newValues[i] = ValueFactory.createNullValue();
 		}
-		
-		String newId = error.getOriginLayer().getSource().getShapeCount()+"";
-		DefaultFeature newFeature = new DefaultFeature(errorGeometry, newValues, newId );
-		
+
+		String newId = error.getOriginLayer().getSource().getShapeCount() + "";
+		DefaultFeature newFeature = new DefaultFeature(errorGeometry,
+				newValues, newId);
+
 		List<IFeature> firstLyrFeatures = new ArrayList<IFeature>();
 		firstLyrFeatures.add(firstFeature);
 		firstLyrFeatures.add(secondFeature);
 		firstLyrFeatures.add(newFeature);
-		return (List<IFeature>[]) new List[]{firstLyrFeatures};
+		return (List<IFeature>[]) new List[] { firstLyrFeatures };
 	}
 
 	public void fix(TopologyError error) throws BaseException {
@@ -161,22 +163,18 @@ public class CreateFeatureOverlapPolygonFix extends AbstractTopologyErrorFix {
 		if (correctedFeatures != null) {
 			List<IFeature> firstLyr = correctedFeatures[0];
 			IFeature firstFeature = firstLyr.get(0);
-			adapters[0].modifyRow(Integer.parseInt(firstFeature.getID()), 
-					firstFeature, 
-					getEditionDescription(), 
-					EditionEvent.GRAPHIC);
-			
-			IFeature secondFeature = firstLyr.get(1);
-			adapters[0].modifyRow(Integer.parseInt(secondFeature.getID()), 
-					secondFeature, 
-					getEditionDescription(), 
-					EditionEvent.GRAPHIC);
-			
+			adapters[0]
+					.modifyRow(Integer.parseInt(firstFeature.getID()),
+							firstFeature, getEditionDescription(),
+							EditionEvent.GRAPHIC);
 
-			
+			IFeature secondFeature = firstLyr.get(1);
+			adapters[0].modifyRow(Integer.parseInt(secondFeature.getID()),
+					secondFeature, getEditionDescription(),
+					EditionEvent.GRAPHIC);
+
 			adapters[0].doAddRow(firstLyr.get(2), EditionEvent.GRAPHIC);
-		
-			
+
 			adapters[0].endComplexRow(getEditionDescription());
 			error.getTopology().removeError(error);
 		}

@@ -59,61 +59,65 @@ public class DiscoveryServiceCapabilities {
 	private String version = null;
 	private String serverMessage = null;
 	private Properties properties = null;
-	
+
 	/**
 	 * @return the isAvailable
 	 */
 	public boolean isAvailable() {
 		return isAvailable;
 	}
-	
+
 	/**
-	 * @param isAvailable the isAvailable to set
+	 * @param isAvailable
+	 *            the isAvailable to set
 	 */
 	public void setAvailable(boolean isAvailable) {
 		this.isAvailable = isAvailable;
 	}
-	
+
 	/**
 	 * @return the version
 	 */
 	public String getVersion() {
 		return version;
 	}
-	
+
 	/**
-	 * @param version the version to set
+	 * @param version
+	 *            the version to set
 	 */
 	public void setVersion(String version) {
 		this.version = version;
 	}
-	
+
 	/**
 	 * @return the serverMessage
 	 */
 	public String getServerMessage() {
 		return serverMessage;
 	}
-	
+
 	/**
-	 * @param serverMessage the serverMessage to set
+	 * @param serverMessage
+	 *            the serverMessage to set
 	 */
 	public void setServerMessage(String serverMessage) {
 		this.serverMessage = serverMessage;
 	}
-	
+
 	/**
 	 * @return the properties
 	 */
 	public Properties getProperties() {
 		return properties;
 	}
-	
+
 	/**
-	 * @param properties the properties to set
+	 * @param properties
+	 *            the properties to set
 	 */
 	public void setProperties(Properties properties) {
 		this.properties = properties;
 	}
-	
+
 }

@@ -2,10 +2,9 @@ package com.hardcode.gdbms.engine.instruction;
 
 import com.hardcode.gdbms.engine.values.Value;
 
-
 /**
  * Adaptador
- *
+ * 
  * @author Fernando González Cortés
  */
 public abstract class AbstractExpression extends Adapter implements Expression {
@@ -16,8 +15,7 @@ public abstract class AbstractExpression extends Adapter implements Expression {
 	/**
 	 * @see com.hardcode.gdbms.engine.instruction.Expression#evaluateExpression(long)
 	 */
-	public Value evaluateExpression(long row)
-		throws EvaluationException {
+	public Value evaluateExpression(long row) throws EvaluationException {
 		if (!getLiteralCondition()) {
 			return evaluate(row);
 		} else {
@@ -29,20 +27,19 @@ public abstract class AbstractExpression extends Adapter implements Expression {
 		}
 	}
 
+	public boolean getLiteralCondition() {
+		if (!literalCalculated) {
+			literal = isLiteral();
+		}
 
-    public boolean getLiteralCondition() {
-        if (!literalCalculated){
-            literal = isLiteral();
-        }
+		return literal;
+	}
 
-        return literal;
-    }
-
-    /**
-     * @see com.hardcode.gdbms.engine.instruction.Expression#isAggregated()
-     */
-    public boolean isAggregated() {
-        return false;
-    }
+	/**
+	 * @see com.hardcode.gdbms.engine.instruction.Expression#isAggregated()
+	 */
+	public boolean isAggregated() {
+		return false;
+	}
 
 }

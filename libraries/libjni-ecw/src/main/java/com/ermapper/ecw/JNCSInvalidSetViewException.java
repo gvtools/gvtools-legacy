@@ -5,19 +5,15 @@
 
 package com.ermapper.ecw;
 
-
 // Referenced classes of package com.ermapper.ecw:
 //            JNCSException
 
-public class JNCSInvalidSetViewException extends JNCSException
-{
+public class JNCSInvalidSetViewException extends JNCSException {
 
-    public JNCSInvalidSetViewException()
-    {
-    }
+	public JNCSInvalidSetViewException() {
+	}
 
-    public JNCSInvalidSetViewException(String s)
-    {
-        super(s);
-    }
+	public JNCSInvalidSetViewException(String s) {
+		super(s);
+	}
 }

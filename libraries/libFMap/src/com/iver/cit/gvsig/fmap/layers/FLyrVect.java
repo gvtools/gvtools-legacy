@@ -256,7 +256,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 	public SimpleFeatureSource getFeatureSource() throws IOException {
 		return getDataStore().getDefaultFeatureSource();
 	}
-	
+
 	public boolean isWaitTodraw() {
 		return waitTodraw;
 	}
@@ -484,7 +484,8 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 				} else {
 					// rv.start();
 					try {
-						it = new GTFeatureIterator(viewPort.getAdjustedExtent(),
+						it = new GTFeatureIterator(
+								viewPort.getAdjustedExtent(),
 								fieldList.toArray(new String[fieldList.size()]),
 								viewPort.getCrs());
 					} catch (IOException e) {
@@ -558,12 +559,12 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 					// est� seleccionado un Feature
 					ReadableVectorial rv = getSource();
 					int selectionIndex = -1;
-//					if (rv instanceof ISpatialDB) {
-//						selectionIndex = ((ISpatialDB) rv)
-//								.getRowIndexByFID(feat);
-//					} else {
-//						selectionIndex = Integer.parseInt(feat.getID());
-//					}
+					// if (rv instanceof ISpatialDB) {
+					// selectionIndex = ((ISpatialDB) rv)
+					// .getRowIndexByFID(feat);
+					// } else {
+					// selectionIndex = Integer.parseInt(feat.getID());
+					// }
 					if (selectionIndex != -1) {
 						if (selectionSupport.isSelected(selectionIndex)) {
 							sym = sym.getSymbolForSelection();

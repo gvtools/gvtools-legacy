@@ -50,19 +50,16 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
 
-
 /**
- * Implements the main functionalities to parse an Filter Encoding
- * expression<br>
- * The expression element is an abstrac element which means that it
- * does not really exist and its only purpose is to act as a placeholder
- * for the elements and combinations of elements that can be used o form
- * expressions.
- *
+ * Implements the main functionalities to parse an Filter Encoding expression<br>
+ * The expression element is an abstrac element which means that it does not
+ * really exist and its only purpose is to act as a placeholder for the elements
+ * and combinations of elements that can be used o form expressions.
+ * 
  * @see http://www.opengeospatial.org/standards/filter
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
-public class FExpression  {
+public class FExpression {
 
 	protected String literal;
 	protected String propertyName;
@@ -74,32 +71,31 @@ public class FExpression  {
 
 	String expressionStr = "";
 
-	Set <String> fieldNames = new HashSet <String>();
+	Set<String> fieldNames = new HashSet<String>();
 
 	double value;
 
-
-	public void parse(XMLSchemaParser parser, int Tag2, String expressionType) throws XmlPullParserException, IOException, LegendDriverException {
+	public void parse(XMLSchemaParser parser, int Tag2, String expressionType)
+			throws XmlPullParserException, IOException, LegendDriverException {
 
 		int currentTag;
 		boolean end = false;
 		currentTag = Tag2;
 		this.expressionType = expressionType;
 
-		while (!end)
-		{
-			switch(currentTag)
-			{
+		while (!end) {
+			switch (currentTag) {
 			case XMLSchemaParser.START_TAG:
 
-				if (parser.getName().compareTo(FilterUtils.remNameSpace(FilterTags.PROPERTYNAME))==0) {
+				if (parser.getName().compareTo(
+						FilterUtils.remNameSpace(FilterTags.PROPERTYNAME)) == 0) {
 					this.propertyName = parser.nextText();
 					fieldNames.add(this.propertyName);
 					isPropertyName = true;
 					end = true;
-					expressionStr +="["+this.propertyName +"] ";
-				}
-				else if (parser.getName().compareTo(FilterUtils.remNameSpace(FilterTags.LITERAL))==0) {
+					expressionStr += "[" + this.propertyName + "] ";
+				} else if (parser.getName().compareTo(
+						FilterUtils.remNameSpace(FilterTags.LITERAL)) == 0) {
 					this.literal = parser.nextText();
 					String myLiteral = this.literal;
 					if (!this.literal.startsWith("#"))
@@ -107,41 +103,50 @@ public class FExpression  {
 							setValue(Double.valueOf(this.literal));
 						} else {
 							/*
-							 * Parche para leer las leyendas generadas con versiones anteriores que
-							 * no ponían comillas para identificar los literales
+							 * Parche para leer las leyendas generadas con
+							 * versiones anteriores que no ponían comillas para
+							 * identificar los literales
 							 */
-							if (!(this.literal.startsWith("\"") && this.literal.endsWith("\""))){
-								myLiteral = "\""+this.literal +"\"";
+							if (!(this.literal.startsWith("\"") && this.literal
+									.endsWith("\""))) {
+								myLiteral = "\"" + this.literal + "\"";
 							}
 							/* Fin del parche */
 						}
 					end = true;
-					expressionStr += myLiteral +" ";
-				}
-				else if (parser.getName().compareTo(FilterUtils.remNameSpace(FilterTags.FUNCTION))==0) {
+					expressionStr += myLiteral + " ";
+				} else if (parser.getName().compareTo(
+						FilterUtils.remNameSpace(FilterTags.FUNCTION)) == 0) {
 					this.function = parser.nextText();
 					end = true;
-				}
-				else if ((parser.getName().compareTo(FilterUtils.remNameSpace(FilterTags.ADD))==0) ||
-				(parser.getName().compareTo(FilterUtils.remNameSpace(FilterTags.DIV))==0) ||
-				(parser.getName().compareTo(FilterUtils.remNameSpace(FilterTags.MULT))==0) ||
-				(parser.getName().compareTo(FilterUtils.remNameSpace(FilterTags.SUB))==0) ){
+				} else if ((parser.getName().compareTo(
+						FilterUtils.remNameSpace(FilterTags.ADD)) == 0)
+						|| (parser.getName().compareTo(
+								FilterUtils.remNameSpace(FilterTags.DIV)) == 0)
+						|| (parser.getName().compareTo(
+								FilterUtils.remNameSpace(FilterTags.MULT)) == 0)
+						|| (parser.getName().compareTo(
+								FilterUtils.remNameSpace(FilterTags.SUB)) == 0)) {
 
 					String operation = parser.getName();
 					currentTag = parser.nextTag();
 					this.insideExpression = new FExpression();
 					expressionStr += "( ";
 
-					this.insideExpression.parse(parser,currentTag,parser.getName());
+					this.insideExpression.parse(parser, currentTag,
+							parser.getName());
 					expressionStr += insideExpression.getExpressionStr();
 
-					expressionStr += FilterUtils.getSymbol4Expression("ogc:"+operation)+" ";
+					expressionStr += FilterUtils.getSymbol4Expression("ogc:"
+							+ operation)
+							+ " ";
 
 					fieldNames.addAll(insideExpression.getFieldNames());
 					currentTag = parser.nextTag();
 					this.insideExpression2 = new FExpression();
 
-					this.insideExpression2.parse(parser,currentTag,parser.getName());
+					this.insideExpression2.parse(parser, currentTag,
+							parser.getName());
 					expressionStr += insideExpression2.getExpressionStr();
 
 					expressionStr += ") ";
@@ -149,21 +154,28 @@ public class FExpression  {
 					fieldNames.addAll(insideExpression2.getFieldNames());
 					parser.nextTag();
 					if (insideExpression == null && insideExpression2 == null)
-						throw new LegendDriverException (LegendDriverException.PARSE_LEGEND_FILE_ERROR);
+						throw new LegendDriverException(
+								LegendDriverException.PARSE_LEGEND_FILE_ERROR);
 					end = true;
-
 
 				}
 
 				break;
 			case XMLSchemaParser.END_TAG:
-				if (parser.getName().compareTo(FilterUtils.remNameSpace(FilterTags.PROPERTYNAME))!=0 &&
-						parser.getName().compareTo(FilterUtils.remNameSpace(FilterTags.LITERAL))!=0 &&
-						parser.getName().compareTo(FilterUtils.remNameSpace(FilterTags.FUNCTION))!=0 &&
-						parser.getName().compareTo(FilterUtils.remNameSpace(FilterTags.ADD))!=0 &&
-						parser.getName().compareTo(FilterUtils.remNameSpace(FilterTags.DIV))!=0 &&
-						parser.getName().compareTo(FilterUtils.remNameSpace(FilterTags.MULT))!=0 &&
-						parser.getName().compareTo(FilterUtils.remNameSpace(FilterTags.SUB))!=0) {
+				if (parser.getName().compareTo(
+						FilterUtils.remNameSpace(FilterTags.PROPERTYNAME)) != 0
+						&& parser.getName().compareTo(
+								FilterUtils.remNameSpace(FilterTags.LITERAL)) != 0
+						&& parser.getName().compareTo(
+								FilterUtils.remNameSpace(FilterTags.FUNCTION)) != 0
+						&& parser.getName().compareTo(
+								FilterUtils.remNameSpace(FilterTags.ADD)) != 0
+						&& parser.getName().compareTo(
+								FilterUtils.remNameSpace(FilterTags.DIV)) != 0
+						&& parser.getName().compareTo(
+								FilterUtils.remNameSpace(FilterTags.MULT)) != 0
+						&& parser.getName().compareTo(
+								FilterUtils.remNameSpace(FilterTags.SUB)) != 0) {
 					end = true;
 				}
 				break;
@@ -176,20 +188,52 @@ public class FExpression  {
 
 	}
 
+	public String getLiteral() {
+		return literal;
+	}
 
-	public String getLiteral() { return literal; }
 	public void setLiteral(String literal) {
-		this.literal = literal; }
-	public String getPropertyName() { return propertyName; }
-	public void setPropertyName(String propertyName) { this.propertyName = propertyName; }
-	public double evaluate() { return this.value; }
-	public void setValue(double value) { this.value = value; }
-	public Set<String> getFieldNames() { return fieldNames; }
-	public boolean isPropertyName() {return isPropertyName;}
-	public String getExpressionType() {return expressionType;}
+		this.literal = literal;
+	}
 
-	public FExpression getInsideExpression() {return insideExpression;}
-	public FExpression getInsideExpression2() {return insideExpression2;}
-	public String getExpressionStr() {return expressionStr;}
+	public String getPropertyName() {
+		return propertyName;
+	}
+
+	public void setPropertyName(String propertyName) {
+		this.propertyName = propertyName;
+	}
+
+	public double evaluate() {
+		return this.value;
+	}
+
+	public void setValue(double value) {
+		this.value = value;
+	}
+
+	public Set<String> getFieldNames() {
+		return fieldNames;
+	}
+
+	public boolean isPropertyName() {
+		return isPropertyName;
+	}
+
+	public String getExpressionType() {
+		return expressionType;
+	}
+
+	public FExpression getInsideExpression() {
+		return insideExpression;
+	}
+
+	public FExpression getInsideExpression2() {
+		return insideExpression2;
+	}
+
+	public String getExpressionStr() {
+		return expressionStr;
+	}
 
 }

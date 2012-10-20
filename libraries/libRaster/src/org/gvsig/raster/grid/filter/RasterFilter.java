@@ -29,40 +29,44 @@ import org.gvsig.raster.datastruct.Extent;
 import org.gvsig.raster.grid.GridTransparency;
 import org.gvsig.raster.process.RasterTask;
 import org.gvsig.raster.process.RasterTaskQueue;
+
 /**
  * Filtro para raster. Ancestro de todos los filtros.
- *
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  * @author Luis W. Sevilla (sevilla_lui@gva.es)
  */
 public abstract class RasterFilter implements IRasterFilter, Cloneable {
-	protected IBuffer   raster       = null;
-	protected IBuffer   rasterResult = null;
-	protected int       height       = 0;
-	protected int       width        = 0;
-	protected Hashtable params       = new Hashtable();
-	protected TreeMap   environment  = new TreeMap();
-	protected Extent    extent       = null;
-	private int         percent      = 0;
-	private String      fName        = "";
+	protected IBuffer raster = null;
+	protected IBuffer rasterResult = null;
+	protected int height = 0;
+	protected int width = 0;
+	protected Hashtable params = new Hashtable();
+	protected TreeMap environment = new TreeMap();
+	protected Extent extent = null;
+	private int percent = 0;
+	private String fName = "";
 	/**
-	 * Variable que control la aplicación o no del filtro. Si está a false aunque esté en
-	 * la pila el filtro no se ejecutará.
+	 * Variable que control la aplicación o no del filtro. Si está a false
+	 * aunque esté en la pila el filtro no se ejecutará.
 	 */
-	protected boolean 		exec = true;
+	protected boolean exec = true;
 
 	/**
-	 * Clase que representa un kernel de NxN píxeles para realizar operaciones sobre
-	 * un pixel.
+	 * Clase que representa un kernel de NxN píxeles para realizar operaciones
+	 * sobre un pixel.
+	 * 
 	 * @author Nacho Brodin (nachobrodin@gmail.com)
 	 */
 	public static class Kernel {
-		public double[][]	kernel	= null;
-		protected double	divisor = 0;
+		public double[][] kernel = null;
+		protected double divisor = 0;
 
 		/**
 		 * Constructor. Crea la matriz de datos para el kernel.
-		 * @param k datos del kernel
+		 * 
+		 * @param k
+		 *            datos del kernel
 		 */
 		public Kernel(double[][] k) {
 			this.kernel = k;
@@ -74,7 +78,9 @@ public abstract class RasterFilter implements IRasterFilter, Cloneable {
 
 		/**
 		 * Constructor. Crea la matriz de datos para el kernel.
-		 * @param k datos del kernel
+		 * 
+		 * @param k
+		 *            datos del kernel
 		 */
 		public Kernel(double[][] k, double divisor) {
 			this.kernel = k;
@@ -90,8 +96,9 @@ public abstract class RasterFilter implements IRasterFilter, Cloneable {
 		}
 
 		/**
-		 * Aplica la operación de convolución del kernel con otro kernel
-		 * pasado por parámetro
+		 * Aplica la operación de convolución del kernel con otro kernel pasado
+		 * por parámetro
+		 * 
 		 * @param k
 		 * @return
 		 */
@@ -99,7 +106,7 @@ public abstract class RasterFilter implements IRasterFilter, Cloneable {
 			double res = this.kernelOperation(k);
 			if (this.divisor != 0)
 				res = res / divisor;
-			//return Math.abs(res);
+			// return Math.abs(res);
 			return res;
 		}
 
@@ -112,8 +119,9 @@ public abstract class RasterFilter implements IRasterFilter, Cloneable {
 		}
 
 		/**
-		 * Obtiene el tamaño del kernel que viene dado por
-		 * el número de pixeles de su lado.
+		 * Obtiene el tamaño del kernel que viene dado por el número de pixeles
+		 * de su lado.
+		 * 
 		 * @return
 		 */
 		public int getLado() {
@@ -121,15 +129,15 @@ public abstract class RasterFilter implements IRasterFilter, Cloneable {
 		}
 
 		/**
-		 * Aplica ls operación 0xff para todos los elementos del
-		 * kernel. Presupone que este es de tipo byte y no hace ninguna
-		 * comprobación al respecto. Se deja en manos del usuario aplicar esta
-		 * operación solo cuando los elementos del kernel sean de este tipo de dato.
+		 * Aplica ls operación 0xff para todos los elementos del kernel.
+		 * Presupone que este es de tipo byte y no hace ninguna comprobación al
+		 * respecto. Se deja en manos del usuario aplicar esta operación solo
+		 * cuando los elementos del kernel sean de este tipo de dato.
 		 */
 		public void rgbNormalization() {
 			for (int i = 0; i < kernel.length; i++)
 				for (int j = 0; j < kernel[0].length; j++)
-					kernel[i][j] = ((byte)kernel[i][j]) & 0xff;
+					kernel[i][j] = ((byte) kernel[i][j]) & 0xff;
 		}
 	}
 
@@ -138,21 +146,25 @@ public abstract class RasterFilter implements IRasterFilter, Cloneable {
 	 */
 	public RasterFilter() {
 	}
-	
+
 	/**
 	 * Instancia un filtro a partir de su nombre
-	 * @param strPackage Paquete 
+	 * 
+	 * @param strPackage
+	 *            Paquete
 	 * @return Filtro instanciado
 	 * @throws FilterTypeException
 	 */
-	static public RasterFilter createFilter(String strPackage) throws FilterTypeException {
+	static public RasterFilter createFilter(String strPackage)
+			throws FilterTypeException {
 		Class filterClass = null;
 		try {
 			filterClass = Class.forName(strPackage.trim());
 		} catch (ClassNotFoundException e) {
-			throw new FilterTypeException("No puedo instanciar " + strPackage.trim());
+			throw new FilterTypeException("No puedo instanciar "
+					+ strPackage.trim());
 		}
-		
+
 		Constructor con = null;
 		try {
 			con = filterClass.getConstructor(null);
@@ -161,7 +173,7 @@ public abstract class RasterFilter implements IRasterFilter, Cloneable {
 		} catch (NoSuchMethodException e) {
 			throw new FilterTypeException("");
 		}
-		
+
 		RasterFilter newFilter = null;
 		try {
 			newFilter = (RasterFilter) con.newInstance(null);
@@ -179,21 +191,24 @@ public abstract class RasterFilter implements IRasterFilter, Cloneable {
 
 	/**
 	 * Aplica el filtro sobre el raster pasado pixel a pixel
+	 * 
 	 * @throws InterruptedException
 	 */
 	public void execute() throws InterruptedException {
-		RasterTask task = RasterTaskQueue.get(Thread.currentThread().toString());
+		RasterTask task = RasterTaskQueue
+				.get(Thread.currentThread().toString());
 		pre();
-		if (raster != null && raster.getDataType() != this.getInRasterDataType())
+		if (raster != null
+				&& raster.getDataType() != this.getInRasterDataType())
 			exec = false;
 		percent = 0;
 		if (exec) {
-			for (int row = 0; row < height; row ++) {
-				for (int col = 0; col < width; col ++)
+			for (int row = 0; row < height; row++) {
+				for (int col = 0; col < width; col++)
 					try {
 						process(col, row);
-					}catch (ArrayIndexOutOfBoundsException e) {
-						//System.out.println(row + " " + col);
+					} catch (ArrayIndexOutOfBoundsException e) {
+						// System.out.println(row + " " + col);
 					}
 
 				if (task.getEvent() != null)
@@ -208,9 +223,11 @@ public abstract class RasterFilter implements IRasterFilter, Cloneable {
 
 	/**
 	 * Añade un parámetro al filtro
-	 *
-	 * @param name Clave del parámetro
-	 * @param param Objeto pasado como parámetro
+	 * 
+	 * @param name
+	 *            Clave del parámetro
+	 * @param param
+	 *            Objeto pasado como parámetro
 	 */
 	public void addParam(String name, Object param) {
 		if (param != null)
@@ -221,7 +238,9 @@ public abstract class RasterFilter implements IRasterFilter, Cloneable {
 
 	/**
 	 * Elimina un parámetro del filtro
-	 * @param name Clave del parámetro a eliminar
+	 * 
+	 * @param name
+	 *            Clave del parámetro a eliminar
 	 */
 	public void removeParam(String name) {
 		params.remove(name);
@@ -229,15 +248,18 @@ public abstract class RasterFilter implements IRasterFilter, Cloneable {
 
 	/**
 	 * Obtiene un parámetro a partir de la clave
-	 * @param name Parámetro
+	 * 
+	 * @param name
+	 *            Parámetro
 	 * @return Parámetro
 	 */
 	public Object getParam(String name) {
 		return params.get(name);
 	}
 
-		/**
-	 * @param extent The extent to set.
+	/**
+	 * @param extent
+	 *            The extent to set.
 	 */
 	public void setExtent(Extent extent) {
 		this.extent = extent;
@@ -245,6 +267,7 @@ public abstract class RasterFilter implements IRasterFilter, Cloneable {
 
 	/**
 	 * Obtiene true si el filtro va a ser ejecutado o false si no va a serlo
+	 * 
 	 * @return
 	 */
 	public boolean isExec() {
@@ -252,8 +275,9 @@ public abstract class RasterFilter implements IRasterFilter, Cloneable {
 	}
 
 	/**
-	 * Asigna el valor a la variable exec. Esta estará a true si el filtro se ejecutará la próxima
-	 * vez que se repinte o false si no se ejecuta.
+	 * Asigna el valor a la variable exec. Esta estará a true si el filtro se
+	 * ejecutará la próxima vez que se repinte o false si no se ejecuta.
+	 * 
 	 * @param exec
 	 */
 	public void setExec(boolean exec) {
@@ -262,6 +286,7 @@ public abstract class RasterFilter implements IRasterFilter, Cloneable {
 
 	/**
 	 * Pone a cero el contador del porcentaje del proceso de filtrado
+	 * 
 	 * @return
 	 */
 	public void resetPercent() {
@@ -270,6 +295,7 @@ public abstract class RasterFilter implements IRasterFilter, Cloneable {
 
 	/**
 	 * Obtiene el porcentaje recorrido del proceso de filtrado
+	 * 
 	 * @return
 	 */
 	public int getPercent() {
@@ -288,7 +314,8 @@ public abstract class RasterFilter implements IRasterFilter, Cloneable {
 
 	/**
 	 * Ejecución del filtro para un pixel de la imagen
-	 * @throws InterruptedException 
+	 * 
+	 * @throws InterruptedException
 	 */
 	abstract public void process(int x, int y) throws InterruptedException;
 
@@ -303,39 +330,50 @@ public abstract class RasterFilter implements IRasterFilter, Cloneable {
 	abstract public int getOutRasterDataType();
 
 	/**
-	 * Obtiene el resultado del filtro despues de su ejecución a través de una clave
-	 * @param name        clave para obtener un objeto resultado del filtro.
+	 * Obtiene el resultado del filtro despues de su ejecución a través de una
+	 * clave
+	 * 
+	 * @param name
+	 *            clave para obtener un objeto resultado del filtro.
 	 */
 	abstract public Object getResult(String name);
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.IRasterFilter#getGroup()
 	 */
 	abstract public String getGroup();
 
 	/**
 	 * Obtener que datos puede tratar una interfaz con sus valores
-	 * @param nameFilter. Cada tipo de filtro puede tener parametros distintos
+	 * 
+	 * @param nameFilter
+	 *            . Cada tipo de filtro puede tener parametros distintos
 	 * @return
 	 */
 	abstract public Params getUIParams(String nameFilter);
 
 	/**
 	 * Obtener que las entradas que puede aperecer un filtro en el interfaz
+	 * 
 	 * @return
 	 */
 	abstract public String[] getNames();
 
 	/**
-	 * Devolverá un booleano indicando si es visible o no en el panel de filtros.
+	 * Devolverá un booleano indicando si es visible o no en el panel de
+	 * filtros.
+	 * 
 	 * @return
 	 */
 	public boolean isVisible() {
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#clone()
 	 */
 	public Object clone() throws CloneNotSupportedException {
@@ -344,6 +382,7 @@ public abstract class RasterFilter implements IRasterFilter, Cloneable {
 
 	/**
 	 * Devuelve el nombre interno del filtro
+	 * 
 	 * @return the fName
 	 */
 	public String getName() {
@@ -351,7 +390,8 @@ public abstract class RasterFilter implements IRasterFilter, Cloneable {
 	}
 
 	/**
-	 * @param name the fName to set
+	 * @param name
+	 *            the fName to set
 	 */
 	public void setName(String name) {
 		fName = name;
@@ -359,6 +399,7 @@ public abstract class RasterFilter implements IRasterFilter, Cloneable {
 
 	/**
 	 * Obtiene el TreeMap con los parámetros del entorno
+	 * 
 	 * @return TreeMap
 	 */
 	public TreeMap getEnv() {
@@ -367,32 +408,36 @@ public abstract class RasterFilter implements IRasterFilter, Cloneable {
 
 	/**
 	 * Asigna el TreeMap con los parámetros del entorno
+	 * 
 	 * @param env
 	 */
 	public void setEnv(TreeMap env) {
 		this.environment = env;
 	}
 
-	protected void mergeBufferTransparency(IBuffer rasterAlpha) throws InterruptedException {
-		GridTransparency transparency = (GridTransparency) environment.get("Transparency");
+	protected void mergeBufferTransparency(IBuffer rasterAlpha)
+			throws InterruptedException {
+		GridTransparency transparency = (GridTransparency) environment
+				.get("Transparency");
 
 		if (transparency != null) {
 			if (transparency.getAlphaBand() != null)
-				transparency.mergeBuffer(rasterAlpha, transparency.getAlphaBand());
+				transparency.mergeBuffer(rasterAlpha,
+						transparency.getAlphaBand());
 			else
 				transparency.setAlphaBand(rasterAlpha);
 
 			transparency.activeTransparency();
 		}
 	}
-	
+
 	/**
 	 * Releases buffer resources
 	 */
 	public void free() {
-		if(raster != null)
+		if (raster != null)
 			raster.free();
-		if(rasterResult != null)
+		if (rasterResult != null)
 			rasterResult.free();
 		rasterResult = null;
 		raster = null;

@@ -40,12 +40,12 @@
  */
 package org.gvsig.remoteClient.sld;
 
-
 /**
- * Implements the LegendGraphic element of an SLD implementation specification .<p>
+ * Implements the LegendGraphic element of an SLD implementation specification .
+ * <p>
  * 
- * The LegendGraphic element gives an optional explicit Graphic Symbol to be displayed
- * i a legend or the rule that contains it inside.
+ * The LegendGraphic element gives an optional explicit Graphic Symbol to be
+ * displayed i a legend or the rule that contains it inside.
  * 
  * @see SLDGraphic
  * @see http://portal.opengeospatial.org/files/?artifact_id=1188
@@ -63,5 +63,5 @@ public abstract class SLDLegendGraphic implements ISLDFeatures {
 	public void setGraphic(SLDGraphic graphic) {
 		this.graphic = graphic;
 	}
-	
+
 }

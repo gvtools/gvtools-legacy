@@ -41,65 +41,95 @@
 package com.iver.cit.gvsig.fmap.layers;
 
 /**
- * <p>Event produced when a layer has been or is being moved from a collection of layers.</p>
- *
+ * <p>
+ * Event produced when a layer has been or is being moved from a collection of
+ * layers.
+ * </p>
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LayerPositionEvent extends LayerCollectionEvent {
 	/**
-	 * <p>If this event is a <i>LAYER_MOVED</i> type, stores the previous index of the affected layer in the layer
-	 *  collection; otherwise its value will be the same as the <code>newPos</code> one.</p>
+	 * <p>
+	 * If this event is a <i>LAYER_MOVED</i> type, stores the previous index of
+	 * the affected layer in the layer collection; otherwise its value will be
+	 * the same as the <code>newPos</code> one.
+	 * </p>
 	 */
 	private int oldPos;
 
 	/**
-	 * <p>The new index in the layer collection of the layer affected.</p>
+	 * <p>
+	 * The new index in the layer collection of the layer affected.
+	 * </p>
 	 */
 	private int newPos;
 
 	/**
-	 * <p>Identifies this event as a action on a layer that is being moved.</p>
+	 * <p>
+	 * Identifies this event as a action on a layer that is being moved.
+	 * </p>
 	 */
 	private final static int LAYER_MOVING = 4;
 
 	/**
-	 * <p>Identifies this event as a action on a layer that has been moved.</p>
+	 * <p>
+	 * Identifies this event as a action on a layer that has been moved.
+	 * </p>
 	 */
 	private final static int LAYER_MOVED = 1;
 
 	/**
-	 * <p>Creates a new layer position event notifying a "layer moved" action.</p>
+	 * <p>
+	 * Creates a new layer position event notifying a "layer moved" action.
+	 * </p>
 	 * 
-	 * @param lyr layer affected by the action
-	 * @param oldp previous index of the affected layer in the layer collection
-	 * @param newp new index of the affected layer in the layer collection
+	 * @param lyr
+	 *            layer affected by the action
+	 * @param oldp
+	 *            previous index of the affected layer in the layer collection
+	 * @param newp
+	 *            new index of the affected layer in the layer collection
 	 * 
 	 * @return a new layer position event
 	 */
-	public static LayerPositionEvent createLayerMovedEvent(FLayer lyr, int oldp, int newp){
+	public static LayerPositionEvent createLayerMovedEvent(FLayer lyr,
+			int oldp, int newp) {
 		return new LayerPositionEvent(lyr, oldp, newp, LAYER_MOVED);
 	}
 
 	/**
-	 * <p>Creates a new layer position event notifying a "layer moving" action.</p>
+	 * <p>
+	 * Creates a new layer position event notifying a "layer moving" action.
+	 * </p>
 	 * 
-	 * @param lyr layer affected by the action
-	 * @param oldp previous index of the affected layer in the layer collection
-	 * @param newp new index of the affected layer in the layer collection
+	 * @param lyr
+	 *            layer affected by the action
+	 * @param oldp
+	 *            previous index of the affected layer in the layer collection
+	 * @param newp
+	 *            new index of the affected layer in the layer collection
 	 * 
 	 * @return a new layer position event
 	 */
-	public static LayerPositionEvent createLayerMovingEvent(FLayer lyr, int oldp, int newp){
+	public static LayerPositionEvent createLayerMovingEvent(FLayer lyr,
+			int oldp, int newp) {
 		return new LayerPositionEvent(lyr, oldp, newp, LAYER_MOVING);
 	}
 
 	/**
-	 * <p>Creates a new layer position event of the specified type.</p>
+	 * <p>
+	 * Creates a new layer position event of the specified type.
+	 * </p>
 	 * 
-	 * @param lyr layer affected by the action
-	 * @param oldp previous index of the affected layer in the layer collection
-	 * @param newp new index of the affected layer in the layer collection
-	 * @param eventType type of layer collection event
+	 * @param lyr
+	 *            layer affected by the action
+	 * @param oldp
+	 *            previous index of the affected layer in the layer collection
+	 * @param newp
+	 *            new index of the affected layer in the layer collection
+	 * @param eventType
+	 *            type of layer collection event
 	 * 
 	 * @return a new layer position event
 	 */
@@ -110,8 +140,10 @@ public class LayerPositionEvent extends LayerCollectionEvent {
 	}
 
 	/**
-	 * <p>Gets the previous index of the affected layer in the layer collection.</p>
-	 *
+	 * <p>
+	 * Gets the previous index of the affected layer in the layer collection.
+	 * </p>
+	 * 
 	 * @return the previous index
 	 */
 	public int getOldPos() {
@@ -119,8 +151,10 @@ public class LayerPositionEvent extends LayerCollectionEvent {
 	}
 
 	/**
-	 * <p>Gets the new index of the affected layer in the layer collection.</p>
-	 *
+	 * <p>
+	 * Gets the new index of the affected layer in the layer collection.
+	 * </p>
+	 * 
 	 * @return the new index
 	 */
 	public int getNewPos() {

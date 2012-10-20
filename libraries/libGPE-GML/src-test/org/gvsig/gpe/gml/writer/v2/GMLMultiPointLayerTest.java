@@ -69,9 +69,10 @@ import org.gvsig.gpe.writer.GPEMultiPointLayerTest;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class GMLMultiPointLayerTest extends GPEMultiPointLayerTest{
+public class GMLMultiPointLayerTest extends GPEMultiPointLayerTest {
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEParserClass()
 	 */
 	public Class getGPEParserClass() {
@@ -80,6 +81,7 @@ public class GMLMultiPointLayerTest extends GPEMultiPointLayerTest{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEWriterHandlerClass()
 	 */
 	public Class getGPEWriterHandlerClass() {
@@ -87,4 +89,3 @@ public class GMLMultiPointLayerTest extends GPEMultiPointLayerTest{
 	}
 
 }
-

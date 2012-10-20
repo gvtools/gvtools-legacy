@@ -4,12 +4,7 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.net.URL;
 
-import org.gvsig.remoteClient.wfs.exceptions.WFSException;
-
-import com.iver.andami.PluginServices;
-import com.iver.andami.messages.NotificationManager;
 import com.iver.cit.gvsig.exceptions.layers.ConnectionErrorLayerException;
-import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.fmap.drivers.wfs.FMapWFSDriver;
 import com.iver.cit.gvsig.fmap.drivers.wfs.FMapWFSDriverFactory;
 import com.iver.cit.gvsig.fmap.layers.WFSLayerNode;
@@ -101,7 +96,10 @@ import com.iver.cit.gvsig.fmap.layers.WFSLayerNode;
  */
 
 /**
- * <p>Model with the information used to add or load a WFS layer using a WFS wizard.</p>
+ * <p>
+ * Model with the information used to add or load a WFS layer using a WFS
+ * wizard.
+ * </p>
  * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
@@ -119,38 +117,39 @@ public class WFSWizardData {
 	 * 
 	 * @return the online resource
 	 */
-	public String getOnlineResource(){
+	public String getOnlineResource() {
 		return driver.getOnlineResource();
 	}
 
 	/**
 	 * Gets the host of the WFS driver.
-	 *
+	 * 
 	 * @return the host name
 	 */
-	public String getHost(){
+	public String getHost() {
 		return driver.getHost();
 	}
 
 	/**
 	 * Create the WFSClient and try to connect
 	 * 
-	 * @param host server name
-	 * @throws Exception 
+	 * @param host
+	 *            server name
+	 * @throws Exception
 	 */
-	public void setHost(URL host,boolean override) throws Exception {
+	public void setHost(URL host, boolean override) throws Exception {
 		try {
 			driver = FMapWFSDriverFactory.getFMapDriverForURL(host);
 			try {
 				driver.createClient(host);
 			} catch (ConnectException e) {
-				throw new ConnectionErrorLayerException(host.toString(),e);
+				throw new ConnectionErrorLayerException(host.toString(), e);
 			} catch (IOException e) {
-				throw new ConnectionErrorLayerException(host.toString(),e);
+				throw new ConnectionErrorLayerException(host.toString(), e);
 			}
 
-			if (!driver.connect(override,null)){
-				throw new ConnectionErrorLayerException(host.toString(),null);
+			if (!driver.connect(override, null)) {
+				throw new ConnectionErrorLayerException(host.toString(), null);
 			}
 
 		} catch (Exception e1) {
@@ -160,13 +159,13 @@ public class WFSWizardData {
 
 	/**
 	 * The server's title (not used in gvSIG).
-	 *
+	 * 
 	 * @return server's title
 	 */
 	public String getTitle() {
 		title = driver.getServiceTitle();
 
-		if (title == null){
+		if (title == null) {
 			return "None";
 		}
 
@@ -175,13 +174,13 @@ public class WFSWizardData {
 
 	/**
 	 * The server's description.
-	 *
+	 * 
 	 * @return server's description
 	 */
 	public String getAbstract() {
-		_abstract= driver.getServiceAbstract();
+		_abstract = driver.getServiceAbstract();
 
-		if (_abstract == null){
+		if (_abstract == null) {
 			return "None";
 		}
 
@@ -200,20 +199,20 @@ public class WFSWizardData {
 	/**
 	 * @see FMapWFSDriver#getLayerList()
 	 */
-	public WFSLayerNode[] getFeatures(){
+	public WFSLayerNode[] getFeatures() {
 		return driver.getLayerList();
 	}
 
 	/**
 	 * @see FMapWFSDriver#getLayerInfo(String, String)
 	 */
-	public Object getFeatureInfo(String featureName, String nameSpace){
+	public Object getFeatureInfo(String featureName, String nameSpace) {
 		return driver.getLayerInfo(featureName, nameSpace);
 	}
 
 	/**
 	 * Gets the server type.
-	 *
+	 * 
 	 * @return server type
 	 */
 	public String getServerType() {
@@ -223,11 +222,11 @@ public class WFSWizardData {
 			return "WFS";
 		}
 
-		return "WFS "+ serverVersion;
+		return "WFS " + serverVersion;
 	}
 
 	/**
-	 * Gets the maximum number of features that can load. 
+	 * Gets the maximum number of features that can load.
 	 * 
 	 * @return the maximum number of features that can load
 	 */
@@ -236,16 +235,17 @@ public class WFSWizardData {
 	}
 
 	/**
-	 * Sets the maximum number of features that can load. 
+	 * Sets the maximum number of features that can load.
 	 * 
-	 * @param buffer the maximum number of features that can load
+	 * @param buffer
+	 *            the maximum number of features that can load
 	 */
 	public void setBuffer(int buffer) {
 		this.buffer = buffer;
 	}
 
 	/**
-	 * Gets the time out used to add or load a layer. 
+	 * Gets the time out used to add or load a layer.
 	 * 
 	 * @return the time out used to add or load a layer
 	 */
@@ -254,16 +254,17 @@ public class WFSWizardData {
 	}
 
 	/**
-	 * Sets the time out used to add or load a layer. 
+	 * Sets the time out used to add or load a layer.
 	 * 
-	 * @param timeOut the time out used to add or load a layer
+	 * @param timeOut
+	 *            the time out used to add or load a layer
 	 */
 	public void setTimeOut(int timeOut) {
 		this.timeOut = timeOut;
 	}
 
 	/**
-	 * Gets the user name. 
+	 * Gets the user name.
 	 * 
 	 * @return the user name
 	 */
@@ -272,9 +273,10 @@ public class WFSWizardData {
 	}
 
 	/**
-	 * Sets the user name. 
+	 * Sets the user name.
 	 * 
-	 * @param userName the user name
+	 * @param userName
+	 *            the user name
 	 */
 	public void setUserName(String userName) {
 		UserName = userName;
@@ -282,8 +284,9 @@ public class WFSWizardData {
 
 	/**
 	 * Sets the driver used to add or load a layer.
-	 *
-	 * @param driver the driver used to add or load a layer
+	 * 
+	 * @param driver
+	 *            the driver used to add or load a layer
 	 */
 	public void setDriver(FMapWFSDriver driver) {
 		this.driver = driver;

@@ -66,7 +66,7 @@ import com.hardcode.gdbms.engine.values.ValueFactory;
 
 /**
  * * Sumarization function that returns min value of all field values.
- *
+ * 
  * @author azabala
  */
 public class MaxFunction implements SummarizationFunction {
@@ -78,19 +78,19 @@ public class MaxFunction implements SummarizationFunction {
 		double val = value.doubleValue();
 		if (!set || maxValue < val) {
 			maxValue = val;
-			set= true;
+			set = true;
 		}
 	}
 
 	public NumericValue getSumarizeValue() {
-		if(!set){
-			//process method wasnt be called
+		if (!set) {
+			// process method wasnt be called
 			return ValueFactory.createValue(0d);
 		}
 		return ValueFactory.createValue(maxValue);
 	}
 
-	public String toString(){
+	public String toString() {
 		return "max";
 	}
 

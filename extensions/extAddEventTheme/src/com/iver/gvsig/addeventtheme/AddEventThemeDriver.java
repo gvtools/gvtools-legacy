@@ -79,66 +79,74 @@ import com.iver.utiles.IPersistence;
 import com.iver.utiles.XMLEntity;
 
 /**
- * The class AddEventThemeDriver allows to create a new FLayer from a
- * gvSIG DataSource.
- *
+ * The class AddEventThemeDriver allows to create a new FLayer from a gvSIG
+ * DataSource.
+ * 
  * @author jmorell
  */
-public class AddEventThemeDriver implements VectorialDriver, ObjectDriver, BoundedShapes, IPersistence, IDataSourceListener {
-    private Rectangle2D fullExtent = null;
-    private SelectableDataSource ds;
-    private int xFieldIndex;
-    private int yFieldIndex;
+public class AddEventThemeDriver implements VectorialDriver, ObjectDriver,
+		BoundedShapes, IPersistence, IDataSourceListener {
+	private Rectangle2D fullExtent = null;
+	private SelectableDataSource ds;
+	private int xFieldIndex;
+	private int yFieldIndex;
 
-    /**
-     * Initializes this.
-     * @param ds
-     * @param xFieldIndex
-     * @param yFieldIndex
-     * @throws ReadDriverException
-     * @throws DriverException
-     */
-    public void setData(DataSource ds, int xFieldIndex, int yFieldIndex) throws ReadDriverException {
-        this.ds = new SelectableDataSource(ds);
-        this.ds.addDataSourceListener(this);
-        this.xFieldIndex = xFieldIndex;
-        this.yFieldIndex = yFieldIndex;
-    }
-    public int[] getFieldsIndex(){
-    	int[] n=new int[2];
-    	n[0]=xFieldIndex;
-    	n[1]=yFieldIndex;
-    	return n;
-    }
-    public int getShapeType() {
-        return FShape.POINT;
-    }
+	/**
+	 * Initializes this.
+	 * 
+	 * @param ds
+	 * @param xFieldIndex
+	 * @param yFieldIndex
+	 * @throws ReadDriverException
+	 * @throws DriverException
+	 */
+	public void setData(DataSource ds, int xFieldIndex, int yFieldIndex)
+			throws ReadDriverException {
+		this.ds = new SelectableDataSource(ds);
+		this.ds.addDataSourceListener(this);
+		this.xFieldIndex = xFieldIndex;
+		this.yFieldIndex = yFieldIndex;
+	}
 
-    public int getShapeCount() throws ReadDriverException {
-        return (int) ds.getRowCount();
-    }
+	public int[] getFieldsIndex() {
+		int[] n = new int[2];
+		n[0] = xFieldIndex;
+		n[1] = yFieldIndex;
+		return n;
+	}
 
-    public DriverAttributes getDriverAttributes() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	public int getShapeType() {
+		return FShape.POINT;
+	}
 
-    private double getX(int row) throws ReadDriverException {
-    	try {
-    		return (new Double(ds.getFieldValue((int)row, xFieldIndex).toString())).doubleValue();
-    	} catch(NumberFormatException e) {
-    		return 0;
-    	}
-    }
-    private double getY(int row) throws ReadDriverException {
-    	try {
-    		return (new Double(ds.getFieldValue((int)row, yFieldIndex).toString())).doubleValue();
-    	} catch(NumberFormatException e) {
-    		return 0;
-    	}
-    }
+	public int getShapeCount() throws ReadDriverException {
+		return (int) ds.getRowCount();
+	}
 
-    public Rectangle2D getFullExtent() throws ReadDriverException {
+	public DriverAttributes getDriverAttributes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private double getX(int row) throws ReadDriverException {
+		try {
+			return (new Double(ds.getFieldValue((int) row, xFieldIndex)
+					.toString())).doubleValue();
+		} catch (NumberFormatException e) {
+			return 0;
+		}
+	}
+
+	private double getY(int row) throws ReadDriverException {
+		try {
+			return (new Double(ds.getFieldValue((int) row, yFieldIndex)
+					.toString())).doubleValue();
+		} catch (NumberFormatException e) {
+			return 0;
+		}
+	}
+
+	public Rectangle2D getFullExtent() throws ReadDriverException {
 		if (fullExtent == null) {
 			for (int i = 0; i < ds.getRowCount(); i++) {
 				double x = this.getX(i); // (new
@@ -160,76 +168,78 @@ public class AddEventThemeDriver implements VectorialDriver, ObjectDriver, Bound
 		return fullExtent;
 	}
 
-    public IGeometry getShape(int index) throws ReadDriverException{
-        double x;
-        double y;
-        try {
-            x = this.getX(index); // (new
+	public IGeometry getShape(int index) throws ReadDriverException {
+		double x;
+		double y;
+		try {
+			x = this.getX(index); // (new
 									// Double(((Value)ds.getFieldValue(index,
 									// xFieldIndex)).toString())).doubleValue();
-            y = this.getY(index); //(new Double(((Value)ds.getFieldValue(index, yFieldIndex)).toString())).doubleValue();
-            //System.err.println("La X = "+x+" , La Y = "+y);
-            FGeometry geometry = ShapeFactory.createGeometry(new FPoint2D(x, y));
-            return geometry;
-        } catch (NumberFormatException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return null;
-    }
+			y = this.getY(index); // (new Double(((Value)ds.getFieldValue(index,
+									// yFieldIndex)).toString())).doubleValue();
+			// System.err.println("La X = "+x+" , La Y = "+y);
+			FGeometry geometry = ShapeFactory
+					.createGeometry(new FPoint2D(x, y));
+			return geometry;
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 
-    public String getName() {
-        return "Add Event Layer Driver";
-    }
+	public String getName() {
+		return "Add Event Layer Driver";
+	}
 
-    public int[] getPrimaryKeys() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	public int[] getPrimaryKeys() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    public void write(DataWare dataWare) {
-        // TODO Auto-generated method stub
+	public void write(DataWare dataWare) {
+		// TODO Auto-generated method stub
 
-    }
+	}
 
-    public void setDataSourceFactory(DataSourceFactory arg0) {
-        // TODO Auto-generated method stub
+	public void setDataSourceFactory(DataSourceFactory arg0) {
+		// TODO Auto-generated method stub
 
-    }
+	}
 
-    public Value getFieldValue(long rowIndex, int fieldId) throws ReadDriverException {
-        return ds.getFieldValue(rowIndex, fieldId);
-    }
+	public Value getFieldValue(long rowIndex, int fieldId)
+			throws ReadDriverException {
+		return ds.getFieldValue(rowIndex, fieldId);
+	}
 
-    public int getFieldCount() throws ReadDriverException {
-        return ds.getFieldCount();
-    }
+	public int getFieldCount() throws ReadDriverException {
+		return ds.getFieldCount();
+	}
 
-    public String getFieldName(int fieldId) throws ReadDriverException {
-        return ds.getFieldName(fieldId);
-    }
+	public String getFieldName(int fieldId) throws ReadDriverException {
+		return ds.getFieldName(fieldId);
+	}
 
-    public long getRowCount() throws ReadDriverException {
-        return ds.getRowCount();
-    }
+	public long getRowCount() throws ReadDriverException {
+		return ds.getRowCount();
+	}
 
-    public int getFieldType(int i) throws ReadDriverException {
-        return ds.getFieldType(i);
-    }
+	public int getFieldType(int i) throws ReadDriverException {
+		return ds.getFieldType(i);
+	}
 
-    public String getClassName() {
-        return this.getClass().getName();
-    }
+	public String getClassName() {
+		return this.getClass().getName();
+	}
 
-
-    // Para guardar en el xml file
-    public XMLEntity getXMLEntity() {
-        XMLEntity xml = new XMLEntity();
-        xml.putProperty("className", this.getClass().getName());
-        xml.putProperty("xFieldIndex", xFieldIndex);
-        xml.putProperty("yFieldIndex", yFieldIndex);
-        xml.putProperty("tableName", ds.getName());
-        XMLEntity dsXML = null;
+	// Para guardar en el xml file
+	public XMLEntity getXMLEntity() {
+		XMLEntity xml = new XMLEntity();
+		xml.putProperty("className", this.getClass().getName());
+		xml.putProperty("xFieldIndex", xFieldIndex);
+		xml.putProperty("yFieldIndex", yFieldIndex);
+		xml.putProperty("tableName", ds.getName());
+		XMLEntity dsXML = null;
 
 		dsXML = this.getDataSourceXML();
 		if (dsXML != null) {
@@ -239,39 +249,42 @@ public class AddEventThemeDriver implements VectorialDriver, ObjectDriver, Bound
 			xml.putProperty("hasDSInfo", false);
 		}
 		return xml;
-    }
+	}
 
-    // Para recuperar del xml file
-    public void setXMLEntity(XMLEntity xml) {
-    	int xFieldIndex = xml.getIntProperty("xFieldIndex");
-    	int yFieldIndex = xml.getIntProperty("yFieldIndex");
-    	String tableName = xml.getStringProperty("tableName");
-    	DataSource ds;
-    	try {
-    		try {
-    			ds = LayerFactory.getDataSourceFactory().createRandomDataSource(tableName, DataSourceFactory.AUTOMATIC_OPENING);
-//  			Intentar reconstruir el DS!!!!!!!!!!
-    		} catch (NoSuchTableException e) {
-    			if (!xml.contains("hasDSInfo") || !xml.getBooleanProperty("hasDSInfo")) {
-    				// No esta registrado el DS y no tenemos su informacion en el
-    				// xml (proyecto viejo)... no podemos arreglarlo
-    				throw new RuntimeException(e);
-    			}
-    			try {
+	// Para recuperar del xml file
+	public void setXMLEntity(XMLEntity xml) {
+		int xFieldIndex = xml.getIntProperty("xFieldIndex");
+		int yFieldIndex = xml.getIntProperty("yFieldIndex");
+		String tableName = xml.getStringProperty("tableName");
+		DataSource ds;
+		try {
+			try {
+				ds = LayerFactory.getDataSourceFactory()
+						.createRandomDataSource(tableName,
+								DataSourceFactory.AUTOMATIC_OPENING);
+				// Intentar reconstruir el DS!!!!!!!!!!
+			} catch (NoSuchTableException e) {
+				if (!xml.contains("hasDSInfo")
+						|| !xml.getBooleanProperty("hasDSInfo")) {
+					// No esta registrado el DS y no tenemos su informacion en
+					// el
+					// xml (proyecto viejo)... no podemos arreglarlo
+					throw new RuntimeException(e);
+				}
+				try {
 					ds = this.getDataSourceFromXML(xml.getChild(0));
 				} catch (NoSuchTableException e1) {
 					throw new RuntimeException(e);
 				}
-    		}
-    		setData(ds, xFieldIndex, yFieldIndex);
-    	} catch (DriverLoadException e) {
-    		throw new RuntimeException(e);
-    	} catch (ReadDriverException e) {
-    		throw new RuntimeException(e);
-    	}
+			}
+			setData(ds, xFieldIndex, yFieldIndex);
+		} catch (DriverLoadException e) {
+			throw new RuntimeException(e);
+		} catch (ReadDriverException e) {
+			throw new RuntimeException(e);
+		}
 
-    }
-
+	}
 
 	public int getFieldWidth(int i) throws ReadDriverException {
 		return ds.getFieldWidth(i);
@@ -284,6 +297,7 @@ public class AddEventThemeDriver implements VectorialDriver, ObjectDriver, Bound
 	public int getShapeType(int index) throws ReadDriverException {
 		return getShape(index).getGeometryType();
 	}
+
 	public boolean isWritable() {
 		return true;
 	}
@@ -293,41 +307,46 @@ public class AddEventThemeDriver implements VectorialDriver, ObjectDriver, Bound
 
 	}
 
-	public void reload() throws ReloadDriverException{
+	public void reload() throws ReloadDriverException {
 		this.ds.reload();
 
 	}
 
-    private XMLEntity getDataSourceXML() {
-    	SourceInfo di = this.ds.getSourceInfo();
-    	ProjectExtension ext = (ProjectExtension) PluginServices.getExtension(ProjectExtension.class);
+	private XMLEntity getDataSourceXML() {
+		SourceInfo di = this.ds.getSourceInfo();
+		ProjectExtension ext = (ProjectExtension) PluginServices
+				.getExtension(ProjectExtension.class);
 
-    	return ext.getProject().getSourceInfoXMLEntity(di);
-    }
+		return ext.getProject().getSourceInfoXMLEntity(di);
+	}
 
-    private DataSource getDataSourceFromXML(XMLEntity xml) throws DriverLoadException, ReadDriverException, NoSuchTableException{
+	private DataSource getDataSourceFromXML(XMLEntity xml)
+			throws DriverLoadException, ReadDriverException,
+			NoSuchTableException {
 		if (xml.getStringProperty("type").equals("otherDriverFile")) {
-			LayerFactory.getDataSourceFactory().addFileDataSource(xml.getStringProperty(
-					"driverName"), xml.getStringProperty("gdbmsname"),
-				PathGenerator.getInstance().getAbsolutePath(xml.getStringProperty("file")));
+			LayerFactory.getDataSourceFactory().addFileDataSource(
+					xml.getStringProperty("driverName"),
+					xml.getStringProperty("gdbmsname"),
+					PathGenerator.getInstance().getAbsolutePath(
+							xml.getStringProperty("file")));
 		} else if (xml.getStringProperty("type").equals("sameDriverFile")) {
 		} else if (xml.getStringProperty("type").equals("db")) {
-			LayerFactory.getDataSourceFactory().addDBDataSourceByTable(xml.getStringProperty(
-					"gdbmsname"), xml.getStringProperty("host"),
-				xml.getIntProperty("port"),
-				xml.getStringProperty("user"),
-				xml.getStringProperty("password"),
-				xml.getStringProperty("dbName"),
-				xml.getStringProperty("tableName"),
-				xml.getStringProperty("driverInfo"));
+			LayerFactory.getDataSourceFactory().addDBDataSourceByTable(
+					xml.getStringProperty("gdbmsname"),
+					xml.getStringProperty("host"), xml.getIntProperty("port"),
+					xml.getStringProperty("user"),
+					xml.getStringProperty("password"),
+					xml.getStringProperty("dbName"),
+					xml.getStringProperty("tableName"),
+					xml.getStringProperty("driverInfo"));
 		}
 
-
-		DataSource ds = LayerFactory.getDataSourceFactory().createRandomDataSource(xml.getStringProperty(
-		"gdbmsname"), DataSourceFactory.AUTOMATIC_OPENING);
+		DataSource ds = LayerFactory.getDataSourceFactory()
+				.createRandomDataSource(xml.getStringProperty("gdbmsname"),
+						DataSourceFactory.AUTOMATIC_OPENING);
 
 		return ds;
 
-    }
+	}
 
 }

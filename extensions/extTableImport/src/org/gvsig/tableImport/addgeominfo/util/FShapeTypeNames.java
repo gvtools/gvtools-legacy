@@ -26,43 +26,49 @@ import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.core.FShape;
 
 /**
- * <p>Utility to convert a shape type in its representation in characters.</p>
+ * <p>
+ * Utility to convert a shape type in its representation in characters.
+ * </p>
  * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class FShapeTypeNames {
 	/**
-	 * <p>Returns an <code>String</code> that represents a <code>FShape</code> type.</p>
+	 * <p>
+	 * Returns an <code>String</code> that represents a <code>FShape</code>
+	 * type.
+	 * </p>
 	 * 
-	 * @param type a type defined in {@link FShape FShape}
+	 * @param type
+	 *            a type defined in {@link FShape FShape}
 	 * @return an <code>String</code> that represents the type
 	 */
 	public static String getFShapeTypeName(int type) {
-		switch(type) {
-			case FShape.NULL:
-				return "NULL";
-			case FShape.POINT:
-				return PluginServices.getText(null, "POINT");
-			case FShape.LINE:
-				return PluginServices.getText(null, "LINE");
-			case FShape.POLYGON:
-				return PluginServices.getText(null, "POLYGON");
-			case FShape.TEXT:
-				return PluginServices.getText(null, "TEXT");
-			case FShape.MULTI:
-				return PluginServices.getText(null, "MULTI");
-			case FShape.MULTIPOINT:
-				return PluginServices.getText(null, "MULTIPOINT");
-			case FShape.CIRCLE:
-				return PluginServices.getText(null, "CIRCLE");
-			case FShape.ARC:
-				return PluginServices.getText(null, "ARC");
-			case FShape.ELLIPSE:
-				return PluginServices.getText(null, "ELLIPSE");
-			case FShape.Z:
-				return "Z";
-			default:
-				return PluginServices.getText(null, "UNKNOWN");
+		switch (type) {
+		case FShape.NULL:
+			return "NULL";
+		case FShape.POINT:
+			return PluginServices.getText(null, "POINT");
+		case FShape.LINE:
+			return PluginServices.getText(null, "LINE");
+		case FShape.POLYGON:
+			return PluginServices.getText(null, "POLYGON");
+		case FShape.TEXT:
+			return PluginServices.getText(null, "TEXT");
+		case FShape.MULTI:
+			return PluginServices.getText(null, "MULTI");
+		case FShape.MULTIPOINT:
+			return PluginServices.getText(null, "MULTIPOINT");
+		case FShape.CIRCLE:
+			return PluginServices.getText(null, "CIRCLE");
+		case FShape.ARC:
+			return PluginServices.getText(null, "ARC");
+		case FShape.ELLIPSE:
+			return PluginServices.getText(null, "ELLIPSE");
+		case FShape.Z:
+			return "Z";
+		default:
+			return PluginServices.getText(null, "UNKNOWN");
 		}
 	}
 }

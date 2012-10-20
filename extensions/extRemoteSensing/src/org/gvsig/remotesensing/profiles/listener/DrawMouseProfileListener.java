@@ -1,42 +1,42 @@
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
-*
-* Copyright (C) 2007 Instituto de Desarrollo Regional and Generalitat Valenciana.
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License
-* as published by the Free Software Foundation; either version 2
-* of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
-*
-* For more information, contact:
-*
-*  Generalitat Valenciana
-*   Conselleria d'Infraestructures i Transport
-*   Av. Blasco Ibáñez, 50
-*   46010 VALENCIA
-*   SPAIN
-*
-*      +34 963862235
-*   gvsig@gva.es
-*      www.gvsig.gva.es
-*
-*    or
-*
-*   Instituto de Desarrollo Regional (Universidad de Castilla La-Mancha)
-*   Campus Universitario s/n
-*   02071 Alabacete
-*   Spain
-*
-*   +34 967 599 200
-*/
+ *
+ * Copyright (C) 2007 Instituto de Desarrollo Regional and Generalitat Valenciana.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
+ *
+ * For more information, contact:
+ *
+ *  Generalitat Valenciana
+ *   Conselleria d'Infraestructures i Transport
+ *   Av. Blasco Ibáñez, 50
+ *   46010 VALENCIA
+ *   SPAIN
+ *
+ *      +34 963862235
+ *   gvsig@gva.es
+ *      www.gvsig.gva.es
+ *
+ *    or
+ *
+ *   Instituto de Desarrollo Regional (Universidad de Castilla La-Mancha)
+ *   Campus Universitario s/n
+ *   02071 Alabacete
+ *   Spain
+ *
+ *   +34 967 599 200
+ */
 
 package org.gvsig.remotesensing.profiles.listener;
 
@@ -71,121 +71,143 @@ import com.iver.cit.gvsig.fmap.tools.Listeners.PointListener;
 import com.iver.cit.gvsig.fmap.tools.Listeners.PolylineListener;
 
 /**
- * Clase que define el comportamiento tras los eventos de dibujado sobre la imagen.
- * Se encarga del pintado de la grafica asociada a la geometria (punto o linea) dibujada.
+ * Clase que define el comportamiento tras los eventos de dibujado sobre la
+ * imagen. Se encarga del pintado de la grafica asociada a la geometria (punto o
+ * linea) dibujada.
  * 
- * @author aMuÑoz (alejandro.munoz@uclm.es)  
+ * @author aMuÑoz (alejandro.munoz@uclm.es)
  * @version 11/3/2008
  */
 
-public class DrawMouseProfileListener implements PolylineListener,PointListener {
-	
-	private ProfilePanel	panel 		= null;
+public class DrawMouseProfileListener implements PolylineListener,
+		PointListener {
+
+	private ProfilePanel panel = null;
 
 	/**
 	 * Constructor
-	 * @param panel principal de perfiles
+	 * 
+	 * @param panel
+	 *            principal de perfiles
 	 * */
 	public DrawMouseProfileListener(ProfilePanel panel) {
-		this.panel= panel;
+		this.panel = panel;
 	}
 
 	/**
-	 *  Eventos tras el dibujado de una linea. Se pinta la geometria dibujada en la vista y se genera el 
-	 *  gráfico asociado.
+	 * Eventos tras el dibujado de una linea. Se pinta la geometria dibujada en
+	 * la vista y se genera el gráfico asociado.
 	 * */
 	public void polylineFinished(MeasureEvent event) throws BehaviorException {
-		
+
 		GeneralPathX gp = event.getGP();
-        IGeometry geometry = null;
-        geometry = ShapeFactory.createPolyline2D(gp);
+		IGeometry geometry = null;
+		geometry = ShapeFactory.createPolyline2D(gp);
 		String roiName = "";
-		VectorialROI lineRoi= null;
+		VectorialROI lineRoi = null;
 		int selectedRow;
-		
+
 		try {
-			selectedRow = panel.getLineOptionsPanel().getTable().getSelectedRow();
-			roiName = (String)panel.getLineOptionsPanel().getTable().getModel().getValueAt(selectedRow,0);
-			lineRoi = (VectorialROI)panel.getLineOptionsPanel().getROI(roiName);
+			selectedRow = panel.getLineOptionsPanel().getTable()
+					.getSelectedRow();
+			roiName = (String) panel.getLineOptionsPanel().getTable()
+					.getModel().getValueAt(selectedRow, 0);
+			lineRoi = (VectorialROI) panel.getLineOptionsPanel()
+					.getROI(roiName);
 
 			// Si hay una roi con mas de una geometria no se hace nada.
-			if(lineRoi.getGeometries().size()>0)
-				return; 
-		
+			if (lineRoi.getGeometries().size() > 0)
+				return;
+
 			else {
 				lineRoi.addGeometry(geometry);
 				panel.getLineOptionsPanel().addROI(lineRoi);
 				ISymbol sym = null;
-				Color geometryColor = (Color)panel.getLineOptionsPanel().getTable().getModel().getValueAt(selectedRow, 1);
-				sym =SymbologyFactory.createDefaultLineSymbol();
-				((ILineSymbol)sym).setLineColor(geometryColor);
-			
-				GraphicLayer graphicLayer = panel.getLineOptionsPanel().getMapControl().getMapContext().getGraphicsLayer();
-				FGraphic fGraphic = new FGraphic(geometry,graphicLayer.addSymbol(sym)); 
-				panel.getLineOptionsPanel().getMapControl().getMapContext().getGraphicsLayer().addGraphic(fGraphic);
-				panel.getLineOptionsPanel().getRoiGraphics(roiName).add(fGraphic);
-				panel.getLineOptionsPanel().getMapControl().drawGraphics();		
+				Color geometryColor = (Color) panel.getLineOptionsPanel()
+						.getTable().getModel().getValueAt(selectedRow, 1);
+				sym = SymbologyFactory.createDefaultLineSymbol();
+				((ILineSymbol) sym).setLineColor(geometryColor);
+
+				GraphicLayer graphicLayer = panel.getLineOptionsPanel()
+						.getMapControl().getMapContext().getGraphicsLayer();
+				FGraphic fGraphic = new FGraphic(geometry,
+						graphicLayer.addSymbol(sym));
+				panel.getLineOptionsPanel().getMapControl().getMapContext()
+						.getGraphicsLayer().addGraphic(fGraphic);
+				panel.getLineOptionsPanel().getRoiGraphics(roiName)
+						.add(fGraphic);
+				panel.getLineOptionsPanel().getMapControl().drawGraphics();
 				panel.getLineOptionsPanel().getNewButton().setSelected(false);
-				panel.getMapControl().setTool(panel.getLineOptionsPanel().getPreviousTool());
+				panel.getMapControl().setTool(
+						panel.getLineOptionsPanel().getPreviousTool());
 				// Se pinta el grafico asociado
-				drawChartRoi(lineRoi,panel.getLineOptionsPanel().getComboBands().getSelectedIndex());
+				drawChartRoi(lineRoi, panel.getLineOptionsPanel()
+						.getComboBands().getSelectedIndex());
 			}
 		} catch (NotInitializeException e) {
-			RasterToolsUtil.messageBoxError("tabla_no_inicializada", this, e);	
+			RasterToolsUtil.messageBoxError("tabla_no_inicializada", this, e);
 		} catch (InterruptedException e) {
 		}
 	}
 
 	/**
-	 * @return  cursor asociado al panel activo 
+	 * @return cursor asociado al panel activo
 	 * */
 	public Cursor getCursor() {
-		if(panel.getPointOptionsPanel().getNextActive()==ProfilePanel.PANELZPROFILE)
+		if (panel.getPointOptionsPanel().getNextActive() == ProfilePanel.PANELZPROFILE)
 			return panel.getLineOptionsPanel().getToolCursor();
 		else
 			return panel.getPointOptionsPanel().getToolCursor();
 	}
 
-	
 	/**
-	 *  Eventos tras el dibujado de un punto. Se añade el punto a la roi activa del panel.
-	 *  Si esta roi tiene alguna geometria, se elimina.
+	 * Eventos tras el dibujado de un punto. Se añade el punto a la roi activa
+	 * del panel. Si esta roi tiene alguna geometria, se elimina.
 	 * */
 	public void point(PointEvent event) throws BehaviorException {
-		
+
 		Point2D point = event.getPoint();
-		Point2D p= panel.getPointOptionsPanel().getMapControl().getViewPort().toMapPoint(point);
-        IGeometry geometry = ShapeFactory.createPoint2D(p.getX(),p.getY());
-		VectorialROI pointRoi= null;
-        String roiName = "";
+		Point2D p = panel.getPointOptionsPanel().getMapControl().getViewPort()
+				.toMapPoint(point);
+		IGeometry geometry = ShapeFactory.createPoint2D(p.getX(), p.getY());
+		VectorialROI pointRoi = null;
+		String roiName = "";
 		int selectedRow;
 		try {
-			
-			selectedRow = panel.getPointOptionsPanel().getTable().getSelectedRow();
-			panel.getPointOptionsPanel().getTable().getModel().setValueAt(new Double(p.getX()), selectedRow, 2);
-			panel.getPointOptionsPanel().getTable().getModel().setValueAt(new Double(p.getY()), selectedRow, 3);
-			roiName = (String)panel.getPointOptionsPanel().getTable().getModel().getValueAt(selectedRow,0);
-			pointRoi =(VectorialROI)panel.getPointOptionsPanel().getRois().get(roiName);
+
+			selectedRow = panel.getPointOptionsPanel().getTable()
+					.getSelectedRow();
+			panel.getPointOptionsPanel().getTable().getModel()
+					.setValueAt(new Double(p.getX()), selectedRow, 2);
+			panel.getPointOptionsPanel().getTable().getModel()
+					.setValueAt(new Double(p.getY()), selectedRow, 3);
+			roiName = (String) panel.getPointOptionsPanel().getTable()
+					.getModel().getValueAt(selectedRow, 0);
+			pointRoi = (VectorialROI) panel.getPointOptionsPanel().getRois()
+					.get(roiName);
 			pointRoi.clear();
 			pointRoi.addGeometry(geometry);
 			panel.getPointOptionsPanel().addROI(pointRoi);
 			// Actualización del gráfico
 			drawChartAllPointsRois();
 			panel.getPointOptionsPanel().getNewButton().setSelected(false);
-			panel.getMapControl().setTool(panel.getPointOptionsPanel().getPreviousTool());
+			panel.getMapControl().setTool(
+					panel.getPointOptionsPanel().getPreviousTool());
 		} catch (NotInitializeException e) {
-			RasterToolsUtil.messageBoxError("tabla_no_inicializada", this, e);	
+			RasterToolsUtil.messageBoxError("tabla_no_inicializada", this, e);
 		}
 	}
 
-	
-	/** 
-	 * 	Metodo que se encarga de pintar la roi de tipo linea que se pasa como parametro sobre el grafico.
-	 * 	La vanda de la que se tomarán los valores es la que se pasa como parámetro.
-	 * @throws InterruptedException  
+	/**
+	 * Metodo que se encarga de pintar la roi de tipo linea que se pasa como
+	 * parametro sobre el grafico. La vanda de la que se tomarán los valores es
+	 * la que se pasa como parámetro.
+	 * 
+	 * @throws InterruptedException
 	 * */
-	private void drawChartRoi(VectorialROI roi, int band) throws InterruptedException {
-		
+	private void drawChartRoi(VectorialROI roi, int band)
+			throws InterruptedException {
+
 		try {
 			int[][] series;
 			series = new int[1][roi.getValues()];
@@ -193,47 +215,44 @@ public class DrawMouseProfileListener implements PolylineListener,PointListener 
 			names[0] = "Grafico";
 			roi.setBandToOperate(band);
 			series = new int[1][roi.getValues()];
-			int k=0;
-			int z=0;
-			if(roi.getGrid().getDataType() == RasterBuffer.TYPE_BYTE){
-				for (int i = 0; i < roi.getNX(); i++){
-					for (int j = 0; j < roi.getNY(); j++){	
-						z= (int) roi.getCellValueAsByte(i,j);
-						if(!roi.isNoDataValue(z)){
-							series[0][k] =z;
+			int k = 0;
+			int z = 0;
+			if (roi.getGrid().getDataType() == RasterBuffer.TYPE_BYTE) {
+				for (int i = 0; i < roi.getNX(); i++) {
+					for (int j = 0; j < roi.getNY(); j++) {
+						z = (int) roi.getCellValueAsByte(i, j);
+						if (!roi.isNoDataValue(z)) {
+							series[0][k] = z;
 							k++;
 						}
 					}
 				}
-			}
-			else if(roi.getGrid().getDataType() == RasterBuffer.TYPE_SHORT){
-				for (int i = 0; i < roi.getNX(); i++){
-					for (int j = 0; j < roi.getNY(); j++){	
-						z= (int) roi.getCellValueAsShort(i,j);
-						if(!roi.isNoDataValue(z)){
-							series[0][k] =z;
+			} else if (roi.getGrid().getDataType() == RasterBuffer.TYPE_SHORT) {
+				for (int i = 0; i < roi.getNX(); i++) {
+					for (int j = 0; j < roi.getNY(); j++) {
+						z = (int) roi.getCellValueAsShort(i, j);
+						if (!roi.isNoDataValue(z)) {
+							series[0][k] = z;
 							k++;
 						}
 					}
 				}
-			}
-			else if(roi.getGrid().getDataType() == RasterBuffer.TYPE_INT){
-				for (int i = 0; i < roi.getNX(); i++){
-					for (int j = 0; j < roi.getNY(); j++){	
-						z= (int) roi.getCellValueAsInt(i,j);
-						if(!roi.isNoDataValue(z)){
-							series[0][k] =z;
+			} else if (roi.getGrid().getDataType() == RasterBuffer.TYPE_INT) {
+				for (int i = 0; i < roi.getNX(); i++) {
+					for (int j = 0; j < roi.getNY(); j++) {
+						z = (int) roi.getCellValueAsInt(i, j);
+						if (!roi.isNoDataValue(z)) {
+							series[0][k] = z;
 							k++;
 						}
 					}
 				}
-			}
-			else if(roi.getGrid().getDataType() == RasterBuffer.TYPE_FLOAT){
-				for (int i = 0; i < roi.getNX(); i++){
-					for (int j = 0; j < roi.getNY(); j++){	
-						z= (int) roi.getCellValueAsFloat(i,j);
-						if(!roi.isNoDataValue(z)){
-							series[0][k] =z;
+			} else if (roi.getGrid().getDataType() == RasterBuffer.TYPE_FLOAT) {
+				for (int i = 0; i < roi.getNX(); i++) {
+					for (int j = 0; j < roi.getNY(); j++) {
+						z = (int) roi.getCellValueAsFloat(i, j);
+						if (!roi.isNoDataValue(z)) {
+							series[0][k] = z;
 							k++;
 						}
 					}
@@ -241,40 +260,49 @@ public class DrawMouseProfileListener implements PolylineListener,PointListener 
 			}
 			// Actualizacion del grafico
 			panel.getLineOptionsPanel().SetColorSeriesChart();
-			panel.getLineOptionsPanel().getJPanelChart().setNewChart(series, names);
+			panel.getLineOptionsPanel().getJPanelChart()
+					.setNewChart(series, names);
 			panel.getLineOptionsPanel().updateUI();
-			int selectedRow = panel.getLineOptionsPanel().getTable().getSelectedRow();
+			int selectedRow = panel.getLineOptionsPanel().getTable()
+					.getSelectedRow();
 			roi.setBandToOperate(band);
-			double max=roi.getMaxValue();
-			double min= roi.getMinValue();
+			double max = roi.getMaxValue();
+			double min = roi.getMinValue();
 			double mean = roi.getMeanValue();
-			panel.getLineOptionsPanel().getTable().getModel().setValueAt(new Double(max), selectedRow, 2);
-			panel.getLineOptionsPanel().getTable().getModel().setValueAt(new Double(min), selectedRow, 3);
-			panel.getLineOptionsPanel().getTable().getModel().setValueAt(new Double(mean), selectedRow, 4);
-		
+			panel.getLineOptionsPanel().getTable().getModel()
+					.setValueAt(new Double(max), selectedRow, 2);
+			panel.getLineOptionsPanel().getTable().getModel()
+					.setValueAt(new Double(min), selectedRow, 3);
+			panel.getLineOptionsPanel().getTable().getModel()
+					.setValueAt(new Double(mean), selectedRow, 4);
+
 		} catch (GridException e) {
-			RasterToolsUtil.messageBoxError(PluginServices.getText(this, "grid_error"), this, e);
+			RasterToolsUtil.messageBoxError(
+					PluginServices.getText(this, "grid_error"), this, e);
 		} catch (NotInitializeException e) {
-			RasterToolsUtil.messageBoxError("tabla_no_inicializada", this, e);	
+			RasterToolsUtil.messageBoxError("tabla_no_inicializada", this, e);
 		}
 	}
 
 	/**
-	 * Método que realiza el repintado del grafico con todas las rois la tabla del panel zprofile.
+	 * Método que realiza el repintado del grafico con todas las rois la tabla
+	 * del panel zprofile.
 	 * */
-	private void drawChartAllPointsRois(){
-		
+	private void drawChartAllPointsRois() {
+
 		ISymbol symbol = null;
 		FGraphic fGraphic = null;
-		IGeometry geometry=null;
-		ArrayList roisArray =panel.getPointOptionsPanel().getROIs();
-		GraphicLayer graphicLayer = panel.getPointOptionsPanel().getMapControl().getMapContext().getGraphicsLayer();
-		VectorialROI pointRoi=null;
-		
-		for (Iterator iter = roisArray.iterator(); iter.hasNext();) { 
-			 pointRoi= (VectorialROI)iter.next();;
-			for (Iterator iterator = pointRoi.getGeometries()
-					.iterator(); iterator.hasNext();) {
+		IGeometry geometry = null;
+		ArrayList roisArray = panel.getPointOptionsPanel().getROIs();
+		GraphicLayer graphicLayer = panel.getPointOptionsPanel()
+				.getMapControl().getMapContext().getGraphicsLayer();
+		VectorialROI pointRoi = null;
+
+		for (Iterator iter = roisArray.iterator(); iter.hasNext();) {
+			pointRoi = (VectorialROI) iter.next();
+			;
+			for (Iterator iterator = pointRoi.getGeometries().iterator(); iterator
+					.hasNext();) {
 				geometry = (IGeometry) iterator.next();
 				switch (geometry.getGeometryType()) {
 				case FShape.POINT:
@@ -282,47 +310,50 @@ public class DrawMouseProfileListener implements PolylineListener,PointListener 
 					((IMarkerSymbol) symbol).setColor(pointRoi.getColor());
 					break;
 				}
-				fGraphic = new FGraphic(geometry, graphicLayer
-						.addSymbol(symbol));
+				fGraphic = new FGraphic(geometry,
+						graphicLayer.addSymbol(symbol));
 				graphicLayer.addGraphic(fGraphic);
-				panel.getPointOptionsPanel().getRoiGraphics(pointRoi.getName()).add(fGraphic);
+				panel.getPointOptionsPanel().getRoiGraphics(pointRoi.getName())
+						.add(fGraphic);
 			}
 		}
 		panel.getPointOptionsPanel().getMapControl().drawGraphics();
-	
+
 		int nSeries = panel.getPointOptionsPanel().getROIs().size();
-		int[][] series = new int[nSeries][pointRoi.getBandCount()+1];
+		int[][] series = new int[nSeries][pointRoi.getBandCount() + 1];
 		String[] names = new String[nSeries];
 
 		// Se establecen los colores de las graficas segun color de las rois
-		for(int iSerie = 0; iSerie < nSeries; iSerie++){
+		for (int iSerie = 0; iSerie < nSeries; iSerie++) {
 			series[iSerie][0] = 0;
-			names[iSerie] = "Band " + (iSerie+1);
-			pointRoi=(VectorialROI) panel.getPointOptionsPanel().getROIs().get(iSerie);
+			names[iSerie] = "Band " + (iSerie + 1);
+			pointRoi = (VectorialROI) panel.getPointOptionsPanel().getROIs()
+					.get(iSerie);
 			try {
-				for (int i = 1; i <= pointRoi.getBandCount(); i++){
-					pointRoi.setBandToOperate(i-1);
+				for (int i = 1; i <= pointRoi.getBandCount(); i++) {
+					pointRoi.setBandToOperate(i - 1);
 					series[iSerie][i] = (int) pointRoi.getMeanValue();
-				}	
+				}
 			} catch (GridException e) {
-				RasterToolsUtil.messageBoxError(PluginServices.getText(this, "grid_error"), this, e);
+				RasterToolsUtil.messageBoxError(
+						PluginServices.getText(this, "grid_error"), this, e);
 			}
 		}
 		panel.getPointOptionsPanel().UpdateChart();
-		panel.getPointOptionsPanel().getJPanelChart().setNewChart(series, names);
+		panel.getPointOptionsPanel().getJPanelChart()
+				.setNewChart(series, names);
 	}
 
-	
 	public boolean cancelDrawing() {
 		return true;
 	}
-	
+
 	public void pointFixed(MeasureEvent event) throws BehaviorException {
 	}
 
 	public void points(MeasureEvent event) throws BehaviorException {
 	}
 
-	public void pointDoubleClick(PointEvent event) throws BehaviorException {	
+	public void pointDoubleClick(PointEvent event) throws BehaviorException {
 	}
 }

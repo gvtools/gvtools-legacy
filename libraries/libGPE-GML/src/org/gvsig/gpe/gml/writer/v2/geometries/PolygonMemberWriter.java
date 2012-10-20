@@ -74,6 +74,7 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
 /**
  * It writes a gml:polygonMemberType object. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;polygonMember&gt;
@@ -87,49 +88,58 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  * &lt;/polygonMember&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class PolygonMemberWriter extends GeometryWriter{
-	
+public class PolygonMemberWriter extends GeometryWriter {
+
 	/**
 	 * It writes a gml:PolygonMember init tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param id
-	 * Geometry ID
+	 *            Geometry ID
 	 * @param coords
-	 * A coordinates sequence
+	 *            A coordinates sequence
 	 * @param srs
-	 * Spatial reference system
+	 *            Spatial reference system
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor handler, String id, 
-			ICoordinateSequence coords, String srs) throws IOException{
+	public void start(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler, String id,
+			ICoordinateSequence coords, String srs) throws IOException {
 		writer.writeStartElement(GMLTags.GML_NAMESPACE_URI, getGeometryName());
-		handler.getProfile().getPolygonWriter().start(writer, handler, id, coords, srs);	
+		handler.getProfile().getPolygonWriter()
+				.start(writer, handler, id, coords, srs);
 	}
-	
+
 	/**
 	 * It writes a gml:PolygonMember end tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @throws IOException
 	 */
-	public void end(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor handler) throws IOException{
+	public void end(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler) throws IOException {
 		handler.getProfile().getPolygonWriter().end(writer, handler);
 		writer.writeEndElement();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.v2.geometries.GeometryWriter#getGeometryName()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.v2.geometries.GeometryWriter#getGeometryName()
 	 */
 	public String getGeometryName() {
 		return GMLTags.GML_POLYGONMEMBER.getLocalPart();
-	}	
+	}
 }

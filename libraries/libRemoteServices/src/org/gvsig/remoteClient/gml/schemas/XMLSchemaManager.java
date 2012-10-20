@@ -79,191 +79,195 @@ import org.xmlpull.v1.XmlPullParserException;
  * 
  */
 /**
- * This class represents a GML file header. It has 
- * methods to parses the GML file header and retrieve
- * the namespaces and the attributes. If there is an schema
- * on the GML file, it has to manage it. It has to retrieve
- * the GML file version
+ * This class represents a GML file header. It has methods to parses the GML
+ * file header and retrieve the namespaces and the attributes. If there is an
+ * schema on the GML file, it has to manage it. It has to retrieve the GML file
+ * version
  * 
  * @author Jorge Piera Llodrï¿½ (piera_jor@gva.es)
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  * 
  */
 public class XMLSchemaManager {
-	
+
 	private File file = null;
 	private String schema = null;
 	private XMLSchemaParser nameSpaceParser = new XMLSchemaParser();
 	private String mainTag;
 	private int no_schema = 1;
-	
+
 	public GMLWarningInfo warnings = null;
-	
+
 	public XMLSchemaManager(File file) {
 		super();
 		this.file = file;
-		this.warnings= new GMLWarningInfo();
+		this.warnings = new GMLWarningInfo();
 	}
-	
+
 	/**
-	 * Reader for the GML file
-	 * It parses the GML header and returns the attributes
+	 * Reader for the GML file It parses the GML header and returns the
+	 * attributes
 	 * 
 	 * @param parser
-	 *  
-	 * @throws IOException 
-	 * @throws XmlPullParserException  
+	 * 
+	 * @throws IOException
+	 * @throws XmlPullParserException
 	 */
-	public void parse(XMLSchemaParser parser) throws XmlPullParserException, IOException{
-		//nextTag() --> Method from KXML library to get next full tag
+	public void parse(XMLSchemaParser parser) throws XmlPullParserException,
+			IOException {
+		// nextTag() --> Method from KXML library to get next full tag
 		parser.nextTag();
-		//It keeps the name of the start tag to compare with the close tag later
+		// It keeps the name of the start tag to compare with the close tag
+		// later
 		mainTag = parser.getName();
-		//If it has namespace before the ":" we keep the maintag without namespace 
+		// If it has namespace before the ":" we keep the maintag without
+		// namespace
 		int pos = mainTag.indexOf(":");
-		if (pos > 0){
-			mainTag = mainTag.substring(mainTag.indexOf(":") + 1,mainTag.length());
+		if (pos > 0) {
+			mainTag = mainTag.substring(mainTag.indexOf(":") + 1,
+					mainTag.length());
 		}
-		//It start to get all the attributes and values from the header tag
-		for (int i=0 ; i<parser.getAttributeCount() ; i++){
+		// It start to get all the attributes and values from the header tag
+		for (int i = 0; i < parser.getAttributeCount(); i++) {
 			String attName = parser.getAttributeName(i);
 			String attValue = parser.getAttributeValue(i);
-			
-						
-			//it splits the attributes names at the both sides from ":"
+
+			// it splits the attributes names at the both sides from ":"
 			String[] ns = attName.split(":");
-			
-			//If it founds the 'xmlns' is a new namespace declaration and it has to parse it
-			if ((ns.length>1) && (ns[0].compareTo(GMLTags.XML_NAMESPACE)==0)){
-				parseNameSpace(ns[1],attValue);
+
+			// If it founds the 'xmlns' is a new namespace declaration and it
+			// has to parse it
+			if ((ns.length > 1)
+					&& (ns[0].compareTo(GMLTags.XML_NAMESPACE) == 0)) {
+				parseNameSpace(ns[1], attValue);
 			}
-			//If its the SCHEMA LOCATION attribute, it means that there are schema and it tries to parse it
-			if ((ns.length>1) && (ns[1].compareTo(GMLTags.XML_SCHEMA_LOCATION)==0)){
-				no_schema=0;
-				parseSchemaLocation(ns[0],attValue);
-			}			
-		}	
-		if (no_schema==1){
-			//Alert that th GML File hasn't schema but it tries to parse
+			// If its the SCHEMA LOCATION attribute, it means that there are
+			// schema and it tries to parse it
+			if ((ns.length > 1)
+					&& (ns[1].compareTo(GMLTags.XML_SCHEMA_LOCATION) == 0)) {
+				no_schema = 0;
+				parseSchemaLocation(ns[0], attValue);
+			}
+		}
+		if (no_schema == 1) {
+			// Alert that th GML File hasn't schema but it tries to parse
 			warnings.setElement(new GMLWarningNoSchema());
 		}
 	}
-	
+
 	/**
 	 * It adds an XML namespace tag to the hashtable
-	 * @param xmlnsName : Namespace
-	 * @param xmlnsValue: URI 
+	 * 
+	 * @param xmlnsName
+	 *            : Namespace
+	 * @param xmlnsValue
+	 *            : URI
 	 */
-	private void parseNameSpace(String xmlnsName,String xmlnsValue){
-		XMLSchemasFactory.addType(xmlnsName,xmlnsValue);		
+	private void parseNameSpace(String xmlnsName, String xmlnsValue) {
+		XMLSchemasFactory.addType(xmlnsName, xmlnsValue);
 	}
-	
+
 	/**
-	 * Parses the schema location attribute
-	 * XML attribute that contains the schema location info
+	 * Parses the schema location attribute XML attribute that contains the
+	 * schema location info
 	 * 
 	 * @param namespace
 	 * @param schemas
 	 **/
-	private void parseSchemaLocation(String namespace,String schemas){
-		// It take the name of the schemas file to open or downlad 
+	private void parseSchemaLocation(String namespace, String schemas) {
+		// It take the name of the schemas file to open or downlad
 		StringTokenizer tokenizer = new StringTokenizer(schemas, " \t");
-        while (tokenizer.hasMoreTokens()){
-            String URI = tokenizer.nextToken();
-            if (!tokenizer.hasMoreTokens()){
-            	//If it hasn't the name of the schemas file or dont find it,
-            	//it exits, and tries to parse without schema
-            	warnings.setElement(new GMLWarningNotFound(null,null));
-            }
-            else
-            {
-            	schema = tokenizer.nextToken();
-            	//It add the schemaLocation to the hashtable
-            	String name = null;
+		while (tokenizer.hasMoreTokens()) {
+			String URI = tokenizer.nextToken();
+			if (!tokenizer.hasMoreTokens()) {
+				// If it hasn't the name of the schemas file or dont find it,
+				// it exits, and tries to parse without schema
+				warnings.setElement(new GMLWarningNotFound(null, null));
+			} else {
+				schema = tokenizer.nextToken();
+				// It add the schemaLocation to the hashtable
+				String name = null;
 				try {
-					name = XMLSchemasFactory.addSchemaLocation(namespace,URI,schema);
-				} 
-				catch (GMLException e) {
+					name = XMLSchemasFactory.addSchemaLocation(namespace, URI,
+							schema);
+				} catch (GMLException e) {
 					// TODO Auto-generated catch block
 					warnings.setElement(new GMLWarningMalformed());
 				}
-            	//It parses the schema.
-            	parseSchema(schema,name);
-            }
-        }
-	}	
-	
+				// It parses the schema.
+				parseSchema(schema, name);
+			}
+		}
+	}
+
 	/**
-	 * Schema to parse 
-	 * It Downloads the schemas and parses them
+	 * Schema to parse It Downloads the schemas and parses them
+	 * 
 	 * @param urlString
 	 * @param nameSpace
 	 */
-	private void parseSchema(String urlString,String nameSpace){
-		//If it is a local file, it has to construct the absolute route
-		if (urlString.indexOf("http://") != 0){
+	private void parseSchema(String urlString, String nameSpace) {
+		// If it is a local file, it has to construct the absolute route
+		if (urlString.indexOf("http://") != 0) {
 			File f = new File(urlString);
-			if (!(f.isAbsolute())){
-				urlString = file.getParentFile().getAbsolutePath() + File.separator +  urlString;
+			if (!(f.isAbsolute())) {
+				urlString = file.getParentFile().getAbsolutePath()
+						+ File.separator + urlString;
 				f = new File(urlString);
 			}
 			/****************************************
-			 * CALL TO THE SCHEMA PARSER   .XSD 	*
+			 * CALL TO THE SCHEMA PARSER .XSD *
 			 ****************************************/
 			try {
-				nameSpaceParser.parse(f,nameSpace);
+				nameSpaceParser.parse(f, nameSpace);
 			} catch (IOException e) {
-				//We can't open the file of the schema
-				warnings.setElement(new GMLWarningNotFound(f.getName(),e));
+				// We can't open the file of the schema
+				warnings.setElement(new GMLWarningNotFound(f.getName(), e));
 			} catch (XmlPullParserException e) {
-				//We can't open the file of the schema
-				warnings.setElement(new GMLWarningNotFound(f.getName(),e));
+				// We can't open the file of the schema
+				warnings.setElement(new GMLWarningNotFound(f.getName(), e));
 			}
-		
-		//Else it is an URL direction and it has to download it.
-		}else{
+
+			// Else it is an URL direction and it has to download it.
+		} else {
 			URL url;
 			try {
-					url = new URL(urlString);
-					//Download the schema without cancel option.
-					File f = Utilities.downloadFile(url,"gml_schmema.xsd", null);
-					/****************************************
-					 * CALL TO THE SCHEMA PARSER   .XSD 	*
-					 ****************************************/
-				   	nameSpaceParser.parse(f,nameSpace);
+				url = new URL(urlString);
+				// Download the schema without cancel option.
+				File f = Utilities.downloadFile(url, "gml_schmema.xsd", null);
+				/****************************************
+				 * CALL TO THE SCHEMA PARSER .XSD *
+				 ****************************************/
+				nameSpaceParser.parse(f, nameSpace);
+			} catch (MalformedURLException e) {
+				// We can't open the file of the schema
+				warnings.setElement(new GMLWarningNotFound(urlString, e));
+			} catch (ConnectException e) {
+				// We can't open the file of the schema
+				warnings.setElement(new GMLWarningNotFound(urlString, e));
+			} catch (UnknownHostException e) {
+				// We can't open the file of the schema
+				warnings.setElement(new GMLWarningNotFound(urlString, e));
+			} catch (IOException e) {
+				// We can't open the file of the schema
+				warnings.setElement(new GMLWarningNotFound(urlString, e));
+			} catch (XmlPullParserException e) {
+				// We can't open the file of the schema
+				warnings.setElement(new GMLWarningNotFound(urlString, e));
 			}
-			catch (MalformedURLException e) {
-				//We can't open the file of the schema
-				warnings.setElement(new GMLWarningNotFound(urlString,e));
-			}
-			catch (ConnectException e) {
-				//We can't open the file of the schema
-				warnings.setElement(new GMLWarningNotFound(urlString,e));
-			} 
-			catch (UnknownHostException e) {
-				//We can't open the file of the schema
-				warnings.setElement(new GMLWarningNotFound(urlString,e));
-			} 
-			catch (IOException e) {
-				//We can't open the file of the schema
-				warnings.setElement(new GMLWarningNotFound(urlString,e));
-			} 
-			catch (XmlPullParserException e) {
-				//We can't open the file of the schema
-				warnings.setElement(new GMLWarningNotFound(urlString,e));
-			}
-		}		
+		}
 	}
 
 	/**
 	 * @return Returns if there are schema.
 	 */
 	public boolean Schema() {
-		if (schema==null)
+		if (schema == null)
 			return false;
 		else
 			return true;
 	}
+
 	/**
 	 * @return Returns the targetNameSpace.
 	 */
@@ -272,10 +276,9 @@ public class XMLSchemaManager {
 	}
 
 	/**
-	 * @return Returns the version.
-	 * TODO: Manage the different versions
+	 * @return Returns the version. TODO: Manage the different versions
 	 */
 	public String getVersion() {
 		return nameSpaceParser.getversion();
 	}
-}	
+}

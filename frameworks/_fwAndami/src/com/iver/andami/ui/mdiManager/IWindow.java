@@ -41,11 +41,10 @@
 package com.iver.andami.ui.mdiManager;
 
 /**
- * The IWindow interface should be implemented by any panel which is
- * intended to be an Andami window. The JPanel implementing IWindow
- * will be the contents of the window, and the frame containing it
- * will be created by Andami.
- *
+ * The IWindow interface should be implemented by any panel which is intended to
+ * be an Andami window. The JPanel implementing IWindow will be the contents of
+ * the window, and the frame containing it will be created by Andami.
+ * 
  * @see MDIManager
  * @see WindowInfo
  * @see SingletonWindow
@@ -54,22 +53,23 @@ package com.iver.andami.ui.mdiManager;
  * @author Fernando González Cortés
  */
 public interface IWindow {
-    /**
-     * <p>Gets the initial window properties. It must be called just once
-     * from the framework. To get the current WindowInfo from this
-     * window, use
-     * <code>PluginServices.getMDIManager.getWindowInfo(window);</code></p>
-     *
-     * @return A WindowInfo object, containing the properties that
-     * this window should have when created
-     */
-    public WindowInfo getWindowInfo();
-    
-    
-    /**
-     * <p>Gets the profile for this window
-     *
-     * @return An object with the profile.
-     */
-    public Object getWindowProfile();
+	/**
+	 * <p>
+	 * Gets the initial window properties. It must be called just once from the
+	 * framework. To get the current WindowInfo from this window, use
+	 * <code>PluginServices.getMDIManager.getWindowInfo(window);</code>
+	 * </p>
+	 * 
+	 * @return A WindowInfo object, containing the properties that this window
+	 *         should have when created
+	 */
+	public WindowInfo getWindowInfo();
+
+	/**
+	 * <p>
+	 * Gets the profile for this window
+	 * 
+	 * @return An object with the profile.
+	 */
+	public Object getWindowProfile();
 }

@@ -69,7 +69,7 @@ import org.gvsig.gpe.kml.writer.v21.geometries.RegionWriter;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class Kml21WriterProfile extends DefaultWriterProfile{
+public class Kml21WriterProfile extends DefaultWriterProfile {
 	protected NameWriter nameWriter = null;
 	protected DescriptionWriter descriptionWriter = null;
 	protected CoordinatesWriter coordinatesWriter = null;
@@ -83,41 +83,47 @@ public class Kml21WriterProfile extends DefaultWriterProfile{
 	protected LineStringWriter lineStringWriter = null;
 	protected LinearRingWriter linearRingWriter = null;
 	protected MetadataWriter metadataWriter = null;
-	protected MultiGeometryWriter multiGeometryWriter= null;
+	protected MultiGeometryWriter multiGeometryWriter = null;
 	protected OuterBoundaryIsWriter outerBoundaryIsWriter = null;
 	protected PlaceMarkWriter placeMarkWriter = null;
 	protected PointWriter pointWriter = null;
 	protected PolygonWriter polygonWriter = null;
 	protected RegionWriter regionWriter = null;
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getNameWriter()
 	 */
-	public NameWriter getNameWriter(){
-		if (nameWriter == null){
+	public NameWriter getNameWriter() {
+		if (nameWriter == null) {
 			nameWriter = new NameWriter();
 		}
 		return nameWriter;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getDescriptionWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getDescriptionWriter()
 	 */
-	public DescriptionWriter getDescriptionWriter(){
-		if (descriptionWriter == null){
+	public DescriptionWriter getDescriptionWriter() {
+		if (descriptionWriter == null) {
 			descriptionWriter = new DescriptionWriter();
 		}
 		return descriptionWriter;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.writer.profiles.DefaultWriterProfile#getCoordinatesWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.writer.profiles.DefaultWriterProfile#getCoordinatesWriter
+	 * ()
 	 */
 	public CoordinatesWriter getCoordinatesWriter() {
-		if (coordinatesWriter == null){
+		if (coordinatesWriter == null) {
 			coordinatesWriter = new CoordinatesWriter();
 		}
 		return coordinatesWriter;
@@ -125,10 +131,13 @@ public class Kml21WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IWriterProfile#getDocumentWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.reader.bindings.profiles.IWriterProfile#getDocumentWriter
+	 * ()
 	 */
 	public DocumentWriter getDocumentWriter() {
-		if (documentWriter == null){
+		if (documentWriter == null) {
 			documentWriter = new DocumentWriter();
 		}
 		return documentWriter;
@@ -136,10 +145,13 @@ public class Kml21WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IWriterProfile#getElementWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.reader.bindings.profiles.IWriterProfile#getElementWriter
+	 * ()
 	 */
 	public ElementWriter getElementWriter() {
-		if (elementWriter == null){
+		if (elementWriter == null) {
 			elementWriter = new ElementWriter();
 		}
 		return elementWriter;
@@ -147,10 +159,13 @@ public class Kml21WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IWriterProfile#getFeatureWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.reader.bindings.profiles.IWriterProfile#getFeatureWriter
+	 * ()
 	 */
 	public FeatureWriter getFeatureWriter() {
-		if (featureWriter == null){
+		if (featureWriter == null) {
 			featureWriter = new FeatureWriter();
 		}
 		return featureWriter;
@@ -158,10 +173,13 @@ public class Kml21WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.reader.bindings.profiles.IWriterProfile#getFolderWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.reader.bindings.profiles.IWriterProfile#getFolderWriter
+	 * ()
 	 */
 	public FolderWriter getFolderWriter() {
-		if (folderWriter == null){
+		if (folderWriter == null) {
 			folderWriter = new FolderWriter();
 		}
 		return folderWriter;
@@ -169,10 +187,13 @@ public class Kml21WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.writer.profiles.DefaultWriterProfile#getGeometryWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.writer.profiles.DefaultWriterProfile#getGeometryWriter
+	 * ()
 	 */
 	public GeometriesWriter getGeometryWriter() {
-		if (geometriesWriter == null){
+		if (geometriesWriter == null) {
 			geometriesWriter = new GeometriesWriter();
 		}
 		return geometriesWriter;
@@ -180,10 +201,12 @@ public class Kml21WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.writer.profiles.DefaultWriterProfile#getInnerBoundaryIsWriter()
+	 * 
+	 * @see org.gvsig.gpe.kml.writer.profiles.DefaultWriterProfile#
+	 * getInnerBoundaryIsWriter()
 	 */
 	public InnerBoundaryIsWriter getInnerBoundaryIsWriter() {
-		if (innerBoundaryIsWriter == null){
+		if (innerBoundaryIsWriter == null) {
 			innerBoundaryIsWriter = new InnerBoundaryIsWriter();
 		}
 		return innerBoundaryIsWriter;
@@ -191,10 +214,13 @@ public class Kml21WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.writer.profiles.DefaultWriterProfile#getLatLonAltBoxWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.writer.profiles.DefaultWriterProfile#getLatLonAltBoxWriter
+	 * ()
 	 */
 	public LatLonAltBoxWriter getLatLonAltBoxWriter() {
-		if (latLonAltBoxWriter == null){
+		if (latLonAltBoxWriter == null) {
 			latLonAltBoxWriter = new LatLonAltBoxWriter();
 		}
 		return latLonAltBoxWriter;
@@ -202,10 +228,12 @@ public class Kml21WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.writer.profiles.DefaultWriterProfile#getLineStringTypeWriter()
+	 * 
+	 * @see org.gvsig.gpe.kml.writer.profiles.DefaultWriterProfile#
+	 * getLineStringTypeWriter()
 	 */
 	public LineStringWriter getLineStringTypeWriter() {
-		if (lineStringWriter == null){
+		if (lineStringWriter == null) {
 			lineStringWriter = new LineStringWriter();
 		}
 		return lineStringWriter;
@@ -213,10 +241,13 @@ public class Kml21WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.writer.profiles.DefaultWriterProfile#getLinearRingWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.writer.profiles.DefaultWriterProfile#getLinearRingWriter
+	 * ()
 	 */
 	public LinearRingWriter getLinearRingWriter() {
-		if (linearRingWriter == null){
+		if (linearRingWriter == null) {
 			linearRingWriter = new LinearRingWriter();
 		}
 		return linearRingWriter;
@@ -224,10 +255,13 @@ public class Kml21WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.writer.profiles.DefaultWriterProfile#getMetadataWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.writer.profiles.DefaultWriterProfile#getMetadataWriter
+	 * ()
 	 */
 	public MetadataWriter getMetadataWriter() {
-		if (metadataWriter == null){
+		if (metadataWriter == null) {
 			metadataWriter = new MetadataWriter();
 		}
 		return metadataWriter;
@@ -235,10 +269,13 @@ public class Kml21WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.writer.profiles.DefaultWriterProfile#getMultiGeometryWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.writer.profiles.DefaultWriterProfile#getMultiGeometryWriter
+	 * ()
 	 */
 	public MultiGeometryWriter getMultiGeometryWriter() {
-		if (multiGeometryWriter == null){
+		if (multiGeometryWriter == null) {
 			multiGeometryWriter = new MultiGeometryWriter();
 		}
 		return multiGeometryWriter;
@@ -246,10 +283,12 @@ public class Kml21WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.writer.profiles.DefaultWriterProfile#getOuterBoundaryIsWriter()
+	 * 
+	 * @see org.gvsig.gpe.kml.writer.profiles.DefaultWriterProfile#
+	 * getOuterBoundaryIsWriter()
 	 */
 	public OuterBoundaryIsWriter getOuterBoundaryIsWriter() {
-		if (outerBoundaryIsWriter == null){
+		if (outerBoundaryIsWriter == null) {
 			outerBoundaryIsWriter = new OuterBoundaryIsWriter();
 		}
 		return outerBoundaryIsWriter;
@@ -257,10 +296,13 @@ public class Kml21WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.writer.profiles.DefaultWriterProfile#getPlaceMarkWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.writer.profiles.DefaultWriterProfile#getPlaceMarkWriter
+	 * ()
 	 */
 	public PlaceMarkWriter getPlaceMarkWriter() {
-		if (placeMarkWriter == null){
+		if (placeMarkWriter == null) {
 			placeMarkWriter = new PlaceMarkWriter();
 		}
 		return placeMarkWriter;
@@ -268,10 +310,13 @@ public class Kml21WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.writer.profiles.DefaultWriterProfile#getPointTypeWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.writer.profiles.DefaultWriterProfile#getPointTypeWriter
+	 * ()
 	 */
 	public PointWriter getPointTypeWriter() {
-		if (pointWriter == null){
+		if (pointWriter == null) {
 			pointWriter = new PointWriter();
 		}
 		return pointWriter;
@@ -279,10 +324,13 @@ public class Kml21WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.writer.profiles.DefaultWriterProfile#getPolygonTypeWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.writer.profiles.DefaultWriterProfile#getPolygonTypeWriter
+	 * ()
 	 */
 	public PolygonWriter getPolygonTypeWriter() {
-		if (polygonWriter == null){
+		if (polygonWriter == null) {
 			polygonWriter = new PolygonWriter();
 		}
 		return polygonWriter;
@@ -290,10 +338,12 @@ public class Kml21WriterProfile extends DefaultWriterProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.writer.profiles.DefaultWriterProfile#getRegionWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.writer.profiles.DefaultWriterProfile#getRegionWriter()
 	 */
 	public RegionWriter getRegionWriter() {
-		if (regionWriter == null){
+		if (regionWriter == null) {
 			regionWriter = new RegionWriter();
 		}
 		return regionWriter;

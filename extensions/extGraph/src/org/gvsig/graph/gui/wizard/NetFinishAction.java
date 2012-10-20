@@ -40,20 +40,20 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: NetFinishAction.java 22182 2008-07-10 07:20:11Z fpenarrubia $
-* $Log$
-* Revision 1.3  2006-12-04 17:13:39  fjp
-* *** empty log message ***
-*
-* Revision 1.2  2006/10/25 19:13:55  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/10/19 15:12:10  jaume
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: NetFinishAction.java 22182 2008-07-10 07:20:11Z fpenarrubia $
+ * $Log$
+ * Revision 1.3  2006-12-04 17:13:39  fjp
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/10/25 19:13:55  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/10/19 15:12:10  jaume
+ * *** empty log message ***
+ *
+ *
+ */
 package org.gvsig.graph.gui.wizard;
 
 import jwizardcomponent.FinishAction;
@@ -67,6 +67,7 @@ class NetFinishAction extends FinishAction {
 		super(wizard.getWizardComponents());
 		this.owner = wizard;
 	}
+
 	public void performAction() {
 		owner.setWasFinishPressed(true);
 		PluginServices.getMDIManager().closeWindow(owner);

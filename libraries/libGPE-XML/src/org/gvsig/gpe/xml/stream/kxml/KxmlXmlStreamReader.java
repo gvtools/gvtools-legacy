@@ -67,146 +67,148 @@ import org.xmlpull.v1.XmlPullParserException;
  */
 public class KxmlXmlStreamReader implements IXmlStreamReader {
 
-    private XmlPullParser parser;
+	private XmlPullParser parser;
 
-    /**
-     * Default constructor for this parser
-     */
-    public KxmlXmlStreamReader() {
-        // do nothing
-    }
+	/**
+	 * Default constructor for this parser
+	 */
+	public KxmlXmlStreamReader() {
+		// do nothing
+	}
 
-    /**
-     * Sets the internal xmlpull parser input stream
-     * 
-     * @param inputStream
-     * @throws XmlStreamException
-     * @see org.gvsig.gpe.xml.stream.IXmlStreamReader#setInput(java.io.InputStream)
-     */
-    public void setInput(final InputStream inputStream) throws XmlStreamException {
-        try {
-            parser = new KXmlParser();
-            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
-            final String encoding = "UTF-8";// StreamUtils.getEncoding(inputStream);
-            // let the parser inferr the encoding
-            parser.setInput(inputStream, null);
-        } catch (XmlPullParserException e) {
-            throw new XmlStreamException(e);
-        }
-    }
+	/**
+	 * Sets the internal xmlpull parser input stream
+	 * 
+	 * @param inputStream
+	 * @throws XmlStreamException
+	 * @see org.gvsig.gpe.xml.stream.IXmlStreamReader#setInput(java.io.InputStream)
+	 */
+	public void setInput(final InputStream inputStream)
+			throws XmlStreamException {
+		try {
+			parser = new KXmlParser();
+			parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
+			final String encoding = "UTF-8";// StreamUtils.getEncoding(inputStream);
+			// let the parser inferr the encoding
+			parser.setInput(inputStream, null);
+		} catch (XmlPullParserException e) {
+			throw new XmlStreamException(e);
+		}
+	}
 
-    public int getAttributeCount() throws XmlStreamException {
-        return parser.getAttributeCount();
-    }
+	public int getAttributeCount() throws XmlStreamException {
+		return parser.getAttributeCount();
+	}
 
-    public QName getAttributeName(int i) throws XmlStreamException {
-        return new QName(parser.getNamespace(), parser.getAttributeName(i));
-    }
+	public QName getAttributeName(int i) throws XmlStreamException {
+		return new QName(parser.getNamespace(), parser.getAttributeName(i));
+	}
 
-    public String getAttributeValue(int i) throws XmlStreamException {
-        return parser.getAttributeValue(i);
-    }
+	public String getAttributeValue(int i) throws XmlStreamException {
+		return parser.getAttributeValue(i);
+	}
 
-    public int getEventType() throws XmlStreamException {
-        // TODO: improve this mapping
-        int xmlPullEventType;
-        try {
-            xmlPullEventType = parser.getEventType();
-        } catch (XmlPullParserException e) {
-            throw new XmlStreamException(e);
-        }
-        return pullEventToGpeEventType(xmlPullEventType);
-    }
+	public int getEventType() throws XmlStreamException {
+		// TODO: improve this mapping
+		int xmlPullEventType;
+		try {
+			xmlPullEventType = parser.getEventType();
+		} catch (XmlPullParserException e) {
+			throw new XmlStreamException(e);
+		}
+		return pullEventToGpeEventType(xmlPullEventType);
+	}
 
-    /**
-     * @return
-     * @see org.gvsig.gpe.xml.stream.IXmlStreamReader#getName()
-     */
-    public QName getName() throws XmlStreamException {
-    	int eventType;
+	/**
+	 * @return
+	 * @see org.gvsig.gpe.xml.stream.IXmlStreamReader#getName()
+	 */
+	public QName getName() throws XmlStreamException {
+		int eventType;
 		try {
 			eventType = parser.getEventType();
 			if (eventType != XMLStreamReader.START_ELEMENT
-	                 && eventType  != XMLStreamReader.END_ELEMENT
-	                 && eventType  != XMLStreamReader.PROCESSING_INSTRUCTION) {
-	             return null;
-	         }
+					&& eventType != XMLStreamReader.END_ELEMENT
+					&& eventType != XMLStreamReader.PROCESSING_INSTRUCTION) {
+				return null;
+			}
 		} catch (XmlPullParserException e) {
 			return null;
-		}     	
-    	String name = parser.getName();
-    	if (name != null){
-    		name = name.substring(name.indexOf(":") + 1, name.length());
-    	}else{
-    		name = "";
-    	}
-    	return new QName(parser.getNamespace(), name);
-    }
+		}
+		String name = parser.getName();
+		if (name != null) {
+			name = name.substring(name.indexOf(":") + 1, name.length());
+		} else {
+			name = "";
+		}
+		return new QName(parser.getNamespace(), name);
+	}
 
-    public String getText() throws XmlStreamException {
-        return parser.getText();
-    }
+	public String getText() throws XmlStreamException {
+		return parser.getText();
+	}
 
-    public boolean isWhitespace() throws XmlStreamException {
-        try {
-            return parser.isWhitespace();
-        } catch (XmlPullParserException e) {
-            throw new XmlStreamException(e);
-        }
-    }
+	public boolean isWhitespace() throws XmlStreamException {
+		try {
+			return parser.isWhitespace();
+		} catch (XmlPullParserException e) {
+			throw new XmlStreamException(e);
+		}
+	}
 
-    public int next() throws XmlStreamException {
-        int xmlPullEventType;
-        try {
-            xmlPullEventType = parser.next();
-        } catch (XmlPullParserException e) {
-            throw new XmlStreamException(e);
-        } catch (IOException e) {
-            throw new XmlStreamException(e);
-        }
-        return pullEventToGpeEventType(xmlPullEventType);
-    }
+	public int next() throws XmlStreamException {
+		int xmlPullEventType;
+		try {
+			xmlPullEventType = parser.next();
+		} catch (XmlPullParserException e) {
+			throw new XmlStreamException(e);
+		} catch (IOException e) {
+			throw new XmlStreamException(e);
+		}
+		return pullEventToGpeEventType(xmlPullEventType);
+	}
 
-    public int nextTag() throws XmlStreamException {
-        int xmlPullEventType;
-        try {
-            xmlPullEventType = parser.nextTag();
-        } catch (XmlPullParserException e) {
-            throw new XmlStreamException(e);
-        } catch (IOException e) {
-            throw new XmlStreamException(e);
-        }
-        return pullEventToGpeEventType(xmlPullEventType);
-    }
+	public int nextTag() throws XmlStreamException {
+		int xmlPullEventType;
+		try {
+			xmlPullEventType = parser.nextTag();
+		} catch (XmlPullParserException e) {
+			throw new XmlStreamException(e);
+		} catch (IOException e) {
+			throw new XmlStreamException(e);
+		}
+		return pullEventToGpeEventType(xmlPullEventType);
+	}
 
-    private int pullEventToGpeEventType(int xmlPullEventType) {
-        switch (xmlPullEventType) {
-        case XmlPullParser.START_DOCUMENT:
-            return IXmlStreamReader.START_DOCUMENT;
-        case XmlPullParser.END_DOCUMENT:
-            return IXmlStreamReader.END_DOCUMENT;
-        case XmlPullParser.START_TAG:
-            return IXmlStreamReader.START_ELEMENT;
-        case XmlPullParser.END_TAG:
-            return IXmlStreamReader.END_ELEMENT;
-        case XmlPullParser.TEXT:
-            return IXmlStreamReader.CHARACTERS;
-        case XmlPullParser.CDSECT:
-            return IXmlStreamReader.CDATA;
-        case XmlPullParser.ENTITY_REF:
-            return IXmlStreamReader.ENTITY_REFERENCE;
-        case XmlPullParser.IGNORABLE_WHITESPACE:
-            return IXmlStreamReader.SPACE;
-        case XmlPullParser.PROCESSING_INSTRUCTION:
-            return IXmlStreamReader.PROCESSING_INSTRUCTION;
-        case XmlPullParser.COMMENT:
-            return IXmlStreamReader.COMMENT;
-        case XmlPullParser.DOCDECL:
-            return IXmlStreamReader.DTD;
-        default:
-            throw new IllegalStateException("Unknown tag type, this should't happen!: "
-                    + xmlPullEventType);
-        }
-    }
+	private int pullEventToGpeEventType(int xmlPullEventType) {
+		switch (xmlPullEventType) {
+		case XmlPullParser.START_DOCUMENT:
+			return IXmlStreamReader.START_DOCUMENT;
+		case XmlPullParser.END_DOCUMENT:
+			return IXmlStreamReader.END_DOCUMENT;
+		case XmlPullParser.START_TAG:
+			return IXmlStreamReader.START_ELEMENT;
+		case XmlPullParser.END_TAG:
+			return IXmlStreamReader.END_ELEMENT;
+		case XmlPullParser.TEXT:
+			return IXmlStreamReader.CHARACTERS;
+		case XmlPullParser.CDSECT:
+			return IXmlStreamReader.CDATA;
+		case XmlPullParser.ENTITY_REF:
+			return IXmlStreamReader.ENTITY_REFERENCE;
+		case XmlPullParser.IGNORABLE_WHITESPACE:
+			return IXmlStreamReader.SPACE;
+		case XmlPullParser.PROCESSING_INSTRUCTION:
+			return IXmlStreamReader.PROCESSING_INSTRUCTION;
+		case XmlPullParser.COMMENT:
+			return IXmlStreamReader.COMMENT;
+		case XmlPullParser.DOCDECL:
+			return IXmlStreamReader.DTD;
+		default:
+			throw new IllegalStateException(
+					"Unknown tag type, this should't happen!: "
+							+ xmlPullEventType);
+		}
+	}
 
 }

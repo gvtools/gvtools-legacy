@@ -36,80 +36,89 @@ import org.gvsig.rastertools.vectorizacion.filter.ui.GrayConversionPanel;
 import com.iver.andami.PluginServices;
 
 /**
- * Clase para la gestión de eventos de los componentes gráficos del panel de preproceso
- * de vectorización.
+ * Clase para la gestión de eventos de los componentes gráficos del panel de
+ * preproceso de vectorización.
  * 
  * 12/06/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
-public class GrayConversionListener implements ActionListener, DataInputContainerListener, SliderListener {
-	private GrayConversionPanel              panel                    = null;
-	private FLyrRasterSE                     lyr                      = null;
-	private GrayConversionData               data                     = null;
-	private GrayConversionProcess            process                  = null;
-	private GrayConversionPreviewRender      previewRender            = null;
-	private PreviewBasePanel                 previewPanel             = null;
-	
+public class GrayConversionListener implements ActionListener,
+		DataInputContainerListener, SliderListener {
+	private GrayConversionPanel panel = null;
+	private FLyrRasterSE lyr = null;
+	private GrayConversionData data = null;
+	private GrayConversionProcess process = null;
+	private GrayConversionPreviewRender previewRender = null;
+	private PreviewBasePanel previewPanel = null;
+
 	/**
 	 * Constructor. Asigna los listeners a los componentes
+	 * 
 	 * @param prepPanel
 	 */
-	public GrayConversionListener(FLyrRasterSE lyr, GrayConversionPanel panel, GrayConversionData data) {
+	public GrayConversionListener(FLyrRasterSE lyr, GrayConversionPanel panel,
+			GrayConversionData data) {
 		this.lyr = lyr;
 		setDataView(panel);
 		setData(data);
 	}
-	
+
 	/**
 	 * Acciones de inicialización del componente
 	 */
 	private void initActions() {
 		getPreviewRender();
-		if(lyr.getBandCount() == 1)
-			data.setBands(new String[]{PluginServices.getText(null, "gray")});
-		
+		if (lyr.getBandCount() == 1)
+			data.setBands(new String[] { PluginServices.getText(null, "gray") });
+
 		data.setPosterizationActive(true);
 		panel.getPosterizationPanel().setComponentEnabled(true);
 		data.updateObservers();
 	}
-	
+
 	/**
 	 * Obtiene el render de la preview asociada
+	 * 
 	 * @return IPreviewRenderProcess
 	 */
 	public GrayConversionPreviewRender getPreviewRender() {
-		if(previewRender == null)
+		if (previewRender == null)
 			previewRender = new GrayConversionPreviewRender(lyr, data);
 		return previewRender;
 	}
-	
+
 	/**
-	 * Asigna la vista de datos. En este caso es el panel de preprocesado de la vectorización
+	 * Asigna la vista de datos. En este caso es el panel de preprocesado de la
+	 * vectorización
+	 * 
 	 * @param prepPanel
 	 */
 	public void setDataView(GrayConversionPanel prepPanel) {
 		this.panel = prepPanel;
 		process = new GrayConversionProcess(null);
 		process.setSourceLayer(lyr);
-		
+
 		panel.getComboBands().addActionListener(this);
 		panel.getPosterizationPanel().getActive().addActionListener(this);
 		panel.getPosterizationPanel().getLevels().addValueChangedListener(this);
-		panel.getPosterizationPanel().getThreshold().addValueChangedListener(this);
+		panel.getPosterizationPanel().getThreshold()
+				.addValueChangedListener(this);
 		panel.getPosterizationPanel().getActive().setSelected(true);
-		
+
 		panel.getNoisePanel().getActive().addActionListener(this);
 		panel.getNoisePanel().getThreshold().addValueChangedListener(this);
-		
+
 		panel.getModePanel().getActive().addActionListener(this);
 		panel.getModePanel().getThreshold().addValueChangedListener(this);
-		
-		//panel.getHighPassPanel().getActive().addActionListener(this);
-		//panel.getHighPassPanel().getRadio().addValueChangedListener(this);
+
+		// panel.getHighPassPanel().getActive().addActionListener(this);
+		// panel.getHighPassPanel().getRadio().addValueChangedListener(this);
 	}
-	
+
 	/**
 	 * Asigna el modelo de datos de los interfaces
+	 * 
 	 * @param coorData
 	 * @param grayConvData
 	 */
@@ -117,101 +126,111 @@ public class GrayConversionListener implements ActionListener, DataInputContaine
 		this.data = grayConvData;
 		initActions();
 	}
-	
+
 	/**
 	 * Asigna el panel con la previsualización
+	 * 
 	 * @param prev
 	 */
 	public void setPreviewPanel(PreviewBasePanel prev) {
 		this.previewPanel = prev;
 	}
-	
+
 	/**
-	 * Método para refresco de preview. Este puede no existir en caso de 
-	 * usarse la funcionalidad de forma independiente por lo que habrá que
-	 * comprobar si existe antes del refresco.
+	 * Método para refresco de preview. Este puede no existir en caso de usarse
+	 * la funcionalidad de forma independiente por lo que habrá que comprobar si
+	 * existe antes del refresco.
 	 */
 	public void refreshPreview() {
-		if(previewPanel != null) {
-			/*while(RasterTaskQueue.getProcessCount() > 0)
-				try {
-					Thread.sleep(500);
-				} catch (InterruptedException e) {
-				}*/
+		if (previewPanel != null) {
+			/*
+			 * while(RasterTaskQueue.getProcessCount() > 0) try {
+			 * Thread.sleep(500); } catch (InterruptedException e) { }
+			 */
 			previewPanel.refreshPreview();
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
-		if(!panel.isEnableValueChangedEvent())
+		if (!panel.isEnableValueChangedEvent())
 			return;
-		
-		//Cambio combo de bandas seleccionadas para la conversión a B/W
-		if(e.getSource() == panel.getComboBands()) {
-			String value = (String)panel.getComboBands().getSelectedItem();
-			if(value.compareTo("R") == 0) 
+
+		// Cambio combo de bandas seleccionadas para la conversión a B/W
+		if (e.getSource() == panel.getComboBands()) {
+			String value = (String) panel.getComboBands().getSelectedItem();
+			if (value.compareTo("R") == 0)
 				data.setBandType(GrayScaleFilter.R);
-			if(value.compareTo("G") == 0) 
+			if (value.compareTo("G") == 0)
 				data.setBandType(GrayScaleFilter.G);
-			if(value.compareTo("B") == 0) 
+			if (value.compareTo("B") == 0)
 				data.setBandType(GrayScaleFilter.B);
-			if(value.compareTo("RGB") == 0) 
+			if (value.compareTo("RGB") == 0)
 				data.setBandType(GrayScaleFilter.RGB);
-			if(value.compareTo(PluginServices.getText(null, "gray")) == 0) 
+			if (value.compareTo(PluginServices.getText(null, "gray")) == 0)
 				data.setBandType(GrayScaleFilter.GRAY);
 		}
-		
-		//Check de activar/desactivar posterización
-		if(e.getSource() == panel.getPosterizationPanel().getActive()) {
-			data.setPosterizationActive(panel.getPosterizationPanel().getActive().isSelected());
+
+		// Check de activar/desactivar posterización
+		if (e.getSource() == panel.getPosterizationPanel().getActive()) {
+			data.setPosterizationActive(panel.getPosterizationPanel()
+					.getActive().isSelected());
 		}
-		
-		//Slider para el umbral de posterización
-		if(e.getSource() == panel.getPosterizationPanel().getThreshold().getSlider()) {
-			data.setPosterizationThreshold((int)panel.getPosterizationPanel().getThreshold().getValue());
+
+		// Slider para el umbral de posterización
+		if (e.getSource() == panel.getPosterizationPanel().getThreshold()
+				.getSlider()) {
+			data.setPosterizationThreshold((int) panel.getPosterizationPanel()
+					.getThreshold().getValue());
 		}
-		
-		//Check de activar/desactivar ruido
-		if(e.getSource() == panel.getNoisePanel().getActive()) {
+
+		// Check de activar/desactivar ruido
+		if (e.getSource() == panel.getNoisePanel().getActive()) {
 			data.setNoiseActive(panel.getNoisePanel().getActive().isSelected());
 		}
-		
-		//Slider para el umbral de ruido
-		if(e.getSource() == panel.getNoisePanel().getThreshold().getSlider()) {
-			data.setNoiseThreshold((int)panel.getNoisePanel().getThreshold().getValue());
+
+		// Slider para el umbral de ruido
+		if (e.getSource() == panel.getNoisePanel().getThreshold().getSlider()) {
+			data.setNoiseThreshold((int) panel.getNoisePanel().getThreshold()
+					.getValue());
 		}
-		
-		//Check de activar/desactivar moda
-		if(e.getSource() == panel.getModePanel().getActive()) {
+
+		// Check de activar/desactivar moda
+		if (e.getSource() == panel.getModePanel().getActive()) {
 			data.setModeActive(panel.getModePanel().getActive().isSelected());
 		}
-		
-		//Slider para el umbral de moda
-		if(e.getSource() == panel.getModePanel().getThreshold().getSlider()) {
-			data.setModeThreshold((int)panel.getModePanel().getThreshold().getValue());
+
+		// Slider para el umbral de moda
+		if (e.getSource() == panel.getModePanel().getThreshold().getSlider()) {
+			data.setModeThreshold((int) panel.getModePanel().getThreshold()
+					.getValue());
 		}
-		
-		//Check de activar/desactivar el paso alto
-		/*if(e.getSource() == panel.getHighPassPanel().getActive()) {
-			data.setHighPassActive(panel.getHighPassPanel().getActive().isSelected());
-		}*/
-		
+
+		// Check de activar/desactivar el paso alto
+		/*
+		 * if(e.getSource() == panel.getHighPassPanel().getActive()) {
+		 * data.setHighPassActive
+		 * (panel.getHighPassPanel().getActive().isSelected()); }
+		 */
+
 		refreshPreview();
 	}
-	
+
 	/**
 	 * Asigna la capa fuente para el proceso
+	 * 
 	 * @param lyr
 	 */
 	public void setProcessSource(FLyrRasterSE lyr) {
-		if(process != null)
+		if (process != null)
 			process.setSourceLayer(lyr);
 	}
-	
+
 	/**
 	 * Aplica las acciones
 	 */
@@ -221,22 +240,23 @@ public class GrayConversionListener implements ActionListener, DataInputContaine
 		} catch (FilterTypeException e) {
 			RasterToolsUtil.messageBoxError("error_filtering", null, e);
 		}
-		//refreshPreview();
+		// refreshPreview();
 	}
-	
+
 	/**
 	 * Captura los eventos de las cajas de texto
 	 */
 	public void actionValueChanged(EventObject e) {
-		if(!panel.isEnableValueChangedEvent())
+		if (!panel.isEnableValueChangedEvent())
 			return;
-		
-		//Niveles de la posterización
-		if(e.getSource() == panel.getPosterizationPanel().getLevels().getDataInputField()) {
+
+		// Niveles de la posterización
+		if (e.getSource() == panel.getPosterizationPanel().getLevels()
+				.getDataInputField()) {
 			String value = panel.getPosterizationPanel().getLevels().getValue();
 			try {
 				double doubleValue = Double.valueOf(value);
-				if(doubleValue < 2)
+				if (doubleValue < 2)
 					throw new NumberFormatException();
 			} catch (NumberFormatException ex) {
 				panel.setEnableValueChangedEvent(false);
@@ -245,50 +265,61 @@ public class GrayConversionListener implements ActionListener, DataInputContaine
 				panel.setEnableValueChangedEvent(true);
 			}
 
-			data.setPosterizationLevels((int)Double.parseDouble(value));
-			if((int)Double.parseDouble(value) == 2)
-				panel.getPosterizationPanel().getThreshold().setControlEnabled(true);
+			data.setPosterizationLevels((int) Double.parseDouble(value));
+			if ((int) Double.parseDouble(value) == 2)
+				panel.getPosterizationPanel().getThreshold()
+						.setControlEnabled(true);
 			else
-				panel.getPosterizationPanel().getThreshold().setControlEnabled(false);
+				panel.getPosterizationPanel().getThreshold()
+						.setControlEnabled(false);
 			refreshPreview();
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.slidertext.listeners.SliderListener#actionValueChanged(org.gvsig.gui.beans.slidertext.listeners.SliderEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.slidertext.listeners.SliderListener#actionValueChanged
+	 * (org.gvsig.gui.beans.slidertext.listeners.SliderEvent)
 	 */
 	public void actionValueChanged(SliderEvent e) {
-		if(!panel.isEnableValueChangedEvent())
+		if (!panel.isEnableValueChangedEvent())
 			return;
-		
-		//Evento de movimiento del slider de cambio de umbral de posterización
-		if(e.getSource() == panel.getPosterizationPanel().getThreshold()) 
-			data.setPosterizationThreshold((int)panel.getPosterizationPanel().getThreshold().getValue());
-		
-		//Evento de movimiento del slider de cambio de umbral de reducción de ruido
-		if(e.getSource() == panel.getNoisePanel().getThreshold()) 
-			data.setNoiseThreshold((int)panel.getNoisePanel().getThreshold().getValue());
-		
-		//Evento de movimiento del slider de cambio de umbral de moda
-		if(e.getSource() == panel.getModePanel().getThreshold()) 
-			data.setModeThreshold((int)panel.getModePanel().getThreshold().getValue());
-		
+
+		// Evento de movimiento del slider de cambio de umbral de posterización
+		if (e.getSource() == panel.getPosterizationPanel().getThreshold())
+			data.setPosterizationThreshold((int) panel.getPosterizationPanel()
+					.getThreshold().getValue());
+
+		// Evento de movimiento del slider de cambio de umbral de reducción de
+		// ruido
+		if (e.getSource() == panel.getNoisePanel().getThreshold())
+			data.setNoiseThreshold((int) panel.getNoisePanel().getThreshold()
+					.getValue());
+
+		// Evento de movimiento del slider de cambio de umbral de moda
+		if (e.getSource() == panel.getModePanel().getThreshold())
+			data.setModeThreshold((int) panel.getModePanel().getThreshold()
+					.getValue());
+
 		refreshPreview();
 	}
-	
+
 	/**
-	 * Asigna el interfaz para que el proceso ejectute las acciones de finalización
-	 * al acabar.
+	 * Asigna el interfaz para que el proceso ejectute las acciones de
+	 * finalización al acabar.
+	 * 
 	 * @param endActions
 	 */
 	public void setProcessActions(IProcessActions endActions) {
-		if(process != null)
+		if (process != null)
 			process.setProcessActions(endActions);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.IProcessActions#interrupted()
 	 */
 	public void interrupted() {

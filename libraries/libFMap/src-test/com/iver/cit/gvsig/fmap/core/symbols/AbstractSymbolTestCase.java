@@ -42,20 +42,19 @@ package com.iver.cit.gvsig.fmap.core.symbols;
 
 import junit.framework.TestCase;
 
-
 public abstract class AbstractSymbolTestCase extends TestCase {
 	protected Class<? extends ISymbol> symClazz;
 
 	public AbstractSymbolTestCase(Class<? extends ISymbol> symClazz) {
 		this.symClazz = symClazz;
 	}
-	
+
 	public ISymbol newInstance() {
 		try {
 			return (ISymbol) symClazz.newInstance();
 		} catch (Exception e) {
-			fail("Failed installing symbol to test "+symClazz.getName());
+			fail("Failed installing symbol to test " + symClazz.getName());
 			return null;
-		} 
+		}
 	}
 }

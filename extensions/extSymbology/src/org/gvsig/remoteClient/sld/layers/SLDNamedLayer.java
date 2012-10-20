@@ -46,11 +46,14 @@ import org.gvsig.remoteClient.gml.schemas.XMLSchemaParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
+
 /**
- * Implements the NamedLayer element of an SLD implementation specification.<p>
+ * Implements the NamedLayer element of an SLD implementation specification.
+ * <p>
  * 
- * A named layer is a layer that can be accessed from an OpenGIS Web
- * Server using a well-known name.<p>
+ * A named layer is a layer that can be accessed from an OpenGIS Web Server
+ * using a well-known name.
+ * <p>
  * 
  * @see SLDLayer
  * @see SLDUserLayer
@@ -59,8 +62,9 @@ import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
 public abstract class SLDNamedLayer extends AbstractSLDLayer {
-	
-	public abstract void parse(XMLSchemaParser parser)throws IOException, XmlPullParserException, LegendDriverException;
+
+	public abstract void parse(XMLSchemaParser parser) throws IOException,
+			XmlPullParserException, LegendDriverException;
 
 	public abstract String toXML();
 }

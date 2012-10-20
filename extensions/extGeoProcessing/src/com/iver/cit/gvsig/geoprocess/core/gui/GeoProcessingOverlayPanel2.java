@@ -84,7 +84,7 @@ public class GeoProcessingOverlayPanel2 extends AbstractGeoprocessGridbagPanel
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 */
 	public GeoProcessingOverlayPanel2(FLayers layers, String titleText) {
 		super(layers, titleText);
@@ -93,33 +93,27 @@ public class GeoProcessingOverlayPanel2 extends AbstractGeoprocessGridbagPanel
 	protected void addSpecificDesign() {
 		Insets insets = new Insets(5, 5, 5, 5);
 		String secondLayerText = PluginServices.getText(this,
-				"Cobertura_de_recorte")
-				+ ":";
+				"Cobertura_de_recorte") + ":";
 		secondLayerComboBox = getSecondLayerComboBox();
-		addComponent(secondLayerText,
-					secondLayerComboBox,
-					GridBagConstraints.BOTH,
-						insets);
+		addComponent(secondLayerText, secondLayerComboBox,
+				GridBagConstraints.BOTH, insets);
 
 		secondLayerSelectedCheckBox = new JCheckBox();
-		secondLayerSelectedCheckBox.addItemListener(new ItemListener(){
+		secondLayerSelectedCheckBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				updateNumSelectedSecondLabel();
-			}});
-		secondLayerSelectedCheckBox.setText(PluginServices.
-				getText(this, "Usar_solamente_los_elementos_seleccionados"));
-		addComponent(secondLayerSelectedCheckBox,
-				GridBagConstraints.BOTH,
+			}
+		});
+		secondLayerSelectedCheckBox.setText(PluginServices.getText(this,
+				"Usar_solamente_los_elementos_seleccionados"));
+		addComponent(secondLayerSelectedCheckBox, GridBagConstraints.BOTH,
 				insets);
 
-		String secondLayerNumSelectedText =
-			PluginServices.getText(this,
-				"Numero_de_elementos_seleccionados")
-				+ ":";
+		String secondLayerNumSelectedText = PluginServices.getText(this,
+				"Numero_de_elementos_seleccionados") + ":";
 		secondLayerNumSelectedLabel = new JLabel("00");
-		addComponent(secondLayerNumSelectedText,
-					secondLayerNumSelectedLabel,
-						insets);
+		addComponent(secondLayerNumSelectedText, secondLayerNumSelectedLabel,
+				insets);
 
 		initSelectedItemsJCheckBox();
 		updateNumSelectedFeaturesLabel();
@@ -144,12 +138,9 @@ public class GeoProcessingOverlayPanel2 extends AbstractGeoprocessGridbagPanel
 		return solution;
 	}
 
-
-	protected void initSelectedItems2JCheckBox(){
-		String selectedLayer =
-			(String) secondLayerComboBox.getSelectedItem();
-		FLyrVect overlayLayer =
-			(FLyrVect) layers.getLayer(selectedLayer);
+	protected void initSelectedItems2JCheckBox() {
+		String selectedLayer = (String) secondLayerComboBox.getSelectedItem();
+		FLyrVect overlayLayer = (FLyrVect) layers.getLayer(selectedLayer);
 		FBitSet fBitSet = null;
 		try {
 			fBitSet = overlayLayer.getRecordset().getSelection();
@@ -169,34 +160,27 @@ public class GeoProcessingOverlayPanel2 extends AbstractGeoprocessGridbagPanel
 	}
 
 	/**
-	 * updates the label's text with the number of features
-	 * to operate with in the second layer
-	 *
+	 * updates the label's text with the number of features to operate with in
+	 * the second layer
+	 * 
 	 */
 	protected void updateNumSelectedSecondLabel() {
 		if (secondLayerSelectedCheckBox.isSelected()) {
-			FLyrVect inputSelectable =
-				(FLyrVect) (layers.getLayer(
-						(String) secondLayerComboBox.
-						getSelectedItem()));
+			FLyrVect inputSelectable = (FLyrVect) (layers
+					.getLayer((String) secondLayerComboBox.getSelectedItem()));
 			FBitSet fBitSet = null;
 			try {
-				fBitSet = inputSelectable.
-							getRecordset().
-							getSelection();
+				fBitSet = inputSelectable.getRecordset().getSelection();
 			} catch (ReadDriverException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			secondLayerNumSelectedLabel.
-				setText(new Integer(fBitSet.
-							cardinality()).
-							toString());
+			secondLayerNumSelectedLabel.setText(new Integer(fBitSet
+					.cardinality()).toString());
 		} else {
-			ReadableVectorial va =
-				((FLyrVect) (layers.getLayer(
-						(String) secondLayerComboBox.
-						getSelectedItem()))).getSource();
+			ReadableVectorial va = ((FLyrVect) (layers
+					.getLayer((String) secondLayerComboBox.getSelectedItem())))
+					.getSource();
 			try {
 				secondLayerNumSelectedLabel.setText(new Integer(va
 						.getShapeCount()).toString());
@@ -204,31 +188,29 @@ public class GeoProcessingOverlayPanel2 extends AbstractGeoprocessGridbagPanel
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}//else
+		}// else
 	}
 
-
-	//cambiar esto para que lo implemente la clase padre,
-	//y que las hijas simplemente sobreescriban y llamen a super()
+	// cambiar esto para que lo implemente la clase padre,
+	// y que las hijas simplemente sobreescriban y llamen a super()
 	/**
-	 * Processess events selection in first layer combo box
-	 * (adding additional logic to abstract base class
+	 * Processess events selection in first layer combo box (adding additional
+	 * logic to abstract base class
 	 */
 	protected void processLayerComboBoxStateChange(ItemEvent e) {
 	}
 
 	/**
-	 * Subclasses those want to overwrite logic of this component
-	 * must overwrites this method
+	 * Subclasses those want to overwrite logic of this component must
+	 * overwrites this method
+	 * 
 	 * @param e
 	 */
 	protected void processLayer2ComboBoxStateChange(ItemEvent e) {
 	}
 
-
 	public FLyrVect getSecondLayer() {
-		String clippingLayer =
-			(String) secondLayerComboBox.getSelectedItem();
+		String clippingLayer = (String) secondLayerComboBox.getSelectedItem();
 		try {
 			return (FLyrVect) layers.getLayer(clippingLayer);
 		} catch (Exception e) {

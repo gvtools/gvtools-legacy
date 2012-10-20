@@ -25,8 +25,8 @@ import org.gvsig.gui.beans.doubleslider.DoubleSliderEvent;
 import org.gvsig.gui.beans.doubleslider.DoubleSliderListener;
 
 public class TestCheckColorSliderTextTable implements DoubleSliderListener {
-	private int                           w      = 375, h = 150;
-	private TestUI                        frame  = new TestUI("TestCheckColorSliderTextTable");
+	private int w = 375, h = 150;
+	private TestUI frame = new TestUI("TestCheckColorSliderTextTable");
 	private CheckColorSliderTextContainer sliderRed = null;
 
 	public TestCheckColorSliderTextTable() {

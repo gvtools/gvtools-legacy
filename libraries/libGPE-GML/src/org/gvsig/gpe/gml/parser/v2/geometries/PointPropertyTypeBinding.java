@@ -65,6 +65,7 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * It parses a gml:pointPropertyType object. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;pointProperty&gt;
@@ -74,59 +75,63 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  * &lt;/pointProperty&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class PointPropertyTypeBinding {
 
 	/**
 	 * It parses the gml:pointProperty tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * A point
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return A point
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public Object parse(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
+	public Object parse(IXmlStreamReader parser, GPEDefaultGmlParser handler)
+			throws XmlStreamException, IOException {
 		boolean endFeature = false;
 		int currentTag;
-		Object point = null;		
+		Object point = null;
 
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_POINT))
-				{
-					point = handler.getProfile().getPointTypeBinding().
-					parse(parser, handler);
+				if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_POINT)) {
+					point = handler.getProfile().getPointTypeBinding()
+							.parse(parser, handler);
 				}
 				break;
 			case IXmlStreamReader.END_ELEMENT:
-				if ((CompareUtils.compareWithNamespace(tag,GMLTags.GML_POINTPROPERTY))||
-					(CompareUtils.compareWithNamespace(tag,GMLTags.GML_LOCATION))||
-					(CompareUtils.compareWithNamespace(tag,GMLTags.GML_CENTEROF))||
-					(CompareUtils.compareWithNamespace(tag,GMLTags.GML_POSITION)))
-				{
-						endFeature = true;						
+				if ((CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_POINTPROPERTY))
+						|| (CompareUtils.compareWithNamespace(tag,
+								GMLTags.GML_LOCATION))
+						|| (CompareUtils.compareWithNamespace(tag,
+								GMLTags.GML_CENTEROF))
+						|| (CompareUtils.compareWithNamespace(tag,
+								GMLTags.GML_POSITION))) {
+					endFeature = true;
 				}
 				break;
-			case IXmlStreamReader.CHARACTERS:			
+			case IXmlStreamReader.CHARACTERS:
 
 				break;
 			}
-			if (!endFeature){					
+			if (!endFeature) {
 				currentTag = parser.next();
 				tag = parser.getName();
 			}
-		}			
-		return point;	
+		}
+		return point;
 	}
 }
-

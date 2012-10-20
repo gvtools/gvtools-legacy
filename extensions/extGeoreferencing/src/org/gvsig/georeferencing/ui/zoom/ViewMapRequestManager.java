@@ -38,22 +38,25 @@ import com.iver.utiles.swing.threads.Cancellable;
 
 /**
  * Gestor de peticiones de zoom sobre el panel con el raster a georreferenciar.
- * Implementa el interfaz IExtensionRequest para que este comunique la peticiones
- * de zoom y ViewRasterRequestManager pueda hacer las peticiones de datos a la capa.
- *
+ * Implementa el interfaz IExtensionRequest para que este comunique la
+ * peticiones de zoom y ViewRasterRequestManager pueda hacer las peticiones de
+ * datos a la capa.
+ * 
  * 30/12/2007
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class ViewMapRequestManager implements IExtensionRequest {
-	private FLayers            lyrs              = null;
-	private BaseZoomView       view              = null;
-	private MapControl         mapControl        = null;
-	private GCPsGraphicLayer   graphicLayer      = null;
-	private Color              backGroundColor   = null;
-	private FLyrRasterSE       testLayer         = null;
+	private FLayers lyrs = null;
+	private BaseZoomView view = null;
+	private MapControl mapControl = null;
+	private GCPsGraphicLayer graphicLayer = null;
+	private Color backGroundColor = null;
+	private FLyrRasterSE testLayer = null;
 
 	/**
 	 * Asigna la capa a georreferenciar de donde se obtienen los datos.
+	 * 
 	 * @param lyr
 	 */
 	public ViewMapRequestManager(BaseZoomView view, MapControl mapControl) {
@@ -64,11 +67,13 @@ public class ViewMapRequestManager implements IExtensionRequest {
 
 	/**
 	 * Añade una capa raster a la lista de capas
+	 * 
 	 * @param lyr
 	 * @throws InvalidRequestException
 	 */
-	public void addTestRasterLayer(FLyrRasterSE lyr) throws InvalidRequestException {
-		if(lyrs == null || lyr == null)
+	public void addTestRasterLayer(FLyrRasterSE lyr)
+			throws InvalidRequestException {
+		if (lyrs == null || lyr == null)
 			return;
 		testLayer = lyr;
 		lyrs.addLayer(lyr);
@@ -78,10 +83,11 @@ public class ViewMapRequestManager implements IExtensionRequest {
 
 	/**
 	 * Elimina la capa de test de la vista de mapa
+	 * 
 	 * @throws InvalidRequestException
 	 */
 	public void removeTestRasterLayer() throws InvalidRequestException {
-		if(testLayer != null){
+		if (testLayer != null) {
 			lyrs.removeLayer(testLayer);
 			PluginServices.getMainFrame().enableControls();
 		}
@@ -91,6 +97,7 @@ public class ViewMapRequestManager implements IExtensionRequest {
 
 	/**
 	 * Asigna la capa de puntos de control
+	 * 
 	 * @param gl
 	 */
 	public void setGCPsGraphicLayer(GCPsGraphicLayer gl) {
@@ -98,31 +105,38 @@ public class ViewMapRequestManager implements IExtensionRequest {
 	}
 
 	/**
-	 * Calcula la extensión que contendrá la vista a partir del extent
-	 * máximo de la capa/s que contienen . Tienen en cuenta las distintan proporciones
+	 * Calcula la extensión que contendrá la vista a partir del extent máximo de
+	 * la capa/s que contienen . Tienen en cuenta las distintan proporciones
 	 * entre vista y petición
+	 * 
 	 * @param Rectangle2D
 	 */
-	public Rectangle2D initRequest(Rectangle2D extent) throws InvalidRequestException {
+	public Rectangle2D initRequest(Rectangle2D extent)
+			throws InvalidRequestException {
 		double x = extent.getX();
 		double y = extent.getY();
 		double w = extent.getWidth();
 		double h = extent.getHeight();
-		//Calculamos la extensión de la vista para el extent máximo que va a contener
-		//teniendo en cuenta las proporciones de ambos.
-		if(extent.getWidth() < extent.getHeight()) {
-			if(((double)view.getCanvasWidth() / (double)view.getCanvasHeight()) <= (extent.getWidth() / extent.getHeight())) {
+		// Calculamos la extensión de la vista para el extent máximo que va a
+		// contener
+		// teniendo en cuenta las proporciones de ambos.
+		if (extent.getWidth() < extent.getHeight()) {
+			if (((double) view.getCanvasWidth() / (double) view
+					.getCanvasHeight()) <= (extent.getWidth() / extent
+					.getHeight())) {
 				h = (view.getCanvasHeight() * w) / view.getCanvasWidth();
 				y = extent.getCenterY() - (h / 2);
-			} else { //p1 < p2
+			} else { // p1 < p2
 				w = (view.getCanvasWidth() * h) / view.getCanvasHeight();
 				x = extent.getCenterX() - (w / 2);
 			}
 		} else {
-			if(((double)view.getCanvasWidth() / (double)view.getCanvasHeight()) >= (extent.getWidth() / extent.getHeight())) {
+			if (((double) view.getCanvasWidth() / (double) view
+					.getCanvasHeight()) >= (extent.getWidth() / extent
+					.getHeight())) {
 				w = (view.getCanvasWidth() * h) / view.getCanvasHeight();
 				x = extent.getCenterX() - (w / 2);
-			} else { //p1 < p2
+			} else { // p1 < p2
 				h = (view.getCanvasHeight() * w) / view.getCanvasWidth();
 				y = extent.getCenterY() - (h / 2);
 			}
@@ -135,35 +149,45 @@ public class ViewMapRequestManager implements IExtensionRequest {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.georeferencing.ui.zoom.IExtensionRequest#request(java.awt.geom.Rectangle2D)
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.georeferencing.ui.zoom.IExtensionRequest#request
+	 * (java.awt.geom.Rectangle2D)
 	 */
-	public Rectangle2D request(Rectangle2D extent) throws InvalidRequestException {
-		if(extent == null)
+	public Rectangle2D request(Rectangle2D extent)
+			throws InvalidRequestException {
+		if (extent == null)
 			return lyrs.getFullExtent();
 
-		//Obtenemos el viewport y calculamos la matriz de transformación
+		// Obtenemos el viewport y calculamos la matriz de transformación
 		ViewPort vp = new ViewPort(null);
-		vp.setImageSize(new Dimension(view.getCanvasWidth(), view.getCanvasHeight()));
+		vp.setImageSize(new Dimension(view.getCanvasWidth(), view
+				.getCanvasHeight()));
 		vp.setExtent(extent);
 		vp.setCrs(mapControl.getMapContext().getCrs());
 		try {
-			//Dibujamos a través del render de la capa en un graphics como el de la vista
-			BufferedImage initImg = new BufferedImage(view.getCanvasWidth(), view.getCanvasHeight(), BufferedImage.TYPE_INT_RGB);
-			Graphics2D img = ((Graphics2D)initImg.getGraphics());
-			if(backGroundColor != null && backGroundColor != Color.BLACK) {
+			// Dibujamos a través del render de la capa en un graphics como el
+			// de la vista
+			BufferedImage initImg = new BufferedImage(view.getCanvasWidth(),
+					view.getCanvasHeight(), BufferedImage.TYPE_INT_RGB);
+			Graphics2D img = ((Graphics2D) initImg.getGraphics());
+			if (backGroundColor != null && backGroundColor != Color.BLACK) {
 				img.setColor(backGroundColor);
-				img.fillRect(0, 0, view.getCanvasWidth(), view.getCanvasHeight());
+				img.fillRect(0, 0, view.getCanvasWidth(),
+						view.getCanvasHeight());
 			}
 
 			DefaultMapContextDrawer mapContextDrawer = new DefaultMapContextDrawer();
 			mapContextDrawer.setMapContext(lyrs.getMapContext());
 			mapContextDrawer.setViewPort(vp);
-			mapContextDrawer.draw(lyrs, initImg, img, new CancellableClass(), mapControl.getMapContext().getScaleView());
-			//lyrs.draw(initImg, img, vp, new CancellableClass(), mapControl.getMapContext().getScaleView());
+			mapContextDrawer.draw(lyrs, initImg, img, new CancellableClass(),
+					mapControl.getMapContext().getScaleView());
+			// lyrs.draw(initImg, img, vp, new CancellableClass(),
+			// mapControl.getMapContext().getScaleView());
 
 			setDrawParams(initImg, extent);
 
-			if(graphicLayer != null)
+			if (graphicLayer != null)
 				graphicLayer.recalcMapDrawCoordinates();
 
 		} catch (Exception e) {
@@ -174,28 +198,42 @@ public class ViewMapRequestManager implements IExtensionRequest {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.georeferencing.ui.zoom.IExtensionRequest#fullExtent(java.awt.Dimension)
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.georeferencing.ui.zoom.IExtensionRequest#fullExtent
+	 * (java.awt.Dimension)
 	 */
-	public void fullExtent() throws InvalidRequestException  {
+	public void fullExtent() throws InvalidRequestException {
 		this.initRequest(lyrs.getFullExtent());
 	}
 
 	/**
 	 * Asigna los parámetros para el control de zoom del mapa
-	 * @param img BufferedImage
-	 * @param vp ViewPort
+	 * 
+	 * @param img
+	 *            BufferedImage
+	 * @param vp
+	 *            ViewPort
 	 */
 	public void setDrawParams(BufferedImage img, Rectangle2D extBuf) {
-		if(view != null && lyrs != null) {
-			if(img != null)
-				view.setDrawParams(img, extBuf, extBuf.getWidth()/img.getWidth(), new Point2D.Double(extBuf.getCenterX(), extBuf.getCenterY()));
+		if (view != null && lyrs != null) {
+			if (img != null)
+				view.setDrawParams(img, extBuf,
+						extBuf.getWidth() / img.getWidth(), new Point2D.Double(
+								extBuf.getCenterX(), extBuf.getCenterY()));
 			else
-				view.setDrawParams(img, extBuf, extBuf.getWidth()/view.getCanvasWidth(), new Point2D.Double(extBuf.getCenterX(), extBuf.getCenterY()));
+				view.setDrawParams(
+						img,
+						extBuf,
+						extBuf.getWidth() / view.getCanvasWidth(),
+						new Point2D.Double(extBuf.getCenterX(), extBuf
+								.getCenterY()));
 		}
 	}
 
 	/**
 	 * Obtiene el color de fondo
+	 * 
 	 * @return
 	 */
 	public Color getBackGroundColor() {
@@ -204,20 +242,22 @@ public class ViewMapRequestManager implements IExtensionRequest {
 
 	/**
 	 * Asigna el color de fondo
+	 * 
 	 * @param backGroundColor
 	 */
 	public void setBackGroundColor(Color backGroundColor) {
 		this.backGroundColor = backGroundColor;
 	}
 
-	class CancellableClass implements Cancellable{
-    	private boolean cancel = false;
-   		public void setCanceled(boolean canceled) {
-   			this.cancel = canceled;
-   		}
+	class CancellableClass implements Cancellable {
+		private boolean cancel = false;
+
+		public void setCanceled(boolean canceled) {
+			this.cancel = canceled;
+		}
 
 		public boolean isCanceled() {
 			return this.cancel;
 		}
-   	}
+	}
 }

@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,37 +39,40 @@
  *   dac@iver.es
  */
 package es.gva.cit.catalog.drivers;
+
 import java.net.URI;
 
 import es.gva.cit.catalog.drivers.profiles.IProfile;
 import es.gva.cit.catalog.querys.CatalogQuery;
+
 /**
- * This interface has to be implemented by all the classes that implement
- * a catalog protocol. It describes all the common operations.
+ * This interface has to be implemented by all the classes that implement a
+ * catalog protocol. It describes all the common operations.
  * 
  * 
  * @author Jorge Piera Llodra (piera_jor@gva.es)
  */
-public interface ICatalogServiceDriver extends IDiscoveryServiceDriver{
+public interface ICatalogServiceDriver extends IDiscoveryServiceDriver {
 
 	/**
 	 * It send a request with a query to retrieve the server records
-     * @return RecordsAnswer Contains the records and additional info
+	 * 
+	 * @return RecordsAnswer Contains the records and additional info
 	 * @param uri
-	 * Server URI
+	 *            Server URI
 	 * @param query
-	 * It contains the values to do the query (title="XXX",abstract="YYY",...)
+	 *            It contains the values to do the query
+	 *            (title="XXX",abstract="YYY",...)
 	 * @param firstRecord
-	 * Number of the first record to retrieve
+	 *            Number of the first record to retrieve
 	 */
-	public GetRecordsReply getRecords(URI uri, CatalogQuery query, int firstRecord);
+	public GetRecordsReply getRecords(URI uri, CatalogQuery query,
+			int firstRecord);
 
 	/**
-	 * @return the server profile. A profile is a list of default
-	 * values for the properties used to create the queries
+	 * @return the server profile. A profile is a list of default values for the
+	 *         properties used to create the queries
 	 */
 	public IProfile getProfile();
 
 }
-
-

@@ -40,17 +40,17 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: IRunnableTask.java 20715 2008-05-14 15:10:56Z vcaballero $
-* $Log$
-* Revision 1.1  2006-05-12 07:15:45  jaume
-* *** empty log message ***
-*
-* Revision 1.1  2006/05/11 17:18:06  jaume
-* Un planificador, monitorizador, de descargas que trabaja en segundo plano
-*
-*
-*/
+ *
+ * $Id: IRunnableTask.java 20715 2008-05-14 15:10:56Z vcaballero $
+ * $Log$
+ * Revision 1.1  2006-05-12 07:15:45  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/05/11 17:18:06  jaume
+ * Un planificador, monitorizador, de descargas que trabaja en segundo plano
+ *
+ *
+ */
 package org.gvsig.remoteClient.taskplanning;
 
 /**
@@ -64,24 +64,26 @@ public interface IRunnableTask {
 	 * Executes this task's operations.
 	 */
 	public void execute();
-	
+
 	/**
 	 * Cancels the current execution, if any, of this task. Should have no
 	 * effect if the task is not executing anything.
 	 */
 	public void cancel();
-	
+
 	/**
 	 * Tells if the task is on execution.
+	 * 
 	 * @return true if the task is busy, false otherwise.
 	 */
 	public boolean isRunning();
-	
+
 	/**
 	 * Returns the timeout set to this task in milliseconds
-	 * @return the amount of milliseconds to wait until the task
-	 * 		   will be considered as unsuccessful, or 0 or less to
-	 * 		   say that task can wait forever.
+	 * 
+	 * @return the amount of milliseconds to wait until the task will be
+	 *         considered as unsuccessful, or 0 or less to say that task can
+	 *         wait forever.
 	 */
 	public long getTaskTimeout();
 }

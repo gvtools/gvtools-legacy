@@ -21,12 +21,14 @@ import com.iver.cit.gvsig.fmap.core.v02.FSymbol;
 
 /**
  * utility class for SLD functionality
+ * 
  * @author laura
  */
 public class SLDUtils {
 
-	public static Color convertHexStringToColor(String str) throws NumberFormatException{
-		          int multiplier = 1;
+	public static Color convertHexStringToColor(String str)
+			throws NumberFormatException {
+		int multiplier = 1;
 		StringTokenizer tokenizer = new StringTokenizer(str, " \t\r\n\b:;[]()+");
 		while (tokenizer.hasMoreTokens()) {
 			multiplier = 1;
@@ -52,7 +54,8 @@ public class SLDUtils {
 					return new Color(multiplier
 							* Integer.parseInt(token.substring(1), 16));
 				} else if (token.startsWith("0") && !token.equals("0")) {
-					return new Color(multiplier * Integer.parseInt(token.substring(1), 8));
+					return new Color(multiplier
+							* Integer.parseInt(token.substring(1), 8));
 				} else {
 					return new Color(multiplier * Integer.parseInt(token));
 				}
@@ -63,61 +66,57 @@ public class SLDUtils {
 		throw new NumberFormatException(str);
 
 	}
-	public static String convertColorToHexString(java.awt.Color c)
-	{
-		String str = Integer.toHexString( c.getRGB() & 0xFFFFFF );
-		return ( "#" + "000000".substring( str.length() ) + str.toUpperCase() );
+
+	public static String convertColorToHexString(java.awt.Color c) {
+		String str = Integer.toHexString(c.getRGB() & 0xFFFFFF);
+		return ("#" + "000000".substring(str.length()) + str.toUpperCase());
 	}
-	public String getWellKnownName(int symbolType)
-	{
+
+	public String getWellKnownName(int symbolType) {
 		return "";
 	}
 
-    public static Symbolizer toGeotoolsSymbol(ISymbol sym)
-    {
-    	FSymbol symbol = (FSymbol) sym;
-    	StyleFactory styleFactory = new StyleFactoryImpl();
+	public static Symbolizer toGeotoolsSymbol(ISymbol sym) {
+		FSymbol symbol = (FSymbol) sym;
+		StyleFactory styleFactory = new StyleFactoryImpl();
 		StyleBuilder styleBuilder = new StyleBuilder();
-		StrokeImpl theStroke = (StrokeImpl)styleBuilder.createStroke();
-		GraphicImpl graphic = (GraphicImpl)styleBuilder.createGraphic();
-    	try
-    	{
-    		switch (symbol.getSymbolType())
-    		{
-				case FConstant.SYMBOL_TYPE_POINT:
-					PointSymbolizer point = styleFactory.createPointSymbolizer();
-					graphic.setSize(symbol.getSize());
-					Mark[] mark = new Mark[1];
-					mark[0] = styleFactory.createMark();
-					//
-					// mark[0].setWellKnownName(
-					// getWellKnownName(symbol.getStyle()));
-					graphic.setMarks(mark);
+		StrokeImpl theStroke = (StrokeImpl) styleBuilder.createStroke();
+		GraphicImpl graphic = (GraphicImpl) styleBuilder.createGraphic();
+		try {
+			switch (symbol.getSymbolType()) {
+			case FConstant.SYMBOL_TYPE_POINT:
+				PointSymbolizer point = styleFactory.createPointSymbolizer();
+				graphic.setSize(symbol.getSize());
+				Mark[] mark = new Mark[1];
+				mark[0] = styleFactory.createMark();
+				//
+				// mark[0].setWellKnownName(
+				// getWellKnownName(symbol.getStyle()));
+				graphic.setMarks(mark);
 
-					// add, color, graphic, size, ...
-					return point;
-				case FConstant.SYMBOL_TYPE_LINE:
-					LineSymbolizer line = styleFactory.createLineSymbolizer();
-					theStroke.setColor(convertColorToHexString(symbol.getColor()));
-					line.setStroke(theStroke);
-					return line;
-				case FConstant.SYMBOL_TYPE_FILL:
-					PolygonSymbolizer polygon = styleFactory.createPolygonSymbolizer();
-					Fill theFill = styleBuilder.createFill(symbol.getColor());
-					//theFill.setOpacity();
-					polygon.setFill( theFill );
-					//theStroke.setColor(symbol.getOutlineColor());
-					return polygon;
-				case FShape.MULTI:
-					// To implement: ver que clase de simbolo corresponde
-					return null;
-    		}
-    		return null;
-    	}
-    	catch(Exception e)
-    	{
-    		e.printStackTrace();
-    		return null;
-    	}
-    }
+				// add, color, graphic, size, ...
+				return point;
+			case FConstant.SYMBOL_TYPE_LINE:
+				LineSymbolizer line = styleFactory.createLineSymbolizer();
+				theStroke.setColor(convertColorToHexString(symbol.getColor()));
+				line.setStroke(theStroke);
+				return line;
+			case FConstant.SYMBOL_TYPE_FILL:
+				PolygonSymbolizer polygon = styleFactory
+						.createPolygonSymbolizer();
+				Fill theFill = styleBuilder.createFill(symbol.getColor());
+				// theFill.setOpacity();
+				polygon.setFill(theFill);
+				// theStroke.setColor(symbol.getOutlineColor());
+				return polygon;
+			case FShape.MULTI:
+				// To implement: ver que clase de simbolo corresponde
+				return null;
+			}
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

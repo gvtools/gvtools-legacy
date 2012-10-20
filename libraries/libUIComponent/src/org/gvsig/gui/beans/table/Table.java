@@ -28,49 +28,63 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import org.gvsig.gui.beans.table.models.ModelLoader;
+
 /**
  * Componente tabla
- *
+ * 
  * @author Nacho Brodin (brodin_ign@gva.es)
  */
 public class Table extends JPanel {
 	private static final long serialVersionUID = -4375500244443538451L;
-	private JTable            jTable           = null;
-	private JScrollPane       scrollPanel      = null;
-	private DefaultTableModel tableModel       = null;
-	private String[]          columnNames      = null;
-	private int[]             columnWidths     = null;
-	private TableContainer    tableContainer   = null;
-	public String             tableModelClass  = null;
-	private ArrayList         listeners        = null;
+	private JTable jTable = null;
+	private JScrollPane scrollPanel = null;
+	private DefaultTableModel tableModel = null;
+	private String[] columnNames = null;
+	private int[] columnWidths = null;
+	private TableContainer tableContainer = null;
+	public String tableModelClass = null;
+	private ArrayList listeners = null;
 
 	/**
-	 *
-	 * @param width Ancho de la tabla en pixeles
-	 * @param height Alto de la tabla en pixeles
-	 * @param columnNames Vector de nombres de columna
-	 * @param columnsWidth	Vector de anchos para cada columna. Ha de tener el mismo número de elementos que columnNames.
-	 * Si vale null las columnas se pondrán equidistantes.
+	 * 
+	 * @param width
+	 *            Ancho de la tabla en pixeles
+	 * @param height
+	 *            Alto de la tabla en pixeles
+	 * @param columnNames
+	 *            Vector de nombres de columna
+	 * @param columnsWidth
+	 *            Vector de anchos para cada columna. Ha de tener el mismo
+	 *            número de elementos que columnNames. Si vale null las columnas
+	 *            se pondrán equidistantes.
 	 */
-	public Table(String[] columnNames, int[] columnWidths, String tableModelClass){
+	public Table(String[] columnNames, int[] columnWidths,
+			String tableModelClass) {
 		this.columnNames = columnNames;
 		this.columnWidths = columnWidths;
 		this.tableModelClass = tableModelClass;
 		initialize();
 	}
-	
+
 	/**
-	 *
-	 * @param width Ancho de la tabla en pixeles
-	 * @param height Alto de la tabla en pixeles
-	 * @param columnNames Vector de nombres de columna
-	 * @param columnsWidth	Vector de anchos para cada columna. Ha de tener el mismo número de elementos que columnNames.
-	 * @para listener Liste de eventos para recoger en las tablas. Cada modelo tiene la posibilida de recoger unos listener
-	 * u otros. El usuario le pasará el listener y el modelo se encargará de gestionarlos si puede hacerlo. Si no puede no
-	 * hará nada con ellos.
-	 * Si vale null las columnas se pondrán equidistantes.
+	 * 
+	 * @param width
+	 *            Ancho de la tabla en pixeles
+	 * @param height
+	 *            Alto de la tabla en pixeles
+	 * @param columnNames
+	 *            Vector de nombres de columna
+	 * @param columnsWidth
+	 *            Vector de anchos para cada columna. Ha de tener el mismo
+	 *            número de elementos que columnNames.
+	 * @para listener Liste de eventos para recoger en las tablas. Cada modelo
+	 *       tiene la posibilida de recoger unos listener u otros. El usuario le
+	 *       pasará el listener y el modelo se encargará de gestionarlos si
+	 *       puede hacerlo. Si no puede no hará nada con ellos. Si vale null las
+	 *       columnas se pondrán equidistantes.
 	 */
-	public Table(String[] columnNames, int[] columnWidths, String tableModelClass, ArrayList listeners){
+	public Table(String[] columnNames, int[] columnWidths,
+			String tableModelClass, ArrayList listeners) {
 		this.columnNames = columnNames;
 		this.columnWidths = columnWidths;
 		this.tableModelClass = tableModelClass;
@@ -78,8 +92,7 @@ public class Table extends JPanel {
 		initialize();
 	}
 
-
-		/**
+	/**
 	 * This method initializes this
 	 */
 	private void initialize() {
@@ -89,10 +102,11 @@ public class Table extends JPanel {
 
 	/**
 	 * Obtiene la Tabla
+	 * 
 	 * @return Tabla de bandas de la imagen
 	 */
 	public JTable getJTable() {
-			if (jTable == null) {
+		if (jTable == null) {
 			// tableModel = new ListModel(columnNames);
 			ModelLoader loader = new ModelLoader();
 			jTable = loader.load(tableModelClass, columnNames, listeners);
@@ -116,6 +130,7 @@ public class Table extends JPanel {
 
 	/**
 	 * This method initializes jScrollPane
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JScrollPane getJScrollPane() {
@@ -127,6 +142,7 @@ public class Table extends JPanel {
 
 	/**
 	 * Obtiene el contenedor padre de la tabla
+	 * 
 	 * @return
 	 */
 	public TableContainer getTableContainer() {
@@ -135,6 +151,7 @@ public class Table extends JPanel {
 
 	/**
 	 * Asigna el contenedor padre de la tabla
+	 * 
 	 * @param tableContainer
 	 */
 	public void setTableContainer(TableContainer tableContainer) {
@@ -143,37 +160,44 @@ public class Table extends JPanel {
 
 	/**
 	 * Obtiene el modelo de la tabla
+	 * 
 	 * @return
 	 */
 	public DefaultTableModel getTableModel() {
 		return tableModel;
 	}
 
-	//********************Métodos de Tabla*****************************//
+	// ********************Métodos de Tabla*****************************//
 
 	/**
 	 * Añade una fila a la tabla.
-	 * @param list Lista de cadenas
+	 * 
+	 * @param list
+	 *            Lista de cadenas
 	 */
-	public void addRow(Object[] list){
-		((DefaultTableModel)this.getJTable().getModel()).addRow(list);
+	public void addRow(Object[] list) {
+		((DefaultTableModel) this.getJTable().getModel()).addRow(list);
 	}
 
 	/**
 	 * Elimina una fila de la tabla.
-	 * @param i Fila a eliminar
+	 * 
+	 * @param i
+	 *            Fila a eliminar
 	 */
-	public void delRow(int i){
-		((DefaultTableModel)this.getJTable().getModel()).removeRow(i);
+	public void delRow(int i) {
+		((DefaultTableModel) this.getJTable().getModel()).removeRow(i);
 	}
-	
+
 	/**
 	 * Intercambia una fila de la tabla por otra.
+	 * 
 	 * @param i
 	 * @param j
 	 */
 	public void swapRow(int i, int j) {
-		DefaultTableModel model = (DefaultTableModel) this.getJTable().getModel();
+		DefaultTableModel model = (DefaultTableModel) this.getJTable()
+				.getModel();
 		if ((i < 0) || (j < 0))
 			return;
 		if ((i >= model.getRowCount()) || (j >= model.getRowCount()))
@@ -184,7 +208,7 @@ public class Table extends JPanel {
 	/**
 	 * Elimina todas las filas de la tabla.
 	 */
-	public void removeAllRows(){
-		((DefaultTableModel)this.getJTable().getModel()).setNumRows(0);
+	public void removeAllRows() {
+		((DefaultTableModel) this.getJTable().getModel()).setNumRows(0);
 	}
 }

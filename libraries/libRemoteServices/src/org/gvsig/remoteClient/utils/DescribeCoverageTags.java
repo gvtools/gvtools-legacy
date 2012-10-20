@@ -45,15 +45,17 @@ package org.gvsig.remoteClient.utils;
 
 /**
  * @author jaume
- *
+ * 
  */
 public class DescribeCoverageTags {
-	private DescribeCoverageTags() {};
-    public static final String COVERAGE_DESCRIPTION = "CoverageDescription";
-    public static final String COVERAGE_OFFERING = "CoverageOffering";
-    public static final String NAME = "name";
-    public static final String LABEL = "label";
-    public static final String LONLAT_ENVELOPE = "lonLatEnvelope";
+	private DescribeCoverageTags() {
+	};
+
+	public static final String COVERAGE_DESCRIPTION = "CoverageDescription";
+	public static final String COVERAGE_OFFERING = "CoverageOffering";
+	public static final String NAME = "name";
+	public static final String LABEL = "label";
+	public static final String LONLAT_ENVELOPE = "lonLatEnvelope";
 	public static final String WGS84 = "WGS84(DD)"; // Decimal Degree
 	public static final String GML_ENVELOPE = "gml:Envelope";
 	public static final String GML_POS = "gml:pos";
@@ -79,12 +81,13 @@ public class DescribeCoverageTags {
 	public static final String TIMERESOLUTION = "timeResolution";
 
 	public static final String RANGESET = "RangeSet";
-	/* TODO this can cause eventually problems if in a future the "rangeSet" (not "RangeSet")
-	 * has more than one sub RangeSet subelement since I'm assuming it and a "rangeSet" tag is
-	 * simply ignored since it has no effect if it just contains one, and only one, RangeSet
-	 * subelement.
+	/*
+	 * TODO this can cause eventually problems if in a future the "rangeSet"
+	 * (not "RangeSet") has more than one sub RangeSet subelement since I'm
+	 * assuming it and a "rangeSet" tag is simply ignored since it has no effect
+	 * if it just contains one, and only one, RangeSet subelement.
 	 */
-	public static final String AXISDESCRIPTION = "AxisDescription" ;
+	public static final String AXISDESCRIPTION = "AxisDescription";
 	public static final String VALUES = "values";
 	public static final String SINGLEVALUE = "singleValue";
 	public static final String INTERVAL = "interval";
@@ -102,6 +105,5 @@ public class DescribeCoverageTags {
 	public static final String FORMATS = "formats";
 	public static final String SUPPORTED_INTERPOLATIONS = "supportedInterpolations";
 	public static final String INTERPOLATION_METHOD = "interpolationMethod";
-
 
 }

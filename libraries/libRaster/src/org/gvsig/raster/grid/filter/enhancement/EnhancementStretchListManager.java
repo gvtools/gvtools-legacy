@@ -32,28 +32,32 @@ import org.gvsig.raster.grid.filter.enhancement.LinearStretchParams.Stretch;
 import org.gvsig.raster.grid.filter.statistics.StatisticsListManager;
 import org.gvsig.raster.hierarchy.IStatistics;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
+
 /**
  * Gestor de la pila de filtros para el filtro de realce por intervalos.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class EnhancementStretchListManager implements IRasterFilterListManager {
-	protected RasterFilterList      filterList        = null;
+	protected RasterFilterList filterList = null;
 	private RasterFilterListManager filterListManager = null;
-	private IStatistics             stats             = null;
+	private IStatistics stats = null;
 
 	/**
 	 * Constructor
+	 * 
 	 * @param filterListManager
 	 */
-	public EnhancementStretchListManager(RasterFilterListManager filterListManager) {
+	public EnhancementStretchListManager(
+			RasterFilterListManager filterListManager) {
 		this.filterListManager = filterListManager;
 		this.filterList = filterListManager.getFilterList();
-		stats = (IStatistics)filterList.getEnvParam("IStatistics");
+		stats = (IStatistics) filterList.getEnvParam("IStatistics");
 	}
-	
+
 	/**
 	 * Asigna el objeto con las estadisticas.
+	 * 
 	 * @param stats
 	 */
 	public void setStatistics(IStatistics stats) {
@@ -61,31 +65,43 @@ public class EnhancementStretchListManager implements IRasterFilterListManager {
 	}
 
 	/**
-	 * Registra EnhancementStretchListManager en los puntos de extension de RasterFilter
+	 * Registra EnhancementStretchListManager en los puntos de extension de
+	 * RasterFilter
 	 */
 	public static void register() {
 		ExtensionPoint point = ExtensionPoint.getExtensionPoint("RasterFilter");
-		point.register("EnhancementStretch", EnhancementStretchListManager.class);
+		point.register("EnhancementStretch",
+				EnhancementStretchListManager.class);
 	}
 
 	/**
-	 * Añade un filtro de realce.
-	 * La forma de inserción del filtro es fija ya que la inserción de un realce lleva implicita
-	 * la inserción de un filtro de recorte de colas (tailtrim), aunque no en todos los casos.
-	 * Si ya existe un filtro de realce en la lista se obtiene la posición de este.
-	 * Si es necesario un recorte de colas entonces se comprueba si existe un uno reemplazandose
-	 * por el nuevo y sino se insertará uno. Al final reemplazamos el realce que existia.
-	 *
-	 * Si por el contrario no existen realce ni trim se añaden ambos al final de la lista.
-	 * @param stats Objeto de estadisticas asociado
-	 * @param tailTrim porcentaje de recorte de colas. Será un valor entre 0 y 1.
-	 * @param insertionMode Modo de inserción
-	 * @param renderBands bandas RGB mostradas en la visualización.
-	 * @throws FilterTypeException 
+	 * Añade un filtro de realce. La forma de inserción del filtro es fija ya
+	 * que la inserción de un realce lleva implicita la inserción de un filtro
+	 * de recorte de colas (tailtrim), aunque no en todos los casos. Si ya
+	 * existe un filtro de realce en la lista se obtiene la posición de este. Si
+	 * es necesario un recorte de colas entonces se comprueba si existe un uno
+	 * reemplazandose por el nuevo y sino se insertará uno. Al final
+	 * reemplazamos el realce que existia.
+	 * 
+	 * Si por el contrario no existen realce ni trim se añaden ambos al final de
+	 * la lista.
+	 * 
+	 * @param stats
+	 *            Objeto de estadisticas asociado
+	 * @param tailTrim
+	 *            porcentaje de recorte de colas. Será un valor entre 0 y 1.
+	 * @param insertionMode
+	 *            Modo de inserción
+	 * @param renderBands
+	 *            bandas RGB mostradas en la visualización.
+	 * @throws FilterTypeException
 	 */
-	public void addEnhancedStretchFilter(LinearStretchParams leParams, IStatistics stats, int[] renderBands, boolean removeEnds) throws FilterTypeException {
+	public void addEnhancedStretchFilter(LinearStretchParams leParams,
+			IStatistics stats, int[] renderBands, boolean removeEnds)
+			throws FilterTypeException {
 		try {
-			if (!leParams.hasTailTrim()) { // En este caso siempre es necesario el máximo y
+			if (!leParams.hasTailTrim()) { // En este caso siempre es necesario
+											// el máximo y
 				// mínimo
 				if (!stats.isCalculated()) {
 					try {
@@ -99,26 +115,33 @@ public class EnhancementStretchListManager implements IRasterFilterListManager {
 					}
 				}
 			} else {
-				StatisticsListManager slm = new StatisticsListManager(filterListManager, stats);
-				slm.addTailFilter(leParams.getTailTrimList(), 0D, removeEnds, stats);
+				StatisticsListManager slm = new StatisticsListManager(
+						filterListManager, stats);
+				slm.addTailFilter(leParams.getTailTrimList(), 0D, removeEnds,
+						stats);
 			}
 
-			RasterFilter filter = createEnhancedFilter(leParams, stats, renderBands, removeEnds);
+			RasterFilter filter = createEnhancedFilter(leParams, stats,
+					renderBands, removeEnds);
 			if (filter != null)
 				filterList.add(filter);
 		} catch (InterruptedException e) {
-			//Si se ha interrumpido no añadimos el filtro
+			// Si se ha interrumpido no añadimos el filtro
 		}
 	}
 
 	/**
 	 * Crea un filtro de realce por tramos de forma estática
-	 * @param leParams Parámetros del filtro
+	 * 
+	 * @param leParams
+	 *            Parámetros del filtro
 	 * @param stats
 	 * @param renderBands
 	 * @return
 	 */
-	public static RasterFilter createEnhancedFilter(LinearStretchParams leParams, IStatistics stats, int[] renderBands, boolean removeEnds) {
+	public static RasterFilter createEnhancedFilter(
+			LinearStretchParams leParams, IStatistics stats, int[] renderBands,
+			boolean removeEnds) {
 		RasterFilter filter = new LinearStretchEnhancementFloatFilter();
 		if (filter != null) {
 			filter.addParam("stats", stats);
@@ -133,6 +156,7 @@ public class EnhancementStretchListManager implements IRasterFilterListManager {
 
 	/**
 	 * Convierte un array de dobles a una cadena
+	 * 
 	 * @param values
 	 * @return
 	 */
@@ -148,6 +172,7 @@ public class EnhancementStretchListManager implements IRasterFilterListManager {
 
 	/**
 	 * Convierte una array de enteros a una cadena
+	 * 
 	 * @param values
 	 * @return
 	 */
@@ -160,9 +185,10 @@ public class EnhancementStretchListManager implements IRasterFilterListManager {
 		}
 		return buffer.toString();
 	}
-	
+
 	/**
 	 * Convierte una cadena a un array de enteros
+	 * 
 	 * @param from
 	 * @return
 	 */
@@ -180,6 +206,7 @@ public class EnhancementStretchListManager implements IRasterFilterListManager {
 
 	/**
 	 * Convierte una cadena a un array de dobles
+	 * 
 	 * @param from
 	 * @return
 	 */
@@ -196,48 +223,69 @@ public class EnhancementStretchListManager implements IRasterFilterListManager {
 	}
 
 	/**
-	 * Guarda en el array de valores, todos los valores del objeto Strech para ser
-	 * almacenado en el 
+	 * Guarda en el array de valores, todos los valores del objeto Strech para
+	 * ser almacenado en el
+	 * 
 	 * @param filterList
 	 * @param band
 	 * @param stretch
 	 */
-	private void putStretchBand(ArrayList filterList, String band, Stretch stretch) {
-		filterList.add("filter.linearstretchenhancement." + band + ".maxValue=" + stretch.maxValue);
-		filterList.add("filter.linearstretchenhancement." + band + ".minValue=" + stretch.minValue);
+	private void putStretchBand(ArrayList filterList, String band,
+			Stretch stretch) {
+		filterList.add("filter.linearstretchenhancement." + band + ".maxValue="
+				+ stretch.maxValue);
+		filterList.add("filter.linearstretchenhancement." + band + ".minValue="
+				+ stretch.minValue);
 		if (stretch.offset != null)
-			filterList.add("filter.linearstretchenhancement." + band + ".offset=" + convertArrayToString(stretch.offset));
+			filterList.add("filter.linearstretchenhancement." + band
+					+ ".offset=" + convertArrayToString(stretch.offset));
 		if (stretch.scale != null)
-			filterList.add("filter.linearstretchenhancement." + band + ".scale=" + convertArrayToString(stretch.scale));
+			filterList.add("filter.linearstretchenhancement." + band
+					+ ".scale=" + convertArrayToString(stretch.scale));
 		if (stretch.stretchIn != null)
-			filterList.add("filter.linearstretchenhancement." + band + ".stretchIn=" + convertArrayToString(stretch.stretchIn));
+			filterList.add("filter.linearstretchenhancement." + band
+					+ ".stretchIn=" + convertArrayToString(stretch.stretchIn));
 		if (stretch.stretchOut != null)
-			filterList.add("filter.linearstretchenhancement." + band + ".stretchOut=" + convertArrayToString(stretch.stretchOut));
-		filterList.add("filter.linearstretchenhancement." + band + ".tailTrimMax=" + stretch.tailTrimMax);
-		filterList.add("filter.linearstretchenhancement." + band + ".tailTrimMin=" + stretch.tailTrimMin);
-		filterList.add("filter.linearstretchenhancement." + band + ".tailTrimValueMax=" + stretch.tailTrimValueMax);
-		filterList.add("filter.linearstretchenhancement." + band + ".tailTrimValueMin=" + stretch.tailTrimValueMin);
-		filterList.add("filter.linearstretchenhancement." + band + ".functionType=" + stretch.functionType);
-		filterList.add("filter.linearstretchenhancement." + band + ".valueFunction=" + stretch.valueFunction);
+			filterList
+					.add("filter.linearstretchenhancement." + band
+							+ ".stretchOut="
+							+ convertArrayToString(stretch.stretchOut));
+		filterList.add("filter.linearstretchenhancement." + band
+				+ ".tailTrimMax=" + stretch.tailTrimMax);
+		filterList.add("filter.linearstretchenhancement." + band
+				+ ".tailTrimMin=" + stretch.tailTrimMin);
+		filterList.add("filter.linearstretchenhancement." + band
+				+ ".tailTrimValueMax=" + stretch.tailTrimValueMax);
+		filterList.add("filter.linearstretchenhancement." + band
+				+ ".tailTrimValueMin=" + stretch.tailTrimValueMin);
+		filterList.add("filter.linearstretchenhancement." + band
+				+ ".functionType=" + stretch.functionType);
+		filterList.add("filter.linearstretchenhancement." + band
+				+ ".valueFunction=" + stretch.valueFunction);
 	}
 
 	/**
-	 * Obtiene un Array de Strings a partir de una pila de filtros. Cada elemento
-	 * del array tendrá la forma de elemento=valor.
+	 * Obtiene un Array de Strings a partir de una pila de filtros. Cada
+	 * elemento del array tendrá la forma de elemento=valor.
 	 */
-	public ArrayList getStringsFromFilterList(ArrayList filterList, RasterFilter rf) {
+	public ArrayList getStringsFromFilterList(ArrayList filterList,
+			RasterFilter rf) {
 		if (rf instanceof LinearStretchEnhancementFilter) {
 			LinearStretchEnhancementFilter filter = (LinearStretchEnhancementFilter) rf;
-			LinearStretchParams stretchs = (LinearStretchParams) filter.getParam("stretchs");
-			int [] renderBands = (int[]) filter.getParam("renderBands");
-			
+			LinearStretchParams stretchs = (LinearStretchParams) filter
+					.getParam("stretchs");
+			int[] renderBands = (int[]) filter.getParam("renderBands");
+
 			filterList.add("filter.linearstretchenhancement.active=true");
-			filterList.add("filter.linearstretchenhancement.removeends=" + filter.getRemoveEnds());
+			filterList.add("filter.linearstretchenhancement.removeends="
+					+ filter.getRemoveEnds());
 			putStretchBand(filterList, "red", stretchs.red);
 			putStretchBand(filterList, "green", stretchs.green);
 			putStretchBand(filterList, "blue", stretchs.blue);
-			filterList.add("filter.linearstretchenhancement.renderbands=" + convertArrayToString(renderBands));
-			filterList.add("filter.linearstretchenhancement.RGB=" + Boolean.valueOf(stretchs.rgb).toString());
+			filterList.add("filter.linearstretchenhancement.renderbands="
+					+ convertArrayToString(renderBands));
+			filterList.add("filter.linearstretchenhancement.RGB="
+					+ Boolean.valueOf(stretchs.rgb).toString());
 		}
 
 		return filterList;
@@ -248,71 +296,88 @@ public class EnhancementStretchListManager implements IRasterFilterListManager {
 	 * propiedad y el valor, en caso de no encontrar la propiedad o no ser dicha
 	 * banda, devuelve false. Es util para usarlo para extraer los valores de
 	 * createFilterListFromStrings
+	 * 
 	 * @param band
 	 * @param property
 	 * @param value
 	 * @param stretch
 	 * @return
 	 */
-	public boolean getStretchBand(String band, String property, String value, Stretch stretch) {
+	public boolean getStretchBand(String band, String property, String value,
+			Stretch stretch) {
 		if (property.startsWith("filter.linearstretchenhancement." + band)) {
-			if (property.startsWith("filter.linearstretchenhancement." + band + ".maxValue")) {
+			if (property.startsWith("filter.linearstretchenhancement." + band
+					+ ".maxValue")) {
 				stretch.maxValue = Double.parseDouble(value);
 				return true;
 			}
-			if (property.startsWith("filter.linearstretchenhancement." + band + ".minValue")) {
+			if (property.startsWith("filter.linearstretchenhancement." + band
+					+ ".minValue")) {
 				stretch.minValue = Double.parseDouble(value);
 				return true;
 			}
-			if (property.startsWith("filter.linearstretchenhancement." + band + ".offset")) {
+			if (property.startsWith("filter.linearstretchenhancement." + band
+					+ ".offset")) {
 				stretch.offset = StringToDoubleArray(value);
 				return true;
 			}
-			if (property.startsWith("filter.linearstretchenhancement." + band + ".scale")) {
+			if (property.startsWith("filter.linearstretchenhancement." + band
+					+ ".scale")) {
 				stretch.scale = StringToDoubleArray(value);
 				return true;
 			}
-			if (property.startsWith("filter.linearstretchenhancement." + band + ".stretchIn")) {
+			if (property.startsWith("filter.linearstretchenhancement." + band
+					+ ".stretchIn")) {
 				stretch.stretchIn = StringToDoubleArray(value);
 				return true;
 			}
-			if (property.startsWith("filter.linearstretchenhancement." + band + ".stretchOut")) {
+			if (property.startsWith("filter.linearstretchenhancement." + band
+					+ ".stretchOut")) {
 				stretch.stretchOut = StringToIntegerArray(value);
 				return true;
 			}
-			if (property.startsWith("filter.linearstretchenhancement." + band + ".tailTrimMax")) {
+			if (property.startsWith("filter.linearstretchenhancement." + band
+					+ ".tailTrimMax")) {
 				stretch.tailTrimMax = Double.parseDouble(value);
 				return true;
 			}
-			if (property.startsWith("filter.linearstretchenhancement." + band + ".tailTrimMin")) {
+			if (property.startsWith("filter.linearstretchenhancement." + band
+					+ ".tailTrimMin")) {
 				stretch.tailTrimMin = Double.parseDouble(value);
 				return true;
 			}
-			if (property.startsWith("filter.linearstretchenhancement." + band + ".tailTrimValueMax")) {
+			if (property.startsWith("filter.linearstretchenhancement." + band
+					+ ".tailTrimValueMax")) {
 				stretch.tailTrimValueMax = Double.parseDouble(value);
 				return true;
 			}
-			if (property.startsWith("filter.linearstretchenhancement." + band + ".tailTrimValueMin")) {
+			if (property.startsWith("filter.linearstretchenhancement." + band
+					+ ".tailTrimValueMin")) {
 				stretch.tailTrimValueMin = Double.parseDouble(value);
 				return true;
 			}
-			if (property.startsWith("filter.linearstretchenhancement." + band + ".functionType")) {
+			if (property.startsWith("filter.linearstretchenhancement." + band
+					+ ".functionType")) {
 				stretch.functionType = Integer.parseInt(value);
 				return true;
 			}
-			if (property.startsWith("filter.linearstretchenhancement." + band + ".valueFunction")) {
+			if (property.startsWith("filter.linearstretchenhancement." + band
+					+ ".valueFunction")) {
 				stretch.valueFunction = Double.parseDouble(value);
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#createFilterListFromStrings(java.util.ArrayList, java.lang.String, int)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#
+	 * createFilterListFromStrings(java.util.ArrayList, java.lang.String, int)
 	 */
-	public int createFilterListFromStrings(ArrayList filters, String fil, int filteri) throws FilterTypeException {
+	public int createFilterListFromStrings(ArrayList filters, String fil,
+			int filteri) throws FilterTypeException {
 		String pkgBase = "filter.linearstretchenhancement.";
 		if (fil.startsWith(pkgBase + "active")) {
 			boolean exec = true;
@@ -322,7 +387,7 @@ public class EnhancementStretchListManager implements IRasterFilterListManager {
 			filters.remove(0);
 			int[] renderBands = new int[] { 0, 0, 0 };
 			LinearStretchParams stretchParams = new LinearStretchParams();
-			
+
 			for (int propFilter = 0; propFilter < filters.size(); propFilter++) {
 				String elem = (String) filters.get(propFilter);
 				String value = RasterFilterListManager.getValue(elem);
@@ -336,25 +401,27 @@ public class EnhancementStretchListManager implements IRasterFilterListManager {
 					stretchParams.rgb = Boolean.parseBoolean(value);
 					continue;
 				}
-				
+
 				if (elem.startsWith("filter.linearstretchenhancement.removeends")) {
 					removeEnds = Boolean.parseBoolean(value);
 					continue;
 				}
-				
+
 				if (getStretchBand("red", elem, value, stretchParams.red))
 					continue;
 				if (getStretchBand("green", elem, value, stretchParams.green))
 					continue;
 				if (getStretchBand("blue", elem, value, stretchParams.blue))
 					continue;
-				
+
 			}
-			
+
 			filterList.remove(LinearStretchEnhancementFilter.class);
-			addEnhancedStretchFilter(stretchParams, stats, renderBands, removeEnds);
-			
-			LinearStretchEnhancementFilter lsef = (LinearStretchEnhancementFilter) filterList.getFilterByBaseClass(LinearStretchEnhancementFilter.class);
+			addEnhancedStretchFilter(stretchParams, stats, renderBands,
+					removeEnds);
+
+			LinearStretchEnhancementFilter lsef = (LinearStretchEnhancementFilter) filterList
+					.getFilterByBaseClass(LinearStretchEnhancementFilter.class);
 			lsef.setExec(exec);
 		}
 		return filteri;
@@ -362,7 +429,10 @@ public class EnhancementStretchListManager implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList()
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList
+	 * ()
 	 */
 	public ArrayList getRasterFilterList() {
 		ArrayList filters = new ArrayList();
@@ -372,105 +442,127 @@ public class EnhancementStretchListManager implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#addFilter(java.lang.Class, org.gvsig.raster.dataset.Params)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.IRasterFilterListManager#addFilter(java.
+	 * lang.Class, org.gvsig.raster.dataset.Params)
 	 */
-	public void addFilter(Class classFilter, Params params) throws FilterTypeException {
+	public void addFilter(Class classFilter, Params params)
+			throws FilterTypeException {
 		if (classFilter.equals(LinearStretchEnhancementFilter.class)) {
 			int[] renderBands = { 0, 1, 2 };
 			boolean removeEnds = false;
 
 			LinearStretchParams leParams = new LinearStretchParams();
-			
+
 			for (int i = 0; i < params.getNumParams(); i++) {
-				if (params.getParam(i).id.equals("RenderBands") && 
-					params.getParam(i).defaultValue instanceof String) {
-					String[] bands = new String((String) params.getParam(i).defaultValue).split(" ");
+				if (params.getParam(i).id.equals("RenderBands")
+						&& params.getParam(i).defaultValue instanceof String) {
+					String[] bands = new String(
+							(String) params.getParam(i).defaultValue)
+							.split(" ");
 					renderBands[0] = new Integer(bands[0]).intValue();
 					renderBands[1] = new Integer(bands[1]).intValue();
 					renderBands[2] = new Integer(bands[2]).intValue();
 					continue;
 				}
-				
+
 				if (params.getParam(i).id.equals("Remove"))
-					removeEnds = ((Boolean) params.getParam(i).defaultValue).booleanValue();
-				
+					removeEnds = ((Boolean) params.getParam(i).defaultValue)
+							.booleanValue();
+
 				if (params.getParam(i).id.equals("RGB"))
-					leParams.rgb = ((Boolean) params.getParam(i).defaultValue).booleanValue();
-				
-				if (params.getParam(i).id.equals("StretchInRed") &&
-					params.getParam(i).defaultValue instanceof double[])
+					leParams.rgb = ((Boolean) params.getParam(i).defaultValue)
+							.booleanValue();
+
+				if (params.getParam(i).id.equals("StretchInRed")
+						&& params.getParam(i).defaultValue instanceof double[])
 					leParams.red.stretchIn = ((double[]) params.getParam(i).defaultValue);
-				
-				if (params.getParam(i).id.equals("StretchInGreen") &&
-					params.getParam(i).defaultValue instanceof double[])
+
+				if (params.getParam(i).id.equals("StretchInGreen")
+						&& params.getParam(i).defaultValue instanceof double[])
 					leParams.green.stretchIn = ((double[]) params.getParam(i).defaultValue);
-				
-				if (params.getParam(i).id.equals("StretchInBlue") &&
-						params.getParam(i).defaultValue instanceof double[])
+
+				if (params.getParam(i).id.equals("StretchInBlue")
+						&& params.getParam(i).defaultValue instanceof double[])
 					leParams.blue.stretchIn = ((double[]) params.getParam(i).defaultValue);
 
-				if (params.getParam(i).id.equals("StretchOutRed") &&
-					params.getParam(i).defaultValue instanceof int[])
+				if (params.getParam(i).id.equals("StretchOutRed")
+						&& params.getParam(i).defaultValue instanceof int[])
 					leParams.red.stretchOut = ((int[]) params.getParam(i).defaultValue);
 
-				if (params.getParam(i).id.equals("StretchOutGreen") &&
-					params.getParam(i).defaultValue instanceof int[])
+				if (params.getParam(i).id.equals("StretchOutGreen")
+						&& params.getParam(i).defaultValue instanceof int[])
 					leParams.green.stretchOut = ((int[]) params.getParam(i).defaultValue);
 
-				if (params.getParam(i).id.equals("StretchOutBlue") &&
-					params.getParam(i).defaultValue instanceof int[])
+				if (params.getParam(i).id.equals("StretchOutBlue")
+						&& params.getParam(i).defaultValue instanceof int[])
 					leParams.blue.stretchOut = ((int[]) params.getParam(i).defaultValue);
 
-				if (params.getParam(i).id.equals("TailTrimRedMin") &&
-					params.getParam(i).defaultValue instanceof Double)
-					leParams.red.tailTrimMin = ((Double) params.getParam(i).defaultValue).doubleValue();
-				
-				if (params.getParam(i).id.equals("TailTrimRedMax") &&
-					params.getParam(i).defaultValue instanceof Double)
-					leParams.red.tailTrimMax = ((Double) params.getParam(i).defaultValue).doubleValue();
-				
-				if (params.getParam(i).id.equals("TailTrimGreenMin") &&
-					params.getParam(i).defaultValue instanceof Double)
-					leParams.green.tailTrimMin = ((Double) params.getParam(i).defaultValue).doubleValue();
-				
-				if (params.getParam(i).id.equals("TailTrimGreenMax") &&
-					params.getParam(i).defaultValue instanceof Double)
-					leParams.green.tailTrimMax = ((Double) params.getParam(i).defaultValue).doubleValue();
-				
-				if (params.getParam(i).id.equals("TailTrimBlueMin") &&
-					params.getParam(i).defaultValue instanceof Double)
-					leParams.blue.tailTrimMin = ((Double) params.getParam(i).defaultValue).doubleValue();
-				
-				if (params.getParam(i).id.equals("TailTrimBlueMax") &&
-					params.getParam(i).defaultValue instanceof Double)
-					leParams.blue.tailTrimMax = ((Double) params.getParam(i).defaultValue).doubleValue();
+				if (params.getParam(i).id.equals("TailTrimRedMin")
+						&& params.getParam(i).defaultValue instanceof Double)
+					leParams.red.tailTrimMin = ((Double) params.getParam(i).defaultValue)
+							.doubleValue();
 
-				if (params.getParam(i).id.equals("StretchRedFunctionType") &&
-						params.getParam(i).defaultValue instanceof Integer)
-						leParams.red.functionType = ((Integer) params.getParam(i).defaultValue).intValue();
+				if (params.getParam(i).id.equals("TailTrimRedMax")
+						&& params.getParam(i).defaultValue instanceof Double)
+					leParams.red.tailTrimMax = ((Double) params.getParam(i).defaultValue)
+							.doubleValue();
 
-				if (params.getParam(i).id.equals("StretchRedValueFunction") &&
-						params.getParam(i).defaultValue instanceof Double)
-						leParams.red.valueFunction = ((Double) params.getParam(i).defaultValue).doubleValue();
+				if (params.getParam(i).id.equals("TailTrimGreenMin")
+						&& params.getParam(i).defaultValue instanceof Double)
+					leParams.green.tailTrimMin = ((Double) params.getParam(i).defaultValue)
+							.doubleValue();
 
-				if (params.getParam(i).id.equals("StretchGreenFunctionType") &&
-						params.getParam(i).defaultValue instanceof Integer)
-						leParams.green.functionType = ((Integer) params.getParam(i).defaultValue).intValue();
+				if (params.getParam(i).id.equals("TailTrimGreenMax")
+						&& params.getParam(i).defaultValue instanceof Double)
+					leParams.green.tailTrimMax = ((Double) params.getParam(i).defaultValue)
+							.doubleValue();
 
-				if (params.getParam(i).id.equals("StretchGreenValueFunction") &&
-						params.getParam(i).defaultValue instanceof Double)
-						leParams.green.valueFunction = ((Double) params.getParam(i).defaultValue).doubleValue();
+				if (params.getParam(i).id.equals("TailTrimBlueMin")
+						&& params.getParam(i).defaultValue instanceof Double)
+					leParams.blue.tailTrimMin = ((Double) params.getParam(i).defaultValue)
+							.doubleValue();
 
-				if (params.getParam(i).id.equals("StretchBlueFunctionType") &&
-						params.getParam(i).defaultValue instanceof Integer)
-						leParams.blue.functionType = ((Integer) params.getParam(i).defaultValue).intValue();
+				if (params.getParam(i).id.equals("TailTrimBlueMax")
+						&& params.getParam(i).defaultValue instanceof Double)
+					leParams.blue.tailTrimMax = ((Double) params.getParam(i).defaultValue)
+							.doubleValue();
 
-				if (params.getParam(i).id.equals("StretchBlueValueFunction") &&
-						params.getParam(i).defaultValue instanceof Double)
-						leParams.blue.valueFunction = ((Double) params.getParam(i).defaultValue).doubleValue();
+				if (params.getParam(i).id.equals("StretchRedFunctionType")
+						&& params.getParam(i).defaultValue instanceof Integer)
+					leParams.red.functionType = ((Integer) params.getParam(i).defaultValue)
+							.intValue();
+
+				if (params.getParam(i).id.equals("StretchRedValueFunction")
+						&& params.getParam(i).defaultValue instanceof Double)
+					leParams.red.valueFunction = ((Double) params.getParam(i).defaultValue)
+							.doubleValue();
+
+				if (params.getParam(i).id.equals("StretchGreenFunctionType")
+						&& params.getParam(i).defaultValue instanceof Integer)
+					leParams.green.functionType = ((Integer) params.getParam(i).defaultValue)
+							.intValue();
+
+				if (params.getParam(i).id.equals("StretchGreenValueFunction")
+						&& params.getParam(i).defaultValue instanceof Double)
+					leParams.green.valueFunction = ((Double) params.getParam(i).defaultValue)
+							.doubleValue();
+
+				if (params.getParam(i).id.equals("StretchBlueFunctionType")
+						&& params.getParam(i).defaultValue instanceof Integer)
+					leParams.blue.functionType = ((Integer) params.getParam(i).defaultValue)
+							.intValue();
+
+				if (params.getParam(i).id.equals("StretchBlueValueFunction")
+						&& params.getParam(i).defaultValue instanceof Double)
+					leParams.blue.valueFunction = ((Double) params.getParam(i).defaultValue)
+							.doubleValue();
 			}
 
-			addEnhancedStretchFilter(leParams, (IStatistics) filterList.getEnvParam("IStatistics"), renderBands, removeEnds);
+			addEnhancedStretchFilter(leParams,
+					(IStatistics) filterList.getEnvParam("IStatistics"),
+					renderBands, removeEnds);
 		}
 	}
 }

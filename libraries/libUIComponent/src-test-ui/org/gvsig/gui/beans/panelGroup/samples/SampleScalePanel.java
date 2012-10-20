@@ -29,19 +29,23 @@ import javax.swing.JTextArea;
 import org.gvsig.gui.beans.panelGroup.panels.AbstractPanel;
 
 /**
- * <p>Sample of {@link AbstractPanel AbstractPanel}.</p>
+ * <p>
+ * Sample of {@link AbstractPanel AbstractPanel}.
+ * </p>
  * 
  * @version 16/10/2007
- * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es) 
+ * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class SampleScalePanel extends AbstractPanel implements Serializable {
 	private static final long serialVersionUID = -4160464669737958732L;
 
 	/**
-	 * <p>Element for the interface.</p>
+	 * <p>
+	 * Element for the interface.
+	 * </p>
 	 */
 	private JTextArea jTextArea = null;
-	
+
 	/**
 	 * @see AbstractPanel#AbstractPanel()
 	 */
@@ -49,7 +53,7 @@ public class SampleScalePanel extends AbstractPanel implements Serializable {
 		super();
 		initialize();
 	}
-	
+
 	/**
 	 * @see AbstractPanel#AbstractPanel(String, String, String)
 	 */
@@ -57,7 +61,7 @@ public class SampleScalePanel extends AbstractPanel implements Serializable {
 		super(id, label, labelGroup);
 		initialize();
 	}
-	
+
 	@Override
 	protected void initialize() {
 		add(new JScrollPane(getJTextArea()));
@@ -66,82 +70,107 @@ public class SampleScalePanel extends AbstractPanel implements Serializable {
 		setID(Samples_Data.PANELS1_IDS[5]);
 		setLabel(Samples_Data.PANELS1_LABELS[5]);
 		setLabelGroup(Samples_Data.PANELS1_LABELGROUPS[5]);
-		setPreferredSize(new Dimension(Samples_Data.PANELS_DEFAULT_WIDTH, Samples_Data.PANELS_DEFAULT_HEIGHT));
+		setPreferredSize(new Dimension(Samples_Data.PANELS_DEFAULT_WIDTH,
+				Samples_Data.PANELS_DEFAULT_HEIGHT));
 		resetChangedStatus();
 	}
-	
+
 	/**
 	 * This method initializes jTextArea
-	 *
+	 * 
 	 * @return JTextArea
 	 */
 	private JTextArea getJTextArea() {
 		if (jTextArea == null) {
 			jTextArea = new JTextArea(5, 40);
-			jTextArea.setText("I\'m a JTextArea object in the \"Panel\" with:\n\nID: " + getID() + "\nLabel: " + getLabel() + "\nLabelGroup: " + getLabelGroup());
+			jTextArea
+					.setText("I\'m a JTextArea object in the \"Panel\" with:\n\nID: "
+							+ getID()
+							+ "\nLabel: "
+							+ getLabel()
+							+ "\nLabelGroup: " + getLabelGroup());
 			jTextArea.setEditable(false);
 			jTextArea.setBackground(Color.YELLOW);
 		}
 
 		return jTextArea;
 	}
-	
+
 	@Override
 	public void setID(String id) {
 		super.setID(id);
-		
+
 		setToolTipText(getID());
-		getJTextArea().setText("I\'m a JTextArea object in the \"Panel\" with:\n\nID: " + getID() + "\nLabel: " + getLabel() + "\nLabelGroup: " + getLabelGroup());
+		getJTextArea().setText(
+				"I\'m a JTextArea object in the \"Panel\" with:\n\nID: "
+						+ getID() + "\nLabel: " + getLabel() + "\nLabelGroup: "
+						+ getLabelGroup());
 		hasChanged = true;
 	}
 
 	@Override
 	public void setLabel(String label) {
 		super.setLabel(label);
-		
-		getJTextArea().setText("I\'m a JTextArea object in the \"Panel\" with:\n\nID: " + getID() + "\nLabel: " + getLabel() + "\nLabelGroup: " + getLabelGroup());
+
+		getJTextArea().setText(
+				"I\'m a JTextArea object in the \"Panel\" with:\n\nID: "
+						+ getID() + "\nLabel: " + getLabel() + "\nLabelGroup: "
+						+ getLabelGroup());
 		hasChanged = true;
 	}
 
 	@Override
 	public void setLabelGroup(String labelGroup) {
 		super.setLabelGroup(labelGroup);
-		
-		getJTextArea().setText("I\'m a JTextArea object in the \"Panel\" with:\n\nID: " + getID() + "\nLabel: " + getLabel() + "\nLabelGroup: " + getLabelGroup());
+
+		getJTextArea().setText(
+				"I\'m a JTextArea object in the \"Panel\" with:\n\nID: "
+						+ getID() + "\nLabel: " + getLabel() + "\nLabelGroup: "
+						+ getLabelGroup());
 		hasChanged = true;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.panels.IPanel#accept()
 	 */
 	public void accept() {
-		System.out.println("I'm the IPanel: " + toString() + "\n and I'm executing an 'accept' method.");
+		System.out.println("I'm the IPanel: " + toString()
+				+ "\n and I'm executing an 'accept' method.");
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.panels.IPanel#apply()
 	 */
 	public void apply() {
-		System.out.println("I'm the IPanel: " + toString() + "\n and I'm executing an 'apply' method.");
+		System.out.println("I'm the IPanel: " + toString()
+				+ "\n and I'm executing an 'apply' method.");
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.panels.IPanel#cancel()
 	 */
 	public void cancel() {
-		System.out.println("I'm the IPanel: " + toString() + "\n and I'm executing a 'cancel' method.");
+		System.out.println("I'm the IPanel: " + toString()
+				+ "\n and I'm executing a 'cancel' method.");
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.panels.IPanel#selected()
 	 */
 	public void selected() {
-		System.out.println("I'm the IPanel: " + toString() + "\n and I've been selected. My information is: " +
-				 "\n\tID: " + getID() + "\n\tLABEL_GROUP: " + getLabelGroup() + "\n\tLABEL: " + getLabel() + "\n\tCLASS: " + getClass() +
-				 "\n\tMy Preferred Size: " + getPreferredSize() + "\n\tAnd My size: " + getSize());
+		System.out.println("I'm the IPanel: " + toString()
+				+ "\n and I've been selected. My information is: " + "\n\tID: "
+				+ getID() + "\n\tLABEL_GROUP: " + getLabelGroup()
+				+ "\n\tLABEL: " + getLabel() + "\n\tCLASS: " + getClass()
+				+ "\n\tMy Preferred Size: " + getPreferredSize()
+				+ "\n\tAnd My size: " + getSize());
 	}
 }

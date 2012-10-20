@@ -48,33 +48,34 @@ import com.iver.cit.gvsig.fmap.edition.DefaultRowEdited;
 import com.iver.cit.gvsig.fmap.edition.IRowEdited;
 import com.iver.cit.gvsig.fmap.edition.IWriter;
 import com.iver.cit.gvsig.fmap.edition.writers.shp.ShpWriter;
+
 /**
- * Este proceso vectoriza la capa de entrada que debe estar ya preprocesada.
- * Usa la libreria de potrace por debajo.
+ * Este proceso vectoriza la capa de entrada que debe estar ya preprocesada. Usa
+ * la libreria de potrace por debajo.
  * 
  * @version 15/09/2008
  * @author BorSanZa - Borja S�nchez Zamorano (borja.sanchez@iver.es)
  */
 public class PotraceProcess extends RasterProcess {
-	private double       percent               = 0;
-	private FLyrRasterSE lyr                   = null;
-	private String       fileName              = null;
-	private IWriter      writer                = null;
-	private Value        values[]              = null;
-	private int          m_iGeometry           = 0;
+	private double percent = 0;
+	private FLyrRasterSE lyr = null;
+	private String fileName = null;
+	private IWriter writer = null;
+	private Value values[] = null;
+	private int m_iGeometry = 0;
 
 	// Default Values
-	private int          bezierPoints          = 7;
-	private int          policy                = VectorizationBinding.POLICY_MINORITY;
-	private int          despeckle             = 0;
-	private double       cornerThreshold       = 1.0;
-	private double       optimizationTolerance = 0.2;
-	private int          outputQuantization    = 10;
-	private boolean      curveOptimization     = true;
-
+	private int bezierPoints = 7;
+	private int policy = VectorizationBinding.POLICY_MINORITY;
+	private int despeckle = 0;
+	private double cornerThreshold = 1.0;
+	private double optimizationTolerance = 0.2;
+	private int outputQuantization = 10;
+	private boolean curveOptimization = true;
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.RasterProcess#init()
 	 */
 	public void init() {
@@ -91,6 +92,7 @@ public class PotraceProcess extends RasterProcess {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.RasterProcess#process()
 	 */
 	public void process() throws InterruptedException {
@@ -119,21 +121,23 @@ public class PotraceProcess extends RasterProcess {
 	 * @param lyr
 	 * @param fileOut
 	 * @param bezierPoints
-	 * @throws RasterDriverException 
-	 * @throws InterruptedException 
-	 * @throws VisitorException 
-	 * @throws InitializeWriterException 
-	 * @throws Exception 
+	 * @throws RasterDriverException
+	 * @throws InterruptedException
+	 * @throws VisitorException
+	 * @throws InitializeWriterException
+	 * @throws Exception
 	 */
-	public void generatePotrace() throws InterruptedException, RasterDriverException, VisitorException, InitializeWriterException {
-		VectorizationBinding binding = new VectorizationBinding(lyr.getBufferFactory());
+	public void generatePotrace() throws InterruptedException,
+			RasterDriverException, VisitorException, InitializeWriterException {
+		VectorizationBinding binding = new VectorizationBinding(
+				lyr.getBufferFactory());
 		binding.setPolicy(policy);
 		binding.setDespeckle(despeckle);
 		binding.setCornerThreshold(cornerThreshold);
 		binding.setOptimizationTolerance(optimizationTolerance);
 		binding.setOutputQuantization(outputQuantization);
 		binding.setEnabledCurveOptimization(curveOptimization);
-		
+
 		// binding.setCornerThreshold(-1);
 		double geometrias[] = binding.VectorizeBuffer();
 
@@ -174,66 +178,80 @@ public class PotraceProcess extends RasterProcess {
 	}
 
 	public void addShape(FShape shape, Value[] value) throws VisitorException {
-		if (shape == null) 
+		if (shape == null)
 			return;
 		IGeometry geom = ShapeFactory.createGeometry(shape);
 		addGeometry(geom, value);
 	}
-	
-	public void addGeometry(IGeometry geom, Value[] value) throws VisitorException {
-		DefaultFeature feat = new DefaultFeature(geom, value, Integer.toString(m_iGeometry));
-		IRowEdited editFeat = new DefaultRowEdited(feat, IRowEdited.STATUS_MODIFIED, m_iGeometry);
+
+	public void addGeometry(IGeometry geom, Value[] value)
+			throws VisitorException {
+		DefaultFeature feat = new DefaultFeature(geom, value,
+				Integer.toString(m_iGeometry));
+		IRowEdited editFeat = new DefaultRowEdited(feat,
+				IRowEdited.STATUS_MODIFIED, m_iGeometry);
 		m_iGeometry++;
 		writer.process(editFeat);
 	}
-	
+
 	private Point2D getTransformPixel(double x, double y) {
 		AffineTransform at = lyr.getAffineTransform();
 		Point2D ptSrc = new Point2D.Double(x, lyr.getPxHeight() - y);
 		at.transform(ptSrc, ptSrc);
 		return ptSrc;
 	}
-	
-	private void showPotrace(double[] potraceX, int trozos) throws InterruptedException, VisitorException {
-		RasterTask task = RasterTaskQueue.get(Thread.currentThread().toString());
+
+	private void showPotrace(double[] potraceX, int trozos)
+			throws InterruptedException, VisitorException {
+		RasterTask task = RasterTaskQueue
+				.get(Thread.currentThread().toString());
 		BezierPathX pathX = new BezierPathX(trozos);
 
-		double increment = (100 / (double)potraceX.length);
+		double increment = (100 / (double) potraceX.length);
 		int cont = 1;
 		while (true) {
 			if ((cont >= potraceX.length) || (cont >= potraceX[0]))
 				return;
 			switch ((int) potraceX[cont]) {
-				case 0: // MoveTo
-					pathX.moveTo(getTransformPixel(potraceX[cont + 1], potraceX[cont + 2]));
-					cont += 3;
-					percent += (increment * 3);
-					break;
-				case 1: // LineTo
-					pathX.lineTo(getTransformPixel(potraceX[cont + 1], potraceX[cont + 2]));
-					cont += 3;
-					percent += (increment * 3);
-					break;
-				case 2: // CurveTo
-					pathX.curveTo(getTransformPixel(potraceX[cont + 1], potraceX[cont + 2]), getTransformPixel(potraceX[cont + 3], potraceX[cont + 4]), getTransformPixel(potraceX[cont + 5], potraceX[cont + 6]));
-					cont += 7;
-					percent += (increment * 7);
-					break;
-				case 3: // closePath
-					FPolyline2D line =  new FPolyline2D(pathX);
-					addShape(line, values);
-					pathX = new BezierPathX(trozos);
-					cont ++;
-					percent += increment;
-					break;
+			case 0: // MoveTo
+				pathX.moveTo(getTransformPixel(potraceX[cont + 1],
+						potraceX[cont + 2]));
+				cont += 3;
+				percent += (increment * 3);
+				break;
+			case 1: // LineTo
+				pathX.lineTo(getTransformPixel(potraceX[cont + 1],
+						potraceX[cont + 2]));
+				cont += 3;
+				percent += (increment * 3);
+				break;
+			case 2: // CurveTo
+				pathX.curveTo(
+						getTransformPixel(potraceX[cont + 1],
+								potraceX[cont + 2]),
+						getTransformPixel(potraceX[cont + 3],
+								potraceX[cont + 4]),
+						getTransformPixel(potraceX[cont + 5],
+								potraceX[cont + 6]));
+				cont += 7;
+				percent += (increment * 7);
+				break;
+			case 3: // closePath
+				FPolyline2D line = new FPolyline2D(pathX);
+				addShape(line, values);
+				pathX = new BezierPathX(trozos);
+				cont++;
+				percent += increment;
+				break;
 			}
-			if(task.getEvent() != null)
+			if (task.getEvent() != null)
 				task.manageEvent(task.getEvent());
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.incrementabletask.IIncrementable#getPercent()
 	 */
 	public int getPercent() {
@@ -242,14 +260,16 @@ public class PotraceProcess extends RasterProcess {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.incrementabletask.IIncrementable#getTitle()
 	 */
 	public String getTitle() {
 		return RasterToolsUtil.getText(this, "vectorization");
 	}
-	
+
 	/**
 	 * Returns the length of field
+	 * 
 	 * @param dataType
 	 * @return length of field
 	 */

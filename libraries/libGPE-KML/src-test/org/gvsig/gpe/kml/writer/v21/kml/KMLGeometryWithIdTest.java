@@ -60,6 +60,7 @@ import org.gvsig.gpe.writer.GPEGeometryWithIdTest;
 public class KMLGeometryWithIdTest extends GPEGeometryWithIdTest {
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEParserClass()
 	 */
 	public Class getGPEParserClass() {
@@ -68,11 +69,11 @@ public class KMLGeometryWithIdTest extends GPEGeometryWithIdTest {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEWriterHandlerClass()
 	 */
 	public Class getGPEWriterHandlerClass() {
 		return org.gvsig.gpe.kml.writer.GPEKml21WriterHandlerImplementor.class;
-	}	
-	
+	}
 
 }

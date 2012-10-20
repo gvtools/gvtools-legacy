@@ -51,6 +51,6 @@ import org.gvsig.gpe.parser.GPEErrorHandler;
 /**
  * @author Jorge Piera Llodrá (jorge.piera@iver.es)
  */
-public class WFSGPEErrorHandler extends GPEErrorHandler{
+public class WFSGPEErrorHandler extends GPEErrorHandler {
 
 }

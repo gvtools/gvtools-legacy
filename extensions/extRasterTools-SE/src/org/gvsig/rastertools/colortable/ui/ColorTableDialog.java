@@ -28,13 +28,16 @@ import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.IWindowListener;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
+
 /**
-* <code>ColorTableDialog</code>. Creación de la ventana de ColorTable para gvSIG.
-*
-* @version 17/04/2007
-* @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
-*/
-public class ColorTableDialog extends JPanel implements IWindow, IWindowListener {
+ * <code>ColorTableDialog</code>. Creación de la ventana de ColorTable para
+ * gvSIG.
+ * 
+ * @version 17/04/2007
+ * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
+ */
+public class ColorTableDialog extends JPanel implements IWindow,
+		IWindowListener {
 	private static final long serialVersionUID = -5374834293534046986L;
 	private FLayer layer = null;
 
@@ -42,11 +45,14 @@ public class ColorTableDialog extends JPanel implements IWindow, IWindowListener
 	 * Panel de recortado de imagen que está en la libreria raster
 	 */
 	private ColorTablePanel colorTablePanel = null;
-	
+
 	/**
 	 * Constructor
-	 * @param width Ancho
-	 * @param height Alto
+	 * 
+	 * @param width
+	 *            Ancho
+	 * @param height
+	 *            Alto
 	 */
 	public ColorTableDialog(FLayer layer, int width, int height) {
 		this.layer = layer;
@@ -58,6 +64,7 @@ public class ColorTableDialog extends JPanel implements IWindow, IWindowListener
 
 	/**
 	 * Obtiene el panel con el histograma
+	 * 
 	 * @return HistogramPanel
 	 */
 	private ColorTablePanel getColorTablePanel() {
@@ -69,12 +76,15 @@ public class ColorTableDialog extends JPanel implements IWindow, IWindowListener
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindow#getWindowInfo()
 	 */
 	public WindowInfo getWindowInfo() {
-		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODELESSDIALOG | WindowInfo.RESIZABLE | WindowInfo.MAXIMIZABLE);
-		if(getColorTablePanel().getLayer() != null)
-			m_viewinfo.setAdditionalInfo(getColorTablePanel().getLayer().getName());
+		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODELESSDIALOG
+				| WindowInfo.RESIZABLE | WindowInfo.MAXIMIZABLE);
+		if (getColorTablePanel().getLayer() != null)
+			m_viewinfo.setAdditionalInfo(getColorTablePanel().getLayer()
+					.getName());
 		m_viewinfo.setTitle(PluginServices.getText(this, "tablas_color"));
 		m_viewinfo.setHeight(this.getHeight());
 		m_viewinfo.setWidth(this.getWidth());
@@ -83,6 +93,7 @@ public class ColorTableDialog extends JPanel implements IWindow, IWindowListener
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindowListener#windowClosed()
 	 */
 	public void windowClosed() {
@@ -91,9 +102,11 @@ public class ColorTableDialog extends JPanel implements IWindow, IWindowListener
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindowListener#windowActivated()
 	 */
-	public void windowActivated() {}
+	public void windowActivated() {
+	}
 
 	public Object getWindowProfile() {
 		return WindowInfo.PROPERTIES_PROFILE;

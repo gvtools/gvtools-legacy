@@ -12,7 +12,6 @@ import com.iver.utiles.swing.jcomboServer.ServerData;
 import es.gva.cit.catalog.drivers.DiscoveryServiceCapabilities;
 import es.gva.cit.catalog.metadataxml.XMLNode;
 import es.gva.cit.catalog.protocols.HTTPPostProtocol;
-import es.gva.cit.gazetteer.drivers.GazetteerCapabilities;
 import es.gva.cit.gazetteer.querys.Feature;
 import es.gva.cit.gazetteer.querys.GazetteerQuery;
 import es.gva.cit.gazetteer.wfs.drivers.WFSServiceDriver;
@@ -75,12 +74,16 @@ import es.gva.cit.gazetteer.wfsg.parsers.WfsgFeatureParser;
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class WFSGServiceDriver extends WFSServiceDriver {
-	//TODO use the download manager instead of this
-	private static final String tempDirectoryPath = System.getProperty("java.io.tmpdir")+"/tmp-andami";
-	
+	// TODO use the download manager instead of this
+	private static final String tempDirectoryPath = System
+			.getProperty("java.io.tmpdir") + "/tmp-andami";
+
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.wfs.drivers.WFSServiceDriver#getCapabilities(java.net.URI)
+	 * 
+	 * @see
+	 * es.gva.cit.gazetteer.wfs.drivers.WFSServiceDriver#getCapabilities(java
+	 * .net.URI)
 	 */
 	public DiscoveryServiceCapabilities getCapabilities(URI uri) {
 		URL url = null;
@@ -92,46 +95,53 @@ public class WFSGServiceDriver extends WFSServiceDriver {
 		}
 		Collection nodes = new HTTPPostProtocol().doQuery(url,
 				WFSGMessages.getHTTPPOSTCapabilities(), 0);
-		
+
 		WfsgCapabilitiesParser parser = new WfsgCapabilitiesParser(this);
 		parser.parse(nodes);
-		return parser.getCapabilities();			
+		return parser.getCapabilities();
 	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.wfs.drivers.WFSServiceDriver#getFeature(java.net.URI, es.gva.cit.gazetteer.querys.Query)
-	 */
-	 public Feature[] getFeature(URI uri, GazetteerQuery query) throws GMLException {        
-		 URL url = null;
-			try {
-				url = uri.toURL();
-			} catch (MalformedURLException e) {
-				setServerAnswerReady("errorServerNotFound");
-				return null;
-			}
-			query.setFieldAttribute("geographicIdentifier");
-			Collection nodes = new HTTPPostProtocol().doQuery(url,
-					WFSGMessages.getHTTPPOSTFeature(query,0),
-					0);			
-			
-			return new WfsgFeatureParser().parse((XMLNode)nodes.toArray()[0]);
-					 
-	 }
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.drivers.AsbtractGazetteerServiceDriver#isDescribeFeatureTypeNeeded()
+	 * 
+	 * @see
+	 * es.gva.cit.gazetteer.wfs.drivers.WFSServiceDriver#getFeature(java.net
+	 * .URI, es.gva.cit.gazetteer.querys.Query)
 	 */
-	public boolean isDescribeFeatureTypeNeeded(){
+	public Feature[] getFeature(URI uri, GazetteerQuery query)
+			throws GMLException {
+		URL url = null;
+		try {
+			url = uri.toURL();
+		} catch (MalformedURLException e) {
+			setServerAnswerReady("errorServerNotFound");
+			return null;
+		}
+		query.setFieldAttribute("geographicIdentifier");
+		Collection nodes = new HTTPPostProtocol().doQuery(url,
+				WFSGMessages.getHTTPPOSTFeature(query, 0), 0);
+
+		return new WfsgFeatureParser().parse((XMLNode) nodes.toArray()[0]);
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see es.gva.cit.gazetteer.drivers.AsbtractGazetteerServiceDriver#
+	 * isDescribeFeatureTypeNeeded()
+	 */
+	public boolean isDescribeFeatureTypeNeeded() {
 		return false;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getServiceName()
+	 * 
+	 * @see
+	 * es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getServiceName()
 	 */
 	public String getServiceName() {
 		return ServerData.SERVER_SUBTYPE_GAZETTEER_WFSG;
-	}	
+	}
 }

@@ -3,25 +3,24 @@
  */
 package com.hardcode.gdbms.gui;
 
-import com.hardcode.gdbms.engine.instruction.Utilities;
-import com.hardcode.gdbms.parser.SimpleNode;
-
 import java.util.Enumeration;
 import java.util.Hashtable;
 
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 
+import com.hardcode.gdbms.engine.instruction.Utilities;
+import com.hardcode.gdbms.parser.SimpleNode;
 
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public class GDBMSParseTreeModel extends DefaultTreeModel {
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param arg0
 	 * @param arg1
 	 */
@@ -31,7 +30,7 @@ public class GDBMSParseTreeModel extends DefaultTreeModel {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param arg0
 	 */
 	public GDBMSParseTreeModel(TreeNode arg0) {
@@ -40,8 +39,9 @@ public class GDBMSParseTreeModel extends DefaultTreeModel {
 
 	/**
 	 * Crea un nuevo GDBMSParseTreeModel.
-	 *
-	 * @param root DOCUMENT ME!
+	 * 
+	 * @param root
+	 *            DOCUMENT ME!
 	 */
 	public GDBMSParseTreeModel(SimpleNode root) {
 		super(null);
@@ -50,8 +50,9 @@ public class GDBMSParseTreeModel extends DefaultTreeModel {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param root DOCUMENT ME!
+	 * 
+	 * @param root
+	 *            DOCUMENT ME!
 	 */
 	public void setTree(SimpleNode root) {
 		this.setRoot(new ParseNode(root));
@@ -59,7 +60,7 @@ public class GDBMSParseTreeModel extends DefaultTreeModel {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @author Fernando González Cortés
 	 */
 	public class ParseNode implements TreeNode {
@@ -67,8 +68,9 @@ public class GDBMSParseTreeModel extends DefaultTreeModel {
 
 		/**
 		 * Crea un nuevo ParseNode.
-		 *
-		 * @param n DOCUMENT ME!
+		 * 
+		 * @param n
+		 *            DOCUMENT ME!
 		 */
 		public ParseNode(SimpleNode n) {
 			node = n;
@@ -137,7 +139,7 @@ public class GDBMSParseTreeModel extends DefaultTreeModel {
 
 		/**
 		 * DOCUMENT ME!
-		 *
+		 * 
 		 * @return DOCUMENT ME!
 		 */
 		public String toString() {

@@ -48,32 +48,45 @@ import com.iver.cit.gvsig.fmap.layers.LayerEvent;
 import com.iver.cit.gvsig.fmap.layers.LegendEvent;
 import com.iver.cit.gvsig.fmap.layers.SelectionEvent;
 
-
 /**
- * <p>An atomic event represents a group of events that will be attended without any interruption.</p>
+ * <p>
+ * An atomic event represents a group of events that will be attended without
+ * any interruption.
+ * </p>
  * 
- * <p>This kind of events are created by the buffer of events of the {@link MapContext MapContext}.</p>
+ * <p>
+ * This kind of events are created by the buffer of events of the
+ * {@link MapContext MapContext}.
+ * </p>
  */
 public class AtomicEvent extends FMapEvent {
 	/**
-	 * <p>Events that constitute this one.</p>
+	 * <p>
+	 * Events that constitute this one.
+	 * </p>
 	 */
 	private ArrayList events;
 
 	/**
-	 * <p>Creates a new instance of this kind of event.</p>
-	 *
-	 * @param fmapEvents events that will constitute this one
+	 * <p>
+	 * Creates a new instance of this kind of event.
+	 * </p>
+	 * 
+	 * @param fmapEvents
+	 *            events that will constitute this one
 	 */
 	public AtomicEvent(ArrayList fmapEvents) {
 		this.events = (ArrayList) fmapEvents.clone();
 	}
 
 	/**
-	 * <p>Returns the event at the specified position in the internal list.</p>
-	 *
-	 * @param index index of event to return
-	 *
+	 * <p>
+	 * Returns the event at the specified position in the internal list.
+	 * </p>
+	 * 
+	 * @param index
+	 *            index of event to return
+	 * 
 	 * @return event at the specified position in this list
 	 */
 	public FMapEvent getEvent(int index) {
@@ -81,8 +94,10 @@ public class AtomicEvent extends FMapEvent {
 	}
 
 	/**
-	 * <p>Returns the number of events that constitute this one.</p>
-	 *
+	 * <p>
+	 * Returns the number of events that constitute this one.
+	 * </p>
+	 * 
 	 * @return number of events that constitute this one
 	 */
 	public int getEventCount() {
@@ -90,8 +105,10 @@ public class AtomicEvent extends FMapEvent {
 	}
 
 	/**
-	 * <p>Returns all legend events that constitute this one.</p>
-	 *
+	 * <p>
+	 * Returns all legend events that constitute this one.
+	 * </p>
+	 * 
 	 * @return an array with all legend events that constitute this one
 	 */
 	public LegendEvent[] getLegendEvents() {
@@ -109,9 +126,12 @@ public class AtomicEvent extends FMapEvent {
 	}
 
 	/**
-	 * <p>Returns all layer collection events that constitute this one.</p>
-	 *
-	 * @return an array with all layer collection events that constitute this one
+	 * <p>
+	 * Returns all layer collection events that constitute this one.
+	 * </p>
+	 * 
+	 * @return an array with all layer collection events that constitute this
+	 *         one
 	 */
 	public LayerCollectionEvent[] getLayerCollectionEvents() {
 		ArrayList ret = new ArrayList();
@@ -124,13 +144,17 @@ public class AtomicEvent extends FMapEvent {
 			}
 		}
 
-		return (LayerCollectionEvent[]) ret.toArray(new LayerCollectionEvent[0]);
+		return (LayerCollectionEvent[]) ret
+				.toArray(new LayerCollectionEvent[0]);
 	}
 
 	/**
-	 * <p>Returns all vector layer selection events that constitute this one.</p>
-	 *
-	 * @return an array with all vector layer selection events that constitute this one
+	 * <p>
+	 * Returns all vector layer selection events that constitute this one.
+	 * </p>
+	 * 
+	 * @return an array with all vector layer selection events that constitute
+	 *         this one
 	 */
 	public SelectionEvent[] getSelectionEvents() {
 		ArrayList ret = new ArrayList();
@@ -147,8 +171,10 @@ public class AtomicEvent extends FMapEvent {
 	}
 
 	/**
-	 * <p>Returns all extent events that constitute this one.</p>
-	 *
+	 * <p>
+	 * Returns all extent events that constitute this one.
+	 * </p>
+	 * 
 	 * @return an array with all extent events that constitute this one
 	 */
 	public ExtentEvent[] getExtentEvents() {
@@ -166,8 +192,10 @@ public class AtomicEvent extends FMapEvent {
 	}
 
 	/**
-	 * <p>Returns all layer events that constitute this one.</p>
-	 *
+	 * <p>
+	 * Returns all layer events that constitute this one.
+	 * </p>
+	 * 
 	 * @return an array with all layer events that constitute this one
 	 */
 	public LayerEvent[] getLayerEvents() {
@@ -185,8 +213,10 @@ public class AtomicEvent extends FMapEvent {
 	}
 
 	/**
-	 * <p>Returns all color events that constitute this one.</p>
-	 *
+	 * <p>
+	 * Returns all color events that constitute this one.
+	 * </p>
+	 * 
 	 * @return an array with all color events that constitute this one
 	 */
 	public ColorEvent[] getColorEvents() {
@@ -204,8 +234,10 @@ public class AtomicEvent extends FMapEvent {
 	}
 
 	/**
-	 * <p>Returns all projection events that constitute this one.</p>
-	 *
+	 * <p>
+	 * Returns all projection events that constitute this one.
+	 * </p>
+	 * 
 	 * @return an array with all projection events that constitute this one
 	 */
 	public ProjectionEvent[] getProjectionEvents() {

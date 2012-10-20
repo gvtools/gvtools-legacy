@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -46,9 +45,9 @@ import java.net.URL;
 import java.util.HashMap;
 
 /**
- * This class is use like a structure. It saves what protocol is
- * supported by each CSW operation. Each attribute is an array that
- * can contain next values: GET, POST or SOAP
+ * This class is use like a structure. It saves what protocol is supported by
+ * each CSW operation. Each attribute is an array that can contain next values:
+ * GET, POST or SOAP
  * 
  * 
  * @author Jorge Piera Llodra (piera_jor@gva.es)
@@ -64,7 +63,7 @@ public class CSWSupportedProtocolOperations {
 	private HashMap getExtrinsicContent = null;
 	private URL url = null;
 
-	public CSWSupportedProtocolOperations(URL url){
+	public CSWSupportedProtocolOperations(URL url) {
 		this.url = url;
 		getCapabilities = new HashMap();
 		describeRecords = new HashMap();
@@ -74,184 +73,208 @@ public class CSWSupportedProtocolOperations {
 		transaction = new HashMap();
 		harvest = new HashMap();
 		getExtrinsicContent = new HashMap();
-	}	
-	
+	}
+
 	/**
 	 * Add a new URL
+	 * 
 	 * @param operation
-	 * Table of the opeartion
+	 *            Table of the opeartion
 	 * @param protocol
-	 * Protocol
+	 *            Protocol
 	 * @param sUrl
-	 * URL to parse
-	 * @throws MalformedURLException 
+	 *            URL to parse
+	 * @throws MalformedURLException
 	 */
-	private void addOperation(HashMap operation, String protocol, String sUrl) throws MalformedURLException{
+	private void addOperation(HashMap operation, String protocol, String sUrl)
+			throws MalformedURLException {
 		URL url = new URL(sUrl);
 		operation.put(protocol, url);
 	}
-	
+
 	/**
 	 * @return Returns the describeRecords.
 	 */
-	public HashMap getDescribeRecords() {        
+	public HashMap getDescribeRecords() {
 		return describeRecords;
-	} 
+	}
 
 	/**
-	 * @param describeRecords The describeRecords to set.
-	 * @throws MalformedURLException 
+	 * @param describeRecords
+	 *            The describeRecords to set.
+	 * @throws MalformedURLException
 	 */
-	public void addDescribeRecord(String protocol, String url) throws MalformedURLException {        
-		addOperation(describeRecords,protocol, url);
-	} 
+	public void addDescribeRecord(String protocol, String url)
+			throws MalformedURLException {
+		addOperation(describeRecords, protocol, url);
+	}
 
 	/**
 	 * @return Returns the getCapabilities.
 	 */
-	public HashMap getGetCapabilities() {        
+	public HashMap getGetCapabilities() {
 		return getCapabilities;
-	} 
+	}
 
 	/**
-	 * @param getCapabilities The getCapabilities to set.
+	 * @param getCapabilities
+	 *            The getCapabilities to set.
 	 */
-	public void addGetCapabilities(String protocol, String url) throws MalformedURLException {        
-		addOperation(getCapabilities,protocol, url);
-	} 
+	public void addGetCapabilities(String protocol, String url)
+			throws MalformedURLException {
+		addOperation(getCapabilities, protocol, url);
+	}
 
 	/**
 	 * @return Returns the getDomain.
 	 */
-	public HashMap getGetDomain() {        
+	public HashMap getGetDomain() {
 		return getDomain;
-	} 
+	}
 
 	/**
-	 * @param getDomain The getDomain to set.
+	 * @param getDomain
+	 *            The getDomain to set.
 	 */
-	public void addGetDomain(String protocol, String url) throws MalformedURLException {        
-		addOperation(getDomain,protocol, url);
-	} 
-	
+	public void addGetDomain(String protocol, String url)
+			throws MalformedURLException {
+		addOperation(getDomain, protocol, url);
+	}
+
 	/**
 	 * @return Returns the getRecords.
 	 */
-	public HashMap getGetRecords() {        
+	public HashMap getGetRecords() {
 		return getRecords;
-	} 
+	}
 
 	/**
-	 * @param getRecords The getRecords to set.
+	 * @param getRecords
+	 *            The getRecords to set.
 	 */
-	public void addGetRecords(String protocol, String url) throws MalformedURLException {        
-		addOperation(getRecords,protocol, url);
-	} 
+	public void addGetRecords(String protocol, String url)
+			throws MalformedURLException {
+		addOperation(getRecords, protocol, url);
+	}
 
 	/**
 	 * @return Returns the getRecordsById.
 	 */
-	public HashMap getGetRecordsById() {        
+	public HashMap getGetRecordsById() {
 		return getRecordsById;
-	} 
+	}
 
 	/**
-	 * @param getRecordsById The getRecordsById to set.
+	 * @param getRecordsById
+	 *            The getRecordsById to set.
 	 */
-	public void addGetRecordsById(String protocol, String url) throws MalformedURLException {        
-		addOperation(getRecordsById,protocol, url);
-	} 
+	public void addGetRecordsById(String protocol, String url)
+			throws MalformedURLException {
+		addOperation(getRecordsById, protocol, url);
+	}
+
 	/**
 	 * @return Returns the harvest.
 	 */
-	public HashMap getHarvest() {        
+	public HashMap getHarvest() {
 		return harvest;
-	} 
+	}
 
 	/**
-	 * @param harvest The harvest to set.
+	 * @param harvest
+	 *            The harvest to set.
 	 */
-	public void addHarvest(String protocol, String url) throws MalformedURLException {        
-		addOperation(harvest,protocol, url);
-	} 
+	public void addHarvest(String protocol, String url)
+			throws MalformedURLException {
+		addOperation(harvest, protocol, url);
+	}
 
 	/**
 	 * @return Returns the transaction.
 	 */
-	public HashMap getTransaction() {        
+	public HashMap getTransaction() {
 		return transaction;
-	} 
-
-	/**
-	 * @param transaction The transaction to set.
-	 */
-	public void setTransaction(String protocol, String url) throws MalformedURLException {        
-		addOperation(transaction,protocol, url);
 	}
 
 	/**
-	 * @return the URL for the getRecords operation
-	 * using the HTTP Post method
+	 * @param transaction
+	 *            The transaction to set.
+	 */
+	public void setTransaction(String protocol, String url)
+			throws MalformedURLException {
+		addOperation(transaction, protocol, url);
+	}
+
+	/**
+	 * @return the URL for the getRecords operation using the HTTP Post method
 	 */
 	public URL getGetRecordsURLPost() {
 		Object obj = getRecords.get(CSWConstants.POST);
-		if (obj != null){
-			return (URL)obj;
+		if (obj != null) {
+			return (URL) obj;
 		}
 		return url;
 	}
 
 	/**
-	 * @param getCapabilities the getCapabilities to set
+	 * @param getCapabilities
+	 *            the getCapabilities to set
 	 */
 	public void setGetCapabilities(HashMap getCapabilities) {
 		this.getCapabilities = getCapabilities;
 	}
 
 	/**
-	 * @param describeRecords the describeRecords to set
+	 * @param describeRecords
+	 *            the describeRecords to set
 	 */
 	public void setDescribeRecords(HashMap describeRecords) {
 		this.describeRecords = describeRecords;
 	}
 
 	/**
-	 * @param getDomain the getDomain to set
+	 * @param getDomain
+	 *            the getDomain to set
 	 */
 	public void setGetDomain(HashMap getDomain) {
 		this.getDomain = getDomain;
 	}
 
 	/**
-	 * @param getRecords the getRecords to set
+	 * @param getRecords
+	 *            the getRecords to set
 	 */
 	public void setGetRecords(HashMap getRecords) {
 		this.getRecords = getRecords;
 	}
 
 	/**
-	 * @param getRecordsById the getRecordsById to set
+	 * @param getRecordsById
+	 *            the getRecordsById to set
 	 */
 	public void setGetRecordsById(HashMap getRecordsById) {
 		this.getRecordsById = getRecordsById;
 	}
 
 	/**
-	 * @param transaction the transaction to set
+	 * @param transaction
+	 *            the transaction to set
 	 */
 	public void setTransaction(HashMap transaction) {
 		this.transaction = transaction;
 	}
 
 	/**
-	 * @param harvest the harvest to set
+	 * @param harvest
+	 *            the harvest to set
 	 */
 	public void setHarvest(HashMap harvest) {
 		this.harvest = harvest;
 	}
 
 	/**
-	 * @param url the url to set
+	 * @param url
+	 *            the url to set
 	 */
 	public void setUrl(URL url) {
 		this.url = url;
@@ -265,16 +288,19 @@ public class CSWSupportedProtocolOperations {
 	}
 
 	/**
-	 * @param getExtrinsicContent the getExtrinsicContent to set
+	 * @param getExtrinsicContent
+	 *            the getExtrinsicContent to set
 	 */
 	public void setGetExtrinsicContent(HashMap getExtrinsicContent) {
 		this.getExtrinsicContent = getExtrinsicContent;
-	} 
-	
+	}
+
 	/**
-	 * @param getDomain The getDomain to set.
+	 * @param getDomain
+	 *            The getDomain to set.
 	 */
-	public void addGetExtrinsicContent(String protocol, String url) throws MalformedURLException {        
-		addOperation(getExtrinsicContent,protocol, url);
-	} 
+	public void addGetExtrinsicContent(String protocol, String url)
+			throws MalformedURLException {
+		addOperation(getExtrinsicContent, protocol, url);
+	}
 }

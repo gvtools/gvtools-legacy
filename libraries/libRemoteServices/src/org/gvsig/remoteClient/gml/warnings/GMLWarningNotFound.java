@@ -57,27 +57,27 @@ import org.gvsig.remoteClient.gml.exceptions.GMLException;
 /**
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  */
-public class GMLWarningNotFound extends GMLException{
-	
+public class GMLWarningNotFound extends GMLException {
+
 	private static final long serialVersionUID = -8467084335329308731L;
 	private String filename = null;
-	
-	public GMLWarningNotFound(String file,Throwable e) {
+
+	public GMLWarningNotFound(String file, Throwable e) {
 		this.init();
-		this.filename=file;
+		this.filename = file;
 		initCause(e);
 	}
-	
+
 	protected Map values() {
 		Hashtable params;
 		params = new Hashtable();
-		params.put("file",filename);
+		params.put("file", filename);
 		return params;
 	}
-	
+
 	public void init() {
-		messageKey="gml_warning_cant_open_schema";
-		formatString="Error opening GML schema %(filename)";
+		messageKey = "gml_warning_cant_open_schema";
+		formatString = "Error opening GML schema %(filename)";
 		code = serialVersionUID;
 	}
 

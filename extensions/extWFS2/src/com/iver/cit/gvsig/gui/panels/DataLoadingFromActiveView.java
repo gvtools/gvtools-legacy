@@ -53,14 +53,18 @@ import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
  */
 
 /**
- * This class has specific code for "WFSFilterPanel" extracted from "FiltroExension" that should be used by "WFSFilterPanel" but that has a conflict in the "DriverException" class
- * (because there are 2 classes with the same name "DriverException" but with different code: one in "libFMap" and another in "libGDBMS").
- *
+ * This class has specific code for "WFSFilterPanel" extracted from
+ * "FiltroExension" that should be used by "WFSFilterPanel" but that has a
+ * conflict in the "DriverException" class (because there are 2 classes with the
+ * same name "DriverException" but with different code: one in "libFMap" and
+ * another in "libGDBMS").
+ * 
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
 public class DataLoadingFromActiveView {
 	/**
-	 * Gets the default expression data source of the active window (view or table).
+	 * Gets the default expression data source of the active window (view or
+	 * table).
 	 * 
 	 * @return data of the active view or <code>null</code>
 	 */
@@ -71,15 +75,16 @@ public class DataLoadingFromActiveView {
 		try {
 			if ((window == null) || (!(window instanceof BaseView))) {
 				return null;
-			}
-			else {
-				// Tries to access to the ActivedWindow and get the data from its selected layer
+			} else {
+				// Tries to access to the ActivedWindow and get the data from
+				// its selected layer
 				SelectableDataSource dataSource = null;
 
 				if (window instanceof Table) {
 					Table vista = (Table) window;
 
-					dataSource = (SelectableDataSource)vista.getModel().getModelo().getRecordset();
+					dataSource = (SelectableDataSource) vista.getModel()
+							.getModelo().getRecordset();
 				} else if (window instanceof BaseView) {
 					IProjectView pv = ((BaseView) window).getModel();
 					FLayer layer = pv.getMapContext().getLayers().getActives()[0];
@@ -89,14 +94,15 @@ public class DataLoadingFromActiveView {
 
 					dataSource = pv.getProject().getDataSourceByLayer(layer);
 				}
-	
+
 				// Load values for return them
 				ds = new DefaultExpressionDataSource();
 				ds.setTable(dataSource);
 
 			}
 		} catch (ReadDriverException de) {
-			NotificationManager.addError(PluginServices.getText(null, "error_filtering"), de);
+			NotificationManager.addError(
+					PluginServices.getText(null, "error_filtering"), de);
 			return null;
 		}
 

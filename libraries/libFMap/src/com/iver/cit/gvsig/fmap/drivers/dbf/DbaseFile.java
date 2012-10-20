@@ -176,7 +176,7 @@ public class DbaseFile {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public int getFieldCount() {
@@ -185,12 +185,12 @@ public class DbaseFile {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param rowIndex
 	 *            DOCUMENT ME!
 	 * @param fieldId
 	 *            DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public boolean getBooleanFieldValue(int rowIndex, int fieldId) {
@@ -213,29 +213,29 @@ public class DbaseFile {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param rowIndex
 	 *            DOCUMENT ME!
 	 * @param fieldId
 	 *            DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 * @throws UnsupportedEncodingException
 	 */
 	public String getStringFieldValue(int rowIndex, int fieldId)
 			throws UnsupportedEncodingException {
-		try{
+		try {
 			int fieldOffset = myHeader.getFieldDescription(fieldId).myFieldDataAddress;
 			byte[] data = new byte[myHeader.getFieldLength(fieldId)];
 			if (rowIndex != posActual) {
 				recordOffset = (myHeader.getRecordLength() * rowIndex)
-					+ myHeader.getHeaderLength() + 1;
+						+ myHeader.getHeaderLength() + 1;
 
 				/*
-			 	* System.err.println("getStringFieldValue: rowIndex = " +
-			 	* rowIndex); System.err.println("recordOffset = " + recordOffset + "
-			 	* fieldOffset=" + fieldOffset);
-			 	*/
+				 * System.err.println("getStringFieldValue: rowIndex = " +
+				 * rowIndex); System.err.println("recordOffset = " +
+				 * recordOffset + " fieldOffset=" + fieldOffset);
+				 */
 				buffer.position(recordOffset);
 				buffer.get(bytesCachedRecord);
 				cachedRecord = ByteBuffer.wrap(bytesCachedRecord);
@@ -244,10 +244,11 @@ public class DbaseFile {
 			}
 			cachedRecord.position(fieldOffset);
 			cachedRecord.get(data);
-//			System.err.println("data:"+ new String(data));
-//			System.err.println("data-charSet:"+new String(data, charSet.name()));
+			// System.err.println("data:"+ new String(data));
+			// System.err.println("data-charSet:"+new String(data,
+			// charSet.name()));
 			return new String(data, charSet.name());
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return "";
 		}
@@ -264,22 +265,20 @@ public class DbaseFile {
 
 		ByteBuffer aux = ByteBuffer.wrap(data);
 		aux.put(str.getBytes(charSet.name()));
-//		raf.seek(recordOffset + fieldOffset);
-//		raf.writeBytes(str);
+		// raf.seek(recordOffset + fieldOffset);
+		// raf.writeBytes(str);
 		aux.flip();
 		int numBytesWritten = channel.write(aux, recordOffset + fieldOffset);
-		//channel.force(true);
-
+		// channel.force(true);
 
 	}
 
-
 	/**
 	 * Retrieve the name of the given column.
-	 *
+	 * 
 	 * @param inIndex
 	 *            DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public String getFieldName(int inIndex) {
@@ -296,10 +295,10 @@ public class DbaseFile {
 
 	/**
 	 * Retrieve the type of the given column.
-	 *
+	 * 
 	 * @param inIndex
 	 *            DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public char getFieldType(int inIndex) {
@@ -308,10 +307,10 @@ public class DbaseFile {
 
 	/**
 	 * Retrieve the length of the given column.
-	 *
+	 * 
 	 * @param inIndex
 	 *            DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public int getFieldLength(int inIndex) {
@@ -320,22 +319,22 @@ public class DbaseFile {
 
 	/*
 	 * Retrieve the value of the given column as string.
-	 *
+	 * 
 	 * @param idField DOCUMENT ME! @param idRecord DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
-	 *
+	 * 
 	 * public Object getFieldValue(int idField, long idRecord) throws
 	 * IOException { Object[] tmpReg = getRecord(idRecord); return
 	 * tmpReg[idField]; }
 	 */
 	/*
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param idField DOCUMENT ME! @param idRecord DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
-	 *
+	 * 
 	 * public double getFieldValueAsDouble(int idField, int idRecord) throws
 	 * IOException { Object[] tmpReg = getRecord(idRecord); return (double)
 	 * Double.parseDouble(tmpReg[idField].toString()); }
@@ -343,10 +342,10 @@ public class DbaseFile {
 
 	/**
 	 * Retrieve the location of the decimal point.
-	 *
+	 * 
 	 * @param inIndex
 	 *            DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public int getFieldDecimalLength(int inIndex) {
@@ -355,10 +354,10 @@ public class DbaseFile {
 
 	/**
 	 * read the DBF file into memory.
-	 *
+	 * 
 	 * @param file
 	 *            DOCUMENT ME!
-	 *
+	 * 
 	 * @throws IOException
 	 *             DOCUMENT ME!
 	 */
@@ -374,63 +373,66 @@ public class DbaseFile {
 		 * CBh Greek Windows
 		 */
 		try {
-		if (file.canWrite()) {
-			try {
-				raf = new RandomAccessFile(file, "rw");
-				mode = FileChannel.MapMode.READ_WRITE;
-			} catch (FileNotFoundException e) {
+			if (file.canWrite()) {
+				try {
+					raf = new RandomAccessFile(file, "rw");
+					mode = FileChannel.MapMode.READ_WRITE;
+				} catch (FileNotFoundException e) {
+					raf = new RandomAccessFile(file, "r");
+					mode = FileChannel.MapMode.READ_ONLY;
+				}
+			} else {
 				raf = new RandomAccessFile(file, "r");
 				mode = FileChannel.MapMode.READ_ONLY;
 			}
-		} else {
-			raf = new RandomAccessFile(file, "r");
-			mode = FileChannel.MapMode.READ_ONLY;
-		}
-		channel = raf.getChannel();
+			channel = raf.getChannel();
 
-		// buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0,
-		// channel.size());
-		buffer = new BigByteBuffer2(channel, mode);
+			// buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0,
+			// channel.size());
+			buffer = new BigByteBuffer2(channel, mode);
 
-		// create the header to contain the header information.
-		myHeader = new DbaseFileHeader();
-		myHeader.readHeader(buffer);
-		if (charSet == null) {
-			// Firsttime:
-			Preferences prefs = Preferences.userRoot().node( "gvSIG.encoding.dbf" );
-    		String defaultCharSetName=prefs.get("dbf_encoding", DbaseFile.getDefaultCharset().toString());
-		    String charSetName = DbfEncodings.getInstance().getCharsetForDbfId(myHeader.getLanguageID());
-		    // If the file has a charset already set, use it. If not, use the one from preferences
-			if ((charSetName == null) || (charSetName.equalsIgnoreCase("UNKNOWN"))){
-				try {
-					charSet = Charset.forName(defaultCharSetName);
+			// create the header to contain the header information.
+			myHeader = new DbaseFileHeader();
+			myHeader.readHeader(buffer);
+			if (charSet == null) {
+				// Firsttime:
+				Preferences prefs = Preferences.userRoot().node(
+						"gvSIG.encoding.dbf");
+				String defaultCharSetName = prefs.get("dbf_encoding", DbaseFile
+						.getDefaultCharset().toString());
+				String charSetName = DbfEncodings.getInstance()
+						.getCharsetForDbfId(myHeader.getLanguageID());
+				// If the file has a charset already set, use it. If not, use
+				// the one from preferences
+				if ((charSetName == null)
+						|| (charSetName.equalsIgnoreCase("UNKNOWN"))) {
+					try {
+						charSet = Charset.forName(defaultCharSetName);
+					} catch (UnsupportedCharsetException e) {
+						charSet = Charset.defaultCharset();
+					}
+				} else { // Use the charset set to the file
+					try {
+						charSet = Charset.forName(charSetName);
+					} catch (UnsupportedCharsetException e) {
+						charSet = Charset.defaultCharset();
+					}
 				}
-				catch (UnsupportedCharsetException e) {
-					charSet = Charset.defaultCharset();
-				}
+				// if (charSet==null){
+				// charSet = Charset.defaultCharset();
+				// }
+
 			}
-			else { // Use the charset set to the file
-				try{
-					charSet = Charset.forName(charSetName);
-				}catch (UnsupportedCharsetException e) {
-					charSet = Charset.defaultCharset();
-				}
-			}
-//			if (charSet==null){
-//				charSet = Charset.defaultCharset();
-//			}
-    		
-
-		}
-		bytesCachedRecord = new byte[myHeader.getRecordLength()];
-		}catch (IOException e) {
-			throw new FileNotFoundDriverException("DBF",e,file.getAbsolutePath());
+			bytesCachedRecord = new byte[myHeader.getRecordLength()];
+		} catch (IOException e) {
+			throw new FileNotFoundDriverException("DBF", e,
+					file.getAbsolutePath());
 		}
 	}
 
 	/**
 	 * Removes all data from the dataset
-	 *
+	 * 
 	 * @throws IOException
 	 *             DOCUMENT ME!
 	 */
@@ -438,7 +440,7 @@ public class DbaseFile {
 		raf.close();
 		channel.close();
 		buffer = null;
-		posActual=-1;
+		posActual = -1;
 	}
 
 	public FileChannel getWriteChannel() {
@@ -475,8 +477,8 @@ public class DbaseFile {
 				Number gVal = (Number) obj;
 				number = new Double(gVal.doubleValue());
 			}
-			o = formatter.getFieldString(fieldLen, myHeader
-					.getFieldDecimalCount(col), number);
+			o = formatter.getFieldString(fieldLen,
+					myHeader.getFieldDecimalCount(col), number);
 			break;
 		case 'D':
 		case 'd':
@@ -492,6 +494,7 @@ public class DbaseFile {
 
 		return o;
 	}
+
 	public static Charset getDefaultCharset() {
 		return defaultCharset;
 	}

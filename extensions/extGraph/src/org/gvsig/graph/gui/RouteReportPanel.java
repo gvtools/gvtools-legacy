@@ -276,7 +276,7 @@ public class RouteReportPanel extends JPanel implements IWindow {
 			}
 
 		});
-		
+
 		south.add(btnPrint);
 		south.add(btnExport);
 		add(south, BorderLayout.SOUTH);
@@ -288,20 +288,20 @@ public class RouteReportPanel extends JPanel implements IWindow {
 		FLyrVect routeLayer = (FLyrVect) LayerFactory.createLayer("Route",
 				driver, crs);
 
-		FormatSelectionPanel selectionPanel = new FormatSelectionPanel(PluginServices.getText(null,
-		"Seleccione_un_formato_para_guardar_la_ruta"));
+		FormatSelectionPanel selectionPanel = new FormatSelectionPanel(
+				PluginServices.getText(null,
+						"Seleccione_un_formato_para_guardar_la_ruta"));
 		PluginServices.getMDIManager().addWindow(selectionPanel);
 
 		String format = selectionPanel.getSelectedFormat();
 		com.iver.cit.gvsig.ExportTo export = new com.iver.cit.gvsig.ExportTo();
 		MapContext context = mapControl.getMapContext();
-			if (format.equalsIgnoreCase("SHP")) {
-				export.saveToShp(context, routeLayer);
-			} else if (format.equalsIgnoreCase("POSTGIS")) {
-				export.saveToPostGIS(context, routeLayer);
-			}
+		if (format.equalsIgnoreCase("SHP")) {
+			export.saveToShp(context, routeLayer);
+		} else if (format.equalsIgnoreCase("POSTGIS")) {
+			export.saveToPostGIS(context, routeLayer);
+		}
 
-		
 	}
 
 	/**
@@ -311,14 +311,17 @@ public class RouteReportPanel extends JPanel implements IWindow {
 		try {
 			// FJP: Esto sería lo ideal, pero solo funciona con el jre 1.6
 			// htmlPanel.print();
-			
-			// Usamos una clase externa por compatibilidad con jre1.5, pero tiene menos calidad la salida.
+
+			// Usamos una clase externa por compatibilidad con jre1.5, pero
+			// tiene menos calidad la salida.
 			DocumentRenderer docRenderer = new DocumentRenderer();
 			docRenderer.print(htmlPanel);
 		} catch (Exception e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog((Component) PluginServices.getMDIManager().getActiveWindow(),
-					e.getLocalizedMessage());
+			JOptionPane
+					.showMessageDialog((Component) PluginServices
+							.getMDIManager().getActiveWindow(), e
+							.getLocalizedMessage());
 		}
 	}
 
@@ -345,24 +348,19 @@ public class RouteReportPanel extends JPanel implements IWindow {
 		htmlText.append("<style type='text/css'>");
 		htmlText.append("<!-- ");
 		htmlText.append("  .normal { ");
-		htmlText
-				.append("	font-family: Arial, Helvetica, sans-serif;	font-size: 9px; font-style: normal; color: #333333;");
+		htmlText.append("	font-family: Arial, Helvetica, sans-serif;	font-size: 9px; font-style: normal; color: #333333;");
 		htmlText.append("}");
 		htmlText.append("  a { ");
-		htmlText
-				.append("	font-family: Arial, Helvetica, sans-serif;	font-size: 9px; font-style: italic; font-weight: bold;");
+		htmlText.append("	font-family: Arial, Helvetica, sans-serif;	font-size: 9px; font-style: italic; font-weight: bold;");
 		htmlText.append("}");
 		htmlText.append("  h1 { ");
-		htmlText
-				.append("	font-family: Arial, Helvetica, sans-serif;	font-size: 12px;");
+		htmlText.append("	font-family: Arial, Helvetica, sans-serif;	font-size: 12px;");
 		htmlText.append("}");
 		htmlText.append("  .distancia { ");
-		htmlText
-				.append("	font-family: Arial, Helvetica, sans-serif;	font-size: 9px; color: #666666;");
+		htmlText.append("	font-family: Arial, Helvetica, sans-serif;	font-size: 9px; color: #666666;");
 		htmlText.append("}");
 		htmlText.append("  .resumen { ");
-		htmlText
-				.append("	font-family: Arial, Helvetica, sans-serif;	font-size: 10px; color: #333333;");
+		htmlText.append("	font-family: Arial, Helvetica, sans-serif;	font-size: 10px; color: #333333;");
 		htmlText.append("}");
 		htmlText.append("  .left { ");
 		htmlText.append("	font-weight: bold; color: #990000;");
@@ -560,8 +558,8 @@ public class RouteReportPanel extends JPanel implements IWindow {
 		// ((DoubleValue)feature.getAttribute(Route.LENGTH_INDEX)).getValue();
 		// double weight =
 		// ((DoubleValue)feature.getAttribute(Route.WEIGHT_INDEX)).getValue();
-		//		
-		//		
+		//
+		//
 		// totalLenght += length;
 		// totalWeight += weight;
 

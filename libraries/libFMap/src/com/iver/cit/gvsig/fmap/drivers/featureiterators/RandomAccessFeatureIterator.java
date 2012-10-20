@@ -17,13 +17,17 @@ public class RandomAccessFeatureIterator implements IFeatureIterator {
 	Rectangle2D r = null;
 	String epsg;
 	int numRec = 0;
-	public RandomAccessFeatureIterator(VectorialDriver driver, SelectableDataSource sds, Rectangle2D r, String strEPSG) {
+
+	public RandomAccessFeatureIterator(VectorialDriver driver,
+			SelectableDataSource sds, Rectangle2D r, String strEPSG) {
 		this.drv = driver;
 		this.ds = sds;
 		this.r = r;
 		this.epsg = strEPSG;
 	}
-	public RandomAccessFeatureIterator(VectorialDriver driver, SelectableDataSource sds, String strEPSG) {
+
+	public RandomAccessFeatureIterator(VectorialDriver driver,
+			SelectableDataSource sds, String strEPSG) {
 		this.drv = driver;
 		this.ds = sds;
 		this.epsg = strEPSG;
@@ -40,15 +44,15 @@ public class RandomAccessFeatureIterator implements IFeatureIterator {
 		geom = drv.getShape(numRec);
 		// Si pedimos solo las que entran en un rectángulo....
 		// ¿QUE PASA SI TENEMOS UN ÍNDICE ESPACIAL?
-		if (r != null){
+		if (r != null) {
 			while (!(geom.fastIntersects(r.getMinX(), r.getMinY(),
-					r.getWidth(), r.getHeight()))){
+					r.getWidth(), r.getHeight()))) {
 				numRec++;
 				if (numRec < drv.getShapeCount())
 					geom = drv.getShape(numRec);
 				else
 					return null;
-				}
+			}
 		}
 		Value[] regAtt = new Value[ds.getFieldCount()];
 		for (int fieldId = 0; fieldId < ds.getFieldCount(); fieldId++) {
@@ -62,6 +66,5 @@ public class RandomAccessFeatureIterator implements IFeatureIterator {
 	public void closeIterator() throws ReadDriverException {
 
 	}
-
 
 }

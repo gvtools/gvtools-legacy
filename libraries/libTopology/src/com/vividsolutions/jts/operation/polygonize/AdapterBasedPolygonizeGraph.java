@@ -48,10 +48,24 @@
  */
 package com.vividsolutions.jts.operation.polygonize;
 
-import java.util.*;
-import com.vividsolutions.jts.geom.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.Stack;
+
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.CoordinateArrays;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.LineString;
+import com.vividsolutions.jts.planargraph.DirectedEdge;
+import com.vividsolutions.jts.planargraph.DirectedEdgeStar;
+import com.vividsolutions.jts.planargraph.Edge;
+import com.vividsolutions.jts.planargraph.Node;
+import com.vividsolutions.jts.planargraph.PlanarGraph;
 import com.vividsolutions.jts.util.Assert;
-import com.vividsolutions.jts.planargraph.*;
 
 /**
  * Polygonizer graph which stores its edges in a adapter based collection.
@@ -61,26 +75,19 @@ import com.vividsolutions.jts.planargraph.*;
  * 
  */
 
-
 /*
- * FIXME
- * La idea es sustituir el Node y los Edges para que no mantengan entradas
+ * FIXME La idea es sustituir el Node y los Edges para que no mantengan entradas
  * de LineString en memoria.
  * 
  * Así, tendremos un AdapterPolygonizeEdge, AdapterPolygonizeDirectedEdge y
- * AdapterEdgeRing que lo que tendrán es mantener "punteros" de los correspondientes
- * DriverBasedCollection.
- * 
- * 
- * 
- * 
- * 
+ * AdapterEdgeRing que lo que tendrán es mantener "punteros" de los
+ * correspondientes DriverBasedCollection.
  */
 public class AdapterBasedPolygonizeGraph extends PlanarGraph {
-/*
- * This class is an adaptation of JTS's PolygonizeGraph.
- */
-	
+	/*
+	 * This class is an adaptation of JTS's PolygonizeGraph.
+	 */
+
 	private static int getDegreeNonDeleted(Node node) {
 		List edges = node.getOutEdges().getEdges();
 		int degree = 0;
@@ -91,7 +98,6 @@ public class AdapterBasedPolygonizeGraph extends PlanarGraph {
 		}
 		return degree;
 	}
-	
 
 	private static int getDegree(Node node, long label) {
 		List edges = node.getOutEdges().getEdges();
@@ -103,7 +109,6 @@ public class AdapterBasedPolygonizeGraph extends PlanarGraph {
 		}
 		return degree;
 	}
-	
 
 	/**
 	 * Deletes all edges at a node
@@ -118,10 +123,8 @@ public class AdapterBasedPolygonizeGraph extends PlanarGraph {
 				sym.setMarked(true);
 		}
 	}
-	
 
 	private GeometryFactory factory;
-
 
 	/**
 	 * Create a new polygonization graph.
@@ -162,7 +165,6 @@ public class AdapterBasedPolygonizeGraph extends PlanarGraph {
 		add(edge);
 	}
 
-	
 	private Node getNode(Coordinate pt) {
 		Node node = findNode(pt);
 		if (node == null) {
@@ -172,7 +174,6 @@ public class AdapterBasedPolygonizeGraph extends PlanarGraph {
 		}
 		return node;
 	}
-	
 
 	private void computeNextCWEdges() {
 		// set the next pointers for the edges around each node
@@ -211,8 +212,8 @@ public class AdapterBasedPolygonizeGraph extends PlanarGraph {
 	 * 
 	 * @param startDE
 	 * @param label
-	 * @return the list of intersection nodes found, or <code>null</code> if
-	 *         no intersection nodes were found
+	 * @return the list of intersection nodes found, or <code>null</code> if no
+	 *         intersection nodes were found
 	 */
 	private static List findIntersectionNodes(PolygonizeDirectedEdge startDE,
 			long label) {

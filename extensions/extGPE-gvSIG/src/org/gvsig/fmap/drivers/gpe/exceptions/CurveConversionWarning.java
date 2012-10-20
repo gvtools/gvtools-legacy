@@ -57,32 +57,33 @@ import org.gvsig.exceptions.BaseException;
 public class CurveConversionWarning extends BaseException {
 	private static final long serialVersionUID = 5231975614662709375L;
 	private String featureID = null;
-	
+
 	public CurveConversionWarning(String featureID) {
 		this.featureID = featureID;
-		initialize();		
+		initialize();
 	}
-	
+
 	/**
 	 * Initialize the properties
 	 */
 	private void initialize() {
 		messageKey = "gpe_gvsig_curve_conversion_warning";
-		formatString = "gvSIG doesn't supports curves. The " +
-			"geometry with id %(featureID) has been converted " +
-			"to a lineString";		
+		formatString = "gvSIG doesn't supports curves. The "
+				+ "geometry with id %(featureID) has been converted "
+				+ "to a lineString";
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map values() {
 		HashMap params = new HashMap();
-		if (featureID != null){
+		if (featureID != null) {
 			params.put("featureID", featureID);
 		}
-		return params;	
+		return params;
 	}
-	
+
 }

@@ -1,4 +1,5 @@
 package org.gvsig.remoteClient.gml.types;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -52,9 +53,8 @@ package org.gvsig.remoteClient.gml.types;
  *
  */
 /**
- * It represent an object type. All the simple and complex
- * XML types and the GML geometry types must be implement
- * this nterface
+ * It represent an object type. All the simple and complex XML types and the GML
+ * geometry types must be implement this nterface
  * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
@@ -65,18 +65,19 @@ public interface IXMLType {
 	public static final int COMPLEX = 1;
 	public static final int SIMPLE = 2;
 	public static final int GML_GEOMETRY = 3;
-	
+
 	/**
-	 * Gets the object type 
+	 * Gets the object type
+	 * 
 	 * @return
 	 */
 	public int getType();
-	
+
 	/**
 	 * Gets the object name
+	 * 
 	 * @return
 	 */
 	public String getName();
-	
-	
+
 }

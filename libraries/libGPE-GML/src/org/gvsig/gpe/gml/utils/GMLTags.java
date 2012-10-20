@@ -103,8 +103,7 @@ import javax.xml.namespace.QName;
  *
  */
 /**
- * Class containing a description for all the TAGS defined in 
- * the GML File
+ * Class containing a description for all the TAGS defined in the GML File
  * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
@@ -112,133 +111,198 @@ import javax.xml.namespace.QName;
  */
 public class GMLTags {
 	public static final String GML_NAMESPACE_URI = "http://www.opengis.net/gml";
-	public static final String GML_DEAFULT_BLANC_SPACE = "_";	
+	public static final String GML_DEAFULT_BLANC_SPACE = "_";
 	public static final int GML_DEAFULT_DECIMAL_DIGITS = 3;
 	public static final QName VERSION = new QName(GML_NAMESPACE_URI, "version");
 	public static final QName GML_NAME = new QName(GML_NAMESPACE_URI, "name");
-	public static final QName GML_DESCRIPTION = new QName(GML_NAMESPACE_URI,"description");
-	public static final QName GML_BOUNDEDBY = new QName(GML_NAMESPACE_URI, "boundedBy");
+	public static final QName GML_DESCRIPTION = new QName(GML_NAMESPACE_URI,
+			"description");
+	public static final QName GML_BOUNDEDBY = new QName(GML_NAMESPACE_URI,
+			"boundedBy");
 	public static final QName GML_BOX = new QName(GML_NAMESPACE_URI, "Box");
-	public static final QName GML_COORDINATES = new QName(GML_NAMESPACE_URI, "coordinates");
+	public static final QName GML_COORDINATES = new QName(GML_NAMESPACE_URI,
+			"coordinates");
 	public static final QName GML_COORD = new QName(GML_NAMESPACE_URI, "coord");
 	public static final QName GML_X = new QName(GML_NAMESPACE_URI, "X");
 	public static final QName GML_Y = new QName(GML_NAMESPACE_URI, "Y");
 	public static final QName GML_Z = new QName(GML_NAMESPACE_URI, "Z");
-	public static final QName GML_COORDINATES_DECIMAL = new QName(GML_NAMESPACE_URI, "decimal");
-	public static final QName GML_COORDINATES_CS = new QName(GML_NAMESPACE_URI, "cs");
-	public static final QName GML_COORDINATES_TS = new QName(GML_NAMESPACE_URI, "ts");
-	public static final QName GML_SRS_NAME = new QName(GML_NAMESPACE_URI, "srsName");
+	public static final QName GML_COORDINATES_DECIMAL = new QName(
+			GML_NAMESPACE_URI, "decimal");
+	public static final QName GML_COORDINATES_CS = new QName(GML_NAMESPACE_URI,
+			"cs");
+	public static final QName GML_COORDINATES_TS = new QName(GML_NAMESPACE_URI,
+			"ts");
+	public static final QName GML_SRS_NAME = new QName(GML_NAMESPACE_URI,
+			"srsName");
 	public static final QName GML_GID = new QName(GML_NAMESPACE_URI, "gid");
 	public static final QName GML_FID = new QName(GML_NAMESPACE_URI, "fid");
 	public static final QName GML_ID = new QName(GML_NAMESPACE_URI, "id");
 	public static final String GML_NAMESPACE_PREFIX = "gml";
-	public static final QName GML_FEATUREMEMBER = new QName(GML_NAMESPACE_URI, "featureMember");
-	public static final QName GML_FEATUREMEMBERS = new QName(GML_NAMESPACE_URI, "featureMembers");
-	public static final QName GML_FEATURCOLLECTION = new QName(GML_NAMESPACE_URI, "FeatureCollection");
-	public static final QName GML_ABSTRACT_FEATURECOLLECTION = new QName(GML_NAMESPACE_URI, "_FeatureCollection");
-	
-	//Geometries
+	public static final QName GML_FEATUREMEMBER = new QName(GML_NAMESPACE_URI,
+			"featureMember");
+	public static final QName GML_FEATUREMEMBERS = new QName(GML_NAMESPACE_URI,
+			"featureMembers");
+	public static final QName GML_FEATURCOLLECTION = new QName(
+			GML_NAMESPACE_URI, "FeatureCollection");
+	public static final QName GML_ABSTRACT_FEATURECOLLECTION = new QName(
+			GML_NAMESPACE_URI, "_FeatureCollection");
+
+	// Geometries
 	public static final QName GML_POINT = new QName(GML_NAMESPACE_URI, "Point");
-	public static final QName GML_LINESTRING = new QName(GML_NAMESPACE_URI, "LineString");
-	public static final QName GML_LINEARRING = new QName(GML_NAMESPACE_URI, "LinearRing");
-	public static final QName GML_POLYGON = new QName(GML_NAMESPACE_URI, "Polygon");
-	public static final QName GML_MULTIPOINT = new QName(GML_NAMESPACE_URI, "MultiPoint");
-	public static final QName GML_MULTILINESTRING = new QName(GML_NAMESPACE_URI, "MultiLineString");
-	public static final QName GML_MULTIPOLYGON = new QName(GML_NAMESPACE_URI, "MultiPolygon");
-	public static final QName GML_MULTIGEOMETRY = new QName(GML_NAMESPACE_URI, "MultiGeometry");
-	public static final QName GML_POINTPROPERTY = new QName(GML_NAMESPACE_URI, "pointProperty");
-	public static final QName GML_LINESTRINGPROPERTY = new QName(GML_NAMESPACE_URI, "lineStringProperty");
-	public static final QName GML_POLYGONPROPERTY = new QName(GML_NAMESPACE_URI, "polygonProperty");
-	public static final QName GML_GEOMETRYPROPERTY = new QName(GML_NAMESPACE_URI, "geometryProperty");
-	public static final QName GML_MULTIPOINTPROPERTY = new QName(GML_NAMESPACE_URI, "multiPointProperty");
-	public static final QName GML_MULTILINESTRINGPROPERTY = new QName(GML_NAMESPACE_URI, "multiLineStringProperty");
-	public static final QName GML_MULTIPOLYGONPROPERTY = new QName(GML_NAMESPACE_URI, "multiPolygonProperty");
-	public static final QName GML_MULTIGEOMETRYPROPERTY = new QName(GML_NAMESPACE_URI, "multiGeometryProperty");
-	
-	public static final String GML_DEFAULT_TUPLES_SEPARATOR  = "[\n\\s\r\t ]+";
+	public static final QName GML_LINESTRING = new QName(GML_NAMESPACE_URI,
+			"LineString");
+	public static final QName GML_LINEARRING = new QName(GML_NAMESPACE_URI,
+			"LinearRing");
+	public static final QName GML_POLYGON = new QName(GML_NAMESPACE_URI,
+			"Polygon");
+	public static final QName GML_MULTIPOINT = new QName(GML_NAMESPACE_URI,
+			"MultiPoint");
+	public static final QName GML_MULTILINESTRING = new QName(
+			GML_NAMESPACE_URI, "MultiLineString");
+	public static final QName GML_MULTIPOLYGON = new QName(GML_NAMESPACE_URI,
+			"MultiPolygon");
+	public static final QName GML_MULTIGEOMETRY = new QName(GML_NAMESPACE_URI,
+			"MultiGeometry");
+	public static final QName GML_POINTPROPERTY = new QName(GML_NAMESPACE_URI,
+			"pointProperty");
+	public static final QName GML_LINESTRINGPROPERTY = new QName(
+			GML_NAMESPACE_URI, "lineStringProperty");
+	public static final QName GML_POLYGONPROPERTY = new QName(
+			GML_NAMESPACE_URI, "polygonProperty");
+	public static final QName GML_GEOMETRYPROPERTY = new QName(
+			GML_NAMESPACE_URI, "geometryProperty");
+	public static final QName GML_MULTIPOINTPROPERTY = new QName(
+			GML_NAMESPACE_URI, "multiPointProperty");
+	public static final QName GML_MULTILINESTRINGPROPERTY = new QName(
+			GML_NAMESPACE_URI, "multiLineStringProperty");
+	public static final QName GML_MULTIPOLYGONPROPERTY = new QName(
+			GML_NAMESPACE_URI, "multiPolygonProperty");
+	public static final QName GML_MULTIGEOMETRYPROPERTY = new QName(
+			GML_NAMESPACE_URI, "multiGeometryProperty");
+
+	public static final String GML_DEFAULT_TUPLES_SEPARATOR = "[\n\\s\r\t ]+";
 	public static final String GML_DEFAULT_COORDINATES_SEPARATOR = ",";
-	public static final String GML_DEFAULT_COORDINATES_DECIMAL = ".";	
-	
-	public static final QName GML_OUTERBOUNDARYIS = new QName(GML_NAMESPACE_URI, "outerBoundaryIs");
-	public static final QName GML_INNERBOUNDARYIS = new QName(GML_NAMESPACE_URI, "innerBoundaryIs");
-	public static final QName GML_POINTMEMBER = new QName(GML_NAMESPACE_URI, "pointMember");
-	public static final QName GML_LINESTRINGMEMBER = new QName(GML_NAMESPACE_URI, "lineStringMember");
-	public static final QName GML_POLYGONMEMBER = new QName(GML_NAMESPACE_URI, "polygonMember");
-	public static final QName GML_GEOMETRYMEMBER = new QName(GML_NAMESPACE_URI, "geometryMember");
-	
+	public static final String GML_DEFAULT_COORDINATES_DECIMAL = ".";
+
+	public static final QName GML_OUTERBOUNDARYIS = new QName(
+			GML_NAMESPACE_URI, "outerBoundaryIs");
+	public static final QName GML_INNERBOUNDARYIS = new QName(
+			GML_NAMESPACE_URI, "innerBoundaryIs");
+	public static final QName GML_POINTMEMBER = new QName(GML_NAMESPACE_URI,
+			"pointMember");
+	public static final QName GML_LINESTRINGMEMBER = new QName(
+			GML_NAMESPACE_URI, "lineStringMember");
+	public static final QName GML_POLYGONMEMBER = new QName(GML_NAMESPACE_URI,
+			"polygonMember");
+	public static final QName GML_GEOMETRYMEMBER = new QName(GML_NAMESPACE_URI,
+			"geometryMember");
+
 	/*************************************************************
-	 * New GML 3 definitions									 *
+	 * New GML 3 definitions *
 	 *************************************************************/
-	//Atributos de Interpolación
-	public static final QName GML_INTERPOLATION = new QName(GML_NAMESPACE_URI, "interpolation");
+	// Atributos de Interpolación
+	public static final QName GML_INTERPOLATION = new QName(GML_NAMESPACE_URI,
+			"interpolation");
 	public static final String GML_DEFAULT_INTERPOLATION = "linear";
-	
-	//Atributos de Dimensión (x,y,z) 
+
+	// Atributos de Dimensión (x,y,z)
 	public static final int GML_DEFAULT_DIMENSION = 2;
-	public static final QName GML_DIMENSION = new QName(GML_NAMESPACE_URI, "dimension");
-	public static final QName GML_SRSDIMENSION = new QName(GML_NAMESPACE_URI, "srsDimension");
-	
-	//Curve
-	public static final QName GML_MULTICURVE = new QName(GML_NAMESPACE_URI, "MultiCurve");
-	public static final QName GML_CURVEMEMBER = new QName(GML_NAMESPACE_URI, "curveMember");
+	public static final QName GML_DIMENSION = new QName(GML_NAMESPACE_URI,
+			"dimension");
+	public static final QName GML_SRSDIMENSION = new QName(GML_NAMESPACE_URI,
+			"srsDimension");
+
+	// Curve
+	public static final QName GML_MULTICURVE = new QName(GML_NAMESPACE_URI,
+			"MultiCurve");
+	public static final QName GML_CURVEMEMBER = new QName(GML_NAMESPACE_URI,
+			"curveMember");
 	public static final QName GML_CURVE = new QName(GML_NAMESPACE_URI, "Curve");
-	public static final QName GML_SEGMENTS = new QName(GML_NAMESPACE_URI, "segments");
-	public static final QName GML_MULTICURVEPROPERTY = new QName(GML_NAMESPACE_URI, "multiCurveProperty");
-	public static final QName GML_CURVEPROPERTY = new QName(GML_NAMESPACE_URI, "curveProperty");
-	public static final QName GML_LINESTRINGSEGMENT = new QName(GML_NAMESPACE_URI, "LineStringSegment");
-	
-	//Surface
-	public static final QName GML_MULTISURFACE = new QName(GML_NAMESPACE_URI, "MultiSurface");
-	public static final QName GML_SURFACEMEMBER = new QName(GML_NAMESPACE_URI, "surfaceMember");
-	public static final QName GML_PATCHES = new QName(GML_NAMESPACE_URI, "patches");
-	public static final QName GML_POLYGONPATCH = new QName(GML_NAMESPACE_URI, "PolygonPatch");
-	public static final QName GML_EXTERIOR = new QName(GML_NAMESPACE_URI, "exterior");
-	public static final QName GML_INTERIOR = new QName(GML_NAMESPACE_URI, "interior");
-	public static final QName GML_SURFACE = new QName(GML_NAMESPACE_URI, "Surface");
-	
-	//Coords
-	//Sustituye al coordinates
-	public static final QName GML_POSLIST = new QName(GML_NAMESPACE_URI, "posList");
+	public static final QName GML_SEGMENTS = new QName(GML_NAMESPACE_URI,
+			"segments");
+	public static final QName GML_MULTICURVEPROPERTY = new QName(
+			GML_NAMESPACE_URI, "multiCurveProperty");
+	public static final QName GML_CURVEPROPERTY = new QName(GML_NAMESPACE_URI,
+			"curveProperty");
+	public static final QName GML_LINESTRINGSEGMENT = new QName(
+			GML_NAMESPACE_URI, "LineStringSegment");
+
+	// Surface
+	public static final QName GML_MULTISURFACE = new QName(GML_NAMESPACE_URI,
+			"MultiSurface");
+	public static final QName GML_SURFACEMEMBER = new QName(GML_NAMESPACE_URI,
+			"surfaceMember");
+	public static final QName GML_PATCHES = new QName(GML_NAMESPACE_URI,
+			"patches");
+	public static final QName GML_POLYGONPATCH = new QName(GML_NAMESPACE_URI,
+			"PolygonPatch");
+	public static final QName GML_EXTERIOR = new QName(GML_NAMESPACE_URI,
+			"exterior");
+	public static final QName GML_INTERIOR = new QName(GML_NAMESPACE_URI,
+			"interior");
+	public static final QName GML_SURFACE = new QName(GML_NAMESPACE_URI,
+			"Surface");
+
+	// Coords
+	// Sustituye al coordinates
+	public static final QName GML_POSLIST = new QName(GML_NAMESPACE_URI,
+			"posList");
 	public static final QName GML_POS = new QName(GML_NAMESPACE_URI, "pos");
-	
-	//Envelope (contenido en el BoundedBy)
-	public static final QName GML_ENVELOPE = new QName(GML_NAMESPACE_URI, "Envelope");
-	public static final QName GML_LOWERCORNER = new QName(GML_NAMESPACE_URI, "lowerCorner");
-	public static final QName GML_UPPERCORNER = new QName(GML_NAMESPACE_URI, "upperCorner");
-	
-	
+
+	// Envelope (contenido en el BoundedBy)
+	public static final QName GML_ENVELOPE = new QName(GML_NAMESPACE_URI,
+			"Envelope");
+	public static final QName GML_LOWERCORNER = new QName(GML_NAMESPACE_URI,
+			"lowerCorner");
+	public static final QName GML_UPPERCORNER = new QName(GML_NAMESPACE_URI,
+			"upperCorner");
+
 	/***************************************************************/
-	
-	//Point Alias
-	public static final QName GML_CENTEROF = new QName(GML_NAMESPACE_URI, "centerOf");
-	public static final QName GML_LOCATION = new QName(GML_NAMESPACE_URI, "location");
-	public static final QName GML_POSITION = new QName(GML_NAMESPACE_URI, "position");
-	
-	//Polygon Alias
-	public static final QName GML_EXTENTOF = new QName(GML_NAMESPACE_URI, "extentOf");
-	public static final QName GML_COVERAGE = new QName(GML_NAMESPACE_URI, "coverage");
-	
-	//LineString Alias
-	public static final QName GML_EDGEOF = new QName(GML_NAMESPACE_URI, "edgeOf");
-	public static final QName GML_CENTERLINEOF = new QName(GML_NAMESPACE_URI, "centerLineOf");
-	
-	//MultiPoint
-	public static final QName GML_MULTICENTEROF = new QName(GML_NAMESPACE_URI, "multiCenterOf");
-	public static final QName GML_MULTILOCATION = new QName(GML_NAMESPACE_URI, "multiLocation");
-	public static final QName GML_MULTIPOSITION = new QName(GML_NAMESPACE_URI, "multiPosition");
-	
-	//MultiLine
-	public static final QName GML_MULTIEDGEOF = new QName(GML_NAMESPACE_URI, "multiEdgeOf");
-	public static final QName GML_MULTICENTERLINEOF = new QName(GML_NAMESPACE_URI, "multiCenterLineOf");
-	
-	//MultiPolygon
-	public static final QName GML_MULTIEXTENTOF = new QName(GML_NAMESPACE_URI, "multiExtentOf");
-	public static final QName GML_MULTICOVERAGE = new QName(GML_NAMESPACE_URI, "multiCoverage");
-	
-	//srs
+
+	// Point Alias
+	public static final QName GML_CENTEROF = new QName(GML_NAMESPACE_URI,
+			"centerOf");
+	public static final QName GML_LOCATION = new QName(GML_NAMESPACE_URI,
+			"location");
+	public static final QName GML_POSITION = new QName(GML_NAMESPACE_URI,
+			"position");
+
+	// Polygon Alias
+	public static final QName GML_EXTENTOF = new QName(GML_NAMESPACE_URI,
+			"extentOf");
+	public static final QName GML_COVERAGE = new QName(GML_NAMESPACE_URI,
+			"coverage");
+
+	// LineString Alias
+	public static final QName GML_EDGEOF = new QName(GML_NAMESPACE_URI,
+			"edgeOf");
+	public static final QName GML_CENTERLINEOF = new QName(GML_NAMESPACE_URI,
+			"centerLineOf");
+
+	// MultiPoint
+	public static final QName GML_MULTICENTEROF = new QName(GML_NAMESPACE_URI,
+			"multiCenterOf");
+	public static final QName GML_MULTILOCATION = new QName(GML_NAMESPACE_URI,
+			"multiLocation");
+	public static final QName GML_MULTIPOSITION = new QName(GML_NAMESPACE_URI,
+			"multiPosition");
+
+	// MultiLine
+	public static final QName GML_MULTIEDGEOF = new QName(GML_NAMESPACE_URI,
+			"multiEdgeOf");
+	public static final QName GML_MULTICENTERLINEOF = new QName(
+			GML_NAMESPACE_URI, "multiCenterLineOf");
+
+	// MultiPolygon
+	public static final QName GML_MULTIEXTENTOF = new QName(GML_NAMESPACE_URI,
+			"multiExtentOf");
+	public static final QName GML_MULTICOVERAGE = new QName(GML_NAMESPACE_URI,
+			"multiCoverage");
+
+	// srs
 	public static final String SRS = "http://www.opengis.net/gml/srs/";
 	public static final String SRS_EPSG_NAME = "EPSG";
 	public static final String SRS_EPSG = "epsg.xml";
 	public static final String SRS_UNKNOWN = "unknown";
-	
+
 }

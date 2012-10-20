@@ -88,16 +88,16 @@ import com.iver.cit.gvsig.fmap.rendering.styling.labeling.ILabelingStrategy;
 import com.iver.cit.gvsig.project.documents.view.legend.gui.AttrInTableLabeling;
 
 /**
- * Driver wrapper around nodes from a network. It may be useful to show the nodes
- * as a layer without consuming more memory.
- * Is a tmpLayer, and when the layer is created, it should be uses with some BeforeSavingListener
- * in order to delete the layer before saving project. See AddLayerNodesExtension (TODO) 
+ * Driver wrapper around nodes from a network. It may be useful to show the
+ * nodes as a layer without consuming more memory. Is a tmpLayer, and when the
+ * layer is created, it should be uses with some BeforeSavingListener in order
+ * to delete the layer before saving project. See AddLayerNodesExtension (TODO)
  * 
  * @author Fco. José Peñarrubia
  * 
  */
-public class NodesDriver implements VectorialDriver, ObjectDriver, BoundedShapes 
-		 {
+public class NodesDriver implements VectorialDriver, ObjectDriver,
+		BoundedShapes {
 	static FieldDescription[] fields = new FieldDescription[4];
 	static {
 		FieldDescription fieldDesc = new FieldDescription();
@@ -138,7 +138,7 @@ public class NodesDriver implements VectorialDriver, ObjectDriver, BoundedShapes
 	public NodesDriver(Network net) {
 		this.net = net;
 		labeling = new AttrInTableLabeling();
-		
+
 	}
 
 	public int getShapeType() {
@@ -157,13 +157,11 @@ public class NodesDriver implements VectorialDriver, ObjectDriver, BoundedShapes
 		return false;
 	}
 
-	public int[] getPrimaryKeys()
-			 {
+	public int[] getPrimaryKeys() {
 		return null;
 	}
 
-	public void write(DataWare dataWare)
-			 {
+	public void write(DataWare dataWare) {
 	}
 
 	/**
@@ -206,8 +204,7 @@ public class NodesDriver implements VectorialDriver, ObjectDriver, BoundedShapes
 	 * 
 	 * @see com.hardcode.gdbms.engine.data.ReadDriver#getFieldValue(long, int)
 	 */
-	public Value getFieldValue(long rowIndex, int fieldId)
-			 {
+	public Value getFieldValue(long rowIndex, int fieldId) {
 		Value val = ValueFactory.createNullValue();
 		GvNode n = net.getGraph().getNodeByID((int) rowIndex);
 		switch (fieldId) {
@@ -250,7 +247,9 @@ public class NodesDriver implements VectorialDriver, ObjectDriver, BoundedShapes
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.hardcode.gdbms.engine.data.driver.GDBMSDriver#setDataSourceFactory(com.hardcode.gdbms.engine.data.DataSourceFactory)
+	 * @see
+	 * com.hardcode.gdbms.engine.data.driver.GDBMSDriver#setDataSourceFactory
+	 * (com.hardcode.gdbms.engine.data.DataSourceFactory)
 	 */
 	public void setDataSourceFactory(DataSourceFactory dsf) {
 	}
@@ -259,12 +258,12 @@ public class NodesDriver implements VectorialDriver, ObjectDriver, BoundedShapes
 		return fields[fieldId].getFieldLength();
 	}
 
-
 	public ILabelingStrategy getDefaultLabelingStrategy() {
 		return (ILabelingStrategy) labeling;
 	}
 
-	public Rectangle2D getShapeBounds(int index) throws ReadDriverException, ExpansionFileReadException {
+	public Rectangle2D getShapeBounds(int index) throws ReadDriverException,
+			ExpansionFileReadException {
 		GvNode n = net.getGraph().getNodeByID(index);
 		Rectangle2D bound = new Rectangle2D.Double(n.getX(), n.getY(), 0.3, 0.3);
 		return bound;

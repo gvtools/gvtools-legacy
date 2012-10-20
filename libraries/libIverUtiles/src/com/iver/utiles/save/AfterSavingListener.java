@@ -2,7 +2,6 @@ package com.iver.utiles.save;
 
 import java.util.EventListener;
 
-
 /* gvSIG. Geographic Information System of the Valencian Government
  *
  * Copyright (C) 2007-2008 Infrastructures and Transports Department
@@ -27,18 +26,17 @@ import java.util.EventListener;
 
 /**
  * The listener object created from that class is then registered with a
- * component using the component's <code>addAfterSavingListener</code> 
- * method. A save event is generated when an object that provides support of notification
- * about saving files, has save a file. The relevant method in the listener 
+ * component using the component's <code>addAfterSavingListener</code> method. A
+ * save event is generated when an object that provides support of notification
+ * about saving files, has save a file. The relevant method in the listener
  * object is then invoked, and the <code>SaveEvent</code> is passed to it.
- *
+ * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public interface AfterSavingListener extends EventListener {
 	/**
-     * Invoked after saving a file.
-     * See the class description of {@link SaveEvent SaveEvent} for a definition of 
-     * has saved an event.
-     */
-    public void afterSaving(SaveEvent e);
+	 * Invoked after saving a file. See the class description of
+	 * {@link SaveEvent SaveEvent} for a definition of has saved an event.
+	 */
+	public void afterSaving(SaveEvent e);
 }

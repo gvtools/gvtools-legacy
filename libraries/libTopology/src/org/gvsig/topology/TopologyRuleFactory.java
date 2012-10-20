@@ -93,16 +93,18 @@ public class TopologyRuleFactory {
 			try {
 				obj.setTopology(ownerOfRule);
 				obj.setXMLEntity(xml);
-				
-				if(obj.getOriginLyr() == null)
-					throw new TopologyRuleDefinitionException("Regla topologica sin capa de origen");
-				
-				if(obj instanceof ITwoLyrRule){
-					if(((ITwoLyrRule)obj).getDestinationLyr() == null){
-						throw new TopologyRuleDefinitionException("Regla que aplica a dos capas no ha especificado la segunda capa");
+
+				if (obj.getOriginLyr() == null)
+					throw new TopologyRuleDefinitionException(
+							"Regla topologica sin capa de origen");
+
+				if (obj instanceof ITwoLyrRule) {
+					if (((ITwoLyrRule) obj).getDestinationLyr() == null) {
+						throw new TopologyRuleDefinitionException(
+								"Regla que aplica a dos capas no ha especificado la segunda capa");
 					}
 				}
-				
+
 			} catch (NotExistInXMLEntity neiXML) {
 				logger.error(Messages.getString("failed_creating_object")
 						+ ": " + s);
@@ -114,22 +116,25 @@ public class TopologyRuleFactory {
 		return (ITopologyRule) obj;
 	}
 
-	public static ITopologyRule createRule(Class<?> ruleClass, 
-										Map<String, Object> params, 
-									Topology ruleOwner) throws TopologyRuleDefinitionException{
-		
-		try{	
+	public static ITopologyRule createRule(Class<?> ruleClass,
+			Map<String, Object> params, Topology ruleOwner)
+			throws TopologyRuleDefinitionException {
+
+		try {
 			ITopologyRule rule = (ITopologyRule) ruleClass.newInstance();
 			FLyrVect originLyr = (FLyrVect) params.get("originLyr");
-			if(originLyr == null)
-				throw new TopologyRuleDefinitionException("Regla topologica sin capa de origen");
-			((IOneLyrRule)rule).setOriginLyr(originLyr);
-			if (ITwoLyrRule.class.isAssignableFrom(ruleClass)){
-				FLyrVect destinationLyr = (FLyrVect) params.get("destinationLyr");
-				if(destinationLyr == null)
-					throw new TopologyRuleDefinitionException("Regla que aplica a dos capas no ha especificado la segunda capa");
-				((ITwoLyrRule)rule).setDestinationLyr(destinationLyr);
-			}	
+			if (originLyr == null)
+				throw new TopologyRuleDefinitionException(
+						"Regla topologica sin capa de origen");
+			((IOneLyrRule) rule).setOriginLyr(originLyr);
+			if (ITwoLyrRule.class.isAssignableFrom(ruleClass)) {
+				FLyrVect destinationLyr = (FLyrVect) params
+						.get("destinationLyr");
+				if (destinationLyr == null)
+					throw new TopologyRuleDefinitionException(
+							"Regla que aplica a dos capas no ha especificado la segunda capa");
+				((ITwoLyrRule) rule).setDestinationLyr(destinationLyr);
+			}
 			return rule;
 		} catch (InstantiationException e) {
 			throw new TopologyRuleDefinitionException(
@@ -137,6 +142,6 @@ public class TopologyRuleFactory {
 		} catch (IllegalAccessException e) {
 			throw new TopologyRuleDefinitionException(
 					"Error construyendo la regla topologica", e);
-		}//catch
+		}// catch
 	}
 }

@@ -40,20 +40,20 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: JBlank.java 13655 2007-09-12 16:28:55Z bsanchez $
-* $Log$
-* Revision 1.2  2007-09-12 16:28:23  bsanchez
-* *** empty log message ***
-*
-* Revision 1.1  2007/08/20 08:34:46  evercher
-* He fusionado LibUI con LibUIComponents
-*
-* Revision 1.1  2006/10/23 09:53:07  jaume
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: JBlank.java 13655 2007-09-12 16:28:55Z bsanchez $
+ * $Log$
+ * Revision 1.2  2007-09-12 16:28:23  bsanchez
+ * *** empty log message ***
+ *
+ * Revision 1.1  2007/08/20 08:34:46  evercher
+ * He fusionado LibUI con LibUIComponents
+ *
+ * Revision 1.1  2006/10/23 09:53:07  jaume
+ * *** empty log message ***
+ *
+ *
+ */
 package org.gvsig.gui.beans.swing;
 
 import java.awt.Dimension;
@@ -61,7 +61,7 @@ import java.awt.Dimension;
 import javax.swing.JPanel;
 
 public class JBlank extends JPanel {
-  private static final long serialVersionUID = -8119213961484182678L;
+	private static final long serialVersionUID = -8119213961484182678L;
 
 	public JBlank(int width, int height) {
 		super();

@@ -35,6 +35,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+
 /**
  * Componente gráfico de JFree
  * 
@@ -44,12 +45,12 @@ import org.jfree.data.xy.XYSeriesCollection;
  */
 public class GraphicChartPanel extends JPanel {
 	private static final long serialVersionUID = 7328137487119964665L;
-	private JFreeChart         chart       = null;
-	private ChartPanel         jPanelChart = null;
-	private XYSeries           series[]    = new XYSeries[0];
-	private XYSeriesCollection dataset     = null;
+	private JFreeChart chart = null;
+	private ChartPanel jPanelChart = null;
+	private XYSeries series[] = new XYSeries[0];
+	private XYSeriesCollection dataset = null;
 
-	private int                viewType    = 0;
+	private int viewType = 0;
 
 	public GraphicChartPanel() {
 		dataset = new XYSeriesCollection();
@@ -80,19 +81,22 @@ public class GraphicChartPanel extends JPanel {
 	public ChartPanel getChart() {
 		if (jPanelChart == null) {
 			jPanelChart = new ChartPanel(chart);
-			jPanelChart.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+			jPanelChart
+					.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
 		}
 		return jPanelChart;
 	}
 
 	/**
 	 * Creates a chart.
-	 * @param dataset the dataset.
+	 * 
+	 * @param dataset
+	 *            the dataset.
 	 * @return A chart.
 	 */
 	private void createChart() {
 		chart = ChartFactory.createXYLineChart(null, null, null, dataset,
-							PlotOrientation.VERTICAL, false, true, true);
+				PlotOrientation.VERTICAL, false, true, true);
 
 		// Definir la lista de colores
 		XYPlot plot = chart.getXYPlot();
@@ -107,7 +111,8 @@ public class GraphicChartPanel extends JPanel {
 		plot.getRenderer().setSeriesPaint(8, Color.yellow);
 		plot.getRenderer().setSeriesPaint(9, Color.orange);
 
-		Image img = new ImageIcon(getClass().getResource("images/splash.png")).getImage();
+		Image img = new ImageIcon(getClass().getResource("images/splash.png"))
+				.getImage();
 		plot.setBackgroundPaint(null);
 		plot.setBackgroundImageAlpha(0.18f);
 		plot.setBackgroundImage(img);
@@ -115,14 +120,17 @@ public class GraphicChartPanel extends JPanel {
 
 	/**
 	 * Asigna nuevos valores para la gráfica
-	 * @param values Matriz de [número de gráficas][Valores por gráfica]
+	 * 
+	 * @param values
+	 *            Matriz de [número de gráficas][Valores por gráfica]
 	 */
 	public void setNewChart(int[][] values, String names[]) {
 		series = new XYSeries[values.length];
 		for (int iGraf = 0; iGraf < values.length; iGraf++) {
 			series[iGraf] = new XYSeries(names[iGraf]);
 			for (int i = 0; i < values[iGraf].length; i++) {
-				series[iGraf].add(new Integer(i), new Integer(values[iGraf][i]));
+				series[iGraf]
+						.add(new Integer(i), new Integer(values[iGraf][i]));
 			}
 		}
 		reloadGraphic();
@@ -130,7 +138,9 @@ public class GraphicChartPanel extends JPanel {
 
 	/**
 	 * Asigna nuevos valores para la gráfica
-	 * @param values Matriz de [número de gráficas][Valores por gráfica]
+	 * 
+	 * @param values
+	 *            Matriz de [número de gráficas][Valores por gráfica]
 	 */
 	public void setNewChart(double[][][] values, String names[]) {
 		series = new XYSeries[values.length];
@@ -144,8 +154,9 @@ public class GraphicChartPanel extends JPanel {
 	}
 
 	/**
-	 * Define el tipo de visualizacion para la grafica.
-	 * Valores: 0 - Normal, 1 - Acumulado, 2 - Logaritmico
+	 * Define el tipo de visualizacion para la grafica. Valores: 0 - Normal, 1 -
+	 * Acumulado, 2 - Logaritmico
+	 * 
 	 * @param type
 	 */
 	public void setViewType(int type) {
@@ -159,38 +170,41 @@ public class GraphicChartPanel extends JPanel {
 	private void reloadGraphic() {
 		dataset.removeAllSeries();
 		switch (viewType) {
-			case 0: // Normal
-				for (int i = 0; i < series.length; i++)
-					dataset.addSeries(series[i]);
-				break;
-			case 1: // Acumulado
-				XYSeries[] seriesAcum = new XYSeries[series.length];
-				for (int i = 0; i < series.length; i++) {
-					seriesAcum[i] = new XYSeries(series[i].getKey());
-					double total = 0;
-					for (int j = 0; j < series[i].getItemCount(); j++) {
-						total += series[i].getY(j).doubleValue();
-						seriesAcum[i].add(series[i].getX(j), total);
-					}
-					dataset.addSeries(seriesAcum[i]);
+		case 0: // Normal
+			for (int i = 0; i < series.length; i++)
+				dataset.addSeries(series[i]);
+			break;
+		case 1: // Acumulado
+			XYSeries[] seriesAcum = new XYSeries[series.length];
+			for (int i = 0; i < series.length; i++) {
+				seriesAcum[i] = new XYSeries(series[i].getKey());
+				double total = 0;
+				for (int j = 0; j < series[i].getItemCount(); j++) {
+					total += series[i].getY(j).doubleValue();
+					seriesAcum[i].add(series[i].getX(j), total);
 				}
-				break;
-			case 2: // Logaritmico
-				XYSeries[] seriesLog = new XYSeries[series.length];
+				dataset.addSeries(seriesAcum[i]);
+			}
+			break;
+		case 2: // Logaritmico
+			XYSeries[] seriesLog = new XYSeries[series.length];
 
-				double minim = Double.MAX_VALUE;
-				for (int i = 0; i < series.length; i++)
-					for (int j = 0; j < series[i].getItemCount(); j++)
-						if (minim > series[i].getY(j).doubleValue())
-							minim = series[i].getY(j).doubleValue();
-				
-				for (int i = 0; i < series.length; i++) {
-					seriesLog[i] = new XYSeries(series[i].getKey());
-					for (int j = 0; j < series[i].getItemCount(); j++)
-						seriesLog[i].add(series[i].getX(j), java.lang.Math.log(series[i].getY(j).doubleValue() - minim + 1.0));
-					dataset.addSeries(seriesLog[i]);
-				}
-				break;
+			double minim = Double.MAX_VALUE;
+			for (int i = 0; i < series.length; i++)
+				for (int j = 0; j < series[i].getItemCount(); j++)
+					if (minim > series[i].getY(j).doubleValue())
+						minim = series[i].getY(j).doubleValue();
+
+			for (int i = 0; i < series.length; i++) {
+				seriesLog[i] = new XYSeries(series[i].getKey());
+				for (int j = 0; j < series[i].getItemCount(); j++)
+					seriesLog[i].add(
+							series[i].getX(j),
+							java.lang.Math.log(series[i].getY(j).doubleValue()
+									- minim + 1.0));
+				dataset.addSeries(seriesLog[i]);
+			}
+			break;
 		}
 		jPanelChart.repaint();
 	}

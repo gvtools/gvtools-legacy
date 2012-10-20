@@ -72,9 +72,9 @@ public class DriverJdbcNotFoundExceptionType extends ExceptionDescription {
 	}
 
 	public String getHtmlErrorMessage() {
-		return "<b>Error: no se ha encontrado el driver JDBC "+
-		driverJdbcClassName+" al intentar cargar la capa "+
-		layerName+"<b><br>";
+		return "<b>Error: no se ha encontrado el driver JDBC "
+				+ driverJdbcClassName + " al intentar cargar la capa "
+				+ layerName + "<b><br>";
 	}
 
 	public void setLayerName(String tableName) {

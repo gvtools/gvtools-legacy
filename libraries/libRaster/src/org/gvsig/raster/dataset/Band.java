@@ -20,81 +20,85 @@ package org.gvsig.raster.dataset;
 
 import java.util.ArrayList;
 
-
 /**
  * Clase que representa a una banda de un fichero.
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class Band {
-	//Nombre del fichero al que pertenece la banda
-	private String 		fileName = "";
-	//Lista de nombre de otros ficheros que forman la banda. Esto es util para CompositeDataset que está compuesto por un mosaico de ficheros.
-	private ArrayList	additionalName = new ArrayList();
-	//Posición en el fichero de la  banda
-	private int 		position = -1;
-	//Tipo de dato de la banda
-	private int 		dataType = IBuffer.TYPE_BYTE;
-	//lista de bandas del buffer donde se dibuja esta banda de imagen. Cada elemento
-	//del vector es un número que corresponde con el número de banda del buffer donde se escribe esta
-	private int[]		rasterBufBandToDrawList = null;
-	
-	public Band(String f, int p, int dt){
+	// Nombre del fichero al que pertenece la banda
+	private String fileName = "";
+	// Lista de nombre de otros ficheros que forman la banda. Esto es util para
+	// CompositeDataset que está compuesto por un mosaico de ficheros.
+	private ArrayList additionalName = new ArrayList();
+	// Posición en el fichero de la banda
+	private int position = -1;
+	// Tipo de dato de la banda
+	private int dataType = IBuffer.TYPE_BYTE;
+	// lista de bandas del buffer donde se dibuja esta banda de imagen. Cada
+	// elemento
+	// del vector es un número que corresponde con el número de banda del buffer
+	// donde se escribe esta
+	private int[] rasterBufBandToDrawList = null;
+
+	public Band(String f, int p, int dt) {
 		setFileName(f);
 		setPosition(p);
 		setDataType(dt);
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#clone()
 	 */
 	public Object clone() {
 		Band result = new Band(fileName, position, dataType);
-		if(rasterBufBandToDrawList != null) {
+		if (rasterBufBandToDrawList != null) {
 			int[] drawBands = new int[rasterBufBandToDrawList.length];
-			for (int i = 0; i < rasterBufBandToDrawList.length; i++) 
+			for (int i = 0; i < rasterBufBandToDrawList.length; i++)
 				drawBands[i] = rasterBufBandToDrawList[i];
 		}
 		return result;
 	}
-	
+
 	/**
-	 * Resetea la asignación de dibujado de las bandas de la imagen
-	 * sobre el DataImage cuando se hace un update para esta banda.
+	 * Resetea la asignación de dibujado de las bandas de la imagen sobre el
+	 * DataImage cuando se hace un update para esta banda.
 	 */
-	public void clearDrawableBands(){
+	public void clearDrawableBands() {
 		rasterBufBandToDrawList = null;
 	}
 
-	//******************************
-	//Setters and Getters
-	//******************************
-	
+	// ******************************
+	// Setters and Getters
+	// ******************************
+
 	/**
-	 * Obtiene las banda del RasterBuf sobre la que se pinta
-	 * este objeto banda
+	 * Obtiene las banda del RasterBuf sobre la que se pinta este objeto banda
+	 * 
 	 * @return bandas del RasterBuf
 	 */
 	public int[] getBufferBandListToDraw() {
 		return rasterBufBandToDrawList;
 	}
 
-	
-	
 	/**
 	 * Dice si la banda se está dibujando en el buffers de salida.
+	 * 
 	 * @return true si la banda se está dibujando y false si no se está haciendo
 	 */
-	public boolean isDrawing(){
-		if(this.rasterBufBandToDrawList == null)
+	public boolean isDrawing() {
+		if (this.rasterBufBandToDrawList == null)
 			return false;
 		return true;
 	}
-		
+
 	/**
-	 * Asigna una banda del RasterBuf sobre la que se pinta
-	 * este objeto banda
-	 * @param rasterBufBandToDraw banda del RasterBuf
+	 * Asigna una banda del RasterBuf sobre la que se pinta este objeto banda
+	 * 
+	 * @param rasterBufBandToDraw
+	 *            banda del RasterBuf
 	 */
 	public void setPositionToDrawInBuffer(int rasterBufBandToDraw) {
 		if (rasterBufBandToDrawList == null) {
@@ -108,11 +112,11 @@ public class Band {
 			rasterBufBandToDrawList = auxList;
 		}
 	}
-	
+
 	/**
 	 * Obtiene el nombre del fichero al que pertenece la banda
-	 * @return String con el nombre del fichero al 
-	 * que pertenece la banda
+	 * 
+	 * @return String con el nombre del fichero al que pertenece la banda
 	 */
 	public String getFileName() {
 		return fileName;
@@ -120,8 +124,9 @@ public class Band {
 
 	/**
 	 * Asigna el nombre del fichero al que pertenece la banda
-	 * @param fileName String con el nombre del fichero al 
-	 * que pertenece la banda
+	 * 
+	 * @param fileName
+	 *            String con el nombre del fichero al que pertenece la banda
 	 */
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
@@ -129,6 +134,7 @@ public class Band {
 
 	/**
 	 * Obtiene la posición de la banda en el fichero
+	 * 
 	 * @return entero con la posición de la banda en el fichero
 	 */
 	public int getPosition() {
@@ -137,7 +143,9 @@ public class Band {
 
 	/**
 	 * Asigna la posición de la banda en el fichero
-	 * @param position Posición de la banda en el fichero
+	 * 
+	 * @param position
+	 *            Posición de la banda en el fichero
 	 */
 	public void setPosition(int position) {
 		this.position = position;
@@ -145,7 +153,8 @@ public class Band {
 
 	/**
 	 * Obtiene el tipo de dato de la banda
-	 * @return entero con el tipo de dato 
+	 * 
+	 * @return entero con el tipo de dato
 	 */
 	public int getDataType() {
 		return dataType;
@@ -153,12 +162,14 @@ public class Band {
 
 	/**
 	 * Asigna el tipo de dato de la banda
-	 * @param datatype entero con el tipo de dato de la banda
+	 * 
+	 * @param datatype
+	 *            entero con el tipo de dato de la banda
 	 */
 	public void setDataType(int dataType) {
 		this.dataType = dataType;
 	}
-	
+
 	/**
 	 * Asigna un nombre de fichero adicional al principal. Esto es util para
 	 * mosaicos de raster donde una banda está compuesta por multiples ficheros.
@@ -166,9 +177,10 @@ public class Band {
 	public void setAdditionalName(String fileName) {
 		additionalName.add(fileName);
 	}
-	
+
 	/**
 	 * Obtiene la lista de nombres de fichero adicionales.
+	 * 
 	 * @return String[]
 	 */
 	public String[] getAdditionalName() {

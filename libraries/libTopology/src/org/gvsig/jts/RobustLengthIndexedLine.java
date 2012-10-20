@@ -79,7 +79,7 @@ public class RobustLengthIndexedLine extends LengthIndexedLine {
 	public RobustLengthIndexedLine(Geometry arg0) {
 		super(arg0);
 		this.linearGeom = arg0;
-		
+
 	}
 
 	public double indexOf(Coordinate pt) {
@@ -112,14 +112,15 @@ public class RobustLengthIndexedLine extends LengthIndexedLine {
 				seg.p0 = it.getSegmentStart();
 				seg.p1 = it.getSegmentEnd();
 				double segDistance = seg.distance(inputPt);
-/*
- * these two lines of code are the only novelties respect to LenghtIndexedLine
- */
+				/*
+				 * these two lines of code are the only novelties respect to
+				 * LenghtIndexedLine
+				 */
 				PrecisionModel pm = linearGeom.getPrecisionModel();
 				segDistance = pm.makePrecise(segDistance);
-/*
- * FIXME Remove them if JTS solve the problem
- */
+				/*
+				 * FIXME Remove them if JTS solve the problem
+				 */
 				double segMeasureToPt = segmentNearestMeasure(seg, inputPt,
 						segmentStartMeasure);
 

@@ -37,57 +37,67 @@ import org.gvsig.georeferencing.ui.zoom.tools.ToolListener;
 import org.gvsig.raster.datastruct.GeoPoint;
 
 /**
- * Capa gráfica que se dibuja sobre un ZoomControl y que dibuja 
- * una lista de puntos de control.
- * 22/12/2007
+ * Capa gráfica que se dibuja sobre un ZoomControl y que dibuja una lista de
+ * puntos de control. 22/12/2007
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class GCPsGraphicLayer implements IGraphicLayer {
-	public boolean                  active          = true;
-	
-	//Operaciones sobre los puntos de control
-	private static final int        NONE            = -1;
-	private static final int        MOVE            = 0;
-	
-	private ArrayList               pointList       = null;
-	private int                     type            = GPGraphic.MAP;
-	private Image                   icoBlue         = null;
-	private Image                   icoRed          = null;
-	private CanvasZone              canvas          = null;
-	private int                     operation       = NONE;
-	//Punto de control sobre el que se realiza la operación
-	private GPGraphic               operanteGP      = null;
-	private GPGraphic               lastGP          = null;
-	//Listener para que objetos externos sean informados de las acciones de la capa
-	private ToolListener            listener        = null;
-	private boolean                 sleepActive     = false;
+	public boolean active = true;
+
+	// Operaciones sobre los puntos de control
+	private static final int NONE = -1;
+	private static final int MOVE = 0;
+
+	private ArrayList pointList = null;
+	private int type = GPGraphic.MAP;
+	private Image icoBlue = null;
+	private Image icoRed = null;
+	private CanvasZone canvas = null;
+	private int operation = NONE;
+	// Punto de control sobre el que se realiza la operación
+	private GPGraphic operanteGP = null;
+	private GPGraphic lastGP = null;
+	// Listener para que objetos externos sean informados de las acciones de la
+	// capa
+	private ToolListener listener = null;
+	private boolean sleepActive = false;
 
 	/**
-	 * Constructor. Asigna el tipo de punto a dibujar en la 
-	 * capa gráfica.
-	 * @param type El valor de type viene definido por las constantes de GPGraphic
-	 * @param listener Listener para acciones de finalización de la operación de mover punto
+	 * Constructor. Asigna el tipo de punto a dibujar en la capa gráfica.
+	 * 
+	 * @param type
+	 *            El valor de type viene definido por las constantes de
+	 *            GPGraphic
+	 * @param listener
+	 *            Listener para acciones de finalización de la operación de
+	 *            mover punto
 	 */
 	public GCPsGraphicLayer(int type, ToolListener listener) {
 		this.type = type;
 		pointList = new ArrayList();
 		this.listener = listener;
 		try {
-			icoBlue = new ImageIcon(getClass().getClassLoader().getResource("images/icoBlue.png")).getImage(); 
-			icoRed = new ImageIcon(getClass().getClassLoader().getResource("images/icoRed.png")).getImage();
+			icoBlue = new ImageIcon(getClass().getClassLoader().getResource(
+					"images/icoBlue.png")).getImage();
+			icoRed = new ImageIcon(getClass().getClassLoader().getResource(
+					"images/icoRed.png")).getImage();
 		} catch (NullPointerException e) {
-			
+
 		}
 	}
-	
+
 	/**
-	 * Añade un punto de control gráfico a la lista. Se hace una distinción entre MapGeoPoint
-	 * y RasterGeoPoint para el calculo de las coordenadas de la vista donde se dibuja. Si es
-	 * de tipo map se utilizarán la información de coordenadas reales contenidas en el objeto
-	 * GeoPoint para transformarlas a coordenadas de la visualización.
+	 * Añade un punto de control gráfico a la lista. Se hace una distinción
+	 * entre MapGeoPoint y RasterGeoPoint para el calculo de las coordenadas de
+	 * la vista donde se dibuja. Si es de tipo map se utilizarán la información
+	 * de coordenadas reales contenidas en el objeto GeoPoint para
+	 * transformarlas a coordenadas de la visualización.
 	 * 
-	 * @param gp Punto de control
-	 * @param id identificador del punto de control
+	 * @param gp
+	 *            Punto de control
+	 * @param id
+	 *            identificador del punto de control
 	 */
 	public void addMapGeoPoint(GeoPoint gp, long id) {
 		GPGraphic graphicGCP = new GPGraphic(GPGraphic.MAP, gp);
@@ -96,15 +106,18 @@ public class GCPsGraphicLayer implements IGraphicLayer {
 		graphicGCP.setDrawCoords(p);
 		pointList.add(graphicGCP);
 	}
-	
+
 	/**
-	 * Añade un punto de control gráfico a la lista. Se hace una distinción entre MapGeoPoint
-	 * y RasterGeoPoint para el calculo de las coordenadas de la vista donde se dibuja. Si es
-	 * de tipo raster se utilizarán la información de coordenadas pixel contenidas en el objeto
-	 * GeoPoint para transformarlas a coordenadas de la visualización.
+	 * Añade un punto de control gráfico a la lista. Se hace una distinción
+	 * entre MapGeoPoint y RasterGeoPoint para el calculo de las coordenadas de
+	 * la vista donde se dibuja. Si es de tipo raster se utilizarán la
+	 * información de coordenadas pixel contenidas en el objeto GeoPoint para
+	 * transformarlas a coordenadas de la visualización.
 	 * 
-	 * @param gp Punto de control
-	 * @param id identificador del punto de control
+	 * @param gp
+	 *            Punto de control
+	 * @param id
+	 *            identificador del punto de control
 	 */
 	public void addPixelGeoPoint(GeoPoint gp, long id) {
 		GPGraphic graphicGCP = new GPGraphic(GPGraphic.PIXEL, gp);
@@ -113,9 +126,10 @@ public class GCPsGraphicLayer implements IGraphicLayer {
 		graphicGCP.setDrawCoords(p);
 		pointList.add(graphicGCP);
 	}
-	
+
 	/**
 	 * Elimina un punto de la lista a partir de su posición
+	 * 
 	 * @param position
 	 * @return
 	 */
@@ -127,53 +141,56 @@ public class GCPsGraphicLayer implements IGraphicLayer {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Elimina todos los puntos de la capa
 	 */
 	public void removeAllPoints() {
 		pointList.clear();
 	}
-	
+
 	/**
 	 * Recalcula las coordenadas de dibujado
 	 */
 	public void recalcPixelDrawCoordinates() {
 		for (int i = 0; i < pointList.size(); i++) {
-			GPGraphic gp = ((GPGraphic)pointList.get(i));
+			GPGraphic gp = ((GPGraphic) pointList.get(i));
 			Point2D p = gp.getGeoPoint().pixelPoint;
 			p = canvas.viewCoordsFromWorld(p);
 			gp.setDrawCoords(p);
 		}
 	}
-	
+
 	/**
 	 * Recalcula las coordenadas de dibujado
 	 */
 	public void recalcMapDrawCoordinates() {
 		for (int i = 0; i < pointList.size(); i++) {
-			GPGraphic gp = ((GPGraphic)pointList.get(i));
+			GPGraphic gp = ((GPGraphic) pointList.get(i));
 			Point2D p = gp.getGeoPoint().mapPoint;
 			p = canvas.viewCoordsFromWorld(p);
 			gp.setDrawCoords(p);
 		}
 	}
-	
+
 	/**
 	 * Obtiene el identificador del punto requerido
-	 * @param pos Posición del punto en la capa
+	 * 
+	 * @param pos
+	 *            Posición del punto en la capa
 	 * @return
 	 */
 	public long getID(int pos) {
 		try {
-			return ((GPGraphic)pointList.get(pos)).getId();
-		}catch (ArrayIndexOutOfBoundsException e) {
+			return ((GPGraphic) pointList.get(pos)).getId();
+		} catch (ArrayIndexOutOfBoundsException e) {
 			return -1;
 		}
 	}
-	
+
 	/**
 	 * Asigna el canvas
+	 * 
 	 * @param canvas
 	 */
 	public void setCanvas(CanvasZone canvas) {
@@ -181,49 +198,59 @@ public class GCPsGraphicLayer implements IGraphicLayer {
 		canvas.addMouseListener(this);
 		this.canvas = canvas;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.georeferencing.ui.zoom.IGraphicLayer#draw(java.awt.Graphics2D, org.gvsig.raster.datastruct.Extent, int, int)
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.georeferencing.ui.zoom.IGraphicLayer#draw(java.
+	 * awt.Graphics2D, org.gvsig.raster.datastruct.Extent, int, int)
 	 */
 	public void draw(Graphics2D g, Rectangle2D ext, int w, int h) {
 		for (int i = 0; i < pointList.size(); i++)
-			((GPGraphic)pointList.get(i)).draw(g);
+			((GPGraphic) pointList.get(i)).draw(g);
 	}
-	
+
 	/**
 	 * Asigna el flag que muestra u oculta la etiqueta del punto
-	 * @param showLabel true para mostrar la etiqueta y false para ocultarla
+	 * 
+	 * @param showLabel
+	 *            true para mostrar la etiqueta y false para ocultarla
 	 */
 	public void setShowLabel(boolean showLabel) {
 		for (int i = 0; i < pointList.size(); i++)
-			((GPGraphic)pointList.get(i)).setShowLabel(showLabel);
+			((GPGraphic) pointList.get(i)).setShowLabel(showLabel);
 	}
 
 	/**
 	 * Asigna el flag que muestra u oculta el número del punto
-	 * @param showLabel true para mostrar el punto y false para ocultarlo
+	 * 
+	 * @param showLabel
+	 *            true para mostrar el punto y false para ocultarlo
 	 */
 	public void setShowNumber(boolean showNumber) {
 		for (int i = 0; i < pointList.size(); i++)
-			((GPGraphic)pointList.get(i)).setShowNumber(showNumber);
+			((GPGraphic) pointList.get(i)).setShowNumber(showNumber);
 	}
-	
+
 	/**
 	 * Obtiene el punto de la posición indicada por el parámetro pos
-	 * @param pos Posición del punto
+	 * 
+	 * @param pos
+	 *            Posición del punto
 	 * @return GPGraphic
 	 */
 	public GPGraphic getPoint(int pos) {
 		try {
-			return ((GPGraphic)pointList.get(pos));
+			return ((GPGraphic) pointList.get(pos));
 		} catch (IndexOutOfBoundsException e) {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Obtiene la lista de puntos
+	 * 
 	 * @return ArrayList
 	 */
 	public ArrayList getPointList() {
@@ -232,6 +259,7 @@ public class GCPsGraphicLayer implements IGraphicLayer {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
 	 */
 	public void mouseClicked(MouseEvent e) {
@@ -239,6 +267,7 @@ public class GCPsGraphicLayer implements IGraphicLayer {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent)
 	 */
 	public void mouseEntered(MouseEvent e) {
@@ -246,6 +275,7 @@ public class GCPsGraphicLayer implements IGraphicLayer {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent)
 	 */
 	public void mouseExited(MouseEvent e) {
@@ -253,97 +283,113 @@ public class GCPsGraphicLayer implements IGraphicLayer {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
 	 */
 	public void mousePressed(MouseEvent e) {
-	
+
 	}
 
 	/**
-	 * Cuando se suelta el botón del ratón después de haber arrastrado volvemos 
-	 * a dibujar el punto pero en la nueva ubicación. Después calculamos las nuevas
-	 * coordenadas del punto y las asignamos. Finalmente desactivamos la operación de
-	 * mover punto y ponemos el punto sobre el que operamos a null.
+	 * Cuando se suelta el botón del ratón después de haber arrastrado volvemos
+	 * a dibujar el punto pero en la nueva ubicación. Después calculamos las
+	 * nuevas coordenadas del punto y las asignamos. Finalmente desactivamos la
+	 * operación de mover punto y ponemos el punto sobre el que operamos a null.
 	 */
 	public void mouseReleased(MouseEvent e) {
-		if(!isActive() || getOperation() != MOVE)
+		if (!isActive() || getOperation() != MOVE)
 			return;
 		operanteGP.setDraw(true);
 		operanteGP.setDrawCoords(e.getPoint());
 		Point2D point = canvas.viewCoordsToWorld(e.getPoint());
-		switch(type) {
-		case GPGraphic.MAP: operanteGP.getGeoPoint().mapPoint = point; break;
-		case GPGraphic.PIXEL: operanteGP.getGeoPoint().pixelPoint = point; break;
+		switch (type) {
+		case GPGraphic.MAP:
+			operanteGP.getGeoPoint().mapPoint = point;
+			break;
+		case GPGraphic.PIXEL:
+			operanteGP.getGeoPoint().pixelPoint = point;
+			break;
 		}
 		canvas.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		operanteGP = null;
 		setOperation(NONE);
-		if(listener != null)
+		if (listener != null)
 			listener.endAction(new ToolEvent(this));
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent
+	 * )
 	 */
 	public void mouseDragged(MouseEvent e) {
-		if(!isActive())
+		if (!isActive())
 			return;
-		if(getOperation() == MOVE) {
+		if (getOperation() == MOVE) {
 			operanteGP.setDraw(false);
-			if(operanteGP.getType() == GPGraphic.PIXEL && icoRed != null)
-				canvas.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icoRed, new Point(16, 16), ""));
-			if(operanteGP.getType() == GPGraphic.MAP && icoBlue != null)
-				canvas.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icoBlue, new Point(16, 16), ""));			
+			if (operanteGP.getType() == GPGraphic.PIXEL && icoRed != null)
+				canvas.setCursor(Toolkit.getDefaultToolkit()
+						.createCustomCursor(icoRed, new Point(16, 16), ""));
+			if (operanteGP.getType() == GPGraphic.MAP && icoBlue != null)
+				canvas.setCursor(Toolkit.getDefaultToolkit()
+						.createCustomCursor(icoBlue, new Point(16, 16), ""));
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
 	 */
 	public void mouseMoved(MouseEvent e) {
-		if(!isActive())
+		if (!isActive())
 			return;
 		setOperation(NONE);
 		for (int i = 0; i < pointList.size(); i++) {
-			GPGraphic gp = ((GPGraphic)pointList.get(i));
-			int pxLeft = (int)gp.getDrawCoords().getX() - 4;
-			int pxRight = (int)gp.getDrawCoords().getX() + 4;
-			int pyUp = (int)gp.getDrawCoords().getY() - 4;
-			int pyDown = (int)gp.getDrawCoords().getY() + 4;
-			if(e.getX() >= pxLeft && e.getX() <= pxRight && e.getY() >= pyUp && e.getY() <= pyDown) {
+			GPGraphic gp = ((GPGraphic) pointList.get(i));
+			int pxLeft = (int) gp.getDrawCoords().getX() - 4;
+			int pxRight = (int) gp.getDrawCoords().getX() + 4;
+			int pyUp = (int) gp.getDrawCoords().getY() - 4;
+			int pyDown = (int) gp.getDrawCoords().getY() + 4;
+			if (e.getX() >= pxLeft && e.getX() <= pxRight && e.getY() >= pyUp
+					&& e.getY() <= pyDown) {
 				lastGP = operanteGP = gp;
 				setOperation(MOVE);
-			} 			
-			
+			}
+
 		}
 
 	}
-	
+
 	/**
 	 * Obtiene la operación sobre el cursor que hay seleccionada
+	 * 
 	 * @return Entero que representa a la operación
 	 */
 	private int getOperation() {
 		return operation;
 	}
-	
+
 	/**
 	 * Asigna la operación sobre el cursor que hay seleccionada
+	 * 
 	 * @param op
 	 */
 	private void setOperation(int op) {
 		operation = op;
-		if(op == NONE) 
+		if (op == NONE)
 			listener.offTool(new ToolEvent(this));
-		else 
+		else
 			listener.onTool(new ToolEvent(this));
 	}
 
 	/**
-	 * Consulta si está activo el evento de pinchado y arrastrado de los puntos de 
-	 * control.
+	 * Consulta si está activo el evento de pinchado y arrastrado de los puntos
+	 * de control.
+	 * 
 	 * @return
 	 */
 	public boolean isActive() {
@@ -351,14 +397,15 @@ public class GCPsGraphicLayer implements IGraphicLayer {
 	}
 
 	/**
-	 * Asigna el flag que activa y desactiva el evento de pinchado y arrastrado 
-	 * de los puntos de control. 
+	 * Asigna el flag que activa y desactiva el evento de pinchado y arrastrado
+	 * de los puntos de control.
+	 * 
 	 * @param activeEvent
 	 */
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-	
+
 	/**
 	 * Desactiva la herramienta temporalmente. Guarda el estado en el que estaba
 	 * para restaurarlo cuando se invoque a awake
@@ -367,17 +414,18 @@ public class GCPsGraphicLayer implements IGraphicLayer {
 		sleepActive = active;
 		active = false;
 	}
-	
+
 	/**
-	 * Recupera el estado de activación que tenía antes de la última invocación 
+	 * Recupera el estado de activación que tenía antes de la última invocación
 	 * de sleep
 	 */
 	public void awake() {
 		active = sleepActive;
 	}
-	
+
 	/**
 	 * Obtiene el último punto arrastrado
+	 * 
 	 * @return GPGraphic
 	 */
 	public GPGraphic getLastPoint() {

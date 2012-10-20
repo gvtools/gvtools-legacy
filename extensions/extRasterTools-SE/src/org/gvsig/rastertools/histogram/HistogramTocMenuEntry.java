@@ -30,23 +30,27 @@ import org.gvsig.rastertools.histogram.ui.HistogramDialog;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction;
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
+
 /**
  * Punto de entrada del menu del histograma.
- *
+ * 
  * @version 17/04/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
-public class HistogramTocMenuEntry extends AbstractTocContextMenuAction implements IGenericToolBarMenuItem {
-	static private HistogramTocMenuEntry singleton  = null;
+public class HistogramTocMenuEntry extends AbstractTocContextMenuAction
+		implements IGenericToolBarMenuItem {
+	static private HistogramTocMenuEntry singleton = null;
 
 	/**
 	 * Nadie puede crear una instancia a esta clase única, hay que usar el
 	 * getSingleton()
 	 */
-	private HistogramTocMenuEntry() {}
+	private HistogramTocMenuEntry() {
+	}
 
 	/**
 	 * Devuelve un objeto unico a dicha clase
+	 * 
 	 * @return
 	 */
 	static public HistogramTocMenuEntry getSingleton() {
@@ -54,9 +58,13 @@ public class HistogramTocMenuEntry extends AbstractTocContextMenuAction implemen
 			singleton = new HistogramTocMenuEntry();
 		return singleton;
 	}
+
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getGroup()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getGroup()
 	 */
 	public String getGroup() {
 		return "RasterLayer";
@@ -64,7 +72,10 @@ public class HistogramTocMenuEntry extends AbstractTocContextMenuAction implemen
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getGroupOrder()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getGroupOrder()
 	 */
 	public int getGroupOrder() {
 		return 55;
@@ -72,7 +83,10 @@ public class HistogramTocMenuEntry extends AbstractTocContextMenuAction implemen
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getOrder()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getOrder()
 	 */
 	public int getOrder() {
 		return 1;
@@ -80,6 +94,7 @@ public class HistogramTocMenuEntry extends AbstractTocContextMenuAction implemen
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.project.documents.IContextMenuAction#getText()
 	 */
 	public String getText() {
@@ -88,14 +103,18 @@ public class HistogramTocMenuEntry extends AbstractTocContextMenuAction implemen
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
 			return false;
 
 		if (selectedItems[0] instanceof ILayerState) {
-			if (!((ILayerState) selectedItems[0]).isOpen()) 
+			if (!((ILayerState) selectedItems[0]).isOpen())
 				return false;
 			return true;
 		}
@@ -104,7 +123,11 @@ public class HistogramTocMenuEntry extends AbstractTocContextMenuAction implemen
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -112,13 +135,18 @@ public class HistogramTocMenuEntry extends AbstractTocContextMenuAction implemen
 
 		if (!(selectedItems[0] instanceof FLyrRasterSE))
 			return false;
-		
-		return ((FLyrRasterSE) selectedItems[0]).isActionEnabled(IRasterLayerActions.HISTOGRAM);
+
+		return ((FLyrRasterSE) selectedItems[0])
+				.isActionEnabled(IRasterLayerActions.HISTOGRAM);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#execute(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #execute(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public void execute(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -134,20 +162,24 @@ public class HistogramTocMenuEntry extends AbstractTocContextMenuAction implemen
 			histogramDialog = new HistogramDialog(650, 500);
 			histogramDialog.setLayer(fLayer);
 			// Parámetros de inicialización del histograma
-			histogramDialog.getHistogramPanel().firstRun(); // Mostar por primera vez el
-																											// histograma
+			histogramDialog.getHistogramPanel().firstRun(); // Mostar por
+															// primera vez el
+															// histograma
 			histogramDialog.setVisible(true);
 
 			RasterToolsUtil.addWindow(histogramDialog);
 		} catch (Exception e) {
-			RasterToolsUtil.messageBoxError(RasterToolsUtil.getText(this, "histogram_error"), this, e);
+			RasterToolsUtil.messageBoxError(
+					RasterToolsUtil.getText(this, "histogram_error"), this, e);
 			return;
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.generictoolbar.IGenericToolBarMenuItem#getIcon()
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.generictoolbar.IGenericToolBarMenuItem#getIcon()
 	 */
 	public Icon getIcon() {
 		return RasterToolsUtil.getIcon("histogram-icon");

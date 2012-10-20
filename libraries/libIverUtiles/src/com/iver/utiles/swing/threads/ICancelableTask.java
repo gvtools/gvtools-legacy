@@ -42,25 +42,25 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: ICancelableTask.java 4419 2006-03-14 19:35:13Z azabala $
-* $Log$
-* Revision 1.1  2006-03-14 19:23:42  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/03/07 21:00:29  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: ICancelableTask.java 4419 2006-03-14 19:35:13Z azabala $
+ * $Log$
+ * Revision 1.1  2006-03-14 19:23:42  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/03/07 21:00:29  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.utiles.swing.threads;
+
 /**
  * Runnable task that could be canceled.
  * 
  * @author azabala
- *
+ * 
  */
 public interface ICancelableTask extends ITask {
 	public void cancel();
 }
-

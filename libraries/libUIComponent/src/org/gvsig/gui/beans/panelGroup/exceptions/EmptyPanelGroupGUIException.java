@@ -26,29 +26,37 @@ import org.gvsig.gui.beans.Messages;
 import org.gvsig.gui.beans.panelGroup.IPanelGroup;
 
 /**
- * <p>When an object of type {@link IPanelGroup IPanelGroup} hasn't any of its registered panels in its GUI
- *  launches an exception of this kind.</p> 
+ * <p>
+ * When an object of type {@link IPanelGroup IPanelGroup} hasn't any of its
+ * registered panels in its GUI launches an exception of this kind.
+ * </p>
  * 
  * @version 27/11/2007
- * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es) 
+ * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class EmptyPanelGroupGUIException extends BaseException {
 	private static final long serialVersionUID = 1244814519514860627L;
 
 	/**
-	 * <p>Creates an initializes a new instance of <code>EmptyPanelGroupGUIException</code>.</p>
+	 * <p>
+	 * Creates an initializes a new instance of
+	 * <code>EmptyPanelGroupGUIException</code>.
+	 * </p>
 	 */
 	public EmptyPanelGroupGUIException() {
 		super();
 
 		// Identifier of this kind of exception
 		this.code = serialVersionUID;
-		
-		// Default text that explains this kind of exception. If there is no translation associated to the
-		// "messageKey" of this exception, then the value shown will be the value of "formatString".
+
+		// Default text that explains this kind of exception. If there is no
+		// translation associated to the
+		// "messageKey" of this exception, then the value shown will be the
+		// value of "formatString".
 		this.formatString = "No panel in the graphical user interface.";
 
-		 // Key to the sentence that explains this exception. That key will be use for multilingual purposes.
+		// Key to the sentence that explains this exception. That key will be
+		// use for multilingual purposes.
 		this.messageKey = "empty_panel_group_gui_exception";
 
 		setTranslator(new Messages());
@@ -56,6 +64,7 @@ public class EmptyPanelGroupGUIException extends BaseException {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map<String, String> values() {

@@ -19,9 +19,10 @@
 package org.gvsig.raster.grid.filter.enhancement;
 
 import org.gvsig.raster.dataset.IBuffer;
+
 /**
  * Filtro de ecualización de histograma para tipo de datos short.
- *
+ * 
  * @version 11/05/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
@@ -29,34 +30,39 @@ public class EqualizationShortFilter extends EqualizationFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.enhancement.LinearEnhancementFilter#process(int, int)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.enhancement.LinearEnhancementFilter#process
+	 * (int, int)
 	 */
 	public void process(int col, int line) throws InterruptedException {
 		for (int iBand = 0; iBand < raster.getBandCount(); iBand++) {
 			short p = raster.getElemShort(line, col, iBand);
-			if(!equalizationActive(iBand)) {
+			if (!equalizationActive(iBand)) {
 				rasterResult.setElem(line, col, iBand, p);
 				continue;
 			}
-			
+
 			if (p > maxBandValue[renderBands[iBand]])
 				p = (short) maxBandValue[renderBands[iBand]];
 			else if (p < minBandValue[renderBands[iBand]])
 				p = (short) minBandValue[renderBands[iBand]];
-		
-			int pos = (int)(((p + dto[iBand]) * nClasses) / distance[iBand]);
-			int ecualizationPositive = (int)(lahe[iBand][pos]);
-			int ecualizationNegative = (int)(lahe[iBand][nElements - pos]);
+
+			int pos = (int) (((p + dto[iBand]) * nClasses) / distance[iBand]);
+			int ecualizationPositive = (int) (lahe[iBand][pos]);
+			int ecualizationNegative = (int) (lahe[iBand][nElements - pos]);
 			double value = ((nElements - ecualizationNegative) + ecualizationPositive) / 2;
-			
-			rasterResult.setElem(line, col, iBand, (short)value);
+
+			rasterResult.setElem(line, col, iBand, (short) value);
 		}
 	}
-	
+
 	double[] distance = null;
 	double[] dto = null;
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#pre()
 	 */
 	public void pre() {
@@ -64,21 +70,25 @@ public class EqualizationShortFilter extends EqualizationFilter {
 		distance = new double[raster.getBandCount()];
 		dto = new double[raster.getBandCount()];
 		for (int i = 0; i < raster.getBandCount(); i++) {
-			distance[i] = maxBandValue[renderBands[i]] - minBandValue[renderBands[i]];
+			distance[i] = maxBandValue[renderBands[i]]
+					- minBandValue[renderBands[i]];
 			dto[i] = -minBandValue[renderBands[i]];
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.enhancement.LinearEnhancementFilter#getInRasterDataType()
+	 * 
+	 * @see org.gvsig.raster.grid.filter.enhancement.LinearEnhancementFilter#
+	 * getInRasterDataType()
 	 */
 	public int getInRasterDataType() {
 		return IBuffer.TYPE_SHORT;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getOutRasterDataType()
 	 */
 	public int getOutRasterDataType() {

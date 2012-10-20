@@ -36,9 +36,9 @@ import org.gvsig.gui.beans.swing.JButton;
  * <code>ButtonsPanel</code> ofrece un widget con un conjunto de botones
  * preestablecidos, aunque también se pueden añadir botones con el método
  * {@link #addButton(String, int)}
- *
+ * 
  * @version 09/05/2008
- *
+ * 
  * @author BorSanZa - Borja Sanchez Zamorano (borja.sanchez@iver.es)
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
@@ -48,35 +48,35 @@ public class ButtonsPanel extends JPanel {
 	private ArrayList<ButtonsPanelListener> actionCommandListeners = new ArrayList<ButtonsPanelListener>();
 	private ArrayList<JButton> buttonsList = new ArrayList<JButton>();
 
-	static private int      eventId                   = Integer.MIN_VALUE;
+	static private int eventId = Integer.MIN_VALUE;
 
-	public static final int BUTTON_ACCEPT             = 1;
-	public static final int BUTTON_CANCEL             = 2;
-	public static final int BUTTON_APPLY              = 3;
-	public static final int BUTTON_YES                = 4;
-	public static final int BUTTON_NO                 = 5;
-	public static final int BUTTON_CLOSE              = 6;
-	public static final int BUTTON_EXIT               = 7;
-	public static final int BUTTON_SEEDETAILS         = 8;
-	public static final int BUTTON_HIDEDETAILS        = 9;
-	public static final int BUTTON_PAUSE              = 10;
-	public static final int BUTTON_RESTART            = 11;
-	public static final int BUTTON_SAVE               = 12;
+	public static final int BUTTON_ACCEPT = 1;
+	public static final int BUTTON_CANCEL = 2;
+	public static final int BUTTON_APPLY = 3;
+	public static final int BUTTON_YES = 4;
+	public static final int BUTTON_NO = 5;
+	public static final int BUTTON_CLOSE = 6;
+	public static final int BUTTON_EXIT = 7;
+	public static final int BUTTON_SEEDETAILS = 8;
+	public static final int BUTTON_HIDEDETAILS = 9;
+	public static final int BUTTON_PAUSE = 10;
+	public static final int BUTTON_RESTART = 11;
+	public static final int BUTTON_SAVE = 12;
 	/**
 	 * Sirve para cuando se crean botones nuevos, saber el último número usado
-	 * internamente, así '<code>new_id = BUTTON_LAST + 1;</code>' podría ser
-	 * el índice del nuevo botón.
+	 * internamente, así '<code>new_id = BUTTON_LAST + 1;</code>' podría ser el
+	 * índice del nuevo botón.
 	 */
-	public static final int BUTTON_LAST               = 12;
-	public static final int BUTTONS_ACCEPT            = 1;
-	public static final int BUTTONS_ACCEPTCANCEL      = 2;
+	public static final int BUTTON_LAST = 12;
+	public static final int BUTTONS_ACCEPT = 1;
+	public static final int BUTTONS_ACCEPTCANCEL = 2;
 	public static final int BUTTONS_ACCEPTCANCELAPPLY = 3;
-	public static final int BUTTONS_CANCEL            = 4;
-	public static final int BUTTONS_YESNO             = 5;
-	public static final int BUTTONS_CLOSE             = 6;
-	public static final int BUTTONS_EXIT              = 7;
-	public static final int BUTTONS_NONE              = 8;
-	public static final int BUTTONS_APPLYCLOSE        = 9;
+	public static final int BUTTONS_CANCEL = 4;
+	public static final int BUTTONS_YESNO = 5;
+	public static final int BUTTONS_CLOSE = 6;
+	public static final int BUTTONS_EXIT = 7;
+	public static final int BUTTONS_NONE = 8;
+	public static final int BUTTONS_APPLYCLOSE = 9;
 
 	/**
 	 * Crea un ButtonsPanel con un Layout por defecto.
@@ -89,49 +89,53 @@ public class ButtonsPanel extends JPanel {
 		setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 7, 0));
 		setBorder(javax.swing.BorderFactory.createEmptyBorder(8, 0, 0, 0));
 	}
+
 	/**
 	 * Crea un ButtonsPanel con un Layout por defecto.
-	 * @param items Que botones vamos a usar en la creación.
+	 * 
+	 * @param items
+	 *            Que botones vamos a usar en la creación.
 	 */
 	public ButtonsPanel(int items) {
 		initialize();
 		switch (items) {
-			case BUTTONS_ACCEPT:
-				addAccept();
-				break;
-			case BUTTONS_ACCEPTCANCEL:
-				addAccept();
-				addCancel();
-				break;
-			case BUTTONS_ACCEPTCANCELAPPLY:
-				addApply();
-				addAccept();
-				addCancel();
-				break;
-			case BUTTONS_APPLYCLOSE:
-				addApply();
-				addClose();
-				break;
-			case BUTTONS_CANCEL:
-				addCancel();
-				break;
-			case BUTTONS_YESNO:
-				addYes();
-				addNo();
-				break;
-			case BUTTONS_CLOSE:
-				addClose();
-				break;
-			case BUTTONS_EXIT:
-				addExit();
-				break;
-			case BUTTONS_NONE:
-				break;
+		case BUTTONS_ACCEPT:
+			addAccept();
+			break;
+		case BUTTONS_ACCEPTCANCEL:
+			addAccept();
+			addCancel();
+			break;
+		case BUTTONS_ACCEPTCANCELAPPLY:
+			addApply();
+			addAccept();
+			addCancel();
+			break;
+		case BUTTONS_APPLYCLOSE:
+			addApply();
+			addClose();
+			break;
+		case BUTTONS_CANCEL:
+			addCancel();
+			break;
+		case BUTTONS_YESNO:
+			addYes();
+			addNo();
+			break;
+		case BUTTONS_CLOSE:
+			addClose();
+			break;
+		case BUTTONS_EXIT:
+			addExit();
+			break;
+		case BUTTONS_NONE:
+			break;
 		}
 	}
 
 	/**
 	 * Añadir el disparador de cuando se pulsa un botón.
+	 * 
 	 * @param listener
 	 */
 	public void addButtonPressedListener(ButtonsPanelListener listener) {
@@ -141,6 +145,7 @@ public class ButtonsPanel extends JPanel {
 
 	/**
 	 * Devuelve el array de listeners del componente
+	 * 
 	 * @return
 	 */
 	public Object[] getButtonPressedListeners() {
@@ -149,6 +154,7 @@ public class ButtonsPanel extends JPanel {
 
 	/**
 	 * Borrar el disparador de eventos de los botones.
+	 * 
 	 * @param listener
 	 */
 	public void removeButtonPressedListener(ButtonsPanelListener listener) {
@@ -156,9 +162,11 @@ public class ButtonsPanel extends JPanel {
 	}
 
 	private void callActionCommandListeners(int buttonID) {
-		Iterator<ButtonsPanelListener> acIterator = actionCommandListeners.iterator();
+		Iterator<ButtonsPanelListener> acIterator = actionCommandListeners
+				.iterator();
 		while (acIterator.hasNext()) {
-			ButtonsPanelListener listener = (ButtonsPanelListener) acIterator.next();
+			ButtonsPanelListener listener = (ButtonsPanelListener) acIterator
+					.next();
 			listener.actionButtonPressed(new ButtonsPanelEvent(this, buttonID));
 		}
 		eventId++;
@@ -250,9 +258,11 @@ public class ButtonsPanel extends JPanel {
 
 	/**
 	 * Añadimos un botón definido por el usuario.
-	 *
-	 * @param text Texto que contendrá el botón
-	 * @param id Entero para identificar los eventos del botón
+	 * 
+	 * @param text
+	 *            Texto que contendrá el botón
+	 * @param id
+	 *            Entero para identificar los eventos del botón
 	 */
 	public void addButton(String text, int id) {
 		JButton button = new JButton();
@@ -262,7 +272,8 @@ public class ButtonsPanel extends JPanel {
 		button.setActionCommand(id + "");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				callActionCommandListeners(Integer.parseInt(e.getActionCommand()));
+				callActionCommandListeners(Integer.parseInt(e
+						.getActionCommand()));
 			}
 		});
 
@@ -271,8 +282,11 @@ public class ButtonsPanel extends JPanel {
 
 	/**
 	 * Obtener un botón por su Entero
-	 * @param id Número del disparador del botón
-	 * @return El botón especificado o <code>null</code> si no se encontró el botón.
+	 * 
+	 * @param id
+	 *            Número del disparador del botón
+	 * @return El botón especificado o <code>null</code> si no se encontró el
+	 *         botón.
 	 */
 	public JButton getButton(int id) {
 		Iterator<JButton> acIterator = buttonsList.iterator();
@@ -285,14 +299,18 @@ public class ButtonsPanel extends JPanel {
 	}
 
 	/**
-	 * <p>Removes the button identified by <code>id</code>.</p>
+	 * <p>
+	 * Removes the button identified by <code>id</code>.
+	 * </p>
 	 * 
-	 * @param id identifier of the button
-	 * @return <code>true</code> if has removed the button; otherwise <code>false</code>
+	 * @param id
+	 *            identifier of the button
+	 * @return <code>true</code> if has removed the button; otherwise
+	 *         <code>false</code>
 	 */
 	public boolean removeButton(int id) {
 		String b_text = getButtonText(id);
-		
+
 		Iterator<JButton> acIterator = buttonsList.iterator();
 		while (acIterator.hasNext()) {
 			JButton button = (JButton) acIterator.next();
@@ -301,59 +319,68 @@ public class ButtonsPanel extends JPanel {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
-	 * <p>Returns the text of the button identified by <code>id</code>.</p>
+	 * <p>
+	 * Returns the text of the button identified by <code>id</code>.
+	 * </p>
 	 * 
-	 * @param id identifier of the button
+	 * @param id
+	 *            identifier of the button
 	 * 
 	 * @return text of the identified button
 	 */
 	protected String getButtonText(int id) {
 		switch (id) {
-			case BUTTON_ACCEPT:
-				return Messages.getText("aceptar");
-			case BUTTON_CANCEL:
-				return Messages.getText("cancelar");
-			case BUTTON_APPLY:
-				return Messages.getText("aplicar");
-			case BUTTON_YES:
-				return Messages.getText("si");
-			case BUTTON_NO:
-				return Messages.getText("no");
-			case BUTTON_CLOSE:
-				return Messages.getText("cerrar");
-			case BUTTON_EXIT:
-				return Messages.getText("salir");
-			case BUTTON_SEEDETAILS:
-				return Messages.getText("verdetalles");
-			case BUTTON_HIDEDETAILS:
-				return Messages.getText("ocultardetalles");
-			case BUTTON_PAUSE:
-				return Messages.getText("pausar");
-			case BUTTON_RESTART:
-				return Messages.getText("reanudar");
-			case BUTTON_SAVE:
-				return Messages.getText("guardar");
+		case BUTTON_ACCEPT:
+			return Messages.getText("aceptar");
+		case BUTTON_CANCEL:
+			return Messages.getText("cancelar");
+		case BUTTON_APPLY:
+			return Messages.getText("aplicar");
+		case BUTTON_YES:
+			return Messages.getText("si");
+		case BUTTON_NO:
+			return Messages.getText("no");
+		case BUTTON_CLOSE:
+			return Messages.getText("cerrar");
+		case BUTTON_EXIT:
+			return Messages.getText("salir");
+		case BUTTON_SEEDETAILS:
+			return Messages.getText("verdetalles");
+		case BUTTON_HIDEDETAILS:
+			return Messages.getText("ocultardetalles");
+		case BUTTON_PAUSE:
+			return Messages.getText("pausar");
+		case BUTTON_RESTART:
+			return Messages.getText("reanudar");
+		case BUTTON_SAVE:
+			return Messages.getText("guardar");
 		}
 
 		return null;
 	}
 
 	/**
-	 * <p>Enables (or disables) the button identified by <code>id</code>.</p>
+	 * <p>
+	 * Enables (or disables) the button identified by <code>id</code>.
+	 * </p>
 	 * 
-	 * @param id identifier of the button
-	 * @param b <code>true</code> to enable the button, otherwise <code>false</code>
+	 * @param id
+	 *            identifier of the button
+	 * @param b
+	 *            <code>true</code> to enable the button, otherwise
+	 *            <code>false</code>
 	 * 
-	 * @return <code>true</code> if there was a button of that kind in this group, otherwise <code>false</code>
+	 * @return <code>true</code> if there was a button of that kind in this
+	 *         group, otherwise <code>false</code>
 	 */
 	public boolean setEnabled(int id, boolean b) {
 		String b_text = getButtonText(id);
-		
+
 		Iterator<JButton> acIterator = buttonsList.iterator();
 		while (acIterator.hasNext()) {
 			JButton button = (JButton) acIterator.next();
@@ -362,7 +389,7 @@ public class ButtonsPanel extends JPanel {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 }

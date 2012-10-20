@@ -5,19 +5,15 @@
 
 package com.ermapper.ecw;
 
-
 // Referenced classes of package com.ermapper.ecw:
 //            JNCSException
 
-public class JNCSFileNotOpenException extends JNCSException
-{
+public class JNCSFileNotOpenException extends JNCSException {
 
-    public JNCSFileNotOpenException()
-    {
-    }
+	public JNCSFileNotOpenException() {
+	}
 
-    public JNCSFileNotOpenException(String s)
-    {
-        super(s);
-    }
+	public JNCSFileNotOpenException(String s) {
+		super(s);
+	}
 }

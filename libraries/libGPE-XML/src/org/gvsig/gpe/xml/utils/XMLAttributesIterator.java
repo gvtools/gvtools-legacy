@@ -42,37 +42,42 @@ import org.gvsig.gpe.xml.stream.XmlStreamException;
  * @author <a href="mailto:jpiera@gvsig.org">Jorge Piera</a>
  */
 public class XMLAttributesIterator implements IAttributesIterator {
-	private Map attributes = new HashMap(); 
+	private Map attributes = new HashMap();
 	private Iterator keys = null;
 	private QName currentAttibuteName = null;
 
-	public XMLAttributesIterator(IXmlStreamReader parser) throws XmlStreamException {
+	public XMLAttributesIterator(IXmlStreamReader parser)
+			throws XmlStreamException {
 		super();
-		while(parser.getEventType() != IXmlStreamReader.START_ELEMENT){
+		while (parser.getEventType() != IXmlStreamReader.START_ELEMENT) {
 			parser.next();
 		}
 		int num_atributos = parser.getAttributeCount();
-		for (int i=0 ; i<parser.getAttributeCount() ; i++){
+		for (int i = 0; i < parser.getAttributeCount(); i++) {
 			QName atributo = parser.getAttributeName(i);
-			String valor=parser.getAttributeValue(i);
-			if (valor!=null)
-				attributes.put(atributo,valor);
+			String valor = parser.getAttributeValue(i);
+			if (valor != null)
+				attributes.put(atributo, valor);
 		}
 		initialize();
 	}
-	
-	public Map getAttributes(){
+
+	public Map getAttributes() {
 		return attributes;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.IAttributesIterator#getNumAttributes()
 	 */
 	public int getNumAttributes() {
 		return attributes.size();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.IAttributesIterator#hasNext()
 	 */
 	public boolean hasNext() throws IOException {
@@ -80,15 +85,19 @@ public class XMLAttributesIterator implements IAttributesIterator {
 		return (keys.hasNext());
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.IAttributesIterator#nextAttribute()
 	 */
 	public Object nextAttribute() throws IOException {
 		setAttributeName();
-		return attributes.get(currentAttibuteName);	
+		return attributes.get(currentAttibuteName);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.IAttributesIterator#nextAttributeName()
 	 */
 	public QName nextAttributeName() {
@@ -96,17 +105,18 @@ public class XMLAttributesIterator implements IAttributesIterator {
 		return currentAttibuteName;
 	}
 
-	private void setAttributeName(){
-		if (currentAttibuteName == null){
-			currentAttibuteName = (QName)keys.next();
+	private void setAttributeName() {
+		if (currentAttibuteName == null) {
+			currentAttibuteName = (QName) keys.next();
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.IAttributesIterator#initialize()
 	 */
 	public void initialize() {
-		keys = attributes.keySet().iterator();		
+		keys = attributes.keySet().iterator();
 	}
 }
-

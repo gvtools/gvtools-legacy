@@ -68,28 +68,30 @@ import org.gvsig.exceptions.BaseException;
  */
 /**
  * Throwed when is impossible to create a new schema
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class SchemaCreationException extends BaseException{
+public class SchemaCreationException extends BaseException {
 	private static final long serialVersionUID = 4287203176574644169L;
 
 	public SchemaCreationException(Throwable exception) {
 		init();
 		initCause(exception);
-	}	
-	
+	}
+
 	private void init() {
 		messageKey = "error_gpe_schema_creation";
 		formatString = "Error creating the xml schema";
-		code = serialVersionUID;		
+		code = serialVersionUID;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map values() {
 		Hashtable params = new Hashtable();
-		return params;		
+		return params;
 	}
 }

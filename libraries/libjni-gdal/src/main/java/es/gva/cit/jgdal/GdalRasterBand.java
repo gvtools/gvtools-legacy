@@ -53,423 +53,458 @@ package es.gva.cit.jgdal;
 /**
  * Representa a una banda simple de la imï¿½gen o canal.
  * 
- * @author Nacho Brodin <brodin_ign@gva.es>.<BR> Equipo de desarrollo gvSIG.<BR> http://www.gvsig.gva.es
+ * @author Nacho Brodin <brodin_ign@gva.es>.<BR>
+ *         Equipo de desarrollo gvSIG.<BR>
+ *         http://www.gvsig.gva.es
  * @version 0.0
  * @link http://www.gvsig.gva.es
  */
 
-public class GdalRasterBand extends JNIBase{
+public class GdalRasterBand extends JNIBase {
 
+	private native long getOverviewNat(long cPtr, int i);
 
-	private native long getOverviewNat(long cPtr,int i);
 	private native long getRasterColorTableNat(long cPtr);
-	private native GdalBuffer readRasterNat(long cPtr, 
-			int nXOff, int nYOff, int nXSize, int nYSize,
-			int BufXSize, int BufYSize,
-			int eBufType);
-	private native GdalBuffer readRasterWithPaletteNat(long cPtr, 
-			int nXOff, int nYOff, int nXSize, int nYSize,
-			int BufXSize, int BufYSize,
-			int eBufType);
-	private native void writeRasterNat(	long cPtr, 
-			int nXOff, int nYOff, int nXSize, int nYSize,
-			GdalBuffer buffer,
-			int eBufType);
-	private native double getRasterNoDataValueNat(long cPtr);
-	private native int existsNoDataValueNat(long cPtr);
-	private native String[] getMetadataNat(long cPtr,String pszDomain);
-	private native int getRasterColorInterpretationNat(long cPtr);
-	private native int setRasterColorInterpretationNat(long cPtr, int bandType);
 
+	private native GdalBuffer readRasterNat(long cPtr, int nXOff, int nYOff,
+			int nXSize, int nYSize, int BufXSize, int BufYSize, int eBufType);
+
+	private native GdalBuffer readRasterWithPaletteNat(long cPtr, int nXOff,
+			int nYOff, int nXSize, int nYSize, int BufXSize, int BufYSize,
+			int eBufType);
+
+	private native void writeRasterNat(long cPtr, int nXOff, int nYOff,
+			int nXSize, int nYSize, GdalBuffer buffer, int eBufType);
+
+	private native double getRasterNoDataValueNat(long cPtr);
+
+	private native int existsNoDataValueNat(long cPtr);
+
+	private native String[] getMetadataNat(long cPtr, String pszDomain);
+
+	private native int getRasterColorInterpretationNat(long cPtr);
+
+	private native int setRasterColorInterpretationNat(long cPtr, int bandType);
 
 	/**
 	 * Asigna el identificador de la banda
 	 */
 
-	 public GdalRasterBand(long cPtr) {
-		 this.cPtr=cPtr;
-	 }
+	public GdalRasterBand(long cPtr) {
+		this.cPtr = cPtr;
+	}
 
+	/**
+	 * Lee datos de la banda de la imï¿½gen
+	 * 
+	 * @return Devuelve un vector de bytes con el trozo de raster leï¿½do.
+	 * @param nXOff
+	 *            El desplazamiento del pixel desde la esquina superior derecha
+	 *            de la banda accedida.
+	 * @param nYOff
+	 *            El desplazamiento de lï¿½nea desde la esquina superior derecha
+	 *            de la banda accedida.
+	 * @param nXSize
+	 *            Ancho de la regiï¿½n en pixels de la banda que serï¿½ accedida
+	 * @param nYSize
+	 *            Altura de la regiï¿½n en lï¿½neas de la banda que serï¿½
+	 *            accedida
+	 * @param bufXSize
+	 *            Ancho del buffer donde la regiï¿½n de la imï¿½gen serï¿½
+	 *            guardada
+	 * @param bufYSize
+	 *            Altura del buffer donde la regiï¿½n de la imï¿½gen serï¿½
+	 *            guardada En caso de que bufXSize o bufYSize sean menores que
+	 *            1, pasan a tener el mismo valor que nXSize y nYSize
+	 *            respectivamente para evitar buffers con tamaño 0.
+	 * @param eBufType
+	 */
 
-	 /**
-	  * Lee datos de la banda de la imï¿½gen
-	  * 
-	  * @return	Devuelve un vector de bytes con el trozo de raster leï¿½do.
-	  * @param nXOff	El desplazamiento del pixel desde la esquina superior derecha
-	  * de la banda accedida.  
-	  * @param nYOff	El desplazamiento de lï¿½nea desde la esquina superior derecha
-	  * de la banda accedida. 	
-	  * @param nXSize	Ancho de la regiï¿½n en pixels de la banda que serï¿½ accedida
-	  * @param nYSize	Altura de la regiï¿½n en lï¿½neas de la banda que serï¿½ accedida
-	  * @param bufXSize	Ancho del buffer donde la regiï¿½n de la imï¿½gen serï¿½ guardada
-	  * @param bufYSize	Altura del buffer donde la regiï¿½n de la imï¿½gen serï¿½ guardada
-	  * En caso de que bufXSize o bufYSize sean menores que 1, pasan a tener el mismo valor que
-	  * nXSize y nYSize respectivamente para evitar buffers con tamaño 0. 
-	  * @param eBufType		
-	  */
+	public GdalBuffer readRaster(int nXOff, int nYOff, int nXSize, int nYSize,
+			int bufXSize, int bufYSize, int eBufType) throws GdalException {
 
-	 public GdalBuffer readRaster(int nXOff, int nYOff, int nXSize, int nYSize,
-			 int bufXSize, int bufYSize,
-			 int eBufType)throws GdalException {
-		 
-		 if (cPtr == 0)
-			 throw new GdalException("No se ha podido acceder al archivo.");
+		if (cPtr == 0)
+			throw new GdalException("No se ha podido acceder al archivo.");
 
-		 if ((nXOff<0) || (nXOff > baseSimpleFunctions(5, "", "")) || (nYOff < 0) || (nYOff > baseSimpleFunctions(6, "", "")))
-			 throw new GdalException("Desplazamiento de la ventana fuera de rango.");
+		if ((nXOff < 0) || (nXOff > baseSimpleFunctions(5, "", ""))
+				|| (nYOff < 0) || (nYOff > baseSimpleFunctions(6, "", "")))
+			throw new GdalException(
+					"Desplazamiento de la ventana fuera de rango.");
 
-		 if ((nXSize < 1) || (nXSize > baseSimpleFunctions(5, "", "")) || (nYSize<1) || (nYSize > baseSimpleFunctions(6, "", "")))
-			 throw new GdalException("Tamaño de ventana incorrecto.");
+		if ((nXSize < 1) || (nXSize > baseSimpleFunctions(5, "", ""))
+				|| (nYSize < 1) || (nYSize > baseSimpleFunctions(6, "", "")))
+			throw new GdalException("Tamaño de ventana incorrecto.");
 
-		 if (((nXSize + nXOff) > (baseSimpleFunctions(5, "", ""))) || ((nYSize + nYOff) > (baseSimpleFunctions(6, "", ""))))
-			 throw new GdalException("Posicion de la ventana incorrecta.");
-		 
-		 if ((eBufType < 1) || (eBufType > 11))
-			 throw new GdalException("Tipo de datos incorrecto.");
-		 
-		 if (bufXSize < 1)
-			 bufXSize = nXSize;
-		 
-		 if (bufYSize < 1)
-			 bufYSize = nYSize;
-		 
-		 GdalBuffer buffer = readRasterNat(cPtr, nXOff, nYOff, nXSize, nYSize, bufXSize, bufYSize, eBufType);
-		 if(buffer!=null)
-			 return buffer;
-		 else 
-			 return null;
-	 }
+		if (((nXSize + nXOff) > (baseSimpleFunctions(5, "", "")))
+				|| ((nYSize + nYOff) > (baseSimpleFunctions(6, "", ""))))
+			throw new GdalException("Posicion de la ventana incorrecta.");
 
-	 /**
-	  * Escribe datos en la banda de la imï¿½gen
-	  * 
-	  * @param nXOff	El desplazamiento del pixel desde la esquina superior derecha
-	  * de la banda accedida.  
-	  * @param nYOff	El desplazamiento de lï¿½nea desde la esquina superior derecha
-	  * de la banda accedida. 	
-	  * @param nXSize	Ancho de la regiï¿½n en pixels de la banda que serï¿½ accedida
-	  * @param nYSize	Altura de la regiï¿½n en lï¿½neas de la banda que serï¿½ accedida
-	  * @param BufXSize	Ancho del buffer donde la regiï¿½n de la imï¿½gen serï¿½ guardada
-	  * @param BufYSize	Altura del buffer donde la regiï¿½n de la imï¿½gen serï¿½ guardada
-	  * @param eBufType
-	  */
+		if ((eBufType < 1) || (eBufType > 11))
+			throw new GdalException("Tipo de datos incorrecto.");
 
-	 public void writeRaster(int nXOff, int nYOff, int nXSize, int nYSize, GdalBuffer buf, int eBufType)throws GdalException{
-		 GdalBuffer buffer=new GdalBuffer();
-		 
-		 if ((nXOff<0) || (nXOff > baseSimpleFunctions(5, "", "")) || (nYOff < 0) || (nYOff > baseSimpleFunctions(6, "", "")))
-			 throw new GdalException("Desplazamiento de la ventana fuera de rango.");
+		if (bufXSize < 1)
+			bufXSize = nXSize;
 
-		 if ((nXSize < 1) || (nXSize > baseSimpleFunctions(5, "", "")) || (nYSize<1) || (nYSize > baseSimpleFunctions(6, "", "")))
-			 throw new GdalException("Tamaño de ventana incorrecto.");
+		if (bufYSize < 1)
+			bufYSize = nYSize;
 
-		 if (((nXSize + nXOff) > (baseSimpleFunctions(5, "", ""))) || ((nYSize + nYOff) > (baseSimpleFunctions(6, "", ""))))
-			 throw new GdalException("Posicion de la ventana incorrecta.");
-		 
-		 if ((eBufType < 1) || (eBufType > 11))
-			 throw new GdalException("Tipo de datos incorrecto.");
-		 
-		 if (buf == null)
-			 throw new GdalException("Buffer incorrecto");
-		 
-		 switch(eBufType){
-		 case 0:
-			 return;
-		 case 1:
-			 buffer.buffByte=buf.buffByte;
-			 break;
-		 case 2:
-		 case 3:
-		 case 8:
-			 buffer.buffShort=buf.buffShort;
-			 break;
-		 case 4:
-		 case 5:
-		 case 9:
-			 buffer.buffInt=buf.buffInt;
-			 break;
-		 case 6:
-		 case 10:
-			 buffer.buffFloat=buf.buffFloat;
-			 break;
-		 case 7:
-		 case 11:
-			 buffer.buffDouble=buf.buffDouble;
-			 break; 		
-		 case 12:
-			 return;
-		 }
+		GdalBuffer buffer = readRasterNat(cPtr, nXOff, nYOff, nXSize, nYSize,
+				bufXSize, bufYSize, eBufType);
+		if (buffer != null)
+			return buffer;
+		else
+			return null;
+	}
 
-		 writeRasterNat(cPtr, nXOff, nYOff, nXSize, nYSize, buffer, eBufType); 	 	
-	 }
+	/**
+	 * Escribe datos en la banda de la imï¿½gen
+	 * 
+	 * @param nXOff
+	 *            El desplazamiento del pixel desde la esquina superior derecha
+	 *            de la banda accedida.
+	 * @param nYOff
+	 *            El desplazamiento de lï¿½nea desde la esquina superior derecha
+	 *            de la banda accedida.
+	 * @param nXSize
+	 *            Ancho de la regiï¿½n en pixels de la banda que serï¿½ accedida
+	 * @param nYSize
+	 *            Altura de la regiï¿½n en lï¿½neas de la banda que serï¿½
+	 *            accedida
+	 * @param BufXSize
+	 *            Ancho del buffer donde la regiï¿½n de la imï¿½gen serï¿½
+	 *            guardada
+	 * @param BufYSize
+	 *            Altura del buffer donde la regiï¿½n de la imï¿½gen serï¿½
+	 *            guardada
+	 * @param eBufType
+	 */
 
-	 /**
-	  *Obtiene el tamaï¿½o en pixeles de la imï¿½gen en el eje de las X
-	  *@return Tamaï¿½o en pixeles del eje X
-	  *@throws GdalException 
-	  */
+	public void writeRaster(int nXOff, int nYOff, int nXSize, int nYSize,
+			GdalBuffer buf, int eBufType) throws GdalException {
+		GdalBuffer buffer = new GdalBuffer();
 
-	 public int getRasterBandXSize()throws GdalException {
-		 String msg1="Error en getRasterBandXSize(). La llamada getRasterBand no tuvo exito";
-		 String msg2="Tamaï¿½o de banda erroneo devuelto por GetRasterBandXSize";
+		if ((nXOff < 0) || (nXOff > baseSimpleFunctions(5, "", ""))
+				|| (nYOff < 0) || (nYOff > baseSimpleFunctions(6, "", "")))
+			throw new GdalException(
+					"Desplazamiento de la ventana fuera de rango.");
 
-		 return baseSimpleFunctions(0,msg1,msg2);
-	 }
+		if ((nXSize < 1) || (nXSize > baseSimpleFunctions(5, "", ""))
+				|| (nYSize < 1) || (nYSize > baseSimpleFunctions(6, "", "")))
+			throw new GdalException("Tamaño de ventana incorrecto.");
 
-	 /**
-	  *Obtiene el tamaï¿½o en pixeles de la imï¿½gen en el eje de las Y
-	  *@return Tamaï¿½o en pixeles del eje Y
-	  *@throws GdalException 
-	  */
+		if (((nXSize + nXOff) > (baseSimpleFunctions(5, "", "")))
+				|| ((nYSize + nYOff) > (baseSimpleFunctions(6, "", ""))))
+			throw new GdalException("Posicion de la ventana incorrecta.");
 
-	 public int getRasterBandYSize()throws GdalException {
-		 String msg1="Error en getRasterBandYSize(). La llamada getRasterBand no tuvo exito";
-		 String msg2="Tamaï¿½o de banda erroneo devuelto por GetRasterBandYSize";
+		if ((eBufType < 1) || (eBufType > 11))
+			throw new GdalException("Tipo de datos incorrecto.");
 
-		 return baseSimpleFunctions(1,msg1,msg2);
-	 }
+		if (buf == null)
+			throw new GdalException("Buffer incorrecto");
 
+		switch (eBufType) {
+		case 0:
+			return;
+		case 1:
+			buffer.buffByte = buf.buffByte;
+			break;
+		case 2:
+		case 3:
+		case 8:
+			buffer.buffShort = buf.buffShort;
+			break;
+		case 4:
+		case 5:
+		case 9:
+			buffer.buffInt = buf.buffInt;
+			break;
+		case 6:
+		case 10:
+			buffer.buffFloat = buf.buffFloat;
+			break;
+		case 7:
+		case 11:
+			buffer.buffDouble = buf.buffDouble;
+			break;
+		case 12:
+			return;
+		}
 
-	 /**
-	  * Devuelve el nï¿½mero de overviews que contiene la banda.
-	  * @return Nï¿½mero de overviews
-	  * @throws GdalException 
-	  */
+		writeRasterNat(cPtr, nXOff, nYOff, nXSize, nYSize, buffer, eBufType);
+	}
 
-	 public int getOverviewCount()throws GdalException {
-		 String msg1="Error en getOverviewCount(). La llamada getRasterBand no tuvo exito";		
-		 String msg2="Error al obtener el nï¿½mero de overviews";
+	/**
+	 * Obtiene el tamaï¿½o en pixeles de la imï¿½gen en el eje de las X
+	 * 
+	 * @return Tamaï¿½o en pixeles del eje X
+	 * @throws GdalException
+	 */
 
-		 return baseSimpleFunctions(2,msg1,msg2);
-	 }
+	public int getRasterBandXSize() throws GdalException {
+		String msg1 = "Error en getRasterBandXSize(). La llamada getRasterBand no tuvo exito";
+		String msg2 = "Tamaï¿½o de banda erroneo devuelto por GetRasterBandXSize";
 
+		return baseSimpleFunctions(0, msg1, msg2);
+	}
 
-	 /**
-	  * Obtiene el overview indicado por el ï¿½ndice "i".
-	  * 
-	  * @param i	indice del overview que se quiere recuperar.
-	  * @return GdalRasterBand	Banda correspondiente al overview selecccionado
-	  * @throws GdalException 
-	  */
+	/**
+	 * Obtiene el tamaï¿½o en pixeles de la imï¿½gen en el eje de las Y
+	 * 
+	 * @return Tamaï¿½o en pixeles del eje Y
+	 * @throws GdalException
+	 */
 
-	 public GdalRasterBand getOverview(int i)throws GdalException {
-		 long cPtr_ov;
+	public int getRasterBandYSize() throws GdalException {
+		String msg1 = "Error en getRasterBandYSize(). La llamada getRasterBand no tuvo exito";
+		String msg2 = "Tamaï¿½o de banda erroneo devuelto por GetRasterBandYSize";
 
-		 if((i < 0) || (i >= getOverviewCount()))
-			 throw new GdalException("El overview seleccionado no existe");
+		return baseSimpleFunctions(1, msg1, msg2);
+	}
 
-		 cPtr_ov = getOverviewNat(cPtr,i);
-		 
-		 if (cPtr_ov == 0)
-			 throw new GdalException("No se ha podido obtener el overview");
+	/**
+	 * Devuelve el nï¿½mero de overviews que contiene la banda.
+	 * 
+	 * @return Nï¿½mero de overviews
+	 * @throws GdalException
+	 */
 
-		 return new GdalRasterBand(cPtr_ov);
-	 }
+	public int getOverviewCount() throws GdalException {
+		String msg1 = "Error en getOverviewCount(). La llamada getRasterBand no tuvo exito";
+		String msg2 = "Error al obtener el nï¿½mero de overviews";
 
+		return baseSimpleFunctions(2, msg1, msg2);
+	}
 
-	 /**
-	  * Devuelve el tamaï¿½o en X del bloque para esa banda
-	  * @return Tamaï¿½o en pixeles del bloque en el eje X
-	  * @throws GdalException 
-	  */
+	/**
+	 * Obtiene el overview indicado por el ï¿½ndice "i".
+	 * 
+	 * @param i
+	 *            indice del overview que se quiere recuperar.
+	 * @return GdalRasterBand Banda correspondiente al overview selecccionado
+	 * @throws GdalException
+	 */
 
-	 public int getBlockXSize()throws GdalException {
-		 String msg1="Error en getBlockXSize(). La llamada getRasterBand no tuvo exito";
-		 String msg2="Tamaï¿½o de bloque erroneo devuelto por GetBlockXSize";
+	public GdalRasterBand getOverview(int i) throws GdalException {
+		long cPtr_ov;
 
-		 return baseSimpleFunctions(3,msg1,msg2);
-	 }
+		if ((i < 0) || (i >= getOverviewCount()))
+			throw new GdalException("El overview seleccionado no existe");
 
+		cPtr_ov = getOverviewNat(cPtr, i);
 
-	 /**
-	  * Devuelve el tamaï¿½o en Y del bloque para esa banda
-	  * @return Tamaï¿½o en pixeles del bloque en el eje Y
-	  * @throws GdalException 
-	  */
+		if (cPtr_ov == 0)
+			throw new GdalException("No se ha podido obtener el overview");
 
-	 public int getBlockYSize()throws GdalException {
-		 String msg1="Error en getBlockXSize(). La llamada getRasterBand no tuvo exito";
-		 String msg2="Tamaï¿½o de bloque erroneo devuelto por GetBlockYSize";
+		return new GdalRasterBand(cPtr_ov);
+	}
 
-		 return baseSimpleFunctions(4,msg1,msg2);
-	 }
+	/**
+	 * Devuelve el tamaï¿½o en X del bloque para esa banda
+	 * 
+	 * @return Tamaï¿½o en pixeles del bloque en el eje X
+	 * @throws GdalException
+	 */
 
-	 /**
-	  * Devuelve el tipo de datos de la banda
-	  * @return Tamaï¿½o en pixeles del bloque en el eje Y
-	  * @throws GdalException 
-	  */
+	public int getBlockXSize() throws GdalException {
+		String msg1 = "Error en getBlockXSize(). La llamada getRasterBand no tuvo exito";
+		String msg2 = "Tamaï¿½o de bloque erroneo devuelto por GetBlockXSize";
 
-	 public int getRasterDataType()throws GdalException {
-		 String msg1="Error en getRasterDataType(). La llamada getRasterBand no tuvo exito";
-		 String msg2="Tipo de dato devuelto por GetRasterDataType erroneo";
+		return baseSimpleFunctions(3, msg1, msg2);
+	}
 
-		 return baseSimpleFunctions(9,msg1,msg2);
-	 }
+	/**
+	 * Devuelve el tamaï¿½o en Y del bloque para esa banda
+	 * 
+	 * @return Tamaï¿½o en pixeles del bloque en el eje Y
+	 * @throws GdalException
+	 */
 
-	 /**
-	  * Obtiene la tabla de color asociada a la imagen
-	  */
-	 public GdalColorTable getRasterColorTable()throws GdalException {
-		 GdalColorTable gct = null;
-		 
-		 if (cPtr == 0)
-			 throw new GdalException("No se ha podido acceder al archivo.");
-		 
-		 long cPtr_ct = getRasterColorTableNat(cPtr);
-		 
-		 if ((cPtr_ct == 0) || (cPtr_ct == -1))
-			 return null;
-		 
-		 gct = new GdalColorTable(cPtr_ct);
+	public int getBlockYSize() throws GdalException {
+		String msg1 = "Error en getBlockXSize(). La llamada getRasterBand no tuvo exito";
+		String msg2 = "Tamaï¿½o de bloque erroneo devuelto por GetBlockYSize";
 
-		 return gct;
-	 }
+		return baseSimpleFunctions(4, msg1, msg2);
+	}
 
-	 /**
-	  * Lee datos de la banda de la imï¿½gen con una paleta asociada
-	  * 
-	  * @return	Devuelve un vector de bytes con el trozo de raster leï¿½do.
-	  * @param nXOff	El desplazamiento del pixel desde la esquina superior derecha
-	  * de la banda accedida.  
-	  * @param nYOff	El desplazamiento de lï¿½nea desde la esquina superior derecha
-	  * de la banda accedida. 	
-	  * @param nXSize	Ancho de la regiï¿½n en pixels de la banda que serï¿½ accedida
-	  * @param nYSize	Altura de la regiï¿½n en lï¿½neas de la banda que serï¿½ accedida
-	  * @param BufXSize	Ancho del buffer donde la regiï¿½n de la imï¿½gen serï¿½ guardada
-	  * @param BufYSize	Altura del buffer donde la regiï¿½n de la imï¿½gen serï¿½ guardada
-	  * En caso de que bufXSize o bufYSize sean menores que 1, pasan a tener el mismo valor que
-	  * nXSize y nYSize respectivamente para evitar buffers con tamaño 0. 
-	  * @param eBufType		
-	  */
+	/**
+	 * Devuelve el tipo de datos de la banda
+	 * 
+	 * @return Tamaï¿½o en pixeles del bloque en el eje Y
+	 * @throws GdalException
+	 */
 
-	 public GdalBuffer readRasterWithPalette(int nXOff, int nYOff, int nXSize, int nYSize,
-			 int bufXSize, int bufYSize,
-			 int eBufType)throws GdalException {
-		 
-		 if (cPtr == 0)
-			 throw new GdalException("No se ha podido acceder al archivo.");
-		 
-		 if ((nXOff<0) || (nXOff > baseSimpleFunctions(5, "", "")) || (nYOff < 0) || (nYOff > baseSimpleFunctions(6, "", "")))
-			 throw new GdalException("Desplazamiento de la ventana fuera de rango.");
+	public int getRasterDataType() throws GdalException {
+		String msg1 = "Error en getRasterDataType(). La llamada getRasterBand no tuvo exito";
+		String msg2 = "Tipo de dato devuelto por GetRasterDataType erroneo";
 
-		 if ((nXSize < 1) || (nXSize > baseSimpleFunctions(5, "", "")) || (nYSize<1) || (nYSize > baseSimpleFunctions(6, "", "")))
-			 throw new GdalException("Tamaño de ventana incorrecto.");
+		return baseSimpleFunctions(9, msg1, msg2);
+	}
 
-		 if (((nXSize + nXOff) > (baseSimpleFunctions(5, "", ""))) || ((nYSize + nYOff) > (baseSimpleFunctions(6, "", ""))))
-			 throw new GdalException("Posicion de la ventana incorrecta.");
-		 
-		 if ((eBufType < 1) || (eBufType > 11))
-			 throw new GdalException("Tipo de datos incorrecto.");
-		 
-		 if (bufXSize < 1)
-			 bufXSize = nXSize;
-		 
-		 if (bufYSize < 1)
-			 bufYSize = nYSize;
-		 
-		 
-		 GdalBuffer buffer = readRasterWithPaletteNat(cPtr, nXOff, nYOff, nXSize, nYSize, bufXSize, bufYSize, eBufType);
+	/**
+	 * Obtiene la tabla de color asociada a la imagen
+	 */
+	public GdalColorTable getRasterColorTable() throws GdalException {
+		GdalColorTable gct = null;
 
+		if (cPtr == 0)
+			throw new GdalException("No se ha podido acceder al archivo.");
 
-		 if(buffer!=null)
-			 return buffer;
-		 else 
-			 return null;
-	 }
+		long cPtr_ct = getRasterColorTableNat(cPtr);
 
-	 /**
-	  *Devuelve el valor de NoData
-	  */
-	 public double getRasterNoDataValue()throws GdalException {
-		 if (cPtr == 0)
-			 throw new GdalException("No se ha podido acceder al archivo.");
-		 
-		 return getRasterNoDataValueNat(cPtr);
-	 }
-	 
-	 /**
-	  * Obtiene el valorDevuelve el valor de NoData
-	  */
-	 public boolean existsNoDataValue()throws GdalException {
-		 if (cPtr == 0)
-			 throw new GdalException("No se ha podido acceder al archivo.");
-		 
-		 int result = existsNoDataValueNat(cPtr);
-		 
-		 if(result == 1)
-			 return true;
-		 else 
-			 return false;
-	 }
+		if ((cPtr_ct == 0) || (cPtr_ct == -1))
+			return null;
 
-	 /**
-	  * Obtiene un array de Strings con los metadatos
-	  * 
-	  * @throws GdalException
-	  * @return Array de Strings que corresponden a los metadatos que ofrece la imï¿½gen
-	  */
+		gct = new GdalColorTable(cPtr_ct);
 
-	 public String[] getMetadata()throws GdalException {
-		 if (cPtr == 0)
-			 throw new GdalException("No se ha podido acceder al archivo.");
-		 
-		 String[] res = getMetadataNat(cPtr,null);
-		 if(res == null)
-			 return new String[0];
-		 else return res;
-	 }
+		return gct;
+	}
 
-	 /**
-	  * Obtiene identificador que representa el tipo de banda de color. 
-	  * @return	identificador del tipo de banda de color
-	  * @throws GdalException
-	  */
+	/**
+	 * Lee datos de la banda de la imï¿½gen con una paleta asociada
+	 * 
+	 * @return Devuelve un vector de bytes con el trozo de raster leï¿½do.
+	 * @param nXOff
+	 *            El desplazamiento del pixel desde la esquina superior derecha
+	 *            de la banda accedida.
+	 * @param nYOff
+	 *            El desplazamiento de lï¿½nea desde la esquina superior derecha
+	 *            de la banda accedida.
+	 * @param nXSize
+	 *            Ancho de la regiï¿½n en pixels de la banda que serï¿½ accedida
+	 * @param nYSize
+	 *            Altura de la regiï¿½n en lï¿½neas de la banda que serï¿½
+	 *            accedida
+	 * @param BufXSize
+	 *            Ancho del buffer donde la regiï¿½n de la imï¿½gen serï¿½
+	 *            guardada
+	 * @param BufYSize
+	 *            Altura del buffer donde la regiï¿½n de la imï¿½gen serï¿½
+	 *            guardada En caso de que bufXSize o bufYSize sean menores que
+	 *            1, pasan a tener el mismo valor que nXSize y nYSize
+	 *            respectivamente para evitar buffers con tamaño 0.
+	 * @param eBufType
+	 */
 
-	 public int getRasterColorInterpretation()throws GdalException {
-		 if (cPtr == 0)
-			 throw new GdalException("No se ha podido acceder al archivo.");
+	public GdalBuffer readRasterWithPalette(int nXOff, int nYOff, int nXSize,
+			int nYSize, int bufXSize, int bufYSize, int eBufType)
+			throws GdalException {
 
-		 int bandType = getRasterColorInterpretationNat(cPtr);
-		 return bandType;		
-	 }
+		if (cPtr == 0)
+			throw new GdalException("No se ha podido acceder al archivo.");
 
+		if ((nXOff < 0) || (nXOff > baseSimpleFunctions(5, "", ""))
+				|| (nYOff < 0) || (nYOff > baseSimpleFunctions(6, "", "")))
+			throw new GdalException(
+					"Desplazamiento de la ventana fuera de rango.");
 
-	 /**
-	  * Asigna la interpretación de color de la banda.
-	  * Con algunos formatos no es posible modificar la interpretación de color, 
-	  * tales como tiff y jpg. En el caso de tif, no hay error pero tampoco se
-	  * produce el cambio en la interpretación. En el caso de jpg, gdal lanza un error.
-	  * 0 = "Undefined"
-	  * 1 = "Gray";
-	  * 2 = "Palette";
-	  * 3 = "Red";
-	  * 4 = "Green";
-	  * 5 = "Blue";
-	  * 6 = "Alpha";
-	  * 7 = "Hue";
-	  * 8 = "Saturation";
-	  * 9 = "Lightness";
-	  * 10 = "Cyan";
-	  * 11 = "Magenta";
-	  * 12 = "Yellow";
-	  * 13 = "Black";
-	  * 14 = "YCbCr_Y";
-	  * 15 = "YCbCr_Cb";
-	  * 16 = "YCbCr_Cr";
-	  * @param bandType
-	  * @throws GdalException
-	  */
-	 public void setRasterColorInterpretation(int bandType) throws GdalException{
-		 if (cPtr == 0)
-			 throw new GdalException("No se ha podido acceder al archivo.");
-		 
-		 if ((bandType < 0) || (bandType > 16)){
-			 throw new GdalException("Tipo de banda incorrecto");
-		 }
-		 
-		 int err = setRasterColorInterpretationNat(cPtr, bandType);
-		 
-	 }
+		if ((nXSize < 1) || (nXSize > baseSimpleFunctions(5, "", ""))
+				|| (nYSize < 1) || (nYSize > baseSimpleFunctions(6, "", "")))
+			throw new GdalException("Tamaño de ventana incorrecto.");
+
+		if (((nXSize + nXOff) > (baseSimpleFunctions(5, "", "")))
+				|| ((nYSize + nYOff) > (baseSimpleFunctions(6, "", ""))))
+			throw new GdalException("Posicion de la ventana incorrecta.");
+
+		if ((eBufType < 1) || (eBufType > 11))
+			throw new GdalException("Tipo de datos incorrecto.");
+
+		if (bufXSize < 1)
+			bufXSize = nXSize;
+
+		if (bufYSize < 1)
+			bufYSize = nYSize;
+
+		GdalBuffer buffer = readRasterWithPaletteNat(cPtr, nXOff, nYOff,
+				nXSize, nYSize, bufXSize, bufYSize, eBufType);
+
+		if (buffer != null)
+			return buffer;
+		else
+			return null;
+	}
+
+	/**
+	 * Devuelve el valor de NoData
+	 */
+	public double getRasterNoDataValue() throws GdalException {
+		if (cPtr == 0)
+			throw new GdalException("No se ha podido acceder al archivo.");
+
+		return getRasterNoDataValueNat(cPtr);
+	}
+
+	/**
+	 * Obtiene el valorDevuelve el valor de NoData
+	 */
+	public boolean existsNoDataValue() throws GdalException {
+		if (cPtr == 0)
+			throw new GdalException("No se ha podido acceder al archivo.");
+
+		int result = existsNoDataValueNat(cPtr);
+
+		if (result == 1)
+			return true;
+		else
+			return false;
+	}
+
+	/**
+	 * Obtiene un array de Strings con los metadatos
+	 * 
+	 * @throws GdalException
+	 * @return Array de Strings que corresponden a los metadatos que ofrece la
+	 *         imï¿½gen
+	 */
+
+	public String[] getMetadata() throws GdalException {
+		if (cPtr == 0)
+			throw new GdalException("No se ha podido acceder al archivo.");
+
+		String[] res = getMetadataNat(cPtr, null);
+		if (res == null)
+			return new String[0];
+		else
+			return res;
+	}
+
+	/**
+	 * Obtiene identificador que representa el tipo de banda de color.
+	 * 
+	 * @return identificador del tipo de banda de color
+	 * @throws GdalException
+	 */
+
+	public int getRasterColorInterpretation() throws GdalException {
+		if (cPtr == 0)
+			throw new GdalException("No se ha podido acceder al archivo.");
+
+		int bandType = getRasterColorInterpretationNat(cPtr);
+		return bandType;
+	}
+
+	/**
+	 * Asigna la interpretación de color de la banda. Con algunos formatos no es
+	 * posible modificar la interpretación de color, tales como tiff y jpg. En
+	 * el caso de tif, no hay error pero tampoco se produce el cambio en la
+	 * interpretación. En el caso de jpg, gdal lanza un error. 0 = "Undefined" 1
+	 * = "Gray"; 2 = "Palette"; 3 = "Red"; 4 = "Green"; 5 = "Blue"; 6 = "Alpha";
+	 * 7 = "Hue"; 8 = "Saturation"; 9 = "Lightness"; 10 = "Cyan"; 11 =
+	 * "Magenta"; 12 = "Yellow"; 13 = "Black"; 14 = "YCbCr_Y"; 15 = "YCbCr_Cb";
+	 * 16 = "YCbCr_Cr";
+	 * 
+	 * @param bandType
+	 * @throws GdalException
+	 */
+	public void setRasterColorInterpretation(int bandType) throws GdalException {
+		if (cPtr == 0)
+			throw new GdalException("No se ha podido acceder al archivo.");
+
+		if ((bandType < 0) || (bandType > 16)) {
+			throw new GdalException("Tipo de banda incorrecto");
+		}
+
+		int err = setRasterColorInterpretationNat(cPtr, bandType);
+
+	}
 
 }

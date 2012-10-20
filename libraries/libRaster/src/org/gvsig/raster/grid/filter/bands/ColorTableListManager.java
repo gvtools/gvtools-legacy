@@ -31,16 +31,17 @@ import org.gvsig.raster.grid.filter.RasterFilter;
 import org.gvsig.raster.grid.filter.RasterFilterList;
 import org.gvsig.raster.grid.filter.RasterFilterListManager;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
+
 /**
  * Gestor del filtro de aplicación de tablas de color sobre un raster.
- *
+ * 
  * @version 06/06/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public class ColorTableListManager  implements IRasterFilterListManager {
+public class ColorTableListManager implements IRasterFilterListManager {
 
-	protected RasterFilterList	filterList = null;
+	protected RasterFilterList filterList = null;
 
 	/**
 	 * Registra ColorTableListManager en los puntos de extension de RasterFilter
@@ -51,9 +52,8 @@ public class ColorTableListManager  implements IRasterFilterListManager {
 	}
 
 	/**
-	 * Constructor.
-	 * Asigna la lista de filtros y el managener global.
-	 *
+	 * Constructor. Asigna la lista de filtros y el managener global.
+	 * 
 	 * @param filterListManager
 	 */
 	public ColorTableListManager(RasterFilterListManager filterListManager) {
@@ -62,13 +62,16 @@ public class ColorTableListManager  implements IRasterFilterListManager {
 
 	/**
 	 * Añade un filtro de tabla de color a la pila de filtros.
+	 * 
 	 * @param ladoVentana
- * @throws FilterTypeException
+	 * @throws FilterTypeException
 	 */
-	public void addColorTableFilter(GridPalette palette) throws FilterTypeException {
+	public void addColorTableFilter(GridPalette palette)
+			throws FilterTypeException {
 		RasterFilter filter = new ColorTableByteFilter();
 
-		//Cuando el filtro esta creado, tomamos los valores y lo añadimos a la pila
+		// Cuando el filtro esta creado, tomamos los valores y lo añadimos a la
+		// pila
 
 		if (filter != null) {
 			filter.addParam("colorTable", palette);
@@ -78,7 +81,10 @@ public class ColorTableListManager  implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList()
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList
+	 * ()
 	 */
 	public ArrayList getRasterFilterList() {
 		ArrayList filters = new ArrayList();
@@ -86,7 +92,8 @@ public class ColorTableListManager  implements IRasterFilterListManager {
 		return filters;
 	}
 
-	public void addFilter(Class classFilter, Params params) throws FilterTypeException {
+	public void addFilter(Class classFilter, Params params)
+			throws FilterTypeException {
 		if (classFilter.equals(ColorTableFilter.class)) {
 			GridPalette colorTable = null;
 			for (int i = 0; i < params.getNumParams(); i++) {
@@ -100,6 +107,7 @@ public class ColorTableListManager  implements IRasterFilterListManager {
 	/**
 	 * Devuelve el color si lo encuentra en el arraylist y lo elimina, en caso
 	 * contrario devuelve null
+	 * 
 	 * @param list
 	 * @param value
 	 * @return
@@ -115,15 +123,15 @@ public class ColorTableListManager  implements IRasterFilterListManager {
 
 	public static ColorTable createColorTableFromArray(ArrayList lines) {
 		String pkgBase = "filter.colortable.";
-		
+
 		boolean existsTable = false;
 		for (int i = 0; i < lines.size(); i++) {
-			if(((String)lines.get(i)).startsWith(pkgBase))
+			if (((String) lines.get(i)).startsWith(pkgBase))
 				existsTable = true;
 		}
-		if(!existsTable)
+		if (!existsTable)
 			return null;
-		
+
 		ArrayList linesCloned = (ArrayList) lines.clone();
 
 		String paletteName = "";
@@ -146,26 +154,41 @@ public class ColorTableListManager  implements IRasterFilterListManager {
 				paletteName = RasterFilterListManager.getValue(elem);
 
 			if (elem.startsWith(pkgBase + "interpolated"))
-				interpolated = Boolean.parseBoolean(RasterFilterListManager.getValue(elem));
+				interpolated = Boolean.parseBoolean(RasterFilterListManager
+						.getValue(elem));
 
 			if (elem.startsWith(pkgBase + "color" + color)) {
 				if (elem.startsWith(pkgBase + "color" + color + ".value"))
-					colorItem.setValue(Double.parseDouble(RasterFilterListManager.getValue(elem)));
+					colorItem
+							.setValue(Double
+									.parseDouble(RasterFilterListManager
+											.getValue(elem)));
 				if (elem.startsWith(pkgBase + "color" + color + ".name"))
-					colorItem.setNameClass(RasterFilterListManager.getValue(elem));
+					colorItem.setNameClass(RasterFilterListManager
+							.getValue(elem));
 				if (elem.startsWith(pkgBase + "color" + color + ".rgb")) {
 
 					String rgb = RasterFilterListManager.getValue(elem);
-					int r = Integer.valueOf(rgb.substring(0, rgb.indexOf(","))).intValue();
-					int g = Integer.valueOf(rgb.substring(rgb.indexOf(",") + 1, rgb.lastIndexOf(","))).intValue();
-					int b = Integer.valueOf(rgb.substring(rgb.lastIndexOf(",") + 1, rgb.length())).intValue();
+					int r = Integer.valueOf(rgb.substring(0, rgb.indexOf(",")))
+							.intValue();
+					int g = Integer.valueOf(
+							rgb.substring(rgb.indexOf(",") + 1,
+									rgb.lastIndexOf(","))).intValue();
+					int b = Integer.valueOf(
+							rgb.substring(rgb.lastIndexOf(",") + 1,
+									rgb.length())).intValue();
 
 					colorItem.setColor(new Color(r, g, b));
 				}
 				if (elem.startsWith(pkgBase + "color" + color + ".interpolated"))
-					colorItem.setInterpolated(Double.parseDouble(RasterFilterListManager.getValue(elem)));
+					colorItem
+							.setInterpolated(Double
+									.parseDouble(RasterFilterListManager
+											.getValue(elem)));
 
-				if ((linesCloned.size() <= 1) || (!((String) linesCloned.get(1)).startsWith(pkgBase + "color" + color))) {
+				if ((linesCloned.size() <= 1)
+						|| (!((String) linesCloned.get(1)).startsWith(pkgBase
+								+ "color" + color))) {
 					rows.add(colorItem);
 					color++;
 					colorItem = new ColorItem();
@@ -174,24 +197,39 @@ public class ColorTableListManager  implements IRasterFilterListManager {
 
 			if (elem.startsWith(pkgBase + "alpha" + alpha)) {
 				if (elem.startsWith(pkgBase + "alpha" + alpha + ".value")) {
-					ColorItem aux = getColorItem(rows, Double.parseDouble(RasterFilterListManager.getValue(elem)));
+					ColorItem aux = getColorItem(rows,
+							Double.parseDouble(RasterFilterListManager
+									.getValue(elem)));
 					if (aux != null) {
 						colorItem = aux;
 						colorItem.setNameClass(aux.getNameClass());
 						colorItem.setInterpolated(aux.getInterpolated());
-						colorItem.setColor(new Color(aux.getColor().getRed(), aux.getColor().getGreen(), aux.getColor().getBlue(), colorItem.getColor().getAlpha()));
+						colorItem.setColor(new Color(aux.getColor().getRed(),
+								aux.getColor().getGreen(), aux.getColor()
+										.getBlue(), colorItem.getColor()
+										.getAlpha()));
 					}
 
-					colorItem.setValue(Double.parseDouble(RasterFilterListManager.getValue(elem)));
+					colorItem
+							.setValue(Double
+									.parseDouble(RasterFilterListManager
+											.getValue(elem)));
 				}
 				if (elem.startsWith(pkgBase + "alpha" + alpha + ".a")) {
 					Color c = colorItem.getColor();
-					colorItem.setColor(new Color(c.getRed(), c.getGreen(), c.getBlue(),Integer.parseInt(RasterFilterListManager.getValue(elem))));
+					colorItem.setColor(new Color(c.getRed(), c.getGreen(), c
+							.getBlue(), Integer
+							.parseInt(RasterFilterListManager.getValue(elem))));
 				}
 				if (elem.startsWith(pkgBase + "alpha" + alpha + ".interpolated"))
-					colorItem.setInterpolated(Double.parseDouble(RasterFilterListManager.getValue(elem)));
+					colorItem
+							.setInterpolated(Double
+									.parseDouble(RasterFilterListManager
+											.getValue(elem)));
 
-				if ((linesCloned.size() <= 1) || (!((String) linesCloned.get(1)).startsWith(pkgBase + "alpha" + alpha))) {
+				if ((linesCloned.size() <= 1)
+						|| (!((String) linesCloned.get(1)).startsWith(pkgBase
+								+ "alpha" + alpha))) {
 					rows.add(colorItem);
 					alpha++;
 					colorItem = new ColorItem();
@@ -213,9 +251,12 @@ public class ColorTableListManager  implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#createFilterListFromStrings(java.util.ArrayList, java.lang.String, int)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#
+	 * createFilterListFromStrings(java.util.ArrayList, java.lang.String, int)
 	 */
-	public int createFilterListFromStrings(ArrayList filters, String fil, int filteri) throws FilterTypeException {
+	public int createFilterListFromStrings(ArrayList filters, String fil,
+			int filteri) throws FilterTypeException {
 		String pkgBase = "filter.colortable.";
 		if (fil.startsWith(pkgBase + "active")) {
 			boolean exec = true;
@@ -228,7 +269,8 @@ public class ColorTableListManager  implements IRasterFilterListManager {
 			filterList.remove(ColorTableFilter.class);
 			addColorTableFilter(new GridPalette(colorTable));
 
-			ColorTableFilter ct = (ColorTableFilter) filterList.getFilterByBaseClass(ColorTableFilter.class);
+			ColorTableFilter ct = (ColorTableFilter) filterList
+					.getFilterByBaseClass(ColorTableFilter.class);
 			ct.setExec(exec);
 		}
 		return filteri;
@@ -236,13 +278,18 @@ public class ColorTableListManager  implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#getStringsFromFilterList(java.util.ArrayList, org.gvsig.raster.grid.filter.RasterFilter)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#
+	 * getStringsFromFilterList(java.util.ArrayList,
+	 * org.gvsig.raster.grid.filter.RasterFilter)
 	 */
-	public ArrayList getStringsFromFilterList(ArrayList filterList, RasterFilter rf) {
+	public ArrayList getStringsFromFilterList(ArrayList filterList,
+			RasterFilter rf) {
 		if (rf instanceof ColorTableFilter) {
 			String pkgBase = "filter.colortable.";
 			ColorTableFilter colorTableFilter = (ColorTableFilter) rf;
-			ColorTable colorTable = (ColorTable) colorTableFilter.getParam("colorTable");
+			ColorTable colorTable = (ColorTable) colorTableFilter
+					.getParam("colorTable");
 			if (colorTable != null) {
 				if (colorTableFilter.isExec())
 					filterList.add(pkgBase + "active=true");
@@ -250,23 +297,33 @@ public class ColorTableListManager  implements IRasterFilterListManager {
 					filterList.add(pkgBase + "active=false");
 
 				filterList.add(pkgBase + "name=" + colorTable.getName());
-				filterList.add(pkgBase + "interpolated=" + colorTable.isInterpolated());
+				filterList.add(pkgBase + "interpolated="
+						+ colorTable.isInterpolated());
 
 				for (int i = 0; i < colorTable.getColorItems().size(); i++) {
-					ColorItem colorItem = (ColorItem) colorTable.getColorItems().get(i);
-					filterList.add(pkgBase + "color" + i + ".value=" + colorItem.getValue());
-					filterList.add(pkgBase + "color" + i + ".name=" + colorItem.getNameClass());
+					ColorItem colorItem = (ColorItem) colorTable
+							.getColorItems().get(i);
+					filterList.add(pkgBase + "color" + i + ".value="
+							+ colorItem.getValue());
+					filterList.add(pkgBase + "color" + i + ".name="
+							+ colorItem.getNameClass());
 					Color c = colorItem.getColor();
-					filterList.add(pkgBase + "color" + i + ".rgb=" + c.getRed() + "," + c.getGreen() + "," + c.getBlue());
-					filterList.add(pkgBase + "color" + i + ".interpolated=" + colorItem.getInterpolated());
+					filterList.add(pkgBase + "color" + i + ".rgb=" + c.getRed()
+							+ "," + c.getGreen() + "," + c.getBlue());
+					filterList.add(pkgBase + "color" + i + ".interpolated="
+							+ colorItem.getInterpolated());
 				}
 
 				for (int i = 0; i < colorTable.getColorItems().size(); i++) {
-					ColorItem colorItem = (ColorItem) colorTable.getColorItems().get(i);
-					filterList.add(pkgBase + "alpha" + i + ".value=" + colorItem.getValue());
+					ColorItem colorItem = (ColorItem) colorTable
+							.getColorItems().get(i);
+					filterList.add(pkgBase + "alpha" + i + ".value="
+							+ colorItem.getValue());
 					Color c = colorItem.getColor();
-					filterList.add(pkgBase + "alpha" + i + ".a=" + c.getAlpha());
-					filterList.add(pkgBase + "alpha" + i + ".interpolated=" + colorItem.getInterpolated());
+					filterList
+							.add(pkgBase + "alpha" + i + ".a=" + c.getAlpha());
+					filterList.add(pkgBase + "alpha" + i + ".interpolated="
+							+ colorItem.getInterpolated());
 				}
 			}
 		}

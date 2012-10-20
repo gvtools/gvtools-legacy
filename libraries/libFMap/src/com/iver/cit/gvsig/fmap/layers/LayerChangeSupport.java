@@ -45,40 +45,54 @@ import java.util.Iterator;
 
 import com.iver.cit.gvsig.fmap.rendering.LegendListener;
 
-
 /**
- * <p>Manages all legend listeners of a layer, notifying them any legend change event produced.</p>
- *
+ * <p>
+ * Manages all legend listeners of a layer, notifying them any legend change
+ * event produced.
+ * </p>
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LayerChangeSupport {
 	/**
-	 * <p>The legend listeners of a layer.</p>
+	 * <p>
+	 * The legend listeners of a layer.
+	 * </p>
 	 */
 	private ArrayList listeners = new ArrayList();
 
 	/**
-	 * <p>Registers a <code>LegendListener</code>.</p>
+	 * <p>
+	 * Registers a <code>LegendListener</code>.
+	 * </p>
 	 * 
-	 * @param listener the legend listener
+	 * @param listener
+	 *            the legend listener
 	 */
 	public void addLayerListener(LegendListener listener) {
 		listeners.add(listener);
 	}
 
 	/**
-	 * <p>Removes a registered <code>LegendListener</code>.</p>
-	 *
-	 * @param listener the legend listener
+	 * <p>
+	 * Removes a registered <code>LegendListener</code>.
+	 * </p>
+	 * 
+	 * @param listener
+	 *            the legend listener
 	 */
 	public void removeLayerListener(LegendListener listener) {
 		listeners.remove(listener);
 	}
 
 	/**
-	 * <p>Notifies a legend change to all legend listeners registered.</p>
-	 *
-	 * @param e a legend event with the new legend and events that compound this one
+	 * <p>
+	 * Notifies a legend change to all legend listeners registered.
+	 * </p>
+	 * 
+	 * @param e
+	 *            a legend event with the new legend and events that compound
+	 *            this one
 	 */
 	public void callLegendChanged(LegendChangedEvent e) {
 		for (Iterator iter = listeners.iterator(); iter.hasNext();) {

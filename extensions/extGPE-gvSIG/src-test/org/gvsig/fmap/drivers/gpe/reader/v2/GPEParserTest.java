@@ -69,50 +69,53 @@ import com.iver.cit.gvsig.fmap.layers.LayerFactory;
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public abstract class GPEParserTest extends TestCase {
-	private String gpeDriversFile = "config" + File.separatorChar +
-			"parser.properties";
+	private String gpeDriversFile = "config" + File.separatorChar
+			+ "parser.properties";
 	private MapControl mapControl = null;
 	private GMLVectorialDriver driver = null;
 	private FLyrVect layer = null;
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see junit.framework.TestCase#setUp()
 	 */
-	public void setUp() throws FileNotFoundException, IOException{
-//		LayerFactory.setDriversPath("../_fwAndami/gvSIG/extensiones/com.iver.cit.gvsig/drivers");
-//		LayerFactory.setWritersPath("../_fwAndami/gvSIG/extensiones/com.iver.cit.gvsig/drivers");
-//		System.out.println("****************READERS****************");
-//		for (int i=0 ; i<LayerFactory.getDM().getDriverNames().length ; i++){
-//			System.out.println(LayerFactory.getDM().getDriverNames()[i]);
-//		}
-//		System.out.println("****************WRITERS****************");
-//		for (int i=0 ; i<LayerFactory.getWM().getWriterNames().length ; i++){
-//			System.out.println(LayerFactory.getWM().getWriterNames()[i]);
-//		}
-//		System.out.println("*************** GPE register *************");
+	public void setUp() throws FileNotFoundException, IOException {
+		// LayerFactory.setDriversPath("../_fwAndami/gvSIG/extensiones/com.iver.cit.gvsig/drivers");
+		// LayerFactory.setWritersPath("../_fwAndami/gvSIG/extensiones/com.iver.cit.gvsig/drivers");
+		// System.out.println("****************READERS****************");
+		// for (int i=0 ; i<LayerFactory.getDM().getDriverNames().length ; i++){
+		// System.out.println(LayerFactory.getDM().getDriverNames()[i]);
+		// }
+		// System.out.println("****************WRITERS****************");
+		// for (int i=0 ; i<LayerFactory.getWM().getWriterNames().length ; i++){
+		// System.out.println(LayerFactory.getWM().getWriterNames()[i]);
+		// }
+		// System.out.println("*************** GPE register *************");
 		GPERegister.addParsersFile(new File(gpeDriversFile));
 		driver = new GMLVectorialDriver();
 		driver.open(new File(getFile()));
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see junit.framework.TestCase#tearDown()
 	 */
-	public void tearDown(){
-		for (int i=0 ; i<getLayer().getNumErrors() ; i++){
+	public void tearDown() {
+		for (int i = 0; i < getLayer().getNumErrors(); i++) {
 			System.out.println(getLayer().getError(i));
 		}
-		assertEquals(getLayer().getNumErrors(),0);
-		
+		assertEquals(getLayer().getNumErrors(), 0);
+
 	}
-	
+
 	/**
 	 * The test
+	 * 
 	 * @throws Exception
 	 */
-	public void testParse() throws Exception{
+	public void testParse() throws Exception {
 		CoordinateReferenceSystem crs = ProjectionUtils.getCRS("EPSG:23030");
 		ViewPort vp = new ViewPort(crs);
 		MapContext mapContext = new MapContext(vp);
@@ -120,15 +123,15 @@ public abstract class GPEParserTest extends TestCase {
 		mapControl.setMapContext(mapContext);
 		makeAsserts();
 	}
-	
+
 	/**
 	 * @return The GPE parser
 	 * @throws GPEParserCreationException
-	 */	
-	protected GPEParser getParser() throws ParserCreationException{
+	 */
+	protected GPEParser getParser() throws ParserCreationException {
 		return GPERegister.createParser("GML");
 	}
-	
+
 	/**
 	 * @return the file to load
 	 */
@@ -136,7 +139,8 @@ public abstract class GPEParserTest extends TestCase {
 
 	/**
 	 * Make the asserts
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 */
 	public abstract void makeAsserts() throws Exception;
 
@@ -146,12 +150,12 @@ public abstract class GPEParserTest extends TestCase {
 	public MapControl getMapControl() {
 		return mapControl;
 	}
-	
+
 	/**
 	 * @return the parent layer
 	 */
-	public FLyrVect getLayer(){
-		if (layer == null){
+	public FLyrVect getLayer() {
+		if (layer == null) {
 			layer = (FLyrVect) LayerFactory.createLayer("Test", driver,
 					ProjectionUtils.getCRS("EPSG:23030"));
 		}

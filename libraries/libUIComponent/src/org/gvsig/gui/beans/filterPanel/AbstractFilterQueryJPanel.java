@@ -80,14 +80,16 @@ import org.gvsig.gui.beans.panelGroup.panels.AbstractPanel;
  */
 
 /**
- * This abstract class represents the common components of the FilterQuery panels
+ * This abstract class represents the common components of the FilterQuery
+ * panels
  * 
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
-public abstract class AbstractFilterQueryJPanel extends AbstractPanel implements Serializable {
+public abstract class AbstractFilterQueryJPanel extends AbstractPanel implements
+		Serializable {
 	public static final int DefaultHeight = 280;
-	public static final int DefaultWidth = 490; 
-	
+	public static final int DefaultWidth = 490;
+
 	protected final int fieldsJPanelHeight = 145;
 	protected final int fieldsJPanelWidth = 145;
 	protected final int valuesJPanelHeight = fieldsJPanelHeight;
@@ -102,7 +104,7 @@ public abstract class AbstractFilterQueryJPanel extends AbstractPanel implements
 	protected final int defaultTopJPanelHeight = 145;
 	protected int fieldsAndValuesJScrollPaneHeight = 110;
 	protected int fieldsAndValuesJScrollPaneWidth = fieldsJPanelWidth;
-	
+
 	protected JLabelML fieldsJLabel = null;
 	protected JLabelML valuesJLabel = null;
 	protected JPanelML fieldsJPanel = null;
@@ -115,39 +117,39 @@ public abstract class AbstractFilterQueryJPanel extends AbstractPanel implements
 	protected JTreeML fieldsJTree = null;
 	protected JListML valuesJList = null;
 	protected JScrollPaneML fieldsJScrollPane = null;
-	protected JScrollPaneML valuesJScrollPane = null;		
+	protected JScrollPaneML valuesJScrollPane = null;
 
 	protected String title;
-	
+
 	protected DefaultTreeModel defaultTreeModel;
 	protected DefaultListModel valuesListModel;
-		
+
 	// A set with all simbols or operator names used
 	private Set<String> operatorSymbols;
-	
-	
+
 	/**
 	 * This is the default constructor
 	 */
-	public AbstractFilterQueryJPanel(String _title) {		
+	public AbstractFilterQueryJPanel(String _title) {
 		super();
 		title = _title;
 	}
+
 	/**
 	 * This is the default constructor
 	 */
-	public AbstractFilterQueryJPanel() {		
+	public AbstractFilterQueryJPanel() {
 		super();
 	}
-	
+
 	/**
 	 * This method initializes this
 	 */
 	protected void initialize() {
 		operatorSymbols = new HashSet<String>();
-			
+
 		operatorSymbols.add("and");
-//		operatorSymbols.add("Date");
+		// operatorSymbols.add("Date");
 		operatorSymbols.add("<>"); // In SQL this is the formal operator
 		operatorSymbols.add("!="); // This operator is also supported
 		operatorSymbols.add("=");
@@ -161,7 +163,7 @@ public abstract class AbstractFilterQueryJPanel extends AbstractPanel implements
 		operatorSymbols.add("<");
 
 		this.setPreferredSize(new Dimension(DefaultWidth, DefaultHeight));
-		
+
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -173,59 +175,60 @@ public abstract class AbstractFilterQueryJPanel extends AbstractPanel implements
 		gridBagConstraints.anchor = GridBagConstraints.SOUTH;
 		this.add(getBottomJPanel(), gridBagConstraints);
 	}
-	
+
 	/**
 	 * This method initializes topJPanel
 	 * 
 	 * @return javax.swing.JPanel
 	 */
 	protected abstract javax.swing.JPanel getTopJPanel();
-	
+
 	/**
 	 * This method initializes bottomJPanel
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	protected abstract JPanel getBottomJPanel();	
-	
+	protected abstract JPanel getBottomJPanel();
+
 	/**
 	 * This method initializes fieldsJLabel
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	protected JLabel getFieldsJLabel() {
 		if (fieldsJLabel == null) {
 			fieldsJLabel = new JLabelML();
-			fieldsJLabel.setText(Messages.getText("fields_uppercase_first") + ":");
+			fieldsJLabel.setText(Messages.getText("fields_uppercase_first")
+					+ ":");
 		}
 
 		return fieldsJLabel;
-	}	
+	}
 
 	/**
 	 * This method initializes valuesJList
-	 *
+	 * 
 	 * @return javax.swing.JList
 	 */
 	protected abstract javax.swing.JList getValuesJList();
-	
+
 	/**
 	 * This method initializes fieldsJPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	protected abstract JPanel getFieldsJPanel();
 
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	protected abstract javax.swing.JScrollPane getFieldsJScrollPane();
 
 	/**
 	 * This method initializes valuesJLabel
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	protected javax.swing.JLabel getValuesJLabel() {
@@ -236,44 +239,46 @@ public abstract class AbstractFilterQueryJPanel extends AbstractPanel implements
 
 		return valuesJLabel;
 	}
-	
+
 	/**
 	 * This method initializes valuesJPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	protected abstract JPanel getValuesJPanel();
-	
+
 	/**
 	 * This method initializes jScrollPane1
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	protected abstract javax.swing.JScrollPane getValuesJScrollPane();
-	
+
 	/**
 	 * This method initializes filterJScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	protected abstract javax.swing.JScrollPane getFilterJScrollPane();
 
 	/**
 	 * This method initializes txtExpression
-	 *
+	 * 
 	 * @return javax.swing.JTextArea
 	 */
 	protected abstract javax.swing.JTextArea getTxtExpression();
-	
+
 	/**
 	 * Adds a symbol to the filter expression.
-	 *
-	 * @param symbol symbol to add
+	 * 
+	 * @param symbol
+	 *            symbol to add
 	 */
 	protected void putSymbol(String symbol) {
 		int position = getTxtExpression().getCaretPosition();
-		
-		getTxtExpression().setText(insert(getTxtExpression().getText(), position, symbol));
+
+		getTxtExpression().setText(
+				insert(getTxtExpression().getText(), position, symbol));
 
 		if (symbol.equals(" () ")) {
 			position = position + 2;
@@ -283,22 +288,22 @@ public abstract class AbstractFilterQueryJPanel extends AbstractPanel implements
 
 		getTxtExpression().setCaretPosition(position);
 	}
-	
+
 	/**
 	 * This method initializes fieldsJTree
-	 *
+	 * 
 	 * @return org.gvsig.gui.beans.swing.jTree
 	 */
 	protected javax.swing.JTree getFieldsJTree() {
 		if (fieldsJTree == null) {
-			fieldsJTree = new JTreeML(new Vector(0,1));
-			
+			fieldsJTree = new JTreeML(new Vector(0, 1));
+
 			// Remove icons:
 			DefaultTreeCellRenderer defaultTreeCellRenderer = new DefaultTreeCellRenderer();
 			defaultTreeCellRenderer.setOpenIcon(null);
 			defaultTreeCellRenderer.setClosedIcon(null);
 			defaultTreeCellRenderer.setLeafIcon(null);
-			
+
 			// Root not visible
 			fieldsJTree.setRootVisible(false);
 			fieldsJTree.setCellRenderer(defaultTreeCellRenderer);
@@ -306,81 +311,92 @@ public abstract class AbstractFilterQueryJPanel extends AbstractPanel implements
 
 		return fieldsJTree;
 	}
-	
-    /**
-     * Inserts an <i>string</i> at a position of another one.
-     *
-     * @param base original <i>string</i> where will be inserted
-     * @param position position at the <i>string</i> where will be inserted
-     * @param graft <i>string</i> to insert
-     *
-     * @return the new <i>string</i> with the graft inserted in
-     */
-    protected static String insert(String base, int position, String graft) {
-        return base.substring(0, position) + graft + base.substring(position);
-    }
+
+	/**
+	 * Inserts an <i>string</i> at a position of another one.
+	 * 
+	 * @param base
+	 *            original <i>string</i> where will be inserted
+	 * @param position
+	 *            position at the <i>string</i> where will be inserted
+	 * @param graft
+	 *            <i>string</i> to insert
+	 * 
+	 * @return the new <i>string</i> with the graft inserted in
+	 */
+	protected static String insert(String base, int position, String graft) {
+		return base.substring(0, position) + graft + base.substring(position);
+	}
 
 	/**
 	 * This method initializes filterButtonsJPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	protected JPanel getFilterButtonsJPanel() {
 		if (filterButtonsJPanel == null) {
 			filterButtonsJPanel = new FilterButtonsJPanel();
-			filterButtonsJPanel.setPreferredSize(new Dimension(filterButtonsPanelWidth, filterButtonsPanelHeight));
-			filterButtonsJPanel.addPropertyChangeListener(new PropertyChangeListener() {
-				/*
-				 *  (non-Javadoc)
-				 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
-				 */
-				public void propertyChange(PropertyChangeEvent arg0) {
-					if (arg0.getPropertyName().equals(FilterButtonsJPanel.BUTTON_CLICKED_ACTION_COMMAND)) {
-		            	
-						switch(Integer.parseInt(arg0.getNewValue().toString()))	{
-							case FilterButtonsJPanel.AND:
-								putSymbol(" and ");
-								break;
-							case FilterButtonsJPanel.DATE:
-								putSymbol( ((FilterButtonsJPanel)arg0.getSource()).getLastSelectedDate() );
-								break;
-							case FilterButtonsJPanel.DISTINCT:
-								putSymbol(" <> ");
-								break;
-							case FilterButtonsJPanel.EQUAL:
-								putSymbol(" = ");
-								break;
-							case FilterButtonsJPanel.EQUALGREATER:
-								putSymbol(" >= ");
-								break;
-							case FilterButtonsJPanel.EQUALSMALLER:
-								putSymbol(" <= ");
-								break;
-							case FilterButtonsJPanel.GREATER:
-								putSymbol(" > ");
-								break;
-							case FilterButtonsJPanel.NOT:
-								putSymbol(" not ");
-								break;
-							case FilterButtonsJPanel.OR:
-								putSymbol(" or ");
-								break;
-							case FilterButtonsJPanel.PARENTHESIS:
-								putSymbol(" () ");
-								break;
-							case FilterButtonsJPanel.SMALLER:
-								putSymbol(" < ");
-								break;
-							case FilterButtonsJPanel.DELETE_TEXT:
-								txtExpression.setText("");
-								break;
-							default: // do anything
-				        }
-					}
-				}			
-			});
+			filterButtonsJPanel.setPreferredSize(new Dimension(
+					filterButtonsPanelWidth, filterButtonsPanelHeight));
+			filterButtonsJPanel
+					.addPropertyChangeListener(new PropertyChangeListener() {
+						/*
+						 * (non-Javadoc)
+						 * 
+						 * @see
+						 * java.beans.PropertyChangeListener#propertyChange(
+						 * java.beans.PropertyChangeEvent)
+						 */
+						public void propertyChange(PropertyChangeEvent arg0) {
+							if (arg0.getPropertyName()
+									.equals(FilterButtonsJPanel.BUTTON_CLICKED_ACTION_COMMAND)) {
+
+								switch (Integer.parseInt(arg0.getNewValue()
+										.toString())) {
+								case FilterButtonsJPanel.AND:
+									putSymbol(" and ");
+									break;
+								case FilterButtonsJPanel.DATE:
+									putSymbol(((FilterButtonsJPanel) arg0
+											.getSource()).getLastSelectedDate());
+									break;
+								case FilterButtonsJPanel.DISTINCT:
+									putSymbol(" <> ");
+									break;
+								case FilterButtonsJPanel.EQUAL:
+									putSymbol(" = ");
+									break;
+								case FilterButtonsJPanel.EQUALGREATER:
+									putSymbol(" >= ");
+									break;
+								case FilterButtonsJPanel.EQUALSMALLER:
+									putSymbol(" <= ");
+									break;
+								case FilterButtonsJPanel.GREATER:
+									putSymbol(" > ");
+									break;
+								case FilterButtonsJPanel.NOT:
+									putSymbol(" not ");
+									break;
+								case FilterButtonsJPanel.OR:
+									putSymbol(" or ");
+									break;
+								case FilterButtonsJPanel.PARENTHESIS:
+									putSymbol(" () ");
+									break;
+								case FilterButtonsJPanel.SMALLER:
+									putSymbol(" < ");
+									break;
+								case FilterButtonsJPanel.DELETE_TEXT:
+									txtExpression.setText("");
+									break;
+								default: // do anything
+								}
+							}
+						}
+					});
 		}
-		
+
 		return filterButtonsJPanel;
 	}
 
@@ -390,38 +406,60 @@ public abstract class AbstractFilterQueryJPanel extends AbstractPanel implements
 	 * @return A set
 	 */
 	protected Set<String> getAllOperatorSymbols() {
-		return operatorSymbols;		
+		return operatorSymbols;
 	}
 
 	/**
-	 * Sets new height to the 'topJPanel', (new Height must be bigger than default, else do nothing)
+	 * Sets new height to the 'topJPanel', (new Height must be bigger than
+	 * default, else do nothing)
 	 * 
-	 * @param new_Height New height
+	 * @param new_Height
+	 *            New height
 	 */
 	public void resizeHeight(int new_Height) {
 		int difference = new_Height - DefaultHeight;
-		
+
 		if (difference > 0) {
-			this.setPreferredSize(new Dimension(this.getPreferredSize().width, this.getPreferredSize().height + difference));
-			getTopJPanel().setPreferredSize(new Dimension(getTopJPanel().getPreferredSize().width, getTopJPanel().getPreferredSize().height + difference));
-			
-			getFieldsJPanel().setPreferredSize(new Dimension(getFieldsJPanel().getPreferredSize().width, getFieldsJPanel().getPreferredSize().height + difference));
-			getFieldsJScrollPane().setPreferredSize(new Dimension(getFieldsJScrollPane().getPreferredSize().width, getFieldsJScrollPane().getPreferredSize().height + difference));
-		
-			getValuesJPanel().setPreferredSize(new Dimension(getValuesJPanel().getPreferredSize().width, getValuesJPanel().getPreferredSize().height + difference));
-			getValuesJScrollPane().setPreferredSize(new Dimension(getValuesJScrollPane().getPreferredSize().width, getValuesJScrollPane().getPreferredSize().height + difference));
+			this.setPreferredSize(new Dimension(this.getPreferredSize().width,
+					this.getPreferredSize().height + difference));
+			getTopJPanel().setPreferredSize(
+					new Dimension(getTopJPanel().getPreferredSize().width,
+							getTopJPanel().getPreferredSize().height
+									+ difference));
+
+			getFieldsJPanel().setPreferredSize(
+					new Dimension(getFieldsJPanel().getPreferredSize().width,
+							getFieldsJPanel().getPreferredSize().height
+									+ difference));
+			getFieldsJScrollPane().setPreferredSize(
+					new Dimension(
+							getFieldsJScrollPane().getPreferredSize().width,
+							getFieldsJScrollPane().getPreferredSize().height
+									+ difference));
+
+			getValuesJPanel().setPreferredSize(
+					new Dimension(getValuesJPanel().getPreferredSize().width,
+							getValuesJPanel().getPreferredSize().height
+									+ difference));
+			getValuesJScrollPane().setPreferredSize(
+					new Dimension(
+							getValuesJScrollPane().getPreferredSize().width,
+							getValuesJScrollPane().getPreferredSize().height
+									+ difference));
 		}
 	}
 
 	/**
 	 * Sets the width to this JPanel
 	 * 
-	 * @param new_Width New width
+	 * @param new_Width
+	 *            New width
 	 */
 	public abstract void resizeWidth(int new_Width);
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.Component#resize(int, int)
 	 */
 	public void resize(int width, int height) {
@@ -429,12 +467,13 @@ public abstract class AbstractFilterQueryJPanel extends AbstractPanel implements
 
 		if (difference != 0)
 			this.resizeHeight(height);
-		
+
 		this.resizeWidth(width);
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.Component#resize(java.awt.Dimension)
 	 */
 	public void resize(Dimension d) {
@@ -442,12 +481,13 @@ public abstract class AbstractFilterQueryJPanel extends AbstractPanel implements
 
 		if (difference != 0)
 			this.resizeHeight(d.height);
-		
+
 		this.resizeWidth(d.width);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.panels.AbstractPanel#accept()
 	 */
 	public void accept() {
@@ -455,6 +495,7 @@ public abstract class AbstractFilterQueryJPanel extends AbstractPanel implements
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.panels.AbstractPanel#apply()
 	 */
 	public void apply() {
@@ -462,16 +503,18 @@ public abstract class AbstractFilterQueryJPanel extends AbstractPanel implements
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.panels.AbstractPanel#cancel()
 	 */
 	public void cancel() {
-	}	
+	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.panels.AbstractPanel#selected()
 	 */
-	public void selected() {		
+	public void selected() {
 	}
 
 	/**
@@ -511,17 +554,18 @@ public abstract class AbstractFilterQueryJPanel extends AbstractPanel implements
 		public JScrollPaneML(int vsbPolicy, int hsbPolicy) {
 			super(vsbPolicy, hsbPolicy);
 		}
-		
+
 		/*
 		 * (non-Javadoc)
+		 * 
 		 * @see javax.swing.JComponent#createToolTip()
 		 */
-	    public JToolTip createToolTip() {
-	    	// Multiline support
-	    	MultiLineToolTip tip = new MultiLineToolTip();
-	    	tip.setComponent(this);
-	    	return tip;
-	    }
+		public JToolTip createToolTip() {
+			// Multiline support
+			MultiLineToolTip tip = new MultiLineToolTip();
+			tip.setComponent(this);
+			return tip;
+		}
 	}
 
 	/**
@@ -578,16 +622,17 @@ public abstract class AbstractFilterQueryJPanel extends AbstractPanel implements
 
 		/*
 		 * (non-Javadoc)
+		 * 
 		 * @see javax.swing.JComponent#createToolTip()
 		 */
-	    public JToolTip createToolTip() {
-	    	// Multiline support
-	    	MultiLineToolTip tip = new MultiLineToolTip();
-	    	tip.setComponent(this);
-	    	return tip;
-	    }
+		public JToolTip createToolTip() {
+			// Multiline support
+			MultiLineToolTip tip = new MultiLineToolTip();
+			tip.setComponent(this);
+			return tip;
+		}
 	}
-	
+
 	/**
 	 * JPanel with multi line tool tip text.
 	 * 
@@ -628,14 +673,15 @@ public abstract class AbstractFilterQueryJPanel extends AbstractPanel implements
 
 		/*
 		 * (non-Javadoc)
+		 * 
 		 * @see javax.swing.JComponent#createToolTip()
 		 */
-	    public JToolTip createToolTip() {
-	    	// Multiline support
-	    	MultiLineToolTip tip = new MultiLineToolTip();
-	    	tip.setComponent(this);
-	    	return tip;
-	    }
+		public JToolTip createToolTip() {
+			// Multiline support
+			MultiLineToolTip tip = new MultiLineToolTip();
+			tip.setComponent(this);
+			return tip;
+		}
 	}
 
 	/**
@@ -658,7 +704,8 @@ public abstract class AbstractFilterQueryJPanel extends AbstractPanel implements
 		/**
 		 * @see JTextArea#JTextArea(Document, String, int, int)
 		 */
-		public JEditableTextAreaML(Document doc, String text, int rows, int columns) {
+		public JEditableTextAreaML(Document doc, String text, int rows,
+				int columns) {
 			super(doc, text, rows, columns);
 		}
 
@@ -692,14 +739,15 @@ public abstract class AbstractFilterQueryJPanel extends AbstractPanel implements
 
 		/*
 		 * (non-Javadoc)
+		 * 
 		 * @see javax.swing.JComponent#createToolTip()
 		 */
-	    public JToolTip createToolTip() {
-	    	// Multiline support
-	    	MultiLineToolTip tip = new MultiLineToolTip();
-	    	tip.setComponent(this);
-	    	return tip;
-	    }	
+		public JToolTip createToolTip() {
+			// Multiline support
+			MultiLineToolTip tip = new MultiLineToolTip();
+			tip.setComponent(this);
+			return tip;
+		}
 	}
 
 	/**
@@ -763,14 +811,15 @@ public abstract class AbstractFilterQueryJPanel extends AbstractPanel implements
 
 		/*
 		 * (non-Javadoc)
+		 * 
 		 * @see javax.swing.JComponent#createToolTip()
 		 */
-	    public JToolTip createToolTip() {
-	    	// Multiline support
-	    	MultiLineToolTip tip = new MultiLineToolTip();
-	    	tip.setComponent(this);
-	    	return tip;
-	    }		
+		public JToolTip createToolTip() {
+			// Multiline support
+			MultiLineToolTip tip = new MultiLineToolTip();
+			tip.setComponent(this);
+			return tip;
+		}
 	}
 
 	/**
@@ -813,14 +862,15 @@ public abstract class AbstractFilterQueryJPanel extends AbstractPanel implements
 
 		/*
 		 * (non-Javadoc)
+		 * 
 		 * @see javax.swing.JComponent#createToolTip()
 		 */
-	    public JToolTip createToolTip() {
-	    	// Multiline support
-	    	MultiLineToolTip tip = new MultiLineToolTip();
-	    	tip.setComponent(this);
-	    	return tip;
-	    }		
+		public JToolTip createToolTip() {
+			// Multiline support
+			MultiLineToolTip tip = new MultiLineToolTip();
+			tip.setComponent(this);
+			return tip;
+		}
 	}
 
 	/**
@@ -876,7 +926,7 @@ public abstract class AbstractFilterQueryJPanel extends AbstractPanel implements
 		}
 
 		/**
-		 *@see JCheckBox#JCheckBox(String, Icon)
+		 * @see JCheckBox#JCheckBox(String, Icon)
 		 */
 		public JCheckBoxML(String text, Icon icon) {
 			super(text, icon);
@@ -891,14 +941,15 @@ public abstract class AbstractFilterQueryJPanel extends AbstractPanel implements
 
 		/*
 		 * (non-Javadoc)
+		 * 
 		 * @see javax.swing.JComponent#createToolTip()
 		 */
-	    public JToolTip createToolTip() {
-	    	// Multiline support
-	    	MultiLineToolTip tip = new MultiLineToolTip();
-	    	tip.setComponent(this);
-	    	return tip;
-	    }		
+		public JToolTip createToolTip() {
+			// Multiline support
+			MultiLineToolTip tip = new MultiLineToolTip();
+			tip.setComponent(this);
+			return tip;
+		}
 	}
 
 	/**
@@ -908,7 +959,7 @@ public abstract class AbstractFilterQueryJPanel extends AbstractPanel implements
 	 * 
 	 * @author Pablo Piqueras Bartolome (pablo.piqueras@iver.es)
 	 */
-    protected class JButtonML extends JButton {
+	protected class JButtonML extends JButton {
 		private static final long serialVersionUID = -6052122756677251026L;
 
 		/**
@@ -947,14 +998,15 @@ public abstract class AbstractFilterQueryJPanel extends AbstractPanel implements
 		}
 
 		/*
-    	 * (non-Javadoc)
-    	 * @see javax.swing.JComponent#createToolTip()
-    	 */
-        public JToolTip createToolTip() {
-        	// Multiline support
-        	MultiLineToolTip tip = new MultiLineToolTip();
-        	tip.setComponent(this);
-        	return tip;
-        }		
-    }
+		 * (non-Javadoc)
+		 * 
+		 * @see javax.swing.JComponent#createToolTip()
+		 */
+		public JToolTip createToolTip() {
+			// Multiline support
+			MultiLineToolTip tip = new MultiLineToolTip();
+			tip.setComponent(this);
+			return tip;
+		}
+	}
 }

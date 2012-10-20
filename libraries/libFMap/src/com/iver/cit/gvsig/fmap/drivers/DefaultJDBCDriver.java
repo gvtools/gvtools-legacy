@@ -76,13 +76,13 @@ import com.iver.cit.gvsig.fmap.layers.XMLException;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.JPasswordDlg;
 
-
-
 /**
  * Clase abstracta qu
  */
-public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectDriver {
-	private static Logger logger = Logger.getLogger(SelectableDataSource.class.getName());
+public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver,
+		ObjectDriver {
+	private static Logger logger = Logger.getLogger(SelectableDataSource.class
+			.getName());
 	protected static Hashtable poolPassw = new Hashtable();
 
 	protected IConnection conn;
@@ -93,8 +93,8 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 	protected DBLayerDefinition lyrDef = null;
 	protected ResultSet rs;
 	protected boolean bCursorActivo = false;
-//	protected Statement st;
-	protected int numReg=-1;
+	// protected Statement st;
+	protected int numReg = -1;
 
 	protected Rectangle2D fullExtent = null;
 
@@ -102,7 +102,6 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 	// protected String idFID_FieldName;
 
 	protected Hashtable hashRelate;
-
 
 	protected ResultSetMetaData metaData = null;
 	protected Rectangle2D workingArea;
@@ -118,66 +117,71 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 	protected String geometryField;
 	protected String whereClause;
 	protected String strSRID;
-	//private double flatness;
+	// private double flatness;
 
 	protected String host, port, dbName, connName;
 
 	protected ArrayList driverEventListeners = new ArrayList();
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver#getConnection()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver#getConnection()
 	 */
-	public IConnection getConnection()
-	{
+	public IConnection getConnection() {
 		return conn;
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver#getFields()
 	 */
-	public String[] getFields()
-	{
-		/* StringTokenizer tokenizer = new StringTokenizer(fields, ",");
-        String[] arrayFields = new String[tokenizer.countTokens()];
-        int i=0;
-        while (tokenizer.hasMoreTokens())
-        {
-            arrayFields[i] = tokenizer.nextToken();
-            i++;
-        }
-	    return arrayFields; */
+	public String[] getFields() {
+		/*
+		 * StringTokenizer tokenizer = new StringTokenizer(fields, ",");
+		 * String[] arrayFields = new String[tokenizer.countTokens()]; int i=0;
+		 * while (tokenizer.hasMoreTokens()) { arrayFields[i] =
+		 * tokenizer.nextToken(); i++; } return arrayFields;
+		 */
 		return lyrDef.getFieldNames();
 
 	}
+
 	/**
 	 * First, the geometry field. After, the rest of fields
+	 * 
 	 * @return
 	 */
-	public String getTotalFields()
-	{
+	public String getTotalFields() {
 		String strAux = getGeometryField(getLyrDef().getFieldGeometry());
 		String[] fieldNames = getLyrDef().getFieldNames();
-		for (int i=0; i< fieldNames.length; i++)
-		{
+		for (int i = 0; i < fieldNames.length; i++) {
 			strAux = strAux + ", " + fieldNames[i];
 		}
 		return strAux;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDatabaseDriver#getWhereClause()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.VectorialDatabaseDriver#getWhereClause()
 	 */
-	public String getWhereClause()
-	{
-		return lyrDef.getWhereClause(); //.toUpperCase();
-	}
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver#getTableName()
-	 */
-	public String getTableName()
-	{
-		return lyrDef.getTableName();
+	public String getWhereClause() {
+		return lyrDef.getWhereClause(); // .toUpperCase();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver#getTableName()
+	 */
+	public String getTableName() {
+		return lyrDef.getTableName();
+	}
 
 	/**
 	 * @throws DriverIOException
@@ -185,89 +189,86 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 	 * @see com.iver.cit.gvsig.fmap.layers.ReadableVectorial#getShapeCount()
 	 */
 	public int getShapeCount() throws ReadDriverException {
-		if (numReg == -1)
-		{
-			try
-			{
-				Statement s = ((ConnectionJDBC)conn).getConnection().createStatement();
-				ResultSet r = s.executeQuery("SELECT COUNT(*) AS NUMREG FROM " + lyrDef.getTableName() + " " + getCompleteWhere());
+		if (numReg == -1) {
+			try {
+				Statement s = ((ConnectionJDBC) conn).getConnection()
+						.createStatement();
+				ResultSet r = s.executeQuery("SELECT COUNT(*) AS NUMREG FROM "
+						+ lyrDef.getTableName() + " " + getCompleteWhere());
 				r.next();
 				numReg = r.getInt(1);
 				System.err.println("numReg = " + numReg);
-			}
-			catch (SQLException e)
-			{
-				throw new ReadDriverException(getName(),e);
+			} catch (SQLException e) {
+				throw new ReadDriverException(getName(), e);
 			}
 		}
 
 		return numReg;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDriver#getFullExtent()
 	 */
-	public Rectangle2D getFullExtent() throws ExpansionFileReadException, ReadDriverException{
+	public Rectangle2D getFullExtent() throws ExpansionFileReadException,
+			ReadDriverException {
 		// Por defecto recorremos todas las geometrias.
 		// Las bases de datos como PostGIS pueden y deben
 		// sobreescribir este método.
-		if (fullExtent == null)
-		{
-			//	            try
-			//	            {
-			IFeatureIterator itGeom = getFeatureIterator("SELECT " +
-					getGeometryField(getLyrDef().getFieldGeometry()) + ", " + getLyrDef().getFieldID() + " FROM " +
-					getLyrDef().getComposedTableName() +  " " + getCompleteWhere());
+		if (fullExtent == null) {
+			// try
+			// {
+			IFeatureIterator itGeom = getFeatureIterator("SELECT "
+					+ getGeometryField(getLyrDef().getFieldGeometry()) + ", "
+					+ getLyrDef().getFieldID() + " FROM "
+					+ getLyrDef().getComposedTableName() + " "
+					+ getCompleteWhere());
 			IGeometry geom;
 			int cont = 0;
-			while (itGeom.hasNext())
-			{
+			while (itGeom.hasNext()) {
 				geom = itGeom.next().getGeometry();
-				if (cont==0)
+				if (cont == 0)
 					fullExtent = geom.getBounds2D();
 				else
 					fullExtent.add(geom.getBounds2D());
 				cont++;
 			}
-			//	            }
-		//	            catch (DriverException e) {
-			//	                // TODO Auto-generated catch block
-			//	                e.printStackTrace();
-			//	            }
+			// }
+			// catch (DriverException e) {
+			// // TODO Auto-generated catch block
+			// e.printStackTrace();
+			// }
 
 		}
 		return fullExtent;
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDriver#getShapeType()
 	 */
 	public int getShapeType() {
-		/* IGeometry geom;
-        if (shapeType == -1)
-        {
-        	shapeType = FShape.MULTI;
-        	try {
-        		geom = getShape(0);
-        		if (geom != null)
-        			shapeType = geom.getGeometryType();
-        	} catch (IOException e) {
-        		// e.printStackTrace();
-        	}
-        }
-        return shapeType; */
+		/*
+		 * IGeometry geom; if (shapeType == -1) { shapeType = FShape.MULTI; try
+		 * { geom = getShape(0); if (geom != null) shapeType =
+		 * geom.getGeometryType(); } catch (IOException e) { //
+		 * e.printStackTrace(); } } return shapeType;
+		 */
 		return lyrDef.getShapeType();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getFieldType(int)
 	 */
-	public int getFieldType(int idField) throws ReadDriverException{
+	public int getFieldType(int idField) throws ReadDriverException {
 		try {
 			int i = idField + 2; // idField viene basado en 1, y
 			// además nos saltamos el campo de geometry
-			int type=metaData.getColumnType(i);
+			int type = metaData.getColumnType(i);
 			if (type == Types.VARCHAR)
 				return Types.VARCHAR;
 			if (type == Types.FLOAT)
@@ -306,34 +307,37 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 				return Types.CHAR;
 
 		} catch (SQLException e) {
-			throw new BadFieldDriverException(getName(),e,String.valueOf(idField));
+			throw new BadFieldDriverException(getName(), e,
+					String.valueOf(idField));
 		}
 		return Types.OTHER;
 	}
+
 	/**
-	 * Obtiene el valor que se encuentra en la fila y columna indicada
-	 * Esta es la implementación por defecto. Si lo del absolute
-	 * no va bien, como es el caso del PostGis, el driver lo
-	 * tiene que reimplementar
-	 *
-	 * @param rowIndex fila
-	 * @param fieldId columna
-	 *
+	 * Obtiene el valor que se encuentra en la fila y columna indicada Esta es
+	 * la implementación por defecto. Si lo del absolute no va bien, como es el
+	 * caso del PostGis, el driver lo tiene que reimplementar
+	 * 
+	 * @param rowIndex
+	 *            fila
+	 * @param fieldId
+	 *            columna
+	 * 
 	 * @return subclase de Value con el valor del origen de datos
-	 *
-	 * @throws DriverException Si se produce un error accediendo al DataSource
+	 * 
+	 * @throws DriverException
+	 *             Si se produce un error accediendo al DataSource
 	 */
 	public Value getFieldValue(long rowIndex, int idField)
-	throws ReadDriverException
-	{
+			throws ReadDriverException {
 		int i = (int) (rowIndex + 1);
-		int fieldId = idField+2;
+		int fieldId = idField + 2;
 		try {
 			rs.absolute(i);
-			if (metaData.getColumnType(fieldId) == Types.VARCHAR)
-			{
+			if (metaData.getColumnType(fieldId) == Types.VARCHAR) {
 				String strAux = rs.getString(fieldId);
-				if (strAux == null) strAux = "";
+				if (strAux == null)
+					strAux = "";
 				return ValueFactory.createValue(strAux);
 			}
 			if (metaData.getColumnType(fieldId) == Types.FLOAT)
@@ -349,91 +353,91 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 			if (metaData.getColumnType(fieldId) == Types.DATE)
 				return ValueFactory.createValue(rs.getDate(fieldId));
 		} catch (SQLException e) {
-			throw new BadFieldDriverException(getName(),e,String.valueOf(fieldId));
+			throw new BadFieldDriverException(getName(), e,
+					String.valueOf(fieldId));
 		}
 		return null;
-
 
 	}
 
 	/**
 	 * Obtiene el número de campos del DataSource
-	 *
+	 * 
 	 * @return
-	 *
-	 * @throws DriverException Si se produce algún error accediendo al
-	 *         DataSource
+	 * 
+	 * @throws DriverException
+	 *             Si se produce algún error accediendo al DataSource
 	 */
-	public int getFieldCount() throws ReadDriverException
-	{
+	public int getFieldCount() throws ReadDriverException {
 		try {
 			// Suponemos que el primer campo es el de las geometries, y no lo
 			// contamos
-			return rs.getMetaData().getColumnCount()-1;
+			return rs.getMetaData().getColumnCount() - 1;
 		} catch (SQLException e) {
-			throw new ReadDriverException(getName(),e);
+			throw new ReadDriverException(getName(), e);
 		}
 
 	}
 
 	/**
 	 * Devuelve el nombre del campo fieldId-ésimo
-	 *
-	 * @param fieldId índice del campo cuyo nombre se quiere obtener
-	 *
+	 * 
+	 * @param fieldId
+	 *            índice del campo cuyo nombre se quiere obtener
+	 * 
 	 * @return
 	 * @throws com.hardcode.gdbms.engine.data.driver.DriverException
-	 *
-	 * @throws DriverException Si se produce algún error accediendo al
-	 *         DataSource
+	 * 
+	 * @throws DriverException
+	 *             Si se produce algún error accediendo al DataSource
 	 */
-	public String getFieldName(int fieldId) throws ReadDriverException
-	{
+	public String getFieldName(int fieldId) throws ReadDriverException {
 		try {
-			return rs.getMetaData().getColumnName(fieldId+2);
+			return rs.getMetaData().getColumnName(fieldId + 2);
 		} catch (SQLException e) {
-			throw new ReadDriverException(getName(),e);
+			throw new ReadDriverException(getName(), e);
 		}
 	}
 
 	/**
 	 * Obtiene el número de registros del DataSource
-	 *
+	 * 
 	 * @return
 	 * @throws ReadDriverException
-	 *
-	 * @throws DriverException Si se produce algún error accediendo al
-	 *         DataSource
+	 * 
+	 * @throws DriverException
+	 *             Si se produce algún error accediendo al DataSource
 	 */
-	public long getRowCount() throws ReadDriverException{
+	public long getRowCount() throws ReadDriverException {
 		return getShapeCount();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver#close()
 	 */
 	public void close() {
 	}
 
 	/**
-	 * Recorre el recordset creando una tabla Hash que usaremos para
-	 * relacionar el número de un registro con su identificador único.
-	 * Debe ser llamado en el setData justo después de crear el recorset
-	 * principal
+	 * Recorre el recordset creando una tabla Hash que usaremos para relacionar
+	 * el número de un registro con su identificador único. Debe ser llamado en
+	 * el setData justo después de crear el recorset principal
+	 * 
 	 * @throws SQLException
 	 */
-	protected void doRelateID_FID() throws DBException
-	{
+	protected void doRelateID_FID() throws DBException {
 		try {
 			hashRelate = new Hashtable();
 
 			String strSQL = "SELECT " + getLyrDef().getFieldID() + " FROM "
-			+ getLyrDef().getComposedTableName() + " "
-			+ getCompleteWhere() + " ORDER BY "
-			+ getLyrDef().getFieldID();
+					+ getLyrDef().getComposedTableName() + " "
+					+ getCompleteWhere() + " ORDER BY "
+					+ getLyrDef().getFieldID();
 			Statement s = ((ConnectionJDBC) getConnection()).getConnection()
-			.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_READ_ONLY);
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+							ResultSet.CONCUR_READ_ONLY);
 			ResultSet r = s.executeQuery(strSQL);
 			int id = 0;
 			int gid;
@@ -457,40 +461,43 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDatabaseDriver#getRowIndexByFID(java.lang.Object)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.VectorialDatabaseDriver#getRowIndexByFID
+	 * (java.lang.Object)
 	 */
-	public int getRowIndexByFID(IFeature FID)
-	{
+	public int getRowIndexByFID(IFeature FID) {
 		int resul;
 		// Object obj = FID.getAttribute(lyrDef.getIdFieldID());
 		String theId = FID.getID();
 		Value aux = ValueFactory.createValue(theId);
 		// System.err.println("Mirando si existe " + aux.toString());
-		if (hashRelate.containsKey(aux))
-		{
+		if (hashRelate.containsKey(aux)) {
 			Integer rowIndex = (Integer) hashRelate.get(aux);
 			resul = rowIndex.intValue();
-			// System.err.println("Row asociada a " + aux.toString() + ":" + resul);
+			// System.err.println("Row asociada a " + aux.toString() + ":" +
+			// resul);
 			return resul;
-		}
-		else
+		} else
 			return -1;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDatabaseDriver#setXMLEntity(com.iver.utiles.XMLEntity)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.VectorialDatabaseDriver#setXMLEntity(
+	 * com.iver.utiles.XMLEntity)
 	 */
-	public void setXMLEntity(XMLEntity xml) throws XMLException
-	{
+	public void setXMLEntity(XMLEntity xml) throws XMLException {
 
 		className = xml.getStringProperty("className");
 		// dbUrl = xml.getStringProperty("dbURL");
 		catalogName = xml.getStringProperty("catalog");
-		userName =xml.getStringProperty("username");
-		driverClass =xml.getStringProperty("driverclass");
+		userName = xml.getStringProperty("username");
+		driverClass = xml.getStringProperty("driverclass");
 		tableName = xml.getStringProperty("tablename");
-		if (xml.contains("schema")){
+		if (xml.contains("schema")) {
 			schema = xml.getStringProperty("schema");
 		}
 		fields = xml.getStringArrayProperty("fields");
@@ -499,34 +506,30 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 		whereClause = xml.getStringProperty("whereclause");
 		strSRID = xml.getStringProperty("SRID");
 
-		if (xml.contains("host"))
-		{
+		if (xml.contains("host")) {
 			host = xml.getStringProperty("host");
 			port = xml.getStringProperty("port");
 			dbName = xml.getStringProperty("dbName");
 			connName = xml.getStringProperty("connName");
-		}
-		else
-		{
+		} else {
 			// Por compatibilidad con versiones anteriores
 			dbUrl = xml.getStringProperty("dbURL");
 			extractParamsFromDbUrl(dbUrl);
 
 		}
-		if (!xml.contains("literalDBName")){
+		if (!xml.contains("literalDBName")) {
 			dbName = dbName.toLowerCase();
-		}else{
-			if(!xml.getBooleanProperty("literalDBName")){
+		} else {
+			if (!xml.getBooleanProperty("literalDBName")) {
 				dbName = dbName.toLowerCase();
 			}
 		}
-		if (xml.contains("minXworkArea"))
-		{
+		if (xml.contains("minXworkArea")) {
 			double x = xml.getDoubleProperty("minXworkArea");
 			double y = xml.getDoubleProperty("minYworkArea");
 			double H = xml.getDoubleProperty("HworkArea");
 			double W = xml.getDoubleProperty("WworkArea");
-			workingArea = new Rectangle2D.Double(x,y,W,H);
+			workingArea = new Rectangle2D.Double(x, y, W, H);
 		}
 
 		DBLayerDefinition lyrDef = new DBLayerDefinition();
@@ -546,17 +549,21 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 		setLyrDef(lyrDef);
 
 	}
+
 	private void extractParamsFromDbUrl(String dbUrl2) {
-		//jdbc:postgres://localhost:5431/latin1
+		// jdbc:postgres://localhost:5431/latin1
 		int iDbName = dbUrl2.lastIndexOf('/');
-		dbName = dbUrl2.substring(iDbName+1);
+		dbName = dbUrl2.substring(iDbName + 1);
 		int iLast2points = dbUrl2.lastIndexOf(':');
-		port = dbUrl2.substring(iLast2points+1, iDbName);
+		port = dbUrl2.substring(iLast2points + 1, iDbName);
 		int iHost = dbUrl2.indexOf("//");
 		host = dbUrl2.substring(iHost + 2, iLast2points);
 		connName = dbUrl2;
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver#load()
 	 */
 	public void load() throws ReadDriverException {
@@ -566,9 +573,8 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 
 			String _drvName = getName();
 
-			String keyPool = _drvName + "_" + host
-			+ "_" + port + "_" + dbName
-			+ "_" + userName;
+			String keyPool = _drvName + "_" + host + "_" + port + "_" + dbName
+					+ "_" + userName;
 
 			IConnection newConn = null;
 			String clave = null;
@@ -578,14 +584,14 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 
 				clave = (String) poolPassw.get(keyPool);
 				cwp = SingleDBConnectionManager.instance().getConnection(
-						_drvName, userName, clave, connName,
-						host, port, dbName, schema, true);
+						_drvName, userName, clave, connName, host, port,
+						dbName, schema, true);
 
 			} else {
 
 				cwp = SingleDBConnectionManager.instance().getConnection(
-						_drvName, userName, null, connName,
-						host, port, dbName, schema, false);
+						_drvName, userName, null, connName, host, port, dbName,
+						schema, false);
 
 				if (cwp.isConnected()) {
 
@@ -596,15 +602,9 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 					JPasswordDlg dlg = new JPasswordDlg();
 					String strMessage = Messages.getString("conectar_jdbc");
 					String strPassword = Messages.getString("password");
-					dlg.setMessage(strMessage
-							+ " ["
-							     + _drvName + ", "
-							     + host + ", "
-							     + port + ", "
-							     + dbName + ", "
-							     + userName + "]. "
-							     + strPassword
-							     + "?");
+					dlg.setMessage(strMessage + " [" + _drvName + ", " + host
+							+ ", " + port + ", " + dbName + ", " + userName
+							+ "]. " + strPassword + "?");
 					dlg.setVisible(true);
 					clave = dlg.getPassword();
 					if (clave == null)
@@ -637,25 +637,29 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 
 			setData(newConn, lyrDef);
 		} catch (ClassNotFoundException e) {
-			//            logger.debug(e);
-			//            DriverJdbcNotFoundExceptionType type =
-			//            	new DriverJdbcNotFoundExceptionType();
-			//            type.setDriverJdbcClassName(driverClass);
-			//            type.setLayerName(this.getTableName());
-			throw new ReadDriverException(getName(),e);
+			// logger.debug(e);
+			// DriverJdbcNotFoundExceptionType type =
+			// new DriverJdbcNotFoundExceptionType();
+			// type.setDriverJdbcClassName(driverClass);
+			// type.setLayerName(this.getTableName());
+			throw new ReadDriverException(getName(), e);
 		} catch (DBException e) {
-			throw new ReadDriverException(getName(),e);
+			throw new ReadDriverException(getName(), e);
 		}
 	}
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDatabaseDriver#getXMLEntity()
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.VectorialDatabaseDriver#getXMLEntity()
 	 */
-	public XMLEntity getXMLEntity()
-	{
+	public XMLEntity getXMLEntity() {
 		XMLEntity xml = new XMLEntity();
-		xml.putProperty("className",this.getClass().getName());
+		xml.putProperty("className", this.getClass().getName());
 		try {
-			DatabaseMetaData metadata = ((ConnectionJDBC)getConnection()).getConnection().getMetaData();
+			DatabaseMetaData metadata = ((ConnectionJDBC) getConnection())
+					.getConnection().getMetaData();
 			xml.putProperty("catalog", getLyrDef().getCatalogName());
 
 			// TODO: NO DEBEMOS GUARDAR EL NOMBRE DE USUARIO Y CONTRASEÑA
@@ -666,7 +670,7 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 			String userName = metadata.getUserName();
 			int aux = userName.indexOf("@");
 			if (aux != -1)
-				userName = userName.substring(0,aux);
+				userName = userName.substring(0, aux);
 			xml.putProperty("username", userName);
 
 			Driver drv = DriverManager.getDriver(metadata.getURL());
@@ -680,23 +684,23 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 			xml.putProperty("whereclause", getWhereClause());
 			xml.putProperty("SRID", lyrDef.getSRID_EPSG());
 
-			ConnectionWithParams cwp =
-				SingleDBConnectionManager.instance().findConnection(getConnection());
+			ConnectionWithParams cwp = SingleDBConnectionManager.instance()
+					.findConnection(getConnection());
 
-			//FIXME:(Chema) Estos cambios los hago porque da errores as persistencia
-			if (cwp != null){
+			// FIXME:(Chema) Estos cambios los hago porque da errores as
+			// persistencia
+			if (cwp != null) {
 				xml.putProperty("host", cwp.getHost());
 				xml.putProperty("port", cwp.getPort());
 				xml.putProperty("dbName", cwp.getDb());
-				xml.putProperty("literalDBName",true);
+				xml.putProperty("literalDBName", true);
 				xml.putProperty("connName", cwp.getName());
 			} else {
-				xml.putProperty("dbURL",metadata.getURL());
+				xml.putProperty("dbURL", metadata.getURL());
 			}
 			// Chema
 
-			if (getWorkingArea() != null)
-			{
+			if (getWorkingArea() != null) {
 				xml.putProperty("minXworkArea", getWorkingArea().getMinX());
 				xml.putProperty("minYworkArea", getWorkingArea().getMinY());
 				xml.putProperty("HworkArea", getWorkingArea().getHeight());
@@ -708,39 +712,51 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 			e.printStackTrace();
 		}
 
-
 		return xml;
 
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver#setWorkingArea(java.awt.geom.Rectangle2D)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver#setWorkingArea
+	 * (java.awt.geom.Rectangle2D)
 	 */
 	public void setWorkingArea(Rectangle2D rect) {
 		this.workingArea = rect;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver#getWorkingArea()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver#getWorkingArea()
 	 */
 	public Rectangle2D getWorkingArea() {
 		return workingArea;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.hardcode.gdbms.engine.data.driver.GDBMSDriver#setDataSourceFactory(com.hardcode.gdbms.engine.data.DataSourceFactory)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.hardcode.gdbms.engine.data.driver.GDBMSDriver#setDataSourceFactory
+	 * (com.hardcode.gdbms.engine.data.DataSourceFactory)
 	 */
 	public void setDataSourceFactory(DataSourceFactory arg0) {
 		// TODO Auto-generated method stub
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver#getLyrDef()
 	 */
 	public DBLayerDefinition getLyrDef() {
-		if (this.conn != null){
-			if (lyrDef.getConnection() != this.conn){
+		if (this.conn != null) {
+			if (lyrDef.getConnection() != this.conn) {
 				lyrDef.setConnection(this.conn);
 			}
 		}
@@ -748,7 +764,8 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 	}
 
 	/**
-	 * @param lyrDef The lyrDef to set.
+	 * @param lyrDef
+	 *            The lyrDef to set.
 	 */
 	public void setLyrDef(DBLayerDefinition lyrDef) {
 		this.lyrDef = lyrDef;
@@ -761,35 +778,37 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 	 */
 	abstract public String getCompleteWhere();
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDriver#reLoad()
 	 */
-	public void reload() throws ReloadDriverException
-	{
+	public void reload() throws ReloadDriverException {
 		try {
-			if ((conn == null) || (((ConnectionJDBC)conn).getConnection().isClosed()))
-			{
+			if ((conn == null)
+					|| (((ConnectionJDBC) conn).getConnection().isClosed())) {
 				this.load();
 			}
 
-			((ConnectionJDBC)conn).getConnection().commit();
+			((ConnectionJDBC) conn).getConnection().commit();
 
 			setData(conn, lyrDef);
 		} catch (SQLException e) {
-			throw new ReloadDriverException(getName(),e);
+			throw new ReloadDriverException(getName(), e);
 		} catch (ReadDriverException e) {
-			throw new ReloadDriverException(getName(),e);
+			throw new ReloadDriverException(getName(), e);
 		} catch (DBException e) {
-			throw new ReloadDriverException(getName(),e);
+			throw new ReloadDriverException(getName(), e);
 		}
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.hardcode.gdbms.engine.data.driver.ReadAccess#getFieldWidth(int)
 	 */
-	public int getFieldWidth(int fieldId)
-	{
+	public int getFieldWidth(int fieldId) {
 		int i = -1;
 		try {
 			int aux = fieldId + 2; // idField viene basado en 1, y
@@ -797,32 +816,37 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		// SUN define que getColumnDisplaySize devuelve numeros negativos cuando el campo es de tipo Text o Vartext
-		// sin ancho. Nosotros vamos a devolver 255 para que fucione, por lo menos al exportar a DBF.
+		// SUN define que getColumnDisplaySize devuelve numeros negativos cuando
+		// el campo es de tipo Text o Vartext
+		// sin ancho. Nosotros vamos a devolver 255 para que fucione, por lo
+		// menos al exportar a DBF.
 		// Nota: Si se truncan cadenas, este es el sitio que lo provoca.
-		if (i <0) i=255;
+		if (i < 0)
+			i = 255;
 		return i;
 	}
 
-	//	public void setFlatness(double flatness) {
-	//		this.flatness = flatness;
-	//	}
+	// public void setFlatness(double flatness) {
+	// this.flatness = flatness;
+	// }
 
 	// -----------------------------------------------------------
-	// ----  EXT JDBC NUEVA                           ---
+	// ---- EXT JDBC NUEVA ---
 	// -----------------------------------------------------------
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver#getConnectionString(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver#getConnectionString
+	 * (java.lang.String, java.lang.String, java.lang.String, java.lang.String,
+	 * java.lang.String)
 	 */
-	public String getConnectionString(
-			String host,
-			String port,
-			String dbname,
-			String user,
-			String pw) {
+	public String getConnectionString(String host, String port, String dbname,
+			String user, String pw) {
 
-		String resp = getConnectionStringBeginning() + "//" + host.toLowerCase();
+		String resp = getConnectionStringBeginning() + "//"
+				+ host.toLowerCase();
 
 		if (dbname.trim().length() > 0) {
 			resp += ":" + port;
@@ -830,31 +854,41 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 			resp += ":" + getDefaultPort();
 		}
 
-		resp += "/" + dbname;//.toLowerCase();
+		resp += "/" + dbname;// .toLowerCase();
 		return resp;
 	}
 
 	/**
 	 * Gets available table names. Should be overwritten by subclasses if its
 	 * not compatible or if it can be refined
-	 *
-	 * @param conn connection object
-	 * @param catalog catalog name
+	 * 
+	 * @param conn
+	 *            connection object
+	 * @param catalog
+	 *            catalog name
 	 * @return array of strings with available table names
 	 * @throws SQLException
 	 */
-	public String[] getTableNames(IConnection conn, String catalog) throws DBException {
+	public String[] getTableNames(IConnection conn, String catalog)
+			throws DBException {
 		try {
 			DatabaseMetaData dbmd;
-			dbmd = ((ConnectionJDBC)conn).getConnection().getMetaData();
+			dbmd = ((ConnectionJDBC) conn).getConnection().getMetaData();
 
-			String[] types = {"TABLE", "VIEW"};
+			String[] types = { "TABLE", "VIEW" };
 			ResultSet rs = dbmd.getTables(catalog, null, null, types);
 			TreeMap ret = new TreeMap();
-			while (rs.next()){
-				// ret.put(rs.getString("TABLE_NAME"), rs.getString("TABLE_NAME"));
-				// As suggested by Jorge Agudo, to allow charging tables from other schemas
-				ret.put((rs.getString("TABLE_SCHEM")!=null?(rs.getString("TABLE_SCHEM") + "."): "") + rs.getString("TABLE_NAME"), (rs.getString("TABLE_SCHEM")!=null?(rs.getString("TABLE_SCHEM") + "."): "") + rs.getString("TABLE_NAME"));
+			while (rs.next()) {
+				// ret.put(rs.getString("TABLE_NAME"),
+				// rs.getString("TABLE_NAME"));
+				// As suggested by Jorge Agudo, to allow charging tables from
+				// other schemas
+				ret.put((rs.getString("TABLE_SCHEM") != null ? (rs
+						.getString("TABLE_SCHEM") + ".") : "")
+						+ rs.getString("TABLE_NAME"),
+						(rs.getString("TABLE_SCHEM") != null ? (rs
+								.getString("TABLE_SCHEM") + ".") : "")
+								+ rs.getString("TABLE_NAME"));
 			}
 			rs.close();
 			return (String[]) ret.keySet().toArray(new String[0]);
@@ -863,25 +897,31 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 		}
 	}
 
-
 	/**
-	 *       Gets all field names of a given table
-	 * @param conn connection object
-	 * @param table_name table name
+	 * Gets all field names of a given table
+	 * 
+	 * @param conn
+	 *            connection object
+	 * @param table_name
+	 *            table name
 	 * @return all field names of the given table
 	 * @throws SQLException
 	 */
-	public String[] getAllFields(IConnection conn, String table_name) throws DBException {
+	public String[] getAllFields(IConnection conn, String table_name)
+			throws DBException {
 		try {
-			Statement st = ((ConnectionJDBC)conn).getConnection().createStatement();
-			ResultSet rs = st.executeQuery("select * from " + table_name + " LIMIT 1");
+			Statement st = ((ConnectionJDBC) conn).getConnection()
+					.createStatement();
+			ResultSet rs = st.executeQuery("select * from " + table_name
+					+ " LIMIT 1");
 			ResultSetMetaData rsmd = rs.getMetaData();
 			String[] ret = new String[rsmd.getColumnCount()];
 
 			for (int i = 0; i < ret.length; i++) {
-				ret[i] = rsmd.getColumnName(i+1);
+				ret[i] = rsmd.getColumnName(i + 1);
 			}
-			rs.close(); st.close();
+			rs.close();
+			st.close();
 			return ret;
 		} catch (SQLException e) {
 			throw new DBException(e);
@@ -889,23 +929,30 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 	}
 
 	/**
-	 *       Gets all field type names of a given table
-	 * @param conn connection object
-	 * @param table_name table name
+	 * Gets all field type names of a given table
+	 * 
+	 * @param conn
+	 *            connection object
+	 * @param table_name
+	 *            table name
 	 * @return all field type names of the given table
 	 * @throws SQLException
 	 */
-	public String[] getAllFieldTypeNames(IConnection conn, String table_name) throws DBException {
+	public String[] getAllFieldTypeNames(IConnection conn, String table_name)
+			throws DBException {
 		try {
-			Statement st = ((ConnectionJDBC)conn).getConnection().createStatement();
-			ResultSet rs = st.executeQuery("select * from " + table_name + " LIMIT 1");
+			Statement st = ((ConnectionJDBC) conn).getConnection()
+					.createStatement();
+			ResultSet rs = st.executeQuery("select * from " + table_name
+					+ " LIMIT 1");
 			ResultSetMetaData rsmd = rs.getMetaData();
 			String[] ret = new String[rsmd.getColumnCount()];
 
 			for (int i = 0; i < ret.length; i++) {
-				ret[i] = rsmd.getColumnTypeName(i+1);
+				ret[i] = rsmd.getColumnTypeName(i + 1);
 			}
-			rs.close(); st.close();
+			rs.close();
+			st.close();
 			return ret;
 		} catch (SQLException e) {
 			throw new DBException(e);
@@ -913,35 +960,44 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 	}
 
 	/**
-	 * Gets the table's possible id fields. By default, all fields can be id.
-	 * It should be overwritten by subclasses.
-	 *
-	 * @param conn conenction object
-	 * @param table_name table name
+	 * Gets the table's possible id fields. By default, all fields can be id. It
+	 * should be overwritten by subclasses.
+	 * 
+	 * @param conn
+	 *            conenction object
+	 * @param table_name
+	 *            table name
 	 * @return the table's possible id fields
 	 * @throws SQLException
 	 */
-	public String[] getIdFieldsCandidates(IConnection conn, String table_name) throws DBException {
+	public String[] getIdFieldsCandidates(IConnection conn, String table_name)
+			throws DBException {
 		return getAllFields(conn, table_name);
 	}
 
 	/**
-	 * Gets the table's possible geometry fields. By default, all fields can be geometry
-	 * fields. It should be overwritten by subclasses.
-	 *
-	 * @param conn conenction object
-	 * @param table_name table name
+	 * Gets the table's possible geometry fields. By default, all fields can be
+	 * geometry fields. It should be overwritten by subclasses.
+	 * 
+	 * @param conn
+	 *            conenction object
+	 * @param table_name
+	 *            table name
 	 * @return the table's possible geometry fields
 	 * @throws SQLException
 	 */
-	public String[] getGeometryFieldsCandidates(IConnection conn, String table_name) throws DBException {
+	public String[] getGeometryFieldsCandidates(IConnection conn,
+			String table_name) throws DBException {
 		return getAllFields(conn, table_name);
 	}
 
 	/**
 	 * Tells if it's an empty table (with no records)
-	 * @param conn conenction object
-	 * @param tableName rtable name
+	 * 
+	 * @param conn
+	 *            conenction object
+	 * @param tableName
+	 *            rtable name
 	 * @return whether it's an empty table (with no records) or not
 	 */
 	public boolean isEmptyTable(IConnection conn, String tableName) {
@@ -949,25 +1005,27 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 		boolean res = true;
 
 		try {
-			Statement st = ((ConnectionJDBC)conn).getConnection().createStatement();
+			Statement st = ((ConnectionJDBC) conn).getConnection()
+					.createStatement();
 			ResultSet rs = null;
 			rs = st.executeQuery("select * from " + tableName + " LIMIT 1");
 			res = !rs.next();
-			rs.close(); st.close();
+			rs.close();
+			st.close();
 		} catch (Exception ex) {
 			res = true;
 		}
 		return res;
 	}
 
-
-
 	/**
-	 * Utility method to allow the driver to do something with the geometry field.
-	 * By default does nothing.
-	 *
-	 * @param flds user-selected fields
-	 * @param geomField geometry field
+	 * Utility method to allow the driver to do something with the geometry
+	 * field. By default does nothing.
+	 * 
+	 * @param flds
+	 *            user-selected fields
+	 * @param geomField
+	 *            geometry field
 	 * @return new user-selected fields
 	 */
 	public String[] manageGeometryField(String[] flds, String geomField) {
@@ -977,7 +1035,7 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 	/**
 	 * Empty method called when the layer is going to be removed from the view.
 	 * Subclasses can overwrite it if needed.
-	 *
+	 * 
 	 */
 	public void remove() {
 
@@ -995,13 +1053,15 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 	}
 
 	public void notifyDriverEndLoaded() {
-		DriverEvent event = new DriverEvent(DriverEvent.DRIVER_EVENT_LOADING_END);
-		for (int i=0; i < driverEventListeners.size(); i++)
-		{
-			DriverEventListener aux = (DriverEventListener) driverEventListeners.get(i);
+		DriverEvent event = new DriverEvent(
+				DriverEvent.DRIVER_EVENT_LOADING_END);
+		for (int i = 0; i < driverEventListeners.size(); i++) {
+			DriverEventListener aux = (DriverEventListener) driverEventListeners
+					.get(i);
 			aux.driverNotification(event);
 		}
 	}
+
 	public static String removePrefix(String str) {
 
 		int colon_ind = str.indexOf(":");
@@ -1012,15 +1072,16 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 		}
 	}
 
-
-	public boolean canRead(IConnection iconn, String tablename) throws SQLException {
+	public boolean canRead(IConnection iconn, String tablename)
+			throws SQLException {
 		return true;
 	}
-	
-	public void validateData(IConnection conn, DBLayerDefinition lyrDef) throws DBException {
-		// subclasses should implement this to allow early detection of 
+
+	public void validateData(IConnection conn, DBLayerDefinition lyrDef)
+			throws DBException {
+		// subclasses should implement this to allow early detection of
 		// invalid layer settings (gvSIG will allow user to correct them and the
-		// notification dialog will not show) 
+		// notification dialog will not show)
 	}
 }
 

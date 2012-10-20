@@ -6,10 +6,9 @@ import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueCollection;
 import com.hardcode.gdbms.engine.values.ValueFactory;
 
-
 /**
  * test cases for PKTable
- *
+ * 
  * @author Fernando González Cortés
  */
 public class PKDataStructureTest extends TestCase {
@@ -26,7 +25,8 @@ public class PKDataStructureTest extends TestCase {
 		pks = new ValueCollection[n];
 
 		for (int i = 0; i < n; i++) {
-			pks[i] = ValueFactory.createValue(new Value[]{ValueFactory.createValue(i)});
+			pks[i] = ValueFactory.createValue(new Value[] { ValueFactory
+					.createValue(i) });
 			pkt.addPK(i, pks[i], i);
 		}
 	}
@@ -75,9 +75,12 @@ public class PKDataStructureTest extends TestCase {
 	 */
 	public void testAdds() {
 		ValueCollection[] newPk = new ValueCollection[3];
-		newPk[0] = ValueFactory.createValue(new Value[]{ValueFactory.createValue(10)});
-		newPk[1] = ValueFactory.createValue(new Value[]{ValueFactory.createValue(11)});
-		newPk[2] = ValueFactory.createValue(new Value[]{ValueFactory.createValue(12)});
+		newPk[0] = ValueFactory.createValue(new Value[] { ValueFactory
+				.createValue(10) });
+		newPk[1] = ValueFactory.createValue(new Value[] { ValueFactory
+				.createValue(11) });
+		newPk[2] = ValueFactory.createValue(new Value[] { ValueFactory
+				.createValue(12) });
 		pkt.addPK(newPk[0], 1000);
 		pkt.addPK(newPk[1], 2000);
 		pkt.addPK(newPk[2], 3000);
@@ -97,9 +100,12 @@ public class PKDataStructureTest extends TestCase {
 	 */
 	public void testEndTransaction() {
 		ValueCollection[] newPk = new ValueCollection[3];
-		newPk[0] = ValueFactory.createValue(new Value[]{ValueFactory.createValue(10)});
-		newPk[1] = ValueFactory.createValue(new Value[]{ValueFactory.createValue(11)});
-		newPk[2] = ValueFactory.createValue(new Value[]{ValueFactory.createValue(12)});
+		newPk[0] = ValueFactory.createValue(new Value[] { ValueFactory
+				.createValue(10) });
+		newPk[1] = ValueFactory.createValue(new Value[] { ValueFactory
+				.createValue(11) });
+		newPk[2] = ValueFactory.createValue(new Value[] { ValueFactory
+				.createValue(12) });
 		pkt.deletePK(4);
 		pkt.deletePK(4);
 		pkt.deletePK(7);

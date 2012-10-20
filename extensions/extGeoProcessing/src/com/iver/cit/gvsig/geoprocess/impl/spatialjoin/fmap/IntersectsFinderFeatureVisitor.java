@@ -90,13 +90,14 @@ import com.iver.cit.gvsig.fmap.layers.layerOperations.VectorialData;
 import com.iver.cit.gvsig.fmap.operations.strategies.FeatureVisitor;
 import com.iver.cit.gvsig.geoprocess.core.fmap.SummarizationFunction;
 import com.vividsolutions.jts.geom.Geometry;
+
 /**
- * Given a feature of a JOIN source layer,
- *  it looks for intersecting geometries of JOIN target layer and applies
- *  a sumarization function to its numeric fields.
- *
+ * Given a feature of a JOIN source layer, it looks for intersecting geometries
+ * of JOIN target layer and applies a sumarization function to its numeric
+ * fields.
+ * 
  * @author azabala
- *
+ * 
  */
 public class IntersectsFinderFeatureVisitor implements FeatureVisitor {
 	/**
@@ -104,8 +105,7 @@ public class IntersectsFinderFeatureVisitor implements FeatureVisitor {
 	 */
 	SelectableDataSource targetRecordset;
 	/**
-	 * Geometry of layer A whose intersections of layer B
-	 * we are looking for
+	 * Geometry of layer A whose intersections of layer B we are looking for
 	 */
 	private Geometry queryGeometry;
 	/**
@@ -113,8 +113,7 @@ public class IntersectsFinderFeatureVisitor implements FeatureVisitor {
 	 */
 	private List intersectIndexes = null;
 	/**
-	 * Relates a set of sumarization functions with a numeric field
-	 * name
+	 * Relates a set of sumarization functions with a numeric field name
 	 */
 	Map fields_sumarizationFun = null;
 	/**
@@ -124,8 +123,11 @@ public class IntersectsFinderFeatureVisitor implements FeatureVisitor {
 
 	/**
 	 * Constructor from a given geometry
-	 * @param geometry geometry whose intersections we are looking for
-	 * @param functions sumarization functions for each numeric value of target layer
+	 * 
+	 * @param geometry
+	 *            geometry whose intersections we are looking for
+	 * @param functions
+	 *            sumarization functions for each numeric value of target layer
 	 */
 	public IntersectsFinderFeatureVisitor(Geometry geometry, Map functions) {
 		this.queryGeometry = geometry;
@@ -138,12 +140,13 @@ public class IntersectsFinderFeatureVisitor implements FeatureVisitor {
 		intersectIndexes = new ArrayList();
 	}
 
-	public void visit(IGeometry g, int index) throws VisitorException, ProcessVisitorException {
-		if(g == null)
+	public void visit(IGeometry g, int index) throws VisitorException,
+			ProcessVisitorException {
+		if (g == null)
 			return;
-		if(selection != null){
-			if(! selection.get(index)){
-				//dont process feature because is not selected
+		if (selection != null) {
+			if (!selection.get(index)) {
+				// dont process feature because is not selected
 				return;
 			}
 		}
@@ -153,7 +156,8 @@ public class IntersectsFinderFeatureVisitor implements FeatureVisitor {
 			try {
 				applySumarizeFunction(index);
 			} catch (ReadDriverException e) {
-				throw new ProcessVisitorException(targetRecordset.getName(),e,"Error al acceder a los atributos de la capa destino en un spatial join");
+				throw new ProcessVisitorException(targetRecordset.getName(), e,
+						"Error al acceder a los atributos de la capa destino en un spatial join");
 			}
 		}
 	}
@@ -162,15 +166,16 @@ public class IntersectsFinderFeatureVisitor implements FeatureVisitor {
 		return "Looking intersects and sumarizing for a spatial join";
 	}
 
-	private void applySumarizeFunction(int recordIndex) throws ReadDriverException {
+	private void applySumarizeFunction(int recordIndex)
+			throws ReadDriverException {
 		Iterator fieldsIt = fields_sumarizationFun.keySet().iterator();
 		while (fieldsIt.hasNext()) {
 			String field = (String) fieldsIt.next();
 			int fieldIndex = targetRecordset.getFieldIndexByName(field);
 			Value valToSumarize = targetRecordset.getFieldValue(recordIndex,
 					fieldIndex);
-			SummarizationFunction[] functions =
-				(SummarizationFunction[]) fields_sumarizationFun.get(field);
+			SummarizationFunction[] functions = (SummarizationFunction[]) fields_sumarizationFun
+					.get(field);
 			for (int i = 0; i < functions.length; i++) {
 				functions[i].process((NumericValue) valToSumarize);
 			}// for
@@ -189,7 +194,7 @@ public class IntersectsFinderFeatureVisitor implements FeatureVisitor {
 		return intersectIndexes.size() > 0;
 	}
 
-	public void clearIntersections(){
+	public void clearIntersections() {
 		intersectIndexes.clear();
 	}
 

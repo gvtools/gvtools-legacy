@@ -15,20 +15,20 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.utiles.BrowserControl;
 
-
 /**
- * This class extends AbstractHyperLinkPanel. And provides support to open txt files and
- * WWW. Implements methods from IExtensionBuilder to make it extending.
- *
+ * This class extends AbstractHyperLinkPanel. And provides support to open txt
+ * files and WWW. Implements methods from IExtensionBuilder to make it
+ * extending.
+ * 
  */
-public class TxtPanel extends AbstractHyperLinkPanel{
+public class TxtPanel extends AbstractHyperLinkPanel {
 	private static final long serialVersionUID = 1408583183372898110L;
 	private JTextPane textPane;
 
 	/**
 	 * Default constructor.
 	 */
-	public TxtPanel(URI doc){
+	public TxtPanel(URI doc) {
 		super(doc);
 		initialize();
 	}
@@ -36,15 +36,15 @@ public class TxtPanel extends AbstractHyperLinkPanel{
 	/**
 	 * Initializes this panel.
 	 */
-	void initialize(){
+	void initialize() {
 		this.setLayout(new BorderLayout());
 		showDocument();
 	}
 
-
 	/**
-	 * Implements the necessary code to show the content of the URI in this panel. The
-	 * content of the URI is a TXT or a WWW.
+	 * Implements the necessary code to show the content of the URI in this
+	 * panel. The content of the URI is a TXT or a WWW.
+	 * 
 	 * @param URI
 	 */
 	protected void showDocument() {
@@ -55,11 +55,12 @@ public class TxtPanel extends AbstractHyperLinkPanel{
 			return;
 		}
 
-		URL url=null;
+		URL url = null;
 		try {
-			url=document.normalize().toURL();
+			url = document.normalize().toURL();
 		} catch (MalformedURLException e1) {
-			NotificationManager.addWarning(PluginServices.getText(this, "Hyperlink_linked_field_doesnot_exist"), e1);
+			NotificationManager.addWarning(PluginServices.getText(this,
+					"Hyperlink_linked_field_doesnot_exist"), e1);
 			return;
 		}
 		try {
@@ -73,7 +74,8 @@ public class TxtPanel extends AbstractHyperLinkPanel{
 				}
 			});
 		} catch (IOException e) {
-			NotificationManager.addWarning(PluginServices.getText(this, "Hyperlink_linked_field_doesnot_exist"), e);
+			NotificationManager.addWarning(PluginServices.getText(this,
+					"Hyperlink_linked_field_doesnot_exist"), e);
 			return;
 		}
 		this.add(textPane, BorderLayout.CENTER);

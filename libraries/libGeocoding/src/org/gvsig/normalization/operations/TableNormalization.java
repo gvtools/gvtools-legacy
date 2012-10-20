@@ -231,7 +231,8 @@ public class TableNormalization extends AbstractNormalization {
 			cadena = cadena.trim();
 
 			// create values
-			vals[positionInRowValues] = createValue(row, tipoCampo, this.posNameNewFields[j], cadena);
+			vals[positionInRowValues] = createValue(row, tipoCampo,
+					this.posNameNewFields[j], cadena);
 
 		}
 	}

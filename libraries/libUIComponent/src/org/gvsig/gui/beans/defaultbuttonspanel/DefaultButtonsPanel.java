@@ -33,11 +33,11 @@ import org.gvsig.gui.beans.buttonspanel.ButtonsPanel;
 import org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener;
 
 /**
- * <code>DefaultButtonsPanel</code> es un Panel que hereda de <code>JPanel</code> con
- * el añadido de poder definir una botonera por defecto.
- *
+ * <code>DefaultButtonsPanel</code> es un Panel que hereda de
+ * <code>JPanel</code> con el añadido de poder definir una botonera por defecto.
+ * 
  * @version 20/08/2008
- *
+ * 
  * @author BorSanZa - Borja Sanchez Zamorano (borja.sanchez@iver.es)
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
@@ -57,27 +57,30 @@ public class DefaultButtonsPanel extends JPanel {
 		getButtonsPanel().addApply();
 		super.add(getButtonsPanel(), java.awt.BorderLayout.SOUTH);
 		super.add(getContent(), java.awt.BorderLayout.CENTER);
-		this.setBorder(javax.swing.BorderFactory.createEmptyBorder(11, 11, 11, 11));
+		this.setBorder(javax.swing.BorderFactory.createEmptyBorder(11, 11, 11,
+				11));
 	}
 
 	/**
-	 * Crea el <code>DialogPanel</code> con los botones que definamos de la clase
-	 * <code>ButtonsPanel</code>
-	 *
-	 * @param buttons Constante para definir que botones se crearán
+	 * Crea el <code>DialogPanel</code> con los botones que definamos de la
+	 * clase <code>ButtonsPanel</code>
+	 * 
+	 * @param buttons
+	 *            Constante para definir que botones se crearán
 	 */
 	public DefaultButtonsPanel(int buttons) {
 		super.setLayout(new java.awt.BorderLayout(0, 0));
 		bp = new ButtonsPanel(buttons);
 		super.add(getButtonsPanel(), java.awt.BorderLayout.SOUTH);
 		super.add(getContent(), java.awt.BorderLayout.CENTER);
-		this.setBorder(javax.swing.BorderFactory.createEmptyBorder(11, 11, 11, 11));
+		this.setBorder(javax.swing.BorderFactory.createEmptyBorder(11, 11, 11,
+				11));
 	}
 
 	/**
 	 * Obtener el objeto <code>ButtonsPanel</code> del <code>DialogPanel</code>.
 	 * En caso de no estar creado, lo creará.
-	 *
+	 * 
 	 * @return El componente bp
 	 */
 	public ButtonsPanel getButtonsPanel() {
@@ -87,9 +90,9 @@ public class DefaultButtonsPanel extends JPanel {
 	}
 
 	/**
-	 * Obtener el contenido del <code>DialogPanel</code>. En caso de no estar creado,
-	 * lo creará.
-	 *
+	 * Obtener el contenido del <code>DialogPanel</code>. En caso de no estar
+	 * creado, lo creará.
+	 * 
 	 * @return El componente content
 	 */
 	public JPanel getContent() {
@@ -108,6 +111,7 @@ public class DefaultButtonsPanel extends JPanel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.Container#getLayout()
 	 */
 	public LayoutManager getLayout() {
@@ -116,6 +120,7 @@ public class DefaultButtonsPanel extends JPanel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.Container#setLayout(java.awt.LayoutManager)
 	 */
 	public void setLayout(LayoutManager mgr) {
@@ -123,8 +128,9 @@ public class DefaultButtonsPanel extends JPanel {
 	}
 
 	/**
-	 * Devuelve el Window que contiene dicha ventana o null en caso de que no sea
-	 * asi
+	 * Devuelve el Window que contiene dicha ventana o null en caso de que no
+	 * sea asi
+	 * 
 	 * @return
 	 */
 	public Window getWindow() {
@@ -139,6 +145,7 @@ public class DefaultButtonsPanel extends JPanel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.Container#add(java.awt.Component)
 	 */
 	public Component add(Component comp) {
@@ -147,6 +154,7 @@ public class DefaultButtonsPanel extends JPanel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.Container#add(java.awt.Component, int)
 	 */
 	public Component add(Component comp, int index) {
@@ -155,6 +163,7 @@ public class DefaultButtonsPanel extends JPanel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.Container#add(java.awt.Component, java.lang.Object)
 	 */
 	public void add(Component comp, Object constraints) {
@@ -163,6 +172,7 @@ public class DefaultButtonsPanel extends JPanel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.Container#add(java.awt.Component, java.lang.Object, int)
 	 */
 	public void add(Component comp, Object constraints, int index) {
@@ -171,6 +181,7 @@ public class DefaultButtonsPanel extends JPanel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.Container#add(java.lang.String, java.awt.Component)
 	 */
 	public Component add(String name, Component comp) {

@@ -21,20 +21,20 @@ package org.gvsig.raster.grid.filter.correction;
 import org.gvsig.raster.buffer.RasterBuffer;
 import org.gvsig.raster.dataset.Params;
 import org.gvsig.raster.grid.filter.RasterFilter;
+
 /**
  * Clase base para los filtros de mediana.
- *
- * @author Diego Guerrero Sevilla  <diego.guerrero@uclm.es>
+ * 
+ * @author Diego Guerrero Sevilla <diego.guerrero@uclm.es>
  */
 public class MedianFilter extends RasterFilter {
-	public static String[] names = new String[] {"median"};
+	public static String[] names = new String[] { "median" };
 	/**
 	 * Variable para guardar el lado de la ventana de filtrado
 	 */
-	protected int                   sideWindow		= 0;
-	protected int                   sizeWindow      = 0;
-	protected int                   halfSide        = 0;
-
+	protected int sideWindow = 0;
+	protected int sizeWindow = 0;
+	protected int halfSide = 0;
 
 	public MedianFilter() {
 		super();
@@ -43,6 +43,7 @@ public class MedianFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#pre()
 	 */
 	public void pre() {
@@ -51,8 +52,8 @@ public class MedianFilter extends RasterFilter {
 		height = raster.getHeight();
 		width = raster.getWidth();
 		sideWindow = ((Integer) params.get("ladoVentana")).intValue();
-		
-		//El lado de la ventana debe ser positivo e impar.
+
+		// El lado de la ventana debe ser positivo e impar.
 		sideWindow = Math.abs(sideWindow);
 		if (sideWindow % 2 == 0)
 			sideWindow++;
@@ -62,6 +63,7 @@ public class MedianFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#post()
 	 */
 	public void post() {
@@ -71,6 +73,7 @@ public class MedianFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getGroup()
 	 */
 	public String getGroup() {
@@ -79,6 +82,7 @@ public class MedianFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getInRasterDataType()
 	 */
 	public int getInRasterDataType() {
@@ -87,6 +91,7 @@ public class MedianFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getNames()
 	 */
 	public String[] getNames() {
@@ -95,6 +100,7 @@ public class MedianFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getOutRasterDataType()
 	 */
 	public int getOutRasterDataType() {
@@ -103,7 +109,9 @@ public class MedianFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.RasterFilter#getResult(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.RasterFilter#getResult(java.lang.String)
 	 */
 	public Object getResult(String name) {
 		if (name.equals("raster")) {
@@ -116,35 +124,39 @@ public class MedianFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getUIParams()
 	 */
 	public Params getUIParams(String nameFilter) {
-		if(params != null) {
+		if (params != null) {
 			Object obj = params.get("ladoVentana");
-			if(obj != null && obj instanceof Integer) {
-				sideWindow = ((Integer)obj).intValue();
+			if (obj != null && obj instanceof Integer) {
+				sideWindow = ((Integer) obj).intValue();
 				sideWindow = Math.abs(sideWindow);
 			}
 		}
 		Params params = new Params();
-		params.setParam("ladoVentana",
-				new Integer(sideWindow),
-				Params.SLIDER,
-				new String[] {"1", "7", "0", "1", "25" }); //min, max, valor defecto, intervalo pequeño, intervalo grande;
+		params.setParam("ladoVentana", new Integer(sideWindow), Params.SLIDER,
+				new String[] { "1", "7", "0", "1", "25" }); // min, max, valor
+															// defecto,
+															// intervalo
+															// pequeño,
+															// intervalo grande;
 		return params;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#process(int, int)
 	 */
 	public void process(int x, int y) throws InterruptedException {
 	}
-	
+
 	/**
 	 * Obtiene el tamaño del lado de la ventana
-	 * @return entero que representa el tamaño del lado de la 
-	 * ventana en píxeles
+	 * 
+	 * @return entero que representa el tamaño del lado de la ventana en píxeles
 	 */
 	public int getSideWindow() {
 		return sideWindow;

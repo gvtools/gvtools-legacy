@@ -46,20 +46,24 @@ import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.RectangleSelectionListener;
 import com.iver.cit.gvsig.fmap.tools.Events.RectangleEvent;
 
-
 /**
- * <p>Inherits {@link RectangleSelectionListener RectangleSelectionListener} enabling/disabling special
- *  controls for managing the data selected.</p>
- *
+ * <p>
+ * Inherits {@link RectangleSelectionListener RectangleSelectionListener}
+ * enabling/disabling special controls for managing the data selected.
+ * </p>
+ * 
  * @see RectangleSelectionListener
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class RectangleSelectListener extends RectangleSelectionListener {
 	/**
- 	 * <p>Creates a new <code>RectangleSelectListener</code> object.</p>
- 	 *
-	 * @param mapCtrl the <code>MapControl</code> where is defined the rectangle
+	 * <p>
+	 * Creates a new <code>RectangleSelectListener</code> object.
+	 * </p>
+	 * 
+	 * @param mapCtrl
+	 *            the <code>MapControl</code> where is defined the rectangle
 	 */
 	public RectangleSelectListener(MapControl mapCtrl) {
 		super(mapCtrl);
@@ -67,7 +71,10 @@ public class RectangleSelectListener extends RectangleSelectionListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.RectangleSelectionListener#rectangle(com.iver.cit.gvsig.fmap.tools.Events.RectangleEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.RectangleSelectionListener#rectangle(com
+	 * .iver.cit.gvsig.fmap.tools.Events.RectangleEvent)
 	 */
 	public void rectangle(RectangleEvent event) throws BehaviorException {
 		super.rectangle(event);

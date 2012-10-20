@@ -67,59 +67,63 @@ import org.gvsig.xmlschema.exceptions.SchemaCreationException;
  *
  */
 /**
- * This interface represents a XML file. It could has some
- * associated schemas.
+ * This interface represents a XML file. It could has some associated schemas.
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public interface IXSSchemaDocument {
-	
+
 	/**
 	 * @return <true> if the document has a schema
 	 */
 	public boolean hasSchemas();
-	
+
 	/**
 	 * @return <true> if the document has namespace prefixes
 	 */
 	public boolean hasPrefixes();
-	
+
 	/**
-	 * Adds a new Schema from a URI. It downloads the file
-	 * and creates the schema
+	 * Adds a new Schema from a URI. It downloads the file and creates the
+	 * schema
+	 * 
 	 * @param uri
-	 * URI tha contains the schema
+	 *            URI tha contains the schema
 	 * @param schema
-	 * Schema to add
+	 *            Schema to add
 	 */
-	public void addSchema(URI uri) throws SchemaCreationException;	
-	
+	public void addSchema(URI uri) throws SchemaCreationException;
+
 	/**
 	 * Adds a new Schema from a URI
+	 * 
 	 * @param uri
-	 * URI tha contains the schema
+	 *            URI tha contains the schema
 	 * @param schema
-	 * Schema to add
+	 *            Schema to add
 	 */
 	public void addSchema(URI uri, IXSSchema schema);
-	
+
 	/**
 	 * Add a schema location.
+	 * 
 	 * @param uri
 	 * @param schemaLocation
 	 */
 	public void addSchemaLocation(URI uri, String schemaLocation);
-	
+
 	/**
 	 * Gets the schema location
+	 * 
 	 * @param uri
-	 * Schema URI
-	 * @return
-	 * The schema location
+	 *            Schema URI
+	 * @return The schema location
 	 */
 	public String getSchemaLocation(URI uri);
-	
+
 	/**
 	 * Return <true> if the schema URI has a schema location
+	 * 
 	 * @param uri
 	 * @return
 	 */
@@ -127,141 +131,143 @@ public interface IXSSchemaDocument {
 
 	/**
 	 * Return if the map has a schema
+	 * 
 	 * @param uri
-	 * URI tha contains the schema
-	 * @return
-	 * <true> if exists or <false>
+	 *            URI tha contains the schema
+	 * @return <true> if exists or <false>
 	 */
 	public boolean hasSchema(URI uri);
 
 	/**
-	 * @return
-	 * A lsit of the schemas URI's
+	 * @return A lsit of the schemas URI's
 	 */
 	public Enumeration getURIs();
 
 	/**
-	 * @return
-	 * A list of schemas
+	 * @return A list of schemas
 	 */
 	public Enumeration getSchemas();
 
 	/**
-	 * @return
-	 * A list of namespace prefixes
+	 * @return A list of namespace prefixes
 	 */
 	public Enumeration getPrefixes();
-	
+
 	/**
 	 * Get a schema from a URI
+	 * 
 	 * @param uri
-	 * URI where the schema is
-	 * @return
-	 * A Schema
+	 *            URI where the schema is
+	 * @return A Schema
 	 */
 	public IXSSchema getSchema(URI uri);
 
 	/**
 	 * Remove a schema from a URI
+	 * 
 	 * @param uri
-	 * Schema URI
+	 *            Schema URI
 	 */
 	public void remove(URI uri);
 
 	/**
-	 * Adds a prefix from a namespace that is used into the
-	 * XML file
+	 * Adds a prefix from a namespace that is used into the XML file
+	 * 
 	 * @param prefix
-	 * Napescape prefix
+	 *            Napescape prefix
 	 * @param namespaceURI
-	 * Napespace URI
+	 *            Napespace URI
 	 */
 	public void addNamespacePrefix(String prefix, String namespaceURI);
 
 	/**
 	 * Return the namespace URI from a prefix
+	 * 
 	 * @param prefix
-	 * Namespace prefix
-	 * @return
-	 * A namespace URI
+	 *            Namespace prefix
+	 * @return A namespace URI
 	 */
 	public String getNamespaceURI(String prefix);
-	
+
 	/**
 	 * It retusn the namespace prefix
+	 * 
 	 * @param namespaceURI
-	 * Namespace URI
-	 * @return
-	 * The namespace prefix
+	 *            Namespace URI
+	 * @return The namespace prefix
 	 */
 	public String getNamespacePrefix(String namespaceURI);
-	
+
 	/**
 	 * Get a element from a qualified name
+	 * 
 	 * @param namespacePrefix
-	 * Namespace prefix
+	 *            Namespace prefix
 	 * @param elementName
-	 * Local name
-	 * @return
-	 * A SXD element
-	 * @throws TypeNotFoundException 
-	 */
-	public IXSElementDeclaration getElementDeclarationByName(String namespacePrefix, String elementName) ;
-	
-	/**
-	 * Get a element from a qualified name
-	 * @param elementName
-	 * Namespace prefix and local name
-	 * @return
-	 * A SXD element
-	 * @throws TypeNotFoundException 
-	 */
-	public IXSElementDeclaration getElementDeclarationByName(String elementName);
-		
-	/**
-	 * Search a XML schema type definition by name
-	 * @param targetNamespace
-	 * Namespace to seach the element
-	 * @param typeName
-	 * XML schema type name
-	 * @return
-	 * A XML schema type definition
+	 *            Local name
+	 * @return A SXD element
 	 * @throws TypeNotFoundException
 	 */
-	public IXSTypeDefinition getTypeByName(String targetNamespace, String typeName);
-	
+	public IXSElementDeclaration getElementDeclarationByName(
+			String namespacePrefix, String elementName);
+
+	/**
+	 * Get a element from a qualified name
+	 * 
+	 * @param elementName
+	 *            Namespace prefix and local name
+	 * @return A SXD element
+	 * @throws TypeNotFoundException
+	 */
+	public IXSElementDeclaration getElementDeclarationByName(String elementName);
+
 	/**
 	 * Search a XML schema type definition by name
+	 * 
+	 * @param targetNamespace
+	 *            Namespace to seach the element
 	 * @param typeName
-	 * XML schema type name
-	 * @return
-	 * A XML schema type definition
+	 *            XML schema type name
+	 * @return A XML schema type definition
+	 * @throws TypeNotFoundException
+	 */
+	public IXSTypeDefinition getTypeByName(String targetNamespace,
+			String typeName);
+
+	/**
+	 * Search a XML schema type definition by name
+	 * 
+	 * @param typeName
+	 *            XML schema type name
+	 * @return A XML schema type definition
 	 * @throws TypeNotFoundException
 	 */
 	public IXSTypeDefinition getTypeByName(String typeName);
-	
+
 	/**
 	 * @return <true> if the element names are qualified
 	 */
 	public boolean isElementFormDefault();
-	
+
 	/**
 	 * Set if the element names are qualified
+	 * 
 	 * @param isElementQualified
-	 * <true> if the element names are qualified
+	 *            <true> if the element names are qualified
 	 */
 	public void setElementFormDefault(boolean isQualified);
-	
+
 	/**
-	 * @return the targetNamespace for the file. It will be used
-	 * for the unqualified names
+	 * @return the targetNamespace for the file. It will be used for the
+	 *         unqualified names
 	 */
 	public String getTargetNamespace();
-	
+
 	/**
 	 * Set the targetNamespace
+	 * 
 	 * @param targetNamespace
-	 * TargetNamespace to set
+	 *            TargetNamespace to set
 	 */
 	public void setTargetNamespace(String targetNamespace);
 }

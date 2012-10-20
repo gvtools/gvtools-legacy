@@ -24,28 +24,33 @@ import java.awt.event.ActionListener;
 
 import org.gvsig.gui.beans.TestUI;
 import org.gvsig.gui.beans.table.exceptions.NotInitializeException;
+
 /**
  * Test del TableContainer
- *
+ * 
  * @version 27/05/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class TestTableColorTable implements ActionListener {
-	private int            w     = 460;
-	private int            h     = 200;
-	private TestUI         frame = new TestUI("TestTableColorTable");
+	private int w = 460;
+	private int h = 200;
+	private TestUI frame = new TestUI("TestTableColorTable");
 	private TableContainer table = null;
 
 	public TestTableColorTable() throws NotInitializeException {
-		String[] columnNames = { "selec", "clase", "RGB", "Valor", "Max", "Alpha" };
+		String[] columnNames = { "selec", "clase", "RGB", "Valor", "Max",
+				"Alpha" };
 		int[] columnWidths = { 54, 1104, 94, 114, 114, 60 };
 		table = new TableContainer(columnNames, columnWidths);
 		table.setModel("TableColorModel");
 		table.initialize();
 
-		Object[] row = { Color.GREEN, "", "0,255,0", new Double(2), new Double(2), "255" };
-		Object[] row1 = { Color.BLUE, "", "0,0,255", new Double(1), new Double(2), "255" };
-		Object[] row2 = { Color.RED , "", "255,0,0", new Double(0), new Double(1), "255" };
+		Object[] row = { Color.GREEN, "", "0,255,0", new Double(2),
+				new Double(2), "255" };
+		Object[] row1 = { Color.BLUE, "", "0,0,255", new Double(1),
+				new Double(2), "255" };
+		Object[] row2 = { Color.RED, "", "255,0,0", new Double(0),
+				new Double(1), "255" };
 		table.addRow(row);
 
 		table.addRow(row1);
@@ -60,7 +65,7 @@ public class TestTableColorTable implements ActionListener {
 	public static void main(String[] args) {
 		try {
 			new TestTableColorTable();
-		} catch(NotInitializeException ex){
+		} catch (NotInitializeException ex) {
 			System.out.println("Tabla no inicializada");
 		}
 	}

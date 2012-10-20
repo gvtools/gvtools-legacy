@@ -70,6 +70,7 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
 /**
  * This class writes a PlaceMark kml tag. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;Placemark&gt;
@@ -81,42 +82,51 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  * &lt;/Placemark&gt;
  * </code>
  * </pre>
+ * 
  * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#placemark
  */
 public class PlaceMarkWriter {
-	
+
 	/**
 	 * Writes a PlaceMark init tag and its attributes
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param id
-	 * PlaceMark id
+	 *            PlaceMark id
 	 * @param name
-	 * PlaceMark name
+	 *            PlaceMark name
 	 * 
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler, String id, String name) throws IOException{
-		handler.getProfile().getFeatureWriter().start(writer, handler, id, Kml2_1_Tags.PLACEMARK);
+	public void start(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor handler, String id, String name)
+			throws IOException {
+		handler.getProfile().getFeatureWriter()
+				.start(writer, handler, id, Kml2_1_Tags.PLACEMARK);
 		writer.writeEndAttributes();
-		if (name != null){
+		if (name != null) {
 			handler.getProfile().getNameWriter().write(writer, handler, name);
-		}	
+		}
 	}
-	
+
 	/**
 	 * It writes the end PlaceMark tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @throws IOException
 	 */
-	public void end(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler) throws IOException{
-		handler.getProfile().getFeatureWriter().end(writer, handler, Kml2_1_Tags.PLACEMARK);
+	public void end(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor handler) throws IOException {
+		handler.getProfile().getFeatureWriter()
+				.end(writer, handler, Kml2_1_Tags.PLACEMARK);
 	}
 }

@@ -9,10 +9,9 @@ import com.hardcode.gdbms.engine.strategies.OperationDataSource;
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public class ArcJoinDataSource extends OperationDataSource {
@@ -24,14 +23,16 @@ public class ArcJoinDataSource extends OperationDataSource {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param result
 	 * @param source
-	 * @param linked DOCUMENT ME!
-	 * @param linkFieldindex DOCUMENT ME!
+	 * @param linked
+	 *            DOCUMENT ME!
+	 * @param linkFieldindex
+	 *            DOCUMENT ME!
 	 */
 	public ArcJoinDataSource(int[] result, DataSource source,
-		DataSource linked, int linkFieldindex) {
+			DataSource linked, int linkFieldindex) {
 		this.relation = result;
 		this.source = source;
 		this.linked = linked;
@@ -59,20 +60,20 @@ public class ArcJoinDataSource extends OperationDataSource {
 	 * @see com.hardcode.gdbms.engine.data.FieldNameAccess#getFieldIndexByName(java.lang.String)
 	 */
 	public int getFieldIndexByName(String fieldName) throws ReadDriverException {
-        for (int i = 0; i < getFieldCount(); i++) {
-            if (getFieldName(i).equals(fieldName)){
-                return i;
-            }
-        }
+		for (int i = 0; i < getFieldCount(); i++) {
+			if (getFieldName(i).equals(fieldName)) {
+				return i;
+			}
+		}
 
-        return -1;
-    }
+		return -1;
+	}
 
 	/**
 	 * @see com.hardcode.gdbms.engine.data.ReadDriver#getFieldValue(long, int)
 	 */
 	public Value getFieldValue(long rowIndex, int fieldId)
-		throws ReadDriverException {
+			throws ReadDriverException {
 		if (fieldId < source.getFieldCount()) {
 			return source.getFieldValue(rowIndex, fieldId);
 		}
@@ -141,8 +142,8 @@ public class ArcJoinDataSource extends OperationDataSource {
 	 * @see com.hardcode.gdbms.engine.data.DataSource#getMemento()
 	 */
 	public Memento getMemento() throws MementoException {
-		return new OperationLayerMemento(getName(),
-				new Memento[]{source.getMemento(), linked.getMemento()}, getSQL());
+		return new OperationLayerMemento(getName(), new Memento[] {
+				source.getMemento(), linked.getMemento() }, getSQL());
 	}
 
 	public int getFieldWidth(int i) throws ReadDriverException {
@@ -158,7 +159,7 @@ public class ArcJoinDataSource extends OperationDataSource {
 		return linked.getFieldWidth(i);
 	}
 
-    public boolean isVirtualField(int fieldId) throws ReadDriverException  {
+	public boolean isVirtualField(int fieldId) throws ReadDriverException {
 		if (fieldId < source.getFieldCount()) {
 			return source.isVirtualField(fieldId);
 		}
@@ -169,5 +170,5 @@ public class ArcJoinDataSource extends OperationDataSource {
 		}
 
 		return linked.isVirtualField(fieldId);
-    }
+	}
 }

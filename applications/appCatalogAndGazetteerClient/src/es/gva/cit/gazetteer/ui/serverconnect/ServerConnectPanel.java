@@ -3,7 +3,6 @@ package es.gva.cit.gazetteer.ui.serverconnect;
 import es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver;
 import es.gva.cit.gazetteer.utils.GazetteerDriverRegister;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -68,22 +67,25 @@ import es.gva.cit.gazetteer.utils.GazetteerDriverRegister;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class ServerConnectPanel extends es.gva.cit.catalog.ui.serverconnect.ServerConnectPanel{
-	
-	public ServerConnectPanel(){
+public class ServerConnectPanel extends
+		es.gva.cit.catalog.ui.serverconnect.ServerConnectPanel {
+
+	public ServerConnectPanel() {
 		super();
-		setDatabaseVisible(false);	
+		setDatabaseVisible(false);
 		setServerPropertiesButtonVisible(false);
 	}
-	
+
 	/**
 	 * Select a concrete protocol
+	 * 
 	 * @param protocol
-	 * Protocol to select
+	 *            Protocol to select
 	 */
-	public void setProtocol(String protocol){
-		IGazetteerServiceDriver driver = GazetteerDriverRegister.getInstance().getDriver(protocol);
-		if (driver != null){
+	public void setProtocol(String protocol) {
+		IGazetteerServiceDriver driver = GazetteerDriverRegister.getInstance()
+				.getDriver(protocol);
+		if (driver != null) {
 			protocolCombo.setSelectedItem(driver);
 		}
 	}

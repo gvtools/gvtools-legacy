@@ -30,42 +30,49 @@ import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
-import com.iver.andami.PluginServices;
 import org.gvsig.raster.beans.previewbase.IUserPanelInterface;
 import org.gvsig.raster.util.BasePanel;
 import org.gvsig.raster.util.RasterToolsUtil;
 import org.gvsig.raster.vectorization.VectorizationBinding;
 import org.gvsig.rastertools.vectorizacion.vector.VectorData;
+
+import com.iver.andami.PluginServices;
+
 /**
  * Panel con los controles de opciones de vectorización
  * 
  * 09/06/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
-public class VectorPanel extends BasePanel implements ActionListener, IUserPanelInterface, Observer {
+public class VectorPanel extends BasePanel implements ActionListener,
+		IUserPanelInterface, Observer {
 	private static final long serialVersionUID = -3059193834485803008L;
-	private ContourLinesPanel contourPanel      = null;
-	private PotracePanel      potracePanel      = null;
-	private JComboBox         algorithm         = null;
-	
+	private ContourLinesPanel contourPanel = null;
+	private PotracePanel potracePanel = null;
+	private JComboBox algorithm = null;
+
 	/**
-	 *Inicializa componentes gráficos y traduce
+	 * Inicializa componentes gráficos y traduce
 	 */
 	public VectorPanel() {
 		init();
 		translate();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#init()
 	 */
 	protected void init() {
-		setBorder(BorderFactory.createTitledBorder(null, RasterToolsUtil.getText(this, "vector_generation"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+		setBorder(BorderFactory.createTitledBorder(null,
+				RasterToolsUtil.getText(this, "vector_generation"),
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
 		setLayout(new GridBagLayout());
 
 		GridBagConstraints gbc;
-
 
 		gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -74,7 +81,6 @@ public class VectorPanel extends BasePanel implements ActionListener, IUserPanel
 		gbc.gridy = 0;
 		add(getAlgorithm(), gbc);
 
-		
 		gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.insets = new Insets(5, 5, 2, 5);
@@ -96,35 +102,33 @@ public class VectorPanel extends BasePanel implements ActionListener, IUserPanel
 		gbc.gridy = 3;
 		gbc.gridx = 0;
 		add(new JPanel(), gbc);
-		
-		/*gbc.gridy = 1;
-		add(getOutputScalePanel(), gbc);
-		
-		gbc.fill = GridBagConstraints.BOTH;
-		gbc.weighty = 1;
-		gbc.insets = new Insets(0, 0, 0, 0);
-		gbc.gridy = 2;
-		add(getPosterizationPanel(), gbc);
-		
-		gbc.gridy = 3;
-		add(getHighPassPanel(), gbc);
-		
-		gbc.gridy = 4;
-		add(getNoisePanel(), gbc);*/
+
+		/*
+		 * gbc.gridy = 1; add(getOutputScalePanel(), gbc);
+		 * 
+		 * gbc.fill = GridBagConstraints.BOTH; gbc.weighty = 1; gbc.insets = new
+		 * Insets(0, 0, 0, 0); gbc.gridy = 2; add(getPosterizationPanel(), gbc);
+		 * 
+		 * gbc.gridy = 3; add(getHighPassPanel(), gbc);
+		 * 
+		 * gbc.gridy = 4; add(getNoisePanel(), gbc);
+		 */
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#translate()
 	 */
 	protected void translate() {
 	}
-	
+
 	public void actionPerformed(ActionEvent e) {
 	}
 
 	/**
 	 * Obtiene el panel de vectorización por lineas de contorno
+	 * 
 	 * @return
 	 */
 	public ContourLinesPanel getContourLinesPanel() {
@@ -135,8 +139,9 @@ public class VectorPanel extends BasePanel implements ActionListener, IUserPanel
 	}
 
 	/**
-	 * Obtiene el panel de vectorización por lineas de contorno para el algoritmo
-	 * de Potrace
+	 * Obtiene el panel de vectorización por lineas de contorno para el
+	 * algoritmo de Potrace
+	 * 
 	 * @return
 	 */
 	public PotracePanel getPotracePanel() {
@@ -148,6 +153,7 @@ public class VectorPanel extends BasePanel implements ActionListener, IUserPanel
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.beans.previewbase.IUserPanelInterface#getTitle()
 	 */
 	public String getTitle() {
@@ -155,8 +161,10 @@ public class VectorPanel extends BasePanel implements ActionListener, IUserPanel
 	}
 
 	/**
-	 * Actualiza los valores de los paneles cuando los datos de ClippingData varian
-	 * @param o 
+	 * Actualiza los valores de los paneles cuando los datos de ClippingData
+	 * varian
+	 * 
+	 * @param o
 	 * @param arg
 	 */
 	public void update(Observable o, Object arg) {
@@ -167,70 +175,89 @@ public class VectorPanel extends BasePanel implements ActionListener, IUserPanel
 
 		setEnableValueChangedEvent(false);
 
-		getContourLinesPanel().setVisible(data.getAlgorithm() == VectorData.CONTOUR_LINES);
-		getPotracePanel().setVisible(data.getAlgorithm() == VectorData.POTRACE_LINES);
+		getContourLinesPanel().setVisible(
+				data.getAlgorithm() == VectorData.CONTOUR_LINES);
+		getPotracePanel().setVisible(
+				data.getAlgorithm() == VectorData.POTRACE_LINES);
 
 		switch (data.getAlgorithm()) {
-			case VectorData.CONTOUR_LINES:
-				getAlgorithm().setSelectedItem(PluginServices.getText(this,"contour"));
-				break;
-			case VectorData.POTRACE_LINES:
-				getAlgorithm().setSelectedItem(PluginServices.getText(this,"potrace"));
-				break;
+		case VectorData.CONTOUR_LINES:
+			getAlgorithm().setSelectedItem(
+					PluginServices.getText(this, "contour"));
+			break;
+		case VectorData.POTRACE_LINES:
+			getAlgorithm().setSelectedItem(
+					PluginServices.getText(this, "potrace"));
+			break;
 		}
 
-		getContourLinesPanel().getDistance().setValue(String.valueOf(data.getDistance()));
-		
-		getPotracePanel().getCurveOptimization().setSelected(data.isCurveOptimization());
-		getPotracePanel().getDespeckle().setValue(new Integer(data.getDespeckle()));
-		getPotracePanel().getCornerThreshold().setValue(new Double(data.getCornerThreshold()));
-		getPotracePanel().getOptimizationTolerance().setValue(new Double(data.getOptimizationTolerance()));
-		getPotracePanel().getOutputQuantization().setValue(new Integer(data.getOutputQuantizqtion()));
-		
+		getContourLinesPanel().getDistance().setValue(
+				String.valueOf(data.getDistance()));
+
+		getPotracePanel().getCurveOptimization().setSelected(
+				data.isCurveOptimization());
+		getPotracePanel().getDespeckle().setValue(
+				new Integer(data.getDespeckle()));
+		getPotracePanel().getCornerThreshold().setValue(
+				new Double(data.getCornerThreshold()));
+		getPotracePanel().getOptimizationTolerance().setValue(
+				new Double(data.getOptimizationTolerance()));
+		getPotracePanel().getOutputQuantization().setValue(
+				new Integer(data.getOutputQuantizqtion()));
+
 		switch (data.getPolicy()) {
-			case VectorizationBinding.POLICY_BLACK:
-				getPotracePanel().getPolicy().setSelectedItem(RasterToolsUtil.getText(this, "black"));
-				break;
-			case VectorizationBinding.POLICY_WHITE:
-				getPotracePanel().getPolicy().setSelectedItem(RasterToolsUtil.getText(this, "white"));
-				break;
-			case VectorizationBinding.POLICY_RIGHT:
-				getPotracePanel().getPolicy().setSelectedItem(RasterToolsUtil.getText(this, "right"));
-				break;
-			case VectorizationBinding.POLICY_LEFT:
-				getPotracePanel().getPolicy().setSelectedItem(RasterToolsUtil.getText(this, "left"));
-				break;
-			case VectorizationBinding.POLICY_MAJORITY:
-				getPotracePanel().getPolicy().setSelectedItem(RasterToolsUtil.getText(this, "majority"));
-				break;
-			case VectorizationBinding.POLICY_RANDOM:
-				getPotracePanel().getPolicy().setSelectedItem(RasterToolsUtil.getText(this, "random"));
-				break;
-			default:
-				getPotracePanel().getPolicy().setSelectedItem(RasterToolsUtil.getText(this, "minority"));
-				break;
+		case VectorizationBinding.POLICY_BLACK:
+			getPotracePanel().getPolicy().setSelectedItem(
+					RasterToolsUtil.getText(this, "black"));
+			break;
+		case VectorizationBinding.POLICY_WHITE:
+			getPotracePanel().getPolicy().setSelectedItem(
+					RasterToolsUtil.getText(this, "white"));
+			break;
+		case VectorizationBinding.POLICY_RIGHT:
+			getPotracePanel().getPolicy().setSelectedItem(
+					RasterToolsUtil.getText(this, "right"));
+			break;
+		case VectorizationBinding.POLICY_LEFT:
+			getPotracePanel().getPolicy().setSelectedItem(
+					RasterToolsUtil.getText(this, "left"));
+			break;
+		case VectorizationBinding.POLICY_MAJORITY:
+			getPotracePanel().getPolicy().setSelectedItem(
+					RasterToolsUtil.getText(this, "majority"));
+			break;
+		case VectorizationBinding.POLICY_RANDOM:
+			getPotracePanel().getPolicy().setSelectedItem(
+					RasterToolsUtil.getText(this, "random"));
+			break;
+		default:
+			getPotracePanel().getPolicy().setSelectedItem(
+					RasterToolsUtil.getText(this, "minority"));
+			break;
 		}
 		setEnableValueChangedEvent(true);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.beans.previewbase.IUserPanelInterface#getPanel()
 	 */
 	public JPanel getPanel() {
 		return this;
 	}
-	
+
 	/**
 	 * Obtiene el algoritmo a usar
+	 * 
 	 * @return JCheckBox
 	 */
 	public JComboBox getAlgorithm() {
 		if (algorithm == null) {
 			algorithm = new JComboBox();
-			algorithm.addItem(PluginServices.getText(this,"contour"));
-			algorithm.addItem(PluginServices.getText(this,"potrace"));
-			algorithm.setSelectedItem(PluginServices.getText(this,"contour"));
+			algorithm.addItem(PluginServices.getText(this, "contour"));
+			algorithm.addItem(PluginServices.getText(this, "potrace"));
+			algorithm.setSelectedItem(PluginServices.getText(this, "contour"));
 		}
 		return algorithm;
 	}

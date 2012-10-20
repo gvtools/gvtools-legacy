@@ -31,28 +31,28 @@ import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.tools.Events.MoveEvent;
 import com.iver.cit.gvsig.fmap.tools.Listeners.PanListener;
 
-
 /**
  * Implementación de la interfaz PanListener como herramienta para realizar el
  * Pan.
- *
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class GeorefPanListenerImpl implements PanListener {
-//	private final Image ipan = new ImageIcon(MapControl.class.getResource(
-//				"images/CruxCursor.png")).getImage();
-	private final Image ipan = PluginServices.getIconTheme().get("crux-cursor").getImage();
+	// private final Image ipan = new ImageIcon(MapControl.class.getResource(
+	// "images/CruxCursor.png")).getImage();
+	private final Image ipan = PluginServices.getIconTheme().get("crux-cursor")
+			.getImage();
 	private Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(ipan,
 			new Point(16, 16), "");
 	private MapControl mapControl;
 	private FLyrRasterSE lyrRaster = null;
-	private String	pathToFile = null;
-
+	private String pathToFile = null;
 
 	/**
 	 * Crea un nuevo RectangleListenerImpl.
-	 *
-	 * @param mapControl MapControl.
+	 * 
+	 * @param mapControl
+	 *            MapControl.
 	 */
 	public GeorefPanListenerImpl(MapControl mapControl) {
 		this.mapControl = mapControl;
@@ -60,7 +60,7 @@ public class GeorefPanListenerImpl implements PanListener {
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.PanListener#move(java.awt.geom.Point2D,
-	 * 		java.awt.geom.Point2D)
+	 *      java.awt.geom.Point2D)
 	 */
 	public void move(MoveEvent event) {
 		ViewPort vp = mapControl.getMapContext().getViewPort();
@@ -75,7 +75,6 @@ public class GeorefPanListenerImpl implements PanListener {
 		r.width = extent.getWidth();
 		r.height = extent.getHeight();
 		vp.setExtent(r);
-
 
 		// mapControl.drawMap();
 	}
@@ -102,7 +101,8 @@ public class GeorefPanListenerImpl implements PanListener {
 	}
 
 	/**
-	 * @param lyrRaster The lyrRaster to set.
+	 * @param lyrRaster
+	 *            The lyrRaster to set.
 	 */
 	public void setLyrRaster(FLyrRasterSE lyrRaster) {
 		this.lyrRaster = lyrRaster;
@@ -116,7 +116,8 @@ public class GeorefPanListenerImpl implements PanListener {
 	}
 
 	/**
-	 * @param pathToFile The pathToFile to set.
+	 * @param pathToFile
+	 *            The pathToFile to set.
 	 */
 	public void setPathToFile(String pathToFile) {
 		this.pathToFile = pathToFile;

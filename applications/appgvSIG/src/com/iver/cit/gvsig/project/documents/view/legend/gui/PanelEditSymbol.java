@@ -51,50 +51,50 @@ import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 
-
 /**
  * Panel creado para editar el símbolo seleccionado.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class PanelEditSymbol extends JPanel implements IWindow {
 	private SingleSymbol panel = null;
-	private JButton bAceptar = null;  //  @jve:decl-index=0:visual-constraint="198,310"
+	private JButton bAceptar = null; // @jve:decl-index=0:visual-constraint="198,310"
 	private JPanel panelbutton = null;
-	private boolean ok=false;
-	//private FSymbol symbol;
+	private boolean ok = false;
 
+	// private FSymbol symbol;
 
-	public PanelEditSymbol(){
+	public PanelEditSymbol() {
 		initialize();
 	}
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 */
 	private void initialize() {
-        this.setLayout(new BorderLayout());
-        this.setSize(450, 343);
-        this.add(getPanel(), java.awt.BorderLayout.NORTH);
-		this.add(getPanelbutton(),BorderLayout.SOUTH);
+		this.setLayout(new BorderLayout());
+		this.setSize(450, 343);
+		this.add(getPanel(), java.awt.BorderLayout.NORTH);
+		this.add(getPanelbutton(), BorderLayout.SOUTH);
 	}
+
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public WindowInfo getWindowInfo() {
 		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODALDIALOG);
 		m_viewinfo.setTitle(PluginServices.getText(this, "simbolo"));
-		m_viewinfo.setWidth(getWidth()+10);
+		m_viewinfo.setWidth(getWidth() + 10);
 		m_viewinfo.setHeight(getHeight());
 		return m_viewinfo;
 	}
 
 	/**
 	 * This method initializes panel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private SingleSymbol getPanel() {
@@ -108,18 +108,19 @@ public class PanelEditSymbol extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes bAceptar
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getBAceptar() {
 		if (bAceptar == null) {
 			bAceptar = new JButton();
-			bAceptar.setPreferredSize(new java.awt.Dimension(80,20));
-			bAceptar.setText(PluginServices.getText(this,"Aceptar"));
+			bAceptar.setPreferredSize(new java.awt.Dimension(80, 20));
+			bAceptar.setText(PluginServices.getText(this, "Aceptar"));
 			bAceptar.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					ok=true;
-					PluginServices.getMDIManager().closeWindow(PanelEditSymbol.this);
+					ok = true;
+					PluginServices.getMDIManager().closeWindow(
+							PanelEditSymbol.this);
 				}
 			});
 			bAceptar.setSize(35, 20);
@@ -127,21 +128,22 @@ public class PanelEditSymbol extends JPanel implements IWindow {
 		return bAceptar;
 	}
 
-	public ISymbol getSymbol(){
+	public ISymbol getSymbol() {
 		return panel.getSymbol();
 	}
 
-	public void setSymbol(ISymbol s){
-		ok=false;
+	public void setSymbol(ISymbol s) {
+		ok = false;
 		panel.setSymbol(s);
 	}
 
-	public boolean isOK(){
+	public boolean isOK() {
 		return ok;
 	}
+
 	/**
 	 * This method initializes panelbutton
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPanelbutton() {
@@ -159,4 +161,4 @@ public class PanelEditSymbol extends JPanel implements IWindow {
 	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

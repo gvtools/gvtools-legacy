@@ -8,8 +8,7 @@ import org.gvsig.hyperlink.AbstractHyperLinkPanel;
 
 import com.iver.andami.PluginServices;
 
-
-public class TxtFormat extends AbstractActionManager implements Serializable{
+public class TxtFormat extends AbstractActionManager implements Serializable {
 	public static final String actionCode = "Txt_format";
 
 	public AbstractHyperLinkPanel createPanel(URI doc)
@@ -30,7 +29,8 @@ public class TxtFormat extends AbstractActionManager implements Serializable{
 	}
 
 	public String getDescription() {
-		return PluginServices.getText(this, "Shows_HTML_or_text_files_in_gvSIG");
+		return PluginServices
+				.getText(this, "Shows_HTML_or_text_files_in_gvSIG");
 	}
 
 	public String getName() {

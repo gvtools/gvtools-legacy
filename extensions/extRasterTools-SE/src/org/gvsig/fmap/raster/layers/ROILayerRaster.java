@@ -44,19 +44,18 @@ import java.awt.Color;
 import org.gvsig.raster.grid.roi.ROI;
 
 /**
- * Clase que representa una región de interés tal y como se asocia a una 
- * capa raster, es decir, incluyendo un nombre y el color con el que se 
- * representa.
+ * Clase que representa una región de interés tal y como se asocia a una capa
+ * raster, es decir, incluyendo un nombre y el color con el que se representa.
  * 
  * @author Diego Guerrero Sevilla (diego.guerrero@uclm.es)
- *
+ * 
  */
 public class ROILayerRaster {
-	
+
 	private ROI roi = null;
 	private Color color = null;
 	private String name = null;
-	
+
 	/**
 	 * Constructor.
 	 * 
@@ -80,7 +79,8 @@ public class ROILayerRaster {
 
 	/**
 	 * 
-	 * @param color Color con el que la ROI se representa en la vista.
+	 * @param color
+	 *            Color con el que la ROI se representa en la vista.
 	 */
 	public void setColor(Color color) {
 		this.color = color;
@@ -96,7 +96,8 @@ public class ROILayerRaster {
 
 	/**
 	 * 
-	 * @param name Nombre asociado a la ROI.
+	 * @param name
+	 *            Nombre asociado a la ROI.
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -112,7 +113,8 @@ public class ROILayerRaster {
 
 	/**
 	 * 
-	 * @param roi Región de interés.
+	 * @param roi
+	 *            Región de interés.
 	 */
 	public void setRoi(ROI roi) {
 		this.roi = roi;

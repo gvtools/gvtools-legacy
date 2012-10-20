@@ -55,27 +55,31 @@ public class VectorUtilities {
 	/**
 	 * Adds an item in alphabetical order.
 	 * 
-	 * @param v java.util.Vector in alphabetical order.
-	 * @param obj java.lang.Object
+	 * @param v
+	 *            java.util.Vector in alphabetical order.
+	 * @param obj
+	 *            java.lang.Object
 	 */
-	public static synchronized void addAlphabeticallyOrdered(Vector<Object> v, Object obj) {
+	public static synchronized void addAlphabeticallyOrdered(Vector<Object> v,
+			Object obj) {
 		int size = v.size();
 		int currentIteration = 0;
 		int index, aux_index;
 		int lowIndex = 0;
-		int highIndex = size -1;
+		int highIndex = size - 1;
 		int maxNumberOfIterations = (int) MathExtension.log2(size);
-		
+
 		// If there are no items
 		if (size == 0) {
 			v.add(obj);
 			return;
 		}
 
-		while ((lowIndex <= highIndex) && (currentIteration <= maxNumberOfIterations)) {
-			index = ( lowIndex + highIndex ) / 2;
+		while ((lowIndex <= highIndex)
+				&& (currentIteration <= maxNumberOfIterations)) {
+			index = (lowIndex + highIndex) / 2;
 
-			// If the item in the index position has the same value as obj 
+			// If the item in the index position has the same value as obj
 			if (v.get(index).toString().compareTo(obj.toString()) == 0) {
 				v.add(index, obj);
 				return;
@@ -84,9 +88,9 @@ public class VectorUtilities {
 			// If the item in the index position has a lower value than the obj
 			if (v.get(index).toString().compareTo(obj.toString()) < 0) {
 				aux_index = index + 1;
-				
+
 				if ((aux_index) >= size) {
-					v.add(v.size() , obj);
+					v.add(v.size(), obj);
 					return;
 				}
 
@@ -96,96 +100,102 @@ public class VectorUtilities {
 				}
 
 				lowIndex = aux_index;
-			}
-			else {
-				// If the item in the index position has a higher value than the obj
+			} else {
+				// If the item in the index position has a higher value than the
+				// obj
 				if (v.get(index).toString().compareTo(obj.toString()) > 0) {
 					aux_index = index - 1;
-					
+
 					if ((aux_index) < 0) {
-						v.add(0 , obj);
+						v.add(0, obj);
 						return;
 					}
-					
+
 					if (v.get(aux_index).toString().compareTo(obj.toString()) < 0) {
 						v.add(index, obj);
 						return;
 					}
-					
+
 					highIndex = aux_index;
 				}
 			}
-			
-			currentIteration ++;
-		}		 
+
+			currentIteration++;
+		}
 	}
-	
+
 	/**
-	 * Adds an item in alphabetical order using a comparator for compare the objects. The vector must be alhabetically ordered.
-	 *
-	 * @param v java.util.Vector in alphabetical order.
-	 * @param obj java.lang.Object
-	 * @param comp java.util.Comparator
+	 * Adds an item in alphabetical order using a comparator for compare the
+	 * objects. The vector must be alhabetically ordered.
+	 * 
+	 * @param v
+	 *            java.util.Vector in alphabetical order.
+	 * @param obj
+	 *            java.lang.Object
+	 * @param comp
+	 *            java.util.Comparator
 	 */
-	public static synchronized void addAlphabeticallyOrdered(Vector<Object> v, Object obj, Comparator<Object> comp) {
+	public static synchronized void addAlphabeticallyOrdered(Vector<Object> v,
+			Object obj, Comparator<Object> comp) {
 		int size = v.size();
 		int currentIteration = 0;
 		int index, aux_index;
 		int lowIndex = 0;
-		int highIndex = size -1;
+		int highIndex = size - 1;
 		int maxNumberOfIterations = (int) MathExtension.log2(size);
-		
+
 		// If there are no items
 		if (size == 0) {
 			v.add(obj);
 			return;
 		}
-		
-		while ((lowIndex <= highIndex) && (currentIteration <= maxNumberOfIterations)) {
-			index = ( lowIndex + highIndex ) / 2;
-			
-			// If the item in the index position has the same value as obj 
+
+		while ((lowIndex <= highIndex)
+				&& (currentIteration <= maxNumberOfIterations)) {
+			index = (lowIndex + highIndex) / 2;
+
+			// If the item in the index position has the same value as obj
 			if (comp.compare(v.get(index), obj) == 0) {
 				v.add(index, obj);
 				return;
 			}
-			
+
 			// If the item in the index position has a lower value than the obj
 			if (comp.compare(v.get(index), obj) < 0) {
 				aux_index = index + 1;
-				
+
 				if ((aux_index) >= size) {
-					v.add(v.size() , obj);
+					v.add(v.size(), obj);
 					return;
 				}
-				
+
 				if (comp.compare(v.get(aux_index), obj) > 0) {
 					v.add(aux_index, obj);
 					return;
 				}
-				
+
 				lowIndex = aux_index;
-			}
-			else {
-				// If the item in the index position has a higher value than the obj
+			} else {
+				// If the item in the index position has a higher value than the
+				// obj
 				if (comp.compare(v.get(index), obj) > 0) {
 					aux_index = index - 1;
-					
+
 					if ((aux_index) < 0) {
-						v.add(0 , obj);
+						v.add(0, obj);
 						return;
 					}
-					
+
 					if (comp.compare(v.get(aux_index), obj) < 0) {
 						v.add(index, obj);
 						return;
 					}
-					
+
 					highIndex = aux_index;
 				}
 			}
-			
-			currentIteration ++;
+
+			currentIteration++;
 		}
 	}
 }

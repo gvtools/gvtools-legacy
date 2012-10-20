@@ -20,6 +20,6 @@ public class GraphException extends BaseException {
 
 	protected Map values() {
 		return null;
-	}		
-	
+	}
+
 }

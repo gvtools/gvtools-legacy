@@ -57,36 +57,44 @@ import java.util.ListIterator;
 /**
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  */
-//***********************************
+// ***********************************
 // PARA WARNINGS YA VEREMOS SI SE USA
-//***********************************
-public class GMLExceptionList extends GMLException{
+// ***********************************
+public class GMLExceptionList extends GMLException {
 	private static final long serialVersionUID = -2229510058574520019L;
 
-private List exceptions = new ArrayList();
-	
-	/* (non-Javadoc)
+	private List exceptions = new ArrayList();
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#size()
 	 */
 	public int size() {
 		return this.exceptions.size();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#isEmpty()
 	 */
 	public boolean isEmpty() {
 		return this.exceptions.isEmpty();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#contains(java.lang.Object)
 	 */
 	public boolean contains(Object arg0) {
 		return this.exceptions.contains(arg0);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#toArray()
 	 */
 	public Object[] toArray() {
@@ -109,7 +117,9 @@ private List exceptions = new ArrayList();
 		return this.exceptions.add(arg0);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#remove(java.lang.Object)
 	 */
 	public boolean remove(Object arg0) {
@@ -157,14 +167,18 @@ private List exceptions = new ArrayList();
 		return this.exceptions.retainAll(arg0);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Collection#clear()
 	 */
 	public void clear() {
 		this.exceptions.clear();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.List#get(int)
 	 */
 	public Object get(int arg0) {
@@ -188,42 +202,54 @@ private List exceptions = new ArrayList();
 		this.exceptions.add(arg0, arg1);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.List#remove(int)
 	 */
 	public Object remove(int arg0) {
 		return this.exceptions.remove(arg0);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.List#indexOf(java.lang.Object)
 	 */
 	public int indexOf(Object arg0) {
 		return this.exceptions.indexOf(arg0);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.List#lastIndexOf(java.lang.Object)
 	 */
 	public int lastIndexOf(Object arg0) {
 		return this.exceptions.lastIndexOf(arg0);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.List#listIterator()
 	 */
 	public ListIterator listIterator() {
 		return this.exceptions.listIterator();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.List#listIterator(int)
 	 */
 	public ListIterator listIterator(int arg0) {
 		return this.exceptions.listIterator(arg0);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.List#subList(int, int)
 	 */
 	public List subList(int arg0, int arg1) {

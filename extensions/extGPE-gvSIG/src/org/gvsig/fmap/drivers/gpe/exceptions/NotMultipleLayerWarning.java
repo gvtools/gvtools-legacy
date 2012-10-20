@@ -57,26 +57,26 @@ import org.gvsig.exceptions.BaseException;
 public class NotMultipleLayerWarning extends BaseException {
 	private static final long serialVersionUID = -3822382578296490537L;
 
-	public NotMultipleLayerWarning() {		
-		initialize();		
+	public NotMultipleLayerWarning() {
+		initialize();
 	}
-	
+
 	/**
 	 * Initialize the properties
 	 */
 	private void initialize() {
 		messageKey = "gpe_not_multiple_layer_warning";
-		formatString = "This gvSIG version doesn't support " +
-			"muliple layers.";
+		formatString = "This gvSIG version doesn't support "
+				+ "muliple layers.";
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map values() {
 		HashMap params = new HashMap();
-		return params;	
+		return params;
 	}
 }
-	

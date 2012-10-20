@@ -21,38 +21,40 @@ package org.gvsig.georeferencing.ui.zoom;
 import java.util.ArrayList;
 
 /**
- * Historial de peticiones para poder recuperar las anteriores a 
- * la actual.
+ * Historial de peticiones para poder recuperar las anteriores a la actual.
  * 
  * 11/01/2008
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class ViewRecord {
 
-	private ArrayList  record = new ArrayList();
-	private int        pos = -1;
+	private ArrayList record = new ArrayList();
+	private int pos = -1;
 
 	/**
 	 * Asigna la petición siguiente
+	 * 
 	 * @param request
 	 */
 	public void setRequest(Object request) {
-		record.add(++ pos, request);
+		record.add(++pos, request);
 	}
-	
+
 	/**
 	 * Obtiene la petición anterior
+	 * 
 	 * @return
 	 */
 	public Object getRequest() {
-		if(pos > 0) {
-			pos --;
+		if (pos > 0) {
+			pos--;
 			return record.get(pos);
-		} else if(pos == 0)
+		} else if (pos == 0)
 			return record.get(pos);
 		return null;
 	}
-	
+
 	/**
 	 * Vacia el historial
 	 */

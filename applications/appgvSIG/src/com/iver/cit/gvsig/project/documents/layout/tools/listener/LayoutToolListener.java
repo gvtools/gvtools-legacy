@@ -43,24 +43,24 @@ package com.iver.cit.gvsig.project.documents.layout.tools.listener;
 import java.awt.Cursor;
 import java.awt.Image;
 
-
 /**
  * Interfaz listener de herramienta.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public interface LayoutToolListener {
 	/**
 	 * Devuelve la imagen del cursor de la herramienta.
-	 *
+	 * 
 	 * @return ImageCursor.
 	 */
 	public Image getImageCursor();
+
 	public Cursor getCursor();
 
 	/**
 	 * Condición para que se cancele el dibujado.
-	 *
+	 * 
 	 * @return True si se cancela el dibujado.
 	 */
 	public boolean cancelDrawing();

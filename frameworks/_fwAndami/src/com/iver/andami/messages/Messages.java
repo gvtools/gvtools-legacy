@@ -43,52 +43,54 @@ package com.iver.andami.messages;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-
 /**
  * Clase que accede a los recursos para la i18n
  */
 public class Messages {
-    /** DOCUMENT ME! */
-    private static final String BUNDLE_NAME = "com.iver.andami.text";
+	/** DOCUMENT ME! */
+	private static final String BUNDLE_NAME = "com.iver.andami.text";
 
-    /** DOCUMENT ME! */
-    private static ResourceBundle RESOURCE_BUNDLE = null;
+	/** DOCUMENT ME! */
+	private static ResourceBundle RESOURCE_BUNDLE = null;
 
-    /**
-     * Inicializa la clase con el locale adecuado
-     *
-     * @param loc Locale de la aplicación
-     */
-    public static void init(Locale loc) {
-    	return;
-    }
+	/**
+	 * Inicializa la clase con el locale adecuado
+	 * 
+	 * @param loc
+	 *            Locale de la aplicación
+	 */
+	public static void init(Locale loc) {
+		return;
+	}
 
-    /**
-     * @param strLocale. Ejemplo: va para valenciano
-     * Se trata de permitir coexistir el valenciano con el catalán.
-     * El método buscará un fichero properties llamado "text_va.properties"
-     * para usarlo con RESOURCE_BUNDLE de donde sacar los mensajes
-     * traducidos.
-     */
-    public static void init(String strLocale) {
-    	return;
-    }
-    
-    
-    /**
-     * Obtiene el valor del recurso con clave 'key'
-     *
-     * @param key clave del recurso que se quiere obtener
-     *
-     * @return recurso que se quiere obtener o !key! en caso de no encontrarlo.
-     *         En dicho caso no se notifica al framework ya que  estos son los
-     *         mensajes propios de la aplicación y deben de estar todos
-     */
-    public static String getString(String key) {
-        return org.gvsig.i18n.Messages.getText(key, "com.iver.andami.messages.Messages");
-    }
-    
-    public static String get(String key) {
-        return org.gvsig.i18n.Messages.getText(key, "com.iver.andami.messages.Messages");
-    }
+	/**
+	 * @param strLocale
+	 *            . Ejemplo: va para valenciano Se trata de permitir coexistir
+	 *            el valenciano con el catalán. El método buscará un fichero
+	 *            properties llamado "text_va.properties" para usarlo con
+	 *            RESOURCE_BUNDLE de donde sacar los mensajes traducidos.
+	 */
+	public static void init(String strLocale) {
+		return;
+	}
+
+	/**
+	 * Obtiene el valor del recurso con clave 'key'
+	 * 
+	 * @param key
+	 *            clave del recurso que se quiere obtener
+	 * 
+	 * @return recurso que se quiere obtener o !key! en caso de no encontrarlo.
+	 *         En dicho caso no se notifica al framework ya que estos son los
+	 *         mensajes propios de la aplicación y deben de estar todos
+	 */
+	public static String getString(String key) {
+		return org.gvsig.i18n.Messages.getText(key,
+				"com.iver.andami.messages.Messages");
+	}
+
+	public static String get(String key) {
+		return org.gvsig.i18n.Messages.getText(key,
+				"com.iver.andami.messages.Messages");
+	}
 }

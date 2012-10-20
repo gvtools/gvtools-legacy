@@ -67,9 +67,9 @@ import com.iver.cit.gvsig.project.documents.view.toc.actions.FLyrVectEditPropert
 
 /**
  * @author FJP
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
+ * 
+ *         TODO To change the template for this generated type comment go to
+ *         Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class TocItemBranch implements ITocItem {
 
@@ -89,27 +89,30 @@ public class TocItemBranch implements ITocItem {
 
 	private Dimension sz;
 
-    final public static DataFlavor INFO_FLAVOR =
-	    new DataFlavor(TocItemBranch.class, "ItemBranch");
-    static DataFlavor flavors[] = {INFO_FLAVOR };
+	final public static DataFlavor INFO_FLAVOR = new DataFlavor(
+			TocItemBranch.class, "ItemBranch");
+	static DataFlavor flavors[] = { INFO_FLAVOR };
 
-	public TocItemBranch(FLayer lyr)
-	{
+	public TocItemBranch(FLayer lyr) {
 		this.lyr = lyr;
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.gui.toc.ITocItem#getLabel()
 	 */
 	public String getLabel() {
-		/*if (lyr instanceof FLyrVect && ((FLyrVect)lyr).isBroken())
-		{
-			return lyr.getName() + "(broken)";
-		}
-		else*/
-			return lyr.getName();
+		/*
+		 * if (lyr instanceof FLyrVect && ((FLyrVect)lyr).isBroken()) { return
+		 * lyr.getName() + "(broken)"; } else
+		 */
+		return lyr.getName();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.gui.toc.ITocItem#getIcon()
 	 */
 	public Icon getIcon() {
@@ -129,8 +132,9 @@ public class TocItemBranch implements ITocItem {
 		if (f.exists()) {
 			icolayer = new ImageIcon(f.getAbsolutePath());
 		} else {
-			URL url =PluginServices.getPluginServices("com.iver.cit.gvsig").getClassLoader().getResource(path);
-			if (url!=null) {
+			URL url = PluginServices.getPluginServices("com.iver.cit.gvsig")
+					.getClassLoader().getResource(path);
+			if (url != null) {
 				icolayer = new ImageIcon(url);
 				return;
 			}
@@ -138,48 +142,46 @@ public class TocItemBranch implements ITocItem {
 		updateStateIcon();
 
 	}
+
 	private void updateStateIcon() {
-		if (icolayer == null) return;
-		if (lyr.getTocStatusImage() != null)
-		{
-			BufferedImage newImage = new BufferedImage(icolayer.getIconWidth(),icolayer.getIconHeight(),BufferedImage.TYPE_INT_ARGB);
+		if (icolayer == null)
+			return;
+		if (lyr.getTocStatusImage() != null) {
+			BufferedImage newImage = new BufferedImage(icolayer.getIconWidth(),
+					icolayer.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
 			Graphics2D grp = newImage.createGraphics();
-			grp.drawImage(icolayer.getImage(),0,0,null);
+			grp.drawImage(icolayer.getImage(), 0, 0, null);
 			Image img = lyr.getTocStatusImage();
-			grp.drawImage(
-					img,
-					0,
-					icolayer.getIconHeight() -img.getHeight(null),
-					null
-			);
+			grp.drawImage(img, 0,
+					icolayer.getIconHeight() - img.getHeight(null), null);
 			this.finalIcon = new ImageIcon(newImage);
 		}
-		if (this.lyr.isAvailable() != this.isAvailable || finalIcon==null) {
+		if (this.lyr.isAvailable() != this.isAvailable || finalIcon == null) {
 			if (!this.lyr.isAvailable()) {
-				BufferedImage newImage = new BufferedImage(icolayer.getIconWidth(),icolayer.getIconHeight(),BufferedImage.TYPE_INT_ARGB);
+				BufferedImage newImage = new BufferedImage(
+						icolayer.getIconWidth(), icolayer.getIconHeight(),
+						BufferedImage.TYPE_INT_ARGB);
 				Graphics2D grp = newImage.createGraphics();
-				grp.drawImage(icolayer.getImage(),0,0,null);
-				/*grp.setComposite(AlphaComposite.getInstance(
-				 AlphaComposite.SRC_OVER, (float) 1));*/
+				grp.drawImage(icolayer.getImage(), 0, 0, null);
+				/*
+				 * grp.setComposite(AlphaComposite.getInstance(
+				 * AlphaComposite.SRC_OVER, (float) 1));
+				 */
 				BufferedImage img = this.getUnavailableImage();
-				grp.drawImage(
-						img,
-						0,
-						icolayer.getIconHeight() -img.getHeight(),
-						null
-				);
+				grp.drawImage(img, 0,
+						icolayer.getIconHeight() - img.getHeight(), null);
 				this.finalIcon = new ImageIcon(newImage);
 
 			} else {
 				this.finalIcon = new ImageIcon(icolayer.getImage());
 			}
-			this.isAvailable =(this.lyr.isAvailable());
+			this.isAvailable = (this.lyr.isAvailable());
 		}
 
 	}
 
 	private void setIcon(ImageIcon icon) {
-		if (icon!=null) {
+		if (icon != null) {
 			icolayer = icon;
 		} else {
 			this.setIcon(defaultIcon);
@@ -193,36 +195,52 @@ public class TocItemBranch implements ITocItem {
 		return lyr;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.datatransfer.Transferable#getTransferDataFlavors()
 	 */
 	public DataFlavor[] getTransferDataFlavors() {
 		return flavors;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.awt.datatransfer.Transferable#isDataFlavorSupported(java.awt.datatransfer.DataFlavor)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.awt.datatransfer.Transferable#isDataFlavorSupported(java.awt.
+	 * datatransfer.DataFlavor)
 	 */
 	public boolean isDataFlavorSupported(DataFlavor dF) {
 		return dF.equals(INFO_FLAVOR);
 	}
 
-	/* (non-Javadoc)
-	 * @see java.awt.datatransfer.Transferable#getTransferData(java.awt.datatransfer.DataFlavor)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.datatransfer.Transferable#getTransferData(java.awt.datatransfer
+	 * .DataFlavor)
 	 */
-	public Object getTransferData(DataFlavor dF) throws UnsupportedFlavorException, IOException {
-	    if (dF.equals(INFO_FLAVOR)) {
-	        return this;
-	      }
-	      else throw new UnsupportedFlavorException(dF);
+	public Object getTransferData(DataFlavor dF)
+			throws UnsupportedFlavorException, IOException {
+		if (dF.equals(INFO_FLAVOR)) {
+			return this;
+		} else
+			throw new UnsupportedFlavorException(dF);
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.gui.toc.ITocItem#getSize()
 	 */
 	public Dimension getSize() {
 		return sz;
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.gui.toc.ITocItem#setSize(java.awt.Dimension)
 	 */
 	public void setSize(Dimension sz) {
@@ -231,11 +249,14 @@ public class TocItemBranch implements ITocItem {
 
 	private BufferedImage getUnavailableImage() {
 		if (this.unavailableImg == null) {
-			URL url =PluginServices.getPluginServices("com.iver.cit.gvsig").getClassLoader().getResource(this.unavailableImgPath);
-			if (url!=null) {
+			URL url = PluginServices.getPluginServices("com.iver.cit.gvsig")
+					.getClassLoader().getResource(this.unavailableImgPath);
+			if (url != null) {
 				ImageIcon uIcon = new ImageIcon(url);
-				this.unavailableImg = new BufferedImage(uIcon.getIconWidth(),uIcon.getIconHeight(),BufferedImage.TYPE_INT_RGB);
-				this.unavailableImg.getGraphics().drawImage(uIcon.getImage(),0,0,null);
+				this.unavailableImg = new BufferedImage(uIcon.getIconWidth(),
+						uIcon.getIconHeight(), BufferedImage.TYPE_INT_RGB);
+				this.unavailableImg.getGraphics().drawImage(uIcon.getImage(),
+						0, 0, null);
 			}
 
 		}

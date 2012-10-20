@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.util;
 
 import java.lang.reflect.Array;
@@ -54,48 +54,46 @@ import java.lang.reflect.Array;
  * Utility class to compute hash codes for classes that overwrites equals.
  * 
  * Inspired in http://www.javapractices.com/topic/TopicAction.do?Id=28
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class HashCodeUtil {
-	
+
 	/**
-	  * An initial value for a <code>hashCode</code>, to which is added contributions
-	  * from fields. Using a non-zero value decreases collisons of <code>hashCode</code>
-	  * values.
-	  */
+	 * An initial value for a <code>hashCode</code>, to which is added
+	 * contributions from fields. Using a non-zero value decreases collisons of
+	 * <code>hashCode</code> values.
+	 */
 	public static final int SEED = 23;
-	
+
 	private static final int FODD_PRIME_NUMBER = 37;
-	
-	
-	public static int hashCode(int seed, int valueInt){
+
+	public static int hashCode(int seed, int valueInt) {
 		return firstTerm(seed) + valueInt;
 	}
-	
-	
-	public static int hashCode(int seed, Object obj){
+
+	public static int hashCode(int seed, Object obj) {
 		int result = seed;
-	    if ( obj == null) {
-	      result = hashCode(result, 0);
-	    }
-	    else if ( ! isArray(obj) ) {
-	      result = hashCode(result, obj.hashCode());
-	    }else {
-	      int length = Array.getLength(obj);
-	      for ( int idx = 0; idx < length; ++idx ) {
-	        Object item = Array.get(obj, idx);
-	        result = hashCode(result, item);
-	      }
-	    }
-	    return result;
+		if (obj == null) {
+			result = hashCode(result, 0);
+		} else if (!isArray(obj)) {
+			result = hashCode(result, obj.hashCode());
+		} else {
+			int length = Array.getLength(obj);
+			for (int idx = 0; idx < length; ++idx) {
+				Object item = Array.get(obj, idx);
+				result = hashCode(result, item);
+			}
+		}
+		return result;
 	}
-	
-	private static int firstTerm( int aSeed ){
+
+	private static int firstTerm(int aSeed) {
 		return FODD_PRIME_NUMBER * aSeed;
 	}
-	
-	 private static boolean isArray(Object aObject){
-		    return aObject.getClass().isArray();
-	 }
+
+	private static boolean isArray(Object aObject) {
+		return aObject.getClass().isArray();
+	}
 }

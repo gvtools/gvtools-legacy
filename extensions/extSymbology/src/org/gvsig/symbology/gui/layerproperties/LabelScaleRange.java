@@ -42,7 +42,6 @@ package org.gvsig.symbology.gui.layerproperties;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.TreeSet;
@@ -52,7 +51,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import org.apache.batik.ext.swing.GridBagConstants;
 import org.gvsig.gui.beans.AcceptCancelPanel;
 import org.gvsig.gui.beans.controls.comboscale.ComboScale;
 import org.gvsig.gui.beans.swing.GridBagLayoutPanel;
@@ -61,26 +59,21 @@ import org.gvsig.gui.beans.swing.JBlank;
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
+
 /**
- * <p>Configuration panel to set the range of scales in which the labels
- * will be visible.</p>
- *
+ * <p>
+ * Configuration panel to set the range of scales in which the labels will be
+ * visible.
+ * </p>
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Apr 4, 2008
- *
+ * 
  */
 public class LabelScaleRange extends JPanel implements IWindow, ActionListener {
 
 	private static final long serialVersionUID = -450284029750650479L;
-	private static final long[] defaultScales = new long[] {
-		1000,
-		2000,
-		5000,
-		10000,
-		50000,
-		100000,
-		200000,
-		500000,
-	};
+	private static final long[] defaultScales = new long[] { 1000, 2000, 5000,
+			10000, 50000, 100000, 200000, 500000, };
 	private long maxScale, minScale;
 	private ComboScale cmbMaxScale;
 	private ComboScale cmbMinScale;
@@ -96,7 +89,9 @@ public class LabelScaleRange extends JPanel implements IWindow, ActionListener {
 		getCmbMinScale().setScale(minScale);
 		getCmbMaxScale().setScale(maxScale);
 		GridBagLayoutPanel p = new GridBagLayoutPanel();
-		p.addComponent(new JLabel(PluginServices.getText(this, "specify_the_range_of_scales_at_which_labels_will_be_shown")+":"));
+		p.addComponent(new JLabel(PluginServices.getText(this,
+				"specify_the_range_of_scales_at_which_labels_will_be_shown")
+				+ ":"));
 		p.addComponent(new JBlank(10, 10));
 		p.addComponent(getRdUseSameRangeThanLayer());
 		p.addComponent(new JBlank(10, 10));
@@ -107,28 +102,37 @@ public class LabelScaleRange extends JPanel implements IWindow, ActionListener {
 		group.add(getRdDontShowLabelsWhenZoomed());
 		getRdUseSameRangeThanLayer().addActionListener(this);
 		getRdDontShowLabelsWhenZoomed().addActionListener(this);
-		getRdUseSameRangeThanLayer().setSelected(maxScale == -1 && minScale == -1);
-		getRdDontShowLabelsWhenZoomed().setSelected(!getRdUseSameRangeThanLayer().isSelected());
-		getCmbMinScale().setEnabled(getRdDontShowLabelsWhenZoomed().isSelected());
-		getCmbMaxScale().setEnabled(getRdDontShowLabelsWhenZoomed().isSelected());
+		getRdUseSameRangeThanLayer().setSelected(
+				maxScale == -1 && minScale == -1);
+		getRdDontShowLabelsWhenZoomed().setSelected(
+				!getRdUseSameRangeThanLayer().isSelected());
+		getCmbMinScale().setEnabled(
+				getRdDontShowLabelsWhenZoomed().isSelected());
+		getCmbMaxScale().setEnabled(
+				getRdDontShowLabelsWhenZoomed().isSelected());
 
 		JPanel aux;
 		JLabel l;
-		l  = new JLabel("    "+PluginServices.getText(this, "out_beyond")+":", JLabel.RIGHT);
+		l = new JLabel("    " + PluginServices.getText(this, "out_beyond")
+				+ ":", JLabel.RIGHT);
 		aux = new JPanel();
 		aux.add(getCmbMaxScale());
-//		aux.add(new JLabel("("+PluginServices.getText(this, "min_scale")+")"));
-		aux.add(new JLabel("("+PluginServices.getText(this, "max_scale")+")"));
+		// aux.add(new JLabel("("+PluginServices.getText(this,
+		// "min_scale")+")"));
+		aux.add(new JLabel("(" + PluginServices.getText(this, "max_scale")
+				+ ")"));
 		p.addComponent(l, aux);
 
-
-		l = new JLabel("    "+PluginServices.getText(this, "in_beyond")+":", JLabel.RIGHT);
+		l = new JLabel(
+				"    " + PluginServices.getText(this, "in_beyond") + ":",
+				JLabel.RIGHT);
 		aux = new JPanel();
 		aux.add(getCmbMinScale());
-//		aux.add(new JLabel("("+PluginServices.getText(this, "max_scale")+")"));
-		aux.add(new JLabel("("+PluginServices.getText(this, "min_scale")+")"));
-			p.addComponent(l, aux);
-
+		// aux.add(new JLabel("("+PluginServices.getText(this,
+		// "max_scale")+")"));
+		aux.add(new JLabel("(" + PluginServices.getText(this, "min_scale")
+				+ ")"));
+		p.addComponent(l, aux);
 
 		add(new JBlank(10, 10), BorderLayout.WEST);
 		add(new JBlank(10, 10), BorderLayout.EAST);
@@ -136,11 +140,11 @@ public class LabelScaleRange extends JPanel implements IWindow, ActionListener {
 		add(new AcceptCancelPanel(this, this), BorderLayout.SOUTH);
 	}
 
-
 	private JRadioButton getRdDontShowLabelsWhenZoomed() {
 		if (rdBtnDontShowLabelWhenZoomed == null) {
 			rdBtnDontShowLabelWhenZoomed = new JRadioButton(
-					PluginServices.getText(this, "dont_show_labels_when_zoomed"));
+					PluginServices
+							.getText(this, "dont_show_labels_when_zoomed"));
 		}
 		return rdBtnDontShowLabelWhenZoomed;
 	}
@@ -148,7 +152,8 @@ public class LabelScaleRange extends JPanel implements IWindow, ActionListener {
 	private JRadioButton getRdUseSameRangeThanLayer() {
 		if (rdBtnUseSameRangeThanLayer == null) {
 			rdBtnUseSameRangeThanLayer = new JRadioButton(
-					PluginServices.getText(this, "use_the_same_scale_range_as_the_feature_layer"));
+					PluginServices.getText(this,
+							"use_the_same_scale_range_as_the_feature_layer"));
 		}
 		return rdBtnUseSameRangeThanLayer;
 	}
@@ -161,7 +166,8 @@ public class LabelScaleRange extends JPanel implements IWindow, ActionListener {
 		if (cmbMaxScale == null) {
 			cmbMaxScale = new ComboScale();
 			TreeSet<Long> ts = new TreeSet<Long>();
-			if (maxScale!=-1) ts.add(maxScale);
+			if (maxScale != -1)
+				ts.add(maxScale);
 			for (int i = 0; i < defaultScales.length; i++) {
 				ts.add(defaultScales[i]);
 			}
@@ -181,7 +187,8 @@ public class LabelScaleRange extends JPanel implements IWindow, ActionListener {
 		if (cmbMinScale == null) {
 			cmbMinScale = new ComboScale();
 			TreeSet<Long> ts = new TreeSet<Long>();
-			if (minScale != -1)	ts.add(minScale);
+			if (minScale != -1)
+				ts.add(minScale);
 			for (int i = 0; i < defaultScales.length; i++) {
 				ts.add(defaultScales[i]);
 			}
@@ -196,37 +203,39 @@ public class LabelScaleRange extends JPanel implements IWindow, ActionListener {
 		return cmbMinScale;
 	}
 
-
 	public long getMinScale() {
 		return minScale;
 	}
 
 	public WindowInfo getWindowInfo() {
-		WindowInfo wi = new WindowInfo(WindowInfo.MODALDIALOG | WindowInfo.RESIZABLE);
+		WindowInfo wi = new WindowInfo(WindowInfo.MODALDIALOG
+				| WindowInfo.RESIZABLE);
 		wi.setTitle(PluginServices.getText(this, "scale_range_window_title"));
 		wi.setWidth(480);
 		wi.setHeight(200);
 		return wi;
 	}
-	
+
 	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		Component c = (Component) e.getSource();
-		if (getRdDontShowLabelsWhenZoomed().equals(c) ||
-			getRdUseSameRangeThanLayer().equals(c)) {
-			getCmbMinScale().setEnabled(getRdDontShowLabelsWhenZoomed().isSelected());
-			getCmbMaxScale().setEnabled(getRdDontShowLabelsWhenZoomed().isSelected());
+		if (getRdDontShowLabelsWhenZoomed().equals(c)
+				|| getRdUseSameRangeThanLayer().equals(c)) {
+			getCmbMinScale().setEnabled(
+					getRdDontShowLabelsWhenZoomed().isSelected());
+			getCmbMaxScale().setEnabled(
+					getRdDontShowLabelsWhenZoomed().isSelected());
 
 		}
 
 		if ("OK".equals(e.getActionCommand())) {
-			maxScale = (getRdUseSameRangeThanLayer().isSelected()) ?
-				 -1 : getCmbMaxScale().getScale();
-			minScale = (getRdUseSameRangeThanLayer().isSelected()) ?
-				 -1 : getCmbMinScale().getScale();
+			maxScale = (getRdUseSameRangeThanLayer().isSelected()) ? -1
+					: getCmbMaxScale().getScale();
+			minScale = (getRdUseSameRangeThanLayer().isSelected()) ? -1
+					: getCmbMinScale().getScale();
 			PluginServices.getMDIManager().closeWindow(this);
 		}
 

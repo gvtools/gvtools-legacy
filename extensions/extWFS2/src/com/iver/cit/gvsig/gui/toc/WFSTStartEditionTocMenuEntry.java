@@ -61,33 +61,38 @@ public class WFSTStartEditionTocMenuEntry extends StartEditingTocMenuEntry {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#execute(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #execute(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public void execute(ITocItem item, FLayer[] selectedItems) {
-		if ((selectedItems.length == 1) &&
-				(selectedItems[0] instanceof FLyrWFS)){
-			layer =  (FLyrWFS)selectedItems[0];			
+		if ((selectedItems.length == 1)
+				&& (selectedItems[0] instanceof FLyrWFS)) {
+			layer = (FLyrWFS) selectedItems[0];
 		} else {
 			return;
-		}	
-		//Start the WFST transaction
-		layer.setWfstEditing(true);		
-		TimeWarningWindow warning = new TimeWarningWindow(layer, item, selectedItems,this);
-		PluginServices.getMDIManager().addWindow(warning);		
+		}
+		// Start the WFST transaction
+		layer.setWfstEditing(true);
+		TimeWarningWindow warning = new TimeWarningWindow(layer, item,
+				selectedItems, this);
+		PluginServices.getMDIManager().addWindow(warning);
 	}
-	
+
 	/**
 	 * 
 	 * @param item
 	 * @param selectedItems
-	 */	
+	 */
 	public void edit(ITocItem item, FLayer[] selectedItems) {
 		super.execute(item, selectedItems);
 	}
-	
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.project.documents.IContextMenuAction#getText()
 	 */
 	public String getText() {
@@ -96,14 +101,18 @@ public class WFSTStartEditionTocMenuEntry extends StartEditingTocMenuEntry {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
 		boolean isEnabled = super.isEnabled(item, selectedItems);
-		if (isEnabled){
-			if (isTocItemBranch(item)){
-				if (getNodeLayer(item) instanceof FLyrWFS){
-					FLyrWFS layer = (FLyrWFS)getNodeLayer(item);
+		if (isEnabled) {
+			if (isTocItemBranch(item)) {
+				if (getNodeLayer(item) instanceof FLyrWFS) {
+					FLyrWFS layer = (FLyrWFS) getNodeLayer(item);
 					return layer.isTransactional();
 				}
 			}
@@ -113,12 +122,16 @@ public class WFSTStartEditionTocMenuEntry extends StartEditingTocMenuEntry {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
 		boolean isVisible = super.isVisible(item, selectedItems);
-		if (isVisible){
-			if (isTocItemBranch(item)){
+		if (isVisible) {
+			if (isTocItemBranch(item)) {
 				return (getNodeLayer(item) instanceof FLyrWFS);
 			}
 		}
@@ -127,7 +140,10 @@ public class WFSTStartEditionTocMenuEntry extends StartEditingTocMenuEntry {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getGroupOrder()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getGroupOrder()
 	 */
 	public int getGroupOrder() {
 		return 1;
@@ -135,7 +151,10 @@ public class WFSTStartEditionTocMenuEntry extends StartEditingTocMenuEntry {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getOrder()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getOrder()
 	 */
 	public int getOrder() {
 		return 2;

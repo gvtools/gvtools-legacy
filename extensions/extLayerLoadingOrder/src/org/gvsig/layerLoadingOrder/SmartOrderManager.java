@@ -18,8 +18,8 @@ public class SmartOrderManager implements OrderManager, IExtensionBuilder {
 	protected static final String description = "Allows_to_set_different_behaviours_for_raster_and_vector_layers";
 
 	/**
-	 * Stores a reference to the global config (the plugin level config), to
-	 * be able to quickly compute the positions.
+	 * Stores a reference to the global config (the plugin level config), to be
+	 * able to quickly compute the positions.
 	 */
 	protected OrderConfig globalConfig = null;
 
@@ -31,116 +31,104 @@ public class SmartOrderManager implements OrderManager, IExtensionBuilder {
 	public SmartOrderManager() {
 		IExtension ext = PluginServices.getExtension(SmartOrderExtension.class);
 		if (ext instanceof SmartOrderExtension) {
-			SmartOrderExtension extension =(SmartOrderExtension) ext;
+			SmartOrderExtension extension = (SmartOrderExtension) ext;
 			globalConfig = (OrderConfig) extension.getConfig();
-		};
+		}
+		;
 	}
-	
+
 	public int getPosition(FLayers target, FLayer newLayer) {
 		OrderConfig auxConfig;
-		if (config!=null) {
+		if (config != null) {
 			auxConfig = config;
-		}
-		else if (globalConfig!=null) {
+		} else if (globalConfig != null) {
 			// there is no local config, use globalConfig
 			auxConfig = globalConfig;
-		}
-		else { // there is no config at all, return default behaviour
+		} else { // there is no config at all, return default behaviour
 			return target.getLayersCount();
 		}
 		if (newLayer instanceof FLyrVect) {
-			if (auxConfig.getVectorBehaviour()==OrderConfig.ON_TOP) {
+			if (auxConfig.getVectorBehaviour() == OrderConfig.ON_TOP) {
 				return target.getLayersCount();
-			}
-			else if (auxConfig.getVectorBehaviour()==OrderConfig.AT_THE_BOTTOM) {
+			} else if (auxConfig.getVectorBehaviour() == OrderConfig.AT_THE_BOTTOM) {
 				return 0;
-			}
-			else if (auxConfig.getVectorBehaviour()==OrderConfig.OVER_RASTER) {
+			} else if (auxConfig.getVectorBehaviour() == OrderConfig.OVER_RASTER) {
 				int maxRaster = -1;
-				for (int i=0; i<target.getLayersCount(); i++) {
+				for (int i = 0; i < target.getLayersCount(); i++) {
 					if (target.getLayer(i) instanceof FLyrRasterSE) {
 						maxRaster = i;
 					}
 				}
-				return maxRaster+1;
-			}
-			else if (auxConfig.getVectorBehaviour()==OrderConfig.UNDER_RASTER) {
-				for (int i=0; i<target.getLayersCount(); i++) {
+				return maxRaster + 1;
+			} else if (auxConfig.getVectorBehaviour() == OrderConfig.UNDER_RASTER) {
+				for (int i = 0; i < target.getLayersCount(); i++) {
 					if (target.getLayer(i) instanceof FLyrRasterSE) {
 						return i;
 					}
 				}
 				return target.getLayersCount();
-			}
-			else if (auxConfig.getVectorBehaviour()==OrderConfig.FROM_TOP) {
-				int pos = target.getLayersCount()-auxConfig.getVectorPosition();
-				if (pos<0) return 0;
+			} else if (auxConfig.getVectorBehaviour() == OrderConfig.FROM_TOP) {
+				int pos = target.getLayersCount()
+						- auxConfig.getVectorPosition();
+				if (pos < 0)
+					return 0;
 				return pos;
-			}
-			else if (auxConfig.getVectorBehaviour()==OrderConfig.FROM_BOTTOM) {
-				if (auxConfig.getVectorPosition()>target.getLayersCount()) {
+			} else if (auxConfig.getVectorBehaviour() == OrderConfig.FROM_BOTTOM) {
+				if (auxConfig.getVectorPosition() > target.getLayersCount()) {
 					return target.getLayersCount();
-				}
-				else {
+				} else {
 					return auxConfig.getVectorPosition();
 				}
 			}
-		}
-		else if (newLayer instanceof FLyrRasterSE) {
-			if (auxConfig.getRasterBehaviour()==OrderConfig.ON_TOP) {
+		} else if (newLayer instanceof FLyrRasterSE) {
+			if (auxConfig.getRasterBehaviour() == OrderConfig.ON_TOP) {
 				return target.getLayersCount();
-			}
-			else if (auxConfig.getRasterBehaviour()==OrderConfig.AT_THE_BOTTOM) {
+			} else if (auxConfig.getRasterBehaviour() == OrderConfig.AT_THE_BOTTOM) {
 				return 0;
-			}
-			else if (auxConfig.getRasterBehaviour()==OrderConfig.OVER_VECTOR) {
+			} else if (auxConfig.getRasterBehaviour() == OrderConfig.OVER_VECTOR) {
 				int maxVector = 0;
-				for (int i=0; i<target.getLayersCount(); i++) {
+				for (int i = 0; i < target.getLayersCount(); i++) {
 					if (target.getLayer(i) instanceof FLyrVect) {
 						maxVector++;
 					}
 				}
 				return maxVector;
-			}
-			else if (auxConfig.getRasterBehaviour()==OrderConfig.UNDER_VECTOR) {
-				for (int i=0; i<target.getLayersCount(); i++) {
+			} else if (auxConfig.getRasterBehaviour() == OrderConfig.UNDER_VECTOR) {
+				for (int i = 0; i < target.getLayersCount(); i++) {
 					if (target.getLayer(i) instanceof FLyrVect) {
 						return i;
 					}
 				}
 				return target.getLayersCount();
-			}
-			else if (auxConfig.getRasterBehaviour()==OrderConfig.FROM_TOP) {
-				int pos = target.getLayersCount()-auxConfig.getRasterPosition();
-				if (pos<0) return 0;
+			} else if (auxConfig.getRasterBehaviour() == OrderConfig.FROM_TOP) {
+				int pos = target.getLayersCount()
+						- auxConfig.getRasterPosition();
+				if (pos < 0)
+					return 0;
 				return pos;
-			}
-			else if (auxConfig.getRasterBehaviour()==OrderConfig.FROM_BOTTOM) {
-				if (auxConfig.getRasterPosition()>target.getLayersCount()) {
+			} else if (auxConfig.getRasterBehaviour() == OrderConfig.FROM_BOTTOM) {
+				if (auxConfig.getRasterPosition() > target.getLayersCount()) {
 					return target.getLayersCount();
-				}
-				else {
+				} else {
 					return auxConfig.getRasterPosition();
 				}
 			}
-		}
-		else {
-			if (auxConfig.getOtherLayersBehaviour()==OrderConfig.ON_TOP) {
+		} else {
+			if (auxConfig.getOtherLayersBehaviour() == OrderConfig.ON_TOP) {
 				return target.getLayersCount();
-			}
-			else if (auxConfig.getOtherLayersBehaviour()==OrderConfig.AT_THE_BOTTOM) {
+			} else if (auxConfig.getOtherLayersBehaviour() == OrderConfig.AT_THE_BOTTOM) {
 				return 0;
-			}
-			else if (auxConfig.getOtherLayersBehaviour()==OrderConfig.FROM_TOP) {
-				int pos = target.getLayersCount()-auxConfig.getOtherLayersPosition();
-				if (pos<0) return 0;
+			} else if (auxConfig.getOtherLayersBehaviour() == OrderConfig.FROM_TOP) {
+				int pos = target.getLayersCount()
+						- auxConfig.getOtherLayersPosition();
+				if (pos < 0)
+					return 0;
 				return pos;
-			}
-			else if (auxConfig.getOtherLayersBehaviour()==OrderConfig.FROM_BOTTOM) {
-				if (auxConfig.getOtherLayersPosition()>target.getLayersCount()) {
+			} else if (auxConfig.getOtherLayersBehaviour() == OrderConfig.FROM_BOTTOM) {
+				if (auxConfig.getOtherLayersPosition() > target
+						.getLayersCount()) {
 					return target.getLayersCount();
-				}
-				else {
+				} else {
 					return auxConfig.getOtherLayersPosition();
 				}
 			}
@@ -165,7 +153,7 @@ public class SmartOrderManager implements OrderManager, IExtensionBuilder {
 	}
 
 	public XMLEntity getXMLEntity() {
-		if (config!=null) {
+		if (config != null) {
 			XMLEntity xml = globalConfig.getXMLEntity();
 			xml.putProperty("code", getCode());
 			return xml;
@@ -174,11 +162,10 @@ public class SmartOrderManager implements OrderManager, IExtensionBuilder {
 	}
 
 	public void setXMLEntity(XMLEntity xml) {
-		// check the right manager ID before processing it 
-		if (xml!=null
-				&& xml.contains("code")
+		// check the right manager ID before processing it
+		if (xml != null && xml.contains("code")
 				&& xml.getStringProperty("code").equals(getCode())) {
-			//ok, process the XML
+			// ok, process the XML
 			config = new OrderConfig();
 			config.setXMLEntity(xml);
 		}
@@ -207,7 +194,7 @@ public class SmartOrderManager implements OrderManager, IExtensionBuilder {
 	public OrderConfig getConfig() {
 		return this.config;
 	}
-	
+
 	public Object clone() {
 		OrderManager om;
 		try {

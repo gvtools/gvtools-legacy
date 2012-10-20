@@ -19,18 +19,18 @@
 package org.gvsig.raster.dataset.io.rmf;
 
 /**
- * Excepción cuando se produce un error de parseo en la cadena XML de entrada
- * a un read de un IRmfBlock. Todas los objetos que quieran leer xml de un bloque rmf
- * podrán hacerlo con su parser favorito pero tendrán que lanzar excepciones de este tipo
- * para que puedan ser gestionadas.
+ * Excepción cuando se produce un error de parseo en la cadena XML de entrada a
+ * un read de un IRmfBlock. Todas los objetos que quieran leer xml de un bloque
+ * rmf podrán hacerlo con su parser favorito pero tendrán que lanzar excepciones
+ * de este tipo para que puedan ser gestionadas.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public class ParsingException extends Exception{
+public class ParsingException extends Exception {
 	private static final long serialVersionUID = 5365697240193452525L;
 
-	public ParsingException(String msg){
+	public ParsingException(String msg) {
 		super(msg);
 	}
 }

@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.impl.voronoi.gui;
 
 import java.awt.event.ItemEvent;
@@ -63,17 +63,16 @@ import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.geoprocess.core.gui.AbstractGeoprocessGridbagPanel;
 import com.iver.cit.gvsig.geoprocess.impl.voronoi.IVoronoiGeoprocessUserEntries;
 
-public class VoronoiGeoprocessPanel extends AbstractGeoprocessGridbagPanel 
- 								implements IVoronoiGeoprocessUserEntries{
+public class VoronoiGeoprocessPanel extends AbstractGeoprocessGridbagPanel
+		implements IVoronoiGeoprocessUserEntries {
 
 	private static final long serialVersionUID = 6485409632799083097L;
-	
+
 	private JRadioButton tinRadioButton;
-	
+
 	private JRadioButton thiessenRadioButton;
 
 	private JComboBox algorithmCb;
-	
 
 	public VoronoiGeoprocessPanel(FLayers arg0) {
 		super(arg0, PluginServices.getText(null, "Voronoi"));
@@ -81,55 +80,54 @@ public class VoronoiGeoprocessPanel extends AbstractGeoprocessGridbagPanel
 
 	protected void addSpecificDesign() {
 		tinRadioButton = getTinRadioButton();
-		
+
 		addComponent(tinRadioButton);
 		thiessenRadioButton = getThiessenRadioButton();
 		addComponent(thiessenRadioButton);
-		
+
 		ButtonGroup buttonGroup = new ButtonGroup();
 		buttonGroup.add(tinRadioButton);
 		buttonGroup.add(thiessenRadioButton);
 		tinRadioButton.setSelected(true);
-		
+
 		algorithmCb = getAlgorithmCb();
 		addComponent(algorithmCb);
-		
+
 		initSelectedItemsJCheckBox();
 		updateNumSelectedFeaturesLabel();
 	}
 
 	protected void processLayerComboBoxStateChange(ItemEvent arg0) {
 	}
-	
+
 	private JRadioButton getTinRadioButton() {
 		if (tinRadioButton == null) {
 			tinRadioButton = new JRadioButton();
-			tinRadioButton.setText(PluginServices.getText(this,
-					"Calcular_Tin")
+			tinRadioButton.setText(PluginServices.getText(this, "Calcular_Tin")
 					+ ":");
-//			tinRadioButton.setBounds(new java.awt.Rectangle(2, 41,
-//					287, 21));
+			// tinRadioButton.setBounds(new java.awt.Rectangle(2, 41,
+			// 287, 21));
 		}
 		return tinRadioButton;
 	}
-	
+
 	private JRadioButton getThiessenRadioButton() {
 		if (thiessenRadioButton == null) {
 			thiessenRadioButton = new JRadioButton();
 			thiessenRadioButton.setText(PluginServices.getText(this,
-					"Calcular_Thiessen")
-					+ ":");
-//			thiessenRadioButton.setBounds(new java.awt.Rectangle(2, 10,
-//					303, 24));
+					"Calcular_Thiessen") + ":");
+			// thiessenRadioButton.setBounds(new java.awt.Rectangle(2, 10,
+			// 303, 24));
 		}
 		return thiessenRadioButton;
 	}
-	
-	private JComboBox getAlgorithmCb(){
-		if(algorithmCb == null){
+
+	private JComboBox getAlgorithmCb() {
+		if (algorithmCb == null) {
 			algorithmCb = new JComboBox();
-			Iterator<VoronoiStrategy> it = Voronoier.getRegisteredAlgorithms().iterator();
-			while(it.hasNext()){
+			Iterator<VoronoiStrategy> it = Voronoier.getRegisteredAlgorithms()
+					.iterator();
+			while (it.hasNext()) {
 				algorithmCb.addItem(it.next());
 			}
 		}
@@ -153,4 +151,3 @@ public class VoronoiGeoprocessPanel extends AbstractGeoprocessGridbagPanel
 	}
 
 }
-

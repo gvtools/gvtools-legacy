@@ -16,8 +16,8 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 
-
-public class LoadVectorLayer extends AbstractActionManager implements Serializable{
+public class LoadVectorLayer extends AbstractActionManager implements
+		Serializable {
 	private static final long serialVersionUID = 1L;
 	protected static final String actionCode = "Load_Vector_Layer";
 
@@ -43,49 +43,56 @@ public class LoadVectorLayer extends AbstractActionManager implements Serializab
 				try {
 					fileName = new File(doc).getCanonicalPath();
 				} catch (MalformedURLException e) {
-					PluginServices.getLogger().warn("Hyperlink - Malformed URL", e);
+					PluginServices.getLogger().warn(
+							"Hyperlink - Malformed URL", e);
 				} catch (IOException e) {
-					PluginServices.getLogger().warn("Hyperlink - Malformed URL", e);
+					PluginServices.getLogger().warn(
+							"Hyperlink - Malformed URL", e);
 				}
 			}
-			if (fileName==null || fileName.equals("")) {
+			if (fileName == null || fileName.equals("")) {
 				return;
 			}
-			String viewName = PluginServices.getMDIManager().getWindowInfo(activeWindow).getTitle();
+			String viewName = PluginServices.getMDIManager()
+					.getWindowInfo(activeWindow).getTitle();
 			try {
-				// assume that layer has same projection as view, because the user has no opportunity to choose the projection
+				// assume that layer has same projection as view, because the
+				// user has no opportunity to choose the projection
 				FLayer newLayer = null;
 				if (fileName.toLowerCase().endsWith(".shp")) {
-					newLayer = LayerFactory.createLayer(fileName, "gvSIG shp driver",
-							new File(fileName), view.getCrs());					
-				}
-				else if (fileName.toLowerCase().endsWith(".dgn")) {
-					newLayer = LayerFactory.createLayer(fileName, "gvSIG DGN Memory Driver",
-							new File(fileName), view.getCrs());	
-				}
-				else if (fileName.toLowerCase().endsWith(".dwg")) {
-					newLayer = LayerFactory.createLayer(fileName, "gvSIG DWG Memory Driver",
-							new File(fileName), view.getCrs());	
-					
-				}
-				else if (fileName.toLowerCase().endsWith(".dxf")) {
-					newLayer = LayerFactory.createLayer(fileName, "gvSIG DXF Memory Driver",
-							new File(fileName), view.getCrs());	
+					newLayer = LayerFactory.createLayer(fileName,
+							"gvSIG shp driver", new File(fileName),
+							view.getCrs());
+				} else if (fileName.toLowerCase().endsWith(".dgn")) {
+					newLayer = LayerFactory.createLayer(fileName,
+							"gvSIG DGN Memory Driver", new File(fileName),
+							view.getCrs());
+				} else if (fileName.toLowerCase().endsWith(".dwg")) {
+					newLayer = LayerFactory.createLayer(fileName,
+							"gvSIG DWG Memory Driver", new File(fileName),
+							view.getCrs());
 
+				} else if (fileName.toLowerCase().endsWith(".dxf")) {
+					newLayer = LayerFactory.createLayer(fileName,
+							"gvSIG DXF Memory Driver", new File(fileName),
+							view.getCrs());
+
+				} else if (fileName.toLowerCase().endsWith(".gml")) {
+					newLayer = LayerFactory.createLayer(fileName,
+							"gvSIG GML Memory Driver", new File(fileName),
+							view.getCrs());
+				} else if (fileName.toLowerCase().endsWith(".kml")) {
+					newLayer = LayerFactory.createLayer(fileName,
+							"gvSIG KML Memory Driver", new File(fileName),
+							view.getCrs());
 				}
-				else if (fileName.toLowerCase().endsWith(".gml")) {
-					newLayer = LayerFactory.createLayer(fileName, "gvSIG GML Memory Driver",
-							new File(fileName), view.getCrs());
-				}
-				else if (fileName.toLowerCase().endsWith(".kml")) {
-					newLayer = LayerFactory.createLayer(fileName, "gvSIG KML Memory Driver",
-							new File(fileName), view.getCrs());
-				}
-				if (newLayer!=null) {
-					view.getMapControl().getMapContext().getLayers().addLayer(newLayer);
+				if (newLayer != null) {
+					view.getMapControl().getMapContext().getLayers()
+							.addLayer(newLayer);
 				}
 			} catch (LoadLayerException e) {
-				PluginServices.getLogger().warn("Hyperlink - Error loading vector layer", e);
+				PluginServices.getLogger().warn(
+						"Hyperlink - Error loading vector layer", e);
 			}
 		}
 	}

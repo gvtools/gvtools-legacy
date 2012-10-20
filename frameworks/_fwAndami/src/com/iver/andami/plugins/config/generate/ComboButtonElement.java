@@ -7,153 +7,141 @@
 
 package com.iver.andami.plugins.config.generate;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Serializable;
-import java.io.Writer;
-import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.Marshaller;
 import org.exolab.castor.xml.Unmarshaller;
-import org.exolab.castor.xml.ValidationException;
-import org.xml.sax.ContentHandler;
 
 /**
  * Class ComboButtonElement.
  * 
- * @version $Revision: 15983 $ $Date: 2007-11-07 12:11:19 +0100 (Wed, 07 Nov 2007) $
+ * @version $Revision: 15983 $ $Date: 2007-11-07 12:11:19 +0100 (Wed, 07 Nov
+ *          2007) $
  */
 public class ComboButtonElement implements java.io.Serializable {
 
+	// --------------------------/
+	// - Class/Member Variables -/
+	// --------------------------/
 
-      //--------------------------/
-     //- Class/Member Variables -/
-    //--------------------------/
+	/**
+	 * Field _icon
+	 */
+	private java.lang.String _icon;
 
-    /**
-     * Field _icon
-     */
-    private java.lang.String _icon;
+	/**
+	 * Field _actionCommand
+	 */
+	private java.lang.String _actionCommand;
 
-    /**
-     * Field _actionCommand
-     */
-    private java.lang.String _actionCommand;
+	// ----------------/
+	// - Constructors -/
+	// ----------------/
 
+	public ComboButtonElement() {
+		super();
+	} // -- com.iver.andami.plugins.config.generate.ComboButtonElement()
 
-      //----------------/
-     //- Constructors -/
-    //----------------/
+	// -----------/
+	// - Methods -/
+	// -----------/
 
-    public ComboButtonElement() {
-        super();
-    } //-- com.iver.andami.plugins.config.generate.ComboButtonElement()
+	/**
+	 * Returns the value of field 'actionCommand'.
+	 * 
+	 * @return the value of field 'actionCommand'.
+	 */
+	public java.lang.String getActionCommand() {
+		return this._actionCommand;
+	} // -- java.lang.String getActionCommand()
 
+	/**
+	 * Returns the value of field 'icon'.
+	 * 
+	 * @return the value of field 'icon'.
+	 */
+	public java.lang.String getIcon() {
+		return this._icon;
+	} // -- java.lang.String getIcon()
 
-      //-----------/
-     //- Methods -/
-    //-----------/
+	/**
+	 * Method isValid
+	 */
+	public boolean isValid() {
+		try {
+			validate();
+		} catch (org.exolab.castor.xml.ValidationException vex) {
+			return false;
+		}
+		return true;
+	} // -- boolean isValid()
 
-    /**
-     * Returns the value of field 'actionCommand'.
-     * 
-     * @return the value of field 'actionCommand'.
-     */
-    public java.lang.String getActionCommand()
-    {
-        return this._actionCommand;
-    } //-- java.lang.String getActionCommand() 
+	/**
+	 * Method marshal
+	 * 
+	 * @param out
+	 */
+	public void marshal(java.io.Writer out)
+			throws org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
 
-    /**
-     * Returns the value of field 'icon'.
-     * 
-     * @return the value of field 'icon'.
-     */
-    public java.lang.String getIcon()
-    {
-        return this._icon;
-    } //-- java.lang.String getIcon() 
+		Marshaller.marshal(this, out);
+	} // -- void marshal(java.io.Writer)
 
-    /**
-     * Method isValid
-     */
-    public boolean isValid()
-    {
-        try {
-            validate();
-        }
-        catch (org.exolab.castor.xml.ValidationException vex) {
-            return false;
-        }
-        return true;
-    } //-- boolean isValid() 
+	/**
+	 * Method marshal
+	 * 
+	 * @param handler
+	 */
+	public void marshal(org.xml.sax.ContentHandler handler)
+			throws java.io.IOException, org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
 
-    /**
-     * Method marshal
-     * 
-     * @param out
-     */
-    public void marshal(java.io.Writer out)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        
-        Marshaller.marshal(this, out);
-    } //-- void marshal(java.io.Writer) 
+		Marshaller.marshal(this, handler);
+	} // -- void marshal(org.xml.sax.ContentHandler)
 
-    /**
-     * Method marshal
-     * 
-     * @param handler
-     */
-    public void marshal(org.xml.sax.ContentHandler handler)
-        throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        
-        Marshaller.marshal(this, handler);
-    } //-- void marshal(org.xml.sax.ContentHandler) 
+	/**
+	 * Sets the value of field 'actionCommand'.
+	 * 
+	 * @param actionCommand
+	 *            the value of field 'actionCommand'.
+	 */
+	public void setActionCommand(java.lang.String actionCommand) {
+		this._actionCommand = actionCommand;
+	} // -- void setActionCommand(java.lang.String)
 
-    /**
-     * Sets the value of field 'actionCommand'.
-     * 
-     * @param actionCommand the value of field 'actionCommand'.
-     */
-    public void setActionCommand(java.lang.String actionCommand)
-    {
-        this._actionCommand = actionCommand;
-    } //-- void setActionCommand(java.lang.String) 
+	/**
+	 * Sets the value of field 'icon'.
+	 * 
+	 * @param icon
+	 *            the value of field 'icon'.
+	 */
+	public void setIcon(java.lang.String icon) {
+		this._icon = icon;
+	} // -- void setIcon(java.lang.String)
 
-    /**
-     * Sets the value of field 'icon'.
-     * 
-     * @param icon the value of field 'icon'.
-     */
-    public void setIcon(java.lang.String icon)
-    {
-        this._icon = icon;
-    } //-- void setIcon(java.lang.String) 
+	/**
+	 * Method unmarshal
+	 * 
+	 * @param reader
+	 */
+	public static java.lang.Object unmarshal(java.io.Reader reader)
+			throws org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
+		return (com.iver.andami.plugins.config.generate.ComboButtonElement) Unmarshaller
+				.unmarshal(
+						com.iver.andami.plugins.config.generate.ComboButtonElement.class,
+						reader);
+	} // -- java.lang.Object unmarshal(java.io.Reader)
 
-    /**
-     * Method unmarshal
-     * 
-     * @param reader
-     */
-    public static java.lang.Object unmarshal(java.io.Reader reader)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        return (com.iver.andami.plugins.config.generate.ComboButtonElement) Unmarshaller.unmarshal(com.iver.andami.plugins.config.generate.ComboButtonElement.class, reader);
-    } //-- java.lang.Object unmarshal(java.io.Reader) 
-
-    /**
-     * Method validate
-     */
-    public void validate()
-        throws org.exolab.castor.xml.ValidationException
-    {
-        org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
-        validator.validate(this);
-    } //-- void validate() 
+	/**
+	 * Method validate
+	 */
+	public void validate() throws org.exolab.castor.xml.ValidationException {
+		org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
+		validator.validate(this);
+	} // -- void validate()
 
 }

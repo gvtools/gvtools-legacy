@@ -50,6 +50,7 @@ import com.iver.andami.ui.mdiFrame.MDIFrame;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
+
 /**
  * Extension para la barra de herramientas generica
  * 
@@ -58,9 +59,10 @@ import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
  */
 public class GenericToolBarModule extends Extension {
 	private GenericToolBarPanel toolBar = null;
-	
+
 	/**
 	 * Crea y devuelve la barra de herramientas
+	 * 
 	 * @return
 	 */
 	private GenericToolBarPanel getGenericToolBarPanel() {
@@ -83,7 +85,7 @@ public class GenericToolBarModule extends Extension {
 		} else {
 			toolBar.setPreferredSize(new Dimension(300, getToolbarHeight()));
 		}
-		
+
 		return toolBar;
 	}
 
@@ -91,87 +93,106 @@ public class GenericToolBarModule extends Extension {
 	 * Obtenemos el alto de cualquier toolbar que este visible en gvSIG y no sea
 	 * nuestro para poder asignarselo al GenericToolBar como PreferredSize. En
 	 * caso de no encontrar ninguno que cumpla las condiciones, se devolverá 24
+	 * 
 	 * @return
 	 */
 	private int getToolbarHeight() {
-		if ((PluginServices.getMainFrame() == null) ||
-				(PluginServices.getMainFrame().getToolbars() == null) ||
-				(PluginServices.getMainFrame().getToolbars().length <= 0))
+		if ((PluginServices.getMainFrame() == null)
+				|| (PluginServices.getMainFrame().getToolbars() == null)
+				|| (PluginServices.getMainFrame().getToolbars().length <= 0))
 			return 24;
-		
+
 		for (int i = 0; i < PluginServices.getMainFrame().getToolbars().length; i++) {
-			if ((PluginServices.getMainFrame().getToolbars()[i].getHeight() > 16) &&
-					((Object) PluginServices.getMainFrame().getToolbars()[i] != (Object) toolBar))
-				return PluginServices.getMainFrame().getToolbars()[i].getHeight();
+			if ((PluginServices.getMainFrame().getToolbars()[i].getHeight() > 16)
+					&& ((Object) PluginServices.getMainFrame().getToolbars()[i] != (Object) toolBar))
+				return PluginServices.getMainFrame().getToolbars()[i]
+						.getHeight();
 		}
 		return 24;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
 		registerIcons();
-		
-		// Creación del punto de extensión para registrar paneles en el cuadro de propiedades.
-		ExtensionPoint point = ExtensionPoint.getExtensionPoint("GenericToolBarGroup");
+
+		// Creación del punto de extensión para registrar paneles en el cuadro
+		// de propiedades.
+		ExtensionPoint point = ExtensionPoint
+				.getExtensionPoint("GenericToolBarGroup");
 		point.setDescription("Punto de extension para los grupos de menus del GenericToolBarPanel");
 
-		point.register("RasterLayer", new GenericToolBarMenuItem(RasterToolsUtil.getText(this, "capa_raster"), PluginServices.getIconTheme().get("layer-icon")));
-		point.register("RasterProcess", new GenericToolBarMenuItem(RasterToolsUtil.getText(this, "process_raster"), PluginServices.getIconTheme().get("process-icon")));
-		point.register("GeoRaster", new GenericToolBarMenuItem(RasterToolsUtil.getText(this, "transformaciones_geograficas"), PluginServices.getIconTheme().get("transgeo-icon")));
-		point.register("RasterExport", new GenericToolBarMenuItem(RasterToolsUtil.getText(this, "raster_export"), PluginServices.getIconTheme().get("raster-export")));
-		
+		point.register("RasterLayer", new GenericToolBarMenuItem(
+				RasterToolsUtil.getText(this, "capa_raster"), PluginServices
+						.getIconTheme().get("layer-icon")));
+		point.register("RasterProcess", new GenericToolBarMenuItem(
+				RasterToolsUtil.getText(this, "process_raster"), PluginServices
+						.getIconTheme().get("process-icon")));
+		point.register(
+				"GeoRaster",
+				new GenericToolBarMenuItem(RasterToolsUtil.getText(this,
+						"transformaciones_geograficas"), PluginServices
+						.getIconTheme().get("transgeo-icon")));
+		point.register("RasterExport", new GenericToolBarMenuItem(
+				RasterToolsUtil.getText(this, "raster_export"), PluginServices
+						.getIconTheme().get("raster-export")));
+
 		point = ExtensionPoint.getExtensionPoint("GenericToolBarMenu");
 		point.setDescription("Punto de extension para los submenus del GenericToolBarPanel");
-		point.register("RasterProperties", RasterPropertiesTocMenuEntry.getSingleton());
+		point.register("RasterProperties",
+				RasterPropertiesTocMenuEntry.getSingleton());
 		point.register("SelectLayer", SelectLayerTocMenuEntry.getSingleton());
 		point.register("HistogramPanel", HistogramTocMenuEntry.getSingleton());
 		point.register("ViewColorTable", ColorTableTocMenuEntry.getSingleton());
 		point.register("Overviews", OverviewsTocMenuEntry.getSingleton());
 		point.register("RoisManager", ROIManagerTocMenuEntry.getSingleton());
-		point.register("ViewRasterAnalysis", ViewRasterAnalysisTocMenuEntry.getSingleton());
-		
+		point.register("ViewRasterAnalysis",
+				ViewRasterAnalysisTocMenuEntry.getSingleton());
+
 		point.register("SaveAs", SaveAsTocMenuEntry.getSingleton());
 		point.register("ClippingPanel", ClippingTocMenuEntry.getSingleton());
 		point.register("SaveRaster", SaveRasterTocMenuEntry.getSingleton());
-		
+
 		point.register("FilterPanel", FilterTocMenuEntry.getSingleton());
 		point.register("EnhancedPanel", EnhancedTocMenuEntry.getSingleton());
 		point.register("GeoLocation", GeoLocationTocMenuEntry.getSingleton());
-		point.register("Vectorization", VectorizationTocMenuEntry.getSingleton());
+		point.register("Vectorization",
+				VectorizationTocMenuEntry.getSingleton());
 		ReprojectTocMenuEntry menuEntry = ReprojectTocMenuEntry.getSingleton();
 		point.register(menuEntry.getText(), menuEntry);
 
 		if (getGenericToolBarPanel() != null)
 			getGenericToolBarPanel().reloadMenuGroup();
 	}
-	
+
 	/**
 	 * Registra los iconos a utilizar en la botonera.
 	 */
 	private void registerIcons() {
 		PluginServices.getIconTheme().register(
 				"layer-icon",
-				this.getClass().getClassLoader().getResource("images/rasterlayer.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/rasterlayer.png"));
 		PluginServices.getIconTheme().register(
 				"process-icon",
-				this.getClass().getClassLoader().getResource("images/icon_process.gif")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/icon_process.gif"));
 		PluginServices.getIconTheme().register(
 				"transgeo-icon",
-				this.getClass().getClassLoader().getResource("images/rastertransgeo.gif")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/rastertransgeo.gif"));
 		PluginServices.getIconTheme().registerDefault(
 				"raster-export",
-				this.getClass().getClassLoader().getResource("images/raster-export.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/raster-export.png"));
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
@@ -180,6 +201,7 @@ public class GenericToolBarModule extends Extension {
 
 	/**
 	 * Establece si la barra de herramientas esta visible
+	 * 
 	 * @param enabled
 	 */
 	private void setToolBarVisible(boolean enabled) {
@@ -188,13 +210,15 @@ public class GenericToolBarModule extends Extension {
 
 		toolBar.setVisible(enabled);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (f == null) {
 			setToolBarVisible(false);
 			return false;
@@ -214,8 +238,9 @@ public class GenericToolBarModule extends Extension {
 		}
 
 		setToolBarVisible(false);
-		return false;			
+		return false;
 	}
-	
-	public void execute(String actionCommand) {}
+
+	public void execute(String actionCommand) {
+	}
 }

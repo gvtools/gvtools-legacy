@@ -63,7 +63,6 @@ import javax.swing.ListCellRenderer;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.WindowInfo;
-import com.iver.cit.gvsig.AddLayer;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.gui.panels.ColorChooserPanel;
 import com.iver.cit.gvsig.gui.utils.FontChooser;
@@ -75,24 +74,23 @@ import com.iver.cit.gvsig.project.documents.layout.fframes.ListViewModel;
 import com.iver.cit.gvsig.project.documents.layout.fframes.gui.JPRotation;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
-
 /**
  * Dialogo para a�adir una barra de escala al Layout.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
-	private static final ImageIcon inumero = PluginServices.getIconTheme()
-		.get("numero-icon");
+	private static final ImageIcon inumero = PluginServices.getIconTheme().get(
+			"numero-icon");
 
-	private static final ImageIcon ibarra1 = PluginServices.getIconTheme()
-		.get("barra1-icon");
+	private static final ImageIcon ibarra1 = PluginServices.getIconTheme().get(
+			"barra1-icon");
 
-	private static final ImageIcon ibarra2 = PluginServices.getIconTheme()
-		.get("barra2-icon");
+	private static final ImageIcon ibarra2 = PluginServices.getIconTheme().get(
+			"barra2-icon");
 
-	private static final ImageIcon ibarra3 = PluginServices.getIconTheme()
-		.get("barra3-icon");
+	private static final ImageIcon ibarra3 = PluginServices.getIconTheme().get(
+			"barra3-icon");
 
 	private javax.swing.JPanel jContentPane = null;
 	private javax.swing.JScrollPane jScrollPane = null;
@@ -109,11 +107,11 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 	private javax.swing.JButton bAceptar = null;
 	private javax.swing.JButton bCancelar = null;
 
-	//private ProjectView m_projectView=null;
+	// private ProjectView m_projectView=null;
 	private FFrameView fframeview = null;
 	private Rectangle2D rect = new Rectangle2D.Double();
 	private Layout m_layout = null;
-	private FFrameScaleBar fframescalebar = null; //new FFrameScaleBar();
+	private FFrameScaleBar fframescalebar = null; // new FFrameScaleBar();
 	private boolean isAcepted = false;
 	private ImageIcon[] images = new ImageIcon[4];
 	private javax.swing.JButton bFuente = null;
@@ -135,8 +133,8 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 	private Color barcolor = null;
 	private Color textcolor = null;
 
-	//private JPanel jPanel = null;
-	//private JPanel jPanel1 = null;
+	// private JPanel jPanel = null;
+	// private JPanel jPanel1 = null;
 	private JPanel jPanel2 = null;
 	private JCheckBox jCheckBox = null;
 	private JPRotation pRotation = null;
@@ -146,19 +144,24 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This is the default constructor
-	 *
-	 * @param layout DOCUMENT ME!
-	 * @param fframe DOCUMENT ME!
+	 * 
+	 * @param layout
+	 *            DOCUMENT ME!
+	 * @param fframe
+	 *            DOCUMENT ME!
 	 */
 	public FFrameScaleBarDialog(Layout layout, FFrameScaleBar fframe) {
 		super();
-		fframescalebar = (FFrameScaleBar)fframe.cloneFFrame(layout);
+		fframescalebar = (FFrameScaleBar) fframe.cloneFFrame(layout);
 		barcolor = fframescalebar.getBarColor();
 		textcolor = fframescalebar.getTextColor();
 
-		if (fframescalebar.getFFrameDependence() != null && fframescalebar.getDescription().equals("")) {
-			getTfNumberScale().setText("1:" +
-				String.valueOf(((FFrameView)fframescalebar.getFFrameDependence()[0]).getScale()));
+		if (fframescalebar.getFFrameDependence() != null
+				&& fframescalebar.getDescription().equals("")) {
+			getTfNumberScale().setText(
+					"1:"
+							+ String.valueOf(((FFrameView) fframescalebar
+									.getFFrameDependence()[0]).getScale()));
 		}
 
 		m_layout = layout;
@@ -167,8 +170,9 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param r DOCUMENT ME!
+	 * 
+	 * @param r
+	 *            DOCUMENT ME!
 	 */
 	public void setRectangle(Rectangle2D r) {
 		rect.setRect(r);
@@ -185,7 +189,7 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 		if (fframescalebar.getStyle() == 0) {
 			getChbMantenerIntervalo().setEnabled(false);
 
-			///getLUnidades().setEnabled(false);
+			// /getLUnidades().setEnabled(false);
 			getCbUnidades().setEnabled(false);
 			getChbEtiquetas().setEnabled(false);
 			getBBarraColor().setEnabled(false);
@@ -205,7 +209,7 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes jContentPane
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private javax.swing.JPanel getJContentPane() {
@@ -230,13 +234,13 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private javax.swing.JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new javax.swing.JScrollPane();
-			jScrollPane.setPreferredSize(new java.awt.Dimension(250,55));
+			jScrollPane.setPreferredSize(new java.awt.Dimension(250, 55));
 			jScrollPane.setViewportView(getLiVistas());
 		}
 
@@ -245,7 +249,7 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes liVistas
-	 *
+	 * 
 	 * @return javax.swing.JList
 	 */
 	private javax.swing.JList getLiVistas() {
@@ -253,63 +257,64 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 			ListViewModel listmodel = new ListViewModel();
 			listmodel.addViews(m_layout);
 
-			///ArrayList list = listmodel.getViews();
+			// /ArrayList list = listmodel.getViews();
 
 			liVistas = new javax.swing.JList();
 
-			liVistas.setSize(new java.awt.Dimension(250,52));
+			liVistas.setSize(new java.awt.Dimension(250, 52));
 			liVistas.setModel(listmodel);
 
 			for (int i = 0; i < liVistas.getModel().getSize(); i++) {
 				if (fframescalebar.getFFrameDependence() != null) {
-					FFrameView fframeviewAux = (FFrameView) liVistas.getModel().getElementAt(i);
+					FFrameView fframeviewAux = (FFrameView) liVistas.getModel()
+							.getElementAt(i);
 
 					if (fframeviewAux == fframescalebar.getFFrameDependence()[0]) {
 						liVistas.setSelectedIndex(i);
-						fframeview=fframeviewAux;
+						fframeview = fframeviewAux;
 					}
 				}
 			}
 
 			liVistas.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-					private int selectIndex=-1;
-					public void valueChanged(
-								javax.swing.event.ListSelectionEvent e) {
-						IFFrame[] fframes=m_layout.getLayoutContext().getFFrames();
-							int selectInt = ((JList) e.getSource())
-									.getSelectedIndex();
-							if (selectInt != selectIndex) {
-								selectIndex = selectInt;
-								if (selectIndex == -1)
-									return;
-								fframeview = (FFrameView) liVistas.getModel()
-										.getElementAt(selectInt);
+				private int selectIndex = -1;
 
-								for (int i = 0; i < fframes.length; i++) {
-									IFFrame f = fframes[i];
+				public void valueChanged(javax.swing.event.ListSelectionEvent e) {
+					IFFrame[] fframes = m_layout.getLayoutContext()
+							.getFFrames();
+					int selectInt = ((JList) e.getSource()).getSelectedIndex();
+					if (selectInt != selectIndex) {
+						selectIndex = selectInt;
+						if (selectIndex == -1)
+							return;
+						fframeview = (FFrameView) liVistas.getModel()
+								.getElementAt(selectInt);
 
-									if (f instanceof FFrameView) {
-										if (((FFrameView) f).getView() == fframeview
-												.getView()) {
-											fframescalebar
-													.setFFrameDependence(fframeview);
-										}
-									}
+						for (int i = 0; i < fframes.length; i++) {
+							IFFrame f = fframes[i];
+
+							if (f instanceof FFrameView) {
+								if (((FFrameView) f).getView() == fframeview
+										.getView()) {
+									fframescalebar
+											.setFFrameDependence(fframeview);
 								}
-
-								getTNumIntervalos().setText(
-										String.valueOf(fframescalebar
-												.getNumInterval()));
-								getTDivIzquierda().setText(
-										String.valueOf(fframescalebar
-												.getNumLeft()));
-								getTIntervalo().setText(
-										fframescalebar.obtainInterval());
-								getTfNumberScale().setText(
-										fframescalebar.getDescription());
 							}
 						}
-					});
+
+						getTNumIntervalos()
+								.setText(
+										String.valueOf(fframescalebar
+												.getNumInterval()));
+						getTDivIzquierda().setText(
+								String.valueOf(fframescalebar.getNumLeft()));
+						getTIntervalo()
+								.setText(fframescalebar.obtainInterval());
+						getTfNumberScale().setText(
+								fframescalebar.getDescription());
+					}
+				}
+			});
 		}
 
 		return liVistas;
@@ -317,7 +322,7 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes chbMantenerIntervalo
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	private javax.swing.JCheckBox getChbMantenerIntervalo() {
@@ -326,13 +331,16 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 			chbMantenerIntervalo.setSelected(fframescalebar.isbIntervalSet());
 			chbMantenerIntervalo.setText(PluginServices.getText(this,
 					"mantener_intervalo"));
-			chbMantenerIntervalo.setPreferredSize(new java.awt.Dimension(200, 20));
-			chbMantenerIntervalo.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						fframescalebar.setIntervalSet(getChbMantenerIntervalo()
-														  .isSelected());
-					}
-				});
+			chbMantenerIntervalo.setPreferredSize(new java.awt.Dimension(200,
+					20));
+			chbMantenerIntervalo
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							fframescalebar
+									.setIntervalSet(getChbMantenerIntervalo()
+											.isSelected());
+						}
+					});
 		}
 
 		return chbMantenerIntervalo;
@@ -340,23 +348,24 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes cbEscala
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private javax.swing.JComboBox getCbEscala() {
 		if (cbEscala == null) {
-			//String[] s={"n�merico","barra1","barra2","barra3","barra4"};
+			// String[] s={"n�merico","barra1","barra2","barra3","barra4"};
 			cbEscala = new javax.swing.JComboBox();
 			images[0] = inumero;
 			images[1] = ibarra1;
 			images[2] = ibarra2;
 			images[3] = ibarra3;
 
-			/*  Image img=img = new BufferedImage(100, 25,
-			   BufferedImage.TYPE_INT_ARGB);
-			   img.getGraphics().drawImage(images[3].getImage(),0,0,null);
-			   img.getGraphics().setXORMode(Color.yellow);
-			    images[3]=new ImageIcon(img);
+			/*
+			 * Image img=img = new BufferedImage(100, 25,
+			 * BufferedImage.TYPE_INT_ARGB);
+			 * img.getGraphics().drawImage(images[3].getImage(),0,0,null);
+			 * img.getGraphics().setXORMode(Color.yellow); images[3]=new
+			 * ImageIcon(img);
 			 */
 			ComboBoxRenderer renderer = new ComboBoxRenderer();
 			renderer.setPreferredSize(new Dimension(100, 25));
@@ -370,42 +379,42 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 			cbEscala.setSelectedIndex(fframescalebar.getStyle());
 			cbEscala.setPreferredSize(new java.awt.Dimension(200, 20));
 			cbEscala.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						fframescalebar.setStyle(getCbEscala().getSelectedIndex());
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					fframescalebar.setStyle(getCbEscala().getSelectedIndex());
 
-						if (cbEscala.getSelectedIndex() == 0) {
-							getChbMantenerIntervalo().setEnabled(false);
-							getChbMostrarUnidades().setEnabled(false);
-							getChbSobreUnidades().setEnabled(false);
-							getCbUnidades().setEnabled(false);
-							getChbEtiquetas().setEnabled(false);
-							getBBarraColor().setEnabled(false);
-							getLIntervalo().setEnabled(false);
-							getTIntervalo().setEnabled(false);
-							getLNumIntervalos().setEnabled(false);
-							getTNumIntervalos().setEnabled(false);
-							getLDivIzquierda().setEnabled(false);
-							getTDivIzquierda().setEnabled(false);
-							getJCheckBox().setEnabled(false);
-							getChbSobreDescripcion().setEnabled(false);
-						} else {
-							getChbMantenerIntervalo().setEnabled(true);
-							getChbMostrarUnidades().setEnabled(true);
-							getChbSobreUnidades().setEnabled(true);
-							getCbUnidades().setEnabled(true);
-							getChbEtiquetas().setEnabled(true);
-							getBBarraColor().setEnabled(true);
-							getLIntervalo().setEnabled(true);
-							getTIntervalo().setEnabled(true);
-							getLNumIntervalos().setEnabled(true);
-							getTNumIntervalos().setEnabled(true);
-							getLDivIzquierda().setEnabled(true);
-							getTDivIzquierda().setEnabled(true);
-							getJCheckBox().setEnabled(true);
-							getChbSobreDescripcion().setEnabled(true);
-						}
+					if (cbEscala.getSelectedIndex() == 0) {
+						getChbMantenerIntervalo().setEnabled(false);
+						getChbMostrarUnidades().setEnabled(false);
+						getChbSobreUnidades().setEnabled(false);
+						getCbUnidades().setEnabled(false);
+						getChbEtiquetas().setEnabled(false);
+						getBBarraColor().setEnabled(false);
+						getLIntervalo().setEnabled(false);
+						getTIntervalo().setEnabled(false);
+						getLNumIntervalos().setEnabled(false);
+						getTNumIntervalos().setEnabled(false);
+						getLDivIzquierda().setEnabled(false);
+						getTDivIzquierda().setEnabled(false);
+						getJCheckBox().setEnabled(false);
+						getChbSobreDescripcion().setEnabled(false);
+					} else {
+						getChbMantenerIntervalo().setEnabled(true);
+						getChbMostrarUnidades().setEnabled(true);
+						getChbSobreUnidades().setEnabled(true);
+						getCbUnidades().setEnabled(true);
+						getChbEtiquetas().setEnabled(true);
+						getBBarraColor().setEnabled(true);
+						getLIntervalo().setEnabled(true);
+						getTIntervalo().setEnabled(true);
+						getLNumIntervalos().setEnabled(true);
+						getTNumIntervalos().setEnabled(true);
+						getLDivIzquierda().setEnabled(true);
+						getTDivIzquierda().setEnabled(true);
+						getJCheckBox().setEnabled(true);
+						getChbSobreDescripcion().setEnabled(true);
 					}
-				});
+				}
+			});
 		}
 
 		return cbEscala;
@@ -413,26 +422,26 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes cbUnidades
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private javax.swing.JComboBox getCbUnidades() {
 		if (cbUnidades == null) {
-			//String[] s={"Kil�metros","metros","cent�metros","mil�metros","millas","yardas","pies","pulgadas"};
+			// String[]
+			// s={"Kil�metros","metros","cent�metros","mil�metros","millas","yardas","pies","pulgadas"};
 			String[] names = MapContext.getDistanceNames();
 			for (int i = 0; i < names.length; i++) {
-				names[i]=PluginServices.getText(this,names[i]);
+				names[i] = PluginServices.getText(this, names[i]);
 			}
 			cbUnidades = new javax.swing.JComboBox(names);
 			cbUnidades.setSelectedIndex(fframescalebar.getUnits());
 			cbUnidades.setPreferredSize(new java.awt.Dimension(150, 20));
 			cbUnidades.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						fframescalebar.setUnits(getCbUnidades()
-													.getSelectedIndex());
-						getTIntervalo().setText(fframescalebar.obtainInterval());
-					}
-				});
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					fframescalebar.setUnits(getCbUnidades().getSelectedIndex());
+					getTIntervalo().setText(fframescalebar.obtainInterval());
+				}
+			});
 		}
 
 		return cbUnidades;
@@ -440,14 +449,14 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes lIntervalo
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLIntervalo() {
 		if (lIntervalo == null) {
 			lIntervalo = new javax.swing.JLabel();
 			lIntervalo.setText(PluginServices.getText(this, "Intervalo"));
-			lIntervalo.setPreferredSize(new java.awt.Dimension(155,20));
+			lIntervalo.setPreferredSize(new java.awt.Dimension(155, 20));
 		}
 
 		return lIntervalo;
@@ -455,28 +464,32 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes tIntervalo
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private javax.swing.JTextField getTIntervalo() {
 		if (tIntervalo == null) {
 			tIntervalo = new javax.swing.JTextField();
-			tIntervalo.setPreferredSize(new java.awt.Dimension(80,20));
+			tIntervalo.setPreferredSize(new java.awt.Dimension(80, 20));
 			tIntervalo.setText(fframescalebar.getInterval());
 			tIntervalo.addKeyListener(new java.awt.event.KeyAdapter() {
-					public void keyReleased(java.awt.event.KeyEvent e) {
-						if (!tIntervalo.getText().toString().equals("")) {
-							String s=tIntervalo.getText().toString();
-							try {
-								fframescalebar.setInterval(FFrameScaleBar.numberFormat.parse(s).doubleValue());
-							} catch (ParseException e1) {
-								e1.printStackTrace();
-							}
-							getTNumIntervalos().setText(String.valueOf(
-									fframescalebar.getNumInterval()));
+				public void keyReleased(java.awt.event.KeyEvent e) {
+					if (!tIntervalo.getText().toString().equals("")) {
+						String s = tIntervalo.getText().toString();
+						try {
+							fframescalebar
+									.setInterval(FFrameScaleBar.numberFormat
+											.parse(s).doubleValue());
+						} catch (ParseException e1) {
+							e1.printStackTrace();
 						}
+						getTNumIntervalos()
+								.setText(
+										String.valueOf(fframescalebar
+												.getNumInterval()));
 					}
-				});
+				}
+			});
 		}
 
 		return tIntervalo;
@@ -484,14 +497,15 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes lNumIntervalos
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLNumIntervalos() {
 		if (lNumIntervalos == null) {
 			lNumIntervalos = new javax.swing.JLabel();
-			lNumIntervalos.setText(PluginServices.getText(this, "Num_intervalos"));
-			lNumIntervalos.setPreferredSize(new java.awt.Dimension(155,20));
+			lNumIntervalos.setText(PluginServices.getText(this,
+					"Num_intervalos"));
+			lNumIntervalos.setPreferredSize(new java.awt.Dimension(155, 20));
 		}
 
 		return lNumIntervalos;
@@ -499,24 +513,25 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes tNumIntervalos
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private javax.swing.JTextField getTNumIntervalos() {
 		if (tNumIntervalos == null) {
 			tNumIntervalos = new javax.swing.JTextField();
-			tNumIntervalos.setPreferredSize(new java.awt.Dimension(80,20));
-			tNumIntervalos.setText(Integer.toString(
-					fframescalebar.getNumInterval()));
+			tNumIntervalos.setPreferredSize(new java.awt.Dimension(80, 20));
+			tNumIntervalos.setText(Integer.toString(fframescalebar
+					.getNumInterval()));
 			tNumIntervalos.addKeyListener(new java.awt.event.KeyAdapter() {
-					public void keyReleased(java.awt.event.KeyEvent e) {
-						if (!tNumIntervalos.getText().toString().equals("")) {
-							fframescalebar.setNumInterval(Integer.parseInt(
-									tNumIntervalos.getText().toString()));
-							getTIntervalo().setText(fframescalebar.obtainInterval());
-						}
+				public void keyReleased(java.awt.event.KeyEvent e) {
+					if (!tNumIntervalos.getText().toString().equals("")) {
+						fframescalebar.setNumInterval(Integer
+								.parseInt(tNumIntervalos.getText().toString()));
+						getTIntervalo()
+								.setText(fframescalebar.obtainInterval());
 					}
-				});
+				}
+			});
 		}
 
 		return tNumIntervalos;
@@ -524,7 +539,7 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes lDivIzquierda
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLDivIzquierda() {
@@ -532,7 +547,7 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 			lDivIzquierda = new javax.swing.JLabel();
 			lDivIzquierda.setText(PluginServices.getText(this,
 					"divisiones_izquierda"));
-			lDivIzquierda.setPreferredSize(new java.awt.Dimension(155,20));
+			lDivIzquierda.setPreferredSize(new java.awt.Dimension(155, 20));
 		}
 
 		return lDivIzquierda;
@@ -540,24 +555,25 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes tDivIzquierda
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private javax.swing.JTextField getTDivIzquierda() {
 		if (tDivIzquierda == null) {
 			tDivIzquierda = new javax.swing.JTextField();
-			tDivIzquierda.setPreferredSize(new java.awt.Dimension(80,20));
-			tDivIzquierda.setText(Integer.toString(fframescalebar.getNumLeft()));
+			tDivIzquierda.setPreferredSize(new java.awt.Dimension(80, 20));
+			tDivIzquierda
+					.setText(Integer.toString(fframescalebar.getNumLeft()));
 			tDivIzquierda.addKeyListener(new java.awt.event.KeyAdapter() {
-					public void keyReleased(java.awt.event.KeyEvent e) {
-						if (tDivIzquierda.getText().toString().equals("")) {
-							tDivIzquierda.setText("0");
-						} else {
-							fframescalebar.setNumLeft(Integer.parseInt(
-									tDivIzquierda.getText()));
-						}
+				public void keyReleased(java.awt.event.KeyEvent e) {
+					if (tDivIzquierda.getText().toString().equals("")) {
+						tDivIzquierda.setText("0");
+					} else {
+						fframescalebar.setNumLeft(Integer
+								.parseInt(tDivIzquierda.getText()));
 					}
-				});
+				}
+			});
 		}
 
 		return tDivIzquierda;
@@ -565,7 +581,7 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes bAceptar
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBAceptar() {
@@ -576,32 +592,34 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 			bAceptar.setLocation(106, 347);
 			bAceptar.setPreferredSize(new java.awt.Dimension(79, 23));
 			bAceptar.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						fframescalebar.setUnits(getCbUnidades()
-													.getSelectedIndex());
-						fframescalebar.setBoundBox(FLayoutUtilities.toSheetRect(
-								rect, m_layout.getLayoutControl().getAT()));
-						fframescalebar.setFFrameDependence(fframeview);
-						fframescalebar.setBarColor(barcolor);
-						fframescalebar.setTextColor(textcolor);
-						fframescalebar.setShowNameUnits(getChbMostrarUnidades()
-															.isSelected());
-						fframescalebar.setShowDescription(getJCheckBox()
-															  .isSelected());
-						fframescalebar.setAboveDescription(getChbSobreDescripcion()
-															   .isSelected());
-						fframescalebar.setAboveIntervals(getChbEtiquetas()
-															 .isSelected());
-						fframescalebar.setAboveName(getChbSobreUnidades()
-														.isSelected());
-						fframescalebar.setRotation(getPRotation().getRotation());
-						fframescalebar.setNumDec(Integer.parseInt(getNumDec().getText()));
-						fframescalebar.setNumLeft(Integer.parseInt(getTDivIzquierda().getText()));
-						PluginServices.getMDIManager().closeWindow(FFrameScaleBarDialog.this);
-						//m_layout.refresh();
-						isAcepted = true;
-					}
-				});
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					fframescalebar.setUnits(getCbUnidades().getSelectedIndex());
+					fframescalebar.setBoundBox(FLayoutUtilities.toSheetRect(
+							rect, m_layout.getLayoutControl().getAT()));
+					fframescalebar.setFFrameDependence(fframeview);
+					fframescalebar.setBarColor(barcolor);
+					fframescalebar.setTextColor(textcolor);
+					fframescalebar.setShowNameUnits(getChbMostrarUnidades()
+							.isSelected());
+					fframescalebar.setShowDescription(getJCheckBox()
+							.isSelected());
+					fframescalebar.setAboveDescription(getChbSobreDescripcion()
+							.isSelected());
+					fframescalebar.setAboveIntervals(getChbEtiquetas()
+							.isSelected());
+					fframescalebar.setAboveName(getChbSobreUnidades()
+							.isSelected());
+					fframescalebar.setRotation(getPRotation().getRotation());
+					fframescalebar.setNumDec(Integer.parseInt(getNumDec()
+							.getText()));
+					fframescalebar.setNumLeft(Integer
+							.parseInt(getTDivIzquierda().getText()));
+					PluginServices.getMDIManager().closeWindow(
+							FFrameScaleBarDialog.this);
+					// m_layout.refresh();
+					isAcepted = true;
+				}
+			});
 		}
 
 		return bAceptar;
@@ -609,7 +627,7 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes bCancelar
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBCancelar() {
@@ -620,17 +638,20 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 			bCancelar.setLocation(297, 347);
 			bCancelar.setPreferredSize(new java.awt.Dimension(85, 23));
 			bCancelar.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						fframescalebar=null;
-						PluginServices.getMDIManager().closeWindow(FFrameScaleBarDialog.this);
-					}
-				});
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					fframescalebar = null;
+					PluginServices.getMDIManager().closeWindow(
+							FFrameScaleBarDialog.this);
+				}
+			});
 		}
 
 		return bCancelar;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.mdiApp.ui.MDIManager.View#getViewInfo()
 	 */
 	public WindowInfo getWindowInfo() {
@@ -656,7 +677,7 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes bFuente
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBFuente() {
@@ -664,15 +685,16 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 			bFuente = new javax.swing.JButton();
 			bFuente.setText(PluginServices.getText(this, "fuente"));
 			bFuente.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						Font font=FontChooser.showDialog(
-								PluginServices.getText(this, "seleccion_fuente"),
-								fframescalebar.getFont());
-						if (font != null){
-							fframescalebar.setFont(font); // fchoser=new FontChooser();
-						}
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					Font font = FontChooser.showDialog(
+							PluginServices.getText(this, "seleccion_fuente"),
+							fframescalebar.getFont());
+					if (font != null) {
+						fframescalebar.setFont(font); // fchoser=new
+														// FontChooser();
 					}
-				});
+				}
+			});
 		}
 
 		return bFuente;
@@ -680,7 +702,7 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes pMarcoVista
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPMarcoVista() {
@@ -688,7 +710,13 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 			pMarcoVista = new JPanel();
 			pMarcoVista.setBounds(7, 9, 263, 86);
 			pMarcoVista.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, PluginServices.getText(this,PluginServices.getText(this,"marco_vista")),javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12), java.awt.Color.black));
+					null,
+					PluginServices.getText(this,
+							PluginServices.getText(this, "marco_vista")),
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION,
+					new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+					java.awt.Color.black));
 			pMarcoVista.add(getJScrollPane(), null);
 		}
 
@@ -697,7 +725,7 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes pDescripcion
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPDescripcion() {
@@ -707,7 +735,14 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 			pDescripcion = new JPanel();
 			pDescripcion.setLayout(flowLayout1);
 			pDescripcion.setBounds(275, 9, 204, 110);
-			pDescripcion.setBorder(javax.swing.BorderFactory.createTitledBorder(null, PluginServices.getText(this,"Escala"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12), java.awt.Color.black));
+			pDescripcion
+					.setBorder(javax.swing.BorderFactory.createTitledBorder(
+							null,
+							PluginServices.getText(this, "Escala"),
+							javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+							javax.swing.border.TitledBorder.DEFAULT_POSITION,
+							new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+							java.awt.Color.black));
 			pDescripcion.add(getTfNumberScale(), null);
 			pDescripcion.add(getJCheckBox(), null);
 			pDescripcion.add(getChbSobreDescripcion(), null);
@@ -718,18 +753,19 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes tfDescripcion
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getTfNumberScale() {
 		if (tfDescripcion == null) {
 			tfDescripcion = new JTextField();
-			tfDescripcion.setPreferredSize(new java.awt.Dimension(180,20));
+			tfDescripcion.setPreferredSize(new java.awt.Dimension(180, 20));
 
 			tfDescripcion.setEditable(false);
-			/*if (fframeview!=null){
-			   getTfDescripcion().setText("escala 1:"+String.valueOf(fframeview.getScale()));
-			   }
+			/*
+			 * if (fframeview!=null){
+			 * getTfDescripcion().setText("escala 1:"+String
+			 * .valueOf(fframeview.getScale())); }
 			 */
 			tfDescripcion.setText(fframescalebar.getDescription());
 		}
@@ -739,7 +775,7 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes pUnidades
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPUnidades() {
@@ -751,7 +787,11 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 			pUnidades.setLocation(274, 122);
 			pUnidades.setSize(204, 110);
 			pUnidades.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, PluginServices.getText(this, "unidades"),javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12), java.awt.Color.black));
+					null, PluginServices.getText(this, "unidades"),
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION,
+					new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+					java.awt.Color.black));
 			pUnidades.add(getCbUnidades(), null);
 			pUnidades.add(getChbMostrarUnidades(), null);
 			pUnidades.add(getChbSobreUnidades(), null);
@@ -762,15 +802,18 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes chbSobreDescripcion
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getChbSobreDescripcion() {
 		if (chbSobreDescripcion == null) {
 			chbSobreDescripcion = new JCheckBox();
-			chbSobreDescripcion.setSelected(fframescalebar.isAboveDescription());
-			chbSobreDescripcion.setPreferredSize(new java.awt.Dimension(180,24));
-			chbSobreDescripcion.setText(PluginServices.getText(this,"sobre_la_barra"));
+			chbSobreDescripcion
+					.setSelected(fframescalebar.isAboveDescription());
+			chbSobreDescripcion
+					.setPreferredSize(new java.awt.Dimension(180, 24));
+			chbSobreDescripcion.setText(PluginServices.getText(this,
+					"sobre_la_barra"));
 		}
 
 		return chbSobreDescripcion;
@@ -778,15 +821,17 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes chbMostrarUnidades
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getChbMostrarUnidades() {
 		if (chbMostrarUnidades == null) {
 			chbMostrarUnidades = new JCheckBox();
-			chbMostrarUnidades.setText(PluginServices.getText(this,"mostrar_unidades"));
+			chbMostrarUnidades.setText(PluginServices.getText(this,
+					"mostrar_unidades"));
 			chbMostrarUnidades.setSelected(fframescalebar.isShowNameUnits());
-			chbMostrarUnidades.setPreferredSize(new java.awt.Dimension(150, 24));
+			chbMostrarUnidades
+					.setPreferredSize(new java.awt.Dimension(150, 24));
 		}
 
 		return chbMostrarUnidades;
@@ -794,14 +839,15 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes chbSobreUnidades
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getChbSobreUnidades() {
 		if (chbSobreUnidades == null) {
 			chbSobreUnidades = new JCheckBox();
 			chbSobreUnidades.setSelected(fframescalebar.isAboveName());
-			chbSobreUnidades.setText(PluginServices.getText(this,"sobre_la_barra"));
+			chbSobreUnidades.setText(PluginServices.getText(this,
+					"sobre_la_barra"));
 			chbSobreUnidades.setPreferredSize(new java.awt.Dimension(150, 24));
 		}
 
@@ -810,7 +856,7 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes pEtiquetas
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPEtiquetas() {
@@ -820,7 +866,11 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 			pEtiquetas = new JPanel();
 			pEtiquetas.setLayout(flowLayout2);
 			pEtiquetas.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, PluginServices.getText(this, "etiquetas"),javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12), java.awt.Color.black));
+					null, PluginServices.getText(this, "etiquetas"),
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION,
+					new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+					java.awt.Color.black));
 			pEtiquetas.setBounds(276, 235, 204, 104);
 			pEtiquetas.add(getChbEtiquetas(), null);
 			pEtiquetas.add(getJPanel2(), null);
@@ -831,14 +881,15 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes chbEtiquetas
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getChbEtiquetas() {
 		if (chbEtiquetas == null) {
 			chbEtiquetas = new JCheckBox();
 			chbEtiquetas.setSelected(fframescalebar.isAboveIntervals());
-			chbEtiquetas.setText(PluginServices.getText(this,"sobre_la_barra"));
+			chbEtiquetas
+					.setText(PluginServices.getText(this, "sobre_la_barra"));
 		}
 
 		return chbEtiquetas;
@@ -846,7 +897,7 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes pBarra
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPBarra() {
@@ -854,14 +905,19 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 			FlowLayout flowLayout3 = new FlowLayout();
 			flowLayout3.setAlignment(java.awt.FlowLayout.LEFT);
 			lblNumDec = new JLabel();
-			lblNumDec.setText(PluginServices.getText(this,"numero_decimales_mostrar"));
+			lblNumDec.setText(PluginServices.getText(this,
+					"numero_decimales_mostrar"));
 			lblBarColor = new JLabel();
-			lblBarColor.setText(PluginServices.getText(this,"color"));
+			lblBarColor.setText(PluginServices.getText(this, "color"));
 			pBarra = new JPanel();
 			pBarra.setLayout(flowLayout3);
 			pBarra.setBounds(8, 98, 263, 241);
-			pBarra.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, PluginServices.getText(this,"barra"),javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12), java.awt.Color.black));
+			pBarra.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+					PluginServices.getText(this, "barra"),
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION,
+					new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+					java.awt.Color.black));
 			pBarra.add(getChbMantenerIntervalo(), null);
 			pBarra.add(getCbEscala(), null);
 			pBarra.add(lblNumDec, null);
@@ -878,13 +934,13 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes jPanel5
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel5() {
 		if (jPanel5 == null) {
 			jPanel5 = new JPanel();
-			jPanel5.setPreferredSize(new java.awt.Dimension(245,30));
+			jPanel5.setPreferredSize(new java.awt.Dimension(245, 30));
 			jPanel5.add(getLIntervalo(), null);
 			jPanel5.add(getTIntervalo(), null);
 		}
@@ -894,13 +950,13 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes jPanel6
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel6() {
 		if (jPanel6 == null) {
 			jPanel6 = new JPanel();
-			jPanel6.setPreferredSize(new java.awt.Dimension(245,30));
+			jPanel6.setPreferredSize(new java.awt.Dimension(245, 30));
 			jPanel6.add(getLDivIzquierda(), null);
 			jPanel6.add(getTDivIzquierda(), null);
 		}
@@ -910,13 +966,13 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes jPanel7
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel7() {
 		if (jPanel7 == null) {
 			jPanel7 = new JPanel();
-			jPanel7.setPreferredSize(new java.awt.Dimension(245,30));
+			jPanel7.setPreferredSize(new java.awt.Dimension(245, 30));
 			jPanel7.add(getLNumIntervalos(), null);
 			jPanel7.add(getTNumIntervalos(), null);
 		}
@@ -926,7 +982,7 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes bUnidadesColor
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private ColorChooserPanel getBUnidadesColor() {
@@ -934,12 +990,13 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 			bUnidadesColor = new ColorChooserPanel();
 			bUnidadesColor.setAlpha(255);
 			bUnidadesColor.setColor(textcolor);
-			bUnidadesColor.setPreferredSize(new java.awt.Dimension(100,25));
-			bUnidadesColor.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						textcolor = getBUnidadesColor().getColor();
-					}
-				});
+			bUnidadesColor.setPreferredSize(new java.awt.Dimension(100, 25));
+			bUnidadesColor
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							textcolor = getBUnidadesColor().getColor();
+						}
+					});
 		}
 
 		return bUnidadesColor;
@@ -947,31 +1004,31 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes bBarraColor
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private ColorChooserPanel getBBarraColor() {
 		if (bBarraColor == null) {
 			bBarraColor = new ColorChooserPanel();
-			bBarraColor.setPreferredSize(new java.awt.Dimension(100,25));
+			bBarraColor.setPreferredSize(new java.awt.Dimension(100, 25));
 			bBarraColor.setAlpha(255);
 			bBarraColor.setColor(barcolor);
 			bBarraColor.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-//						JDialog dlg;
-//						JColorChooser colorChooser;
-//						colorChooser = new JColorChooser();
-//						dlg = JColorChooser.createDialog((JFrame) null,
-//								PluginServices.getText(this, "Elegir_Color"),
-//								true, colorChooser, null, null);
-//						dlg.show(true);
-//
-						barcolor = getBBarraColor().getColor();
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					// JDialog dlg;
+					// JColorChooser colorChooser;
+					// colorChooser = new JColorChooser();
+					// dlg = JColorChooser.createDialog((JFrame) null,
+					// PluginServices.getText(this, "Elegir_Color"),
+					// true, colorChooser, null, null);
+					// dlg.show(true);
+					//
+					barcolor = getBBarraColor().getColor();
 
-//						bBarraColor.setBackground(barcolor);
-//						bBarraColor.setForeground(barcolor);
-					}
-				});
+					// bBarraColor.setBackground(barcolor);
+					// bBarraColor.setForeground(barcolor);
+				}
+			});
 		}
 
 		return bBarraColor;
@@ -979,40 +1036,32 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 
-	/*private JPanel getJPanel() {
-	   if (jPanel == null) {
-	           jPanel = new JPanel();
-	           jPanel.setPreferredSize(new java.awt.Dimension(44,24));
-	           jPanel.setForeground(barcolor);
-	           jPanel.setBackground(barcolor);
-	   }
-	   return jPanel;
-	   }
+	/*
+	 * private JPanel getJPanel() { if (jPanel == null) { jPanel = new JPanel();
+	 * jPanel.setPreferredSize(new java.awt.Dimension(44,24));
+	 * jPanel.setForeground(barcolor); jPanel.setBackground(barcolor); } return
+	 * jPanel; }
 	 */
 
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 
-	/*        private JPanel getJPanel1() {
-	   if (jPanel1 == null) {
-	           jPanel1 = new JPanel();
-	           jPanel1.setBackground(textcolor);
-	           jPanel1.setPreferredSize(new java.awt.Dimension(44,24));
-	   }
-	   return jPanel1;
-	   }
+	/*
+	 * private JPanel getJPanel1() { if (jPanel1 == null) { jPanel1 = new
+	 * JPanel(); jPanel1.setBackground(textcolor); jPanel1.setPreferredSize(new
+	 * java.awt.Dimension(44,24)); } return jPanel1; }
 	 */
 
 	/**
 	 * This method initializes jPanel2
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel2() {
@@ -1021,7 +1070,7 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 			jPanel2.add(getBFuente(), null);
 			jPanel2.add(getBUnidadesColor(), null);
 
-			//jPanel2.add(getJPanel1(), null);
+			// jPanel2.add(getJPanel1(), null);
 		}
 
 		return jPanel2;
@@ -1029,15 +1078,16 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes jCheckBox
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getJCheckBox() {
 		if (jCheckBox == null) {
 			jCheckBox = new JCheckBox();
 			jCheckBox.setSelected(fframescalebar.isShowDescription());
-			jCheckBox.setPreferredSize(new java.awt.Dimension(180,24));
-			jCheckBox.setText(PluginServices.getText(this,"mostrar_escala_numerica"));
+			jCheckBox.setPreferredSize(new java.awt.Dimension(180, 24));
+			jCheckBox.setText(PluginServices.getText(this,
+					"mostrar_escala_numerica"));
 		}
 
 		return jCheckBox;
@@ -1045,7 +1095,7 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @author Vicente Caballero Navarro
 	 */
 	class ComboBoxRenderer extends JLabel implements ListCellRenderer {
@@ -1059,15 +1109,14 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 		}
 
 		/*
-		 * This method finds the image and text corresponding
-		 * to the selected value and returns the label, set up
-		 * to display the text and image.
+		 * This method finds the image and text corresponding to the selected
+		 * value and returns the label, set up to display the text and image.
 		 */
 		public Component getListCellRendererComponent(JList list, Object value,
-			int index, boolean isSelected, boolean cellHasFocus) {
-			//Get the selected index. (The index param isn't
-			//always valid, so just use the value.)
-			///int selectedIndex = ((Integer)value).intValue();
+				int index, boolean isSelected, boolean cellHasFocus) {
+			// Get the selected index. (The index param isn't
+			// always valid, so just use the value.)
+			// /int selectedIndex = ((Integer)value).intValue();
 			if (isSelected) {
 				setBackground(list.getSelectionBackground());
 				setForeground(list.getSelectionForeground());
@@ -1085,7 +1134,7 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes pRotation
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPRotation getPRotation() {
@@ -1098,21 +1147,22 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes numDec
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getNumDec() {
 		if (txtNumDec == null) {
 			txtNumDec = new JTextField();
-			txtNumDec.setPreferredSize(new java.awt.Dimension(30,20));
+			txtNumDec.setPreferredSize(new java.awt.Dimension(30, 20));
 			txtNumDec.setText(String.valueOf(fframescalebar.getNumDec()));
 			txtNumDec.addKeyListener(new java.awt.event.KeyAdapter() {
 				public void keyReleased(KeyEvent arg0) {
 					super.keyReleased(arg0);
 					if (!getNumDec().getText().toString().equals("")) {
-						fframescalebar.setNumDec(Integer.parseInt(
-								getNumDec().getText().toString()));
-						getTIntervalo().setText(fframescalebar.obtainInterval());
+						fframescalebar.setNumDec(Integer.parseInt(getNumDec()
+								.getText().toString()));
+						getTIntervalo()
+								.setText(fframescalebar.obtainInterval());
 					}
 				}
 			});
@@ -1127,5 +1177,5 @@ public class FFrameScaleBarDialog extends JPanel implements IFFrameDialog {
 	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
-} //  @jve:decl-index=0:visual-constraint="17,10"
-//  @jve:visual-info  decl-index=0 visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="17,10"
+// @jve:visual-info decl-index=0 visual-constraint="10,10"

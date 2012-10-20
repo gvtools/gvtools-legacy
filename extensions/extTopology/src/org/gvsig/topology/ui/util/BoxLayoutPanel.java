@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.ui.util;
 
 import java.awt.Dimension;
@@ -57,11 +57,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
- * Utility class to easy creation of 'forms-style' panels.
- * Its very similar to GridBagLayoutPanel, but it is based in BoxLayout instead of
- * GridBagLayout.
+ * Utility class to easy creation of 'forms-style' panels. Its very similar to
+ * GridBagLayoutPanel, but it is based in BoxLayout instead of GridBagLayout.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class BoxLayoutPanel extends JPanel {
 
@@ -69,20 +69,18 @@ public class BoxLayoutPanel extends JPanel {
 
 	public static final int DEFAULT_WIDTH = 500;
 	public static final int DEFAULT_HEIGHT = 20;
-	
-	public BoxLayoutPanel(){
+
+	public BoxLayoutPanel() {
 		super();
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 	}
-	
-	
-	public void addComponent(String fieldName, JComponent component){
+
+	public void addComponent(String fieldName, JComponent component) {
 		addComponent(fieldName, component, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	}
-	
-	
-	public void addComponent(String fieldName, JComponent component, int width, int height)
-	{
+
+	public void addComponent(String fieldName, JComponent component, int width,
+			int height) {
 		add(Box.createVerticalStrut(10));
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
@@ -96,21 +94,21 @@ public class BoxLayoutPanel extends JPanel {
 		panel.setAlignmentX(LEFT_ALIGNMENT);
 		add(panel);
 	}
-	
-	public void addBlank(){
+
+	public void addBlank() {
 		add(Box.createVerticalStrut(10));
 	}
-	
-	public void addRow(JComponent[] components){
+
+	public void addRow(JComponent[] components) {
 		addRow(components, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	}
-	
-	public void addRow(JComponent[] components, int width, int height){
+
+	public void addRow(JComponent[] components, int width, int height) {
 		add(Box.createVerticalStrut(10));
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 		panel.add(Box.createHorizontalStrut(15));
-		for(int i = 0; i < components.length; i++){
+		for (int i = 0; i < components.length; i++) {
 			panel.add(components[i]);
 			panel.add(Box.createHorizontalStrut(5));
 		}
@@ -120,19 +118,17 @@ public class BoxLayoutPanel extends JPanel {
 		panel.setAlignmentX(LEFT_ALIGNMENT);
 		add(panel);
 	}
-	
-	
-	
-	protected void addTitleLabel(  String sText, boolean isSectionTitleLabel){
+
+	protected void addTitleLabel(String sText, boolean isSectionTitleLabel) {
 		JLabel label = new JLabel();
 		label.setText(sText);
-		label.setPreferredSize(new java.awt.Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
-		
-		if (isSectionTitleLabel){
-			label.setFont(new java.awt.Font("Tahoma",1,11));
+		label.setPreferredSize(new java.awt.Dimension(DEFAULT_WIDTH,
+				DEFAULT_HEIGHT));
+
+		if (isSectionTitleLabel) {
+			label.setFont(new java.awt.Font("Tahoma", 1, 11));
 		}
-		addRow(new JComponent[]{label});
+		addRow(new JComponent[] { label });
 	}
-		
-		
+
 }

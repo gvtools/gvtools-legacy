@@ -1,6 +1,5 @@
 package org.gvsig.tools.evaluator;
 
-
 public abstract class AbstractEvaluator implements Evaluator {
 
 	public String getDescription() {

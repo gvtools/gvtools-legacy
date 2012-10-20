@@ -30,9 +30,6 @@ package org.gvsig.normalization.persistence;
 import com.iver.cit.gvsig.fmap.layers.XMLException;
 import com.iver.utiles.XMLEntity;
 
-
-
-
 /**
  * Geocoding persistence interface
  * 
@@ -47,8 +44,8 @@ public interface GeocodingPersistence {
 	 * 
 	 * @return the name of the class that persists
 	 */
-    public String getClassName();
-	
+	public String getClassName();
+
 	/**
 	 * Save the pattern to XML
 	 * 

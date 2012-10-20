@@ -42,28 +42,33 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: IDescriptableException.java 20098 2008-04-14 08:42:53Z jmvivo $
-* $Log$
-* Revision 1.1  2006-09-21 17:04:52  azabala
-* First version in cvs
-*
-*
-*/
+ *
+ * $Id: IDescriptableException.java 20098 2008-04-14 08:42:53Z jmvivo $
+ * $Log$
+ * Revision 1.1  2006-09-21 17:04:52  azabala
+ * First version in cvs
+ *
+ *
+ */
 package com.iver.utiles;
 
 /**
- * <p>All specialized exceptions that can offer more information about
- *  their cause should implement this interface to add the type that identifies it.</p>
+ * <p>
+ * All specialized exceptions that can offer more information about their cause
+ * should implement this interface to add the type that identifies it.
+ * </p>
  * 
  * @author azabala
  */
 public interface IDescriptableException {
 	/**
-	 * <p>Gets the exception type which caused this one and has detailed information about the causes.</p>
+	 * <p>
+	 * Gets the exception type which caused this one and has detailed
+	 * information about the causes.
+	 * </p>
 	 * 
-	 * @return the exception type which caused this one and has detailed information about the causes
+	 * @return the exception type which caused this one and has detailed
+	 *         information about the causes
 	 */
 	public ExceptionDescription getExceptionType();
 }
-

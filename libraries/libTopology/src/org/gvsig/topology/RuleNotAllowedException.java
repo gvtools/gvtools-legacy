@@ -42,35 +42,34 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id$
-* $Log$
-*
-*/
+ *
+ * $Id$
+ * $Log$
+ *
+ */
 package org.gvsig.topology;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 
 /**
- * Exception launched when we try to add an incorrect rule to a 
- * Topology
+ * Exception launched when we try to add an incorrect rule to a Topology
+ * 
  * @author azabala
- *
+ * 
  */
 public class RuleNotAllowedException extends Exception {
-	
+
 	private static final long serialVersionUID = -5722744922367080907L;
 
 	public RuleNotAllowedException(String text, ReadDriverException e) {
-		super(text,e);
+		super(text, e);
 	}
-	
-	public RuleNotAllowedException(String text){
+
+	public RuleNotAllowedException(String text) {
 		super(text);
 	}
-	
-	public RuleNotAllowedException(){
+
+	public RuleNotAllowedException() {
 		super();
 	}
 }
-

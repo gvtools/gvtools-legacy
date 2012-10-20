@@ -30,23 +30,27 @@ import org.gvsig.rastertools.filter.ui.FilterDialog;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction;
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
+
 /**
  * Punto de entrada del menu para los filtros
- *
+ * 
  * @version 02/05/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
-public class FilterTocMenuEntry extends AbstractTocContextMenuAction implements IGenericToolBarMenuItem {
-	static private FilterTocMenuEntry singleton  = null;
+public class FilterTocMenuEntry extends AbstractTocContextMenuAction implements
+		IGenericToolBarMenuItem {
+	static private FilterTocMenuEntry singleton = null;
 
 	/**
 	 * Nadie puede crear una instancia a esta clase única, hay que usar el
 	 * getSingleton()
 	 */
-	private FilterTocMenuEntry() {}
+	private FilterTocMenuEntry() {
+	}
 
 	/**
 	 * Devuelve un objeto unico a dicha clase
+	 * 
 	 * @return
 	 */
 	static public FilterTocMenuEntry getSingleton() {
@@ -54,10 +58,13 @@ public class FilterTocMenuEntry extends AbstractTocContextMenuAction implements 
 			singleton = new FilterTocMenuEntry();
 		return singleton;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getGroup()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getGroup()
 	 */
 	public String getGroup() {
 		return "RasterProcess";
@@ -65,7 +72,10 @@ public class FilterTocMenuEntry extends AbstractTocContextMenuAction implements 
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getGroupOrder()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getGroupOrder()
 	 */
 	public int getGroupOrder() {
 		return 55;
@@ -73,7 +83,10 @@ public class FilterTocMenuEntry extends AbstractTocContextMenuAction implements 
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getOrder()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getOrder()
 	 */
 	public int getOrder() {
 		return 0;
@@ -81,6 +94,7 @@ public class FilterTocMenuEntry extends AbstractTocContextMenuAction implements 
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.project.documents.IContextMenuAction#getText()
 	 */
 	public String getText() {
@@ -89,7 +103,11 @@ public class FilterTocMenuEntry extends AbstractTocContextMenuAction implements 
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -106,7 +124,11 @@ public class FilterTocMenuEntry extends AbstractTocContextMenuAction implements 
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -114,25 +136,34 @@ public class FilterTocMenuEntry extends AbstractTocContextMenuAction implements 
 
 		if (!(selectedItems[0] instanceof FLyrRasterSE))
 			return false;
-		
-		return ((FLyrRasterSE) selectedItems[0]).isActionEnabled(IRasterLayerActions.FILTER);
+
+		return ((FLyrRasterSE) selectedItems[0])
+				.isActionEnabled(IRasterLayerActions.FILTER);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#execute(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #execute(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public void execute(ITocItem item, FLayer[] selectedItems) {
-		if ((selectedItems == null) || (selectedItems.length != 1) || (!(selectedItems[0] instanceof FLyrRasterSE)))
+		if ((selectedItems == null) || (selectedItems.length != 1)
+				|| (!(selectedItems[0] instanceof FLyrRasterSE)))
 			return;
 
-		FilterDialog rasterFilterDialog = new FilterDialog((FLyrRasterSE) selectedItems[0], 740, 400);
+		FilterDialog rasterFilterDialog = new FilterDialog(
+				(FLyrRasterSE) selectedItems[0], 740, 400);
 		RasterToolsUtil.addWindow(rasterFilterDialog);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.generictoolbar.IGenericToolBarMenuItem#getIcon()
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.generictoolbar.IGenericToolBarMenuItem#getIcon()
 	 */
 	public Icon getIcon() {
 		return RasterToolsUtil.getIcon("filter-icon");

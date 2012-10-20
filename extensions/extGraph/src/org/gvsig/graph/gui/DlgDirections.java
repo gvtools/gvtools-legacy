@@ -59,10 +59,10 @@ public class DlgDirections extends JDialog {
 
 	/**
 	 * This method initializes
-	 *
+	 * 
 	 * @param b
 	 * @param frame
-	 *
+	 * 
 	 */
 	public DlgDirections(Frame frame, boolean b) {
 		super(frame, b);
@@ -72,7 +72,7 @@ public class DlgDirections extends JDialog {
 	/**
 	 * Es responsabilidad del interfaz de usuario presentar el modelo a su
 	 * manera.
-	 *
+	 * 
 	 * @param features
 	 */
 	public void setModel(ArrayList featureList) {
@@ -111,7 +111,7 @@ public class DlgDirections extends JDialog {
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 */
 	private void initialize() {
 		this.setSize(new java.awt.Dimension(363, 254));
@@ -121,7 +121,7 @@ public class DlgDirections extends JDialog {
 
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getJScrollPane() {
@@ -134,7 +134,7 @@ public class DlgDirections extends JDialog {
 
 	/**
 	 * This method initializes jTextPane
-	 *
+	 * 
 	 * @return javax.swing.JTextPane
 	 */
 	private JTextPane getJTextPane() {

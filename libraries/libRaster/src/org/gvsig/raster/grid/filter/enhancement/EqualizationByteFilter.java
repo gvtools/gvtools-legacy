@@ -19,9 +19,10 @@
 package org.gvsig.raster.grid.filter.enhancement;
 
 import org.gvsig.raster.dataset.IBuffer;
+
 /**
  * Filtro de ecualización de histograma.
- *
+ * 
  * @version 11/05/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
@@ -29,34 +30,42 @@ public class EqualizationByteFilter extends EqualizationFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.enhancement.LinearEnhancementFilter#process(int, int)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.enhancement.LinearEnhancementFilter#process
+	 * (int, int)
 	 */
 	public void process(int col, int line) throws InterruptedException {
 		for (int iBand = 0; iBand < raster.getBandCount(); iBand++) {
-			int p = (int)(raster.getElemByte(line, col, iBand) & 0xff);
-			if(!equalizationActive(iBand)) {
-				rasterResult.setElem(line, col, iBand, (byte)p);
+			int p = (int) (raster.getElemByte(line, col, iBand) & 0xff);
+			if (!equalizationActive(iBand)) {
+				rasterResult.setElem(line, col, iBand, (byte) p);
 				continue;
 			}
-			
-			//Las estadísticas están calculadas para todas las bandas por lo que hay que seleccionar solo las que se renderiza
+
+			// Las estadísticas están calculadas para todas las bandas por lo
+			// que hay que seleccionar solo las que se renderiza
 			if (p > maxBandValue[renderBands[iBand]])
 				p = (int) maxBandValue[renderBands[iBand]];
 			else if (p < minBandValue[renderBands[iBand]])
 				p = (int) minBandValue[renderBands[iBand]];
 
-			//Método lahe
-			int ecualizationPositive = (int)lahe[iBand][p % histogram.getNumValues()];
-			int ecualizationNegative = (int)laheNegative[iBand][nElements - (p % histogram.getNumValues())];
-			
+			// Método lahe
+			int ecualizationPositive = (int) lahe[iBand][p
+					% histogram.getNumValues()];
+			int ecualizationNegative = (int) laheNegative[iBand][nElements
+					- (p % histogram.getNumValues())];
+
 			int value = ((nElements - ecualizationNegative) + ecualizationPositive) / 2;
-			rasterResult.setElem(line, col, iBand, (byte)(value & 0x000000ff));
+			rasterResult.setElem(line, col, iBand, (byte) (value & 0x000000ff));
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.enhancement.LinearEnhancementFilter#getInRasterDataType()
+	 * 
+	 * @see org.gvsig.raster.grid.filter.enhancement.LinearEnhancementFilter#
+	 * getInRasterDataType()
 	 */
 	public int getInRasterDataType() {
 		return IBuffer.TYPE_BYTE;

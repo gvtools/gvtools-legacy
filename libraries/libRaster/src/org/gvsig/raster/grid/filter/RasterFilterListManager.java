@@ -43,17 +43,18 @@ import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
  * conversión de un filtro a cadena de Strings y la recuperación desde cadena de
  * Strings y el control de tipos de la salida de un raster de la lista con la
  * entrada del siguiente filtro.
- *
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class RasterFilterListManager {
-	protected RasterFilterList	rasterFilterList = null;
-	private boolean				debug = false;
-	protected ArrayList			filterList = null;
-	private ArrayList			managers = new ArrayList();
+	protected RasterFilterList rasterFilterList = null;
+	private boolean debug = false;
+	protected ArrayList filterList = null;
+	private ArrayList managers = new ArrayList();
 
 	/**
 	 * Constructor
+	 * 
 	 * @param filterStack
 	 */
 	public RasterFilterListManager(RasterFilterList filterStack) {
@@ -61,13 +62,15 @@ public class RasterFilterListManager {
 
 		// Cargamos el manager con los gestores de drivers registrados
 
-		ExtensionPoint extensionPoint = ExtensionPoint.getExtensionPoint("RasterFilter");
+		ExtensionPoint extensionPoint = ExtensionPoint
+				.getExtensionPoint("RasterFilter");
 		Iterator iterator = extensionPoint.getIterator();
 		while (iterator.hasNext()) {
 			Entry entry = (Entry) iterator.next();
 			if (entry != null) {
 				Class RasterClass = (Class) entry.getValue();
-				Object obj = RasterFilterListManager.loadClass(RasterClass, this);
+				Object obj = RasterFilterListManager.loadClass(RasterClass,
+						this);
 				if (obj != null)
 					managers.add(obj);
 			}
@@ -75,9 +78,9 @@ public class RasterFilterListManager {
 	}
 
 	/**
-	 * Controla que los tipos de los filtros de la pila sean correctos, es decir,
-	 * que el tipo de salida de un filtro de salida coincida con el tipo de la
-	 * entrada del siguiente. En caso de no ser así crea el filtro de tipo
+	 * Controla que los tipos de los filtros de la pila sean correctos, es
+	 * decir, que el tipo de salida de un filtro de salida coincida con el tipo
+	 * de la entrada del siguiente. En caso de no ser así crea el filtro de tipo
 	 * adecuado y lo sustituye en el no coincidente. Esto es necesario ya que en
 	 * la eliminación de filtros puede quedarse en inconsistencia de tipos.
 	 */
@@ -90,34 +93,49 @@ public class RasterFilterListManager {
 				if (rf == null)
 					return;
 				classFilter = rf.getClass().toString();
-				packageFilter = classFilter.substring(classFilter.indexOf(" ") + 1, classFilter.lastIndexOf("."));
-				oldClass = classFilter.substring(classFilter.lastIndexOf(".") + 1, classFilter.length());
+				packageFilter = classFilter.substring(
+						classFilter.indexOf(" ") + 1,
+						classFilter.lastIndexOf("."));
+				oldClass = classFilter.substring(
+						classFilter.lastIndexOf(".") + 1, classFilter.length());
 			} catch (ArrayIndexOutOfBoundsException ex) {
 				return;
 			} catch (NullPointerException ex) {
 				return;
 			}
 
-			// Para el primer filtro comprobamos con el tipo de dato de entrada a la pila
+			// Para el primer filtro comprobamos con el tipo de dato de entrada
+			// a la pila
 			if (i == 0) {
-				if (rasterFilterList.getInitDataType() != rasterFilterList.get(i).getInRasterDataType()) {
-					Pattern p = Pattern.compile(RasterUtilities.typesToString(rasterFilterList.get(i).getInRasterDataType()));
+				if (rasterFilterList.getInitDataType() != rasterFilterList.get(
+						i).getInRasterDataType()) {
+					Pattern p = Pattern.compile(RasterUtilities
+							.typesToString(rasterFilterList.get(i)
+									.getInRasterDataType()));
 					Matcher m = p.matcher(oldClass);
-					String newClass = m.replaceAll(RasterUtilities.typesToString(rasterFilterList.getInitDataType()));
+					String newClass = m.replaceAll(RasterUtilities
+							.typesToString(rasterFilterList.getInitDataType()));
 					String strPackage = packageFilter + "." + newClass;
 
 					renewFilterFromControlTypes(strPackage, i, exceptions);
 				}
 
-				// Desde el filtro 2 en adelante se compara la salida de uno con la entrada del siguiente
+				// Desde el filtro 2 en adelante se compara la salida de uno con
+				// la entrada del siguiente
 			} else {
-				if (rasterFilterList.get(i - 1).getOutRasterDataType() != rasterFilterList.get(i).getInRasterDataType()) {
-					Pattern p = Pattern.compile(RasterUtilities.typesToString(rasterFilterList.get(i).getInRasterDataType()));
+				if (rasterFilterList.get(i - 1).getOutRasterDataType() != rasterFilterList
+						.get(i).getInRasterDataType()) {
+					Pattern p = Pattern.compile(RasterUtilities
+							.typesToString(rasterFilterList.get(i)
+									.getInRasterDataType()));
 					Matcher m = p.matcher(oldClass);
-					String newClass = m.replaceAll(RasterUtilities.typesToString(rasterFilterList.get(i - 1).getOutRasterDataType()));
+					String newClass = m.replaceAll(RasterUtilities
+							.typesToString(rasterFilterList.get(i - 1)
+									.getOutRasterDataType()));
 					String strPackage = packageFilter + "." + newClass;
-					
-					renewFilterFromControlTypes(strPackage.trim(), i, exceptions);
+
+					renewFilterFromControlTypes(strPackage.trim(), i,
+							exceptions);
 				}
 			}
 		}
@@ -128,15 +146,17 @@ public class RasterFilterListManager {
 		if (debug)
 			rasterFilterList.show();
 	}
-	
+
 	/**
-	 * Reemplaza un filtro segun su nombre a la lista de filtros, util para cambiar
-	 * el tipo de datos de un filtro en la pila de filtros.
+	 * Reemplaza un filtro segun su nombre a la lista de filtros, util para
+	 * cambiar el tipo de datos de un filtro en la pila de filtros.
+	 * 
 	 * @param nameFilter
 	 * @param pos
 	 * @param exceptions
 	 */
-	private void renewFilterFromControlTypes(String nameFilter, int pos, ArrayList exceptions) {
+	private void renewFilterFromControlTypes(String nameFilter, int pos,
+			ArrayList exceptions) {
 		try {
 			RasterFilter newFilter = RasterFilter.createFilter(nameFilter);
 			newFilter.params = rasterFilterList.get(pos).params;
@@ -149,11 +169,13 @@ public class RasterFilterListManager {
 			exceptions.add(e);
 		}
 	}
-	
+
 	/**
-	 * Método que devuelve true si el tipo de filtro pasado por parámetro está en
-	 * la pila y false si no lo está.
-	 * @param filter Tipo de filtro a comprobar
+	 * Método que devuelve true si el tipo de filtro pasado por parámetro está
+	 * en la pila y false si no lo está.
+	 * 
+	 * @param filter
+	 *            Tipo de filtro a comprobar
 	 * @return true si está en la pila y false si no lo está
 	 */
 	public boolean isActive(String name) {
@@ -162,9 +184,10 @@ public class RasterFilterListManager {
 
 	/**
 	 * Elimina los filtros de la pila de un determinado tipo
-	 *
-	 * @param type Tipo de filtro a eliminar
-	 * @throws FilterTypeException 
+	 * 
+	 * @param type
+	 *            Tipo de filtro a eliminar
+	 * @throws FilterTypeException
 	 */
 	public void removeFilter(String name) throws FilterTypeException {
 		rasterFilterList.remove(name);
@@ -176,10 +199,12 @@ public class RasterFilterListManager {
 		for (int i = 0; i < rasterFilterList.lenght(); i++) {
 			RasterFilter rf = rasterFilterList.get(i);
 
-			// Se recorren todos los managers registrados comprobando si corresponde a
+			// Se recorren todos los managers registrados comprobando si
+			// corresponde a
 			// la clase del filtro
 			for (int j = 0; j < managers.size(); j++)
-				filterList = ((IRasterFilterListManager) managers.get(j)).getStringsFromFilterList(filterList, rf);
+				filterList = ((IRasterFilterListManager) managers.get(j))
+						.getStringsFromFilterList(filterList, rf);
 		}
 
 		return filterList;
@@ -187,36 +212,45 @@ public class RasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#createStackFromStrings(java.util.ArrayList, java.lang.String, int)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.IRasterFilterListManager#createStackFromStrings
+	 * (java.util.ArrayList, java.lang.String, int)
 	 */
 	public int createStackFromStrings(ArrayList filters, String fil, int filteri) {
 		return filteri;
 	}
 
 	/**
-	 * Crea una pila de filtros a partir de un Array de Strings. Cada elemento del array debe
-	 * tener la forma elemento=valor.
+	 * Crea una pila de filtros a partir de un Array de Strings. Cada elemento
+	 * del array debe tener la forma elemento=valor.
+	 * 
 	 * @param filters
-	 * @throws FilterTypeException 
+	 * @throws FilterTypeException
 	 */
-	public void createFilterListFromStrings(ArrayList f) throws FilterTypeException {
+	public void createFilterListFromStrings(ArrayList f)
+			throws FilterTypeException {
 		createFilterListFromStrings(f, new Integer(0));
 	}
 
 	/**
-	 * Crea una pila de filtros a partir de un Array de Strings. Cada elemento del array debe
-	 * tener la forma elemento=valor.
-	 * @param pos Posición desde la cual se empieza a analizar.
+	 * Crea una pila de filtros a partir de un Array de Strings. Cada elemento
+	 * del array debe tener la forma elemento=valor.
+	 * 
+	 * @param pos
+	 *            Posición desde la cual se empieza a analizar.
 	 * @param filters
-	 * @throws FilterTypeException 
+	 * @throws FilterTypeException
 	 */
-	private void createFilterListFromStrings(ArrayList f, Integer pos) throws FilterTypeException {
+	private void createFilterListFromStrings(ArrayList f, Integer pos)
+			throws FilterTypeException {
 		ArrayList filters = (ArrayList) f.clone();
 		rasterFilterList.clear();
 
 		int filteri = pos.intValue();
 
-		// Busca un filtro activo y después todas las propiedades que necesita ese
+		// Busca un filtro activo y después todas las propiedades que necesita
+		// ese
 		// filtro para ser creado. Una vez las tiene añade en la pila el tipo de
 		// filtro.
 		while ((filters.size() > 0) && (filteri < filters.size())) {
@@ -224,7 +258,8 @@ public class RasterFilterListManager {
 
 			for (int j = 0; j < managers.size(); j++) {
 				try {
-					filteri = ((IRasterFilterListManager) managers.get(j)).createFilterListFromStrings(filters, fil, filteri);
+					filteri = ((IRasterFilterListManager) managers.get(j))
+							.createFilterListFromStrings(filters, fil, filteri);
 				} catch (NullPointerException e) {
 				}
 			}
@@ -235,6 +270,7 @@ public class RasterFilterListManager {
 
 	/**
 	 * Obtiene el elemento de una cadena de la forma elemento=valor
+	 * 
 	 * @param cadena
 	 * @return
 	 */
@@ -248,6 +284,7 @@ public class RasterFilterListManager {
 
 	/**
 	 * Obtiene el valor de una cadena de la forma elemento=valor
+	 * 
 	 * @param cadena
 	 * @return
 	 */
@@ -262,59 +299,51 @@ public class RasterFilterListManager {
 	/**
 	 * Convierte un rango contenido en una array doble en una cadena de strings
 	 * para poder salvar a xml
+	 * 
 	 * @param rang
 	 * @return
 	 */
-	/*private String rangeToString(int[][] rang) {
-		StringBuffer rangoStr = new StringBuffer();
-
-		if (rang != null) {
-			for (int i = 0; i < rang.length; i++) {
-				rangoStr.append(String.valueOf(rang[i][0]) + ":");
-				rangoStr.append(String.valueOf(rang[i][1]) + ":");
-			}
-
-			String r = rangoStr.toString();
-
-			if (r.endsWith(":")) {
-				r = r.substring(0, r.length() - 1);
-			}
-
-			return r;
-		} else {
-			return null;
-		}
-	}*/
+	/*
+	 * private String rangeToString(int[][] rang) { StringBuffer rangoStr = new
+	 * StringBuffer();
+	 * 
+	 * if (rang != null) { for (int i = 0; i < rang.length; i++) {
+	 * rangoStr.append(String.valueOf(rang[i][0]) + ":");
+	 * rangoStr.append(String.valueOf(rang[i][1]) + ":"); }
+	 * 
+	 * String r = rangoStr.toString();
+	 * 
+	 * if (r.endsWith(":")) { r = r.substring(0, r.length() - 1); }
+	 * 
+	 * return r; } else { return null; } }
+	 */
 
 	/**
 	 * Convierte una cadena en una lista de rangos numericos para poder asignar
 	 * transparencias a la imagen
+	 * 
 	 * @param rang
 	 * @return
 	 */
-	/*private int[][] stringToRange(String rang) {
-		if ((rang != null) && !rang.equals("null")) {
-			ArrayList lista = new ArrayList();
-			StringTokenizer tokenizer = new StringTokenizer(rang, ":");
-
-			while (tokenizer.hasMoreTokens())
-				lista.add(tokenizer.nextToken());
-
-			int[][] intervalos = new int[(int) (lista.size() / 2)][2];
-
-			for (int i = 0; i < lista.size(); i = i + 2) {
-				intervalos[i / 2][0] = Integer.valueOf((String) lista.get(i)).intValue();
-				intervalos[i / 2][1] = Integer.valueOf((String) lista.get(i + 1)).intValue();
-			}
-
-			return intervalos;
-		} else {
-			return null;
-		}
-	}*/
+	/*
+	 * private int[][] stringToRange(String rang) { if ((rang != null) &&
+	 * !rang.equals("null")) { ArrayList lista = new ArrayList();
+	 * StringTokenizer tokenizer = new StringTokenizer(rang, ":");
+	 * 
+	 * while (tokenizer.hasMoreTokens()) lista.add(tokenizer.nextToken());
+	 * 
+	 * int[][] intervalos = new int[(int) (lista.size() / 2)][2];
+	 * 
+	 * for (int i = 0; i < lista.size(); i = i + 2) { intervalos[i / 2][0] =
+	 * Integer.valueOf((String) lista.get(i)).intValue(); intervalos[i / 2][1] =
+	 * Integer.valueOf((String) lista.get(i + 1)).intValue(); }
+	 * 
+	 * return intervalos; } else { return null; } }
+	 */
 
 	/**
 	 * Obtiene la lista de filtros
+	 * 
 	 * @return RasterFilterList
 	 */
 	public RasterFilterList getFilterList() {
@@ -322,14 +351,18 @@ public class RasterFilterListManager {
 	}
 
 	/**
-	 * Carga una clase pasada por parámetro. Como argumento del constructor de la
-	 * clase se pasará un RasterFilterStackManager. Esto es usado para instanciar
-	 * los gestores de filtros registrados
-	 * @param clase Clase a instanciar
-	 * @param stackManager Parámetro del constructor de la clase a instanciar
+	 * Carga una clase pasada por parámetro. Como argumento del constructor de
+	 * la clase se pasará un RasterFilterStackManager. Esto es usado para
+	 * instanciar los gestores de filtros registrados
+	 * 
+	 * @param clase
+	 *            Clase a instanciar
+	 * @param stackManager
+	 *            Parámetro del constructor de la clase a instanciar
 	 * @return Objeto que corresponde a la instancia de la clase pasada.
 	 */
-	public static Object loadClass(Class clase, RasterFilterListManager stackManager) {
+	public static Object loadClass(Class clase,
+			RasterFilterListManager stackManager) {
 		Object obj = null;
 		Class[] args = { RasterFilterListManager.class };
 		try {
@@ -354,6 +387,7 @@ public class RasterFilterListManager {
 
 	/**
 	 * Obtiene el manager registrado a partir de la clase
+	 * 
 	 * @return
 	 */
 	public IRasterFilterListManager getManagerByClass(Class c) {
@@ -366,24 +400,31 @@ public class RasterFilterListManager {
 
 	/**
 	 * Obtiene el manager registrado a partir de la clase de un filtro
+	 * 
 	 * @return
 	 */
 	public IRasterFilterListManager getManagerByFilterClass(Class c) {
 		for (int i = 0; i < managers.size(); i++)
-			for (int j = 0; j < ((IRasterFilterListManager) managers.get(i)).getRasterFilterList().size(); j++)
-				if (((IRasterFilterListManager) managers.get(i)).getRasterFilterList().get(j).equals(c))
+			for (int j = 0; j < ((IRasterFilterListManager) managers.get(i))
+					.getRasterFilterList().size(); j++)
+				if (((IRasterFilterListManager) managers.get(i))
+						.getRasterFilterList().get(j).equals(c))
 					return (IRasterFilterListManager) managers.get(i);
 		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList()
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList
+	 * ()
 	 */
 	public ArrayList getRasterFilterList() {
 		ArrayList filters = new ArrayList();
 		for (int i = 0; i < managers.size(); i++) {
-			ArrayList auxFilters = ((IRasterFilterListManager) managers.get(i)).getRasterFilterList();
+			ArrayList auxFilters = ((IRasterFilterListManager) managers.get(i))
+					.getRasterFilterList();
 			for (int j = 0; j < auxFilters.size(); j++) {
 				filters.add(auxFilters.get(j));
 			}

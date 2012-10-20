@@ -59,33 +59,45 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class PolygonMemberTypeBinding extends org.gvsig.gpe.gml.parser.v2.geometries.PolygonMemberTypeBinding{
-	
+public class PolygonMemberTypeBinding extends
+		org.gvsig.gpe.gml.parser.v2.geometries.PolygonMemberTypeBinding {
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.parser.v2.geometries.PolygonMemberTypeBinding#parseTag(org.xmlpull.v1.XmlPullParser, org.gvsig.gpe.gml.GPEDefaultGmlParser, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.parser.v2.geometries.PolygonMemberTypeBinding#parseTag
+	 * (org.xmlpull.v1.XmlPullParser, org.gvsig.gpe.gml.GPEDefaultGmlParser,
+	 * java.lang.String)
 	 */
-	protected Object parseTag(IXmlStreamReader parser,GPEDefaultGmlParser handler, QName tag) throws XmlStreamException, IOException{
+	protected Object parseTag(IXmlStreamReader parser,
+			GPEDefaultGmlParser handler, QName tag) throws XmlStreamException,
+			IOException {
 		Object polygon = super.parseTag(parser, handler, tag);
-		if (polygon != null){
+		if (polygon != null) {
 			return polygon;
 		}
-		if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_SURFACE)){
-			polygon = handler.getProfile().getPolygonTypeBinding().parse(parser, handler);
+		if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_SURFACE)) {
+			polygon = handler.getProfile().getPolygonTypeBinding()
+					.parse(parser, handler);
 		}
 		return polygon;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.bindings.v2.geometries.PolygonMemberTypeBinding#parseLastTag(org.xmlpull.v1.XmlPullParser, org.gvsig.gpe.gml.GPEDefaultGmlParser, java.lang.String)
+	 * 
+	 * @see org.gvsig.gpe.gml.bindings.v2.geometries.PolygonMemberTypeBinding#
+	 * parseLastTag(org.xmlpull.v1.XmlPullParser,
+	 * org.gvsig.gpe.gml.GPEDefaultGmlParser, java.lang.String)
 	 */
-	protected boolean parseLastTag(IXmlStreamReader parser,GPEDefaultGmlParser handler, QName tag){
+	protected boolean parseLastTag(IXmlStreamReader parser,
+			GPEDefaultGmlParser handler, QName tag) {
 		boolean endFeature = super.parseLastTag(parser, handler, tag);
-		if (endFeature){
+		if (endFeature) {
 			return true;
 		}
-		if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_SURFACEMEMBER)){						
+		if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_SURFACEMEMBER)) {
 			return true;
 		}
 		return false;

@@ -62,32 +62,32 @@ public class TestJTextFieldWithSCP {
 	private static JTextFieldWithSCP jTF2;
 	private static JTextFieldWithSCP jTF3;
 	private static JTextFieldWithSCP jTF4;
-	
+
 	/**
 	 * Test method for the TestJCalendarCDatePanel class
+	 * 
 	 * @param args
 	 */
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		final int height = 60;
 		final int width = 300;
-		
+
 		final int heightTF = 25;
 		final int widthTF = 40;
-		
+
 		final int heightJB = 25;
 		final int widthJB = 100;
-		
+
 		// Objects creation
-		JFrame jF = new JFrame();		
+		JFrame jF = new JFrame();
 
 		JPanel jP = new JPanel();
 		jP.setPreferredSize(new Dimension(width, height));
-		
+
 		jTF1 = new JTextFieldWithSCP();
 		jTF1.setPreferredSize(new Dimension(widthTF, heightTF));
 		jTF1.setToolTipText(Messages.getText("Default"));
-		
+
 		jTF2 = new JTextFieldWithSCP();
 		jTF2.setCaretPositionMode(ISpecificCaretPosition.RIGHT_POSITIONS);
 		jTF2.setPreferredSize(new Dimension(widthTF, heightTF));
@@ -102,50 +102,52 @@ public class TestJTextFieldWithSCP {
 		jTF4.setCaretPositionMode(ISpecificCaretPosition.LIKE_JTEXTCOMPONENT);
 		jTF4.setPreferredSize(new Dimension(widthTF, heightTF));
 		jTF4.setToolTipText(Messages.getText("Like_JTextField"));
-		
+
 		JButton jButton = new JButton();
 		jButton.setToolTipText("Enable/Disable");
 		jButton.setText("En./Dis.");
 		jButton.setPreferredSize(new Dimension(widthJB, heightJB));
 		jButton.addMouseListener(new MouseAdapter() {
 			/*
-			 *  (non-Javadoc)
-			 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent
+			 * )
 			 */
 			public void mouseClicked(MouseEvent e) {
 				enableOrDisableJTextFields();
-			}			
+			}
 		});
 
-	    
 		jP.add(jTF1);
 		jP.add(jTF2);
 		jP.add(jTF3);
 		jP.add(jTF4);
 		jP.add(jButton);
 
-//		jF.setVisible(false);		
-	    // Test adding text to text fields
+		// jF.setVisible(false);
+		// Test adding text to text fields
 
-	    // Set properties
+		// Set properties
 		jF.setTitle("Test JTextFieldWithSpecificCaretPosition");
-	    jF.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    jF.setSize(jP.getPreferredSize());
-	    jF.getContentPane().add(jP);	
-	    
+		jF.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		jF.setSize(jP.getPreferredSize());
+		jF.getContentPane().add(jP);
+
 		jF.setVisible(true);
-		
-	    jTF1.setEnabled(false);
-	    jTF1.setText("+123456.78901234141241");
-	    jTF2.setEnabled(false);
-	    jTF2.setText("-0917429817.10934712");
-	    jTF3.setEnabled(false);
-	    jTF3.setText("-184091.3095174");
-	    jTF4.setEnabled(false);
-	    jTF4.setText("+128947.09345734");
+
+		jTF1.setEnabled(false);
+		jTF1.setText("+123456.78901234141241");
+		jTF2.setEnabled(false);
+		jTF2.setText("-0917429817.10934712");
+		jTF3.setEnabled(false);
+		jTF3.setText("-184091.3095174");
+		jTF4.setEnabled(false);
+		jTF4.setText("+128947.09345734");
 
 	}
-	
+
 	private static void enableOrDisableJTextFields() {
 		jTF1.setEnabled(!jTF1.isEnabled());
 		jTF2.setEnabled(!jTF2.isEnabled());

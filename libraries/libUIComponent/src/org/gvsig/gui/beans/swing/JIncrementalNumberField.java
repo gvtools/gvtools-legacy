@@ -71,8 +71,10 @@ import org.gvsig.gui.beans.swing.ValidatingTextField.Cleaner;
 import org.gvsig.gui.beans.swing.ValidatingTextField.Validator;
 
 /**
- * This class represents a JTextField-like component that allows to input numbers
- * and featuring a built-in increment or decrease of the number using the mouse.
+ * This class represents a JTextField-like component that allows to input
+ * numbers and featuring a built-in increment or decrease of the number using
+ * the mouse.
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class JIncrementalNumberField extends JPanel {
@@ -86,19 +88,20 @@ public class JIncrementalNumberField extends JPanel {
 
 	private ActionListener propage = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-			if (!isEnabled()) return;
+			if (!isEnabled())
+				return;
 			if (acceptsDoubles) {
 				double v = getDouble();
-				if (v>maxValue)
+				if (v > maxValue)
 					v = maxValue;
-				if (v<minValue)
+				if (v < minValue)
 					v = minValue;
 				setDouble(v);
 			} else {
 				int v = getInteger();
-				if (v>maxValue)
+				if (v > maxValue)
 					v = (int) maxValue;
-				if (v<minValue)
+				if (v < minValue)
 					v = (int) minValue;
 				setInteger(v);
 			}
@@ -108,53 +111,59 @@ public class JIncrementalNumberField extends JPanel {
 
 	private FocusListener propageFocus = new FocusListener() {
 		public void focusGained(FocusEvent e) {
-			if (!isEnabled()) return;
-			Iterator<FocusListener> iter = Arrays.asList(JIncrementalNumberField.this.getFocusListeners()).iterator();
+			if (!isEnabled())
+				return;
+			Iterator<FocusListener> iter = Arrays.asList(
+					JIncrementalNumberField.this.getFocusListeners())
+					.iterator();
 			e.setSource(JIncrementalNumberField.this);
-			while (iter.hasNext()){
+			while (iter.hasNext()) {
 				iter.next().focusGained(e);
 			}
 		}
 
 		public void focusLost(FocusEvent e) {
-			if (!isEnabled()) return;
+			if (!isEnabled())
+				return;
 			if (acceptsDoubles) {
 				double v = getDouble();
-				if (v>maxValue)
+				if (v > maxValue)
 					v = maxValue;
-				if (v<minValue)
+				if (v < minValue)
 					v = minValue;
 				setDouble(v);
 			} else {
 				int v = getInteger();
-				if (v>maxValue)
+				if (v > maxValue)
 					v = (int) maxValue;
-				if (v<minValue)
+				if (v < minValue)
 					v = (int) minValue;
 				setInteger(v);
 			}
-			Iterator<FocusListener> iter = Arrays.asList(JIncrementalNumberField.this.getFocusListeners()).iterator();
+			Iterator<FocusListener> iter = Arrays.asList(
+					JIncrementalNumberField.this.getFocusListeners())
+					.iterator();
 			e.setSource(JIncrementalNumberField.this);
-			while (iter.hasNext()){
+			while (iter.hasNext()) {
 				iter.next().focusLost(e);
 			}
 		}
 	};
 
-
 	private ActionListener accum = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-			if (!isEnabled()) return;
+			if (!isEnabled())
+				return;
 			String command = e.getActionCommand();
 			if ("UP".equals(command)) {
 				if (acceptsDoubles) {
 					double v = getDouble() + step;
-					if (v>maxValue)
+					if (v > maxValue)
 						v = maxValue;
 					setDouble(v);
 				} else {
 					int v = getInteger() + (int) Math.round(step);
-					if (v>maxValue)
+					if (v > maxValue)
 						v = (int) maxValue;
 					setInteger(v);
 				}
@@ -162,13 +171,13 @@ public class JIncrementalNumberField extends JPanel {
 				if (acceptsDoubles) {
 					double v = getDouble();// - step;
 					v = v - step;
-					if (v<minValue)
+					if (v < minValue)
 						v = minValue;
 					setDouble(v);
 
 				} else {
 					int v = getInteger() - (int) Math.round(step);
-					if (v<minValue)
+					if (v < minValue)
 						v = (int) minValue;
 					setInteger(v);
 				}
@@ -185,7 +194,7 @@ public class JIncrementalNumberField extends JPanel {
 		private MouseEvent e;
 		private ButtonMouseListener ml;
 
-		private MousePressedTask(ButtonMouseListener ml, MouseEvent e){
+		private MousePressedTask(ButtonMouseListener ml, MouseEvent e) {
 			super();
 			this.ml = ml;
 			this.e = e;
@@ -199,14 +208,16 @@ public class JIncrementalNumberField extends JPanel {
 
 			while (ml.pressed) {
 				if (ml.in) {
-					accum.actionPerformed(new ActionEvent(b, 12431, b.getActionCommand()));
+					accum.actionPerformed(new ActionEvent(b, 12431, b
+							.getActionCommand()));
 
 					long currTime = System.currentTimeMillis();
 					if (delay > 5 && ((currTime - time) > 1000)) {
 						delay /= 2;
 						time = currTime;
 					}
-				} else time = System.currentTimeMillis();
+				} else
+					time = System.currentTimeMillis();
 				try {
 					Thread.sleep(delay);
 				} catch (InterruptedException e1) {
@@ -218,11 +229,15 @@ public class JIncrementalNumberField extends JPanel {
 		}
 	}
 
-	private class ButtonMouseListener implements MouseListener{
+	private class ButtonMouseListener implements MouseListener {
 		boolean in = false;
 		boolean pressed = false;
 
-		public void mouseClicked(MouseEvent e) { /* nothing (managed by the ActionListener) */ }
+		public void mouseClicked(MouseEvent e) { /*
+												 * nothing (managed by the
+												 * ActionListener)
+												 */
+		}
 
 		public void mouseEntered(MouseEvent e) {
 			in = true;
@@ -253,7 +268,6 @@ public class JIncrementalNumberField extends JPanel {
 
 	};
 
-
 	public JIncrementalNumberField() {
 		this("");
 	}
@@ -263,21 +277,30 @@ public class JIncrementalNumberField extends JPanel {
 	}
 
 	public JIncrementalNumberField(String text, int columns) {
-		this(text, columns, ValidatingTextField.DOUBLE_VALIDATOR, ValidatingTextField.NUMBER_CLEANER_2_DECIMALS, -Double.MAX_VALUE, Double.MAX_VALUE, 1);
+		this(text, columns, ValidatingTextField.DOUBLE_VALIDATOR,
+				ValidatingTextField.NUMBER_CLEANER_2_DECIMALS,
+				-Double.MAX_VALUE, Double.MAX_VALUE, 1);
 	}
 
-	public JIncrementalNumberField(String text, int columns, double minValue, double maxValue, double step) {
-		this(text, columns, ValidatingTextField.DOUBLE_VALIDATOR, ValidatingTextField.NUMBER_CLEANER_2_DECIMALS, minValue, maxValue, step);
+	public JIncrementalNumberField(String text, int columns, double minValue,
+			double maxValue, double step) {
+		this(text, columns, ValidatingTextField.DOUBLE_VALIDATOR,
+				ValidatingTextField.NUMBER_CLEANER_2_DECIMALS, minValue,
+				maxValue, step);
 	}
 
-	public JIncrementalNumberField(String text, int columns, Validator validator, Cleaner cleaner, double minValue, double maxValue, double step) {
+	public JIncrementalNumberField(String text, int columns,
+			Validator validator, Cleaner cleaner, double minValue,
+			double maxValue, double step) {
 		super();
-		if (text == null) text = "";
+		if (text == null)
+			text = "";
 
 		this.minValue = minValue;
 		this.maxValue = maxValue;
 		this.step = step;
-		acceptsDoubles = validator.getClass().equals(ValidatingTextField.DOUBLE_VALIDATOR.getClass());
+		acceptsDoubles = validator.getClass().equals(
+				ValidatingTextField.DOUBLE_VALIDATOR.getClass());
 
 		JPanel lateralButtons = new JPanel();
 		Icon upIcon = new Icon() {
@@ -291,17 +314,13 @@ public class JIncrementalNumberField extends JPanel {
 			}
 
 			public void paintIcon(Component c, Graphics g, int x, int y) {
-				g.setColor( isEnabled() ? Color.DARK_GRAY : Color.RED);
+				g.setColor(isEnabled() ? Color.DARK_GRAY : Color.RED);
 				((Graphics2D) g).setStroke(new BasicStroke(2));
-				g.drawLine(isEnabled() ? 3 : 1,
-						   isEnabled() ? 6 : 4,
-						   isEnabled() ? 5 : 3,
-						   isEnabled() ? 3 : 1);
+				g.drawLine(isEnabled() ? 3 : 1, isEnabled() ? 6 : 4,
+						isEnabled() ? 5 : 3, isEnabled() ? 3 : 1);
 
-				g.drawLine(isEnabled() ? 5 : 3,
-						   isEnabled() ? 3 : 1,
-						   isEnabled() ? 8 : 6,
-						   isEnabled() ? 6 : 4);
+				g.drawLine(isEnabled() ? 5 : 3, isEnabled() ? 3 : 1,
+						isEnabled() ? 8 : 6, isEnabled() ? 6 : 4);
 
 			}
 		};
@@ -318,16 +337,11 @@ public class JIncrementalNumberField extends JPanel {
 				g.setColor(isEnabled() ? Color.DARK_GRAY : Color.RED);
 				((Graphics2D) g).setStroke(new BasicStroke(2));
 
+				g.drawLine(isEnabled() ? 3 : 1, isEnabled() ? 3 : 1,
+						isEnabled() ? 5 : 3, isEnabled() ? 6 : 4);
 
-				g.drawLine(isEnabled() ? 3 : 1,
-						   isEnabled() ? 3 : 1,
-						   isEnabled() ? 5 : 3,
-						   isEnabled() ? 6 : 4);
-
-				g.drawLine(isEnabled() ? 5 : 3,
-						   isEnabled() ? 6 : 4,
-						   isEnabled() ? 8 : 6,
-						   isEnabled() ? 3 : 1);
+				g.drawLine(isEnabled() ? 5 : 3, isEnabled() ? 6 : 4,
+						isEnabled() ? 8 : 6, isEnabled() ? 3 : 1);
 
 			}
 		};
@@ -345,8 +359,6 @@ public class JIncrementalNumberField extends JPanel {
 		down.setBounds(0, 11, 11, 11);
 		down.setFocusable(false);
 
-
-
 		lateralButtons.setLayout(null);
 		lateralButtons.setSize(13, 20);
 		lateralButtons.add(up);
@@ -354,12 +366,8 @@ public class JIncrementalNumberField extends JPanel {
 		lateralButtons.setSize(new Dimension(11, 22));
 		lateralButtons.setPreferredSize(new Dimension(11, 22));
 		lateralButtons.setBorder(BorderFactory.createLineBorder(Color.GREEN));
-		vtf = new ValidatingTextField(
-				text,
-				columns,
-				SwingConstants.RIGHT,
-				validator,
-				cleaner) ;
+		vtf = new ValidatingTextField(text, columns, SwingConstants.RIGHT,
+				validator, cleaner);
 		setLayout(new BorderLayout(0, 0));
 		vtf.addActionListener(propage);
 		vtf.addFocusListener(propageFocus);
@@ -373,15 +381,15 @@ public class JIncrementalNumberField extends JPanel {
 
 	public double getDouble() {
 		if (!acceptsDoubles)
-			throw new Error(Messages.getText(
-					"cannot_get_double_value_from_an_integer_number_field_use_getInteger()_instead"));
+			throw new Error(
+					Messages.getText("cannot_get_double_value_from_an_integer_number_field_use_getInteger()_instead"));
 		return vtf.getDouble();
 	}
 
 	public void setDouble(double v) {
 		if (!acceptsDoubles)
-			throw new Error(Messages.getText(
-					"cannot_set_a_double_value_from_an_integer_number_field_use_setInteger(int)_instead"));
+			throw new Error(
+					Messages.getText("cannot_set_a_double_value_from_an_integer_number_field_use_setInteger(int)_instead"));
 		vtf.setText(String.valueOf(v));
 	}
 
@@ -390,12 +398,12 @@ public class JIncrementalNumberField extends JPanel {
 	}
 
 	public void addActionListener(ActionListener l) {
-//		vtf.addActionListener(l);
+		// vtf.addActionListener(l);
 		listeners.add(l);
 	}
 
 	public void removeActionListener(ActionListener l) {
-//		vtf.removeActionListener(l);
+		// vtf.removeActionListener(l);
 		listeners.remove(l);
 	}
 

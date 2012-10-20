@@ -70,11 +70,11 @@ public class OldTocContextMenuAction extends AbstractTocContextMenuAction {
 	}
 
 	public void execute(ITocItem item, FLayer[] selectedItems) {
-		return; //No se llega a ejecutar nunca
+		return; // No se llega a ejecutar nunca
 	}
 
 	public String getText() {
-		return null; //No se llega a ejecutar nunca
+		return null; // No se llega a ejecutar nunca
 	}
 
 	public void initializeElement(FPopupMenu menu) {

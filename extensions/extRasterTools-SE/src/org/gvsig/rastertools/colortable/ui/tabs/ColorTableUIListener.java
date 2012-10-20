@@ -19,6 +19,7 @@
 package org.gvsig.rastertools.colortable.ui.tabs;
 
 import java.util.EventListener;
+
 /**
  * Interfaz para controlar los cambios en los paneles de edición de un
  * ColorTable
@@ -29,6 +30,7 @@ import java.util.EventListener;
 public interface ColorTableUIListener extends EventListener {
 	/**
 	 * Evento que se dispara cuando cambia el ColorTable de un Panel de edición
+	 * 
 	 * @param e
 	 */
 	public void actionColorTableUIChanged(IColorTableUI colorTableUI);

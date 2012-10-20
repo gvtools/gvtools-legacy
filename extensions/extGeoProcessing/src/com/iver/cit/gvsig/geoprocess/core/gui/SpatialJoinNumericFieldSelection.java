@@ -87,21 +87,22 @@ import org.gvsig.gui.beans.AcceptCancelPanel;
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
-public class SpatialJoinNumericFieldSelection 
-	extends JDialog implements SpatialJoinNumFieldIF {
+public class SpatialJoinNumericFieldSelection extends JDialog implements
+		SpatialJoinNumFieldIF {
 
 	private static final long serialVersionUID = -9031708821779458450L;
-	
+
 	private FLyrVect inputLayer;
 	private JPanel jContentPane;
 	private JPanel acceptCancelPanel;
 	private boolean ok = false;
+
 	/**
 	 * This is the default constructor
 	 */
 	public SpatialJoinNumericFieldSelection(FLyrVect inputLayer) {
-		super((JFrame)PluginServices.getMainFrame(), true);
-		this.inputLayer =  inputLayer; 
+		super((JFrame) PluginServices.getMainFrame(), true);
+		this.inputLayer = inputLayer;
 		initialize();
 	}
 
@@ -111,26 +112,30 @@ public class SpatialJoinNumericFieldSelection
 	 * @return void
 	 */
 	private void initialize() {
-		this.setTitle(PluginServices.getText(this,"Funciones_Sumarizacion"));
+		this.setTitle(PluginServices.getText(this, "Funciones_Sumarizacion"));
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(getJContentPane(), BorderLayout.CENTER);
 		getContentPane().add(getAcceptCancelPanel(), BorderLayout.SOUTH);
-		
+
 	}
-	
+
 	private JPanel getAcceptCancelPanel() {
 		if (acceptCancelPanel == null) {
 			acceptCancelPanel = new AcceptCancelPanel();
-			((AcceptCancelPanel) acceptCancelPanel).setOkButtonActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent arg0) {
-					ok();
+			((AcceptCancelPanel) acceptCancelPanel)
+					.setOkButtonActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent arg0) {
+							ok();
 
-				}});
-			((AcceptCancelPanel) acceptCancelPanel).setCancelButtonActionListener(new ActionListener(){
+						}
+					});
+			((AcceptCancelPanel) acceptCancelPanel)
+					.setCancelButtonActionListener(new ActionListener() {
 
-				public void actionPerformed(ActionEvent arg0) {
-					setVisible(false);
-				}});
+						public void actionPerformed(ActionEvent arg0) {
+							setVisible(false);
+						}
+					});
 		}
 		return acceptCancelPanel;
 	}
@@ -153,12 +158,12 @@ public class SpatialJoinNumericFieldSelection
 	}
 
 	public Map getSumarizationFunctions() {
-		return ((NumericFieldFunctionsControl)jContentPane).getFieldFunctionMap();
+		return ((NumericFieldFunctionsControl) jContentPane)
+				.getFieldFunctionMap();
 	}
 
 	public boolean isOk() {
 		return ok;
 	}
 
-
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

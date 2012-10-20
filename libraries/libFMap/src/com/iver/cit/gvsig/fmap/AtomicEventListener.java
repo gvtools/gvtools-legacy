@@ -41,15 +41,25 @@
 package com.iver.cit.gvsig.fmap;
 
 /**
- * <p>Listener of {@link AtomicEvent AtomicEvent}.</p>
+ * <p>
+ * Listener of {@link AtomicEvent AtomicEvent}.
+ * </p>
  * 
- * <p>An <code>AtomicEvent</p> represents a group of events that will be attended without any interruption.</p>
+ * <p>
+ * An <code>AtomicEvent
+ * </p>
+ * represents a group of events that will be attended without any
+ * interruption.</p>
  */
 public interface AtomicEventListener {
 	/**
-	 * <p>Called when is produced an <code>AtomicEvent</code> in the buffer of <code>MapControl</code>.</p>
+	 * <p>
+	 * Called when is produced an <code>AtomicEvent</code> in the buffer of
+	 * <code>MapControl</code>.
+	 * </p>
 	 * 
-	 * @param e an atomic event
+	 * @param e
+	 *            an atomic event
 	 * 
 	 * @see EventBuffer
 	 */

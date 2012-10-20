@@ -42,98 +42,100 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.jts;
 
 import java.util.Hashtable;
 
 import com.vividsolutions.jts.geom.Coordinate;
+
 /**
- * A coordinate map that consideers snap tolerance and that mantains
- * a counter with the number of ocurrences of each coordinate (and its
- * snapping region) in the map.
+ * A coordinate map that consideers snap tolerance and that mantains a counter
+ * with the number of ocurrences of each coordinate (and its snapping region) in
+ * the map.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class SnappingCoordinateMapWithCounter extends Hashtable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private double snapTolerance;
 
 	public SnappingCoordinateMapWithCounter(double snapTolerance) {
 		this.snapTolerance = snapTolerance;
 	}
 
-	
-	public Object put(Object key, Object obj){
-		if(! (key instanceof Coordinate) )
+	public Object put(Object key, Object obj) {
+		if (!(key instanceof Coordinate))
 			return null;
-		
-		SnapCoordinateWithCounter keyCoord = new SnapCoordinateWithCounter((Coordinate)key);
-		
-		SnapCoordinateWithCounter objCoord = (SnapCoordinateWithCounter) super.get(keyCoord);
-		if(objCoord != null){
+
+		SnapCoordinateWithCounter keyCoord = new SnapCoordinateWithCounter(
+				(Coordinate) key);
+
+		SnapCoordinateWithCounter objCoord = (SnapCoordinateWithCounter) super
+				.get(keyCoord);
+		if (objCoord != null) {
 			objCoord.increaseCount();
 			return objCoord;
-		}else{
+		} else {
 			return super.put(keyCoord, keyCoord);
 		}
 	}
-	
-	public Object get(Object key){
-		if(! (key instanceof Coordinate) )
+
+	public Object get(Object key) {
+		if (!(key instanceof Coordinate))
 			return null;
-		return super.get(new SnapCoordinateWithCounter((Coordinate)key));
+		return super.get(new SnapCoordinateWithCounter((Coordinate) key));
 	}
-	
-	public int getCount(Object key){
-		if(! (key instanceof Coordinate) )
+
+	public int getCount(Object key) {
+		if (!(key instanceof Coordinate))
 			return -1;
-		SnapCoordinateWithCounter coord = (SnapCoordinateWithCounter) super.
-						get(new SnapCoordinateWithCounter((Coordinate)key));
-		if(coord != null)
+		SnapCoordinateWithCounter coord = (SnapCoordinateWithCounter) super
+				.get(new SnapCoordinateWithCounter((Coordinate) key));
+		if (coord != null)
 			return coord.getCount();
 		else
 			return -1;
 	}
-	
 
-	
-	public boolean containsKey(Object key){
-		if(! (key instanceof Coordinate) )
+	public boolean containsKey(Object key) {
+		if (!(key instanceof Coordinate))
 			return false;
-		return super.containsKey(new SnapCoordinateWithCounter((Coordinate)key));
+		return super
+				.containsKey(new SnapCoordinateWithCounter((Coordinate) key));
 	}
-	
+
 	public class SnapCoordinateWithCounter extends Coordinate {
 		private static final long serialVersionUID = 1L;
 		private int count = 0;
-		
+
 		public SnapCoordinateWithCounter(Coordinate arg0) {
 			super(arg0);
 			count++;
 		}
 
 		public boolean equals(Object obj) {
-			if(! (obj instanceof SnapCoordinateWithCounter))
+			if (!(obj instanceof SnapCoordinateWithCounter))
 				return false;
 			SnapCoordinateWithCounter other = (SnapCoordinateWithCounter) obj;
 			return other.distance(this) <= SnappingCoordinateMapWithCounter.this.snapTolerance;
 		}
 
 		public int hashCode() {
-			return 1; 
+			return 1;
 		}
-		
-		public void increaseCount(){
+
+		public void increaseCount() {
 			count++;
 		}
-		
-		public int getCount(){
+
+		public int getCount() {
 			return count;
 		}
 	}

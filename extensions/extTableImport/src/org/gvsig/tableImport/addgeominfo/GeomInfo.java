@@ -33,11 +33,12 @@ import org.gvsig.tableImport.addgeominfo.util.StringUtilitiesExtended;
 import com.hardcode.gdbms.engine.values.ValueFactory;
 import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 
-
 /**
- * <p>Label used in the lists of {@link AddGeometricInfoPanel AddGeometricInfoPanel}, that represent
- *  a geometric information of a geometry.</p>
- *
+ * <p>
+ * Label used in the lists of {@link AddGeometricInfoPanel
+ * AddGeometricInfoPanel}, that represent a geometric information of a geometry.
+ * </p>
+ * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class GeomInfo extends JLabel {
@@ -81,25 +82,38 @@ public class GeomInfo extends JLabel {
 	private int shapeType;
 
 	/**
-	 * <p>If the geometry type has more than one geometric info, this
-	 *  parameter identifies each one.</p>
+	 * <p>
+	 * If the geometry type has more than one geometric info, this parameter
+	 * identifies each one.
+	 * </p>
 	 * 
-	 * <p>It's optional, only used by some geometry types, like the polygon or point.</p>
+	 * <p>
+	 * It's optional, only used by some geometry types, like the polygon or
+	 * point.
+	 * </p>
 	 */
 	private int geomSubType; // Only used for POLYGON shapes
 
 	/**
-	 * <p>Determines if the geometric information will be added as a new column.</p>
+	 * <p>
+	 * Determines if the geometric information will be added as a new column.
+	 * </p>
 	 */
 	private boolean isNewColumn;
 
 	/**
-	 * <p>Creates a new <code>GeomInfo</code>.</p>
+	 * <p>
+	 * Creates a new <code>GeomInfo</code>.
+	 * </p>
 	 * 
-	 * @param icon the icon that represents this geometry type
-	 * @param text the text of the label
-	 * @param name the name of the geometric information
-	 * @param shapeType the type of the geometric information
+	 * @param icon
+	 *            the icon that represents this geometry type
+	 * @param text
+	 *            the text of the label
+	 * @param name
+	 *            the name of the geometric information
+	 * @param shapeType
+	 *            the type of the geometric information
 	 * 
 	 * @see Types
 	 */
@@ -108,52 +122,62 @@ public class GeomInfo extends JLabel {
 		this.shapeType = shapeType;
 		this.isNewColumn = true; // By default, is a new column
 		this.geomSubType = UNDEFINED;
-		setName(StringUtilitiesExtended.replaceAllAccents(
-					StringUtilitiesExtended.replaceAllCedilla(
-						StringUtilitiesExtended.replaceAllNWithTilde(name))));
+		setName(StringUtilitiesExtended
+				.replaceAllAccents(StringUtilitiesExtended
+						.replaceAllCedilla(StringUtilitiesExtended
+								.replaceAllNWithTilde(name))));
 	}
 
 	/**
-	 * <p>Creates a new {@link FieldDescription FieldDescription} with the geometric information.</p>
+	 * <p>
+	 * Creates a new {@link FieldDescription FieldDescription} with the
+	 * geometric information.
+	 * </p>
 	 * 
-	 * @param geomInfo object that identifies the geometric information
-	 * @param type SQL type
-	 * @param length the length of the field
-	 * @param decimalCount the length of the decimal part of a decimal number
+	 * @param geomInfo
+	 *            object that identifies the geometric information
+	 * @param type
+	 *            SQL type
+	 * @param length
+	 *            the length of the field
+	 * @param decimalCount
+	 *            the length of the decimal part of a decimal number
 	 * 
-	 * @return the new field description, or <code>null</p> if any problem succeed
+	 * @return the new field description, or
+	 *         <code>null</p> if any problem succeed
 	 */
-	public static FieldDescription getFieldDescription(GeomInfo geomInfo, int type, int length, short decimalCount) {
+	public static FieldDescription getFieldDescription(GeomInfo geomInfo,
+			int type, int length, short decimalCount) {
 		try {
 			FieldDescription fD = new FieldDescription();
-			
+
 			// Bug fixed -> data source doesn't display the accents
-			String name = StringUtilitiesExtended.replaceAllAccents(
-							StringUtilitiesExtended.replaceAllCedilla(
-							  StringUtilitiesExtended.replaceAllNWithTilde(geomInfo.getName())));
+			String name = StringUtilitiesExtended
+					.replaceAllAccents(StringUtilitiesExtended
+							.replaceAllCedilla(StringUtilitiesExtended
+									.replaceAllNWithTilde(geomInfo.getName())));
 			fD.setFieldName(name);
 			fD.setFieldAlias(name);
 			fD.setFieldType(type);
 			fD.setFieldLength(length);
-			
-			switch(type) {
-				case Types.DOUBLE:
-					fD.setDefaultValue(ValueFactory.createValueByType("0", type));
-					fD.setFieldDecimalCount(decimalCount);
-					break;
-				case Types.BIGINT:
-					fD.setDefaultValue(ValueFactory.createValueByType("0", type));
-					break;
-				case Types.VARCHAR:
-					fD.setDefaultValue(ValueFactory.createValueByType("", type));
-					break;
-				default:  // Unsupported
-					return null;
+
+			switch (type) {
+			case Types.DOUBLE:
+				fD.setDefaultValue(ValueFactory.createValueByType("0", type));
+				fD.setFieldDecimalCount(decimalCount);
+				break;
+			case Types.BIGINT:
+				fD.setDefaultValue(ValueFactory.createValueByType("0", type));
+				break;
+			case Types.VARCHAR:
+				fD.setDefaultValue(ValueFactory.createValueByType("", type));
+				break;
+			default: // Unsupported
+				return null;
 			}
-			
+
 			return fD;
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			return null;
 		}
 	}
@@ -172,7 +196,8 @@ public class GeomInfo extends JLabel {
 	/**
 	 * Determines if the geometric information will be added as a new column.
 	 * 
-	 * @return <code>true</code> if the geometric information will be added as a new column, otherwise <code>false</code>
+	 * @return <code>true</code> if the geometric information will be added as a
+	 *         new column, otherwise <code>false</code>
 	 */
 	public boolean isNewColumn() {
 		return isNewColumn;
@@ -181,15 +206,17 @@ public class GeomInfo extends JLabel {
 	/**
 	 * Sets if the geometric information will be added as a new column, or not.
 	 * 
-	 * @param b <code>true</code> if the geometric information will be added as a new column, otherwise <code>false</code>
+	 * @param b
+	 *            <code>true</code> if the geometric information will be added
+	 *            as a new column, otherwise <code>false</code>
 	 */
 	public void setNewColumn(boolean b) {
 		isNewColumn = b;
 	}
 
-	
 	/**
-	 * Identifies with geometric information of the geometry type represents this object. 
+	 * Identifies with geometric information of the geometry type represents
+	 * this object.
 	 * 
 	 * @return identifier of the geometric information
 	 */
@@ -198,9 +225,10 @@ public class GeomInfo extends JLabel {
 	}
 
 	/**
-	 * Sets the geometric information of the geometry type. 
+	 * Sets the geometric information of the geometry type.
 	 * 
-	 * @param geomSubType identifier of the geometric information
+	 * @param geomSubType
+	 *            identifier of the geometric information
 	 */
 	public void setGeomSubType(int geomSubType) {
 		this.geomSubType = geomSubType;

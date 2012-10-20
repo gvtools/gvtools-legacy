@@ -46,17 +46,18 @@ import javax.swing.DefaultComboBoxModel;
  *   dac@iver.es
  */
 
-
 /**
- * Model for 'JPanelWithJComboBoxImageIconItems', stores the attribute 'showImageIconAndText'
+ * Model for 'JPanelWithJComboBoxImageIconItems', stores the attribute
+ * 'showImageIconAndText'
  * 
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
-public class ComboBoxImageIconModel extends DefaultComboBoxModel implements Serializable {
+public class ComboBoxImageIconModel extends DefaultComboBoxModel implements
+		Serializable {
 	private static final long serialVersionUID = -775510419199115805L;
 
 	public static final boolean DEFAULT_SHOW_IMAGE_ICON_AND_TEXT_PROPERTY = false;
-	
+
 	private boolean showImageIconAndText;
 
 	/**
@@ -93,7 +94,8 @@ public class ComboBoxImageIconModel extends DefaultComboBoxModel implements Seri
 	/**
 	 * Sets the value of the inner attribute 'imageIconAndText'
 	 * 
-	 * @param b A boolean value
+	 * @param b
+	 *            A boolean value
 	 */
 	public void setShowImageIconAndTextProperty(boolean b) {
 		showImageIconAndText = b;

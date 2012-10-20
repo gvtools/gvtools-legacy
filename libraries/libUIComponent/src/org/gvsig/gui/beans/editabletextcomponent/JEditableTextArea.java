@@ -25,26 +25,29 @@ import javax.swing.text.Document;
 import org.gvsig.gui.beans.editabletextcomponent.event.UndoRedoEditListener;
 
 /**
- * <p>Text area with options to edit its text easily.</p>
+ * <p>
+ * Text area with options to edit its text easily.
+ * </p>
  * 
  * @see JTextArea
  * 
  * @version 03/01/2008
- * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es) 
+ * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class JEditableTextArea extends JTextArea implements IEditableText {
 	private static final long serialVersionUID = -8094155271679157582L;
 
 	// REFERENCE TO THE TEXT EDITOR DECORATOR
 	private EditableTextDecorator editableTextDecorator;
+
 	// END REFERENCE TO THE TEXT EDITOR DECORATOR
-	
+
 	/**
 	 * @see JEditableTextArea#JEditableTextArea()
 	 */
 	public JEditableTextArea() {
 		super();
-		
+
 		initialize();
 	}
 
@@ -53,7 +56,7 @@ public class JEditableTextArea extends JTextArea implements IEditableText {
 	 */
 	public JEditableTextArea(Document doc, String text, int rows, int columns) {
 		super(doc, text, rows, columns);
-		
+
 		initialize();
 	}
 
@@ -62,7 +65,7 @@ public class JEditableTextArea extends JTextArea implements IEditableText {
 	 */
 	public JEditableTextArea(Document doc) {
 		super(doc);
-		
+
 		initialize();
 	}
 
@@ -71,7 +74,7 @@ public class JEditableTextArea extends JTextArea implements IEditableText {
 	 */
 	public JEditableTextArea(int rows, int columns) {
 		super(rows, columns);
-		
+
 		initialize();
 	}
 
@@ -80,7 +83,7 @@ public class JEditableTextArea extends JTextArea implements IEditableText {
 	 */
 	public JEditableTextArea(String text, int rows, int columns) {
 		super(text, rows, columns);
-		
+
 		initialize();
 	}
 
@@ -89,12 +92,14 @@ public class JEditableTextArea extends JTextArea implements IEditableText {
 	 */
 	public JEditableTextArea(String text) {
 		super(text);
-		
+
 		initialize();
 	}
 
 	/**
-	 * <p>Fits this component to be ready to be used.</p>
+	 * <p>
+	 * Fits this component to be ready to be used.
+	 * </p>
 	 */
 	protected void initialize() {
 		editableTextDecorator = new EditableTextDecorator(this);
@@ -102,7 +107,9 @@ public class JEditableTextArea extends JTextArea implements IEditableText {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.editabletextcomponent.IEditableText#getUndoRedoLimitActions()
+	 * 
+	 * @see org.gvsig.gui.beans.editabletextcomponent.IEditableText#
+	 * getUndoRedoLimitActions()
 	 */
 	public int getUndoRedoLimitActions() {
 		return editableTextDecorator.getUndoRedoLimitActions();
@@ -110,7 +117,9 @@ public class JEditableTextArea extends JTextArea implements IEditableText {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.editabletextcomponent.IEditableText#setUndoRedoLimitActions(int)
+	 * 
+	 * @see org.gvsig.gui.beans.editabletextcomponent.IEditableText#
+	 * setUndoRedoLimitActions(int)
 	 */
 	public void setUndoRedoLimitActions(int limit) {
 		editableTextDecorator.setUndoRedoLimitActions(limit);
@@ -118,7 +127,10 @@ public class JEditableTextArea extends JTextArea implements IEditableText {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.editabletextcomponent.IEditableText#addUndoRedoEditListener(org.gvsig.gui.beans.editabletextcomponent.event.UndoRedoEditListener)
+	 * 
+	 * @see org.gvsig.gui.beans.editabletextcomponent.IEditableText#
+	 * addUndoRedoEditListener
+	 * (org.gvsig.gui.beans.editabletextcomponent.event.UndoRedoEditListener)
 	 */
 	public void addUndoRedoEditListener(UndoRedoEditListener listener) {
 		editableTextDecorator.addUndoRedoEditListener(listener);
@@ -126,7 +138,9 @@ public class JEditableTextArea extends JTextArea implements IEditableText {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.editabletextcomponent.IEditableText#getUndoRedoEditListeners()
+	 * 
+	 * @see org.gvsig.gui.beans.editabletextcomponent.IEditableText#
+	 * getUndoRedoEditListeners()
 	 */
 	public UndoRedoEditListener[] getUndoRedoEditListeners() {
 		return editableTextDecorator.getUndoRedoEditListeners();
@@ -134,7 +148,10 @@ public class JEditableTextArea extends JTextArea implements IEditableText {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.editabletextcomponent.IEditableText#removeUndoRedoEditListener(org.gvsig.gui.beans.editabletextcomponent.event.UndoRedoEditListener)
+	 * 
+	 * @see org.gvsig.gui.beans.editabletextcomponent.IEditableText#
+	 * removeUndoRedoEditListener
+	 * (org.gvsig.gui.beans.editabletextcomponent.event.UndoRedoEditListener)
 	 */
 	public void removeUndoRedoEditListener(UndoRedoEditListener listener) {
 		editableTextDecorator.removeUndoRedoEditListener(listener);

@@ -58,23 +58,28 @@ public class WFSTClientExtension extends Extension {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String actionCommand) {
-				
+
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
-		ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
-		extensionPoints.add("View_TocActions","WFSTStartEditing",WFSTStartEditionTocMenuEntry.class);
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+		extensionPoints.add("View_TocActions", "WFSTStartEditing",
+				WFSTStartEditionTocMenuEntry.class);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
@@ -83,6 +88,7 @@ public class WFSTClientExtension extends Extension {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {

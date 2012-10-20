@@ -21,7 +21,7 @@ package org.gvsig.raster.beans.previewbase;
 import org.gvsig.raster.dataset.Params;
 
 /**
- * Estructura para los parámetros de PreviewFiltering. Contiene el nombre del 
+ * Estructura para los parámetros de PreviewFiltering. Contiene el nombre del
  * filtro, el parámetro y la clase de este.
  * 
  */
@@ -38,7 +38,8 @@ public class ParamStruct {
 	}
 
 	/**
-	 * @param filterName the filterName to set
+	 * @param filterName
+	 *            the filterName to set
 	 */
 	public void setFilterName(String filterName) {
 		this.filterName = filterName;
@@ -52,7 +53,8 @@ public class ParamStruct {
 	}
 
 	/**
-	 * @param filterParam the filterParam to set
+	 * @param filterParam
+	 *            the filterParam to set
 	 */
 	public void setFilterParam(Params filterParam) {
 		this.filterParam = filterParam;
@@ -66,7 +68,8 @@ public class ParamStruct {
 	}
 
 	/**
-	 * @param filterClass the filterClass to set
+	 * @param filterClass
+	 *            the filterClass to set
 	 */
 	public void setFilterClass(Class filterClass) {
 		this.filterClass = filterClass;

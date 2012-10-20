@@ -57,7 +57,7 @@ import org.gvsig.gpe.containers.Layer;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class GPELayerWithNameTest extends GPEWriterBaseTest{
+public abstract class GPELayerWithNameTest extends GPEWriterBaseTest {
 	private String layerId = "l1";
 	private String layerName = "Layer";
 	private String layerDescription = "Layer with bbox Test";
@@ -65,23 +65,26 @@ public abstract class GPELayerWithNameTest extends GPEWriterBaseTest{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#readObjects()
 	 */
 	public void readObjects() {
 		Layer[] layers = getLayers();
-		assertEquals(layers.length, 1);		
+		assertEquals(layers.length, 1);
 		Layer layer = layers[0];
 		assertEquals(layer.getName(), layerName);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#writeObjects()
 	 */
 	public void writeObjects() {
 		getWriterHandler().initialize();
-		getWriterHandler().startLayer(layerId, null, layerName, layerDescription, srs);
+		getWriterHandler().startLayer(layerId, null, layerName,
+				layerDescription, srs);
 		getWriterHandler().endLayer();
-		getWriterHandler().close();		
+		getWriterHandler().close();
 	}
 }

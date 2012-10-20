@@ -55,56 +55,60 @@ import com.iver.andami.plugins.Extension;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author vcn
  */
-public class PrintProperties extends Extension /*implements IPreferenceExtension*/ {
-    private Layout l;
-//    private static final IPreference printPropertiesPage = new PrintPropertiesPage();
-   // private Paper paper;
-    Rectangle2D.Double aux = null;
+public class PrintProperties extends Extension /*
+												 * implements
+												 * IPreferenceExtension
+												 */{
+	private Layout l;
+	// private static final IPreference printPropertiesPage = new
+	// PrintPropertiesPage();
+	// private Paper paper;
+	Rectangle2D.Double aux = null;
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param s DOCUMENT ME!
-     */
-    public void execute(String s) {
-        l = (Layout) PluginServices.getMDIManager().getActiveWindow();
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param s
+	 *            DOCUMENT ME!
+	 */
+	public void execute(String s) {
+		l = (Layout) PluginServices.getMDIManager().getActiveWindow();
 		l.showFConfig();
-        //l.showPagePropertiesWindow(Print.printerJob);
-    }
+		// l.showPagePropertiesWindow(Print.printerJob);
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public boolean isVisible() {
-        IWindow f = PluginServices.getMDIManager().getActiveWindow();
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public boolean isVisible() {
+		IWindow f = PluginServices.getMDIManager().getActiveWindow();
 
-        if (f == null) {
-            return false;
-        }
+		if (f == null) {
+			return false;
+		}
 
-        return (f instanceof Layout);
-    }
+		return (f instanceof Layout);
+	}
 
-    /**
-     * @see com.iver.mdiApp.plugins.IExtension#isEnabled()
-     */
-    public boolean isEnabled() {
-        Layout f = (Layout) PluginServices.getMDIManager().getActiveWindow();
+	/**
+	 * @see com.iver.mdiApp.plugins.IExtension#isEnabled()
+	 */
+	public boolean isEnabled() {
+		Layout f = (Layout) PluginServices.getMDIManager().getActiveWindow();
 
-        if (f == null || !f.getLayoutContext().isEditable()) {
-            return false;
-        }
+		if (f == null || !f.getLayoutContext().isEditable()) {
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 
 	/**
 	 * @see com.iver.andami.plugins.IExtension#initialize()
@@ -112,27 +116,27 @@ public class PrintProperties extends Extension /*implements IPreferenceExtension
 	public void initialize() {
 		registerIcons();
 	}
-	
-	private void registerIcons(){
+
+	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"layout-page-setup",
-				this.getClass().getClassLoader().getResource("images/Frame.gif")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/Frame.gif"));
 		PluginServices.getIconTheme().registerDefault(
 				"prepare-page-icon",
-				this.getClass().getClassLoader().getResource("images/prepare-page.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/prepare-page.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"portrait-page-setup",
-				this.getClass().getClassLoader().getResource("images/portrait-page.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/portrait-page.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"landscape-page-setup",
-				this.getClass().getClassLoader().getResource("images/landscape-page.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/landscape-page.png"));
 	}
 
-//	public IPreference getPreferencesPage() {
-//		return printPropertiesPage;
-//	}
+	// public IPreference getPreferencesPage() {
+	// return printPropertiesPage;
+	// }
 }

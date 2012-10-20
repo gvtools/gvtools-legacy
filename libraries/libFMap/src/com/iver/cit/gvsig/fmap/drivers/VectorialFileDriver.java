@@ -47,67 +47,72 @@ import com.hardcode.gdbms.driver.exceptions.CloseDriverException;
 import com.hardcode.gdbms.driver.exceptions.OpenDriverException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 
-
 /**
  * Interfaz a implementar por los drivers. El constructor no ha de tener
  * parámetros y ha de ser rápido, para las tareas de inicialización de la capa
  * se deberá de utilizar initialize.
  */
 public interface VectorialFileDriver extends VectorialDriver {
-    /**
-     * Abre el fichero para una serie de operaciones.
-     *
-     * @param f Fichero sobre el que se va a operar
-     *
-     * @throws IOException Si se produce algún error
-     */
-    void open(File f) throws OpenDriverException;
+	/**
+	 * Abre el fichero para una serie de operaciones.
+	 * 
+	 * @param f
+	 *            Fichero sobre el que se va a operar
+	 * 
+	 * @throws IOException
+	 *             Si se produce algún error
+	 */
+	void open(File f) throws OpenDriverException;
 
-    /**
-     * Cuando se terminan las operaciones sobre el fichero se invoca éste
-     * método para cerrar el descriptor que se abrió en f
-     *
-     * @throws IOException Si se produce algún error
-     */
-    void close() throws CloseDriverException;
+	/**
+	 * Cuando se terminan las operaciones sobre el fichero se invoca éste método
+	 * para cerrar el descriptor que se abrió en f
+	 * 
+	 * @throws IOException
+	 *             Si se produce algún error
+	 */
+	void close() throws CloseDriverException;
 
+	/**
+	 * Método invocado una sóla vez durante la ejecución justo antes de
+	 * visualizar una capa. En él se deben de hacer las inicializaciones
+	 * necesarias
+	 * 
+	 * @throws OpenDriverException
+	 * 
+	 * @throws IOException
+	 *             Si se produce algún error
+	 */
+	void initialize() throws ReadDriverException;
 
-    /**
-     * Método invocado una sóla vez durante la ejecución justo antes
-     * de visualizar una capa. En él se deben de hacer las inicializaciones
-     * necesarias
-     * @throws OpenDriverException
-     *
-     * @throws IOException Si se produce algún error
-     */
-    void initialize() throws ReadDriverException;
+	/**
+	 * Define los tipos de fichero que puede leer el driver. Si devuelve true,
+	 * el fichero está aceptado (es de los que el driver puede leer), si
+	 * devuelve false es porque no lo puede leer.
+	 * 
+	 * @param f
+	 *            Fichero
+	 * 
+	 * @return boolean
+	 */
+	boolean accept(File f);
 
-    /**
-     * Define los tipos de fichero que puede leer el driver. Si devuelve true,
-     * el fichero está aceptado (es de los que el driver puede leer), si
-     * devuelve false es porque no lo puede leer.
-     *
-     * @param f Fichero
-     *
-     * @return boolean
-     */
-    boolean accept(File f);
+	/**
+	 * Obtiene del fichero abierto en open la geometría index-ésima
+	 * 
+	 * @param index
+	 *            Índice de la geometría que se quiere obtener
+	 * 
+	 * @return IGeometry. Construida mediante llamadas a ShapeFactory
+	 * 
+	 * @throws IOException
+	 *             Si se produce algún error
+	 */
+	// IGeometry getShape(int index) throws IOException;
 
-    /**
-     * Obtiene del fichero abierto en open la geometría index-ésima
-     *
-     * @param index Índice de la geometría que se quiere obtener
-     *
-     * @return IGeometry. Construida mediante llamadas a ShapeFactory
-     *
-     * @throws IOException Si se produce algún error
-     */
-    // IGeometry getShape(int index) throws IOException;
-
-    /**
-     * @return the original File that we are opening.
-     */
-    File getFile();
-
+	/**
+	 * @return the original File that we are opening.
+	 */
+	File getFile();
 
 }

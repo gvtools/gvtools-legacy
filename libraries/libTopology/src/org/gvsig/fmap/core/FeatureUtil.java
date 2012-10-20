@@ -80,27 +80,26 @@ import com.vividsolutions.jts.precision.EnhancedPrecisionOp;
  * 
  */
 public class FeatureUtil {
-	
+
 	private static Logger logger = Logger.getLogger(FeatureUtil.class);
-	
+
 	private static WKBParser2 wkbParser = new WKBParser2();
-	
-	public static XMLEntity getValueAsXMLEntity(Object value){
+
+	public static XMLEntity getValueAsXMLEntity(Object value) {
 		XMLEntity solution = new XMLEntity();
 		solution.putProperty("value", value);
 		return solution;
 	}
-	
-	public static Object getValueFromXMLEntity(XMLEntity xml){
-		if(xml.contains("value"))
+
+	public static Object getValueFromXMLEntity(XMLEntity xml) {
+		if (xml.contains("value"))
 			return xml.getObjectProperty("value");
 		else
 			return null;
 	}
-	
-	
+
 	public static Value getValue(Object object, int fieldType) {
-		if(object == null)
+		if (object == null)
 			return ValueFactory.createNullValue();
 		Value solution = null;
 		switch (fieldType) {
@@ -172,135 +171,135 @@ public class FeatureUtil {
 		}
 		return solution;
 	}
-	
-	private static IGeometry geometryFromXmlByteArray(String xmlByteArray){
+
+	private static IGeometry geometryFromXmlByteArray(String xmlByteArray) {
 		String[] bytes = xmlByteArray.split(",");
 		byte[] wkbErrorGeometry = new byte[bytes.length];
-		for(int i = 0; i < bytes.length; i++){
+		for (int i = 0; i < bytes.length; i++) {
 			wkbErrorGeometry[i] = new Byte(bytes[i].trim()).byteValue();
 		}
 		return wkbParser.parse(wkbErrorGeometry);
 	}
-	
-	public static void setXMLEntity(IFeature feature, XMLEntity xml){
-		if(xml.contains("fid")){
+
+	public static void setXMLEntity(IFeature feature, XMLEntity xml) {
+		if (xml.contains("fid")) {
 			feature.setID(xml.getStringProperty("fid"));
 		}
-		
-		if(xml.contains("geometry")){
+
+		if (xml.contains("geometry")) {
 			String xmlByteArray = (String) xml.getObjectProperty("geometry");
-			feature.setGeometry( geometryFromXmlByteArray(xmlByteArray) );
+			feature.setGeometry(geometryFromXmlByteArray(xmlByteArray));
 		}
-		
-		if(xml.contains("numberOfAttributes")){
+
+		if (xml.contains("numberOfAttributes")) {
 			int numberOfAttributes = xml.getIntProperty("numberOfAttributes");
-			if(numberOfAttributes > 0){
+			if (numberOfAttributes > 0) {
 				Value[] values = new Value[numberOfAttributes];
-				for(int i = 0; i < numberOfAttributes; i++){
-					int type = xml.getIntProperty("sqlType"+i);
-					Object obj = xml.getObjectProperty("value"+i);
+				for (int i = 0; i < numberOfAttributes; i++) {
+					int type = xml.getIntProperty("sqlType" + i);
+					Object obj = xml.getObjectProperty("value" + i);
 					Value value = getValue(obj, type);
 					values[i] = value;
-				}//for
+				}// for
 				feature.setAttributes(values);
-			}//if
-		}//if numberOfAttrs
+			}// if
+		}// if numberOfAttrs
 	}
-	
-	public static IFeature getFeatureFromXmlEntity(XMLEntity xml){
+
+	public static IFeature getFeatureFromXmlEntity(XMLEntity xml) {
 		DefaultFeature solution = null;
 		String fid = null;
 		IGeometry geometry = null;
 		Value[] values = null;
-		
-		if(xml.contains("fid")){
+
+		if (xml.contains("fid")) {
 			fid = xml.getStringProperty("fid");
 		}
-		
-		if(xml.contains("geometry")){
+
+		if (xml.contains("geometry")) {
 			String xmlByteArray = (String) xml.getObjectProperty("geometry");
 			geometry = geometryFromXmlByteArray(xmlByteArray);
 		}
-		
-		if(xml.contains("numberOfAttributes")){
+
+		if (xml.contains("numberOfAttributes")) {
 			int numberOfAttributes = xml.getIntProperty("numberOfAttributes");
-			if(numberOfAttributes > 0){
+			if (numberOfAttributes > 0) {
 				values = new Value[numberOfAttributes];
-				for(int i = 0; i < numberOfAttributes; i++){
-					int type = xml.getIntProperty("sqlType"+i);
-					Object obj = xml.getObjectProperty("value"+i);
+				for (int i = 0; i < numberOfAttributes; i++) {
+					int type = xml.getIntProperty("sqlType" + i);
+					Object obj = xml.getObjectProperty("value" + i);
 					Value value = getValue(obj, type);
 					values[i] = value;
-				}//for
-			}//if
+				}// for
+			}// if
 		}
-		
+
 		solution = new DefaultFeature(geometry, values, fid);
 		return solution;
 	}
-	
-	
-	public static XMLEntity getAsXmlEntity(IFeature feature){
+
+	public static XMLEntity getAsXmlEntity(IFeature feature) {
 		XMLEntity solution = new XMLEntity();
 		String fid = feature.getID();
 		solution.putProperty("fid", fid);
-		
+
 		IGeometry errorGeometry = feature.getGeometry();
 		try {
 			byte[] wkbErrorGeometry = errorGeometry.toWKB();
 			solution.putProperty("geometry", wkbErrorGeometry);
 		} catch (IOException e) {
 			logger.error("Error trying to serialize feature to xml ");
-			return null;//FIXME Revisar si puede haber problemas devolviendo NULL
+			return null;// FIXME Revisar si puede haber problemas devolviendo
+						// NULL
 		}
-		
+
 		Value[] attributes = feature.getAttributes();
-		if(attributes != null){
+		if (attributes != null) {
 			solution.putProperty("numberOfAttributes", attributes.length);
-			for(int i = 0; i < attributes.length; i++){
+			for (int i = 0; i < attributes.length; i++) {
 				Value value = attributes[i];
 				int type = value.getSQLType();
-				Object objectValue = FeatureUtil.getJavaTypeFromValue(value, type);
-				solution.putProperty("sqlType"+i, type);
-				solution.putProperty("value"+i, objectValue);
-				
+				Object objectValue = FeatureUtil.getJavaTypeFromValue(value,
+						type);
+				solution.putProperty("sqlType" + i, type);
+				solution.putProperty("value" + i, objectValue);
+
 			}
 		}
 		return solution;
 	}
 
-	public static IFeature removeOverlappingArea(IFeature featureToEdit, 
-											 Geometry originalGeo, 
-											 Geometry errorGeo){
+	public static IFeature removeOverlappingArea(IFeature featureToEdit,
+			Geometry originalGeo, Geometry errorGeo) {
 		Geometry[] first = null;
-		if(originalGeo instanceof GeometryCollection){
+		if (originalGeo instanceof GeometryCollection) {
 			first = JtsUtil.extractGeometries((GeometryCollection) originalGeo);
-		}else
-		{
-			first = new Geometry[]{originalGeo};
+		} else {
+			first = new Geometry[] { originalGeo };
 		}
-		
+
 		Geometry[] second = null;
-		if(errorGeo instanceof GeometryCollection){
+		if (errorGeo instanceof GeometryCollection) {
 			second = JtsUtil.extractGeometries((GeometryCollection) errorGeo);
-		}else
-		{
-			second = new Geometry[]{errorGeo};
+		} else {
+			second = new Geometry[] { errorGeo };
 		}
-		
+
 		for (int i = 0; i < first.length; i++) {
 			Geometry geom = first[i];
 			Geometry partialSolution = null;
 			for (int j = 0; j < second.length; j++) {
 				Geometry aux = EnhancedPrecisionOp.difference(geom, second[j]);
-				if(partialSolution == null)
+				if (partialSolution == null)
 					partialSolution = aux;
 				else
-					partialSolution = EnhancedPrecisionOp.union(partialSolution, aux);
-			}//for
+					partialSolution = EnhancedPrecisionOp.union(
+							partialSolution, aux);
+			}// for
 			first[i] = partialSolution;
-		}//for i
-		GeometryCollection geomCol = JtsUtil.GEOMETRY_FACTORY.createGeometryCollection(first);
+		}// for i
+		GeometryCollection geomCol = JtsUtil.GEOMETRY_FACTORY
+				.createGeometryCollection(first);
 		IGeometry newFGeo = NewFConverter.toFMap(geomCol);
 		featureToEdit.setGeometry(newFGeo);
 		return featureToEdit;

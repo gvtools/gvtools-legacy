@@ -46,10 +46,9 @@ import com.iver.cit.gvsig.fmap.layers.FLyrAnnotation;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.ISpatialDB;
 
-
 /**
  * Clase con métodos estáticos para crear la estategia.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class StrategyManager {
@@ -57,26 +56,27 @@ public class StrategyManager {
 	 * Se encarga de, dada una clase que implementa el interfaz vectorial,
 	 * seleccionar la estrategia óptima de acceso a las capas, devolviendo el
 	 * objeto Strategy con la capa vectorial asociada.
-	 *
-	 * @param v SingleLayer.
-	 *
+	 * 
+	 * @param v
+	 *            SingleLayer.
+	 * 
 	 * @return Estrategia.
 	 */
 	public static Strategy getStrategy(FLyrVect v) {
-        if (v.getStrategy() != null)
-        {
-            return v.getStrategy();
-        }
-        if (v instanceof FLyrAnnotation)
-			return new AnnotationStrategy((FLayer)v);
-        if (v.getSource().getDriver() instanceof BoundedShapes) {
+		if (v.getStrategy() != null) {
+			return v.getStrategy();
+		}
+		if (v instanceof FLyrAnnotation)
+			return new AnnotationStrategy((FLayer) v);
+		if (v.getSource().getDriver() instanceof BoundedShapes) {
 			return new ShpStrategy((FLayer) v);
 		} else {
-		    if (v.getSource() instanceof ISpatialDB)
-		        return new DBStrategy((FLayer) v);
-		    /* else if (v.getSource() instanceof WFSAdapter)
-		        return new WFSStrategy((FLayer) v); */
-
+			if (v.getSource() instanceof ISpatialDB)
+				return new DBStrategy((FLayer) v);
+			/*
+			 * else if (v.getSource() instanceof WFSAdapter) return new
+			 * WFSStrategy((FLayer) v);
+			 */
 
 		}
 		return new DefaultStrategy((FLayer) v);

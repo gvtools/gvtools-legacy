@@ -19,7 +19,8 @@
 package org.gvsig.raster.dataset;
 
 /**
- * Tags que corresponden al fichero XML .rmf (Raster Metafile) 
+ * Tags que corresponden al fichero XML .rmf (Raster Metafile)
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class RasterMetaFileTags {
@@ -41,7 +42,7 @@ public class RasterMetaFileTags {
 	public static final String PX_WIDTH = "ImagePxWidth";
 	public static final String PX_HEIGHT = "ImagePxHeight";
 	public static final String DIM = "Dimension";
-	
+
 	public static final String GEOPOINTS = "GeoPoints";
 	public static final String GEOPOINT = "GeoPoint";
 	public static final String GEOPOINT_PX = "PixelX";
@@ -53,7 +54,7 @@ public class RasterMetaFileTags {
 	public static final String GEOPOINT_RCENTER = "RightCenterPoint";
 	public static final String GEOPOINT_LVP = "LeftViewPort";
 	public static final String GEOPOINT_RVP = "RightViewPort";
-		
+
 	public static final String POINTS_LYR = "Layer";
 	public static final String POINTS_VP = "ViewPortData";
 	public static final String POINTS_PROJ = "Proj";

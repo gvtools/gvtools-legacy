@@ -52,10 +52,9 @@ import com.iver.cit.gvsig.fmap.core.v02.FConstant;
 import com.iver.cit.gvsig.fmap.drivers.shp.SHP;
 import com.iver.cit.gvsig.fmap.drivers.shp.ShapeFileHeader;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class SHPFileWrite {
@@ -68,13 +67,16 @@ public class SHPFileWrite {
 	private int m_cnt;
 	private FileChannel shpChannel;
 	private FileChannel shxChannel;
-//	private double flatness;
+
+	// private double flatness;
 
 	/**
 	 * Crea un nuevo SHPFileWrite.
-	 *
-	 * @param shpChannel DOCUMENT ME!
-	 * @param shxChannel DOCUMENT ME!
+	 * 
+	 * @param shpChannel
+	 *            DOCUMENT ME!
+	 * @param shxChannel
+	 *            DOCUMENT ME!
 	 */
 	public SHPFileWrite(FileChannel shpChannel, FileChannel shxChannel) {
 		this.shpChannel = shpChannel;
@@ -83,8 +85,9 @@ public class SHPFileWrite {
 
 	/**
 	 * Make sure our buffer is of size.
-	 *
-	 * @param size DOCUMENT ME!
+	 * 
+	 * @param size
+	 *            DOCUMENT ME!
 	 */
 	private void checkShapeBuffer(int size) {
 		if (m_bb.capacity() < size) {
@@ -94,8 +97,9 @@ public class SHPFileWrite {
 
 	/**
 	 * Drain internal buffers into underlying channels.
-	 *
-	 * @throws IOException DOCUMENT ME!
+	 * 
+	 * @throws IOException
+	 *             DOCUMENT ME!
 	 */
 	private void drain() throws IOException {
 		m_bb.flip();
@@ -121,8 +125,9 @@ public class SHPFileWrite {
 
 	/**
 	 * Close the underlying Channels.
-	 *
-	 * @throws IOException DOCUMENT ME!
+	 * 
+	 * @throws IOException
+	 *             DOCUMENT ME!
 	 */
 	public void close() throws IOException {
 		shpChannel.close();
@@ -133,13 +138,13 @@ public class SHPFileWrite {
 
 		if (m_indexBuffer instanceof ByteBuffer) {
 			if (m_indexBuffer != null) {
-				///NIOUtilities.clean(m_indexBuffer);
+				// /NIOUtilities.clean(m_indexBuffer);
 			}
 		}
 
 		if (m_indexBuffer instanceof ByteBuffer) {
 			if (m_indexBuffer != null) {
-				///NIOUtilities.clean(m_bb);
+				// /NIOUtilities.clean(m_bb);
 			}
 		}
 
@@ -149,17 +154,21 @@ public class SHPFileWrite {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param geometries DOCUMENT ME!
-	 * @param type DOCUMENT ME!
-	 *
-	 * @throws IOException DOCUMENT ME!
-	 * @throws ShapefileException DOCUMENT ME!
+	 * 
+	 * @param geometries
+	 *            DOCUMENT ME!
+	 * @param type
+	 *            DOCUMENT ME!
+	 * 
+	 * @throws IOException
+	 *             DOCUMENT ME!
+	 * @throws ShapefileException
+	 *             DOCUMENT ME!
 	 */
-	public void write(IGeometry[] geometries, int type)
-		throws IOException, ShapefileException {
+	public void write(IGeometry[] geometries, int type) throws IOException,
+			ShapefileException {
 		m_shape = SHP.create(type);
-//		m_shape.setFlatness(flatness);
+		// m_shape.setFlatness(flatness);
 		writeHeaders(geometries, type);
 
 		m_pos = m_bb.position();
@@ -173,14 +182,17 @@ public class SHPFileWrite {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param geometries DOCUMENT ME!
-	 * @param type DOCUMENT ME!
-	 *
-	 * @throws IOException DOCUMENT ME!
+	 * 
+	 * @param geometries
+	 *            DOCUMENT ME!
+	 * @param type
+	 *            DOCUMENT ME!
+	 * 
+	 * @throws IOException
+	 *             DOCUMENT ME!
 	 */
 	private void writeHeaders(IGeometry[] geometries, int type)
-		throws IOException {
+			throws IOException {
 		int fileLength = 100;
 		Rectangle2D extent = null;
 
@@ -191,10 +203,10 @@ public class SHPFileWrite {
 			fileLength += size;
 
 			if (extent == null) {
-				extent = new Rectangle2D.Double(fgeometry.getBounds2D().getMinX(),
-						fgeometry.getBounds2D().getMinY(),
-						fgeometry.getBounds2D().getWidth(),
-						fgeometry.getBounds2D().getHeight());
+				extent = new Rectangle2D.Double(fgeometry.getBounds2D()
+						.getMinX(), fgeometry.getBounds2D().getMinY(),
+						fgeometry.getBounds2D().getWidth(), fgeometry
+								.getBounds2D().getHeight());
 			} else {
 				extent.add(fgeometry.getBounds2D());
 			}
@@ -205,21 +217,24 @@ public class SHPFileWrite {
 
 	/**
 	 * Writes shape header (100 bytes)
-	 *
-	 * @param bounds DOCUMENT ME!
-	 * @param type DOCUMENT ME!
-	 * @param numberOfGeometries DOCUMENT ME!
-	 * @param fileLength DOCUMENT ME!
-	 *
-	 * @throws IOException DOCUMENT ME!
+	 * 
+	 * @param bounds
+	 *            DOCUMENT ME!
+	 * @param type
+	 *            DOCUMENT ME!
+	 * @param numberOfGeometries
+	 *            DOCUMENT ME!
+	 * @param fileLength
+	 *            DOCUMENT ME!
+	 * 
+	 * @throws IOException
+	 *             DOCUMENT ME!
 	 */
 	public void writeHeaders(Rectangle2D bounds, int type,
-		int numberOfGeometries, int fileLength) throws IOException {
-		/*try {
-		   handler = type.getShapeHandler();
-		   } catch (ShapefileException se) {
-		     throw new RuntimeException("unexpected Exception",se);
-		   }
+			int numberOfGeometries, int fileLength) throws IOException {
+		/*
+		 * try { handler = type.getShapeHandler(); } catch (ShapefileException
+		 * se) { throw new RuntimeException("unexpected Exception",se); }
 		 */
 		if (m_bb == null) {
 			allocateBuffers();
@@ -231,12 +246,13 @@ public class SHPFileWrite {
 		ShapeFileHeader header = new ShapeFileHeader();
 
 		header.write(m_bb, type, numberOfGeometries, fileLength / 2,
-			bounds.getMinX(), bounds.getMinY(), bounds.getMaxX(),
-			bounds.getMaxY(), 0, 0, 0, 0);
+				bounds.getMinX(), bounds.getMinY(), bounds.getMaxX(),
+				bounds.getMaxY(), 0, 0, 0, 0);
 
 		header.write(m_indexBuffer, type, numberOfGeometries,
-			50 + (4 * numberOfGeometries), bounds.getMinX(), bounds.getMinY(),
-			bounds.getMaxX(), bounds.getMaxY(), 0, 0, 0, 0);
+				50 + (4 * numberOfGeometries), bounds.getMinX(),
+				bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY(), 0, 0, 0,
+				0);
 
 		m_offset = 50;
 		m_type = type;
@@ -246,22 +262,21 @@ public class SHPFileWrite {
 		shxChannel.position(0);
 		drain();
 	}
-	public synchronized int writeIGeometry(IGeometry g) throws IOException, ShapefileException
-	{
+
+	public synchronized int writeIGeometry(IGeometry g) throws IOException,
+			ShapefileException {
 		int shapeType = getShapeType(g.getGeometryType());
 		m_shape = SHP.create(shapeType);
-//		m_shape.setFlatness(flatness);
+		// m_shape.setFlatness(flatness);
 		return writeGeometry(g);
 	}
 
-
-
 	/**
 	 * Writes a single Geometry.
-	 *
+	 * 
 	 * @param g
-	 * @return the position of buffer (after the last geometry, it will allow you to
-	 * write the file size in the header.
+	 * @return the position of buffer (after the last geometry, it will allow
+	 *         you to write the file size in the header.
 	 * @throws IOException
 	 */
 	public synchronized int writeGeometry(IGeometry g) throws IOException {
@@ -292,7 +307,7 @@ public class SHPFileWrite {
 		m_bb.putInt(m_type);
 		m_shape.write(m_bb, g);
 
-		///assert (length * 2 == (m_bb.position() - m_pos) - 8);
+		// /assert (length * 2 == (m_bb.position() - m_pos) - 8);
 		m_pos = m_bb.position();
 
 		// write to the shx
@@ -301,19 +316,22 @@ public class SHPFileWrite {
 		m_offset += (length + 4);
 		drain();
 
-		///assert(m_bb.position() == 0);
+		// /assert(m_bb.position() == 0);
 		return m_pos; // Devolvemos hasta donde hemos escrito
 	}
 
 	/**
-	 * Returns a shapeType compatible with shapeFile constants from a gvSIG's IGeometry type
+	 * Returns a shapeType compatible with shapeFile constants from a gvSIG's
+	 * IGeometry type
+	 * 
 	 * @param geometryType
-	 * @return a shapeType compatible with shapeFile constants from a gvSIG's IGeometry type
+	 * @return a shapeType compatible with shapeFile constants from a gvSIG's
+	 *         IGeometry type
 	 */
 	public int getShapeType(int geometryType) {
-		int type=geometryType;
-		if (geometryType>=FShape.M) {
-			type=geometryType-FShape.M;
+		int type = geometryType;
+		if (geometryType >= FShape.M) {
+			type = geometryType - FShape.M;
 			switch (type) {
 			case (FShape.POINT):
 				return FConstant.SHAPE_TYPE_POINTM;
@@ -325,10 +343,11 @@ public class SHPFileWrite {
 				return FConstant.SHAPE_TYPE_POLYGONM;
 
 			case FShape.MULTIPOINT:
-				return FConstant.SHAPE_TYPE_MULTIPOINTM; //TODO falta aclarar cosas aquï¿½.
+				return FConstant.SHAPE_TYPE_MULTIPOINTM; // TODO falta aclarar
+															// cosas aquï¿½.
 			}
-		}else if (geometryType>=FShape.Z){
-			type=geometryType-FShape.Z;
+		} else if (geometryType >= FShape.Z) {
+			type = geometryType - FShape.Z;
 			switch (geometryType - FShape.Z) {
 			case (FShape.POINT):
 				return FConstant.SHAPE_TYPE_POINTZ;
@@ -340,32 +359,34 @@ public class SHPFileWrite {
 				return FConstant.SHAPE_TYPE_POLYGONZ;
 
 			case FShape.MULTIPOINT:
-				return FConstant.SHAPE_TYPE_MULTIPOINTZ; //TODO falta aclarar cosas aquí.
-		}
+				return FConstant.SHAPE_TYPE_MULTIPOINTZ; // TODO falta aclarar
+															// cosas aquí.
+			}
 
-		}else{
+		} else {
 			switch (geometryType) {
-				case FShape.POINT:
-					return FConstant.SHAPE_TYPE_POINT;
+			case FShape.POINT:
+				return FConstant.SHAPE_TYPE_POINT;
 
-				case FShape.LINE:
-				case FShape.ELLIPSE:
-				case FShape.CIRCLE:
-				case FShape.ARC:
-					return FConstant.SHAPE_TYPE_POLYLINE;
+			case FShape.LINE:
+			case FShape.ELLIPSE:
+			case FShape.CIRCLE:
+			case FShape.ARC:
+				return FConstant.SHAPE_TYPE_POLYLINE;
 
-				case FShape.POLYGON:
-					return FConstant.SHAPE_TYPE_POLYGON;
+			case FShape.POLYGON:
+				return FConstant.SHAPE_TYPE_POLYGON;
 
-				case FShape.MULTIPOINT:
-					return FConstant.SHAPE_TYPE_MULTIPOINT; //TODO falta aclarar cosas aquí.
+			case FShape.MULTIPOINT:
+				return FConstant.SHAPE_TYPE_MULTIPOINT; // TODO falta aclarar
+														// cosas aquí.
 			}
 		}
-			return FConstant.SHAPE_TYPE_NULL;
-		}
+		return FConstant.SHAPE_TYPE_NULL;
+	}
 
-//	public void setFlatness(double flatness) {
-//		this.flatness=flatness;
-//	}
+	// public void setFlatness(double flatness) {
+	// this.flatness=flatness;
+	// }
 
 }

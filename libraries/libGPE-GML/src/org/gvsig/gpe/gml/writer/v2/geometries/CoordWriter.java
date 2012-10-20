@@ -80,56 +80,64 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
 /**
  * It parses a gml:CoordType object. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;gml:coord&gt;&lt;gml:X&gt;0&lt;/gml:X&gt;&lt;gml:Y&gt;0&lt;/gml:Y&gt;&lt;/gml:coord&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class CoordWriter {
 
 	/**
 	 * It writes a gml:Coord tag list
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param coords
-	 * A coordinates sequence
+	 *            A coordinates sequence
 	 * @throws IOException
 	 */
-	public void write(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor handler, 
-			ICoordinateSequence coords) throws IOException{
+	public void write(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler, ICoordinateSequence coords)
+			throws IOException {
 		double[] buffer = new double[coords.iterator().getDimension()];
-		while (coords.iterator().hasNext()){
+		while (coords.iterator().hasNext()) {
 			coords.iterator().next(buffer);
 			writer.writeStartElement(GMLTags.GML_COORD);
-			writeOneCoordinate(writer,handler,buffer);
+			writeOneCoordinate(writer, handler, buffer);
 			writer.writeEndElement();
 		}
 	}
 
 	/**
 	 * Writes the content of a gml:coord tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param buffer
-	 * A buffer of coordinates
+	 *            A buffer of coordinates
 	 * @throws IOException
 	 */
-	private void writeOneCoordinate(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor handler, double[] buffer) throws IOException{		
-		//TODO Jorge: This method is not fine!!!
+	private void writeOneCoordinate(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler, double[] buffer)
+			throws IOException {
+		// TODO Jorge: This method is not fine!!!
 		writer.writeStartElement(GMLTags.GML_X);
 		writer.writeValue(buffer[0]);
 		writer.writeEndElement();
 		writer.writeStartElement(GMLTags.GML_Y);
 		writer.writeValue(buffer[1]);
 		writer.writeEndElement();
-		if (buffer.length > 2){
+		if (buffer.length > 2) {
 			writer.writeStartElement(GMLTags.GML_Z);
 			writer.writeValue(buffer[2]);
 			writer.writeEndElement();

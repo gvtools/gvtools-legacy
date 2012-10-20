@@ -40,10 +40,6 @@
  */
 package org.gvsig.symbology.fmap.symbols;
 
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.geom.AffineTransform;
-
 import org.apache.log4j.Logger;
 import org.jfree.chart.plot.PiePlot3D;
 import org.jfree.chart.plot.Plot;
@@ -51,78 +47,76 @@ import org.jfree.data.general.DefaultKeyedValuesDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.util.Rotation;
 
-import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
-import com.iver.cit.gvsig.fmap.core.symbols.SymbolDrawingException;
 import com.iver.utiles.XMLEntity;
 
 public class PieChart3DSymbol extends JFreeChartSymbol {
 	private boolean clockwise;
-    private String[] keys;
-    private double[] values;
-    private DefaultKeyedValuesDataset dataset;
-    private boolean circular;
-    private double minimumAngleToDraw;
-    private double depthFactor;
-    private boolean ignoreZeroValues;
-    private float foregroundAlpha;
-	
+	private String[] keys;
+	private double[] values;
+	private DefaultKeyedValuesDataset dataset;
+	private boolean circular;
+	private double minimumAngleToDraw;
+	private double depthFactor;
+	private boolean ignoreZeroValues;
+	private float foregroundAlpha;
 
-   	private void updateDataset() {
-		if (dataset == null) dataset = new DefaultKeyedValuesDataset();
-    	else dataset.clear();
+	private void updateDataset() {
+		if (dataset == null)
+			dataset = new DefaultKeyedValuesDataset();
+		else
+			dataset.clear();
 
-    	for (int i = 0; keys != null &&  i < keys.length; i++) {
-    		dataset.insertValue(i, keys[i], values[i]);
-    	}
+		for (int i = 0; keys != null && i < keys.length; i++) {
+			dataset.insertValue(i, keys[i], values[i]);
+		}
 	}
 
-   
-    
-    protected Plot getMapPlot() {
-    	if (mapPlot == null) {
+	protected Plot getMapPlot() {
+		if (mapPlot == null) {
 			PiePlot3D myMapPlot;
-    		try {
+			try {
 				myMapPlot = (PiePlot3D) getOutlinePlot().clone();
-        	} catch (CloneNotSupportedException e) {
-				Logger.getLogger(getClass()).error("Error cloning the PieChartSymbol's plot, check consistency");
+			} catch (CloneNotSupportedException e) {
+				Logger.getLogger(getClass())
+						.error("Error cloning the PieChartSymbol's plot, check consistency");
 				myMapPlot = new PiePlot3D();
 			}
-    	
-        	myMapPlot.setBackgroundPaint(null);
-        	myMapPlot.setOutlinePaint(null);
-        	myMapPlot.setLabelBackgroundPaint(null);
-        	myMapPlot.setLabelGenerator(null); 
-        	myMapPlot.setLabelLinksVisible(false);
-        	mapPlot = myMapPlot;
-    	} 
+
+			myMapPlot.setBackgroundPaint(null);
+			myMapPlot.setOutlinePaint(null);
+			myMapPlot.setLabelBackgroundPaint(null);
+			myMapPlot.setLabelGenerator(null);
+			myMapPlot.setLabelLinksVisible(false);
+			mapPlot = myMapPlot;
+		}
 		return mapPlot;
 	}
 
 	protected Plot getOutlinePlot() {
 		if (outlinePlot == null) {
 			PiePlot3D myMapPlot = new PiePlot3D();
-    		
-        	myMapPlot.setLabelGap(0);
-        	myMapPlot.setIgnoreZeroValues(ignoreZeroValues);
-			
+
+			myMapPlot.setLabelGap(0);
+			myMapPlot.setIgnoreZeroValues(ignoreZeroValues);
+
 			updateDataset();
-	    	
-			
+
 			myMapPlot.setDataset(new DefaultPieDataset(dataset));
-			myMapPlot.setDirection(clockwise ? Rotation.CLOCKWISE : Rotation.ANTICLOCKWISE);
+			myMapPlot.setDirection(clockwise ? Rotation.CLOCKWISE
+					: Rotation.ANTICLOCKWISE);
 			myMapPlot.setDepthFactor(depthFactor);
 			myMapPlot.setMinimumArcAngleToDraw(minimumAngleToDraw);
-			myMapPlot.setCircular(circular); 
+			myMapPlot.setCircular(circular);
 			myMapPlot.setStartAngle(getRotation());
 			/*
-			myMapPlot.setDarkerSides(false); // requires jfreechart 1.0.10
-			myMapPlot.setForegroundAlpha(foregroundAlpha); // requires jfreechart 1.0.10
-			*/
+			 * myMapPlot.setDarkerSides(false); // requires jfreechart 1.0.10
+			 * myMapPlot.setForegroundAlpha(foregroundAlpha); // requires
+			 * jfreechart 1.0.10
+			 */
 			outlinePlot = myMapPlot;
 		}
 		return outlinePlot;
 	}
-
 
 	public XMLEntity getXMLEntity() {
 		XMLEntity xml = new XMLEntity();
@@ -139,7 +133,7 @@ public class PieChart3DSymbol extends JFreeChartSymbol {
 		xml.putProperty("ignoreZeroValues", ignoreZeroValues);
 		xml.putProperty("foregroundAlpha", foregroundAlpha);
 		return xml;
-		
+
 	}
 
 	public void setXMLEntity(XMLEntity xml) {
@@ -159,7 +153,7 @@ public class PieChart3DSymbol extends JFreeChartSymbol {
 	public void setIgnoreZeroValues(boolean ignoreZeroValues) {
 		this.ignoreZeroValues = ignoreZeroValues;
 	}
-	
+
 	public boolean isIgnoreZeroValues() {
 		return ignoreZeroValues;
 	}
@@ -171,15 +165,15 @@ public class PieChart3DSymbol extends JFreeChartSymbol {
 	public double[] getValues() {
 		return values;
 	}
-	
+
 	public void setValues(double[] values) {
 		this.values = values;
 	}
-	
+
 	public String[] getKeys() {
 		return keys;
 	}
-	
+
 	public void setKeys(String[] keys) {
 		this.keys = keys;
 	}
@@ -216,13 +210,9 @@ public class PieChart3DSymbol extends JFreeChartSymbol {
 		this.depthFactor = depthFactor;
 	}
 
-
-
 	public float getForegroundAlpha() {
 		return foregroundAlpha;
 	}
-
-
 
 	public void setForegroundAlpha(float foregroundAlpha) {
 		this.foregroundAlpha = foregroundAlpha;

@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.impl.lineorpolygontopoints.gui;
 
 import java.awt.BorderLayout;
@@ -62,31 +62,32 @@ import com.iver.cit.gvsig.geoprocess.core.fmap.GeoprocessException;
 import com.iver.cit.gvsig.geoprocess.core.gui.AbstractGeoprocessGridbagPanel;
 import com.iver.cit.gvsig.geoprocess.impl.lineorpolygontopoints.ILineToPointsGeoprocessUserEntries;
 
-public class LineToPointsGeoprocessPanel 
-	extends AbstractGeoprocessGridbagPanel implements ILineToPointsGeoprocessUserEntries{
+public class LineToPointsGeoprocessPanel extends AbstractGeoprocessGridbagPanel
+		implements ILineToPointsGeoprocessUserEntries {
 
 	private static final long serialVersionUID = 6833607794721720432L;
 
 	private JTextField distToleranceTextField;
-	
+
 	public LineToPointsGeoprocessPanel(FLayers arg0) {
 		super(arg0, PluginServices.getText(null, "LineOrPolygonToPoints"));
 	}
 
 	protected void addSpecificDesign() {
-		
+
 		JPanel aux = new JPanel(new BorderLayout());
-		String text = PluginServices.getText(this,"distTolerance")+":";
+		String text = PluginServices.getText(this, "distTolerance") + ":";
 		distToleranceTextField = getDistToleranceTextField();
-        aux.add(distToleranceTextField, BorderLayout.WEST);
-       
-        addComponent(text, aux, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5) );
+		aux.add(distToleranceTextField, BorderLayout.WEST);
+
+		addComponent(text, aux, GridBagConstraints.HORIZONTAL, new Insets(5, 5,
+				5, 5));
 		initSelectedItemsJCheckBox();
 		updateNumSelectedFeaturesLabel();
 	}
 
 	private JTextField getDistToleranceTextField() {
-		if(this.distToleranceTextField == null){
+		if (this.distToleranceTextField == null) {
 			this.distToleranceTextField = new JTextField(15);
 		}
 		return distToleranceTextField;
@@ -94,20 +95,18 @@ public class LineToPointsGeoprocessPanel
 
 	protected void processLayerComboBoxStateChange(ItemEvent arg0) {
 	}
-	
-	
+
 	public boolean onlyFirstLayerSelected() {
 		return isFirstOnlySelected();
 	}
 
 	public double getClusterTolerance() throws GeoprocessException {
-			try {
-				String strDist = this.distToleranceTextField.getText();
-				return Double.parseDouble(strDist);
-			} catch (NumberFormatException ex) {
-				throw new GeoprocessException(
-						"Distancia de tolerancia introducida no numérica");
-			}
+		try {
+			String strDist = this.distToleranceTextField.getText();
+			return Double.parseDouble(strDist);
+		} catch (NumberFormatException ex) {
+			throw new GeoprocessException(
+					"Distancia de tolerancia introducida no numérica");
+		}
 	}
 }
-

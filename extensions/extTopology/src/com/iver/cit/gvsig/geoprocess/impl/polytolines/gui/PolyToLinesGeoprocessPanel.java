@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.impl.polytolines.gui;
 
 import java.awt.event.ItemEvent;
@@ -55,11 +55,10 @@ import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.geoprocess.core.gui.AbstractGeoprocessGridbagPanel;
 import com.iver.cit.gvsig.geoprocess.impl.polytolines.IPolyToLinesGeoprocessUserEntries;
 
-public class PolyToLinesGeoprocessPanel 
-	extends AbstractGeoprocessGridbagPanel implements IPolyToLinesGeoprocessUserEntries{
+public class PolyToLinesGeoprocessPanel extends AbstractGeoprocessGridbagPanel
+		implements IPolyToLinesGeoprocessUserEntries {
 
 	private static final long serialVersionUID = 6833607794721720432L;
-
 
 	public PolyToLinesGeoprocessPanel(FLayers arg0) {
 		super(arg0, PluginServices.getText(null, "PolygonToLines"));
@@ -70,14 +69,10 @@ public class PolyToLinesGeoprocessPanel
 		updateNumSelectedFeaturesLabel();
 	}
 
-	
-
 	protected void processLayerComboBoxStateChange(ItemEvent arg0) {
 	}
-	
-	
+
 	public boolean onlyFirstLayerSelected() {
 		return isFirstOnlySelected();
 	}
 }
-

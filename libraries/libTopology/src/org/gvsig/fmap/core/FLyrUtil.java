@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.fmap.core;
 
 import java.util.ArrayList;
@@ -65,83 +65,81 @@ import com.iver.cit.gvsig.fmap.spatialindex.RTreeJsi;
 
 /**
  * Utility methods to work with FMap layers
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class FLyrUtil {
 	/**
-	 * From a given FLyrVect it returns an INearestNeighbourFinder
-	 * spatial index.
+	 * From a given FLyrVect it returns an INearestNeighbourFinder spatial
+	 * index.
 	 * 
 	 * @param lyr
 	 * @return
 	 */
-	public static INearestNeighbourFinder getNearestNeighbourFinder(FLyrVect lyr) throws ReadDriverException{
+	public static INearestNeighbourFinder getNearestNeighbourFinder(FLyrVect lyr)
+			throws ReadDriverException {
 		ISpatialIndex spatialIndex = lyr.getISpatialIndex();
-		if( spatialIndex instanceof INearestNeighbourFinder){
+		if (spatialIndex instanceof INearestNeighbourFinder) {
 			return (INearestNeighbourFinder) spatialIndex;
 		}
-		
+
 		RTreeJsi newSptIdx = new RTreeJsi();
 		newSptIdx.create();
 		IFeatureIterator iterator = lyr.getSource().getFeatureIterator();
-		while(iterator.hasNext()){
+		while (iterator.hasNext()) {
 			IFeature feature = iterator.next();
 			IGeometry geometry = feature.getGeometry();
-			if(geometry != null)
-				newSptIdx.insert(geometry.getBounds2D(), Integer.parseInt(feature.getID()));
+			if (geometry != null)
+				newSptIdx.insert(geometry.getBounds2D(),
+						Integer.parseInt(feature.getID()));
 		}
-		return newSptIdx;	
+		return newSptIdx;
 	}
-	
-	public static  List<FLyrVect> getActiveVectorialLyrs(MapContext mapContext){
+
+	public static List<FLyrVect> getActiveVectorialLyrs(MapContext mapContext) {
 		List<FLyrVect> activeVectorialLyrs = new ArrayList<FLyrVect>();
 		LayersIterator it = new LayersIterator(mapContext.getLayers());
-		while (it.hasNext())
-		{
+		while (it.hasNext()) {
 			FLayer aux = (FLayer) it.next();
 			if (!aux.isActive())
 				continue;
 
-			if(aux instanceof FLyrVect)
-			{
-				activeVectorialLyrs.add((FLyrVect)aux);
-			}//if
-		}//while
+			if (aux instanceof FLyrVect) {
+				activeVectorialLyrs.add((FLyrVect) aux);
+			}// if
+		}// while
 		return activeVectorialLyrs;
 	}
-	
-	public static List<FLyrVect> getVectorialLayers(MapContext mapContext){
+
+	public static List<FLyrVect> getVectorialLayers(MapContext mapContext) {
 		List<FLyrVect> activeVectorialLyrs = new ArrayList<FLyrVect>();
 		LayersIterator it = new LayersIterator(mapContext.getLayers());
-		while (it.hasNext())
-		{
+		while (it.hasNext()) {
 			FLayer aux = (FLayer) it.next();
-			if(aux instanceof FLyrVect)
-			{
-				activeVectorialLyrs.add((FLyrVect)aux);
-			}//if
-		}//while
+			if (aux instanceof FLyrVect) {
+				activeVectorialLyrs.add((FLyrVect) aux);
+			}// if
+		}// while
 		return activeVectorialLyrs;
 	}
-	
-	public static List<FLyrVect> getLayersOfType(MapContext mapContext, int shapeType){
+
+	public static List<FLyrVect> getLayersOfType(MapContext mapContext,
+			int shapeType) {
 		List<FLyrVect> activeVectorialLyrs = new ArrayList<FLyrVect>();
 		LayersIterator it = new LayersIterator(mapContext.getLayers());
-		while (it.hasNext())
-		{
+		while (it.hasNext()) {
 			FLayer aux = (FLayer) it.next();
-			if(aux instanceof FLyrVect)
-			{
-				FLyrVect aux2 = (FLyrVect)aux;
+			if (aux instanceof FLyrVect) {
+				FLyrVect aux2 = (FLyrVect) aux;
 				try {
-					if(aux2.getShapeType() == shapeType)
-						activeVectorialLyrs.add((FLyrVect)aux);
+					if (aux2.getShapeType() == shapeType)
+						activeVectorialLyrs.add((FLyrVect) aux);
 				} catch (ReadDriverException e) {
 					continue;
 				}
-			}//if
-		}//while
+			}// if
+		}// while
 		return activeVectorialLyrs;
 	}
 

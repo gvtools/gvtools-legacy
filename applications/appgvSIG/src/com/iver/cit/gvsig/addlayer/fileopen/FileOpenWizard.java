@@ -50,21 +50,21 @@ import com.iver.utiles.listManager.ListManagerListener;
 
 /**
  * Pestaña donde estara la apertura de ficheros
- *
+ * 
  * @version 04/09/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 	private static final String OPEN_LAYER_FILE_CHOOSER_ID = "OPEN_LAYER_FILE_CHOOSER_ID";
 	private static final long serialVersionUID = 335310147513197564L;
-	private static String     lastPath        = null;
-	private JPanel            jPanel2         = null;
-	private JFileChooser      fileChooser     = null;
-	private CRSSelectPanel    jPanelProj      = null;
-	private ListManagerSkin   listManagerSkin = null;
-	private boolean           projection      = false;
-	static private FileFilter lastFileFilter  = null;
-	private TitledBorder      titledBorder    = null;
+	private static String lastPath = null;
+	private JPanel jPanel2 = null;
+	private JFileChooser fileChooser = null;
+	private CRSSelectPanel jPanelProj = null;
+	private ListManagerSkin listManagerSkin = null;
+	private boolean projection = false;
+	static private FileFilter lastFileFilter = null;
+	private TitledBorder titledBorder = null;
 
 	/**
 	 * Lista de manejadores de ficheros (extensiones)
@@ -82,19 +82,24 @@ public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 	/**
 	 * Construye un FileOpenWizard usando el punto de extension pasado por
 	 * parametro
+	 * 
 	 * @param nameExtension
 	 */
 	public FileOpenWizard(String nameExtension) {
 		this(nameExtension, true);
 	}
+
 	/**
 	 * Construye un FileOpenWizard usando el punto de extension pasado por
 	 * parametro
+	 * 
 	 * @param nameExtension
 	 */
 	public FileOpenWizard(String nameExtension, boolean proj) {
-		ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
-		ExtensionPoint extensionPoint = (ExtensionPoint) extensionPoints.get(nameExtension);
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+		ExtensionPoint extensionPoint = (ExtensionPoint) extensionPoints
+				.get(nameExtension);
 		if (extensionPoint == null)
 			return;
 
@@ -118,6 +123,7 @@ public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 
 	/**
 	 * Creates a new FileOpenWizard object.
+	 * 
 	 * @param driverClasses
 	 * @param proj
 	 */
@@ -127,6 +133,7 @@ public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 
 	/**
 	 * Creates a new FileOpenWizard object.
+	 * 
 	 * @param driverClasses
 	 */
 	public FileOpenWizard(IFileOpen[] driverClasses) {
@@ -135,6 +142,7 @@ public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 
 	/**
 	 * Creates a new FileOpenWizard object.
+	 * 
 	 * @param driverClasses
 	 * @param proj
 	 * @param title
@@ -165,6 +173,7 @@ public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.gui.WizardPanel#initWizard()
 	 */
 	public void initWizard() {
@@ -182,7 +191,8 @@ public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 	}
 
 	public File[] getFiles() {
-		MyFile[] files = (MyFile[]) getListManagerSkin().getListManager().getListModel().getObjects().toArray(new MyFile[0]);
+		MyFile[] files = (MyFile[]) getListManagerSkin().getListManager()
+				.getListModel().getObjects().toArray(new MyFile[0]);
 		File[] ret = new File[files.length];
 		int pos = files.length - 1;
 		for (int i = 0; i < files.length; i++) {
@@ -193,11 +203,13 @@ public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 	}
 
 	public MyFile[] getMyFiles() {
-		return (MyFile[]) getListManagerSkin().getListManager().getListModel().getObjects().toArray(new MyFile[0]);
+		return (MyFile[]) getListManagerSkin().getListManager().getListModel()
+				.getObjects().toArray(new MyFile[0]);
 	}
 
 	/**
 	 * This method initializes jPanel2
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel2() {
@@ -217,14 +229,18 @@ public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 
 	private TitledBorder getTitledBorder() {
 		if (titledBorder == null) {
-			titledBorder = BorderFactory.createTitledBorder(null, PluginServices.getText(this, "Seleccionar_fichero"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null);
+			titledBorder = BorderFactory.createTitledBorder(null,
+					PluginServices.getText(this, "Seleccionar_fichero"),
+					TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, null);
 			titledBorder.setTitle(PluginServices.getText(this, "Capas"));
 		}
 		return titledBorder;
 	}
 
 	public String[] getDriverNames() {
-		MyFile[] files = (MyFile[]) getListManagerSkin().getListManager().getListModel().getObjects().toArray(new MyFile[0]);
+		MyFile[] files = (MyFile[]) getListManagerSkin().getListManager()
+				.getListModel().getObjects().toArray(new MyFile[0]);
 		String[] ret = new String[files.length];
 		int pos = files.length - 1;
 
@@ -237,11 +253,13 @@ public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 
 	/**
 	 * This method initializes jPanel
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private CRSSelectPanel getJPanelProj() {
 		if (jPanelProj == null) {
-			CoordinateReferenceSystem crs = ProjectionUtils.getCRS("EPSG:23030");
+			CoordinateReferenceSystem crs = ProjectionUtils
+					.getCRS("EPSG:23030");
 			if (PluginServices.getMainFrame() != null) {
 				crs = AddLayerDialog.getLastCrs();
 			}
@@ -262,9 +280,9 @@ public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 		return jPanelProj;
 	}
 
-
 	/**
 	 * This method initializes listManagerDemoSkin
+	 * 
 	 * @return ListManagerSkin
 	 */
 	private ListManagerSkin getListManagerSkin() {
@@ -278,6 +296,7 @@ public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.utiles.listManager.ListManagerListener#addObjects()
 	 */
 	public Object[] addObjects() {
@@ -350,7 +369,10 @@ public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.utiles.listManager.ListManagerListener#getProperties(java.lang.Object)
+	 * 
+	 * @see
+	 * com.iver.utiles.listManager.ListManagerListener#getProperties(java.lang
+	 * .Object)
 	 */
 	public Object getProperties(Object selected) {
 		return null;
@@ -358,6 +380,7 @@ public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.gui.WizardPanel#getLayer()
 	 */
 	public FLayer getLayer() {
@@ -366,6 +389,7 @@ public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 
 	/**
 	 * Obtiene la última ruta seleccionada al añadir ficheros.
+	 * 
 	 * @return Ruta del último fichero seleccionado
 	 */
 	public static String getLastPath() {
@@ -374,10 +398,12 @@ public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 
 	/**
 	 * Asigna la última ruta en una selección de ficheros de disco. Es necesario
-	 * poder hacer esta asignación desde fuera de FileOpenWizard ya que este path debe
-	 * ser común a toda la aplicación. Hay otros puntos donde se seleccionan ficheros
-	 * de disco.
-	 * @param lastPath Ruta del último fichero de disco seleccionado
+	 * poder hacer esta asignación desde fuera de FileOpenWizard ya que este
+	 * path debe ser común a toda la aplicación. Hay otros puntos donde se
+	 * seleccionan ficheros de disco.
+	 * 
+	 * @param lastPath
+	 *            Ruta del último fichero de disco seleccionado
 	 */
 	public static void setLastPath(String path) {
 		lastPath = path;

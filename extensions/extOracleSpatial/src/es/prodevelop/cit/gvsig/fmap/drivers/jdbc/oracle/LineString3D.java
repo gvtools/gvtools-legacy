@@ -48,57 +48,56 @@ import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.impl.CoordinateArraySequence;
 
-
 /**
  * Utility class to manage 3D geometries. Keeps a LineString field and an array
  * of Z.
- *
+ * 
  * @author jldominguez
  */
 public class LineString3D {
-    private LineString ls;
-    private double[] zc;
+	private LineString ls;
+	private double[] zc;
 
-    public LineString3D(LineString l, double[] z) {
-        ls = l;
-        zc = z;
-    }
+	public LineString3D(LineString l, double[] z) {
+		ls = l;
+		zc = z;
+	}
 
-    public LineString getLs() {
-        return ls;
-    }
+	public LineString getLs() {
+		return ls;
+	}
 
-    public void setLs(LineString l) {
-        ls = l;
-    }
+	public void setLs(LineString l) {
+		ls = l;
+	}
 
-    public double[] getZc() {
-        return zc;
-    }
+	public double[] getZc() {
+		return zc;
+	}
 
-    public void setZc(double[] z) {
-        zc = z;
-    }
+	public void setZc(double[] z) {
+		zc = z;
+	}
 
-    public LineString3D createReverse() {
-        double[] nz = null;
+	public LineString3D createReverse() {
+		double[] nz = null;
 
-        if (zc != null) {
-            nz = OracleSpatialUtils.reverseArray(zc);
-        }
+		if (zc != null) {
+			nz = OracleSpatialUtils.reverseArray(zc);
+		}
 
-        Coordinate[] nc = OracleSpatialUtils.reverseCoordinateArray(ls.getCoordinates());
-        GeometryFactory gf = new GeometryFactory();
-        CoordinateArraySequence ncs = new CoordinateArraySequence(nc);
-        LineString nls = null;
+		Coordinate[] nc = OracleSpatialUtils.reverseCoordinateArray(ls
+				.getCoordinates());
+		GeometryFactory gf = new GeometryFactory();
+		CoordinateArraySequence ncs = new CoordinateArraySequence(nc);
+		LineString nls = null;
 
-        if (ls instanceof LinearRing) {
-            nls = new LinearRing(ncs, gf);
-        }
-        else {
-            nls = new LineString(ncs, gf);
-        }
+		if (ls instanceof LinearRing) {
+			nls = new LinearRing(ncs, gf);
+		} else {
+			nls = new LineString(ncs, gf);
+		}
 
-        return new LineString3D(nls, nz);
-    }
+		return new LineString3D(nls, nz);
+	}
 }

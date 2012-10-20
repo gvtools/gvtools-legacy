@@ -63,51 +63,55 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 public class InteriorTypeBinding {
 	/**
 	 * It parses the gml:interior tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * An array of coordinates
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return An array of coordinates
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public ICoordinateIterator parse(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException  {
+	public ICoordinateIterator parse(IXmlStreamReader parser,
+			GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
 		boolean endFeature = false;
 		int currentTag;
 
 		double[][] coordinates = null;
 
-
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_LINEARRING)){
-					org.gvsig.gpe.gml.parser.v2.geometries.LinearRingTypeBinding linearRingBinding = handler.getProfile().getLinearRingTypeBinding();
-					ICoordinateIterator coordinatesIterator = linearRingBinding.parseCoordinates(parser, handler);
-					if (coordinatesIterator != null){
+				if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_LINEARRING)) {
+					org.gvsig.gpe.gml.parser.v2.geometries.LinearRingTypeBinding linearRingBinding = handler
+							.getProfile().getLinearRingTypeBinding();
+					ICoordinateIterator coordinatesIterator = linearRingBinding
+							.parseCoordinates(parser, handler);
+					if (coordinatesIterator != null) {
 						return coordinatesIterator;
 					}
 				}
 				break;
 			case IXmlStreamReader.END_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_INTERIOR)){						
+				if (CompareUtils
+						.compareWithNamespace(tag, GMLTags.GML_INTERIOR)) {
 					endFeature = true;
 				}
 				break;
-			case IXmlStreamReader.CHARACTERS:					
+			case IXmlStreamReader.CHARACTERS:
 
 				break;
 			}
-			if (!endFeature){					
+			if (!endFeature) {
 				currentTag = parser.next();
 				tag = parser.getName();
 			}
-		}			
+		}
 		return null;
 	}
 }

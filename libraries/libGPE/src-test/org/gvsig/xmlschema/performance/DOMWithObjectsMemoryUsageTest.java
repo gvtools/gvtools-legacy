@@ -69,7 +69,8 @@ import org.gvsig.xmlschema.utils.SchemaDocumentBuilder;
 public class DOMWithObjectsMemoryUsageTest extends MemoryUsageTest {
 
 	protected void parse(String file) throws Exception {
-		IXSSchema schema = SchemaDocumentBuilder.getInstance().parse(new FileInputStream(file));
+		IXSSchema schema = SchemaDocumentBuilder.getInstance().parse(
+				new FileInputStream(file));
 		schema.getElementDeclarations();
 		schema.getTypeDefinitions();
 	}

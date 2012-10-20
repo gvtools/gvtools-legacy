@@ -57,19 +57,20 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 /**
  * Diálogo para la calculadora de bandas.
  * 
- * @author Alejandro Muñoz Sanchez	(alejandro.munoz@uclm.es)
+ * @author Alejandro Muñoz Sanchez (alejandro.munoz@uclm.es)
  * @author Diego Guerrero Sevilla (diego.guerrero@uclm.es)
- * @version 19/10/2007 
+ * @version 19/10/2007
  */
- 
-public class GridMathDialog extends JPanel implements IWindow, ButtonsPanelListener{
+
+public class GridMathDialog extends JPanel implements IWindow,
+		ButtonsPanelListener {
 
 	private static final long serialVersionUID = -8676017674682458513L;
-	
+
 	private View view = null;
 	private GridMathPanel gridMathPanel = null;
-	private int width=630;
-	private int height=300;
+	private int width = 630;
+	private int height = 300;
 
 	/**
 	 * @see com.iver.mdiApp.ui.MDIManager.View#getViewInfo()
@@ -78,14 +79,17 @@ public class GridMathDialog extends JPanel implements IWindow, ButtonsPanelListe
 		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODELESSDIALOG);
 		m_viewinfo.setWidth(width);
 		m_viewinfo.setHeight(height);
-		m_viewinfo.setTitle(PluginServices.getText(this,"band_math"));
+		m_viewinfo.setTitle(PluginServices.getText(this, "band_math"));
 		m_viewinfo.setX(300);
 		return m_viewinfo;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener#actionButtonPressed(org.gvsig.gui.beans.buttonspanel.ButtonsPanelEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener#actionButtonPressed
+	 * (org.gvsig.gui.beans.buttonspanel.ButtonsPanelEvent)
 	 */
 	public void actionButtonPressed(ButtonsPanelEvent e) {
 		if (e.getButton() == ButtonsPanel.BUTTON_CLOSE) {
@@ -99,7 +103,9 @@ public class GridMathDialog extends JPanel implements IWindow, ButtonsPanelListe
 
 	/**
 	 * Constructor
-	 * @param view vista actual
+	 * 
+	 * @param view
+	 *            vista actual
 	 */
 	public GridMathDialog(View view) {
 		this.view = view;
@@ -108,14 +114,13 @@ public class GridMathDialog extends JPanel implements IWindow, ButtonsPanelListe
 		this.setLayout(new BorderLayout(3, 3));
 		this.add(getGridMathPanel(), java.awt.BorderLayout.CENTER);
 	}
-	
-	
+
 	/**
 	 * @return CalculatorPanel del dialogo
 	 */
 	public GridMathPanel getGridMathPanel() {
-		if (gridMathPanel==null){
-			gridMathPanel = new GridMathPanel(this,view);
+		if (gridMathPanel == null) {
+			gridMathPanel = new GridMathPanel(this, view);
 			gridMathPanel.addButtonPressedListener(this);
 		}
 		return gridMathPanel;

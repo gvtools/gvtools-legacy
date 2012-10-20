@@ -42,23 +42,23 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: TaskMonitorTimerListener.java 8714 2006-11-13 20:46:37Z azabala $
-* $Log$
-* Revision 1.4  2006-11-13 20:46:37  azabala
-* *** empty log message ***
-*
-* Revision 1.3  2006/11/06 07:29:59  jaume
-* organize imports
-*
-* Revision 1.2  2006/03/14 19:24:07  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/03/07 21:00:29  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: TaskMonitorTimerListener.java 8714 2006-11-13 20:46:37Z azabala $
+ * $Log$
+ * Revision 1.4  2006-11-13 20:46:37  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.3  2006/11/06 07:29:59  jaume
+ * organize imports
+ *
+ * Revision 1.2  2006/03/14 19:24:07  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/03/07 21:00:29  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.utiles.swing.threads;
 
 import java.awt.event.ActionEvent;
@@ -67,42 +67,42 @@ import java.awt.event.ActionListener;
 import javax.swing.Timer;
 
 /**
- * It receives timer events sended by a swing Timer and does:
- * a) Reads task advances from a IMonitorableTask.
- * b) refresh task status info of a ProgressMonitor.
+ * It receives timer events sended by a swing Timer and does: a) Reads task
+ * advances from a IMonitorableTask. b) refresh task status info of a
+ * ProgressMonitor.
+ * 
  * @author azabala
- *
+ * 
  */
 public class TaskMonitorTimerListener implements ActionListener {
 	private IProgressMonitorIF progressMonitor;
 	private IMonitorableTask task;
 	private Timer timer;
-	
+
 	public TaskMonitorTimerListener(IProgressMonitorIF progressMonitor,
-			IMonitorableTask task){
+			IMonitorableTask task) {
 		this.progressMonitor = progressMonitor;
 		this.task = task;
 	}
-	
-	public void setTimer(Timer timer){
+
+	public void setTimer(Timer timer) {
 		this.timer = timer;
 	}
-	
+
 	public void actionPerformed(ActionEvent arg0) {
 		int currentStep = task.getCurrentStep();
 		String statusNote = task.getNote();
-        progressMonitor.setCurrentStep(currentStep);
-        progressMonitor.setNote(statusNote);
-        if(progressMonitor.isCanceled()){
-        	 progressMonitor.close();
-             task.cancel();
-             timer.stop();
-        }
-        if (task.isFinished()) {
-           progressMonitor.close();
-           timer.stop();
-        }
+		progressMonitor.setCurrentStep(currentStep);
+		progressMonitor.setNote(statusNote);
+		if (progressMonitor.isCanceled()) {
+			progressMonitor.close();
+			task.cancel();
+			timer.stop();
+		}
+		if (task.isFinished()) {
+			progressMonitor.close();
+			timer.stop();
+		}
 	}
 
 }
-

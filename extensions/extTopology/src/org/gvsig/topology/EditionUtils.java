@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology;
 
 import com.iver.andami.PluginServices;
@@ -59,12 +59,13 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
  * Utility class to make edition operations for topology error correction.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 
 public class EditionUtils {
-	
-	public static void startEdition(FLyrVect[] flyrVects) throws StartEditionLayerException{
+
+	public static void startEdition(FLyrVect[] flyrVects)
+			throws StartEditionLayerException {
 		/*
 		 * FIXME FLyrVect.setEditing(true) changes the TOC's active layer, to
 		 * ensure a layer which is editing is the active in TOC. Until we could
@@ -77,19 +78,20 @@ public class EditionUtils {
 		if (mapCtrl != null) {
 			mapCtrl.getMapContext().getLayers().setActive(false);
 		}
-		
-		for(int i = 0; i < flyrVects.length; i++)
+
+		for (int i = 0; i < flyrVects.length; i++)
 			flyrVects[i].setEditing(true);
-		
+
 		if (mapCtrl != null)
 			mapCtrl.getMapContext().getLayers().setActive(false);
 		for (int i = 0; i < activeLyrs.length; i++) {
 			activeLyrs[i].setActive(true);
 		}
 	}
-	
-	public static void startEdition(FLyrVect lyr) throws StartEditionLayerException {
-		EditionUtils.startEdition(new FLyrVect[]{lyr});
+
+	public static void startEdition(FLyrVect lyr)
+			throws StartEditionLayerException {
+		EditionUtils.startEdition(new FLyrVect[] { lyr });
 	}
 
 }

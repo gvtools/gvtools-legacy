@@ -59,16 +59,18 @@ public class TestMultiLayerSymbol extends TestCase {
 		for (int i = 0; i < symbols.length; i++) {
 			if (symbols[i] instanceof IMarkerSymbol) {
 				try {
-				IMarkerSymbol marker = (IMarkerSymbol) symbols[i];
-				multiLayer.addLayer(marker);
+					IMarkerSymbol marker = (IMarkerSymbol) symbols[i];
+					multiLayer.addLayer(marker);
 				} catch (Exception e) {
-					fail("MultiLayerMarkerSymbol failed adding a '"+symbols[i].getClassName());
+					fail("MultiLayerMarkerSymbol failed adding a '"
+							+ symbols[i].getClassName());
 				}
 			} else {
 				try {
 					multiLayer.addLayer(symbols[i]);
-					fail("MultiLayerMarkerSymbol should not accept '"+symbols[i].getClassName()+"' symbols");
-				} catch (ClassCastException ccEx){
+					fail("MultiLayerMarkerSymbol should not accept '"
+							+ symbols[i].getClassName() + "' symbols");
+				} catch (ClassCastException ccEx) {
 					// this is right
 				}
 			}
@@ -80,16 +82,18 @@ public class TestMultiLayerSymbol extends TestCase {
 		for (int i = 0; i < symbols.length; i++) {
 			if (symbols[i] instanceof ILineSymbol) {
 				try {
-				ILineSymbol line = (ILineSymbol) symbols[i];
-				multiLayer.addLayer(line);
+					ILineSymbol line = (ILineSymbol) symbols[i];
+					multiLayer.addLayer(line);
 				} catch (Exception e) {
-					fail("MultiLayerLineSymbol failed adding a '"+symbols[i].getClassName());
+					fail("MultiLayerLineSymbol failed adding a '"
+							+ symbols[i].getClassName());
 				}
 			} else {
 				try {
 					multiLayer.addLayer(symbols[i]);
-					fail("MultiLayerLineSymbol should not accept '"+symbols[i].getClassName()+"' symbols");
-				} catch (ClassCastException ccEx){
+					fail("MultiLayerLineSymbol should not accept '"
+							+ symbols[i].getClassName() + "' symbols");
+				} catch (ClassCastException ccEx) {
 					// this is right
 				}
 			}
@@ -102,15 +106,17 @@ public class TestMultiLayerSymbol extends TestCase {
 			if (symbols[i] instanceof IFillSymbol) {
 				try {
 					IFillSymbol fill = (IFillSymbol) symbols[i];
-				multiLayer.addLayer(fill);
+					multiLayer.addLayer(fill);
 				} catch (Exception e) {
-					fail("MultiLayerLineSymbol failed adding a '"+symbols[i].getClassName());
+					fail("MultiLayerLineSymbol failed adding a '"
+							+ symbols[i].getClassName());
 				}
 			} else {
 				try {
 					multiLayer.addLayer(symbols[i]);
-					fail("MultiLayerLineSymbol should not accept '"+symbols[i].getClassName()+"' symbols");
-				} catch (ClassCastException ccEx){
+					fail("MultiLayerLineSymbol should not accept '"
+							+ symbols[i].getClassName() + "' symbols");
+				} catch (ClassCastException ccEx) {
 					// this is right
 				}
 			}
@@ -132,7 +138,7 @@ public class TestMultiLayerSymbol extends TestCase {
 		try {
 			multiLayer.addLayer(sym2, 3);
 			fail("MultiLayer cannot accept adding at an index larger than the amount of layers already contained");
-		} catch (IndexOutOfBoundsException ioobEx){
+		} catch (IndexOutOfBoundsException ioobEx) {
 			// this is right
 		}
 
@@ -142,8 +148,12 @@ public class TestMultiLayerSymbol extends TestCase {
 			fail("MultiLayer should accept adding at index less or equal to the layer count");
 		}
 
-		assertTrue("layer returned does not correspond with the index provided", multiLayer.getLayer(1).getDescription().equals("sym2"));
-		assertTrue("layer returned does not correspond with the index provided", multiLayer.getLayer(0).getDescription().equals("sym1"));
+		assertTrue(
+				"layer returned does not correspond with the index provided",
+				multiLayer.getLayer(1).getDescription().equals("sym2"));
+		assertTrue(
+				"layer returned does not correspond with the index provided",
+				multiLayer.getLayer(0).getDescription().equals("sym1"));
 	}
 
 	public void testLayerAdditionPositionConsistencyMultiLayer_LINE_Symbol() {
@@ -162,7 +172,7 @@ public class TestMultiLayerSymbol extends TestCase {
 		try {
 			multiLayer.addLayer(layer2, 3);
 			fail("MultiLayer cannot accept adding at an index larger than the amount of layers already contained");
-		} catch (IndexOutOfBoundsException ioobEx){
+		} catch (IndexOutOfBoundsException ioobEx) {
 			// this is right
 		}
 
@@ -172,8 +182,12 @@ public class TestMultiLayerSymbol extends TestCase {
 			fail("MultiLayer should accept adding at index less or equal to the layer count");
 		}
 
-		assertTrue("layer returned does not correspond with the index provided", multiLayer.getLayer(1).getDescription().equals("layer2"));
-		assertTrue("layer returned does not correspond with the index provided", multiLayer.getLayer(0).getDescription().equals("layer1"));
+		assertTrue(
+				"layer returned does not correspond with the index provided",
+				multiLayer.getLayer(1).getDescription().equals("layer2"));
+		assertTrue(
+				"layer returned does not correspond with the index provided",
+				multiLayer.getLayer(0).getDescription().equals("layer1"));
 	}
 
 	public void testLayerAdditionPositionConsistencyMultiLayer_FILL_Symbol() {
@@ -192,7 +206,7 @@ public class TestMultiLayerSymbol extends TestCase {
 		try {
 			multiLayer.addLayer(layer2, 3);
 			fail("MultiLayer cannot accept adding at an index larger than the amount of layers already contained");
-		} catch (IndexOutOfBoundsException ioobEx){
+		} catch (IndexOutOfBoundsException ioobEx) {
 			// this is right
 		}
 
@@ -202,8 +216,12 @@ public class TestMultiLayerSymbol extends TestCase {
 			fail("MultiLayer should accept adding at index less or equal to the layer count");
 		}
 
-		assertTrue("layer returned does not correspond with the index provided", multiLayer.getLayer(1).getDescription().equals("layer2"));
-		assertTrue("layer returned does not correspond with the index provided", multiLayer.getLayer(0).getDescription().equals("layer1"));
+		assertTrue(
+				"layer returned does not correspond with the index provided",
+				multiLayer.getLayer(1).getDescription().equals("layer2"));
+		assertTrue(
+				"layer returned does not correspond with the index provided",
+				multiLayer.getLayer(0).getDescription().equals("layer1"));
 	}
 
 	public void testMultiLayer_MARKER_SymbolLayerSwapping() {
@@ -219,14 +237,14 @@ public class TestMultiLayerSymbol extends TestCase {
 		multiLayer.addLayer(layer2);
 		multiLayer.addLayer(layer3);
 
-		multiLayer.swapLayers(1,0);
-		assertTrue("failed swapping layers 0 and 1",
-				   multiLayer.getLayer(0).getDescription().equals("layer2")
+		multiLayer.swapLayers(1, 0);
+		assertTrue("failed swapping layers 0 and 1", multiLayer.getLayer(0)
+				.getDescription().equals("layer2")
 				&& multiLayer.getLayer(1).getDescription().equals("layer1"));
 
-		multiLayer.swapLayers(1,2);
-		assertTrue("failed swapping layers 0 and 1",
-				   multiLayer.getLayer(2).getDescription().equals("layer1")
+		multiLayer.swapLayers(1, 2);
+		assertTrue("failed swapping layers 0 and 1", multiLayer.getLayer(2)
+				.getDescription().equals("layer1")
 				&& multiLayer.getLayer(1).getDescription().equals("layer3"));
 
 		Random random = new Random(System.currentTimeMillis());
@@ -238,7 +256,8 @@ public class TestMultiLayerSymbol extends TestCase {
 			ISymbol aLayer = multiLayer.getLayer(n);
 			multiLayer.swapLayers(n, m);
 			ISymbol otherLayer = multiLayer.getLayer(m);
-			assertEquals("failed swapping layers "+n+" and "+m, aLayer, otherLayer);
+			assertEquals("failed swapping layers " + n + " and " + m, aLayer,
+					otherLayer);
 		}
 
 	}
@@ -256,14 +275,14 @@ public class TestMultiLayerSymbol extends TestCase {
 		multiLayer.addLayer(layer2);
 		multiLayer.addLayer(layer3);
 
-		multiLayer.swapLayers(1,0);
-		assertTrue("failed swapping layers 0 and 1",
-				   multiLayer.getLayer(0).getDescription().equals("layer2")
+		multiLayer.swapLayers(1, 0);
+		assertTrue("failed swapping layers 0 and 1", multiLayer.getLayer(0)
+				.getDescription().equals("layer2")
 				&& multiLayer.getLayer(1).getDescription().equals("layer1"));
 
-		multiLayer.swapLayers(1,2);
-		assertTrue("failed swapping layers 0 and 1",
-				   multiLayer.getLayer(2).getDescription().equals("layer1")
+		multiLayer.swapLayers(1, 2);
+		assertTrue("failed swapping layers 0 and 1", multiLayer.getLayer(2)
+				.getDescription().equals("layer1")
 				&& multiLayer.getLayer(1).getDescription().equals("layer3"));
 
 		Random random = new Random(System.currentTimeMillis());
@@ -275,7 +294,8 @@ public class TestMultiLayerSymbol extends TestCase {
 			ISymbol aLayer = multiLayer.getLayer(n);
 			multiLayer.swapLayers(n, m);
 			ISymbol otherLayer = multiLayer.getLayer(m);
-			assertEquals("failed swapping layers "+n+" and "+m, aLayer, otherLayer);
+			assertEquals("failed swapping layers " + n + " and " + m, aLayer,
+					otherLayer);
 		}
 
 	}
@@ -293,14 +313,14 @@ public class TestMultiLayerSymbol extends TestCase {
 		multiLayer.addLayer(layer2);
 		multiLayer.addLayer(layer3);
 
-		multiLayer.swapLayers(1,0);
-		assertTrue("failed swapping layers 0 and 1",
-				   multiLayer.getLayer(0).getDescription().equals("layer2")
+		multiLayer.swapLayers(1, 0);
+		assertTrue("failed swapping layers 0 and 1", multiLayer.getLayer(0)
+				.getDescription().equals("layer2")
 				&& multiLayer.getLayer(1).getDescription().equals("layer1"));
 
-		multiLayer.swapLayers(1,2);
-		assertTrue("failed swapping layers 0 and 1",
-				   multiLayer.getLayer(2).getDescription().equals("layer1")
+		multiLayer.swapLayers(1, 2);
+		assertTrue("failed swapping layers 0 and 1", multiLayer.getLayer(2)
+				.getDescription().equals("layer1")
 				&& multiLayer.getLayer(1).getDescription().equals("layer3"));
 
 		Random random = new Random(System.currentTimeMillis());
@@ -312,7 +332,8 @@ public class TestMultiLayerSymbol extends TestCase {
 			ISymbol aLayer = multiLayer.getLayer(n);
 			multiLayer.swapLayers(n, m);
 			ISymbol otherLayer = multiLayer.getLayer(m);
-			assertEquals("failed swapping layers "+n+" and "+m, aLayer, otherLayer);
+			assertEquals("failed swapping layers " + n + " and " + m, aLayer,
+					otherLayer);
 		}
 	}
 
@@ -329,11 +350,14 @@ public class TestMultiLayerSymbol extends TestCase {
 		multiLayer.addLayer(layer2);
 		multiLayer.addLayer(layer3);
 
-		for (int i = -4; i < multiLayer.getLayerCount()+4; i++) {
-			if (i<0 || i>=multiLayer.getLayerCount()) {
+		for (int i = -4; i < multiLayer.getLayerCount() + 4; i++) {
+			if (i < 0 || i >= multiLayer.getLayerCount()) {
 				try {
 					multiLayer.getLayer(i);
-					fail("MultiLayerMarkerSymbol should throw an IndexOutOfBoundsException when accessing a layer at index "+i+", because layer count is "+multiLayer.getLayerCount());
+					fail("MultiLayerMarkerSymbol should throw an IndexOutOfBoundsException when accessing a layer at index "
+							+ i
+							+ ", because layer count is "
+							+ multiLayer.getLayerCount());
 				} catch (IndexOutOfBoundsException ioobEx) {
 					// this is correct;
 				}
@@ -341,7 +365,8 @@ public class TestMultiLayerSymbol extends TestCase {
 				try {
 					multiLayer.getLayer(i);
 				} catch (IndexOutOfBoundsException ioobEx) {
-					fail("MultiLayerMarkerSymbol threw an IndexOutOfBoundsException, but it has "+multiLayer.getLayerCount()+" layers");
+					fail("MultiLayerMarkerSymbol threw an IndexOutOfBoundsException, but it has "
+							+ multiLayer.getLayerCount() + " layers");
 				}
 			}
 		}
@@ -360,11 +385,14 @@ public class TestMultiLayerSymbol extends TestCase {
 		multiLayer.addLayer(layer2);
 		multiLayer.addLayer(layer3);
 
-		for (int i = -4; i < multiLayer.getLayerCount()+4; i++) {
-			if (i<0 || i>=multiLayer.getLayerCount()) {
+		for (int i = -4; i < multiLayer.getLayerCount() + 4; i++) {
+			if (i < 0 || i >= multiLayer.getLayerCount()) {
 				try {
 					multiLayer.getLayer(i);
-					fail("MultiLayerLineSymbol should throw an IndexOutOfBoundsException when accessing a layer at index "+i+", because layer count is "+multiLayer.getLayerCount());
+					fail("MultiLayerLineSymbol should throw an IndexOutOfBoundsException when accessing a layer at index "
+							+ i
+							+ ", because layer count is "
+							+ multiLayer.getLayerCount());
 				} catch (IndexOutOfBoundsException ioobEx) {
 					// this is correct;
 				}
@@ -372,7 +400,8 @@ public class TestMultiLayerSymbol extends TestCase {
 				try {
 					multiLayer.getLayer(i);
 				} catch (IndexOutOfBoundsException ioobEx) {
-					fail("MultiLayerLineSymbol threw an IndexOutOfBoundsException, but it has "+multiLayer.getLayerCount()+" layers");
+					fail("MultiLayerLineSymbol threw an IndexOutOfBoundsException, but it has "
+							+ multiLayer.getLayerCount() + " layers");
 				}
 			}
 		}
@@ -390,11 +419,14 @@ public class TestMultiLayerSymbol extends TestCase {
 		multiLayer.addLayer(layer1);
 		multiLayer.addLayer(layer2);
 		multiLayer.addLayer(layer3);
-		for (int i = -4; i < multiLayer.getLayerCount()+4; i++) {
-			if (i<0 || i>=multiLayer.getLayerCount()) {
+		for (int i = -4; i < multiLayer.getLayerCount() + 4; i++) {
+			if (i < 0 || i >= multiLayer.getLayerCount()) {
 				try {
 					multiLayer.getLayer(i);
-					fail("MultiLayerFillSymbol should throw an IndexOutOfBoundsException when accessing a layer at index "+i+", because layer count is "+multiLayer.getLayerCount());
+					fail("MultiLayerFillSymbol should throw an IndexOutOfBoundsException when accessing a layer at index "
+							+ i
+							+ ", because layer count is "
+							+ multiLayer.getLayerCount());
 				} catch (IndexOutOfBoundsException ioobEx) {
 					// this is correct;
 				}
@@ -402,25 +434,26 @@ public class TestMultiLayerSymbol extends TestCase {
 				try {
 					multiLayer.getLayer(i);
 				} catch (IndexOutOfBoundsException ioobEx) {
-					fail("MultiLayerFillSymbol threw an IndexOutOfBoundsException, but it has "+multiLayer.getLayerCount()+" layers");
+					fail("MultiLayerFillSymbol threw an IndexOutOfBoundsException, but it has "
+							+ multiLayer.getLayerCount() + " layers");
 				}
 			}
 		}
 
 	}
-	
-	public void testMultiLayer_MARKER_SymbolLayerSize(){
+
+	public void testMultiLayer_MARKER_SymbolLayerSize() {
 		MultiLayerMarkerSymbol multiLayer = new MultiLayerMarkerSymbol();
 		IMarkerSymbol layer1 = new SimpleMarkerSymbol();
 		IMarkerSymbol layer2 = new SimpleMarkerSymbol();
 		IMarkerSymbol layer3 = new SimpleMarkerSymbol();
-		
-		Random rnd =  new Random();
-		
+
+		Random rnd = new Random();
+
 		layer1.setSize(2 * rnd.nextDouble());
 		layer2.setSize(3 * rnd.nextDouble());
 		layer3.setSize(4 * rnd.nextDouble());
-		
+
 		layer1.setDescription("layer1");
 		layer2.setDescription("layer2");
 		layer3.setDescription("layer3");
@@ -429,21 +462,27 @@ public class TestMultiLayerSymbol extends TestCase {
 		multiLayer.addLayer(layer2);
 		multiLayer.addLayer(layer3);
 
-		double totalSize = Math.max(layer1.getSize(),layer2.getSize());
-		totalSize = Math.max(totalSize,layer3.getSize());
-		
-		assertTrue("MultiLayerMarkerSymbol does not calculate the size correctly. It was expected " +totalSize+ " and the size was "+ multiLayer.getSize()
-				,multiLayer.getSize() == totalSize );
-		
-		
+		double totalSize = Math.max(layer1.getSize(), layer2.getSize());
+		totalSize = Math.max(totalSize, layer3.getSize());
+
+		assertTrue(
+				"MultiLayerMarkerSymbol does not calculate the size correctly. It was expected "
+						+ totalSize
+						+ " and the size was "
+						+ multiLayer.getSize(),
+				multiLayer.getSize() == totalSize);
+
 		IMarkerSymbol layer4 = new SimpleMarkerSymbol();
-		
-		layer4.setSize(totalSize +3);
+
+		layer4.setSize(totalSize + 3);
 		layer4.setDescription("layer4");
-		multiLayer.addLayer(layer4,0);
-		
-		
-		assertTrue("MultiLayerMarkerSymbol does not calculate the size correctly. It was expected " +totalSize+ " and the size was "+ multiLayer.getSize()
-				,multiLayer.getSize() == Math.max(totalSize,layer4.getSize()));
+		multiLayer.addLayer(layer4, 0);
+
+		assertTrue(
+				"MultiLayerMarkerSymbol does not calculate the size correctly. It was expected "
+						+ totalSize
+						+ " and the size was "
+						+ multiLayer.getSize(),
+				multiLayer.getSize() == Math.max(totalSize, layer4.getSize()));
 	}
 }

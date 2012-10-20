@@ -42,17 +42,17 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: NetCancelAction.java 22182 2008-07-10 07:20:11Z fpenarrubia $
-* $Log$
-* Revision 1.2  2006-12-04 17:13:39  fjp
-* *** empty log message ***
-*
-* Revision 1.1  2006/10/25 19:13:55  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: NetCancelAction.java 22182 2008-07-10 07:20:11Z fpenarrubia $
+ * $Log$
+ * Revision 1.2  2006-12-04 17:13:39  fjp
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/10/25 19:13:55  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package org.gvsig.graph.gui.wizard;
 
 import jwizardcomponent.CancelAction;
@@ -60,8 +60,9 @@ import jwizardcomponent.CancelAction;
 import com.iver.andami.PluginServices;
 
 public class NetCancelAction extends CancelAction {
-	
+
 	private NetWizard owner;
+
 	public NetCancelAction(NetWizard wizard) {
 		super(wizard.getWizardComponents());
 		this.owner = wizard;
@@ -73,4 +74,3 @@ public class NetCancelAction extends CancelAction {
 	}
 
 }
-

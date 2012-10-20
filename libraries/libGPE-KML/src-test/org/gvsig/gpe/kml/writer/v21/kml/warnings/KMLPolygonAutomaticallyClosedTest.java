@@ -61,6 +61,7 @@ public class KMLPolygonAutomaticallyClosedTest extends
 		GPEPolygonAutomaticallyClosedTest {
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEParserClass()
 	 */
 	public Class getGPEParserClass() {
@@ -69,6 +70,7 @@ public class KMLPolygonAutomaticallyClosedTest extends
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEWriterHandlerClass()
 	 */
 	public Class getGPEWriterHandlerClass() {

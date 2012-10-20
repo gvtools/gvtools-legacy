@@ -49,10 +49,9 @@ import com.iver.cit.gvsig.fmap.layers.FBitSet;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
-
 /**
  * Query by Theme.
- *
+ * 
  * @author Fernando González Cortés
  */
 public class QueryByThemeVisitor implements FeatureVisitor {
@@ -63,10 +62,13 @@ public class QueryByThemeVisitor implements FeatureVisitor {
 
 	/**
 	 * Crea un nuevo QueryByThemeVisitor.
-	 *
-	 * @param toQuery Capa.
-	 * @param layer Capa.
-	 * @param relation Relación.
+	 * 
+	 * @param toQuery
+	 *            Capa.
+	 * @param layer
+	 *            Capa.
+	 * @param relation
+	 *            Relación.
 	 */
 	public QueryByThemeVisitor(FLayer toQuery, FLayer layer, int relation) {
 		this.layer = layer;
@@ -77,9 +79,10 @@ public class QueryByThemeVisitor implements FeatureVisitor {
 	/**
 	 * @throws ReadDriverException
 	 * @see com.iver.cit.gvsig.fmap.operations.strategies.FeatureVisitor#visit(com.iver.cit.gvsig.fmap.core.IGeometry,
-	 * 		int)
+	 *      int)
 	 */
-	public void visit(IGeometry g, int index) throws ReadDriverException, VisitorException, ProcessVisitorException {
+	public void visit(IGeometry g, int index) throws ReadDriverException,
+			VisitorException, ProcessVisitorException {
 		Strategy s = StrategyManager.getStrategy((FLyrVect) toQuery);
 		QueryByGeometryVisitor visitor = new QueryByGeometryVisitor(g, relation);
 		s.process(visitor);
@@ -105,9 +108,9 @@ public class QueryByThemeVisitor implements FeatureVisitor {
 	/**
 	 * Devuelve un FBitSet con los índices de los registros como respuesta a la
 	 * consulta.
-	 *
+	 * 
 	 * @return FBitSet con los índices de los registros como respuesta a la
-	 * 		   consulta.
+	 *         consulta.
 	 */
 	public FBitSet getBitset() {
 		return bitset;

@@ -47,11 +47,13 @@ import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
 import com.iver.cit.gvsig.fmap.tools.Listeners.PointListener;
 import com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener;
 
-
 /**
- * <p>Behavior that permits user to move and drag the mouse on the image of the associated
- *  <code>MapControl</code> instance using a {@link PointListener PointListener}.</p>
- *
+ * <p>
+ * Behavior that permits user to move and drag the mouse on the image of the
+ * associated <code>MapControl</code> instance using a {@link PointListener
+ * PointListener}.
+ * </p>
+ * 
  * @author Vicente Caballero Navarro
  */
 public class MouseMovementBehavior extends Behavior {
@@ -64,9 +66,14 @@ public class MouseMovementBehavior extends Behavior {
 	protected PointListener listener;
 
 	/**
-	 * <p>Creates a new behavior for moving or dragging the mouse on the image of the associated <code>MapControl</code> instance.</p>
-	 *
-	 * @param mli listener used to permit this object to work with the associated <code>MapControl</code>
+	 * <p>
+	 * Creates a new behavior for moving or dragging the mouse on the image of
+	 * the associated <code>MapControl</code> instance.
+	 * </p>
+	 * 
+	 * @param mli
+	 *            listener used to permit this object to work with the
+	 *            associated <code>MapControl</code>
 	 */
 	public MouseMovementBehavior(PointListener mli) {
 		listener = mli;
@@ -74,7 +81,10 @@ public class MouseMovementBehavior extends Behavior {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseDragged(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseDragged(java.awt
+	 * .event.MouseEvent)
 	 */
 	public void mouseDragged(MouseEvent e) throws BehaviorException {
 		mouseMoved(e);
@@ -82,7 +92,10 @@ public class MouseMovementBehavior extends Behavior {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseMoved(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseMoved(java.awt.event
+	 * .MouseEvent)
 	 */
 	public void mouseMoved(MouseEvent e) throws BehaviorException {
 		PointEvent event = new PointEvent(e.getPoint(), e);
@@ -90,9 +103,13 @@ public class MouseMovementBehavior extends Behavior {
 	}
 
 	/**
-	 * <p>Sets a tool listener to work with the <code>MapControl</code> using this behavior.</p>
+	 * <p>
+	 * Sets a tool listener to work with the <code>MapControl</code> using this
+	 * behavior.
+	 * </p>
 	 * 
-	 * @param listener a <code>PointListener</code> object for this behavior
+	 * @param listener
+	 *            a <code>PointListener</code> object for this behavior
 	 */
 	public void setListener(ToolListener listener) {
 		this.listener = (PointListener) listener;
@@ -100,6 +117,7 @@ public class MouseMovementBehavior extends Behavior {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#getListener()
 	 */
 	public ToolListener getListener() {

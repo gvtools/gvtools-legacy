@@ -42,38 +42,38 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: ScalableConvexHullVisitor.java 10626 2007-03-06 16:55:54Z caballero $
-* $Log$
-* Revision 1.2  2007-03-06 16:47:58  caballero
-* Exceptions
-*
-* Revision 1.1  2006/06/20 18:20:45  azabala
-* first version in cvs
-*
-* Revision 1.2  2006/06/02 18:21:28  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/05/24 21:13:31  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.3  2006/03/15 18:31:06  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/03/07 21:01:33  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/03/06 19:48:39  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/03/05 19:57:48  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/02/17 16:32:50  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: ScalableConvexHullVisitor.java 10626 2007-03-06 16:55:54Z caballero $
+ * $Log$
+ * Revision 1.2  2007-03-06 16:47:58  caballero
+ * Exceptions
+ *
+ * Revision 1.1  2006/06/20 18:20:45  azabala
+ * first version in cvs
+ *
+ * Revision 1.2  2006/06/02 18:21:28  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/05/24 21:13:31  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.3  2006/03/15 18:31:06  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/03/07 21:01:33  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/03/06 19:48:39  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/03/05 19:57:48  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/02/17 16:32:50  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.convexhull.fmap;
 
 import com.iver.cit.gvsig.exceptions.visitors.ProcessVisitorException;
@@ -90,35 +90,37 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 public class ScalableConvexHullVisitor implements ConvexHullVisitor {
 	Geometry geometry;
 	GeometryFactory geomFact;
-	
-	public ScalableConvexHullVisitor(){
+
+	public ScalableConvexHullVisitor() {
 		geomFact = new GeometryFactory();
 	}
+
 	/**
 	 * Returns FMap convex hull geometry.
+	 * 
 	 * @return
 	 */
-	public IGeometry getConvexHull(){
+	public IGeometry getConvexHull() {
 		return FConverter.jts_to_igeometry(geometry);
 	}
-	
-	public Geometry getJtsConvexHull(){
+
+	public Geometry getJtsConvexHull() {
 		return geometry;
 	}
-	
-	public void visit(IGeometry g, int index) throws VisitorException, ProcessVisitorException {
-		if(g == null)
+
+	public void visit(IGeometry g, int index) throws VisitorException,
+			ProcessVisitorException {
+		if (g == null)
 			return;
 		Geometry actualGeometry = g.toJTSGeometry();
-		if(geometry == null){
+		if (geometry == null) {
 			geometry = actualGeometry;
-		}else{
+		} else {
 			Geometry[] geoms = new Geometry[2];
 			geoms[0] = geometry;
 			geoms[1] = actualGeometry;
-			GeometryCollection gc = geomFact.
-				createGeometryCollection(geoms);
-			geometry = gc.convexHull();	
+			GeometryCollection gc = geomFact.createGeometryCollection(geoms);
+			geometry = gc.convexHull();
 		}
 	}
 
@@ -128,10 +130,9 @@ public class ScalableConvexHullVisitor implements ConvexHullVisitor {
 	public boolean start(FLayer layer) throws StartVisitorException {
 		return layer instanceof VectorialData;
 	}
-	
+
 	public String getProcessDescription() {
 		return "Computing convex hull in an scalable manner";
 	}
 
 }
-

@@ -50,15 +50,16 @@ import javax.swing.JTabbedPane;
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.MessageEvent;
 import com.iver.andami.messages.NotificationListener;
-import com.iver.andami.ui.mdiManager.SingletonWindow;
 import com.iver.andami.ui.mdiManager.IWindow;
+import com.iver.andami.ui.mdiManager.SingletonWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 
 /**
  * Frame que escucha los eventos del sistema de mensajes de la aplicación y los
  * muestra.
  */
-public class ConsolaFrame extends JPanel implements IWindow, SingletonWindow,NotificationListener {
+public class ConsolaFrame extends JPanel implements IWindow, SingletonWindow,
+		NotificationListener {
 	private StringBuffer info = new StringBuffer();
 	private StringBuffer warn = new StringBuffer();
 	private StringBuffer error = new StringBuffer();
@@ -68,210 +69,168 @@ public class ConsolaFrame extends JPanel implements IWindow, SingletonWindow,Not
 	private JEditorPane textoErrores;
 	private JEditorPane textoAll;
 
-	private final static String marcaInfo ="font size='3' color='#000000'";
-	private final static String marcaWarning ="font size='3' color='#800000'";
-	private final static String marcaError ="font size='3' color='#FF0000'";
+	private final static String marcaInfo = "font size='3' color='#000000'";
+	private final static String marcaWarning = "font size='3' color='#800000'";
+	private final static String marcaError = "font size='3' color='#FF0000'";
 	private JTabbedPane tabs;
 	private JPanel panelErrores;
-	
+
 	public static final int WIDTH = 500;
 	public static final int HEIGHT = 270;
 
-    /**
-     * Crea la consola con los mensajes producidos hasta el momento de la
-     * creación de este objeto.
-     *
-     * @param todo Array de todos los mensajes
-     * @param infos Array de los mensajes de información
-     * @param warns Array de los mensajes de warning
-     * @param errors Array de los mensajes de error
-     */
-    public ConsolaFrame() {
+	/**
+	 * Crea la consola con los mensajes producidos hasta el momento de la
+	 * creación de este objeto.
+	 * 
+	 * @param todo
+	 *            Array de todos los mensajes
+	 * @param infos
+	 *            Array de los mensajes de información
+	 * @param warns
+	 *            Array de los mensajes de warning
+	 * @param errors
+	 *            Array de los mensajes de error
+	 */
+	public ConsolaFrame() {
 
-		this.setSize(WIDTH,HEIGHT);
+		this.setSize(WIDTH, HEIGHT);
 
-        //Las cajas de texto donde van los mensajes
-        textoInfos = new JEditorPane();
-        textoInfos.setEditable(false);
+		// Las cajas de texto donde van los mensajes
+		textoInfos = new JEditorPane();
+		textoInfos.setEditable(false);
 		textoInfos.setContentType("text/html");
-        textoWarnings = new JEditorPane();
-        textoWarnings.setEditable(false);
+		textoWarnings = new JEditorPane();
+		textoWarnings.setEditable(false);
 		textoWarnings.setContentType("text/html");
-        textoErrores = new JEditorPane();
-        textoErrores.setEditable(false);
+		textoErrores = new JEditorPane();
+		textoErrores.setEditable(false);
 		textoErrores.setContentType("text/html");
-        textoAll = new JEditorPane();
-        textoAll.setEditable(false);
+		textoAll = new JEditorPane();
+		textoAll.setEditable(false);
 		textoAll.setContentType("text/html");
 
 		JScrollPane scroll = new JScrollPane(textoAll);
-		scroll.setVerticalScrollBarPolicy(
-						JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		scroll.setHorizontalScrollBarPolicy(
-		JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-//		scroll.setPreferredSize(new Dimension(500, 500));
-//		scroll.setMinimumSize(new Dimension(10, 10));
+		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		// scroll.setPreferredSize(new Dimension(500, 500));
+		// scroll.setMinimumSize(new Dimension(10, 10));
 		JPanel panelAll = new JPanel(new BorderLayout());
 		panelAll.add(scroll, BorderLayout.CENTER);
-		
+
 		scroll = new JScrollPane(textoInfos);
-		scroll.setVerticalScrollBarPolicy(
-						JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		scroll.setHorizontalScrollBarPolicy(
-			JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-//		scroll.setPreferredSize(new Dimension(250, 145));
-//		scroll.setMinimumSize(new Dimension(10, 10));
+		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		// scroll.setPreferredSize(new Dimension(250, 145));
+		// scroll.setMinimumSize(new Dimension(10, 10));
 		JPanel panelInfos = new JPanel(new BorderLayout());
 		panelInfos.add(scroll, BorderLayout.CENTER);
-		
+
 		scroll = new JScrollPane(textoWarnings);
-		scroll.setVerticalScrollBarPolicy(
-						JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		scroll.setHorizontalScrollBarPolicy(
-		JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-//		scroll.setPreferredSize(new Dimension(250, 145));
-//		scroll.setMinimumSize(new Dimension(10, 10));
+		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		// scroll.setPreferredSize(new Dimension(250, 145));
+		// scroll.setMinimumSize(new Dimension(10, 10));
 		JPanel panelWarnings = new JPanel(new BorderLayout());
 		panelWarnings.add(scroll, BorderLayout.CENTER);
-		
+
 		scroll = new JScrollPane(textoErrores);
-		scroll.setVerticalScrollBarPolicy(
-						JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		scroll.setHorizontalScrollBarPolicy(
-		JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-//		scroll.setPreferredSize(new Dimension(250, 145));
-//		scroll.setMinimumSize(new Dimension(10, 10));
+		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		// scroll.setPreferredSize(new Dimension(250, 145));
+		// scroll.setMinimumSize(new Dimension(10, 10));
 		panelErrores = new JPanel(new BorderLayout());
 		panelErrores.add(scroll, BorderLayout.CENTER);
 
-//        rellenar(infos, textoInfos, info, marcaInfo);
-  //      rellenar(warns, textoWarnings, warn, marcaWarning);
-    //    rellenar(errors, textoErrores, error, marcaError);
-      //  rellenarTodo(todo, textoAll);
+		// rellenar(infos, textoInfos, info, marcaInfo);
+		// rellenar(warns, textoWarnings, warn, marcaWarning);
+		// rellenar(errors, textoErrores, error, marcaError);
+		// rellenarTodo(todo, textoAll);
 
-        //Las pestañas
-        tabs = new JTabbedPane();
-        tabs.addTab(PluginServices.getText( this ,"todos"), panelAll);
-        tabs.addTab(PluginServices.getText( this ,"info"), panelInfos);
-        tabs.addTab(PluginServices.getText( this ,"warnings"), panelWarnings);
-        tabs.addTab(PluginServices.getText( this ,"errores"), panelErrores);
+		// Las pestañas
+		tabs = new JTabbedPane();
+		tabs.addTab(PluginServices.getText(this, "todos"), panelAll);
+		tabs.addTab(PluginServices.getText(this, "info"), panelInfos);
+		tabs.addTab(PluginServices.getText(this, "warnings"), panelWarnings);
+		tabs.addTab(PluginServices.getText(this, "errores"), panelErrores);
 		this.setLayout(new BorderLayout());
-        this.add(tabs, BorderLayout.CENTER);
-        
-    }
+		this.add(tabs, BorderLayout.CENTER);
 
-	/**
-	 * Método de utilidad para rellenar los cuadros de texto con un array de
-	 * cadenas
-	 *
-	 * @param contenido array de cadenas que se mostrarán en el cuadro de texto
-	 *        separadas por un retorno de carro
-	 * @param control Control en el que se pondrán las cadenas
-	 */
-	private void rellenar(String[] contenido, JEditorPane control, StringBuffer buffer, String marca) {
-		String content = "";
-		for (int i = 0; i < contenido.length; i++) {
-			content = content + "<"+marca+">"+contenido[i] + "</"+marca+"><br/";
-		}
-			
-		buffer.append(content);
-
-		control.setContentType("text/html");
-		control.setText(content);
 	}
-
-	/*
-	 * Método de utilidad para rellenar los cuadros de texto con un array de
-	 * cadenas
-	 *
-	 * @param contenido array de cadenas que se mostrarán en el cuadro de texto
-	 *        separadas por un retorno de carro
-	 * @param control Control en el que se pondrán las cadenas
-	 *
-	private void rellenarTodo(Message[] contenido, JEditorPane control) {
-		HashMap marcasTipoMsg = new HashMap();
-		marcasTipoMsg.put(new Integer(Message.INFO), marcaInfo);
-		marcasTipoMsg.put(new Integer(Message.WARNING), marcaWarning);
-		marcasTipoMsg.put(new Integer(Message.ERROR), marcaError);
-
-		String content = "";
-		for (int i = 0; i < contenido.length; i++) {
-			String marca = (String) marcasTipoMsg.get(new Integer(contenido[i].tipo));
-			content = content + "<"+marca+">"+contenido[i].texto + "</"+marca+"><br/";
-		}
-
-		all.append(content);
-
-		control.setContentType("text/html");
-		control.setText(content);
-	}*/
-
 
 	/**
 	 * Obtiene un string con la traza de una excepción a la consola
-	 *
-	 * @param t Elemento throwable
+	 * 
+	 * @param t
+	 *            Elemento throwable
 	 */
 	private static String dumpStackTrace(Throwable t) {
-		if ( t == null ) return "";
+		if (t == null)
+			return "";
 		StackTraceElement[] stes = t.getStackTrace();
-		String todo = "<"+marcaWarning+">" + t.getClass().getName() + ": " + t.getLocalizedMessage() +
-			"<"+marcaWarning+">" + "<br/";
+		String todo = "<" + marcaWarning + ">" + t.getClass().getName() + ": "
+				+ t.getLocalizedMessage() + "<" + marcaWarning + ">" + "<br/";
 
 		for (int i = 0; i < stes.length; i++) {
-			todo += ("<"+marcaWarning+">&nbsp;&nbsp;&nbsp;&nbsp;" + stes[i].toString() + "<br/");
+			todo += ("<" + marcaWarning + ">&nbsp;&nbsp;&nbsp;&nbsp;"
+					+ stes[i].toString() + "<br/");
 		}
 
 		if (t.getCause() != null) {
 			todo = todo + dumpStackTrace(t.getCause());
 		}
-        
+
 		return todo;
 	}
 
-    /**
-     * @see com.iver.mdiApp.NotificationListener#errorEvent(java.lang.String)
-     */
-    public void errorEvent(MessageEvent e) {
-    	for (int i = 0; i < e.getMessages().length; i++){
-    		String traza = dumpStackTrace(e.getExceptions()[i]);
+	/**
+	 * @see com.iver.mdiApp.NotificationListener#errorEvent(java.lang.String)
+	 */
+	public void errorEvent(MessageEvent e) {
+		for (int i = 0; i < e.getMessages().length; i++) {
+			String traza = dumpStackTrace(e.getExceptions()[i]);
 
-			error.append("<"+marcaError+">" + e.getMessages()[i] + "</"+marcaError+"><br/" + traza);
-			all.append("<"+marcaError+">" + e.getMessages()[i] + "</"+marcaError+"><br/" + traza);
-    	}
+			error.append("<" + marcaError + ">" + e.getMessages()[i] + "</"
+					+ marcaError + "><br/" + traza);
+			all.append("<" + marcaError + ">" + e.getMessages()[i] + "</"
+					+ marcaError + "><br/" + traza);
+		}
 		textoErrores.setText(error.toString());
 		textoAll.setText(all.toString());
 		tabs.setSelectedComponent(panelErrores);
-    }
+	}
 
-    /**
-     * @see com.iver.mdiApp.NotificationListener#warningEvent(java.lang.String)
-     */
-    public void warningEvent(MessageEvent e) {
-		for (int i = 0; i < e.getMessages().length; i++){
+	/**
+	 * @see com.iver.mdiApp.NotificationListener#warningEvent(java.lang.String)
+	 */
+	public void warningEvent(MessageEvent e) {
+		for (int i = 0; i < e.getMessages().length; i++) {
 			String traza = dumpStackTrace(e.getExceptions()[i]);
 
-			warn.append("<"+marcaWarning+">" + e.getMessages()[i] + "</"+marcaWarning+"><br/" + traza);
-			all.append("<"+marcaWarning+">" + e.getMessages()[i] + "</"+marcaWarning+"><br/" + traza);
+			warn.append("<" + marcaWarning + ">" + e.getMessages()[i] + "</"
+					+ marcaWarning + "><br/" + traza);
+			all.append("<" + marcaWarning + ">" + e.getMessages()[i] + "</"
+					+ marcaWarning + "><br/" + traza);
 		}
 		textoWarnings.setText(warn.toString());
 		textoAll.setText(all.toString());
-    }
+	}
 
-    /**
-     * @see com.iver.mdiApp.NotificationListener#infoEvent(java.lang.String)
-     */
-    public void infoEvent(MessageEvent e) {
-		for (int i = 0; i < e.getMessages().length; i++){
+	/**
+	 * @see com.iver.mdiApp.NotificationListener#infoEvent(java.lang.String)
+	 */
+	public void infoEvent(MessageEvent e) {
+		for (int i = 0; i < e.getMessages().length; i++) {
 			String traza = dumpStackTrace(e.getExceptions()[i]);
-			
-			info.append("<"+marcaInfo+">" + e.getMessages()[i] + "</"+marcaInfo+"><br/" + traza);
-			all.append("<"+marcaInfo+">" + e.getMessages()[i] + "</"+marcaInfo+"><br/" + traza);
+
+			info.append("<" + marcaInfo + ">" + e.getMessages()[i] + "</"
+					+ marcaInfo + "><br/" + traza);
+			all.append("<" + marcaInfo + ">" + e.getMessages()[i] + "</"
+					+ marcaInfo + "><br/" + traza);
 		}
-		textoInfos.setText(info.toString() );
+		textoInfos.setText(info.toString());
 		textoAll.setText(all.toString());
 
-    }
+	}
 
 	/**
 	 * @see com.iver.mdiApp.ui.MDIManager.IWindow#getModel()
@@ -284,7 +243,9 @@ public class ConsolaFrame extends JPanel implements IWindow, SingletonWindow,Not
 	 * @see com.iver.andami.ui.mdiManager.IWindow#getWindowInfo()
 	 */
 	public WindowInfo getWindowInfo() {
-		WindowInfo info = new WindowInfo(WindowInfo.MODELESSDIALOG|WindowInfo.RESIZABLE|WindowInfo.MAXIMIZABLE|WindowInfo.ICONIFIABLE);
+		WindowInfo info = new WindowInfo(WindowInfo.MODELESSDIALOG
+				| WindowInfo.RESIZABLE | WindowInfo.MAXIMIZABLE
+				| WindowInfo.ICONIFIABLE);
 		info.setTitle(PluginServices.getText(this, "titulo_consola"));
 		return info;
 	}
@@ -292,7 +253,7 @@ public class ConsolaFrame extends JPanel implements IWindow, SingletonWindow,Not
 	public Object getWindowProfile() {
 		return WindowInfo.PROPERTIES_PROFILE;
 	}
-	
+
 }
 
 // [eiel-gestion-excepciones]

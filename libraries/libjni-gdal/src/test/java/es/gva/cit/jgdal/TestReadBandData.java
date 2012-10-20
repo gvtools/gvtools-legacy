@@ -6,16 +6,17 @@ import junit.framework.TestCase;
 
 /**
  * Test de acceso a datos de las bandas de una imagen.
+ * 
  * @author Miguel Ángel Querol Carratalá <miguelangel.querol@iver.es>
- *
+ * 
  */
-public class TestReadBandData extends TestCase{
+public class TestReadBandData extends TestCase {
 	private Gdal gdal = null;
 	private GdalRasterBand band = null;
 	private String baseDir = "./test-images/";
 	private String file1 = baseDir + "testGdal.tif";
-	
-	public void start(){
+
+	public void start() {
 		try {
 			setUp();
 			testStack();
@@ -24,42 +25,42 @@ public class TestReadBandData extends TestCase{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
-	public void setUp() throws GdalException, IOException{
+
+	public void setUp() throws GdalException, IOException {
 		gdal = new Gdal();
 		gdal.open(file1, Gdal.GA_Update);
 	}
-	
-	public void testStack() throws GdalException, IOException{
-		//Llamada sin dominio
+
+	public void testStack() throws GdalException, IOException {
+		// Llamada sin dominio
 		String[] metadata = gdal.getMetadata();
 		assertNotNull("No se han devuelto metadatos", metadata);
-		for (int i = 0 ; i<metadata.length ; i++){
+		for (int i = 0; i < metadata.length; i++) {
 			System.out.println("Metadato: " + metadata[i]);
 		}
-		
-		//Llamada con dominio "Image Structure Metadata"
+
+		// Llamada con dominio "Image Structure Metadata"
 		metadata = gdal.getMetadata("Image Structure Metadata");
 		assertNotNull("No se han devuelto metadatos", metadata);
-		for (int i = 0 ; i<metadata.length ; i++){
+		for (int i = 0; i < metadata.length; i++) {
 			System.out.println("Metadato: " + metadata[i]);
 		}
-		
-		//Comprobación del tamaño de la imagen
+
+		// Comprobación del tamaño de la imagen
 		assertEquals(842, gdal.getRasterXSize());
 		assertEquals(1023, gdal.getRasterYSize());
-		
-		//Comprobación del número de bandas
+
+		// Comprobación del número de bandas
 		assertEquals(4, gdal.getRasterCount());
-		
-		//Comprobación del driver de la imagen
+
+		// Comprobación del driver de la imagen
 		assertEquals("GTiff", gdal.getDriverShortName());
-		
-		//Comprobación del acceso a las bandas
-		for (int i = 0 ; i < gdal.getRasterCount() ; i++){
-			assertNotNull(gdal.getRasterBand(i+1));
+
+		// Comprobación del acceso a las bandas
+		for (int i = 0; i < gdal.getRasterCount(); i++) {
+			assertNotNull(gdal.getRasterBand(i + 1));
 		}
 	}
 }

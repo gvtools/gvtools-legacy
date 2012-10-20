@@ -62,34 +62,38 @@ import org.gvsig.gpe.containers.Layer;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class GPELayerWithBboxTest extends GPEWriterBaseTest{
+public abstract class GPELayerWithBboxTest extends GPEWriterBaseTest {
 	private String layerId = "l1";
 	private String srs = "EPSG:23030";
 	private String bboxId = "bboxID";
 	private double[] bboxX = generateRandomBBox();
 	private double[] bboxY = generateRandomBBox();
 	private double[] bboxZ = generateRandomBBox();
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#readObjects()
 	 */
 	public void readObjects() {
 		Layer[] layers = getLayers();
-		assertEquals(layers.length, 1);		
+		assertEquals(layers.length, 1);
 		Layer layer = layers[0];
-		GeometryAsserts.bbox(layer.getBbox(),bboxX,bboxY,bboxZ);
+		GeometryAsserts.bbox(layer.getBbox(), bboxX, bboxY, bboxZ);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#writeObjects()
 	 */
 	public void writeObjects() {
 		getWriterHandler().initialize();
 		getWriterHandler().startLayer(layerId, null, null, srs, null);
-		getWriterHandler().startBbox(bboxId, new CoordinatesSequence(bboxX,	bboxY, bboxZ), srs);
+		getWriterHandler().startBbox(bboxId,
+				new CoordinatesSequence(bboxX, bboxY, bboxZ), srs);
 		getWriterHandler().endBbox();
 		getWriterHandler().endLayer();
-		getWriterHandler().close();		
+		getWriterHandler().close();
 	}
 }

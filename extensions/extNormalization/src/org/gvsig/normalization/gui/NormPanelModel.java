@@ -293,7 +293,7 @@ public class NormPanelModel implements INormPanelModel {
 		} while (!isOkName);
 
 		// validate the new field name
-		//String vname = validateFieldName(nam);
+		// String vname = validateFieldName(nam);
 		eleme.setFieldname(nam);
 		eleme.setFieldseparator(fsep);
 		eleme.setInfieldseparators(getDefaultInfieldseparators());
@@ -341,9 +341,10 @@ public class NormPanelModel implements INormPanelModel {
 
 			if (thefile.exists()) {
 
-				int n = JOptionPane.showConfirmDialog(null, PluginServices
-						.getText(null, "file_exists"), PluginServices.getText(
-						null, "save_norm_pattern"), JOptionPane.YES_NO_OPTION);
+				int n = JOptionPane.showConfirmDialog(null,
+						PluginServices.getText(null, "file_exists"),
+						PluginServices.getText(null, "save_norm_pattern"),
+						JOptionPane.YES_NO_OPTION);
 				if (n == JOptionPane.YES_OPTION) {
 					writeSaveFile(thefile);
 				} else if (n == JOptionPane.NO_OPTION) {
@@ -758,11 +759,11 @@ public class NormPanelModel implements INormPanelModel {
 	private void loadTable(NormalizationNewTable normTable) {
 		String name = normTable.getOuputFile().getName();
 
-		//		LayerFactory.getDataSourceFactory().addDataSource(
-		//		normTable.getDriver(), name);
+		// LayerFactory.getDataSourceFactory().addDataSource(
+		// normTable.getDriver(), name);
 
 		LayerFactory.getDataSourceFactory().addFileDataSource("Ficheros_dbf",
-				name, normTable.getOuputFile().getAbsolutePath());		
+				name, normTable.getOuputFile().getAbsolutePath());
 
 		EditableAdapter editAdapterSecond = null;
 
@@ -771,9 +772,9 @@ public class NormPanelModel implements INormPanelModel {
 			dtSecond = LayerFactory.getDataSourceFactory()
 					.createRandomDataSource(name,
 							DataSourceFactory.AUTOMATIC_OPENING);
-			
-			SelectableDataSource sel = new SelectableDataSource(dtSecond);			
-			
+
+			SelectableDataSource sel = new SelectableDataSource(dtSecond);
+
 			editAdapterSecond = new EditableAdapter();
 			editAdapterSecond.setOriginalDataSource(sel);
 
@@ -822,9 +823,10 @@ public class NormPanelModel implements INormPanelModel {
 			for (int i = 0; i < (int) tamTab; i++) {
 				IRowEdited rowVals = ies.getRow(i);
 
-				res[i] = rowVals.getAttribute(
-						tab.getSelectedFieldIndices().nextSetBit(0)).toString()
-						.trim();
+				res[i] = rowVals
+						.getAttribute(
+								tab.getSelectedFieldIndices().nextSetBit(0))
+						.toString().trim();
 			}
 		} catch (Exception e) {
 			log.error("ERROR al obtener el recorset de la tabla", e);

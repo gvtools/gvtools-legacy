@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.impl.generalization;
 
 import java.io.File;
@@ -67,7 +67,8 @@ import com.iver.cit.gvsig.geoprocess.impl.generalization.fmap.GeneralizationGeop
 import com.iver.utiles.swing.threads.IMonitorableTask;
 import com.iver.utiles.swing.threads.MonitorableDecoratorMainFirst;
 
-public class GeneralizationGeoprocessController extends AbstractGeoprocessController {
+public class GeneralizationGeoprocessController extends
+		AbstractGeoprocessController {
 
 	private IGeneralizationGeoprocessUserEntries userEntries;
 	private GeneralizationGeoprocess geoprocess;
@@ -81,7 +82,7 @@ public class GeneralizationGeoprocessController extends AbstractGeoprocessContro
 	}
 
 	public boolean launchGeoprocess() {
-/*MOVER A CLASE ABSTRACTA*/		
+		/* MOVER A CLASE ABSTRACTA */
 		final FLyrVect inputLayer = userEntries.getInputLayer();
 		FLayers layers = userEntries.getFLayers();
 		File outputFile = null;
@@ -106,16 +107,16 @@ public class GeneralizationGeoprocessController extends AbstractGeoprocessContro
 				return false;
 			}
 		}
-/*MOVER A CLASE ABSTRACTA*/		
-		
+		/* MOVER A CLASE ABSTRACTA */
+
 		geoprocess = new GeneralizationGeoprocess(inputLayer);
 
-/*MOVER A CLASE ABSTRACTA*/		
+		/* MOVER A CLASE ABSTRACTA */
 		SHPLayerDefinition definition = (SHPLayerDefinition) geoprocess
 				.createLayerDefinition();
 		definition.setFile(outputFile);
-		ShpSchemaManager schemaManager = new ShpSchemaManager(outputFile
-				.getAbsolutePath());
+		ShpSchemaManager schemaManager = new ShpSchemaManager(
+				outputFile.getAbsolutePath());
 		IWriter writer = null;
 		try {
 			writer = getShpWriter(definition);
@@ -129,30 +130,30 @@ public class GeneralizationGeoprocessController extends AbstractGeoprocessContro
 		}
 		geoprocess.setResultLayerProperties(writer, schemaManager);
 
-/*MOVER A CLASE ABSTRACTA*/	
-		
+		/* MOVER A CLASE ABSTRACTA */
+
 		HashMap params = new HashMap();
 		boolean computeDouglasPeucker = userEntries.computeDouglasPeucker();
-		boolean computeTopologyPreserving = userEntries.computeTopologyPreservingSimplify();
+		boolean computeTopologyPreserving = userEntries
+				.computeTopologyPreservingSimplify();
 		params.put("dp", new Boolean(computeDouglasPeucker));
-		params.put("topologyPreserving", new Boolean(computeTopologyPreserving));	
+		params.put("topologyPreserving", new Boolean(computeTopologyPreserving));
 		boolean onlySelection = userEntries.onlyFirstLayerSelected();
 		params.put("layer_selection", new Boolean(onlySelection));
 		double distTolerance = 0;
 		try {
 			distTolerance = userEntries.getDistTolerance();
 		} catch (GeoprocessException e1) {
-			String error = PluginServices.getText(this,
-			"Error_entrada_datos");
-			userEntries.error(PluginServices.getText(this, "distancia_no_numerica"), error);
+			String error = PluginServices.getText(this, "Error_entrada_datos");
+			userEntries.error(
+					PluginServices.getText(this, "distancia_no_numerica"),
+					error);
 		}
 		params.put("distTolerance", new Double(distTolerance));
-		
-		
-		
-/*
- * MOVER A CLASE ABSTRACTA 
- * */		
+
+		/*
+		 * MOVER A CLASE ABSTRACTA
+		 */
 		try {
 			geoprocess.setParameters(params);
 			geoprocess.checkPreconditions();
@@ -177,8 +178,8 @@ public class GeneralizationGeoprocessController extends AbstractGeoprocessContro
 		}
 		return true;
 		/*
-		 * MOVER A CLASE ABSTRACTA 
-		 * */		
+		 * MOVER A CLASE ABSTRACTA
+		 */
 	}
 
 	public int getWidth() {

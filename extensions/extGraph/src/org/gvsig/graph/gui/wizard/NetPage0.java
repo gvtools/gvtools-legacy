@@ -72,114 +72,113 @@ import org.gvsig.gui.beans.swing.GridBagLayoutPanel;
 import com.iver.andami.PluginServices;
 
 /**
- * First page of the wizard.
- * It prevents user of pseudonodes in a linear layer, and offers
- * them to launch clean geoprocess to remove pseudonodes.
+ * First page of the wizard. It prevents user of pseudonodes in a linear layer,
+ * and offers them to launch clean geoprocess to remove pseudonodes.
  * 
  * Also, it offers users to work with a snap tolerance in node definition.
  * 
  * @author alzabord
- *
+ * 
  */
-public class NetPage0 extends JWizardPanel  {
+public class NetPage0 extends JWizardPanel {
 	private NetWizard owner;
-	
+
 	JRadioButton originalLayerBtn;
 	JRadioButton cleanedLayerBtn;
 	JRadioButton originalCoordinatesBtn;
 	JRadioButton snappedCoordinatesBtn;
 	JSpinner snapTolerance;
-	
+
 	NetPage0(NetWizard wizard) {
 		super(wizard.getWizardComponents());
 		this.owner = wizard;
 		initialize();
 	}
-	
-	
-	public boolean cleanOriginalLayer(){
+
+	public boolean cleanOriginalLayer() {
 		return cleanedLayerBtn.isSelected();
 	}
-	
-	public boolean applySnapTolerance(){
+
+	public boolean applySnapTolerance() {
 		return snappedCoordinatesBtn.isSelected();
 	}
-	
-	public double getSnapTolerance(){
-		if(applySnapTolerance())
+
+	public double getSnapTolerance() {
+		if (applySnapTolerance())
 			return ((Number) snapTolerance.getValue()).doubleValue();
 		else
 			return 0d;
 	}
-	
-	
-	 public void next() {
-        super.next();
-        owner.setCleanOriginalLayer(cleanOriginalLayer());
-        boolean applySnap = applySnapTolerance();
-        if(applySnap){
-        	owner.setSnapTolerance(getSnapTolerance());
-        }
-	 	owner.setApplySnapTolerance(applySnap);  
-    }
-	
+
+	public void next() {
+		super.next();
+		owner.setCleanOriginalLayer(cleanOriginalLayer());
+		boolean applySnap = applySnapTolerance();
+		if (applySnap) {
+			owner.setSnapTolerance(getSnapTolerance());
+		}
+		owner.setApplySnapTolerance(applySnap);
+	}
 
 	private void initialize() {
 		// this.setSize(new java.awt.Dimension(319,234));
 		GridBagLayoutPanel contentPane = new GridBagLayoutPanel();
-		
+
 		JEditorPane htmlPanel = new JEditorPane();
 		htmlPanel.setEditable(false);
 		htmlPanel.setEditorKit(new HTMLEditorKit());
 		String layerName = owner.getLayer().getName();
-		String htmlText = PluginServices.getText(null, "netpage0_htmltext1") + 
-		layerName + PluginServices.getText(null, "netpage0_htmltext2");
+		String htmlText = PluginServices.getText(null, "netpage0_htmltext1")
+				+ layerName
+				+ PluginServices.getText(null, "netpage0_htmltext2");
 		htmlPanel.setText(htmlText);
 		contentPane.addComponent(htmlPanel);
-		
-		
+
 		contentPane.addBlank();
 		contentPane.addBlank();
 		contentPane.addBlank();
-		
-		originalLayerBtn = new JRadioButton(PluginServices.getText(this, "Calcular_la_red_sobre_la_capa_original"));
+
+		originalLayerBtn = new JRadioButton(PluginServices.getText(this,
+				"Calcular_la_red_sobre_la_capa_original"));
 		originalLayerBtn.setSelected(true);
-		
-		cleanedLayerBtn = new JRadioButton(PluginServices.getText(this, "Aplicar_un_CLEAN_sobre_la_capa_original"));
-		
+
+		cleanedLayerBtn = new JRadioButton(PluginServices.getText(this,
+				"Aplicar_un_CLEAN_sobre_la_capa_original"));
+
 		ButtonGroup cleanGroup = new ButtonGroup();
 		cleanGroup.add(originalLayerBtn);
 		cleanGroup.add(cleanedLayerBtn);
-		
+
 		contentPane.addComponent(originalLayerBtn);
 		contentPane.addComponent(cleanedLayerBtn);
-		
+
 		contentPane.addBlank();
 		contentPane.addBlank();
 		contentPane.addBlank();
-		
-		originalCoordinatesBtn = new JRadioButton(PluginServices.getText(this, "Trabajar_con_las_coordenadas_originales"));
+
+		originalCoordinatesBtn = new JRadioButton(PluginServices.getText(this,
+				"Trabajar_con_las_coordenadas_originales"));
 		originalCoordinatesBtn.setSelected(true);
-		
-		snappedCoordinatesBtn = new JRadioButton(PluginServices.getText(this, "Aplicar_tolerancia_de_snap"));
-		SpinnerNumberModel spinnerModel =
-			new SpinnerNumberModel(0.01, 0d, 100d, 0.01 );
+
+		snappedCoordinatesBtn = new JRadioButton(PluginServices.getText(this,
+				"Aplicar_tolerancia_de_snap"));
+		SpinnerNumberModel spinnerModel = new SpinnerNumberModel(0.01, 0d,
+				100d, 0.01);
 		snapTolerance = new JSpinner(spinnerModel);
-//		 Disable keyboard edits in the spinner
-//		JFormattedTextField tf = ((JSpinner.DefaultEditor) snapTolerance
-//				.getEditor()).getTextField();
-//		tf.setEditable(false);
-//		tf.setBackground(Color.white);
-		               
+		// Disable keyboard edits in the spinner
+		// JFormattedTextField tf = ((JSpinner.DefaultEditor) snapTolerance
+		// .getEditor()).getTextField();
+		// tf.setEditable(false);
+		// tf.setBackground(Color.white);
+
 		ButtonGroup snapGroup = new ButtonGroup();
 		snapGroup.add(originalCoordinatesBtn);
 		snapGroup.add(snappedCoordinatesBtn);
-		
+
 		contentPane.addComponent(originalCoordinatesBtn);
 		contentPane.addComponent(snappedCoordinatesBtn, snapTolerance);
-		
-		
+
 		this.add(contentPane);
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

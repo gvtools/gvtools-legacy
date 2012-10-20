@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.jts.voronoi;
 
 import java.awt.geom.Point2D;
@@ -54,16 +54,17 @@ import org.gvsig.jts.voronoi.VoronoiAndTinInputLyr.VertexVisitor;
 
 /**
  * Visits all vertices of a VoronoiAndTinInputLyr and computes its extent
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
-public class MessExtentVertexVisitor implements VertexVisitor{
+public class MessExtentVertexVisitor implements VertexVisitor {
 	int count = 0;
 	double argmaxx = 0;
 	double argmaxy = 0;
 	double argminx = 0;
 	double argminy = 0;
-	
+
 	public void visit(Point2D vertex) {
 		if (count == 0) {
 			argmaxx = vertex.getX();
@@ -126,4 +127,4 @@ public class MessExtentVertexVisitor implements VertexVisitor{
 	public void setArgminy(double argminy) {
 		this.argminy = argminy;
 	}
-}//class
+}// class

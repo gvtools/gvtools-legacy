@@ -39,10 +39,9 @@ import com.iver.cit.gvsig.fmap.tools.Behavior.CircleBehavior;
 import com.iver.cit.gvsig.fmap.tools.Events.MeasureEvent;
 import com.iver.cit.gvsig.fmap.tools.Listeners.CircleListener;
 
-
 /**
- *
- *
+ * 
+ * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class CircleSelectionBehavior extends CircleBehavior {
@@ -58,37 +57,42 @@ public class CircleSelectionBehavior extends CircleBehavior {
 
 	public CircleSelectionBehavior(CircleListener zili) {
 		super(zili);
-		
+
 		listener = zili;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#paintComponent(java.awt.Graphics)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#paintComponent(java.awt
+	 * .Graphics)
 	 */
-	public void paintComponent(Graphics g) {		
+	public void paintComponent(Graphics g) {
 		double radio;
 		BufferedImage img = getMapControl().getImage();
 		g.drawImage(img, 0, 0, null);
 		g.setColor(Color.black);
 		g.setXORMode(Color.white);
-		if ((m_FirstPoint != null) && (m_LastPoint != null)) {			
+		if ((m_FirstPoint != null) && (m_LastPoint != null)) {
 			radio = m_LastPoint.distance(m_FirstPoint);
-			Arc2D.Double arc = new Arc2D.Double(m_FirstPoint.getX()-radio,
-												m_FirstPoint.getY()-radio,
-												2*radio,
-												2*radio, 0, 360, Arc2D.OPEN);
+			Arc2D.Double arc = new Arc2D.Double(m_FirstPoint.getX() - radio,
+					m_FirstPoint.getY() - radio, 2 * radio, 2 * radio, 0, 360,
+					Arc2D.OPEN);
 
-			((Graphics2D) g).draw(arc);			
+			((Graphics2D) g).draw(arc);
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mousePressed(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mousePressed(java.awt
+	 * .event.MouseEvent)
 	 */
 	public void mousePressed(MouseEvent e) {
-		
+
 		Point pScreen = e.getPoint();
 		m_PointAnt = pScreen;
 
@@ -107,22 +111,25 @@ public class CircleSelectionBehavior extends CircleBehavior {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseReleased(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseReleased(java.awt
+	 * .event.MouseEvent)
 	 */
 	public void mouseReleased(MouseEvent e) throws BehaviorException {
-	    if ((m_FirstPoint == null) || (m_LastPoint == null))
-	    	return;
+		if ((m_FirstPoint == null) || (m_LastPoint == null))
+			return;
 
 		Point2D p1;
 		Point2D p2;
-		Point pScreen = e.getPoint(); 
+		Point pScreen = e.getPoint();
 
 		ViewPort vp = getMapControl().getMapContext().getViewPort();
 
 		p1 = vp.toMapPoint(m_FirstPoint);
 		p2 = vp.toMapPoint(pScreen);
 
-		//	Fijamos el nuevo extent
+		// Fijamos el nuevo extent
 		Rectangle2D.Double r = new Rectangle2D.Double();
 		r.setFrameFromDiagonal(p1, p2);
 
@@ -134,11 +141,11 @@ public class CircleSelectionBehavior extends CircleBehavior {
 		x[0] = new Double(p1.getX());
 		x[1] = new Double(p2.getX());
 		y[0] = new Double(p1.getY());
-		y[1] = new Double(p2.getY());			
+		y[1] = new Double(p2.getY());
 		MeasureEvent event = new MeasureEvent(x, y, e);
-		listener.circle(event);						
-		getMapControl().repaint();	    
-		
+		listener.circle(event);
+		getMapControl().repaint();
+
 		m_FirstPoint = null;
 		m_LastPoint = null;
 		isClicked = false;
@@ -146,33 +153,40 @@ public class CircleSelectionBehavior extends CircleBehavior {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseDragged(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseDragged(java.awt
+	 * .event.MouseEvent)
 	 */
 	public void mouseDragged(MouseEvent e) throws BehaviorException {
 		mouseMoved(e);
-	}	
+	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseMoved(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseMoved(java.awt.event
+	 * .MouseEvent)
 	 */
-	public void mouseMoved(MouseEvent e)  throws BehaviorException {
-		if (! isClicked)
+	public void mouseMoved(MouseEvent e) throws BehaviorException {
+		if (!isClicked)
 			return;
 
 		m_LastPoint = e.getPoint();
-		
-	    if (m_FirstPoint == null) return;
+
+		if (m_FirstPoint == null)
+			return;
 		Point2D p1;
 		Point2D p2;
-		Point pScreen = e.getPoint(); 
+		Point pScreen = e.getPoint();
 
 		ViewPort vp = getMapControl().getMapContext().getViewPort();
 
 		p1 = vp.toMapPoint(m_FirstPoint);
 		p2 = vp.toMapPoint(pScreen);
 
-		//	Fijamos el nuevo extent
+		// Fijamos el nuevo extent
 		Rectangle2D.Double r = new Rectangle2D.Double();
 		r.setFrameFromDiagonal(p1, p2);
 
@@ -184,9 +198,9 @@ public class CircleSelectionBehavior extends CircleBehavior {
 		x[0] = new Double(p1.getX());
 		x[1] = new Double(p2.getX());
 		y[0] = new Double(p1.getY());
-		y[1] = new Double(p2.getY());			
+		y[1] = new Double(p2.getY());
 		MeasureEvent event = new MeasureEvent(x, y, e);
-		listener.circle(event);						
+		listener.circle(event);
 		getMapControl().repaint();
 	}
 }

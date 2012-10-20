@@ -50,10 +50,11 @@ package com.iver.utiles.console;
  */
 public interface ResponseListener {
 	/**
-	 * Invocado cuando el usuario pulsa intro en la consola despues de haber
-	 * una pregunta en al mismas
-	 *
-	 * @param response Texto introducido por el usuario. Null si se pulsó ESC
+	 * Invocado cuando el usuario pulsa intro en la consola despues de haber una
+	 * pregunta en al mismas
+	 * 
+	 * @param response
+	 *            Texto introducido por el usuario. Null si se pulsó ESC
 	 */
 	public void acceptResponse(String response);
 }

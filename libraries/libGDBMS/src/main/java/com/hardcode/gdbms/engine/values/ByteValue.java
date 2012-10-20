@@ -2,9 +2,6 @@ package com.hardcode.gdbms.engine.values;
 
 import java.sql.Types;
 
-
-
-
 /**
  *
  */
@@ -13,8 +10,9 @@ public class ByteValue extends NumericValue {
 
 	/**
 	 * Crea un nuevo ByteValue.
-	 *
-	 * @param value DOCUMENT ME!
+	 * 
+	 * @param value
+	 *            DOCUMENT ME!
 	 */
 	ByteValue(byte value) {
 		this.value = value;
@@ -75,19 +73,19 @@ public class ByteValue extends NumericValue {
 		return ValueFactory.BYTE;
 	}
 
-    /**
-     * @see com.hardcode.gdbms.engine.values.Value#getStringValue(com.hardcode.gdbms.engine.data.driver.ValueWriter)
-     */
-    public String getStringValue(ValueWriter writer) {
-        return writer.getStatementString(value, Types.TINYINT);
-    }
+	/**
+	 * @see com.hardcode.gdbms.engine.values.Value#getStringValue(com.hardcode.gdbms.engine.data.driver.ValueWriter)
+	 */
+	public String getStringValue(ValueWriter writer) {
+		return writer.getStatementString(value, Types.TINYINT);
+	}
 
-    /**
-     * @see com.hardcode.gdbms.engine.values.Value#getSQLType()
-     */
-    public int getSQLType() {
-        return Types.TINYINT;
-    }
+	/**
+	 * @see com.hardcode.gdbms.engine.values.Value#getSQLType()
+	 */
+	public int getSQLType() {
+		return Types.TINYINT;
+	}
 
 	public int getWidth() {
 		return 1;

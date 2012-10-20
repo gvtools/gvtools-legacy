@@ -49,8 +49,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
+
 import javax.swing.JCheckBox;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
@@ -62,7 +62,6 @@ import org.gvsig.symbology.gui.styling.LayerPreview;
 
 import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
-import com.hardcode.gdbms.engine.data.DataSourceFactory;
 import com.hardcode.gdbms.engine.instruction.EvaluationException;
 import com.hardcode.gdbms.engine.instruction.SemanticException;
 import com.hardcode.gdbms.parser.ParseException;
@@ -81,7 +80,8 @@ import com.iver.cit.gvsig.fmap.rendering.styling.labeling.IZoomConstraints;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelClass;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelingFactory;
 
-public class DefaultLabeling extends AbstractLabelingMethodPanel implements ActionListener {
+public class DefaultLabeling extends AbstractLabelingMethodPanel implements
+		ActionListener {
 	private static final long serialVersionUID = 7100208944546698724L;
 	private LabelClass defaultLabel;
 	private IPlacementConstraints placementConstraints;
@@ -94,6 +94,7 @@ public class DefaultLabeling extends AbstractLabelingMethodPanel implements Acti
 	private boolean allowOverlap;
 	private IZoomConstraints zoomConstraints;
 	private LabelClassProperties lcProp;
+
 	@Override
 	public Class<? extends ILabelingMethod> getLabelingMethodClass() {
 		return DefaultLabelingMethod.class;
@@ -101,16 +102,17 @@ public class DefaultLabeling extends AbstractLabelingMethodPanel implements Acti
 
 	@Override
 	public String getName() {
-		return PluginServices.getText(this, "label_features_in_the_same_way")+".";
+		return PluginServices.getText(this, "label_features_in_the_same_way")
+				+ ".";
 	}
 
 	@Override
-	public void fillPanel(ILabelingMethod method, SelectableDataSource dataSource) {
+	public void fillPanel(ILabelingMethod method,
+			SelectableDataSource dataSource) {
 		try {
 			if (enableLayerPrev.isSelected()) {
 				layerPrev.setLayer(layer);
-			}
-			else {
+			} else {
 				layerPrev.setLayer(null);
 			}
 
@@ -132,7 +134,8 @@ public class DefaultLabeling extends AbstractLabelingMethodPanel implements Acti
 		}
 
 		LabelClass lc = null;
-		if (method.getLabelClasses() != null && method.getLabelClasses().length > 0) {
+		if (method.getLabelClasses() != null
+				&& method.getLabelClasses().length > 0) {
 			lc = method.getLabelClasses()[0];
 		} else {
 			lc = new LabelClass();
@@ -141,33 +144,33 @@ public class DefaultLabeling extends AbstractLabelingMethodPanel implements Acti
 		getLcProp();
 	}
 
-	private JButton getBtnProperties(){
-		if (btnProperties == null){
-			btnProperties = new JButton(PluginServices.getText(this, "properties"));
+	private JButton getBtnProperties() {
+		if (btnProperties == null) {
+			btnProperties = new JButton(PluginServices.getText(this,
+					"properties"));
 			btnProperties.addActionListener(this);
 		}
 		return btnProperties;
 	}
 
-	private LabelClassPreview getLabelPrev(){
-		if (labelPrev == null){
+	private LabelClassPreview getLabelPrev() {
+		if (labelPrev == null) {
 			labelPrev = new LabelClassPreview();
 		}
 		return labelPrev;
 	}
 
-	private JCheckBox getEnableLayerPreview(){
-		if(enableLayerPrev == null){
-			enableLayerPrev = new JCheckBox(
-					PluginServices.getText(this, "Enable_layer_preview"));
+	private JCheckBox getEnableLayerPreview() {
+		if (enableLayerPrev == null) {
+			enableLayerPrev = new JCheckBox(PluginServices.getText(this,
+					"Enable_layer_preview"));
 			enableLayerPrev.addItemListener(new ItemListener() {
 
 				public void itemStateChanged(ItemEvent e) {
 					try {
-						if (e.getStateChange()==ItemEvent.SELECTED) {
+						if (e.getStateChange() == ItemEvent.SELECTED) {
 							layerPrev.setLayer(layer);
-						}
-						else if (e.getStateChange()==ItemEvent.DESELECTED) {
+						} else if (e.getStateChange() == ItemEvent.DESELECTED) {
 							layerPrev.setLayer(null);
 						}
 					} catch (ExpansionFileReadException e1) {
@@ -181,28 +184,29 @@ public class DefaultLabeling extends AbstractLabelingMethodPanel implements Acti
 		return enableLayerPrev;
 	}
 
-	private LayerPreview getLayerPreview(){
-		if (layerPrev == null){
+	private LayerPreview getLayerPreview() {
+		if (layerPrev == null) {
 			layerPrev = new LayerPreview();
 		}
 		return layerPrev;
 	}
+
 	@Override
 	protected void initializePanel() {
 		setLayout(new BorderLayout());
 		JSplitPane scrl = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		scrl.add(getLayerPreview(), JSplitPane.LEFT);
 
-		labelPrev = getLabelPrev(); //new LabelClassPreview();
+		labelPrev = getLabelPrev(); // new LabelClassPreview();
 		JPanel aux = new JPanel(new BorderLayout());
-		aux.add(new JBlank(10, 10), BorderLayout.NORTH );
-		aux.add(new JBlank(10, 10), BorderLayout.WEST );
+		aux.add(new JBlank(10, 10), BorderLayout.NORTH);
+		aux.add(new JBlank(10, 10), BorderLayout.WEST);
 		aux.add(labelPrev, BorderLayout.CENTER);
-		aux.add(new JBlank(10, 10), BorderLayout.EAST );
+		aux.add(new JBlank(10, 10), BorderLayout.EAST);
 		JPanel aux2 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
 		btnProperties = getBtnProperties();
 		aux2.add(btnProperties);
-//		btnProperties.addActionListener(this);
+		// btnProperties.addActionListener(this);
 		aux.add(aux2, BorderLayout.SOUTH);
 		scrl.add(aux, JSplitPane.RIGHT);
 		add(scrl, BorderLayout.CENTER);
@@ -212,8 +216,8 @@ public class DefaultLabeling extends AbstractLabelingMethodPanel implements Acti
 		add(enableLayerPrev, BorderLayout.SOUTH);
 	}
 
-	private LabelClassProperties getLcProp(){
-		if(lcProp == null){
+	private LabelClassProperties getLcProp() {
+		if (lcProp == null) {
 			lcProp = new LabelClassProperties(fieldNames, fieldTypes);
 			lcProp.setLabelClass(method.getLabelClasses()[0]);
 		}
@@ -223,17 +227,21 @@ public class DefaultLabeling extends AbstractLabelingMethodPanel implements Acti
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(getBtnProperties())) {
-//			LabelClassProperties lcProp = new LabelClassProperties(fieldNames, fieldTypes);
-//			lcProp.setLabelClass(method.getLabelClasses()[0]);
-//			PluginServices.getMDIManager().addWindow(lcProp);
-//			setLabel(lcProp.getLabelClass());
+			// LabelClassProperties lcProp = new
+			// LabelClassProperties(fieldNames, fieldTypes);
+			// lcProp.setLabelClass(method.getLabelClasses()[0]);
+			// PluginServices.getMDIManager().addWindow(lcProp);
+			// setLabel(lcProp.getLabelClass());
 			LabelClassProperties lcProp = getLcProp();
 			LabelClass lc = defaultLabel;
 			lcProp.setLabelClass(lc);
 			boolean eval = false;
-			while (!eval){
+			while (!eval) {
 				PluginServices.getMDIManager().addWindow(lcProp);
-				if(!lcProp.isAccepted()){ break; };
+				if (!lcProp.isAccepted()) {
+					break;
+				}
+				;
 				lc = lcProp.getLabelClass();
 				eval = evaluateSQL(lc);
 			}
@@ -241,10 +249,10 @@ public class DefaultLabeling extends AbstractLabelingMethodPanel implements Acti
 		}
 	}
 
-	private boolean evaluateSQL(LabelClass lc){
-		if(lc.isUseSqlQuery()){
+	private boolean evaluateSQL(LabelClass lc) {
+		if (lc.isUseSqlQuery()) {
 			String sqlQuery = lc.getSQLQuery();
-			if (sqlQuery.compareToIgnoreCase("")!=0){
+			if (sqlQuery.compareToIgnoreCase("") != 0) {
 				SelectableDataSource recordset = null;
 				try {
 					recordset = layer.getRecordset();
@@ -252,11 +260,13 @@ public class DefaultLabeling extends AbstractLabelingMethodPanel implements Acti
 					NotificationManager.addError(e1);
 					return false;
 				}
-				if (recordset != null){
+				if (recordset != null) {
 					String rName = recordset.getName();
-					sqlQuery = "select * from '"+rName+ "' where "+sqlQuery+";";
+					sqlQuery = "select * from '" + rName + "' where "
+							+ sqlQuery + ";";
 					try {
-						recordset.getDataSourceFactory().executeSQL(sqlQuery, 0);
+						recordset.getDataSourceFactory()
+								.executeSQL(sqlQuery, 0);
 					} catch (DriverLoadException e1) {
 						NotificationManager.addError(e1);
 						return false;
@@ -264,16 +274,24 @@ public class DefaultLabeling extends AbstractLabelingMethodPanel implements Acti
 						NotificationManager.addError(e1);
 						return false;
 					} catch (ParseException e1) {
-						NotificationManager.showMessageError(PluginServices.getText(this, "error_coding_filter_query"), e1);
+						NotificationManager
+								.showMessageError(PluginServices.getText(this,
+										"error_coding_filter_query"), e1);
 						return false;
 					} catch (SemanticException e1) {
-						NotificationManager.showMessageError(PluginServices.getText(this, "error_coding_filter_query"), e1);
+						NotificationManager
+								.showMessageError(PluginServices.getText(this,
+										"error_coding_filter_query"), e1);
 						return false;
 					} catch (EvaluationException e1) {
-						NotificationManager.showMessageError(PluginServices.getText(this, "error_validating_filter_query"), e1);
+						NotificationManager.showMessageError(
+								PluginServices.getText(this,
+										"error_validating_filter_query"), e1);
 						return false;
 					} catch (Error e1) {
-						NotificationManager.showMessageError(PluginServices.getText(this, "error_coding_filter_query"),new Exception(e1));
+						NotificationManager.showMessageError(PluginServices
+								.getText(this, "error_coding_filter_query"),
+								new Exception(e1));
 						return false;
 					}
 				}
@@ -283,7 +301,8 @@ public class DefaultLabeling extends AbstractLabelingMethodPanel implements Acti
 	}
 
 	private void setLabel(LabelClass labelClass) {
-		defaultLabel = LabelingFactory.createLabelClassFromXML(labelClass.getXMLEntity());
+		defaultLabel = LabelingFactory.createLabelClassFromXML(labelClass
+				.getXMLEntity());
 		labelPrev.setLabelClass(defaultLabel);
 		method = newMethodForThePreview(defaultLabel);
 
@@ -296,21 +315,24 @@ public class DefaultLabeling extends AbstractLabelingMethodPanel implements Acti
 	}
 
 	private void updatePreview() {
-		GeneralLabelingStrategy s = (GeneralLabelingStrategy) layer.getLabelingStrategy();
-		if (method == null){
+		GeneralLabelingStrategy s = (GeneralLabelingStrategy) layer
+				.getLabelingStrategy();
+		if (method == null) {
 			s.setLabelingMethod(newMethodForThePreview(defaultLabel));
 		} else {
 			s.setLabelingMethod(method);
 		}
-//		s.setPlacementConstraints(placementConstraints);
-//		s.setAllowOverlapping(allowOverlap);
-//		s.setZoomConstraints(zoomConstraints);
+		// s.setPlacementConstraints(placementConstraints);
+		// s.setAllowOverlapping(allowOverlap);
+		// s.setZoomConstraints(zoomConstraints);
 
 		layer.setIsLabeled(true);
 
-		/* If the selected labeling method is OnSelectionLabeled we have to select some rows
-		 * in the previous sample image*/
-		if(s.getLabelingMethod() instanceof OnSelectionLabeled) {
+		/*
+		 * If the selected labeling method is OnSelectionLabeled we have to
+		 * select some rows in the previous sample image
+		 */
+		if (s.getLabelingMethod() instanceof OnSelectionLabeled) {
 
 			try {
 
@@ -319,7 +341,7 @@ public class DefaultLabeling extends AbstractLabelingMethodPanel implements Acti
 				FBitSet bitSet = new FBitSet();
 				long rowCount = layer.getRecordset().getRowCount();
 
-				for (int i = 0; i <= rowCount/4; i++) {
+				for (int i = 0; i <= rowCount / 4; i++) {
 					bitSet.set(i);
 				}
 
@@ -327,10 +349,10 @@ public class DefaultLabeling extends AbstractLabelingMethodPanel implements Acti
 				layer.getRecordset().setSelectionSupport(selectionSupport);
 
 			} catch (ReadDriverException e) {
-				NotificationManager.addError(PluginServices.getText(this, "accessing_file_structure"), e);
+				NotificationManager.addError(PluginServices.getText(this,
+						"accessing_file_structure"), e);
 			}
 		}
-
 
 		try {
 			Rectangle r = layerPrev.getBounds();
@@ -347,8 +369,8 @@ public class DefaultLabeling extends AbstractLabelingMethodPanel implements Acti
 
 	public void propertyChange(PropertyChangeEvent evt) {
 		String prop = evt.getPropertyName();
-		GeneralLabelingStrategy s = (GeneralLabelingStrategy) layer.
-		getLabelingStrategy();
+		GeneralLabelingStrategy s = (GeneralLabelingStrategy) layer
+				.getLabelingStrategy();
 
 		if (AbstractLabelingMethodPanel.PLACEMENT_CONSTRAINTS.equals(prop)) {
 			placementConstraints = (IPlacementConstraints) evt.getNewValue();
@@ -366,14 +388,17 @@ public class DefaultLabeling extends AbstractLabelingMethodPanel implements Acti
 
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
-		if (layerPrev!=null) {
+		if (layerPrev != null) {
 			layerPrev.setEnabled(enabled);
-		};
-		if (labelPrev!=null) {
+		}
+		;
+		if (labelPrev != null) {
 			labelPrev.setEnabled(enabled);
-		};
-		if (btnProperties!=null) {
+		}
+		;
+		if (btnProperties != null) {
 			btnProperties.setEnabled(enabled);
-		};
+		}
+		;
 	}
 }

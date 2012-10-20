@@ -56,83 +56,129 @@
 package com.iver.utiles;
 
 /**
- * <p>Most exceptions produced in a layer, has common information (layer name, driver name, error description, error code).</p>
+ * <p>
+ * Most exceptions produced in a layer, has common information (layer name,
+ * driver name, error description, error code).
+ * </p>
  * 
- * <p>An <code>ExceptionDescription</code> can provide this extra information describing the cause of the
- *  error, and more useful information to give to the user that works with a layer.<p>
+ * <p>
+ * An <code>ExceptionDescription</code> can provide this extra information
+ * describing the cause of the error, and more useful information to give to the
+ * user that works with a layer.
+ * <p>
  * 
  * @author azabala
  */
 public abstract class ExceptionDescription {
 	/**
-	 * <p>Code which identifies the kind of error which is the cause of this exception.</p>
+	 * <p>
+	 * Code which identifies the kind of error which is the cause of this
+	 * exception.
+	 * </p>
 	 */
 	private int errorCode;
 
 	/**
-	 * <p>A description about the error which produced this exception.</p>
+	 * <p>
+	 * A description about the error which produced this exception.
+	 * </p>
 	 */
 	private String errorDescription;
 
 	/**
-	 * <p>If this exception was produced using a driver, this attribute describes that driver.</p>
+	 * <p>
+	 * If this exception was produced using a driver, this attribute describes
+	 * that driver.
+	 * </p>
 	 */
 	private String driverName;
 
 	/**
-	 * <p>If this exception was produced using a layer, this attribute describes that layer.</p> 
+	 * <p>
+	 * If this exception was produced using a layer, this attribute describes
+	 * that layer.
+	 * </p>
 	 */
 	private String layerName;
-	
+
 	/**
-	 * <p>Gets the name of the driver (if a driver was using) which this exception was produced.</p>
+	 * <p>
+	 * Gets the name of the driver (if a driver was using) which this exception
+	 * was produced.
+	 * </p>
 	 * 
-	 * @return the name of the driver (if a driver was using) which this exception was produced
-	 */	
+	 * @return the name of the driver (if a driver was using) which this
+	 *         exception was produced
+	 */
 	public String getDriverName() {
 		return driverName;
 	}
 
 	/**
-	 * <p>Sets the name of the driver (if a driver was using) which this exception was produced.</p>
+	 * <p>
+	 * Sets the name of the driver (if a driver was using) which this exception
+	 * was produced.
+	 * </p>
 	 * 
-	 * @param driverName the name of the driver (if a driver was using) which this exception was produced
+	 * @param driverName
+	 *            the name of the driver (if a driver was using) which this
+	 *            exception was produced
 	 */
-	public void setDriverName(String driverName){
+	public void setDriverName(String driverName) {
 		this.driverName = driverName;
-	}	
+	}
 
 	/**
-	 * <p>Gets the name of the layer (if a layer was using) with that this exception was produced.</p>
+	 * <p>
+	 * Gets the name of the layer (if a layer was using) with that this
+	 * exception was produced.
+	 * </p>
 	 * 
-	 * @return the name of the layer (if a layer was using) with that this exception was produced
+	 * @return the name of the layer (if a layer was using) with that this
+	 *         exception was produced
 	 */
 	public String getLayerName() {
 		return driverName;
 	}
 
 	/**
-	 * <p>Sets the name of the layer (if a layer was using) with that this exception was produced.</p>
+	 * <p>
+	 * Sets the name of the layer (if a layer was using) with that this
+	 * exception was produced.
+	 * </p>
 	 * 
-	 * @param layerName the name of the layer (if a layer was using) with that this exception was produced
+	 * @param layerName
+	 *            the name of the layer (if a layer was using) with that this
+	 *            exception was produced
 	 */
-	public void setLayerName(String layerName){
+	public void setLayerName(String layerName) {
 		this.layerName = layerName;
-	}	
+	}
 
 	/**
-	 * <p>Sets the name of the layer (if a layer was using) with that this exception was produced.</p>
+	 * <p>
+	 * Sets the name of the layer (if a layer was using) with that this
+	 * exception was produced.
+	 * </p>
 	 * 
-	 * @param layerName the name of the layer (if a layer was using) with that this exception was produced
+	 * @param layerName
+	 *            the name of the layer (if a layer was using) with that this
+	 *            exception was produced
 	 */
 	public ExceptionDescription() {
 	}
 
 	/**
-	 * <p>Creates a new <code>ExceptionDescription</code> with the useful values initialized.</p>
+	 * <p>
+	 * Creates a new <code>ExceptionDescription</code> with the useful values
+	 * initialized.
+	 * </p>
 	 * 
-	 * @param errorCode code which identifies the kind of error which is the cause of this exception
-	 * @param errorDescription description about the error which produced this exception
+	 * @param errorCode
+	 *            code which identifies the kind of error which is the cause of
+	 *            this exception
+	 * @param errorDescription
+	 *            description about the error which produced this exception
 	 */
 	public ExceptionDescription(int errorCode, String errorDescription) {
 		this.errorCode = errorCode;
@@ -140,34 +186,48 @@ public abstract class ExceptionDescription {
 	}
 
 	/**
-	 * <p>Sets the code which identifies the kind of error which is the cause of this exception.</p>
+	 * <p>
+	 * Sets the code which identifies the kind of error which is the cause of
+	 * this exception.
+	 * </p>
 	 * 
-	 * @param errorCode code which identifies the kind of error which is the cause of this exception
+	 * @param errorCode
+	 *            code which identifies the kind of error which is the cause of
+	 *            this exception
 	 */
 	public void setCode(int errorCode) {
 		this.errorCode = errorCode;
 	}
 
 	/**
-	 * <p>Sets the description about the error which produced this exception.</p>
+	 * <p>
+	 * Sets the description about the error which produced this exception.
+	 * </p>
 	 * 
-	 * @param description description about the error which produced this exception
+	 * @param description
+	 *            description about the error which produced this exception
 	 */
 	public void setDescription(String description) {
 		this.errorDescription = description;
 	}
 
 	/**
-	 * <p>Gets the code which identifies the kind of error which is the cause of this exception.</p>
+	 * <p>
+	 * Gets the code which identifies the kind of error which is the cause of
+	 * this exception.
+	 * </p>
 	 * 
-	 * @return code which identifies the kind of error which is the cause of this exception
+	 * @return code which identifies the kind of error which is the cause of
+	 *         this exception
 	 */
 	public int getErrorCode() {
 		return errorCode;
 	}
 
 	/**
-	 * <p>Gets the description about the error which produced this exception.</p>
+	 * <p>
+	 * Gets the description about the error which produced this exception.
+	 * </p>
 	 * 
 	 * @return description about the error which produced this exception
 	 */
@@ -176,9 +236,13 @@ public abstract class ExceptionDescription {
 	}
 
 	/**
-	 * <p>Returns a message that describes the error which produced this exception, formatted in HTML code.</p>
+	 * <p>
+	 * Returns a message that describes the error which produced this exception,
+	 * formatted in HTML code.
+	 * </p>
 	 * 
-	 * @return message that describes the error which produced this exception, formatted in HTML code
+	 * @return message that describes the error which produced this exception,
+	 *         formatted in HTML code
 	 */
 	public abstract String getHtmlErrorMessage();
 }

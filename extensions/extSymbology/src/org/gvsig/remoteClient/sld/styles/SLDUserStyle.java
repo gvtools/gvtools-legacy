@@ -48,22 +48,23 @@ import org.gvsig.remoteClient.sld.SLDFeatureTypeStyle;
 import org.xmlpull.v1.XmlPullParserException;
 
 import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
+
 /**
- * UserStyle allows map styling to be defined externally from a system and 
- * to be passed around in an interoperable format.
+ * UserStyle allows map styling to be defined externally from a system and to be
+ * passed around in an interoperable format.
  * 
  * @see http://portal.opengeospatial.org/files/?artifact_id=1188
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
 public abstract class SLDUserStyle extends AbstractSLDStyle {
-	
+
 	protected String title;
 	protected String uStyleAbstract;
 	protected boolean isDefault = false;
 	private ArrayList<SLDFeatureTypeStyle> featureTypeStyle = new ArrayList<SLDFeatureTypeStyle>();
 
-
-	public abstract void parse(XMLSchemaParser parser)throws IOException, XmlPullParserException, LegendDriverException;
+	public abstract void parse(XMLSchemaParser parser) throws IOException,
+			XmlPullParserException, LegendDriverException;
 
 	public abstract String toXML();
 
@@ -95,12 +96,13 @@ public abstract class SLDUserStyle extends AbstractSLDStyle {
 		return featureTypeStyle;
 	}
 
-	public void setFeatureTypeStyle(ArrayList<SLDFeatureTypeStyle> featureTypeStyle) {
+	public void setFeatureTypeStyle(
+			ArrayList<SLDFeatureTypeStyle> featureTypeStyle) {
 		this.featureTypeStyle = featureTypeStyle;
 	}
-	
+
 	public void addFeatureTypeStyle(SLDFeatureTypeStyle typeStyle) {
 		this.featureTypeStyle.add(typeStyle);
-		
+
 	}
 }

@@ -74,6 +74,7 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * It parses a gml:MultiPolygonType object. Example:
  * <p>
+ * 
  * <pre>
  * <code> 
  * &lt;MultiPolygon gid="c731" srsName="http://www.opengis.net/gml/srs/epsg.xml#4326"&gt;
@@ -98,60 +99,65 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  * &lt;/MultiPolygon&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class MultiPolygonTypeBinding extends GeometryBinding{
+public class MultiPolygonTypeBinding extends GeometryBinding {
 
 	/**
 	 * It parses the gml:MultiPolygon tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * A multipolygon
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return A multipolygon
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public Object parse(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
+	public Object parse(IXmlStreamReader parser, GPEDefaultGmlParser handler)
+			throws XmlStreamException, IOException {
 		boolean endFeature = false;
 		int currentTag;
-		Object multiPolygon = null;		
+		Object multiPolygon = null;
 
 		super.setAtributtes(parser, handler.getErrorHandler());
 
-		multiPolygon = handler.getContentHandler().startMultiPolygon(id, srsName);
+		multiPolygon = handler.getContentHandler().startMultiPolygon(id,
+				srsName);
 
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
 				parseTag(parser, handler, tag, id, multiPolygon, srsName);
 				break;
 			case IXmlStreamReader.END_ELEMENT:
-				endFeature = parseLastTag(parser, handler, tag);	
-				if (endFeature){
+				endFeature = parseLastTag(parser, handler, tag);
+				if (endFeature) {
 					handler.getContentHandler().endMultiPolygon(multiPolygon);
 				}
 				break;
-			case IXmlStreamReader.CHARACTERS:					
+			case IXmlStreamReader.CHARACTERS:
 
 				break;
 			}
-			if (!endFeature){					
+			if (!endFeature) {
 				currentTag = parser.next();
 				tag = parser.getName();
 			}
-		}			
-		return multiPolygon;	
+		}
+		return multiPolygon;
 	}
 
 	/**
 	 * It parses the XML tag
+	 * 
 	 * @param parser
 	 * @param handler
 	 * @param tag
@@ -161,28 +167,35 @@ public class MultiPolygonTypeBinding extends GeometryBinding{
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	protected void parseTag(IXmlStreamReader parser,GPEDefaultGmlParser handler, QName tag, String id, Object multiPolygon, String srsName) throws XmlStreamException, IOException{
-		if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_POLYGONMEMBER)){
-			Object polygon = handler.getProfile().getPolygonMemberTypeBinding().
-			parse(parser, handler);
-			handler.getContentHandler().addPolygonToMultiPolygon(polygon, multiPolygon);
+	protected void parseTag(IXmlStreamReader parser,
+			GPEDefaultGmlParser handler, QName tag, String id,
+			Object multiPolygon, String srsName) throws XmlStreamException,
+			IOException {
+		if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_POLYGONMEMBER)) {
+			Object polygon = handler.getProfile().getPolygonMemberTypeBinding()
+					.parse(parser, handler);
+			handler.getContentHandler().addPolygonToMultiPolygon(polygon,
+					multiPolygon);
 		}
-		if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_GEOMETRYMEMBER)){
-			Object polygon = handler.getProfile().getPolygonMemberTypeBinding().
-			parse(parser, handler);
-			handler.getContentHandler().addPolygonToMultiPolygon(polygon, multiPolygon);
+		if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_GEOMETRYMEMBER)) {
+			Object polygon = handler.getProfile().getPolygonMemberTypeBinding()
+					.parse(parser, handler);
+			handler.getContentHandler().addPolygonToMultiPolygon(polygon,
+					multiPolygon);
 		}
 	}
 
 	/**
 	 * Parses the last tag
+	 * 
 	 * @param parser
 	 * @param handler
 	 * @param tag
 	 * @return
 	 */
-	protected boolean parseLastTag(IXmlStreamReader parser,GPEDefaultGmlParser handler, QName tag){
-		if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTIPOLYGON)){						
+	protected boolean parseLastTag(IXmlStreamReader parser,
+			GPEDefaultGmlParser handler, QName tag) {
+		if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_MULTIPOLYGON)) {
 			return true;
 		}
 		return false;

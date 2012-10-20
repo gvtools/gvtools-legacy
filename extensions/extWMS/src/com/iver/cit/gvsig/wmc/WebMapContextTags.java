@@ -40,52 +40,54 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: WebMapContextTags.java 5409 2006-05-24 16:37:35Z jaume $
-* $Log$
-* Revision 1.3  2006-05-24 16:36:28  jaume
-* *** empty log message ***
-*
-* Revision 1.2  2006/05/12 07:47:39  jaume
-* removed unnecessary imports
-*
-* Revision 1.1  2006/05/03 07:51:21  jaume
-* *** empty log message ***
-*
-* Revision 1.5  2006/05/02 15:58:20  jaume
-* Few better javadoc
-*
-* Revision 1.4  2006/05/02 15:57:44  jaume
-* Few better javadoc
-*
-* Revision 1.3  2006/04/21 10:27:32  jaume
-* exporting now supported
-*
-* Revision 1.2  2006/04/19 16:34:29  jaume
-* *** empty log message ***
-*
-* Revision 1.1  2006/04/19 07:57:29  jaume
-* *** empty log message ***
-*
-* Revision 1.2  2006/04/12 17:10:53  jaume
-* *** empty log message ***
-*
-* Revision 1.1  2006/04/04 14:22:22  jaume
-* Now exports MapContext (not yet tested)
-*
-*
-*/
+ *
+ * $Id: WebMapContextTags.java 5409 2006-05-24 16:37:35Z jaume $
+ * $Log$
+ * Revision 1.3  2006-05-24 16:36:28  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/05/12 07:47:39  jaume
+ * removed unnecessary imports
+ *
+ * Revision 1.1  2006/05/03 07:51:21  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.5  2006/05/02 15:58:20  jaume
+ * Few better javadoc
+ *
+ * Revision 1.4  2006/05/02 15:57:44  jaume
+ * Few better javadoc
+ *
+ * Revision 1.3  2006/04/21 10:27:32  jaume
+ * exporting now supported
+ *
+ * Revision 1.2  2006/04/19 16:34:29  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/04/19 07:57:29  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/04/12 17:10:53  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/04/04 14:22:22  jaume
+ * Now exports MapContext (not yet tested)
+ *
+ *
+ */
 package com.iver.cit.gvsig.wmc;
 
 /**
  * WebMapContextTags is a class with only static public fields containing the
  * String constants of the WebMapContext XML document.
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
 public class WebMapContextTags {
-	private WebMapContextTags() {};
-	
+	private WebMapContextTags() {
+	};
+
 	public static final String VIEW_CONTEXT = "ViewContext";
 	public static final String VIEW_CONTEXT_0_1_4 = "WMS_Viewer_Context";
 	public static final String VERSION = "version";
@@ -94,7 +96,7 @@ public class WebMapContextTags {
 	public static final String XMLNS_XLINK = "xmlns:xlink";
 	public static final String XMLNS_XLINK_VALUE = "http://www.w3.org/1999/xlink";
 	public static final String XMLNS_VALUE = "http://www.opengis.net/context"; // "http://www.opengeospatial.net/context"
-	public static final String XMLNS_XSI = "xmlns:xsi"; 
+	public static final String XMLNS_XSI = "xmlns:xsi";
 	public static final String XMLNS_XSI_VALUE = "http://www.w3.org/2001/XMLSchema-instance";
 	public static final String XSI_SCHEMA_LOCATION = "xsi:schemaLocation";
 	public static final String XSI_SCHEMA_LOCATION_VALUE = "http://www.opengeospatial.net/context context.xsd";
@@ -148,5 +150,5 @@ public class WebMapContextTags {
 	public static final String CONTACT_ELECTRONIC_MAIL_ADDRESS = "ContactElectronicMailAddress";
 	public static final String DIMENSION_LIST = "DimensionList";
 	public static final String LEGEND_URL = "LegendURL";
-	
+
 }

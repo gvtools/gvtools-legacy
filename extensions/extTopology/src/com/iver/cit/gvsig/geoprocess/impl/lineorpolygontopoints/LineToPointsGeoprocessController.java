@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.impl.lineorpolygontopoints;
 
 import java.io.File;
@@ -67,13 +67,14 @@ import com.iver.cit.gvsig.geoprocess.impl.lineorpolygontopoints.fmap.LineOrPolyg
 import com.iver.utiles.swing.threads.IMonitorableTask;
 import com.iver.utiles.swing.threads.MonitorableDecoratorMainFirst;
 
-public class LineToPointsGeoprocessController extends AbstractGeoprocessController {
+public class LineToPointsGeoprocessController extends
+		AbstractGeoprocessController {
 
 	private ILineToPointsGeoprocessUserEntries userEntries;
 	private LineOrPolygonToPointsGeoprocess geoprocess;
 
 	public void setView(IGeoprocessUserEntries viewPanel) {
-		this.userEntries =  (ILineToPointsGeoprocessUserEntries) viewPanel;
+		this.userEntries = (ILineToPointsGeoprocessUserEntries) viewPanel;
 	}
 
 	public IGeoprocess getGeoprocess() {
@@ -81,7 +82,7 @@ public class LineToPointsGeoprocessController extends AbstractGeoprocessControll
 	}
 
 	public boolean launchGeoprocess() {
-/*MOVER A CLASE ABSTRACTA*/		
+		/* MOVER A CLASE ABSTRACTA */
 		final FLyrVect inputLayer = userEntries.getInputLayer();
 		FLayers layers = userEntries.getFLayers();
 		File outputFile = null;
@@ -106,16 +107,16 @@ public class LineToPointsGeoprocessController extends AbstractGeoprocessControll
 				return false;
 			}
 		}
-/*MOVER A CLASE ABSTRACTA*/		
-		
+		/* MOVER A CLASE ABSTRACTA */
+
 		geoprocess = new LineOrPolygonToPointsGeoprocess(inputLayer);
 
-/*MOVER A CLASE ABSTRACTA*/		
+		/* MOVER A CLASE ABSTRACTA */
 		SHPLayerDefinition definition = (SHPLayerDefinition) geoprocess
 				.createLayerDefinition();
 		definition.setFile(outputFile);
-		ShpSchemaManager schemaManager = new ShpSchemaManager(outputFile
-				.getAbsolutePath());
+		ShpSchemaManager schemaManager = new ShpSchemaManager(
+				outputFile.getAbsolutePath());
 		IWriter writer = null;
 		try {
 			writer = getShpWriter(definition);
@@ -129,10 +130,10 @@ public class LineToPointsGeoprocessController extends AbstractGeoprocessControll
 		}
 		geoprocess.setResultLayerProperties(writer, schemaManager);
 
-/*MOVER A CLASE ABSTRACTA*/	
-		
+		/* MOVER A CLASE ABSTRACTA */
+
 		HashMap params = new HashMap();
-		
+
 		boolean onlySelection = userEntries.onlyFirstLayerSelected();
 		params.put("layer_selection", new Boolean(onlySelection));
 		double distTolerance = 0d;
@@ -143,11 +144,10 @@ public class LineToPointsGeoprocessController extends AbstractGeoprocessControll
 			e1.printStackTrace();
 		}
 		params.put("cluster_tolerance", new Double(distTolerance));
-		
-		
-/*
- * MOVER A CLASE ABSTRACTA 
- * */		
+
+		/*
+		 * MOVER A CLASE ABSTRACTA
+		 */
 		try {
 			geoprocess.setParameters(params);
 			geoprocess.checkPreconditions();
@@ -172,8 +172,8 @@ public class LineToPointsGeoprocessController extends AbstractGeoprocessControll
 		}
 		return true;
 		/*
-		 * MOVER A CLASE ABSTRACTA 
-		 * */		
+		 * MOVER A CLASE ABSTRACTA
+		 */
 	}
 
 	public int getWidth() {

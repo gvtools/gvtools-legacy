@@ -55,106 +55,112 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.XMLException;
 import com.iver.utiles.XMLEntity;
 
-public class TestTopologyErrorContainer implements ITopologyErrorContainer{
+public class TestTopologyErrorContainer implements ITopologyErrorContainer {
 
-		List<TopologyError> topologyErrors = new ArrayList<TopologyError>();
-		
-		public void addTopologyError(TopologyError topologyError) {
-			topologyError.setID(topologyErrors.size()+"");
-			topologyErrors.add(topologyError);
-		}
-		
-		public Object clone(){
-			return null;
-		}
+	List<TopologyError> topologyErrors = new ArrayList<TopologyError>();
 
-		public List<TopologyError> getTopologyErrors(String ruleName, int shapeType, FLyrVect sourceLayer, CoordinateReferenceSystem desiredCrs, boolean includeExceptions) {
-			return null;
-		}
-		public List<TopologyError> getTopologyErrorsByRule(String ruleName, CoordinateReferenceSystem desiredCrs, boolean includeExceptions) {
-			return null;
-		}
-
-		public List<TopologyError> getTopologyErrorsByShapeType(int shapeType, CoordinateReferenceSystem desiredCrs, boolean includeExceptions) {
-			return null;
-		}
-
-		public List<TopologyError> getTopologyErrorsByLyr(FLyrVect layer, CoordinateReferenceSystem desiredCrs, boolean includeExceptions) {
-			return null;
-		}
-
-		public void markAsTopologyException(TopologyError topologyError) {
-			topologyError.setException(true);	
-		}
-
-		public void demoteToError(TopologyError topologyError) {
-			topologyError.setException(false);
-		}
-
-		public String getErrorFid() {
-			return topologyErrors.size() + "";
-		}
-
-		public int getNumberOfErrors() {
-			return topologyErrors.size();
-		}
-
-		public TopologyError getTopologyError(int index) {
-			return topologyErrors.get(index);
-		}
-
-		public void clear() {
-			// TODO Auto-generated method stub
-			
-		}
-
-		public int getNumberOfExceptions() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		public XMLEntity getXMLEntity() throws XMLException {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		public void setXMLEntity(XMLEntity xml) throws XMLException {
-			// TODO Auto-generated method stub
-			
-		}
-
-		public void removeErrorsByLayer(FLyrVect layer) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		public void removeErrorsByRule(String ruleName) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		public FLyrVect getAsFMapLayer() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		public FLyrVect getAsFMapLayer(String name, CoordinateReferenceSystem crs) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		public Topology getTopology() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		public void setTopology(Topology topology) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		public void removeError(TopologyError topologyError) {
-			// TODO Auto-generated method stub
-			
-		}	
+	public void addTopologyError(TopologyError topologyError) {
+		topologyError.setID(topologyErrors.size() + "");
+		topologyErrors.add(topologyError);
 	}
+
+	public Object clone() {
+		return null;
+	}
+
+	public List<TopologyError> getTopologyErrors(String ruleName,
+			int shapeType, FLyrVect sourceLayer,
+			CoordinateReferenceSystem desiredCrs, boolean includeExceptions) {
+		return null;
+	}
+
+	public List<TopologyError> getTopologyErrorsByRule(String ruleName,
+			CoordinateReferenceSystem desiredCrs, boolean includeExceptions) {
+		return null;
+	}
+
+	public List<TopologyError> getTopologyErrorsByShapeType(int shapeType,
+			CoordinateReferenceSystem desiredCrs, boolean includeExceptions) {
+		return null;
+	}
+
+	public List<TopologyError> getTopologyErrorsByLyr(FLyrVect layer,
+			CoordinateReferenceSystem desiredCrs, boolean includeExceptions) {
+		return null;
+	}
+
+	public void markAsTopologyException(TopologyError topologyError) {
+		topologyError.setException(true);
+	}
+
+	public void demoteToError(TopologyError topologyError) {
+		topologyError.setException(false);
+	}
+
+	public String getErrorFid() {
+		return topologyErrors.size() + "";
+	}
+
+	public int getNumberOfErrors() {
+		return topologyErrors.size();
+	}
+
+	public TopologyError getTopologyError(int index) {
+		return topologyErrors.get(index);
+	}
+
+	public void clear() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public int getNumberOfExceptions() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public XMLEntity getXMLEntity() throws XMLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setXMLEntity(XMLEntity xml) throws XMLException {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void removeErrorsByLayer(FLyrVect layer) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void removeErrorsByRule(String ruleName) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public FLyrVect getAsFMapLayer() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public FLyrVect getAsFMapLayer(String name, CoordinateReferenceSystem crs) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Topology getTopology() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setTopology(Topology topology) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void removeError(TopologyError topologyError) {
+		// TODO Auto-generated method stub
+
+	}
+}

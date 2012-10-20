@@ -59,39 +59,38 @@ import java.io.UnsupportedEncodingException;
  * certain encodings, and it reads the XML header for the rest of encodings.
  * 
  * @author César Martínez Izquierdo <cesar.martinez@iver.es>
- *
+ * 
  */
 public class XMLEncodingUtils {
 	InputStream _is;
-	
+
 	/**
 	 * Creates a new XMLEncodingUtils object.
 	 * 
-	 * @param is An InputStream connected to the XML file to process.
+	 * @param is
+	 *            An InputStream connected to the XML file to process.
 	 */
 	public XMLEncodingUtils(InputStream is) {
 		if (is == null)
 			throw new IllegalArgumentException();
 		_is = is;
 	}
-	
+
 	/**
 	 * Gets the encoding of the XML file.
 	 * 
-	 * The following encodings can be detected: UTF-32BE, UTF-32LE,
-	 * UTF-16BE, UTF-16-LE, UTF-8. The rest of the encodings are
-	 * read from the XML header.
+	 * The following encodings can be detected: UTF-32BE, UTF-32LE, UTF-16BE,
+	 * UTF-16-LE, UTF-8. The rest of the encodings are read from the XML header.
 	 * 
-	 * @return Returns the encoding of the XML file, or null if the
-	 * encoding couldn't be correctly detected or read from the XML
-	 * header.
+	 * @return Returns the encoding of the XML file, or null if the encoding
+	 *         couldn't be correctly detected or read from the XML header.
 	 */
 	public String getEncoding() {
 		int srcCount = 0;
-		String enc=null;
+		String enc = null;
 		char[] srcBuf = new char[128];
-		
-		// read four bytes 
+
+		// read four bytes
 		int chk = 0;
 		try {
 			while (srcCount < 4) {
@@ -101,46 +100,46 @@ public class XMLEncodingUtils {
 				chk = (chk << 8) | i;
 				srcBuf[srcCount++] = (char) i;
 			}
-			
+
 			if (srcCount == 4) {
 				switch (chk) {
-				case 0x00000FEFF :
+				case 0x00000FEFF:
 					enc = "UTF-32BE";
 					srcCount = 0;
 					break;
-					
-				case 0x0FFFE0000 :
+
+				case 0x0FFFE0000:
 					enc = "UTF-32LE";
 					srcCount = 0;
 					break;
-					
-				case 0x03c :
+
+				case 0x03c:
 					enc = "UTF-32BE";
 					srcBuf[0] = '<';
 					srcCount = 1;
 					break;
-					
-				case 0x03c000000 :
+
+				case 0x03c000000:
 					enc = "UTF-32LE";
 					srcBuf[0] = '<';
 					srcCount = 1;
 					break;
-					
-				case 0x0003c003f :
+
+				case 0x0003c003f:
 					enc = "UTF-16BE";
 					srcBuf[0] = '<';
 					srcBuf[1] = '?';
 					srcCount = 2;
 					break;
-					
-				case 0x03c003f00 :
+
+				case 0x03c003f00:
 					enc = "UTF-16LE";
 					srcBuf[0] = '<';
 					srcBuf[1] = '?';
 					srcCount = 2;
 					break;
-					
-				case 0x03c3f786d :
+
+				case 0x03c3f786d:
 					while (true) {
 						int i = _is.read();
 						if (i == -1)
@@ -151,7 +150,7 @@ public class XMLEncodingUtils {
 							int i0 = s.indexOf("encoding");
 							if (i0 != -1) {
 								while (s.charAt(i0) != '"'
-									&& s.charAt(i0) != '\'')
+										&& s.charAt(i0) != '\'')
 									i0++;
 								char deli = s.charAt(i0++);
 								int i1 = s.indexOf(deli, i0);
@@ -160,46 +159,39 @@ public class XMLEncodingUtils {
 							break;
 						}
 					}
-					
-				default :
+
+				default:
 					if ((chk & 0x0ffff0000) == 0x0FEFF0000) {
 						enc = "UTF-16BE";
-						srcBuf[0] =
-							(char) ((srcBuf[2] << 8) | srcBuf[3]);
+						srcBuf[0] = (char) ((srcBuf[2] << 8) | srcBuf[3]);
 						srcCount = 1;
-					}
-					else if ((chk & 0x0ffff0000) == 0x0fffe0000) {
+					} else if ((chk & 0x0ffff0000) == 0x0fffe0000) {
 						enc = "UTF-16LE";
-						srcBuf[0] =
-							(char) ((srcBuf[3] << 8) | srcBuf[2]);
+						srcBuf[0] = (char) ((srcBuf[3] << 8) | srcBuf[2]);
 						srcCount = 1;
-					}
-					else if ((chk & 0x0ffffff00) == 0x0EFBBBF00) {
+					} else if ((chk & 0x0ffffff00) == 0x0EFBBBF00) {
 						enc = "UTF-8";
 						srcBuf[0] = srcBuf[3];
 						srcCount = 1;
 					}
 				}
 			}
-		}
-		catch (IOException ex) {
+		} catch (IOException ex) {
 			return null;
 		}
 		return enc;
 	}
-	
+
 	/**
-	 * Gets an InputStreamReader for the provided XML file.
-	 * The reader uses the right encoding, as specified in
-	 * the XML header (or autodetected). 
+	 * Gets an InputStreamReader for the provided XML file. The reader uses the
+	 * right encoding, as specified in the XML header (or autodetected).
 	 * 
-	 * @return A reader which uses the right encoding, or null
-	 * if the encoding couldn't be correctly detected or read
-	 * from the XML header.
+	 * @return A reader which uses the right encoding, or null if the encoding
+	 *         couldn't be correctly detected or read from the XML header.
 	 */
 	public InputStreamReader getReader() {
 		String encoding = getEncoding();
-		if (encoding==null)
+		if (encoding == null)
 			return null;
 		try {
 			return new InputStreamReader(_is, encoding);
@@ -207,13 +199,13 @@ public class XMLEncodingUtils {
 			return null;
 		}
 	}
-	
+
 	/**
-	 * Gets an InputStreamReader for the provided XML file.
-	 * The reader uses the right encoding, as specified in
-	 * the XML header (or autodetected).
+	 * Gets an InputStreamReader for the provided XML file. The reader uses the
+	 * right encoding, as specified in the XML header (or autodetected).
 	 * 
-	 * @param is An InputStream connected to the XML file to process
+	 * @param is
+	 *            An InputStream connected to the XML file to process
 	 * @return A reader for the provided XML file.
 	 * @see getReader()
 	 */
@@ -225,7 +217,8 @@ public class XMLEncodingUtils {
 	/**
 	 * Gets the character encoding of the XML file.
 	 * 
-	 * @param is An InputStream connected to the XML file to process
+	 * @param is
+	 *            An InputStream connected to the XML file to process
 	 * @see getEncoding()
 	 * @return The encoding of the file
 	 */
@@ -233,32 +226,36 @@ public class XMLEncodingUtils {
 		XMLEncodingUtils util = new XMLEncodingUtils(is);
 		return util.getEncoding();
 	}
-	
+
 	/**
-	 * Gets an InputStreamReader for the provided XML file.
-	 * The reader uses the right encoding, as specified in
-	 * the XML header (or autodetected).
+	 * Gets an InputStreamReader for the provided XML file. The reader uses the
+	 * right encoding, as specified in the XML header (or autodetected).
 	 * 
-	 * @param file The XML file to process
+	 * @param file
+	 *            The XML file to process
 	 * @return A reader for the provided XML file.
 	 * @see getReader()
 	 */
-	public static InputStreamReader getReader(File file) throws FileNotFoundException {
-		BufferedInputStream bs = new BufferedInputStream(new FileInputStream(file));
+	public static InputStreamReader getReader(File file)
+			throws FileNotFoundException {
+		BufferedInputStream bs = new BufferedInputStream(new FileInputStream(
+				file));
 		XMLEncodingUtils util = new XMLEncodingUtils(bs);
 		return util.getReader();
 	}
-	
+
 	/**
 	 * Gets the character encoding of the XML file.
 	 * 
-	 * @param File The XML file to process
+	 * @param File
+	 *            The XML file to process
 	 * @see getEncoding()
 	 * @return The encoding of the file
-	 * @throws FileNotFoundException 
+	 * @throws FileNotFoundException
 	 */
 	public static String getEncoding(File file) throws FileNotFoundException {
-		BufferedInputStream bs = new BufferedInputStream(new FileInputStream(file));
+		BufferedInputStream bs = new BufferedInputStream(new FileInputStream(
+				file));
 		XMLEncodingUtils util = new XMLEncodingUtils(bs);
 		return util.getEncoding();
 	}

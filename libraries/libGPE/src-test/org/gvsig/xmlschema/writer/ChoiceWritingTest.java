@@ -83,39 +83,38 @@ public class ChoiceWritingTest extends WriterBaseTest {
 	private String contentType1 = IXSContentType.WITOUT_CONTENT;
 	private String contentRestriction1 = IXSContentType.WITOUT_RESTRICTION;
 	private String type1ElementName1 = "length";
-	private String type1ElementType1 = "xs:double";	
+	private String type1ElementType1 = "xs:double";
 	private String type1ElementName2 = "name";
 	private String type1ElementType2 = "xs:string";
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.writer.WriterBaseTest#readSchema()
 	 */
-	public void readSchema(){
-		IXSTypeDefinition type = getSchema().getTypeByName(getNamespaceURI(), typeName1);
+	public void readSchema() {
+		IXSTypeDefinition type = getSchema().getTypeByName(getNamespaceURI(),
+				typeName1);
 		assertNotNull(type);
 		assertEquals(type.getQName().getLocalPart(), typeName1);
-		IXSComplexTypeDefinition cType = (IXSComplexTypeDefinition)type;
+		IXSComplexTypeDefinition cType = (IXSComplexTypeDefinition) type;
 		Iterator it = cType.getItems().iterator();
 		IXSChoice choice = null;
-		while (it.hasNext()){
+		while (it.hasNext()) {
 			choice = (IXSChoice) it.next();
 		}
-		assertNotNull(choice);				
+		assertNotNull(choice);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.writer.WriterBaseTest#writeSchema()
 	 */
 	public void writeSchema() {
 		IXSComplexTypeDefinition complexType = getSchema().addComplexType(
 				typeName1, typeType1, contentType1, contentRestriction1);
-		complexType.addElement(
-				type1ElementName1,
-				type1ElementType1);		
-		complexType.addElement(
-				type1ElementName2,
-				type1ElementType2);			
+		complexType.addElement(type1ElementName1, type1ElementType1);
+		complexType.addElement(type1ElementName2, type1ElementType2);
 	}
 }

@@ -45,20 +45,24 @@ import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.tools.PanListenerImpl;
 import com.iver.cit.gvsig.fmap.tools.Events.MoveEvent;
 
-
 /**
- * <p>Inherits {@link PanListener PanListener} enabling/disabling special
- *  controls for managing the data.</p>
- *
+ * <p>
+ * Inherits {@link PanListener PanListener} enabling/disabling special controls
+ * for managing the data.
+ * </p>
+ * 
  * @see PanListenerImpl
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class PanListener extends PanListenerImpl {
 	/**
-	 * <p>Creates a new <code>PanListener</code> object.</p>
+	 * <p>
+	 * Creates a new <code>PanListener</code> object.
+	 * </p>
 	 * 
-	 * @param mapCtrl the <code>MapControl</code> where will be applied the changes
+	 * @param mapCtrl
+	 *            the <code>MapControl</code> where will be applied the changes
 	 */
 	public PanListener(MapControl mapCtrl) {
 		super(mapCtrl);
@@ -66,7 +70,10 @@ public class PanListener extends PanListenerImpl {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.PanListenerImpl#move(com.iver.cit.gvsig.fmap.tools.Events.MoveEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.PanListenerImpl#move(com.iver.cit.gvsig
+	 * .fmap.tools.Events.MoveEvent)
 	 */
 	public void move(MoveEvent event) {
 		super.move(event);

@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
@@ -76,203 +75,230 @@ import com.iver.cit.gvsig.fmap.rendering.Annotation_Legend;
 import com.iver.cit.gvsig.gui.panels.annotation.ConfigureLabel;
 import com.iver.utiles.SimpleFileFilter;
 
-
 /**
  * Dialog to create a new annotation layer.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class Annotation_Create extends FinishAction {
-    private JWizardComponents myWizardComponents;
-    private MapContext map;
-    private Annotation_Layer layerAnnotation;
+	private JWizardComponents myWizardComponents;
+	private MapContext map;
+	private Annotation_Layer layerAnnotation;
 
-    public Annotation_Create(JWizardComponents wizardComponents,
-        MapContext map, Annotation_Layer layerAnnotation) {
-        super(wizardComponents);
-        this.map = map;
-        this.layerAnnotation = layerAnnotation;
-        myWizardComponents = wizardComponents;
-    }
+	public Annotation_Create(JWizardComponents wizardComponents,
+			MapContext map, Annotation_Layer layerAnnotation) {
+		super(wizardComponents);
+		this.map = map;
+		this.layerAnnotation = layerAnnotation;
+		myWizardComponents = wizardComponents;
+	}
 
-    /**
-     * DOCUMENT ME!
-     */
-    public void performAction() {
-        myWizardComponents.getFinishButton().setEnabled(false);
+	/**
+	 * DOCUMENT ME!
+	 */
+	public void performAction() {
+		myWizardComponents.getFinishButton().setEnabled(false);
 
-        Annotation_FieldSelect panel1 = (Annotation_FieldSelect) myWizardComponents.getWizardPanel(0);
-        Annotation_ConfigureLabel panel2 = (Annotation_ConfigureLabel) myWizardComponents.getWizardPanel(1);
+		Annotation_FieldSelect panel1 = (Annotation_FieldSelect) myWizardComponents
+				.getWizardPanel(0);
+		Annotation_ConfigureLabel panel2 = (Annotation_ConfigureLabel) myWizardComponents
+				.getWizardPanel(1);
 
-        SelectableDataSource source;
-        Annotation_Mapping mapping = new Annotation_Mapping();
+		SelectableDataSource source;
+		Annotation_Mapping mapping = new Annotation_Mapping();
 
-        try {
-            source = this.layerAnnotation.getRecordset();
+		try {
+			source = this.layerAnnotation.getRecordset();
 
-            mapping.setColumnText(source.getFieldIndexByName(panel1.getField()));
+			mapping.setColumnText(source.getFieldIndexByName(panel1.getField()));
 
-            if (!panel2.getAngleFieldName().equals(ConfigureLabel.TEXT_FOR_DEFAULT_VALUE)) {
-                mapping.setColumnRotate(source.getFieldIndexByName(
-                        panel2.getAngleFieldName()));
-            }
+			if (!panel2.getAngleFieldName().equals(
+					ConfigureLabel.TEXT_FOR_DEFAULT_VALUE)) {
+				mapping.setColumnRotate(source.getFieldIndexByName(panel2
+						.getAngleFieldName()));
+			}
 
-            if (!panel2.getColorFieldName().equals(ConfigureLabel.TEXT_FOR_DEFAULT_VALUE)) {
-                mapping.setColumnColor(source.getFieldIndexByName(
-                        panel2.getColorFieldName()));
-            }
+			if (!panel2.getColorFieldName().equals(
+					ConfigureLabel.TEXT_FOR_DEFAULT_VALUE)) {
+				mapping.setColumnColor(source.getFieldIndexByName(panel2
+						.getColorFieldName()));
+			}
 
-            if (!panel2.getSizeFieldName().equals(ConfigureLabel.TEXT_FOR_DEFAULT_VALUE)) {
-                mapping.setColumnHeight(source.getFieldIndexByName(
-                        panel2.getSizeFieldName()));
-            }
+			if (!panel2.getSizeFieldName().equals(
+					ConfigureLabel.TEXT_FOR_DEFAULT_VALUE)) {
+				mapping.setColumnHeight(source.getFieldIndexByName(panel2
+						.getSizeFieldName()));
+			}
 
-            if (!panel2.getFontFieldName().equals(ConfigureLabel.TEXT_FOR_DEFAULT_VALUE)) {
-                mapping.setColumnTypeFont(source.getFieldIndexByName(
-                        panel2.getFontFieldName()));
-            }
-        } catch (ReadDriverException e) {
-        	 NotificationManager.addError(e);
-		}
-
-        try {
-        	this.layerAnnotation.setMapping(mapping);
-//        	AttrInTableLabelingStrategy labeling = new AttrInTableLabelingStrategy();
-        	((Annotation_Legend)layerAnnotation.getLegend()).setUnits(panel2.getCmbUnits().getSelectedUnitIndex());
-//        	this.layerAnnotation.setLabelingStrategy(labeling);
-//        	((FSymbol) this.layerAnnotation.getLegend().getDefaultSymbol()).setFontSizeInPixels(panel2.sizeUnitsInPixels());
-            saveToShp(map, this.layerAnnotation, panel1.getDuplicate());
-        } catch (LegendLayerException e) {
-			 NotificationManager.addError(e);
+			if (!panel2.getFontFieldName().equals(
+					ConfigureLabel.TEXT_FOR_DEFAULT_VALUE)) {
+				mapping.setColumnTypeFont(source.getFieldIndexByName(panel2
+						.getFontFieldName()));
+			}
 		} catch (ReadDriverException e) {
-			 NotificationManager.addError(e);
+			NotificationManager.addError(e);
 		}
 
-        this.myWizardComponents.getCancelAction().performAction();
-    }
+		try {
+			this.layerAnnotation.setMapping(mapping);
+			// AttrInTableLabelingStrategy labeling = new
+			// AttrInTableLabelingStrategy();
+			((Annotation_Legend) layerAnnotation.getLegend()).setUnits(panel2
+					.getCmbUnits().getSelectedUnitIndex());
+			// this.layerAnnotation.setLabelingStrategy(labeling);
+			// ((FSymbol)
+			// this.layerAnnotation.getLegend().getDefaultSymbol()).setFontSizeInPixels(panel2.sizeUnitsInPixels());
+			saveToShp(map, this.layerAnnotation, panel1.getDuplicate());
+		} catch (LegendLayerException e) {
+			NotificationManager.addError(e);
+		} catch (ReadDriverException e) {
+			NotificationManager.addError(e);
+		}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param mapContext DOCUMENT ME!
-     * @param layer DOCUMENT ME!
-     * @param duplicate DOCUMENT ME!
-     * @throws ReadDriverException
-     *
-     * @throws EditionException DOCUMENT ME!
-     * @throws DriverIOException DOCUMENT ME!
-     */
-    public void saveToShp(MapContext mapContext, Annotation_Layer layer,
-        String duplicate) throws ReadDriverException {
-        try {
-            JFileChooser jfc = new JFileChooser();
-            SimpleFileFilter filterShp = new SimpleFileFilter("shp",
-                    PluginServices.getText(this, "shp_files"));
-            jfc.setFileFilter(filterShp);
+		this.myWizardComponents.getCancelAction().performAction();
+	}
 
-            if (jfc.showSaveDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
-                File newFile = jfc.getSelectedFile();
-                String path = newFile.getAbsolutePath();
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param mapContext
+	 *            DOCUMENT ME!
+	 * @param layer
+	 *            DOCUMENT ME!
+	 * @param duplicate
+	 *            DOCUMENT ME!
+	 * @throws ReadDriverException
+	 * 
+	 * @throws EditionException
+	 *             DOCUMENT ME!
+	 * @throws DriverIOException
+	 *             DOCUMENT ME!
+	 */
+	public void saveToShp(MapContext mapContext, Annotation_Layer layer,
+			String duplicate) throws ReadDriverException {
+		try {
+			JFileChooser jfc = new JFileChooser();
+			SimpleFileFilter filterShp = new SimpleFileFilter("shp",
+					PluginServices.getText(this, "shp_files"));
+			jfc.setFileFilter(filterShp);
 
-                if (newFile.exists()) {
-                    int resp = JOptionPane.showConfirmDialog((Component) PluginServices.getMainFrame(),
-                            PluginServices.getText(this,
-                                "fichero_ya_existe_seguro_desea_guardarlo"),
-                            PluginServices.getText(this, "guardar"),
-                            JOptionPane.YES_NO_OPTION);
+			if (jfc.showSaveDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
+				File newFile = jfc.getSelectedFile();
+				String path = newFile.getAbsolutePath();
 
-                    if (resp != JOptionPane.YES_OPTION) {
-                        return;
-                    }
-                }
+				if (newFile.exists()) {
+					int resp = JOptionPane
+							.showConfirmDialog(
+									(Component) PluginServices.getMainFrame(),
+									PluginServices
+											.getText(this,
+													"fichero_ya_existe_seguro_desea_guardarlo"),
+									PluginServices.getText(this, "guardar"),
+									JOptionPane.YES_NO_OPTION);
 
-                if (!(path.toLowerCase().endsWith(".shp"))) {
-                    path = path + ".shp";
-                }
+					if (resp != JOptionPane.YES_OPTION) {
+						return;
+					}
+				}
 
-                newFile = new File(path);
+				if (!(path.toLowerCase().endsWith(".shp"))) {
+					path = path + ".shp";
+				}
 
-                SelectableDataSource sds = layer.getRecordset();
-                FieldDescription[] fieldsDescrip = sds.getFieldsDescription();
+				newFile = new File(path);
 
-                ShpWriter writer = (ShpWriter) LayerFactory.getWM().getWriter("Shape Writer");
-                Driver driver = null;
+				SelectableDataSource sds = layer.getRecordset();
+				FieldDescription[] fieldsDescrip = sds.getFieldsDescription();
 
-                SHPLayerDefinition lyrDefPoint = new SHPLayerDefinition();
-                lyrDefPoint.setFieldsDesc(fieldsDescrip);
+				ShpWriter writer = (ShpWriter) LayerFactory.getWM().getWriter(
+						"Shape Writer");
+				Driver driver = null;
 
-                File filePoints = new File(path);
-                lyrDefPoint.setFile(filePoints);
-                lyrDefPoint.setName(filePoints.getName());
-                lyrDefPoint.setShapeType(FShape.POINT);
-                writer.setFile(filePoints);
-                writer.initialize(lyrDefPoint);
-                driver = getOpenAnnotationDriver(filePoints);
-                writeFeatures(mapContext, layer, writer, driver, duplicate);
-            }
-        } catch (InitializeWriterException e) {
-			throw new ReadDriverException(layerAnnotation.getName(),e);
+				SHPLayerDefinition lyrDefPoint = new SHPLayerDefinition();
+				lyrDefPoint.setFieldsDesc(fieldsDescrip);
+
+				File filePoints = new File(path);
+				lyrDefPoint.setFile(filePoints);
+				lyrDefPoint.setName(filePoints.getName());
+				lyrDefPoint.setShapeType(FShape.POINT);
+				writer.setFile(filePoints);
+				writer.initialize(lyrDefPoint);
+				driver = getOpenAnnotationDriver(filePoints);
+				writeFeatures(mapContext, layer, writer, driver, duplicate);
+			}
+		} catch (InitializeWriterException e) {
+			throw new ReadDriverException(layerAnnotation.getName(), e);
 		} catch (DriverLoadException e) {
-			throw new ReadDriverException(layerAnnotation.getName(),e);
+			throw new ReadDriverException(layerAnnotation.getName(), e);
 		} catch (IOException e) {
-			throw new ReadDriverException(layerAnnotation.getName(),e);
+			throw new ReadDriverException(layerAnnotation.getName(), e);
 		}
-    }
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param filePoints DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     *
-     * @throws IOException DOCUMENT ME!
-     * @throws OpenDriverException
-     */
-    private Driver getOpenAnnotationDriver(File filePoints)
-        throws IOException, OpenDriverException {
-        IndexedShpDriver drv = new IndexedShpDriver();
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param filePoints
+	 *            DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 * 
+	 * @throws IOException
+	 *             DOCUMENT ME!
+	 * @throws OpenDriverException
+	 */
+	private Driver getOpenAnnotationDriver(File filePoints) throws IOException,
+			OpenDriverException {
+		IndexedShpDriver drv = new IndexedShpDriver();
 
-        if (!filePoints.exists()) {
-            filePoints.createNewFile();
+		if (!filePoints.exists()) {
+			filePoints.createNewFile();
 
-            File newFileSHX = new File(filePoints.getAbsolutePath().replaceAll("[.]shp",
-                        ".shx"));
-            newFileSHX.createNewFile();
+			File newFileSHX = new File(filePoints.getAbsolutePath().replaceAll(
+					"[.]shp", ".shx"));
+			newFileSHX.createNewFile();
 
-            File newFileDBF = new File(filePoints.getAbsolutePath().replaceAll("[.]shp",
-                        ".dbf"));
-            newFileDBF.createNewFile();
-        }
+			File newFileDBF = new File(filePoints.getAbsolutePath().replaceAll(
+					"[.]shp", ".dbf"));
+			newFileDBF.createNewFile();
+		}
 
-        File newFileGVA = new File(filePoints.getAbsolutePath().replaceAll("[.]shp",
-                    ".gva"));
+		File newFileGVA = new File(filePoints.getAbsolutePath().replaceAll(
+				"[.]shp", ".gva"));
 
-        if (!newFileGVA.exists()) {
-            newFileGVA.createNewFile();
-        }
+		if (!newFileGVA.exists()) {
+			newFileGVA.createNewFile();
+		}
 
-        drv.open(filePoints);
+		drv.open(filePoints);
 
-        return drv;
-    }
+		return drv;
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param mapContext DOCUMENT ME!
-     * @param layer DOCUMENT ME!
-     * @param writer DOCUMENT ME!
-     * @param reader DOCUMENT ME!
-     * @param duplicate DOCUMENT ME!
-     * @throws ReadDriverException
-     *
-     * @throws DriverIOException DOCUMENT ME!
-     * @throws com.iver.cit.gvsig.fmap.DriverException DOCUMENT ME!
-     */
-    private void writeFeatures(MapContext mapContext, Annotation_Layer layer,
-        IWriter writer, Driver reader, String duplicate) throws ReadDriverException{
-        PluginServices.cancelableBackgroundExecution(new Annotation_TaskCreate(
-                mapContext, layer, writer, reader, duplicate));
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param mapContext
+	 *            DOCUMENT ME!
+	 * @param layer
+	 *            DOCUMENT ME!
+	 * @param writer
+	 *            DOCUMENT ME!
+	 * @param reader
+	 *            DOCUMENT ME!
+	 * @param duplicate
+	 *            DOCUMENT ME!
+	 * @throws ReadDriverException
+	 * 
+	 * @throws DriverIOException
+	 *             DOCUMENT ME!
+	 * @throws com.iver.cit.gvsig.fmap.DriverException
+	 *             DOCUMENT ME!
+	 */
+	private void writeFeatures(MapContext mapContext, Annotation_Layer layer,
+			IWriter writer, Driver reader, String duplicate)
+			throws ReadDriverException {
+		PluginServices.cancelableBackgroundExecution(new Annotation_TaskCreate(
+				mapContext, layer, writer, reader, duplicate));
+	}
 }

@@ -68,16 +68,17 @@ import org.w3c.dom.Element;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class XSNodeImpl implements IXSNode{
+public abstract class XSNodeImpl implements IXSNode {
 	private Element element = null;
-	private DOMObjectsFactory elementsFactory = null;	
+	private DOMObjectsFactory elementsFactory = null;
 
 	public XSNodeImpl() {
-		super();					
-	}	
+		super();
+	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSNode#getElement()
 	 */
 	public Element getElement() {
@@ -86,25 +87,28 @@ public abstract class XSNodeImpl implements IXSNode{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSNode#setElement(org.w3c.dom.Element)
 	 */
 	public void setElement(Element element) {
-		this.element = element;		
+		this.element = element;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.schema.som.IXSNode#addChildElement(org.w3c.dom.Element)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.schema.som.IXSNode#addChildElement(org.w3c.dom.Element)
 	 */
 	public void addChildElement(Element element) {
-		getElement().appendChild(element);		
-	}	
-	
+		getElement().appendChild(element);
+	}
+
 	/**
 	 * @return the factory
 	 */
 	protected DOMObjectsFactory getElementsFactory() {
-		if (elementsFactory == null){
+		if (elementsFactory == null) {
 			elementsFactory = DOMObjectsFactory.getInstance();
 		}
 		return elementsFactory;

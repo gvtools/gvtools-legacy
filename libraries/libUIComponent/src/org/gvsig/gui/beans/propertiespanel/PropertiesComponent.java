@@ -1,21 +1,21 @@
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
-*
-* Copyright (C) 2007 IVER T.I. and Generalitat Valenciana.
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License
-* as published by the Free Software Foundation; either version 2
-* of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
-*/
+ *
+ * Copyright (C) 2007 IVER T.I. and Generalitat Valenciana.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
+ */
 package org.gvsig.gui.beans.propertiespanel;
 
 import java.awt.Component;
@@ -48,22 +48,25 @@ import javax.swing.event.ChangeListener;
 import org.gvsig.gui.beans.slidertext.SliderTextContainer;
 import org.gvsig.gui.beans.slidertext.listeners.SliderEvent;
 import org.gvsig.gui.beans.slidertext.listeners.SliderListener;
+
 /**
  * Componente para crear un cuadro de propiedades de configuracion standard.
- *
+ * 
  * @version 19/04/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
-public class PropertiesComponent extends JScrollPane implements FocusListener, KeyListener, ChangeListener, ItemListener, PropertiesComponentListener, SliderListener {
+public class PropertiesComponent extends JScrollPane implements FocusListener,
+		KeyListener, ChangeListener, ItemListener, PropertiesComponentListener,
+		SliderListener {
 	private static final long serialVersionUID = 372118344763661890L;
-	private ArrayList       datalist               = new ArrayList();
-	private ArrayList       actionCommandListeners = new ArrayList();
+	private ArrayList datalist = new ArrayList();
+	private ArrayList actionCommandListeners = new ArrayList();
 
-	private JPanel          jPanelContent          = null;
+	private JPanel jPanelContent = null;
 
-	static final public int TYPE_DEFAULT           = 1;
-	static final public int TYPE_SLIDER            = 2;
-	static final public int TYPE_COMBO             = 3;
+	static final public int TYPE_DEFAULT = 1;
+	static final public int TYPE_SLIDER = 2;
+	static final public int TYPE_COMBO = 3;
 
 	/**
 	 * Constructor de la calse
@@ -74,17 +77,19 @@ public class PropertiesComponent extends JScrollPane implements FocusListener, K
 
 	/**
 	 * Constructor para poder pasarle un ArrayList de PropertyStruct
+	 * 
 	 * @param values
 	 */
 	public PropertiesComponent(ArrayList values) {
 		initialize();
-		for (int i=0; i<values.size(); i++) {
+		for (int i = 0; i < values.size(); i++) {
 			addPropertyStruct((PropertyStruct) values.get(i));
 		}
 	}
 
 	/**
 	 * Constructor para poder pasarle un Properties
+	 * 
 	 * @param values
 	 */
 	public PropertiesComponent(Properties properties) {
@@ -103,13 +108,13 @@ public class PropertiesComponent extends JScrollPane implements FocusListener, K
 		this.setBorder(null);
 		jPanelContent = new JPanel();
 		jPanelContent.setLayout(new GridBagLayout());
-		
+
 		JPanel jPanelPrincipal = new JPanel();
 		jPanelPrincipal.setLayout(new GridBagLayout());
 
 		JPanel jPanelEmpty = new JPanel();
 		jPanelEmpty.setPreferredSize(new Dimension(0, 0));
-		
+
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.fill = GridBagConstraints.BOTH;
 		jPanelPrincipal.add(jPanelContent, gridBagConstraints);
@@ -120,13 +125,15 @@ public class PropertiesComponent extends JScrollPane implements FocusListener, K
 		gridBagConstraints.weightx = 1.0;
 		gridBagConstraints.weighty = 1.0;
 		jPanelPrincipal.add(jPanelEmpty, gridBagConstraints);
-		
+
 		this.setViewportView(jPanelPrincipal);
 	}
 
 	int y = 0;
+
 	/**
 	 * Añade un PropertyStruct al componente
+	 * 
 	 * @param property
 	 */
 	public void addPropertyStruct(PropertyStruct property) {
@@ -134,7 +141,8 @@ public class PropertiesComponent extends JScrollPane implements FocusListener, K
 
 		JLabel label = new JLabel(property.getTextLabel() + ": ");
 
-		Component component = new JLabel("Sin soporte para: " + property.getOldValue().getClass().toString());
+		Component component = new JLabel("Sin soporte para: "
+				+ property.getOldValue().getClass().toString());
 
 		if (property.getOldValue() instanceof Component) {
 			component = (Component) property.getOldValue();
@@ -156,44 +164,59 @@ public class PropertiesComponent extends JScrollPane implements FocusListener, K
 		}
 
 		// Tratamiento de Integer
-		if (property.getOldValue() instanceof Integer || property.getOldValue() instanceof Double) {
+		if (property.getOldValue() instanceof Integer
+				|| property.getOldValue() instanceof Double) {
 			boolean created = false;
 			if (property.getExtras() != null) {
 				switch (((Integer) property.getExtras()[0]).intValue()) {
-					case TYPE_SLIDER:
-						without_label = true;
-						component = new SliderTextContainer();
-						((SliderTextContainer) component).setBorder(javax.swing.BorderFactory.createTitledBorder(property.getTextLabel()));
+				case TYPE_SLIDER:
+					without_label = true;
+					component = new SliderTextContainer();
+					((SliderTextContainer) component)
+							.setBorder(javax.swing.BorderFactory
+									.createTitledBorder(property.getTextLabel()));
 
-						if (property.getExtras().length >= 2)
-							((SliderTextContainer) component).setMinimum(((Integer) property.getExtras()[1]).intValue());
-						if (property.getExtras().length >= 3)
-							((SliderTextContainer) component).setMaximum(((Integer) property.getExtras()[2]).intValue());
-						if (property.getOldValue() instanceof Integer) {
-							((SliderTextContainer) component).setDecimal(false);
-							((SliderTextContainer) component).setValue(((Integer) property.getOldValue()).intValue());
-						}
-						if (property.getOldValue() instanceof Double) {
-							((SliderTextContainer) component).setDecimal(true);
-							((SliderTextContainer) component).setValue(((Double) property.getOldValue()).doubleValue());
-						}
+					if (property.getExtras().length >= 2)
+						((SliderTextContainer) component)
+								.setMinimum(((Integer) property.getExtras()[1])
+										.intValue());
+					if (property.getExtras().length >= 3)
+						((SliderTextContainer) component)
+								.setMaximum(((Integer) property.getExtras()[2])
+										.intValue());
+					if (property.getOldValue() instanceof Integer) {
+						((SliderTextContainer) component).setDecimal(false);
+						((SliderTextContainer) component)
+								.setValue(((Integer) property.getOldValue())
+										.intValue());
+					}
+					if (property.getOldValue() instanceof Double) {
+						((SliderTextContainer) component).setDecimal(true);
+						((SliderTextContainer) component)
+								.setValue(((Double) property.getOldValue())
+										.doubleValue());
+					}
 
-						((SliderTextContainer) component).addValueChangedListener(this);
+					((SliderTextContainer) component)
+							.addValueChangedListener(this);
 
+					created = true;
+					break;
+				case TYPE_COMBO:
+					if (property.getOldValue() instanceof Integer) {
+						component = new JComboBox();
+						ArrayList aux = (ArrayList) property.getExtras()[1];
+						for (int i = 0; i < aux.size(); i++)
+							((JComboBox) component).addItem(aux.get(i)
+									.toString());
+						if (property.getOldValue() instanceof Integer)
+							((JComboBox) component)
+									.setSelectedIndex(((Integer) property
+											.getOldValue()).intValue());
+						((JComboBox) component).addItemListener(this);
 						created = true;
-						break;
-					case TYPE_COMBO:
-						if(property.getOldValue() instanceof Integer) {
-							component = new JComboBox();
-							ArrayList aux = (ArrayList) property.getExtras()[1];
-							for (int i=0; i<aux.size(); i++)
-								((JComboBox) component).addItem(aux.get(i).toString());
-							if(property.getOldValue() instanceof Integer)
-								((JComboBox) component).setSelectedIndex(((Integer) property.getOldValue()).intValue());
-							((JComboBox) component).addItemListener(this);
-							created = true;
-						}
-						break;
+					}
+					break;
 				}
 			}
 			if (!created) {
@@ -206,7 +229,8 @@ public class PropertiesComponent extends JScrollPane implements FocusListener, K
 		// Tratamiento de Boolean
 		if (property.getOldValue() instanceof Boolean) {
 			component = new JCheckBox();
-			((JCheckBox) component).setSelected(((Boolean) property.getOldValue()).booleanValue());
+			((JCheckBox) component).setSelected(((Boolean) property
+					.getOldValue()).booleanValue());
 			((JCheckBox) component).addItemListener(this);
 		}
 
@@ -249,40 +273,45 @@ public class PropertiesComponent extends JScrollPane implements FocusListener, K
 	 * Añade una clave/valor al panel de propiedades.<br>
 	 * <br>
 	 * El componente seleccionado dependera del instanceof del valor y las
-	 * opciones extras que se pongan. Por ejemplo: para el instanceof de un String
-	 * siempre se usara un JTextField, en cambio, para un Integer, se podran usar
-	 * 3 tipos, el JSlider, JComboBox y JSpinner. Estos tipos se especifican en el
-	 * array extras, poniendolo siempre en la posicion 0. En la posición 1 y 2 de
-	 * un JSlider se puede especificar el mínimo y el máximo del Slider.
-	 *
+	 * opciones extras que se pongan. Por ejemplo: para el instanceof de un
+	 * String siempre se usara un JTextField, en cambio, para un Integer, se
+	 * podran usar 3 tipos, el JSlider, JComboBox y JSpinner. Estos tipos se
+	 * especifican en el array extras, poniendolo siempre en la posicion 0. En
+	 * la posición 1 y 2 de un JSlider se puede especificar el mínimo y el
+	 * máximo del Slider.
+	 * 
 	 * @param textLabel
 	 * @param key
 	 * @param value
 	 * @param extras
 	 */
-	public void addValue(String textLabel, String key, Object value, Object[] extras) {
-		PropertyStruct propertyStruct = new PropertyStruct(textLabel, key, value, extras);
+	public void addValue(String textLabel, String key, Object value,
+			Object[] extras) {
+		PropertyStruct propertyStruct = new PropertyStruct(textLabel, key,
+				value, extras);
 		addPropertyStruct(propertyStruct);
 	}
 
 	/**
 	 * Añade una clave valor al panel de propiedades.
+	 * 
 	 * @param key
 	 * @param value
 	 */
 	public void put(Object key, Object value) {
-		PropertyStruct propertyStruct = new PropertyStruct((String) key, (String) key, value, null);
+		PropertyStruct propertyStruct = new PropertyStruct((String) key,
+				(String) key, value, null);
 		addPropertyStruct(propertyStruct);
 	}
 
 	/**
 	 * Obtener todos los valores de la ventana, esto será un
 	 * <code><b>ArrayList</b></code> que contendrá elementos de tipo
-	 * <code><b>PropertyStruct</b></code>, pudiendo tener el valor antes de
-	 * ser modificado y el nuevo valor.
-	 *
+	 * <code><b>PropertyStruct</b></code>, pudiendo tener el valor antes de ser
+	 * modificado y el nuevo valor.
+	 * 
 	 * @see <code>PropertyStruct</code>
-	 *
+	 * 
 	 * @return ArrayList de elementos de tipo <code>PropertyStruct</code>
 	 */
 	public ArrayList getValues() {
@@ -290,26 +319,36 @@ public class PropertiesComponent extends JScrollPane implements FocusListener, K
 			PropertyStruct propertyStruct = ((PropertyStruct) datalist.get(i));
 
 			if (propertyStruct.getComponent() instanceof JTextField) {
-				propertyStruct.setNewValue(((JTextField) propertyStruct.getComponent()).getText());
+				propertyStruct.setNewValue(((JTextField) propertyStruct
+						.getComponent()).getText());
 				continue;
 			}
 			if (propertyStruct.getComponent() instanceof JSpinner) {
-				propertyStruct.setNewValue(((JSpinner) propertyStruct.getComponent()).getValue());
+				propertyStruct.setNewValue(((JSpinner) propertyStruct
+						.getComponent()).getValue());
 				continue;
 			}
 			if (propertyStruct.getComponent() instanceof SliderTextContainer) {
 				if (propertyStruct.getOldValue() instanceof Double)
-					propertyStruct.setNewValue(new Double((double) ((SliderTextContainer) propertyStruct.getComponent()).getValue()));
+					propertyStruct.setNewValue(new Double(
+							(double) ((SliderTextContainer) propertyStruct
+									.getComponent()).getValue()));
 				else
-					propertyStruct.setNewValue(new Integer((int) ((SliderTextContainer) propertyStruct.getComponent()).getValue()));
+					propertyStruct.setNewValue(new Integer(
+							(int) ((SliderTextContainer) propertyStruct
+									.getComponent()).getValue()));
 				continue;
 			}
 			if (propertyStruct.getComponent() instanceof JCheckBox) {
-				propertyStruct.setNewValue(new Boolean(((JCheckBox) propertyStruct.getComponent()).getSelectedObjects()!=null));
+				propertyStruct.setNewValue(new Boolean(
+						((JCheckBox) propertyStruct.getComponent())
+								.getSelectedObjects() != null));
 				continue;
 			}
 			if (propertyStruct.getComponent() instanceof JComboBox) {
-				propertyStruct.setNewValue(new Integer(((JComboBox) propertyStruct.getComponent()).getSelectedIndex()));
+				propertyStruct.setNewValue(new Integer(
+						((JComboBox) propertyStruct.getComponent())
+								.getSelectedIndex()));
 				continue;
 			}
 			if (propertyStruct.getComponent() instanceof JPanelProperty) {
@@ -324,6 +363,7 @@ public class PropertiesComponent extends JScrollPane implements FocusListener, K
 	 * Devuelve el componente del interfaz que trata esa variable, hay que tener
 	 * cuidado, puede devolver null o un componente distinto al esperado si se
 	 * modífica esta clase.
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -336,9 +376,10 @@ public class PropertiesComponent extends JScrollPane implements FocusListener, K
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Obtener todos los valores de la ventana en formato java.util.Properties
+	 * 
 	 * @return
 	 */
 	public Properties getProperties() {
@@ -348,30 +389,47 @@ public class PropertiesComponent extends JScrollPane implements FocusListener, K
 			String key = propertyStruct.getKey();
 
 			if (propertyStruct.getComponent() instanceof JTextField) {
-				properties.put(key, ((JTextField) propertyStruct.getComponent()).getText());
+				properties.put(key,
+						((JTextField) propertyStruct.getComponent()).getText());
 				continue;
 			}
 			if (propertyStruct.getComponent() instanceof JSpinner) {
-				properties.put(key, ((JSpinner) propertyStruct.getComponent()).getValue());
+				properties.put(key,
+						((JSpinner) propertyStruct.getComponent()).getValue());
 				continue;
 			}
 			if (propertyStruct.getComponent() instanceof SliderTextContainer) {
 				if (propertyStruct.getOldValue() instanceof Double)
-					properties.put(key, new Double((double) ((SliderTextContainer) propertyStruct.getComponent()).getValue()));
+					properties
+							.put(key,
+									new Double(
+											(double) ((SliderTextContainer) propertyStruct
+													.getComponent()).getValue()));
 				else
-					properties.put(key, new Integer((int) ((SliderTextContainer) propertyStruct.getComponent()).getValue()));
+					properties.put(
+							key,
+							new Integer(
+									(int) ((SliderTextContainer) propertyStruct
+											.getComponent()).getValue()));
 				continue;
 			}
 			if (propertyStruct.getComponent() instanceof JCheckBox) {
-				properties.put(key, new Boolean(((JCheckBox) propertyStruct.getComponent()).getSelectedObjects() != null));
+				properties.put(
+						key,
+						new Boolean(((JCheckBox) propertyStruct.getComponent())
+								.getSelectedObjects() != null));
 				continue;
 			}
 			if (propertyStruct.getComponent() instanceof JComboBox) {
-				properties.put(key, new Integer(((JComboBox) propertyStruct.getComponent()).getSelectedIndex()));
+				properties.put(
+						key,
+						new Integer(((JComboBox) propertyStruct.getComponent())
+								.getSelectedIndex()));
 				continue;
 			}
 			if (propertyStruct.getComponent() instanceof JPanelProperty) {
-				properties.put(key, (JPanelProperty) propertyStruct.getComponent());
+				properties.put(key,
+						(JPanelProperty) propertyStruct.getComponent());
 				continue;
 			}
 		}
@@ -380,6 +438,7 @@ public class PropertiesComponent extends JScrollPane implements FocusListener, K
 
 	/**
 	 * Añadir el disparador de cuando se pulsa un botón.
+	 * 
 	 * @param listener
 	 */
 	public void addStateChangedListener(PropertiesComponentListener listener) {
@@ -389,6 +448,7 @@ public class PropertiesComponent extends JScrollPane implements FocusListener, K
 
 	/**
 	 * Borrar el disparador de eventos de los botones.
+	 * 
 	 * @param listener
 	 */
 	public void removeStateChangedListener(PropertiesComponentListener listener) {
@@ -398,14 +458,18 @@ public class PropertiesComponent extends JScrollPane implements FocusListener, K
 	private void callStateChanged() {
 		Iterator acIterator = actionCommandListeners.iterator();
 		while (acIterator.hasNext()) {
-			PropertiesComponentListener listener = (PropertiesComponentListener) acIterator.next();
+			PropertiesComponentListener listener = (PropertiesComponentListener) acIterator
+					.next();
 			listener.actionChangeProperties(new EventObject(this));
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
+	 * 
+	 * @see
+	 * javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent
+	 * )
 	 */
 	public void stateChanged(ChangeEvent e) {
 		callStateChanged();
@@ -413,7 +477,9 @@ public class PropertiesComponent extends JScrollPane implements FocusListener, K
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ItemListener#itemStateChanged(java.awt.event.ItemEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ItemListener#itemStateChanged(java.awt.event.ItemEvent)
 	 */
 	public void itemStateChanged(ItemEvent e) {
 		callStateChanged();
@@ -421,6 +487,7 @@ public class PropertiesComponent extends JScrollPane implements FocusListener, K
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.FocusListener#focusLost(java.awt.event.FocusEvent)
 	 */
 	public void focusLost(FocusEvent e) {
@@ -429,6 +496,7 @@ public class PropertiesComponent extends JScrollPane implements FocusListener, K
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
 	 */
 	public void keyReleased(KeyEvent e) {
@@ -438,7 +506,9 @@ public class PropertiesComponent extends JScrollPane implements FocusListener, K
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.propertiespanel.PropertiesComponentListener#actionChangeProperties(java.util.EventObject)
+	 * 
+	 * @see org.gvsig.gui.beans.propertiespanel.PropertiesComponentListener#
+	 * actionChangeProperties(java.util.EventObject)
 	 */
 	public void actionChangeProperties(EventObject e) {
 		callStateChanged();
@@ -446,7 +516,10 @@ public class PropertiesComponent extends JScrollPane implements FocusListener, K
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.slidertext.listeners.SliderListener#actionValueChanged(org.gvsig.gui.beans.slidertext.listeners.SliderEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.slidertext.listeners.SliderListener#actionValueChanged
+	 * (org.gvsig.gui.beans.slidertext.listeners.SliderEvent)
 	 */
 	public void actionValueChanged(SliderEvent e) {
 		callStateChanged();
@@ -454,13 +527,21 @@ public class PropertiesComponent extends JScrollPane implements FocusListener, K
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.slidertext.listeners.SliderListener#actionValueDragged(org.gvsig.gui.beans.slidertext.listeners.SliderEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.slidertext.listeners.SliderListener#actionValueDragged
+	 * (org.gvsig.gui.beans.slidertext.listeners.SliderEvent)
 	 */
 	public void actionValueDragged(SliderEvent e) {
-		//callStateChanged();
+		// callStateChanged();
 	}
 
-	public void keyTyped(KeyEvent e) {}
-	public void focusGained(FocusEvent e) {}
-	public void keyPressed(KeyEvent e) {}
+	public void keyTyped(KeyEvent e) {
+	}
+
+	public void focusGained(FocusEvent e) {
+	}
+
+	public void keyPressed(KeyEvent e) {
+	}
 }

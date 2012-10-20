@@ -42,65 +42,65 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: DissolveGeoprocess.java 18947 2008-02-13 21:57:01Z azabala $
-* $Log$
-* Revision 1.6  2007-09-19 16:06:59  jaume
-* removed unnecessary imports
-*
-* Revision 1.5  2007/08/07 15:46:26  azabala
-* centrilizing JTS in JTSFacade and allowing all geometry types (not only Polygon)
-*
-* Revision 1.4  2007/05/15 07:24:19  cesar
-* Add the finished method for execution from Event Dispatch Thread
-*
-* Revision 1.3  2007/03/06 16:47:58  caballero
-* Exceptions
-*
-* Revision 1.2  2006/06/29 07:33:57  fjp
-* Cambios ISchemaManager y IFieldManager por terminar
-*
-* Revision 1.1  2006/06/20 18:20:45  azabala
-* first version in cvs
-*
-* Revision 1.2  2006/06/08 18:24:43  azabala
-* modificaciones para admitir capas de shapeType MULTI
-*
-* Revision 1.1  2006/05/24 21:11:14  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.10  2006/05/08 15:37:26  azabala
-* added alphanumeric dissolve
-*
-* Revision 1.9  2006/05/01 19:14:50  azabala
-* la cancelacion no solo para el ITask que ejecuta el geoproceso, además llama al metodo cancel() del mismo (que se supone que debería hacer un drop() con los resultados del geoproceso inconcluso)
-*
-* Revision 1.8  2006/03/23 21:03:45  azabala
-* *** empty log message ***
-*
-* Revision 1.7  2006/03/17 19:53:14  azabala
-* *** empty log message ***
-*
-* Revision 1.6  2006/03/15 18:33:24  azabala
-* *** empty log message ***
-*
-* Revision 1.5  2006/03/14 18:32:46  fjp
-* Cambio con LayerDefinition para que sea compatible con la definición de tablas también.
-*
-* Revision 1.4  2006/03/07 21:01:33  azabala
-* *** empty log message ***
-*
-* Revision 1.3  2006/03/06 19:48:39  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/03/05 19:58:20  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/02/26 20:53:44  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: DissolveGeoprocess.java 18947 2008-02-13 21:57:01Z azabala $
+ * $Log$
+ * Revision 1.6  2007-09-19 16:06:59  jaume
+ * removed unnecessary imports
+ *
+ * Revision 1.5  2007/08/07 15:46:26  azabala
+ * centrilizing JTS in JTSFacade and allowing all geometry types (not only Polygon)
+ *
+ * Revision 1.4  2007/05/15 07:24:19  cesar
+ * Add the finished method for execution from Event Dispatch Thread
+ *
+ * Revision 1.3  2007/03/06 16:47:58  caballero
+ * Exceptions
+ *
+ * Revision 1.2  2006/06/29 07:33:57  fjp
+ * Cambios ISchemaManager y IFieldManager por terminar
+ *
+ * Revision 1.1  2006/06/20 18:20:45  azabala
+ * first version in cvs
+ *
+ * Revision 1.2  2006/06/08 18:24:43  azabala
+ * modificaciones para admitir capas de shapeType MULTI
+ *
+ * Revision 1.1  2006/05/24 21:11:14  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.10  2006/05/08 15:37:26  azabala
+ * added alphanumeric dissolve
+ *
+ * Revision 1.9  2006/05/01 19:14:50  azabala
+ * la cancelacion no solo para el ITask que ejecuta el geoproceso, además llama al metodo cancel() del mismo (que se supone que debería hacer un drop() con los resultados del geoproceso inconcluso)
+ *
+ * Revision 1.8  2006/03/23 21:03:45  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.7  2006/03/17 19:53:14  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.6  2006/03/15 18:33:24  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.5  2006/03/14 18:32:46  fjp
+ * Cambio con LayerDefinition para que sea compatible con la definición de tablas también.
+ *
+ * Revision 1.4  2006/03/07 21:01:33  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.3  2006/03/06 19:48:39  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/03/05 19:58:20  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/02/26 20:53:44  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.dissolve.fmap;
 
 import java.util.Map;
@@ -118,41 +118,41 @@ import com.iver.cit.gvsig.geoprocess.core.fmap.IOneLayerGeoprocess;
 import com.iver.utiles.swing.threads.CancellableMonitorable;
 import com.iver.utiles.swing.threads.DefaultCancellableMonitorable;
 import com.iver.utiles.swing.threads.IMonitorableTask;
+
 /**
- * Processes each geometry of a polygonal vectorial layer, looking for
- * its adjacent polygons. If this adjacent polygons has the same specified
- * field value as processed geometry, this polygons will be dissolved.
- *
- *
+ * Processes each geometry of a polygonal vectorial layer, looking for its
+ * adjacent polygons. If this adjacent polygons has the same specified field
+ * value as processed geometry, this polygons will be dissolved.
+ * 
+ * 
  * @author azabala
- *
+ * 
  */
-public class DissolveGeoprocess extends AbstractGeoprocess
-							implements IOneLayerGeoprocess {
+public class DissolveGeoprocess extends AbstractGeoprocess implements
+		IOneLayerGeoprocess {
 
 	private String dissolveField;
 	private boolean dissolveOnlySelection;
 	private ILayerDefinition resultLayerDefinition;
 	private Map fields_functions;
-	
+
 	private IDissolveCriteria criteria;
 	private int dissolveType = FeatureDissolver.ALPHANUMERIC_DISSOLVE;
 
 	private boolean dissolveOnlyAdjacents;
 
-
 	/**
 	 * Constructor.
-	 *
-	 * @param inputLayer Layer whose geometries we are
-	 * going to dissolve
+	 * 
+	 * @param inputLayer
+	 *            Layer whose geometries we are going to dissolve
 	 */
 	public DissolveGeoprocess(FLyrVect inputLayer, String dissolveField) {
 		setFirstOperand(inputLayer);
 		this.dissolveField = dissolveField;
 	}
 
-	public void setFieldsFunctions(Map fieldsFunctions){
+	public void setFieldsFunctions(Map fieldsFunctions) {
 		this.fields_functions = fieldsFunctions;
 	}
 
@@ -162,29 +162,26 @@ public class DissolveGeoprocess extends AbstractGeoprocess
 	}
 
 	public void setParameters(Map params) throws GeoprocessException {
-		Boolean onlySelection =
-			(Boolean) params.get("layer_selection");
-		if(onlySelection != null)
+		Boolean onlySelection = (Boolean) params.get("layer_selection");
+		if (onlySelection != null)
 			dissolveOnlySelection = onlySelection.booleanValue();
 
-		Boolean onlyAdjacents =
-			(Boolean) params.get("only_adjacents");
-		if(onlyAdjacents != null)
+		Boolean onlyAdjacents = (Boolean) params.get("only_adjacents");
+		if (onlyAdjacents != null)
 			dissolveOnlyAdjacents = onlyAdjacents.booleanValue();
 
-
 		try {
-			if(dissolveOnlyAdjacents){
+			if (dissolveOnlyAdjacents) {
 				dissolveType = FeatureDissolver.SPATIAL_DISSOLVE;
-				criteria =
-					new SingleFieldAdjacencyDissolveCriteria(dissolveField,
-							firstLayer);
-			}else{
+				criteria = new SingleFieldAdjacencyDissolveCriteria(
+						dissolveField, firstLayer);
+			} else {
 				criteria = new SingleFieldDissolveCriteria(dissolveField,
 						firstLayer);
 			}
 		} catch (com.hardcode.gdbms.engine.data.driver.DriverException e) {
-			throw new GeoprocessException("Error preparando la lectura del dissolve field", e);
+			throw new GeoprocessException(
+					"Error preparando la lectura del dissolve field", e);
 		}
 
 	}
@@ -192,21 +189,21 @@ public class DissolveGeoprocess extends AbstractGeoprocess
 	public void checkPreconditions() throws GeoprocessException {
 		if (firstLayer == null)
 			throw new GeoprocessException("Buffer con capa de entrada a null");
-		if(this.writer == null ||
-		   this.schemaManager == null){
-			throw new GeoprocessException("Operacion de dissolve sin especificar capa de resultados");
+		if (this.writer == null || this.schemaManager == null) {
+			throw new GeoprocessException(
+					"Operacion de dissolve sin especificar capa de resultados");
 		}
 		/*
-		try {
-			if(firstLayer.getShapeType() != XTypes.POLYGON
-					&& firstLayer.getShapeType() != XTypes.MULTI)
-				throw new GeoprocessException("La capa a disolver debe ser de polígonos");
-		} catch (ReadDriverException e) {
-			throw new GeoprocessException("Error intentando verificar el tipo de geometria de la capa a disolver");
-		}
-		*/
-		if(this.dissolveField == null)
-			throw new GeoprocessException("No se ha proporcionado el campo para dissolver");
+		 * try { if(firstLayer.getShapeType() != XTypes.POLYGON &&
+		 * firstLayer.getShapeType() != XTypes.MULTI) throw new
+		 * GeoprocessException("La capa a disolver debe ser de polígonos"); }
+		 * catch (ReadDriverException e) { throw new GeoprocessException(
+		 * "Error intentando verificar el tipo de geometria de la capa a disolver"
+		 * ); }
+		 */
+		if (this.dissolveField == null)
+			throw new GeoprocessException(
+					"No se ha proporcionado el campo para dissolver");
 
 	}
 
@@ -217,8 +214,6 @@ public class DissolveGeoprocess extends AbstractGeoprocess
 			throw new GeoprocessException(e);
 		}
 	}
-
-
 
 	public void cancel() {
 		try {
@@ -231,19 +226,18 @@ public class DissolveGeoprocess extends AbstractGeoprocess
 
 	public ILayerDefinition createLayerDefinition() {
 		try {
-			if(resultLayerDefinition == null){
-				resultLayerDefinition = criteria.createLayerDefinition(fields_functions);
+			if (resultLayerDefinition == null) {
+				resultLayerDefinition = criteria
+						.createLayerDefinition(fields_functions);
 				resultLayerDefinition.setShapeType(firstLayer.getShapeType());
 			}
-				
+
 		} catch (ReadDriverException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return resultLayerDefinition;
 	}
-
-
 
 	public IMonitorableTask createTask() {
 		try {
@@ -254,37 +248,40 @@ public class DissolveGeoprocess extends AbstractGeoprocess
 	}
 
 	/**
-	 * IMonitorableTask that allows to run diff geoprocess in background,
-	 * with cancelation requests.
-	 *
+	 * IMonitorableTask that allows to run diff geoprocess in background, with
+	 * cancelation requests.
+	 * 
 	 * @author azabala
-	 *
+	 * 
 	 */
 	class DissolveMonitorableTask implements IMonitorableTask {
 		private CancellableMonitorable cancelMonitor = null;
 
-		String DISSOLVE_MESSAGE = PluginServices.getText(this, "Mensaje_dissolve");
-		String DISSOLVE_NOTE = PluginServices.getText(this, "Mensaje_procesando_dissolves");
+		String DISSOLVE_MESSAGE = PluginServices.getText(this,
+				"Mensaje_dissolve");
+		String DISSOLVE_NOTE = PluginServices.getText(this,
+				"Mensaje_procesando_dissolves");
 		String OF = PluginServices.getText(this, "De");
 		private boolean finished = false;
 
 		FeatureDissolver dissolver = null;
 
-		DissolveMonitorableTask() throws ReadDriverException{
+		DissolveMonitorableTask() throws ReadDriverException {
 			initialize();
 		}
+
 		void initialize() throws ReadDriverException {
 			cancelMonitor = createCancelMonitor();
 		}
 
-		private CancellableMonitorable createCancelMonitor() throws ReadDriverException{
-			DefaultCancellableMonitorable monitor = new
-							DefaultCancellableMonitorable();
+		private CancellableMonitorable createCancelMonitor()
+				throws ReadDriverException {
+			DefaultCancellableMonitorable monitor = new DefaultCancellableMonitorable();
 			monitor.setInitialStep(0);
 
-
-			if(dissolveOnlySelection)
-				monitor.setFinalStep(firstLayer.getRecordset().getSelection().cardinality());
+			if (dissolveOnlySelection)
+				monitor.setFinalStep(firstLayer.getRecordset().getSelection()
+						.cardinality());
 			else
 				monitor.setFinalStep(firstLayer.getSource().getShapeCount());
 			monitor.setDeterminatedProcess(true);
@@ -300,12 +297,12 @@ public class DissolveGeoprocess extends AbstractGeoprocess
 		}
 
 		public int getCurrentStep() {
-			//return cancelMonitor.getCurrentStep();
-//			if(visitor == null)
-//				return getInitialStep();
-//			else
-//				return visitor.getNumProcessedGeometries();
-			if(dissolver == null)
+			// return cancelMonitor.getCurrentStep();
+			// if(visitor == null)
+			// return getInitialStep();
+			// else
+			// return visitor.getNumProcessedGeometries();
+			if (dissolver == null)
 				return getInitialStep();
 			else
 				return dissolver.getNumProcessedGeometries();
@@ -316,10 +313,8 @@ public class DissolveGeoprocess extends AbstractGeoprocess
 		}
 
 		public String getNote() {
-			return DISSOLVE_NOTE + " "+
-			getCurrentStep() + " " +
-			OF + " " +
-			getFinishStep();
+			return DISSOLVE_NOTE + " " + getCurrentStep() + " " + OF + " "
+					+ getFinishStep();
 		}
 
 		public void cancel() {
@@ -329,27 +324,22 @@ public class DissolveGeoprocess extends AbstractGeoprocess
 
 		public void run() throws GeoprocessException {
 			try {
-				FeaturePersisterProcessor2 processor =
-					new FeaturePersisterProcessor2(writer);
+				FeaturePersisterProcessor2 processor = new FeaturePersisterProcessor2(
+						writer);
 
-				dissolver = new
-					FeatureDissolver(processor,
-							firstLayer,
-							fields_functions,
-							criteria,
-							dissolveType);
-				
+				dissolver = new FeatureDissolver(processor, firstLayer,
+						fields_functions, criteria, dissolveType);
+
 				if (dissolveOnlySelection) {
-					FBitSet selection = firstLayer.
-										getRecordset().
-										getSelection();
+					FBitSet selection = firstLayer.getRecordset()
+							.getSelection();
 					dissolver.setSelection(selection);
 				}
 				dissolver.dissolve(cancelMonitor);
-			}catch(Exception e){
+			} catch (Exception e) {
 				e.printStackTrace();
 
-			} finally{
+			} finally {
 				finished = true;
 			}
 		}
@@ -365,14 +355,16 @@ public class DissolveGeoprocess extends AbstractGeoprocess
 		public boolean isFinished() {
 			return finished;
 		}
-		/* (non-Javadoc)
+
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see com.iver.utiles.swing.threads.IMonitorableTask#finished()
 		 */
 		public void finished() {
 			// TODO Auto-generated method stub
-			
+
 		}
 	}
 
 }
-

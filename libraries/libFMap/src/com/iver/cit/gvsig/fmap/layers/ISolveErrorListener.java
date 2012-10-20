@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
@@ -44,34 +43,35 @@ package com.iver.cit.gvsig.fmap.layers;
 
 import com.hardcode.driverManager.Driver;
 
-
 /**
  * Interface to solve one error al layer
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public interface ISolveErrorListener {
-    /**
-     * Return the class to string of the exception to solve.
-     *
-     * @return Class exception
-     */
-    public String getException();
+	/**
+	 * Return the class to string of the exception to solve.
+	 * 
+	 * @return Class exception
+	 */
+	public String getException();
 
-    /**
-     * Solve the error and return the layer solved.
-     *
-     * @param layer Layer with error
-     * @param driver Driver of layer.
-     *
-     * @return Layer solved.
-     */
-    public FLayer solve(FLayer layer, Driver driver);
+	/**
+	 * Solve the error and return the layer solved.
+	 * 
+	 * @param layer
+	 *            Layer with error
+	 * @param driver
+	 *            Driver of layer.
+	 * 
+	 * @return Layer solved.
+	 */
+	public FLayer solve(FLayer layer, Driver driver);
 
-    /**
-     * Return true if the layer has been solved.
-     *
-     * @return True if the layer has been solved.
-     */
-    public boolean isSolved();
+	/**
+	 * Return true if the layer has been solved.
+	 * 
+	 * @return True if the layer has been solved.
+	 */
+	public boolean isSolved();
 }

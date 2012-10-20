@@ -29,39 +29,39 @@ import org.gvsig.raster.dataset.io.RasterDriverException;
 
 /**
  * Este test prueba el acceso a datos a traves de un DataSource sin resampleo
- * para un raster leido con Gdal con coordenadas pixel. 
+ * para un raster leido con Gdal con coordenadas pixel.
  * 
- * Lee el raster completo y comprueba que los datos leidos sean correctos 
- * comparando los valores de las cuatro esquinas y algunos valores dentro de la imagen.
- * Después hace selecciona un área dentro de la imagen de 2x2 y compara que los valores
- * leidos sean correctos.
+ * Lee el raster completo y comprueba que los datos leidos sean correctos
+ * comparando los valores de las cuatro esquinas y algunos valores dentro de la
+ * imagen. Después hace selecciona un área dentro de la imagen de 2x2 y compara
+ * que los valores leidos sean correctos.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public class TDSIntGdal extends TestCase{
+public class TDSIntGdal extends TestCase {
 
 	private String baseDir = "./test-images/";
-	private String path = baseDir + "miniRaster25x24.tif";	
-	private RasterDataset f = null;	
+	private String path = baseDir + "miniRaster25x24.tif";
+	private RasterDataset f = null;
 	private BufferFactory ds = null;
-	
-	public void start(){
+
+	public void start() {
 		this.setUp();
 		this.testStack();
 	}
-	
+
 	public void setUp() {
 		System.err.println("TDSIntGdal running...");
-		//System.out.println("TestDataSource (Pixel Coord) [Gdal] running...");
+		// System.out.println("TestDataSource (Pixel Coord) [Gdal] running...");
 	}
-	
-	static{
+
+	static {
 		RasterLibrary.wakeUp();
 	}
-	
-	public void testStack(){
-		int[] drawableBands = {0, 1, 2};
+
+	public void testStack() {
+		int[] drawableBands = { 0, 1, 2 };
 		try {
 			f = RasterDataset.open(null, path);
 		} catch (NotSupportedExtensionException e) {
@@ -84,8 +84,8 @@ public class TDSIntGdal extends TestCase{
 			e.printStackTrace();
 			return;
 		}
-		//print();
-		
+		// print();
+
 		try {
 			ds.setAreaOfInterest(10, 10, 2, 2);
 			dataTest2();
@@ -97,79 +97,80 @@ public class TDSIntGdal extends TestCase{
 			e.printStackTrace();
 			return;
 		}
-		//print();
+		// print();
 	}
-	
+
 	private void dataTest2() throws InterruptedException {
 		IBuffer raster = ds.getRasterBuf();
-		//Upper Left
-		assertEquals((int)(raster.getElemByte(0, 0, 0) & 0xff), 80);
-		assertEquals((int)(raster.getElemByte(0, 0, 1) & 0xff), 96);
-		assertEquals((int)(raster.getElemByte(0, 0, 2) & 0xff), 60);
-		//Upper Right
-		assertEquals((int)(raster.getElemByte(0, 1, 0) & 0xff), 80);
-		assertEquals((int)(raster.getElemByte(0, 1, 1) & 0xff), 96);
-		assertEquals((int)(raster.getElemByte(0, 1, 2) & 0xff), 60);
-		//Lower Left
-		assertEquals((int)(raster.getElemByte(1, 0, 0) & 0xff), 82);
-		assertEquals((int)(raster.getElemByte(1, 0, 1) & 0xff), 97);
-		assertEquals((int)(raster.getElemByte(1, 0, 2) & 0xff), 68);
-		//Lower Right
-		assertEquals((int)(raster.getElemByte(1, 1, 0) & 0xff), 82);
-		assertEquals((int)(raster.getElemByte(1, 1, 1) & 0xff), 97);
-		assertEquals((int)(raster.getElemByte(1, 1, 2) & 0xff), 68);
+		// Upper Left
+		assertEquals((int) (raster.getElemByte(0, 0, 0) & 0xff), 80);
+		assertEquals((int) (raster.getElemByte(0, 0, 1) & 0xff), 96);
+		assertEquals((int) (raster.getElemByte(0, 0, 2) & 0xff), 60);
+		// Upper Right
+		assertEquals((int) (raster.getElemByte(0, 1, 0) & 0xff), 80);
+		assertEquals((int) (raster.getElemByte(0, 1, 1) & 0xff), 96);
+		assertEquals((int) (raster.getElemByte(0, 1, 2) & 0xff), 60);
+		// Lower Left
+		assertEquals((int) (raster.getElemByte(1, 0, 0) & 0xff), 82);
+		assertEquals((int) (raster.getElemByte(1, 0, 1) & 0xff), 97);
+		assertEquals((int) (raster.getElemByte(1, 0, 2) & 0xff), 68);
+		// Lower Right
+		assertEquals((int) (raster.getElemByte(1, 1, 0) & 0xff), 82);
+		assertEquals((int) (raster.getElemByte(1, 1, 1) & 0xff), 97);
+		assertEquals((int) (raster.getElemByte(1, 1, 2) & 0xff), 68);
 	}
-	
+
 	private void dataTest1() throws InterruptedException {
 		IBuffer raster = ds.getRasterBuf();
-		//Upper Left
-		assertEquals((int)(raster.getElemByte(0, 0, 0) & 0xff), 14);
-		assertEquals((int)(raster.getElemByte(0, 0, 1) & 0xff), 14);
-		assertEquals((int)(raster.getElemByte(0, 0, 2) & 0xff), 0);
-		//Upper Right
-		assertEquals((int)(raster.getElemByte(0, 24, 0) & 0xff), 68);
-		assertEquals((int)(raster.getElemByte(0, 24, 1) & 0xff), 90);
-		assertEquals((int)(raster.getElemByte(0, 24, 2) & 0xff), 52);
-		//Lower Left
-		assertEquals((int)(raster.getElemByte(23, 0, 0) & 0xff), 129);
-		assertEquals((int)(raster.getElemByte(23, 0, 1) & 0xff), 122);
-		assertEquals((int)(raster.getElemByte(23, 0, 2) & 0xff), 106);
-		//Lower Right
-		assertEquals((int)(raster.getElemByte(23, 24, 0) & 0xff), 145);
-		assertEquals((int)(raster.getElemByte(23, 24, 1) & 0xff), 140);
-		assertEquals((int)(raster.getElemByte(23, 24, 2) & 0xff), 134);
-		
-		assertEquals((int)(raster.getElemByte(6, 6, 0) & 0xff), 21);
-		assertEquals((int)(raster.getElemByte(6, 6, 1) & 0xff), 37);
-		assertEquals((int)(raster.getElemByte(6, 6, 2) & 0xff), 10);
-		
-		assertEquals((int)(raster.getElemByte(6, 23, 0) & 0xff), 91);
-		assertEquals((int)(raster.getElemByte(6, 23, 1) & 0xff), 105);
-		assertEquals((int)(raster.getElemByte(6, 23, 2) & 0xff), 92);
-		
-		assertEquals((int)(raster.getElemByte(23, 6, 0) & 0xff), 153);
-		assertEquals((int)(raster.getElemByte(23, 6, 1) & 0xff), 133);
-		assertEquals((int)(raster.getElemByte(23, 6, 2) & 0xff), 122);
-		
-		assertEquals((int)(raster.getElemByte(9, 14, 0) & 0xff), 63);
-		assertEquals((int)(raster.getElemByte(9, 14, 1) & 0xff), 69);
-		assertEquals((int)(raster.getElemByte(9, 14, 2) & 0xff), 55);
-		
-		assertEquals((int)(raster.getElemByte(6, 13, 0) & 0xff), 70);
-		assertEquals((int)(raster.getElemByte(6, 13, 1) & 0xff), 78);
-		assertEquals((int)(raster.getElemByte(6, 13, 2) & 0xff), 55);
+		// Upper Left
+		assertEquals((int) (raster.getElemByte(0, 0, 0) & 0xff), 14);
+		assertEquals((int) (raster.getElemByte(0, 0, 1) & 0xff), 14);
+		assertEquals((int) (raster.getElemByte(0, 0, 2) & 0xff), 0);
+		// Upper Right
+		assertEquals((int) (raster.getElemByte(0, 24, 0) & 0xff), 68);
+		assertEquals((int) (raster.getElemByte(0, 24, 1) & 0xff), 90);
+		assertEquals((int) (raster.getElemByte(0, 24, 2) & 0xff), 52);
+		// Lower Left
+		assertEquals((int) (raster.getElemByte(23, 0, 0) & 0xff), 129);
+		assertEquals((int) (raster.getElemByte(23, 0, 1) & 0xff), 122);
+		assertEquals((int) (raster.getElemByte(23, 0, 2) & 0xff), 106);
+		// Lower Right
+		assertEquals((int) (raster.getElemByte(23, 24, 0) & 0xff), 145);
+		assertEquals((int) (raster.getElemByte(23, 24, 1) & 0xff), 140);
+		assertEquals((int) (raster.getElemByte(23, 24, 2) & 0xff), 134);
+
+		assertEquals((int) (raster.getElemByte(6, 6, 0) & 0xff), 21);
+		assertEquals((int) (raster.getElemByte(6, 6, 1) & 0xff), 37);
+		assertEquals((int) (raster.getElemByte(6, 6, 2) & 0xff), 10);
+
+		assertEquals((int) (raster.getElemByte(6, 23, 0) & 0xff), 91);
+		assertEquals((int) (raster.getElemByte(6, 23, 1) & 0xff), 105);
+		assertEquals((int) (raster.getElemByte(6, 23, 2) & 0xff), 92);
+
+		assertEquals((int) (raster.getElemByte(23, 6, 0) & 0xff), 153);
+		assertEquals((int) (raster.getElemByte(23, 6, 1) & 0xff), 133);
+		assertEquals((int) (raster.getElemByte(23, 6, 2) & 0xff), 122);
+
+		assertEquals((int) (raster.getElemByte(9, 14, 0) & 0xff), 63);
+		assertEquals((int) (raster.getElemByte(9, 14, 1) & 0xff), 69);
+		assertEquals((int) (raster.getElemByte(9, 14, 2) & 0xff), 55);
+
+		assertEquals((int) (raster.getElemByte(6, 13, 0) & 0xff), 70);
+		assertEquals((int) (raster.getElemByte(6, 13, 1) & 0xff), 78);
+		assertEquals((int) (raster.getElemByte(6, 13, 2) & 0xff), 55);
 	}
-	
+
 	/**
 	 * Imprime todos los pixels de la fuente de datos en RGB
 	 */
-	/*private void print(){
-		IBuffer raster = ds.getRasterBuf();
-		for(int line = 0; line < raster.getHeight(); line++){
-			for(int col = 0; col < raster.getWidth(); col++)
-				System.out.print("(" + (int)(raster.getElemByte(line, col, 0) & 0xff) + " " + (int)(raster.getElemByte(line, col, 1) & 0xff) + " " + (int)(raster.getElemByte(line, col, 2) & 0xff) + ")");
-			System.out.println();
-		}
-	}*/
+	/*
+	 * private void print(){ IBuffer raster = ds.getRasterBuf(); for(int line =
+	 * 0; line < raster.getHeight(); line++){ for(int col = 0; col <
+	 * raster.getWidth(); col++) System.out.print("(" +
+	 * (int)(raster.getElemByte(line, col, 0) & 0xff) + " " +
+	 * (int)(raster.getElemByte(line, col, 1) & 0xff) + " " +
+	 * (int)(raster.getElemByte(line, col, 2) & 0xff) + ")");
+	 * System.out.println(); } }
+	 */
 
 }

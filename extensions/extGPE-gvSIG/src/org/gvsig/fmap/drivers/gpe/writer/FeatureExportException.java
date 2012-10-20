@@ -56,30 +56,30 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class FeatureExportException extends GPELayerException{
+public class FeatureExportException extends GPELayerException {
 	private static final long serialVersionUID = -7643617950034530635L;
 	private int index = 0;
-	
+
 	public FeatureExportException(FLayer layer, int index, Throwable exception) {
 		super(layer, exception);
 		this.index = index;
 		initialize();
 	}
-	
+
 	/**
 	 * Initialize the properties
 	 */
 	private void initialize() {
 		messageKey = "gpe_gvsig_export_feature_exception";
-		formatString = "Impossible to export the feature %(index) " +
-				"for the layer %(layerName).";
+		formatString = "Impossible to export the feature %(index) "
+				+ "for the layer %(layerName).";
 		code = serialVersionUID;
 	}
-	
+
 	protected Map values() {
-		HashMap params = (HashMap)super.values();
+		HashMap params = (HashMap) super.values();
 		params.put("index", String.valueOf(index));
-		return params;	
+		return params;
 	}
 
 }

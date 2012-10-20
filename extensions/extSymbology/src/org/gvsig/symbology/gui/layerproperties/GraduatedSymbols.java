@@ -123,11 +123,11 @@ import com.iver.cit.gvsig.project.documents.view.legend.gui.SymbolTable;
 import com.iver.cit.gvsig.project.documents.view.legend.gui.VectorialInterval;
 
 /**
- * Implements the interface that shows the information of a legend which draws quantities
- * using symbol size to show relative values.
- *
+ * Implements the interface that shows the information of a legend which draws
+ * quantities using symbol size to show relative values.
+ * 
  * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
- *
+ * 
  */
 
 public class GraduatedSymbols extends VectorialInterval implements ILegendPanel {
@@ -140,7 +140,7 @@ public class GraduatedSymbols extends VectorialInterval implements ILegendPanel 
 	private JSymbolPreviewButton btnBackground;
 	private int shapeType;
 	private GridBagLayoutPanel aux;
-	private int templateShapeType = 0 ;
+	private int templateShapeType = 0;
 	private boolean showBackground = true;
 
 	public GraduatedSymbols() {
@@ -158,17 +158,17 @@ public class GraduatedSymbols extends VectorialInterval implements ILegendPanel 
 
 		if (optionPanel == null) {
 			optionPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-			optionPanel.setBorder(BorderFactory.
-					createTitledBorder(null,
-							PluginServices.getText(this, "symbol")));
+			optionPanel.setBorder(BorderFactory.createTitledBorder(null,
+					PluginServices.getText(this, "symbol")));
 
 			aux = new GridBagLayoutPanel();
 			aux.addComponent(new JLabel(PluginServices.getText(this, "size")));
-			aux.addComponent(PluginServices.getText(this, "from")+":",
+			aux.addComponent(PluginServices.getText(this, "from") + ":",
 					getTxtMinSize());
-			aux.addComponent(PluginServices.getText(this, "to")+":",
+			aux.addComponent(PluginServices.getText(this, "to") + ":",
 					getTxtMaxSize());
-			aux.addComponent(PluginServices.getText(this, "template"), getBtnTemplate());
+			aux.addComponent(PluginServices.getText(this, "template"),
+					getBtnTemplate());
 			optionPanel.add(aux);
 
 		}
@@ -176,13 +176,17 @@ public class GraduatedSymbols extends VectorialInterval implements ILegendPanel 
 	}
 
 	/**
-	 * Adds the button that allows the user to select a background for the graduated symbol.
+	 * Adds the button that allows the user to select a background for the
+	 * graduated symbol.
 	 */
 	private void getBackgroundPanel() {
-		aux.addComponent(PluginServices.getText(this, "background"), getBtnBackground());
+		aux.addComponent(PluginServices.getText(this, "background"),
+				getBtnBackground());
 	}
+
 	/**
-	 * Creates the JSymbolPreviewButton for the background of the graduated symbol.
+	 * Creates the JSymbolPreviewButton for the background of the graduated
+	 * symbol.
 	 */
 	private JSymbolPreviewButton getBtnBackground() {
 		if (btnBackground == null) {
@@ -192,36 +196,42 @@ public class GraduatedSymbols extends VectorialInterval implements ILegendPanel 
 		}
 		return btnBackground;
 	}
+
 	/**
 	 * Creates the JSymbolPreviewButton for the graduated symbol.
 	 */
 	private JSymbolPreviewButton getBtnTemplate() {
 		if (btnTemplate == null) {
-			templateShapeType = ((shapeType%FShape.Z) == FShape.POLYGON) ? FShape.POINT : shapeType;
+			templateShapeType = ((shapeType % FShape.Z) == FShape.POLYGON) ? FShape.POINT
+					: shapeType;
 			btnTemplate = new JSymbolPreviewButton(templateShapeType);
 			btnTemplate.setPreferredSize(new Dimension(100, 35));
 
 		}
 		return btnTemplate;
 	}
+
 	/**
-	 * Creates the JIncrementalNumberField which is used to specify the maximum size of the
-	 * graduated symbol
+	 * Creates the JIncrementalNumberField which is used to specify the maximum
+	 * size of the graduated symbol
 	 */
 	private JIncrementalNumberField getTxtMaxSize() {
 		if (txtMaxSize == null) {
-			txtMaxSize = new JIncrementalNumberField(String.valueOf(25), 7,0,100,1);
+			txtMaxSize = new JIncrementalNumberField(String.valueOf(25), 7, 0,
+					100, 1);
 
 		}
 		return txtMaxSize;
 	}
+
 	/**
-	 * Creates the JIncrementalNumberField which is used to specify the minimum size of the
-	 * graduated symbol
+	 * Creates the JIncrementalNumberField which is used to specify the minimum
+	 * size of the graduated symbol
 	 */
 	private JIncrementalNumberField getTxtMinSize() {
 		if (txtMinSize == null) {
-			txtMinSize = new JIncrementalNumberField(String.valueOf(3), 7,0,100,1);
+			txtMinSize = new JIncrementalNumberField(String.valueOf(3), 7, 0,
+					100, 1);
 		}
 		return txtMinSize;
 	}
@@ -232,16 +242,19 @@ public class GraduatedSymbols extends VectorialInterval implements ILegendPanel 
 
 		try {
 			shapeType = (this.layer.getShapeType());
-			templateShapeType = ((shapeType%FShape.Z) == FShape.POLYGON) ? FShape.POINT : shapeType;
+			templateShapeType = ((shapeType % FShape.Z) == FShape.POLYGON) ? FShape.POINT
+					: shapeType;
 			getBtnTemplate().setShapeType(templateShapeType);
-			if(showBackground){
-				if((shapeType%FShape.Z) == FShape.POLYGON && btnBackground == null) {
+			if (showBackground) {
+				if ((shapeType % FShape.Z) == FShape.POLYGON
+						&& btnBackground == null) {
 					getBackgroundPanel();
 					getBtnBackground().setShapeType(FShape.POLYGON);
 				}
 			}
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(PluginServices.getText(this, "generating_intervals"), e);
+			NotificationManager.addError(
+					PluginServices.getText(this, "generating_intervals"), e);
 		}
 
 		if (symbolTable != null)
@@ -249,7 +262,8 @@ public class GraduatedSymbols extends VectorialInterval implements ILegendPanel 
 
 		getDefaultSymbolPrev(templateShapeType);
 
-		symbolTable = new SymbolTable(this, SymbolTable.INTERVALS_TYPE,templateShapeType);
+		symbolTable = new SymbolTable(this, SymbolTable.INTERVALS_TYPE,
+				templateShapeType);
 		pnlCenter.add(symbolTable);
 
 		fillFieldNames();
@@ -266,21 +280,33 @@ public class GraduatedSymbols extends VectorialInterval implements ILegendPanel 
 			cmbField.setSelectedItem(auxLegend.getClassifyingFieldNames()[0]);
 			symbolTable.fillTableFromSymbolList(auxLegend.getSymbols(),
 					auxLegend.getValues(), auxLegend.getDescriptions());
-			getTxtMaxSize().setDouble(((GraduatedSymbolLegend) auxLegend).getMaxSymbolSize());
-			getTxtMinSize().setDouble(((GraduatedSymbolLegend) auxLegend).getMinSymbolSize());
-			if (auxLegend.getSymbols().length > 0){
-				getBtnTemplate().setSymbol(((GraduatedSymbolLegend) auxLegend).getSymbols()[auxLegend.getSymbols().length-1]);
+			getTxtMaxSize().setDouble(
+					((GraduatedSymbolLegend) auxLegend).getMaxSymbolSize());
+			getTxtMinSize().setDouble(
+					((GraduatedSymbolLegend) auxLegend).getMinSymbolSize());
+			if (auxLegend.getSymbols().length > 0) {
+				getBtnTemplate()
+						.setSymbol(
+								((GraduatedSymbolLegend) auxLegend)
+										.getSymbols()[auxLegend.getSymbols().length - 1]);
 			} else {
-				getBtnTemplate().setSymbol(newSymbol(shapeType, shapeType == FShape.LINE ? 3 : 10));
+				getBtnTemplate()
+						.setSymbol(
+								newSymbol(shapeType,
+										shapeType == FShape.LINE ? 3 : 10));
 			}
-			if(showBackground){
-				if((shapeType%FShape.Z) == FShape.POLYGON)
-					getBtnBackground().setSymbol(((GraduatedSymbolLegend) auxLegend).getBackgroundSymbol());
+			if (showBackground) {
+				if ((shapeType % FShape.Z) == FShape.POLYGON)
+					getBtnBackground().setSymbol(
+							((GraduatedSymbolLegend) auxLegend)
+									.getBackgroundSymbol());
 			}
 			if (auxLegend.isUseDefaultSymbol())
-				txtNumIntervals.setText(String.valueOf(auxLegend.getSymbols().length - 1));
+				txtNumIntervals
+						.setText(String.valueOf(auxLegend.getSymbols().length - 1));
 			else
-				txtNumIntervals.setText(String.valueOf(auxLegend.getSymbols().length));
+				txtNumIntervals
+						.setText(String.valueOf(auxLegend.getSymbols().length));
 
 		} else {
 			// Si la capa viene con otro tipo de leyenda, creamos
@@ -288,25 +314,28 @@ public class GraduatedSymbols extends VectorialInterval implements ILegendPanel 
 			auxLegend = new GraduatedSymbolLegend();
 			getTxtMaxSize().setDouble(DEFAULT_SYMBOL_MAX_SIZE);
 			getTxtMinSize().setDouble(DEFAULT_SYMBOL_MIN_SIZE);
-			auxLegend.setDefaultSymbol(newSymbol(shapeType, shapeType == FShape.LINE ? 3 : 10));
+			auxLegend.setDefaultSymbol(newSymbol(shapeType,
+					shapeType == FShape.LINE ? 3 : 10));
 			getBtnTemplate().setSymbol(auxLegend.getDefaultSymbol());
-			((GraduatedSymbolLegend) auxLegend).setTemplateShapeType(templateShapeType);
+			((GraduatedSymbolLegend) auxLegend)
+					.setTemplateShapeType(templateShapeType);
 
 		}
 		cmbFieldType.setSelectedIndex(auxLegend.getIntervalType());
 		defaultSymbolPrev.setSymbol(auxLegend.getDefaultSymbol());
 	}
 
-
 	@Override
 	public String getDescription() {
-		return PluginServices.getText(this, "draw_quantities_using_symbol_size_to_show_relative_values");
+		return PluginServices.getText(this,
+				"draw_quantities_using_symbol_size_to_show_relative_values");
 	}
 
 	@Override
 	public ILegend getLegend() {
 
-		GraduatedSymbolLegend gsl = new GraduatedSymbolLegend((VectorialIntervalLegend) super.getLegend());
+		GraduatedSymbolLegend gsl = new GraduatedSymbolLegend(
+				(VectorialIntervalLegend) super.getLegend());
 
 		double minSize = getTxtMinSize().getDouble();
 		gsl.setMinSymbolSize(minSize);
@@ -315,12 +344,13 @@ public class GraduatedSymbols extends VectorialInterval implements ILegendPanel 
 		try {
 			gsl.setShapeType(layer.getShapeType());
 		} catch (ReadDriverException e) {
-			NotificationManager.addWarning("Reached what should be unreachable code", e);
+			NotificationManager.addWarning(
+					"Reached what should be unreachable code", e);
 		}
 
 		ISymbol sym = getBtnTemplate().getSymbol();
 
-		if (sym != null){
+		if (sym != null) {
 			gsl.setTemplateShapeType(sym.getSymbolType());
 			gsl.setDefaultSymbol(sym);
 		} else {
@@ -328,11 +358,11 @@ public class GraduatedSymbols extends VectorialInterval implements ILegendPanel 
 		}
 
 		gsl.useDefaultSymbol(getChkDefaultvalues().isSelected());
-		if(defaultSymbolPrev.getSymbol() != null)
+		if (defaultSymbolPrev.getSymbol() != null)
 			gsl.setDefaultSymbol(defaultSymbolPrev.getSymbol());
 
-		if (this.showBackground){
-			if((shapeType%FShape.Z) == FShape.POLYGON)
+		if (this.showBackground) {
+			if ((shapeType % FShape.Z) == FShape.POLYGON)
 				gsl.setBackgroundSymbol(btnBackground.getSymbol());
 		}
 
@@ -341,8 +371,8 @@ public class GraduatedSymbols extends VectorialInterval implements ILegendPanel 
 
 	@Override
 	public ImageIcon getIcon() {
-		return new ImageIcon(this.getClass().getClassLoader().
-				getResource("images/GraduatedSymbols.PNG"));
+		return new ImageIcon(this.getClass().getClassLoader()
+				.getResource("images/GraduatedSymbols.PNG"));
 	}
 
 	@Override
@@ -367,7 +397,7 @@ public class GraduatedSymbols extends VectorialInterval implements ILegendPanel 
 
 	@Override
 	public boolean isSuitableFor(FLayer layer) {
-		if ( super.isSuitableFor(layer)) {
+		if (super.isSuitableFor(layer)) {
 			FLyrVect lVect = (FLyrVect) layer;
 			try {
 				return lVect.getShapeType() != FShape.MULTI;
@@ -398,7 +428,8 @@ public class GraduatedSymbols extends VectorialInterval implements ILegendPanel 
 			case FShape.LINE | FShape.M:
 				templateSymbol = new SimpleLineSymbol();
 				((SimpleLineSymbol) templateSymbol).setLineWidth(size);
-				((SimpleLineSymbol) templateSymbol).setLineColor(Color.DARK_GRAY);
+				((SimpleLineSymbol) templateSymbol)
+						.setLineColor(Color.DARK_GRAY);
 				break;
 			default:
 				throw new Error("Unknown symbol type");
@@ -418,13 +449,13 @@ public class GraduatedSymbols extends VectorialInterval implements ILegendPanel 
 			if (mySymbol instanceof IMarkerSymbol) {
 				IMarkerSymbol mSym = (IMarkerSymbol) mySymbol;
 				mSym.setSize(size);
-				if ((shapeType%FShape.Z) == FShape.POLYGON) {
+				if ((shapeType % FShape.Z) == FShape.POLYGON) {
 					// this is to allow using in Polygon layers
 					MarkerFillSymbol fillSymbol = new MarkerFillSymbol();
 					fillSymbol.setOutline(null);
 					fillSymbol.setFillColor(null);
-					fillSymbol.getMarkerFillProperties().
-					setFillStyle(IMarkerFillPropertiesStyle.SINGLE_CENTERED_SYMBOL);
+					fillSymbol.getMarkerFillProperties().setFillStyle(
+							IMarkerFillPropertiesStyle.SINGLE_CENTERED_SYMBOL);
 					fillSymbol.setMarker(mSym);
 				}
 			}
@@ -452,17 +483,19 @@ public class GraduatedSymbols extends VectorialInterval implements ILegendPanel 
 
 			this.shapeType = layer.getShapeType();
 
-			if((layer.getShapeType()%FShape.Z) == FShape.POLYGON)
+			if ((layer.getShapeType() % FShape.Z) == FShape.POLYGON)
 				this.templateShapeType = FShape.POINT;
 
-
-
-			auxLegend = LegendFactory.createVectorialIntervalLegend(this.shapeType);
+			auxLegend = LegendFactory
+					.createVectorialIntervalLegend(this.shapeType);
 			auxLegend.setIntervalType(getCmbIntervalTypes().getSelectedIndex());
 			if (chkdefaultvalues.isSelected()) {
 				auxLegend.getDefaultSymbol().setDescription("Default");
-				auxLegend.addSymbol(new NullIntervalValue(),
-						SymbologyFactory.createDefaultSymbolByShapeType(this.templateShapeType));
+				auxLegend
+						.addSymbol(
+								new NullIntervalValue(),
+								SymbologyFactory
+										.createDefaultSymbolByShapeType(this.templateShapeType));
 			}
 
 			int symbolType;
@@ -476,41 +509,44 @@ public class GraduatedSymbols extends VectorialInterval implements ILegendPanel 
 				theSymbol = newSymbol(symbolType, size);
 
 				auxLegend.addSymbol(interval, theSymbol);
-				System.out.println("addSymbol = " + interval +
-						" theSymbol = " + theSymbol.getDescription());
+				System.out.println("addSymbol = " + interval + " theSymbol = "
+						+ theSymbol.getDescription());
 				numSymbols++;
 
 				if (numSymbols > 100) {
-					int resp = JOptionPane.showConfirmDialog(this,
-							PluginServices.getText(this, "mas_de_100_simbolos"),
-							PluginServices.getText(this, "quiere_continuar"),
-							JOptionPane.YES_NO_OPTION,
-							JOptionPane.WARNING_MESSAGE);
+					int resp = JOptionPane
+							.showConfirmDialog(this, PluginServices.getText(
+									this, "mas_de_100_simbolos"),
+									PluginServices.getText(this,
+											"quiere_continuar"),
+									JOptionPane.YES_NO_OPTION,
+									JOptionPane.WARNING_MESSAGE);
 
-					if ((resp == JOptionPane.NO_OPTION) ||
-							(resp == JOptionPane.DEFAULT_OPTION)) {
+					if ((resp == JOptionPane.NO_OPTION)
+							|| (resp == JOptionPane.DEFAULT_OPTION)) {
 						return;
 					}
 				}
 
-
-				theSymbol.setDescription(NumberFormat.getInstance().format(interval.getMin()) +
-						" - " +
-						NumberFormat.getInstance().format(interval.getMax()));
+				theSymbol.setDescription(NumberFormat.getInstance().format(
+						interval.getMin())
+						+ " - "
+						+ NumberFormat.getInstance().format(interval.getMax()));
 
 				size = size + step;
 			} // for
 
-
-
 			symbolTable.fillTableFromSymbolList(auxLegend.getSymbols(),
-					auxLegend.getValues(),auxLegend.getDescriptions());
-
+					auxLegend.getValues(), auxLegend.getDescriptions());
 
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(PluginServices.getText(this, "could_not_get_shape_type"), e);
+			NotificationManager
+					.addError(PluginServices.getText(this,
+							"could_not_get_shape_type"), e);
 		} catch (LegendLayerException e) {
-			NotificationManager.addError(PluginServices.getText(this, "failed_computing_intervals"), e);
+			NotificationManager.addError(
+					PluginServices.getText(this, "failed_computing_intervals"),
+					e);
 		}
 
 		bDelAll.setEnabled(true);
@@ -518,15 +554,12 @@ public class GraduatedSymbols extends VectorialInterval implements ILegendPanel 
 
 	}
 
-	public void setShowBackground(boolean showBackground){
+	public void setShowBackground(boolean showBackground) {
 		this.showBackground = showBackground;
 	}
 
-	public boolean getShowBackground(){
+	public boolean getShowBackground() {
 		return this.showBackground;
 	}
 
-
-
-
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

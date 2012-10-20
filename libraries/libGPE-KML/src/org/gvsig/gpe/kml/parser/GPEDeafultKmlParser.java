@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import javax.xml.namespace.QName;
 
-import org.gvsig.exceptions.BaseException;
 import org.gvsig.gpe.kml.exceptions.KmlHeaderParseException;
 import org.gvsig.gpe.kml.parser.profiles.IBindingProfile;
 import org.gvsig.gpe.kml.utils.Kml2_1_Tags;
@@ -94,14 +93,15 @@ import org.gvsig.gpe.xml.utils.XMLAttributesIterator;
  *
  */
 /**
- * This is a KML parser. This class must be registered in 
- * the GPE register to read and write KML/KMZ files.
+ * This is a KML parser. This class must be registered in the GPE register to
+ * read and write KML/KMZ files.
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public abstract class GPEDeafultKmlParser extends GPEXmlParser {
 	private IBindingProfile profile = null;
 	private Object layer = null;
-	
+
 	/**
 	 * @return the profile
 	 */
@@ -110,7 +110,8 @@ public abstract class GPEDeafultKmlParser extends GPEXmlParser {
 	}
 
 	/**
-	 * @param profile the profile to set
+	 * @param profile
+	 *            the profile to set
 	 */
 	public void setProfile(IBindingProfile profile) {
 		this.profile = profile;
@@ -119,59 +120,69 @@ public abstract class GPEDeafultKmlParser extends GPEXmlParser {
 	public GPEDeafultKmlParser() {
 		super();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.xml.GPEXmlParser#initParse()
 	 */
 	protected void initParse() {
 		layer = null;
 		try {
-			String namespace = getProfile().getHeaderBinding().parse(getParser(),this);
+			String namespace = getProfile().getHeaderBinding().parse(
+					getParser(), this);
 			boolean endFeature = false;
-			int currentTag;		
+			int currentTag;
 
 			QName tag = getParser().getName();
 			currentTag = getParser().getEventType();
 
-			XMLAttributesIterator attributesIterator = new XMLAttributesIterator(getParser());
-			
-			while (!endFeature){
-				switch(currentTag){
+			XMLAttributesIterator attributesIterator = new XMLAttributesIterator(
+					getParser());
+
+			while (!endFeature) {
+				switch (currentTag) {
 				case IXmlStreamReader.START_ELEMENT:
-					if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.DOCUMENT)){
-						getProfile().getDocumentBinding().parse(getParser(), this);
-					}else if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.FOLDER)){
-						getProfile().getFolderBinding().parse(getParser(), this, null);
-					}else if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.PLACEMARK)){
-						if (layer == null){
-							layer = getContentHandler().startLayer(null, Kml2_1_Tags.NAMESPACE_21, null, null, Kml2_1_Tags.DEFAULT_SRS, attributesIterator, null, null);
+					if (CompareUtils.compareWithNamespace(tag,
+							Kml2_1_Tags.DOCUMENT)) {
+						getProfile().getDocumentBinding().parse(getParser(),
+								this);
+					} else if (CompareUtils.compareWithNamespace(tag,
+							Kml2_1_Tags.FOLDER)) {
+						getProfile().getFolderBinding().parse(getParser(),
+								this, null);
+					} else if (CompareUtils.compareWithNamespace(tag,
+							Kml2_1_Tags.PLACEMARK)) {
+						if (layer == null) {
+							layer = getContentHandler().startLayer(null,
+									Kml2_1_Tags.NAMESPACE_21, null, null,
+									Kml2_1_Tags.DEFAULT_SRS,
+									attributesIterator, null, null);
 						}
-						Object feature = getProfile().getPlaceMarketBinding().parse(getParser(), this);
-						getContentHandler().addFeatureToLayer(feature, layer);			
+						Object feature = getProfile().getPlaceMarketBinding()
+								.parse(getParser(), this);
+						getContentHandler().addFeatureToLayer(feature, layer);
 					}
 					break;
 				case IXmlStreamReader.END_DOCUMENT:
 					endFeature = true;
-					break;					
+					break;
 				}
-				if (!endFeature){					
+				if (!endFeature) {
 					currentTag = getParser().next();
 					tag = getParser().getName();
 				}
 			}
-			if (layer != null){
+			if (layer != null) {
 				getContentHandler().endLayer(layer);
-			}			
+			}
 		} catch (KmlHeaderParseException e) {
-			getErrorHandler().addError(e);
-		} catch (BaseException e) {
 			getErrorHandler().addError(e);
 		} catch (XmlStreamException e) {
 			getErrorHandler().addError(e);
 		} catch (IOException e) {
 			getErrorHandler().addError(e);
-		}		
+		}
 	}
 
 }

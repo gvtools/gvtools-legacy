@@ -63,11 +63,11 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  *
  */
 /**
- * This class parses the gml objects that has a 
- * gml:FeatureMember type. The structure of the
- * properties that this type has is variable and depends
- * on its schema. Example:
+ * This class parses the gml objects that has a gml:FeatureMember type. The
+ * structure of the properties that this type has is variable and depends on its
+ * schema. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;gml:featureMember&gt;
@@ -84,53 +84,59 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  * &lt;/gml:featureMember&gt;
  * </code>
  * </pre>
+ * 
  * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class FeatureMemberTypeBinding {
-	
+
 	/**
 	 * It parses a feature
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * A feature
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return A feature
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public Object parse(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
+	public Object parse(IXmlStreamReader parser, GPEDefaultGmlParser handler)
+			throws XmlStreamException, IOException {
 		boolean endFeature = false;
-		int currentTag;		
-		Object feature = null;	
-				
+		int currentTag;
+		Object feature = null;
+
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-				if (!CompareUtils.compareWithNamespace(tag, GMLTags.GML_FEATUREMEMBER)){
-					feature = handler.getProfile().getFeatureTypeBinding().parse(parser, handler);
-				}	
-				break;
-			case IXmlStreamReader.END_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_FEATUREMEMBER)){						
-					endFeature = true;					
+				if (!CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_FEATUREMEMBER)) {
+					feature = handler.getProfile().getFeatureTypeBinding()
+							.parse(parser, handler);
 				}
 				break;
-			case IXmlStreamReader.CHARACTERS:					
+			case IXmlStreamReader.END_ELEMENT:
+				if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_FEATUREMEMBER)) {
+					endFeature = true;
+				}
+				break;
+			case IXmlStreamReader.CHARACTERS:
 
 				break;
 			}
-			if (!endFeature){					
+			if (!endFeature) {
 				currentTag = parser.next();
 				tag = parser.getName();
 			}
-		}			
+		}
 
-		return feature;		
+		return feature;
 	}
 }

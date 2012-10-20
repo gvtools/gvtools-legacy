@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,35 +39,35 @@
  *   dac@iver.es
  */
 package es.gva.cit.gazetteer.ui.serverconnect;
+
 import es.gva.cit.catalog.utils.Frames;
 
 /**
- * This class implements the JFrame for the server
- * connect panel that will be used when the gazetteer
- * client is runned without gvSIG. It also implements
- * the window listener that closes the application when
- * the window is closed.
+ * This class implements the JFrame for the server connect panel that will be
+ * used when the gazetteer client is runned without gvSIG. It also implements
+ * the window listener that closes the application when the window is closed.
+ * 
  * @author Jorge Piera Llodra (piera_jor@gva.es)
  */
-public class ServerConnectDialog extends es.gva.cit.catalog.ui.serverconnect.ServerConnectDialog{
+public class ServerConnectDialog extends
+		es.gva.cit.catalog.ui.serverconnect.ServerConnectDialog {
 	private static final long serialVersionUID = -6457336150268592182L;
 
-	public  ServerConnectDialog() {        
-		super();       
+	public ServerConnectDialog() {
+		super();
 		initialize();
-	} 
+	}
 
 	/**
 	 * This method initializes jDialog
 	 */
-	protected void initialize() {        
+	protected void initialize() {
 		Frames.centerFrame(this, 625, 290);
 		this.setTitle("Metadata catalog");
 		setResizable(false);
 		setName("serverConnect");
-		getContentPane().add(new ServerConnectDialogPanel(
-				this));
+		getContentPane().add(new ServerConnectDialogPanel(this));
 		addWindowListener(this);
 		setVisible(true);
-	} 	
+	}
 }

@@ -33,37 +33,38 @@ import com.vividsolutions.jump.feature.Feature;
  * Iterator implementation that can returns OpenJUMP's feature implementations
  * using gvSIG's driver architecture.
  * 
- * Based in the work of OrbisCAD project, adapted to work with
- * gvSIG's driver architecture.
+ * Based in the work of OrbisCAD project, adapted to work with gvSIG's driver
+ * architecture.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class FeatureIterator implements Iterator<Feature> {
 
-    private ReadableVectorial rv;
-    private int index = 0;
+	private ReadableVectorial rv;
+	private int index = 0;
 
-    public FeatureIterator(ReadableVectorial rv) {
-        this.rv = rv;
-    }
-    
-    public boolean hasNext() {
-        try {
-            return index < rv.getShapeCount();
-        }  catch (ReadDriverException e) {
-        	throw new RuntimeException(e);
+	public FeatureIterator(ReadableVectorial rv) {
+		this.rv = rv;
+	}
+
+	public boolean hasNext() {
+		try {
+			return index < rv.getShapeCount();
+		} catch (ReadDriverException e) {
+			throw new RuntimeException(e);
 		}
-    }
+	}
 
-    public Feature next() {
-        Feature f = new FeatureAdapter(rv, index);
-        index++;
-        
-        return f;
-    }
+	public Feature next() {
+		Feature f = new FeatureAdapter(rv, index);
+		index++;
 
-    public void remove() {
-        throw new UnsupportedOperationException();
-    }
+		return f;
+	}
+
+	public void remove() {
+		throw new UnsupportedOperationException();
+	}
 
 }

@@ -40,69 +40,69 @@
  */
 package org.gvsig.symbology.fmap.labeling.placements;
 
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
 import com.iver.cit.gvsig.fmap.ViewPort;
-import com.iver.cit.gvsig.fmap.core.FPoint2D;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
-import com.iver.cit.gvsig.fmap.core.ShapeFactory;
-import com.iver.cit.gvsig.fmap.core.v02.FConverter;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.IPlacementConstraints;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelClass;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelLocationMetrics;
 import com.iver.utiles.swing.threads.Cancellable;
+
 /**
- *
+ * 
  * LinePlacementAtBest.java
- *
- *
+ * 
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Dec 17, 2007
- *
+ * 
  */
 public class LinePlacementAtBest extends CompoundLabelPlacement {
 	static private ILabelPlacement[] pl = new ILabelPlacement[] {
-		new LinePlacementInTheMiddle(),
-		new LinePlacementAtExtremities()
-	};
+			new LinePlacementInTheMiddle(), new LinePlacementAtExtremities() };
 
 	public LinePlacementAtBest() {
 		super(pl);
 		// a patch just to keep in mind the end of the lines
 	}
 
+	public ArrayList<LabelLocationMetrics> guess(LabelClass lc, IGeometry geom,
+			IPlacementConstraints constraints, double cartographicSymbolSize,
+			Cancellable cancel, ViewPort vp) {
+		if (cancel.isCanceled())
+			return CannotPlaceLabel.NO_PLACES;
 
-	public ArrayList<LabelLocationMetrics> guess(LabelClass lc,
-			IGeometry geom, IPlacementConstraints constraints, double cartographicSymbolSize, Cancellable cancel, ViewPort vp) {
-		if (cancel.isCanceled()) return CannotPlaceLabel.NO_PLACES;
-
-		ArrayList<LabelLocationMetrics> llc = super.guess(lc, geom, constraints, cartographicSymbolSize, cancel,vp);
+		ArrayList<LabelLocationMetrics> llc = super.guess(lc, geom,
+				constraints, cartographicSymbolSize, cancel, vp);
 		if (constraints instanceof AbstractPlacementConstraints) {
 			AbstractPlacementConstraints clone;
 			try {
-				clone = (AbstractPlacementConstraints) ((AbstractPlacementConstraints) constraints).clone();
+				clone = (AbstractPlacementConstraints) ((AbstractPlacementConstraints) constraints)
+						.clone();
 				clone.setLocationAlongTheLine(IPlacementConstraints.AT_THE_END_OF_THE_LINE);
-				llc.addAll(pl[1].guess(lc, geom, clone, cartographicSymbolSize, cancel,vp));
+				llc.addAll(pl[1].guess(lc, geom, clone, cartographicSymbolSize,
+						cancel, vp));
 			} catch (CloneNotSupportedException e) {
 				// this should never happen but
 				// anyway a warning does not hurt anyone
-				Logger.getLogger(getClass()).info("Couldn't clone "+constraints.getClassName(), e);
+				Logger.getLogger(getClass()).info(
+						"Couldn't clone " + constraints.getClassName(), e);
 			}
 
 		}
 		return llc;
 	}
+
 	public boolean isSuitableFor(IPlacementConstraints placementConstraints,
 			int shapeType) {
-		if ((shapeType%FShape.Z) == FShape.LINE) {
-			return placementConstraints != null && placementConstraints.isAtBestOfLine();
+		if ((shapeType % FShape.Z) == FShape.LINE) {
+			return placementConstraints != null
+					&& placementConstraints.isAtBestOfLine();
 		}
 		return false;
 	}
-
 
 }

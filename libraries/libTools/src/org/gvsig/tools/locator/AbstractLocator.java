@@ -41,81 +41,80 @@ import org.gvsig.tools.extensionPoint.ExtensionPointsSingleton;
  */
 public abstract class AbstractLocator implements Locator {
 
-    private Map instances = new HashMap();
+	private Map instances = new HashMap();
 
-    private Object lock = new Object();
+	private Object lock = new Object();
 
-    public Object get(String name) throws LocatorException {
-        Object instance = null;
+	public Object get(String name) throws LocatorException {
+		Object instance = null;
 
-        // Synchronize the creation and storage of instances
-        synchronized (lock) {
-            instance = instances.get(name);
-            if (instance == null) {
-                try {
-                    instance = getExtensionPoint().create(name);
-                } catch (Exception ex) {
-                    throw new LocatorException(ex, name, this);
-                }
-                instances.put(name, instance);
-            }
-        }
+		// Synchronize the creation and storage of instances
+		synchronized (lock) {
+			instance = instances.get(name);
+			if (instance == null) {
+				try {
+					instance = getExtensionPoint().create(name);
+				} catch (Exception ex) {
+					throw new LocatorException(ex, name, this);
+				}
+				instances.put(name, instance);
+			}
+		}
 
-        return instance;
-    }
+		return instance;
+	}
 
-    public String[] getNames() {
-        ExtensionPoint extensionPoint = getExtensionPoint();
-        Set names = extensionPoint.keySet();
-        return names == null || names.size() == 0 ? null
-                : (String[]) names
-                .toArray(new String[names.size()]);
-    }
+	public String[] getNames() {
+		ExtensionPoint extensionPoint = getExtensionPoint();
+		Set names = extensionPoint.keySet();
+		return names == null || names.size() == 0 ? null : (String[]) names
+				.toArray(new String[names.size()]);
+	}
 
-    public void register(String name, Class clazz) {
-        ExtensionPointsSingleton.getInstance()
-                .add(getLocatorName(), name, clazz);
-    }
+	public void register(String name, Class clazz) {
+		ExtensionPointsSingleton.getInstance().add(getLocatorName(), name,
+				clazz);
+	}
 
-    public void register(String name, String description, Class clazz) {
-        ExtensionPointsSingleton.getInstance().add(getLocatorName(), name,
-                description, clazz);
-    }
+	public void register(String name, String description, Class clazz) {
+		ExtensionPointsSingleton.getInstance().add(getLocatorName(), name,
+				description, clazz);
+	}
 
-    public void register(String name, LocatorObjectFactory factory) {
-        ExtensionPointsSingleton.getInstance().add(getLocatorName(), name,
-                factory);
-    }
+	public void register(String name, LocatorObjectFactory factory) {
+		ExtensionPointsSingleton.getInstance().add(getLocatorName(), name,
+				factory);
+	}
 
-    public void register(String name, String description,
-            LocatorObjectFactory factory) {
-        ExtensionPointsSingleton.getInstance().add(getLocatorName(), name,
-                description, factory);
-    }
-    
-    public String toString() {
-        return getLocatorName();
-    }
+	public void register(String name, String description,
+			LocatorObjectFactory factory) {
+		ExtensionPointsSingleton.getInstance().add(getLocatorName(), name,
+				description, factory);
+	}
 
-    /**
-     * Returns the ExtensionPoint to use for the Locator values.
-     */
-    private ExtensionPoint getExtensionPoint() {
-        ExtensionPoints extensionPoints = ExtensionPointsSingleton
-                .getInstance();
-        String moduleName = getLocatorName();
-        // synchronize the retrieval of the ExtensionPoint
-        synchronized (lock) {
+	public String toString() {
+		return getLocatorName();
+	}
 
-            ExtensionPoint extensionPoint = (ExtensionPoint) extensionPoints
-                    .get(moduleName);
+	/**
+	 * Returns the ExtensionPoint to use for the Locator values.
+	 */
+	private ExtensionPoint getExtensionPoint() {
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+		String moduleName = getLocatorName();
+		// synchronize the retrieval of the ExtensionPoint
+		synchronized (lock) {
 
-            if (extensionPoint == null) {
-                extensionPoint = new ExtensionPoint(moduleName);
-                extensionPoints.put(moduleName, extensionPoint);
-            }
+			ExtensionPoint extensionPoint = (ExtensionPoint) extensionPoints
+					.get(moduleName);
 
-            return extensionPoint;
-        }
-    }
+			if (extensionPoint == null) {
+				extensionPoint = new ExtensionPoint(moduleName);
+				extensionPoints.put(moduleName, extensionPoint);
+			}
+
+			return extensionPoint;
+		}
+	}
 }

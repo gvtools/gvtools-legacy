@@ -43,37 +43,50 @@ package com.iver.cit.gvsig.fmap;
 import java.awt.Color;
 
 /**
- * <p>Event produced when changes the background color of the <i>view port</i>.</p>
- *
+ * <p>
+ * Event produced when changes the background color of the <i>view port</i>.
+ * </p>
+ * 
  * @author Vicente Caballero Navarro
  */
 public class ColorEvent extends FMapEvent {
 	/**
-	 * <p>Identifier of this kind of event.</p>
+	 * <p>
+	 * Identifier of this kind of event.
+	 * </p>
 	 */
 	private static final int COLOR_EVENT = 0;
-	
+
 	/**
-	 * <p>Reference to the new color</p> 
+	 * <p>
+	 * Reference to the new color
+	 * </p>
 	 */
 	private Color color;
 
 	/**
-	 * <p>Returns a new color event.</p>
+	 * <p>
+	 * Returns a new color event.
+	 * </p>
 	 * 
-	 * @param c the new color
-	 *
+	 * @param c
+	 *            the new color
+	 * 
 	 * @return a new color event
 	 */
-	public static ColorEvent createColorEvent(Color c){
+	public static ColorEvent createColorEvent(Color c) {
 		return new ColorEvent(c, COLOR_EVENT);
 	}
-	
+
 	/**
-	 * <p>Creates a new color event.</p>
-	 *
-	 * @param c the new color
-	 * @param eventType identifier of this kind of event
+	 * <p>
+	 * Creates a new color event.
+	 * </p>
+	 * 
+	 * @param c
+	 *            the new color
+	 * @param eventType
+	 *            identifier of this kind of event
 	 */
 	private ColorEvent(Color c, int eventType) {
 		color = c;
@@ -81,12 +94,13 @@ public class ColorEvent extends FMapEvent {
 	}
 
 	/**
-	 * <p>Gets the new color.</p>
-	 *
+	 * <p>
+	 * Gets the new color.
+	 * </p>
+	 * 
 	 * @return the new color
 	 */
 	public Color getNewColor() {
 		return color;
 	}
 }
-

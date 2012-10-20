@@ -55,11 +55,12 @@ import com.iver.cit.gvsig.fmap.tools.Events.RectangleEvent;
 import com.iver.cit.gvsig.fmap.tools.Listeners.RectangleListener;
 import com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener;
 
-
 /**
- * <p>Behavior that permits user to select a rectangular area on the associated <code>MapControl</code> using
- *  a {@link RectangleListener RectangleListener}.</p>
- *
+ * <p>
+ * Behavior that permits user to select a rectangular area on the associated
+ * <code>MapControl</code> using a {@link RectangleListener RectangleListener}.
+ * </p>
+ * 
  * @author Vicente Caballero Navarro
  * @author Pablo Piqueras Bartolomé
  */
@@ -70,11 +71,11 @@ public class RectangleBehavior extends Behavior {
 	private Point2D m_FirstPoint;
 
 	/**
-	 * Second point of the rectangle area, that represents the opposite corner of the first,
-	 *  along the diagonal.
+	 * Second point of the rectangle area, that represents the opposite corner
+	 * of the first, along the diagonal.
 	 */
 	private Point2D m_LastPoint;
-	
+
 	/**
 	 * Tool listener used to work with the <code>MapControl</code> object.
 	 * 
@@ -84,9 +85,13 @@ public class RectangleBehavior extends Behavior {
 	private RectangleListener listener;
 
 	/**
-	 * <p>Creates a new behavior for selecting rectangle areas.</p>
-	 *
-	 * @param zili listener used to permit this object to work with the associated <code>MapControl</code>
+	 * <p>
+	 * Creates a new behavior for selecting rectangle areas.
+	 * </p>
+	 * 
+	 * @param zili
+	 *            listener used to permit this object to work with the
+	 *            associated <code>MapControl</code>
 	 */
 	public RectangleBehavior(RectangleListener zili) {
 		listener = zili;
@@ -94,7 +99,10 @@ public class RectangleBehavior extends Behavior {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#paintComponent(java.awt.Graphics)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#paintComponent(java.awt
+	 * .Graphics)
 	 */
 	public void paintComponent(Graphics g) {
 		BufferedImage img = getMapControl().getImage();
@@ -115,7 +123,10 @@ public class RectangleBehavior extends Behavior {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mousePressed(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mousePressed(java.awt
+	 * .event.MouseEvent)
 	 */
 	public void mousePressed(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON1) {
@@ -130,10 +141,14 @@ public class RectangleBehavior extends Behavior {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseReleased(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseReleased(java.awt
+	 * .event.MouseEvent)
 	 */
 	public void mouseReleased(MouseEvent e) throws BehaviorException {
-	    if (m_FirstPoint == null) return;
+		if (m_FirstPoint == null)
+			return;
 		Point2D p1;
 		Point2D p2;
 		Point pScreen = e.getPoint();
@@ -144,7 +159,7 @@ public class RectangleBehavior extends Behavior {
 		p2 = vp.toMapPoint(pScreen);
 
 		if (e.getButton() == MouseEvent.BUTTON1) {
-			//	Fijamos el nuevo extent
+			// Fijamos el nuevo extent
 			Rectangle2D.Double r = new Rectangle2D.Double();
 			r.setFrameFromDiagonal(p1, p2);
 
@@ -161,7 +176,10 @@ public class RectangleBehavior extends Behavior {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseDragged(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseDragged(java.awt
+	 * .event.MouseEvent)
 	 */
 	public void mouseDragged(MouseEvent e) {
 		m_LastPoint = e.getPoint();
@@ -169,9 +187,13 @@ public class RectangleBehavior extends Behavior {
 	}
 
 	/**
-	 * <p>Sets a tool listener to work with the <code>MapControl</code> using this behavior.</p>	
+	 * <p>
+	 * Sets a tool listener to work with the <code>MapControl</code> using this
+	 * behavior.
+	 * </p>
 	 * 
-	 * @param listener a <code>RectangleListener</code> object for this behavior
+	 * @param listener
+	 *            a <code>RectangleListener</code> object for this behavior
 	 */
 	public void setListener(ToolListener listener) {
 		this.listener = (RectangleListener) listener;
@@ -179,6 +201,7 @@ public class RectangleBehavior extends Behavior {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#getListener()
 	 */
 	public ToolListener getListener() {

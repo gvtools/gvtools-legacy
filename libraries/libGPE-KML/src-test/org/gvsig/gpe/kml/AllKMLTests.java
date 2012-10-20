@@ -64,12 +64,12 @@ public class AllKMLTests {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.gvsig.gpe.kml");
-		//$JUnit-BEGIN$		
+		// $JUnit-BEGIN$
 		suite.addTest(KMLReaderv21TestSuite.suite());
 		suite.addTest(KMLWriterv21TestSuite.suite());
 		suite.addTest(KMZReaderv21TestSuite.suite());
 		suite.addTest(KMZWriterv21TestSuite.suite());
-		//$JUnit-END$
+		// $JUnit-END$
 		return suite;
 	}
 

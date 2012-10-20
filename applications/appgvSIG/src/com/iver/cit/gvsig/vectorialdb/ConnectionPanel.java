@@ -27,35 +27,34 @@ import com.iver.utiles.swing.JComboBox;
 import com.iver.utiles.swing.wizard.Step;
 import com.iver.utiles.swing.wizard.WizardControl;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public class ConnectionPanel extends JPanel implements Step {
-//    private static String passw = null;
-    private static Map<String, String> passwords = new HashMap<String, String>();
+	// private static String passw = null;
+	private static Map<String, String> passwords = new HashMap<String, String>();
 
-    private JPanel jPanelLabels = null;
-    private JLabel jLabel = null;
-    private JTextField txtHost = null;
-    private JPanel jPanelTexts = null;
-    private JTextField txtPort = null;
-    private JLabel jLabel1 = null;
-    private JLabel jLabel2 = null;
-    private JTextField txtUser = null;
-    private JLabel jLabel3 = null;
-    private JPasswordField txtPassword = null;
-    private JLabel jLabel4 = null;
-    private JTextField txtBD = null;
-    private JLabel jLabel5 = null;
-    private JComboBox cmbDriver = null;
-    private JLabel jLabel6 = null;
-    private com.iver.utiles.swing.JComboBox cmbName = null;
-    private HashMap cs = new HashMap();
+	private JPanel jPanelLabels = null;
+	private JLabel jLabel = null;
+	private JTextField txtHost = null;
+	private JPanel jPanelTexts = null;
+	private JTextField txtPort = null;
+	private JLabel jLabel1 = null;
+	private JLabel jLabel2 = null;
+	private JTextField txtUser = null;
+	private JLabel jLabel3 = null;
+	private JPasswordField txtPassword = null;
+	private JLabel jLabel4 = null;
+	private JTextField txtBD = null;
+	private JLabel jLabel5 = null;
+	private JComboBox cmbDriver = null;
+	private JLabel jLabel6 = null;
+	private com.iver.utiles.swing.JComboBox cmbName = null;
+	private HashMap cs = new HashMap();
 
-    private JPanel jPanel = null;
+	private JPanel jPanel = null;
 
 	private JLabel jLabelSchema = null;
 
@@ -95,492 +94,497 @@ public class ConnectionPanel extends JPanel implements Step {
 
 	private JTextField txtSchema = null;
 
+	/**
+	 * This is the default constructor
+	 */
+	public ConnectionPanel() {
+		super();
+		initialize();
+	}
 
+	/**
+	 * This method initializes this
+	 */
+	private void initialize() {
+		this.setLayout(null);
+		this.setSize(335, 240);
+		this.add(getJPanel(), null);
 
-    /**
-     * This is the default constructor
-     */
-    public ConnectionPanel() {
-        super();
-        initialize();
-    }
+		// if (passw != null)
+		// txtPassword.setText(passw);
 
-    /**
-     * This method initializes this
-     */
-    private void initialize() {
-        this.setLayout(null);
-        this.setSize(335, 240);
-        this.add(getJPanel(), null);
+	}
 
-//        if (passw != null)
-//            txtPassword.setText(passw);
+	/**
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getJPanelLabels() {
+		if (jPanelLabels == null) {
+			String string = PluginServices.getText(this, "schema") + ":";
+			jLabelSchema = new JLabel();
+			jLabelSchema.setName("jLabel4");
+			jLabelSchema.setHorizontalAlignment(SwingConstants.RIGHT);
+			jLabelSchema.setHorizontalTextPosition(SwingConstants.RIGHT);
+			jLabelSchema.setText(string);
+			jLabelSchema.setPreferredSize(new Dimension(140, 19));
+			FlowLayout flowLayout3 = new FlowLayout();
+			flowLayout3.setVgap(15);
+			jLabel5 = new JLabel();
+			jLabel4 = new JLabel();
+			jLabel3 = new JLabel();
+			jLabel2 = new JLabel();
+			jLabel1 = new JLabel();
+			jLabel = new JLabel();
+			jPanelLabels = new JPanel();
+			jPanelLabels.setLayout(flowLayout3);
+			jPanelLabels.setName("jPanelLabels");
+			jPanelLabels.setPreferredSize(new java.awt.Dimension(150, 400));
+			jLabel.setText(PluginServices.getText(this, "host") + ":");
+			jLabel.setPreferredSize(new java.awt.Dimension(140, 19));
+			jLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+			jLabel.setName("jLabel");
+			jLabel1.setText(PluginServices.getText(this, "puerto") + ":");
+			jLabel1.setPreferredSize(new java.awt.Dimension(140, 19));
+			jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+			jLabel1.setName("jLabel1");
+			jLabel2.setText(PluginServices.getText(this, "usuario") + ":");
+			jLabel2.setName("jLabel2");
+			jLabel2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+			jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+			jLabel2.setPreferredSize(new java.awt.Dimension(140, 19));
+			jLabel3.setText(PluginServices.getText(this, "password") + ":");
+			jLabel3.setName("jLabel3");
+			jLabel3.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+			jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+			jLabel3.setPreferredSize(new java.awt.Dimension(140, 19));
+			jLabel4.setText(PluginServices.getText(this, "bd") + ":");
+			jLabel4.setName("jLabel4");
+			jLabel4.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+			jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+			jLabel4.setPreferredSize(new java.awt.Dimension(140, 19));
+			jLabel5.setText(PluginServices.getText(this, "driver") + ":");
+			jLabel5.setName("jLabel5");
+			jLabel5.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+			jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+			jLabel5.setPreferredSize(new java.awt.Dimension(140, 19));
+			jPanelLabels.add(getJLabel6(), null);
+			jPanelLabels.add(jLabel, null);
+			jPanelLabels.add(jLabel1, null);
+			jPanelLabels.add(jLabel2, null);
+			jPanelLabels.add(jLabel3, null);
+			jPanelLabels.add(jLabel4, null);
+			jPanelLabels.add(jLabelSchema, null);
+			jPanelLabels.add(jLabel5, null);
 
-    }
+		}
 
-    /**
-     * This method initializes jPanel
-     *
-     * @return javax.swing.JPanel
-     */
-    private JPanel getJPanelLabels() {
-        if (jPanelLabels == null) {
-            String string = PluginServices.getText(this, "schema") + ":";
-            jLabelSchema = new JLabel();
-            jLabelSchema.setName("jLabel4");
-            jLabelSchema.setHorizontalAlignment(SwingConstants.RIGHT);
-            jLabelSchema.setHorizontalTextPosition(SwingConstants.RIGHT);
-            jLabelSchema.setText(string);
-            jLabelSchema.setPreferredSize(new Dimension(140, 19));
-            FlowLayout flowLayout3 = new FlowLayout();
-            flowLayout3.setVgap(15);
-            jLabel5 = new JLabel();
-            jLabel4 = new JLabel();
-            jLabel3 = new JLabel();
-            jLabel2 = new JLabel();
-            jLabel1 = new JLabel();
-            jLabel = new JLabel();
-            jPanelLabels = new JPanel();
-            jPanelLabels.setLayout(flowLayout3);
-            jPanelLabels.setName("jPanelLabels");
-            jPanelLabels.setPreferredSize(new java.awt.Dimension(150,400));
-            jLabel.setText(PluginServices.getText(this, "host") + ":");
-            jLabel.setPreferredSize(new java.awt.Dimension(140,19));
-            jLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            jLabel.setName("jLabel");
-            jLabel1.setText(PluginServices.getText(this, "puerto")+":");
-            jLabel1.setPreferredSize(new java.awt.Dimension(140,19));
-            jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-            jLabel1.setName("jLabel1");
-            jLabel2.setText(PluginServices.getText(this, "usuario")+":");
-            jLabel2.setName("jLabel2");
-            jLabel2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-            jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            jLabel2.setPreferredSize(new java.awt.Dimension(140,19));
-            jLabel3.setText(PluginServices.getText(this, "password")+":");
-            jLabel3.setName("jLabel3");
-            jLabel3.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-            jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            jLabel3.setPreferredSize(new java.awt.Dimension(140,19));
-            jLabel4.setText(PluginServices.getText(this, "bd")+":");
-            jLabel4.setName("jLabel4");
-            jLabel4.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-            jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            jLabel4.setPreferredSize(new java.awt.Dimension(140,19));
-            jLabel5.setText(PluginServices.getText(this, "driver")+":");
-            jLabel5.setName("jLabel5");
-            jLabel5.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-            jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            jLabel5.setPreferredSize(new java.awt.Dimension(140,19));
-            jPanelLabels.add(getJLabel6(), null);
-            jPanelLabels.add(jLabel, null);
-            jPanelLabels.add(jLabel1, null);
-            jPanelLabels.add(jLabel2, null);
-            jPanelLabels.add(jLabel3, null);
-            jPanelLabels.add(jLabel4, null);
-            jPanelLabels.add(jLabelSchema, null);
-            jPanelLabels.add(jLabel5, null);
+		return jPanelLabels;
+	}
 
-        }
+	/**
+	 * This method initializes txtHost
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getTxtHost() {
+		if (txtHost == null) {
+			txtHost = new JTextField();
+			txtHost.setPreferredSize(new java.awt.Dimension(170, 19));
+			txtHost.setName("txtHost");
+		}
 
-        return jPanelLabels;
-    }
+		return txtHost;
+	}
 
-    /**
-     * This method initializes txtHost
-     *
-     * @return javax.swing.JTextField
-     */
-    private JTextField getTxtHost() {
-        if (txtHost == null) {
-            txtHost = new JTextField();
-            txtHost.setPreferredSize(new java.awt.Dimension(170, 19));
-            txtHost.setName("txtHost");
-        }
+	/**
+	 * This method initializes jPanel1
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getJPanelTexts() {
+		if (jPanelTexts == null) {
+			FlowLayout flowLayout2 = new FlowLayout(FlowLayout.LEFT);
+			flowLayout2.setVgap(15);
+			jPanelTexts = new JPanel();
+			jPanelTexts.setLayout(flowLayout2);
+			jPanelTexts.setPreferredSize(new Dimension(200, 300));
 
-        return txtHost;
-    }
+			jPanelTexts.setName("jPanelText");
+			jPanelTexts.add(getCmbName(), null);
+			jPanelTexts.add(getTxtHost(), null);
+			jPanelTexts.add(getTxtPort(), null);
+			jPanelTexts.add(getTxtUser(), null);
+			jPanelTexts.add(getTxtPassword(), null);
+			jPanelTexts.add(getTxtBD(), null);
+			jPanelTexts.add(getTxtSchema(), null);
+			jPanelTexts.add(getCmbDriver(), null);
+		}
 
-    /**
-     * This method initializes jPanel1
-     *
-     * @return javax.swing.JPanel
-     */
-    private JPanel getJPanelTexts() {
-        if (jPanelTexts == null) {
-            FlowLayout flowLayout2 = new FlowLayout(FlowLayout.LEFT);
-            flowLayout2.setVgap(15);
-            jPanelTexts = new JPanel();
-            jPanelTexts.setLayout(flowLayout2);
-            jPanelTexts.setPreferredSize(new Dimension(200, 300));
+		return jPanelTexts;
+	}
 
-            jPanelTexts.setName("jPanelText");
-            jPanelTexts.add(getCmbName(), null);
-            jPanelTexts.add(getTxtHost(), null);
-            jPanelTexts.add(getTxtPort(), null);
-            jPanelTexts.add(getTxtUser(), null);
-            jPanelTexts.add(getTxtPassword(), null);
-            jPanelTexts.add(getTxtBD(), null);
-            jPanelTexts.add(getTxtSchema(), null);
-            jPanelTexts.add(getCmbDriver(), null);
-        }
+	/**
+	 * This method initializes txtPort
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getTxtPort() {
+		if (txtPort == null) {
+			txtPort = new JTextField();
+			txtPort.setPreferredSize(new java.awt.Dimension(40, 19));
+			txtPort.setName("txtPort");
+			txtPort.setText("3306");
+			txtPort.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+		}
 
-        return jPanelTexts;
-    }
+		return txtPort;
+	}
 
-    /**
-     * This method initializes txtPort
-     *
-     * @return javax.swing.JTextField
-     */
-    private JTextField getTxtPort() {
-        if (txtPort == null) {
-            txtPort = new JTextField();
-            txtPort.setPreferredSize(new java.awt.Dimension(40, 19));
-            txtPort.setName("txtPort");
-            txtPort.setText("3306");
-            txtPort.setHorizontalAlignment(javax.swing.JTextField.LEFT);
-        }
+	/**
+	 * This method initializes txtUser
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getTxtUser() {
+		if (txtUser == null) {
+			txtUser = new JTextField();
+			txtUser.setPreferredSize(new java.awt.Dimension(170, 19));
+			txtUser.setName("txtUser");
+		}
 
-        return txtPort;
-    }
+		return txtUser;
+	}
 
-    /**
-     * This method initializes txtUser
-     *
-     * @return javax.swing.JTextField
-     */
-    private JTextField getTxtUser() {
-        if (txtUser == null) {
-            txtUser = new JTextField();
-            txtUser.setPreferredSize(new java.awt.Dimension(170, 19));
-            txtUser.setName("txtUser");
-        }
+	/**
+	 * This method initializes txtPassword
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JPasswordField getTxtPassword() {
+		if (txtPassword == null) {
+			txtPassword = new JPasswordField();
+			txtPassword.setPreferredSize(new java.awt.Dimension(170, 19));
+			txtPassword.setName("txtPassword");
+		}
 
-        return txtUser;
-    }
+		return txtPassword;
+	}
 
-    /**
-     * This method initializes txtPassword
-     *
-     * @return javax.swing.JTextField
-     */
-    private JPasswordField getTxtPassword() {
-        if (txtPassword == null) {
-            txtPassword = new JPasswordField();
-            txtPassword.setPreferredSize(new java.awt.Dimension(170, 19));
-            txtPassword.setName("txtPassword");
-        }
+	/**
+	 * This method initializes txtBD
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getTxtBD() {
+		if (txtBD == null) {
+			txtBD = new JTextField();
+			txtBD.setPreferredSize(new java.awt.Dimension(170, 19));
+			txtBD.setName("txtBD");
+		}
 
-        return txtPassword;
-    }
+		return txtBD;
+	}
 
-    /**
-     * This method initializes txtBD
-     *
-     * @return javax.swing.JTextField
-     */
-    private JTextField getTxtBD() {
-        if (txtBD == null) {
-            txtBD = new JTextField();
-            txtBD.setPreferredSize(new java.awt.Dimension(170, 19));
-            txtBD.setName("txtBD");
-        }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public String getHost() {
+		return getTxtHost().getText();
+	}
 
-        return txtBD;
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public String getPort() {
+		return getTxtPort().getText();
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public String getHost() {
-        return getTxtHost().getText();
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public String getUser() {
+		return getTxtUser().getText();
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public String getPort() {
-        return getTxtPort().getText();
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public String getSettingsName() {
+		if (getCmbName().getSelectedItem() != null)
+			return getCmbName().getSelectedItem().toString();
+		else
+			return "";
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public String getUser() {
-        return getTxtUser().getText();
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public String getPassword() {
+		String curPwd = String.copyValueOf(getTxtPassword().getPassword());
+		// passw = String.copyValueOf(getTxtPassword().getPassword());
+		// return passw;
+		if (this.getSettingsName() != null
+				&& this.getSettingsName().length() > 0) {
+			passwords.put(this.getSettingsName(), curPwd + "");
+		}
+		return curPwd;
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public String getSettingsName() {
-    	if(getCmbName().getSelectedItem() != null)
-    		return getCmbName().getSelectedItem().toString();
-    	else return "";
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public String getDBName() {
+		return getTxtBD().getText();
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public String getPassword() {
-    	String curPwd = String.copyValueOf(getTxtPassword().getPassword());
-//        passw = String.copyValueOf(getTxtPassword().getPassword());    	
-//        return passw;
-    	if (this.getSettingsName() != null && this.getSettingsName().length()> 0){
-    		passwords.put(this.getSettingsName(), curPwd+"");    		
-    	}
-    	return curPwd;
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param drivers
+	 *            DOCUMENT ME!
+	 */
+	public void setDrivers(String[] drivers) {
+		DefaultComboBoxModel model = new DefaultComboBoxModel();
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public String getDBName() {
-        return getTxtBD().getText();
-    }
+		for (int i = 0; i < drivers.length; i++) {
+			model.addElement(drivers[i]);
+		}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param drivers DOCUMENT ME!
-     */
-    public void setDrivers(String[] drivers) {
-        DefaultComboBoxModel model = new DefaultComboBoxModel();
+		getCmbDriver().setModel(model);
 
-        for (int i = 0; i < drivers.length; i++) {
-            model.addElement(drivers[i]);
-        }
+		// Para que refresque el textbox del puerto
+		if (drivers.length > 0)
+			cmbDriver.setSelectedIndex(0);
 
-        getCmbDriver().setModel(model);
+	}
 
-        //Para que refresque el textbox del puerto
-        if (drivers.length > 0)
-            cmbDriver.setSelectedIndex(0);
+	/**
+	 * @return ConnectionSettings based on values in this panel
+	 */
+	public ConnectionSettings getConnectionSettings() {
+		ConnectionSettings cs = new ConnectionSettings();
+		cs.setDb(getDBName());
+		cs.setSchema(getSchema());
+		cs.setDriver(getDriver());
+		cs.setHost(getHost());
+		cs.setPort(getPort());
+		cs.setUser(getUser());
+		cs.setPassw(getPassword());
+		cs.setName(getSettingsName());
+		return cs;
+	}
 
-    }
-
-
-    /**
-     * @return ConnectionSettings based on values in this panel
-     */
-    public ConnectionSettings getConnectionSettings()
-    {
-        ConnectionSettings cs = new ConnectionSettings();
-        cs.setDb(getDBName());
-        cs.setSchema(getSchema());
-        cs.setDriver(getDriver());
-        cs.setHost(getHost());
-        cs.setPort(getPort());
-        cs.setUser(getUser());
-        cs.setPassw(getPassword());
-        cs.setName(getSettingsName());
-        return cs;
-    }
-
-    public String getSchema() {
+	public String getSchema() {
 		return txtSchema.getText();
 	}
 
-    /**
-     * Makes persistent the connection settings of this panel.
-     */
-    public void saveConnectionSettings()
-    {
-    	ConnectionSettings cs = new ConnectionSettings();
-        cs.setDb(getDBName());
-        cs.setSchema(getSchema());
-        cs.setDriver(getDriver());
-        cs.setHost(getHost());
-        cs.setPort(getPort());
-        cs.setUser(getUser());
-        cs.setPassw(getPassword());
-        cs.setName(getSettingsName());
-        cs.setSchema(getSchema());
+	/**
+	 * Makes persistent the connection settings of this panel.
+	 */
+	public void saveConnectionSettings() {
+		ConnectionSettings cs = new ConnectionSettings();
+		cs.setDb(getDBName());
+		cs.setSchema(getSchema());
+		cs.setDriver(getDriver());
+		cs.setHost(getHost());
+		cs.setPort(getPort());
+		cs.setUser(getUser());
+		cs.setPassw(getPassword());
+		cs.setName(getSettingsName());
+		cs.setSchema(getSchema());
 
-        PluginServices ps = PluginServices.getPluginServices(this);
-        XMLEntity xml = ps.getPersistentXML();
+		PluginServices ps = PluginServices.getPluginServices(this);
+		XMLEntity xml = ps.getPersistentXML();
 
-        try {
-            String[] connections = xml.getStringArrayProperty("jdbc-connections");
-            String[] newConnections = new String[connections.length + 1];
-            System.arraycopy(connections, 0, newConnections, 0, connections.length);
-            newConnections[connections.length] = cs.toString();
-            xml.putProperty("jdbc-connections", newConnections);
-        } catch (NotExistInXMLEntity e) {
-            xml.putProperty("jdbc-connections", new String[] { cs.toString() });
-        }
+		try {
+			String[] connections = xml
+					.getStringArrayProperty("jdbc-connections");
+			String[] newConnections = new String[connections.length + 1];
+			System.arraycopy(connections, 0, newConnections, 0,
+					connections.length);
+			newConnections[connections.length] = cs.toString();
+			xml.putProperty("jdbc-connections", newConnections);
+		} catch (NotExistInXMLEntity e) {
+			xml.putProperty("jdbc-connections", new String[] { cs.toString() });
+		}
 
+	}
 
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public String getDriver() {
+		return cmbDriver.getSelectedItem().toString();
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public String getDriver() {
-        return cmbDriver.getSelectedItem().toString();
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param cs
+	 *            DOCUMENT ME!
+	 */
+	public void setSettings(HashMap cs) {
+		this.cs = cs;
+		((DefaultComboBoxModel) getCmbName().getModel()).removeAllElements();
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param cs DOCUMENT ME!
-     */
-    public void setSettings(HashMap cs) {
-        this.cs = cs;
-        ((DefaultComboBoxModel) getCmbName().getModel()).removeAllElements();
+		Iterator i = cs.keySet().iterator();
 
-        Iterator i = cs.keySet().iterator();
+		while (i.hasNext()) {
+			String item = (String) i.next();
+			((DefaultComboBoxModel) getCmbName().getModel()).addElement(item);
+		}
+	}
 
-        while (i.hasNext()) {
-            String item = (String) i.next();
-            ((DefaultComboBoxModel) getCmbName().getModel()).addElement(item);
-        }
-    }
+	/**
+	 * @see com.iver.utiles.swing.wizard.Step#init(com.iver.utiles.swing.wizard.WizardControl)
+	 */
+	public void init(WizardControl w) {
+	}
 
-    /**
-     * @see com.iver.utiles.swing.wizard.Step#init(com.iver.utiles.swing.wizard.WizardControl)
-     */
-    public void init(WizardControl w) {
-    }
+	/**
+	 * This method initializes cmbDriver
+	 * 
+	 * @return com.iver.utiles.swing.JComboBox
+	 */
+	private JComboBox getCmbDriver() {
+		if (cmbDriver == null) {
+			cmbDriver = new JComboBox();
+			cmbDriver.setPreferredSize(new java.awt.Dimension(170, 19));
+			cmbDriver.setName("cmbDriver");
+			cmbDriver.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String driverName = cmbDriver.getSelectedItem().toString();
+					IVectorialDatabaseDriver driver;
+					try {
+						driver = (IVectorialDatabaseDriver) LayerFactory
+								.getDM().getDriver(driverName);
+						getTxtPort().setText(
+								Integer.toString(driver.getDefaultPort()));
+					} catch (DriverLoadException e1) {
+						getTxtPort().setText("");
+					}
+				}
+			});
+		}
 
-    /**
-     * This method initializes cmbDriver
-     *
-     * @return com.iver.utiles.swing.JComboBox
-     */
-    private JComboBox getCmbDriver() {
-        if (cmbDriver == null) {
-            cmbDriver = new JComboBox();
-            cmbDriver.setPreferredSize(new java.awt.Dimension(170, 19));
-            cmbDriver.setName("cmbDriver");
-            cmbDriver.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    String driverName = cmbDriver.getSelectedItem().toString();
-                    IVectorialDatabaseDriver driver;
-                    try {
-                        driver = (IVectorialDatabaseDriver) LayerFactory.getDM().getDriver(driverName);
-                        getTxtPort().setText(Integer.toString(driver.getDefaultPort()));
-                    } catch (DriverLoadException e1) {
-                        getTxtPort().setText("");
-                    }
-                }
-            });
-        }
+		return cmbDriver;
+	}
 
-        return cmbDriver;
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return
+	 */
+	public boolean done() {
+		return (getTxtBD().getText().length() > 0)
+				&& (getTxtHost().getText().length() > 0)
+				&& (getCmbName().getSelectedItem() != null)
+				&& (getCmbName().getSelectedItem().toString().length() > 0);
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return
-     */
-    public boolean done() {
-        return (getTxtBD().getText().length() > 0) &&
-        (getTxtHost().getText().length() > 0) &&
-        (getCmbName().getSelectedItem() != null) &&
-        (getCmbName().getSelectedItem().toString().length() > 0);
-    }
+	/**
+	 * This method initializes jLabel6
+	 * 
+	 * @return javax.swing.JLabel
+	 */
+	private JLabel getJLabel6() {
+		if (jLabel6 == null) {
+			jLabel6 = new JLabel();
+			jLabel6.setText(PluginServices.getText(this, "connection_name")
+					+ ":");
+			jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+			jLabel6.setPreferredSize(new java.awt.Dimension(140, 19));
+		}
 
-    /**
-     * This method initializes jLabel6
-     *
-     * @return javax.swing.JLabel
-     */
-    private JLabel getJLabel6() {
-        if (jLabel6 == null) {
-            jLabel6 = new JLabel();
-            jLabel6.setText(PluginServices.getText(this, "connection_name")+":");
-            jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            jLabel6.setPreferredSize(new java.awt.Dimension(140,19));
-        }
+		return jLabel6;
+	}
 
-        return jLabel6;
-    }
+	/**
+	 * This method initializes jComboBox
+	 * 
+	 * @return com.iver.utiles.swing.JComboBox
+	 */
+	private com.iver.utiles.swing.JComboBox getCmbName() {
+		if (cmbName == null) {
+			cmbName = new com.iver.utiles.swing.JComboBox();
+			cmbName.setEditable(true);
+			cmbName.setPreferredSize(new java.awt.Dimension(170, 19));
+			cmbName.setModel(new DefaultComboBoxModel());
+			cmbName.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Object item = cmbName.getSelectedItem();
 
-    /**
-     * This method initializes jComboBox
-     *
-     * @return com.iver.utiles.swing.JComboBox
-     */
-    private com.iver.utiles.swing.JComboBox getCmbName() {
-        if (cmbName == null) {
-            cmbName = new com.iver.utiles.swing.JComboBox();
-            cmbName.setEditable(true);
-            cmbName.setPreferredSize(new java.awt.Dimension(170, 19));
-            cmbName.setModel(new DefaultComboBoxModel());
-            cmbName.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        Object item = cmbName.getSelectedItem();
+					if (item == null) {
+						return;
+					}
 
-                        if (item == null) {
-                            return;
-                        }
+					ConnectionSettings c = (ConnectionSettings) cs.get(item
+							.toString());
 
-                        ConnectionSettings c = (ConnectionSettings) cs.get(item.toString());
+					if (c != null) {
+						getTxtHost().setText(c.getHost());
+						getTxtPort().setText(c.getPort());
+						getTxtBD().setText(c.getDb());
+						getTxtUser().setText(c.getUser());
+						if (c.getPassw() != null) {
+							getTxtPassword().setText(c.getPassw());
+						} else {
+							if (passwords.containsKey(c.getName())) {
+								getTxtPassword().setText(
+										passwords.get(c.getName()));
+							}
+						}
+						getCmbDriver().setSelectedItem(c.getDriver());
+					}
+				}
+			});
+		}
 
-                        if (c != null) {
-                            getTxtHost().setText(c.getHost());
-                            getTxtPort().setText(c.getPort());
-                            getTxtBD().setText(c.getDb());
-                            getTxtUser().setText(c.getUser());
-                            if (c.getPassw() != null){
-                                getTxtPassword().setText(c.getPassw());
-                            } else{
-                            	if (passwords.containsKey(c.getName())){
-                            		getTxtPassword().setText(passwords.get(c.getName()));
-                            	}
-                            }
-                            getCmbDriver().setSelectedItem(c.getDriver());
-                        }
-                    }
-                });
-        }
+		return cmbName;
+	}
 
-        return cmbName;
-    }
-
-    /**
-     * This method initializes jPanel
-     *
-     * @return javax.swing.JPanel
-     */
-    private JPanel getJPanel() {
-    	if (jPanel == null) {
-    		jPanel = new JPanel();
-    		jPanel.setLayout(new BorderLayout());
-    		jPanel.setBounds(0, 0, 363, 240);
-    		jPanel.add(getJPanelLabels(), java.awt.BorderLayout.WEST);
-    		jPanel.add(getJPanelTexts(), java.awt.BorderLayout.EAST);
-    	}
-    	return jPanel;
-    }
+	/**
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getJPanel() {
+		if (jPanel == null) {
+			jPanel = new JPanel();
+			jPanel.setLayout(new BorderLayout());
+			jPanel.setBounds(0, 0, 363, 240);
+			jPanel.add(getJPanelLabels(), java.awt.BorderLayout.WEST);
+			jPanel.add(getJPanelTexts(), java.awt.BorderLayout.EAST);
+		}
+		return jPanel;
+	}
 
 	/**
 	 * This method initializes XYZ
-	 *
+	 * 
 	 * @return com.iver.cit.gvsig.jdbc_spatial.gui.jdbcwizard.ConnectionPanel
 	 */
 	private ConnectionPanel getXYZ() {
 		if (XYZ == null) {
 			XYZ = new ConnectionPanel();
 			XYZ.setLayout(null);
-			XYZ.setSize(new java.awt.Dimension(335,240));
+			XYZ.setSize(new java.awt.Dimension(335, 240));
 			XYZ.add(getJPanel1(), null);
 		}
 		return XYZ;
@@ -588,7 +592,7 @@ public class ConnectionPanel extends JPanel implements Step {
 
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel1() {
@@ -604,7 +608,7 @@ public class ConnectionPanel extends JPanel implements Step {
 
 	/**
 	 * This method initializes jPanelLabels1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanelLabels1() {
@@ -639,7 +643,8 @@ public class ConnectionPanel extends JPanel implements Step {
 			jLabel7.setPreferredSize(new Dimension(140, 19));
 			jLabel61 = new JLabel();
 			jLabel61.setPreferredSize(new Dimension(140, 19));
-			jLabel61.setText(PluginServices.getText(getXYZ(), "connection_name") + ":");
+			jLabel61.setText(PluginServices
+					.getText(getXYZ(), "connection_name") + ":");
 			jLabel61.setHorizontalAlignment(SwingConstants.RIGHT);
 			FlowLayout flowLayout31 = new FlowLayout();
 			flowLayout31.setVgap(15);
@@ -660,7 +665,7 @@ public class ConnectionPanel extends JPanel implements Step {
 
 	/**
 	 * This method initializes jPanelTexts1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanelTexts1() {
@@ -684,7 +689,7 @@ public class ConnectionPanel extends JPanel implements Step {
 
 	/**
 	 * This method initializes cmbName1
-	 *
+	 * 
 	 * @return com.iver.utiles.swing.JComboBox
 	 */
 	private JComboBox getCmbName1() {
@@ -699,7 +704,7 @@ public class ConnectionPanel extends JPanel implements Step {
 
 	/**
 	 * This method initializes txtHost1
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getTxtHost1() {
@@ -713,7 +718,7 @@ public class ConnectionPanel extends JPanel implements Step {
 
 	/**
 	 * This method initializes txtPort1
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getTxtPort1() {
@@ -729,7 +734,7 @@ public class ConnectionPanel extends JPanel implements Step {
 
 	/**
 	 * This method initializes txtUser1
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getTxtUser1() {
@@ -743,7 +748,7 @@ public class ConnectionPanel extends JPanel implements Step {
 
 	/**
 	 * This method initializes txtPassword1
-	 *
+	 * 
 	 * @return javax.swing.JPasswordField
 	 */
 	private JPasswordField getTxtPassword1() {
@@ -757,7 +762,7 @@ public class ConnectionPanel extends JPanel implements Step {
 
 	/**
 	 * This method initializes txtBD1
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getTxtBD1() {
@@ -771,7 +776,7 @@ public class ConnectionPanel extends JPanel implements Step {
 
 	/**
 	 * This method initializes cmbDriver1
-	 *
+	 * 
 	 * @return com.iver.utiles.swing.JComboBox
 	 */
 	private JComboBox getCmbDriver1() {
@@ -785,7 +790,7 @@ public class ConnectionPanel extends JPanel implements Step {
 
 	/**
 	 * This method initializes txtSchema
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getTxtSchema() {
@@ -796,6 +801,6 @@ public class ConnectionPanel extends JPanel implements Step {
 		}
 		return txtSchema;
 	}
-} //  @jve:decl-index=0:visual-constraint="7,3"
+} // @jve:decl-index=0:visual-constraint="7,3"
 
 // [eiel-gestion-conexiones]

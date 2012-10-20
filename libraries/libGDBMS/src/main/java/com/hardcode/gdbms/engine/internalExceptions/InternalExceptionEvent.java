@@ -2,7 +2,7 @@ package com.hardcode.gdbms.engine.internalExceptions;
 
 /**
  * Internal exception event
- *
+ * 
  * @author Fernando González Cortés
  */
 public class InternalExceptionEvent {
@@ -19,7 +19,7 @@ public class InternalExceptionEvent {
 
 	/**
 	 * gets the originator of the event
-	 *
+	 * 
 	 * @return originator of the event
 	 */
 	public Object getSource() {
@@ -28,7 +28,7 @@ public class InternalExceptionEvent {
 
 	/**
 	 * Gets the exception that caused the event
-	 *
+	 * 
 	 * @return InternalException
 	 */
 	public InternalException getInternalException() {

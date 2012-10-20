@@ -37,7 +37,7 @@ public class ListBaseExceptionTest extends TestCase {
 		super.tearDown();
 	}
 
-	public void testSimple(){
+	public void testSimple() {
 
 	}
 

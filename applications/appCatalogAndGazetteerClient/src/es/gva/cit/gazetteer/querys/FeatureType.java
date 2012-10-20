@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.gazetteer.querys;
+
 import es.gva.cit.catalog.querys.Coordinates;
 
 /**
@@ -58,134 +58,143 @@ public class FeatureType {
 	private Coordinates coordinates;
 	private FeatureType[] featureTypes;
 
-	public  FeatureType() {        
-		
-	} 
+	public FeatureType() {
+
+	}
 
 	/**
-	 * @param name 
+	 * @param name
 	 */
-	public  FeatureType(String name) {        
-		this.name = name;		
-	} 
+	public FeatureType(String name) {
+		this.name = name;
+	}
 
 	/**
 	 * @return Returns the name.
 	 */
-	public String getName() {        
+	public String getName() {
 		return name;
-	} 
+	}
 
 	/**
-	 * @param name The name to set.
+	 * @param name
+	 *            The name to set.
 	 */
-	public void setName(String name) {        
+	public void setName(String name) {
 		this.name = name;
-	} 
+	}
 
 	/**
 	 * @return Returns the abstract_.
 	 */
-	public String getAbstract() {        
+	public String getAbstract() {
 		return abstract_;
-	} 
+	}
 
 	/**
-	 * @param abstract_ The abstract_ to set.
+	 * @param abstract_
+	 *            The abstract_ to set.
 	 */
-	public void setAbstract(String abstract_) {        
+	public void setAbstract(String abstract_) {
 		this.abstract_ = abstract_;
-	} 
+	}
 
 	/**
 	 * @return Returns the coordinates.
 	 */
-	public Coordinates getCoordinates() {        
+	public Coordinates getCoordinates() {
 		return coordinates;
-	} 
+	}
 
 	/**
-	 * @param coordinates The coordinates to set.
+	 * @param coordinates
+	 *            The coordinates to set.
 	 */
-	public void setCoordinates(Coordinates coordinates) {        
+	public void setCoordinates(Coordinates coordinates) {
 		this.coordinates = coordinates;
-	} 
+	}
 
 	/**
 	 * @return Returns the keywords.
 	 */
-	public String getKeywords() {        
+	public String getKeywords() {
 		return keywords;
-	} 
+	}
 
 	/**
-	 * @param keywords The keywords to set.
+	 * @param keywords
+	 *            The keywords to set.
 	 */
-	public void setKeywords(String keywords) {        
+	public void setKeywords(String keywords) {
 		this.keywords = keywords;
-	} 
+	}
 
 	/**
 	 * @return Returns the srs.
 	 */
-	public String getSrs() {        
+	public String getSrs() {
 		return srs;
-	} 
+	}
 
 	/**
-	 * @param srs The srs to set.
+	 * @param srs
+	 *            The srs to set.
 	 */
-	public void setSrs(String srs) {        
+	public void setSrs(String srs) {
 		this.srs = srs;
-	} 
+	}
 
 	/**
 	 * @return Returns the title.
 	 */
-	public String getTitle() {        
+	public String getTitle() {
 		return title;
-	} 
+	}
 
 	/**
-	 * @param title The title to set.
+	 * @param title
+	 *            The title to set.
 	 */
-	public void setTitle(String title) {        
+	public void setTitle(String title) {
 		this.title = title;
-	} 
+	}
 
 	/**
 	 * To load into a List
-	 * @return 
+	 * 
+	 * @return
 	 */
-	public String toString() {        
+	public String toString() {
 		return title;
-	} 
+	}
 
 	/**
 	 * @return Returns the features.
 	 */
-	public FeatureType[] getFeatures() {        
+	public FeatureType[] getFeatures() {
 		return featureTypes;
-	} 
+	}
 
 	/**
-	 * @param features The features to set.
+	 * @param features
+	 *            The features to set.
 	 */
-	public void setFeatures(FeatureType[] featureTypes) {        
+	public void setFeatures(FeatureType[] featureTypes) {
 		this.featureTypes = featureTypes;
-	} 
+	}
 
 	/**
 	 * @return Returns the fields.
 	 */
-	public FeatureTypeAttribute[] getFields() {        
-		return attributes; 
-	} 
+	public FeatureTypeAttribute[] getFields() {
+		return attributes;
+	}
 
 	/**
-	 * @param fields The fields to set.
+	 * @param fields
+	 *            The fields to set.
 	 */
-	public void setFields(FeatureTypeAttribute[] attributes) {        
+	public void setFields(FeatureTypeAttribute[] attributes) {
 		this.attributes = attributes;
-	} 
+	}
 }

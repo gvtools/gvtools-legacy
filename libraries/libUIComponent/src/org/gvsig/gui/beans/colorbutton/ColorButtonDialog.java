@@ -29,8 +29,9 @@ import org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener;
 import org.gvsig.gui.beans.colorchooser.ColorChooser;
 import org.gvsig.gui.beans.colorchooser.ColorChooserListener;
 import org.gvsig.gui.beans.defaultbuttonspanel.DefaultButtonsPanel;
+
 /**
- *
+ * 
  * @version 06/08/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
@@ -47,13 +48,16 @@ public class ColorButtonDialog extends JDialog implements ButtonsPanelListener {
 	private void initialize() {
 		setResizable(false);
 		setTitle("Selector de color");
-		defaultButtonsPanel = new DefaultButtonsPanel(ButtonsPanel.BUTTONS_ACCEPTCANCEL);
-		defaultButtonsPanel.getButtonsPanel().setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 7, 0));
+		defaultButtonsPanel = new DefaultButtonsPanel(
+				ButtonsPanel.BUTTONS_ACCEPTCANCEL);
+		defaultButtonsPanel.getButtonsPanel().setLayout(
+				new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 7, 0));
 		add(defaultButtonsPanel);
 		colorChooser = new ColorChooser();
 		defaultButtonsPanel.add(colorChooser);
 		defaultButtonsPanel.addButtonPressedListener(this);
-		colorChooser.setPreferredSize(new Dimension(220, (int) colorChooser.getPreferredSize().getHeight()));
+		colorChooser.setPreferredSize(new Dimension(220, (int) colorChooser
+				.getPreferredSize().getHeight()));
 		pack();
 	}
 
@@ -89,11 +93,11 @@ public class ColorButtonDialog extends JDialog implements ButtonsPanelListener {
 
 	public void actionButtonPressed(ButtonsPanelEvent e) {
 		switch (e.getButton()) {
-			case ButtonsPanel.BUTTON_ACCEPT:
-				result = true;
-			case ButtonsPanel.BUTTON_CANCEL:
-				this.setVisible(false);
-				break;
+		case ButtonsPanel.BUTTON_ACCEPT:
+			result = true;
+		case ButtonsPanel.BUTTON_CANCEL:
+			this.setVisible(false);
+			break;
 		}
 	}
 }

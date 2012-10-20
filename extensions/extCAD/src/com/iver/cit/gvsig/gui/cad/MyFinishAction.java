@@ -34,7 +34,6 @@ import com.iver.cit.gvsig.fmap.drivers.IConnection;
 import com.iver.cit.gvsig.fmap.drivers.ITableDefinition;
 import com.iver.cit.gvsig.fmap.drivers.IVectorialJDBCDriver;
 import com.iver.cit.gvsig.fmap.drivers.SHPLayerDefinition;
-import com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver;
 import com.iver.cit.gvsig.fmap.drivers.db.utils.ConnectionWithParams;
 import com.iver.cit.gvsig.fmap.drivers.dbf.DbaseFile;
 import com.iver.cit.gvsig.fmap.drivers.jdbc.postgis.PostGISWriter;
@@ -52,15 +51,17 @@ import com.iver.cit.gvsig.gui.cad.panels.JPanelFieldDefinition;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.prodevelop.cit.gvsig.vectorialdb.wizard.NewVectorDBConnectionPanel;
 
-public class MyFinishAction extends FinishAction
-{
-	private static Preferences prefs = Preferences.userRoot().node( "gvSIG.encoding.dbf" );
+public class MyFinishAction extends FinishAction {
+	private static Preferences prefs = Preferences.userRoot().node(
+			"gvSIG.encoding.dbf");
 	JWizardComponents myWizardComponents;
 	FinishAction oldAction;
 	ITableDefinition lyrDef = null;
 	View view;
 	String actionComand;
-	public MyFinishAction(JWizardComponents wizardComponents, View view, String actionComand) {
+
+	public MyFinishAction(JWizardComponents wizardComponents, View view,
+			String actionComand) {
 		super(wizardComponents);
 		oldAction = wizardComponents.getFinishAction();
 		myWizardComponents = wizardComponents;
@@ -73,80 +74,92 @@ public class MyFinishAction extends FinishAction
 		FLyrVect lyr = null;
 		MapControl mapCtrl = view.getMapControl();
 		try {
-			// ChooseWriteDriver driverPanel = (ChooseWriteDriver) myWizardComponents.getWizardPanel(0);
+			// ChooseWriteDriver driverPanel = (ChooseWriteDriver)
+			// myWizardComponents.getWizardPanel(0);
 			mapCtrl.getMapContext().beginAtomicEvent();
-			if (actionComand.equals("SHP"))
-			{
-				FileBasedPanel shpPanel = (FileBasedPanel) myWizardComponents.getWizardPanel(2);
-				String path=shpPanel.getPath();
-				if (!path.toLowerCase().endsWith(".shp")){
-					path+=".shp";
+			if (actionComand.equals("SHP")) {
+				FileBasedPanel shpPanel = (FileBasedPanel) myWizardComponents
+						.getWizardPanel(2);
+				String path = shpPanel.getPath();
+				if (!path.toLowerCase().endsWith(".shp")) {
+					path += ".shp";
 				}
 				File newFile = new File(path);
-				if( newFile.exists()){
-					int resp = JOptionPane.showConfirmDialog(
-							(Component) PluginServices.getMainFrame(),PluginServices.getText(this,"fichero_ya_existe_seguro_desea_guardarlo"),
-							PluginServices.getText(this,"guardar"), JOptionPane.YES_NO_OPTION);
+				if (newFile.exists()) {
+					int resp = JOptionPane
+							.showConfirmDialog(
+									(Component) PluginServices.getMainFrame(),
+									PluginServices
+											.getText(this,
+													"fichero_ya_existe_seguro_desea_guardarlo"),
+									PluginServices.getText(this, "guardar"),
+									JOptionPane.YES_NO_OPTION);
 					if (resp != JOptionPane.YES_OPTION) {
 						return;
 					}
 				}
-				ChooseGeometryType geometryTypePanel = (ChooseGeometryType) myWizardComponents.getWizardPanel(0);
-				JPanelFieldDefinition fieldDefinitionPanel = (JPanelFieldDefinition) myWizardComponents.getWizardPanel(1);
-
+				ChooseGeometryType geometryTypePanel = (ChooseGeometryType) myWizardComponents
+						.getWizardPanel(0);
+				JPanelFieldDefinition fieldDefinitionPanel = (JPanelFieldDefinition) myWizardComponents
+						.getWizardPanel(1);
 
 				String layerName = geometryTypePanel.getLayerName();
 				String selectedDriver = geometryTypePanel.getSelectedDriver();
 				int geometryType = geometryTypePanel.getSelectedGeometryType();
-				FieldDescription[] fieldsDesc = fieldDefinitionPanel.getFieldsDescription();
+				FieldDescription[] fieldsDesc = fieldDefinitionPanel
+						.getFieldsDescription();
 
-    		    SHPLayerDefinition lyrDef = new SHPLayerDefinition();
-    		    lyrDef.setFieldsDesc(fieldsDesc);
-    		    lyrDef.setFile(newFile);
-    		    lyrDef.setName(layerName);
-    		    lyrDef.setShapeType(geometryType);
-    			ShpWriter writer= (ShpWriter)LayerFactory.getWM().getWriter("Shape Writer");
-    			String charSetName = prefs.get("dbf_encoding", DbaseFile.getDefaultCharset().toString());
-    			writer.loadDbfEncoding(newFile.getAbsolutePath(), Charset.forName(charSetName));
-    			writer.setCharset(Charset.forName(charSetName));
-    			writer.setFile(newFile);
-    			writer.initialize(lyrDef);
-    			writer.preProcess();
-    			writer.postProcess();
+				SHPLayerDefinition lyrDef = new SHPLayerDefinition();
+				lyrDef.setFieldsDesc(fieldsDesc);
+				lyrDef.setFile(newFile);
+				lyrDef.setName(layerName);
+				lyrDef.setShapeType(geometryType);
+				ShpWriter writer = (ShpWriter) LayerFactory.getWM().getWriter(
+						"Shape Writer");
+				String charSetName = prefs.get("dbf_encoding", DbaseFile
+						.getDefaultCharset().toString());
+				writer.loadDbfEncoding(newFile.getAbsolutePath(),
+						Charset.forName(charSetName));
+				writer.setCharset(Charset.forName(charSetName));
+				writer.setFile(newFile);
+				writer.initialize(lyrDef);
+				writer.preProcess();
+				writer.postProcess();
 
+				lyr = (FLyrVect) LayerFactory.createLayer(layerName,
+						new IndexedShpDriver(), newFile, mapCtrl.getCrs());
 
-                lyr = (FLyrVect) LayerFactory.createLayer(layerName,
-                        new IndexedShpDriver(), newFile, mapCtrl.getCrs());
-
-			}
-			else if (actionComand.equals("POSTGIS"))
-			{
-				ChooseGeometryType geometryTypePanel = (ChooseGeometryType) myWizardComponents.getWizardPanel(0);
-				JPanelFieldDefinition fieldDefinitionPanel = (JPanelFieldDefinition) myWizardComponents.getWizardPanel(1);
-				NewVectorDBConnectionPanel conn_pan = (NewVectorDBConnectionPanel) myWizardComponents.getWizardPanel(2);
-				
+			} else if (actionComand.equals("POSTGIS")) {
+				ChooseGeometryType geometryTypePanel = (ChooseGeometryType) myWizardComponents
+						.getWizardPanel(0);
+				JPanelFieldDefinition fieldDefinitionPanel = (JPanelFieldDefinition) myWizardComponents
+						.getWizardPanel(1);
+				NewVectorDBConnectionPanel conn_pan = (NewVectorDBConnectionPanel) myWizardComponents
+						.getWizardPanel(2);
 
 				String _layerName = geometryTypePanel.getLayerName();
 				String _tableName = conn_pan.getTableName();
 				String selectedDriver = geometryTypePanel.getSelectedDriver();
 				int geometryType = geometryTypePanel.getSelectedGeometryType();
-				FieldDescription[] fieldsDesc = fieldDefinitionPanel.getFieldsDescription();
+				FieldDescription[] fieldsDesc = fieldDefinitionPanel
+						.getFieldsDescription();
 
 				Driver drv = new PostGisDriver();
 
 				IVectorialJDBCDriver dbDriver = (IVectorialJDBCDriver) drv;
-				NewVectorDBConnectionPanel postgisPanel = (NewVectorDBConnectionPanel) myWizardComponents.getWizardPanel(2);
-				ConnectionWithParams cwp = postgisPanel.getConnectionWithParams();
+				NewVectorDBConnectionPanel postgisPanel = (NewVectorDBConnectionPanel) myWizardComponents
+						.getWizardPanel(2);
+				ConnectionWithParams cwp = postgisPanel
+						.getConnectionWithParams();
 				if (cwp == null)
 					return;
-				
-				IConnection conex = ConnectionFactory.createConnection(
-						cwp.getConnectionStr(),
-						cwp.getUser(), cwp.getPw());
 
-				PostGISWriter writer= new PostGISWriter(); //(PostGISWriter)LayerFactory.getWM().getWriter("PostGIS Writer");
-				if(!existTable(conex,cwp.getSchema(), _tableName)){
-				
+				IConnection conex = ConnectionFactory.createConnection(
+						cwp.getConnectionStr(), cwp.getUser(), cwp.getPw());
+
+				PostGISWriter writer = new PostGISWriter(); // (PostGISWriter)LayerFactory.getWM().getWriter("PostGIS Writer");
+				if (!existTable(conex, cwp.getSchema(), _tableName)) {
+
 					DBLayerDefinition dbLayerDef = new DBLayerDefinition();
 					dbLayerDef.setCatalogName(cwp.getDb());
 					dbLayerDef.setSchema(cwp.getSchema());
@@ -154,58 +167,57 @@ public class MyFinishAction extends FinishAction
 					dbLayerDef.setShapeType(geometryType);
 					dbLayerDef.setFieldsDesc(fieldsDesc);
 					dbLayerDef.setFieldGeometry("the_geom");
-					
+
 					// create gid & add it to FieldDescription array
 					dbLayerDef.setNewFieldID();
-	
+
 					dbLayerDef.setWhereClause("");
 					String strSRID = ProjectionUtils.getAbrev(mapCtrl.getCrs())
 							.substring(5);
 					dbLayerDef.setSRID_EPSG(strSRID);
 					dbLayerDef.setConnection(conex);
-	
-	    			
-	    			writer.setWriteAll(true);
-	    			writer.setCreateTable(true);
-	    			writer.initialize(dbLayerDef);
-	
-	    			// Creamos la tabla.
-	    			writer.preProcess();
-	    			writer.postProcess();
-	
-	    	        if (dbDriver instanceof ICanReproject)
-	    	        {
-	    	            ((ICanReproject)dbDriver).setDestProjection(strSRID);
-	    	        }	
 
-	    	        dbDriver.setData(conex, dbLayerDef);
-	    	        CoordinateReferenceSystem crs = null;
+					writer.setWriteAll(true);
+					writer.setCreateTable(true);
+					writer.initialize(dbLayerDef);
+
+					// Creamos la tabla.
+					writer.preProcess();
+					writer.postProcess();
+
+					if (dbDriver instanceof ICanReproject) {
+						((ICanReproject) dbDriver).setDestProjection(strSRID);
+					}
+
+					dbDriver.setData(conex, dbLayerDef);
+					CoordinateReferenceSystem crs = null;
 					if (drv instanceof ICanReproject) {
 						crs = ProjectionUtils.getCRS("EPSG:"
 								+ ((ICanReproject) dbDriver)
 										.getSourceProjection(null, null));
 					}
-	
-	    			lyr = (FLyrVect) LayerFactory.createDBLayer(dbDriver, _layerName, crs);
-	    			// postgisPanel.saveConnectionSettings();
-    			
-				}
-				else {
-					JOptionPane.showMessageDialog(null,PluginServices.getText(this,"table_already_exists_in_database"),PluginServices.getText(this,"warning_title"),JOptionPane.WARNING_MESSAGE);
+
+					lyr = (FLyrVect) LayerFactory.createDBLayer(dbDriver,
+							_layerName, crs);
+					// postgisPanel.saveConnectionSettings();
+
+				} else {
+					JOptionPane.showMessageDialog(null, PluginServices.getText(
+							this, "table_already_exists_in_database"),
+							PluginServices.getText(this, "warning_title"),
+							JOptionPane.WARNING_MESSAGE);
 					return;
 				}
 
-			}
-			else // Si no es ni lo uno ni lo otro,
+			} else // Si no es ni lo uno ni lo otro,
 			{
-
 
 			}
 		} catch (Exception e) {
-			NotificationManager.showMessageError(e.getLocalizedMessage(),e);
+			NotificationManager.showMessageError(e.getLocalizedMessage(), e);
 			return;
 		}
-        lyr.setVisible(true);
+		lyr.setVisible(true);
 
 		mapCtrl.getMapContext().getLayers().addLayer(lyr);
 
@@ -215,17 +227,17 @@ public class MyFinishAction extends FinishAction
 
 		try {
 			lyr.setEditing(true);
-	        VectorialEditableAdapter vea = (VectorialEditableAdapter) lyr.getSource();
+			VectorialEditableAdapter vea = (VectorialEditableAdapter) lyr
+					.getSource();
 			vea.getRules().clear();
 			// TODO: ESTO ES PROVISIONAL, DESCOMENTAR LUEGO
-			if (vea.getShapeType() == FShape.POLYGON)
-			{
+			if (vea.getShapeType() == FShape.POLYGON) {
 				IRule rulePol = new RulePolygon();
 				vea.getRules().add(rulePol);
 			}
-			StartEditing.startCommandsApplicable(view,lyr);
-	        vea.getCommandRecord().addCommandListener(mapCtrl);
-	        view.showConsole();
+			StartEditing.startCommandsApplicable(view, lyr);
+			vea.getCommandRecord().addCommandListener(mapCtrl);
+			view.showConsole();
 
 			// Para cerrar el cuadro de di�logo.
 			oldAction.performAction();
@@ -235,28 +247,29 @@ public class MyFinishAction extends FinishAction
 			NotificationManager.addError(e);
 		}
 
-
 	}
-	
-	private boolean existTable(IConnection conex,String schema, String tableName) throws SQLException{
-		
+
+	private boolean existTable(IConnection conex, String schema,
+			String tableName) throws SQLException {
+
 		Statement st = null;
-		boolean exists =false;
-		
-		if (schema == null || schema.equals("")){
+		boolean exists = false;
+
+		if (schema == null || schema.equals("")) {
 			schema = " current_schema()::Varchar ";
 		} else {
 			schema = "'" + schema + "'";
 		}
 
-		String sql = "select relname,nspname " +
-			"from pg_class inner join pg_namespace " +
-			"on relnamespace = pg_namespace.oid where "+
-			" relkind = 'r' and relname = '" + tableName +"' and nspname = " + schema;
+		String sql = "select relname,nspname "
+				+ "from pg_class inner join pg_namespace "
+				+ "on relnamespace = pg_namespace.oid where "
+				+ " relkind = 'r' and relname = '" + tableName
+				+ "' and nspname = " + schema;
 
-		st = ((ConnectionJDBC)conex).getConnection().createStatement();
+		st = ((ConnectionJDBC) conex).getConnection().createStatement();
 		ResultSet rs = st.executeQuery(sql);
-		if (rs.next()){
+		if (rs.next()) {
 			exists = true;
 		}
 		rs.close();

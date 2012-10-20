@@ -48,24 +48,25 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import javax.swing.ImageIcon;
-
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
 import com.iver.cit.gvsig.fmap.tools.Listeners.PointListener;
 import com.iver.cit.gvsig.project.documents.view.MapOverview;
 
-
 /**
- * <p>Listener for changes of the zoom caused by selecting a point on the associated {@link MapOverview MapOverview} object
- *  by a single click of the button 1 of the mouse.</p>
+ * <p>
+ * Listener for changes of the zoom caused by selecting a point on the
+ * associated {@link MapOverview MapOverview} object by a single click of the
+ * button 1 of the mouse.
+ * </p>
  * 
- * <p>Updates the extent of its <code>ViewPort</code> with a <i>zoom out</i> operation, and enables/disables controls for
- *  managing the data.</p>
- *
+ * <p>
+ * Updates the extent of its <code>ViewPort</code> with a <i>zoom out</i>
+ * operation, and enables/disables controls for managing the data.
+ * </p>
+ * 
  * @see ViewPort
  * 
  * @author Vicente Caballero Navarro
@@ -74,15 +75,16 @@ public class MapOverviewListener implements PointListener {
 	/**
 	 * The image to display when the cursor is active.
 	 */
-	private final Image izoomout = PluginServices.getIconTheme().get("crux-cursor").getImage();
+	private final Image izoomout = PluginServices.getIconTheme()
+			.get("crux-cursor").getImage();
 
 	/**
 	 * The cursor used to work with this tool listener.
 	 * 
 	 * @see #getCursor()
 	 */
-	private Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(izoomout,
-			new Point(16, 16), "");
+	private Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(
+			izoomout, new Point(16, 16), "");
 
 	/**
 	 * Reference to the <code>MapControl</code> object that uses.
@@ -90,9 +92,14 @@ public class MapOverviewListener implements PointListener {
 	protected MapOverview mapControl;
 
 	/**
- 	 * <p>Creates a new listener for zooming out the extent of the associated {@link MapOverview MapOverview} object.</p>
-	 *
-	 * @param mapControl the <code>MapControl</code> object which represents the <code>MapOverview</code>  
+	 * <p>
+	 * Creates a new listener for zooming out the extent of the associated
+	 * {@link MapOverview MapOverview} object.
+	 * </p>
+	 * 
+	 * @param mapControl
+	 *            the <code>MapControl</code> object which represents the
+	 *            <code>MapOverview</code>
 	 */
 	public MapOverviewListener(MapOverview mapControl) {
 		this.mapControl = mapControl;
@@ -100,23 +107,27 @@ public class MapOverviewListener implements PointListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#point(com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#point(com.iver.
+	 * cit.gvsig.fmap.tools.Events.PointEvent)
 	 */
 	public void point(PointEvent event) {
 		ViewPort vp = mapControl.getMapContext().getViewPort();
 
-		if (vp.getExtent() != null &&
-				mapControl.getAssociatedMapContext().getViewPort().getExtent()!=null) {
+		if (vp.getExtent() != null
+				&& mapControl.getAssociatedMapContext().getViewPort()
+						.getExtent() != null) {
 			Point2D p = vp.toMapPoint(event.getPoint());
 			Rectangle2D r = (Rectangle2D) mapControl.getAssociatedMapContext()
-										   .getViewPort().getExtent().clone();
+					.getViewPort().getExtent().clone();
 
-			r.setRect(p.getX() - (r.getWidth() / 2),
-				p.getY() - (r.getHeight() / 2), r.getWidth(), r.getHeight());
+			r.setRect(p.getX() - (r.getWidth() / 2), p.getY()
+					- (r.getHeight() / 2), r.getWidth(), r.getHeight());
 
-			if (event.getEvent().getButton()!=MouseEvent.BUTTON1) {
+			if (event.getEvent().getButton() != MouseEvent.BUTTON1) {
 				((MapOverview) this.mapControl).getAssociatedMapContext()
-					.getViewPort().setExtent(r);
+						.getViewPort().setExtent(r);
 				PluginServices.getMainFrame().enableControls();
 			}
 		}
@@ -124,6 +135,7 @@ public class MapOverviewListener implements PointListener {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#getCursor()
 	 */
 	public Cursor getCursor() {
@@ -132,6 +144,7 @@ public class MapOverviewListener implements PointListener {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#cancelDrawing()
 	 */
 	public boolean cancelDrawing() {
@@ -140,7 +153,10 @@ public class MapOverviewListener implements PointListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#pointDoubleClick(com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#pointDoubleClick
+	 * (com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
 	 */
 	public void pointDoubleClick(PointEvent event) throws BehaviorException {
 		// TODO Auto-generated method stub

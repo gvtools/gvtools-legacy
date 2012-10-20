@@ -42,47 +42,48 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: MinFunction.java 5919 2006-06-20 18:21:48Z azabala $
-* $Log$
-* Revision 1.2  2006-06-20 18:19:43  azabala
-* refactorización para que todos los nuevos geoprocesos cuelguen del paquete impl
-*
-* Revision 1.1  2006/05/24 21:12:16  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.1  2006/02/26 20:55:28  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: MinFunction.java 5919 2006-06-20 18:21:48Z azabala $
+ * $Log$
+ * Revision 1.2  2006-06-20 18:19:43  azabala
+ * refactorización para que todos los nuevos geoprocesos cuelguen del paquete impl
+ *
+ * Revision 1.1  2006/05/24 21:12:16  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.1  2006/02/26 20:55:28  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core.fmap;
 
 import com.hardcode.gdbms.engine.values.NumericValue;
 import com.hardcode.gdbms.engine.values.ValueFactory;
+
 /**
- * Sumarization function that returns min value of
- * all field values.
+ * Sumarization function that returns min value of all field values.
+ * 
  * @author azabala
- *
+ * 
  */
 public class MinFunction implements SummarizationFunction {
 	double minValue = Double.MAX_VALUE;
-	
+
 	public void process(NumericValue value) {
 		double val = value.doubleValue();
-		if(minValue > val){
+		if (minValue > val) {
 			minValue = val;
 		}
 	}
 
 	public NumericValue getSumarizeValue() {
-		if(minValue == Double.MAX_VALUE)
+		if (minValue == Double.MAX_VALUE)
 			return ValueFactory.createValue(0d);
 		return ValueFactory.createValue(minValue);
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		return "min";
 	}
 
@@ -91,4 +92,3 @@ public class MinFunction implements SummarizationFunction {
 	}
 
 }
-

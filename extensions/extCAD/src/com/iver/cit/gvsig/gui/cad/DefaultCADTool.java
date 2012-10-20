@@ -86,18 +86,20 @@ import com.iver.utiles.console.JConsole;
 
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public abstract class DefaultCADTool implements CADTool {
-	public static ISymbol selectionSymbol = SymbologyFactory.
-	createDefaultSymbolByShapeType(FShape.MULTI, new Color(255, 0,0, 100)); // Le ponemos una transparencia
-	public static ISymbol axisReferencesSymbol = SymbologyFactory.
-	createDefaultSymbolByShapeType(FShape.MULTI, new Color(100, 100, 100, 100));
-	public static ISymbol geometrySelectSymbol = SymbologyFactory.
-	createDefaultSymbolByShapeType(FShape.MULTI, Color.RED);
-	public static ISymbol handlerSymbol = SymbologyFactory.
-	createDefaultSymbolByShapeType(FShape.MULTI, Color.ORANGE);
+	public static ISymbol selectionSymbol = SymbologyFactory
+			.createDefaultSymbolByShapeType(FShape.MULTI, new Color(255, 0, 0,
+					100)); // Le ponemos una transparencia
+	public static ISymbol axisReferencesSymbol = SymbologyFactory
+			.createDefaultSymbolByShapeType(FShape.MULTI, new Color(100, 100,
+					100, 100));
+	public static ISymbol geometrySelectSymbol = SymbologyFactory
+			.createDefaultSymbolByShapeType(FShape.MULTI, Color.RED);
+	public static ISymbol handlerSymbol = SymbologyFactory
+			.createDefaultSymbolByShapeType(FShape.MULTI, Color.ORANGE);
 	private static Logger logger = Logger.getLogger(DefaultCADTool.class
 			.getName());
 	private CADToolAdapter cadToolAdapter;
@@ -116,35 +118,42 @@ public abstract class DefaultCADTool implements CADTool {
 		temporalCache.add(geom);
 		insertSpatialCache(geom);
 	}
+
 	public void clearTemporalCache() {
-		IGeometry[] geoms=(IGeometry[])temporalCache.toArray(new IGeometry[0]);
-		for (int i=0;i<geoms.length;i++) {
+		IGeometry[] geoms = (IGeometry[]) temporalCache
+				.toArray(new IGeometry[0]);
+		for (int i = 0; i < geoms.length; i++) {
 			removeSpatialCache(geoms[i]);
 		}
 		temporalCache.clear();
 	}
+
 	protected void insertSpatialCache(IGeometry geom) {
 		VectorialLayerEdited vle = getVLE();
-		SpatialCache spatialCache=((FLyrVect)vle.getLayer()).getSpatialCache();
-		Rectangle2D r=geom.getBounds2D();
-		if (geom.getGeometryType()==FShape.POINT) {
-			r = new Rectangle2D.Double(r.getX(),r.getY(),1,1);
+		SpatialCache spatialCache = ((FLyrVect) vle.getLayer())
+				.getSpatialCache();
+		Rectangle2D r = geom.getBounds2D();
+		if (geom.getGeometryType() == FShape.POINT) {
+			r = new Rectangle2D.Double(r.getX(), r.getY(), 1, 1);
 		}
-		spatialCache.insert(r,geom);
+		spatialCache.insert(r, geom);
 
 	}
+
 	private void removeSpatialCache(IGeometry geom) {
 		VectorialLayerEdited vle = getVLE();
-		SpatialCache spatialCache=((FLyrVect)vle.getLayer()).getSpatialCache();
-		Rectangle2D r=null;
-		if (geom.getGeometryType()==FShape.POINT) {
-			r = new Rectangle2D.Double(r.getX(),r.getY(),1,1);
-		}else {
-			r=geom.getBounds2D();
+		SpatialCache spatialCache = ((FLyrVect) vle.getLayer())
+				.getSpatialCache();
+		Rectangle2D r = null;
+		if (geom.getGeometryType() == FShape.POINT) {
+			r = new Rectangle2D.Double(r.getX(), r.getY(), 1, 1);
+		} else {
+			r = geom.getBounds2D();
 		}
-		spatialCache.remove(r,geom);
+		spatialCache.remove(r, geom);
 
 	}
+
 	/**
 	 * DOCUMENT ME!
 	 */
@@ -159,7 +168,7 @@ public abstract class DefaultCADTool implements CADTool {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param cta
 	 *            DOCUMENT ME!
 	 */
@@ -169,7 +178,7 @@ public abstract class DefaultCADTool implements CADTool {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public CADToolAdapter getCadToolAdapter() {
@@ -183,7 +192,7 @@ public abstract class DefaultCADTool implements CADTool {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param g
 	 *            DOCUMENT ME!
 	 * @param firstPoint
@@ -191,18 +200,18 @@ public abstract class DefaultCADTool implements CADTool {
 	 * @param endPoint
 	 *            DOCUMENT ME!
 	 */
-	public void drawLine(Graphics2D g, Point2D firstPoint, Point2D endPoint, ISymbol symbol) {
+	public void drawLine(Graphics2D g, Point2D firstPoint, Point2D endPoint,
+			ISymbol symbol) {
 		GeneralPathX elShape = new GeneralPathX(GeneralPathX.WIND_EVEN_ODD, 2);
 		elShape.moveTo(firstPoint.getX(), firstPoint.getY());
 		elShape.lineTo(endPoint.getX(), endPoint.getY());
 		ShapeFactory.createPolyline2D(elShape).draw(g,
-				getCadToolAdapter().getMapControl().getViewPort(),
-					symbol);
+				getCadToolAdapter().getMapControl().getViewPort(), symbol);
 	}
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param geometry
 	 *            DOCUMENT ME!
 	 */
@@ -223,17 +232,16 @@ public abstract class DefaultCADTool implements CADTool {
 			int index = vea.addRow(df, getName(), EditionEvent.GRAPHIC);
 			VectorialLayerEdited vle = getVLE();
 			clearSelection();
-			//ArrayList selectedRow = vle.getSelectedRow();
-
+			// ArrayList selectedRow = vle.getSelectedRow();
 
 			ViewPort vp = vle.getLayer().getMapContext().getViewPort();
-			BufferedImage selectionImage = new BufferedImage(vp
-					.getImageWidth(), vp.getImageHeight(),
+			BufferedImage selectionImage = new BufferedImage(
+					vp.getImageWidth(), vp.getImageHeight(),
 					BufferedImage.TYPE_INT_ARGB);
 			Graphics2D gs = selectionImage.createGraphics();
-			int inversedIndex=vea.getInversedIndex(index);
+			int inversedIndex = vea.getInversedIndex(index);
 			vle.addSelectionCache(new DefaultRowEdited(df,
-					IRowEdited.STATUS_ADDED, inversedIndex ));
+					IRowEdited.STATUS_ADDED, inversedIndex));
 			vea.getSelection().set(inversedIndex);
 			IGeometry geom = df.getGeometry();
 			geom.cloneGeometry().draw(gs, vp, DefaultCADTool.selectionSymbol);
@@ -241,20 +249,18 @@ public abstract class DefaultCADTool implements CADTool {
 			vea.setSelectionImage(selectionImage);
 			insertSpatialCache(geom);
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 			return;
 		} catch (ValidateRowException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 			return;
 		}
 		draw(geometry.cloneGeometry());
 	}
 
-
-
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param geometry
 	 *            DOCUMENT ME!
 	 */
@@ -263,18 +269,18 @@ public abstract class DefaultCADTool implements CADTool {
 			getVLE().getVEA().modifyRow(index, row, getName(),
 					EditionEvent.GRAPHIC);
 		} catch (ValidateRowException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		} catch (ExpansionFileWriteException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 		draw(row.getGeometry().cloneGeometry());
 	}
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param geometry
 	 *            DOCUMENT ME!
 	 * @param values
@@ -298,7 +304,7 @@ public abstract class DefaultCADTool implements CADTool {
 
 	/**
 	 * Devuelve la cadena que corresponde al estado en el que nos encontramos.
-	 *
+	 * 
 	 * @return Cadena para mostrar por consola.
 	 */
 	public String getQuestion() {
@@ -307,7 +313,7 @@ public abstract class DefaultCADTool implements CADTool {
 
 	/**
 	 * Actualiza la cadena que corresponde al estado actual.
-	 *
+	 * 
 	 * @param s
 	 *            Cadena que aparecerá en consola.
 	 */
@@ -323,7 +329,7 @@ public abstract class DefaultCADTool implements CADTool {
 	 */
 	public void refresh() {
 		// getCadToolAdapter().getMapControl().drawMap(false);
-//		getVLE().getLayer().setDirty(true);
+		// getVLE().getLayer().setDirty(true);
 
 		getCadToolAdapter().getMapControl().rePaintDirtyLayers();
 	}
@@ -347,7 +353,8 @@ public abstract class DefaultCADTool implements CADTool {
 			if (ig == null)
 				continue;
 			Handler[] handlers = ig.getHandlers(IGeometry.SELECTHANDLER);
-			FGraphicUtilities.DrawHandlers((Graphics2D) g, at, handlers,DefaultCADTool.handlerSymbol);
+			FGraphicUtilities.DrawHandlers((Graphics2D) g, at, handlers,
+					DefaultCADTool.handlerSymbol);
 		}
 	}
 
@@ -361,20 +368,20 @@ public abstract class DefaultCADTool implements CADTool {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.gui.cad.CADTool#end()
 	 */
 	public void end() {
 		CADExtension.setCADTool("_selection", true);
 		PluginServices.getMainFrame().setSelectedTool("_selection");
-		CADTool cadtool=CADExtension.getCADTool();
+		CADTool cadtool = CADExtension.getCADTool();
 		cadtool.setPreviosTool(this);
 	}
 
 	public void init() {
-// jaume, should not be necessary
-//		CADTool.drawingSymbol.setOutlined(true);
-//		CADTool.drawingSymbol.setOutlineColor(Color.GREEN);
+		// jaume, should not be necessary
+		// CADTool.drawingSymbol.setOutlined(true);
+		// CADTool.drawingSymbol.setOutlineColor(Color.GREEN);
 
 	}
 
@@ -431,7 +438,7 @@ public abstract class DefaultCADTool implements CADTool {
 							.getActiveWindow();
 					vista.getConsolePanel().addText("\n" + ct.getName(),
 							JConsole.COMMAND);
-					String question=ct.getQuestion();
+					String question = ct.getQuestion();
 					vista.getConsolePanel().addText(
 							"\n" + "#" + question + " > ", JConsole.MESSAGE);
 					return true;
@@ -450,33 +457,37 @@ public abstract class DefaultCADTool implements CADTool {
 
 	public void throwValueException(String s, double d) {
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		if (window instanceof View){
-			((View)window).getConsolePanel().addText(s + " : " + d, JConsole.ERROR);
+		if (window instanceof View) {
+			((View) window).getConsolePanel().addText(s + " : " + d,
+					JConsole.ERROR);
 		}
 	}
 
 	public void throwOptionException(String s, String o) {
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		if (window instanceof View){
-			((View)window).getConsolePanel().addText(s + " : " + o, JConsole.ERROR);
+		if (window instanceof View) {
+			((View) window).getConsolePanel().addText(s + " : " + o,
+					JConsole.ERROR);
 		}
 	}
 
 	public void throwPointException(String s, double x, double y) {
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		if (window instanceof View){
-			((View)window).getConsolePanel().addText(s + " : " + " X = " + x + ", Y = " + y,
-				JConsole.ERROR);
+		if (window instanceof View) {
+			((View) window).getConsolePanel().addText(
+					s + " : " + " X = " + x + ", Y = " + y, JConsole.ERROR);
 		}
 	}
 
 	public void setPreviosTool(DefaultCADTool tool) {
-		previousTool=tool;
+		previousTool = tool;
 	}
+
 	public void restorePreviousTool() {
 		CADExtension.setCADTool(previousTool.toString(), true);
 		PluginServices.getMainFrame().setSelectedTool(previousTool.toString());
 	}
+
 	public void endTransition(double x, double y, MouseEvent e) {
 		// TODO Auto-generated method stub
 

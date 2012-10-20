@@ -60,21 +60,25 @@ import es.gva.cit.catalog.drivers.profiles.IProfile;
  */
 public class ServerPropertiesDialog extends JFrame {
 
-	public ServerPropertiesDialog(ServerData serverData, CatalogClient client, IProfile profile){
+	public ServerPropertiesDialog(ServerData serverData, CatalogClient client,
+			IProfile profile) {
 		super();
 		initialize(serverData, client, profile);
 	}
 
 	/**
 	 * This method initializes the panel
+	 * 
 	 * @param serverData
 	 */
-	private void initialize(ServerData serverData, CatalogClient client, IProfile profile) {
+	private void initialize(ServerData serverData, CatalogClient client,
+			IProfile profile) {
 		setBounds(0, 0, 525, 320);
 		this.setTitle(Messages.getText("catalogProperties"));
-		ServerPropertiesDialogPanel panel = new ServerPropertiesDialogPanel(serverData, client, profile, this);
+		ServerPropertiesDialogPanel panel = new ServerPropertiesDialogPanel(
+				serverData, client, profile, this);
 		getContentPane().add(panel);
-		setVisible(true);		
+		setVisible(true);
 	}
-	
+
 }

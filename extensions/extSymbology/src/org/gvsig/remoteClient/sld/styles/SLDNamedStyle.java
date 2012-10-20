@@ -46,21 +46,24 @@ import org.gvsig.remoteClient.gml.schemas.XMLSchemaParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
+
 /**
- * Implements the NamedStyle element of an SLD implementation specification ).<p> 
+ * Implements the NamedStyle element of an SLD implementation specification ).
+ * <p>
  * 
- * A named style, similar to a named layer, is referenced by a well-known name. A
- * particular named style only has meaning when used in conjunction with a particular
- * named layer. All available styles for each available layer are normally named in a 
- * capabilities document.
+ * A named style, similar to a named layer, is referenced by a well-known name.
+ * A particular named style only has meaning when used in conjunction with a
+ * particular named layer. All available styles for each available layer are
+ * normally named in a capabilities document.
  * 
  * @see http://portal.opengeospatial.org/files/?artifact_id=1188
  * 
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
 public abstract class SLDNamedStyle extends AbstractSLDStyle {
-	
-	public abstract void parse(XMLSchemaParser parser)throws IOException, XmlPullParserException, LegendDriverException;
+
+	public abstract void parse(XMLSchemaParser parser) throws IOException,
+			XmlPullParserException, LegendDriverException;
 
 	public abstract String toXML();
 

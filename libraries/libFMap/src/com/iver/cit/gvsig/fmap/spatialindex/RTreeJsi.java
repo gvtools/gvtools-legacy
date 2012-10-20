@@ -42,26 +42,26 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: RTreeJsi.java 28572 2009-05-11 13:48:23Z vcaballero $
-* $Log$
-* Revision 1.5  2007-09-19 16:25:39  jaume
-* ReadExpansionFileException removed from this context and removed unnecessary imports
-*
-* Revision 1.4  2007/06/27 20:17:30  azabala
-* new spatial index (rix)
-*
-* Revision 1.3  2007/03/06 17:08:59  caballero
-* Exceptions
-*
-* Revision 1.2  2006/06/05 16:59:08  azabala
-* implementada busqueda de vecino mas proximo a partir de rectangulos
-*
-* Revision 1.1  2006/05/24 21:58:04  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: RTreeJsi.java 28572 2009-05-11 13:48:23Z vcaballero $
+ * $Log$
+ * Revision 1.5  2007-09-19 16:25:39  jaume
+ * ReadExpansionFileException removed from this context and removed unnecessary imports
+ *
+ * Revision 1.4  2007/06/27 20:17:30  azabala
+ * new spatial index (rix)
+ *
+ * Revision 1.3  2007/03/06 17:08:59  caballero
+ * Exceptions
+ *
+ * Revision 1.2  2006/06/05 16:59:08  azabala
+ * implementada busqueda de vecino mas proximo a partir de rectangulos
+ *
+ * Revision 1.1  2006/05/24 21:58:04  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.spatialindex;
 
 import gnu.trove.TIntProcedure;
@@ -69,7 +69,6 @@ import gnu.trove.TIntProcedure;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -77,43 +76,39 @@ import com.infomatiq.jsi.Rectangle;
 import com.infomatiq.jsi.rtree.RTree;
 
 /**
- * RTree spatial index implementation based in library
- * JSI (java spatial index).
- *
+ * RTree spatial index implementation based in library JSI (java spatial index).
+ * 
  * http://jsi.sourceforge.net/
- *
- * This RTree has better performance that Spatial Index Library
- * RTree, and that JTS'RTree, because
- * it uses the GNU's Trove Collections API.
- *
- * We are doing some probes with it, because it offers
- * a Nearest Neighbour algorithm implementation
- * (useful for Spatial Join geoprocess, for example).
- *
- * It isnt persistent, and We've found some problems
- * with delete operations.
- *
- *
- *
- *
+ * 
+ * This RTree has better performance that Spatial Index Library RTree, and that
+ * JTS'RTree, because it uses the GNU's Trove Collections API.
+ * 
+ * We are doing some probes with it, because it offers a Nearest Neighbour
+ * algorithm implementation (useful for Spatial Join geoprocess, for example).
+ * 
+ * It isnt persistent, and We've found some problems with delete operations.
+ * 
+ * 
+ * 
+ * 
  * @author azabala
- *
+ * 
  */
 public class RTreeJsi implements ISpatialIndex, INearestNeighbourFinder {
 	private RTree rtree;
 
-	public RTreeJsi(){
+	public RTreeJsi() {
 		rtree = new RTree();
 	}
 
-	public void create(){
+	public void create() {
 		Properties props = new Properties();
-//		props.setProperty("MaxNodeEntries", "500");
-//		props.setProperty("MinNodeEntries", "200");
+		// props.setProperty("MaxNodeEntries", "500");
+		// props.setProperty("MinNodeEntries", "200");
 		rtree.init(props);
 	}
 
-	class ListIntProcedure implements TIntProcedure{
+	class ListIntProcedure implements TIntProcedure {
 		ArrayList solution = new ArrayList();
 
 		public boolean execute(int arg0) {
@@ -121,11 +116,10 @@ public class RTreeJsi implements ISpatialIndex, INearestNeighbourFinder {
 			return true;
 		}
 
-		public List getSolution(){
+		public List getSolution() {
 			return solution;
 		}
 	}
-
 
 	public List query(Rectangle2D rect) {
 		ListIntProcedure solution = new ListIntProcedure();
@@ -133,11 +127,10 @@ public class RTreeJsi implements ISpatialIndex, INearestNeighbourFinder {
 		return solution.getSolution();
 	}
 
-	private Rectangle toJsiRect(Rectangle2D rect){
-		Rectangle jsiRect = new Rectangle((float)rect.getMinX(),
-				(float)rect.getMinY(),
-				(float)rect.getMaxX(),
-				(float)rect.getMaxY());
+	private Rectangle toJsiRect(Rectangle2D rect) {
+		Rectangle jsiRect = new Rectangle((float) rect.getMinX(),
+				(float) rect.getMinY(), (float) rect.getMaxX(),
+				(float) rect.getMaxY());
 		return jsiRect;
 	}
 
@@ -151,45 +144,47 @@ public class RTreeJsi implements ISpatialIndex, INearestNeighbourFinder {
 
 	public List findNNearest(int numberOfNearest, Point2D point) {
 		ListIntProcedure solution = new ListIntProcedure();
-		com.infomatiq.jsi.Point jsiPoint =
-			new com.infomatiq.jsi.Point((float)point.getX(), (float)point.getY());
-		//FIXME REVISAR
+		com.infomatiq.jsi.Point jsiPoint = new com.infomatiq.jsi.Point(
+				(float) point.getX(), (float) point.getY());
+		// FIXME REVISAR
 		rtree.nearest(jsiPoint, solution, Float.POSITIVE_INFINITY);
 		return solution.getSolution();
 	}
 
 	public List findNNearest(int numberOfNearest, Rectangle2D rect) {
 		ListIntProcedure solution = new ListIntProcedure();
-		com.infomatiq.jsi.Rectangle jsiRect =
-			toJsiRect(rect);
+		com.infomatiq.jsi.Rectangle jsiRect = toJsiRect(rect);
 
 		rtree.nearest(jsiRect.centre(), solution, Float.POSITIVE_INFINITY);
 		return solution.getSolution();
 	}
 
-//	public List findNNearest(int numberOfNearest, Rectangle2D rect){
-//		return (List) rtree.nearest(toJsiRect(rect), numberOfNearest);
-//	}
+	// public List findNNearest(int numberOfNearest, Rectangle2D rect){
+	// return (List) rtree.nearest(toJsiRect(rect), numberOfNearest);
+	// }
 
-//	public List findNNearest(int numberOfNearest, Point2D point){
-//		com.infomatiq.jsi.Point jsiPoint =
-//			new com.infomatiq.jsi.Point((float)point.getX(), (float)point.getY());
-//		return (List) rtree.nearest(jsiPoint, numberOfNearest);
-//	}
+	// public List findNNearest(int numberOfNearest, Point2D point){
+	// com.infomatiq.jsi.Point jsiPoint =
+	// new com.infomatiq.jsi.Point((float)point.getX(), (float)point.getY());
+	// return (List) rtree.nearest(jsiPoint, numberOfNearest);
+	// }
 
-	public static void main(String[] args){
+	public static void main(String[] args) {
 		RTreeJsi q = new RTreeJsi();
 		q.create();
 
-			for(int i = 1; i <= 99; i++){
-				q.insert(new Rectangle2D.Double(100+i, 200+i, 200+i, 500+i),i);
-			}
+		for (int i = 1; i <= 99; i++) {
+			q.insert(
+					new Rectangle2D.Double(100 + i, 200 + i, 200 + i, 500 + i),
+					i);
+		}
 
-			for(int i = 1; i <= 99; i++){
-				q.delete(new Rectangle2D.Double(100+i, 200+i, 200+i, 500+i),i);
-				System.out.println("Rect="+i);
-			}
+		for (int i = 1; i <= 99; i++) {
+			q.delete(
+					new Rectangle2D.Double(100 + i, 200 + i, 200 + i, 500 + i),
+					i);
+			System.out.println("Rect=" + i);
+		}
 	}
 
 }
-

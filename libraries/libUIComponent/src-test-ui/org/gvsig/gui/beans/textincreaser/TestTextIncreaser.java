@@ -21,9 +21,9 @@ package org.gvsig.gui.beans.textincreaser;
 import javax.swing.JFrame;
 
 public class TestTextIncreaser {
-	private int                    w     = 200;
-	private int                    h     = 200;
-	private JFrame                 frame = new JFrame();
+	private int w = 200;
+	private int h = 200;
+	private JFrame frame = new JFrame();
 	private TextIncreaserContainer tic1;
 
 	public TestTextIncreaser() {

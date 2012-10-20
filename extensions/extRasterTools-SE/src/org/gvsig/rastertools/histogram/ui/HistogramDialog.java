@@ -30,33 +30,41 @@ import org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener;
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
+
 /**
- * <code>HistogramDialog</code>. Creación de la ventana de histograma para gvSIG.
- *
+ * <code>HistogramDialog</code>. Creación de la ventana de histograma para
+ * gvSIG.
+ * 
  * @version 20/03/2007
  * @author Nacho Brodin (brodin_ign@gva.es)
  * @author BorSanZa - Borja Sanchez Zamorano (borja.sanchez@iver.es)
  */
-public class HistogramDialog extends JPanel implements IWindow, ButtonsPanelListener {
+public class HistogramDialog extends JPanel implements IWindow,
+		ButtonsPanelListener {
 	private static final long serialVersionUID = 7362459094802955247L;
 	private HistogramPanel histogramPanel = null;
-	private String         layerName      = null;
+	private String layerName = null;
 
 	/**
 	 * Crea la ventana del histograma con un ancho y alto.
-	 * @param width Ancho de la ventana
-	 * @param height Alto de la ventana
+	 * 
+	 * @param width
+	 *            Ancho de la ventana
+	 * @param height
+	 *            Alto de la ventana
 	 */
-	public HistogramDialog(int width, int height){
+	public HistogramDialog(int width, int height) {
 		this.setSize(width, height);
 		this.setLayout(new BorderLayout(5, 5));
 		this.add(getHistogramPanel(), java.awt.BorderLayout.CENTER);
 	}
-	
+
 	/**
-	 * Asigna la capa para obtener las fuentes de datos tanto del 
-	 * datasource como de la visualización.
-	 * @param lyr Capa
+	 * Asigna la capa para obtener las fuentes de datos tanto del datasource
+	 * como de la visualización.
+	 * 
+	 * @param lyr
+	 *            Capa
 	 */
 	public void setLayer(FLyrRasterSE lyr) throws Exception {
 		layerName = lyr.getName();
@@ -66,9 +74,10 @@ public class HistogramDialog extends JPanel implements IWindow, ButtonsPanelList
 
 	/**
 	 * Obtiene el panel con el histograma
+	 * 
 	 * @return HistogramPanel
 	 */
-	public HistogramPanel getHistogramPanel(){
+	public HistogramPanel getHistogramPanel() {
 		if (histogramPanel == null) {
 			histogramPanel = new HistogramPanel();
 			histogramPanel.addButtonPressedListener(this);
@@ -78,10 +87,12 @@ public class HistogramDialog extends JPanel implements IWindow, ButtonsPanelList
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindow#getWindowInfo()
 	 */
 	public WindowInfo getWindowInfo() {
-		WindowInfo m_viewinfo=new WindowInfo(WindowInfo.MODELESSDIALOG | WindowInfo.RESIZABLE | WindowInfo.MAXIMIZABLE);
+		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODELESSDIALOG
+				| WindowInfo.RESIZABLE | WindowInfo.MAXIMIZABLE);
 		if (getLayerName() != null)
 			m_viewinfo.setAdditionalInfo(getLayerName());
 		m_viewinfo.setTitle(PluginServices.getText(this, "histograma"));
@@ -97,13 +108,16 @@ public class HistogramDialog extends JPanel implements IWindow, ButtonsPanelList
 		try {
 			PluginServices.getMDIManager().closeWindow(this);
 		} catch (ArrayIndexOutOfBoundsException e) {
-			//Si la ventana no se puede eliminar no hacemos nada
+			// Si la ventana no se puede eliminar no hacemos nada
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener#actionButtonPressed(org.gvsig.gui.beans.buttonspanel.ButtonsPanelEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener#actionButtonPressed
+	 * (org.gvsig.gui.beans.buttonspanel.ButtonsPanelEvent)
 	 */
 	public void actionButtonPressed(ButtonsPanelEvent e) {
 		if (e.getButton() == ButtonsPanel.BUTTON_CLOSE) {
@@ -112,8 +126,10 @@ public class HistogramDialog extends JPanel implements IWindow, ButtonsPanelList
 	}
 
 	/**
-	 * Obtiene el nombre de la capa. Esto no es necesario para la funcionalidad de histograma.
-	 * Solo se usa para destruir el dialogo si está abierto cuando se destruye la capa.
+	 * Obtiene el nombre de la capa. Esto no es necesario para la funcionalidad
+	 * de histograma. Solo se usa para destruir el dialogo si está abierto
+	 * cuando se destruye la capa.
+	 * 
 	 * @return Nombre de la capa
 	 */
 	public String getLayerName() {

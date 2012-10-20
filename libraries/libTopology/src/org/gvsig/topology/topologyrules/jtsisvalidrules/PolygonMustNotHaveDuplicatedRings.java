@@ -77,46 +77,46 @@ import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Polygon;
 
 /**
- * This rule checks it two rings in a polygon of a polygon layer
- * are equivalent.
+ * This rule checks it two rings in a polygon of a polygon layer are equivalent.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class PolygonMustNotHaveDuplicatedRings extends AbstractTopologyRule {
-	
+
 	private MultiShapeSymbol errorSymbol = DEFAULT_ERROR_SYMBOL;
-	
-	private static String RULE_NAME = Messages.getText("POLYGON_MUST_NOT_HAVE_DUPLICATED_RINGS");
-	
-	private static List<ITopologyErrorFix> automaticErrorFixes =
-		new ArrayList<ITopologyErrorFix>();	
-	
+
+	private static String RULE_NAME = Messages
+			.getText("POLYGON_MUST_NOT_HAVE_DUPLICATED_RINGS");
+
+	private static List<ITopologyErrorFix> automaticErrorFixes = new ArrayList<ITopologyErrorFix>();
+
 	private static final Color DEFAULT_ERROR_COLOR = Color.RED;
-	
-	
-	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = 
-		(MultiShapeSymbol) SymbologyFactory.createDefaultSymbolByShapeType(FShape.MULTI, 
-											DEFAULT_ERROR_COLOR);
-	static{
+
+	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = (MultiShapeSymbol) SymbologyFactory
+			.createDefaultSymbolByShapeType(FShape.MULTI, DEFAULT_ERROR_COLOR);
+	static {
 		DEFAULT_ERROR_SYMBOL.setDescription(RULE_NAME);
 		DEFAULT_ERROR_SYMBOL.setLineWidth(2);
 	}
-	
+
 	private double snapTolerance;
-	
+
 	private JtsValidRule parentRule;
 
-	public PolygonMustNotHaveDuplicatedRings(Topology topology, FLyrVect lyr, double tolerance){
+	public PolygonMustNotHaveDuplicatedRings(Topology topology, FLyrVect lyr,
+			double tolerance) {
 		super(topology, lyr);
 		this.snapTolerance = tolerance;
 	}
-	
-	public PolygonMustNotHaveDuplicatedRings(){}
-	
-	public PolygonMustNotHaveDuplicatedRings(FLyrVect lyr, double tolerance){
+
+	public PolygonMustNotHaveDuplicatedRings() {
+	}
+
+	public PolygonMustNotHaveDuplicatedRings(FLyrVect lyr, double tolerance) {
 		this(null, lyr, tolerance);
 	}
-	
+
 	public String getName() {
 		return RULE_NAME;
 	}
@@ -126,8 +126,9 @@ public class PolygonMustNotHaveDuplicatedRings extends AbstractTopologyRule {
 		try {
 			shapeType = this.originLyr.getShapeType();
 			int numDimensions = FGeometryUtil.getDimensions(shapeType);
-			if(numDimensions != 2)
-				throw new TopologyRuleDefinitionException("MustNotHaveDuplicatedRings solo aplica sobre capas de dimension 2");
+			if (numDimensions != 2)
+				throw new TopologyRuleDefinitionException(
+						"MustNotHaveDuplicatedRings solo aplica sobre capas de dimension 2");
 		} catch (ReadDriverException e) {
 			throw new TopologyRuleDefinitionException(
 					"Error al tratar de verificar el tipo de geometria");
@@ -140,71 +141,67 @@ public class PolygonMustNotHaveDuplicatedRings extends AbstractTopologyRule {
 			Polygon polygon = (Polygon) jtsGeo;
 			checkRings(polygon, feature);
 		} else if (jtsGeo instanceof MultiPolygon) {
-			MultiPolygon multiPoly = (MultiPolygon)jtsGeo;
-			for(int i = 0; i < multiPoly.getNumGeometries(); i++){
+			MultiPolygon multiPoly = (MultiPolygon) jtsGeo;
+			for (int i = 0; i < multiPoly.getNumGeometries(); i++) {
 				Polygon polygon = (Polygon) multiPoly.getGeometryN(i);
 				checkRings(polygon, feature);
 			}
-		}else if(jtsGeo instanceof GeometryCollection){
-			MultiPolygon multiPoly = JtsUtil.convertToMultiPolygon((GeometryCollection) jtsGeo);
-			for(int i = 0; i < multiPoly.getNumGeometries(); i++){
+		} else if (jtsGeo instanceof GeometryCollection) {
+			MultiPolygon multiPoly = JtsUtil
+					.convertToMultiPolygon((GeometryCollection) jtsGeo);
+			for (int i = 0; i < multiPoly.getNumGeometries(); i++) {
 				Polygon polygon = (Polygon) multiPoly.getGeometryN(i);
 				checkRings(polygon, feature);
 			}
 		}
 	}
-	
-	private void checkRings(Polygon polygon, IFeature feature){
+
+	private void checkRings(Polygon polygon, IFeature feature) {
 		LineString shell = polygon.getExteriorRing();
 		int numHoles = polygon.getNumInteriorRing();
-		for(int i = 0; i < numHoles; i++){
+		for (int i = 0; i < numHoles; i++) {
 			LineString hole = polygon.getInteriorRingN(i);
-			if(shell.equalsExact(hole, snapTolerance)){
+			if (shell.equalsExact(hole, snapTolerance)) {
 				IGeometry geometry = NewFConverter.toFMap(hole);
 				AbstractTopologyRule violatedRule = null;
-				if(this.parentRule != null)
+				if (this.parentRule != null)
 					violatedRule = parentRule;
 				else
 					violatedRule = this;
-				JtsValidTopologyError error = new JtsValidTopologyError(geometry,
-														violatedRule, 
-														feature,
-														topology);
+				JtsValidTopologyError error = new JtsValidTopologyError(
+						geometry, violatedRule, feature, topology);
 				addTopologyError(error);
-			}//if
-			
-			
-			for(int j = 0; j < numHoles; j++){
-				if(i >= j)
+			}// if
+
+			for (int j = 0; j < numHoles; j++) {
+				if (i >= j)
 					continue;
 				LineString hole2 = polygon.getInteriorRingN(j);
-				if(hole.equalsExact(hole2)){
+				if (hole.equalsExact(hole2)) {
 					IGeometry geometry = NewFConverter.toFMap(hole);
 					AbstractTopologyRule violatedRule = null;
-					if(this.parentRule != null)
+					if (this.parentRule != null)
 						violatedRule = parentRule;
 					else
 						violatedRule = this;
-					JtsValidTopologyError error = new JtsValidTopologyError(geometry,
-															violatedRule, 
-															feature,
-															topology);
+					JtsValidTopologyError error = new JtsValidTopologyError(
+							geometry, violatedRule, feature, topology);
 					addTopologyError(error);
 				}
 			}
-		}//for
+		}// for
 	}
-	
-	public XMLEntity getXMLEntity(){
+
+	public XMLEntity getXMLEntity() {
 		XMLEntity xml = super.getXMLEntity();
 		xml.putProperty("snapTolerance", snapTolerance);
 		return xml;
 	}
-	    
-	public void setXMLEntity(XMLEntity xml){
+
+	public void setXMLEntity(XMLEntity xml) {
 		super.setXMLEntity(xml);
-		
-		if(xml.contains("snapTolerance")){
+
+		if (xml.contains("snapTolerance")) {
 			snapTolerance = xml.getDoubleProperty("snapTolerance");
 		}
 	}
@@ -216,7 +213,7 @@ public class PolygonMustNotHaveDuplicatedRings extends AbstractTopologyRule {
 	public void setParentRule(JtsValidRule parentRule) {
 		this.parentRule = parentRule;
 	}
-	
+
 	public boolean acceptsOriginLyr(FLyrVect lyr) {
 		try {
 			return FGeometryUtil.getDimensions(lyr.getShapeType()) == 2;

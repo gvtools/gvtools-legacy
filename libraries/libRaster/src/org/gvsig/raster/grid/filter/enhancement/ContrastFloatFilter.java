@@ -19,24 +19,32 @@
 package org.gvsig.raster.grid.filter.enhancement;
 
 import org.gvsig.raster.buffer.RasterBuffer;
+
 /**
  * Filtro de contraste para tipo de datos float.
  * 
- * @author Miguel Ángel Querol Carratalá  (miguelangel.querol@iver.es)
+ * @author Miguel Ángel Querol Carratalá (miguelangel.querol@iver.es)
  */
 public class ContrastFloatFilter extends ContrastFilter {
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.enhancement.ContrastFilter#process(int, int)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.enhancement.ContrastFilter#process(int,
+	 * int)
 	 */
 	public void process(int col, int line) throws InterruptedException {
 		for (int i = 0; i < raster.getBandCount(); i++)
-			rasterResult.setElem(line, col, i, (byte) calcContrast((int) raster.getElemFloat(line, col, i) & 0xff));
+			rasterResult
+					.setElem(line, col, i, (byte) calcContrast((int) raster
+							.getElemFloat(line, col, i) & 0xff));
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.enhancement.ContrastFilter#getInRasterDataType()
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.enhancement.ContrastFilter#getInRasterDataType
+	 * ()
 	 */
 	public int getInRasterDataType() {
 		return RasterBuffer.TYPE_FLOAT;

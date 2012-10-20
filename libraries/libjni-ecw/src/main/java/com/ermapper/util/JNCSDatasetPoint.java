@@ -5,22 +5,18 @@
 
 package com.ermapper.util;
 
+public class JNCSDatasetPoint {
 
-public class JNCSDatasetPoint
-{
+	public JNCSDatasetPoint() {
+		x = 0;
+		y = 0;
+	}
 
-    public JNCSDatasetPoint()
-    {
-        x = 0;
-        y = 0;
-    }
+	public JNCSDatasetPoint(int i, int j) {
+		x = i;
+		y = j;
+	}
 
-    public JNCSDatasetPoint(int i, int j)
-    {
-        x = i;
-        y = j;
-    }
-
-    public int x;
-    public int y;
+	public int x;
+	public int y;
 }

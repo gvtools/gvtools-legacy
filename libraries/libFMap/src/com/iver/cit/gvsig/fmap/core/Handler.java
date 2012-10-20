@@ -48,39 +48,59 @@ import java.awt.geom.Point2D;
 
 import com.iver.cit.gvsig.fmap.layers.GraphicLayer;
 
-
 /**
- * <p>In a {@link GraphicLayer GraphicLayer}, each geometry drawn has control points named <i>handlers</i> that allow
- *  user to move, modify, deform, ... that geometry.</p>
- *  
- * <p>Each geometry will have its own handlers, and each one can have different behavior according its nature.</p>
+ * <p>
+ * In a {@link GraphicLayer GraphicLayer}, each geometry drawn has control
+ * points named <i>handlers</i> that allow user to move, modify, deform, ...
+ * that geometry.
+ * </p>
  * 
- * <p>The <code>Handler</code> interface defines the least set of common methods for all geometry handlers.</p>
+ * <p>
+ * Each geometry will have its own handlers, and each one can have different
+ * behavior according its nature.
+ * </p>
+ * 
+ * <p>
+ * The <code>Handler</code> interface defines the least set of common methods
+ * for all geometry handlers.
+ * </p>
  */
 public interface Handler {
 	/**
-	 * <p>Generic method of moving in 2D a handler of a geometry using two numbers that
-	 * represent the 2D coordinates.</p>
+	 * <p>
+	 * Generic method of moving in 2D a handler of a geometry using two numbers
+	 * that represent the 2D coordinates.
+	 * </p>
 	 * 
-	 * <p>Each handler of each geometry adapts this method to its own behavior in that geometry, that
-	 * implies that could not be implemented.</p>
-	 *
-	 * @param x first dimension coordinate
-	 * @param y second dimension coordinate
+	 * <p>
+	 * Each handler of each geometry adapts this method to its own behavior in
+	 * that geometry, that implies that could not be implemented.
+	 * </p>
+	 * 
+	 * @param x
+	 *            first dimension coordinate
+	 * @param y
+	 *            second dimension coordinate
 	 * 
 	 * @see #set(double, double)
 	 */
 	public void move(double x, double y);
 
 	/**
- 	 * <p>Generic method of situating in 2D a handler of a geometry using two numbers that
-	 * represent the 2D coordinates.</p>
+	 * <p>
+	 * Generic method of situating in 2D a handler of a geometry using two
+	 * numbers that represent the 2D coordinates.
+	 * </p>
 	 * 
-	 * <p>Each handler of each geometry adapts this method to its own behavior in that geometry, that
-	 * implies that could not be implemented.</p>
-	 *
-	 * @param x first dimension coordinate
-	 * @param y second dimension coordinate
+	 * <p>
+	 * Each handler of each geometry adapts this method to its own behavior in
+	 * that geometry, that implies that could not be implemented.
+	 * </p>
+	 * 
+	 * @param x
+	 *            first dimension coordinate
+	 * @param y
+	 *            second dimension coordinate
 	 * 
 	 * @see #move(double, double)
 	 * @see #getPoint()
@@ -88,11 +108,16 @@ public interface Handler {
 	public void set(double x, double y);
 
 	/**
- 	 * <p>Generic method of getting the 2D point that represents a handler of a geometry.</p>
+	 * <p>
+	 * Generic method of getting the 2D point that represents a handler of a
+	 * geometry.
+	 * </p>
 	 * 
-	 * <p>Each handler of each geometry adapts this method to its own behavior in that geometry, that
-	 * implies that could not be implemented.</p>
-	 *
+	 * <p>
+	 * Each handler of each geometry adapts this method to its own behavior in
+	 * that geometry, that implies that could not be implemented.
+	 * </p>
+	 * 
 	 * @return point 2D that represents this handler of geometry
 	 * 
 	 * @see #set(double, double)
@@ -101,11 +126,15 @@ public interface Handler {
 	public Point2D getPoint();
 
 	/**
-	 * <p>Returns <code>true</code> if the object is a <code>Handler</code> and has the
-	 *  same coordinates as this one.</p>
+	 * <p>
+	 * Returns <code>true</code> if the object is a <code>Handler</code> and has
+	 * the same coordinates as this one.
+	 * </p>
 	 * 
-	 * @param obj the reference object with which to compare 
-	 * @return <code>true</code> if this object is the same as the <code>obj</code> argument; <code>false</code> otherwise
+	 * @param obj
+	 *            the reference object with which to compare
+	 * @return <code>true</code> if this object is the same as the
+	 *         <code>obj</code> argument; <code>false</code> otherwise
 	 * 
 	 * @see #getPoint()
 	 */

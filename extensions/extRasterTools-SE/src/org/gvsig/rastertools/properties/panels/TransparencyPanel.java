@@ -40,23 +40,25 @@ import org.gvsig.rastertools.properties.control.TransparencyListener;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
+
 /**
  * Dialogo para asignar la transparencia por pixel y global al raster.
- *
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
-public class TransparencyPanel extends AbstractPanel implements ActionListener, SliderListener {
+public class TransparencyPanel extends AbstractPanel implements ActionListener,
+		SliderListener {
 	private static final long serialVersionUID = -4556920949255458471L;
-	private IRasterProperties        op                   = null;
+	private IRasterProperties op = null;
 
 	/**
 	 * Número de bandas del raster
 	 */
-	public int                       nBands               = 3;
-	private JCheckBox                cbTransparencia      = null;
-	private TranspByPixelPanel       pTranspByPixel       = null;
-	private CheckSliderTextContainer pOpacity             = null;
-	private TransparencyListener     transparencyListener = null;
+	public int nBands = 3;
+	private JCheckBox cbTransparencia = null;
+	private TranspByPixelPanel pTranspByPixel = null;
+	private CheckSliderTextContainer pOpacity = null;
+	private TransparencyListener transparencyListener = null;
 
 	/**
 	 * Constructor.
@@ -75,6 +77,7 @@ public class TransparencyPanel extends AbstractPanel implements ActionListener, 
 
 	/**
 	 * This method initializes this
+	 * 
 	 * @return void
 	 */
 	protected void initialize() {
@@ -87,6 +90,7 @@ public class TransparencyPanel extends AbstractPanel implements ActionListener, 
 
 	/**
 	 * Asigna el número de bandas de la imagen
+	 * 
 	 * @param nBands
 	 */
 	public void setBands(int nBands) {
@@ -102,6 +106,7 @@ public class TransparencyPanel extends AbstractPanel implements ActionListener, 
 
 	/**
 	 * This method initializes jCheckBox
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	public JCheckBox getTransparencyCheck() {
@@ -116,11 +121,13 @@ public class TransparencyPanel extends AbstractPanel implements ActionListener, 
 
 	/**
 	 * This method initializes TranspOpacitySliderPanel
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	public CheckSliderTextContainer getOpacityPanel() {
 		if (pOpacity == null) {
-			pOpacity = new CheckSliderTextContainer(0, 100, 100, false, PluginServices.getText(this, "activar"), false, false, true);
+			pOpacity = new CheckSliderTextContainer(0, 100, 100, false,
+					PluginServices.getText(this, "activar"), false, false, true);
 			pOpacity.setDecimal(false);
 			pOpacity.setBorder(PluginServices.getText(this, "opacidad"));
 			pOpacity.addValueChangedListener(this);
@@ -131,11 +138,13 @@ public class TransparencyPanel extends AbstractPanel implements ActionListener, 
 
 	/**
 	 * Activa/Desactiva los controles de transparencia
+	 * 
 	 * @param active
 	 */
 	public void setActiveTransparencyControl(boolean active) {
 		this.getTransparencyCheck().setSelected(active);
-		TranspByPixelRGBInputPanel rgbPanel = this.getPTranspByPixel().getPRGBInput();
+		TranspByPixelRGBInputPanel rgbPanel = this.getPTranspByPixel()
+				.getPRGBInput();
 		rgbPanel.getTRed().setEnabled(active);
 
 		if (op != null) {
@@ -153,12 +162,16 @@ public class TransparencyPanel extends AbstractPanel implements ActionListener, 
 
 	/**
 	 * This method initializes jPanel2
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	public TranspByPixelPanel getPTranspByPixel() {
 		if (pTranspByPixel == null) {
 			pTranspByPixel = new TranspByPixelPanel();
-			pTranspByPixel.setBorder(BorderFactory.createTitledBorder(null, PluginServices.getText(this, "transp_by_pixel"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+			pTranspByPixel.setBorder(BorderFactory.createTitledBorder(null,
+					PluginServices.getText(this, "transp_by_pixel"),
+					TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, null));
 		}
 
 		return pTranspByPixel;
@@ -183,6 +196,7 @@ public class TransparencyPanel extends AbstractPanel implements ActionListener, 
 
 	/**
 	 * Obtiene el interfaz de operaciones raster
+	 * 
 	 * @return FLyrRasterSE
 	 */
 	public IRasterProperties getRasterOperations() {
@@ -191,6 +205,7 @@ public class TransparencyPanel extends AbstractPanel implements ActionListener, 
 
 	/**
 	 * Obtiene la capa si existe esta.
+	 * 
 	 * @return FLayer si existe una capa o null si no existe.
 	 */
 	public FLayer getLayer() {
@@ -229,15 +244,16 @@ public class TransparencyPanel extends AbstractPanel implements ActionListener, 
 		if (!fLyrRasterSE.isActionEnabled(IRasterLayerActions.TRANSPARENCY))
 			StatusComponent.setDisabled(getPTranspByPixel());
 
-		if (!fLyrRasterSE.isActionEnabled(IRasterLayerActions.TRANSPARENCY) &&
-				!fLyrRasterSE.isActionEnabled(IRasterLayerActions.OPACITY))
+		if (!fLyrRasterSE.isActionEnabled(IRasterLayerActions.TRANSPARENCY)
+				&& !fLyrRasterSE.isActionEnabled(IRasterLayerActions.OPACITY))
 			setVisible(false);
 		else
 			setVisible(true);
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.rastertools.properties.dialog.IRegistrablePanel#accept()
 	 */
 	public void accept() {
@@ -245,7 +261,8 @@ public class TransparencyPanel extends AbstractPanel implements ActionListener, 
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.rastertools.properties.dialog.IRegistrablePanel#apply()
 	 */
 	public void apply() {
@@ -253,7 +270,8 @@ public class TransparencyPanel extends AbstractPanel implements ActionListener, 
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.rastertools.properties.dialog.IRegistrablePanel#cancel()
 	 */
 	public void cancel() {
@@ -262,7 +280,10 @@ public class TransparencyPanel extends AbstractPanel implements ActionListener, 
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.slidertext.listeners.SliderListener#actionValueChanged(org.gvsig.gui.beans.slidertext.listeners.SliderEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.slidertext.listeners.SliderListener#actionValueChanged
+	 * (org.gvsig.gui.beans.slidertext.listeners.SliderEvent)
 	 */
 	public void actionValueChanged(SliderEvent e) {
 		if (!RasterModule.autoRefreshView)
@@ -270,6 +291,9 @@ public class TransparencyPanel extends AbstractPanel implements ActionListener, 
 		getTransparencyListener().onlyApply();
 	}
 
-	public void actionValueDragged(SliderEvent e) {}
-	public void selected() {}
+	public void actionValueDragged(SliderEvent e) {
+	}
+
+	public void selected() {
+	}
 }

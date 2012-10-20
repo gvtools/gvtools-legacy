@@ -21,67 +21,69 @@ package com.iver.utiles.listManager;
 import java.util.Vector;
 
 import javax.swing.AbstractListModel;
+
 /**
  * Implementación por defecto de ListModel
- *
+ * 
  * @author Fernando González Cortés
  */
 public class DefaultListModel extends AbstractListModel implements ListModel {
-    private Vector v;
-    private boolean down=true;
-    /**
-     * Crea un nuevo DefaultListModel con un parámetro que indica si la lista
-     * se crea en el orden que se van introcuciendo(true) o al contrario.
-     */
-    public DefaultListModel(boolean down) {
-        v = new Vector();
-        this.down=down;
-    }
+	private Vector v;
+	private boolean down = true;
 
-    /**
-     * @see com.iver.utiles.listManager.ListModel#remove(int)
-     */
-    public Object remove(int i) throws ArrayIndexOutOfBoundsException {
-        Object o = v.remove(i);
-        super.fireIntervalRemoved(this, i, i);
+	/**
+	 * Crea un nuevo DefaultListModel con un parámetro que indica si la lista se
+	 * crea en el orden que se van introcuciendo(true) o al contrario.
+	 */
+	public DefaultListModel(boolean down) {
+		v = new Vector();
+		this.down = down;
+	}
 
-        return o;
-    }
+	/**
+	 * @see com.iver.utiles.listManager.ListModel#remove(int)
+	 */
+	public Object remove(int i) throws ArrayIndexOutOfBoundsException {
+		Object o = v.remove(i);
+		super.fireIntervalRemoved(this, i, i);
 
-    /**
-     * @see com.iver.utiles.listManager.ListModel#insertAt(int,
-     *      java.lang.Object)
-     */
-    public void insertAt(int i, Object o) {
-        v.add(i, o);
-        super.fireIntervalAdded(this, i, i);
-    }
+		return o;
+	}
 
-    /**
-     * @see javax.swing.ListModel#getSize()
-     */
-    public int getSize() {
-        return v.size();
-    }
+	/**
+	 * @see com.iver.utiles.listManager.ListModel#insertAt(int,
+	 *      java.lang.Object)
+	 */
+	public void insertAt(int i, Object o) {
+		v.add(i, o);
+		super.fireIntervalAdded(this, i, i);
+	}
 
-    /**
-     * @see javax.swing.ListModel#getElementAt(int)
-     */
-    public Object getElementAt(int arg0) {
-        return v.get(arg0);
-    }
+	/**
+	 * @see javax.swing.ListModel#getSize()
+	 */
+	public int getSize() {
+		return v.size();
+	}
 
-    /**
-     * @see com.iver.utiles.listManager.ListModel#add(java.lang.Object)
-     */
-    public void add(Object o) {
-      if (down) {
-        v.add(o);
-        super.fireIntervalAdded(this, v.size() - 1, v.size() - 1);
-      } else {
-        insertAt(0, o);
-      }
-    }
+	/**
+	 * @see javax.swing.ListModel#getElementAt(int)
+	 */
+	public Object getElementAt(int arg0) {
+		return v.get(arg0);
+	}
+
+	/**
+	 * @see com.iver.utiles.listManager.ListModel#add(java.lang.Object)
+	 */
+	public void add(Object o) {
+		if (down) {
+			v.add(o);
+			super.fireIntervalAdded(this, v.size() - 1, v.size() - 1);
+		} else {
+			insertAt(0, o);
+		}
+	}
 
 	/**
 	 * @see com.iver.utiles.listManager.ListModel#getObjects()

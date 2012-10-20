@@ -5,5 +5,5 @@ import com.hardcode.gdbms.engine.data.driver.SpatialDriver;
 /**
  * DataSource with spatial capabilities
  */
-public interface SpatialDataSource extends DataSource, SpatialDriver{
+public interface SpatialDataSource extends DataSource, SpatialDriver {
 }

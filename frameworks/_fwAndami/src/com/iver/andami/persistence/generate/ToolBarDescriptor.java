@@ -47,8 +47,8 @@
  */
 package com.iver.andami.persistence.generate;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
 import org.exolab.castor.xml.validators.NameValidator;
@@ -56,227 +56,224 @@ import org.exolab.castor.xml.validators.NameValidator;
 /**
  * Class ToolBarDescriptor.
  * 
- * @version $Revision: 5275 $ $Date: 2006-05-19 08:41:50 +0200 (Fri, 19 May 2006) $
+ * @version $Revision: 5275 $ $Date: 2006-05-19 08:41:50 +0200 (Fri, 19 May
+ *          2006) $
  */
-public class ToolBarDescriptor extends org.exolab.castor.xml.util.XMLClassDescriptorImpl {
+public class ToolBarDescriptor extends
+		org.exolab.castor.xml.util.XMLClassDescriptorImpl {
 
+	// --------------------------/
+	// - Class/Member Variables -/
+	// --------------------------/
 
-      //--------------------------/
-     //- Class/Member Variables -/
-    //--------------------------/
+	/**
+	 * Field nsPrefix
+	 */
+	private java.lang.String nsPrefix;
 
-    /**
-     * Field nsPrefix
-     */
-    private java.lang.String nsPrefix;
+	/**
+	 * Field nsURI
+	 */
+	private java.lang.String nsURI;
 
-    /**
-     * Field nsURI
-     */
-    private java.lang.String nsURI;
+	/**
+	 * Field xmlName
+	 */
+	private java.lang.String xmlName;
 
-    /**
-     * Field xmlName
-     */
-    private java.lang.String xmlName;
+	/**
+	 * Field identity
+	 */
+	private org.exolab.castor.xml.XMLFieldDescriptor identity;
 
-    /**
-     * Field identity
-     */
-    private org.exolab.castor.xml.XMLFieldDescriptor identity;
+	// ----------------/
+	// - Constructors -/
+	// ----------------/
 
+	public ToolBarDescriptor() {
+		super();
+		xmlName = "tool-bar";
+		org.exolab.castor.xml.util.XMLFieldDescriptorImpl desc = null;
+		org.exolab.castor.xml.XMLFieldHandler handler = null;
+		org.exolab.castor.xml.FieldValidator fieldValidator = null;
+		// -- initialize attribute descriptors
 
-      //----------------/
-     //- Constructors -/
-    //----------------/
+		// -- _xPosition
+		desc = new org.exolab.castor.xml.util.XMLFieldDescriptorImpl(
+				java.lang.String.class, "_xPosition", "x-position",
+				org.exolab.castor.xml.NodeType.Attribute);
+		handler = (new org.exolab.castor.xml.XMLFieldHandler() {
+			public java.lang.Object getValue(java.lang.Object object)
+					throws IllegalStateException {
+				ToolBar target = (ToolBar) object;
+				return target.getXPosition();
+			}
 
-    public ToolBarDescriptor() {
-        super();
-        xmlName = "tool-bar";
-        org.exolab.castor.xml.util.XMLFieldDescriptorImpl  desc           = null;
-        org.exolab.castor.xml.XMLFieldHandler              handler        = null;
-        org.exolab.castor.xml.FieldValidator               fieldValidator = null;
-        //-- initialize attribute descriptors
-        
-        //-- _xPosition
-        desc = new org.exolab.castor.xml.util.XMLFieldDescriptorImpl(java.lang.String.class, "_xPosition", "x-position", org.exolab.castor.xml.NodeType.Attribute);
-        handler = (new org.exolab.castor.xml.XMLFieldHandler() {
-            public java.lang.Object getValue( java.lang.Object object ) 
-                throws IllegalStateException
-            {
-                ToolBar target = (ToolBar) object;
-                return target.getXPosition();
-            }
-            public void setValue( java.lang.Object object, java.lang.Object value) 
-                throws IllegalStateException, IllegalArgumentException
-            {
-                try {
-                    ToolBar target = (ToolBar) object;
-                    target.setXPosition( (java.lang.String) value);
-                }
-                catch (java.lang.Exception ex) {
-                    throw new IllegalStateException(ex.toString());
-                }
-            }
-            public java.lang.Object newInstance( java.lang.Object parent ) {
-                return new java.lang.String();
-            }
-        } );
-        desc.setHandler(handler);
-        desc.setRequired(true);
-        addFieldDescriptor(desc);
-        
-        //-- validation code for: _xPosition
-        fieldValidator = new org.exolab.castor.xml.FieldValidator();
-        fieldValidator.setMinOccurs(1);
-        { //-- local scope
-            NameValidator typeValidator = new NameValidator(NameValidator.NMTOKEN);
-            fieldValidator.setValidator(typeValidator);
-        }
-        desc.setValidator(fieldValidator);
-        //-- _yPosition
-        desc = new org.exolab.castor.xml.util.XMLFieldDescriptorImpl(java.lang.String.class, "_yPosition", "y-position", org.exolab.castor.xml.NodeType.Attribute);
-        handler = (new org.exolab.castor.xml.XMLFieldHandler() {
-            public java.lang.Object getValue( java.lang.Object object ) 
-                throws IllegalStateException
-            {
-                ToolBar target = (ToolBar) object;
-                return target.getYPosition();
-            }
-            public void setValue( java.lang.Object object, java.lang.Object value) 
-                throws IllegalStateException, IllegalArgumentException
-            {
-                try {
-                    ToolBar target = (ToolBar) object;
-                    target.setYPosition( (java.lang.String) value);
-                }
-                catch (java.lang.Exception ex) {
-                    throw new IllegalStateException(ex.toString());
-                }
-            }
-            public java.lang.Object newInstance( java.lang.Object parent ) {
-                return new java.lang.String();
-            }
-        } );
-        desc.setHandler(handler);
-        desc.setRequired(true);
-        addFieldDescriptor(desc);
-        
-        //-- validation code for: _yPosition
-        fieldValidator = new org.exolab.castor.xml.FieldValidator();
-        fieldValidator.setMinOccurs(1);
-        { //-- local scope
-            NameValidator typeValidator = new NameValidator(NameValidator.NMTOKEN);
-            fieldValidator.setValidator(typeValidator);
-        }
-        desc.setValidator(fieldValidator);
-        //-- _name
-        desc = new org.exolab.castor.xml.util.XMLFieldDescriptorImpl(java.lang.String.class, "_name", "name", org.exolab.castor.xml.NodeType.Attribute);
-        handler = (new org.exolab.castor.xml.XMLFieldHandler() {
-            public java.lang.Object getValue( java.lang.Object object ) 
-                throws IllegalStateException
-            {
-                ToolBar target = (ToolBar) object;
-                return target.getName();
-            }
-            public void setValue( java.lang.Object object, java.lang.Object value) 
-                throws IllegalStateException, IllegalArgumentException
-            {
-                try {
-                    ToolBar target = (ToolBar) object;
-                    target.setName( (java.lang.String) value);
-                }
-                catch (java.lang.Exception ex) {
-                    throw new IllegalStateException(ex.toString());
-                }
-            }
-            public java.lang.Object newInstance( java.lang.Object parent ) {
-                return new java.lang.String();
-            }
-        } );
-        desc.setHandler(handler);
-        desc.setRequired(true);
-        addFieldDescriptor(desc);
-        
-        //-- validation code for: _name
-        fieldValidator = new org.exolab.castor.xml.FieldValidator();
-        fieldValidator.setMinOccurs(1);
-        { //-- local scope
-            NameValidator typeValidator = new NameValidator(NameValidator.NMTOKEN);
-            fieldValidator.setValidator(typeValidator);
-        }
-        desc.setValidator(fieldValidator);
-        //-- initialize element descriptors
-        
-    } //-- com.iver.andami.persistence.generate.ToolBarDescriptor()
+			public void setValue(java.lang.Object object, java.lang.Object value)
+					throws IllegalStateException, IllegalArgumentException {
+				try {
+					ToolBar target = (ToolBar) object;
+					target.setXPosition((java.lang.String) value);
+				} catch (java.lang.Exception ex) {
+					throw new IllegalStateException(ex.toString());
+				}
+			}
 
+			public java.lang.Object newInstance(java.lang.Object parent) {
+				return new java.lang.String();
+			}
+		});
+		desc.setHandler(handler);
+		desc.setRequired(true);
+		addFieldDescriptor(desc);
 
-      //-----------/
-     //- Methods -/
-    //-----------/
+		// -- validation code for: _xPosition
+		fieldValidator = new org.exolab.castor.xml.FieldValidator();
+		fieldValidator.setMinOccurs(1);
+		{ // -- local scope
+			NameValidator typeValidator = new NameValidator(
+					NameValidator.NMTOKEN);
+			fieldValidator.setValidator(typeValidator);
+		}
+		desc.setValidator(fieldValidator);
+		// -- _yPosition
+		desc = new org.exolab.castor.xml.util.XMLFieldDescriptorImpl(
+				java.lang.String.class, "_yPosition", "y-position",
+				org.exolab.castor.xml.NodeType.Attribute);
+		handler = (new org.exolab.castor.xml.XMLFieldHandler() {
+			public java.lang.Object getValue(java.lang.Object object)
+					throws IllegalStateException {
+				ToolBar target = (ToolBar) object;
+				return target.getYPosition();
+			}
 
-    /**
-     * Method getAccessMode
-     */
-    public org.exolab.castor.mapping.AccessMode getAccessMode()
-    {
-        return null;
-    } //-- org.exolab.castor.mapping.AccessMode getAccessMode() 
+			public void setValue(java.lang.Object object, java.lang.Object value)
+					throws IllegalStateException, IllegalArgumentException {
+				try {
+					ToolBar target = (ToolBar) object;
+					target.setYPosition((java.lang.String) value);
+				} catch (java.lang.Exception ex) {
+					throw new IllegalStateException(ex.toString());
+				}
+			}
 
-    /**
-     * Method getExtends
-     */
-    public org.exolab.castor.mapping.ClassDescriptor getExtends()
-    {
-        return null;
-    } //-- org.exolab.castor.mapping.ClassDescriptor getExtends() 
+			public java.lang.Object newInstance(java.lang.Object parent) {
+				return new java.lang.String();
+			}
+		});
+		desc.setHandler(handler);
+		desc.setRequired(true);
+		addFieldDescriptor(desc);
 
-    /**
-     * Method getIdentity
-     */
-    public org.exolab.castor.mapping.FieldDescriptor getIdentity()
-    {
-        return identity;
-    } //-- org.exolab.castor.mapping.FieldDescriptor getIdentity() 
+		// -- validation code for: _yPosition
+		fieldValidator = new org.exolab.castor.xml.FieldValidator();
+		fieldValidator.setMinOccurs(1);
+		{ // -- local scope
+			NameValidator typeValidator = new NameValidator(
+					NameValidator.NMTOKEN);
+			fieldValidator.setValidator(typeValidator);
+		}
+		desc.setValidator(fieldValidator);
+		// -- _name
+		desc = new org.exolab.castor.xml.util.XMLFieldDescriptorImpl(
+				java.lang.String.class, "_name", "name",
+				org.exolab.castor.xml.NodeType.Attribute);
+		handler = (new org.exolab.castor.xml.XMLFieldHandler() {
+			public java.lang.Object getValue(java.lang.Object object)
+					throws IllegalStateException {
+				ToolBar target = (ToolBar) object;
+				return target.getName();
+			}
 
-    /**
-     * Method getJavaClass
-     */
-    public java.lang.Class getJavaClass()
-    {
-        return com.iver.andami.persistence.generate.ToolBar.class;
-    } //-- java.lang.Class getJavaClass() 
+			public void setValue(java.lang.Object object, java.lang.Object value)
+					throws IllegalStateException, IllegalArgumentException {
+				try {
+					ToolBar target = (ToolBar) object;
+					target.setName((java.lang.String) value);
+				} catch (java.lang.Exception ex) {
+					throw new IllegalStateException(ex.toString());
+				}
+			}
 
-    /**
-     * Method getNameSpacePrefix
-     */
-    public java.lang.String getNameSpacePrefix()
-    {
-        return nsPrefix;
-    } //-- java.lang.String getNameSpacePrefix() 
+			public java.lang.Object newInstance(java.lang.Object parent) {
+				return new java.lang.String();
+			}
+		});
+		desc.setHandler(handler);
+		desc.setRequired(true);
+		addFieldDescriptor(desc);
 
-    /**
-     * Method getNameSpaceURI
-     */
-    public java.lang.String getNameSpaceURI()
-    {
-        return nsURI;
-    } //-- java.lang.String getNameSpaceURI() 
+		// -- validation code for: _name
+		fieldValidator = new org.exolab.castor.xml.FieldValidator();
+		fieldValidator.setMinOccurs(1);
+		{ // -- local scope
+			NameValidator typeValidator = new NameValidator(
+					NameValidator.NMTOKEN);
+			fieldValidator.setValidator(typeValidator);
+		}
+		desc.setValidator(fieldValidator);
+		// -- initialize element descriptors
 
-    /**
-     * Method getValidator
-     */
-    public org.exolab.castor.xml.TypeValidator getValidator()
-    {
-        return this;
-    } //-- org.exolab.castor.xml.TypeValidator getValidator() 
+	} // -- com.iver.andami.persistence.generate.ToolBarDescriptor()
 
-    /**
-     * Method getXMLName
-     */
-    public java.lang.String getXMLName()
-    {
-        return xmlName;
-    } //-- java.lang.String getXMLName() 
+	// -----------/
+	// - Methods -/
+	// -----------/
+
+	/**
+	 * Method getAccessMode
+	 */
+	public org.exolab.castor.mapping.AccessMode getAccessMode() {
+		return null;
+	} // -- org.exolab.castor.mapping.AccessMode getAccessMode()
+
+	/**
+	 * Method getExtends
+	 */
+	public org.exolab.castor.mapping.ClassDescriptor getExtends() {
+		return null;
+	} // -- org.exolab.castor.mapping.ClassDescriptor getExtends()
+
+	/**
+	 * Method getIdentity
+	 */
+	public org.exolab.castor.mapping.FieldDescriptor getIdentity() {
+		return identity;
+	} // -- org.exolab.castor.mapping.FieldDescriptor getIdentity()
+
+	/**
+	 * Method getJavaClass
+	 */
+	public java.lang.Class getJavaClass() {
+		return com.iver.andami.persistence.generate.ToolBar.class;
+	} // -- java.lang.Class getJavaClass()
+
+	/**
+	 * Method getNameSpacePrefix
+	 */
+	public java.lang.String getNameSpacePrefix() {
+		return nsPrefix;
+	} // -- java.lang.String getNameSpacePrefix()
+
+	/**
+	 * Method getNameSpaceURI
+	 */
+	public java.lang.String getNameSpaceURI() {
+		return nsURI;
+	} // -- java.lang.String getNameSpaceURI()
+
+	/**
+	 * Method getValidator
+	 */
+	public org.exolab.castor.xml.TypeValidator getValidator() {
+		return this;
+	} // -- org.exolab.castor.xml.TypeValidator getValidator()
+
+	/**
+	 * Method getXMLName
+	 */
+	public java.lang.String getXMLName() {
+		return xmlName;
+	} // -- java.lang.String getXMLName()
 
 }

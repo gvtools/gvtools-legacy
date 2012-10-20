@@ -52,15 +52,16 @@ import com.iver.cit.gvsig.fmap.rendering.IClassifiedLegend;
 import com.iver.cit.gvsig.fmap.rendering.IClassifiedVectorLegend;
 import com.iver.cit.gvsig.fmap.rendering.ILegend;
 import com.iver.cit.gvsig.fmap.rendering.ZSort;
+
 /**
  * This test checks the different properties that the zSort class has to keep.
- *
+ * 
  * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
- *
+ * 
  */
 public class TestZSort extends TestCase {
 	private ILegend legends[];
-	private ISymbol[] symbols ;
+	private ISymbol[] symbols;
 	private IMultiLayerSymbol[] multiLayerSymbols;
 
 	@Override
@@ -74,13 +75,16 @@ public class TestZSort extends TestCase {
 				addSymbol2Legend(legends[i], symbols[j]);
 			}
 			for (int j = 0; j < multiLayerSymbols.length; j++) {
-				if(multiLayerSymbols[j] != null)
+				if (multiLayerSymbols[j] != null)
 					addSymbol2Legend(legends[i], multiLayerSymbols[j]);
 			}
 		}
 	}
+
 	/**
-	 * Creates an array with different kinds of IMultiLayerSymbol to be tested by the different methods
+	 * Creates an array with different kinds of IMultiLayerSymbol to be tested
+	 * by the different methods
+	 * 
 	 * @return
 	 */
 	private IMultiLayerSymbol[] getMultiLayerSymbols() {
@@ -88,39 +92,45 @@ public class TestZSort extends TestCase {
 		IMultiLayerSymbol[] myMultiLayerSymbols = new IMultiLayerSymbol[symbols.length];
 
 		for (int i = 0; i < symbols.length; i++) {
-			//MultiLayerSymbol made of ITextSymbols are not allowed for the moment
-			if(! (symbols[i] instanceof ITextSymbol)) {
-				IMultiLayerSymbol myMultiLayer = SymbologyFactory.createEmptyMultiLayerSymbol(symbols[i].getSymbolType());
-				myMultiLayer.addLayer(SymbologyFactory.createDefaultSymbolByShapeType(symbols[i].getSymbolType()));
+			// MultiLayerSymbol made of ITextSymbols are not allowed for the
+			// moment
+			if (!(symbols[i] instanceof ITextSymbol)) {
+				IMultiLayerSymbol myMultiLayer = SymbologyFactory
+						.createEmptyMultiLayerSymbol(symbols[i].getSymbolType());
+				myMultiLayer.addLayer(SymbologyFactory
+						.createDefaultSymbolByShapeType(symbols[i]
+								.getSymbolType()));
 				myMultiLayerSymbols[i] = myMultiLayer;
 			}
 		}
 		return myMultiLayerSymbols;
 	}
+
 	/**
-	 * This test ensures that if a legend has a ZSort then, when we do changes in a symbol,
-	 * these will be reflected in the ZSort.
+	 * This test ensures that if a legend has a ZSort then, when we do changes
+	 * in a symbol, these will be reflected in the ZSort.
 	 */
 	public void testInitializationOnClassifiedVectorLegends() {
 
 		for (int i = 0; i < legends.length; i++) {
-			if(legends[i] instanceof IClassifiedVectorLegend) {
+			if (legends[i] instanceof IClassifiedVectorLegend) {
 				ISymbol sym = SymbologyFactory.createDefaultFillSymbol();
 				IClassifiedVectorLegend icvl = (IClassifiedVectorLegend) legends[i];
 				addSymbol2Legend(icvl, sym);
 				ZSort myZSort = new ZSort(icvl);
 				icvl.setZSort(myZSort);
-				assertTrue("the symbols contained in the ZSort for legend "+ legends[i].getClassName()+
-						" are not correct ", sym == myZSort.getSymbols()[0]);
+				assertTrue("the symbols contained in the ZSort for legend "
+						+ legends[i].getClassName() + " are not correct ",
+						sym == myZSort.getSymbols()[0]);
 			}
 		}
 	}
 
 	/**
 	 * Will test the consistency of the symbol set handled by the ZSort after
-	 * the legend is edited.... for the ZSort purposes, the edit that has to
-	 * be kept in account is the change of any of the symbols contained in
-	 * the legend. (Changes on values have nothing to do with ZSorts)
+	 * the legend is edited.... for the ZSort purposes, the edit that has to be
+	 * kept in account is the change of any of the symbols contained in the
+	 * legend. (Changes on values have nothing to do with ZSorts)
 	 */
 	public void testSymbolReplacement() {
 
@@ -131,17 +141,25 @@ public class TestZSort extends TestCase {
 
 			ZSort myZSort = new ZSort(legends[i]);
 			zsortSymbols = myZSort.getSymbols();
-			if(legends[i] instanceof IClassifiedLegend) {
+			if (legends[i] instanceof IClassifiedLegend) {
 				legendSymbols = ((IClassifiedLegend) legends[i]).getSymbols();
 				for (int j = 0; j < legendSymbols.length; j++) {
 
-					assertTrue("the symbols contained in the ZSort for the legend "+ legends[i].getClassName()+
-							" are not correct", zsortSymbols[j].equals(legendSymbols[j]));
+					assertTrue(
+							"the symbols contained in the ZSort for the legend "
+									+ legends[i].getClassName()
+									+ " are not correct",
+							zsortSymbols[j].equals(legendSymbols[j]));
 
-					replaceSymbol2Legend(legends[i],legendSymbols[j]);
+					replaceSymbol2Legend(legends[i], legendSymbols[j]);
 
-					assertTrue("the symbols contained in the ZSort for the legend "+ legends[i].getClassName()+
-							" are not correct after the modification of one of its symbols", myZSort.getSymbols()[j].equals(((IClassifiedLegend) legends[i]).getSymbols()[j]));
+					assertTrue(
+							"the symbols contained in the ZSort for the legend "
+									+ legends[i].getClassName()
+									+ " are not correct after the modification of one of its symbols",
+							myZSort.getSymbols()[j]
+									.equals(((IClassifiedLegend) legends[i])
+											.getSymbols()[j]));
 
 				}
 			}
@@ -150,44 +168,49 @@ public class TestZSort extends TestCase {
 
 	/**
 	 * If testSymbolReplacement passes then it is sure that the symbols are
-	 * replaced in ZSort aswell. This test ensures that the levels set in
-	 * the ZSort for a given symbol (MultiLayerSymbol) are kept after the
+	 * replaced in ZSort aswell. This test ensures that the levels set in the
+	 * ZSort for a given symbol (MultiLayerSymbol) are kept after the
 	 * replacement of the symbol.
-	 *
-	 * In case the new symbol has less levels than the previous, then the
-	 * levels are kept until the max layer of the new multilayer symbol.
-	 * ([0,2,3] -> [0,2])
-	 *
-	 * If the new symbol has more levels than the previous, then the level
-	 * used for further levels is the same than the one in the last
-	 * multilayersymbol's layer's symbol
-	 * ([0,2,3] -> [0,2,3,3,3,3......])
+	 * 
+	 * In case the new symbol has less levels than the previous, then the levels
+	 * are kept until the max layer of the new multilayer symbol. ([0,2,3] ->
+	 * [0,2])
+	 * 
+	 * If the new symbol has more levels than the previous, then the level used
+	 * for further levels is the same than the one in the last
+	 * multilayersymbol's layer's symbol ([0,2,3] -> [0,2,3,3,3,3......])
 	 * ([0,3,2] -> [0,3,2,2,2,2......])
 	 */
 	public void testSymbolLevelReplacementConsistency() {
 
 		for (int i = 0; i < legends.length; i++) {
 			ZSort myZSort = new ZSort(legends[i]);
-			if(legends[i] instanceof IClassifiedLegend) {
-				ISymbol[] legendSymbols = ((IClassifiedLegend) legends[i]).getSymbols();
+			if (legends[i] instanceof IClassifiedLegend) {
+				ISymbol[] legendSymbols = ((IClassifiedLegend) legends[i])
+						.getSymbols();
 				for (int j = 0; j < legendSymbols.length; j++) {
-					if(legendSymbols[j] instanceof IMultiLayerSymbol) {
+					if (legendSymbols[j] instanceof IMultiLayerSymbol) {
 
-						IMultiLayerSymbol myMultiLayer = (IMultiLayerSymbol)legendSymbols[j];
+						IMultiLayerSymbol myMultiLayer = (IMultiLayerSymbol) legendSymbols[j];
 
-						// case 1: the replaced symbol has the same amount of layers
+						// case 1: the replaced symbol has the same amount of
+						// layers
 						MultiLayerLineSymbol testSymbol = new MultiLayerLineSymbol();
 						int[] levels = myZSort.getLevels(myMultiLayer);
 						for (int k = 0; k < myMultiLayer.getLayerCount(); k++) {
-							testSymbol.addLayer(SymbologyFactory.createDefaultLineSymbol());
+							testSymbol.addLayer(SymbologyFactory
+									.createDefaultLineSymbol());
 						}
-						//Replacement of the symbol in the legend
-						((IClassifiedVectorLegend)legends[i]).replace(myMultiLayer, testSymbol);
+						// Replacement of the symbol in the legend
+						((IClassifiedVectorLegend) legends[i]).replace(
+								myMultiLayer, testSymbol);
 
 						int[] newLevels = myZSort.getLevels(testSymbol);
 						for (int k = 0; k < testSymbol.getLayerCount(); k++) {
-							assertTrue("does not keep symbol level (CASE symbol size are equal)in the legend" +
-									legends[i].getClassName(),levels[k] == newLevels[k]);
+							assertTrue(
+									"does not keep symbol level (CASE symbol size are equal)in the legend"
+											+ legends[i].getClassName(),
+									levels[k] == newLevels[k]);
 						}
 					}
 				}
@@ -195,46 +218,54 @@ public class TestZSort extends TestCase {
 		}
 	}
 
-
 	/**
 	 * Implements the addition of a new symbol to a specific legend
-	 *
-	 * @param leg legend where the symbol will be added
-	 * @param sym symbol to be added
+	 * 
+	 * @param leg
+	 *            legend where the symbol will be added
+	 * @param sym
+	 *            symbol to be added
 	 */
 	private void addSymbol2Legend(ILegend leg, ISymbol sym) {
 
 		if (leg instanceof IClassifiedLegend) {
-			Object[] values = TestILegend.getLegendTestCaseByLegend(leg).getTestSampleValues();
-			if (values.length>1) {
-				IClassifiedVectorLegend ivul =  (IClassifiedVectorLegend) leg;
+			Object[] values = TestILegend.getLegendTestCaseByLegend(leg)
+					.getTestSampleValues();
+			if (values.length > 1) {
+				IClassifiedVectorLegend ivul = (IClassifiedVectorLegend) leg;
 				ivul.addSymbol(values[0], sym);
 			} else {
-				fail("test "+TestILegend.getLegendTestCaseByLegend(leg).getClass().getName()+" does not provide test data values, please fix or tests don't give any warranty.");
+				fail("test "
+						+ TestILegend.getLegendTestCaseByLegend(leg).getClass()
+								.getName()
+						+ " does not provide test data values, please fix or tests don't give any warranty.");
 			}
 		}
 	}
 
 	/**
 	 * Implements the replacement of a symbol in a specific legend
-	 *
-	 * @param leg legend where the symbol will be replaced
-	 * @param sym symbol to be replaced
+	 * 
+	 * @param leg
+	 *            legend where the symbol will be replaced
+	 * @param sym
+	 *            symbol to be replaced
 	 */
 	private void replaceSymbol2Legend(ILegend leg, ISymbol sym) {
 
 		if (leg instanceof IClassifiedVectorLegend) {
 
-			if(sym instanceof IMultiLayerSymbol) {
+			if (sym instanceof IMultiLayerSymbol) {
 				ISymbol oldSymbol = sym;
-				ISymbol newSym = SymbologyFactory.createEmptyMultiLayerSymbol(sym.getSymbolType());
+				ISymbol newSym = SymbologyFactory
+						.createEmptyMultiLayerSymbol(sym.getSymbolType());
 				newSym.setDescription("New MultiLayerSymbol");
-				((IClassifiedVectorLegend)leg).replace(oldSymbol, newSym);
-			}
-			else {
-				ISymbol newSymbol = SymbologyFactory.createDefaultSymbolByShapeType(sym.getSymbolType());
+				((IClassifiedVectorLegend) leg).replace(oldSymbol, newSym);
+			} else {
+				ISymbol newSymbol = SymbologyFactory
+						.createDefaultSymbolByShapeType(sym.getSymbolType());
 				newSymbol.setDescription("New Symbol");
-				((IClassifiedVectorLegend)leg).replace(sym, newSymbol);
+				((IClassifiedVectorLegend) leg).replace(sym, newSymbol);
 			}
 
 		}

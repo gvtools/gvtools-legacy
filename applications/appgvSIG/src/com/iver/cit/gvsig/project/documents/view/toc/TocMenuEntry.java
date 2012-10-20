@@ -55,16 +55,17 @@ import com.iver.cit.gvsig.project.documents.view.toc.gui.FPopupMenu;
  */
 public abstract class TocMenuEntry implements ActionListener {
 	private FPopupMenu menu;
-	//private Class [] layerTypes = null;
+
+	// private Class [] layerTypes = null;
 	public TocMenuEntry() {
 	}
 
 	/**
-	 * Se utiliza para inicializar el menu. Dentro comprobará
-	 * encima de qué tipo de tocItem hemos pinchado, y se
-	 * mostrará la opción de menu o no en función de si
-	 * es un branch o un leaf, o incluso de algún otro
-	 * parámetro interno.
+	 * Se utiliza para inicializar el menu. Dentro comprobará encima de qué tipo
+	 * de tocItem hemos pinchado, y se mostrará la opción de menu o no en
+	 * función de si es un branch o un leaf, o incluso de algún otro parámetro
+	 * interno.
+	 * 
 	 * @param menu
 	 */
 	public void initialize(FPopupMenu m) {
@@ -72,19 +73,24 @@ public abstract class TocMenuEntry implements ActionListener {
 	}
 
 	/**
-	 * Código que se ejecuta cuando selecciona una opción
-	 * de menu. Recibe el tocItem sobre el que has pinchado.
+	 * Código que se ejecuta cuando selecciona una opción de menu. Recibe el
+	 * tocItem sobre el que has pinchado.
+	 * 
 	 * @param tocItem
 	 */
 	public abstract void actionPerformed(ActionEvent e);
 
-	public FPopupMenu getMenu() { return menu; }
+	public FPopupMenu getMenu() {
+		return menu;
+	}
 
 	public MapContext getMapContext() {
 		return menu.getMapContext();
 	}
+
 	public Object getNodeUserObject() {
-		if (menu.getNode() == null) return null;
+		if (menu.getNode() == null)
+			return null;
 		return menu.getNode().getUserObject();
 	}
 
@@ -93,6 +99,7 @@ public abstract class TocMenuEntry implements ActionListener {
 			return ((TocItemBranch) getNodeUserObject()).getLayer();
 		return null;
 	}
+
 	public boolean isTocItemLeaf() {
 		return getNodeUserObject() instanceof TocItemLeaf;
 	}

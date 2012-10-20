@@ -60,60 +60,61 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.utiles.IPersistence;
 import com.iver.utiles.XMLEntity;
 
-
 /**
- * Error produced when one or many features 
- * dont pass a topology rule.
+ * Error produced when one or many features dont pass a topology rule.
  */
-public class TopologyError extends DefaultFeature implements IPersistence{
-	
+public class TopologyError extends DefaultFeature implements IPersistence {
+
 	/**
 	 * Reference to the topology to which this error is associated.
 	 */
 	private Topology topology;
-		
+
 	/**
-	 *rule which has been violated
+	 * rule which has been violated
 	 */
 	private ITopologyRule violatedRule;
-	 
+
 	/**
-	 First feature that causes the topology error
-	 (Some rules' topology error will have only one feature associated
+	 * First feature that causes the topology error (Some rules' topology error
+	 * will have only one feature associated
 	 */
 	private IFeature feature1;
-	 
+
 	/**
-	 *Second feature that causes the topology error (null if dont exists)
+	 * Second feature that causes the topology error (null if dont exists)
 	 */
 	private IFeature feature2;
-	 
+
 	/**
-	 * Flag that marks if this error is allowed
-	 * (it has been marked as an exception)
+	 * Flag that marks if this error is allowed (it has been marked as an
+	 * exception)
 	 */
 	private boolean exception;
-	
+
 	/**
 	 * Constructor
-	 * @param geometry geometry of the error
-	 * @param errorFid unique identifier for this error in the error container
-	 * (topology)
 	 * 
-	 * @param violatedRule topology rule that this error violates
+	 * @param geometry
+	 *            geometry of the error
+	 * @param errorFid
+	 *            unique identifier for this error in the error container
+	 *            (topology)
 	 * 
-	 * @param sourceLyrFeatures features of the origin layer in the rule
-	 * that violates the rule
+	 * @param violatedRule
+	 *            topology rule that this error violates
 	 * 
-	 * @param destinationLyrFeatures features of the destination layer in the rule
-	 * that violates the rule
+	 * @param sourceLyrFeatures
+	 *            features of the origin layer in the rule that violates the
+	 *            rule
+	 * 
+	 * @param destinationLyrFeatures
+	 *            features of the destination layer in the rule that violates
+	 *            the rule
 	 */
-	public TopologyError(IGeometry geometry, 
-			    		String errorFid,
-			    		AbstractTopologyRule violatedRule,
-			    		IFeature feature1, 
-			    		IFeature feature2,
-			    		Topology topology){
+	public TopologyError(IGeometry geometry, String errorFid,
+			AbstractTopologyRule violatedRule, IFeature feature1,
+			IFeature feature2, Topology topology) {
 		super(geometry, null, errorFid);
 		this.exception = false;
 		this.violatedRule = violatedRule;
@@ -121,55 +122,52 @@ public class TopologyError extends DefaultFeature implements IPersistence{
 		this.feature2 = feature2;
 		this.topology = topology;
 	}
-	
-	public TopologyError(IGeometry geometry,
-						 AbstractTopologyRule violatedRule,
-						 IFeature feature1, 
-						 Topology topology){
+
+	public TopologyError(IGeometry geometry, AbstractTopologyRule violatedRule,
+			IFeature feature1, Topology topology) {
 		super(geometry, null, null);
 		this.violatedRule = violatedRule;
 		this.feature1 = feature1;
 		this.topology = topology;
 	}
-	
-	
-	public TopologyError(Topology parentTopology){
+
+	public TopologyError(Topology parentTopology) {
 		super(null, null, null);
 		this.topology = parentTopology;
 	}
-	 
+
 	public void setViolatedRule(AbstractTopologyRule violatedRule) {
 		this.violatedRule = violatedRule;
 	}
-	 
+
 	public ITopologyRule getViolatedRule() {
 		return violatedRule;
 	}
-	 
+
 	public void setFeature1(IFeature feature) {
 		this.feature1 = feature;
 	}
-	 
+
 	public IFeature getFeature1() {
 		return feature1;
 	}
-	 
+
 	public void setFeature2(IFeature feature) {
 		this.feature2 = feature;
 	}
-	 
+
 	public IFeature getFeature2() {
 		return feature2;
 	}
-	 
+
 	/**
-	 *Ruturns the type of geometry of the error
+	 * Ruturns the type of geometry of the error
 	 */
 	public int getShapeType() {
 		return getGeometry().getGeometryType();
 	}
-	
-	public String getShapeTypeAsText(){
+
+	public String getShapeTypeAsText() {
 		String solution = "";
 		int shapeType = getShapeType();
 		switch (shapeType) {
@@ -184,8 +182,8 @@ public class TopologyError extends DefaultFeature implements IPersistence{
 		case FShape.ARC:
 		case FShape.CIRCLE:
 		case FShape.ELLIPSE:
-			//needed because FGeometryCollection returns FShape.LINE
-			if(getGeometry() instanceof FGeometryCollection)
+			// needed because FGeometryCollection returns FShape.LINE
+			if (getGeometry() instanceof FGeometryCollection)
 				solution = Messages.getText("MULTIGEOMETRY");
 			else
 				solution = Messages.getText("LINE");
@@ -199,23 +197,22 @@ public class TopologyError extends DefaultFeature implements IPersistence{
 		}
 		return solution;
 	}
-	 
+
 	public void setException(boolean exception) {
 		this.exception = exception;
 	}
-	 
+
 	public boolean isException() {
 		return exception;
 	}
 
-	
-	public FLyrVect getOriginLayer(){
-		return ((IOneLyrRule)violatedRule).getOriginLyr();
+	public FLyrVect getOriginLayer() {
+		return ((IOneLyrRule) violatedRule).getOriginLyr();
 	}
-	
-	public FLyrVect getDestinationLayer(){
-		if(violatedRule instanceof ITwoLyrRule)
-			return  ((ITwoLyrRule)violatedRule).getDestinationLyr();
+
+	public FLyrVect getDestinationLayer() {
+		if (violatedRule instanceof ITwoLyrRule)
+			return ((ITwoLyrRule) violatedRule).getDestinationLyr();
 		else
 			return null;
 	}
@@ -223,27 +220,27 @@ public class TopologyError extends DefaultFeature implements IPersistence{
 	public String getClassName() {
 		return this.getClass().getName();
 	}
-	
-	public Topology getTopology(){
+
+	public Topology getTopology() {
 		return this.topology;
 	}
 
 	public XMLEntity getXMLEntity() {
 		XMLEntity solution = FeatureUtil.getAsXmlEntity(this);
 		solution.putProperty("exception", this.exception);
-		
+
 		solution.addChild(this.violatedRule.getXMLEntity());
 		XMLEntity xmlFeature = null;
 		boolean hasFeature1 = false;
-		if(feature1 != null){
+		if (feature1 != null) {
 			hasFeature1 = true;
 			xmlFeature = FeatureUtil.getAsXmlEntity(feature1);
 			solution.addChild(xmlFeature);
 		}
 		solution.putProperty("hasFeature1", hasFeature1);
-		
+
 		boolean hasFeature2 = false;
-		if(feature2 != null){
+		if (feature2 != null) {
 			hasFeature2 = true;
 			xmlFeature = FeatureUtil.getAsXmlEntity(feature2);
 			solution.addChild(xmlFeature);
@@ -253,34 +250,33 @@ public class TopologyError extends DefaultFeature implements IPersistence{
 	}
 
 	public void setXMLEntity(XMLEntity xml) {
-		//first of all information xml of feature
+		// first of all information xml of feature
 		FeatureUtil.setXMLEntity(this, xml);
-		
-		if(xml.contains("exception")){
+
+		if (xml.contains("exception")) {
 			exception = xml.getBooleanProperty("exception");
 		}
-		
-		this.violatedRule =
-			 TopologyRuleFactory.createFromXML(this.topology, xml.getChild(0));
+
+		this.violatedRule = TopologyRuleFactory.createFromXML(this.topology,
+				xml.getChild(0));
 		int childNumber = 1;
-		
-		if(xml.contains("hasFeature1")){
-				boolean hasFeature1 = xml.getBooleanProperty("hasFeature1");
-				if(hasFeature1)
-				{
-					this.feature1 = FeatureUtil.getFeatureFromXmlEntity(xml.getChild(childNumber));
-					childNumber++;
-				}
-		}//if
-		
-		if(xml.contains("hasFeature2")){
-			boolean hasFeature2 = xml.getBooleanProperty("hasFeature2");
-			if(hasFeature2)
-			{
-				this.feature2 = FeatureUtil.getFeatureFromXmlEntity(xml.getChild(childNumber));
+
+		if (xml.contains("hasFeature1")) {
+			boolean hasFeature1 = xml.getBooleanProperty("hasFeature1");
+			if (hasFeature1) {
+				this.feature1 = FeatureUtil.getFeatureFromXmlEntity(xml
+						.getChild(childNumber));
+				childNumber++;
 			}
-		}//if
+		}// if
+
+		if (xml.contains("hasFeature2")) {
+			boolean hasFeature2 = xml.getBooleanProperty("hasFeature2");
+			if (hasFeature2) {
+				this.feature2 = FeatureUtil.getFeatureFromXmlEntity(xml
+						.getChild(childNumber));
+			}
+		}// if
 	}
 
 }
- 

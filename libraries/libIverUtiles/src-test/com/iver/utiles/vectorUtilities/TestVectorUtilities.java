@@ -59,32 +59,35 @@ public class TestVectorUtilities extends TestCase {
 	private static Vector v1 = new Vector();
 	private static Vector v2 = new Vector();
 	private static StringComparator stringComparator;
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see junit.framework.TestCase#setUp()
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
-		
+
 		// Initialize the StringComparator
 		stringComparator = new StringComparator();
 
-	    // Set spanish rules and with case sensitive
-		Collator collator = Collator.getInstance(new Locale("es_ES"));		
-		stringComparator.setLocaleRules(stringComparator.new LocaleRules(true, collator));
+		// Set spanish rules and with case sensitive
+		Collator collator = Collator.getInstance(new Locale("es_ES"));
+		stringComparator.setLocaleRules(stringComparator.new LocaleRules(true,
+				collator));
 		stringComparator.setCaseSensitive(false);
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see junit.framework.TestCase#tearDown()
 	 */
 	protected void tearDown() throws Exception {
 		super.tearDown();
 	}
 
-	///// TEST OPERATION: addAlphabeticallyOrdered(Vector, Object) /////
+	// /// TEST OPERATION: addAlphabeticallyOrdered(Vector, Object) /////
 
 	/**
 	 * A test
@@ -93,15 +96,15 @@ public class TestVectorUtilities extends TestCase {
 		try {
 			// Insert at the beginning
 			obj = new String("First");
-			
+
 			VectorUtilities.addAlphabeticallyOrdered(v1, obj);
-			
+
 			System.out.println("Test 1:\nObj: " + obj + "\nResults: " + v1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -109,15 +112,15 @@ public class TestVectorUtilities extends TestCase {
 		try {
 			// Insert at the end
 			obj = new String("ZZÑÑÇÇ");
-			
+
 			VectorUtilities.addAlphabeticallyOrdered(v1, obj);
-			
+
 			System.out.println("Test 2:\nObj: " + obj + "\nResults: " + v1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -125,15 +128,15 @@ public class TestVectorUtilities extends TestCase {
 		try {
 			// An insertion
 			obj = new String("Ñandú");
-			
+
 			VectorUtilities.addAlphabeticallyOrdered(v1, obj);
-			
+
 			System.out.println("Test 3:\nObj: " + obj + "\nResults: " + v1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -141,15 +144,15 @@ public class TestVectorUtilities extends TestCase {
 		try {
 			// An insertion
 			obj = new String("ÑANDÚ");
-			
+
 			VectorUtilities.addAlphabeticallyOrdered(v1, obj);
-			
+
 			System.out.println("Test 4:\nObj: " + obj + "\nResults: " + v1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -157,15 +160,15 @@ public class TestVectorUtilities extends TestCase {
 		try {
 			// An insertion
 			obj = new String("appgvSIG");
-			
+
 			VectorUtilities.addAlphabeticallyOrdered(v1, obj);
-			
+
 			System.out.println("Test 5:\nObj: " + obj + "\nResults: " + v1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -173,9 +176,9 @@ public class TestVectorUtilities extends TestCase {
 		try {
 			// An insertion
 			obj = new String("libIverUtiles");
-			
+
 			VectorUtilities.addAlphabeticallyOrdered(v1, obj);
-			
+
 			System.out.println("Test 6:\nObj: " + obj + "\nResults: " + v1);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -189,15 +192,15 @@ public class TestVectorUtilities extends TestCase {
 		try {
 			// An insertion
 			obj = new String("libUI");
-			
+
 			VectorUtilities.addAlphabeticallyOrdered(v1, obj);
-			
+
 			System.out.println("Test 7:\nObj: " + obj + "\nResults: " + v1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -205,15 +208,15 @@ public class TestVectorUtilities extends TestCase {
 		try {
 			// An insertion
 			obj = new String("libIverUtiles");
-			
+
 			VectorUtilities.addAlphabeticallyOrdered(v1, obj);
-			
+
 			System.out.println("Test 8:\nObj: " + obj + "\nResults: " + v1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-		
+
 	/**
 	 * A test
 	 */
@@ -221,18 +224,20 @@ public class TestVectorUtilities extends TestCase {
 		try {
 			// An insertion
 			obj = new String("extWFS");
-			
+
 			VectorUtilities.addAlphabeticallyOrdered(v1, obj);
-			
+
 			System.out.println("Test 9:\nObj: " + obj + "\nResults: " + v1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	///// END TEST OPERATION: addAlphabeticallyOrdered(Vector, Object) /////
-	
-	///// TEST OPERATION: addAlphabeticallyOrdered(Vector, Object, Comparator) /////
-	
+
+	// /// END TEST OPERATION: addAlphabeticallyOrdered(Vector, Object) /////
+
+	// /// TEST OPERATION: addAlphabeticallyOrdered(Vector, Object, Comparator)
+	// /////
+
 	/**
 	 * A test
 	 */
@@ -240,15 +245,15 @@ public class TestVectorUtilities extends TestCase {
 		try {
 			// Insert at the beginning
 			obj = new String("First");
-			
+
 			VectorUtilities.addAlphabeticallyOrdered(v2, obj, stringComparator);
-			
+
 			System.out.println("Test 11:\nObj: " + obj + "\nResults: " + v2);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -256,15 +261,15 @@ public class TestVectorUtilities extends TestCase {
 		try {
 			// Insert at the end
 			obj = new String("ZZÑÑÇÇ");
-			
+
 			VectorUtilities.addAlphabeticallyOrdered(v2, obj, stringComparator);
-			
+
 			System.out.println("Test 12:\nObj: " + obj + "\nResults: " + v2);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -272,15 +277,15 @@ public class TestVectorUtilities extends TestCase {
 		try {
 			// An insertion
 			obj = new String("Ñandú");
-			
+
 			VectorUtilities.addAlphabeticallyOrdered(v2, obj, stringComparator);
-			
+
 			System.out.println("Test 13:\nObj: " + obj + "\nResults: " + v2);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -288,15 +293,15 @@ public class TestVectorUtilities extends TestCase {
 		try {
 			// An insertion
 			obj = new String("ÑANDÚ");
-			
+
 			VectorUtilities.addAlphabeticallyOrdered(v2, obj, stringComparator);
-			
+
 			System.out.println("Test 14:\nObj: " + obj + "\nResults: " + v2);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -304,15 +309,15 @@ public class TestVectorUtilities extends TestCase {
 		try {
 			// An insertion
 			obj = new String("appgvSIG");
-			
+
 			VectorUtilities.addAlphabeticallyOrdered(v2, obj, stringComparator);
-			
+
 			System.out.println("Test 15:\nObj: " + obj + "\nResults: " + v2);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -320,9 +325,9 @@ public class TestVectorUtilities extends TestCase {
 		try {
 			// An insertion
 			obj = new String("libIverUtiles");
-			
+
 			VectorUtilities.addAlphabeticallyOrdered(v2, obj, stringComparator);
-			
+
 			System.out.println("Test 16:\nObj: " + obj + "\nResults: " + v2);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -336,15 +341,15 @@ public class TestVectorUtilities extends TestCase {
 		try {
 			// An insertion
 			obj = new String("libUI");
-			
+
 			VectorUtilities.addAlphabeticallyOrdered(v2, obj, stringComparator);
-			
+
 			System.out.println("Test 17:\nObj: " + obj + "\nResults: " + v2);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * A test
 	 */
@@ -352,15 +357,15 @@ public class TestVectorUtilities extends TestCase {
 		try {
 			// An insertion
 			obj = new String("libIverUtiles");
-			
+
 			VectorUtilities.addAlphabeticallyOrdered(v2, obj, stringComparator);
-			
+
 			System.out.println("Test 18:\nObj: " + obj + "\nResults: " + v2);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-		
+
 	/**
 	 * A test
 	 */
@@ -368,14 +373,15 @@ public class TestVectorUtilities extends TestCase {
 		try {
 			// An insertion
 			obj = new String("extWFS");
-			
+
 			VectorUtilities.addAlphabeticallyOrdered(v2, obj, stringComparator);
-			
+
 			System.out.println("Test 19:\nObj: " + obj + "\nResults: " + v2);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	///// END TEST OPERATION: addAlphabeticallyOrdered(Vector, Object, Comparator) /////
+
+	// /// END TEST OPERATION: addAlphabeticallyOrdered(Vector, Object,
+	// Comparator) /////
 }

@@ -9,16 +9,17 @@ import com.iver.cit.gvsig.fmap.core.v02.FLabel;
 
 /**
  * Implementación en memoria de LabelExpansion.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LabelExpansion {
 	private ArrayList labels = new ArrayList();
-	//BitSet invalidRows = new BitSet();
+
+	// BitSet invalidRows = new BitSet();
 	/**
 	 * @see com.iver.cit.gvsig.fmap.edition.ExpansionFile#addRow(IRow, int)
 	 */
-	public int addLabel(FLabel label){
+	public int addLabel(FLabel label) {
 		int newIndex = labels.size();
 		labels.add(label);
 
@@ -26,16 +27,15 @@ public class LabelExpansion {
 	}
 
 	/**
-	 * @see com.iver.cit.gvsig.fmap.edition.ExpansionFile#modifyRow(int,
-	 * 		IRow)
+	 * @see com.iver.cit.gvsig.fmap.edition.ExpansionFile#modifyRow(int, IRow)
 	 */
-	public int modifyLabel(int index, FLabel label){
-		/*if (invalidRows.get(index)) {
-			throw new RuntimeException(
-				"Se ha intentado modificar una geometría que ha sido borrada anteriormente");
-		}
-*/
-		//invalidateRow(index);
+	public int modifyLabel(int index, FLabel label) {
+		/*
+		 * if (invalidRows.get(index)) { throw new RuntimeException(
+		 * "Se ha intentado modificar una geometría que ha sido borrada anteriormente"
+		 * ); }
+		 */
+		// invalidateRow(index);
 		labels.add(label);
 
 		return labels.size() - 1;
@@ -45,58 +45,51 @@ public class LabelExpansion {
 	 * @see com.iver.cit.gvsig.fmap.edition.ExpansionFile#getRow(int)
 	 */
 	public FLabel getLabel(int index) {
-		/*if (invalidRows.get(index)) {
-			return null;
-		}
-*/
+		/*
+		 * if (invalidRows.get(index)) { return null; }
+		 */
 		return (FLabel) labels.get(index);
 	}
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.edition.ExpansionFile#invalidateRow(int)
 	 */
-	/*public void invalidateRow(int index) {
-		invalidRows.set(index, true);
-	}
-*/
+	/*
+	 * public void invalidateRow(int index) { invalidRows.set(index, true); }
+	 */
 	/**
 	 * @see com.iver.cit.gvsig.fmap.edition.ExpansionFile#compact()
 	 */
 	public void compact(HashMap relations) {
-	/*	ArrayList geoAux = new ArrayList();
-		Iterator iter = relations.keySet().iterator();
-		HashMap aux = new HashMap();
-		int n = 0;
-
-		while (iter.hasNext()) {
-			Integer virtualIndex = (Integer) iter.next();
-			Integer expansionIndex = (Integer) relations.get(virtualIndex);
-
-			if (!invalidRows.get(expansionIndex.intValue())){
-				geoAux.add(rows.get(expansionIndex.intValue()));
-				aux.put(new Integer(n), new Integer(geoAux.size()-1));
-				n++;
-			}
-		}
-
-		invalidRows.clear();
-		rows = geoAux;
-		relations.clear();
-		relations.putAll(aux);
-*/
+		/*
+		 * ArrayList geoAux = new ArrayList(); Iterator iter =
+		 * relations.keySet().iterator(); HashMap aux = new HashMap(); int n =
+		 * 0;
+		 * 
+		 * while (iter.hasNext()) { Integer virtualIndex = (Integer)
+		 * iter.next(); Integer expansionIndex = (Integer)
+		 * relations.get(virtualIndex);
+		 * 
+		 * if (!invalidRows.get(expansionIndex.intValue())){
+		 * geoAux.add(rows.get(expansionIndex.intValue())); aux.put(new
+		 * Integer(n), new Integer(geoAux.size()-1)); n++; } }
+		 * 
+		 * invalidRows.clear(); rows = geoAux; relations.clear();
+		 * relations.putAll(aux);
+		 */
 
 	}
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.edition.ExpansionFile#getRowCount()
 	 */
-	/*public int getRowCount() {
-		return rows.size() - invalidRows.cardinality();
-	}
-*/
+	/*
+	 * public int getRowCount() { return rows.size() -
+	 * invalidRows.cardinality(); }
+	 */
 	public void deleteLastLabel() {
-		//invalidRows.set(rows.size()-1,false);
-		labels.remove(labels.size()-1);
+		// invalidRows.set(rows.size()-1,false);
+		labels.remove(labels.size() - 1);
 
 	}
 
@@ -114,14 +107,15 @@ public class LabelExpansion {
 		return labels.size();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.edition.ExpansionFile#validateRow(int)
 	 */
-	/*public void validateRow(int previousExpansionFileIndex) {
-		invalidRows.set(previousExpansionFileIndex, false);
-	}
-
-	public BitSet getInvalidRows() {
-		return invalidRows;
-	}*/
+	/*
+	 * public void validateRow(int previousExpansionFileIndex) {
+	 * invalidRows.set(previousExpansionFileIndex, false); }
+	 * 
+	 * public BitSet getInvalidRows() { return invalidRows; }
+	 */
 }

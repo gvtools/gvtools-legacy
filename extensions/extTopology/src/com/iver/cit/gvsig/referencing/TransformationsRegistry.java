@@ -85,20 +85,19 @@ public class TransformationsRegistry {
 
 	static {
 		TransformationRegistryEntry projective = new TransformationRegistryEntry() {
-			
-			
+
 			public MathTransformBuilder createTransformBuilder(
 					List<MappedPosition> links) {
-				
+
 				return new ProjectiveTransformBuilder(links);
 			}
 
 			public String getName() {
 				return PluginServices.getText(null, "PROJECTIVE_TRANSFORM");
 			}
-			
-			//Move to an abstract class
-			public String toString(){
+
+			// Move to an abstract class
+			public String toString() {
 				return getName();
 			}
 		};
@@ -107,19 +106,17 @@ public class TransformationsRegistry {
 
 		TransformationRegistryEntry affine = new TransformationRegistryEntry() {
 
-			
-			
 			public MathTransformBuilder createTransformBuilder(
 					List<MappedPosition> links) {
 				return new AffineTransformBuilder(links);
-				
+
 			}
 
 			public String getName() {
 				return PluginServices.getText(null, "AFFINE_TRANSFORM");
 			}
-			
-			public String toString(){
+
+			public String toString() {
 				return getName();
 			}
 		};
@@ -128,8 +125,6 @@ public class TransformationsRegistry {
 
 		TransformationRegistryEntry similar = new TransformationRegistryEntry() {
 
-			
-			
 			public MathTransformBuilder createTransformBuilder(
 					List<MappedPosition> links) {
 				return new SimilarTransformBuilder(links);
@@ -138,8 +133,8 @@ public class TransformationsRegistry {
 			public String getName() {
 				return PluginServices.getText(null, "SIMILAR_TRANSFORM");
 			}
-			
-			public String toString(){
+
+			public String toString() {
 				return getName();
 			}
 		};
@@ -147,7 +142,7 @@ public class TransformationsRegistry {
 		registerTransformation(similar);
 
 		TransformationRegistryEntry bursaWolf = new TransformationRegistryEntry() {
-			
+
 			public MathTransformBuilder createTransformBuilder(
 					List<MappedPosition> links) {
 				return new BursaWolfTransformBuilder(links);
@@ -156,8 +151,8 @@ public class TransformationsRegistry {
 			public String getName() {
 				return PluginServices.getText(null, "BURSA_WOLF_TRANSFORM");
 			}
-			
-			public String toString(){
+
+			public String toString() {
 				return getName();
 			}
 		};
@@ -173,8 +168,8 @@ public class TransformationsRegistry {
 			public String getName() {
 				return PluginServices.getText(null, "RUBBER_SHEET_TRANSFORM");
 			}
-			
-			public String toString(){
+
+			public String toString() {
 				return getName();
 			}
 		};
@@ -182,7 +177,7 @@ public class TransformationsRegistry {
 		registerTransformation(rubberSheet);
 
 		TransformationRegistryEntry advAffine = new TransformationRegistryEntry() {
-			
+
 			public MathTransformBuilder createTransformBuilder(
 					List<MappedPosition> links) {
 				try {
@@ -207,8 +202,8 @@ public class TransformationsRegistry {
 				return PluginServices
 						.getText(null, "ADVANCED_AFFINE_TRANSFORM");
 			}
-			
-			public String toString(){
+
+			public String toString() {
 				return getName();
 			}
 		};
@@ -222,69 +217,69 @@ public class TransformationsRegistry {
 			registeredTransform.put(entry.getName(), entry);
 		}
 	}
-	
-	public static TransformationRegistryEntry getRegisteredTransform(String name){
+
+	public static TransformationRegistryEntry getRegisteredTransform(String name) {
 		return registeredTransform.get(name);
-		
+
 	}
-	
-	
-	public static Collection<TransformationRegistryEntry> getRegisteredTransforms(){
+
+	public static Collection<TransformationRegistryEntry> getRegisteredTransforms() {
 		return registeredTransform.values();
 	}
-	
-	
-	public static List<DirectPosition> createRoi(List<MappedPosition> mappedPositions){
+
+	public static List<DirectPosition> createRoi(
+			List<MappedPosition> mappedPositions) {
 		List<DirectPosition> solution = new ArrayList<DirectPosition>();
 		double minX = Double.MAX_VALUE, minY = Double.MAX_VALUE, maxX = Double.MIN_VALUE, maxY = Double.MIN_VALUE;
-		
+
 		for (int i = 0; i < mappedPositions.size(); i++) {
 			MappedPosition position = mappedPositions.get(i);
 			DirectPosition source = position.getSource();
 			double[] sourceCoords = source.getCoordinate();
-			if(sourceCoords[0] > maxX)
+			if (sourceCoords[0] > maxX)
 				maxX = sourceCoords[0];
-			if(sourceCoords[0] < minX)
+			if (sourceCoords[0] < minX)
 				minX = sourceCoords[0];
-			if(sourceCoords[1] > maxY)
+			if (sourceCoords[1] > maxY)
 				maxY = sourceCoords[1];
-			if(sourceCoords[1] < minY)
+			if (sourceCoords[1] < minY)
 				minY = sourceCoords[1];
-			
-			
-			
+
 			DirectPosition target = position.getTarget();
 			double[] targetCoords = target.getCoordinate();
-			if(targetCoords[0] > maxX)
+			if (targetCoords[0] > maxX)
 				maxX = targetCoords[0];
-			if(targetCoords[0] < minX)
+			if (targetCoords[0] < minX)
 				minX = targetCoords[0];
-			if(targetCoords[1] > maxY)
+			if (targetCoords[1] > maxY)
 				maxY = targetCoords[1];
-			if(targetCoords[1] < minY)
+			if (targetCoords[1] < minY)
 				minY = targetCoords[1];
-			
+
 		}
-		//azabala: we add this epsilon because in Geotools implemention when a Coordinate falls on
-    	//a rectangle edge, represented as GeneralPathX, contains() returns false
-//    	final double EPSILON = 0.01;
+		// azabala: we add this epsilon because in Geotools implemention when a
+		// Coordinate falls on
+		// a rectangle edge, represented as GeneralPathX, contains() returns
+		// false
+		// final double EPSILON = 0.01;
 		final double EPSILON = 0.5;
-    	minX -= EPSILON;
-    	maxX += EPSILON;
-    	minY -= EPSILON;
-    	maxY += EPSILON;
-		
-		//El orden de a, b, c y d es muy importante, pues RubberSheetBuilder no ordena los puntos
+		minX -= EPSILON;
+		maxX += EPSILON;
+		minY -= EPSILON;
+		maxY += EPSILON;
+
+		// El orden de a, b, c y d es muy importante, pues RubberSheetBuilder no
+		// ordena los puntos
 		DirectPosition a = new DirectPosition2D(minX, minY);
 		DirectPosition b = new DirectPosition2D(minX, maxY);
 		DirectPosition c = new DirectPosition2D(maxX, maxY);
 		DirectPosition d = new DirectPosition2D(maxX, minY);
-		
+
 		solution.add(a);
 		solution.add(b);
 		solution.add(c);
 		solution.add(d);
-		
+
 		return solution;
 	}
 

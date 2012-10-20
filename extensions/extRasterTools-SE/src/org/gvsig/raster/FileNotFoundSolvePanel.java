@@ -22,30 +22,30 @@ import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 
 /**
- * Panel de resolución de errores construido como el de appgvSIG.
- * El uso de este panel es temporal hasta que se generalize uno para todo 
- * tipo de capas. Para ello no debería depender de FileNotFoundSolve sino
- * de ISolveErrorListener.
+ * Panel de resolución de errores construido como el de appgvSIG. El uso de este
+ * panel es temporal hasta que se generalize uno para todo tipo de capas. Para
+ * ello no debería depender de FileNotFoundSolve sino de ISolveErrorListener.
  * 
  * 18/03/2009
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class FileNotFoundSolvePanel extends JPanel implements IWindow {
-	private static final long   serialVersionUID = 1L;
-	private JPanel              jPanel           = null;
-	private JPanel              jPanel1          = null;
-	private JPanel              jPanel2          = null;
-	private JPanel              jPanel3          = null;
-	private JTextField          jTextField       = null;
-	private JTextField          jTextField1      = null;
-	private JButton             jButton          = null;
-	private AcceptCancelPanel   accept           = null;
-	private JFileChooser        fileChooser;
-	private static String       lastPath;
+	private static final long serialVersionUID = 1L;
+	private JPanel jPanel = null;
+	private JPanel jPanel1 = null;
+	private JPanel jPanel2 = null;
+	private JPanel jPanel3 = null;
+	private JTextField jTextField = null;
+	private JTextField jTextField1 = null;
+	private JButton jButton = null;
+	private AcceptCancelPanel accept = null;
+	private JFileChooser fileChooser;
+	private static String lastPath;
 	private ISolveErrorListener model;
-	File                        myfile           = null;
-	private JPanel              jPanel4          = null;
-	private JLabel              jLabel1          = null;
+	File myfile = null;
+	private JPanel jPanel4 = null;
+	private JLabel jLabel1 = null;
 
 	/**
 	 * This is the default constructor
@@ -59,7 +59,7 @@ public class FileNotFoundSolvePanel extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
@@ -70,7 +70,7 @@ public class FileNotFoundSolvePanel extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel() {
@@ -86,13 +86,17 @@ public class FileNotFoundSolvePanel extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel1() {
 		if (jPanel1 == null) {
 			jPanel1 = new JPanel();
-			jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, PluginServices.getText(this,"incorrect_path"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(
+					null, PluginServices.getText(this, "incorrect_path"),
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					null));
 			jPanel1.add(getJTextField(), null);
 		}
 		return jPanel1;
@@ -100,14 +104,18 @@ public class FileNotFoundSolvePanel extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jPanel2
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel2() {
 		if (jPanel2 == null) {
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new BorderLayout());
-			jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, PluginServices.getText(this,"new_file_properties"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(
+					null, PluginServices.getText(this, "new_file_properties"),
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					null));
 			jPanel2.add(getJPanel4(), java.awt.BorderLayout.CENTER);
 		}
 		return jPanel2;
@@ -115,7 +123,7 @@ public class FileNotFoundSolvePanel extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jPanel3
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel3() {
@@ -125,7 +133,7 @@ public class FileNotFoundSolvePanel extends JPanel implements IWindow {
 		}
 		return jPanel3;
 	}
-	
+
 	private AcceptCancelPanel getAcceptCancelPanel() {
 		if (accept == null) {
 			ActionListener okAction, cancelAction;
@@ -152,13 +160,13 @@ public class FileNotFoundSolvePanel extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jTextField
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getJTextField() {
 		if (jTextField == null) {
 			jTextField = new JTextField();
-			jTextField.setPreferredSize(new java.awt.Dimension(400,23));
+			jTextField.setPreferredSize(new java.awt.Dimension(400, 23));
 			jTextField.setEditable(false);
 			jTextField.setText(model.getPath());
 		}
@@ -167,26 +175,26 @@ public class FileNotFoundSolvePanel extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jTextField1
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getJTextField1() {
 		if (jTextField1 == null) {
 			jTextField1 = new JTextField();
-			jTextField1.setPreferredSize(new java.awt.Dimension(300,23));
+			jTextField1.setPreferredSize(new java.awt.Dimension(300, 23));
 		}
 		return jTextField1;
 	}
 
 	/**
 	 * This method initializes jButton
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getJButton() {
 		if (jButton == null) {
 			jButton = new JButton();
-			jButton.setPreferredSize(new java.awt.Dimension(34,20));
+			jButton.setPreferredSize(new java.awt.Dimension(34, 20));
 			jButton.setText("...");
 			jButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -198,12 +206,12 @@ public class FileNotFoundSolvePanel extends JPanel implements IWindow {
 		}
 		return jButton;
 	}
-	
+
 	public File addObjects() {
 		fileChooser = new JFileChooser(lastPath);
 		fileChooser.setMultiSelectionEnabled(false);
 		fileChooser.setAcceptAllFileFilterUsed(false);
-			
+
 		RasterDriverFileFilter vff = new RasterDriverFileFilter();
 		fileChooser.addChoosableFileFilter(vff);
 		fileChooser.setFileFilter(vff);
@@ -219,24 +227,28 @@ public class FileNotFoundSolvePanel extends JPanel implements IWindow {
 		return null;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindow#getWindowInfo()
 	 */
 	public WindowInfo getWindowInfo() {
-		WindowInfo wi=new WindowInfo(WindowInfo.MODALDIALOG | WindowInfo.RESIZABLE);
-		wi.setTitle(PluginServices.getText(this,"dont_find_the_file") + ": " + model.getLayerName());
+		WindowInfo wi = new WindowInfo(WindowInfo.MODALDIALOG
+				| WindowInfo.RESIZABLE);
+		wi.setTitle(PluginServices.getText(this, "dont_find_the_file") + ": "
+				+ model.getLayerName());
 		return wi;
 	}
 
 	/**
 	 * This method initializes jPanel4
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel4() {
 		if (jPanel4 == null) {
 			jLabel1 = new JLabel();
-			jLabel1.setText(PluginServices.getText(this,"path"));
+			jLabel1.setText(PluginServices.getText(this, "path"));
 			FlowLayout flowLayout1 = new FlowLayout();
 			flowLayout1.setAlignment(java.awt.FlowLayout.RIGHT);
 			jPanel4 = new JPanel();
@@ -251,10 +263,11 @@ public class FileNotFoundSolvePanel extends JPanel implements IWindow {
 	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
-	
+
 	public class RasterDriverFileFilter extends FileFilter {
 		/*
 		 * (non-Javadoc)
+		 * 
 		 * @see javax.swing.filechooser.FileFilter#accept(java.io.File)
 		 */
 		public boolean accept(File f) {
@@ -262,7 +275,8 @@ public class FileNotFoundSolvePanel extends JPanel implements IWindow {
 				return true;
 
 			if (f.getParentFile().getName().equals("cellhd")) {
-				if (f.getName().endsWith(".rmf") || f.getName().endsWith(".rmf~"))
+				if (f.getName().endsWith(".rmf")
+						|| f.getName().endsWith(".rmf~"))
 					return false;
 				return true;
 			}
@@ -281,7 +295,8 @@ public class FileNotFoundSolvePanel extends JPanel implements IWindow {
 				} finally {
 					try {
 						reader.close();
-					} catch (Exception e) {}
+					} catch (Exception e) {
+					}
 				}
 			}
 
@@ -290,6 +305,7 @@ public class FileNotFoundSolvePanel extends JPanel implements IWindow {
 
 		/*
 		 * (non-Javadoc)
+		 * 
 		 * @see javax.swing.filechooser.FileFilter#getDescription()
 		 */
 		public String getDescription() {
@@ -297,4 +313,4 @@ public class FileNotFoundSolvePanel extends JPanel implements IWindow {
 		}
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="71,10"
+} // @jve:decl-index=0:visual-constraint="71,10"

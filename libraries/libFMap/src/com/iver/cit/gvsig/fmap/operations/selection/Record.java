@@ -41,9 +41,9 @@
 package com.iver.cit.gvsig.fmap.operations.selection;
 
 public interface Record {
-    int getFieldCount() ;
+	int getFieldCount();
 
-    String getFieldName(int index) ;
+	String getFieldName(int index);
 
-    String getFieldValue(int index) ;
+	String getFieldValue(int index);
 }

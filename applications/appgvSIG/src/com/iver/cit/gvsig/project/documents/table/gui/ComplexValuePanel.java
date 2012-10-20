@@ -84,22 +84,22 @@ import com.iver.andami.ui.mdiManager.WindowInfo;
 /**
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class ComplexValuePanel extends JPanel implements IWindow{
+public class ComplexValuePanel extends JPanel implements IWindow {
 	private ComplexValue value = null;
 	private String name = null;
 	private WindowInfo m_windowInfo = null;
 	private JButton closeButton = null;
 	private JPanel buttonsPanel = null;
 	private JScrollPane scroll = null;
-	private GridBagLayoutPanel complexPanel = null;	
-	
-	public ComplexValuePanel(String name,ComplexValue value) {
+	private GridBagLayoutPanel complexPanel = null;
+
+	public ComplexValuePanel(String name, ComplexValue value) {
 		super();
 		this.value = value;
 		this.name = name;
-		initialize();	
+		initialize();
 	}
-	
+
 	/**
 	 * This method initializes this
 	 * 
@@ -109,133 +109,134 @@ public class ComplexValuePanel extends JPanel implements IWindow{
 		this.add(getScrollPane());
 		this.add(getButtonPanel());
 	}
-	
-	private JScrollPane getScrollPane(){
-		if (scroll == null){
+
+	private JScrollPane getScrollPane() {
+		if (scroll == null) {
 			scroll = new JScrollPane();
-			complexPanel = createLevelPanel(name,value);
+			complexPanel = createLevelPanel(name, value);
 			Dimension dim = complexPanel.getPreferredSize();
-			int widht,heigth = 0;
-			if (dim.getHeight()>500){
+			int widht, heigth = 0;
+			if (dim.getHeight() > 500) {
 				heigth = 500;
-			}else{
+			} else {
 				heigth = new Double(dim.getHeight()).intValue() + 10;
 			}
-			if (dim.getWidth()>500){
+			if (dim.getWidth() > 500) {
 				widht = 500;
-			}else{
+			} else {
 				widht = new Double(dim.getWidth()).intValue() + 10;
 			}
-			scroll.setPreferredSize(new Dimension(widht,heigth));
+			scroll.setPreferredSize(new Dimension(widht, heigth));
 			scroll.setViewportView(complexPanel);
 		}
 		return scroll;
 	}
-	
+
 	/**
-	 * Create a new panel with a row (label + text field)
-	 * by each geometry attribute.
-	 * If one attribute is a complexValue it creates a new
-	 * panel recursively
+	 * Create a new panel with a row (label + text field) by each geometry
+	 * attribute. If one attribute is a complexValue it creates a new panel
+	 * recursively
+	 * 
 	 * @param name
-	 * Param name
+	 *            Param name
 	 * @param map
-	 * Map with the attributes
+	 *            Map with the attributes
 	 * @return
 	 */
-	private GridBagLayoutPanel createLevelPanel(String name,Map map){
+	private GridBagLayoutPanel createLevelPanel(String name, Map map) {
 		GridBagLayoutPanel panel = new GridBagLayoutPanel();
-		panel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-				null, null,
-				javax.swing.border.TitledBorder.LEFT,
+		panel.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+				null, javax.swing.border.TitledBorder.LEFT,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
 		Iterator keys = map.keySet().iterator();
-		while (keys.hasNext()){
-			String param = (String)keys.next();
-			Value value = (Value)map.get(param);
-			if (!(value instanceof ComplexValue)){
-				JTextField tf = new JTextField(value.toString(),30);
+		while (keys.hasNext()) {
+			String param = (String) keys.next();
+			Value value = (Value) map.get(param);
+			if (!(value instanceof ComplexValue)) {
+				JTextField tf = new JTextField(value.toString(), 30);
 				tf.setEditable(false);
 				tf.setBackground(Color.WHITE);
+				panel.addComponent(param, tf, new Insets(1, 0, 1, 0));
+			} else {
 				panel.addComponent(param,
-						tf,new Insets(1,0,1,0));
-			}else{
-				panel.addComponent(param,
-						createLevelPanel(param,(ComplexValue)value),new Insets(1,0,1,0));
+						createLevelPanel(param, (ComplexValue) value),
+						new Insets(1, 0, 1, 0));
 			}
 		}
 		return panel;
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindow#getWindowInfo()
 	 */
 	public WindowInfo getWindowInfo() {
-		if (m_windowInfo == null){
+		if (m_windowInfo == null) {
 			m_windowInfo = new WindowInfo(WindowInfo.MODALDIALOG);
 			m_windowInfo.setTitle(name);
 			Dimension dim = getComponent(0).getPreferredSize();
-			int widht,heigth = 0;
-			if (dim.getHeight()>500){
+			int widht, heigth = 0;
+			if (dim.getHeight() > 500) {
 				heigth = 500 + 15;
-			}else{
+			} else {
 				heigth = new Double(dim.getHeight()).intValue() + 15;
 			}
-			if (dim.getWidth()>500){
+			if (dim.getWidth() > 500) {
 				widht = 500 + 5;
-			}else{
+			} else {
 				widht = new Double(dim.getWidth()).intValue() + 5;
 			}
 			m_windowInfo.setWidth(widht);
 			m_windowInfo.setHeight(heigth);
 		}
 		return m_windowInfo;
-	}	
-	
+	}
+
 	/**
 	 * Gets the panel where are all the buttons
 	 * 
 	 * 
 	 * @return JPanel
 	 */
-	public JPanel getButtonPanel() {        
+	public JPanel getButtonPanel() {
 		if (buttonsPanel == null) {
 			FlowLayout flowLayout = new FlowLayout();
 			flowLayout.setAlignment(FlowLayout.RIGHT);
 			buttonsPanel = new JPanel(flowLayout);
-			buttonsPanel.add(getCloseButton(),null);				
+			buttonsPanel.add(getCloseButton(), null);
 		}
 		return buttonsPanel;
-	} 
-	
+	}
+
 	/**
 	 * It gets the close button
-	 * @return 
+	 * 
+	 * @return
 	 */
-	public JButton getCloseButton() {        
+	public JButton getCloseButton() {
 		if (closeButton == null) {
-			closeButton = new JButton(PluginServices.getText(this,"close"));
+			closeButton = new JButton(PluginServices.getText(this, "close"));
 			closeButton.setPreferredSize(new Dimension(80, 23));
 			closeButton.setActionCommand("cerrar");
-			closeButton.addActionListener(new ActionListener(){
+			closeButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					closeJDialog();
-				}				
+				}
 			});
 		}
 		return closeButton;
-	} 
-	
+	}
+
 	/**
 	 * Closes the dialog
 	 */
-	private void closeJDialog(){
+	private void closeJDialog() {
 		PluginServices.getMDIManager().closeWindow(this);
 	}
 
 	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
-	
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+
+} // @jve:decl-index=0:visual-constraint="10,10"

@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.topologyrules;
 
 import java.awt.geom.Rectangle2D;
@@ -67,30 +67,30 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.vividsolutions.jts.geom.Geometry;
 
 /**
- * All geometries of origin layer must have at least one geometry of 
- * destination layer with the same geometry.
+ * All geometries of origin layer must have at least one geometry of destination
+ * layer with the same geometry.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
-public class LyrMustBeEqual extends AbstractSpatialPredicateTwoLyrRule implements IRuleWithClusterTolerance{
+public class LyrMustBeEqual extends AbstractSpatialPredicateTwoLyrRule
+		implements IRuleWithClusterTolerance {
 
 	static final String RULE_NAME = Messages.getText("must_be_equals");
-	
+
 	static {
 		DEFAULT_ERROR_SYMBOL.setDescription(RULE_NAME);
 		automaticErrorFixes.add(new DeleteTopologyErrorFix());
 	}
-	
+
 	private double clusterTolerance;
-	
-	public LyrMustBeEqual(Topology topology, 
-			 FLyrVect originLyr,
-			 FLyrVect destinationLyr){
+
+	public LyrMustBeEqual(Topology topology, FLyrVect originLyr,
+			FLyrVect destinationLyr) {
 		super(topology, originLyr, destinationLyr);
 	}
 
-
-	public LyrMustBeEqual(){
+	public LyrMustBeEqual() {
 		super();
 	}
 
@@ -103,28 +103,31 @@ public class LyrMustBeEqual extends AbstractSpatialPredicateTwoLyrRule implement
 	protected boolean acceptsOriginGeometryType(int shapeType) {
 		return true;
 	}
-	
+
 	@Override
-	protected void checkWithNeighbourhood(IFeature feature, Rectangle2D extendedBounds, IFeatureIterator neighbourhood) throws BaseException{
-		Geometry firstGeometry = NewFConverter.toJtsGeometry(feature.getGeometry());
+	protected void checkWithNeighbourhood(IFeature feature,
+			Rectangle2D extendedBounds, IFeatureIterator neighbourhood)
+			throws BaseException {
+		Geometry firstGeometry = NewFConverter.toJtsGeometry(feature
+				.getGeometry());
 		while (neighbourhood.hasNext()) {
 			IFeature neighbourFeature = neighbourhood.next();
 			IGeometry geom2 = neighbourFeature.getGeometry();
-			if(acceptsDestinationGeometryType(geom2.getGeometryType())){
+			if (acceptsDestinationGeometryType(geom2.getGeometryType())) {
 				Rectangle2D rect2 = geom2.getBounds2D();
 				if (extendedBounds.intersects(rect2)) {
 					Geometry jtsGeom2 = NewFConverter.toJtsGeometry(geom2);
-					if(checkSpatialPredicate(feature, firstGeometry, 
-														neighbourFeature, jtsGeom2 )){
+					if (checkSpatialPredicate(feature, firstGeometry,
+							neighbourFeature, jtsGeom2)) {
 						return;
 					}
-				}//if
-			}//if
-		}//while
-		//at this point, feature doesnt cover any feature of destination layer
+				}// if
+			}// if
+		}// while
+			// at this point, feature doesnt cover any feature of destination
+			// layer
 		addTopologyError(createTopologyError(firstGeometry, feature, null));
 	}
-	
 
 	@Override
 	protected boolean checkSpatialPredicate(IFeature feature,
@@ -149,17 +152,15 @@ public class LyrMustBeEqual extends AbstractSpatialPredicateTwoLyrRule implement
 		return true;
 	}
 
-
 	public double getClusterTolerance() {
 		return clusterTolerance;
 	}
 
-
 	public void setClusterTolerance(double clusterTolerance) {
 		this.clusterTolerance = clusterTolerance;
 	}
-	
-	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError){
+
+	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError) {
 		return automaticErrorFixes.get(0);
 	}
 

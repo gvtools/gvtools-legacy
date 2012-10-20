@@ -22,53 +22,61 @@ import org.gvsig.raster.util.Queue;
 import org.gvsig.raster.util.RasterToolsUtil;
 
 /**
- * Cola de procesos de ejecución exclusiva. Los procesos de esta lista se irán ejecutando
- * por orden de llegada impidiendo que se ejecuten dos al mismo tiempo.
+ * Cola de procesos de ejecución exclusiva. Los procesos de esta lista se irán
+ * ejecutando por orden de llegada impidiendo que se ejecuten dos al mismo
+ * tiempo.
  * 
  * 16/05/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class UniqueProcessQueue implements IProcessActions {
-	private static final int          LAPSE_TIME       = 1000;
+	private static final int LAPSE_TIME = 1000;
 
-	private Queue                     queue            = new Queue();
-	private RasterProcess             executionProcess = null;
-	static private UniqueProcessQueue singleton        = new UniqueProcessQueue();
+	private Queue queue = new Queue();
+	private RasterProcess executionProcess = null;
+	static private UniqueProcessQueue singleton = new UniqueProcessQueue();
 
 	/**
 	 * Dejamos el constructor privado para que nadie pueda referenciarlo
 	 */
-	private UniqueProcessQueue() {}
-	
+	private UniqueProcessQueue() {
+	}
+
 	/**
-	 * Devuelve una instancia al unico objeto de UniqueProcessQueue que puede existir.
+	 * Devuelve una instancia al unico objeto de UniqueProcessQueue que puede
+	 * existir.
+	 * 
 	 * @return
 	 */
 	static public UniqueProcessQueue getSingleton() {
 		return singleton;
 	}
-	
+
 	/**
 	 * Añade un proceso a la cola.
-	 * @param id Identificador del proceso
-	 * @param process Proceso
+	 * 
+	 * @param id
+	 *            Identificador del proceso
+	 * @param process
+	 *            Proceso
 	 */
 	public synchronized void add(RasterProcess process) {
 		queue.put(process);
 		process.setUniqueProcessActions(this);
-		
-		//Decisión de arranque
-		if(queue.size() >= 1 && executionProcess == null)
+
+		// Decisión de arranque
+		if (queue.size() >= 1 && executionProcess == null)
 			start();
 	}
-	
+
 	/**
 	 * Pone en marcha el primer proceso de la lista
 	 */
 	public void start() {
 		nextProcess();
 	}
-	
+
 	private void nextProcess() {
 		executionProcess = ((RasterProcess) queue.get());
 		if (executionProcess != null)
@@ -76,9 +84,9 @@ public class UniqueProcessQueue implements IProcessActions {
 	}
 
 	/**
-	 * Evento de finalización de un proceso. Cuando un proceso acaba se 
-	 * pone en marcha el siguiente de la lista si existe. Se asigna un tiempo de latencia para
-	 * la ejecución del siguiente marcado por LAPSE_TIME.  
+	 * Evento de finalización de un proceso. Cuando un proceso acaba se pone en
+	 * marcha el siguiente de la lista si existe. Se asigna un tiempo de
+	 * latencia para la ejecución del siguiente marcado por LAPSE_TIME.
 	 */
 	public void end(Object param) {
 		try {
@@ -88,7 +96,7 @@ public class UniqueProcessQueue implements IProcessActions {
 		}
 		nextProcess();
 	}
-	
+
 	/**
 	 * How many elements are there in this queue?
 	 */
@@ -98,7 +106,9 @@ public class UniqueProcessQueue implements IProcessActions {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.IProcessActions#interrupted()
 	 */
-	public void interrupted() {}	
+	public void interrupted() {
+	}
 }

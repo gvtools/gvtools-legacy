@@ -54,18 +54,21 @@ import javax.swing.Icon;
 import com.iver.cit.gvsig.project.documents.IContextMenuAction;
 
 /**
- * @author FJP
- * Siguiendo el Patrón COMPOSITE: la rama será la capa (FLayer) y la
- * hoja será el símbolo (FStyle2D)
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
+ * @author FJP Siguiendo el Patrón COMPOSITE: la rama será la capa (FLayer) y la
+ *         hoja será el símbolo (FStyle2D)
+ * 
+ *         TODO To change the template for this generated type comment go to
+ *         Window - Preferences - Java - Code Generation - Code and Comments
  */
 public interface ITocItem extends Transferable {
 	String getLabel();
+
 	Icon getIcon();
+
 	Dimension getSize();
+
 	void setSize(Dimension sz);
+
 	public IContextMenuAction getDoubleClickAction();
-	
+
 }

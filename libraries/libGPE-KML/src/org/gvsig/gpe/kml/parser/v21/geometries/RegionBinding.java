@@ -65,6 +65,7 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * This class parses a Region Kml tag. Example:
  * <p>
+ * 
  * <pre>
  * <code> 
  * &lt;Region&gt;
@@ -78,54 +79,58 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  * &lt;/Region&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#region
  */
 public class RegionBinding {
-	
+
 	/**
 	 * It parses the Region tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * A Bounding box
-	 * @throws IOException 
-	 * @throws XmlStreamException 
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return A Bounding box
+	 * @throws IOException
+	 * @throws XmlStreamException
 	 */
-	public Object parse(IXmlStreamReader parser,GPEDeafultKmlParser handler) throws XmlStreamException, IOException {
+	public Object parse(IXmlStreamReader parser, GPEDeafultKmlParser handler)
+			throws XmlStreamException, IOException {
 		boolean endFeature = false;
 		int currentTag;
 		Object bbox = null;
-		
+
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.LATLONALTBOX)){
-					bbox =  handler.getProfile().getLatLonAltBoxBinding().parse(parser, handler);
+				if (CompareUtils.compareWithNamespace(tag,
+						Kml2_1_Tags.LATLONALTBOX)) {
+					bbox = handler.getProfile().getLatLonAltBoxBinding()
+							.parse(parser, handler);
 				}
 				break;
 			case IXmlStreamReader.END_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.REGION)){						
-					endFeature = true;					
+				if (CompareUtils.compareWithNamespace(tag, Kml2_1_Tags.REGION)) {
+					endFeature = true;
 				}
 				break;
-			case IXmlStreamReader.CHARACTERS:					
+			case IXmlStreamReader.CHARACTERS:
 
 				break;
 			}
-			if (!endFeature){					
+			if (!endFeature) {
 				currentTag = parser.next();
 				tag = parser.getName();
 			}
-		}			
-		return bbox;	
+		}
+		return bbox;
 	}
 }
-

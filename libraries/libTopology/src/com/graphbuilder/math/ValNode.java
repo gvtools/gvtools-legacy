@@ -1,8 +1,9 @@
 package com.graphbuilder.math;
 
 /**
-A node of an expression tree that represents a value.  A ValNode cannot have any children.
-*/
+ * A node of an expression tree that represents a value. A ValNode cannot have
+ * any children.
+ */
 public class ValNode extends Expression {
 
 	protected double val = 0.0;
@@ -12,8 +13,8 @@ public class ValNode extends Expression {
 	}
 
 	/**
-	Returns the value.
-	*/
+	 * Returns the value.
+	 */
 	public double eval(VarMap v, FuncMap f) {
 		return val;
 	}

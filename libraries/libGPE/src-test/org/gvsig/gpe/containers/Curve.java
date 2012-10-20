@@ -45,55 +45,55 @@ import java.util.ArrayList;
 
 /**
  * This class represetnts a Curve
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class Curve extends Geometry {
 	private ArrayList coordinates = null;
 	private ArrayList segments = null;
-	
-	public Curve(){
+
+	public Curve() {
 		segments = new ArrayList();
 		coordinates = new ArrayList();
 	}
-		
+
 	/**
-	 * Adds a segment 
+	 * Adds a segment
+	 * 
 	 * @param segment
-	 * The segment to add
+	 *            The segment to add
 	 */
-	public void addSegment(LineString segment){
+	public void addSegment(LineString segment) {
 		segments.add(segment);
 	}
-	
+
 	/**
 	 * Gets a segment
+	 * 
 	 * @param i
-	 * The segment position
-	 * @return
-	 * A Segment
+	 *            The segment position
+	 * @return A Segment
 	 */
-	public LineString getSegmentAt(int i){
-		return (LineString)segments.get(i);
+	public LineString getSegmentAt(int i) {
+		return (LineString) segments.get(i);
 	}
-	
+
 	/**
 	 * @return the number of seg
 	 */
-	public int getSegmentsSize(){
+	public int getSegmentsSize() {
 		return segments.size();
 	}
-	
-	public void addCoordinate(double[] coordinate){
+
+	public void addCoordinate(double[] coordinate) {
 		coordinates.add(coordinate);
 	}
-	
-	public double geCoordinateAt(int index, int dimension){
-		return ((double[])(coordinates.get(index)))[dimension];
+
+	public double geCoordinateAt(int index, int dimension) {
+		return ((double[]) (coordinates.get(index)))[dimension];
 	}
-	
-	public int getCoordinatesNumber(){
+
+	public int getCoordinatesNumber() {
 		return coordinates.size();
-	}	
+	}
 }
-
-

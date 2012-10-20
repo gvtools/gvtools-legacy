@@ -42,17 +42,17 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: PolygonBuildGeoprocessPlugin.java 21235 2008-06-05 14:08:38Z azabala $
-* $Log$
-* Revision 1.1  2006-12-21 17:23:27  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/12/19 19:29:30  azabala
-* first version in cvs
-*
-*
-*/
+ *
+ * $Id: PolygonBuildGeoprocessPlugin.java 21235 2008-06-05 14:08:38Z azabala $
+ * $Log$
+ * Revision 1.1  2006-12-21 17:23:27  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/12/19 19:29:30  azabala
+ * first version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.topology.polygonbuild;
 
 import java.net.URL;
@@ -66,32 +66,26 @@ import com.iver.cit.gvsig.geoprocess.core.gui.IGeoprocessUserEntries;
 import com.iver.cit.gvsig.geoprocess.impl.topology.polygonbuild.gui.PolygonBuildGeoprocessPanel;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
-public class PolygonBuildGeoprocessPlugin extends GeoprocessPluginAbstract implements IGeoprocessPlugin {
+public class PolygonBuildGeoprocessPlugin extends GeoprocessPluginAbstract
+		implements IGeoprocessPlugin {
 	private static String dataConvertPkg;
 	private static String geoprocessName;
 
-	static{
-		dataConvertPkg =
-			PluginServices.getText(null, "Conversion_de_datos");
-		geoprocessName =
-			PluginServices.getText(null, "Build_de_poligonos");
+	static {
+		dataConvertPkg = PluginServices.getText(null, "Conversion_de_datos");
+		geoprocessName = PluginServices.getText(null, "Build_de_poligonos");
 	}
 
-
 	public IGeoprocessUserEntries getGeoprocessPanel() {
-		View vista = (View)PluginServices.
-		getMDIManager().
-		getActiveWindow();
-		FLayers layers = vista.getModel().
-			getMapContext().
-			getLayers();
+		View vista = (View) PluginServices.getMDIManager().getActiveWindow();
+		FLayers layers = vista.getModel().getMapContext().getLayers();
 
 		return new PolygonBuildGeoprocessPanel(layers);
 	}
 
 	public URL getImgDescription() {
 		URL url = PluginServices.getIconTheme().getURL("polygbuilddesc-icon");
-	return url;
+		return url;
 	}
 
 	public IGeoprocessController getGpController() {
@@ -102,9 +96,8 @@ public class PolygonBuildGeoprocessPlugin extends GeoprocessPluginAbstract imple
 		return dataConvertPkg + "/" + geoprocessName;
 	}
 
-	public String toString(){
+	public String toString() {
 		return geoprocessName;
 	}
 
 }
-

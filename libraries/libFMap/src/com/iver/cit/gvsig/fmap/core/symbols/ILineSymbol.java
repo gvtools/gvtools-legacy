@@ -83,43 +83,55 @@ import java.awt.Color;
 import com.iver.cit.gvsig.fmap.core.CartographicSupport;
 import com.iver.cit.gvsig.fmap.core.styles.ILineStyle;
 
-
 /**
- * Interface for <b>line symbols</b>.It has the different methods to obtain or define
- * the attributes of a line such as color, style, width and alpha (transparency).
- *
- * @author   jaume dominguez faus - jaume.dominguez@iver.es
+ * Interface for <b>line symbols</b>.It has the different methods to obtain or
+ * define the attributes of a line such as color, style, width and alpha
+ * (transparency).
+ * 
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
-public interface ILineSymbol extends ISymbol, CartographicSupport{
+public interface ILineSymbol extends ISymbol, CartographicSupport {
 
 	/**
 	 * Returns the color of the line symbol
+	 * 
 	 * @return Color
 	 */
 	public abstract Color getColor();
+
 	/**
 	 * Sets the color for a line symbol
+	 * 
 	 * @param color
 	 */
 
 	public abstract void setLineColor(Color color);
+
 	/**
 	 * Obtains the style of the line symbol.
+	 * 
 	 * @return ILineStyle, the style of the line symbol
 	 */
 	public abstract ILineStyle getLineStyle();
+
 	/**
 	 * Defines the style of the line symbol to be used.
+	 * 
 	 * @param lineStyle
 	 */
 	public abstract void setLineStyle(ILineStyle lineStyle);
+
 	/**
 	 * Sets the width of the line symbol.
-	 * @param width, the width of the line
+	 * 
+	 * @param width
+	 *            , the width of the line
 	 */
 	public abstract void setLineWidth(double width);
+
 	/**
 	 * Returns the width of the line symbol
+	 * 
 	 * @return
 	 */
 
@@ -127,13 +139,16 @@ public interface ILineSymbol extends ISymbol, CartographicSupport{
 
 	/**
 	 * Obtains the transparency of the line symbol
+	 * 
 	 * @return
 	 */
 	public abstract int getAlpha();
 
 	/**
 	 * Defines the transparency of a line symbol.
-	 * @param outlineAlpha, the transparency
+	 * 
+	 * @param outlineAlpha
+	 *            , the transparency
 	 */
 	public abstract void setAlpha(int outlineAlpha);
 }

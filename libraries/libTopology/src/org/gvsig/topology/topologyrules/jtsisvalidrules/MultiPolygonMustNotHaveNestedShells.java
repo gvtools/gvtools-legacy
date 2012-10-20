@@ -80,26 +80,24 @@ import com.vividsolutions.jts.geomgraph.GeometryGraph;
 
 public class MultiPolygonMustNotHaveNestedShells extends AbstractTopologyRule {
 
-	static final String RULE_NAME = Messages.getText("MULTIPOL_NOT_HAVE_NESTED_SHELLS");
+	static final String RULE_NAME = Messages
+			.getText("MULTIPOL_NOT_HAVE_NESTED_SHELLS");
 
 	private static List<ITopologyErrorFix> automaticErrorFixes = new ArrayList<ITopologyErrorFix>();
-	
 
 	private static final Color DEFAULT_ERROR_COLOR = Color.BLACK;
 
-	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = 
-		(MultiShapeSymbol) SymbologyFactory.createDefaultSymbolByShapeType(FShape.MULTI, 
-											DEFAULT_ERROR_COLOR);
-	static{
+	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = (MultiShapeSymbol) SymbologyFactory
+			.createDefaultSymbolByShapeType(FShape.MULTI, DEFAULT_ERROR_COLOR);
+	static {
 		DEFAULT_ERROR_SYMBOL.setDescription(RULE_NAME);
 		DEFAULT_ERROR_SYMBOL.setSize(2);
 	}
 
-
 	private MultiShapeSymbol errorSymbol;
-	
+
 	JtsValidRule parentRule;
-	
+
 	public JtsValidRule getParentRule() {
 		return parentRule;
 	}
@@ -112,12 +110,13 @@ public class MultiPolygonMustNotHaveNestedShells extends AbstractTopologyRule {
 			FLyrVect originLyr) {
 		super(topology, originLyr);
 	}
-	
+
 	public MultiPolygonMustNotHaveNestedShells(FLyrVect originLyr) {
 		super(originLyr);
 	}
-	
-	public MultiPolygonMustNotHaveNestedShells(){}
+
+	public MultiPolygonMustNotHaveNestedShells() {
+	}
 
 	public String getName() {
 		return Messages.getText("POLYGON_MUST_NOT_HAVE_DUPLICATED_RINGS");
@@ -180,12 +179,12 @@ public class MultiPolygonMustNotHaveNestedShells extends AbstractTopologyRule {
 			FPoint2D point = new FPoint2D(shellPt.x, shellPt.y);
 			IGeometry errorGeometry = ShapeFactory.createGeometry(point);
 			AbstractTopologyRule violatedRule = null;
-			if(this.parentRule != null)
+			if (this.parentRule != null)
 				violatedRule = parentRule;
 			else
 				violatedRule = this;
-			JtsValidTopologyError topologyError = 
-				new JtsValidTopologyError(errorGeometry,violatedRule, feature, topology);
+			JtsValidTopologyError topologyError = new JtsValidTopologyError(
+					errorGeometry, violatedRule, feature, topology);
 			topologyError.setSecondaryRule(this);
 			addTopologyError(topologyError);
 		}
@@ -206,12 +205,12 @@ public class MultiPolygonMustNotHaveNestedShells extends AbstractTopologyRule {
 		FPoint2D point = new FPoint2D(badNestedPt.x, badNestedPt.y);
 		IGeometry errorGeometry = ShapeFactory.createGeometry(point);
 		AbstractTopologyRule violatedRule = null;
-		if(this.parentRule != null)
+		if (this.parentRule != null)
 			violatedRule = parentRule;
 		else
 			violatedRule = this;
-		JtsValidTopologyError error = 
-			new JtsValidTopologyError(errorGeometry, violatedRule, feature, topology);
+		JtsValidTopologyError error = new JtsValidTopologyError(errorGeometry,
+				violatedRule, feature, topology);
 		error.setSecondaryRule(this);
 		addTopologyError(error);
 	}
@@ -244,23 +243,22 @@ public class MultiPolygonMustNotHaveNestedShells extends AbstractTopologyRule {
 		return null;
 	}
 
-	
-
 	public void validateFeature(IFeature feature) {
 		Geometry geometry = feature.getGeometry().toJTSGeometry();
-		if(geometry instanceof MultiPolygon){
+		if (geometry instanceof MultiPolygon) {
 			MultiPolygon multiPolygon = (MultiPolygon) geometry;
-			checkShellsNotNested(multiPolygon, new GeometryGraph(0, multiPolygon), feature);
-		}else if(geometry instanceof GeometryCollection){
+			checkShellsNotNested(multiPolygon, new GeometryGraph(0,
+					multiPolygon), feature);
+		} else if (geometry instanceof GeometryCollection) {
 			GeometryCollection geomCol = (GeometryCollection) geometry;
 			MultiPolygon multiPol = JtsUtil.convertToMultiPolygon(geomCol);
-			if(multiPol.getNumGeometries() > 0)
-			{
-				checkShellsNotNested(multiPol, new GeometryGraph(0, multiPol), feature );
+			if (multiPol.getNumGeometries() > 0) {
+				checkShellsNotNested(multiPol, new GeometryGraph(0, multiPol),
+						feature);
 			}
-		}	
+		}
 	}
-	
+
 	public boolean acceptsOriginLyr(FLyrVect lyr) {
 		try {
 			return lyr.getShapeType() == FShape.MULTI;
@@ -281,6 +279,5 @@ public class MultiPolygonMustNotHaveNestedShells extends AbstractTopologyRule {
 	public MultiShapeSymbol getErrorSymbol() {
 		return errorSymbol;
 	}
-	
-	
+
 }

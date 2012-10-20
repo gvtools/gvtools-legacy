@@ -42,29 +42,29 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: GeoprocessingXYShiftPanel.java 13881 2007-09-19 16:22:04Z jaume $
-* $Log$
-* Revision 1.6  2007-09-19 16:09:14  jaume
-* removed unnecessary imports
-*
-* Revision 1.5  2007/03/06 16:48:14  caballero
-* Exceptions
-*
-* Revision 1.4  2006/08/11 17:17:55  azabala
-* *** empty log message ***
-*
-* Revision 1.3  2006/07/03 20:29:08  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/06/29 17:58:31  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/06/28 18:17:21  azabala
-* first version in cvs
-*
-*
-*/
+ *
+ * $Id: GeoprocessingXYShiftPanel.java 13881 2007-09-19 16:22:04Z jaume $
+ * $Log$
+ * Revision 1.6  2007-09-19 16:09:14  jaume
+ * removed unnecessary imports
+ *
+ * Revision 1.5  2007/03/06 16:48:14  caballero
+ * Exceptions
+ *
+ * Revision 1.4  2006/08/11 17:17:55  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.3  2006/07/03 20:29:08  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/06/29 17:58:31  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/06/28 18:17:21  azabala
+ * first version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.xyshift.gui;
 
 import java.awt.Rectangle;
@@ -88,8 +88,7 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.geoprocess.core.fmap.GeoprocessException;
 import com.iver.cit.gvsig.geoprocess.core.gui.AbstractGeoprocessPanel;
 
-public class GeoprocessingXYShiftPanel
-					extends AbstractGeoprocessPanel  {
+public class GeoprocessingXYShiftPanel extends AbstractGeoprocessPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JLabel jLabel = null;
@@ -106,7 +105,7 @@ public class GeoprocessingXYShiftPanel
 
 	/**
 	 * This method initializes
-	 *
+	 * 
 	 */
 	public GeoprocessingXYShiftPanel(FLayers layers) {
 		super();
@@ -114,17 +113,16 @@ public class GeoprocessingXYShiftPanel
 		initialize();
 	}
 
-	public double getXOffset() throws GeoprocessException{
+	public double getXOffset() throws GeoprocessException {
 		try {
 			String strDist = xoffsetTextField.getText();
 			return Double.parseDouble(strDist);
 		} catch (NumberFormatException ex) {
-			throw new GeoprocessException(
-					"Offset en x introducido no numerico");
+			throw new GeoprocessException("Offset en x introducido no numerico");
 		}
 	}
 
-	public double getYOffset() throws GeoprocessException{
+	public double getYOffset() throws GeoprocessException {
 		try {
 			String strDist = yoffsetTextField.getText();
 			return Double.parseDouble(strDist);
@@ -135,58 +133,64 @@ public class GeoprocessingXYShiftPanel
 	}
 
 	/**
-	 * Tells if apply geoprocess only to selected features of the input
-	 * layer or to all features
+	 * Tells if apply geoprocess only to selected features of the input layer or
+	 * to all features
+	 * 
 	 * @return
 	 */
-	public boolean isOnlySelected(){
+	public boolean isOnlySelected() {
 		return selectedOnlyCheckBox.isSelected();
 	}
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 */
 	private void initialize() {
-        offsetLabel = new JLabel();
-        offsetLabel.setBounds(new java.awt.Rectangle(29,147,211,23));
-        offsetLabel.setText(PluginServices.getText(this,"Introducir_valores_desplazamiento"));
-        jLabel3 = new JLabel();
-        jLabel3.setBounds(new java.awt.Rectangle(27,215,152,27));
-        jLabel3.setText(PluginServices.getText(this,"yOffset")+":");
-        xoffsetLabel = new JLabel();
-        xoffsetLabel.setBounds(new java.awt.Rectangle(26,182,154,26));
-        xoffsetLabel.setText(PluginServices.getText(this,"xOffset")+":");
-        jLabel1 = new JLabel();
-        jLabel1.setBounds(new java.awt.Rectangle(27,60,384,23));
-        jLabel1.setText(PluginServices.getText(this, "Cobertura_de_entrada") + ":");
-        jLabel = new JLabel();
-        jLabel.setBounds(new java.awt.Rectangle(27,17,384,27));
-        jLabel.setText(PluginServices.getText(this, "XYShift._Introduccion_de_datos") + ":");
-        this.setLayout(null);
-        this.setBounds(new java.awt.Rectangle(0,0,500,400));
-        this.add(jLabel, null);
-        this.add(jLabel1, null);
-        this.add(getSelectedOnlyCheckBox(), null);
-        this.add(getResultPanel(), null);
-        this.add(xoffsetLabel, null);
-        this.add(getXoffsetTextField(), null);
-        this.add(jLabel3, null);
-        this.add(getYoffsetjTextField1(), null);
-        this.add(offsetLabel, null);
-        this.add(getLayersComboBox(), null);
+		offsetLabel = new JLabel();
+		offsetLabel.setBounds(new java.awt.Rectangle(29, 147, 211, 23));
+		offsetLabel.setText(PluginServices.getText(this,
+				"Introducir_valores_desplazamiento"));
+		jLabel3 = new JLabel();
+		jLabel3.setBounds(new java.awt.Rectangle(27, 215, 152, 27));
+		jLabel3.setText(PluginServices.getText(this, "yOffset") + ":");
+		xoffsetLabel = new JLabel();
+		xoffsetLabel.setBounds(new java.awt.Rectangle(26, 182, 154, 26));
+		xoffsetLabel.setText(PluginServices.getText(this, "xOffset") + ":");
+		jLabel1 = new JLabel();
+		jLabel1.setBounds(new java.awt.Rectangle(27, 60, 384, 23));
+		jLabel1.setText(PluginServices.getText(this, "Cobertura_de_entrada")
+				+ ":");
+		jLabel = new JLabel();
+		jLabel.setBounds(new java.awt.Rectangle(27, 17, 384, 27));
+		jLabel.setText(PluginServices.getText(this,
+				"XYShift._Introduccion_de_datos") + ":");
+		this.setLayout(null);
+		this.setBounds(new java.awt.Rectangle(0, 0, 500, 400));
+		this.add(jLabel, null);
+		this.add(jLabel1, null);
+		this.add(getSelectedOnlyCheckBox(), null);
+		this.add(getResultPanel(), null);
+		this.add(xoffsetLabel, null);
+		this.add(getXoffsetTextField(), null);
+		this.add(jLabel3, null);
+		this.add(getYoffsetjTextField1(), null);
+		this.add(offsetLabel, null);
+		this.add(getLayersComboBox(), null);
 	}
 
 	/**
 	 * This method initializes selectedOnlyCheckBox
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getSelectedOnlyCheckBox() {
 		if (selectedOnlyCheckBox == null) {
 			selectedOnlyCheckBox = new JCheckBox();
-			selectedOnlyCheckBox.setBounds(new java.awt.Rectangle(27,94,383,23));
-			selectedOnlyCheckBox.setText(PluginServices.getText(this, "Usar_solamente_los_elementos_seleccionados"));
+			selectedOnlyCheckBox.setBounds(new java.awt.Rectangle(27, 94, 383,
+					23));
+			selectedOnlyCheckBox.setText(PluginServices.getText(this,
+					"Usar_solamente_los_elementos_seleccionados"));
 		}
 		return selectedOnlyCheckBox;
 	}
@@ -204,7 +208,7 @@ public class GeoprocessingXYShiftPanel
 						// Cambiar el estado del CheckBox
 						initSelectedItemsJCheckBox();
 					}
-				}//itemStateChange
+				}// itemStateChange
 			});
 		}
 		return layersComboBox;
@@ -230,18 +234,21 @@ public class GeoprocessingXYShiftPanel
 
 	/**
 	 * This method initializes resultSelectionPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getResultPanel() {
 		if (resultSelectionPanel == null) {
 			jLabel2 = new JLabel();
 			jLabel2.setBounds(new Rectangle(4, 13, 126, 17));
-			jLabel2.setText(PluginServices.getText(this, "Cobertura_de_salida") + ":");
+			jLabel2.setText(PluginServices.getText(this, "Cobertura_de_salida")
+					+ ":");
 			resultSelectionPanel = new JPanel();
 			resultSelectionPanel.setLayout(null);
-			resultSelectionPanel.setBounds(new java.awt.Rectangle(26,259,443,46));
-			resultSelectionPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+			resultSelectionPanel.setBounds(new java.awt.Rectangle(26, 259, 443,
+					46));
+			resultSelectionPanel.setBorder(BorderFactory
+					.createEtchedBorder(EtchedBorder.RAISED));
 			resultSelectionPanel.add(getOpenResultButton(), null);
 			resultSelectionPanel.add(getFileNameResultTextField(), null);
 			resultSelectionPanel.add(jLabel2, null);
@@ -251,7 +258,7 @@ public class GeoprocessingXYShiftPanel
 
 	/**
 	 * This method initializes openResultButton
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getOpenResultButton() {
@@ -259,54 +266,56 @@ public class GeoprocessingXYShiftPanel
 			openResultButton = new JButton();
 			openResultButton.setBounds(new Rectangle(311, 12, 101, 21));
 			openResultButton.setText(PluginServices.getText(this, "Abrir"));
-			openResultButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					openResultFile();
-				}
-			});
+			openResultButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							openResultFile();
+						}
+					});
 		}
 		return openResultButton;
 	}
 
 	/**
 	 * This method initializes jTextField
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	public JTextField getFileNameResultTextField() {
 		if (fileNameResultTextField == null) {
-			super.getFileNameResultTextField().
-				setBounds(new Rectangle(135, 11,
-										169, 21));
+			super.getFileNameResultTextField().setBounds(
+					new Rectangle(135, 11, 169, 21));
 		}
 		return fileNameResultTextField;
 	}
 
 	/**
 	 * This method initializes xoffsetTextField
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getXoffsetTextField() {
 		if (xoffsetTextField == null) {
 			xoffsetTextField = new JTextField();
-			xoffsetTextField.setBounds(new java.awt.Rectangle(193,182,216,25));
+			xoffsetTextField
+					.setBounds(new java.awt.Rectangle(193, 182, 216, 25));
 		}
 		return xoffsetTextField;
 	}
 
 	/**
 	 * This method initializes yoffsetjTextField1
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getYoffsetjTextField1() {
 		if (yoffsetTextField == null) {
 			yoffsetTextField = new JTextField();
-			yoffsetTextField.setBounds(new java.awt.Rectangle(193,216,216,25));
+			yoffsetTextField
+					.setBounds(new java.awt.Rectangle(193, 216, 216, 25));
 		}
 		return yoffsetTextField;
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="13,15"
+} // @jve:decl-index=0:visual-constraint="13,15"
 

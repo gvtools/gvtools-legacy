@@ -16,20 +16,26 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
  * Implementación del gestor de errores en la carga de capas raster
  * 
  * 18/03/2009
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class FileNotFoundSolve implements ISolveErrorListener {
-	private FLayer    layer   = null;
-	private Driver    driver  = null;
-	private boolean   solved  = false;
-	//private File      file    = null;
-		
+	private FLayer layer = null;
+	private Driver driver = null;
+	private boolean solved = false;
+
+	// private File file = null;
+
 	public String getException() {
 		return FileNotFoundDriverException.class.toString();
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.layers.ISolveErrorListener#solve(com.iver.cit.gvsig.fmap.layers.FLayer, com.hardcode.driverManager.Driver)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.ISolveErrorListener#solve(com.iver.cit
+	 * .gvsig.fmap.layers.FLayer, com.hardcode.driverManager.Driver)
 	 */
 	public FLayer solve(FLayer lyr, Driver driver) {
 		layer = lyr;
@@ -38,34 +44,38 @@ public class FileNotFoundSolve implements ISolveErrorListener {
 		PluginServices.getMDIManager().addWindow(fnfs);
 		return getLayer();
 	}
+
 	/**
 	 * @param file
 	 */
-	public void createLayer(File file){
+	public void createLayer(File file) {
 		try {
 			String lyr_name = RasterToolsUtil.getLayerNameFromFile(file);
-			layer = FLyrRasterSE.createLayer(lyr_name, file.getAbsolutePath(), null);
+			layer = FLyrRasterSE.createLayer(lyr_name, file.getAbsolutePath(),
+					null);
 		} catch (LoadLayerException e) {
 			solved = false;
 		}
 		solved = true;
 	}
-	
+
 	/**
 	 * @return
 	 */
 	public Driver getDriver() {
 		return driver;
-	} 
-	
+	}
+
 	/**
 	 * @return
 	 */
 	public FLayer getLayer() {
 		return layer;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.ISolveErrorListener#isSolved()
 	 */
 	public boolean isSolved() {
@@ -74,6 +84,7 @@ public class FileNotFoundSolve implements ISolveErrorListener {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.fmap.raster.layers.ISolveErrorListener#getLayerName()
 	 */
 	public String getLayerName() {
@@ -82,11 +93,12 @@ public class FileNotFoundSolve implements ISolveErrorListener {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.fmap.raster.layers.ISolveErrorListener#getPath()
 	 */
 	public String getPath() {
-		if(((FLyrRasterSE)layer).getFile() != null)
-			return ((FLyrRasterSE)layer).getFile().getAbsolutePath();
+		if (((FLyrRasterSE) layer).getFile() != null)
+			return ((FLyrRasterSE) layer).getFile().getAbsolutePath();
 		return null;
 	}
 

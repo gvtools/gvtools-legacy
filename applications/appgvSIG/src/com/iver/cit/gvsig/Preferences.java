@@ -46,13 +46,11 @@ import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.project.documents.ProjectDocument;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
-
 /**
- * Extensión para que el usuario fije sus preferencias.
- * La idea es usar algo como lo que tiene Eclipse, que
- * permita a las extensiones registrar sus cuadros de
- * diálogo de preferencias.
- *
+ * Extensión para que el usuario fije sus preferencias. La idea es usar algo
+ * como lo que tiene Eclipse, que permita a las extensiones registrar sus
+ * cuadros de diálogo de preferencias.
+ * 
  * @author Fjp
  */
 public class Preferences extends Extension {
@@ -68,7 +66,7 @@ public class Preferences extends Extension {
 	 * @see com.iver.mdiApp.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-			return true;
+		return true;
 	}
 
 	/**
@@ -78,7 +76,7 @@ public class Preferences extends Extension {
 		View vista = (View) PluginServices.getMDIManager().getActiveWindow();
 		ViewPort vp = vista.getModel().getMapContext().getViewPort();
 		vp.setPreviousExtent();
-		((ProjectDocument)vista.getModel()).setModified(true);
+		((ProjectDocument) vista.getModel()).setModified(true);
 	}
 
 	/**

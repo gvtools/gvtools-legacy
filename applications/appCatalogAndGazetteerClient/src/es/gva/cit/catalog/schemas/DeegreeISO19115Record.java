@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,50 +39,60 @@
  *   dac@iver.es
  */
 package es.gva.cit.catalog.schemas;
+
 import java.net.URI;
 
 import es.gva.cit.catalog.metadataxml.XMLNode;
 import es.gva.cit.catalog.metadataxml.XMLTree;
 
 /**
- * This class is used to parse the metadata retreived using
- * the CSW deegree server.
+ * This class is used to parse the metadata retreived using the CSW deegree
+ * server.
  * 
  * 
  * @author Jorge Piera Llodra (piera_jor@gva.es)
  */
 public class DeegreeISO19115Record extends Record {
 
-	public  DeegreeISO19115Record() {        
+	public DeegreeISO19115Record() {
 
 	}
-	
-	/**
-	 * @param node 
-	 */
-	public  DeegreeISO19115Record(URI uri,XMLNode node) {        
-		super(uri,node);
 
-		setTitle(XMLTree.searchNodeValue(node,
-				"iso19115:identificationInfo->smXML:MD_DataIdentification->smXML:citation->smXML:CI_Citation->smXML:title->smXML:CharacterString"));
-		setAbstract_(XMLTree.searchNodeValue(node,
-		"iso19115:identificationInfo->smXML:MD_DataIdentification->smXML:abstract->smXML:CharacterString"));
-		setPurpose(XMLTree.searchNodeValue(node,
-		"iso19115:identificationInfo->smXML:MD_DataIdentification->smXML:purpose->smXML:CharacterString"));
-		setKeyWords(XMLTree.searchMultipleNodeValue(node,
-		"iso19115:identificationInfo->smXML:MD_DataIdentification->smXML:descriptiveKeywords->smXML:MD_Keywords->smXML:keyword->smXML:CharacterString"));
+	/**
+	 * @param node
+	 */
+	public DeegreeISO19115Record(URI uri, XMLNode node) {
+		super(uri, node);
+
+		setTitle(XMLTree
+				.searchNodeValue(
+						node,
+						"iso19115:identificationInfo->smXML:MD_DataIdentification->smXML:citation->smXML:CI_Citation->smXML:title->smXML:CharacterString"));
+		setAbstract_(XMLTree
+				.searchNodeValue(
+						node,
+						"iso19115:identificationInfo->smXML:MD_DataIdentification->smXML:abstract->smXML:CharacterString"));
+		setPurpose(XMLTree
+				.searchNodeValue(
+						node,
+						"iso19115:identificationInfo->smXML:MD_DataIdentification->smXML:purpose->smXML:CharacterString"));
+		setKeyWords(XMLTree
+				.searchMultipleNodeValue(
+						node,
+						"iso19115:identificationInfo->smXML:MD_DataIdentification->smXML:descriptiveKeywords->smXML:MD_Keywords->smXML:keyword->smXML:CharacterString"));
 		setResources(getResources("iso19115:distributionInfo->smXML:MD_Distribution->smXML:distributor->smXML:MD_Distributor->smXML:distributorContact->smXML:CI_ResponsibleParty->smXML:contactInfo->smXML:CI_Contact->smXML:onlineResource->smXML:CI_OnlineResource"));
 		setImageURL("iso19115:identificationInfo->smXML:MD_DataIdentification->smXML:graphicOverview->smXML:MD_BrowseGraphic->smXML:fileName->smXML:CharacterString");
-	} 
+	}
 
 	/**
 	 * It parses the online resources
 	 * 
 	 * 
 	 * @return Resource
-	 * @param label Label that contains the resource root
+	 * @param label
+	 *            Label that contains the resource root
 	 */
-	private Resource[] getResources(String label) {        
+	private Resource[] getResources(String label) {
 		XMLNode[] nodes = XMLTree.searchMultipleNode(getNode(), label);
 
 		if (nodes == null) {
@@ -92,24 +101,28 @@ public class DeegreeISO19115Record extends Record {
 		Resource[] resources = new Resource[nodes.length];
 
 		for (int i = 0; i < resources.length; i++)
-			resources[i] = new Resource(XMLTree.searchNodeValue(nodes[i],"smXML:linkage->smXML:URL"),
-					XMLTree.searchNodeValue(nodes[i],"smXML:protocol->smXML:CharacterString"),
-					XMLTree.searchNodeValue(nodes[i],"smXML:name->smXML:CharacterString"),
-					XMLTree.searchNodeValue(nodes[i],"smXML:description->smXML:CharacterString"),
-					"",
-					"",	
-					null);
+			resources[i] = new Resource(XMLTree.searchNodeValue(nodes[i],
+					"smXML:linkage->smXML:URL"), XMLTree.searchNodeValue(
+					nodes[i], "smXML:protocol->smXML:CharacterString"),
+					XMLTree.searchNodeValue(nodes[i],
+							"smXML:name->smXML:CharacterString"),
+					XMLTree.searchNodeValue(nodes[i],
+							"smXML:description->smXML:CharacterString"), "",
+					"", null);
 		return resources;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.schemas.discoverer.Record#accept(java.net.URI, es.gva.cit.catalogClient.metadataxml.XMLNode)
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.schemas.discoverer.Record#accept(java.net.URI,
+	 * es.gva.cit.catalogClient.metadataxml.XMLNode)
 	 */
 	public boolean accept(URI uri, XMLNode node) {
-		if (node.getName().equals("iso19115:MD_Metadata")){
+		if (node.getName().equals("iso19115:MD_Metadata")) {
 			return true;
 		}
 		return false;
-	} 
+	}
 }

@@ -66,47 +66,48 @@ import com.iver.cit.gvsig.addlayer.fileopen.FileOpenWizard;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 
-
 /**
  * Listener para el panel de la calculadora de bandas
  * 
  * @author Diego Guerrero Sevilla (diego.guerrero@uclm.es)
- * @author Alejandro Muñoz Sánchez	(alejandro.munoz@uclm.es)
- * @version 19/10/2007 
+ * @author Alejandro Muñoz Sánchez (alejandro.munoz@uclm.es)
+ * @version 19/10/2007
  */
-public class GridMathPanelListener implements ButtonsPanelListener, TableModelListener {
-	
+public class GridMathPanelListener implements ButtonsPanelListener,
+		TableModelListener {
+
 	private GridMathPanel gridMathPanel = null;
 	private boolean canClose = false;
 
-	
 	/**
 	 * Constructor
+	 * 
 	 * @param calculatorPanel
 	 */
 	public GridMathPanelListener(GridMathPanel calculatorPanel) {
 		this.gridMathPanel = calculatorPanel;
-	
-	}
 
+	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener#actionButtonPressed(org.gvsig.gui.beans.buttonspanel.ButtonsPanelEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener#actionButtonPressed
+	 * (org.gvsig.gui.beans.buttonspanel.ButtonsPanelEvent)
 	 */
 	public void actionButtonPressed(ButtonsPanelEvent e) {
 		// Botón de Aceptar
-		
-			if (e.getButton() == ButtonsPanel.BUTTON_ACCEPT) {
-				aplicar();
-				if(canClose)
-					close();
-			}
-			// Botón de Aplicar
-			if (e.getButton() == ButtonsPanel.BUTTON_APPLY) {
-				aplicar();
-			}
-	
+
+		if (e.getButton() == ButtonsPanel.BUTTON_ACCEPT) {
+			aplicar();
+			if (canClose)
+				close();
+		}
+		// Botón de Aplicar
+		if (e.getButton() == ButtonsPanel.BUTTON_APPLY) {
+			aplicar();
+		}
 
 		// Botón de Cerrar
 		if (e.getButton() == ButtonsPanel.BUTTON_CANCEL) {
@@ -114,148 +115,183 @@ public class GridMathPanelListener implements ButtonsPanelListener, TableModelLi
 		}
 	}
 
-	
-	 /**	
-	 *	Acciones al aplicar. Comprobar que la lista de variables no es vacia, que todas las variables
-	 *  estan asignadas, y que la expresión es correcta. Si se cumplen los requisitos se lanza el calculo.
+	/**
+	 * Acciones al aplicar. Comprobar que la lista de variables no es vacia, que
+	 * todas las variables estan asignadas, y que la expresión es correcta. Si
+	 * se cumplen los requisitos se lanza el calculo.
 	 */
-	private void aplicar(){
-	
-		try{
-	
-		canClose = false;
-		if (gridMathPanel.getCalculatorPanel().getJTableVariables().getTableFormat().getRowCount()>0){
-			boolean allAsigned=true;
-	
-			// Comprobar que todas las variables estan asignadas
-			for (int i=0; i<gridMathPanel.getCalculatorPanel().getJTableVariables().getTableFormat().getRowCount(); i++){
-				if (gridMathPanel.getCalculatorPanel().getJTableVariables().getTableFormat().getValueAt(i,1).toString().equals(""))
-				{ allAsigned=false; break;}
-			}
-	
-			if (allAsigned){
-				gridMathPanel.getCalculatorPanel().getParser().parseExpression(
-						gridMathPanel.getCalculatorPanel().getJTextExpression().getText());
-				if(!gridMathPanel.getCalculatorPanel().getParser().hasError()){
-					canClose  = true;
-					calculate();
+	private void aplicar() {
+
+		try {
+
+			canClose = false;
+			if (gridMathPanel.getCalculatorPanel().getJTableVariables()
+					.getTableFormat().getRowCount() > 0) {
+				boolean allAsigned = true;
+
+				// Comprobar que todas las variables estan asignadas
+				for (int i = 0; i < gridMathPanel.getCalculatorPanel()
+						.getJTableVariables().getTableFormat().getRowCount(); i++) {
+					if (gridMathPanel.getCalculatorPanel().getJTableVariables()
+							.getTableFormat().getValueAt(i, 1).toString()
+							.equals("")) {
+						allAsigned = false;
+						break;
+					}
 				}
-				else{
-					throw new ErrorSintaxisException();
+
+				if (allAsigned) {
+					gridMathPanel
+							.getCalculatorPanel()
+							.getParser()
+							.parseExpression(
+									gridMathPanel.getCalculatorPanel()
+											.getJTextExpression().getText());
+					if (!gridMathPanel.getCalculatorPanel().getParser()
+							.hasError()) {
+						canClose = true;
+						calculate();
+					} else {
+						throw new ErrorSintaxisException();
+					}
+				} else {
+					throw new NoAssignedVarsException();
 				}
-			}else{			
-				throw new NoAssignedVarsException();
-			}
-		
-		}else {
-			throw new NoVarsException();
+
+			} else {
+				throw new NoVarsException();
 			}
 		} catch (ErrorSintaxisException exc) {
-			RasterToolsUtil.messageBoxError(PluginServices.getText(this, "bad_expresion"), this);
-		}catch (NoAssignedVarsException exc){
-			RasterToolsUtil.messageBoxError(PluginServices.getText(this,"variables_sin_asignar"),this);
-		}catch (NoVarsException exc){
-			RasterToolsUtil.messageBoxError(PluginServices.getText(this,"no_variables"),this);
+			RasterToolsUtil.messageBoxError(
+					PluginServices.getText(this, "bad_expresion"), this);
+		} catch (NoAssignedVarsException exc) {
+			RasterToolsUtil
+					.messageBoxError(PluginServices.getText(this,
+							"variables_sin_asignar"), this);
+		} catch (NoVarsException exc) {
+			RasterToolsUtil.messageBoxError(
+					PluginServices.getText(this, "no_variables"), this);
 		}
 	}
-	
-	
+
 	/**
-	 * Método que construye el HasMap con los params y lanza el proceso para el 
-	 * calculo del raster resultante. 
+	 * Método que construye el HasMap con los params y lanza el proceso para el
+	 * calculo del raster resultante.
 	 * 
 	 */
-	private void calculate(){
+	private void calculate() {
 
 		int nBand;
 		String layerBand;
 		String layerName;
 		FLyrRasterSE rasterLayer;
-	
+
 		String path = getFileSelected();
 		if (path == null)
-			return;		
-		FLayers layers = gridMathPanel.getView().getModel().getMapContext().getLayers();
-		
+			return;
+		FLayers layers = gridMathPanel.getView().getModel().getMapContext()
+				.getLayers();
+
 		// Extent de salida personalizado.
-		if (gridMathPanel.getOptionsPanel().getRButtom2().isSelected()){
-			try{
-			gridMathPanel.getOutputExtent().setXRange(Double.parseDouble(gridMathPanel.getOptionsPanel().getJTextRangoX1().getText()),Double.parseDouble(gridMathPanel.getOptionsPanel().getJTextRangoX2().getText()));
-			gridMathPanel.getOutputExtent().setYRange(Double.parseDouble(gridMathPanel.getOptionsPanel().getJTextRangoY1().getText()), Double.parseDouble(gridMathPanel.getOptionsPanel().getJTextRangoY2().getText()));
-			gridMathPanel.getOutputExtent().setCellSizeX(Double.parseDouble(gridMathPanel.getOptionsPanel().getJTextCellSizeX().getText()));
-			gridMathPanel.getOutputExtent().setCellSizeY(Double.parseDouble(gridMathPanel.getOptionsPanel().getJTextCellSizeY().getText()));
-			}catch (NumberFormatException  e) {
-				RasterToolsUtil.messageBoxError(PluginServices.getText(this, "invalid_number"), this);
+		if (gridMathPanel.getOptionsPanel().getRButtom2().isSelected()) {
+			try {
+				gridMathPanel.getOutputExtent().setXRange(
+						Double.parseDouble(gridMathPanel.getOptionsPanel()
+								.getJTextRangoX1().getText()),
+						Double.parseDouble(gridMathPanel.getOptionsPanel()
+								.getJTextRangoX2().getText()));
+				gridMathPanel.getOutputExtent().setYRange(
+						Double.parseDouble(gridMathPanel.getOptionsPanel()
+								.getJTextRangoY1().getText()),
+						Double.parseDouble(gridMathPanel.getOptionsPanel()
+								.getJTextRangoY2().getText()));
+				gridMathPanel.getOutputExtent().setCellSizeX(
+						Double.parseDouble(gridMathPanel.getOptionsPanel()
+								.getJTextCellSizeX().getText()));
+				gridMathPanel.getOutputExtent().setCellSizeY(
+						Double.parseDouble(gridMathPanel.getOptionsPanel()
+								.getJTextCellSizeY().getText()));
+			} catch (NumberFormatException e) {
+				RasterToolsUtil.messageBoxError(
+						PluginServices.getText(this, "invalid_number"), this);
 				return;
 			}
 		}
-		//	Extent de salida a partir de una capa.
-		else if(gridMathPanel.getOptionsPanel().getRButtom4().isSelected()){
+		// Extent de salida a partir de una capa.
+		else if (gridMathPanel.getOptionsPanel().getRButtom4().isSelected()) {
 			try {
-				FLayer layer = layers.getLayer(gridMathPanel.getOptionsPanel().getJComboCapas().getSelectedIndex());	
-				gridMathPanel.getOutputExtent().setXRange(layer.getFullExtent().getMinX(),
+				FLayer layer = layers.getLayer(gridMathPanel.getOptionsPanel()
+						.getJComboCapas().getSelectedIndex());
+				gridMathPanel.getOutputExtent().setXRange(
+						layer.getFullExtent().getMinX(),
 						layer.getFullExtent().getMaxX());
-				gridMathPanel.getOutputExtent().setYRange(layer.getFullExtent().getMinY(),
+				gridMathPanel.getOutputExtent().setYRange(
+						layer.getFullExtent().getMinY(),
 						layer.getFullExtent().getMaxY());
-				gridMathPanel.getOutputExtent().setCellSize(Double.parseDouble(gridMathPanel.getOptionsPanel().getJTextCellSizeX().getText()));		
+				gridMathPanel.getOutputExtent().setCellSize(
+						Double.parseDouble(gridMathPanel.getOptionsPanel()
+								.getJTextCellSizeX().getText()));
 				gridMathPanel.getOptionsPanel().extentHasChanged();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 		}
-		gridMathPanel.getGridMath().setResultExtent(gridMathPanel.getOutputExtent());
-		
-		 //Rellenar el HasMap con el buffer corespondiente a cada variable
-		
-		
-		
+		gridMathPanel.getGridMath().setResultExtent(
+				gridMathPanel.getOutputExtent());
+
+		// Rellenar el HasMap con el buffer corespondiente a cada variable
+
 		/*
-		Comprobar que todas las variables que intervienen en la expresion 
-		estan en el HasMap de parametros.
+		 * Comprobar que todas las variables que intervienen en la expresion
+		 * estan en el HasMap de parametros.
 		 */
-	
-				
-		 // Lanzar el proceso de cálculo.
+
+		// Lanzar el proceso de cálculo.
 		GridMathProcess process = new GridMathProcess();
-		process.addParam("panel",gridMathPanel);
-		process.addParam("expresion",gridMathPanel.getCalculatorPanel().getJTextExpression().getText());	
-		process.addParam("params",gridMathPanel.getGridMath().getParams());	
-		process.addParam("extent",gridMathPanel.getOutputExtent());
-		process.addParam("mapcontext",gridMathPanel.getView().getModel().getMapContext());
+		process.addParam("panel", gridMathPanel);
+		process.addParam("expresion", gridMathPanel.getCalculatorPanel()
+				.getJTextExpression().getText());
+		process.addParam("params", gridMathPanel.getGridMath().getParams());
+		process.addParam("extent", gridMathPanel.getOutputExtent());
+		process.addParam("mapcontext", gridMathPanel.getView().getModel()
+				.getMapContext());
 		process.addParam("filepath", path);
-	    process.start();
-	
+		process.start();
+
 	}
-	
-	
+
 	/**
 	 * Acciones al cerrar
 	 */
 	private void close() {
-		PluginServices.getMDIManager().closeWindow(gridMathPanel.getCalculatorDialog());
+		PluginServices.getMDIManager().closeWindow(
+				gridMathPanel.getCalculatorDialog());
 	}
-	
 
 	public void tableChanged(TableModelEvent e) {
 		gridMathPanel.getOptionsPanel().InicializarOpcion();
 	}
-	
+
 	/**
 	 * Devuelve la ruta del fichero donde se va a guardar, en caso de guardarse
 	 * en memoria, calcula el nombre sin preguntar y devuelve la ruta.
+	 * 
 	 * @return string con la ruta de salida
 	 */
 	public String getFileSelected() {
 		String path = "";
 		if (gridMathPanel.getOptionsPanel().getRadioFile().isSelected()) {
-			JFileChooser chooser = new JFileChooser(FileOpenWizard.getLastPath());
-			chooser.setDialogTitle(PluginServices.getText(this, "seleccionar_fichero"));
-			//Añadimos las extensiones que hayan sido registradas en el driver
+			JFileChooser chooser = new JFileChooser(
+					FileOpenWizard.getLastPath());
+			chooser.setDialogTitle(PluginServices.getText(this,
+					"seleccionar_fichero"));
+			// Añadimos las extensiones que hayan sido registradas en el driver
 			String[] extList = GeoRasterWriter.getDriversExtensions();
 			chooser.setAcceptAllFileFilterUsed(false);
 			ExtendedFileFilter selectedFilter = null;
-			for(int i=0;i<extList.length;i++) {				
-				ExtendedFileFilter fileFilter = new ExtendedFileFilter(extList[i]);
+			for (int i = 0; i < extList.length; i++) {
+				ExtendedFileFilter fileFilter = new ExtendedFileFilter(
+						extList[i]);
 				chooser.addChoosableFileFilter(fileFilter);
 				if (extList[i].toLowerCase().equals("tif")) {
 					selectedFilter = fileFilter;
@@ -269,43 +305,55 @@ public class GridMathPanelListener implements ButtonsPanelListener, TableModelLi
 				}
 				if (extList[i].toLowerCase().equals("lan")) {
 					fileFilter.addExtension((String) "gis");
-				}				
+				}
 			}
 			if (selectedFilter != null)
-				chooser.setFileFilter(selectedFilter);			
+				chooser.setFileFilter(selectedFilter);
 
 			if (chooser.showOpenDialog(gridMathPanel.getOptionsPanel()) != JFileChooser.APPROVE_OPTION)
 				return null;
 
-			FileOpenWizard.setLastPath(chooser.getSelectedFile().getPath().substring(0, chooser.getSelectedFile().getPath().lastIndexOf(File.separator)));
-			ExtendedFileFilter fileFilter = (ExtendedFileFilter) chooser.getFileFilter();
+			FileOpenWizard.setLastPath(chooser
+					.getSelectedFile()
+					.getPath()
+					.substring(
+							0,
+							chooser.getSelectedFile().getPath()
+									.lastIndexOf(File.separator)));
+			ExtendedFileFilter fileFilter = (ExtendedFileFilter) chooser
+					.getFileFilter();
 			path = fileFilter.getNormalizedFilename(chooser.getSelectedFile());
 		} else {
-			String file = gridMathPanel.getOptionsPanel().getJTextNombreCapa().getText();
-			path = Utilities.createTempDirectory() + File.separator + gridMathPanel.getOptionsPanel().getJTextNombreCapa().getText() + ".tif";
-			if(file.compareTo(RasterLibrary.getOnlyLayerName()) == 0) 
+			String file = gridMathPanel.getOptionsPanel().getJTextNombreCapa()
+					.getText();
+			path = Utilities.createTempDirectory()
+					+ File.separator
+					+ gridMathPanel.getOptionsPanel().getJTextNombreCapa()
+							.getText() + ".tif";
+			if (file.compareTo(RasterLibrary.getOnlyLayerName()) == 0)
 				RasterLibrary.usesOnlyLayerName();
 			gridMathPanel.getOptionsPanel().updateNewLayerText();
 		}
-		
+
 		return path;
 	}
-	
+
 }
 
 /**
- * @author Nacho Brodin <brodin_ign@gva.es>
- * Filtro para el selector de formatos de escritura
+ * @author Nacho Brodin <brodin_ign@gva.es> Filtro para el selector de formatos
+ *         de escritura
  */
 class WriterFilter extends javax.swing.filechooser.FileFilter {
-	private String				filter;
+	private String filter;
 
 	public WriterFilter(String fil) {
 		this.filter = fil;
 	}
 
 	public boolean accept(File f) {
-		return f.isDirectory() || f.getName().toLowerCase().endsWith("." + filter);
+		return f.isDirectory()
+				|| f.getName().toLowerCase().endsWith("." + filter);
 	}
 
 	public String getDescription() {

@@ -48,8 +48,9 @@ import com.iver.utiles.XMLEntity;
 
 public class NormPreferences extends AbstractPreferencePage {
 	private static final long serialVersionUID = 1L;
-	
-	private String normFolder = com.iver.andami.Launcher.getAppHomeDir() + "normalization" + File.separator;
+
+	private String normFolder = com.iver.andami.Launcher.getAppHomeDir()
+			+ "normalization" + File.separator;
 
 	private ImageIcon icon;
 

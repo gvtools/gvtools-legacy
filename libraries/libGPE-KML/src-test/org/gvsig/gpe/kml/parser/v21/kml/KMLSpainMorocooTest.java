@@ -1,4 +1,5 @@
 package org.gvsig.gpe.kml.parser.v21.kml;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -48,10 +49,11 @@ package org.gvsig.gpe.kml.parser.v21.kml;
 /**
  * @author Jorge Piera Llodrá (jorge.piera@iver.es)
  */
-public class KMLSpainMorocooTest extends KMLBaseTest{
-	
+public class KMLSpainMorocooTest extends KMLBaseTest {
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.readers.GPEReaderBaseTest#getFile()
 	 */
 	public String getFile() {
@@ -60,11 +62,12 @@ public class KMLSpainMorocooTest extends KMLBaseTest{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.readers.GPEReaderBaseTest#makeAsserts()
 	 */
 	public void makeAsserts() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

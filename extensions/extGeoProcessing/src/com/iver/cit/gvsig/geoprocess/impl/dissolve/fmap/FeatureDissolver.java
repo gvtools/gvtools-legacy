@@ -117,9 +117,9 @@ import com.vividsolutions.jts.geom.Geometry;
  * Dissolve features in base of a given dissolve criteria.
  * </p>
  * By 'dissolving' we understand the union of the geometry of many features
- *
+ * 
  * @author azabala
- *
+ * 
  */
 public class FeatureDissolver {
 
@@ -141,16 +141,16 @@ public class FeatureDissolver {
 	 * feature geometry
 	 */
 	protected FLyrVect dissolvedLayer;
-	
+
 	protected int geometryType;
 
 	/**
 	 * It marks all features that have already been dissolved (to avoid process
 	 * them in subsecuent steps)
-	 *
+	 * 
 	 */
 	protected FBitSet dissolvedGeometries;
-	
+
 	/**
 	 * If its not null, the dissolver will only dissolve the selected features
 	 */
@@ -179,14 +179,14 @@ public class FeatureDissolver {
 	protected IDissolveCriteria dissolveCriteria;
 
 	/**
-	 *
+	 * 
 	 * @param processor
 	 * @param layer
 	 * @throws GeoprocessException
 	 */
 	public FeatureDissolver(FeatureProcessor processor, FLyrVect layer,
-			Map numericField_sumFunction, IDissolveCriteria criteria, int dissolveType)
-			throws GeoprocessException {
+			Map numericField_sumFunction, IDissolveCriteria criteria,
+			int dissolveType) throws GeoprocessException {
 
 		this.featureProcessor = processor;
 		this.numericField_sumarizeFunction = numericField_sumFunction;
@@ -228,7 +228,8 @@ public class FeatureDissolver {
 		return dissolvedGeometries.cardinality();
 	}
 
-	public void dissolve(CancellableMonitorable cancel) throws GeoprocessException {
+	public void dissolve(CancellableMonitorable cancel)
+			throws GeoprocessException {
 		try {
 			ReadableVectorial va = dissolvedLayer.getSource();
 			va.start();
@@ -238,25 +239,24 @@ public class FeatureDissolver {
 					return;
 				}
 
-				
 				/*
-				 * If a selection has been setted, we only process those geometries that
-				 * has been selected
-				 * */
-				if(selection != null){
-					if(! selection.get(i))
+				 * If a selection has been setted, we only process those
+				 * geometries that has been selected
+				 */
+				if (selection != null) {
+					if (!selection.get(i))
 						continue;
 				}
-				
-				//Ver si podemos optimizar esto de forma que solo
-				//se procesasen los elementos no marcados en el bitset
-				//(bitset de acceso aleatorio)
+
+				// Ver si podemos optimizar esto de forma que solo
+				// se procesasen los elementos no marcados en el bitset
+				// (bitset de acceso aleatorio)
 				if (!dissolvedGeometries.get(i)) {
 					// if we havent processed this element yet
 					try {
-						if(dissolveType == SPATIAL_DISSOLVE)
-							process( i, va, cancel);
-						else if(dissolveType == ALPHANUMERIC_DISSOLVE)
+						if (dissolveType == SPATIAL_DISSOLVE)
+							process(i, va, cancel);
+						else if (dissolveType == ALPHANUMERIC_DISSOLVE)
 							processAlphanumeric(i, va, cancel);
 					} catch (ReadDriverException e) {
 						throw new GeoprocessException(
@@ -284,7 +284,7 @@ public class FeatureDissolver {
 	/**
 	 * Verifies cancelation events, and return a boolean flag if processes must
 	 * be stopped for this cancelations events.
-	 *
+	 * 
 	 * @param cancel
 	 * @param va
 	 * @param visitor
@@ -326,8 +326,9 @@ public class FeatureDissolver {
 			this.cancel = cancel;
 		}
 
-		public void visit(IGeometry g, int index2) throws VisitorException, ProcessVisitorException {
-			if(g == null)
+		public void visit(IGeometry g, int index2) throws VisitorException,
+				ProcessVisitorException {
+			if (g == null)
 				return;
 			if (verifyCancelation(cancel, va)) {
 				// TODO Revisar si hay problemas por llamar a finish
@@ -336,13 +337,14 @@ public class FeatureDissolver {
 				return;
 			}
 
-			if(index1 == index2){
-				//we dont want dissolve a feature with itself
+			if (index1 == index2) {
+				// we dont want dissolve a feature with itself
 				return;
 			}
-			
-			if(selection != null){//if there is a selection, only consideer selected features
-				if(! selection.get(index2))
+
+			if (selection != null) {// if there is a selection, only consideer
+									// selected features
+				if (!selection.get(index2))
 					return;
 			}
 
@@ -352,30 +354,29 @@ public class FeatureDissolver {
 			}
 
 			if (criteria.verifyIfDissolve(index1, index2)) {
-				//Rediseñar esto (es para que valga tanto para dissolves
-				//espaciales como alfanuméricos
-				if(stack != null)
+				// Rediseñar esto (es para que valga tanto para dissolves
+				// espaciales como alfanuméricos
+				if (stack != null)
 					stack.push(new Integer(index2));
 				try {
-					if(criteria instanceof ISpatialDissolveCriteria){
-						//Para ver el criterio de disolucion ya se ha
-						//leido la geometria
-						geometries.add(
-								((ISpatialDissolveCriteria)criteria).
-								getSecondGeometry().toJTSGeometry());
-					}else{
+					if (criteria instanceof ISpatialDissolveCriteria) {
+						// Para ver el criterio de disolucion ya se ha
+						// leido la geometria
+						geometries.add(((ISpatialDissolveCriteria) criteria)
+								.getSecondGeometry().toJTSGeometry());
+					} else {
 						IGeometry g2 = va.getShape(index2);
-						if(ct != null)
+						if (ct != null)
 							g2.reProject(ct);
 						geometries.add(g2.toJTSGeometry());
 					}
 					sumarizer.applySumarizeFunction(index2);
 				} catch (ReadDriverException e) {
-					throw new ProcessVisitorException(recordset.getName(),e,
+					throw new ProcessVisitorException(recordset.getName(), e,
 							"Error durante lectura de geometria en dissolve");
-				} 
-				//Esto se debe hacer externamente
-				if(stack == null)
+				}
+				// Esto se debe hacer externamente
+				if (stack == null)
 					dissolvedGeometries.set(index2);
 			}
 		}// visit
@@ -404,54 +405,45 @@ public class FeatureDissolver {
 	 * @throws IOException
 	 * @throws DriverIOException
 	 */
-	public void processAlphanumeric(int index1,
-							ReadableVectorial va,
-							CancellableMonitorable cancel)
-							throws ReadDriverException, ExpansionFileReadException, VisitorException{
+	public void processAlphanumeric(int index1, ReadableVectorial va,
+			CancellableMonitorable cancel) throws ReadDriverException,
+			ExpansionFileReadException, VisitorException {
 
 		dissolvedGeometries.set(index1);
 		Strategy strategy = StrategyManager.getStrategy(dissolvedLayer);
 		ArrayList geometries = new ArrayList();
-		//we add the 'seed' feature geometry
+		// we add the 'seed' feature geometry
 		IGeometry g1 = va.getShape(index1);
-		if(g1 == null)
+		if (g1 == null)
 			return;
-		if(ct != null)
+		if (ct != null)
 			g1.reProject(ct);
 		geometries.add(g1.toJTSGeometry());
-		if(dissolveCriteria instanceof ISpatialDissolveCriteria){
-			((ISpatialDissolveCriteria)dissolveCriteria).setCrsTransform(ct);
-			((ISpatialDissolveCriteria)dissolveCriteria).setFirstGeometry(g1);
+		if (dissolveCriteria instanceof ISpatialDissolveCriteria) {
+			((ISpatialDissolveCriteria) dissolveCriteria).setCrsTransform(ct);
+			((ISpatialDissolveCriteria) dissolveCriteria).setFirstGeometry(g1);
 		}
 		FunctionSummarizer sumarizer = new FunctionSummarizer(
 				numericField_sumarizeFunction, recordset);
-		DissolveVisitor visitor = new DissolveVisitor(dissolveCriteria, index1, null,
-				geometries, va, sumarizer, cancel);
+		DissolveVisitor visitor = new DissolveVisitor(dissolveCriteria, index1,
+				null, geometries, va, sumarizer, cancel);
 		strategy.process(visitor);
 		IGeometry newGeometry = FConverter.jts_to_igeometry(union2(geometries));
 		List sumarizedValues = sumarizer.getValues();
 		IFeature dissolvedFeature = null;
-		if(sumarizedValues != null || sumarizedValues.size() != 0){
-			dissolvedFeature =  dissolveCriteria.
-							getFeatureBuilder().
-							createFeature(newGeometry,
-										sumarizedValues,
-												fid,
-												index1);
-		}else{
-			dissolvedFeature = dissolveCriteria.
-								getFeatureBuilder().
-								createFeature(newGeometry,
-										index1,
-										fid);
+		if (sumarizedValues != null || sumarizedValues.size() != 0) {
+			dissolvedFeature = dissolveCriteria.getFeatureBuilder()
+					.createFeature(newGeometry, sumarizedValues, fid, index1);
+		} else {
+			dissolvedFeature = dissolveCriteria.getFeatureBuilder()
+					.createFeature(newGeometry, index1, fid);
 		}
-		if(dissolvedFeature.getGeometry() != null){
+		if (dissolvedFeature.getGeometry() != null) {
 			fid++;
 			featureProcessor.processFeature(dissolvedFeature);
 		}
 		dissolveCriteria.clear();
 	}
-
 
 	class SpatialDissolveVisitor implements FeatureVisitor {
 
@@ -464,10 +456,10 @@ public class FeatureDissolver {
 		FunctionSummarizer sumarizer;
 		CancellableMonitorable cancel;
 
-		SpatialDissolveVisitor(IDissolveCriteria criteria, Geometry geo1, StackEntry entry1,
-				Stack stack,
-				List geometries, ReadableVectorial va,
-				FunctionSummarizer sumarizer, CancellableMonitorable cancel) {
+		SpatialDissolveVisitor(IDissolveCriteria criteria, Geometry geo1,
+				StackEntry entry1, Stack stack, List geometries,
+				ReadableVectorial va, FunctionSummarizer sumarizer,
+				CancellableMonitorable cancel) {
 			this.criteria = criteria;
 			this.geom1 = geo1;
 			this.entry1 = entry1;
@@ -478,15 +470,14 @@ public class FeatureDissolver {
 			this.cancel = cancel;
 		}
 
-		void setSeed(StackEntry entry, Geometry jtsGeo){
+		void setSeed(StackEntry entry, Geometry jtsGeo) {
 			this.entry1 = entry;
 			this.geom1 = jtsGeo;
 		}
 
-
-
-		public void visit(IGeometry g, int index2) throws VisitorException, ProcessVisitorException {
-			if(g == null)
+		public void visit(IGeometry g, int index2) throws VisitorException,
+				ProcessVisitorException {
+			if (g == null)
 				return;
 			if (verifyCancelation(cancel, va)) {
 				// TODO Revisar si hay problemas por llamar a finish
@@ -495,41 +486,41 @@ public class FeatureDissolver {
 				return;
 			}
 
-			if(entry1.index == index2){
-				//we dont want dissolve a feature with itself
+			if (entry1.index == index2) {
+				// we dont want dissolve a feature with itself
 				return;
 			}
-			
-			if(selection != null){//if there is a selection, only consideer selected features
-				if(! selection.get(index2))
+
+			if (selection != null) {// if there is a selection, only consideer
+									// selected features
+				if (!selection.get(index2))
 					return;
 			}
-			
 
 			if (dissolvedGeometries.get(index2)) {
 				// this geometry has been processed yet
 				return;
 			}
-			if(criteria instanceof ISpatialDissolveCriteria){
-				((ISpatialDissolveCriteria)criteria).setSecondGeometry(g);
+			if (criteria instanceof ISpatialDissolveCriteria) {
+				((ISpatialDissolveCriteria) criteria).setSecondGeometry(g);
 			}
 			if (criteria.verifyIfDissolve(entry1.index, index2)) {
 				StackEntry entry2 = new StackEntry();
 				entry2.g = g;
 				entry2.index = index2;
 				stack.push(entry2);
-				System.out.println("Anado "+index2+ " al stack");
+				System.out.println("Anado " + index2 + " al stack");
 				dumpStack(stack);
-				if(criteria instanceof ISpatialDissolveCriteria)
-				{
-					ISpatialDissolveCriteria c = (ISpatialDissolveCriteria)criteria;
+				if (criteria instanceof ISpatialDissolveCriteria) {
+					ISpatialDissolveCriteria c = (ISpatialDissolveCriteria) criteria;
 					geometries.add(c.getSecondJts());
-				}else
+				} else
 					geometries.add(g.toJTSGeometry());
 				try {
 					sumarizer.applySumarizeFunction(index2);
 				} catch (ReadDriverException e) {
-					throw new ProcessVisitorException(recordset.getName(),e,"Error al aplicar la funcion de sumarizacion en dissolve");
+					throw new ProcessVisitorException(recordset.getName(), e,
+							"Error al aplicar la funcion de sumarizacion en dissolve");
 				}
 				dissolvedGeometries.set(index2);
 			}
@@ -547,15 +538,16 @@ public class FeatureDissolver {
 		}
 	}
 
-	class StackEntry{
+	class StackEntry {
 		public IGeometry g;
 		public int index;
 	}
+
 	/**
 	 * Processes the given feature looking for features to dissolve with. The
 	 * criteria to decide if dissolve two features is given by
 	 * IDissolveCriteria.
-	 *
+	 * 
 	 * @param criteria
 	 *            decides if dissolve two features
 	 * @param index1
@@ -572,56 +564,49 @@ public class FeatureDissolver {
 	 * @throws IOException
 	 * @throws DriverIOException
 	 */
-	public void process(int index1,
-			ReadableVectorial va,
-			CancellableMonitorable cancel)
-			throws ReadDriverException, ExpansionFileReadException, VisitorException {
+	public void process(int index1, ReadableVectorial va,
+			CancellableMonitorable cancel) throws ReadDriverException,
+			ExpansionFileReadException, VisitorException {
 
-		if(dissolvedGeometries.get(index1))
+		if (dissolvedGeometries.get(index1))
 			return;
 		Strategy strategy = StrategyManager.getStrategy(dissolvedLayer);
 		IGeometry g1 = va.getShape(index1);
-		if(g1 == null)
+		if (g1 == null)
 			return;
-		if(ct != null)
+		if (ct != null)
 			g1.reProject(ct);
 		StackEntry entry = new StackEntry();
 		entry.g = g1;
 		entry.index = index1;
-		Stack stack = new Stack();//it saves FMap geometries
+		Stack stack = new Stack();// it saves FMap geometries
 		stack.push(entry);
 		ArrayList geometries = new ArrayList();
 
 		Geometry jtsGeo = g1.toJTSGeometry();
-		geometries.add(jtsGeo);//it saves jts geometries
+		geometries.add(jtsGeo);// it saves jts geometries
 
-		if(dissolveCriteria instanceof ISpatialDissolveCriteria){
-			((ISpatialDissolveCriteria)dissolveCriteria).setCrsTransform(ct);
-			((ISpatialDissolveCriteria)dissolveCriteria).setFirstGeometry(g1);
+		if (dissolveCriteria instanceof ISpatialDissolveCriteria) {
+			((ISpatialDissolveCriteria) dissolveCriteria).setCrsTransform(ct);
+			((ISpatialDissolveCriteria) dissolveCriteria).setFirstGeometry(g1);
 		}
 		FunctionSummarizer sumarizer = new FunctionSummarizer(
 				numericField_sumarizeFunction, recordset);
-		SpatialDissolveVisitor visitor = new SpatialDissolveVisitor(dissolveCriteria,
-																			jtsGeo,
-																			entry,
-																			stack,
-																			geometries,
-																			va,
-																			sumarizer,
-																			cancel);
+		SpatialDissolveVisitor visitor = new SpatialDissolveVisitor(
+				dissolveCriteria, jtsGeo, entry, stack, geometries, va,
+				sumarizer, cancel);
 
 		while (stack.size() != 0) {
 			dumpStack(stack);
 			StackEntry sEntry = (StackEntry) stack.pop();
 			dissolvedGeometries.set(sEntry.index);
 
-			/*//TODO
-			 * Revisar si no deberiamos hacer
+			/*
+			 * //TODO Revisar si no deberiamos hacer
 			 * ct.getInverted().convert(rect);
-			 *
-			 * */
+			 */
 			Rectangle2D rect = sEntry.g.getBounds2D();
-			if(ct != null)
+			if (ct != null)
 				rect = ProjectionUtils.transform(rect, ct);
 			double xmin = rect.getMinX();
 			double ymin = rect.getMinY();
@@ -635,23 +620,15 @@ public class FeatureDissolver {
 			strategy.process(visitor, query);
 		}// while
 
-
 		IGeometry newGeometry = FConverter.jts_to_igeometry(union2(geometries));
 		List sumarizedValues = sumarizer.getValues();
 		IFeature dissolvedFeature = null;
-		if(sumarizedValues != null || sumarizedValues.size() != 0){
-			dissolvedFeature =  dissolveCriteria.
-								getFeatureBuilder().
-								createFeature(newGeometry,
-											sumarizedValues,
-													fid,
-													index1);
-		}else{
-			dissolvedFeature = dissolveCriteria.
-								getFeatureBuilder().
-								createFeature(newGeometry,
-										index1,
-										fid);
+		if (sumarizedValues != null || sumarizedValues.size() != 0) {
+			dissolvedFeature = dissolveCriteria.getFeatureBuilder()
+					.createFeature(newGeometry, sumarizedValues, fid, index1);
+		} else {
+			dissolvedFeature = dissolveCriteria.getFeatureBuilder()
+					.createFeature(newGeometry, index1, fid);
 		}
 		fid++;
 		featureProcessor.processFeature(dissolvedFeature);
@@ -661,66 +638,44 @@ public class FeatureDissolver {
 	private void dumpStack(Stack stack) {
 		Enumeration e = stack.elements();
 		System.out.println("#####Elementos por procesar");
-		while(e.hasMoreElements()){
-			System.out.println("#######-     "+((StackEntry)e.nextElement()).index);
+		while (e.hasMoreElements()) {
+			System.out.println("#######-     "
+					+ ((StackEntry) e.nextElement()).index);
 		}
 	}
 
 	/**
 	 * Returns the union of all geometries of the list
-	 *
+	 * 
 	 * @param geometries
 	 * @return
 	 */
 	/*
-	protected Geometry union(List geometries) {
-		Geometry union = null;
-//		GeometryFactory fact = ((Geometry)geometries.
-//									get(0)).getFactory();
-		Iterator geomIt = geometries.iterator();
-		while(geomIt.hasNext()){
-			Geometry g = (Geometry) geomIt.next();
-			if(union == null)
-				union = g;
-			else{
-				Geometry[] geomArray = {union, g};
-//				GeometryCollection gCol =
-//					fact.
-//					createGeometryCollection(geomArray);
-//				union = gCol.buffer(0d);
-				union = JTSFacade.union(geomArray);
-			}
-		}
-		return union;
-	}
-	*/
+	 * protected Geometry union(List geometries) { Geometry union = null; //
+	 * GeometryFactory fact = ((Geometry)geometries. // get(0)).getFactory();
+	 * Iterator geomIt = geometries.iterator(); while(geomIt.hasNext()){
+	 * Geometry g = (Geometry) geomIt.next(); if(union == null) union = g; else{
+	 * Geometry[] geomArray = {union, g}; // GeometryCollection gCol = // fact.
+	 * // createGeometryCollection(geomArray); // union = gCol.buffer(0d); union
+	 * = JTSFacade.union(geomArray); } } return union; }
+	 */
 
 	/*
-	protected Geometry union3(List geometries) {
-		long t0 = System.currentTimeMillis();
-		Geometry union = null;
-		Iterator geomIt = geometries.iterator();
-		while(geomIt.hasNext()){
-			Geometry g = (Geometry) geomIt.next();
-			if(union == null)
-				union = g;
-			else{
-//				union = union.union(g);
-				union = JTSFacade.union(union, g);
-			}
-		}
-		long t1 = System.currentTimeMillis();
-		System.out.println((t1-t0)+ " en procesar union 3");
-		return union;
-	}
-	*/
+	 * protected Geometry union3(List geometries) { long t0 =
+	 * System.currentTimeMillis(); Geometry union = null; Iterator geomIt =
+	 * geometries.iterator(); while(geomIt.hasNext()){ Geometry g = (Geometry)
+	 * geomIt.next(); if(union == null) union = g; else{ // union =
+	 * union.union(g); union = JTSFacade.union(union, g); } } long t1 =
+	 * System.currentTimeMillis(); System.out.println((t1-t0)+
+	 * " en procesar union 3"); return union; }
+	 */
 
-	protected Geometry union2(List geometries){
-			Geometry union = null;
-			Geometry[] geom = new Geometry[geometries.size()];
-			geometries.toArray(geom);
-			union = JTSFacade.union(geom, geometryType);
-		    return union;
+	protected Geometry union2(List geometries) {
+		Geometry union = null;
+		Geometry[] geom = new Geometry[geometries.size()];
+		geometries.toArray(geom);
+		union = JTSFacade.union(geom, geometryType);
+		return union;
 
 	}
 

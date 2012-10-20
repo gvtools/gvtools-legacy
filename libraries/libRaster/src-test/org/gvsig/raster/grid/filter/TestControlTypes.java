@@ -31,22 +31,23 @@ import org.gvsig.raster.grid.filter.enhancement.BrightnessContrastListManager;
 import org.gvsig.raster.grid.filter.enhancement.EnhancementStretchListManager;
 import org.gvsig.raster.grid.filter.enhancement.LinearStretchEnhancementFilter;
 import org.gvsig.raster.grid.filter.enhancement.LinearStretchParams;
+
 /**
- * Dada una pila de filtros con filtros de tipos heterogeneos. Elimina uno del 
- * medio y ejecuta controlTypes de RasterFilterListManager. Después comprueba 
+ * Dada una pila de filtros con filtros de tipos heterogeneos. Elimina uno del
+ * medio y ejecuta controlTypes de RasterFilterListManager. Después comprueba
  * que los tipo siguen siendo correctos.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public class TestControlTypes extends TestCase{
+public class TestControlTypes extends TestCase {
 
-	private RasterFilterList		list = new RasterFilterList();
+	private RasterFilterList list = new RasterFilterList();
 	private String baseDir = "./test-images/";
 	private String path1 = baseDir + "miniRaster28x25F32.tif";
 	private RasterDataset f1 = null;
 
-	static{
+	static {
 		RasterLibrary.wakeUp();
 	}
 
@@ -67,11 +68,14 @@ public class TestControlTypes extends TestCase{
 	}
 
 	public void testStack() {
-		IBuffer buf = RasterBuffer.getBuffer(IBuffer.TYPE_DOUBLE, 10, 10, 3, true);
+		IBuffer buf = RasterBuffer.getBuffer(IBuffer.TYPE_DOUBLE, 10, 10, 3,
+				true);
 		list.setInitRasterBuf(buf);
 		RasterFilterListManager manager = new RasterFilterListManager(list);
-		EnhancementStretchListManager m0 = (EnhancementStretchListManager) manager.getManagerByClass(EnhancementStretchListManager.class);
-		BrightnessContrastListManager m1 = (BrightnessContrastListManager)manager.getManagerByClass(BrightnessContrastListManager.class);
+		EnhancementStretchListManager m0 = (EnhancementStretchListManager) manager
+				.getManagerByClass(EnhancementStretchListManager.class);
+		BrightnessContrastListManager m1 = (BrightnessContrastListManager) manager
+				.getManagerByClass(BrightnessContrastListManager.class);
 
 		try {
 			// Metemos Short, Short, Byte, Byte
@@ -81,7 +85,10 @@ public class TestControlTypes extends TestCase{
 			m1.addContrastFilter(12);
 			m1.addBrightnessFilter(10);
 			try {
-				m0.addEnhancedStretchFilter(LinearStretchParams.createStandardParam(new int[] { 0,	1, 2 }, 0.0, f1.getStatistics(), true), f1.getStatistics(), new int[] { 0,	1, 2 }, false);
+				m0.addEnhancedStretchFilter(
+						LinearStretchParams.createStandardParam(new int[] { 0,
+								1, 2 }, 0.0, f1.getStatistics(), true),
+						f1.getStatistics(), new int[] { 0, 1, 2 }, false);
 			} catch (FileNotOpenException e) {
 				e.printStackTrace();
 			} catch (RasterDriverException e) {

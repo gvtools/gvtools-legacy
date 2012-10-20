@@ -24,23 +24,24 @@ import java.util.ArrayList;
 import org.gvsig.georeferencing.ui.zoom.CanvasZone;
 
 /**
- * Clase base de la que deben extender las herramientas para la vista del 
- * zoom.
+ * Clase base de la que deben extender las herramientas para la vista del zoom.
  * 
  * 17/01/2008
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public abstract class BaseViewTool implements ToolListener {
-	
-	protected ArrayList        listeners   = new ArrayList();
-	protected boolean          active      = false;
-	protected CanvasZone       canvas      = null;
-	
-	private boolean            sleepActive = false;
-	private boolean            sleep       = false;
-	
+
+	protected ArrayList listeners = new ArrayList();
+	protected boolean active = false;
+	protected CanvasZone canvas = null;
+
+	private boolean sleepActive = false;
+	private boolean sleep = false;
+
 	/**
 	 * Constructor. Asigna el canvas y el listener para la tool.
+	 * 
 	 * @param canvas
 	 * @param listener
 	 */
@@ -48,49 +49,55 @@ public abstract class BaseViewTool implements ToolListener {
 		this.canvas = canvas;
 		addToolListener(listener);
 	}
-	
+
 	/**
 	 * Añade un listener para eventos de la tool
+	 * 
 	 * @param listener
 	 */
 	public void addToolListener(ToolListener listener) {
-		if(!listeners.contains(listener))
+		if (!listeners.contains(listener))
 			listeners.add(listener);
 	}
-	
+
 	/**
 	 * Informa de que la herramienta está activa.
+	 * 
 	 * @param ev
 	 */
 	public void onTool(ToolEvent ev) {
 		for (int i = 0; i < listeners.size(); i++) {
-			((ToolListener)listeners.get(i)).onTool(ev);
+			((ToolListener) listeners.get(i)).onTool(ev);
 		}
 	}
-	
+
 	/**
 	 * Informa de que la herramienta está activa.
+	 * 
 	 * @param ev
 	 */
 	public void offTool(ToolEvent ev) {
 		for (int i = 0; i < listeners.size(); i++) {
-			((ToolListener)listeners.get(i)).offTool(ev);
+			((ToolListener) listeners.get(i)).offTool(ev);
 		}
 	}
-	
+
 	/**
 	 * Evento de finalización de las acciones de la tool
-	 * @param ev ToolEvent
+	 * 
+	 * @param ev
+	 *            ToolEvent
 	 */
 	public void endAction(ToolEvent ev) {
 		for (int i = 0; i < listeners.size(); i++) {
-			((ToolListener)listeners.get(i)).endAction(ev);
+			((ToolListener) listeners.get(i)).endAction(ev);
 		}
 	}
-	
+
 	/**
-	 * Consulta si está activo el evento de pinchado y arrastrado de los puntos de 
-	 * control.
+	 * Consulta si está activo el evento de pinchado y arrastrado de los puntos
+	 * de control.
+	 * 
 	 * @return
 	 */
 	public boolean isActive() {
@@ -98,19 +105,21 @@ public abstract class BaseViewTool implements ToolListener {
 	}
 
 	/**
-	 * Asigna el flag que activa y desactiva la herramienta 
-	 * @param active true para activarla y false para desactivarla
+	 * Asigna el flag que activa y desactiva la herramienta
+	 * 
+	 * @param active
+	 *            true para activarla y false para desactivarla
 	 */
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-	
+
 	/**
 	 * Desactiva la herramienta temporalmente. Guarda el estado en el que estaba
 	 * para restaurarlo cuando se invoque a awake
 	 */
 	public void sleep() {
-		if(!sleep) {
+		if (!sleep) {
 			sleepActive = active;
 			active = false;
 			sleep = true;
@@ -118,25 +127,29 @@ public abstract class BaseViewTool implements ToolListener {
 	}
 
 	/**
-	 * Recupera el estado de activación que tenía antes de la última invocación 
+	 * Recupera el estado de activación que tenía antes de la última invocación
 	 * de sleep
 	 */
 	public void awake() {
-		if(sleep) {
+		if (sleep) {
 			active = sleepActive;
 			sleep = false;
 		}
 	}
-	
+
 	/**
 	 * Parte gráfica de una tool. Una tool puede dibujar sobre una vista
-	 * @param img BufferedImage
-	 * @param ext Rectangle2D
+	 * 
+	 * @param img
+	 *            BufferedImage
+	 * @param ext
+	 *            Rectangle2D
 	 */
 	public abstract void draw(Graphics g);
-	
+
 	/**
 	 * Obtiene el resultado de la aplicación de la herramienta
+	 * 
 	 * @return Object
 	 */
 	public abstract Object getResult();

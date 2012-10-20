@@ -85,89 +85,96 @@ import es.gva.cit.catalog.schemas.Resource;
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
 public class ARCIMSLayerLoader extends LayerLoader {
-	
+
 	public ARCIMSLayerLoader(Resource resource) {
-		super(resource);		
+		super(resource);
 	}
-	
+
 	/**
-	 * This function loads a ArcIms resource 
+	 * This function loads a ArcIms resource
+	 * 
 	 * @param host
-	 * URL where the server is located
+	 *            URL where the server is located
 	 * @param sLayer
-	 * Layer name
+	 *            Layer name
 	 * @param crs
-	 * Coordenates System
-	 * @throws LayerLoaderException 
+	 *            Coordenates System
+	 * @throws LayerLoaderException
 	 */
-	
+
 	public void loadLayer() throws LayerLoaderException {
 		String host = getResource().getLinkage();
 		String sLayer = getResource().getName();
 		String protocol = getResource().getProtocol();
-		BaseView activeView = 
-			(BaseView) PluginServices.getMDIManager().getActiveWindow();
+		BaseView activeView = (BaseView) PluginServices.getMDIManager()
+				.getActiveWindow();
 		String srs = ProjectionUtils.getAbrev(activeView.getCrs());
 		FLayer flayer = null;
-				
+
 		Map args = new HashMap();
-		args.put("host",host);
-		args.put("service_name",sLayer);
-		args.put("layer_name",sLayer);
-		args.put("srs",srs);
-		
-		if (protocol.toUpperCase().indexOf(Resource.ARCIMS_IMAGE) >= 0){
+		args.put("host", host);
+		args.put("service_name", sLayer);
+		args.put("layer_name", sLayer);
+		args.put("srs", srs);
+
+		if (protocol.toUpperCase().indexOf(Resource.ARCIMS_IMAGE) >= 0) {
 			flayer = createArcImsImageLayer(args);
-		}else if (protocol.toUpperCase().indexOf(Resource.ARCIMS_VECTORIAL) >= 0){
+		} else if (protocol.toUpperCase().indexOf(Resource.ARCIMS_VECTORIAL) >= 0) {
 			flayer = createArcImsVectorialLayer(args);
 		}
-		
+
 		try {
 			addLayerToView(flayer);
 		} catch (Exception e) {
-			throw new LayerLoaderException(e.getMessage(),getWindowMessage());
-		}   		    
-		
-	}	
+			throw new LayerLoaderException(e.getMessage(), getWindowMessage());
+		}
 
-	private FLayer createArcImsImageLayer(Map args) throws  LayerLoaderException{
-		ExtensionPoint extensionPoint = (ExtensionPoint)ExtensionPointsSingleton.getInstance().get("CatalogLayers");
+	}
+
+	private FLayer createArcImsImageLayer(Map args) throws LayerLoaderException {
+		ExtensionPoint extensionPoint = (ExtensionPoint) ExtensionPointsSingleton
+				.getInstance().get("CatalogLayers");
 
 		try {
-			return (FLayer)extensionPoint.create("arcims_raster", args  );
-		} catch(Exception e) {
-			throw new LayerLoaderException(getErrorMessage(),getWindowMessage());
+			return (FLayer) extensionPoint.create("arcims_raster", args);
+		} catch (Exception e) {
+			throw new LayerLoaderException(getErrorMessage(),
+					getWindowMessage());
 		}
 	}
-	
-	private FLayer createArcImsVectorialLayer(Map args) throws  LayerLoaderException{
-		ExtensionPoint extensionPoint = (ExtensionPoint)ExtensionPointsSingleton.getInstance().get("CatalogLayers");
-		
-		try {			
-			return (FLayer)extensionPoint.create("arcims_vectorial", args);
-		} catch(Exception e) {
-			throw new LayerLoaderException(getErrorMessage(),getWindowMessage());
+
+	private FLayer createArcImsVectorialLayer(Map args)
+			throws LayerLoaderException {
+		ExtensionPoint extensionPoint = (ExtensionPoint) ExtensionPointsSingleton
+				.getInstance().get("CatalogLayers");
+
+		try {
+			return (FLayer) extensionPoint.create("arcims_vectorial", args);
+		} catch (Exception e) {
+			throw new LayerLoaderException(getErrorMessage(),
+					getWindowMessage());
 		}
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see es.gva.cit.gvsig.catalogClient.loaders.LayerLoader#getErrorMessage()
 	 */
 	protected String getErrorMessage() {
-		return Messages.getText("arcims_server_error") + ".\n" +
-		Messages.getText("server") + ": " + 
-		getResource().getLinkage() + "\n" +
-		Messages.getText("layer") + ": " +
-		getResource().getName();		
+		return Messages.getText("arcims_server_error") + ".\n"
+				+ Messages.getText("server") + ": "
+				+ getResource().getLinkage() + "\n" + Messages.getText("layer")
+				+ ": " + getResource().getName();
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
-	 * @see es.gva.cit.gvsig.catalogClient.loaders.LayerLoader#getWindowMessage()
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * es.gva.cit.gvsig.catalogClient.loaders.LayerLoader#getWindowMessage()
 	 */
 	protected String getWindowMessage() {
 		return Messages.getText("arcims_load");
-	}	
+	}
 }
-

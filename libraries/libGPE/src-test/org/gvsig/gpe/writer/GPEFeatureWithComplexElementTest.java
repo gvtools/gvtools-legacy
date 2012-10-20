@@ -69,7 +69,8 @@ import org.gvsig.xmlschema.utils.TypeUtils;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class GPEFeatureWithComplexElementTest extends GPEWriterBaseTest {
+public abstract class GPEFeatureWithComplexElementTest extends
+		GPEWriterBaseTest {
 	private String namespace = "http://www,gvsig.org/cit";
 	private String layerId = "l1";
 	private String layerName = "Points Layer";
@@ -86,29 +87,32 @@ public abstract class GPEFeatureWithComplexElementTest extends GPEWriterBaseTest
 	private String element1Type = null;
 	private String element11Name = "First Name";
 	private String element11Value = "Jorge";
-	private String element11Type = TypeUtils.getXSType(element11Value.getClass());
+	private String element11Type = TypeUtils.getXSType(element11Value
+			.getClass());
 	private String element12Name = "Surname";
 	private String element12Value = "Piera";
-	private String element12Type = TypeUtils.getXSType(element12Value.getClass());
-	
+	private String element12Type = TypeUtils.getXSType(element12Value
+			.getClass());
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#readObjects()
 	 */
 	public void readObjects() {
 		Layer[] layers = getLayers();
-		assertEquals(layers.length, 1);		
+		assertEquals(layers.length, 1);
 		Layer layer = layers[0];
-	
+
 		assertEquals(layer.getFeatures().size(), 1);
-		//FEATURE 1
-		Feature feature1 = (Feature)layer.getFeatures().get(0);
+		// FEATURE 1
+		Feature feature1 = (Feature) layer.getFeatures().get(0);
 		Element element1 = feature1.getElementAt(0);
 		assertEquals(element1.getName(), element1Name);
-		//assertEquals(element1.getValue(), element1Value);
-		//assertEquals(element1.getType(), element1Type);
-		
-		assertEquals(element1.getElements().size(),2);
+		// assertEquals(element1.getValue(), element1Value);
+		// assertEquals(element1.getType(), element1Type);
+
+		assertEquals(element1.getElements().size(), 2);
 		Element element11 = element1.getElementAt(0);
 		assertEquals(element11.getName(), element11Name);
 		assertEquals(element11.getValue(), element11Value);
@@ -117,41 +121,41 @@ public abstract class GPEFeatureWithComplexElementTest extends GPEWriterBaseTest
 		assertEquals(element12.getName(), element12Name);
 		assertEquals(element12.getValue(), element12Value);
 		assertEquals(element12.getType(), element12Type);
-		
+
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#writeObjects()
 	 */
 	public void writeObjects() {
 		getWriterHandler().initialize();
-		getWriterHandler().startLayer(layerId, null, layerName, layerDescription, srs);
+		getWriterHandler().startLayer(layerId, null, layerName,
+				layerDescription, srs);
 		getWriterHandler().startFeature(feature1Id, null, feature1Name);
-		getWriterHandler().startPoint(point1Id, new CoordinatesSequence(point1X, point1Y, point1Z), srs);
-		getWriterHandler().endPoint();	
-		getWriterHandler().startElement(namespace,
-				element1Name,
-				element1Value);
-		getWriterHandler().startElement(namespace,
-				element11Name,
+		getWriterHandler().startPoint(point1Id,
+				new CoordinatesSequence(point1X, point1Y, point1Z), srs);
+		getWriterHandler().endPoint();
+		getWriterHandler().startElement(namespace, element1Name, element1Value);
+		getWriterHandler().startElement(namespace, element11Name,
 				element11Value);
 		getWriterHandler().endElement();
-		getWriterHandler().startElement(namespace,
-				element12Name,
+		getWriterHandler().startElement(namespace, element12Name,
 				element12Value);
 		getWriterHandler().endElement();
 		getWriterHandler().endElement();
-		getWriterHandler().endFeature();		
+		getWriterHandler().endFeature();
 		getWriterHandler().endLayer();
-		getWriterHandler().close();		
+		getWriterHandler().close();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getSchemaPath()
 	 */
-	protected String getSchemaPath(){
+	protected String getSchemaPath() {
 		return new File("testdata/cities.xsd").getAbsolutePath();
 	}
 }

@@ -40,68 +40,68 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: MultiLayerLineSymbol.java 15675 2007-10-30 16:41:53Z jdominguez $
-* $Log$
-* Revision 1.18  2007-09-21 12:25:32  jaume
-* cancellation support extended down to the IGeometry and ISymbol level
-*
-* Revision 1.17  2007/09/18 07:30:15  cesar
-* Revert last change
-*
-* Revision 1.15  2007/09/17 15:26:24  jaume
-* *** empty log message ***
-*
-* Revision 1.14  2007/09/17 14:16:11  jaume
-* multilayer symbols sizing bug fixed
-*
-* Revision 1.13  2007/09/17 09:33:47  jaume
-* some multishapedsymbol bugs fixed
-*
-* Revision 1.12  2007/08/09 08:04:48  jvidal
-* javadoc
-*
-* Revision 1.11  2007/07/23 06:52:55  jaume
-* Added support for arrow line decorator (start commiting)
-*
-* Revision 1.10  2007/07/18 06:54:34  jaume
-* continuing with cartographic support
-*
-* Revision 1.9  2007/07/03 10:58:29  jaume
-* first refactor on CartographicSupport
-*
-* Revision 1.8  2007/06/29 13:07:01  jaume
-* +PictureLineSymbol
-*
-* Revision 1.7  2007/05/17 09:32:06  jaume
-* *** empty log message ***
-*
-* Revision 1.6  2007/05/08 08:47:40  jaume
-* *** empty log message ***
-*
-* Revision 1.5  2007/04/17 07:01:53  bsanchez
-* - Corregido fallo de Double.MIN_VALUE por Double.NEGATIVE_INFINITY comentado por Victor Olaya.
-*
-* Revision 1.4  2007/03/26 14:26:02  jaume
-* implemented Print
-*
-* Revision 1.3  2007/03/20 16:01:21  jaume
-* *** empty log message ***
-*
-* Revision 1.2  2007/03/09 11:20:56  jaume
-* Advanced symbology (start committing)
-*
-* Revision 1.1.2.3  2007/02/21 16:09:02  jaume
-* *** empty log message ***
-*
-* Revision 1.1.2.2  2007/02/21 07:34:09  jaume
-* labeling starts working
-*
-* Revision 1.1.2.1  2007/02/16 10:54:12  jaume
-* multilayer splitted to multilayerline, multilayermarker,and  multilayerfill
-*
-*
-*/
+ *
+ * $Id: MultiLayerLineSymbol.java 15675 2007-10-30 16:41:53Z jdominguez $
+ * $Log$
+ * Revision 1.18  2007-09-21 12:25:32  jaume
+ * cancellation support extended down to the IGeometry and ISymbol level
+ *
+ * Revision 1.17  2007/09/18 07:30:15  cesar
+ * Revert last change
+ *
+ * Revision 1.15  2007/09/17 15:26:24  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.14  2007/09/17 14:16:11  jaume
+ * multilayer symbols sizing bug fixed
+ *
+ * Revision 1.13  2007/09/17 09:33:47  jaume
+ * some multishapedsymbol bugs fixed
+ *
+ * Revision 1.12  2007/08/09 08:04:48  jvidal
+ * javadoc
+ *
+ * Revision 1.11  2007/07/23 06:52:55  jaume
+ * Added support for arrow line decorator (start commiting)
+ *
+ * Revision 1.10  2007/07/18 06:54:34  jaume
+ * continuing with cartographic support
+ *
+ * Revision 1.9  2007/07/03 10:58:29  jaume
+ * first refactor on CartographicSupport
+ *
+ * Revision 1.8  2007/06/29 13:07:01  jaume
+ * +PictureLineSymbol
+ *
+ * Revision 1.7  2007/05/17 09:32:06  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.6  2007/05/08 08:47:40  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.5  2007/04/17 07:01:53  bsanchez
+ * - Corregido fallo de Double.MIN_VALUE por Double.NEGATIVE_INFINITY comentado por Victor Olaya.
+ *
+ * Revision 1.4  2007/03/26 14:26:02  jaume
+ * implemented Print
+ *
+ * Revision 1.3  2007/03/20 16:01:21  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.2  2007/03/09 11:20:56  jaume
+ * Advanced symbology (start committing)
+ *
+ * Revision 1.1.2.3  2007/02/21 16:09:02  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1.2.2  2007/02/21 07:34:09  jaume
+ * labeling starts working
+ *
+ * Revision 1.1.2.1  2007/02/16 10:54:12  jaume
+ * multilayer splitted to multilayerline, multilayermarker,and  multilayerfill
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.core.symbols;
 
 import java.awt.Color;
@@ -119,11 +119,13 @@ import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
 import com.iver.cit.gvsig.fmap.core.styles.ILineStyle;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.threads.Cancellable;
+
 /**
- * MultiLayerLineSymbol allows to create new symbols using a composition of several lineal
- * symbols (xxxLineSymbol implementing ILineSymbol)and be treated as an only one symbol.
- *
- * @author  jaume dominguez faus - jaume.dominguez@iver.es
+ * MultiLayerLineSymbol allows to create new symbols using a composition of
+ * several lineal symbols (xxxLineSymbol implementing ILineSymbol)and be treated
+ * as an only one symbol.
+ * 
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class MultiLayerLineSymbol extends AbstractLineSymbol implements
 		ILineSymbol, IMultiLayerSymbol {
@@ -133,16 +135,16 @@ public class MultiLayerLineSymbol extends AbstractLineSymbol implements
 
 	public Color getColor() {
 		/*
-		 * a multilayer symbol does not define any color, the color
-		 * of each layer is defined by the layer itself
+		 * a multilayer symbol does not define any color, the color of each
+		 * layer is defined by the layer itself
 		 */
 		return null;
 	}
 
 	public ILineStyle getLineStyle() {
 		/*
-		 * a multilayer symbol does not define any style, the style
-		 * of each layer is defined by the layer itself
+		 * a multilayer symbol does not define any style, the style of each
+		 * layer is defined by the layer itself
 		 */
 		return null;
 	}
@@ -151,7 +153,8 @@ public class MultiLayerLineSymbol extends AbstractLineSymbol implements
 
 		double myLineWidth = 0;
 		for (int i = 0; i < getLayerCount(); i++) {
-			myLineWidth = Math.max(myLineWidth, ((ILineSymbol) getLayer(i)).getLineWidth());
+			myLineWidth = Math.max(myLineWidth,
+					((ILineSymbol) getLayer(i)).getLineWidth());
 		}
 
 		if (lineWidth != myLineWidth)
@@ -183,18 +186,22 @@ public class MultiLayerLineSymbol extends AbstractLineSymbol implements
 			double scaleFactor = width / getLineWidth();
 			this.lineWidth = width;
 			for (int i = 0; i < layers.length; i++) {
-				layers[i].setLineWidth(layers[i].getLineWidth()*scaleFactor);
+				layers[i].setLineWidth(layers[i].getLineWidth() * scaleFactor);
 			}
 		}
 	}
 
-	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp, Cancellable cancel) {
-		for (int i = 0; (cancel==null || !cancel.isCanceled()) && i < layers.length; i++) {
+	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp,
+			Cancellable cancel) {
+		for (int i = 0; (cancel == null || !cancel.isCanceled())
+				&& i < layers.length; i++) {
 			layers[i].draw(g, affineTransform, shp, cancel);
 		}
 	}
 
-	public void drawInsideRectangle(Graphics2D g, AffineTransform scaleInstance, Rectangle r, PrintRequestAttributeSet properties) throws SymbolDrawingException {
+	public void drawInsideRectangle(Graphics2D g,
+			AffineTransform scaleInstance, Rectangle r,
+			PrintRequestAttributeSet properties) throws SymbolDrawingException {
 		for (int i = 0; i < layers.length; i++) {
 			layers[i].drawInsideRectangle(g, scaleInstance, r, properties);
 		}
@@ -202,12 +209,12 @@ public class MultiLayerLineSymbol extends AbstractLineSymbol implements
 
 	public int getOnePointRgb() {
 		// will paint only the last layer pixel
-		return layers[layers.length-1].getOnePointRgb();
+		return layers[layers.length - 1].getOnePointRgb();
 	}
 
 	public void getPixExtentPlus(FShape shp, float[] distances,
 			ViewPort viewPort, int dpi) {
-		float[] myDistances = new float[] {0,0};
+		float[] myDistances = new float[] { 0, 0 };
 		distances[0] = 0;
 		distances[1] = 0;
 		for (int i = 0; i < layers.length; i++) {
@@ -228,9 +235,6 @@ public class MultiLayerLineSymbol extends AbstractLineSymbol implements
 		return selectionSymbol;
 	}
 
-
-
-
 	public XMLEntity getXMLEntity() {
 		XMLEntity xml = new XMLEntity();
 		xml.putProperty("className", getClass().getName());
@@ -246,7 +250,7 @@ public class MultiLayerLineSymbol extends AbstractLineSymbol implements
 	}
 
 	public boolean isSuitableFor(IGeometry geom) {
-		return (geom.getGeometryType()%FShape.Z) == FShape.LINE;
+		return (geom.getGeometryType() % FShape.Z) == FShape.LINE;
 	}
 
 	public String getClassName() {
@@ -260,18 +264,21 @@ public class MultiLayerLineSymbol extends AbstractLineSymbol implements
 		setUnit(xml.getIntProperty("unit"));
 		setReferenceSystem(xml.getIntProperty("referenceSystem"));
 		for (int i = 0; i < xml.getChildrenCount(); i++) {
-			addLayer((ILineSymbol) SymbologyFactory.createSymbolFromXML(xml.getChild(i), "layer" + i));
+			addLayer((ILineSymbol) SymbologyFactory.createSymbolFromXML(
+					xml.getChild(i), "layer" + i));
 		}
 	}
 
-	public void print(Graphics2D g, AffineTransform at, FShape shape, PrintRequestAttributeSet properties) {
+	public void print(Graphics2D g, AffineTransform at, FShape shape,
+			PrintRequestAttributeSet properties) {
 		for (int i = 0; i < layers.length; i++) {
 			layers[i].print(g, at, shape, properties);
 		}
 
 	}
 
-	public void setLayer(int index, ISymbol layer) throws IndexOutOfBoundsException {
+	public void setLayer(int index, ISymbol layer)
+			throws IndexOutOfBoundsException {
 		layers[index] = (ILineSymbol) layer;
 	}
 
@@ -293,9 +300,11 @@ public class MultiLayerLineSymbol extends AbstractLineSymbol implements
 		addLayer(newLayer, layers.length);
 	}
 
-	public void addLayer(ISymbol newLayer, int layerIndex) throws IndexOutOfBoundsException {
+	public void addLayer(ISymbol newLayer, int layerIndex)
+			throws IndexOutOfBoundsException {
 
-		if (newLayer == null) return; // null are not allowed
+		if (newLayer == null)
+			return; // null are not allowed
 		ILineSymbol newLine = (ILineSymbol) newLayer;
 		if (getLayerCount() == 0) {
 			// apply the new layer properties to this multilayer
@@ -311,13 +320,14 @@ public class MultiLayerLineSymbol extends AbstractLineSymbol implements
 			newLine.setUnit(getUnit());
 		}
 
-		selectionSymbol = null; /* forces the selection symbol to be re-created
-		 						 * next time it is required
-		 						 */
-
+		selectionSymbol = null; /*
+								 * forces the selection symbol to be re-created
+								 * next time it is required
+								 */
 
 		if (layerIndex < 0 || layers.length < layerIndex)
-			throw new IndexOutOfBoundsException(layerIndex+" < 0 or "+layerIndex+" > "+layers.length);
+			throw new IndexOutOfBoundsException(layerIndex + " < 0 or "
+					+ layerIndex + " > " + layers.length);
 		ArrayList<ISymbol> newLayers = new ArrayList<ISymbol>();
 		for (int i = 0; i < layers.length; i++) {
 			newLayers.add(layers[i]);
@@ -326,7 +336,8 @@ public class MultiLayerLineSymbol extends AbstractLineSymbol implements
 			newLayers.add(layerIndex, newLayer);
 			layers = (ILineSymbol[]) newLayers.toArray(new ILineSymbol[0]);
 		} catch (ArrayStoreException asEx) {
-			throw new ClassCastException(newLayer.getClassName()+" is not an ILineSymbol");
+			throw new ClassCastException(newLayer.getClassName()
+					+ " is not an ILineSymbol");
 		}
 	}
 
@@ -347,15 +358,16 @@ public class MultiLayerLineSymbol extends AbstractLineSymbol implements
 		// will compute the acumulated opacity
 		double myAlpha = 0;
 		for (int i = 0; i < layers.length; i++) {
-			double layerAlpha = layers[i].getAlpha()/255D;
-			myAlpha += (1-myAlpha)*layerAlpha;
+			double layerAlpha = layers[i].getAlpha() / 255D;
+			myAlpha += (1 - myAlpha) * layerAlpha;
 		}
 		int result = (int) Math.round(myAlpha * 255);
-		return (result>255) ? 255 : result;
+		return (result > 255) ? 255 : result;
 	}
 
 	public void setAlpha(int outlineAlpha) {
-		// first, get the biggest alpha in the layers and the index if such layer
+		// first, get the biggest alpha in the layers and the index if such
+		// layer
 		int maxAlpha = Integer.MIN_VALUE;
 		int maxAlphaLayerIndex = 0;
 		for (int i = 0; i < layers.length; i++) {
@@ -368,9 +380,9 @@ public class MultiLayerLineSymbol extends AbstractLineSymbol implements
 		// now, max alpha takes the value of the desired alpha and the rest
 		// will take a scaled (to biggest alpha) alpha value
 		for (int i = 0; i < layers.length; i++) {
-			if (i!=maxAlphaLayerIndex) {
-				double scaledAlpha = (double) layers[i].getAlpha()/maxAlpha;
-				int myAlpha = (int) (outlineAlpha*scaledAlpha);
+			if (i != maxAlphaLayerIndex) {
+				double scaledAlpha = (double) layers[i].getAlpha() / maxAlpha;
+				int myAlpha = (int) (outlineAlpha * scaledAlpha);
 				if (myAlpha == 0)
 					myAlpha = 1;
 				layers[i].setAlpha(myAlpha);
@@ -402,7 +414,7 @@ public class MultiLayerLineSymbol extends AbstractLineSymbol implements
 
 	@Override
 	public void setCartographicSize(double cartographicSize, FShape shp) {
-//		super.setCartographicSize(cartographicSize, shp);
+		// super.setCartographicSize(cartographicSize, shp);
 		setLineWidth(cartographicSize);
 	}
 }

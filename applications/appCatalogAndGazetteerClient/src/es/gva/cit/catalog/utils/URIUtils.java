@@ -54,48 +54,50 @@ import java.net.URISyntaxException;
  */
 /**
  * Some utils to manage URI's
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class URIUtils {
-	
+
 	/**
-	 * It creates an URI from a String. If the port and the schema
-	 * have not been especified on the string this method
-	 * adds them
+	 * It creates an URI from a String. If the port and the schema have not been
+	 * especified on the string this method adds them
+	 * 
 	 * @param sUri
-	 * The uri like a string
+	 *            The uri like a string
 	 * @param defaultSchema
-	 * The deafulet schema
+	 *            The deafulet schema
 	 * @param deafultPort
-	 * The default port
-	 * @return
-	 * An uri
-	 * @throws URISyntaxException 
+	 *            The default port
+	 * @return An uri
+	 * @throws URISyntaxException
 	 */
-	public static URI createUri(String sUri, String defaultSchema, int deafultPort) throws URISyntaxException{
+	public static URI createUri(String sUri, String defaultSchema,
+			int deafultPort) throws URISyntaxException {
 		String schema = defaultSchema;
 		String host = null;
 		int port = deafultPort;
 		String path = "";
-		//Cut the schema
+		// Cut the schema
 		int index = sUri.indexOf("://");
-		if (index > -1){
-			schema = sUri.substring(0,index);
+		if (index > -1) {
+			schema = sUri.substring(0, index);
 			sUri = sUri.substring(index + 3, sUri.length());
 		}
-		//Cut the path
+		// Cut the path
 		index = sUri.indexOf("/");
-		if (index > -1){
+		if (index > -1) {
 			path = sUri.substring(index, sUri.length());
-			sUri = sUri.substring(0,index);			
+			sUri = sUri.substring(0, index);
 		}
-		//Cut the host:port
+		// Cut the host:port
 		index = sUri.indexOf(":");
-		if (index > -1){
-			host = sUri.substring(0,index);
-			port = Integer.valueOf(sUri.substring(index + 1, sUri.length())).intValue();
-		}else{
-			host = sUri;			
+		if (index > -1) {
+			host = sUri.substring(0, index);
+			port = Integer.valueOf(sUri.substring(index + 1, sUri.length()))
+					.intValue();
+		} else {
+			host = sUri;
 		}
 		return new URI(schema + "://" + host + ":" + port + path);
 	}

@@ -84,246 +84,272 @@ import com.vividsolutions.jts.geom.Envelope;
 /**
  * Panel to digitize MappedPosition in mapcontrol.
  * 
- * MappedPosition is a 2D euclidean vector, useful to represent correspondency between equivalent
- * points.
+ * MappedPosition is a 2D euclidean vector, useful to represent correspondency
+ * between equivalent points.
  * 
  * @author Alvaro Zabala
  * 
  * 
- * TODO Puede ser mas intuitivo usar una tabla, en la que se muestre x0,y0-x1,y1, y que tenga una serie de botones
- *(borrar, redigitalizar en el mapa, añadir, etc) que se seleccionen en funcion de lo que haya seleccionado en la tabla
- *(borrar solo si hay un registro seleccionado, añadir siempre habilitado)
- *
+ *         TODO Puede ser mas intuitivo usar una tabla, en la que se muestre
+ *         x0,y0-x1,y1, y que tenga una serie de botones (borrar, redigitalizar
+ *         en el mapa, añadir, etc) que se seleccionen en funcion de lo que haya
+ *         seleccionado en la tabla (borrar solo si hay un registro
+ *         seleccionado, añadir siempre habilitado)
+ * 
  */
 public class MappedPositionPanel extends BoxLayoutPanel {
 	/**
 	 * Serial version id
 	 */
 	private static final long serialVersionUID = 2689973568535047698L;
-	
+
 	/**
 	 * Identifier of this mapped position
 	 */
 	int mappedPositionIdx;
-	
-	
-//	private List<MappedPosition> linksList;
+
+	// private List<MappedPosition> linksList;
 	/**
 	 * List of mapped positions digitized in an adjust session
 	 */
 	private MappedPositionContainer linksList;
-	
+
 	/**
-	 * Reference to the active view when user opened referencing dialog
-	 * (when digitizing, referencing dialog is not visible, so user could active
+	 * Reference to the active view when user opened referencing dialog (when
+	 * digitizing, referencing dialog is not visible, so user could active
 	 * another view, causing problems.
 	 */
 	private MapControl currentView;
-	
+
 	/**
 	 * mapped position associated to this panel
 	 */
 	private MappedPosition mappedPosition;
 
-	
 	String title = PluginServices.getText(null, "Mapped_Position");
 	String xLbl = PluginServices.getText(null, "X=");
 	String yLbl = PluginServices.getText(null, "Y=");
-	
+
 	JTextField originPtTextFieldX;
 	JTextField originPtTextFieldY;
-	
+
 	JTextField destPtTextFieldX;
 	JTextField destPtTextFieldY;
-	
+
 	JButton digitizeButton;
-	
-	
+
 	/**
 	 * Constructor
-	 * @param 
+	 * 
+	 * @param
 	 * 
 	 */
-	public MappedPositionPanel(MappedPositionContainer linksList, MapControl currentView) {
+	public MappedPositionPanel(MappedPositionContainer linksList,
+			MapControl currentView) {
 		super();
 		this.linksList = linksList;
 		this.mappedPositionIdx = linksList.getCount();
 		this.currentView = currentView;
-		
+
 		initialize();
 	}
-	
-	private void initialize(){
-		this.addRow(new JComponent[] { 
-				new JLabel(title+" "+ mappedPositionIdx) , getDigitizeButton()});
-		
-		this.addRow(new JComponent[]{new JLabel(xLbl), 
-									getOriginXTF(), 
-									new JLabel(" ; "+yLbl), 
-									getOriginYTF()});
-		
-		this.addRow(new JComponent[]{new JLabel(xLbl), 
-				getDestXTF(), 
-				new JLabel(" ; "+yLbl), 
-				getDestYTF()/*, getDigitizeButton()*/});
+
+	private void initialize() {
+		this.addRow(new JComponent[] {
+				new JLabel(title + " " + mappedPositionIdx),
+				getDigitizeButton() });
+
+		this.addRow(new JComponent[] { new JLabel(xLbl), getOriginXTF(),
+				new JLabel(" ; " + yLbl), getOriginYTF() });
+
+		this.addRow(new JComponent[] { new JLabel(xLbl), getDestXTF(),
+				new JLabel(" ; " + yLbl), getDestYTF() /* , getDigitizeButton() */});
 	}
-	
-	public void setMappedPosition(MappedPosition mappedPosition){
+
+	public void setMappedPosition(MappedPosition mappedPosition) {
 		this.mappedPosition = mappedPosition;
-		
+
 		DirectPosition source = mappedPosition.getSource();
 		DirectPosition dest = mappedPosition.getTarget();
-		
-		this.originPtTextFieldX.setText(source.getCoordinate()[0]+"");
-		this.originPtTextFieldY.setText(source.getCoordinate()[1]+"");
-		
-		this.destPtTextFieldX.setText(dest.getCoordinate()[0]+"");
-		this.destPtTextFieldY.setText(dest.getCoordinate()[1]+"");
-		
+
+		this.originPtTextFieldX.setText(source.getCoordinate()[0] + "");
+		this.originPtTextFieldY.setText(source.getCoordinate()[1] + "");
+
+		this.destPtTextFieldX.setText(dest.getCoordinate()[0] + "");
+		this.destPtTextFieldY.setText(dest.getCoordinate()[1] + "");
+
 	}
-	
+
 	public MappedPosition getMappedPosition() throws IllegalArgumentException {
 		try {
 			double x0 = Double.parseDouble(getOriginXTF().getText());
 			double y0 = Double.parseDouble(getOriginYTF().getText());
-			
+
 			double x1 = Double.parseDouble(getDestXTF().getText());
 			double y1 = Double.parseDouble(getDestYTF().getText());
-			  
+
 			ReferencingUtil ref = ReferencingUtil.getInstance();
-			
-			DirectPosition a = ref.create(new double[]{x0, y0} , null);
-			DirectPosition b = ref.create(new double[]{x1, y1} , null);
-			
-			
-			DisactivableMappedPosition p = new DisactivableMappedPosition(a,b);
+
+			DirectPosition a = ref.create(new double[] { x0, y0 }, null);
+			DirectPosition b = ref.create(new double[] { x1, y1 }, null);
+
+			DisactivableMappedPosition p = new DisactivableMappedPosition(a, b);
 			return p;
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException("Valor no numerico", e);
 		}
 	}
-	
-	public void setEditable(boolean editable){
+
+	public void setEditable(boolean editable) {
 		originPtTextFieldX.setEditable(editable);
 		originPtTextFieldY.setEditable(editable);
 		destPtTextFieldX.setEditable(editable);
 		destPtTextFieldY.setEditable(editable);
 	}
-	
-	private JTextField getOriginXTF(){
-		if(originPtTextFieldX == null){
+
+	private JTextField getOriginXTF() {
+		if (originPtTextFieldX == null) {
 			originPtTextFieldX = new JTextField(20);
 			originPtTextFieldX.setEditable(false);
 		}
 		return originPtTextFieldX;
 	}
-	
-	private JTextField getOriginYTF(){
-		if(originPtTextFieldY == null){
+
+	private JTextField getOriginYTF() {
+		if (originPtTextFieldY == null) {
 			originPtTextFieldY = new JTextField(20);
 			originPtTextFieldY.setEditable(false);
 		}
 		return originPtTextFieldY;
 	}
-	
-	private JTextField getDestXTF(){
-		if(destPtTextFieldX == null){
+
+	private JTextField getDestXTF() {
+		if (destPtTextFieldX == null) {
 			destPtTextFieldX = new JTextField(20);
 			destPtTextFieldX.setEditable(false);
 		}
 		return destPtTextFieldX;
 	}
-	
-	private JTextField getDestYTF(){
-		if(destPtTextFieldY == null){
+
+	private JTextField getDestYTF() {
+		if (destPtTextFieldY == null) {
 			destPtTextFieldY = new JTextField(20);
 			destPtTextFieldY.setEditable(false);
 		}
 		return destPtTextFieldY;
 	}
-	
-	private JButton getDigitizeButton(){
-		if(digitizeButton == null){
+
+	private JButton getDigitizeButton() {
+		if (digitizeButton == null) {
 			digitizeButton = new JButton(" -> ");
-			digitizeButton.addActionListener(new ActionListener(){
+			digitizeButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					try {
-//						MDIManager mdiManager = PluginServices.getMDIManager(); 
-//						if (mdiManager != null && mdiManager.getActiveWindow() != null && mdiManager.getActiveWindow() instanceof View) {
-//							View view = (View) mdiManager.getActiveWindow();
-//							final MapControl mapCtrl = view.getMapControl();
-							final MapControl mapCtrl = currentView;
-							if (mapCtrl != null) {//PROBLEMA. EL PRIMER VECTOR DE ERROR SE CONSTRUYE CUANDO EL MAPCONTROL ES NULL ARREGLAR!!!!!!
-								String sTool = "digitizeVectorError";
-								StatusBarListener sbl = new StatusBarListener(mapCtrl);	
-								
-								final JComponent thisContainer = (JComponent) GUIUtil.getInstance().getParentOfType(MappedPositionPanel.this, IWindow.class);
-								
-								VectorListenerImpl vl = new VectorListenerImpl(mapCtrl, linksList){
-									public void vector(MoveEvent event) throws BehaviorException {
-										super.vector(event);
-										
-										MappedPosition lastMappedPosition = 
-											linksList.getMappedPosition(linksList.getCount() - 1);
-										
-										MappedPositionPanel.this.setMappedPosition(lastMappedPosition);
-										
-										if(thisContainer != null){
-											if(!GUIUtil.getInstance().getParentOfType(thisContainer, JInternalFrame.class).isVisible()){
-												GUIUtil.getInstance().getParentOfType(thisContainer, JInternalFrame.class).setVisible(true);
-											}
-												
-										}//thisContainer
-										mapCtrl.setPrevTool();
-										
-										if(!linksList.existsLinksLyr()){
-											FLyrVect linkLyr = linksList.getLinkLyr(currentView.getCrs());
-											MapContext mapContext = currentView.getMapContext();
-											mapContext.beginAtomicEvent();
-											mapContext.getLayers().addLayer(linkLyr);
-											mapContext.endAtomicEvent();
+						// MDIManager mdiManager =
+						// PluginServices.getMDIManager();
+						// if (mdiManager != null &&
+						// mdiManager.getActiveWindow() != null &&
+						// mdiManager.getActiveWindow() instanceof View) {
+						// View view = (View) mdiManager.getActiveWindow();
+						// final MapControl mapCtrl = view.getMapControl();
+						final MapControl mapCtrl = currentView;
+						if (mapCtrl != null) {// PROBLEMA. EL PRIMER VECTOR DE
+												// ERROR SE CONSTRUYE CUANDO EL
+												// MAPCONTROL ES NULL
+												// ARREGLAR!!!!!!
+							String sTool = "digitizeVectorError";
+							StatusBarListener sbl = new StatusBarListener(
+									mapCtrl);
+
+							final JComponent thisContainer = (JComponent) GUIUtil
+									.getInstance().getParentOfType(
+											MappedPositionPanel.this,
+											IWindow.class);
+
+							VectorListenerImpl vl = new VectorListenerImpl(
+									mapCtrl, linksList) {
+								public void vector(MoveEvent event)
+										throws BehaviorException {
+									super.vector(event);
+
+									MappedPosition lastMappedPosition = linksList
+											.getMappedPosition(linksList
+													.getCount() - 1);
+
+									MappedPositionPanel.this
+											.setMappedPosition(lastMappedPosition);
+
+									if (thisContainer != null) {
+										if (!GUIUtil
+												.getInstance()
+												.getParentOfType(thisContainer,
+														JInternalFrame.class)
+												.isVisible()) {
+											GUIUtil.getInstance()
+													.getParentOfType(
+															thisContainer,
+															JInternalFrame.class)
+													.setVisible(true);
 										}
-										mapCtrl.commandRepaint();
-										
-										
-		
+
+									}// thisContainer
+									mapCtrl.setPrevTool();
+
+									if (!linksList.existsLinksLyr()) {
+										FLyrVect linkLyr = linksList
+												.getLinkLyr(currentView
+														.getCrs());
+										MapContext mapContext = currentView
+												.getMapContext();
+										mapContext.beginAtomicEvent();
+										mapContext.getLayers()
+												.addLayer(linkLyr);
+										mapContext.endAtomicEvent();
 									}
-								};
-								
-								mapCtrl.addMapTool(sTool, new Behavior[] {
-										new VectorBehavior(vl, null),
-										new MouseMovementBehavior(sbl) });
-								mapCtrl.setTool(sTool);
+									mapCtrl.commandRepaint();
 
-								if(mappedPosition != null){
-									DirectPosition source = mappedPosition.getSource();
-									double[] sourceCoords = source.getCoordinate();
-									DirectPosition dest = mappedPosition.getTarget();
-									double[] destCoords = dest.getCoordinate();
-									
-									Envelope envelope = new Envelope(sourceCoords[0], 
-																	   destCoords[0], 
-																	   sourceCoords[1], 
-																	   destCoords[1]);
-									
-									Rectangle2D rect = FGeometryUtil.envelopeToRectangle2D(envelope);
-									mapCtrl.getMapContext().zoomToExtent(rect);
 								}
-								
-								
-								if (thisContainer != null) {
-									GUIUtil.getInstance().getParentOfType(thisContainer, JInternalFrame.class).setVisible(false);
-								}
+							};
 
-							}// if mapCtrl != null
-//						}// if f!=null
+							mapCtrl.addMapTool(sTool, new Behavior[] {
+									new VectorBehavior(vl, null),
+									new MouseMovementBehavior(sbl) });
+							mapCtrl.setTool(sTool);
+
+							if (mappedPosition != null) {
+								DirectPosition source = mappedPosition
+										.getSource();
+								double[] sourceCoords = source.getCoordinate();
+								DirectPosition dest = mappedPosition
+										.getTarget();
+								double[] destCoords = dest.getCoordinate();
+
+								Envelope envelope = new Envelope(
+										sourceCoords[0], destCoords[0],
+										sourceCoords[1], destCoords[1]);
+
+								Rectangle2D rect = FGeometryUtil
+										.envelopeToRectangle2D(envelope);
+								mapCtrl.getMapContext().zoomToExtent(rect);
+							}
+
+							if (thisContainer != null) {
+								GUIUtil.getInstance()
+										.getParentOfType(thisContainer,
+												JInternalFrame.class)
+										.setVisible(false);
+							}
+
+						}// if mapCtrl != null
+							// }// if f!=null
 					} catch (RuntimeException e) {
 						e.printStackTrace();
 					}
-				}});
+				}
+			});
 		}
 		return digitizeButton;
 	}
-	
+
 }

@@ -80,8 +80,8 @@ public class GazetteerExtension extends Extension {
 	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"gazetteer-search",
-				this.getClass().getClassLoader().getResource(
-						"images/GazzButton.png"));
+				this.getClass().getClassLoader()
+						.getResource("images/GazzButton.png"));
 	}
 
 	/*
@@ -183,10 +183,8 @@ public class GazetteerExtension extends Extension {
 				"http://193.144.250.29/webservices/services/IDEC_GeoServeisPort",
 				date, date, ServerData.SERVER_TYPE_GAZETTEER,
 				ServerData.SERVER_SUBTYPE_GAZETTEER_IDEC);
-		servers[3] = new ServerData(
-				"www.geonames.org:80",
-				date, date, ServerData.SERVER_TYPE_GAZETTEER,
-				"Geonames");
+		servers[3] = new ServerData("www.geonames.org:80", date, date,
+				ServerData.SERVER_TYPE_GAZETTEER, "Geonames");
 
 		return servers;
 	}

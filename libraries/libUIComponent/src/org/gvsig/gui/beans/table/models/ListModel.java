@@ -19,6 +19,7 @@
 package org.gvsig.gui.beans.table.models;
 
 import javax.swing.table.DefaultTableModel;
+
 /**
  * Componente tabla
  * 
@@ -26,7 +27,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ListModel extends DefaultTableModel implements IModel {
 	final private static long serialVersionUID = -3370601314380922368L;
-	private int               nColumns         = 0;
+	private int nColumns = 0;
 
 	public ListModel(String[] columnNames) {
 		super(new Object[0][columnNames.length], columnNames);

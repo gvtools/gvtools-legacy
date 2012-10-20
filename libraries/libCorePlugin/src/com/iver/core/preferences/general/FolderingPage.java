@@ -86,16 +86,18 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.preferences.AbstractPreferencePage;
 import com.iver.andami.preferences.StoreException;
 import com.iver.utiles.XMLEntity;
+
 /**
- *
+ * 
  * In the FolderingPage the user sets which folder paths should be used by
  * default.
- *
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
-public class FolderingPage extends AbstractPreferencePage{
-	private static Preferences prefs = Preferences.userRoot().node( "gvsig.foldering" );
+public class FolderingPage extends AbstractPreferencePage {
+	private static Preferences prefs = Preferences.userRoot().node(
+			"gvsig.foldering");
 
 	private static final String PROJECTS_FOLDER_PROPERTY_NAME = "ProjectsFolder";
 	private static final String DATA_FOLDER_PROPERTY_NAME = "DataFolder";
@@ -111,8 +113,6 @@ public class FolderingPage extends AbstractPreferencePage{
 	private JButton btnSelectSymbolLibraryFolder;
 	private ImageIcon icon;
 	private ActionListener btnFileChooserAction;
-
-
 
 	public FolderingPage() {
 		super();
@@ -133,7 +133,7 @@ public class FolderingPage extends AbstractPreferencePage{
 				}
 
 				// The file filter for the JFileChooser
-				FileFilter def =  new FileFilter(){
+				FileFilter def = new FileFilter() {
 					public boolean accept(File f) {
 						return (f.isDirectory());
 					}
@@ -157,12 +157,14 @@ public class FolderingPage extends AbstractPreferencePage{
 				fc.addChoosableFileFilter(def);
 				int result = fc.showOpenDialog(FolderingPage.this);
 
-				if (result == JFileChooser.APPROVE_OPTION && (file = fc.getSelectedFile()) != null) {
+				if (result == JFileChooser.APPROVE_OPTION
+						&& (file = fc.getSelectedFile()) != null) {
 					if (e.getSource().equals(btnSelectProjectsFolder)) {
 						txtProjectsFolder.setText(file.getAbsolutePath());
 					} else if (e.getSource().equals(btnSelectDataFolder)) {
 						txtDataFolder.setText(file.getAbsolutePath());
-					} else if (e.getSource().equals(btnSelectSymbolLibraryFolder)) {
+					} else if (e.getSource().equals(
+							btnSelectSymbolLibraryFolder)) {
 						txtSymbolLibraryFolder.setText(file.getAbsolutePath());
 					} else {
 						txtTemplatesFolder.setText(file.getAbsolutePath());
@@ -171,64 +173,71 @@ public class FolderingPage extends AbstractPreferencePage{
 			}
 
 		};
-		btnSelectProjectsFolder = new JButton(PluginServices.getText(this, "browse"));
+		btnSelectProjectsFolder = new JButton(PluginServices.getText(this,
+				"browse"));
 		btnSelectProjectsFolder.addActionListener(btnFileChooserAction);
-		btnSelectDataFolder = new JButton(PluginServices.getText(this, "browse"));
+		btnSelectDataFolder = new JButton(
+				PluginServices.getText(this, "browse"));
 		btnSelectDataFolder.addActionListener(btnFileChooserAction);
-		btnSelectTemplatesFolder = new JButton(PluginServices.getText(this, "browse"));
+		btnSelectTemplatesFolder = new JButton(PluginServices.getText(this,
+				"browse"));
 		btnSelectTemplatesFolder.addActionListener(btnFileChooserAction);
-		btnSelectSymbolLibraryFolder = new JButton(PluginServices.getText(this, "browse"));
+		btnSelectSymbolLibraryFolder = new JButton(PluginServices.getText(this,
+				"browse"));
 		btnSelectSymbolLibraryFolder.addActionListener(btnFileChooserAction);
 
-
-		JLabel lblProjectsFolder = new JLabel("<html><b>" +
-				PluginServices.
-				getText(this, "options.foldering.projects_folder") +
-		"</b></html>");
+		JLabel lblProjectsFolder = new JLabel("<html><b>"
+				+ PluginServices.getText(this,
+						"options.foldering.projects_folder") + "</b></html>");
 		addComponent(lblProjectsFolder);
-		addComponent(txtProjectsFolder = new JTextField(30), btnSelectProjectsFolder);
+		addComponent(txtProjectsFolder = new JTextField(30),
+				btnSelectProjectsFolder);
 		addComponent(new JLabel(" "));
 
-		JLabel lblDataFolder = new JLabel("<html><b>" +
-				PluginServices.
-				getText(this, "options.foldering.data_folder") +
-		"</b></html>");
+		JLabel lblDataFolder = new JLabel("<html><b>"
+				+ PluginServices.getText(this, "options.foldering.data_folder")
+				+ "</b></html>");
 		addComponent(lblDataFolder);
 		addComponent(txtDataFolder = new JTextField(30), btnSelectDataFolder);
 		addComponent(new JLabel(" "));
 
-		JLabel lblTemplatesFolder = new JLabel("<html><b>" +
-				PluginServices.
-				getText(this, "options.foldering.template_folder") +
-		"</b></html>");
+		JLabel lblTemplatesFolder = new JLabel("<html><b>"
+				+ PluginServices.getText(this,
+						"options.foldering.template_folder") + "</b></html>");
 		addComponent(lblTemplatesFolder);
-		addComponent(txtTemplatesFolder = new JTextField(30), btnSelectTemplatesFolder);
+		addComponent(txtTemplatesFolder = new JTextField(30),
+				btnSelectTemplatesFolder);
 		addComponent(new JLabel(" "));
 
-		JLabel lblSymbolLibraryFolder = new JLabel("<html><b>" +
-				PluginServices.
-				getText(this, "options.foldering.symbol_library_folder") +
-		"</b></html>");
+		JLabel lblSymbolLibraryFolder = new JLabel("<html><b>"
+				+ PluginServices.getText(this,
+						"options.foldering.symbol_library_folder")
+				+ "</b></html>");
 		addComponent(lblSymbolLibraryFolder);
-		addComponent(txtSymbolLibraryFolder = new JTextField(30), btnSelectSymbolLibraryFolder);
+		addComponent(txtSymbolLibraryFolder = new JTextField(30),
+				btnSelectSymbolLibraryFolder);
 		addComponent(new JLabel(" "));
 		PluginServices ps = PluginServices.getPluginServices(this);
 		XMLEntity xml = ps.getPersistentXML();
 
 		if (xml.contains(PROJECTS_FOLDER_PROPERTY_NAME)) {
-			prefs.put(PROJECTS_FOLDER_PROPERTY_NAME, xml.getStringProperty(PROJECTS_FOLDER_PROPERTY_NAME));
+			prefs.put(PROJECTS_FOLDER_PROPERTY_NAME,
+					xml.getStringProperty(PROJECTS_FOLDER_PROPERTY_NAME));
 		}
 
 		if (xml.contains(DATA_FOLDER_PROPERTY_NAME)) {
-			prefs.put(DATA_FOLDER_PROPERTY_NAME, xml.getStringProperty(DATA_FOLDER_PROPERTY_NAME));
+			prefs.put(DATA_FOLDER_PROPERTY_NAME,
+					xml.getStringProperty(DATA_FOLDER_PROPERTY_NAME));
 		}
 
 		if (xml.contains(TEMPLATES_FOLDER_PROPERTY_NAME)) {
-			prefs.put(TEMPLATES_FOLDER_PROPERTY_NAME, xml.getStringProperty(TEMPLATES_FOLDER_PROPERTY_NAME));
+			prefs.put(TEMPLATES_FOLDER_PROPERTY_NAME,
+					xml.getStringProperty(TEMPLATES_FOLDER_PROPERTY_NAME));
 		}
 
 		if (xml.contains(SYMBOL_LIBRARY_FOLDER_PROPERTY_NAME)) {
-			prefs.put(SYMBOL_LIBRARY_FOLDER_PROPERTY_NAME, xml.getStringProperty(SYMBOL_LIBRARY_FOLDER_PROPERTY_NAME));
+			prefs.put(SYMBOL_LIBRARY_FOLDER_PROPERTY_NAME,
+					xml.getStringProperty(SYMBOL_LIBRARY_FOLDER_PROPERTY_NAME));
 		}
 
 	}
@@ -343,16 +352,20 @@ public class FolderingPage extends AbstractPreferencePage{
 		PluginServices ps = PluginServices.getPluginServices(this);
 		XMLEntity xml = ps.getPersistentXML();
 		if (xml.contains(PROJECTS_FOLDER_PROPERTY_NAME)) {
-			txtProjectsFolder.setText(xml.getStringProperty(PROJECTS_FOLDER_PROPERTY_NAME));
+			txtProjectsFolder.setText(xml
+					.getStringProperty(PROJECTS_FOLDER_PROPERTY_NAME));
 		}
 		if (xml.contains(DATA_FOLDER_PROPERTY_NAME)) {
-			txtDataFolder.setText(xml.getStringProperty(DATA_FOLDER_PROPERTY_NAME));
+			txtDataFolder.setText(xml
+					.getStringProperty(DATA_FOLDER_PROPERTY_NAME));
 		}
 		if (xml.contains(TEMPLATES_FOLDER_PROPERTY_NAME)) {
-			txtTemplatesFolder.setText(xml.getStringProperty(TEMPLATES_FOLDER_PROPERTY_NAME));
+			txtTemplatesFolder.setText(xml
+					.getStringProperty(TEMPLATES_FOLDER_PROPERTY_NAME));
 		}
 		if (xml.contains(SYMBOL_LIBRARY_FOLDER_PROPERTY_NAME)) {
-			txtSymbolLibraryFolder.setText(xml.getStringProperty(SYMBOL_LIBRARY_FOLDER_PROPERTY_NAME));
+			txtSymbolLibraryFolder.setText(xml
+					.getStringProperty(SYMBOL_LIBRARY_FOLDER_PROPERTY_NAME));
 		}
 	}
 

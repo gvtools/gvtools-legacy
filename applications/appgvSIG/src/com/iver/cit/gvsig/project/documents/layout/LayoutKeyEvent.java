@@ -10,14 +10,14 @@ import com.iver.cit.gvsig.exceptions.commands.EditionCommandException;
 import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
-public class LayoutKeyEvent implements KeyEventDispatcher{
-	private static IFFrame[] selectFFrames=new IFFrame[0];
-    private int difX;
-    private int difY;
+public class LayoutKeyEvent implements KeyEventDispatcher {
+	private static IFFrame[] selectFFrames = new IFFrame[0];
+	private int difX;
+	private int difY;
 
 	public static boolean copy(Layout layout) {
 		IFFrame[] fframes = layout.getLayoutContext().getFFrameSelected();
-		if (fframes.length==0)
+		if (fframes.length == 0)
 			return false;
 		selectFFrames = new IFFrame[fframes.length];
 		for (int i = 0; i < fframes.length; i++) {
@@ -25,9 +25,10 @@ public class LayoutKeyEvent implements KeyEventDispatcher{
 		}
 		return true;
 	}
+
 	public static boolean cut(Layout layout) {
 		IFFrame[] fframes = layout.getLayoutContext().getFFrameSelected();
-		if (fframes.length==0)
+		if (fframes.length == 0)
 			return false;
 		selectFFrames = new IFFrame[fframes.length];
 		for (int i = 0; i < fframes.length; i++) {
@@ -37,6 +38,7 @@ public class LayoutKeyEvent implements KeyEventDispatcher{
 		layout.getLayoutContext().callLayoutDrawListeners();
 		return true;
 	}
+
 	public static boolean paste(Layout layout) {
 		IFFrame copyFFrame = null;
 		layout.getLayoutContext().getEFS().startComplexCommand();
@@ -47,11 +49,14 @@ public class LayoutKeyEvent implements KeyEventDispatcher{
 			else
 				layout.getLayoutContext().addFFrame(copyFFrame, false, true);
 		}
-		layout.getLayoutContext().getEFS().endComplexCommand(
-				PluginServices.getText(layout, "paste_elements"));
+		layout.getLayoutContext()
+				.getEFS()
+				.endComplexCommand(
+						PluginServices.getText(layout, "paste_elements"));
 		layout.getLayoutContext().callLayoutDrawListeners();
 		return true;
 	}
+
 	public static boolean undo(Layout layout) {
 		try {
 			layout.getLayoutContext().getEFS().undo();
@@ -63,6 +68,7 @@ public class LayoutKeyEvent implements KeyEventDispatcher{
 		PluginServices.getMainFrame().enableControls();
 		return true;
 	}
+
 	public static boolean redo(Layout layout) {
 		try {
 			layout.getLayoutContext().getEFS().redo();
@@ -75,12 +81,13 @@ public class LayoutKeyEvent implements KeyEventDispatcher{
 		return true;
 	}
 
-    public boolean dispatchKeyEvent(KeyEvent e) {
+	public boolean dispatchKeyEvent(KeyEvent e) {
 		IWindow view = PluginServices.getMDIManager().getActiveWindow();
 
-		if (e.getID() == KeyEvent.KEY_PRESSED || !(view instanceof Layout) || !(e.getSource() instanceof LayoutControl))
+		if (e.getID() == KeyEvent.KEY_PRESSED || !(view instanceof Layout)
+				|| !(e.getSource() instanceof LayoutControl))
 			return false;
-		Layout layout=(Layout)view;
+		Layout layout = (Layout) view;
 		if (!layout.getLayoutContext().isEditable())
 			return false;
 		IFFrame[] fframes = layout.getLayoutContext().getFFrameSelected();
@@ -124,22 +131,29 @@ public class LayoutKeyEvent implements KeyEventDispatcher{
 				layout.getLayoutControl().refresh();
 				break;
 			}
-			if (e.getKeyCode()==KeyEvent.VK_LEFT || e.getKeyCode()==KeyEvent.VK_RIGHT || e.getKeyCode()==KeyEvent.VK_UP || e.getKeyCode()==KeyEvent.VK_DOWN) {
-				if (fframes.length==0)
+			if (e.getKeyCode() == KeyEvent.VK_LEFT
+					|| e.getKeyCode() == KeyEvent.VK_RIGHT
+					|| e.getKeyCode() == KeyEvent.VK_UP
+					|| e.getKeyCode() == KeyEvent.VK_DOWN) {
+				if (fframes.length == 0)
 					return false;
 				layout.getLayoutContext().getEFS().startComplexCommand();
-			for (int i = 0; i < fframes.length; i++) {
-				IFFrame fframeAux = fframes[i].cloneFFrame(layout);
-				Rectangle2D r = getRectMove(fframes[i]
-						.getBoundingBox(layout.getLayoutControl().getAT()), difX, difY);
-				fframeAux.setBoundBox(FLayoutUtilities.toSheetRect(r,
-						layout.getLayoutControl().getAT()));
-				layout.getLayoutContext().getEFS().modifyFFrame(fframes[i], fframeAux);
-			}
-			layout.getLayoutContext().getEFS().endComplexCommand(
-					PluginServices.getText(this, "move_elements"));
-			layout.getLayoutContext().updateFFrames();
-			layout.getLayoutControl().refresh();
+				for (int i = 0; i < fframes.length; i++) {
+					IFFrame fframeAux = fframes[i].cloneFFrame(layout);
+					Rectangle2D r = getRectMove(
+							fframes[i].getBoundingBox(layout.getLayoutControl()
+									.getAT()), difX, difY);
+					fframeAux.setBoundBox(FLayoutUtilities.toSheetRect(r,
+							layout.getLayoutControl().getAT()));
+					layout.getLayoutContext().getEFS()
+							.modifyFFrame(fframes[i], fframeAux);
+				}
+				layout.getLayoutContext()
+						.getEFS()
+						.endComplexCommand(
+								PluginServices.getText(this, "move_elements"));
+				layout.getLayoutContext().updateFFrames();
+				layout.getLayoutControl().refresh();
 			}
 			difX = 0;
 			difY = 0;
@@ -147,13 +161,16 @@ public class LayoutKeyEvent implements KeyEventDispatcher{
 		}
 		return true;
 	}
-	private Rectangle2D getRectMove(Rectangle2D r,int difX,int difY) {
-		Rectangle2D rectMove=new Rectangle2D.Double();
-		rectMove.setRect(r.getX()+difX,r.getY()+difY,r.getWidth(),r.getHeight());
+
+	private Rectangle2D getRectMove(Rectangle2D r, int difX, int difY) {
+		Rectangle2D rectMove = new Rectangle2D.Double();
+		rectMove.setRect(r.getX() + difX, r.getY() + difY, r.getWidth(),
+				r.getHeight());
 		return rectMove;
 	}
+
 	public static boolean hasSelection() {
-		return selectFFrames.length>0;
+		return selectFFrames.length > 0;
 	}
 
 }

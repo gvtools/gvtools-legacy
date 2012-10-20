@@ -40,65 +40,65 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id$
-* $Log$
-* Revision 1.10  2007/09/19 16:16:52  jaume
-* removed unnecessary imports
-*
-* Revision 1.9  2006/11/20 17:29:43  fjp
-* Fallo proxy con usuario y contraseña
-*
-* Revision 1.8  2006/09/12 10:11:25  jaume
-* *** empty log message ***
-*
-* Revision 1.7.4.1  2006/09/08 11:56:24  jaume
-* *** empty log message ***
-*
-* Revision 1.7  2006/08/22 12:23:05  jaume
-* improved perfomance when saving changes
-*
-* Revision 1.6  2006/08/22 07:37:17  jaume
-* *** empty log message ***
-*
-* Revision 1.5  2006/08/04 11:45:12  caballero
-* lanzo una excepción cuando falla el método storeValues
-*
-* Revision 1.4  2006/07/31 10:02:31  jaume
-* *** empty log message ***
-*
-* Revision 1.3  2006/07/03 10:46:01  jaume
-* *** empty log message ***
-*
-* Revision 1.2  2006/06/13 07:43:08  fjp
-* Ajustes sobre los cuadros de dialogos de preferencias
-*
-* Revision 1.1  2006/06/12 16:04:28  caballero
-* Preferencias
-*
-* Revision 1.6  2006/06/06 10:26:31  jaume
-* *** empty log message ***
-*
-* Revision 1.5  2006/06/05 17:07:17  jaume
-* *** empty log message ***
-*
-* Revision 1.4  2006/06/05 10:06:08  jaume
-* *** empty log message ***
-*
-* Revision 1.3  2006/06/05 09:13:22  jaume
-* *** empty log message ***
-*
-* Revision 1.2  2006/06/05 08:11:38  jaume
-* *** empty log message ***
-*
-* Revision 1.1  2006/06/02 10:50:18  jaume
-* *** empty log message ***
-*
-* Revision 1.1  2006/06/01 15:54:09  jaume
-* added preferences extension
-*
-*
-*/
+ *
+ * $Id$
+ * $Log$
+ * Revision 1.10  2007/09/19 16:16:52  jaume
+ * removed unnecessary imports
+ *
+ * Revision 1.9  2006/11/20 17:29:43  fjp
+ * Fallo proxy con usuario y contraseña
+ *
+ * Revision 1.8  2006/09/12 10:11:25  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.7.4.1  2006/09/08 11:56:24  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.7  2006/08/22 12:23:05  jaume
+ * improved perfomance when saving changes
+ *
+ * Revision 1.6  2006/08/22 07:37:17  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.5  2006/08/04 11:45:12  caballero
+ * lanzo una excepción cuando falla el método storeValues
+ *
+ * Revision 1.4  2006/07/31 10:02:31  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.3  2006/07/03 10:46:01  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/06/13 07:43:08  fjp
+ * Ajustes sobre los cuadros de dialogos de preferencias
+ *
+ * Revision 1.1  2006/06/12 16:04:28  caballero
+ * Preferencias
+ *
+ * Revision 1.6  2006/06/06 10:26:31  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.5  2006/06/05 17:07:17  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.4  2006/06/05 10:06:08  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.3  2006/06/05 09:13:22  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/06/05 08:11:38  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/06/02 10:50:18  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/06/01 15:54:09  jaume
+ * added preferences extension
+ *
+ *
+ */
 package com.iver.core.preferences.network;
 
 import java.awt.event.ActionEvent;
@@ -115,37 +115,43 @@ import com.iver.andami.ui.mdiFrame.JToolBarButton;
 
 /**
  * General network connection page.
- *
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
 public class NetworkPage extends AbstractPreferencePage {
-	//private static Preferences prefs = Preferences.userRoot().node( "gvsig.connection" );
+	// private static Preferences prefs = Preferences.userRoot().node(
+	// "gvsig.connection" );
 	private ImageIcon icon;
 	private JLabel lblNetworkStatus;
 	private JToolBarButton btnRefresh;
 	protected static String id;
 
-
 	public NetworkPage() {
 		super();
 		id = this.getClass().getName();
-		// icon = new ImageIcon(this.getClass().getClassLoader().getResource("images/network.png"));
-		icon=PluginServices.getIconTheme().get("aplication-preferences-network");
+		// icon = new
+		// ImageIcon(this.getClass().getClassLoader().getResource("images/network.png"));
+		icon = PluginServices.getIconTheme().get(
+				"aplication-preferences-network");
 		lblNetworkStatus = new JLabel();
-		lblNetworkStatus.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 12));
-		lblNetworkStatus.setText(PluginServices.getText(this, "optinos.network.click_to_test_connection"));
+		lblNetworkStatus.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD,
+				12));
+		lblNetworkStatus.setText(PluginServices.getText(this,
+				"optinos.network.click_to_test_connection"));
 
 		JPanel aux = new JPanel();
 		aux.add(getBtnCheckConnection());
-		addComponent(PluginServices.getText(this, "options.network.status") + ":", lblNetworkStatus	);
+		addComponent(PluginServices.getText(this, "options.network.status")
+				+ ":", lblNetworkStatus);
 		addComponent("", aux);
 
 	}
 
 	private JToolBarButton getBtnCheckConnection() {
 		if (btnRefresh == null) {
-			btnRefresh = new JToolBarButton(PluginServices.getText(this, "test_now"));
+			btnRefresh = new JToolBarButton(PluginServices.getText(this,
+					"test_now"));
 			btnRefresh.addActionListener(new ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					refreshStatus();
@@ -160,10 +166,12 @@ public class NetworkPage extends AbstractPreferencePage {
 		ImageIcon statusIcon;
 		String statusText;
 		if (connected) {
-			statusIcon = PluginServices.getIconTheme().get("kde-network-online-icon") ;
+			statusIcon = PluginServices.getIconTheme().get(
+					"kde-network-online-icon");
 			statusText = PluginServices.getText(this, "online");
 		} else {
-			statusIcon = PluginServices.getIconTheme().get("kde-network-offline-icon");
+			statusIcon = PluginServices.getIconTheme().get(
+					"kde-network-offline-icon");
 			statusText = PluginServices.getText(this, "offline");
 		}
 		lblNetworkStatus.setIcon(statusIcon);
@@ -195,9 +203,7 @@ public class NetworkPage extends AbstractPreferencePage {
 		return this;
 	}
 
-
 	public void initializeValues() {
-
 
 	}
 
@@ -226,6 +232,5 @@ public class NetworkPage extends AbstractPreferencePage {
 	public void setChangesApplied() {
 		setChanged(false);
 	}
-
 
 }

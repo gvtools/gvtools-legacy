@@ -162,7 +162,9 @@ import com.iver.utiles.swing.jcomboServer.ServerData;
  */
 
 /**
- * <p>Wizard that allows add a new WFS layer.</p>
+ * <p>
+ * Wizard that allows add a new WFS layer.
+ * </p>
  * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
@@ -187,8 +189,10 @@ public class WFSWizard extends WizardPanel {
 	private JLabel lblServerType = null;
 	private JLabel lblServerTypeValue = null;
 	private JCheckBox chkCaching = null;
-	private static Preferences fPrefs = Preferences.userRoot().node( "gvsig.wfs-wizard" );
-	private boolean refreshing = fPrefs.getBoolean("refresh_capabilities", false);
+	private static Preferences fPrefs = Preferences.userRoot().node(
+			"gvsig.wfs-wizard");
+	private boolean refreshing = fPrefs.getBoolean("refresh_capabilities",
+			false);
 	private final String wfs_properties_extensionpoint_name = "WFSPropertiesDialog";
 
 	/**
@@ -208,24 +212,28 @@ public class WFSWizard extends WizardPanel {
 		lblServerType = new JLabel();
 		lblServerType.setBounds(20, 444, 100, 20);
 		lblServerType.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-		lblServerType.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-		lblServerType.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 11));
-		lblServerType.setText(PluginServices.getText(this, "server_type")+":");
+		lblServerType
+				.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+		lblServerType.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN,
+				11));
+		lblServerType
+				.setText(PluginServices.getText(this, "server_type") + ":");
 		lblServerTypeValue = new JLabel();
 		lblServerTypeValue.setBounds(128, 444, 148, 20);
-		lblServerTypeValue.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 11));
+		lblServerTypeValue.setFont(new java.awt.Font("Arial",
+				java.awt.Font.BOLD, 11));
 		lblServerTypeValue.setText("-");
 
 		this.setLayout(null);
-//		this.setPreferredSize(new java.awt.Dimension(750, 320));
-//		this.setPreferredSize(new Dimension(750, 320));
+		// this.setPreferredSize(new java.awt.Dimension(750, 320));
+		// this.setPreferredSize(new Dimension(750, 320));
 		this.setVisible(true);
-//		this.setSize(518, 468);
+		// this.setSize(518, 468);
 
 		this.add(getPanelPage1(), null);
 		page = 0;
 		this.add(getPanelPage2(), null);
-	
+
 		this.add(getBtnAnterior(), null);
 		this.add(getBtnSiguiente(), null);
 
@@ -237,26 +245,29 @@ public class WFSWizard extends WizardPanel {
 
 	/**
 	 * Adds the host addres to a persistent data storage.
-	 *
-	 * @param host the host of the server
+	 * 
+	 * @param host
+	 *            the host of the server
 	 */
 	private void addHost(String host) {
 		host = host.trim();
-		ServerDataPersistence persistence = new ServerDataPersistence(this,ServerData.SERVER_TYPE_WFS);
-		persistence.addServerData(new ServerData(host, ServerData.SERVER_TYPE_WFS));
+		ServerDataPersistence persistence = new ServerDataPersistence(this,
+				ServerData.SERVER_TYPE_WFS);
+		persistence.addServerData(new ServerData(host,
+				ServerData.SERVER_TYPE_WFS));
 	}
 
 	/**
 	 * Fills up the initial WCSWizard controls.
-	 *
+	 * 
 	 * jaume
 	 */
-	private void rellenarControles() throws Exception{
+	private void rellenarControles() throws Exception {
 		try {
 			String host = cmbHost.getModel().getSelectedItem().toString();
 
 			URL url = new URL(host);
-		
+
 			dataSource.setHost(url, refreshing);
 			addHost(host);
 			getLblTitle().setText(dataSource.getTitle());
@@ -264,32 +275,30 @@ public class WFSWizard extends WizardPanel {
 			lblServerTypeValue.setText(dataSource.getServerType());
 			wfsParamsPanel.setWizardData(dataSource);
 			connected = true;
-		} catch(Exception e) {				
+		} catch (Exception e) {
 			throw e;
 		}
 	}
 
 	/**
-	 * Enables or disables the Next and Previous buttons according with the current
-	 * page and the enabled pages.
+	 * Enables or disables the Next and Previous buttons according with the
+	 * current page and the enabled pages.
 	 */
 	private void uptateNavigatingButtons() {
 		if (page == 0) {
 			getBtnAnterior().setEnabled(false);
 			getBtnSiguiente().setVisible(true);
 			getBtnSiguiente().setEnabled(false);
-		}
-		else {
+		} else {
 			short tabIndex = (short) wfsParamsPanel.getSelectedIndex();
-			
+
 			getBtnAnterior().setEnabled(true);
 			if (wfsParamsPanel.nextPageEnabled() == -1) {
-			    getBtnSiguiente().setEnabled(false);
-			    
-			    if (tabIndex == (wfsParamsPanel.getPanelInGUICount() -1))
+				getBtnSiguiente().setEnabled(false);
+
+				if (tabIndex == (wfsParamsPanel.getPanelInGUICount() - 1))
 					getBtnSiguiente().setVisible(false);
-			}
-			else {
+			} else {
 				getBtnSiguiente().setVisible(true);
 				getBtnSiguiente().setEnabled(true);
 			}
@@ -298,7 +307,7 @@ public class WFSWizard extends WizardPanel {
 
 	/**
 	 * This method initializes txtHost from the persistent data storage
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private javax.swing.JComboBox getTxtHost() {
@@ -309,28 +318,35 @@ public class WFSWizard extends WizardPanel {
 			cmbHost.setBounds(11, 26, 454, 20);
 			cmbHost.setEditable(true);
 
-			ServerDataPersistence persistence = new ServerDataPersistence(this,ServerData.SERVER_TYPE_WFS);
+			ServerDataPersistence persistence = new ServerDataPersistence(this,
+					ServerData.SERVER_TYPE_WFS);
 			ServerData[] servers = persistence.getArrayOfServerData();
 
-			if (servers.length == 0){
+			if (servers.length == 0) {
 				PluginServices ps = PluginServices.getPluginServices(this);
 				XMLEntity xml = ps.getPersistentXML();
 				try {
-					String[] oldServers = xml.getStringArrayProperty("wfs-servers");
+					String[] oldServers = xml
+							.getStringArrayProperty("wfs-servers");
 					servers = new ServerData[oldServers.length];
-					for (int i=0; i<oldServers.length; i++) {
-						servers[i] = new ServerData(oldServers[i],ServerData.SERVER_TYPE_WMS);
+					for (int i = 0; i < oldServers.length; i++) {
+						servers[i] = new ServerData(oldServers[i],
+								ServerData.SERVER_TYPE_WMS);
 					}
 					xml.remove("wfs-servers");
 					ps.setPersistentXML(xml);
 				} catch (NotExistInXMLEntity e) {
 					// Old servers doesn't exist
 					servers = new ServerData[2];
-					servers[0] = new ServerData("http://www2.dmsolutions.ca/cgi-bin/mswfs_gmap",ServerData.SERVER_TYPE_WFS);
-					servers[1] = new ServerData("http://www.idee.es/IDEE-WFS/ogcwebservice",ServerData.SERVER_TYPE_WFS);
+					servers[0] = new ServerData(
+							"http://www2.dmsolutions.ca/cgi-bin/mswfs_gmap",
+							ServerData.SERVER_TYPE_WFS);
+					servers[1] = new ServerData(
+							"http://www.idee.es/IDEE-WFS/ogcwebservice",
+							ServerData.SERVER_TYPE_WFS);
 				}
 
-				for (int i = 0; i < servers.length; i++){
+				for (int i = 0; i < servers.length; i++) {
 					persistence.addServerData(servers[i]);
 				}
 				persistence.setPersistent();
@@ -338,25 +354,30 @@ public class WFSWizard extends WizardPanel {
 
 			cmbHost.setServerList(servers);
 
-			// Allows that user can start the connection to the written server pressing the 'Enter' key
-			cmbHost.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
-				/*
-				 * (non-Javadoc)
-				 * @see java.awt.event.KeyAdapter#keyReleased(java.awt.event.KeyEvent)
-				 */
-				public void keyReleased(KeyEvent e) {
-					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-						getBtnConnect().doClick();
-					}
-				}
-			});
+			// Allows that user can start the connection to the written server
+			// pressing the 'Enter' key
+			cmbHost.getEditor().getEditorComponent()
+					.addKeyListener(new KeyAdapter() {
+						/*
+						 * (non-Javadoc)
+						 * 
+						 * @see
+						 * java.awt.event.KeyAdapter#keyReleased(java.awt.event
+						 * .KeyEvent)
+						 */
+						public void keyReleased(KeyEvent e) {
+							if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+								getBtnConnect().doClick();
+							}
+						}
+					});
 		}
 		return cmbHost;
 	}
 
 	/**
 	 * This method initializes btnDetalles
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getBtnConnect() {
@@ -367,24 +388,26 @@ public class WFSWizard extends WizardPanel {
 			btnConnect.setText(PluginServices.getText(this, "connect"));
 			btnConnect.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					btnConnect.setEnabled(false); // This avoids multiple contiguous actions
+					btnConnect.setEnabled(false); // This avoids multiple
+													// contiguous actions
 
 					try {
 						rellenarControles();
 						wfsParamsPanel.refreshCapabilitiesInfo();
 						wfsParamsPanel.refreshWFSSelectFeaturePanel();
 						wfsParamsPanel.enableDefaultTabs(false);
-						btnConnect.setEnabled(true); // This avoids multiple contiguous actions
-						
+						btnConnect.setEnabled(true); // This avoids multiple
+														// contiguous actions
+
 						getBtnSiguiente().setEnabled(true);
-						getBtnSiguiente().requestFocus(); // Sets focus to the 'next' button
-					}
-					catch(Exception e1) {
-						JOptionPane.showMessageDialog(null, 
-								Messages.getText("invalid_url"), 
+						getBtnSiguiente().requestFocus(); // Sets focus to the
+															// 'next' button
+					} catch (Exception e1) {
+						JOptionPane.showMessageDialog(null,
+								Messages.getText("invalid_url"),
 								Messages.getText("warning"),
 								JOptionPane.WARNING_MESSAGE);
-						btnConnect.setEnabled(true); 
+						btnConnect.setEnabled(true);
 					}
 				}
 			});
@@ -392,8 +415,11 @@ public class WFSWizard extends WizardPanel {
 			// If user press the 'Enter' key -> advance
 			btnConnect.addKeyListener(new KeyAdapter() {
 				/*
-				 *  (non-Javadoc)
-				 * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
+				 * (non-Javadoc)
+				 * 
+				 * @see
+				 * java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent
+				 * )
 				 */
 				public void keyReleased(KeyEvent e) {
 					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -408,7 +434,7 @@ public class WFSWizard extends WizardPanel {
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private javax.swing.JPanel getJPanel() {
@@ -431,13 +457,13 @@ public class WFSWizard extends WizardPanel {
 
 	/**
 	 * This method initializes pnlName
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPnlName() {
 		if (pnlName == null) {
 			pnlName = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-			pnlName.setBounds(new java.awt.Rectangle(9,19,452,24));
+			pnlName.setBounds(new java.awt.Rectangle(9, 19, 452, 24));
 			pnlName.add(getJLabel1(), null);
 			pnlName.add(getLblTitle(), null);
 		}
@@ -446,7 +472,7 @@ public class WFSWizard extends WizardPanel {
 
 	/**
 	 * This method initializes jLabel1
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getJLabel1() {
@@ -461,7 +487,7 @@ public class WFSWizard extends WizardPanel {
 
 	/**
 	 * This method initializes lblTitle
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLblTitle() {
@@ -477,7 +503,7 @@ public class WFSWizard extends WizardPanel {
 
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private javax.swing.JScrollPane getJScrollPane() {
@@ -493,7 +519,7 @@ public class WFSWizard extends WizardPanel {
 
 	/**
 	 * This method initializes txtAbstract
-	 *
+	 * 
 	 * @return javax.swing.JTextArea
 	 */
 	private javax.swing.JTextArea getTxtAbstract() {
@@ -509,7 +535,7 @@ public class WFSWizard extends WizardPanel {
 
 	/**
 	 * This method initializes panelPage1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private javax.swing.JPanel getPanelPage1() {
@@ -528,7 +554,7 @@ public class WFSWizard extends WizardPanel {
 
 	/**
 	 * This method initializes panelPage2
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private javax.swing.JPanel getPanelPage2() {
@@ -542,20 +568,24 @@ public class WFSWizard extends WizardPanel {
 				// Initially there is no layer
 				wfsParamsPanel = (WFSParamsPanel) manager.getPanelGroup(null);
 				wfsParamsPanel.setBounds(4, 9, 502, 423);
-				wfsParamsPanel.loadPanels(new PanelGroupLoaderFromExtensionPoint(wfs_properties_extensionpoint_name));
+				wfsParamsPanel
+						.loadPanels(new PanelGroupLoaderFromExtensionPoint(
+								wfs_properties_extensionpoint_name));
 				wfsParamsPanel.addChangeListener(new ChangeListener() {
-			        // This method is called whenever the selected tab changes
-			        public void stateChanged(ChangeEvent evt) {
-			            JTabbedPane pane = (JTabbedPane)evt.getSource();
+					// This method is called whenever the selected tab changes
+					public void stateChanged(ChangeEvent evt) {
+						JTabbedPane pane = (JTabbedPane) evt.getSource();
 
-			            // Update the navigation buttons
-			            uptateNavigatingButtons();
-			        }
-			    });
+						// Update the navigation buttons
+						uptateNavigatingButtons();
+					}
+				});
 			} catch (BaseException bE) {
-				NotificationManager.showMessageError(bE.getLocalizedMessageStack(), bE);
+				NotificationManager.showMessageError(
+						bE.getLocalizedMessageStack(), bE);
 			} catch (Exception e) {
-				NotificationManager.showMessageError(e.getLocalizedMessage(), e);
+				NotificationManager
+						.showMessageError(e.getLocalizedMessage(), e);
 			}
 		}
 
@@ -564,7 +594,7 @@ public class WFSWizard extends WizardPanel {
 
 	/**
 	 * This method initializes btnSiguiente
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getBtnSiguiente() {
@@ -579,8 +609,7 @@ public class WFSWizard extends WizardPanel {
 						page = 1;
 						getPanelPage1().setVisible(false);
 						getPanelPage2().setVisible(true);
-					}
-					else {
+					} else {
 						wfsParamsPanel.goToNextTab();
 					}
 
@@ -593,7 +622,7 @@ public class WFSWizard extends WizardPanel {
 
 	/**
 	 * This method initializes btnAnterior
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getBtnAnterior() {
@@ -605,7 +634,7 @@ public class WFSWizard extends WizardPanel {
 			btnAnterior.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					int tabIndex = wfsParamsPanel.getSelectedIndex();
-					
+
 					if (page == 1) {
 						if (tabIndex == 0) {
 							page = 0;
@@ -615,18 +644,15 @@ public class WFSWizard extends WizardPanel {
 							getLblTitle().setText("-");
 							getTxtAbstract().setText("");
 
-
 							getPanelPage2().setVisible(false);
 							getPanelPage1().setVisible(true);
+						} else {
+							wfsParamsPanel.goToPreviousTab();
 						}
-						else {
-							wfsParamsPanel.goToPreviousTab();	
-						}
+					} else {
+
 					}
-					else {
-						
-					}
-					
+
 					uptateNavigatingButtons();
 				}
 			});
@@ -636,7 +662,7 @@ public class WFSWizard extends WizardPanel {
 
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private javax.swing.JPanel getJPanel1() {
@@ -646,7 +672,8 @@ public class WFSWizard extends WizardPanel {
 			jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(
 					null, PluginServices.getText(this, "server"),
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					null));
 			jPanel1.setBounds(2, 5, 477, 85);
 			jPanel1.add(getTxtHost(), null);
 			jPanel1.add(getBtnConnect(), null);
@@ -658,7 +685,7 @@ public class WFSWizard extends WizardPanel {
 
 	/**
 	 * Returns the wizard's data source
-	 *
+	 * 
 	 * @return the wizard's data source
 	 */
 	public WFSWizardData getDataSource() {
@@ -667,8 +694,9 @@ public class WFSWizard extends WizardPanel {
 
 	/**
 	 * Sets the wizard's data source
-	 *
-	 * @param source the wizard's data source
+	 * 
+	 * @param source
+	 *            the wizard's data source
 	 */
 	public void setDataSource(WFSWizardData source) {
 		dataSource = source;
@@ -676,9 +704,10 @@ public class WFSWizard extends WizardPanel {
 
 	/**
 	 * Returns the rectangle that contains all the others
-	 *
-	 * @param rects[] rectangles with its positions and dimensions
-	 *
+	 * 
+	 * @param rects
+	 *            [] rectangles with its positions and dimensions
+	 * 
 	 * @return Rectangle2D the rectangle that contains all the others
 	 */
 	public static Rectangle2D getRectangle(Rectangle2D[] rects) {
@@ -694,7 +723,7 @@ public class WFSWizard extends WizardPanel {
 	/**
 	 * Returns the host typed in the host text field or null if nothing is typed
 	 * or it is not a valid URL.
-	 *
+	 * 
 	 * @return URL del host
 	 */
 	public URL getHost() {
@@ -707,6 +736,7 @@ public class WFSWizard extends WizardPanel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.gui.WizardPanel#initWizard()
 	 */
 	public void initWizard() {
@@ -715,6 +745,7 @@ public class WFSWizard extends WizardPanel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.gui.WizardPanel#execute()
 	 */
 	public void execute() {
@@ -722,6 +753,7 @@ public class WFSWizard extends WizardPanel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.gui.WizardPanel#getLayer()
 	 */
 	public FLayer getLayer() {
@@ -735,15 +767,17 @@ public class WFSWizard extends WizardPanel {
 
 	/**
 	 * This method initializes chkCaching
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getChkCaching() {
 		if (chkCaching == null) {
 			chkCaching = new JCheckBox();
 			chkCaching.setBounds(7, 51, 349, 20);
-			chkCaching.setText(PluginServices.getText(this, "refresh_capabilities"));
-			chkCaching.setToolTipText(PluginServices.getText(this, "refresh_capabilities_tooltip"));
+			chkCaching.setText(PluginServices.getText(this,
+					"refresh_capabilities"));
+			chkCaching.setToolTipText(PluginServices.getText(this,
+					"refresh_capabilities_tooltip"));
 			chkCaching.setSelected(refreshing);
 			chkCaching.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -752,9 +786,12 @@ public class WFSWizard extends WizardPanel {
 			});
 			chkCaching.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					chkCaching.setEnabled(false); // This avoids multiple contiguous actions
-					fPrefs.putBoolean("refresh_capabilities", chkCaching.isSelected());
-					chkCaching.setEnabled(true); // This avoids multiple contiguous actions
+					chkCaching.setEnabled(false); // This avoids multiple
+													// contiguous actions
+					fPrefs.putBoolean("refresh_capabilities",
+							chkCaching.isSelected());
+					chkCaching.setEnabled(true); // This avoids multiple
+													// contiguous actions
 				}
 			});
 

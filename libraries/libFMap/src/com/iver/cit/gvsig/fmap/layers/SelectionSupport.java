@@ -46,10 +46,9 @@ import java.util.Iterator;
 import com.iver.cit.gvsig.fmap.operations.selection.LinkSelectionListener;
 import com.iver.utiles.XMLEntity;
 
-
 /**
  * Clase que gestiona las operaciónes sobre la selección.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class SelectionSupport {
@@ -58,8 +57,9 @@ public class SelectionSupport {
 
 	/**
 	 * Inserta una nueva selección.
-	 *
-	 * @param selection FBitSet con la selección.
+	 * 
+	 * @param selection
+	 *            FBitSet con la selección.
 	 */
 	public void setSelection(FBitSet selection) {
 		this.selection = selection;
@@ -68,7 +68,7 @@ public class SelectionSupport {
 
 	/**
 	 * Devuelve un FBitSet con los índices de los elementos seleccionados.
-	 *
+	 * 
 	 * @return FBitSet.
 	 */
 	public FBitSet getSelection() {
@@ -77,9 +77,10 @@ public class SelectionSupport {
 
 	/**
 	 * Devuelve true si el elemento está seleccionado.
-	 *
-	 * @param recordIndex índice del registro.
-	 *
+	 * 
+	 * @param recordIndex
+	 *            índice del registro.
+	 * 
 	 * @return True si está seleccionado.
 	 */
 	public boolean isSelected(int recordIndex) {
@@ -90,14 +91,15 @@ public class SelectionSupport {
 	 * Elimina la selección.
 	 */
 	public void clearSelection() {
-	    this.selection.clear();
-	    fireSelectionEvents();
-    }
+		this.selection.clear();
+		fireSelectionEvents();
+	}
 
 	/**
 	 * Añade un SelectionListener al ArrayList de Listeners.
-	 *
-	 * @param listener SelectionListener a añadir.
+	 * 
+	 * @param listener
+	 *            SelectionListener a añadir.
 	 */
 	public void addSelectionListener(SelectionListener listener) {
 		if (!listeners.contains(listener))
@@ -105,10 +107,11 @@ public class SelectionSupport {
 	}
 
 	/**
-	 * Borra el SelectionListener que se le pasa como parámetro del ArrayList
-	 * de Listener.
-	 *
-	 * @param listener SlectionListener a borrar.
+	 * Borra el SelectionListener que se le pasa como parámetro del ArrayList de
+	 * Listener.
+	 * 
+	 * @param listener
+	 *            SlectionListener a borrar.
 	 */
 	public void removeSelectionListener(SelectionListener listener) {
 		listeners.remove(listener);
@@ -121,7 +124,8 @@ public class SelectionSupport {
 	 * "ráfaga" de eventos
 	 */
 	public void fireSelectionEvents() {
-		for (Iterator<SelectionListener> iter = listeners.iterator(); iter.hasNext();) {
+		for (Iterator<SelectionListener> iter = listeners.iterator(); iter
+				.hasNext();) {
 			SelectionListener listener = iter.next();
 
 			listener.selectionChanged(new SelectionEvent());
@@ -131,12 +135,12 @@ public class SelectionSupport {
 	/**
 	 * Devuelve el XMLEntity con la información necesaria para reproducir un
 	 * objeto igual al actual.
-	 *
+	 * 
 	 * @return XMLEntity.
 	 */
 	public XMLEntity getXMLEntity() {
 		XMLEntity xml = new XMLEntity();
-		xml.putProperty("className",this.getClass().getName());
+		xml.putProperty("className", this.getClass().getName());
 
 		if (selection != null) {
 			xml.putProperty("numBitSet", selection.cardinality());
@@ -156,8 +160,9 @@ public class SelectionSupport {
 
 	/**
 	 * A partir del XMLEntity reproduce la selección.
-	 *
-	 * @param xml DOCUMENT ME!
+	 * 
+	 * @param xml
+	 *            DOCUMENT ME!
 	 */
 	public void setXMLEntity(XMLEntity xml) {
 		int numBitSet = xml.getIntProperty("numBitSet");
@@ -171,8 +176,9 @@ public class SelectionSupport {
 
 	/**
 	 * A partir del XMLEntity reproduce la selección.
-	 *
-	 * @param xml DOCUMENT ME!
+	 * 
+	 * @param xml
+	 *            DOCUMENT ME!
 	 */
 	public void setXMLEntity03(XMLEntity xml) {
 		int numBitSet = xml.getIntProperty("numBitSet");
@@ -185,9 +191,9 @@ public class SelectionSupport {
 	}
 
 	public void removeLinkSelectionListener() {
-		for (int i=0;i<listeners.size();i++){
+		for (int i = 0; i < listeners.size(); i++) {
 			if (listeners.get(i) instanceof LinkSelectionListener)
-			listeners.remove(listeners.get(i));
+				listeners.remove(listeners.get(i));
 		}
 	}
 }

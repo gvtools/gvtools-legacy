@@ -116,8 +116,6 @@ public class ProjectTable extends ProjectDocument {
 
 	private XMLEntity backupXMLEntity = null;
 
-	
-	
 	/**
 	 * Establece a true el bit index-ésimo del bitmap de campos visibles. Los
 	 * campos cuyos bits estén a true se considerarán visibles y viceversa
@@ -291,8 +289,8 @@ public class ProjectTable extends ProjectDocument {
 					}
 
 					if (bUsingJoinedField) {
-						JOptionPane.showMessageDialog(null, PluginServices.getText(null,
-								"legend_using_joined_field"));
+						JOptionPane.showMessageDialog(null, PluginServices
+								.getText(null, "legend_using_joined_field"));
 						try {
 							lyr.setLegend(LegendFactory
 									.createSingleSymbolLegend(lyr
@@ -318,7 +316,7 @@ public class ProjectTable extends ProjectDocument {
 											"Error in com.iver.cit.gvsig.project.documents.table.ProjectTable.restoreDataSource()",
 											null);
 						}
-							
+
 					}
 				} // ClassifiedVectorLegend
 				checkLabelling(lyr, sdsOrig, sdsJoined);
@@ -397,7 +395,7 @@ public class ProjectTable extends ProjectDocument {
 		if (bLabelingWithJoin) {
 			JOptionPane.showMessageDialog(null, PluginServices.getText(null,
 					"labelling_using_joined_field"));
-			
+
 			lyr.setLabelingStrategy(LabelingFactory.createDefaultStrategy(lyr));
 			lyr.setIsLabeled(false);
 		}
@@ -447,10 +445,10 @@ public class ProjectTable extends ProjectDocument {
 			// esModel.getRecordset().getName());
 
 			if (associatedTable != null) {
-				xml.putProperty("layerName", ((FLayer) associatedTable)
-						.getName());
-				xml.putProperty("viewName", project
-						.getView((FLayer) associatedTable));
+				xml.putProperty("layerName",
+						((FLayer) associatedTable).getName());
+				xml.putProperty("viewName",
+						project.getView((FLayer) associatedTable));
 			}
 
 			xml.putProperty("mapping", mapping);
@@ -510,8 +508,8 @@ public class ProjectTable extends ProjectDocument {
 			associatedTable = (AlphanumericData) layer;
 
 			LayerFactory.getDataSourceFactory().addDataSource(
-					(ObjectDriver) ((FLyrVect) layer).getSource()
-							.getDriver(), xml.getStringProperty("gdbmsname"));
+					(ObjectDriver) ((FLyrVect) layer).getSource().getDriver(),
+					xml.getStringProperty("gdbmsname"));
 		} else if (xml.getStringProperty("type").equals("db")) {
 			LayerFactory.getDataSourceFactory().addDBDataSourceByTable(
 					xml.getStringProperty("gdbmsname"),
@@ -574,8 +572,8 @@ public class ProjectTable extends ProjectDocument {
 
 			/*
 			 * if (xml.getStringProperty("type").equals("otherDriverFile")) { }
-			 * else if (xml.getStringProperty("type").equals("sameDriverFile")) {
-			 * String layerName = xml.getStringProperty("layerName");
+			 * else if (xml.getStringProperty("type").equals("sameDriverFile"))
+			 * { String layerName = xml.getStringProperty("layerName");
 			 * ProjectView vista = project.getViewByName(xml.getStringProperty(
 			 * "viewName")); FLayer layer =
 			 * vista.getMapContext().getLayers().getLayer(layerName);
@@ -588,9 +586,9 @@ public class ProjectTable extends ProjectDocument {
 			setName(xml.getStringProperty("name"));
 
 			if (xml.contains("linkTable")) {
-				setLinkTable(xml.getStringProperty("linkTable"), xml
-						.getStringProperty("field1"), xml
-						.getStringProperty("field2"));
+				setLinkTable(xml.getStringProperty("linkTable"),
+						xml.getStringProperty("field1"),
+						xml.getStringProperty("field2"));
 			}
 
 			if (xml.contains("joinedTableNames")) {
@@ -635,8 +633,8 @@ public class ProjectTable extends ProjectDocument {
 		// }
 		if (xml.contains("columns")) {
 			columns.clear();
-			columns = Columns.createColumns(xml
-					.getChild(xml.getChildrenCount() - 1));
+			columns = Columns
+					.createColumns(xml.getChild(xml.getChildrenCount() - 1));
 		}
 
 	}
@@ -719,8 +717,8 @@ public class ProjectTable extends ProjectDocument {
 				layerName = xml.getStringProperty("layerName");
 
 				ProjectView vista = (ProjectView) project
-						.getProjectDocumentByName(xml
-								.getStringProperty("viewName"),
+						.getProjectDocumentByName(
+								xml.getStringProperty("viewName"),
 								ProjectViewFactory.registerName);
 				FLayer layer = getLayer(vista.getMapContext().getLayers(),
 						layerName);
@@ -754,8 +752,8 @@ public class ProjectTable extends ProjectDocument {
 			if (bNeedToReplace) {
 				if (layerName != null) {
 					ProjectView vista = (ProjectView) project
-							.getProjectDocumentByName(xml
-									.getStringProperty("viewName"),
+							.getProjectDocumentByName(
+									xml.getStringProperty("viewName"),
 									ProjectViewFactory.registerName);
 					FLayer layer = getLayer(vista.getMapContext().getLayers(),
 							layerName);

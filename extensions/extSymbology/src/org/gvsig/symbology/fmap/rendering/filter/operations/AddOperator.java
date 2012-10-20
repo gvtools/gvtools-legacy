@@ -46,12 +46,11 @@ import java.util.Hashtable;
 import com.hardcode.gdbms.engine.values.Value;
 import com.iver.cit.gvsig.fmap.Messages;
 
-
 /**
  * Implements the funcionality of an ADD operator
- *
+ * 
  * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
- *
+ * 
  */
 public class AddOperator extends Operator {
 
@@ -65,45 +64,43 @@ public class AddOperator extends Operator {
 		super(symbol_table);
 	}
 
-	public Object evaluate()throws ExpressionException {
+	public Object evaluate() throws ExpressionException {
 
 		Double doubleResult = null;
 		Integer intResult = null;
 
-
 		try {
 
-			intResult = (Integer)((Expression)arguments.get(0)).evaluate();
-			if (intResult==null){
-				intResult=new Integer(0);
+			intResult = (Integer) ((Expression) arguments.get(0)).evaluate();
+			if (intResult == null) {
+				intResult = new Integer(0);
 			}
 			if (arguments.size() == 1)
 				return intResult;
 
-			for (int i = 1; i < arguments.size(); i++){
-				Expression function = (Expression)arguments.get(i);
-				Integer integer=((Integer)function.evaluate());
-				if (integer==null){
-					integer=new Integer(0);
+			for (int i = 1; i < arguments.size(); i++) {
+				Expression function = (Expression) arguments.get(i);
+				Integer integer = ((Integer) function.evaluate());
+				if (integer == null) {
+					integer = new Integer(0);
 				}
 				intResult += integer;
 			}
 
 			return intResult;
 
-
 		} catch (ClassCastException e) {
-			Object value1=((Expression)arguments.get(0)).evaluate();
-			if (value1==null)
-				value1=new Double(0);
+			Object value1 = ((Expression) arguments.get(0)).evaluate();
+			if (value1 == null)
+				value1 = new Double(0);
 			doubleResult = new Double(value1.toString());
-			if(arguments.size() == 1)
+			if (arguments.size() == 1)
 				return doubleResult;
-			for (int i = 1; i < arguments.size(); i++){
-				Expression function = (Expression)arguments.get(i);
-				Object value2=((Expression)function).evaluate();
-				if (value2==null){
-					value2=new Double(0);
+			for (int i = 1; i < arguments.size(); i++) {
+				Expression function = (Expression) arguments.get(i);
+				Object value2 = ((Expression) function).evaluate();
+				if (value2 == null) {
+					value2 = new Double(0);
 				}
 				doubleResult += new Double(value2.toString());
 			}
@@ -118,10 +115,11 @@ public class AddOperator extends Operator {
 	}
 
 	public String getPattern() {
-		return "("+Messages.getString(OperationTags.OPERAND)
-		+ OperationTags.ADD_OP +Messages.getString(OperationTags.OPERAND)+ ")\n"+
-		Messages.getString(OperationTags.OPERAND) +" = "+
-		Messages.getString(OperationTags.NUMERIC_VALUE );
+		return "(" + Messages.getString(OperationTags.OPERAND)
+				+ OperationTags.ADD_OP
+				+ Messages.getString(OperationTags.OPERAND) + ")\n"
+				+ Messages.getString(OperationTags.OPERAND) + " = "
+				+ Messages.getString(OperationTags.NUMERIC_VALUE);
 	}
 
 	public ArrayList<Expression> getArguments() {
@@ -135,11 +133,10 @@ public class AddOperator extends Operator {
 	public void check() throws ExpressionException {
 
 		for (int i = 0; i < arguments.size(); i++) {
-			if(!(arguments.get(i)instanceof NumericalConstant))
-				throw new ExpressionException(ExpressionException.CLASS_CASTING_EXCEPTION);
+			if (!(arguments.get(i) instanceof NumericalConstant))
+				throw new ExpressionException(
+						ExpressionException.CLASS_CASTING_EXCEPTION);
 		}
 	}
-
-
 
 }

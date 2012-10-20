@@ -34,12 +34,12 @@ import org.gvsig.tools.exception.BaseException;
 /**
  * @author Jorge Piera Llodrá (jorge.piera@iver.es)
  */
-public class NotSupportedOperationException extends BaseException{
+public class NotSupportedOperationException extends BaseException {
 	private static final long serialVersionUID = 1L;
 	private String visitorClassName = null;
 	private String objectClassName = null;
 
-	public NotSupportedOperationException(Visitor visitor, Object object){
+	public NotSupportedOperationException(Visitor visitor, Object object) {
 		this.visitorClassName = visitor.getClass().getName();
 		this.objectClassName = object.getClass().getName();
 	}
@@ -48,9 +48,9 @@ public class NotSupportedOperationException extends BaseException{
 	 * Initializes some values
 	 */
 	public void init() {
-		messageKey="geometries_reader_not_exists";
-		formatString="The visitor %(visitorClassName) doesn't implements any " +
-			"operation for the object %(objectClassName)";
+		messageKey = "geometries_reader_not_exists";
+		formatString = "The visitor %(visitorClassName) doesn't implements any "
+				+ "operation for the object %(objectClassName)";
 		code = serialVersionUID;
 	}
 

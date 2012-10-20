@@ -19,6 +19,7 @@
 package org.gvsig.raster;
 
 import junit.framework.TestCase;
+
 /**
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
@@ -27,18 +28,18 @@ public class TestTemplate extends TestCase {
 	static {
 		RasterLibrary.wakeUp();
 	}
-	
+
 	public void start() {
 		this.setUp();
 		this.testStack();
 	}
-	
+
 	public void setUp() {
 		System.err.println("TestHistogramSerializer running...");
-		
+
 	}
-	
-	public void testStack(){
-		
+
+	public void testStack() {
+
 	}
 }

@@ -48,46 +48,65 @@ import com.iver.andami.ui.mdiManager.IWindowListener;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 
 /**
- * <p>Graphical component that is represented as an {@link IWindow IWindow}, and that has two immediate internal
- *  panels, the top is a {@link PanelGroup PanelGroup}, and the bottom is a {@link PanelGroupDialog PanelGroupDialog}
- *  of <code>PanelGroupDialog.BUTTONS_ACCEPTCANCELAPPLY</code> type.</p>
- *
+ * <p>
+ * Graphical component that is represented as an {@link IWindow IWindow}, and
+ * that has two immediate internal panels, the top is a {@link PanelGroup
+ * PanelGroup}, and the bottom is a {@link PanelGroupDialog PanelGroupDialog} of
+ * <code>PanelGroupDialog.BUTTONS_ACCEPTCANCELAPPLY</code> type.
+ * </p>
+ * 
  * @see DefaultButtonsPanel
- *
+ * 
  * @version 15/10/2007
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
-public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPanelListener, IWindow, IWindowListener, IPanelGroup, IButtonsPanel, Serializable {
+public class PanelGroupDialog extends DefaultButtonsPanel implements
+		ButtonsPanelListener, IWindow, IWindowListener, IPanelGroup,
+		IButtonsPanel, Serializable {
 	private static final long serialVersionUID = 6267404338808012765L;
 
 	/**
-	 * <p>Default width.</p>
+	 * <p>
+	 * Default width.
+	 * </p>
 	 */
 	protected static int defaultWidth = 530;
 
 	/**
-	 * <p>Default height.</p>
+	 * <p>
+	 * Default height.
+	 * </p>
 	 */
 	protected static int defaultHeight = 432;
 
 	/**
-	 * <p>This graphical component has a panel that allows work {@link IPanel IPanel}.</p>
-	 *
+	 * <p>
+	 * This graphical component has a panel that allows work {@link IPanel
+	 * IPanel}.
+	 * </p>
+	 * 
 	 * @see #getPanelGroup()
 	 */
 	protected IPanelGroup panelGroup;
 
 	/**
-	 * <p>Properties about the managing of this dialog by <i>Andami</i>.</p>
+	 * <p>
+	 * Properties about the managing of this dialog by <i>Andami</i>.
+	 * </p>
 	 */
 	private WindowInfo windowInfo;
 
 	/**
-	 * <p>Default constructor with two parameters, that creates a panel with an {@link AbstractPanelGroup AbstractPanelGroup}
-	 *  on top and another with <i>accept</i>, <i>apply</i>, and <i>cancel</i> buttons on bottom.</p>
-	 *
-	 * @param windowTitle title for this <code>IWindow</code>
-	 * @param PanelGroup kind of panel for work with this <code>IWindow</code>
+	 * <p>
+	 * Default constructor with two parameters, that creates a panel with an
+	 * {@link AbstractPanelGroup AbstractPanelGroup} on top and another with
+	 * <i>accept</i>, <i>apply</i>, and <i>cancel</i> buttons on bottom.
+	 * </p>
+	 * 
+	 * @param windowTitle
+	 *            title for this <code>IWindow</code>
+	 * @param PanelGroup
+	 *            kind of panel for work with this <code>IWindow</code>
 	 */
 	public PanelGroupDialog(String windowTitle, IPanelGroup panelGroup) {
 		super(ButtonsPanel.BUTTONS_ACCEPTCANCELAPPLY);
@@ -103,19 +122,33 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 	}
 
 	/**
-	 * <p>Default constructor with six parameters, that creates a panel with an {@link AbstractPanelGroup AbstractPanelGroup}
-	 *  on top and another with <i>accept</i>, <i>apply</i>, and <i>cancel</i> buttons on bottom.</p>
-	 * <p>Last parameter is the {@link PanelGroup PanelGroup} graphical component that
-	 *  this panel will have, and the previous are information to initialize this {@link IWindow IWindow}.</p>
-	 *
-	 * @param additionalInfo additional information about this <code>IWindow</code>
-	 * @param windowTitle title for this <code>IWindow</code>
-	 * @param width width for this component
-	 * @param height height for this component
-	 * @param windowInfoProperties properties about the managing of this dialog by <i>Andami</i>
-	 * @param PanelGroup kind of panel for work with this <code>IWindow</code>
+	 * <p>
+	 * Default constructor with six parameters, that creates a panel with an
+	 * {@link AbstractPanelGroup AbstractPanelGroup} on top and another with
+	 * <i>accept</i>, <i>apply</i>, and <i>cancel</i> buttons on bottom.
+	 * </p>
+	 * <p>
+	 * Last parameter is the {@link PanelGroup PanelGroup} graphical component
+	 * that this panel will have, and the previous are information to initialize
+	 * this {@link IWindow IWindow}.
+	 * </p>
+	 * 
+	 * @param additionalInfo
+	 *            additional information about this <code>IWindow</code>
+	 * @param windowTitle
+	 *            title for this <code>IWindow</code>
+	 * @param width
+	 *            width for this component
+	 * @param height
+	 *            height for this component
+	 * @param windowInfoProperties
+	 *            properties about the managing of this dialog by <i>Andami</i>
+	 * @param PanelGroup
+	 *            kind of panel for work with this <code>IWindow</code>
 	 */
-	public PanelGroupDialog(String additionalInfo, String windowTitle, int  width, int height, byte windowInfoProperties, IPanelGroup panelGroup) {
+	public PanelGroupDialog(String additionalInfo, String windowTitle,
+			int width, int height, byte windowInfoProperties,
+			IPanelGroup panelGroup) {
 		super(ButtonsPanel.BUTTONS_ACCEPTCANCELAPPLY);
 
 		windowInfo = new WindowInfo(windowInfoProperties);
@@ -130,35 +163,46 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 	}
 
 	/**
-	 * <p>This method is used to execute initialization tasks of this graphical component.</p>
+	 * <p>
+	 * This method is used to execute initialization tasks of this graphical
+	 * component.
+	 * </p>
 	 */
 	private void initialize() {
 		setLayout(new BorderLayout());
 		addButtonPressedListener(this);
-		
+
 		this.panelGroup.setParentPanelGroup(this);
-		
+
 		// Mask possible extra exceptions
 		if (panelGroup != null) {
-			add((AbstractPanelGroup)panelGroup, BorderLayout.CENTER);
+			add((AbstractPanelGroup) panelGroup, BorderLayout.CENTER);
 
 			// Holds the preferred size
-			if ((windowInfo.getWidth() > getPreferredSize().width) || (windowInfo.getHeight() > getPreferredSize().height))
-				setPreferredSize(new Dimension(Math.max(windowInfo.getWidth(), getWidth()), Math.max(windowInfo.getHeight(), getHeight())));
+			if ((windowInfo.getWidth() > getPreferredSize().width)
+					|| (windowInfo.getHeight() > getPreferredSize().height))
+				setPreferredSize(new Dimension(Math.max(windowInfo.getWidth(),
+						getWidth()), Math.max(windowInfo.getHeight(),
+						getHeight())));
 		}
 	}
 
 	/**
-	 * <p>Determinates if this panel is resizable or not.</p>
-	 *
-	 * @return <code>true</code> if it's resizable; <code>false</code> otherwise.
+	 * <p>
+	 * Determinates if this panel is resizable or not.
+	 * </p>
+	 * 
+	 * @return <code>true</code> if it's resizable; <code>false</code>
+	 *         otherwise.
 	 */
 	public boolean isResizable() {
 		return windowInfo.isResizable();
 	}
 
 	/**
-	 * <p>Closes this {@link IWindow IWindow}.</p>
+	 * <p>
+	 * Closes this {@link IWindow IWindow}.
+	 * </p>
 	 */
 	public void close() {
 		PluginServices.getMDIManager().closeWindow(this);
@@ -166,6 +210,7 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindow#getWindowInfo()
 	 */
 	public WindowInfo getWindowInfo() {
@@ -174,7 +219,10 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener#actionButtonPressed(org.gvsig.gui.beans.buttonspanel.ButtonsPanelEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener#actionButtonPressed
+	 * (org.gvsig.gui.beans.buttonspanel.ButtonsPanelEvent)
 	 */
 	public void actionButtonPressed(ButtonsPanelEvent e) {
 		// Masks possible extra exceptions
@@ -197,12 +245,15 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindowListener#windowActivated()
 	 */
-	public void windowActivated() {}
+	public void windowActivated() {
+	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindowListener#windowClosed()
 	 */
 	public void windowClosed() {
@@ -216,6 +267,7 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.IPanelGroup#accept()
 	 */
 	public void accept() {
@@ -224,7 +276,10 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.panelGroup.IPanelGroup#addPanel(org.gvsig.gui.beans.panelGroup.panels.IPanel)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.panelGroup.IPanelGroup#addPanel(org.gvsig.gui.beans
+	 * .panelGroup.panels.IPanel)
 	 */
 	public void addPanel(IPanel panel) throws BaseException {
 		panelGroup.addPanel(panel);
@@ -232,6 +287,7 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.IPanelGroup#apply()
 	 */
 	public void apply() {
@@ -240,6 +296,7 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.IPanelGroup#cancel()
 	 */
 	public void cancel() {
@@ -248,6 +305,7 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.IPanelGroup#getActivePanel()
 	 */
 	public IPanel getActivePanel() {
@@ -256,6 +314,7 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.IPanelGroup#getProperties()
 	 */
 	public Hashtable getProperties() {
@@ -264,15 +323,19 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.IPanelGroup#getReference()
 	 */
 	public Object getReference() {
 		return panelGroup.getReference();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.panelGroup.IPanelGroup#updateReference(java.lang.Object)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.panelGroup.IPanelGroup#updateReference(java.lang.
+	 * Object)
 	 */
 	public void updateReference(Object reference) {
 		panelGroup.updateReference(reference);
@@ -280,6 +343,7 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.IPanelGroup#isAccepted()
 	 */
 	public boolean isAccepted() {
@@ -288,25 +352,28 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.panelGroup.IPanelGroup#loadPanels(org.gvsig.gui.beans.panelGroup.loaders.IPanelGroupLoader)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.panelGroup.IPanelGroup#loadPanels(org.gvsig.gui.beans
+	 * .panelGroup.loaders.IPanelGroupLoader)
 	 */
-	public void loadPanels(IPanelGroupLoader loader) throws ListCouldntAddPanelException, EmptyPanelGroupException, EmptyPanelGroupGUIException {
+	public void loadPanels(IPanelGroupLoader loader)
+			throws ListCouldntAddPanelException, EmptyPanelGroupException,
+			EmptyPanelGroupGUIException {
 		try {
 			panelGroup.loadPanels(loader);
-			
+
 			if (panelGroup.getPanelInGUICount() == 0)
 				close();
-		}
-		catch (BaseException be) {
+		} catch (BaseException be) {
 			be.setTranslator(new Messages());
-			
+
 			JOptionPane.showMessageDialog(this, be.getLocalizedMessageStack());
 
 			// Don't show the dialog if there is no panels in the GUI
 			if (panelGroup.getPanelInGUICount() == 0)
 				close();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			NotificationManager.showMessageError(e.getMessage(), e);
 
 			// Don't show the dialog if there is no panels in the GUI
@@ -317,7 +384,10 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.panelGroup.IPanelGroup#removePanel(org.gvsig.gui.beans.panelGroup.panels.IPanel)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.panelGroup.IPanelGroup#removePanel(org.gvsig.gui.
+	 * beans.panelGroup.panels.IPanel)
 	 */
 	public void removePanel(IPanel panel) {
 		panelGroup.removePanel(panel);
@@ -325,7 +395,10 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.panelGroup.IPanelGroup#isPanelInGUI(org.gvsig.gui.beans.panelGroup.panels.IPanel)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.panelGroup.IPanelGroup#isPanelInGUI(org.gvsig.gui
+	 * .beans.panelGroup.panels.IPanel)
 	 */
 	public boolean isPanelInGUI(IPanel panel) {
 		return panelGroup.isPanelInGUI(panel);
@@ -333,7 +406,10 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.panelGroup.IPanelGroup#setPanelInGUI(org.gvsig.gui.beans.panelGroup.panels.IPanel, boolean)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.panelGroup.IPanelGroup#setPanelInGUI(org.gvsig.gui
+	 * .beans.panelGroup.panels.IPanel, boolean)
 	 */
 	public void setPanelInGUI(IPanel panel, boolean b) {
 		panelGroup.setPanelInGUI(panel, b);
@@ -341,6 +417,7 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.IPanelGroup#getPanelCount()
 	 */
 	public int getPanelCount() {
@@ -349,6 +426,7 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.IPanelGroup#getPanelInGUICount()
 	 */
 	public int getPanelInGUICount() {
@@ -357,54 +435,69 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.JComponent#setPreferredSize(java.awt.Dimension)
 	 */
 	public void setPreferredSize(Dimension preferredSize) {
 		super.setPreferredSize(preferredSize);
-		
+
 		windowInfo.setWidth(preferredSize.width);
 		windowInfo.setHeight(preferredSize.height);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.panelGroup.IPanelGroup#setParentPanelGroup(org.gvsig.gui.beans.panelGroup.IPanelGroup)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.panelGroup.IPanelGroup#setParentPanelGroup(org.gvsig
+	 * .gui.beans.panelGroup.IPanelGroup)
 	 */
 	public void setParentPanelGroup(IPanelGroup parent) {
 		panelGroup.setParentPanelGroup(parent);
-		
-//		this.addComponentListener(new ComponentAdapter())
+
+		// this.addComponentListener(new ComponentAdapter())
 	}
 
-	///// BEGIN: Buttons Enable/Disable functionality /////
+	// /// BEGIN: Buttons Enable/Disable functionality /////
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.IButtonsPanel#isEnabledAcceptButton()
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.IButtonsPanel#isEnabledAcceptButton()
 	 */
 	public boolean isEnabledAcceptButton() {
-		return getButtonsPanel().getButton(ButtonsPanel.BUTTON_ACCEPT).isEnabled();
+		return getButtonsPanel().getButton(ButtonsPanel.BUTTON_ACCEPT)
+				.isEnabled();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.IButtonsPanel#isEnabledApplyButton()
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.IButtonsPanel#isEnabledApplyButton()
 	 */
 	public boolean isEnabledApplyButton() {
-		return getButtonsPanel().getButton(ButtonsPanel.BUTTON_APPLY).isEnabled();
+		return getButtonsPanel().getButton(ButtonsPanel.BUTTON_APPLY)
+				.isEnabled();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.IButtonsPanel#isEnabledCancelButton()
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.IButtonsPanel#isEnabledCancelButton()
 	 */
 	public boolean isEnabledCancelButton() {
-		return getButtonsPanel().getButton(ButtonsPanel.BUTTON_CANCEL).isEnabled();
+		return getButtonsPanel().getButton(ButtonsPanel.BUTTON_CANCEL)
+				.isEnabled();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.IButtonsPanel#isEnabledCloseButton()
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.IButtonsPanel#isEnabledCloseButton()
 	 */
 	public boolean isEnabledCloseButton() {
 		/* Unimplemented */
@@ -413,6 +506,7 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.buttonspanel.IButtonsPanel#isEnabledExitButton()
 	 */
 	public boolean isEnabledExitButton() {
@@ -422,7 +516,10 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.IButtonsPanel#isEnabledHideDetailsButton()
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.IButtonsPanel#isEnabledHideDetailsButton
+	 * ()
 	 */
 	public boolean isEnabledHideDetailsButton() {
 		/* Unimplemented */
@@ -431,6 +528,7 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.buttonspanel.IButtonsPanel#isEnabledNoButton()
 	 */
 	public boolean isEnabledNoButton() {
@@ -440,7 +538,9 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.IButtonsPanel#isEnabledPauseButton()
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.IButtonsPanel#isEnabledPauseButton()
 	 */
 	public boolean isEnabledPauseButton() {
 		/* Unimplemented */
@@ -449,7 +549,9 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.IButtonsPanel#isEnabledRestartButton()
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.IButtonsPanel#isEnabledRestartButton()
 	 */
 	public boolean isEnabledRestartButton() {
 		/* Unimplemented */
@@ -458,6 +560,7 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.buttonspanel.IButtonsPanel#isEnabledSaveButton()
 	 */
 	public boolean isEnabledSaveButton() {
@@ -467,7 +570,10 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.IButtonsPanel#isEnabledSeeDetailsButton()
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.IButtonsPanel#isEnabledSeeDetailsButton
+	 * ()
 	 */
 	public boolean isEnabledSeeDetailsButton() {
 		/* Unimplemented */
@@ -476,6 +582,7 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.buttonspanel.IButtonsPanel#isEnabledYesButton()
 	 */
 	public boolean isEnabledYesButton() {
@@ -485,7 +592,10 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.IButtonsPanel#setEnabledAcceptButton(boolean)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.IButtonsPanel#setEnabledAcceptButton
+	 * (boolean)
 	 */
 	public void setEnabledAcceptButton(boolean b) {
 		getButtonsPanel().getButton(ButtonsPanel.BUTTON_ACCEPT).setEnabled(b);
@@ -493,7 +603,10 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.IButtonsPanel#setEnabledApplyButton(boolean)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.IButtonsPanel#setEnabledApplyButton(
+	 * boolean)
 	 */
 	public void setEnabledApplyButton(boolean b) {
 		getButtonsPanel().getButton(ButtonsPanel.BUTTON_APPLY).setEnabled(b);
@@ -501,7 +614,10 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.IButtonsPanel#setEnabledCancelButton(boolean)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.IButtonsPanel#setEnabledCancelButton
+	 * (boolean)
 	 */
 	public void setEnabledCancelButton(boolean b) {
 		getButtonsPanel().getButton(ButtonsPanel.BUTTON_CANCEL).setEnabled(b);
@@ -509,7 +625,10 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.IButtonsPanel#setEnabledCloseButton(boolean)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.IButtonsPanel#setEnabledCloseButton(
+	 * boolean)
 	 */
 	public void setEnabledCloseButton(boolean b) {
 		/* Unimplemented */
@@ -517,7 +636,10 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.IButtonsPanel#setEnabledExitButton(boolean)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.IButtonsPanel#setEnabledExitButton(boolean
+	 * )
 	 */
 	public void setEnabledExitButton(boolean b) {
 		/* Unimplemented */
@@ -525,7 +647,10 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.IButtonsPanel#setEnabledHideDetailsButton(boolean)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.IButtonsPanel#setEnabledHideDetailsButton
+	 * (boolean)
 	 */
 	public void setEnabledHideDetailsButton(boolean b) {
 		/* Unimplemented */
@@ -533,7 +658,10 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.IButtonsPanel#setEnabledNoButton(boolean)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.IButtonsPanel#setEnabledNoButton(boolean
+	 * )
 	 */
 	public void setEnabledNoButton(boolean b) {
 		/* Unimplemented */
@@ -541,7 +669,10 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.IButtonsPanel#setEnabledPauseButton(boolean)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.IButtonsPanel#setEnabledPauseButton(
+	 * boolean)
 	 */
 	public void setEnabledPauseButton(boolean b) {
 		/* Unimplemented */
@@ -549,7 +680,10 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.IButtonsPanel#setEnabledRestartButton(boolean)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.IButtonsPanel#setEnabledRestartButton
+	 * (boolean)
 	 */
 	public void setEnabledRestartButton(boolean b) {
 		/* Unimplemented */
@@ -557,7 +691,10 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.IButtonsPanel#setEnabledSaveButton(boolean)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.IButtonsPanel#setEnabledSaveButton(boolean
+	 * )
 	 */
 	public void setEnabledSaveButton(boolean b) {
 		/* Unimplemented */
@@ -565,7 +702,10 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.IButtonsPanel#setEnabledSeeDetailsButton(boolean)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.IButtonsPanel#setEnabledSeeDetailsButton
+	 * (boolean)
 	 */
 	public void setEnabledSeeDetailsButton(boolean b) {
 		/* Unimplemented */
@@ -573,7 +713,10 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.IButtonsPanel#setEnabledYesButton(boolean)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.IButtonsPanel#setEnabledYesButton(boolean
+	 * )
 	 */
 	public void setEnabledYesButton(boolean b) {
 		/* Unimplemented */
@@ -582,6 +725,6 @@ public class PanelGroupDialog extends DefaultButtonsPanel implements ButtonsPane
 	public Object getWindowProfile() {
 		return WindowInfo.PROPERTIES_PROFILE;
 	}
-	
-	///// END: Buttons Enable/Disable functionality /////
+
+	// /// END: Buttons Enable/Disable functionality /////
 }

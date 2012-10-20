@@ -53,5 +53,5 @@ public class SummarizeException extends Exception {
 	public SummarizeException(Throwable cause) {
 		super(cause);
 	}
-	
+
 }

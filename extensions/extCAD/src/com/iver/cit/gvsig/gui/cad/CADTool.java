@@ -39,6 +39,7 @@
  *   dac@iver.es
  */
 package com.iver.cit.gvsig.gui.cad;
+
 import java.awt.Graphics;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
@@ -47,25 +48,31 @@ import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.gui.cad.exception.CommandException;
 import com.iver.cit.gvsig.layers.VectorialLayerEdited;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author $author$
  */
 public interface CADTool {
 
-
 	public static int TOPGEOMETRY = 2000;
 
 	public void init();
+
 	public void end();
+
 	public void transition(double x, double y, InputEvent event);
+
 	public void transition(double d);
+
 	public void transition(String s) throws CommandException;
-	public void addPoint(double x,double y,InputEvent event);
+
+	public void addPoint(double x, double y, InputEvent event);
+
 	public void addValue(double d);
+
 	public void addOption(String s);
+
 	public void setQuestion(String s);
 
 	/**
@@ -73,48 +80,62 @@ public interface CADTool {
 	 * EditableFeatureSource que se pasa como parámetro. En este método, la
 	 * herramienta ha de implementar el dibujado de la operación que se está
 	 * realizando dependiendo del estado. Por ejemplo al dibujar un círculo
-	 * mediante 3 puntos, cuando la herramienta se encuentre en el estado en
-	 * el que sólo falta un punto, se dibujará el círculo teniendo en cuenta
-	 * como tercer punto el puntero del ratón (pasado en los parámetros x e
-	 * y). Este método es invocado tras cada transición y cada vez que se
-	 * mueve el ratón.
-	 *
-	 * @param g DOCUMENT ME!
-	 * @param efs DOCUMENT ME!
-	 * @param selectedGeometries DOCUMENT ME!
-	 * @param x DOCUMENT ME!
-	 * @param y DOCUMENT ME!
+	 * mediante 3 puntos, cuando la herramienta se encuentre en el estado en el
+	 * que sólo falta un punto, se dibujará el círculo teniendo en cuenta como
+	 * tercer punto el puntero del ratón (pasado en los parámetros x e y). Este
+	 * método es invocado tras cada transición y cada vez que se mueve el ratón.
+	 * 
+	 * @param g
+	 *            DOCUMENT ME!
+	 * @param efs
+	 *            DOCUMENT ME!
+	 * @param selectedGeometries
+	 *            DOCUMENT ME!
+	 * @param x
+	 *            DOCUMENT ME!
+	 * @param y
+	 *            DOCUMENT ME!
 	 */
-	void drawOperation(Graphics g,double x, double y);
+	void drawOperation(Graphics g, double x, double y);
 
 	/**
-	 * Obtiene la pregunta que saldrá en la consola relativa al estado en el
-	 * que se encuentra la herramienta
-	 *
+	 * Obtiene la pregunta que saldrá en la consola relativa al estado en el que
+	 * se encuentra la herramienta
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	String getQuestion();
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param cta DOCUMENT ME!
+	 * 
+	 * @param cta
+	 *            DOCUMENT ME!
 	 */
 	public void setCadToolAdapter(CADToolAdapter cta);
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public CADToolAdapter getCadToolAdapter();
+
 	public String[] getDescriptions();
+
 	public void setDescription(String[] descriptions);
+
 	public String getName();
+
 	public VectorialLayerEdited getVLE();
+
 	void clearSelection() throws ReadDriverException;
+
 	public boolean isApplicable(int shapeType);
+
 	public void setPreviosTool(DefaultCADTool tool);
+
 	public void restorePreviousTool();
+
 	public void endTransition(double x, double y, MouseEvent e);
 }

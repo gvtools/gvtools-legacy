@@ -44,7 +44,6 @@ import java.util.Map;
 
 import org.gvsig.exceptions.BaseException;
 
-
 public class FilterException extends BaseException {
 
 	/**

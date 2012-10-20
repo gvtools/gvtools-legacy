@@ -3,8 +3,6 @@ package org.gvsig.fmap.drivers.gpe.reader;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-import org.gvsig.gpe.parser.GPEParser;
-
 import com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver;
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
@@ -54,21 +52,22 @@ import com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver;
  *
  */
 /**
- * This interface has to be implemented by all the drivers
- * that represents a GPE driver
+ * This interface has to be implemented by all the drivers that represents a GPE
+ * driver
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public interface IGPEDriver extends VectorialFileDriver{
+public interface IGPEDriver extends VectorialFileDriver {
 
 	/**
-	 * Sets the driver extent. If the layer has children
-	 * the extent will contains all the extents of
-	 * its children
+	 * Sets the driver extent. If the layer has children the extent will
+	 * contains all the extents of its children
+	 * 
 	 * @param extent
-	 * The extent to set
+	 *            The extent to set
 	 */
 	public void setExtent(Rectangle2D extent);
-	
+
 	/**
 	 * @return the GPE parser used to read the file
 	 */

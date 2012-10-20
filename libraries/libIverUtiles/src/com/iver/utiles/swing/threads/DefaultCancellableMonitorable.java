@@ -42,44 +42,42 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: DefaultCancellableMonitorable.java 5317 2006-05-22 10:36:54Z fjp $
-* $Log$
-* Revision 1.1  2006-05-22 10:31:55  fjp
-* Monitorable tasks easy
-*
-* Revision 1.4  2006/05/15 14:56:23  azabala
-* Añadida la posibilidad de modificar el paso actual (para que en tareas que constan de varios pasos, para cada paso se pueda mostrar una barra llenandose)
-*
-* Revision 1.3  2006/03/14 19:29:15  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/03/09 18:43:29  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/03/09 18:41:32  azabala
-* *** empty log message ***
-*
-*
-*/
-package com.iver.utiles.swing.threads;
-/**
- * Default very easy implementation of 
- * CancellableMonitorable
- * @author azabala
+ *
+ * $Id: DefaultCancellableMonitorable.java 5317 2006-05-22 10:36:54Z fjp $
+ * $Log$
+ * Revision 1.1  2006-05-22 10:31:55  fjp
+ * Monitorable tasks easy
+ *
+ * Revision 1.4  2006/05/15 14:56:23  azabala
+ * Añadida la posibilidad de modificar el paso actual (para que en tareas que constan de varios pasos, para cada paso se pueda mostrar una barra llenandose)
+ *
+ * Revision 1.3  2006/03/14 19:29:15  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/03/09 18:43:29  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/03/09 18:41:32  azabala
+ * *** empty log message ***
+ *
  *
  */
+package com.iver.utiles.swing.threads;
+
+/**
+ * Default very easy implementation of CancellableMonitorable
+ * 
+ * @author azabala
+ * 
+ */
 public class DefaultCancellableMonitorable implements CancellableMonitorable {
-	
+
 	private boolean canceled = false;
 	private int currentStep = 0;
 	private int initialStep = 0;
 	private int lastStep = 0;
 	private boolean determinated = false;
-	
-	
-	
-	
+
 	public boolean isCanceled() {
 		return canceled;
 	}
@@ -133,4 +131,3 @@ public class DefaultCancellableMonitorable implements CancellableMonitorable {
 	}
 
 }
-

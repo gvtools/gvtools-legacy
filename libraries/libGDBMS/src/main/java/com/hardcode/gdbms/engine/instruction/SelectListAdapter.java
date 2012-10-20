@@ -5,10 +5,9 @@ package com.hardcode.gdbms.engine.instruction;
 
 import java.util.ArrayList;
 
-
 /**
  * Adaptador
- *
+ * 
  * @author Fernando González Cortés
  */
 public class SelectListAdapter extends Adapter {
@@ -46,7 +45,7 @@ public class SelectListAdapter extends Adapter {
 
 	/**
 	 * Obtiene las expresiones de los campos
-	 *
+	 * 
 	 * @return
 	 */
 	public Expression[] getFieldsExpression() {
@@ -59,7 +58,7 @@ public class SelectListAdapter extends Adapter {
 
 	/**
 	 * Obtiene los alias de los campos
-	 *
+	 * 
 	 * @return
 	 */
 	public String[] getFieldsAlias() {

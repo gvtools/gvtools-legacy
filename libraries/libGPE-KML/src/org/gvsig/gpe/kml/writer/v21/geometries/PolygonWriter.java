@@ -68,6 +68,7 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
 /**
  * It writes a Polygon tag. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;Polygon gid="_877789"&gt;
@@ -79,40 +80,49 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  * &lt;/Polygon&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#polygon
  */
 public class PolygonWriter {
-	
+
 	/**
 	 * It writes the Polygon kml init tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param id
-	 * LineString id
+	 *            LineString id
 	 * @param coords
-	 * A coordinates iterator. 
+	 *            A coordinates iterator.
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler, String id, 
-			ICoordinateSequence coords) throws IOException{
-		handler.getProfile().getGeometryWriter().startGeometry(writer, handler, Kml2_1_Tags.POLYGON, id);
-		handler.getProfile().getOuterBoundaryIsWriter().start(writer, handler, coords);
+	public void start(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor handler, String id,
+			ICoordinateSequence coords) throws IOException {
+		handler.getProfile().getGeometryWriter()
+				.startGeometry(writer, handler, Kml2_1_Tags.POLYGON, id);
+		handler.getProfile().getOuterBoundaryIsWriter()
+				.start(writer, handler, coords);
 		handler.getProfile().getOuterBoundaryIsWriter().end(writer, handler);
 	}
-	
+
 	/**
 	 * It writes the Polygon end tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @throws IOException
 	 */
-	public void end(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler) throws IOException{
-		handler.getProfile().getGeometryWriter().endGeometry(writer, handler, Kml2_1_Tags.POLYGON);
+	public void end(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor handler) throws IOException {
+		handler.getProfile().getGeometryWriter()
+				.endGeometry(writer, handler, Kml2_1_Tags.POLYGON);
 	}
 }

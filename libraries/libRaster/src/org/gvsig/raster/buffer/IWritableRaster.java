@@ -21,12 +21,14 @@ package org.gvsig.raster.buffer;
 /**
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
 public interface IWritableRaster extends IQueryableRaster {
-	/*public void setData(int x, int y, int band, String value);
-	public void setData(int x, int y, int band, Number value);
-	public void setData(int x, int y, int band, double value);
-	public void setData(int x, int y, int band, float value);
-	public void setData(int x, int y, int band, int value);*/
+	/*
+	 * public void setData(int x, int y, int band, String value); public void
+	 * setData(int x, int y, int band, Number value); public void setData(int x,
+	 * int y, int band, double value); public void setData(int x, int y, int
+	 * band, float value); public void setData(int x, int y, int band, int
+	 * value);
+	 */
 }

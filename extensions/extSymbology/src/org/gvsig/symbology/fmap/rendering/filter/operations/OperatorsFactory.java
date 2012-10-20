@@ -40,84 +40,81 @@
  */
 package org.gvsig.symbology.fmap.rendering.filter.operations;
 
-
 import java.util.HashMap;
 import java.util.Hashtable;
 
 import com.hardcode.gdbms.engine.values.Value;
 
 /**
- * Implements methods that allow the user to create new operators to be
- * included in an expression to be parsed
- *
+ * Implements methods that allow the user to create new operators to be included
+ * in an expression to be parsed
+ * 
  * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
- *
+ * 
  */
-public class OperatorsFactory  {
+public class OperatorsFactory {
 
 	private static OperatorsFactory instance = new OperatorsFactory();
-    public HashMap<String,Class> functions = new HashMap<String,Class>();
+	public HashMap<String, Class> functions = new HashMap<String, Class>();
 	Class myClass;
 
-    public static OperatorsFactory getInstance()
-    {
-        return instance;
-    }
+	public static OperatorsFactory getInstance() {
+		return instance;
+	}
 
-    private OperatorsFactory()
-    {
+	private OperatorsFactory() {
 
-        // logical functions
-        addOperator(OrOperator.class);
-        addOperator(AndOperator.class);
-        addOperator(NotOperator.class);
-        addOperator(EqOperator.class);
-        addOperator(NeOperator.class);
-        addOperator(LessThanOperator.class);
-        addOperator(LessThanOrEqualsOperator.class);
-        addOperator(GreaterThanOperator.class);
-        addOperator(GreaterThanOrEqualsOperator.class);
-        addOperator(AddOperator.class);
-        addOperator(MinusOperator.class);
-        addOperator(MultOperator.class);
-        addOperator(DivOperator.class);
-        addOperator(IsBetweenOperator.class);
-        addOperator(IsNullOperator.class);
-        addOperator(ReplaceOperator.class);
+		// logical functions
+		addOperator(OrOperator.class);
+		addOperator(AndOperator.class);
+		addOperator(NotOperator.class);
+		addOperator(EqOperator.class);
+		addOperator(NeOperator.class);
+		addOperator(LessThanOperator.class);
+		addOperator(LessThanOrEqualsOperator.class);
+		addOperator(GreaterThanOperator.class);
+		addOperator(GreaterThanOrEqualsOperator.class);
+		addOperator(AddOperator.class);
+		addOperator(MinusOperator.class);
+		addOperator(MultOperator.class);
+		addOperator(DivOperator.class);
+		addOperator(IsBetweenOperator.class);
+		addOperator(IsNullOperator.class);
+		addOperator(ReplaceOperator.class);
 
-    }
+	}
 
-    public void addOperator(Class<? extends Expression> newClass)
-    {
-        if (!Expression.class.isAssignableFrom(newClass))
-            throw new RuntimeException("Tried to register an operator which does not implement the Expression inteface");
+	public void addOperator(Class<? extends Expression> newClass) {
+		if (!Expression.class.isAssignableFrom(newClass))
+			throw new RuntimeException(
+					"Tried to register an operator which does not implement the Expression inteface");
 
-        try {
-			functions.put(((Expression) newClass.
-					getConstructor(new Class[] { Hashtable.class }).newInstance( new Hashtable<String, Value>())).getName(), newClass);
+		try {
+			functions.put(
+					((Expression) newClass.getConstructor(
+							new Class[] { Hashtable.class }).newInstance(
+							new Hashtable<String, Value>())).getName(),
+					newClass);
 
 		} catch (Exception e) {
-			 throw new RuntimeException("Tried to register an operator which does not implement the Expression inteface");
+			throw new RuntimeException(
+					"Tried to register an operator which does not implement the Expression inteface");
 		}
 
-    }
+	}
 
+	public Expression getOperator(String name) throws Exception {
 
-    public Expression getOperator(String name) throws Exception {
+		return (Expression) functions.get(name).newInstance();
 
-        return (Expression)functions.get(name).newInstance();
+	}
 
-    }
+	public Expression createOperator(String name) throws Exception {
+		myClass = (Class) functions.get(name);
+		if (myClass == null)
+			return null;
 
-    public Expression createOperator(String name) throws Exception
-    {
-    	myClass = (Class)functions.get(name);
-        if (myClass == null)
-            return null;
-
-        return (Expression)myClass.newInstance();
-    }
-
-
+		return (Expression) myClass.newInstance();
+	}
 
 }

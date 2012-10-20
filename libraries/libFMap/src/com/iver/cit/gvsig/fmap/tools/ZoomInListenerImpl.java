@@ -54,16 +54,18 @@ import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.tools.Events.RectangleEvent;
 import com.iver.cit.gvsig.fmap.tools.Listeners.RectangleListener;
 
-
 /**
- * <p>Listener for doing a <i>zoom in</i> operation of the extent of the <code>ViewPort</code> of the associated {@link MapControl MapControl}
- *  object, defining a rectangular area.</p>
- *
- * <p>If the area defined is smaller than 3 pixels x 3 pixels holds the zoom, otherwise, calculates the new extent <i>r</i>
- *  with this equations:
- *  <code><br>
+ * <p>
+ * Listener for doing a <i>zoom in</i> operation of the extent of the
+ * <code>ViewPort</code> of the associated {@link MapControl MapControl} object,
+ * defining a rectangular area.
+ * </p>
+ * 
+ * <p>
+ * If the area defined is smaller than 3 pixels x 3 pixels holds the zoom,
+ * otherwise, calculates the new extent <i>r</i> with this equations: <code><br>
  *   double factor = 1/MapContext.ZOOMINFACTOR;<br>
- *	 Rectangle2D rect = event.getWorldCoordRect();<br>
+ * 	 Rectangle2D rect = event.getWorldCoordRect();<br>
  *   Rectangle2D.Double r = new Rectangle2D.Double();<br>
  *   ViewPort vp = mapCtrl.getMapContext().getViewPort();<br>
  *   double nuevoX = rect.getMaxX() - ((vp.getExtent().getWidth() * factor) / 2.0);<br>
@@ -76,42 +78,47 @@ import com.iver.cit.gvsig.fmap.tools.Listeners.RectangleListener;
  *   vp.setExtent(r);
  *  </code>
  * </p>
- *
- * <p>The ultimately extent will be an adaptation from that, calculated by the <code>ViewPort</code>
- *  bearing in mind the ratio of the available rectangle where display the graphical information.</p>
- *
+ * 
+ * <p>
+ * The ultimately extent will be an adaptation from that, calculated by the
+ * <code>ViewPort</code> bearing in mind the ratio of the available rectangle
+ * where display the graphical information.
+ * </p>
+ * 
  * @see MapContext#ZOOMINFACTOR
  * @see ViewPort#setExtent(Rectangle2D)
  * @see ZoomOutListenerImpl
  * @see ZoomOutRightButtonListener
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class ZoomInListenerImpl implements RectangleListener {
 	/**
 	 * The image to display when the cursor is active.
 	 */
-	private final Image izoomin = new ImageIcon(MapControl.class.getResource(
-				"images/ZoomInCursor.gif")).getImage();
+	private final Image izoomin = new ImageIcon(
+			MapControl.class.getResource("images/ZoomInCursor.gif")).getImage();
 
 	/**
 	 * The cursor used to work with this tool listener.
-	 *
+	 * 
 	 * @see #getCursor()
 	 */
-	private Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(izoomin,
-			new Point(16, 16), "");
+	private Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(
+			izoomin, new Point(16, 16), "");
 
 	/**
 	 * Reference to the <code>MapControl</code> object that uses.
 	 */
 	private MapControl mapCtrl;
 
-
 	/**
- 	 * <p>Creates a new <code>ZoomInListenerImpl</code> object.</p>
-	 *
-	 * @param mapCtrl the <code>MapControl</code> where is defined the rectangle
+	 * <p>
+	 * Creates a new <code>ZoomInListenerImpl</code> object.
+	 * </p>
+	 * 
+	 * @param mapCtrl
+	 *            the <code>MapControl</code> where is defined the rectangle
 	 */
 	public ZoomInListenerImpl(MapControl mapCtrl) {
 		this.mapCtrl = mapCtrl;
@@ -119,7 +126,10 @@ public class ZoomInListenerImpl implements RectangleListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.RectangleListener#rectangle(com.iver.cit.gvsig.fmap.tools.Events.RectangleEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.RectangleListener#rectangle(com
+	 * .iver.cit.gvsig.fmap.tools.Events.RectangleEvent)
 	 */
 	public void rectangle(RectangleEvent event) {
 		Rectangle2D rect = event.getWorldCoordRect();
@@ -128,31 +138,29 @@ public class ZoomInListenerImpl implements RectangleListener {
 
 		ViewPort vp = mapCtrl.getMapContext().getViewPort();
 
-		if ((pixelRect.getWidth() < 3) && (pixelRect.getHeight() < 3))
-		{
-			if (vp.getExtent()!=null){
-				double factor = 1/MapContext.ZOOMINFACTOR;
-				double nuevoX = rect.getMaxX() -
-					((vp.getExtent().getWidth() * factor) / 2.0);
-				double nuevoY = rect.getMaxY() -
-					((vp.getExtent().getHeight() * factor) / 2.0);
+		if ((pixelRect.getWidth() < 3) && (pixelRect.getHeight() < 3)) {
+			if (vp.getExtent() != null) {
+				double factor = 1 / MapContext.ZOOMINFACTOR;
+				double nuevoX = rect.getMaxX()
+						- ((vp.getExtent().getWidth() * factor) / 2.0);
+				double nuevoY = rect.getMaxY()
+						- ((vp.getExtent().getHeight() * factor) / 2.0);
 				r.x = nuevoX;
 				r.y = nuevoY;
 				r.width = vp.getExtent().getWidth() * factor;
 				r.height = vp.getExtent().getHeight() * factor;
 				vp.setExtent(r);
 			}
+		} else {
+			vp.setExtent(event.getWorldCoordRect());
 		}
-		else
-		{
-		    vp.setExtent(event.getWorldCoordRect());
-		}
-//		mapCtrl.getMapContext().clearAllCachingImageDrawnLayers();
+		// mapCtrl.getMapContext().clearAllCachingImageDrawnLayers();
 		// mapCtrl.drawMap(false);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#getCursor()
 	 */
 	public Cursor getCursor() {
@@ -161,10 +169,11 @@ public class ZoomInListenerImpl implements RectangleListener {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#cancelDrawing()
 	 */
 	public boolean cancelDrawing() {
-	    System.out.println("cancelDrawing del ZoomOutListenerImpl");
+		System.out.println("cancelDrawing del ZoomOutListenerImpl");
 		return true;
 	}
 }

@@ -44,70 +44,68 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
 import com.iver.utiles.connections.ConnectionTransInit;
 
-
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class JDBCExtension extends Extension {
-    /**
-     * DOCUMENT ME!
-     */
-    public void initialize() {
-        // TODO Auto-generated method stub
-    }
+	/**
+	 * DOCUMENT ME!
+	 */
+	public void initialize() {
+		// TODO Auto-generated method stub
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param actionCommand DOCUMENT ME!
-     */
-    public void execute(String actionCommand) {
-    	ConnectionTransInit[] connDrivers=new ConnectionTransInit[2];
-    	connDrivers[0]=new ConnectionTransInit();
-    	connDrivers[0].setHost("localhost");
-    	connDrivers[0].setName("MYSQL DataBase");
-    	connDrivers[0].setConnBegining("jdbc:mysql:");
-    	connDrivers[0].setPort("3306");
-    	
-    	connDrivers[1]=new ConnectionTransInit();
-    	connDrivers[1].setHost("localhost");
-    	connDrivers[1].setName("POSTGRES DataBase");
-    	connDrivers[1].setConnBegining("jdbc:postgresql:");
-    	connDrivers[1].setPort("5432");
-    	
-    	JDBCManagerView jdbcManager=new JDBCManagerView(connDrivers);
-    	
-    	
-    	PluginServices.getMDIManager().addWindow(jdbcManager);
-    		//Connection conn=null;
-			//	conn = jdbcManager.getConnection();
-		//	try {
-		//		System.out.println(conn.getMetaData());
-		//	} catch (SQLException e) {
-				// TODO Auto-generated catch block
-		//		e.printStackTrace();
-		//	}
-    	
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param actionCommand
+	 *            DOCUMENT ME!
+	 */
+	public void execute(String actionCommand) {
+		ConnectionTransInit[] connDrivers = new ConnectionTransInit[2];
+		connDrivers[0] = new ConnectionTransInit();
+		connDrivers[0].setHost("localhost");
+		connDrivers[0].setName("MYSQL DataBase");
+		connDrivers[0].setConnBegining("jdbc:mysql:");
+		connDrivers[0].setPort("3306");
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public boolean isEnabled() {
-        return true;
-    }
+		connDrivers[1] = new ConnectionTransInit();
+		connDrivers[1].setHost("localhost");
+		connDrivers[1].setName("POSTGRES DataBase");
+		connDrivers[1].setConnBegining("jdbc:postgresql:");
+		connDrivers[1].setPort("5432");
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public boolean isVisible() {
-        return true;
-    }
+		JDBCManagerView jdbcManager = new JDBCManagerView(connDrivers);
+
+		PluginServices.getMDIManager().addWindow(jdbcManager);
+		// Connection conn=null;
+		// conn = jdbcManager.getConnection();
+		// try {
+		// System.out.println(conn.getMetaData());
+		// } catch (SQLException e) {
+		// TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+
+	}
+
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public boolean isEnabled() {
+		return true;
+	}
+
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public boolean isVisible() {
+		return true;
+	}
 }

@@ -48,9 +48,9 @@ package com.iver.andami.ui.mdiFrame;
 
 /**
  * @author root
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * 
+ *         TODO To change the template for this generated type comment go to
+ *         Window - Preferences - Java - Code Style - Code Templates
  */
 public interface EnableTextSupport {
 	/**
@@ -59,7 +59,8 @@ public interface EnableTextSupport {
 	public abstract String getEnableText();
 
 	/**
-	 * @param enableText The enableText to set.
+	 * @param enableText
+	 *            The enableText to set.
 	 */
 	public abstract void setEnableText(String enableText);
 

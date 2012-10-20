@@ -23,21 +23,23 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
- 
+
 package org.gvsig.jogr;
 
 /**
- * Es generada cuando los códigos de retorno de las funciones de OGR significan que algo ha ido mal.
+ * Es generada cuando los códigos de retorno de las funciones de OGR significan
+ * que algo ha ido mal.
  * 
- * @author Nacho Brodin <brodin_ign@gva.es>.<BR> Equipo de desarrollo gvSIG.<BR> http://www.gvsig.gva.es
+ * @author Nacho Brodin <brodin_ign@gva.es>.<BR>
+ *         Equipo de desarrollo gvSIG.<BR>
+ *         http://www.gvsig.gva.es
  * @version 0.0
  * @link http://www.gvsig.gva.es
  */
 
+public class OGRCorruptDataException extends OGRException {
 
-public class OGRCorruptDataException extends OGRException{
-
-	OGRCorruptDataException(String msg){
+	OGRCorruptDataException(String msg) {
 		super(msg);
 	}
 }

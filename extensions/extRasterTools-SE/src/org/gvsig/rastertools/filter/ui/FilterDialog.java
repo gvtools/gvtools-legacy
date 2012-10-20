@@ -32,21 +32,26 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.IWindowListener;
 import com.iver.andami.ui.mdiManager.WindowInfo;
+
 /**
  * Dialogo para los filtros de raster.
  * 
  * @version 25/02/2008
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
-public class FilterDialog extends JPanel implements IWindow, IWindowListener, ButtonsPanelListener {
+public class FilterDialog extends JPanel implements IWindow, IWindowListener,
+		ButtonsPanelListener {
 	private static final long serialVersionUID = 818691082984915388L;
-	private FLyrRasterSE layer      = null;
+	private FLyrRasterSE layer = null;
 	private FilterPanel filterPanel = null;
 
 	/**
 	 * Constructor
-	 * @param width Ancho
-	 * @param height Alto
+	 * 
+	 * @param width
+	 *            Ancho
+	 * @param height
+	 *            Alto
 	 */
 	public FilterDialog(FLyrRasterSE layer, int width, int height) {
 		this.layer = layer;
@@ -54,9 +59,10 @@ public class FilterDialog extends JPanel implements IWindow, IWindowListener, Bu
 		setLayout(new BorderLayout(5, 5));
 		add(getFilterPanel(), java.awt.BorderLayout.CENTER);
 	}
-	
+
 	/**
 	 * Obtiene el panel con el histograma
+	 * 
 	 * @return HistogramPanel
 	 */
 	private FilterPanel getFilterPanel() {
@@ -65,25 +71,28 @@ public class FilterDialog extends JPanel implements IWindow, IWindowListener, Bu
 		}
 		return filterPanel;
 	}
-	
+
 	/**
 	 * Acciones a ejecutar cuando se cancela
 	 */
 	private void close() {
 		try {
-			RasterLibrary.removeOnlyLayerNameListener(getFilterPanel().getNewLayerPanel().getPanelNewLayer());
+			RasterLibrary.removeOnlyLayerNameListener(getFilterPanel()
+					.getNewLayerPanel().getPanelNewLayer());
 			PluginServices.getMDIManager().closeWindow(this);
 		} catch (ArrayIndexOutOfBoundsException e) {
-			//Si la ventana no se puede eliminar no hacemos nada
+			// Si la ventana no se puede eliminar no hacemos nada
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindow#getWindowInfo()
 	 */
 	public WindowInfo getWindowInfo() {
-		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODELESSDIALOG | WindowInfo.RESIZABLE | WindowInfo.MAXIMIZABLE);
+		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODELESSDIALOG
+				| WindowInfo.RESIZABLE | WindowInfo.MAXIMIZABLE);
 		if (layer != null)
 			m_viewinfo.setAdditionalInfo(layer.getName());
 		m_viewinfo.setTitle(PluginServices.getText(this, "filtros"));
@@ -94,34 +103,43 @@ public class FilterDialog extends JPanel implements IWindow, IWindowListener, Bu
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindowListener#windowClosed()
 	 */
 	public void windowClosed() {
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener#actionButtonPressed(org.gvsig.gui.beans.buttonspanel.ButtonsPanelEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener#actionButtonPressed
+	 * (org.gvsig.gui.beans.buttonspanel.ButtonsPanelEvent)
 	 */
 	public void actionButtonPressed(ButtonsPanelEvent e) {
 		// Al pulsar Aceptar o Aplicar se ejecuta el aceptar del panel
-		if (e.getButton() == ButtonsPanel.BUTTON_APPLY /*|| e.getButton() == ButtonsPanel.BUTTON_ACCEPT*/) {
+		if (e.getButton() == ButtonsPanel.BUTTON_APPLY /*
+														 * || e.getButton() ==
+														 * ButtonsPanel
+														 * .BUTTON_ACCEPT
+														 */) {
 			getFilterPanel().getLayerVisualStatus().restoreVisualStatus(layer);
 			getFilterPanel().apply();
 		}
-	
+
 		// Al pulsar Cancelar la ventana se cierra y se refresca la vista
 		if (e.getButton() == ButtonsPanel.BUTTON_CANCEL) {
 			getFilterPanel().getLayerVisualStatus().restoreVisualStatus(layer);
 			getFilterPanel().cancel();
 		}
-			
+
 		if (e.getButton() == ButtonsPanel.BUTTON_CLOSE) {
 			close();
 		}
 	}
-	
-	public void windowActivated() {}
+
+	public void windowActivated() {
+	}
 
 	public Object getWindowProfile() {
 		return WindowInfo.PROPERTIES_PROFILE;

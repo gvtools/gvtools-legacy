@@ -1,4 +1,4 @@
-	/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
  *
@@ -40,43 +40,39 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: OnSelectionLabeled.java 10815 2007-03-20 16:16:20Z jaume $
-* $Log$
-* Revision 1.3  2007-03-20 16:16:20  jaume
-* refactored to use ISymbol instead of FSymbol
-*
-* Revision 1.2  2007/03/09 08:33:43  jaume
-* *** empty log message ***
-*
-* Revision 1.1.2.2  2007/02/01 11:42:47  jaume
-* *** empty log message ***
-*
-* Revision 1.1.2.1  2007/01/30 18:10:45  jaume
-* start commiting labeling stuff
-*
-*
-*/
+ *
+ * $Id: OnSelectionLabeled.java 10815 2007-03-20 16:16:20Z jaume $
+ * $Log$
+ * Revision 1.3  2007-03-20 16:16:20  jaume
+ * refactored to use ISymbol instead of FSymbol
+ *
+ * Revision 1.2  2007/03/09 08:33:43  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1.2.2  2007/02/01 11:42:47  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1.2.1  2007/01/30 18:10:45  jaume
+ * start commiting labeling stuff
+ *
+ *
+ */
 package org.gvsig.symbology.fmap.labeling;
-
-import java.util.BitSet;
-
-import org.gvsig.symbology.fmap.drivers.featureiterators.FeatureSelectionIterator;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.fmap.ViewPort;
-import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.DefaultLabelingMethod;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelClass;
+
 /**
- *
+ * 
  * OnSelectionLabeled.java
- *
- *
+ * 
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Apr 2, 2008
- *
+ * 
  */
 public class OnSelectionLabeled extends DefaultLabelingMethod {
 
@@ -85,34 +81,35 @@ public class OnSelectionLabeled extends DefaultLabelingMethod {
 		return getClass().getName();
 	}
 
-	public IFeatureIterator getFeatureIteratorByLabelClass(FLyrVect layer, LabelClass lc, ViewPort viewPort, String[] usedFields)
-	throws ReadDriverException {
+	public IFeatureIterator getFeatureIteratorByLabelClass(FLyrVect layer,
+			LabelClass lc, ViewPort viewPort, String[] usedFields)
+			throws ReadDriverException {
 
 		String sqlFields = "";
 		for (int i = 0; i < usedFields.length; i++) {
 			sqlFields += usedFields[i];
-			if (i < usedFields.length -1) sqlFields += ", ";
+			if (i < usedFields.length - 1)
+				sqlFields += ", ";
 		}
 		String fieldNames[] = layer.getSource().getRecordset().getFieldNames();
 		StringBuilder sql = new StringBuilder();
 		sql.append("select ");
-		for (int i=0; i<fieldNames.length-1; i++) {
+		for (int i = 0; i < fieldNames.length - 1; i++) {
 			sql.append(fieldNames[i]);
 			sql.append(",");
 		}
-		sql.append(fieldNames[fieldNames.length-1]);
+		sql.append(fieldNames[fieldNames.length - 1]);
 		sql.append(" from ");
 		sql.append(layer.getRecordset().getName());
-		if(lc.isUseSqlQuery()){
+		if (lc.isUseSqlQuery()) {
 			sql.append(" where ");
 			sql.append(lc.getSQLQuery());
 		}
 		sql.append(";");
 
-		return layer.getSource().getFeatureIterator(sql.toString(), layer.getCrs(),true);
-
+		return layer.getSource().getFeatureIterator(sql.toString(),
+				layer.getCrs(), true);
 
 	}
-
 
 }

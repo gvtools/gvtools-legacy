@@ -40,7 +40,6 @@
  */
 package org.gvsig.symbology.fmap.rendering.filter.operations;
 
-import java.util.ArrayList;
 import java.util.Hashtable;
 
 import com.hardcode.gdbms.engine.values.Value;

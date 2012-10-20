@@ -40,36 +40,37 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: DefaultDimension.java 18675 2008-02-11 10:16:01Z jdominguez $
-* $Log$
-* Revision 1.5  2006-02-28 15:25:14  jaume
-* *** empty log message ***
-*
-* Revision 1.3.2.4  2006/02/10 13:22:35  jaume
-* now analyzes dimensions on demand
-*
-* Revision 1.3.2.3  2006/01/31 16:25:24  jaume
-* correcciones de bugs
-*
-* Revision 1.4  2006/01/26 16:07:14  jaume
-* *** empty log message ***
-*
-* Revision 1.3.2.1  2006/01/26 12:59:32  jaume
-* 0.5
-*
-* Revision 1.3  2006/01/25 09:08:53  jaume
-* test save and reload project
-*
-* Revision 1.2  2006/01/24 14:36:33  jaume
-* This is the new version
-*
-* Revision 1.1.2.1  2006/01/20 15:22:46  jaume
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: DefaultDimension.java 18675 2008-02-11 10:16:01Z jdominguez $
+ * $Log$
+ * Revision 1.5  2006-02-28 15:25:14  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.3.2.4  2006/02/10 13:22:35  jaume
+ * now analyzes dimensions on demand
+ *
+ * Revision 1.3.2.3  2006/01/31 16:25:24  jaume
+ * correcciones de bugs
+ *
+ * Revision 1.4  2006/01/26 16:07:14  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.3.2.1  2006/01/26 12:59:32  jaume
+ * 0.5
+ *
+ * Revision 1.3  2006/01/25 09:08:53  jaume
+ * test save and reload project
+ *
+ * Revision 1.2  2006/01/24 14:36:33  jaume
+ * This is the new version
+ *
+ * Revision 1.1.2.1  2006/01/20 15:22:46  jaume
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.layers;
+
 /**
  * This class instances a regular WMS dimension. It handles single, multiple and
  * interval values and uses them as they were a point, a list or a regularly
@@ -78,57 +79,67 @@ package com.iver.cit.gvsig.fmap.layers;
  * As far as it implements IFMapWMSDimension it uses the same interface and
  * documentation.
  * </p>
+ * 
  * @author jaume dominguez faus (jaume.dominguez@iver.es)
- *
+ * 
  */
 public class DefaultDimension implements IFMapWMSDimension {
 	static private final String digit = "[0-9]";
-    static private final String nonZeroDigit = "[1-9]";
-    static private final String letter = "[_$%a-zA-Z]";
-    static private final String word = letter+"("+letter+"|"+digit+")+"; // TODO Should be * instead of + ??
-    static private final String floatingPointNumber = "("+digit+"+(\\."+digit+"+)?)";
-    static private final String integerNumber = nonZeroDigit+digit+"+";
-    static private final String dimensionItem = "("+floatingPointNumber+"|"+word+")";
-    /**
-     * regular expression for matching dimensions.
-     */
-    static private final String regexpDefaultDimensionExpression =
-    	"("+floatingPointNumber+"/"+floatingPointNumber+"/"+floatingPointNumber+"|"+
-    	    dimensionItem+"(,"+dimensionItem+")*)";
-    
+	static private final String nonZeroDigit = "[1-9]";
+	static private final String letter = "[_$%a-zA-Z]";
+	static private final String word = letter + "(" + letter + "|" + digit
+			+ ")+"; // TODO Should be * instead of + ??
+	static private final String floatingPointNumber = "(" + digit + "+(\\."
+			+ digit + "+)?)";
+	static private final String integerNumber = nonZeroDigit + digit + "+";
+	static private final String dimensionItem = "(" + floatingPointNumber + "|"
+			+ word + ")";
+	/**
+	 * regular expression for matching dimensions.
+	 */
+	static private final String regexpDefaultDimensionExpression = "("
+			+ floatingPointNumber + "/" + floatingPointNumber + "/"
+			+ floatingPointNumber + "|" + dimensionItem + "(," + dimensionItem
+			+ ")*)";
+
 	private String name;
-    private String unit;
-    private String unitSymbol;
-    private String expression;
-    private String period;
-    private Object minValue;
-    private Object maxValue;
+	private String unit;
+	private String unitSymbol;
+	private String expression;
+	private String period;
+	private Object minValue;
+	private Object maxValue;
 	private int type;
 	private boolean compiled = false;
-    /**
-     * Creates a new instance of DefaultDimension.
-     * @param _name
-     * @param _units
-     * @param _unitSymbol
-     * @param _dimensionExpression
-     */
-    public DefaultDimension(String _name, String _units, String _unitSymbol, String _dimensionExpression) {
-    	this.name = _name;
-    	this.unit = _units;
-    	this.unitSymbol = _unitSymbol;
-    	setExpression(_dimensionExpression);
-    }
-    
-    /*
-     *  (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.layers.IFMapWMSDimension#getName()
-     */
-    public String getName() {
+
+	/**
+	 * Creates a new instance of DefaultDimension.
+	 * 
+	 * @param _name
+	 * @param _units
+	 * @param _unitSymbol
+	 * @param _dimensionExpression
+	 */
+	public DefaultDimension(String _name, String _units, String _unitSymbol,
+			String _dimensionExpression) {
+		this.name = _name;
+		this.unit = _units;
+		this.unitSymbol = _unitSymbol;
+		setExpression(_dimensionExpression);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.layers.IFMapWMSDimension#getName()
+	 */
+	public String getName() {
 		return name;
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.IFMapWMSDimension#getUnit()
 	 */
 	public String getUnit() {
@@ -136,7 +147,8 @@ public class DefaultDimension implements IFMapWMSDimension {
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.IFMapWMSDimension#getUnitSymbol()
 	 */
 	public String getUnitSymbol() {
@@ -144,7 +156,8 @@ public class DefaultDimension implements IFMapWMSDimension {
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.IFMapWMSDimension#getLowLimit()
 	 */
 	public String getLowLimit() {
@@ -152,7 +165,8 @@ public class DefaultDimension implements IFMapWMSDimension {
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.IFMapWMSDimension#getHighLimit()
 	 */
 	public String getHighLimit() {
@@ -160,36 +174,43 @@ public class DefaultDimension implements IFMapWMSDimension {
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.IFMapWMSDimension#getResolution()
 	 */
 	public String getResolution() {
 		if (type == INTERVAL) {
-    		String[] s = expression.split("/");
-    		return (s.length == 1) ? s[3] : null;
-    	} else return null;
+			String[] s = expression.split("/");
+			return (s.length == 1) ? s[3] : null;
+		} else
+			return null;
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.layers.IFMapWMSDimension#isValidValue(java.lang.String)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.IFMapWMSDimension#isValidValue(java.lang
+	 * .String)
 	 */
 	public boolean isValidValue(String value) {
 		return value.matches(word) || value.matches(floatingPointNumber);
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.layers.IFMapWMSDimension#valueOf(java.lang.String)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.IFMapWMSDimension#valueOf(java.lang.String
+	 * )
 	 */
 	public Object valueOf(String value) throws IllegalArgumentException {
 		if (compiled) {
 			if (value.matches(word)) {
 				return (String) value;
-			} else if (value.matches(integerNumber)){
+			} else if (value.matches(integerNumber)) {
 				return new Integer(value);
-			}
-			else if (value.matches(floatingPointNumber)) {
+			} else if (value.matches(floatingPointNumber)) {
 				return new Float(value);
 			}
 		}
@@ -197,38 +218,41 @@ public class DefaultDimension implements IFMapWMSDimension {
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.IFMapWMSDimension#valueAt(int)
 	 */
 	public String valueAt(int pos) throws ArrayIndexOutOfBoundsException {
 		if (compiled) {
-			if (pos<0 || pos>valueCount())
-				throw new ArrayIndexOutOfBoundsException(pos+"(must be >= 0 and <="+valueCount()+")");
-			
+			if (pos < 0 || pos > valueCount())
+				throw new ArrayIndexOutOfBoundsException(pos
+						+ "(must be >= 0 and <=" + valueCount() + ")");
+
 			if (type == SINGLE_VALUE)
 				return expression;
-			
+
 			if (type == MULTIPLE_VALUE)
 				return expression.split(",")[pos];
-			
+
 			if (type == INTERVAL) {
 				double minPos = Double.parseDouble((String) minValue);
 				double maxPos = Double.parseDouble((String) maxValue);
 				double step = Double.parseDouble(period);
-				double newPos = minPos + (step*pos);
+				double newPos = minPos + (step * pos);
 				if (newPos < minPos)
-					return minPos+"";
-				
+					return minPos + "";
+
 				if (newPos > maxPos)
-					return maxPos+"";
-				return newPos+"";
+					return maxPos + "";
+				return newPos + "";
 			}
 		}
-        return null;
+		return null;
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.IFMapWMSDimension#valueCount()
 	 */
 	public int valueCount() {
@@ -241,7 +265,7 @@ public class DefaultDimension implements IFMapWMSDimension {
 				double max = Double.parseDouble((String) maxValue);
 				double step = Double.parseDouble(period);
 				double distance = max - min;
-				count = (int) (distance/step);
+				count = (int) (distance / step);
 				return count;
 			} else {
 				return 1;
@@ -251,7 +275,8 @@ public class DefaultDimension implements IFMapWMSDimension {
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.IFMapWMSDimension#getExpression()
 	 */
 	public String getExpression() {
@@ -259,16 +284,20 @@ public class DefaultDimension implements IFMapWMSDimension {
 	}
 
 	/*
-	 *  (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.layers.IFMapWMSDimension#setExpression(java.lang.String)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.IFMapWMSDimension#setExpression(java.lang
+	 * .String)
 	 */
 	public void setExpression(String expr) {
 		expression = expr.toUpperCase();
-        
+
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.IFMapWMSDimension#getType()
 	 */
 	public int getType() {
@@ -276,37 +305,36 @@ public class DefaultDimension implements IFMapWMSDimension {
 	}
 
 	public void compile() throws IllegalArgumentException {
-		if (expression.matches(regexpDefaultDimensionExpression)){
+		if (expression.matches(regexpDefaultDimensionExpression)) {
 
-        } else {
-            //System.err.println("Invalid dimension expression: "+expr+" (for "+this.getName()+")");
-            throw new IllegalArgumentException();
-        }
-		
+		} else {
+			// System.err.println("Invalid dimension expression: "+expr+" (for "+this.getName()+")");
+			throw new IllegalArgumentException();
+		}
 
-        String separator;
-        if (expression.indexOf("/")!=-1) {
-        	separator = "/";
-        	type = INTERVAL;
-        } else if (expression.indexOf(",")!=-1) {
-        	separator = ",";
-        	type = MULTIPLE_VALUE;
-        } else {
-        	separator = ",";
-        	type = SINGLE_VALUE;
-        }
-        compiled = true;
-        String[] s = expression.split(separator);
-        minValue = valueOf(s[0]);
-        if (type == INTERVAL) {
-        	maxValue = (s.length>1) ? valueOf(s[1]) : valueOf(s[0]);
-        	period = (s.length>2) ? s[2] : null;
-        } else if (type == MULTIPLE_VALUE) {
-        	maxValue = valueOf(s[s.length-1]);
-        } else {
-        	maxValue = valueOf(s[0]);
-        }
-        
+		String separator;
+		if (expression.indexOf("/") != -1) {
+			separator = "/";
+			type = INTERVAL;
+		} else if (expression.indexOf(",") != -1) {
+			separator = ",";
+			type = MULTIPLE_VALUE;
+		} else {
+			separator = ",";
+			type = SINGLE_VALUE;
+		}
+		compiled = true;
+		String[] s = expression.split(separator);
+		minValue = valueOf(s[0]);
+		if (type == INTERVAL) {
+			maxValue = (s.length > 1) ? valueOf(s[1]) : valueOf(s[0]);
+			period = (s.length > 2) ? s[2] : null;
+		} else if (type == MULTIPLE_VALUE) {
+			maxValue = valueOf(s[s.length - 1]);
+		} else {
+			maxValue = valueOf(s[0]);
+		}
+
 	}
 
 }

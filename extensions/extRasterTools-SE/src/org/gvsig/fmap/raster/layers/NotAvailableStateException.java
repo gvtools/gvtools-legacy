@@ -22,12 +22,12 @@ package org.gvsig.fmap.raster.layers;
  * Excepción lanzada cuando se intenta poner una capa en un estado inaccesible.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
 public class NotAvailableStateException extends Exception {
 	private static final long serialVersionUID = 1557651260026647067L;
 
-	public NotAvailableStateException(String msg){
+	public NotAvailableStateException(String msg) {
 		super(msg);
 	}
 }

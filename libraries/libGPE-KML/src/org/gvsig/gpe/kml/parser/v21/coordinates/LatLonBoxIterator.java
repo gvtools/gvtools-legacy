@@ -65,6 +65,7 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * This class parses a LatLonBox tag. Example:
  * <p>
+ * 
  * <pre>
  * <code> 
  * &lt;LatLonAltBox&gt;
@@ -76,28 +77,31 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  * &lt;/LatLonAltBox&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#latlonbox
  */
-public class LatLonBoxIterator extends KmlCoodinatesIterator{
+public class LatLonBoxIterator extends KmlCoodinatesIterator {
 	double[] min = null;
 	double[] max = null;
 	int iterations = 0;
-	
+
 	/**
 	 * It parses the LatLonAltBox tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * A Bounding box
-	 * @throws IOException 
-	 * @throws XmlStreamException 
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return A Bounding box
+	 * @throws IOException
+	 * @throws XmlStreamException
 	 */
-	public  Object parse(IXmlStreamReader parser,GPEDeafultKmlParser handler) throws XmlStreamException, IOException {
+	public Object parse(IXmlStreamReader parser, GPEDeafultKmlParser handler)
+			throws XmlStreamException, IOException {
 		boolean endFeature = false;
 		int currentTag;
 		Object bbox = null;
@@ -106,57 +110,71 @@ public class LatLonBoxIterator extends KmlCoodinatesIterator{
 		double rotation;
 		iterations = 0;
 		dimension = 2;
-		
-		String id = handler.getProfile().getGeometryBinding().getID(parser, handler);
+
+		String id = handler.getProfile().getGeometryBinding()
+				.getID(parser, handler);
 
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-				if (CompareUtils.compareWithOutNamespace(tag,Kml2_1_Tags.NORTH)){
+				if (CompareUtils
+						.compareWithOutNamespace(tag, Kml2_1_Tags.NORTH)) {
 					parser.next();
-					max[1] = handler.getProfile().getDoubleBinding().parse(parser.getText());
-				}else if (CompareUtils.compareWithOutNamespace(tag,Kml2_1_Tags.SOUTH)){
+					max[1] = handler.getProfile().getDoubleBinding()
+							.parse(parser.getText());
+				} else if (CompareUtils.compareWithOutNamespace(tag,
+						Kml2_1_Tags.SOUTH)) {
 					parser.next();
-					min[1] = handler.getProfile().getDoubleBinding().parse(parser.getText());
-				}else if (CompareUtils.compareWithOutNamespace(tag,Kml2_1_Tags.EAST)){
+					min[1] = handler.getProfile().getDoubleBinding()
+							.parse(parser.getText());
+				} else if (CompareUtils.compareWithOutNamespace(tag,
+						Kml2_1_Tags.EAST)) {
 					parser.next();
-					max[0] = handler.getProfile().getDoubleBinding().parse(parser.getText());
-				}else if (CompareUtils.compareWithOutNamespace(tag,Kml2_1_Tags.WEST)){
+					max[0] = handler.getProfile().getDoubleBinding()
+							.parse(parser.getText());
+				} else if (CompareUtils.compareWithOutNamespace(tag,
+						Kml2_1_Tags.WEST)) {
 					parser.next();
-					min[0] = handler.getProfile().getDoubleBinding().parse(parser.getText());
-				}else if (CompareUtils.compareWithOutNamespace(tag,Kml2_1_Tags.ROTATION)){
+					min[0] = handler.getProfile().getDoubleBinding()
+							.parse(parser.getText());
+				} else if (CompareUtils.compareWithOutNamespace(tag,
+						Kml2_1_Tags.ROTATION)) {
 					parser.next();
-					rotation = handler.getProfile().getDoubleBinding().parse(parser.getText());
+					rotation = handler.getProfile().getDoubleBinding()
+							.parse(parser.getText());
 				}
 				break;
 			case IXmlStreamReader.END_ELEMENT:
-				if (CompareUtils.compareWithOutNamespace(tag,Kml2_1_Tags.LATLONBOX)){						
+				if (CompareUtils.compareWithOutNamespace(tag,
+						Kml2_1_Tags.LATLONBOX)) {
 					endFeature = true;
-					bbox = handler.getContentHandler().startBbox(id, this, Kml2_1_Tags.DEFAULT_SRS);
+					bbox = handler.getContentHandler().startBbox(id, this,
+							Kml2_1_Tags.DEFAULT_SRS);
 					handler.getContentHandler().endBbox(bbox);
 				}
 				break;
-			case IXmlStreamReader.CHARACTERS:					
+			case IXmlStreamReader.CHARACTERS:
 
 				break;
 			}
-			if (!endFeature){					
+			if (!endFeature) {
 				currentTag = parser.next();
 				tag = parser.getName();
 			}
-		}			
-		return bbox;	
+		}
+		return bbox;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.ICoordinateIterator#hasNext()
 	 */
 	public boolean hasNext() throws IOException {
-		if (iterations < 2){
+		if (iterations < 2) {
 			return true;
 		}
 		return false;
@@ -164,17 +182,18 @@ public class LatLonBoxIterator extends KmlCoodinatesIterator{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.ICoordinateIterator#next(double[])
 	 */
 	public void next(double[] buffer) throws IOException {
-		if (iterations == 0){
-			for (int i=0 ; i<buffer.length ; i++){
+		if (iterations == 0) {
+			for (int i = 0; i < buffer.length; i++) {
 				buffer[i] = min[i];
 			}
 			iterations = 1;
 		}
-		if (iterations == 1){
-			for (int i=0 ; i<buffer.length ; i++){
+		if (iterations == 1) {
+			for (int i = 0; i < buffer.length; i++) {
 				buffer[i] = max[i];
 			}
 			iterations = 2;

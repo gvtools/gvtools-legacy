@@ -10,12 +10,12 @@ public abstract class AbstractSnapper implements ISnapper {
 	private int sizePixels = 10;
 	private Color color = Color.MAGENTA;
 	private boolean enabled;
-	private int priority=10;
-//	public void setSnapPoint(Point2D snapPoint) {
-//		this.snapPoint = snapPoint;
-//
-//	}
+	private int priority = 10;
 
+	// public void setSnapPoint(Point2D snapPoint) {
+	// this.snapPoint = snapPoint;
+	//
+	// }
 
 	public int getSizePixels() {
 		return sizePixels;
@@ -33,9 +33,9 @@ public abstract class AbstractSnapper implements ISnapper {
 		this.color = color;
 	}
 
-	public IWindow getConfigurator(){
-//		DefaultConfigurePanel configurePanel=new DefaultConfigurePanel();
-//		return configurePanel;
+	public IWindow getConfigurator() {
+		// DefaultConfigurePanel configurePanel=new DefaultConfigurePanel();
+		// return configurePanel;
 		return null;
 	}
 
@@ -46,13 +46,17 @@ public abstract class AbstractSnapper implements ISnapper {
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-	 /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.gui.cad.snapping.ISnapper#getPriority()
-     */
-    public int getPriority() {
-        return priority;
-    }
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.gvsig.gui.cad.snapping.ISnapper#getPriority()
+	 */
+	public int getPriority() {
+		return priority;
+	}
+
 	public void setPriority(int priority) {
-		this.priority=priority;
+		this.priority = priority;
 	}
 }

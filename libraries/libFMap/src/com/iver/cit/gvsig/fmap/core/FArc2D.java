@@ -52,81 +52,91 @@ import java.util.ArrayList;
 
 import com.iver.cit.gvsig.fmap.edition.UtilFunctions;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FArc2D extends FPolyline2D {
 	private Point2D init;
 	private Point2D center;
 	private Point2D end;
+
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param gpx
 	 */
-	public FArc2D(GeneralPathX gpx,Point2D i,Point2D c, Point2D e) {
+	public FArc2D(GeneralPathX gpx, Point2D i, Point2D c, Point2D e) {
 		super(gpx);
-		init=i;
-		center=c;
-		end=e;
+		init = i;
+		center = c;
+		end = e;
 	}
-	public Point2D getInit(){
+
+	public Point2D getInit() {
 		return init;
 	}
-	public Point2D getEnd(){
+
+	public Point2D getEnd() {
 		return end;
 	}
-	public Point2D getCenter(){
-		return UtilFunctions.getCenter(init, center,end);
+
+	public Point2D getCenter() {
+		return UtilFunctions.getCenter(init, center, end);
 	}
-	public Point2D getMid(){
+
+	public Point2D getMid() {
 		return center;
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.FShape#cloneFShape()
 	 */
 	public FShape cloneFShape() {
-		FArc2D arc=new FArc2D((GeneralPathX) gp.clone(),init,center,end);
+		FArc2D arc = new FArc2D((GeneralPathX) gp.clone(), init, center, end);
 		return arc;
 	}
+
 	public void transform(AffineTransform at) {
 		gp.transform(at);
-		InitHandler inithandler=(InitHandler)getStretchingHandlers()[0];
-		//CenterHandler centerhandler=(CenterHandler)getHandlers()[1];
-		EndHandler endhandler=(EndHandler)getStretchingHandlers()[1];
-		Point2D aux1=new Point2D.Double();
-		Point2D aux2=new Point2D.Double();
-		Point2D aux3=new Point2D.Double();
-		at.transform(inithandler.getPoint(),aux1);
+		InitHandler inithandler = (InitHandler) getStretchingHandlers()[0];
+		// CenterHandler centerhandler=(CenterHandler)getHandlers()[1];
+		EndHandler endhandler = (EndHandler) getStretchingHandlers()[1];
+		Point2D aux1 = new Point2D.Double();
+		Point2D aux2 = new Point2D.Double();
+		Point2D aux3 = new Point2D.Double();
+		at.transform(inithandler.getPoint(), aux1);
 		inithandler.setPoint(aux1);
-		//at.transform(centerhandler.getPoint(),aux2);
-		//centerhandler.setPoint(aux2);
-		at.transform(endhandler.getPoint(),aux3);
+		// at.transform(centerhandler.getPoint(),aux2);
+		// centerhandler.setPoint(aux2);
+		at.transform(endhandler.getPoint(), aux3);
 		endhandler.setPoint(aux3);
-		CenterSelHandler centerhandler=(CenterSelHandler)getSelectHandlers()[1];
-		at.transform(centerhandler.getPoint(),aux2);
+		CenterSelHandler centerhandler = (CenterSelHandler) getSelectHandlers()[1];
+		at.transform(centerhandler.getPoint(), aux2);
 		centerhandler.setPoint(aux2);
 
 	}
+
 	/**
 	 * @see com.iver.cit.gvsig.fmap.core.FShape#getShapeType()
 	 */
 	public int getShapeType() {
 		return FShape.ARC;
 	}
+
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public Handler[] getStretchingHandlers() {
 		ArrayList handlers = new ArrayList();
 
 		handlers.add(new InitHandler(0, init.getX(), init.getY()));
-		//handlers.add(new CenterHandler(1, center.getX(), center.getY()));
+		// handlers.add(new CenterHandler(1, center.getX(), center.getY()));
 		handlers.add(new EndHandler(1, end.getX(), end.getY()));
 
 		return (Handler[]) handlers.toArray(new Handler[0]);
@@ -141,18 +151,22 @@ public class FArc2D extends FPolyline2D {
 
 		return (Handler[]) handlers.toArray(new Handler[0]);
 	}
+
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @author Vicente Caballero Navarro
 	 */
-	class CenterSelHandler extends AbstractHandler implements ICenterHandler{
+	class CenterSelHandler extends AbstractHandler implements ICenterHandler {
 		/**
 		 * Crea un nuevo PointHandler.
-		 *
-		 * @param i DOCUMENT ME!
-		 * @param x DOCUMENT ME!
-		 * @param y DOCUMENT ME!
+		 * 
+		 * @param i
+		 *            DOCUMENT ME!
+		 * @param x
+		 *            DOCUMENT ME!
+		 * @param y
+		 *            DOCUMENT ME!
 		 */
 		public CenterSelHandler(int i, double x, double y) {
 			center = new Point2D.Double(x, y);
@@ -161,18 +175,22 @@ public class FArc2D extends FPolyline2D {
 
 		/**
 		 * DOCUMENT ME!
-		 *
-		 * @param x DOCUMENT ME!
-		 * @param y DOCUMENT ME!
-		 *
+		 * 
+		 * @param x
+		 *            DOCUMENT ME!
+		 * @param y
+		 *            DOCUMENT ME!
+		 * 
 		 * @return DOCUMENT ME!
 		 */
 		public void move(double x, double y) {
 		}
-		public void setPoint(Point2D p){
-			center=p;
+
+		public void setPoint(Point2D p) {
+			center = p;
 		}
-		public Point2D getPoint(){
+
+		public Point2D getPoint() {
 			return center;
 		}
 
@@ -180,24 +198,27 @@ public class FArc2D extends FPolyline2D {
 		 * @see com.iver.cit.gvsig.fmap.core.Handler#set(double, double)
 		 */
 		public void set(double x, double y) {
-			center=new Point2D.Double(x,y);
-			Arc2D arco = UtilFunctions.createArc(init,center, end);
-			gp=new GeneralPathX(arco);
+			center = new Point2D.Double(x, y);
+			Arc2D arco = UtilFunctions.createArc(init, center, end);
+			gp = new GeneralPathX(arco);
 		}
 	}
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @author Vicente Caballero Navarro
 	 */
-	class InitHandler extends AbstractHandler implements IFinalHandler{
+	class InitHandler extends AbstractHandler implements IFinalHandler {
 		/**
 		 * Crea un nuevo PointHandler.
-		 *
-		 * @param i DOCUMENT ME!
-		 * @param x DOCUMENT ME!
-		 * @param y DOCUMENT ME!
+		 * 
+		 * @param i
+		 *            DOCUMENT ME!
+		 * @param x
+		 *            DOCUMENT ME!
+		 * @param y
+		 *            DOCUMENT ME!
 		 */
 		public InitHandler(int i, double x, double y) {
 			init = new Point2D.Double(x, y);
@@ -206,31 +227,37 @@ public class FArc2D extends FPolyline2D {
 
 		/**
 		 * DOCUMENT ME!
-		 *
-		 * @param x DOCUMENT ME!
-		 * @param y DOCUMENT ME!
-		 *
+		 * 
+		 * @param x
+		 *            DOCUMENT ME!
+		 * @param y
+		 *            DOCUMENT ME!
+		 * 
 		 * @return DOCUMENT ME!
 		 */
 		public void move(double x, double y) {
-			Point2D mediop=new Point2D.Double((init.getX()+end.getX())/2,(init.getY()+end.getY())/2);
-			double dist=mediop.distance(center);
-			init=new Point2D.Double(init.getX()+x,init.getY()+y);
+			Point2D mediop = new Point2D.Double((init.getX() + end.getX()) / 2,
+					(init.getY() + end.getY()) / 2);
+			double dist = mediop.distance(center);
+			init = new Point2D.Double(init.getX() + x, init.getY() + y);
 
-			mediop=new Point2D.Double((init.getX()+end.getX())/2,(init.getY()+end.getY())/2);
-			Point2D[] perp=UtilFunctions.getPerpendicular(init,end,mediop);
-			if (UtilFunctions.getAngle(end,init)<=Math.PI){
-				dist=-dist;
+			mediop = new Point2D.Double((init.getX() + end.getX()) / 2,
+					(init.getY() + end.getY()) / 2);
+			Point2D[] perp = UtilFunctions.getPerpendicular(init, end, mediop);
+			if (UtilFunctions.getAngle(end, init) <= Math.PI) {
+				dist = -dist;
 			}
-			center=UtilFunctions.getPoint(mediop,perp[1],dist);
+			center = UtilFunctions.getPoint(mediop, perp[1], dist);
 
-			Arc2D arco = UtilFunctions.createArc(init,center, end);
-			gp=new GeneralPathX(arco);
+			Arc2D arco = UtilFunctions.createArc(init, center, end);
+			gp = new GeneralPathX(arco);
 		}
-		public void setPoint(Point2D p){
-			init=p;
+
+		public void setPoint(Point2D p) {
+			init = p;
 		}
-		public Point2D getPoint(){
+
+		public Point2D getPoint() {
 			return init;
 		}
 
@@ -238,21 +265,24 @@ public class FArc2D extends FPolyline2D {
 		 * @see com.iver.cit.gvsig.fmap.core.Handler#set(double, double)
 		 */
 		public void set(double x, double y) {
-			}
+		}
 	}
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @author Vicente Caballero Navarro
 	 */
-	class EndHandler extends AbstractHandler implements IFinalHandler{
+	class EndHandler extends AbstractHandler implements IFinalHandler {
 		/**
 		 * Crea un nuevo PointHandler.
-		 *
-		 * @param i DOCUMENT ME!
-		 * @param x DOCUMENT ME!
-		 * @param y DOCUMENT ME!
+		 * 
+		 * @param i
+		 *            DOCUMENT ME!
+		 * @param x
+		 *            DOCUMENT ME!
+		 * @param y
+		 *            DOCUMENT ME!
 		 */
 		public EndHandler(int i, double x, double y) {
 			end = new Point2D.Double(x, y);
@@ -261,31 +291,37 @@ public class FArc2D extends FPolyline2D {
 
 		/**
 		 * DOCUMENT ME!
-		 *
-		 * @param x DOCUMENT ME!
-		 * @param y DOCUMENT ME!
-		 *
+		 * 
+		 * @param x
+		 *            DOCUMENT ME!
+		 * @param y
+		 *            DOCUMENT ME!
+		 * 
 		 * @return DOCUMENT ME!
 		 */
 		public void move(double x, double y) {
-			Point2D mediop=new Point2D.Double((init.getX()+end.getX())/2,(init.getY()+end.getY())/2);
-			double dist=mediop.distance(center);
-			end=new Point2D.Double(end.getX()+x,end.getY()+y);
+			Point2D mediop = new Point2D.Double((init.getX() + end.getX()) / 2,
+					(init.getY() + end.getY()) / 2);
+			double dist = mediop.distance(center);
+			end = new Point2D.Double(end.getX() + x, end.getY() + y);
 
-			mediop=new Point2D.Double((init.getX()+end.getX())/2,(init.getY()+end.getY())/2);
-			Point2D[] perp=UtilFunctions.getPerpendicular(init,end,mediop);
-			if (UtilFunctions.getAngle(end,init)<=Math.PI){
-				dist=-dist;
+			mediop = new Point2D.Double((init.getX() + end.getX()) / 2,
+					(init.getY() + end.getY()) / 2);
+			Point2D[] perp = UtilFunctions.getPerpendicular(init, end, mediop);
+			if (UtilFunctions.getAngle(end, init) <= Math.PI) {
+				dist = -dist;
 			}
-			center=UtilFunctions.getPoint(mediop,perp[1],dist);
+			center = UtilFunctions.getPoint(mediop, perp[1], dist);
 
-			Arc2D arco = UtilFunctions.createArc(init,center, end);
-			gp=new GeneralPathX(arco);
+			Arc2D arco = UtilFunctions.createArc(init, center, end);
+			gp = new GeneralPathX(arco);
 		}
-		public void setPoint(Point2D p){
-			end=p;
+
+		public void setPoint(Point2D p) {
+			end = p;
 		}
-		public Point2D getPoint(){
+
+		public Point2D getPoint() {
 			return end;
 		}
 
@@ -299,16 +335,19 @@ public class FArc2D extends FPolyline2D {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @author Vicente Caballero Navarro
 	 */
-	class InitSelHandler extends AbstractHandler implements IFinalHandler{
+	class InitSelHandler extends AbstractHandler implements IFinalHandler {
 		/**
 		 * Crea un nuevo PointHandler.
-		 *
-		 * @param i DOCUMENT ME!
-		 * @param x DOCUMENT ME!
-		 * @param y DOCUMENT ME!
+		 * 
+		 * @param i
+		 *            DOCUMENT ME!
+		 * @param x
+		 *            DOCUMENT ME!
+		 * @param y
+		 *            DOCUMENT ME!
 		 */
 		public InitSelHandler(int i, double x, double y) {
 			init = new Point2D.Double(x, y);
@@ -317,31 +356,37 @@ public class FArc2D extends FPolyline2D {
 
 		/**
 		 * DOCUMENT ME!
-		 *
-		 * @param x DOCUMENT ME!
-		 * @param y DOCUMENT ME!
-		 *
+		 * 
+		 * @param x
+		 *            DOCUMENT ME!
+		 * @param y
+		 *            DOCUMENT ME!
+		 * 
 		 * @return DOCUMENT ME!
 		 */
 		public void move(double x, double y) {
-			Point2D mediop=new Point2D.Double((init.getX()+end.getX())/2,(init.getY()+end.getY())/2);
-			double dist=mediop.distance(center);
-			init=new Point2D.Double(init.getX()+x,init.getY()+y);
+			Point2D mediop = new Point2D.Double((init.getX() + end.getX()) / 2,
+					(init.getY() + end.getY()) / 2);
+			double dist = mediop.distance(center);
+			init = new Point2D.Double(init.getX() + x, init.getY() + y);
 
-			mediop=new Point2D.Double((init.getX()+end.getX())/2,(init.getY()+end.getY())/2);
-			Point2D[] perp=UtilFunctions.getPerpendicular(init,end,mediop);
-			if (UtilFunctions.getAngle(end,init)<=Math.PI){
-				dist=-dist;
+			mediop = new Point2D.Double((init.getX() + end.getX()) / 2,
+					(init.getY() + end.getY()) / 2);
+			Point2D[] perp = UtilFunctions.getPerpendicular(init, end, mediop);
+			if (UtilFunctions.getAngle(end, init) <= Math.PI) {
+				dist = -dist;
 			}
-			center=UtilFunctions.getPoint(mediop,perp[1],dist);
+			center = UtilFunctions.getPoint(mediop, perp[1], dist);
 
-			Arc2D arco = UtilFunctions.createArc(init,center, end);
-			gp=new GeneralPathX(arco);
+			Arc2D arco = UtilFunctions.createArc(init, center, end);
+			gp = new GeneralPathX(arco);
 		}
-		public void setPoint(Point2D p){
-			init=p;
+
+		public void setPoint(Point2D p) {
+			init = p;
 		}
-		public Point2D getPoint(){
+
+		public Point2D getPoint() {
 			return init;
 		}
 
@@ -349,33 +394,38 @@ public class FArc2D extends FPolyline2D {
 		 * @see com.iver.cit.gvsig.fmap.core.Handler#set(double, double)
 		 */
 		public void set(double x, double y) {
-			Point2D mediop=new Point2D.Double((init.getX()+end.getX())/2,(init.getY()+end.getY())/2);
-			double dist=mediop.distance(center);
-			init=new Point2D.Double(x,y);
+			Point2D mediop = new Point2D.Double((init.getX() + end.getX()) / 2,
+					(init.getY() + end.getY()) / 2);
+			double dist = mediop.distance(center);
+			init = new Point2D.Double(x, y);
 
-			mediop=new Point2D.Double((init.getX()+end.getX())/2,(init.getY()+end.getY())/2);
-			Point2D[] perp=UtilFunctions.getPerpendicular(init,end,mediop);
-			if (UtilFunctions.getAngle(end,init)<=Math.PI){
-				dist=-dist;
+			mediop = new Point2D.Double((init.getX() + end.getX()) / 2,
+					(init.getY() + end.getY()) / 2);
+			Point2D[] perp = UtilFunctions.getPerpendicular(init, end, mediop);
+			if (UtilFunctions.getAngle(end, init) <= Math.PI) {
+				dist = -dist;
 			}
-			///center=TrigonometricalFunctions.getPoint(mediop,perp[1],dist);
-			Arc2D arco = UtilFunctions.createArc(init,center, end);
-			gp=new GeneralPathX(arco);
+			// /center=TrigonometricalFunctions.getPoint(mediop,perp[1],dist);
+			Arc2D arco = UtilFunctions.createArc(init, center, end);
+			gp = new GeneralPathX(arco);
 		}
 	}
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @author Vicente Caballero Navarro
 	 */
-	class EndSelHandler extends AbstractHandler implements IFinalHandler{
+	class EndSelHandler extends AbstractHandler implements IFinalHandler {
 		/**
 		 * Crea un nuevo PointHandler.
-		 *
-		 * @param i DOCUMENT ME!
-		 * @param x DOCUMENT ME!
-		 * @param y DOCUMENT ME!
+		 * 
+		 * @param i
+		 *            DOCUMENT ME!
+		 * @param x
+		 *            DOCUMENT ME!
+		 * @param y
+		 *            DOCUMENT ME!
 		 */
 		public EndSelHandler(int i, double x, double y) {
 			end = new Point2D.Double(x, y);
@@ -384,31 +434,37 @@ public class FArc2D extends FPolyline2D {
 
 		/**
 		 * DOCUMENT ME!
-		 *
-		 * @param x DOCUMENT ME!
-		 * @param y DOCUMENT ME!
-		 *
+		 * 
+		 * @param x
+		 *            DOCUMENT ME!
+		 * @param y
+		 *            DOCUMENT ME!
+		 * 
 		 * @return DOCUMENT ME!
 		 */
 		public void move(double x, double y) {
-			Point2D mediop=new Point2D.Double((init.getX()+end.getX())/2,(init.getY()+end.getY())/2);
-			double dist=mediop.distance(center);
-			end=new Point2D.Double(end.getX()+x,end.getY()+y);
+			Point2D mediop = new Point2D.Double((init.getX() + end.getX()) / 2,
+					(init.getY() + end.getY()) / 2);
+			double dist = mediop.distance(center);
+			end = new Point2D.Double(end.getX() + x, end.getY() + y);
 
-			mediop=new Point2D.Double((init.getX()+end.getX())/2,(init.getY()+end.getY())/2);
-			Point2D[] perp=UtilFunctions.getPerpendicular(init,end,mediop);
-			if (UtilFunctions.getAngle(end,init)<=Math.PI){
-				dist=-dist;
+			mediop = new Point2D.Double((init.getX() + end.getX()) / 2,
+					(init.getY() + end.getY()) / 2);
+			Point2D[] perp = UtilFunctions.getPerpendicular(init, end, mediop);
+			if (UtilFunctions.getAngle(end, init) <= Math.PI) {
+				dist = -dist;
 			}
-			center=UtilFunctions.getPoint(mediop,perp[1],dist);
+			center = UtilFunctions.getPoint(mediop, perp[1], dist);
 
-			Arc2D arco = UtilFunctions.createArc(init,center, end);
-			gp=new GeneralPathX(arco);
+			Arc2D arco = UtilFunctions.createArc(init, center, end);
+			gp = new GeneralPathX(arco);
 		}
-		public void setPoint(Point2D p){
-			end=p;
+
+		public void setPoint(Point2D p) {
+			end = p;
 		}
-		public Point2D getPoint(){
+
+		public Point2D getPoint() {
 			return end;
 		}
 
@@ -416,27 +472,32 @@ public class FArc2D extends FPolyline2D {
 		 * @see com.iver.cit.gvsig.fmap.core.Handler#set(double, double)
 		 */
 		public void set(double x, double y) {
-			Point2D mediop=new Point2D.Double((init.getX()+end.getX())/2,(init.getY()+end.getY())/2);
-			double dist=mediop.distance(center);
-			end=new Point2D.Double(x,y);
+			Point2D mediop = new Point2D.Double((init.getX() + end.getX()) / 2,
+					(init.getY() + end.getY()) / 2);
+			double dist = mediop.distance(center);
+			end = new Point2D.Double(x, y);
 
-			mediop=new Point2D.Double((init.getX()+end.getX())/2,(init.getY()+end.getY())/2);
-			Point2D[] perp=UtilFunctions.getPerpendicular(init,end,mediop);
-			if (UtilFunctions.getAngle(end,init)<=Math.PI){
-				dist=-dist;
+			mediop = new Point2D.Double((init.getX() + end.getX()) / 2,
+					(init.getY() + end.getY()) / 2);
+			Point2D[] perp = UtilFunctions.getPerpendicular(init, end, mediop);
+			if (UtilFunctions.getAngle(end, init) <= Math.PI) {
+				dist = -dist;
 			}
-			///center=TrigonometricalFunctions.getPoint(mediop,perp[1],dist);
-			Arc2D arco = UtilFunctions.createArc(init,center, end);
-			gp=new GeneralPathX(arco);
+			// /center=TrigonometricalFunctions.getPoint(mediop,perp[1],dist);
+			Arc2D arco = UtilFunctions.createArc(init, center, end);
+			gp = new GeneralPathX(arco);
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.core.FPolyline2D#intersects(java.awt.geom.Rectangle2D)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.core.FPolyline2D#intersects(java.awt.geom.Rectangle2D
+	 * )
 	 */
 	public boolean intersects(Rectangle2D r) {
 		return gp.intersects(r);
 	}
-
 
 }

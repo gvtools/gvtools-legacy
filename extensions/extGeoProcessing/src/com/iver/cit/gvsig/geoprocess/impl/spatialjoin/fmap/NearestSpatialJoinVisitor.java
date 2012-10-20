@@ -92,7 +92,6 @@ import java.util.List;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
-import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
 import com.iver.cit.gvsig.exceptions.visitors.ProcessVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.StartVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.VisitorException;
@@ -112,30 +111,30 @@ import com.iver.cit.gvsig.geoprocess.core.fmap.XTypes;
 
 /**
  * This visitor implement Nearest Geometry Spatial Join.
- *
- * It is a particular case of 1-1 relationship
- * (a feature of layer A always be related to a feature of layer B)
- *
+ * 
+ * It is a particular case of 1-1 relationship (a feature of layer A always be
+ * related to a feature of layer B)
+ * 
  * If two features of layer B are at the same distance of a feature of layer A,
  * we will took the first one analized.
- *
- * In this visitor we apply a secuential scaning strategy: given a geometry
- * of layer A, we check distances with all geometries of layer B return
- * the geometry at the min distance.
- *
- *
+ * 
+ * In this visitor we apply a secuential scaning strategy: given a geometry of
+ * layer A, we check distances with all geometries of layer B return the
+ * geometry at the min distance.
+ * 
+ * 
  * @author azabala
- *
+ * 
  */
 public class NearestSpatialJoinVisitor implements SpatialJoinVisitor {
 	/**
 	 * Needed to create layer definition
 	 */
-	 FLyrVect sourceLayer;
+	FLyrVect sourceLayer;
 	/**
 	 * Reads data of features for the source layer
 	 */
-	 SelectableDataSource sourceRecordset;
+	SelectableDataSource sourceRecordset;
 
 	/**
 	 * Reads data of features for the target layer
@@ -174,13 +173,14 @@ public class NearestSpatialJoinVisitor implements SpatialJoinVisitor {
 
 	/**
 	 * Constructor. It receives layer with which we want to do a spatial join
-	 *
+	 * 
 	 * @param targetRecordset
-	 * @throws ReadDriverException TODO
+	 * @throws ReadDriverException
+	 *             TODO
 	 */
 	public NearestSpatialJoinVisitor(FLyrVect sourceLayer,
-			FLyrVect targetLayer,
-			FeatureProcessor processor) throws ReadDriverException {
+			FLyrVect targetLayer, FeatureProcessor processor)
+			throws ReadDriverException {
 		this.sourceLayer = sourceLayer;
 		this.sourceRecordset = sourceLayer.getRecordset();
 		this.targetLayer = targetLayer;
@@ -193,24 +193,26 @@ public class NearestSpatialJoinVisitor implements SpatialJoinVisitor {
 	 * Processes a Feature of source layer, looking for its nearest feature of
 	 * target layer and taking attributes from it
 	 */
-	public void visit(IGeometry g, int sourceIndex) throws VisitorException, ProcessVisitorException {
-		if(g == null)
+	public void visit(IGeometry g, int sourceIndex) throws VisitorException,
+			ProcessVisitorException {
+		if (g == null)
 			return;
 		lookForNearestVisitor.setQueryGeometry(g.toJTSGeometry());
 		try {
-			if(onlySecondLayerSelection)
-				strategy.process(lookForNearestVisitor, targetRecordset.getSelection());
+			if (onlySecondLayerSelection)
+				strategy.process(lookForNearestVisitor,
+						targetRecordset.getSelection());
 			else
 				strategy.process(lookForNearestVisitor);
 			int targetIndex = lookForNearestVisitor.getNearestFeatureIndex();
 			double shortestDistance = lookForNearestVisitor.getShortestDist();
-			IFeature joinedFeature = createFeature(g, sourceIndex,
-									targetIndex, shortestDistance);
+			IFeature joinedFeature = createFeature(g, sourceIndex, targetIndex,
+					shortestDistance);
 			this.featureProcessor.processFeature(joinedFeature);
 		} catch (ReadDriverException e) {
-			throw new ProcessVisitorException(targetRecordset.getName(),e,
+			throw new ProcessVisitorException(targetRecordset.getName(), e,
 					"Problemas accediendo a los datos durante un nearest spatial join");
-		} 
+		}
 	}
 
 	public void stop(FLayer layer) throws VisitorException {
@@ -228,51 +230,54 @@ public class NearestSpatialJoinVisitor implements SpatialJoinVisitor {
 	}
 
 	IFeature createFeature(IGeometry g, int sourceLayerIndex,
-						int targetLayerIndex, double shortestDist)
-										throws ReadDriverException {
+			int targetLayerIndex, double shortestDist)
+			throws ReadDriverException {
 		IFeature solution = null;
 		int numFieldsA = sourceRecordset.getFieldCount();
 		int numFieldsB = targetRecordset.getFieldCount();
 		Value[] featureAttr = new Value[numFieldsA + numFieldsB + 1];
 		for (int indexField = 0; indexField < numFieldsA; indexField++) {
-			featureAttr[indexField] = sourceRecordset
-				.getFieldValue(sourceLayerIndex,indexField);
+			featureAttr[indexField] = sourceRecordset.getFieldValue(
+					sourceLayerIndex, indexField);
 		}
 		for (int indexFieldB = 0; indexFieldB < numFieldsB; indexFieldB++) {
-			featureAttr[numFieldsA + indexFieldB] =
-				targetRecordset.getFieldValue(targetLayerIndex, indexFieldB);
+			featureAttr[numFieldsA + indexFieldB] = targetRecordset
+					.getFieldValue(targetLayerIndex, indexFieldB);
 		}
-		featureAttr[numFieldsA + numFieldsB] =
-			ValueFactory.createValue(shortestDist);
+		featureAttr[numFieldsA + numFieldsB] = ValueFactory
+				.createValue(shortestDist);
 		solution = FeatureFactory.createFeature(featureAttr, g);
 		return solution;
 	}
 
-	public ILayerDefinition getResultLayerDefinition() throws GeoprocessException{
-		if(layerDefinition == null){
+	public ILayerDefinition getResultLayerDefinition()
+			throws GeoprocessException {
+		if (layerDefinition == null) {
 			try {
-				layerDefinition = DefinitionUtils.
-						mergeLayerDefinitions(sourceLayer,
-											targetLayer);
-				//spatial join, in difference of union, intersection or difference
-				//adds an additional field to mergeLayerDefinitions result:
-				//the shortest distance
-				List tempfieldDescs = Arrays.asList(layerDefinition.
-						getFieldsDesc());
+				layerDefinition = DefinitionUtils.mergeLayerDefinitions(
+						sourceLayer, targetLayer);
+				// spatial join, in difference of union, intersection or
+				// difference
+				// adds an additional field to mergeLayerDefinitions result:
+				// the shortest distance
+				List tempfieldDescs = Arrays.asList(layerDefinition
+						.getFieldsDesc());
 				ArrayList fieldDescs = new ArrayList(tempfieldDescs);
 				FieldDescription newField = new FieldDescription();
 				newField.setFieldName("DIST");
 				newField.setFieldType(XTypes.DOUBLE);
-				newField.setFieldLength(DefinitionUtils.
-						getDataTypeLength(XTypes.DOUBLE));
+				newField.setFieldLength(DefinitionUtils
+						.getDataTypeLength(XTypes.DOUBLE));
 				newField.setFieldDecimalCount(DefinitionUtils.NUM_DECIMALS);
 				fieldDescs.add(newField);
-				FieldDescription[] newDescs = new FieldDescription[fieldDescs.size()];
+				FieldDescription[] newDescs = new FieldDescription[fieldDescs
+						.size()];
 				fieldDescs.toArray(newDescs);
 				layerDefinition.setFieldsDesc(newDescs);
 
 			} catch (Exception e) {
-				throw new GeoprocessException("Problemas al crear el esquema de la capa solucion de un spatial join");
+				throw new GeoprocessException(
+						"Problemas al crear el esquema de la capa solucion de un spatial join");
 			}
 		}
 		return layerDefinition;

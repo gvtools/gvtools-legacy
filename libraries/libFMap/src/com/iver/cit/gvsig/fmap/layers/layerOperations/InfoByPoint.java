@@ -48,26 +48,43 @@ import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.exceptions.visitors.VisitorException;
 import com.iver.utiles.swing.threads.Cancellable;
 
-
 /**
- * <p>Interface that must be implemented by layers which support the operation "<i>information by point</i>".</p>
+ * <p>
+ * Interface that must be implemented by layers which support the operation
+ * "<i>information by point</i>".
+ * </p>
  * 
- * <p>That operation allows get meta-information from a point and an area around, of a layer.</p>
+ * <p>
+ * That operation allows get meta-information from a point and an area around,
+ * of a layer.
+ * </p>
  */
 public interface InfoByPoint {
 	/**
-	 * <p>Executes a consultation about information of a point on the layer.</p>
+	 * <p>
+	 * Executes a consultation about information of a point on the layer.
+	 * </p>
 	 * 
-	 * <p>There is an area around the point where will got the information.</p>
-	 *
-	 * @param p point where is the consultation
-	 * @param tolerance permissible margin around the coordinates of the point where the method will got the information. Each
-	 *  singular implementation of this method would use it in a different way. The coordinates also depend on the implementation.
-	 * @param cancel shared object that determines if this layer can continue being drawn
+	 * <p>
+	 * There is an area around the point where will got the information.
+	 * </p>
+	 * 
+	 * @param p
+	 *            point where is the consultation
+	 * @param tolerance
+	 *            permissible margin around the coordinates of the point where
+	 *            the method will got the information. Each singular
+	 *            implementation of this method would use it in a different way.
+	 *            The coordinates also depend on the implementation.
+	 * @param cancel
+	 *            shared object that determines if this layer can continue being
+	 *            drawn
 	 * 
 	 * @return an array with XML items that have the information of that point
 	 * 
-	 * @throws DriverException any exception produced using the driver.
+	 * @throws DriverException
+	 *             any exception produced using the driver.
 	 */
-	public XMLItem[] getInfo(Point p, double tolerance, Cancellable cancel) throws ReadDriverException, VisitorException, LoadLayerException;
+	public XMLItem[] getInfo(Point p, double tolerance, Cancellable cancel)
+			throws ReadDriverException, VisitorException, LoadLayerException;
 }

@@ -29,55 +29,62 @@ import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
 import org.gvsig.fmap.raster.layers.FLyrRasterSE;
-import org.gvsig.raster.dataset.properties.DatasetColorInterpretation;
 import org.gvsig.raster.util.RasterToolsUtil;
 import org.gvsig.rastertools.enhanced.graphics.HistogramGraphicBase;
 
 import com.iver.utiles.swing.JComboBox;
+
 /**
  * Panel con las selección de opciones.
  * 
  * 20/02/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class SelectorsPanel extends JPanel {
 	private static final long serialVersionUID = 3453973982901626644L;
-	private JComboBox            enhancedType  = null;
-	private JComboBox            histogramType = null;
-	private JComboBox            drawType      = null;
-	private JComboBox            band          = null;
-	private HistogramGraphicBase graphicBase   = null;
+	private JComboBox enhancedType = null;
+	private JComboBox histogramType = null;
+	private JComboBox drawType = null;
+	private JComboBox band = null;
+	private HistogramGraphicBase graphicBase = null;
+
 	// private JComboBox sourcesMatchingPanel = null;
 
 	/**
 	 * Crea una instancia del panel GraphicsPanel
+	 * 
 	 * @param lyr
 	 * @param list
-	 * @param graphicBase Grafica donde estan los histogramas, para saber como
-	 *          rellenar el combo de colores
+	 * @param graphicBase
+	 *            Grafica donde estan los histogramas, para saber como rellenar
+	 *            el combo de colores
 	 */
 	public SelectorsPanel(FLyrRasterSE lyr, HistogramGraphicBase graphicBase) {
 		this.graphicBase = graphicBase;
 		init(lyr);
 	}
-	
+
 	/**
 	 * Inicialización de los controles gráficos.
 	 */
 	private void init(FLyrRasterSE lyr) {
 		GridBagConstraints gridBagConstraints = null;
 
-		setBorder(BorderFactory.createTitledBorder(null, null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+		setBorder(BorderFactory.createTitledBorder(null, null,
+				TitledBorder.DEFAULT_JUSTIFICATION,
+				TitledBorder.DEFAULT_POSITION, null, null));
 
 		setLayout(new GridBagLayout());
-		
+
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 0;
 		gridBagConstraints.anchor = GridBagConstraints.EAST;
 		gridBagConstraints.weightx = 1.0;
 		gridBagConstraints.insets = new Insets(5, 5, 2, 2);
-		add(new JLabel(RasterToolsUtil.getText(this, "operation")), gridBagConstraints);
+		add(new JLabel(RasterToolsUtil.getText(this, "operation")),
+				gridBagConstraints);
 
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 1;
@@ -85,14 +92,15 @@ public class SelectorsPanel extends JPanel {
 		gridBagConstraints.insets = new Insets(5, 2, 2, 2);
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		add(getEnhancedType(), gridBagConstraints);
-		
+
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 1;
 		gridBagConstraints.anchor = GridBagConstraints.EAST;
 		gridBagConstraints.weightx = 1.0;
 		gridBagConstraints.insets = new Insets(2, 5, 2, 2);
-		add(new JLabel(RasterToolsUtil.getText(this, "band")), gridBagConstraints);
+		add(new JLabel(RasterToolsUtil.getText(this, "band")),
+				gridBagConstraints);
 
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 1;
@@ -100,14 +108,15 @@ public class SelectorsPanel extends JPanel {
 		gridBagConstraints.insets = new Insets(2, 2, 2, 2);
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		add(getBand(lyr), gridBagConstraints);
-		
+
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 2;
 		gridBagConstraints.gridy = 0;
 		gridBagConstraints.anchor = GridBagConstraints.EAST;
 		gridBagConstraints.weightx = 1.0;
 		gridBagConstraints.insets = new Insets(5, 2, 2, 2);
-		add(new JLabel(RasterToolsUtil.getText(this, "drawing_type")), gridBagConstraints);
+		add(new JLabel(RasterToolsUtil.getText(this, "drawing_type")),
+				gridBagConstraints);
 
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 3;
@@ -115,14 +124,15 @@ public class SelectorsPanel extends JPanel {
 		gridBagConstraints.insets = new Insets(5, 2, 2, 5);
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		add(getDrawType(), gridBagConstraints);
-		
+
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 2;
 		gridBagConstraints.gridy = 1;
 		gridBagConstraints.anchor = GridBagConstraints.EAST;
 		gridBagConstraints.weightx = 1.0;
 		gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-		add(new JLabel(RasterToolsUtil.getText(this, "histogram_type")), gridBagConstraints);
+		add(new JLabel(RasterToolsUtil.getText(this, "histogram_type")),
+				gridBagConstraints);
 
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 3;
@@ -130,34 +140,36 @@ public class SelectorsPanel extends JPanel {
 		gridBagConstraints.insets = new Insets(2, 2, 2, 5);
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		add(getHistogramType(), gridBagConstraints);
-		
-//		gridBagConstraints = new GridBagConstraints();
-//		gridBagConstraints.gridx = 0;
-//		gridBagConstraints.gridy = 2;
-//		gridBagConstraints.gridwidth = 4;
-//		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-//		gridBagConstraints.anchor = GridBagConstraints.NORTH;
-//		gridBagConstraints.weighty = 1.0;
-//		gridBagConstraints.insets = new Insets(2, 5, 5, 5);
-//		add(getSourcesMatchingPanel(list), gridBagConstraints);
+
+		// gridBagConstraints = new GridBagConstraints();
+		// gridBagConstraints.gridx = 0;
+		// gridBagConstraints.gridy = 2;
+		// gridBagConstraints.gridwidth = 4;
+		// gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+		// gridBagConstraints.anchor = GridBagConstraints.NORTH;
+		// gridBagConstraints.weighty = 1.0;
+		// gridBagConstraints.insets = new Insets(2, 5, 5, 5);
+		// add(getSourcesMatchingPanel(list), gridBagConstraints);
 	}
-	
-//	/**
-//	 * Obtiene la lista con las capas cargadas en el TOC para la selección de la 
-//	 * que necesitemos en la funcionalidad de histogram matching
-//	 * @return JPanel
-//	 */
-//	private JComboBox getSourcesMatchingPanel(ArrayList list) {
-//		if (sourcesMatchingPanel == null) {
-//			sourcesMatchingPanel = new JComboBox();
-//			for (int i = 0; i < list.size(); i++)
-//				sourcesMatchingPanel.addItem(((FLyrRasterSE) list.get(i)).getName());
-//		}
-//		return sourcesMatchingPanel;
-//	}
-	
+
+	// /**
+	// * Obtiene la lista con las capas cargadas en el TOC para la selección de
+	// la
+	// * que necesitemos en la funcionalidad de histogram matching
+	// * @return JPanel
+	// */
+	// private JComboBox getSourcesMatchingPanel(ArrayList list) {
+	// if (sourcesMatchingPanel == null) {
+	// sourcesMatchingPanel = new JComboBox();
+	// for (int i = 0; i < list.size(); i++)
+	// sourcesMatchingPanel.addItem(((FLyrRasterSE) list.get(i)).getName());
+	// }
+	// return sourcesMatchingPanel;
+	// }
+
 	/**
 	 * Obtiene el tipo de histograma
+	 * 
 	 * @return JComboBox
 	 */
 	public JComboBox getHistogramType() {
@@ -166,13 +178,15 @@ public class SelectorsPanel extends JPanel {
 			histogramType.addItem(RasterToolsUtil.getText(this, "standard"));
 			histogramType.addItem(RasterToolsUtil.getText(this, "cumulative"));
 			histogramType.addItem(RasterToolsUtil.getText(this, "logaritmic"));
-			histogramType.addItem(RasterToolsUtil.getText(this, "cumulative_logarithmic"));
+			histogramType.addItem(RasterToolsUtil.getText(this,
+					"cumulative_logarithmic"));
 		}
 		return histogramType;
 	}
-	
+
 	/**
 	 * Obtiene el tipo de dibujado de histograma (lineas, barras, ...)
+	 * 
 	 * @return JComboBox
 	 */
 	public JComboBox getDrawType() {
@@ -183,15 +197,16 @@ public class SelectorsPanel extends JPanel {
 		}
 		return drawType;
 	}
-	
+
 	/**
 	 * Obtiene la banda que representa el histograma
+	 * 
 	 * @return JComboBox
 	 */
 	public JComboBox getBand(FLyrRasterSE lyr) {
 		if (band == null) {
 			band = new JComboBox();
-			
+
 			if (lyr.isRenderingAsGray()) {
 				band.addItem(RasterToolsUtil.getText(this, "gray"));
 			} else {
@@ -208,6 +223,7 @@ public class SelectorsPanel extends JPanel {
 
 	/**
 	 * Obtiene el tipo de función a aplicar (ecualización, realce lineal, ...)
+	 * 
 	 * @return JComboBox
 	 */
 	public JComboBox getEnhancedType() {
@@ -218,22 +234,25 @@ public class SelectorsPanel extends JPanel {
 			enhancedType.addItem(RasterToolsUtil.getText(this, "logaritmic"));
 			enhancedType.addItem(RasterToolsUtil.getText(this, "exponential"));
 			enhancedType.addItem(RasterToolsUtil.getText(this, "level_slice"));
-//			enhancedType.addItem(RasterToolsUtil.getText(this, "gaussian"));
-//			enhancedType.addItem(RasterToolsUtil.getText(this, "equalization"));
+			// enhancedType.addItem(RasterToolsUtil.getText(this, "gaussian"));
+			// enhancedType.addItem(RasterToolsUtil.getText(this,
+			// "equalization"));
 		}
 		return enhancedType;
 	}
 
 	/**
 	 * Selecciona un item del combo EnhancedType sin lanzar un evento
+	 * 
 	 * @param type
 	 */
 	public void setSelectedEnhancedType(String type) {
 		if (getEnhancedType().getSelectedItem() != type) {
-			ActionListener[] copyActionListeners = getEnhancedType().getActionListeners();
+			ActionListener[] copyActionListeners = getEnhancedType()
+					.getActionListeners();
 			for (int i = 0; i < copyActionListeners.length; i++)
 				getEnhancedType().removeActionListener(copyActionListeners[i]);
-	
+
 			getEnhancedType().setSelectedItem(type);
 
 			for (int i = 0; i < copyActionListeners.length; i++)

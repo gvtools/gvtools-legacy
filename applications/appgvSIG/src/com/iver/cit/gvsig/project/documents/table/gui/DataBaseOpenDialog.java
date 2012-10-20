@@ -78,61 +78,61 @@ import com.iver.utiles.swing.JPasswordDlg;
 import com.prodevelop.cit.gvsig.vectorialdb.wizard.DBConnectionParamsDialog;
 import com.prodevelop.cit.gvsig.vectorialdb.wizard.TablesListItemSimple;
 import com.prodevelop.cit.gvsig.vectorialdb.wizard.WizardVectorialDB;
+
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  * @author jldominguez
  */
 public class DataBaseOpenDialog extends JPanel implements ActionListener {
-	
+
 	private AddLayerDialog parent_dialog = null;
-	
+
 	private int _width = 500;
 	private int _height = 480;
 	private int _margin = 6;
 	private int _conn_height = 55;
 	private int _conn_button_height = 21;
 	private int _conn_button_width = 26;
-	
-	
-	
-    /**
-     * This is the default constructor
-     */
-    public DataBaseOpenDialog(AddLayerDialog dlg) {
-        super();
-        parent_dialog = dlg;
-        initialize();
-    }
 
-    /**
-     * This is the default constructor
-     */
-    public DataBaseOpenDialog() {
-        super();
-        initialize();
-    }
+	/**
+	 * This is the default constructor
+	 */
+	public DataBaseOpenDialog(AddLayerDialog dlg) {
+		super();
+		parent_dialog = dlg;
+		initialize();
+	}
 
-	private static Logger logger = Logger.getLogger(WizardVectorialDB.class.getName());
+	/**
+	 * This is the default constructor
+	 */
+	public DataBaseOpenDialog() {
+		super();
+		initialize();
+	}
+
+	private static Logger logger = Logger.getLogger(WizardVectorialDB.class
+			.getName());
 	protected IConnection conex = null;
 	private ConnectionWithParams selectedDataSource = null;
 	private JPanel connPanel = null;
 	private JPanel tablesPanel = null;
 	private JScrollPane tablesScrollPane = null;
 	private JScrollPane _fieldsScrollPane = null;
-	
+
 	private AvailableTablesList tablesList = null;
 	private JList _fieldsList = null;
-	
+
 	private JComboBox datasourceComboBox = null;
 	// private UserTableSettingsPanel settingsPanel = null;
 	private JPanel fieldsPanel = null;
 	// private UserTableSettingsPanel emptySettingsPanel = null;
 	// private UserSelectedFieldsPanel emptyFieldsPanel = null;
 	private JButton dbButton = null;
+
 	// private BaseView view = null;
-	
 
 	private void initialize() {
 		setLayout(null);
@@ -153,20 +153,18 @@ public class DataBaseOpenDialog extends JPanel implements ActionListener {
 			fieldsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
 					null, PluginServices.getText(this, "choose_table"),
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
-			fieldsPanel.setBounds(new java.awt.Rectangle(
-					(_width-3*_margin)/2+2*_margin,
-					_conn_height+2*_margin,
-					(_width-3*_margin)/2,
-					_height-_conn_height-3*_margin));
-			fieldsPanel.add(getFieldsScrollPane(), java.awt.BorderLayout.CENTER);
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					null));
+			fieldsPanel.setBounds(new java.awt.Rectangle((_width - 3 * _margin)
+					/ 2 + 2 * _margin, _conn_height + 2 * _margin,
+					(_width - 3 * _margin) / 2, _height - _conn_height - 3
+							* _margin));
+			fieldsPanel
+					.add(getFieldsScrollPane(), java.awt.BorderLayout.CENTER);
 		}
 
 		return fieldsPanel;
 	}
-
-
-
 
 	private JScrollPane getFieldsScrollPane() {
 		if (_fieldsScrollPane == null) {
@@ -182,7 +180,7 @@ public class DataBaseOpenDialog extends JPanel implements ActionListener {
 		getDatasourceComboBox().addItem(new ConnectionWithParams());
 
 		ConnectionWithParams[] conn = SingleDBConnectionManager.instance()
-		.getAllConnections();
+				.getAllConnections();
 
 		if (conn == null) {
 			return;
@@ -190,8 +188,9 @@ public class DataBaseOpenDialog extends JPanel implements ActionListener {
 
 		Driver _drv = null;
 		for (int i = 0; i < conn.length; i++) {
-			
-			_drv = SingleDBConnectionManager.getInstanceFromName(conn[i].getDrvName());
+
+			_drv = SingleDBConnectionManager.getInstanceFromName(conn[i]
+					.getDrvName());
 			if (_drv != null && _drv instanceof AlphanumericDBDriver) {
 				getDatasourceComboBox().addItem(conn[i]);
 			}
@@ -208,18 +207,20 @@ public class DataBaseOpenDialog extends JPanel implements ActionListener {
 
 	/**
 	 * This method initializes namePanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getConnectionPanel() {
 		if (connPanel == null) {
 			connPanel = new JPanel();
 			connPanel.setLayout(null);
-			connPanel.setBounds(new java.awt.Rectangle(_margin, _margin, _width-2*_margin, _conn_height));
+			connPanel.setBounds(new java.awt.Rectangle(_margin, _margin, _width
+					- 2 * _margin, _conn_height));
 			connPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
 					null, PluginServices.getText(this, "choose_connection"),
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					null));
 			connPanel.add(getDatasourceComboBox(), null);
 			connPanel.add(getJdbcButton(), null);
 		}
@@ -229,7 +230,7 @@ public class DataBaseOpenDialog extends JPanel implements ActionListener {
 
 	/**
 	 * This method initializes tablesPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getTablesPanel() {
@@ -239,9 +240,13 @@ public class DataBaseOpenDialog extends JPanel implements ActionListener {
 			tablesPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
 					null, PluginServices.getText(this, "choose_table"),
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
-			tablesPanel.setBounds(new java.awt.Rectangle(_margin, _conn_height+2*_margin, (_width-3*_margin)/2, _height-3*_margin-_conn_height));
-			tablesPanel.add(getTablesScrollPane(), java.awt.BorderLayout.CENTER);
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					null));
+			tablesPanel.setBounds(new java.awt.Rectangle(_margin, _conn_height
+					+ 2 * _margin, (_width - 3 * _margin) / 2, _height - 3
+					* _margin - _conn_height));
+			tablesPanel
+					.add(getTablesScrollPane(), java.awt.BorderLayout.CENTER);
 		}
 
 		return tablesPanel;
@@ -249,7 +254,7 @@ public class DataBaseOpenDialog extends JPanel implements ActionListener {
 
 	/**
 	 * This method initializes tablesScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getTablesScrollPane() {
@@ -262,7 +267,7 @@ public class DataBaseOpenDialog extends JPanel implements ActionListener {
 
 	/**
 	 * This method initializes tablesList
-	 *
+	 * 
 	 * @return javax.swing.JList
 	 */
 	private AvailableTablesList getTablesList() {
@@ -278,16 +283,15 @@ public class DataBaseOpenDialog extends JPanel implements ActionListener {
 
 	/**
 	 * This method initializes jComboBox
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	protected JComboBox getDatasourceComboBox() {
 		if (datasourceComboBox == null) {
 			datasourceComboBox = new JComboBox();
-			datasourceComboBox.setBounds(new java.awt.Rectangle(
-					_margin,
-					3*_margin,
-					_width-5*_margin-_conn_button_width, _conn_button_height));
+			datasourceComboBox.setBounds(new java.awt.Rectangle(_margin,
+					3 * _margin, _width - 5 * _margin - _conn_button_width,
+					_conn_button_height));
 		}
 
 		return datasourceComboBox;
@@ -315,10 +319,11 @@ public class DataBaseOpenDialog extends JPanel implements ActionListener {
 				try {
 					updateTableList(selectedDataSource);
 					checkFinishable();
-				} catch (SQLException e) { }
+				} catch (SQLException e) {
+				}
 				return;
 			}
-			
+
 			if (!selectedDataSource.isConnected()) {
 				if (!tryToConnect(selectedDataSource)) {
 					datasourceComboBox.setSelectedIndex(0);
@@ -326,30 +331,30 @@ public class DataBaseOpenDialog extends JPanel implements ActionListener {
 					return;
 				}
 			}
-			
+
 			try {
 				updateTableList(selectedDataSource);
 				checkFinishable();
 			} catch (SQLException e) {
-				JOptionPane.showMessageDialog(this,
-						PluginServices.getText(this, "Error_getting_table_names") + ": " + e.getMessage(),
-						PluginServices.getText(this, "Error"),
-						JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(
+						this,
+						PluginServices.getText(this,
+								"Error_getting_table_names")
+								+ ": "
+								+ e.getMessage(), PluginServices.getText(this,
+								"Error"), JOptionPane.ERROR_MESSAGE);
 				setEmptyPanels();
 				return;
 			}
 
-
 			if (tablesList.getModel().getSize() == 0) {
-				JOptionPane.showMessageDialog(
-						this,
-						PluginServices.getText(this, "No_tables_listed_maybe_schema_case_issue"),
+				JOptionPane.showMessageDialog(this, PluginServices.getText(
+						this, "No_tables_listed_maybe_schema_case_issue"),
 						PluginServices.getText(this, "Error"),
 						JOptionPane.WARNING_MESSAGE);
 				return;
 			}
 
-					
 			return;
 		}
 
@@ -366,23 +371,23 @@ public class DataBaseOpenDialog extends JPanel implements ActionListener {
 	private void setEmptyPanels() {
 		((DefaultListModel) getTablesList().getModel()).clear();
 		getTablesScrollPane().updateUI();
-		
-		((TitledBorder) getFieldsPanel().getBorder()).setTitle(
-				PluginServices.getText(this, "Fields_for_table") + ": -");
+
+		((TitledBorder) getFieldsPanel().getBorder()).setTitle(PluginServices
+				.getText(this, "Fields_for_table") + ": -");
 		((DefaultListModel) getFieldsList().getModel()).clear();
 		getFieldsScrollPane().updateUI();
-		
+
 		checkFinishable();
 	}
 
 	private boolean tryToConnect(ConnectionWithParams _cwp) {
 		JPasswordDlg dlg = new JPasswordDlg();
-		dlg.setLocationRelativeTo((Component)PluginServices.getMainFrame());
+		dlg.setLocationRelativeTo((Component) PluginServices.getMainFrame());
 		String strMessage = PluginServices.getText(this, "conectar_jdbc");
 		String strPassword = PluginServices.getText(this, "password");
-		dlg.setMessage(strMessage + " [" + _cwp.getDrvName() + ", " +
-				_cwp.getHost() + ", " + _cwp.getPort() + ", " + _cwp.getDb() +
-				", " + _cwp.getUser() + "]. " + strPassword + "?");
+		dlg.setMessage(strMessage + " [" + _cwp.getDrvName() + ", "
+				+ _cwp.getHost() + ", " + _cwp.getPort() + ", " + _cwp.getDb()
+				+ ", " + _cwp.getUser() + "]. " + strPassword + "?");
 
 		dlg.setVisible(true);
 
@@ -394,8 +399,7 @@ public class DataBaseOpenDialog extends JPanel implements ActionListener {
 
 		try {
 			_cwp.connect(clave);
-		}
-		catch (DBException e) {
+		} catch (DBException e) {
 			showConnectionErrorMessage(e.getMessage());
 
 			return false;
@@ -418,66 +422,71 @@ public class DataBaseOpenDialog extends JPanel implements ActionListener {
 		DefaultListModel lmodel = new DefaultListModel();
 
 		if (conex instanceof ConnectionJDBC) {
-			jdbc_conn = (ConnectionJDBC) conex; 
+			jdbc_conn = (ConnectionJDBC) conex;
 		} else {
 			getTablesList().setModel(lmodel);
 			getTablesScrollPane().setViewportView(tablesList);
 			getTablesScrollPane().updateUI();
-			throw new SQLException("Unknown connection type: " + conex.getClass().getName());
+			throw new SQLException("Unknown connection type: "
+					+ conex.getClass().getName());
 		}
-		
-		String[] ret_types = {"TABLE", "VIEW", "SYSTEM TABLE" /* odbc */ };
+
+		String[] ret_types = { "TABLE", "VIEW", "SYSTEM TABLE" /* odbc */};
 		ResultSet rs = null;
 
 		try {
-			
-//		    DatabaseMetaData dmd = jdbc_conn.getConnection().getMetaData();
-//		    ResultSet rs2 = dmd.getTables(null, null, "%", null);
-//		    while (rs2.next())
-//		        System.out.println(rs2.getString(3) + " " + rs2.getString(4));
-//		    rs2 = dmd.getTables(null, null, null, null);
-//		    int colcnt = rs2.getMetaData().getColumnCount();
-//		    while (rs2.next()) {
-//		    	for (int i=0; i<colcnt; i++) {
-//		    		System.out.println(rs2.getMetaData().getColumnName(i+1) + " : " + rs2.getString(i+1));
-//		    	}
-//		    }
+
+			// DatabaseMetaData dmd = jdbc_conn.getConnection().getMetaData();
+			// ResultSet rs2 = dmd.getTables(null, null, "%", null);
+			// while (rs2.next())
+			// System.out.println(rs2.getString(3) + " " + rs2.getString(4));
+			// rs2 = dmd.getTables(null, null, null, null);
+			// int colcnt = rs2.getMetaData().getColumnCount();
+			// while (rs2.next()) {
+			// for (int i=0; i<colcnt; i++) {
+			// System.out.println(rs2.getMetaData().getColumnName(i+1) + " : " +
+			// rs2.getString(i+1));
+			// }
+			// }
 
 			// jdbc_conn.getConnection().getMetaData().
-			rs = jdbc_conn.getConnection().getMetaData().getTables(
-					null,
-					src.getSchema().length() == 0 ? null : src.getSchema(),
-					null,
-					ret_types);
+			rs = jdbc_conn
+					.getConnection()
+					.getMetaData()
+					.getTables(
+							null,
+							src.getSchema().length() == 0 ? null : src
+									.getSchema(), null, ret_types);
 		} catch (SQLException e1) {
 			throw e1;
 		}
-		
+
 		String _n = "";
 		String _t = "";
 		String _s = "";
-		
+
 		while (rs.next()) {
 			_s = rs.getString(2);
 			_n = rs.getString(3);
-			_n = (_s == null || _s.length()==0) ? _n : _s + "." + _n; 
+			_n = (_s == null || _s.length() == 0) ? _n : _s + "." + _n;
 			_t = rs.getString(4);
-			lmodel.addElement( new TablesListItemSimple(_n, _t, src.getConnection()) );
+			lmodel.addElement(new TablesListItemSimple(_n, _t, src
+					.getConnection()));
 		}
 		rs.close();
-		
+
 		getTablesList().setModel(lmodel);
 		getTablesScrollPane().setViewportView(tablesList);
 		getTablesScrollPane().updateUI();
-		
-		
+
 	}
 
 	private boolean validFormSettings() {
-		
+
 		int count = tablesList.getModel().getSize();
 		for (int i = 0; i < count; i++) {
-			TablesListItemSimple item = (TablesListItemSimple) tablesList.getModel().getElementAt(i);
+			TablesListItemSimple item = (TablesListItemSimple) tablesList
+					.getModel().getElementAt(i);
 			if (item.isSelected()) {
 				return true;
 			}
@@ -492,74 +501,70 @@ public class DataBaseOpenDialog extends JPanel implements ActionListener {
 
 	/**
 	 * This method initializes jdbcButton
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
-	 private JButton getJdbcButton() {
+	private JButton getJdbcButton() {
 		if (dbButton == null) {
 			dbButton = new JButton();
 			dbButton.addActionListener(this);
 			dbButton.setToolTipText(PluginServices.getText(this,
 					"add_connection"));
-			dbButton.setBounds(new java.awt.Rectangle(
-					_width-3*_margin-_conn_button_width,
-					3*_margin,
-					_conn_button_width, _conn_button_height));
+			dbButton.setBounds(new java.awt.Rectangle(_width - 3 * _margin
+					- _conn_button_width, 3 * _margin, _conn_button_width,
+					_conn_button_height));
 
 			String _file = createResourceUrl("images/jdbc.png").getFile();
 			dbButton.setIcon(new ImageIcon(_file));
 		}
 
 		return dbButton;
-	 }
+	}
 
-	 private ConnectionWithParams addNewConnection() {
-		 ConnectionWithParams resp = null;
+	private ConnectionWithParams addNewConnection() {
+		ConnectionWithParams resp = null;
 
-		 DBConnectionParamsDialog newco = new DBConnectionParamsDialog();
-		 newco.showDialog();
+		DBConnectionParamsDialog newco = new DBConnectionParamsDialog();
+		newco.showDialog();
 
-		 if (newco.isOkPressed()) {
-			 String _drvname = newco.getConnectionDriverName();
-			 String _host = newco.getConnectionServerUrl();
-			 String _port = newco.getConnectionPort();
-			 String _dbname = newco.getConnectionDBName();
-			 String _user = newco.getConnectionUser();
-			 String _pw = newco.getConnectionPassword();
-			 String _sche = newco.getConnectionSchema();
-			 String _conn_usr_name = newco.getConnectionName();
+		if (newco.isOkPressed()) {
+			String _drvname = newco.getConnectionDriverName();
+			String _host = newco.getConnectionServerUrl();
+			String _port = newco.getConnectionPort();
+			String _dbname = newco.getConnectionDBName();
+			String _user = newco.getConnectionUser();
+			String _pw = newco.getConnectionPassword();
+			String _sche = newco.getConnectionSchema();
+			String _conn_usr_name = newco.getConnectionName();
 
-			 boolean hasToBeCon = newco.hasToBeConnected();
+			boolean hasToBeCon = newco.hasToBeConnected();
 
-			 try {
-				 resp = SingleDBConnectionManager.instance()
-				 .getConnection(_drvname,
-						 _user, _pw, _conn_usr_name, _host, _port, _dbname, _sche,
-						 hasToBeCon);
-			 }
-			 catch (DBException e) {
-				 showConnectionErrorMessage(e.getMessage());
+			try {
+				resp = SingleDBConnectionManager.instance().getConnection(
+						_drvname, _user, _pw, _conn_usr_name, _host, _port,
+						_dbname, _sche, hasToBeCon);
+			} catch (DBException e) {
+				showConnectionErrorMessage(e.getMessage());
 
-				 return null;
-			 }
-			 SingleVectorialDBConnectionExtension.saveAllToPersistence();
-			 return resp;
-		 }
-		 else {
-			 return null;
-		 }
-	 }
+				return null;
+			}
+			SingleVectorialDBConnectionExtension.saveAllToPersistence();
+			return resp;
+		} else {
+			return null;
+		}
+	}
 
-	 private void showConnectionErrorMessage(String _msg) {
-		 String msg = (_msg.length() > 300) ? "" : (": " + _msg);
-		 String title = PluginServices.getText(this, "connection_error");
-		 JOptionPane.showMessageDialog(this, title + msg, title,
-				 JOptionPane.ERROR_MESSAGE);
-	 }
+	private void showConnectionErrorMessage(String _msg) {
+		String msg = (_msg.length() > 300) ? "" : (": " + _msg);
+		String title = PluginServices.getText(this, "connection_error");
+		JOptionPane.showMessageDialog(this, title + msg, title,
+				JOptionPane.ERROR_MESSAGE);
+	}
 
-	 private java.net.URL createResourceUrl(String path) {
-		 return getClass().getClassLoader().getResource(path);
-	 }
+	private java.net.URL createResourceUrl(String path) {
+		return getClass().getClassLoader().getResource(path);
+	}
 
 	public String getDriverName() {
 		if (selectedDataSource == null) {
@@ -619,7 +624,7 @@ public class DataBaseOpenDialog extends JPanel implements ActionListener {
 		ListModel lm = getTablesList().getModel();
 		int sz = lm.getSize();
 		TablesListItemSimple item = null;
-		for (int i=0; i<sz; i++) {
+		for (int i = 0; i < sz; i++) {
 			if (lm.getElementAt(i) instanceof TablesListItemSimple) {
 				item = (TablesListItemSimple) lm.getElementAt(i);
 				if (item.isSelected()) {
@@ -635,13 +640,14 @@ public class DataBaseOpenDialog extends JPanel implements ActionListener {
 
 		String drvn = selectedDataSource.getDrvName();
 		IConnection iconn = selectedDataSource.getConnection();
-		
+
 		Driver drv = SingleDBConnectionManager.getInstanceFromName(drvn);
 		String tn = "";
-		if (drv instanceof AlphanumericDBDriver && iconn instanceof ConnectionJDBC) {
+		if (drv instanceof AlphanumericDBDriver
+				&& iconn instanceof ConnectionJDBC) {
 			ConnectionJDBC conn = (ConnectionJDBC) iconn;
 			AlphanumericDBDriver alpha_drv = (AlphanumericDBDriver) drv;
-			
+
 			tn = quoteTableName(acttab.getTableName());
 
 			String _sql = "SELECT * FROM " + tn + " WHERE (0=1)";
@@ -651,51 +657,57 @@ public class DataBaseOpenDialog extends JPanel implements ActionListener {
 				fd = alpha_drv.getTableDefinition().getFieldsDesc();
 			} catch (Exception ex) {
 				logger.error("While getting fields: " + ex.getMessage());
-				JOptionPane.showMessageDialog(this,
-						PluginServices.getText(this, "Error_while_getting_table_fields") + ": " + ex.getMessage(),
-						PluginServices.getText(this, "Error"),
-						JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(
+						this,
+						PluginServices.getText(this,
+								"Error_while_getting_table_fields")
+								+ ": "
+								+ ex.getMessage(), PluginServices.getText(this,
+								"Error"), JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			
+
 			int fld_cnt = fd.length;
 			((DefaultListModel) getFieldsList().getModel()).clear();
 			String ft = "Other";
-			for (int i=0; i<fld_cnt; i++) {
+			for (int i = 0; i < fld_cnt; i++) {
 				String fn = fd[i].getFieldName();
-				
+
 				try {
 					ft = typeToString(fd[i].getFieldType());
 				} catch (Exception ex) {
 					ft = "Other";
 				}
-				
-				((DefaultListModel) getFieldsList().getModel()).addElement(
-						new FieldListItem(fn,ft));
+
+				((DefaultListModel) getFieldsList().getModel())
+						.addElement(new FieldListItem(fn, ft));
 			}
 			this.getFieldsScrollPane().setViewportView(getFieldsList());
 			getFieldsScrollPane().updateUI();
-			
-			((TitledBorder) getFieldsPanel().getBorder()).setTitle(
-					PluginServices.getText(this, "Fields_for_table") + ": " + tn);
-			
+
+			((TitledBorder) getFieldsPanel().getBorder())
+					.setTitle(PluginServices.getText(this, "Fields_for_table")
+							+ ": " + tn);
+
 			try {
 				alpha_drv.close();
 			} catch (Exception ex) {
-				logger.error("Unreported error while closing temp driver: " + ex.getMessage());
+				logger.error("Unreported error while closing temp driver: "
+						+ ex.getMessage());
 			}
-			
+
 			alpha_drv = null;
 			return true;
 		} else {
-			logger.error("Unexpacted driver or conn class, drv : " + drv.getClass().getName());
-			logger.error("Unexpacted driver or conn class, conn: " + iconn.getClass().getName());
+			logger.error("Unexpacted driver or conn class, drv : "
+					+ drv.getClass().getName());
+			logger.error("Unexpacted driver or conn class, conn: "
+					+ iconn.getClass().getName());
 			return false;
 		}
-		
+
 	}
-	
-		
+
 	public static String typeToString(int sqlType) {
 		switch (sqlType) {
 		case Types.BIGINT:
@@ -751,33 +763,42 @@ public class DataBaseOpenDialog extends JPanel implements ActionListener {
 		}
 		return _fieldsList;
 	}
-	
+
 	private class FieldListItem extends JLabel {
-		
+
 		private String name = "";
 		private String type = "";
-		
+
 		public FieldListItem(String _n, String _t) {
 			name = _n;
 			type = _t;
 		}
-		
+
 		public String toString() {
 			if (name == null || name.length() == 0) {
 				return "[-]";
 			} else {
-				return (type == null || type.length() == 0) ? name : (name+" [" + type + "]");
+				return (type == null || type.length() == 0) ? name : (name
+						+ " [" + type + "]");
 			}
 		}
-		
+
 	}
-	
+
 	private class NoSelectionModel extends DefaultListSelectionModel {
 		public NoSelectionModel() {
 		}
-		public void addSelectionInterval(int a, int b) {  }
-		public boolean isSelectedIndex(int a) { return false; }
-		public boolean isSelectionEmpty() { return true; }
+
+		public void addSelectionInterval(int a, int b) {
+		}
+
+		public boolean isSelectedIndex(int a) {
+			return false;
+		}
+
+		public boolean isSelectionEmpty() {
+			return true;
+		}
 	}
 
 	public void clearFieldsList() {
@@ -785,23 +806,19 @@ public class DataBaseOpenDialog extends JPanel implements ActionListener {
 		getFieldsScrollPane().updateUI();
 	}
 
-	
 	public static String quoteTableName(String _tn) {
 
 		String[] pointspl = _tn.split("\\.");
 		String resp = "";
-		for (int i=0; i<pointspl.length; i++) {
-			if (i!=0) {
+		for (int i = 0; i < pointspl.length; i++) {
+			if (i != 0) {
 				resp = resp + ".";
 			}
 			resp = resp + "\"" + pointspl[i] + "\"";
 		}
 		return resp;
 	}
-    
-    
 
-} 
-
+}
 
 // [eiel-gestion-conexiones]

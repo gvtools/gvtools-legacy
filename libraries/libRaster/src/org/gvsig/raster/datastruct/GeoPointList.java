@@ -19,20 +19,21 @@
 package org.gvsig.raster.datastruct;
 
 import java.util.ArrayList;
+
 /**
  * La clase GeoPointList es un contenedor de GeoPoints.
  * 
  * Internamente se guardan en un ArrayList. Así que el interfaz que se ofrece
  * hacia afuera es el de un ArrayList, con la excepcion de que en vez de tratar
  * con Objects, se trata con GeoPoints.
- *  
+ * 
  * @version 17/07/2008
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class GeoPointList {
 
 	private ArrayList list = null;
-	
+
 	/**
 	 * Construye una lista vacía de GeoPoints
 	 */

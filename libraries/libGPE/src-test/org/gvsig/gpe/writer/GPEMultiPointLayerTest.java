@@ -6,7 +6,6 @@ import org.gvsig.gpe.containers.GeometryAsserts;
 import org.gvsig.gpe.containers.Layer;
 import org.gvsig.gpe.containers.MultiPoint;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -77,7 +76,7 @@ import org.gvsig.gpe.containers.MultiPoint;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class GPEMultiPointLayerTest extends GPEWriterBaseTest{
+public abstract class GPEMultiPointLayerTest extends GPEWriterBaseTest {
 	private String layerId = "l1";
 	private String srs = "EPSG:23030";
 	private String feature1Id = "f1";
@@ -94,45 +93,53 @@ public abstract class GPEMultiPointLayerTest extends GPEWriterBaseTest{
 	private double point3X = generateRandomPoint();
 	private double point3Y = generateRandomPoint();
 	private double point3Z = generateRandomPoint();
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#readObjects()
 	 */
 	public void readObjects() {
 		Layer[] layers = getLayers();
-		assertEquals(layers.length, 1);		
+		assertEquals(layers.length, 1);
 		Layer layer = layers[0];
-	
+
 		assertEquals(layer.getFeatures().size(), 1);
-		//FEATURE 1
-		Feature feature1 = (Feature)layer.getFeatures().get(0);
-		MultiPoint multiPoint = (MultiPoint)feature1.getGeometry();
+		// FEATURE 1
+		Feature feature1 = (Feature) layer.getFeatures().get(0);
+		MultiPoint multiPoint = (MultiPoint) feature1.getGeometry();
 		assertEquals(multiPoint.getGeometries().size(), 3);
-		GeometryAsserts.point(multiPoint.getMultiPointAt(0), point1X, point1Y, point1Z);
-		GeometryAsserts.point(multiPoint.getMultiPointAt(1), point2X, point2Y, point2Z);
-		GeometryAsserts.point(multiPoint.getMultiPointAt(2), point3X, point3Y, point3Z);
+		GeometryAsserts.point(multiPoint.getMultiPointAt(0), point1X, point1Y,
+				point1Z);
+		GeometryAsserts.point(multiPoint.getMultiPointAt(1), point2X, point2Y,
+				point2Z);
+		GeometryAsserts.point(multiPoint.getMultiPointAt(2), point3X, point3Y,
+				point3Z);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#writeObjects()
 	 */
 	public void writeObjects() {
 		getWriterHandler().initialize();
-		getWriterHandler().startLayer(layerId, null , null , srs, null);
+		getWriterHandler().startLayer(layerId, null, null, srs, null);
 		getWriterHandler().startFeature(feature1Id, null, null);
 		getWriterHandler().startMultiPoint(multiPoint1Id, srs);
-		getWriterHandler().startPoint(point1Id, new CoordinatesSequence(point1X, point1Y, point1Z), srs);
-		getWriterHandler().endPoint();		
-		getWriterHandler().startPoint(point2Id, new CoordinatesSequence(point2X, point2Y, point2Z), srs);
-		getWriterHandler().endPoint();		
-		getWriterHandler().startPoint(point3Id, new CoordinatesSequence(point3X, point3Y, point3Z), srs);
-		getWriterHandler().endPoint();		
-		getWriterHandler().endMultiPoint();		
+		getWriterHandler().startPoint(point1Id,
+				new CoordinatesSequence(point1X, point1Y, point1Z), srs);
+		getWriterHandler().endPoint();
+		getWriterHandler().startPoint(point2Id,
+				new CoordinatesSequence(point2X, point2Y, point2Z), srs);
+		getWriterHandler().endPoint();
+		getWriterHandler().startPoint(point3Id,
+				new CoordinatesSequence(point3X, point3Y, point3Z), srs);
+		getWriterHandler().endPoint();
+		getWriterHandler().endMultiPoint();
 		getWriterHandler().endFeature();
 		getWriterHandler().endLayer();
-		getWriterHandler().close();	
+		getWriterHandler().close();
 	}
 
 }

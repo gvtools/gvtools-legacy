@@ -85,30 +85,30 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: NumericFieldListModel.java 7372 2006-09-19 17:57:47Z azabala $
-* $Log$
-* Revision 1.3  2006-09-19 17:57:47  azabala
-* we made public internal class (it is needed in other classes)
-*
-* Revision 1.2  2006/08/11 16:12:27  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/05/24 21:13:09  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.1  2006/03/05 19:56:06  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: NumericFieldListModel.java 7372 2006-09-19 17:57:47Z azabala $
+ * $Log$
+ * Revision 1.3  2006-09-19 17:57:47  azabala
+ * we made public internal class (it is needed in other classes)
+ *
+ * Revision 1.2  2006/08/11 16:12:27  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/05/24 21:13:09  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.1  2006/03/05 19:56:06  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core.gui;
 
 import javax.swing.AbstractListModel;
 
 /**
  * @author azabala
- *
+ * 
  */
 public class NumericFieldListModel extends AbstractListModel {
 	private static final long serialVersionUID = 1L;
@@ -131,37 +131,36 @@ public class NumericFieldListModel extends AbstractListModel {
 		else
 			return new NumericFieldListEntry(numericFields[arg0], arg0);
 	}
-	
-	public class NumericFieldListEntry{
+
+	public class NumericFieldListEntry {
 		int index;
 		String key;
-		
-		NumericFieldListEntry(String key, int index){
+
+		NumericFieldListEntry(String key, int index) {
 			this.key = key;
 			this.index = index;
 		}
-		
-		public int hashCode(){
+
+		public int hashCode() {
 			return 1;
 		}
-		
-		public String getKey(){
+
+		public String getKey() {
 			return key;
 		}
-		
-		public boolean equals(Object o){
-			if(!(o instanceof NumericFieldListEntry))
+
+		public boolean equals(Object o) {
+			if (!(o instanceof NumericFieldListEntry))
 				return false;
-			return ((NumericFieldListEntry)o).key.equals(key);
+			return ((NumericFieldListEntry) o).key.equals(key);
 		}
-		
-		public String toString(){
+
+		public String toString() {
 			String prefix = index + " - ";
-			if(key == null)
+			if (key == null)
 				return prefix;
 			else
 				return prefix + key;
 		}
 	}
 }
-

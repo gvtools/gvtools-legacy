@@ -1,4 +1,5 @@
 package org.gvsig.remoteClient.wfs.edition;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -54,7 +55,7 @@ public interface IWFSTOperation {
 	 * @return the operation name
 	 */
 	public String getOperationName();
-	
+
 	/**
 	 * @return the request to send to the server
 	 */

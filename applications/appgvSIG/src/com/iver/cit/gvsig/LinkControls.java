@@ -56,22 +56,22 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
-
 /**
  * Extensión para gestionar los hiperlinks.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LinkControls extends Extension {
-	private static Logger logger = Logger.getLogger(LinkControls.class.getName());
+	private static Logger logger = Logger.getLogger(LinkControls.class
+			.getName());
 
 	/**
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String s) {
 		View vista = (View) PluginServices.getMDIManager().getActiveWindow();
-		//ProjectView model = vista.getModel();
-		//FMap mapa = model.getMapContext();
+		// ProjectView model = vista.getModel();
+		// FMap mapa = model.getMapContext();
 		MapControl mapCtrl = vista.getMapControl();
 		logger.debug("Comand : " + s);
 
@@ -84,8 +84,8 @@ public class LinkControls extends Extension {
 	 * @see com.iver.mdiApp.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-															 .getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (f == null) {
 			return false;
@@ -93,9 +93,9 @@ public class LinkControls extends Extension {
 
 		if (f instanceof View) {
 
-		  MapContext mapa = ((View) f).getModel().getMapContext();
+			MapContext mapa = ((View) f).getModel().getMapContext();
 
-		  return mapa.getLayers().getLayersCount() > 0;
+			return mapa.getLayers().getLayersCount() > 0;
 		} else {
 			return false;
 		}
@@ -114,22 +114,24 @@ public class LinkControls extends Extension {
 		if (f instanceof com.iver.cit.gvsig.project.documents.view.gui.View) {
 			com.iver.cit.gvsig.project.documents.view.gui.View view = (com.iver.cit.gvsig.project.documents.view.gui.View) f;
 			IProjectView model = view.getModel();
-			Boolean p=null;
-
+			Boolean p = null;
 
 			FLayer[] activas = model.getMapContext().getLayers().getActives();
 
-			//Utilizo esta comprobación para poner el botón de la herramienta desactivado
-			//cuando se carga la ventana (comprobar que hay alguna capa activa)
-			if(activas.length==0)
+			// Utilizo esta comprobación para poner el botón de la herramienta
+			// desactivado
+			// cuando se carga la ventana (comprobar que hay alguna capa activa)
+			if (activas.length == 0)
 				return false;
 
 			for (int i = 0; i < activas.length; i++) {
 				if (!activas[i].isAvailable()) {
 					return false;
 				}
-				if(!activas[i].allowLinks())return false;
-				if(activas[i].getLinkProperties()==null || activas[i].getLinkProperties().getField()==null)
+				if (!activas[i].allowLinks())
+					return false;
+				if (activas[i].getLinkProperties() == null
+						|| activas[i].getLinkProperties().getField() == null)
 					return false;
 			}
 		}
@@ -143,11 +145,12 @@ public class LinkControls extends Extension {
 		registerIcons();
 	}
 
-	private void registerIcons(){
+	private void registerIcons() {
 
-		PluginServices.getIconTheme().registerDefault(
-				"view-query-link",
-				this.getClass().getClassLoader().getResource("images/Link.png")
-			);
+		PluginServices.getIconTheme()
+				.registerDefault(
+						"view-query-link",
+						this.getClass().getClassLoader()
+								.getResource("images/Link.png"));
 	}
 }

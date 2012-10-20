@@ -5,16 +5,16 @@ package com.iver.cit.gvsig.exceptions.layers;
  */
 public class ReloadLayerException extends LoadLayerException {
 
-	public ReloadLayerException(String l,Throwable exception) {
-		super(l,exception);
+	public ReloadLayerException(String l, Throwable exception) {
+		super(l, exception);
 		init();
 	}
-	
+
 	public ReloadLayerException(String l) {
 		super(l);
 		init();
-	}	
-	
+	}
+
 	/**
 	 *
 	 */

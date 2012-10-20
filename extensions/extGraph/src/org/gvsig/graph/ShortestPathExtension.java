@@ -40,10 +40,8 @@
  */
 package org.gvsig.graph;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -55,7 +53,6 @@ import javax.swing.JOptionPane;
 import org.gvsig.graph.core.GraphException;
 import org.gvsig.graph.core.GvFlag;
 import org.gvsig.graph.core.Network;
-import org.gvsig.graph.core.NetworkUtils;
 import org.gvsig.graph.gui.RouteControlPanel;
 import org.gvsig.graph.gui.RouteReportPanel;
 import org.gvsig.graph.solvers.OneToManySolver;
@@ -70,7 +67,6 @@ import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
-import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
 import com.iver.cit.gvsig.fmap.core.styles.ArrowDecoratorStyle;
 import com.iver.cit.gvsig.fmap.core.styles.ILineStyle;
 import com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle;
@@ -82,18 +78,18 @@ import com.iver.cit.gvsig.fmap.layers.SingleLayerIterator;
 import com.iver.cit.gvsig.fmap.rendering.FGraphic;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.cit.gvsig.util.GvSession;
-import com.iver.utiles.Utils;
 
 public class ShortestPathExtension extends Extension {
 
-//	public static ShortestPathSolverAStar solver = new ShortestPathSolverAStar();
+	// public static ShortestPathSolverAStar solver = new
+	// ShortestPathSolverAStar();
 	private int idSymbolLine = -1;
 
 	public void initialize() {
 		PluginServices.getIconTheme().registerDefault(
 				"shortest_path",
-				this.getClass().getClassLoader().getResource("images/shortest_path.png")
-			);		
+				this.getClass().getClassLoader()
+						.getResource("images/shortest_path.png"));
 	}
 
 	public void execute(String actionCommand) {
@@ -101,96 +97,105 @@ public class ShortestPathExtension extends Extension {
 		MapControl mapCtrl = v.getMapControl();
 		MapContext map = mapCtrl.getMapContext();
 		SingleLayerIterator it = new SingleLayerIterator(map.getLayers());
-		while (it.hasNext())
-		{
+		while (it.hasNext()) {
 			FLayer aux = it.next();
 			if (!aux.isActive())
 				continue;
 			Network net = (Network) aux.getProperty("network");
 
-			if ( net != null)
-			{
+			if (net != null) {
 				Route route;
 				try {
-					RouteControlPanel controlPanel = (RouteControlPanel) GvSession.getInstance().get(mapCtrl, "RouteControlPanel");
+					RouteControlPanel controlPanel = (RouteControlPanel) GvSession
+							.getInstance().get(mapCtrl, "RouteControlPanel");
 					if (controlPanel != null) {
-						boolean returnToOrigin = controlPanel.isReturnToOriginSelected(); 
+						boolean returnToOrigin = controlPanel
+								.isReturnToOriginSelected();
 						if (returnToOrigin) {
 							net.addFlag(net.getFlags()[0]);
 						}
 						if (controlPanel.isTspSelected()) {
 							OneToManySolver odMatrixSolver = new OneToManySolver();
 							odMatrixSolver.setNetwork(net);
-							odMatrixSolver.putDestinationsOnNetwork(net.getFlags());
-							
+							odMatrixSolver.putDestinationsOnNetwork(net
+									.getFlags());
+
 							GvFlag[] flags = net.getFlags();
-							
+
 							double[][] odMatrix = new double[flags.length][flags.length];
-							
-							for (int i=0; i < flags.length; i++)
-							{
-								
+
+							for (int i = 0; i < flags.length; i++) {
+
 								odMatrixSolver.setSourceFlag(flags[i]);
 								long t1 = System.currentTimeMillis();
-								
+
 								odMatrixSolver.calculate();
 								long t2 = System.currentTimeMillis();
-								System.out.println("Punto " + i + " de " + flags.length + ". " + (t2-t1) + " msecs.");
-								
-								for (int j=0; j < flags.length; j++)
-								{
+								System.out.println("Punto " + i + " de "
+										+ flags.length + ". " + (t2 - t1)
+										+ " msecs.");
+
+								for (int j = 0; j < flags.length; j++) {
 									long secs = Math.round(flags[j].getCost());
-	//								long meters = Math.round(flags[j].getAccumulatedLength());
-	//								String strAux = i + "\t" + j + "\t" + secs + "\t" + meters;
+									// long meters =
+									// Math.round(flags[j].getAccumulatedLength());
+									// String strAux = i + "\t" + j + "\t" +
+									// secs + "\t" + meters;
 									odMatrix[i][j] = flags[j].getCost();
 								}
-								
+
 							}
-							
-							odMatrixSolver.removeDestinationsFromNetwork(net.getFlags());
-	
-							
+
+							odMatrixSolver.removeDestinationsFromNetwork(net
+									.getFlags());
+
 							TspSolverAnnealing solverTsp = new TspSolverAnnealing();
 							solverTsp.setReturnToOrigin(returnToOrigin);
 							solverTsp.setStops(net.getFlags());
 							solverTsp.setODMatrix(odMatrix);
 							GvFlag[] orderedFlags = solverTsp.calculate();
-							ArrayList<GvFlag> orderedArray = new ArrayList<GvFlag>(orderedFlags.length);
+							ArrayList<GvFlag> orderedArray = new ArrayList<GvFlag>(
+									orderedFlags.length);
 							Collections.addAll(orderedArray, orderedFlags);
 							net.setFlags(orderedArray);
-							// TODO: Si ya existe el flag0, no añadirlo al final.
-							
+							// TODO: Si ya existe el flag0, no añadirlo al
+							// final.
+
 						}
 					}
 					route = calculateRoute(net);
 					if (route == null)
 						return;
-					
-					List routes = (List) GvSession.getInstance().get(mapCtrl, "Route");
-					if(routes == null){
+
+					List routes = (List) GvSession.getInstance().get(mapCtrl,
+							"Route");
+					if (routes == null) {
 						routes = new ArrayList();
 						GvSession.getInstance().put(mapCtrl, "Route", routes);
 					}
-					
-					if (route.getFeatureList().size() == 0) 
+
+					if (route.getFeatureList().size() == 0)
 						return;
-					
+
 					routes.add(route);
-					
-					
-					createGraphicsFrom(route.getFeatureList(), v.getMapControl());
-					RouteReportPanel routeReport = new RouteReportPanel(route, v.getMapControl());
+
+					createGraphicsFrom(route.getFeatureList(),
+							v.getMapControl());
+					RouteReportPanel routeReport = new RouteReportPanel(route,
+							v.getMapControl());
 					PluginServices.getMDIManager().addWindow(routeReport);
-					List reportsPanels = (List) GvSession.getInstance().get(mapCtrl, "RouteReport");
-					if(reportsPanels == null){
+					List reportsPanels = (List) GvSession.getInstance().get(
+							mapCtrl, "RouteReport");
+					if (reportsPanels == null) {
 						reportsPanels = new ArrayList();
-						GvSession.getInstance().put(mapCtrl, "RouteReport", reportsPanels);
-					}	
+						GvSession.getInstance().put(mapCtrl, "RouteReport",
+								reportsPanels);
+					}
 					reportsPanels.add(routeReport);
-					
+
 					if (controlPanel != null)
 						controlPanel.refresh();
-					
+
 				} catch (GraphException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -198,48 +203,50 @@ public class ShortestPathExtension extends Extension {
 			}
 		}
 
-
-
 	}
 
 	private Route calculateRoute(Network net) throws GraphException {
 		Route route = null;
 		ShortestPathSolverAStar solver = new ShortestPathSolverAStar();
 		solver.setNetwork(net);
-//					solver.setFielStreetName("STREET_NAM");
-		String fieldStreetName = (String) net.getLayer().getProperty("network_fieldStreetName");
+		// solver.setFielStreetName("STREET_NAM");
+		String fieldStreetName = (String) net.getLayer().getProperty(
+				"network_fieldStreetName");
 		solver.setFielStreetName(fieldStreetName);
 		route = solver.calculateRoute();
-		if (route.getFeatureList().size() == 0)
-		{
-			JOptionPane.showMessageDialog((JComponent) PluginServices.getMDIManager().getActiveWindow(),
-					PluginServices.getText(this, "shortest_path_not_found"));
+		if (route.getFeatureList().size() == 0) {
+			JOptionPane.showMessageDialog((JComponent) PluginServices
+					.getMDIManager().getActiveWindow(), PluginServices.getText(
+					this, "shortest_path_not_found"));
 		}
 		return route;
 	}
 
-	private void createGraphicsFrom(Collection featureList, MapControl mapControl) {
+	private void createGraphicsFrom(Collection featureList,
+			MapControl mapControl) {
 		Iterator it = featureList.iterator();
-		GraphicLayer graphicLayer = mapControl.getMapContext().getGraphicsLayer();
-//		if (idSymbolLine == -1)
+		GraphicLayer graphicLayer = mapControl.getMapContext()
+				.getGraphicsLayer();
+		// if (idSymbolLine == -1)
 		{
 			SimpleLineSymbol arrowSymbol = new SimpleLineSymbol();
 			// FSymbol arrowSymbol = new FSymbol(FConstant.SYMBOL_TYPE_LINE);
 			arrowSymbol.setLineWidth(3.0f);
 			ILineStyle lineStyle = new SimpleLineStyle();
-			
+
 			ArrowDecoratorStyle arrowDecoratorStyle = new ArrowDecoratorStyle();
-			ArrowMarkerSymbol marker = (ArrowMarkerSymbol) arrowDecoratorStyle.getMarker(); 
+			ArrowMarkerSymbol marker = (ArrowMarkerSymbol) arrowDecoratorStyle
+					.getMarker();
 			marker.setSize(16);
 			marker.setColor(Color.RED);
 			arrowDecoratorStyle.setArrowMarkerCount(1);
-			lineStyle.setArrowDecorator(arrowDecoratorStyle );
+			lineStyle.setArrowDecorator(arrowDecoratorStyle);
 			lineStyle.setLineWidth(3.0f);
 			arrowSymbol.setLineColor(Color.RED);
 			arrowSymbol.setAlpha(120);
 			arrowSymbol.setLineStyle(lineStyle);
 			idSymbolLine = graphicLayer.addSymbol(arrowSymbol);
-			
+
 		}
 		// Para evitar hacer reallocate de los elementos de la
 		// graphicList cada vez, creamos primero la lista
@@ -251,7 +258,7 @@ public class ShortestPathExtension extends Extension {
 			FGraphic graphic = new FGraphic(gAux, idSymbolLine);
 			graphic.setTag("ROUTE");
 			graphicsRoute.add(graphic);
-//			graphicLayer.insertGraphic(0, graphic);
+			// graphicLayer.insertGraphic(0, graphic);
 		}
 		// Lo insertamos al principio de la lista para que los
 		// pushpins se dibujen después.
@@ -262,31 +269,30 @@ public class ShortestPathExtension extends Extension {
 	}
 
 	public boolean isEnabled() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-		 .getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (f == null) {
-		    return false;
+			return false;
 		}
 		if (f instanceof View) {
-		    View v = (View) f;
+			View v = (View) f;
 			MapContext map = v.getMapControl().getMapContext();
 			SingleLayerIterator it = new SingleLayerIterator(map.getLayers());
-			while (it.hasNext())
-			{
+			while (it.hasNext()) {
 				FLayer aux = it.next();
 				if (!aux.isActive())
 					continue;
 				Network net = (Network) aux.getProperty("network");
 
-				if ( net != null)
-				{
+				if (net != null) {
 					int count = 0;
-					for (int i=0; i < net.getOriginaFlags().size(); i++)
-					{
+					for (int i = 0; i < net.getOriginaFlags().size(); i++) {
 						GvFlag flag = (GvFlag) net.getOriginaFlags().get(i);
-						if (flag.isEnabled()) count++;
+						if (flag.isEnabled())
+							count++;
 					}
-					if (count > 1) return true;
+					if (count > 1)
+						return true;
 				}
 			}
 			return false;
@@ -296,10 +302,9 @@ public class ShortestPathExtension extends Extension {
 	}
 
 	public boolean isVisible() {
-		IWindow f = PluginServices.getMDIManager()
-		 .getActiveWindow();
+		IWindow f = PluginServices.getMDIManager().getActiveWindow();
 		if (f == null) {
-		    return false;
+			return false;
 		}
 		if (f instanceof View) {
 			return true;
@@ -309,5 +314,3 @@ public class ShortestPathExtension extends Extension {
 	}
 
 }
-
-

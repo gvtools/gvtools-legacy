@@ -22,6 +22,7 @@ import java.util.Arrays;
 
 import org.gvsig.raster.buffer.RasterBuffer;
 import org.gvsig.raster.dataset.IBuffer;
+
 /**
  * Filtro de Mediana que se aplica en la imagen. Toma como entrada la imagen y
  * el lado de la ventana de filtrado.
@@ -30,24 +31,29 @@ import org.gvsig.raster.dataset.IBuffer;
  */
 public class MedianDoubleFilter extends MedianFilter {
 	private double[] window = null;
-	
-	public MedianDoubleFilter(){
+
+	public MedianDoubleFilter() {
 		super();
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.correction.MedianFilter#pre()
 	 */
 	public void pre() {
 		super.pre();
 		window = new double[sizeWindow];
-		rasterResult = RasterBuffer.getBuffer(IBuffer.TYPE_DOUBLE, raster.getWidth(), raster.getHeight(), raster.getBandCount(), true);
+		rasterResult = RasterBuffer.getBuffer(IBuffer.TYPE_DOUBLE,
+				raster.getWidth(), raster.getHeight(), raster.getBandCount(),
+				true);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.correction.MedianFilter#process(int, int)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.correction.MedianFilter#process(int,
+	 * int)
 	 */
 	public void process(int col, int line) throws InterruptedException {
 		// Obtener el vector con la ventanas de muestras
@@ -55,8 +61,10 @@ public class MedianDoubleFilter extends MedianFilter {
 			int k = 0;
 			for (int i = -halfSide; i <= halfSide; i++)
 				for (int j = -halfSide; j <= halfSide; j++) {
-					if ((col + i >= 0) && (line + j >= 0) && (col + i < width) && (line + j < height)) {
-						window[k] = raster.getElemDouble(line + j, col + i, band);
+					if ((col + i >= 0) && (line + j >= 0) && (col + i < width)
+							&& (line + j < height)) {
+						window[k] = raster.getElemDouble(line + j, col + i,
+								band);
 						k++;
 					}
 				}
@@ -70,7 +78,10 @@ public class MedianDoubleFilter extends MedianFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.correction.MedianFilter#getInRasterDataType()
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.correction.MedianFilter#getInRasterDataType
+	 * ()
 	 */
 	public int getInRasterDataType() {
 		return RasterBuffer.TYPE_DOUBLE;
@@ -78,6 +89,7 @@ public class MedianDoubleFilter extends MedianFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getOutRasterDataType()
 	 */
 	public int getOutRasterDataType() {

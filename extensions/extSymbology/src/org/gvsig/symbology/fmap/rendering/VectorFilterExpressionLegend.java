@@ -40,7 +40,6 @@
  */
 package org.gvsig.symbology.fmap.rendering;
 
-
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -67,17 +66,17 @@ import com.iver.cit.gvsig.fmap.rendering.LegendFactory;
 import com.iver.cit.gvsig.fmap.rendering.SymbolLegendEvent;
 import com.iver.utiles.XMLEntity;
 
-
 /**
- *
+ * 
  * Implements a vectorial legend which represents the elements of a layer
  * depending on the value of an expression. That is, if the expression is
  * evaluated to true, then the symbol associated to the expression is painted.
  * In other case it is not showed.
- *
+ * 
  * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
  */
-public class VectorFilterExpressionLegend extends AbstractClassifiedVectorLegend  {
+public class VectorFilterExpressionLegend extends
+		AbstractClassifiedVectorLegend {
 
 	private int shapeType;
 	private ISymbol defaultSymbol;
@@ -96,7 +95,6 @@ public class VectorFilterExpressionLegend extends AbstractClassifiedVectorLegend
 		}
 	};
 
-
 	private class Item {
 		private ISymbol sym;
 		private String expression;
@@ -107,16 +105,19 @@ public class VectorFilterExpressionLegend extends AbstractClassifiedVectorLegend
 			this.sym = sym;
 
 			try {
-				this.expParser =  createExpressionParser(this.expression);
+				this.expParser = createExpressionParser(this.expression);
 			} catch (ParseException e) {
 				e.printStackTrace();
-				Logger.getLogger(getClass()).error(Messages.getString("invalid_filter_expression"));
+				Logger.getLogger(getClass()).error(
+						Messages.getString("invalid_filter_expression"));
 			}
 
 		}
 
-		private Expression createExpressionParser(String expressionString) throws ParseException {
-			LabelExpressionParser parser = new LabelExpressionParser(new StringReader(expressionString), parser_symbol_table);
+		private Expression createExpressionParser(String expressionString)
+				throws ParseException {
+			LabelExpressionParser parser = new LabelExpressionParser(
+					new StringReader(expressionString), parser_symbol_table);
 			try {
 				parser.LabelExpression();
 			} catch (ParseException e) {
@@ -128,8 +129,10 @@ public class VectorFilterExpressionLegend extends AbstractClassifiedVectorLegend
 
 		@Override
 		public boolean equals(Object obj) {
-			if (obj == null) return false;
-			if (!obj.getClass().equals(Item.class)) return false;
+			if (obj == null)
+				return false;
+			if (!obj.getClass().equals(Item.class))
+				return false;
 			return this.expression.equals(((Item) obj).expression);
 		}
 
@@ -148,11 +151,13 @@ public class VectorFilterExpressionLegend extends AbstractClassifiedVectorLegend
 
 	/**
 	 * Constructor method
-	 *
-	 * @param type shapetype of the layer
-	 * @param fieldNames classifying field names used in the legend
+	 * 
+	 * @param type
+	 *            shapetype of the layer
+	 * @param fieldNames
+	 *            classifying field names used in the legend
 	 */
-	public VectorFilterExpressionLegend(int type,String[] fieldNames) {
+	public VectorFilterExpressionLegend(int type, String[] fieldNames) {
 		setShapeType(type);
 		this.setClassifyingFieldNames(fieldNames);
 		this.fNames = fieldNames;
@@ -160,15 +165,15 @@ public class VectorFilterExpressionLegend extends AbstractClassifiedVectorLegend
 
 	/**
 	 * Constructor method
-	 *
+	 * 
 	 */
-	public VectorFilterExpressionLegend() { }
-
+	public VectorFilterExpressionLegend() {
+	}
 
 	public ISymbol getSymbolByFeature(IFeature feat) {
 		ISymbol returnSymbol = null;
 		Object result = null;
-		fNames =  getClassifyingFieldNames();
+		fNames = getClassifyingFieldNames();
 		try {
 			updateSymbolsTable(feat, fNames);
 
@@ -176,11 +181,11 @@ public class VectorFilterExpressionLegend extends AbstractClassifiedVectorLegend
 				Expression expression = newSymbols.get(i).expParser;
 
 				result = expression.evaluate();
-				if (result.equals("Default")){
+				if (result.equals("Default")) {
 					return defaultSymbol;
 				}
 
-				if(result != null && (Boolean)result==true) {
+				if (result != null && (Boolean) result == true) {
 					returnSymbol = newSymbols.get(i).sym;
 					if (returnSymbol != null) {
 						return returnSymbol;
@@ -190,36 +195,41 @@ public class VectorFilterExpressionLegend extends AbstractClassifiedVectorLegend
 		} catch (ExpressionException e) {
 			e.printStackTrace();
 		} catch (LegendDriverException e) {
-			Logger.getLogger(getClass()).error(Messages.getString("invalid_url"));
+			Logger.getLogger(getClass()).error(
+					Messages.getString("invalid_url"));
 		}
 
-		if(useDefaultSymbol)
+		if (useDefaultSymbol)
 			return getDefaultSymbol();
 
 		return null;
 	}
+
 	/**
-	 * Returns a HashTable containing the name of the field of an specific feature
-	 * and its values
-	 *
-	 * @param feat specific feature
-	 * @param fNames field names
+	 * Returns a HashTable containing the name of the field of an specific
+	 * feature and its values
+	 * 
+	 * @param feat
+	 *            specific feature
+	 * @param fNames
+	 *            field names
 	 * @return HashTable
 	 * @throws LegendDriverException
 	 */
-	private void updateSymbolsTable(IFeature feat, String[] fNames) throws LegendDriverException {
+	private void updateSymbolsTable(IFeature feat, String[] fNames)
+			throws LegendDriverException {
 		if (fNames != null)
 			for (int j = 0; j < fNames.length; j++) {
-				if(feat.getAttribute(j) != null)
+				if (feat.getAttribute(j) != null)
 					parser_symbol_table.put(fNames[j], feat.getAttribute(j));
-				else throw new LegendDriverException(LegendDriverException.CLASSIFICATION_FIELDS_NOT_FOUND);
+				else
+					throw new LegendDriverException(
+							LegendDriverException.CLASSIFICATION_FIELDS_NOT_FOUND);
 			}
 	}
 
-
 	public void addSymbol(Object key, ISymbol symbol) {
-		newSymbols.add(new Item((String)key.toString(),
-				symbol));
+		newSymbols.add(new Item((String) key.toString(), symbol));
 	}
 
 	public void clear() {
@@ -232,9 +242,8 @@ public class VectorFilterExpressionLegend extends AbstractClassifiedVectorLegend
 			if (newSymbols.get(i).sym.equals(key))
 				newSymbols.remove(i);
 		}
-		fireClassifiedSymbolChangeEvent(new SymbolLegendEvent(mySymbol,null));
+		fireClassifiedSymbolChangeEvent(new SymbolLegendEvent(mySymbol, null));
 	}
-
 
 	public void replace(ISymbol oldSymbol, ISymbol newSymbol) {
 
@@ -243,9 +252,9 @@ public class VectorFilterExpressionLegend extends AbstractClassifiedVectorLegend
 				newSymbols.get(i).sym = newSymbol;
 		}
 
-		fireClassifiedSymbolChangeEvent(new SymbolLegendEvent(oldSymbol,newSymbol));
+		fireClassifiedSymbolChangeEvent(new SymbolLegendEvent(oldSymbol,
+				newSymbol));
 	}
-
 
 	public String[] getDescriptions() {
 		String[] descriptions = new String[newSymbols.size()];
@@ -269,20 +278,19 @@ public class VectorFilterExpressionLegend extends AbstractClassifiedVectorLegend
 		return null;
 	}
 
-
-
 	public ILegend cloneLegend() throws XMLException {
 		return LegendFactory.createFromXML(getXMLEntity());
 	}
 
 	public ISymbol getDefaultSymbol() {
-		if(defaultSymbol==null) {
-			defaultSymbol = SymbologyFactory.createDefaultSymbolByShapeType(shapeType);
-			fireDefaultSymbolChangedEvent(new SymbolLegendEvent(null, defaultSymbol));
+		if (defaultSymbol == null) {
+			defaultSymbol = SymbologyFactory
+					.createDefaultSymbolByShapeType(shapeType);
+			fireDefaultSymbolChangedEvent(new SymbolLegendEvent(null,
+					defaultSymbol));
 		}
 		return defaultSymbol;
 	}
-
 
 	public String getClassName() {
 		return getClass().getName();
@@ -291,9 +299,9 @@ public class VectorFilterExpressionLegend extends AbstractClassifiedVectorLegend
 	public XMLEntity getXMLEntity() {
 		XMLEntity xml = new XMLEntity();
 		xml.putProperty("className", this.getClass().getName());
-		if(getClassifyingFieldNames() != null)
+		if (getClassifyingFieldNames() != null)
 			xml.putProperty("fieldNames", getClassifyingFieldNames());
-		if(getClassifyingFieldTypes() != null)
+		if (getClassifyingFieldTypes() != null)
 			xml.putProperty("fieldTypes", getClassifyingFieldTypes());
 		xml.putProperty("labelfield", labelFieldName);
 		xml.putProperty("labelFieldHeight", labelFieldHeight);
@@ -317,9 +325,9 @@ public class VectorFilterExpressionLegend extends AbstractClassifiedVectorLegend
 				sk[i] = newSymbols.get(i).expression.toString();
 			}
 			xml.putProperty("keys", getValues());
-			int numKeys=0;
+			int numKeys = 0;
 			for (int i = 0; i < newSymbols.size(); i++) {
-				if (!newSymbols.get(i).getStringExpression().equals("Default")){
+				if (!newSymbols.get(i).getStringExpression().equals("Default")) {
 					xml.addChild(getSymbols()[i].getXMLEntity());
 					numKeys++;
 				}
@@ -327,8 +335,7 @@ public class VectorFilterExpressionLegend extends AbstractClassifiedVectorLegend
 			xml.putProperty("numKeys", numKeys);
 		}
 
-
-		if (getZSort()!=null) {
+		if (getZSort() != null) {
 			XMLEntity xmlZSort = getZSort().getXMLEntity();
 			xmlZSort.putProperty("id", "zSort");
 			xml.addChild(xmlZSort);
@@ -339,23 +346,26 @@ public class VectorFilterExpressionLegend extends AbstractClassifiedVectorLegend
 	public void setXMLEntity(XMLEntity xml) {
 		clear();
 		if (xml.contains("fieldName"))
-			setClassifyingFieldNames(new String[] {xml.getStringProperty("fieldName")});
-		else if (xml.contains("fieldNames")){
+			setClassifyingFieldNames(new String[] { xml
+					.getStringProperty("fieldName") });
+		else if (xml.contains("fieldNames")) {
 			setClassifyingFieldNames(xml.getStringArrayProperty("fieldNames"));
 		}
-//		if (xml.contains("fieldTypes"))
-//			setClassifyingFieldTypes(new int[] {xml.getIntProperty("fieldTypes")});
+		// if (xml.contains("fieldTypes"))
+		// setClassifyingFieldTypes(new int[]
+		// {xml.getIntProperty("fieldTypes")});
 
 		int hasDefaultSymbol = xml.getIntProperty("useDefaultSymbol");
 		if (hasDefaultSymbol == 1) {
 			useDefaultSymbol = true;
-			setDefaultSymbol(SymbologyFactory.createSymbolFromXML(xml.getChild(0), null));
+			setDefaultSymbol(SymbologyFactory.createSymbolFromXML(
+					xml.getChild(0), null));
 		} else {
 			useDefaultSymbol = false;
 			setDefaultSymbol(null);
 		}
-		if (xml.contains("useDefaultSym")){
-			useDefaultSymbol=xml.getBooleanProperty("useDefaultSym");
+		if (xml.contains("useDefaultSym")) {
+			useDefaultSymbol = xml.getBooleanProperty("useDefaultSym");
 		}
 		int numKeys = xml.getIntProperty("numKeys");
 		if (numKeys > 0) {
@@ -364,10 +374,15 @@ public class VectorFilterExpressionLegend extends AbstractClassifiedVectorLegend
 
 			for (int i = 0; i < numKeys; i++) {
 				auxExpression = sk[i];
-				newSymbols.add(new Item(auxExpression,SymbologyFactory.createSymbolFromXML(xml.getChild(i + hasDefaultSymbol), null)));
-				System.out.println("auxExpression =" + auxExpression + "Symbol =" +
-						SymbologyFactory.createSymbolFromXML(xml.getChild(i + hasDefaultSymbol), null)
-						.getDescription()+"\n");
+				newSymbols.add(new Item(auxExpression, SymbologyFactory
+						.createSymbolFromXML(
+								xml.getChild(i + hasDefaultSymbol), null)));
+				System.out.println("auxExpression ="
+						+ auxExpression
+						+ "Symbol ="
+						+ SymbologyFactory.createSymbolFromXML(
+								xml.getChild(i + hasDefaultSymbol), null)
+								.getDescription() + "\n");
 			}
 		}
 	}
@@ -381,18 +396,18 @@ public class VectorFilterExpressionLegend extends AbstractClassifiedVectorLegend
 		return null;
 	}
 
-
 	public boolean isUseDefaultSymbol() {
 		return useDefaultSymbol;
 	}
 
 	public void setDataSource(DataSource ds) throws FieldNotFoundException,
-	ReadDriverException {
-//		dataSource = ds;
+			ReadDriverException {
+		// dataSource = ds;
 	}
 
 	public void setDefaultSymbol(ISymbol s) throws IllegalArgumentException {
-		if (s == null) throw new NullPointerException("Default symbol cannot be null");
+		if (s == null)
+			throw new NullPointerException("Default symbol cannot be null");
 		ISymbol old = defaultSymbol;
 		defaultSymbol = s;
 		fireDefaultSymbolChangedEvent(new SymbolLegendEvent(old, defaultSymbol));
@@ -400,14 +415,14 @@ public class VectorFilterExpressionLegend extends AbstractClassifiedVectorLegend
 
 	public void setShapeType(int shapeType) {
 		if (this.shapeType != shapeType) {
-			setDefaultSymbol(SymbologyFactory.
-					createDefaultSymbolByShapeType(shapeType));
+			setDefaultSymbol(SymbologyFactory
+					.createDefaultSymbolByShapeType(shapeType));
 			this.shapeType = shapeType;
 		}
 	}
 
 	public void setXMLEntity03(XMLEntity xml) {
-//		TODO Auto-generated method stub
+		// TODO Auto-generated method stub
 
 	}
 
@@ -419,13 +434,11 @@ public class VectorFilterExpressionLegend extends AbstractClassifiedVectorLegend
 		if (newSymbols != null) {
 			Object[] myObjects = new Object[newSymbols.size()];
 			for (int i = 0; i < newSymbols.size(); i++) {
-				myObjects[i] =newSymbols.get(i).expression;
+				myObjects[i] = newSymbols.get(i).expression;
 			}
 			return myObjects;
 		}
 		return null;
 	}
-
-
 
 }

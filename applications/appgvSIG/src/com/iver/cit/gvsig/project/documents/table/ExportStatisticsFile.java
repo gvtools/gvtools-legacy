@@ -1,22 +1,21 @@
 /* gvSIG. Sistema de Informaci鏮 Geogr塻ica de la Generalitat Valenciana
-*
-* Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License
-* as published by the Free Software Foundation; either version 2
-* of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
-*/
-
+ *
+ * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
+ */
 
 package com.iver.cit.gvsig.project.documents.table;
 
@@ -58,151 +57,176 @@ import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.project.documents.table.gui.CSVSeparatorOptionsPanel;
 import com.iver.cit.gvsig.project.documents.table.gui.Statistics.MyObjectStatistics;
 
-
 /**
- * Class to create dbf and csv files at disk with the statistics group generated from a table. 
+ * Class to create dbf and csv files at disk with the statistics group generated
+ * from a table.
  * 
- * dbf -> Data Base File
- * csv -> Comma Separated Value
+ * dbf -> Data Base File csv -> Comma Separated Value
  * 
- * @author 聲gel Fraile Gri鼁n  e-mail: angel.fraile@iver.es
+ * @author 聲gel Fraile Gri鼁n e-mail: angel.fraile@iver.es
  * 
  */
 
-
 public class ExportStatisticsFile {
 
-	
 	private String lastPath = null;
-	private Hashtable<String, MyFileFilter> dbfExtensionsSupported; // Supported extensions.
+	private Hashtable<String, MyFileFilter> dbfExtensionsSupported; // Supported
+																	// extensions.
 	private Hashtable<String, MyFileFilter> csvExtensionsSupported;
-	
-	private static Logger logger = Logger.getLogger(ExportStatisticsFile.class.getName());
 
-	
+	private static Logger logger = Logger.getLogger(ExportStatisticsFile.class
+			.getName());
+
 	public ExportStatisticsFile(List<MyObjectStatistics> valores) {
-		
-        	JFileChooser jfc = new JFileChooser(lastPath);
-			jfc.removeChoosableFileFilter(jfc.getAcceptAllFileFilter());
-			
-			// Adding required extensions (dbf, csv)
-			dbfExtensionsSupported = new Hashtable<String, MyFileFilter>();
-			csvExtensionsSupported = new Hashtable<String, MyFileFilter>();
-			dbfExtensionsSupported.put("dbf", new MyFileFilter("dbf",PluginServices.getText(this, "Ficheros_dbf"), "dbf"));
-			csvExtensionsSupported.put("csv", new MyFileFilter("csv",PluginServices.getText(this, "Ficheros_csv"), "csv"));
 
-			Iterator<MyFileFilter> iter = csvExtensionsSupported.values().iterator();
-			while (iter.hasNext()) {
-				jfc.addChoosableFileFilter(iter.next());
-			}
+		JFileChooser jfc = new JFileChooser(lastPath);
+		jfc.removeChoosableFileFilter(jfc.getAcceptAllFileFilter());
 
-			iter = dbfExtensionsSupported.values().iterator();
-			while (iter.hasNext()) {
-				jfc.addChoosableFileFilter(iter.next());
+		// Adding required extensions (dbf, csv)
+		dbfExtensionsSupported = new Hashtable<String, MyFileFilter>();
+		csvExtensionsSupported = new Hashtable<String, MyFileFilter>();
+		dbfExtensionsSupported.put("dbf", new MyFileFilter("dbf",
+				PluginServices.getText(this, "Ficheros_dbf"), "dbf"));
+		csvExtensionsSupported.put("csv", new MyFileFilter("csv",
+				PluginServices.getText(this, "Ficheros_csv"), "csv"));
+
+		Iterator<MyFileFilter> iter = csvExtensionsSupported.values()
+				.iterator();
+		while (iter.hasNext()) {
+			jfc.addChoosableFileFilter(iter.next());
+		}
+
+		iter = dbfExtensionsSupported.values().iterator();
+		while (iter.hasNext()) {
+			jfc.addChoosableFileFilter(iter.next());
+		}
+
+		// Opening a JFileCooser
+		if (jfc.showSaveDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
+			File endFile = jfc.getSelectedFile();
+			if (endFile.exists()) {// File exists in the directory.
+				int resp = JOptionPane.showConfirmDialog(
+						(Component) PluginServices.getMainFrame(),
+						PluginServices.getText(this,
+								"fichero_ya_existe_seguro_desea_guardarlo")
+								+ "\n" + endFile.getAbsolutePath(),
+						PluginServices.getText(this, "guardar"),
+						JOptionPane.YES_NO_OPTION);// Informing the user
+				if (resp != JOptionPane.YES_OPTION) {// cancel pressed.
+					return;
+				}
+			}// end if exits.
+			MyFileFilter filter = (MyFileFilter) jfc.getFileFilter();// dbf, csv
+			endFile = filter.normalizeExtension(endFile);// "name" + "." +
+															// "dbf", "name" +
+															// "." + "csv"
+
+			if (filter.getExtensionOfAFile(endFile).toLowerCase()
+					.compareTo("csv") == 0) { // csv file
+				exportToCSVFile(valores, endFile); // export to csv format
+			} else if (filter.getExtensionOfAFile(endFile).toLowerCase()
+					.compareTo("dbf") == 0) {// dbf file
+				exportToDBFFile(valores, endFile); // export to dbf format
 			}
-			
-			// Opening a JFileCooser
-			if (jfc.showSaveDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
-					File endFile = jfc.getSelectedFile();
-						if (endFile.exists()){// File exists in the directory.
-							int resp = JOptionPane.showConfirmDialog(
-									(Component) PluginServices.getMainFrame(),
-									PluginServices.getText(this,
-											"fichero_ya_existe_seguro_desea_guardarlo")+"\n"+endFile.getAbsolutePath(),
-									PluginServices.getText(this,"guardar"), JOptionPane.YES_NO_OPTION);// Informing the user
-							if (resp != JOptionPane.YES_OPTION) {//cancel pressed.
-								return;
-							}
-						}//end if exits.
-						MyFileFilter filter = (MyFileFilter)jfc.getFileFilter();// dbf, csv
-						endFile = filter.normalizeExtension(endFile);//"name" + "." + "dbf", "name" + "." + "csv"
-						
-						if(filter.getExtensionOfAFile(endFile).toLowerCase().compareTo("csv") == 0) { // csv file
-							exportToCSVFile(valores,endFile); // export to csv format
-						}
-						else if(filter.getExtensionOfAFile(endFile).toLowerCase().compareTo("dbf") == 0) {// dbf file
-							exportToDBFFile(valores,endFile); // export to dbf format
-						}
-			}//end if aprove option.
+		}// end if aprove option.
 	}
-	
+
 	/**
-	 * Creating  cvs format file with the statistics.
-	 * Option to select the two columns separator.
+	 * Creating cvs format file with the statistics. Option to select the two
+	 * columns separator.
 	 * 
-	 * Example with semicolon: Name;data\n
-	 * 					   Name2;data2\n
+	 * Example with semicolon: Name;data\n Name2;data2\n
 	 * 
 	 * @param valores
-	 * 			- Pairs: String name (key) + Double value (
+	 *            - Pairs: String name (key) + Double value (
 	 * @param endFile
-	 * 			- File to write the information
+	 *            - File to write the information
 	 */
-	
+
 	private void exportToCSVFile(List<MyObjectStatistics> valores, File endFile) {
-	
+
 		try {
 			CSVSeparatorOptionsPanel csvSeparatorOptions = new CSVSeparatorOptionsPanel();
 			PluginServices.getMDIManager().addWindow(csvSeparatorOptions);
-			
+
 			String separator = csvSeparatorOptions.getSeparator();
-			
-			if(separator != null) {
-				
+
+			if (separator != null) {
+
 				FileWriter fileCSV = new FileWriter(endFile);
-				
-				fileCSV.write(PluginServices.getText(this, "Nombre") + separator + PluginServices.getText(this, "Valor")+ "\n");
-				
+
+				fileCSV.write(PluginServices.getText(this, "Nombre")
+						+ separator + PluginServices.getText(this, "Valor")
+						+ "\n");
+
 				Iterator<MyObjectStatistics> iterador = valores.listIterator();
-				
+
 				while (iterador.hasNext()) {// Writing value,value\n
-					 MyObjectStatistics data= (MyObjectStatistics) iterador.next();
-					 fileCSV.write(data.getKey() + separator + (data.getValue())+ "\n");
+					MyObjectStatistics data = (MyObjectStatistics) iterador
+							.next();
+					fileCSV.write(data.getKey() + separator + (data.getValue())
+							+ "\n");
 				}
 				fileCSV.close();
-				JOptionPane.showMessageDialog(null, PluginServices.getText(this, "fichero_creado_en") + " " + endFile.getAbsolutePath(),
-						PluginServices.getText(this, "fichero_creado_en_formato")+ " csv "+
-						PluginServices.getText(this, "mediante_el_separador")+ 
-						" \""+ separator + "\"", JOptionPane.INFORMATION_MESSAGE);// Informing the user
-			}
-			else
+				JOptionPane.showMessageDialog(
+						null,
+						PluginServices.getText(this, "fichero_creado_en") + " "
+								+ endFile.getAbsolutePath(),
+						PluginServices.getText(this,
+								"fichero_creado_en_formato")
+								+ " csv "
+								+ PluginServices.getText(this,
+										"mediante_el_separador")
+								+ " \""
+								+ separator + "\"",
+						JOptionPane.INFORMATION_MESSAGE);// Informing the user
+			} else
 				return;
-				
+
 		} catch (IOException e) {// Informing the user
 			logger.error("Error exportando a formato csv");
-			JOptionPane.showMessageDialog(null, PluginServices.getText(this, "Error_exportando_las_estadisticas") + " " + endFile.getAbsolutePath(),
-					PluginServices.getText(this, "Error"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(
+					null,
+					PluginServices.getText(this,
+							"Error_exportando_las_estadisticas")
+							+ " "
+							+ endFile.getAbsolutePath(), PluginServices
+							.getText(this, "Error"), JOptionPane.ERROR_MESSAGE);
 		}
-		
+
 	}
-	
+
 	/**
 	 * Creating dbf format file with the statistics
+	 * 
 	 * @param valores
-	 * 			- Pairs String name (key) + Double value
+	 *            - Pairs String name (key) + Double value
 	 * @param endFile
-	 * 			- File to write the information
+	 *            - File to write the information
 	 */
 	private void exportToDBFFile(List<MyObjectStatistics> valores, File endFile) {
-		
+
 		try {
 			FileDriver driver = null;
 			try {
-				driver = (FileDriver) LayerFactory.getDM().getDriver("gdbms dbf driver");
+				driver = (FileDriver) LayerFactory.getDM().getDriver(
+						"gdbms dbf driver");
 			} catch (DriverLoadException e1) {
 				logger.error("Error Creando el driver dbf");
-			} 
-	
+			}
+
 			try {
-				if (!endFile.exists()){
+				if (!endFile.exists()) {
 					try {
-						driver.createSource(endFile.getAbsolutePath(),new String[] {"0"},new int[] {Types.DOUBLE} );
+						driver.createSource(endFile.getAbsolutePath(),
+								new String[] { "0" },
+								new int[] { Types.DOUBLE });
 					} catch (ReadDriverException e) {
 						logger.error("Error en createSource");
 					}
 					endFile.createNewFile();
 				}
-	
+
 				try {
 					driver.open(endFile);
 				} catch (OpenDriverException e) {
@@ -210,16 +234,18 @@ public class ExportStatisticsFile {
 				}
 			} catch (IOException e) {
 				try {
-					throw new Exception("Error creando el fichero de destino", e);
+					throw new Exception("Error creando el fichero de destino",
+							e);
 				} catch (Exception e1) {
 					logger.error("Error creando el fichero de destino");
-				} 
+				}
 			}
-			
-			IWriter writer = ((IWriteable)driver).getWriter();
+
+			IWriter writer = ((IWriteable) driver).getWriter();
 			ITableDefinition orgDef = new TableDefinition();
 			try {
-				// Preparing the total rows in the new dbf file, in this case two rows : Name  Value
+				// Preparing the total rows in the new dbf file, in this case
+				// two rows : Name Value
 				FieldDescription[] fields = new FieldDescription[2];
 				fields[0] = new FieldDescription();
 				fields[0].setFieldType(Types.VARCHAR);
@@ -247,12 +273,13 @@ public class ExportStatisticsFile {
 				IFeature feat = null;
 
 				Iterator<MyObjectStatistics> iterador = valores.listIterator();
-				
+
 				while (iterador.hasNext()) {
-					MyObjectStatistics data= (MyObjectStatistics) iterador.next();
+					MyObjectStatistics data = (MyObjectStatistics) iterador
+							.next();
 					value[0] = ValueFactory.createValue(data.getKey());
 					value[1] = ValueFactory.createValue(data.getValue());
-					feat = new DefaultFeature(null, value,"" + index++);
+					feat = new DefaultFeature(null, value, "" + index++);
 					write(writer, feat, index);
 				}
 			} catch (Exception e) {
@@ -260,32 +287,42 @@ public class ExportStatisticsFile {
 			}
 			try {
 				writer.postProcess();// Operation finished
-				JOptionPane.showMessageDialog(null, PluginServices.getText(this, "fichero_creado_en") + " " + endFile.getAbsolutePath(),
-						PluginServices.getText(this, "fichero_creado_en_formato")+ " dbf", JOptionPane.INFORMATION_MESSAGE);// Informing the user
+				JOptionPane.showMessageDialog(
+						null,
+						PluginServices.getText(this, "fichero_creado_en") + " "
+								+ endFile.getAbsolutePath(),
+						PluginServices.getText(this,
+								"fichero_creado_en_formato") + " dbf",
+						JOptionPane.INFORMATION_MESSAGE);// Informing the user
 			} catch (StopWriterVisitorException e) {
 				logger.error("Error en el postProcess del writer");
 			}
 		} catch (Exception e) {// Informing the user
 			logger.error("Error exportando a formato dbf");
-			JOptionPane.showMessageDialog(null, PluginServices.getText(this, "Error_exportando_las_estadisticas") + " " + endFile.getAbsolutePath(),
-					PluginServices.getText(this, "Error"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(
+					null,
+					PluginServices.getText(this,
+							"Error_exportando_las_estadisticas")
+							+ " "
+							+ endFile.getAbsolutePath(), PluginServices
+							.getText(this, "Error"), JOptionPane.ERROR_MESSAGE);
 		}
-		
+
 	}
-	
+
 	/**
 	 * Writer to create dbf file
 	 * 
 	 * @param writer
 	 * @param feature
-	 * 				- fill with the corresponding rows
-	 * @param index 
-	 * 				- fill file position 
+	 *            - fill with the corresponding rows
+	 * @param index
+	 *            - fill file position
 	 */
 	private void write(IWriter writer, IFeature feature, int index) {
 		DefaultRowEdited edRow = new DefaultRowEdited(feature,
-				 DefaultRowEdited.STATUS_ADDED, index);
-		 try {
+				DefaultRowEdited.STATUS_ADDED, index);
+		try {
 			writer.process(edRow);
 		} catch (VisitorException e) {
 			logger.error("Error en la generaci鏮 del fichero dbf");
@@ -294,9 +331,9 @@ public class ExportStatisticsFile {
 }
 
 /**
- * @author 聲gel Fraile Gri鼁n  e-mail: angel.fraile@iver.es
+ * @author 聲gel Fraile Gri鼁n e-mail: angel.fraile@iver.es
  * 
- * Class to work with the file extensions.
+ *         Class to work with the file extensions.
  */
 class MyFileFilter extends FileFilter {
 

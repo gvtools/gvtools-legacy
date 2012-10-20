@@ -45,74 +45,73 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.plugins.Extension;
 import com.iver.andami.ui.mdiManager.IWindow;
-import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
 import com.iver.cit.gvsig.project.documents.table.gui.Table;
-
 
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class TableEditCutExtension extends Extension {
-    /**
-     * @see com.iver.andami.plugins.IExtension#initialize()
-     */
-    public void initialize() {
-    	registerIcons();
-    }
+	/**
+	 * @see com.iver.andami.plugins.IExtension#initialize()
+	 */
+	public void initialize() {
+		registerIcons();
+	}
 
-    private void registerIcons(){
-    	PluginServices.getIconTheme().registerDefault(
+	private void registerIcons() {
+		PluginServices.getIconTheme().registerDefault(
 				"edit-cut",
-				this.getClass().getClassLoader().getResource("images/editcut.png")
-			);
-    }
+				this.getClass().getClassLoader()
+						.getResource("images/editcut.png"));
+	}
 
-    /**
-     * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
-     */
-    public void execute(String actionCommand) {
-        if ("CUT".equals(actionCommand)) {
-            IWindow v = PluginServices.getMDIManager().getActiveWindow();
+	/**
+	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
+	 */
+	public void execute(String actionCommand) {
+		if ("CUT".equals(actionCommand)) {
+			IWindow v = PluginServices.getMDIManager().getActiveWindow();
 
-            try {
-                ((Table) v).cutRow();
-            } catch (ReadDriverException e) {
+			try {
+				((Table) v).cutRow();
+			} catch (ReadDriverException e) {
 				NotificationManager.addError("No se pudo cortar la fila", e);
 			}
-        }
-    }
+		}
+	}
 
-    /**
-     * @see com.iver.andami.plugins.IExtension#isEnabled()
-     */
-    public boolean isEnabled() {
-    	IWindow v = PluginServices.getMDIManager().getActiveWindow();
+	/**
+	 * @see com.iver.andami.plugins.IExtension#isEnabled()
+	 */
+	public boolean isEnabled() {
+		IWindow v = PluginServices.getMDIManager().getActiveWindow();
 
-        if (v == null) {
-            return false;
-        }
+		if (v == null) {
+			return false;
+		}
 
-        if (v.getClass() == Table.class) {
-            return (((Table) v).isEditing()) && (((Table) v).getSelectedRowIndices().length>0);
-        }
+		if (v.getClass() == Table.class) {
+			return (((Table) v).isEditing())
+					&& (((Table) v).getSelectedRowIndices().length > 0);
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    /**
-     * @see com.iver.andami.plugins.IExtension#isVisible()
-     */
-    public boolean isVisible() {
-        IWindow v = PluginServices.getMDIManager().getActiveWindow();
+	/**
+	 * @see com.iver.andami.plugins.IExtension#isVisible()
+	 */
+	public boolean isVisible() {
+		IWindow v = PluginServices.getMDIManager().getActiveWindow();
 
-        if (v == null) {
-            return false;
-        } else if (v instanceof Table && ((Table) v).isEditing()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+		if (v == null) {
+			return false;
+		} else if (v instanceof Table && ((Table) v).isEditing()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

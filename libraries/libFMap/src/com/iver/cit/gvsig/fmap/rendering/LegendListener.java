@@ -42,18 +42,18 @@ package com.iver.cit.gvsig.fmap.rendering;
 
 import com.iver.cit.gvsig.fmap.layers.LegendChangedEvent;
 
-
 /**
  * Interfaz con los eventos que puede realizar una leyenda.
  */
 public interface LegendListener {
 
 	/**
-     * Called when the legend of a vector layer has changed.
-     *
-     * @param e the <code>LegendChangedEvent</code> contains contextual information about the event
-     */
-    void legendChanged(LegendChangedEvent e);
-
+	 * Called when the legend of a vector layer has changed.
+	 * 
+	 * @param e
+	 *            the <code>LegendChangedEvent</code> contains contextual
+	 *            information about the event
+	 */
+	void legendChanged(LegendChangedEvent e);
 
 }

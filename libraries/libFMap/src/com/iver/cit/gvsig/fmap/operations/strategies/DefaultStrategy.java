@@ -393,7 +393,8 @@ public class DefaultStrategy implements Strategy {
 			if (visitor.start(capa)) {
 				SimpleFeatureSource featureSource = ((FLyrVect) capa)
 						.getFeatureSource();
-				SimpleFeatureIterator features = featureSource.getFeatures().features();
+				SimpleFeatureIterator features = featureSource.getFeatures()
+						.features();
 				MathTransform trans = getCapa().getCrsTransform();
 				int i = 0;
 				while (features.hasNext()) {

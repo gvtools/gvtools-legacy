@@ -51,10 +51,9 @@ import com.iver.cit.gvsig.fmap.core.IGeometryM;
 import com.iver.cit.gvsig.fmap.core.v02.FConstant;
 import com.iver.cit.gvsig.fmap.drivers.shp.SHP;
 
-
 /**
  * Elemento shape de tipo Polígono.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class SHPPolygon extends SHPMultiLine {
@@ -68,15 +67,16 @@ public class SHPPolygon extends SHPMultiLine {
 
 	/**
 	 * Crea un nuevo SHPPolygon.
-	 *
-	 * @param type Tipo de shape.
-	 *
+	 * 
+	 * @param type
+	 *            Tipo de shape.
+	 * 
 	 * @throws ShapefileException
 	 */
 	public SHPPolygon(int type) throws ShapefileException {
-		if ((type != FConstant.SHAPE_TYPE_POLYGON) &&
-				(type != FConstant.SHAPE_TYPE_POLYGONM) &&
-				(type != FConstant.SHAPE_TYPE_POLYGONZ)) {
+		if ((type != FConstant.SHAPE_TYPE_POLYGON)
+				&& (type != FConstant.SHAPE_TYPE_POLYGONM)
+				&& (type != FConstant.SHAPE_TYPE_POLYGONZ)) {
 			throw new ShapefileException("No es de tipo 5, 15, o 25");
 		}
 
@@ -98,8 +98,8 @@ public class SHPPolygon extends SHPMultiLine {
 		double minY = buffer.getDouble();
 		double maxX = buffer.getDouble();
 		double maxY = buffer.getDouble();
-		Rectangle2D rec = new Rectangle2D.Double(minX, minY, maxX - minX,
-				maxY - maxY);
+		Rectangle2D rec = new Rectangle2D.Double(minX, minY, maxX - minX, maxY
+				- maxY);
 		int numParts = buffer.getInt();
 		int numPoints = buffer.getInt();
 
@@ -111,13 +111,10 @@ public class SHPPolygon extends SHPMultiLine {
 
 		FPoint2D[] points = readPoints(buffer, numPoints);
 
-		/* if (m_type == FConstant.SHAPE_TYPE_POLYGONZ) {
-		   //z
-		   buffer.position(buffer.position() + (2 * 8));
-		   for (int t = 0; t < numPoints; t++) {
-		       points[t].z = buffer.getDouble();
-		   }
-		   }
+		/*
+		 * if (m_type == FConstant.SHAPE_TYPE_POLYGONZ) { //z
+		 * buffer.position(buffer.position() + (2 * 8)); for (int t = 0; t <
+		 * numPoints; t++) { points[t].z = buffer.getDouble(); } }
 		 */
 		int offset = 0;
 		int start;
@@ -147,14 +144,15 @@ public class SHPPolygon extends SHPMultiLine {
 
 	/**
 	 * Lee los puntos del buffer.
-	 *
+	 * 
 	 * @param buffer
-	 * @param numPoints Número de puntos.
-	 *
+	 * @param numPoints
+	 *            Número de puntos.
+	 * 
 	 * @return Vector de Puntos.
 	 */
 	private synchronized FPoint2D[] readPoints(final MappedByteBuffer buffer,
-		final int numPoints) {
+			final int numPoints) {
 		FPoint2D[] points = new FPoint2D[numPoints];
 
 		for (int t = 0; t < numPoints; t++) {
@@ -168,39 +166,39 @@ public class SHPPolygon extends SHPMultiLine {
 	 * @see com.iver.cit.gvsig.fmap.shp.SHPShape#write(ByteBuffer, IGeometry)
 	 */
 	public synchronized void write(ByteBuffer buffer, IGeometry geometry) {
-		//FPolygon2D polyLine;
-		//polyLine = (FPolygon2D) geometry.getShape();
+		// FPolygon2D polyLine;
+		// polyLine = (FPolygon2D) geometry.getShape();
 		Rectangle2D rec = geometry.getBounds2D();
 		buffer.putDouble(rec.getMinX());
 		buffer.putDouble(rec.getMinY());
 		buffer.putDouble(rec.getMaxX());
 		buffer.putDouble(rec.getMaxY());
 
-		//////
-		///obtainsPoints(geometry.getGeneralPathXIterator());
+		// ////
+		// /obtainsPoints(geometry.getGeneralPathXIterator());
 
-		//int[] parts=polyLine.getParts();
-		//FPoint2D[] points=polyLine.getPoints();
+		// int[] parts=polyLine.getParts();
+		// FPoint2D[] points=polyLine.getPoints();
 		int nparts = parts.length;
 		int npoints = points.length;
 
-		//////
-		///int npoints = polyLine.getNumPoints();
-		///int nparts = polyLine.getNumParts();
+		// ////
+		// /int npoints = polyLine.getNumPoints();
+		// /int nparts = polyLine.getNumParts();
 		buffer.putInt(nparts);
 		buffer.putInt(npoints);
 
 		int count = 0;
 
 		for (int t = 0; t < nparts; t++) {
-			///buffer.putInt(polyLine.getPart(t));
+			// /buffer.putInt(polyLine.getPart(t));
 			buffer.putInt(parts[t]);
 		}
 
-		///FPoint[] points = polyLine.getPoints();
+		// /FPoint[] points = polyLine.getPoints();
 		for (int t = 0; t < points.length; t++) {
-			///buffer.putDouble(points[t].x);
-			///buffer.putDouble(points[t].y);
+			// /buffer.putDouble(points[t].x);
+			// /buffer.putDouble(points[t].y);
 			buffer.putDouble(points[t].getX());
 			buffer.putDouble(points[t].getY());
 		}
@@ -224,13 +222,14 @@ public class SHPPolygon extends SHPMultiLine {
 			}
 		}
 
-		if (m_type == FConstant.SHAPE_TYPE_POLYGONM){
+		if (m_type == FConstant.SHAPE_TYPE_POLYGONM) {
 			buffer.putDouble(-10E40);
 			buffer.putDouble(-10E40);
-			double[] ms = ((IGeometryM)geometry).getMs();
+			double[] ms = ((IGeometryM) geometry).getMs();
 			for (int t = 0; t < npoints; t++) {
-				if (npoints >= ms.length) 
-					buffer.putDouble(ms[0]); // Era un polígono cerrado que no terminaba en el primer punto
+				if (npoints >= ms.length)
+					buffer.putDouble(ms[0]); // Era un polígono cerrado que no
+												// terminaba en el primer punto
 				else
 					buffer.putDouble(ms[t]);
 			}
@@ -242,32 +241,32 @@ public class SHPPolygon extends SHPMultiLine {
 	 */
 	public synchronized int getLength(IGeometry fgeometry) {
 		// FPolygon2D multi;
-		//multi = (FPolygon2D) fgeometry.getShape();
-		///int nrings = 0;
-		///obtainsPoints(fgeometry.getGeneralPathXIterator());
+		// multi = (FPolygon2D) fgeometry.getShape();
+		// /int nrings = 0;
+		// /obtainsPoints(fgeometry.getGeneralPathXIterator());
 
-		//int[] parts=multi.getParts();
-		//FPoint2D[] points;
-		/////////
-		//points = multi.getPoints();
+		// int[] parts=multi.getParts();
+		// FPoint2D[] points;
+		// ///////
+		// points = multi.getPoints();
 		int npoints = points.length;
 
-		///////////
-		///nrings = multi.getNumParts();
-		///int npoints = multi.getNumPoints();
+		// /////////
+		// /nrings = multi.getNumParts();
+		// /int npoints = multi.getNumPoints();
 		int length;
 
 		if (m_type == FConstant.SHAPE_TYPE_POLYGONZ) {
-			length = 44 + (4 * parts.length) + (16 * npoints) + (8 * npoints) +
-				16;
+			length = 44 + (4 * parts.length) + (16 * npoints) + (8 * npoints)
+					+ 16;
 		} else if (m_type == FConstant.SHAPE_TYPE_POLYGONM) {
-			length = 44 + (4 * parts.length) + (16 * npoints) + (8 * npoints) +
-				16;
+			length = 44 + (4 * parts.length) + (16 * npoints) + (8 * npoints)
+					+ 16;
 		} else if (m_type == FConstant.SHAPE_TYPE_POLYGON) {
 			length = 44 + (4 * parts.length) + (16 * npoints);
 		} else {
 			throw new IllegalStateException(
-				"Expected ShapeType of Polygon, got " + m_type);
+					"Expected ShapeType of Polygon, got " + m_type);
 		}
 
 		return length;

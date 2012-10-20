@@ -42,41 +42,40 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: WrongLyrForTopologyException.java 14154 2007-09-27 19:14:16Z azabala $
-* $Log: WrongLyrForTopologyException.java,v $
-* Revision 1.1  2007/09/19 16:37:15  azabala
-* first version in cvs
-*
-*
-*/
+ *
+ * $Id: WrongLyrForTopologyException.java 14154 2007-09-27 19:14:16Z azabala $
+ * $Log: WrongLyrForTopologyException.java,v $
+ * Revision 1.1  2007/09/19 16:37:15  azabala
+ * first version in cvs
+ *
+ *
+ */
 package org.gvsig.topology;
 
 /**
- * Exception launched when we try to add a layer that is not
- * a FLyrVect to a Topology FLayers.
+ * Exception launched when we try to add a layer that is not a FLyrVect to a
+ * Topology FLayers.
  * 
  * @author azabala
- *
+ * 
  */
 public class WrongLyrForTopologyException extends RuntimeException {
-	
+
 	private static final long serialVersionUID = -6058138466815385213L;
 
 	public WrongLyrForTopologyException(String text, Exception e) {
-		super(text,e);
+		super(text, e);
 	}
-	
-	public WrongLyrForTopologyException(String text){
+
+	public WrongLyrForTopologyException(String text) {
 		super(text);
 	}
-	
-	public WrongLyrForTopologyException(){
+
+	public WrongLyrForTopologyException() {
 		super();
 	}
-	
-	public WrongLyrForTopologyException(Exception e){
+
+	public WrongLyrForTopologyException(Exception e) {
 		super(e);
 	}
 }
-

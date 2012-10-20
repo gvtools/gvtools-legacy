@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.ui.util;
 
 import com.iver.andami.ui.mdiManager.IWindow;
@@ -54,36 +54,35 @@ import com.iver.andami.ui.mdiManager.WindowInfo;
 /**
  * A box layout panel which can be added to ANDAMI's mdi manager as a modal and
  * resizable IWindow.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
-public class IWindowBoxLayoutPanel extends BoxLayoutPanel implements IWindow{
+public class IWindowBoxLayoutPanel extends BoxLayoutPanel implements IWindow {
 	private static final long serialVersionUID = -8972358453750122827L;
-	private static final int DEFAULT_WINDOW_MODE = WindowInfo.MODALDIALOG|WindowInfo.RESIZABLE;
-	
-	
-	
+	private static final int DEFAULT_WINDOW_MODE = WindowInfo.MODALDIALOG
+			| WindowInfo.RESIZABLE;
+
 	WindowInfo winfo = null;
-	
-	public IWindowBoxLayoutPanel(String title, int w, int h, int windowMode){
+
+	public IWindowBoxLayoutPanel(String title, int w, int h, int windowMode) {
 		super();
 		winfo = new WindowInfo(windowMode);
 		winfo.setTitle(title);
 		winfo.setWidth(w);
 		winfo.setHeight(h);
 	}
-	
-	public IWindowBoxLayoutPanel(String title, int w, int h){
+
+	public IWindowBoxLayoutPanel(String title, int w, int h) {
 		this(title, w, h, DEFAULT_WINDOW_MODE);
 	}
-	
-	
+
 	public WindowInfo getWindowInfo() {
 		return winfo;
 	}
-	
+
 	public Object getWindowProfile() {
 		return WindowInfo.TOOL_PROFILE;
 	}
-	
+
 }

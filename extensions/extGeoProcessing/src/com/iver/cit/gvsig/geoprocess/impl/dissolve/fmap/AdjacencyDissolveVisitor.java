@@ -100,11 +100,11 @@ import com.vividsolutions.jts.precision.SimpleGeometryPrecisionReducer;
  * This Visitor generates a dissolve of input layer based in adjacency criteria:
  * it dissolves two polygons, if and only if they are adjacent.
  * </p>
- * TODO: To dissolve buffers from radial rings create a DissolveVisitor
- * to compare FROM-TO Fields.
- *
+ * TODO: To dissolve buffers from radial rings create a DissolveVisitor to
+ * compare FROM-TO Fields.
+ * 
  * @author azabala
- *
+ * 
  */
 public class AdjacencyDissolveVisitor extends DissolveVisitor {
 
@@ -114,29 +114,30 @@ public class AdjacencyDissolveVisitor extends DissolveVisitor {
 	private DoubleValue currentBufferDistance = null;
 
 	/**
-	 * FIXME REFACTOR THIS!!!!
-	 * This is a workaround to avoid the use of strategies
-	 * and allow the cancelation
+	 * FIXME REFACTOR THIS!!!! This is a workaround to avoid the use of
+	 * strategies and allow the cancelation
 	 * 
-	 * To optimize disolution of buffers, we need to avoid the reading
-	 * of geometries that also has been processed. Strategies cant do this
+	 * To optimize disolution of buffers, we need to avoid the reading of
+	 * geometries that also has been processed. Strategies cant do this
 	 * 
 	 */
 	CancellableMonitorable cancelMonitor = null;
-	
-//	FIXME Probe to optimize the union of the features 
-	//(buffer + dissolve when applies to almost all features of the layer
-	//is very inefficient
+
+	// FIXME Probe to optimize the union of the features
+	// (buffer + dissolve when applies to almost all features of the layer
+	// is very inefficient
 	private Geometry geometry;
+
 	public AdjacencyDissolveVisitor(String dissolveField,
 			FeatureProcessor processor) {
 		super(dissolveField, processor);
 	}
 
-	//FIXME REFACTOR THIS!!!
-	public void setCancelMonitor(CancellableMonitorable cancelMonitor){
+	// FIXME REFACTOR THIS!!!
+	public void setCancelMonitor(CancellableMonitorable cancelMonitor) {
 		this.cancelMonitor = cancelMonitor;
 	}
+
 	protected boolean verifyIfDissolve(DissolvedFeature f1, DissolvedFeature f2) {
 		Geometry geo1 = f1.getJtsGeometry();
 		Geometry geo2 = f2.getJtsGeometry();
@@ -144,9 +145,9 @@ public class AdjacencyDissolveVisitor extends DissolveVisitor {
 	}
 
 	/**
-	 * Creates a new IFeature with util info for dissolve geoprocess
-	 * (it ignore non numerical values, etc)
-	 *
+	 * Creates a new IFeature with util info for dissolve geoprocess (it ignore
+	 * non numerical values, etc)
+	 * 
 	 * @param g
 	 * @param index
 	 * @return
@@ -158,55 +159,60 @@ public class AdjacencyDissolveVisitor extends DissolveVisitor {
 	}
 
 	/**
-	 * We overwrite this method because we are not interested in save sumarization
-	 * function values with dissolved features.
-	 * Instead, we want to add buffer distance like an attribute of them.
+	 * We overwrite this method because we are not interested in save
+	 * sumarization function values with dissolved features. Instead, we want to
+	 * add buffer distance like an attribute of them.
 	 */
-	public void visit(IGeometry g, int index) throws VisitorException, ProcessVisitorException {
-		if(g == null)
+	public void visit(IGeometry g, int index) throws VisitorException,
+			ProcessVisitorException {
+		if (g == null)
 			return;
-//		if(g.getGeometryType() != XTypes.POLYGON &&
-//				g.getGeometryType() != XTypes.MULTI)
-//			return;
+		// if(g.getGeometryType() != XTypes.POLYGON &&
+		// g.getGeometryType() != XTypes.MULTI)
+		// return;
 		if (!dissolvedGeometries.get(index)) {
 			try {
 				int fieldIndex = recordset.getFieldIndexByName("DIST");
-				currentBufferDistance = (DoubleValue) recordset.getFieldValue(index, fieldIndex);
+				currentBufferDistance = (DoubleValue) recordset.getFieldValue(
+						index, fieldIndex);
 				// if we havent dissolved this feature
 				Stack toDissol = new Stack();// stack for adjacent features
 				DissolvedFeature feature = createFeature(g, index);
 				toDissol.push(feature);
-//				ArrayList geometries = new ArrayList();
+				// ArrayList geometries = new ArrayList();
 				Value[] values = dissolveGeometries(toDissol);
-//				Geometry geometry = union(geometries);
+				// Geometry geometry = union(geometries);
 				Value[] valuesWithFID = new Value[values.length + 1];
 				System.arraycopy(values, 0, valuesWithFID, 1, values.length);
 				valuesWithFID[0] = ValueFactory.createValue(fid);
-				DissolvedFeature dissolved = new DissolvedFeature(null,valuesWithFID, fid/*index*/);
+				DissolvedFeature dissolved = new DissolvedFeature(null,
+						valuesWithFID, fid/* index */);
 				dissolved.setJtsGeometry(geometry);
 				this.featureProcessor.processFeature(dissolved);
 				fid++;
 				resetFunctions();
 				geometry = null;
 			} catch (ReadDriverException e) {
-				throw new ProcessVisitorException(recordset.getName(),e,
-					"Error al procesar las geometrias a fusionar durante dissolve");
+				throw new ProcessVisitorException(recordset.getName(), e,
+						"Error al procesar las geometrias a fusionar durante dissolve");
 			} catch (VisitorException e) {
-				throw new ProcessVisitorException(recordset.getName(),e,
-				"Error al procesar las geometrias a fusionar durante dissolve");
+				throw new ProcessVisitorException(recordset.getName(), e,
+						"Error al procesar las geometrias a fusionar durante dissolve");
 			}
 		}// ifponer aqui geometry a null?
 	}
 
 	/**
-	 * We overwrite this method to ignore sumarization values and to
-	 * add buffer distance to the attributes of the result features.
+	 * We overwrite this method to ignore sumarization values and to add buffer
+	 * distance to the attributes of the result features.
+	 * 
 	 * @throws VisitorException
 	 * @throws ExpansionFileReadException
 	 * @throws ReadDriverException
 	 */
-	protected Value[] dissolveGeometries(Stack toDissol) throws
-			ReadDriverException, ExpansionFileReadException, VisitorException {
+	protected Value[] dissolveGeometries(Stack toDissol)
+			throws ReadDriverException, ExpansionFileReadException,
+			VisitorException {
 
 		IndividualGeometryDissolveVisitor visitor = null;
 		DissolvedFeature feature = null;
@@ -233,26 +239,30 @@ public class AdjacencyDissolveVisitor extends DissolveVisitor {
 
 			if (dissolvedLayer.getISpatialIndex() == null) {
 				strategy.process(visitor, query);
-			}else{
+			} else {
 				process(visitor, query);
-			}	
-			//al final de toda la pila de llamadas recursivas,
-			//geometries tendrá todas las geometrias que debemos dissolver
-//			geometries.add(feature.getJtsGeometry());
-			if(geometry == null){
+			}
+			// al final de toda la pila de llamadas recursivas,
+			// geometries tendrá todas las geometrias que debemos dissolver
+			// geometries.add(feature.getJtsGeometry());
+			if (geometry == null) {
 				geometry = feature.getJtsGeometry();
-			}else{
+			} else {
 				GeometryFactory factory = geometry.getFactory();
-				Geometry[] geoms = new Geometry[]{geometry, feature.getJtsGeometry()};
-				GeometryCollection collection = factory.createGeometryCollection(geoms);
-//				geometry = EnhancedPrecisionOp.buffer(collection, 0d);
-				
-				try{
+				Geometry[] geoms = new Geometry[] { geometry,
+						feature.getJtsGeometry() };
+				GeometryCollection collection = factory
+						.createGeometryCollection(geoms);
+				// geometry = EnhancedPrecisionOp.buffer(collection, 0d);
+
+				try {
 					geometry = EnhancedPrecisionOp.buffer(collection, 0d);
-				}catch(Throwable t){
+				} catch (Throwable t) {
 					PrecisionModel precision = new PrecisionModel(1000);
-					//FIXME do a test with TopologyPreservingSimplier and compare
-					SimpleGeometryPrecisionReducer reducer = new SimpleGeometryPrecisionReducer(precision);
+					// FIXME do a test with TopologyPreservingSimplier and
+					// compare
+					SimpleGeometryPrecisionReducer reducer = new SimpleGeometryPrecisionReducer(
+							precision);
 					geometry = reducer.reduce(collection);
 					geometry = EnhancedPrecisionOp.buffer(geometry, 0d);
 				}
@@ -263,7 +273,7 @@ public class AdjacencyDissolveVisitor extends DissolveVisitor {
 		return values;
 	}
 
-	void process(IndividualGeometryDissolveVisitor visitor, Rectangle2D query){
+	void process(IndividualGeometryDissolveVisitor visitor, Rectangle2D query) {
 		try {
 			if (visitor.start(dissolvedLayer)) {
 				ReadableVectorial va = dissolvedLayer.getSource();
@@ -271,39 +281,39 @@ public class AdjacencyDissolveVisitor extends DissolveVisitor {
 				List lstRecs = dissolvedLayer.getISpatialIndex().query(query);
 				Integer idRec;
 				int index;
-					va.start();
-					DriverAttributes attr = va.getDriverAttributes();
-					boolean bMustClone = false;
-					if (attr != null) {
-						if (attr.isLoadedInMemory()) {
-							bMustClone = attr.isLoadedInMemory();
-						}
+				va.start();
+				DriverAttributes attr = va.getDriverAttributes();
+				boolean bMustClone = false;
+				if (attr != null) {
+					if (attr.isLoadedInMemory()) {
+						bMustClone = attr.isLoadedInMemory();
 					}
+				}
 
-					for (int i = 0; i < lstRecs.size(); i++) {
-						if(cancelMonitor != null){
-							if(cancelMonitor.isCanceled())
-								return;
-						}
-						idRec = (Integer) lstRecs.get(i);
-						index = idRec.intValue();
-						if(getDissolvedGeometries().get(index))
-							continue;
-						
-						IGeometry geom = va.getShape(index);
-						if (geom == null)// azabala
-							continue;
-						if (trans != null) {
-							if (bMustClone)
-								geom = geom.cloneGeometry();
-							geom.reProject(trans);
-						}
-						if (geom.intersects(query))
-							visitor.visit(geom, index);
-					}// for
-					va.stop();
+				for (int i = 0; i < lstRecs.size(); i++) {
+					if (cancelMonitor != null) {
+						if (cancelMonitor.isCanceled())
+							return;
+					}
+					idRec = (Integer) lstRecs.get(i);
+					index = idRec.intValue();
+					if (getDissolvedGeometries().get(index))
+						continue;
+
+					IGeometry geom = va.getShape(index);
+					if (geom == null)// azabala
+						continue;
+					if (trans != null) {
+						if (bMustClone)
+							geom = geom.cloneGeometry();
+						geom.reProject(trans);
+					}
+					if (geom.intersects(query))
+						visitor.visit(geom, index);
+				}// for
+				va.stop();
 			}// if visitor.start
-			
+
 			visitor.stop(dissolvedLayer);
 		} catch (StartVisitorException e) {
 			// TODO Auto-generated catch block
@@ -325,9 +335,5 @@ public class AdjacencyDissolveVisitor extends DissolveVisitor {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	
-	
 
 }

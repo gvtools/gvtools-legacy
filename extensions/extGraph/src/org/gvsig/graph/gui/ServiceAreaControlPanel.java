@@ -162,7 +162,6 @@ import java.awt.geom.Point2D;
 import java.util.Arrays;
 import java.util.Random;
 
-import javax.swing.CellEditor;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -190,7 +189,6 @@ import org.gvsig.graph.solvers.ServiceAreaExtractor2;
 import org.gvsig.gui.beans.swing.GridBagLayoutPanel;
 
 import com.hardcode.gdbms.engine.values.DoubleValue;
-import com.hardcode.gdbms.engine.values.ValueFactory;
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.MapContext;
@@ -203,7 +201,8 @@ import com.iver.cit.gvsig.fmap.rendering.IVectorialUniqueValueLegend;
 import com.iver.cit.gvsig.fmap.rendering.LegendFactory;
 
 public class ServiceAreaControlPanel extends RouteControlPanel {
-	private static Logger logger = Logger.getLogger(ServiceAreaControlPanel.class.getName());
+	private static Logger logger = Logger
+			.getLogger(ServiceAreaControlPanel.class.getName());
 
 	WindowInfo wi;
 
@@ -212,6 +211,7 @@ public class ServiceAreaControlPanel extends RouteControlPanel {
 	private JCheckBox chkCompactArea;
 
 	private JButton btnCalculateServiceArea;
+
 	private class MyTableModel extends AbstractTableModel {
 		private String[] colName2;
 
@@ -231,15 +231,14 @@ public class ServiceAreaControlPanel extends RouteControlPanel {
 			case 1:
 				return flag.getDescription();
 			case 2:
-				return flag.getProperties().get("service_area_costs");				
+				return flag.getProperties().get("service_area_costs");
 			}
 
 			return null;
 		}
 
 		public Class getColumnClass(int columnIndex) {
-			switch (columnIndex)
-			{
+			switch (columnIndex) {
 			case 0:
 				return Boolean.class;
 			case 1:
@@ -253,10 +252,9 @@ public class ServiceAreaControlPanel extends RouteControlPanel {
 		public String getColumnName(int column) {
 			if (colName2 == null)
 				colName2 = new String[] {
-					PluginServices.getText(this, "enable"),
-					PluginServices.getText(this, "stage"),
-					PluginServices.getText(this, "costs"),
-					};
+						PluginServices.getText(this, "enable"),
+						PluginServices.getText(this, "stage"),
+						PluginServices.getText(this, "costs"), };
 			return colName2[column];
 		}
 
@@ -267,8 +265,7 @@ public class ServiceAreaControlPanel extends RouteControlPanel {
 
 		public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 			GvFlag flag = (GvFlag) _getFlags().get(rowIndex);
-			switch (columnIndex)
-			{
+			switch (columnIndex) {
 			case 0:
 				Boolean bAux = (Boolean) aValue;
 				flag.setEnabled(bAux.booleanValue());
@@ -279,8 +276,9 @@ public class ServiceAreaControlPanel extends RouteControlPanel {
 				String strAux = (String) aValue;
 				flag.setDescription(strAux);
 				return;
-			case 2: 
-				flag.getProperties().setProperty("service_area_costs", (String) aValue);
+			case 2:
+				flag.getProperties().setProperty("service_area_costs",
+						(String) aValue);
 				return;
 
 			}
@@ -288,22 +286,20 @@ public class ServiceAreaControlPanel extends RouteControlPanel {
 		}
 
 	}
-	
-
 
 	/**
 	 * This method initializes
-	 *
+	 * 
 	 */
 	public ServiceAreaControlPanel(Network network) {
 		super(network);
-//		initialize();
+		// initialize();
 	}
-
 
 	@Override
 	protected void initialize() {
-		btnCalculateServiceArea = new JButton(PluginServices.getText(null, "Calculate_Service_Areas"));
+		btnCalculateServiceArea = new JButton(PluginServices.getText(null,
+				"Calculate_Service_Areas"));
 		btnCalculateServiceArea.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -314,7 +310,7 @@ public class ServiceAreaControlPanel extends RouteControlPanel {
 					e1.printStackTrace();
 				}
 			}
-			
+
 		});
 		btnCalculateServiceArea.setEnabled(false);
 		panelButtonsEast.add(btnCalculateServiceArea);
@@ -322,7 +318,7 @@ public class ServiceAreaControlPanel extends RouteControlPanel {
 		borderLayout.setHgap(10);
 		borderLayout.setVgap(10);
 		JPanel cont = new JPanel(borderLayout);
-//		cont.setPreferredSize(new Dimension(490, 320));
+		// cont.setPreferredSize(new Dimension(490, 320));
 		this.setPreferredSize(new Dimension(460, 280));
 		cont.add(getWestPanel(), BorderLayout.CENTER);
 		cont.add(getEastPanel(), BorderLayout.EAST);
@@ -334,29 +330,27 @@ public class ServiceAreaControlPanel extends RouteControlPanel {
 		getChkReturnToOrigin().setVisible(false);
 		getChkTSP().setVisible(false);
 		lblCost.setVisible(false);
-		
+
 	}
-	
+
 	@Override
 	public void refresh() {
 		super.refresh();
 		int numActiveFlags = 0;
-		for (int i=0; i < _getFlags().size(); i++) {
+		for (int i = 0; i < _getFlags().size(); i++) {
 			GvFlag f = (GvFlag) _getFlags().get(i);
 			if (f.isEnabled())
 				numActiveFlags++;
 		}
 		if (numActiveFlags > 0) {
 			btnCalculateServiceArea.setEnabled(true);
-		}
-		else
+		} else
 			btnCalculateServiceArea.setEnabled(false);
 	}
 
-
 	/**
 	 * This method initializes eastPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	protected JPanel getEastPanel() {
@@ -364,20 +358,21 @@ public class ServiceAreaControlPanel extends RouteControlPanel {
 			GridLayout layout = new GridLayout();
 			layout.setColumns(1);
 			layout.setVgap(5);
-			
+
 			panelButtonsEast.add(getBtnLoadStage());
 			panelButtonsEast.add(getBtnSaveStage());
-//			panelButtonsEast.add(getBtnSaveRoute());
+			// panelButtonsEast.add(getBtnSaveRoute());
 			panelButtonsEast.add(getBtnCenterOnFlag());
-			
+
 			panelButtonsEast.add(getChkCompactArea());
-			
-//			panelButtonsEast.add(getBtnSetVelocities());
-//			panelButtonsEast.add(getChkTSP());
-//			panelButtonsEast.add(getChkReturnToOrigin());
-			panelButtonsEast.add(new JLabel(PluginServices.getText(this, "tolerance") + ":"));
+
+			// panelButtonsEast.add(getBtnSetVelocities());
+			// panelButtonsEast.add(getChkTSP());
+			// panelButtonsEast.add(getChkReturnToOrigin());
+			panelButtonsEast.add(new JLabel(PluginServices.getText(this,
+					"tolerance") + ":"));
 			panelButtonsEast.add(getTxtTolerance());
-			
+
 			layout.setRows(panelButtonsEast.getComponentCount());
 			panelButtonsEast.setLayout(layout);
 			eastPanel = new GridBagLayoutPanel();
@@ -386,23 +381,24 @@ public class ServiceAreaControlPanel extends RouteControlPanel {
 		return eastPanel;
 	}
 
-
 	public JCheckBox getChkCompactArea() {
 		if (chkCompactArea == null) {
 			chkCompactArea = new JCheckBox();
-			chkCompactArea.setText(PluginServices.getText(this,
-					"compact_area"));
+			chkCompactArea
+					.setText(PluginServices.getText(this, "compact_area"));
 		}
 		return chkCompactArea;
 
 	}
 
-
 	public void calculateServiceAreas(Network net) throws BaseException {
 		if (getTblStages().getCellEditor() != null) {
-			DefaultCellEditor cellEditor = (DefaultCellEditor) getTblStages().getCellEditor();
+			DefaultCellEditor cellEditor = (DefaultCellEditor) getTblStages()
+					.getCellEditor();
 			cellEditor.stopCellEditing();
-			// getTblStages().setValueAt(cellEditor.getCellEditorValue(), getTblStages().getEditingRow(), getTblStages().getEditingColumn());
+			// getTblStages().setValueAt(cellEditor.getCellEditorValue(),
+			// getTblStages().getEditingRow(),
+			// getTblStages().getEditingColumn());
 		}
 		OneToManySolver solver = new OneToManySolver();
 		solver.setNetwork(net);
@@ -415,54 +411,58 @@ public class ServiceAreaControlPanel extends RouteControlPanel {
 		for (int i = 0; i < flags.length; i++) {
 			String aux = (String) getTableModel().getValueAt(i, 2);
 			if (aux == null) {
-				JOptionPane.showMessageDialog((Component) PluginServices.getMainFrame(), 
-						PluginServices.getText(null, "please_introduce_some_costs") + ":" + 
-						PluginServices.getText(null, "Line") + " " + (i+1));
+				JOptionPane.showMessageDialog(
+						(Component) PluginServices.getMainFrame(),
+						PluginServices.getText(null,
+								"please_introduce_some_costs")
+								+ ":"
+								+ PluginServices.getText(null, "Line")
+								+ " "
+								+ (i + 1));
 				return;
 			}
 			double[] costs = null;
 			try {
 				costs = NetworkUtils.string2doubleArray(aux, ",");
 				Arrays.sort(costs);
-			}
-			catch (NumberFormatException e) {
-				JOptionPane.showMessageDialog((Component) PluginServices.getMainFrame(),
-						PluginServices.getText(null, "please_introduce_some_costs"));
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog((Component) PluginServices
+						.getMainFrame(), PluginServices.getText(null,
+						"please_introduce_some_costs"));
 				return;
 			}
-			
-			
+
 			solver.setSourceFlag(flags[i]);
-			long t1 = System.currentTimeMillis();			
+			long t1 = System.currentTimeMillis();
 			solver.setExploreAllNetwork(true);
-			for (int j=costs.length-1; j>= 0; j--) {
-				solver.setMaxCost(costs[j]*1.2);
+			for (int j = costs.length - 1; j >= 0; j--) {
+				solver.setMaxCost(costs[j] * 1.2);
 				extractor.setIdFlag(i);
 				double[] oneOnly = new double[1];
 				oneOnly[0] = costs[j];
-				extractor.setCosts(oneOnly);			
-				extractor.setDoCompactArea(getChkCompactArea().isSelected());			
+				extractor.setCosts(oneOnly);
+				extractor.setDoCompactArea(getChkCompactArea().isSelected());
 				solver.calculate();
 				extractor.writeServiceArea();
-//				FLyrVect lyrPoints= extractor.getBorderPoints();
-//				lyrPoints.setProjection(map.getProjection());
-//				map.getLayers().addLayer(lyrPoints);
+				// FLyrVect lyrPoints= extractor.getBorderPoints();
+				// lyrPoints.setProjection(map.getProjection());
+				// map.getLayers().addLayer(lyrPoints);
 				extractor.reset();
 			} // j
 			long t2 = System.currentTimeMillis();
-			System.out.println("Punto " + i + " de "
-					+ flags.length + ". " + (t2 - t1)
-					+ " msecs.");
-						
+			System.out.println("Punto " + i + " de " + flags.length + ". "
+					+ (t2 - t1) + " msecs.");
+
 		}
 		extractor.closeFiles();
 
 		FLyrVect lyrPol = extractor.getPolygonLayer();
 		lyrPol.setCrs(map.getCrs());
-		IVectorialUniqueValueLegend defaultLegend = LegendFactory.createVectorialUniqueValueLegend(FShape.POLYGON);
-		defaultLegend.setClassifyingFieldNames(new String[] {"COST"} );
-		ISymbol myDefaultSymbol = SymbologyFactory.
-			createDefaultSymbolByShapeType(FShape.POLYGON);
+		IVectorialUniqueValueLegend defaultLegend = LegendFactory
+				.createVectorialUniqueValueLegend(FShape.POLYGON);
+		defaultLegend.setClassifyingFieldNames(new String[] { "COST" });
+		ISymbol myDefaultSymbol = SymbologyFactory
+				.createDefaultSymbolByShapeType(FShape.POLYGON);
 
 		defaultLegend.setDefaultSymbol(myDefaultSymbol);
 
@@ -472,13 +472,13 @@ public class ServiceAreaControlPanel extends RouteControlPanel {
 		int iField = lyrPol.getRecordset().getFieldIndexByName("COST");
 
 		for (int j = 0; j < lyrPol.getRecordset().getRowCount(); j++) {
-			clave = (DoubleValue) lyrPol.getRecordset().getFieldValue(j, iField);
+			clave = (DoubleValue) lyrPol.getRecordset()
+					.getFieldValue(j, iField);
 			if (defaultLegend.getSymbolByValue(clave) == null) {
-				theSymbol =	(IFillSymbol) SymbologyFactory.
-					createDefaultSymbolByShapeType(FShape.POLYGON);
+				theSymbol = (IFillSymbol) SymbologyFactory
+						.createDefaultSymbolByShapeType(FShape.POLYGON);
 				theSymbol.setDescription(clave.toString());
-				Color newColor = new Color(rnd.nextFloat(), 
-						rnd.nextFloat(),
+				Color newColor = new Color(rnd.nextFloat(), rnd.nextFloat(),
 						rnd.nextFloat(), 0.7f);
 				theSymbol.setFillColor(newColor);
 
@@ -487,7 +487,7 @@ public class ServiceAreaControlPanel extends RouteControlPanel {
 
 		} // for
 		lyrPol.setLegend(defaultLegend);
-		
+
 		FLyrVect lyrLine = extractor.getLineLayer();
 		lyrLine.setCrs(map.getCrs());
 
@@ -495,9 +495,9 @@ public class ServiceAreaControlPanel extends RouteControlPanel {
 		map.beginAtomicEvent();
 		map.getLayers().addLayer(lyrPol);
 		map.getLayers().addLayer(lyrLine);
-		
+
 		map.endAtomicEvent();
-		
+
 	}
 
 	public Object getWindowModel() {
@@ -507,34 +507,34 @@ public class ServiceAreaControlPanel extends RouteControlPanel {
 	public WindowInfo getWindowInfo() {
 		if (wi == null) {
 			wi = new WindowInfo(WindowInfo.MODELESSDIALOG
-				    | WindowInfo.MAXIMIZABLE
-					| WindowInfo.ICONIFIABLE | WindowInfo.PALETTE);
+					| WindowInfo.MAXIMIZABLE | WindowInfo.ICONIFIABLE
+					| WindowInfo.PALETTE);
 			wi.setWidth(600);
 			wi.setHeight((int) this.getPreferredSize().getHeight());
-			wi.setTitle(PluginServices.getText(this, "service_area_control_panel"));
+			wi.setTitle(PluginServices.getText(this,
+					"service_area_control_panel"));
 		}
 		return wi;
 	}
 
-	public Object getWindowProfile(){
+	public Object getWindowProfile() {
 		return WindowInfo.TOOL_PROFILE;
 	}
-	
+
 	protected JPanel getWestPanel() {
 		if (westPanel == null) {
 			westPanel = new JPanel(new BorderLayout(5, 5));
 			lblCost = new JLabel();
 			lblCost.setFont(lblCost.getFont().deriveFont(Font.BOLD));
 			GridBagLayoutPanel aux = new GridBagLayoutPanel();
-//			aux.addComponent(PluginServices.getText(this, "total_route_cost")
-//					+ ":", lblCost);
+			// aux.addComponent(PluginServices.getText(this, "total_route_cost")
+			// + ":", lblCost);
 			aux.addComponent(getScrlStages());
 
 			westPanel.add(aux);
 		}
 		return westPanel;
 	}
-
 
 	protected JScrollPane getScrlStages() {
 		if (scrlStages == null) {
@@ -545,10 +545,9 @@ public class ServiceAreaControlPanel extends RouteControlPanel {
 		return scrlStages;
 	}
 
-
 	/**
 	 * This method initializes tblStages
-	 *
+	 * 
 	 * @return javax.swing.JTable
 	 */
 	protected JTable getTblStages() {
@@ -560,8 +559,9 @@ public class ServiceAreaControlPanel extends RouteControlPanel {
 			TableColumnModel cm = tblStages.getColumnModel();
 
 			int tablePreferredWidth = 400;
-			int colSize = (int) (1.2 * tblStages.getFontMetrics(tblStages.getFont())
-					.stringWidth(tblStages.getModel().getColumnName(0)));
+			int colSize = (int) (1.2 * tblStages.getFontMetrics(
+					tblStages.getFont()).stringWidth(
+					tblStages.getModel().getColumnName(0)));
 			cm.getColumn(0).setPreferredWidth((int) (colSize));
 			cm.getColumn(0).setMinWidth((int) (colSize));
 			cm.getColumn(0).setMaxWidth((int) (colSize));
@@ -574,40 +574,38 @@ public class ServiceAreaControlPanel extends RouteControlPanel {
 			// Ask to be notified of selection changes.
 			ListSelectionModel rowSM = tblStages.getSelectionModel();
 			rowSM.addListSelectionListener(new ListSelectionListener() {
-			    public void valueChanged(ListSelectionEvent e) {
-			        //Ignore extra messages.
-			        if (e.getValueIsAdjusting())
-			        	return;
+				public void valueChanged(ListSelectionEvent e) {
+					// Ignore extra messages.
+					if (e.getValueIsAdjusting())
+						return;
 
-			        ListSelectionModel lsm =
-			            (ListSelectionModel)e.getSource();
-		        	getBtnCenterOnFlag().setEnabled(!lsm.isSelectionEmpty());
+					ListSelectionModel lsm = (ListSelectionModel) e.getSource();
+					getBtnCenterOnFlag().setEnabled(!lsm.isSelectionEmpty());
 					int[] selected = tblStages.getSelectedRows();
 					if (selected.length == 0)
 						return;
 					GvFlag flag = (GvFlag) _getFlags().get(selected[0]);
 
-		        	Point2D p = flag.getOriginalPoint();
-		        	mapCtrl.repaint(); // borramos el de antes
-		        	NetworkUtils.flashPoint(mapCtrl, p.getX(), p.getY());
-		        	
-			    }
-			});
+					Point2D p = flag.getOriginalPoint();
+					mapCtrl.repaint(); // borramos el de antes
+					NetworkUtils.flashPoint(mapCtrl, p.getX(), p.getY());
 
-			tblStages.getModel().addTableModelListener(new TableModelListener() {
-
-				public void tableChanged(TableModelEvent e) {
-					System.out.println("Table model changed");
-//					getBtnCenterOnFlag().setEnabled(false);
 				}
-
 			});
 
+			tblStages.getModel().addTableModelListener(
+					new TableModelListener() {
+
+						public void tableChanged(TableModelEvent e) {
+							System.out.println("Table model changed");
+							// getBtnCenterOnFlag().setEnabled(false);
+						}
+
+					});
 
 		}
 		return tblStages;
 	}
-
 
 	@Override
 	protected TableModel getTableModel() {

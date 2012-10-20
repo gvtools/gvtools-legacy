@@ -85,15 +85,14 @@ import com.iver.utiles.extensionPoints.ExtensionPoint;
 import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
-
 /**
- * Clase principal del proyecto donde se puede operar para crear
- * cualquier tipo de documento.
- *
+ * Clase principal del proyecto donde se puede operar para crear cualquier tipo
+ * de documento.
+ * 
  * @author Vicente Caballero Navarro
  */
 public class ProjectWindow extends JPanel implements PropertyChangeListener,
-	IWindow, SingletonWindow {
+		IWindow, SingletonWindow {
 	private JPanel jPanel = null;
 	private JRadioButton[] btnsDocuments = null;
 	private ButtonGroup grupo = new ButtonGroup();
@@ -116,7 +115,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 	private JButton btnExportar = null;
 	private JButton btnEditar = null;
 	// The properties of the Project Manager window (size, position, etc):
-	private WindowInfo m_viewInfo=null;
+	private WindowInfo m_viewInfo = null;
 
 	/** Proyecto representado en la vista */
 	private Project p;
@@ -127,8 +126,9 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 	/**
 	 * This is the default constructor
-	 *
-	 * @param project Extension
+	 * 
+	 * @param project
+	 *            Extension
 	 */
 	public ProjectWindow() {
 		super();
@@ -145,8 +145,9 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 	/**
 	 * Asigna el proyecto a la ventana
-	 *
-	 * @param p Proyecto con el que se operará a través de este diálogo
+	 * 
+	 * @param p
+	 *            Proyecto con el que se operará a través de este diálogo
 	 */
 	public void setProject(Project p) {
 		this.p = p;
@@ -155,18 +156,17 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 	}
 
 	/**
-	 * Activa los botones de la botonera del medio o los desactiva en función
-	 * de que esté seleccionado o no un elemento de proyecto en la lista del
-	 * medio
+	 * Activa los botones de la botonera del medio o los desactiva en función de
+	 * que esté seleccionado o no un elemento de proyecto en la lista del medio
 	 */
 	private void activarBotones() {
 		if (lstDocs.getSelectedIndex() != -1) {
 			btnAbrir.setEnabled(true);
 			btnBorrar.setEnabled(true);
-			if (lstDocs.getSelectedIndices().length==1) {
+			if (lstDocs.getSelectedIndices().length == 1) {
 				btnRenombrar.setEnabled(true);
 				btnPropiedades.setEnabled(true);
-			}else {
+			} else {
 				btnRenombrar.setEnabled(false);
 				btnPropiedades.setEnabled(false);
 			}
@@ -184,49 +184,53 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 	 */
 	private void refreshList() {
 		if (p != null) {
-			DefaultListModel model=null;
-			String tituloMarco = PluginServices.getText(this, "documentos_existentes");
+			DefaultListModel model = null;
+			String tituloMarco = PluginServices.getText(this,
+					"documentos_existentes");
 
-			String doc=getDocumentSelected();
+			String doc = getDocumentSelected();
 			model = new DefaultListModel(p.getDocumentsByType(doc));
-			tituloMarco=getDocumentSelectedName();
+			tituloMarco = getDocumentSelectedName();
 
 			lstDocs.setModel(model);
-			((TitledBorder)getJPanel1().getBorder()).setTitle(tituloMarco);
+			((TitledBorder) getJPanel1().getBorder()).setTitle(tituloMarco);
 			getJPanel1().repaint(1);
 			activarBotones();
 		}
 	}
+
 	/**
-	 * Devuelve el nombre del tipo de documento
-	 * activo (el mismo que ProjectDocumentFactory.getRegisterName)
-	 *
-	 *
+	 * Devuelve el nombre del tipo de documento activo (el mismo que
+	 * ProjectDocumentFactory.getRegisterName)
+	 * 
+	 * 
 	 * @return
 	 */
 
 	public String getDocumentSelected() {
-		JRadioButton btnSelected=null;
-		for (int i=0;i<btnsDocuments.length;i++) {
+		JRadioButton btnSelected = null;
+		for (int i = 0; i < btnsDocuments.length; i++) {
 			if (btnsDocuments[i].isSelected()) {
-				btnSelected=btnsDocuments[i];
+				btnSelected = btnsDocuments[i];
 				return btnSelected.getName();
 			}
 		}
 
 		return null;
 	}
+
 	private String getDocumentSelectedName() {
-		JRadioButton btnSelected=null;
-		for (int i=0;i<btnsDocuments.length;i++) {
+		JRadioButton btnSelected = null;
+		for (int i = 0; i < btnsDocuments.length; i++) {
 			if (btnsDocuments[i].isSelected()) {
-				btnSelected=btnsDocuments[i];
+				btnSelected = btnsDocuments[i];
 				return btnSelected.getText();
 			}
 		}
 
 		return null;
 	}
+
 	/**
 	 * Refresca las etiquetas con la información del proyecto
 	 */
@@ -266,47 +270,51 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1.0;
 		c.weighty = 0;
-		c.gridy=0;
+		c.gridy = 0;
 		c.insets = new Insets(2, 5, 2, 5);
 
-		layout.setConstraints(getJPanel(),c);
+		layout.setConstraints(getJPanel(), c);
 		add(getJPanel(), null);
 
 		c.fill = GridBagConstraints.BOTH;
-		c.gridy=1;
+		c.gridy = 1;
 		c.weightx = 1.0;
 		c.weighty = 1.0;
-		layout.setConstraints(getJPanel1(),c);
+		layout.setConstraints(getJPanel1(), c);
 		add(getJPanel1(), null);
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 0;
 		c.weighty = 0;
-		c.gridy=2;
-		layout.setConstraints(getJPanel3(),c);
+		c.gridy = 2;
+		layout.setConstraints(getJPanel3(), c);
 		add(getJPanel3(), null);
 
 		this.setSize(430, 475);
 		this.setPreferredSize(new java.awt.Dimension(430, 489));
 		this.setMinimumSize(new java.awt.Dimension(430, 489));
 		this.add(getJScrollPane1(), gridBagConstraints);
-		for (int i=0;i<btnsDocuments.length;i++) {
+		for (int i = 0; i < btnsDocuments.length; i++) {
 			grupo.add(btnsDocuments[i]);
 		}
-		if (btnsDocuments.length>0)
+		if (btnsDocuments.length > 0)
 			btnsDocuments[0].setSelected(true);
 	}
-	private ProjectDocument createDocument(String s) {
-		ExtensionPoints extensionPoints =
-			ExtensionPointsSingleton.getInstance();
 
-		ExtensionPoint extensionPoint =(ExtensionPoint)extensionPoints.get("Documents");
+	private ProjectDocument createDocument(String s) {
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+
+		ExtensionPoint extensionPoint = (ExtensionPoint) extensionPoints
+				.get("Documents");
 		Iterator iterator = extensionPoint.keySet().iterator();
 		while (iterator.hasNext()) {
 			try {
-				ProjectDocumentFactory documentFactory = (ProjectDocumentFactory)extensionPoint.create((String)iterator.next());
+				ProjectDocumentFactory documentFactory = (ProjectDocumentFactory) extensionPoint
+						.create((String) iterator.next());
 				if (documentFactory.getRegisterName().equals(s)) {
-					ProjectDocument document=documentFactory.createFromGUI(p);
-					if (document == null) return null;
+					ProjectDocument document = documentFactory.createFromGUI(p);
+					if (document == null)
+						return null;
 					document.setProjectDocumentFactory(documentFactory);
 					p.setModified(true);
 					return document;
@@ -321,15 +329,17 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 		}
 		return null;
 	}
+
 	/**
 	 * Crea un nuevo project element
-	 *
-	 * @throws Exception DOCUMENT ME!
+	 * 
+	 * @throws Exception
+	 *             DOCUMENT ME!
 	 */
 	private void newProjectDocument() throws Exception {
-		String s=getDocumentSelected();
-		ProjectDocument doc=createDocument(s);
-		if (doc!=null) {
+		String s = getDocumentSelected();
+		ProjectDocument doc = createDocument(s);
+		if (doc != null) {
 			p.addDocument(doc);
 			p.setModified(true);
 		}
@@ -340,17 +350,19 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 	 */
 	private void abrir() {
 		int[] indexes = lstDocs.getSelectedIndices();
-		for (int i=indexes.length-1;i>=0;i--) {
-			int index=indexes[i];
+		for (int i = indexes.length - 1; i >= 0; i--) {
+			int index = indexes[i];
 			if (index == -1) {
 				return;
 			}
-			String s=getDocumentSelected();
-			ArrayList documents=p.getDocumentsByType(s);
-			ProjectDocument doc=(ProjectDocument)documents.get(index);
-			IWindow window=doc.createWindow();
-			if (window == null){
-				JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(), PluginServices.getText(this, "error_opening_the_document"));
+			String s = getDocumentSelected();
+			ArrayList documents = p.getDocumentsByType(s);
+			ProjectDocument doc = (ProjectDocument) documents.get(index);
+			IWindow window = doc.createWindow();
+			if (window == null) {
+				JOptionPane.showMessageDialog((Component) PluginServices
+						.getMainFrame(), PluginServices.getText(this,
+						"error_opening_the_document"));
 				return;
 			}
 			PluginServices.getMDIManager().addWindow(window);
@@ -367,12 +379,13 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 		if (index == -1) {
 			return;
 		}
-		String s=getDocumentSelected();
-		ArrayList documents=p.getDocumentsByType(s);
-		ProjectDocument doc=(ProjectDocument)documents.get(index);
+		String s = getDocumentSelected();
+		ArrayList documents = p.getDocumentsByType(s);
+		ProjectDocument doc = (ProjectDocument) documents.get(index);
 
 		if (doc.isLocked()) {
-			JOptionPane.showMessageDialog(this,	PluginServices.getText(this, "locked_element_it_cannot_be_renamed"));
+			JOptionPane.showMessageDialog(this, PluginServices.getText(this,
+					"locked_element_it_cannot_be_renamed"));
 			return;
 		}
 
@@ -381,8 +394,9 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 		pane.setMessageType(JOptionPane.QUESTION_MESSAGE);
 		pane.setWantsInput(true);
 		pane.setInitialSelectionValue(doc.getName());
-        pane.setInputValue(doc.getName());
-		JDialog dlg = pane.createDialog((Component) PluginServices.getMainFrame(),
+		pane.setInputValue(doc.getName());
+		JDialog dlg = pane.createDialog(
+				(Component) PluginServices.getMainFrame(),
 				PluginServices.getText(this, "renombrar"));
 		dlg.setModal(true);
 		dlg.show();
@@ -393,14 +407,14 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 			return;
 		}
 
-		if (nuevoNombre == null) {
-			return;
-		}
-
-		for (int i=0; i<lstDocs.getModel().getSize(); i++){
-			if (i==index) continue;
-			if (((ProjectDocument)lstDocs.getModel().getElementAt(i)).getName().equals(nuevoNombre)){
-				JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(), PluginServices.getText(this, "elemento_ya_existe"));
+		for (int i = 0; i < lstDocs.getModel().getSize(); i++) {
+			if (i == index)
+				continue;
+			if (((ProjectDocument) lstDocs.getModel().getElementAt(i))
+					.getName().equals(nuevoNombre)) {
+				JOptionPane.showMessageDialog(
+						(Component) PluginServices.getMainFrame(),
+						PluginServices.getText(this, "elemento_ya_existe"));
 				return;
 			}
 
@@ -415,20 +429,22 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 	 * Borra un project element
 	 */
 	private void borrar() {
-		int res = JOptionPane.showConfirmDialog((Component) PluginServices.getMainFrame(),
+		int res = JOptionPane.showConfirmDialog(
+				(Component) PluginServices.getMainFrame(),
 				PluginServices.getText(this, "confirmar_borrar"),
 				PluginServices.getText(this, "borrar"),
 				JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
 		if (res == JOptionPane.YES_OPTION) {
 			int[] indexes = lstDocs.getSelectedIndices();
-			for (int i=indexes.length-1;i>=0;i--) {
-				int index=indexes[i];
-				String s=getDocumentSelected();
-				ArrayList documents=p.getDocumentsByType(s);
-				ProjectDocument doc=(ProjectDocument)documents.get(index);
+			for (int i = indexes.length - 1; i >= 0; i--) {
+				int index = indexes[i];
+				String s = getDocumentSelected();
+				ArrayList documents = p.getDocumentsByType(s);
+				ProjectDocument doc = (ProjectDocument) documents.get(index);
 				if (doc.isLocked()) {
-					JOptionPane.showMessageDialog(this,	PluginServices.getText(this, "locked_element_it_cannot_be_deleted"));
+					JOptionPane.showMessageDialog(this, PluginServices.getText(
+							this, "locked_element_it_cannot_be_deleted"));
 					return;
 				}
 				PluginServices.getMDIManager().closeSingletonWindow(doc);
@@ -450,14 +466,15 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 		}
 
 		IWindow dlg = null;
-		String s=getDocumentSelected();
-		ArrayList documents=p.getDocumentsByType(s);
-		ProjectDocument doc=(ProjectDocument) documents.get(index);
+		String s = getDocumentSelected();
+		ArrayList documents = p.getDocumentsByType(s);
+		ProjectDocument doc = (ProjectDocument) documents.get(index);
 		if (doc.isLocked()) {
-			JOptionPane.showMessageDialog(this,	PluginServices.getText(this, "locked_element"));
+			JOptionPane.showMessageDialog(this,
+					PluginServices.getText(this, "locked_element"));
 			return;
 		}
-		dlg=doc.getProperties();
+		dlg = doc.getProperties();
 		PluginServices.getMDIManager().addWindow(dlg);
 
 		refreshControls();
@@ -467,7 +484,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return JPanel
 	 */
 	private JPanel getJPanel() {
@@ -477,18 +494,18 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 			java.awt.FlowLayout layFlowLayout1 = new java.awt.FlowLayout();
 			layFlowLayout1.setHgap(15);
 			jPanel.setLayout(layFlowLayout1);
-			JRadioButton[] btns=getBtnDocuments();
-			for (int i=0;i<btns.length;i++) {
-				jPanel.add(btns[i],null);
+			JRadioButton[] btns = getBtnDocuments();
+			for (int i = 0; i < btns.length; i++) {
+				jPanel.add(btns[i], null);
 			}
 			jPanel.setName("tipoDocPanel");
-				
+
 			/*
-			jPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, PluginServices.getText(this, "tipos_de_documentos"),
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
-			*/
+			 * jPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+			 * null, PluginServices.getText(this, "tipos_de_documentos"),
+			 * javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+			 * javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			 */
 		}
 
 		return jPanel;
@@ -496,22 +513,24 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 	/**
 	 * This method initializes btnVistas
-	 *
+	 * 
 	 * @return JRadioButton
 	 */
 	private JRadioButton[] getBtnDocuments() {
 		if (btnsDocuments == null) {
-			ExtensionPoints extensionPoints =
-				ExtensionPointsSingleton.getInstance();
+			ExtensionPoints extensionPoints = ExtensionPointsSingleton
+					.getInstance();
 
-			ExtensionPoint extensionPoint =(ExtensionPoint)extensionPoints.get("Documents");
-			ArrayList btns=new ArrayList();
-			ArrayList priorities=new ArrayList();
+			ExtensionPoint extensionPoint = (ExtensionPoint) extensionPoints
+					.get("Documents");
+			ArrayList btns = new ArrayList();
+			ArrayList priorities = new ArrayList();
 			Iterator iterator = extensionPoint.keySet().iterator();
 			while (iterator.hasNext()) {
 				try {
-					ProjectDocumentFactory documentFactory = (ProjectDocumentFactory)extensionPoint.create((String)iterator.next());
-					JRadioButton rb=new JRadioButton();
+					ProjectDocumentFactory documentFactory = (ProjectDocumentFactory) extensionPoint
+							.create((String) iterator.next());
+					JRadioButton rb = new JRadioButton();
 
 					rb.setIcon(documentFactory.getButtonIcon());
 					rb.setSelectedIcon(documentFactory.getSelectedButtonIcon());
@@ -520,19 +539,19 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 					rb.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 					rb.setName(documentFactory.getRegisterName());
 					rb.addChangeListener(new javax.swing.event.ChangeListener() {
-							public void stateChanged(javax.swing.event.ChangeEvent e) {
-								refreshList();
-							}
-						});
+						public void stateChanged(javax.swing.event.ChangeEvent e) {
+							refreshList();
+						}
+					});
 					// place in the right order according to list priority
 					int priority = documentFactory.getListPriority();
 					int pos;
-					for (pos=0; pos<btns.size(); pos++) {
-					    if (((Integer)(priorities.get(pos))).intValue() > priority) {
-					    	priorities.add(pos, new Integer(priority));
-					    	btns.add(pos, rb);
-					    	break;
-					    }
+					for (pos = 0; pos < btns.size(); pos++) {
+						if (((Integer) (priorities.get(pos))).intValue() > priority) {
+							priorities.add(pos, new Integer(priority));
+							btns.add(pos, rb);
+							break;
+						}
 					}
 					if (pos >= btns.size()) {
 						priorities.add(new Integer(priority));
@@ -548,8 +567,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 				}
 			}
 
-
-			btnsDocuments=(JRadioButton[])btns.toArray(new JRadioButton[0]);
+			btnsDocuments = (JRadioButton[]) btns.toArray(new JRadioButton[0]);
 
 		}
 
@@ -558,7 +576,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return JPanel
 	 */
 	private JPanel getJPanel1() {
@@ -572,29 +590,29 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 			c.insets = new Insets(2, 5, 2, 5);
 			c.anchor = GridBagConstraints.WEST;
 			c.fill = GridBagConstraints.BOTH;
-			c.weightx= 1.0;
+			c.weightx = 1.0;
 			c.weighty = 1.0;
-			layout2.setConstraints(getJScrollPane(),c);
+			layout2.setConstraints(getJScrollPane(), c);
 			jPanel1.add(getJScrollPane());
 
 			c.anchor = GridBagConstraints.EAST;
 
-
 			c.fill = GridBagConstraints.NONE;
-			c.weightx= 0;
+			c.weightx = 0;
 			c.weighty = 0;
-			layout2.setConstraints(getJPanel2(),c);
+			layout2.setConstraints(getJPanel2(), c);
 			jPanel1.add(getJPanel2());
 
-			jPanel1.setPreferredSize(new java.awt.Dimension(430,170));			
-			jPanel1.setMinimumSize(new java.awt.Dimension(430,160));
-			
-			/*jPanel1.setMinimumSize(new java.awt.Dimension(430,145));*/
+			jPanel1.setPreferredSize(new java.awt.Dimension(430, 170));
+			jPanel1.setMinimumSize(new java.awt.Dimension(430, 160));
+
+			/* jPanel1.setMinimumSize(new java.awt.Dimension(430,145)); */
 			jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(
 					null,
 					PluginServices.getText(this, "documentos_existentes"),
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					null));
 		}
 
 		return jPanel1;
@@ -602,61 +620,65 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 	/**
 	 * This method initializes lstDocs
-	 *
+	 * 
 	 * @return JList
 	 */
 	private JList getLstDocs() {
 		if (lstDocs == null) {
 			lstDocs = new JList();
 			lstDocs.addMouseListener(new java.awt.event.MouseAdapter() {
-					public ProjectDocument[] getSelecteds() {
-						if (lstDocs.getSelectedIndex() < 0) {
-							return new ProjectDocument[0];
-						}
-						Object[] seleteds = lstDocs.getSelectedValues();
-						ProjectDocument[] returnValue = new ProjectDocument[seleteds.length];
-						System.arraycopy(seleteds,0,returnValue,0,seleteds.length);
-						return returnValue;
+				public ProjectDocument[] getSelecteds() {
+					if (lstDocs.getSelectedIndex() < 0) {
+						return new ProjectDocument[0];
 					}
+					Object[] seleteds = lstDocs.getSelectedValues();
+					ProjectDocument[] returnValue = new ProjectDocument[seleteds.length];
+					System.arraycopy(seleteds, 0, returnValue, 0,
+							seleteds.length);
+					return returnValue;
+				}
 
-					public ProjectDocument getItem(java.awt.event.MouseEvent e) {
-						if (lstDocs.getSelectedIndex() < 0) {
-							return null;
-						}
-						Component c = lstDocs.getComponentAt(e.getPoint());
-
+				public ProjectDocument getItem(java.awt.event.MouseEvent e) {
+					if (lstDocs.getSelectedIndex() < 0) {
 						return null;
 					}
+					Component c = lstDocs.getComponentAt(e.getPoint());
 
-					public void mouseClicked(java.awt.event.MouseEvent e) {
-						if (e.getButton() == java.awt.event.MouseEvent.BUTTON3) {
-							/*
-							getDocumentSelected();//ProjectView
-							getDocumentSelectedName();//Vista
-							*/
-							String docType = getDocumentSelected();
-							ProjectDocument[] selecteds = this.getSelecteds();
+					return null;
+				}
 
-							if (selecteds == null) return;
-							DocumentContextMenu menu = new DocumentContextMenu(docType,this.getItem(e),(ProjectDocument[])selecteds);
-							if (menu.getActionsVisibles() < 1) return;
-							lstDocs.add(menu);
-							menu.show(e.getComponent(), e.getX(), e.getY());
+				public void mouseClicked(java.awt.event.MouseEvent e) {
+					if (e.getButton() == java.awt.event.MouseEvent.BUTTON3) {
+						/*
+						 * getDocumentSelected();//ProjectView
+						 * getDocumentSelectedName();//Vista
+						 */
+						String docType = getDocumentSelected();
+						ProjectDocument[] selecteds = this.getSelecteds();
+
+						if (selecteds == null)
 							return;
-						}
-
-						if (e.getClickCount() == 2) {
-							abrir();
-						}
-
+						DocumentContextMenu menu = new DocumentContextMenu(
+								docType, this.getItem(e),
+								(ProjectDocument[]) selecteds);
+						if (menu.getActionsVisibles() < 1)
+							return;
+						lstDocs.add(menu);
+						menu.show(e.getComponent(), e.getX(), e.getY());
+						return;
 					}
-				});
+
+					if (e.getClickCount() == 2) {
+						abrir();
+					}
+
+				}
+			});
 			lstDocs.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-					public void valueChanged(
-						javax.swing.event.ListSelectionEvent e) {
-						activarBotones();
-					}
-				});
+				public void valueChanged(javax.swing.event.ListSelectionEvent e) {
+					activarBotones();
+				}
+			});
 		}
 
 		return lstDocs;
@@ -664,15 +686,15 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 	/**
 	 * This method initializes jPanel2
-	 *
+	 * 
 	 * @return JPanel
 	 */
 	private JPanel getJPanel2() {
 		if (jPanel2 == null) {
 			jPanel2 = new JPanel();
 
-			//FlowLayout layout = new FlowLayout();
-			GridLayout layout = new GridLayout(5,1);
+			// FlowLayout layout = new FlowLayout();
+			GridLayout layout = new GridLayout(5, 1);
 			layout.setVgap(7);
 
 			jPanel2.setLayout(layout);
@@ -691,7 +713,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 	/**
 	 * This method initializes btnNuevo
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getBtnNuevo() {
@@ -701,15 +723,15 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 			btnNuevo.setText(PluginServices.getText(this, "nuevo"));
 			btnNuevo.setMargin(new java.awt.Insets(2, 2, 2, 2));
 			btnNuevo.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						try {
-							newProjectDocument();
-						} catch (Exception e1) {
-							NotificationManager.addError(e1.getLocalizedMessage(),
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try {
+						newProjectDocument();
+					} catch (Exception e1) {
+						NotificationManager.addError(e1.getLocalizedMessage(),
 								e1);
-						}
 					}
-				});
+				}
+			});
 		}
 
 		return btnNuevo;
@@ -717,7 +739,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 	/**
 	 * This method initializes btnPropiedades
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getBtnPropiedades() {
@@ -727,11 +749,12 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 			btnPropiedades.setName("btnPropiedades");
 			btnPropiedades.setEnabled(false);
 			btnPropiedades.setMargin(new java.awt.Insets(2, 2, 2, 2));
-			btnPropiedades.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						propiedades();
-					}
-				});
+			btnPropiedades
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							propiedades();
+						}
+					});
 		}
 
 		return btnPropiedades;
@@ -739,7 +762,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 	/**
 	 * This method initializes btnAbrir
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getBtnAbrir() {
@@ -750,10 +773,10 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 			btnAbrir.setEnabled(false);
 			btnAbrir.setMargin(new java.awt.Insets(2, 2, 2, 2));
 			btnAbrir.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						abrir();
-					}
-				});
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					abrir();
+				}
+			});
 		}
 
 		return btnAbrir;
@@ -761,7 +784,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 	/**
 	 * This method initializes btnBorrar
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getBtnBorrar() {
@@ -772,10 +795,10 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 			btnBorrar.setEnabled(false);
 			btnBorrar.setMargin(new java.awt.Insets(2, 2, 2, 2));
 			btnBorrar.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						borrar();
-					}
-				});
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					borrar();
+				}
+			});
 		}
 
 		return btnBorrar;
@@ -783,7 +806,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 	/**
 	 * This method initializes btnRenombrar
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getBtnRenombrar() {
@@ -794,10 +817,10 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 			btnRenombrar.setEnabled(false);
 			btnRenombrar.setMargin(new java.awt.Insets(2, 2, 2, 2));
 			btnRenombrar.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						renombrar();
-					}
-				});
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					renombrar();
+				}
+			});
 		}
 
 		return btnRenombrar;
@@ -805,7 +828,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 	/**
 	 * This method initializes jPanel3
-	 *
+	 * 
 	 * @return JPanel
 	 */
 	private JPanel getJPanel3() {
@@ -817,49 +840,50 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 			jPanel3.setLayout(layout3);
 			c.insets = new Insets(2, 5, 0, 5);
 			c.anchor = GridBagConstraints.WEST;
-			c.gridx =0;
-			c.gridy =0;
-			layout3.setConstraints(getJLabel(),c);
+			c.gridx = 0;
+			c.gridy = 0;
+			layout3.setConstraints(getJLabel(), c);
 			jPanel3.add(getJLabel(), null);
 			c.fill = GridBagConstraints.HORIZONTAL;
-			c.weightx=1.0;
-			c.gridx =1;
-			layout3.setConstraints(getLblNombreSesion(),c);
+			c.weightx = 1.0;
+			c.gridx = 1;
+			layout3.setConstraints(getLblNombreSesion(), c);
 			jPanel3.add(getLblNombreSesion(), null);
 
-			c.gridx =0;
-			c.gridy =1;
+			c.gridx = 0;
+			c.gridy = 1;
 			c.fill = GridBagConstraints.NONE;
-			c.weightx=0.0;
-			layout3.setConstraints(getJLabel1(),c);
+			c.weightx = 0.0;
+			layout3.setConstraints(getJLabel1(), c);
 			jPanel3.add(getJLabel1(), null);
 			c.fill = GridBagConstraints.HORIZONTAL;
-			c.weightx=1.0;
-			c.gridx =1;
-			layout3.setConstraints(getLblGuardado(),c);
+			c.weightx = 1.0;
+			c.gridx = 1;
+			layout3.setConstraints(getLblGuardado(), c);
 			jPanel3.add(getLblGuardado(), null);
 
-			c.gridx =0;
-			c.gridy =2;
+			c.gridx = 0;
+			c.gridy = 2;
 			c.fill = GridBagConstraints.NONE;
-			c.weightx=0.0;
-			layout3.setConstraints(getJLabel2(),c);
+			c.weightx = 0.0;
+			layout3.setConstraints(getJLabel2(), c);
 			jPanel3.add(getJLabel2(), null);
 
 			c.fill = GridBagConstraints.HORIZONTAL;
-			c.weightx=1.0;
-			c.gridx =1;
-			layout3.setConstraints(getLblFecha(),c);
+			c.weightx = 1.0;
+			c.gridx = 1;
+			layout3.setConstraints(getLblFecha(), c);
 			jPanel3.add(getLblFecha(), null);
 			jPanel3.setPreferredSize(new java.awt.Dimension(430, 125));
 			jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(
 					null, PluginServices.getText(this, "propiedades_sesion"),
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
-			c.gridx =1;
-			c.gridy =4;
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					null));
+			c.gridx = 1;
+			c.gridy = 4;
 			c.anchor = GridBagConstraints.EAST;
-			layout3.setConstraints(getJPanel4(),c);
+			layout3.setConstraints(getJPanel4(), c);
 			jPanel3.add(getJPanel4(), null);
 		}
 
@@ -868,7 +892,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 	/**
 	 * This method initializes jLabel
-	 *
+	 * 
 	 * @return JLabel
 	 */
 	private JLabel getJLabel() {
@@ -883,7 +907,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 	/**
 	 * This method initializes lblNombreSesion
-	 *
+	 * 
 	 * @return JLabel
 	 */
 	private JLabel getLblNombreSesion() {
@@ -900,7 +924,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 	/**
 	 * This method initializes jLabel1
-	 *
+	 * 
 	 * @return JLabel
 	 */
 	private JLabel getJLabel1() {
@@ -915,7 +939,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 	/**
 	 * This method initializes lblGuardado
-	 *
+	 * 
 	 * @return JLabel
 	 */
 	private JLabel getLblGuardado() {
@@ -931,14 +955,13 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 	/**
 	 * This method initializes jLabel2
-	 *
+	 * 
 	 * @return JLabel
 	 */
 	private JLabel getJLabel2() {
 		if (jLabel2 == null) {
 			jLabel2 = new JLabel();
-			jLabel2.setText(PluginServices.getText(this, "creation_date") +
-				":");
+			jLabel2.setText(PluginServices.getText(this, "creation_date") + ":");
 			jLabel2.setPreferredSize(new java.awt.Dimension(150, 16));
 		}
 
@@ -947,7 +970,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 	/**
 	 * This method initializes lblFecha
-	 *
+	 * 
 	 * @return JLabel
 	 */
 	private JLabel getLblFecha() {
@@ -963,7 +986,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 	/**
 	 * This method initializes btnImportar
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getBtnImportar() {
@@ -982,7 +1005,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 	/**
 	 * This method initializes btnExportar
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getBtnExportar() {
@@ -1001,7 +1024,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 	/**
 	 * This method initializes btnEditar
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getBtnEditar() {
@@ -1014,12 +1037,12 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 			btnEditar.setMargin(new java.awt.Insets(2, 2, 2, 2));
 
 			btnEditar.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						ProjectProperties dlg = new ProjectProperties(p);
-						PluginServices.getMDIManager().addWindow(dlg);
-						refreshProperties();
-					}
-				});
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					ProjectProperties dlg = new ProjectProperties(p);
+					PluginServices.getMDIManager().addWindow(dlg);
+					refreshProperties();
+				}
+			});
 		}
 
 		return btnEditar;
@@ -1027,7 +1050,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return JScrollPane
 	 */
 	private JScrollPane getJScrollPane() {
@@ -1035,7 +1058,8 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 			jScrollPane = new JScrollPane();
 			jScrollPane.setViewportView(getLstDocs());
 			jScrollPane.setPreferredSize(new java.awt.Dimension(200, 100));
-			jScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+			jScrollPane
+					.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		}
 
 		return jScrollPane;
@@ -1048,24 +1072,24 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 		return p;
 	}
 
-    /**
-     * This method is used to get <strong>an initial</strong> ViewInfo object
-     * for this Project Manager window. It is not intended to retrieve the
-     * ViewInfo object in a later time.
-     * <strong>Use PluginServices.getMDIManager().getViewInfo(view)
-     * to retrieve the ViewInfo object at any time after the creation of the
-     * object.
-     *
-     * @see com.iver.mdiApp.ui.MDIManager.IWindow#getWindowInfo()
-     */
+	/**
+	 * This method is used to get <strong>an initial</strong> ViewInfo object
+	 * for this Project Manager window. It is not intended to retrieve the
+	 * ViewInfo object in a later time. <strong>Use
+	 * PluginServices.getMDIManager().getViewInfo(view) to retrieve the ViewInfo
+	 * object at any time after the creation of the object.
+	 * 
+	 * @see com.iver.mdiApp.ui.MDIManager.IWindow#getWindowInfo()
+	 */
 	public WindowInfo getWindowInfo() {
-		if (m_viewInfo==null) {
+		if (m_viewInfo == null) {
 			m_viewInfo = new WindowInfo(WindowInfo.MAXIMIZABLE);
-			
-			/* 
-			m_viewInfo = new WindowInfo(WindowInfo.MAXIMIZABLE+WindowInfo.RESIZABLE);
-			*/
-			
+
+			/*
+			 * m_viewInfo = new
+			 * WindowInfo(WindowInfo.MAXIMIZABLE+WindowInfo.RESIZABLE);
+			 */
+
 			m_viewInfo.setWidth(this.getWidth());
 			m_viewInfo.setHeight(this.getHeight());
 			m_viewInfo.setNormalWidth(this.getPreferredSize().width);
@@ -1091,7 +1115,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 	/**
 	 * This method initializes jPanel4
-	 *
+	 * 
 	 * @return JPanel
 	 */
 	private JPanel getJPanel4() {
@@ -1111,14 +1135,15 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 	/**
 	 * This method initializes jScrollPane1
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getJScrollPane1() {
 		if (jScrollPane1 == null) {
 			jScrollPane1 = new JScrollPane();
-			jScrollPane1.setVerticalScrollBarPolicy(javax.swing.JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-			jScrollPane1.setPreferredSize(new java.awt.Dimension(433,200));
+			jScrollPane1
+					.setVerticalScrollBarPolicy(javax.swing.JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+			jScrollPane1.setPreferredSize(new java.awt.Dimension(433, 200));
 			jScrollPane1.setViewportView(getJPanel());
 		}
 		return jScrollPane1;
@@ -1127,4 +1152,4 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 	public Object getWindowProfile() {
 		return WindowInfo.PROJECT_PROFILE;
 	}
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

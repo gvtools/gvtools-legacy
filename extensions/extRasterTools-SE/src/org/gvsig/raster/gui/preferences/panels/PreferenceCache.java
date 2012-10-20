@@ -37,6 +37,7 @@ import javax.swing.text.NumberFormatter;
 import org.gvsig.raster.Configuration;
 import org.gvsig.raster.RasterLibrary;
 import org.gvsig.raster.util.BasePanel;
+
 /**
  * PreferenceCache es la clase que se encarga de configurar en RasterPreferences
  * las opciones de cacheamiento de capas en Raster.
@@ -45,25 +46,25 @@ import org.gvsig.raster.util.BasePanel;
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class PreferenceCache extends BasePanel {
-	protected static final long serialVersionUID      = 1L;
-	private JLabel              labelWarning          = null;
-	private JLabel              labelBlockHeight      = null;
-	private JComboBox           comboBoxBlockHeight   = null;
-	private JLabel              labelCacheSize        = null;
-	private JFormattedTextField textFieldCacheSize    = null;
-	private JLabel              labelPagsPerGroup     = null;
+	protected static final long serialVersionUID = 1L;
+	private JLabel labelWarning = null;
+	private JLabel labelBlockHeight = null;
+	private JComboBox comboBoxBlockHeight = null;
+	private JLabel labelCacheSize = null;
+	private JFormattedTextField textFieldCacheSize = null;
+	private JLabel labelPagsPerGroup = null;
 	private JFormattedTextField textFieldPagsPerGroup = null;
-	private JLabel              labelPageSize         = null;
-	private JFormattedTextField textFieldPageSize     = null;
-	
+	private JLabel labelPageSize = null;
+	private JFormattedTextField textFieldPageSize = null;
+
 	/**
-	 *Inicializa componentes gráficos y traduce
+	 * Inicializa componentes gráficos y traduce
 	 */
 	public PreferenceCache() {
 		init();
 		translate();
 	}
-	
+
 	/**
 	 * Define todas las traducciones de PreferenceCache
 	 */
@@ -163,10 +164,10 @@ public class PreferenceCache extends BasePanel {
 		if (textFieldCacheSize == null) {
 			NumberFormat integerFormat = NumberFormat.getNumberInstance();
 			integerFormat.setParseIntegerOnly(true);
-			textFieldCacheSize = new JFormattedTextField(new DefaultFormatterFactory(
-					new NumberFormatter(integerFormat),
-					new NumberFormatter(integerFormat),
-					new NumberFormatter(integerFormat)));
+			textFieldCacheSize = new JFormattedTextField(
+					new DefaultFormatterFactory(new NumberFormatter(
+							integerFormat), new NumberFormatter(integerFormat),
+							new NumberFormatter(integerFormat)));
 		}
 		return textFieldCacheSize;
 	}
@@ -175,10 +176,10 @@ public class PreferenceCache extends BasePanel {
 		if (textFieldPagsPerGroup == null) {
 			NumberFormat integerFormat = NumberFormat.getNumberInstance();
 			integerFormat.setParseIntegerOnly(true);
-			textFieldPagsPerGroup = new JFormattedTextField(new DefaultFormatterFactory(
-					new NumberFormatter(integerFormat),
-					new NumberFormatter(integerFormat),
-					new NumberFormatter(integerFormat)));
+			textFieldPagsPerGroup = new JFormattedTextField(
+					new DefaultFormatterFactory(new NumberFormatter(
+							integerFormat), new NumberFormatter(integerFormat),
+							new NumberFormatter(integerFormat)));
 		}
 		return textFieldPagsPerGroup;
 	}
@@ -187,10 +188,10 @@ public class PreferenceCache extends BasePanel {
 		if (textFieldPageSize == null) {
 			NumberFormat integerFormat = NumberFormat.getNumberInstance();
 			integerFormat.setParseIntegerOnly(true);
-			textFieldPageSize = new JFormattedTextField(new DefaultFormatterFactory(
-					new NumberFormatter(integerFormat),
-					new NumberFormatter(integerFormat),
-					new NumberFormatter(integerFormat)));
+			textFieldPageSize = new JFormattedTextField(
+					new DefaultFormatterFactory(new NumberFormatter(
+							integerFormat), new NumberFormatter(integerFormat),
+							new NumberFormatter(integerFormat)));
 		}
 		return textFieldPageSize;
 	}
@@ -226,7 +227,8 @@ public class PreferenceCache extends BasePanel {
 	private JComboBox getComboBoxBlockHeight() {
 		if (comboBoxBlockHeight == null) {
 			comboBoxBlockHeight = new JComboBox();
-			comboBoxBlockHeight.setModel(new DefaultComboBoxModel(new String[] { "128", "256", "512", "1024", "2048", "4096" }));
+			comboBoxBlockHeight.setModel(new DefaultComboBoxModel(new String[] {
+					"128", "256", "512", "1024", "2048", "4096" }));
 		}
 		return comboBoxBlockHeight;
 	}
@@ -235,13 +237,18 @@ public class PreferenceCache extends BasePanel {
 	 * Establece los valores por defecto de la Cache
 	 */
 	public void initializeDefaults() {
-		getTextFieldCacheSize().setValue((Long) Configuration.getDefaultValue("cache_size"));
-		getTextFieldPageSize().setValue((Double) Configuration.getDefaultValue("cache_pagesize"));
-		getTextFieldPagsPerGroup().setValue((Integer) Configuration.getDefaultValue("cache_pagspergroup"));
+		getTextFieldCacheSize().setValue(
+				(Long) Configuration.getDefaultValue("cache_size"));
+		getTextFieldPageSize().setValue(
+				(Double) Configuration.getDefaultValue("cache_pagesize"));
+		getTextFieldPagsPerGroup().setValue(
+				(Integer) Configuration.getDefaultValue("cache_pagspergroup"));
 
-		Integer blockHeight = (Integer) Configuration.getDefaultValue("cache_blockheight");
+		Integer blockHeight = (Integer) Configuration
+				.getDefaultValue("cache_blockheight");
 		for (int i = 0; i < getComboBoxBlockHeight().getItemCount(); i++) {
-			if (getComboBoxBlockHeight().getItemAt(i).toString().equals(blockHeight.toString())) {
+			if (getComboBoxBlockHeight().getItemAt(i).toString()
+					.equals(blockHeight.toString())) {
 				getComboBoxBlockHeight().setSelectedIndex(i);
 				break;
 			}
@@ -252,13 +259,21 @@ public class PreferenceCache extends BasePanel {
 	 * Establece los valores que ha definido el usuario de la Cache
 	 */
 	public void initializeValues() {
-		getTextFieldCacheSize().setValue(Configuration.getValue("cache_size", Long.valueOf(RasterLibrary.cacheSize)));
-		getTextFieldPageSize().setValue(Configuration.getValue("cache_pagesize", Double.valueOf(RasterLibrary.pageSize)));
-		getTextFieldPagsPerGroup().setValue(Configuration.getValue("cache_pagspergroup", Integer.valueOf(RasterLibrary.pagsPerGroup)));
+		getTextFieldCacheSize().setValue(
+				Configuration.getValue("cache_size",
+						Long.valueOf(RasterLibrary.cacheSize)));
+		getTextFieldPageSize().setValue(
+				Configuration.getValue("cache_pagesize",
+						Double.valueOf(RasterLibrary.pageSize)));
+		getTextFieldPagsPerGroup().setValue(
+				Configuration.getValue("cache_pagspergroup",
+						Integer.valueOf(RasterLibrary.pagsPerGroup)));
 
-		Integer blockHeight = Configuration.getValue("cache_blockheight", Integer.valueOf(RasterLibrary.blockHeight));
+		Integer blockHeight = Configuration.getValue("cache_blockheight",
+				Integer.valueOf(RasterLibrary.blockHeight));
 		for (int i = 0; i < getComboBoxBlockHeight().getItemCount(); i++) {
-			if (getComboBoxBlockHeight().getItemAt(i).toString().equals(blockHeight.toString())) {
+			if (getComboBoxBlockHeight().getItemAt(i).toString()
+					.equals(blockHeight.toString())) {
 				getComboBoxBlockHeight().setSelectedIndex(i);
 				break;
 			}
@@ -270,8 +285,11 @@ public class PreferenceCache extends BasePanel {
 	 */
 	public void storeValues() {
 		Configuration.setValue("cache_size", getTextFieldCacheSize().getText());
-		Configuration.setValue("cache_pagesize", Double.valueOf(getTextFieldPageSize().getText()));
-		Configuration.setValue("cache_pagspergroup", getTextFieldPagsPerGroup().getText());
-		Configuration.setValue("cache_blockheight", getComboBoxBlockHeight().getSelectedItem().toString());
+		Configuration.setValue("cache_pagesize",
+				Double.valueOf(getTextFieldPageSize().getText()));
+		Configuration.setValue("cache_pagspergroup", getTextFieldPagsPerGroup()
+				.getText());
+		Configuration.setValue("cache_blockheight", getComboBoxBlockHeight()
+				.getSelectedItem().toString());
 	}
 }

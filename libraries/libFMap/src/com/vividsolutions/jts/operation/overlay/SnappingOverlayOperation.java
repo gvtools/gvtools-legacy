@@ -31,51 +31,46 @@ import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.util.Assert;
 
 /**
- * TODO 
- * El codigo esta lleno de coordinateA.distance(coordinateB)
- * <= snapTolerance;
+ * TODO El codigo esta lleno de coordinateA.distance(coordinateB) <=
+ * snapTolerance;
  * 
- * CAMBIAR POR SnapCoordinate, de forma que equals haga
- * esta comprobacin
+ * CAMBIAR POR SnapCoordinate, de forma que equals haga esta comprobacin
  * 
  * 
  */
 public class SnappingOverlayOperation extends OverlayOp {
-	
+
 	protected final SnapPointLocator ptLocator = new SnapPointLocator();
 	protected GeometryFactory geomFact;
 	protected Geometry resultGeom;
 
 	protected LineIntersector li;
-	
+
 	protected double snapTolerance;
-	
-	
-	/*Planar graph of the overlay operation*/
+
+	/* Planar graph of the overlay operation */
 	protected SnappingPlanarGraph graph;
-	
-	/*Geometry graph of each individual geometry*/
+
+	/* Geometry graph of each individual geometry */
 	protected SnappingGeometryGraph[] arg;
 
-	
-	/*It saves all the new edges resulting from intersections of
-	 * edges of geometries A and B. It is a temporal repository, before
-	 * to save them in SnappingPlanarGraph*/
+	/*
+	 * It saves all the new edges resulting from intersections of edges of
+	 * geometries A and B. It is a temporal repository, before to save them in
+	 * SnappingPlanarGraph
+	 */
 	protected SnapEdgeList edgeList = null;
 
-	
-/*
- * El resultado de una operacion de overlay puede contener
- * puntos, lineas y poligonos.
- * */	
+	/*
+	 * El resultado de una operacion de overlay puede contener puntos, lineas y
+	 * poligonos.
+	 */
 	protected List resultPolyList = new ArrayList();
 
 	protected List resultLineList = new ArrayList();
 
 	protected List resultPointList = new ArrayList();
-	
 
-	
 	public static Geometry overlayOp(Geometry geom0, Geometry geom1,
 			int opCode, double tolerance) {
 		SnappingOverlayOperation gov = new SnappingOverlayOperation(geom0,
@@ -83,9 +78,7 @@ public class SnappingOverlayOperation extends OverlayOp {
 		Geometry geomOv = gov.getResultGeometry(opCode);
 		return geomOv;
 	}
-	
 
-	
 	public SnappingOverlayOperation(Geometry g0, Geometry g1, double tolerance) {
 		super(g0, g1);
 		graph = new SnappingPlanarGraph(new OverlayNodeFactory(), tolerance);
@@ -103,145 +96,122 @@ public class SnappingOverlayOperation extends OverlayOp {
 		return resultGeom;
 	}
 
-	
 	public PlanarGraph getGraph() {
 		return graph;
 	}
-	
-	
+
 	private boolean isReused = false;
+
 	/**
-	 * Metodo de utilidad cuando vayamos a intersectar la geometria
-	 * g1 con varias geometrias (g2, g3, g4, .... , etc.)
+	 * Metodo de utilidad cuando vayamos a intersectar la geometria g1 con
+	 * varias geometrias (g2, g3, g4, .... , etc.)
 	 * 
 	 * Los calculos basicos no se repiten para g1
 	 * 
 	 * */
-	
-	
-	public void setSecondGeometry(Geometry geometry){
+
+	public void setSecondGeometry(Geometry geometry) {
 		Geometry g0 = arg[0].getGeometry();
-		 if (g0.getPrecisionModel().compareTo(geometry.getPrecisionModel()) >= 0)
-		      setComputationPrecision(g0.getPrecisionModel());
-		    else
-		      setComputationPrecision(geometry.getPrecisionModel());
+		if (g0.getPrecisionModel().compareTo(geometry.getPrecisionModel()) >= 0)
+			setComputationPrecision(g0.getPrecisionModel());
+		else
+			setComputationPrecision(geometry.getPrecisionModel());
 		graph = new SnappingPlanarGraph(new OverlayNodeFactory(), snapTolerance);
-		
-		
+
 		/*
-		 *TODO
-		 *Deberiamos borrar todos los nodos del GeometryGraph,
-		 *o solo las intersecciones?????
-		 *De todos modos, aunque borrasemos los nodos, getBoundaryNodes
-		 *devolveria nodos cacheados 
+		 * TODODeberiamos borrar todos los nodos del GeometryGraph,o solo las
+		 * intersecciones?????De todos modos, aunque borrasemos los nodos,
+		 * getBoundaryNodesdevolveria nodos cacheados
 		 * 
 		 * TODO REVISAR
-		 * */
+		 */
 		arg[0].clearIntersections();
-		
-		
-		
+
 		arg[1] = new SnappingGeometryGraph(snapTolerance, 1, geometry);
 		geomFact = g0.getFactory();
 		edgeList = new SnapEdgeList(snapTolerance);
-		
+
 		resultPolyList.clear();
 		resultLineList.clear();
 		resultPointList.clear();
-		
+
 		resultGeom = null;
-		
+
 		isReused = true;
 	}
 
-	
 	/*
 	 * ************************************************************
 	 * METODO PRINCIPAL
 	 * ************************************************************
-	 * */
+	 */
 	private void computeOverlay(int opCode) {
-		
+
 		/*
-		 * Se copian los NODOS de las dos geometrias. 
-		 * ESTO ES IMPORTANTE, PUES:
-		 * a) un punto origina un nodo.
-		 * b) una linea origina dos nodos
-		 * c) un poligono origina un nodo.
-		 * 
-		 * */
+		 * Se copian los NODOS de las dos geometrias. ESTO ES IMPORTANTE, PUES:
+		 * a) un punto origina un nodo. b) una linea origina dos nodos c) un
+		 * poligono origina un nodo.
+		 */
 		copyPoints(0);
 		copyPoints(1);
-		if(! isReused) //esto solo se hace si no se ha calculado ya
+		if (!isReused) // esto solo se hace si no se ha calculado ya
 			arg[0].computeSelfNodes(li, false);
 		arg[1].computeSelfNodes(li, false);
 
-		
 		/*
-		 * Calcula las intersecciones.
-		 * Se supone que daran lugar a Nodes, ¿NO?
-		 * Como resultado, cada Edge guardará en sus EdgeIntersectionList
-		 * las intersecciones que hay en sus segmentos (EdgeIntersection).
+		 * Calcula las intersecciones. Se supone que daran lugar a Nodes, ¿NO?
+		 * Como resultado, cada Edge guardará en sus EdgeIntersectionList las
+		 * intersecciones que hay en sus segmentos (EdgeIntersection).
 		 * 
-		 * Estas intersecciones se representan por:
-		 * -segmento del edge en que ocurren.
-		 * -coordenada
-		 * -distancia al primer vertice del segmento
+		 * Estas intersecciones se representan por: -segmento del edge en que
+		 * ocurren. -coordenada -distancia al primer vertice del segmento
 		 * 
-		 * ¡OJO¡ COMO RESULTADO DE ESTO NO SE GENERAN EJES NUEVOS.
-		 * PARA HACER SNAP EN LAS INTERSECCIONES TENDRIAMOS QUE RETOCAR LA 
-		 * CLASE EDGEINTERSECTIONLIST
-		 * 
-		 * */
+		 * ¡OJO¡ COMO RESULTADO DE ESTO NO SE GENERAN EJES NUEVOS. PARA HACER
+		 * SNAP EN LAS INTERSECCIONES TENDRIAMOS QUE RETOCAR LA CLASE
+		 * EDGEINTERSECTIONLIST
+		 */
 		arg[0].computeEdgeIntersections(arg[1], li, true);
 		/*
-		 * Ahora lo que se hace es: para cada Edge del grafo,
-		 * se parte (en función de sus intersecciones) y se añaden
-		 * los Edges fragmentados a la colección baseSplitEdges
-		 * 
-		 * */
-		
+		 * Ahora lo que se hace es: para cada Edge del grafo, se parte (en
+		 * función de sus intersecciones) y se añaden los Edges fragmentados a
+		 * la colección baseSplitEdges
+		 */
+
 		List baseSplitEdges = new ArrayList();
 		arg[0].computeSplitEdges(baseSplitEdges);
-		//TODO Quizas la clave esté tambien en la 2ª geometria
+		// TODO Quizas la clave esté tambien en la 2ª geometria
 		arg[1].computeSplitEdges(baseSplitEdges);
-		
-		
+
 		/*
-		 * Edges resulting of A intersection B, that are in baseSplitEdges 
-		 * Collection, are saved in EdgeList.
-		 * ¡OJO¡ Si aparecen ejes repetidos, no se duplican (pero si 
-		 * que se cambia su etiqueta)
-		 * */
-		//Se copian los nuevos Edges generados en EdgeList
+		 * Edges resulting of A intersection B, that are in baseSplitEdges
+		 * Collection, are saved in EdgeList. ¡OJO¡ Si aparecen ejes repetidos,
+		 * no se duplican (pero si que se cambia su etiqueta)
+		 */
+		// Se copian los nuevos Edges generados en EdgeList
 		insertUniqueEdges(baseSplitEdges);
-		
-		
-		/*Se etiquetan*/
+
+		/* Se etiquetan */
 		computeLabelsFromDepths();
-		
+
 		/*
-		 * Quita los Edges que hayan sufrido colapso dimensional
-		 * (en la documentacíon de JTS viene algo de esto)
-		 * */
+		 * Quita los Edges que hayan sufrido colapso dimensional (en la
+		 * documentacíon de JTS viene algo de esto)
+		 */
 		replaceCollapsedEdges();
 
-		
-        /*
-         * Finalmente, se añade al SnappingPlanarGraph resultado los Edges
-         * calculados como fruto de las intersecciones (contenidos en EdgeList).
-         * 
-         * Aquí se hace algo muy importante también: se añaden nuevos nodos
-         * al grafo (correspondientes con los extremos de los nuevos Edge
-         * que no estuvieran ya en el grafo)
-         * 
-         * */
+		/*
+		 * Finalmente, se añade al SnappingPlanarGraph resultado los Edges
+		 * calculados como fruto de las intersecciones (contenidos en EdgeList).
+		 * 
+		 * Aquí se hace algo muy importante también: se añaden nuevos nodos al
+		 * grafo (correspondientes con los extremos de los nuevos Edge que no
+		 * estuvieran ya en el grafo)
+		 */
 		graph.addEdges(edgeList.getEdges());
-		
-		
+
 		computeLabelling();
 		labelIncompleteNodes();
-		
+
 		/**
 		 * The ordering of building the result Geometries is important. Areas
 		 * must be built before lines, which must be built before points. This
@@ -250,9 +220,8 @@ public class SnappingOverlayOperation extends OverlayOp {
 		 */
 		findResultAreaEdges(opCode);
 		cancelDuplicateResultEdges();
-		
-		
-		//TODO Todos los builders deberán usar los metodos snap de locator
+
+		// TODO Todos los builders deberán usar los metodos snap de locator
 		SnapPolygonBuilder polyBuilder = new SnapPolygonBuilder(geomFact);
 		polyBuilder.add(graph);
 		resultPolyList = polyBuilder.getPolygons();
@@ -260,44 +229,45 @@ public class SnappingOverlayOperation extends OverlayOp {
 		LineBuilder lineBuilder = new LineBuilder(this, geomFact, ptLocator);
 		resultLineList = lineBuilder.build(opCode);
 
-		PointBuilder pointBuilder = new PointBuilder(this, geomFact, ptLocator){
-			 public List build(int opCode)
-			  {
-				 for (Iterator nodeit = getGraph().getNodes().iterator(); nodeit.hasNext(); ) {
-				      Node n = (Node) nodeit.next();
+		PointBuilder pointBuilder = new PointBuilder(this, geomFact, ptLocator) {
+			public List build(int opCode) {
+				for (Iterator nodeit = getGraph().getNodes().iterator(); nodeit
+						.hasNext();) {
+					Node n = (Node) nodeit.next();
 
-				      // filter out nodes which are known to be in the result
-				      if (n.isInResult())
-				        continue;
-				      // if an incident edge is in the result, then the node coordinate is included already
-				      if (n.isIncidentEdgeInResult())
-				        continue;
-				      if (n.getEdges().getDegree() == 0 || opCode == OverlayOp.INTERSECTION) {
+					// filter out nodes which are known to be in the result
+					if (n.isInResult())
+						continue;
+					// if an incident edge is in the result, then the node
+					// coordinate is included already
+					if (n.isIncidentEdgeInResult())
+						continue;
+					if (n.getEdges().getDegree() == 0
+							|| opCode == OverlayOp.INTERSECTION) {
 
-				        /**
-				         * For nodes on edges, only INTERSECTION can result in edge nodes being included even
-				         * if none of their incident edges are included
-				         */
-				          Label label = n.getLabel();
-				          if (SnappingOverlayOperation.checkLabelLocation(label.getLocation(0),
-				        		  label.getLocation(1), opCode)) {
-				            filterCoveredNodeToPoint(n);
-				          }
-				      }
-				 }
-			    return resultPointList;
-			  }
-			 
-			 
-				 
-			 private void filterCoveredNodeToPoint(Node n)
-			  {
-			    Coordinate coord = n.getCoordinate();
-			    if (! isCoveredByLA(coord)) {
-			      Point pt = geomFact.createPoint(coord);
-			      resultPointList.add(pt);
-			    }
-			  }	
+						/**
+						 * For nodes on edges, only INTERSECTION can result in
+						 * edge nodes being included even if none of their
+						 * incident edges are included
+						 */
+						Label label = n.getLabel();
+						if (SnappingOverlayOperation.checkLabelLocation(
+								label.getLocation(0), label.getLocation(1),
+								opCode)) {
+							filterCoveredNodeToPoint(n);
+						}
+					}
+				}
+				return resultPointList;
+			}
+
+			private void filterCoveredNodeToPoint(Node n) {
+				Coordinate coord = n.getCoordinate();
+				if (!isCoveredByLA(coord)) {
+					Point pt = geomFact.createPoint(coord);
+					resultPointList.add(pt);
+				}
+			}
 		};
 		resultPointList = pointBuilder.build(opCode);
 
@@ -306,64 +276,57 @@ public class SnappingOverlayOperation extends OverlayOp {
 		resultGeom = computeGeometry(resultPointList, resultLineList,
 				resultPolyList);
 	}
-	
-	
-	 /**
-	   * This method will handle arguments of Location.NONE correctly
-	   *
-	   * @return true if the locations correspond to the opCode
-	   */
-	  public static boolean isResultOfOp(int loc0, int loc1, int opCode)
-	  {
-	    if (loc0 == Location.BOUNDARY) loc0 = Location.INTERIOR;
-	    if (loc1 == Location.BOUNDARY) loc1 = Location.INTERIOR;
-	    switch (opCode) {
-	    case INTERSECTION:
-	      return loc0 == Location.INTERIOR
-	          && loc1 == Location.INTERIOR;
-	    case UNION:
-	      return loc0 == Location.INTERIOR
-	          || loc1 == Location.INTERIOR;
-	    case DIFFERENCE:
-	      return loc0 == Location.INTERIOR
-	          && loc1 != Location.INTERIOR;
-	    case SYMDIFFERENCE:
-	      return   (     loc0 == Location.INTERIOR &&  loc1 != Location.INTERIOR)
-	            || (     loc0 != Location.INTERIOR &&  loc1 == Location.INTERIOR);
-	    }
-	    return false;
-	  }
-	  
-	  public static boolean isResultOfOp(Label label, int opCode)
-	  {
-	    int loc0 = label.getLocation(0);
-	    int loc1 = label.getLocation(1);
-	    return isResultOfOp(loc0, loc1, opCode);
-	  }
 
-	
-	//TODO Quitar esto de aqui
-	
-	 public static boolean checkLabelLocation(int loc0, int loc1, int opCode)
-	  {
-	    if (loc0 == Location.BOUNDARY) loc0 = Location.INTERIOR;
-	    if (loc1 == Location.BOUNDARY) loc1 = Location.INTERIOR;
-	    switch (opCode) {
-	    case INTERSECTION:
-	      return loc0 == Location.INTERIOR
-	          && loc1 == Location.INTERIOR;
-	    case UNION:
-	      return loc0 == Location.INTERIOR
-	          || loc1 == Location.INTERIOR;
-	    case DIFFERENCE:
-	      return loc0 == Location.INTERIOR
-	          && loc1 != Location.INTERIOR;
-	    case SYMDIFFERENCE:
-	      return   (     loc0 == Location.INTERIOR &&  loc1 != Location.INTERIOR)
-	            || (     loc0 != Location.INTERIOR &&  loc1 == Location.INTERIOR);
-	    }
-	    return false;
-	  }
+	/**
+	 * This method will handle arguments of Location.NONE correctly
+	 * 
+	 * @return true if the locations correspond to the opCode
+	 */
+	public static boolean isResultOfOp(int loc0, int loc1, int opCode) {
+		if (loc0 == Location.BOUNDARY)
+			loc0 = Location.INTERIOR;
+		if (loc1 == Location.BOUNDARY)
+			loc1 = Location.INTERIOR;
+		switch (opCode) {
+		case INTERSECTION:
+			return loc0 == Location.INTERIOR && loc1 == Location.INTERIOR;
+		case UNION:
+			return loc0 == Location.INTERIOR || loc1 == Location.INTERIOR;
+		case DIFFERENCE:
+			return loc0 == Location.INTERIOR && loc1 != Location.INTERIOR;
+		case SYMDIFFERENCE:
+			return (loc0 == Location.INTERIOR && loc1 != Location.INTERIOR)
+					|| (loc0 != Location.INTERIOR && loc1 == Location.INTERIOR);
+		}
+		return false;
+	}
+
+	public static boolean isResultOfOp(Label label, int opCode) {
+		int loc0 = label.getLocation(0);
+		int loc1 = label.getLocation(1);
+		return isResultOfOp(loc0, loc1, opCode);
+	}
+
+	// TODO Quitar esto de aqui
+
+	public static boolean checkLabelLocation(int loc0, int loc1, int opCode) {
+		if (loc0 == Location.BOUNDARY)
+			loc0 = Location.INTERIOR;
+		if (loc1 == Location.BOUNDARY)
+			loc1 = Location.INTERIOR;
+		switch (opCode) {
+		case INTERSECTION:
+			return loc0 == Location.INTERIOR && loc1 == Location.INTERIOR;
+		case UNION:
+			return loc0 == Location.INTERIOR || loc1 == Location.INTERIOR;
+		case DIFFERENCE:
+			return loc0 == Location.INTERIOR && loc1 != Location.INTERIOR;
+		case SYMDIFFERENCE:
+			return (loc0 == Location.INTERIOR && loc1 != Location.INTERIOR)
+					|| (loc0 != Location.INTERIOR && loc1 == Location.INTERIOR);
+		}
+		return false;
+	}
 
 	private void insertUniqueEdges(List edges) {
 		for (Iterator i = edges.iterator(); i.hasNext();) {
@@ -378,15 +341,15 @@ public class SnappingOverlayOperation extends OverlayOp {
 	 * not inserted, but its label is merged with the existing edge.
 	 */
 	protected void insertUniqueEdge(Edge e) {
-		
-		//TODO Crear una clase SnapEdge y SnapEdgeList puede ser necesario???
-		//creo que si pq SnapEdgeList mantiene una cache que no considera snap
+
+		// TODO Crear una clase SnapEdge y SnapEdgeList puede ser necesario???
+		// creo que si pq SnapEdgeList mantiene una cache que no considera snap
 		Edge existingEdge = edgeList.findEqualEdge(e);
 		// If an identical edge already exists, simply update its label
 		if (existingEdge != null) {
 			Label existingLabel = existingEdge.getLabel();
 			Label labelToMerge = e.getLabel();
-			
+
 			// check if new edge is in reverse direction to existing edge
 			// if so, must flip the label before merging it
 			if (!existingEdge.isPointwiseEqual(e)) {
@@ -407,7 +370,6 @@ public class SnappingOverlayOperation extends OverlayOp {
 		}
 	}
 
-	
 	/**
 	 * Update the labels for edges according to their depths. For each edge, the
 	 * depths are first normalized. Then, if the depths for the edge are equal,
@@ -445,16 +407,14 @@ public class SnappingOverlayOperation extends OverlayOp {
 							 * to reflect the resultant side locations indicated
 							 * by the depth values.
 							 */
-							Assert
-									.isTrue(!depth.isNull(i, Position.LEFT),
-											"depth of LEFT side has not been initialized");
-							lbl.setLocation(i, Position.LEFT, depth
-									.getLocation(i, Position.LEFT));
-							Assert
-									.isTrue(!depth.isNull(i, Position.RIGHT),
-											"depth of RIGHT side has not been initialized");
-							lbl.setLocation(i, Position.RIGHT, depth
-									.getLocation(i, Position.RIGHT));
+							Assert.isTrue(!depth.isNull(i, Position.LEFT),
+									"depth of LEFT side has not been initialized");
+							lbl.setLocation(i, Position.LEFT,
+									depth.getLocation(i, Position.LEFT));
+							Assert.isTrue(!depth.isNull(i, Position.RIGHT),
+									"depth of RIGHT side has not been initialized");
+							lbl.setLocation(i, Position.RIGHT,
+									depth.getLocation(i, Position.RIGHT));
 						}
 					}
 				}
@@ -471,7 +431,7 @@ public class SnappingOverlayOperation extends OverlayOp {
 		for (Iterator it = edgeList.iterator(); it.hasNext();) {
 			Edge e = (Edge) it.next();
 			if (e.isCollapsed()) {
-				//	Debug.print(e);
+				// Debug.print(e);
 				it.remove();
 				newEdges.add(e.getCollapsedEdge());
 			}
@@ -490,8 +450,8 @@ public class SnappingOverlayOperation extends OverlayOp {
 		for (Iterator i = arg[argIndex].getNodeIterator(); i.hasNext();) {
 			Node graphNode = (Node) i.next();
 			Node newNode = graph.addNode(graphNode.getCoordinate());
-			newNode.setLabel(argIndex, graphNode.getLabel().getLocation(
-					argIndex));
+			newNode.setLabel(argIndex,
+					graphNode.getLabel().getLocation(argIndex));
 		}
 	}
 
@@ -508,7 +468,7 @@ public class SnappingOverlayOperation extends OverlayOp {
 		}
 		mergeSymLabels();
 		updateNodeLabelling();
-		
+
 	}
 
 	/**
@@ -571,9 +531,9 @@ public class SnappingOverlayOperation extends OverlayOp {
 	 * Label an isolated node with its relationship to the target geometry.
 	 */
 	private void labelIncompleteNode(Node n, int targetIndex) {
-	    //TODO Ver si el pointLocator deberia snapear
+		// TODO Ver si el pointLocator deberia snapear
 		Coordinate coord = n.getCoordinate();
-	    Geometry geom = arg[targetIndex].getGeometry();
+		Geometry geom = arg[targetIndex].getGeometry();
 		int loc = ptLocator.locate(coord, geom, snapTolerance);
 		n.getLabel().setLocation(targetIndex, loc);
 	}
@@ -593,10 +553,10 @@ public class SnappingOverlayOperation extends OverlayOp {
 			Label label = de.getLabel();
 			if (label.isArea()
 					&& !de.isInteriorAreaEdge()
-					&& isResultOfOp(label.getLocation(0, Position.RIGHT), label
-							.getLocation(1, Position.RIGHT), opCode)) {
+					&& isResultOfOp(label.getLocation(0, Position.RIGHT),
+							label.getLocation(1, Position.RIGHT), opCode)) {
 				de.setInResult(true);
-				//	Debug.print("in result "); Debug.println(de);
+				// Debug.print("in result "); Debug.println(de);
 			}
 		}
 	}
@@ -614,7 +574,7 @@ public class SnappingOverlayOperation extends OverlayOp {
 			if (de.isInResult() && sym.isInResult()) {
 				de.setInResult(false);
 				sym.setInResult(false);
-				//	Debug.print("cancelled "); Debug.println(de);
+				// Debug.print("cancelled "); Debug.println(de);
 				// Debug.println(sym);
 			}
 		}
@@ -671,93 +631,109 @@ public class SnappingOverlayOperation extends OverlayOp {
 		// build the most specific geometry possible
 		return geomFact.buildGeometry(geomList);
 	}
-	
-	
-	public static void main(String[] args){
+
+	public static void main(String[] args) {
 		GeometryFactory factory = new GeometryFactory();
-		com.vividsolutions.jts.io.WKTReader reader = new com.vividsolutions.jts.io.WKTReader(factory);
+		com.vividsolutions.jts.io.WKTReader reader = new com.vividsolutions.jts.io.WKTReader(
+				factory);
 		Geometry a, b, c, d;
 		try {
-		
-			//Snap en un extremo y en un vertice intermedio
+
+			// Snap en un extremo y en un vertice intermedio
 			a = reader.read("LINESTRING(0.001 0.001, 5.001 5.001)");
-			b = reader.read("LINESTRING(2.1 -3, 0.0 -0.001, -2.22 4.88, 10.0 10.0, 5.002 5.002)");
-			System.out.println(SnappingOverlayOperation.overlayOp(a, b, OverlayOp.INTERSECTION, 0.01));			
-//			//snap mediante líneas paralelas
+			b = reader
+					.read("LINESTRING(2.1 -3, 0.0 -0.001, -2.22 4.88, 10.0 10.0, 5.002 5.002)");
+			System.out.println(SnappingOverlayOperation.overlayOp(a, b,
+					OverlayOp.INTERSECTION, 0.01));
+			// //snap mediante líneas paralelas
 			c = reader.read("LINESTRING(0 0, 5 0, 10 0.001)");
-			d = reader.read("LINESTRING(0.001 0.01, 5.001 0.002, 10.001 0.002)");		
+			d = reader
+					.read("LINESTRING(0.001 0.01, 5.001 0.002, 10.001 0.002)");
 			long t0 = System.currentTimeMillis();
-			System.out.println(SnappingOverlayOperation.overlayOp(c, d, OverlayOp.INTERSECTION, 0.1));		
+			System.out.println(SnappingOverlayOperation.overlayOp(c, d,
+					OverlayOp.INTERSECTION, 0.1));
 			long t1 = System.currentTimeMillis();
-			System.out.println(OverlayOp.overlayOp(c, d, OverlayOp.INTERSECTION));
+			System.out.println(OverlayOp
+					.overlayOp(c, d, OverlayOp.INTERSECTION));
 			long t2 = System.currentTimeMillis();
-			System.out.println("Con snap: "+(t1-t0)+" ms");
-			System.out.println("Sin snap: "+(t2-t1)+" ms");
-			
+			System.out.println("Con snap: " + (t1 - t0) + " ms");
+			System.out.println("Sin snap: " + (t2 - t1) + " ms");
+
 			d = reader.read("LINESTRING(0 0, 5 0, 10 0.001)");
-			System.out.println(OverlayOp.overlayOp(c, d, OverlayOp.INTERSECTION));
-			
-			//lineas paralelas a una distancia superior a la de snap
-			//(para comprobar el criterio de paralelismo en LineIntersector
+			System.out.println(OverlayOp
+					.overlayOp(c, d, OverlayOp.INTERSECTION));
+
+			// lineas paralelas a una distancia superior a la de snap
+			// (para comprobar el criterio de paralelismo en LineIntersector
 			c = reader.read("LINESTRING(0 0, 5 0, 10 0.001)");
 			d = reader.read("LINESTRING(0 0.11, 5 0.12, 10 0.14)");
-			System.out.println(SnappingOverlayOperation.overlayOp(c, d, OverlayOp.INTERSECTION, 0.001));
-//			
+			System.out.println(SnappingOverlayOperation.overlayOp(c, d,
+					OverlayOp.INTERSECTION, 0.001));
+			//
 			c = reader.read("LINESTRING(1 0, 3 2)");
 			d = reader.read("LINESTRING(3.05 2.01, 5 1.25, 0.25 1.75)");
-			System.out.println(OverlayOp.overlayOp(c, d, OverlayOp.INTERSECTION));
-			System.out.println((SnappingOverlayOperation.overlayOp(c, d, OverlayOp.INTERSECTION, 0.1)));
-//			
-//			
+			System.out.println(OverlayOp
+					.overlayOp(c, d, OverlayOp.INTERSECTION));
+			System.out.println((SnappingOverlayOperation.overlayOp(c, d,
+					OverlayOp.INTERSECTION, 0.1)));
+			//
+			//
 			d = reader.read("LINESTRING(3 2, 5 1.25, 0.25 1.75)");
-			System.out.println(OverlayOp.overlayOp(c, d, OverlayOp.INTERSECTION));
-			System.out.println((SnappingOverlayOperation.overlayOp(c, d, OverlayOp.INTERSECTION, 0.1)));
-			
-			//Que un polígono esté cerrado o no no es snap, sino regla topologica
-			
-			//TODO CON POLIGONOS ESTÁ DANDO PROBLEMAS. HABRA QUE REVISAR LINEAS Y POLIGONOS
-//			c = reader.read("POLYGON((0 0, 0 5, 5 5, 5 0,  0 0))");
-//			d = reader.read("POLYGON((-0.01 0, 3 8, 6 6 ,  -0.01 0))");
-			
+			System.out.println(OverlayOp
+					.overlayOp(c, d, OverlayOp.INTERSECTION));
+			System.out.println((SnappingOverlayOperation.overlayOp(c, d,
+					OverlayOp.INTERSECTION, 0.1)));
+
+			// Que un polígono esté cerrado o no no es snap, sino regla
+			// topologica
+
+			// TODO CON POLIGONOS ESTÁ DANDO PROBLEMAS. HABRA QUE REVISAR LINEAS
+			// Y POLIGONOS
+			// c = reader.read("POLYGON((0 0, 0 5, 5 5, 5 0,  0 0))");
+			// d = reader.read("POLYGON((-0.01 0, 3 8, 6 6 ,  -0.01 0))");
+
 			c = reader.read("POLYGON((5 0, 5 5, 10 5, 10 0,  5 0))");
 			d = reader.read("POLYGON((4 3, 4.99 3.5, 10.01 3.5, 12 3,  4 3))");
-			
-			
-			
-			//REVISIÓN TOPOLOGICA 
-			/*
-			 * Un aspecto esencial de la topologia en JTS es el etiquetado.
-			 * Todo Eje del grafo asociado a un polígono tiene una etiqueta o Label, 
-			 * con tres valores posibles para la izquierda, derecha y encima del poligono
-			 * (EXTERIOR, BOUNDARY, INTERIOR)
-			 * 
-			 * Por tanto, si la orientación no es la correcta, todo se va al traste
-			 * (pues las cosas se invierten especularmente)
-			 * */
-			if(CGAlgorithms.isCCW(c.getCoordinates())){
-				System.out.println("Anillo exterior de poligono en orden incorrecto");
-			    System.out.println(c.toText());
-				System.exit(-2);
-			}
-			if(CGAlgorithms.isCCW(d.getCoordinates())){
-				System.out.println("Anillo exterior de poligono en orden incorrecto");
-				   System.out.println(d.toText());
-				System.exit(-2);
-			}
-		
-			System.out.println((SnappingOverlayOperation.overlayOp(c, d, OverlayOp.INTERSECTION, 0.1)));
 
-			Geometry pol1 = reader.read("POLYGON((0 0, -5 0, -10 5, 0 10,  10 5, 5 0, 0 0))");
-			Geometry pol2 = reader.read("POLYGON((10.01 0, 5 5, 5 10, 10 10, 10.01 0))");
-			
-			System.out.println((SnappingOverlayOperation.overlayOp(pol1, pol2, OverlayOp.INTERSECTION, 0.1)));
-			System.out.println((OverlayOp.overlayOp(pol1, pol2, OverlayOp.INTERSECTION)));
-			
-			
+			// REVISIÓN TOPOLOGICA
+			/*
+			 * Un aspecto esencial de la topologia en JTS es el etiquetado. Todo
+			 * Eje del grafo asociado a un polígono tiene una etiqueta o Label,
+			 * con tres valores posibles para la izquierda, derecha y encima del
+			 * poligono (EXTERIOR, BOUNDARY, INTERIOR)
+			 * 
+			 * Por tanto, si la orientación no es la correcta, todo se va al
+			 * traste (pues las cosas se invierten especularmente)
+			 */
+			if (CGAlgorithms.isCCW(c.getCoordinates())) {
+				System.out
+						.println("Anillo exterior de poligono en orden incorrecto");
+				System.out.println(c.toText());
+				System.exit(-2);
+			}
+			if (CGAlgorithms.isCCW(d.getCoordinates())) {
+				System.out
+						.println("Anillo exterior de poligono en orden incorrecto");
+				System.out.println(d.toText());
+				System.exit(-2);
+			}
+
+			System.out.println((SnappingOverlayOperation.overlayOp(c, d,
+					OverlayOp.INTERSECTION, 0.1)));
+
+			Geometry pol1 = reader
+					.read("POLYGON((0 0, -5 0, -10 5, 0 10,  10 5, 5 0, 0 0))");
+			Geometry pol2 = reader
+					.read("POLYGON((10.01 0, 5 5, 5 10, 10 10, 10.01 0))");
+
+			System.out.println((SnappingOverlayOperation.overlayOp(pol1, pol2,
+					OverlayOp.INTERSECTION, 0.1)));
+			System.out.println((OverlayOp.overlayOp(pol1, pol2,
+					OverlayOp.INTERSECTION)));
+
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		   
 
 	}
 

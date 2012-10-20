@@ -80,74 +80,74 @@ public class Network {
 	private Hashtable velocities = null;
 
 	private ArrayList<GvTurn> turnCosts = new ArrayList();
-	
+
 	private IFeatureExtractor featExtractor = null;
 
 	public void reconstruyeTramo(int idArc) {
 		GvNode pN1, pN2;
 		int i;
-		
-		// Si encontramos un enlace con idEdge >= numOriginalEdges, lo cambiamos.
+
+		// Si encontramos un enlace con idEdge >= numOriginalEdges, lo
+		// cambiamos.
 		// Y CON ESE IDarc!!
-		// Si hay varios, no pasa nada, volvemos a llamar a esta función con IdTramo
+		// Si hay varios, no pasa nada, volvemos a llamar a esta función con
+		// IdTramo
 
 		EdgePair edgePair = graph.getEdgesByIdArc(idArc);
-		if (edgePair.getIdEdge() != -1)
-		{
+		if (edgePair.getIdEdge() != -1) {
 			// Restauramos los enlaces de los nodos de ese tramo.
-//			pN1 = &Nodos[Arcos[IndiceArcos[idTramo].idArco].idNodo1];
-//			pN2 = &Nodos[Arcos[IndiceArcos[idTramo].idArco].idNodo2];
+			// pN1 = &Nodos[Arcos[IndiceArcos[idTramo].idArco].idNodo1];
+			// pN2 = &Nodos[Arcos[IndiceArcos[idTramo].idArco].idNodo2];
 			GvEdge edge = graph.getEdgeByID(edgePair.getIdEdge());
 			pN1 = graph.getNodeByID(edge.getIdNodeOrig());
 			pN2 = graph.getNodeByID(edge.getIdNodeEnd());
 
 			// Metemos idArco en los enlaces de Nodo1
-//			for (i=0; i< pN1.getOutputLinks().size(); i++)
-//			{
-//				GvEdge auxEdge = (GvEdge) pN1.getOutputLinks().get(i);
-//				if (auxEdge.getIdArc() == idArc)
-//				{
-//					if (auxEdge.getIdEdge() >= numOriginalEdges) 
-//					{
-//						pN1.getOutputLinks().set(i, graph.getEdgeByID(edgePair.getIdEdge()));
-//						break;
-//					}
-//				}
-//			}
+			// for (i=0; i< pN1.getOutputLinks().size(); i++)
+			// {
+			// GvEdge auxEdge = (GvEdge) pN1.getOutputLinks().get(i);
+			// if (auxEdge.getIdArc() == idArc)
+			// {
+			// if (auxEdge.getIdEdge() >= numOriginalEdges)
+			// {
+			// pN1.getOutputLinks().set(i,
+			// graph.getEdgeByID(edgePair.getIdEdge()));
+			// break;
+			// }
+			// }
+			// }
 			restoreConnectors(edge);
-			
+
 		}
 
-		if (edgePair.idInverseEdge != -1)
-		{
-//			pN1 = &Nodos[Arcos[IndiceArcos[idTramo].idContraArco].idNodo1];
-//			pN2 = &Nodos[Arcos[IndiceArcos[idTramo].idContraArco].idNodo2];
+		if (edgePair.idInverseEdge != -1) {
+			// pN1 = &Nodos[Arcos[IndiceArcos[idTramo].idContraArco].idNodo1];
+			// pN2 = &Nodos[Arcos[IndiceArcos[idTramo].idContraArco].idNodo2];
 			GvEdge edge = graph.getEdgeByID(edgePair.getIdInverseEdge());
 			pN1 = graph.getNodeByID(edge.getIdNodeOrig());
 
-//			for (i=0; i< pN1.getOutputLinks().size(); i++)
-//			{
-//				if (edge.getIdArc() == idArc)
-//				{
-//					GvEdge auxEdge = (GvEdge) pN1.getOutputLinks().get(i);
-//					if (auxEdge.getIdEdge() >= numOriginalEdges) 
-//					{
-//						pN1.getOutputLinks().set(i, graph.getEdgeByID(edgePair.getIdInverseEdge()));
-//						break;
-//					}
-//				}								
-//			}
+			// for (i=0; i< pN1.getOutputLinks().size(); i++)
+			// {
+			// if (edge.getIdArc() == idArc)
+			// {
+			// GvEdge auxEdge = (GvEdge) pN1.getOutputLinks().get(i);
+			// if (auxEdge.getIdEdge() >= numOriginalEdges)
+			// {
+			// pN1.getOutputLinks().set(i,
+			// graph.getEdgeByID(edgePair.getIdInverseEdge()));
+			// break;
+			// }
+			// }
+			// }
 			restoreConnectors(edge);
 		}
 
 		int numEdges = graph.numEdges();
 		int numNodes = graph.numVertices();
-		for (int idEdge = numEdges-1; idEdge >= numOriginalEdges; idEdge--)
-		{
+		for (int idEdge = numEdges - 1; idEdge >= numOriginalEdges; idEdge--) {
 			graph.removeEdge(idEdge);
 		}
-		for (int idNode = numNodes-1; idNode >= numOriginalNodes; idNode--)
-		{
+		for (int idNode = numNodes - 1; idNode >= numOriginalNodes; idNode--) {
 			graph.removeNode(idNode);
 		}
 
@@ -159,7 +159,8 @@ public class Network {
 		for (int iCon = 0; iCon < pN1.getConnectors().size(); iCon++) {
 			GvConnector c = pN1.getConnectors().get(iCon);
 			if (c.getEdgeOut() != null) {
-				if ((c.getEdgeOut().getIdEdge() >= numOriginalEdges) && (c.getEdgeOut().getIdArc() == edge.getIdArc())) {
+				if ((c.getEdgeOut().getIdEdge() >= numOriginalEdges)
+						&& (c.getEdgeOut().getIdArc() == edge.getIdArc())) {
 					c.setEdgeOut(edge);
 				}
 			}
@@ -167,7 +168,8 @@ public class Network {
 		for (int iCon = 0; iCon < pN2.getConnectors().size(); iCon++) {
 			GvConnector c = pN2.getConnectors().get(iCon);
 			if (c.getEdgeIn() != null) {
-				if ((c.getEdgeIn().getIdEdge() >= numOriginalEdges) && (c.getEdgeIn().getIdArc() == edge.getIdArc())) {
+				if ((c.getEdgeIn().getIdEdge() >= numOriginalEdges)
+						&& (c.getEdgeIn().getIdArc() == edge.getIdArc())) {
 					c.setEdgeIn(edge);
 				}
 			}
@@ -176,19 +178,22 @@ public class Network {
 
 	/**
 	 * Closest ID to this point. -1 if out from tolerance.
+	 * 
 	 * @param x
 	 * @param y
 	 * @param tolerance
-	 * @param nearest. Point to receive the nearest point ON arc.
+	 * @param nearest
+	 *            . Point to receive the nearest point ON arc.
 	 * @return
 	 */
-	public int findClosestArc(double x, double y, double tolerance, Point2D nearestPoint) {
+	public int findClosestArc(double x, double y, double tolerance,
+			Point2D nearestPoint) {
 		Point2D p = new Point2D.Double(x, y);
-		
-		if (featExtractor != null)
-		{
-			if (! (featExtractor instanceof DefaultFeatureExtractor)) {
-				return findClosestArcWithFeatExtractor(p, tolerance, nearestPoint);
+
+		if (featExtractor != null) {
+			if (!(featExtractor instanceof DefaultFeatureExtractor)) {
+				return findClosestArcWithFeatExtractor(p, tolerance,
+						nearestPoint);
 			}
 		}
 		FBitSet bitSet;
@@ -203,14 +208,14 @@ public class Network {
 				IGeometry geom;
 				geom = va.getShape(i);
 				CoordinateReferenceSystem crs = lyrVect.getCrs();
-			    if (crs != null) {
+				if (crs != null) {
 					if (!crs.getName().equals(
 							lyrVect.getMapContext().getViewPort().getCrs()
 									.getName())) {
 						geom.reProject(lyrVect.getCrsTransform());
 					}
-			    }
-				
+				}
+
 				Point2D nearest = getNearestPoint(p, geom, tolerance);
 				if (nearest != null) {
 					double dist = nearest.distance(p);
@@ -483,9 +488,7 @@ public class Network {
 			if (dist1 < dist2) {
 				flag.setPct(0);
 				return from.getIdNode();
-			}
-			else
-			{
+			} else {
 				flag.setPct(1.0);
 				return to.getIdNode();
 			}
@@ -498,13 +501,10 @@ public class Network {
 					from.getY());
 			double dist2 = flag.getOriginalPoint().distance(to.getX(),
 					to.getY());
-			if (dist1 < dist2)
-			{
+			if (dist1 < dist2) {
 				flag.setPct(0);
 				return from.getIdNode();
-			}
-			else
-			{
+			} else {
 				flag.setPct(1.0);
 				return to.getIdNode();
 			}
@@ -532,8 +532,8 @@ public class Network {
 		// Nos quedamos con el que esté más cerca y luego recorremos hasta él
 		// acumulando distancia.
 		// Finalmente, dividimos esa distancia por la longitud total.
-//		lyrVect.getSource().start();
-//		IGeometry geom = lyrVect.getSource().getShape(idArc);
+		// lyrVect.getSource().start();
+		// IGeometry geom = lyrVect.getSource().getShape(idArc);
 		IGeometry geom = featExtractor.getGeometry(idArc);
 		MultiLineString jtsGeom = (MultiLineString) geom.toJTSGeometry();
 
@@ -568,7 +568,7 @@ public class Network {
 			}
 			longReal += line.getLength();
 		}
-//		lyrVect.getSource().stop();
+		// lyrVect.getSource().stop();
 		dist = cOrig.distance(closestPoint);
 		double longBuscada = distTo + dist;
 
@@ -625,7 +625,7 @@ public class Network {
 	 *            tolerance in map units
 	 * @return null if there is no place to add flag. You can increase the
 	 *         tolerance, then.
-	 * @throws GraphException 
+	 * @throws GraphException
 	 */
 	public GvFlag addFlag(double x, double y, double tol) throws GraphException {
 		try {
@@ -652,15 +652,17 @@ public class Network {
 	}
 
 	/**
-	 * Create a flag in both directions, but NOT add it to the Network.
-	 * We use it on onetomany solver
+	 * Create a flag in both directions, but NOT add it to the Network. We use
+	 * it on onetomany solver
+	 * 
 	 * @param x
 	 * @param y
 	 * @param tol
 	 * @return
 	 * @throws GraphException
 	 */
-	public GvFlag createFlag(double x, double y, double tol) throws GraphException {
+	public GvFlag createFlag(double x, double y, double tol)
+			throws GraphException {
 		try {
 			Point2D nearestPoint = new Point2D.Double();
 			int idArc = findClosestArc(x, y, tol, nearestPoint);
@@ -669,7 +671,7 @@ public class Network {
 
 			GvFlag flag = new GvFlag(x, y);
 			flag.setIdArc(idArc);
-//			EdgePair edgePair = graph.getEdgesByIdArc(idArc);
+			// EdgePair edgePair = graph.getEdgesByIdArc(idArc);
 			flag.setDirec(GvFlag.BOTH_DIRECTIONS);
 
 			flag.setPct(percentAlong(idArc, x, y));
@@ -682,7 +684,8 @@ public class Network {
 
 	}
 
-	public GvFlag addFlagToNode(double x, double y, double tol) throws GraphException {
+	public GvFlag addFlagToNode(double x, double y, double tol)
+			throws GraphException {
 		Point2D nearestPoint = new Point2D.Double();
 		int idArc = findClosestArc(x, y, tol, nearestPoint);
 		if (idArc == -1)
@@ -692,7 +695,7 @@ public class Network {
 		flag.setIdArc(idArc);
 		flag.setDirec(GvFlag.BOTH_DIRECTIONS);
 		int idNode = getClosestIdNode(flag);
-		
+
 		GvNode node = graph.getNodeByID(idNode);
 		flag.setOriginalPoint(node.getX(), node.getY());
 		flag.setIdFlag(flags.size());
@@ -702,7 +705,6 @@ public class Network {
 
 	}
 
-
 	public void addFlag(GvFlag flag) {
 		flags.add(flag);
 		callFlagsChanged(IFlagListener.FLAG_ADDED);
@@ -710,27 +712,27 @@ public class Network {
 
 	public GvFlag[] getFlags() {
 		ArrayList aux = new ArrayList();
-		for (int i=0; i < getOriginaFlags().size(); i++)
-		{
+		for (int i = 0; i < getOriginaFlags().size(); i++) {
 			GvFlag flag = (GvFlag) getOriginaFlags().get(i);
-			if (flag.isEnabled()) aux.add(flag);
+			if (flag.isEnabled())
+				aux.add(flag);
 		}
 
 		return (GvFlag[]) aux.toArray(new GvFlag[0]);
 	}
-	
-	public int getFlagsCount(){
+
+	public int getFlagsCount() {
 		return this.getOriginaFlags().size();
 	}
-	
+
 	/**
 	 * Suitable to change directly the flags collection
+	 * 
 	 * @return
 	 */
 	public ArrayList getOriginaFlags() {
 		return flags;
 	}
-
 
 	public void setFlags(ArrayList flags) {
 		this.flags = flags;
@@ -754,7 +756,7 @@ public class Network {
 		this.lyrVect = lyr;
 		this.featExtractor = new DefaultFeatureExtractor(lyr);
 		// FJP: Workarround to avoid using SpatialIndex with reprojected layers
-	    if (lyrVect.getCrsTransform() != null) {
+		if (lyrVect.getCrsTransform() != null) {
 			if (!lyrVect
 					.getCrs()
 					.getName()
@@ -762,17 +764,17 @@ public class Network {
 							.getName()))
 				lyrVect.setISpatialIndex(null);
 		}
-		
-		// fin 
-		
+
+		// fin
+
 	}
 
 	public void removeFlags() {
 		flags = new ArrayList();
 		callFlagsChanged(IFlagListener.FLAG_REMOVED);
 	}
-	
-	public void removeFlag(GvFlag flag){
+
+	public void removeFlag(GvFlag flag) {
 		flags.remove(flag);
 		callFlagsChanged(IFlagListener.FLAG_REMOVED);
 	}
@@ -835,64 +837,69 @@ public class Network {
 		// ////////////////////////////////////////////////////
 		int i;
 		// boolean encontrado = false;
-//		for (i = 0; i < pN1.getOutputLinks().size(); i++) {
-//			GvEdge aux = (GvEdge) pN1.getOutputLinks().get(i);
-//			if (aux.getIdEdge() == idEdge) {
-//				pN1.getOutputLinks().set(i, first);
-//				// encontrado = true;
-//				break;
-//			}
-//		} // for
+		// for (i = 0; i < pN1.getOutputLinks().size(); i++) {
+		// GvEdge aux = (GvEdge) pN1.getOutputLinks().get(i);
+		// if (aux.getIdEdge() == idEdge) {
+		// pN1.getOutputLinks().set(i, first);
+		// // encontrado = true;
+		// break;
+		// }
+		// } // for
 		for (i = 0; i < pN1.getConnectors().size(); i++) {
 			GvConnector c = pN1.getConnectors().get(i);
-			if ((c.getEdgeOut() != null) && (c.getEdgeOut().getIdEdge()== idEdge)) {
+			if ((c.getEdgeOut() != null)
+					&& (c.getEdgeOut().getIdEdge() == idEdge)) {
 				c.setEdgeOut(first);
 				// encontrado = true;
 				break;
 			}
 		} // for
 
-		// Conector de entrada 
-//		GvConnector newCon = new GvConnector();
-//		newCon.setEdgeIn(first);
-//		newNode.getConnectors().add(newCon);
+		// Conector de entrada
+		// GvConnector newCon = new GvConnector();
+		// newCon.setEdgeIn(first);
+		// newNode.getConnectors().add(newCon);
 		addInputLink(newNode, first);
 
-		// Conector de salida 
-//		GvConnector conOut = new GvConnector();
-//		conOut.setEdgeOut(second);
-//		newNode.getConnectors().add(conOut);
+		// Conector de salida
+		// GvConnector conOut = new GvConnector();
+		// conOut.setEdgeOut(second);
+		// newNode.getConnectors().add(conOut);
 		addOutputLink(newNode, second);
-		
+
 		// Y hacemos que el conector de entrada del idNodo2 tenga el arco nuevo
 		// log("Y hacemos que el conector de entrada del idNodo2 tenga el arco nuevo");
 		for (i = 0; i < pN2.getConnectors().size(); i++) {
 			GvConnector c = pN2.getConnectors().get(i);
-			if ((c.getEdgeIn() != null) && (c.getEdgeIn().getIdEdge()== idEdge)) {
+			if ((c.getEdgeIn() != null)
+					&& (c.getEdgeIn().getIdEdge() == idEdge)) {
 				c.setEdgeIn(second);
 				// encontrado = true;
 				break;
 			}
 		} // for
 	}
-	
+
 	/**
-	 * Add an edge out to this node. This function takes care of creating the needed connectors
+	 * Add an edge out to this node. This function takes care of creating the
+	 * needed connectors
+	 * 
 	 * @param edge
 	 */
 	private void addOutputLink(GvNode n, GvEdge edge) {
-//		outputLinks.add(edge);
+		// outputLinks.add(edge);
 		// Create connectors
 		// First, search the connector if it is already created
 		GvConnector c;
 		boolean bFound = false;
 		GvConnector cFound = null;
-		for (int iConec=0; iConec< n.getConnectors().size();  iConec++)
-		{
+		for (int iConec = 0; iConec < n.getConnectors().size(); iConec++) {
 			c = n.getConnectors().get(iConec);
-			if ((c.getEdgeIn() != null) && (c.getEdgeIn().getIdNodeOrig() == edge.getIdNodeEnd())
-				&& (c.getEdgeIn().getIdNodeEnd() == edge.getIdNodeOrig())) {
-				// Found. This connector has been originated before by the same edge
+			if ((c.getEdgeIn() != null)
+					&& (c.getEdgeIn().getIdNodeOrig() == edge.getIdNodeEnd())
+					&& (c.getEdgeIn().getIdNodeEnd() == edge.getIdNodeOrig())) {
+				// Found. This connector has been originated before by the same
+				// edge
 				bFound = true;
 				cFound = c;
 				break;
@@ -902,30 +909,31 @@ public class Network {
 			GvConnector newCon = new GvConnector();
 			newCon.setEdgeOut(edge);
 			n.getConnectors().add(newCon);
-		}
-		else
-		{
+		} else {
 			cFound.setEdgeOut(edge);
 		}
-		
+
 	}
 
 	/**
-	 * Add an input edge to this node. This function takes care of creating the needed connectors
+	 * Add an input edge to this node. This function takes care of creating the
+	 * needed connectors
+	 * 
 	 * @param edge
 	 */
 	private void addInputLink(GvNode n, GvEdge edge) {
-//		inputLinks.add(edge);
+		// inputLinks.add(edge);
 		// First, search the connector if it is already created
 		GvConnector c;
 		boolean bFound = false;
 		GvConnector cFound = null;
-		for (int iConec=0; iConec< n.getConnectors().size();  iConec++)
-		{
+		for (int iConec = 0; iConec < n.getConnectors().size(); iConec++) {
 			c = n.getConnectors().get(iConec);
-			if ((c.getEdgeOut() != null) && (c.getEdgeOut().getIdNodeOrig() == edge.getIdNodeEnd())
+			if ((c.getEdgeOut() != null)
+					&& (c.getEdgeOut().getIdNodeOrig() == edge.getIdNodeEnd())
 					&& (c.getEdgeOut().getIdNodeEnd() == edge.getIdNodeOrig())) {
-				// Found. This connector has been originated before by the same arc
+				// Found. This connector has been originated before by the same
+				// arc
 				bFound = true;
 				cFound = c;
 				break;
@@ -935,127 +943,127 @@ public class Network {
 			GvConnector newCon = new GvConnector();
 			newCon.setEdgeIn(edge);
 			n.getConnectors().add(newCon);
-		}
-		else
-		{
+		} else {
 			cFound.setEdgeIn(edge);
 		}
-		
+
 	}
-	
 
 	public ArrayList getModifiedCosts() {
 		return modifiedCosts;
-		
+
 	}
-	
+
 	private int[] BuscaNodosDeTramo(EdgePair pair) {
 		int[] resul = new int[2];
-		if ((pair.idEdge == -1) && (pair.idInverseEdge == -1))
-		{
+		if ((pair.idEdge == -1) && (pair.idInverseEdge == -1)) {
 			return null; // Error: No existen esos arcos.
 		}
 
-		if (pair.idEdge != -1)
-		{
+		if (pair.idEdge != -1) {
 			resul[0] = graph.getEdgeByID(pair.idEdge).getIdNodeOrig();
-			resul[1]= graph.getEdgeByID(pair.idEdge).getIdNodeEnd();
-		}
-		else
-		{
+			resul[1] = graph.getEdgeByID(pair.idEdge).getIdNodeEnd();
+		} else {
 			resul[0] = graph.getEdgeByID(pair.idInverseEdge).getIdNodeOrig();
-			resul[1]= graph.getEdgeByID(pair.idInverseEdge).getIdNodeEnd();
+			resul[1] = graph.getEdgeByID(pair.idInverseEdge).getIdNodeEnd();
 		}
 		return resul;
 
 	}
 
-	public GvTurn addTurnCost(int idArcOrigin, int idArcDestination, double newCost) {
-		GvTurn turnCost = new GvTurn(idArcOrigin, idArcDestination, newCost);		
+	public GvTurn addTurnCost(int idArcOrigin, int idArcDestination,
+			double newCost) {
+		GvTurn turnCost = new GvTurn(idArcOrigin, idArcDestination, newCost);
 		EdgePair edgePairFrom = getGraph().getEdgesByIdArc(idArcOrigin);
 		EdgePair edgePairTo = getGraph().getEdgesByIdArc(idArcDestination);
-		
-		// We found the node that connects these arcs, 
+
+		// We found the node that connects these arcs,
 		// and add the new turnCost to its list of turnCosts.
 		GvNode searchedNode;
 		int idNa1, idNa2, idNb1, idNb2, idNodoBuscado;
 		int[] A, B;
 
 		A = BuscaNodosDeTramo(edgePairFrom);
-		if (A == null) return null; // No existen arcos para ese idTramo
-		
+		if (A == null)
+			return null; // No existen arcos para ese idTramo
 
 		B = BuscaNodosDeTramo(edgePairTo);
-		if (B == null) return null; // No existen arcos para ese idTramo
+		if (B == null)
+			return null; // No existen arcos para ese idTramo
 
-		idNa1 = A[0]; idNa2 = A[1];
-		idNb1 = B[0]; idNb2 = B[1];
+		idNa1 = A[0];
+		idNa2 = A[1];
+		idNb1 = B[0];
+		idNb2 = B[1];
 
 		// Buscamos el nodo que está entre fromIdTramo y toIdTramo
 		// y el arco. Al arco hay que cambiarle el destino
 		if (idNa1 == idNb1)
 			idNodoBuscado = idNa1;
+		else if (idNa1 == idNb2)
+			idNodoBuscado = idNa1;
+		else if (idNa2 == idNb1)
+			idNodoBuscado = idNa2;
+		else if (idNa2 == idNb2)
+			idNodoBuscado = idNa2;
 		else
-			if (idNa1 == idNb2)
-				idNodoBuscado = idNa1;
-			else
-				if (idNa2 == idNb1)
-					idNodoBuscado = idNa2;
-				else
-					if (idNa2 == idNb2)
-						idNodoBuscado = idNa2;
-					else // ERROR
-						return null; // esos tramos no conectan.
+			// ERROR
+			return null; // esos tramos no conectan.
 
-		// Podemos funcionar con idTramo en lugar de idArco porque cada CLink lleva dentro
+		// Podemos funcionar con idTramo en lugar de idArco porque cada CLink
+		// lleva dentro
 		// el idTramo que lo originó, y en el algoritmo podemos mirarlo.
 
 		searchedNode = graph.getNodeByID(idNodoBuscado);
-		searchedNode.addTurnCost(turnCost);			
-		turnCosts.add(turnCost); //useful to remove them one by one without iterating the whole graph.
-		
+		searchedNode.addTurnCost(turnCost);
+		turnCosts.add(turnCost); // useful to remove them one by one without
+									// iterating the whole graph.
+
 		return turnCost; // everything is fine
 	}
+
 	/**
-	 * Create, add and apply a new modified cost to the graph. 
-	 * @param idArc where the cost will be applied.
-	 * @param newCost. -1 if you want tu put a BARRIER.
-	 * @param direction. 1-> edge of digitalized direction. 2-> inverse edge. 3-> Both directions
+	 * Create, add and apply a new modified cost to the graph.
+	 * 
+	 * @param idArc
+	 *            where the cost will be applied.
+	 * @param newCost
+	 *            . -1 if you want tu put a BARRIER.
+	 * @param direction
+	 *            . 1-> edge of digitalized direction. 2-> inverse edge. 3->
+	 *            Both directions
 	 */
-	public GvModifiedCost addModifiedCost(int idArc, double newCost, int direction) {
-		GvModifiedCost modifiedCost = new GvModifiedCost(idArc, newCost, direction);
+	public GvModifiedCost addModifiedCost(int idArc, double newCost,
+			int direction) {
+		GvModifiedCost modifiedCost = new GvModifiedCost(idArc, newCost,
+				direction);
 		EdgePair edgePair = getGraph().getEdgesByIdArc(idArc);
 		modifiedCost.setIdEdge(edgePair.idEdge);
 		modifiedCost.setIdInverseEdge(edgePair.idInverseEdge);
-		if (direction == 3)
-		{
-			if (edgePair.getIdEdge() != -1)
-			{
+		if (direction == 3) {
+			if (edgePair.getIdEdge() != -1) {
 				GvEdge edge = getGraph().getEdgeByID(edgePair.getIdEdge());
 				modifiedCost.setOldCost(edge.getWeight());
 				edge.setWeight(-1.0);
 			}
-			if (edgePair.getIdInverseEdge() != -1)
-			{
-				GvEdge inverseEdge = getGraph().getEdgeByID(edgePair.getIdInverseEdge());
+			if (edgePair.getIdInverseEdge() != -1) {
+				GvEdge inverseEdge = getGraph().getEdgeByID(
+						edgePair.getIdInverseEdge());
 				modifiedCost.setOldInverseCost(inverseEdge.getWeight());
 				inverseEdge.setWeight(-1.0);
 			}
 		}
-		if (direction == 1)
-		{
-			if (edgePair.getIdEdge() != -1)
-			{
+		if (direction == 1) {
+			if (edgePair.getIdEdge() != -1) {
 				GvEdge edge = getGraph().getEdgeByID(edgePair.getIdEdge());
 				modifiedCost.setOldCost(edge.getWeight());
 				edge.setWeight(-1.0);
 			}
 		}
-		if (direction == 2)
-		{
-			if (edgePair.getIdInverseEdge() != -1)
-			{
-				GvEdge inverseEdge = getGraph().getEdgeByID(edgePair.getIdInverseEdge());
+		if (direction == 2) {
+			if (edgePair.getIdInverseEdge() != -1) {
+				GvEdge inverseEdge = getGraph().getEdgeByID(
+						edgePair.getIdInverseEdge());
 				modifiedCost.setOldInverseCost(inverseEdge.getWeight());
 				inverseEdge.setWeight(-1.0);
 			}
@@ -1064,17 +1072,17 @@ public class Network {
 		modifiedCost.setApplied(true);
 		return modifiedCost;
 	}
-	
+
 	/**
 	 * Remove ALL turn costs
 	 */
 	public void removeTurnCosts() {
-		for (int i=0; i < turnCosts.size(); i++) {
+		for (int i = 0; i < turnCosts.size(); i++) {
 			GvTurn turn = turnCosts.get(i);
-//			turn.getNode().getTurnCosts().remove(turn);
-			if (turn.getNode() == null)
-			{
-				System.err.println("El turnCost " + i + " no tiene nodo asociado.");
+			// turn.getNode().getTurnCosts().remove(turn);
+			if (turn.getNode() == null) {
+				System.err.println("El turnCost " + i
+						+ " no tiene nodo asociado.");
 				continue;
 			}
 			turn.getNode().removeTurnCosts();
@@ -1084,6 +1092,7 @@ public class Network {
 
 	/**
 	 * Be careful about the ORDER!!!!
+	 * 
 	 * @param modifiedCost
 	 */
 	public boolean removeModifiedCost(GvModifiedCost modifiedCost) {
@@ -1092,32 +1101,27 @@ public class Network {
 		int idArc = modifiedCost.getIdArc();
 		int direction = modifiedCost.getDirection();
 		EdgePair edgePair = getGraph().getEdgesByIdArc(idArc);
-		if (direction == 3)
-		{
-			if (edgePair.getIdEdge() != -1)
-			{
+		if (direction == 3) {
+			if (edgePair.getIdEdge() != -1) {
 				GvEdge edge = getGraph().getEdgeByID(edgePair.getIdEdge());
 				edge.setWeight(modifiedCost.getOldCost());
 			}
-			if (edgePair.getIdInverseEdge() != -1)
-			{
-				GvEdge inverseEdge = getGraph().getEdgeByID(edgePair.getIdInverseEdge());
+			if (edgePair.getIdInverseEdge() != -1) {
+				GvEdge inverseEdge = getGraph().getEdgeByID(
+						edgePair.getIdInverseEdge());
 				inverseEdge.setWeight(modifiedCost.getOldInverseCost());
 			}
 		}
-		if (direction == 1)
-		{
-			if (edgePair.getIdEdge() != -1)
-			{
+		if (direction == 1) {
+			if (edgePair.getIdEdge() != -1) {
 				GvEdge edge = getGraph().getEdgeByID(edgePair.getIdEdge());
 				edge.setWeight(modifiedCost.getOldCost());
 			}
 		}
-		if (direction == 2)
-		{
-			if (edgePair.getIdInverseEdge() != -1)
-			{
-				GvEdge inverseEdge = getGraph().getEdgeByID(edgePair.getIdInverseEdge());
+		if (direction == 2) {
+			if (edgePair.getIdInverseEdge() != -1) {
+				GvEdge inverseEdge = getGraph().getEdgeByID(
+						edgePair.getIdInverseEdge());
 				inverseEdge.setWeight(modifiedCost.getOldInverseCost());
 			}
 		}
@@ -1129,24 +1133,23 @@ public class Network {
 			flagListeners.add(listener);
 		}
 	}
-	
-	public void removeFlagListener(IFlagListener listener){
+
+	public void removeFlagListener(IFlagListener listener) {
 		flagListeners.remove(listener);
 	}
-	
+
 	private void callFlagsChanged(int reason) {
 		if (dispatching) {
-			for (int i=0; i < flagListeners.size(); i++)
-			{
+			for (int i = 0; i < flagListeners.size(); i++) {
 				IFlagListener listener = (IFlagListener) flagListeners.get(i);
 				listener.flagsChanged(reason);
 			}
 		}
 	}
-	
+
 	/**
-	 * Useful to do batch modifies. (For example, add lot of flags
-	 * and when finished (endModifying), throw event.
+	 * Useful to do batch modifies. (For example, add lot of flags and when
+	 * finished (endModifying), throw event.
 	 */
 	public void beginModifyingFlags() {
 		dispatching = false;
@@ -1156,17 +1159,22 @@ public class Network {
 		dispatching = true;
 		callFlagsChanged(IFlagListener.FLAG_MANY_CHANGES);
 	}
+
 	/**
 	 * Mueve un flag de la posición from a la posición to.
-	 *
-	 * @param from origen.
-	 * @param to destino.
+	 * 
+	 * @param from
+	 *            origen.
+	 * @param to
+	 *            destino.
 	 * 
 	 */
 	public void moveTo(int from, int to) throws CancelationException {
-		int newfrom=flags.size()-from-1;
-		int newto=flags.size()-to-1;
-		if ( newfrom < 0 || newfrom >=flags.size() || newto < 0 || newto >= flags.size()) return;
+		int newfrom = flags.size() - from - 1;
+		int newto = flags.size() - to - 1;
+		if (newfrom < 0 || newfrom >= flags.size() || newto < 0
+				|| newto >= flags.size())
+			return;
 		GvFlag aux = (GvFlag) flags.get(newfrom);
 		flags.remove(newfrom);
 		flags.add(newto, aux);
@@ -1177,18 +1185,15 @@ public class Network {
 		// TODO: Tener esto precalculado
 		TreeMap map = new TreeMap();
 		ArrayList ret = new ArrayList();
-		for (int i = 0; i < graph.numEdges(); i++)
-		{
+		for (int i = 0; i < graph.numEdges(); i++) {
 			GvEdge edge = graph.getEdgeByID(i);
 			Integer type = new Integer(edge.getType());
-			if (!map.containsKey(type))
-			{
-				map.put(type, type);				
+			if (!map.containsKey(type)) {
+				map.put(type, type);
 			}
 		}
 		Iterator it = map.entrySet().iterator();
-		while (it.hasNext())
-		{
+		while (it.hasNext()) {
 			Map.Entry entry = (Map.Entry) it.next();
 			Integer type = (Integer) entry.getKey();
 			ret.add(type);
@@ -1197,21 +1202,19 @@ public class Network {
 	}
 
 	public Hashtable getVelocities() {
-		return velocities ;
+		return velocities;
 	}
 
 	public void setVelocities(Hashtable veloMeters) {
-		for (int i=0; i < getGraph().numEdges(); i++)
-		{
+		for (int i = 0; i < getGraph().numEdges(); i++) {
 			GvEdge edge = getGraph().getEdgeByID(i);
-			
+
 			Integer key = new Integer(edge.getType());
 			Double vel = (Double) veloMeters.get(key);
 			edge.setWeight(edge.getDistance() / vel.doubleValue()); // segundos
 		}
 		this.velocities = veloMeters;
 
-		
 	}
 
 	public ArrayList<GvTurn> getTurnCosts() {

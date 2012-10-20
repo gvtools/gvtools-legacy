@@ -1,4 +1,5 @@
 package com.iver.utiles.console.jedit;
+
 /*
  * XMLTokenMarker.java - XML token marker
  * Copyright (C) 1999 Slava Pestov
@@ -10,14 +11,12 @@ package com.iver.utiles.console.jedit;
 
 /**
  * XML token marker.
- *
+ * 
  * @author Slava Pestov
  * @version $Id$
  */
-public class XMLTokenMarker extends HTMLTokenMarker
-{
-	public XMLTokenMarker()
-	{
+public class XMLTokenMarker extends HTMLTokenMarker {
+	public XMLTokenMarker() {
 		super(false);
 	}
 }

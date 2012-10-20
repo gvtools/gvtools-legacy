@@ -86,11 +86,11 @@ import org.gvsig.gpe.xml.utils.XMLAttributesIterator;
  *
  */
 /**
- * This class parses the gml objects that has a 
- * gml:_Feature object type. The structure of the
- * properties that this type has is variable and depends
- * on its schema. Example:
+ * This class parses the gml objects that has a gml:_Feature object type. The
+ * structure of the properties that this type has is variable and depends on its
+ * schema. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;cit:cities&gt;
@@ -105,112 +105,134 @@ import org.gvsig.gpe.xml.utils.XMLAttributesIterator;
  * &lt;/cit:cities&gt;
  * </code>
  * </pre>
+ * 
  * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class FeatureTypeBinding {	
+public class FeatureTypeBinding {
 	/**
 	 * It parses a feature
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * A feature
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return A feature
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public Object parse(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
+	public Object parse(IXmlStreamReader parser, GPEDefaultGmlParser handler)
+			throws XmlStreamException, IOException {
 		boolean endFeature = false;
-		int currentTag;		
-		Object feature = null;	
-		//Used to finish to parse the current feature member
+		int currentTag;
+		Object feature = null;
+		// Used to finish to parse the current feature member
 		QName featureRootType = parser.getName();
 
-		XMLAttributesIterator attributesIterator = new XMLAttributesIterator(parser);		
+		XMLAttributesIterator attributesIterator = new XMLAttributesIterator(
+				parser);
 		String fid = getID(attributesIterator.getAttributes());
-					
-		//If the element doesn't has the type it register the warning
-//		IXSElementDeclaration featureElement = null;
-//		featureElement = handler.getContentHandler().getSchemaDocument().getElementDeclarationByName(featureRootType);
-//		String elementName = null;
-//		if (featureElement!=null){
-//			String substitution = featureElement.getElement().getAttribute(SchemaTags.SUBSTITUTIONGROUP);
-//			//If it is a layer starts to parse the tag like a new layer
-//			if (CompareUtils.compareWithNamespace(substitution,GMLTags.GML_ABSTRACT_FEATURECOLLECTION)){
-//				return new GMLObject(handler.getProfile().getFeatureCollectionBinding().parse(parser, handler),
-//						GMLObject.LAYER);
-//			}
-//			elementName = featureElement.getTypeName();
-//		}
-		feature = handler.getContentHandler().startFeature(fid, 
-				featureRootType.getNamespaceURI(),
-				GMLUtilsParser.removeBlancSymbol(featureRootType.getLocalPart()),
-				attributesIterator,
-				null);
-		
+
+		// If the element doesn't has the type it register the warning
+		// IXSElementDeclaration featureElement = null;
+		// featureElement =
+		// handler.getContentHandler().getSchemaDocument().getElementDeclarationByName(featureRootType);
+		// String elementName = null;
+		// if (featureElement!=null){
+		// String substitution =
+		// featureElement.getElement().getAttribute(SchemaTags.SUBSTITUTIONGROUP);
+		// //If it is a layer starts to parse the tag like a new layer
+		// if
+		// (CompareUtils.compareWithNamespace(substitution,GMLTags.GML_ABSTRACT_FEATURECOLLECTION)){
+		// return new
+		// GMLObject(handler.getProfile().getFeatureCollectionBinding().parse(parser,
+		// handler),
+		// GMLObject.LAYER);
+		// }
+		// elementName = featureElement.getTypeName();
+		// }
+		feature = handler.getContentHandler()
+				.startFeature(
+						fid,
+						featureRootType.getNamespaceURI(),
+						GMLUtilsParser.removeBlancSymbol(featureRootType
+								.getLocalPart()), attributesIterator, null);
+
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_NAME)){
+				if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_NAME)) {
 					parser.next();
-					handler.getContentHandler().addNameToFeature(parser.getText(), feature);
-				}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_DESCRIPTION)){
+					handler.getContentHandler().addNameToFeature(
+							parser.getText(), feature);
+				} else if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_DESCRIPTION)) {
 					parser.next();
 					String description = parser.getText();
-				}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_BOUNDEDBY)){
-					Object bbox = handler.getProfile().getBoundedByTypeBinding().parse(parser, handler);
+				} else if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_BOUNDEDBY)) {
+					Object bbox = handler.getProfile()
+							.getBoundedByTypeBinding().parse(parser, handler);
 					handler.getContentHandler().addBboxToFeature(bbox, feature);
-				}else{
-					//If is not a GML...
-					if (!(CompareUtils.compareWithNamespace(featureRootType,tag))){						
-						if (GMLGeometries.isGML(tag)){
-							Object geometry = handler.getProfile().getGeometryBinding().parse(parser, handler);
-							handler.getContentHandler().addGeometryToFeature(geometry, feature);
-						}else{
-						//Elements (elements or features)
-							Object element = handler.getProfile().getElementTypeBinding().parse(parser, handler, feature, null, null);
-							handler.getContentHandler().addElementToFeature(element, feature);
+				} else {
+					// If is not a GML...
+					if (!(CompareUtils.compareWithNamespace(featureRootType,
+							tag))) {
+						if (GMLGeometries.isGML(tag)) {
+							Object geometry = handler.getProfile()
+									.getGeometryBinding()
+									.parse(parser, handler);
+							handler.getContentHandler().addGeometryToFeature(
+									geometry, feature);
+						} else {
+							// Elements (elements or features)
+							Object element = handler
+									.getProfile()
+									.getElementTypeBinding()
+									.parse(parser, handler, feature, null, null);
+							handler.getContentHandler().addElementToFeature(
+									element, feature);
 						}
 					}
 				}
 				break;
 			case IXmlStreamReader.END_ELEMENT:
-				if (CompareUtils.compareWithNamespace(featureRootType, tag)){						
+				if (CompareUtils.compareWithNamespace(featureRootType, tag)) {
 					endFeature = true;
 					handler.getContentHandler().endFeature(feature);
 				}
 				break;
-			case IXmlStreamReader.CHARACTERS:					
+			case IXmlStreamReader.CHARACTERS:
 
 				break;
 			}
-			if (!endFeature){					
+			if (!endFeature) {
 				currentTag = parser.next();
 				tag = parser.getName();
 			}
-		}			
-		return new GMLObject(feature,GMLObject.FEATURE);		
-	}	
-	
+		}
+		return new GMLObject(feature, GMLObject.FEATURE);
+	}
+
 	/**
 	 * It returns a the feaure id attribute
+	 * 
 	 * @param hash
-	 * Hashtable with the XML attributes
-	 * @return
-	 * The id
+	 *            Hashtable with the XML attributes
+	 * @return The id
 	 */
-	public String getID(Map hash){
-		if (hash.containsKey(GMLTags.GML_FID)){
-			return (String)hash.get(GMLTags.GML_FID);
+	public String getID(Map hash) {
+		if (hash.containsKey(GMLTags.GML_FID)) {
+			return (String) hash.get(GMLTags.GML_FID);
 		}
 		String id = GMLTags.GML_NAMESPACE_PREFIX + ":" + GMLTags.GML_ID;
-		if (hash.containsKey(id)){
-			return (String)hash.get(id);
+		if (hash.containsKey(id)) {
+			return (String) hash.get(id);
 		}
 		return null;
 	}

@@ -45,33 +45,31 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 
-import javax.swing.ImageIcon;
-
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.LayoutMoveListener;
 
-
 /**
- * Implementaci�n de la interfaz LayoutPanListener como herramienta para realizar el
- * Pan.
- *
+ * Implementaci�n de la interfaz LayoutPanListener como herramienta para
+ * realizar el Pan.
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LayoutViewPanListenerImpl implements LayoutMoveListener {
-	private final Image ipan = PluginServices.getIconTheme()
-		.get("hand-icon").getImage();
-	private final Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(ipan,
-			new Point(16, 16), "");
+	private final Image ipan = PluginServices.getIconTheme().get("hand-icon")
+			.getImage();
+	private final Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(
+			ipan, new Point(16, 16), "");
 
 	private Layout layout;
+
 	/**
 	 * Crea un nuevo RectangleListenerImpl.
-	 *
-	 * @param mapControl MapControl.
+	 * 
+	 * @param mapControl
+	 *            MapControl.
 	 */
 	public LayoutViewPanListenerImpl(Layout l) {
 		this.layout = l;
@@ -79,7 +77,7 @@ public class LayoutViewPanListenerImpl implements LayoutMoveListener {
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.PanListener#move(java.awt.geom.Point2D,
-	 * 		java.awt.geom.Point2D)
+	 *      java.awt.geom.Point2D)
 	 */
 	public void drag(PointEvent event) {
 
@@ -91,7 +89,8 @@ public class LayoutViewPanListenerImpl implements LayoutMoveListener {
 	public Image getImageCursor() {
 		return ipan;
 	}
-	public Cursor getCursor(){
+
+	public Cursor getCursor() {
 		return cur;
 	}
 
@@ -111,8 +110,8 @@ public class LayoutViewPanListenerImpl implements LayoutMoveListener {
 		Point p1 = layout.getLayoutControl().getFirstPoint();
 		layout.getLayoutControl().setLastPoint();
 		layout.getLayoutControl().setPointAnt();
-        Point p2 = event.getEvent().getPoint();
-        layout.getLayoutControl().getLayoutFunctions().setViewPan(p1, p2);
+		Point p2 = event.getEvent().getPoint();
+		layout.getLayoutControl().getLayoutFunctions().setViewPan(p1, p2);
 		layout.getLayoutControl().refresh();
 
 	}

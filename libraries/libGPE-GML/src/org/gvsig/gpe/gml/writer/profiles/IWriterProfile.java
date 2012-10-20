@@ -74,50 +74,50 @@ import org.gvsig.gpe.gml.writer.v2.geometries.PolygonWriter;
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public interface IWriterProfile {
-	
+
 	public FeatureCollectionWriter getFeatureCollectionWriter();
-	
+
 	public NameWriter getNameWriter();
-	
+
 	public DescriptionWriter getDescriptionWriter();
-	
+
 	public ElementWriter getElementWriter();
-	
+
 	public FeatureMemberWriter getFeatureMemberWriter();
-	
+
 	public BoundedByWriter getBoundedByWriter();
-	
+
 	public BoxWriter getBoxWriter();
-	
+
 	public CoordinatesWriter getCoordinatesWriter();
-	
-	public CoordWriter getCoordWriter();	
-	
+
+	public CoordWriter getCoordWriter();
+
 	public GeometryMemberWriter getGeometryMemberWriter();
-	
+
 	public InnerBoundaryIsWriter getInnerBoundaryIsWriter();
-	
+
 	public LinearRingWriter getLinearRingWriter();
-	
+
 	public LineStringMemberWriter getLineStringMemeberWriter();
-	
+
 	public LineStringWriter getLineStringWriter();
-	
+
 	public MultiGeometryWriter getMultiGeometryWriter();
-	
+
 	public MultiLineStringWriter getMultiLineStringWriter();
-	
+
 	public MultiPointWriter getMultiPointWriter();
-	
+
 	public MultiPolygonWriter getMultiPolygonWriter();
-	
+
 	public OuterBoundaryIsWriter getOuterBoundaryIsWriter();
-	
+
 	public PointMemberWriter getPointMemberWriter();
-	
+
 	public PointWriter getPointWriter();
-	
-	public PolygonMemberWriter  getPolygonMemberWriter();
-	
-	public PolygonWriter getPolygonWriter();	
+
+	public PolygonMemberWriter getPolygonMemberWriter();
+
+	public PolygonWriter getPolygonWriter();
 }

@@ -32,18 +32,20 @@ import org.gvsig.raster.datastruct.ColorTable;
 import org.gvsig.raster.datastruct.io.RasterLegendIO;
 
 import com.iver.andami.PluginServices;
+
 /**
  * Clase GimpPalettes sirve para importar y exportar tablas de color de Gimp.
  * Los ficheros de Paletas de gimp tienen la extension .gpl
- *
+ * 
  * @version 03/12/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class GimpPalettes extends RasterLegendIO {
 
 	/**
-	 * Devuelve el ColorItem asociado a una linea de un fichero de tablas de color
-	 * de Gimp
+	 * Devuelve el ColorItem asociado a una linea de un fichero de tablas de
+	 * color de Gimp
+	 * 
 	 * @param strings
 	 * @param pos
 	 * @return
@@ -56,16 +58,15 @@ public class GimpPalettes extends RasterLegendIO {
 
 		item.setInterpolated(100);
 
-		item.setColor(new Color(
-				Integer.valueOf(strings[1]).intValue(),
-				Integer.valueOf(strings[2]).intValue(),
-				Integer.valueOf(strings[3]).intValue()
-			));
+		item.setColor(new Color(Integer.valueOf(strings[1]).intValue(), Integer
+				.valueOf(strings[2]).intValue(), Integer.valueOf(strings[3])
+				.intValue()));
 		return item;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.datastruct.io.RasterLegendIO#read(java.io.File)
 	 */
 	public ColorTable read(File input) throws IOException {
@@ -87,7 +88,8 @@ public class GimpPalettes extends RasterLegendIO {
 					if (colorItem == null)
 						continue;
 
-					strings = (" " + currentLine).split("\\s+\\d+\\s+\\d+\\s+\\d+\\s+");
+					strings = (" " + currentLine)
+							.split("\\s+\\d+\\s+\\d+\\s+\\d+\\s+");
 
 					if (!strings[1].equals("Untitled"))
 						colorItem.setNameClass(strings[1]);
@@ -110,7 +112,10 @@ public class GimpPalettes extends RasterLegendIO {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.datastruct.io.RasterLegendIO#write(org.gvsig.raster.datastruct.ColorTable, java.io.File)
+	 * 
+	 * @see
+	 * org.gvsig.raster.datastruct.io.RasterLegendIO#write(org.gvsig.raster.
+	 * datastruct.ColorTable, java.io.File)
 	 */
 	public void write(ColorTable colorTable, File output) throws IOException {
 		ArrayList colorItems = colorTable.getColorItems();
@@ -128,7 +133,8 @@ public class GimpPalettes extends RasterLegendIO {
 				line += color.getRed() + " ";
 				line += color.getGreen() + " ";
 				line += color.getBlue() + "\t";
-				if ((item1.getNameClass() != null) && (item1.getNameClass().length() > 0))
+				if ((item1.getNameClass() != null)
+						&& (item1.getNameClass().length() > 0))
 					line += item1.getNameClass() + "\n";
 				else
 					line += "Untitled\n";
@@ -142,9 +148,10 @@ public class GimpPalettes extends RasterLegendIO {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.datastruct.io.RasterLegendIO#getDescription()
 	 */
 	public String getDescription() {
-		return PluginServices.getText (this,"Ficheros_GPL");
+		return PluginServices.getText(this, "Ficheros_GPL");
 	}
 }

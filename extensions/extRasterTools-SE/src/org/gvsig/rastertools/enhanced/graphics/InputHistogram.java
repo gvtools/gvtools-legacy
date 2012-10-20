@@ -34,28 +34,33 @@ import org.gvsig.raster.beans.canvas.layers.functions.SquareRootPowLine;
 import org.gvsig.raster.beans.canvas.layers.functions.StraightLine;
 import org.gvsig.raster.datastruct.Histogram;
 import org.gvsig.rastertools.enhanced.ui.EnhancedListener;
+
 /**
  * Componente con el histograma de entrada.
  * 
  * 20/02/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class InputHistogram extends HistogramGraphicBase {
 	private static final long serialVersionUID = 681848373747974757L;
-	
+
 	/**
 	 * Crea una nueva instancia de InputHistogram.
 	 */
-	public InputHistogram(Histogram hist, FLyrRasterSE lyr, double[] minList, double[] maxList) {
+	public InputHistogram(Histogram hist, FLyrRasterSE lyr, double[] minList,
+			double[] maxList) {
 		super(hist, lyr, minList, maxList);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.enhanced.graphics.HistogramGraphicBase#getCanvas()
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.enhanced.graphics.HistogramGraphicBase#getCanvas()
 	 */
 	public GCanvas getCanvas() {
-		if(canvas == null) {
+		if (canvas == null) {
 			canvas = new GCanvas(Color.BLACK);
 			canvas.addDrawableElement(new GraphicHistogram(Color.white));
 			canvas.addDrawableElement(new MinMaxLines(minMaxLineColor));
@@ -65,17 +70,19 @@ public class InputHistogram extends HistogramGraphicBase {
 		}
 		return canvas;
 	}
-	
+
 	/**
 	 * Asigna el listener para gestionar el evento de movimiento de gráficos
+	 * 
 	 * @param listener
 	 */
 	public void setListener(EnhancedListener listener) {
 		getCanvas().addValueChangedListener(listener);
 	}
-	
+
 	/**
 	 * Asigna el nivel de la función si esta es density slicing.
+	 * 
 	 * @param level
 	 */
 	public void setLevel(int level) {
@@ -83,67 +90,78 @@ public class InputHistogram extends HistogramGraphicBase {
 			histogramDrawed.setLevel(level);
 		getCanvas().repaint();
 	}
-	
+
 	/**
-	 * Asigna el tipo de función Lineal, Exponencial, logaritmica, density slicing, campana de gauss, 
-	 * raiz cuadrada o ecualización.
+	 * Asigna el tipo de función Lineal, Exponencial, logaritmica, density
+	 * slicing, campana de gauss, raiz cuadrada o ecualización.
 	 * 
-	 * @param type Tipo de histograma. El valor está definido en las constantes de GraphicHistogram
+	 * @param type
+	 *            Tipo de histograma. El valor está definido en las constantes
+	 *            de GraphicHistogram
 	 */
 	public void setFunction(int function) {
 		if (histogramDrawed == null)
 			return;
 
 		BaseFunction baseFunction = histogramDrawed.getBaseFunction();
-		
+
 		ArrayList listBaseFunc = canvas.getDrawableElements(BaseFunction.class);
-		if(listBaseFunc != null && listBaseFunc.get(0) instanceof BaseFunction)
-			((BaseFunction)listBaseFunc.get(0)).setDrawing(true);
-		
+		if (listBaseFunc != null && listBaseFunc.get(0) instanceof BaseFunction)
+			((BaseFunction) listBaseFunc.get(0)).setDrawing(true);
+
 		boolean regen = false;
 		switch (function) {
-			case GraphicHistogram.FUNCTION_DENSITY:
-				if (!baseFunction.getClass().equals(DensitySlicingLine.class))
-					baseFunction = new DensitySlicingLine(histogramDrawed.getBaseFunction().getColor());
-				break;
-			case GraphicHistogram.FUNCTION_LINEAL:
-				if (!baseFunction.getClass().equals(StraightLine.class))
-					baseFunction = new StraightLine(histogramDrawed.getBaseFunction().getColor());
-				break;
-			case GraphicHistogram.FUNCTION_LOGARIT:
-				regen = false;
-				if (!baseFunction.getClass().equals(LogaritmicExponentialLine.class)) {
+		case GraphicHistogram.FUNCTION_DENSITY:
+			if (!baseFunction.getClass().equals(DensitySlicingLine.class))
+				baseFunction = new DensitySlicingLine(histogramDrawed
+						.getBaseFunction().getColor());
+			break;
+		case GraphicHistogram.FUNCTION_LINEAL:
+			if (!baseFunction.getClass().equals(StraightLine.class))
+				baseFunction = new StraightLine(histogramDrawed
+						.getBaseFunction().getColor());
+			break;
+		case GraphicHistogram.FUNCTION_LOGARIT:
+			regen = false;
+			if (!baseFunction.getClass()
+					.equals(LogaritmicExponentialLine.class)) {
+				regen = true;
+			} else {
+				if (!((LogaritmicExponentialLine) baseFunction)
+						.isLogaritmical())
 					regen = true;
-				} else {
-					if (!((LogaritmicExponentialLine) baseFunction).isLogaritmical())
-						regen = true;
-				}
-				if (regen)
-					baseFunction = new LogaritmicExponentialLine(histogramDrawed.getBaseFunction().getColor(), 1.0);
-				break;
-			case GraphicHistogram.FUNCTION_EXPONENT:
-				regen = false;
-				if (!baseFunction.getClass().equals(LogaritmicExponentialLine.class)) {
+			}
+			if (regen)
+				baseFunction = new LogaritmicExponentialLine(histogramDrawed
+						.getBaseFunction().getColor(), 1.0);
+			break;
+		case GraphicHistogram.FUNCTION_EXPONENT:
+			regen = false;
+			if (!baseFunction.getClass()
+					.equals(LogaritmicExponentialLine.class)) {
+				regen = true;
+			} else {
+				if (!((LogaritmicExponentialLine) baseFunction).isExponencial())
 					regen = true;
-				} else {
-					if (!((LogaritmicExponentialLine) baseFunction).isExponencial())
-						regen = true;
-				}
-				if (regen)
-					baseFunction = new LogaritmicExponentialLine(histogramDrawed.getBaseFunction().getColor(), -1.0);
-				break;
-			case GraphicHistogram.FUNCTION_SQUARE_ROOT:
-				if (!baseFunction.getClass().equals(SquareRootPowLine.class))
-					baseFunction = new SquareRootPowLine(histogramDrawed.getBaseFunction().getColor(), 1.0);
-				break;
-			case GraphicHistogram.FUNCTION_NONE:
-				((BaseFunction)listBaseFunc.get(0)).setDrawing(false);		
-				break;
+			}
+			if (regen)
+				baseFunction = new LogaritmicExponentialLine(histogramDrawed
+						.getBaseFunction().getColor(), -1.0);
+			break;
+		case GraphicHistogram.FUNCTION_SQUARE_ROOT:
+			if (!baseFunction.getClass().equals(SquareRootPowLine.class))
+				baseFunction = new SquareRootPowLine(histogramDrawed
+						.getBaseFunction().getColor(), 1.0);
+			break;
+		case GraphicHistogram.FUNCTION_NONE:
+			((BaseFunction) listBaseFunc.get(0)).setDrawing(false);
+			break;
 		}
-					
+
 		histogramDrawed.setBaseFunction(baseFunction);
-		getCanvas().replaceDrawableElement(histogramDrawed.getBaseFunction(), BaseFunction.class);
-		
+		getCanvas().replaceDrawableElement(histogramDrawed.getBaseFunction(),
+				BaseFunction.class);
+
 		// Fuerza un repintado inmediato para actualizar los valores
 		getCanvas().paint(getCanvas().getGraphics());
 	}

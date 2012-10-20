@@ -36,24 +36,25 @@ import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 
 /**
- * Gestor de visualización de preview. Se encarga del repintado de la imagen 
- * de la previsualización
+ * Gestor de visualización de preview. Se encarga del repintado de la imagen de
+ * la previsualización
  * 
  * 19/02/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class PreviewRequestManager implements IClientImageNavigator {
-	private PreviewBasePanel        previewBasePanel  = null;
-	private FLyrRasterSE            previewLayer      = null;
-	private IPreviewRenderProcess   renderProcess     = null; 
+	private PreviewBasePanel previewBasePanel = null;
+	private FLyrRasterSE previewLayer = null;
+	private IPreviewRenderProcess renderProcess = null;
 
 	/**
 	 * Construye un ColorTableListener
-	 * @param 
+	 * 
+	 * @param
 	 */
-	public PreviewRequestManager(	PreviewBasePanel panel, 
-									IPreviewRenderProcess renderProcess, 
-									FLyrRasterSE layer) {
+	public PreviewRequestManager(PreviewBasePanel panel,
+			IPreviewRenderProcess renderProcess, FLyrRasterSE layer) {
 		this.previewBasePanel = panel;
 		this.renderProcess = renderProcess;
 		setLayer(layer);
@@ -61,18 +62,20 @@ public class PreviewRequestManager implements IClientImageNavigator {
 
 	/**
 	 * Asigna la capa raster de la vista
+	 * 
 	 * @param fLayer
 	 */
 	private void setLayer(FLayer fLayer) {
 		if (fLayer instanceof FLyrRasterSE) {
 			FLyrRasterSE ly = ((FLyrRasterSE) fLayer);
 			try {
-				if(ly.isActionEnabled(IRasterLayerActions.REMOTE_ACTIONS))
-					previewLayer = (FLyrRasterSE)ly.getFileLayer();//ly;
+				if (ly.isActionEnabled(IRasterLayerActions.REMOTE_ACTIONS))
+					previewLayer = (FLyrRasterSE) ly.getFileLayer();// ly;
 				else
-					previewLayer = (FLyrRasterSE) fLayer.cloneLayer();					
+					previewLayer = (FLyrRasterSE) fLayer.cloneLayer();
 			} catch (Exception e) {
-				RasterToolsUtil.messageBoxError("preview_not_available", previewBasePanel, e);
+				RasterToolsUtil.messageBoxError("preview_not_available",
+						previewBasePanel, e);
 			}
 		}
 	}
@@ -89,13 +92,17 @@ public class PreviewRequestManager implements IClientImageNavigator {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.imagenavigator.IClientImageNavigator#drawImage(java.awt.Graphics2D,
-	 *      double, double, double, double, double, int, int)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.imagenavigator.IClientImageNavigator#drawImage(java
+	 * .awt.Graphics2D, double, double, double, double, double, int, int)
 	 */
-	public void drawImage(Graphics2D g, double x1, double y1, double x2, double y2, double zoom, int width, int height) 
-		throws ImageUnavailableException {
+	public void drawImage(Graphics2D g, double x1, double y1, double x2,
+			double y2, double zoom, int width, int height)
+			throws ImageUnavailableException {
 		if (previewLayer == null || !(previewLayer instanceof IRasterRendering))
-			throw new ImageUnavailableException(PluginServices.getText(this, "error_dont_exists_layer"));
+			throw new ImageUnavailableException(PluginServices.getText(this,
+					"error_dont_exists_layer"));
 
 		IRasterRendering rendering = ((IRasterRendering) previewLayer);
 
@@ -110,23 +117,28 @@ public class PreviewRequestManager implements IClientImageNavigator {
 			renderProcess.process(rendering);
 		} catch (FilterTypeException e1) {
 			RasterToolsUtil.debug("error_adding_filters", this, e1);
-			throw new ImageUnavailableException(PluginServices.getText(this, "error_adding_filters"));
+			throw new ImageUnavailableException(PluginServices.getText(this,
+					"error_adding_filters"));
 		} catch (ImageUnavailableException e3) {
-			// No guardamos el mensaje en el log porque solo sirve para visualizarlo en el preview
+			// No guardamos el mensaje en el log porque solo sirve para
+			// visualizarlo en el preview
 			throw new ImageUnavailableException(e3.getMessage());
 		} catch (Exception e2) {
 			RasterToolsUtil.debug("error_adding_filters", this, e2);
-			throw new ImageUnavailableException(PluginServices.getText(this, "error_adding_filters"));
+			throw new ImageUnavailableException(PluginServices.getText(this,
+					"error_adding_filters"));
 		}
 
 		try {
 			previewLayer.draw(null, g, vp, null, 1.0);
 		} catch (ReadDriverException e) {
 			RasterToolsUtil.debug("error_preview_render", this, e);
-			throw new ImageUnavailableException(PluginServices.getText(this, "error_preview_render"));
+			throw new ImageUnavailableException(PluginServices.getText(this,
+					"error_preview_render"));
 		} catch (Exception e2) {
 			RasterToolsUtil.debug("error_preview_render", this, e2);
-			throw new ImageUnavailableException(PluginServices.getText(this, "error_preview_render"));
+			throw new ImageUnavailableException(PluginServices.getText(this,
+					"error_preview_render"));
 		}
 		rendering.getRenderFilterList().popStatus();
 	}

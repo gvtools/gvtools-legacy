@@ -48,10 +48,9 @@ import java.util.ArrayList;
 
 import javax.swing.AbstractListModel;
 
-
 /**
  * Modelo de la Lista de operadores a seleccionar.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class ListOperatorsModel extends AbstractListModel {
@@ -77,6 +76,7 @@ public class ListOperatorsModel extends AbstractListModel {
 	public Object getElementAt(int index) {
 		return operators.get(index);
 	}
+
 	public void clear() {
 		operators.clear();
 	}

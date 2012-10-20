@@ -94,41 +94,37 @@ import com.vividsolutions.jts.geom.MultiLineString;
 public class LineMustNotHavePseudonodes extends AbstractTopologyRule implements
 		IRuleWithClusterTolerance {
 
-	final static String RULE_NAME = Messages.getText("must_not_have_pseudonodes");
+	final static String RULE_NAME = Messages
+			.getText("must_not_have_pseudonodes");
 
 	double clusterTol;
-	
+
 	protected SnappingCoordinateMap pseudoNodesCoordMap = null;
-	
+
 	/**
 	 * Symbol for topology errors caused by a violation of this rule.
 	 */
 	protected MultiShapeSymbol errorSymbol = DEFAULT_ERROR_SYMBOL;
-	
-	private static List<ITopologyErrorFix> automaticErrorFixes =
-		new ArrayList<ITopologyErrorFix>();
-	static{
+
+	private static List<ITopologyErrorFix> automaticErrorFixes = new ArrayList<ITopologyErrorFix>();
+	static {
 		automaticErrorFixes.add(new RemovePseudoNodeFix());
-		
+
 	}
-	
+
 	protected static final Color DEFAULT_ERROR_COLOR = Color.PINK;
-	
-	
-	protected static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = 
-		(MultiShapeSymbol) SymbologyFactory.createDefaultSymbolByShapeType(FShape.MULTI, 
-											DEFAULT_ERROR_COLOR);
-	static{
+
+	protected static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = (MultiShapeSymbol) SymbologyFactory
+			.createDefaultSymbolByShapeType(FShape.MULTI, DEFAULT_ERROR_COLOR);
+	static {
 		DEFAULT_ERROR_SYMBOL.setDescription(RULE_NAME);
 		DEFAULT_ERROR_SYMBOL.setSize(3);
 	}
-	
 
 	public LineMustNotHavePseudonodes(Topology topology, FLyrVect originLyr,
 			double clusterTolerance) {
 		super(topology, originLyr);
 		setClusterTolerance(clusterTolerance);
-		
 
 	}
 
@@ -142,7 +138,8 @@ public class LineMustNotHavePseudonodes extends AbstractTopologyRule implements
 	public void checkPreconditions() throws TopologyRuleDefinitionException {
 		try {
 			int shapeType = this.originLyr.getShapeType();
-			if (FGeometryUtil.getDimensions(shapeType) != 1 && shapeType != FShape.MULTI)
+			if (FGeometryUtil.getDimensions(shapeType) != 1
+					&& shapeType != FShape.MULTI)
 				throw new TopologyRuleDefinitionException(
 						"LineMustNotHavePseudonodes requires a lineal geometry type");
 		} catch (ReadDriverException e) {
@@ -151,10 +148,10 @@ public class LineMustNotHavePseudonodes extends AbstractTopologyRule implements
 					"Error leyendo el tipo de geometria del driver", e);
 		}
 	}
-	
-	public void ruleChecked(){
+
+	public void ruleChecked() {
 		super.ruleChecked();
-		
+
 		this.pseudoNodesCoordMap = new SnappingCoordinateMap(this.clusterTol);
 	}
 
@@ -180,20 +177,21 @@ public class LineMustNotHavePseudonodes extends AbstractTopologyRule implements
 		} else if (geometry instanceof LineString) {
 			LineString lineString = (LineString) geometry;
 			Envelope lnEnv = lineString.getEnvelopeInternal();
-			 
-			//We try to extend a bit the original envelope to ensure
-			//recovering geometries in the limit
+
+			// We try to extend a bit the original envelope to ensure
+			// recovering geometries in the limit
 			double minX = lnEnv.getMinX() - 10;
 			double minY = lnEnv.getMinY() - 10;
 			double maxX = lnEnv.getMaxX() + 10;
 			double maxY = lnEnv.getMaxY() + 10;
 
-			Rectangle2D rect = new Rectangle2D.Double(minX, minY, maxX - minX, maxY - minY);
-			
+			Rectangle2D rect = new Rectangle2D.Double(minX, minY, maxX - minX,
+					maxY - minY);
+
 			SnappingCoordinateMapWithCounter coordinateMap = new SnappingCoordinateMapWithCounter(
 					getClusterTolerance());
 
-			// we consideer  pseudonode a coordinate with degree 2 (it only
+			// we consideer pseudonode a coordinate with degree 2 (it only
 			// connects two geometries)
 			Coordinate firstPoint = lineString.getCoordinateN(0);
 			coordinateMap.put(firstPoint, firstPoint);
@@ -210,7 +208,8 @@ public class LineMustNotHavePseudonodes extends AbstractTopologyRule implements
 					if (neighbourFeature.getID().equalsIgnoreCase(
 							feature.getID()))
 						continue;
-					Geometry geom2 = NewFConverter.toJtsGeometry(neighbourFeature.getGeometry());
+					Geometry geom2 = NewFConverter
+							.toJtsGeometry(neighbourFeature.getGeometry());
 					ArrayList<LineString> geometriesToProcess = new ArrayList<LineString>();
 					if (geom2 instanceof LineString) {
 						geometriesToProcess.add((LineString) geom2);
@@ -240,54 +239,50 @@ public class LineMustNotHavePseudonodes extends AbstractTopologyRule implements
 					for (int i = 0; i < numGeometries; i++) {
 						LineString lineString2 = geometriesToProcess.get(i);
 						Coordinate firstPoint2 = lineString2.getCoordinateN(0);
-						Coordinate lastPoint2 = lineString2.getCoordinateN(lineString2
-								.getNumPoints() - 1);
-						
+						Coordinate lastPoint2 = lineString2
+								.getCoordinateN(lineString2.getNumPoints() - 1);
+
 						coordinateMap.put(lastPoint2, lastPoint);
 						coordinateMap.put(firstPoint2, firstPoint);
 
-					}//for
+					}// for
 
-				}//while
-				
+				}// while
+
 				int firstPointDegree = coordinateMap.getCount(firstPoint);
 				int lastPointDegree = coordinateMap.getCount(lastPoint);
-				
-				if(firstPointDegree == 2){//A pseudonode is a node with degree 2, it only connects two lines
-					
-					//we dont add two times the same error
-					Coordinate existingNode = (Coordinate) pseudoNodesCoordMap.get(firstPoint);
-					if(existingNode == null){
-						IGeometry errorGeom = 
-							ShapeFactory.createPoint2D(firstPoint.x,
-													   firstPoint.y);
-					    TopologyError topologyError = 
-							new TopologyError(errorGeom, 
-												this, 
-											 feature,
-											topology);
-					    topologyError.setID(errorContainer.getErrorFid());
-					    addTopologyError(topologyError);
-					    
-					    pseudoNodesCoordMap.put(firstPoint, firstPoint);
+
+				if (firstPointDegree == 2) {// A pseudonode is a node with
+											// degree 2, it only connects two
+											// lines
+
+					// we dont add two times the same error
+					Coordinate existingNode = (Coordinate) pseudoNodesCoordMap
+							.get(firstPoint);
+					if (existingNode == null) {
+						IGeometry errorGeom = ShapeFactory.createPoint2D(
+								firstPoint.x, firstPoint.y);
+						TopologyError topologyError = new TopologyError(
+								errorGeom, this, feature, topology);
+						topologyError.setID(errorContainer.getErrorFid());
+						addTopologyError(topologyError);
+
+						pseudoNodesCoordMap.put(firstPoint, firstPoint);
 					}
 				}
-				
-				if(lastPointDegree == 2){
-					Coordinate existingNode = (Coordinate) pseudoNodesCoordMap.get(lastPoint);
-					if(existingNode == null){
-						IGeometry errorGeom = 
-							ShapeFactory.createPoint2D(lastPoint.x,
-									lastPoint.y);
-					    TopologyError topologyError = 
-							new TopologyError(errorGeom, 
-												this, 
-											 feature,
-											topology);
-					    topologyError.setID(errorContainer.getErrorFid());
-					    addTopologyError(topologyError);
-					    
-					    pseudoNodesCoordMap.put(lastPoint, lastPoint);
+
+				if (lastPointDegree == 2) {
+					Coordinate existingNode = (Coordinate) pseudoNodesCoordMap
+							.get(lastPoint);
+					if (existingNode == null) {
+						IGeometry errorGeom = ShapeFactory.createPoint2D(
+								lastPoint.x, lastPoint.y);
+						TopologyError topologyError = new TopologyError(
+								errorGeom, this, feature, topology);
+						topologyError.setID(errorContainer.getErrorFid());
+						addTopologyError(topologyError);
+
+						pseudoNodesCoordMap.put(lastPoint, lastPoint);
 					}
 				}
 
@@ -331,12 +326,12 @@ public class LineMustNotHavePseudonodes extends AbstractTopologyRule implements
 	public MultiShapeSymbol getErrorSymbol() {
 		return errorSymbol;
 	}
-	
+
 	public void setErrorSymbol(MultiShapeSymbol errorSymbol) {
 		this.errorSymbol = errorSymbol;
 	}
-	
-	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError){
+
+	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError) {
 		return automaticErrorFixes.get(0);
 	}
 

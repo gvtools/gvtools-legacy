@@ -31,38 +31,41 @@ import javax.swing.JLabel;
 import org.gvsig.raster.Configuration;
 import org.gvsig.raster.RasterLibrary;
 import org.gvsig.raster.util.BasePanel;
+
 /**
- * Clase para la configuracion general de Raster. Aqui tenemos todas las variables
- * que no tienen una sección en concreto.
+ * Clase para la configuracion general de Raster. Aqui tenemos todas las
+ * variables que no tienen una sección en concreto.
  * 
  * @version 12/12/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class PreferenceGeneral extends BasePanel {
-	private static final long   serialVersionUID    = 1L;
-	private JCheckBox           checkBoxPreview     = null;
-	private JCheckBox           checkBoxCoordinates = null;
-	private JLabel              labelNumClases      = null;
-	private JComboBox           comboBoxNumClases   = null;
-	private JCheckBox           checkBoxProjection  = null;
-	
+	private static final long serialVersionUID = 1L;
+	private JCheckBox checkBoxPreview = null;
+	private JCheckBox checkBoxCoordinates = null;
+	private JLabel labelNumClases = null;
+	private JComboBox comboBoxNumClases = null;
+	private JCheckBox checkBoxProjection = null;
+
 	/**
-	 *Inicializa componentes gráficos y traduce
+	 * Inicializa componentes gráficos y traduce
 	 */
 	public PreferenceGeneral() {
 		init();
 		translate();
 	}
-	
+
 	/**
 	 * Todas las traducciones de esta clase.
 	 */
 	protected void translate() {
 		setBorder(BorderFactory.createTitledBorder(getText(this, "general")));
-		getCheckBoxPreview().setText(getText(this, "previsualizar_automaticamente_raster"));
+		getCheckBoxPreview().setText(
+				getText(this, "previsualizar_automaticamente_raster"));
 		getCheckBoxPreview().setToolTipText(getCheckBoxPreview().getText());
 		getLabelNumClases().setText(getText(this, "num_clases") + ":");
-		getCheckBoxCoordinates().setText(getText(this, "pedir_coordenadas_georreferenciacion"));
+		getCheckBoxCoordinates().setText(
+				getText(this, "pedir_coordenadas_georreferenciacion"));
 		getCheckBoxProjection().setText(getText(this, "ask_for_projection"));
 	}
 
@@ -105,7 +108,7 @@ public class PreferenceGeneral extends BasePanel {
 		gridBagConstraints.weighty = 1.0;
 		gridBagConstraints.insets = new Insets(2, 5, 5, 5);
 		add(getCheckBoxCoordinates(), gridBagConstraints);
-		
+
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 3;
@@ -134,7 +137,8 @@ public class PreferenceGeneral extends BasePanel {
 	private JComboBox getComboBoxNumClases() {
 		if (comboBoxNumClases == null) {
 			comboBoxNumClases = new JComboBox();
-			comboBoxNumClases.setModel(new DefaultComboBoxModel(new String[] { "32", "64", "128", "256" }));
+			comboBoxNumClases.setModel(new DefaultComboBoxModel(new String[] {
+					"32", "64", "128", "256" }));
 		}
 		return comboBoxNumClases;
 	}
@@ -146,11 +150,12 @@ public class PreferenceGeneral extends BasePanel {
 		}
 		return checkBoxCoordinates;
 	}
-	
+
 	/**
-	 * Obtiene el checkbox que indica si se se muestran las opciones de proyección
-	 * en la carga de un raster o no. Si se marca no, se aplicarán siempre las opciones
-	 * por defecto.
+	 * Obtiene el checkbox que indica si se se muestran las opciones de
+	 * proyección en la carga de un raster o no. Si se marca no, se aplicarán
+	 * siempre las opciones por defecto.
+	 * 
 	 * @return JCheckBox
 	 */
 	private JCheckBox getCheckBoxProjection() {
@@ -165,12 +170,23 @@ public class PreferenceGeneral extends BasePanel {
 	 * Establece los valodres por defecto
 	 */
 	public void initializeDefaults() {
-		getCheckBoxCoordinates().setSelected(((Boolean) Configuration.getDefaultValue("general_ask_coordinates")).booleanValue());
-		getCheckBoxProjection().setSelected(((Boolean) Configuration.getDefaultValue("general_ask_projection")).booleanValue());
-		getCheckBoxPreview().setSelected(((Boolean)Configuration.getDefaultValue("general_auto_preview")).booleanValue());
-		Integer defaultNumberOfClasses = (Integer) Configuration.getDefaultValue("general_defaultNumberOfClasses");
+		getCheckBoxCoordinates().setSelected(
+				((Boolean) Configuration
+						.getDefaultValue("general_ask_coordinates"))
+						.booleanValue());
+		getCheckBoxProjection().setSelected(
+				((Boolean) Configuration
+						.getDefaultValue("general_ask_projection"))
+						.booleanValue());
+		getCheckBoxPreview().setSelected(
+				((Boolean) Configuration
+						.getDefaultValue("general_auto_preview"))
+						.booleanValue());
+		Integer defaultNumberOfClasses = (Integer) Configuration
+				.getDefaultValue("general_defaultNumberOfClasses");
 		for (int i = 0; i < getComboBoxNumClases().getItemCount(); i++) {
-			if (getComboBoxNumClases().getItemAt(i).toString().equals(defaultNumberOfClasses.toString())) {
+			if (getComboBoxNumClases().getItemAt(i).toString()
+					.equals(defaultNumberOfClasses.toString())) {
 				getComboBoxNumClases().setSelectedIndex(i);
 				break;
 			}
@@ -181,12 +197,21 @@ public class PreferenceGeneral extends BasePanel {
 	 * Establece los valores que han sido definidas por el usuario
 	 */
 	public void initializeValues() {
-		getCheckBoxCoordinates().setSelected(Configuration.getValue("general_ask_coordinates", Boolean.valueOf(false)).booleanValue());
-		getCheckBoxProjection().setSelected(Configuration.getValue("general_ask_projection", Boolean.valueOf(true)).booleanValue());
-		getCheckBoxPreview().setSelected(Configuration.getValue("general_auto_preview", Boolean.valueOf(true)).booleanValue());
-		Integer defaultNumberOfClasses = Configuration.getValue("general_defaultNumberOfClasses", Integer.valueOf(RasterLibrary.defaultNumberOfClasses));
+		getCheckBoxCoordinates().setSelected(
+				Configuration.getValue("general_ask_coordinates",
+						Boolean.valueOf(false)).booleanValue());
+		getCheckBoxProjection().setSelected(
+				Configuration.getValue("general_ask_projection",
+						Boolean.valueOf(true)).booleanValue());
+		getCheckBoxPreview().setSelected(
+				Configuration.getValue("general_auto_preview",
+						Boolean.valueOf(true)).booleanValue());
+		Integer defaultNumberOfClasses = Configuration.getValue(
+				"general_defaultNumberOfClasses",
+				Integer.valueOf(RasterLibrary.defaultNumberOfClasses));
 		for (int i = 0; i < getComboBoxNumClases().getItemCount(); i++) {
-			if (getComboBoxNumClases().getItemAt(i).toString().equals(defaultNumberOfClasses.toString())) {
+			if (getComboBoxNumClases().getItemAt(i).toString()
+					.equals(defaultNumberOfClasses.toString())) {
 				getComboBoxNumClases().setSelectedIndex(i);
 				break;
 			}
@@ -197,9 +222,13 @@ public class PreferenceGeneral extends BasePanel {
 	 * Guarda los valores que han sido definidas por el usuario
 	 */
 	public void storeValues() {
-		Configuration.setValue("general_ask_coordinates", Boolean.valueOf(getCheckBoxCoordinates().isSelected()));
-		Configuration.setValue("general_auto_preview", Boolean.valueOf(getCheckBoxPreview().isSelected()));
-		Configuration.setValue("general_defaultNumberOfClasses", Integer.valueOf(getComboBoxNumClases().getSelectedItem().toString()));
-		Configuration.setValue("general_ask_projection", Boolean.valueOf(getCheckBoxProjection().isSelected()));
+		Configuration.setValue("general_ask_coordinates",
+				Boolean.valueOf(getCheckBoxCoordinates().isSelected()));
+		Configuration.setValue("general_auto_preview",
+				Boolean.valueOf(getCheckBoxPreview().isSelected()));
+		Configuration.setValue("general_defaultNumberOfClasses", Integer
+				.valueOf(getComboBoxNumClases().getSelectedItem().toString()));
+		Configuration.setValue("general_ask_projection",
+				Boolean.valueOf(getCheckBoxProjection().isSelected()));
 	}
 }

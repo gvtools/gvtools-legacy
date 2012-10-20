@@ -73,16 +73,17 @@ import com.iver.cit.gvsig.fmap.layers.XMLException;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.ClassifiableVectorial;
 import com.iver.cit.gvsig.fmap.rendering.ILegend;
 import com.iver.cit.gvsig.fmap.rendering.NullIntervalValue;
-import com.iver.utiles.swing.JComboBox;
 
 /**
- * Implements the JPanel that shows the properties of a VectorialFilterExpressionLegend
- * in order to allows the user to modify its characteristics
- *
+ * Implements the JPanel that shows the properties of a
+ * VectorialFilterExpressionLegend in order to allows the user to modify its
+ * characteristics
+ * 
  * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
- *
+ * 
  */
-public class VectorFilterExpression extends JPanel implements ILegendPanel,ActionListener {
+public class VectorFilterExpression extends JPanel implements ILegendPanel,
+		ActionListener {
 	private static final long serialVersionUID = -7187473609965942511L;
 	private VectorFilterExpressionLegend theLegend;
 	VectorFilterExpressionLegend auxLegend;
@@ -109,7 +110,6 @@ public class VectorFilterExpression extends JPanel implements ILegendPanel,Actio
 		initialize();
 	}
 
-
 	/**
 	 * This method initializes this
 	 */
@@ -119,51 +119,56 @@ public class VectorFilterExpression extends JPanel implements ILegendPanel,Actio
 		pnlCenter.setLayout(new BorderLayout());
 
 		JPanel pnlButtons = new JPanel();
-		btnAddExpression = new JButton(PluginServices.getText(this, "new_filter_expression"));
+		btnAddExpression = new JButton(PluginServices.getText(this,
+				"new_filter_expression"));
 		btnAddExpression.setActionCommand("NEW_EXPRESSION");
 		btnAddExpression.addActionListener(this);
 		pnlButtons.add(btnAddExpression);
 
-		btnModExpression = new JButton(PluginServices.getText(this, "modify_filter_expression"));
+		btnModExpression = new JButton(PluginServices.getText(this,
+				"modify_filter_expression"));
 		btnModExpression.setActionCommand("MODIFY_EXPRESSION");
 		btnModExpression.addActionListener(this);
 		pnlButtons.add(btnModExpression);
 
-		btnRemoveExpression = new JButton(PluginServices.getText(this, "delete_filter_expression"));
+		btnRemoveExpression = new JButton(PluginServices.getText(this,
+				"delete_filter_expression"));
 		btnRemoveExpression.setActionCommand("REMOVE");
 		btnRemoveExpression.addActionListener(this);
 		pnlButtons.add(btnRemoveExpression);
 		defaultSymbolPanel.add(getChkDefaultvalues());
-		pnlCenter.add(defaultSymbolPanel,BorderLayout.NORTH);
+		pnlCenter.add(defaultSymbolPanel, BorderLayout.NORTH);
 
 		this.setLayout(new BorderLayout());
 		this.add(pnlCenter, BorderLayout.CENTER);
 		this.add(pnlButtons, BorderLayout.SOUTH);
 
-
 	}
+
 	public void getDefaultSymbolPrev(int shapeType) {
-		if(defaultSymbolPrev == null){
+		if (defaultSymbolPrev == null) {
 			defaultSymbolPrev = new JSymbolPreviewButton(shapeType);
-			defaultSymbolPrev.setPreferredSize(new Dimension(110,20));
-			defaultSymbolPanel.add(defaultSymbolPrev,null);
+			defaultSymbolPrev.setPreferredSize(new Dimension(110, 20));
+			defaultSymbolPanel.add(defaultSymbolPrev, null);
 		}
 	}
 
 	public String getDescription() {
-		return PluginServices.getText(this,"shows_the_elements_of_the_layer_depending_on_the_value_of_a_filter_expression") + ".";
+		return PluginServices
+				.getText(this,
+						"shows_the_elements_of_the_layer_depending_on_the_value_of_a_filter_expression")
+				+ ".";
 	}
 
 	public ISymbol getIconSymbol() {
 		if (previewSymbol == null) {
 			try {
 				previewSymbol = new PictureFillSymbol();
-				previewSymbol.setImage( new File(
-						this.getClass().getClassLoader().
-						getResource("images/ValoresUnicos.png").
-						getFile()).toURL());
-				previewSymbol.getMarkerFillProperties().
-				setFillStyle(
+				previewSymbol.setImage(new File(this.getClass()
+						.getClassLoader()
+						.getResource("images/ValoresUnicos.png").getFile())
+						.toURL());
+				previewSymbol.getMarkerFillProperties().setFillStyle(
 						IMarkerFillPropertiesStyle.SINGLE_CENTERED_SYMBOL);
 			} catch (IOException e) {
 				return null;
@@ -182,15 +187,16 @@ public class VectorFilterExpression extends JPanel implements ILegendPanel,Actio
 		} catch (XMLException e) {
 			e.printStackTrace();
 		}
-		if(defaultSymbolPrev.getSymbol() != null)
+		if (defaultSymbolPrev.getSymbol() != null)
 			theLegend.setDefaultSymbol(defaultSymbolPrev.getSymbol());
 
 		theLegend.useDefaultSymbol(chkdefaultvalues.isSelected());
 		return theLegend;
 	}
+
 	/**
 	 * Fills the list of symbols of the legend
-	 *
+	 * 
 	 */
 	private void fillSymbolListFromTable() {
 		Object clave;
@@ -201,19 +207,22 @@ public class VectorFilterExpression extends JPanel implements ILegendPanel,Actio
 		FLyrVect m = (FLyrVect) layer;
 		try {
 
-			if(auxLegend.getClassifyingFieldNames() != null) {
-				String[] fNames= auxLegend.getClassifyingFieldNames();
-				int[] fieldTypes  = new int[auxLegend.getClassifyingFieldNames().length];
+			if (auxLegend.getClassifyingFieldNames() != null) {
+				String[] fNames = auxLegend.getClassifyingFieldNames();
+				int[] fieldTypes = new int[auxLegend.getClassifyingFieldNames().length];
 
 				for (int i = 0; i < auxLegend.getClassifyingFieldNames().length; i++) {
-					int fieldIndex = m.getSource().getRecordset().getFieldIndexByName(fNames[i]);
-					fieldTypes[i]= m.getSource().getRecordset().getFieldType(fieldIndex);
+					int fieldIndex = m.getSource().getRecordset()
+							.getFieldIndexByName(fNames[i]);
+					fieldTypes[i] = m.getSource().getRecordset()
+							.getFieldType(fieldIndex);
 				}
 
 				auxLegend.setClassifyingFieldTypes(fieldTypes);
 			}
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(PluginServices.getText(this, "could_not_setup_legend"), e);
+			NotificationManager.addError(
+					PluginServices.getText(this, "could_not_setup_legend"), e);
 		}
 
 		auxLegend.useDefaultSymbol(chkdefaultvalues.isSelected());
@@ -224,16 +233,18 @@ public class VectorFilterExpression extends JPanel implements ILegendPanel,Actio
 		}
 
 		for (int row = 0; row < symbolTable.getRowCount(); row++) {
-			clave =  symbolTable.getFieldValue(row, 1);
+			clave = symbolTable.getFieldValue(row, 1);
 			theSymbol = (ISymbol) symbolTable.getFieldValue(row, 0);
-			theSymbol.setDescription((String) symbolTable.getFieldValue(row, 2));
+			theSymbol
+					.setDescription((String) symbolTable.getFieldValue(row, 2));
 			auxLegend.addSymbol(clave, theSymbol);
 		}
-		if(chkdefaultvalues.isSelected()){
-			if(defaultSymbolPrev.getSymbol() != null){
-				String description = PluginServices.getText(this,"default");
+		if (chkdefaultvalues.isSelected()) {
+			if (defaultSymbolPrev.getSymbol() != null) {
+				String description = PluginServices.getText(this, "default");
 				defaultSymbolPrev.getSymbol().setDescription(description);
-				auxLegend.addSymbol(new NullIntervalValue(), defaultSymbolPrev.getSymbol());
+				auxLegend.addSymbol(new NullIntervalValue(),
+						defaultSymbolPrev.getSymbol());
 			}
 		}
 
@@ -252,13 +263,13 @@ public class VectorFilterExpression extends JPanel implements ILegendPanel,Actio
 	}
 
 	public String getTitle() {
-		return PluginServices.getText(this,"expressions");
+		return PluginServices.getText(this, "expressions");
 	}
 
 	public boolean isSuitableFor(FLayer layer) {
 		FLyrVect lVect = (FLyrVect) layer;
 		try {
-			return (lVect.getShapeType()%FShape.Z) != FShape.MULTI;
+			return (lVect.getShapeType() % FShape.Z) != FShape.MULTI;
 		} catch (ReadDriverException e) {
 			return false;
 		}
@@ -272,7 +283,8 @@ public class VectorFilterExpression extends JPanel implements ILegendPanel,Actio
 		try {
 			shapeType = this.layer.getShapeType();
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(PluginServices.getText(this, "generating_intervals"), e);
+			NotificationManager.addError(
+					PluginServices.getText(this, "generating_intervals"), e);
 		}
 
 		if (symbolTable != null)
@@ -284,8 +296,7 @@ public class VectorFilterExpression extends JPanel implements ILegendPanel,Actio
 
 		symbolTable = new SymbolTable(this, "expressions", shapeType);
 		pnlCenter.add(symbolTable, BorderLayout.CENTER);
-		pnlCenter.add(getPnlMovBut(),BorderLayout.EAST);
-
+		pnlCenter.add(getPnlMovBut(), BorderLayout.EAST);
 
 		if (legend instanceof VectorFilterExpressionLegend) {
 			try {
@@ -305,14 +316,16 @@ public class VectorFilterExpression extends JPanel implements ILegendPanel,Actio
 	}
 
 	private JPanel getPnlMovBut() {
-		if(pnlMovBut == null){
+		if (pnlMovBut == null) {
 			pnlMovBut = new JPanel();
 			pnlMovBut.setLayout(new BoxLayout(pnlMovBut, BoxLayout.Y_AXIS));
 			pnlMovBut.add(new JBlank(1, 70));
-			pnlMovBut.add(moveUp = new JButton(PluginServices.getIconTheme().get("up-arrow")));
-			moveUp.setSize(new Dimension(15,15));
-			pnlMovBut.add(new JBlank(1,10));
-			pnlMovBut.add(moveDown = new JButton(PluginServices.getIconTheme().get("down-arrow")));
+			pnlMovBut.add(moveUp = new JButton(PluginServices.getIconTheme()
+					.get("up-arrow")));
+			moveUp.setSize(new Dimension(15, 15));
+			pnlMovBut.add(new JBlank(1, 10));
+			pnlMovBut.add(moveDown = new JButton(PluginServices.getIconTheme()
+					.get("down-arrow")));
 			pnlMovBut.add(new JBlank(1, 70));
 			moveDown.setActionCommand("MOVE-DOWN");
 			moveUp.setActionCommand("MOVE-UP");
@@ -325,73 +338,87 @@ public class VectorFilterExpression extends JPanel implements ILegendPanel,Actio
 	public void actionPerformed(ActionEvent e) {
 		int[] indices = null;
 
-		if(e.getActionCommand() == "MOVE-UP" || e.getActionCommand() == "MOVE-DOWN"){
+		if (e.getActionCommand() == "MOVE-UP"
+				|| e.getActionCommand() == "MOVE-DOWN") {
 			indices = symbolTable.getSelectedRows();
 		}
 
-		if(e.getActionCommand() == "MOVE-UP"){
-			if (indices.length>0) {
+		if (e.getActionCommand() == "MOVE-UP") {
+			if (indices.length > 0) {
 				int classIndex = indices[0];
-				int targetPos = Math.max(0, classIndex-1);
-				symbolTable.moveUpRows(classIndex, targetPos,indices.length);
+				int targetPos = Math.max(0, classIndex - 1);
+				symbolTable.moveUpRows(classIndex, targetPos, indices.length);
 			}
 		}
 
-		if(e.getActionCommand() == "MOVE-DOWN"){
-			if (indices.length>0) {
-				int classIndex = indices[indices.length-1];
-				int targetPos = Math.min(symbolTable.getRowCount()-1, classIndex+1);
-				symbolTable.moveDownRows(classIndex, targetPos,indices.length);
+		if (e.getActionCommand() == "MOVE-DOWN") {
+			if (indices.length > 0) {
+				int classIndex = indices[indices.length - 1];
+				int targetPos = Math.min(symbolTable.getRowCount() - 1,
+						classIndex + 1);
+				symbolTable.moveDownRows(classIndex, targetPos, indices.length);
 			}
 		}
 
-		if(e.getActionCommand() == "MOVE-UP" || e.getActionCommand() == "MOVE-DOWN"){
+		if (e.getActionCommand() == "MOVE-UP"
+				|| e.getActionCommand() == "MOVE-DOWN") {
 			ArrayList orders = new ArrayList();
 
 			for (int i = 0; i < symbolTable.getRowCount(); i++) {
-				orders.add(symbolTable.getFieldValue(i,1).toString());
+				orders.add(symbolTable.getFieldValue(i, 1).toString());
 			}
 		}
 		if (e.getActionCommand() == "NEW_EXPRESSION") {
-			ExpressionCreator newExpression = new ExpressionCreator((FLyrVect) this.layer );
+			ExpressionCreator newExpression = new ExpressionCreator(
+					(FLyrVect) this.layer);
 			PluginServices.getMDIManager().addWindow((IWindow) newExpression);
-			String expression = ((ExpressionCreator) newExpression).getExpression();
-			if(newExpression.getFieldNamesExpression() != null)
+			String expression = ((ExpressionCreator) newExpression)
+					.getExpression();
+			if (newExpression.getFieldNamesExpression() != null)
 				addClassFieldNames(newExpression.getFieldNamesExpression());
 
-			if(expression != null)
-				if(expression.compareTo("") != 0) {
-					auxLegend.addSymbol(expression, newExpression.getSymbolForExpression());
+			if (expression != null)
+				if (expression.compareTo("") != 0) {
+					auxLegend.addSymbol(expression,
+							newExpression.getSymbolForExpression());
 					symbolTable.removeAllItems();
 					symbolTable.fillTableFromSymbolList(auxLegend.getSymbols(),
 							auxLegend.getValues(), auxLegend.getDescriptions());
 				}
 			repaint();
-		}
-		else if (e.getActionCommand() == "MODIFY_EXPRESSION") {
+		} else if (e.getActionCommand() == "MODIFY_EXPRESSION") {
 
-			if(symbolTable.getSelectedRowElements() == null) {
-				JOptionPane.showMessageDialog(this, PluginServices.getText(this, "select_one_row")+".\n");
+			if (symbolTable.getSelectedRowElements() == null) {
+				JOptionPane.showMessageDialog(this,
+						PluginServices.getText(this, "select_one_row") + ".\n");
 			}
 
 			else {
-				ISymbol mySymbol = (ISymbol) symbolTable.getSelectedRowElements()[0];
-				String expression = (String) symbolTable.getSelectedRowElements()[1];
+				ISymbol mySymbol = (ISymbol) symbolTable
+						.getSelectedRowElements()[0];
+				String expression = (String) symbolTable
+						.getSelectedRowElements()[1];
 				String myDesc = (String) symbolTable.getSelectedRowElements()[2];
 
-				ExpressionCreator newExpression = new ExpressionCreator((FLyrVect) this.layer );
+				ExpressionCreator newExpression = new ExpressionCreator(
+						(FLyrVect) this.layer);
 				newExpression.setExpression(expression);
 				newExpression.setDescriptionForExpression(myDesc);
 				newExpression.setSymbolForExpression(mySymbol);
-				PluginServices.getMDIManager().addWindow((IWindow) newExpression);
+				PluginServices.getMDIManager().addWindow(
+						(IWindow) newExpression);
 
-				if(expression != null)
-					if(expression.compareTo("") != 0 && newExpression.getExpression()!=null) {
+				if (expression != null)
+					if (expression.compareTo("") != 0
+							&& newExpression.getExpression() != null) {
 						auxLegend.delSymbol(mySymbol);
-						auxLegend.addSymbol(((ExpressionCreator) newExpression).getExpression(), newExpression.getSymbolForExpression());
+						auxLegend.addSymbol(((ExpressionCreator) newExpression)
+								.getExpression(), newExpression
+								.getSymbolForExpression());
 						symbolTable.removeAllItems();
-						symbolTable.fillTableFromSymbolList(auxLegend.getSymbols(),
-								auxLegend.getValues(), auxLegend.getDescriptions());
+						symbolTable.fillTableFromSymbolList(
+								auxLegend.getSymbols(), auxLegend.getValues(),
+								auxLegend.getDescriptions());
 
 						repaint();
 					}
@@ -399,11 +426,12 @@ public class VectorFilterExpression extends JPanel implements ILegendPanel,Actio
 		}
 
 		else if (e.getActionCommand() == "REMOVE") {
-			if(symbolTable.getSelectedRowElements() == null) {
-				JOptionPane.showMessageDialog(this, PluginServices.getText(this, "select_one_row")+".\n");
-			}
-			else{
-				ISymbol mySymbol = (ISymbol) symbolTable.getSelectedRowElements()[0];
+			if (symbolTable.getSelectedRowElements() == null) {
+				JOptionPane.showMessageDialog(this,
+						PluginServices.getText(this, "select_one_row") + ".\n");
+			} else {
+				ISymbol mySymbol = (ISymbol) symbolTable
+						.getSelectedRowElements()[0];
 				auxLegend.delSymbol(mySymbol);
 				symbolTable.removeAllItems();
 				symbolTable.fillTableFromSymbolList(auxLegend.getSymbols(),
@@ -413,9 +441,11 @@ public class VectorFilterExpression extends JPanel implements ILegendPanel,Actio
 			}
 		}
 	}
+
 	/**
 	 * Adds new classifying field names to the legend when a new expression is
 	 * created or an existing one is modified
+	 * 
 	 * @param fieldNamesExpression
 	 */
 	private void addClassFieldNames(Object[] fieldNamesExpression) {
@@ -430,53 +460,56 @@ public class VectorFilterExpression extends JPanel implements ILegendPanel,Actio
 			for (int i = 0; i < fieldNamesExpression.length; i++) {
 				appears = false;
 				for (int j = 0; j < auxLegend.getClassifyingFieldNames().length; j++) {
-					if (auxLegend.getClassifyingFieldNames()[j].compareTo((String) fieldNamesExpression[i]) == 0)
+					if (auxLegend.getClassifyingFieldNames()[j]
+							.compareTo((String) fieldNamesExpression[i]) == 0)
 						appears = true;
 				}
-				if(!appears) {
+				if (!appears) {
 					myFieldNames.add((String) fieldNamesExpression[i]);
 				}
 			}
 
-			auxLegend.setClassifyingFieldNames((String[])myFieldNames.toArray(new
-					String[myFieldNames.size()]));
+			auxLegend.setClassifyingFieldNames((String[]) myFieldNames
+					.toArray(new String[myFieldNames.size()]));
 		}
 
 		else {
 			for (int i = 0; i < fieldNamesExpression.length; i++) {
 				myFieldNames.add((String) fieldNamesExpression[i]);
 			}
-			auxLegend.setClassifyingFieldNames((String[])myFieldNames.toArray(new
-					String[myFieldNames.size()]));
+			auxLegend.setClassifyingFieldNames((String[]) myFieldNames
+					.toArray(new String[myFieldNames.size()]));
 		}
 	}
 
-
 	public ImageIcon getIcon() {
-		return new ImageIcon(this.getClass().getClassLoader().
-				getResource("images/FilterExpressions.png"));
+		return new ImageIcon(this.getClass().getClassLoader()
+				.getResource("images/FilterExpressions.png"));
 	}
+
 	/**
 	 * This method initializes chkdefaultvalues
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	protected JCheckBox getChkDefaultvalues() {
 		if (chkdefaultvalues == null) {
 			chkdefaultvalues = new JCheckBox();
 			chkdefaultvalues.setText(PluginServices.getText(this,
-			"resto_valores")+": ");
-			chkdefaultvalues.setBounds(new java.awt.Rectangle(342, 26, 141, 20));
+					"resto_valores") + ": ");
+			chkdefaultvalues
+					.setBounds(new java.awt.Rectangle(342, 26, 141, 20));
 			chkdefaultvalues.setSelected(false);
-			chkdefaultvalues.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if (chkdefaultvalues.isSelected()) {
-						auxLegend.useDefaultSymbol(true);
-					} else {
-						auxLegend.useDefaultSymbol(false);
-					}
-				}
-			});
+			chkdefaultvalues
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							if (chkdefaultvalues.isSelected()) {
+								auxLegend.useDefaultSymbol(true);
+							} else {
+								auxLegend.useDefaultSymbol(false);
+							}
+						}
+					});
 		}
 
 		return chkdefaultvalues;

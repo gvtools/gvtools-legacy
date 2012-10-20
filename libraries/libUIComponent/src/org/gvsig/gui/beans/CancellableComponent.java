@@ -40,22 +40,25 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: CancellableComponent.java 13136 2007-08-20 08:38:34Z evercher $
-* $Log$
-* Revision 1.1  2007-08-20 08:34:45  evercher
-* He fusionado LibUI con LibUIComponents
-*
-* Revision 1.1  2006/05/17 17:20:11  jaume
-* *** empty log message ***
-*
-*
-*/
-package org.gvsig.gui.beans;
-/**
- * Interface implemented by those components that can cancel an action at anytime.
- * @author jaume dominguez faus - jaume.dominguez@iver.es
  *
+ * $Id: CancellableComponent.java 13136 2007-08-20 08:38:34Z evercher $
+ * $Log$
+ * Revision 1.1  2007-08-20 08:34:45  evercher
+ * He fusionado LibUI con LibUIComponents
+ *
+ * Revision 1.1  2006/05/17 17:20:11  jaume
+ * *** empty log message ***
+ *
+ *
+ */
+package org.gvsig.gui.beans;
+
+/**
+ * Interface implemented by those components that can cancel an action at
+ * anytime.
+ * 
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
+ * 
  */
 public interface CancellableComponent {
 	/**

@@ -24,13 +24,15 @@ import java.util.ArrayList;
 import javax.swing.filechooser.FileFilter;
 
 import com.iver.andami.PluginServices;
+
 /**
- * ExtendedFileFilter es una clase para usarla junto a los JFileChooser.
- * Ofrece una funcionalidad simple para poder agregar extensiones de manera
- * comoda y rapida. Las descripciones ya las pone con un formato, asi que esto
- * es opcional poner una descripción especifica.
+ * ExtendedFileFilter es una clase para usarla junto a los JFileChooser. Ofrece
+ * una funcionalidad simple para poder agregar extensiones de manera comoda y
+ * rapida. Las descripciones ya las pone con un formato, asi que esto es
+ * opcional poner una descripción especifica.
  * 
  * Un ejemplo típico de como se usaria:
+ * 
  * <pre>
  * // Usamos el JFileChooser de libUIComponents
  * JFileChooser chooser = new JFileChooser(this.getClass().toString(), (File) null);
@@ -40,16 +42,16 @@ import com.iver.andami.PluginServices;
  * chooser.setMultiSelectionEnabled(true);
  * // Nos guardamos cada tipo de fichero en uno que contenga todos
  * ExtendedFileFilter allFilters = new ExtendedFileFilter();
- * for (int i = 0; i < formats.length; i++) {
- *   ExtendedFileFilter fileFilter = new ExtendedFileFilter();
- *   fileFilter.addExtension(formats[i]);
- *   // Agregamos el filefilter al JFileChooser
- *   chooser.addChoosableFileFilter(fileFilter);
- *   // Agregamos el mismo filtro a un ExtendedFileFilter global 
- *   allFilters.addExtension(formats[i]);
+ * for (int i = 0; i &lt; formats.length; i++) {
+ * 	ExtendedFileFilter fileFilter = new ExtendedFileFilter();
+ * 	fileFilter.addExtension(formats[i]);
+ * 	// Agregamos el filefilter al JFileChooser
+ * 	chooser.addChoosableFileFilter(fileFilter);
+ * 	// Agregamos el mismo filtro a un ExtendedFileFilter global
+ * 	allFilters.addExtension(formats[i]);
  * }
  * // Poner una descripcion (OPCIONAL) para todos los ficheros.
- * allFilters.setDescription(PluginServices.getText(this, "todos_soportados"));
+ * allFilters.setDescription(PluginServices.getText(this, &quot;todos_soportados&quot;));
  * // Lo añadimos
  * chooser.addChoosableFileFilter(allFilters);
  * // Y lo dejamos seleccionado por defecto
@@ -72,6 +74,7 @@ public class ExtendedFileFilter extends FileFilter {
 
 	/**
 	 * Construye un ExtendedFileFilter con una extensión ya agregada
+	 * 
 	 * @param extension
 	 */
 	public ExtendedFileFilter(String extension) {
@@ -80,6 +83,7 @@ public class ExtendedFileFilter extends FileFilter {
 
 	/**
 	 * Añade una extensión a la lista de extensiones soportadas
+	 * 
 	 * @param extension
 	 */
 	public void addExtension(String extension) {
@@ -91,6 +95,7 @@ public class ExtendedFileFilter extends FileFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.filechooser.FileFilter#accept(java.io.File)
 	 */
 	public boolean accept(File f) {
@@ -103,7 +108,8 @@ public class ExtendedFileFilter extends FileFilter {
 		if (i > 0 && i < s.length() - 1) {
 			String extension = s.substring(i + 1).toLowerCase();
 			for (int j = 0; j < extensions.size(); j++) {
-				if (extensions.get(j).toString().toLowerCase().equals(extension))
+				if (extensions.get(j).toString().toLowerCase()
+						.equals(extension))
 					return true;
 			}
 		}
@@ -114,6 +120,7 @@ public class ExtendedFileFilter extends FileFilter {
 	/**
 	 * Normaliza el nombre de un fichero, añadiendo la extension si fuera
 	 * necesario
+	 * 
 	 * @param file
 	 * @return
 	 */
@@ -124,28 +131,32 @@ public class ExtendedFileFilter extends FileFilter {
 		if (i > 0 && i < s.length() - 1) {
 			String extension = s.substring(i + 1).toLowerCase();
 			for (int j = 0; j < extensions.size(); j++) {
-				if (extensions.get(j).toString().toLowerCase().equals(extension))
+				if (extensions.get(j).toString().toLowerCase()
+						.equals(extension))
 					return file.toString();
 			}
 		}
 
-		return file.toString() + "." + extensions.get(0).toString().toLowerCase();
+		return file.toString() + "."
+				+ extensions.get(0).toString().toLowerCase();
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.filechooser.FileFilter#getDescription()
 	 */
 	public String getDescription() {
-		
-		/* there are no raster formats with > 2 alternate
-		 * extensions, so if extensions.size() > 2,
-		 * then we have an "all supported rasters" filter.
-		 * */		
-		if ( extensions.size() > 2) {
+
+		/*
+		 * there are no raster formats with > 2 alternate extensions, so if
+		 * extensions.size() > 2, then we have an "all supported rasters"
+		 * filter.
+		 */
+		if (extensions.size() > 2) {
 			return (PluginServices.getText(this, "raster"));
 		}
-		
+
 		String format1 = "";
 		String format2 = "";
 		for (int j = 0; j < extensions.size(); j++) {
@@ -160,102 +171,106 @@ public class ExtendedFileFilter extends FileFilter {
 				break;
 			}
 			format1 = format1 + extensions.get(j).toString().toUpperCase();
-			format2 = format2 + "*." + extensions.get(j).toString().toLowerCase();
-			
+			format2 = format2 + "*."
+					+ extensions.get(j).toString().toLowerCase();
+
 			/* return proper names for known GDAL formats */
-			if ( extensions.get(j).toString().toLowerCase().equals( "tif" ) ) {
+			if (extensions.get(j).toString().toLowerCase().equals("tif")) {
 				return (PluginServices.getText(this, "Ficheros_TIF"));
 			}
-			if ( extensions.get(j).toString().toLowerCase().equals ("tiff") ) {
+			if (extensions.get(j).toString().toLowerCase().equals("tiff")) {
 				return (PluginServices.getText(this, "Ficheros_TIF"));
-			}			
-			if ( extensions.get(j).toString().toLowerCase().equals ("img") ) {
+			}
+			if (extensions.get(j).toString().toLowerCase().equals("img")) {
 				return (PluginServices.getText(this, "Ficheros_IMG"));
-			}			
-			if ( extensions.get(j).toString().toLowerCase().equals ("bmp") ) {
+			}
+			if (extensions.get(j).toString().toLowerCase().equals("bmp")) {
 				return (PluginServices.getText(this, "bmp"));
-			}			
-			if ( extensions.get(j).toString().toLowerCase().equals("pgm") ) {
+			}
+			if (extensions.get(j).toString().toLowerCase().equals("pgm")) {
 				return (PluginServices.getText(this, "Ficheros_PGM"));
 			}
-			if ( extensions.get(j).toString().toLowerCase().equals("ppm") ) {
+			if (extensions.get(j).toString().toLowerCase().equals("ppm")) {
 				return (PluginServices.getText(this, "Ficheros_PPM"));
-			}						
-			if ( extensions.get(j).toString().toLowerCase().equals("mpl") ) {
+			}
+			if (extensions.get(j).toString().toLowerCase().equals("mpl")) {
 				return (PluginServices.getText(this, "Ficheros_MPL"));
 			}
-			if ( extensions.get(j).toString().toLowerCase().equals("mpr") ) {
+			if (extensions.get(j).toString().toLowerCase().equals("mpr")) {
 				return (PluginServices.getText(this, "Ficheros_MPL"));
-			}						
-			if ( extensions.get(j).toString().toLowerCase().equals("rst") ) {
+			}
+			if (extensions.get(j).toString().toLowerCase().equals("rst")) {
 				return (PluginServices.getText(this, "Ficheros_RST"));
-			}			
-			if ( extensions.get(j).toString().toLowerCase().equals("jp2") ) {
+			}
+			if (extensions.get(j).toString().toLowerCase().equals("jp2")) {
 				return (PluginServices.getText(this, "jp2"));
-			}			
-			if ( extensions.get(j).toString().toLowerCase().equals("jpg") ) {
+			}
+			if (extensions.get(j).toString().toLowerCase().equals("jpg")) {
 				return (PluginServices.getText(this, "jpg"));
 			}
-			if ( extensions.get(j).toString().toLowerCase().equals("jpeg") ) {
+			if (extensions.get(j).toString().toLowerCase().equals("jpeg")) {
 				return (PluginServices.getText(this, "jpg"));
-			}						
-			if ( extensions.get(j).toString().toLowerCase().equals("png") ) {
+			}
+			if (extensions.get(j).toString().toLowerCase().equals("png")) {
 				return (PluginServices.getText(this, "png"));
 			}
-			if ( extensions.get(j).toString().toLowerCase().equals("gif") ) {
+			if (extensions.get(j).toString().toLowerCase().equals("gif")) {
 				return (PluginServices.getText(this, "Ficheros_GIF"));
 			}
-			if ( extensions.get(j).toString().toLowerCase().equals("lan") ) {
+			if (extensions.get(j).toString().toLowerCase().equals("lan")) {
 				return (PluginServices.getText(this, "Ficheros_LAN"));
 			}
-			if ( extensions.get(j).toString().toLowerCase().equals("gis") ) {
+			if (extensions.get(j).toString().toLowerCase().equals("gis")) {
 				return (PluginServices.getText(this, "Ficheros_LAN"));
 			}
-			if ( extensions.get(j).toString().toLowerCase().equals("pix") ) {
+			if (extensions.get(j).toString().toLowerCase().equals("pix")) {
 				return (PluginServices.getText(this, "Ficheros_PIX"));
 			}
-			if ( extensions.get(j).toString().toLowerCase().equals("adf") ) {
+			if (extensions.get(j).toString().toLowerCase().equals("adf")) {
 				return (PluginServices.getText(this, "Ficheros_ADF"));
 			}
-			if ( extensions.get(j).toString().toLowerCase().equals("raw") ) {
+			if (extensions.get(j).toString().toLowerCase().equals("raw")) {
 				return (PluginServices.getText(this, "Ficheros_RAW"));
 			}
-			if ( extensions.get(j).toString().toLowerCase().equals("ers") ) {
+			if (extensions.get(j).toString().toLowerCase().equals("ers")) {
 				return (PluginServices.getText(this, "Ficheros_ERS"));
 			}
-			if ( extensions.get(j).toString().toLowerCase().equals("ecw") ) {
+			if (extensions.get(j).toString().toLowerCase().equals("ecw")) {
 				return (PluginServices.getText(this, "Ficheros_ECW"));
 			}
-			if ( extensions.get(j).toString().toLowerCase().equals("sid") ) {
+			if (extensions.get(j).toString().toLowerCase().equals("sid")) {
 				return (PluginServices.getText(this, "Ficheros_SID"));
 			}
-			if ( extensions.get(j).toString().toLowerCase().equals("rmf") ) {
+			if (extensions.get(j).toString().toLowerCase().equals("rmf")) {
 				return (PluginServices.getText(this, "Ficheros_RMF"));
 			}
-			if ( extensions.get(j).toString().toLowerCase().equals("txt") ) {
+			if (extensions.get(j).toString().toLowerCase().equals("txt")) {
 				return (PluginServices.getText(this, "Ficheros_TXT"));
 			}
-			if ( extensions.get(j).toString().toLowerCase().equals("wld") ) {
+			if (extensions.get(j).toString().toLowerCase().equals("wld")) {
 				return (PluginServices.getText(this, "Ficheros_WLD"));
-			}									
-			if ( extensions.get(j).toString().toLowerCase().equals("tfw") ) {
+			}
+			if (extensions.get(j).toString().toLowerCase().equals("tfw")) {
 				return (PluginServices.getText(this, "Ficheros_TFW"));
 			}
-			if ( extensions.get(j).toString().toLowerCase().equals("csv") ) {
+			if (extensions.get(j).toString().toLowerCase().equals("csv")) {
 				return (PluginServices.getText(this, "Ficheros_csv"));
-			}															
+			}
 		}
-				
+
 		/* default: compose name from extension */
 		if (description == null)
-			return PluginServices.getText(this, "archivo") + " " + format1 + " (" + format2 + ")";
+			return PluginServices.getText(this, "archivo") + " " + format1
+					+ " (" + format2 + ")";
 
 		return description + " (" + format2 + ")";
 	}
 
 	/**
 	 * Especifica la descripcion del item
-	 * @param description the description to set
+	 * 
+	 * @param description
+	 *            the description to set
 	 */
 	public void setDescription(String description) {
 		this.description = description;
@@ -263,24 +278,26 @@ public class ExtendedFileFilter extends FileFilter {
 
 	/**
 	 * Borra una extension de la lista de extensiones
+	 * 
 	 * @param extension
 	 */
-	public void removeExtension(String extension){
+	public void removeExtension(String extension) {
 		extensions.remove(extension);
- }
+	}
 
 	/**
 	 * Borra todas las extensiones existentes
 	 */
-	public void clearExtensions(){
+	public void clearExtensions() {
 		extensions.clear();
 	}
 
 	/**
 	 * Devuelve una lista con las extensiones disponibles
+	 * 
 	 * @return
 	 */
-	public ArrayList getExtensions(){
+	public ArrayList getExtensions() {
 		return extensions;
 	}
 }

@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.jump.adapter;
 
 import java.rmi.server.UID;
@@ -64,29 +64,28 @@ import com.vividsolutions.jump.feature.Feature;
 
 /**
  * Adapts a JUMP's feature to IFeature interface.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class IFeatureAdapter implements IFeature {
 
-	
 	Feature feature;
 	String uid;
-	
-	
-	public IFeatureAdapter(Feature feature){
+
+	public IFeatureAdapter(Feature feature) {
 		this.feature = feature;
 		this.uid = new UID().toString();
 	}
-	
+
 	public IGeometry getGeometry() {
-			
+
 		Geometry geometry = feature.getGeometry();
-		if(geometry != null)
+		if (geometry != null)
 			return NewFConverter.toFMap(geometry);
 		else
 			return null;
-		
+
 	}
 
 	public void setGeometry(IGeometry geom) {
@@ -99,18 +98,18 @@ public class IFeatureAdapter implements IFeature {
 	}
 
 	public Value getAttribute(int fieldId) {
-		
+
 		Object attr = feature.getAttribute(fieldId);
 		AttributeType type = feature.getSchema().getAttributeType(fieldId);
 		Value solution = ValueFactory.createNullValue();
-		if(type == AttributeType.STRING){
+		if (type == AttributeType.STRING) {
 			solution = ValueFactory.createValue((String) attr);
-		}else if(type == AttributeType.DOUBLE){
-			solution = ValueFactory.createValue(((Double)attr).doubleValue());
-		}else if(type == AttributeType.INTEGER){
-			solution = ValueFactory.createValue(((Integer)attr).intValue());
-		}else if(type == AttributeType.DATE){
-			solution = ValueFactory.createValue(((Date)attr));
+		} else if (type == AttributeType.DOUBLE) {
+			solution = ValueFactory.createValue(((Double) attr).doubleValue());
+		} else if (type == AttributeType.INTEGER) {
+			solution = ValueFactory.createValue(((Integer) attr).intValue());
+		} else if (type == AttributeType.DATE) {
+			solution = ValueFactory.createValue(((Date) attr));
 		}
 		return solution;
 	}
@@ -118,7 +117,7 @@ public class IFeatureAdapter implements IFeature {
 	public Value[] getAttributes() {
 		int numFields = feature.getSchema().getAttributeCount();
 		Value[] solution = new Value[numFields];
-		for(int i = 0; i < numFields; i++){
+		for (int i = 0; i < numFields; i++) {
 			solution[i] = getAttribute(i);
 		}
 		return solution;
@@ -130,7 +129,7 @@ public class IFeatureAdapter implements IFeature {
 
 	public void setAttributes(Value[] att) {
 		int numValues = att.length;
-		for(int i = 0; i < numValues; i++){
+		for (int i = 0; i < numValues; i++) {
 			feature.setAttribute(i, att[i]);
 		}
 	}

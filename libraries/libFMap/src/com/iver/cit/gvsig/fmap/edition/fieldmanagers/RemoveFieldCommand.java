@@ -40,22 +40,16 @@
  */
 package com.iver.cit.gvsig.fmap.edition.fieldmanagers;
 
-
 public class RemoveFieldCommand implements FieldCommand {
-	
+
 	private String fieldName;
-	
-	public RemoveFieldCommand(String fieldName)
-	{
+
+	public RemoveFieldCommand(String fieldName) {
 		this.fieldName = fieldName;
 	}
 
 	public String getFieldName() {
 		return fieldName;
 	}
-	
-	
-	
+
 }
-
-

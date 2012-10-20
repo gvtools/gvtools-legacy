@@ -46,7 +46,6 @@ import com.iver.cit.gvsig.fmap.rendering.ILegend;
 import com.iver.cit.gvsig.fmap.rendering.IVectorLegend;
 import com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend;
 
-
 public class SingleSymbolLegendTest extends AbstractVectorLegendTestCase {
 
 	public SingleSymbolLegendTest() {
@@ -56,8 +55,8 @@ public class SingleSymbolLegendTest extends AbstractVectorLegendTestCase {
 	@Override
 	public void initLegend(ILegend leg) {
 		IVectorLegend vLeg = (IVectorLegend) leg;
-		vLeg.setDefaultSymbol(SymbologyFactory.
-				createDefaultSymbolByShapeType(FShape.POLYGON));
-	}	
-	
+		vLeg.setDefaultSymbol(SymbologyFactory
+				.createDefaultSymbolByShapeType(FShape.POLYGON));
+	}
+
 }

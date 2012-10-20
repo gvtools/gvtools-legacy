@@ -65,6 +65,7 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * It parses a gml:geometryMemberType object. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;geometryMember&gt;
@@ -74,61 +75,66 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  * &lt;/geometryMember&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 
-
 public class GeometryMemberTypeBinding {
-	
+
 	/**
 	 * It parses the gml:GeometryMember tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * A Geometry
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return A Geometry
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public Object parse(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
+	public Object parse(IXmlStreamReader parser, GPEDefaultGmlParser handler)
+			throws XmlStreamException, IOException {
 		boolean endFeature = false;
 		int currentTag;
-		Object geometry = null;		
-		
+		Object geometry = null;
+
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-					if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_POINT)){
-						geometry = handler.getProfile().getPointTypeBinding().
-						parse(parser, handler);
-					}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_LINESTRING)){
-						geometry = handler.getProfile().getLineStringTypeBinding().
-						parse(parser, handler);
-					}if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_POLYGON)){
-						geometry = handler.getProfile().getPolygonTypeBinding().
-						parse(parser, handler);
-					}
-					break;
-				case IXmlStreamReader.END_ELEMENT:
-					if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_GEOMETRYMEMBER)){						
-						endFeature = true;						
-					}
-					break;
-				case IXmlStreamReader.CHARACTERS:			
-					
-					break;
+				if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_POINT)) {
+					geometry = handler.getProfile().getPointTypeBinding()
+							.parse(parser, handler);
+				} else if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_LINESTRING)) {
+					geometry = handler.getProfile().getLineStringTypeBinding()
+							.parse(parser, handler);
 				}
-				if (!endFeature){					
-					currentTag = parser.next();
-					tag = parser.getName();
+				if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_POLYGON)) {
+					geometry = handler.getProfile().getPolygonTypeBinding()
+							.parse(parser, handler);
 				}
-			}			
-		return geometry;	
+				break;
+			case IXmlStreamReader.END_ELEMENT:
+				if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_GEOMETRYMEMBER)) {
+					endFeature = true;
+				}
+				break;
+			case IXmlStreamReader.CHARACTERS:
+
+				break;
+			}
+			if (!endFeature) {
+				currentTag = parser.next();
+				tag = parser.getName();
+			}
+		}
+		return geometry;
 	}
 }

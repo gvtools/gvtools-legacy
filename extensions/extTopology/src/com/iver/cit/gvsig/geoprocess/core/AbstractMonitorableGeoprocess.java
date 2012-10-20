@@ -67,14 +67,13 @@ import com.iver.utiles.swing.threads.IMonitorableTask;
  */
 public abstract class AbstractMonitorableGeoprocess extends AbstractGeoprocess {
 
-	
 	/**
 	 * the geoprocess will operate only with selected elements of layer, or with
 	 * all elements.<br>
 	 * By default, it work with all elements.
 	 */
 	protected boolean operateOnlyWithSelection = false;
-	
+
 	/**
 	 * Executes the geoprocess passing monitorization or cancelation messages to
 	 * the specified progress monitor instance.
@@ -88,22 +87,22 @@ public abstract class AbstractMonitorableGeoprocess extends AbstractGeoprocess {
 			throw new GeoprocessException("Error al ejecutar la tarea", e);
 		}
 	}
-	
+
 	/**
 	 * Creates a task to execute this geoprocess in background
 	 */
 	public IMonitorableTask createTask() {
 		return new GenericGeoprocessTask(this);
 	}
-	
-	
+
 	/**
 	 * Executes the geoprocess passing monitorization or cancelation messages to
 	 * the specified progress monitor instance.
 	 * 
 	 * @param progressMonitor
 	 */
-	public abstract void process(CancellableProgressTask progressMonitor) throws GeoprocessException;
+	public abstract void process(CancellableProgressTask progressMonitor)
+			throws GeoprocessException;
 
 	/**
 	 * Initialize reporting params of progressMonitor with geoprocess

@@ -1,4 +1,5 @@
 package es.gva.cit.catalog.csw.drivers;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -56,59 +57,70 @@ public class CSWException {
 	private String subcode = null;
 	private String reason = null;
 	private String _abstract = null;
-		
+
 	public CSWException() {
 		super();
 		this.code = CODE_DEFAULT;
 	}
+
 	/**
 	 * @return the code
 	 */
 	public String getCode() {
 		return code;
 	}
+
 	/**
-	 * @param code the code to set
+	 * @param code
+	 *            the code to set
 	 */
 	public void setCode(String code) {
 		this.code = code;
 	}
+
 	/**
 	 * @return the subcode
 	 */
 	public String getSubcode() {
 		return subcode;
 	}
+
 	/**
-	 * @param subcode the subcode to set
+	 * @param subcode
+	 *            the subcode to set
 	 */
 	public void setSubcode(String subcode) {
 		this.subcode = subcode;
 	}
+
 	/**
 	 * @return the reason
 	 */
 	public String getReason() {
 		return reason;
 	}
+
 	/**
-	 * @param reason the reason to set
+	 * @param reason
+	 *            the reason to set
 	 */
 	public void setReason(String reason) {
 		this.reason = reason;
 	}
+
 	/**
 	 * @return the _abstract
 	 */
 	public String getAbstract() {
 		return _abstract;
 	}
+
 	/**
-	 * @param _abstract the _abstract to set
+	 * @param _abstract
+	 *            the _abstract to set
 	 */
 	public void setAbstract(String _abstract) {
 		this._abstract = _abstract;
 	}
-	
-	
+
 }

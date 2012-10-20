@@ -42,35 +42,35 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: GeoprocessingReprojectPanel.java 13881 2007-09-19 16:22:04Z jaume $
-* $Log$
-* Revision 1.9  2007-09-19 16:09:14  jaume
-* removed unnecessary imports
-*
-* Revision 1.8  2007/02/28 13:32:12  azabala
-* added changes of V10 to allow compatibility of jcrs with other modules (geoprocessing, etc.)
-*
-* Revision 1.7  2006/10/17 08:22:19  jmvivo
-* Sincronizacion de los cambios de Luis hechos en el branch v10 (basado en informe de historico de cvs con fecha >= 19/09/2006).
-*
-* Revision 1.6  2006/09/21 18:14:42  azabala
-* changes of appGvSig packages (document extensibility)
-*
-* Revision 1.5  2006/08/29 08:46:36  cesar
-* Rename the remaining method calls (extGeoprocessingExtensions was not in my workspace)
-*
-* Revision 1.4  2006/08/11 17:20:32  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/07/04 16:43:18  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/07/03 20:28:56  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: GeoprocessingReprojectPanel.java 13881 2007-09-19 16:22:04Z jaume $
+ * $Log$
+ * Revision 1.9  2007-09-19 16:09:14  jaume
+ * removed unnecessary imports
+ *
+ * Revision 1.8  2007/02/28 13:32:12  azabala
+ * added changes of V10 to allow compatibility of jcrs with other modules (geoprocessing, etc.)
+ *
+ * Revision 1.7  2006/10/17 08:22:19  jmvivo
+ * Sincronizacion de los cambios de Luis hechos en el branch v10 (basado en informe de historico de cvs con fecha >= 19/09/2006).
+ *
+ * Revision 1.6  2006/09/21 18:14:42  azabala
+ * changes of appGvSig packages (document extensibility)
+ *
+ * Revision 1.5  2006/08/29 08:46:36  cesar
+ * Rename the remaining method calls (extGeoprocessingExtensions was not in my workspace)
+ *
+ * Revision 1.4  2006/08/11 17:20:32  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/07/04 16:43:18  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/07/03 20:28:56  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.reproject.gui;
 
 import java.awt.Insets;
@@ -97,12 +97,12 @@ public class GeoprocessingReprojectPanel extends AbstractGeoprocessGridbagPanel 
 	 * projection of the target layer
 	 */
 	private CoordinateReferenceSystem targetLayerCrs;
-	
+
 	/**
 	 * label to show input projection name
 	 */
 	private JLabel inputProjectionLabel;
-	
+
 	/**
 	 * label to show target projection name
 	 */
@@ -110,15 +110,14 @@ public class GeoprocessingReprojectPanel extends AbstractGeoprocessGridbagPanel 
 	 * label to show target projection name
 	 */
 	private CRSSelectPanel targetPanelProj;
-	
+
 	/**
 	 * Constructor.
 	 * 
 	 */
 	public GeoprocessingReprojectPanel(FLayers layers) {
-		super(layers, 
-			PluginServices.getText(null, 
-					"Reproyeccion._Introduccion_de_datos"));
+		super(layers, PluginServices.getText(null,
+				"Reproyeccion._Introduccion_de_datos"));
 	}
 
 	protected void addSpecificDesign() {
@@ -128,81 +127,80 @@ public class GeoprocessingReprojectPanel extends AbstractGeoprocessGridbagPanel 
 		String inputProjectionText = PluginServices.getText(this,
 				"Proyeccion_Actual") + ":  " + CRS.toSRS(inputLayerCrs, true);
 		inputProjectionLabel = new JLabel(inputProjectionText);
-		addComponent(inputProjectionLabel,  insets);
-		
-		
-//		String targetProjectionText = PluginServices.
-//						getText(this, "Proyeccion_Destino")+
-//										":  " +
-//									targetLayerProjection.getAbrev();
-//		targetProjectionLabel = new JLabel(targetProjectionText);
-//		addComponent(targetProjectionLabel, 
-//				getOpenProjectionDialogButton(),
-//				GridBagConstraints.REMAINDER,
-//				insets);
+		addComponent(inputProjectionLabel, insets);
+
+		// String targetProjectionText = PluginServices.
+		// getText(this, "Proyeccion_Destino")+
+		// ":  " +
+		// targetLayerProjection.getAbrev();
+		// targetProjectionLabel = new JLabel(targetProjectionText);
+		// addComponent(targetProjectionLabel,
+		// getOpenProjectionDialogButton(),
+		// GridBagConstraints.REMAINDER,
+		// insets);
 		addComponent(getTargetPanelProj());
 		initSelectedItemsJCheckBox();
 		updateNumSelectedFeaturesLabel();
 	}
-	
+
 	private CRSSelectPanel getTargetPanelProj() {
 		if (targetPanelProj == null) {
 			targetPanelProj = CRSSelectPanel.getPanel(targetLayerCrs);
-			targetPanelProj.getJLabel().setText(PluginServices.
-						getText(this, "Proyeccion_Destino"));
-			targetPanelProj.setPreferredSize(new java.awt.Dimension(330,35));
-			targetPanelProj.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if (targetPanelProj.isOkPressed()) {
-						targetLayerCrs = targetPanelProj.getCurrentCrs();
-					}
-				}
-			});
+			targetPanelProj.getJLabel().setText(
+					PluginServices.getText(this, "Proyeccion_Destino"));
+			targetPanelProj.setPreferredSize(new java.awt.Dimension(330, 35));
+			targetPanelProj
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							if (targetPanelProj.isOkPressed()) {
+								targetLayerCrs = targetPanelProj
+										.getCurrentCrs();
+							}
+						}
+					});
 		}
-		//azabala: added this for compability with JCRS
+		// azabala: added this for compability with JCRS
 		targetPanelProj.setTransPanelActive(true);
 		return targetPanelProj;
 	}
-	
-//	private JButton getOpenProjectionDialogButton(){
-//		JButton solution = new JButton("...");
-//		solution.addActionListener(new ActionListener(){
-//			public void actionPerformed(ActionEvent arg0) {
-//				CSSelectionDialog csSelect = new CSSelectionDialog();
-//				csSelect.setProjection(targetLayerProjection);
-//		        PluginServices.getMDIManager().addWindow(csSelect);
-//		        if (csSelect.isOkPressed()) {
-//		        	targetLayerProjection = 
-//		        		csSelect.getProjection();
-//		        	String targetProjectionText = PluginServices.
-//					getText(this, "Proyeccion_Destino")+
-//									":  " +
-//								targetLayerProjection.getAbrev();
-//		        	targetProjectionLabel.
-//		        		setText(targetProjectionText);
-//		        }
-//			}});
-//		return solution;
-//	}
+
+	// private JButton getOpenProjectionDialogButton(){
+	// JButton solution = new JButton("...");
+	// solution.addActionListener(new ActionListener(){
+	// public void actionPerformed(ActionEvent arg0) {
+	// CSSelectionDialog csSelect = new CSSelectionDialog();
+	// csSelect.setProjection(targetLayerProjection);
+	// PluginServices.getMDIManager().addWindow(csSelect);
+	// if (csSelect.isOkPressed()) {
+	// targetLayerProjection =
+	// csSelect.getProjection();
+	// String targetProjectionText = PluginServices.
+	// getText(this, "Proyeccion_Destino")+
+	// ":  " +
+	// targetLayerProjection.getAbrev();
+	// targetProjectionLabel.
+	// setText(targetProjectionText);
+	// }
+	// }});
+	// return solution;
+	// }
 
 	/**
-	 * This method processes selection events in layer combo box
-	 * (in this case, modify the projection to show the projection
-	 * of the selected layer)
+	 * This method processes selection events in layer combo box (in this case,
+	 * modify the projection to show the projection of the selected layer)
 	 */
 	protected void processLayerComboBoxStateChange(ItemEvent e) {
 		FLyrVect inputLyr = getInputLayer();
 		inputLayerCrs = inputLyr.getCrs();
 		String inputProjectionText = PluginServices.getText(this,
 				"Proyeccion_Actual") + ":  " + CRS.toSRS(inputLayerCrs, true);
-		
+
 		inputProjectionLabel.setText(inputProjectionText);
 	}
-	
-	public CoordinateReferenceSystem getTargetCrs(){
+
+	public CoordinateReferenceSystem getTargetCrs() {
 		return targetLayerCrs;
 	}
 
-
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"
 

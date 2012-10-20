@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-
 public class FooConnection implements Connection {
 
 	public Statement createStatement() throws SQLException {
@@ -44,7 +43,7 @@ public class FooConnection implements Connection {
 
 	public void setAutoCommit(boolean arg0) throws SQLException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public boolean getAutoCommit() throws SQLException {
@@ -54,17 +53,17 @@ public class FooConnection implements Connection {
 
 	public void commit() throws SQLException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void rollback() throws SQLException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void close() throws SQLException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public boolean isClosed() throws SQLException {
@@ -79,7 +78,7 @@ public class FooConnection implements Connection {
 
 	public void setReadOnly(boolean arg0) throws SQLException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public boolean isReadOnly() throws SQLException {
@@ -89,7 +88,7 @@ public class FooConnection implements Connection {
 
 	public void setCatalog(String arg0) throws SQLException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public String getCatalog() throws SQLException {
@@ -99,7 +98,7 @@ public class FooConnection implements Connection {
 
 	public void setTransactionIsolation(int arg0) throws SQLException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public int getTransactionIsolation() throws SQLException {
@@ -114,7 +113,7 @@ public class FooConnection implements Connection {
 
 	public void clearWarnings() throws SQLException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public Statement createStatement(int arg0, int arg1) throws SQLException {
@@ -122,12 +121,14 @@ public class FooConnection implements Connection {
 		return null;
 	}
 
-	public PreparedStatement prepareStatement(String arg0, int arg1, int arg2) throws SQLException {
+	public PreparedStatement prepareStatement(String arg0, int arg1, int arg2)
+			throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public CallableStatement prepareCall(String arg0, int arg1, int arg2) throws SQLException {
+	public CallableStatement prepareCall(String arg0, int arg1, int arg2)
+			throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -139,7 +140,7 @@ public class FooConnection implements Connection {
 
 	public void setHoldability(int arg0) throws SQLException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public int getHoldability() throws SQLException {
@@ -159,40 +160,46 @@ public class FooConnection implements Connection {
 
 	public void rollback(Savepoint arg0) throws SQLException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void releaseSavepoint(Savepoint arg0) throws SQLException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	public Statement createStatement(int arg0, int arg1, int arg2) throws SQLException {
+	public Statement createStatement(int arg0, int arg1, int arg2)
+			throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public PreparedStatement prepareStatement(String arg0, int arg1, int arg2, int arg3) throws SQLException {
+	public PreparedStatement prepareStatement(String arg0, int arg1, int arg2,
+			int arg3) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public CallableStatement prepareCall(String arg0, int arg1, int arg2, int arg3) throws SQLException {
+	public CallableStatement prepareCall(String arg0, int arg1, int arg2,
+			int arg3) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public PreparedStatement prepareStatement(String arg0, int arg1) throws SQLException {
+	public PreparedStatement prepareStatement(String arg0, int arg1)
+			throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public PreparedStatement prepareStatement(String arg0, int[] arg1) throws SQLException {
+	public PreparedStatement prepareStatement(String arg0, int[] arg1)
+			throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public PreparedStatement prepareStatement(String arg0, String[] arg1) throws SQLException {
+	public PreparedStatement prepareStatement(String arg0, String[] arg1)
+			throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -244,13 +251,13 @@ public class FooConnection implements Connection {
 
 	public void setClientInfo(Properties arg0) throws SQLClientInfoException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void setClientInfo(String arg0, String arg1)
 			throws SQLClientInfoException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public boolean isWrapperFor(Class arg0) throws SQLException {
@@ -266,7 +273,7 @@ public class FooConnection implements Connection {
 	@Override
 	public void abort(Executor arg0) throws SQLException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -284,19 +291,19 @@ public class FooConnection implements Connection {
 	@Override
 	public void setNetworkTimeout(Executor arg0, int arg1) throws SQLException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void setSchema(String arg0) throws SQLException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void setTypeMap(Map<String, Class<?>> arg0) throws SQLException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

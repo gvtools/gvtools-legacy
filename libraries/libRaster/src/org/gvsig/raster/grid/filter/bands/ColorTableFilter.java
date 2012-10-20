@@ -23,6 +23,7 @@ import org.gvsig.raster.dataset.IBuffer;
 import org.gvsig.raster.dataset.Params;
 import org.gvsig.raster.grid.GridPalette;
 import org.gvsig.raster.grid.filter.RasterFilter;
+
 /**
  * <P>
  * Clase base para los filtros de tabla de color. Siempre gastará la banda cero
@@ -32,15 +33,15 @@ import org.gvsig.raster.grid.filter.RasterFilter;
  * <P>
  * La salida siempre es un ARGB.
  * </P>
- *
+ * 
  * @version 06/06/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class ColorTableFilter extends RasterFilter {
-	protected IBuffer      rasterAlpha  = null;
-	public static String[] names        = new String[] { "colortable" };
-	protected GridPalette  colorTable   = new GridPalette();
-	protected boolean      hasAlpha     = false; 
+	protected IBuffer rasterAlpha = null;
+	public static String[] names = new String[] { "colortable" };
+	protected GridPalette colorTable = new GridPalette();
+	protected boolean hasAlpha = false;
 
 	/**
 	 * Constructor
@@ -52,6 +53,7 @@ public class ColorTableFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#pre()
 	 */
 	public void pre() {
@@ -62,14 +64,17 @@ public class ColorTableFilter extends RasterFilter {
 		if (raster != null) {
 			height = raster.getHeight();
 			width = raster.getWidth();
-			rasterResult = RasterBuffer.getBuffer(IBuffer.TYPE_BYTE, raster.getWidth(), raster.getHeight(), 3, true);
+			rasterResult = RasterBuffer.getBuffer(IBuffer.TYPE_BYTE,
+					raster.getWidth(), raster.getHeight(), 3, true);
 			if (hasAlpha)
-				rasterAlpha = RasterBuffer.getBuffer(IBuffer.TYPE_BYTE, raster.getWidth(), raster.getHeight(), 1, true);
+				rasterAlpha = RasterBuffer.getBuffer(IBuffer.TYPE_BYTE,
+						raster.getWidth(), raster.getHeight(), 1, true);
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getGroup()
 	 */
 	public String getGroup() {
@@ -78,6 +83,7 @@ public class ColorTableFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getNames()
 	 */
 	public String[] getNames() {
@@ -86,12 +92,14 @@ public class ColorTableFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.RasterFilter#getResult(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.RasterFilter#getResult(java.lang.String)
 	 */
 	public Object getResult(String name) {
 		if (name.equals("alphaBand"))
 			return rasterAlpha;
-		
+
 		if (name.equals("raster"))
 			return (Object) this.rasterResult;
 		return null;
@@ -99,14 +107,13 @@ public class ColorTableFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.RasterFilter#getUIParams(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.RasterFilter#getUIParams(java.lang.String)
 	 */
 	public Params getUIParams(String nameFilter) {
 		Params params = new Params();
-		params.setParam("colorTable",
-				new GridPalette(colorTable),
-				-1,
-				null);
+		params.setParam("colorTable", new GridPalette(colorTable), -1, null);
 		return params;
 	}
 
@@ -118,6 +125,7 @@ public class ColorTableFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getOutRasterDataType()
 	 */
 	public int getOutRasterDataType() {
@@ -126,6 +134,7 @@ public class ColorTableFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#isVisible()
 	 */
 	public boolean isVisible() {
@@ -134,6 +143,7 @@ public class ColorTableFilter extends RasterFilter {
 
 	/**
 	 * Obtiene la tabla de color que se usará para la aplicación del filtro
+	 * 
 	 * @return GridPalette
 	 */
 	public GridPalette getColorTable() {
@@ -144,6 +154,7 @@ public class ColorTableFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getInRasterDataType()
 	 */
 	public int getInRasterDataType() {
@@ -152,7 +163,9 @@ public class ColorTableFilter extends RasterFilter {
 
 	/**
 	 * Define la tabla de color
-	 * @param colorTable the colorTable to set
+	 * 
+	 * @param colorTable
+	 *            the colorTable to set
 	 */
 	public void setColorTable(GridPalette colorTable) {
 		this.colorTable = colorTable;

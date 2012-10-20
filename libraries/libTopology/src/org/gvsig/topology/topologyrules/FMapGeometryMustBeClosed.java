@@ -97,33 +97,33 @@ import com.vividsolutions.jts.geom.LineString;
  * @author Alvaro Zabala
  * 
  */
-public class FMapGeometryMustBeClosed extends AbstractTopologyRule 
-	implements IRuleWithClusterTolerance, ITopologyRuleWithExclusiveFix {
+public class FMapGeometryMustBeClosed extends AbstractTopologyRule implements
+		IRuleWithClusterTolerance, ITopologyRuleWithExclusiveFix {
 
-	private static String RULE_NAME = Messages.getText("polygon_must_be_closed");
+	private static String RULE_NAME = Messages
+			.getText("polygon_must_be_closed");
 
 	private double clusterTolerance;
-	
+
 	/**
 	 * Symbol for topology errors caused by a violation of this rule.
 	 */
 	private MultiShapeSymbol errorSymbol = DEFAULT_ERROR_SYMBOL;
-	
-	private static List<ITopologyErrorFix> automaticErrorFixes =
-		new ArrayList<ITopologyErrorFix>();
-	static{
+
+	private static List<ITopologyErrorFix> automaticErrorFixes = new ArrayList<ITopologyErrorFix>();
+	static {
 		automaticErrorFixes.add(new RemoveOvershootFix());
 		automaticErrorFixes.add(new CompleteUndershootFix());
-		
+
 	}
-	
+
 	private static final Color DEFAULT_ERROR_COLOR = Color.RED;
-	
-	//this symbol is multishape because this topology rule applies to lines or polygons
-	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = 
-		(MultiShapeSymbol) SymbologyFactory.createDefaultSymbolByShapeType(FShape.MULTI, 
-											DEFAULT_ERROR_COLOR);
-	static{
+
+	// this symbol is multishape because this topology rule applies to lines or
+	// polygons
+	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = (MultiShapeSymbol) SymbologyFactory
+			.createDefaultSymbolByShapeType(FShape.MULTI, DEFAULT_ERROR_COLOR);
+	static {
 		DEFAULT_ERROR_SYMBOL.setDescription(RULE_NAME);
 		DEFAULT_ERROR_SYMBOL.setSize(0.5);
 		DEFAULT_ERROR_SYMBOL.setLineWidth(0.5);
@@ -143,8 +143,9 @@ public class FMapGeometryMustBeClosed extends AbstractTopologyRule
 		super(topology, originLyr);
 		setClusterTolerance(snapTolerance);
 	}
-	
-	public FMapGeometryMustBeClosed(){}
+
+	public FMapGeometryMustBeClosed() {
+	}
 
 	public void checkPreconditions() throws TopologyRuleDefinitionException {
 		try {
@@ -187,22 +188,22 @@ public class FMapGeometryMustBeClosed extends AbstractTopologyRule
 					for (int i = 0; i < partsCoords.size(); i++) {
 						Point2D[] part = partsCoords.get(i);
 						if (!FGeometryUtil.isClosed(part, clusterTolerance)) {
-							//createGeometryNotClosedError(part, feature);
+							// createGeometryNotClosedError(part, feature);
 							IGeometry partError = getGeometryNotClosedError(part);
-							if(partError != null)
+							if (partError != null)
 								geometries.add(getGeometryNotClosedError(part));
 						}// if isClosed
 					}// for i
 				}// while
-				
+
 				IGeometry[] geoms = new IGeometry[geometries.size()];
 				geometries.toArray(geoms);
 				FGeometryCollection errorGeom = new FGeometryCollection(geoms);
-				TopologyError topologyError = new TopologyError(errorGeom, this,
-						feature, topology);
+				TopologyError topologyError = new TopologyError(errorGeom,
+						this, feature, topology);
 				topologyError.setID(errorContainer.getErrorFid());
 				addTopologyError(topologyError);
-				
+
 			}
 		} else if (geometry instanceof FGeometryCollection) {
 			FGeometryCollection geomCol = (FGeometryCollection) geometry;
@@ -214,35 +215,34 @@ public class FMapGeometryMustBeClosed extends AbstractTopologyRule
 			System.out.println("Encontrado " + geometry.getClass().toString());
 		}
 	}
-	
-	
-	
-	 
-	private IGeometry getGeometryNotClosedError(Point2D[] unclosedPart){
-		
+
+	private IGeometry getGeometryNotClosedError(Point2D[] unclosedPart) {
+
 		List<IGeometry> geometries = new ArrayList<IGeometry>();
 		// we are going to see if shape is an overshoot or an
 		// undershoot
 		Coordinate[] jtsCoords = JtsUtil.getPoint2DAsCoordinates(unclosedPart);
-		LineString jtsGeo = (LineString) JtsUtil.createGeometry(jtsCoords, "LINESTRING");		
-		SnapLineStringSelfIntersectionChecker checker = 
-			new SnapLineStringSelfIntersectionChecker(jtsGeo, this.clusterTolerance);
-		if(checker.hasSelfIntersections()){
-			//Over shoot
+		LineString jtsGeo = (LineString) JtsUtil.createGeometry(jtsCoords,
+				"LINESTRING");
+		SnapLineStringSelfIntersectionChecker checker = new SnapLineStringSelfIntersectionChecker(
+				jtsGeo, this.clusterTolerance);
+		if (checker.hasSelfIntersections()) {
+			// Over shoot
 			Geometry[] geoms = checker.clean();
-			for(int i = 0; i < geoms.length; i++){
+			for (int i = 0; i < geoms.length; i++) {
 				LineString line = (LineString) geoms[i];
-				if(!line.isClosed()){
-					//this rule doesnt checks if a line has self intersections.
-					//thats the reason for we only consideer errors at splitted linestrings
-					//which are unclosed.
+				if (!line.isClosed()) {
+					// this rule doesnt checks if a line has self intersections.
+					// thats the reason for we only consideer errors at splitted
+					// linestrings
+					// which are unclosed.
 					IGeometry errorGeom = NewFConverter.jts_to_igeometry(line);
 					geometries.add(errorGeom);
-				}//if
-			}//for
+				}// if
+			}// for
 
-		}else{
-			//Under Shoot
+		} else {
+			// Under Shoot
 			GeneralPathX gp = new GeneralPathX();
 			Point2D start = unclosedPart[0];
 			Point2D end = unclosedPart[unclosedPart.length - 1];
@@ -252,56 +252,59 @@ public class FMapGeometryMustBeClosed extends AbstractTopologyRule
 			geometries.add(errorGeom);
 		}
 		int size = geometries.size();
-		if(size == 0)
+		if (size == 0)
 			return null;
-		else if(size == 1)
+		else if (size == 1)
 			return geometries.get(0);
-		else{
+		else {
 			IGeometry[] geoms = new IGeometry[geometries.size()];
 			geometries.toArray(geoms);
 			IGeometry solution = new FGeometryCollection(geoms);
 			return solution;
 		}
-		
+
 	}
 
-	private void createGeometryNotClosedError(Point2D[] unclosedPart, IFeature feature) {
+	private void createGeometryNotClosedError(Point2D[] unclosedPart,
+			IFeature feature) {
 
 		// we are going to see if shape is an overshoot or an
 		// undershoot
 		Coordinate[] jtsCoords = JtsUtil.getPoint2DAsCoordinates(unclosedPart);
-		LineString jtsGeo = (LineString) JtsUtil.createGeometry(jtsCoords, "LINESTRING");		
-		SnapLineStringSelfIntersectionChecker checker = 
-			new SnapLineStringSelfIntersectionChecker(jtsGeo, this.clusterTolerance);
-		if(checker.hasSelfIntersections()){
-			//Over shoot
+		LineString jtsGeo = (LineString) JtsUtil.createGeometry(jtsCoords,
+				"LINESTRING");
+		SnapLineStringSelfIntersectionChecker checker = new SnapLineStringSelfIntersectionChecker(
+				jtsGeo, this.clusterTolerance);
+		if (checker.hasSelfIntersections()) {
+			// Over shoot
 			Geometry[] geoms = checker.clean();
-			for(int i = 0; i < geoms.length; i++){
+			for (int i = 0; i < geoms.length; i++) {
 				LineString line = (LineString) geoms[i];
-				if(!line.isClosed()){
-					//this rule doesnt checks if a line has self intersections.
-					//thats the reason for we only consideer errors at splitted linestrings
-					//which are unclosed.
+				if (!line.isClosed()) {
+					// this rule doesnt checks if a line has self intersections.
+					// thats the reason for we only consideer errors at splitted
+					// linestrings
+					// which are unclosed.
 					IGeometry errorGeom = NewFConverter.jts_to_igeometry(line);
-					TopologyError topologyError = new TopologyError(errorGeom, this,
-							feature, topology);
+					TopologyError topologyError = new TopologyError(errorGeom,
+							this, feature, topology);
 					topologyError.setID(errorContainer.getErrorFid());
 					addTopologyError(topologyError);
-				}//if
-			}//for
+				}// if
+			}// for
 
-		}else{
-			//Under Shoot
+		} else {
+			// Under Shoot
 			GeneralPathX gp = new GeneralPathX();
 			Point2D start = unclosedPart[0];
 			Point2D end = unclosedPart[unclosedPart.length - 1];
-			
+
 			gp.moveTo(start.getX(), start.getY());
 			gp.lineTo(end.getX(), end.getY());
 
 			IGeometry errorGeometry = ShapeFactory.createPolyline2D(gp);
-			TopologyError topologyError = new TopologyError(errorGeometry, this,
-					feature, topology);
+			TopologyError topologyError = new TopologyError(errorGeometry,
+					this, feature, topology);
 			topologyError.setID(errorContainer.getErrorFid());
 			addTopologyError(topologyError);
 		}
@@ -327,16 +330,14 @@ public class FMapGeometryMustBeClosed extends AbstractTopologyRule
 	public List<ITopologyErrorFix> getAutomaticErrorFixes() {
 		return FMapGeometryMustBeClosed.automaticErrorFixes;
 	}
-	
-	
 
 	public MultiShapeSymbol getDefaultErrorSymbol() {
 		return DEFAULT_ERROR_SYMBOL;
 	}
-	
+
 	@Override
-	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError){
-		if(topologyError != null)
+	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError) {
+		if (topologyError != null)
 			return getExclusiveErrorFixes(topologyError).get(0);
 		else
 			return getAutomaticErrorFixes().get(0);
@@ -353,7 +354,7 @@ public class FMapGeometryMustBeClosed extends AbstractTopologyRule
 	public List<ITopologyErrorFix> getExclusiveErrorFixes(TopologyError error) {
 		List<ITopologyErrorFix> solution = new ArrayList<ITopologyErrorFix>();
 		IGeometry geom = error.getFeature1().getGeometry();
-		if(geom instanceof FGeometry){
+		if (geom instanceof FGeometry) {
 			FShape shp = (FShape) geom.getInternalShape();
 			MultipartShapeIterator it = new MultipartShapeIterator(shp);
 			Iterator<Shape> shapeIt = it.getShapeIterator();
@@ -364,30 +365,31 @@ public class FMapGeometryMustBeClosed extends AbstractTopologyRule
 				for (int i = 0; i < partsCoords.size(); i++) {
 					Point2D[] part = partsCoords.get(i);
 					if (!FGeometryUtil.isClosed(part, clusterTolerance)) {
-						Coordinate[] jtsCoords = JtsUtil.
-							getPoint2DAsCoordinates(part);
-						LineString jtsGeo = (LineString) JtsUtil.createGeometry(jtsCoords, "LINESTRING");						
-						SnapLineStringSelfIntersectionChecker checker = 
-							new SnapLineStringSelfIntersectionChecker(jtsGeo, this.clusterTolerance);
-						if(checker.hasSelfIntersections()){
-							//Over shoot
+						Coordinate[] jtsCoords = JtsUtil
+								.getPoint2DAsCoordinates(part);
+						LineString jtsGeo = (LineString) JtsUtil
+								.createGeometry(jtsCoords, "LINESTRING");
+						SnapLineStringSelfIntersectionChecker checker = new SnapLineStringSelfIntersectionChecker(
+								jtsGeo, this.clusterTolerance);
+						if (checker.hasSelfIntersections()) {
+							// Over shoot
 							solution.add(new RemoveOvershootFix());
-						}else{
-							//Under Shoot
+						} else {
+							// Under Shoot
 							solution.add(new CompleteUndershootFix());
 						}
 					}// if isClosed
 				}// for i
 			}// while
-		} 
+		}
 		return solution;
-//		else if (geom instanceof FGeometryCollection) {
-//			FGeometryCollection geomCol = (FGeometryCollection) geom;
-//			IGeometry[] geometries = geomCol.getGeometries();
-//			for (int i = 0; i < geometries.length; i++) {
-//				process(geometries[i], feature);
-//			}// for
-//		}
+		// else if (geom instanceof FGeometryCollection) {
+		// FGeometryCollection geomCol = (FGeometryCollection) geom;
+		// IGeometry[] geometries = geomCol.getGeometries();
+		// for (int i = 0; i < geometries.length; i++) {
+		// process(geometries[i], feature);
+		// }// for
+		// }
 	}
 
 }

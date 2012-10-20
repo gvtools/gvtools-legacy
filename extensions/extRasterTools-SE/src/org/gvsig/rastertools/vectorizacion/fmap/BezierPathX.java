@@ -21,6 +21,7 @@ package org.gvsig.rastertools.vectorizacion.fmap;
 import java.awt.geom.Point2D;
 
 import com.iver.cit.gvsig.fmap.core.GeneralPathX;
+
 /**
  * Reimplementacion del GeneralPathX para que acepte curvas de Bezier
  * 
@@ -29,12 +30,13 @@ import com.iver.cit.gvsig.fmap.core.GeneralPathX;
  */
 public class BezierPathX extends GeneralPathX {
 	private static final long serialVersionUID = -77239133302246295L;
-	private Point2D lastPoint      = new Point2D.Double(0, 0);
-	private int     numberOfPoints = 1;
+	private Point2D lastPoint = new Point2D.Double(0, 0);
+	private int numberOfPoints = 1;
 
 	/**
 	 * Crea un GeneralPathX definiendo cuantos cortes tendrá en las curvas de
 	 * Bezier. Cuanto mayor sea el numero de puntos, mejor definido estará
+	 * 
 	 * @param numberOfPoints
 	 */
 	public BezierPathX(int numberOfPoints) {
@@ -43,6 +45,7 @@ public class BezierPathX extends GeneralPathX {
 
 	/**
 	 * Devuelve el punto de la curva de Bezier para el intervalo t
+	 * 
 	 * @param cp
 	 * @param t
 	 * @return
@@ -68,16 +71,21 @@ public class BezierPathX extends GeneralPathX {
 		tSquared = t * t;
 		tCubed = tSquared * t;
 
-		result.setLocation((ax * tCubed) + (bx * tSquared) + (cx * t) + cp[0].getX(), (ay * tCubed) + (by * tSquared) + (cy * t) + cp[0].getY());
+		result.setLocation(
+				(ax * tCubed) + (bx * tSquared) + (cx * t) + cp[0].getX(),
+				(ay * tCubed) + (by * tSquared) + (cy * t) + cp[0].getY());
 
 		return result;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.core.GeneralPathX#curveTo(double, double, double, double, double, double)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.core.GeneralPathX#curveTo(double, double,
+	 * double, double, double, double)
 	 */
-	public synchronized void curveTo(double x1, double y1, double x2, double y2, double x3, double y3) {
+	public synchronized void curveTo(double x1, double y1, double x2,
+			double y2, double x3, double y3) {
 		Point2D points[] = new Point2D[4];
 		points[0] = new Point2D.Double(lastPoint.getX(), lastPoint.getY());
 		points[1] = new Point2D.Double(x1, y1);
@@ -95,6 +103,7 @@ public class BezierPathX extends GeneralPathX {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.GeneralPathX#lineTo(double, double)
 	 */
 	public synchronized void lineTo(double x, double y) {
@@ -104,6 +113,7 @@ public class BezierPathX extends GeneralPathX {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.GeneralPathX#moveTo(double, double)
 	 */
 	public synchronized void moveTo(double x, double y) {
@@ -118,8 +128,10 @@ public class BezierPathX extends GeneralPathX {
 	public synchronized void lineTo(Point2D point) {
 		this.lineTo(point.getX(), point.getY());
 	}
-	
-	public synchronized void curveTo(Point2D point1, Point2D point2, Point2D point3) {
-		this.curveTo(point1.getX(), point1.getY(), point2.getX(), point2.getY(), point3.getX(), point3.getY());
+
+	public synchronized void curveTo(Point2D point1, Point2D point2,
+			Point2D point3) {
+		this.curveTo(point1.getX(), point1.getY(), point2.getX(),
+				point2.getY(), point3.getX(), point3.getY());
 	}
 }

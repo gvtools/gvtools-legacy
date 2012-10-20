@@ -55,10 +55,9 @@ import com.iver.cit.gvsig.fmap.core.IGeometryM;
 import com.iver.cit.gvsig.fmap.core.v02.FConstant;
 import com.iver.cit.gvsig.fmap.drivers.shp.SHP;
 
-
 /**
  * Elemento shape de tipo multipunto.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class SHPMultiPoint implements SHPShape {
@@ -76,15 +75,16 @@ public class SHPMultiPoint implements SHPShape {
 
 	/**
 	 * Crea un nuevo SHPMultiPoint.
-	 *
-	 * @param type Tipo de multipunto.
-	 *
+	 * 
+	 * @param type
+	 *            Tipo de multipunto.
+	 * 
 	 * @throws ShapefileException
 	 */
 	public SHPMultiPoint(int type) throws ShapefileException {
-		if ((type != FConstant.SHAPE_TYPE_MULTIPOINT) &&
-				(type != FConstant.SHAPE_TYPE_MULTIPOINTM) &&
-				(type != FConstant.SHAPE_TYPE_MULTIPOINTZ)) {
+		if ((type != FConstant.SHAPE_TYPE_MULTIPOINT)
+				&& (type != FConstant.SHAPE_TYPE_MULTIPOINTM)
+				&& (type != FConstant.SHAPE_TYPE_MULTIPOINTZ)) {
 			throw new ShapefileException("No es de tipo 8, 18, o 28");
 		}
 
@@ -93,7 +93,7 @@ public class SHPMultiPoint implements SHPShape {
 
 	/**
 	 * Devuelve el tipo de multipoint en concreto.
-	 *
+	 * 
 	 * @return Tipo de multipoint.
 	 */
 	public int getShapeType() {
@@ -108,8 +108,8 @@ public class SHPMultiPoint implements SHPShape {
 		double minY = buffer.getDouble();
 		double maxX = buffer.getDouble();
 		double maxY = buffer.getDouble();
-		Rectangle2D rec = new Rectangle2D.Double(minX, minY, maxX - minX,
-				maxY - maxY);
+		Rectangle2D rec = new Rectangle2D.Double(minX, minY, maxX - minX, maxY
+				- maxY);
 		int numpoints = buffer.getInt();
 		FPoint2D[] p = new FPoint2D[numpoints];
 
@@ -119,12 +119,10 @@ public class SHPMultiPoint implements SHPShape {
 			p[t] = new FPoint2D(x, y);
 		}
 
-		/*   if (m_type == FConstant.SHAPE_TYPE_MULTIPOINTZ) {
-		   buffer.position(buffer.position() + (2 * 8));
-		   for (int t = 0; t < numpoints; t++) {
-		       p[t].z = buffer.getDouble(); //z
-		   }
-		   }
+		/*
+		 * if (m_type == FConstant.SHAPE_TYPE_MULTIPOINTZ) {
+		 * buffer.position(buffer.position() + (2 * 8)); for (int t = 0; t <
+		 * numpoints; t++) { p[t].z = buffer.getDouble(); //z } }
 		 */
 		return (IGeometry) new FMultiPoint2D(p);
 	}
@@ -141,7 +139,7 @@ public class SHPMultiPoint implements SHPShape {
 		buffer.putDouble(box.getMinY());
 		buffer.putDouble(box.getMaxX());
 		buffer.putDouble(box.getMaxY());
-		///obtainsPoints(geometry.getGeneralPathXIterator());
+		// /obtainsPoints(geometry.getGeneralPathXIterator());
 		buffer.putInt(numpoints);
 
 		for (int t = 0, tt = numpoints; t < tt; t++) {
@@ -150,32 +148,32 @@ public class SHPMultiPoint implements SHPShape {
 			buffer.putDouble(point.getY());
 		}
 
-		  if (m_type == FConstant.SHAPE_TYPE_MULTIPOINTZ) {
-		   double[] zExtreame = SHP.getZMinMax(zs);
-		   if (Double.isNaN(zExtreame[0])) {
-		       buffer.putDouble(0.0);
-		       buffer.putDouble(0.0);
-		   } else {
-		       buffer.putDouble(zExtreame[0]);
-		       buffer.putDouble(zExtreame[1]);
-		   }
-		   for (int t = 0; t < numpoints; t++) {
-		       double z = zs[t];
-		       if (Double.isNaN(z)) {
-		           buffer.putDouble(0.0);
-		       } else {
-		           buffer.putDouble(z);
-		       }
-		   }
-		   }
-		  if (m_type == FConstant.SHAPE_TYPE_MULTIPOINTM){
-		       buffer.putDouble(-10E40);
-		       buffer.putDouble(-10E40);
-		       double[] ms = ((IGeometryM)geometry).getMs();
-		       for (int t = 0; t < numpoints; t++) {		    	   
-		    	   buffer.putDouble(ms[t]);
-		       }
-		   }
+		if (m_type == FConstant.SHAPE_TYPE_MULTIPOINTZ) {
+			double[] zExtreame = SHP.getZMinMax(zs);
+			if (Double.isNaN(zExtreame[0])) {
+				buffer.putDouble(0.0);
+				buffer.putDouble(0.0);
+			} else {
+				buffer.putDouble(zExtreame[0]);
+				buffer.putDouble(zExtreame[1]);
+			}
+			for (int t = 0; t < numpoints; t++) {
+				double z = zs[t];
+				if (Double.isNaN(z)) {
+					buffer.putDouble(0.0);
+				} else {
+					buffer.putDouble(z);
+				}
+			}
+		}
+		if (m_type == FConstant.SHAPE_TYPE_MULTIPOINTM) {
+			buffer.putDouble(-10E40);
+			buffer.putDouble(-10E40);
+			double[] ms = ((IGeometryM) geometry).getMs();
+			for (int t = 0; t < numpoints; t++) {
+				buffer.putDouble(ms[t]);
+			}
+		}
 
 	}
 
@@ -183,8 +181,8 @@ public class SHPMultiPoint implements SHPShape {
 	 * @see com.iver.cit.gvsig.fmap.shp.SHPShape#getLength(com.iver.cit.gvsig.core.BasicShape.FGeometry)
 	 */
 	public int getLength(IGeometry fgeometry) {
-		//FMultiPoint2D mp = (FMultiPoint2D) fgeometry.getShape();
-		///obtainsPoints(fgeometry.getGeneralPathXIterator());
+		// FMultiPoint2D mp = (FMultiPoint2D) fgeometry.getShape();
+		// /obtainsPoints(fgeometry.getGeneralPathXIterator());
 
 		int length;
 
@@ -198,8 +196,8 @@ public class SHPMultiPoint implements SHPShape {
 			// add the additional ZMin,ZMax, plus 8 per Z
 			length = (numpoints * 16) + 40 + 16 + (8 * numpoints);
 		} else {
-			throw new IllegalStateException("Expected ShapeType of Arc, got " +
-				m_type);
+			throw new IllegalStateException("Expected ShapeType of Arc, got "
+					+ m_type);
 		}
 
 		return length;
@@ -209,23 +207,24 @@ public class SHPMultiPoint implements SHPShape {
 	 * @see com.iver.cit.gvsig.fmap.drivers.shp.write.SHPShape#obtainsPoints(com.iver.cit.gvsig.fmap.core.GeneralPathXIterator)
 	 */
 	public void obtainsPoints(IGeometry g) {
-		if (FConstant.SHAPE_TYPE_MULTIPOINTZ == m_type){
-			zs=((IGeometry3D)g).getZs();
+		if (FConstant.SHAPE_TYPE_MULTIPOINTZ == m_type) {
+			zs = ((IGeometry3D) g).getZs();
 		}
-		PathIterator theIterator = g.getPathIterator(null); //polyLine.getPathIterator(null, flatness);
+		PathIterator theIterator = g.getPathIterator(null); // polyLine.getPathIterator(null,
+															// flatness);
 		double[] theData = new double[6];
-		ArrayList ps=new ArrayList();
+		ArrayList ps = new ArrayList();
 		while (!theIterator.isDone()) {
-			//while not done
+			// while not done
 			int theType = theIterator.currentSegment(theData);
 
 			ps.add(new Point2D.Double(theData[0], theData[1]));
 			theIterator.next();
-		} //end while loop
-		points=(Point2D[])ps.toArray(new Point2D.Double[0]);
-		numpoints=points.length;
+		} // end while loop
+		points = (Point2D[]) ps.toArray(new Point2D.Double[0]);
+		numpoints = points.length;
 	}
-//	public void setFlatness(double flatness) {
-//		//this.flatness=flatness;
-//	}
+	// public void setFlatness(double flatness) {
+	// //this.flatness=flatness;
+	// }
 }

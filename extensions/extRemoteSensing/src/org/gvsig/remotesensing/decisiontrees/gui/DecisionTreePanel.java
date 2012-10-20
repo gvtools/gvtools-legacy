@@ -1,42 +1,42 @@
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
-	 *
-	 * Copyright (C) 2006 Instituto de Desarrollo Regional and Generalitat Valenciana.
-	 *
-	 * This program is free software; you can redistribute it and/or
-	 * modify it under the terms of the GNU General Public License
-	 * as published by the Free Software Foundation; either version 2
-	 * of the License, or (at your option) any later version.
-	 *
-	 * This program is distributed in the hope that it will be useful,
-	 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-	 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	 * GNU General Public License for more details.
-	 *
-	 * You should have received a copy of the GNU General Public License
-	 * along with this program; if not, write to the Free Software
-	 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
-	 *
-	 * For more information, contact:
-	 *
-	 *  Generalitat Valenciana
-	 *   Conselleria d'Infraestructures i Transport
-	 *   Av. Blasco Ibañez, 50
-	 *   46010 VALENCIA
-	 *   SPAIN
-	 *
-	 *      +34 963862235
-	 *   gvsig@gva.es
-	 *      www.gvsig.gva.es
-	 *
-	 *    or
-	 *
-	 *   Instituto de Desarrollo Regional (Universidad de Castilla La-Mancha)
-	 *   Campus Universitario s/n
-	 *   02071 Alabacete
-	 *   Spain
-	 *
-	 *   +34 967 599 200
-	 */
+ *
+ * Copyright (C) 2006 Instituto de Desarrollo Regional and Generalitat Valenciana.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
+ *
+ * For more information, contact:
+ *
+ *  Generalitat Valenciana
+ *   Conselleria d'Infraestructures i Transport
+ *   Av. Blasco Ibañez, 50
+ *   46010 VALENCIA
+ *   SPAIN
+ *
+ *      +34 963862235
+ *   gvsig@gva.es
+ *      www.gvsig.gva.es
+ *
+ *    or
+ *
+ *   Instituto de Desarrollo Regional (Universidad de Castilla La-Mancha)
+ *   Campus Universitario s/n
+ *   02071 Alabacete
+ *   Spain
+ *
+ *   +34 967 599 200
+ */
 package org.gvsig.remotesensing.decisiontrees.gui;
 
 import java.awt.BorderLayout;
@@ -78,43 +78,44 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
  * Panel para la herramienta de árboles de decisión.
  * 
  * @author Diego Guerrero Sevilla (diego.guerrero@uclm.es)
- *
+ * 
  */
 public class DecisionTreePanel extends DefaultButtonsPanel {
 
 	/**
 	 * 
 	 */
-	private static final long 		serialVersionUID 	= 2800193252856199039L;
-	private static final Color[]	colors  = new Color[] {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.MAGENTA, Color.CYAN,
-		Color.ORANGE, Color.PINK, Color.WHITE, Color.BLACK};
-	public  static final int 		POSITION_LEFT 		= 0;
-	public  static final int 		POSITION_RIGHT 		= 1;
-	
-	private JGraph 			  			jGraph     	   		= null;
-	private DecisionTreeDialog  		decisionTreeDialog 	= null;
-	private JScrollPane					scrollPane			= null;
-	private JPanel						menuBarPanel		= null;
-	private JMenuBar 					menuBar			 	= null;
-	private JMenuItem 					closeMenuItem 		= null;
-	private JMenuItem 					saveMenuItem 		= null;
-	private JMenuItem 					loadMenuItem 		= null;
-	private JMenuItem 					exportMenuItem 		= null;
-	private JMenuItem 					helpMenuItem 		= null;
-	private JMenuItem 					importMenuItem		= null;
-	private JPopupMenu					jPopupMenu			= null;
-	private JMenuItem 					addMenuItem			= null;
-	private JMenuItem					deleteMenuItem		= null;
-	private JMenuItem					executeMenuItem		= null;
-	private DecisionTree				decisionTree		= null;
-	private DecisionTreePanelListener 	listener 			= null;
-	private DefaultGraphCell 			selectedCell 		= null;
-	private View						view				= null;
-	private JTabbedPane					tabbedPanel 		= null; 
-	private OptionsPanel				outputOptionsPanel  = null;
-	private JPanel 						treePanel 			= null;
-	private JButton						jButtonSaveTree		= null;
-	private JButton						jButtonLoadTree		= null;
+	private static final long serialVersionUID = 2800193252856199039L;
+	private static final Color[] colors = new Color[] { Color.RED, Color.GREEN,
+			Color.BLUE, Color.YELLOW, Color.MAGENTA, Color.CYAN, Color.ORANGE,
+			Color.PINK, Color.WHITE, Color.BLACK };
+	public static final int POSITION_LEFT = 0;
+	public static final int POSITION_RIGHT = 1;
+
+	private JGraph jGraph = null;
+	private DecisionTreeDialog decisionTreeDialog = null;
+	private JScrollPane scrollPane = null;
+	private JPanel menuBarPanel = null;
+	private JMenuBar menuBar = null;
+	private JMenuItem closeMenuItem = null;
+	private JMenuItem saveMenuItem = null;
+	private JMenuItem loadMenuItem = null;
+	private JMenuItem exportMenuItem = null;
+	private JMenuItem helpMenuItem = null;
+	private JMenuItem importMenuItem = null;
+	private JPopupMenu jPopupMenu = null;
+	private JMenuItem addMenuItem = null;
+	private JMenuItem deleteMenuItem = null;
+	private JMenuItem executeMenuItem = null;
+	private DecisionTree decisionTree = null;
+	private DecisionTreePanelListener listener = null;
+	private DefaultGraphCell selectedCell = null;
+	private View view = null;
+	private JTabbedPane tabbedPanel = null;
+	private OptionsPanel outputOptionsPanel = null;
+	private JPanel treePanel = null;
+	private JButton jButtonSaveTree = null;
+	private JButton jButtonLoadTree = null;
 
 	public DecisionTreePanel(DecisionTreeDialog decisionTreeDialog, View view) {
 		super(ButtonsPanel.BUTTONS_APPLYCLOSE);
@@ -122,13 +123,13 @@ public class DecisionTreePanel extends DefaultButtonsPanel {
 		this.decisionTreeDialog = decisionTreeDialog;
 		initialize();
 	}
-	
+
 	private void initialize() {
 		initTree();
 		reloadGraph();
-		setLayout(new BorderLayout(5,5));
-		setBorder(new EmptyBorder(2,2,10,2));		
-		add(getMenuBarPanel(),BorderLayout.NORTH);
+		setLayout(new BorderLayout(5, 5));
+		setBorder(new EmptyBorder(2, 2, 10, 2));
+		add(getMenuBarPanel(), BorderLayout.NORTH);
 		add(getTabbedPanel());
 		listener = new DecisionTreePanelListener(this);
 		getAddMenuItem().addActionListener(listener);
@@ -146,165 +147,182 @@ public class DecisionTreePanel extends DefaultButtonsPanel {
 	}
 
 	private Component getTabbedPanel() {
-		if (tabbedPanel==null){
+		if (tabbedPanel == null) {
 			tabbedPanel = new JTabbedPane();
-			tabbedPanel.setBorder(new EmptyBorder(0,10,0,10));	
-			tabbedPanel.addTab(PluginServices.getText(this, "arbol"), getTreePanel());
-			tabbedPanel.addTab(PluginServices.getText(this,"output_options"), getOutputOptionsPanel());
+			tabbedPanel.setBorder(new EmptyBorder(0, 10, 0, 10));
+			tabbedPanel.addTab(PluginServices.getText(this, "arbol"),
+					getTreePanel());
+			tabbedPanel.addTab(PluginServices.getText(this, "output_options"),
+					getOutputOptionsPanel());
 		}
 		return tabbedPanel;
 	}
 
 	/**
 	 * Crea el árbol de decisión inicial
-	 *
+	 * 
 	 */
 	private void initTree() {
 		getDecisionTree().getRoot().setChildren();
 		getDecisionTree().getRoot().setExpression("");
-		getDecisionTree().getRoot().getLeftChild().setClassID(generateClassId());
-		getDecisionTree().getRoot().getRightChild().setClassID(generateClassId());
+		getDecisionTree().getRoot().getLeftChild()
+				.setClassID(generateClassId());
+		getDecisionTree().getRoot().getRightChild()
+				.setClassID(generateClassId());
 	}
-	
-	public void initJGraph(){
+
+	public void initJGraph() {
 		jGraph = null;
 	}
-	
+
 	/**
 	 * Reconstruye el gráfico a partir del Árbol (root).
-	 *
+	 * 
 	 */
-	public void reloadGraph(){
+	public void reloadGraph() {
 		/*
 		 * Limpiar el gráfico.
 		 */
-		getJGraph().getGraphLayoutCache().remove(getJGraph().getGraphLayoutCache().getCells(false, true, false, true),true,true);
+		getJGraph().getGraphLayoutCache().remove(
+				getJGraph().getGraphLayoutCache().getCells(false, true, false,
+						true), true, true);
 		getJGraph().getGraphLayoutCache().reload();
 		/*
 		 * Construir el gráfico a partir el árbol.
 		 */
-		insertCells(getDecisionTree().getRoot(),null,-1);
+		insertCells(getDecisionTree().getRoot(), null, -1);
 	}
 
 	/**
-	 * Inserta recursivamente en el gráfico los nodos y arcos el árbol que radica en <code>node</node>
+	 * Inserta recursivamente en el gráfico los nodos y arcos el árbol que
+	 * radica en <code>node</node>
 	 * en el gráfico.
 	 * 
-	 * @param node nodo raiz del subárbol.
-	 * @param parent nodo antecesor del subárbol a insertar
-	 * @param position indica si <code>node</node> es el hijo izquierdo (0) o derecho (1) de <code>parent</code>
+	 * @param node
+	 *            nodo raiz del subárbol.
+	 * @param parent
+	 *            nodo antecesor del subárbol a insertar
+	 * @param position
+	 *            indica si <code>node</node> es el hijo izquierdo (0) o derecho
+	 *            (1) de <code>parent</code>
 	 */
-	public void insertCells(DecisionTreeNode node, DefaultGraphCell parent, int position) {
+	public void insertCells(DecisionTreeNode node, DefaultGraphCell parent,
+			int position) {
 		int x = 0;
 		int y = 0;
 		int w = 90;
 		int h = 40;
-		if(parent==null){
+		if (parent == null) {
 			y = 10;
-			//x = getScrollPane().getPreferredSize().width/2 - 20;
-			//x = node.getLevelsCount() * w -w +10;
-			x = getXFactor(node,null) * w - w + 10;
-		}
-		else{
-			int leftLevels = ((DecisionTreeNode)parent.getUserObject()).getLeftChild().getLevelsCount();
-			int rightLevels = ((DecisionTreeNode)parent.getUserObject()).getRightChild().getLevelsCount();
+			// x = getScrollPane().getPreferredSize().width/2 - 20;
+			// x = node.getLevelsCount() * w -w +10;
+			x = getXFactor(node, null) * w - w + 10;
+		} else {
+			int leftLevels = ((DecisionTreeNode) parent.getUserObject())
+					.getLeftChild().getLevelsCount();
+			int rightLevels = ((DecisionTreeNode) parent.getUserObject())
+					.getRightChild().getLevelsCount();
 			int minLevels = Math.min(leftLevels, rightLevels);
-			y = ((int)GraphConstants.getBounds(parent.getAttributes()).getMaxY())+50;
-			if(position==POSITION_LEFT)
-				x = ((int)GraphConstants.getBounds(parent.getAttributes()).getMinX())-w*minLevels;
+			y = ((int) GraphConstants.getBounds(parent.getAttributes())
+					.getMaxY()) + 50;
+			if (position == POSITION_LEFT)
+				x = ((int) GraphConstants.getBounds(parent.getAttributes())
+						.getMinX()) - w * minLevels;
 			else
-				x = ((int)GraphConstants.getBounds(parent.getAttributes()).getMinX())+(w)*minLevels;
+				x = ((int) GraphConstants.getBounds(parent.getAttributes())
+						.getMinX()) + (w) * minLevels;
 		}
-		DefaultGraphCell nodeVertex = createVertex(node, x, y, w, h, null, false);
-		
+		DefaultGraphCell nodeVertex = createVertex(node, x, y, w, h, null,
+				false);
+
 		/*
 		 * Si es un nodo final:
 		 */
-		if (node.isFinal()){
-			Color color = (Color)getDecisionTree().getColorTable().get(new Integer(node.getClassID()));
+		if (node.isFinal()) {
+			Color color = (Color) getDecisionTree().getColorTable().get(
+					new Integer(node.getClassID()));
 			GraphConstants.setBackground(nodeVertex.getAttributes(), color);
 			GraphConstants.setOpaque(nodeVertex.getAttributes(), true);
 		}
-		
+
 		getJGraph().getGraphLayoutCache().insert(nodeVertex);
-		if (parent!=null){
+		if (parent != null) {
 			String label = PluginServices.getText(this, "si");
-			if(position==POSITION_LEFT)
+			if (position == POSITION_LEFT)
 				label = PluginServices.getText(this, "no");
 			DefaultEdge edge = createEdge(nodeVertex, parent, label);
 			getJGraph().getGraphLayoutCache().insert(edge);
 		}
-			
-		if (node.getLeftChild()!=null){
+
+		if (node.getLeftChild() != null) {
 			insertCells(node.getLeftChild(), nodeVertex, POSITION_LEFT);
 		}
-		if (node.getRightChild()!=null){
+		if (node.getRightChild() != null) {
 			insertCells(node.getRightChild(), nodeVertex, POSITION_RIGHT);
 		}
 	}
-	
-	private int getXFactor(DecisionTreeNode node, DecisionTreeNode parent){
-		if (parent == null){
-			return 1+getXFactor(node.getLeftChild(),node);
+
+	private int getXFactor(DecisionTreeNode node, DecisionTreeNode parent) {
+		if (parent == null) {
+			return 1 + getXFactor(node.getLeftChild(), node);
 		}
 		int leftLevels = parent.getLeftChild().getLevelsCount();
 		int rightLevels = parent.getRightChild().getLevelsCount();
 		int minLevels = Math.min(leftLevels, rightLevels);
-		
-		if (node.getLeftChild()!=null)
-			return minLevels+getXFactor(node.getLeftChild(),node);
-		
-		return 1+minLevels;
+
+		if (node.getLeftChild() != null)
+			return minLevels + getXFactor(node.getLeftChild(), node);
+
+		return 1 + minLevels;
 	}
 
-	private DefaultGraphCell createVertex(Object name, double x,
-			double y, double w, double h, Color bg, boolean raised) {
+	private DefaultGraphCell createVertex(Object name, double x, double y,
+			double w, double h, Color bg, boolean raised) {
 
-			// Create vertex with the given name
-			DefaultGraphCell cell = new DefaultGraphCell(name);
+		// Create vertex with the given name
+		DefaultGraphCell cell = new DefaultGraphCell(name);
 
-			// Set bounds
-			GraphConstants.setBounds(cell.getAttributes(),
-					new Rectangle2D.Double(x, y, w, h));
+		// Set bounds
+		GraphConstants.setBounds(cell.getAttributes(), new Rectangle2D.Double(
+				x, y, w, h));
 
-			// Set fill color
-			if (bg != null) {
-				GraphConstants.setGradientColor(
-					cell.getAttributes(), bg);
-				GraphConstants.setOpaque(
-					cell.getAttributes(), true);
-			}
-
-			// Set raised border
-			if (raised)
-				GraphConstants.setBorder(
-					cell.getAttributes(), 
-					BorderFactory.createRaisedBevelBorder());
-			else
-				// Set black border
-				GraphConstants.setBorderColor(
-					cell.getAttributes(), Color.black);
-
-			// Add a Port
-			DefaultPort port = new DefaultPort();
-			cell.add(port);
-			port.setParent(cell);
-			
-			GraphConstants.setBorder(cell.getAttributes(), BorderFactory.createEtchedBorder());
-	    	GraphConstants.setAutoSize(cell.getAttributes(),false);
-	    	GraphConstants.setResize(cell.getAttributes(),false);
-	    	GraphConstants.setInset(cell.getAttributes(), 10);
-	    	GraphConstants.setMoveable(cell.getAttributes(), true);
-	    	GraphConstants.setSizeable(cell.getAttributes(),true);
-
-			return cell;
+		// Set fill color
+		if (bg != null) {
+			GraphConstants.setGradientColor(cell.getAttributes(), bg);
+			GraphConstants.setOpaque(cell.getAttributes(), true);
 		}
-	
-	private DefaultEdge createEdge(DefaultGraphCell cell, DefaultGraphCell parentCell, String label){
+
+		// Set raised border
+		if (raised)
+			GraphConstants.setBorder(cell.getAttributes(),
+					BorderFactory.createRaisedBevelBorder());
+		else
+			// Set black border
+			GraphConstants.setBorderColor(cell.getAttributes(), Color.black);
+
+		// Add a Port
+		DefaultPort port = new DefaultPort();
+		cell.add(port);
+		port.setParent(cell);
+
+		GraphConstants.setBorder(cell.getAttributes(),
+				BorderFactory.createEtchedBorder());
+		GraphConstants.setAutoSize(cell.getAttributes(), false);
+		GraphConstants.setResize(cell.getAttributes(), false);
+		GraphConstants.setInset(cell.getAttributes(), 10);
+		GraphConstants.setMoveable(cell.getAttributes(), true);
+		GraphConstants.setSizeable(cell.getAttributes(), true);
+
+		return cell;
+	}
+
+	private DefaultEdge createEdge(DefaultGraphCell cell,
+			DefaultGraphCell parentCell, String label) {
 		DefaultEdge edge = new DefaultEdge(label);
 		edge.setSource(parentCell);
 		edge.setTarget(cell);
-		GraphConstants.setLineEnd(edge.getAttributes(), GraphConstants.ARROW_SIMPLE);
+		GraphConstants.setLineEnd(edge.getAttributes(),
+				GraphConstants.ARROW_SIMPLE);
 		GraphConstants.setEndFill(edge.getAttributes(), false);
 		GraphConstants.setAutoSize(edge.getAttributes(), true);
 		getJGraph().getGraphLayoutCache().insert(edge);
@@ -312,58 +330,58 @@ public class DecisionTreePanel extends DefaultButtonsPanel {
 	}
 
 	public JScrollPane getScrollPane() {
-		if (scrollPane == null){
+		if (scrollPane == null) {
 			scrollPane = new JScrollPane(getJGraph());
-			scrollPane.setPreferredSize(new Dimension(500,400));
+			scrollPane.setPreferredSize(new Dimension(500, 400));
 		}
 		return scrollPane;
 	}
 
-	
-	public JPanel getTreePanel(){
-		
-		if(treePanel ==null){
+	public JPanel getTreePanel() {
+
+		if (treePanel == null) {
 			treePanel = new JPanel();
-			BorderLayout bd= new BorderLayout();
+			BorderLayout bd = new BorderLayout();
 			treePanel.setLayout(bd);
 			treePanel.add(getScrollPane(), BorderLayout.CENTER);
-			
-			JPanel paux= new JPanel();
+
+			JPanel paux = new JPanel();
 			paux.add(getJButtonLoadTree());
 			paux.add(getJButtonSaveTree());
-			
-			JPanel p= new JPanel();
+
+			JPanel p = new JPanel();
 			p.setLayout(new BorderLayout());
 			p.add(paux, BorderLayout.WEST);
-			treePanel.add(p,BorderLayout.SOUTH);
+			treePanel.add(p, BorderLayout.SOUTH);
 		}
-		
+
 		return treePanel;
 	}
-	
+
 	public JGraph getJGraph() {
-		if (jGraph == null){
+		if (jGraph == null) {
 			GraphModel model = new DefaultGraphModel();
 			jGraph = new JGraph(model);
-			
+
 			jGraph.setCloneable(false);
 			jGraph.setEditable(false);
-	        jGraph.setInvokesStopCellEditing(false);
-	        jGraph.setJumpToDefaultPort(true);
-	        jGraph.setConnectable(false);
-	        jGraph.setDisconnectable(false);
+			jGraph.setInvokesStopCellEditing(false);
+			jGraph.setJumpToDefaultPort(true);
+			jGraph.setConnectable(false);
+			jGraph.setDisconnectable(false);
 		}
 		return jGraph;
 	}
-	
+
 	public JMenuBar getMenuBar() {
-		if (menuBar==null){
+		if (menuBar == null) {
 			menuBar = new JMenuBar();
-			menuBar.setBorder(new EmptyBorder(0,0,0,0));
+			menuBar.setBorder(new EmptyBorder(0, 0, 0, 0));
 			JMenu fileMenu = new JMenu(PluginServices.getText(this, "archivo"));
-			JMenu optionsMenu = new JMenu(PluginServices.getText(this, "opciones"));
+			JMenu optionsMenu = new JMenu(PluginServices.getText(this,
+					"opciones"));
 			JMenu helpMenu = new JMenu(PluginServices.getText(this, "help"));
-			
+
 			fileMenu.add(getSaveMenuItem());
 			fileMenu.add(getLoadMenuItem());
 			fileMenu.add(getImportMenuItem());
@@ -377,51 +395,54 @@ public class DecisionTreePanel extends DefaultButtonsPanel {
 		}
 		return menuBar;
 	}
-	
+
 	public JMenuItem getExportMenuItem() {
-		if (helpMenuItem == null){
-			exportMenuItem = new JMenuItem(PluginServices.getText(this, "exportar"));
+		if (helpMenuItem == null) {
+			exportMenuItem = new JMenuItem(PluginServices.getText(this,
+					"exportar"));
 		}
 		return exportMenuItem;
 	}
-	
+
 	public JMenuItem getImportMenuItem() {
-		if (importMenuItem == null){
-			importMenuItem = new JMenuItem(PluginServices.getText(this, "importar"));
+		if (importMenuItem == null) {
+			importMenuItem = new JMenuItem(PluginServices.getText(this,
+					"importar"));
 		}
 		return importMenuItem;
 	}
 
 	public JMenuItem getHelpMenuItem() {
-		if (helpMenuItem == null){
+		if (helpMenuItem == null) {
 			helpMenuItem = new JMenuItem(PluginServices.getText(this, "help"));
 		}
 		return helpMenuItem;
 	}
 
 	public JMenuItem getLoadMenuItem() {
-		if (loadMenuItem == null){
+		if (loadMenuItem == null) {
 			loadMenuItem = new JMenuItem(PluginServices.getText(this, "cargar"));
 		}
 		return loadMenuItem;
 	}
 
 	public JMenuItem getSaveMenuItem() {
-		if (saveMenuItem == null){
+		if (saveMenuItem == null) {
 			saveMenuItem = new JMenuItem(PluginServices.getText(this, "salvar"));
 		}
 		return saveMenuItem;
 	}
-	
+
 	public JMenuItem getCloseMenuItem() {
-		if (closeMenuItem == null){
-			closeMenuItem = new JMenuItem(PluginServices.getText(this, "cerrar"));
+		if (closeMenuItem == null) {
+			closeMenuItem = new JMenuItem(
+					PluginServices.getText(this, "cerrar"));
 		}
 		return closeMenuItem;
 	}
 
 	public JPopupMenu getJPopupMenu() {
-		if (jPopupMenu==null){
+		if (jPopupMenu == null) {
 			jPopupMenu = new JPopupMenu("");
 			jPopupMenu.add(getAddMenuItem());
 			jPopupMenu.add(getDeleteMenuItem());
@@ -431,25 +452,28 @@ public class DecisionTreePanel extends DefaultButtonsPanel {
 	}
 
 	public JMenuItem getAddMenuItem() {
-		if (addMenuItem==null){
-			addMenuItem = new JMenuItem(PluginServices.getText(this, "addChild"));
+		if (addMenuItem == null) {
+			addMenuItem = new JMenuItem(
+					PluginServices.getText(this, "addChild"));
 		}
 		return addMenuItem;
 	}
 
 	public JMenuItem getDeleteMenuItem() {
-		if (deleteMenuItem==null){
-			deleteMenuItem = new JMenuItem(PluginServices.getText(this, "deleteChild"));
+		if (deleteMenuItem == null) {
+			deleteMenuItem = new JMenuItem(PluginServices.getText(this,
+					"deleteChild"));
 		}
 		return deleteMenuItem;
 	}
 
 	public JMenuItem getExecuteMenuItem() {
 		if (executeMenuItem == null)
-			executeMenuItem = new JMenuItem(PluginServices.getText(this, "ejecutar"));
+			executeMenuItem = new JMenuItem(PluginServices.getText(this,
+					"ejecutar"));
 		return executeMenuItem;
 	}
-	
+
 	public void setSelectedCell(DefaultGraphCell cell) {
 		selectedCell = cell;
 	}
@@ -457,7 +481,6 @@ public class DecisionTreePanel extends DefaultButtonsPanel {
 	public DefaultGraphCell getSelectedCell() {
 		return selectedCell;
 	}
-	
 
 	public View getView() {
 		return view;
@@ -468,66 +491,60 @@ public class DecisionTreePanel extends DefaultButtonsPanel {
 	}
 
 	public OptionsPanel getOutputOptionsPanel() {
-		if (outputOptionsPanel == null){
+		if (outputOptionsPanel == null) {
 			outputOptionsPanel = new OptionsPanel(view);
 		}
 		return outputOptionsPanel;
 	}
-	
-	/**
-	 * Devuelve un color para asignar a un nuevo nodo final
-	 * 
-	 * @return Color
-	 */
-	private Color generateColor(){
-		return null;
-	}
-	
+
 	/**
 	 * Devuelve un ID para asignar a un nuevo nodo final
 	 * 
 	 * @return int
 	 */
-	public int generateClassId(){
+	public int generateClassId() {
 		Color color = null;
 		int classColorsCount = getDecisionTree().getColorTable().size();
-		for (int i=0; i<classColorsCount;i++)
-			if(!getDecisionTree().getColorTable().containsKey(new Integer(i))){
-				if (i<colors.length)
+		for (int i = 0; i < classColorsCount; i++)
+			if (!getDecisionTree().getColorTable().containsKey(new Integer(i))) {
+				if (i < colors.length)
 					color = colors[i];
 				else
-					color = new Color((float)Math.random(),(float)Math.random(),(float)Math.random());
+					color = new Color((float) Math.random(),
+							(float) Math.random(), (float) Math.random());
 				getDecisionTree().getColorTable().put(new Integer(i), color);
 				return i;
 			}
-		if (classColorsCount<colors.length)
+		if (classColorsCount < colors.length)
 			color = colors[classColorsCount];
 		else
-			color = new Color((float)Math.random(),(float)Math.random(),(float)Math.random());
-		getDecisionTree().getColorTable().put(new Integer(classColorsCount), color);
+			color = new Color((float) Math.random(), (float) Math.random(),
+					(float) Math.random());
+		getDecisionTree().getColorTable().put(new Integer(classColorsCount),
+				color);
 		return classColorsCount;
 	}
 
 	/**
-	 * Elimina las entradas de <code>classColors</code> que se están
-	 * usando en el árbol.
-	 *
+	 * Elimina las entradas de <code>classColors</code> que se están usando en
+	 * el árbol.
+	 * 
 	 */
 	public void cleanClassColors() {
 		ArrayList ids = new ArrayList();
 		getDecisionTree().getRoot().getFinals(ids);
 		Object keys[] = getDecisionTree().getColorTable().keySet().toArray();
-		for (int i=0; i < keys.length; i++){
+		for (int i = 0; i < keys.length; i++) {
 			if (!ids.contains(keys[i]))
 				getDecisionTree().getColorTable().remove(keys[i]);
 		}
 	}
 
 	public JPanel getMenuBarPanel() {
-		if (menuBarPanel == null){
+		if (menuBarPanel == null) {
 			menuBarPanel = new JPanel();
 			menuBarPanel.setLayout(new BorderLayout());
-		//	menuBarPanel.add(getMenuBar(),BorderLayout.WEST);
+			// menuBarPanel.add(getMenuBar(),BorderLayout.WEST);
 		}
 		return menuBarPanel;
 	}
@@ -543,20 +560,20 @@ public class DecisionTreePanel extends DefaultButtonsPanel {
 	}
 
 	public JButton getJButtonLoadTree() {
-		
-		if(jButtonLoadTree==null){
-			jButtonLoadTree= new JButton(PluginServices.getText(this,"loadtree"));
+
+		if (jButtonLoadTree == null) {
+			jButtonLoadTree = new JButton(PluginServices.getText(this,
+					"loadtree"));
 		}
 		return jButtonLoadTree;
 	}
 
 	public JButton getJButtonSaveTree() {
-		if(jButtonSaveTree==null){
-			jButtonSaveTree= new JButton(PluginServices.getText(this,"savetree"));
+		if (jButtonSaveTree == null) {
+			jButtonSaveTree = new JButton(PluginServices.getText(this,
+					"savetree"));
 		}
 		return jButtonSaveTree;
 	}
-	
-	
 
 }

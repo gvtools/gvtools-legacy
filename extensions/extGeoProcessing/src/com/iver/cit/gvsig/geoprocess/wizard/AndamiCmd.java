@@ -42,20 +42,19 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: AndamiCmd.java 5412 2006-05-24 21:15:07Z azabala $
-* $Log$
-* Revision 1.1  2006-05-24 21:08:45  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.1  2006/03/28 16:24:39  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: AndamiCmd.java 5412 2006-05-24 21:15:07Z azabala $
+ * $Log$
+ * Revision 1.1  2006-05-24 21:08:45  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.1  2006/03/28 16:24:39  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.wizard;
 
 public interface AndamiCmd {
 	public void execute();
 }
-

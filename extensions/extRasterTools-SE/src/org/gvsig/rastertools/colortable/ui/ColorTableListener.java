@@ -48,6 +48,7 @@ import org.gvsig.rastertools.colortable.ui.tabs.IColorTableUI;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
+
 /**
  * Listener generico para el panel de tablas de color, en el controlaremos el
  * refresco de la vista previa, los cambios en las tablas de color y la
@@ -56,19 +57,22 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
  * @version 27/06/2007
  * @author BorSanZa - Borja S�nchez Zamorano (borja.sanchez@iver.es)
  */
-public class ColorTableListener implements PropertyListener, ColorTableUIListener, IPreviewRenderProcess {
-	private ColorTablePanel colorTablePanel  = null;
-	private FLyrRasterSE    previewLayer     = null;
-	private ColorTableData  colorTableData   = null;
-	private ArrayList       statusList       = new ArrayList();
-	private IColorTableUI   lastColorTableUI = null;
-	private boolean         showPreview      = true;
-	
+public class ColorTableListener implements PropertyListener,
+		ColorTableUIListener, IPreviewRenderProcess {
+	private ColorTablePanel colorTablePanel = null;
+	private FLyrRasterSE previewLayer = null;
+	private ColorTableData colorTableData = null;
+	private ArrayList statusList = new ArrayList();
+	private IColorTableUI lastColorTableUI = null;
+	private boolean showPreview = true;
+
 	/**
 	 * Construye un ColorTableListener
+	 * 
 	 * @param colorTablePanel
 	 */
-	public ColorTableListener(ColorTablePanel colorTablePanel, ColorTableData colorTableData) {
+	public ColorTableListener(ColorTablePanel colorTablePanel,
+			ColorTableData colorTableData) {
 		this.colorTablePanel = colorTablePanel;
 		this.colorTableData = colorTableData;
 		getColorTableData().addValueChangedListener(this);
@@ -76,6 +80,7 @@ public class ColorTableListener implements PropertyListener, ColorTableUIListene
 
 	/**
 	 * Devuelve el panel de ColorTable
+	 * 
 	 * @return
 	 */
 	private ColorTablePanel getColorTablePanel() {
@@ -88,6 +93,7 @@ public class ColorTableListener implements PropertyListener, ColorTableUIListene
 
 	/**
 	 * Asigna la capa raster de la vista
+	 * 
 	 * @param fLayer
 	 */
 	public void setLayer(FLayer fLayer) {
@@ -95,7 +101,8 @@ public class ColorTableListener implements PropertyListener, ColorTableUIListene
 			try {
 				previewLayer = (FLyrRasterSE) fLayer.cloneLayer();
 			} catch (Exception e) {
-				RasterToolsUtil.messageBoxError("preview_not_available", colorTablePanel, e);
+				RasterToolsUtil.messageBoxError("preview_not_available",
+						colorTablePanel, e);
 			}
 		}
 	}
@@ -113,14 +120,18 @@ public class ColorTableListener implements PropertyListener, ColorTableUIListene
 	/**
 	 * Aqui se aplica el estado de las tablas de color al rendering pasado por
 	 * parametro
+	 * 
 	 * @param rendering
 	 * @return
 	 * @throws FilterTypeException
 	 */
-	private void applyColorTable(IRasterRendering rendering, boolean isPreview) throws FilterTypeException {
+	private void applyColorTable(IRasterRendering rendering, boolean isPreview)
+			throws FilterTypeException {
 		RasterFilterList filterList = rendering.getRenderFilterList();
-		RasterFilterListManager manager = new RasterFilterListManager(filterList);
-		ColorTableListManager cManager = (ColorTableListManager) manager.getManagerByClass(ColorTableListManager.class);
+		RasterFilterListManager manager = new RasterFilterListManager(
+				filterList);
+		ColorTableListManager cManager = (ColorTableListManager) manager
+				.getManagerByClass(ColorTableListManager.class);
 
 		filterList.remove(ColorTableFilter.class);
 
@@ -129,19 +140,22 @@ public class ColorTableListener implements PropertyListener, ColorTableUIListene
 		if (getColorTableData().isEnabled()) {
 			filterList.remove(LinearStretchEnhancementFilter.class);
 			filterList.remove(TailTrimFilter.class);
-			GridPalette gridPalette = new GridPalette(getColorTableData().getColorTable());
+			GridPalette gridPalette = new GridPalette(getColorTableData()
+					.getColorTable());
 
 			// Asignamos la transparencia del render actual al filterList
-			filterList.addEnvParam("Transparency", rendering.getRender().getLastTransparency());
+			filterList.addEnvParam("Transparency", rendering.getRender()
+					.getLastTransparency());
 
 			cManager.addColorTableFilter(gridPalette);
 
 			if (!isPreview) {
 				gridPalette.compressPalette();
-				((FLyrRasterSE) getColorTablePanel().getLayer()).setLastLegend(gridPalette);
+				((FLyrRasterSE) getColorTablePanel().getLayer())
+						.setLastLegend(gridPalette);
 			}
 		}
-		for (int i = 0; i< filterList.lenght(); i++) {
+		for (int i = 0; i < filterList.lenght(); i++) {
 			((RasterFilter) filterList.get(i)).setEnv(filterList.getEnv());
 		}
 
@@ -149,21 +163,27 @@ public class ColorTableListener implements PropertyListener, ColorTableUIListene
 	}
 
 	/**
-	 * Acciones que se ejecutaran al haber presionado el bot�n aceptar o aplicar
+	 * Acciones que se ejecutaran al haber presionado el bot�n aceptar o
+	 * aplicar
 	 */
 	public void accept() {
 		if (getColorTablePanel().getLayer() instanceof IRasterRendering) {
 			try {
-				applyColorTable(((IRasterRendering) getColorTablePanel().getLayer()), false);
+				applyColorTable(((IRasterRendering) getColorTablePanel()
+						.getLayer()), false);
 				getColorTablePanel().getLayer().getMapContext().invalidate();
-				ColorTableLibraryPersistence.save_to_1_1(ColorTableLibraryPanel.palettesPath, getColorTableData().getColorTable());
+				ColorTableLibraryPersistence.save_to_1_1(
+						ColorTableLibraryPanel.palettesPath,
+						getColorTableData().getColorTable());
 			} catch (FilterTypeException e) {
-				RasterToolsUtil.messageBoxError(PluginServices.getText(this, "error_adding_filters"), this, e);
+				RasterToolsUtil.messageBoxError(
+						PluginServices.getText(this, "error_adding_filters"),
+						this, e);
 			}
 
 		}
 	}
-	
+
 	public class StatusComponent {
 		private JComponent object;
 		private boolean enabled;
@@ -184,7 +204,7 @@ public class ColorTableListener implements PropertyListener, ColorTableUIListene
 			this.object = object;
 		}
 	}
-	
+
 	private void saveComponentsStatus(JComponent component) {
 		// Guardar estado
 		StatusComponent auxStatus = new StatusComponent();
@@ -197,7 +217,8 @@ public class ColorTableListener implements PropertyListener, ColorTableUIListene
 				saveComponentsStatus((JComponent) component.getComponent(i));
 	}
 
-	private void setEnabledRecursive(JComponent component, boolean enabled, int level) {
+	private void setEnabledRecursive(JComponent component, boolean enabled,
+			int level) {
 		if (enabled == true) {
 			boolean auxEnabled = false;
 			boolean finded = false;
@@ -217,7 +238,8 @@ public class ColorTableListener implements PropertyListener, ColorTableUIListene
 			if (finded)
 				component.setEnabled(auxEnabled);
 		} else {
-			// Si es la primera llamada, guardamos el estado de todos los componentes
+			// Si es la primera llamada, guardamos el estado de todos los
+			// componentes
 			if (level == 0)
 				saveComponentsStatus(component);
 
@@ -227,24 +249,31 @@ public class ColorTableListener implements PropertyListener, ColorTableUIListene
 
 		for (int i = 0; i < component.getComponentCount(); i++)
 			if (component.getComponent(i) instanceof JComponent)
-				setEnabledRecursive((JComponent) component.getComponent(i), enabled, level + 1);
-	}	
-	
+				setEnabledRecursive((JComponent) component.getComponent(i),
+						enabled, level + 1);
+	}
+
 	/**
-	 * Activa/Desactiva los componentes de las pesta�as segun la pesta�a selecionada
+	 * Activa/Desactiva los componentes de las pesta�as segun la pesta�a
+	 * selecionada
+	 * 
 	 * @param enabled
 	 */
 	private void setEnabledPanel(boolean enabled) {
 		colorTablePanel.getGeneralPanel().setEnabledPanel(enabled);
-		colorTablePanel.getPreviewBasePanel().getTabbedPane().setEnabled(enabled);
+		colorTablePanel.getPreviewBasePanel().getTabbedPane()
+				.setEnabled(enabled);
 		setEnabledRecursive(getLastColorTableUI().getPanel(), enabled, 0);
-		setEnabledRecursive(colorTablePanel.getPreviewBasePanel().getImageNavigator(), enabled, 0);
+		setEnabledRecursive(colorTablePanel.getPreviewBasePanel()
+				.getImageNavigator(), enabled, 0);
 		setEnabledRecursive(colorTablePanel.getPanelListView(), enabled, 0);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.PropertyListener#actionValueChanged(org.gvsig.rastertools.PropertyEvent)
+	 * 
+	 * @see org.gvsig.rastertools.PropertyListener#actionValueChanged(org.gvsig.
+	 * rastertools.PropertyEvent)
 	 */
 	public void actionValueChanged(PropertyEvent e) {
 		if (e.getName().equals("refreshPreview")) {
@@ -252,26 +281,30 @@ public class ColorTableListener implements PropertyListener, ColorTableUIListene
 			return;
 		}
 		if (e.getName().equals("interpolated")) {
-			colorTablePanel.getColorTableLibraryPanel().setInterpolated(((Boolean) e.getValue()).booleanValue());
-			getColorTableData().getColorTable().setInterpolated(((Boolean) e.getValue()).booleanValue());
+			colorTablePanel.getColorTableLibraryPanel().setInterpolated(
+					((Boolean) e.getValue()).booleanValue());
+			getColorTableData().getColorTable().setInterpolated(
+					((Boolean) e.getValue()).booleanValue());
 			getColorTableData().refreshPreview();
-			getLastColorTableUI().setColorTable(getColorTableData().getColorTable());
+			getLastColorTableUI().setColorTable(
+					getColorTableData().getColorTable());
 			return;
 		}
-		
+
 		if (e.getName().equals("enabled")) {
 			setEnabledPanel(((Boolean) e.getValue()).booleanValue());
 			return;
 		}
 
-		if (e.getName().equals("limits") ||
-				e.getName().equals("maxim") ||
-				e.getName().equals("minim")) {
+		if (e.getName().equals("limits") || e.getName().equals("maxim")
+				|| e.getName().equals("minim")) {
 			if (getColorTableData().isLimitsEnabled()) {
 				double min = getColorTableData().getMinim();
 				double max = getColorTableData().getMaxim();
-				getLastColorTableUI().getColorTable().createColorTableInRange(min, max, false);
-				getLastColorTableUI().setColorTable(getLastColorTableUI().getColorTable());
+				getLastColorTableUI().getColorTable().createColorTableInRange(
+						min, max, false);
+				getLastColorTableUI().setColorTable(
+						getLastColorTableUI().getColorTable());
 				getColorTableData().refreshPreview();
 			} else {
 				colorTablePanel.reloadPanelsFromLibraryPanel();
@@ -279,9 +312,10 @@ public class ColorTableListener implements PropertyListener, ColorTableUIListene
 			return;
 		}
 	}
-	
+
 	/**
 	 * Recarga la tabla de elementos
+	 * 
 	 * @param isNewSelection
 	 */
 	public void refreshItems(boolean isNewSelection) {
@@ -291,7 +325,8 @@ public class ColorTableListener implements PropertyListener, ColorTableUIListene
 		if (isNewSelection)
 			getColorTableData().getColorTable().removeDuplicatedValues();
 
-		getLastColorTableUI().setColorTable(getColorTableData().getColorTable());
+		getLastColorTableUI()
+				.setColorTable(getColorTableData().getColorTable());
 	}
 
 	/**
@@ -314,12 +349,13 @@ public class ColorTableListener implements PropertyListener, ColorTableUIListene
 		}
 		for (int i = 0; i < list.size(); i++) {
 			ColorItem colorItem = (ColorItem) list.get(i);
-			colorItem.setValue(min2 + (((max2 - min2) / (list.size() - 1)) * i));
+			colorItem
+					.setValue(min2 + (((max2 - min2) / (list.size() - 1)) * i));
 		}
 		refreshItems(true);
 		getColorTableData().refreshPreview();
 	}
-	
+
 	/**
 	 * @return the lastColorTableUI
 	 */
@@ -328,7 +364,8 @@ public class ColorTableListener implements PropertyListener, ColorTableUIListene
 	}
 
 	/**
-	 * @param lastColorTableUI the lastColorTableUI to set
+	 * @param lastColorTableUI
+	 *            the lastColorTableUI to set
 	 */
 	public void setLastColorTableUI(IColorTableUI lastColorTableUI) {
 		this.lastColorTableUI = lastColorTableUI;
@@ -336,45 +373,59 @@ public class ColorTableListener implements PropertyListener, ColorTableUIListene
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.colortable.panels.ColorTableUIListener#actionColorTableUIChanged(org.gvsig.rastertools.colortable.panels.IColorTableUI)
+	 * 
+	 * @see org.gvsig.rastertools.colortable.panels.ColorTableUIListener#
+	 * actionColorTableUIChanged
+	 * (org.gvsig.rastertools.colortable.panels.IColorTableUI)
 	 */
 	public void actionColorTableUIChanged(IColorTableUI colorTableUI) {
-		ColorTable colorTable = colorTablePanel.getColorTableLibraryPanel().getColorTableSelected();
-		colorTable.createPaletteFromColorItems(colorTableUI.getColorTable().getColorItems(), false);
-		colorTablePanel.getColorTableLibraryPanel().setColorTableSelected(colorTable);
+		ColorTable colorTable = colorTablePanel.getColorTableLibraryPanel()
+				.getColorTableSelected();
+		colorTable.createPaletteFromColorItems(colorTableUI.getColorTable()
+				.getColorItems(), false);
+		colorTablePanel.getColorTableLibraryPanel().setColorTableSelected(
+				colorTable);
 
-		getColorTableData().setColorTable((ColorTable) colorTableUI.getColorTable().clone());
+		getColorTableData().setColorTable(
+				(ColorTable) colorTableUI.getColorTable().clone());
 		getColorTableData().refreshPreview();
-		//getLastColorTableUI().setColorTable(getColorTableData().getColorTable());
+		// getLastColorTableUI().setColorTable(getColorTableData().getColorTable());
 	}
 
-	public void process(IRasterRendering rendering) throws FilterTypeException, ImageUnavailableException {
-		if(!showPreview)
-			throw new ImageUnavailableException(RasterToolsUtil.getText(this, "panel_preview_not_available"));
-		
-//		rendering.getRenderFilterList().pushStatus();
+	public void process(IRasterRendering rendering) throws FilterTypeException,
+			ImageUnavailableException {
+		if (!showPreview)
+			throw new ImageUnavailableException(RasterToolsUtil.getText(this,
+					"panel_preview_not_available"));
+
+		// rendering.getRenderFilterList().pushStatus();
 		try {
 			applyColorTable(rendering, true);
 		} catch (FilterTypeException e1) {
-			RasterToolsUtil.messageBoxError(PluginServices.getText(this, "error_adding_filters"), this, e1);
+			RasterToolsUtil.messageBoxError(
+					PluginServices.getText(this, "error_adding_filters"), this,
+					e1);
 		}
-//		rendering.getRenderFilterList().popStatus();
+		// rendering.getRenderFilterList().popStatus();
 	}
-	
+
 	/**
-	 * Obtiene el flag que informa de si se est� mostrando la previsualizaci�n o no.
-	 * En caso de no mostrarse se lanza una excepci�n ImageUnavailableExcepcion con el 
-	 * mensaje "La previsualizaci�n no est� disponible para este panel"
+	 * Obtiene el flag que informa de si se est� mostrando la
+	 * previsualizaci�n o no. En caso de no mostrarse se lanza una excepci�n
+	 * ImageUnavailableExcepcion con el mensaje
+	 * "La previsualizaci�n no est� disponible para este panel"
+	 * 
 	 * @return
 	 */
 	public boolean isShowPreview() {
 		return showPreview;
 	}
-	
+
 	/**
-	 * Asigna el flag para mostrar u ocultar la preview. En caso de no mostrarse se lanza una 
-	 * excepci�n ImageUnavailableExcepcion con el mensaje "La previsualizaci�n no est� disponible para
-	 * este panel"
+	 * Asigna el flag para mostrar u ocultar la preview. En caso de no mostrarse
+	 * se lanza una excepci�n ImageUnavailableExcepcion con el mensaje "La
+	 * previsualizaci�n no est� disponible para este panel"
+	 * 
 	 * @param showPreview
 	 */
 	public void setShowPreview(boolean showPreview) {

@@ -42,84 +42,84 @@ package com.iver.cit.gvsig.gui.wizards;
 
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public class WizardData {
-    private String title;
-    private String Abstract;
-    private LayerInfo layer;
-    private String[] formats;
+	private String title;
+	private String Abstract;
+	private LayerInfo layer;
+	private String[] formats;
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return
-     */
-    public String getAbstract() {
-        return Abstract;
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return
+	 */
+	public String getAbstract() {
+		return Abstract;
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return
-     */
-    public String[] getFormats() {
-        return formats;
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return
+	 */
+	public String[] getFormats() {
+		return formats;
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return
-     */
-    public LayerInfo getLayer() {
-        return layer;
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return
+	 */
+	public LayerInfo getLayer() {
+		return layer;
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return
-     */
-    public String getTitle() {
-        return title;
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return
+	 */
+	public String getTitle() {
+		return title;
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param string
-     */
-    public void setAbstract(String string) {
-        Abstract = string;
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param string
+	 */
+	public void setAbstract(String string) {
+		Abstract = string;
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param strings
-     */
-    public void setFormats(String[] strings) {
-        formats = strings;
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param strings
+	 */
+	public void setFormats(String[] strings) {
+		formats = strings;
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param info
-     */
-    public void setLayer(LayerInfo info) {
-        layer = info;
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param info
+	 */
+	public void setLayer(LayerInfo info) {
+		layer = info;
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param string
-     */
-    public void setTitle(String string) {
-        title = string;
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param string
+	 */
+	public void setTitle(String string) {
+		title = string;
+	}
 }

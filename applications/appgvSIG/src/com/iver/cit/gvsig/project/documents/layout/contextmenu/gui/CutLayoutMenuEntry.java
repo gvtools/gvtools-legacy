@@ -45,10 +45,9 @@ import com.iver.cit.gvsig.project.documents.layout.LayoutContext;
 import com.iver.cit.gvsig.project.documents.layout.LayoutKeyEvent;
 import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 
-
 /**
  * Corta el FFrame seleccionado.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class CutLayoutMenuEntry extends AbstractLayoutContextMenuAction {
@@ -68,16 +67,19 @@ public class CutLayoutMenuEntry extends AbstractLayoutContextMenuAction {
 		return PluginServices.getText(this, "cut");
 	}
 
-	public boolean isEnabled(LayoutContext layoutContext, IFFrame[] selectedFrames) {
+	public boolean isEnabled(LayoutContext layoutContext,
+			IFFrame[] selectedFrames) {
 		return true;
 	}
 
-	public boolean isVisible(LayoutContext layoutContext, IFFrame[] selectedFrames) {
-		if (selectedFrames.length==1 && !(getLayout().getLayoutControl().getGeometryAdapter().getPoints().length>0))
+	public boolean isVisible(LayoutContext layoutContext,
+			IFFrame[] selectedFrames) {
+		if (selectedFrames.length == 1
+				&& !(getLayout().getLayoutControl().getGeometryAdapter()
+						.getPoints().length > 0))
 			return true;
 		return false;
 	}
-
 
 	public void execute(LayoutContext layoutContext, IFFrame[] selectedFrames) {
 		LayoutKeyEvent.cut(getLayout());

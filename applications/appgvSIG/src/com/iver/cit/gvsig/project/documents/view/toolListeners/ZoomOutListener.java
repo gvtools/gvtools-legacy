@@ -45,20 +45,24 @@ import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.tools.ZoomOutListenerImpl;
 import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
 
-
 /**
- * <p>Inherits {@link ZoomOutListenerImpl ZoomOutListenerImpl} enabling/disabling special
- *  controls for managing the data selected.</p>
- *
+ * <p>
+ * Inherits {@link ZoomOutListenerImpl ZoomOutListenerImpl} enabling/disabling
+ * special controls for managing the data selected.
+ * </p>
+ * 
  * @see ZoomOutListenerImpl
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class ZoomOutListener extends ZoomOutListenerImpl {
 	/**
-	 * <p>Creates a new <code>ZoomOutListener</code> object.</p>
+	 * <p>
+	 * Creates a new <code>ZoomOutListener</code> object.
+	 * </p>
 	 * 
-	 * @param mapCtrl the <code>MapControl</code> where be applied the changes
+	 * @param mapCtrl
+	 *            the <code>MapControl</code> where be applied the changes
 	 */
 	public ZoomOutListener(MapControl mapCtrl) {
 		super(mapCtrl);
@@ -66,7 +70,10 @@ public class ZoomOutListener extends ZoomOutListenerImpl {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.ZoomOutListenerImpl#point(com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.ZoomOutListenerImpl#point(com.iver.cit.
+	 * gvsig.fmap.tools.Events.PointEvent)
 	 */
 	public void point(PointEvent event) {
 		super.point(event);

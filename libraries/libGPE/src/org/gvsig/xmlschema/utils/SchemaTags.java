@@ -1,4 +1,5 @@
 package org.gvsig.xmlschema.utils;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -71,6 +72,7 @@ package org.gvsig.xmlschema.utils;
  */
 /**
  * This class contains the xml schema constants
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class SchemaTags {
@@ -89,7 +91,7 @@ public class SchemaTags {
 	public static final String XS_NS = "xs";
 	public static final String NAME = "name";
 	public static final String TYPE = "type";
-	public static final String TARGET_NAMESPACE = "targetNamespace";	
+	public static final String TARGET_NAMESPACE = "targetNamespace";
 	public static final String SIMPLE_TYPE = "simpleType";
 	public static final String COMPLEX_TYPE = "complexType";
 	public static final String ELEMENT = "element";

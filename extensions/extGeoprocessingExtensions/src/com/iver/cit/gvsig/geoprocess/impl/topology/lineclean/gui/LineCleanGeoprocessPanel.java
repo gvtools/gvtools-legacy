@@ -42,23 +42,23 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: LineCleanGeoprocessPanel.java 24094 2008-10-19 07:44:04Z azabala $
-* $Log$
-* Revision 1.1  2006-12-21 17:23:27  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/12/04 19:42:23  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/10/17 18:25:53  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/10/10 18:50:17  azabala
-* First version in CVS
-*
-*
-*/
+ *
+ * $Id: LineCleanGeoprocessPanel.java 24094 2008-10-19 07:44:04Z azabala $
+ * $Log$
+ * Revision 1.1  2006-12-21 17:23:27  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/12/04 19:42:23  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/10/17 18:25:53  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/10/10 18:50:17  azabala
+ * First version in CVS
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.topology.lineclean.gui;
 
 import java.awt.GridBagConstraints;
@@ -72,8 +72,8 @@ import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.geoprocess.core.gui.AbstractGeoprocessGridbagPanel;
 import com.iver.cit.gvsig.geoprocess.impl.topology.lineclean.ILineCleanGeoprocessUserEntries;
 
-public class LineCleanGeoprocessPanel extends AbstractGeoprocessGridbagPanel 
-	implements ILineCleanGeoprocessUserEntries{
+public class LineCleanGeoprocessPanel extends AbstractGeoprocessGridbagPanel
+		implements ILineCleanGeoprocessUserEntries {
 
 	private static final long serialVersionUID = 6485409632799083097L;
 
@@ -84,13 +84,12 @@ public class LineCleanGeoprocessPanel extends AbstractGeoprocessGridbagPanel
 	}
 
 	protected void addSpecificDesign() {
-		
+
 		this.addGroupOfLyrsCb = new JCheckBox();
 		this.addGroupOfLyrsCb.setText(PluginServices.getText(this,
 				"Añadir_al_TOC_geometrias_erroneas"));
-		addComponent(addGroupOfLyrsCb, 
-				GridBagConstraints.NONE, 
-				new Insets(5, 5, 5, 5));
+		addComponent(addGroupOfLyrsCb, GridBagConstraints.NONE, new Insets(5,
+				5, 5, 5));
 		initSelectedItemsJCheckBox();
 		updateNumSelectedFeaturesLabel();
 	}
@@ -99,11 +98,10 @@ public class LineCleanGeoprocessPanel extends AbstractGeoprocessGridbagPanel
 	}
 
 	public boolean cleanOnlySelection() {
-		return  isFirstOnlySelected();
+		return isFirstOnlySelected();
 	}
 
 	public boolean createLyrsWithErrorGeometries() {
 		return addGroupOfLyrsCb.isSelected();
-	}	
+	}
 }
-

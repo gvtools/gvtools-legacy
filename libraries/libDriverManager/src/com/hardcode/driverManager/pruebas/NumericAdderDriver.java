@@ -5,13 +5,15 @@ import com.hardcode.driverManager.Driver;
 /**
  * @author Fernando González Cortés
  */
-public class NumericAdderDriver implements Driver, Adder{
+public class NumericAdderDriver implements Driver, Adder {
 
 	/**
-	 * @see com.hardcode.driverManager.pruebas.Adder#add(java.lang.String, java.lang.String)
+	 * @see com.hardcode.driverManager.pruebas.Adder#add(java.lang.String,
+	 *      java.lang.String)
 	 */
 	public String add(String a, String b) {
-		return new Integer(new Integer(a).intValue() + new Integer(b).intValue()).toString();
+		return new Integer(new Integer(a).intValue()
+				+ new Integer(b).intValue()).toString();
 	}
 
 	/**

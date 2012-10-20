@@ -105,58 +105,62 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.gvsig.gui.beans.listeners.BeanListener;
+
 /**
  * Sample class for see how to use BeanListeners.
  * <p>
  * Have fun! ;-)
  * </p>
+ * 
  * @author jaume
  */
 public class SamplePanel extends JPanel {
-  private static final long serialVersionUID = 3663247043945556938L;
-		private Pager ep;
-    /**
-     * This is the default constructor
-     */
-    public SamplePanel() {
-        super();
-        initialize();
-    }
+	private static final long serialVersionUID = 3663247043945556938L;
+	private Pager ep;
 
-    /**
-     * This method initializes this
-     * 
-     * @return void
-     */
-    private void initialize() {
-        this.setSize(300, 200);
-        this.setLayout(null);
-        
-        this.add(getEditionPanel(), null);
-        
-    }
+	/**
+	 * This is the default constructor
+	 */
+	public SamplePanel() {
+		super();
+		initialize();
+	}
 
-    private Pager getEditionPanel(){
-        if (ep == null){
-            ep = new Pager(0, 20, Pager.HORIZONTAL);
-            ep.addListener(new BeanListener(){
+	/**
+	 * This method initializes this
+	 * 
+	 * @return void
+	 */
+	private void initialize() {
+		this.setSize(300, 200);
+		this.setLayout(null);
 
-                public void beanValueChanged(Object value) {
-                    System.out.println("("+((Integer) value).intValue()+")");
-                }
-                
-            });
-        }
-        return ep;
-    }
-    
-    public static void main(String[] args){
-        //dim = new TimeDimension("units", "unitSymbol", "2004-12-24/2005-12-18/P1D");
-        
-        JFrame frame = new JFrame();
-        frame.getContentPane().add(new SamplePanel());
-        frame.setBounds(0, 0, 279, 63);
-        frame.pack();
-        frame.setVisible(true);
-    }
+		this.add(getEditionPanel(), null);
+
+	}
+
+	private Pager getEditionPanel() {
+		if (ep == null) {
+			ep = new Pager(0, 20, Pager.HORIZONTAL);
+			ep.addListener(new BeanListener() {
+
+				public void beanValueChanged(Object value) {
+					System.out.println("(" + ((Integer) value).intValue() + ")");
+				}
+
+			});
+		}
+		return ep;
+	}
+
+	public static void main(String[] args) {
+		// dim = new TimeDimension("units", "unitSymbol",
+		// "2004-12-24/2005-12-18/P1D");
+
+		JFrame frame = new JFrame();
+		frame.getContentPane().add(new SamplePanel());
+		frame.setBounds(0, 0, 279, 63);
+		frame.pack();
+		frame.setVisible(true);
+	}
 }

@@ -5,16 +5,16 @@ import com.iver.utiles.swing.objectSelection.ObjectSelectionModel;
 /**
  * @author Fernando González Cortés
  */
-public class TableSelectionModel implements ObjectSelectionModel{
+public class TableSelectionModel implements ObjectSelectionModel {
 
 	private ProjectTable[] tables;
 	private String msg;
 
-	public TableSelectionModel(ProjectTable[] tables, String msg){
+	public TableSelectionModel(ProjectTable[] tables, String msg) {
 		this.tables = tables;
 		this.msg = msg;
 	}
-	
+
 	/**
 	 * @see com.iver.cit.gvsig.project.documents.table.TableSelectionModel#getTables()
 	 */

@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.impl.smooth.fmap;
 
 import java.rmi.server.UID;
@@ -79,19 +79,18 @@ import com.iver.utiles.swing.threads.CancellableProgressTask;
 
 /**
  * Geoprocess to generalize linear or poligonal vectorial layers.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class SmoothGeoprocess extends AbstractMonitorableGeoprocess {
 
 	private static Logger logger = Logger.getLogger(SmoothGeoprocess.class
 			.getName());
-	
+
 	private LayerDefinition resultLayerDefinition;
-	
-	
+
 	private int curveOption = FCurve.BEZIER;
-	
 
 	public SmoothGeoprocess(FLyrVect inputLayer) {
 		this.firstLayer = inputLayer;
@@ -100,20 +99,22 @@ public class SmoothGeoprocess extends AbstractMonitorableGeoprocess {
 	public void checkPreconditions() throws GeoprocessException {
 		int lyrDimensions;
 		try {
-			lyrDimensions = FGeometryUtil.getDimensions(firstLayer.getShapeType());
-		
-			if(lyrDimensions == 0)
+			lyrDimensions = FGeometryUtil.getDimensions(firstLayer
+					.getShapeType());
+
+			if (lyrDimensions == 0)
 				throw new GeoprocessException(
-					"Geoproceso suavizar línea con capa de puntos");
-		
+						"Geoproceso suavizar línea con capa de puntos");
+
 		} catch (ReadDriverException e) {
-			throw new GeoprocessException("Error intentando acceder al tipo de geometria de capa vectorial");
+			throw new GeoprocessException(
+					"Error intentando acceder al tipo de geometria de capa vectorial");
 		}
 
 	}
 
 	public ILayerDefinition createLayerDefinition() {
-		if(resultLayerDefinition == null){
+		if (resultLayerDefinition == null) {
 			try {
 				resultLayerDefinition = DefinitionUtils
 						.createLayerDefinition(firstLayer);
@@ -124,20 +125,16 @@ public class SmoothGeoprocess extends AbstractMonitorableGeoprocess {
 		return resultLayerDefinition;
 	}
 
-	
-
 	public void setParameters(Map params) throws GeoprocessException {
 		Boolean onlySelection = (Boolean) params.get("layer_selection");
 		if (onlySelection != null)
 			this.operateOnlyWithSelection = onlySelection.booleanValue();
-		
-		Integer curveOptionI = (Integer) params.get("curve_option");
-		if(curveOptionI != null)
-			curveOption = curveOptionI.intValue();
-		
-	}
 
-	
+		Integer curveOptionI = (Integer) params.get("curve_option");
+		if (curveOptionI != null)
+			curveOption = curveOptionI.intValue();
+
+	}
 
 	public void process(CancellableProgressTask progressMonitor)
 			throws GeoprocessException {
@@ -161,30 +158,30 @@ public class SmoothGeoprocess extends AbstractMonitorableGeoprocess {
 
 		try {
 			IFeatureIterator featureIterator = null;
-			if(this.operateOnlyWithSelection){
+			if (this.operateOnlyWithSelection) {
 				FBitSet selection = firstLayer.getRecordset().getSelection();
-	        	featureIterator = new FeatureBitsetIterator(selection, firstLayer.getSource());
-			}else{
+				featureIterator = new FeatureBitsetIterator(selection,
+						firstLayer.getSource());
+			} else {
 				featureIterator = firstLayer.getSource().getFeatureIterator();
 			}
-			
-			while(featureIterator.hasNext()){
+
+			while (featureIterator.hasNext()) {
 				IFeature feature = featureIterator.next();
 				IGeometry fmapGeo = feature.getGeometry();
 				Value[] values = feature.getAttributes();
-				
-				IGeometry smoothedGeometry = FGeometryUtil.smoothGeometry(fmapGeo, curveOption); 
-				
-				if(progressMonitor != null)
+
+				IGeometry smoothedGeometry = FGeometryUtil.smoothGeometry(
+						fmapGeo, curveOption);
+
+				if (progressMonitor != null)
 					progressMonitor.reportStep();
-				DefaultFeature newFeature = 
-					new DefaultFeature(smoothedGeometry, 
-												values, 
-											new UID().toString());
+				DefaultFeature newFeature = new DefaultFeature(
+						smoothedGeometry, values, new UID().toString());
 				featureProcessor.processFeature(newFeature);
-				
+
 			}
-			
+
 			featureProcessor.finish();
 			if (progressMonitor != null) {
 				progressMonitor.finished();
@@ -197,10 +194,8 @@ public class SmoothGeoprocess extends AbstractMonitorableGeoprocess {
 			throw new GeoprocessException(
 					"Error al acceder a la informacion del driver dentro del geoproceso",
 					e);
-		} 
+		}
 	}
-	
-	
 
 	public void initialize(CancellableProgressTask progressMonitor)
 			throws GeoprocessException {

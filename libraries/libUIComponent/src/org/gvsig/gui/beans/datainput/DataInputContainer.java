@@ -26,15 +26,20 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 /**
  * Campo de texto que controla el contenido de datos del componente y solo
- * dispara un evento cuando realmente ha cambiado su valor. Contiene un
- * label para ponerle un nombre.<p>
+ * dispara un evento cuando realmente ha cambiado su valor. Contiene un label
+ * para ponerle un nombre.
+ * <p>
  * 
- * <b>RECOMENDABLE:</b> Usar JFormattedTextFields<p>
+ * <b>RECOMENDABLE:</b> Usar JFormattedTextFields
+ * <p>
  * 
  * Ejemplo de Sun:<br>
- * &nbsp;&nbsp;<a href="http://java.sun.com/docs/books/tutorial/uiswing/examples/components/FormatterFactoryDemoProject/src/components/FormatterFactoryDemo.java">FormatterFactoryDemo.java</a>
+ * &nbsp;&nbsp;<a href=
+ * "http://java.sun.com/docs/books/tutorial/uiswing/examples/components/FormatterFactoryDemoProject/src/components/FormatterFactoryDemo.java"
+ * >FormatterFactoryDemo.java</a>
  * 
  * @version 06/09/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
@@ -42,8 +47,8 @@ import javax.swing.JPanel;
 public class DataInputContainer extends JPanel {
 	private static final long serialVersionUID = 7084105134015956663L;
 
-	private JLabel          jLabel         = null;
-	private DataInputField  dataInputField = null;
+	private JLabel jLabel = null;
+	private DataInputField dataInputField = null;
 
 	/**
 	 * This is the default constructor
@@ -54,6 +59,7 @@ public class DataInputContainer extends JPanel {
 
 	/**
 	 * This method initializes this
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
@@ -80,15 +86,16 @@ public class DataInputContainer extends JPanel {
 
 	/**
 	 * Da nombre al campo de texto del componente.
+	 * 
 	 * @param text
 	 */
-	public void setLabelText(String text){
+	public void setLabelText(String text) {
 		getLText().setText(text + ":");
 	}
 
 	/**
 	 * This method initializes jTextField
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	public DataInputField getDataInputField() {
@@ -100,6 +107,7 @@ public class DataInputContainer extends JPanel {
 
 	/**
 	 * Devuelve el valor del campo de texto.
+	 * 
 	 * @return
 	 */
 	public String getValue() {
@@ -108,15 +116,17 @@ public class DataInputContainer extends JPanel {
 
 	/**
 	 * Habilita o deshabilita el control
+	 * 
 	 * @param en
 	 */
-	public void setControlEnabled(boolean en){
+	public void setControlEnabled(boolean en) {
 		getLText().setEnabled(en);
 		getDataInputField().setControlEnabled(en);
 	}
 
 	/**
 	 * Asigna el valor al campo de texto.
+	 * 
 	 * @return
 	 */
 	public void setValue(String value) {
@@ -125,14 +135,16 @@ public class DataInputContainer extends JPanel {
 
 	/**
 	 * Añadir un listener a la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void addValueChangedListener(DataInputContainerListener listener) {
 		getDataInputField().addValueChangedListener(listener);
 	}
-	
+
 	/**
 	 * Añadir un listener a la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void addKeyListener(KeyListener listener) {
@@ -141,14 +153,16 @@ public class DataInputContainer extends JPanel {
 
 	/**
 	 * Borrar un listener de la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void removeValueChangedListener(DataInputContainerListener listener) {
 		getDataInputField().removeValueChangedListener(listener);
 	}
-	
+
 	/**
 	 * Borrar un listener de la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void removeKeyListener(KeyListener listener) {

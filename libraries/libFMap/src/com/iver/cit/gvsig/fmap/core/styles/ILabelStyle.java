@@ -40,44 +40,44 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: ILabelStyle.java 23418 2008-09-17 13:24:20Z vcaballero $
-* $Log$
-* Revision 1.10  2007-08-16 06:55:30  jvidal
-* javadoc updated
-*
-* Revision 1.9  2007/08/13 11:36:30  jvidal
-* javadoc
-*
-* Revision 1.8  2007/05/08 08:47:39  jaume
-* *** empty log message ***
-*
-* Revision 1.7  2007/04/05 16:07:14  jaume
-* Styled labeling stuff
-*
-* Revision 1.6  2007/04/04 15:42:03  jaume
-* *** empty log message ***
-*
-* Revision 1.5  2007/04/04 15:41:05  jaume
-* *** empty log message ***
-*
-* Revision 1.4  2007/04/02 16:34:56  jaume
-* Styled labeling (start commiting)
-*
-* Revision 1.3  2007/03/29 16:02:01  jaume
-* *** empty log message ***
-*
-* Revision 1.2  2007/03/09 11:20:56  jaume
-* Advanced symbology (start committing)
-*
-* Revision 1.1.2.1  2007/02/15 16:23:44  jaume
-* *** empty log message ***
-*
-* Revision 1.1.2.1  2007/02/09 07:47:05  jaume
-* Isymbol moved
-*
-*
-*/
+ *
+ * $Id: ILabelStyle.java 23418 2008-09-17 13:24:20Z vcaballero $
+ * $Log$
+ * Revision 1.10  2007-08-16 06:55:30  jvidal
+ * javadoc updated
+ *
+ * Revision 1.9  2007/08/13 11:36:30  jvidal
+ * javadoc
+ *
+ * Revision 1.8  2007/05/08 08:47:39  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.7  2007/04/05 16:07:14  jaume
+ * Styled labeling stuff
+ *
+ * Revision 1.6  2007/04/04 15:42:03  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.5  2007/04/04 15:41:05  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.4  2007/04/02 16:34:56  jaume
+ * Styled labeling (start commiting)
+ *
+ * Revision 1.3  2007/03/29 16:02:01  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.2  2007/03/09 11:20:56  jaume
+ * Advanced symbology (start committing)
+ *
+ * Revision 1.1.2.1  2007/02/15 16:23:44  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1.2.1  2007/02/09 07:47:05  jaume
+ * Isymbol moved
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.core.styles;
 
 import java.awt.Dimension;
@@ -87,12 +87,12 @@ import java.awt.geom.Rectangle2D;
 import com.iver.utiles.XMLEntity;
 
 /**
- * Defines the style that a Label symbol can contain which typically define
- * a background of the label as an Image, the texts that the label holds
- * and their position within the label in rendering time.
- *
+ * Defines the style that a Label symbol can contain which typically define a
+ * background of the label as an Image, the texts that the label holds and their
+ * position within the label in rendering time.
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
 public interface ILabelStyle extends IStyle {
 	/**
@@ -102,14 +102,15 @@ public interface ILabelStyle extends IStyle {
 
 	/**
 	 * Sets the texts that will appear in the label.
+	 * 
 	 * @param texts
 	 */
 	public void setTextFields(String[] texts);
 
-
 	/**
 	 * Returns an array of rectangles defining the text boxes where text is
 	 * placed.
+	 * 
 	 * @return
 	 */
 	public Rectangle2D[] getTextBounds();
@@ -117,44 +118,54 @@ public interface ILabelStyle extends IStyle {
 	public Dimension getSize();
 
 	/**
-	 * Returns the position of the point labeled by this label in percent units relative
-	 * to the label bounds. It determines the offset to be applied to the label to be
-	 * placed and allows the user to use custom styles.
+	 * Returns the position of the point labeled by this label in percent units
+	 * relative to the label bounds. It determines the offset to be applied to
+	 * the label to be placed and allows the user to use custom styles.
 	 */
 	public Point2D getMarkerPoint();
 
 	/**
-	 * Sets the position of the point labeled by this in percent units relative to the
-	 * label bounds
+	 * Sets the position of the point labeled by this in percent units relative
+	 * to the label bounds
+	 * 
 	 * @param p
-	 * @throws IllegalArgumentException if the point coordinates are >0.0 or <1.0
+	 * @throws IllegalArgumentException
+	 *             if the point coordinates are >0.0 or <1.0
 	 */
 	public void setMarkerPoint(Point2D p) throws IllegalArgumentException;
 
 	/**
 	 * Sets a TextFieldArea using its index. With this method the user can
 	 * modify the size of the rectangle for the TextFieldArea
+	 * 
 	 * @param index
 	 * @param rect
 	 */
 	public void setTextFieldArea(int index, Rectangle2D rect);
 
 	/**
-	 * Adds a new TextFieldArea with an specific size which is defined as a rectangle.
-	 * @param index,int
-	 * @param rect,Rectangle2D
+	 * Adds a new TextFieldArea with an specific size which is defined as a
+	 * rectangle.
+	 * 
+	 * @param index
+	 *            ,int
+	 * @param rect
+	 *            ,Rectangle2D
 	 */
 	public void addTextFieldArea(Rectangle2D rect);
 
 	/**
 	 * Delete the TextFieldArea specified by its index.
-	 * @param index,int
+	 * 
+	 * @param index
+	 *            ,int
 	 */
 	public void deleteTextFieldArea(int index);
 
 	/**
-	 * Sets the size for a laber and stablishes an unit scale factor to not change
-	 * too much its content
+	 * Sets the size for a laber and stablishes an unit scale factor to not
+	 * change too much its content
+	 * 
 	 * @param width
 	 * @param height
 	 */
@@ -162,15 +173,16 @@ public interface ILabelStyle extends IStyle {
 
 	/**
 	 * Returns the XMLEntity of the background image which is used in the label
-	 *
+	 * 
 	 * @return XMLEntity of the image
 	 */
 
-	public XMLEntity getBackground() ;
+	public XMLEntity getBackground();
 
 	/**
-	 * Sets the XMLEntity of the image that is used to create the background of the style
-	 *
+	 * Sets the XMLEntity of the image that is used to create the background of
+	 * the style
+	 * 
 	 * @param background
 	 */
 	public void setBackground(XMLEntity background);

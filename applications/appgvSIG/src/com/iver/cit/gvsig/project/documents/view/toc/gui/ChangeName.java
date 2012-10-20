@@ -40,9 +40,7 @@
  */
 package com.iver.cit.gvsig.project.documents.view.toc.gui;
 
-
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -57,10 +55,9 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 
-
 /**
  * Diálogo para cambiar el nombre de una capa.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class ChangeName extends JPanel implements IWindow {
@@ -70,19 +67,22 @@ public class ChangeName extends JPanel implements IWindow {
 	private String name;
 	private JPanel jPanel = null;
 	private AcceptCancelPanel jPanel1 = null;
-	private boolean isAccepted=false;
+	private boolean isAccepted = false;
+
 	/**
 	 * This is the default constructor
-	 *
-	 * @param layout Referencia al Layout.
-	 * @param fframe Referencia al fframe de imagen.
+	 * 
+	 * @param layout
+	 *            Referencia al Layout.
+	 * @param fframe
+	 *            Referencia al fframe de imagen.
 	 */
 	public ChangeName(String n) {
 		super();
-		if (n==null){
-			name=PluginServices.getText(this, "agrupacion");
-		}else{
-			name=n;
+		if (n == null) {
+			name = PluginServices.getText(this, "agrupacion");
+		} else {
+			name = n;
 		}
 		initialize();
 	}
@@ -98,7 +98,7 @@ public class ChangeName extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jContentPane
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJContentPane() {
@@ -116,7 +116,7 @@ public class ChangeName extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lFichero
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private JLabel getLblName() {
@@ -132,7 +132,7 @@ public class ChangeName extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes tFichero
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getTxtName() {
@@ -141,12 +141,12 @@ public class ChangeName extends JPanel implements IWindow {
 			txtName.setBounds(62, 8, 280, 20);
 			txtName.setPreferredSize(new java.awt.Dimension(270, 20));
 			txtName.setText(name);
-			txtName.addKeyListener(new KeyListener(){
+			txtName.addKeyListener(new KeyListener() {
 
 				public void keyPressed(KeyEvent e) {
-					if (e.getKeyCode() == KeyEvent.VK_ENTER){
+					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 						acceptAction();
-					} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE){
+					} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 						cancelAction();
 					}
 
@@ -169,29 +169,32 @@ public class ChangeName extends JPanel implements IWindow {
 
 	/**
 	 * Inserta el path al TFichero.
-	 *
-	 * @param val path del fichero.
+	 * 
+	 * @param val
+	 *            path del fichero.
 	 */
 	public void setText(String val) {
 		getTxtName().setText(val);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.mdiApp.ui.MDIManager.View#getViewInfo()
 	 */
 	public WindowInfo getWindowInfo() {
 		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODALDIALOG);
-		m_viewinfo.setTitle(PluginServices.getText(this,
-				"cambio_nombre"));
+		m_viewinfo.setTitle(PluginServices.getText(this, "cambio_nombre"));
 		return m_viewinfo;
 	}
-	public String getName(){
+
+	public String getName() {
 		return name;
 	}
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel() {
@@ -200,14 +203,14 @@ public class ChangeName extends JPanel implements IWindow {
 			jPanel.add(getLblName(), null);
 			jPanel.add(getTxtName(), null);
 
-			jPanel.setBounds(new java.awt.Rectangle(4,3,329,35));
+			jPanel.setBounds(new java.awt.Rectangle(4, 3, 329, 35));
 		}
 		return jPanel;
 	}
 
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private AcceptCancelPanel getJPanel1() {
@@ -223,8 +226,9 @@ public class ChangeName extends JPanel implements IWindow {
 					cancelAction();
 				}
 			};
-			jPanel1 = new AcceptCancelPanel(okActionListener, cancelActionListener);
-			jPanel1.setBounds(new java.awt.Rectangle(3,39,374,35));
+			jPanel1 = new AcceptCancelPanel(okActionListener,
+					cancelActionListener);
+			jPanel1.setBounds(new java.awt.Rectangle(3, 39, 374, 35));
 		}
 		return jPanel1;
 	}
@@ -233,15 +237,15 @@ public class ChangeName extends JPanel implements IWindow {
 		return isAccepted;
 	}
 
-	protected void acceptAction(){
-		name=getTxtName().getText();
-		isAccepted=true;
+	protected void acceptAction() {
+		name = getTxtName().getText();
+		isAccepted = true;
 		PluginServices.getMDIManager().closeWindow(ChangeName.this);
 
 	}
 
-	protected void cancelAction(){
-		isAccepted=false;
+	protected void cancelAction() {
+		isAccepted = false;
 		PluginServices.getMDIManager().closeWindow(ChangeName.this);
 
 	}
@@ -250,5 +254,5 @@ public class ChangeName extends JPanel implements IWindow {
 		return WindowInfo.DIALOG_PROFILE;
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"
 

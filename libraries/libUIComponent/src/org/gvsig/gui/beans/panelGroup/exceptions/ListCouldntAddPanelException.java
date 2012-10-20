@@ -26,18 +26,24 @@ import org.gvsig.gui.beans.Messages;
 import org.gvsig.gui.beans.panelGroup.loaders.IPanelGroupLoader;
 
 /**
- * <p>It's possible that during the loading process of an {@link IPanelGroupLoader IPanelGroupLoader}, any of the panels
- *  that are being added could failed. To avoid stop the process, the exception launched will be caught and
- *  stored in a <code>ListCouldntAddPanelException</code>.</p>
+ * <p>
+ * It's possible that during the loading process of an {@link IPanelGroupLoader
+ * IPanelGroupLoader}, any of the panels that are being added could failed. To
+ * avoid stop the process, the exception launched will be caught and stored in a
+ * <code>ListCouldntAddPanelException</code>.
+ * </p>
  * 
  * @version 28/11/2007
- * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es) 
+ * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class ListCouldntAddPanelException extends ListBaseException {
 	private static final long serialVersionUID = -8397609549559655067L;
 
 	/**
-	 * <p>Creates an initializes a new instance of <code>ListCouldntAddPanelException</code>.</p>
+	 * <p>
+	 * Creates an initializes a new instance of
+	 * <code>ListCouldntAddPanelException</code>.
+	 * </p>
 	 */
 	public ListCouldntAddPanelException() {
 		super();
@@ -45,11 +51,14 @@ public class ListCouldntAddPanelException extends ListBaseException {
 		// Identifier of this kind of exception
 		this.code = serialVersionUID;
 
-		// Default text that explains this kind of exception. If there is no translation associated to the
-		// "messageKey" of this exception, then the value shown will be the value of "formatString".
+		// Default text that explains this kind of exception. If there is no
+		// translation associated to the
+		// "messageKey" of this exception, then the value shown will be the
+		// value of "formatString".
 		this.formatString = "Couldn't add some panels to the panel-group component:";
 
-		 // Key to the sentence that explains this exception. That key will be use for multilingual purposes.
+		// Key to the sentence that explains this exception. That key will be
+		// use for multilingual purposes.
 		this.messageKey = "couldnt_add_some_panel_exception";
 
 		setTranslator(new Messages());
@@ -57,6 +66,7 @@ public class ListCouldntAddPanelException extends ListBaseException {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map<String, String> values() {

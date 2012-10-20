@@ -63,130 +63,142 @@ import org.xmlpull.v1.XmlPullParserException;
 /**
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class WFSFeature1_1_0 extends WFSFeature{
-	
+public class WFSFeature1_1_0 extends WFSFeature {
+
 	public WFSFeature1_1_0() {
-		
+
 	}
-	
+
 	public WFSFeature1_1_0(String name) {
-		super(name);		
+		super(name);
 	}
 
 	/**
-	 * <p>Parses the contents of the parser(WMSCapabilities)
-	 * to extract the information about an WMSLayer</p>
-	 * @throws IOException 
-	 * @throws XmlPullParserException 
+	 * <p>
+	 * Parses the contents of the parser(WMSCapabilities) to extract the
+	 * information about an WMSLayer
+	 * </p>
+	 * 
+	 * @throws IOException
+	 * @throws XmlPullParserException
 	 * 
 	 */
-	public void parse(KXmlParser parser) throws XmlPullParserException, IOException{
+	public void parse(KXmlParser parser) throws XmlPullParserException,
+			IOException {
 		int currentTag;
 		boolean end = false;
-		
-		parser.require(KXmlParser.START_TAG, null, CapabilitiesTags.WFS_FEATURETYPE);
-		
-		for (int i=0 ; i<parser.getAttributeCount() ; i++){
+
+		parser.require(KXmlParser.START_TAG, null,
+				CapabilitiesTags.WFS_FEATURETYPE);
+
+		for (int i = 0; i < parser.getAttributeCount(); i++) {
 			String[] attName = parser.getAttributeName(i).split(":");
-			if (attName.length == 2){
-				if (attName[0].compareTo(GMLTags.XML_NAMESPACE)==0){
-					XMLNameSpace nameSpace = new XMLNameSpace(attName[1],parser.getAttributeValue(i));
+			if (attName.length == 2) {
+				if (attName[0].compareTo(GMLTags.XML_NAMESPACE) == 0) {
+					XMLNameSpace nameSpace = new XMLNameSpace(attName[1],
+							parser.getAttributeValue(i));
 					this.setNamespace(nameSpace);
 				}
 			}
 		}
-		
+
 		currentTag = parser.next();
-		while (!end) 
-		{
-			switch(currentTag)
-			{
+		while (!end) {
+			switch (currentTag) {
 			case KXmlParser.START_TAG:
-				if (parser.getName().compareToIgnoreCase(CapabilitiesTags.NAME)==0)
-				{
+				if (parser.getName().compareToIgnoreCase(CapabilitiesTags.NAME) == 0) {
 					this.setName(parser.nextText());
-				}else if (parser.getName().compareToIgnoreCase(CapabilitiesTags.TITLE)==0){
+				} else if (parser.getName().compareToIgnoreCase(
+						CapabilitiesTags.TITLE) == 0) {
 					this.setTitle(parser.nextText());
-				}else if (parser.getName().compareToIgnoreCase(CapabilitiesTags.WFS_KEYWORDS)==0){
+				} else if (parser.getName().compareToIgnoreCase(
+						CapabilitiesTags.WFS_KEYWORDS) == 0) {
 					parser.nextTag();
-					while (parser.getName().compareTo(CapabilitiesTags.KEYWORD)==0){
+					while (parser.getName().compareTo(CapabilitiesTags.KEYWORD) == 0) {
 						parser.next();
 						String keyword = parser.getText();
-						if ((keyword != null) || (!(keyword.equals("")))){
+						if ((keyword != null) || (!(keyword.equals("")))) {
 							this.addKeyword(keyword);
 						}
-						//Keyword end tag
+						// Keyword end tag
 						parser.nextTag();
-						//Keyword start tag?
+						// Keyword start tag?
 						parser.nextTag();
 					}
-					
-									
-				} else if (parser.getName().compareToIgnoreCase(CapabilitiesTags.KEYWORD)==0){
-					this.addKeyword(parser.nextText());									
-				} else if (parser.getName().compareToIgnoreCase(CapabilitiesTags.SRS)==0){
-				     String value = parser.nextText();
-                     if (value != null){
-                         String[] mySRSs = value.split(" ");
-                         for (int i = 0; i < mySRSs.length; i++) {
-                             this.addSRS(mySRSs[i]);    
-                         }
-                         
-                     }
-				} else if (parser.getName().compareToIgnoreCase(CapabilitiesTags.DEAFAULTSRS)==0){
-				     String value = parser.nextText();
-                     addSRS(value.trim());                           
-				} else	if (parser.getName().compareToIgnoreCase(CapabilitiesTags.LATLONGBOUNDINGBOX)==0){
+
+				} else if (parser.getName().compareToIgnoreCase(
+						CapabilitiesTags.KEYWORD) == 0) {
+					this.addKeyword(parser.nextText());
+				} else if (parser.getName().compareToIgnoreCase(
+						CapabilitiesTags.SRS) == 0) {
+					String value = parser.nextText();
+					if (value != null) {
+						String[] mySRSs = value.split(" ");
+						for (int i = 0; i < mySRSs.length; i++) {
+							this.addSRS(mySRSs[i]);
+						}
+
+					}
+				} else if (parser.getName().compareToIgnoreCase(
+						CapabilitiesTags.DEAFAULTSRS) == 0) {
+					String value = parser.nextText();
+					addSRS(value.trim());
+				} else if (parser.getName().compareToIgnoreCase(
+						CapabilitiesTags.LATLONGBOUNDINGBOX) == 0) {
 					BoundaryBox bbox = new BoundaryBox();
 					bbox.setSrs(CapabilitiesTags.EPSG_4326);
-                    String value = parser.getAttributeValue("",CapabilitiesTags.MINX);
-                    if ((value != null) && (Utilities.isNumber(value)))
-                        bbox.setXmin(Double.parseDouble(value));	
-                    value = parser.getAttributeValue("",CapabilitiesTags.MINY);
-                    if ((value != null) && (Utilities.isNumber(value)))
-                        bbox.setYmin(Double.parseDouble(value));	
-                    value = parser.getAttributeValue("",CapabilitiesTags.MAXX);
-                    if ((value != null) && (Utilities.isNumber(value)))
-                        bbox.setXmax(Double.parseDouble(value));	
-                    value = parser.getAttributeValue("",CapabilitiesTags.MAXY);
-                    if ((value != null) && (Utilities.isNumber(value)))
-                        bbox.setYmax(Double.parseDouble(value));
-                    this.addBBox(bbox);
-                    this.setLatLonBbox(bbox);                                 
-				} else if (parser.getName().compareTo(CapabilitiesTags.BOUNDINGBOX)==0){
+					String value = parser.getAttributeValue("",
+							CapabilitiesTags.MINX);
+					if ((value != null) && (Utilities.isNumber(value)))
+						bbox.setXmin(Double.parseDouble(value));
+					value = parser.getAttributeValue("", CapabilitiesTags.MINY);
+					if ((value != null) && (Utilities.isNumber(value)))
+						bbox.setYmin(Double.parseDouble(value));
+					value = parser.getAttributeValue("", CapabilitiesTags.MAXX);
+					if ((value != null) && (Utilities.isNumber(value)))
+						bbox.setXmax(Double.parseDouble(value));
+					value = parser.getAttributeValue("", CapabilitiesTags.MAXY);
+					if ((value != null) && (Utilities.isNumber(value)))
+						bbox.setYmax(Double.parseDouble(value));
+					this.addBBox(bbox);
+					this.setLatLonBbox(bbox);
+				} else if (parser.getName().compareTo(
+						CapabilitiesTags.BOUNDINGBOX) == 0) {
 					BoundaryBox bbox = new BoundaryBox();
-                    String value = parser.getAttributeValue("",CapabilitiesTags.SRS);
-                    if (value != null)
-                        bbox.setSrs(value);
-                    value = parser.getAttributeValue("",CapabilitiesTags.MINX);
-                    if ((value != null) && (Utilities.isNumber(value)))
-                        bbox.setXmin(Double.parseDouble(value));	
-                    value = parser.getAttributeValue("",CapabilitiesTags.MINY);
-                    if ((value != null) && (Utilities.isNumber(value)))
-                        bbox.setYmin(Double.parseDouble(value));	
-                    value = parser.getAttributeValue("",CapabilitiesTags.MAXX);
-                    if ((value != null) && (Utilities.isNumber(value)))
-                        bbox.setXmax(Double.parseDouble(value));	
-                    value = parser.getAttributeValue("",CapabilitiesTags.MAXY);
-                    if ((value != null) && (Utilities.isNumber(value)))
-                        bbox.setYmax(Double.parseDouble(value));	
-                    if (bbox.getSrs() != null){
-                    	this.addBBox(bbox);
-                    	this.addSRS(bbox.getSrs());
-                    }
-                }	 
-				
+					String value = parser.getAttributeValue("",
+							CapabilitiesTags.SRS);
+					if (value != null)
+						bbox.setSrs(value);
+					value = parser.getAttributeValue("", CapabilitiesTags.MINX);
+					if ((value != null) && (Utilities.isNumber(value)))
+						bbox.setXmin(Double.parseDouble(value));
+					value = parser.getAttributeValue("", CapabilitiesTags.MINY);
+					if ((value != null) && (Utilities.isNumber(value)))
+						bbox.setYmin(Double.parseDouble(value));
+					value = parser.getAttributeValue("", CapabilitiesTags.MAXX);
+					if ((value != null) && (Utilities.isNumber(value)))
+						bbox.setXmax(Double.parseDouble(value));
+					value = parser.getAttributeValue("", CapabilitiesTags.MAXY);
+					if ((value != null) && (Utilities.isNumber(value)))
+						bbox.setYmax(Double.parseDouble(value));
+					if (bbox.getSrs() != null) {
+						this.addBBox(bbox);
+						this.addSRS(bbox.getSrs());
+					}
+				}
+
 				break;
 			case KXmlParser.END_TAG:
-				if (parser.getName().compareTo(CapabilitiesTags.WFS_FEATURETYPE) == 0)
+				if (parser.getName()
+						.compareTo(CapabilitiesTags.WFS_FEATURETYPE) == 0)
 					end = true;
 				break;
-			case KXmlParser.TEXT:                   
+			case KXmlParser.TEXT:
 				break;
 			}
-			if (!end){
+			if (!end) {
 				currentTag = parser.next();
 			}
-		}    
+		}
 	}
 }

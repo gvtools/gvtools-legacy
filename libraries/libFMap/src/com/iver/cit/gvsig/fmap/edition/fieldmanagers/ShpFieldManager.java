@@ -40,7 +40,6 @@
  */
 package com.iver.cit.gvsig.fmap.edition.fieldmanagers;
 
-
 public class ShpFieldManager extends AbstractFieldManager {
 
 	public boolean alterTable() {
@@ -49,5 +48,3 @@ public class ShpFieldManager extends AbstractFieldManager {
 	}
 
 }
-
-

@@ -25,11 +25,11 @@ import spatialindex.storagemanager.RandomEvictionsBuffer;
  * http://u-foria.org/marioh/spatialindex/index.html <br>
  * marioh@cs.ucr.edu
  * </p>
- * It has the problem that spatial index file creation is a bit slowly
- * (in comparation with other indexes).
+ * It has the problem that spatial index file creation is a bit slowly (in
+ * comparation with other indexes).
  */
 public class RTreeSptLib implements IPersistentSpatialIndex,
-									INearestNeighbourFinder{
+		INearestNeighbourFinder {
 	/**
 	 * Page size of associated file
 	 */
@@ -43,13 +43,17 @@ public class RTreeSptLib implements IPersistentSpatialIndex,
 	RTree rtree;
 	String rtreeFile;
 	IStorageManager diskfile;
+
 	/**
 	 * Constructor
-	 * @param overwriteFile tells if we must override existing files.
-	 * If we are goint to create a new spatial index (or if we want to overwrite
-	 * an existing one) we must to use always 'true'. If we want to load
-	 * an existing spatial index file, overwrite must be 'false'
-	 * @param fileName name of the rtree spatial index file
+	 * 
+	 * @param overwriteFile
+	 *            tells if we must override existing files. If we are goint to
+	 *            create a new spatial index (or if we want to overwrite an
+	 *            existing one) we must to use always 'true'. If we want to load
+	 *            an existing spatial index file, overwrite must be 'false'
+	 * @param fileName
+	 *            name of the rtree spatial index file
 	 * @throws SpatialIndexException
 	 */
 
@@ -71,13 +75,14 @@ public class RTreeSptLib implements IPersistentSpatialIndex,
 			diskfile = new DiskStorageManager(ps);
 			load();
 		} catch (SecurityException e) {
-			//throw new SpatialIndexException("No tenemos permisos de escritura?", e);
+			// throw new
+			// SpatialIndexException("No tenemos permisos de escritura?", e);
 			throw new SpatialIndexException();
 		} catch (FileNotFoundException e) {
-			//throw new SpatialIndexException("El fichero no existe", e);
+			// throw new SpatialIndexException("El fichero no existe", e);
 			throw new SpatialIndexException();
 		} catch (IOException e) {
-			//throw new SpatialIndexException("Error de I/O", e);
+			// throw new SpatialIndexException("Error de I/O", e);
 			throw new SpatialIndexException();
 		}
 	}
@@ -85,29 +90,30 @@ public class RTreeSptLib implements IPersistentSpatialIndex,
 	/**
 	 * If the spatial index file exists and has content
 	 */
-	public boolean exists(){
-		return (new File(rtreeFile+".dat").length() != 0);
+	public boolean exists() {
+		return (new File(rtreeFile + ".dat").length() != 0);
 	}
 
-
-	class RTreeVisitor implements IVisitor{
+	class RTreeVisitor implements IVisitor {
 		ArrayList solution = new ArrayList();
+
 		public void visitNode(INode n) {
 		}
+
 		public void visitData(IData d) {
 			solution.add(new Integer(d.getIdentifier()));
 		}
-		public List getSolution(){
+
+		public List getSolution() {
 			return solution;
 		}
 	}
-
 
 	public List query(Rectangle2D rect) {
 		List solution = null;
 		Region region = createRegion(rect);
 		RTreeVisitor visitor = new RTreeVisitor();
-		rtree.intersectionQuery(region,visitor);
+		rtree.intersectionQuery(region, visitor);
 		solution = visitor.getSolution();
 		return solution;
 	}
@@ -116,27 +122,27 @@ public class RTreeSptLib implements IPersistentSpatialIndex,
 		List solution = null;
 		Region region = createRegion(rect);
 		RTreeVisitor visitor = new RTreeVisitor();
-		rtree.containmentQuery(region,visitor);
+		rtree.containmentQuery(region, visitor);
 		solution = visitor.getSolution();
 		return solution;
 	}
 
 	/**
-	 * Warn! This RTree implemention doesnt care if 'index'
-	 * entry has been indexed yet
+	 * Warn! This RTree implemention doesnt care if 'index' entry has been
+	 * indexed yet
 	 */
 	public void insert(Rectangle2D rect, int index) {
 		rtree.insertData(null, createRegion(rect), index);
 	}
 
-	private Region createRegion(Rectangle2D rect){
+	private Region createRegion(Rectangle2D rect) {
 		Region region = null;
 		double xmin = rect.getMinX();
 		double ymin = rect.getMinY();
 		double xmax = rect.getMaxX();
 		double ymax = rect.getMaxY();
-		double[] p1 = new double[]{xmin, ymin};
-		double[] p2 = new double[]{xmax, ymax};
+		double[] p1 = new double[] { xmin, ymin };
+		double[] p2 = new double[] { xmax, ymax };
 		region = new Region(p1, p2);
 		return region;
 	}
@@ -147,6 +153,7 @@ public class RTreeSptLib implements IPersistentSpatialIndex,
 
 	/**
 	 * Looks for N indexes nearest to the specified rect.
+	 * 
 	 * @param numberOfNearest
 	 * @param rect
 	 * @return
@@ -155,52 +162,52 @@ public class RTreeSptLib implements IPersistentSpatialIndex,
 		List solution = null;
 		Region region = createRegion(rect);
 		RTreeVisitor visitor = new RTreeVisitor();
-		rtree.nearestNeighborQuery(numberOfNearest, region,visitor);
+		rtree.nearestNeighborQuery(numberOfNearest, region, visitor);
 		solution = visitor.getSolution();
 		return solution;
 	}
 
 	/**
 	 * Looks for the N indexes nearest to the specified point
+	 * 
 	 * @param numberOfNearest
 	 * @param point
 	 * @return
 	 */
 	public List findNNearest(int numberOfNearest, Point2D point) {
 		List solution = null;
-		spatialindex.spatialindex.Point sptPoint = new
-			spatialindex.spatialindex.Point(new double[]{point.getX(), point.getY()});
+		spatialindex.spatialindex.Point sptPoint = new spatialindex.spatialindex.Point(
+				new double[] { point.getX(), point.getY() });
 		RTreeVisitor visitor = new RTreeVisitor();
-		rtree.nearestNeighborQuery(numberOfNearest, sptPoint,visitor);
+		rtree.nearestNeighborQuery(numberOfNearest, sptPoint, visitor);
 		solution = visitor.getSolution();
 		return solution;
 	}
 
-
-
-	public void flush(){
+	public void flush() {
 		rtree.flush();
 	}
 
-	public static void main(String[] args){
+	public static void main(String[] args) {
 		try {
 			File file = new File("c:/kk/pruebartree.idx");
 			System.out.println(file.getName());
 			RTreeSptLib rtree = new RTreeSptLib(false, "c:/pruebartree");
-			if(rtree.exists()){
+			if (rtree.exists()) {
 				System.out.println("Fichero ya creado");
-				List items = rtree.query(new Rectangle2D.Double(399,0,400,4000));
-				for(int i = 0; i < items.size(); i++){
-					System.out.println((Integer)items.get(i));
+				List items = rtree.query(new Rectangle2D.Double(399, 0, 400,
+						4000));
+				for (int i = 0; i < items.size(); i++) {
+					System.out.println((Integer) items.get(i));
 				}
 			}
-			rtree.insert(new Rectangle2D.Double(0,0, 400, 4000), 1);
-			rtree.insert(new Rectangle2D.Double(0,110, 2000, 5000), 2);
-			rtree.insert(new Rectangle2D.Double(110,0, 4000, 4000), 3);
-			rtree.insert(new Rectangle2D.Double(10,110, 8000, 111000), 4);
-			rtree.insert(new Rectangle2D.Double(1110,1110, 40, 22200), 5);
-			rtree.insert(new Rectangle2D.Double(0,0, 40, 48540), 6);
-			rtree.insert(new Rectangle2D.Double(0,0, 6330, 56400), 7);
+			rtree.insert(new Rectangle2D.Double(0, 0, 400, 4000), 1);
+			rtree.insert(new Rectangle2D.Double(0, 110, 2000, 5000), 2);
+			rtree.insert(new Rectangle2D.Double(110, 0, 4000, 4000), 3);
+			rtree.insert(new Rectangle2D.Double(10, 110, 8000, 111000), 4);
+			rtree.insert(new Rectangle2D.Double(1110, 1110, 40, 22200), 5);
+			rtree.insert(new Rectangle2D.Double(0, 0, 40, 48540), 6);
+			rtree.insert(new Rectangle2D.Double(0, 0, 6330, 56400), 7);
 			rtree.flush();
 
 		} catch (SpatialIndexException e) {
@@ -211,7 +218,7 @@ public class RTreeSptLib implements IPersistentSpatialIndex,
 	}
 
 	public void load() {
-//		 applies a main memory random buffer on top of the persistent
+		// applies a main memory random buffer on top of the persistent
 		// storage manager
 		IBuffer buffer = new RandomEvictionsBuffer(diskfile, BUFFER_SIZE, false);
 
@@ -227,7 +234,7 @@ public class RTreeSptLib implements IPersistentSpatialIndex,
 		ps2.setProperty("Dimension", i);
 
 		File file = new File(rtreeFile + ".dat");
-		if(file.length() != 0){
+		if (file.length() != 0) {
 			ps2.setProperty("IndexIdentifier", new Integer(1));
 		}
 		rtree = new RTree(ps2, buffer);

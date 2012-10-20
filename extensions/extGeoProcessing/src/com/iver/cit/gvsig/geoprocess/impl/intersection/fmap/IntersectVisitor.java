@@ -97,7 +97,6 @@ package com.iver.cit.gvsig.geoprocess.impl.intersection.fmap;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.driver.DriverException;
 import com.hardcode.gdbms.engine.values.Value;
-import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
 import com.iver.cit.gvsig.exceptions.visitors.ProcessVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.StartVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.VisitorException;
@@ -120,12 +119,12 @@ import com.vividsolutions.jts.geom.Geometry;
 /**
  * Computes intersections of features of a layer with features of an overlay
  * layer.
- *
+ * 
  * @author azabala
- *
- * FIXME Crear una clase abstracta: OverlayVisitor, pues todos los visitors de
- * un overlay son muy parecidos.
- *
+ * 
+ *         FIXME Crear una clase abstracta: OverlayVisitor, pues todos los
+ *         visitors de un overlay son muy parecidos.
+ * 
  */
 public class IntersectVisitor implements FeatureVisitor {
 
@@ -179,6 +178,7 @@ public class IntersectVisitor implements FeatureVisitor {
 
 	/**
 	 * Constructor
+	 * 
 	 * @param overlayLayer
 	 * @param processor
 	 * @param strategy
@@ -188,7 +188,8 @@ public class IntersectVisitor implements FeatureVisitor {
 	 * @throws com.iver.cit.gvsig.fmap.DriverException
 	 */
 	public IntersectVisitor(FLyrVect overlayLayer, FeatureProcessor processor,
-			Strategy strategy, boolean onlyOverlaySelection) throws ReadDriverException{
+			Strategy strategy, boolean onlyOverlaySelection)
+			throws ReadDriverException {
 		this.overlayLayer = overlayLayer;
 		this.featureProcessor = processor;
 		this.strategy = strategy;
@@ -197,55 +198,61 @@ public class IntersectVisitor implements FeatureVisitor {
 		numFieldsB = secondRs.getFieldCount();
 	}
 
-	public void visit(IGeometry g, final int index) throws VisitorException, ProcessVisitorException {
-		if(g == null)
+	public void visit(IGeometry g, final int index) throws VisitorException,
+			ProcessVisitorException {
+		if (g == null)
 			return;
-		
-//		if(g.getGeometryType() != XTypes.POLYGON &&
-//				g.getGeometryType() != XTypes.MULTI)
-//			return;
-		
+
+		// if(g.getGeometryType() != XTypes.POLYGON &&
+		// g.getGeometryType() != XTypes.MULTI)
+		// return;
+
 		final Geometry firstJts = g.toJTSGeometry();
 		final boolean onlyOverlay = onlyOverlaySelection;
 		try {
-			strategy.process(new FeatureVisitor(){
-				public void visit(IGeometry g, int indexOverlay) throws VisitorException, ProcessVisitorException {
-					if(onlyOverlay){
+			strategy.process(new FeatureVisitor() {
+				public void visit(IGeometry g, int indexOverlay)
+						throws VisitorException, ProcessVisitorException {
+					if (onlyOverlay) {
 						try {
-							if(!overlayLayer.getRecordset().getSelection().get(indexOverlay))
+							if (!overlayLayer.getRecordset().getSelection()
+									.get(indexOverlay))
 								return;
 						} catch (ReadDriverException e) {
-							throw new ProcessVisitorException(overlayLayer.getName(),e,
-							"Error en interseccion: verificando si un posible overlay esta seleccionado");
-						}//geometry g is not selected
+							throw new ProcessVisitorException(overlayLayer
+									.getName(), e,
+									"Error en interseccion: verificando si un posible overlay esta seleccionado");
+						}// geometry g is not selected
 					}
-					
-					
-//					if(g.getGeometryType() != XTypes.POLYGON &&
-//							g.getGeometryType() != XTypes.MULTI)
-//						return;
-					
-					
+
+					// if(g.getGeometryType() != XTypes.POLYGON &&
+					// g.getGeometryType() != XTypes.MULTI)
+					// return;
+
 					Geometry overlayJts = g.toJTSGeometry();
 					if (firstJts.intersects(overlayJts)) {
-						
-//						Geometry newGeoJts = EnhancedPrecisionOp.intersection(firstJts, overlayJts);
-//						if (!(newGeoJts instanceof Polygon)
-//								&& !(newGeoJts instanceof MultiPolygon)) {
-//							// intersection of adjacent polygons is a linestring
-//							// but we are not interested in it
-//							return;
-//						}
-						Geometry newGeoJts = JTSFacade.intersection(firstJts, overlayJts);
-						if(JTSFacade.checkNull(newGeoJts))
+
+						// Geometry newGeoJts =
+						// EnhancedPrecisionOp.intersection(firstJts,
+						// overlayJts);
+						// if (!(newGeoJts instanceof Polygon)
+						// && !(newGeoJts instanceof MultiPolygon)) {
+						// // intersection of adjacent polygons is a linestring
+						// // but we are not interested in it
+						// return;
+						// }
+						Geometry newGeoJts = JTSFacade.intersection(firstJts,
+								overlayJts);
+						if (JTSFacade.checkNull(newGeoJts))
 							return;
-						
+
 						IFeature intersectionFeature;
 						try {
 							intersectionFeature = createFeature(newGeoJts,
 									index, indexOverlay);
 						} catch (ReadDriverException e) {
-							throw new ProcessVisitorException(overlayLayer.getName(),e,
+							throw new ProcessVisitorException(overlayLayer
+									.getName(), e,
 									"Error al crear el feature resultante de la interseccion");
 						}
 						featureProcessor.processFeature(intersectionFeature);
@@ -255,16 +262,19 @@ public class IntersectVisitor implements FeatureVisitor {
 				public String getProcessDescription() {
 					return "Computing intersections of a polygon with its adjacents";
 				}
+
 				public void stop(FLayer layer) throws VisitorException {
 				}
+
 				public boolean start(FLayer layer) throws StartVisitorException {
 					return true;
-				}},g.getBounds2D());
+				}
+			}, g.getBounds2D());
 
 		} catch (ReadDriverException e) {
-			throw new ProcessVisitorException(overlayLayer.getName(),e,
+			throw new ProcessVisitorException(overlayLayer.getName(), e,
 					"Error buscando los overlays que intersectan con un feature");
-		} 
+		}
 	}
 
 	public void stop(FLayer layer) throws VisitorException {
@@ -285,21 +295,19 @@ public class IntersectVisitor implements FeatureVisitor {
 		return false;
 	}
 
-
 	/**
 	 * TODO Meter este metodo en FeatureFactory, porque lo estoy copypasteando
 	 * en todos los Visitor
-	 *
+	 * 
 	 * FIXME El esquema es resultado de la mezcla de los esquemas de dos capas
-	 * ¿Como saber qué campo de ILayerDefinition se toma de firstRs y cual de secondRs?
-	 * Mirando DefinitionUtils, vemos que primero se recorre firstLayer,
-	 * y luego secondLayer. REVISAR
+	 * ¿Como saber qué campo de ILayerDefinition se toma de firstRs y cual de
+	 * secondRs? Mirando DefinitionUtils, vemos que primero se recorre
+	 * firstLayer, y luego secondLayer. REVISAR
 	 */
 	private IFeature createFeature(Geometry jtsGeometry, int firstLayerIndex,
 			int overlayLayerIndex) throws ReadDriverException {
 		IFeature solution = null;
 		IGeometry intersectGeometry = FConverter.jts_to_igeometry(jtsGeometry);
-
 
 		Value[] featureAttr = new Value[numFieldsA + numFieldsB];
 		for (int indexField = 0; indexField < numFieldsA; indexField++) {

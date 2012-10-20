@@ -46,84 +46,87 @@
  */
 package org.gvsig.remoteClient.arcims.styling.renderers;
 
+import java.util.Iterator;
+
 import org.gvsig.remoteClient.arcims.styling.symbols.SymbolUtils;
 import org.gvsig.remoteClient.arcims.utils.ServiceInfoTags;
 
-import java.util.Iterator;
-
-
 /**
- * Class representing a scale dependent legend, it isn't supported at this time by gvSIG.
- * This renderer usually is formed by other GROUPRENDERER or VALUEMAPRENDERER. This way the
- * ArcIMS service can change its simbology according to the scale. In this case it will be
- * necessary to select one of the renderers.
+ * Class representing a scale dependent legend, it isn't supported at this time
+ * by gvSIG. This renderer usually is formed by other GROUPRENDERER or
+ * VALUEMAPRENDERER. This way the ArcIMS service can change its simbology
+ * according to the scale. In this case it will be necessary to select one of
+ * the renderers.
+ * 
  * @author jsanz
- *
+ * 
  */
 public class ScaleDependentRenderer extends GroupRenderer {
-    public static final String TAG = ServiceInfoTags.tSCALEDEPENDENTRENDERER;
-    private String lower;
-    private String upper;
+	public static final String TAG = ServiceInfoTags.tSCALEDEPENDENTRENDERER;
+	private String lower;
+	private String upper;
 
-    /**
-     * @param lower
-     * @param upper
-     */
-    public ScaleDependentRenderer(String lower, String upper) {
-        this.lower = lower;
-        this.upper = upper;
-    }
+	/**
+	 * @param lower
+	 * @param upper
+	 */
+	public ScaleDependentRenderer(String lower, String upper) {
+		this.lower = lower;
+		this.upper = upper;
+	}
 
-    /**
-     * @return Returns the lower.
-     */
-    public String getLower() {
-        return lower;
-    }
+	/**
+	 * @return Returns the lower.
+	 */
+	public String getLower() {
+		return lower;
+	}
 
-    /**
-     * @param lower The lower to set.
-     */
-    public void setLower(String lower) {
-        this.lower = lower;
-    }
+	/**
+	 * @param lower
+	 *            The lower to set.
+	 */
+	public void setLower(String lower) {
+		this.lower = lower;
+	}
 
-    /**
-     * @return Returns the upper.
-     */
-    public String getUpper() {
-        return upper;
-    }
+	/**
+	 * @return Returns the upper.
+	 */
+	public String getUpper() {
+		return upper;
+	}
 
-    /**
-     * @param upper The upper to set.
-     */
-    public void setUpper(String upper) {
-        this.upper = upper;
-    }
+	/**
+	 * @param upper
+	 *            The upper to set.
+	 */
+	public void setUpper(String upper) {
+		this.upper = upper;
+	}
 
-    /**
-     * Generates an XML representation of the Renderer
-     */
-    public String toString() {
-        String param = new String();
+	/**
+	 * Generates an XML representation of the Renderer
+	 */
+	public String toString() {
+		String param = new String();
 
-        if (SymbolUtils.isVoid(upper)) {
-            param += (" upper =\"" + upper + "\"");
-        }
+		if (SymbolUtils.isVoid(upper)) {
+			param += (" upper =\"" + upper + "\"");
+		}
 
-        if (SymbolUtils.isVoid(lower)) {
-            param += (" lower =\"" + lower + "\"");
-        }
+		if (SymbolUtils.isVoid(lower)) {
+			param += (" lower =\"" + lower + "\"");
+		}
 
-        StringBuffer sb = new StringBuffer();
-        Iterator it = super.iterator();
+		StringBuffer sb = new StringBuffer();
+		Iterator it = super.iterator();
 
-        while (it.hasNext()) {
-            sb.append(((Renderer) it.next()).toString());
-        }
+		while (it.hasNext()) {
+			sb.append(((Renderer) it.next()).toString());
+		}
 
-        return "<" + ScaleDependentRenderer.TAG + param + ">\r\n" +
-        sb.toString() + "</" + ScaleDependentRenderer.TAG + ">\r\n";
-    }
+		return "<" + ScaleDependentRenderer.TAG + param + ">\r\n"
+				+ sb.toString() + "</" + ScaleDependentRenderer.TAG + ">\r\n";
+	}
 }

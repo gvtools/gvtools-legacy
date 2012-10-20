@@ -57,11 +57,10 @@ import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
  * Iterates over the selected features of a layer.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class FeatureSelectionIterator extends DefaultFeatureIterator {
 
-	
 	FBitSet selection;
 
 	public FeatureSelectionIterator(ReadableVectorial source,
@@ -77,7 +76,7 @@ public class FeatureSelectionIterator extends DefaultFeatureIterator {
 			throws ReadDriverException {
 		super(source);
 	}
-	
+
 	public boolean hasNext() throws ReadDriverException {
 		return currentFeature != -1;
 	}
@@ -87,12 +86,13 @@ public class FeatureSelectionIterator extends DefaultFeatureIterator {
 			IGeometry geom = chekIfCloned(source.getShape(currentFeature));
 			reprojectIfNecessary(geom);
 			Value[] regAtt = getValues(currentFeature);
-			IFeature feat  = new DefaultFeature(geom, regAtt, currentFeature + "");
+			IFeature feat = new DefaultFeature(geom, regAtt, currentFeature
+					+ "");
 			currentFeature = selection.nextSetBit(currentFeature + 1);
 			return feat;
 		} catch (ExpansionFileReadException e) {
-			throw new ReadDriverException("",e);
-		} 
+			throw new ReadDriverException("", e);
+		}
 	}
-	
+
 }

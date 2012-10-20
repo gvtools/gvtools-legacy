@@ -50,10 +50,12 @@
  */
 
 package org.gvsig.remoteClient.wms;
+
 /**
  * Interface for monitoring events from the WMSClient.
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
 public interface WMSEventListener {
 	public static final int CAPABILITIES = 1;
@@ -64,6 +66,6 @@ public interface WMSEventListener {
 	public static final int TRANSFERRING = -3;
 	public static final int FAILED = -4;
 	public static final int CANCELLED = -5;
-	
+
 	public abstract void newEvent(int idRequest, int eventType);
 }

@@ -59,121 +59,133 @@ import com.iver.utiles.IPersistence;
 import com.iver.utiles.swing.threads.CancellableProgressTask;
 
 /**
- * A topology rule checks that features' geometry of one or more layers
- * verifies a given spatial condition.
+ * A topology rule checks that features' geometry of one or more layers verifies
+ * a given spatial condition.
  * 
  * 
  * 
  * @author azabala
- *
+ * 
  */
 public interface ITopologyRule extends IPersistence {
-	
+
 	/**
 	 * Return the name of this topology rule
+	 * 
 	 * @return
 	 */
 	public String getName();
-	
+
 	/**
-	 * Returns url of a html document with the description of the 
-	 * topology rule.
+	 * Returns url of a html document with the description of the topology rule.
+	 * 
 	 * @return
 	 */
 	public URL getDescription();
-	 
+
 	/**
-	 *Checks if the rule's parameters 
-	 *(sourceLyr, destinationLyr) verify 
-	 *rule preconditions (geometry type, etc.)
-	 * @throws TopologyRuleDefinitionException 
+	 * Checks if the rule's parameters (sourceLyr, destinationLyr) verify rule
+	 * preconditions (geometry type, etc.)
+	 * 
+	 * @throws TopologyRuleDefinitionException
 	 */
 	public void checkPreconditions() throws TopologyRuleDefinitionException;
-	 
+
 	/**
 	 * Checks this rule for all features of origin layer
 	 */
-	public  void checkRule();
-	
+	public void checkRule();
+
 	/**
 	 * Check the rule for all features and pass log progress messages to
 	 * specified progress monitor.
+	 * 
 	 * @param progressMonitor
 	 */
 	public void checkRule(CancellableProgressTask progressMonitor);
-	
-	public void checkRule(CancellableProgressTask progressMonitor, Rectangle2D rect);
-	 
+
+	public void checkRule(CancellableProgressTask progressMonitor,
+			Rectangle2D rect);
+
 	/**
 	 * Checks this rule for all features of the origin layer in the specified
 	 * rectangle 2d.
+	 * 
 	 * @param rect
 	 */
-	public  void checkRule(Rectangle2D rect);
-	
+	public void checkRule(Rectangle2D rect);
+
 	/**
-	 * Notifies that this rule has finished validation process.
-	 * Useful to free resources, empty caches, etc.
+	 * Notifies that this rule has finished validation process. Useful to free
+	 * resources, empty caches, etc.
 	 */
 	public void ruleChecked();
-	
+
 	public void validateFeature(IFeature feature);
-	
+
 	/**
 	 * Sets the topology error container for this rule.
+	 * 
 	 * @param errorContainer
 	 */
 	public void setTopologyErrorContainer(ITopologyErrorContainer errorContainer);
-	
+
 	/**
 	 * Gets the topology error container for this rule
+	 * 
 	 * @return
 	 */
 	public ITopologyErrorContainer getTopologyErrorContainer();
-	
+
 	public void addTopologyError(TopologyError topologyError);
-	
+
 	/**
 	 * Sets rule unique identifier inside a topology
-	 * @param ruleId rule unique identifier
+	 * 
+	 * @param ruleId
+	 *            rule unique identifier
 	 */
 	public void setId(int ruleId);
-	
+
 	public int getId();
-	
+
 	/**
 	 * sets the owner of the topology rule
+	 * 
 	 * @param owner
 	 */
 	public void setTopology(Topology owner);
-	
+
 	/**
 	 * returns the owner of the topology rule
+	 * 
 	 * @return
 	 */
 	public Topology getTopology();
-	
+
 	/**
-	 * Returns the default error symbol for the topology errors caused
-	 * by the violation of this rule.
+	 * Returns the default error symbol for the topology errors caused by the
+	 * violation of this rule.
+	 * 
 	 * @return A MultiShapeSymbol, because error layer is a multigeometry layer
 	 */
 	public MultiShapeSymbol getDefaultErrorSymbol();
-	
+
 	/**
 	 * Returns the actual error symbol for topology errors.
+	 * 
 	 * @return
 	 */
 	public MultiShapeSymbol getErrorSymbol();
-	
+
 	/**
-	 * Returns a list of automatic error fixes for topology errors caused
-	 * by the violation of this rule.
+	 * Returns a list of automatic error fixes for topology errors caused by the
+	 * violation of this rule.
+	 * 
 	 * @return
 	 */
 	public List<ITopologyErrorFix> getAutomaticErrorFixes();
-	
+
 	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError);
-	
+
 }
- 

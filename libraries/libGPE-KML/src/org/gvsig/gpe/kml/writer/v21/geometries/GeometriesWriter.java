@@ -67,11 +67,10 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  *
  */
 /**
- * A Geometry element is an abstract element and cannot be used
- * directly in a KML file. It provides a placeholder object for
- * all derived Geometry objects.
- * <br>
- * This class has methods to write the common parts. 
+ * A Geometry element is an abstract element and cannot be used directly in a
+ * KML file. It provides a placeholder object for all derived Geometry objects. <br>
+ * This class has methods to write the common parts.
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#geometry
  */
@@ -79,35 +78,40 @@ public class GeometriesWriter {
 
 	/**
 	 * It writes the geometry init tag and its attributes
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
-	 * Geometry tag name
+	 *            The writer handler implementor Geometry tag name
 	 * @param id
-	 * Geometry id
+	 *            Geometry id
 	 * @throws IOException
 	 */
-	public void startGeometry(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler, QName tagName,String id) throws IOException{
+	public void startGeometry(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor handler, QName tagName, String id)
+			throws IOException {
 		writer.writeStartElement(tagName);
-		if (id != null){
+		if (id != null) {
 			writer.writeStartAttribute(Kml2_1_Tags.GEOMETRY_ID);
-			writer.writeValue(id);			
+			writer.writeValue(id);
 		}
-		writer.writeEndAttributes();	
+		writer.writeEndAttributes();
 	}
-	
+
 	/**
 	 * It writes the geometry end tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param tagName
-	 * Geometry tag name
+	 *            Geometry tag name
 	 * @throws IOException
 	 */
-	public void endGeometry(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor hanlder,QName tagName) throws IOException{
-		writer.writeEndElement();		
+	public void endGeometry(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor hanlder, QName tagName)
+			throws IOException {
+		writer.writeEndElement();
 	}
 }

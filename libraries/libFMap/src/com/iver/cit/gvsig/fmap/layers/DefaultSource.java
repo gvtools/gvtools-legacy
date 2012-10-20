@@ -12,7 +12,7 @@ public class DefaultSource implements Source {
 	public DefaultSource(URL url) {
 		this.url = url;
 	}
-	
+
 	@Override
 	public URL getURL() {
 		return url;
@@ -31,10 +31,10 @@ public class DefaultSource implements Source {
 			return false;
 		}
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return url.hashCode();
 	}
-	
+
 }

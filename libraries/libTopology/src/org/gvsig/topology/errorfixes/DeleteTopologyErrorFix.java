@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.errorfixes;
 
 import java.util.Map;
@@ -62,36 +62,40 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
 
 /**
- * The Delete fix removes features that would collapse during the validate 
- * process based on the topology's cluster tolerance. 
+ * The Delete fix removes features that would collapse during the validate
+ * process based on the topology's cluster tolerance.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class DeleteTopologyErrorFix implements ITopologyErrorFix {
 
 	public void fix(TopologyError topologyError) throws BaseException {
 		FLyrVect originLyr = topologyError.getOriginLayer();
-		if(! originLyr.isEditing()){
-				originLyr.setEditing(true);
+		if (!originLyr.isEditing()) {
+			originLyr.setEditing(true);
 		}
 		ReadableVectorial source = originLyr.getSource();
-		if(!(source instanceof EditableAdapter))
-			throw new BaseException(){
+		if (!(source instanceof EditableAdapter))
+			throw new BaseException() {
 				protected Map values() {
 					return null;
-				}};
-		
+				}
+			};
+
 		EditableAdapter editAdapter = (EditableAdapter) source;
 		IFeature causingFeature = topologyError.getFeature1();
-		
-		//TODO En un futuro el getID no tiene porque coincidir con el indice del driver.
-		//hacer que topology error tenga los indices de los features implicados.
-		editAdapter.removeRow(Integer.parseInt(causingFeature.getID()),getEditionDescription(), EditionEvent.ROW_EDITION);
-		
+
+		// TODO En un futuro el getID no tiene porque coincidir con el indice
+		// del driver.
+		// hacer que topology error tenga los indices de los features
+		// implicados.
+		editAdapter.removeRow(Integer.parseInt(causingFeature.getID()),
+				getEditionDescription(), EditionEvent.ROW_EDITION);
+
 		topologyError.getTopology().removeError(topologyError);
 	}
-	
+
 	public String getEditionDescription() {
 		return Messages.getText("DELETE_FIX");
 	}

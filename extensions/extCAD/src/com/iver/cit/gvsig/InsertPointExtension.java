@@ -48,74 +48,77 @@ import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.gui.cad.tools.PointCADTool;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
+
 /**
  * Extensión que gestiona la inserción de puntos en edición.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class InsertPointExtension extends Extension {
-   private View view;
-   private MapControl mapControl;
-   private PointCADTool point;
+	private View view;
+	private MapControl mapControl;
+	private PointCADTool point;
 
-   /**
-     * @see com.iver.andami.plugins.IExtension#initialize()
-     */
-    public void initialize() {
-        point = new PointCADTool();
-        CADExtension.addCADTool("_point", point);
-    
-        registerIcons();
-    }
+	/**
+	 * @see com.iver.andami.plugins.IExtension#initialize()
+	 */
+	public void initialize() {
+		point = new PointCADTool();
+		CADExtension.addCADTool("_point", point);
 
-    private void registerIcons(){
-    	PluginServices.getIconTheme().registerDefault(
+		registerIcons();
+	}
+
+	private void registerIcons() {
+		PluginServices.getIconTheme().registerDefault(
 				"edition-insert-geometry-point",
-				this.getClass().getClassLoader().getResource("images/Point.png")
-			);
-    	
-    }
-    
-    /**
-     * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
-     */
-    public void execute(String s) {
-    	CADExtension.initFocus();
+				this.getClass().getClassLoader()
+						.getResource("images/Point.png"));
 
-        if (s.equals("_point")) {
-        	CADExtension.setCADTool("_point",true);
-        	CADExtension.getEditionManager().setMapControl(mapControl);
-        }
-        CADExtension.getCADToolAdapter().configureMenu();
-    }
-    /**
-     * @see com.iver.andami.plugins.IExtension#isEnabled()
-     */
-    public boolean isEnabled() {
+	}
 
-      	try {
-			if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE){
+	/**
+	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
+	 */
+	public void execute(String s) {
+		CADExtension.initFocus();
+
+		if (s.equals("_point")) {
+			CADExtension.setCADTool("_point", true);
+			CADExtension.getEditionManager().setMapControl(mapControl);
+		}
+		CADExtension.getCADToolAdapter().configureMenu();
+	}
+
+	/**
+	 * @see com.iver.andami.plugins.IExtension#isEnabled()
+	 */
+	public boolean isEnabled() {
+
+		try {
+			if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE) {
 				view = (View) PluginServices.getMDIManager().getActiveWindow();
-		        mapControl = view.getMapControl();
-		        if (CADExtension.getEditionManager().getActiveLayerEdited()==null)
+				mapControl = view.getMapControl();
+				if (CADExtension.getEditionManager().getActiveLayerEdited() == null)
 					return false;
-		        FLyrVect lv=(FLyrVect)CADExtension.getEditionManager().getActiveLayerEdited().getLayer();
-				if (point.isApplicable(lv.getShapeType())){
+				FLyrVect lv = (FLyrVect) CADExtension.getEditionManager()
+						.getActiveLayerEdited().getLayer();
+				if (point.isApplicable(lv.getShapeType())) {
 					return true;
 				}
 			}
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 		return false;
-    }
+	}
 
-    /**
-     * @see com.iver.andami.plugins.IExtension#isVisible()
-     */
-    public boolean isVisible() {
-    	if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE)
+	/**
+	 * @see com.iver.andami.plugins.IExtension#isVisible()
+	 */
+	public boolean isVisible() {
+		if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE)
 			return true;
 		return false;
-    }
 	}
+}

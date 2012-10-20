@@ -42,21 +42,22 @@ package com.iver.cit.gvsig.gui.wizards;
 
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author $author$
  */
 public interface WizardListener {
 
 	/**
-	 * Invocado cuando el wizard puede ser finalizado porque se
-	 * ha rellenado toda la información necesaria
+	 * Invocado cuando el wizard puede ser finalizado porque se ha rellenado
+	 * toda la información necesaria
 	 */
 	public void wizardStateChanged(boolean finishable);
-	
+
 	/**
 	 * Si se produce algún error
-	 *
-	 * @param e Excepción que se ha producido
+	 * 
+	 * @param e
+	 *            Excepción que se ha producido
 	 */
 	public void error(Exception e);
 }

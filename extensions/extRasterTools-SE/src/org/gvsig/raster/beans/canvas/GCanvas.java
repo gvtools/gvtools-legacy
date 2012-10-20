@@ -28,31 +28,35 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.swing.JPanel;
+
 /**
- * Canvas donde se pintan objetos GLine
- * 14-oct-2007
+ * Canvas donde se pintan objetos GLine 14-oct-2007
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
-public class GCanvas  extends JPanel implements MouseListener, MouseMotionListener {
-	private static final long   serialVersionUID = 5431466034535083594L;
-	private Color               backgroundColor = Color.WHITE;
-	private ArrayList           drawableElements = new ArrayList();
-	public static final int     DEFAULT_CURSOR = Cursor.DEFAULT_CURSOR;
-	
+public class GCanvas extends JPanel implements MouseListener,
+		MouseMotionListener {
+	private static final long serialVersionUID = 5431466034535083594L;
+	private Color backgroundColor = Color.WHITE;
+	private ArrayList drawableElements = new ArrayList();
+	public static final int DEFAULT_CURSOR = Cursor.DEFAULT_CURSOR;
+
 	private boolean hasMouse = false;
-	
+
 	// Tamaño de los bordes para el canvas
-	private int               borderX1               = 0;
-	private int               borderX2               = 0;
-	private int               borderY1               = 0;
-	private int               borderY2               = 0;
-	
-	private ArrayList           actionCommandListeners = new ArrayList();
-		
+	private int borderX1 = 0;
+	private int borderX2 = 0;
+	private int borderY1 = 0;
+	private int borderY2 = 0;
+
+	private ArrayList actionCommandListeners = new ArrayList();
+
 	/**
-	 * Contructor.Inicializa el objeto asignando color de fondo. Considera que el objeto
-	 * GLine ya tiene su color asignado.
-	 * @param line Objeto línea
+	 * Contructor.Inicializa el objeto asignando color de fondo. Considera que
+	 * el objeto GLine ya tiene su color asignado.
+	 * 
+	 * @param line
+	 *            Objeto línea
 	 * @param backgroundColor
 	 */
 	public GCanvas(Color backgroundColor) {
@@ -60,16 +64,17 @@ public class GCanvas  extends JPanel implements MouseListener, MouseMotionListen
 		addMouseListener(this);
 		addMouseMotionListener(this);
 	}
-	
+
 	public void addBorder(int x1, int y1, int x2, int y2) {
 		borderX1 += x1;
 		borderX2 += x2;
 		borderY1 += y1;
 		borderY2 += y2;
 	}
-	
+
 	/**
 	 * Añadir un listener a la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void addValueChangedListener(IGCanvasListener listener) {
@@ -79,12 +84,13 @@ public class GCanvas  extends JPanel implements MouseListener, MouseMotionListen
 
 	/**
 	 * Borrar un listener de la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void removeValueChangedListener(IGCanvasListener listener) {
 		actionCommandListeners.remove(listener);
 	}
-	
+
 	/**
 	 * Invocar a los eventos asociados al componente
 	 */
@@ -95,7 +101,7 @@ public class GCanvas  extends JPanel implements MouseListener, MouseMotionListen
 			listener.actionDataChanged(new GCanvasEvent(this, key, value));
 		}
 	}
-	
+
 	/**
 	 * Invocar a los eventos asociados al componente
 	 */
@@ -106,9 +112,10 @@ public class GCanvas  extends JPanel implements MouseListener, MouseMotionListen
 			listener.actionDataDragged(new GCanvasEvent(this, key, value));
 		}
 	}
-	
+
 	/**
 	 * Añade un elemento dibujable a la lista
+	 * 
 	 * @param element
 	 */
 	public void addDrawableElement(DrawableElement element) {
@@ -118,14 +125,16 @@ public class GCanvas  extends JPanel implements MouseListener, MouseMotionListen
 		element.firstActions();
 		drawableElements.add(element);
 	}
-	
+
 	/**
 	 * Reemplaza un elemento dibujable si encuentra uno de su mismo tipo
+	 * 
 	 * @param element
 	 */
 	public void replaceDrawableElement(DrawableElement element) {
 		for (int i = 0; i < drawableElements.size(); i++) {
-			if (element.getClass().isAssignableFrom(drawableElements.get(i).getClass())) {
+			if (element.getClass().isAssignableFrom(
+					drawableElements.get(i).getClass())) {
 				drawableElements.set(i, element);
 				element.setCanvas(this);
 				break;
@@ -135,6 +144,7 @@ public class GCanvas  extends JPanel implements MouseListener, MouseMotionListen
 
 	/**
 	 * Obtiene todos los elementos dibujable que sean una instancia de c1
+	 * 
 	 * @param c1
 	 * @return ArrayList de DrawableElements
 	 */
@@ -146,10 +156,11 @@ public class GCanvas  extends JPanel implements MouseListener, MouseMotionListen
 		}
 		return elements;
 	}
-	
+
 	/**
-	 * Reemplaza un elemento dibujable si encuentra uno del tipo especificado en el 
-	 * parametro c1
+	 * Reemplaza un elemento dibujable si encuentra uno del tipo especificado en
+	 * el parametro c1
+	 * 
 	 * @param element
 	 * @param c1
 	 */
@@ -162,19 +173,22 @@ public class GCanvas  extends JPanel implements MouseListener, MouseMotionListen
 			}
 		}
 	}
-	
+
 	/**
 	 * Elimina un elemento dibujable
-	 * @param Class clase del elemento a eliminar
+	 * 
+	 * @param Class
+	 *            clase del elemento a eliminar
 	 */
 	public void removeDrawableElement(Class cl) {
 		for (int i = 0; i < drawableElements.size(); i++)
 			if (cl.isInstance(drawableElements.get(i)))
 				drawableElements.remove(i);
 	}
-	
+
 	/**
 	 * Asigna una lista de elementos dibujables
+	 * 
 	 * @return
 	 */
 	public void setDrawableElements(ArrayList list) {
@@ -184,69 +198,78 @@ public class GCanvas  extends JPanel implements MouseListener, MouseMotionListen
 				drawableElements.add(list.get(i));
 		repaint();
 	}
-		
+
 	/**
 	 * Inicializa el fondo y dibuja el gráfico sobre el canvas.
 	 */
 	public void paint(Graphics g) {
-		if (g == null) return;
+		if (g == null)
+			return;
 		g.setColor(backgroundColor);
 		g.fillRect(0, 0, getWidth(), getHeight());
-		for (int i = 0; i < drawableElements.size(); i++) 
-			((DrawableElement)drawableElements.get(i)).draw(g);
+		for (int i = 0; i < drawableElements.size(); i++)
+			((DrawableElement) drawableElements.get(i)).draw(g);
 	}
-	
+
 	/**
-	 * Ejecuta las acciones antes del primer dibujado de todos
-	 * los elementos dibujables
+	 * Ejecuta las acciones antes del primer dibujado de todos los elementos
+	 * dibujables
 	 */
 	public void execFirstDrawActions() {
-		for (int i = 0; i < drawableElements.size(); i++) 
-			((DrawableElement)drawableElements.get(i)).firstDrawActions();
+		for (int i = 0; i < drawableElements.size(); i++)
+			((DrawableElement) drawableElements.get(i)).firstDrawActions();
 	}
-	
+
 	/**
 	 * Obtiene la posición mínima en X del canvas donde comenzar a dibujar
+	 * 
 	 * @return
 	 */
 	public int getCanvasMinX() {
 		return borderX1;
 	}
-	
+
 	/**
 	 * Obtiene la posición mínima en Y del canvas donde comenzar a dibujar
+	 * 
 	 * @return
 	 */
 	public int getCanvasMinY() {
 		return borderY1;
 	}
-	
+
 	/**
 	 * Obtiene la posición máxima en X del canvas donde terminar el dibujado
+	 * 
 	 * @return
 	 */
 	public int getCanvasMaxX() {
 		return getWidth() - borderX2;
 	}
-	
+
 	/**
 	 * Obtiene la posición máxima en Y del canvas donde terminar el dibujado
+	 * 
 	 * @return
 	 */
 	public int getCanvasMaxY() {
 		return getHeight() - borderY2;
 	}
-	
+
 	/**
-	 * Obtiene el ancho del canvas sumando a partir de getCanvasX donde termina el área de dibujo
+	 * Obtiene el ancho del canvas sumando a partir de getCanvasX donde termina
+	 * el área de dibujo
+	 * 
 	 * @return
 	 */
 	public int getCanvasWidth() {
 		return getWidth() - (borderX1 + borderX2);
 	}
-	
+
 	/**
-	 * Obtiene el alto del canvas sumando a partir de getCanvasY donde termina el área de dibujo
+	 * Obtiene el alto del canvas sumando a partir de getCanvasY donde termina
+	 * el área de dibujo
+	 * 
 	 * @return
 	 */
 	public int getCanvasHeight() {
@@ -255,20 +278,23 @@ public class GCanvas  extends JPanel implements MouseListener, MouseMotionListen
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
 	 */
 	public void mousePressed(MouseEvent e) {
-		for (int i = drawableElements.size() - 1; i >= 0 ; i--)
+		for (int i = drawableElements.size() - 1; i >= 0; i--)
 			if (!((DrawableElement) drawableElements.get(i)).mousePressed(e))
 				return;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
 	 */
 	public void mouseReleased(MouseEvent e) {
-		for (int i = drawableElements.size() - 1; i >= 0 ; i--)
+		for (int i = drawableElements.size() - 1; i >= 0; i--)
 			if (!((DrawableElement) drawableElements.get(i)).mouseReleased(e))
 				return;
 		this.mouseMoved(e);
@@ -276,56 +302,65 @@ public class GCanvas  extends JPanel implements MouseListener, MouseMotionListen
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent
+	 * )
 	 */
 	public void mouseDragged(MouseEvent e) {
-		for (int i = drawableElements.size() - 1; i >= 0 ; i--)
+		for (int i = drawableElements.size() - 1; i >= 0; i--)
 			if (!((DrawableElement) drawableElements.get(i)).mouseDragged(e))
 				return;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
 	 */
 	public void mouseMoved(MouseEvent e) {
-		for (int i = drawableElements.size() - 1; i >= 0 ; i--)
+		for (int i = drawableElements.size() - 1; i >= 0; i--)
 			if (!((DrawableElement) drawableElements.get(i)).mouseMoved(e))
 				return;
 		setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent)
 	 */
 	public void mouseEntered(MouseEvent e) {
 		hasMouse = true;
 		repaint();
-		for (int i = drawableElements.size() - 1; i >= 0 ; i--)
+		for (int i = drawableElements.size() - 1; i >= 0; i--)
 			if (!((DrawableElement) drawableElements.get(i)).mouseEntered(e))
 				return;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent)
 	 */
 	public void mouseExited(MouseEvent e) {
 		hasMouse = false;
 		repaint();
-		for (int i = drawableElements.size() - 1; i >= 0 ; i--)
+		for (int i = drawableElements.size() - 1; i >= 0; i--)
 			if (!((DrawableElement) drawableElements.get(i)).mouseExited(e))
 				return;
 	}
 
 	/**
 	 * Devuelve si en ese momento el raton esta sobre el canvas
+	 * 
 	 * @return
 	 */
 	public boolean isMouse() {
 		return hasMouse;
 	}
 
-	public void mouseClicked(MouseEvent e) {}
+	public void mouseClicked(MouseEvent e) {
+	}
 }

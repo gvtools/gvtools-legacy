@@ -25,25 +25,38 @@ package org.gvsig.tools.backup.exceptions;
 import java.io.File;
 
 /**
- * <p>Exception to report that a backup process has failed.</p>
- *
+ * <p>
+ * Exception to report that a backup process has failed.
+ * </p>
+ * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class BackupException extends Exception {
 	private static final long serialVersionUID = -2846421984617208883L;
 
 	/**
-	 * <p>The source file to be backup.</p>
+	 * <p>
+	 * The source file to be backup.
+	 * </p>
 	 */
 	protected File source;
 
 	/**
-	 * <p>Constructs a new backup exception with the specified detail message and cause.</p>
+	 * <p>
+	 * Constructs a new backup exception with the specified detail message and
+	 * cause.
+	 * </p>
 	 * 
-	 * @param message the detail message (which is saved for later retrieval by the <code>getMessage()</code> method).
-	 * @param cause the cause (which is saved for later retrieval by the <code>getCause()</code> method). (A <code>null</code>
-	 *  value is permitted, and indicates that the cause is nonexistent or unknown.)
-	 * @param source the file from that was going to be done a backup
+	 * @param message
+	 *            the detail message (which is saved for later retrieval by the
+	 *            <code>getMessage()</code> method).
+	 * @param cause
+	 *            the cause (which is saved for later retrieval by the
+	 *            <code>getCause()</code> method). (A <code>null</code> value is
+	 *            permitted, and indicates that the cause is nonexistent or
+	 *            unknown.)
+	 * @param source
+	 *            the file from that was going to be done a backup
 	 * 
 	 * @see Exception#Exception(String, Throwable)
 	 */
@@ -53,7 +66,9 @@ public class BackupException extends Exception {
 	}
 
 	/**
-	 * <p>Gets the source file to be backup.</p> 
+	 * <p>
+	 * Gets the source file to be backup.
+	 * </p>
 	 * 
 	 * @return the source file
 	 */

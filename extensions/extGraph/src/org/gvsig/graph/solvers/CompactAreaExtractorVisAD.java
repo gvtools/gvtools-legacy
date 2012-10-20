@@ -71,7 +71,6 @@ import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.GeneralPathX;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.ShapeFactory;
-import com.iver.cit.gvsig.fmap.core.v02.FConverter;
 import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 import com.iver.cit.gvsig.fmap.drivers.SHPLayerDefinition;
 import com.iver.cit.gvsig.fmap.edition.DefaultRowEdited;
@@ -84,16 +83,16 @@ import com.vividsolutions.jts.geom.Geometry;
 /**
  * @author fjp
  * 
- * This class can label nodes with distances and costs to a flag. You will
- * obtain a temp shp layer with fields IdArc, IdEdge, CostOrig, DistOrig,
- * CostEnd, DistEnd, IdFlag
+ *         This class can label nodes with distances and costs to a flag. You
+ *         will obtain a temp shp layer with fields IdArc, IdEdge, CostOrig,
+ *         DistOrig, CostEnd, DistEnd, IdFlag
  * 
- * La diferencia con ServiceAreaExtractor es que esta versión escucha al
- * algoritmo Dijkstra, y va montando el shp de líneas conforme va siendo
- * explorada la red. La gran ventaja de hacerlo así es que no dependes del
- * tamaño de la red. Solo recorres los tramos y nodos que exploras, de forma que
- * si limitas el área de servicio a una distancia máxima, la red solo se explora
- * hasta esa distancia / coste.
+ *         La diferencia con ServiceAreaExtractor es que esta versión escucha al
+ *         algoritmo Dijkstra, y va montando el shp de líneas conforme va siendo
+ *         explorada la red. La gran ventaja de hacerlo así es que no dependes
+ *         del tamaño de la red. Solo recorres los tramos y nodos que exploras,
+ *         de forma que si limitas el área de servicio a una distancia máxima,
+ *         la red solo se explora hasta esa distancia / coste.
  * 
  */
 public class CompactAreaExtractorVisAD implements IDijkstraListener {
@@ -108,7 +107,7 @@ public class CompactAreaExtractorVisAD implements IDijkstraListener {
 		fieldDesc.setFieldLength(20);
 		fieldDesc.setFieldDecimalCount(5);
 		fieldsPol[0] = fieldDesc;
-		
+
 		fieldDesc = new FieldDescription();
 		fieldDesc.setFieldName("IDFLAG");
 		fieldDesc.setFieldType(Types.INTEGER);
@@ -118,14 +117,12 @@ public class CompactAreaExtractorVisAD implements IDijkstraListener {
 
 	}
 
-	
 	private Network net;
 
 	private ShpWriter shpWriterPol;
 	private File fTempPol;
 	private SHPLayerDefinition layerDefPol;
-	
-	
+
 	private HashMap<Integer, GvEdge> visitedEdges = new HashMap();
 
 	private File fTemp;
@@ -136,12 +133,12 @@ public class CompactAreaExtractorVisAD implements IDijkstraListener {
 
 	private ReadableVectorial adapter;
 
-//	private double maxCost;
+	// private double maxCost;
 
 	private Geometry serviceArea;
-	private ArrayList <Geometry> serviceAreaPolygons;
+	private ArrayList<Geometry> serviceAreaPolygons;
 
-	private double[] costs = null;	
+	private double[] costs = null;
 
 	private HashSet<GvNode> nodes = new HashSet();
 	DelaunayWatson tri2;
@@ -155,19 +152,19 @@ public class CompactAreaExtractorVisAD implements IDijkstraListener {
 	 */
 	public CompactAreaExtractorVisAD(Network net) throws BaseException {
 		int aux = (int) (Math.random() * 1000);
-		
+
 		this.net = net;
 		nodes = new HashSet<GvNode>();
-		
+
 		String namePol = "tmpCompactAreaPol" + aux + ".shp";
-		fTempPol = new File(tempDirectoryPath + "/" + namePol );
-		
+		fTempPol = new File(tempDirectoryPath + "/" + namePol);
+
 		layerDefPol = new SHPLayerDefinition();
 		layerDefPol.setFile(fTempPol);
-		layerDefPol.setName(namePol);		
+		layerDefPol.setName(namePol);
 		layerDefPol.setFieldsDesc(fieldsPol);
 		layerDefPol.setShapeType(FShape.POLYGON);
-		
+
 		shpWriterPol = new ShpWriter();
 		shpWriterPol.setFile(fTempPol);
 		shpWriterPol.initialize(layerDefPol);
@@ -175,7 +172,6 @@ public class CompactAreaExtractorVisAD implements IDijkstraListener {
 		FLyrVect lyr = net.getLayer();
 		adapter = lyr.getSource();
 		adapter.start();
-		
 
 	}
 
@@ -185,14 +181,14 @@ public class CompactAreaExtractorVisAD implements IDijkstraListener {
 		GvNode end = g.getNodeByID(edge.getIdNodeEnd());
 		nodes.add(orig);
 		nodes.add(end);
-		
+
 		return false;
 	}
 
 	public boolean minimumCostNodeSelected(GvNode node) {
 		IGraph g = net.getGraph();
 		int idEdge = node.get_best_from_link();
-		if (idEdge == -1) 
+		if (idEdge == -1)
 			return false;
 		GvEdge edge = g.getEdgeByID(idEdge);
 		GvNode orig = g.getNodeByID(edge.getIdNodeOrig());
@@ -205,47 +201,38 @@ public class CompactAreaExtractorVisAD implements IDijkstraListener {
 
 	public void writeServiceArea() throws ProcessWriterVisitorException {
 		int numPoints = nodes.size();
-	    double[][] samples = new double[2][numPoints];
-	    double[] samp0 = samples[0];
-	    double[] samp1 = samples[1];
-	    Iterator it = nodes.iterator();
-	    for (int i=0; i<numPoints; i++) {
-	    	GvNode node = (GvNode) it.next();
-	    	samp0[i] = node.getX();
-	    	samp1[i] = node.getY();
-	    }
+		double[][] samples = new double[2][numPoints];
+		double[] samp0 = samples[0];
+		double[] samp1 = samples[1];
+		Iterator it = nodes.iterator();
+		for (int i = 0; i < numPoints; i++) {
+			GvNode node = (GvNode) it.next();
+			samp0[i] = node.getX();
+			samp1[i] = node.getY();
+		}
 
-	    try {
+		try {
 			tri2 = new DelaunayWatson(samples);
-//			tri2.improve(samples, 10);
-			
-			System.out.println("Fin de trayecto. Num. triángulos=" + tri2.Tri.length);
-			for (int i=0; i< tri2.Tri.length; i++) {
-			      writeTri(tri2.Tri[i], samples);
-		    }
+			// tri2.improve(samples, 10);
+
+			System.out.println("Fin de trayecto. Num. triángulos="
+					+ tri2.Tri.length);
+			for (int i = 0; i < tri2.Tri.length; i++) {
+				writeTri(tri2.Tri[i], samples);
+			}
 		} catch (VisADException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
-	private void writePolygon(int idFlag, double maxCost, Geometry jtsGeom) throws ProcessWriterVisitorException {
-		Value[] values = new Value[2];
-		values[0] = ValueFactory.createValue(maxCost);
-		values[1] = ValueFactory.createValue(idFlag);
-		
-		IGeometry geom = FConverter.jts_to_igeometry(jtsGeom);
-		DefaultFeature feat = new DefaultFeature(geom, values);
-		IRowEdited row = new DefaultRowEdited(feat, DefaultRowEdited.STATUS_ADDED, idFlag);
-		shpWriterPol.process(row);
-	}
-
-	private void writeTri(int[] vertex, double[][] points) throws ProcessWriterVisitorException {
+	private void writeTri(int[] vertex, double[][] points)
+			throws ProcessWriterVisitorException {
 		Value[] values = new Value[2];
 		values[0] = ValueFactory.createValue(2.0);
 		values[1] = ValueFactory.createValue(1);
-		
+
 		GeneralPathX gp = new GeneralPathX();
 		FPoint2D p1 = new FPoint2D(points[0][vertex[0]], points[1][vertex[0]]);
 		FPoint2D p2 = new FPoint2D(points[0][vertex[1]], points[1][vertex[1]]);
@@ -254,21 +241,21 @@ public class CompactAreaExtractorVisAD implements IDijkstraListener {
 		gp.lineTo(p2.getX(), p2.getY());
 		gp.lineTo(p3.getX(), p3.getY());
 		gp.lineTo(p1.getX(), p1.getY());
-		
+
 		IGeometry geom = ShapeFactory.createPolygon2D(gp);
 		DefaultFeature feat = new DefaultFeature(geom, values);
-		IRowEdited row = new DefaultRowEdited(feat, DefaultRowEdited.STATUS_ADDED, idFlag);
+		IRowEdited row = new DefaultRowEdited(feat,
+				DefaultRowEdited.STATUS_ADDED, idFlag);
 		shpWriterPol.process(row);
-		
+
 	}
 
-	public void closeFiles() throws StopWriterVisitorException, ReadDriverException {
-			shpWriterPol.postProcess();
-			
-			adapter.stop();
+	public void closeFiles() throws StopWriterVisitorException,
+			ReadDriverException {
+		shpWriterPol.postProcess();
 
-		
+		adapter.stop();
+
 	}
 
-	
 }

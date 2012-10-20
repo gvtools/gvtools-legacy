@@ -46,7 +46,11 @@ import com.hardcode.gdbms.engine.instruction.EvaluationException;
 
 public interface Function {
 	public String getName();
+
 	public int getArgumentCount();
-	public Object evaluate(Object[] args) throws SemanticException, EvaluationException;
+
+	public Object evaluate(Object[] args) throws SemanticException,
+			EvaluationException;
+
 	public Class returnType();
 }

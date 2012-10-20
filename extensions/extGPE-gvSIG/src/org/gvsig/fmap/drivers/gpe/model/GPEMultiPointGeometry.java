@@ -53,27 +53,29 @@ import com.iver.cit.gvsig.fmap.core.ShapeFactory;
 /**
  * @author Jorge Piera Llodrá (jorge.piera@iver.es)
  */
-public class GPEMultiPointGeometry extends GPEMultiGeometry{
+public class GPEMultiPointGeometry extends GPEMultiGeometry {
 
 	public GPEMultiPointGeometry(String id, String srs) {
-		super(id, srs);		
+		super(id, srs);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.fmap.drivers.gpe.model.GPEMultiGeometry#getIGeometry()
 	 */
 	public IGeometry getIGeometry() {
-		if (geometry == null){
+		if (geometry == null) {
 			double[] x = new double[getGeometriesSize()];
 			double[] y = new double[getGeometriesSize()];
-			for (int i=0 ; i<getGeometriesSize() ; i++){
-				GPEGeometry geom = (GPEGeometry)getGeometryAt(i);
-				FPoint2D point = (FPoint2D)geom.getIGeometry().getInternalShape();
+			for (int i = 0; i < getGeometriesSize(); i++) {
+				GPEGeometry geom = (GPEGeometry) getGeometryAt(i);
+				FPoint2D point = (FPoint2D) geom.getIGeometry()
+						.getInternalShape();
 				x[i] = point.getX();
-				y[i] = point.getY();				
+				y[i] = point.getY();
 			}
-			geometry =  ShapeFactory.createMultipoint2D(x, y);
+			geometry = ShapeFactory.createMultipoint2D(x, y);
 		}
 		return geometry;
 	}

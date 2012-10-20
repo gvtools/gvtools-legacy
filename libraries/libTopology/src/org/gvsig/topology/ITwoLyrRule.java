@@ -50,7 +50,6 @@ package org.gvsig.topology;
 
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
-
 /**
  * interface for all rules that applies to two layers
  * 
@@ -59,18 +58,21 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 public interface ITwoLyrRule extends IOneLyrRule {
 	/**
 	 * Sets the destination layer of this two layer rule.
+	 * 
 	 * @param destinationLyr
 	 */
 	public void setDestinationLyr(FLyrVect destinationLyr);
+
 	/**
 	 * Returns the destination layer of this two layer rule.
+	 * 
 	 * @return
 	 */
 	public FLyrVect getDestinationLyr();
+
 	/**
 	 * Check if this two layer rule accepts the specified layer as destination
 	 * layer.
 	 */
 	public boolean acceptsDestinationLyr(FLyrVect originLyr);
 }
- 

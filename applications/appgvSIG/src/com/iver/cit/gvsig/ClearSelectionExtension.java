@@ -62,10 +62,9 @@ import com.iver.cit.gvsig.project.documents.table.gui.Table;
 import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 
-
 /**
  * Extensión encargada de limpiar la selección.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class ClearSelectionExtension extends Extension {
@@ -75,9 +74,10 @@ public class ClearSelectionExtension extends Extension {
 	public void execute(String s) {
 		if (s.compareTo("DEL_SELECTION") == 0) {
 			boolean refresh = false;
-			com.iver.andami.ui.mdiManager.IWindow view =PluginServices.getMDIManager().getActiveWindow();
+			com.iver.andami.ui.mdiManager.IWindow view = PluginServices
+					.getMDIManager().getActiveWindow();
 
-			if (view instanceof BaseView){
+			if (view instanceof BaseView) {
 				BaseView vista = (BaseView) view;
 				IProjectView model = vista.getModel();
 				MapContext mapa = model.getMapContext();
@@ -88,11 +88,11 @@ public class ClearSelectionExtension extends Extension {
 				if (refresh) {
 					mapCtrl.drawMap(false);
 				}
-				((ProjectDocument)vista.getModel()).setModified(true);
-			}else if (view instanceof Table){
+				((ProjectDocument) vista.getModel()).setModified(true);
+			} else if (view instanceof Table) {
 				Table table = (Table) view;
 				ProjectTable model = table.getModel();
-				SelectableDataSource dataSource=null;
+				SelectableDataSource dataSource = null;
 				try {
 					dataSource = model.getModelo().getRecordset();
 				} catch (ReadDriverException e) {
@@ -101,22 +101,21 @@ public class ClearSelectionExtension extends Extension {
 				if (dataSource.getSelection().cardinality() != 0) {
 					refresh = true;
 				}
-			    dataSource.clearSelection();
-			    if (refresh) {
-			    	table.refresh();
+				dataSource.clearSelection();
+				if (refresh) {
+					table.refresh();
 				}
-			    table.getModel().setModified(true);
+				table.getModel().setModified(true);
 			}
 		}
-    }
+	}
 
-
-	private boolean clearSelectionOfView(FLayers layers){
-		boolean refresh=false;
+	private boolean clearSelectionOfView(FLayers layers) {
+		boolean refresh = false;
 
 		for (int i = 0; i < layers.getLayersCount(); i++) {
-			FLayer lyr =layers.getLayer(i);
-			if (lyr instanceof FLayers){
+			FLayer lyr = layers.getLayer(i);
+			if (lyr instanceof FLayers) {
 				refresh = refresh || clearSelectionOfView((FLayers) lyr);
 			} else if (lyr instanceof FLyrVect) {
 				FLyrVect lyrVect = (FLyrVect) lyr;
@@ -124,11 +123,11 @@ public class ClearSelectionExtension extends Extension {
 					try {
 						SelectableDataSource dataSource;
 
-						dataSource = ((FLyrVect)lyr).getRecordset();
+						dataSource = ((FLyrVect) lyr).getRecordset();
 						if (dataSource.getSelection().cardinality() != 0) {
 							refresh = true;
 						}
-				        dataSource.clearSelection();
+						dataSource.clearSelection();
 					} catch (ReadDriverException e) {
 						e.printStackTrace();
 					}
@@ -137,11 +136,13 @@ public class ClearSelectionExtension extends Extension {
 		}
 		return refresh;
 	}
+
 	/**
 	 * @see com.iver.mdiApp.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow view = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow view = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (view == null) {
 			return false;
@@ -161,37 +162,41 @@ public class ClearSelectionExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
-		com.iver.andami.ui.mdiManager.IWindow view = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow view = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (view == null) {
 			return false;
 		}
-		if (view instanceof BaseView){
+		if (view instanceof BaseView) {
 			MapContext mapa = ((BaseView) view).getMapControl().getMapContext();
 			return hasVectorLayersWithSelection(mapa.getLayers());
 		}
-		if (view instanceof Table){
-			return ((Table)view).getSelectedRowIndices().length>0;
+		if (view instanceof Table) {
+			return ((Table) view).getSelectedRowIndices().length > 0;
 		}
 		return false;
 	}
 
 	private boolean hasVectorLayersWithSelection(FLayers layers) {
 		for (int i = 0; i < layers.getLayersCount(); i++) {
-			FLayer lyr =layers.getLayer(i);
-			if (lyr instanceof FLayers){
-				if (hasVectorLayersWithSelection((FLayers) lyr)){
+			FLayer lyr = layers.getLayer(i);
+			if (lyr instanceof FLayers) {
+				if (hasVectorLayersWithSelection((FLayers) lyr)) {
 					return true;
 				}
 			} else if (lyr instanceof FLyrVect) {
 				FLyrVect lyrVect = (FLyrVect) lyr;
 				if (lyrVect.isActive()) {
-					if (lyrVect.isAvailable()){
+					if (lyrVect.isAvailable()) {
 						try {
-							if (lyrVect.getRecordset().getSelection().cardinality() > 0)
+							if (lyrVect.getRecordset().getSelection()
+									.cardinality() > 0)
 								return true;
 						} catch (ReadDriverException e) {
 							e.printStackTrace();
-							NotificationManager.addWarning("Capa " + lyrVect.getName() + " sin recordset correcto",e);
+							NotificationManager.addWarning(
+									"Capa " + lyrVect.getName()
+											+ " sin recordset correcto", e);
 						}
 					}
 				}
@@ -207,10 +212,10 @@ public class ClearSelectionExtension extends Extension {
 		registerIcons();
 	}
 
-	private void registerIcons(){
+	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"view-clear-selection",
-				this.getClass().getClassLoader().getResource("images/delselection.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/delselection.png"));
 	}
 }

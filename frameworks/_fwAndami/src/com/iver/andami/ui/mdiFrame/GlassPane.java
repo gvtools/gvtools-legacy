@@ -45,6 +45,7 @@
  *   dac@iver.es
  */
 package com.iver.andami.ui.mdiFrame;
+
 import java.awt.Cursor;
 
 import javax.swing.JPanel;
@@ -52,10 +53,12 @@ import javax.swing.event.MouseInputAdapter;
 
 public class GlassPane extends JPanel {
 
-	public GlassPane(){
+	public GlassPane() {
 		this.setOpaque(false);
-		this.addMouseListener(new MouseInputAdapter(){});
-		this.addMouseMotionListener(new MouseInputAdapter(){});
+		this.addMouseListener(new MouseInputAdapter() {
+		});
+		this.addMouseMotionListener(new MouseInputAdapter() {
+		});
 		this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 	}
 
@@ -67,4 +70,3 @@ public class GlassPane extends JPanel {
 	}
 
 }
-

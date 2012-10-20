@@ -25,9 +25,11 @@ import java.util.Properties;
 
 import org.gvsig.gui.beans.buttonspanel.ButtonsPanel;
 import org.gvsig.gui.beans.defaultbuttonspanel.DefaultButtonsPanel;
+
 /**
- * Panel para crear un cuadro de propiedades de configuracion standard.
- * Tiene botones de aceptar, cancelar y aplicar.
+ * Panel para crear un cuadro de propiedades de configuracion standard. Tiene
+ * botones de aceptar, cancelar y aplicar.
+ * 
  * @version 19/04/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
@@ -46,6 +48,7 @@ public class PropertiesPanel extends DefaultButtonsPanel {
 
 	/**
 	 * Constructor para poder pasarle un ArrayList de PropertyStruct
+	 * 
 	 * @param values
 	 */
 	public PropertiesPanel(ArrayList values) {
@@ -56,6 +59,7 @@ public class PropertiesPanel extends DefaultButtonsPanel {
 
 	/**
 	 * Constructor para poder pasarle un Properties
+	 * 
 	 * @param values
 	 */
 	public PropertiesPanel(Properties properties) {
@@ -66,6 +70,7 @@ public class PropertiesPanel extends DefaultButtonsPanel {
 
 	/**
 	 * Añade un PropertyStruct al componente
+	 * 
 	 * @param property
 	 */
 	public void addPropertyStruct(PropertyStruct property) {
@@ -84,23 +89,26 @@ public class PropertiesPanel extends DefaultButtonsPanel {
 	 * Añade una clave/valor al panel de propiedades.<br>
 	 * <br>
 	 * El componente seleccionado dependera del instanceof del valor y las
-	 * opciones extras que se pongan. Por ejemplo: para el instanceof de un String
-	 * siempre se usara un JTextField, en cambio, para un Integer, se podran usar
-	 * 3 tipos, el JSlider, JComboBox y JSpinner. Estos tipos se especifican en el
-	 * array extras, poniendolo siempre en la posicion 0. En la posición 1 y 2 de
-	 * un JSlider se puede especificar el mínimo y el máximo del Slider.
-	 *
+	 * opciones extras que se pongan. Por ejemplo: para el instanceof de un
+	 * String siempre se usara un JTextField, en cambio, para un Integer, se
+	 * podran usar 3 tipos, el JSlider, JComboBox y JSpinner. Estos tipos se
+	 * especifican en el array extras, poniendolo siempre en la posicion 0. En
+	 * la posición 1 y 2 de un JSlider se puede especificar el mínimo y el
+	 * máximo del Slider.
+	 * 
 	 * @param textLabel
 	 * @param key
 	 * @param value
 	 * @param extras
 	 */
-	public void addValue(String textLabel, String key, Object value, Object[] extras) {
+	public void addValue(String textLabel, String key, Object value,
+			Object[] extras) {
 		propertiesComponent.addValue(textLabel, key, value, extras);
 	}
 
 	/**
 	 * Añade una clave valor al panel de propiedades.
+	 * 
 	 * @param key
 	 * @param value
 	 */
@@ -111,11 +119,11 @@ public class PropertiesPanel extends DefaultButtonsPanel {
 	/**
 	 * Obtener todos los valores de la ventana, esto será un
 	 * <code><b>ArrayList</b></code> que contendrá elementos de tipo
-	 * <code><b>PropertyStruct</b></code>, pudiendo tener el valor antes de
-	 * ser modificado y el nuevo valor.
-	 *
+	 * <code><b>PropertyStruct</b></code>, pudiendo tener el valor antes de ser
+	 * modificado y el nuevo valor.
+	 * 
 	 * @see <code>PropertyStruct</code>
-	 *
+	 * 
 	 * @return ArrayList de elementos de tipo <code>PropertyStruct</code>
 	 */
 	public ArrayList getValues() {
@@ -124,16 +132,18 @@ public class PropertiesPanel extends DefaultButtonsPanel {
 
 	/**
 	 * Obtener todos los valores de la ventana en formato java.util.Properties
+	 * 
 	 * @return
 	 */
 	public Properties getProperties() {
 		return propertiesComponent.getProperties();
 	}
-	
+
 	/**
 	 * Devuelve el componente del interfaz que trata esa variable, hay que tener
 	 * cuidado, puede devolver null o un componente distinto al esperado si se
 	 * modífica esta clase.
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -143,6 +153,7 @@ public class PropertiesPanel extends DefaultButtonsPanel {
 
 	/**
 	 * Añadir el disparador de cuando se pulsa un botón.
+	 * 
 	 * @param listener
 	 */
 	public void addStateChangedListener(PropertiesComponentListener listener) {
@@ -151,6 +162,7 @@ public class PropertiesPanel extends DefaultButtonsPanel {
 
 	/**
 	 * Borrar el disparador de eventos de los botones.
+	 * 
 	 * @param listener
 	 */
 	public void removeStateChangedListener(PropertiesComponentListener listener) {
@@ -159,9 +171,10 @@ public class PropertiesPanel extends DefaultButtonsPanel {
 
 	/**
 	 * Devuelve el PropertiesComponent que contiene este panel.
+	 * 
 	 * @return PropertiesComponent
 	 */
-	public PropertiesComponent getPropertiesComponent(){
+	public PropertiesComponent getPropertiesComponent() {
 		return propertiesComponent;
 	}
 }

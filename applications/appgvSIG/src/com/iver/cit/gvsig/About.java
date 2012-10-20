@@ -50,15 +50,14 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
 import com.iver.cit.gvsig.gui.panels.FPanelAbout;
 
-
 /**
- * Extensión que abre una nueva ventana mostrando la información sobre el
- * gvSIG.
- *
+ * Extensión que abre una nueva ventana mostrando la información sobre el gvSIG.
+ * 
  * @author Francisco José Peñarrubia
  */
 public class About extends Extension {
-    private static FPanelAbout panelAbout = new FPanelAbout();
+	private static FPanelAbout panelAbout = new FPanelAbout();
+
 	/**
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
@@ -77,19 +76,20 @@ public class About extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
-        java.net.URL aboutURL = About.class.getResource(
-        "/about.htm");
-        panelAbout.addAboutUrl("gvSIG",aboutURL);
+		java.net.URL aboutURL = About.class.getResource("/about.htm");
+		panelAbout.addAboutUrl("gvSIG", aboutURL);
 
-        // EXAMPLE TO MAKE USE OF ABOUT WINDOW FROM AN EXTERNAL
-        // EXTENSION
-        /* About claseAbout = (About) PluginServices.getExtension(com.iver.cit.gvsig.About.class);
-        java.net.URL aboutURL2 = About.class.getResource(
-        "/about.htm");
+		// EXAMPLE TO MAKE USE OF ABOUT WINDOW FROM AN EXTERNAL
+		// EXTENSION
+		/*
+		 * About claseAbout = (About)
+		 * PluginServices.getExtension(com.iver.cit.gvsig.About.class);
+		 * java.net.URL aboutURL2 = About.class.getResource( "/about.htm");
+		 * 
+		 * claseAbout.getAboutPanel().addAboutUrl("NewExtensionName",
+		 * aboutURL2);
+		 */
 
-        claseAbout.getAboutPanel().addAboutUrl("NewExtensionName", aboutURL2); */
-        
-        
 	}
 
 	/**
@@ -97,36 +97,30 @@ public class About extends Extension {
 	 */
 	public void execute(String actionCommand) {
 		PluginServices.getMDIManager().addWindow(panelAbout);
-        /*
-         * Ejemplo de cómo crear una ventana para hacer paletas.
-         * Cuando tenga tiempo, hay que hacerlo con Andami para
-         * que Andami no dependa de los JInternalFrame, y algún
-         * día (si hace falta) se cambie.
-         *  
-         *  JInternalFrame panel = new JInternalFrame();
-        panel.setClosable(true);
-        panel.setSize(200,200);
-        panel.setTitle("Hola");
-        
-        MDIFrame mainFrame = (MDIFrame) PluginServices.getMainFrame();
-        JLayeredPane lyrPane = mainFrame.getLayeredPane();
-        lyrPane.add(panel, JDesktopPane.PALETTE_LAYER);        
-        panel.show(); */
+		/*
+		 * Ejemplo de cómo crear una ventana para hacer paletas. Cuando tenga
+		 * tiempo, hay que hacerlo con Andami para que Andami no dependa de los
+		 * JInternalFrame, y algún día (si hace falta) se cambie.
+		 * 
+		 * JInternalFrame panel = new JInternalFrame(); panel.setClosable(true);
+		 * panel.setSize(200,200); panel.setTitle("Hola");
+		 * 
+		 * MDIFrame mainFrame = (MDIFrame) PluginServices.getMainFrame();
+		 * JLayeredPane lyrPane = mainFrame.getLayeredPane(); lyrPane.add(panel,
+		 * JDesktopPane.PALETTE_LAYER); panel.show();
+		 */
 	}
-    
-    /**
-     * An external plugin must call this method to obtain
-     * the AboutPanel and add its own about.
-     * Example:
-     * In initialize, call PluginServices.getExtension and 
-     * cast it to About class.
-     * Then, call getAboutPanel, and addAboutUrl
-     * PluginServices.getExtension(com.iver.cit.gvsig.About);
-     * See the initalize method inside this extension
-     * @return the About Panel
-     */
-    public FPanelAbout getAboutPanel()
-    {
-        return panelAbout;
-    }
+
+	/**
+	 * An external plugin must call this method to obtain the AboutPanel and add
+	 * its own about. Example: In initialize, call PluginServices.getExtension
+	 * and cast it to About class. Then, call getAboutPanel, and addAboutUrl
+	 * PluginServices.getExtension(com.iver.cit.gvsig.About); See the initalize
+	 * method inside this extension
+	 * 
+	 * @return the About Panel
+	 */
+	public FPanelAbout getAboutPanel() {
+		return panelAbout;
+	}
 }

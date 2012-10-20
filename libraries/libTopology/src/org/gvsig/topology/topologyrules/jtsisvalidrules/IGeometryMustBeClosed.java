@@ -71,55 +71,54 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.utiles.XMLEntity;
 
 /**
- * This rule checks if an FMap geometry is closed, always applying a 
- * given snap tolerance.
+ * This rule checks if an FMap geometry is closed, always applying a given snap
+ * tolerance.
  * 
- * To check multigeometries and multipart geometries, we follow the
- * next guideline:
+ * To check multigeometries and multipart geometries, we follow the next
+ * guideline:
  * 
- * a) if geometry is multipart or multigeometry, to be closed all parts must be closed.
- * b) point geometries are not closed.
- *
+ * a) if geometry is multipart or multigeometry, to be closed all parts must be
+ * closed. b) point geometries are not closed.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class IGeometryMustBeClosed extends AbstractTopologyRule {
-		
+
 	static final List<ITopologyErrorFix> automaticFixes = new ArrayList<ITopologyErrorFix>();
-	static{
+	static {
 		automaticFixes.add(new CompleteUndershootFix());
 	}
-	
+
 	private static final Color DEFAULT_ERROR_COLOR = Color.RED;
-	
-	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = 
-		(MultiShapeSymbol) SymbologyFactory.createDefaultSymbolByShapeType(FShape.MULTI, 
-											DEFAULT_ERROR_COLOR);
-	static{
+
+	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = (MultiShapeSymbol) SymbologyFactory
+			.createDefaultSymbolByShapeType(FShape.MULTI, DEFAULT_ERROR_COLOR);
+	static {
 		DEFAULT_ERROR_SYMBOL.setSize(0.5);
 		DEFAULT_ERROR_SYMBOL.setLineWidth(0.5);
 		DEFAULT_ERROR_SYMBOL.getOutline().setLineColor(DEFAULT_ERROR_COLOR);
 		DEFAULT_ERROR_SYMBOL.setFillColor(DEFAULT_ERROR_COLOR);
 	}
-	
+
 	/**
 	 * Symbol for topology errors caused by a violation of this rule.
 	 */
 	private MultiShapeSymbol errorSymbol = DEFAULT_ERROR_SYMBOL;
-	
-	
-	
+
 	private double snapTolerance;
-	
+
 	private JtsValidRule parentRule;
-	
-	public IGeometryMustBeClosed(Topology topology, FLyrVect originLyr, double snapTolerance) {
+
+	public IGeometryMustBeClosed(Topology topology, FLyrVect originLyr,
+			double snapTolerance) {
 		super(topology, originLyr);
 		this.snapTolerance = snapTolerance;
 	}
-	
-	public IGeometryMustBeClosed(){}
-	
+
+	public IGeometryMustBeClosed() {
+	}
+
 	public IGeometryMustBeClosed(FLyrVect originLyr, double snapTolerance) {
 		this(null, originLyr, snapTolerance);
 	}
@@ -131,48 +130,47 @@ public class IGeometryMustBeClosed extends AbstractTopologyRule {
 	public void checkPreconditions() throws TopologyRuleDefinitionException {
 		try {
 			int shapeType = this.originLyr.getShapeType();
-			if(shapeType == FShape.POINT || 
-					shapeType == FShape.MULTIPOINT || 
-					shapeType == FShape.TEXT)
+			if (shapeType == FShape.POINT || shapeType == FShape.MULTIPOINT
+					|| shapeType == FShape.TEXT)
 				throw new TopologyRuleDefinitionException();
 		} catch (ReadDriverException e) {
 			e.printStackTrace();
-			throw new TopologyRuleDefinitionException("Error leyendo el tipo de geometria del driver",e);
-		}	
+			throw new TopologyRuleDefinitionException(
+					"Error leyendo el tipo de geometria del driver", e);
+		}
 	}
 
 	public void validateFeature(IFeature feature) {
 		IGeometry geometry = feature.getGeometry();
-		if(! FGeometryUtil.isClosed(geometry, snapTolerance)){
-			IGeometry errorGeometry = FGeometryUtil.
-						getGeometryToClose(geometry, snapTolerance);
+		if (!FGeometryUtil.isClosed(geometry, snapTolerance)) {
+			IGeometry errorGeometry = FGeometryUtil.getGeometryToClose(
+					geometry, snapTolerance);
 			addTopologyError(feature, errorGeometry);
 		}
 	}
-	
 
 	private void addTopologyError(IFeature errorFeature, IGeometry errorGeometry) {
 		AbstractTopologyRule violatedRule = null;
-		if(this.parentRule != null)
+		if (this.parentRule != null)
 			violatedRule = parentRule;
 		else
 			violatedRule = this;
-		JtsValidTopologyError error = 
-			new JtsValidTopologyError(errorGeometry, violatedRule, errorFeature, topology);
+		JtsValidTopologyError error = new JtsValidTopologyError(errorGeometry,
+				violatedRule, errorFeature, topology);
 		error.setSecondaryRule(this);
 		addTopologyError(error);
 	}
-	
-	public XMLEntity getXMLEntity(){
+
+	public XMLEntity getXMLEntity() {
 		XMLEntity xml = super.getXMLEntity();
 		xml.putProperty("snapTolerance", snapTolerance);
 		return xml;
 	}
-	    
-	public void setXMLEntity(XMLEntity xml){
+
+	public void setXMLEntity(XMLEntity xml) {
 		super.setXMLEntity(xml);
-		
-		if(xml.contains("snapTolerance")){
+
+		if (xml.contains("snapTolerance")) {
 			snapTolerance = xml.getDoubleProperty("snapTolerance");
 		}
 	}

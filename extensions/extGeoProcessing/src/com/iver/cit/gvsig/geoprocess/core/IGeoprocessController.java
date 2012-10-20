@@ -42,70 +42,68 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: IGeoprocessController.java 21230 2008-06-05 14:01:14Z azabala $
-* $Log$
-* Revision 1.2  2006-10-23 10:27:13  caballero
-* ancho y alto del panel
-*
-* Revision 1.1  2006/05/24 21:12:48  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.1  2006/04/11 17:55:51  azabala
-* primera version en cvs
-*
-*
-*/
+ *
+ * $Id: IGeoprocessController.java 21230 2008-06-05 14:01:14Z azabala $
+ * $Log$
+ * Revision 1.2  2006-10-23 10:27:13  caballero
+ * ancho y alto del panel
+ *
+ * Revision 1.1  2006/05/24 21:12:48  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.1  2006/04/11 17:55:51  azabala
+ * primera version en cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core;
 
 import com.iver.cit.gvsig.geoprocess.core.fmap.IGeoprocess;
 import com.iver.cit.gvsig.geoprocess.core.gui.IGeoprocessUserEntries;
 
 /**
- * This interface receives user inputs from
- * a GeoprocessPanel (GUI component associated
- * to a geoprocess) and prepare the execution
- * of the geoprocess.
- * <br>
- * In a model-view-controller architecture, IGeoprocessController
- * would be the Controller, IGeoprocessPanel the view, and
- * IGeoprocess the model.
- *
+ * This interface receives user inputs from a GeoprocessPanel (GUI component
+ * associated to a geoprocess) and prepare the execution of the geoprocess. <br>
+ * In a model-view-controller architecture, IGeoprocessController would be the
+ * Controller, IGeoprocessPanel the view, and IGeoprocess the model.
+ * 
  * @author azabala
- *
- * TODO Maybe we could add an intermediate interface,
- * IUserEntry, to allow to work with GUI environments like this
- * (IGeoprocessPanel) and with shell environments.
- *
+ * 
+ *         TODO Maybe we could add an intermediate interface, IUserEntry, to
+ *         allow to work with GUI environments like this (IGeoprocessPanel) and
+ *         with shell environments.
+ * 
  */
 public interface IGeoprocessController {
 	/**
-	 * Sets "view" part, a panel where user has entered
-	 * input data
+	 * Sets "view" part, a panel where user has entered input data
+	 * 
 	 * @param viewPanel
 	 */
 	public void setView(IGeoprocessUserEntries userEntries);
+
 	/**
-	 * Returns model part, the geoprocess that we are going to launch,
-	 * if user entries are correct.
-	 * It has the responsability to create it
+	 * Returns model part, the geoprocess that we are going to launch, if user
+	 * entries are correct. It has the responsability to create it
+	 * 
 	 * @param geoprocess
 	 */
 	public IGeoprocess getGeoprocess();
+
 	/**
-	 * Launch geoprocess.
-	 * Return true if execution was possible, and false
-	 * if any precondition wasnt verified, or if there were
-	 * any problem in execution
+	 * Launch geoprocess. Return true if execution was possible, and false if
+	 * any precondition wasnt verified, or if there were any problem in
+	 * execution
 	 */
 	public boolean launchGeoprocess();
+
 	/**
 	 * Return the width of geoprocess panel.
 	 */
 	public int getWidth();
+
 	/**
 	 * Return the height of geoprocess panel.
 	 */
 	public int getHeight();
 }
-

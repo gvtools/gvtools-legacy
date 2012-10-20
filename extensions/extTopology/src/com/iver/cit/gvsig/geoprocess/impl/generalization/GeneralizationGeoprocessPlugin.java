@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.impl.generalization;
 
 import java.net.URL;
@@ -59,30 +59,29 @@ import com.iver.cit.gvsig.geoprocess.core.gui.IGeoprocessUserEntries;
 import com.iver.cit.gvsig.geoprocess.impl.generalization.gui.GeneralizationGeoprocessPanel;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
-public class GeneralizationGeoprocessPlugin extends GeoprocessPluginAbstract  implements IGeoprocessPlugin {
+public class GeneralizationGeoprocessPlugin extends GeoprocessPluginAbstract
+		implements IGeoprocessPlugin {
 
 	private static String dataConvertPkg;
 	private static String geoprocessName;
-	
-	static{
-		dataConvertPkg = 
-			PluginServices.getText(null, "Conversion_de_datos");
-		geoprocessName =
-			PluginServices.getText(null, "Generalitation");
+
+	static {
+		dataConvertPkg = PluginServices.getText(null, "Conversion_de_datos");
+		geoprocessName = PluginServices.getText(null, "Generalitation");
 	}
-	
-	
-	
-	
+
 	public IGeoprocessUserEntries getGeoprocessPanel() {
-		com.iver.andami.ui.mdiManager.IWindow view = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow view = PluginServices
+				.getMDIManager().getActiveWindow();
 		View vista = (View) view;
 		FLayers layers = vista.getModel().getMapContext().getLayers();
-		return (IGeoprocessUserEntries) new GeneralizationGeoprocessPanel(layers);
+		return (IGeoprocessUserEntries) new GeneralizationGeoprocessPanel(
+				layers);
 	}
 
 	public URL getImgDescription() {
-		URL url = PluginServices.getIconTheme().getURL("generalizationdesc-icon");
+		URL url = PluginServices.getIconTheme().getURL(
+				"generalizationdesc-icon");
 		return url;
 	}
 
@@ -90,12 +89,11 @@ public class GeneralizationGeoprocessPlugin extends GeoprocessPluginAbstract  im
 		return new GeneralizationGeoprocessController();
 	}
 
-	
 	public String getNamespace() {
 		return dataConvertPkg + "/" + geoprocessName;
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		return geoprocessName;
 	}
 

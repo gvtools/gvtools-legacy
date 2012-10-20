@@ -63,8 +63,8 @@ public class SnappingGeometryGraph extends GeometryGraph {
 			Geometry parentGeometry) {
 		// le pasamos al constructor padre GeometryCollection vacia para que
 		// no replique la construccion del grafo
-		super(argIndex, new GeometryCollection(new Geometry[0], parentGeometry
-				.getFactory()), boundaryNodeRule);
+		super(argIndex, new GeometryCollection(new Geometry[0],
+				parentGeometry.getFactory()), boundaryNodeRule);
 		nodes = new SnappingNodeMap(nodeFact, tolerance);
 		this.argIndex = argIndex;
 		this.parentGeometry = parentGeometry;

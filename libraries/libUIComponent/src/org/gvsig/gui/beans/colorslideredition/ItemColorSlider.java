@@ -19,6 +19,7 @@
 package org.gvsig.gui.beans.colorslideredition;
 
 import java.awt.Color;
+
 /**
  * 
  * @version 26/09/2007
@@ -33,10 +34,8 @@ public class ItemColorSlider {
 	private Object tag = null;
 
 	/**
-	 * Seleted:
-	 * -1: No seleccionado
-	 * 1: Seleccionado el item
-	 * 2: Seleccionado la interpolacion izquierda
+	 * Seleted: -1: No seleccionado 1: Seleccionado el item 2: Seleccionado la
+	 * interpolacion izquierda
 	 */
 	private int selected = -1;
 
@@ -53,7 +52,8 @@ public class ItemColorSlider {
 	}
 
 	/**
-	 * @param color the color to set
+	 * @param color
+	 *            the color to set
 	 */
 	public void setColor(Color color) {
 		this.color = color;
@@ -67,7 +67,8 @@ public class ItemColorSlider {
 	}
 
 	/**
-	 * @param interpolation the interpolation to set
+	 * @param interpolation
+	 *            the interpolation to set
 	 */
 	public void setInterpolated(double interpolation) {
 		this.interpolated = interpolation;
@@ -85,7 +86,8 @@ public class ItemColorSlider {
 	}
 
 	/**
-	 * @param value the value to set
+	 * @param value
+	 *            the value to set
 	 */
 	public void setValue(double value) {
 		this.value = value;
@@ -103,7 +105,8 @@ public class ItemColorSlider {
 	}
 
 	/**
-	 * @param visible the visible to set
+	 * @param visible
+	 *            the visible to set
 	 */
 	public void setVisible(boolean visible) {
 		this.visible = visible;
@@ -117,17 +120,18 @@ public class ItemColorSlider {
 	}
 
 	/**
-	 * @param selected the selected to set
+	 * @param selected
+	 *            the selected to set
 	 */
 	public void setSelected(int selected) {
 		switch (selected) {
-			case 1:
-			case 2:
-				this.selected = selected;
-				break;
-			default:
-				this.selected = -1;
-				break;
+		case 1:
+		case 2:
+			this.selected = selected;
+			break;
+		default:
+			this.selected = -1;
+			break;
 		}
 	}
 
@@ -139,7 +143,8 @@ public class ItemColorSlider {
 	}
 
 	/**
-	 * @param name the name to set
+	 * @param name
+	 *            the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -147,17 +152,19 @@ public class ItemColorSlider {
 
 	/**
 	 * Obtiene el campo extra de cada elemento
+	 * 
 	 * @return
 	 */
 	public Object getTag() {
-  	return tag;
-  }
+		return tag;
+	}
 
 	/**
 	 * Especifica un campo extra a cada elemento
+	 * 
 	 * @param tag
 	 */
 	public void setTag(Object tag) {
-  	this.tag = tag;
-  }
+		this.tag = tag;
+	}
 }

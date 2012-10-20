@@ -40,58 +40,57 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: ZoomConstraintsImpl.java 10671 2007-03-09 08:33:43Z jaume $
-* $Log$
-* Revision 1.2  2007-03-09 08:33:43  jaume
-* *** empty log message ***
-*
-* Revision 1.1.2.2  2007/02/15 16:23:44  jaume
-* *** empty log message ***
-*
-* Revision 1.1.2.1  2007/02/09 07:47:05  jaume
-* Isymbol moved
-*
-* Revision 1.1.2.1  2007/01/30 18:10:45  jaume
-* start commiting labeling stuff
-*
-*
-*/
+ *
+ * $Id: ZoomConstraintsImpl.java 10671 2007-03-09 08:33:43Z jaume $
+ * $Log$
+ * Revision 1.2  2007-03-09 08:33:43  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1.2.2  2007/02/15 16:23:44  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1.2.1  2007/02/09 07:47:05  jaume
+ * Isymbol moved
+ *
+ * Revision 1.1.2.1  2007/01/30 18:10:45  jaume
+ * start commiting labeling stuff
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.rendering.styling.labeling;
 
 import com.iver.utiles.XMLEntity;
 
 /**
- * @author  jaume dominguez faus - jaume.dominguez@iver.es
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class ZoomConstraintsImpl implements IZoomConstraints {
 	/**
-	 * @uml.property  name="mode"
+	 * @uml.property name="mode"
 	 */
 	private int mode = DEFINED_BY_THE_LAYER;
 	/**
-	 * @uml.property  name="minScale"
+	 * @uml.property name="minScale"
 	 */
 	private long minScale = -1;
 	/**
-	 * @uml.property  name="maxScale"
+	 * @uml.property name="maxScale"
 	 */
 	private long maxScale = -1;
 
 	/**
 	 * @param mode
-	 * @uml.property  name="mode"
+	 * @uml.property name="mode"
 	 */
 	public void setMode(int mode) {
-		if (mode != DEFINED_BY_THE_LAYER &&
-			mode != DEFINED_BY_THE_USER)
+		if (mode != DEFINED_BY_THE_LAYER && mode != DEFINED_BY_THE_USER)
 			throw new IllegalArgumentException();
 		this.mode = mode;
 	}
 
 	/**
 	 * @return
-	 * @uml.property  name="maxScale"
+	 * @uml.property name="maxScale"
 	 */
 	public long getMaxScale() {
 		return maxScale;
@@ -99,7 +98,7 @@ public class ZoomConstraintsImpl implements IZoomConstraints {
 
 	/**
 	 * @param maxScale
-	 * @uml.property  name="maxScale"
+	 * @uml.property name="maxScale"
 	 */
 	public void setMaxScale(long maxScale) {
 		this.maxScale = maxScale;
@@ -107,7 +106,7 @@ public class ZoomConstraintsImpl implements IZoomConstraints {
 
 	/**
 	 * @return
-	 * @uml.property  name="minScale"
+	 * @uml.property name="minScale"
 	 */
 	public long getMinScale() {
 		return minScale;
@@ -115,7 +114,7 @@ public class ZoomConstraintsImpl implements IZoomConstraints {
 
 	/**
 	 * @param minScale
-	 * @uml.property  name="minScale"
+	 * @uml.property name="minScale"
 	 */
 	public void setMinScale(long minScale) {
 		this.minScale = minScale;
@@ -132,7 +131,7 @@ public class ZoomConstraintsImpl implements IZoomConstraints {
 	public String getClassName() {
 		return getClass().getName();
 	}
-	
+
 	public XMLEntity getXMLEntity() {
 		XMLEntity xml = new XMLEntity();
 		xml.putProperty("className", getClassName());
@@ -141,7 +140,7 @@ public class ZoomConstraintsImpl implements IZoomConstraints {
 		xml.putProperty("mode", mode);
 		return xml;
 	}
-	
+
 	public void setXMLEntity(XMLEntity xml) {
 		setMaxScale(xml.getLongProperty("maxScale"));
 		setMinScale(xml.getLongProperty("minScale"));

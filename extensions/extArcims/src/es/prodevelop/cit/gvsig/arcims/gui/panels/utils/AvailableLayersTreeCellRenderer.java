@@ -50,81 +50,81 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-
 /**
- * This class overrides the jtree cell renderer to allow
- * a different tool tip for each node.
- *
+ * This class overrides the jtree cell renderer to allow a different tool tip
+ * for each node.
+ * 
  * @author jldominguez
- *
+ * 
  */
 public class AvailableLayersTreeCellRenderer extends DefaultTreeCellRenderer {
-    private static final long serialVersionUID = 0;
+	private static final long serialVersionUID = 0;
 
-    /**
-     * Colors used to indicate whether a node has been added or not.
-     * This has a sense in the FeatureServicePanel:
-     *
-     * @see es.prodevelop.cit.gvsig.arcims.gui.panels.FeatureServicePanel
-     */
-    private Color addedLeafForeground = Color.LIGHT_GRAY;
-    private Color notAddedLeafForeground = Color.BLACK;
+	/**
+	 * Colors used to indicate whether a node has been added or not. This has a
+	 * sense in the FeatureServicePanel:
+	 * 
+	 * @see es.prodevelop.cit.gvsig.arcims.gui.panels.FeatureServicePanel
+	 */
+	private Color addedLeafForeground = Color.LIGHT_GRAY;
+	private Color notAddedLeafForeground = Color.BLACK;
 
-    /**
-     * This method sets the specific tool tip for each node
-     * and the root node
-     */
-    public Component getTreeCellRendererComponent(JTree tree, Object value,
-        boolean selected, boolean expanded, boolean leaf, int row,
-        boolean hasFocus) {
-        Component c = super.getTreeCellRendererComponent(tree, value, selected,
-                expanded, leaf, row, hasFocus);
-        JComponent jc;
+	/**
+	 * This method sets the specific tool tip for each node and the root node
+	 */
+	public Component getTreeCellRendererComponent(JTree tree, Object value,
+			boolean selected, boolean expanded, boolean leaf, int row,
+			boolean hasFocus) {
+		Component c = super.getTreeCellRendererComponent(tree, value, selected,
+				expanded, leaf, row, hasFocus);
+		JComponent jc;
 
-        DefaultMutableTreeNode dmtn = (DefaultMutableTreeNode) value;
-        Object innerObj = dmtn.getUserObject();
+		DefaultMutableTreeNode dmtn = (DefaultMutableTreeNode) value;
+		Object innerObj = dmtn.getUserObject();
 
-        if (innerObj instanceof LayersListElement) {
-            // tree nodes, with the LayersListElement's tool tip
-            LayersListElement lle = (LayersListElement) dmtn.getUserObject();
-            c.setForeground(this.getLeafForegroundColor(leaf, lle.isAdded(),
-                    selected));
-            jc = (JComponent) c;
-            jc.setToolTipText(lle.toolTipText());
-        }
+		if (innerObj instanceof LayersListElement) {
+			// tree nodes, with the LayersListElement's tool tip
+			LayersListElement lle = (LayersListElement) dmtn.getUserObject();
+			c.setForeground(this.getLeafForegroundColor(leaf, lle.isAdded(),
+					selected));
+			jc = (JComponent) c;
+			jc.setToolTipText(lle.toolTipText());
+		}
 
-        if (innerObj instanceof ServiceNamesObject) {
-            // tree root node, with the ServiceNamesObject's tool tip
-            ServiceNamesObject sno = (ServiceNamesObject) dmtn.getUserObject();
-            jc = (JComponent) c;
-            jc.setToolTipText(sno.toolTipText());
-        }
+		if (innerObj instanceof ServiceNamesObject) {
+			// tree root node, with the ServiceNamesObject's tool tip
+			ServiceNamesObject sno = (ServiceNamesObject) dmtn.getUserObject();
+			jc = (JComponent) c;
+			jc.setToolTipText(sno.toolTipText());
+		}
 
-        return c;
-    }
+		return c;
+	}
 
-    /**
-     * Gets the tree node's font color.
-     *
-     * @param lf whether it is a leaf or not.
-     * @param added whether the node has been added or not.
-     * @param sel whether the node is selected or not.
-     * @return the node's font color.
-     */
-    private Color getLeafForegroundColor(boolean lf, boolean added, boolean sel) {
-        if (!lf) {
-            return Color.BLACK;
-        }
+	/**
+	 * Gets the tree node's font color.
+	 * 
+	 * @param lf
+	 *            whether it is a leaf or not.
+	 * @param added
+	 *            whether the node has been added or not.
+	 * @param sel
+	 *            whether the node is selected or not.
+	 * @return the node's font color.
+	 */
+	private Color getLeafForegroundColor(boolean lf, boolean added, boolean sel) {
+		if (!lf) {
+			return Color.BLACK;
+		}
 
-        if (sel) {
-            return Color.WHITE;
-        }
+		if (sel) {
+			return Color.WHITE;
+		}
 
-        if (added) {
-            return addedLeafForeground;
-        }
-        else {
-            return notAddedLeafForeground;
-        }
-    }
+		if (added) {
+			return addedLeafForeground;
+		} else {
+			return notAddedLeafForeground;
+		}
+	}
 }

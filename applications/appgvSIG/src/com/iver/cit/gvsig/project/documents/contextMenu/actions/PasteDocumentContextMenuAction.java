@@ -17,39 +17,48 @@ public class PasteDocumentContextMenuAction extends
 		return 2;
 	}
 
-	public boolean isVisible(ProjectDocument item, ProjectDocument[] selectedItems) {
+	public boolean isVisible(ProjectDocument item,
+			ProjectDocument[] selectedItems) {
 		return true;
 	}
 
-	public boolean isEnabled(ProjectDocument item, ProjectDocument[] selectedItems) {
+	public boolean isEnabled(ProjectDocument item,
+			ProjectDocument[] selectedItems) {
 		String sourceString = PluginServices.getFromClipboard();
-		if (sourceString == null) return false;
+		if (sourceString == null)
+			return false;
 
-		ProjectExtension projectExtension = (ProjectExtension)PluginServices.getExtension(ProjectExtension.class);
+		ProjectExtension projectExtension = (ProjectExtension) PluginServices
+				.getExtension(ProjectExtension.class);
 		Project project = projectExtension.getProject();
-		String docType = ((ProjectWindow)projectExtension.getProjectWindow()).getDocumentSelected();
+		String docType = ((ProjectWindow) projectExtension.getProjectWindow())
+				.getDocumentSelected();
 
-		return project.isValidXMLForImport(sourceString,docType);
+		return project.isValidXMLForImport(sourceString, docType);
 	}
-
 
 	public void execute(ProjectDocument item, ProjectDocument[] selectedItems) {
 		String sourceString = PluginServices.getFromClipboard();
-		if (sourceString == null) return;
+		if (sourceString == null)
+			return;
 
-		ProjectExtension projectExtension = (ProjectExtension)PluginServices.getExtension(ProjectExtension.class);
+		ProjectExtension projectExtension = (ProjectExtension) PluginServices
+				.getExtension(ProjectExtension.class);
 		Project project = projectExtension.getProject();
-		String docType = ((ProjectWindow)projectExtension.getProjectWindow()).getDocumentSelected();
+		String docType = ((ProjectWindow) projectExtension.getProjectWindow())
+				.getDocumentSelected();
 
 		try {
-			project.importFromXML(sourceString,docType);
+			project.importFromXML(sourceString, docType);
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(
-					(Component)PluginServices.getMainFrame(),
-					"<html>"+PluginServices.getText(this,"No_ha_sido_posible_realizar_la_operacion")+"</html>",//Mensaje
-					PluginServices.getText(this,"pegar"),//titulo
-					JOptionPane.ERROR_MESSAGE
-					);
+					(Component) PluginServices.getMainFrame(),
+					"<html>"
+							+ PluginServices.getText(this,
+									"No_ha_sido_posible_realizar_la_operacion")
+							+ "</html>",// Mensaje
+					PluginServices.getText(this, "pegar"),// titulo
+					JOptionPane.ERROR_MESSAGE);
 		}
 		project.setModified(true);
 	}
@@ -57,7 +66,5 @@ public class PasteDocumentContextMenuAction extends
 	public String getText() {
 		return PluginServices.getText(this, "pegar");
 	}
-
-
 
 }

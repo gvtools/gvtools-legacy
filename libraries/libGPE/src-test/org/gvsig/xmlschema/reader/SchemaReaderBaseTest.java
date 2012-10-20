@@ -103,36 +103,37 @@ import org.gvsig.xmlschema.utils.SchemaDocumentBuilder;
  *
  */
 /**
- * This class must be implemented by all the xml Schema 
- * reading tests.
+ * This class must be implemented by all the xml Schema reading tests.
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public abstract class SchemaReaderBaseTest extends TestCase {
 	private SchemaDocumentBuilder schemaBuilder = null;
 	private IXSSchema schema = null;
-	
-	public void setUp(){
+
+	public void setUp() {
 		schemaBuilder = SchemaDocumentBuilder.getInstance();
 	}
-	
-	public void testParse() throws SchemaCreationException, FileNotFoundException{
+
+	public void testParse() throws SchemaCreationException,
+			FileNotFoundException {
 		schema = getSchemaBuilder().parse(new FileInputStream(getFile()));
 		makeAsserts();
 		printSchema();
 	}
-	
+
 	/**
 	 * Gets the XML schema file to open
+	 * 
 	 * @return
 	 */
 	public abstract String getFile();
-	
+
 	/**
-	 * This method must be used by the subclasses
-	 * to make the comparations. 
+	 * This method must be used by the subclasses to make the comparations.
 	 */
-	public abstract void makeAsserts() ;
-	
+	public abstract void makeAsserts();
+
 	/**
 	 * @return the schema
 	 */
@@ -146,158 +147,159 @@ public abstract class SchemaReaderBaseTest extends TestCase {
 	public IXSSchema getSchema() {
 		return schema;
 	}
-	
+
 	/**
-	 * Print the schema elements by console
-	 * @
+	 * Print the schema elements by console @
 	 */
 	private void printSchema() {
 		Iterator it = getSchema().getElementDeclarations().iterator();
-		while (it.hasNext()){
-			IXSElementDeclaration element = (IXSElementDeclaration)it.next();
-			printElement(element, "");			
+		while (it.hasNext()) {
+			IXSElementDeclaration element = (IXSElementDeclaration) it.next();
+			printElement(element, "");
 		}
-	}		
+	}
 
 	/**
 	 * Print one element
+	 * 
 	 * @param element
-	 * xml schema element to print
+	 *            xml schema element to print
 	 * @param tab
-	 * Tabs to write on the left part of each line
-	 * @
+	 *            Tabs to write on the left part of each line @
 	 */
 	private void printElement(IXSElementDeclaration element, String tab) {
 		IXSTypeDefinition type = element.getTypeDefinition();
 		System.out.print(tab + "ELEMENT: " + element.getQName().getLocalPart());
 		System.out.print(", TYPE: ");
-		if (type == null){
+		if (type == null) {
 			System.out.print("NULL");
 			System.out.print(", TYPE NAME: " + element.getTypeName());
 			System.out.print("\n");
-		}else{
+		} else {
 			System.out.print(type.getQName().getLocalPart());
 			System.out.print("\n");
-			printType(type,tab + "\t");
-		}		
-	}
-	
-	private void printType(IXSTypeDefinition type, String tab) {
-		if (type instanceof IXSSimpleTypeDefinition){
-			System.out.print(tab + "SIMPLE TYPE");
-			System.out.print("\n");
-		}else if (type instanceof IXSComplexTypeDefinition){ 
-			System.out.print(tab + "COMPLEX TYPE");
-			System.out.print("\n");
-			printComplexType((IXSComplexTypeDefinition)type,tab + "\t");			
-		}
-	}
-	
-	private void printComplexType(IXSComplexTypeDefinition complexType, String tab) {
-		IXSContentType contentType = complexType.getContentType();
-		if (contentType != null){
-			printContentType(contentType,tab);
-		}
-		IXSGroup group = complexType.getGroup();
-		if (group != null){
-			printGroup(group,tab);
+			printType(type, tab + "\t");
 		}
 	}
 
-	private void printContentType(IXSContentType contentType, String tab)  {
-		if (contentType instanceof IXSSimpleContent){
+	private void printType(IXSTypeDefinition type, String tab) {
+		if (type instanceof IXSSimpleTypeDefinition) {
+			System.out.print(tab + "SIMPLE TYPE");
+			System.out.print("\n");
+		} else if (type instanceof IXSComplexTypeDefinition) {
+			System.out.print(tab + "COMPLEX TYPE");
+			System.out.print("\n");
+			printComplexType((IXSComplexTypeDefinition) type, tab + "\t");
+		}
+	}
+
+	private void printComplexType(IXSComplexTypeDefinition complexType,
+			String tab) {
+		IXSContentType contentType = complexType.getContentType();
+		if (contentType != null) {
+			printContentType(contentType, tab);
+		}
+		IXSGroup group = complexType.getGroup();
+		if (group != null) {
+			printGroup(group, tab);
+		}
+	}
+
+	private void printContentType(IXSContentType contentType, String tab) {
+		if (contentType instanceof IXSSimpleContent) {
 			System.out.println(tab + "SIMPLE CONTENT");
 			System.out.print("\n");
-			printSimpleContent((IXSSimpleContent)contentType, tab + "\t");
-		}else if (contentType instanceof IXSComplexContent){
+			printSimpleContent((IXSSimpleContent) contentType, tab + "\t");
+		} else if (contentType instanceof IXSComplexContent) {
 			System.out.print(tab + "COMPLEX CONTENT");
 			System.out.print("\n");
-			printComplexContent((IXSComplexContent)contentType, tab + "\t");
-		}else if (contentType instanceof IXSGroup){
-			printGroup((IXSGroup)contentType, tab + "\t");
-		}		
+			printComplexContent((IXSComplexContent) contentType, tab + "\t");
+		} else if (contentType instanceof IXSGroup) {
+			printGroup((IXSGroup) contentType, tab + "\t");
+		}
 	}
-	
+
 	private void printSimpleContent(IXSSimpleContent simpleContent, String tab) {
 		IXSRestriction restriction = simpleContent.getRestriction();
-		if (restriction != null){
-			printRestriction(restriction, tab  + "\t");
+		if (restriction != null) {
+			printRestriction(restriction, tab + "\t");
 		}
 		IXSExtension extension = simpleContent.getExtension();
-		if (extension != null){
-			printExtension(extension, tab  + "\t");
+		if (extension != null) {
+			printExtension(extension, tab + "\t");
 		}
 	}
-	
-	private void printComplexContent(IXSComplexContent complexContent, String tab) {
+
+	private void printComplexContent(IXSComplexContent complexContent,
+			String tab) {
 		IXSRestriction restriction = complexContent.getRestriction();
-		if (restriction != null){
+		if (restriction != null) {
 			printRestriction(restriction, tab);
 		}
 		IXSExtension extension = complexContent.getExtension();
-		if (extension != null){
+		if (extension != null) {
 			printExtension(extension, tab);
 		}
 	}
 
-	private void printExtension(IXSExtension extension, String tab)  {
+	private void printExtension(IXSExtension extension, String tab) {
 		System.out.print(tab + "EXTENSION");
 		System.out.print("\n");
 		Iterator it = extension.getItems().iterator();
-		while (it.hasNext()){
+		while (it.hasNext()) {
 			Object item = it.next();
-			if (item instanceof IXSElementDeclaration){
-				printElement((IXSElementDeclaration)item, tab + "\t");
-			}else {
-				printGroup((IXSGroup)item, tab + "\t");
-			}				
-		}		
-	}
-	
-	private void printRestriction(IXSRestriction restriction, String tab){
-		System.out.print(tab + "RESTRICTION");
-		System.out.print("\n");
-		Iterator it = restriction.getItems().iterator();
-		while (it.hasNext()){
-			Object item = it.next();
-			if (item instanceof IXSElementDeclaration){
-				printElement((IXSElementDeclaration)item, tab + "\t");
-			}else {
-				printGroup((IXSGroup)item, tab + "\t");
+			if (item instanceof IXSElementDeclaration) {
+				printElement((IXSElementDeclaration) item, tab + "\t");
+			} else {
+				printGroup((IXSGroup) item, tab + "\t");
 			}
-		}		
-	}
-	
-	private void printGroup(IXSGroup group, String tab)  {
-		if (group instanceof IXSChoice){			
-			System.out.print(tab + "CHOICE");	
-		}else if (group instanceof IXSSequence){
-			System.out.print(tab + "SEQUENCE");	
-		}else if (group instanceof IXSAll){
-			System.out.print(tab + "ALL");	
-		}else {
-			System.out.print(tab + "GROUP");	
-		}
-		System.out.print("\n");
-		Iterator it = group.getItems().iterator();
-		while (it.hasNext()){
-			Object item = it.next();
-			if (item instanceof IXSElementDeclaration){
-				printElement((IXSElementDeclaration)item, tab + "\t");				
-			}else {
-				printGroup((IXSGroup)item, tab);
-			}				
 		}
 	}
 
-	private void printChoice(IXSChoice choice, String tab){
-		System.out.print(tab + "CHOICE");	
+	private void printRestriction(IXSRestriction restriction, String tab) {
+		System.out.print(tab + "RESTRICTION");
+		System.out.print("\n");
+		Iterator it = restriction.getItems().iterator();
+		while (it.hasNext()) {
+			Object item = it.next();
+			if (item instanceof IXSElementDeclaration) {
+				printElement((IXSElementDeclaration) item, tab + "\t");
+			} else {
+				printGroup((IXSGroup) item, tab + "\t");
+			}
+		}
+	}
+
+	private void printGroup(IXSGroup group, String tab) {
+		if (group instanceof IXSChoice) {
+			System.out.print(tab + "CHOICE");
+		} else if (group instanceof IXSSequence) {
+			System.out.print(tab + "SEQUENCE");
+		} else if (group instanceof IXSAll) {
+			System.out.print(tab + "ALL");
+		} else {
+			System.out.print(tab + "GROUP");
+		}
+		System.out.print("\n");
+		Iterator it = group.getItems().iterator();
+		while (it.hasNext()) {
+			Object item = it.next();
+			if (item instanceof IXSElementDeclaration) {
+				printElement((IXSElementDeclaration) item, tab + "\t");
+			} else {
+				printGroup((IXSGroup) item, tab);
+			}
+		}
+	}
+
+	private void printChoice(IXSChoice choice, String tab) {
+		System.out.print(tab + "CHOICE");
 		System.out.print("\n");
 		Iterator it = choice.getItems().iterator();
-		while (it.hasNext()){
-			IXSElementDeclaration element = (IXSElementDeclaration)it.next();
+		while (it.hasNext()) {
+			IXSElementDeclaration element = (IXSElementDeclaration) it.next();
 			printElement(element, "");
 			System.out.print("\n");
 		}
-	}	
+	}
 }

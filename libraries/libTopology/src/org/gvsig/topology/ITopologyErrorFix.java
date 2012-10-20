@@ -42,24 +42,24 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology;
 
 import org.gvsig.exceptions.BaseException;
 
 /**
- * Automatic error fix for a given topology error.
- * <br>
- * When a topology rule validation finds a topology error,
- * this rule could have associated many automatic error fixes.
+ * Automatic error fix for a given topology error. <br>
+ * When a topology rule validation finds a topology error, this rule could have
+ * associated many automatic error fixes.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public interface ITopologyErrorFix {
 	public void fix(TopologyError topologyError) throws BaseException;
+
 	public String getEditionDescription();
 }

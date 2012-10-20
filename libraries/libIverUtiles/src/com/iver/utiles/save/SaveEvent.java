@@ -27,90 +27,95 @@ import java.util.EventObject;
 
 /**
  * Event which indicates that a file is going to be saved, or has been saved.
- *
+ * 
  * @see BeforeSavingListener
  * @see AfterSavingListener
- *
+ * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class SaveEvent extends EventObject {
 	private static final long serialVersionUID = -4477418408438214208L;
 
 	/**
-     * Determines that's going to save a file.
-     */
-    public static final short BEFORE_SAVING = 0;
+	 * Determines that's going to save a file.
+	 */
+	public static final short BEFORE_SAVING = 0;
 
-    /**
-     * Determines that has saved a file.
-     */
-    public static final short AFTER_SAVING = 1;
+	/**
+	 * Determines that has saved a file.
+	 */
+	public static final short AFTER_SAVING = 1;
 
-    /**
-     * Identifies the type of this event.
-     */
-    private short id;
+	/**
+	 * Identifies the type of this event.
+	 */
+	private short id;
 
-    /**
-     * File to be saved or saved.
-     */
-    private File file;
+	/**
+	 * File to be saved or saved.
+	 */
+	private File file;
 
-    /**
-     * <p>Creates a new <code>SaveEvent</code> instance.</p>
-     * 
-     * @param source 
-     * @param id identifies this event
-     * @param file path of the associated file
-     */
-    public SaveEvent(Object source, short id, File file) {
+	/**
+	 * <p>
+	 * Creates a new <code>SaveEvent</code> instance.
+	 * </p>
+	 * 
+	 * @param source
+	 * @param id
+	 *            identifies this event
+	 * @param file
+	 *            path of the associated file
+	 */
+	public SaveEvent(Object source, short id, File file) {
 		super(source);
 		this.id = id;
 		this.file = file;
 	}
 
-    /**
-     * Returns a String representation of this EventObject.
-     *
-     * @return  A a String representation of this EventObject.
-     */
-    public String toString() {
-        return getClass().getName() + " [" + paramString() + "] on " + (source != null? source.getClass().toString() : "");
-    }
+	/**
+	 * Returns a String representation of this EventObject.
+	 * 
+	 * @return A a String representation of this EventObject.
+	 */
+	public String toString() {
+		return getClass().getName() + " [" + paramString() + "] on "
+				+ (source != null ? source.getClass().toString() : "");
+	}
 
-    /**
-     * Returns a string representing the kind of this <code>Event</code>.
-     * 
-     * @return  a string representation of this event
-     */
-    protected String paramString() {
-    	String s_id = null;
-    	
-    	switch(id) {
-    		case BEFORE_SAVING:
-    			s_id = "BEFORE SAVE";
-    			break;
-    		case AFTER_SAVING:
-    			s_id = "AFTER SAVE";
-    			break;
-    	}
+	/**
+	 * Returns a string representing the kind of this <code>Event</code>.
+	 * 
+	 * @return a string representation of this event
+	 */
+	protected String paramString() {
+		String s_id = null;
 
-        return "ID: " + s_id + " File Absolute Path: " + file.getAbsolutePath();
-    }
+		switch (id) {
+		case BEFORE_SAVING:
+			s_id = "BEFORE SAVE";
+			break;
+		case AFTER_SAVING:
+			s_id = "AFTER SAVE";
+			break;
+		}
 
-    /**
-     * Returns the event type.
-     */
-    public int getID() {
-        return id;
-    }
+		return "ID: " + s_id + " File Absolute Path: " + file.getAbsolutePath();
+	}
 
-    /**
-     * Gets the file saved or going to be saved.
-     * 
-     * @return the referenced file
-     */
-    public File getFile() {
-    	return file;
-    }
+	/**
+	 * Returns the event type.
+	 */
+	public int getID() {
+		return id;
+	}
+
+	/**
+	 * Gets the file saved or going to be saved.
+	 * 
+	 * @return the referenced file
+	 */
+	public File getFile() {
+		return file;
+	}
 }

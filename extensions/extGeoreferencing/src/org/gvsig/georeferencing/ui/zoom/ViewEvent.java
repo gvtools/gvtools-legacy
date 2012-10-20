@@ -24,13 +24,15 @@ import java.util.EventObject;
  * Evento lanzado por la vista cuando se realizan acciones sobre ella.
  * 
  * 17/01/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
-public class ViewEvent  extends EventObject {
+public class ViewEvent extends EventObject {
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * Constructor
+	 * 
 	 * @param source
 	 */
 	public ViewEvent(Object source) {

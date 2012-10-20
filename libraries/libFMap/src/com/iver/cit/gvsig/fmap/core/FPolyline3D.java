@@ -46,7 +46,7 @@ import com.iver.cit.gvsig.fmap.core.v02.FConverter;
 
 /**
  * Polilinea 3D.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FPolyline3D extends FPolyline2D implements FShape3D {
@@ -54,9 +54,11 @@ public class FPolyline3D extends FPolyline2D implements FShape3D {
 
 	/**
 	 * Crea un nuevo Polyline3D.
-	 *
-	 * @param gpx GeneralPathX
-	 * @param pZ Vector con la Z.
+	 * 
+	 * @param gpx
+	 *            GeneralPathX
+	 * @param pZ
+	 *            Vector con la Z.
 	 */
 	public FPolyline3D(GeneralPathX gpx, double[] pZ) {
 		super(gpx);
@@ -72,45 +74,46 @@ public class FPolyline3D extends FPolyline2D implements FShape3D {
 
 	/**
 	 * Devuelve un Array con todos los valores de Z.
-	 *
+	 * 
 	 * @return Array de Zs.
 	 */
 	public double[] getZs() {
 		return pZ;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.FShape#cloneFShape()
 	 */
 	public FShape cloneFShape() {
 		return new FPolyline3D((GeneralPathX) gp.clone(), (double[]) pZ);
 	}
 
-	
 	//
-	public String toText(){		
+	public String toText() {
 		StringBuffer str = new StringBuffer();
-		//Ojo eldriver postgis no tiene en cuenta capas
-		//de tipo no multi.Cambiar a static.
+		// Ojo eldriver postgis no tiene en cuenta capas
+		// de tipo no multi.Cambiar a static.
 		str.append("MULTILINESTRING");
 		str.append(" ((");
-		int theType;		
-		double[] theData = new double[6];		
+		int theType;
+		double[] theData = new double[6];
 
 		PathIterator theIterator = getPathIterator(null, FConverter.FLATNESS);
 		int i = 0;
 
 		while (!theIterator.isDone()) {
-			//while not done
+			// while not done
 			theType = theIterator.currentSegment(theData);
 
 			double m = 0.0;
-			if (i < pZ.length){
-				m = pZ[i]; 
+			if (i < pZ.length) {
+				m = pZ[i];
 			}
-			
+
 			switch (theType) {
-			case PathIterator.SEG_MOVETO:					
+			case PathIterator.SEG_MOVETO:
 				str.append(theData[0] + " " + theData[1] + " " + m + ",");
 				break;
 
@@ -131,12 +134,12 @@ public class FPolyline3D extends FPolyline2D implements FShape3D {
 
 			case PathIterator.SEG_CLOSE:
 				break;
-			} //end switch
+			} // end switch
 
 			theIterator.next();
 			i++;
-		} //end while loop		
-		return str.delete(str.length()-1, str.length()) + "))";
+		} // end while loop
+		return str.delete(str.length() - 1, str.length()) + "))";
 	}
-	
+
 }

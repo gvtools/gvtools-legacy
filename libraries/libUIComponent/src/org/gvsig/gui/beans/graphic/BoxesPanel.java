@@ -27,7 +27,7 @@ import javax.swing.JPanel;
 import org.gvsig.gui.beans.textincreaser.TextIncreaserContainer;
 
 /**
- *
+ * 
  * Nacho Brodin (brodin_ign@gva.es)
  */
 
@@ -37,6 +37,7 @@ public class BoxesPanel extends JPanel {
 	private JPanel pRight = null;
 	private TextIncreaserContainer controlLeft = null;
 	private TextIncreaserContainer controlRight = null;
+
 	public BoxesPanel() {
 		super();
 		initialize();
@@ -44,7 +45,7 @@ public class BoxesPanel extends JPanel {
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 */
 	private void initialize() {
 		this.setLayout(new BorderLayout());
@@ -54,7 +55,7 @@ public class BoxesPanel extends JPanel {
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPLeft() {
@@ -73,7 +74,7 @@ public class BoxesPanel extends JPanel {
 
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPRight() {
@@ -92,7 +93,7 @@ public class BoxesPanel extends JPanel {
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	public TextIncreaserContainer getControlLeft() {
@@ -104,7 +105,7 @@ public class BoxesPanel extends JPanel {
 
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	public TextIncreaserContainer getControlRight() {
@@ -114,15 +115,17 @@ public class BoxesPanel extends JPanel {
 		return controlRight;
 	}
 
-	//****************************************************
-	//MÉTODOS DEL CONTROL
+	// ****************************************************
+	// MÉTODOS DEL CONTROL
 
 	/**
 	 * Obtiene el valor de los controles.
-	 * @return Array con los valores de ambos controles. El primer valor del array es el control de la derecha
-	 * y el segundo el de la izquierda.
+	 * 
+	 * @return Array con los valores de ambos controles. El primer valor del
+	 *         array es el control de la derecha y el segundo el de la
+	 *         izquierda.
 	 */
-	public double[] getBoxesValues(){
+	public double[] getBoxesValues() {
 		double[] v = new double[2];
 		v[0] = getControlRight().getValue();
 		v[1] = getControlLeft().getValue();

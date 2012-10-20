@@ -48,7 +48,6 @@ import java.awt.geom.Rectangle2D;
 
 import javax.print.attribute.PrintRequestAttributeSet;
 
-import org.jfree.chart.plot.PiePlot3D;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.PlotState;
@@ -60,15 +59,15 @@ import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.SymbolDrawingException;
 import com.iver.utiles.swing.threads.Cancellable;
 
-public abstract class JFreeChartSymbol extends AbstractMarkerSymbol implements IChartSymbol{
-	
+public abstract class JFreeChartSymbol extends AbstractMarkerSymbol implements
+		IChartSymbol {
 
 	protected Plot renderPlot;
 	protected Plot mapPlot;
 	protected Plot outlinePlot;
 	protected PlotState plotState;
 	protected PlotRenderingInfo plotRenderingInfo;
-	
+
 	public ISymbol getSymbolForSelection() {
 		return this;
 	}
@@ -81,22 +80,23 @@ public abstract class JFreeChartSymbol extends AbstractMarkerSymbol implements I
 			renderPlot = getMapPlot();
 		}
 		double size = getSize();
-		double halfSize = size*0.5;
+		double halfSize = size * 0.5;
 		double minx = p.getX() - halfSize;
 		double miny = p.getY() - halfSize;
-		renderPlot.draw(g, new Rectangle2D.Double(minx, miny, size, size), p, plotState, plotRenderingInfo);
+		renderPlot.draw(g, new Rectangle2D.Double(minx, miny, size, size), p,
+				plotState, plotRenderingInfo);
 	}
-	
+
 	@Override
-	public void drawInsideRectangle(Graphics2D g, AffineTransform scaleInstance, Rectangle r, PrintRequestAttributeSet properties)
-	throws SymbolDrawingException {
+	public void drawInsideRectangle(Graphics2D g,
+			AffineTransform scaleInstance, Rectangle r,
+			PrintRequestAttributeSet properties) throws SymbolDrawingException {
 		renderPlot = getOutlinePlot();
 		super.drawInsideRectangle(g, scaleInstance, r, properties);
 		renderPlot = getMapPlot();
 	}
-	
-	
-	
+
 	protected abstract Plot getMapPlot();
+
 	protected abstract Plot getOutlinePlot();
 }

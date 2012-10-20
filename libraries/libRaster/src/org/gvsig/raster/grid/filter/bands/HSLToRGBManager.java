@@ -27,16 +27,17 @@ import org.gvsig.raster.grid.filter.RasterFilter;
 import org.gvsig.raster.grid.filter.RasterFilterList;
 import org.gvsig.raster.grid.filter.RasterFilterListManager;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
+
 /**
  * Gestor del filtro de conversión de HSL a RGB.
- *
+ * 
  * @version 06/06/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public class HSLToRGBManager  implements IRasterFilterListManager {
+public class HSLToRGBManager implements IRasterFilterListManager {
 
-	protected RasterFilterList	filterList = null;
+	protected RasterFilterList filterList = null;
 
 	/**
 	 * Registra HSLToRGBManager en los puntos de extension de RasterFilter
@@ -47,9 +48,8 @@ public class HSLToRGBManager  implements IRasterFilterListManager {
 	}
 
 	/**
-	 * Constructor.
-	 * Asigna la lista de filtros y el managener global.
-	 *
+	 * Constructor. Asigna la lista de filtros y el managener global.
+	 * 
 	 * @param filterListManager
 	 */
 	public HSLToRGBManager(RasterFilterListManager filterListManager) {
@@ -58,12 +58,14 @@ public class HSLToRGBManager  implements IRasterFilterListManager {
 
 	/**
 	 * Añade un filtro de conversión de RGB a HSL a la pila de filtros.
- * @throws FilterTypeException 
+	 * 
+	 * @throws FilterTypeException
 	 */
 	public void addHSLToRGBFilter(int[] renderBands) throws FilterTypeException {
 		RasterFilter filter = new HSLToRGBByteFilter();
 
-		//Cuando el filtro esta creado, tomamos los valores y lo añadimos a la pila
+		// Cuando el filtro esta creado, tomamos los valores y lo añadimos a la
+		// pila
 
 		if (filter != null) {
 			filterList.add(filter);
@@ -73,7 +75,10 @@ public class HSLToRGBManager  implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList()
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList
+	 * ()
 	 */
 	public ArrayList getRasterFilterList() {
 		ArrayList filters = new ArrayList();
@@ -83,15 +88,21 @@ public class HSLToRGBManager  implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#addFilter(java.lang.Class, org.gvsig.raster.dataset.Params)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.IRasterFilterListManager#addFilter(java.
+	 * lang.Class, org.gvsig.raster.dataset.Params)
 	 */
-	public void addFilter(Class classFilter, Params params) throws FilterTypeException {
+	public void addFilter(Class classFilter, Params params)
+			throws FilterTypeException {
 		if (classFilter.equals(HSLToRGBFilter.class)) {
 			int[] renderBands = { 0, 1, 2 };
 			for (int i = 0; i < params.getNumParams(); i++) {
-				if (params.getParam(i).id.equals("RenderBands") && 
-						params.getParam(i).defaultValue instanceof String) {
-					String[] bands = new String((String) params.getParam(i).defaultValue).split(" ");
+				if (params.getParam(i).id.equals("RenderBands")
+						&& params.getParam(i).defaultValue instanceof String) {
+					String[] bands = new String(
+							(String) params.getParam(i).defaultValue)
+							.split(" ");
 					renderBands[0] = new Integer(bands[0]).intValue();
 					renderBands[1] = new Integer(bands[1]).intValue();
 					renderBands[2] = new Integer(bands[2]).intValue();
@@ -104,17 +115,24 @@ public class HSLToRGBManager  implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#createFilterListFromStrings(java.util.ArrayList, java.lang.String, int)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#
+	 * createFilterListFromStrings(java.util.ArrayList, java.lang.String, int)
 	 */
-	public int createFilterListFromStrings(ArrayList filters, String fil, int filteri) {
+	public int createFilterListFromStrings(ArrayList filters, String fil,
+			int filteri) {
 		return filteri;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#getStringsFromFilterList(java.util.ArrayList, org.gvsig.raster.grid.filter.RasterFilter)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#
+	 * getStringsFromFilterList(java.util.ArrayList,
+	 * org.gvsig.raster.grid.filter.RasterFilter)
 	 */
-	public ArrayList getStringsFromFilterList(ArrayList filterList, RasterFilter rf) {
+	public ArrayList getStringsFromFilterList(ArrayList filterList,
+			RasterFilter rf) {
 		return filterList;
 	}
 }

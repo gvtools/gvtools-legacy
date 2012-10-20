@@ -5,13 +5,13 @@ package com.hardcode.gdbms.engine.instruction;
 
 /**
  * Adaptador
- *
+ * 
  * @author Fernando González Cortés
  */
 public class CompareOpAdapter extends Adapter {
 	/**
 	 * Obtiene el operador
-	 *
+	 * 
 	 * @return opertador
 	 */
 	public int getOperator() {

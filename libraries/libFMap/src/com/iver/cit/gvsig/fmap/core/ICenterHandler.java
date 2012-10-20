@@ -40,11 +40,9 @@
  */
 package com.iver.cit.gvsig.fmap.core;
 
-
-
 /**
  * Center handlers.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public interface ICenterHandler extends Handler {

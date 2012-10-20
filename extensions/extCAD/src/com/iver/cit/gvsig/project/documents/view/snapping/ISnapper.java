@@ -7,10 +7,9 @@ import com.iver.andami.ui.mdiManager.IWindow;
 
 /**
  * @author fjp
- *
+ * 
  */
 public interface ISnapper {
-
 
 	// void setSnapPoint(Point2D snapPoint);
 
@@ -21,13 +20,17 @@ public interface ISnapper {
 	/**
 	 * Implement this if you need a Snapper more important than the others.
 	 * Default value is 0 (no prority).
+	 * 
 	 * @return
 	 */
 	int getPriority();
 
 	boolean isEnabled();
+
 	public void setEnabled(boolean enabled);
+
 	public void setPriority(int priority);
+
 	IWindow getConfigurator();
 
 }

@@ -54,9 +54,10 @@ import org.gvsig.gpe.containers.Layer;
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class GMLCitiesReader extends GMLReaderBaseTest {
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.GPEReaderBaseTest#getFile()
 	 */
 	public String getFile() {
@@ -65,6 +66,7 @@ public class GMLCitiesReader extends GMLReaderBaseTest {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.parser.GMLReaderBaseTest#hasSchema()
 	 */
 	public boolean hasSchema() {
@@ -74,6 +76,7 @@ public class GMLCitiesReader extends GMLReaderBaseTest {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.GPEReaderBaseTest#makeAsserts()
 	 */
 	public void makeAsserts() {
@@ -81,7 +84,6 @@ public class GMLCitiesReader extends GMLReaderBaseTest {
 		Layer layer = getLayers()[0];
 		ArrayList features = layer.getFeatures();
 		assertEquals(85, features.size());
-		
+
 	}
 }
-

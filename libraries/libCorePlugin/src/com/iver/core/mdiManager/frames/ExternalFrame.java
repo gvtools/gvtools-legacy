@@ -52,278 +52,305 @@ import javax.swing.JDialog;
 
 /**
  * @author Cesar Martinez Izquierdo <cesar.martinez@iver.es>
- *
+ * 
  */
 public class ExternalFrame extends JDialog implements IFrame, ComponentListener {
 	private static final long serialVersionUID = 1L;
-	
+
 	private void initFrame() {
 		addComponentListener(this);
 	}
-	
-    /**
-     * Creates a non-modal dialog without a title and without a specified
-     * <code>Frame</code> owner.  A shared, hidden frame will be
-     * set as the owner of the dialog.
-     * <p>
-     * This constructor sets the component's locale property to the value
-     * returned by <code>JComponent.getDefaultLocale</code>.     
-     * 
-     * @exception HeadlessException if GraphicsEnvironment.isHeadless()
-     * returns true.
-     * @see java.awt.GraphicsEnvironment#isHeadless
-     * @see JComponent#getDefaultLocale
-     */
-    public ExternalFrame() throws HeadlessException {
-    	super();
-    	initFrame();
-    }
-
-    /**
-     * Creates a non-modal dialog without a title with the
-     * specified <code>Frame</code> as its owner.  If <code>owner</code>
-     * is <code>null</code>, a shared, hidden frame will be set as the
-     * owner of the dialog.
-     * <p>
-     * This constructor sets the component's locale property to the value
-     * returned by <code>JComponent.getDefaultLocale</code>.
-     *
-     * @param owner the <code>Frame</code> from which the dialog is displayed
-     * @exception HeadlessException if GraphicsEnvironment.isHeadless()
-     * returns true.
-     * @see java.awt.GraphicsEnvironment#isHeadless
-     * @see JComponent#getDefaultLocale
-     */
-    public ExternalFrame(Frame owner) throws HeadlessException {
-    	super(owner);
-    	initFrame();
-    }
-
-    /**
-     * Creates a modal or non-modal dialog without a title and
-     * with the specified owner <code>Frame</code>.  If <code>owner</code>
-     * is <code>null</code>, a shared, hidden frame will be set as the
-     * owner of the dialog.
-     * <p>
-     * This constructor sets the component's locale property to the value
-     * returned by <code>JComponent.getDefaultLocale</code>.     
-     *
-     * @param owner the <code>Frame</code> from which the dialog is displayed
-     * @param modal  true for a modal dialog, false for one that allows
-     *               others windows to be active at the same time
-     * @exception HeadlessException if GraphicsEnvironment.isHeadless()
-     * returns true.
-     * @see java.awt.GraphicsEnvironment#isHeadless
-     * @see JComponent#getDefaultLocale
-     */
-    public ExternalFrame(Frame owner, boolean modal) throws HeadlessException {
-        super(owner, modal);
-        initFrame();
-    }
-
-    /**
-     * Creates a non-modal dialog with the specified title and
-     * with the specified owner frame.  If <code>owner</code>
-     * is <code>null</code>, a shared, hidden frame will be set as the
-     * owner of the dialog.
-     * <p>
-     * This constructor sets the component's locale property to the value
-     * returned by <code>JComponent.getDefaultLocale</code>.     
-     *
-     * @param owner the <code>Frame</code> from which the dialog is displayed
-     * @param title  the <code>String</code> to display in the dialog's
-     *			title bar
-     * @exception HeadlessException if GraphicsEnvironment.isHeadless()
-     * returns true.
-     * @see java.awt.GraphicsEnvironment#isHeadless
-     * @see JComponent#getDefaultLocale
-     */
-    public ExternalFrame(Frame owner, String title) throws HeadlessException {
-        super(owner, title);
-        initFrame();
-    }
-
-    /**
-     * Creates a modal or non-modal dialog with the specified title 
-     * and the specified owner <code>Frame</code>.  If <code>owner</code>
-     * is <code>null</code>, a shared, hidden frame will be set as the
-     * owner of this dialog.  All constructors defer to this one.
-     * <p>
-     * NOTE: Any popup components (<code>JComboBox</code>,
-     * <code>JPopupMenu</code>, <code>JMenuBar</code>)
-     * created within a modal dialog will be forced to be lightweight.
-     * <p>
-     * This constructor sets the component's locale property to the value
-     * returned by <code>JComponent.getDefaultLocale</code>.     
-     *
-     * @param owner the <code>Frame</code> from which the dialog is displayed
-     * @param title  the <code>String</code> to display in the dialog's
-     *			title bar
-     * @param modal  true for a modal dialog, false for one that allows
-     *               other windows to be active at the same time
-     * @exception HeadlessException if GraphicsEnvironment.isHeadless()
-     * returns true.
-     * @see java.awt.GraphicsEnvironment#isHeadless
-     * @see JComponent#getDefaultLocale
-     */
-    public ExternalFrame(Frame owner, String title, boolean modal)
-        throws HeadlessException {
-	       super(owner, title, modal);
-	       initFrame();
-    }
-
-    /**
-     * Creates a non-modal dialog without a title with the
-     * specified <code>Dialog</code> as its owner.
-     * <p>
-     * This constructor sets the component's locale property to the value 
-     * returned by <code>JComponent.getDefaultLocale</code>.
-     *
-     * @param owner the non-null <code>Dialog</code> from which the dialog is displayed
-     * @exception HeadlessException if GraphicsEnvironment.isHeadless()
-     * returns true.
-     * @see java.awt.GraphicsEnvironment#isHeadless
-     * @see JComponent#getDefaultLocale
-     */
-    public ExternalFrame(Dialog owner) throws HeadlessException {
-        super(owner);
-        initFrame();
-    }
-
-    /**
-     * Creates a modal or non-modal dialog without a title and
-     * with the specified owner dialog.
-     * <p>
-     * This constructor sets the component's locale property to the value 
-     * returned by <code>JComponent.getDefaultLocale</code>.
-     *
-     * @param owner the non-null <code>Dialog</code> from which the dialog is displayed
-     * @param modal  true for a modal dialog, false for one that allows
-     *               other windows to be active at the same time
-     * @exception HeadlessException if GraphicsEnvironment.isHeadless()
-     * returns true.
-     * @see java.awt.GraphicsEnvironment#isHeadless
-     * @see JComponent#getDefaultLocale
-     */
-    public ExternalFrame(Dialog owner, boolean modal) throws HeadlessException {
-        super(owner, modal);
-        initFrame();
-    }
-
-    /**
-     * Creates a non-modal dialog with the specified title and
-     * with the specified owner dialog.
-     * <p>
-     * This constructor sets the component's locale property to the value 
-     * returned by <code>JComponent.getDefaultLocale</code>.
-     *
-     * @param owner the non-null <code>Dialog</code> from which the dialog is displayed
-     * @param title  the <code>String</code> to display in the dialog's
-     *			title bar
-     * @exception HeadlessException if GraphicsEnvironment.isHeadless()
-     * returns true.
-     * @see java.awt.GraphicsEnvironment#isHeadless
-     * @see JComponent#getDefaultLocale
-     */
-    public ExternalFrame(Dialog owner, String title) throws HeadlessException {
-        super(owner, title);
-        initFrame();
-    }
-
-    /**
-     * Creates a modal or non-modal dialog with the specified title 
-     * and the specified owner frame. 
-     * <p>
-     * This constructor sets the component's locale property to the value
-     * returned by <code>JComponent.getDefaultLocale</code>.     
-     *
-     * @param owner the non-null <code>Dialog</code> from which the dialog is displayed
-     * @param title  the <code>String</code> to display in the dialog's
-     *			title bar
-     * @param modal  true for a modal dialog, false for one that allows
-     *               other windows to be active at the same time
-     * @exception HeadlessException if GraphicsEnvironment.isHeadless()
-     * returns true.
-     * @see java.awt.GraphicsEnvironment#isHeadless
-     * @see JComponent#getDefaultLocale
-     */
-    public ExternalFrame(Dialog owner, String title, boolean modal)
-        throws HeadlessException {
-        super(owner, title, modal);
-        initFrame();
-    }
 
 	/**
-	 *  Stores the minimum allowed size for this JDialog. If it is null, there
-	 *  is no minimum size for this window.
+	 * Creates a non-modal dialog without a title and without a specified
+	 * <code>Frame</code> owner. A shared, hidden frame will be set as the owner
+	 * of the dialog.
+	 * <p>
+	 * This constructor sets the component's locale property to the value
+	 * returned by <code>JComponent.getDefaultLocale</code>.
+	 * 
+	 * @exception HeadlessException
+	 *                if GraphicsEnvironment.isHeadless() returns true.
+	 * @see java.awt.GraphicsEnvironment#isHeadless
+	 * @see JComponent#getDefaultLocale
+	 */
+	public ExternalFrame() throws HeadlessException {
+		super();
+		initFrame();
+	}
+
+	/**
+	 * Creates a non-modal dialog without a title with the specified
+	 * <code>Frame</code> as its owner. If <code>owner</code> is
+	 * <code>null</code>, a shared, hidden frame will be set as the owner of the
+	 * dialog.
+	 * <p>
+	 * This constructor sets the component's locale property to the value
+	 * returned by <code>JComponent.getDefaultLocale</code>.
+	 * 
+	 * @param owner
+	 *            the <code>Frame</code> from which the dialog is displayed
+	 * @exception HeadlessException
+	 *                if GraphicsEnvironment.isHeadless() returns true.
+	 * @see java.awt.GraphicsEnvironment#isHeadless
+	 * @see JComponent#getDefaultLocale
+	 */
+	public ExternalFrame(Frame owner) throws HeadlessException {
+		super(owner);
+		initFrame();
+	}
+
+	/**
+	 * Creates a modal or non-modal dialog without a title and with the
+	 * specified owner <code>Frame</code>. If <code>owner</code> is
+	 * <code>null</code>, a shared, hidden frame will be set as the owner of the
+	 * dialog.
+	 * <p>
+	 * This constructor sets the component's locale property to the value
+	 * returned by <code>JComponent.getDefaultLocale</code>.
+	 * 
+	 * @param owner
+	 *            the <code>Frame</code> from which the dialog is displayed
+	 * @param modal
+	 *            true for a modal dialog, false for one that allows others
+	 *            windows to be active at the same time
+	 * @exception HeadlessException
+	 *                if GraphicsEnvironment.isHeadless() returns true.
+	 * @see java.awt.GraphicsEnvironment#isHeadless
+	 * @see JComponent#getDefaultLocale
+	 */
+	public ExternalFrame(Frame owner, boolean modal) throws HeadlessException {
+		super(owner, modal);
+		initFrame();
+	}
+
+	/**
+	 * Creates a non-modal dialog with the specified title and with the
+	 * specified owner frame. If <code>owner</code> is <code>null</code>, a
+	 * shared, hidden frame will be set as the owner of the dialog.
+	 * <p>
+	 * This constructor sets the component's locale property to the value
+	 * returned by <code>JComponent.getDefaultLocale</code>.
+	 * 
+	 * @param owner
+	 *            the <code>Frame</code> from which the dialog is displayed
+	 * @param title
+	 *            the <code>String</code> to display in the dialog's title bar
+	 * @exception HeadlessException
+	 *                if GraphicsEnvironment.isHeadless() returns true.
+	 * @see java.awt.GraphicsEnvironment#isHeadless
+	 * @see JComponent#getDefaultLocale
+	 */
+	public ExternalFrame(Frame owner, String title) throws HeadlessException {
+		super(owner, title);
+		initFrame();
+	}
+
+	/**
+	 * Creates a modal or non-modal dialog with the specified title and the
+	 * specified owner <code>Frame</code>. If <code>owner</code> is
+	 * <code>null</code>, a shared, hidden frame will be set as the owner of
+	 * this dialog. All constructors defer to this one.
+	 * <p>
+	 * NOTE: Any popup components (<code>JComboBox</code>,
+	 * <code>JPopupMenu</code>, <code>JMenuBar</code>) created within a modal
+	 * dialog will be forced to be lightweight.
+	 * <p>
+	 * This constructor sets the component's locale property to the value
+	 * returned by <code>JComponent.getDefaultLocale</code>.
+	 * 
+	 * @param owner
+	 *            the <code>Frame</code> from which the dialog is displayed
+	 * @param title
+	 *            the <code>String</code> to display in the dialog's title bar
+	 * @param modal
+	 *            true for a modal dialog, false for one that allows other
+	 *            windows to be active at the same time
+	 * @exception HeadlessException
+	 *                if GraphicsEnvironment.isHeadless() returns true.
+	 * @see java.awt.GraphicsEnvironment#isHeadless
+	 * @see JComponent#getDefaultLocale
+	 */
+	public ExternalFrame(Frame owner, String title, boolean modal)
+			throws HeadlessException {
+		super(owner, title, modal);
+		initFrame();
+	}
+
+	/**
+	 * Creates a non-modal dialog without a title with the specified
+	 * <code>Dialog</code> as its owner.
+	 * <p>
+	 * This constructor sets the component's locale property to the value
+	 * returned by <code>JComponent.getDefaultLocale</code>.
+	 * 
+	 * @param owner
+	 *            the non-null <code>Dialog</code> from which the dialog is
+	 *            displayed
+	 * @exception HeadlessException
+	 *                if GraphicsEnvironment.isHeadless() returns true.
+	 * @see java.awt.GraphicsEnvironment#isHeadless
+	 * @see JComponent#getDefaultLocale
+	 */
+	public ExternalFrame(Dialog owner) throws HeadlessException {
+		super(owner);
+		initFrame();
+	}
+
+	/**
+	 * Creates a modal or non-modal dialog without a title and with the
+	 * specified owner dialog.
+	 * <p>
+	 * This constructor sets the component's locale property to the value
+	 * returned by <code>JComponent.getDefaultLocale</code>.
+	 * 
+	 * @param owner
+	 *            the non-null <code>Dialog</code> from which the dialog is
+	 *            displayed
+	 * @param modal
+	 *            true for a modal dialog, false for one that allows other
+	 *            windows to be active at the same time
+	 * @exception HeadlessException
+	 *                if GraphicsEnvironment.isHeadless() returns true.
+	 * @see java.awt.GraphicsEnvironment#isHeadless
+	 * @see JComponent#getDefaultLocale
+	 */
+	public ExternalFrame(Dialog owner, boolean modal) throws HeadlessException {
+		super(owner, modal);
+		initFrame();
+	}
+
+	/**
+	 * Creates a non-modal dialog with the specified title and with the
+	 * specified owner dialog.
+	 * <p>
+	 * This constructor sets the component's locale property to the value
+	 * returned by <code>JComponent.getDefaultLocale</code>.
+	 * 
+	 * @param owner
+	 *            the non-null <code>Dialog</code> from which the dialog is
+	 *            displayed
+	 * @param title
+	 *            the <code>String</code> to display in the dialog's title bar
+	 * @exception HeadlessException
+	 *                if GraphicsEnvironment.isHeadless() returns true.
+	 * @see java.awt.GraphicsEnvironment#isHeadless
+	 * @see JComponent#getDefaultLocale
+	 */
+	public ExternalFrame(Dialog owner, String title) throws HeadlessException {
+		super(owner, title);
+		initFrame();
+	}
+
+	/**
+	 * Creates a modal or non-modal dialog with the specified title and the
+	 * specified owner frame.
+	 * <p>
+	 * This constructor sets the component's locale property to the value
+	 * returned by <code>JComponent.getDefaultLocale</code>.
+	 * 
+	 * @param owner
+	 *            the non-null <code>Dialog</code> from which the dialog is
+	 *            displayed
+	 * @param title
+	 *            the <code>String</code> to display in the dialog's title bar
+	 * @param modal
+	 *            true for a modal dialog, false for one that allows other
+	 *            windows to be active at the same time
+	 * @exception HeadlessException
+	 *                if GraphicsEnvironment.isHeadless() returns true.
+	 * @see java.awt.GraphicsEnvironment#isHeadless
+	 * @see JComponent#getDefaultLocale
+	 */
+	public ExternalFrame(Dialog owner, String title, boolean modal)
+			throws HeadlessException {
+		super(owner, title, modal);
+		initFrame();
+	}
+
+	/**
+	 * Stores the minimum allowed size for this JDialog. If it is null, there is
+	 * no minimum size for this window.
 	 */
 	Dimension minimumSize = null;
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.core.mdiManager.frames.IFrame#setHeight(int)
 	 */
 	public void setHeight(int height) {
 		super.setSize(getWidth(), height);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.core.mdiManager.frames.IFrame#setWidth(int)
 	 */
 	public void setWidth(int width) {
 		super.setSize(width, getHeight());
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.core.mdiManager.frames.IFrame#setX(int)
 	 */
 	public void setX(int x) {
 		super.setLocation(x, getX());
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.core.mdiManager.frames.IFrame#setY(int)
 	 */
 	public void setY(int y) {
 		super.setLocation(y, getY());
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.core.mdiManager.frames.IFrame#getMinimumSize()
 	 */
 	public Dimension getMinimumSize() {
 		return minimumSize;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.core.mdiManager.frames.IFrame#setMinimumSize(java.awt.Dimension)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.core.mdiManager.frames.IFrame#setMinimumSize(java.awt.Dimension)
 	 */
 	public void setMinimumSize(Dimension minSize) {
 		minimumSize = minSize;
 		adjustToMinSize();
 	}
-	
+
 	/**
 	 * Adjust the window to the minimum size, if necessary.
 	 */
 	private void adjustToMinSize() {
-		if (minimumSize==null) return;
+		if (minimumSize == null)
+			return;
 		int height, width;
 		Dimension currentSize = getSize();
-		boolean modified=false;
-		
+		boolean modified = false;
+
 		if (currentSize.height < minimumSize.height) {
 			height = minimumSize.height;
 			modified = true;
-		}
-		else {
+		} else {
 			height = currentSize.height;
 		}
-		
+
 		if (currentSize.width < minimumSize.width) {
 			width = minimumSize.width;
 			modified = true;
-		}
-		else {
+		} else {
 			width = currentSize.width;
 		}
 		if (modified) {
@@ -337,24 +364,25 @@ public class ExternalFrame extends JDialog implements IFrame, ComponentListener 
 
 	public void componentHidden(ComponentEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void componentMoved(ComponentEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void componentResized(ComponentEvent e) {
 		// this is necessary because in Java 1.4/1.5, JDialog doesn't have a
-		// setMinimum method. It's solved in 1.6, we'll remove this after migration.
+		// setMinimum method. It's solved in 1.6, we'll remove this after
+		// migration.
 		adjustToMinSize();
-		
+
 	}
 
 	public void componentShown(ComponentEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

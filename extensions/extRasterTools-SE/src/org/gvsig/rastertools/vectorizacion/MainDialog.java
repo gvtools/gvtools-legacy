@@ -32,20 +32,25 @@ import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 
 /**
- * Dialogo para el preprocesado del raster antes de la aplicación de la vectorización.
+ * Dialogo para el preprocesado del raster antes de la aplicación de la
+ * vectorización.
  * 
  * 12/06/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class MainDialog extends JPanel implements IWindow, ButtonsPanelListener {
-	private static final long            serialVersionUID = -5374834293534046986L;
-	private String                       name             = null;
-	private MainPanel                    panel            = null;
+	private static final long serialVersionUID = -5374834293534046986L;
+	private String name = null;
+	private MainPanel panel = null;
 
 	/**
 	 * Constructor
-	 * @param width Ancho
-	 * @param height Alto
+	 * 
+	 * @param width
+	 *            Ancho
+	 * @param height
+	 *            Alto
 	 */
 	public MainDialog(int width, int height, String name, MainPanel mainPanel) {
 		this.name = name;
@@ -59,19 +64,21 @@ public class MainDialog extends JPanel implements IWindow, ButtonsPanelListener 
 
 	/**
 	 * Obtiene el panel principal
+	 * 
 	 * @return HistogramPanel
 	 */
 	public MainPanel getMainPanel() {
 		return panel;
 	}
 
-
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindow#getWindowInfo()
 	 */
 	public WindowInfo getWindowInfo() {
-		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODELESSDIALOG | WindowInfo.RESIZABLE | WindowInfo.MAXIMIZABLE);
+		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODELESSDIALOG
+				| WindowInfo.RESIZABLE | WindowInfo.MAXIMIZABLE);
 		if (name != null)
 			m_viewinfo.setAdditionalInfo(name);
 		m_viewinfo.setTitle(PluginServices.getText(this, "vectorization"));
@@ -93,7 +100,10 @@ public class MainDialog extends JPanel implements IWindow, ButtonsPanelListener 
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener#actionButtonPressed(org.gvsig.gui.beans.buttonspanel.ButtonsPanelEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener#actionButtonPressed
+	 * (org.gvsig.gui.beans.buttonspanel.ButtonsPanelEvent)
 	 */
 	public void actionButtonPressed(ButtonsPanelEvent e) {
 		if (e.getButton() == ButtonsPanel.BUTTON_CANCEL) {

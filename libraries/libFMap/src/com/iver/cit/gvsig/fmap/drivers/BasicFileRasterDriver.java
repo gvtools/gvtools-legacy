@@ -50,7 +50,7 @@ import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 
 /**
  * Interfaz base para implementar los drivers de raster.
- *
+ * 
  * @author $author$
  */
 public interface BasicFileRasterDriver {
@@ -61,10 +61,10 @@ public interface BasicFileRasterDriver {
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.layers.LayerOperations#draw(java.awt.image.BufferedImage,
-	 * 		ISymbol)
+	 *      ISymbol)
 	 */
 	public void draw(BufferedImage image, Graphics2D g, ViewPort viewPort)
-		throws DriverIOException;
+			throws DriverIOException;
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.layers.RasterOperations#queryByPoint(com.iver.cit.gvsig.fmap.operations.QueriedPoint)

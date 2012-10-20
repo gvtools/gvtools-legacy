@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import org.gvsig.gui.beans.checkslidertext.CheckColorSliderTextContainer;
 import org.gvsig.gui.beans.doubleslider.DoubleSliderEvent;
 import org.gvsig.gui.beans.doubleslider.DoubleSliderListener;
+
 /**
  * Panel con los 3 campos para introducir listas de valores RGB. Este gestiona
  * los eventos de FocusListener para validar que los valores que se introducen
@@ -33,18 +34,19 @@ import org.gvsig.gui.beans.doubleslider.DoubleSliderListener;
  * de valores en forma de array multidimensional de 2xN elementos. Cada pareja
  * de valores es un rango de color en ese valor de pixel. Un rango de valores
  * podria ser por ejemplo {{1,3},{15,30},{200, 255}}
- *
+ * 
  * @author Nacho Brodin (brodin_ign@gva.es)
  */
-public class TranspByPixelRGBInputPanel extends JPanel implements DoubleSliderListener {
-	private static final long     serialVersionUID = 5858119425941331458L;
-	private int[]                 rangeRed   = null;
-	private int[]                 rangeGreen = null;
-	private int[]                 rangeBlue  = null;
-	CheckColorSliderTextContainer tRed       = null;
-	CheckColorSliderTextContainer tGreen     = null;
-	CheckColorSliderTextContainer tBlue      = null;
-	CheckColorSliderTextContainer tAlpha     = null;
+public class TranspByPixelRGBInputPanel extends JPanel implements
+		DoubleSliderListener {
+	private static final long serialVersionUID = 5858119425941331458L;
+	private int[] rangeRed = null;
+	private int[] rangeGreen = null;
+	private int[] rangeBlue = null;
+	CheckColorSliderTextContainer tRed = null;
+	CheckColorSliderTextContainer tGreen = null;
+	CheckColorSliderTextContainer tBlue = null;
+	CheckColorSliderTextContainer tAlpha = null;
 
 	/**
 	 * This is the default constructor
@@ -58,11 +60,12 @@ public class TranspByPixelRGBInputPanel extends JPanel implements DoubleSliderLi
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
-		this.setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.Y_AXIS));
+		this.setLayout(new javax.swing.BoxLayout(this,
+				javax.swing.BoxLayout.Y_AXIS));
 		this.add(getTRed());
 		this.add(getTGreen());
 		this.add(getTBlue());
@@ -75,7 +78,7 @@ public class TranspByPixelRGBInputPanel extends JPanel implements DoubleSliderLi
 
 	/**
 	 * This method initializes jTextField
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	public CheckColorSliderTextContainer getTRed() {
@@ -87,7 +90,7 @@ public class TranspByPixelRGBInputPanel extends JPanel implements DoubleSliderLi
 
 	/**
 	 * This method initializes jTextField
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	public CheckColorSliderTextContainer getTAlpha() {
@@ -100,7 +103,7 @@ public class TranspByPixelRGBInputPanel extends JPanel implements DoubleSliderLi
 
 	/**
 	 * This method initializes jTextField1
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	public CheckColorSliderTextContainer getTGreen() {
@@ -112,7 +115,7 @@ public class TranspByPixelRGBInputPanel extends JPanel implements DoubleSliderLi
 
 	/**
 	 * This method initializes jTextField2
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	public CheckColorSliderTextContainer getTBlue() {
@@ -124,7 +127,7 @@ public class TranspByPixelRGBInputPanel extends JPanel implements DoubleSliderLi
 
 	/**
 	 * Obtiene la lista de valores del campo Blue.
-	 *
+	 * 
 	 * @return array multidimensional con los intervalos
 	 */
 	public int[] getRangeBlue() {
@@ -133,6 +136,7 @@ public class TranspByPixelRGBInputPanel extends JPanel implements DoubleSliderLi
 
 	/**
 	 * Obtiene la lista de valores del campo Green.
+	 * 
 	 * @return array multidimensional con los intervalos
 	 */
 	public int[] getRangeGreen() {
@@ -141,6 +145,7 @@ public class TranspByPixelRGBInputPanel extends JPanel implements DoubleSliderLi
 
 	/**
 	 * Obtiene la lista de valores del campo Red.
+	 * 
 	 * @return array multidimensional con los intervalos
 	 */
 	public int[] getRangeRed() {
@@ -149,9 +154,11 @@ public class TranspByPixelRGBInputPanel extends JPanel implements DoubleSliderLi
 
 	/**
 	 * Activa o desactiva el control
-	 * @param enable True activa el control y false lo desactiva
+	 * 
+	 * @param enable
+	 *            True activa el control y false lo desactiva
 	 */
-	public void setControlEnabled(boolean enabled){
+	public void setControlEnabled(boolean enabled) {
 		getTRed().setEnabled(enabled);
 		getTGreen().setEnabled(enabled);
 		getTBlue().setEnabled(enabled);
@@ -160,30 +167,32 @@ public class TranspByPixelRGBInputPanel extends JPanel implements DoubleSliderLi
 
 	/**
 	 * Asigna el número de bandas activas
-	 * @param n Número de bandas
+	 * 
+	 * @param n
+	 *            Número de bandas
 	 */
-	public void setActiveBands(int n){
+	public void setActiveBands(int n) {
 		this.getTRed().setEnabled(true);
 		switch (n) {
-			case 1:
-				this.getTGreen().setEnabled(false);
-				this.getTBlue().setEnabled(false);
-				break;
-			case 2:
-				this.getTGreen().setEnabled(true);
-				this.getTBlue().setEnabled(false);
-				break;
-			case 3:
-				this.getTGreen().setEnabled(true);
-				this.getTBlue().setEnabled(true);
-				break;
+		case 1:
+			this.getTGreen().setEnabled(false);
+			this.getTBlue().setEnabled(false);
+			break;
+		case 2:
+			this.getTGreen().setEnabled(true);
+			this.getTBlue().setEnabled(false);
+			break;
+		case 3:
+			this.getTGreen().setEnabled(true);
+			this.getTBlue().setEnabled(true);
+			break;
 		}
 	}
 
 	/**
 	 * Limpia el valor de las cajas de texto R, G y B
 	 */
-	public void clear(){
+	public void clear() {
 		getTRed().setValue(0);
 		getTGreen().setValue(0);
 		getTBlue().setValue(0);
@@ -194,17 +203,20 @@ public class TranspByPixelRGBInputPanel extends JPanel implements DoubleSliderLi
 
 	/**
 	 * Actualiza los colores de los componentes de seleccion de color, el ultimo
-	 * parametro true o false es para que haga o no un refresco del componente, lo
-	 * hacemos solo una vez por componente para que consuma menos CPU
+	 * parametro true o false es para que haga o no un refresco del componente,
+	 * lo hacemos solo una vez por componente para que consuma menos CPU
 	 */
 	public void updateColors() {
 		int r = tRed.getValue();
 		int g = tGreen.getValue();
 		int b = tBlue.getValue();
 
-		if (!tRed.isChecked()) r = 0;
-		if (!tGreen.isChecked()) g = 0;
-		if (!tBlue.isChecked()) b = 0;
+		if (!tRed.isChecked())
+			r = 0;
+		if (!tGreen.isChecked())
+			g = 0;
+		if (!tBlue.isChecked())
+			b = 0;
 
 		tRed.setColor1(new Color(0, g, b), false);
 		tRed.setColor2(new Color(255, g, b), true);
@@ -219,9 +231,9 @@ public class TranspByPixelRGBInputPanel extends JPanel implements DoubleSliderLi
 	 * encarga de la validación de datos y actualizar los rangos de selección
 	 */
 	public void validateValues() {
-		rangeRed = new int[] {0, 255};
-		rangeGreen = new int[] {0, 255};
-		rangeBlue = new int[] {0, 255};
+		rangeRed = new int[] { 0, 255 };
+		rangeGreen = new int[] { 0, 255 };
+		rangeBlue = new int[] { 0, 255 };
 
 		if (getTRed().isChecked())
 			rangeRed[0] = rangeRed[1] = getTRed().getValue();
@@ -235,7 +247,10 @@ public class TranspByPixelRGBInputPanel extends JPanel implements DoubleSliderLi
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.doubleslider.DoubleSliderListener#actionValueChanged(org.gvsig.gui.beans.doubleslider.DoubleSliderEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.doubleslider.DoubleSliderListener#actionValueChanged
+	 * (org.gvsig.gui.beans.doubleslider.DoubleSliderEvent)
 	 */
 	public void actionValueChanged(DoubleSliderEvent e) {
 		updateColors();
@@ -244,7 +259,10 @@ public class TranspByPixelRGBInputPanel extends JPanel implements DoubleSliderLi
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.doubleslider.DoubleSliderListener#actionValueDragged(org.gvsig.gui.beans.doubleslider.DoubleSliderEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.doubleslider.DoubleSliderListener#actionValueDragged
+	 * (org.gvsig.gui.beans.doubleslider.DoubleSliderEvent)
 	 */
 	public void actionValueDragged(DoubleSliderEvent e) {
 		updateColors();

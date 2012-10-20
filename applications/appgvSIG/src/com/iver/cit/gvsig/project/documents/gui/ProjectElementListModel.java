@@ -44,46 +44,46 @@ import java.util.ArrayList;
 
 import javax.swing.AbstractListModel;
 
-
 /**
  * Modelo para presentar los ProjectElement's (vistas, mapas, tablas) en un
  * JList
- *
+ * 
  * @author Fernando González Cortés
  */
 public class ProjectElementListModel extends AbstractListModel {
-    private ArrayList els;
+	private ArrayList els;
 
-    /**
-     * Creates a new MyListModel object.
-     *
-     * @param els Elementos del modelo
-     */
-    public ProjectElementListModel(ArrayList els) {
-        this.els = els;
-    }
+	/**
+	 * Creates a new MyListModel object.
+	 * 
+	 * @param els
+	 *            Elementos del modelo
+	 */
+	public ProjectElementListModel(ArrayList els) {
+		this.els = els;
+	}
 
-    /**
-     * Obtiene el tamaño de la lista
-     *
-     * @return tamaño de la lista
-     */
-    public int getSize() {
-        if (els == null) {
-            return 0;
-        }
+	/**
+	 * Obtiene el tamaño de la lista
+	 * 
+	 * @return tamaño de la lista
+	 */
+	public int getSize() {
+		if (els == null) {
+			return 0;
+		}
 
-        return els.size();
-    }
+		return els.size();
+	}
 
-    /**
-     * @see javax.swing.ListModel#getElementAt(int)
-     */
-    public Object getElementAt(int index) {
-        if (els == null) {
-            return "";
-        }
+	/**
+	 * @see javax.swing.ListModel#getElementAt(int)
+	 */
+	public Object getElementAt(int index) {
+		if (els == null) {
+			return "";
+		}
 
-        return els.get(index);
-    }
+		return els.get(index);
+	}
 }

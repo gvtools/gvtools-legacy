@@ -65,55 +65,56 @@ import com.iver.cit.gvsig.fmap.layers.FLyrWFS;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class ClockPanel extends JPanel implements IControl{
+public class ClockPanel extends JPanel implements IControl {
 	public static final String LOCKFEATURE_ACTIONCOMMAND = "lwac";
 	private JButton wfstButton = null;
 	private ClockText wfstText = null;
 	private FLyrWFS layer = null;
 	boolean isClosed = false;
 
-	public ClockPanel(FLyrWFS layer){
+	public ClockPanel(FLyrWFS layer) {
 		super();
 		initialize();
 		this.layer = layer;
-		this.setExpiryTime(layer.getWfstExpiryTime());		
+		this.setExpiryTime(layer.getWfstExpiryTime());
 		addActionListener(new ClockWindowListener(this));
 	}
 
 	/**
 	 * Initializes the panel
 	 */
-	private void initialize(){
+	private void initialize() {
 		setLayout(new java.awt.BorderLayout());
 		add(getWfstButton(), java.awt.BorderLayout.WEST);
 		add(getWfstTextField(), java.awt.BorderLayout.CENTER);
 	}
-	
+
 	/**
 	 * @return the value of the expiry text
 	 */
-	public int getExpiryTime(){
+	public int getExpiryTime() {
 		try {
 			return Integer.parseInt(getWfstTextField().getText());
-		} catch (NumberFormatException nfe){
+		} catch (NumberFormatException nfe) {
 			return 0;
 		}
 	}
-	
+
 	/**
 	 * Sets the expiry time
+	 * 
 	 * @param i
 	 */
-	public void setExpiryTime(int i){
+	public void setExpiryTime(int i) {
 		getWfstTextField().setExpiryTime(i);
 	}
 
 	/**
 	 * @return the WFST text field
 	 */
-	private ClockText getWfstTextField(){
-		if (wfstText == null){
-			wfstText = new ClockText();	
+	private ClockText getWfstTextField() {
+		if (wfstText == null) {
+			wfstText = new ClockText();
 			wfstText.setEditable(false);
 		}
 		return wfstText;
@@ -122,26 +123,30 @@ public class ClockPanel extends JPanel implements IControl{
 	/**
 	 * @return the WFST button
 	 */
-	private JButton getWfstButton(){
-		if (wfstButton == null){
+	private JButton getWfstButton() {
+		if (wfstButton == null) {
 			wfstButton = new JButton();
-			wfstButton.setPreferredSize(new Dimension(40,40));
+			wfstButton.setPreferredSize(new Dimension(40, 40));
 			wfstButton.setActionCommand(LOCKFEATURE_ACTIONCOMMAND);
-			wfstButton.setIcon(new ImageIcon(this.getClass().getClassLoader().getResource("images/clock.png")));
+			wfstButton.setIcon(new ImageIcon(this.getClass().getClassLoader()
+					.getResource("images/clock.png")));
 		}
 		return wfstButton;
 	}
-	
+
 	/**
 	 * Start the time
 	 */
-	public void startTime(){
-		new TimeCounter(getExpiryTime()).start();		
+	public void startTime() {
+		new TimeCounter(getExpiryTime()).start();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.controls.IControl#addActionListener(java.awt.event.ActionListener)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.controls.IControl#addActionListener(java.awt.event
+	 * .ActionListener)
 	 */
 	public void addActionListener(ActionListener listener) {
 		// TODO Auto-generated method stub
@@ -150,7 +155,10 @@ public class ClockPanel extends JPanel implements IControl{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.controls.IControl#removeActionListener(java.awt.event.ActionListener)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.controls.IControl#removeActionListener(java.awt.event
+	 * .ActionListener)
 	 */
 	public void removeActionListener(ActionListener listener) {
 		// TODO Auto-generated method stub
@@ -159,6 +167,7 @@ public class ClockPanel extends JPanel implements IControl{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.controls.IControl#setValue(java.lang.Object)
 	 */
 	public Object setValue(Object value) {
@@ -171,72 +180,75 @@ public class ClockPanel extends JPanel implements IControl{
 	public FLyrWFS getLayer() {
 		return layer;
 	}
-	
+
 	/**
 	 * Closes the thread
 	 */
 	public void setClosed() {
 		this.isClosed = true;
 	}
-		
+
 	/**
 	 * It closes the window
 	 */
-	protected void closeWindow(){
-		
+	protected void closeWindow() {
+
 	}
-	
+
 	/**
 	 * To control the expiry time
+	 * 
 	 * @author Jorge Piera Llodrá (jorge.piera@iver.es)
 	 */
-	private class TimeCounter extends Thread{
+	private class TimeCounter extends Thread {
 		int milis = 0;
-		
-		public TimeCounter(int minutes){
+
+		public TimeCounter(int minutes) {
 			milis = minutes * 1000 * 60;
 		}
-	
+
 		/*
 		 * (non-Javadoc)
+		 * 
 		 * @see java.lang.Thread#run()
 		 */
 		public void run() {
 			try {
 				printTime();
-				while(!isClosed){
+				while (!isClosed) {
 					sleep(1000);
-					milis = milis - 1000;				
+					milis = milis - 1000;
 					printTime();
-				}				
+				}
 			} catch (InterruptedException e) {
 				NotificationManager.addError(e);
 			}
 		}
-		
+
 		/**
 		 * Print the time into the text field
 		 */
-		private void printTime(){
-			try{
+		private void printTime() {
+			try {
 				Time time = new Time(milis);
-				if (milis < 3600000 ){
+				if (milis < 3600000) {
 					time.setHours(0);
 				}
-				if(milis < 60000){
+				if (milis < 60000) {
 					getWfstTextField().setWarning();
 				}
-				if (milis == 0){
-					JOptionPane.showMessageDialog(
-							(Component) PluginServices.getMDIManager().getActiveWindow(),
-							PluginServices.getText(this, "wfst_layer_cant_be_saved_message"),
-							PluginServices.getText(this, "wfst_layer_cant_be_saved_window"),
+				if (milis == 0) {
+					JOptionPane.showMessageDialog((Component) PluginServices
+							.getMDIManager().getActiveWindow(), PluginServices
+							.getText(this, "wfst_layer_cant_be_saved_message"),
+							PluginServices.getText(this,
+									"wfst_layer_cant_be_saved_window"),
 							JOptionPane.WARNING_MESSAGE);
 					layer.setWfstEditing(false);
-					closeWindow();					
+					closeWindow();
 				}
 				getWfstTextField().setText(time.toString());
-			}catch(Exception e){
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}

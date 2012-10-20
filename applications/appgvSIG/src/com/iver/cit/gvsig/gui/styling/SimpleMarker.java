@@ -122,38 +122,38 @@ import com.iver.andami.messages.NotificationManager;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol;
 import com.iver.cit.gvsig.gui.panels.ColorChooserPanel;
-import com.iver.cit.gvsig.gui.styling.AbstractTypeSymbolEditor;
-import com.iver.cit.gvsig.gui.styling.EditorTool;
-import com.iver.cit.gvsig.gui.styling.JComboBoxSimpleMarkeStyles;
-import com.iver.cit.gvsig.gui.styling.SymbolEditor;
 
 /**
  * SimpleMarker allows the user to store and modify the main properties that
- * define a <b>simple marker</b>.<p>
+ * define a <b>simple marker</b>.
+ * <p>
  * <p>
  * This functionality is carried out thanks to a tab (simple marker and mask)
- * which are included in the panel to edit the properities of a symbol (SymbolEditor)
- * how is explained in AbstractTypeSymbolEditor.<p>
+ * which are included in the panel to edit the properities of a symbol
+ * (SymbolEditor) how is explained in AbstractTypeSymbolEditor.
+ * <p>
  * <p>
  * This tab (Simple Marker)allows the user to change the different attributes
  * which are color (<b>jccColor</b>),text size (<b>txtSize</b>),text offset
- * (<b>txtXOffset</b> and <b>txtXOffset</b>), style of the marker (<b></b>)
- * the width (<b>txtWidth</b>) and the style of the line (<b>cmbStyle</b>)
- * and the color of the outline(<b>jccOutlineColor</b>).<p>
- *
- *@see Mask
- *@see AbstractTypeSymbolEditor
- *@author jaume dominguez faus - jaume.dominguez@iver.es
+ * (<b>txtXOffset</b> and <b>txtXOffset</b>), style of the marker (<b></b>) the
+ * width (<b>txtWidth</b>) and the style of the line (<b>cmbStyle</b>) and the
+ * color of the outline(<b>jccOutlineColor</b>).
+ * <p>
+ * 
+ * @see Mask
+ * @see AbstractTypeSymbolEditor
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
-public class SimpleMarker extends AbstractTypeSymbolEditor implements ActionListener, FocusListener{
+public class SimpleMarker extends AbstractTypeSymbolEditor implements
+		ActionListener, FocusListener {
 
 	private ArrayList tabs = new ArrayList();
 	private ColorChooserPanel jccColor;
 	private JIncrementalNumberField txtSize;
 	private JIncrementalNumberField txtXOffset;
 	private JIncrementalNumberField txtYOffset;
-	//TODO: Comentarizado hasta que mask esté acabado
-//	private Mask mask;
+	// TODO: Comentarizado hasta que mask esté acabado
+	// private Mask mask;
 	private JComboBoxSimpleMarkeStyles cmbStyle;
 	private JCheckBox chkUseOutline;
 	private ColorChooserPanel jccOutlineColor;
@@ -162,15 +162,16 @@ public class SimpleMarker extends AbstractTypeSymbolEditor implements ActionList
 		super(owner);
 		initialize();
 	}
+
 	/**
-	 * Initializes the parameters that define a simplemarker.To do it,
-	 * a tab is created inside the SymbolEditor panel with default values
-	 *  for the different attributes of the simple marker.Also, a mask will be
-	 *  added as a new tab.
+	 * Initializes the parameters that define a simplemarker.To do it, a tab is
+	 * created inside the SymbolEditor panel with default values for the
+	 * different attributes of the simple marker.Also, a mask will be added as a
+	 * new tab.
 	 */
 
 	private void initialize() {
-		JPanel myTab = new JPanel(new FlowLayout(FlowLayout.LEADING, 5,5));
+		JPanel myTab = new JPanel(new FlowLayout(FlowLayout.LEADING, 5, 5));
 		myTab.setName(PluginServices.getText(this, "simple_marker"));
 		GridBagLayoutPanel aux = new GridBagLayoutPanel();
 
@@ -178,39 +179,38 @@ public class SimpleMarker extends AbstractTypeSymbolEditor implements ActionList
 		jccColor = new ColorChooserPanel(true);
 		jccColor.setAlpha(255);
 
-		aux.addComponent(PluginServices.getText(this, "color")+":",
-				jccColor	);
+		aux.addComponent(PluginServices.getText(this, "color") + ":", jccColor);
 
 		// marker width
 		txtSize = new JIncrementalNumberField("5", 25);
-		aux.addComponent(PluginServices.getText(this, "size")+":",
-				txtSize );
+		aux.addComponent(PluginServices.getText(this, "size") + ":", txtSize);
 		txtSize.setDouble(5);
 
 		// marker xOffset
 		txtXOffset = new JIncrementalNumberField("0", 25);
-		aux.addComponent(PluginServices.getText(this, "x_offset")+":",
-				txtXOffset );
-
+		aux.addComponent(PluginServices.getText(this, "x_offset") + ":",
+				txtXOffset);
 
 		// marker width
 		txtYOffset = new JIncrementalNumberField("0", 25);
-		aux.addComponent(PluginServices.getText(this, "y_offset")+":",
-				txtYOffset );
+		aux.addComponent(PluginServices.getText(this, "y_offset") + ":",
+				txtYOffset);
 
 		// marker style
 		cmbStyle = new JComboBoxSimpleMarkeStyles();
-		aux.addComponent(PluginServices.getText(this, "marker_style")+":",
+		aux.addComponent(PluginServices.getText(this, "marker_style") + ":",
 				cmbStyle);
 
 		// use outline
-		chkUseOutline = new JCheckBox(PluginServices.getText(this, "use_outline"));
+		chkUseOutline = new JCheckBox(PluginServices.getText(this,
+				"use_outline"));
 		aux.addComponent(chkUseOutline);
 
 		// outline color
 		jccOutlineColor = new ColorChooserPanel(true);
 		jccOutlineColor.setAlpha(255);
-		aux.addComponent(PluginServices.getText(this, "outline_color")+":", jccOutlineColor);
+		aux.addComponent(PluginServices.getText(this, "outline_color") + ":",
+				jccOutlineColor);
 
 		aux.setPreferredSize(new Dimension(300, 300));
 		myTab.add(aux);
@@ -218,7 +218,6 @@ public class SimpleMarker extends AbstractTypeSymbolEditor implements ActionList
 		// initialize defaults
 		jccColor.setColor(Color.BLACK);
 		cmbStyle.setSymbolColor(jccColor.getColor());
-
 
 		jccColor.addActionListener(this);
 		txtSize.addActionListener(this);
@@ -233,8 +232,8 @@ public class SimpleMarker extends AbstractTypeSymbolEditor implements ActionList
 
 		tabs.add(myTab);
 
-//		mask = new Mask(this);
-//		tabs.add(mask);
+		// mask = new Mask(this);
+		// tabs.add(mask);
 	}
 
 	public ISymbol getLayer() {
@@ -242,12 +241,11 @@ public class SimpleMarker extends AbstractTypeSymbolEditor implements ActionList
 		layer.setColor(jccColor.getColor());
 		layer.setIsShapeVisible(true);
 		layer.setSize(txtSize.getDouble());
-//		layer.setUnit(owner.getUnit());
-//		layer.setReferenceSystem(owner.getUnitsReferenceSystem());
-		layer.setOffset(new Point2D.Double(
-				txtXOffset.getDouble(),
-				txtYOffset.getDouble()));
-//		layer.setMask(mask.getMask());
+		// layer.setUnit(owner.getUnit());
+		// layer.setReferenceSystem(owner.getUnitsReferenceSystem());
+		layer.setOffset(new Point2D.Double(txtXOffset.getDouble(), txtYOffset
+				.getDouble()));
+		// layer.setMask(mask.getMask());
 		layer.setStyle(((Integer) cmbStyle.getSelectedItem()).intValue());
 		layer.setOutlined(chkUseOutline.isSelected());
 		layer.setOutlineColor(jccOutlineColor.getColor());
@@ -267,7 +265,8 @@ public class SimpleMarker extends AbstractTypeSymbolEditor implements ActionList
 		try {
 			if (layer == null) {
 				// initialize defaults
-				System.err.println("SimpleLine.java:: should be unreachable code");
+				System.err
+						.println("SimpleLine.java:: should be unreachable code");
 				jccColor.setColor(Color.BLACK);
 
 				txtSize.setDouble(1.0);
@@ -286,11 +285,12 @@ public class SimpleMarker extends AbstractTypeSymbolEditor implements ActionList
 				cmbStyle.setSelectedItem(new Integer(sym.getStyle()));
 			}
 		} catch (IndexOutOfBoundsException ioEx) {
-			NotificationManager.addWarning("Symbol layer index out of bounds", ioEx);
+			NotificationManager.addWarning("Symbol layer index out of bounds",
+					ioEx);
 		} catch (ClassCastException ccEx) {
-			NotificationManager.addWarning("Illegal casting from " +
-					layer.getClassName() + " to " + getSymbolClass().
-					getName() + ".", ccEx);
+			NotificationManager.addWarning(
+					"Illegal casting from " + layer.getClassName() + " to "
+							+ getSymbolClass().getName() + ".", ccEx);
 
 		}
 	}
@@ -306,10 +306,12 @@ public class SimpleMarker extends AbstractTypeSymbolEditor implements ActionList
 	public EditorTool[] getEditorTools() {
 		return null;
 	}
+
 	public void focusGained(FocusEvent e) {
 		// TODO Auto-generated method stub
 
 	}
+
 	public void focusLost(FocusEvent e) {
 		fireSymbolChangedEvent();
 

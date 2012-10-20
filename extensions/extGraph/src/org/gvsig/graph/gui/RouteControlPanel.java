@@ -233,7 +233,8 @@ import com.vividsolutions.jts.geom.Point;
 
 public class RouteControlPanel extends JPanel implements SingletonWindow,
 		ActionListener, IFlagListener {
-	private static Logger logger = Logger.getLogger(RouteControlPanel.class.getName());
+	private static Logger logger = Logger.getLogger(RouteControlPanel.class
+			.getName());
 
 	WindowInfo wi;
 
@@ -269,8 +270,7 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 
 	private JPanel southPanel;
 
-	String[] colName = new String[] {
-			PluginServices.getText(this, "enable"),
+	String[] colName = new String[] { PluginServices.getText(this, "enable"),
 			PluginServices.getText(this, "stage"),
 			PluginServices.getText(this, "cost"), };
 
@@ -302,10 +302,11 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 		}
 
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			// Parece un fallo de java!! ¿? Tengo que controlar que rowIndex no sea mayor que getRowCount()!!
+			// Parece un fallo de java!! ¿? Tengo que controlar que rowIndex no
+			// sea mayor que getRowCount()!!
 			if (rowIndex >= getRowCount())
 				return null;
-			
+
 			GvFlag flag = (GvFlag) _getFlags().get(rowIndex);
 			switch (columnIndex) {
 			case 0:
@@ -320,8 +321,7 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 		}
 
 		public Class getColumnClass(int columnIndex) {
-			switch (columnIndex)
-			{
+			switch (columnIndex) {
 			case 0:
 				return Boolean.class;
 			case 1:
@@ -348,8 +348,7 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 			if (rowIndex >= getRowCount())
 				return;
 			GvFlag flag = (GvFlag) _getFlags().get(rowIndex);
-			switch (columnIndex)
-			{
+			switch (columnIndex) {
 			case 0:
 				Boolean bAux = (Boolean) aValue;
 				flag.setEnabled(bAux.booleanValue());
@@ -360,10 +359,10 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 				flag.setDescription(strAux);
 				return;
 
-//			case 2: // No es editable
-//				Double dblAux = (Double) aValue;
-//				flag.setCost(dblAux.doubleValue());
-//				return;
+				// case 2: // No es editable
+				// Double dblAux = (Double) aValue;
+				// flag.setCost(dblAux.doubleValue());
+				// return;
 
 			}
 
@@ -373,37 +372,33 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 
 	/**
 	 * This method initializes
-	 *
+	 * 
 	 */
 	public RouteControlPanel(Network network) {
 		super();
 		this.network = network;
-//		GvFlag[] flags = network.getFlags();
-//		List vflags = _getFlags();
-//		for (int i = 0; i < flags.length; i++) {
-//			vflags.add(flags[i]);
-//		}
+		// GvFlag[] flags = network.getFlags();
+		// List vflags = _getFlags();
+		// for (int i = 0; i < flags.length; i++) {
+		// vflags.add(flags[i]);
+		// }
 		initialize();
 	}
 
-	public void refresh(){
-//		GvFlag[] flags = network.getFlags();
-//		List vflags = _getFlags();
-//		List tempFlags = Arrays.asList(flags);
-//		vflags.addAll(tempFlags);
-		lblFlagAmout.setText(String.valueOf(_getFlags()
-				.size()));
+	public void refresh() {
+		// GvFlag[] flags = network.getFlags();
+		// List vflags = _getFlags();
+		// List tempFlags = Arrays.asList(flags);
+		// vflags.addAll(tempFlags);
+		lblFlagAmout.setText(String.valueOf(_getFlags().size()));
 		updateTotalCost();
 		ListSelectionModel rowSM = tblStages.getSelectionModel();
 		getChkTSP().setEnabled((_getFlags().size() > 2));
 		getChkReturnToOrigin().setEnabled((_getFlags().size() > 1));
-		if (_getFlags().size() == 0)
-		{
+		if (_getFlags().size() == 0) {
 			getBtnCenterOnFlag().setEnabled(false);
 			getBtnSaveStage().setEnabled(false);
-		}
-		else
-		{
+		} else {
 			getBtnCenterOnFlag().setEnabled(!rowSM.isSelectionEmpty());
 			getBtnSaveStage().setEnabled(true);
 		}
@@ -411,11 +406,11 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 		System.out.println("Actualizo tabla");
 
 	}
+
 	private void processLayer(FLayer layer) {
 		if (layer.isActive()) {
 			if (layer instanceof FLyrVect) {
-				Network net = (Network) layer
-						.getProperty("network");
+				Network net = (Network) layer.getProperty("network");
 				if (net != null) {
 					network = net;
 					network.addFlagListener(this);
@@ -435,8 +430,8 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 				}
 			};
 			mapCtrl.getMapContext().getLayers().addLayerListener(listener);
-			mapCtrl.getMapContext().getLayers().addLayerCollectionListener(
-					listener);
+			mapCtrl.getMapContext().getLayers()
+					.addLayerCollectionListener(listener);
 			if (net != null) {
 				network = net;
 				network.addFlagListener(this);
@@ -456,14 +451,14 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 */
 	protected void initialize() {
 		BorderLayout borderLayout = new BorderLayout();
 		borderLayout.setHgap(10);
 		borderLayout.setVgap(10);
 		JPanel cont = new JPanel(borderLayout);
-//		cont.setPreferredSize(new Dimension(490, 320));
+		// cont.setPreferredSize(new Dimension(490, 320));
 		this.setPreferredSize(new Dimension(460, 280));
 		cont.add(getWestPanel(), BorderLayout.CENTER);
 		cont.add(getEastPanel(), BorderLayout.EAST);
@@ -502,8 +497,8 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 	public WindowInfo getWindowInfo() {
 		if (wi == null) {
 			wi = new WindowInfo(WindowInfo.MODELESSDIALOG
-				    | WindowInfo.MAXIMIZABLE
-					| WindowInfo.ICONIFIABLE | WindowInfo.PALETTE);
+					| WindowInfo.MAXIMIZABLE | WindowInfo.ICONIFIABLE
+					| WindowInfo.PALETTE);
 			wi.setWidth((int) this.getPreferredSize().getWidth() + 10);
 			wi.setHeight(300);
 			wi.setTitle(PluginServices.getText(this, "route_control_panel"));
@@ -511,14 +506,13 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 		return wi;
 	}
 
-	public Object getWindowProfile(){
+	public Object getWindowProfile() {
 		return WindowInfo.TOOL_PROFILE;
 	}
 
-
 	/**
 	 * This method initializes westPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	protected JPanel getWestPanel() {
@@ -568,7 +562,7 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 
 	/**
 	 * This method initializes scrlStages
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	protected JScrollPane getScrlStages() {
@@ -598,14 +592,14 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 			if (!flags[i].isEnabled())
 				continue;
 			getBtnSaveStage().setEnabled(true);
-			if (flags[i].getCost() >= Double.MAX_VALUE)
-			{
-				lblCost.setText(PluginServices.getText(this, "no_se_puede_pasar_por_todas_las_paradas"));
+			if (flags[i].getCost() >= Double.MAX_VALUE) {
+				lblCost.setText(PluginServices.getText(this,
+						"no_se_puede_pasar_por_todas_las_paradas"));
 				return;
 			}
-			if (flags[i].getCost() < 0)
-			{
-				lblCost.setText(PluginServices.getText(this, "solucion_no_valida"));
+			if (flags[i].getCost() < 0) {
+				lblCost.setText(PluginServices.getText(this,
+						"solucion_no_valida"));
 				return;
 			}
 
@@ -634,7 +628,7 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 
 	/**
 	 * This method initializes tblStages
-	 *
+	 * 
 	 * @return javax.swing.JTable
 	 */
 	protected JTable getTblStages() {
@@ -661,33 +655,32 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 			// Ask to be notified of selection changes.
 			ListSelectionModel rowSM = tblStages.getSelectionModel();
 			rowSM.addListSelectionListener(new ListSelectionListener() {
-			    public void valueChanged(ListSelectionEvent e) {
-			        //Ignore extra messages.
-			        if (e.getValueIsAdjusting())
-			        	return;
+				public void valueChanged(ListSelectionEvent e) {
+					// Ignore extra messages.
+					if (e.getValueIsAdjusting())
+						return;
 
-			        ListSelectionModel lsm =
-			            (ListSelectionModel)e.getSource();
-		        	getBtnCenterOnFlag().setEnabled(!lsm.isSelectionEmpty());
+					ListSelectionModel lsm = (ListSelectionModel) e.getSource();
+					getBtnCenterOnFlag().setEnabled(!lsm.isSelectionEmpty());
 					int[] selected = tblStages.getSelectedRows();
 					if (selected.length == 0)
 						return;
 					GvFlag flag = (GvFlag) _getFlags().get(selected[0]);
 					Point2D p = flag.getOriginalPoint();
-		        	mapCtrl.repaint(); // borramos el de antes
-		        	NetworkUtils.flashPoint(mapCtrl, p.getX(), p.getY());
-			    }
-			});
-
-			tblStages.getModel().addTableModelListener(new TableModelListener() {
-
-				public void tableChanged(TableModelEvent e) {
-					System.out.println("Table model changed");
-//					getBtnCenterOnFlag().setEnabled(false);
+					mapCtrl.repaint(); // borramos el de antes
+					NetworkUtils.flashPoint(mapCtrl, p.getX(), p.getY());
 				}
-
 			});
 
+			tblStages.getModel().addTableModelListener(
+					new TableModelListener() {
+
+						public void tableChanged(TableModelEvent e) {
+							System.out.println("Table model changed");
+							// getBtnCenterOnFlag().setEnabled(false);
+						}
+
+					});
 
 		}
 		return tblStages;
@@ -698,10 +691,10 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 	}
 
 	List _getFlags() {
-//		if (routeFlags == null) {
-//			routeFlags = new ArrayList();
-//		}
-//		return routeFlags;
+		// if (routeFlags == null) {
+		// routeFlags = new ArrayList();
+		// }
+		// return routeFlags;
 
 		return network.getOriginaFlags();
 	}
@@ -712,7 +705,7 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 
 	/**
 	 * This method initializes eastPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	protected JPanel getEastPanel() {
@@ -720,14 +713,15 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 			GridLayout layout = new GridLayout();
 			layout.setColumns(1);
 			layout.setVgap(5);
-			
+
 			panelButtonsEast.add(getBtnLoadStage());
 			panelButtonsEast.add(getBtnSaveStage());
 			panelButtonsEast.add(getBtnSaveRoute());
 			panelButtonsEast.add(getBtnCenterOnFlag());
 			panelButtonsEast.add(getBtnSetVelocities());
-			
-			panelButtonsEast.add(new JLabel(PluginServices.getText(this, "tolerance") + ":"));
+
+			panelButtonsEast.add(new JLabel(PluginServices.getText(this,
+					"tolerance") + ":"));
 			panelButtonsEast.add(getTxtTolerance());
 			panelButtonsEast.add(getChkTSP());
 			panelButtonsEast.add(getChkReturnToOrigin());
@@ -742,9 +736,9 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 	public JTextField getTxtTolerance() {
 		if (txtTolerance == null) {
 			txtTolerance = new JTextField();
-			txtTolerance.setToolTipText(PluginServices.getText(this, "map_units"));
-			txtTolerance.setText(PluginServices.getText(this,
-					"10"));
+			txtTolerance.setToolTipText(PluginServices.getText(this,
+					"map_units"));
+			txtTolerance.setText(PluginServices.getText(this, "10"));
 		}
 		return txtTolerance;
 	}
@@ -752,9 +746,8 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 	protected JCheckBox getChkTSP() {
 		if (chkTSP == null) {
 			chkTSP = new JCheckBox();
-			chkTSP.setText(PluginServices.getText(this,
-					"order_stops"));
-//			chkTSP.setEnabled(false);
+			chkTSP.setText(PluginServices.getText(this, "order_stops"));
+			// chkTSP.setEnabled(false);
 			chkTSP.addActionListener(this);
 		}
 		return chkTSP;
@@ -765,7 +758,7 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 			chkReturnToOrigin = new JCheckBox();
 			chkReturnToOrigin.setText(PluginServices.getText(this,
 					"return_to_origin"));
-//			chkReturnToOrigin.setEnabled(false);
+			// chkReturnToOrigin.setEnabled(false);
 			chkReturnToOrigin.addActionListener(this);
 		}
 		return chkReturnToOrigin;
@@ -787,7 +780,7 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 			btnSetVelocities = new JButton();
 			btnSetVelocities.setText(PluginServices.getText(this,
 					"set_velocities"));
-//			btnSetVelocities.setEnabled(false);
+			// btnSetVelocities.setEnabled(false);
 
 			// TODO: PONERLO VISIBLE CUANDO SE CORRIJA LO DE ABRIR EL
 			// DIALOGO Y LEER LAS VELOCIDADES QUE HABÍA ANTES.
@@ -808,7 +801,7 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 
 	/**
 	 * This method initializes defaultTableModel
-	 *
+	 * 
 	 * @return javax.swing.table.DefaultTableModel
 	 */
 	protected TableModel getTableModel() {
@@ -817,7 +810,7 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 
 	/**
 	 * This method initializes btnLoadStage
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	protected JButton getBtnLoadStage() {
@@ -831,7 +824,7 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 
 	/**
 	 * This method initializes btnSaveStages
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	protected JButton getBtnSaveStage() {
@@ -898,7 +891,7 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 				return;
 			GvFlag flag = (GvFlag) _getFlags().get(selected[0]);
 			IWindow window = PluginServices.getMDIManager().getActiveWindow();
-			if(! (window instanceof IView))
+			if (!(window instanceof IView))
 				return;
 			IView view = (IView) window;
 			ViewPort vp = view.getMapControl().getViewPort();
@@ -912,21 +905,19 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 
 			r.width = width;
 			r.height = height;
-			r.x = xNC - width/2;
-			r.y = yNC - height/2;
+			r.x = xNC - width / 2;
+			r.y = yNC - height / 2;
 
 			vp.setExtent(r);
-
-
 
 		}
 		repaint();
 	}
 
 	private void setVelocities() {
-		if(network == null){
+		if (network == null) {
 			IWindow window = PluginServices.getMDIManager().getActiveWindow();
-			if(! (window instanceof IView))
+			if (!(window instanceof IView))
 				return;
 			IView view = (View) window;
 			MapControl mapControl = view.getMapControl();
@@ -945,15 +936,14 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 
 		ArrayList lstTipoTramo = network.getEdgeTypes();
 
-		// I try to use a generic multiinputdialog. All this stuff can be extracted
+		// I try to use a generic multiinputdialog. All this stuff can be
+		// extracted
 		// from here and subclass MultiInputDlg
-		Hashtable veloMeters  = network.getVelocities();
+		Hashtable veloMeters = network.getVelocities();
 		ArrayList veloKm = new ArrayList(lstTipoTramo.size());
-		if (veloMeters != null)
-		{
+		if (veloMeters != null) {
 			NumberFormat nf = NumberFormat.getInstance();
-			for (int i=0; i<lstTipoTramo.size(); i++)
-			{
+			for (int i = 0; i < lstTipoTramo.size(); i++) {
 				Object key = lstTipoTramo.get(i);
 				Double velM = (Double) veloMeters.get(key);
 				System.out.println("Vel. Metros / seg = " + velM);
@@ -962,16 +952,12 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 				else
 					veloKm.add(i, "0");
 			} // for
-		}
-		else
-		{
-			for (int i=0; i<lstTipoTramo.size(); i++)
-			{
+		} else {
+			for (int i = 0; i < lstTipoTramo.size(); i++) {
 				veloKm.add(i, "60");
 			} // for
 		}
-		try
-		{
+		try {
 			String msg = PluginServices.getText(this, "msg_set_velocities");
 			MultiInputDlg dlg = new MultiInputDlg(msg, lstTipoTramo, veloKm);
 			dlg.setResizable(true);
@@ -983,37 +969,36 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 			if (dlg.isCanceled())
 				return;
 
-			veloKm = dlg.getRightValues(); //{120, 110, 90, 80, 70, 60, 50, 40};
+			veloKm = dlg.getRightValues(); // {120, 110, 90, 80, 70, 60, 50,
+											// 40};
 			veloMeters = new Hashtable(veloKm.size());
-			for (int i=0; i<veloKm.size(); i++)
-			{
+			for (int i = 0; i < veloKm.size(); i++) {
 				Object key = lstTipoTramo.get(i);
-				veloMeters.put(key, new Double(Double.parseDouble((String) veloKm.get(i)) / 3.6));
+				veloMeters
+						.put(key,
+								new Double(Double.parseDouble((String) veloKm
+										.get(i)) / 3.6));
 			}
 
 			network.setVelocities(veloMeters);
-		}
-		catch(Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 
 	}
 
 	private void invalidateSolution() {
-		for (int i=0; i < _getFlags().size(); i++)
-		{
+		for (int i = 0; i < _getFlags().size(); i++) {
 			GvFlag flag = (GvFlag) _getFlags().get(i);
 			flag.setCost(-1.0);
 		}
 		updateTotalCost();
 	}
 
-	private void saveStage(){
-		if(network == null){
+	private void saveStage() {
+		if (network == null) {
 			IWindow window = PluginServices.getMDIManager().getActiveWindow();
-			if(! (window instanceof IView))
+			if (!(window instanceof IView))
 				return;
 			IView view = (View) window;
 			MapControl mapControl = view.getMapControl();
@@ -1032,21 +1017,27 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 
 		List features = new ArrayList();
 		GvFlag[] flags = network.getFlags();
-		for(int i = 0; i < flags.length; i++){
+		for (int i = 0; i < flags.length; i++) {
 			GvFlag flag = flags[i];
 			// Solo se guardan los flags habilitados
 			if (!flag.isEnabled())
 				continue;
 			FPoint2D point = new FPoint2D(flag.getOriginalPoint());
 			Value[] values = new Value[6];
-			values[GvFlag.ID_FLAG_INDEX] = ValueFactory.createValue(flag.getIdFlag());
-			values[GvFlag.ID_ARC_INDEX] = ValueFactory.createValue(flag.getIdArc());
-			values[GvFlag.DESCRIPTION_INDEX] = ValueFactory.createValue(flag.getDescription());
-			values[GvFlag.DIREC_INDEX] = ValueFactory.createValue(flag.getDirec());
+			values[GvFlag.ID_FLAG_INDEX] = ValueFactory.createValue(flag
+					.getIdFlag());
+			values[GvFlag.ID_ARC_INDEX] = ValueFactory.createValue(flag
+					.getIdArc());
+			values[GvFlag.DESCRIPTION_INDEX] = ValueFactory.createValue(flag
+					.getDescription());
+			values[GvFlag.DIREC_INDEX] = ValueFactory.createValue(flag
+					.getDirec());
 			values[GvFlag.PCT_INDEX] = ValueFactory.createValue(flag.getPct());
-			values[GvFlag.COST_INDEX] = ValueFactory.createValue(flag.getCost());
+			values[GvFlag.COST_INDEX] = ValueFactory
+					.createValue(flag.getCost());
 			IGeometry geo = ShapeFactory.createPoint2D(point);
-			DefaultFeature feature = new DefaultFeature(geo, values, new Integer(flag.getIdFlag()).toString() );
+			DefaultFeature feature = new DefaultFeature(geo, values,
+					new Integer(flag.getIdFlag()).toString());
 			features.add(feature);
 		}
 
@@ -1055,18 +1046,17 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 		FLyrVect routeLayer = (FLyrVect) LayerFactory.createLayer("Flags",
 				driver, crs);
 
-		FormatSelectionPanel selectionPanel =
-			new FormatSelectionPanel(PluginServices.
-					getText(null,
-				"Seleccione_un_formato_para_guardar_los_flags"));
+		FormatSelectionPanel selectionPanel = new FormatSelectionPanel(
+				PluginServices.getText(null,
+						"Seleccione_un_formato_para_guardar_los_flags"));
 		PluginServices.getMDIManager().addWindow(selectionPanel);
 		if (selectionPanel.isOkButtonPressed() == false)
 			return;
-		
+
 		String format = selectionPanel.getSelectedFormat();
 		com.iver.cit.gvsig.ExportTo export = new com.iver.cit.gvsig.ExportTo();
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		if(! (window instanceof IView))
+		if (!(window instanceof IView))
 			return;
 		IView view = (View) window;
 		MapControl mapControl = view.getMapControl();
@@ -1077,50 +1067,54 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 			export.saveToPostGIS(context, routeLayer);
 		}
 	}
+
 	private void saveRoute() {
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		if(! (window instanceof IView))
+		if (!(window instanceof IView))
 			return;
 		IView view = (View) window;
 		MapControl mapControl = view.getMapControl();
 		List routes = (List) GvSession.getInstance().get(mapControl, "Route");
-		if(routes == null || routes.size() == 0){
-			JOptionPane.showMessageDialog(this, PluginServices.getText(this, "Ruta_borrada_o_inexistente"),
+		if (routes == null || routes.size() == 0) {
+			JOptionPane.showMessageDialog(this,
+					PluginServices.getText(this, "Ruta_borrada_o_inexistente"),
 					PluginServices.getText(this, "Ruta_no_encontrada"),
 					JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		Route lastRoute = (Route) routes.get(routes.size() - 1);
-		RouteMemoryDriver driver = new RouteMemoryDriver(lastRoute.getFeatureList());
+		RouteMemoryDriver driver = new RouteMemoryDriver(
+				lastRoute.getFeatureList());
 		CoordinateReferenceSystem crs = AddLayerDialog.getLastCrs();
 		FLyrVect routeLayer = (FLyrVect) LayerFactory.createLayer("Route",
 				driver, crs);
 
-		FormatSelectionPanel selectionPanel = new FormatSelectionPanel(PluginServices.getText(null,
-		"Seleccione_un_formato_para_guardar_la_ruta"));
+		FormatSelectionPanel selectionPanel = new FormatSelectionPanel(
+				PluginServices.getText(null,
+						"Seleccione_un_formato_para_guardar_la_ruta"));
 		PluginServices.getMDIManager().addWindow(selectionPanel);
 
 		String format = selectionPanel.getSelectedFormat();
 		com.iver.cit.gvsig.ExportTo export = new com.iver.cit.gvsig.ExportTo();
 		MapContext context = mapControl.getMapContext();
-			if (format.equalsIgnoreCase("SHP")) {
-				export.saveToShp(context, routeLayer);
-//			} else if (format.equalsIgnoreCase("GML")) {
-//				export.saveToGml(context, routeLayer);
-			} else if (format.equalsIgnoreCase("POSTGIS")) {
-				export.saveToPostGIS(context, routeLayer);
-			}
+		if (format.equalsIgnoreCase("SHP")) {
+			export.saveToShp(context, routeLayer);
+			// } else if (format.equalsIgnoreCase("GML")) {
+			// export.saveToGml(context, routeLayer);
+		} else if (format.equalsIgnoreCase("POSTGIS")) {
+			export.saveToPostGIS(context, routeLayer);
+		}
 	}
 
 	/**
 	 * Converts a point layer loaded in the active view's toc in a collection of
 	 * flags of the active network
-	 *
+	 * 
 	 */
 	protected void loadStages() {
 
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		if(! (window instanceof IView))
+		if (!(window instanceof IView))
 			return;
 		IView view = (IView) window;
 		MapControl mapControl = view.getMapControl();
@@ -1167,15 +1161,16 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 					return;
 
 				// Por si queremos añadir paradas a otras ya existentes
-//				_getFlags().clear();
+				// _getFlags().clear();
 
 				GvFlag flag;
 				ReadableVectorial reader = vectLyr.getSource();
 				SelectableDataSource recordset = vectLyr.getRecordset();
 				int numShapes = reader.getShapeCount();
 
-				double realTol = Double.parseDouble(getTxtTolerance().getText());
-//						.toMapDistance(FlagListener.pixelTolerance);
+				double realTol = Double
+						.parseDouble(getTxtTolerance().getText());
+				// .toMapDistance(FlagListener.pixelTolerance);
 				reader.start();
 				MathTransform trans = vectLyr.getCrsTransform();
 				DriverAttributes attr = reader.getDriverAttributes();
@@ -1185,7 +1180,7 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 						bMustClone = attr.isLoadedInMemory();
 					}
 				}
-				
+
 				ArrayList errors = new ArrayList();
 				for (int i = 0; i < numShapes; i++) {
 					IGeometry geom = reader.getShape(i);
@@ -1194,41 +1189,43 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 							geom = geom.cloneGeometry();
 						geom.reProject(trans);
 					}
-					
+
 					Geometry geo = geom.toJTSGeometry();
 					if (!((geo instanceof Point) || (geo instanceof MultiPoint)))
 						continue;
 
-
-
 					Coordinate[] coords = geo.getCoordinates();
 					if (coords.length > 1) {
-						logger.warn("The record " + i + " has " + coords.length + " coordinates. Pay attention!!");
+						logger.warn("The record " + i + " has " + coords.length
+								+ " coordinates. Pay attention!!");
 					}
 					for (int j = 0; j < coords.length; j++) {
 
 						try {
-							flag = net.addFlag(coords[j].x, coords[j].y, realTol);
-							if (flag == null)
-							{
+							flag = net.addFlag(coords[j].x, coords[j].y,
+									realTol);
+							if (flag == null) {
 								// segundo intento:
-								flag = net.addFlag(coords[j].x, coords[j].y, 4*realTol);
-								if (flag == null)
-								{
+								flag = net.addFlag(coords[j].x, coords[j].y,
+										4 * realTol);
+								if (flag == null) {
 									errors.add(new Integer(i));
 								}
 							}
-							if (flag != null)
-							{
-							// TODO: Create use a IFlagListener to do this
-							// inside flagsChanged. The best solution is
-							// to put all the code in RouteControlPanel
+							if (flag != null) {
+								// TODO: Create use a IFlagListener to do this
+								// inside flagsChanged. The best solution is
+								// to put all the code in RouteControlPanel
 								NetworkUtils.addGraphicFlag(mapControl, flag);
 							}
 						} catch (GraphException e) {
 							e.printStackTrace();
-							NotificationManager.addError("No se puedo situar el registro " + i +
-									"Por favor, compruebe que está encima de la red.", e);
+							NotificationManager
+									.addError(
+											"No se puedo situar el registro "
+													+ i
+													+ "Por favor, compruebe que está encima de la red.",
+											e);
 						}
 
 					} // for j
@@ -1236,14 +1233,19 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 				reader.stop();
 				mapControl.drawGraphics();
 				if (errors.size() > 0) {
-					String msg = PluginServices.getText(null, "these_records_are_out_from_network") + "\n";
-					for (int i =0; i < errors.size(); i++) {
+					String msg = PluginServices.getText(null,
+							"these_records_are_out_from_network") + "\n";
+					for (int i = 0; i < errors.size(); i++) {
 						msg = msg + i + " ";
 					}
-					msg = msg + "\n" + PluginServices.getText(null, "please_check_them_or_increase_tolerance");
-					JOptionPane.showMessageDialog((Component) PluginServices.getMDIManager().getActiveWindow(), msg);
+					msg = msg
+							+ "\n"
+							+ PluginServices.getText(null,
+									"please_check_them_or_increase_tolerance");
+					JOptionPane.showMessageDialog((Component) PluginServices
+							.getMDIManager().getActiveWindow(), msg);
 				}
-				
+
 				PluginServices.getMainFrame().enableControls();
 
 			} catch (BaseException e1) {
@@ -1255,7 +1257,7 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 	/**
 	 * Removes the selected flags in the component's table from: -the graphic
 	 * layer of the active view -the active network -the own table
-	 *
+	 * 
 	 */
 	private void removeStage() {
 		int[] selected = tblStages.getSelectedRows();

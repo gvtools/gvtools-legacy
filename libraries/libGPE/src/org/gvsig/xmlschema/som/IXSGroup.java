@@ -1,4 +1,5 @@
 package org.gvsig.xmlschema.som;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -58,9 +59,9 @@ package org.gvsig.xmlschema.som;
  *
  */
 /**
- * This interface represents a XML schema group element. 
- * Example:
+ * This interface represents a XML schema group element. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;group
@@ -74,10 +75,12 @@ package org.gvsig.xmlschema.som;
  * &lt;/group>&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @see http://www.w3.org/TR/xmlschema-1/#element-group
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public interface IXSGroup extends IXSComponent{
-	
+public interface IXSGroup extends IXSComponent {
+
 }

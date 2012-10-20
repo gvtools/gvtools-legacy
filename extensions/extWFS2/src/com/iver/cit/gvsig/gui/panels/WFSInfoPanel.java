@@ -114,7 +114,10 @@ import com.iver.cit.gvsig.gui.wizards.WFSWizardData;
  */
 
 /**
- * <p>Panel that provides information about the service offered by the WFS server connected.</p>
+ * <p>
+ * Panel that provides information about the service offered by the WFS server
+ * connected.
+ * </p>
  * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
@@ -123,26 +126,33 @@ public class WFSInfoPanel extends AbstractWFSPanel {
 
 	private final String bgColor0 = "\"#FEEDD6\""; // light salmon
 	private final String bgColor1 = "\"#EAEAEA\""; // light grey
-//	private final String bgColor2 = "\"#F2FEFF\""; // light blue
+	// private final String bgColor2 = "\"#F2FEFF\""; // light blue
 	private final String bgColor3 = "\"#FBFFE1\""; // light yellow
 
-	private final String service_title       = PluginServices.getText(this, "service_info");
-	private final String server              = PluginServices.getText(this, "server");
-	private final String server_type         = PluginServices.getText(this, "server_type");
-	private final String server_abstract     = PluginServices.getText(this, "server_abstract");
-	private final String server_title        = PluginServices.getText(this, "server_title");
-	private final String layers_title        = PluginServices.getText(this, "selected_layer");
-	private final String layer_title         = PluginServices.getText(this, "layer_title");
-	private final String layer_abstract      = PluginServices.getText(this, "layer_abstract");
-	private final String options			 = PluginServices.getText(this, "properties");
-	private final String layer_fields 	 	 = PluginServices.getText(this, "fields");
-	private final String layer_name			 = PluginServices.getText(this, "name");
-	private final String timeout 			 = PluginServices.getText(this, "timeout");
-	private final String buffer				 = PluginServices.getText(this, "max_features");
-	private final String layer_geometry		 = PluginServices.getText(this, "geometry");
-	private final String layer_srs			 = PluginServices.getText(this, "srs");
+	private final String service_title = PluginServices.getText(this,
+			"service_info");
+	private final String server = PluginServices.getText(this, "server");
+	private final String server_type = PluginServices.getText(this,
+			"server_type");
+	private final String server_abstract = PluginServices.getText(this,
+			"server_abstract");
+	private final String server_title = PluginServices.getText(this,
+			"server_title");
+	private final String layers_title = PluginServices.getText(this,
+			"selected_layer");
+	private final String layer_title = PluginServices.getText(this,
+			"layer_title");
+	private final String layer_abstract = PluginServices.getText(this,
+			"layer_abstract");
+	private final String options = PluginServices.getText(this, "properties");
+	private final String layer_fields = PluginServices.getText(this, "fields");
+	private final String layer_name = PluginServices.getText(this, "name");
+	private final String timeout = PluginServices.getText(this, "timeout");
+	private final String buffer = PluginServices.getText(this, "max_features");
+	private final String layer_geometry = PluginServices.getText(this,
+			"geometry");
+	private final String layer_srs = PluginServices.getText(this, "srs");
 	private JEditorPane editor = null;
-
 
 	/**
 	 * Creates a new instance of InfoPanel with double buffer and null layout
@@ -150,25 +160,26 @@ public class WFSInfoPanel extends AbstractWFSPanel {
 	public WFSInfoPanel() {
 		super();
 		initialize();
-	}	
-	
+	}
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
 	 */
 	protected void paintComponent(Graphics g) {
 		IPanelGroup panelGroup = getPanelGroup();
-		
+
 		if (panelGroup == null)
 			return;
-		
-		((WFSParamsPanel)panelGroup).refreshCapabilitiesInfo();
+
+		((WFSParamsPanel) panelGroup).refreshCapabilitiesInfo();
 		super.paintComponent(g);
 	}
 
 	/**
 	 * This method initializes editor
-	 *
+	 * 
 	 * @return javax.swing.JEditorPane
 	 */
 	private JEditorPane getEditor() {
@@ -179,17 +190,18 @@ public class WFSInfoPanel extends AbstractWFSPanel {
 		return editor;
 	}
 
-
 	/**
-	 * Fills the text pane with a data table describing the
-	 * service and the selected settings.
-	 *
-	 * @param WFSWizardData dataSource: connection info
-	 * @param WFSLayer layer: the selected layer
+	 * Fills the text pane with a data table describing the service and the
+	 * selected settings.
+	 * 
+	 * @param WFSWizardData
+	 *            dataSource: connection info
+	 * @param WFSLayer
+	 *            layer: the selected layer
 	 */
 	public void refresh(WFSLayerNode layer) {
 		WFSWizardData wizardData = getWizardData();
-		
+
 		String server_text = wizardData.getHost();
 		String server_type_text = wizardData.getServerType();
 		String server_title_text = wizardData.getTitle();
@@ -206,7 +218,7 @@ public class WFSInfoPanel extends AbstractWFSPanel {
 			server_abstract_text = "-";
 
 		String layers_html = "";
-		if (layer!=null) {
+		if (layer != null) {
 			String layer_name_text = layer.getName();
 			String layer_abstract_text = layer.getAbstract();
 			String layer_title_text = layer.getTitle();
@@ -217,117 +229,229 @@ public class WFSInfoPanel extends AbstractWFSPanel {
 			Vector<Object> fields = layer.getSelectedFields();
 			layer_fields_text = "";
 
-			for (int i=0 ; i<fields.size() ; i++){
-				XMLElement field = (XMLElement)fields.get(i);
-				if (!((field.getEntityType() != null) && (field.getEntityType().getType() == IXMLType.GML_GEOMETRY))){
-					layer_fields_text = layer_fields_text + field.getName() +
-					" (" +
-					PluginServices.getText(this,WFSUtils.getFieldType(field.getEntityType())) + ")";
-				}else{
+			for (int i = 0; i < fields.size(); i++) {
+				XMLElement field = (XMLElement) fields.get(i);
+				if (!((field.getEntityType() != null) && (field.getEntityType()
+						.getType() == IXMLType.GML_GEOMETRY))) {
+					layer_fields_text = layer_fields_text
+							+ field.getName()
+							+ " ("
+							+ PluginServices.getText(this, WFSUtils
+									.getFieldType(field.getEntityType())) + ")";
+				} else {
 					layer_fields_text = layer_fields_text + field.getName();
 				}
-				if (i < fields.size() -1){
+				if (i < fields.size() - 1) {
 					layer_fields_text = layer_fields_text + ", ";
 				}
 			}
 
-			layer_geometry_text = PluginServices.getText(this,WFSUtils.getGeometry(layer));
-			if (layer_geometry_text.equals("")){
+			layer_geometry_text = PluginServices.getText(this,
+					WFSUtils.getGeometry(layer));
+			if (layer_geometry_text.equals("")) {
 				layer_geometry_text = "-";
 			}
 
-			if (layer.getSrs().size() > 0){
-				layer_srs_text = (String)layer.getSrs().get(0);
+			if (layer.getSrs().size() > 0) {
+				layer_srs_text = (String) layer.getSrs().get(0);
 			}
 
-			if (layer_name_text ==null)
+			if (layer_name_text == null)
 				layer_name_text = "-";
-			if (layer_abstract_text==null)
+			if (layer_abstract_text == null)
 				layer_abstract_text = "-";
 			if (layer_title_text == null)
 				layer_title_text = "-";
-			String layer_html =
-				"  <tr valign=\"top\">" +
-				"     <td bgcolor=\"#D6D6D6\" align=\"right\"><font face=\"Arial\" size=\"3\" align=\"right\"><b>"+layer_name+"</b></font></td>" +
-				"     <td bgcolor="+bgColor0+"><font face=\"Arial\" size=\"3\">"+layer_name_text+"</font></td>" +
-				"  </tr>" +
-				"  <tr valign=\"top\">" +
-				"     <td width=\"119\" height=\"18\" bgcolor=\"#D6D6D6\" align=\"right\"><font face=\"Arial\" size=\"3\"><b>"+layer_title+"</b></font></td>" +
-				"     <td width=\"322\" height=\"18\" bgcolor="+bgColor1+"><font face=\"Arial\" size=\"3\">"+layer_title_text+"</font></td>" +
-				"  </tr>" +
-				"  <tr valign=\"top\">" +
-				"     <td bgcolor=\"#D6D6D6\" align=\"right\"><font face=\"Arial\" size=\"3\" align=\"right\"><b>"+layer_abstract+"</b></font></td>" +
-				"     <td bgcolor="+bgColor0+"><font face=\"Arial\" size=\"3\">"+layer_abstract_text+"</font></td>" +
-				"  </tr>" +
-				"  <tr valign=\"top\">" +
-				"     <td width=\"119\" height=\"18\" bgcolor=\"#D6D6D6\" align=\"right\"><font face=\"Arial\" size=\"3\"><b>"+layer_geometry+"</b></font></td>" +
-				"     <td width=\"322\" height=\"18\" bgcolor="+bgColor1+"><font face=\"Arial\" size=\"3\">"+layer_geometry_text+"</font></td>" +
-				"  </tr>" +
-				"  <tr valign=\"top\">" +
-				"     <td bgcolor=\"#D6D6D6\" align=\"right\"><font face=\"Arial\" size=\"3\" align=\"right\"><b>"+layer_fields+"</b></font></td>" +
-				"     <td bgcolor="+bgColor0+"><font face=\"Arial\" size=\"3\">"+layer_fields_text+"</font></td>" +
-				"  </tr>" +
-				"  <tr valign=\"top\">" +
-				"     <td width=\"119\" height=\"18\" bgcolor=\"#D6D6D6\" align=\"right\"><font face=\"Arial\" size=\"3\"><b>"+layer_srs+"</b></font></td>" +
-				"     <td width=\"322\" height=\"18\" bgcolor="+bgColor1+"><font face=\"Arial\" size=\"3\">"+layer_srs_text+"</font></td>" +
-				"  </tr>" +
-				"  <tr>" +
-				"  </tr>";
+			String layer_html = "  <tr valign=\"top\">"
+					+ "     <td bgcolor=\"#D6D6D6\" align=\"right\"><font face=\"Arial\" size=\"3\" align=\"right\"><b>"
+					+ layer_name
+					+ "</b></font></td>"
+					+ "     <td bgcolor="
+					+ bgColor0
+					+ "><font face=\"Arial\" size=\"3\">"
+					+ layer_name_text
+					+ "</font></td>"
+					+ "  </tr>"
+					+ "  <tr valign=\"top\">"
+					+ "     <td width=\"119\" height=\"18\" bgcolor=\"#D6D6D6\" align=\"right\"><font face=\"Arial\" size=\"3\"><b>"
+					+ layer_title
+					+ "</b></font></td>"
+					+ "     <td width=\"322\" height=\"18\" bgcolor="
+					+ bgColor1
+					+ "><font face=\"Arial\" size=\"3\">"
+					+ layer_title_text
+					+ "</font></td>"
+					+ "  </tr>"
+					+ "  <tr valign=\"top\">"
+					+ "     <td bgcolor=\"#D6D6D6\" align=\"right\"><font face=\"Arial\" size=\"3\" align=\"right\"><b>"
+					+ layer_abstract
+					+ "</b></font></td>"
+					+ "     <td bgcolor="
+					+ bgColor0
+					+ "><font face=\"Arial\" size=\"3\">"
+					+ layer_abstract_text
+					+ "</font></td>"
+					+ "  </tr>"
+					+ "  <tr valign=\"top\">"
+					+ "     <td width=\"119\" height=\"18\" bgcolor=\"#D6D6D6\" align=\"right\"><font face=\"Arial\" size=\"3\"><b>"
+					+ layer_geometry
+					+ "</b></font></td>"
+					+ "     <td width=\"322\" height=\"18\" bgcolor="
+					+ bgColor1
+					+ "><font face=\"Arial\" size=\"3\">"
+					+ layer_geometry_text
+					+ "</font></td>"
+					+ "  </tr>"
+					+ "  <tr valign=\"top\">"
+					+ "     <td bgcolor=\"#D6D6D6\" align=\"right\"><font face=\"Arial\" size=\"3\" align=\"right\"><b>"
+					+ layer_fields
+					+ "</b></font></td>"
+					+ "     <td bgcolor="
+					+ bgColor0
+					+ "><font face=\"Arial\" size=\"3\">"
+					+ layer_fields_text
+					+ "</font></td>"
+					+ "  </tr>"
+					+ "  <tr valign=\"top\">"
+					+ "     <td width=\"119\" height=\"18\" bgcolor=\"#D6D6D6\" align=\"right\"><font face=\"Arial\" size=\"3\"><b>"
+					+ layer_srs
+					+ "</b></font></td>"
+					+ "     <td width=\"322\" height=\"18\" bgcolor="
+					+ bgColor1
+					+ "><font face=\"Arial\" size=\"3\">"
+					+ layer_srs_text
+					+ "</font></td>"
+					+ "  </tr>"
+					+ "  <tr>"
+					+ "  </tr>";
 			layers_html += layer_html;
 		}
 		if (!layers_html.equals(""))
-			layers_html =
-				"  <tr valign=\"top\" bgcolor=\"#FFFFFF\">" +
-				"    <td width=\"92\" height=\"18\" bgcolor="+bgColor3+" colspan=\"2\"><font face=\""+font+"\" size=\"4\"><b>"+layers_title+"</font></b></td>" +
-				"  </tr>" + layers_html;
+			layers_html = "  <tr valign=\"top\" bgcolor=\"#FFFFFF\">"
+					+ "    <td width=\"92\" height=\"18\" bgcolor=" + bgColor3
+					+ " colspan=\"2\"><font face=\"" + font
+					+ "\" size=\"4\"><b>" + layers_title + "</font></b></td>"
+					+ "  </tr>" + layers_html;
 
 		String buffer_text = String.valueOf(wizardData.getBuffer());
 		String timeout_text = String.valueOf(wizardData.getTimeOut());
 
-		String options_html =
-			"  <tr valign=\"top\" bgcolor=\"#FFFFFF\">" +
-			"    <td width=\"92\" height=\"18\" bgcolor="+bgColor3+" colspan=\"2\"><font face=\""+font+"\" size=\"4\"><b>"+options+"</font></b></td>" +
-			"  </tr>" +
-			"  <tr valign=\"top\" bgcolor="+bgColor0+">" +
-			"    <td height=\"18\" bgcolor=\"#D6D6D6\" align=\"right\"><font face=\""+font+"\" size=\"3\"><b>"+timeout+"</b></font></td>" +
-			"    <td><font face=\""+font+"\" size=\"3\"><font face=\""+font+"\" size=\"3\">"+timeout_text+"</font></td>" +
-			"  </tr>" +
-			"  <tr valign=\"top\" bgcolor="+bgColor1+">" +
-			"    <td height=\"18\" bgcolor=\"#D6D6D6\" align=\"right\"><font face=\""+font+"\" size=\"3\"><b>"+buffer+"</font></b></td>" +
-			"    <td><font face=\""+font+"\" size=\"3\">"+buffer_text+"</font></td>" +
-			"  </tr>";
+		String options_html = "  <tr valign=\"top\" bgcolor=\"#FFFFFF\">"
+				+ "    <td width=\"92\" height=\"18\" bgcolor="
+				+ bgColor3
+				+ " colspan=\"2\"><font face=\""
+				+ font
+				+ "\" size=\"4\"><b>"
+				+ options
+				+ "</font></b></td>"
+				+ "  </tr>"
+				+ "  <tr valign=\"top\" bgcolor="
+				+ bgColor0
+				+ ">"
+				+ "    <td height=\"18\" bgcolor=\"#D6D6D6\" align=\"right\"><font face=\""
+				+ font
+				+ "\" size=\"3\"><b>"
+				+ timeout
+				+ "</b></font></td>"
+				+ "    <td><font face=\""
+				+ font
+				+ "\" size=\"3\"><font face=\""
+				+ font
+				+ "\" size=\"3\">"
+				+ timeout_text
+				+ "</font></td>"
+				+ "  </tr>"
+				+ "  <tr valign=\"top\" bgcolor="
+				+ bgColor1
+				+ ">"
+				+ "    <td height=\"18\" bgcolor=\"#D6D6D6\" align=\"right\"><font face=\""
+				+ font
+				+ "\" size=\"3\"><b>"
+				+ buffer
+				+ "</font></b></td>"
+				+ "    <td><font face=\""
+				+ font
+				+ "\" size=\"3\">"
+				+ buffer_text + "</font></td>" + "  </tr>";
 
-		String html =
-			"<html>" +
-			"<body>" +
-			"<table align=\"center\" width=\"437\" height=\"156\" border=\"0\" cellpadding=\"4\" cellspacing=\"4\">" +
-			"  <tr valign=\"top\" bgcolor=\"#FFFFFF\">" +
-			"    <td width=\"92\" height=\"18\" bgcolor="+bgColor3+" colspan=\"2\"><font face=\""+font+"\" size=\"4\"><b>"+service_title+"</font></b></td>" +
-			"  </tr>" +
-			"  <tr valign=\"top\" bgcolor="+bgColor0+">" +
-			"    <td width=\"92\" height=\"18\" bgcolor=\"#D6D6D6\" align=\"right\"><font face=\""+font+"\" size=\"3\"><b>"+server+"</font></b></td>" +
-			"    <td width=\"268\"><font face=\""+font+"\" size=\"3\">"+server_text+"</font></td>" +
-			"  </tr>" +
-			"  <tr valign=\"top\" bgcolor="+bgColor1+">" +
-			"    <td height=\"18\" bgcolor=\"#D6D6D6\" align=\"right\"><font face=\""+font+"\" size=\"3\"><b>"+server_type+"</b></font></td>" +
-			"    <td><font face=\""+font+"\" size=\"3\">"+server_type_text+"</font></td>" +
-			"  </tr>" +
-			"  <tr valign=\"top\" bgcolor="+bgColor0+">" +
-			"    <td height=\"18\" bgcolor=\"#D6D6D6\" align=\"right\"><font face=\""+font+"\" size=\"3\"><b>"+server_title+"</b></font></td>" +
-			"    <td><font face=\""+font+"\" size=\"3\"><font face=\""+font+"\" size=\"3\">"+server_title_text+"</font></td>" +
-			"  </tr>" +
-			"  <tr valign=\"top\" bgcolor="+bgColor1+">" +
-			"    <td height=\"18\" bgcolor=\"#D6D6D6\" align=\"right\"><font face=\""+font+"\" size=\"3\"><b>"+server_abstract+"</font></b></td>" +
-			"    <td><font face=\""+font+"\" size=\"3\">"+server_abstract_text+"</font></td>" +
-			"  </tr>" +
+		String html = "<html>"
+				+ "<body>"
+				+ "<table align=\"center\" width=\"437\" height=\"156\" border=\"0\" cellpadding=\"4\" cellspacing=\"4\">"
+				+ "  <tr valign=\"top\" bgcolor=\"#FFFFFF\">"
+				+ "    <td width=\"92\" height=\"18\" bgcolor="
+				+ bgColor3
+				+ " colspan=\"2\"><font face=\""
+				+ font
+				+ "\" size=\"4\"><b>"
+				+ service_title
+				+ "</font></b></td>"
+				+ "  </tr>"
+				+ "  <tr valign=\"top\" bgcolor="
+				+ bgColor0
+				+ ">"
+				+ "    <td width=\"92\" height=\"18\" bgcolor=\"#D6D6D6\" align=\"right\"><font face=\""
+				+ font
+				+ "\" size=\"3\"><b>"
+				+ server
+				+ "</font></b></td>"
+				+ "    <td width=\"268\"><font face=\""
+				+ font
+				+ "\" size=\"3\">"
+				+ server_text
+				+ "</font></td>"
+				+ "  </tr>"
+				+ "  <tr valign=\"top\" bgcolor="
+				+ bgColor1
+				+ ">"
+				+ "    <td height=\"18\" bgcolor=\"#D6D6D6\" align=\"right\"><font face=\""
+				+ font
+				+ "\" size=\"3\"><b>"
+				+ server_type
+				+ "</b></font></td>"
+				+ "    <td><font face=\""
+				+ font
+				+ "\" size=\"3\">"
+				+ server_type_text
+				+ "</font></td>"
+				+ "  </tr>"
+				+ "  <tr valign=\"top\" bgcolor="
+				+ bgColor0
+				+ ">"
+				+ "    <td height=\"18\" bgcolor=\"#D6D6D6\" align=\"right\"><font face=\""
+				+ font
+				+ "\" size=\"3\"><b>"
+				+ server_title
+				+ "</b></font></td>"
+				+ "    <td><font face=\""
+				+ font
+				+ "\" size=\"3\"><font face=\""
+				+ font
+				+ "\" size=\"3\">"
+				+ server_title_text
+				+ "</font></td>"
+				+ "  </tr>"
+				+ "  <tr valign=\"top\" bgcolor="
+				+ bgColor1
+				+ ">"
+				+ "    <td height=\"18\" bgcolor=\"#D6D6D6\" align=\"right\"><font face=\""
+				+ font
+				+ "\" size=\"3\"><b>"
+				+ server_abstract
+				+ "</font></b></td>"
+				+ "    <td><font face=\""
+				+ font
+				+ "\" size=\"3\">"
+				+ server_abstract_text
+				+ "</font></td>"
+				+ "  </tr>"
+				+
 
-			"  <tr>" +
-			"  </tr>" +
-			layers_html +
-			options_html +
-			"</table>" +
-			"</body>" +
-			"</html>";
+				"  <tr>"
+				+ "  </tr>"
+				+ layers_html
+				+ options_html
+				+ "</table>"
+				+ "</body>" + "</html>";
 
 		getEditor().setContentType("text/html");
 		getEditor().setText(html);
@@ -335,6 +459,7 @@ public class WFSInfoPanel extends AbstractWFSPanel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.gui.panels.AbstractWFSPanel#initialize()
 	 */
 	protected void initialize() {

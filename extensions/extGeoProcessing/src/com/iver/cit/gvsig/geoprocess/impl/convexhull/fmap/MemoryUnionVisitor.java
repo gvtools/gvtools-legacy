@@ -42,26 +42,26 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: MemoryUnionVisitor.java 12949 2007-08-07 15:23:01Z azabala $
-* $Log$
-* Revision 1.2  2007-08-07 15:20:12  azabala
-* centrilizing JTS in JTSFacade
-*
-* Revision 1.1  2006/06/20 18:20:45  azabala
-* first version in cvs
-*
-* Revision 1.1  2006/05/24 21:13:31  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.1  2006/03/06 19:48:39  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/03/05 19:57:48  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: MemoryUnionVisitor.java 12949 2007-08-07 15:23:01Z azabala $
+ * $Log$
+ * Revision 1.2  2007-08-07 15:20:12  azabala
+ * centrilizing JTS in JTSFacade
+ *
+ * Revision 1.1  2006/06/20 18:20:45  azabala
+ * first version in cvs
+ *
+ * Revision 1.1  2006/05/24 21:13:31  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.1  2006/03/06 19:48:39  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/03/05 19:57:48  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 
 package com.iver.cit.gvsig.geoprocess.impl.convexhull.fmap;
 
@@ -71,23 +71,21 @@ import com.iver.cit.gvsig.geoprocess.core.util.JTSFacade;
 import com.vividsolutions.jts.geom.Geometry;
 
 public class MemoryUnionVisitor extends MemoryConvexHullVisitor {
-	
+
 	int geometryType;
-	public MemoryUnionVisitor(int geometryType){
+
+	public MemoryUnionVisitor(int geometryType) {
 		super();
 		this.geometryType = geometryType;
 	}
-	
-	public IGeometry getConvexHull(){
+
+	public IGeometry getConvexHull() {
 		return FConverter.jts_to_igeometry(getJtsConvexHull());
 	}
-	
-	
-	
-	public Geometry getJtsConvexHull(){
+
+	public Geometry getJtsConvexHull() {
 		Geometry[] geoms = new Geometry[geometries.size()];
 		geometries.toArray(geoms);
 		return JTSFacade.union(geoms, geometryType);
 	}
 }
-

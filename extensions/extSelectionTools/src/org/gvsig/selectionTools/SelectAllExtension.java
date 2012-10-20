@@ -27,7 +27,6 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.plugins.Extension;
 import com.iver.andami.ui.mdiManager.IWindow;
-
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.layers.FBitSet;
@@ -38,8 +37,10 @@ import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 /**
- * <p>Extension to add support for selecting all the features of a vector layer.</p>
- *
+ * <p>
+ * Extension to add support for selecting all the features of a vector layer.
+ * </p>
+ * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class SelectAllExtension extends Extension {
@@ -51,14 +52,16 @@ public class SelectAllExtension extends Extension {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String actionCommand) {
-		if (actionCommand.equals("SELALL") ) {
+		if (actionCommand.equals("SELALL")) {
 			IWindow view = PluginServices.getMDIManager().getActiveWindow();
 			if (view instanceof View) {
-				MapControl mc = ((View)view).getMapControl();
-				FLayer[] activeLayers = mc.getMapContext().getLayers().getActives();
+				MapControl mc = ((View) view).getMapControl();
+				FLayer[] activeLayers = mc.getMapContext().getLayers()
+						.getActives();
 
 				FLayer layer;
 				SelectableDataSource sds;
@@ -73,10 +76,13 @@ public class SelectAllExtension extends Extension {
 						try {
 							sds = lyrVect.getRecordset();
 							selectedRows = sds.getSelection();
-							selectedRows.set(0, (int)sds.getRowCount()); // Selects all features
+							selectedRows.set(0, (int) sds.getRowCount()); // Selects
+																			// all
+																			// features
 							sds.setSelection(selectedRows);
 						} catch (ReadDriverException e) {
-							NotificationManager.showMessageError("Driver exception", e);
+							NotificationManager.showMessageError(
+									"Driver exception", e);
 						}
 					}
 				}
@@ -88,7 +94,8 @@ public class SelectAllExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (f == null) {
 			return false;
@@ -109,7 +116,8 @@ public class SelectAllExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (f == null) {
 			return false;
@@ -125,8 +133,9 @@ public class SelectAllExtension extends Extension {
 
 			for (int i = 0; i < layers.length; i++) {
 				layer = layers[i];
-				
-				if ((layer instanceof FLyrVect) && (layer.isAvailable()) && (layer.isActive()))
+
+				if ((layer instanceof FLyrVect) && (layer.isAvailable())
+						&& (layer.isActive()))
 					return true;
 			}
 		}

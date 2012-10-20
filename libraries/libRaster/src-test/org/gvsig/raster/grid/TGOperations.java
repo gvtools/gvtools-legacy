@@ -36,62 +36,66 @@ import org.gvsig.raster.dataset.IBuffer;
  * </UL>
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public class TGOperations extends TestCase{
-	
-	static{
-		RasterLibrary.wakeUp();	
+public class TGOperations extends TestCase {
+
+	static {
+		RasterLibrary.wakeUp();
 	}
-	
+
 	public void setUp() {
 		System.err.println("TGOperations running...");
 	}
-	
-	public void start(){
+
+	public void start() {
 		this.setUp();
 		this.testStack();
 	}
-	
-	public void testStack(){
+
+	public void testStack() {
 		try {
 			GridExtent layerExtent = new GridExtent(1000, 1000, 1500, 1500, 100);
-			Grid g1 = new Grid(layerExtent, layerExtent, IBuffer.TYPE_INT, new int[]{0, 1, 2});
+			Grid g1 = new Grid(layerExtent, layerExtent, IBuffer.TYPE_INT,
+					new int[] { 0, 1, 2 });
 			init(g1);
-			
-			//Multiplicar por un entero
+
+			// Multiplicar por un entero
 			g1.multiply(2);
-			int[][] m1 = new int[][]{{0, 2, 4, 6, 8}, {2, 4, 6, 8, 10}, {4, 6, 8, 10, 12}, {6, 8, 10, 12, 14}, {8, 10, 12, 14, 16}};
+			int[][] m1 = new int[][] { { 0, 2, 4, 6, 8 }, { 2, 4, 6, 8, 10 },
+					{ 4, 6, 8, 10, 12 }, { 6, 8, 10, 12, 14 },
+					{ 8, 10, 12, 14, 16 } };
 			compare(m1, g1);
-					
-			//Sumar dos grids
-			Grid g2 = new Grid(layerExtent, layerExtent, IBuffer.TYPE_INT, new int[]{0, 1, 2});
+
+			// Sumar dos grids
+			Grid g2 = new Grid(layerExtent, layerExtent, IBuffer.TYPE_INT,
+					new int[] { 0, 1, 2 });
 			init(g1);
 			init(g2);
 			g1.add(g2);
 			compare(m1, g1);
-			
-			//Sobreescritura
+
+			// Sobreescritura
 			g2.assign(g1);
 			compare(m1, g1);
-			//print(g1);
-			
-			//Celdas ordenadas
+			// print(g1);
+
+			// Celdas ordenadas
 			GridCell[] cells = g1.getSortedArrayOfCells();
-			int[] values = new int[]{0, 2, 2, 4, 4, 4, 6, 6, 6, 6, 8, 8, 8, 8, 8, 10, 10, 10, 10, 12, 12, 12, 14, 14, 16};
+			int[] values = new int[] { 0, 2, 2, 4, 4, 4, 6, 6, 6, 6, 8, 8, 8,
+					8, 8, 10, 10, 10, 10, 12, 12, 12, 14, 14, 16 };
 			compareArray(values, cells);
-			
-			//Media de un grid (getMeanValue)
+
+			// Media de un grid (getMeanValue)
 			init(g1);
 			g1.setBandToOperate(0);
-			assertEquals((int)g1.getMeanValue(), 4);
-			assertEquals((int)g1.getMinValue(), 0);
-			assertEquals((int)g1.getMaxValue(), 8);
-			
-			
+			assertEquals((int) g1.getMeanValue(), 4);
+			assertEquals((int) g1.getMinValue(), 0);
+			assertEquals((int) g1.getMaxValue(), 8);
+
 		} catch (RasterBufferInvalidException e1) {
 			e1.printStackTrace();
-		}  catch (OutOfGridException e3) {
+		} catch (OutOfGridException e3) {
 			e3.printStackTrace();
 		} catch (RasterBufferInvalidAccessException e) {
 			e.printStackTrace();
@@ -100,37 +104,39 @@ public class TGOperations extends TestCase{
 		} catch (InterruptedException e) {
 		}
 	}
-	
-	private void init(Grid g) throws OutOfGridException, InterruptedException{
+
+	private void init(Grid g) throws OutOfGridException, InterruptedException {
 		for (int i = 0; i < g.getNX(); i++) {
 			for (int j = 0; j < g.getNY(); j++)
-				g.setCellValue(j, i, (int)(j + i));
+				g.setCellValue(j, i, (int) (j + i));
 		}
 	}
-	
-	private void compare(int[][] m, Grid g) throws RasterBufferInvalidAccessException, GridException, InterruptedException {
-		for(int line = 0; line < g.getNY(); line++){
-			for(int col = 0; col < g.getNX(); col++)
+
+	private void compare(int[][] m, Grid g)
+			throws RasterBufferInvalidAccessException, GridException,
+			InterruptedException {
+		for (int line = 0; line < g.getNY(); line++) {
+			for (int col = 0; col < g.getNX(); col++)
 				assertEquals(g.getCellValueAsInt(col, line), m[line][col]);
 		}
 	}
-	
-	private void compareArray(int[] a, GridCell[] cells) throws RasterBufferInvalidAccessException {
-		for (int i = 0; i < cells.length; i++) 
-			assertEquals((int)cells[i].getValue(), (int)cells[i].getValue());
+
+	private void compareArray(int[] a, GridCell[] cells)
+			throws RasterBufferInvalidAccessException {
+		for (int i = 0; i < cells.length; i++)
+			assertEquals((int) cells[i].getValue(), (int) cells[i].getValue());
 	}
-	
+
 	/**
 	 * Imprime todos los pixels de la fuente de datos en RGB
-	 * @throws RasterBufferInvalidAccessException 
+	 * 
+	 * @throws RasterBufferInvalidAccessException
 	 */
-	/*private void print(Grid g) throws RasterBufferInvalidAccessException {
-		for(int line = 0; line < g.getNY(); line++){
-			for(int col = 0; col < g.getNX(); col++)
-				System.out.print(g.getCellValueAsInt(col, line) + " ");
-			System.out.println();
-		}
-		System.out.println();
-	}*/
-	
+	/*
+	 * private void print(Grid g) throws RasterBufferInvalidAccessException {
+	 * for(int line = 0; line < g.getNY(); line++){ for(int col = 0; col <
+	 * g.getNX(); col++) System.out.print(g.getCellValueAsInt(col, line) + " ");
+	 * System.out.println(); } System.out.println(); }
+	 */
+
 }

@@ -5,7 +5,7 @@ package com.hardcode.gdbms.engine.data.indexes;
 
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public abstract class MemoryIndexSet {

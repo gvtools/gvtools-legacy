@@ -19,28 +19,32 @@
 package org.gvsig.raster.dataset.io.rmf;
 
 import java.util.ArrayList;
+
 /**
- * Clase base para el gestor de ficheros rmf. Esta contiene el mecanismo de registro de objetos
- * serializadores. Mantiene una lista de IRmfBlock.
+ * Clase base para el gestor de ficheros rmf. Esta contiene el mecanismo de
+ * registro de objetos serializadores. Mantiene una lista de IRmfBlock.
  * 
  * 21-abr-2007
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public abstract class ClientRegister {
 
 	protected ArrayList clients = new ArrayList();
-	
+
 	/**
 	 * Añade un objeto IRmfBlock
+	 * 
 	 * @param block
 	 */
 	public void addClient(IRmfBlock block) {
 		removeClient(block.getClass());
 		clients.add(block);
 	}
-	
+
 	/**
-	 * Elimina un objeto IRmfBlock de la lista a través de la clase del serializador.
+	 * Elimina un objeto IRmfBlock de la lista a través de la clase del
+	 * serializador.
 	 * 
 	 * @param id
 	 */
@@ -49,11 +53,13 @@ public abstract class ClientRegister {
 			if (clients.get(i).getClass().equals(class1))
 				clients.remove(i);
 	}
-	
+
 	/**
 	 * Obtiene el objeto serializador a través de su nombre de clase. El nombre
-	 * de este coincide con el nombre del objeto que se está serializando seguido de la palabra 
-	 * Serializer. Asi pues, el serializador del objeto Histogram se llamará HistogramSerializer.
+	 * de este coincide con el nombre del objeto que se está serializando
+	 * seguido de la palabra Serializer. Asi pues, el serializador del objeto
+	 * Histogram se llamará HistogramSerializer.
+	 * 
 	 * @param id
 	 * @return IRmfBlock
 	 */
@@ -68,25 +74,28 @@ public abstract class ClientRegister {
 		}
 		return null;
 	}
-	
+
 	/**
-	 * Obtiene el objeto serializador a través de su posición. 
-	 * @param pos Posición
+	 * Obtiene el objeto serializador a través de su posición.
+	 * 
+	 * @param pos
+	 *            Posición
 	 * @return IRmfBlock
 	 */
 	public IRmfBlock getClient(int pos) {
 		return (IRmfBlock) clients.get(pos);
 	}
-	
+
 	/**
 	 * Elimina todos los objetos serializadores de la lista.
 	 */
 	public void removeAllClients() {
 		clients.clear();
 	}
-	
+
 	/**
 	 * Obtiene el número de clientes registrado (Objetos IRmfBlock).
+	 * 
 	 * @return Entero con el número de clientes registrado
 	 */
 	public int getClientsCount() {

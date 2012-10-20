@@ -27,18 +27,20 @@ import org.gvsig.raster.hierarchy.IRasterProperties;
 import org.gvsig.rastertools.RasterModule;
 import org.gvsig.rastertools.properties.RasterPropertiesTocMenuEntry;
 import org.gvsig.rastertools.properties.panels.TransparencyPanel;
+
 /**
  * Clase que hace de interfaz entre los objetos que contienen la información de
  * transparencia y el panel.
- *
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class TransparencyListener implements TranspByPixelEventListener {
-	private GridTransparency  transparency      = null;
-	private TransparencyPanel tPanel            = null;
+	private GridTransparency transparency = null;
+	private TransparencyPanel tPanel = null;
 
 	/**
 	 * Construye un TransparencyControl
+	 * 
 	 * @param tp
 	 */
 	public TransparencyListener(TransparencyPanel tp) {
@@ -50,10 +52,11 @@ public class TransparencyListener implements TranspByPixelEventListener {
 	 * Carga los valores del panel desde el objeto con la transparencia
 	 */
 	private void setValuesFromGridTransparencyToPanel() {
-		//Asignamos la opacidad al panel
+		// Asignamos la opacidad al panel
 		if (transparency.getOpacity() != 255) {
 			tPanel.getOpacityPanel().setControlEnabled(true);
-			tPanel.getOpacityPanel().setValue((int) (transparency.getOpacity() * 100) / 255);
+			tPanel.getOpacityPanel().setValue(
+					(int) (transparency.getOpacity() * 100) / 255);
 		} else {
 			tPanel.getOpacityPanel().setControlEnabled(false);
 			tPanel.getOpacityPanel().setValue(100);
@@ -65,7 +68,8 @@ public class TransparencyListener implements TranspByPixelEventListener {
 			tPanel.getPTranspByPixel().clear();
 			tPanel.getPTranspByPixel().setControlEnabled(true);
 			for (int i = 0; i < transparency.getTransparencyRange().size(); i++) {
-				TransparencyRange range = (TransparencyRange) transparency.getTransparencyRange().get(i);
+				TransparencyRange range = (TransparencyRange) transparency
+						.getTransparencyRange().get(i);
 				tPanel.getPTranspByPixel().addStringElement(range);
 			}
 		} else {
@@ -83,7 +87,8 @@ public class TransparencyListener implements TranspByPixelEventListener {
 			return;
 		// Asignamos la opacidad al objeto
 		if (tPanel.getOpacityPanel().getCheck().isSelected()) {
-			transparency.setOpacity((int) Math.round((tPanel.getOpacityPanel().getValue() * 255) / 100));
+			transparency.setOpacity((int) Math.round((tPanel.getOpacityPanel()
+					.getValue() * 255) / 100));
 		} else
 			transparency.setOpacity(255);
 
@@ -92,12 +97,13 @@ public class TransparencyListener implements TranspByPixelEventListener {
 			transparency.clearListOfTransparencyRange();
 			ArrayList entries = tPanel.getPTranspByPixel().getEntries();
 			for (int i = 0; i < entries.size(); i++)
-				transparency.setTransparencyRange((TransparencyRange) entries.get(i));
+				transparency.setTransparencyRange((TransparencyRange) entries
+						.get(i));
 		} else
 			transparency.clearListOfTransparencyRange();
 
 		transparency.activeTransparency();
-		
+
 		// Redibujamos
 		if (tPanel.getLayer() != null)
 			tPanel.getLayer().getMapContext().invalidate();
@@ -123,28 +129,37 @@ public class TransparencyListener implements TranspByPixelEventListener {
 	 * Guarda el estado actual del panel
 	 */
 	private void saveStatus() {
-		tPanel.getPanelGroup().getProperties().put("opacity", new Integer(transparency.getOpacity()));
+		tPanel.getPanelGroup().getProperties()
+				.put("opacity", new Integer(transparency.getOpacity()));
 
-		tPanel.getPanelGroup().getProperties().put("transparencyActive", new Boolean(transparency.isTransparencyActive()));
+		tPanel.getPanelGroup()
+				.getProperties()
+				.put("transparencyActive",
+						new Boolean(transparency.isTransparencyActive()));
 
 		ArrayList newArray = new ArrayList();
 		for (int i = 0; i < transparency.getTransparencyRange().size(); i++) {
 			newArray.add(transparency.getTransparencyRange().get(i));
 		}
-		tPanel.getPanelGroup().getProperties().put("transparencyRange", newArray);
+		tPanel.getPanelGroup().getProperties()
+				.put("transparencyRange", newArray);
 	}
 
 	/**
 	 * Deja la capa en el último estado guardado y la refresca
 	 */
 	public void restoreStatus() {
-		transparency.setOpacity(((Integer) tPanel.getPanelGroup().getProperties().get("opacity")).intValue());
-		transparency.setTransparencyActive(((Boolean) tPanel.getPanelGroup().getProperties().get("transparencyActive")).booleanValue());
+		transparency.setOpacity(((Integer) tPanel.getPanelGroup()
+				.getProperties().get("opacity")).intValue());
+		transparency.setTransparencyActive(((Boolean) tPanel.getPanelGroup()
+				.getProperties().get("transparencyActive")).booleanValue());
 
-		ArrayList newArray = (ArrayList) tPanel.getPanelGroup().getProperties().get("transparencyRange");
+		ArrayList newArray = (ArrayList) tPanel.getPanelGroup().getProperties()
+				.get("transparencyRange");
 		transparency.clearListOfTransparencyRange();
 		for (int i = 0; i < newArray.size(); i++) {
-			transparency.setTransparencyRange((TransparencyRange) newArray.get(i));
+			transparency.setTransparencyRange((TransparencyRange) newArray
+					.get(i));
 		}
 
 		if (tPanel.getLayer() != null)
@@ -167,7 +182,9 @@ public class TransparencyListener implements TranspByPixelEventListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.properties.panels.TranspByPixelEventListener#actionPixelListChanged(java.util.EventObject)
+	 * 
+	 * @see org.gvsig.rastertools.properties.panels.TranspByPixelEventListener#
+	 * actionPixelListChanged(java.util.EventObject)
 	 */
 	public void actionPixelListChanged(EventObject e) {
 		if (!RasterModule.autoRefreshView)
@@ -178,6 +195,7 @@ public class TransparencyListener implements TranspByPixelEventListener {
 
 	/**
 	 * Aqui se definen los parametros iniciales para la transparencia del panel
+	 * 
 	 * @param t
 	 */
 	public void setLayer(IRasterProperties layer) {

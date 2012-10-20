@@ -41,11 +41,14 @@
 package org.gvsig.remoteClient.sld;
 
 import java.util.ArrayList;
+
 /**
- * Implements the LayerFeatureConstraints element of an SLD implementation specification 
- * .<p>
- * The LayerFeatureConstraints element is used to specify what features of what feature
- * types are to be rendered in a layer.<p>
+ * Implements the LayerFeatureConstraints element of an SLD implementation
+ * specification .
+ * <p>
+ * The LayerFeatureConstraints element is used to specify what features of what
+ * feature types are to be rendered in a layer.
+ * <p>
  * 
  * @see SLDFeatureTypeConstraint
  * @see http://portal.opengeospatial.org/files/?artifact_id=1188
@@ -53,9 +56,9 @@ import java.util.ArrayList;
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
 
-public abstract class SLDLayerFeatureConstraints implements ISLDFeatures{
+public abstract class SLDLayerFeatureConstraints implements ISLDFeatures {
 
-	protected ArrayList<SLDFeatureTypeConstraint>featureTypeConstraint = new ArrayList<SLDFeatureTypeConstraint>();
+	protected ArrayList<SLDFeatureTypeConstraint> featureTypeConstraint = new ArrayList<SLDFeatureTypeConstraint>();
 
 	public ArrayList<SLDFeatureTypeConstraint> getFeatureTypeConstraint() {
 		return featureTypeConstraint;
@@ -69,5 +72,5 @@ public abstract class SLDLayerFeatureConstraints implements ISLDFeatures{
 	public void addFeatureTypeConstraint(SLDFeatureTypeConstraint feat) {
 		this.featureTypeConstraint.add(feat);
 	}
-	
+
 }

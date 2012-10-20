@@ -51,20 +51,22 @@ import java.util.ArrayList;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class WFSTTransaction_1_1_0 extends WFSTTransaction{
+public class WFSTTransaction_1_1_0 extends WFSTTransaction {
 
 	public WFSTTransaction_1_1_0(String typename, String namespaceprefix,
 			String namespace, ArrayList featuresLocked) {
 		super(typename, namespaceprefix, namespace, featuresLocked);
 	}
-	
+
 	public WFSTTransaction_1_1_0() {
 		super();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.remoteClient.wfs.edition.WFSTTransaction#getSchemaLocation()
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.wfs.edition.WFSTTransaction#getSchemaLocation()
 	 */
 	protected String getSchemaLocation() {
 		return "../wfs/1.1.0/WFS-transaction.xsd";
@@ -72,6 +74,7 @@ public class WFSTTransaction_1_1_0 extends WFSTTransaction{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.remoteClient.wfs.edition.WFSTTransaction#getVersion()
 	 */
 	protected String getVersion() {

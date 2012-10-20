@@ -54,61 +54,66 @@ import org.gvsig.rastertools.colortable.data.ColorTableData;
 
 import com.iver.andami.PluginServices;
 import com.iver.utiles.FileUtils;
+
 /**
- * Panel que aparece en la parte inferior derecha que contiene la lista
- * de librerias disponibles para las tablas de color, con sus botones correspondientes
- * para importar, exportar, borrar y aï¿½adir librerias.
+ * Panel que aparece en la parte inferior derecha que contiene la lista de
+ * librerias disponibles para las tablas de color, con sus botones
+ * correspondientes para importar, exportar, borrar y aï¿½adir librerias.
  * 
  * 19/02/2008
+ * 
  * @author BorSanZa - Borja Sï¿½nchez Zamorano (borja.sanchez@iver.es)
  */
-public class ColorTableLibraryPanel extends BasePanel implements ActionListener, ListViewListener {
-	private static final long serialVersionUID       = 1L;
-	private JPanel            panelButtons           = null;
-	private JButton           buttonAdd              = null;
-	private JButton           buttonDel              = null;
-	private JButton           buttonImport           = null;
-	private JButton           buttonExport           = null;
-	private ListViewComponent listViewComponent      = null;
+public class ColorTableLibraryPanel extends BasePanel implements
+		ActionListener, ListViewListener {
+	private static final long serialVersionUID = 1L;
+	private JPanel panelButtons = null;
+	private JButton buttonAdd = null;
+	private JButton buttonDel = null;
+	private JButton buttonImport = null;
+	private JButton buttonExport = null;
+	private ListViewComponent listViewComponent = null;
 
-	private boolean           hasChanged             = false;
+	private boolean hasChanged = false;
 
-	private ArrayList         actionCommandListeners = new ArrayList();
-	private ColorTableData    colorTableData         = null;
+	private ArrayList actionCommandListeners = new ArrayList();
+	private ColorTableData colorTableData = null;
 
-	private ColorTable        currentColorTable      = null;
+	private ColorTable currentColorTable = null;
 
-	public static String      palettesPath           = FileUtils.getAppHomeDir() + "colortable";
-		
+	public static String palettesPath = FileUtils.getAppHomeDir()
+			+ "colortable";
+
 	/**
-	 *Inicializa componentes gráficos y traduce
+	 * Inicializa componentes gráficos y traduce
 	 */
 	public ColorTableLibraryPanel() {
 		init();
 		translate();
 	}
-	
-	public ColorTableLibraryPanel(ColorTableData colorTableData){
+
+	public ColorTableLibraryPanel(ColorTableData colorTableData) {
 		this.colorTableData = colorTableData;
 		init();
 		translate();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#init()
 	 */
 	protected void init() {
 		setLayout(new BorderLayout());
-		
+
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		panel.setBorder(javax.swing.BorderFactory.createEmptyBorder(8, 8, 8, 8));
-		
+
 		JScrollPane jScrollPane = new JScrollPane();
 		jScrollPane.setViewportView(getListViewComponent());
 		jScrollPane.setAutoscrolls(true);
-		
+
 		panel.add(jScrollPane, BorderLayout.CENTER);
 		add(panel, BorderLayout.CENTER);
 		add(getPanelButtons(), BorderLayout.SOUTH);
@@ -119,16 +124,19 @@ public class ColorTableLibraryPanel extends BasePanel implements ActionListener,
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#translate()
 	 */
 	protected void translate() {
 	}
-	
+
 	private void loadDiskLibrary() {
-		ArrayList fileList = ColorTableLibraryPersistence.getPaletteFileList(palettesPath);
+		ArrayList fileList = ColorTableLibraryPersistence
+				.getPaletteFileList(palettesPath);
 		for (int i = 0; i < fileList.size(); i++) {
 			ArrayList paletteItems = new ArrayList();
-			String paletteName = ColorTableLibraryPersistence.loadPalette(palettesPath, (String) fileList.get(i), paletteItems);
+			String paletteName = ColorTableLibraryPersistence.loadPalette(
+					palettesPath, (String) fileList.get(i), paletteItems);
 
 			if (paletteItems.size() <= 0)
 				continue;
@@ -138,16 +146,18 @@ public class ColorTableLibraryPanel extends BasePanel implements ActionListener,
 			colorTable.createPaletteFromColorItems(paletteItems, true);
 			colorTable.setInterpolated(true);
 
-			ListViewItem item = new ListViewItem(new ColorTableIconPainter(colorTable), paletteName);
+			ListViewItem item = new ListViewItem(new ColorTableIconPainter(
+					colorTable), paletteName);
 			item.setTag(fileList.get(i));
 			getListViewComponent().addItem(item);
 		}
 		getListViewComponent().setSelectedIndex(0);
-		callColorTableChanged();		
+		callColorTableChanged();
 	}
-	
+
 	/**
 	 * Devuelve el jButtonAdd
+	 * 
 	 * @return
 	 */
 	private JButton getButtonAdd() {
@@ -169,6 +179,7 @@ public class ColorTableLibraryPanel extends BasePanel implements ActionListener,
 
 	/**
 	 * Devuelve el jButtonDel
+	 * 
 	 * @return
 	 */
 	private JButton getButtonDel() {
@@ -189,6 +200,7 @@ public class ColorTableLibraryPanel extends BasePanel implements ActionListener,
 
 	/**
 	 * Devuelve el jButtonDel
+	 * 
 	 * @return
 	 */
 	private JButton getButtonImport() {
@@ -209,6 +221,7 @@ public class ColorTableLibraryPanel extends BasePanel implements ActionListener,
 
 	/**
 	 * Devuelve el jButtonDel
+	 * 
 	 * @return
 	 */
 	private JButton getButtonExport() {
@@ -226,9 +239,10 @@ public class ColorTableLibraryPanel extends BasePanel implements ActionListener,
 		}
 		return buttonExport;
 	}
-	
+
 	/**
 	 * Devuelve el panel de botones de la libreria de aï¿½adir y borrar
+	 * 
 	 * @return
 	 */
 	private JPanel getPanelButtons() {
@@ -262,17 +276,17 @@ public class ColorTableLibraryPanel extends BasePanel implements ActionListener,
 	private void callColorTableChanged() {
 		Iterator acIterator = actionCommandListeners.iterator();
 		while (acIterator.hasNext()) {
-			ColorTableLibraryListener listener = (ColorTableLibraryListener) acIterator.next();
+			ColorTableLibraryListener listener = (ColorTableLibraryListener) acIterator
+					.next();
 			listener.actionColorTableChanged(new ColorTableLibraryEvent(this));
 		}
 	}
-	
+
 	/**
-	 * Accion que se ejecuta cuando se disparan los siguientes eventos:
-	 *  - Checkbox de interpolacion.
-	 *  - Checkbox de habilitacion de colortables.
-	 *  - Boton de aï¿½adir un colortable nuevo.
-	 *  - Boton de borrar un colortable seleccionado.
+	 * Accion que se ejecuta cuando se disparan los siguientes eventos: -
+	 * Checkbox de interpolacion. - Checkbox de habilitacion de colortables. -
+	 * Boton de aï¿½adir un colortable nuevo. - Boton de borrar un colortable
+	 * seleccionado.
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == getButtonAdd()) {
@@ -280,18 +294,24 @@ public class ColorTableLibraryPanel extends BasePanel implements ActionListener,
 			if (addLibrary.showConfirm(this) == JOptionPane.OK_OPTION) {
 				ColorTable colorTable = addLibrary.getColorTable();
 				if (colorTable != null) {
-					ListViewItem item = new ListViewItem(new ColorTableIconPainter(colorTable), colorTable.getName());
+					ListViewItem item = new ListViewItem(
+							new ColorTableIconPainter(colorTable),
+							colorTable.getName());
 					item.setTag(item.getName() + ".xml");
 					getListViewComponent().addItem(item);
-					getListViewComponent().setSelectedIndex(getListViewComponent().getItems().size() - 1);
-					((ColorTableIconPainter) item.getIcon()).getColorTable().setName(item.getName());
-					colorTable.setName(((ColorTableIconPainter) item.getIcon()).getColorTable().getName());
-					ColorTableLibraryPersistence.save_to_1_1(palettesPath, colorTable);
+					getListViewComponent().setSelectedIndex(
+							getListViewComponent().getItems().size() - 1);
+					((ColorTableIconPainter) item.getIcon()).getColorTable()
+							.setName(item.getName());
+					colorTable.setName(((ColorTableIconPainter) item.getIcon())
+							.getColorTable().getName());
+					ColorTableLibraryPersistence.save_to_1_1(palettesPath,
+							colorTable);
 					callColorTableChanged();
 				}
 			}
 		}
-		
+
 		if (e.getSource() == getButtonExport()) {
 			JFileChooser chooser = new JFileChooser();
 			chooser.setAcceptAllFileFilterUsed(false);
@@ -304,7 +324,10 @@ public class ColorTableLibraryPanel extends BasePanel implements ActionListener,
 				fileFilter.addExtension(formats[i]);
 
 				try {
-					String desc = RasterLegendIO.getRasterLegendIO(RasterUtilities.getExtensionFromFileName(formats[i])).getDescription();
+					String desc = RasterLegendIO.getRasterLegendIO(
+							RasterUtilities
+									.getExtensionFromFileName(formats[i]))
+							.getDescription();
 					if (desc != null)
 						fileFilter.setDescription(desc);
 				} catch (RasterLegendIONotFound e1) {
@@ -321,13 +344,19 @@ public class ColorTableLibraryPanel extends BasePanel implements ActionListener,
 			int returnVal = chooser.showSaveDialog(this);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				try {
-					if (colorTableData != null){	
-						ColorTableLibraryPersistence.save_to_1_1(ColorTableLibraryPanel.palettesPath, colorTableData.getColorTable());
+					if (colorTableData != null) {
+						ColorTableLibraryPersistence.save_to_1_1(
+								ColorTableLibraryPanel.palettesPath,
+								colorTableData.getColorTable());
 					}
-					ExtendedFileFilter filter = (ExtendedFileFilter) chooser.getFileFilter();
-					String file = filter.getNormalizedFilename(chooser.getSelectedFile());
+					ExtendedFileFilter filter = (ExtendedFileFilter) chooser
+							.getFileFilter();
+					String file = filter.getNormalizedFilename(chooser
+							.getSelectedFile());
 
-					RasterLegendIO.getRasterLegendIO(RasterUtilities.getExtensionFromFileName(file)).write(getColorTableSelected(), new File(file));
+					RasterLegendIO.getRasterLegendIO(
+							RasterUtilities.getExtensionFromFileName(file))
+							.write(getColorTableSelected(), new File(file));
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				} catch (RasterLegendIONotFound e1) {
@@ -350,7 +379,10 @@ public class ColorTableLibraryPanel extends BasePanel implements ActionListener,
 				allFilters.addExtension(formats[i]);
 
 				try {
-					String desc = RasterLegendIO.getRasterLegendIO(RasterUtilities.getExtensionFromFileName(formats[i])).getDescription();
+					String desc = RasterLegendIO.getRasterLegendIO(
+							RasterUtilities
+									.getExtensionFromFileName(formats[i]))
+							.getDescription();
 					if (desc != null)
 						fileFilter.setDescription(desc);
 				} catch (RasterLegendIONotFound e1) {
@@ -367,27 +399,43 @@ public class ColorTableLibraryPanel extends BasePanel implements ActionListener,
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				try {
-					for (int file = 0; file<chooser.getSelectedFiles().length; file++) {
+					for (int file = 0; file < chooser.getSelectedFiles().length; file++) {
 						fileFilter = null;
 						for (int i = 0; i < formats.length; i++) {
 							fileFilter = new ExtendedFileFilter();
 							fileFilter.addExtension(formats[i]);
-							if (fileFilter.accept(chooser.getSelectedFiles()[file])) {
-								ColorTable colorTable = RasterLegendIO.getRasterLegendIO(formats[i]).read(chooser.getSelectedFiles()[file]);
+							if (fileFilter
+									.accept(chooser.getSelectedFiles()[file])) {
+								ColorTable colorTable = RasterLegendIO
+										.getRasterLegendIO(formats[i])
+										.read(chooser.getSelectedFiles()[file]);
 
-								if (colorTable != null){
+								if (colorTable != null) {
 									colorTable.setInterpolated(true);
 
-									ListViewItem item = new ListViewItem(new ColorTableIconPainter(colorTable), colorTable.getName());
+									ListViewItem item = new ListViewItem(
+											new ColorTableIconPainter(
+													colorTable),
+											colorTable.getName());
 									item.setTag(item.getName() + ".xml");
 									getListViewComponent().addItem(item);
-									getListViewComponent().setSelectedIndex(getListViewComponent().getItems().size() - 1);
-									((ColorTableIconPainter) item.getIcon()).getColorTable().setName(item.getName());
-									colorTable.setName(((ColorTableIconPainter) item.getIcon()).getColorTable().getName());
-									ColorTableLibraryPersistence.save_to_1_1(palettesPath, colorTable);
+									getListViewComponent().setSelectedIndex(
+											getListViewComponent().getItems()
+													.size() - 1);
+									((ColorTableIconPainter) item.getIcon())
+											.getColorTable().setName(
+													item.getName());
+									colorTable
+											.setName(((ColorTableIconPainter) item
+													.getIcon()).getColorTable()
+													.getName());
+									ColorTableLibraryPersistence.save_to_1_1(
+											palettesPath, colorTable);
 									callColorTableChanged();
 								} else {
-									RasterToolsUtil.messageBoxError("error_importando_tabla_color_rmf", this);
+									RasterToolsUtil.messageBoxError(
+											"error_importando_tabla_color_rmf",
+											this);
 								}
 								break;
 							}
@@ -395,7 +443,8 @@ public class ColorTableLibraryPanel extends BasePanel implements ActionListener,
 					}
 				} catch (IOException e1) {
 					e1.printStackTrace();
-					RasterToolsUtil.messageBoxError("error_importando_tabla_color_rmf", this);
+					RasterToolsUtil.messageBoxError(
+							"error_importando_tabla_color_rmf", this);
 				} catch (RasterLegendIONotFound e1) {
 					e1.printStackTrace();
 				}
@@ -404,12 +453,16 @@ public class ColorTableLibraryPanel extends BasePanel implements ActionListener,
 
 		if (e.getSource() == getButtonDel()) {
 			if (getListViewComponent().getSelectedIndices().length > 0) {
-				if (RasterToolsUtil.messageBoxYesOrNot("desea_borrar_librerias", this)) {
-					File oldFile = new File(palettesPath + File.separator + getListViewComponent().getSelectedValue().getTag());
+				if (RasterToolsUtil.messageBoxYesOrNot(
+						"desea_borrar_librerias", this)) {
+					File oldFile = new File(palettesPath
+							+ File.separator
+							+ getListViewComponent().getSelectedValue()
+									.getTag());
 					oldFile.delete();
 					int pos = getListViewComponent().getSelectedIndices()[0];
 					getListViewComponent().removeSelecteds();
-					
+
 					if (getListViewComponent().getItems().size() == 0) {
 						loadDiskLibrary();
 					} else {
@@ -424,42 +477,52 @@ public class ColorTableLibraryPanel extends BasePanel implements ActionListener,
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.listview.ListViewListener#actionItemNameChanged(java.util.EventObject, java.lang.String, org.gvsig.gui.beans.listview.ListViewItem)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.listview.ListViewListener#actionItemNameChanged(java
+	 * .util.EventObject, java.lang.String,
+	 * org.gvsig.gui.beans.listview.ListViewItem)
 	 */
-	public void actionItemNameChanged(EventObject e, String oldName, ListViewItem item) {
-		File oldFile = new File(palettesPath + File.separator + oldName + ".xml");
+	public void actionItemNameChanged(EventObject e, String oldName,
+			ListViewItem item) {
+		File oldFile = new File(palettesPath + File.separator + oldName
+				+ ".xml");
 		oldFile.delete();
 
 		getColorTableSelected().setName(item.getName());
 		item.setTag(item.getName() + ".xml");
 
-		ColorTableLibraryPersistence.save_to_1_1(palettesPath, getColorTableSelected());
-		
+		ColorTableLibraryPersistence.save_to_1_1(palettesPath,
+				getColorTableSelected());
+
 		callColorTableChanged();
 	}
 
 	/**
 	 * Comprueba si el usuario ha cambiado los valores de la tabla de colores,
-	 * si es asï¿½, le pregunta al usuario si quiere guardar los datos, y segï¿½n la
-	 * selecciï¿½n, restaura los datos antiguos o los machaca.
+	 * si es asï¿½, le pregunta al usuario si quiere guardar los datos, y
+	 * segï¿½n la selecciï¿½n, restaura los datos antiguos o los machaca.
 	 */
 	private void testLibraryChanged() {
 		if (hasChanged) {
-			if (RasterToolsUtil.messageBoxYesOrNot("desea_guardar_cambios", this)) {
-				ColorTableLibraryPersistence.save_to_1_1(palettesPath, getColorTableSelected());
+			if (RasterToolsUtil.messageBoxYesOrNot("desea_guardar_cambios",
+					this)) {
+				ColorTableLibraryPersistence.save_to_1_1(palettesPath,
+						getColorTableSelected());
 				getListViewComponent().repaint();
 			}
 			hasChanged = false;
 		}
 	}
-	
+
 	/**
 	 * Selecciona la tabla de color por defecto.
 	 */
 	public void selectDefault() {
 		int selected = 0;
 		for (int i = 0; i < getListViewComponent().getItems().size(); i++) {
-			if (((ListViewItem) getListViewComponent().getItems().get(i)).getName().equals("Default")) {
+			if (((ListViewItem) getListViewComponent().getItems().get(i))
+					.getName().equals("Default")) {
 				selected = i;
 				break;
 			}
@@ -467,39 +530,44 @@ public class ColorTableLibraryPanel extends BasePanel implements ActionListener,
 		getListViewComponent().setSelectedIndex(selected);
 		callColorTableChanged();
 	}
-	
+
 	/**
 	 * Inserta una tabla de color en la posicion especificada y selecciona.
 	 */
 	public void addColorTable(int pos, ColorTable colorTable) {
-		ListViewItem item = new ListViewItem(new ColorTableIconPainter(colorTable), getText(this, "tabla_actual"));
+		ListViewItem item = new ListViewItem(new ColorTableIconPainter(
+				colorTable), getText(this, "tabla_actual"));
 		getListViewComponent().addItem(pos, item);
 		getListViewComponent().setSelectedIndex(pos);
 		callColorTableChanged();
 	}
-	
+
 	/**
 	 * Accion que se ejecuta cuando cambia la seleccion de un item del
 	 * ListViewComponent
 	 */
 	public void actionValueChanged(EventObject e) {
-		currentColorTable = ((ColorTableIconPainter) getListViewComponent().getSelectedValue().getIcon()).getColorTable();
+		currentColorTable = ((ColorTableIconPainter) getListViewComponent()
+				.getSelectedValue().getIcon()).getColorTable();
 		testLibraryChanged();
 		callColorTableChanged();
 	}
-	
+
 	/**
 	 * Define si se visualizara el componente con interpolacion o no.
+	 * 
 	 * @param enabled
 	 */
 	public void setInterpolated(boolean enabled) {
 		for (int i = 0; i < getListViewComponent().getItems().size(); i++)
-			((ColorTableIconPainter) ((ListViewItem) getListViewComponent().getItems().get(i)).getIcon()).setInterpolated(enabled);
+			((ColorTableIconPainter) ((ListViewItem) getListViewComponent()
+					.getItems().get(i)).getIcon()).setInterpolated(enabled);
 		getListViewComponent().repaint();
 	}
-	
+
 	/**
 	 * Aï¿½adir un listener a la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void addColorTableLibraryListener(ColorTableLibraryListener listener) {
@@ -509,30 +577,37 @@ public class ColorTableLibraryPanel extends BasePanel implements ActionListener,
 
 	/**
 	 * Borrar un listener de la lista de eventos
+	 * 
 	 * @param listener
 	 */
-	public void removeColorTableLibraryListener(ColorTableLibraryListener listener) {
+	public void removeColorTableLibraryListener(
+			ColorTableLibraryListener listener) {
 		actionCommandListeners.remove(listener);
 	}
 
 	/**
 	 * Devuelve la tabla de color que hay seleccionada en ese momento
+	 * 
 	 * @return
 	 */
 	public ColorTable getColorTableSelected() {
-		if (getListViewComponent().getSelectedValue() != null){
-			currentColorTable = ((ColorTableIconPainter) getListViewComponent().getSelectedValue().getIcon()).getColorTable();
+		if (getListViewComponent().getSelectedValue() != null) {
+			currentColorTable = ((ColorTableIconPainter) getListViewComponent()
+					.getSelectedValue().getIcon()).getColorTable();
 		}
 		return currentColorTable;
 	}
-	
+
 	/**
 	 * Reescribe la tabla de color en la posicion seleccionada
+	 * 
 	 * @param colorTable
 	 */
 	public void setColorTableSelected(ColorTable colorTable) {
 		hasChanged = true;
-		((ColorTableIconPainter) getListViewComponent().getSelectedValue().getIcon()).getColorTable().createPaletteFromColorItems(colorTable.getColorItems(), false);
+		((ColorTableIconPainter) getListViewComponent().getSelectedValue()
+				.getIcon()).getColorTable().createPaletteFromColorItems(
+				colorTable.getColorItems(), false);
 		getListViewComponent().repaint();
 	}
 

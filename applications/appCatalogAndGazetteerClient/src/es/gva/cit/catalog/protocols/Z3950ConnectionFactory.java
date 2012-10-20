@@ -75,6 +75,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
  */
 /**
  * This factory creates Z39.50 connections
+ * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
 public class Z3950ConnectionFactory {
@@ -82,56 +83,67 @@ public class Z3950ConnectionFactory {
 	private static boolean appContextInitialized = false;
 	private static Z3950ServiceFactory factory = null;
 	private static Hashtable connections = new Hashtable();
-	
-	public static Z3950Connection getConnection(URI uri){
-		Z3950Connection connection = (Z3950Connection)connections.get(uri);
-		if (connection == null){
+
+	public static Z3950Connection getConnection(URI uri) {
+		Z3950Connection connection = (Z3950Connection) connections.get(uri);
+		if (connection == null) {
 			connection = new Z3950Connection(uri);
-			connections.put(uri,connection);
+			connections.put(uri, connection);
 		}
 		return connection;
 	}
-	
-	public static Searchable getSearchable(URI uri) throws SearchException{
-		if (!(appContextInitialized)){
+
+	public static Searchable getSearchable(URI uri) throws SearchException {
+		if (!(appContextInitialized)) {
 			initAppContext(uri);
-			factory = new Z3950ServiceFactory();		
+			factory = new Z3950ServiceFactory();
 			factory.setApplicationContext(app_context);
 			factory.setDefaultRecordSyntax("usmarc");
 			factory.setDefaultElementSetName("F");
-			factory.getRecordArchetypes().put("Default","usmarc::F");
-			factory.getRecordArchetypes().put("FullDisplay","usmarc::F");
-			factory.getRecordArchetypes().put("BriefDisplay","usmarc::B");
-			factory.getRecordArchetypes().put("Holdings","usmarc::F");
+			factory.getRecordArchetypes().put("Default", "usmarc::F");
+			factory.getRecordArchetypes().put("FullDisplay", "usmarc::F");
+			factory.getRecordArchetypes().put("BriefDisplay", "usmarc::B");
+			factory.getRecordArchetypes().put("Holdings", "usmarc::F");
 		}
 		factory.setHost(uri.getHost());
 		factory.setPort(uri.getPort());
 		Searchable s = factory.newSearchable();
-		s.setApplicationContext(app_context);	
+		s.setApplicationContext(app_context);
 		return s;
 	}
 
 	/**
 	 * Initialize the application context
-	 * @param url 
+	 * 
+	 * @param url
 	 */
-	private static void initAppContext(URI uri){
-		System.setProperty("javax.xml.parsers.DocumentBuilderFactory","org.apache.xerces.jaxp.DocumentBuilderFactoryImpl");
-		try{
-			app_context = new FileSystemXmlApplicationContext(new String[]{"config/ApplicationContextAlone.xml"},false);
-			((FileSystemXmlApplicationContext)app_context).setClassLoader(Z3950ConnectionFactory.class.getClassLoader());
-			((FileSystemXmlApplicationContext)app_context).refresh();
-		}catch(Exception e){
+	private static void initAppContext(URI uri) {
+		System.setProperty("javax.xml.parsers.DocumentBuilderFactory",
+				"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl");
+		try {
+			app_context = new FileSystemXmlApplicationContext(
+					new String[] { "config/ApplicationContextAlone.xml" },
+					false);
+			((FileSystemXmlApplicationContext) app_context)
+					.setClassLoader(Z3950ConnectionFactory.class
+							.getClassLoader());
+			((FileSystemXmlApplicationContext) app_context).refresh();
+		} catch (Exception e) {
 			e.printStackTrace();
-			app_context = new FileSystemXmlApplicationContext(new String[]{"gvSIG/extensiones/es.gva.cit.gvsig.catalogClient/config/ApplicationContext.xml"},false);
-			((FileSystemXmlApplicationContext)app_context).setClassLoader(Z3950ConnectionFactory.class.getClassLoader());
-			((FileSystemXmlApplicationContext)app_context).refresh();
-		}			
-		
-		if (app_context == null){
-			throw new RuntimeException("Unable to locate TestApplicationContext.xml definition file");
+			app_context = new FileSystemXmlApplicationContext(
+					new String[] { "gvSIG/extensiones/es.gva.cit.gvsig.catalogClient/config/ApplicationContext.xml" },
+					false);
+			((FileSystemXmlApplicationContext) app_context)
+					.setClassLoader(Z3950ConnectionFactory.class
+							.getClassLoader());
+			((FileSystemXmlApplicationContext) app_context).refresh();
+		}
+
+		if (app_context == null) {
+			throw new RuntimeException(
+					"Unable to locate TestApplicationContext.xml definition file");
 		}
 		appContextInitialized = true;
 	}
-	
+
 }

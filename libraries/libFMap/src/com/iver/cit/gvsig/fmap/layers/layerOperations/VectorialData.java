@@ -48,49 +48,77 @@ import com.iver.cit.gvsig.exceptions.visitors.VisitorException;
 import com.iver.cit.gvsig.fmap.layers.FBitSet;
 import com.iver.cit.gvsig.fmap.operations.strategies.FeatureVisitor;
 
-
-
 /**
- * <p>Interface that layers with vector data must implement.</p>
+ * <p>
+ * Interface that layers with vector data must implement.
+ * </p>
  * 
- * <p>Has methods for supporting the <i>visitor pattern</i> on the vector data features.</p>
+ * <p>
+ * Has methods for supporting the <i>visitor pattern</i> on the vector data
+ * features.
+ * </p>
  */
 public interface VectorialData {
 	/**
-	 * <p>Processes the layer's geometries indicated in the bit set, using the criterion of a <code>FeatureVisitor</code> object.</p>
+	 * <p>
+	 * Processes the layer's geometries indicated in the bit set, using the
+	 * criterion of a <code>FeatureVisitor</code> object.
+	 * </p>
 	 * 
-	 * @param visitor object that allows visit each feature
-	 * @param subset indicates the indexes of the geometries that will be visited
-	 *
-	 * @throws ReadDriverException any exception produced reading with the driver.
-	 * @throws ExpansionFileReadException any exception produced accessing an <code>ExpansionFile</code>.
-	 * @throws VisitorException any exception produced visiting the features.
+	 * @param visitor
+	 *            object that allows visit each feature
+	 * @param subset
+	 *            indicates the indexes of the geometries that will be visited
+	 * 
+	 * @throws ReadDriverException
+	 *             any exception produced reading with the driver.
+	 * @throws ExpansionFileReadException
+	 *             any exception produced accessing an
+	 *             <code>ExpansionFile</code>.
+	 * @throws VisitorException
+	 *             any exception produced visiting the features.
 	 */
 	public void process(FeatureVisitor visitor, FBitSet subset)
-		throws ReadDriverException, ExpansionFileReadException, VisitorException;
-
+			throws ReadDriverException, ExpansionFileReadException,
+			VisitorException;
 
 	/**
-	 * <p>Processes the layer's geometries which intersect the rectangle passed as parameter, using the criterion of a <code>FeatureVisitor</code> object.</p>
+	 * <p>
+	 * Processes the layer's geometries which intersect the rectangle passed as
+	 * parameter, using the criterion of a <code>FeatureVisitor</code> object.
+	 * </p>
 	 * 
-	 * @param visitor object that allows visit each feature
-	 * @param rect indicates the boundaries that will be analyzed
-	 *
-	 * @throws ReadDriverException any exception produced reading with the driver.
-	 * @throws ExpansionFileReadException any exception produced accessing an <code>ExpansionFile</code>.
-	 * @throws VisitorException any exception produced visiting the features.
+	 * @param visitor
+	 *            object that allows visit each feature
+	 * @param rect
+	 *            indicates the boundaries that will be analyzed
+	 * 
+	 * @throws ReadDriverException
+	 *             any exception produced reading with the driver.
+	 * @throws ExpansionFileReadException
+	 *             any exception produced accessing an
+	 *             <code>ExpansionFile</code>.
+	 * @throws VisitorException
+	 *             any exception produced visiting the features.
 	 */
 	public void process(FeatureVisitor visitor, Rectangle2D rect)
-		throws ReadDriverException, ExpansionFileReadException, VisitorException;
+			throws ReadDriverException, ExpansionFileReadException,
+			VisitorException;
 
 	/**
-	 * <p>Processes the layer's geometries using the criterion of a <code>FeatureVisitor</code> object.</p>
-	 *
-	 * @param visitor object that allows visit each feature
-	 *
-	 * @throws ReadDriverException any exception produced reading with the driver.
-	 * @throws VisitorException any exception produced visiting the features.
+	 * <p>
+	 * Processes the layer's geometries using the criterion of a
+	 * <code>FeatureVisitor</code> object.
+	 * </p>
+	 * 
+	 * @param visitor
+	 *            object that allows visit each feature
+	 * 
+	 * @throws ReadDriverException
+	 *             any exception produced reading with the driver.
+	 * @throws VisitorException
+	 *             any exception produced visiting the features.
 	 */
-	public void process(FeatureVisitor visitor)
-		throws ReadDriverException, VisitorException;
+	public void process(FeatureVisitor visitor) throws ReadDriverException,
+			VisitorException;
 }

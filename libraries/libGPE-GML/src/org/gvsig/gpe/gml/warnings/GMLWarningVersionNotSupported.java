@@ -63,20 +63,20 @@ import org.gvsig.exceptions.BaseException;
 /**
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  */
-public class GMLWarningVersionNotSupported extends BaseException{
-	
+public class GMLWarningVersionNotSupported extends BaseException {
+
 	private static final long serialVersionUID = 5475287715951343565L;
 	private String version = null;
-	
+
 	public GMLWarningVersionNotSupported(String ver) {
 		this.init();
-		this.version=ver;
+		this.version = ver;
 	}
-	
+
 	protected Map values() {
 		Hashtable params;
 		params = new Hashtable();
-		params.put("version",version);
+		params.put("version", version);
 		return params;
 	}
 
@@ -87,10 +87,10 @@ public class GMLWarningVersionNotSupported extends BaseException{
 	public void setVersion(String version) {
 		this.version = version;
 	}
-	
+
 	public void init() {
-		messageKey="Gml_Warning_Version_Not_Supported";
-		formatString="GML version %(ver) not implemented";
+		messageKey = "Gml_Warning_Version_Not_Supported";
+		formatString = "GML version %(ver) not implemented";
 		code = serialVersionUID;
 	}
 }

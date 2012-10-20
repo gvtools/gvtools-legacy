@@ -53,11 +53,13 @@ import org.xmlpull.v1.XmlPullParserException;
 import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
 
 /**
- * Implements the NamedLayer element of an SLD implementation specification (version 
- * 1.0.0).<p>
+ * Implements the NamedLayer element of an SLD implementation specification
+ * (version 1.0.0).
+ * <p>
  * 
- * A named layer is a layer that can be accessed from an OpenGIS Web
- * Server using a well-known name.<p>
+ * A named layer is a layer that can be accessed from an OpenGIS Web Server
+ * using a well-known name.
+ * <p>
  * 
  * @see SLDLayer
  * @see SLDUserLayer1_0_0
@@ -67,39 +69,36 @@ import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
  */
 public class SLDNamedLayer1_0_0 extends SLDNamedLayer {
 
-
 	/**
-	 * Parses the xml data retrieved from the SLD, it will parse the NamedLayer 
+	 * Parses the xml data retrieved from the SLD, it will parse the NamedLayer
 	 * element</p>
-	 * @throws LegendDriverException 
+	 * 
+	 * @throws LegendDriverException
 	 */
-	public void parse(XMLSchemaParser parser)throws IOException, XmlPullParserException, LegendDriverException {
+	public void parse(XMLSchemaParser parser) throws IOException,
+			XmlPullParserException, LegendDriverException {
 		int currentTag;
 		boolean end = false;
 
 		parser.require(XMLSchemaParser.START_TAG, null, SLDTags.NAMEDLAYER);
 		currentTag = parser.next();
 
-		while (!end)
-		{
-			switch(currentTag)
-			{
+		while (!end) {
+			switch (currentTag) {
 			case XMLSchemaParser.START_TAG:
-				if (parser.getName().compareTo(SLDTags.NAME)==0) {
+				if (parser.getName().compareTo(SLDTags.NAME) == 0) {
 					setName(parser.nextText());
-				}
-				else if (parser.getName().compareTo(SLDTags.LAYER_FEATURE_CONST)==0) {
+				} else if (parser.getName().compareTo(
+						SLDTags.LAYER_FEATURE_CONST) == 0) {
 					SLDLayerFeatureConstraints1_0_0 sldLayerFeatCons = new SLDLayerFeatureConstraints1_0_0();
-					sldLayerFeatCons.parse(parser,currentTag,null);
+					sldLayerFeatCons.parse(parser, currentTag, null);
 					addLayerFeatureConstraint(sldLayerFeatCons);
 
-				}
-				else if (parser.getName().compareTo(SLDTags.NAMEDSTYLE)==0) {
+				} else if (parser.getName().compareTo(SLDTags.NAMEDSTYLE) == 0) {
 					SLDNamedStyle1_0_0 namedStyle = new SLDNamedStyle1_0_0();
 					namedStyle.parse(parser);
 					addLayerStyle(namedStyle);
-				}
-				else if (parser.getName().compareTo(SLDTags.USERSTYLE)==0) {
+				} else if (parser.getName().compareTo(SLDTags.USERSTYLE) == 0) {
 					SLDUserStyle1_0_0 userStyle = new SLDUserStyle1_0_0();
 					userStyle.parse(parser);
 					addLayerStyle(userStyle);
@@ -123,8 +122,7 @@ public class SLDNamedLayer1_0_0 extends SLDNamedLayer {
 	@Override
 	public String toXML() {
 		// TODO Auto-generated method stub
-		throw new Error ("Not yet implemented");
+		throw new Error("Not yet implemented");
 	}
-
 
 }

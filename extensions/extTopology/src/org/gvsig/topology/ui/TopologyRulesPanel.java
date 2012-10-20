@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.ui;
 
 import java.awt.BorderLayout;
@@ -80,20 +80,22 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
  * 
  * @author Alvaro Zabala
  * 
- * TODO Ver si quitamos ITopologyContentProvider y usamos Topology en su lugar.
- * La idea de ITopologyContentProvider es que un mismo control valga para topologias
- * ya existentes o bien para factorias, cuando todavia no se ha creado la topologia
- *
+ *         TODO Ver si quitamos ITopologyContentProvider y usamos Topology en su
+ *         lugar. La idea de ITopologyContentProvider es que un mismo control
+ *         valga para topologias ya existentes o bien para factorias, cuando
+ *         todavia no se ha creado la topologia
+ * 
  */
 public class TopologyRulesPanel extends JWizardPanel {
-	
+
 	private static final long serialVersionUID = 4121232928062159340L;
-	
+
 	/**
 	 * text of the title showed in the component
 	 */
-	private static String title = PluginServices.getText(null, "Topology_rules");
-	
+	private static String title = PluginServices
+			.getText(null, "Topology_rules");
+
 	/**
 	 * Rules showed by this component as selected
 	 */
@@ -105,28 +107,25 @@ public class TopologyRulesPanel extends JWizardPanel {
 	private ITopologyContentProvider contentProvider;
 
 	/**
-	 * Contains listeners interested in the addition or removing of rules
-	 * to this component.
+	 * Contains listeners interested in the addition or removing of rules to
+	 * this component.
 	 */
 	private List<RuleSelectionListener> selectionListeners;
-	
+
 	/**
 	 * table which shows the selected rules
 	 */
 	private JTable rulesTable;
-	
+
 	private boolean readOnly;
-	
-	
-	public TopologyRulesPanel(JWizardComponents wizardComponents, 
-			 ITopologyContentProvider layerProvider){
+
+	public TopologyRulesPanel(JWizardComponents wizardComponents,
+			ITopologyContentProvider layerProvider) {
 		this(wizardComponents, layerProvider, false);
 	}
 
-	
-	public TopologyRulesPanel(JWizardComponents wizardComponents, 
-							 ITopologyContentProvider layerProvider,
-							 boolean readOnly) {
+	public TopologyRulesPanel(JWizardComponents wizardComponents,
+			ITopologyContentProvider layerProvider, boolean readOnly) {
 		super(wizardComponents, title);
 		this.contentProvider = layerProvider;
 		this.selectionListeners = new ArrayList<RuleSelectionListener>();
@@ -134,73 +133,74 @@ public class TopologyRulesPanel extends JWizardPanel {
 		setLayout(new BorderLayout());
 		rules = new ArrayList<ITopologyRule>();
 		List<ITopologyRule> existingRules = contentProvider.getRules();
-		if(existingRules != null && existingRules.size() > 0)
+		if (existingRules != null && existingRules.size() > 0)
 			rules.addAll(existingRules);
 		initialize();
 	}
-	
-	public void addRuleSelectionListener(RuleSelectionListener selectionListener){
+
+	public void addRuleSelectionListener(RuleSelectionListener selectionListener) {
 		this.selectionListeners.add(selectionListener);
 	}
-	
-	public void updateContent(ITopologyContentProvider contentProvider){
+
+	public void updateContent(ITopologyContentProvider contentProvider) {
 		rules.clear();
 		this.contentProvider = contentProvider;
 		List<ITopologyRule> existingRules = contentProvider.getRules();
-		if(existingRules != null && existingRules.size() > 0)
+		if (existingRules != null && existingRules.size() > 0)
 			rules.addAll(existingRules);
 		rulesTable.revalidate();
-		
+
 	}
-	
+
 	/**
-	 * Interface that must be implemented by all of these classes interested
-	 * in listening adding or removing rules events.
+	 * Interface that must be implemented by all of these classes interested in
+	 * listening adding or removing rules events.
+	 * 
 	 * @author Alvaro Zabala
-	 *
+	 * 
 	 */
-	public interface RuleSelectionListener{
+	public interface RuleSelectionListener {
 		public void selectionEvent(SelectedRuleEvent event);
 	}
-	
-	
+
 	/**
 	 * Events generated when a rule is added or removed from this component
+	 * 
 	 * @author Alvaro Zabala
-	 *
+	 * 
 	 */
-	public class SelectedRuleEvent{
+	public class SelectedRuleEvent {
 		public static final int RULE_ADDED = 0;
 		public static final int RULE_REMOVED = 1;
-		
+
 		private int eventType;
-		
-		public int getEventType(){
+
+		public int getEventType() {
 			return eventType;
 		}
-		
+
 		private ITopologyRule rule;
-		
-		public ITopologyRule getRule(){
+
+		public ITopologyRule getRule() {
 			return rule;
 		}
 	}
-	
+
 	/**
 	 * Returns the rules of this component's content
+	 * 
 	 * @return
 	 */
-	public List<ITopologyRule> getRules(){
+	public List<ITopologyRule> getRules() {
 		return rules;
 	}
-	
-	private void fireLayerSelectionEvent(SelectedRuleEvent event){
-		for(int i = 0; i < selectionListeners.size(); i++){
+
+	private void fireLayerSelectionEvent(SelectedRuleEvent event) {
+		for (int i = 0; i < selectionListeners.size(); i++) {
 			RuleSelectionListener listener = selectionListeners.get(i);
 			listener.selectionEvent(event);
 		}
 	}
-	
 
 	private void initialize() {
 		JLabel rulesText = new JLabel(PluginServices.getText(null,
@@ -234,60 +234,73 @@ public class TopologyRulesPanel extends JWizardPanel {
 		};
 		rulesTable = new JTable();
 		rulesTable.setModel(dataModel);
-		rulesTable.getColumnModel().getColumn(0).setHeaderValue(
-				PluginServices.getText(null, "Rule"));
-		rulesTable.getColumnModel().getColumn(1).setHeaderValue(
-				PluginServices.getText(null, "Layers"));
+		rulesTable.getColumnModel().getColumn(0)
+				.setHeaderValue(PluginServices.getText(null, "Rule"));
+		rulesTable.getColumnModel().getColumn(1)
+				.setHeaderValue(PluginServices.getText(null, "Layers"));
 		JScrollPane scrollTable = new JScrollPane(rulesTable);
-		
+
 		add(scrollTable, BorderLayout.CENTER);
-		
-		
-		if(! readOnly){
+
+		if (!readOnly) {
 			add(getButtonsPanel(), BorderLayout.SOUTH);
 		}
 	}
-	
-	private JPanel getButtonsPanel(){
-		JButton addRuleButton = new JButton(PluginServices.getText(null, "Add_Rule"));
-		addRuleButton.addActionListener(new ActionListener(){
+
+	private JPanel getButtonsPanel() {
+		JButton addRuleButton = new JButton(PluginServices.getText(null,
+				"Add_Rule"));
+		addRuleButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				List<FLyrVect> selectedLyrs = contentProvider.getLayers();
-				if(selectedLyrs.size() == 0){
-					GUIUtil.getInstance().messageBox("Message_no_layers_selected",
+				if (selectedLyrs.size() == 0) {
+					GUIUtil.getInstance().messageBox(
+							"Message_no_layers_selected",
 							"Message_error_creating_topology");
 					return;
 				}
-				NewTopologyRulePanel newRulePanel = new NewTopologyRulePanel(contentProvider.getLayers(), contentProvider.getMapContext());
+				NewTopologyRulePanel newRulePanel = new NewTopologyRulePanel(
+						contentProvider.getLayers(), contentProvider
+								.getMapContext());
 				PluginServices.getMDIManager().addWindow(newRulePanel);
 				ITopologyRule newRule = newRulePanel.getNewTopologyRule();
-				if(newRule != null){
-					if(! rules.contains(newRule)){
+				if (newRule != null) {
+					if (!rules.contains(newRule)) {
 						rules.add(newRule);
 						SelectedRuleEvent event = new SelectedRuleEvent();
 						event.eventType = SelectedRuleEvent.RULE_ADDED;
 						fireLayerSelectionEvent(event);
-					}else{
-						GUIUtil.getInstance().messageBox("Message_rule_already_in_topology", "Message_error_creating_topology");
+					} else {
+						GUIUtil.getInstance().messageBox(
+								"Message_rule_already_in_topology",
+								"Message_error_creating_topology");
 					}
 				}
 				rulesTable.revalidate();
-			}});
-		
-		JButton removeRuleButton = new JButton(PluginServices.getText(this, "Remove_Rule"));
-		removeRuleButton.addActionListener(new ActionListener(){
+			}
+		});
+
+		JButton removeRuleButton = new JButton(PluginServices.getText(this,
+				"Remove_Rule"));
+		removeRuleButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int rowIdx = rulesTable.getSelectedRow();
-				if(rowIdx == -1){
-					GUIUtil.getInstance().messageBox(PluginServices.getText(this, "Message_error_select_rule"), 
-										PluginServices.getText(this, "Message_error_creating_topology"));
+				if (rowIdx == -1) {
+					GUIUtil.getInstance().messageBox(
+							PluginServices.getText(this,
+									"Message_error_select_rule"),
+							PluginServices.getText(this,
+									"Message_error_creating_topology"));
 					return;
 				}
 				ITopologyRule rule = rules.get(rowIdx);
-				
-				if(rule instanceof MustBeLargerThanClusterTolerance){
-					GUIUtil.getInstance().messageBox(PluginServices.getText(this, "Message_error_delete_cluster_rule"), 
-							PluginServices.getText(this, "Message_error_creating_topology"));
+
+				if (rule instanceof MustBeLargerThanClusterTolerance) {
+					GUIUtil.getInstance().messageBox(
+							PluginServices.getText(this,
+									"Message_error_delete_cluster_rule"),
+							PluginServices.getText(this,
+									"Message_error_creating_topology"));
 					return;
 				}
 				SelectedRuleEvent event = new SelectedRuleEvent();
@@ -296,12 +309,14 @@ public class TopologyRulesPanel extends JWizardPanel {
 				fireLayerSelectionEvent(event);
 				rules.remove(rule);
 				rulesTable.revalidate();
-			}});
-		
-		JButton removeAllRulesBtn = new JButton(PluginServices.getText(this, "Remove_All"));
-		removeAllRulesBtn.addActionListener(new ActionListener(){
+			}
+		});
+
+		JButton removeAllRulesBtn = new JButton(PluginServices.getText(this,
+				"Remove_All"));
+		removeAllRulesBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				for(int i = 0; i < rules.size(); i++){
+				for (int i = 0; i < rules.size(); i++) {
 					SelectedRuleEvent event = new SelectedRuleEvent();
 					event.eventType = SelectedRuleEvent.RULE_REMOVED;
 					fireLayerSelectionEvent(event);
@@ -310,7 +325,7 @@ public class TopologyRulesPanel extends JWizardPanel {
 				rulesTable.revalidate();
 			}
 		});
-		
+
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		buttonPanel.add(addRuleButton);
 		buttonPanel.add(removeRuleButton);

@@ -54,82 +54,80 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-
 /**
  * Utility class to keep the list of available fields.
- *
+ * 
  * @author jldominguez
- *
+ * 
  */
 public class AvailableFieldsCheckBoxList extends JList {
-    protected static Border noFocusBorder = new EmptyBorder(1, 1, 1, 1);
+	protected static Border noFocusBorder = new EmptyBorder(1, 1, 1, 1);
 
-    public AvailableFieldsCheckBoxList() {
-        setCellRenderer(new CellRenderer());
+	public AvailableFieldsCheckBoxList() {
+		setCellRenderer(new CellRenderer());
 
-        addMouseListener(new MouseAdapter() {
-                public void mousePressed(MouseEvent e) {
-                    int index = locationToIndex(e.getPoint());
+		addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				int index = locationToIndex(e.getPoint());
 
-                    if (index == -1) {
-                        return;
-                    }
+				if (index == -1) {
+					return;
+				}
 
-                    FieldsListItem sel = (FieldsListItem) getModel()
-                                                              .getElementAt(index);
+				FieldsListItem sel = (FieldsListItem) getModel().getElementAt(
+						index);
 
-                    if ((e.getClickCount() == 2) || (e.getX() < 15)) {
-                        sel.setSelected(!sel.isSelected());
-                    }
-                }
-            });
+				if ((e.getClickCount() == 2) || (e.getX() < 15)) {
+					sel.setSelected(!sel.isSelected());
+				}
+			}
+		});
 
-        setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    }
+		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	}
 
-    public Object[] getCheckedItems() {
-        int size = getModel().getSize();
-        ArrayList resp = new ArrayList();
+	public Object[] getCheckedItems() {
+		int size = getModel().getSize();
+		ArrayList resp = new ArrayList();
 
-        for (int i = 0; i < size; i++) {
-            FieldsListItem item = (FieldsListItem) getModel().getElementAt(i);
+		for (int i = 0; i < size; i++) {
+			FieldsListItem item = (FieldsListItem) getModel().getElementAt(i);
 
-            if (item.isSelected()) {
-                resp.add(item);
-            }
-        }
+			if (item.isSelected()) {
+				resp.add(item);
+			}
+		}
 
-        return resp.toArray();
-    }
+		return resp.toArray();
+	}
 
-    public void checkAll(boolean b) {
-        int size = getModel().getSize();
+	public void checkAll(boolean b) {
+		int size = getModel().getSize();
 
-        for (int i = 0; i < size; i++) {
-            FieldsListItem item = (FieldsListItem) getModel().getElementAt(i);
-            item.setSelected(b);
-        }
+		for (int i = 0; i < size; i++) {
+			FieldsListItem item = (FieldsListItem) getModel().getElementAt(i);
+			item.setSelected(b);
+		}
 
-        updateUI();
-    }
+		updateUI();
+	}
 
-    protected class CellRenderer implements ListCellRenderer {
-        public Component getListCellRendererComponent(JList list, Object value,
-            int index, boolean isSelected, boolean cellHasFocus) {
-            FieldsListItem checkbox = (FieldsListItem) value;
-            checkbox.setBackground(isSelected ? getSelectionBackground()
-                                              : getBackground());
-            checkbox.setForeground(isSelected ? getSelectionForeground()
-                                              : getForeground());
-            checkbox.setEnabled(isEnabled());
-            checkbox.setFont(getFont());
-            checkbox.setFocusPainted(false);
-            checkbox.setBorderPainted(true);
-            checkbox.setBorder(isSelected
-                ? UIManager.getBorder("List.focusCellHighlightBorder")
-                : noFocusBorder);
+	protected class CellRenderer implements ListCellRenderer {
+		public Component getListCellRendererComponent(JList list, Object value,
+				int index, boolean isSelected, boolean cellHasFocus) {
+			FieldsListItem checkbox = (FieldsListItem) value;
+			checkbox.setBackground(isSelected ? getSelectionBackground()
+					: getBackground());
+			checkbox.setForeground(isSelected ? getSelectionForeground()
+					: getForeground());
+			checkbox.setEnabled(isEnabled());
+			checkbox.setFont(getFont());
+			checkbox.setFocusPainted(false);
+			checkbox.setBorderPainted(true);
+			checkbox.setBorder(isSelected ? UIManager
+					.getBorder("List.focusCellHighlightBorder") : noFocusBorder);
 
-            return checkbox;
-        }
-    }
+			return checkbox;
+		}
+	}
 }

@@ -82,9 +82,9 @@ import com.iver.cit.gvsig.geoprocess.core.fmap.FeatureProcessor;
 
 /**
  * This visitor apply an xy offset to visited features and save the result.
- *
+ * 
  * @author azabala
- *
+ * 
  */
 public class XYShifterFeatureVisitor implements FeatureVisitor {
 	/**
@@ -115,7 +115,7 @@ public class XYShifterFeatureVisitor implements FeatureVisitor {
 
 	/**
 	 * Default constructor
-	 *
+	 * 
 	 * @param featureProcessor
 	 * @param selection
 	 * @param dx
@@ -124,14 +124,13 @@ public class XYShifterFeatureVisitor implements FeatureVisitor {
 	 *            offset to apply in y direction
 	 */
 	public XYShifterFeatureVisitor(FeatureProcessor featureProcessor,
-										ILayerDefinition layerDef,
-										double dx, double dy) {
+			ILayerDefinition layerDef, double dx, double dy) {
 		this.featureProcessor = featureProcessor;
 		this.layerDefinition = layerDef;
 		this.offsetTransform = createTransform(dx, dy);
 	}
 
-	public void setSelection(FBitSet selection){
+	public void setSelection(FBitSet selection) {
 		this.selection = selection;
 	}
 
@@ -141,11 +140,12 @@ public class XYShifterFeatureVisitor implements FeatureVisitor {
 		return solution;
 	}
 
-	public void visit(IGeometry g, int index) throws VisitorException, StopWriterVisitorException, ProcessVisitorException {
-		if(g == null)
+	public void visit(IGeometry g, int index) throws VisitorException,
+			StopWriterVisitorException, ProcessVisitorException {
+		if (g == null)
 			return;
-		if(selection != null){
-			if(! selection.get(index))
+		if (selection != null) {
+			if (!selection.get(index))
 				return;
 		}
 		IGeometry newGeometry = g.cloneGeometry();
@@ -154,13 +154,15 @@ public class XYShifterFeatureVisitor implements FeatureVisitor {
 		try {
 			newFeature = createFeature(newGeometry, index);
 		} catch (ReadDriverException e) {
-			throw new ProcessVisitorException(recordset.getName(),e,"Error al construir el feature de resultado");
+			throw new ProcessVisitorException(recordset.getName(), e,
+					"Error al construir el feature de resultado");
 		}
 		featureProcessor.processFeature(newFeature);
 
 	}
 
-	private IFeature createFeature(IGeometry geometry, int layerIndex) throws ReadDriverException {
+	private IFeature createFeature(IGeometry geometry, int layerIndex)
+			throws ReadDriverException {
 		IFeature solution = null;
 		FieldDescription[] fields = layerDefinition.getFieldsDesc();
 		Value[] featureAttr = new Value[fields.length];
@@ -170,12 +172,13 @@ public class XYShifterFeatureVisitor implements FeatureVisitor {
 			String fieldName = recordset.getFieldName(indexField);
 			for (int j = 0; j < fields.length; j++) {
 				if (fieldName.equalsIgnoreCase(fields[j].getFieldName())) {
-					featureAttr[j] = recordset.getFieldValue(layerIndex,indexField);
+					featureAttr[j] = recordset.getFieldValue(layerIndex,
+							indexField);
 					break;
 				}// if
 			}// for
 		}// for
-		// now we put null values
+			// now we put null values
 		for (int i = 0; i < featureAttr.length; i++) {
 			if (featureAttr[i] == null)
 				featureAttr[i] = ValueFactory.createNullValue();
@@ -188,7 +191,8 @@ public class XYShifterFeatureVisitor implements FeatureVisitor {
 		return "Apply a xy shift to IGeometry coordinates";
 	}
 
-	public void stop(FLayer layer) throws StopWriterVisitorException, VisitorException {
+	public void stop(FLayer layer) throws StopWriterVisitorException,
+			VisitorException {
 		featureProcessor.finish();
 	}
 

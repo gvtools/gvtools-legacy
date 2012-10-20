@@ -13,8 +13,8 @@ package org.gvsig.app.documents.table.summarize.utils;
 import javax.swing.event.ChangeEvent;
 
 /**
- * Interfaz que deben implementar todos aquellos objetos interseados en
- * detectar cuando ha cambiado el contenido de un JTextFieldExt, JNumericField o
+ * Interfaz que deben implementar todos aquellos objetos interseados en detectar
+ * cuando ha cambiado el contenido de un JTextFieldExt, JNumericField o
  * JTextArea.
  * 
  * @author dance

@@ -78,15 +78,15 @@ import com.iver.utiles.extensionPoints.IExtensionBuilder;
  *
  */
 /**
- * Creates a Postgis FLyrVect from a set of params
- * (URL, user name, password, ...). The catalog
- * extension uses this class to load a new layer
- * from a metadata.
+ * Creates a Postgis FLyrVect from a set of params (URL, user name, password,
+ * ...). The catalog extension uses this class to load a new layer from a
+ * metadata.
+ * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class JDBCLayerBuilder implements IExtensionBuilder{
+public class JDBCLayerBuilder implements IExtensionBuilder {
 
-	public JDBCLayerBuilder(){
+	public JDBCLayerBuilder() {
 		super();
 	}
 
@@ -112,7 +112,6 @@ public class JDBCLayerBuilder implements IExtensionBuilder{
 		String tableName = (String) args.get((String) "TABLENAME");
 		String whereClause = (String) args.get((String) "WHERECLAUSE");
 
-
 		IConnection conn;
 		try {
 			conn = ConnectionFactory.createConnection(dbURL, user, pwd);
@@ -120,7 +119,6 @@ public class JDBCLayerBuilder implements IExtensionBuilder{
 			e.printStackTrace();
 			return null;
 		}
-
 
 		DBLayerDefinition lyrDef = new DBLayerDefinition();
 		lyrDef.setName(layerName);

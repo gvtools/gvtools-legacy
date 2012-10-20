@@ -211,10 +211,10 @@ public class GeoprocessManager extends JPanel implements SingletonWindow,
 		return viewInfo;
 	}
 
-		
-	public Object getWindowProfile(){
+	public Object getWindowProfile() {
 		return WindowInfo.TOOL_PROFILE;
 	}
+
 	/**
 	 * This method initializes this
 	 * 
@@ -231,7 +231,6 @@ public class GeoprocessManager extends JPanel implements SingletonWindow,
 		 * see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4182558
 		 * JSplitPane doesnt care setDividerLocation calls before its container
 		 * would be visible
-		 * 
 		 */
 		getJSplitPaneCenter().addComponentListener(new ComponentAdapter() {
 			public void componentResized(ComponentEvent event) {
@@ -272,14 +271,6 @@ public class GeoprocessManager extends JPanel implements SingletonWindow,
 				if (!(o instanceof IGeoprocessPlugin))
 					return;
 				IGeoprocessPlugin geoprocess = (IGeoprocessPlugin) o;
-				if (geoprocess == null) {
-					String error = PluginServices.getText(this,
-							"Error_seleccionar_gp");
-					String errorDescription = PluginServices.getText(this,
-							"Error_seleccionar_gp_desc");
-					JOptionPane.showMessageDialog(GeoprocessManager.this,
-							errorDescription, error, JOptionPane.ERROR_MESSAGE);
-				}
 				IGeoprocessUserEntries panel = geoprocess.getGeoprocessPanel();
 				GeoprocessPaneContainer container = new GeoprocessPaneContainer(
 						(JPanel) panel);

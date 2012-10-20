@@ -51,15 +51,18 @@ import java.util.List;
  */
 public class CompareLists {
 	/**
-	 * Compares two lists of elements, using the value returned of the <i><b>toString()</b></i> method
-	 *   of each element. <br>
+	 * Compares two lists of elements, using the value returned of the
+	 * <i><b>toString()</b></i> method of each element. <br>
 	 * Each element must also implement the {@link Comparable} interface. <br>
 	 * This method considers case sensitive .
 	 * 
-	 * @param l1 First list of items. @see java.util.List
-	 * @param l2 Second list of items. @see java.util.List
-	 * @return True if the two lists have the same number of elements, and elements are in the same
-	 *   position of the two lists and have the same <i>String</i> value .
+	 * @param l1
+	 *            First list of items. @see java.util.List
+	 * @param l2
+	 *            Second list of items. @see java.util.List
+	 * @return True if the two lists have the same number of elements, and
+	 *         elements are in the same position of the two lists and have the
+	 *         same <i>String</i> value .
 	 */
 	public synchronized static boolean compare(List l1, List l2) {
 		// If both are null -> true; if one yes but the other no -> return false
@@ -69,32 +72,37 @@ public class CompareLists {
 			else
 				return false;
 		}
-		
+
 		// If the length isn't equal
 		if (l1.size() != l2.size())
 			return false;
 
-		// Compares each item: must have the same value in the same position in the list
+		// Compares each item: must have the same value in the same position in
+		// the list
 		for (int i = 0; i < l1.size(); i++) {
-			if ( l1.get(i).toString().compareTo(l2.get(i).toString()) != 0 )
+			if (l1.get(i).toString().compareTo(l2.get(i).toString()) != 0)
 				return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
-	 * Compares two lists of elements, using the value returned of the <i><b>toString()</b></i> method
-	 *   of each element. <br>
+	 * Compares two lists of elements, using the value returned of the
+	 * <i><b>toString()</b></i> method of each element. <br>
 	 * Each element must also implement the {@link Comparable} interface. <br>
 	 * This method ignores case sensitive during the comparation.
 	 * 
-	 * @param l1 First list of items. @see java.util.List
-	 * @param l2 Second list of items. @see java.util.List
-	 * @return True if the two lists have the same number of elements, and elements are in the same
-	 *   position of the two lists and have the same <i>String</i> value .
+	 * @param l1
+	 *            First list of items. @see java.util.List
+	 * @param l2
+	 *            Second list of items. @see java.util.List
+	 * @return True if the two lists have the same number of elements, and
+	 *         elements are in the same position of the two lists and have the
+	 *         same <i>String</i> value .
 	 */
-	public synchronized static boolean compareIgnoringCaseSensitive(List l1, List l2) {
+	public synchronized static boolean compareIgnoringCaseSensitive(List l1,
+			List l2) {
 		// If both are null -> true; if one yes but the other no -> return false
 		if ((l1 == null) || (l2 == null)) {
 			if (l1 == l2)
@@ -107,25 +115,31 @@ public class CompareLists {
 		if (l1.size() != l2.size())
 			return false;
 
-		// Compares each item: must have the same value in the same position in the list
+		// Compares each item: must have the same value in the same position in
+		// the list
 		for (int i = 0; i < l1.size(); i++) {
-			if ( l1.get(i).toString().compareToIgnoreCase(l2.get(i).toString()) != 0 )
+			if (l1.get(i).toString().compareToIgnoreCase(l2.get(i).toString()) != 0)
 				return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
-	 * Compares two lists of elements, using the value returned of the <i><b>toString()</b></i> method
-	 *   of each element. <br>
+	 * Compares two lists of elements, using the value returned of the
+	 * <i><b>toString()</b></i> method of each element. <br>
 	 * Each element must also implement the {@link Comparable} interface. <br>
 	 * 
-	 * @param l1 First list of items. @see java.util.List
-	 * @param l2 Second list of items. @see java.util.List
-	 * @param comp A class which implements the <i><b>compare</b></i> method of the <i>Comparator</i> interface . 
-	 * @return True if the two lists have the same number of elements, and elements are in the same
-	 *   position of the two lists and have the same <i>String</i> value .
+	 * @param l1
+	 *            First list of items. @see java.util.List
+	 * @param l2
+	 *            Second list of items. @see java.util.List
+	 * @param comp
+	 *            A class which implements the <i><b>compare</b></i> method of
+	 *            the <i>Comparator</i> interface .
+	 * @return True if the two lists have the same number of elements, and
+	 *         elements are in the same position of the two lists and have the
+	 *         same <i>String</i> value .
 	 */
 	public synchronized static boolean compare(List l1, List l2, Comparator comp) {
 		// If both are null -> true; if one yes but the other no -> return false
@@ -140,28 +154,35 @@ public class CompareLists {
 		if (l1.size() != l2.size())
 			return false;
 
-		// Compares each item: must have the same value in the same position in the list
+		// Compares each item: must have the same value in the same position in
+		// the list
 		for (int i = 0; i < l1.size(); i++) {
-			if ( comp.compare(l1.get(i).toString(), (l2.get(i).toString())) != 0 )
+			if (comp.compare(l1.get(i).toString(), (l2.get(i).toString())) != 0)
 				return false;
 		}
 
 		return true;
 	}
-	
+
 	/**
-	 * Compares two lists of elements, using the value returned of the <i><b>toString()</b></i> method
-	 *   of each element. <br>
+	 * Compares two lists of elements, using the value returned of the
+	 * <i><b>toString()</b></i> method of each element. <br>
 	 * Each element must also implement the {@link Comparable} interface. <br>
 	 * This method ignores case sensitive during the comparation.
 	 * 
-	 * @param l1 First list of items. @see java.util.List
-	 * @param l2 Second list of items. @see java.util.List
-	 * @param comp A class which implements the <i><b>compare</b></i> method of the <i>Comparator</i> interface . 
-	 * @return True if the two lists have the same number of elements, and elements are in the same
-	 *   position of the two lists and have the same <i>String</i> value .
+	 * @param l1
+	 *            First list of items. @see java.util.List
+	 * @param l2
+	 *            Second list of items. @see java.util.List
+	 * @param comp
+	 *            A class which implements the <i><b>compare</b></i> method of
+	 *            the <i>Comparator</i> interface .
+	 * @return True if the two lists have the same number of elements, and
+	 *         elements are in the same position of the two lists and have the
+	 *         same <i>String</i> value .
 	 */
-	public synchronized static boolean compareIgnoringCaseSensitive(List l1, List l2, Comparator comp) {
+	public synchronized static boolean compareIgnoringCaseSensitive(List l1,
+			List l2, Comparator comp) {
 		// If both are null -> true; if one yes but the other no -> return false
 		if ((l1 == null) || (l2 == null)) {
 			if (l1 == l2)
@@ -174,9 +195,11 @@ public class CompareLists {
 		if (l1.size() != l2.size())
 			return false;
 
-		// Compares each item: must have the same value in the same position in the list
+		// Compares each item: must have the same value in the same position in
+		// the list
 		for (int i = 0; i < l1.size(); i++) {
-			if ( comp.compare(l1.get(i).toString().toLowerCase(), (l2.get(i).toString().toLowerCase())) != 0 )
+			if (comp.compare(l1.get(i).toString().toLowerCase(), (l2.get(i)
+					.toString().toLowerCase())) != 0)
 				return false;
 		}
 

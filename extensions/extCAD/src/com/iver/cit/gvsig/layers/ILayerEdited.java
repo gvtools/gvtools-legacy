@@ -8,6 +8,5 @@ public interface ILayerEdited {
 	 * @return Returns the lyr.
 	 */
 	public FLayer getLayer();
-	
 
 }

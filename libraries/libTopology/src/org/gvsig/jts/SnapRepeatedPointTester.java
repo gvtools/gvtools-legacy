@@ -42,14 +42,14 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: SnapRepeatedPointTester.java 14147 2007-09-27 19:02:04Z azabala $
-* $Log: SnapRepeatedPointTester.java,v $
-* Revision 1.1  2007/09/19 16:37:49  azabala
-* first version in cvs
-*
-*
-*/
+ *
+ * $Id: SnapRepeatedPointTester.java 14147 2007-09-27 19:02:04Z azabala $
+ * $Log: SnapRepeatedPointTester.java,v $
+ * Revision 1.1  2007/09/19 16:37:49  azabala
+ * first version in cvs
+ *
+ *
+ */
 package org.gvsig.jts;
 
 import java.util.Collection;
@@ -62,63 +62,63 @@ import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.MultiPoint;
 
 /**
- * RepeatedPointTester implementation that consideers a snap tolerance
- * (points that are at a distance lower than the snap tolerance are consideered
- * the same point)
+ * RepeatedPointTester implementation that consideers a snap tolerance (points
+ * that are at a distance lower than the snap tolerance are consideered the same
+ * point)
  * 
  * @author azabala
- *
+ * 
  */
 public class SnapRepeatedPointTester extends RepeatedPointTester {
-	
+
 	private double snapTolerance;
-	
+
 	private SnappingCoordinateMap repeatedCoords;
-	
+
 	/**
-	 * Constructor 
+	 * Constructor
+	 * 
 	 * @param snapTolerance
 	 */
 	public SnapRepeatedPointTester(double snapTolerance) {
 		repeatedCoords = new SnappingCoordinateMap(snapTolerance);
 		this.snapTolerance = snapTolerance;
 	}
-	
+
 	public Collection<Coordinate> getRepeatedCoordinates() {
 		return repeatedCoords.values();
 	}
-	
-	public void clear(){
+
+	public void clear() {
 		repeatedCoords.clear();
 	}
-	
-	
+
 	public boolean hasRepeatedPoint(Coordinate[] coords) {
 		boolean solution = false;
 		for (int i = 1; i < coords.length; i++) {
 			Coordinate previousCoord = coords[i - 1];
 			Coordinate coord = coords[i];
-			if(SnapCGAlgorithms.snapEquals2D(previousCoord, coord, snapTolerance)){
-				if(repeatedCoords.get(coords[i]) == null)
+			if (SnapCGAlgorithms.snapEquals2D(previousCoord, coord,
+					snapTolerance)) {
+				if (repeatedCoords.get(coords[i]) == null)
 					repeatedCoords.put(coords[i], coords[i]);
 				solution = true;
 			}
 		}// for
 		return solution;
 	}
-	
-	
-	public Geometry removeRepeatedPoints(Geometry g){
-		
-		if(g instanceof GeometryCollection){
-			if(! (g instanceof MultiPoint))
-				return removeRepeatedPoints((GeometryCollection)g);
+
+	public Geometry removeRepeatedPoints(Geometry g) {
+
+		if (g instanceof GeometryCollection) {
+			if (!(g instanceof MultiPoint))
+				return removeRepeatedPoints((GeometryCollection) g);
 		}
 		Coordinate[] coords = g.getCoordinates();
-		SnapCoordinateList coordList = new SnapCoordinateList(coords, snapTolerance, false);
+		SnapCoordinateList coordList = new SnapCoordinateList(coords,
+				snapTolerance, false);
 		Coordinate[] correctedCoords = coordList.toCoordinateArray();
 		return JtsUtil.createGeometry(correctedCoords, g.getGeometryType());
 	}
-	
-}
 
+}

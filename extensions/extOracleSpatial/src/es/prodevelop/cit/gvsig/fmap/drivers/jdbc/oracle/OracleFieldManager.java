@@ -17,11 +17,12 @@ import com.iver.cit.gvsig.fmap.edition.fieldmanagers.RemoveFieldCommand;
 import com.iver.cit.gvsig.fmap.edition.fieldmanagers.RenameFieldCommand;
 
 public class OracleFieldManager extends AbstractFieldManager {
-	
-	private static Logger logger = Logger.getLogger(OracleFieldManager.class.getName());
+
+	private static Logger logger = Logger.getLogger(OracleFieldManager.class
+			.getName());
 	private Connection conn;
 	private String tableName;
-	
+
 	private String[] forbiddenNames;
 
 	public OracleFieldManager(Connection c, String tn, String[] forbidden) {
@@ -29,29 +30,31 @@ public class OracleFieldManager extends AbstractFieldManager {
 		tableName = tn;
 		forbiddenNames = forbidden;
 	}
-	
+
 	private boolean isOneOf(String str, String[] arr) {
-		
-		for (int i=0; i<arr.length; i++) {
-			if (str.compareToIgnoreCase(arr[i]) == 0) return true;
+
+		for (int i = 0; i < arr.length; i++) {
+			if (str.compareToIgnoreCase(arr[i]) == 0)
+				return true;
 		}
 		return false;
-		
-		
+
 	}
+
 	public void setOriginalFields(FieldDescription[] flds) {
-		
+
 		ArrayList aux = new ArrayList();
-		for (int i=0; i<flds.length; i++) {
+		for (int i = 0; i < flds.length; i++) {
 			if (!isOneOf(flds[i].getFieldName(), forbiddenNames)) {
 				aux.add(flds[i]);
 			}
 		}
-		originalFields = (FieldDescription[]) aux.toArray(new FieldDescription[0]);
-	}	
+		originalFields = (FieldDescription[]) aux
+				.toArray(new FieldDescription[0]);
+	}
 
-	public boolean alterTable() throws WriteDriverException{
-	
+	public boolean alterTable() throws WriteDriverException {
+
 		String sql = "";
 		Statement st;
 		try {
@@ -62,15 +65,22 @@ public class OracleFieldManager extends AbstractFieldManager {
 				if (fc instanceof AddFieldCommand) {
 					AddFieldCommand addFC = (AddFieldCommand) fc;
 
-					// ALTER TABLE STAFF_OPTIONS ADD SO_INSURANCE_PROVIDER Varchar2(35);
+					// ALTER TABLE STAFF_OPTIONS ADD SO_INSURANCE_PROVIDER
+					// Varchar2(35);
 					sql = "ALTER TABLE "
 							+ tableName
 							+ " ADD "
 							+ addFC.getFieldDesc().getFieldName()
 							+ " "
-							+ OracleSpatialDriver.fieldTypeToSqlStringType(addFC.getFieldDesc())
+							+ OracleSpatialDriver
+									.fieldTypeToSqlStringType(addFC
+											.getFieldDesc())
 							+ " "
-							+ "DEFAULT " + addFC.getFieldDesc().getDefaultValue().getStringValue(ValueWriter.internalValueWriter)
+							+ "DEFAULT "
+							+ addFC.getFieldDesc()
+									.getDefaultValue()
+									.getStringValue(
+											ValueWriter.internalValueWriter)
 							+ "";
 					st.execute(sql);
 				}
@@ -83,7 +93,7 @@ public class OracleFieldManager extends AbstractFieldManager {
 				if (fc instanceof RenameFieldCommand) {
 					RenameFieldCommand renFC = (RenameFieldCommand) fc;
 					sql = "ALTER TABLE " + tableName + " RENAME COLUMN "
-					+ renFC.getAntName() + " TO " + renFC.getNewName();
+							+ renFC.getAntName() + " TO " + renFC.getNewName();
 					st.execute(sql);
 				}
 				logger.debug("Alter Table: " + sql);
@@ -98,10 +108,10 @@ public class OracleFieldManager extends AbstractFieldManager {
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
-			throw new WriteDriverException("JDBC",e);
+			throw new WriteDriverException("JDBC", e);
 		}
 
 		return false;
-	}	
+	}
 
 }

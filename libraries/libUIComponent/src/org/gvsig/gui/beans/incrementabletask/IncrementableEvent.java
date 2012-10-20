@@ -23,10 +23,11 @@ package org.gvsig.gui.beans.incrementabletask;
  */
 
 import java.util.EventObject;
+
 /**
  * Se utiliza para poder definir que acción esta ocurriendo en un momento dado
  * en la ventana IncrementableTask
- *
+ * 
  * @version 23/04/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
@@ -50,6 +51,7 @@ public class IncrementableEvent extends EventObject {
 
 	/**
 	 * Constructor de IncrementableEvent
+	 * 
 	 * @param source
 	 */
 	public IncrementableEvent(Object source) {

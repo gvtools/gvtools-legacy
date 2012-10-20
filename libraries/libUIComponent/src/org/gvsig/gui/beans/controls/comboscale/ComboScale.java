@@ -34,7 +34,7 @@ import javax.swing.JPanel;
 import org.gvsig.gui.beans.controls.IControl;
 
 public class ComboScale extends JPanel implements IControl {
-  private static final long serialVersionUID = 6483498713300082876L;
+	private static final long serialVersionUID = 6483498713300082876L;
 
 	private JLabel jLabel = null;
 
@@ -48,8 +48,8 @@ public class ComboScale extends JPanel implements IControl {
 	private boolean isScaleCombo;
 
 	static private int eventId = Integer.MIN_VALUE;
-	
-	private long lastScaleValue=0;
+
+	private long lastScaleValue = 0;
 
 	// jaume
 	private class ComboScaleItem {
@@ -64,13 +64,15 @@ public class ComboScale extends JPanel implements IControl {
 		}
 
 		public boolean equals(Object obj) {
-			return obj instanceof ComboScaleItem && ((ComboScaleItem) obj).getValue() == value;
+			return obj instanceof ComboScaleItem
+					&& ((ComboScaleItem) obj).getValue() == value;
 		}
 
 		public long getValue() {
 			return value;
 		}
 	}
+
 	/**
 	 * This is the default constructor
 	 */
@@ -81,7 +83,7 @@ public class ComboScale extends JPanel implements IControl {
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
@@ -92,15 +94,15 @@ public class ComboScale extends JPanel implements IControl {
 		jLabel.setText("1:");
 		this.setLayout(flowLayout);
 		this.setSize(155, 16);
-		//this.setBorder(javax.swing.BorderFactory.createLineBorder(
+		// this.setBorder(javax.swing.BorderFactory.createLineBorder(
 		this.add(jLabel, null);
 		this.add(getJComboBox(), null);
-				//java.awt.Color.gray, 1));
+		// java.awt.Color.gray, 1));
 	}
 
 	/**
 	 * This method initializes jComboBox
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getJComboBox() {
@@ -112,7 +114,8 @@ public class ComboScale extends JPanel implements IControl {
 			jComboBox.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD,
 					10));
 			jComboBox.setBackground(java.awt.SystemColor.window);
-			jComboBox.setComponentOrientation(java.awt.ComponentOrientation.LEFT_TO_RIGHT);
+			jComboBox
+					.setComponentOrientation(java.awt.ComponentOrientation.LEFT_TO_RIGHT);
 			jComboBox.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (e.getActionCommand().equals("comboBoxChanged")) {
@@ -120,35 +123,35 @@ public class ComboScale extends JPanel implements IControl {
 						// callActionCommandListeners(((Long)jComboBox.getSelectedItem()).longValue());
 						// setScale(((Long)jComboBox.getSelectedItem()).longValue());
 						Object item = jComboBox.getSelectedItem();
-						long scale=0;
+						long scale = 0;
 						if (item instanceof String) {
 							StringBuffer sb = new StringBuffer((String) item);
 							// remove any point in the number
 							final String digits = "0123456789";
 							int i = 0;
-							if ((sb.length() > 0) && (sb.charAt(0) == '-')){
+							if ((sb.length() > 0) && (sb.charAt(0) == '-')) {
 								i = 1;
 							}
-							BitSet deleteChars=new BitSet();
+							BitSet deleteChars = new BitSet();
 							while (i < sb.length()) {
-								if (digits.indexOf(sb.charAt(i))==-1)
+								if (digits.indexOf(sb.charAt(i)) == -1)
 									deleteChars.set(i);
 								i++;
 							}
-							for (int k=deleteChars.size();k>=0;k--){
+							for (int k = deleteChars.size(); k >= 0; k--) {
 								if (deleteChars.get(k))
 									sb.deleteCharAt(k);
 							}
 							jComboBox.removeItem(item);
-							try{
+							try {
 								scale = Long.parseLong(sb.toString());
 								lastScaleValue = scale;
-							}catch (NumberFormatException e1) {
+							} catch (NumberFormatException e1) {
 								scale = lastScaleValue;
 							}
 						} else {
-							scale = ((ComboScaleItem) jComboBox.getSelectedItem())
-							.getValue();
+							scale = ((ComboScaleItem) jComboBox
+									.getSelectedItem()).getValue();
 						}
 						insertScaleIfNotPresent(scale);
 						callActionCommandListeners(scale);
@@ -170,14 +173,14 @@ public class ComboScale extends JPanel implements IControl {
 
 	/**
 	 * This funcion ONLY sets the text in combo. It will NOT call listeners.
-	 *
+	 * 
 	 * @param scale
 	 */
 	public void setScale(long item) {
 		bDoCallListeners = false;
 		getJComboBox().setSelectedItem(new ComboScaleItem(item));
 		bDoCallListeners = true;
-		this.lastScaleValue=item;
+		this.lastScaleValue = item;
 	}
 
 	/**
@@ -201,7 +204,8 @@ public class ComboScale extends JPanel implements IControl {
 		}
 		if (!inserted) {
 			for (int i = 0; i < model.getSize(); i++) {
-				ComboScaleItem itemScale = (ComboScaleItem) model.getElementAt(i);
+				ComboScaleItem itemScale = (ComboScaleItem) model
+						.getElementAt(i);
 				if (scale < itemScale.getValue()) {
 					model.insertElementAt(new ComboScaleItem(scale), i);
 					inserted = true;
@@ -212,7 +216,7 @@ public class ComboScale extends JPanel implements IControl {
 				model.addElement(new ComboScaleItem(scale));
 		}
 		jComboBox.setSelectedItem(new ComboScaleItem(scale));
-		isScaleCombo=true;
+		isScaleCombo = true;
 	}
 
 	private void callActionCommandListeners(long scale) {
@@ -239,7 +243,7 @@ public class ComboScale extends JPanel implements IControl {
 
 	/**
 	 * Returns the current selected item.
-	 *
+	 * 
 	 * @return The value of the selected scale, or -1 if there was an invalid
 	 *         value (ie. not long value).
 	 */
@@ -263,11 +267,11 @@ public class ComboScale extends JPanel implements IControl {
 
 	public Object setValue(Object value) {
 		if (isScaleCombo) {
-			isScaleCombo=false;
+			isScaleCombo = false;
 			return null;
 		}
 		try {
-			long scale = Long.parseLong((String)value);
+			long scale = Long.parseLong((String) value);
 
 			if (scale < 0)
 				return null;
@@ -283,14 +287,13 @@ public class ComboScale extends JPanel implements IControl {
 		}
 	}
 
-
 	public void setEnabled(boolean enabled) {
-        boolean oldEnabled = jComboBox.isEnabled();
-        jComboBox.setEnabled(enabled);
-        jComboBox.firePropertyChange("enabled", oldEnabled, enabled);
-        if (enabled != oldEnabled) {
-            jComboBox.repaint();
-        }
-    }
+		boolean oldEnabled = jComboBox.isEnabled();
+		jComboBox.setEnabled(enabled);
+		jComboBox.firePropertyChange("enabled", oldEnabled, enabled);
+		if (enabled != oldEnabled) {
+			jComboBox.repaint();
+		}
+	}
 
 } // @jve:decl-index=0:visual-constraint="10,10"

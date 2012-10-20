@@ -55,14 +55,14 @@ import es.gva.cit.catalog.metadataxml.XMLNode;
  *
  */
 /**
- * This class creates a parsed record from a uri and a 
- * XMLNode. 
+ * This class creates a parsed record from a uri and a XMLNode.
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class RecordFactory {
-	private static ArrayList records = null; 
+	private static ArrayList records = null;
 
-	static{
+	static {
 		records = new ArrayList();
 		records.add(new GeonetworkISO19115Record());
 		records.add(new DeegreeISO19115Record());
@@ -73,42 +73,44 @@ public class RecordFactory {
 		records.add(new LaitsGmuISO19115Record());
 		records.add(new LaitsGmuServicesRecord());
 		records.add(new LaitsGmuEbRIMRecord());
-	}	
+	}
 
 	/**
 	 * Adds a new record
+	 * 
 	 * @param record
-	 * New record to add
+	 *            New record to add
 	 */
-	public static void addRecord(Record record){
+	public static void addRecord(Record record) {
 		records.add(record);
 	}
 
-
 	/**
 	 * Try to identify the XML format and return a record
+	 * 
 	 * @param uri
-	 * Server URI (used to retrieve the images)
+	 *            Server URI (used to retrieve the images)
 	 * @param node
-	 * XML node
+	 *            XML node
 	 * @return
 	 */
-	public static Record createRecord(URI uri, XMLNode node){
-		for (int i=0 ; i<records.size() ; i++){
-			Record record = (Record)records.get(i);
-			if (node != null){
-				if (record.accept(uri, node)){
-					Object[] values = {uri, node};
-					Class[] types = {URI.class, XMLNode.class}; 
+	public static Record createRecord(URI uri, XMLNode node) {
+		for (int i = 0; i < records.size(); i++) {
+			Record record = (Record) records.get(i);
+			if (node != null) {
+				if (record.accept(uri, node)) {
+					Object[] values = { uri, node };
+					Class[] types = { URI.class, XMLNode.class };
 					try {
-						return (Record)record.getClass().getConstructor(types).newInstance(values);
+						return (Record) record.getClass().getConstructor(types)
+								.newInstance(values);
 					} catch (Exception e) {
-						//It the instance can be created the 
-						//default record has to be returned
-					} 
-				}	
+						// It the instance can be created the
+						// default record has to be returned
+					}
+				}
 			}
 		}
-		return new UnknownRecord(uri,node);	
+		return new UnknownRecord(uri, node);
 	}
 }

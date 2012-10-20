@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.impl.smooth.gui;
 
 import java.awt.event.ItemEvent;
@@ -58,14 +58,13 @@ import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.geoprocess.core.gui.AbstractGeoprocessGridbagPanel;
 import com.iver.cit.gvsig.geoprocess.impl.smooth.ISmoothGeoprocessUserEntries;
 
-public class SmoothGeoprocessPanel extends AbstractGeoprocessGridbagPanel 
- 								implements ISmoothGeoprocessUserEntries{
-	
+public class SmoothGeoprocessPanel extends AbstractGeoprocessGridbagPanel
+		implements ISmoothGeoprocessUserEntries {
+
 	/*
-	 * copiado de SmoothGeometry.
-	 * TODO REDISEÑAR
-	 * */
-	static String[]  curveTypesNames = new String[]{
+	 * copiado de SmoothGeometry. TODO REDISEÑAR
+	 */
+	static String[] curveTypesNames = new String[] {
 			PluginServices.getText(null, "BEZIER"),
 			PluginServices.getText(null, "B_SPLINE"),
 			PluginServices.getText(null, "CARDINAL_SPLINE"),
@@ -73,43 +72,37 @@ public class SmoothGeoprocessPanel extends AbstractGeoprocessGridbagPanel
 			PluginServices.getText(null, "CUBIC_BSPLINE"),
 			PluginServices.getText(null, "LAGRANGE_CURVE"),
 			PluginServices.getText(null, "NATURAL_CUBIC_SPLINE"),
-			PluginServices.getText(null, "NURB_SPLINE")
-	};;
+			PluginServices.getText(null, "NURB_SPLINE") };;
 
 	private static final long serialVersionUID = 4103406609252667142L;
 
 	private JComboBox curveOptionJb;
-	
 
 	public SmoothGeoprocessPanel(FLayers arg0) {
 		super(arg0, PluginServices.getText(null, "Smooth_Lines"));
 	}
-	
+
 	JComboBox getCurveTypesCb() {
 		if (curveOptionJb == null) {
 			curveOptionJb = new JComboBox();
-			DefaultComboBoxModel defaultModel = 
-				new DefaultComboBoxModel( curveTypesNames);
+			DefaultComboBoxModel defaultModel = new DefaultComboBoxModel(
+					curveTypesNames);
 			curveOptionJb.setModel(defaultModel);
 		}
 		return curveOptionJb;
 	}
 
-
 	protected void addSpecificDesign() {
 		curveOptionJb = getCurveTypesCb();
-		
-		addComponent(PluginServices.getText(this, "CURVE_TYPE"),curveOptionJb);
-	
+
+		addComponent(PluginServices.getText(this, "CURVE_TYPE"), curveOptionJb);
+
 		initSelectedItemsJCheckBox();
 		updateNumSelectedFeaturesLabel();
 	}
 
-	
-
 	protected void processLayerComboBoxStateChange(ItemEvent arg0) {
 	}
-	
 
 	public boolean onlyFirstLayerSelected() {
 		return isFirstOnlySelected();
@@ -119,4 +112,3 @@ public class SmoothGeoprocessPanel extends AbstractGeoprocessGridbagPanel
 		return getCurveTypesCb().getSelectedIndex();
 	}
 }
-

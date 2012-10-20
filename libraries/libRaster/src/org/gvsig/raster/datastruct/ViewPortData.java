@@ -28,283 +28,290 @@ import org.cresques.geo.Georeferenced;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 
-
 /**
  * Datos de vista sobre las capas.
- *
- * Mantiene un conjunto de datos necesarios, que describen el modo de
- * ver las capas actual.
- *
+ * 
+ * Mantiene un conjunto de datos necesarios, que describen el modo de ver las
+ * capas actual.
+ * 
  * @author "Luis W. Sevilla" <sevilla_lui@gva.es>
  */
 public class ViewPortData implements Georeferenced {
-    /**
-     * Tipo de proyección de la vista.
-     */
-    CoordinateReferenceSystem crs = null;
+	/**
+	 * Tipo de proyección de la vista.
+	 */
+	CoordinateReferenceSystem crs = null;
 
-    /**
-     * Sistema de coordenadas de la vista.
-     */
-    CoordinateReferenceSystem cs = null;
+	/**
+	 * Sistema de coordenadas de la vista.
+	 */
+	CoordinateReferenceSystem cs = null;
 
-    /**
-     * Amplitud de la vista, en coordenadas proyectadas.
-     */
-    Extent extent = null;
+	/**
+	 * Amplitud de la vista, en coordenadas proyectadas.
+	 */
+	Extent extent = null;
 
-    /**
-     * Tamaño de la vista, en coordenadas de dispositivo.
-     */
-    Dimension2D viewSize = null;
+	/**
+	 * Tamaño de la vista, en coordenadas de dispositivo.
+	 */
+	Dimension2D viewSize = null;
 
-    /**
-     * Transformación afín usada en la vista actual.
-     */
-    public AffineTransform mat = null;
-    
-    /**
-     * Información de tamaño en pixeles. Esta no es calculada. Solo se almacena
-     * si el usuario la necesita.
-     */
-    public Point2D pxSize = null;
+	/**
+	 * Transformación afín usada en la vista actual.
+	 */
+	public AffineTransform mat = null;
 
-    /**
-     * Resolución (Puntos por pulgada) de la vista actual.
-     * Se necesita para los cálculos de escala geográfica.
-     */
-    int dpi = java.awt.Toolkit.getDefaultToolkit().getScreenResolution();
+	/**
+	 * Información de tamaño en pixeles. Esta no es calculada. Solo se almacena
+	 * si el usuario la necesita.
+	 */
+	public Point2D pxSize = null;
 
-    public ViewPortData() {
-    	mat = new AffineTransform();
-    	mat.scale(1.0, -1.0);
-    }
+	/**
+	 * Resolución (Puntos por pulgada) de la vista actual. Se necesita para los
+	 * cálculos de escala geográfica.
+	 */
+	int dpi = java.awt.Toolkit.getDefaultToolkit().getScreenResolution();
 
-    public ViewPortData(CoordinateReferenceSystem crs, Extent extent, Dimension2D size) {
-        this.crs = crs;
-        this.extent = extent;
-        this.viewSize = size;
-        mat = new AffineTransform();
-        mat.scale(1.0, -1.0);
-    }
+	public ViewPortData() {
+		mat = new AffineTransform();
+		mat.scale(1.0, -1.0);
+	}
 
-    public CoordinateReferenceSystem getCrs() {
-        return crs;
-    }
+	public ViewPortData(CoordinateReferenceSystem crs, Extent extent,
+			Dimension2D size) {
+		this.crs = crs;
+		this.extent = extent;
+		this.viewSize = size;
+		mat = new AffineTransform();
+		mat.scale(1.0, -1.0);
+	}
 
-    public void setCrs(CoordinateReferenceSystem proj) {
-        this.crs = proj;
-    }
+	public CoordinateReferenceSystem getCrs() {
+		return crs;
+	}
+
+	public void setCrs(CoordinateReferenceSystem proj) {
+		this.crs = proj;
+	}
 
 	public void reProject(MathTransform trans, CoordinateReferenceSystem target) {
-        // TODO metodo reProject pendiente de implementar
-    }
+		// TODO metodo reProject pendiente de implementar
+	}
 
-    public void setCoordSys(CoordinateReferenceSystem cs) {
-        this.cs = cs;
-    }
+	public void setCoordSys(CoordinateReferenceSystem cs) {
+		this.cs = cs;
+	}
 
-    //public void setCoordTrans(ICoordTrans ct) { this.ct = ct; }
-    public AffineTransform getMat() {
-        return mat;
-    }
+	// public void setCoordTrans(ICoordTrans ct) { this.ct = ct; }
+	public AffineTransform getMat() {
+		return mat;
+	}
 
-    public void setMat(AffineTransform mat) {
-        this.mat = mat;
-    }
+	public void setMat(AffineTransform mat) {
+		this.mat = mat;
+	}
 
-    public Object clone() {
-        ViewPortData vp = new ViewPortData();
+	public Object clone() {
+		ViewPortData vp = new ViewPortData();
 
-        if (mat != null) {
-            vp.mat = new AffineTransform(mat);
-        }
+		if (mat != null) {
+			vp.mat = new AffineTransform(mat);
+		}
 
-        if (extent != null) {
-            vp.extent = new Extent(extent);
-        }
+		if (extent != null) {
+			vp.extent = new Extent(extent);
+		}
 
-        vp.crs = crs;
-        vp.viewSize = viewSize;
-        vp.dpi = dpi;
+		vp.crs = crs;
+		vp.viewSize = viewSize;
+		vp.dpi = dpi;
 
-        return vp;
-    }
+		return vp;
+	}
 
-    /**
-     * Obtiene el ancho de la vista
-     * @return
-     */
-    public double getWidth() {
-        return viewSize.getWidth();
-    }
+	/**
+	 * Obtiene el ancho de la vista
+	 * 
+	 * @return
+	 */
+	public double getWidth() {
+		return viewSize.getWidth();
+	}
 
-    /**
-     * Obtiene el alto de la vista
-     * @return
-     */
-    public double getHeight() {
-        return viewSize.getHeight();
-    }
+	/**
+	 * Obtiene el alto de la vista
+	 * 
+	 * @return
+	 */
+	public double getHeight() {
+		return viewSize.getHeight();
+	}
 
-    /**
-     * Obtiene el tamaño de la vista
-     */
-    public Dimension2D getSize() {
-        return viewSize;
-    }
+	/**
+	 * Obtiene el tamaño de la vista
+	 */
+	public Dimension2D getSize() {
+		return viewSize;
+	}
 
-    /**
-     * Asigna el ancho y alto de la vista
-     * @param w Ancho
-     * @param h Alto
-     */
-    public void setSize(double w, double h) {
-        setSize(new Dimension((int) w, (int) h));
-    }
-    
-    public void setSize(Dimension2D sz) {
-    	viewSize = sz;
-        reExtent();
-    }
+	/**
+	 * Asigna el ancho y alto de la vista
+	 * 
+	 * @param w
+	 *            Ancho
+	 * @param h
+	 *            Alto
+	 */
+	public void setSize(double w, double h) {
+		setSize(new Dimension((int) w, (int) h));
+	}
 
-    public Extent getExtent() {
-        return extent;
-    }
+	public void setSize(Dimension2D sz) {
+		viewSize = sz;
+		reExtent();
+	}
 
-    public void setExtent(Dimension2D sz) {
-        Point2D.Double pt0 = new Point2D.Double(0, 0);
-        Point2D.Double ptSz = new Point2D.Double(sz.getWidth(), sz.getHeight());
+	public Extent getExtent() {
+		return extent;
+	}
 
-        try {
-            mat.inverseTransform(pt0, pt0);
-            mat.inverseTransform(ptSz, ptSz);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+	public void setExtent(Dimension2D sz) {
+		Point2D.Double pt0 = new Point2D.Double(0, 0);
+		Point2D.Double ptSz = new Point2D.Double(sz.getWidth(), sz.getHeight());
 
-        extent = new Extent(pt0, ptSz);
-    }
-    
-    /**
-     * Asigna la extensión del raster
-     * @param ext Extent
-     */
-    public void setExtent(Extent ext) {
-    	extent = ext;
-    }
+		try {
+			mat.inverseTransform(pt0, pt0);
+			mat.inverseTransform(ptSz, ptSz);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-    public void reExtent() {
-        setExtent(viewSize);
-    }
+		extent = new Extent(pt0, ptSz);
+	}
 
-    public void setDPI(int dpi) {
-        this.dpi = dpi;
-    }
+	/**
+	 * Asigna la extensión del raster
+	 * 
+	 * @param ext
+	 *            Extent
+	 */
+	public void setExtent(Extent ext) {
+		extent = ext;
+	}
 
-    public int getDPI() {
-        return this.dpi;
-    }
+	public void reExtent() {
+		setExtent(viewSize);
+	}
 
-    /**
-     * zoom a un marco.
-     *
-     * @param extent
-     */
-    public void zoom(Extent extent) {
-        double[] scale = extent.getScale(getWidth(), getHeight());
-        double escala = Math.min(scale[0], scale[1]);
+	public void setDPI(int dpi) {
+		this.dpi = dpi;
+	}
 
-        mat.setToIdentity();
-        mat.scale(escala, -escala);
-        mat.translate(-extent.minX(), -extent.maxY());
-        this.extent = extent;
-        reExtent();
-    }
+	public int getDPI() {
+		return this.dpi;
+	}
 
-    /**
-     * zoom centrado en un punto.
-     *
-     * @param zoom
-     * @param pt
-     */
-    public void zoom(double zoom, Point2D pt) {
-        zoom(zoom, zoom, pt);
-    }
+	/**
+	 * zoom a un marco.
+	 * 
+	 * @param extent
+	 */
+	public void zoom(Extent extent) {
+		double[] scale = extent.getScale(getWidth(), getHeight());
+		double escala = Math.min(scale[0], scale[1]);
 
-    public void zoom(double zx, double zy, Point2D pt) {
-        centerAt(pt);
-        mat.scale(zx, zy);
-        centerAt(pt);
-        reExtent();
-    }
+		mat.setToIdentity();
+		mat.scale(escala, -escala);
+		mat.translate(-extent.minX(), -extent.maxY());
+		this.extent = extent;
+		reExtent();
+	}
 
-    /**
-     * Zoom a una escala (geográfica);
-     *
-     * @param scale
-     */
-    public void zoomToCenter(double f) {
-        Point2D.Double ptCenter = new Point2D.Double(getWidth() / 2.0,
-                                                     getHeight() / 2.0);
+	/**
+	 * zoom centrado en un punto.
+	 * 
+	 * @param zoom
+	 * @param pt
+	 */
+	public void zoom(double zoom, Point2D pt) {
+		zoom(zoom, zoom, pt);
+	}
 
-        try {
-            mat.inverseTransform(ptCenter, ptCenter);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+	public void zoom(double zx, double zy, Point2D pt) {
+		centerAt(pt);
+		mat.scale(zx, zy);
+		centerAt(pt);
+		reExtent();
+	}
 
-        zoom(f, ptCenter);
-    }
+	/**
+	 * Zoom a una escala (geográfica);
+	 * 
+	 * @param scale
+	 */
+	public void zoomToCenter(double f) {
+		Point2D.Double ptCenter = new Point2D.Double(getWidth() / 2.0,
+				getHeight() / 2.0);
 
-    /**
-     * Centrar en un punto.
-     *
-     * @param pt
-     */
-    public void centerAt(Point2D pt) {
-        Point2D.Double ptCenter = new Point2D.Double(getWidth() / 2.0,
-                                                     getHeight() / 2.0);
+		try {
+			mat.inverseTransform(ptCenter, ptCenter);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-        try {
-            mat.inverseTransform(ptCenter, ptCenter);
-            mat.translate(ptCenter.x - pt.getX(), ptCenter.y - pt.getY());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+		zoom(f, ptCenter);
+	}
 
-        reExtent();
-    }
+	/**
+	 * Centrar en un punto.
+	 * 
+	 * @param pt
+	 */
+	public void centerAt(Point2D pt) {
+		Point2D.Double ptCenter = new Point2D.Double(getWidth() / 2.0,
+				getHeight() / 2.0);
 
-    /**
-     * Desplaza la vista actual.
-     *
-     * @param pt
-     */
-    public void pan(Point2D ptIni, Point2D ptFin) {
-        mat.translate(ptFin.getX() - ptIni.getX(), ptFin.getY() - ptIni.getY());
-        reExtent();
-    }
+		try {
+			mat.inverseTransform(ptCenter, ptCenter);
+			mat.translate(ptCenter.x - pt.getX(), ptCenter.y - pt.getY());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-    public Point2D getCenter() {
-        Point2D.Double ptCenter = new Point2D.Double(getWidth() / 2.0,
-                                                     getHeight() / 2.0);
+		reExtent();
+	}
 
-        try {
-            mat.inverseTransform(ptCenter, ptCenter);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+	/**
+	 * Desplaza la vista actual.
+	 * 
+	 * @param pt
+	 */
+	public void pan(Point2D ptIni, Point2D ptFin) {
+		mat.translate(ptFin.getX() - ptIni.getX(), ptFin.getY() - ptIni.getY());
+		reExtent();
+	}
 
-        return ptCenter;
-    }
-    
-    /**
-     * Calcula la transformación afín.
-     */
+	public Point2D getCenter() {
+		Point2D.Double ptCenter = new Point2D.Double(getWidth() / 2.0,
+				getHeight() / 2.0);
+
+		try {
+			mat.inverseTransform(ptCenter, ptCenter);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return ptCenter;
+	}
+
+	/**
+	 * Calcula la transformación afín.
+	 */
 	public void calculateAffineTransform() {
-		if ((viewSize == null) || (extent == null) ||
-			(viewSize.getWidth() <= 0) || (viewSize.getHeight() <= 0)) 
+		if ((viewSize == null) || (extent == null)
+				|| (viewSize.getWidth() <= 0) || (viewSize.getHeight() <= 0))
 			return;
 
 		AffineTransform escalado = new AffineTransform();
@@ -323,18 +330,17 @@ public class ViewPortData implements Georeferenced {
 
 		Rectangle2D adjustedExtent = new Rectangle2D.Double();
 		double scale = 0;
-		
+
 		if (escalaX < escalaY) {
 			scale = escalaX;
 			newHeight = viewSize.getHeight() / scale;
-			adjustedExtent.setRect(xCenter - (extent.width() / 2.0),
-					yCenter - (newHeight / 2.0), extent.width(), newHeight);
+			adjustedExtent.setRect(xCenter - (extent.width() / 2.0), yCenter
+					- (newHeight / 2.0), extent.width(), newHeight);
 		} else {
 			scale = escalaY;
 			newWidth = viewSize.getWidth() / scale;
-			adjustedExtent.setRect(xCenter - (newWidth / 2.0),
-					yCenter - (extent.height() / 2.0), newWidth,
-					extent.height());
+			adjustedExtent.setRect(xCenter - (newWidth / 2.0), yCenter
+					- (extent.height() / 2.0), newWidth, extent.height());
 		}
 		escalado.setToScale(scale, -scale);
 		translacion.setToTranslation(-extent.getULX(), -extent.getULY());

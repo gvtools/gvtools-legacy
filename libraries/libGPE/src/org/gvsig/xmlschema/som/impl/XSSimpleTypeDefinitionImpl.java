@@ -68,41 +68,43 @@ import org.gvsig.xmlschema.utils.TypeUtils;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class XSSimpleTypeDefinitionImpl extends XSTypeDefinitionImpl implements IXSSimpleTypeDefinition{
+public class XSSimpleTypeDefinitionImpl extends XSTypeDefinitionImpl implements
+		IXSSimpleTypeDefinition {
 	private Object value = null;
-	
+
 	public XSSimpleTypeDefinitionImpl(IXSSchema schema, Object value) {
-		super(schema);		
+		super(schema);
 	}
-	
+
 	public XSSimpleTypeDefinitionImpl(IXSSchema schema) {
-		super(schema);		
+		super(schema);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSSimpleTypeDefinition#getValue()
 	 */
 	public Object getValue() {
 		return value;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSSimpleTypeDefinition#getValue()
 	 */
-	public void setValue(Object value){
+	public void setValue(Object value) {
 		this.value = value;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSTypeDefinition#getTypeName()
 	 */
 	public String getTypeName() {
 		return TypeUtils.STRING;
 	}
 
-
-	
 }

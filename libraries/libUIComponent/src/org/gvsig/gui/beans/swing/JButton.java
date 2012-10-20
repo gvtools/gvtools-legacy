@@ -45,39 +45,34 @@ import java.awt.Dimension;
 import javax.swing.Icon;
 
 /**
- * According to the gvSIG's GUI style sheet all the buttons in the application will
- * have a normative size. No smaller than a concrete size, and big enough to contain
- * the text and avoiding the "..." characters. The button will grow up in width by
- * a set of widths defined in this style sheet, always choosing the smallest width that
- * can contain the text. If the biggest width is not enought for this purpose then the
- * button will automatically grow up to the smallest necessary width to fit the text.<br>
+ * According to the gvSIG's GUI style sheet all the buttons in the application
+ * will have a normative size. No smaller than a concrete size, and big enough
+ * to contain the text and avoiding the "..." characters. The button will grow
+ * up in width by a set of widths defined in this style sheet, always choosing
+ * the smallest width that can contain the text. If the biggest width is not
+ * enought for this purpose then the button will automatically grow up to the
+ * smallest necessary width to fit the text.<br>
  * <p>
- * The button resizing is based on the <b>setText(String txt)</b> method. However,
- * it is possible to use a custom size if you invoke one of <b>setSize(..)</b>,
- * <b>setBorders(...)</b> or <b>setPreferredSize(...)</b> after invoking the
- * <b>setText(...)<b> method.
+ * The button resizing is based on the <b>setText(String txt)</b> method.
+ * However, it is possible to use a custom size if you invoke one of
+ * <b>setSize(..)</b>, <b>setBorders(...)</b> or <b>setPreferredSize(...)</b>
+ * after invoking the <b>setText(...)<b> method.
  * <p>
  * This class is just a standard javax.swing.JButton that handles this issue.
  * </p>
- *
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
 public class JButton extends javax.swing.JButton {
-  private static final long serialVersionUID = -1635879317292710725L;
+	private static final long serialVersionUID = -1635879317292710725L;
 
 	// TODO this should be initialized from a properties file or so.
-	private static int[][] buttonSizes = new int[][] {
-			new int[] { 90, 23},
-			new int[] {110, 23},
-			new int[] {135, 23},
-			new int[] {160, 23}
-	};
+	private static int[][] buttonSizes = new int[][] { new int[] { 90, 23 },
+			new int[] { 110, 23 }, new int[] { 135, 23 }, new int[] { 160, 23 } };
 
 	private String enableText;
 	private String toolTip;
-
-
 
 	/**
 	 * Creates a new empty instance of org.gvsig.gui.beans.swing.JButton.
@@ -87,7 +82,9 @@ public class JButton extends javax.swing.JButton {
 	}
 
 	/**
-	 * Creates a new instance of org.gvsig.gui.beans.swing.JButton containing a text.
+	 * Creates a new instance of org.gvsig.gui.beans.swing.JButton containing a
+	 * text.
+	 * 
 	 * @param text
 	 */
 	public JButton(String text) {
@@ -96,8 +93,9 @@ public class JButton extends javax.swing.JButton {
 	}
 
 	/**
-	 * Creates a new instance of org.gvsig.gui.beans.swing.JButton containing an image and
-	 * a text.
+	 * Creates a new instance of org.gvsig.gui.beans.swing.JButton containing an
+	 * image and a text.
+	 * 
 	 * @param text
 	 * @param icon
 	 */
@@ -107,34 +105,37 @@ public class JButton extends javax.swing.JButton {
 	}
 
 	/**
-	 * Creates a new instance of org.gvsig.gui.beans.swing.JButton containing an image.
+	 * Creates a new instance of org.gvsig.gui.beans.swing.JButton containing an
+	 * image.
 	 */
 	public JButton(Icon icon) {
 		super(icon);
 	}
 
-
 	/**
 	 * Gets the text that appears in the tooltip when the button is disabled.
+	 * 
 	 * @return String
 	 */
 	public String getEnableText() {
 		return enableText;
 	}
+
 	/**
 	 * Sets the text that appears in the tooltip when the button is disabled.
-	 * @param enableText The enableText to set.
+	 * 
+	 * @param enableText
+	 *            The enableText to set.
 	 */
 	public void setEnableText(String enableText) {
 		this.enableText = enableText;
 	}
 
-
 	public void setEnabled(boolean aFlag) {
 		super.setEnabled(aFlag);
-		if (aFlag){
+		if (aFlag) {
 			setToolTipText(toolTip);
-		}else{
+		} else {
 			setToolTipText(enableText);
 		}
 	}
@@ -153,12 +154,12 @@ public class JButton extends javax.swing.JButton {
 		int oldHeight = (int) d.getHeight(), newHeight = oldHeight;
 
 		// figure out the suitable width
-		for (int i = buttonSizes.length-1; i >= 0 ; i--)
+		for (int i = buttonSizes.length - 1; i >= 0; i--)
 			if (oldWidth < buttonSizes[i][0])
 				newWidth = buttonSizes[i][0];
 
 		// figure out the suitable height
-		for (int i = buttonSizes.length-1; i >= 0 ; i--)
+		for (int i = buttonSizes.length - 1; i >= 0; i--)
 			if (oldHeight < buttonSizes[i][1])
 				newHeight = buttonSizes[i][1];
 

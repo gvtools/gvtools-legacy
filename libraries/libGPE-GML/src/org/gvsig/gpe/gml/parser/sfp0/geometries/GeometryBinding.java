@@ -59,35 +59,46 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class GeometryBinding extends org.gvsig.gpe.gml.parser.v2.geometries.GeometryBinding{
+public class GeometryBinding extends
+		org.gvsig.gpe.gml.parser.v2.geometries.GeometryBinding {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.bindings.v2.geometries.GeometryBinding#parseTag(org.xmlpull.v1.XmlPullParser, org.gvsig.gpe.gml.GPEDefaultGmlParser, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.bindings.v2.geometries.GeometryBinding#parseTag(org
+	 * .xmlpull.v1.XmlPullParser, org.gvsig.gpe.gml.GPEDefaultGmlParser,
+	 * java.lang.String)
 	 */
-	protected Object parseTag(IXmlStreamReader parser,GPEDefaultGmlParser handler, QName tag) throws XmlStreamException, IOException{
+	protected Object parseTag(IXmlStreamReader parser,
+			GPEDefaultGmlParser handler, QName tag) throws XmlStreamException,
+			IOException {
 		Object geometry = super.parseTag(parser, handler, tag);
-		if (geometry != null){
+		if (geometry != null) {
 			return geometry;
 		}
 
-		if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTICURVEPROPERTY)){
-			geometry = handler.getProfile().getCurvePropertyTypeBinding().
-			parse(parser, handler);
-		}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_CURVEPROPERTY)){
-			geometry = handler.getProfile().getCurvePropertyTypeBinding().
-			parse(parser, handler);
-		}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTICURVE)){
-			geometry = handler.getProfile().getMultiCurveTypeBinding().
-			parse(parser, handler);
+		if (CompareUtils.compareWithNamespace(tag,
+				GMLTags.GML_MULTICURVEPROPERTY)) {
+			geometry = handler.getProfile().getCurvePropertyTypeBinding()
+					.parse(parser, handler);
+		} else if (CompareUtils.compareWithNamespace(tag,
+				GMLTags.GML_CURVEPROPERTY)) {
+			geometry = handler.getProfile().getCurvePropertyTypeBinding()
+					.parse(parser, handler);
+		} else if (CompareUtils.compareWithNamespace(tag,
+				GMLTags.GML_MULTICURVE)) {
+			geometry = handler.getProfile().getMultiCurveTypeBinding()
+					.parse(parser, handler);
 		}
-		//MULTIPOLYGON PROPERTY ALIASES
-		else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTISURFACE)){				
-			geometry = handler.getProfile().getMultiPolygonTypeBinding().
-			parse(parser, handler);
-		}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_SURFACE)){				
-			geometry = handler.getProfile().getPolygonTypeBinding().
-			parse(parser, handler);
+		// MULTIPOLYGON PROPERTY ALIASES
+		else if (CompareUtils.compareWithNamespace(tag,
+				GMLTags.GML_MULTISURFACE)) {
+			geometry = handler.getProfile().getMultiPolygonTypeBinding()
+					.parse(parser, handler);
+		} else if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_SURFACE)) {
+			geometry = handler.getProfile().getPolygonTypeBinding()
+					.parse(parser, handler);
 		}
 		return geometry;
 	}

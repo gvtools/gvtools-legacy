@@ -22,10 +22,16 @@ import java.awt.image.DataBuffer;
 
 /**
  * Clase vacia para que sepa que se puede instanciar este tipo de datos
+ * 
  * @version 17/01/2008
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class RegionAlphaIntegerFilter extends RegionAlphaFilter {
-	public int getInRasterDataType() {return DataBuffer.TYPE_INT;}
-	public int getOutRasterDataType() { return DataBuffer.TYPE_INT;}
+	public int getInRasterDataType() {
+		return DataBuffer.TYPE_INT;
+	}
+
+	public int getOutRasterDataType() {
+		return DataBuffer.TYPE_INT;
+	}
 }

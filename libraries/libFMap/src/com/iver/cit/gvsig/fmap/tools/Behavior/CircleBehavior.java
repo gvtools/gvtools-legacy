@@ -57,11 +57,12 @@ import com.iver.cit.gvsig.fmap.tools.Listeners.CircleListener;
 import com.iver.cit.gvsig.fmap.tools.Listeners.PolylineListener;
 import com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener;
 
-
 /**
- * <p>Behavior that allows user to draw a circle on the image of the associated
- *  <code>MapControl</code> using a {@link PolylineListener PolylineListener}.</p>
- *
+ * <p>
+ * Behavior that allows user to draw a circle on the image of the associated
+ * <code>MapControl</code> using a {@link PolylineListener PolylineListener}.
+ * </p>
+ * 
  * @author Laura
  * @author Pablo Piqueras Bartolom�
  */
@@ -78,21 +79,26 @@ public class CircleBehavior extends Behavior {
 
 	/**
 	 * Tool listener used to work with the <code>MapControl</code> object.
-	 *
+	 * 
 	 * @see #getListener()
 	 * @see #setListener(ToolListener)
 	 */
 	private CircleListener listener;
 
 	/**
-	 * Determines if user setting the radius of the circle (with one click of the button 1 of the mouse), or not.
+	 * Determines if user setting the radius of the circle (with one click of
+	 * the button 1 of the mouse), or not.
 	 */
 	protected boolean isClicked = false;
 
 	/**
- 	 * <p>Creates a new behavior for selecting circle areas.</p>
- 	 *
-	 * @param zili listener used to permit this object to work with the associated <code>MapControl</code>
+	 * <p>
+	 * Creates a new behavior for selecting circle areas.
+	 * </p>
+	 * 
+	 * @param zili
+	 *            listener used to permit this object to work with the
+	 *            associated <code>MapControl</code>
 	 */
 	public CircleBehavior(CircleListener zili) {
 		listener = zili;
@@ -100,7 +106,10 @@ public class CircleBehavior extends Behavior {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#paintComponent(java.awt.Graphics)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#paintComponent(java.awt
+	 * .Graphics)
 	 */
 	public void paintComponent(Graphics g) {
 
@@ -111,17 +120,19 @@ public class CircleBehavior extends Behavior {
 		g.setXORMode(Color.white);
 		if ((m_FirstPoint != null) && (m_LastPoint != null)) {
 			radio = m_LastPoint.distance(m_FirstPoint);
-			Arc2D.Double arc = new Arc2D.Double(m_FirstPoint.getX()-radio,
-												m_FirstPoint.getY()-radio,
-												2*radio,
-												2*radio, 0, 360, Arc2D.OPEN);
+			Arc2D.Double arc = new Arc2D.Double(m_FirstPoint.getX() - radio,
+					m_FirstPoint.getY() - radio, 2 * radio, 2 * radio, 0, 360,
+					Arc2D.OPEN);
 			((Graphics2D) g).draw(arc);
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mousePressed(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mousePressed(java.awt
+	 * .event.MouseEvent)
 	 */
 	public void mousePressed(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON1) {
@@ -139,7 +150,10 @@ public class CircleBehavior extends Behavior {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseReleased(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseReleased(java.awt
+	 * .event.MouseEvent)
 	 */
 	public void mouseReleased(MouseEvent e) throws BehaviorException {
 		m_FirstPoint = null;
@@ -149,7 +163,10 @@ public class CircleBehavior extends Behavior {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseDragged(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseDragged(java.awt
+	 * .event.MouseEvent)
 	 */
 	public void mouseDragged(MouseEvent e) throws BehaviorException {
 		mouseMoved(e);
@@ -157,19 +174,23 @@ public class CircleBehavior extends Behavior {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseMoved(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseMoved(java.awt.event
+	 * .MouseEvent)
 	 */
-	public void mouseMoved(MouseEvent e)  throws BehaviorException {
-	    if (m_FirstPoint == null) return;
+	public void mouseMoved(MouseEvent e) throws BehaviorException {
+		if (m_FirstPoint == null)
+			return;
 
-	    m_LastPoint = e.getPoint();
+		m_LastPoint = e.getPoint();
 
 		ViewPort vp = getMapControl().getMapContext().getViewPort();
 
 		Point2D p1 = vp.toMapPoint(m_FirstPoint);
 		Point2D p2 = vp.toMapPoint(m_LastPoint);
 
-		//	Fijamos el nuevo extent
+		// Fijamos el nuevo extent
 		Rectangle2D.Double r = new Rectangle2D.Double();
 		r.setFrameFromDiagonal(p1, p2);
 
@@ -188,20 +209,24 @@ public class CircleBehavior extends Behavior {
 	}
 
 	/**
-	 * <p>Sets a tool listener to work with the <code>MapControl</code> using this behavior.</p>
-	 *
-	 * @param listener a <code>CircleListener</code> object for this behavior
+	 * <p>
+	 * Sets a tool listener to work with the <code>MapControl</code> using this
+	 * behavior.
+	 * </p>
+	 * 
+	 * @param listener
+	 *            a <code>CircleListener</code> object for this behavior
 	 */
 	public void setListener(ToolListener listener) {
-		this.listener = (CircleListener)listener;
+		this.listener = (CircleListener) listener;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#getListener()
 	 */
 	public ToolListener getListener() {
 		return listener;
 	}
 }
-

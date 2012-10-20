@@ -83,15 +83,15 @@ public class TimeWarningPanel extends JPanel {
 	private JCheckBox srsBasedOnXMLCheck;
 	private JPanel lockGeometriesPanel;
 	private JCheckBox lockGeometriesCheck;
-	
-	public TimeWarningPanel(){
+
+	public TimeWarningPanel() {
 		initialize();
 	}
 
 	/**
 	 * Initialize the components
 	 */
-	private void initialize(){
+	private void initialize() {
 		GridBagConstraints gridBagConstraints;
 		setLayout(new java.awt.GridBagLayout());
 
@@ -102,7 +102,7 @@ public class TimeWarningPanel extends JPanel {
 		gridBagConstraints.weightx = 1.0;
 		gridBagConstraints.weighty = 1.0;
 		gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 2);
-		add(getMessagePanel(), gridBagConstraints);		
+		add(getMessagePanel(), gridBagConstraints);
 
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 0;
@@ -110,24 +110,24 @@ public class TimeWarningPanel extends JPanel {
 		gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 		gridBagConstraints.weighty = 1.0;
 		gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 2);
-		add(getExpiryTimePanel(), gridBagConstraints);	
-		
+		add(getExpiryTimePanel(), gridBagConstraints);
+
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 2;
 		gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 		gridBagConstraints.weighty = 1.0;
 		gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 2);
-		add(getLockGeometriesPanel(), gridBagConstraints);	
-		
+		add(getLockGeometriesPanel(), gridBagConstraints);
+
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 3;
 		gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 		gridBagConstraints.weighty = 1.0;
 		gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 2);
-		add(getUpdateGeometriesPanel(), gridBagConstraints);	
-		
+		add(getUpdateGeometriesPanel(), gridBagConstraints);
+
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 4;
@@ -141,59 +141,64 @@ public class TimeWarningPanel extends JPanel {
 	 * @return the buttonsPanel
 	 */
 	private JPanel getLockGeometriesPanel() {
-		if (lockGeometriesPanel == null){
+		if (lockGeometriesPanel == null) {
 			lockGeometriesPanel = new JPanel();
-			lockGeometriesPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 3, 0));
-			lockGeometriesPanel.add(getLockGeometriesCheck());			
+			lockGeometriesPanel.setLayout(new java.awt.FlowLayout(
+					java.awt.FlowLayout.LEFT, 3, 0));
+			lockGeometriesPanel.add(getLockGeometriesCheck());
 		}
 		return lockGeometriesPanel;
-	}	
+	}
 
 	/**
 	 * @return the updateGeometriesCheck
 	 */
 	private JCheckBox getLockGeometriesCheck() {
-		if (lockGeometriesCheck == null){
+		if (lockGeometriesCheck == null) {
 			lockGeometriesCheck = new JCheckBox();
 			lockGeometriesCheck.setSelected(true);
-			lockGeometriesCheck.setText(PluginServices.getText(this, "wfst_support_lockfeature"));
+			lockGeometriesCheck.setText(PluginServices.getText(this,
+					"wfst_support_lockfeature"));
 		}
 		return lockGeometriesCheck;
-	}	
-	
+	}
+
 	/**
 	 * @return the buttonsPanel
 	 */
 	private JPanel getUpdateGeometriesPanel() {
-		if (srsBasedOnXMLPanel == null){
+		if (srsBasedOnXMLPanel == null) {
 			srsBasedOnXMLPanel = new JPanel();
-			srsBasedOnXMLPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 3, 0));
-			srsBasedOnXMLPanel.add(getSrsBasedOnXMLCheck());			
+			srsBasedOnXMLPanel.setLayout(new java.awt.FlowLayout(
+					java.awt.FlowLayout.LEFT, 3, 0));
+			srsBasedOnXMLPanel.add(getSrsBasedOnXMLCheck());
 		}
 		return srsBasedOnXMLPanel;
 	}
-	
 
 	/**
 	 * @return the srsBasedOnXMLCheck
 	 */
 	private JCheckBox getSrsBasedOnXMLCheck() {
-		if (srsBasedOnXMLCheck == null){
+		if (srsBasedOnXMLCheck == null) {
 			srsBasedOnXMLCheck = new JCheckBox();
 			srsBasedOnXMLCheck.setSelected(true);
-			srsBasedOnXMLCheck.setText(PluginServices.getText(this, "wfst_srs_based_on_XML"));
+			srsBasedOnXMLCheck.setText(PluginServices.getText(this,
+					"wfst_srs_based_on_XML"));
 		}
 		return srsBasedOnXMLCheck;
 	}
-	
+
 	/**
 	 * @return the buttonsPanel
 	 */
 	private JPanel getButtonsPanel() {
-		if (buttonsPanel == null){
+		if (buttonsPanel == null) {
 			buttonsPanel = new JPanel();
-			buttonsPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 3, 0));
-			buttonsPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 4));
+			buttonsPanel.setLayout(new java.awt.FlowLayout(
+					java.awt.FlowLayout.RIGHT, 3, 0));
+			buttonsPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(
+					0, 0, 0, 4));
 			buttonsPanel.add(getAcceptButton());
 			buttonsPanel.add(getCancelButton());
 		}
@@ -204,9 +209,10 @@ public class TimeWarningPanel extends JPanel {
 	 * @return the expiryLabel
 	 */
 	private JLabel getExpiryLabel() {
-		if (expiryLabel == null){
+		if (expiryLabel == null) {
 			expiryLabel = new JLabel();
-			expiryLabel.setText(PluginServices.getText(this, "wfst_minutes_to_expiry") + ": ");			
+			expiryLabel.setText(PluginServices.getText(this,
+					"wfst_minutes_to_expiry") + ": ");
 		}
 		return expiryLabel;
 	}
@@ -215,10 +221,10 @@ public class TimeWarningPanel extends JPanel {
 	 * @return the expiryText
 	 */
 	private ClockText getExpiryText() {
-		if (expiryText == null){
+		if (expiryText == null) {
 			expiryText = new ClockText();
 			expiryText.setPreferredSize(new Dimension(50, 19));
-		
+
 		}
 		return expiryText;
 	}
@@ -227,7 +233,7 @@ public class TimeWarningPanel extends JPanel {
 	 * @return the expiryTimePanel
 	 */
 	private JPanel getExpiryTimePanel() {
-		if (expiryTimePanel == null){
+		if (expiryTimePanel == null) {
 			expiryTimePanel = new JPanel();
 			expiryTimePanel.setLayout(new java.awt.BorderLayout());
 			expiryTimePanel.add(getQueryPanel(), java.awt.BorderLayout.WEST);
@@ -239,31 +245,32 @@ public class TimeWarningPanel extends JPanel {
 	 * @return the jButton1
 	 */
 	private JButton getAcceptButton() {
-		if (acceptButton == null){
+		if (acceptButton == null) {
 			acceptButton = new JButton();
 			acceptButton.setText(PluginServices.getText(this, "aceptar"));
 			acceptButton.setActionCommand(ACCEPTBUTTON_ACTIONCOMMAND);
 		}
 		return acceptButton;
 	}
-	
+
 	/**
 	 * @return the cancelButton
 	 */
 	protected JButton getCancelButton() {
-		if (cancelButton == null){
+		if (cancelButton == null) {
 			cancelButton = new JButton();
 			cancelButton.setText(PluginServices.getText(this, "cancelar"));
 			cancelButton.setActionCommand(CANCELBUTTON_ACTIONCOMMAND);
 		}
 		return cancelButton;
 	}
-	
+
 	/**
 	 * Add a listener for the buttons
+	 * 
 	 * @param listener
 	 */
-	protected void addActionListener(ActionListener listener){
+	protected void addActionListener(ActionListener listener) {
 		getAcceptButton().addActionListener(listener);
 		getCancelButton().addActionListener(listener);
 	}
@@ -272,7 +279,7 @@ public class TimeWarningPanel extends JPanel {
 	 * @return the jPanel1
 	 */
 	private JPanel getQueryPanel() {
-		if (queryPanel == null){
+		if (queryPanel == null) {
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.fill = GridBagConstraints.VERTICAL;
 			gridBagConstraints2.gridx = 1;
@@ -295,10 +302,11 @@ public class TimeWarningPanel extends JPanel {
 	 * @return the messageArea
 	 */
 	private JTextArea getMessageArea() {
-		if (messageArea == null){
+		if (messageArea == null) {
 			messageArea = new JTextArea();
 			messageArea.setEditable(false);
-			messageArea.setText(PluginServices.getText(this, "wfst_start_editing_warning"));
+			messageArea.setText(PluginServices.getText(this,
+					"wfst_start_editing_warning"));
 			messageArea.setLineWrap(true);
 			messageArea.setBackground(null);
 		}
@@ -309,49 +317,52 @@ public class TimeWarningPanel extends JPanel {
 	 * @return the messagePanel
 	 */
 	private JScrollPane getMessagePanel() {
-		if (messagePanel == null){
+		if (messagePanel == null) {
 			messagePanel = new JScrollPane();
-			messagePanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			messagePanel
+					.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 			messagePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 			messagePanel.setViewportView(getMessageArea());
 		}
 		return messagePanel;
 	}
-	
+
 	/**
 	 * @return the expiry time
 	 */
-	public int getExpiryTime(){
+	public int getExpiryTime() {
 		return getExpiryText().getExpiryTime();
 	}
-	
+
 	/**
 	 * @return if the srs is based on XML
 	 */
-	public boolean isSrsBasedOnXML(){
+	public boolean isSrsBasedOnXML() {
 		return getSrsBasedOnXMLCheck().isSelected();
 	}
-	
+
 	/**
 	 * Select or not select the srs geometries check
+	 * 
 	 * @param isUpdated
 	 */
-	public void setSrsBasedOnXML(boolean isUpdated){
+	public void setSrsBasedOnXML(boolean isUpdated) {
 		getSrsBasedOnXMLCheck().setSelected(isUpdated);
 	}
-	
+
 	/**
 	 * @return if the geometries can be locked
 	 */
-	public boolean isLockGeometries(){
+	public boolean isLockGeometries() {
 		return getLockGeometriesCheck().isSelected();
 	}
-	
+
 	/**
 	 * Select or not select the lock geometries check
+	 * 
 	 * @param isUpdated
 	 */
-	public void setLockFeatures(boolean isLocked){
+	public void setLockFeatures(boolean isLocked) {
 		getLockGeometriesCheck().setSelected(isLocked);
 	}
 }

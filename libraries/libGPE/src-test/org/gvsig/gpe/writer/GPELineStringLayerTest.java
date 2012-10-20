@@ -6,7 +6,6 @@ import org.gvsig.gpe.containers.GeometryAsserts;
 import org.gvsig.gpe.containers.Layer;
 import org.gvsig.gpe.containers.LineString;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -74,7 +73,7 @@ import org.gvsig.gpe.containers.LineString;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class GPELineStringLayerTest extends GPEWriterBaseTest{
+public abstract class GPELineStringLayerTest extends GPEWriterBaseTest {
 	private String layerId = "l1";
 	private String layerName = "Line String Layer";
 	private String layerDescription = "This is a line string test";
@@ -88,7 +87,7 @@ public abstract class GPELineStringLayerTest extends GPEWriterBaseTest{
 	private String lineString1Id = "p1";
 	private double[] lineString1X = generateRandomCoordinates();
 	private double[] lineString1Y = generateRandomCoordinates();
-	private double[] lineString1Z = generateRandomCoordinates();	
+	private double[] lineString1Z = generateRandomCoordinates();
 	private String feature2Name = "Los Angeles";
 	private String feature2Id = "f2";
 	private String lineString2Id = "p2";
@@ -96,55 +95,55 @@ public abstract class GPELineStringLayerTest extends GPEWriterBaseTest{
 	private double[] lineString2Y = generateRandomCoordinates();
 	private double[] lineString2Z = generateRandomCoordinates();
 
-	
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#readObjects()
 	 */
 	public void readObjects() {
 		Layer[] layers = getLayers();
-		assertEquals(layers.length, 1);		
+		assertEquals(layers.length, 1);
 		Layer layer = layers[0];
-		
-		assertEquals(layer.getFeatures().size(), 2);
-		//FEATURE 1
-		Feature feature1 = (Feature)layer.getFeatures().get(0);
-		GeometryAsserts.lineString((LineString)feature1.getGeometry(), lineString1X, lineString1Y, lineString1Z);
 
-		//FEATURE 2
-		Feature feature2 = (Feature)layer.getFeatures().get(1);
-		GeometryAsserts.lineString((LineString)feature2.getGeometry(), lineString2X, lineString2Y, lineString2Z);
+		assertEquals(layer.getFeatures().size(), 2);
+		// FEATURE 1
+		Feature feature1 = (Feature) layer.getFeatures().get(0);
+		GeometryAsserts.lineString((LineString) feature1.getGeometry(),
+				lineString1X, lineString1Y, lineString1Z);
+
+		// FEATURE 2
+		Feature feature2 = (Feature) layer.getFeatures().get(1);
+		GeometryAsserts.lineString((LineString) feature2.getGeometry(),
+				lineString2X, lineString2Y, lineString2Z);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#writeObjects()
 	 */
 	public void writeObjects() {
 		getWriterHandler().initialize();
-		getWriterHandler().startLayer(layerId, null, layerName, layerDescription, srs);
-		getWriterHandler().startBbox(bboxId, new CoordinatesSequence(bboxX,
-				bboxY,
-				bboxZ),
-				srs);
+		getWriterHandler().startLayer(layerId, null, layerName,
+				layerDescription, srs);
+		getWriterHandler().startBbox(bboxId,
+				new CoordinatesSequence(bboxX, bboxY, bboxZ), srs);
 		getWriterHandler().endBbox();
 		getWriterHandler().startFeature(feature1Id, null, feature1Name);
-		getWriterHandler().startLineString(lineString1Id, new CoordinatesSequence(
-				lineString1X,
-				lineString1Y,
-				lineString1Z), 
-				srs);
-		getWriterHandler().endLineString();		
+		getWriterHandler().startLineString(
+				lineString1Id,
+				new CoordinatesSequence(lineString1X, lineString1Y,
+						lineString1Z), srs);
+		getWriterHandler().endLineString();
 		getWriterHandler().endFeature();
 		getWriterHandler().startFeature(feature2Id, null, feature2Name);
-		getWriterHandler().startLineString(lineString2Id, new CoordinatesSequence(
-				lineString2X,
-				lineString2Y,
-				lineString2Z), 
-				srs);
-		getWriterHandler().endLineString();		
+		getWriterHandler().startLineString(
+				lineString2Id,
+				new CoordinatesSequence(lineString2X, lineString2Y,
+						lineString2Z), srs);
+		getWriterHandler().endLineString();
 		getWriterHandler().endFeature();
 		getWriterHandler().endLayer();
-		getWriterHandler().close();		
+		getWriterHandler().close();
 	}
 }

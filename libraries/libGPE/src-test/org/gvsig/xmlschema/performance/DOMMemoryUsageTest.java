@@ -1,4 +1,5 @@
 package org.gvsig.xmlschema.performance;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -62,14 +63,15 @@ import javax.xml.parsers.DocumentBuilderFactory;
  */
 /**
  * This test parses a XSD file using the DOM strategy.
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class DOMMemoryUsageTest extends MemoryUsageTest {
 
 	protected void parse(String file) throws Exception {
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance(); 
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		builder.parse(file);
 	}
-	
+
 }

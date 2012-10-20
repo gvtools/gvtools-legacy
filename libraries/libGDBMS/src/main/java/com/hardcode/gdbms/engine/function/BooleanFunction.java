@@ -3,10 +3,9 @@ package com.hardcode.gdbms.engine.function;
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public class BooleanFunction implements Function {
@@ -19,7 +18,7 @@ public class BooleanFunction implements Function {
 		}
 
 		return ValueFactory.createValue(Boolean.valueOf(args[0].toString())
-											   .booleanValue());
+				.booleanValue());
 	}
 
 	/**
@@ -29,17 +28,17 @@ public class BooleanFunction implements Function {
 		return "boolean";
 	}
 
-    /**
-     * @see com.hardcode.gdbms.engine.function.Function#isAggregate()
-     */
-    public boolean isAggregate() {
-        return false;
-    }
+	/**
+	 * @see com.hardcode.gdbms.engine.function.Function#isAggregate()
+	 */
+	public boolean isAggregate() {
+		return false;
+	}
 
-    /**
-     * @see com.hardcode.gdbms.engine.function.Function#cloneFunction()
-     */
-    public Function cloneFunction() {
-        return new BooleanFunction();
-    }
+	/**
+	 * @see com.hardcode.gdbms.engine.function.Function#cloneFunction()
+	 */
+	public Function cloneFunction() {
+		return new BooleanFunction();
+	}
 }

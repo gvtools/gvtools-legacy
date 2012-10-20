@@ -30,28 +30,37 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.gvsig.gui.beans.slidertext.ColorSliderTextContainer;
+
 /**
  * Añade un check al componente Slider ajustando el tamaño del componente a la
  * longitud del check. Al redimensionar el componente varia el tamaño del slider
- *
+ * 
  * @version 08/06/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
-public class CheckColorSliderTextContainer extends ColorSliderTextContainer implements ActionListener {
-	private static final long	serialVersionUID	= 7047604405777061995L;
+public class CheckColorSliderTextContainer extends ColorSliderTextContainer
+		implements ActionListener {
+	private static final long serialVersionUID = 7047604405777061995L;
 	public JCheckBox check = null;
 	private JPanel pLabel = null;
-	private String	text = null;
+	private String text = null;
 
 	/**
 	 * Constructor
-	 * @param min Valor mínimo del slider
-	 * @param max Valor máximo del slider
-	 * @param defaultPos Posición inicial
-	 * @param txt Texto de la etiqueta del check
-	 * @param active Valor por defecto del control.True activo y false desactivo
+	 * 
+	 * @param min
+	 *            Valor mínimo del slider
+	 * @param max
+	 *            Valor máximo del slider
+	 * @param defaultPos
+	 *            Posición inicial
+	 * @param txt
+	 *            Texto de la etiqueta del check
+	 * @param active
+	 *            Valor por defecto del control.True activo y false desactivo
 	 */
-	public CheckColorSliderTextContainer(int min, int max, int defaultPos, String txt, boolean active) {
+	public CheckColorSliderTextContainer(int min, int max, int defaultPos,
+			String txt, boolean active) {
 		super(min, max, defaultPos);
 		text = txt;
 		add(getPCheck(), BorderLayout.WEST);
@@ -65,7 +74,7 @@ public class CheckColorSliderTextContainer extends ColorSliderTextContainer impl
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPCheck() {
@@ -82,6 +91,7 @@ public class CheckColorSliderTextContainer extends ColorSliderTextContainer impl
 
 	/**
 	 * This method initializes JLabel
+	 * 
 	 * @return
 	 */
 	private JCheckBox getCheck() {
@@ -92,6 +102,7 @@ public class CheckColorSliderTextContainer extends ColorSliderTextContainer impl
 
 	/**
 	 * Activa o desactiva el control del panel
+	 * 
 	 * @param active
 	 */
 	public void setChecked(boolean active) {
@@ -101,6 +112,7 @@ public class CheckColorSliderTextContainer extends ColorSliderTextContainer impl
 
 	/**
 	 * Hace visible el checkbox o no del componente
+	 * 
 	 * @param value
 	 */
 	public void setCheckboxVisible(boolean value) {
@@ -111,6 +123,7 @@ public class CheckColorSliderTextContainer extends ColorSliderTextContainer impl
 
 	/**
 	 * Devuelve si el control esta activo
+	 * 
 	 * @param active
 	 */
 	public boolean isChecked() {
@@ -124,7 +137,9 @@ public class CheckColorSliderTextContainer extends ColorSliderTextContainer impl
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.JComponent#setEnabled(boolean)
 	 */
 	public void setEnabled(boolean enabled) {

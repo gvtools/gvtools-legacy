@@ -1,9 +1,8 @@
 package com.iver.cit.gvsig.project.documents.exceptions;
 
 /**
- * Excepción que indica un conflicto de nombres en los elementos del 
- * proyecto
- *
+ * Excepción que indica un conflicto de nombres en los elementos del proyecto
+ * 
  * @author Fernando González Cortés
  */
 public class NameException extends RuntimeException {
@@ -18,7 +17,7 @@ public class NameException extends RuntimeException {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param message
 	 */
 	public NameException(String message) {
@@ -29,7 +28,7 @@ public class NameException extends RuntimeException {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param message
 	 * @param cause
 	 */
@@ -41,7 +40,7 @@ public class NameException extends RuntimeException {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param cause
 	 */
 	public NameException(Throwable cause) {

@@ -65,6 +65,7 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * It parses a MultyGeometry tag. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;MultiGeometry&gt;
@@ -81,64 +82,79 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  * &lt;MultiGeometry&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
- * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#multigeometry
+ * @see http
+ *      ://code.google.com/apis/kml/documentation/kml_tags_21.html#multigeometry
  */
 public class MultiGeometryBinding {
 	/**
 	 * It parses the MultiGeometry tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * A multigeometry
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return A multigeometry
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public Object parse(IXmlStreamReader parser,GPEDeafultKmlParser handler) throws XmlStreamException, IOException {
+	public Object parse(IXmlStreamReader parser, GPEDeafultKmlParser handler)
+			throws XmlStreamException, IOException {
 		boolean endFeature = false;
 		int currentTag;
-		Object multiGeometry = null;		
-		
-		String id = handler.getProfile().getGeometryBinding().getID(parser, handler);
-		
-		multiGeometry = handler.getContentHandler().startMultiGeometry(id, Kml2_1_Tags.DEFAULT_SRS);
-		
+		Object multiGeometry = null;
+
+		String id = handler.getProfile().getGeometryBinding()
+				.getID(parser, handler);
+
+		multiGeometry = handler.getContentHandler().startMultiGeometry(id,
+				Kml2_1_Tags.DEFAULT_SRS);
+
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-					if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.POINT)){
-						Object point = handler.getProfile().getPointTypeBinding().parse(parser, handler);
-						handler.getContentHandler().addGeometryToMultiGeometry(point, multiGeometry);
-					}else if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.LINESTRING)){
-						Object lineString = handler.getProfile().getLineStringTypeBinding().parse(parser, handler);
-						handler.getContentHandler().addGeometryToMultiGeometry(lineString, multiGeometry);
-					}if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.POLYGON)){
-						Object polygon = handler.getProfile().getPolygonTypeBinding().parse(parser, handler);
-						handler.getContentHandler().addGeometryToMultiGeometry(polygon, multiGeometry);
-					}
-					break;
-				case IXmlStreamReader.END_ELEMENT:
-					if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.MULTIGEOMETRY)){						
-						endFeature = true;	
-						handler.getContentHandler().endMultiGeometry(multiGeometry);
-					}
-					break;
-				case IXmlStreamReader.CHARACTERS:					
-					
-					break;
+				if (CompareUtils.compareWithNamespace(tag, Kml2_1_Tags.POINT)) {
+					Object point = handler.getProfile().getPointTypeBinding()
+							.parse(parser, handler);
+					handler.getContentHandler().addGeometryToMultiGeometry(
+							point, multiGeometry);
+				} else if (CompareUtils.compareWithNamespace(tag,
+						Kml2_1_Tags.LINESTRING)) {
+					Object lineString = handler.getProfile()
+							.getLineStringTypeBinding().parse(parser, handler);
+					handler.getContentHandler().addGeometryToMultiGeometry(
+							lineString, multiGeometry);
 				}
-				if (!endFeature){					
-					currentTag = parser.next();
-					tag = parser.getName();
+				if (CompareUtils.compareWithNamespace(tag, Kml2_1_Tags.POLYGON)) {
+					Object polygon = handler.getProfile()
+							.getPolygonTypeBinding().parse(parser, handler);
+					handler.getContentHandler().addGeometryToMultiGeometry(
+							polygon, multiGeometry);
 				}
-			}			
-		return multiGeometry;	
+				break;
+			case IXmlStreamReader.END_ELEMENT:
+				if (CompareUtils.compareWithNamespace(tag,
+						Kml2_1_Tags.MULTIGEOMETRY)) {
+					endFeature = true;
+					handler.getContentHandler().endMultiGeometry(multiGeometry);
+				}
+				break;
+			case IXmlStreamReader.CHARACTERS:
+
+				break;
+			}
+			if (!endFeature) {
+				currentTag = parser.next();
+				tag = parser.getName();
+			}
+		}
+		return multiGeometry;
 	}
 }

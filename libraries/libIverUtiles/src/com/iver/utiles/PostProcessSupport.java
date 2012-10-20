@@ -49,140 +49,145 @@ import java.util.ArrayList;
 
 /**
  * @author fjp
- *
- * Clase que recibe las llamadas que tiene que hacer cuando termine
- * la lectura de proyecto, por ejemplo. Recibiría algo así como Clase,
- * Nombre de función a invocar, Parámetros y Prioridad.
- * Lo guarda en un array, ordena por prioridad y empieza a invocar.
+ * 
+ *         Clase que recibe las llamadas que tiene que hacer cuando termine la
+ *         lectura de proyecto, por ejemplo. Recibiría algo así como Clase,
+ *         Nombre de función a invocar, Parámetros y Prioridad. Lo guarda en un
+ *         array, ordena por prioridad y empieza a invocar.
  */
-public class PostProcessSupport
-{
-    private static ArrayList callList = new ArrayList();
-    private static class Call
-    {
-        private Object obj;
-        private Method method;
-        private Object[] parameters;
-        private int priority;
-        public Call(Object obj, String strMethod, Object[] parameters, int priority)
-        {
-            this.obj = obj;
-            this.parameters = parameters;
-            Class[] classParams = new Class[parameters.length];
-            for (int i=0; i< parameters.length; i++)
-                classParams[i] = parameters[i].getClass();
-            try {
-                method = obj.getClass().getMethod(strMethod, classParams);
-            } catch (SecurityException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-                // Resulta que con getMethod no pilla bien el superinterface VectorialLegend,
-                // así que lo hacemos manual
-                Method[] list = obj.getClass().getMethods();
-                for (int i=0; i< list.length; i++)
-                {
-                    // System.err.println(list[i].toString());
-                    if (list[i].getName().compareTo(strMethod) == 0)
-                    {
-                        boolean encontrado = true;
-                        Class[] params = list[i].getParameterTypes();
-                        // En cada parámetro del método, miramos si
-                        // el parámetro correspondiente implementa la interfaz
-                        // adecuada.
-                        for (int j=0; j < params.length; j++) // for de los parámetros del método.
-                        {
-                        	// Miramos primero si es de la clase que buscamos, y si no lo es, pasamos
-                        	// a revisar sus interfaces.
-                        	boolean bParamOK = false;
-//                        	if (params[j].getName().compareTo(parameters[j].getClass().getName()) == 0)
-                        	if ( params[j].isInstance(parameters[j]) )
-                        	{
-                        		bParamOK = true;
-                        		continue;
-                        	}
-                            // Interfaces que implementa el parámetro j-ésimo que le pasamos.
-                            Class[] theInterfaces = parameters[j].getClass().getInterfaces();
+public class PostProcessSupport {
+	private static ArrayList callList = new ArrayList();
 
-                            for (int k=0; k< theInterfaces.length; k++)
-                            {
-                                // Si alguno de estos interfaces cuadra con lo que
-                                // espera el método, podemos comprobar el siguiente parámetro.
-                                // Si al salir del for externo, encontrado sigue siendo true,
-                                // hemos encontrado el método que buscábamos.
-                                if (theInterfaces[k].getName().compareTo(params[j].getName()) == 0)
-                                {
-                                    bParamOK = true;
-                                    break;
-                                }
-                            }
-                            if (bParamOK == false)
-                            {
-                                encontrado = false;
-                                break; // Vamos a por otro método
-                            }
-                        }
-                        if (encontrado)
-                        {
-                            method = list[i];
-                            return;
-                        }
-                    }
-                }
-                e.printStackTrace();
-            }
-        }
+	private static class Call {
+		private Object obj;
+		private Method method;
+		private Object[] parameters;
+		private int priority;
 
-        public Object executeMethod() throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
-        {
-        	if (method!=null)
-        		return method.invoke(obj,parameters);
-        	return null;
-        }
-    }
-    public static void addToPostProcess(Object obj, String strMethod, Object[] parameters, int priority)
-    {
-        Call newCall = new Call(obj, strMethod, parameters, priority);
-        callList.add(newCall);
-    }
-    public static void addToPostProcess(Object obj, String strMethod, Object parameter, int priority)
-    {
-        Object[] parameters = new Object[1];
-        parameters[0] = parameter;
-        Call newCall = new Call(obj, strMethod, parameters, priority);
-        callList.add(newCall);
-    }
+		public Call(Object obj, String strMethod, Object[] parameters,
+				int priority) {
+			this.obj = obj;
+			this.parameters = parameters;
+			Class[] classParams = new Class[parameters.length];
+			for (int i = 0; i < parameters.length; i++)
+				classParams[i] = parameters[i].getClass();
+			try {
+				method = obj.getClass().getMethod(strMethod, classParams);
+			} catch (SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchMethodException e) {
+				// Resulta que con getMethod no pilla bien el superinterface
+				// VectorialLegend,
+				// así que lo hacemos manual
+				Method[] list = obj.getClass().getMethods();
+				for (int i = 0; i < list.length; i++) {
+					// System.err.println(list[i].toString());
+					if (list[i].getName().compareTo(strMethod) == 0) {
+						boolean encontrado = true;
+						Class[] params = list[i].getParameterTypes();
+						// En cada parámetro del método, miramos si
+						// el parámetro correspondiente implementa la interfaz
+						// adecuada.
+						for (int j = 0; j < params.length; j++) // for de los
+																// parámetros
+																// del método.
+						{
+							// Miramos primero si es de la clase que buscamos, y
+							// si no lo es, pasamos
+							// a revisar sus interfaces.
+							boolean bParamOK = false;
+							// if
+							// (params[j].getName().compareTo(parameters[j].getClass().getName())
+							// == 0)
+							if (params[j].isInstance(parameters[j])) {
+								bParamOK = true;
+								continue;
+							}
+							// Interfaces que implementa el parámetro j-ésimo
+							// que le pasamos.
+							Class[] theInterfaces = parameters[j].getClass()
+									.getInterfaces();
 
-    private static void orderByPriority()
-    {
-        // TODO
-    }
-    public static void executeCalls()
-    {
-        // TODO: Primero deberíamos ordenar por prioridad
-        // por ahora no lo hago.
-        orderByPriority();
+							for (int k = 0; k < theInterfaces.length; k++) {
+								// Si alguno de estos interfaces cuadra con lo
+								// que
+								// espera el método, podemos comprobar el
+								// siguiente parámetro.
+								// Si al salir del for externo, encontrado sigue
+								// siendo true,
+								// hemos encontrado el método que buscábamos.
+								if (theInterfaces[k].getName().compareTo(
+										params[j].getName()) == 0) {
+									bParamOK = true;
+									break;
+								}
+							}
+							if (bParamOK == false) {
+								encontrado = false;
+								break; // Vamos a por otro método
+							}
+						}
+						if (encontrado) {
+							method = list[i];
+							return;
+						}
+					}
+				}
+				e.printStackTrace();
+			}
+		}
 
-        for (int i=0; i < callList.size(); i++)
-        {
-            Call call = (Call) callList.get(i);
-            try {
-                call.executeMethod();
-            } catch (IllegalArgumentException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        clearList();
-    }
-    public static void clearList()
-    {
-        callList.clear();
-    }
+		public Object executeMethod() throws IllegalArgumentException,
+				IllegalAccessException, InvocationTargetException {
+			if (method != null)
+				return method.invoke(obj, parameters);
+			return null;
+		}
+	}
+
+	public static void addToPostProcess(Object obj, String strMethod,
+			Object[] parameters, int priority) {
+		Call newCall = new Call(obj, strMethod, parameters, priority);
+		callList.add(newCall);
+	}
+
+	public static void addToPostProcess(Object obj, String strMethod,
+			Object parameter, int priority) {
+		Object[] parameters = new Object[1];
+		parameters[0] = parameter;
+		Call newCall = new Call(obj, strMethod, parameters, priority);
+		callList.add(newCall);
+	}
+
+	private static void orderByPriority() {
+		// TODO
+	}
+
+	public static void executeCalls() {
+		// TODO: Primero deberíamos ordenar por prioridad
+		// por ahora no lo hago.
+		orderByPriority();
+
+		for (int i = 0; i < callList.size(); i++) {
+			Call call = (Call) callList.get(i);
+			try {
+				call.executeMethod();
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		clearList();
+	}
+
+	public static void clearList() {
+		callList.clear();
+	}
 }

@@ -44,29 +44,28 @@ package com.prodevelop.cit.gvsig.vectorialdb.wizard;
 
 import javax.swing.JCheckBox;
 
-
 /**
  * Used to instantiate field list items. Shows the database dependent type name.
- *
+ * 
  * @author jldominguez
- *
+ * 
  */
 public class FieldsListItem extends JCheckBox {
-    private String name = "[No name]";
-    private String type = "[No type]";
+	private String name = "[No name]";
+	private String type = "[No type]";
 
-    public FieldsListItem(String _name, String _type) {
-        name = _name;
-        type = _type;
-        setText(toString());
-        setSelected(true);
-    }
+	public FieldsListItem(String _name, String _type) {
+		name = _name;
+		type = _type;
+		setText(toString());
+		setSelected(true);
+	}
 
-    public String toString() {
-        return name + " [" + type + "]";
-    }
+	public String toString() {
+		return name + " [" + type + "]";
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 }

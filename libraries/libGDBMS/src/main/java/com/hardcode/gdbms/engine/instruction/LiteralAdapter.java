@@ -7,10 +7,9 @@ import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
 import com.hardcode.gdbms.parser.SimpleNode;
 
-
 /**
  * Adaptador
- *
+ * 
  * @author Fernando González Cortés
  */
 public class LiteralAdapter extends AbstractExpression {
@@ -36,18 +35,18 @@ public class LiteralAdapter extends AbstractExpression {
 		try {
 			String text = Utilities.getText(n);
 			if (!text.equals("''")) {
-				// Single quotes are escaped in GDBMs by doubling them, but we need to un-escape them to process the real string
-				return ValueFactory.createValue(Utilities.getText(n).replaceAll("''", "'"),
-						Utilities.getType(n));
-			}
-			else {
-				// We should not un-escape the '' literal 
+				// Single quotes are escaped in GDBMs by doubling them, but we
+				// need to un-escape them to process the real string
+				return ValueFactory.createValue(Utilities.getText(n)
+						.replaceAll("''", "'"), Utilities.getType(n));
+			} else {
+				// We should not un-escape the '' literal
 				return ValueFactory.createValue(Utilities.getText(n),
 						Utilities.getType(n));
 			}
-        } catch (SemanticException e) {
-            throw new EvaluationException();
-        }
+		} catch (SemanticException e) {
+			throw new EvaluationException();
+		}
 	}
 
 	/**

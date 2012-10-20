@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import com.hardcode.driverManager.Driver;
 import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.gdbms.driver.exceptions.InitializeWriterException;
 import com.iver.andami.PluginServices;
@@ -16,35 +15,30 @@ import com.iver.cit.gvsig.exceptions.visitors.StopWriterVisitorException;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 import com.iver.cit.gvsig.fmap.drivers.SHPLayerDefinition;
-import com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver;
 import com.iver.cit.gvsig.fmap.edition.writers.shp.ShpWriter;
 import com.iver.cit.gvsig.fmap.rendering.Annotation_Legend;
 
 public class Annotation_LayerFactory {
 	public static FieldDescription[] getDefaultFieldDescriptions() {
-		String[] fieldNames = {
-				Annotation_Mapping.TEXT,
-				Annotation_Mapping.TYPEFONT,
-				Annotation_Mapping.STYLEFONT,
-				Annotation_Mapping.COLOR,
-				Annotation_Mapping.HEIGHT,
-				Annotation_Mapping.ROTATE};
-		int[] fieldLength = {
-			150, // text
-			25,  // typefont
-			-1,  // font style
-			10,  // color
-			-1,  // height
-			-1   // rotate
+		String[] fieldNames = { Annotation_Mapping.TEXT,
+				Annotation_Mapping.TYPEFONT, Annotation_Mapping.STYLEFONT,
+				Annotation_Mapping.COLOR, Annotation_Mapping.HEIGHT,
+				Annotation_Mapping.ROTATE };
+		int[] fieldLength = { 150, // text
+				25, // typefont
+				-1, // font style
+				10, // color
+				-1, // height
+				-1 // rotate
 		};
 
 		FieldDescription[] fieldsDescriptions = new FieldDescription[fieldNames.length];
 		FieldDescription desc;
 
-		for (int i=0; i<fieldNames.length; i++) {
+		for (int i = 0; i < fieldNames.length; i++) {
 			desc = new FieldDescription();
 			desc.setFieldName(fieldNames[i]);
-			if (fieldLength[i]!=-1) {
+			if (fieldLength[i] != -1) {
 				desc.setFieldLength(fieldLength[i]);
 			}
 			desc.setFieldType(Annotation_Mapping.getType(fieldNames[i]));
@@ -57,25 +51,24 @@ public class Annotation_LayerFactory {
 			throws DriverLoadException, InitializeWriterException,
 			StartWriterVisitorException, StopWriterVisitorException,
 			LoadLayerException {
-		if (!file.exists())
-		{
+		if (!file.exists()) {
 			SHPLayerDefinition lyrDef = new SHPLayerDefinition();
 			lyrDef.setFieldsDesc(getDefaultFieldDescriptions());
 			lyrDef.setFile(file);
 			lyrDef.setName(file.getName());
 			lyrDef.setShapeType(FShape.POINT);
-			ShpWriter writer= (ShpWriter)LayerFactory.getWM().getWriter("Shape Writer");
+			ShpWriter writer = (ShpWriter) LayerFactory.getWM().getWriter(
+					"Shape Writer");
 			writer.setFile(file);
 			writer.initialize(lyrDef);
 			writer.preProcess();
 			writer.postProcess();
 			int pos = file.getPath().toLowerCase().lastIndexOf(".shp");
 			File gvaFile = null;
-			if (pos!=-1) {
-				gvaFile = new File(file.getPath().substring(0, pos)+".gva");
-			}
-			else {
-				gvaFile = new File(file.getPath()+".gva");
+			if (pos != -1) {
+				gvaFile = new File(file.getPath().substring(0, pos) + ".gva");
+			} else {
+				gvaFile = new File(file.getPath() + ".gva");
 			}
 			try {
 				gvaFile.createNewFile();
@@ -101,10 +94,10 @@ public class Annotation_LayerFactory {
 		FLayer lyr = null;
 
 		try {
-			lyr = GTLayerFactory.createVectorLayer(layerName, 
-					file, crs, background);
+			lyr = GTLayerFactory.createVectorLayer(layerName, file, crs,
+					background);
 		} catch (IOException e) {
-			PluginServices.getLogger().error(e.getMessage(),e);
+			PluginServices.getLogger().error(e.getMessage(), e);
 			return null;
 		}
 
@@ -121,10 +114,10 @@ public class Annotation_LayerFactory {
 		try {
 			Annotation_Mapping.addAnnotationMapping(al);
 		} catch (Exception e) {
-			PluginServices.getLogger().error(e.getMessage(),e);
+			PluginServices.getLogger().error(e.getMessage(), e);
 			return null;
 		}
-		((Annotation_Legend)al.getLegend()).setUnits(units);
+		((Annotation_Legend) al.getLegend()).setUnits(units);
 		return al;
 	}
 }

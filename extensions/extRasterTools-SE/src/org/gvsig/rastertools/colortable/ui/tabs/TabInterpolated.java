@@ -43,47 +43,51 @@ import org.gvsig.gui.beans.colorslideredition.ItemColorSlider;
 import org.gvsig.raster.beans.previewbase.IUserPanelInterface;
 import org.gvsig.raster.datastruct.ColorItem;
 import org.gvsig.raster.datastruct.ColorTable;
-import org.gvsig.raster.util.MathUtils;
 import org.gvsig.raster.util.BasePanel;
+import org.gvsig.raster.util.MathUtils;
 import org.gvsig.raster.util.RasterToolsUtil;
+
 /**
- * Pestaña para las interpolaciones de la tabla de color, aqui se tratarán
- * los gradientes de color, etc...
- *
+ * Pestaña para las interpolaciones de la tabla de color, aqui se tratarán los
+ * gradientes de color, etc...
+ * 
  * @version 27/06/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
-public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSliderListener, ColorButtonListener, FocusListener, KeyListener, IUserPanelInterface {
+public class TabInterpolated extends BasePanel implements IColorTableUI,
+		ColorSliderListener, ColorButtonListener, FocusListener, KeyListener,
+		IUserPanelInterface {
 	private static final long serialVersionUID = -5208861410196059899L;
 
-	private ArrayList          actionCommandListeners = new ArrayList();
-	private boolean            listenerEnabled        = true;
-	private double             min                    = Double.POSITIVE_INFINITY;
-	private double             max                    = Double.NEGATIVE_INFINITY;
-	
+	private ArrayList actionCommandListeners = new ArrayList();
+	private boolean listenerEnabled = true;
+	private double min = Double.POSITIVE_INFINITY;
+	private double max = Double.NEGATIVE_INFINITY;
+
 	/**
 	 * Tabla de color interna que se esta utilizando actualmente
-	 */	
-	private ColorTable         colorTable             = new ColorTable();
+	 */
+	private ColorTable colorTable = new ColorTable();
 
-	private ColorSliderEdition colorSliderEdition     = null;
-	private ColorButton        colorButton            = null;
-	private JTextField         jTextClassName         = null;
-	private JTextField         jTextValue             = null;
-	private JLabel             jLabelColor            = null;
-	private JLabel             jLabelClassName        = null;
-	private JLabel             jLabelValue            = null;
+	private ColorSliderEdition colorSliderEdition = null;
+	private ColorButton colorButton = null;
+	private JTextField jTextClassName = null;
+	private JTextField jTextValue = null;
+	private JLabel jLabelColor = null;
+	private JLabel jLabelClassName = null;
+	private JLabel jLabelValue = null;
 
 	/**
-	 *Inicializa componentes gráficos y traduce
+	 * Inicializa componentes gráficos y traduce
 	 */
 	public TabInterpolated() {
 		init();
 		translate();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#init()
 	 */
 	protected void init() {
@@ -111,14 +115,14 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 		gridBagConstraints.weightx = 0.5;
 		gridBagConstraints.insets = new Insets(2, 2, 2, 5);
 		add(getColorButton(), gridBagConstraints);
-		
+
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 2;
 		gridBagConstraints.anchor = GridBagConstraints.EAST;
 		gridBagConstraints.insets = new Insets(2, 5, 2, 2);
 		add(getJLabelClassName(), gridBagConstraints);
-		
+
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 2;
@@ -144,9 +148,10 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 		gridBagConstraints.insets = new Insets(2, 2, 2, 5);
 		add(getJTextValue(), gridBagConstraints);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#translate()
 	 */
 	protected void translate() {
@@ -154,12 +159,13 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 
 	private JLabel getJLabelColor() {
 		if (jLabelColor == null) {
-			jLabelColor = new JLabel(getText(this, "tabinterpolated_color") + ": ");
+			jLabelColor = new JLabel(getText(this, "tabinterpolated_color")
+					+ ": ");
 			jLabelColor.setEnabled(false);
 		}
 		return jLabelColor;
 	}
-	
+
 	private JLabel getJLabelClassName() {
 		if (jLabelClassName == null) {
 			jLabelClassName = new JLabel(getText(this, "clase") + ": ");
@@ -214,10 +220,14 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.colorslideredition.ColorSliderListener#actionSelectionChanged(org.gvsig.gui.beans.colorslideredition.ColorSliderEvent)
+	 * 
+	 * @see org.gvsig.gui.beans.colorslideredition.ColorSliderListener#
+	 * actionSelectionChanged
+	 * (org.gvsig.gui.beans.colorslideredition.ColorSliderEvent)
 	 */
 	public void actionSelectionChanged(ColorSliderEvent e) {
-		ItemColorSlider itemColorSlider = getColorSliderEdition().getSelectedItem();
+		ItemColorSlider itemColorSlider = getColorSliderEdition()
+				.getSelectedItem();
 		boolean enabled = false;
 		if ((itemColorSlider != null) && (itemColorSlider.getSelected() == 1)) {
 			getColorButton().setColor(itemColorSlider.getColor());
@@ -232,7 +242,8 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 	 * actualiza el color del ItemColorSlider segun la seleccion del usuario.
 	 */
 	private void updateItemSelectedToColorSlider() {
-		ItemColorSlider itemColorSlider = getColorSliderEdition().getSelectedItem();
+		ItemColorSlider itemColorSlider = getColorSliderEdition()
+				.getSelectedItem();
 		if (itemColorSlider != null) {
 			itemColorSlider.setColor(getColorButton().getColor());
 			itemColorSlider.setName(getJTextClassName().getText());
@@ -242,7 +253,10 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.colorbutton.ColorButtonListener#actionValueDragged(org.gvsig.gui.beans.colorbutton.ColorButtonEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.colorbutton.ColorButtonListener#actionValueDragged
+	 * (org.gvsig.gui.beans.colorbutton.ColorButtonEvent)
 	 */
 	public void actionValueDragged(ColorButtonEvent e) {
 		updateItemSelectedToColorSlider();
@@ -251,6 +265,7 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 	/**
 	 * Convierte el slider de la paleta en un array de objetos para poder crear
 	 * con él el objeto Palette
+	 * 
 	 * @return
 	 */
 	private ArrayList getPalette() {
@@ -286,7 +301,8 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 			colorItem.setInterpolated((int) item.getInterpolated());
 			colorItem.setNameClass(item.getName());
 
-			colorItem.setValue(min2 + ((item.getValue() * (max2 - min2)) / 100.0d));
+			colorItem.setValue(min2
+					+ ((item.getValue() * (max2 - min2)) / 100.0d));
 
 			arrayList.add(colorItem);
 		}
@@ -303,21 +319,24 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 		colorItem.setValue(max2);
 		arrayList.add(colorItem);
 
-
 		return arrayList;
-	}	
-	
+	}
+
 	/**
 	 * Refresco de los items del panel de color
+	 * 
 	 * @param colorItems
 	 */
 	private void refreshItems() {
 		colorTable.createPaletteFromColorItems(getPalette(), false);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.colorbutton.ColorButtonListener#actionValueChanged(org.gvsig.gui.beans.colorbutton.ColorButtonEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.colorbutton.ColorButtonListener#actionValueChanged
+	 * (org.gvsig.gui.beans.colorbutton.ColorButtonEvent)
 	 */
 	public void actionValueChanged(ColorButtonEvent e) {
 		updateItemSelectedToColorSlider();
@@ -327,7 +346,10 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.colorslideredition.ColorSliderListener#actionValueChanged(org.gvsig.gui.beans.colorslideredition.ColorSliderEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.colorslideredition.ColorSliderListener#actionValueChanged
+	 * (org.gvsig.gui.beans.colorslideredition.ColorSliderEvent)
 	 */
 	public void actionValueChanged(ColorSliderEvent e) {
 		refreshItems();
@@ -339,7 +361,7 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 		getColorSliderEdition().repaint();
 		setControlsEnabled(false);
 	}
-	
+
 	private void setControlsEnabled(boolean value) {
 		getColorButton().setEnabled(value);
 		getJLabelColor().setEnabled(value);
@@ -353,6 +375,7 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 
 	/**
 	 * Carga inicial de los items del panel de color
+	 * 
 	 * @param colorItems
 	 */
 	private void reloadItems() {
@@ -400,20 +423,20 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 		ArrayList list = getColorSliderEdition().getItems();
 		for (int i = 0; i < list.size(); i++) {
 			ItemColorSlider itemColorSlider = (ItemColorSlider) list.get(i);
-			
+
 			double value = SliderToValue(itemColorSlider.getValue());
-			
+
 			itemColorSlider.setTag(new Double(value));
-			
+
 			if (itemColorSlider.getSelected() != 1) {
 				if (min2 > value)
 					min2 = value;
-	
+
 				if (max2 < value)
 					max2 = value;
 			}
 		}
-		
+
 		double value;
 		try {
 			value = Double.parseDouble(getJTextValue().getText());
@@ -423,15 +446,16 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 				max2 = value;
 		} catch (NumberFormatException e1) {
 		}
-		
+
 		min = min2;
 		max = max2;
 
 		for (int i = 0; i < list.size(); i++) {
 			ItemColorSlider itemColorSlider = (ItemColorSlider) list.get(i);
-			
-			value = ValueToSlider(((Double) itemColorSlider.getTag()).doubleValue());
-			
+
+			value = ValueToSlider(((Double) itemColorSlider.getTag())
+					.doubleValue());
+
 			itemColorSlider.setValue(value);
 
 			if (itemColorSlider.getSelected() == 1) {
@@ -443,9 +467,10 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 			}
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.FocusListener#focusLost(java.awt.event.FocusEvent)
 	 */
 	public void focusLost(FocusEvent e) {
@@ -459,6 +484,7 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
 	 */
 	public void keyReleased(KeyEvent e) {
@@ -468,7 +494,7 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 			refreshItems();
 			callColorTableUIChangedListener();
 		}
-		
+
 		if (e.getSource() == getJTextClassName()) {
 			updateItemSelectedToColorSlider();
 			refreshItems();
@@ -478,21 +504,26 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 
 	private void changeTextValue() {
 		if (getColorSliderEdition().getSelectedItem() != null) {
-			double value = SliderToValue(getColorSliderEdition().getSelectedItem().getValue());
+			double value = SliderToValue(getColorSliderEdition()
+					.getSelectedItem().getValue());
 			getJTextValue().setText(MathUtils.format(value, 3) + "");
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.colorslideredition.ColorSliderListener#actionValueDragged(org.gvsig.gui.beans.colorslideredition.ColorSliderEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.colorslideredition.ColorSliderListener#actionValueDragged
+	 * (org.gvsig.gui.beans.colorslideredition.ColorSliderEvent)
 	 */
 	public void actionValueDragged(ColorSliderEvent e) {
 		changeTextValue();
 	}
-	
+
 	/**
 	 * Devuelve los limites de la tabla de color, minimo y maximo
+	 * 
 	 * @return
 	 */
 	private double[] getLimits() {
@@ -504,17 +535,18 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 			min2 = max2;
 			max2 = aux;
 		}
-		
+
 		if (min2 == max2)
 			max2++;
 
-		double limits[] = {min2, max2};
-		
+		double limits[] = { min2, max2 };
+
 		return limits;
 	}
-	
+
 	/**
 	 * Convierte un valor de la tabla de color a un porcentaje para el Slider
+	 * 
 	 * @param value
 	 * @return
 	 */
@@ -525,17 +557,20 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 
 	/**
 	 * Convierte un porcentaje del slider a un valor de la tabla de color
+	 * 
 	 * @param value
 	 * @return
 	 */
 	private double SliderToValue(double value) {
 		double limits[] = getLimits();
-		return limits[0] + ((value * (limits[1] - limits[0])) / 100.0d);		
+		return limits[0] + ((value * (limits[1] - limits[0])) / 100.0d);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.colortable.panels.IColorTableUI#getColorTable()
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.colortable.panels.IColorTableUI#getColorTable()
 	 */
 	public ColorTable getColorTable() {
 		return colorTable;
@@ -543,7 +578,10 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.colortable.panels.IColorTableUI#setColorTable(org.gvsig.raster.datastruct.ColorTable)
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.colortable.panels.IColorTableUI#setColorTable(org
+	 * .gvsig.raster.datastruct.ColorTable)
 	 */
 	public void setColorTable(ColorTable colorTable) {
 		listenerEnabled = false;
@@ -552,10 +590,13 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 		getColorSliderEdition().setInterpolated(colorTable.isInterpolated());
 		listenerEnabled = true;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.colortable.panels.IColorTableUI#addColorTableUIChangedListener(org.gvsig.rastertools.colortable.panels.ColorTableUIListener)
+	 * 
+	 * @see org.gvsig.rastertools.colortable.panels.IColorTableUI#
+	 * addColorTableUIChangedListener
+	 * (org.gvsig.rastertools.colortable.panels.ColorTableUIListener)
 	 */
 	public void addColorTableUIChangedListener(ColorTableUIListener listener) {
 		if (!actionCommandListeners.contains(listener))
@@ -564,7 +605,10 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.colortable.panels.IColorTableUI#removeColorTableUIChangedListener(org.gvsig.rastertools.colortable.panels.ColorTableUIListener)
+	 * 
+	 * @see org.gvsig.rastertools.colortable.panels.IColorTableUI#
+	 * removeColorTableUIChangedListener
+	 * (org.gvsig.rastertools.colortable.panels.ColorTableUIListener)
 	 */
 	public void removeColorTableUIChangedListener(ColorTableUIListener listener) {
 		actionCommandListeners.remove(listener);
@@ -572,6 +616,7 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 
 	/**
 	 * Invoca el evento de cambio de un ColorTable
+	 * 
 	 * @param colorTable
 	 */
 	private void callColorTableUIChangedListener() {
@@ -580,20 +625,22 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 
 		Iterator acIterator = actionCommandListeners.iterator();
 		while (acIterator.hasNext()) {
-			ColorTableUIListener listener = (ColorTableUIListener) acIterator.next();
+			ColorTableUIListener listener = (ColorTableUIListener) acIterator
+					.next();
 			listener.actionColorTableUIChanged(this);
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
 	 */
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == 38) {
 			try {
 				double value = Double.parseDouble(getJTextValue().getText());
-				value+=10;
+				value += 10;
 				getJTextValue().setText(Double.valueOf(value).toString());
 				updateChangedValue();
 				updateItemSelectedToColorSlider();
@@ -605,7 +652,7 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 		if (e.getKeyCode() == 40) {
 			try {
 				double value = Double.parseDouble(getJTextValue().getText());
-				value-=10;
+				value -= 10;
 				getJTextValue().setText(Double.valueOf(value).toString());
 				updateChangedValue();
 				updateItemSelectedToColorSlider();
@@ -618,17 +665,22 @@ public class TabInterpolated extends BasePanel implements IColorTableUI, ColorSl
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.beans.previewbase.IUserPanelInterface#getTitle()
 	 */
 	public String getTitle() {
 		return RasterToolsUtil.getText(this, "rampa");
 	}
-	
-	public void focusGained(FocusEvent e) {}
-	public void keyTyped(KeyEvent e) {}
+
+	public void focusGained(FocusEvent e) {
+	}
+
+	public void keyTyped(KeyEvent e) {
+	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.rastertools.colortable.ui.tabs.IColorTableUI#getPanel()
 	 */
 	public JPanel getPanel() {

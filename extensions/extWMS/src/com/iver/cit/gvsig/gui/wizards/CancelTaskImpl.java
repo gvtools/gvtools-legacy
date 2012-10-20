@@ -24,18 +24,20 @@ package com.iver.cit.gvsig.gui.wizards;
 import org.gvsig.remoteClient.wms.ICancellable;
 
 /**
- * All tasks which use libRemoteServices need an object that implements ICancellable
- * to cancel processes.
+ * All tasks which use libRemoteServices need an object that implements
+ * ICancellable to cancel processes.
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class CancelTaskImpl implements ICancellable {
-	private boolean       cancel = false;
-	
+	private boolean cancel = false;
+
 	public CancelTaskImpl() {
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.compat.net.ICancellable#getID()
 	 */
 	public Object getID() {
@@ -44,14 +46,16 @@ public class CancelTaskImpl implements ICancellable {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.compat.net.ICancellable#isCanceled()
 	 */
 	public boolean isCanceled() {
 		return cancel;
 	}
-	
+
 	/**
 	 * Cancel the task
+	 * 
 	 * @param cancel
 	 */
 	public void setCanceled(boolean cancel) {

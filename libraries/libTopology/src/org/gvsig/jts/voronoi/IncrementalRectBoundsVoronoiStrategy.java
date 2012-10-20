@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.jts.voronoi;
 
 import java.util.List;
@@ -54,6 +54,7 @@ import org.gvsig.exceptions.BaseException;
 import org.gvsig.topology.Messages;
 
 import com.iver.utiles.swing.threads.CancellableProgressTask;
+
 public class IncrementalRectBoundsVoronoiStrategy extends
 		AbstractVoronoiStrategy {
 
@@ -99,7 +100,8 @@ public class IncrementalRectBoundsVoronoiStrategy extends
 	}
 
 	public String getName() {
-		return Messages.getText("Incremental_DT_based_in_a_rectangular_bounding_box");
+		return Messages
+				.getText("Incremental_DT_based_in_a_rectangular_bounding_box");
 	}
 
 }

@@ -13,12 +13,11 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-
 /**
  * Clase wizard con la gestión de los botones y los paneles añadidos al mismo.
  * Al avanzar o retrasar un paso el asistente se desactivan todos los botones
  * menos el de cancelar, que está activo siempre por defecto
- *
+ * 
  * @author Fernando González Cortés
  */
 public class Wizard extends JPanel implements WizardControl {
@@ -35,14 +34,15 @@ public class Wizard extends JPanel implements WizardControl {
 	/**
 	 * This is the default constructor
 	 */
-	public Wizard(String backText, String nextText, String finishText, String cancelText) {
+	public Wizard(String backText, String nextText, String finishText,
+			String cancelText) {
 		super();
 		initialize(backText, nextText, finishText, cancelText);
 	}
 
 	/**
 	 * Añade un lístener de eventos del wizard
-	 *
+	 * 
 	 * @param listener
 	 */
 	public void addWizardListener(WizardListener listener) {
@@ -51,7 +51,7 @@ public class Wizard extends JPanel implements WizardControl {
 
 	/**
 	 * Elimina un listener de eventos del wizard
-	 *
+	 * 
 	 * @param listener
 	 */
 	public void removeWizardListener(WizardListener listener) {
@@ -101,24 +101,28 @@ public class Wizard extends JPanel implements WizardControl {
 	/**
 	 * This method initializes this
 	 */
-	private void initialize(String backText, String nextText, String finishText, String cancelText) {
+	private void initialize(String backText, String nextText,
+			String finishText, String cancelText) {
 		this.setLayout(new BorderLayout());
 		this.setSize(300, 200);
-		this.add(getJPanel(backText, nextText, finishText, cancelText), java.awt.BorderLayout.SOUTH);
+		this.add(getJPanel(backText, nextText, finishText, cancelText),
+				java.awt.BorderLayout.SOUTH);
 		this.add(getPnlSteps(), java.awt.BorderLayout.CENTER);
 	}
 
 	/**
 	 * Añade un paso al asistente. Inicializa el paso
-	 *
-	 * @param s Paso a añadir
-	 *
-	 * @throws RuntimeException DOCUMENT ME!
+	 * 
+	 * @param s
+	 *            Paso a añadir
+	 * 
+	 * @throws RuntimeException
+	 *             DOCUMENT ME!
 	 */
 	public void addStep(Step s) {
 		if (!(s instanceof JComponent)) {
 			throw new RuntimeException(
-				"Step must be a visual component (descend from JComponent)");
+					"Step must be a visual component (descend from JComponent)");
 		}
 
 		getPnlSteps().add((JComponent) s, BorderLayout.CENTER);
@@ -159,10 +163,11 @@ public class Wizard extends JPanel implements WizardControl {
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getJPanel(String backText, String nextText, String finishText, String cancelText) {
+	private JPanel getJPanel(String backText, String nextText,
+			String finishText, String cancelText) {
 		if (jPanel == null) {
 			jPanel = new JPanel();
 			jPanel.setPreferredSize(new Dimension(0, 40));
@@ -175,21 +180,24 @@ public class Wizard extends JPanel implements WizardControl {
 		return jPanel;
 	}
 
-	private JButton newJButton(String text){
+	private JButton newJButton(String text) {
 		return new JButton() {
-            protected void paintComponent(Graphics g) {
-    			TextLayout tl = new TextLayout(getText(), getFont(), ((Graphics2D )getGraphics()).getFontRenderContext());
-    			setPreferredSize(new java.awt.Dimension((int) tl.getBounds().getWidth(), 18));
-                super.paintComponent(g);
-            }
-        };
-	    
+			protected void paintComponent(Graphics g) {
+				TextLayout tl = new TextLayout(getText(), getFont(),
+						((Graphics2D) getGraphics()).getFontRenderContext());
+				setPreferredSize(new java.awt.Dimension((int) tl.getBounds()
+						.getWidth(), 18));
+				super.paintComponent(g);
+			}
+		};
+
 	}
-	
+
 	/**
 	 * Obtiene una referencia al botón de dar un paso atrás
+	 * 
 	 * @param text
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	public JButton getBtnBack(String text) {
@@ -199,10 +207,10 @@ public class Wizard extends JPanel implements WizardControl {
 			btnBack.setMargin(new java.awt.Insets(2, 2, 2, 2));
 			btnBack.setEnabled(false);
 			btnBack.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						backStep();
-					}
-				});
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					backStep();
+				}
+			});
 		}
 
 		return btnBack;
@@ -210,8 +218,9 @@ public class Wizard extends JPanel implements WizardControl {
 
 	/**
 	 * Obtiene una referencia al botón de dar un paso adelante
+	 * 
 	 * @param text
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	public JButton getBtnNext(String text) {
@@ -221,10 +230,10 @@ public class Wizard extends JPanel implements WizardControl {
 			btnNext.setMargin(new java.awt.Insets(2, 2, 2, 2));
 			btnNext.setEnabled(false);
 			btnNext.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						nextStep();
-					}
-				});
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					nextStep();
+				}
+			});
 		}
 
 		return btnNext;
@@ -232,8 +241,9 @@ public class Wizard extends JPanel implements WizardControl {
 
 	/**
 	 * Obtiene una referencia al botón de finalizar
+	 * 
 	 * @param finishText
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	public JButton getBtnFinish(String text) {
@@ -243,10 +253,10 @@ public class Wizard extends JPanel implements WizardControl {
 			btnFinish.setText(text);
 			btnFinish.setEnabled(false);
 			btnFinish.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						callFinishListener();
-					}
-				});
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					callFinishListener();
+				}
+			});
 		}
 
 		return btnFinish;
@@ -254,8 +264,9 @@ public class Wizard extends JPanel implements WizardControl {
 
 	/**
 	 * Obtiene una referencia al botón de cancelar
+	 * 
 	 * @param cancelText
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	public JButton getBtnCancel(String text) {
@@ -264,10 +275,10 @@ public class Wizard extends JPanel implements WizardControl {
 			btnCancel.setMargin(new java.awt.Insets(2, 2, 2, 2));
 			btnCancel.setText(text);
 			btnCancel.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						callCancelListener();
-					}
-				});
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					callCancelListener();
+				}
+			});
 		}
 
 		return btnCancel;
@@ -275,7 +286,7 @@ public class Wizard extends JPanel implements WizardControl {
 
 	/**
 	 * This method initializes pnlSteps
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPnlSteps() {
@@ -308,11 +319,10 @@ public class Wizard extends JPanel implements WizardControl {
 	}
 
 	/**
-	 * Se cancela el asistente. Esta operación no tiene ningún efecto, salvo
-	 * que se disparará el evento de cancelado. El resultado de esto dependerá
-	 * de las implementaciones que haya escuchando el evento. Generalmente
-	 * deberá haber un objeto que al escuchar este evento cerrará el
-	 * asistente.
+	 * Se cancela el asistente. Esta operación no tiene ningún efecto, salvo que
+	 * se disparará el evento de cancelado. El resultado de esto dependerá de
+	 * las implementaciones que haya escuchando el evento. Generalmente deberá
+	 * haber un objeto que al escuchar este evento cerrará el asistente.
 	 */
 	public void cancel() {
 		callCancelListener();
@@ -331,7 +341,7 @@ public class Wizard extends JPanel implements WizardControl {
 
 	/**
 	 * Obtiene un array con los pasos del asistente
-	 *
+	 * 
 	 * @return array de pasos
 	 */
 	public Step[] getSteps() {
@@ -340,7 +350,7 @@ public class Wizard extends JPanel implements WizardControl {
 
 	/**
 	 * Obtiene el paso actual del asistente
-	 *
+	 * 
 	 * @return Paso actual del asistente
 	 */
 	public Step getCurrentStep() {

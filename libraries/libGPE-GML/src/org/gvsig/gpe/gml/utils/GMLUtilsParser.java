@@ -1,16 +1,11 @@
 package org.gvsig.gpe.gml.utils;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.xml.namespace.QName;
 
 import org.gvsig.gpe.GPEDefaults;
 import org.gvsig.gpe.gml.GmlProperties;
 import org.gvsig.gpe.utils.StringUtils;
 import org.gvsig.gpe.xml.XmlProperties;
-import org.gvsig.gpe.xml.stream.IXmlStreamReader;
-import org.gvsig.gpe.xml.stream.XmlStreamException;
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
@@ -102,60 +97,66 @@ public class GMLUtilsParser {
 
 	/**
 	 * Remove the blanc symbol from a tag
+	 * 
 	 * @param tag
-	 * Tag name
-	 * @return
-	 * The tag without blancs
+	 *            Tag name
+	 * @return The tag without blancs
 	 */
-	public static String removeBlancSymbol(String tag){
-		if (tag == null){
+	public static String removeBlancSymbol(String tag) {
+		if (tag == null) {
 			return null;
 		}
-		String blancSpace = GPEDefaults.getStringProperty(XmlProperties.DEFAULT_BLANC_SPACE);
-		if (blancSpace == null){
+		String blancSpace = GPEDefaults
+				.getStringProperty(XmlProperties.DEFAULT_BLANC_SPACE);
+		if (blancSpace == null) {
 			blancSpace = GMLTags.GML_DEAFULT_BLANC_SPACE;
 		}
-		// PROBLEM WITH COMPATIBILITY OF "replaceAll()" WITH IBM J9 JAVA MICROEDITION
+		// PROBLEM WITH COMPATIBILITY OF "replaceAll()" WITH IBM J9 JAVA
+		// MICROEDITION
 		return StringUtils.replaceAllString(tag, blancSpace, " ");
 		// return tag.replaceAll(blancSpace," ");
 	}
-	
+
 	/**
-	 * Replace the blancs of a tag with the
-	 * deafult blanc symbol
+	 * Replace the blancs of a tag with the deafult blanc symbol
+	 * 
 	 * @param tag
-	 * @return
-	 * A tag with blancs
+	 * @return A tag with blancs
 	 */
-	public static String addBlancSymbol(String tag){
-		if (tag == null){
+	public static String addBlancSymbol(String tag) {
+		if (tag == null) {
 			return null;
 		}
-		String blancSpace = GPEDefaults.getStringProperty(XmlProperties.DEFAULT_BLANC_SPACE);
-		if (blancSpace == null){
+		String blancSpace = GPEDefaults
+				.getStringProperty(XmlProperties.DEFAULT_BLANC_SPACE);
+		if (blancSpace == null) {
 			blancSpace = GMLTags.GML_DEAFULT_BLANC_SPACE;
 		}
-		// PROBLEM WITH COMPATIBILITY OF "replaceAll()" WITH IBM J9 JAVA MICROEDITION
-		return StringUtils.replaceAllString(tag," ",blancSpace);
-		//return tag.replaceAll(" ",blancSpace);
+		// PROBLEM WITH COMPATIBILITY OF "replaceAll()" WITH IBM J9 JAVA
+		// MICROEDITION
+		return StringUtils.replaceAllString(tag, " ", blancSpace);
+		// return tag.replaceAll(" ",blancSpace);
 	}
-	
+
 	/**
 	 * @return a default feature collection name
 	 */
-	public static QName createDefaultFeatureCollection(){
-		String namespace = GPEDefaults.getStringProperty(XmlProperties.DEFAULT_NAMESPACE_URI);
-		String localName = GPEDefaults.getStringProperty(GmlProperties.DEFAULT_FEATURECOLLECTION);
+	public static QName createDefaultFeatureCollection() {
+		String namespace = GPEDefaults
+				.getStringProperty(XmlProperties.DEFAULT_NAMESPACE_URI);
+		String localName = GPEDefaults
+				.getStringProperty(GmlProperties.DEFAULT_FEATURECOLLECTION);
 		return new QName(namespace, localName);
 	}
-	
+
 	/**
 	 * @return a default feature name
 	 */
-	public static QName createDefaultFeature(){
-		String namespace = GPEDefaults.getStringProperty(XmlProperties.DEFAULT_NAMESPACE_URI);
-		String localName = GPEDefaults.getStringProperty(GmlProperties.DEFAULT_FEATURE);
+	public static QName createDefaultFeature() {
+		String namespace = GPEDefaults
+				.getStringProperty(XmlProperties.DEFAULT_NAMESPACE_URI);
+		String localName = GPEDefaults
+				.getStringProperty(GmlProperties.DEFAULT_FEATURE);
 		return new QName(namespace, localName);
 	}
 }
-

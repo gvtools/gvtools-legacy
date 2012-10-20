@@ -21,28 +21,31 @@ package org.gvsig.raster.hierarchy;
 import org.gvsig.raster.datastruct.Histogram;
 import org.gvsig.raster.datastruct.HistogramException;
 
-
 /**
  * Interfaz que deben implementar todas las clases capaces de servir histogramas
+ * 
  * @version 27/03/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
 public interface IHistogramable {
-	
+
 	/**
 	 * Obtiene un histograma.
+	 * 
 	 * @return Histograma
 	 */
-	public Histogram getHistogram() throws HistogramException, InterruptedException;
-	
+	public Histogram getHistogram() throws HistogramException,
+			InterruptedException;
+
 	/**
 	 * Inicializa el porcentaje a 0 de un histograma.
 	 */
 	public void resetPercent();
-	
+
 	/**
 	 * Obtiene el porcentaje procesado de un histograma.
+	 * 
 	 * @return int
 	 */
 	public int getPercent();

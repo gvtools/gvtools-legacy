@@ -21,15 +21,16 @@ package org.gvsig.georeferencing.ui.zoom.tools;
 import java.util.EventObject;
 
 /**
- * Evento lanzado por las herramientas de la vista
- * 17/01/2008
+ * Evento lanzado por las herramientas de la vista 17/01/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
-public class ToolEvent  extends EventObject {
+public class ToolEvent extends EventObject {
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * Constructor
+	 * 
 	 * @param source
 	 */
 	public ToolEvent(Object source) {

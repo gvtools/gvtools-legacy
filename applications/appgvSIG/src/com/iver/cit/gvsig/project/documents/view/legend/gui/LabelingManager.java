@@ -51,7 +51,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.TreeMap;
 
@@ -65,32 +64,32 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.cit.gvsig.fmap.core.ILabelable;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
-import com.iver.cit.gvsig.fmap.rendering.styling.labeling.AttrInTableLabelingStrategy;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.ILabelingStrategy;
 import com.iver.utiles.swing.JComboBox;
 
 /**
- *
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
-public class LabelingManager extends AbstractThemeManagerPage implements ActionListener {
+public class LabelingManager extends AbstractThemeManagerPage implements
+		ActionListener {
 	private static final long serialVersionUID = 856162295985695717L;
 	private static ArrayList<Class<? extends ILabelingStrategyPanel>> installedPanels = new ArrayList<Class<? extends ILabelingStrategyPanel>>();
-	private Comparator<Class<?>> comparator=new Comparator<Class<?>>(){
+	private Comparator<Class<?>> comparator = new Comparator<Class<?>>() {
 
 		public int compare(Class<?> o1, Class<?> o2) {
 			return o1.getName().compareTo(o2.getName());
 		}
 
 	};
-	private TreeMap<Class<?>, ILabelingStrategyPanel> strategyPanels = new TreeMap<Class<?>, ILabelingStrategyPanel>(comparator);
+	private TreeMap<Class<?>, ILabelingStrategyPanel> strategyPanels = new TreeMap<Class<?>, ILabelingStrategyPanel>(
+			comparator);
 	private JCheckBox chkApplyLabels;
 	private ILabelable layer;
 	private JPanel content;
 	private JPanel pnlNorth;
 	private JComboBox cmbStrategy;
-
 
 	public LabelingManager() {
 		super();
@@ -111,7 +110,8 @@ public class LabelingManager extends AbstractThemeManagerPage implements ActionL
 		public boolean equals(Object obj) {
 			if (obj instanceof LabelingStrategyItem) {
 				LabelingStrategyItem item = (LabelingStrategyItem) obj;
-				return this.strategyPanel.getClass().equals(item.strategyPanel.getClass());
+				return this.strategyPanel.getClass().equals(
+						item.strategyPanel.getClass());
 
 			}
 			return super.equals(obj);
@@ -122,15 +122,17 @@ public class LabelingManager extends AbstractThemeManagerPage implements ActionL
 	private void initialize() {
 		setLayout(new BorderLayout());
 
-		for (Iterator<Class<? extends ILabelingStrategyPanel>> it = installedPanels.iterator(); it.hasNext();) {
+		for (Iterator<Class<? extends ILabelingStrategyPanel>> it = installedPanels
+				.iterator(); it.hasNext();) {
 			try {
-				ILabelingStrategyPanel pnl = (ILabelingStrategyPanel) it.next().newInstance();
+				ILabelingStrategyPanel pnl = (ILabelingStrategyPanel) it.next()
+						.newInstance();
 				strategyPanels.put(pnl.getLabelingStrategyClass(), pnl);
 			} catch (Exception e) {
 				/*
-				 *  can't happen
-				 *  this should never happen since instantiation and access exceptions have been
-				 *	controlled in the addLabelingStrategy method
+				 * can't happen this should never happen since instantiation and
+				 * access exceptions have been controlled in the
+				 * addLabelingStrategy method
 				 */
 				NotificationManager.addError(e);
 			}
@@ -145,13 +147,13 @@ public class LabelingManager extends AbstractThemeManagerPage implements ActionL
 
 	private JPanel getPnlNorth() {
 		if (pnlNorth == null) {
-			pnlNorth = new JPanel(new BorderLayout(5,5));
+			pnlNorth = new JPanel(new BorderLayout(5, 5));
 			JPanel aux = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 			aux.add(getChkApplyLabels());
 			pnlNorth.add(aux, BorderLayout.NORTH);
 			aux = new JPanel(new FlowLayout(FlowLayout.LEFT));
-			aux.add(new JLabel(PluginServices.getText(this, "general")+":"));
+			aux.add(new JLabel(PluginServices.getText(this, "general") + ":"));
 			aux.add(getCmbStrategy());
 			pnlNorth.add(aux, BorderLayout.CENTER);
 
@@ -161,12 +163,14 @@ public class LabelingManager extends AbstractThemeManagerPage implements ActionL
 
 	private JComboBox getCmbStrategy() {
 		if (cmbStrategy == null) {
-			Iterator<ILabelingStrategyPanel> it = strategyPanels.values().iterator();
+			Iterator<ILabelingStrategyPanel> it = strategyPanels.values()
+					.iterator();
 			final ArrayList<LabelingStrategyItem> aux = new ArrayList<LabelingStrategyItem>();
 			while (it.hasNext()) {
 				aux.add(new LabelingStrategyItem(it.next()));
 			}
-			final LabelingStrategyItem items[] = aux.toArray(new LabelingStrategyItem[aux.size()]);
+			final LabelingStrategyItem items[] = aux
+					.toArray(new LabelingStrategyItem[aux.size()]);
 
 			cmbStrategy = new JComboBox(items) {
 				private static final long serialVersionUID = 7506754097091500846L;
@@ -177,10 +181,13 @@ public class LabelingManager extends AbstractThemeManagerPage implements ActionL
 						return;
 					if (anObject instanceof ILabelingStrategy) {
 						ILabelingStrategy st = (ILabelingStrategy) anObject;
-						for (ILabelingStrategyPanel pnl : strategyPanels.values()) {
-							if (pnl.getLabelingStrategyClass() != null &&
-								pnl.getLabelingStrategyClass().equals(st.getClass())) {
-								super.setSelectedItem(new LabelingStrategyItem(pnl));
+						for (ILabelingStrategyPanel pnl : strategyPanels
+								.values()) {
+							if (pnl.getLabelingStrategyClass() != null
+									&& pnl.getLabelingStrategyClass().equals(
+											st.getClass())) {
+								super.setSelectedItem(new LabelingStrategyItem(
+										pnl));
 								return;
 							}
 						}
@@ -199,14 +206,16 @@ public class LabelingManager extends AbstractThemeManagerPage implements ActionL
 
 	private JCheckBox getChkApplyLabels() {
 		if (chkApplyLabels == null) {
-			chkApplyLabels = new JCheckBox(PluginServices.getText(this, "enable_labeling"));
+			chkApplyLabels = new JCheckBox(PluginServices.getText(this,
+					"enable_labeling"));
 			chkApplyLabels.setName("CHKAPPLYLABELS");
 			chkApplyLabels.addActionListener(this);
 		}
 		return chkApplyLabels;
 	}
 
-	public static void addLabelingStrategy(Class<? extends ILabelingStrategyPanel> iLabelingStrategyPanelClass) {
+	public static void addLabelingStrategy(
+			Class<? extends ILabelingStrategyPanel> iLabelingStrategyPanelClass) {
 		installedPanels.add(iLabelingStrategyPanelClass);
 	}
 
@@ -214,18 +223,16 @@ public class LabelingManager extends AbstractThemeManagerPage implements ActionL
 		c.setEnabled(b);
 	}
 
-
 	public void setModel(FLayer layer) throws IllegalArgumentException {
 		if (layer instanceof ILabelable) {
 			// get the labeling strategy
 			this.layer = (ILabelable) layer;
 			for (ILabelingStrategyPanel p : strategyPanels.values()) {
-				p.setModel(layer,((ILabelable) layer).getLabelingStrategy() );
+				p.setModel(layer, ((ILabelable) layer).getLabelingStrategy());
 			}
 
 			setComponentEnabled(this, true);
 			refreshControls();
-
 
 			ActionEvent evt = new ActionEvent(chkApplyLabels, 0, null);
 			evt.setSource(chkApplyLabels);
@@ -240,21 +247,17 @@ public class LabelingManager extends AbstractThemeManagerPage implements ActionL
 		}
 	}
 
-
-
 	private void refreshControls() {
-		if (layer == null) return;
+		if (layer == null)
+			return;
 
 		// enables labeling
 		JCheckBox applyLabels = getChkApplyLabels();
 		applyLabels.setSelected(layer.isLabeled());
 	}
 
-
-
-
 	public void actionPerformed(ActionEvent e) {
-		JComponent c = (JComponent)e.getSource();
+		JComponent c = (JComponent) e.getSource();
 
 		if (c.equals(chkApplyLabels)) {
 			boolean b = chkApplyLabels.isSelected();
@@ -266,9 +269,10 @@ public class LabelingManager extends AbstractThemeManagerPage implements ActionL
 					setComponentEnabled(c1, b);
 			}
 
-		} else if (c.equals(cmbStrategy)){
-			ILabelingStrategyPanel panel = ((LabelingStrategyItem) cmbStrategy.getSelectedItem()).strategyPanel;
-			if (panel!=null) {
+		} else if (c.equals(cmbStrategy)) {
+			ILabelingStrategyPanel panel = ((LabelingStrategyItem) cmbStrategy
+					.getSelectedItem()).strategyPanel;
+			if (panel != null) {
 				try {
 					remove(content);
 					content.removeAll();
@@ -295,15 +299,15 @@ public class LabelingManager extends AbstractThemeManagerPage implements ActionL
 
 	public void applyAction() {
 		if (layer != null) { // in other case the layer is not labelable
-			ILabelingStrategyPanel panel = ((LabelingStrategyItem) getCmbStrategy().getSelectedItem()).strategyPanel;
-			ILabelingStrategy strategy=panel.getLabelingStrategy();
+			ILabelingStrategyPanel panel = ((LabelingStrategyItem) getCmbStrategy()
+					.getSelectedItem()).strategyPanel;
+			ILabelingStrategy strategy = panel.getLabelingStrategy();
 			layer.setLabelingStrategy(strategy);
 			layer.setIsLabeled(getChkApplyLabels().isSelected());
 		}
 	}
 
-
 	public String getName() {
-		return PluginServices.getText(this,"Etiquetados");
+		return PluginServices.getText(this, "Etiquetados");
 	}
 }

@@ -53,21 +53,25 @@ import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 
 /**
  * Listener para el panel de geolocalización.
+ * 
  * @version 31/07/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public class GeoLocationPanelListener implements ActionListener, DataInputContainerListener, KeyListener {
+public class GeoLocationPanelListener implements ActionListener,
+		DataInputContainerListener, KeyListener {
 
-	private GeolocationBaseClassPanel	panel                  = null;
-	private boolean                     enableValueChangeEvent = false;
-	private GeoLocationDialog           dialog                 = null;
+	private GeolocationBaseClassPanel panel = null;
+	private boolean enableValueChangeEvent = false;
+	private GeoLocationDialog dialog = null;
 
 	/**
 	 * Crea un nuevo <code>GeoLocationPanelListener</code>
+	 * 
 	 * @param panel
 	 */
-	public GeoLocationPanelListener(GeolocationBaseClassPanel panel, GeoLocationDialog dialog) {
+	public GeoLocationPanelListener(GeolocationBaseClassPanel panel,
+			GeoLocationDialog dialog) {
 		this.dialog = dialog;
 		this.panel = panel;
 	}
@@ -76,21 +80,25 @@ public class GeoLocationPanelListener implements ActionListener, DataInputContai
 	 * Método que se invoca cuando se disparan los eventos de los botones
 	 */
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == panel.getSaveButton()) {
-			if(RasterToolsUtil.messageBoxYesOrNot(PluginServices.getText(this,"aviso_write_transform"), panel)) {
+		if (e.getSource() == panel.getSaveButton()) {
+			if (RasterToolsUtil.messageBoxYesOrNot(
+					PluginServices.getText(this, "aviso_write_transform"),
+					panel)) {
 				try {
 					panel.getLayer().saveGeoToRmf();
 					panel.activeButtons();
 				} catch (RmfSerializerException e1) {
-					RasterToolsUtil.messageBoxError(PluginServices.getText(this,"error_salvando_rmf"), panel, e1);
+					RasterToolsUtil.messageBoxError(
+							PluginServices.getText(this, "error_salvando_rmf"),
+							panel, e1);
 				}
 				panel.setModify(false);
 			}
 			return;
 		}
 
-		//Asignamos la georreferenciación que hay en ese momento en el dialogo
-		if(e.getSource() == panel.getApplyButton()) {
+		// Asignamos la georreferenciación que hay en ese momento en el dialogo
+		if (e.getSource() == panel.getApplyButton()) {
 			try {
 				double ulx = Double.parseDouble(panel.getUlx().getValue());
 				double uly = Double.parseDouble(panel.getUly().getValue());
@@ -98,56 +106,64 @@ public class GeoLocationPanelListener implements ActionListener, DataInputContai
 				double psy = Double.parseDouble(panel.getPsy().getValue());
 				double rotx = Double.parseDouble(panel.getRotx().getValue());
 				double roty = Double.parseDouble(panel.getRoty().getValue());
-				if(psx == 0 || psy == 0)
+				if (psx == 0 || psy == 0)
 					return;
-				AffineTransform at = new AffineTransform(psx, roty, rotx, psy, ulx, uly);
+				AffineTransform at = new AffineTransform(psx, roty, rotx, psy,
+						ulx, uly);
 				panel.getLayer().setAffineTransform(at);
 				panel.setModify(true);
-				if(panel.getMapCtrl() != null)
+				if (panel.getMapCtrl() != null)
 					panel.getMapCtrl().getMapContext().invalidate();
 				else {
-					if(panel instanceof GeoLocationOpeningRasterPanel)
-						PluginServices.getMDIManager().closeWindow(((GeoLocationOpeningRasterPanel)panel).getDialog());
+					if (panel instanceof GeoLocationOpeningRasterPanel)
+						PluginServices.getMDIManager().closeWindow(
+								((GeoLocationOpeningRasterPanel) panel)
+										.getDialog());
 				}
-				panel.activeButtons();				
+				panel.activeButtons();
 				return;
-			} catch(NumberFormatException ex) {
-				RasterToolsUtil.messageBoxError(PluginServices.getText(this,"error_transformacion"), panel);
+			} catch (NumberFormatException ex) {
+				RasterToolsUtil.messageBoxError(
+						PluginServices.getText(this, "error_transformacion"),
+						panel);
 				return;
 			}
 		}
-		
-		if(e.getSource() == panel.getCancelButton()) {
-			PluginServices.getMDIManager().closeWindow(((GeoLocationOpeningRasterPanel)panel).getDialog());
+
+		if (e.getSource() == panel.getCancelButton()) {
+			PluginServices.getMDIManager().closeWindow(
+					((GeoLocationOpeningRasterPanel) panel).getDialog());
 		}
 
 		Historical hist = panel.getHistorical();
-		if(hist == null)
+		if (hist == null)
 			return;
 
 		AffineTransform at = null;
 
-		//Cargamos la primera transformación
-		if(e.getSource() == panel.getFirstButton())
-			at = (AffineTransform)hist.getFirst();
+		// Cargamos la primera transformación
+		if (e.getSource() == panel.getFirstButton())
+			at = (AffineTransform) hist.getFirst();
 
-		//Cargamos la transformación anterior
-		if(e.getSource() == panel.getBackButton())
-			at = (AffineTransform)hist.getBack();
+		// Cargamos la transformación anterior
+		if (e.getSource() == panel.getBackButton())
+			at = (AffineTransform) hist.getBack();
 
-		////Cargamos la transformación siguiente
-		if(e.getSource() == panel.getNextButton())
-			at = (AffineTransform)hist.getNext();
+		// //Cargamos la transformación siguiente
+		if (e.getSource() == panel.getNextButton())
+			at = (AffineTransform) hist.getNext();
 
-		//Cargamos la georreferenciación del raster
-		if(e.getSource() == panel.getResetButton())
+		// Cargamos la georreferenciación del raster
+		if (e.getSource() == panel.getResetButton())
 			at = panel.getLayer().getDataSource().getOwnAffineTransform();
 
-		//Cargar la georreferenciación desde tfw
-		if(e.getSource() == panel.getTfwLoad()) {
-			JFileChooser chooser = new JFileChooser(FileOpenWizard.getLastPath());
+		// Cargar la georreferenciación desde tfw
+		if (e.getSource() == panel.getTfwLoad()) {
+			JFileChooser chooser = new JFileChooser(
+					FileOpenWizard.getLastPath());
 			chooser.setAcceptAllFileFilterUsed(true);
-			chooser.setDialogTitle(PluginServices.getText(this, "seleccionar_fichero"));			
+			chooser.setDialogTitle(PluginServices.getText(this,
+					"seleccionar_fichero"));
 			chooser.addChoosableFileFilter(new ExtendedFileFilter("wld"));
 			chooser.addChoosableFileFilter(new ExtendedFileFilter("tfw"));
 
@@ -158,51 +174,56 @@ public class GeoLocationPanelListener implements ActionListener, DataInputContai
 			}
 		}
 
-		//Centrar el raster en la vista
-		if(e.getSource() == panel.getCenterToView()) {
+		// Centrar el raster en la vista
+		if (e.getSource() == panel.getCenterToView()) {
 			Extent extentView = calcCenterExtent(panel.getViewPort());
 			double x = extentView.minX();
 			double y = extentView.maxY();
-			double psX = extentView.width() / ((FLyrRasterSE)panel.getLayer()).getPxWidth();
-			double psY = -(extentView.height() / ((FLyrRasterSE)panel.getLayer()).getPxHeight());
+			double psX = extentView.width()
+					/ ((FLyrRasterSE) panel.getLayer()).getPxWidth();
+			double psY = -(extentView.height() / ((FLyrRasterSE) panel
+					.getLayer()).getPxHeight());
 			at = new AffineTransform(psX, 0, 0, psY, x, y);
 			panel.setModify(true);
 		}
-		
-		//Recuperar el foco
-		if(e.getSource() == panel.getFocus()) {
-			if(dialog != null) {
+
+		// Recuperar el foco
+		if (e.getSource() == panel.getFocus()) {
+			if (dialog != null) {
 				BaseView theView = dialog.getAssociateView();
 				MapControl mapCtrl = theView.getMapControl();
 				mapCtrl.setTool("geoPan");
 			}
 		}
 
-		//Entrará en el caso de que se haya seleccionado alguna transformación
-		if(at != null) {
+		// Entrará en el caso de que se haya seleccionado alguna transformación
+		if (at != null) {
 			panel.getLayer().setAT(at);
 			panel.loadTransform(at);
 			panel.activeButtons();
-			if(panel.getMapCtrl() != null)
+			if (panel.getMapCtrl() != null)
 				panel.getMapCtrl().getMapContext().invalidate();
 		}
 	}
-	
+
 	/**
-	 * Control del cambio de valor dentro de las cajas de texto. Cuando esto ocurre tiene
-	 * el mismo efecto que el botón "Aplicar"
-	 * @param e EventObject
+	 * Control del cambio de valor dentro de las cajas de texto. Cuando esto
+	 * ocurre tiene el mismo efecto que el botón "Aplicar"
+	 * 
+	 * @param e
+	 *            EventObject
 	 */
 	public void actionValueChanged(EventObject e) {
-		if(isEnableValueChangeEvent() && panel instanceof GeoLocationPanel) {
+		if (isEnableValueChangeEvent() && panel instanceof GeoLocationPanel) {
 			ActionEvent ev = new ActionEvent(panel.getApplyButton(), 0, null);
 			actionPerformed(ev);
 		}
 	}
 
 	/**
-	 * Obtiene el valor de la variable que informa sobre la activación y desactivación del evento de cambio de valor
-	 * dentro de un campo de texto
+	 * Obtiene el valor de la variable que informa sobre la activación y
+	 * desactivación del evento de cambio de valor dentro de un campo de texto
+	 * 
 	 * @return enableValueChangeEvent
 	 */
 	public boolean isEnableValueChangeEvent() {
@@ -210,8 +231,9 @@ public class GeoLocationPanelListener implements ActionListener, DataInputContai
 	}
 
 	/**
-	 * Asigna el valor para la activación y desactivación del evento de cambio de valor
-	 * dentro de un campo de texto
+	 * Asigna el valor para la activación y desactivación del evento de cambio
+	 * de valor dentro de un campo de texto
+	 * 
 	 * @param enableValueChangeEvent
 	 */
 	public void setEnableValueChangeEvent(boolean enableValueChangeEvent) {
@@ -219,33 +241,37 @@ public class GeoLocationPanelListener implements ActionListener, DataInputContai
 	}
 
 	/**
-	 * Centra el raster asociado a la capa en al extent del viewport pasado
-	 * por parámetro.
-	 * @param vp ViewPort
-	 * @return	Extent para la imagen
+	 * Centra el raster asociado a la capa en al extent del viewport pasado por
+	 * parámetro.
+	 * 
+	 * @param vp
+	 *            ViewPort
+	 * @return Extent para la imagen
 	 */
 	private Extent calcCenterExtent(ViewPort vp) {
 		Extent tempExtent = null;
 		double widthPxImg, heightPxImg;
 
-		widthPxImg = ((FLyrRasterSE)panel.getLayer()).getPxWidth();
-		heightPxImg = ((FLyrRasterSE)panel.getLayer()).getPxHeight();
+		widthPxImg = ((FLyrRasterSE) panel.getLayer()).getPxWidth();
+		heightPxImg = ((FLyrRasterSE) panel.getLayer()).getPxHeight();
 
-		if(vp == null || vp.getAdjustedExtent() == null) {
+		if (vp == null || vp.getAdjustedExtent() == null) {
 			vp = new ViewPort(null);
-			Rectangle2D r2d = new Rectangle2D.Double(0, 0, widthPxImg, heightPxImg);
+			Rectangle2D r2d = new Rectangle2D.Double(0, 0, widthPxImg,
+					heightPxImg);
 			vp.setExtent(r2d);
 			tempExtent = new Extent(0, 0, widthPxImg, heightPxImg);
 		} else
 			tempExtent = new Extent(vp.getAdjustedExtent());
 
 		double ulX = 0D, ulY = 0D, lrX = 0D, lrY = 0D;
-		if(widthPxImg > heightPxImg) {
+		if (widthPxImg > heightPxImg) {
 			double widthView = tempExtent.maxX() - tempExtent.minX();
 			ulX = tempExtent.minX() + (widthView / 4);
 			lrX = ulX + (widthView / 2);
 			double newAlto = ((heightPxImg * (widthView / 2)) / widthPxImg);
-			double centroY = tempExtent.minY()+((tempExtent.maxY() - tempExtent.minY())/2);
+			double centroY = tempExtent.minY()
+					+ ((tempExtent.maxY() - tempExtent.minY()) / 2);
 			ulY = centroY - (newAlto / 2);
 			lrY = centroY + (newAlto / 2);
 		} else {
@@ -253,7 +279,8 @@ public class GeoLocationPanelListener implements ActionListener, DataInputContai
 			ulY = tempExtent.minY() + (heightView / 4);
 			lrY = ulY + (heightView / 2);
 			double newAncho = ((widthPxImg * (heightView / 2)) / heightPxImg);
-			double centroX = tempExtent.minX()+((tempExtent.maxX() - tempExtent.minX())/2);
+			double centroX = tempExtent.minX()
+					+ ((tempExtent.maxX() - tempExtent.minX()) / 2);
 			ulX = centroX - (newAncho / 2);
 			lrX = centroX + (newAncho / 2);
 		}
@@ -262,42 +289,51 @@ public class GeoLocationPanelListener implements ActionListener, DataInputContai
 
 	/**
 	 * Lee las coordenadas de un fichero de tfw con una transformación y
-	 * devuelve la clase AffineTransform con dicha transformación. Esta llamada gestiona los
-	 * errores producidos actuando en consecuencia. Muestra los mensajes al usuario y retorna
-	 * null en caso de tener problemas.
-	 * @param fName Nombre del fichero tfw
+	 * devuelve la clase AffineTransform con dicha transformación. Esta llamada
+	 * gestiona los errores producidos actuando en consecuencia. Muestra los
+	 * mensajes al usuario y retorna null en caso de tener problemas.
+	 * 
+	 * @param fName
+	 *            Nombre del fichero tfw
 	 * @return AffineTransform
 	 */
 	private AffineTransform readTfw(String fName) {
 		BufferedReader inGrf = null;
 		double[] result = new double[6];
 		try {
-			inGrf = new BufferedReader(new InputStreamReader(new FileInputStream(fName)));
+			inGrf = new BufferedReader(new InputStreamReader(
+					new FileInputStream(fName)));
 			String str = inGrf.readLine();
 			int count = 0;
-			while(str != null && count < 6) {
+			while (str != null && count < 6) {
 				try {
-					Double value =  new Double(str);
+					Double value = new Double(str);
 					result[count] = value.doubleValue();
 				} catch (NumberFormatException ex) {
-					RasterToolsUtil.messageBoxError(PluginServices.getText(this, "error_file_not_valid"), panel, ex);
+					RasterToolsUtil.messageBoxError(PluginServices.getText(
+							this, "error_file_not_valid"), panel, ex);
 					return null;
 				}
 				str = inGrf.readLine();
-				count ++;
+				count++;
 			}
 		} catch (FileNotFoundException e) {
-			RasterToolsUtil.messageBoxError(PluginServices.getText(this, "error_file_not_found"), panel, e);
+			RasterToolsUtil.messageBoxError(
+					PluginServices.getText(this, "error_file_not_found"),
+					panel, e);
 			return null;
 		} catch (IOException ex) {
-			RasterToolsUtil.messageBoxError(PluginServices.getText(this, "error_lectura"), panel, ex);
+			RasterToolsUtil.messageBoxError(
+					PluginServices.getText(this, "error_lectura"), panel, ex);
 			return null;
 		}
-		return new AffineTransform(result[0], result[1], result[2], result[3], result[4], result[5]);
+		return new AffineTransform(result[0], result[1], result[2], result[3],
+				result[4], result[5]);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
 	 */
 	public void keyPressed(KeyEvent e) {
@@ -305,17 +341,18 @@ public class GeoLocationPanelListener implements ActionListener, DataInputContai
 	}
 
 	/**
-	 * Capturamos el evento de pulsar la tecla Enter y cancel. Cuando pulsamos enter
-	 * ejecuta el evento del botón de aplicar y cuando pulsamos cancel cerramos el cuadro 
-	 * y no hacemos nada. 
+	 * Capturamos el evento de pulsar la tecla Enter y cancel. Cuando pulsamos
+	 * enter ejecuta el evento del botón de aplicar y cuando pulsamos cancel
+	 * cerramos el cuadro y no hacemos nada.
 	 */
 	public void keyReleased(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			ActionEvent ev = new ActionEvent(panel.getApplyButton(), 0, null);
 			actionPerformed(ev);
 		}
-		
-		if(e.getKeyCode() == KeyEvent.VK_ESCAPE && panel.getCancelButton() != null) {
+
+		if (e.getKeyCode() == KeyEvent.VK_ESCAPE
+				&& panel.getCancelButton() != null) {
 			ActionEvent ev = new ActionEvent(panel.getCancelButton(), 0, null);
 			actionPerformed(ev);
 		}
@@ -323,6 +360,7 @@ public class GeoLocationPanelListener implements ActionListener, DataInputContai
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.KeyListener#keyTyped(java.awt.event.KeyEvent)
 	 */
 	public void keyTyped(KeyEvent e) {

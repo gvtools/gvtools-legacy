@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
@@ -91,53 +90,59 @@ import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.layers.XMLException;
 import com.iver.utiles.XMLEntity;
 
-
 /**
  * Vectorial Database Driver.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public interface IVectorialDatabaseDriver extends VectorialDriver {
 	/**
 	 * Obtains the boundingbox of layer.
-	 *
+	 * 
 	 * @return Rectangle2D Boundingbox of layer.
-	 *
+	 * 
 	 * @throws ReadDriverException
 	 * @throws ExpansionFileReadException
 	 */
-	public Rectangle2D getFullExtent()
-	throws ReadDriverException, ExpansionFileReadException;
+	public Rectangle2D getFullExtent() throws ReadDriverException,
+			ExpansionFileReadException;
 
 	/**
 	 * Return shape type of layer.
-	 *
+	 * 
 	 * @return int Shape type.
 	 */
 	public int getShapeType();
 
 	/**
-	 * Returns a feature iterator with all features that are contained into a rectangle.
-	 *
-	 * @param r Rectangle to query.
-	 * @param strEPSG Projection to query.
-	 *
+	 * Returns a feature iterator with all features that are contained into a
+	 * rectangle.
+	 * 
+	 * @param r
+	 *            Rectangle to query.
+	 * @param strEPSG
+	 *            Projection to query.
+	 * 
 	 * @return IFeatureIterator.
-	 *
+	 * 
 	 * @throws ReadDriverException
 	 */
 	public IFeatureIterator getFeatureIterator(Rectangle2D r, String strEPSG)
-	throws ReadDriverException;
+			throws ReadDriverException;
 
 	/**
-	 * Returns a feature iterator with all features that are contained into a rectangle and this features with determinates fields.
-	 *
-	 * @param r Rectangle to query.
-	 * @param strEPSG Projection to query.
-	 * @param alphaNumericFieldsNeeded Fields to query.
-	 *
+	 * Returns a feature iterator with all features that are contained into a
+	 * rectangle and this features with determinates fields.
+	 * 
+	 * @param r
+	 *            Rectangle to query.
+	 * @param strEPSG
+	 *            Projection to query.
+	 * @param alphaNumericFieldsNeeded
+	 *            Fields to query.
+	 * 
 	 * @return IFeatureIterator
-	 *
+	 * 
 	 * @throws ReadDriverException
 	 */
 	public IFeatureIterator getFeatureIterator(Rectangle2D r, String strEPSG,
@@ -145,21 +150,21 @@ public interface IVectorialDatabaseDriver extends VectorialDriver {
 
 	/**
 	 * Returns all the fields of layer.
-	 *
+	 * 
 	 * @return Array of field names.
 	 */
 	public String[] getFields();
 
 	/**
 	 * Return the where clause.
-	 *
+	 * 
 	 * @return String with the where clause.
 	 */
 	public String getWhereClause();
 
 	/**
 	 * Returns table name.
-	 *
+	 * 
 	 * @return Table name.
 	 */
 	public String getTableName();
@@ -176,9 +181,10 @@ public interface IVectorialDatabaseDriver extends VectorialDriver {
 
 	/**
 	 * Returns a row index by feature.
-	 *
-	 * @param FID IFeature
-	 *
+	 * 
+	 * @param FID
+	 *            IFeature
+	 * 
 	 * @return el número de registro asociado a ese FID. Se usa dentro del
 	 *         DBStrategy para averiguar si un Feature está seleccionado o no.
 	 */
@@ -186,33 +192,35 @@ public interface IVectorialDatabaseDriver extends VectorialDriver {
 
 	/**
 	 * Returns the expression to query a geometry's field.
-	 *
-	 * @param fieldName Geometry's field name.
-	 *
+	 * 
+	 * @param fieldName
+	 *            Geometry's field name.
+	 * 
 	 * @return Expression to query a geometry's field
 	 */
 	public String getGeometryField(String fieldName);
 
 	/**
 	 * Returns a XMLEntity with all properties to save the object.
-	 *
+	 * 
 	 * @return XMLEntity.
 	 */
 	public XMLEntity getXMLEntity();
 
 	/**
-	 * Para evitar que una clase no se pueda instanciar, el setXMLEntity
-	 * debería devolver una referencia a la clase que crea. Ya vorem.
-	 *
-	 * @param xml XMLEntity with all properties to create again the object.
-	 *
+	 * Para evitar que una clase no se pueda instanciar, el setXMLEntity debería
+	 * devolver una referencia a la clase que crea. Ya vorem.
+	 * 
+	 * @param xml
+	 *            XMLEntity with all properties to create again the object.
+	 * 
 	 * @throws XMLException
 	 */
 	public void setXMLEntity(XMLEntity xml) throws XMLException;
 
 	/**
 	 * Returns the layer definition.
-	 *
+	 * 
 	 * @return information about catalog, fields, tablename, etc
 	 */
 	public DBLayerDefinition getLyrDef();
@@ -225,33 +233,39 @@ public interface IVectorialDatabaseDriver extends VectorialDriver {
 
 	/**
 	 * Load the layer.
-	 *
+	 * 
 	 * @throws ReadDriverException
 	 */
 	public void load() throws ReadDriverException;
 
 	/**
 	 * Returns the connection of this Driver.
-	 *
-	 * @return devuelve la Conexión a la base de datos, para que
-	 * el usuario pueda hacer la consulta que quiera, si lo desea.
-	 * Por ejemplo, esto puede ser útil para abrir un cuadro de dialogo
-	 * avanazado y lanzar peticiones del tipo "Devuelveme un buffer
-	 * a las autopistas", y con el resultset que te venga, escribir
-	 * un shape, o cosas así.
+	 * 
+	 * @return devuelve la Conexión a la base de datos, para que el usuario
+	 *         pueda hacer la consulta que quiera, si lo desea. Por ejemplo,
+	 *         esto puede ser útil para abrir un cuadro de dialogo avanazado y
+	 *         lanzar peticiones del tipo "Devuelveme un buffer a las
+	 *         autopistas", y con el resultset que te venga, escribir un shape,
+	 *         o cosas así.
 	 */
 	public IConnection getConnection();
 
 	/**
-	 * Gets the drivers connection string given its parameters (this can be different for
-	 * different driver, so it should be overwritten in that case.)
-	 *
-	 * @param _host Host
-	 * @param _port Port
-	 * @param _db Database
-	 * @param _user User
-	 * @param _pw Password
-	 *
+	 * Gets the drivers connection string given its parameters (this can be
+	 * different for different driver, so it should be overwritten in that
+	 * case.)
+	 * 
+	 * @param _host
+	 *            Host
+	 * @param _port
+	 *            Port
+	 * @param _db
+	 *            Database
+	 * @param _user
+	 *            User
+	 * @param _pw
+	 *            Password
+	 * 
 	 * @return Key compound of properties's connection.
 	 */
 	public String getConnectionString(String _host, String _port, String _db,
@@ -259,75 +273,87 @@ public interface IVectorialDatabaseDriver extends VectorialDriver {
 
 	/**
 	 * Returns the default port.
-	 *
+	 * 
 	 * @return int Default port of connection.
 	 */
 	public int getDefaultPort();
 
 	/**
 	 * Returns the beginning string connection.
-	 *
+	 * 
 	 * @return String
 	 */
 	public String getConnectionStringBeginning();
 
 	/**
-	 * Initialize the parameters of Driver with the connection and the DBLayerDefinition.
-	 *
-	 * @param conn Connection`s driver
-	 * @param lyrDef DBLayerDefinition
-	 *
-	 * @throws DBException!
+	 * Initialize the parameters of Driver with the connection and the
+	 * DBLayerDefinition.
+	 * 
+	 * @param conn
+	 *            Connection`s driver
+	 * @param lyrDef
+	 *            DBLayerDefinition
+	 * 
+	 * @throws DBException
+	 *             !
 	 */
 	public void setData(IConnection conn, DBLayerDefinition lyrDef)
-	throws DBException;
+			throws DBException;
 
 	/**
 	 * Gets all field names of a given table.
-	 *
-	 * @param conn Connection
-	 * @param tableName Name of table.
-	 *
+	 * 
+	 * @param conn
+	 *            Connection
+	 * @param tableName
+	 *            Name of table.
+	 * 
 	 * @return Array of field names.
-	 *
+	 * 
 	 * @throws DBException
 	 */
 	public String[] getAllFields(IConnection conn, String tableName)
-	throws DBException;
+			throws DBException;
 
 	/**
 	 * Gets all field type names of a given table.
-	 *
-	 * @param conn Connection
-	 * @param tableName Name of table
-	 *
+	 * 
+	 * @param conn
+	 *            Connection
+	 * @param tableName
+	 *            Name of table
+	 * 
 	 * @return Array of field type names.
-	 *
+	 * 
 	 * @throws DBException
 	 */
 	public String[] getAllFieldTypeNames(IConnection conn, String tableName)
-	throws DBException;
+			throws DBException;
 
 	/**
-	 * Gets the table's possible id fields. By default, all fields can be id.
-	 * It should be overwritten by subclasses.
-	 *
-	 * @param conn Connection
-	 * @param tableName Name of table.
-	 *
+	 * Gets the table's possible id fields. By default, all fields can be id. It
+	 * should be overwritten by subclasses.
+	 * 
+	 * @param conn
+	 *            Connection
+	 * @param tableName
+	 *            Name of table.
+	 * 
 	 * @return Array of Id field candidates.
-	 *
+	 * 
 	 * @throws DBException
 	 */
 	public String[] getIdFieldsCandidates(IConnection conn, String tableName)
-	throws DBException;
+			throws DBException;
 
 	/**
-	 * Gets the table's possible geometry fields. By default, all fields can be geometry
-	 * fields. It should be overwritten by subclasses.
-	 *
-	 * @param conn conenction object
-	 * @param table_name table name
+	 * Gets the table's possible geometry fields. By default, all fields can be
+	 * geometry fields. It should be overwritten by subclasses.
+	 * 
+	 * @param conn
+	 *            conenction object
+	 * @param table_name
+	 *            table name
 	 * @return the table's possible geometry fields
 	 * @throws SQLException
 	 */
@@ -335,29 +361,33 @@ public interface IVectorialDatabaseDriver extends VectorialDriver {
 			String tableName) throws DBException;
 
 	/**
-	 * Insert the working area of layer and the features that not are contained don't show it.
-	 *
-	 * @param _wa Rectangle of area.
+	 * Insert the working area of layer and the features that not are contained
+	 * don't show it.
+	 * 
+	 * @param _wa
+	 *            Rectangle of area.
 	 */
 	public void setWorkingArea(Rectangle2D _wa);
 
 	/**
 	 * Gets available table names. Should be overwritten by subclasses if its
 	 * not compatible or if it can be refined.
-	 *
-	 * @param conex Connection
-	 * @param dbName Name of Database
-	 *
+	 * 
+	 * @param conex
+	 *            Connection
+	 * @param dbName
+	 *            Name of Database
+	 * 
 	 * @return Array of table names.
-	 *
+	 * 
 	 * @throws DBException
 	 */
 	public String[] getTableNames(IConnection conex, String dbName)
-	throws DBException;
+			throws DBException;
 
 	/**
 	 * Returns working area of layer.
-	 *
+	 * 
 	 * @return Rectangle of area.
 	 */
 	public Rectangle2D getWorkingArea();
@@ -366,7 +396,8 @@ public interface IVectorialDatabaseDriver extends VectorialDriver {
 	 * Tells if user can read contents of the layer.
 	 * 
 	 * @return true if can read, either false.
-	 * @throws SQLException 
+	 * @throws SQLException
 	 */
-	public boolean canRead(IConnection iconn, String tablename) throws SQLException;
+	public boolean canRead(IConnection iconn, String tablename)
+			throws SQLException;
 }

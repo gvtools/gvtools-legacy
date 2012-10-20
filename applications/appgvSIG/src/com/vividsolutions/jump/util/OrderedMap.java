@@ -1,4 +1,3 @@
-
 /*
  * The Unified Mapping Platform (JUMP) is an extensible, interactive GUI 
  * for visualizing and manipulating spatial features with geometry and attributes.
@@ -41,118 +40,122 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
 /**
  * A Map that preserves the order of its keys.
  */
 public class OrderedMap implements Map {
-    private Map map;
-    private List keyList;
+	private Map map;
+	private List keyList;
 
-    /**
-     * Creates an OrderedMap backed by the given map.
-     * @param map a Map that will be this OrderedMap's underlying Map
-     */
-    public OrderedMap(List keyList, Map map) {
-    	this.keyList = keyList;
-        this.map = map;
-    }
+	/**
+	 * Creates an OrderedMap backed by the given map.
+	 * 
+	 * @param map
+	 *            a Map that will be this OrderedMap's underlying Map
+	 */
+	public OrderedMap(List keyList, Map map) {
+		this.keyList = keyList;
+		this.map = map;
+	}
 
-    /**
-     * Creates an OrderedMap.
-     */
-    public OrderedMap() {
-        this(new HashMap());
-    }
-    
-    public OrderedMap(Map map) {
-    	this(new UniqueList(), map);
-    }
+	/**
+	 * Creates an OrderedMap.
+	 */
+	public OrderedMap() {
+		this(new HashMap());
+	}
 
-    public int size() {
-        return map.size();
-    }
+	public OrderedMap(Map map) {
+		this(new UniqueList(), map);
+	}
 
-    public boolean isEmpty() {
-        return map.isEmpty();
-    }
+	public int size() {
+		return map.size();
+	}
 
-    public boolean containsKey(Object key) {
-        return map.containsKey(key);
-    }
+	public boolean isEmpty() {
+		return map.isEmpty();
+	}
 
-    public boolean containsValue(Object value) {
-        return map.containsValue(value);
-    }
+	public boolean containsKey(Object key) {
+		return map.containsKey(key);
+	}
 
-    public Object get(Object key) {
-        return map.get(key);
-    }
+	public boolean containsValue(Object value) {
+		return map.containsValue(value);
+	}
 
-    public Object put(Object key, Object value) {
-        keyList.add(key);
+	public Object get(Object key) {
+		return map.get(key);
+	}
 
-        return map.put(key, value);
-    }
+	public Object put(Object key, Object value) {
+		keyList.add(key);
 
-    public Object remove(Object key) {
-        keyList.remove(key);
+		return map.put(key, value);
+	}
 
-        return map.remove(key);
-    }
+	public Object remove(Object key) {
+		keyList.remove(key);
 
-    public void putAll(Map t) {
-        keyList.addAll(t.keySet());
-        map.putAll(t);
-    }
+		return map.remove(key);
+	}
 
-    public void clear() {
-        keyList.clear();
-        map.clear();
-    }
+	public void putAll(Map t) {
+		keyList.addAll(t.keySet());
+		map.putAll(t);
+	}
 
-    public Set keySet() {
-        return map.keySet();
-    }
+	public void clear() {
+		keyList.clear();
+		map.clear();
+	}
 
-    /**
-     * Returns the keys, in order.
-     * @return the keys in the order they were (first) added
-     */
-    public List keyList() {
-        return keyList;
-    }
+	public Set keySet() {
+		return map.keySet();
+	}
 
-    /**
-     * Returns the values.
-     * @return the values in the same order as the keys
-     * @see #keyList()
-     */
-    public List valueList() {
-        return (List) values();
-    }
+	/**
+	 * Returns the keys, in order.
+	 * 
+	 * @return the keys in the order they were (first) added
+	 */
+	public List keyList() {
+		return keyList;
+	}
 
-    /**
-     * Returns the values.
-     * @return the values in the same order as the keys
-     * @see #keyList()
-     */
-    public Collection values() {
-        ArrayList values = new ArrayList();
+	/**
+	 * Returns the values.
+	 * 
+	 * @return the values in the same order as the keys
+	 * @see #keyList()
+	 */
+	public List valueList() {
+		return (List) values();
+	}
 
-        for (Iterator i = keyList.iterator(); i.hasNext();) {
-            Object key = i.next();
-            values.add(map.get(key));
-        }
+	/**
+	 * Returns the values.
+	 * 
+	 * @return the values in the same order as the keys
+	 * @see #keyList()
+	 */
+	public Collection values() {
+		ArrayList values = new ArrayList();
 
-        return values;
-    }
+		for (Iterator i = keyList.iterator(); i.hasNext();) {
+			Object key = i.next();
+			values.add(map.get(key));
+		}
 
-    public Set entrySet() {
-        return map.entrySet();
-    }
+		return values;
+	}
 
-    public boolean equals(Object o) {
-        return map.equals(o);
-    }
+	public Set entrySet() {
+		return map.entrySet();
+	}
+
+	public boolean equals(Object o) {
+		return map.equals(o);
+	}
 }

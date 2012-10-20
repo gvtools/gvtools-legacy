@@ -34,101 +34,102 @@ package com.vividsolutions.jump.util;
 
 import java.util.HashMap;
 import java.util.Map;
+
 /**
-* String-to-Object map that anyone can use.
-* For example, the Options dialog has a single instance, and
-* it's stored on the Workbench Blackboard.
-*/
+ * String-to-Object map that anyone can use. For example, the Options dialog has
+ * a single instance, and it's stored on the Workbench Blackboard.
+ */
 public class Blackboard implements Cloneable {
-    private HashMap properties = new HashMap();
+	private HashMap properties = new HashMap();
 
-    /**
-     * Used by Java2XML
-     */
-    public HashMap getProperties() {
-        return properties;
-    }
+	/**
+	 * Used by Java2XML
+	 */
+	public HashMap getProperties() {
+		return properties;
+	}
 
-    /**
-     * Used by Java2XML
-     */
-    public void setProperties(HashMap properties) {
-        this.properties = properties;
-    }
+	/**
+	 * Used by Java2XML
+	 */
+	public void setProperties(HashMap properties) {
+		this.properties = properties;
+	}
 
-    public Blackboard put(String key, Object value) {
-        properties.put(key, value);
-        return this;
-    }
+	public Blackboard put(String key, Object value) {
+		properties.put(key, value);
+		return this;
+	}
 
-    public Object get(String key) {
-        return properties.get(key);
-    }
+	public Object get(String key) {
+		return properties.get(key);
+	}
 
-    public Blackboard put(String key, boolean value) {
-        put(key, new Boolean(value));
-        return this;
-    }
-    public Blackboard putAll(Map properties) {
-        this.properties.putAll(properties);
-        return this;
-    }
+	public Blackboard put(String key, boolean value) {
+		put(key, new Boolean(value));
+		return this;
+	}
 
-    public boolean get(String key, boolean defaultValue) {
-        if (get(key) == null) {
-            put(key, defaultValue);
-        }
+	public Blackboard putAll(Map properties) {
+		this.properties.putAll(properties);
+		return this;
+	}
 
-        return getBoolean(key);
-    }
+	public boolean get(String key, boolean defaultValue) {
+		if (get(key) == null) {
+			put(key, defaultValue);
+		}
 
-    public boolean getBoolean(String key) {
-        return ((Boolean) get(key)).booleanValue();
-    }
+		return getBoolean(key);
+	}
 
-    public Blackboard put(String key, int value) {
-        put(key, new Integer(value));
-        return this;
-    }
+	public boolean getBoolean(String key) {
+		return ((Boolean) get(key)).booleanValue();
+	}
 
-    public Blackboard put(String key, double value) {
-        put(key, new Double(value));
-        return this;
-    }
+	public Blackboard put(String key, int value) {
+		put(key, new Integer(value));
+		return this;
+	}
 
-    public double get(String key, double defaultValue) {
-        if (get(key) == null) {
-            put(key, defaultValue);
-        }
+	public Blackboard put(String key, double value) {
+		put(key, new Double(value));
+		return this;
+	}
 
-        return getDouble(key);
-    }
+	public double get(String key, double defaultValue) {
+		if (get(key) == null) {
+			put(key, defaultValue);
+		}
 
-    public int get(String key, int defaultValue) {
-        if (get(key) == null) {
-            put(key, defaultValue);
-        }
+		return getDouble(key);
+	}
 
-        return getInt(key);
-    }
+	public int get(String key, int defaultValue) {
+		if (get(key) == null) {
+			put(key, defaultValue);
+		}
 
-    public int getInt(String key) {
-        return ((Integer) get(key)).intValue();
-    }
+		return getInt(key);
+	}
 
-    public double getDouble(String key) {
-        return ((Double) get(key)).doubleValue();
-    }
+	public int getInt(String key) {
+		return ((Integer) get(key)).intValue();
+	}
 
-    public Object get(String key, Object defaultValue) {
-        if (get(key) == null) {
-            put(key, defaultValue);
-        }
+	public double getDouble(String key) {
+		return ((Double) get(key)).doubleValue();
+	}
 
-        return get(key);
-    }
-    
-    public Object clone() {
-        return new Blackboard().putAll(properties);
-    }
+	public Object get(String key, Object defaultValue) {
+		if (get(key) == null) {
+			put(key, defaultValue);
+		}
+
+		return get(key);
+	}
+
+	public Object clone() {
+		return new Blackboard().putAll(properties);
+	}
 }

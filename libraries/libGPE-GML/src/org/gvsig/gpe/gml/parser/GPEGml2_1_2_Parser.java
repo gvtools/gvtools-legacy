@@ -91,15 +91,16 @@ import org.gvsig.gpe.gml.parser.profiles.Gml2BindingProfile;
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  **/
 
-public class GPEGml2_1_2_Parser extends GPEDefaultGmlParser{
-	
+public class GPEGml2_1_2_Parser extends GPEDefaultGmlParser {
+
 	public GPEGml2_1_2_Parser() {
 		super();
 		setProfile(new Gml2BindingProfile());
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.GPEParser#getDescription()
 	 */
 	public String getDescription() {
@@ -108,6 +109,7 @@ public class GPEGml2_1_2_Parser extends GPEDefaultGmlParser{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.GPEParser#getName()
 	 */
 	public String getName() {
@@ -116,9 +118,10 @@ public class GPEGml2_1_2_Parser extends GPEDefaultGmlParser{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.GPEParser#getFormat()
 	 */
 	public String getFormat() {
-		return "text/xml; subtype=gml/2.1.2";		
+		return "text/xml; subtype=gml/2.1.2";
 	}
 }

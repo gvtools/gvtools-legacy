@@ -29,8 +29,9 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import org.gvsig.gui.beans.TestUI;
+
 /**
- *
+ * 
  * @version 02/11/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
@@ -55,9 +56,11 @@ public class TestColorSliderEdition implements ActionListener {
 
 		colorSliderEdition.addItem(new ItemColorSlider(0, Color.black), false);
 		colorSliderEdition.addItem(new ItemColorSlider(25, Color.red), false);
-		colorSliderEdition.addItem(new ItemColorSlider(50, Color.yellow), false);
+		colorSliderEdition
+				.addItem(new ItemColorSlider(50, Color.yellow), false);
 		colorSliderEdition.addItem(new ItemColorSlider(75, Color.blue), true);
-		colorSliderEdition.addItem(new ItemColorSlider(100, new Color(255, 255, 255, 0)), true);
+		colorSliderEdition.addItem(new ItemColorSlider(100, new Color(255, 255,
+				255, 0)), true);
 
 		JPanel jPanel = new JPanel();
 		jFrame.setContentPane(jPanel);

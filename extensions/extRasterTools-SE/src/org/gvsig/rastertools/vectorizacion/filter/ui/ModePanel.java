@@ -35,68 +35,78 @@ import org.gvsig.raster.util.RasterToolsUtil;
  * Panel con los controles del filtro de moda.
  * 
  * 09/06/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class ModePanel extends BasePanel implements ActionListener {
-	private static final long         serialVersionUID  = 1L;
-	private JCheckBox                 active            = null;
-	private CheckSliderTextContainer  threshold         = null;
-	private boolean                   enabled           = true;
-	
+	private static final long serialVersionUID = 1L;
+	private JCheckBox active = null;
+	private CheckSliderTextContainer threshold = null;
+	private boolean enabled = true;
+
 	/**
-	 *Inicializa componentes gráficos y traduce
+	 * Inicializa componentes gráficos y traduce
 	 */
 	public ModePanel() {
 		init();
 		translate();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#init()
 	 */
 	protected void init() {
 		setLayout(new GridBagLayout());
-		setBorder(BorderFactory.createTitledBorder(null, RasterToolsUtil.getText(this, "modefilter"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+		setBorder(BorderFactory.createTitledBorder(null,
+				RasterToolsUtil.getText(this, "modefilter"),
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.weightx = 1;
 		gbc.insets = new Insets(0, 0, 0, 0);
-		
+
 		add(getActive(), gbc);
-		
+
 		gbc.gridy = 1;
 		add(getThreshold(), gbc);
-		
+
 		getActive().addActionListener(this);
 		setComponentEnabled(false);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#translate()
 	 */
 	protected void translate() {
-		
+
 	}
-	
+
 	/**
-	 * Obtiene el check de activo 
+	 * Obtiene el check de activo
+	 * 
 	 * @return JCheckBox
 	 */
 	public JCheckBox getActive() {
-		if(active == null)
+		if (active == null)
 			active = new JCheckBox();
 		return active;
 	}
-		
+
 	/**
 	 * Obtiene la barra deslizadora con el radio del filtro de paso alto
+	 * 
 	 * @return CheckSliderTextContainer
 	 */
 	public CheckSliderTextContainer getThreshold() {
-		if(threshold == null)
-			threshold = new CheckSliderTextContainer(1, 10, 1, false, RasterToolsUtil.getText(this, "threshold"), true, false, false);
+		if (threshold == null)
+			threshold = new CheckSliderTextContainer(1, 10, 1, false,
+					RasterToolsUtil.getText(this, "threshold"), true, false,
+					false);
 		return threshold;
 	}
 
@@ -108,13 +118,14 @@ public class ModePanel extends BasePanel implements ActionListener {
 	}
 
 	/**
-	 * Activa o desactiva el componente. El estado de activación y desactivación de un
-	 * componente depende de los controles que contiene. En este caso activa o desactiva
-	 * la barra de incremento.
+	 * Activa o desactiva el componente. El estado de activación y desactivación
+	 * de un componente depende de los controles que contiene. En este caso
+	 * activa o desactiva la barra de incremento.
+	 * 
 	 * @param enabled
 	 */
 	public void setComponentEnabled(boolean enabled) {
-		if(getActive().isSelected() != enabled)
+		if (getActive().isSelected() != enabled)
 			getActive().setSelected(enabled);
 		getThreshold().setControlEnabled(enabled);
 		this.enabled = !enabled;

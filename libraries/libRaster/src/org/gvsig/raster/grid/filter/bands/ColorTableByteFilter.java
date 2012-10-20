@@ -19,16 +19,19 @@
 package org.gvsig.raster.grid.filter.bands;
 
 import org.gvsig.raster.dataset.IBuffer;
+
 /**
  * Filtro de tabla de color para tipo de datos byte.
- *
+ * 
  * @version 06/06/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class ColorTableByteFilter extends ColorTableFilter {
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.bands.ColorTableFilter#process(int, int)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.bands.ColorTableFilter#process(int,
+	 * int)
 	 */
 	public void process(int col, int line) throws InterruptedException {
 		byte value = raster.getElemByte(line, col, 0);
@@ -40,7 +43,9 @@ public class ColorTableByteFilter extends ColorTableFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.bands.ColorTableFilter#getInRasterDataType()
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.bands.ColorTableFilter#getInRasterDataType()
 	 */
 	public int getInRasterDataType() {
 		return IBuffer.TYPE_BYTE;

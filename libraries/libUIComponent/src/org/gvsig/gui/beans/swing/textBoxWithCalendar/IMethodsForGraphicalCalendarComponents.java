@@ -44,31 +44,31 @@ import java.util.Date;
  */
 
 /**
- * This interface defines some methods for grafical components that use a JCalendar
+ * This interface defines some methods for grafical components that use a
+ * JCalendar
  * 
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
 public interface IMethodsForGraphicalCalendarComponents {
 	/**
-	 * Gets the date of the calendar 
+	 * Gets the date of the calendar
 	 * 
 	 * @return Date
 	 */
 	public Date getDate();
-	
+
 	/**
 	 * Sets the date to the calendar
 	 * 
 	 * @param date
 	 */
 	public void setDate(Date date);
-	
+
 	/**
 	 * Returns the date selected, formatted
 	 * 
 	 * @return String The formatted date
 	 */
 	public String getFormattedDate();
-	
-	
+
 }

@@ -47,11 +47,11 @@ package org.gvsig.topology;
 import java.util.List;
 
 /**
- * Interface for those topology rules whose fixes may be 
- * exclusives (apply one fix or another one in function of the error)
+ * Interface for those topology rules whose fixes may be exclusives (apply one
+ * fix or another one in function of the error)
  * 
  * @author azabala azabala[en]gmai[dot]com
- *
+ * 
  */
 public interface ITopologyRuleWithExclusiveFix {
 	public List<ITopologyErrorFix> getExclusiveErrorFixes(TopologyError error);

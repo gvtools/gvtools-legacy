@@ -22,76 +22,83 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Modelo de datos para la capa de selección de tramos. Representa
- * un array de datos Double donde cada valor está entre 0 y 1. Un valor
- * del array representa la posición de ese tramo de forma porcentual. El 
- * primer elemento será 0 y el último 1. El resto de valores se reparten 
- * dentro del rango ordenados de menor a mayor. 
+ * Modelo de datos para la capa de selección de tramos. Representa un array de
+ * datos Double donde cada valor está entre 0 y 1. Un valor del array representa
+ * la posición de ese tramo de forma porcentual. El primer elemento será 0 y el
+ * último 1. El resto de valores se reparten dentro del rango ordenados de menor
+ * a mayor.
  * 
  * 07/08/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class StretchLayerDataModel extends ArrayList {
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * Obtiene la lista de valores en forma de array de double
+	 * 
 	 * @return double[]
 	 */
 	public double[] getValues() {
 		double[] list = new double[size()];
-		for (int i = 0; i < size(); i++) { 
+		for (int i = 0; i < size(); i++) {
 			try {
-				list[i] = ((Double)get(i)).doubleValue();
-			} catch(NumberFormatException e) {
-				//Continua con los siguientes valores
+				list[i] = ((Double) get(i)).doubleValue();
+			} catch (NumberFormatException e) {
+				// Continua con los siguientes valores
 			}
 		}
 		return list;
 	}
-	
+
 	/**
-	 * Genera n tramos equidistantes 
-	 * @param n Número de intervalos a crear
+	 * Genera n tramos equidistantes
+	 * 
+	 * @param n
+	 *            Número de intervalos a crear
 	 */
 	public void generate(int n) {
-		if(n <= 0)
+		if (n <= 0)
 			return;
 		double distance = 1D / n;
 		clear();
-		for (int i = 0; i <= n; i++) 
+		for (int i = 0; i <= n; i++)
 			add(new Double(i * distance));
 	}
-	
+
 	/**
-	 * Genera los tramos a la distancia especificada. El último tramo será de tamaño 
-	 * menor en caso de no ser divisibles
-	 * @param distance. Distancia entre tramos
+	 * Genera los tramos a la distancia especificada. El último tramo será de
+	 * tamaño menor en caso de no ser divisibles
+	 * 
+	 * @param distance
+	 *            . Distancia entre tramos
 	 * @parma min. Valor mínimo
-	 * @param max. Valor máximo
+	 * @param max
+	 *            . Valor máximo
 	 */
 	public void generate(double distance, double min, double max) {
-		if(distance <= 0 || min > max)
+		if (distance <= 0 || min > max)
 			return;
 		double step = distance / (max - min);
 		clear();
 		add(new Double(0));
 		double value = step;
-		while(value < 1) {
+		while (value < 1) {
 			add(new Double(value));
 			value += step;
 		}
-		if((value - step) < 1)
+		if ((value - step) < 1)
 			add(new Double(1));
 	}
-	
+
 	/**
 	 * Ordena los elementos del array
 	 */
 	public void sort() {
-		double[] list =  new double[size()];
-		for (int i = 0; i < size(); i++) 
-			list[i] = ((Double)get(i)).doubleValue();
+		double[] list = new double[size()];
+		for (int i = 0; i < size(); i++)
+			list[i] = ((Double) get(i)).doubleValue();
 		Arrays.sort(list);
 		clear();
 		for (int i = 0; i < list.length; i++)

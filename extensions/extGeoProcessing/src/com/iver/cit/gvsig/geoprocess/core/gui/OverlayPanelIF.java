@@ -42,29 +42,29 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: OverlayPanelIF.java 6745 2006-08-11 16:12:27Z azabala $
-* $Log$
-* Revision 1.3  2006-08-11 16:12:27  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/07/21 09:10:34  azabala
-* fixed bug 608: user doesnt enter any result file to the geoprocess panel
-*
-* Revision 1.1  2006/05/24 21:13:09  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.2  2006/03/21 19:26:08  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/02/26 20:52:13  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/02/17 15:56:48  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: OverlayPanelIF.java 6745 2006-08-11 16:12:27Z azabala $
+ * $Log$
+ * Revision 1.3  2006-08-11 16:12:27  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/07/21 09:10:34  azabala
+ * fixed bug 608: user doesnt enter any result file to the geoprocess panel
+ *
+ * Revision 1.1  2006/05/24 21:13:09  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.2  2006/03/21 19:26:08  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/02/26 20:52:13  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/02/17 15:56:48  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core.gui;
 
 import java.io.File;
@@ -75,32 +75,33 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.utiles.swing.threads.IMonitorableTask;
 
 /**
- * Models  funtionality of GeoProcessingBufferPanel
- * GUI component.
+ * Models funtionality of GeoProcessingBufferPanel GUI component.
  * 
  * @author azabala
- *
+ * 
  */
 public interface OverlayPanelIF {
 	public FLyrVect getInputLayer();
+
 	public FLyrVect getSecondLayer();
-	public FLayers  getFLayers();
-	
-	
+
+	public FLayers getFLayers();
+
 	public boolean onlyFirstLayerSelected();
+
 	public boolean onlySecondLayerSelected();
-	
-	
+
 	public void openResultFileDialog();
-	
+
 	public void firstLayerSelectionChecked(boolean checked);
+
 	public void secondLayerSelectionChecked(boolean checked);
-	
-	
+
 	public File getOutputFile() throws FileNotFoundException;
-	
+
 	public void error(String error, String errorDescription);
+
 	public boolean askForOverwriteOutputFile(File file);
+
 	IMonitorableTask askForSpatialIndexCreation(FLyrVect layer);
 }
-

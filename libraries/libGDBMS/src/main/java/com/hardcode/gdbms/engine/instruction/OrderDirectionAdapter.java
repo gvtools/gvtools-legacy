@@ -3,6 +3,6 @@ package com.hardcode.gdbms.engine.instruction;
 /**
  * @author Fernando González Cortés
  */
-public class OrderDirectionAdapter extends Adapter{
+public class OrderDirectionAdapter extends Adapter {
 
 }

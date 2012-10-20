@@ -29,6 +29,7 @@ import org.gvsig.raster.datastruct.NoData;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
 import org.kxml2.io.KXmlParser;
 import org.xmlpull.v1.XmlPullParserException;
+
 /**
  * <P>
  * Clase para convertir a XML un valor NoData y obtener el valor desde un XML.
@@ -42,7 +43,7 @@ import org.xmlpull.v1.XmlPullParserException;
  * <P>
  * &lt;NoData value="-99.999"><BR>
  * &lt;/NoData><BR>
- *
+ * 
  * @version 18/12/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
@@ -57,12 +58,16 @@ public class NoDataRmfSerializer extends ClassSerializer {
 		ExtensionPoint point = ExtensionPoint.getExtensionPoint("Serializer");
 		point.register("NoData", NoDataRmfSerializer.class);
 	}
-	
+
 	/**
 	 * Constructor. Asigna el valor NoData a serializar
-	 * @param noData   Valor NoData
-	 * @param type     Tipo de NoData
-	 * @param dataType Tipo de datos de la capa
+	 * 
+	 * @param noData
+	 *            Valor NoData
+	 * @param type
+	 *            Tipo de NoData
+	 * @param dataType
+	 *            Tipo de datos de la capa
 	 */
 	public NoDataRmfSerializer(NoData noData) {
 		this.noData = noData;
@@ -71,18 +76,21 @@ public class NoDataRmfSerializer extends ClassSerializer {
 	/**
 	 * Constructor.
 	 */
-	public NoDataRmfSerializer() {}
+	public NoDataRmfSerializer() {
+	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.io.rmf.IRmfBlock#getMainTag()
 	 */
 	public String getMainTag() {
 		return MAIN_TAG;
 	}
-	
+
 	/**
 	 * Devuelve el valor noData, en caso de no existir lo crea.
+	 * 
 	 * @return
 	 */
 	private NoData getNoData() {
@@ -93,6 +101,7 @@ public class NoDataRmfSerializer extends ClassSerializer {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.io.rmf.IRmfBlock#getResult()
 	 */
 	public Object getResult() {
@@ -107,6 +116,7 @@ public class NoDataRmfSerializer extends ClassSerializer {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.io.rmf.IRmfBlock#read(java.lang.String)
 	 */
 	public void read(String xml) throws ParsingException {
@@ -126,17 +136,21 @@ public class NoDataRmfSerializer extends ClassSerializer {
 
 				while (tag != KXmlParser.END_DOCUMENT) {
 					switch (tag) {
-						case KXmlParser.START_TAG:
-							if (parser.getName().equals("Data")) {
-								for (int i = 0; i < parser.getAttributeCount(); i++) {
-									if (parser.getAttributeName(i).equals("value")) {
-										getNoData().setValue(Double.parseDouble((String) parser.getAttributeValue(i)));
-									}
-									if (parser.getAttributeName(i).equals("type")) {
-										getNoData().setType(Integer.parseInt((String) parser.getAttributeValue(i)));
-									}
+					case KXmlParser.START_TAG:
+						if (parser.getName().equals("Data")) {
+							for (int i = 0; i < parser.getAttributeCount(); i++) {
+								if (parser.getAttributeName(i).equals("value")) {
+									getNoData().setValue(
+											Double.parseDouble((String) parser
+													.getAttributeValue(i)));
+								}
+								if (parser.getAttributeName(i).equals("type")) {
+									getNoData().setType(
+											Integer.parseInt((String) parser
+													.getAttributeValue(i)));
 								}
 							}
+						}
 					}
 					tag = parser.next();
 				}
@@ -151,6 +165,7 @@ public class NoDataRmfSerializer extends ClassSerializer {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.io.rmf.IRmfBlock#write()
 	 */
 	public String write() throws IOException {
@@ -161,7 +176,7 @@ public class NoDataRmfSerializer extends ClassSerializer {
 			return "";
 
 		StringBuffer b = new StringBuffer();
-		
+
 		b.append("<" + MAIN_TAG + ">\n");
 		b.append("\t<Data");
 		if (getNoData().getType() == RasterLibrary.NODATATYPE_USER)

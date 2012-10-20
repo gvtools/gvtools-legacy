@@ -21,27 +21,31 @@ package org.gvsig.georeferencing.ui.zoom;
 import java.awt.geom.Rectangle2D;
 
 /**
- * Interfaz necesario en un ZoomControl para la petición de extensióna un objeto 
+ * Interfaz necesario en un ZoomControl para la petición de extensióna un objeto
  * externo cuando se pulsan los botones zoom más y zoom menos.
  * 
  * 30/12/2007
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public interface IExtensionRequest {
-	
+
 	/**
 	 * Petición de coordenadas al pulsar zoom más o zoom menos en el control.
-	 * Estas coordenadas son calculadas a partir del extent del control actual aplicando
-	 * un escalado sobre este. La coordenada central del control se mantiene invariante, es
-	 * decir, el zoom se calcula sobre el centro actual. El escalado del siguiente buffer
-	 * pasado en setParams será de 1.0.
-	 * @param Rectangle2D extent
+	 * Estas coordenadas son calculadas a partir del extent del control actual
+	 * aplicando un escalado sobre este. La coordenada central del control se
+	 * mantiene invariante, es decir, el zoom se calcula sobre el centro actual.
+	 * El escalado del siguiente buffer pasado en setParams será de 1.0.
+	 * 
+	 * @param Rectangle2D
+	 *            extent
 	 * @return Extent aplicado
 	 */
-	public Rectangle2D request(Rectangle2D extent)throws InvalidRequestException;
-	
+	public Rectangle2D request(Rectangle2D extent)
+			throws InvalidRequestException;
+
 	/**
 	 * Extensión completa de la capa.
 	 */
-	public void fullExtent() throws InvalidRequestException ;
+	public void fullExtent() throws InvalidRequestException;
 }

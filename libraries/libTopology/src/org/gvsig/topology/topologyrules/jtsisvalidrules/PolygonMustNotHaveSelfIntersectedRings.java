@@ -80,49 +80,49 @@ import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Polygon;
 
-public class PolygonMustNotHaveSelfIntersectedRings extends AbstractTopologyRule{ 
-	
-	private static String RULE_NAME = Messages.getText("POLYGON_MUST_NOT_HAVE_INTERSECTED_RINGS");
+public class PolygonMustNotHaveSelfIntersectedRings extends
+		AbstractTopologyRule {
+
+	private static String RULE_NAME = Messages
+			.getText("POLYGON_MUST_NOT_HAVE_INTERSECTED_RINGS");
 	/**
 	 * Symbol for topology errors caused by a violation of this rule.
 	 */
 	private MultiShapeSymbol errorSymbol = DEFAULT_ERROR_SYMBOL;
-	
-	
-	private static List<ITopologyErrorFix> automaticErrorFixes =
-		new ArrayList<ITopologyErrorFix>();
-	static{
+
+	private static List<ITopologyErrorFix> automaticErrorFixes = new ArrayList<ITopologyErrorFix>();
+	static {
 		automaticErrorFixes.add(new ExtendDangleToNearestBoundaryPointFix());
 		automaticErrorFixes.add(new ExtendDangleToNearestVertexFix());
 	}
-	
-	
+
 	private static final Color DEFAULT_ERROR_COLOR = Color.RED;
-	
-	
-	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = 
-		(MultiShapeSymbol) SymbologyFactory.createDefaultSymbolByShapeType(FShape.MULTI, 
-											DEFAULT_ERROR_COLOR);
-	static{
+
+	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = (MultiShapeSymbol) SymbologyFactory
+			.createDefaultSymbolByShapeType(FShape.MULTI, DEFAULT_ERROR_COLOR);
+	static {
 		DEFAULT_ERROR_SYMBOL.setDescription(RULE_NAME);
 		DEFAULT_ERROR_SYMBOL.setSize(4);
 	}
-	
+
 	private double snapTolerance;
-	
+
 	private JtsValidRule parentRule;
-	
-	public PolygonMustNotHaveSelfIntersectedRings(Topology topology, FLyrVect lyr, double snapTolerance){
+
+	public PolygonMustNotHaveSelfIntersectedRings(Topology topology,
+			FLyrVect lyr, double snapTolerance) {
 		super(topology, lyr);
 		this.snapTolerance = snapTolerance;
 	}
-	
-	public PolygonMustNotHaveSelfIntersectedRings(){}
-	
-	public PolygonMustNotHaveSelfIntersectedRings(FLyrVect lyr, double snapTolerance){
+
+	public PolygonMustNotHaveSelfIntersectedRings() {
+	}
+
+	public PolygonMustNotHaveSelfIntersectedRings(FLyrVect lyr,
+			double snapTolerance) {
 		this(null, lyr, snapTolerance);
 	}
-	
+
 	public String getName() {
 		return RULE_NAME;
 	}
@@ -132,8 +132,9 @@ public class PolygonMustNotHaveSelfIntersectedRings extends AbstractTopologyRule
 		try {
 			shapeType = this.originLyr.getShapeType();
 			int numDimensions = FGeometryUtil.getDimensions(shapeType);
-			if(numDimensions != 2)
-				throw new WrongLyrForTopologyException("MustNotHaveSelfIntersectedRings solo aplica sobre capas de dimension 2");
+			if (numDimensions != 2)
+				throw new WrongLyrForTopologyException(
+						"MustNotHaveSelfIntersectedRings solo aplica sobre capas de dimension 2");
 		} catch (ReadDriverException e) {
 			throw new TopologyRuleDefinitionException(
 					"Error al tratar de verificar el tipo de geometria");
@@ -160,62 +161,64 @@ public class PolygonMustNotHaveSelfIntersectedRings extends AbstractTopologyRule
 			}
 		}
 	}
-	
-	
-	private  void checkPolygon(Polygon polygon, IFeature feature){
+
+	private void checkPolygon(Polygon polygon, IFeature feature) {
 		LineString shell = polygon.getExteriorRing();
-		SnapLineStringSelfIntersectionChecker checker =
-			new SnapLineStringSelfIntersectionChecker(shell, snapTolerance);
-		if(checker.hasSelfIntersections()){
+		SnapLineStringSelfIntersectionChecker checker = new SnapLineStringSelfIntersectionChecker(
+				shell, snapTolerance);
+		if (checker.hasSelfIntersections()) {
 			Coordinate[] selfIntersections = checker.getSelfIntersections();
 			addError(selfIntersections, feature);
 		}
-		
+
 		int numHoles = polygon.getNumInteriorRing();
-		for(int i = 0; i < numHoles; i++){
+		for (int i = 0; i < numHoles; i++) {
 			LineString hole = polygon.getInteriorRingN(i);
-			checker = new SnapLineStringSelfIntersectionChecker(hole, snapTolerance);
-			if(checker.hasSelfIntersections()){
+			checker = new SnapLineStringSelfIntersectionChecker(hole,
+					snapTolerance);
+			if (checker.hasSelfIntersections()) {
 				Coordinate[] selfIntersections = checker.getSelfIntersections();
 				addError(selfIntersections, feature);
-			}//if
-		}//for
+			}// if
+		}// for
 	}
-	
-	private void addError(Coordinate[] selfIntersections, IFeature feature){
+
+	private void addError(Coordinate[] selfIntersections, IFeature feature) {
 		double[] x = new double[selfIntersections.length];
 		double[] y = new double[selfIntersections.length];
-		for(int i = 0; i < selfIntersections.length; i++){
+		for (int i = 0; i < selfIntersections.length; i++) {
 			x[i] = selfIntersections[i].x;
 			y[i] = selfIntersections[i].y;
 		}
-//		FMultiPoint2D errorGeo = new FMultiPoint2D(x, y);
-		
-		//FIXME USAR MULTIPOINT CUANDO FUNCIONE
-		com.iver.cit.gvsig.fmap.core.FPoint2D point = 
-			new com.iver.cit.gvsig.fmap.core.FPoint2D(x[0], y[0]);
-		com.iver.cit.gvsig.fmap.core.IGeometry errorGeo = com.iver.cit.gvsig.fmap.core.ShapeFactory.createGeometry(point);
-				
+		// FMultiPoint2D errorGeo = new FMultiPoint2D(x, y);
+
+		// FIXME USAR MULTIPOINT CUANDO FUNCIONE
+		com.iver.cit.gvsig.fmap.core.FPoint2D point = new com.iver.cit.gvsig.fmap.core.FPoint2D(
+				x[0], y[0]);
+		com.iver.cit.gvsig.fmap.core.IGeometry errorGeo = com.iver.cit.gvsig.fmap.core.ShapeFactory
+				.createGeometry(point);
+
 		AbstractTopologyRule violatedRule = null;
-		if(this.parentRule != null)
+		if (this.parentRule != null)
 			violatedRule = parentRule;
 		else
 			violatedRule = this;
-		JtsValidTopologyError error = new JtsValidTopologyError(errorGeo, violatedRule, feature, topology );
+		JtsValidTopologyError error = new JtsValidTopologyError(errorGeo,
+				violatedRule, feature, topology);
 		error.setSecondaryRule(this);
 		addTopologyError(error);
 	}
-	
-	public XMLEntity getXMLEntity(){
+
+	public XMLEntity getXMLEntity() {
 		XMLEntity xml = super.getXMLEntity();
 		xml.putProperty("snapTolerance", snapTolerance);
 		return xml;
 	}
-	    
-	public void setXMLEntity(XMLEntity xml){
+
+	public void setXMLEntity(XMLEntity xml) {
 		super.setXMLEntity(xml);
-		
-		if(xml.contains("snapTolerance")){
+
+		if (xml.contains("snapTolerance")) {
 			snapTolerance = xml.getDoubleProperty("snapTolerance");
 		}
 	}

@@ -43,63 +43,82 @@ package com.iver.cit.gvsig.fmap.layers;
 import com.iver.cit.gvsig.fmap.FMapEvent;
 import com.iver.cit.gvsig.fmap.rendering.ILegend;
 
-
 /**
- * <p>Event or set of events produced when changes a legend.</p>
+ * <p>
+ * Event or set of events produced when changes a legend.
+ * </p>
  * 
  * @see FMapEvent
  * @author Vicente Caballero Navarro
  */
 public class LegendChangedEvent extends LegendEvent {
 	/**
-	 * <p>Identifies this event as a changed of a legend.</p>
- 	 */
+	 * <p>
+	 * Identifies this event as a changed of a legend.
+	 * </p>
+	 */
 	private static final int LEGEND_CHANGED = 0;
 
 	/**
-	 * <p>Previous vector legend.</p>
+	 * <p>
+	 * Previous vector legend.
+	 * </p>
 	 */
 	private ILegend oldLegend;
 
 	/**
-	 * <p>New vector legend.</p>
+	 * <p>
+	 * New vector legend.
+	 * </p>
 	 */
 	private ILegend newLegend;
 
 	/**
-	 * <p>Events that constitute this one.</p>
+	 * <p>
+	 * Events that constitute this one.
+	 * </p>
 	 */
 	private LegendChangedEvent[] events;
 
 	/**
-	 * <p>Creates a new legend change event.</p>
+	 * <p>
+	 * Creates a new legend change event.
+	 * </p>
 	 * 
-	 * @param oldLegend previous vector legend
-	 * @param newLegend new vector legend
+	 * @param oldLegend
+	 *            previous vector legend
+	 * @param newLegend
+	 *            new vector legend
 	 * 
 	 * @return a new legend change event
 	 */
-	public static LegendChangedEvent createLegendChangedEvent(ILegend oldLegend,
-			ILegend newLegend){
+	public static LegendChangedEvent createLegendChangedEvent(
+			ILegend oldLegend, ILegend newLegend) {
 		return new LegendChangedEvent(oldLegend, newLegend, LEGEND_CHANGED);
 	}
-	
+
 	/**
-	 * <p>Creates a new legend change event.</p>
-	 *
-	 * @param oldLegend previous vector legend
-	 * @param newLegend new vector legend
+	 * <p>
+	 * Creates a new legend change event.
+	 * </p>
+	 * 
+	 * @param oldLegend
+	 *            previous vector legend
+	 * @param newLegend
+	 *            new vector legend
 	 */
-	private LegendChangedEvent(ILegend oldLegend,
-			ILegend newLegend, int eventType) {
+	private LegendChangedEvent(ILegend oldLegend, ILegend newLegend,
+			int eventType) {
 		this.oldLegend = oldLegend;
 		this.newLegend = newLegend;
 		setEventType(eventType);
 	}
 
 	/**
-	 * <p>Gets the previous vector legend.</p>
-	 *
+	 * <p>
+	 * Gets the previous vector legend.
+	 * </p>
+	 * 
 	 * @return the previous vector legend
 	 */
 	public ILegend getOldLegend() {
@@ -107,8 +126,10 @@ public class LegendChangedEvent extends LegendEvent {
 	}
 
 	/**
-	 * <p>Gets the new vector legend.</p>
-	 *
+	 * <p>
+	 * Gets the new vector legend.
+	 * </p>
+	 * 
 	 * @return the new vector legend
 	 */
 	public ILegend getNewLegend() {
@@ -116,8 +137,10 @@ public class LegendChangedEvent extends LegendEvent {
 	}
 
 	/**
-	 * <p>Gets the events that constitute this one.</p>
-	 *
+	 * <p>
+	 * Gets the events that constitute this one.
+	 * </p>
+	 * 
 	 * @return an array with the events that constitute this one
 	 */
 	public LegendChangedEvent[] getEvents() {
@@ -125,9 +148,12 @@ public class LegendChangedEvent extends LegendEvent {
 	}
 
 	/**
-	 * <p>Sets the events that constitute this one.</p>
-	 *
-	 * @param events an array with the events that constitute this one
+	 * <p>
+	 * Sets the events that constitute this one.
+	 * </p>
+	 * 
+	 * @param events
+	 *            an array with the events that constitute this one
 	 */
 	public void setEvents(LegendChangedEvent[] events) {
 		this.events = events;

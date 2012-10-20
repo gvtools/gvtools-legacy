@@ -29,18 +29,19 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.cit.gvsig.project.documents.view.legend.CreateSpatialIndexMonitorableTask;
 
 public class StopEditingClean extends StopEditing {
-	
+
 	private View vista;
-	
+
 	public void execute(String s) {
-		com.iver.andami.ui.mdiManager.IWindow[] windows = PluginServices.getMDIManager().getAllWindows();
-		
-		for(int i=0;i<windows.length;i++) {
-			if(windows[i] instanceof IView)
+		com.iver.andami.ui.mdiManager.IWindow[] windows = PluginServices
+				.getMDIManager().getAllWindows();
+
+		for (int i = 0; i < windows.length; i++) {
+			if (windows[i] instanceof IView)
 				vista = (View) windows[i];
 		}
-		
-		boolean isStop=false;
+
+		boolean isStop = false;
 		IProjectView model = vista.getModel();
 		MapContext mapa = model.getMapContext();
 		FLayers layers = mapa.getLayers();
@@ -54,18 +55,19 @@ public class StopEditingClean extends StopEditing {
 				if (actives[i] instanceof FLyrVect && actives[i].isEditing()) {
 					FLyrVect lv = (FLyrVect) actives[i];
 					MapControl mapControl = vista.getMapControl();
-					VectorialLayerEdited lyrEd = (VectorialLayerEdited)	edMan.getActiveLayerEdited();
+					VectorialLayerEdited lyrEd = (VectorialLayerEdited) edMan
+							.getActiveLayerEdited();
 					try {
 						lyrEd.clearSelection(false);
 					} catch (ReadDriverException e) {
 						e.printStackTrace();
 					}
-					isStop=stopEditing(lv, mapControl);
-					if (isStop){
+					isStop = stopEditing(lv, mapControl);
+					if (isStop) {
 						lv.removeLayerListener(edMan);
-						if (lv instanceof FLyrAnnotation){
-							FLyrAnnotation lva=(FLyrAnnotation)lv;
-				            lva.setMapping(lva.getMapping());
+						if (lv instanceof FLyrAnnotation) {
+							FLyrAnnotation lva = (FLyrAnnotation) lv;
+							lva.setMapping(lva.getMapping());
 						}
 					}
 				}
@@ -78,12 +80,13 @@ public class StopEditingClean extends StopEditing {
 
 			}
 		}
-//		PluginServices.getMainFrame().enableControls();
+		// PluginServices.getMainFrame().enableControls();
 	}
 
 	public boolean stopEditing(FLyrVect layer, MapControl mapControl) {
 
-		VectorialEditableAdapter vea = (VectorialEditableAdapter) layer.getSource();
+		VectorialEditableAdapter vea = (VectorialEditableAdapter) layer
+				.getSource();
 
 		try {
 			if (layer.isWritable()) {
@@ -91,15 +94,17 @@ public class StopEditingClean extends StopEditing {
 				saveLayer(layer);
 				vea.getCommandRecord().removeCommandListener(mapControl);
 				layer.setEditing(false);
-				if (layer.isSpatiallyIndexed()){
-	            	if(layer.getISpatialIndex() != null){
+				if (layer.isSpatiallyIndexed()) {
+					if (layer.getISpatialIndex() != null) {
 						try {
-							PluginServices.cancelableBackgroundExecution(new CreateSpatialIndexMonitorableTask((FLyrVect)layer));
+							PluginServices
+									.cancelableBackgroundExecution(new CreateSpatialIndexMonitorableTask(
+											(FLyrVect) layer));
 						} catch (ReadDriverException e) {
 							e.printStackTrace();
 						}
-	                }
-		        }
+					}
+				}
 				return true;
 			}
 
@@ -111,13 +116,15 @@ public class StopEditingClean extends StopEditing {
 		return false;
 
 	}
-	
+
 	private void saveLayer(FLyrVect layer) throws ReadDriverException {
-		layer.setProperty("stoppingEditing",new Boolean(true));
-		VectorialEditableAdapter vea = (VectorialEditableAdapter) layer.getSource();
-		
+		layer.setProperty("stoppingEditing", new Boolean(true));
+		VectorialEditableAdapter vea = (VectorialEditableAdapter) layer
+				.getSource();
+
 		ISpatialWriter writer = (ISpatialWriter) vea.getWriter();
-		com.iver.andami.ui.mdiManager.IWindow[] views = PluginServices.getMDIManager().getAllWindows();
+		com.iver.andami.ui.mdiManager.IWindow[] views = PluginServices
+				.getMDIManager().getAllWindows();
 		for (int j = 0; j < views.length; j++) {
 			if (views[j] instanceof Table) {
 				Table table = (Table) views[j];
@@ -128,15 +135,17 @@ public class StopEditingClean extends StopEditing {
 			}
 		}
 		vea.cleanSelectableDatasource();
-		layer.setRecordset(vea.getRecordset()); // Queremos que el recordset del layer
+		layer.setRecordset(vea.getRecordset()); // Queremos que el recordset del
+												// layer
 		// refleje los cambios en los campos.
 		ILayerDefinition lyrDef = EditionUtilities.createLayerDefinition(layer);
-		String aux="FIELDS:";
+		String aux = "FIELDS:";
 		FieldDescription[] flds = lyrDef.getFieldsDesc();
-		for (int i=0; i < flds.length; i++){
+		for (int i = 0; i < flds.length; i++) {
 			aux = aux + ", " + flds[i].getFieldAlias();
 		}
-		System.err.println("Escribiendo la capa " + lyrDef.getName() + " con los campos " + aux);
+		System.err.println("Escribiendo la capa " + lyrDef.getName()
+				+ " con los campos " + aux);
 		try {
 			writer.initialize(lyrDef);
 		} catch (InitializeWriterException e) {
@@ -147,9 +156,9 @@ public class StopEditingClean extends StopEditing {
 		} catch (StopWriterVisitorException e) {
 			e.printStackTrace();
 		}
-		layer.setProperty("stoppingEditing",new Boolean(false));
+		layer.setProperty("stoppingEditing", new Boolean(false));
 	}
-	
+
 	public boolean isEnabled() {
 		return super.isEnabled();
 	}
@@ -157,6 +166,5 @@ public class StopEditingClean extends StopEditing {
 	public boolean isVisible() {
 		return super.isVisible();
 	}
-	
-}
 
+}

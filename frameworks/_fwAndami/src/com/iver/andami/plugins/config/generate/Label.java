@@ -7,175 +7,160 @@
 
 package com.iver.andami.plugins.config.generate;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Serializable;
-import java.io.Writer;
-import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.Marshaller;
 import org.exolab.castor.xml.Unmarshaller;
-import org.exolab.castor.xml.ValidationException;
-import org.xml.sax.ContentHandler;
 
 /**
  * Class Label.
  * 
- * @version $Revision: 15983 $ $Date: 2007-11-07 12:11:19 +0100 (Wed, 07 Nov 2007) $
+ * @version $Revision: 15983 $ $Date: 2007-11-07 12:11:19 +0100 (Wed, 07 Nov
+ *          2007) $
  */
 public class Label implements java.io.Serializable {
 
+	// --------------------------/
+	// - Class/Member Variables -/
+	// --------------------------/
 
-      //--------------------------/
-     //- Class/Member Variables -/
-    //--------------------------/
+	/**
+	 * Field _size
+	 */
+	private int _size;
 
-    /**
-     * Field _size
-     */
-    private int _size;
+	/**
+	 * keeps track of state for field: _size
+	 */
+	private boolean _has_size;
 
-    /**
-     * keeps track of state for field: _size
-     */
-    private boolean _has_size;
+	/**
+	 * Field _id
+	 */
+	private java.lang.String _id;
 
-    /**
-     * Field _id
-     */
-    private java.lang.String _id;
+	// ----------------/
+	// - Constructors -/
+	// ----------------/
 
+	public Label() {
+		super();
+	} // -- com.iver.andami.plugins.config.generate.Label()
 
-      //----------------/
-     //- Constructors -/
-    //----------------/
+	// -----------/
+	// - Methods -/
+	// -----------/
 
-    public Label() {
-        super();
-    } //-- com.iver.andami.plugins.config.generate.Label()
+	/**
+	 * Method deleteSize
+	 */
+	public void deleteSize() {
+		this._has_size = false;
+	} // -- void deleteSize()
 
+	/**
+	 * Returns the value of field 'id'.
+	 * 
+	 * @return the value of field 'id'.
+	 */
+	public java.lang.String getId() {
+		return this._id;
+	} // -- java.lang.String getId()
 
-      //-----------/
-     //- Methods -/
-    //-----------/
+	/**
+	 * Returns the value of field 'size'.
+	 * 
+	 * @return the value of field 'size'.
+	 */
+	public int getSize() {
+		return this._size;
+	} // -- int getSize()
 
-    /**
-     * Method deleteSize
-     */
-    public void deleteSize()
-    {
-        this._has_size= false;
-    } //-- void deleteSize() 
+	/**
+	 * Method hasSize
+	 */
+	public boolean hasSize() {
+		return this._has_size;
+	} // -- boolean hasSize()
 
-    /**
-     * Returns the value of field 'id'.
-     * 
-     * @return the value of field 'id'.
-     */
-    public java.lang.String getId()
-    {
-        return this._id;
-    } //-- java.lang.String getId() 
+	/**
+	 * Method isValid
+	 */
+	public boolean isValid() {
+		try {
+			validate();
+		} catch (org.exolab.castor.xml.ValidationException vex) {
+			return false;
+		}
+		return true;
+	} // -- boolean isValid()
 
-    /**
-     * Returns the value of field 'size'.
-     * 
-     * @return the value of field 'size'.
-     */
-    public int getSize()
-    {
-        return this._size;
-    } //-- int getSize() 
+	/**
+	 * Method marshal
+	 * 
+	 * @param out
+	 */
+	public void marshal(java.io.Writer out)
+			throws org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
 
-    /**
-     * Method hasSize
-     */
-    public boolean hasSize()
-    {
-        return this._has_size;
-    } //-- boolean hasSize() 
+		Marshaller.marshal(this, out);
+	} // -- void marshal(java.io.Writer)
 
-    /**
-     * Method isValid
-     */
-    public boolean isValid()
-    {
-        try {
-            validate();
-        }
-        catch (org.exolab.castor.xml.ValidationException vex) {
-            return false;
-        }
-        return true;
-    } //-- boolean isValid() 
+	/**
+	 * Method marshal
+	 * 
+	 * @param handler
+	 */
+	public void marshal(org.xml.sax.ContentHandler handler)
+			throws java.io.IOException, org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
 
-    /**
-     * Method marshal
-     * 
-     * @param out
-     */
-    public void marshal(java.io.Writer out)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        
-        Marshaller.marshal(this, out);
-    } //-- void marshal(java.io.Writer) 
+		Marshaller.marshal(this, handler);
+	} // -- void marshal(org.xml.sax.ContentHandler)
 
-    /**
-     * Method marshal
-     * 
-     * @param handler
-     */
-    public void marshal(org.xml.sax.ContentHandler handler)
-        throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        
-        Marshaller.marshal(this, handler);
-    } //-- void marshal(org.xml.sax.ContentHandler) 
+	/**
+	 * Sets the value of field 'id'.
+	 * 
+	 * @param id
+	 *            the value of field 'id'.
+	 */
+	public void setId(java.lang.String id) {
+		this._id = id;
+	} // -- void setId(java.lang.String)
 
-    /**
-     * Sets the value of field 'id'.
-     * 
-     * @param id the value of field 'id'.
-     */
-    public void setId(java.lang.String id)
-    {
-        this._id = id;
-    } //-- void setId(java.lang.String) 
+	/**
+	 * Sets the value of field 'size'.
+	 * 
+	 * @param size
+	 *            the value of field 'size'.
+	 */
+	public void setSize(int size) {
+		this._size = size;
+		this._has_size = true;
+	} // -- void setSize(int)
 
-    /**
-     * Sets the value of field 'size'.
-     * 
-     * @param size the value of field 'size'.
-     */
-    public void setSize(int size)
-    {
-        this._size = size;
-        this._has_size = true;
-    } //-- void setSize(int) 
+	/**
+	 * Method unmarshal
+	 * 
+	 * @param reader
+	 */
+	public static java.lang.Object unmarshal(java.io.Reader reader)
+			throws org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
+		return (com.iver.andami.plugins.config.generate.Label) Unmarshaller
+				.unmarshal(com.iver.andami.plugins.config.generate.Label.class,
+						reader);
+	} // -- java.lang.Object unmarshal(java.io.Reader)
 
-    /**
-     * Method unmarshal
-     * 
-     * @param reader
-     */
-    public static java.lang.Object unmarshal(java.io.Reader reader)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        return (com.iver.andami.plugins.config.generate.Label) Unmarshaller.unmarshal(com.iver.andami.plugins.config.generate.Label.class, reader);
-    } //-- java.lang.Object unmarshal(java.io.Reader) 
-
-    /**
-     * Method validate
-     */
-    public void validate()
-        throws org.exolab.castor.xml.ValidationException
-    {
-        org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
-        validator.validate(this);
-    } //-- void validate() 
+	/**
+	 * Method validate
+	 */
+	public void validate() throws org.exolab.castor.xml.ValidationException {
+		org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
+		validator.validate(this);
+	} // -- void validate()
 
 }

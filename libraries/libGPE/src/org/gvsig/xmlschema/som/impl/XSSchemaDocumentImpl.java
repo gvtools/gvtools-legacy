@@ -80,14 +80,14 @@ import org.gvsig.xmlschema.utils.SchemaDocumentBuilder;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class XSSchemaDocumentImpl implements IXSSchemaDocument{
+public class XSSchemaDocumentImpl implements IXSSchemaDocument {
 	private Hashtable schemas = null;
 	private Hashtable prefixes = null;
 	private Hashtable schemaLocations = null;
 	private boolean isElementQualified = false;
 	private String targetNamespace = null;
-	
-	public XSSchemaDocumentImpl(){
+
+	public XSSchemaDocumentImpl() {
 		schemas = new Hashtable();
 		prefixes = new Hashtable();
 		schemaLocations = new Hashtable();
@@ -95,128 +95,148 @@ public class XSSchemaDocumentImpl implements IXSSchemaDocument{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.schema.som.IXSSchemaMap#addSchema(java.lang.String, org.gvsig.gpe.schema.som.IXSSchema)
+	 * 
+	 * @see org.gvsig.gpe.schema.som.IXSSchemaMap#addSchema(java.lang.String,
+	 * org.gvsig.gpe.schema.som.IXSSchema)
 	 */
-	public void addSchema(URI uri, IXSSchema schema){
+	public void addSchema(URI uri, IXSSchema schema) {
 		schemas.put(uri, schema);
 		schemaLocations.put(uri, uri.toString());
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSSchemaMap#hasSchema(java.lang.String)
 	 */
-	public boolean hasSchema(URI uri){
+	public boolean hasSchema(URI uri) {
 		return schemas.get(uri) != null;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSSchemaMap#getURIs()
 	 */
-	public Enumeration getURIs(){
+	public Enumeration getURIs() {
 		return schemas.keys();
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSSchemaMap#getSchemas()
 	 */
-	public Enumeration getSchemas(){
+	public Enumeration getSchemas() {
 		return schemas.elements();
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSSchemaMap#getSchema(java.lang.String)
 	 */
-	public IXSSchema getSchema(URI uri){
-		return (IXSSchema)schemas.get(uri);
+	public IXSSchema getSchema(URI uri) {
+		return (IXSSchema) schemas.get(uri);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSSchemaMap#remove(java.lang.String)
 	 */
-	public void remove(URI uri){
+	public void remove(URI uri) {
 		schemas.remove(uri);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.schema.som.IXSSchemaMap#addNamespacePrefix(java.lang.String, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.schema.som.IXSSchemaMap#addNamespacePrefix(java.lang.String
+	 * , java.lang.String)
 	 */
 	public void addNamespacePrefix(String prefix, String namespaceURI) {
-		prefixes.put(prefix, namespaceURI);	
+		prefixes.put(prefix, namespaceURI);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.schema.som.IXSSchemaMap#getNamespaceURI(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.schema.som.IXSSchemaMap#getNamespaceURI(java.lang.String)
 	 */
 	public String getNamespaceURI(String prefix) {
-		if (prefixes.get(prefix) != null){
-			return (String)prefixes.get(prefix);
+		if (prefixes.get(prefix) != null) {
+			return (String) prefixes.get(prefix);
 		}
 		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSSchemaMap#addSchema(java.lang.String)
 	 */
-	public void addSchema(URI uri) throws SchemaCreationException{
-		try {		
-			IXSSchema schema = SchemaDocumentBuilder.getInstance().parse(new FileInputStream(uri.getPath()));
+	public void addSchema(URI uri) throws SchemaCreationException {
+		try {
+			IXSSchema schema = SchemaDocumentBuilder.getInstance().parse(
+					new FileInputStream(uri.getPath()));
 			addSchema(uri, schema);
-		} catch (Exception e){
+		} catch (Exception e) {
 			throw new SchemaCreationException(new NotDownloadFileException(e));
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.schema.som.IXSSchemaMap#getElementDeclarationByName(java.lang.String, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.schema.som.IXSSchemaMap#getElementDeclarationByName(java
+	 * .lang.String, java.lang.String)
 	 */
-	public IXSElementDeclaration getElementDeclarationByName(String namespacePrefix, String elementName){
+	public IXSElementDeclaration getElementDeclarationByName(
+			String namespacePrefix, String elementName) {
 		Enumeration it = getSchemas();
 		String namespaceURI = null;
-		if (namespacePrefix != null){
+		if (namespacePrefix != null) {
 			namespaceURI = getNamespaceURI(namespacePrefix);
-		}		
-		if (namespaceURI == null){
+		}
+		if (namespaceURI == null) {
 			namespaceURI = getTargetNamespace();
 		}
-		while (it.hasMoreElements()){
-			IXSSchema schema = (IXSSchema)it.nextElement();
-			if (schema.getTargetNamespace().compareTo(namespaceURI) == 0){
-				return schema.getElementDeclarationByName(namespaceURI, elementName);
+		while (it.hasMoreElements()) {
+			IXSSchema schema = (IXSSchema) it.nextElement();
+			if (schema.getTargetNamespace().compareTo(namespaceURI) == 0) {
+				return schema.getElementDeclarationByName(namespaceURI,
+						elementName);
 			}
 		}
 		return null;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.schema.som.IXSSchemaMap#getElementDeclarationByName(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.schema.som.IXSSchemaMap#getElementDeclarationByName(java
+	 * .lang.String)
 	 */
-	public IXSElementDeclaration getElementDeclarationByName(String elementName){
+	public IXSElementDeclaration getElementDeclarationByName(String elementName) {
 		int index = elementName.indexOf(":");
-		//If is a qualified name
-		if (index == -1){
-			return getElementDeclarationByName(
-					null,
-					elementName);
-		}else{
+		// If is a qualified name
+		if (index == -1) {
+			return getElementDeclarationByName(null, elementName);
+		} else {
 			String prefix = elementName.substring(0, index);
-			return getElementDeclarationByName(
-					prefix,
-					elementName.substring(index + 1,elementName.length()));
-		}		
+			return getElementDeclarationByName(prefix,
+					elementName.substring(index + 1, elementName.length()));
+		}
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSSchemaMap#isElementQualified()
 	 */
 	public boolean isElementFormDefault() {
@@ -225,6 +245,7 @@ public class XSSchemaDocumentImpl implements IXSSchemaDocument{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSSchemaMap#setElementQualified(boolean)
 	 */
 	public void setElementFormDefault(boolean isElementQualified) {
@@ -233,27 +254,36 @@ public class XSSchemaDocumentImpl implements IXSSchemaDocument{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.schema.som.IXSSchemaDocument#addSchemaLocation(java.net.URI, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.schema.som.IXSSchemaDocument#addSchemaLocation(java.net
+	 * .URI, java.lang.String)
 	 */
 	public void addSchemaLocation(URI uri, String schemaLocation) {
-		schemaLocations.put(uri, schemaLocation);		
+		schemaLocations.put(uri, schemaLocation);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.schema.som.IXSSchemaDocument#getSchemaLocation(java.net.URI)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.schema.som.IXSSchemaDocument#getSchemaLocation(java.net
+	 * .URI)
 	 */
 	public String getSchemaLocation(URI uri) {
 		Object obj = schemaLocations.get(uri);
-		if (obj != null){
-			return (String)obj;
+		if (obj != null) {
+			return (String) obj;
 		}
 		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.schema.som.IXSSchemaDocument#hasSchemaLocation(java.net.URI)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.schema.som.IXSSchemaDocument#hasSchemaLocation(java.net
+	 * .URI)
 	 */
 	public boolean hasSchemaLocation(URI uri) {
 		return (schemaLocations.get(uri) != null);
@@ -261,6 +291,7 @@ public class XSSchemaDocumentImpl implements IXSSchemaDocument{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSSchemaDocument#getTargetNamespace()
 	 */
 	public String getTargetNamespace() {
@@ -269,14 +300,18 @@ public class XSSchemaDocumentImpl implements IXSSchemaDocument{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.schema.som.IXSSchemaDocument#setTargetNamespace(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.schema.som.IXSSchemaDocument#setTargetNamespace(java.lang
+	 * .String)
 	 */
 	public void setTargetNamespace(String targetNamespace) {
-		this.targetNamespace = targetNamespace;		
+		this.targetNamespace = targetNamespace;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSSchemaDocument#hasSchemas()
 	 */
 	public boolean hasSchemas() {
@@ -285,25 +320,29 @@ public class XSSchemaDocumentImpl implements IXSSchemaDocument{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSSchemaDocument#getPrefixes()
 	 */
 	public Enumeration getPrefixes() {
 		return prefixes.elements();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.xmlschema.som.IXSSchemaDocument#getNamespacePrefix(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.xmlschema.som.IXSSchemaDocument#getNamespacePrefix(java.lang
+	 * .String)
 	 */
 	public String getNamespacePrefix(String namespaceURI) {
-		if (namespaceURI == null){
+		if (namespaceURI == null) {
 			return null;
 		}
 		Enumeration enume = prefixes.elements();
-		while (enume.hasMoreElements()){
+		while (enume.hasMoreElements()) {
 			Object obj = enume.nextElement();
-			if (namespaceURI.equals(obj)){
-				return (String)obj;
+			if (namespaceURI.equals(obj)) {
+				return (String) obj;
 			}
 		}
 		return null;
@@ -311,6 +350,7 @@ public class XSSchemaDocumentImpl implements IXSSchemaDocument{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSSchemaDocument#hasPrefixes()
 	 */
 	public boolean hasPrefixes() {
@@ -319,21 +359,24 @@ public class XSSchemaDocumentImpl implements IXSSchemaDocument{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.xmlschema.som.IXSSchemaDocument#getTypeByName(java.lang.String, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.xmlschema.som.IXSSchemaDocument#getTypeByName(java.lang.String,
+	 * java.lang.String)
 	 */
 	public IXSTypeDefinition getTypeByName(String targetNamespace,
 			String typeName) {
 		Enumeration it = getSchemas();
 		String namespaceURI = null;
-		if (targetNamespace != null){
+		if (targetNamespace != null) {
 			namespaceURI = getNamespaceURI(targetNamespace);
-		}		
-		if (namespaceURI == null){
+		}
+		if (namespaceURI == null) {
 			namespaceURI = getTargetNamespace();
 		}
-		while (it.hasMoreElements()){
-			IXSSchema schema = (IXSSchema)it.nextElement();
-			if (schema.getTargetNamespace().compareTo(namespaceURI) == 0){
+		while (it.hasMoreElements()) {
+			IXSSchema schema = (IXSSchema) it.nextElement();
+			if (schema.getTargetNamespace().compareTo(namespaceURI) == 0) {
 				return schema.getTypeByName(namespaceURI, typeName);
 			}
 		}
@@ -342,21 +385,19 @@ public class XSSchemaDocumentImpl implements IXSSchemaDocument{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.xmlschema.som.IXSSchemaDocument#getTypeByName(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.xmlschema.som.IXSSchemaDocument#getTypeByName(java.lang.String)
 	 */
 	public IXSTypeDefinition getTypeByName(String typeName) {
 		int index = typeName.indexOf(":");
-		//If is a qualified name
-		if (index == -1){
-			return getTypeByName(
-					null,
-					typeName);
-		}else{
+		// If is a qualified name
+		if (index == -1) {
+			return getTypeByName(null, typeName);
+		} else {
 			String prefix = typeName.substring(0, index);
-			return getTypeByName(
-					prefix,
-					typeName.substring(index + 1,typeName.length()));
-		}		
+			return getTypeByName(prefix,
+					typeName.substring(index + 1, typeName.length()));
+		}
 	}
 }
-

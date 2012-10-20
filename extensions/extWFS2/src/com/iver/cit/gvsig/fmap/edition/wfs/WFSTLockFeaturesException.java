@@ -51,12 +51,12 @@ import org.gvsig.remoteClient.wfs.exceptions.WFSException;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class WFSTLockFeaturesException extends WFSException{
+public class WFSTLockFeaturesException extends WFSException {
 	private static final long serialVersionUID = 678972590501766760L;
 
 	/**
-	  * Crea WMSException.
-	 *
+	 * Crea WMSException.
+	 * 
 	 * @param cause
 	 */
 	public WFSTLockFeaturesException(Throwable cause) {

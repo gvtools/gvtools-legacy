@@ -42,11 +42,9 @@ package com.iver.core;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.MessageEvent;
-import com.iver.andami.messages.Messages;
 import com.iver.andami.messages.NotificationListener;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.plugins.Extension;
-
 
 /**
  * Plugin que escucha las notificaciones que recive la aplicación y las muestra
@@ -55,35 +53,41 @@ import com.iver.andami.plugins.Extension;
 public class StatusBar extends Extension implements NotificationListener {
 	private int i;
 	private int pr;
-    /**
-     * @see com.iver.mdiApp.IExtension#initialize()
-     */
-    public void initialize() {
-        NotificationManager.addNotificationListener(this);
-    }
 
-    /**
-     * @see com.iver.mdiApp.NotificationListener#errorEvent(java.lang.String)
-     */
-    public void errorEvent(MessageEvent e) {
-    	PluginServices.getMainFrame().getStatusBar().setErrorText(e.getMessages()[0]);
-    }
+	/**
+	 * @see com.iver.mdiApp.IExtension#initialize()
+	 */
+	public void initialize() {
+		NotificationManager.addNotificationListener(this);
+	}
 
-    /**
-     * @see com.iver.mdiApp.NotificationListener#warningEvent(java.lang.String)
-     */
-    public void warningEvent(MessageEvent e) {
-    	PluginServices.getMainFrame().getStatusBar().setWarningText(e.getMessages()[0]);
-    }
+	/**
+	 * @see com.iver.mdiApp.NotificationListener#errorEvent(java.lang.String)
+	 */
+	public void errorEvent(MessageEvent e) {
+		PluginServices.getMainFrame().getStatusBar()
+				.setErrorText(e.getMessages()[0]);
+	}
 
-    /**
-     * @see com.iver.mdiApp.NotificationListener#infoEvent(java.lang.String)
-     */
-    public void infoEvent(MessageEvent e) {
-    	PluginServices.getMainFrame().getStatusBar().setInfoText(e.getMessages()[0]);
-    }
+	/**
+	 * @see com.iver.mdiApp.NotificationListener#warningEvent(java.lang.String)
+	 */
+	public void warningEvent(MessageEvent e) {
+		PluginServices.getMainFrame().getStatusBar()
+				.setWarningText(e.getMessages()[0]);
+	}
 
-	/* (non-Javadoc)
+	/**
+	 * @see com.iver.mdiApp.NotificationListener#infoEvent(java.lang.String)
+	 */
+	public void infoEvent(MessageEvent e) {
+		PluginServices.getMainFrame().getStatusBar()
+				.setInfoText(e.getMessages()[0]);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.Extension#execute(java.lang.String)
 	 */
 	public void execute(String actionCommand) {
@@ -91,7 +95,9 @@ public class StatusBar extends Extension implements NotificationListener {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.Extension#isEnabled()
 	 */
 	public boolean isEnabled() {
@@ -99,13 +105,14 @@ public class StatusBar extends Extension implements NotificationListener {
 		return false;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.Extension#isVisible()
 	 */
 	public boolean isVisible() {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 
 }

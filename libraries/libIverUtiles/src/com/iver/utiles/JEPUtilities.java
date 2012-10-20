@@ -42,67 +42,60 @@ package com.iver.utiles;
 
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public class JEPUtilities {
-    /**
-     * Transforma una expresion en funcion de variables con nombre de la forma
-     * xix  (donde i es un número cualquiera) en una expresión donde dichas
-     * variables han sido sustituidas por los valores que se pasan como
-     * parámetros.
-     *
-     * @param expression Expresion en funcion de xi
-     * @param values Valores que toman las distintas variables x
-     * @param cadena cadena[i] = true si xi es alfanumérica y false en caso
-     *        contrario
-     *
-     * @return La nueva expresion
-     */
-    public static String fillExpression(String expression, String[] values,
-        boolean[] cadena) {
-        String expresionReal = expression;
+	/**
+	 * Transforma una expresion en funcion de variables con nombre de la forma
+	 * xix (donde i es un número cualquiera) en una expresión donde dichas
+	 * variables han sido sustituidas por los valores que se pasan como
+	 * parámetros.
+	 * 
+	 * @param expression
+	 *            Expresion en funcion de xi
+	 * @param values
+	 *            Valores que toman las distintas variables x
+	 * @param cadena
+	 *            cadena[i] = true si xi es alfanumérica y false en caso
+	 *            contrario
+	 * 
+	 * @return La nueva expresion
+	 */
+	public static String fillExpression(String expression, String[] values,
+			boolean[] cadena) {
+		String expresionReal = expression;
 
-        for (int i = 0; i < values.length; i++) {
-            if (cadena[i]) {
-                expresionReal = expresionReal.replaceAll("x" + i + "x",
-                        "\"" + values[i] + "\"");
-            } else {
-                expresionReal = expresionReal.replaceAll("x" + i + "x",
-                        values[i]);
-            }
-        }
+		for (int i = 0; i < values.length; i++) {
+			if (cadena[i]) {
+				expresionReal = expresionReal.replaceAll("x" + i + "x", "\""
+						+ values[i] + "\"");
+			} else {
+				expresionReal = expresionReal.replaceAll("x" + i + "x",
+						values[i]);
+			}
+		}
 
-        return expresionReal;
-    }
+		return expresionReal;
+	}
 
-    /*
-     * DOCUMENT ME!
-     *
-     * @param o DOCUMENT ME!
-     * @param type DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     *
-     * @throws IllegalStateException DOCUMENT ME!
-     *
-       public static String getOrdinalValue(Object o, int type) {
-               switch (type) {
-               case FRecordset.STRING:
-                       return (String) o;
-               case FRecordset.DECIMAL:
-               case FRecordset.INTEGER:
-                       return ((Number) o).toString();
-               case FRecordset.DATE:
-                       return new Long(((Date) o).getTime()).toString();
-               case FRecordset.BOOLEAN:
-                       if (((Boolean) o).booleanValue()) {
-                               return "1";
-                       } else {
-                               return "0";
-                       }
-               }
-               throw new IllegalStateException("No se conoce el tipo del campo");
-       }
-     */
+	/*
+	 * DOCUMENT ME!
+	 * 
+	 * @param o DOCUMENT ME!
+	 * 
+	 * @param type DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 * 
+	 * @throws IllegalStateException DOCUMENT ME!
+	 * 
+	 * public static String getOrdinalValue(Object o, int type) { switch (type)
+	 * { case FRecordset.STRING: return (String) o; case FRecordset.DECIMAL:
+	 * case FRecordset.INTEGER: return ((Number) o).toString(); case
+	 * FRecordset.DATE: return new Long(((Date) o).getTime()).toString(); case
+	 * FRecordset.BOOLEAN: if (((Boolean) o).booleanValue()) { return "1"; }
+	 * else { return "0"; } } throw new
+	 * IllegalStateException("No se conoce el tipo del campo"); }
+	 */
 }

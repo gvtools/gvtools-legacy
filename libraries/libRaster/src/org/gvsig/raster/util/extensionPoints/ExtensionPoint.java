@@ -22,11 +22,14 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
+
 /**
- * ExtensionPoint es una clase en la que se pueden registrar elementos asociados a un identificador.
- * <br><br>
- * Esta clase no posee constructores. La única forma de poder obtener una instancia a dicha clase
- * es usando el método <code>getExtensionPoint(String)</code>
+ * ExtensionPoint es una clase en la que se pueden registrar elementos asociados
+ * a un identificador. <br>
+ * <br>
+ * Esta clase no posee constructores. La única forma de poder obtener una
+ * instancia a dicha clase es usando el método
+ * <code>getExtensionPoint(String)</code>
  * 
  * @version 21/07/2008
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
@@ -39,19 +42,22 @@ public class ExtensionPoint {
 	private String description;
 
 	/**
-	 * Construye un punto de extension.
-	 * <br>
-	 * @param extensionPointName Nombre del punto de extension.
+	 * Construye un punto de extension. <br>
+	 * 
+	 * @param extensionPointName
+	 *            Nombre del punto de extension.
 	 */
 	private ExtensionPoint(String extensionPointName) {
 		this.name = extensionPointName;
 	}
-	
+
 	/**
-	 * Construye un punto de extension.
-	 * <br>
-	 * @param extensionPointName Nombre del punto de extension
-	 * @param description Descripcion del punto de extension
+	 * Construye un punto de extension. <br>
+	 * 
+	 * @param extensionPointName
+	 *            Nombre del punto de extension
+	 * @param description
+	 *            Descripcion del punto de extension
 	 */
 	private ExtensionPoint(String extensionPointName, String description) {
 		this.name = extensionPointName;
@@ -59,22 +65,25 @@ public class ExtensionPoint {
 	}
 
 	/**
-	 * Devuelve un punto de extensión asociado al identificador pasado por parametro.
-	 * En caso de no existir dicho punto de extensión, lo crea.
+	 * Devuelve un punto de extensión asociado al identificador pasado por
+	 * parametro. En caso de no existir dicho punto de extensión, lo crea.
+	 * 
 	 * @param extensionPointName
 	 * @return
 	 */
 	public static ExtensionPoint getExtensionPoint(String extensionPointName) {
-		ExtensionPoint extensionPoint = (ExtensionPoint) map.get(extensionPointName);
+		ExtensionPoint extensionPoint = (ExtensionPoint) map
+				.get(extensionPointName);
 		if (extensionPoint == null) {
 			extensionPoint = new ExtensionPoint(extensionPointName);
 			map.put(extensionPoint.getName(), extensionPoint);
 		}
 		return extensionPoint;
 	}
-	
+
 	/**
 	 * Establece la descripción del punto de extensión actual.
+	 * 
 	 * @param description
 	 */
 	public void setDescription(String description) {
@@ -83,6 +92,7 @@ public class ExtensionPoint {
 
 	/**
 	 * Devuelve la descripción del punto de extensión actual
+	 * 
 	 * @return
 	 */
 	public String getDescription() {
@@ -91,6 +101,7 @@ public class ExtensionPoint {
 
 	/**
 	 * Devuelve el nombre del punto de extensión actual
+	 * 
 	 * @return
 	 */
 	public String getName() {
@@ -98,7 +109,9 @@ public class ExtensionPoint {
 	}
 
 	/**
-	 * Registra un elemento en el punto de extensión actual asociándolo con un key identificador.
+	 * Registra un elemento en el punto de extensión actual asociándolo con un
+	 * key identificador.
+	 * 
 	 * @param key
 	 * @param value
 	 */
@@ -107,7 +120,9 @@ public class ExtensionPoint {
 	}
 
 	/**
-	 * Devuelve un iterador para poder recorrer todos los elementos del punto de extensión.
+	 * Devuelve un iterador para poder recorrer todos los elementos del punto de
+	 * extensión.
+	 * 
 	 * @return
 	 */
 	public Iterator getIterator() {
@@ -115,15 +130,19 @@ public class ExtensionPoint {
 	}
 
 	/**
-	 * Devuelve el número de elementos que hay registrados en el punto de extensión
+	 * Devuelve el número de elementos que hay registrados en el punto de
+	 * extensión
+	 * 
 	 * @return
 	 */
 	public int size() {
 		return point.size();
 	}
-	
+
 	/**
-	 * Devuelve <tt>true</tt> si el punto de extensión contiene un key en su lista de elementos
+	 * Devuelve <tt>true</tt> si el punto de extensión contiene un key en su
+	 * lista de elementos
+	 * 
 	 * @param key
 	 * @return
 	 */
@@ -134,17 +153,19 @@ public class ExtensionPoint {
 	}
 
 	/**
-	 * Devuelve el elemento asociado al key pasado por parametro. En caso de no existir, devolverá
-	 * <tt>null</tt>.
+	 * Devuelve el elemento asociado al key pasado por parametro. En caso de no
+	 * existir, devolverá <tt>null</tt>.
+	 * 
 	 * @param key
 	 * @return
 	 */
 	public Object getValue(String key) {
 		return point.get(key);
 	}
-	
+
 	/**
 	 * Devuelve la lista de keys para el punto de extensión actual.
+	 * 
 	 * @param key
 	 * @return
 	 */

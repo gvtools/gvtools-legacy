@@ -74,6 +74,7 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * It parses a gml:MultiPointType object. Example:
  * <p>
+ * 
  * <pre>
  * <code> 
  * &lt;MultiPoint gid="c731" srsName="http://www.opengis.net/gml/srs/epsg.xml#4326"&gt;
@@ -90,59 +91,65 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  * &lt;/MultiPoint&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class MultiPointTypeBinding extends GeometryBinding{
-	
+public class MultiPointTypeBinding extends GeometryBinding {
+
 	/**
 	 * It parses the gml:MultiPoint tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * A multipoint
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return A multipoint
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public Object parse(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
+	public Object parse(IXmlStreamReader parser, GPEDefaultGmlParser handler)
+			throws XmlStreamException, IOException {
 		boolean endFeature = false;
 		int currentTag;
-		Object multiPoint = null;		
-		
+		Object multiPoint = null;
+
 		super.setAtributtes(parser, handler.getErrorHandler());
-		
+
 		multiPoint = handler.getContentHandler().startMultiPoint(id, srsName);
-		
+
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-					if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_POINTMEMBER)){
-						Object point = handler.getProfile().getPointMemberTypeBinding().
-						parse(parser, handler);
-						handler.getContentHandler().addPointToMultiPoint(point, multiPoint);
-					}
-					break;
-				case IXmlStreamReader.END_ELEMENT:
-					if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTIPOINT)){						
-						endFeature = true;	
-						handler.getContentHandler().endMultiPoint(multiPoint);
-					}
-					break;
-				case IXmlStreamReader.CHARACTERS:					
-					
-					break;
+				if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_POINTMEMBER)) {
+					Object point = handler.getProfile()
+							.getPointMemberTypeBinding().parse(parser, handler);
+					handler.getContentHandler().addPointToMultiPoint(point,
+							multiPoint);
 				}
-				if (!endFeature){					
-					currentTag = parser.next();
-					tag = parser.getName();
+				break;
+			case IXmlStreamReader.END_ELEMENT:
+				if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_MULTIPOINT)) {
+					endFeature = true;
+					handler.getContentHandler().endMultiPoint(multiPoint);
 				}
-			}			
-		return multiPoint;	
+				break;
+			case IXmlStreamReader.CHARACTERS:
+
+				break;
+			}
+			if (!endFeature) {
+				currentTag = parser.next();
+				tag = parser.getName();
+			}
+		}
+		return multiPoint;
 	}
 }

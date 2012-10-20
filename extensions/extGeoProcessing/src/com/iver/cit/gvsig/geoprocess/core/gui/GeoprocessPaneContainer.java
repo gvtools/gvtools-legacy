@@ -102,33 +102,34 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.geoprocess.core.IGeoprocessController;
+
 /**
- * This GUI class is a container to show gui components associated to
- * a geoprocess.
- * To correctly execute the geoprocess associated, this PaneContainer must
- * receive an AndamiCommand instance, which is controller class that
- * knows how to invoque geoprocess
+ * This GUI class is a container to show gui components associated to a
+ * geoprocess. To correctly execute the geoprocess associated, this
+ * PaneContainer must receive an AndamiCommand instance, which is controller
+ * class that knows how to invoque geoprocess
+ * 
  * @author azabala
- *
+ * 
  */
 public class GeoprocessPaneContainer extends JPanel implements IWindow {
 	private static final long serialVersionUID = 1L;
 	private AcceptCancelPanel buttonPanel = null;
-	private JPanel mainPanel = new JPanel();  //  @jve:decl-index=0:visual-constraint="10,10"
+	private JPanel mainPanel = new JPanel(); // @jve:decl-index=0:visual-constraint="10,10"
 	private WindowInfo viewInfo = null;
 	private IGeoprocessController controller;
 
-	private ActionListener okActionListener = new ActionListener(){
+	private ActionListener okActionListener = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			if (controller.launchGeoprocess()) {
-				//So controller will launch geoprocess in background,
-				//we can call cancel to close dialog
+				// So controller will launch geoprocess in background,
+				// we can call cancel to close dialog
 				cancel();
 			}
 		}
 	};
 
-	private ActionListener cancelActionListener = new ActionListener(){
+	private ActionListener cancelActionListener = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			cancel();
 		}
@@ -136,6 +137,7 @@ public class GeoprocessPaneContainer extends JPanel implements IWindow {
 
 	/**
 	 * Constructor from GUI component associated to a geoprocess
+	 * 
 	 * @param mainPanel
 	 */
 	public GeoprocessPaneContainer(JPanel mainPanel) {
@@ -143,6 +145,7 @@ public class GeoprocessPaneContainer extends JPanel implements IWindow {
 		this.mainPanel = mainPanel;
 		initialize();
 	}
+
 	/**
 	 * Implementation of ViewInfo andami interface.
 	 */
@@ -156,30 +159,31 @@ public class GeoprocessPaneContainer extends JPanel implements IWindow {
 		}
 		return viewInfo;
 	}
-	
-	public Object getWindowProfile(){
+
+	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
 
 	/**
-	 * Sets AndamiCmd instance, which knows how to run geoprocess
-	 * from user inputs in main panel.
+	 * Sets AndamiCmd instance, which knows how to run geoprocess from user
+	 * inputs in main panel.
+	 * 
 	 * @param command
 	 */
-	public void setCommand(IGeoprocessController controller){
+	public void setCommand(IGeoprocessController controller) {
 		this.controller = controller;
 	}
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
-//		this.setLayout(new BorderLayout(10, 10));
+		// this.setLayout(new BorderLayout(10, 10));
 		this.setLayout(new BorderLayout());
-//		mainPanel.setSize(new java.awt.Dimension(430,390));
-		this.setSize(new java.awt.Dimension(570,460));
+		// mainPanel.setSize(new java.awt.Dimension(430,390));
+		this.setSize(new java.awt.Dimension(570, 460));
 		this.add(getMainPanel(), java.awt.BorderLayout.NORTH);
 		this.add(getButtonPanel(), java.awt.BorderLayout.SOUTH);
 
@@ -189,9 +193,10 @@ public class GeoprocessPaneContainer extends JPanel implements IWindow {
 	private JPanel getMainPanel() {
 		return mainPanel;
 	}
+
 	/**
 	 * This method initializes buttonPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private AcceptCancelPanel getButtonPanel() {
@@ -205,20 +210,21 @@ public class GeoprocessPaneContainer extends JPanel implements IWindow {
 
 	/**
 	 * Closes parent dialog
-	 *
+	 * 
 	 */
-	public void cancel(){
+	public void cancel() {
 		if (PluginServices.getMainFrame() == null) {
 			Container container = getParent();
 			Container parentOfContainer = null;
-			while(! (container instanceof Window)){
+			while (!(container instanceof Window)) {
 				parentOfContainer = container.getParent();
 				container = parentOfContainer;
 			}
-			((Window)container).dispose();
-		}else {
-			PluginServices.getMDIManager().closeWindow(GeoprocessPaneContainer.this);
+			((Window) container).dispose();
+		} else {
+			PluginServices.getMDIManager().closeWindow(
+					GeoprocessPaneContainer.this);
 		}
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="31,13"
+} // @jve:decl-index=0:visual-constraint="31,13"

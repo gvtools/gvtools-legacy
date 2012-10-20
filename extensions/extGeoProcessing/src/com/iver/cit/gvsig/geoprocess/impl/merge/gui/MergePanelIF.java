@@ -42,29 +42,29 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: MergePanelIF.java 6749 2006-08-11 16:30:38Z azabala $
-* $Log$
-* Revision 1.3  2006-08-11 16:30:38  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/07/21 09:10:34  azabala
-* fixed bug 608: user doesnt enter any result file to the geoprocess panel
-*
-* Revision 1.1  2006/06/20 18:20:45  azabala
-* first version in cvs
-*
-* Revision 1.1  2006/05/24 21:10:15  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.2  2006/03/17 19:52:07  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/03/05 19:56:06  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: MergePanelIF.java 6749 2006-08-11 16:30:38Z azabala $
+ * $Log$
+ * Revision 1.3  2006-08-11 16:30:38  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/07/21 09:10:34  azabala
+ * fixed bug 608: user doesnt enter any result file to the geoprocess panel
+ *
+ * Revision 1.1  2006/06/20 18:20:45  azabala
+ * first version in cvs
+ *
+ * Revision 1.1  2006/05/24 21:10:15  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.2  2006/03/17 19:52:07  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/03/05 19:56:06  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.merge.gui;
 
 import java.io.File;
@@ -72,49 +72,57 @@ import java.io.FileNotFoundException;
 
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
+
 /**
  * Base interfaz to model MergePanel component
+ * 
  * @author azabala
- *
+ * 
  */
 public interface MergePanelIF {
 	/**
 	 * Returns all selected layer, in TOC list and directory list
+	 * 
 	 * @return
 	 */
 	public FLyrVect[] getSelectedLayers();
+
 	/**
-	 * Looks for vectorial files in a directory, and creates FLyrVect 
+	 * Looks for vectorial files in a directory, and creates FLyrVect
+	 * 
 	 * @param directory
 	 * @param exts
 	 * @return
 	 */
 	public FLyrVect[] loadLayersInDirectory(File directory, String[] exts);
+
 	/**
 	 * @param layers
 	 */
 	public void addLayersToMergeList(FLyrVect[] layers);
+
 	/**
-	 * Devuelve la capa cuyo esquema tendra el resultado 
-	 * del merge
+	 * Devuelve la capa cuyo esquema tendra el resultado del merge
+	 * 
 	 * @return
 	 */
 	public FLyrVect getSelectedSchema();
-	
-	
+
 	public FLayers getFLayers();
-	
+
 	/**
-	 * Event of layer selection in one of two list: TOC and directory
-	 * list
-	 *
+	 * Event of layer selection in one of two list: TOC and directory list
+	 * 
 	 */
 	public void layersSelected();
+
 	public void openResultFileDialog();
+
 	public void openDirectoryLayersDialog();
+
 	public File getOutputFile() throws FileNotFoundException;
-	
+
 	public void error(String error, String errorDescription);
+
 	public boolean askForOverwriteOutputFile(File file);
 }
-

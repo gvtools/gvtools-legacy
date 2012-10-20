@@ -43,29 +43,38 @@ package com.iver.cit.gvsig.fmap.rendering;
 import com.iver.cit.gvsig.fmap.FMapEvent;
 import com.iver.cit.gvsig.fmap.layers.LegendEvent;
 
-
 /**
- * <p>Event produced when changes the value in the field of labeling of a legend.</p>
- *
+ * <p>
+ * Event produced when changes the value in the field of labeling of a legend.
+ * </p>
+ * 
  * @see FMapEvent
  * @author Vicente Caballero Navarro
  */
 public class LabelLegendEvent extends LegendEvent {
 	/**
-	 * <p>Previous field value.</p>
+	 * <p>
+	 * Previous field value.
+	 * </p>
 	 */
 	private int oldFieldId;
-	
+
 	/**
-	 * <p>New field value.</p>
+	 * <p>
+	 * New field value.
+	 * </p>
 	 */
 	private int newFieldId;
 
 	/**
-	 * <p>Creates a new legend label event.</p>
-	 *
-	 * @param oldFieldId previous field value
-	 * @param newFieldId new field value
+	 * <p>
+	 * Creates a new legend label event.
+	 * </p>
+	 * 
+	 * @param oldFieldId
+	 *            previous field value
+	 * @param newFieldId
+	 *            new field value
 	 */
 	public LabelLegendEvent(int oldFieldId, int newFieldId) {
 		this.oldFieldId = oldFieldId;
@@ -73,8 +82,10 @@ public class LabelLegendEvent extends LegendEvent {
 	}
 
 	/**
-	 * <p>Gets the new field value.</p>
-	 *
+	 * <p>
+	 * Gets the new field value.
+	 * </p>
+	 * 
 	 * @return the new field value
 	 */
 	public int getNewFieldId() {
@@ -82,8 +93,10 @@ public class LabelLegendEvent extends LegendEvent {
 	}
 
 	/**
-	 * <p>Gets the previous field value.</p>
-	 *
+	 * <p>
+	 * Gets the previous field value.
+	 * </p>
+	 * 
 	 * @return the previous field value
 	 */
 	public int getOldFieldId() {

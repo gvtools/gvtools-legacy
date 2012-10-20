@@ -90,6 +90,7 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * It parses the LineQName tag. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;LineString&gt;
@@ -98,63 +99,71 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  * &lt;/LineString&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
- * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#linestring
+ * @see http
+ *      ://code.google.com/apis/kml/documentation/kml_tags_21.html#linestring
  */
 public class LineStringTypeBinding {
 
 	/**
 	 * It parses the LineQName tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * A line string
-	 * @throws IOException 
-	 * @throws XmlStreamException 
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return A line string
+	 * @throws IOException
+	 * @throws XmlStreamException
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public Object parse(IXmlStreamReader parser,GPEDeafultKmlParser handler) throws XmlStreamException, IOException {
+	public Object parse(IXmlStreamReader parser, GPEDeafultKmlParser handler)
+			throws XmlStreamException, IOException {
 		boolean endFeature = false;
 		int currentTag;
 		Object lineString = null;
 
-		String id = handler.getProfile().getGeometryBinding().getID(parser, handler);
+		String id = handler.getProfile().getGeometryBinding()
+				.getID(parser, handler);
 
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.COORDINATES)){
-					CoordinatesTypeIterator coordinatesIterator = handler.getProfile().getCoordinatesTypeBinding();
-					coordinatesIterator.initialize(parser, handler, Kml2_1_Tags.LINESTRING);
-					lineString = handler.getContentHandler().startLineString(id,
-							coordinatesIterator,								
-							Kml2_1_Tags.DEFAULT_SRS);	
+				if (CompareUtils.compareWithNamespace(tag,
+						Kml2_1_Tags.COORDINATES)) {
+					CoordinatesTypeIterator coordinatesIterator = handler
+							.getProfile().getCoordinatesTypeBinding();
+					coordinatesIterator.initialize(parser, handler,
+							Kml2_1_Tags.LINESTRING);
+					lineString = handler.getContentHandler().startLineString(
+							id, coordinatesIterator, Kml2_1_Tags.DEFAULT_SRS);
 					return lineString;
 				}
 				break;
 			case IXmlStreamReader.END_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.LINESTRING)){						
+				if (CompareUtils.compareWithNamespace(tag,
+						Kml2_1_Tags.LINESTRING)) {
 					endFeature = true;
 					handler.getContentHandler().endLineString(lineString);
 				}
 				break;
-			case IXmlStreamReader.CHARACTERS:					
+			case IXmlStreamReader.CHARACTERS:
 
 				break;
 			}
-			if (!endFeature){					
+			if (!endFeature) {
 				currentTag = parser.next();
 				tag = parser.getName();
 			}
-		}			
-		return lineString;	
+		}
+		return lineString;
 	}
 }

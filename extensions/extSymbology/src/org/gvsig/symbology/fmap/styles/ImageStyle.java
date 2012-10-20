@@ -57,40 +57,47 @@ import com.iver.cit.gvsig.fmap.core.symbols.SymbolDrawingException;
 
 /**
  * Controls the style of an image to be correctly painted. This class controls
- * aspects like the source path of the image, creates a rectangle to paint inside 
- * the image, draws the outline of the image and so on.
+ * aspects like the source path of the image, creates a rectangle to paint
+ * inside the image, draws the outline of the image and so on.
  * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class ImageStyle extends BackgroundFileStyle {
 	private BufferedImage img;
+
 	/**
 	 * Creates a rectangle with the dimensions of the buffered image
+	 * 
 	 * @return Rectangle
 	 */
 	public Rectangle getBounds() {
-		if (img == null) return new Rectangle();
+		if (img == null)
+			return new Rectangle();
 		return new Rectangle(new Dimension(img.getWidth(), img.getHeight()));
 	}
+
 	/**
 	 * Defines the source (file) from where the buffered image will be taken.
-	 * @param f,File
+	 * 
+	 * @param f
+	 *            ,File
 	 */
 	public void setSource(URL url) throws IOException {
 		File f = new File(url.getFile());
-		if(f.isAbsolute()){
+		if (f.isAbsolute()) {
 			sourceFile = url;
 			img = ImageIO.read(f);
-			this.isRelativePath=false;
-		}
-		else {
-			sourceFile = new URL(SymbologyFactory.SymbolLibraryPath + File.separator + f.getPath());
+			this.isRelativePath = false;
+		} else {
+			sourceFile = new URL(SymbologyFactory.SymbolLibraryPath
+					+ File.separator + f.getPath());
 			img = ImageIO.read(f);
-			this.isRelativePath=true;	
+			this.isRelativePath = true;
 		}
 	}
 
-	public void drawInsideRectangle(Graphics2D g, Rectangle r, boolean keepAspectRatio) {
+	public void drawInsideRectangle(Graphics2D g, Rectangle r,
+			boolean keepAspectRatio) {
 		if (img != null) {
 
 			double xOffset = 0;
@@ -99,24 +106,24 @@ public class ImageStyle extends BackgroundFileStyle {
 			double yScale = 1;
 			if (keepAspectRatio) {
 				double scale;
-				if (img.getWidth()>img.getHeight()) {
-					scale = r.getWidth()/img.getWidth();
-					yOffset = 0.5*(r.getHeight() - img.getHeight()*scale);
+				if (img.getWidth() > img.getHeight()) {
+					scale = r.getWidth() / img.getWidth();
+					yOffset = 0.5 * (r.getHeight() - img.getHeight() * scale);
 				} else {
-					scale = r.getHeight()/img.getHeight();
-					xOffset = 0.5*(r.getWidth() - img.getWidth()*scale);
+					scale = r.getHeight() / img.getHeight();
+					xOffset = 0.5 * (r.getWidth() - img.getWidth() * scale);
 				}
 				xScale = yScale = scale;
 
 			} else {
-				xScale = r.getWidth()/img.getWidth();
-				yScale = r.getHeight()/img.getHeight();
-				yOffset = img.getHeight()*0.5*yScale ;
+				xScale = r.getWidth() / img.getWidth();
+				yScale = r.getHeight() / img.getHeight();
+				yOffset = img.getHeight() * 0.5 * yScale;
 
 			}
 
-
-			AffineTransform at = AffineTransform.getTranslateInstance(xOffset, yOffset);
+			AffineTransform at = AffineTransform.getTranslateInstance(xOffset,
+					yOffset);
 			at.concatenate(AffineTransform.getScaleInstance(xScale, yScale));
 			g.drawRenderedImage(img, at);
 		}
@@ -128,13 +135,13 @@ public class ImageStyle extends BackgroundFileStyle {
 
 	}
 
-	public void drawOutline(Graphics2D g, Rectangle r) throws SymbolDrawingException {
+	public void drawOutline(Graphics2D g, Rectangle r)
+			throws SymbolDrawingException {
 		drawInsideRectangle(g, r);
 	}
 
 	public String getClassName() {
 		return getClass().getName();
 	}
-
 
 }

@@ -42,27 +42,29 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.errorfixes;
 
 import org.gvsig.topology.TopologyError;
 import org.gvsig.util.GParameter;
 
-
 /**
- * All topology error fixes which requires user entries must
- * implement this interface.
+ * All topology error fixes which requires user entries must implement this
+ * interface.
  * 
- * For example, the correction ExtendDangleToNearestVertexFix requires
- * user entering the max distance to extend the line.
+ * For example, the correction ExtendDangleToNearestVertexFix requires user
+ * entering the max distance to extend the line.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public interface ITopologyErrorFixWithParameters {
 	public GParameter[] getParameters();
+
 	public void setParameterValue(String paramName, Object value);
+
 	public void initialize(TopologyError error);
 }

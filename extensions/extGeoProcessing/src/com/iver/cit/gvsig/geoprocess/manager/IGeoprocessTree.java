@@ -42,20 +42,20 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: IGeoprocessTree.java 6057 2006-06-27 16:14:29Z azabala $
-* $Log$
-* Revision 1.3  2006-06-27 16:14:06  azabala
-* added geoprocess panel opening with user mouse interaction
-*
-* Revision 1.2  2006/06/23 19:04:29  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/06/22 17:46:30  azabala
-* first version in cvs
-*
-*
-*/
+ *
+ * $Id: IGeoprocessTree.java 6057 2006-06-27 16:14:29Z azabala $
+ * $Log$
+ * Revision 1.3  2006-06-27 16:14:06  azabala
+ * added geoprocess panel opening with user mouse interaction
+ *
+ * Revision 1.2  2006/06/23 19:04:29  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/06/22 17:46:30  azabala
+ * first version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.manager;
 
 import java.awt.event.MouseListener;
@@ -63,46 +63,49 @@ import java.awt.event.MouseListener;
 import javax.swing.event.TreeSelectionListener;
 
 import com.iver.cit.gvsig.geoprocess.core.IGeoprocessPlugin;
+
 /**
  * It models the logic of GeoprocessTree component.
+ * 
  * @author azabala
- *
+ * 
  */
 public interface IGeoprocessTree {
 	/**
-	 * This string separates packages (nodes) and
-	 * geoprocesses (leafs) in the textual representation
-	 * of a geoprocess
+	 * This string separates packages (nodes) and geoprocesses (leafs) in the
+	 * textual representation of a geoprocess
 	 */
 	public static final String PATH_SEPARATOR = "/";
+
 	/**
-	 * Returns the selected geoprocess in the tree
-	 * (or null if the selected node is a directory)
+	 * Returns the selected geoprocess in the tree (or null if the selected node
+	 * is a directory)
+	 * 
 	 * @return
 	 */
 	public IGeoprocessPlugin getGeoprocess();
+
 	/**
 	 * Adds a geoprocess to the specified path
+	 * 
 	 * @param path
 	 * @param metadata
 	 * @return
 	 */
 	public void register(IGeoprocessPlugin metadata);
-	
+
 	/**
 	 * Adds a tree selection listener to the geoprocess tree
+	 * 
 	 * @param l
 	 */
 	public void addTreeSelectionListener(TreeSelectionListener l);
-	
+
 	/**
 	 * Adds a mouse listener to the associated tree
+	 * 
 	 * @param l
 	 */
 	public void addMouseListener(MouseListener l);
-	
-	
-	
-	
-}
 
+}

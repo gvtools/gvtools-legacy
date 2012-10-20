@@ -46,12 +46,17 @@ import com.iver.cit.gvsig.project.Project;
 import com.iver.utiles.swing.JComboBox;
 
 /**
- * <p>Class representing a JComboBox with the measure units handled by the application.
- * It takes values from Attributes.NAMES and Attributes.CHANGE static fields. So, to
- * add more measure units, you must edit Attributes class and change will be automatically
- * reflected in the combo box.</p>
- *
- * <p>The internatiolanization of the field is automatically handled by the system</p>
+ * <p>
+ * Class representing a JComboBox with the measure units handled by the
+ * application. It takes values from Attributes.NAMES and Attributes.CHANGE
+ * static fields. So, to add more measure units, you must edit Attributes class
+ * and change will be automatically reflected in the combo box.
+ * </p>
+ * 
+ * <p>
+ * The internatiolanization of the field is automatically handled by the system
+ * </p>
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class JComboBoxUnits extends JComboBox {
@@ -66,18 +71,18 @@ public class JComboBoxUnits extends JComboBox {
 	}
 
 	/**
-	 *
-	 * Creates a new instance of JUnitComboBox. If includePixel is true
-	 * then pixel units are included in the list and they are automatically
+	 * 
+	 * Creates a new instance of JUnitComboBox. If includePixel is true then
+	 * pixel units are included in the list and they are automatically
 	 * pre-selected. Otherwise, meters are preselected.
-	 *
+	 * 
 	 */
 	public JComboBoxUnits(boolean includePixel) {
 		super();
-		String[] names=MapContext.getDistanceNames();
+		String[] names = MapContext.getDistanceNames();
 
 		for (int i = 0; i < names.length; i++) {
-			super.addItem(PluginServices.getText(this,names[i]));
+			super.addItem(PluginServices.getText(this, names[i]));
 		}
 		if (includePixel) {
 			super.addItem(PluginServices.getText(this, "pixels"));
@@ -88,25 +93,27 @@ public class JComboBoxUnits extends JComboBox {
 		setMaximumRowCount(10);
 	}
 
-
 	/**
-	 * Returns the conversion factor from the <b>unit selected in the combo box</b>
-	 * to <b>meters</b> or <b>0</b> if pixels have been selected as the size unit.
+	 * Returns the conversion factor from the <b>unit selected in the combo
+	 * box</b> to <b>meters</b> or <b>0</b> if pixels have been selected as the
+	 * size unit.
+	 * 
 	 * @return
 	 */
 	public double getUnitConversionFactor() {
-			double unitFactor;
-			try {
-				unitFactor = MapContext.getDistanceTrans2Meter()[getSelectedIndex()];
-			} catch (ArrayIndexOutOfBoundsException aioobEx) { //jijiji
-				unitFactor = 0; // which represents size in pixel
-			}
-			return unitFactor;
+		double unitFactor;
+		try {
+			unitFactor = MapContext.getDistanceTrans2Meter()[getSelectedIndex()];
+		} catch (ArrayIndexOutOfBoundsException aioobEx) { // jijiji
+			unitFactor = 0; // which represents size in pixel
+		}
+		return unitFactor;
 
 	}
 
 	/**
 	 * the use of this method is not allowed in this combo box.
+	 * 
 	 * @deprecated
 	 */
 	public void addItem(Object anObject) {
@@ -115,6 +122,7 @@ public class JComboBoxUnits extends JComboBox {
 
 	/**
 	 * the use of this method is not allowed for this combo box.
+	 * 
 	 * @deprecated
 	 */
 	public void removeAllItems() {
@@ -123,19 +131,18 @@ public class JComboBoxUnits extends JComboBox {
 
 	public int getSelectedUnitIndex() {
 		int i = getSelectedIndex();
-		if (i>MapContext.getDistanceNames().length-1)
+		if (i > MapContext.getDistanceNames().length - 1)
 			return -1;
-		else return i;
+		else
+			return i;
 	}
 
 	public void setSelectedUnitIndex(int unitIndex) {
 		if (unitIndex == -1) {
-			setSelectedIndex(getItemCount()-1);
+			setSelectedIndex(getItemCount() - 1);
 		} else {
 			setSelectedIndex(unitIndex);
 		}
 	}
-
-
 
 }

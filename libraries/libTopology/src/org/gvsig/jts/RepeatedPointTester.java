@@ -95,8 +95,8 @@ public class RepeatedPointTester {
 	public Collection<Coordinate> getRepeatedCoordinates() {
 		return new HashSet<Coordinate>(repeatedCoords);
 	}
-	
-	public void clear(){
+
+	public void clear() {
 		repeatedCoords.clear();
 	}
 
@@ -128,30 +128,28 @@ public class RepeatedPointTester {
 		}// for
 		return solution;
 	}
-	
-	
-	public Geometry removeRepeatedPoints(Geometry g){
-		
-		if(g instanceof GeometryCollection){
-			if(! (g instanceof MultiPoint))
-				return removeRepeatedPoints((GeometryCollection)g);
+
+	public Geometry removeRepeatedPoints(Geometry g) {
+
+		if (g instanceof GeometryCollection) {
+			if (!(g instanceof MultiPoint))
+				return removeRepeatedPoints((GeometryCollection) g);
 		}
 		Coordinate[] coords = g.getCoordinates();
 		CoordinateList coordList = new CoordinateList(coords, false);
 		Coordinate[] correctedCoords = coordList.toCoordinateArray();
 		return JtsUtil.createGeometry(correctedCoords, g.getGeometryType());
 	}
-	
-	public Geometry removeRepeatedPoints(GeometryCollection gc){
+
+	public Geometry removeRepeatedPoints(GeometryCollection gc) {
 		Geometry[] geoms = new Geometry[gc.getNumGeometries()];
 		for (int i = 0; i < gc.getNumGeometries(); i++) {
 			Geometry g = gc.getGeometryN(i);
 			geoms[i] = removeRepeatedPoints(g);
-		}//for
+		}// for
 		return new GeometryFactory().createGeometryCollection(geoms);
 	}
-	
-	
+
 	private boolean hasRepeatedPoint(Polygon p) {
 		boolean solution = false;
 		if (hasRepeatedPoint(p.getExteriorRing().getCoordinates()))

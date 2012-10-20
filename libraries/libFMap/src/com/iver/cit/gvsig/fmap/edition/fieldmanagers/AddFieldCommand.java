@@ -43,24 +43,19 @@ package com.iver.cit.gvsig.fmap.edition.fieldmanagers;
 import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 
 public class AddFieldCommand implements FieldCommand {
-	
+
 	private FieldDescription fieldDesc;
-	
-	public AddFieldCommand(FieldDescription fieldDesc)
-	{
+
+	public AddFieldCommand(FieldDescription fieldDesc) {
 		this.fieldDesc = fieldDesc;
 	}
 
-//	public int getType() {
-//		return FieldCommand.ADD;
-//	}
+	// public int getType() {
+	// return FieldCommand.ADD;
+	// }
 
 	public FieldDescription getFieldDesc() {
 		return fieldDesc;
 	}
-	
-	
-	
+
 }
-
-

@@ -47,173 +47,170 @@ import com.iver.andami.plugins.Extension;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
-
 /**
- * Extensión para editar los vértices de las geometrías añadidas en un FFrameGraphics.
- *
+ * Extensión para editar los vértices de las geometrías añadidas en un
+ * FFrameGraphics.
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LayoutInsertToolsExtension extends Extension {
-    private static Logger logger = Logger.getLogger(LayoutInsertToolsExtension.class.getName());
-    private Layout layout = null;
+	private static Logger logger = Logger
+			.getLogger(LayoutInsertToolsExtension.class.getName());
+	private Layout layout = null;
 
-
-    public void initialize() {
+	public void initialize() {
 		// TODO Auto-generated method stub
-    	registerIcons();
+		registerIcons();
 	}
 
-    private void registerIcons(){
+	private void registerIcons() {
 
-    	PluginServices.getIconTheme().registerDefault(
-    			"view-select-geometry",
-				this.getClass().getClassLoader().getResource("images/Select.png")
-			);
+		PluginServices.getIconTheme().registerDefault(
+				"view-select-geometry",
+				this.getClass().getClassLoader()
+						.getResource("images/Select.png"));
 
-    	PluginServices.getIconTheme().registerDefault(
-    			"layout-insert-text",
-				this.getClass().getClassLoader().getResource("images/MapaTexto.png")
-			);
+		PluginServices.getIconTheme().registerDefault(
+				"layout-insert-text",
+				this.getClass().getClassLoader()
+						.getResource("images/MapaTexto.png"));
 
-    	PluginServices.getIconTheme().registerDefault(
-    			"layout-insert-point",
-				this.getClass().getClassLoader().getResource("images/Point.png")
-			);
+		PluginServices.getIconTheme().registerDefault(
+				"layout-insert-point",
+				this.getClass().getClassLoader()
+						.getResource("images/Point.png"));
 
-    	PluginServices.getIconTheme().registerDefault(
-    			"layout-insert-rectangle",
-				this.getClass().getClassLoader().getResource("images/Rectangle.png")
-			);
+		PluginServices.getIconTheme().registerDefault(
+				"layout-insert-rectangle",
+				this.getClass().getClassLoader()
+						.getResource("images/Rectangle.png"));
 
-    	PluginServices.getIconTheme().registerDefault(
-    			"layout-insert-circle",
-				this.getClass().getClassLoader().getResource("images/Circle.png")
-			);
+		PluginServices.getIconTheme().registerDefault(
+				"layout-insert-circle",
+				this.getClass().getClassLoader()
+						.getResource("images/Circle.png"));
 
+		PluginServices.getIconTheme()
+				.registerDefault(
+						"layout-insert-line",
+						this.getClass().getClassLoader()
+								.getResource("images/Rect.png"));
 
-    	PluginServices.getIconTheme().registerDefault(
-    			"layout-insert-line",
-				this.getClass().getClassLoader().getResource("images/Rect.png")
-			);
+		PluginServices.getIconTheme()
+				.registerDefault(
+						"layout-insert-polyline",
+						this.getClass().getClassLoader()
+								.getResource("images/Line.png"));
 
-    	PluginServices.getIconTheme().registerDefault(
-    			"layout-insert-polyline",
-				this.getClass().getClassLoader().getResource("images/Line.png")
-			);
+		PluginServices.getIconTheme().registerDefault(
+				"layout-insert-poligon",
+				this.getClass().getClassLoader()
+						.getResource("images/Polygon.png"));
 
-    	PluginServices.getIconTheme().registerDefault(
-    			"layout-insert-poligon",
-				this.getClass().getClassLoader().getResource("images/Polygon.png")
-			);
+		PluginServices.getIconTheme().registerDefault(
+				"layout-insert-image",
+				this.getClass().getClassLoader()
+						.getResource("images/MapaImagen.png"));
 
-    	PluginServices.getIconTheme().registerDefault(
-    			"layout-insert-image",
-				this.getClass().getClassLoader().getResource("images/MapaImagen.png")
-			);
+		PluginServices.getIconTheme().registerDefault(
+				"layout-insert-view",
+				this.getClass().getClassLoader()
+						.getResource("images/MapaVista.png"));
 
-    	PluginServices.getIconTheme().registerDefault(
-    			"layout-insert-view",
-				this.getClass().getClassLoader().getResource("images/MapaVista.png")
-			);
+		PluginServices.getIconTheme().registerDefault(
+				"layout-insert-locator",
+				this.getClass().getClassLoader()
+						.getResource("images/MapaLocalizador.png"));
 
-    	PluginServices.getIconTheme().registerDefault(
-    			"layout-insert-locator",
-				this.getClass().getClassLoader().getResource("images/MapaLocalizador.png")
-			);
+		PluginServices.getIconTheme().registerDefault(
+				"layout-insert-legend",
+				this.getClass().getClassLoader()
+						.getResource("images/MapaLeyenda.png"));
 
-    	PluginServices.getIconTheme().registerDefault(
-    			"layout-insert-legend",
-				this.getClass().getClassLoader().getResource("images/MapaLeyenda.png")
-			);
+		PluginServices.getIconTheme().registerDefault(
+				"layout-insert-scalebar",
+				this.getClass().getClassLoader()
+						.getResource("images/MapaEscala.png"));
 
-    	PluginServices.getIconTheme().registerDefault(
-    			"layout-insert-scalebar",
-				this.getClass().getClassLoader().getResource("images/MapaEscala.png")
-			);
+		PluginServices.getIconTheme().registerDefault(
+				"layout-insert-north",
+				this.getClass().getClassLoader()
+						.getResource("images/MapaNorth.png"));
 
-    	PluginServices.getIconTheme().registerDefault(
-    			"layout-insert-north",
-				this.getClass().getClassLoader().getResource("images/MapaNorth.png")
-			);
+		PluginServices.getIconTheme().registerDefault("layout-insert-box",
+				this.getClass().getClassLoader().getResource("images/box.png"));
 
-    	PluginServices.getIconTheme().registerDefault(
-    			"layout-insert-box",
-				this.getClass().getClassLoader().getResource("images/box.png")
-			);
-    	
-    	PluginServices.getIconTheme().registerDefault(
-    			"remove-selection",
-				this.getClass().getClassLoader().getResource("images/remove.png")
-			);
-    }
-
-    public void execute(String s) {
-    	 layout = (Layout) PluginServices.getMDIManager().getActiveWindow();
-
-         logger.debug("Comand : " + s);
-         boolean insertGroupPosibility=false;
-        if (s.equals("SELECT")) {
-             layout.getLayoutControl().setTool("layoutselect");
-        } else if (s.equals("RECTANGLEVIEW")) {
-     		layout.getLayoutControl().setTool("layoutaddview");
-     		insertGroupPosibility=true;
-     	} else if (s.equals("RECTANGLEOVERVIEW")) {
-     		layout.getLayoutControl().setTool("layoutaddoverview");
-     		insertGroupPosibility=true;
-     	} else if (s.equals("RECTANGLEPICTURE")) {
-     		layout.getLayoutControl().setTool("layoutaddpicture");
-     		insertGroupPosibility=true;
-     	} else if (s.equals("RECTANGLESCALEBAR")) {
-     		layout.getLayoutControl().setTool("layoutaddscale");
-     		insertGroupPosibility=true;
-     	} else if (s.equals("RECTANGLELEGEND")) {
-     		layout.getLayoutControl().setTool("layoutaddlegend");
-     		insertGroupPosibility=true;
-     	} else if (s.equals("RECTANGLETEXT")) {
-     		layout.getLayoutControl().setTool("layoutaddtext");
-     		insertGroupPosibility=true;
-     	} else if (s.equals("RECTANGLENORTH")) {
-     		layout.getLayoutControl().setTool("layoutaddnorth");
-     		insertGroupPosibility=true;
-     	} else if (s.equals("RECTANGLEBOX")) {
-     		layout.getLayoutControl().setTool("layoutaddbox");
-     		insertGroupPosibility=true;
-     	} else if (s.equals("POINT")) {
-     		layout.getLayoutControl().setTool("layoutaddpoint");
-     	} else if (s.equals("LINE")) {
-     		layout.getLayoutControl().setTool("layoutaddline");
-     	} else if (s.equals("POLYLINE")) {
-     		layout.getLayoutControl().setTool("layoutaddpolyline");
-     	} else if (s.equals("CIRCLE")) {
-     		layout.getLayoutControl().setTool("layoutaddcircle");
-     	} else if (s.equals("RECTANGLESIMPLE")) {
-     		layout.getLayoutControl().setTool("layoutaddrectangle");
-     	} else if (s.equals("POLYGON")) {
-     		layout.getLayoutControl().setTool("layoutaddpolygon");
-     	} else if (s.equals("REMOVE")){
-     		layout.getLayoutContext().delFFrameSelected();
-     		layout.getLayoutControl().refresh();
-     	}
-        layout.getModel().setModified(true);
-   }
-
-
-    public boolean isEnabled() {
-    	IWindow f = PluginServices.getMDIManager().getActiveWindow();
-
-        if (f == null) {
-            return false;
-        }
-
-        if (f instanceof Layout) {
-            return ((Layout) f).getLayoutContext().isEditable();
-        }
-
-        return false;
+		PluginServices.getIconTheme().registerDefault(
+				"remove-selection",
+				this.getClass().getClassLoader()
+						.getResource("images/remove.png"));
 	}
 
+	public void execute(String s) {
+		layout = (Layout) PluginServices.getMDIManager().getActiveWindow();
 
-    public boolean isVisible() {
+		logger.debug("Comand : " + s);
+		boolean insertGroupPosibility = false;
+		if (s.equals("SELECT")) {
+			layout.getLayoutControl().setTool("layoutselect");
+		} else if (s.equals("RECTANGLEVIEW")) {
+			layout.getLayoutControl().setTool("layoutaddview");
+			insertGroupPosibility = true;
+		} else if (s.equals("RECTANGLEOVERVIEW")) {
+			layout.getLayoutControl().setTool("layoutaddoverview");
+			insertGroupPosibility = true;
+		} else if (s.equals("RECTANGLEPICTURE")) {
+			layout.getLayoutControl().setTool("layoutaddpicture");
+			insertGroupPosibility = true;
+		} else if (s.equals("RECTANGLESCALEBAR")) {
+			layout.getLayoutControl().setTool("layoutaddscale");
+			insertGroupPosibility = true;
+		} else if (s.equals("RECTANGLELEGEND")) {
+			layout.getLayoutControl().setTool("layoutaddlegend");
+			insertGroupPosibility = true;
+		} else if (s.equals("RECTANGLETEXT")) {
+			layout.getLayoutControl().setTool("layoutaddtext");
+			insertGroupPosibility = true;
+		} else if (s.equals("RECTANGLENORTH")) {
+			layout.getLayoutControl().setTool("layoutaddnorth");
+			insertGroupPosibility = true;
+		} else if (s.equals("RECTANGLEBOX")) {
+			layout.getLayoutControl().setTool("layoutaddbox");
+			insertGroupPosibility = true;
+		} else if (s.equals("POINT")) {
+			layout.getLayoutControl().setTool("layoutaddpoint");
+		} else if (s.equals("LINE")) {
+			layout.getLayoutControl().setTool("layoutaddline");
+		} else if (s.equals("POLYLINE")) {
+			layout.getLayoutControl().setTool("layoutaddpolyline");
+		} else if (s.equals("CIRCLE")) {
+			layout.getLayoutControl().setTool("layoutaddcircle");
+		} else if (s.equals("RECTANGLESIMPLE")) {
+			layout.getLayoutControl().setTool("layoutaddrectangle");
+		} else if (s.equals("POLYGON")) {
+			layout.getLayoutControl().setTool("layoutaddpolygon");
+		} else if (s.equals("REMOVE")) {
+			layout.getLayoutContext().delFFrameSelected();
+			layout.getLayoutControl().refresh();
+		}
+		layout.getModel().setModified(true);
+	}
+
+	public boolean isEnabled() {
+		IWindow f = PluginServices.getMDIManager().getActiveWindow();
+
+		if (f == null) {
+			return false;
+		}
+
+		if (f instanceof Layout) {
+			return ((Layout) f).getLayoutContext().isEditable();
+		}
+
+		return false;
+	}
+
+	public boolean isVisible() {
 		IWindow f = PluginServices.getMDIManager().getActiveWindow();
 
 		if (f == null) {

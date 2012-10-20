@@ -1,30 +1,31 @@
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
-*
-* Copyright (C) 2007 IVER T.I. and Generalitat Valenciana.
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License
-* as published by the Free Software Foundation; either version 2
-* of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
-*/
+ *
+ * Copyright (C) 2007 IVER T.I. and Generalitat Valenciana.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
+ */
 package org.gvsig.gui.beans.propertiespanel;
 
 import java.awt.Component;
 
 import javax.swing.JLabel;
+
 /**
  * Clase con todos los datos posibles que puede tener una clave/valor
  * especificada.
- *
+ * 
  * @version 23/04/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
@@ -73,12 +74,14 @@ public class PropertyStruct {
 
 	/**
 	 * Crea un PropertyStruct;
+	 * 
 	 * @param textLabel
 	 * @param key
 	 * @param value
 	 * @param extras
 	 */
-	public PropertyStruct(String textLabel, String key, Object value, Object[] extras) {
+	public PropertyStruct(String textLabel, String key, Object value,
+			Object[] extras) {
 		setTextLabel(textLabel);
 		setKey(key);
 		setOldValue(value);
@@ -94,7 +97,8 @@ public class PropertyStruct {
 	}
 
 	/**
-	 * @param component the component to set
+	 * @param component
+	 *            the component to set
 	 */
 	public void setComponent(Component component) {
 		this.component = component;
@@ -108,7 +112,8 @@ public class PropertyStruct {
 	}
 
 	/**
-	 * @param extras the extras to set
+	 * @param extras
+	 *            the extras to set
 	 */
 	public void setExtras(Object[] extras) {
 		this.extras = extras;
@@ -122,7 +127,8 @@ public class PropertyStruct {
 	}
 
 	/**
-	 * @param label the jLabel to set
+	 * @param label
+	 *            the jLabel to set
 	 */
 	public void setJLabel(JLabel label) {
 		jLabel = label;
@@ -136,7 +142,8 @@ public class PropertyStruct {
 	}
 
 	/**
-	 * @param key the key to set
+	 * @param key
+	 *            the key to set
 	 */
 	public void setKey(String key) {
 		this.key = key;
@@ -150,7 +157,8 @@ public class PropertyStruct {
 	}
 
 	/**
-	 * @param newValue the newValue to set
+	 * @param newValue
+	 *            the newValue to set
 	 */
 	public void setNewValue(Object newValue) {
 		this.newValue = newValue;
@@ -164,7 +172,8 @@ public class PropertyStruct {
 	}
 
 	/**
-	 * @param oldValue the oldValue to set
+	 * @param oldValue
+	 *            the oldValue to set
 	 */
 	public void setOldValue(Object oldValue) {
 		this.oldValue = oldValue;
@@ -178,7 +187,8 @@ public class PropertyStruct {
 	}
 
 	/**
-	 * @param textLabel the textLabel to set
+	 * @param textLabel
+	 *            the textLabel to set
 	 */
 	public void setTextLabel(String textLabel) {
 		this.textLabel = textLabel;

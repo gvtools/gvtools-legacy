@@ -99,115 +99,117 @@ import es.gva.cit.catalog.drivers.GetRecordsReply;
 import es.gva.cit.catalog.metadataxml.XMLNode;
 import es.gva.cit.catalog.metadataxml.XMLTree;
 
-public class Z3950Connection extends SynchronousOriginBean
-{
-  public static final char ISO2709_RS = 035;
-  public static final char ISO2709_FS = 036;
-  public static final char ISO2709_IDFS = 037;
-  private static final String PREFIX_QUERY_TYPE = "PREFIX";
-  private static final String CCL_QUERY_TYPE = "CCL";
+public class Z3950Connection extends SynchronousOriginBean {
+	public static final char ISO2709_RS = 035;
+	public static final char ISO2709_FS = 036;
+	public static final char ISO2709_IDFS = 037;
+	private static final String PREFIX_QUERY_TYPE = "PREFIX";
+	private static final String CCL_QUERY_TYPE = "CCL";
 
-  private int auth_type = 0; // 0=none, 1=anonymous, 2=open, 3=idpass
-  private String principal = null;
-  private String group = null;
-  private String credentials = null; 
-  private InitializeResponse_type resp = null;
-  private URI uri = null;
-  private String host = null;
-  private int port = 0;
-  private String database = null;
-  
-  
-  public Z3950Connection(URI uri){
-	  super(new OIDRegister("/a2j.properties"));
-	  this.uri = uri;
-	  this.host = uri.getHost();
-	  this.port = uri.getPort();
-	  StringTokenizer sti = new StringTokenizer(uri.getPath(), "/");
-      if (sti.countTokens() == 0) {
-          this.database = "geo";
-      } else {
-          this.database = sti.nextToken();
-      }
-  }
-  
-  /**
-   * 
-   * @param url
-   * @return
-   */
-  public String connect(){
-	   	if (resp == null){
-	    	resp = connect(host,port,auth_type,principal,group,credentials);
-	    }
-	    StringBuffer string = new StringBuffer();	    
-	    if (resp == null){
-	    	return null;
-	    }
-	    if (resp.result.booleanValue() == true) {
-	    	if (resp.referenceId != null) {
-	    		string.append("Reference ID : " + new String(resp.referenceId) +
-	    		"\n");
-	    	}
-	    	string.append("Implementation ID : " +
-	    			resp.implementationId + "\n");
-	    	string.append("Implementation Name : " +
-	    			resp.implementationName + "\n");
-	    	string.append("Implementation Version : " +
-	    			resp.implementationVersion + "\n");
-	    } else {
-	    	System.out.println(" Failed to establish association");
-	    	return null;
-	    }
-	    
-	    return string.toString();
-  }
+	private int auth_type = 0; // 0=none, 1=anonymous, 2=open, 3=idpass
+	private String principal = null;
+	private String group = null;
+	private String credentials = null;
+	private InitializeResponse_type resp = null;
+	private URI uri = null;
+	private String host = null;
+	private int port = 0;
+	private String database = null;
 
-  public GetRecordsReply search(GetRecordsReply recordsReply, String sQuery,int firstRecord){
-	  try{
-		  IRQuery query = new IRQuery();
-		  query.collections = new Vector();
-		  query.collections.add(database);
-		  query.query = new org.jzkit.search.util.QueryModel.PrefixString.PrefixString(sQuery);
-		  
-		  Searchable s = Z3950ConnectionFactory.getSearchable(uri);
-		  IRResultSet result = s.evaluate(query);
-		  result.waitForStatus(IRResultSetStatus.COMPLETE|IRResultSetStatus.FAILURE,0);
-		
-		  int numOfResults = result.getFragmentCount();
-		  recordsReply.setNumRecords(numOfResults);
-				  
-		  RecordFormatSpecification rfs = new ExplicitRecordFormatSpecification(null,null,"f");
-		  InformationFragment[] fragment = result.getFragment(firstRecord,10,rfs);
+	public Z3950Connection(URI uri) {
+		super(new OIDRegister("/a2j.properties"));
+		this.uri = uri;
+		this.host = uri.getHost();
+		this.port = uri.getPort();
+		StringTokenizer sti = new StringTokenizer(uri.getPath(), "/");
+		if (sti.countTokens() == 0) {
+			this.database = "geo";
+		} else {
+			this.database = sti.nextToken();
+		}
+	}
 
-		  for (int i=0 ; i<fragment.length ; i++){
-			  try {
-				  String answer = "";				  
-				  if (fragment[i] instanceof XMLRecord){				  	 
-					  XMLRecord xml = (XMLRecord)fragment[i];	
-					  answer = xml.toString();
-				  }else {
-					  SUTRS sutr = (SUTRS)fragment[i];
-					  answer = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-					  "<" + XMLNode.ISNOTXML + ">" + 
-					  sutr.toString() + 
-					  "</" + XMLNode.ISNOTXML + ">";
-				  }  				  
-				  recordsReply.addRecord(uri, XMLTree.xmlToTree(answer));
-			  } catch (Exception e1) {
-				  // TODO Auto-generated catch block
-				  e1.printStackTrace();
-			  }
-		  }	
-	  }catch(SearchException e){
-		  e.printStackTrace();
-	  } catch (IRResultSetException e) {
-		  // TODO Auto-generated catch block
-		  e.printStackTrace();
-	  } catch (Exception e) {
-		  // TODO Auto-generated catch block
-		  e.printStackTrace();
-	  }	  
-      return recordsReply;
-  } 
+	/**
+	 * 
+	 * @param url
+	 * @return
+	 */
+	public String connect() {
+		if (resp == null) {
+			resp = connect(host, port, auth_type, principal, group, credentials);
+		}
+		StringBuffer string = new StringBuffer();
+		if (resp == null) {
+			return null;
+		}
+		if (resp.result.booleanValue() == true) {
+			if (resp.referenceId != null) {
+				string.append("Reference ID : " + new String(resp.referenceId)
+						+ "\n");
+			}
+			string.append("Implementation ID : " + resp.implementationId + "\n");
+			string.append("Implementation Name : " + resp.implementationName
+					+ "\n");
+			string.append("Implementation Version : "
+					+ resp.implementationVersion + "\n");
+		} else {
+			System.out.println(" Failed to establish association");
+			return null;
+		}
+
+		return string.toString();
+	}
+
+	public GetRecordsReply search(GetRecordsReply recordsReply, String sQuery,
+			int firstRecord) {
+		try {
+			IRQuery query = new IRQuery();
+			query.collections = new Vector();
+			query.collections.add(database);
+			query.query = new org.jzkit.search.util.QueryModel.PrefixString.PrefixString(
+					sQuery);
+
+			Searchable s = Z3950ConnectionFactory.getSearchable(uri);
+			IRResultSet result = s.evaluate(query);
+			result.waitForStatus(IRResultSetStatus.COMPLETE
+					| IRResultSetStatus.FAILURE, 0);
+
+			int numOfResults = result.getFragmentCount();
+			recordsReply.setNumRecords(numOfResults);
+
+			RecordFormatSpecification rfs = new ExplicitRecordFormatSpecification(
+					null, null, "f");
+			InformationFragment[] fragment = result.getFragment(firstRecord,
+					10, rfs);
+
+			for (int i = 0; i < fragment.length; i++) {
+				try {
+					String answer = "";
+					if (fragment[i] instanceof XMLRecord) {
+						XMLRecord xml = (XMLRecord) fragment[i];
+						answer = xml.toString();
+					} else {
+						SUTRS sutr = (SUTRS) fragment[i];
+						answer = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+								+ "<" + XMLNode.ISNOTXML + ">"
+								+ sutr.toString() + "</" + XMLNode.ISNOTXML
+								+ ">";
+					}
+					recordsReply.addRecord(uri, XMLTree.xmlToTree(answer));
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		} catch (SearchException e) {
+			e.printStackTrace();
+		} catch (IRResultSetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return recordsReply;
+	}
 }

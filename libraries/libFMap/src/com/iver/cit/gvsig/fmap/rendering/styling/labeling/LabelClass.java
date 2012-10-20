@@ -128,12 +128,12 @@ import com.iver.utiles.IPersistence;
 import com.iver.utiles.XMLEntity;
 
 /**
- *
+ * 
  * LabelClass is the model of the label in the new simbology of gvSIG. In this
  * class is contained its definition, the expresion that defines the text which
  * is going to be showed, if it will be visible or not, the text symbol that is
  * going to paint the label and the style for its background.
- *
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class LabelClass implements IPersistence, CartographicSupport {
@@ -148,10 +148,9 @@ public class LabelClass implements IPersistence, CartographicSupport {
 	private String sqlQuery;
 	private boolean useSqlQuery = false;
 
-
 	/**
 	 * Returns true if the label will be showed in the map
-	 *
+	 * 
 	 * @return isVisible boolean
 	 */
 	public boolean isVisible() {
@@ -160,49 +159,51 @@ public class LabelClass implements IPersistence, CartographicSupport {
 
 	/**
 	 * Sets the visibility of the label in the map.
-	 *
-	 * @param isVisible boolean
+	 * 
+	 * @param isVisible
+	 *            boolean
 	 */
 	public void setVisible(boolean isVisible) {
 		this.isVisible = isVisible;
 	}
 
 	/**
-	 * Returns the expression that defines the text which will be showed in
-	 * the label
-	 *
+	 * Returns the expression that defines the text which will be showed in the
+	 * label
+	 * 
 	 * @return labelExpressions String[]
 	 */
 	public String[] getLabelExpressions() {
 		return labelExpressions;
 	}
+
 	/**
-	 * Returns the expression that defines the text which will be showed in
-	 * the label ready to be used for the label parser
-	 *
+	 * Returns the expression that defines the text which will be showed in the
+	 * label ready to be used for the label parser
+	 * 
 	 * @return labelExpression String
 	 */
-	public String getStringLabelExpression(){
+	public String getStringLabelExpression() {
 		String expr = "";
 
-		if(labelExpressions != null && labelExpressions.length > 0){
+		if (labelExpressions != null && labelExpressions.length > 0) {
 
-			for (int i = 0; i < labelExpressions.length-1; i++) {
-				expr += (String) labelExpressions[i] +  ":";//EOFIELD
+			for (int i = 0; i < labelExpressions.length - 1; i++) {
+				expr += (String) labelExpressions[i] + ":";// EOFIELD
 			}
-			expr += labelExpressions[labelExpressions.length - 1] +";";//EOEXPRESSION
+			expr += labelExpressions[labelExpressions.length - 1] + ";";// EOEXPRESSION
 
-		}
-		else expr = ";";
+		} else
+			expr = ";";
 		return expr;
 	}
-
 
 	/**
 	 * Stablishes the expresion that, when it is evaluated, returns the text
 	 * which will be showed by the label.
-	 *
-	 * @param labelExpression String
+	 * 
+	 * @param labelExpression
+	 *            String
 	 */
 	public void setLabelExpressions(String[] labelExpressions) {
 		this.labelExpressions = labelExpressions;
@@ -211,7 +212,7 @@ public class LabelClass implements IPersistence, CartographicSupport {
 	/**
 	 * Returns the text symbol that is being used for the text(the font,
 	 * size,style,aligment)
-	 *
+	 * 
 	 * @return label ITextSymbol
 	 */
 	public ITextSymbol getTextSymbol() {
@@ -223,7 +224,7 @@ public class LabelClass implements IPersistence, CartographicSupport {
 
 	private Dimension getSize() {
 		if (labelStyle == null) {
-			if (texts!=null && texts.length >0) {
+			if (texts != null && texts.length > 0) {
 				String t = "";
 				for (int i = 0; i < texts.length; i++) {
 					t += texts[i];
@@ -232,20 +233,22 @@ public class LabelClass implements IPersistence, CartographicSupport {
 			}
 
 			Rectangle bounds = getTextSymbol().getBounds();
-//			bounds.setLocation(
-//					(int) Math.round(bounds.getX()),
-//					(int) Math.round(bounds.getY()+bounds.getHeight()));
+			// bounds.setLocation(
+			// (int) Math.round(bounds.getX()),
+			// (int) Math.round(bounds.getY()+bounds.getHeight()));
 			return new Dimension(bounds.width, bounds.height);
 		} else {
 			labelStyle.setTextFields(texts);
 			return labelStyle.getSize();
 		}
 	}
+
 	/**
 	 * Stablishes the text symbol that is going to be used for the text(the
 	 * font,size,style,aligment)
-	 *
-	 * @param textSymbol ITextSymbol
+	 * 
+	 * @param textSymbol
+	 *            ITextSymbol
 	 */
 	public void setTextSymbol(ITextSymbol textSymbol) {
 		this.textSymbol = textSymbol;
@@ -258,8 +261,9 @@ public class LabelClass implements IPersistence, CartographicSupport {
 
 	/**
 	 * Stablishes the style for the label.
-	 *
-	 * @param labelStyle ILabelStyle
+	 * 
+	 * @param labelStyle
+	 *            ILabelStyle
 	 */
 	public void setLabelStyle(ILabelStyle labelStyle) {
 		this.labelStyle = labelStyle;
@@ -267,7 +271,7 @@ public class LabelClass implements IPersistence, CartographicSupport {
 
 	/**
 	 * Returns the style of the label
-	 *
+	 * 
 	 */
 	public ILabelStyle getLabelStyle() {
 		return this.labelStyle;
@@ -275,7 +279,7 @@ public class LabelClass implements IPersistence, CartographicSupport {
 
 	/**
 	 * Returns the name of the label
-	 *
+	 * 
 	 */
 	public String getName() {
 		return name;
@@ -283,6 +287,7 @@ public class LabelClass implements IPersistence, CartographicSupport {
 
 	/**
 	 * Stablishes the name of the label
+	 * 
 	 * @param name
 	 */
 	public void setName(String name) {
@@ -291,14 +296,16 @@ public class LabelClass implements IPersistence, CartographicSupport {
 
 	public String toString() {
 		// for debugging
-//		return name+"{label expression="+labelExpression+", visible="+isVisible+", priority="+priority+"}";
+		// return
+		// name+"{label expression="+labelExpression+", visible="+isVisible+", priority="+priority+"}";
 		return getName();
 	}
 
 	/**
 	 * Sets the text for the label
-	 *
-	 * @param texts String[]
+	 * 
+	 * @param texts
+	 *            String[]
 	 */
 	public void setTexts(String[] texts) {
 		this.texts = texts;
@@ -307,27 +314,31 @@ public class LabelClass implements IPersistence, CartographicSupport {
 
 	/**
 	 * Return the text for the label
-	 *
-	 * @param texts String[]
+	 * 
+	 * @param texts
+	 *            String[]
 	 */
 	public String[] getTexts() {
 		return this.texts;
 	}
 
-
 	/**
 	 * <p>
-	 * LabelLocationMetrics, contains the anchor point, rotation, and some
-	 * other geometric calculations computed by the PlacementManager.
+	 * LabelLocationMetrics, contains the anchor point, rotation, and some other
+	 * geometric calculations computed by the PlacementManager.
 	 * </p>
-	 *
+	 * 
 	 * <p>
-	 * The shp argument is passed as an accessory for subclasses of this
-	 * class in case they need futher geometric calculations
+	 * The shp argument is passed as an accessory for subclasses of this class
+	 * in case they need futher geometric calculations
 	 * </p>
-	 * @param graphics, graphics to use to paint the label.
-	 * @param llm, concrete settings of the placement of this layer
-	 * @param shp, the Shape over whose the label is painted
+	 * 
+	 * @param graphics
+	 *            , graphics to use to paint the label.
+	 * @param llm
+	 *            , concrete settings of the placement of this layer
+	 * @param shp
+	 *            , the Shape over whose the label is painted
 	 */
 	public void draw(Graphics2D graphics, LabelLocationMetrics llm, FShape shp) {
 		if (scale == 0)
@@ -335,15 +346,15 @@ public class LabelClass implements IPersistence, CartographicSupport {
 		if (!isVisible)
 			return;
 		Dimension size = getSize();
-		int width = (int) Math.round(size.getWidth()*scale);
-		if (width  < 1)
+		int width = (int) Math.round(size.getWidth() * scale);
+		if (width < 1)
 			return;
 
-		int height = (int) Math.round(size.getHeight()*scale);
+		int height = (int) Math.round(size.getHeight() * scale);
 		if (height < 1)
 			return;
 
-		Rectangle r = new Rectangle(0,0, width, height);
+		Rectangle r = new Rectangle(0, 0, width, height);
 		FPoint2D anchor = new FPoint2D(llm.getAnchor());
 		double xAnchor = anchor.getX();
 		double yAnchor = anchor.getY();
@@ -353,39 +364,34 @@ public class LabelClass implements IPersistence, CartographicSupport {
 			theta = theta + (2 * Math.PI);
 		}
 
-		if ((theta > (Math.PI / 2)) &&
-			(theta < ((3 * Math.PI) / 2))) {
+		if ((theta > (Math.PI / 2)) && (theta < ((3 * Math.PI) / 2))) {
 			theta = theta - (float) Math.PI;
 		}
 
+		// PathLength pathLen = new PathLength(shp);
+		//
+		// // if (pathLen.lengthOfPath() < width / mT.getScaleX()) return;
+		// float midDistance = pathLen.lengthOfPath() / 2;
+		// pAux = pathLen.pointAtLength(midDistance);
+		// angle = pathLen.angleAtLength(midDistance);
 
-//		PathLength pathLen = new PathLength(shp);
-//
-//		// if (pathLen.lengthOfPath() < width / mT.getScaleX()) return;
-//		float midDistance = pathLen.lengthOfPath() / 2;
-//		pAux = pathLen.pointAtLength(midDistance);
-//		angle = pathLen.angleAtLength(midDistance);
-
-//		if (angle < 0) {
-//			angle = angle + (float) (2 * Math.PI);
-//		}
-//
-//		if ((angle > (Math.PI / 2)) &&
-//				(angle < ((3 * Math.PI) / 2))) {
-//			angle = angle - (float) Math.PI;
-//		}
-//
-//		theLabel.setRotation(Math.toDegrees(angle));
-
-
-
+		// if (angle < 0) {
+		// angle = angle + (float) (2 * Math.PI);
+		// }
+		//
+		// if ((angle > (Math.PI / 2)) &&
+		// (angle < ((3 * Math.PI) / 2))) {
+		// angle = angle - (float) Math.PI;
+		// }
+		//
+		// theLabel.setRotation(Math.toDegrees(angle));
 
 		graphics.translate(xAnchor, yAnchor);
 		graphics.rotate(theta);
 		synchronized (this) {
 			float fontSizeBefore = textSymbol.getFont().getSize2D();
 			try {
-				textSymbol.setFontSize(fontSizeBefore*scale);
+				textSymbol.setFontSize(fontSizeBefore * scale);
 				drawInsideRectangle(graphics, r);
 				textSymbol.setFontSize(fontSizeBefore);
 			} catch (SymbolDrawingException e) {
@@ -397,18 +403,20 @@ public class LabelClass implements IPersistence, CartographicSupport {
 
 	}
 
-
-	private void relativeToAbsolute(double[] xy, Rectangle r, Dimension labelSz, double ratioLabel, double ratioViewPort) {
+	private void relativeToAbsolute(double[] xy, Rectangle r,
+			Dimension labelSz, double ratioLabel, double ratioViewPort) {
 		int x;
 		int y;
 		if (ratioViewPort > ratioLabel) {
 			// size is defined by the viewport height
-			y = (int) (r.height*xy[1]);
-			x = (int) ((0.5*r.width) - (0.5-xy[0])*(ratioLabel*r.height));
+			y = (int) (r.height * xy[1]);
+			x = (int) ((0.5 * r.width) - (0.5 - xy[0])
+					* (ratioLabel * r.height));
 		} else {
 			// size is defined by the viewport width
 			x = (int) (r.width * xy[0]);
-			y = (int) ((0.5 * r.height) - (0.5-xy[1])*(r.width/ratioLabel));
+			y = (int) ((0.5 * r.height) - (0.5 - xy[1])
+					* (r.width / ratioLabel));
 		}
 		xy[0] = x;
 		xy[1] = y;
@@ -416,48 +424,53 @@ public class LabelClass implements IPersistence, CartographicSupport {
 
 	/**
 	 * Useful to render a Label with size inside little rectangles.
-	 *
-	 * @param graphics Graphics2D
-	 * @param bounds Rectangle
+	 * 
+	 * @param graphics
+	 *            Graphics2D
+	 * @param bounds
+	 *            Rectangle
 	 * @throws SymbolDrawingException
 	 */
-	public void drawInsideRectangle(Graphics2D graphics, Rectangle bounds) throws SymbolDrawingException {
+	public void drawInsideRectangle(Graphics2D graphics, Rectangle bounds)
+			throws SymbolDrawingException {
 		if (labelStyle != null) {
 			labelStyle.drawInsideRectangle(graphics, bounds);
 			Rectangle2D[] textBounds = labelStyle.getTextBounds();
 			Dimension labelSz = getSize();
-			final double ratioLabel = labelSz.getWidth()/labelSz.getHeight();
+			final double ratioLabel = labelSz.getWidth() / labelSz.getHeight();
 			final double ratioViewPort = bounds.getWidth() / bounds.getHeight();
 			final double[] xy = new double[2];
 
-
 			// draw the text fields
-			if (textBounds.length > 0 && texts!=null) {
+			if (textBounds.length > 0 && texts != null) {
 				for (int i = 0; i < textBounds.length && i < texts.length; i++) {
 					getTextSymbol().setText(texts[i]);
 					Rectangle2D textFieldArea = textBounds[i];
 					xy[0] = textFieldArea.getX();
 					xy[1] = textFieldArea.getY();
-					relativeToAbsolute(xy, bounds, labelSz, ratioLabel, ratioViewPort);
+					relativeToAbsolute(xy, bounds, labelSz, ratioLabel,
+							ratioViewPort);
 					int x = (int) Math.round(xy[0]);
 					int y = (int) Math.round(xy[1]);
 
 					xy[0] = textFieldArea.getMaxX();
 					xy[1] = textFieldArea.getMaxY();
-					relativeToAbsolute(xy, bounds, labelSz, ratioLabel, ratioViewPort);
-					int width = (int) Math.round(xy[0]) -x;
-					int height = (int) Math.round(xy[1] - y) ;
+					relativeToAbsolute(xy, bounds, labelSz, ratioLabel,
+							ratioViewPort);
+					int width = (int) Math.round(xy[0]) - x;
+					int height = (int) Math.round(xy[1] - y);
 
 					Rectangle textRect = new Rectangle(x, y, width, height);
 					Shape oldClip = graphics.getClip();
 					graphics.setClip(textRect);
-					getTextSymbol().drawInsideRectangle(graphics, null, textRect, null);
+					getTextSymbol().drawInsideRectangle(graphics, null,
+							textRect, null);
 					graphics.setClip(oldClip);
 				}
 			}
 		} else {
 
-			if (texts != null && texts.length>0)
+			if (texts != null && texts.length > 0)
 				getTextSymbol().setText(texts[0]);
 			getTextSymbol().drawInsideRectangle(graphics, null, bounds, null);
 		}
@@ -472,7 +485,7 @@ public class LabelClass implements IPersistence, CartographicSupport {
 	}
 
 	public FShape getShape(LabelLocationMetrics llm) {
-		if (llm==null)
+		if (llm == null)
 			return null;
 		Point2D anchor = llm.getAnchor();
 		FPoint2D p = new FPoint2D(anchor);
@@ -482,7 +495,8 @@ public class LabelClass implements IPersistence, CartographicSupport {
 		FShape returnedValue;
 		Rectangle bounds = getBounds();
 
-		AffineTransform at = AffineTransform.getTranslateInstance(p.getX(), p.getY());
+		AffineTransform at = AffineTransform.getTranslateInstance(p.getX(),
+				p.getY());
 		at.concatenate(AffineTransform.getRotateInstance(theta));
 
 		returnedValue = new FPolygon2D(new GeneralPathX(bounds));
@@ -490,7 +504,6 @@ public class LabelClass implements IPersistence, CartographicSupport {
 		returnedValue.transform(at);
 		return returnedValue;
 	}
-
 
 	public String getClassName() {
 		return getClass().getName();
@@ -501,12 +514,12 @@ public class LabelClass implements IPersistence, CartographicSupport {
 		xml.putProperty("className", getClassName());
 		xml.putProperty("isVisible", isVisible);
 		xml.putProperty("name", name);
-		if(labelExpressions != null)
+		if (labelExpressions != null)
 			xml.putProperty("labelExpressions", labelExpressions);
 		xml.putProperty("unit", getUnit());
 		xml.putProperty("referenceSystem", getReferenceSystem());
 		xml.putProperty("priority", getPriority());
-		xml.putProperty("useSqlQuery",isUseSqlQuery());
+		xml.putProperty("useSqlQuery", isUseSqlQuery());
 
 		if (texts != null) {
 			xml.putProperty("texts", texts);
@@ -515,7 +528,7 @@ public class LabelClass implements IPersistence, CartographicSupport {
 			xml.putProperty("sqlQuery", getSQLQuery());
 		}
 
-		if (labelStyle!=null) {
+		if (labelStyle != null) {
 			XMLEntity labelStyleXML = labelStyle.getXMLEntity();
 			labelStyleXML.putProperty("id", "labelStyle");
 			xml.addChild(labelStyleXML);
@@ -531,15 +544,14 @@ public class LabelClass implements IPersistence, CartographicSupport {
 	public void setXMLEntity(XMLEntity xml) {
 		isVisible = xml.getBooleanProperty("isVisible");
 		name = xml.getStringProperty("name");
-		if(xml.contains("labelExpressions"))
+		if (xml.contains("labelExpressions"))
 			labelExpressions = xml.getStringArrayProperty("labelExpressions");
 		setUnit(xml.getIntProperty("unit"));
 		setReferenceSystem(xml.getIntProperty("referenceSystem"));
-		setTextSymbol(
-				(ITextSymbol) SymbologyFactory.
-				createSymbolFromXML(xml.firstChild("id", "TextSymbol"), null));
+		setTextSymbol((ITextSymbol) SymbologyFactory.createSymbolFromXML(
+				xml.firstChild("id", "TextSymbol"), null));
 
-		if(xml.contains("useSqlQuery")){
+		if (xml.contains("useSqlQuery")) {
 			setUseSqlQuery(xml.getBooleanProperty("useSqlQuery"));
 		}
 
@@ -555,9 +567,9 @@ public class LabelClass implements IPersistence, CartographicSupport {
 		}
 		// labelStyle
 		XMLEntity aux = xml.firstChild("id", "labelStyle");
-		if (aux!= null) {
-			setLabelStyle((ILabelStyle) SymbologyFactory.
-							createStyleFromXML(aux, "labelStyle"));
+		if (aux != null) {
+			setLabelStyle((ILabelStyle) SymbologyFactory.createStyleFromXML(
+					aux, "labelStyle"));
 		}
 	}
 
@@ -568,11 +580,8 @@ public class LabelClass implements IPersistence, CartographicSupport {
 		Dimension sz = getSize();
 		double width = sz.getWidth();
 		double height = sz.getHeight();
-		return CartographicSupportToolkit.
-			getCartographicLength(this,
-							  Math.max(width, height),
-							  viewPort,
-							  dpi);
+		return CartographicSupportToolkit.getCartographicLength(this,
+				Math.max(width, height), viewPort, dpi);
 	}
 
 	public int getReferenceSystem() {
@@ -597,7 +606,8 @@ public class LabelClass implements IPersistence, CartographicSupport {
 	public void setReferenceSystem(int referenceSystem) {
 		this.referenceSystem = referenceSystem;
 		if (textSymbol != null && textSymbol instanceof CartographicSupport) {
-			((CartographicSupport) textSymbol).setReferenceSystem(referenceSystem);
+			((CartographicSupport) textSymbol)
+					.setReferenceSystem(referenceSystem);
 		}
 	}
 
@@ -609,25 +619,19 @@ public class LabelClass implements IPersistence, CartographicSupport {
 	}
 
 	public double toCartographicSize(ViewPort viewPort, double dpi, FShape shp) {
-		setCartographicSize(getCartographicSize(
-								viewPort,
-								dpi,
-								shp),
-							shp);
+		setCartographicSize(getCartographicSize(viewPort, dpi, shp), shp);
 		return 0;
 	}
 
 	public Rectangle getBounds() {
 		Dimension cBounds = getSize();
-		return new Rectangle(
-				0,
-				0,
-				(int) Math.round(cBounds.width*scale),
-				(int) Math.round(cBounds.height*scale));
+		return new Rectangle(0, 0, (int) Math.round(cBounds.width * scale),
+				(int) Math.round(cBounds.height * scale));
 	}
 
 	public String getSQLQuery() {
-		if (sqlQuery == null) sqlQuery = "";
+		if (sqlQuery == null)
+			sqlQuery = "";
 		return sqlQuery;
 	}
 

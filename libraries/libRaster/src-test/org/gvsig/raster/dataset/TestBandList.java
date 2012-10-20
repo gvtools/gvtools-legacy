@@ -21,11 +21,12 @@ package org.gvsig.raster.dataset;
 import junit.framework.TestCase;
 
 import org.gvsig.raster.RasterLibrary;
+
 /**
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class TestBandList extends TestCase {
-	private boolean  showCode = false;
+	private boolean showCode = false;
 	private BandList bandList = null;
 
 	static {
@@ -65,34 +66,40 @@ public class TestBandList extends TestCase {
 			print();
 	}
 
-//	private void test2() {
-//		assertEquals(bandList.getBandCount(), 5);
-//		assertEquals(bandList.getDrawableBandsCount(), 4);
-//		for (int i = 0; i < bandList.getBandCount(); i++) {
-//
-//			assertEquals((((Band) bandList.getBand(i)).getDataType()), 0);
-//			assertEquals((((Band) bandList.getBand(i)).getFileName()), "fileName");
-//			assertEquals((((Band) bandList.getBand(i)).getPosition()), i);
-//		}
-//	}
+	// private void test2() {
+	// assertEquals(bandList.getBandCount(), 5);
+	// assertEquals(bandList.getDrawableBandsCount(), 4);
+	// for (int i = 0; i < bandList.getBandCount(); i++) {
+	//
+	// assertEquals((((Band) bandList.getBand(i)).getDataType()), 0);
+	// assertEquals((((Band) bandList.getBand(i)).getFileName()), "fileName");
+	// assertEquals((((Band) bandList.getBand(i)).getPosition()), i);
+	// }
+	// }
 
 	/**
 	 * Muestra la lista de bandas en modo texto
 	 */
 	public void print() {
 		System.out.println("BandCount: " + bandList.getBandCount());
-		System.out.println("DrawableBandsCount: " + bandList.getDrawableBandsCount());
+		System.out.println("DrawableBandsCount: "
+				+ bandList.getDrawableBandsCount());
 		for (int i = 0; i < bandList.getBandCount(); i++) {
 			System.out.println("");
 			System.out.println("***********************");
 			System.out.println("Band: " + i);
-			System.out.println("DataType: " + ((Band) bandList.getBand(i)).getDataType());
-			System.out.println("FileName: " + ((Band) bandList.getBand(i)).getFileName());
-			System.out.println("Position: " + ((Band) bandList.getBand(i)).getPosition());
+			System.out.println("DataType: "
+					+ ((Band) bandList.getBand(i)).getDataType());
+			System.out.println("FileName: "
+					+ ((Band) bandList.getBand(i)).getFileName());
+			System.out.println("Position: "
+					+ ((Band) bandList.getBand(i)).getPosition());
 			if (((Band) bandList.getBand(i)).getBufferBandListToDraw() != null) {
 				System.out.print("Band Dst: ");
-				for (int j = 0; j < ((Band) bandList.getBand(i)).getBufferBandListToDraw().length; j++)
-					System.out.print(((Band) bandList.getBand(i)).getBufferBandListToDraw()[j] + " ");
+				for (int j = 0; j < ((Band) bandList.getBand(i))
+						.getBufferBandListToDraw().length; j++)
+					System.out.print(((Band) bandList.getBand(i))
+							.getBufferBandListToDraw()[j] + " ");
 			}
 		}
 	}

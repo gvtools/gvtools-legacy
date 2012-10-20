@@ -50,125 +50,129 @@ import com.iver.cit.gvsig.project.documents.layout.fframes.gui.dialogs.IFFrameDi
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 import com.iver.utiles.XMLEntity;
 
-
 /**
  * Class that extends FFramePicture and implements IFFrameViewDependence to be
  * able to maintain the same rotation that the view to which associate.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FFrameNorth extends FFramePicture implements IFFrameViewDependence {
-    private FFrameView fframeview;
-    private int dependenceIndex = -1;
+	private FFrameView fframeview;
+	private int dependenceIndex = -1;
 
-    /**
-     * Inserts FFrameView to be able to relate this with the image.
-     *
-     * @param fv FFrameView
-     */
-    public void setFFrameDependence(IFFrame fv) {
-        fframeview = (FFrameView) fv;
-    }
-    public void refreshDependence(IFFrame fant, IFFrame fnew) {
-    	if ((fframeview != null) &&
-                fframeview.equals(fant)) {
-            fframeview=(FFrameView)fnew;
-    	}
-    }
-    /**
-     * Returns the FFrameView.
-     *
-     * @return FFrameView
-     */
-    public IFFrame[] getFFrameDependence() {
-        return new IFFrame[]{fframeview};
-    }
+	/**
+	 * Inserts FFrameView to be able to relate this with the image.
+	 * 
+	 * @param fv
+	 *            FFrameView
+	 */
+	public void setFFrameDependence(IFFrame fv) {
+		fframeview = (FFrameView) fv;
+	}
 
-    /**
-     * Returns the rotation of de FFrameView.
-     *
-     * @return Rotation.
-     */
-    public double getRotation() {
-        if (fframeview != null) {
-            return fframeview.getRotation();
-        }
+	public void refreshDependence(IFFrame fant, IFFrame fnew) {
+		if ((fframeview != null) && fframeview.equals(fant)) {
+			fframeview = (FFrameView) fnew;
+		}
+	}
 
-        return super.getRotation();
-    }
+	/**
+	 * Returns the FFrameView.
+	 * 
+	 * @return FFrameView
+	 */
+	public IFFrame[] getFFrameDependence() {
+		return new IFFrame[] { fframeview };
+	}
 
-    /**
-     * Returns a XMLEntity to save de properties.
-     *
-     * @return XMLEntity with the properties of FFrameNorth.
-     *
-     * @throws SaveException
-     */
-    public XMLEntity getXMLEntity() throws SaveException {
-        XMLEntity xml = super.getXMLEntity();
+	/**
+	 * Returns the rotation of de FFrameView.
+	 * 
+	 * @return Rotation.
+	 */
+	public double getRotation() {
+		if (fframeview != null) {
+			return fframeview.getRotation();
+		}
 
-        try {
-//            xml.putProperty("type", Layout.RECTANGLENORTH);
+		return super.getRotation();
+	}
 
-            if (fframeview != null) {
-                Layout layout = fframeview.getLayout();
+	/**
+	 * Returns a XMLEntity to save de properties.
+	 * 
+	 * @return XMLEntity with the properties of FFrameNorth.
+	 * 
+	 * @throws SaveException
+	 */
+	public XMLEntity getXMLEntity() throws SaveException {
+		XMLEntity xml = super.getXMLEntity();
 
-                if (layout != null) {
-                    IFFrame[] fframes = layout.getLayoutContext().getAllFFrames();
+		try {
+			// xml.putProperty("type", Layout.RECTANGLENORTH);
 
-                    for (int i = 0; i < fframes.length; i++) {
-                        if ((fframeview != null) &&
-                                fframeview.compare(fframes[i])) {
-                            xml.putProperty("index", i);
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            throw new SaveException(e, this.getClass().getName());
-        }
+			if (fframeview != null) {
+				Layout layout = fframeview.getLayout();
 
-        return xml;
-    }
+				if (layout != null) {
+					IFFrame[] fframes = layout.getLayoutContext()
+							.getAllFFrames();
 
-    /**
-     * Inserts the properties of FFrameNorth from a XMLEntity and the Layout.
-     *
-     * @param xml XMLEntity with the properties.
-     */
-    public void setXMLEntity(XMLEntity xml) {
-        super.setXMLEntity(xml);
-        String prevPath=getPath();
-        File file = new File(AddLayer.class.getClassLoader()
-                .getResource("northimages")
-                .getFile());
-        if ( file != null && prevPath != null ) { // guard against NULL strings
-        	String newPath = file.getAbsolutePath()+prevPath.substring(prevPath.indexOf("northimages")+11);
-        	setPath(newPath);
-        	try {
-        		load(newPath);
-        	} catch (Exception ex) {
-        		NotificationManager.addError("Cargando imagen :", ex);
-        	}
-        }
-        if (xml.contains("index")) {
-            dependenceIndex = xml.getIntProperty("index");
-        }
-    }
+					for (int i = 0; i < fframes.length; i++) {
+						if ((fframeview != null)
+								&& fframeview.compare(fframes[i])) {
+							xml.putProperty("index", i);
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			throw new SaveException(e, this.getClass().getName());
+		}
 
-    /**
-     * Update the dependences that have this FFrame with the other FFrame.
-     *
-     * @param fframes Other FFrames.
-     */
-    public void initDependence(IFFrame[] fframes) {
-        if ((dependenceIndex != -1) &&
-                fframes[dependenceIndex] instanceof FFrameView) {
-            fframeview = (FFrameView) fframes[dependenceIndex];
-        }
-    }
+		return xml;
+	}
+
+	/**
+	 * Inserts the properties of FFrameNorth from a XMLEntity and the Layout.
+	 * 
+	 * @param xml
+	 *            XMLEntity with the properties.
+	 */
+	public void setXMLEntity(XMLEntity xml) {
+		super.setXMLEntity(xml);
+		String prevPath = getPath();
+		File file = new File(AddLayer.class.getClassLoader()
+				.getResource("northimages").getFile());
+		if (file != null && prevPath != null) { // guard against NULL strings
+			String newPath = file.getAbsolutePath()
+					+ prevPath.substring(prevPath.indexOf("northimages") + 11);
+			setPath(newPath);
+			try {
+				load(newPath);
+			} catch (Exception ex) {
+				NotificationManager.addError("Cargando imagen :", ex);
+			}
+		}
+		if (xml.contains("index")) {
+			dependenceIndex = xml.getIntProperty("index");
+		}
+	}
+
+	/**
+	 * Update the dependences that have this FFrame with the other FFrame.
+	 * 
+	 * @param fframes
+	 *            Other FFrames.
+	 */
+	public void initDependence(IFFrame[] fframes) {
+		if ((dependenceIndex != -1)
+				&& fframes[dependenceIndex] instanceof FFrameView) {
+			fframeview = (FFrameView) fframes[dependenceIndex];
+		}
+	}
 
 	public IFFrameDialog getPropertyDialog() {
-		return new FFrameNorthDialog(getLayout(),this);
+		return new FFrameNorthDialog(getLayout(), this);
 	}
 }

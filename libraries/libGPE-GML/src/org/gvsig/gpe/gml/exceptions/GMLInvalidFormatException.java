@@ -62,7 +62,7 @@ import org.gvsig.exceptions.BaseException;
 /**
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  */
-public class GMLInvalidFormatException extends BaseException{
+public class GMLInvalidFormatException extends BaseException {
 
 	/**
 	 * 
@@ -78,9 +78,10 @@ public class GMLInvalidFormatException extends BaseException{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	public void init() {
-		messageKey="Gml_Invalid_Type_Format_Error";
-		formatString="Invalid Data Type Format Defined";
+		messageKey = "Gml_Invalid_Type_Format_Error";
+		formatString = "Invalid Data Type Format Defined";
 		code = serialVersionUID;
 	}
 }

@@ -5,10 +5,9 @@ import com.hardcode.gdbms.engine.values.BooleanValue;
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.parser.Node;
 
-
 /**
  * Adapter de las Expresiones Not del arbol sintáctico
- *
+ * 
  * @author Fernando González Cortés
  */
 public class NotExprAdapter extends AbstractExpression implements Expression {
@@ -16,20 +15,24 @@ public class NotExprAdapter extends AbstractExpression implements Expression {
 
 	/**
 	 * Evalua expresión invocando el método adecuado en función del tipo de
-	 * expresion (suma, producto, ...) de los objetos Value de la expresion,
-	 * de las subexpresiones y de los objetos Field
-	 *
-	 * @param row Fila en la que se evalúa la expresión, en este caso no es
-	 * 		  necesario, pero las subexpresiones sobre las que se opera pueden
-	 * 		  ser campos de una tabla, en cuyo caso si es necesario
-	 *
+	 * expresion (suma, producto, ...) de los objetos Value de la expresion, de
+	 * las subexpresiones y de los objetos Field
+	 * 
+	 * @param row
+	 *            Fila en la que se evalúa la expresión, en este caso no es
+	 *            necesario, pero las subexpresiones sobre las que se opera
+	 *            pueden ser campos de una tabla, en cuyo caso si es necesario
+	 * 
 	 * @return Objeto Value resultado de la operación propia de la expresión
-	 * 		   representada por el nodo sobre el cual éste objeto es adaptador
-	 *
-	 * @throws SemanticException Si se produce un error semántico
-	 * @throws DriverException Si se produce un error de I/O
-	 * @throws IncompatibleTypesException Si la expresión es una negación y la
-	 * 		   expresión que se niega no es booleana
+	 *         representada por el nodo sobre el cual éste objeto es adaptador
+	 * 
+	 * @throws SemanticException
+	 *             Si se produce un error semántico
+	 * @throws DriverException
+	 *             Si se produce un error de I/O
+	 * @throws IncompatibleTypesException
+	 *             Si la expresión es una negación y la expresión que se niega
+	 *             no es booleana
 	 */
 	public Value evaluate(long row) throws EvaluationException {
 		Value ret = null;
@@ -40,7 +43,8 @@ public class NotExprAdapter extends AbstractExpression implements Expression {
 			Value value = c.evaluateExpression(row);
 
 			if (not) {
-				((BooleanValue) value).setValue(!((BooleanValue) value).getValue());
+				((BooleanValue) value).setValue(!((BooleanValue) value)
+						.getValue());
 			}
 
 			return value;

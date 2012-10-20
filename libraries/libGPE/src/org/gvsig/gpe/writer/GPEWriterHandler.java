@@ -103,28 +103,31 @@ import org.gvsig.xmlschema.som.IXSSchemaDocument;
  *
  */
 /**
- * This class make the XML schema validation and call
- * to the concrete parser to write the output file.
+ * This class make the XML schema validation and call to the concrete parser to
+ * write the output file.
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  */
 public class GPEWriterHandler {
-	private IGPEWriterHandlerImplementor writerImplementor = null;	
-	
+	private IGPEWriterHandlerImplementor writerImplementor = null;
+
 	/**
 	 * The constructor
+	 * 
 	 * @param writerImplementor
-	 * The concrete writer handler implementation
+	 *            The concrete writer handler implementation
 	 */
-	public GPEWriterHandler(IGPEWriterHandlerImplementor writerImplementor){
+	public GPEWriterHandler(IGPEWriterHandlerImplementor writerImplementor) {
 		this.writerImplementor = writerImplementor;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
-	public String toString(){
+	public String toString() {
 		return writerImplementor.toString();
 	}
 
@@ -141,7 +144,7 @@ public class GPEWriterHandler {
 	public String getName() {
 		return writerImplementor.getName();
 	}
-	
+
 	/**
 	 * @return the errorHandler
 	 */
@@ -150,14 +153,16 @@ public class GPEWriterHandler {
 	}
 
 	/**
-	 * @param errorHandler the errorHandler to set
+	 * @param errorHandler
+	 *            the errorHandler to set
 	 */
 	public void setErrorHandler(GPEErrorHandler errorHandler) {
 		writerImplementor.setErrorHandler(errorHandler);
 	}
 
 	/**
-	 * @param fileName the fileName to set
+	 * @param fileName
+	 *            the fileName to set
 	 */
 	public void setOutputStream(OutputStream os) {
 		writerImplementor.setOutputStream(os);
@@ -169,17 +174,19 @@ public class GPEWriterHandler {
 	public String getFormat() {
 		return writerImplementor.getFormat();
 	}
-	
+
 	/**
 	 * @return the default file extension
 	 */
-	public String getFileExtension(){
+	public String getFileExtension() {
 		return writerImplementor.getFileExtension();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#startPoint(java.lang.String, double, double, double, java.lang.String)
+	 * 
+	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#startPoint(java.lang.String,
+	 * double, double, double, java.lang.String)
 	 */
 	public void startPoint(String id, ICoordinateSequence coords, String srs) {
 		writerImplementor.startPoint(id, coords, srs);
@@ -187,6 +194,7 @@ public class GPEWriterHandler {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#endPoint()
 	 */
 	public void endPoint() {
@@ -195,96 +203,120 @@ public class GPEWriterHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#startLineString(java.lang.String, double[], double[], double[], java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writers.IGPEWriterHandler#startLineString(java.lang.String,
+	 * double[], double[], double[], java.lang.String)
 	 */
-	public void startLineString(String id, ICoordinateSequence coords, String srs) {
+	public void startLineString(String id, ICoordinateSequence coords,
+			String srs) {
 		writerImplementor.startLineString(id, coords, srs);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#endLineString()
-	 */	
+	 */
 	public void endLineString() {
 		writerImplementor.endLineString();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#startLinearRing(java.lang.String, double[], double[], double[], java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writers.IGPEWriterHandler#startLinearRing(java.lang.String,
+	 * double[], double[], double[], java.lang.String)
 	 */
-	public void startLinearRing(String id, ICoordinateSequence coords, String srs) {
-//		if (!GeographicalUtils.isClosed(x, y, z)){
-//			x = GeographicalUtils.closePolygon(x);
-//			y = GeographicalUtils.closePolygon(y);
-//			z = GeographicalUtils.closePolygon(z);	
-//			getErrorHandler().addWarning(new PolygonAutomaticallyClosedWarning(x,y,z));
-//		}
+	public void startLinearRing(String id, ICoordinateSequence coords,
+			String srs) {
+		// if (!GeographicalUtils.isClosed(x, y, z)){
+		// x = GeographicalUtils.closePolygon(x);
+		// y = GeographicalUtils.closePolygon(y);
+		// z = GeographicalUtils.closePolygon(z);
+		// getErrorHandler().addWarning(new
+		// PolygonAutomaticallyClosedWarning(x,y,z));
+		// }
 		writerImplementor.startLinearRing(id, coords, srs);
-	}	
+	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#endLinearRing()
 	 */
 	public void endLinearRing() {
 		writerImplementor.endLinearRing();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#startPolygon(java.lang.String, double[], double[], double[], java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writers.IGPEWriterHandler#startPolygon(java.lang.String,
+	 * double[], double[], double[], java.lang.String)
 	 */
 	public void startPolygon(String id, ICoordinateSequence coords, String srs) {
-//  		if (!GeographicalUtils.isClosed(x, y, z)){
-//			x = GeographicalUtils.closePolygon(x);
-//			y = GeographicalUtils.closePolygon(y);
-//			z = GeographicalUtils.closePolygon(z);	
-//			getErrorHandler().addWarning(new PolygonAutomaticallyClosedWarning(x,y,z));
-//		}
+		// if (!GeographicalUtils.isClosed(x, y, z)){
+		// x = GeographicalUtils.closePolygon(x);
+		// y = GeographicalUtils.closePolygon(y);
+		// z = GeographicalUtils.closePolygon(z);
+		// getErrorHandler().addWarning(new
+		// PolygonAutomaticallyClosedWarning(x,y,z));
+		// }
 		writerImplementor.startPolygon(id, coords, srs);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#endPolygon()
 	 */
 	public void endPolygon() {
 		writerImplementor.endPolygon();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#startInnerBoundary(java.lang.String, double[], double[], double[], java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writers.IGPEWriterHandler#startInnerBoundary(java.lang.
+	 * String, double[], double[], double[], java.lang.String)
 	 */
-	public void startInnerBoundary(String id, ICoordinateSequence coords, String srs) {
-//		if (!GeographicalUtils.isClosed(x, y, z)){
-//			x = GeographicalUtils.closePolygon(x);
-//			y = GeographicalUtils.closePolygon(y);
-//			z = GeographicalUtils.closePolygon(z);	
-//			getErrorHandler().addWarning(new PolygonAutomaticallyClosedWarning(x,y,z));
-//		}
+	public void startInnerBoundary(String id, ICoordinateSequence coords,
+			String srs) {
+		// if (!GeographicalUtils.isClosed(x, y, z)){
+		// x = GeographicalUtils.closePolygon(x);
+		// y = GeographicalUtils.closePolygon(y);
+		// z = GeographicalUtils.closePolygon(z);
+		// getErrorHandler().addWarning(new
+		// PolygonAutomaticallyClosedWarning(x,y,z));
+		// }
 		writerImplementor.startInnerBoundary(id, coords, srs);
 	}
-	
-/*
- * (non-Javadoc)
- * @see org.gvsig.gpe.writers.IGPEWriterHandler#endInnerBoundary()
- */
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#endInnerBoundary()
+	 */
 	public void endInnerBoundary() {
 		writerImplementor.endInnerBoundary();
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#initialize()
 	 */
 	public void initialize() {
 		writerImplementor.initialize();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#close()
 	 */
 	public void close() {
@@ -293,14 +325,17 @@ public class GPEWriterHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#startBbox(java.lang.String, double[], double[], double[], java.lang.String)
+	 * 
+	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#startBbox(java.lang.String,
+	 * double[], double[], double[], java.lang.String)
 	 */
 	public void startBbox(String id, ICoordinateSequence coords, String srs) {
 		writerImplementor.startBbox(id, coords, srs);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#endBbox()
 	 */
 	public void endBbox() {
@@ -309,191 +344,215 @@ public class GPEWriterHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#startElement(java.lang.String, java.lang.Object, java.lang.Object)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writers.IGPEWriterHandler#startElement(java.lang.String,
+	 * java.lang.Object, java.lang.Object)
 	 */
 	public void startElement(String namespace, String name, Object value) {
-//		if (isRemoved){
-//			elementStack.push(name,xsElementName,isRemoved);
-//			return;
-//		}
-//		TypedObject feature = featureStack.lastElement();
-//		//If is a simple element
-//		if (elementStack.size() == 0){
-//			//If the feature has type
-//			if (feature.getType() != null){
-//				IXSElementDeclaration xsFeature = getSchemaDocument().getElementDeclarationByName(feature.getType());
-//				//If the feature is null has been declarated inside the layer
-//				if (xsFeature == null){
-//					TypedObject layer = layerStack.lastElement();
-//					//The layer has to have a type
-//					IXSElementDeclaration xsLayer = getSchemaDocument().getElementDeclarationByName(layer.getType());
-//					xsFeature = xsLayer.getSubElementByName(feature.getType());
-//				}
-//				//If the feature has a type it will be always on the schema
-//				IXSElementDeclaration xsElement = xsFeature.getSubElementByName(name);
-//				//If the element doesn't exist on the feature
-//				if (xsElement == null){
-//					isRemoved = true;
-//					getErrorHandler().addWarning(new NotSupportedElementWarning(name,
-//							xsElementName,
-//							feature.getName(),
-//							feature.getType()));
-//				}								
-//			}
-//		}else{ //Is a complex element
-//			TypedObject parentElement = elementStack.lastElement();
-//			//TODO complex element validation
-//		}			
-//		elementStack.push(namespace, name);
-		writerImplementor.startElement(namespace, name, value);			
+		// if (isRemoved){
+		// elementStack.push(name,xsElementName,isRemoved);
+		// return;
+		// }
+		// TypedObject feature = featureStack.lastElement();
+		// //If is a simple element
+		// if (elementStack.size() == 0){
+		// //If the feature has type
+		// if (feature.getType() != null){
+		// IXSElementDeclaration xsFeature =
+		// getSchemaDocument().getElementDeclarationByName(feature.getType());
+		// //If the feature is null has been declarated inside the layer
+		// if (xsFeature == null){
+		// TypedObject layer = layerStack.lastElement();
+		// //The layer has to have a type
+		// IXSElementDeclaration xsLayer =
+		// getSchemaDocument().getElementDeclarationByName(layer.getType());
+		// xsFeature = xsLayer.getSubElementByName(feature.getType());
+		// }
+		// //If the feature has a type it will be always on the schema
+		// IXSElementDeclaration xsElement =
+		// xsFeature.getSubElementByName(name);
+		// //If the element doesn't exist on the feature
+		// if (xsElement == null){
+		// isRemoved = true;
+		// getErrorHandler().addWarning(new NotSupportedElementWarning(name,
+		// xsElementName,
+		// feature.getName(),
+		// feature.getType()));
+		// }
+		// }
+		// }else{ //Is a complex element
+		// TypedObject parentElement = elementStack.lastElement();
+		// //TODO complex element validation
+		// }
+		// elementStack.push(namespace, name);
+		writerImplementor.startElement(namespace, name, value);
 	}
 
-/*+
- * (non-Javadoc)
- * @see org.gvsig.gpe.writers.IGPEWriterHandler#endElement()
- */
+	/*
+	 * + (non-Javadoc)
+	 * 
+	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#endElement()
+	 */
 	public void endElement() {
-//		TypedObject element = elementStack.pop();
-//		if (!element.isRemoved()){
-			writerImplementor.endElement();
-//		}else{
-//			if (!layerStack.lastElement().isRemoved()){
-//				if (!featureStack.lastElement().isRemoved()){
-//					if (elementStack.size() == 0){
-//						isRemoved = false;
-//					}else{
-//						TypedObject parentElement = elementStack.lastElement();
-//						isRemoved = parentElement.isRemoved();
-//					}
-//				}
-//			}
-//		}		
+		// TypedObject element = elementStack.pop();
+		// if (!element.isRemoved()){
+		writerImplementor.endElement();
+		// }else{
+		// if (!layerStack.lastElement().isRemoved()){
+		// if (!featureStack.lastElement().isRemoved()){
+		// if (elementStack.size() == 0){
+		// isRemoved = false;
+		// }else{
+		// TypedObject parentElement = elementStack.lastElement();
+		// isRemoved = parentElement.isRemoved();
+		// }
+		// }
+		// }
+		// }
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#startLayer(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * 
+	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#startLayer(java.lang.String,
+	 * java.lang.String, java.lang.String, java.lang.String)
 	 */
-	public void startLayer(String id, String namespace, String name, String description, String srs) {
-//		if (isRemoved){
-//			layerStack.push(name,xsElementName,isRemoved);
-//			return;
-//		}
-//		//If is a root layer
-//		if (layerStack.size() == 0){
-//			//If it has a schema
-//			if (xsElementName != null){
-//				//If the schema doesn't exists the layer can't be added
-//				if (getSchemaDocument().getElementDeclarationByName(xsElementName) == null){
-//					isRemoved = true;
-//					getErrorHandler().addWarning(new NotSupportedLayerWarning(name,	
-//							xsElementName));							
-//				}
-//			}
-//		}else{//It is a child layer
-//			TypedObject parentLayer = layerStack.lastElement();
-//			//If the parent layer has a XML schema type
-//			if (parentLayer.getType() != null){
-//				IXSElementDeclaration xsParentLayer = getSchemaDocument().getElementDeclarationByName(parentLayer.getType());
-//				//If the parent layer has a schema
-//				if (xsParentLayer != null){
-//					IXSElementDeclaration xsLayer = xsParentLayer.getSubElementByName(xsElementName);
-//					//If the layer name doesn't exist on the parent schema
-//					if (xsLayer == null){
-//						isRemoved = true;
-//						getErrorHandler().addWarning(new NotSupportedLayerWarning(name,
-//								xsElementName,
-//								parentLayer.getName(),
-//								parentLayer.getType()));
-//					}
-//				}
-//			}
-//		}				
-//		layerStack.push(name,xsElementName,isRemoved);
+	public void startLayer(String id, String namespace, String name,
+			String description, String srs) {
+		// if (isRemoved){
+		// layerStack.push(name,xsElementName,isRemoved);
+		// return;
+		// }
+		// //If is a root layer
+		// if (layerStack.size() == 0){
+		// //If it has a schema
+		// if (xsElementName != null){
+		// //If the schema doesn't exists the layer can't be added
+		// if (getSchemaDocument().getElementDeclarationByName(xsElementName) ==
+		// null){
+		// isRemoved = true;
+		// getErrorHandler().addWarning(new NotSupportedLayerWarning(name,
+		// xsElementName));
+		// }
+		// }
+		// }else{//It is a child layer
+		// TypedObject parentLayer = layerStack.lastElement();
+		// //If the parent layer has a XML schema type
+		// if (parentLayer.getType() != null){
+		// IXSElementDeclaration xsParentLayer =
+		// getSchemaDocument().getElementDeclarationByName(parentLayer.getType());
+		// //If the parent layer has a schema
+		// if (xsParentLayer != null){
+		// IXSElementDeclaration xsLayer =
+		// xsParentLayer.getSubElementByName(xsElementName);
+		// //If the layer name doesn't exist on the parent schema
+		// if (xsLayer == null){
+		// isRemoved = true;
+		// getErrorHandler().addWarning(new NotSupportedLayerWarning(name,
+		// xsElementName,
+		// parentLayer.getName(),
+		// parentLayer.getType()));
+		// }
+		// }
+		// }
+		// }
+		// layerStack.push(name,xsElementName,isRemoved);
 		writerImplementor.startLayer(id, namespace, name, description, srs);
 	}
-	
-/*
- * (non-Javadoc)
- * @see org.gvsig.gpe.writers.IGPEWriterHandler#endLayer()
- */
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#endLayer()
+	 */
 	public void endLayer() {
-//		TypedObject layer = layerStack.pop();
-//		if (!layer.isRemoved()){
-			writerImplementor.endLayer();
-//		}else{
-//			if (layerStack.size() == 0){
-//				isRemoved = false;
-//			}else{
-//				TypedObject parentLayer = layerStack.lastElement();
-//				isRemoved = parentLayer.isRemoved();				
-//			}
-//		}
+		// TypedObject layer = layerStack.pop();
+		// if (!layer.isRemoved()){
+		writerImplementor.endLayer();
+		// }else{
+		// if (layerStack.size() == 0){
+		// isRemoved = false;
+		// }else{
+		// TypedObject parentLayer = layerStack.lastElement();
+		// isRemoved = parentLayer.isRemoved();
+		// }
+		// }
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#startFeature(java.lang.String, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writers.IGPEWriterHandler#startFeature(java.lang.String,
+	 * java.lang.String)
 	 */
 	public void startFeature(String id, String namespace, String name) {
-//		if (isRemoved){
-//			featureStack.push(name,xsElementName,isRemoved);
-//			return;
-//		}
-//		TypedObject layer = layerStack.lastElement();
-//		//If the parent layer has type
-//		if (layer.getType() != null){
-//			IXSElementDeclaration xsLayer = getSchemaDocument().getElementDeclarationByName(layer.getType());
-//			//If the layer schema exists
-//			if (xsLayer != null){
-//				IXSElementDeclaration xsFeature = xsLayer.getSubElementByName(xsElementName);
-//				//If the feature type doesn't exist on the layer
-//				if (xsFeature == null){
-//					isRemoved = true;
-//					getErrorHandler().addWarning(new NotSupportedFeatureWarning(name,	
-//							xsElementName,
-//							layer.getName(),
-//							layer.getType()));	
-//				}				
-//			}
-//		}else{//The layer doesn't has type
-//			//If the feature has type
-//			if (xsElementName != null){
-//				//If the feature type is not on the schema
-//				if (getSchemaDocument().getElementDeclarationByName(xsElementName) == null){
-//					isRemoved = true;
-//					getErrorHandler().addWarning(new NotSupportedFeatureWarning(name,	
-//							xsElementName));								
-//				}
-//			}
-//		}
-		//featureStack.push(name,xsElementName,isRemoved);
+		// if (isRemoved){
+		// featureStack.push(name,xsElementName,isRemoved);
+		// return;
+		// }
+		// TypedObject layer = layerStack.lastElement();
+		// //If the parent layer has type
+		// if (layer.getType() != null){
+		// IXSElementDeclaration xsLayer =
+		// getSchemaDocument().getElementDeclarationByName(layer.getType());
+		// //If the layer schema exists
+		// if (xsLayer != null){
+		// IXSElementDeclaration xsFeature =
+		// xsLayer.getSubElementByName(xsElementName);
+		// //If the feature type doesn't exist on the layer
+		// if (xsFeature == null){
+		// isRemoved = true;
+		// getErrorHandler().addWarning(new NotSupportedFeatureWarning(name,
+		// xsElementName,
+		// layer.getName(),
+		// layer.getType()));
+		// }
+		// }
+		// }else{//The layer doesn't has type
+		// //If the feature has type
+		// if (xsElementName != null){
+		// //If the feature type is not on the schema
+		// if (getSchemaDocument().getElementDeclarationByName(xsElementName) ==
+		// null){
+		// isRemoved = true;
+		// getErrorHandler().addWarning(new NotSupportedFeatureWarning(name,
+		// xsElementName));
+		// }
+		// }
+		// }
+		// featureStack.push(name,xsElementName,isRemoved);
 		writerImplementor.startFeature(id, namespace, name);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#endFeature()
 	 */
 	public void endFeature() {
-//		TypedObject feature = featureStack.pop();
-//		if (!feature.isRemoved()){
-			writerImplementor.endFeature();
-//		}else{
-//			if (!layerStack.lastElement().isRemoved()){
-//				if (featureStack.size() == 0){
-//					isRemoved = false;
-//				}else{
-//					TypedObject parentFeature = featureStack.lastElement();
-//					isRemoved = parentFeature.isRemoved();
-//				}
-//			}
-//		}		
+		// TypedObject feature = featureStack.pop();
+		// if (!feature.isRemoved()){
+		writerImplementor.endFeature();
+		// }else{
+		// if (!layerStack.lastElement().isRemoved()){
+		// if (featureStack.size() == 0){
+		// isRemoved = false;
+		// }else{
+		// TypedObject parentFeature = featureStack.lastElement();
+		// isRemoved = parentFeature.isRemoved();
+		// }
+		// }
+		// }
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#startMultiPoint(java.lang.String, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writers.IGPEWriterHandler#startMultiPoint(java.lang.String,
+	 * java.lang.String)
 	 */
 	public void startMultiPoint(String id, String srs) {
 		writerImplementor.startMultiPoint(id, srs);
@@ -501,6 +560,7 @@ public class GPEWriterHandler {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#endMuliPoint()
 	 */
 	public void endMultiPoint() {
@@ -509,7 +569,10 @@ public class GPEWriterHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#startMultiLineString(java.lang.String, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writers.IGPEWriterHandler#startMultiLineString(java.lang
+	 * .String, java.lang.String)
 	 */
 	public void startMultiLineString(String id, String srs) {
 		writerImplementor.startMultiLineString(id, srs);
@@ -517,6 +580,7 @@ public class GPEWriterHandler {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#endMultiLineString()
 	 */
 	public void endMultiLineString() {
@@ -525,7 +589,10 @@ public class GPEWriterHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#startMultiPolygon(java.lang.String, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writers.IGPEWriterHandler#startMultiPolygon(java.lang.String
+	 * , java.lang.String)
 	 */
 	public void startMultiPolygon(String id, String srs) {
 		writerImplementor.startMultiPolygon(id, srs);
@@ -533,6 +600,7 @@ public class GPEWriterHandler {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#endMultiPolygon()
 	 */
 	public void endMultiPolygon() {
@@ -541,7 +609,10 @@ public class GPEWriterHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#startMultiGeometry(java.lang.String, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writers.IGPEWriterHandler#startMultiGeometry(java.lang.
+	 * String, java.lang.String)
 	 */
 	public void startMultiGeometry(String id, String srs) {
 		writerImplementor.startMultiGeometry(id, srs);
@@ -549,6 +620,7 @@ public class GPEWriterHandler {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#endMultiGeometry()
 	 */
 	public void endMultiGeometry() {
@@ -563,9 +635,10 @@ public class GPEWriterHandler {
 	}
 
 	/**
-	 * @param schemaDocument the schemaDocument to set
+	 * @param schemaDocument
+	 *            the schemaDocument to set
 	 */
 	public void setSchemaDocument(IXSSchemaDocument schemaDocument) {
 		writerImplementor.setSchemaDocument(schemaDocument);
-	}	
+	}
 }

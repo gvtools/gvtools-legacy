@@ -90,16 +90,14 @@ public class GeoProcessingDissolvePanel2 extends AbstractGeoprocessGridbagPanel
 
 	JPanel sumarizationAttrsPanel;
 
-
 	/**
 	 * Constructor
-	 *
+	 * 
 	 * @param layers
 	 */
 	public GeoProcessingDissolvePanel2(FLayers layers) {
 		super(layers, PluginServices.getText(null,
-				"Disolver._Introduccion_de_datos")
-				+ ":");
+				"Disolver._Introduccion_de_datos") + ":");
 	}
 
 	protected void addSpecificDesign() {
@@ -109,8 +107,7 @@ public class GeoProcessingDissolvePanel2 extends AbstractGeoprocessGridbagPanel
 		Insets insets = new Insets(5, 5, 5, 5);
 
 		String dissolveFieldText = PluginServices.getText(this,
-				"Campo_para_disolver")
-				+ ":";
+				"Campo_para_disolver") + ":";
 		dissolveFieldComboBox = getDissolveFieldJComboBox();
 		addComponent(dissolveFieldText, dissolveFieldComboBox,
 				GridBagConstraints.BOTH, insets);
@@ -120,7 +117,7 @@ public class GeoProcessingDissolvePanel2 extends AbstractGeoprocessGridbagPanel
 				"Solo_disolver_adyacentes"));
 		addComponent(dissolveAdjacentsCheck, GridBagConstraints.BOTH, insets);
 
-		sumarizationAttrsPanel =  getSumarizeAttributesPanel();
+		sumarizationAttrsPanel = getSumarizeAttributesPanel();
 		addComponent(sumarizationAttrsPanel, GridBagConstraints.HORIZONTAL,
 				insets);
 
@@ -136,14 +133,14 @@ public class GeoProcessingDissolvePanel2 extends AbstractGeoprocessGridbagPanel
 	}
 
 	public Map getFieldFunctionMap() {
-		return ((NumericFieldFunctionsControl)sumarizationAttrsPanel).
-		getFieldFunctionMap();
+		return ((NumericFieldFunctionsControl) sumarizationAttrsPanel)
+				.getFieldFunctionMap();
 	}
 
-
-	//TODO Llamar a NumericFieldFunctionControl
+	// TODO Llamar a NumericFieldFunctionControl
 	public void openSumarizeFunction() {
-		((NumericFieldFunctionsControl)sumarizationAttrsPanel).openSumarizeFunction();
+		((NumericFieldFunctionsControl) sumarizationAttrsPanel)
+				.openSumarizeFunction();
 
 	}
 
@@ -163,8 +160,8 @@ public class GeoProcessingDissolvePanel2 extends AbstractGeoprocessGridbagPanel
 		DefaultComboBoxModel defaultModel = new DefaultComboBoxModel(
 				getFieldNames());
 		dissolveFieldComboBox.setModel(defaultModel);
-		((NumericFieldFunctionsControl)sumarizationAttrsPanel).
-			setLayer(getInputLayer());
+		((NumericFieldFunctionsControl) sumarizationAttrsPanel)
+				.setLayer(getInputLayer());
 
 	}
 
@@ -196,17 +193,16 @@ public class GeoProcessingDissolvePanel2 extends AbstractGeoprocessGridbagPanel
 		return solution;
 	}
 
-
 	public String[] getFieldsToSummarize() {
-		return ((NumericFieldFunctionsControl)sumarizationAttrsPanel).
-										getFieldsToSummarize();
+		return ((NumericFieldFunctionsControl) sumarizationAttrsPanel)
+				.getFieldsToSummarize();
 
 	}
 
 	public SummarizationFunction[] getSumarizationFunctinFor(
 			String numericFieldName) {
-		return ((NumericFieldFunctionsControl)sumarizationAttrsPanel).
-					getSumarizationFunctinFor(numericFieldName);
+		return ((NumericFieldFunctionsControl) sumarizationAttrsPanel)
+				.getSumarizationFunctinFor(numericFieldName);
 	}
 
 	private JComboBox getDissolveFieldJComboBox() {
@@ -238,7 +234,8 @@ public class GeoProcessingDissolvePanel2 extends AbstractGeoprocessGridbagPanel
 	private JPanel getSumarizeAttributesPanel() {
 		if (sumarizationAttrsPanel == null) {
 
-			sumarizationAttrsPanel = new NumericFieldFunctionsControl(getInputLayer());
+			sumarizationAttrsPanel = new NumericFieldFunctionsControl(
+					getInputLayer());
 		}
 		return sumarizationAttrsPanel;
 	}

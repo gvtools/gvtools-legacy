@@ -50,16 +50,15 @@ import com.iver.cit.gvsig.project.documents.layout.fframes.FFrameView;
 import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
-
-
 /**
  * Extensión preparada para controlar las opciones que se pueden realizar sobre
  * una vista añadida en el Layout.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FFrameViewExtension extends Extension {
-	//private static Logger logger = Logger.getLogger(FFrameViewExtension.class.getName());
+	// private static Logger logger =
+	// Logger.getLogger(FFrameViewExtension.class.getName());
 	private Layout layout = null;
 
 	/**
@@ -69,23 +68,21 @@ public class FFrameViewExtension extends Extension {
 		registerIcons();
 	}
 
-	private void registerIcons(){
+	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"view-zoom-in",
-				this.getClass().getClassLoader().getResource("images/ZoomIn.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/ZoomIn.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"view-zoom-out",
-				this.getClass().getClassLoader().getResource("images/ZoomOut.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/ZoomOut.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"view-zoom-map-contents",
-				this.getClass().getClassLoader().getResource("images/MapContents.png")
-			);
-		PluginServices.getIconTheme().registerDefault(
-				"view-pan",
-				this.getClass().getClassLoader().getResource("images/Pan.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/MapContents.png"));
+		PluginServices.getIconTheme().registerDefault("view-pan",
+				this.getClass().getClassLoader().getResource("images/Pan.png"));
 	}
 
 	/**
@@ -114,14 +111,15 @@ public class FFrameViewExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
-		Layout l = (Layout)PluginServices.getMDIManager().getActiveWindow();
+		Layout l = (Layout) PluginServices.getMDIManager().getActiveWindow();
 		IFFrame[] fframes = l.getLayoutContext().getFFrameSelected();
 		if (!l.getLayoutContext().isEditable())
 			return false;
 		for (int i = 0; i < fframes.length; i++) {
-			if (fframes[i] instanceof FFrameView && !(fframes[i] instanceof FFrameOverView)) {
-				if (((FFrameView)fframes[i]).getView()!=null)
-				return true;
+			if (fframes[i] instanceof FFrameView
+					&& !(fframes[i] instanceof FFrameOverView)) {
+				if (((FFrameView) fframes[i]).getView() != null)
+					return true;
 			}
 		}
 
@@ -139,9 +137,10 @@ public class FFrameViewExtension extends Extension {
 		}
 
 		if (f instanceof Layout) {
-		//	Layout layout = (Layout) f;
+			// Layout layout = (Layout) f;
 
-			return true; //layout.m_Display.getMapControl().getMapContext().getLayers().layerCount() > 0;
+			return true; // layout.m_Display.getMapControl().getMapContext().getLayers().layerCount()
+							// > 0;
 		} else {
 			return false;
 		}

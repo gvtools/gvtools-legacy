@@ -44,14 +44,15 @@ import java.awt.geom.Rectangle2D;
 
 /**
  * Polígono 2D.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FPolygon2D extends FPolyline2D {
 	/**
 	 * Crea un nuevo Polygon2D.
-	 *
-	 * @param gpx GeneralPathX.
+	 * 
+	 * @param gpx
+	 *            GeneralPathX.
 	 */
 	public FPolygon2D(GeneralPathX gpx) {
 		super(gpx);
@@ -66,16 +67,19 @@ public class FPolygon2D extends FPolyline2D {
 
 	/**
 	 * Clona FPolygon2D.
-	 *
+	 * 
 	 * @return FShape clonado.
- 	 */
+	 */
 	public FShape cloneFShape() {
 		return new FPolygon2D((GeneralPathX) gp.clone());
 	}
-    /* (non-Javadoc)
-     * @see java.awt.Shape#intersects(java.awt.geom.Rectangle2D)
-     */
-    public boolean intersects(Rectangle2D r) {
-        return gp.intersects(r);
-    }
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.awt.Shape#intersects(java.awt.geom.Rectangle2D)
+	 */
+	public boolean intersects(Rectangle2D r) {
+		return gp.intersects(r);
+	}
 }

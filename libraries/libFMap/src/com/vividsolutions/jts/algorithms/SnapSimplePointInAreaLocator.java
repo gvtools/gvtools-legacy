@@ -42,23 +42,23 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: SnapSimplePointInAreaLocator.java 24730 2008-11-04 12:07:00Z vcaballero $
-* $Log$
-* Revision 1.2  2007-03-06 17:08:55  caballero
-* Exceptions
-*
-* Revision 1.1  2006/12/04 19:29:31  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/10/17 18:25:53  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/10/09 19:10:56  azabala
-* First version in CVS
-*
-*
-*/
+ *
+ * $Id: SnapSimplePointInAreaLocator.java 24730 2008-11-04 12:07:00Z vcaballero $
+ * $Log$
+ * Revision 1.2  2007-03-06 17:08:55  caballero
+ * Exceptions
+ *
+ * Revision 1.1  2006/12/04 19:29:31  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/10/17 18:25:53  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/10/09 19:10:56  azabala
+ * First version in CVS
+ *
+ *
+ */
 package com.vividsolutions.jts.algorithms;
 
 import java.util.Iterator;
@@ -73,48 +73,53 @@ import com.vividsolutions.jts.geom.Location;
 import com.vividsolutions.jts.geom.Polygon;
 
 public class SnapSimplePointInAreaLocator extends SimplePointInAreaLocator {
-	  public SnapSimplePointInAreaLocator(Geometry geom) {
-		  super(geom);
-		  // TODO Auto-generated constructor stub
-		 }
-	public static int locate(Coordinate p, Geometry geom, double snapTolerance)
-	  {
-	    if (geom.isEmpty()) return Location.EXTERIOR;
+	public SnapSimplePointInAreaLocator(Geometry geom) {
+		super(geom);
+		// TODO Auto-generated constructor stub
+	}
 
-	    if (containsPoint(p, geom, snapTolerance))
-	      return Location.INTERIOR;
-	    return Location.EXTERIOR;
-	  }
+	public static int locate(Coordinate p, Geometry geom, double snapTolerance) {
+		if (geom.isEmpty())
+			return Location.EXTERIOR;
 
-	  private static boolean containsPoint(Coordinate p, Geometry geom, double snapTolerance)
-	  {
-	    if (geom instanceof Polygon) {
-	      return containsPointInPolygon(p, (Polygon) geom);
-	    }
-	    else if (geom instanceof GeometryCollection) {
-	      Iterator geomi = new GeometryCollectionIterator((GeometryCollection) geom);
-	      while (geomi.hasNext()) {
-	        Geometry g2 = (Geometry) geomi.next();
-	        if (g2 != geom)
-	          if (containsPoint(p, g2, snapTolerance))
-	            return true;
-	      }
-	    }
-	    return false;
-	  }
+		if (containsPoint(p, geom, snapTolerance))
+			return Location.INTERIOR;
+		return Location.EXTERIOR;
+	}
 
-	  public static boolean containsPointInPolygon(Coordinate p, Polygon poly, double snapTolerance)
-	  {
-	    if (poly.isEmpty()) return false;
-	    LinearRing shell = (LinearRing) poly.getExteriorRing();
-	    if (! SnapCGAlgorithms.isPointInRing(p, shell.getCoordinates(), snapTolerance)) return false;
-	    // now test if the point lies in or on the holes
-	    for (int i = 0; i < poly.getNumInteriorRing(); i++) {
-	      LinearRing hole = (LinearRing) poly.getInteriorRingN(i);
-	      if (SnapCGAlgorithms.isPointInRing(p, hole.getCoordinates(), snapTolerance)) return false;
-	    }
-	    return true;
-	  }
+	private static boolean containsPoint(Coordinate p, Geometry geom,
+			double snapTolerance) {
+		if (geom instanceof Polygon) {
+			return containsPointInPolygon(p, (Polygon) geom);
+		} else if (geom instanceof GeometryCollection) {
+			Iterator geomi = new GeometryCollectionIterator(
+					(GeometryCollection) geom);
+			while (geomi.hasNext()) {
+				Geometry g2 = (Geometry) geomi.next();
+				if (g2 != geom)
+					if (containsPoint(p, g2, snapTolerance))
+						return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean containsPointInPolygon(Coordinate p, Polygon poly,
+			double snapTolerance) {
+		if (poly.isEmpty())
+			return false;
+		LinearRing shell = (LinearRing) poly.getExteriorRing();
+		if (!SnapCGAlgorithms.isPointInRing(p, shell.getCoordinates(),
+				snapTolerance))
+			return false;
+		// now test if the point lies in or on the holes
+		for (int i = 0; i < poly.getNumInteriorRing(); i++) {
+			LinearRing hole = (LinearRing) poly.getInteriorRingN(i);
+			if (SnapCGAlgorithms.isPointInRing(p, hole.getCoordinates(),
+					snapTolerance))
+				return false;
+		}
+		return true;
+	}
 
 }
-

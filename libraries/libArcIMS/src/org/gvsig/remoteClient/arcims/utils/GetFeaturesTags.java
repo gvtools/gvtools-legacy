@@ -46,30 +46,30 @@
  */
 package org.gvsig.remoteClient.arcims.utils;
 
-
 /**
- *
+ * 
  * Class containing a description for TAGS defined in the GET_FEATURES request
  * returned from a ArcIMS Server
+ * 
  * @author jsanz
  */
 public class GetFeaturesTags {
-    public final static int MAX_ROWS_PER_REQUEST = 1000;
-    public final static int MIN_ROWS_PER_REQUEST = 700;
-    public final static int ACCURACY_RATIO = 1;
-    public final static String FIELD = "FIELD";
-    public final static String FIELDS = "FIELDS";
-    public final static String FEATURES = "FEATURES";
-    public final static String FEATURE = "FEATURE";
-    public final static String FEATURECOUNT = "FEATURECOUNT";
-    public final static String POLYGON = "POLYGON";
-    public final static String RING = "RING";
-    public final static String COORDS = "COORDS";
-    public final static String POLYLINE = "POLYLINE";
-    public final static String PATH = "PATH";
-    public final static String MULTIPOINT = "MULTIPOINT";
-    public final static String NAME = "name";
-    public final static String VALUE = "value";
-    public final static String COUNT = "count";
-    public final static String HASMORE = "hasmore";
+	public final static int MAX_ROWS_PER_REQUEST = 1000;
+	public final static int MIN_ROWS_PER_REQUEST = 700;
+	public final static int ACCURACY_RATIO = 1;
+	public final static String FIELD = "FIELD";
+	public final static String FIELDS = "FIELDS";
+	public final static String FEATURES = "FEATURES";
+	public final static String FEATURE = "FEATURE";
+	public final static String FEATURECOUNT = "FEATURECOUNT";
+	public final static String POLYGON = "POLYGON";
+	public final static String RING = "RING";
+	public final static String COORDS = "COORDS";
+	public final static String POLYLINE = "POLYLINE";
+	public final static String PATH = "PATH";
+	public final static String MULTIPOINT = "MULTIPOINT";
+	public final static String NAME = "name";
+	public final static String VALUE = "value";
+	public final static String COUNT = "count";
+	public final static String HASMORE = "hasmore";
 }

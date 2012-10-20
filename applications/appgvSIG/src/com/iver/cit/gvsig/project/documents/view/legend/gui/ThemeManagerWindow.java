@@ -64,27 +64,27 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrDefault;
 
 /**
- *700
+ * 700
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  * @version 01-feb-2007
  */
-public final class ThemeManagerWindow extends JPanel implements IWindow, ActionListener {
+public final class ThemeManagerWindow extends JPanel implements IWindow,
+		ActionListener {
 	private static final long serialVersionUID = 4650656815369149211L;
 	private static int selectedTabIndex = 0;
-	private static ArrayList<Class<? extends AbstractThemeManagerPage>> pages =
-			new ArrayList<Class<? extends AbstractThemeManagerPage>>();
+	private static ArrayList<Class<? extends AbstractThemeManagerPage>> pages = new ArrayList<Class<? extends AbstractThemeManagerPage>>();
 	private FLayer layer;
-	//private Legend legend; // Le asignaremos la leyenda del primer tema activo.
-	private JTabbedPane tabs = new JTabbedPane();  //  @jve:decl-index=0:
+	// private Legend legend; // Le asignaremos la leyenda del primer tema
+	// activo.
+	private JTabbedPane tabs = new JTabbedPane(); // @jve:decl-index=0:
 	private JPanel panelButtons;
-	private static Hashtable<Class<? extends AbstractThemeManagerPage>, ArrayList<Class<? extends FLyrDefault>>> s =
-		new Hashtable<Class<? extends AbstractThemeManagerPage>, ArrayList<Class<? extends FLyrDefault>>>();
-
+	private static Hashtable<Class<? extends AbstractThemeManagerPage>, ArrayList<Class<? extends FLyrDefault>>> s = new Hashtable<Class<? extends AbstractThemeManagerPage>, ArrayList<Class<? extends FLyrDefault>>>();
 
 	/**
 	 * Sobrecarga del constructor. Este se utiliza cuando se llama a este
 	 * diálogo desde la barra de comandos.
-	 *
+	 * 
 	 */
 	public ThemeManagerWindow(FLayer l) {
 		this.layer = l;
@@ -95,32 +95,34 @@ public final class ThemeManagerWindow extends JPanel implements IWindow, ActionL
 		initialize();
 	}
 
-	private  void initialize() {
+	private void initialize() {
 		for (int i = 0; i < pages.size(); i++) {
 			Class<? extends AbstractThemeManagerPage> pageClass = pages.get(i);
 			AbstractThemeManagerPage tab;
 			try {
 				tab = (AbstractThemeManagerPage) pageClass.newInstance();
-//				if (tab.isSuitableFor(layer)) {
-				if (s.get(tab.getClass()).contains(layer.getClass())){
+				// if (tab.isSuitableFor(layer)) {
+				if (s.get(tab.getClass()).contains(layer.getClass())) {
 					tab.setModel(layer);
 					tabs.addTab(tab.getName(), tab);
 				}
 			} catch (InstantiationException e) {
-				NotificationManager.addError("Trying to instantiate an interface" +
-						" or abstract class + "+pageClass.getName(), e);
+				NotificationManager
+						.addError(
+								"Trying to instantiate an interface"
+										+ " or abstract class + "
+										+ pageClass.getName(), e);
 			} catch (IllegalAccessException e) {
-				NotificationManager.addError("IllegalAccessException: does " +
-						pageClass.getName()	+ " class have an anonymous" +
-						" constructor?", e);
+				NotificationManager.addError("IllegalAccessException: does "
+						+ pageClass.getName() + " class have an anonymous"
+						+ " constructor?", e);
 			}
 		}
 
-		if (tabs.getComponentCount()>selectedTabIndex) {
+		if (tabs.getComponentCount() > selectedTabIndex) {
 			tabs.setSelectedIndex(selectedTabIndex);
 		}
-		tabs.setPreferredSize(new java.awt.Dimension(640,370));
-
+		tabs.setPreferredSize(new java.awt.Dimension(640, 370));
 
 		setLayout(new BorderLayout());
 		add(tabs, java.awt.BorderLayout.CENTER);
@@ -128,9 +130,9 @@ public final class ThemeManagerWindow extends JPanel implements IWindow, ActionL
 		// The listener must be added after the tabs are added to the window
 		tabs.addChangeListener(new ChangeListener() {
 			public void stateChanged(javax.swing.event.ChangeEvent e) {
-				//remember the visible tab
+				// remember the visible tab
 				selectedTabIndex = tabs.getSelectedIndex();
-				if (selectedTabIndex<0)
+				if (selectedTabIndex < 0)
 					selectedTabIndex = 0;
 			};
 		});
@@ -140,21 +142,23 @@ public final class ThemeManagerWindow extends JPanel implements IWindow, ActionL
 
 	private JPanel getPanelButtons() {
 		if (panelButtons == null) {
-			panelButtons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5,5));
+			panelButtons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 
-			JButton btnAceptar = new JButton(PluginServices.getText(this,"Aceptar"));
+			JButton btnAceptar = new JButton(PluginServices.getText(this,
+					"Aceptar"));
 			btnAceptar.setActionCommand("OK");
 			btnAceptar.addActionListener(this);
 
-			JButton btnApply = new JButton(PluginServices.getText(this,"Apply"));
+			JButton btnApply = new JButton(
+					PluginServices.getText(this, "Apply"));
 			btnApply.setActionCommand("APPLY");
 			btnApply.addActionListener(this);
 
-
-			JButton btnCancelar = new JButton(PluginServices.getText(this,"Cerrar"));
+			JButton btnCancelar = new JButton(PluginServices.getText(this,
+					"Cerrar"));
 			btnCancelar.setActionCommand("CANCEL");
 			btnCancelar.addActionListener(this);
-			panelButtons.setPreferredSize(new java.awt.Dimension(493,33));
+			panelButtons.setPreferredSize(new java.awt.Dimension(493, 33));
 			panelButtons.add(btnCancelar);
 			panelButtons.add(btnApply);
 			panelButtons.add(btnAceptar);
@@ -167,35 +171,41 @@ public final class ThemeManagerWindow extends JPanel implements IWindow, ActionL
 		String actionCommand = e.getActionCommand();
 
 		if (actionCommand == "OK") {
-			/* Causes all the tabs in the ThemeManagerWindow to perform THEIR apply-action
-			 * then fires the LegendChanged event that causes the view to be refreshed.
-			 * After that, it closes the window.
+			/*
+			 * Causes all the tabs in the ThemeManagerWindow to perform THEIR
+			 * apply-action then fires the LegendChanged event that causes the
+			 * view to be refreshed. After that, it closes the window.
 			 */
 			this.applyChanges();
 			close();
 		} else if (actionCommand == "CANCEL") {
-			/* Causes all the tabs in the ThemeManagerWindow to perform THEIR cancel-action
-			 * then closes the window.
+			/*
+			 * Causes all the tabs in the ThemeManagerWindow to perform THEIR
+			 * cancel-action then closes the window.
 			 */
 			for (int i = 0; i < tabs.getTabCount(); i++) {
-				AbstractThemeManagerPage tab = (AbstractThemeManagerPage) tabs.getComponentAt(i);
+				AbstractThemeManagerPage tab = (AbstractThemeManagerPage) tabs
+						.getComponentAt(i);
 				tab.cancelAction();
 			}
 			close();
 		} else if (actionCommand == "APPLY") {
-			/* Causes all the tabs in the ThemeManagerWindow to perform
-			 * ITS specific apply-action.
+			/*
+			 * Causes all the tabs in the ThemeManagerWindow to perform ITS
+			 * specific apply-action.
 			 */
 			this.applyChanges();
-		} else {}
+		} else {
+		}
 		// Lots of temporary objects were create.
 		// let's try some memory cleanup
 		System.gc();
 	}
 
-	private void applyChanges(){
+	private void applyChanges() {
 		for (int i = 0; i < tabs.getTabCount(); i++) {
-			AbstractThemeManagerPage tab = (AbstractThemeManagerPage) tabs.getComponentAt(i);
+			AbstractThemeManagerPage tab = (AbstractThemeManagerPage) tabs
+					.getComponentAt(i);
 			tab.applyAction();
 		}
 		layer.getMapContext().callLegendChanged();
@@ -207,22 +217,27 @@ public final class ThemeManagerWindow extends JPanel implements IWindow, ActionL
 	}
 
 	public WindowInfo getWindowInfo() {
-		WindowInfo viewInfo = new WindowInfo(WindowInfo.MODELESSDIALOG|WindowInfo.RESIZABLE);
+		WindowInfo viewInfo = new WindowInfo(WindowInfo.MODELESSDIALOG
+				| WindowInfo.RESIZABLE);
 		viewInfo.setWidth(getWidth());
 		viewInfo.setHeight(getHeight());
-		viewInfo.setTitle(PluginServices.getText(this,"propiedades_de_la_capa"));
+		viewInfo.setTitle(PluginServices
+				.getText(this, "propiedades_de_la_capa"));
 		return viewInfo;
 	}
 
-	public static void addPage(Class<? extends AbstractThemeManagerPage> abstractThemeManagerPageClass) {
+	public static void addPage(
+			Class<? extends AbstractThemeManagerPage> abstractThemeManagerPageClass) {
 		pages.add(abstractThemeManagerPageClass);
 	}
 
-	public static void setTabEnabledForLayer(Class<? extends AbstractThemeManagerPage> abstractThemeManagerPageClass, Class<? extends FLyrDefault> fLayerClazz, boolean enabled) {
+	public static void setTabEnabledForLayer(
+			Class<? extends AbstractThemeManagerPage> abstractThemeManagerPageClass,
+			Class<? extends FLyrDefault> fLayerClazz, boolean enabled) {
 		ArrayList<Class<? extends FLyrDefault>> enabledLayers;
 		if (enabled == true) {
 			if (!s.containsKey(abstractThemeManagerPageClass)) {
-				enabledLayers = new ArrayList<Class<? extends FLyrDefault>> ();
+				enabledLayers = new ArrayList<Class<? extends FLyrDefault>>();
 				enabledLayers.add(fLayerClazz);
 				s.put(abstractThemeManagerPageClass, enabledLayers);
 			} else {
@@ -230,8 +245,9 @@ public final class ThemeManagerWindow extends JPanel implements IWindow, ActionL
 				enabledLayers.add(fLayerClazz);
 			}
 		} else {
-			if (!s.containsKey(abstractThemeManagerPageClass)) return;
-				enabledLayers = s.get(abstractThemeManagerPageClass);
+			if (!s.containsKey(abstractThemeManagerPageClass))
+				return;
+			enabledLayers = s.get(abstractThemeManagerPageClass);
 			enabledLayers.remove(fLayerClazz);
 		}
 	}
@@ -239,4 +255,4 @@ public final class ThemeManagerWindow extends JPanel implements IWindow, ActionL
 	public Object getWindowProfile() {
 		return WindowInfo.PROPERTIES_PROFILE;
 	};
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

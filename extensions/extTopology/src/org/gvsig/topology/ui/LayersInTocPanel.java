@@ -66,8 +66,8 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.LayersIterator;
 
 /**
- * Panel which shows toc layers with a check box to select or unselect 
- * many of them.
+ * Panel which shows toc layers with a check box to select or unselect many of
+ * them.
  * 
  * @author Alvaro Zabala
  * 
@@ -80,10 +80,10 @@ public class LayersInTocPanel extends BoxLayoutPanel {
 	 * Root layer of the toc
 	 */
 	FLayers rootOfToc;
-	
+
 	/**
-	 * Contains all layers that must be checked in the control
-	 * (because they have been selected yet)
+	 * Contains all layers that must be checked in the control (because they
+	 * have been selected yet)
 	 */
 	List<FLayer> alreadySelectedLyrs;
 
@@ -105,8 +105,8 @@ public class LayersInTocPanel extends BoxLayoutPanel {
 		this.lyr_checkbox = new HashMap<FLayer, JCheckBox>();
 		initialize();
 	}
-	
-	public LayersInTocPanel(FLayers rootOfToc){
+
+	public LayersInTocPanel(FLayers rootOfToc) {
 		this(rootOfToc, null);
 	}
 
@@ -131,20 +131,20 @@ public class LayersInTocPanel extends BoxLayoutPanel {
 				if (visitedLayer instanceof FLyrVect) {
 					FLyrVect lyrVect = (FLyrVect) visitedLayer;
 					JCheckBox checkBoxLyr = new JCheckBox(lyrVect.getName());
-					if(alreadySelectedLyrs != null){
-						if(alreadySelectedLyrs.contains(lyrVect)){
+					if (alreadySelectedLyrs != null) {
+						if (alreadySelectedLyrs.contains(lyrVect)) {
 							checkBoxLyr.setSelected(true);
 						}
 					}
-					
-					//if a layer is already contained in a topology
-					//it cant be selected
-					if(lyrVect.getParentLayer() instanceof Topology){
+
+					// if a layer is already contained in a topology
+					// it cant be selected
+					if (lyrVect.getParentLayer() instanceof Topology) {
 						checkBoxLyr.setEnabled(false);
-						checkBoxLyr.setToolTipText(PluginServices.getText(this, "capa_ya_pertenece_a_topologia"));
+						checkBoxLyr.setToolTipText(PluginServices.getText(this,
+								"capa_ya_pertenece_a_topologia"));
 					}
-					
-					
+
 					lyr_checkbox.put(lyrVect, checkBoxLyr);
 					addRow(new JComponent[] { checkBoxLyr }, 350, 20);
 				}// if
@@ -154,6 +154,7 @@ public class LayersInTocPanel extends BoxLayoutPanel {
 
 	/**
 	 * Returns the layes which checkbox has been checked
+	 * 
 	 * @return
 	 */
 	public List<FLyrVect> getSelectedLyrs() {

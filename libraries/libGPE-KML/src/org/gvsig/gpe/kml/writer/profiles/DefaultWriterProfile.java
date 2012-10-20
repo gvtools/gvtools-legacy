@@ -73,23 +73,28 @@ public class DefaultWriterProfile implements IWriterProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getNameWriter()
 	 */
-	public NameWriter getNameWriter(){
+	public NameWriter getNameWriter() {
 		return null;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getDescriptionWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getDescriptionWriter()
 	 */
-	public DescriptionWriter getDescriptionWriter(){
+	public DescriptionWriter getDescriptionWriter() {
 		return null;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getCoordinatesWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getCoordinatesWriter()
 	 */
 	public CoordinatesWriter getCoordinatesWriter() {
 		return null;
@@ -97,6 +102,7 @@ public class DefaultWriterProfile implements IWriterProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getDocumentWriter()
 	 */
 	public DocumentWriter getDocumentWriter() {
@@ -105,6 +111,7 @@ public class DefaultWriterProfile implements IWriterProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getElementWriter()
 	 */
 	public ElementWriter getElementWriter() {
@@ -113,6 +120,7 @@ public class DefaultWriterProfile implements IWriterProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getFeatureWriter()
 	 */
 	public FeatureWriter getFeatureWriter() {
@@ -121,6 +129,7 @@ public class DefaultWriterProfile implements IWriterProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getFolderWriter()
 	 */
 	public FolderWriter getFolderWriter() {
@@ -129,6 +138,7 @@ public class DefaultWriterProfile implements IWriterProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getGeometryWriter()
 	 */
 	public GeometriesWriter getGeometryWriter() {
@@ -137,7 +147,10 @@ public class DefaultWriterProfile implements IWriterProfile {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getInnerBoundaryIsWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getInnerBoundaryIsWriter
+	 * ()
 	 */
 	public InnerBoundaryIsWriter getInnerBoundaryIsWriter() {
 		return null;
@@ -145,7 +158,9 @@ public class DefaultWriterProfile implements IWriterProfile {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getLatLonAltBoxWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getLatLonAltBoxWriter()
 	 */
 	public LatLonAltBoxWriter getLatLonAltBoxWriter() {
 		return null;
@@ -153,7 +168,10 @@ public class DefaultWriterProfile implements IWriterProfile {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getLineStringTypeWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getLineStringTypeWriter
+	 * ()
 	 */
 	public LineStringWriter getLineStringTypeWriter() {
 		return null;
@@ -161,7 +179,9 @@ public class DefaultWriterProfile implements IWriterProfile {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getLinearRingWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getLinearRingWriter()
 	 */
 	public LinearRingWriter getLinearRingWriter() {
 		return null;
@@ -169,6 +189,7 @@ public class DefaultWriterProfile implements IWriterProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getMetadataWriter()
 	 */
 	public MetadataWriter getMetadataWriter() {
@@ -177,7 +198,9 @@ public class DefaultWriterProfile implements IWriterProfile {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getMultiGeometryWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getMultiGeometryWriter()
 	 */
 	public MultiGeometryWriter getMultiGeometryWriter() {
 		return null;
@@ -185,7 +208,10 @@ public class DefaultWriterProfile implements IWriterProfile {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getOuterBoundaryIsWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getOuterBoundaryIsWriter
+	 * ()
 	 */
 	public OuterBoundaryIsWriter getOuterBoundaryIsWriter() {
 		return null;
@@ -193,7 +219,9 @@ public class DefaultWriterProfile implements IWriterProfile {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getPlaceMarkWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getPlaceMarkWriter()
 	 */
 	public PlaceMarkWriter getPlaceMarkWriter() {
 		return null;
@@ -201,7 +229,9 @@ public class DefaultWriterProfile implements IWriterProfile {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getPointTypeWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getPointTypeWriter()
 	 */
 	public PointWriter getPointTypeWriter() {
 		return null;
@@ -209,14 +239,17 @@ public class DefaultWriterProfile implements IWriterProfile {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getPolygonTypeWriter()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getPolygonTypeWriter()
 	 */
 	public PolygonWriter getPolygonTypeWriter() {
 		return null;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.kml.writer.profiles.IWriterProfile#getRegionWriter()
 	 */
 	public RegionWriter getRegionWriter() {

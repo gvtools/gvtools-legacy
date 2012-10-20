@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.gazetteer.adl.protocols;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
@@ -53,6 +53,7 @@ import es.gva.cit.gazetteer.querys.FeatureType;
 
 /**
  * This class implemets an ADL thesaurus client
+ * 
  * @author Jorge Piera Llodra (piera_jor@gva.es)
  * @see http://middleware.alexandria.ucsb.edu:8080/thes/FTT/index.html
  */
@@ -60,33 +61,36 @@ public class ADLThesaurus {
 	private URL url;
 	private FeatureType[] features;
 
-	public  ADLThesaurus(URL url) {        
+	public ADLThesaurus(URL url) {
 		setUrl(url);
 		getNarrower();
-	} 
+	}
 
 	/**
 	 * It implements the getNarrower ADL thesaurus operation
 	 * 
 	 */
-	private void getNarrower() {        
+	private void getNarrower() {
 		URL urlNarrower;
 		try {
-			urlNarrower = new URL ("http", getUrl().getHost(), getUrl().getPort(),getUrl().getFile() + "/get-narrower");
+			urlNarrower = new URL("http", getUrl().getHost(), getUrl()
+					.getPort(), getUrl().getFile() + "/get-narrower");
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return;
 		}
-		Collection nodes = new HTTPGetProtocol().doQuery(urlNarrower, getNarrowerParams(), 0);
-		parseGetNarrowAnswer((XMLNode)nodes.toArray()[0]);       
-	} 
+		Collection nodes = new HTTPGetProtocol().doQuery(urlNarrower,
+				getNarrowerParams(), 0);
+		parseGetNarrowAnswer((XMLNode) nodes.toArray()[0]);
+	}
 
 	/**
 	 * It returns the name-value pair for the getNarrower opertaion
+	 * 
 	 * @return Name-value pair
 	 */
-	private NameValuePair[] getNarrowerParams() {        
+	private NameValuePair[] getNarrowerParams() {
 		String message = "";
 		System.out.println(message);
 		NameValuePair nvp1 = new NameValuePair("starting-term", "");
@@ -94,72 +98,83 @@ public class ADLThesaurus {
 		NameValuePair nvp3 = new NameValuePair("format", "term");
 
 		return new NameValuePair[] { nvp1, nvp2, nvp3 };
-	} 
+	}
 
 	/**
 	 * It parses the getNarrow answer into a Feature arrray
-	 * @param node 
+	 * 
+	 * @param node
 	 */
-	private void parseGetNarrowAnswer(XMLNode node) {        
-		XMLNode[] rootNodes = XMLTree.searchMultipleNode(node,"hierarchy->node->node");
+	private void parseGetNarrowAnswer(XMLNode node) {
+		XMLNode[] rootNodes = XMLTree.searchMultipleNode(node,
+				"hierarchy->node->node");
 		FeatureType[] features = new FeatureType[rootNodes.length];
-		for (int i=0 ; i<rootNodes.length ; i++){
-			FeatureType thesaurus = new FeatureType(XMLTree.searchNodeValue(rootNodes[i],"term"));
-			thesaurus.setFeatures(parseRecursiveFeatures(rootNodes[i],thesaurus));
+		for (int i = 0; i < rootNodes.length; i++) {
+			FeatureType thesaurus = new FeatureType(XMLTree.searchNodeValue(
+					rootNodes[i], "term"));
+			thesaurus.setFeatures(parseRecursiveFeatures(rootNodes[i],
+					thesaurus));
 			thesaurus.setTitle(thesaurus.getName());
 			features[i] = (thesaurus);
 		}
 		setFeatures(features);
-	} 
+	}
 
 	/**
 	 * It is used to parse a feature using recursivity.
-	 * @return 
-	 * @param node Feature tree
-	 * @param thesaurus Feature to add the child Features
+	 * 
+	 * @return
+	 * @param node
+	 *            Feature tree
+	 * @param thesaurus
+	 *            Feature to add the child Features
 	 */
-	private FeatureType[] parseRecursiveFeatures(XMLNode node, FeatureType thesaurus) {        
-		XMLNode[] rootNodes = XMLTree.searchMultipleNode(node,"node");
+	private FeatureType[] parseRecursiveFeatures(XMLNode node,
+			FeatureType thesaurus) {
+		XMLNode[] rootNodes = XMLTree.searchMultipleNode(node, "node");
 
-		if ((rootNodes == null) || (rootNodes.length == 0)){
+		if ((rootNodes == null) || (rootNodes.length == 0)) {
 			return null;
 		}
 
 		FeatureType[] features = new FeatureType[rootNodes.length];
-		for (int i=0 ; i<rootNodes.length ; i++){
-			FeatureType f = new FeatureType(XMLTree.searchNodeValue(rootNodes[i],"term"));
+		for (int i = 0; i < rootNodes.length; i++) {
+			FeatureType f = new FeatureType(XMLTree.searchNodeValue(
+					rootNodes[i], "term"));
 			f.setTitle(f.getName());
-			f.setFeatures(parseRecursiveFeatures(rootNodes[i],f));
+			f.setFeatures(parseRecursiveFeatures(rootNodes[i], f));
 			features[i] = f;
-		}        
+		}
 		return features;
-	} 
+	}
 
 	/**
 	 * @return Returns the url.
 	 */
-	public URL getUrl() {        
+	public URL getUrl() {
 		return url;
-	} 
+	}
 
 	/**
-	 * @param url The url to set.
+	 * @param url
+	 *            The url to set.
 	 */
-	public void setUrl(URL url) {        
+	public void setUrl(URL url) {
 		this.url = url;
-	} 
+	}
 
 	/**
 	 * @return Returns the features.
 	 */
-	public FeatureType[] getFeatures() {        
+	public FeatureType[] getFeatures() {
 		return features;
-	} 
+	}
 
 	/**
-	 * @param features The features to set.
+	 * @param features
+	 *            The features to set.
 	 */
-	public void setFeatures(FeatureType[] features) {        
+	public void setFeatures(FeatureType[] features) {
 		this.features = features;
-	} 
+	}
 }

@@ -13,18 +13,18 @@ public class AllTests {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.gvsig.remoteClient");
-		//$JUnit-BEGIN$
+		// $JUnit-BEGIN$
 		suite.addTestSuite(Test.class);
-		
-		//commented until there is a way to simulate the needed servers.
-		//suite.addTestSuite(URLRetrieveTest.class);
+
+		// commented until there is a way to simulate the needed servers.
+		// suite.addTestSuite(URLRetrieveTest.class);
 		suite.addTestSuite(WCSProtocolHandler_1_0_0Test.class);
 		suite.addTestSuite(WFSProtocolHandlerTest1_0_0.class);
 		suite.addTestSuite(WFSProtocolHandlerTest1_1_0.class);
 		suite.addTestSuite(WMSProtocolHandler_1_1_1Test.class);
 		suite.addTestSuite(WMSStatusTest.class);
-		
-		//$JUnit-END$
+
+		// $JUnit-END$
 		return suite;
 	}
 

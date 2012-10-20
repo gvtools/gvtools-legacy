@@ -53,21 +53,21 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class LayerExportException  extends GPELayerException{
+public class LayerExportException extends GPELayerException {
 	private static final long serialVersionUID = -4880913793373200416L;
 
 	public LayerExportException(FLayer layer, Throwable exception) {
 		super(layer, exception);
-		initialize();		
+		initialize();
 	}
-	
+
 	/**
 	 * Initialize the properties
 	 */
 	private void initialize() {
 		messageKey = "gpe_gvsig_export_not_extent_warning";
-		formatString = "Impossible to retrieve the layer extent for " +
-				"%(layerName).";
+		formatString = "Impossible to retrieve the layer extent for "
+				+ "%(layerName).";
 		code = serialVersionUID;
-	}	
+	}
 }

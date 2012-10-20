@@ -76,56 +76,60 @@ public class GMLEditionUtils {
 
 	/**
 	 * It creates a GML to insert a new feature
+	 * 
 	 * @param row
 	 * @param fields
 	 * @param crs
 	 * @return
 	 * @throws IOException
-	 * @throws GPEWriterHandlerCreationException 
+	 * @throws GPEWriterHandlerCreationException
 	 */
 	public static String getInsertQuery(IRowEdited row,
 			FieldDescription[] fields, CoordinateReferenceSystem crs,
 			WFSStatus status, WFSClient wfsClient) throws IOException,
 			WriterHandlerCreationException {
 		OutputStream os = new ByteArrayOutputStream();
-		GPEWriterHandler writer = new WFSTWriterHandler(new WFSTWriterHandlerImplementor("WFST", "WFSTWriter",os),os);
+		GPEWriterHandler writer = new WFSTWriterHandler(
+				new WFSTWriterHandlerImplementor("WFST", "WFSTWriter", os), os);
 		writer.setOutputStream(os);
-		writer.startFeature(row.getAttribute(row.getAttributes().length-1).toString(),
-				status.getFeatureName(),
-				status.getNamespacePrefix());
-		//Write the geometry
+		writer.startFeature(row.getAttribute(row.getAttributes().length - 1)
+				.toString(), status.getFeatureName(), status
+				.getNamespacePrefix());
+		// Write the geometry
 		XMLElement geometry = getGeometry(status, wfsClient);
 		ExportGeometry exportGeometry = new ExportGeometry(writer);
 		exportGeometry.setGeometry(geometry);
 		exportGeometry.setSourceCrs(getCRSView());
 		exportGeometry.setTargetCrs(getCRSLayer(status, wfsClient));
-		//If the geometry is an element
-		if (geometry != null){
-			writer.startElement(status.getNamespacePrefix() + ":" + geometry.getName(),
-					"",
+		// If the geometry is an element
+		if (geometry != null) {
+			writer.startElement(
+					status.getNamespacePrefix() + ":" + geometry.getName(), "",
 					null);
-			exportGeometry.writeGeometry(((IFeature)row.getLinkedRow()).getGeometry());
+			exportGeometry.writeGeometry(((IFeature) row.getLinkedRow())
+					.getGeometry());
 
 			writer.endElement();
-		}else{
-			exportGeometry.writeGeometry(((IFeature)row.getLinkedRow()).getGeometry());
-		}		
-		//Write the attributes
-		for (int i=0 ; i<row.getAttributes().length - 1 ; i++){
-			if ((geometry != null) && (geometry.getName().compareTo(fields[i].getFieldName())==0)){
+		} else {
+			exportGeometry.writeGeometry(((IFeature) row.getLinkedRow())
+					.getGeometry());
+		}
+		// Write the attributes
+		for (int i = 0; i < row.getAttributes().length - 1; i++) {
+			if ((geometry != null)
+					&& (geometry.getName().compareTo(fields[i].getFieldName()) == 0)) {
 				continue;
 			}
-			if (fields[i].getFieldName().compareTo("the geom")==0){
+			if (fields[i].getFieldName().compareTo("the geom") == 0) {
 				continue;
 			}
-			if (fields[i].getFieldName().equals("objectidglds")){
+			if (fields[i].getFieldName().equals("objectidglds")) {
 				continue;
 			}
 			String value = row.getAttributes()[i].toString();
-			if (value.compareTo("") > 0){
-				writer.startElement(status.getNamespacePrefix() + ":" + fields[i].getFieldName(),
-						value,
-						null);
+			if (value.compareTo("") > 0) {
+				writer.startElement(status.getNamespacePrefix() + ":"
+						+ fields[i].getFieldName(), value, null);
 				writer.endElement();
 			}
 		}
@@ -134,19 +138,18 @@ public class GMLEditionUtils {
 	}
 
 	/**
-	 * @return the View CRS. It is necessary because the
-	 * updated coordinates are on this CRS. This method will
-	 * be removed.
+	 * @return the View CRS. It is necessary because the updated coordinates are
+	 *         on this CRS. This method will be removed.
 	 */
-	private static CoordinateReferenceSystem getCRSView(){
-		BaseView view = (BaseView)PluginServices.getMDIManager().getActiveWindow();
+	private static CoordinateReferenceSystem getCRSView() {
+		BaseView view = (BaseView) PluginServices.getMDIManager()
+				.getActiveWindow();
 		return view.getCrs();
 	}
 
 	/**
-	 * @return the Layer CRS. It is necessary because the
-	 * updated coordinates has to be converted to this
-	 * CRS. This method will be removed.
+	 * @return the Layer CRS. It is necessary because the updated coordinates
+	 *         has to be converted to this CRS. This method will be removed.
 	 */
 	private static CoordinateReferenceSystem getCRSLayer(WFSStatus status,
 			WFSClient wfsClient) {
@@ -162,19 +165,20 @@ public class GMLEditionUtils {
 
 	/**
 	 * Gets the geometric property of a feature
+	 * 
 	 * @param status
 	 * @param wfsClient
 	 * @return
 	 */
-	public static XMLElement getGeometry(WFSStatus status, WFSClient wfsClient){
+	public static XMLElement getGeometry(WFSStatus status, WFSClient wfsClient) {
 		Hashtable features = wfsClient.getFeatures();
-		WFSFeature feature = (WFSFeature)features.get(status.getFeatureName());
+		WFSFeature feature = (WFSFeature) features.get(status.getFeatureName());
 		Vector fields = feature.getFields();
-		if (fields.size() > 0){
-			fields = ((XMLElement)fields.get(0)).getChildren();
-			for (int i=0 ; i<fields.size() ; i++){
-				XMLElement element = (XMLElement)fields.get(i);
-				if (isGeometry(element)){
+		if (fields.size() > 0) {
+			fields = ((XMLElement) fields.get(0)).getChildren();
+			for (int i = 0; i < fields.size(); i++) {
+				XMLElement element = (XMLElement) fields.get(i);
+				if (isGeometry(element)) {
 					return element;
 				}
 			}
@@ -184,18 +188,17 @@ public class GMLEditionUtils {
 
 	/**
 	 * @param element
-	 * @return
-	 * If a element has a geometry
+	 * @return If a element has a geometry
 	 */
-	private static boolean isGeometry(XMLElement element){
-		if (element.getEntityType() instanceof GMLGeometryType){
+	private static boolean isGeometry(XMLElement element) {
+		if (element.getEntityType() instanceof GMLGeometryType) {
 			return true;
 		}
 		Vector fields = element.getChildren();
 		boolean isGeometry = false;
-		for (int i=0 ; i<fields.size() ; i++){
-			XMLElement childElement = (XMLElement)fields.get(i);
-			if (element.getEntityType() instanceof GMLGeometryType){
+		for (int i = 0; i < fields.size(); i++) {
+			XMLElement childElement = (XMLElement) fields.get(i);
+			if (element.getEntityType() instanceof GMLGeometryType) {
 				isGeometry = true;
 			}
 		}
@@ -204,6 +207,7 @@ public class GMLEditionUtils {
 
 	/**
 	 * Creates an Update WFST Query
+	 * 
 	 * @param row
 	 * @param fields
 	 * @param object
@@ -216,33 +220,38 @@ public class GMLEditionUtils {
 			FieldDescription[] fields, Object object, WFSStatus status,
 			WFSClient remoteServicesClient) {
 		StringBuffer query = new StringBuffer();
-		//Update the geometry
+		// Update the geometry
 		XMLElement geometry = getGeometry(status, remoteServicesClient);
-		if (geometry != null){
+		if (geometry != null) {
 			OutputStream os = new ByteArrayOutputStream();
-			GPEWriterHandler writer = new WFSTWriterHandler(new WFSTWriterHandlerImplementor("WFST", "WFSTWriter",os),os);
+			GPEWriterHandler writer = new WFSTWriterHandler(
+					new WFSTWriterHandlerImplementor("WFST", "WFSTWriter", os),
+					os);
 			writer.setOutputStream(os);
 			ExportGeometry exportGeometry = new ExportGeometry(writer);
 			exportGeometry.setGeometry(geometry);
 			exportGeometry.setSourceCrs(getCRSView());
-			exportGeometry.setTargetCrs(getCRSLayer(status, remoteServicesClient));
-			exportGeometry.writeGeometry(((IFeature)row.getLinkedRow()).getGeometry());
+			exportGeometry.setTargetCrs(getCRSLayer(status,
+					remoteServicesClient));
+			exportGeometry.writeGeometry(((IFeature) row.getLinkedRow())
+					.getGeometry());
 			query.append(createProperty(status, geometry.getName(),
 					os.toString()));
-		}		
-		//Update the fields	
-		for (int i=0 ; i<row.getAttributes().length - 1 ; i++){
-			if ((geometry != null) && (geometry.getName().compareTo(fields[i].getFieldName())==0)){
+		}
+		// Update the fields
+		for (int i = 0; i < row.getAttributes().length - 1; i++) {
+			if ((geometry != null)
+					&& (geometry.getName().compareTo(fields[i].getFieldName()) == 0)) {
 				continue;
 			}
-			if (fields[i].getFieldName().compareTo("the geom")==0){
+			if (fields[i].getFieldName().compareTo("the geom") == 0) {
 				continue;
 			}
-			if (fields[i].getFieldName().equals("objectidglds")){
+			if (fields[i].getFieldName().equals("objectidglds")) {
 				continue;
 			}
 			String value = row.getAttributes()[i].toString();
-			if (value.compareTo("")>0){
+			if (value.compareTo("") > 0) {
 				query.append(createProperty(status, fields[i].getFieldName(),
 						value));
 			}
@@ -252,15 +261,18 @@ public class GMLEditionUtils {
 
 	/**
 	 * Creates a property for the WFS-T update request
+	 * 
 	 * @param status
 	 * @param name
 	 * @param value
 	 * @return
 	 */
-	private static String createProperty(WFSStatus status, String name, String value){
+	private static String createProperty(WFSStatus status, String name,
+			String value) {
 		StringBuffer query = new StringBuffer();
 		query.append("<wfs:Property>");
-		query.append("<wfs:Name>" + status.getNamespacePrefix() + ":" + name + "</wfs:Name>");
+		query.append("<wfs:Name>" + status.getNamespacePrefix() + ":" + name
+				+ "</wfs:Name>");
 		query.append("<wfs:Value>" + value + "</wfs:Value>");
 		query.append("</wfs:Property>");
 		return query.toString();

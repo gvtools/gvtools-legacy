@@ -51,8 +51,6 @@ import javax.swing.filechooser.FileFilter;
 import org.gvsig.exceptions.BaseException;
 import org.gvsig.graph.core.IGraph;
 import org.gvsig.graph.core.Network;
-import org.gvsig.graph.core.NetworkUtils;
-import org.gvsig.graph.core.loaders.NetworkLoader;
 import org.gvsig.graph.core.loaders.NetworkRedLoader;
 import org.gvsig.gui.beans.swing.JFileChooser;
 
@@ -61,16 +59,13 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.plugins.Extension;
 import com.iver.andami.ui.mdiManager.IWindow;
-import com.iver.cit.gvsig.ProjectExtension;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
-import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.fmap.layers.SingleLayerIterator;
-import com.iver.cit.gvsig.project.documents.table.ProjectTable;
 import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.IView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
@@ -80,8 +75,8 @@ public class LoadNetworkExtension extends Extension {
 	public void initialize() {
 		PluginServices.getIconTheme().registerDefault(
 				"network",
-				this.getClass().getClassLoader().getResource("images/network.png")
-			);		
+				this.getClass().getClassLoader()
+						.getResource("images/network.png"));
 
 	}
 
@@ -89,28 +84,29 @@ public class LoadNetworkExtension extends Extension {
 		IView view = (View) PluginServices.getMDIManager().getActiveWindow();
 		MapControl mapControl = view.getMapControl();
 		MapContext map = mapControl.getMapContext();
-		SingleLayerIterator lyrIterator = new SingleLayerIterator(map
-				.getLayers());
+		SingleLayerIterator lyrIterator = new SingleLayerIterator(
+				map.getLayers());
 		while (lyrIterator.hasNext()) {
 			FLayer lyr = lyrIterator.next();
-			if ((lyr.isActive()) && (lyr instanceof FLyrVect))
-			{
+			if ((lyr.isActive()) && (lyr instanceof FLyrVect)) {
 				FLyrVect lyrVect = (FLyrVect) lyr;
 				int shapeType;
 				try {
 					shapeType = lyrVect.getShapeType();
-					if ((shapeType & FShape.LINE) == FShape.LINE) 
-//						if (shapeType == FShape.LINE)
+					if ((shapeType & FShape.LINE) == FShape.LINE)
+					// if (shapeType == FShape.LINE)
 					{
-//						if (actionCommand.equalsIgnoreCase("LOAD_NET")) {
-//							File netFile = NetworkUtils.getNetworkFile(lyrVect);
-//							loadNetwork(lyrVect, netFile);
-//							return;
-//						}
-						if (actionCommand.equalsIgnoreCase("LOAD_NET_FROM_FILE")) {
+						// if (actionCommand.equalsIgnoreCase("LOAD_NET")) {
+						// File netFile = NetworkUtils.getNetworkFile(lyrVect);
+						// loadNetwork(lyrVect, netFile);
+						// return;
+						// }
+						if (actionCommand
+								.equalsIgnoreCase("LOAD_NET_FROM_FILE")) {
 							String curDir = System.getProperty("user.dir");
 
-							JFileChooser fileChooser = new JFileChooser("NET_FILES", new File(curDir));
+							JFileChooser fileChooser = new JFileChooser(
+									"NET_FILES", new File(curDir));
 							fileChooser.setFileFilter(new FileFilter() {
 
 								@Override
@@ -125,19 +121,22 @@ public class LoadNetworkExtension extends Extension {
 
 								@Override
 								public String getDescription() {
-									return (PluginServices.getText(this, "Ficheros_NET"));
+									return (PluginServices.getText(this,
+											"Ficheros_NET"));
 								}
-								
+
 							});
-							int res = fileChooser.showOpenDialog((Component) PluginServices.getMainFrame());
-							if (res==JFileChooser.APPROVE_OPTION) {
-								File netFile =fileChooser.getSelectedFile();
+							int res = fileChooser
+									.showOpenDialog((Component) PluginServices
+											.getMainFrame());
+							if (res == JFileChooser.APPROVE_OPTION) {
+								File netFile = fileChooser.getSelectedFile();
 								loadNetwork(lyrVect, netFile);
 							}
-							
+
 							return;
 						}
-						
+
 					}
 				} catch (BaseException e) {
 					e.printStackTrace();
@@ -147,61 +146,60 @@ public class LoadNetworkExtension extends Extension {
 			}
 		}
 
-
 	}
 
-	private void loadNetwork(FLyrVect lyrVect, File netFile) throws BaseException {
+	private void loadNetwork(FLyrVect lyrVect, File netFile)
+			throws BaseException {
 		// Aquí mostrar un diálgo para seleccionar las tablas
 		// de nodos y edges
 		// y hacer un mapping (si es necesario) entre los
 		// nombres de campos
 
-		// TODO: MOSTRAR UN CUADRO DE DIÁLOGO CON UN COMBOBOX PARA QUE ESCOJA EL CAMPO DE NOMBRE DE CALLE.
+		// TODO: MOSTRAR UN CUADRO DE DIÁLOGO CON UN COMBOBOX PARA QUE ESCOJA EL
+		// CAMPO DE NOMBRE DE CALLE.
 		ArrayList aux = new ArrayList();
-		FieldDescription[] fields = lyrVect.getRecordset().getFieldsDescription();
-		for (int i=0; i<fields.length; i++)
-		{
-			if (fields[i].getFieldType() == Types.VARCHAR)
-			{
+		FieldDescription[] fields = lyrVect.getRecordset()
+				.getFieldsDescription();
+		for (int i = 0; i < fields.length; i++) {
+			if (fields[i].getFieldType() == Types.VARCHAR) {
 				aux.add(fields[i].getFieldName());
 			}
 		}
-		String fieldStreetName = (String) JOptionPane.showInputDialog((Component) PluginServices.getMainFrame(),
+		String fieldStreetName = (String) JOptionPane.showInputDialog(
+				(Component) PluginServices.getMainFrame(),
 				PluginServices.getText(this, "select_street_route_field_name"),
-				"gvSIG",
-				JOptionPane.QUESTION_MESSAGE, 
-				null,
-				(Object[]) aux.toArray(new String[0]), 
-				"NOMBRE");
-		
+				"gvSIG", JOptionPane.QUESTION_MESSAGE, null,
+				(Object[]) aux.toArray(new String[0]), "NOMBRE");
+
 		if (fieldStreetName == null)
 			return;
 
-		
 		NetworkRedLoader netLoader = new NetworkRedLoader();
-		
+
 		netLoader.setNetFile(netFile);
 
 		IGraph g = netLoader.loadNetwork();
-		
-		System.out.println("Num nodos=" + g.numVertices() + " numEdges = " + g.numEdges());
+
+		System.out.println("Num nodos=" + g.numVertices() + " numEdges = "
+				+ g.numEdges());
 
 		Network net = new Network();
 		// lyrVect.createSpatialIndex();
 		net.setGraph(g);
 		net.setLayer(lyrVect);
-		
+
 		// FJP: Workarround to avoid using SpatialIndex with reprojected layers
 		// MIRAR SETLAYER, AHÍ ESTÁ ESTE CÓDIGO
-//	    if (lyrVect.getCoordTrans() != null) {
-//	    	if (!lyrVect.getProjection().getAbrev().equals(lyrVect.getMapContext().getViewPort().getProjection().getAbrev()))
-//	    		lyrVect.setISpatialIndex(null);
-//		}
-		
-		// fin 
-		
-//		ShortestPathExtension.solver.setNetwork(net);
-//		ShortestPathExtension.solver.setFielStreetName(fieldStreetName);
+		// if (lyrVect.getCoordTrans() != null) {
+		// if
+		// (!lyrVect.getProjection().getAbrev().equals(lyrVect.getMapContext().getViewPort().getProjection().getAbrev()))
+		// lyrVect.setISpatialIndex(null);
+		// }
+
+		// fin
+
+		// ShortestPathExtension.solver.setNetwork(net);
+		// ShortestPathExtension.solver.setFielStreetName(fieldStreetName);
 
 		lyrVect.setProperty("network", net);
 		lyrVect.setProperty("network_fieldStreetName", fieldStreetName);
@@ -235,25 +233,24 @@ public class LoadNetworkExtension extends Extension {
 			MapContext mapa = model.getMapContext();
 			FLayer[] activeLayers = mapa.getLayers().getActives();
 			if (activeLayers.length > 0)
-				if (activeLayers[0] instanceof FLyrVect){
+				if (activeLayers[0] instanceof FLyrVect) {
 					FLyrVect lyrVect = (FLyrVect) activeLayers[0];
 					if (!lyrVect.isAvailable())
 						return false;
-					int shapeType ;
+					int shapeType;
 					try {
 						shapeType = lyrVect.getShapeType();
-//							if (shapeType == FShape.LINE)
-						if ((shapeType & FShape.LINE) == FShape.LINE) 
+						// if (shapeType == FShape.LINE)
+						if ((shapeType & FShape.LINE) == FShape.LINE)
 							return true;
 					} catch (ReadDriverException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				}	
+				}
 		}
 		return false;
 
 	}
-
 
 }

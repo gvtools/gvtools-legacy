@@ -28,12 +28,14 @@ import org.gvsig.gui.beans.TestUI;
 import org.gvsig.gui.beans.controls.combobutton.ComboButton;
 
 public class TestComboButton implements ActionListener {
-	
+
 	public TestComboButton() {
 		TestUI frame = new TestUI("TestComboButton");
 		ComboButton cb = new ComboButton();
-		ImageIcon icon1 = new ImageIcon(getClass().getResource("images/backward.png"));
-		ImageIcon icon2 = new ImageIcon(getClass().getResource("images/forward.png"));
+		ImageIcon icon1 = new ImageIcon(getClass().getResource(
+				"images/backward.png"));
+		ImageIcon icon2 = new ImageIcon(getClass().getResource(
+				"images/forward.png"));
 		JButton b1 = new JButton("Action 1", icon1);
 		b1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -59,12 +61,10 @@ public class TestComboButton implements ActionListener {
 		frame.setSize(80, 80);
 		frame.setVisible(true);
 	}
-	
 
 	public static void main(String[] args) {
 		new TestComboButton();
 	}
-
 
 	public void actionPerformed(ActionEvent e) {
 		System.out.println("actionPerformed() : " + e.getActionCommand());

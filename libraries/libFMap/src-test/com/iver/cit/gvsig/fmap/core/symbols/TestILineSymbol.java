@@ -54,9 +54,9 @@ import com.iver.cit.gvsig.fmap.core.FPolyline2D;
 import com.iver.cit.gvsig.fmap.core.GeneralPathX;
 
 /**
- * Integration test to test that Line symbols always draw in the same
- * place respecting size constraints.
- *
+ * Integration test to test that Line symbols always draw in the same place
+ * respecting size constraints.
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class TestILineSymbol extends TestCase {
@@ -66,25 +66,14 @@ public class TestILineSymbol extends TestCase {
 
 	{
 		GeneralPathX gp = new GeneralPathX();
-		gp.moveTo(0, sz.height / 2 );
-		gp.lineTo(sz.width, sz.height /2 );
+		gp.moveTo(0, sz.height / 2);
+		gp.lineTo(sz.width, sz.height / 2);
 
 		centerL = new FPolyline2D(gp);
 	}
-	private static final double sizes[] = new double[] {
-		300,
-		250,
-		225,
-		200,
-		100,
-		50,
-		30,
-		15,
-		5,
-		3,
-		2,
-		1,
-		// smaller sizes don't make any sense
+	private static final double sizes[] = new double[] { 300, 250, 225, 200,
+			100, 50, 30, 15, 5, 3, 2, 1,
+	// smaller sizes don't make any sense
 	};
 
 	private static final float INNER_TOLERANCE = TestIMarkerSymbol.INNER_TOLERANCE;
@@ -105,75 +94,90 @@ public class TestILineSymbol extends TestCase {
 
 			}
 		}
-		this.symbols = (ILineSymbol[]) symbols.toArray(new ILineSymbol[symbols.size()]);
+		this.symbols = (ILineSymbol[]) symbols.toArray(new ILineSymbol[symbols
+				.size()]);
 	}
 
 	public void testDrawingSize() {
 		for (int i = 0; i < symbols.length; i++) {
 			for (int j = 0; j < sizes.length; j++) {
 				// new blank buffered image
-				BufferedImage bi = new BufferedImage(sz.width, sz.height, BufferedImage.TYPE_INT_ARGB);
+				BufferedImage bi = new BufferedImage(sz.width, sz.height,
+						BufferedImage.TYPE_INT_ARGB);
 
-				// the graphics for the image, so we can draw onto the buffered image
+				// the graphics for the image, so we can draw onto the buffered
+				// image
 				Graphics2D g = bi.createGraphics();
 
 				ILineSymbol testSymbol = symbols[i];
 				testSymbol.setLineColor(Color.YELLOW);
 				testSymbol.setLineWidth(sizes[j]);
-				String name =  TestISymbol.getNameForSymbol(testSymbol);
+				String name = TestISymbol.getNameForSymbol(testSymbol);
 
-				Point2D upperP1 = new Point2D.Double(0, centerL.getBounds().getY() - sizes[j]*0.5);
-				Point2D upperP2 = new Point2D.Double(centerL.getBounds().getWidth(), centerL.getBounds().getY() - sizes[j]*0.5);
+				Point2D upperP1 = new Point2D.Double(0, centerL.getBounds()
+						.getY() - sizes[j] * 0.5);
+				Point2D upperP2 = new Point2D.Double(centerL.getBounds()
+						.getWidth(), centerL.getBounds().getY() - sizes[j]
+						* 0.5);
 				GeneralPathX gpUp = new GeneralPathX();
 				gpUp.moveTo(upperP1.getX(), upperP1.getY());
 				gpUp.lineTo(upperP2.getX(), upperP2.getY());
 
-
 				GeneralPathX gpDown = new GeneralPathX();
-				Point2D lowerP1 = new Point2D.Double(0, centerL.getBounds().getY() + sizes[j]*0.5);
-				Point2D lowerP2 = new Point2D.Double(centerL.getBounds().getWidth(), centerL.getBounds().getY() + sizes[j]*0.5);
+				Point2D lowerP1 = new Point2D.Double(0, centerL.getBounds()
+						.getY() + sizes[j] * 0.5);
+				Point2D lowerP2 = new Point2D.Double(centerL.getBounds()
+						.getWidth(), centerL.getBounds().getY() + sizes[j]
+						* 0.5);
 				gpDown.moveTo(lowerP1.getX(), lowerP1.getY());
 				gpDown.lineTo(lowerP2.getX(), lowerP2.getY());
 
-
 				testSymbol.draw(g, new AffineTransform(), centerL, null);
 
-				/// per a borrar
-//				g.setStroke(new BasicStroke());
-//				g.setColor(Color.RED);
-//
-//				g.draw(gpUp);
-//
-//				g.setColor(Color.BLUE);
-//				g.draw(gpDown);
-//
-//				try {
-//
-//					File dstDir = new File (System.getProperty("java.io.tmpdir")+"/prova-imatges/");
-//					if (!dstDir.exists()) dstDir.mkdir();
-//				ImageIO.write(bi, "png",
-//						new File(dstDir.getAbsoluteFile()+File.separator+
-//									name+"_size_"+sizes[j]
-//									                    +".png"));
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//					fail();
-//				}
-				/// fi per a borrar
-				assertFalse("fails sizing line, too big ("+name+", "+sizes[j]+"px)", isOutsideRect(bi, upperP1, lowerP1, OUTTER_TOLERANCE ));
-				assertTrue("fails sizing line, too small ("+name+", "+sizes[j]+"px) \n" +
-						"\t - forgot to enable ANTIALIASING?", fitsInsideRect(bi, upperP1, lowerP1, INNER_TOLERANCE));
+				// / per a borrar
+				// g.setStroke(new BasicStroke());
+				// g.setColor(Color.RED);
+				//
+				// g.draw(gpUp);
+				//
+				// g.setColor(Color.BLUE);
+				// g.draw(gpDown);
+				//
+				// try {
+				//
+				// File dstDir = new File
+				// (System.getProperty("java.io.tmpdir")+"/prova-imatges/");
+				// if (!dstDir.exists()) dstDir.mkdir();
+				// ImageIO.write(bi, "png",
+				// new File(dstDir.getAbsoluteFile()+File.separator+
+				// name+"_size_"+sizes[j]
+				// +".png"));
+				// } catch (IOException e) {
+				// e.printStackTrace();
+				// fail();
+				// }
+				// / fi per a borrar
+				assertFalse("fails sizing line, too big (" + name + ", "
+						+ sizes[j] + "px)",
+						isOutsideRect(bi, upperP1, lowerP1, OUTTER_TOLERANCE));
+				assertTrue("fails sizing line, too small (" + name + ", "
+						+ sizes[j] + "px) \n"
+						+ "\t - forgot to enable ANTIALIASING?",
+						fitsInsideRect(bi, upperP1, lowerP1, INNER_TOLERANCE));
 
 			}
 		}
 	}
 
-	private boolean isOutsideRect(BufferedImage bi, Point2D upper, Point2D lower, float outterTolerance) {
+	private boolean isOutsideRect(BufferedImage bi, Point2D upper,
+			Point2D lower, float outterTolerance) {
 		for (int i = 0; i < bi.getWidth(); i++) {
 			for (int j = 0; j < bi.getHeight(); j++) {
-				if (j<upper.getY()-outterTolerance && j>lower.getY()+outterTolerance)
-					if (bi.getRGB(i,j) != 0) {
-						System.out.println("too big In pixel ("+i+", "+j+")");
+				if (j < upper.getY() - outterTolerance
+						&& j > lower.getY() + outterTolerance)
+					if (bi.getRGB(i, j) != 0) {
+						System.out.println("too big In pixel (" + i + ", " + j
+								+ ")");
 						return true;
 					}
 
@@ -182,12 +186,15 @@ public class TestILineSymbol extends TestCase {
 		return false;
 	}
 
-	private boolean fitsInsideRect(BufferedImage bi,Point2D upper, Point2D lower , float innerTolerance) {
+	private boolean fitsInsideRect(BufferedImage bi, Point2D upper,
+			Point2D lower, float innerTolerance) {
 		for (int i = 0; i < bi.getWidth(); i++) {
 			for (int j = 0; j < bi.getHeight(); j++) {
-				if (j<upper.getY()+innerTolerance && j>lower.getY()-innerTolerance)
-					if (bi.getRGB(i,j) == 0) {
-						System.out.println("does not fit big In pixel ("+i+", "+j+")");
+				if (j < upper.getY() + innerTolerance
+						&& j > lower.getY() - innerTolerance)
+					if (bi.getRGB(i, j) == 0) {
+						System.out.println("does not fit big In pixel (" + i
+								+ ", " + j + ")");
 						return false;
 					}
 

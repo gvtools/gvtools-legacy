@@ -58,49 +58,51 @@ import com.iver.cit.gvsig.fmap.core.ShapeFactory;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class GPEMultiGeometry extends GPEGeometry{
+public class GPEMultiGeometry extends GPEGeometry {
 	protected IGeometry geometry = null;
 	protected ArrayList geometries = null;
 	protected Rectangle2D bounds = null;
-	
-	public  GPEMultiGeometry(String id, String srs) {
+
+	public GPEMultiGeometry(String id, String srs) {
 		super(id, null, srs);
-		geometries = new ArrayList();		
+		geometries = new ArrayList();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.gpe.model.GPEGeometry#getGeometry()
 	 */
 	public IGeometry getIGeometry() {
-		if (geometry == null){
+		if (geometry == null) {
 			geometry = ShapeFactory.createPolygon2D(createGeneralXPath());
 		}
 		return geometry;
 	}
-	
+
 	/**
 	 * Create the general X path
+	 * 
 	 * @return
 	 */
-	protected GeneralPathX createGeneralXPath(){
+	protected GeneralPathX createGeneralXPath() {
 		GeneralPathX gp = new GeneralPathX();
-		for (int i=0 ; i<geometries.size() ; i++){
-			IGeometry geom =((GPEGeometry)geometries.get(i)).getIGeometry();
-			FShape shape = (FShape)geom.getInternalShape();
+		for (int i = 0; i < geometries.size(); i++) {
+			IGeometry geom = ((GPEGeometry) geometries.get(i)).getIGeometry();
+			FShape shape = (FShape) geom.getInternalShape();
 			PathIterator it = shape.getPathIterator(null);
 			int theType;
-			double[] theData = new double[6];			
-			while (!it.isDone()){
+			double[] theData = new double[6];
+			while (!it.isDone()) {
 				theType = it.currentSegment(theData);
 				switch (theType) {
 				case PathIterator.SEG_MOVETO:
-					gp.moveTo(theData[0], theData[1]);			
+					gp.moveTo(theData[0], theData[1]);
 					break;
 				case PathIterator.SEG_LINETO:
-					gp.lineTo(theData[0], theData[1]);		
+					gp.lineTo(theData[0], theData[1]);
 					break;
-				case PathIterator.SEG_CLOSE:	
+				case PathIterator.SEG_CLOSE:
 					break;
 				}
 				it.next();
@@ -108,42 +110,45 @@ public class GPEMultiGeometry extends GPEGeometry{
 		}
 		return gp;
 	}
-	
+
 	/**
 	 * Gets one geometry
+	 * 
 	 * @param i
-	 * Geometry position
-	 * @return
-	 * A Geometry
+	 *            Geometry position
+	 * @return A Geometry
 	 */
-	public GPEGeometry getGeometryAt(int i){
-		return (GPEGeometry)geometries.get(i);
+	public GPEGeometry getGeometryAt(int i) {
+		return (GPEGeometry) geometries.get(i);
 	}
-	
+
 	/**
 	 * @return the number of geometries
 	 */
-	public int getGeometriesSize(){
+	public int getGeometriesSize() {
 		return geometries.size();
 	}
-	
+
 	/**
 	 * Adds a new geometry
+	 * 
 	 * @param geometry
-	 * The geometry to add
+	 *            The geometry to add
 	 */
-	public void addGeometry(GPEGeometry geometry){
-		if (bounds == null){
+	public void addGeometry(GPEGeometry geometry) {
+		if (bounds == null) {
 			bounds = geometry.getShapeBounds();
-		}else{
+		} else {
 			bounds.add(geometry.getShapeBounds());
 		}
 		geometries.add(geometry);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.drivers.gpe.model.GPEGeometry#getShapeBounds()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.gpe.model.GPEGeometry#getShapeBounds()
 	 */
 	public Rectangle2D getShapeBounds() {
 		return bounds;

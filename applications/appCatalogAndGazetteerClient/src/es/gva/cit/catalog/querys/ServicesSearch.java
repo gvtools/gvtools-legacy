@@ -1,4 +1,5 @@
 package es.gva.cit.catalog.querys;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -50,12 +51,13 @@ package es.gva.cit.catalog.querys;
  */
 /**
  * This class implements a services search
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class ServicesSearch extends Search {
 
 	public ServicesSearch(String name) {
-		super(name);		
+		super(name);
 	}
 
 }

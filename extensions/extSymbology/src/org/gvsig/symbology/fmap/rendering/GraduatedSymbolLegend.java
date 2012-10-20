@@ -79,23 +79,25 @@ import com.iver.cit.gvsig.fmap.rendering.VectorialIntervalLegend;
 import com.iver.utiles.StringUtilities;
 import com.iver.utiles.XMLEntity;
 
-
 /**
- * <p>GraduatedSymbolLegend is a legend that allows to classify ranges of
- * values using a value with symbol sizes.<b>
+ * <p>
+ * GraduatedSymbolLegend is a legend that allows to classify ranges of values
+ * using a value with symbol sizes.<b>
  * </p>
  * <p>
- * The symbol size will be calculated according the min size, the
- * max size and the amount of intervals. So for a min size of 1, a max size
- * of 5, and 5 intervals, symbol sizes will be [1, 2, 3, 4, 5].
+ * The symbol size will be calculated according the min size, the max size and
+ * the amount of intervals. So for a min size of 1, a max size of 5, and 5
+ * intervals, symbol sizes will be [1, 2, 3, 4, 5].
  * </p>
- * @author  jaume dominguez faus - jaume.dominguez@iver.es
+ * 
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class GraduatedSymbolLegend extends VectorialIntervalLegend {
 	private double maxSymbolSize;
 	private double minSymbolSize;
 	private ISymbol backgroundSymbol;
 	private int templateShapeType;
+
 	/**
 	 * DefaultConstructor
 	 */
@@ -105,9 +107,10 @@ public class GraduatedSymbolLegend extends VectorialIntervalLegend {
 
 	/**
 	 * Convenience constructor.
-	 *
-	 * Creates a new instance of GraduatedSymbolLegend from a VectorialIntervalLegend by
-	 * taking the same fields.
+	 * 
+	 * Creates a new instance of GraduatedSymbolLegend from a
+	 * VectorialIntervalLegend by taking the same fields.
+	 * 
 	 * @param leg
 	 */
 	public GraduatedSymbolLegend(VectorialIntervalLegend leg) {
@@ -117,8 +120,9 @@ public class GraduatedSymbolLegend extends VectorialIntervalLegend {
 	}
 
 	/**
-	 * Returns the max symbol size. Combined with the min symbol size and
-	 * the interval count, will produce the symbol sizes.
+	 * Returns the max symbol size. Combined with the min symbol size and the
+	 * interval count, will produce the symbol sizes.
+	 * 
 	 * @return double, the max size.
 	 */
 	public double getMaxSymbolSize() {
@@ -126,8 +130,9 @@ public class GraduatedSymbolLegend extends VectorialIntervalLegend {
 	}
 
 	/**
-	 * Returns the min symbol size. Combined with the max symbol size and
-	 * the interval count, will produce the symbol sizes.
+	 * Returns the min symbol size. Combined with the max symbol size and the
+	 * interval count, will produce the symbol sizes.
+	 * 
 	 * @return double, the min size.
 	 */
 	public double getMinSymbolSize() {
@@ -135,16 +140,16 @@ public class GraduatedSymbolLegend extends VectorialIntervalLegend {
 	}
 
 	/**
-	 * Sets the max symbol size. Combined with the min symbol size and
-	 * the interval count, will produce the symbol sizes.
+	 * Sets the max symbol size. Combined with the min symbol size and the
+	 * interval count, will produce the symbol sizes.
 	 */
 	public void setMaxSymbolSize(double size) {
 		this.maxSymbolSize = size;
 	}
 
 	/**
-	 * Sets the min symbol size. Combined with the max symbol size and
-	 * the interval count, will produce the symbol sizes.
+	 * Sets the min symbol size. Combined with the max symbol size and the
+	 * interval count, will produce the symbol sizes.
 	 */
 	public void setMinSymbolSize(double size) {
 		this.minSymbolSize = size;
@@ -159,11 +164,11 @@ public class GraduatedSymbolLegend extends VectorialIntervalLegend {
 		xml.putProperty("minSymbolSize", minSymbolSize);
 
 		if (getDefaultSymbol() == null) {
-	        xml.putProperty("useDefaultSymbol", 0);
-	    } else {
-	        xml.putProperty("useDefaultSymbol", 1);
-	        xml.addChild(getDefaultSymbol().getXMLEntity());
-	    }
+			xml.putProperty("useDefaultSymbol", 0);
+		} else {
+			xml.putProperty("useDefaultSymbol", 1);
+			xml.addChild(getDefaultSymbol().getXMLEntity());
+		}
 
 		if (backgroundSymbol != null) {
 			XMLEntity backgroundXML = backgroundSymbol.getXMLEntity();
@@ -189,22 +194,25 @@ public class GraduatedSymbolLegend extends VectorialIntervalLegend {
 		maxSymbolSize = xml.getDoubleProperty("maxSymbolSize");
 		minSymbolSize = xml.getDoubleProperty("minSymbolSize");
 
-//		if (xml.firstChild("id", "defaultSymbol") != null) {
-//			XMLEntity defaultXML = xml.firstChild("id", "defaultSymbol");
-//			setDefaultSymbol(SymbologyFactory.createSymbolFromXML(defaultXML, "defaultSymbol"));
-//		}
+		// if (xml.firstChild("id", "defaultSymbol") != null) {
+		// XMLEntity defaultXML = xml.firstChild("id", "defaultSymbol");
+		// setDefaultSymbol(SymbologyFactory.createSymbolFromXML(defaultXML,
+		// "defaultSymbol"));
+		// }
 
 		int useDefaultSymbol = xml.getIntProperty("useDefaultSymbol");
 
 		if (useDefaultSymbol == 1) {
-			setDefaultSymbol( SymbologyFactory.createSymbolFromXML(xml.getChild(0), null));
+			setDefaultSymbol(SymbologyFactory.createSymbolFromXML(
+					xml.getChild(0), null));
 		} else {
 			setDefaultSymbol(null);
 		}
 
 		if (xml.firstChild("idB", "backgroundSymbol") != null) {
 			XMLEntity backgroundXML = xml.firstChild("idB", "backgroundSymbol");
-			backgroundSymbol = SymbologyFactory.createSymbolFromXML(backgroundXML, "backgroundSymbol");
+			backgroundSymbol = SymbologyFactory.createSymbolFromXML(
+					backgroundXML, "backgroundSymbol");
 		}
 	}
 
@@ -218,7 +226,8 @@ public class GraduatedSymbolLegend extends VectorialIntervalLegend {
 	public ISymbol getSymbolByFeature(IFeature feat) {
 		ISymbol theSymbol = super.getSymbolByFeature(feat);
 
-		if ((shapeType % FShape.Z) == FShape.POLYGON && theSymbol instanceof IMarkerSymbol) {
+		if ((shapeType % FShape.Z) == FShape.POLYGON
+				&& theSymbol instanceof IMarkerSymbol) {
 			// transform it to a fill symbol
 			MarkerFillSymbol aux = new MarkerFillSymbol();
 			// tell the fill style to draw the IMarkerSymbol
@@ -231,10 +240,8 @@ public class GraduatedSymbolLegend extends VectorialIntervalLegend {
 			theSymbol = aux;
 		}
 
-
-
 		if (backgroundSymbol != null) {
-			MultiLayerFillSymbol multi = new MultiLayerFillSymbol() ;
+			MultiLayerFillSymbol multi = new MultiLayerFillSymbol();
 			multi.addLayer(backgroundSymbol);
 			multi.addLayer(theSymbol);
 			return multi;
@@ -242,15 +249,14 @@ public class GraduatedSymbolLegend extends VectorialIntervalLegend {
 
 		return theSymbol;
 
-
 	}
-
 
 	@Override
 	public ISymbol getSymbolByInterval(IInterval key) {
 		ISymbol theSymbol = super.getSymbolByInterval(key);
 
-		if ((shapeType % FShape.Z) == FShape.POLYGON && theSymbol instanceof IMarkerSymbol) {
+		if ((shapeType % FShape.Z) == FShape.POLYGON
+				&& theSymbol instanceof IMarkerSymbol) {
 			// transform it to a fill symbol
 			MarkerFillSymbol aux = new MarkerFillSymbol();
 			// tell the fill style to draw the IMarkerSymbol
@@ -275,6 +281,7 @@ public class GraduatedSymbolLegend extends VectorialIntervalLegend {
 
 	/**
 	 * Sets the background symbol.
+	 * 
 	 * @param symbol
 	 */
 	public void setBackgroundSymbol(ISymbol symbol) {
@@ -289,9 +296,9 @@ public class GraduatedSymbolLegend extends VectorialIntervalLegend {
 
 	@Override
 	public boolean isSuitableForShapeType(int shapeType) {
-		return (getShapeType() % FShape.Z) == (shapeType % FShape.Z) || ((getTemplateShapeType()%FShape.Z) == FShape.POINT && (shapeType % FShape.Z) == FShape.POLYGON);
+		return (getShapeType() % FShape.Z) == (shapeType % FShape.Z)
+				|| ((getTemplateShapeType() % FShape.Z) == FShape.POINT && (shapeType % FShape.Z) == FShape.POLYGON);
 	}
-
 
 	/**
 	 * Obtains the shapetype of the background symbol
@@ -299,15 +306,15 @@ public class GraduatedSymbolLegend extends VectorialIntervalLegend {
 	public int getTemplateShapeType() {
 		return templateShapeType;
 	}
+
 	/**
 	 * Sets the shapetype of the background symbol
 	 */
 	public void setTemplateShapeType(int templateShapeType) {
-		if((shapeType % FShape.Z) == FShape.POLYGON ) {
-			if((templateShapeType % FShape.Z)== FShape.POINT)
+		if ((shapeType % FShape.Z) == FShape.POLYGON) {
+			if ((templateShapeType % FShape.Z) == FShape.POINT)
 				this.templateShapeType = templateShapeType;
-		}
-		else if((templateShapeType % FShape.Z) == (shapeType % FShape.Z)) {
+		} else if ((templateShapeType % FShape.Z) == (shapeType % FShape.Z)) {
 			this.templateShapeType = templateShapeType;
 		}
 	}

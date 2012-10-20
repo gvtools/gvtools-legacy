@@ -19,9 +19,10 @@
 package org.gvsig.raster.dataset.io.features;
 
 import org.gvsig.raster.dataset.io.PngWriter;
+
 /**
- * Caracteristicas del formato Png para escritura.
- * La georreferenciación puede hacerse mediante un fichero .wld.
+ * Caracteristicas del formato Png para escritura. La georreferenciación puede
+ * hacerse mediante un fichero .wld.
  * 
  * @version 14/12/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)

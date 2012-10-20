@@ -54,37 +54,39 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
  *
  */
 /**
- * This exception is thrown when it is not possible
- * to calculate an extent for a layer  
+ * This exception is thrown when it is not possible to calculate an extent for a
+ * layer
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class NotExtentException extends BaseException {
 	private static final long serialVersionUID = 620553176638259949L;
 	private FLayer layer = null;
-	
+
 	public NotExtentException(FLayer layer, Throwable exception) {
 		this.layer = layer;
 		initialize();
 		initCause(exception);
 	}
-	
+
 	/**
 	 * Initialize the properties
 	 */
 	private void initialize() {
 		messageKey = "gpe_calculate_extent_error";
-		formatString = "Error calculating the extent " +
-				"for the layer %(layerName).";
+		formatString = "Error calculating the extent "
+				+ "for the layer %(layerName).";
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map values() {
 		HashMap params = new HashMap();
 		params.put("layerName", layer.getName());
-		return params;	
+		return params;
 	}
-	
+
 }

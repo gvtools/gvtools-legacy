@@ -66,39 +66,45 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
 /**
  * This class writes a coordinates Kml tag. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;coordinates&gt;60.0,60.0 60.0,90.0 90.0,90.0&lt;/coordinates&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
- * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#coordinates
+ * @see http
+ *      ://code.google.com/apis/kml/documentation/kml_tags_21.html#coordinates
  */
 public class CoordinatesWriter {
-	
+
 	/**
-	 * It writes an array of coordinates written using
-	 * the kml coordinates tag
+	 * It writes an array of coordinates written using the kml coordinates tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param coords
-	 * A coordinates iterator. 
+	 *            A coordinates iterator.
 	 * @throws IOException
 	 */
-	public void write(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler,
-			ICoordinateSequence coords) throws IOException{
+	public void write(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor handler, ICoordinateSequence coords)
+			throws IOException {
 		writer.writeStartElement(Kml2_1_Tags.COORDINATES);
-		writer.startArray(EventType.VALUE_DOUBLE, coords.getSize()*coords.iterator().getDimension());
+		writer.startArray(EventType.VALUE_DOUBLE, coords.getSize()
+				* coords.iterator().getDimension());
 		double[] buffer = new double[coords.iterator().getDimension()];
-	
-		while (coords.iterator().hasNext()){
-			coords.iterator().next(buffer);		
+
+		while (coords.iterator().hasNext()) {
+			coords.iterator().next(buffer);
 			writer.writeValue(buffer, 0, buffer.length);
-		}	
-		writer.endArray();	
-		writer.writeEndElement();			
-	}	
+		}
+		writer.endArray();
+		writer.writeEndElement();
+	}
 }

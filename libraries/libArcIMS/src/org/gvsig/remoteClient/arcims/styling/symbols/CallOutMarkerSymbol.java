@@ -46,37 +46,38 @@
  */
 package org.gvsig.remoteClient.arcims.styling.symbols;
 
-
-
 import org.gvsig.remoteClient.arcims.utils.ServiceInfoTags;
 
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 
-
 /**
- * This class is not supported at this time by gvSIG, so it will
- * be transformed in a TextSymbol.
+ * This class is not supported at this time by gvSIG, so it will be transformed
+ * in a TextSymbol.
+ * 
  * @author jsanz
- *
+ * 
  */
 public class CallOutMarkerSymbol extends TextSymbol implements IArcIMSSymbol {
-    public static final String TAG = ServiceInfoTags.tCALLOUTMARKERSYMBOL;
+	public static final String TAG = ServiceInfoTags.tCALLOUTMARKERSYMBOL;
 
-    /**
+	/**
      *
      */
-    public CallOutMarkerSymbol() {
-        super();
-    }
+	public CallOutMarkerSymbol() {
+		super();
+	}
 
-    public String toString() {
-        return "<" + TAG + getParam() + "/>\r\n";
-    }
+	public String toString() {
+		return "<" + TAG + getParam() + "/>\r\n";
+	}
 
-    /* (non-Javadoc)
-     * @see org.gvsig.remoteClient.arcims.styling.symbols.IArcIMSSymbol#getFSymbol()
-     */
-    public ISymbol getFSymbol() {
-        return ArcImsFSymbolFactory.getFSymbol(this);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.arcims.styling.symbols.IArcIMSSymbol#getFSymbol()
+	 */
+	public ISymbol getFSymbol() {
+		return ArcImsFSymbolFactory.getFSymbol(this);
+	}
 }

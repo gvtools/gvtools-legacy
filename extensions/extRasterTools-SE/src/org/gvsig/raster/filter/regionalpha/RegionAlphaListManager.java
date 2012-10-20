@@ -30,29 +30,32 @@ import org.gvsig.raster.grid.filter.RegistrableFilterListener;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
 
 public class RegionAlphaListManager implements IRasterFilterListManager {
-	protected RasterFilterList	filterList = null;
+	protected RasterFilterList filterList = null;
 
 	/**
 	 * Constructor. Asigna la lista de filtros y el manager.
+	 * 
 	 * @param filterListManager
 	 */
 	public RegionAlphaListManager(RasterFilterListManager filterListManager) {
 		this.filterList = filterListManager.getFilterList();
 	}
-	
+
 	/**
 	 * Registrar los manager en los puntos de extension
 	 */
 	public static void register() {
-		ExtensionPoint extensionPoint = ExtensionPoint.getExtensionPoint("RasterFilter");
+		ExtensionPoint extensionPoint = ExtensionPoint
+				.getExtensionPoint("RasterFilter");
 		extensionPoint.register("RegionAlpha", RegionAlphaListManager.class);
 	}
 
-	
-	public void addRegionAlphaFilter(ArrayList rois, int alpha, Boolean inverse) throws FilterTypeException {
+	public void addRegionAlphaFilter(ArrayList rois, int alpha, Boolean inverse)
+			throws FilterTypeException {
 		RasterFilter filter = new RegionAlphaByteFilter();
 
-		//Cuando el filtro esta creado, tomamos los valores y lo añadimos a la pila
+		// Cuando el filtro esta creado, tomamos los valores y lo añadimos a la
+		// pila
 		if (filter != null) {
 			filter.addParam("rois", rois);
 			filter.addParam("inverse", inverse);
@@ -63,7 +66,10 @@ public class RegionAlphaListManager implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList()
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList
+	 * ()
 	 */
 	public ArrayList getRasterFilterList() {
 		ArrayList filters = new ArrayList();
@@ -73,30 +79,37 @@ public class RegionAlphaListManager implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#addFilter(java.lang.Class, org.gvsig.raster.dataset.Params)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.IRasterFilterListManager#addFilter(java.
+	 * lang.Class, org.gvsig.raster.dataset.Params)
 	 */
-	public void addFilter(Class classFilter, Params params) throws FilterTypeException {
+	public void addFilter(Class classFilter, Params params)
+			throws FilterTypeException {
 		if (classFilter.equals(RegionAlphaFilter.class)) {
 			ArrayList rois = new ArrayList();
 			Boolean inverse = new Boolean(false);
 			int alpha = 255;
-			
+
 			Params paramsUI = null;
 			for (int i = 0; i < params.getNumParams(); i++) {
-				if (params.getParam(i).id.equals("Panel") &&
-					params.getParam(i).defaultValue instanceof RegistrableFilterListener) {
-					paramsUI = ((RegistrableFilterListener) params.getParam(i).defaultValue).getParams();
+				if (params.getParam(i).id.equals("Panel")
+						&& params.getParam(i).defaultValue instanceof RegistrableFilterListener) {
+					paramsUI = ((RegistrableFilterListener) params.getParam(i).defaultValue)
+							.getParams();
 				}
-				if (params.getParam(i).id.equals("Alpha") && params.getParam(i).defaultValue instanceof Integer) {
-					alpha = ((Integer) params.getParam(i).defaultValue).intValue();
+				if (params.getParam(i).id.equals("Alpha")
+						&& params.getParam(i).defaultValue instanceof Integer) {
+					alpha = ((Integer) params.getParam(i).defaultValue)
+							.intValue();
 				}
 			}
 
 			if (paramsUI != null) {
 				for (int i = 0; i < paramsUI.getNumParams(); i++) {
-					if (paramsUI.getParam(i).id.equals("rois")) 
+					if (paramsUI.getParam(i).id.equals("rois"))
 						rois = (ArrayList) paramsUI.getParam(i).defaultValue;
-					if (paramsUI.getParam(i).id.equals("inverse")) 
+					if (paramsUI.getParam(i).id.equals("inverse"))
 						inverse = (Boolean) paramsUI.getParam(i).defaultValue;
 				}
 			}
@@ -106,17 +119,24 @@ public class RegionAlphaListManager implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#createFilterListFromStrings(java.util.ArrayList, java.lang.String, int)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#
+	 * createFilterListFromStrings(java.util.ArrayList, java.lang.String, int)
 	 */
-	public int createFilterListFromStrings(ArrayList filters, String fil, int filteri) throws FilterTypeException {
+	public int createFilterListFromStrings(ArrayList filters, String fil,
+			int filteri) throws FilterTypeException {
 		return filteri;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#getStringsFromFilterList(java.util.ArrayList, org.gvsig.raster.grid.filter.RasterFilter)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#
+	 * getStringsFromFilterList(java.util.ArrayList,
+	 * org.gvsig.raster.grid.filter.RasterFilter)
 	 */
-	public ArrayList getStringsFromFilterList(ArrayList filterList, RasterFilter rf) {
+	public ArrayList getStringsFromFilterList(ArrayList filterList,
+			RasterFilter rf) {
 		return filterList;
 	}
 }

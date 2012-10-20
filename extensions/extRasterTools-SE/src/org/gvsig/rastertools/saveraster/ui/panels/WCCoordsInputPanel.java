@@ -30,26 +30,32 @@ import com.iver.andami.PluginServices;
  * Panel para la selección de coordenadas reales.
  * 
  * 04/10/2007
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class WCCoordsInputPanel extends JPanel {
 	private static final long serialVersionUID = 2294445086139039312L;
-	private CoordinatesPanel   coordinatesPanel   = null;
-	
+	private CoordinatesPanel coordinatesPanel = null;
+
 	/**
 	 * Constructor. Crea los paneles y añadel el objeto CoordinatesPanel.
 	 */
 	public WCCoordsInputPanel() {
 		BorderLayout layout = new BorderLayout();
 		this.setLayout(layout);
-		setBorder(javax.swing.BorderFactory.createTitledBorder(null, PluginServices.getText(this, "coordenadas_reales"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", java.awt.Font.PLAIN, 10), null));
-		
+		setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+				PluginServices.getText(this, "coordenadas_reales"),
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION,
+				new java.awt.Font("Dialog", java.awt.Font.PLAIN, 10), null));
+
 		coordinatesPanel = new CoordinatesPanel();
 		this.add(coordinatesPanel);
 	}
-	
+
 	/**
 	 * Obtiene el panel con las coordenadas de la selección en la vista
+	 * 
 	 * @return
 	 */
 	public CoordinatesPanel getCoordinatesPanel() {

@@ -43,7 +43,6 @@ import javax.swing.JLabel;
  *   dac@iver.es
  */
 
-
 /**
  * This class has some methods for classes which will be a JLabel as a cell
  * 
@@ -56,30 +55,32 @@ public abstract class AbstractJLabelAsCellLoaded extends JLabel {
 	public AbstractJLabelAsCellLoaded() {
 		super();
 	}
-	
+
 	/**
 	 * @see JLabel#JLabel(String)
 	 */
 	public AbstractJLabelAsCellLoaded(String text) {
 		super(text);
 	}
-	
+
 	/**
-	 * Configures some characteristics 
+	 * Configures some characteristics
 	 */
 	protected abstract void configure();
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	public int compareTo(Object o) {
 		// It's supposed that 'o' is an string
-		return this.getText().compareTo((String)o);
+		return this.getText().compareTo((String) o);
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {

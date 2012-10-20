@@ -6,8 +6,6 @@ import org.gvsig.remoteClient.utils.CapabilitiesTags;
 import org.gvsig.remoteClient.wfs.WFSOperation;
 import org.gvsig.remoteClient.wfs.filters.FilterEncoding;
 
-import com.sun.org.apache.bcel.internal.generic.NEWARRAY;
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -62,142 +60,149 @@ public abstract class WFSTTransaction {
 	private String typename = null;
 	private String namespace = null;
 	private String namespaceprefix = null;
-	
-	//Features Locked
-	private ArrayList featuresLocked = null;	
-	
-	//Transaction message
+
+	// Features Locked
+	private ArrayList featuresLocked = null;
+
+	// Transaction message
 	public String message = null;
-	
-	//Status
+
+	// Status
 	public static final int STATUS_NO_EXECUTED = 0;
 	public static final int STATUS_FAILED = 1;
 	public static final int STATUS_SUCCESS = 2;
 	private int status = 0;
-		
-	WFSTTransaction(){
-		status = STATUS_NO_EXECUTED;	
-		operations = new ArrayList();	
+
+	WFSTTransaction() {
+		status = STATUS_NO_EXECUTED;
+		operations = new ArrayList();
 		featuresLocked = new ArrayList();
 	}
-	
-	WFSTTransaction(String typename, String namespaceprefix, String namespace, ArrayList featuresLocked){
-		status = STATUS_NO_EXECUTED;	
+
+	WFSTTransaction(String typename, String namespaceprefix, String namespace,
+			ArrayList featuresLocked) {
+		status = STATUS_NO_EXECUTED;
 		operations = new ArrayList();
 		this.typename = typename;
 		this.namespaceprefix = namespaceprefix;
 		this.namespace = namespace;
 		this.featuresLocked = featuresLocked;
 	}
-	
+
 	/**
 	 * Adds a delete operation
+	 * 
 	 * @param ids
-	 * The identifiers of the features to delete
+	 *            The identifiers of the features to delete
 	 */
-	public void addDeleteOperation(ArrayList ids){
+	public void addDeleteOperation(ArrayList ids) {
 		FilterEncoding fe = new FilterEncoding();
 		fe.setQualified(true);
-		for (int i=0 ; i<ids.size() ; i++){
+		for (int i = 0; i < ids.size(); i++) {
 			fe.addFeatureById(ids.get(i));
 		}
-		operations.add(new WFSTDeleteOperation(typename, fe.toString()));		
+		operations.add(new WFSTDeleteOperation(typename, fe.toString()));
 	}
-	
+
 	/**
 	 * Adds a delete operation
+	 * 
 	 * @param id
-	 * The identifies of the feature to delete
+	 *            The identifies of the feature to delete
 	 */
-	public void addDeleteOperation(String id){
+	public void addDeleteOperation(String id) {
 		ArrayList ids = new ArrayList();
 		ids.add(id);
-		addDeleteOperation(ids);		
+		addDeleteOperation(ids);
 	}
-	
+
 	/**
 	 * Adds a delete operation
-	  * @param gml
-	 * The new Feature
+	 * 
+	 * @param gml
+	 *            The new Feature
 	 */
-	public void addInsertOperation(String gml){
-		operations.add(new WFSTInsertOperation(typename, gml));		
+	public void addInsertOperation(String gml) {
+		operations.add(new WFSTInsertOperation(typename, gml));
 	}
-	
+
 	/**
 	 * Adds a update operation
+	 * 
 	 * @param ids
-	 * The identifiers of the features to update
+	 *            The identifiers of the features to update
 	 * @param gml
-	 * The update operation
+	 *            The update operation
 	 */
-	public void addUpdateOperation(ArrayList ids, String gml){
+	public void addUpdateOperation(ArrayList ids, String gml) {
 		FilterEncoding fe = new FilterEncoding();
 		fe.setQualified(true);
-		for (int i=0 ; i<ids.size() ; i++){
+		for (int i = 0; i < ids.size(); i++) {
 			fe.addFeatureById(ids.get(i));
 		}
-		operations.add(new WFSTUpdateOperation(typename, fe.toString(), gml));		
+		operations.add(new WFSTUpdateOperation(typename, fe.toString(), gml));
 	}
-	
+
 	/**
 	 * Adds a update operation
+	 * 
 	 * @param ids
-	 * The identifier of the feature to update
+	 *            The identifier of the feature to update
 	 * @param gml
-	 * The update operation
+	 *            The update operation
 	 */
-	public void addUpdateOperation(String id, String gml){
+	public void addUpdateOperation(String id, String gml) {
 		ArrayList ids = new ArrayList();
 		ids.add(id);
-		addUpdateOperation(ids,gml);			
+		addUpdateOperation(ids, gml);
 	}
 
 	/**
 	 * @return the WFS version
 	 */
 	protected abstract String getVersion();
-	
+
 	/**
 	 * @return the transaction schema location
 	 */
 	protected abstract String getSchemaLocation();
-	
+
 	/**
-	 * @return the WFS-T request to execute
-	 * the transaction
+	 * @return the WFS-T request to execute the transaction
 	 */
-	public String getWFSTRequest(){
+	public String getWFSTRequest() {
 		StringBuffer request = new StringBuffer();
 		request.append(getWFSTRequestStartHeader());
 		request.append(getWFSTRequestLockID());
-		for (int i=0 ; i<getOperationSize() ; i++){
+		for (int i = 0; i < getOperationSize(); i++) {
 			WFSTOperation operation = getOperationAt(i);
 			request.append(operation.getRequest());
 		}
 		request.append(getWFSTRequestEndHeader());
 		return request.toString();
-	}	
-	
+	}
+
 	/**
 	 * Create the lockID request
+	 * 
 	 * @return
 	 */
 	private Object getWFSTRequestLockID() {
 		StringBuffer request = new StringBuffer();
-//		for (int i=0 ; i<featuresLocked.size() ; i++){
-//			request.append("<" + WFSTTags.WFS_NAMESPACE_PREFIX + ":" + WFSTTags.WFST_LOCKID + ">" );
-//			request.append(featuresLocked.get(i));
-//			request.append("</" + WFSTTags.WFS_NAMESPACE_PREFIX + ":" + WFSTTags.WFST_LOCKID + ">" );
-//		}
+		// for (int i=0 ; i<featuresLocked.size() ; i++){
+		// request.append("<" + WFSTTags.WFS_NAMESPACE_PREFIX + ":" +
+		// WFSTTags.WFST_LOCKID + ">" );
+		// request.append(featuresLocked.get(i));
+		// request.append("</" + WFSTTags.WFS_NAMESPACE_PREFIX + ":" +
+		// WFSTTags.WFST_LOCKID + ">" );
+		// }
 		return request.toString();
 	}
 
 	/**
-	 * @return the XML header of the WFS Transaction 
-	 * request
+	 * @return the XML header of the WFS Transaction request
 	 */
-	private String getWFSTRequestStartHeader(){
+	private String getWFSTRequestStartHeader() {
 		StringBuffer request = new StringBuffer();
 		request.append(WFSTTags.XML_ROOT);
 		request.append("<" + WFSTTags.WFS_NAMESPACE_PREFIX + ":");
@@ -215,23 +220,24 @@ public abstract class WFSTTransaction {
 		request.append("=\"" + WFSTTags.GML_NAMESPACE + "\" ");
 		request.append(WFSTTags.XMLNS + ":" + namespaceprefix);
 		request.append("=\"" + namespace + "\" ");
-		request.append(WFSTTags.XML_NAMESPACE_PREFIX + ":" + WFSTTags.XML_SCHEMALOCATION);
+		request.append(WFSTTags.XML_NAMESPACE_PREFIX + ":"
+				+ WFSTTags.XML_SCHEMALOCATION);
 		request.append("=\"" + WFSTTags.WFS_NAMESPACE + " ");
 		request.append(getSchemaLocation());
 		request.append("\">");
 		return request.toString();
-	}	
-	
+	}
+
 	/**
 	 * @return the end of the WFS Transaction request header
 	 */
-	private String getWFSTRequestEndHeader(){
+	private String getWFSTRequestEndHeader() {
 		StringBuffer request = new StringBuffer();
 		request.append("</" + WFSTTags.WFS_NAMESPACE_PREFIX + ":");
 		request.append(CapabilitiesTags.WFS_TRANSACTION + ">");
 		return request.toString();
-	}	
-	
+	}
+
 	/**
 	 * @return the operation size
 	 */
@@ -241,21 +247,23 @@ public abstract class WFSTTransaction {
 
 	/**
 	 * Gets an operation
+	 * 
 	 * @param i
-	 * Operation position
-	 * @return
-	 * A operation
+	 *            Operation position
+	 * @return A operation
 	 */
-	public WFSTOperation getOperationAt(int i){
-		if (i>getOperationSize()){
+	public WFSTOperation getOperationAt(int i) {
+		if (i > getOperationSize()) {
 			return null;
 		}
-		return (WFSTOperation)operations.get(i);
+		return (WFSTOperation) operations.get(i);
 	}
-	
+
 	/**
 	 * Adds a new operation
-	 * @param operation the operation to add
+	 * 
+	 * @param operation
+	 *            the operation to add
 	 */
 	public void addOperation(WFSOperation operation) {
 		operations.add(operation);
@@ -269,7 +277,8 @@ public abstract class WFSTTransaction {
 	}
 
 	/**
-	 * @param status the status to set
+	 * @param status
+	 *            the status to set
 	 */
 	public void setStatus(int status) {
 		this.status = status;
@@ -283,9 +292,10 @@ public abstract class WFSTTransaction {
 	}
 
 	/**
-	 * @param message the message to set
+	 * @param message
+	 *            the message to set
 	 */
 	public void setMessage(String message) {
 		this.message = message;
-	}	
+	}
 }

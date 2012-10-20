@@ -1,6 +1,5 @@
 package org.gvsig.remoteClient.wfs.filters;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -57,54 +56,54 @@ package org.gvsig.remoteClient.wfs.filters;
  *
  */
 /**
- * This class implements a binary tree (not ordered) that is
- * used to build a sintactic tree for the SQL language.
+ * This class implements a binary tree (not ordered) that is used to build a
+ * sintactic tree for the SQL language.
+ * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class BinaryTree {
 	private Node root;
 	private Node currentNode;
-	
-	public BinaryTree(){
+
+	public BinaryTree() {
 		root = null;
 		currentNode = null;
 	}
 
 	/**
-	 * This method is called for each term that is on 
-	 * the SQL query. It's supposed that the value is a valid expression, otherwise will launch an exception.
+	 * This method is called for each term that is on the SQL query. It's
+	 * supposed that the value is a valid expression, otherwise will launch an
+	 * exception.
 	 * 
-	 * @param value expression formatted
+	 * @param value
+	 *            expression formatted
 	 */
 	public void addTerm(String value) {
 		if (value.equals("(")) {
 			if (currentNode == null) {
 				currentNode = new Node();
-				
+
 				if (root == null) {
 					root = currentNode;
 				}
-			}
-			else {
+			} else {
 				if (currentNode.leftNode == null) {
 					currentNode.leftNode = new Node(currentNode);
 					currentNode = currentNode.leftNode;
-				}
-				else {
+				} else {
 					currentNode.rigthNode = new Node(currentNode);
 					currentNode = currentNode.rigthNode;
 				}
 			}
-		}
-		else {
+		} else {
 			if (value.equals(")")) {
 				// Do nothing
-			}
-			else {
+			} else {
 				// Add the expression or the operand
 
-				// Seeks for the first parent node without a value defined, if there isn't any, creates a new one
+				// Seeks for the first parent node without a value defined, if
+				// there isn't any, creates a new one
 				while (currentNode.value != null) {
 					if (currentNode.parentNode == null) {
 						currentNode.parentNode = new Node();
@@ -116,26 +115,27 @@ public class BinaryTree {
 
 					currentNode = currentNode.parentNode;
 				}
-				
+
 				// Sets the expression or operand value
 				currentNode.value = value;
 			}
 		}
 	}
-	
+
 	/**
 	 * Adds a new term to the tree
+	 * 
 	 * @param name
 	 * @param value
 	 * @param operationPair
 	 * @param operationTree
 	 */
-	public void addTerm(String value, String operationTree ) {
+	public void addTerm(String value, String operationTree) {
 		Node operationNode = new Node();
 		operationNode.value = value;
 		if (root == null) {
-			root = operationNode;			
-		}else{
+			root = operationNode;
+		} else {
 			Node newRoot = new Node();
 			newRoot.value = operationTree;
 			newRoot.leftNode = root;
@@ -146,77 +146,78 @@ public class BinaryTree {
 
 	/**
 	 * Print all the tree
-	 *
+	 * 
 	 */
-	public void printTree(){
-		printNode(root,0);
-	}	
-	
+	public void printTree() {
+		printNode(root, 0);
+	}
+
 	/**
 	 * Print one node
+	 * 
 	 * @param node
-	 * Node to print
+	 *            Node to print
 	 * @param level
-	 * Level node
+	 *            Level node
 	 */
-	private void printNode(Node node,int level){
-		if (node != null){
+	private void printNode(Node node, int level) {
+		if (node != null) {
 			String tab = "";
-			for (int i=0 ; i<level ; i++){
+			for (int i = 0; i < level; i++) {
 				tab = tab + "\t";
 			}
 			level++;
-			if (node.isField()){
+			if (node.isField()) {
 				System.out.print(tab + node.value + "\n");
-			}else{
+			} else {
 				System.out.print(tab + node.value + "\n");
-				printNode(node.leftNode,level);
-				printNode(node.rigthNode,level);
+				printNode(node.leftNode, level);
+				printNode(node.rigthNode, level);
 				System.out.print(tab + "\\" + node.value + "\n");
 			}
-		}		
+		}
 	}
-	
+
 	/**
 	 * @return Returns the root.
 	 */
 	public Node getRoot() {
 		return root;
-	}	
-	
+	}
+
 	/**
 	 * This class represents a binary tree node.
+	 * 
 	 * @author Jorge Piera Llodrá (piera_jor@gva.es)
-	 *
+	 * 
 	 */
-	public class Node{
+	public class Node {
 		private String value;
 		private Node leftNode;
 		private Node rigthNode;
 		private Node parentNode;
-		
-		private Node(){
+
+		private Node() {
 			leftNode = null;
 			rigthNode = null;
 			parentNode = null;
 		}
-		
-		private Node(Node parentNode){
+
+		private Node(Node parentNode) {
 			leftNode = null;
 			rigthNode = null;
 			this.parentNode = parentNode;
 		}
-		
-		private Node(Node parentNode, String value){
+
+		private Node(Node parentNode, String value) {
 			leftNode = null;
 			rigthNode = null;
 			this.value = value;
 			this.parentNode = parentNode;
 		}
-		
-		public boolean isField(){
-			if ((leftNode == null)&&
-					(rigthNode == null)){
+
+		public boolean isField() {
+			if ((leftNode == null) && (rigthNode == null)) {
 				return true;
 			}
 			return false;
@@ -244,6 +245,4 @@ public class BinaryTree {
 		}
 	}
 
-	
 }
-

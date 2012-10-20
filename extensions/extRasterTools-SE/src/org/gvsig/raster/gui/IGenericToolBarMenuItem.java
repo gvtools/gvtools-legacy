@@ -22,6 +22,7 @@ import javax.swing.Icon;
 
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
+
 /**
  * Interfaz que debe implementar quien quiera aparecer en la barra de
  * herramientas genérica.
@@ -32,52 +33,60 @@ import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
 public interface IGenericToolBarMenuItem {
 	/**
 	 * Devuelve el nombre del grupo al que pertenece el item de menu
+	 * 
 	 * @return
 	 */
 	public String getGroup();
-	
+
 	/**
 	 * Devuelve el orden en el que aparecerá en el menú
+	 * 
 	 * @return
 	 */
 	public int getOrder();
 
 	/**
 	 * Devuelve el orden en el que aparecerá en el menú
+	 * 
 	 * @return
 	 */
 	public int getGroupOrder();
-	
+
 	/**
 	 * Devuelve el texto que se verá en el menú
+	 * 
 	 * @return
 	 */
 	public String getText();
-	
+
 	/**
 	 * Devuelve el icono del item del menu
+	 * 
 	 * @return
 	 */
 	public Icon getIcon();
 
 	/**
 	 * Dice si es visible el item de menu para dicha entrada
+	 * 
 	 * @param item
 	 * @param selectedItems
 	 * @return
 	 */
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems);
-	
+
 	/**
 	 * Dice si el item actual esta habilitado
+	 * 
 	 * @param item
 	 * @param selectedItems
 	 * @return
 	 */
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems);
-	
+
 	/**
 	 * Metodo que sera invocado cuando el item del menu sea presionado
+	 * 
 	 * @param item
 	 * @param selectedItems
 	 */

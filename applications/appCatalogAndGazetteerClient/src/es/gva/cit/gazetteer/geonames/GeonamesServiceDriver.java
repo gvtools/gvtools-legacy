@@ -46,16 +46,18 @@ import es.gva.cit.gazetteer.querys.Feature;
 import es.gva.cit.gazetteer.querys.GazetteerQuery;
 
 public class GeonamesServiceDriver extends AbstractGazetteerServiceDriver {
-	
-	
+
 	public GeonamesServiceDriver() {
 		super();
-		setProjection("EPSG:4326");		
+		setProjection("EPSG:4326");
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getFeature(java.net.URI, es.gva.cit.gazetteer.querys.GazetteerQuery)
+	 * 
+	 * @see
+	 * es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getFeature(java.
+	 * net.URI, es.gva.cit.gazetteer.querys.GazetteerQuery)
 	 */
 	public Feature[] getFeature(URI uri, GazetteerQuery query) throws Exception {
 		ToponymSearchCriteria searchCriteria = new ToponymSearchCriteria();
@@ -63,33 +65,36 @@ public class GeonamesServiceDriver extends AbstractGazetteerServiceDriver {
 		ToponymSearchResult searchResult = WebService.search(searchCriteria);
 		List toponims = searchResult.getToponyms();
 		Feature[] features = new Feature[toponims.size()];
-		for (int i=0 ; i<toponims.size() ; i++){
-			features[i] = converToponym((Toponym)toponims.get(i));
+		for (int i = 0; i < toponims.size(); i++) {
+			features[i] = converToponym((Toponym) toponims.get(i));
 		}
 		return features;
 	}
 
 	private Feature converToponym(Toponym toponym) {
-		Feature feature = new Feature(toponym.getFeatureCode(), 
-				toponym.getName(),
-				toponym.getName(),
-				new Point2D.Double(toponym.getLongitude(), toponym.getLatitude()));
-		
+		Feature feature = new Feature(toponym.getFeatureCode(),
+				toponym.getName(), toponym.getName(), new Point2D.Double(
+						toponym.getLongitude(), toponym.getLatitude()));
+
 		return feature;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalog.drivers.IDiscoveryServiceDriver#getCapabilities(java.net.URI)
+	 * 
+	 * @see
+	 * es.gva.cit.catalog.drivers.IDiscoveryServiceDriver#getCapabilities(java
+	 * .net.URI)
 	 */
 	public DiscoveryServiceCapabilities getCapabilities(URI uri)
-	throws NotSupportedVersionException {
+			throws NotSupportedVersionException {
 		GazetteerCapabilities capabilities = new GazetteerCapabilities();
 		return capabilities;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see es.gva.cit.catalog.drivers.IDiscoveryServiceDriver#getServiceName()
 	 */
 	public String getServiceName() {
@@ -98,11 +103,12 @@ public class GeonamesServiceDriver extends AbstractGazetteerServiceDriver {
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalog.drivers.AbstractDiscoveryServiceDriver#getOneServer()
+	 * 
+	 * @see
+	 * es.gva.cit.catalog.drivers.AbstractDiscoveryServiceDriver#getOneServer()
 	 */
 	public ServerData getOneServer() {
 		return new ServerData("www.geonames.org", "GEONAMES");
 	}
-	
-	
+
 }

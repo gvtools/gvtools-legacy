@@ -7,36 +7,40 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction;
 import com.iver.utiles.extensionPoints.IExtensionBuilder;
 
-public abstract class AbstractTocContextMenuAction extends AbstractContextMenuAction implements IExtensionBuilder{
+public abstract class AbstractTocContextMenuAction extends
+		AbstractContextMenuAction implements IExtensionBuilder {
 	private MapContext mapContext;
-	
+
 	public MapContext getMapContext() {
 		return this.mapContext;
 	}
-	
+
 	public void setMapContext(MapContext mapContext) {
 		this.mapContext = mapContext;
 	}
-	
+
 	/**
-	 * @deprecated use public boolean isEnabled(ITocItem item, FLayer[] selectedItems)
+	 * @deprecated use public boolean isEnabled(ITocItem item, FLayer[]
+	 *             selectedItems)
 	 */
 	public boolean isEnabled(Object item, Object[] selectedItems) {
-		return this.isEnabled((ITocItem)item, (FLayer[])selectedItems);
+		return this.isEnabled((ITocItem) item, (FLayer[]) selectedItems);
 	}
 
 	/**
-	 * @deprecated use public boolean isVisible(ITocItem item, FLayer[] selectedItems)
+	 * @deprecated use public boolean isVisible(ITocItem item, FLayer[]
+	 *             selectedItems)
 	 */
 	public boolean isVisible(Object item, Object[] selectedItems) {
-		return this.isVisible((ITocItem)item, (FLayer[])selectedItems);
+		return this.isVisible((ITocItem) item, (FLayer[]) selectedItems);
 	}
 
 	/**
-	 * @deprecated use public void execute(ITocItem item, FLayer[] selectedItems)
+	 * @deprecated use public void execute(ITocItem item, FLayer[]
+	 *             selectedItems)
 	 */
 	public void execute(Object item, Object[] selectedItems) {
-		this.execute((ITocItem)item, (FLayer[])selectedItems);		
+		this.execute((ITocItem) item, (FLayer[]) selectedItems);
 	}
 
 	public FLayer getNodeLayer(ITocItem node) {
@@ -44,14 +48,14 @@ public abstract class AbstractTocContextMenuAction extends AbstractContextMenuAc
 			return ((TocItemBranch) node).getLayer();
 		return null;
 	}
+
 	public boolean isTocItemLeaf(ITocItem node) {
 		return node instanceof TocItemLeaf;
 	}
-	
+
 	public boolean isTocItemBranch(ITocItem node) {
 		return node instanceof TocItemBranch;
 	}
-
 
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
 		return true;
@@ -63,7 +67,7 @@ public abstract class AbstractTocContextMenuAction extends AbstractContextMenuAc
 
 	public abstract void execute(ITocItem item, FLayer[] selectedItems);
 
-	public Object create() {		
+	public Object create() {
 		return this;
 	}
 

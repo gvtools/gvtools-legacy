@@ -78,17 +78,15 @@ import com.vividsolutions.jts.operation.polygonize.Polygonizer;
  * 
  * 
  * @author azabala
- *
+ * 
  */
 public class LineStringSplitter {
-	
-	
+
 	/*
 	 * This inner class is repeated in LineCleanVisitor of
 	 * GeoprocessingExtensions and here.
 	 * 
 	 * TODO Remove one (for that, move this class to libFMap)
-	 * 
 	 */
 
 	static class LineIntersection {
@@ -99,71 +97,67 @@ public class LineStringSplitter {
 
 	private static final double DEFAULT_SNAP_TOLERANCE = 0d;
 
-	
-	
 	private static LineString[] splitClosedLineString(LineString lineString,
-			Coordinate[] splitPoints){
-		return splitClosedLineString(lineString, splitPoints,DEFAULT_SNAP_TOLERANCE);
+			Coordinate[] splitPoints) {
+		return splitClosedLineString(lineString, splitPoints,
+				DEFAULT_SNAP_TOLERANCE);
 	}
-	
-	
-	
+
 	private static LineString[] splitClosedLineString(LineString lineString,
 			Coordinate[] splitPoints, double snapTolerance) {
 
 		Polygonizer polygonizer = new Polygonizer();
-		LineString[] lineStrings = splitSimple(lineString, splitPoints); 
-		
+		LineString[] lineStrings = splitSimple(lineString, splitPoints);
+
 		ArrayList<LineString> closedLineStrings = new ArrayList<LineString>();
 		ArrayList<LineString> unclosedLineStrings = new ArrayList<LineString>();
-		
-		for(int i = 0; i < lineStrings.length; i++){
+
+		for (int i = 0; i < lineStrings.length; i++) {
 			LineString geom = lineStrings[i];
-			if(JtsUtil.isClosed(geom, snapTolerance)){
+			if (JtsUtil.isClosed(geom, snapTolerance)) {
 				closedLineStrings.add(geom);
-			}else{
+			} else {
 				unclosedLineStrings.add(geom);
 			}
 		}
-		
-		//JTS Polygonizer requires a exact coincident in coordinates.
-		//We try to apply a previous snap
-		//MUST WE APPLY A COORDINATE CRACKING??
-		
+
+		// JTS Polygonizer requires a exact coincident in coordinates.
+		// We try to apply a previous snap
+		// MUST WE APPLY A COORDINATE CRACKING??
+
 		LineString[] unclosedLS = new LineString[unclosedLineStrings.size()];
 		unclosedLineStrings.toArray(unclosedLS);
 		GeometrySnapper snapper = new GeometrySnapper(snapTolerance);
 		Geometry[] snappedLS = snapper.snap(unclosedLS);
 		List<Geometry> snappedList = Arrays.asList(snappedLS);
-		
-		
+
 		polygonizer.add(snappedList);
 		Collection polygons = polygonizer.getPolygons();
-		
+
 		Iterator polyIt = polygons.iterator();
 		ArrayList outerRingsList = new ArrayList();
 		while (polyIt.hasNext()) {
 			outerRingsList.add(((Polygon) polyIt.next()).getExteriorRing());
 		}
-		
-		Iterator closedLineStringIt =closedLineStrings.iterator();
-		while(closedLineStringIt.hasNext()){
+
+		Iterator closedLineStringIt = closedLineStrings.iterator();
+		while (closedLineStringIt.hasNext()) {
 			outerRingsList.add(closedLineStringIt.next());
 		}
-		
+
 		LineString[] solution = new LineString[outerRingsList.size()];
 		outerRingsList.toArray(solution);
 		return solution;
 	}
-	
-	
-	//FIXME Introduce snap tolerance concept
-	
+
+	// FIXME Introduce snap tolerance concept
+
 	private static LineString[] splitUnclosedLineString(LineString lineString,
 			Coordinate[] splitPoints, double snapTolerance) {
-		
+
 		ArrayList lineStringList = new ArrayList();
-//		RobustLengthIndexedLine lengthLine = new RobustLengthIndexedLine(lineString);
+		// RobustLengthIndexedLine lengthLine = new
+		// RobustLengthIndexedLine(lineString);
 		LengthIndexedLine lengthLine = new LengthIndexedLine(lineString);
 		ArrayList<LineIntersection> nodeIntersections = new ArrayList<LineIntersection>();
 		double linearReferencingIndex = 0d;
@@ -197,7 +191,8 @@ public class LineStringSplitter {
 
 		LinearLocation lastLocation = null;
 		LineIntersection lastIntersection = null;
-		RobustLocationIndexedLine indexedLine = new RobustLocationIndexedLine(lineString);
+		RobustLocationIndexedLine indexedLine = new RobustLocationIndexedLine(
+				lineString);
 		for (int i = 0; i < nodeIntersections.size(); i++) {
 			Geometry geometry = null;
 			LineIntersection li = (LineIntersection) nodeIntersections.get(i);
@@ -225,17 +220,18 @@ public class LineStringSplitter {
 				lastIntersection = li;
 
 			}
-			//If a linestring self intersects with its first point, the first location
-			//is equal to the intersection and must ignore this fragment
-			if(geometry.getLength() > snapTolerance)
+			// If a linestring self intersects with its first point, the first
+			// location
+			// is equal to the intersection and must ignore this fragment
+			if (geometry.getLength() > snapTolerance)
 				lineStringList.add(geometry);
 		}// for
 		LinearLocation endLocation = new LinearLocation();
 		endLocation.setToEnd(lineString);
-		
-		//when the intersection point is equal to the last point we avoid this
+
+		// when the intersection point is equal to the last point we avoid this
 		Geometry lastLine = indexedLine.extractLine(lastLocation, endLocation);
-		if(lastLine.getLength() > snapTolerance)
+		if (lastLine.getLength() > snapTolerance)
 			lineStringList.add(lastLine);
 
 		LineString[] solution = new LineString[lineStringList.size()];
@@ -243,36 +239,38 @@ public class LineStringSplitter {
 		return solution;
 	}
 
-	
-//	FIXME Introduce snap tolerance concept
-	
+	// FIXME Introduce snap tolerance concept
+
 	/**
-	 * Splits the specified lineString with the specified points.
-	 * (One point will give two lines, two points three lines, etc
+	 * Splits the specified lineString with the specified points. (One point
+	 * will give two lines, two points three lines, etc
 	 * 
 	 * @param lineString
 	 * @param points
 	 * */
-	
-	public static LineString[] splitSimple(LineString lineString, Coordinate[] points) {
+
+	public static LineString[] splitSimple(LineString lineString,
+			Coordinate[] points) {
 		LineString[] splittedLS = null;
-		RobustLengthIndexedLine lengthLine = new RobustLengthIndexedLine(lineString);
+		RobustLengthIndexedLine lengthLine = new RobustLengthIndexedLine(
+				lineString);
 		/*
-		 * LenghtIndexedLine indexOfAlter method returns the index of a line greater than the specified index.
-		 * For this reason, we must save in a cache the last computed index for a given coord, and pass
-		 * this precomputed index to the indexOfAlter method
-		 * */
+		 * LenghtIndexedLine indexOfAlter method returns the index of a line
+		 * greater than the specified index. For this reason, we must save in a
+		 * cache the last computed index for a given coord, and pass this
+		 * precomputed index to the indexOfAlter method
+		 */
 		HashMap coordsIndex = new HashMap();
 		ArrayList nodeIntersections = new ArrayList();
 		for (int i = 0; i < points.length; i++) {
 			Coordinate coord = points[i];
 			Double index = (Double) coordsIndex.get(coord);
 			double indexD = 0d;
-			if(index != null)
+			if (index != null)
 				indexD = index.doubleValue();
 			double computedIndex = lengthLine.indexOfAfter(coord, indexD);
 			coordsIndex.put(coord, new Double(computedIndex));
-					LineIntersection inters = new LineIntersection();
+			LineIntersection inters = new LineIntersection();
 			inters.coordinate = coord;
 			inters.lenght = computedIndex;
 			nodeIntersections.add(inters);
@@ -296,7 +294,8 @@ public class LineStringSplitter {
 
 		LinearLocation lastLocation = null;
 		LineIntersection lastIntersection = null;
-		RobustLocationIndexedLine indexedLine = new RobustLocationIndexedLine(lineString);
+		RobustLocationIndexedLine indexedLine = new RobustLocationIndexedLine(
+				lineString);
 		ArrayList splittedLsList = new ArrayList();
 		for (int i = 0; i < nodeIntersections.size(); i++) {
 			Geometry solution = null;
@@ -323,7 +322,7 @@ public class LineStringSplitter {
 		splittedLsList.add(geo);
 		splittedLS = new LineString[splittedLsList.size()];
 		splittedLsList.toArray(splittedLS);
-		
+
 		return splittedLS;
 
 	}
@@ -343,22 +342,21 @@ public class LineStringSplitter {
 		}
 		return solution;
 	}
-	
-	
-//	FIXME Introduce snap tolerance concept
-	
+
+	// FIXME Introduce snap tolerance concept
 
 	public static LineString[] removeSelfIntersections(LineString lineString,
 			Coordinate[] splitPoints, double snapTolerance) {
 		if (splitPoints.length < 1) {
 			return new LineString[] { lineString };
 		}
-		
+
 		Coordinate[] duplicatedSelfIntersections = duplicateSelfIntersections(splitPoints);
-		//TODO Create a test case for a linestring not closed for precision reasons
-		//but closed with a given snap tolerance
-		if(JtsUtil.isClosed(lineString, snapTolerance)){
-//		if (lineString.isClosed()) {
+		// TODO Create a test case for a linestring not closed for precision
+		// reasons
+		// but closed with a given snap tolerance
+		if (JtsUtil.isClosed(lineString, snapTolerance)) {
+			// if (lineString.isClosed()) {
 			return splitClosedLineString(lineString,
 					duplicatedSelfIntersections, snapTolerance);
 		} else {
@@ -367,10 +365,10 @@ public class LineStringSplitter {
 		}
 
 	}
-	
-	
+
 	public static LineString[] removeSelfIntersections(LineString lineString,
-			Coordinate[] splitPoints){
-		return removeSelfIntersections(lineString, splitPoints, DEFAULT_SNAP_TOLERANCE);
+			Coordinate[] splitPoints) {
+		return removeSelfIntersections(lineString, splitPoints,
+				DEFAULT_SNAP_TOLERANCE);
 	}
 }

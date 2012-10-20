@@ -40,11 +40,9 @@
  */
 package org.gvsig.symbology.fmap.labeling.placements;
 
-import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
 import com.iver.cit.gvsig.fmap.ViewPort;
-import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.IPlacementConstraints;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelClass;
@@ -52,12 +50,12 @@ import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelLocationMetrics;
 import com.iver.utiles.swing.threads.Cancellable;
 
 /**
- *
+ * 
  * CannotPlaceLabel.java
- *
- *
+ * 
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Dec 17, 2007
- *
+ * 
  */
 public class CannotPlaceLabel implements ILabelPlacement {
 	public static final ArrayList<LabelLocationMetrics> NO_PLACES = new ArrayList<LabelLocationMetrics>();
@@ -67,9 +65,10 @@ public class CannotPlaceLabel implements ILabelPlacement {
 		return true;
 	}
 
-	public ArrayList<LabelLocationMetrics> guess(LabelClass lc, IGeometry geom, IPlacementConstraints placementConstraints, double cartographicSymbolSize, Cancellable cancel, ViewPort vp) {
+	public ArrayList<LabelLocationMetrics> guess(LabelClass lc, IGeometry geom,
+			IPlacementConstraints placementConstraints,
+			double cartographicSymbolSize, Cancellable cancel, ViewPort vp) {
 		return NO_PLACES;
 	}
-
 
 }

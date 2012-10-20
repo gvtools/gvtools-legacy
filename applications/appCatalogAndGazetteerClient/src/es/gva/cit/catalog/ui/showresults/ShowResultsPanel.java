@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.catalog.ui.showresults;
+
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -100,32 +100,36 @@ public class ShowResultsPanel extends JPanel {
 	private JButton lastButton = null;
 	private JLabel textLabel = null;
 	private JButton nextButton = null;
-	private int numRecords; 
+	private int numRecords;
 	private JButton closeButton = null;
 
 	/**
 	 * Constaructor
 	 * 
-	 * @param server Server URL
+	 * @param server
+	 *            Server URL
 	 * 
-	 * @param node Answer Node
-	 * @param protocol Search protocol
-	 * @param numRecords Number of records returned by the query
-	 * @param serverURL 
-	 * @param translator 
+	 * @param node
+	 *            Answer Node
+	 * @param protocol
+	 *            Search protocol
+	 * @param numRecords
+	 *            Number of records returned by the query
+	 * @param serverURL
+	 * @param translator
 	 */
-	public  ShowResultsPanel(CatalogClient client, int numRecords) {        
+	public ShowResultsPanel(CatalogClient client, int numRecords) {
 		super();
-		this.client = client;		
-		this.numRecords = numRecords;        
-		initialize();		
-	} 
+		this.client = client;
+		this.numRecords = numRecords;
+		initialize();
+	}
 
 	/**
 	 * This method initializes this
 	 * 
 	 */
-	private void initialize() {        
+	private void initialize() {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setSize(703, 364);
 		this.add(getNextLastPanel(), null);
@@ -134,38 +138,43 @@ public class ShowResultsPanel extends JPanel {
 		this.add(getJPanel(), null);
 		this.add(getLinksPanel(), null);
 		actualizaLabel(1);
-	} 
+	}
 
 	/**
 	 * Actualiza el valor de la cadena de taexto que muestra los resultados
 	 * 
 	 * 
-	 * @param number Registro actual
+	 * @param number
+	 *            Registro actual
 	 */
-	public void actualizaLabel(int number) {        
-		textLabel.setText(Messages.getText("results") + ": " + String.valueOf(number) + " " + Messages.getText("of") + " " +
-				String.valueOf(this.numRecords));
-	} 
+	public void actualizaLabel(int number) {
+		textLabel.setText(Messages.getText("results") + ": "
+				+ String.valueOf(number) + " " + Messages.getText("of") + " "
+				+ String.valueOf(this.numRecords));
+	}
 
 	/**
-	 * @param descripcionBoton The descripcionBoton to set.
+	 * @param descripcionBoton
+	 *            The descripcionBoton to set.
 	 */
-	public void setDescripcionBoton(JButton descripcionBoton) {        
+	public void setDescripcionBoton(JButton descripcionBoton) {
 		this.descriptionButton = descripcionBoton;
-	} 
+	}
 
 	/**
-	 * @param mapButton The mapButton to set.
+	 * @param mapButton
+	 *            The mapButton to set.
 	 */
-	public void setMapButton(JButton mapButton) {        
+	public void setMapButton(JButton mapButton) {
 		this.mapButton = mapButton;
-	} 
+	}
 
 	/**
 	 * This method initializes jPanel
+	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getDescriptionPanel() {        
+	private JPanel getDescriptionPanel() {
 		if (descriptionPanel == null) {
 			jLabel1 = new JLabel();
 			descriptionPanel = new JPanel();
@@ -184,26 +193,28 @@ public class ShowResultsPanel extends JPanel {
 			}
 		}
 		return descriptionPanel;
-	} 
+	}
 
 	/**
 	 * This method initializes jTextArea
+	 * 
 	 * @return javax.swing.JTextArea
 	 */
-	public JEditorPane getDescriptionArea() {        
+	public JEditorPane getDescriptionArea() {
 		if (descriptionArea == null) {
 			descriptionArea = new JEditorPane();
 			descriptionArea.setPreferredSize(new java.awt.Dimension(400, 300));
-			descriptionArea.setContentType("text/html");			
+			descriptionArea.setContentType("text/html");
 		}
 		return descriptionArea;
-	} 
+	}
 
 	/**
 	 * This method initializes jPanel
+	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getLinksPanel() {        
+	private JPanel getLinksPanel() {
 		if (linksPanel == null) {
 			FlowLayout flowLayout = new FlowLayout();
 			flowLayout.setAlignment(flowLayout.RIGHT);
@@ -213,24 +224,26 @@ public class ShowResultsPanel extends JPanel {
 			linksPanel.add(getCloseButton(), null);
 		}
 		return linksPanel;
-	} 
+	}
 
 	/**
 	 * This method initializes jPanel
+	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getJPanel() {        
+	private JPanel getJPanel() {
 		if (jPanel == null) {
 			jPanel = new JPanel();
 		}
 		return jPanel;
-	} 
+	}
 
 	/**
 	 * This method initializes jButton
+	 * 
 	 * @return javax.swing.JButton
 	 */
-	public JButton getDescriptionButton() {        
+	public JButton getDescriptionButton() {
 		if (descriptionButton == null) {
 			descriptionButton = new JButton();
 			descriptionButton.setText(Messages.getText("description"));
@@ -238,24 +251,26 @@ public class ShowResultsPanel extends JPanel {
 			descriptionButton.setPreferredSize(new Dimension(95, 23));
 		}
 		return descriptionButton;
-	} 
+	}
 
 	/**
 	 * This method initializes jLabel
+	 * 
 	 * @return javax.swing.JLabel
 	 */
-	private JLabel getJLabel() {        
+	private JLabel getJLabel() {
 		if (jLabel == null) {
 			jLabel = new JLabel();
 		}
 		return jLabel;
-	} 
+	}
 
 	/**
 	 * This method initializes mapButton
+	 * 
 	 * @return javax.swing.JButton
 	 */
-	public JButton getMapButton() {        
+	public JButton getMapButton() {
 		if (mapButton == null) {
 			mapButton = new JButton();
 			mapButton.setText(Messages.getText("addLayer"));
@@ -263,70 +278,76 @@ public class ShowResultsPanel extends JPanel {
 			mapButton.setPreferredSize(new Dimension(95, 23));
 		}
 		return mapButton;
-	} 
+	}
 
 	/**
 	 * This method initializes descriptionScroll
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
-	public JScrollPane getDescriptionScroll() {        
+	public JScrollPane getDescriptionScroll() {
 		if (descriptionScroll == null) {
 			descriptionScroll = new JScrollPane();
 			descriptionScroll.setViewportView(getDescriptionArea());
-			descriptionScroll.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-			descriptionScroll.setVerticalScrollBarPolicy(javax.swing.JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-			descriptionScroll.setPreferredSize(new java.awt.Dimension(400, 250));
+			descriptionScroll
+					.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			descriptionScroll
+					.setVerticalScrollBarPolicy(javax.swing.JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+			descriptionScroll
+					.setPreferredSize(new java.awt.Dimension(400, 250));
 		}
 		return descriptionScroll;
-	} 
+	}
 
 	/**
 	 * @return Returns the record.
 	 */
-	public Record getRecord() {        
+	public Record getRecord() {
 		return record;
-	} 
+	}
 
 	/**
-	 * @param record The Record to set.
+	 * @param record
+	 *            The Record to set.
 	 */
-	public void setRecord(Record record) {        
+	public void setRecord(Record record) {
 		this.record = record;
-	} 
+	}
 
 	/**
-	 * @param node 
-	 * @param protocol 
+	 * @param node
+	 * @param protocol
 	 */
-	public void loadTextNewRecord(Record record) {        
+	public void loadTextNewRecord(Record record) {
 		setRecord(record);
 		descriptionArea.setText(this.getHtml());
 		descriptionArea.setCaretPosition(0);
-		if (getRecord() != null){
-			if (getRecord().getImage() == null){
-				imageLabel.setIcon(getImgIcon(null));	
-				//DOWNLOAD the image
-				new ImageThread();			
-			}else{
+		if (getRecord() != null) {
+			if (getRecord().getImage() == null) {
+				imageLabel.setIcon(getImgIcon(null));
+				// DOWNLOAD the image
+				new ImageThread();
+			} else {
 				imageLabel.setIcon(getImgIcon(getRecord().getImage()));
 			}
 		}
 		this.repaint();
-	} 
+	}
 
 	/**
 	 * @return the HTML code to show
 	 */
-	private String getHtml() {        
+	private String getHtml() {
 		StringBuffer html = new StringBuffer();
 		html.append("<html><body>");
-		if(getRecord() == null){
+		if (getRecord() == null) {
 			html.append("Error");
 			html.append("</body></html>");
 			return html.toString();
 		}
-		if ((getRecord().getNode() != null) && (getRecord().getNode().getName() != null)){
-			if (getRecord().getNode().getName().equals(XMLNode.ISNOTXML)){
+		if ((getRecord().getNode() != null)
+				&& (getRecord().getNode().getName() != null)) {
+			if (getRecord().getNode().getName().equals(XMLNode.ISNOTXML)) {
 				html.append(getRecord().getNode().getText());
 				html.append("</body></html>");
 				return html.toString();
@@ -337,18 +358,18 @@ public class ShowResultsPanel extends JPanel {
 			html.append(this.getRecord().getTitle());
 		}
 		html.append("<font COLOR=\"#000000\">");
-		if ((this.getRecord().getAbstract_() != null) &&
-				(!(this.getRecord().getAbstract_().equals("")))) {
+		if ((this.getRecord().getAbstract_() != null)
+				&& (!(this.getRecord().getAbstract_().equals("")))) {
 			html.append("<br>");
 			html.append("<br>");
 			html.append("<b>" + Messages.getText("abstract") + ": </b>");
 			html.append(this.getRecord().getAbstract_());
 		}
-		if ((this.getRecord().getPurpose() != null) &&
-				(!(this.getRecord().getPurpose().equals("")))) {
+		if ((this.getRecord().getPurpose() != null)
+				&& (!(this.getRecord().getPurpose().equals("")))) {
 			html.append("<br>");
 			html.append("<br>");
-			html.append("<b>" + Messages.getText("purpose") +": </b>");
+			html.append("<b>" + Messages.getText("purpose") + ": </b>");
 			html.append(this.getRecord().getPurpose());
 		}
 		if (this.getRecord().getKeyWords() != null) {
@@ -367,13 +388,14 @@ public class ShowResultsPanel extends JPanel {
 		}
 		html.append("</body></html>");
 		return html.toString();
-	} 
+	}
 
 	/**
 	 * This method initializes imagePanel
+	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getImagePanel() {        
+	private JPanel getImagePanel() {
 		if (imagePanel == null) {
 			imagePanel = new JPanel();
 			imagePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -388,23 +410,23 @@ public class ShowResultsPanel extends JPanel {
 			borderPanel.add(imageLabel, BorderLayout.CENTER);
 		}
 		return imagePanel;
-	} 
+	}
 
 	/**
-	 * @return 
-	 * @param pic 
+	 * @return
+	 * @param pic
 	 */
-	public ImageIcon getImgIcon(BufferedImage pic) {        
+	public ImageIcon getImgIcon(BufferedImage pic) {
 		BufferedImage img = new BufferedImage(180, 180,
 				BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = img.createGraphics();
 		if (pic != null) {
-			double fw =         1.0;
-			double fh =         1.0;
-			if (pic.getWidth() > pic.getHeight()){
+			double fw = 1.0;
+			double fh = 1.0;
+			if (pic.getWidth() > pic.getHeight()) {
 				fw = 180D / pic.getWidth();
-				fh = fw; 
-			}else{
+				fh = fw;
+			} else {
 				fh = 180D / pic.getHeight();
 				fw = fh;
 			}
@@ -421,15 +443,17 @@ public class ShowResultsPanel extends JPanel {
 					RenderingHints.VALUE_ANTIALIAS_ON);
 			g.setFont(new Font("Lucida Bright", Font.ITALIC, 30));
 			g.rotate(-Math.PI / 4, 100D, 100D);
-			String text = "NO PICTURE"; //DateFormat.getDateInstance(DateFormat.SHORT).format(new Date());
+			String text = "NO PICTURE"; // DateFormat.getDateInstance(DateFormat.SHORT).format(new
+										// Date());
 			TextLayout tl = new TextLayout(text, g.getFont(),
 					g.getFontRenderContext());
 			Rectangle2D bounds = tl.getBounds();
-			double x = (( 180D - bounds.getWidth()) / 2) - bounds.getX();
-			double y = (( 180D - bounds.getHeight()) / 2) - bounds.getY();
-			Shape outline = tl.getOutline(AffineTransform.getTranslateInstance(x +
-					2, y + 1));
-			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+			double x = ((180D - bounds.getWidth()) / 2) - bounds.getX();
+			double y = ((180D - bounds.getHeight()) / 2) - bounds.getY();
+			Shape outline = tl.getOutline(AffineTransform.getTranslateInstance(
+					x + 2, y + 1));
+			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+					0.3f));
 			g.setPaint(Color.WHITE);
 			g.draw(outline);
 			g.setPaint(new GradientPaint(0, 0, new Color(192, 192, 255), 30,
@@ -438,38 +462,41 @@ public class ShowResultsPanel extends JPanel {
 		}
 		g.dispose();
 		return new ImageIcon(img);
-	} 
+	}
 
 	/**
 	 * @return Returns the imageURL.
 	 */
-	public URL getImageURL() {        
+	public URL getImageURL() {
 		return imageURL;
-	} 
+	}
 
 	/**
-	 * @param imageURL The imageURL to set.
+	 * @param imageURL
+	 *            The imageURL to set.
 	 */
-	public void setImageURL(URL imageURL) {        
+	public void setImageURL(URL imageURL) {
 		this.imageURL = imageURL;
-	} 
+	}
 
 	/**
 	 * This method initializes jPanel1
+	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getJPanel1() {        
+	private JPanel getJPanel1() {
 		if (jPanel1 == null) {
 			jPanel1 = new JPanel();
 		}
 		return jPanel1;
-	} 
+	}
 
 	/**
 	 * This method initializes jPanel2
+	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getNextLastPanel() {        
+	private JPanel getNextLastPanel() {
 		if (nextLastPanel == null) {
 			textLabel = new JLabel();
 			nextLastPanel = new JPanel();
@@ -479,7 +506,7 @@ public class ShowResultsPanel extends JPanel {
 			nextLastPanel.add(getNextButton(), null);
 		}
 		return nextLastPanel;
-	} 
+	}
 
 	/**
 	 * This method initializes jButton
@@ -487,7 +514,7 @@ public class ShowResultsPanel extends JPanel {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	public JButton getLastButton() {        
+	public JButton getLastButton() {
 		if (lastButton == null) {
 			lastButton = new JButton();
 			lastButton.setText(Messages.getText("last"));
@@ -496,13 +523,14 @@ public class ShowResultsPanel extends JPanel {
 			lastButton.setPreferredSize(new Dimension(95, 23));
 		}
 		return lastButton;
-	} 
+	}
 
 	/**
 	 * This method initializes jButton
+	 * 
 	 * @return javax.swing.JButton
 	 */
-	public JButton getNextButton() {        
+	public JButton getNextButton() {
 		if (nextButton == null) {
 			nextButton = new JButton();
 			nextButton.setText(Messages.getText("next"));
@@ -513,13 +541,14 @@ public class ShowResultsPanel extends JPanel {
 			}
 		}
 		return nextButton;
-	} 
+	}
 
 	/**
 	 * This method initializes jButton
+	 * 
 	 * @return javax.swing.JButton
 	 */
-	public JButton getCloseButton() {        
+	public JButton getCloseButton() {
 		if (closeButton == null) {
 			closeButton = new JButton();
 			closeButton.setText(Messages.getText("close"));
@@ -527,34 +556,36 @@ public class ShowResultsPanel extends JPanel {
 			closeButton.setPreferredSize(new Dimension(80, 23));
 		}
 		return closeButton;
-	} 
+	}
 
 	/**
 	 * This thread is used to download the image
+	 * 
 	 * @author jorpiell
-	 *
+	 * 
 	 */
 	private class ImageThread implements Runnable {
 		volatile Thread myThread = null;
 
-		public  ImageThread() {        
+		public ImageThread() {
 			myThread = new Thread(this);
 			myThread.start();
-		} 
+		}
 
-		public void stop() {        
+		public void stop() {
 			myThread.stop();
-		} 
+		}
 
 		/*
 		 * (non-Javadoc)
+		 * 
 		 * @see java.lang.Runnable#run()
 		 */
-		public void run() {        
+		public void run() {
 			BufferedImage img = ImageRetriever.getImageUrl(getRecord());
 			imageLabel.setIcon(getImgIcon(img));
-		} 
+		}
 	}
 
 }
-//@jve:decl-index=0:visual-constraint="107,10"
+// @jve:decl-index=0:visual-constraint="107,10"

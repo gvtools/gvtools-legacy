@@ -26,10 +26,12 @@ import org.gvsig.raster.beans.canvas.layers.Border;
 import org.gvsig.raster.beans.canvas.layers.GraphicHistogram;
 import org.gvsig.raster.beans.canvas.layers.InfoLayer;
 import org.gvsig.raster.datastruct.Histogram;
+
 /**
  * Componente con el histograma de salida.
  * 
  * 20/02/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class OutputHistogram extends HistogramGraphicBase {
@@ -38,13 +40,16 @@ public class OutputHistogram extends HistogramGraphicBase {
 	/**
 	 * Crea una nueva instancia de OutputHistogram.
 	 */
-	public OutputHistogram(Histogram hist, FLyrRasterSE lyr, double[] minList, double[] maxList) {
+	public OutputHistogram(Histogram hist, FLyrRasterSE lyr, double[] minList,
+			double[] maxList) {
 		super(hist, lyr, minList, maxList);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.enhanced.graphics.HistogramGraphicBase#getCanvas()
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.enhanced.graphics.HistogramGraphicBase#getCanvas()
 	 */
 	public GCanvas getCanvas() {
 		if (canvas == null) {

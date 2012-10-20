@@ -103,7 +103,7 @@ import com.vividsolutions.jts.geom.impl.CoordinateArraySequence;
 
 public class NetworkUtils {
 	static int idSymbolFlag = -1;
-	
+
 	static Logger logger = Logger.getLogger(NetworkUtils.class);
 
 	static private GeometryFactory geomFactory = new GeometryFactory();
@@ -446,17 +446,17 @@ public class NetworkUtils {
 				.toArray(new Coordinate[0]));
 	}
 
-	
-	
 	/**
-	 * If coordList != null, it will be used to return all coordinates. Useful to avoid
-	 * two iterations, and only if you linestring is single part.
-	 * If you don't need it, simply set coordList = null
+	 * If coordList != null, it will be used to return all coordinates. Useful
+	 * to avoid two iterations, and only if you linestring is single part. If
+	 * you don't need it, simply set coordList = null
+	 * 
 	 * @param geom
 	 * @param coordList
 	 * @return
 	 */
-	public static double getLength(IGeometry geom, ArrayList<Coordinate> coordList) {
+	public static double getLength(IGeometry geom,
+			ArrayList<Coordinate> coordList) {
 		double partlength = 0;
 		PathIterator pi = geom.getPathIterator(null, FConverter.FLATNESS);
 		double[] theData = new double[6];
@@ -465,95 +465,90 @@ public class NetworkUtils {
 		Coordinate c2 = null;
 		Coordinate first = null;
 		while (!pi.isDone()) {
-			//while not done
+			// while not done
 			int type = pi.currentSegment(theData);
-        	switch (type)
-        	{
-        	case PathIterator.SEG_MOVETO:
-//        		coordList = new CoordinateList();
-//        		listOfParts.add(coordList);
-        		totalLength += partlength;
-        		partlength = 0;
-        		c1= new Coordinate(theData[0], theData[1]);
-        		first = c1;
-        		if (coordList != null)
-        			coordList.add(c1);
-        		break;
-        	case PathIterator.SEG_LINETO:
-        		c2= new Coordinate(theData[0], theData[1]);
-        		if (coordList != null)
-        			coordList.add(c2);
-        		partlength += c2.distance(c1);
-        		c1 = c2;
-        		break;
+			switch (type) {
+			case PathIterator.SEG_MOVETO:
+				// coordList = new CoordinateList();
+				// listOfParts.add(coordList);
+				totalLength += partlength;
+				partlength = 0;
+				c1 = new Coordinate(theData[0], theData[1]);
+				first = c1;
+				if (coordList != null)
+					coordList.add(c1);
+				break;
+			case PathIterator.SEG_LINETO:
+				c2 = new Coordinate(theData[0], theData[1]);
+				if (coordList != null)
+					coordList.add(c2);
+				partlength += c2.distance(c1);
+				c1 = c2;
+				break;
 
-        	case PathIterator.SEG_CLOSE:
-        		if (coordList != null)
-        			coordList.add(first);
-        		partlength += c1.distance(first);
-        		break;
+			case PathIterator.SEG_CLOSE:
+				if (coordList != null)
+					coordList.add(first);
+				partlength += c1.distance(first);
+				break;
 
-        	}
-        	pi.next();
+			}
+			pi.next();
 		}
 		totalLength += partlength;
 		return totalLength;
 	}
-	
+
 	public static IGeometry flipGeometry(IGeometry geom) {
 		GeneralPathX gp = new GeneralPathX();
 		PathIterator pi = geom.getPathIterator(null, FConverter.FLATNESS);
 		double[] theData = new double[6];
-        Coordinate first = null;
-        CoordinateList coordList = new CoordinateList();
-        Coordinate c1;
-        GeneralPathX newGp = new GeneralPathX();
-        ArrayList listOfParts = new ArrayList();
+		Coordinate first = null;
+		CoordinateList coordList = new CoordinateList();
+		Coordinate c1;
+		GeneralPathX newGp = new GeneralPathX();
+		ArrayList listOfParts = new ArrayList();
 		while (!pi.isDone()) {
-			//while not done
+			// while not done
 			int type = pi.currentSegment(theData);
-        	switch (type)
-        	{
-        	case PathIterator.SEG_MOVETO:
-        		coordList = new CoordinateList();
-        		listOfParts.add(coordList);
-        		c1= new Coordinate(theData[0], theData[1]);
-        		coordList.add(c1, true);
-        		break;
-        	case PathIterator.SEG_LINETO:
-        		c1= new Coordinate(theData[0], theData[1]);
-        		coordList.add(c1, true);
-        		break;
+			switch (type) {
+			case PathIterator.SEG_MOVETO:
+				coordList = new CoordinateList();
+				listOfParts.add(coordList);
+				c1 = new Coordinate(theData[0], theData[1]);
+				coordList.add(c1, true);
+				break;
+			case PathIterator.SEG_LINETO:
+				c1 = new Coordinate(theData[0], theData[1]);
+				coordList.add(c1, true);
+				break;
 
-        	case PathIterator.SEG_CLOSE:
-        		coordList.add(coordList.getCoordinate(0));
-        		break;
+			case PathIterator.SEG_CLOSE:
+				coordList.add(coordList.getCoordinate(0));
+				break;
 
-        	}
-        	pi.next();
+			}
+			pi.next();
 		}
 
-		for (int i=listOfParts.size()-1; i>=0; i--)
-		{
+		for (int i = listOfParts.size() - 1; i >= 0; i--) {
 			coordList = (CoordinateList) listOfParts.get(i);
 			Coordinate[] coords = coordList.toCoordinateArray();
 			CoordinateArraySequence seq = new CoordinateArraySequence(coords);
 			CoordinateSequences.reverse(seq);
 			coords = seq.toCoordinateArray();
 			newGp.moveTo(coords[0].x, coords[0].y);
-			for (int j=1; j < coords.length; j++)
-			{
+			for (int j = 1; j < coords.length; j++) {
 				newGp.lineTo(coords[j].x, coords[j].y);
 			}
 		}
-		
+
 		return ShapeFactory.createPolyline2D(newGp);
 	}
-	
-	
+
 	/**
-	 * Receives IGeometry, percentage of desired linestring and direction.
-	 * Used in populateRoute (at least) in order to speed up populate route
+	 * Receives IGeometry, percentage of desired linestring and direction. Used
+	 * in populateRoute (at least) in order to speed up populate route
 	 * 
 	 * @param geom
 	 * @param pct
@@ -574,9 +569,9 @@ public class NetworkUtils {
 		ArrayList<Coordinate> coords = new ArrayList<Coordinate>();
 		longReal = getLength(geom, coords);
 		longBuscada = longReal * pct;
-//		Coordinate[] coords = geom.getCoordinates();
+		// Coordinate[] coords = geom.getCoordinates();
 		Coordinate c1 = null, c2 = null;
-//		ArrayList savedCoords = new ArrayList();
+		// ArrayList savedCoords = new ArrayList();
 		GeneralPathX gpx = new GeneralPathX();
 		Coordinate lastCoord = null;
 
@@ -590,7 +585,7 @@ public class NetworkUtils {
 				dist = c1.distance(c2);
 				longAcum += dist;
 				if ((lastCoord == null) || (!c1.equals2D(lastCoord))) {
-//					savedCoords.add(c1);
+					// savedCoords.add(c1);
 					if (numVertices == 0)
 						gpx.moveTo(c1.x, c1.y);
 					else
@@ -607,7 +602,7 @@ public class NetworkUtils {
 					nuevaX = c1.x + (c2.x - c1.x) * miniPorcentaje;
 					nuevaY = c1.y + (c2.y - c1.y) * miniPorcentaje;
 
-//					savedCoords.add(new Coordinate(nuevaX, nuevaY));
+					// savedCoords.add(new Coordinate(nuevaX, nuevaY));
 					gpx.lineTo(nuevaX, nuevaY);
 					numVertices++;
 					break;
@@ -639,13 +634,13 @@ public class NetworkUtils {
 						nuevaX = c1.x + (c2.x - c1.x) * miniPorcentaje;
 						nuevaY = c1.y + (c2.y - c1.y) * miniPorcentaje;
 
-//						savedCoords.add(new Coordinate(nuevaX, nuevaY));
-//						savedCoords.add(c2);
+						// savedCoords.add(new Coordinate(nuevaX, nuevaY));
+						// savedCoords.add(c2);
 						gpx.moveTo(nuevaX, nuevaY);
 						gpx.lineTo(c2.x, c2.y);
 					} else {
 						if ((lastCoord == null) || (!c2.equals2D(lastCoord))) {
-//							savedCoords.add(c2);
+							// savedCoords.add(c2);
 							gpx.lineTo(c2.x, c2.y);
 							lastCoord = c2;
 						}
@@ -662,15 +657,15 @@ public class NetworkUtils {
 
 		return ShapeFactory.createPolyline2D(gpx);
 	}
-	
-	
+
 	/**
-	 * Retrieves a sub-linestring from pct1 and length = pct2 
+	 * Retrieves a sub-linestring from pct1 and length = pct2
 	 * 
 	 * @param geom
-	 * @param pct1 =>
-	 *            from pct
-	 * @param pct2 => distance (in percentage) of second point
+	 * @param pct1
+	 *            => from pct
+	 * @param pct2
+	 *            => distance (in percentage) of second point
 	 * @param direction
 	 *            1=> same as geometry. 0=> Inversed
 	 * @return partial linestring
@@ -687,7 +682,7 @@ public class NetworkUtils {
 		longAcum = 0;
 		longReal = geom.getLength();
 		longFrom = longReal * pct1;
-		
+
 		Coordinate[] coords = geom.getCoordinates();
 		Coordinate c1 = null, c2 = null;
 		ArrayList savedCoords = new ArrayList();
@@ -736,7 +731,7 @@ public class NetworkUtils {
 		} else // Hemos entrado por el 2 hacia el 1
 		{
 			numVertices = 0;
-			
+
 			longTo = longFrom;
 			longFrom = longFrom - (longReal * pct2);
 
@@ -921,10 +916,11 @@ public class NetworkUtils {
 				continue;
 
 			Coordinate[] coords = geo.getCoordinates();
-			 if (coords.length > 1) {
-				 logger.warn("The record " + i + " has " + coords.length + "coordinates. Pay attention!!");
-				 logger.warn("Only one point will be used.");
-			 }
+			if (coords.length > 1) {
+				logger.warn("The record " + i + " has " + coords.length
+						+ "coordinates. Pay attention!!");
+				logger.warn("Only one point will be used.");
+			}
 			for (int j = 0; j < coords.length; j++) {
 				GvFlag flag = net.addFlag(coords[j].x, coords[j].y, tolerance);
 				if (flag == null) {
@@ -938,7 +934,8 @@ public class NetworkUtils {
 					// aumente la tolerancia.",
 					// e);
 				}
-				System.out.println("Situando flag " + i + " de la capa " + layer.getName() + " en idArc=" + flag.getIdArc());
+				System.out.println("Situando flag " + i + " de la capa "
+						+ layer.getName() + " en idArc=" + flag.getIdArc());
 				flags.add(flag);
 				flag.getProperties().put("rec", new Integer(i));
 				break;
@@ -949,16 +946,17 @@ public class NetworkUtils {
 		reader.stop();
 		return flags.toArray(new GvFlag[0]);
 	}
-	
+
 	/**
 	 * Parche hasta corregir QuadtreGT2 y createSpatialIndex (lo de menos de
 	 * 65.000 niveles)
 	 * 
 	 * @param lyrVect
-	 * @throws ReadDriverException 
-	 * @throws InitializeDriverException 
+	 * @throws ReadDriverException
+	 * @throws InitializeDriverException
 	 */
-	public static ISpatialIndex createJtsQuadtree(FLyrVect lyrVect) throws InitializeDriverException, ReadDriverException {
+	public static ISpatialIndex createJtsQuadtree(FLyrVect lyrVect)
+			throws InitializeDriverException, ReadDriverException {
 		ReadableVectorial va = lyrVect.getSource();
 		if (!(va.getDriver() instanceof BoundedShapes))
 			return null;
@@ -970,9 +968,9 @@ public class NetworkUtils {
 			Rectangle2D r = shapeBounds.getShapeBounds(i);
 			if (r != null)
 				spatialIndex.insert(r, i);
-			if ((i % 100000) == 0) 
+			if ((i % 100000) == 0)
 				System.out.println("Inserting  " + i + " bounding of " + to);
-			
+
 		} // for
 		va.stop();
 		// vectorial adapter needs a reference to the spatial index, to
@@ -984,16 +982,17 @@ public class NetworkUtils {
 
 	public static void loadLegend(FLyrVect lyr, String gvlPath) {
 		File xmlFile = new File(gvlPath);
-				
+
 		FileReader reader = null;
 
 		try {
 			reader = new FileReader(xmlFile);
 
 			XmlTag tag = (XmlTag) XmlTag.unmarshal(reader);
-			IVectorLegend myLegend = LegendFactory.createFromXML(new XMLEntity(tag));
+			IVectorLegend myLegend = LegendFactory.createFromXML(new XMLEntity(
+					tag));
 
-			if(myLegend != null ) {
+			if (myLegend != null) {
 				lyr.setLegend(myLegend);
 			}
 		} catch (FileNotFoundException e) {
@@ -1013,8 +1012,6 @@ public class NetworkUtils {
 			e.printStackTrace();
 		}
 
-		
 	}
-
 
 }

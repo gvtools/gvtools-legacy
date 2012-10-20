@@ -22,9 +22,9 @@ import org.gvsig.gui.beans.TestUI;
 import org.gvsig.gui.beans.table.exceptions.NotInitializeException;
 
 public class TestTreeRadioButtonModelTable {
-	private int            w     = 400;
-	private int            h     = 200;
-	private TestUI         frame = new TestUI("TestTreeRadioButtonModelTable");
+	private int w = 400;
+	private int h = 200;
+	private TestUI frame = new TestUI("TestTreeRadioButtonModelTable");
 	private TableContainer table = null;
 
 	public TestTreeRadioButtonModelTable() throws NotInitializeException {
@@ -34,10 +34,14 @@ public class TestTreeRadioButtonModelTable {
 		table.setModel("ARGBBandSelectorModel");
 		table.initialize();
 
-		Object[] row = { new Boolean(false), new Boolean(true), new Boolean(false), new Boolean(false), "layer1.tif" };
-		Object[] row1 = { new Boolean(false), new Boolean(false), new Boolean(true), new Boolean(false), "layer2.tif" };
-		Object[] row2 = { new Boolean(false), new Boolean(false), new Boolean(false), new Boolean(true), "layer3.tif" };
-		Object[] row3 = { new Boolean(true), new Boolean(false), new Boolean(false), new Boolean(false), "layer4.tif" };
+		Object[] row = { new Boolean(false), new Boolean(true),
+				new Boolean(false), new Boolean(false), "layer1.tif" };
+		Object[] row1 = { new Boolean(false), new Boolean(false),
+				new Boolean(true), new Boolean(false), "layer2.tif" };
+		Object[] row2 = { new Boolean(false), new Boolean(false),
+				new Boolean(false), new Boolean(true), "layer3.tif" };
+		Object[] row3 = { new Boolean(true), new Boolean(false),
+				new Boolean(false), new Boolean(false), "layer4.tif" };
 		table.addRow(row);
 		table.addRow(row1);
 		table.addRow(row2);

@@ -62,14 +62,14 @@ import org.gvsig.exceptions.BaseException;
 /**
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  */
-public class GMLFileReadException extends BaseException{
+public class GMLFileReadException extends BaseException {
 
 	private static final long serialVersionUID = 6522759980715442218L;
 
 	/**
 	 * @param args
 	 */
-	public GMLFileReadException(Throwable error){
+	public GMLFileReadException(Throwable error) {
 		this.init();
 		initCause(error);
 	}
@@ -78,9 +78,10 @@ public class GMLFileReadException extends BaseException{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	public void init() {
-		messageKey="Gml_File_Read_Error";
-		formatString="Error Reading GML File";
+		messageKey = "Gml_File_Read_Error";
+		formatString = "Error Reading GML File";
 		code = serialVersionUID;
 	}
 }

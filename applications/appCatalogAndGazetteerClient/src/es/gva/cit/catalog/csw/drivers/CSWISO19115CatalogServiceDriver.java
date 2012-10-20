@@ -1,20 +1,10 @@
 package es.gva.cit.catalog.csw.drivers;
 
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
-import java.util.Collection;
-
 import es.gva.cit.catalog.csw.drivers.profiles.CSWISO19115Profile;
-import es.gva.cit.catalog.csw.drivers.profiles.CSWAbstractProfile;
-import es.gva.cit.catalog.csw.drivers.profiles.CSWebRIMProfile;
 import es.gva.cit.catalog.csw.parsers.CSWConstants;
-import es.gva.cit.catalog.drivers.GetRecordsReply;
 import es.gva.cit.catalog.drivers.profiles.IProfile;
 import es.gva.cit.catalog.metadataxml.XMLNode;
 import es.gva.cit.catalog.metadataxml.XMLTree;
-import es.gva.cit.catalog.protocols.HTTPPostProtocol;
-import es.gva.cit.catalog.querys.CatalogQuery;
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
@@ -65,35 +55,42 @@ import es.gva.cit.catalog.querys.CatalogQuery;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class CSWISO19115CatalogServiceDriver extends CSWCatalogServiceDriver{
+public class CSWISO19115CatalogServiceDriver extends CSWCatalogServiceDriver {
 	public static String SERVICE_NAME = "CSW/ISO 19115";
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#getServiceName()
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#getServiceName()
 	 */
 	public String getServiceName() {
 		return SERVICE_NAME;
-	}	
-	
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalog.csw.drivers.CSWCatalogServiceDriver#retrieveResults(es.gva.cit.catalog.metadataxml.XMLNode)
+	 * 
+	 * @see
+	 * es.gva.cit.catalog.csw.drivers.CSWCatalogServiceDriver#retrieveResults
+	 * (es.gva.cit.catalog.metadataxml.XMLNode)
 	 */
-	protected XMLNode[] retrieveResults(XMLNode root){
-		XMLNode resultNode = XMLTree.searchNode(root, CSWConstants.SEARCH_RESULTS);
-		if (resultNode == null){
+	protected XMLNode[] retrieveResults(XMLNode root) {
+		XMLNode resultNode = XMLTree.searchNode(root,
+				CSWConstants.SEARCH_RESULTS);
+		if (resultNode == null) {
 			return new XMLNode[0];
 		}
 		XMLNode[] results = new XMLNode[resultNode.getNumSubNodes()];
-		for (int i=0 ; i<resultNode.getNumSubNodes() ; i++){
+		for (int i = 0; i < resultNode.getNumSubNodes(); i++) {
 			results[i] = resultNode.getSubNode(i);
 		}
 		return results;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see es.gva.cit.catalog.drivers.AbstractCatalogServiceDriver#getProfile()
 	 */
 	public IProfile getProfile() {

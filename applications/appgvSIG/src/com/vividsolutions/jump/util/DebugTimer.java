@@ -1,4 +1,3 @@
-
 /*
  * The Unified Mapping Platform (JUMP) is an extensible, interactive GUI 
  * for visualizing and manipulating spatial features with geometry and attributes.
@@ -35,57 +34,56 @@ package com.vividsolutions.jump.util;
 
 import com.vividsolutions.jts.util.Stopwatch;
 
-
 public class DebugTimer {
-    private static final int TIME_LEN = 10;
-    private static DebugTimer timer = new DebugTimer();
-    private Stopwatch sw = null;
-    private String blankStr;
+	private static final int TIME_LEN = 10;
+	private static DebugTimer timer = new DebugTimer();
+	private Stopwatch sw = null;
+	private String blankStr;
 
-    public DebugTimer() {
-        sw = new Stopwatch();
-        sw.start();
-        blankStr = fillString(TIME_LEN, ' ');
-    }
+	public DebugTimer() {
+		sw = new Stopwatch();
+		sw.start();
+		blankStr = fillString(TIME_LEN, ' ');
+	}
 
-    public static void startStatic(String msg) {
-        timer.start(msg);
-    }
+	public static void startStatic(String msg) {
+		timer.start(msg);
+	}
 
-    public static void logEventStatic(String msg) {
-        timer.logEvent(msg);
-    }
+	public static void logEventStatic(String msg) {
+		timer.logEvent(msg);
+	}
 
-    public void start(String msg) {
-        System.out.println("Started    " + msg);
-        sw.start();
-    }
+	public void start(String msg) {
+		System.out.println("Started    " + msg);
+		sw.start();
+	}
 
-    public void logEvent(String msg) {
-        String elapsedStr = formatTime(sw.getTimeString());
-        System.out.println("Elapsed: " + elapsedStr + "    " + msg);
-        sw.start();
-    }
+	public void logEvent(String msg) {
+		String elapsedStr = formatTime(sw.getTimeString());
+		System.out.println("Elapsed: " + elapsedStr + "    " + msg);
+		sw.start();
+	}
 
-    public String formatTime(String timeStr) {
-        if (timeStr.length() < TIME_LEN) {
-            String filled = blankStr + timeStr;
-            int start = filled.length() - TIME_LEN;
+	public String formatTime(String timeStr) {
+		if (timeStr.length() < TIME_LEN) {
+			String filled = blankStr + timeStr;
+			int start = filled.length() - TIME_LEN;
 
-            return filled.substring(start);
-        }
+			return filled.substring(start);
+		}
 
-        // don't pad if it's already longer
-        return timeStr;
-    }
+		// don't pad if it's already longer
+		return timeStr;
+	}
 
-    public String fillString(int len, char ch) {
-        StringBuffer buf = new StringBuffer(len);
+	public String fillString(int len, char ch) {
+		StringBuffer buf = new StringBuffer(len);
 
-        for (int i = 0; i < len; i++) {
-            buf.append(ch);
-        }
+		for (int i = 0; i < len; i++) {
+			buf.append(ch);
+		}
 
-        return buf.toString();
-    }
+		return buf.toString();
+	}
 }

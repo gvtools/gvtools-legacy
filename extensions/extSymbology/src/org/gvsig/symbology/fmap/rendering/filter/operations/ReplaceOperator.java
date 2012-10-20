@@ -54,20 +54,18 @@ import com.hardcode.gdbms.engine.values.NullValue;
 import com.hardcode.gdbms.engine.values.ShortValue;
 import com.hardcode.gdbms.engine.values.StringValue;
 import com.hardcode.gdbms.engine.values.Value;
+
 /**
- *
- * Implements the funcionality of the ReplaceOperator operator which
- * takes an string with a field name and returns its value contained in
- * a HashTable
- *
+ * 
+ * Implements the funcionality of the ReplaceOperator operator which takes an
+ * string with a field name and returns its value contained in a HashTable
+ * 
  * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
- *
+ * 
  */
 public class ReplaceOperator extends Operator {
 
-
 	private String id;
-
 
 	public String getName() {
 		return OperationTags.REPLACE_OP;
@@ -81,6 +79,7 @@ public class ReplaceOperator extends Operator {
 		id = image;
 
 	}
+
 	public void addArgument(int i, Expression arg) {
 		// TODO Auto-generated method stub
 
@@ -94,31 +93,28 @@ public class ReplaceOperator extends Operator {
 				Integer val = Integer.valueOf(v.toString());
 				return (val);
 			}
-			if (v.getClass().equals(LongValue.class) ||
-					v.getClass().equals(ByteValue.class) ||
-					v.getClass().equals(ShortValue.class) ||
-					v.getClass().equals(FloatValue.class) ||
-					v.getClass().equals(DoubleValue.class)) {
-				Double val =  Double.valueOf(v.toString());
+			if (v.getClass().equals(LongValue.class)
+					|| v.getClass().equals(ByteValue.class)
+					|| v.getClass().equals(ShortValue.class)
+					|| v.getClass().equals(FloatValue.class)
+					|| v.getClass().equals(DoubleValue.class)) {
+				Double val = Double.valueOf(v.toString());
 				return (val);
-			}
-			else if (v.getClass().equals(BooleanValue.class) ||
-					v.getClass().equals(BinaryValue.class)) {
+			} else if (v.getClass().equals(BooleanValue.class)
+					|| v.getClass().equals(BinaryValue.class)) {
 				return (new Boolean(v.toString()));
-			}
-			else if (v.getClass().equals(StringValue.class)) {
+			} else if (v.getClass().equals(StringValue.class)) {
 				return (new String(v.toString()));
-			}
-			else if (v.getClass().equals(NullValue.class)) {
+			} else if (v.getClass().equals(NullValue.class)) {
 				return (null);
 			}
-		}
-		else if(v == null && id.length() > 0)
-			return (new String("["+id.toString()+"]"));
+		} else if (v == null && id.length() > 0)
+			return (new String("[" + id.toString() + "]"));
 
 		throw new ExpressionException(ExpressionException.NO_CLASSIF_NAME);
 
 	}
+
 	public ArrayList<Expression> getArguments() {
 		// TODO Auto-generated method stub
 		return null;
@@ -132,9 +128,11 @@ public class ReplaceOperator extends Operator {
 		// TODO Auto-generated method stub
 
 	}
+
 	public void check() throws ExpressionException {
 		return;
 	}
+
 	public String getValue() {
 		return id;
 	}

@@ -3,11 +3,10 @@ package com.hardcode.gdbms.engine.instruction;
 import com.hardcode.gdbms.parser.Node;
 import com.hardcode.gdbms.parser.SimpleNode;
 
-
 /**
  * Clase base para todos los adaptadores de elementos del arbol sintáctico
  * generado por el parser a elementos descendientes de SelectInstruction
- *
+ * 
  * @author Fernando González Cortés
  */
 public class Adapter {
@@ -18,10 +17,11 @@ public class Adapter {
 
 	/**
 	 * set the context of the instruction being executed. Should be invoked on
-	 * the root adapter to make all the adapter nodes have the same
-	 * instruction context
-	 *
-	 * @param ic instruction context to set
+	 * the root adapter to make all the adapter nodes have the same instruction
+	 * context
+	 * 
+	 * @param ic
+	 *            instruction context to set
 	 */
 	public void setInstructionContext(InstructionContext ic) {
 		this.ic = ic;
@@ -35,7 +35,7 @@ public class Adapter {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public InstructionContext getInstructionContext() {
@@ -45,8 +45,9 @@ public class Adapter {
 	/**
 	 * Establece la entidad del arbol sintáctico de la que es adaptador este
 	 * objeto
-	 *
-	 * @param o Nodo de arbol sintáctico
+	 * 
+	 * @param o
+	 *            Nodo de arbol sintáctico
 	 */
 	public void setEntity(Node o) {
 		entity = o;
@@ -55,7 +56,7 @@ public class Adapter {
 	/**
 	 * Obtiene la entidad del arbol sintáctico de la que es adaptador este
 	 * objeto
-	 *
+	 * 
 	 * @return Nodo del arbol sintáctico
 	 */
 	public SimpleNode getEntity() {
@@ -64,8 +65,9 @@ public class Adapter {
 
 	/**
 	 * Añade un hijo al adaptador
-	 *
-	 * @param a Adaptador hijo
+	 * 
+	 * @param a
+	 *            Adaptador hijo
 	 */
 	public void setChilds(Adapter[] a) {
 		childs = a;
@@ -73,9 +75,9 @@ public class Adapter {
 
 	/**
 	 * Obtiene el array de hijos del adaptador
-	 *
-	 * @return Array de hijos del adaptador. Si no existe ningún hijo se
-	 * 		   retorna un array vacío
+	 * 
+	 * @return Array de hijos del adaptador. Si no existe ningún hijo se retorna
+	 *         un array vacío
 	 */
 	public Adapter[] getChilds() {
 		return childs;
@@ -83,7 +85,7 @@ public class Adapter {
 
 	/**
 	 * Establece el padre del nodo en el arbol de adaptadores
-	 *
+	 * 
 	 * @param parent
 	 */
 	protected void setParent(Adapter parent) {
@@ -95,9 +97,11 @@ public class Adapter {
 	 * único que hacen es devolver el valor de su único hijo. Para evitar esto
 	 * se pone al hijo en contacto directo con el padre invocando directamente
 	 * este método
-	 *
-	 * @param child Hijo a sustituir
-	 * @param newChild Hijo que reemplaza al anterior
+	 * 
+	 * @param child
+	 *            Hijo a sustituir
+	 * @param newChild
+	 *            Hijo que reemplaza al anterior
 	 */
 	protected void replaceChild(Adapter child, Adapter newChild) {
 		for (int i = 0; i < childs.length; i++) {
@@ -109,7 +113,7 @@ public class Adapter {
 
 	/**
 	 * Obtiene el padre de este adaptador en el arbol de adaptadores
-	 *
+	 * 
 	 * @return Returns the parent.
 	 */
 	public Adapter getParent() {

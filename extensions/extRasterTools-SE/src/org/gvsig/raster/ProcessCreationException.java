@@ -17,16 +17,17 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
  */
 package org.gvsig.raster;
+
 /**
- * Excepción lanzada cuando no es posible crear un proceso. Esta es lanzada 
+ * Excepción lanzada cuando no es posible crear un proceso. Esta es lanzada
  * después de un proceso de validación de los parámetros de entrada
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
-public class ProcessCreationException extends Exception{
+public class ProcessCreationException extends Exception {
 	private static final long serialVersionUID = 666908550965442025L;
 
-	public ProcessCreationException(String msg){
+	public ProcessCreationException(String msg) {
 		super(msg);
 	}
 }

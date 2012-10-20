@@ -46,14 +46,13 @@ import java.util.Hashtable;
 import com.hardcode.gdbms.engine.values.Value;
 import com.iver.cit.gvsig.fmap.Messages;
 
-
 /**
  * Implements the funcionality of the ( < ) operator
- *
+ * 
  * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
- *
+ * 
  */
-public class LessThanOperator extends Operator{
+public class LessThanOperator extends Operator {
 
 	private ArrayList<Expression> arguments = new ArrayList<Expression>();
 
@@ -65,14 +64,14 @@ public class LessThanOperator extends Operator{
 		super(symbol_table);
 	}
 
-	public Object evaluate()throws ExpressionException {
-		Object eval1=((Expression)arguments.get(0)).evaluate();
-		Object eval2=((Expression)arguments.get(1)).evaluate();
-		if (eval1==null || eval2==null){
+	public Object evaluate() throws ExpressionException {
+		Object eval1 = ((Expression) arguments.get(0)).evaluate();
+		Object eval2 = ((Expression) arguments.get(1)).evaluate();
+		if (eval1 == null || eval2 == null) {
 			return false;
 		}
 		Double left = new Double(eval1.toString());
-		Double right =new Double(eval2.toString());
+		Double right = new Double(eval2.toString());
 
 		if (left < right)
 			return true;
@@ -86,11 +85,12 @@ public class LessThanOperator extends Operator{
 	}
 
 	public String getPattern() {
-		return "("+Messages.getString(OperationTags.OPERAND)
-		+ OperationTags.LESS_THAN_OP +Messages.getString(OperationTags.OPERAND)+ ")\n"+
-		Messages.getString(OperationTags.OPERAND) +" = "+
-		Messages.getString(OperationTags.NUMERIC_VALUE);
-		}
+		return "(" + Messages.getString(OperationTags.OPERAND)
+				+ OperationTags.LESS_THAN_OP
+				+ Messages.getString(OperationTags.OPERAND) + ")\n"
+				+ Messages.getString(OperationTags.OPERAND) + " = "
+				+ Messages.getString(OperationTags.NUMERIC_VALUE);
+	}
 
 	public ArrayList<Expression> getArguments() {
 		return arguments;
@@ -102,11 +102,13 @@ public class LessThanOperator extends Operator{
 
 	public void check() throws ExpressionException {
 		if (arguments.size() > 2)
-			throw new ExpressionException(ExpressionException.INCORRECT_NUMBER_OF_ARGUMENTS);
+			throw new ExpressionException(
+					ExpressionException.INCORRECT_NUMBER_OF_ARGUMENTS);
 
 		for (int i = 0; i < arguments.size(); i++) {
-			if(!(arguments.get(i)instanceof NumericalConstant))
-				throw new ExpressionException(ExpressionException.CLASS_CASTING_EXCEPTION);
+			if (!(arguments.get(i) instanceof NumericalConstant))
+				throw new ExpressionException(
+						ExpressionException.CLASS_CASTING_EXCEPTION);
 		}
 	}
 }

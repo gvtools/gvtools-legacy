@@ -42,14 +42,13 @@ public class AllTests {
 		TestSuite suite = new TestSuite(
 				"Test for org.gvsig.normalization.operations");
 		// $JUnit-BEGIN$
-		
+
 		suite.addTestSuite(TestMarshall.class);
 		suite.addTestSuite(TestFilterString.class);
 		suite.addTestSuite(TestNormAlgorithm.class);
-		
+
 		// Norm Strings from file
 		suite.addTestSuite(TestCreateNewPattern.class);
-		
 
 		// Norm Strings from file
 		suite.addTestSuite(TestNormalizeStringsFromFile.class);

@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.utiles.swing.threads;
 
 import java.util.List;
@@ -56,15 +56,14 @@ import org.gvsig.topology.ITopologyRule;
 import org.gvsig.topology.Messages;
 import org.gvsig.topology.TopologyError;
 
-
-
 public class TopologyBatchCorrectionTask extends CancellableProgressTask {
 
 	static final String NOTE_PREFIX = Messages.getText("BATCH_FIXING");
 	ITopologyErrorContainer topology;
 	ITopologyRule ruleToFix;
 
-	public TopologyBatchCorrectionTask(ITopologyErrorContainer topology, ITopologyRule errorRule) {
+	public TopologyBatchCorrectionTask(ITopologyErrorContainer topology,
+			ITopologyRule errorRule) {
 		this.topology = topology;
 		this.ruleToFix = errorRule;
 		super.statusMessage = Messages.getText("FIXING_ERROR");
@@ -72,11 +71,11 @@ public class TopologyBatchCorrectionTask extends CancellableProgressTask {
 	}
 
 	public void run() throws Exception {
-		List<TopologyError> errors = topology.getTopologyErrorsByRule(ruleToFix.getName(),
-				null, true);
+		List<TopologyError> errors = topology.getTopologyErrorsByRule(
+				ruleToFix.getName(), null, true);
 		int numberOfErrors = errors.size();
-		for(int i = 0; i < numberOfErrors; i++){
-			if(isCanceled())
+		for (int i = 0; i < numberOfErrors; i++) {
+			if (isCanceled())
 				break;
 			TopologyError error = errors.get(i);
 			ITopologyErrorFix defaultFix = ruleToFix.getDefaultFixFor(error);
@@ -84,7 +83,8 @@ public class TopologyBatchCorrectionTask extends CancellableProgressTask {
 		}
 		finished = true;
 	}
-	
 
-	public void finished() {super.finished = true;}
+	public void finished() {
+		super.finished = true;
+	}
 }

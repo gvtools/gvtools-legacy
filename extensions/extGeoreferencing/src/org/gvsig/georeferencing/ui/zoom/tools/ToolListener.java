@@ -18,27 +18,33 @@
  */
 package org.gvsig.georeferencing.ui.zoom.tools;
 
-
 /**
  * Listener para las herramientas de la vista
  * 
  * 17/01/2008
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public interface ToolListener {
 	/**
 	 * Informa de que la herramienta está activa.
+	 * 
 	 * @param ev
 	 */
 	public void onTool(ToolEvent ev);
+
 	/**
 	 * Informa de que la herramienta está activa.
+	 * 
 	 * @param ev
 	 */
 	public void offTool(ToolEvent ev);
+
 	/**
 	 * Evento de finalización de las acciones de la tool
-	 * @param ev ToolEvent
+	 * 
+	 * @param ev
+	 *            ToolEvent
 	 */
 	public void endAction(ToolEvent ev);
 }

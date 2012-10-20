@@ -33,39 +33,44 @@ import javax.swing.text.NumberFormatter;
 import org.gvsig.raster.Configuration;
 import org.gvsig.raster.RasterLibrary;
 import org.gvsig.raster.util.BasePanel;
+
 /**
  * Panel para la gestión del valor NoData en el panel de preferencias de gvSIG.
- *
+ * 
  * @version 10/12/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class PreferenceNoData extends BasePanel {
-	private static final long   serialVersionUID = -8964531984609056094L;
-	private JCheckBox           jCheckBoxNoDataEnabled = null;
-	private JLabel              jLabelGeneralValue     = null;
-	private JFormattedTextField textFieldGeneralValue  = null;
+	private static final long serialVersionUID = -8964531984609056094L;
+	private JCheckBox jCheckBoxNoDataEnabled = null;
+	private JLabel jLabelGeneralValue = null;
+	private JFormattedTextField textFieldGeneralValue = null;
 
 	/**
-	 *Inicializa componentes gráficos y traduce
+	 * Inicializa componentes gráficos y traduce
 	 */
 	public PreferenceNoData() {
 		init();
 		translate();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#translate()
 	 */
 	protected void translate() {
 		setBorder(BorderFactory.createTitledBorder(getText(this, "nodata")));
-		getCheckBoxNoDataEnabled().setText(getText(this, "tratar_nodata_transparente"));
-		getCheckBoxNoDataEnabled().setToolTipText(getCheckBoxNoDataEnabled().getText());
+		getCheckBoxNoDataEnabled().setText(
+				getText(this, "tratar_nodata_transparente"));
+		getCheckBoxNoDataEnabled().setToolTipText(
+				getCheckBoxNoDataEnabled().getText());
 		getLabelGeneralValue().setText(getText(this, "valor_general") + ":");
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#init()
 	 */
 	protected void init() {
@@ -104,10 +109,10 @@ public class PreferenceNoData extends BasePanel {
 			integerFormat.setParseIntegerOnly(false);
 			integerFormat.setMinimumFractionDigits(0);
 			integerFormat.setMaximumFractionDigits(3);
-			textFieldGeneralValue = new JFormattedTextField(new DefaultFormatterFactory(
-					new NumberFormatter(integerFormat),
-					new NumberFormatter(integerFormat),
-					new NumberFormatter(integerFormat)));
+			textFieldGeneralValue = new JFormattedTextField(
+					new DefaultFormatterFactory(new NumberFormatter(
+							integerFormat), new NumberFormatter(integerFormat),
+							new NumberFormatter(integerFormat)));
 		}
 		return textFieldGeneralValue;
 	}
@@ -115,7 +120,8 @@ public class PreferenceNoData extends BasePanel {
 	private JCheckBox getCheckBoxNoDataEnabled() {
 		if (jCheckBoxNoDataEnabled == null) {
 			jCheckBoxNoDataEnabled = new JCheckBox();
-			jCheckBoxNoDataEnabled.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+			jCheckBoxNoDataEnabled.setBorder(BorderFactory.createEmptyBorder(0,
+					0, 0, 0));
 			jCheckBoxNoDataEnabled.setMargin(new Insets(0, 0, 0, 0));
 		}
 		return jCheckBoxNoDataEnabled;
@@ -132,32 +138,42 @@ public class PreferenceNoData extends BasePanel {
 	 * Establece los valores por defecto
 	 */
 	public void initializeDefaults() {
-		Boolean enabled = (Boolean) Configuration.getDefaultValue("nodata_transparency_enabled");
+		Boolean enabled = (Boolean) Configuration
+				.getDefaultValue("nodata_transparency_enabled");
 		getCheckBoxNoDataEnabled().setSelected(enabled.booleanValue());
-		getTextFieldGeneralValue().setValue((Double) Configuration.getDefaultValue("nodata_value"));
+		getTextFieldGeneralValue().setValue(
+				(Double) Configuration.getDefaultValue("nodata_value"));
 	}
 
 	/**
 	 * Carga los valores definidos por el usuario
 	 */
 	public void initializeValues() {
-		Boolean enabled = Configuration.getValue("nodata_transparency_enabled", Boolean.FALSE);
+		Boolean enabled = Configuration.getValue("nodata_transparency_enabled",
+				Boolean.FALSE);
 		getCheckBoxNoDataEnabled().setSelected(enabled.booleanValue());
-		getTextFieldGeneralValue().setValue(Configuration.getValue("nodata_value", Double.valueOf(RasterLibrary.defaultNoDataValue)));
+		getTextFieldGeneralValue().setValue(
+				Configuration.getValue("nodata_value",
+						Double.valueOf(RasterLibrary.defaultNoDataValue)));
 	}
 
 	/**
 	 * Guarda los valores definidos por el usuario
 	 */
 	public void storeValues() {
-		Configuration.setValue("nodata_transparency_enabled", Boolean.valueOf(getCheckBoxNoDataEnabled().isSelected()));
+		Configuration.setValue("nodata_transparency_enabled",
+				Boolean.valueOf(getCheckBoxNoDataEnabled().isSelected()));
 		try {
-			if(getTextFieldGeneralValue().getValue() instanceof Double)
-				Configuration.setValue("nodata_value", (Double) getTextFieldGeneralValue().getValue());
-			if(getTextFieldGeneralValue().getValue() instanceof String)
-				Configuration.setValue("nodata_value", new Double((String)getTextFieldGeneralValue().getValue()));
-			if(getTextFieldGeneralValue().getValue() instanceof Long)
-				Configuration.setValue("nodata_value", new Double(((Long)getTextFieldGeneralValue().getValue()).longValue()));
+			if (getTextFieldGeneralValue().getValue() instanceof Double)
+				Configuration.setValue("nodata_value",
+						(Double) getTextFieldGeneralValue().getValue());
+			if (getTextFieldGeneralValue().getValue() instanceof String)
+				Configuration.setValue("nodata_value", new Double(
+						(String) getTextFieldGeneralValue().getValue()));
+			if (getTextFieldGeneralValue().getValue() instanceof Long)
+				Configuration.setValue("nodata_value",
+						new Double(((Long) getTextFieldGeneralValue()
+								.getValue()).longValue()));
 		} catch (NumberFormatException e) {
 		}
 	}

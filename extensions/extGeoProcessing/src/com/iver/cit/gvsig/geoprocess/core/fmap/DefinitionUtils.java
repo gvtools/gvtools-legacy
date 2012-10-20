@@ -42,38 +42,38 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: DefinitionUtils.java 10626 2007-03-06 16:55:54Z caballero $
-* $Log$
-* Revision 1.3  2007-03-06 16:47:58  caballero
-* Exceptions
-*
-* Revision 1.2  2006/06/20 18:19:43  azabala
-* refactorización para que todos los nuevos geoprocesos cuelguen del paquete impl
-*
-* Revision 1.1  2006/05/24 21:12:16  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.6  2006/05/08 15:38:31  azabala
-* converted private constant in public
-*
-* Revision 1.5  2006/03/26 20:03:31  azabala
-* *** empty log message ***
-*
-* Revision 1.4  2006/03/14 18:32:46  fjp
-* Cambio con LayerDefinition para que sea compatible con la definición de tablas también.
-*
-* Revision 1.3  2006/02/19 20:56:07  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/02/17 16:34:00  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/02/09 15:59:48  azabala
-* First version in CVS
-*
-*
-*/
+ *
+ * $Id: DefinitionUtils.java 10626 2007-03-06 16:55:54Z caballero $
+ * $Log$
+ * Revision 1.3  2007-03-06 16:47:58  caballero
+ * Exceptions
+ *
+ * Revision 1.2  2006/06/20 18:19:43  azabala
+ * refactorización para que todos los nuevos geoprocesos cuelguen del paquete impl
+ *
+ * Revision 1.1  2006/05/24 21:12:16  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.6  2006/05/08 15:38:31  azabala
+ * converted private constant in public
+ *
+ * Revision 1.5  2006/03/26 20:03:31  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.4  2006/03/14 18:32:46  fjp
+ * Cambio con LayerDefinition para que sea compatible con la definición de tablas también.
+ *
+ * Revision 1.3  2006/02/19 20:56:07  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/02/17 16:34:00  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/02/09 15:59:48  azabala
+ * First version in CVS
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core.fmap;
 
 import java.util.ArrayList;
@@ -89,15 +89,18 @@ import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 
 /**
  * This class has utility methods to work with LayerDefinitions
+ * 
  * @author azabala
- *
- * TODO By now only works with SHPLayerDefinition. Redesign to work
- * with any layer definition.
+ * 
+ *         TODO By now only works with SHPLayerDefinition. Redesign to work with
+ *         any layer definition.
  */
 public class DefinitionUtils {
 	public static int NUM_DECIMALS = 5;
+
 	/**
 	 * It builds a LayerDefinition from a LyrVect
+	 * 
 	 * @param datasource
 	 * @param shapeType
 	 * @return
@@ -105,21 +108,21 @@ public class DefinitionUtils {
 	 * @throws DriverException
 	 * @throws com.iver.cit.gvsig.fmap.DriverException
 	 */
-	public static SHPLayerDefinition createLayerDefinition(FLyrVect layer) throws ReadDriverException{
+	public static SHPLayerDefinition createLayerDefinition(FLyrVect layer)
+			throws ReadDriverException {
 		SHPLayerDefinition solution = new SHPLayerDefinition();
 		solution.setName(layer.getName());
 		solution.setShapeType(layer.getShapeType());
 		SelectableDataSource datasource = layer.getRecordset();
 		int numFields = datasource.getFieldCount();
-		FieldDescription[] fields =
-			new FieldDescription[numFields];
+		FieldDescription[] fields = new FieldDescription[numFields];
 		FieldDescription fieldDesc = null;
-		for(int i = 0; i < numFields; i++){
+		for (int i = 0; i < numFields; i++) {
 			fieldDesc = new FieldDescription();
 			fieldDesc.setFieldName(datasource.getFieldName(i));
 			int fieldType = datasource.getFieldType(i);
 			fieldDesc.setFieldType(fieldType);
-			int fieldLength  = getDataTypeLength(fieldType);
+			int fieldLength = getDataTypeLength(fieldType);
 			fieldDesc.setFieldLength(fieldLength);
 			fieldDesc.setFieldDecimalCount(NUM_DECIMALS);
 			fields[i] = fieldDesc;
@@ -128,10 +131,8 @@ public class DefinitionUtils {
 		return solution;
 	}
 
-
-
-	public static int getDataTypeLength(int dataType){
-		switch(dataType){
+	public static int getDataTypeLength(int dataType) {
+		switch (dataType) {
 		case XTypes.NUMERIC:
 		case XTypes.DOUBLE:
 		case XTypes.REAL:
@@ -154,8 +155,9 @@ public class DefinitionUtils {
 	}
 
 	/**
-	 * Utility class to overlay geoprocess (that merges
-	 * layer definitions of many features)
+	 * Utility class to overlay geoprocess (that merges layer definitions of
+	 * many features)
+	 * 
 	 * @param firstLayer
 	 * @param secondLayer
 	 * @return
@@ -164,7 +166,7 @@ public class DefinitionUtils {
 	 * @throws com.iver.cit.gvsig.fmap.DriverException
 	 */
 	public static SHPLayerDefinition mergeLayerDefinitions(FLyrVect firstLayer,
-			FLyrVect secondLayer) throws ReadDriverException{
+			FLyrVect secondLayer) throws ReadDriverException {
 
 		SHPLayerDefinition solution = new SHPLayerDefinition();
 		solution.setName(firstLayer.getName() + "-" + secondLayer.getName());
@@ -173,26 +175,26 @@ public class DefinitionUtils {
 		SelectableDataSource secondDatasource = secondLayer.getRecordset();
 		int numFieldsA = firstDatasource.getFieldCount();
 		int numFieldsB = secondDatasource.getFieldCount();
-		FieldDescription[] fields =
-			new FieldDescription[numFieldsA + numFieldsB];
+		FieldDescription[] fields = new FieldDescription[numFieldsA
+				+ numFieldsB];
 		FieldDescription fieldDesc = null;
-		for(int i = 0; i < numFieldsA; i++){
+		for (int i = 0; i < numFieldsA; i++) {
 			fieldDesc = new FieldDescription();
 			fieldDesc.setFieldName(firstDatasource.getFieldName(i));
 			int fieldType = firstDatasource.getFieldType(i);
 			fieldDesc.setFieldType(fieldType);
-			int fieldLength  = getDataTypeLength(fieldType);
+			int fieldLength = getDataTypeLength(fieldType);
 			fieldDesc.setFieldLength(fieldLength);
 			fieldDesc.setFieldDecimalCount(NUM_DECIMALS);
 			fields[i] = fieldDesc;
 		}
 
-		for(int i = 0; i < numFieldsB; i++){
+		for (int i = 0; i < numFieldsB; i++) {
 			fieldDesc = new FieldDescription();
 			fieldDesc.setFieldName(secondDatasource.getFieldName(i));
 			int fieldType = secondDatasource.getFieldType(i);
 			fieldDesc.setFieldType(fieldType);
-			int fieldLength  = getDataTypeLength(fieldType);
+			int fieldLength = getDataTypeLength(fieldType);
 			fieldDesc.setFieldLength(fieldLength);
 			fieldDesc.setFieldDecimalCount(NUM_DECIMALS);
 			fields[i + numFieldsA] = fieldDesc;
@@ -200,30 +202,33 @@ public class DefinitionUtils {
 		solution.setFieldsDesc(fields);
 		return solution;
 	}
+
 	/**
 	 * Tells if a FieldDescription is numeric
+	 * 
 	 * @param fieldDesc
 	 * @return
 	 */
-	public static boolean isNumeric(FieldDescription fieldDesc){
+	public static boolean isNumeric(FieldDescription fieldDesc) {
 		return XTypes.isNumeric(fieldDesc.getFieldType());
 	}
+
 	/**
 	 * Returns all numeric FieldDescriptions of a LayerDefinition
+	 * 
 	 * @param layerDef
 	 * @return
 	 */
-	public static List getNumerics(ITableDefinition layerDef){
+	public static List getNumerics(ITableDefinition layerDef) {
 		ArrayList solution = new ArrayList();
 		FieldDescription[] fields = layerDef.getFieldsDesc();
-		for(int i = 0; i < fields.length; i++){
-			//java access to arrays is a consumption operation
+		for (int i = 0; i < fields.length; i++) {
+			// java access to arrays is a consumption operation
 			FieldDescription field = fields[i];
-			if(DefinitionUtils.isNumeric(field)){
+			if (DefinitionUtils.isNumeric(field)) {
 				solution.add(field);
 			}
 		}
 		return solution;
 	}
 }
-

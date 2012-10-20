@@ -54,22 +54,26 @@ import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.tools.Events.MoveEvent;
 import com.iver.cit.gvsig.fmap.tools.Listeners.PanListener;
 
-
 /**
- * <p>Listener for moving the extent of the associated {@link MapControl MapControl} object
- *  according the movement between the initial and final points of line determined by the movement
- *  dragging with the third button of the mouse.</p>
+ * <p>
+ * Listener for moving the extent of the associated {@link MapControl
+ * MapControl} object according the movement between the initial and final
+ * points of line determined by the movement dragging with the third button of
+ * the mouse.
+ * </p>
  * 
- * <p>Updates the extent of its <code>ViewPort</code> with the new position.</p>
- *
+ * <p>
+ * Updates the extent of its <code>ViewPort</code> with the new position.
+ * </p>
+ * 
  * @author Vicente Caballero Navarro
  */
 public class PanListenerImpl implements PanListener {
 	/**
 	 * The image to display when the cursor is active.
 	 */
-	private final Image ipan = new ImageIcon(MapControl.class.getResource(
-				"images/Hand.gif")).getImage();
+	private final Image ipan = new ImageIcon(
+			MapControl.class.getResource("images/Hand.gif")).getImage();
 
 	/**
 	 * The cursor used to work with this tool listener.
@@ -85,9 +89,13 @@ public class PanListenerImpl implements PanListener {
 	private MapControl mapControl;
 
 	/**
-  	 * <p>Creates a new listener for changing the position of the extent of the associated {@link MapControl MapControl} object.</p>
+	 * <p>
+	 * Creates a new listener for changing the position of the extent of the
+	 * associated {@link MapControl MapControl} object.
+	 * </p>
 	 * 
-	 * @param mapControl the <code>MapControl</code> where will be applied the changes
+	 * @param mapControl
+	 *            the <code>MapControl</code> where will be applied the changes
 	 */
 	public PanListenerImpl(MapControl mapControl) {
 		this.mapControl = mapControl;
@@ -95,7 +103,10 @@ public class PanListenerImpl implements PanListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.PanListener#move(com.iver.cit.gvsig.fmap.tools.Events.MoveEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.PanListener#move(com.iver.cit
+	 * .gvsig.fmap.tools.Events.MoveEvent)
 	 */
 	public void move(MoveEvent event) {
 		ViewPort vp = mapControl.getMapContext().getViewPort();
@@ -111,12 +122,13 @@ public class PanListenerImpl implements PanListener {
 		r.width = extent.getWidth();
 		r.height = extent.getHeight();
 		vp.setExtent(r);
-//		mapControl.getMapContext().clearAllCachingImageDrawnLayers();
+		// mapControl.getMapContext().clearAllCachingImageDrawnLayers();
 		// mapControl.drawMap();
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#getCursor()
 	 */
 	public Cursor getCursor() {
@@ -125,6 +137,7 @@ public class PanListenerImpl implements PanListener {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#cancelDrawing()
 	 */
 	public boolean cancelDrawing() {

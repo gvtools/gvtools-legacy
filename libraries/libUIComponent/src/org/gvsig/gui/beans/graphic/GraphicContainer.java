@@ -32,23 +32,25 @@ import org.gvsig.gui.beans.doubleslider.DoubleSliderEvent;
 import org.gvsig.gui.beans.doubleslider.DoubleSliderListener;
 import org.gvsig.gui.beans.textincreaser.TextIncreaserEvent;
 import org.gvsig.gui.beans.textincreaser.TextIncreaserListener;
+
 /**
  * Control para el manejo de un gráfico.
  * 
  * @author Nacho Brodin (brodin_ign@gva.es)
  */
-public class GraphicContainer extends JPanel implements DoubleSliderListener, TextIncreaserListener {
+public class GraphicContainer extends JPanel implements DoubleSliderListener,
+		TextIncreaserListener {
 	private static final long serialVersionUID = -6230083498345786500L;
 	private ArrayList actionCommandListeners = new ArrayList();
 
-	private JPanel            pGeneral         = null;
-	private GraphicChartPanel pGraphic         = null;
-	private JPanel            panelSlider      = null;
-	private BoxesPanel        pBoxes           = null;
-	private DoubleSlider      doubleSlider     = null;
+	private JPanel pGeneral = null;
+	private GraphicChartPanel pGraphic = null;
+	private JPanel panelSlider = null;
+	private BoxesPanel pBoxes = null;
+	private DoubleSlider doubleSlider = null;
 
-	private boolean           bDoCallListeners = true;
-	static private int        eventId          = Integer.MIN_VALUE;
+	private boolean bDoCallListeners = true;
+	static private int eventId = Integer.MIN_VALUE;
 
 	public GraphicContainer() {
 		initialize();
@@ -59,7 +61,6 @@ public class GraphicContainer extends JPanel implements DoubleSliderListener, Te
 		initialize();
 	}
 
-
 	private void initialize() {
 		this.setLayout(new BorderLayout(0, 4));
 		this.add(getPGraphic(), BorderLayout.CENTER);
@@ -67,9 +68,9 @@ public class GraphicContainer extends JPanel implements DoubleSliderListener, Te
 	}
 
 	/**
-	 * This method initializes jPanel1	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes jPanel1
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPGeneral() {
 		if (pGeneral == null) {
@@ -83,9 +84,9 @@ public class GraphicContainer extends JPanel implements DoubleSliderListener, Te
 	}
 
 	/**
-	 * This method initializes jPanel1	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes jPanel1
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	public GraphicChartPanel getPGraphic() {
 		if (pGraphic == null) {
@@ -95,9 +96,9 @@ public class GraphicContainer extends JPanel implements DoubleSliderListener, Te
 	}
 
 	/**
-	 * This method initializes jPanel1	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes jPanel1
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JComponent getPDoubleSlider() {
 		if (panelSlider == null) {
@@ -107,9 +108,10 @@ public class GraphicContainer extends JPanel implements DoubleSliderListener, Te
 		}
 		return panelSlider;
 	}
-	
+
 	/**
 	 * Devuelve el componente DoubleSlider
+	 * 
 	 * @return
 	 */
 	private DoubleSlider getDoubleSlider() {
@@ -121,9 +123,9 @@ public class GraphicContainer extends JPanel implements DoubleSliderListener, Te
 	}
 
 	/**
-	 * This method initializes jPanel1	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes jPanel1
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private BoxesPanel getPBoxes() {
 		if (pBoxes == null) {
@@ -134,12 +136,12 @@ public class GraphicContainer extends JPanel implements DoubleSliderListener, Te
 		return pBoxes;
 	}
 
-	//****************************************************
-	//MÉTODOS DEL CONTROL
+	// ****************************************************
+	// MÉTODOS DEL CONTROL
 
 	public double getX1() {
 		double value = getPBoxes().getControlLeft().getValue();
-		
+
 		if (value > 100)
 			value = 100;
 
@@ -163,12 +165,16 @@ public class GraphicContainer extends JPanel implements DoubleSliderListener, Te
 
 	public void actionValueChanged(TextIncreaserEvent e) {
 		if (e.getSource() == getPBoxes().getControlLeft()) {
-			if (getPBoxes().getControlLeft().getValue() > getPBoxes().getControlRight().getValue())
-				getPBoxes().getControlRight().setValue(getPBoxes().getControlLeft().getValue());
+			if (getPBoxes().getControlLeft().getValue() > getPBoxes()
+					.getControlRight().getValue())
+				getPBoxes().getControlRight().setValue(
+						getPBoxes().getControlLeft().getValue());
 		}
 		if (e.getSource() == getPBoxes().getControlRight()) {
-			if (getPBoxes().getControlRight().getValue() < getPBoxes().getControlLeft().getValue())
-				getPBoxes().getControlLeft().setValue(getPBoxes().getControlRight().getValue());
+			if (getPBoxes().getControlRight().getValue() < getPBoxes()
+					.getControlLeft().getValue())
+				getPBoxes().getControlLeft().setValue(
+						getPBoxes().getControlRight().getValue());
 		}
 		getDoubleSlider().setX1((int) getPBoxes().getControlLeft().getValue());
 		getDoubleSlider().setX2((int) getPBoxes().getControlRight().getValue());
@@ -196,26 +202,36 @@ public class GraphicContainer extends JPanel implements DoubleSliderListener, Te
 	}
 
 	public void setBandVisible(int band, boolean visible) {
-		getPGraphic().getChart().getChart().getXYPlot().getRenderer().setSeriesVisible(band, Boolean.valueOf(visible));
+		getPGraphic().getChart().getChart().getXYPlot().getRenderer()
+				.setSeriesVisible(band, Boolean.valueOf(visible));
 	}
 
 	public void setBandColor(int band, Color color) {
-		getPGraphic().getChart().getChart().getXYPlot().getRenderer().setSeriesPaint(band, color);
+		getPGraphic().getChart().getChart().getXYPlot().getRenderer()
+				.setSeriesPaint(band, color);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.doubleslider.DoubleSliderListener#actionValueChanged(java.util.EventObject)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.doubleslider.DoubleSliderListener#actionValueChanged
+	 * (java.util.EventObject)
 	 */
 	public void actionValueChanged(DoubleSliderEvent e) {
-		getPBoxes().getControlLeft().setValue(((DoubleSlider) e.getSource()).getX1());
-		getPBoxes().getControlRight().setValue(((DoubleSlider) e.getSource()).getX2());
+		getPBoxes().getControlLeft().setValue(
+				((DoubleSlider) e.getSource()).getX1());
+		getPBoxes().getControlRight().setValue(
+				((DoubleSlider) e.getSource()).getX2());
 		callValueChangedListeners();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.doubleslider.DoubleSliderListener#actionValueDragged(java.util.EventObject)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.doubleslider.DoubleSliderListener#actionValueDragged
+	 * (java.util.EventObject)
 	 */
 	public void actionValueDragged(DoubleSliderEvent e) {
 		actionValueChanged(e);

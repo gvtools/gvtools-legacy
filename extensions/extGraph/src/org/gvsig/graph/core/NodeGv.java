@@ -46,23 +46,26 @@ public class NodeGv {
 
 	private Integer id;
 	private Coordinate c;
+
 	public NodeGv(Coordinate pt, int id) {
 		c = pt;
 		this.id = new Integer(id);
 	}
+
 	public Coordinate getCoordinate() {
 		return c;
 	}
+
 	public void setCoordinate(Coordinate c) {
 		this.c = c;
 	}
+
 	public Integer getId() {
 		return id;
 	}
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
 }
-
-

@@ -56,71 +56,45 @@ import com.iver.andami.messages.Messages;
  * Several methods to manage the user interface fonts.
  * 
  * @author Cesar Martinez Izquierdo <cesar.martinez@iver.es>
- *
+ * 
  */
 public class FontUtils {
-	
+
 	/**
 	 * Changes the default UIManager font to the provided font.
 	 * 
 	 * @param fontName
 	 */
 	public static void setFont(String fontName) {
-		String[] fieldList = {
-				"Button.font",
-				"CheckBox.font",
-				"CheckBoxMenuItem.font",
-				"ColorChooser.font",
-				"ComboBox.font",
-				"DesktopIcon.font",
-				"EditorPane.font",
-				"FormattedTextField.font",
-				"Label.font",
-				"List.font",
-				"Menu.font",
-				"MenuBar.font",
-				"MenuItem.font",
-				"OptionPane.font",
-				"Panel.font",
-				"PasswordField.font",
-				"PopupMenu.font",
-				"ProgressBar.font",
-				"RadioButton.font",
-				"RadioButtonMenuItem.font",
-				"ScrollPane.font",
-				"Slider.font",
-				"Spinner.font",
-				"TabbedPane.font",
-				"Table.font",
-				"TableHeader.font",
-				"TextArea.font",
-				"TextField.font",
-				"TextPane.font",
-				"TitledBorder.font",
-				"ToggleButton.font",
-				"ToolBar.font",
-				"ToolTip.font",
-				"Tree.font",
-				"Viewport.font"
-		} ;
-		
+		String[] fieldList = { "Button.font", "CheckBox.font",
+				"CheckBoxMenuItem.font", "ColorChooser.font", "ComboBox.font",
+				"DesktopIcon.font", "EditorPane.font",
+				"FormattedTextField.font", "Label.font", "List.font",
+				"Menu.font", "MenuBar.font", "MenuItem.font",
+				"OptionPane.font", "Panel.font", "PasswordField.font",
+				"PopupMenu.font", "ProgressBar.font", "RadioButton.font",
+				"RadioButtonMenuItem.font", "ScrollPane.font", "Slider.font",
+				"Spinner.font", "TabbedPane.font", "Table.font",
+				"TableHeader.font", "TextArea.font", "TextField.font",
+				"TextPane.font", "TitledBorder.font", "ToggleButton.font",
+				"ToolBar.font", "ToolTip.font", "Tree.font", "Viewport.font" };
+
 		Font font;
-		
-		for (int i = fieldList.length-1; i>=0; i--) {
+
+		for (int i = fieldList.length - 1; i >= 0; i--) {
 			font = UIManager.getFont(fieldList[i]);
-			if (font!=null)
-				UIManager.put(fieldList[i], new Font(fontName, Font.PLAIN, font.getSize()));
+			if (font != null)
+				UIManager.put(fieldList[i],
+						new Font(fontName, Font.PLAIN, font.getSize()));
 		}
 	}
-	
-
 
 	/**
 	 * Inits the UIManager fonts, so that it can display current's language
 	 * symbols. The font is only changed when necessary.
 	 */
 	public static void initFonts() {
-		
+
 		if (Launcher.getAndamiConfig().getLocaleLanguage().equals("km")) {
 			FontUtils.initKhmerFonts();
 			return;
@@ -128,49 +102,56 @@ public class FontUtils {
 		// conservative behaviour: we just change the font, if the default one
 		// can't correctly display the current language
 		Font defaultFont = UIManager.getFont("Label.font");
-		if (defaultFont==null) return;
-		if (defaultFont.canDisplayUpTo(Messages.getString("MDIFrame.quiere_salir"))==-1) {
-			PluginServices.getLogger().info("Fonts configuration was not necessary");
-			//listSystemFonts();
-			return;			
+		if (defaultFont == null)
+			return;
+		if (defaultFont.canDisplayUpTo(Messages
+				.getString("MDIFrame.quiere_salir")) == -1) {
+			PluginServices.getLogger().info(
+					"Fonts configuration was not necessary");
+			// listSystemFonts();
+			return;
 		}
 
-		
-		Font[] allfonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
+		Font[] allfonts = GraphicsEnvironment.getLocalGraphicsEnvironment()
+				.getAllFonts();
 		HashSet workingFonts = new HashSet();
-		
-		for (int i=allfonts.length-1; i>=0; i--) {			
-			if (allfonts[i].canDisplayUpTo(Messages.getString("MDIFrame.quiere_salir"))==-1) {
+
+		for (int i = allfonts.length - 1; i >= 0; i--) {
+			if (allfonts[i].canDisplayUpTo(Messages
+					.getString("MDIFrame.quiere_salir")) == -1) {
 				workingFonts.add(allfonts[i].getName());
 			}
 		}
-		
+
 		// try to set the preferred font
-		String[] preferredFonts = getPreferedFonts(Locale.getDefault().getLanguage());
-		for (int i=0;i<preferredFonts.length; i++) {
-			if (workingFonts.contains(preferredFonts[i])){
+		String[] preferredFonts = getPreferedFonts(Locale.getDefault()
+				.getLanguage());
+		for (int i = 0; i < preferredFonts.length; i++) {
+			if (workingFonts.contains(preferredFonts[i])) {
 				setFont(preferredFonts[i]);
-				PluginServices.getLogger().info("FontSet: "+preferredFonts[i]);
+				PluginServices.getLogger()
+						.info("FontSet: " + preferredFonts[i]);
 				return;
 			}
 		}
-		
+
 		// try to set any working font
 		Iterator iterator = workingFonts.iterator();
-		
+
 		if (iterator.hasNext()) {
 			String fontName = (String) iterator.next();
 			setFont(fontName);
-			PluginServices.getLogger().info("FontSet: "+fontName);	
+			PluginServices.getLogger().info("FontSet: " + fontName);
 		}
 	}
-	
+
 	private static void initKhmerFonts() {
 		// Buscar la fuente de sistema para jemer "Khmer OS System" y instalarla
-		// Si no se encuentra, instalar la primera fuente que se encuentre que 
+		// Si no se encuentra, instalar la primera fuente que se encuentre que
 		// contenga caracteres khmeres.
 
-		Font[] allfonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
+		Font[] allfonts = GraphicsEnvironment.getLocalGraphicsEnvironment()
+				.getAllFonts();
 
 		for (int i = allfonts.length - 1; i >= 0; i--) {
 			if (allfonts[i].getName().equals("Khmer OS System")) {
@@ -179,9 +160,9 @@ public class FontUtils {
 			}
 		}
 
-
 		for (int i = allfonts.length - 1; i >= 0; i--) {
-			if (allfonts[i].canDisplayUpTo("\u1785\u17C1\u1789\u200B\u1796\u17B8 gvSIG ?") == -1) {
+			if (allfonts[i]
+					.canDisplayUpTo("\u1785\u17C1\u1789\u200B\u1796\u17B8 gvSIG ?") == -1) {
 				setFont(allfonts[i].getName());
 				return;
 			}
@@ -189,39 +170,35 @@ public class FontUtils {
 		}
 	}
 
-
-
 	/**
-	 * Returns an ordered list of preferred fonts for the provided language.
-	 * As there is several fonts which can be used to display each language,
-	 * this list provides a hint about which is the more suitable font for
-	 * this language.
+	 * Returns an ordered list of preferred fonts for the provided language. As
+	 * there is several fonts which can be used to display each language, this
+	 * list provides a hint about which is the more suitable font for this
+	 * language.
 	 * 
-	 * This method does not check whether the fonts are available in the
-	 * running system.
+	 * This method does not check whether the fonts are available in the running
+	 * system.
 	 * 
 	 * @param lang
 	 * @return
 	 */
-	private static String [] getPreferedFonts(String lang) {
-		//TODO this should be read from a file, for each language
+	private static String[] getPreferedFonts(String lang) {
+		// TODO this should be read from a file, for each language
 		if (lang.equals("zh")) {
-			String []preferredChineseFonts = {
-					"AR PL KaitiM GB",
-					"AR PL SungtiL GB",
-					"Kochi Gothic",
-					"SimSun"
-			} ;
+			String[] preferredChineseFonts = { "AR PL KaitiM GB",
+					"AR PL SungtiL GB", "Kochi Gothic", "SimSun" };
 			return preferredChineseFonts;
 		}
 		return new String[0];
 	}
-	
-	private static void listSystemFonts() {
-		Font[] allfonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
 
-		for (int i=allfonts.length-1; i>=0; i--) {
-			System.out.println(allfonts[i].getName()+" --- "+allfonts[i].getFontName());
+	private static void listSystemFonts() {
+		Font[] allfonts = GraphicsEnvironment.getLocalGraphicsEnvironment()
+				.getAllFonts();
+
+		for (int i = allfonts.length - 1; i >= 0; i--) {
+			System.out.println(allfonts[i].getName() + " --- "
+					+ allfonts[i].getFontName());
 		}
 	}
 }

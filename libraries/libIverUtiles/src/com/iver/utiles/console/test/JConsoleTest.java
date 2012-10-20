@@ -51,12 +51,14 @@ import javax.swing.UIManager;
 import com.iver.utiles.console.JConsole;
 import com.iver.utiles.console.JDockPanel;
 import com.iver.utiles.console.ResponseListener;
+
 public class JConsoleTest extends JFrame {
 
 	private javax.swing.JPanel jContentPane = null;
 
 	private JConsole jConsole = null;
 	private JButton jButton = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -64,23 +66,25 @@ public class JConsoleTest extends JFrame {
 		super();
 		initialize();
 	}
+
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(300,200);
+		this.setSize(300, 200);
 		this.setContentPane(getJContentPane());
 		this.setTitle("JFrame");
 	}
+
 	/**
 	 * This method initializes jContentPane
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private javax.swing.JPanel getJContentPane() {
-		if(jContentPane == null) {
+		if (jContentPane == null) {
 			jContentPane = new javax.swing.JPanel();
 			jContentPane.setLayout(new java.awt.BorderLayout());
 			JDockPanel dock = new JDockPanel(getJConsole());
@@ -88,9 +92,10 @@ public class JConsoleTest extends JFrame {
 		}
 		return jContentPane;
 	}
+
 	/**
 	 * This method initializes jConsole
-	 *
+	 * 
 	 * @return com.iver.utiles.console.JConsole
 	 */
 	private JConsole getJConsole() {
@@ -100,46 +105,46 @@ public class JConsoleTest extends JFrame {
 		}
 		return jConsole;
 	}
+
 	/**
 	 * This method initializes jButton
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getJButton() {
 		if (jButton == null) {
 			jButton = new JButton();
-			jButton.setPreferredSize(new java.awt.Dimension(34,25));
+			jButton.setPreferredSize(new java.awt.Dimension(34, 25));
 		}
 		return jButton;
 	}
 
 	public static void main(String[] args) {
 		MyBoolean responsed = new MyBoolean();
-		
-		//Se pone el lookAndFeel
+
+		// Se pone el lookAndFeel
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {
 
 		}
 
-
 		JConsoleTest ct = new JConsoleTest();
 		ct.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		ct.show();
 		ResponseHandler listener = new ResponseHandler(responsed, ct);
 		ct.getJConsole().addResponseListener(listener);
-		while (true){
+		while (true) {
 			responsed.value = false;
-			ct.getJConsole().addText("Como vas? ",JConsole.MESSAGE);
+			ct.getJConsole().addText("Como vas? ", JConsole.MESSAGE);
 
-			while (!responsed.value){
+			while (!responsed.value) {
 
 			}
 		}
 	}
 
-	private static class MyBoolean{
+	private static class MyBoolean {
 		public boolean value;
 	}
 
@@ -148,7 +153,7 @@ public class JConsoleTest extends JFrame {
 		private MyBoolean responsed;
 		private JConsoleTest ct;
 
-		public ResponseHandler(MyBoolean responsed, JConsoleTest ct){
+		public ResponseHandler(MyBoolean responsed, JConsoleTest ct) {
 			this.responsed = responsed;
 			this.ct = ct;
 		}
@@ -157,10 +162,10 @@ public class JConsoleTest extends JFrame {
 		 * @throws InvalidResponseException
 		 * @see com.iver.utiles.console.ResponseListener#acceptResponse(java.lang.String)
 		 */
-		public void acceptResponse(String response){
+		public void acceptResponse(String response) {
 			ct.jButton.setText(response);
 			responsed.value = true;
 		}
 
 	}
-  }
+}

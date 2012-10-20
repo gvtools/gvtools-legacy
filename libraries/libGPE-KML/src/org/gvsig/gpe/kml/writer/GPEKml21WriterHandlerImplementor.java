@@ -51,15 +51,17 @@ import org.gvsig.gpe.kml.writer.profiles.Kml21WriterProfile;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class GPEKml21WriterHandlerImplementor extends GPEKmlWriterHandlerImplementor {
+public class GPEKml21WriterHandlerImplementor extends
+		GPEKmlWriterHandlerImplementor {
 
 	public GPEKml21WriterHandlerImplementor() {
 		super();
 		setProfile(new Kml21WriterProfile());
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.IGPEWriterHandlerImplementor#getVersions()
 	 */
 	public String[] getVersions() {
@@ -67,9 +69,10 @@ public class GPEKml21WriterHandlerImplementor extends GPEKmlWriterHandlerImpleme
 		versions[0] = "2.1";
 		return versions;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterHandler#getDefaultVersion()
 	 */
 	public String getDefaultVersion() {
@@ -78,6 +81,7 @@ public class GPEKml21WriterHandlerImplementor extends GPEKmlWriterHandlerImpleme
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writer.IGPEWriterHandlerImplementor#getDescription()
 	 */
 	public String getDescription() {
@@ -86,6 +90,7 @@ public class GPEKml21WriterHandlerImplementor extends GPEKmlWriterHandlerImpleme
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writer.IGPEWriterHandlerImplementor#getName()
 	 */
 	public String getName() {

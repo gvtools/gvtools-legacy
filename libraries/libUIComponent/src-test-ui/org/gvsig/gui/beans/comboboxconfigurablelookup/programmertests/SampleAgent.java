@@ -27,28 +27,37 @@ import org.gvsig.gui.beans.comboboxconfigurablelookup.ILookUp;
 import org.gvsig.gui.beans.comboboxconfigurablelookup.StringComparator;
 
 /**
- * <p>Sample of personalized look up algorithm for the model of a <code>JComboBoxConfigurableLookUp</code> object.</p>
+ * <p>
+ * Sample of personalized look up algorithm for the model of a
+ * <code>JComboBoxConfigurableLookUp</code> object.
+ * </p>
  * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  * @version 08/02/2008
  */
 public class SampleAgent implements ILookUp {
 	/**
-	 * <p>Creates a new instance of the class <code>StartsWithLookUpAgent</code>.</p>
+	 * <p>
+	 * Creates a new instance of the class <code>StartsWithLookUpAgent</code>.
+	 * </p>
 	 */
 	public SampleAgent() {
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.comboboxconfigurablelookup.ILookUp#doLookUpConsideringCaseSensitive(java.lang.String, java.util.Vector, org.gvsig.gui.beans.comboboxconfigurablelookup.StringComparator)
+	 * 
+	 * @see org.gvsig.gui.beans.comboboxconfigurablelookup.ILookUp#
+	 * doLookUpConsideringCaseSensitive(java.lang.String, java.util.Vector,
+	 * org.gvsig.gui.beans.comboboxconfigurablelookup.StringComparator)
 	 */
-	public List<Object> doLookUpConsideringCaseSensitive(String text, Vector<Object> sortOrderedItems, StringComparator comp) {
+	public List<Object> doLookUpConsideringCaseSensitive(String text,
+			Vector<Object> sortOrderedItems, StringComparator comp) {
 		if (sortOrderedItems == null)
 			return null;
 
 		List<Object> list = new ArrayList<Object>();
-		
+
 		for (int i = 0; i < (sortOrderedItems.size()); i++) {
 			if (i % 2 == 0)
 				list.add(sortOrderedItems.get(i));
@@ -59,14 +68,18 @@ public class SampleAgent implements ILookUp {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.comboboxconfigurablelookup.ILookUp#doLookUpIgnoringCaseSensitive(java.lang.String, java.util.Vector, org.gvsig.gui.beans.comboboxconfigurablelookup.StringComparator)
+	 * 
+	 * @see org.gvsig.gui.beans.comboboxconfigurablelookup.ILookUp#
+	 * doLookUpIgnoringCaseSensitive(java.lang.String, java.util.Vector,
+	 * org.gvsig.gui.beans.comboboxconfigurablelookup.StringComparator)
 	 */
-	public List<Object> doLookUpIgnoringCaseSensitive(String text, Vector<Object> sortOrderedItems, StringComparator comp) {
+	public List<Object> doLookUpIgnoringCaseSensitive(String text,
+			Vector<Object> sortOrderedItems, StringComparator comp) {
 		if (sortOrderedItems == null)
 			return null;
 
 		List<Object> list = new ArrayList<Object>();
-		
+
 		for (int i = 0; i < (sortOrderedItems.size()); i++) {
 			if (i % 2 == 0)
 				list.add(sortOrderedItems.get(i));

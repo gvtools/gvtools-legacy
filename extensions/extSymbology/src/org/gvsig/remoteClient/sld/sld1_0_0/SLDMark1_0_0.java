@@ -52,20 +52,26 @@ import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
 import com.iver.cit.gvsig.fmap.rendering.XmlBuilder;
 
 /**
- * Implements the Mark element of an SLD implementation specification (version 
- * 1.0.0).<p>
- * The Mark element of a Graphic defines a �shape� which has coloring applied to it.<p>
+ * Implements the Mark element of an SLD implementation specification (version
+ * 1.0.0).
+ * <p>
+ * The Mark element of a Graphic defines a �shape� which has coloring
+ * applied to it.
+ * <p>
  * The WellKnownName element gives the well-known name of the shape of the mark.
- * Allowed values include at least �square�, �circle�, �triangle�, �star�, �cross�,
- * and �x�, though map servers may draw a different symbol instead if they don't
- * have a shape for all of these. The default WellKnownName is �square�. Renderings 
- * of these marks may be made solid or hollow depending on Fill and Stroke elements.
- * <p> 
- * The Mark element serves two purposes. It allows the selection of simple shapes,
- * and, in combination with the capability to select and mix multiple external-URL 
- * graphics and marks, it allows a style to be specified that can produce a usable 
- * result in a best-effort rendering environment, provided that a simple Mark is 
- * included at the bottom of the list of sources for every Graphic.<p>
+ * Allowed values include at least �square�, �circle�, �triangle�,
+ * �star�, �cross�, and �x�, though map servers may draw a different
+ * symbol instead if they don't have a shape for all of these. The default
+ * WellKnownName is �square�. Renderings of these marks may be made solid or
+ * hollow depending on Fill and Stroke elements.
+ * <p>
+ * The Mark element serves two purposes. It allows the selection of simple
+ * shapes, and, in combination with the capability to select and mix multiple
+ * external-URL graphics and marks, it allows a style to be specified that can
+ * produce a usable result in a best-effort rendering environment, provided that
+ * a simple Mark is included at the bottom of the list of sources for every
+ * Graphic.
+ * <p>
  * 
  * @see SLDFill1_0_0
  * @see SLDStroke1_0_0
@@ -75,9 +81,8 @@ import com.iver.cit.gvsig.fmap.rendering.XmlBuilder;
  */
 public class SLDMark1_0_0 extends SLDMark {
 
-
-	
-	public void parse(XMLSchemaParser parser, int cuTag, String expressionType)throws IOException, XmlPullParserException, LegendDriverException  {
+	public void parse(XMLSchemaParser parser, int cuTag, String expressionType)
+			throws IOException, XmlPullParserException, LegendDriverException {
 
 		int currentTag;
 		boolean end = false;
@@ -85,32 +90,30 @@ public class SLDMark1_0_0 extends SLDMark {
 		parser.require(XMLSchemaParser.START_TAG, null, SLDTags.MARK);
 		currentTag = parser.next();
 
-		while (!end)
-		{
-			switch(currentTag)
-			{
+		while (!end) {
+			switch (currentTag) {
 			case XMLSchemaParser.START_TAG:
-				if (parser.getName().compareTo(SLDTags.WELLKNOWNNAME)==0) {
+				if (parser.getName().compareTo(SLDTags.WELLKNOWNNAME) == 0) {
 					parser.next();
 					String s = parser.getText().trim();
 					FExpression wellKnownName = new FExpression();
-					
-					if (s==null || "".equals(s)) {
-						wellKnownName.parse(parser, parser.nextTag(),parser.getName());
+
+					if (s == null || "".equals(s)) {
+						wellKnownName.parse(parser, parser.nextTag(),
+								parser.getName());
 					} else {
 						wellKnownName.setLiteral(s);
-					}				
+					}
 					setWellKnownName(wellKnownName);
 				}
-				
-				else if (parser.getName().compareTo(SLDTags.FILL)==0) {
+
+				else if (parser.getName().compareTo(SLDTags.FILL) == 0) {
 					SLDFill1_0_0 fill = new SLDFill1_0_0();
-					fill.parse(parser,currentTag,null);
+					fill.parse(parser, currentTag, null);
 					setFill(fill);
-				}
-				else if (parser.getName().compareTo(SLDTags.STROKE)==0) {
+				} else if (parser.getName().compareTo(SLDTags.STROKE) == 0) {
 					SLDStroke1_0_0 stroke = new SLDStroke1_0_0();
-					stroke.parse(parser,currentTag,null);
+					stroke.parse(parser, currentTag, null);
 					setStroke(stroke);
 				}
 				break;
@@ -129,13 +132,13 @@ public class SLDMark1_0_0 extends SLDMark {
 
 	}
 
-	
 	public String toXML() {
 		XmlBuilder xmlBuilder = new XmlBuilder();
 		xmlBuilder.openTag(SLDTags.MARK);
 
 		if (getWellKnownName().getLiteral() != null)
-			xmlBuilder.writeTag(SLDTags.WELLKNOWNNAME, getWellKnownName().getLiteral().toString());
+			xmlBuilder.writeTag(SLDTags.WELLKNOWNNAME, getWellKnownName()
+					.getLiteral().toString());
 		if (getFill() != null)
 			xmlBuilder.writeRaw(getFill().toXML());
 		if (getStroke() != null)

@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
@@ -85,37 +84,42 @@ package com.iver.cit.gvsig.project.documents.layout.fframes;
 /**
  * Interfaz para incluir métodos necesarios para tener una dependencia con un
  * fframe.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public interface IFFrameViewDependence {
-    /**
-     * Inserta una FFrame de la cual se necesita por tener una dependencia.
-     *
-     * @param f FFrame de la que se depende.
-     */
-    public void setFFrameDependence(IFFrame f);
+	/**
+	 * Inserta una FFrame de la cual se necesita por tener una dependencia.
+	 * 
+	 * @param f
+	 *            FFrame de la que se depende.
+	 */
+	public void setFFrameDependence(IFFrame f);
 
-    /**
-     * Refresca las dependencias de la IFFrame teniendo en cuenta la dependencia anterior.
-     *
-     * @param fant Dependencia anterior.
-     * @param fnew Nueva dependencia.
-     */
-    public void refreshDependence(IFFrame fant, IFFrame fnew);
+	/**
+	 * Refresca las dependencias de la IFFrame teniendo en cuenta la dependencia
+	 * anterior.
+	 * 
+	 * @param fant
+	 *            Dependencia anterior.
+	 * @param fnew
+	 *            Nueva dependencia.
+	 */
+	public void refreshDependence(IFFrame fant, IFFrame fnew);
 
-    /**
-     * Devuelve el FFrame utilizado.
-     *
-     * @return FFrame utilizado.
-     */
-    public IFFrame[] getFFrameDependence();
+	/**
+	 * Devuelve el FFrame utilizado.
+	 * 
+	 * @return FFrame utilizado.
+	 */
+	public IFFrame[] getFFrameDependence();
 
-    /**
-     * A partir de un Array con todas las FFrames se resuelve el FFrame del que
-     * se tiene una dependencia.
-     *
-     * @param fframes Array de FFrames.
-     */
-    public void initDependence(IFFrame[] fframes);
+	/**
+	 * A partir de un Array con todas las FFrames se resuelve el FFrame del que
+	 * se tiene una dependencia.
+	 * 
+	 * @param fframes
+	 *            Array de FFrames.
+	 */
+	public void initDependence(IFFrame[] fframes);
 }

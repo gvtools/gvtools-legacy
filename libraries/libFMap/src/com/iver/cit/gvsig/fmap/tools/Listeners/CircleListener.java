@@ -44,20 +44,27 @@ import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Events.MeasureEvent;
 
-
 /**
- * <p>Interface for all tools that reply for a {@link MeasureEvent MeasureEvent} produced in the 
- *  associated {@link MapControl MapControl} object, as a consequence of a circle area drawn by the mouse.</p>
+ * <p>
+ * Interface for all tools that reply for a {@link MeasureEvent MeasureEvent}
+ * produced in the associated {@link MapControl MapControl} object, as a
+ * consequence of a circle area drawn by the mouse.
+ * </p>
  * 
  * @see ToolListener
  */
 public interface CircleListener extends ToolListener {
 	/**
-	 * <p>Called when user defines a circular area.</p>
-	 *
-	 * @param event information about the mouse event, and geometry data related with the operation done
-	 *
-	 * @throws BehaviorException will be thrown when fails the process of this tool
+	 * <p>
+	 * Called when user defines a circular area.
+	 * </p>
+	 * 
+	 * @param event
+	 *            information about the mouse event, and geometry data related
+	 *            with the operation done
+	 * 
+	 * @throws BehaviorException
+	 *             will be thrown when fails the process of this tool
 	 */
 	public void circle(MeasureEvent event) throws BehaviorException;
 }

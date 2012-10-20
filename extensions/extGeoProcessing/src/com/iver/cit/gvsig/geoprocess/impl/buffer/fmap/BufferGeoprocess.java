@@ -166,9 +166,9 @@ import com.iver.utiles.swing.threads.IMonitorableTask;
  * All the points interior to this buffer area has to be at a distance inferior
  * to "buffer distance" to the original geometry. This buffer distance could be
  * constant, or it could be a function of the value of a feature attribute.<br>
- *
+ * 
  * @author azabala
- *
+ * 
  */
 public class BufferGeoprocess extends AbstractGeoprocess implements
 		IOneLayerGeoprocess {
@@ -183,7 +183,6 @@ public class BufferGeoprocess extends AbstractGeoprocess implements
 	 * attribute value
 	 */
 	public static final byte ATTRIBUTE_DISTANCE_STRATEGY = 1;
-
 
 	/**
 	 * Schema of the result layer
@@ -211,7 +210,7 @@ public class BufferGeoprocess extends AbstractGeoprocess implements
 
 	/**
 	 * Constructor
-	 *
+	 * 
 	 * @param bufferLayer
 	 *            layer to buffer
 	 */
@@ -235,19 +234,18 @@ public class BufferGeoprocess extends AbstractGeoprocess implements
 		if (onlySelection != null)
 			bufferOnlySelection = onlySelection.booleanValue();
 
-		
 		CoordinateReferenceSystem crs = (CoordinateReferenceSystem) params
 				.get("projection");
-		int distanceUnits = ((Integer)params.get("distanceunits")).intValue();
-		int mapUnits = ((Integer)params.get("mapunits")).intValue();
+		int distanceUnits = ((Integer) params.get("distanceunits")).intValue();
+		int mapUnits = ((Integer) params.get("mapunits")).intValue();
 		Byte strategy_flat = (Byte) params.get("strategy_flag");
 		if (strategy_flat != null
 				&& strategy_flat.byteValue() == ATTRIBUTE_DISTANCE_STRATEGY) {
 			// must check attribute name not null
 			String attributeName = (String) params.get("attr_name");
 			if (attributeName != null) {
-				bufferVisitor = new AttributeBufferVisitor(attributeName,
-						crs, distanceUnits, mapUnits);
+				bufferVisitor = new AttributeBufferVisitor(attributeName, crs,
+						distanceUnits, mapUnits);
 			} else {
 				throw new GeoprocessException(
 						"Buffer por atributo sin nombre de atributo");
@@ -270,23 +268,22 @@ public class BufferGeoprocess extends AbstractGeoprocess implements
 		if (dissolve != null)
 			dissolveBuffers = dissolve.booleanValue();
 		bufferVisitor.setIsDissolve(dissolveBuffers);
-		
+
 		Byte capflag = (Byte) params.get("cap");
-		if(capflag != null){
+		if (capflag != null) {
 			bufferVisitor.setTypeOfCap(capflag.byteValue());
 		}
 
 		Byte typePolFlag = (Byte) params.get("typePolBuffer");
-		if(typePolFlag != null){
+		if (typePolFlag != null) {
 			bufferVisitor.setTypeOfBuffer(typePolFlag.byteValue());
 		}
 
 		Integer numRingsFlag = (Integer) params.get("numRings");
-		if(numRingsFlag != null){
+		if (numRingsFlag != null) {
 			bufferVisitor.setNumberOfRadialBuffers(numRingsFlag.intValue());
 		}
 	}
-
 
 	/**
 	 * Checks preconditions to this geoprocess (input layer mustnt be null), etc
@@ -302,20 +299,22 @@ public class BufferGeoprocess extends AbstractGeoprocess implements
 
 	/**
 	 * Computes buffer geoprocess, and saves results in solution layer.
-	 *
+	 * 
 	 */
 	public void process() throws GeoprocessException {
 		try {
 			createTask().run();
 		} catch (Exception e) {
-			throw new GeoprocessException("Error durante la ejecución del buffer", e);
+			throw new GeoprocessException(
+					"Error durante la ejecución del buffer", e);
 		}
 	}
 
 	/**
-	 * Creates a temp layer with the file referenced by writer.
-	 * It is useful when you want to dissolve buffers, to avoid working
-	 * with intermediate results in memory.
+	 * Creates a temp layer with the file referenced by writer. It is useful
+	 * when you want to dissolve buffers, to avoid working with intermediate
+	 * results in memory.
+	 * 
 	 * @return
 	 * @throws OpenDriverException
 	 * @throws InitializeDriverException
@@ -323,7 +322,8 @@ public class BufferGeoprocess extends AbstractGeoprocess implements
 	 * @throws IOException
 	 * @throws DriverException
 	 */
-	public FLyrVect createTempLayer() throws OpenDriverException, InitializeDriverException, LoadLayerException {
+	public FLyrVect createTempLayer() throws OpenDriverException,
+			InitializeDriverException, LoadLayerException {
 		FLyrVect solution = null;
 		String fileName = ((ShpWriter) writer).getShpPath();
 		File file = new File(fileName);
@@ -337,11 +337,9 @@ public class BufferGeoprocess extends AbstractGeoprocess implements
 
 	}
 
-
-
 	/**
-	 * Computes buffers of input layer, and saves them with the
-	 * actual writer.
+	 * Computes buffers of input layer, and saves them with the actual writer.
+	 * 
 	 * @param strategy
 	 * @param cancel
 	 * @throws ReadDriverException
@@ -354,7 +352,9 @@ public class BufferGeoprocess extends AbstractGeoprocess implements
 	 * @throws ExpansionFileReadException
 	 */
 	private void computeOnlyBuffers(Strategy strategy,
-			CancellableMonitorable cancel) throws ReadDriverException, SchemaEditionException, ExpansionFileReadException, VisitorException {
+			CancellableMonitorable cancel) throws ReadDriverException,
+			SchemaEditionException, ExpansionFileReadException,
+			VisitorException {
 
 		bufferVisitor.setBufferProcessor(new GeometryPersisterProcessor(
 				this.resultLayerDefinition, this.schemaManager, this.writer));
@@ -368,40 +368,39 @@ public class BufferGeoprocess extends AbstractGeoprocess implements
 	}
 
 	/**
-	 * Creates a LayerDefinition in function of:
-	 * a) input layer
-	 * b) user selections
-	 * c) buffer geoprocess itselt operation
-	 *
+	 * Creates a LayerDefinition in function of: a) input layer b) user
+	 * selections c) buffer geoprocess itselt operation
+	 * 
 	 * Users of this geoprocess may construct a Writer from this LayerDefinition
 	 * (for example, to save to shp ShpWriter needs a File and a LayerDefinition
 	 * -to create this file with the proper schema-)
-	 *
-	 * FIXME
-	 * We cant call this method before setParams(Map params). Launch a exception
-	 *
+	 * 
+	 * FIXME We cant call this method before setParams(Map params). Launch a
+	 * exception
+	 * 
 	 * ILayerDefinition wont be the same for dissolved buffers layers
-	 *
+	 * 
 	 */
 	public ILayerDefinition createLayerDefinition() {
 		// In a buffer geoprocess we only well have a geometry
 		// and a FID
 		if (resultLayerDefinition == null) {
-			if(!dissolveBuffers){
+			if (!dissolveBuffers) {
 				resultLayerDefinition = new SHPLayerDefinition();
 				try {
 					resultLayerDefinition.setShapeType(FShape.POLYGON);
 					resultLayerDefinition.setCrs(firstLayer.getCrs());
 					resultLayerDefinition.setName(firstLayer.getName());
-					resultLayerDefinition.setFieldsDesc(firstLayer.getRecordset().getFieldsDescription());
+					resultLayerDefinition.setFieldsDesc(firstLayer
+							.getRecordset().getFieldsDescription());
 				} catch (ReadDriverException e) {
 					e.printStackTrace();
 				}
-					return resultLayerDefinition;
-			}else{
-				if(bufferVisitor.getTypeOfBuffer() == BufferVisitor.BUFFER_INSIDE_OUTSIDE_POLY){
+				return resultLayerDefinition;
+			} else {
+				if (bufferVisitor.getTypeOfBuffer() == BufferVisitor.BUFFER_INSIDE_OUTSIDE_POLY) {
 					resultLayerDefinition = createPositiveAndNegativeBufferDefinition();
-				}else{
+				} else {
 					resultLayerDefinition = createPositiveOrNegativeBufferDefinition();
 				}
 			}
@@ -412,9 +411,10 @@ public class BufferGeoprocess extends AbstractGeoprocess implements
 	/**
 	 * Auxilar method to create a layer definition for buffer's process which
 	 * needs to create only internal or external buffers.
+	 * 
 	 * @return
 	 */
-	protected ILayerDefinition createPositiveOrNegativeBufferDefinition(){
+	protected ILayerDefinition createPositiveOrNegativeBufferDefinition() {
 		ILayerDefinition resultLayerDefinition = new SHPLayerDefinition();
 		resultLayerDefinition.setShapeType(XTypes.POLYGON);
 		FieldDescription[] fields = new FieldDescription[2];
@@ -431,13 +431,13 @@ public class BufferGeoprocess extends AbstractGeoprocess implements
 		return resultLayerDefinition;
 	}
 
-
 	/**
 	 * Auxilar method to create a layer definition for buffer's process which
 	 * needs to create internal and external buffers.
+	 * 
 	 * @return
 	 */
-	protected ILayerDefinition createPositiveAndNegativeBufferDefinition(){
+	protected ILayerDefinition createPositiveAndNegativeBufferDefinition() {
 		ILayerDefinition resultLayerDefinition = new SHPLayerDefinition();
 		resultLayerDefinition.setShapeType(XTypes.POLYGON);
 		FieldDescription[] fields = new FieldDescription[3];
@@ -461,8 +461,9 @@ public class BufferGeoprocess extends AbstractGeoprocess implements
 	}
 
 	/**
-	 * Creates a CancelableMonitorable instance to monitor and cancels
-	 * ITask's buffer creation.
+	 * Creates a CancelableMonitorable instance to monitor and cancels ITask's
+	 * buffer creation.
+	 * 
 	 * @return
 	 */
 	private DefaultCancellableMonitorable createCancelMonitor() {
@@ -515,7 +516,7 @@ public class BufferGeoprocess extends AbstractGeoprocess implements
 		 * Message for report individual step of dissolving of buffers
 		 */
 		final String note2 = PluginServices.getText(this,
-		"Mensaje_procesando_buffer2");
+				"Mensaje_procesando_buffer2");
 		/*
 		 * Concatenation string
 		 */
@@ -535,8 +536,9 @@ public class BufferGeoprocess extends AbstractGeoprocess implements
 			}
 
 			public int getCurrentStep() {
-				if(currentNote == note2)
-					return dissolveVisitor.getDissolvedGeometries().cardinality();
+				if (currentNote == note2)
+					return dissolveVisitor.getDissolvedGeometries()
+							.cardinality();
 				else
 					return cancelMonitor.getCurrentStep();
 			}
@@ -562,62 +564,67 @@ public class BufferGeoprocess extends AbstractGeoprocess implements
 				resultLayerDefinition = createLayerDefinition();
 				try {
 					if (dissolveBuffers) {
-						//computeAndDissolveBuffer(strategy, cancelMonitor);
+						// computeAndDissolveBuffer(strategy, cancelMonitor);
 						ShpWriter mainWriter = (ShpWriter) writer;
 						writer = new ShpWriter();
-						String temp = System.getProperty("java.io.tmpdir") +
-								"/buffer" +
-								System.currentTimeMillis() +
-								".shp";
+						String temp = System.getProperty("java.io.tmpdir")
+								+ "/buffer" + System.currentTimeMillis()
+								+ ".shp";
 						File newFile = new File(temp);
 						((ShpWriter) writer).setFile(newFile);
-						((ShpWriter) writer).initialize(
-								resultLayerDefinition);
-						((SHPLayerDefinition) resultLayerDefinition).setFile(newFile);
+						((ShpWriter) writer).initialize(resultLayerDefinition);
+						((SHPLayerDefinition) resultLayerDefinition)
+								.setFile(newFile);
 						schemaManager.createSchema(resultLayerDefinition);
-						bufferVisitor.setBufferProcessor(new GeometryPersisterProcessor(
-								resultLayerDefinition, schemaManager, writer));
+						bufferVisitor
+								.setBufferProcessor(new GeometryPersisterProcessor(
+										resultLayerDefinition, schemaManager,
+										writer));
 						computeOnlyBuffers(strategy, cancelMonitor);
-						//dissolving buffers
+						// dissolving buffers
 						cancelMonitor.setCurrentStep(0);
 						FLyrVect tempLayer = createTempLayer();
 						tempLayer.createSpatialIndex();
-						cancelMonitor.setFinalStep(tempLayer.getSource().getShapeCount());
+						cancelMonitor.setFinalStep(tempLayer.getSource()
+								.getShapeCount());
 						writer = mainWriter;
 						FeaturePersisterProcessor2 processor = new FeaturePersisterProcessor2(
 								writer);
-//						AdjacencyDissolveVisitor dissolveVisitor =
-//							new AdjacencyDissolveVisitor(null, processor);
-						dissolveVisitor =
-							createDissolveVisitor(processor);
+						// AdjacencyDissolveVisitor dissolveVisitor =
+						// new AdjacencyDissolveVisitor(null, processor);
+						dissolveVisitor = createDissolveVisitor(processor);
 						currentNote = note2;
-						Strategy secondPassStrategy = StrategyManager.getStrategy(tempLayer);
+						Strategy secondPassStrategy = StrategyManager
+								.getStrategy(tempLayer);
 						dissolveVisitor.setStrategy(secondPassStrategy);
-						if(dissolveVisitor instanceof AdjacencyDissolveVisitor){
-							((AdjacencyDissolveVisitor)dissolveVisitor).setCancelMonitor(cancelMonitor);
+						if (dissolveVisitor instanceof AdjacencyDissolveVisitor) {
+							((AdjacencyDissolveVisitor) dissolveVisitor)
+									.setCancelMonitor(cancelMonitor);
 						}
-//						secondPassStrategy.process(dissolveVisitor, cancelMonitor);
-					     ReadableVectorial source = tempLayer.getSource();
+						// secondPassStrategy.process(dissolveVisitor,
+						// cancelMonitor);
+						ReadableVectorial source = tempLayer.getSource();
 						MathTransform trans = tempLayer.getCrsTransform();
-						
-						 if(dissolveVisitor.start(tempLayer)){
-							 source.start();
-							 for (int i = 0; i < source.getShapeCount(); i++) {
-									if(cancelMonitor.isCanceled()){
-										source.stop();
-										return;
-									}
-									if(dissolveVisitor.getDissolvedGeometries().get(i))
-										continue;
-									IGeometry geom = source.getShape(i);
+
+						if (dissolveVisitor.start(tempLayer)) {
+							source.start();
+							for (int i = 0; i < source.getShapeCount(); i++) {
+								if (cancelMonitor.isCanceled()) {
+									source.stop();
+									return;
+								}
+								if (dissolveVisitor.getDissolvedGeometries()
+										.get(i))
+									continue;
+								IGeometry geom = source.getShape(i);
 								if (trans != null) {
 									geom.reProject(trans);
-									}
-								    dissolveVisitor.visit(geom, i);
-							}//for
-							source.stop();		
-						 }
-						 dissolveVisitor.stop(tempLayer);
+								}
+								dissolveVisitor.visit(geom, i);
+							}// for
+							source.stop();
+						}
+						dissolveVisitor.stop(tempLayer);
 					} else {
 						computeOnlyBuffers(strategy, cancelMonitor);
 					}
@@ -629,34 +636,32 @@ public class BufferGeoprocess extends AbstractGeoprocess implements
 			}
 
 			/**
-			 * Creates a DissolveVisitor to dissolve computed buffers.
-			 * If we only computed a ring buffer, dissolve
-			 * criteria will be adjacency.
-			 * If we computed many buffers, dissolve criteria will be
-			 * adjacency and alphanumeric (value of FROM-TO or DISTANCE fields of the
+			 * Creates a DissolveVisitor to dissolve computed buffers. If we
+			 * only computed a ring buffer, dissolve criteria will be adjacency.
+			 * If we computed many buffers, dissolve criteria will be adjacency
+			 * and alphanumeric (value of FROM-TO or DISTANCE fields of the
 			 * buffer geometry)
+			 * 
 			 * @return
 			 */
-			private DissolveVisitor createDissolveVisitor(FeaturePersisterProcessor2 processor) {
-				//int numBuffers = bufferVisitor.getNumberOfRadialBuffers();
-				//if(numBuffers == 1){
-					return new AdjacencyDissolveVisitor(null,processor);
-				//}
-				/*DOCUMENTAR ESTE CASO
-				else{
-					//Esto no funciona bien. Para dissolver buffers
-					//con varios rings, da errores topológicos.
-
-					//La única solución es calcular 1º la unión, luego
-					//y luego los multirings
-
-					if(bufferVisitor.getTypeOfBuffer() == BufferVisitor.BUFFER_INSIDE_OUTSIDE_POLY){
-						return new DissolveVisitor("FROM", processor);
-					}else{
-						return new DissolveVisitor("DIST", processor);
-					}
-				}
-				*/
+			private DissolveVisitor createDissolveVisitor(
+					FeaturePersisterProcessor2 processor) {
+				// int numBuffers = bufferVisitor.getNumberOfRadialBuffers();
+				// if(numBuffers == 1){
+				return new AdjacencyDissolveVisitor(null, processor);
+				// }
+				/*
+				 * DOCUMENTAR ESTE CASO else{ //Esto no funciona bien. Para
+				 * dissolver buffers //con varios rings, da errores topológicos.
+				 * 
+				 * //La única solución es calcular 1º la unión, luego //y luego
+				 * los multirings
+				 * 
+				 * if(bufferVisitor.getTypeOfBuffer() ==
+				 * BufferVisitor.BUFFER_INSIDE_OUTSIDE_POLY){ return new
+				 * DissolveVisitor("FROM", processor); }else{ return new
+				 * DissolveVisitor("DIST", processor); } }
+				 */
 			}
 
 			public boolean isDefined() {
@@ -673,7 +678,7 @@ public class BufferGeoprocess extends AbstractGeoprocess implements
 
 			public void finished() {
 				// TODO Auto-generated method stub
-				
+
 			}
 		};
 	}

@@ -9,11 +9,9 @@ import org.xml.sax.SAXException;
 
 import com.iver.utiles.XMLEntity;
 
-
 /**
- * Maneja los eventos de GDBMS para obtener un XMLEntity con la
- * información
- *
+ * Maneja los eventos de GDBMS para obtener un XMLEntity con la información
+ * 
  * @author Fernando González Cortés
  */
 public class GDBMSHandler implements ContentHandler {
@@ -38,7 +36,7 @@ public class GDBMSHandler implements ContentHandler {
 	 * @see org.xml.sax.ContentHandler#characters(char[], int, int)
 	 */
 	public void characters(char[] ch, int start, int length)
-		throws SAXException {
+			throws SAXException {
 		// TODO Auto-generated method stub
 	}
 
@@ -46,7 +44,7 @@ public class GDBMSHandler implements ContentHandler {
 	 * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
 	 */
 	public void ignorableWhitespace(char[] ch, int start, int length)
-		throws SAXException {
+			throws SAXException {
 		// TODO Auto-generated method stub
 	}
 
@@ -73,38 +71,38 @@ public class GDBMSHandler implements ContentHandler {
 
 	/**
 	 * @see org.xml.sax.ContentHandler#processingInstruction(java.lang.String,
-	 * 		java.lang.String)
+	 *      java.lang.String)
 	 */
 	public void processingInstruction(String target, String data)
-		throws SAXException {
+			throws SAXException {
 		// TODO Auto-generated method stub
 	}
 
 	/**
 	 * @see org.xml.sax.ContentHandler#startPrefixMapping(java.lang.String,
-	 * 		java.lang.String)
+	 *      java.lang.String)
 	 */
 	public void startPrefixMapping(String prefix, String uri)
-		throws SAXException {
+			throws SAXException {
 		// TODO Auto-generated method stub
 	}
 
 	/**
 	 * @see org.xml.sax.ContentHandler#endElement(java.lang.String,
-	 * 		java.lang.String, java.lang.String)
+	 *      java.lang.String, java.lang.String)
 	 */
 	public void endElement(String namespaceURI, String localName, String qName)
-		throws SAXException {
+			throws SAXException {
 		last = (XMLEntity) entities.pop();
 	}
 
 	/**
 	 * @see org.xml.sax.ContentHandler#startElement(java.lang.String,
-	 * 		java.lang.String, java.lang.String, org.xml.sax.Attributes)
+	 *      java.lang.String, java.lang.String, org.xml.sax.Attributes)
 	 */
 	public void startElement(String namespaceURI, String localName,
-		String qName, Attributes atts) throws SAXException {
-		//Configuramos el xml entity
+			String qName, Attributes atts) throws SAXException {
+		// Configuramos el xml entity
 		XMLEntity xml = new XMLEntity();
 		xml.setName(qName);
 
@@ -124,7 +122,7 @@ public class GDBMSHandler implements ContentHandler {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public XMLEntity getXMLEntity() {

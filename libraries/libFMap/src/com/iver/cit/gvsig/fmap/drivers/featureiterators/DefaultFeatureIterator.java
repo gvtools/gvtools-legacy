@@ -83,9 +83,8 @@ import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 
 /**
  * 
- * Iterator over all the features of a vectorial adapter.
- * It is thinked for data sources which dont have capabilities
- * of querying or reprojection.
+ * Iterator over all the features of a vectorial adapter. It is thinked for data
+ * sources which dont have capabilities of querying or reprojection.
  * 
  * 
  * @author Alvaro Zabala
@@ -93,23 +92,23 @@ import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 public class DefaultFeatureIterator implements IFeatureIterator {
 
 	/**
-	 * Projection of the layer on which this iterator iterates.
-	 * TODO Move projection from layer to adapter or driver
+	 * Projection of the layer on which this iterator iterates. TODO Move
+	 * projection from layer to adapter or driver
 	 * */
 	protected CoordinateReferenceSystem sourceCrs;
 	/**
-	 * If its setted, all features returned by this iterator
-	 * will be previously reprojected to this target projection
+	 * If its setted, all features returned by this iterator will be previously
+	 * reprojected to this target projection
 	 */
 	protected CoordinateReferenceSystem targetCrs;
 	/**
-	 * If its setted, returned features only will have these alphanumeric attributes
+	 * If its setted, returned features only will have these alphanumeric
+	 * attributes
 	 */
 	protected String[] fieldNames;
 
 	/**
-	 * vectorial data source. It reads geometries
-	 * and has the recordset
+	 * vectorial data source. It reads geometries and has the recordset
 	 */
 	protected ReadableVectorial source;
 	/**
@@ -118,42 +117,43 @@ public class DefaultFeatureIterator implements IFeatureIterator {
 	protected SelectableDataSource recordset;
 
 	/**
-	 * index of the next feature that will be returned by this
-	 * iterator
+	 * index of the next feature that will be returned by this iterator
 	 */
 	protected int currentFeature;
 
 	/**
-	 * Default constructor. 
-	 * Creates an iterator which will return features in the data source projection
-	 * (without reprojection) and with all the alphanumeric attributes
-	 * @throws ReadDriverException 
-	 *
+	 * Default constructor. Creates an iterator which will return features in
+	 * the data source projection (without reprojection) and with all the
+	 * alphanumeric attributes
+	 * 
+	 * @throws ReadDriverException
+	 * 
 	 */
-	public DefaultFeatureIterator( ReadableVectorial source) throws ReadDriverException{
+	public DefaultFeatureIterator(ReadableVectorial source)
+			throws ReadDriverException {
 		this.source = source;
-		//needed for layers in edition status
+		// needed for layers in edition status
 		this.source.start();
 		this.recordset = source.getRecordset();
 		currentFeature = 0;
 	}
 
 	/**
-	 * Constructor.
-	 * The iterator will reproject the geometry of the features to the specified target projection,
-	 * and with the specified attribute fields.
+	 * Constructor. The iterator will reproject the geometry of the features to
+	 * the specified target projection, and with the specified attribute fields.
 	 * */
-	public DefaultFeatureIterator(ReadableVectorial source, 
-			CoordinateReferenceSystem sourceCrs, 
-			CoordinateReferenceSystem targetCrs, 
-			String[] fieldNames) throws ReadDriverException{
+	public DefaultFeatureIterator(ReadableVectorial source,
+			CoordinateReferenceSystem sourceCrs,
+			CoordinateReferenceSystem targetCrs, String[] fieldNames)
+			throws ReadDriverException {
 		this(source);
 		this.sourceCrs = sourceCrs;
-		//check to avoid reprojections with the same projection
-		if(targetCrs != null){
-			// FJP: Si la capa original no sabemos qué proyección tiene, no hacemos nada
+		// check to avoid reprojections with the same projection
+		if (targetCrs != null) {
+			// FJP: Si la capa original no sabemos qué proyección tiene, no
+			// hacemos nada
 			if (sourceCrs != null) {
-				if(!(targetCrs.getName().equals(sourceCrs.getName())))
+				if (!(targetCrs.getName().equals(sourceCrs.getName())))
 					this.targetCrs = targetCrs;
 			}
 		}
@@ -162,9 +162,9 @@ public class DefaultFeatureIterator implements IFeatureIterator {
 
 	/**
 	 * Default constructor.
-	 *
+	 * 
 	 */
-	public DefaultFeatureIterator(){
+	public DefaultFeatureIterator() {
 	}
 
 	public boolean hasNext() throws ReadDriverException {
@@ -178,12 +178,13 @@ public class DefaultFeatureIterator implements IFeatureIterator {
 			IGeometry geom = chekIfCloned(source.getShape(currentFeature));
 			reprojectIfNecessary(geom);
 			Value[] regAtt = getValues(currentFeature);
-			IFeature feat  = new DefaultFeature(geom, regAtt, currentFeature + "");
+			IFeature feat = new DefaultFeature(geom, regAtt, currentFeature
+					+ "");
 			currentFeature++;
 			return feat;
 		} catch (ExpansionFileReadException e) {
-			throw new ReadDriverException("",e);
-		} 
+			throw new ReadDriverException("", e);
+		}
 	}
 
 	public void closeIterator() throws ReadDriverException {
@@ -216,13 +217,13 @@ public class DefaultFeatureIterator implements IFeatureIterator {
 
 	/**
 	 * 
-	 * Checks if must reproject the given geom
-	 * and reprojects it if true
+	 * Checks if must reproject the given geom and reprojects it if true
+	 * 
 	 * @param geom
 	 */
-	protected void reprojectIfNecessary(IGeometry geom){
+	protected void reprojectIfNecessary(IGeometry geom) {
 		if (targetCrs != null && sourceCrs != null
-				&&	!targetCrs.getName().equals(sourceCrs.getName())){
+				&& !targetCrs.getName().equals(sourceCrs.getName())) {
 			MathTransform trans = ProjectionUtils.getCrsTransform(sourceCrs,
 					targetCrs);
 			geom.reProject(trans);
@@ -231,39 +232,45 @@ public class DefaultFeatureIterator implements IFeatureIterator {
 
 	/**
 	 * Checks if the geometry must be cloned.
-	 * @return
-	 * If it must be cloned.
+	 * 
+	 * @return If it must be cloned.
 	 */
-	protected IGeometry chekIfCloned(IGeometry geom){
-		if ((source.getDriverAttributes() != null) &&
-			(source.getDriverAttributes().isLoadedInMemory())){			
+	protected IGeometry chekIfCloned(IGeometry geom) {
+		if ((source.getDriverAttributes() != null)
+				&& (source.getDriverAttributes().isLoadedInMemory())) {
 			return geom.cloneGeometry();
 		}
 		return geom;
 	}
 
-	protected Value[] getValues(int featureIdx) throws ReadDriverException{
+	protected Value[] getValues(int featureIdx) throws ReadDriverException {
 		Value[] regAtt = null;
-		if(fieldNames == null){
-			//TODO Duda: cual es el comportamiento deseado cuando fieldNames sea null
-			//devolverlo todo o no devolver nada?????
-			//			regAtt = new Value[recordset.getFieldCount()];//igual optimiza reutilizar y hacer copias (en vez de alocar array)
-			//			for (int fieldId = 0; fieldId < recordset.getFieldCount(); fieldId++) {
-			//				regAtt[fieldId] = recordset.getFieldValue(featureIdx, fieldId);
-			//			}
+		if (fieldNames == null) {
+			// TODO Duda: cual es el comportamiento deseado cuando fieldNames
+			// sea null
+			// devolverlo todo o no devolver nada?????
+			// regAtt = new Value[recordset.getFieldCount()];//igual optimiza
+			// reutilizar y hacer copias (en vez de alocar array)
+			// for (int fieldId = 0; fieldId < recordset.getFieldCount();
+			// fieldId++) {
+			// regAtt[fieldId] = recordset.getFieldValue(featureIdx, fieldId);
+			// }
 			regAtt = new Value[0];
-		}else{
+		} else {
 			regAtt = new Value[fieldNames.length];
 			for (int fieldId = 0; fieldId < fieldNames.length; fieldId++) {
-				int fieldCode = recordset.getFieldIndexByName(fieldNames[fieldId]);
-				regAtt[fieldId] = recordset.getFieldValue(featureIdx, fieldCode);
+				int fieldCode = recordset
+						.getFieldIndexByName(fieldNames[fieldId]);
+				regAtt[fieldId] = recordset
+						.getFieldValue(featureIdx, fieldCode);
 			}
 		}
 		return regAtt;
 	}
-	
+
 	/**
-	 * Useful if the layer is joined, to allow to retrieve values from joined fields
+	 * Useful if the layer is joined, to allow to retrieve values from joined
+	 * fields
 	 * 
 	 * @param rs
 	 */
@@ -272,4 +279,3 @@ public class DefaultFeatureIterator implements IFeatureIterator {
 	}
 
 }
-

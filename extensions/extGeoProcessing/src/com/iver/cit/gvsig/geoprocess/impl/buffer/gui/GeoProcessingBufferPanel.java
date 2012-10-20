@@ -80,11 +80,11 @@ import com.iver.utiles.GenericFileFilter;
 /**
  * Component that represents a Step of the GeoProcessingPanel Wizard. It allows
  * user to make selections to do buffers geoprocesses.
- *
+ * 
  * @author jmorell, azabala
- *
- * TODO copiar del ClipPanel el que se muestre el numero de elementos
- * seleccionados en la capa
+ * 
+ *         TODO copiar del ClipPanel el que se muestre el numero de elementos
+ *         seleccionados en la capa
  */
 public class GeoProcessingBufferPanel extends AbstractGeoprocessPanel implements
 		BufferPanelIF, IWindow {
@@ -155,7 +155,7 @@ public class GeoProcessingBufferPanel extends AbstractGeoprocessPanel implements
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
@@ -164,8 +164,7 @@ public class GeoProcessingBufferPanel extends AbstractGeoprocessPanel implements
 		this.setLayout(null);
 		this.setBounds(new java.awt.Rectangle(0, 0, 486, 377));
 		jLabel.setText(PluginServices.getText(this,
-				"Areas_de_influencia._Introduccion_de_datos")
-				+ ":");
+				"Areas_de_influencia._Introduccion_de_datos") + ":");
 		jLabel.setBounds(5, 20, 343, 21);
 		jLabel3.setText(PluginServices.getText(this, "Cobertura_de_entrada")
 				+ ":");
@@ -233,7 +232,7 @@ public class GeoProcessingBufferPanel extends AbstractGeoprocessPanel implements
 
 	/**
 	 * This method initializes layersComboBox
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getLayersComboBox() {
@@ -261,8 +260,7 @@ public class GeoProcessingBufferPanel extends AbstractGeoprocessPanel implements
 		return layersComboBox;
 	}
 
-
-	private void verifyTypeBufferComboEnabled(){
+	private void verifyTypeBufferComboEnabled() {
 		String layerName = (String) layersComboBox.getSelectedItem();
 		FLyrVect layer = (FLyrVect) layers.getLayer(layerName);
 		boolean enable = false;
@@ -275,24 +273,22 @@ public class GeoProcessingBufferPanel extends AbstractGeoprocessPanel implements
 		enableTypePolygonBufferPanel(enable);
 	}
 
-
 	/**
 	 * This method initializes fileNameResultTextField
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	public JTextField getFileNameResultTextField() {
 		if (fileNameResultTextField == null) {
-			super.getFileNameResultTextField().
-				setBounds(new java.awt.Rectangle(132, 11,
-												199, 21));
+			super.getFileNameResultTextField().setBounds(
+					new java.awt.Rectangle(132, 11, 199, 21));
 		}
 		return fileNameResultTextField;
 	}
 
 	/**
 	 * This method initializes openFileButton
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getOpenFileButton() {
@@ -320,15 +316,14 @@ public class GeoProcessingBufferPanel extends AbstractGeoprocessPanel implements
 
 	/**
 	 * This method initializes distanceBufferRadioButton
-	 *
+	 * 
 	 * @return javax.swing.JRadioButton
 	 */
 	private JRadioButton getDistanceBufferRadioButton() {
 		if (distanceBufferRadioButton == null) {
 			distanceBufferRadioButton = new JRadioButton();
 			distanceBufferRadioButton.setText(PluginServices.getText(this,
-					"Area_de_influencia_definida_por_una_distancia")
-					+ ":");
+					"Area_de_influencia_definida_por_una_distancia") + ":");
 			distanceBufferRadioButton.setBounds(new java.awt.Rectangle(2, 10,
 					303, 24));
 			distanceBufferRadioButton
@@ -343,7 +338,7 @@ public class GeoProcessingBufferPanel extends AbstractGeoprocessPanel implements
 
 	/**
 	 * This method initializes bufferDistanceTextField
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getBufferDistanceTextField() {
@@ -357,15 +352,14 @@ public class GeoProcessingBufferPanel extends AbstractGeoprocessPanel implements
 
 	/**
 	 * This method initializes attributeBufferRadioButton
-	 *
+	 * 
 	 * @return javax.swing.JRadioButton
 	 */
 	private JRadioButton getAttributeBufferRadioButton() {
 		if (attributeBufferRadioButton == null) {
 			attributeBufferRadioButton = new JRadioButton();
 			attributeBufferRadioButton.setText(PluginServices.getText(this,
-					"Area_de_influencia_definida_por_un_campo")
-					+ ":");
+					"Area_de_influencia_definida_por_un_campo") + ":");
 			attributeBufferRadioButton.setBounds(new java.awt.Rectangle(2, 41,
 					287, 21));
 			attributeBufferRadioButton
@@ -380,7 +374,7 @@ public class GeoProcessingBufferPanel extends AbstractGeoprocessPanel implements
 
 	/**
 	 * This method initializes layerFieldsComboBox
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getLayerFieldsComboBox() {
@@ -408,9 +402,8 @@ public class GeoProcessingBufferPanel extends AbstractGeoprocessPanel implements
 
 	public void openResultFile() {
 		JFileChooser jfc = new JFileChooser();
-		jfc
-				.addChoosableFileFilter(new GenericFileFilter("shp",
-						PluginServices.getText(this, "Ficheros_SHP")));
+		jfc.addChoosableFileFilter(new GenericFileFilter("shp", PluginServices
+				.getText(this, "Ficheros_SHP")));
 		if (jfc.showSaveDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
 			File file = jfc.getSelectedFile();
 			if (!(file.getPath().endsWith(".shp") || file.getPath().endsWith(
@@ -449,9 +442,9 @@ public class GeoProcessingBufferPanel extends AbstractGeoprocessPanel implements
 		try {
 			String strDist = bufferDistanceTextField.getText();
 			Double dist = Double.parseDouble(strDist);
-			if (dist <= 0){
+			if (dist <= 0) {
 				throw new GeoprocessException(
-					"Distancia de buffer debe ser > 0");
+						"Distancia de buffer debe ser > 0");
 			}
 			return dist;
 		} catch (NumberFormatException ex) {
@@ -475,7 +468,7 @@ public class GeoProcessingBufferPanel extends AbstractGeoprocessPanel implements
 
 		} catch (ReadDriverException e) {
 			throw new GeoprocessException(
-				"Problemas accediendo al campo que define la distancia de buffer");
+					"Problemas accediendo al campo que define la distancia de buffer");
 		}
 		return attributeField;
 	}
@@ -497,12 +490,13 @@ public class GeoProcessingBufferPanel extends AbstractGeoprocessPanel implements
 		return viewInfo;
 	}
 
-	public Object getWindowProfile(){
+	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
+
 	/**
 	 * This method initializes methodSelectionPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getMethodSelectionPanel() {
@@ -526,7 +520,7 @@ public class GeoProcessingBufferPanel extends AbstractGeoprocessPanel implements
 
 	/**
 	 * This method initializes resultSelectionPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getResultSelectionPanel() {
@@ -555,7 +549,7 @@ public class GeoProcessingBufferPanel extends AbstractGeoprocessPanel implements
 
 	/**
 	 * This method initializes endCapCheckBox
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getEndCapCheckBox() {
@@ -570,7 +564,7 @@ public class GeoProcessingBufferPanel extends AbstractGeoprocessPanel implements
 
 	/**
 	 * This method initializes extendedOptionsPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getExtendedOptionsPanel() {
@@ -590,7 +584,7 @@ public class GeoProcessingBufferPanel extends AbstractGeoprocessPanel implements
 
 	/**
 	 * This method initializes typePolygonBufferPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getTypePolygonBufferPanel() {
@@ -611,7 +605,7 @@ public class GeoProcessingBufferPanel extends AbstractGeoprocessPanel implements
 
 	/**
 	 * This method initializes typeBufferComboBox
-	 *
+	 * 
 	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getTypeBufferComboBox() {
@@ -630,7 +624,7 @@ public class GeoProcessingBufferPanel extends AbstractGeoprocessPanel implements
 	/**
 	 * Returns the type of polygon byffer (inside, outside, inside and outside)
 	 * selected by user
-	 *
+	 * 
 	 * @return
 	 */
 	public String getTypePolygonBuffer() {
@@ -641,7 +635,7 @@ public class GeoProcessingBufferPanel extends AbstractGeoprocessPanel implements
 	 * Allow to enable/disable typePolygonBufferPanel (and all its components).
 	 * The reason is that this customizations are only possible with polygon
 	 * layers.
-	 *
+	 * 
 	 * @param enable
 	 */
 	public void enableTypePolygonBufferPanel(boolean enable) {
@@ -651,7 +645,7 @@ public class GeoProcessingBufferPanel extends AbstractGeoprocessPanel implements
 
 	/**
 	 * This method initializes numBuffersPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getNumBuffersPanel() {
@@ -671,7 +665,7 @@ public class GeoProcessingBufferPanel extends AbstractGeoprocessPanel implements
 
 	/**
 	 * This method initializes radialBufferTextField
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JSpinner getRadialBufferSpinner() {
@@ -697,7 +691,7 @@ public class GeoProcessingBufferPanel extends AbstractGeoprocessPanel implements
 	/**
 	 * Returns the number of radial buffers selected by user (by now, only a
 	 * maximum of three radial buffers allowed)
-	 *
+	 * 
 	 * @return
 	 */
 	public int getNumberOfRadialBuffers() {

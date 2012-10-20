@@ -40,20 +40,20 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: Features.java 11704 2007-05-17 09:43:35Z jaume $
-* $Log$
-* Revision 1.3  2007-05-17 09:32:37  jaume
-* *** empty log message ***
-*
-* Revision 1.2  2007/03/09 11:25:00  jaume
-* Advanced symbology (start committing)
-*
-* Revision 1.1.2.1  2007/01/26 13:49:03  jaume
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: Features.java 11704 2007-05-17 09:43:35Z jaume $
+ * $Log$
+ * Revision 1.3  2007-05-17 09:32:37  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.2  2007/03/09 11:25:00  jaume
+ * Advanced symbology (start committing)
+ *
+ * Revision 1.1.2.1  2007/01/26 13:49:03  jaume
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.project.documents.view.legend.gui;
 
 import com.iver.andami.PluginServices;
@@ -67,6 +67,7 @@ public class Features extends AbstractParentPanel {
 		throw new Error("Not yet implemented!");
 
 	}
+
 	public String getTitle() {
 		return PluginServices.getText(Features.class, "features");
 	}

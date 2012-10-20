@@ -60,95 +60,101 @@ import es.gva.cit.catalog.schemas.Resource;
 import es.gva.cit.catalog.ui.showresults.ShowResultsDialogPanel;
 import es.gva.cit.catalog.utils.Frames;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author luisw
  */
-public class ShowResultsDialog extends ShowResultsDialogPanel implements IWindow {
-    private JDialog frame = null;
-    /**
-     * DOCUMENT ME!
-     *
-     * @param client
-     * @param nodes
-     * @param currentRecord
-     */
-    public ShowResultsDialog(JDialog frame,CatalogClient client, GetRecordsReply recordsReply,
-        int currentRecord) {
-        super(client, recordsReply, currentRecord);
-        this.frame = frame;
-    }
+public class ShowResultsDialog extends ShowResultsDialogPanel implements
+		IWindow {
+	private JDialog frame = null;
 
-    /**
-     * DOCUMENT ME!
-     */
-    public void descriptionButtonActionPerformed() {
-    	Record record = recordsReply.getRecordAt(getCurrentNode());
-    	if (record == null){
-    		return;
-    	}
-    	XMLNode node = record.getNode();
-    	if (node == null){
-    		JOptionPane.showMessageDialog(this,Messages.getText("Error_accediendo_a_los_datos"));
-    	}else{
-    		
-    		JDialog panel = new JDialog((Frame) PluginServices.getMainFrame(), false);
-    		Frames.centerFrame(panel, 796, 675);
-    		//panel.setBounds(0, 0, 796, 675);
-    		panel.setTitle(Messages.getText("metadata_tree"));
-    		panel.setResizable(false);
-    		
-    		ShowTreeDialog dialog = new ShowTreeDialog(panel,node);
-    		
-    		panel.getContentPane().add(dialog);
-    		panel.show();
-    	}
-        
-//        PluginServices.getMDIManager().addView(dialog);
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param client
+	 * @param nodes
+	 * @param currentRecord
+	 */
+	public ShowResultsDialog(JDialog frame, CatalogClient client,
+			GetRecordsReply recordsReply, int currentRecord) {
+		super(client, recordsReply, currentRecord);
+		this.frame = frame;
+	}
 
-    /**
-     * DOCUMENT ME!
-     */
-    public void mapButtonActionPerformed() {
-        Resource[] resources = controlsPanel.getRecord().getResources();
-        Collection col = new java.util.ArrayList();
-        for (int i=0 ; i<resources.length ;i++){
-            col.add(resources[i]);
-        }
-        ChooseResourceDialog dialog = new ChooseResourceDialog(col);
-        dialog.setBounds(0, 0, 586, 145);
-        dialog.setName(Messages.getText("Recursos Disponibles"));
-        dialog.setVisible(true);
-        PluginServices.getMDIManager().addWindow(dialog);
-    }
+	/**
+	 * DOCUMENT ME!
+	 */
+	public void descriptionButtonActionPerformed() {
+		Record record = recordsReply.getRecordAt(getCurrentNode());
+		if (record == null) {
+			return;
+		}
+		XMLNode node = record.getNode();
+		if (node == null) {
+			JOptionPane.showMessageDialog(this,
+					Messages.getText("Error_accediendo_a_los_datos"));
+		} else {
 
-    /**
-     * DOCUMENT ME!
-     */
-    public void closeButtonActionPerformed() {
-        closeJDialog();
-    }
+			JDialog panel = new JDialog((Frame) PluginServices.getMainFrame(),
+					false);
+			Frames.centerFrame(panel, 796, 675);
+			// panel.setBounds(0, 0, 796, 675);
+			panel.setTitle(Messages.getText("metadata_tree"));
+			panel.setResizable(false);
 
-    /**
-     * Cierra el Dialog
-     */
-    public void closeJDialog() {
-        frame.setVisible(false);
-    }
+			ShowTreeDialog dialog = new ShowTreeDialog(panel, node);
 
-    /* (non-Javadoc)
-     * @see com.iver.andami.ui.mdiManager.View#getViewInfo()
-     */
-    public WindowInfo getWindowInfo() {
-        WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODALDIALOG);
-        m_viewinfo.setTitle(getName());
+			panel.getContentPane().add(dialog);
+			panel.show();
+		}
 
-        return m_viewinfo;
-    }
-    public Object getWindowProfile(){
+		// PluginServices.getMDIManager().addView(dialog);
+	}
+
+	/**
+	 * DOCUMENT ME!
+	 */
+	public void mapButtonActionPerformed() {
+		Resource[] resources = controlsPanel.getRecord().getResources();
+		Collection col = new java.util.ArrayList();
+		for (int i = 0; i < resources.length; i++) {
+			col.add(resources[i]);
+		}
+		ChooseResourceDialog dialog = new ChooseResourceDialog(col);
+		dialog.setBounds(0, 0, 586, 145);
+		dialog.setName(Messages.getText("Recursos Disponibles"));
+		dialog.setVisible(true);
+		PluginServices.getMDIManager().addWindow(dialog);
+	}
+
+	/**
+	 * DOCUMENT ME!
+	 */
+	public void closeButtonActionPerformed() {
+		closeJDialog();
+	}
+
+	/**
+	 * Cierra el Dialog
+	 */
+	public void closeJDialog() {
+		frame.setVisible(false);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.andami.ui.mdiManager.View#getViewInfo()
+	 */
+	public WindowInfo getWindowInfo() {
+		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODALDIALOG);
+		m_viewinfo.setTitle(getName());
+
+		return m_viewinfo;
+	}
+
+	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
 }

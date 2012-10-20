@@ -6,7 +6,6 @@ import com.iver.cit.gvsig.fmap.core.v02.FConverter;
 
 //import com.iver.andami.PluginServices;
 
-
 /* gvSIG. Sistema de Informaci�n Geogr�fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -58,20 +57,22 @@ import com.iver.cit.gvsig.fmap.core.v02.FConverter;
  */
 /**
  * This object represents a polyline with the M coordinate.
+ * 
  * @author Jorge Piera LLodr� (jorge.piera@iver.es)
  */
-public class FPolyline2DM extends FPolyline2D implements FShapeM{
+public class FPolyline2DM extends FPolyline2D implements FShapeM {
 	private static final long serialVersionUID = -617233536274899782L;
 	private static final String NAME = "MULTILINESTRINGM";
 	double[] pM = null;
 
 	public FPolyline2DM(GeneralPathX gpx, double[] pM) {
-		super(gpx);	
+		super(gpx);
 		this.pM = pM;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.FShapeDS#getMs()
 	 */
 	public double[] getMs() {
@@ -80,6 +81,7 @@ public class FPolyline2DM extends FPolyline2D implements FShapeM{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.FPolyline3D#getShapeType()
 	 */
 	public int getShapeType() {
@@ -88,6 +90,7 @@ public class FPolyline2DM extends FPolyline2D implements FShapeM{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.FPolyline3D#cloneFShape()
 	 */
 	public FShape cloneFShape() {
@@ -96,77 +99,76 @@ public class FPolyline2DM extends FPolyline2D implements FShapeM{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.FShapeM#setMAt(int, double)
 	 */
 	public void setMAt(int i, double value) {
-		if (i < pM.length){
-			pM[i] = value;		
+		if (i < pM.length) {
+			pM[i] = value;
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.FShapeM#isDecreasing()
 	 */
 	public boolean isDecreasing() {
-		if (pM.length == 0){
+		if (pM.length == 0) {
 			return false;
 		}
-		return (pM[0] > pM[pM.length-1]);
+		return (pM[0] > pM[pM.length - 1]);
 	}
 
-	public void revertMs(){
-		double totalDistance = Math.abs(pM[0] - pM[pM.length-1]);	
+	public void revertMs() {
+		double totalDistance = Math.abs(pM[0] - pM[pM.length - 1]);
 		double[] percentages = new double[pM.length];
-		for (int i=1 ; i<percentages.length ; i++)
-		{
-			percentages [i] = (Math.abs(pM[i]-pM[i-1]))/totalDistance;
-		}		
-		//The first value
-		double pm0 = pM[0];		
-		if (!isDecreasing()){
-			pM[0] = pM[pM.length-1];
-			for (int i=1 ; i<pM.length-1 ; i++)
-			{
+		for (int i = 1; i < percentages.length; i++) {
+			percentages[i] = (Math.abs(pM[i] - pM[i - 1])) / totalDistance;
+		}
+		// The first value
+		double pm0 = pM[0];
+		if (!isDecreasing()) {
+			pM[0] = pM[pM.length - 1];
+			for (int i = 1; i < pM.length - 1; i++) {
 				double increasing = percentages[i] * totalDistance;
-				pM[i] = pM[i-1] - increasing;				
+				pM[i] = pM[i - 1] - increasing;
 			}
-		}else{
-			pM[0] = pM[pM.length-1];
-			for (int i=1 ; i<pM.length-1 ; i++)
-			{
+		} else {
+			pM[0] = pM[pM.length - 1];
+			for (int i = 1; i < pM.length - 1; i++) {
 				double decreasing = percentages[i] * totalDistance;
-				pM[i] = pM[i-1] + decreasing;				
+				pM[i] = pM[i - 1] + decreasing;
 			}
 		}
-		pM[pM.length-1] = pm0;	
+		pM[pM.length - 1] = pm0;
 	}
 
 	/**
-	 * This method is used instead of the JTS ToString method. The reason is because
-	 * JTS doesn't support the M coordinate
+	 * This method is used instead of the JTS ToString method. The reason is
+	 * because JTS doesn't support the M coordinate
 	 */
-	public String toText(){
+	public String toText() {
 		StringBuffer str = new StringBuffer();
 		str.append(NAME);
 		str.append(" ((");
-		int theType;		
-		double[] theData = new double[6];		
+		int theType;
+		double[] theData = new double[6];
 
 		PathIterator theIterator = getPathIterator(null, FConverter.FLATNESS);
 		int i = 0;
 
 		while (!theIterator.isDone()) {
-			//while not done
+			// while not done
 			theType = theIterator.currentSegment(theData);
 
 			double m = 0.0;
-			if (i < pM.length){
-				m = pM[i]; 
+			if (i < pM.length) {
+				m = pM[i];
 			}
-			
+
 			switch (theType) {
-			case PathIterator.SEG_MOVETO:					
+			case PathIterator.SEG_MOVETO:
 				str.append(theData[0] + " " + theData[1] + " " + m + ",");
 				break;
 
@@ -187,11 +189,11 @@ public class FPolyline2DM extends FPolyline2D implements FShapeM{
 
 			case PathIterator.SEG_CLOSE:
 				break;
-			} //end switch
+			} // end switch
 
 			theIterator.next();
 			i++;
-		} //end while loop		
-		return str.delete(str.length()-1, str.length()) + "))";
+		} // end while loop
+		return str.delete(str.length() - 1, str.length()) + "))";
 	}
 }

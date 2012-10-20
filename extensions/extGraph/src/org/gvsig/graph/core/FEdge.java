@@ -53,61 +53,77 @@ public class FEdge extends DirectedSparseEdge {
 	private int idNodeOrig;
 	private int idNodeEnd;
 	private int numSoluc;
+
 	public FEdge(Vertex from, Vertex to) {
 		super(from, to);
 	}
+
 	public double getWeight() {
 		return cost1;
 	}
+
 	public int getArcID() {
 		return arcID;
 	}
+
 	public void setArcID(int arcID) {
 		this.arcID = arcID;
 	}
+
 	public double getCost1() {
 		return cost1;
 	}
+
 	public void setWeight(double cost1) {
 		this.cost1 = cost1;
 	}
+
 	public double getCost2() {
 		return cost2;
 	}
+
 	public void setCost2(double d) {
 		this.cost2 = d;
 	}
+
 	public int getDirection() {
 		return direction;
 	}
+
 	public void setDirection(int direction) {
 		this.direction = direction;
 	}
+
 	public int getIdNodeEnd() {
 		return idNodeEnd;
 	}
+
 	public void setIdNodeEnd(int idNodeEnd) {
 		this.idNodeEnd = idNodeEnd;
 	}
+
 	public int getIdNodeOrig() {
 		return idNodeOrig;
 	}
+
 	public void setIdNodeOrig(int idNodeOrig) {
 		this.idNodeOrig = idNodeOrig;
 	}
+
 	public int getNumSoluc() {
 		return numSoluc;
 	}
+
 	public void setNumSoluc(int numSoluc) {
 		this.numSoluc = numSoluc;
 	}
+
 	public int getType() {
 		return type;
 	}
+
 	public void setType(int type) {
 		this.type = type;
 	}
 
 }
-
-

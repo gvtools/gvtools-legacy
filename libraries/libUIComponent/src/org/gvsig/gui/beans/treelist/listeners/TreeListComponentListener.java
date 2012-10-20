@@ -21,26 +21,32 @@ package org.gvsig.gui.beans.treelist.listeners;
 import org.gvsig.gui.beans.treelist.event.TreeListEvent;
 
 /**
- * Interfaz que contiene los eventos del componente TreeList
- * Nacho Brodin (brodin_ign@gva.es)
+ * Interfaz que contiene los eventos del componente TreeList Nacho Brodin
+ * (brodin_ign@gva.es)
  */
 
 public interface TreeListComponentListener {
 	/**
 	 * Este método es ejecutado cuando se inserta un nuevo elemento en la lista
-	 * @param e TreeListEvent
+	 * 
+	 * @param e
+	 *            TreeListEvent
 	 */
 	public void elementAdded(TreeListEvent e);
-	
+
 	/**
 	 * Este método es ejecutado cuando se elimina un elemento de la lista
-	 * @param e TreeListEvent
+	 * 
+	 * @param e
+	 *            TreeListEvent
 	 */
 	public void elementRemoved(TreeListEvent e);
-	
+
 	/**
 	 * Este método es ejecutado cuando se mueve un elemento de la lista
-	 * @param e TreeListEvent
+	 * 
+	 * @param e
+	 *            TreeListEvent
 	 */
 	public void elementMoved(TreeListEvent e);
 }

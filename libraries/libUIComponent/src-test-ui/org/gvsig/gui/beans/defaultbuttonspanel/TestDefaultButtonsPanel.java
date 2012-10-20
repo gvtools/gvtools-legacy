@@ -34,7 +34,7 @@ import org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener;
 /**
  * <code>TestDialogPanel</code>. Test para comprobar el funcionamiento de la
  * clase <code>DialogPanel</code>
- *
+ * 
  * @version 15/03/2007
  * @author BorSanZa - Borja Sanchez Zamorano (borja.sanchez@iver.es)
  */

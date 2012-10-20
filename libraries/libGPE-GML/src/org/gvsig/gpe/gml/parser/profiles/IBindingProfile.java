@@ -44,6 +44,7 @@ import org.gvsig.gpe.gml.parser.v2.geometries.PointTypeBinding;
 import org.gvsig.gpe.gml.parser.v2.geometries.PolygonMemberTypeBinding;
 import org.gvsig.gpe.gml.parser.v2.geometries.PolygonPropertyTypeBinding;
 import org.gvsig.gpe.gml.parser.v2.geometries.PolygonTypeBinding;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -93,7 +94,7 @@ import org.gvsig.gpe.gml.parser.v2.geometries.PolygonTypeBinding;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public interface IBindingProfile{
+public interface IBindingProfile {
 
 	public FeatureCollectionBinding getFeatureCollectionBinding();
 
@@ -120,7 +121,7 @@ public interface IBindingProfile{
 	public BoundedByTypeBinding getBoundedByTypeBinding();
 
 	public FeatureMemberTypeBinding getFeatureMemberTypeBinding();
-	
+
 	public FeatureMembersTypeBinding getFeatureMembersTypeBinding();
 
 	public FeatureTypeBinding getFeatureTypeBinding();
@@ -162,7 +163,7 @@ public interface IBindingProfile{
 	public MultiLineStringTypeBinding getMultiLineStringTypeBinding();
 
 	public MultiPolygonTypeBinding getMultiPolygonTypeBinding();
-	
+
 	public MultiCurveTypeBinding getMultiCurveTypeBinding();
 
 	public MultiGeometryTypeBinding getMultiGeometryTypeBinding();

@@ -24,9 +24,9 @@ import org.gvsig.symbology.fmap.rendering.filter.operations.ReplaceOperator;
 import com.iver.cit.gvsig.fmap.rendering.XmlBuilder;
 
 /**
- * Implements a class that allows the user to create an XML document 
- * from an expression
- *
+ * Implements a class that allows the user to create an XML document from an
+ * expression
+ * 
  * @see http://www.opengeospatial.org/standards/filter
  * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
  */
@@ -37,13 +37,13 @@ public class FilterFactory {
 
 		XmlBuilder xmlBuilder = new XmlBuilder();
 
-		if(filter4Symbol instanceof AndOperator) 
+		if (filter4Symbol instanceof AndOperator)
 			xmlBuilder.openTag(FilterTags.AND);
-		else if(filter4Symbol instanceof OrOperator) 
+		else if (filter4Symbol instanceof OrOperator)
 			xmlBuilder.openTag(FilterTags.OR);
-		else if(filter4Symbol instanceof NotOperator)
+		else if (filter4Symbol instanceof NotOperator)
 			xmlBuilder.openTag(FilterTags.NOT);
-		else if (filter4Symbol instanceof EqOperator) 
+		else if (filter4Symbol instanceof EqOperator)
 			xmlBuilder.openTag(FilterTags.PROPERTYISEQUALTO);
 		else if (filter4Symbol instanceof NeOperator)
 			xmlBuilder.openTag(FilterTags.PROPERTYISNOTEQUALTO);
@@ -55,46 +55,44 @@ public class FilterFactory {
 			xmlBuilder.openTag(FilterTags.MULT);
 		else if (filter4Symbol instanceof DivOperator)
 			xmlBuilder.openTag(FilterTags.DIV);
-		else if (filter4Symbol instanceof GreaterThanOperator) 
+		else if (filter4Symbol instanceof GreaterThanOperator)
 			xmlBuilder.openTag(FilterTags.PROPERTYISGREATERTHAN);
 		else if (filter4Symbol instanceof GreaterThanOrEqualsOperator)
 			xmlBuilder.openTag(FilterTags.PROPERTYISGREATEROREQUALTHAN);
 		else if (filter4Symbol instanceof LessThanOperator)
 			xmlBuilder.openTag(FilterTags.PROPERTYISLESSTHAN);
-		else if (filter4Symbol instanceof LessThanOrEqualsOperator) 
+		else if (filter4Symbol instanceof LessThanOrEqualsOperator)
 			xmlBuilder.openTag(FilterTags.PROPERTYISLESSOREQUALTHAN);
-		else if (filter4Symbol instanceof IsBetweenOperator) 
+		else if (filter4Symbol instanceof IsBetweenOperator)
 			xmlBuilder.openTag(FilterTags.PROPERTYISBETWEEN);
 		else if (filter4Symbol instanceof IsNullOperator)
 			xmlBuilder.openTag(FilterTags.PROPERTYISNULL);
 		else if (filter4Symbol instanceof ReplaceOperator) {
-			ReplaceOperator replace = (ReplaceOperator)filter4Symbol;
-			xmlBuilder.writeTag(FilterTags.PROPERTYNAME,replace.getValue());
+			ReplaceOperator replace = (ReplaceOperator) filter4Symbol;
+			xmlBuilder.writeTag(FilterTags.PROPERTYNAME, replace.getValue());
 			return xmlBuilder.getXML();
-		}
-		else if (filter4Symbol instanceof BooleanConstant) {
-			BooleanConstant myBool = (BooleanConstant)filter4Symbol;
-			xmlBuilder.writeTag(FilterTags.LITERAL,String.valueOf(myBool.getValue()));
+		} else if (filter4Symbol instanceof BooleanConstant) {
+			BooleanConstant myBool = (BooleanConstant) filter4Symbol;
+			xmlBuilder.writeTag(FilterTags.LITERAL,
+					String.valueOf(myBool.getValue()));
 			return xmlBuilder.getXML();
-		}
-		else if (filter4Symbol instanceof DoubleConstant) {
-			DoubleConstant myDouble = (DoubleConstant)filter4Symbol;
-			xmlBuilder.writeTag(FilterTags.LITERAL,String.valueOf(myDouble.getValue()));
+		} else if (filter4Symbol instanceof DoubleConstant) {
+			DoubleConstant myDouble = (DoubleConstant) filter4Symbol;
+			xmlBuilder.writeTag(FilterTags.LITERAL,
+					String.valueOf(myDouble.getValue()));
 			return xmlBuilder.getXML();
-		}
-		else if (filter4Symbol instanceof NullConstant) {
-			xmlBuilder.writeTag(FilterTags.LITERAL,"null");
+		} else if (filter4Symbol instanceof NullConstant) {
+			xmlBuilder.writeTag(FilterTags.LITERAL, "null");
 			return xmlBuilder.getXML();
 		}
 
 		for (int i = 0; i < filter4Symbol.getArguments().size(); i++) {
-			xmlBuilder.writeRaw(createXMLFromExpression(filter4Symbol.getArguments().get(i)));
+			xmlBuilder.writeRaw(createXMLFromExpression(filter4Symbol
+					.getArguments().get(i)));
 		}
 
 		xmlBuilder.closeTag();
 		return xmlBuilder.getXML();
 	}
-
-
 
 }

@@ -92,8 +92,9 @@ import com.vividsolutions.jts.geom.Polygon;
  * FConverter does (for example, it doesnt close unclosed Polygons).
  * 
  * Also, it works with Jts.GEOMETRY_FACTORY, a global geometry factory which
- * works with a precision model selected by user. Precision Model is very important
- * to determine the number of significant digits of geometries, and to avoid precision problems.
+ * works with a precision model selected by user. Precision Model is very
+ * important to determine the number of significant digits of geometries, and to
+ * avoid precision problems.
  * 
  * @author Alvaro Zabala
  * 
@@ -123,29 +124,27 @@ public class NewFConverter extends FConverter {
 
 			if ((testPoint.x == p.x)
 					&& (testPoint.y == p.y)
-					&& ((testPoint.z == p.z) || (!(testPoint.z == testPoint.z)))) 
-			{
+					&& ((testPoint.z == p.z) || (!(testPoint.z == testPoint.z)))) {
 				return true;
 			}
 		}
 
 		return false;
 	}
-	
-	private static Point createPoint(FShape shp){
+
+	private static Point createPoint(FShape shp) {
 		FPoint2D p = (FPoint2D) shp;
 		Coordinate coord = new Coordinate(p.getX(), p.getY());
 		return JtsUtil.GEOMETRY_FACTORY.createPoint(coord);
 	}
-	
-	
-	private static MultiLineString createLineString(FShape shp){
+
+	private static MultiLineString createLineString(FShape shp) {
 		LineString lin = null;
 		ArrayList<LineString> arrayLines = new ArrayList<LineString>();
 		ArrayList<Coordinate> arrayCoords = null;
 		double[] theData = new double[6];
 		int numParts = 0;
-		
+
 		PathIterator theIterator = shp.getPathIterator(null, FLATNESS);
 		while (!theIterator.isDone()) {
 			int theType = theIterator.currentSegment(theData);
@@ -154,8 +153,9 @@ public class NewFConverter extends FConverter {
 				if (arrayCoords == null) {
 					arrayCoords = new ArrayList<Coordinate>();
 				} else {
-					lin = JtsUtil.GEOMETRY_FACTORY.createLineString(
-							CoordinateArrays.toCoordinateArray(arrayCoords));
+					lin = JtsUtil.GEOMETRY_FACTORY
+							.createLineString(CoordinateArrays
+									.toCoordinateArray(arrayCoords));
 					arrayLines.add(lin);
 					arrayCoords.clear();
 				}
@@ -180,26 +180,25 @@ public class NewFConverter extends FConverter {
 		return JtsUtil.GEOMETRY_FACTORY.createMultiLineString(GeometryFactory
 				.toLineStringArray(arrayLines));
 	}
-	
-	
-	private static MultiPolygon createMultiPolygonFromRings(List<LinearRing> holes, List<LinearRing> shells){
-		
-		ArrayList<ArrayList<LinearRing>> holesForShells = 
-			new ArrayList<ArrayList<LinearRing>>(shells.size());
-		
+
+	private static MultiPolygon createMultiPolygonFromRings(
+			List<LinearRing> holes, List<LinearRing> shells) {
+
+		ArrayList<ArrayList<LinearRing>> holesForShells = new ArrayList<ArrayList<LinearRing>>(
+				shells.size());
+
 		for (int i = 0; i < shells.size(); i++) {
 			holesForShells.add(new ArrayList<LinearRing>());
 		}
 
-		for (int i = 0; i < holes.size(); i++) {//for each hole
+		for (int i = 0; i < holes.size(); i++) {// for each hole
 			LinearRing testRing = (LinearRing) holes.get(i);
 			LinearRing minShell = null;
 			Envelope minEnv = null;
-			
-			
+
 			Envelope testEnv = testRing.getEnvelopeInternal();
 			Coordinate testPt = testRing.getCoordinateN(0);
-			
+
 			LinearRing tryRing = null;
 			for (int j = 0; j < shells.size(); j++) {
 				tryRing = (LinearRing) shells.get(j);
@@ -241,34 +240,35 @@ public class NewFConverter extends FConverter {
 					reversed[pointIndex] = cs[z];
 					pointIndex++;
 				}
-				LinearRing newRing = JtsUtil.GEOMETRY_FACTORY.createLinearRing(reversed);
+				LinearRing newRing = JtsUtil.GEOMETRY_FACTORY
+						.createLinearRing(reversed);
 				shells.add(newRing);
 				holesForShells.add(new ArrayList<LinearRing>());
 			} else {
 				((ArrayList) holesForShells.get(shells.indexOf(minShell)))
 						.add(testRing);
 			}
-		}//holes
-		
-		
+		}// holes
 
 		Polygon[] polygons = new Polygon[shells.size()];
 		for (int i = 0; i < shells.size(); i++) {
-			polygons[i] = JtsUtil.GEOMETRY_FACTORY.createPolygon((LinearRing) shells
-					.get(i), (LinearRing[]) ((ArrayList) holesForShells
-					.get(i)).toArray(new LinearRing[0]));
+			polygons[i] = JtsUtil.GEOMETRY_FACTORY.createPolygon(
+					(LinearRing) shells.get(i),
+					(LinearRing[]) ((ArrayList) holesForShells.get(i))
+							.toArray(new LinearRing[0]));
 		}
-		
+
 		return JtsUtil.GEOMETRY_FACTORY.createMultiPolygon(polygons);
 	}
-	
-	private static MultiPolygon createPolygon(FShape shp) throws IncorrectJtsGeometryException{
+
+	private static MultiPolygon createPolygon(FShape shp)
+			throws IncorrectJtsGeometryException {
 		ArrayList<LinearRing> shells = new ArrayList<LinearRing>();
 		ArrayList<LinearRing> holes = new ArrayList<LinearRing>();
 		ArrayList<Coordinate> arrayCoords = null;
 		Coordinate[] points = null;
 		double[] theData = new double[6];
-	
+
 		PathIterator theIterator = shp.getPathIterator(null, FLATNESS);
 		while (!theIterator.isDone()) {
 			int theType = theIterator.currentSegment(theData);
@@ -281,16 +281,19 @@ public class NewFConverter extends FConverter {
 				} else {
 					points = CoordinateArrays.toCoordinateArray(arrayCoords);
 					try {
-						LinearRing ring = JtsUtil.GEOMETRY_FACTORY.createLinearRing(points);
-						//TODO VER SI SE PUEDE MODIFICAR EL CRITERIO DE ASIGNACION DE HOLES
+						LinearRing ring = JtsUtil.GEOMETRY_FACTORY
+								.createLinearRing(points);
+						// TODO VER SI SE PUEDE MODIFICAR EL CRITERIO DE
+						// ASIGNACION DE HOLES
 						if (CGAlgorithms.isCCW(points)) {
 							holes.add(ring);
 						} else {
 							shells.add(ring);
 						}
 					} catch (Exception e) {
-						throw new IncorrectJtsGeometryException(e, "No se pudo construir la geometria JTS");
-					}//catch exception
+						throw new IncorrectJtsGeometryException(e,
+								"No se pudo construir la geometria JTS");
+					}// catch exception
 					arrayCoords.clear();
 				}
 				arrayCoords.add(new Coordinate(theData[0], theData[1]));
@@ -301,7 +304,7 @@ public class NewFConverter extends FConverter {
 				break;
 
 			case PathIterator.SEG_CLOSE:
-			    //if the iterator has SEG_CLOSE, we close the ring
+				// if the iterator has SEG_CLOSE, we close the ring
 				Coordinate firstCoord = (Coordinate) arrayCoords.get(0);
 				arrayCoords.add(new Coordinate(firstCoord.x, firstCoord.y));
 				break;
@@ -309,28 +312,28 @@ public class NewFConverter extends FConverter {
 			theIterator.next();
 		} // end while loop
 
-//we dont close rings without SEG_CLOSE flag		
-//		arrayCoords.add(arrayCoords.get(0));
-		
+		// we dont close rings without SEG_CLOSE flag
+		// arrayCoords.add(arrayCoords.get(0));
+
 		points = CoordinateArrays.toCoordinateArray(arrayCoords);
 		try {
 			LinearRing ring = JtsUtil.GEOMETRY_FACTORY.createLinearRing(points);
-			//TODO VER SI SE PUEDE MODIFICAR EL CRITERIO DE ASIGNACION DE HOLES
+			// TODO VER SI SE PUEDE MODIFICAR EL CRITERIO DE ASIGNACION DE HOLES
 			if (CGAlgorithms.isCCW(points)) {
 				holes.add(ring);
 			} else {
 				shells.add(ring);
 			}
 		} catch (Exception e) {
-			throw new IncorrectJtsGeometryException(e, "No se pudo construir la geometria JTS");
+			throw new IncorrectJtsGeometryException(e,
+					"No se pudo construir la geometria JTS");
 		}
 
 		return createMultiPolygonFromRings(holes, shells);
-		
-		
+
 	}
-	
-	public static Geometry createLinStr(FShape shp){
+
+	public static Geometry createLinStr(FShape shp) {
 		return createLineString(shp);
 	}
 
@@ -344,19 +347,18 @@ public class NewFConverter extends FConverter {
 	 * 
 	 * @return Geometry de JTS.
 	 */
-	public static Geometry java2d_to_jts(FShape shp) throws IncorrectJtsGeometryException{
+	public static Geometry java2d_to_jts(FShape shp)
+			throws IncorrectJtsGeometryException {
 
 		Geometry geoJTS = null;
-		
-		
+
 		ArrayList<Coordinate> arrayCoords = null;
-	
+
 		int theType;
 		int numParts = 0;
 		double[] theData = new double[6];
 		PathIterator theIterator;
 
-		
 		switch (shp.getShapeType()) {
 		case FShape.POINT:
 		case FShape.POINT + FShape.Z:
@@ -927,7 +929,8 @@ public class NewFConverter extends FConverter {
 					points = CoordinateArrays.toCoordinateArray(arrayCoords);
 
 					try {
-						LinearRing ring = JtsUtil.GEOMETRY_FACTORY.createLinearRing(points);
+						LinearRing ring = JtsUtil.GEOMETRY_FACTORY
+								.createLinearRing(points);
 
 						if (CGAlgorithms.isCCW(points)) {
 							holes.add(ring);
@@ -944,8 +947,8 @@ public class NewFConverter extends FConverter {
 					/*
 					 * if (numParts == 1) { linRingExt = new
 					 * GeometryFactory().createLinearRing(
-					 * CoordinateArrays.toCoordinateArray(arrayCoords)); } else {
-					 * linRing = new GeometryFactory().createLinearRing(
+					 * CoordinateArrays.toCoordinateArray(arrayCoords)); } else
+					 * { linRing = new GeometryFactory().createLinearRing(
 					 * CoordinateArrays.toCoordinateArray(arrayCoords));
 					 * arrayLines.add(linRing); }
 					 */
@@ -997,48 +1000,48 @@ public class NewFConverter extends FConverter {
 		return ShapeFactory.createGeometry(pol);
 
 	}
-	
+
 	/**
 	 * Completes FMap's FConverter consideering GeometryCollection instances
 	 * (ignored in FConverter)
+	 * 
 	 * @param geometry
 	 * @return
 	 */
-	public static IGeometry toFMap(Geometry geometry){
+	public static IGeometry toFMap(Geometry geometry) {
 		IGeometry solution = null;
-		if(geometry.getClass().equals(GeometryCollection.class)){
+		if (geometry.getClass().equals(GeometryCollection.class)) {
 			solution = convert((GeometryCollection) geometry);
-		}else{
+		} else {
 			solution = FConverter.jts_to_igeometry(geometry);
 		}
 		return solution;
 	}
 
-	
 	/**
 	 * Original FConverter doestn convert GeometryCollection raw type
 	 * 
 	 * @param geometryCollection
 	 * @return
 	 */
-	public static IGeometry convert(GeometryCollection geometryCollection){
+	public static IGeometry convert(GeometryCollection geometryCollection) {
 		Geometry[] geomsArray = JtsUtil.extractGeometries(geometryCollection);
 		int numGeoms = geomsArray.length;
 		IGeometry[] fmapGeoms = new IGeometry[numGeoms];
-		for(int i = 0; i < numGeoms; i++){
+		for (int i = 0; i < numGeoms; i++) {
 			fmapGeoms[i] = FConverter.jts_to_igeometry(geomsArray[i]);
 		}
-		if(numGeoms == 1)
+		if (numGeoms == 1)
 			return fmapGeoms[0];
 		else
 			return new FGeometryCollection(fmapGeoms);
 	}
 
 	public static MultiPolygon toJtsPolygon(FShape shp) {
-	
+
 		ArrayList<LinearRing> shells = new ArrayList<LinearRing>();
 		ArrayList<LinearRing> holes = new ArrayList<LinearRing>();
-	
+
 		List<Point2D[]> shpPoints = ShapePointExtractor.extractPoints(shp);
 		for (int i = 0; i < shpPoints.size(); i++) {
 			Point2D[] partPoints = shpPoints.get(i);
@@ -1046,7 +1049,7 @@ public class NewFConverter extends FConverter {
 			try {
 				LinearRing ring = JtsUtil.GEOMETRY_FACTORY
 						.createLinearRing(coords);
-	
+
 				// TODO REPORTAR ESTO EN FMAP, CREO QUE ESTÁ MAL PORQUE LO HACE
 				// AL REVÉS.
 				// EL TEMA ESTÁ EN QUE JTS HACE LAS COSAS AL REVES QUE EL
@@ -1061,10 +1064,11 @@ public class NewFConverter extends FConverter {
 				 * Leer la cabecera del metodo: FConverter no debería hacer
 				 * estos tratamientos boolean same = true; for (int j = 0; i <
 				 * coords.length - 1 && same; j++) { if (coords[i].x !=
-				 * coords[i+1].x || coords[i].y != coords[i+1].y) same = false; }
-				 * if (same) return JtsUtil.geomFactory.createPoint(coords[0]);
+				 * coords[i+1].x || coords[i].y != coords[i+1].y) same = false;
+				 * } if (same) return
+				 * JtsUtil.geomFactory.createPoint(coords[0]);
 				 */
-	
+
 				/*
 				 * caso cuando es una línea de 3 puntos, no creo un LinearRing,
 				 * sino una linea
@@ -1080,7 +1084,7 @@ public class NewFConverter extends FConverter {
 				return null;
 			}
 		}// for
-	
+
 		// At this point, we have a collection of shells and a collection of
 		// holes
 		// Now we have to find for each shell its holes
@@ -1089,7 +1093,7 @@ public class NewFConverter extends FConverter {
 		for (int i = 0; i < shells.size(); i++) {
 			holesForShells.add(new ArrayList<LinearRing>());
 		}
-	
+
 		/*
 		 * Now, for each hole we look for the minimal shell that contains it. We
 		 * look for minimal because many shells could contain the same hole.
@@ -1101,13 +1105,13 @@ public class NewFConverter extends FConverter {
 			Envelope testEnv = testHole.getEnvelopeInternal();
 			Coordinate testPt = testHole.getCoordinateN(0);
 			LinearRing tryRing = null;
-	
+
 			for (int j = 0; j < shells.size(); j++) {// for each shell
 				tryRing = (LinearRing) shells.get(j);
 				Envelope tryEnv = tryRing.getEnvelopeInternal();
 				boolean isContained = false;
 				Coordinate[] coordList = tryRing.getCoordinates();
-	
+
 				// if testpoint is in ring, or test point is a shell point, is
 				// contained
 				if (tryEnv.contains(testEnv)
@@ -1115,7 +1119,7 @@ public class NewFConverter extends FConverter {
 								.pointInList(testPt, coordList))) {
 					isContained = true;
 				}
-	
+
 				// check if this new containing ring is smaller than the current
 				// minimum ring
 				if (isContained) {
@@ -1125,14 +1129,14 @@ public class NewFConverter extends FConverter {
 					}
 				}
 			}// for shells
-	
+
 			// At this point, minShell is the shell that contains a testHole
 			// if minShell is null, we have a SHELL which points were digitized
 			// in the
 			// wrong order
-	
+
 			if (minShell == null) {
-	
+
 				/*
 				 * TODO Si las clases de FMap incluyesen en su semantica la
 				 * diferencia entre un shell y un hole, no deberiamos hacer esta
@@ -1140,8 +1144,6 @@ public class NewFConverter extends FConverter {
 				 * 
 				 * Pero como java.awt.geom.Shape no hace esta distincion,
 				 * tenemos que hacerla.
-				 * 
-				 * 
 				 */
 				LinearRing reversed = (LinearRing) JtsUtil.reverse(testHole);
 				shells.add(reversed);
@@ -1151,7 +1153,7 @@ public class NewFConverter extends FConverter {
 						.indexOf(minShell))).add(testHole);
 			}
 		}// for each hole
-	
+
 		Polygon[] polygons = new Polygon[shells.size()];
 		for (int i = 0; i < shells.size(); i++) {
 			polygons[i] = JtsUtil.GEOMETRY_FACTORY.createPolygon(
@@ -1160,7 +1162,7 @@ public class NewFConverter extends FConverter {
 							.get(i)).toArray(new LinearRing[0]));
 		}
 		return JtsUtil.GEOMETRY_FACTORY.createMultiPolygon(polygons);
-	
+
 	}
 
 	public static Geometry toJtsGeometry(IGeometry fmapGeometry) {
@@ -1173,10 +1175,12 @@ public class NewFConverter extends FConverter {
 					.getGeometries();
 			Geometry[] theGeoms = new Geometry[geometries.length];
 			for (int i = 0; i < geometries.length; i++) {
-				theGeoms[i] = NewFConverter.toJtsGeometry(((IGeometry) geometries[i]));
+				theGeoms[i] = NewFConverter
+						.toJtsGeometry(((IGeometry) geometries[i]));
 			}
-			solution = JtsUtil.GEOMETRY_FACTORY.createGeometryCollection(theGeoms);
-	
+			solution = JtsUtil.GEOMETRY_FACTORY
+					.createGeometryCollection(theGeoms);
+
 		} else if (fmapGeometry instanceof FMultiPoint2D) {
 			solution = ((FMultiPoint2D) fmapGeometry).toJTSGeometry();
 		}

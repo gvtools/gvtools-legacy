@@ -41,34 +41,36 @@
 package com.iver.cit.gvsig.fmap.core.rendering;
 
 import com.iver.cit.gvsig.fmap.rendering.IClassifiedLegend;
+
 /**
  * <p>
  * This a handy class to ease the use of integration tests.
  * </p>
  * 
  * <p>
- * Your legend test itself must extend this if the legend being
- * tested is an instance of IClassifiedLegend. 
+ * Your legend test itself must extend this if the legend being tested is an
+ * instance of IClassifiedLegend.
  * </p>
  * <p>
- * You must not add this to the TestILegend. What you have to
- * do is to add your subclass like follows.
- * 		TestILegend.addLegendToTest(new VectorialUniqueValueLegendTest());
+ * You must not add this to the TestILegend. What you have to do is to add your
+ * subclass like follows. TestILegend.addLegendToTest(new
+ * VectorialUniqueValueLegendTest());
  * </p>
  * 
- * NOTE: Although it has no abstract components, the class is abstract in purpose
- * since it does not test any concrete legend, but initializes legends of 
- * this kind. Subclass it to test any concrete Legend: For example: 
+ * NOTE: Although it has no abstract components, the class is abstract in
+ * purpose since it does not test any concrete legend, but initializes legends
+ * of this kind. Subclass it to test any concrete Legend: For example:
  * SingleLegendTestCase extends AbstractVectorLegendTestCase
-
+ * 
  * AbstractClassifiedLegendTestCase.java
- *
+ * 
  * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Jun 12, 2008
- *
+ * 
  */
-public  abstract /*<-MUST BE ABSTRACT!!*/  class AbstractClassifiedLegendTestCase extends AbstractLegendTestCase {
-	private Object[] sampleValues ;
+public abstract/* <-MUST BE ABSTRACT!! */class AbstractClassifiedLegendTestCase
+		extends AbstractLegendTestCase {
+	private Object[] sampleValues;
 
 	/**
 	 * <p>
@@ -76,26 +78,25 @@ public  abstract /*<-MUST BE ABSTRACT!!*/  class AbstractClassifiedLegendTestCas
 	 * </p>
 	 * 
 	 * <p>
-	 * Your legend test itself must extend this if the legend being
-	 * tested is an instance of IClassifiedLegend. 
+	 * Your legend test itself must extend this if the legend being tested is an
+	 * instance of IClassifiedLegend.
 	 * </p>
 	 * <p>
-	 * You must not add this to the TestILegend. What you have to
-	 * do is to add your subclass like follows.
-	 * 		TestILegend.addLegendToTest(new VectorialUniqueValueLegendTest());
+	 * You must not add this to the TestILegend. What you have to do is to add
+	 * your subclass like follows. TestILegend.addLegendToTest(new
+	 * VectorialUniqueValueLegendTest());
 	 * </p>
 	 * 
 	 */
-	 public AbstractClassifiedLegendTestCase(
-			Class<? extends IClassifiedLegend> legClazz,
-			Object[] sampleValues) {
+	public AbstractClassifiedLegendTestCase(
+			Class<? extends IClassifiedLegend> legClazz, Object[] sampleValues) {
 		super(legClazz);
 		this.sampleValues = sampleValues;
 	}
-	
+
 	@Override
 	public Object[] getTestSampleValues() {
 		return sampleValues;
 	}
-	
+
 }

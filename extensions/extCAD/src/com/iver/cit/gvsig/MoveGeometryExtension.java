@@ -50,37 +50,40 @@ import com.iver.cit.gvsig.gui.cad.tools.MoveCADTool;
 
 /**
  * Extensión que gestiona la herramienta de mover.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class MoveGeometryExtension extends Extension {
 
 	protected MapControl mapControl;
 	protected MoveCADTool move;
+
 	/**
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
-		move=new MoveCADTool();
-		CADExtension.addCADTool("_move",move);
-		
+		move = new MoveCADTool();
+		CADExtension.addCADTool("_move", move);
+
 		registerIcons();
 	}
 
-	private void registerIcons(){
-		PluginServices.getIconTheme().registerDefault(
-				"edition-geometry-move",
-				this.getClass().getClassLoader().getResource("images/Move.png")
-			);
+	private void registerIcons() {
+		PluginServices.getIconTheme()
+				.registerDefault(
+						"edition-geometry-move",
+						this.getClass().getClassLoader()
+								.getResource("images/Move.png"));
 	}
+
 	/**
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String s) {
 		CADExtension.initFocus();
-		 if (s.equals("_move")) {
-			 CADExtension.setCADTool("_move",true);
-	        }
+		if (s.equals("_move")) {
+			CADExtension.setCADTool("_move", true);
+		}
 		CADExtension.getEditionManager().setMapControl(mapControl);
 		CADExtension.getCADToolAdapter().configureMenu();
 	}
@@ -89,13 +92,14 @@ public class MoveGeometryExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
-		if (CADExtension.getEditionManager().getActiveLayerEdited()==null)
+		if (CADExtension.getEditionManager().getActiveLayerEdited() == null)
 			return false;
-		FLyrVect lv=(FLyrVect)CADExtension.getEditionManager().getActiveLayerEdited().getLayer();
+		FLyrVect lv = (FLyrVect) CADExtension.getEditionManager()
+				.getActiveLayerEdited().getLayer();
 		try {
 			return move.isApplicable(lv.getShapeType());
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 		return false;
 	}
@@ -104,7 +108,7 @@ public class MoveGeometryExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE){
+		if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE) {
 			return true;
 		}
 		return false;

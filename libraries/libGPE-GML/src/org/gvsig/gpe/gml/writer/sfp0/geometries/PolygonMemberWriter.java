@@ -2,7 +2,6 @@ package org.gvsig.gpe.gml.writer.sfp0.geometries;
 
 import org.gvsig.gpe.gml.utils.GMLTags;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -52,13 +51,16 @@ import org.gvsig.gpe.gml.utils.GMLTags;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class PolygonMemberWriter extends org.gvsig.gpe.gml.writer.v2.geometries.PolygonMemberWriter{
+public class PolygonMemberWriter extends
+		org.gvsig.gpe.gml.writer.v2.geometries.PolygonMemberWriter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.writer.v2.geometries.GeometryWriter#getGeometryName()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.writer.v2.geometries.GeometryWriter#getGeometryName()
 	 */
 	public String getGeometryName() {
 		return GMLTags.GML_SURFACEMEMBER.getLocalPart();
-	}	
+	}
 }

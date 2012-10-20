@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.errorfixes;
 
 import java.util.ArrayList;
@@ -61,60 +61,57 @@ import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.vividsolutions.jts.geom.Geometry;
 
 /**
- * Automatic fix for MustNotOverlapWith fix.
- * It involves two layers.
+ * Automatic fix for MustNotOverlapWith fix. It involves two layers.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class SubstractOverlapPolygonWithFix extends SubstractOverlapPolygonFix {
-	public List<IFeature>[] fixAlgorithm(TopologyError error) throws BaseException {
+	public List<IFeature>[] fixAlgorithm(TopologyError error)
+			throws BaseException {
 		Geometry errorJts = NewFConverter.toJtsGeometry(error.getGeometry());
-		
+
 		IFeature firstFeature = error.getFeature1();
-		Geometry firstJts = NewFConverter.toJtsGeometry(firstFeature.getGeometry());
-		
+		Geometry firstJts = NewFConverter.toJtsGeometry(firstFeature
+				.getGeometry());
+
 		IFeature secondFeature = error.getFeature2();
-		Geometry secondJts = NewFConverter.toJtsGeometry(secondFeature.getGeometry());
-	
-		
+		Geometry secondJts = NewFConverter.toJtsGeometry(secondFeature
+				.getGeometry());
+
 		List<IFeature> firstLyrEditedFeatures = new ArrayList<IFeature>();
 		List<IFeature> secondLyrEditedFeatures = new ArrayList<IFeature>();
-		
-		//we could find three cases:
-		//a) first covers second, we compute first difference second
-		//b) they dont cover or are covered. we compute first difference second
-		//c) second covers a, we compute second difference first, and modifies second
-		if(secondJts.covers(firstJts)){
-			
-			//we remove the overlapped area from the container geometry
-			
-			secondFeature = FeatureUtil.removeOverlappingArea(secondFeature, 
-															secondJts, 
-															errorJts );
+
+		// we could find three cases:
+		// a) first covers second, we compute first difference second
+		// b) they dont cover or are covered. we compute first difference second
+		// c) second covers a, we compute second difference first, and modifies
+		// second
+		if (secondJts.covers(firstJts)) {
+
+			// we remove the overlapped area from the container geometry
+
+			secondFeature = FeatureUtil.removeOverlappingArea(secondFeature,
+					secondJts, errorJts);
 			secondLyrEditedFeatures.add(secondFeature);
-			
-		}else if(firstJts.covers(secondJts))
-		{
-			//we remove secondJts from firstJts
-			firstFeature = FeatureUtil.removeOverlappingArea(firstFeature, 
-					firstJts, 
-					errorJts );
+
+		} else if (firstJts.covers(secondJts)) {
+			// we remove secondJts from firstJts
+			firstFeature = FeatureUtil.removeOverlappingArea(firstFeature,
+					firstJts, errorJts);
 			firstLyrEditedFeatures.add(firstFeature);
-		}else{
-			//we remove overlapping area from both features
-			firstFeature = FeatureUtil.removeOverlappingArea(firstFeature, 
-					firstJts, 
-					errorJts );
-			secondFeature = FeatureUtil.removeOverlappingArea(secondFeature, 
-					secondJts, 
-					errorJts );
+		} else {
+			// we remove overlapping area from both features
+			firstFeature = FeatureUtil.removeOverlappingArea(firstFeature,
+					firstJts, errorJts);
+			secondFeature = FeatureUtil.removeOverlappingArea(secondFeature,
+					secondJts, errorJts);
 			secondLyrEditedFeatures.add(secondFeature);
 			firstLyrEditedFeatures.add(firstFeature);
 		}
-		return (List<IFeature>[]) new List[]{firstLyrEditedFeatures,
-												secondLyrEditedFeatures};
+		return (List<IFeature>[]) new List[] { firstLyrEditedFeatures,
+				secondLyrEditedFeatures };
 	}
-	
 
 	public String getEditionDescription() {
 		return Messages.getText("SUBSTRACT_OVERLAP_AREA_WITH_FIX");

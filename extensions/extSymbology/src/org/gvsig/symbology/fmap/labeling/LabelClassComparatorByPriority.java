@@ -46,14 +46,13 @@ import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelClass;
 
 public class LabelClassComparatorByPriority implements Comparator<LabelClass> {
 	public int compare(LabelClass o1, LabelClass o2) {
-		if (!o1.getClass().equals(LabelClass.class) ||
-			!o2.getClass().equals(LabelClass.class)) return 0;
-		
+		if (!o1.getClass().equals(LabelClass.class)
+				|| !o2.getClass().equals(LabelClass.class))
+			return 0;
+
 		// they will always be LabelClass
-		if (o1 == null && o2 == null) return 0;
-		if (o1 != null && o2 == null) return -1;
-		if (o1 == null && o2 != null) return 1;
-		if (o1.getPriority() < o2.getPriority()) return -1;
+		if (o1.getPriority() < o2.getPriority())
+			return -1;
 		return 1;
 	}
 }

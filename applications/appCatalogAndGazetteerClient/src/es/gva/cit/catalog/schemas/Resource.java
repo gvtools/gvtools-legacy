@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.catalog.schemas;
+
 import es.gva.cit.catalog.querys.Coordinates;
 
 /**
@@ -49,49 +49,49 @@ import es.gva.cit.catalog.querys.Coordinates;
  * @author Jorge Piera Llodra (piera_jor@gva.es)
  */
 public class Resource {
-	
+
 	/**
 	 * 
 	 * 
 	 */
 	public static final String WMS = "OGC:WMS";
-	
+
 	/**
 	 * 
 	 * 
 	 */
 	public static final String WFS = "OGC:WFS";
-	
+
 	/**
 	 * 
 	 * 
 	 */
 	public static final String WCS = "OGC:WCS";
-	
+
 	/**
 	 * 
 	 * 
 	 */
 	public static final String POSTGIS = "POSTGIS";
-	
+
 	/**
 	 * 
 	 * 
 	 */
 	public static final String ARCIMS_IMAGE = "ESRI:AIMS--HTTP-GET-IMAGE";
-	
+
 	/**
 	 * 
 	 * 
 	 */
 	public static final String ARCIMS_VECTORIAL = "ESRI:AIMS--HTTP-GET-FEATURE";
-	
+
 	/**
 	 * 
 	 * 
 	 */
 	public static final String WEBSITE = "WWW:LINK";
-	
+
 	/**
 	 * 
 	 * 
@@ -102,37 +102,37 @@ public class Resource {
 	 * 
 	 */
 	public static final String UNKNOWN = "UNKNOWN";
-	
+
 	/**
 	 * 
 	 * 
 	 */
 	private String linkage = null;
-	
+
 	/**
 	 * 
 	 * 
 	 */
 	private String protocol = null;
-	
+
 	/**
 	 * 
 	 * 
 	 */
 	private String name = null;
-	
+
 	/**
 	 * 
 	 * 
 	 */
 	private String description = null;
-	
+
 	/**
 	 * 
 	 * 
 	 */
 	private String function = null;
-	
+
 	/**
 	 * 
 	 * 
@@ -148,20 +148,22 @@ public class Resource {
 	 * 
 	 */
 	private String Type = null;
-	
+
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param linkage 
-	 * @param protocol 
-	 * @param name 
-	 * @param description 
-	 * @param function 
-	 * @param srs 
-	 * @param coordinates 
+	 * @param linkage
+	 * @param protocol
+	 * @param name
+	 * @param description
+	 * @param function
+	 * @param srs
+	 * @param coordinates
 	 */
-	public  Resource(String linkage, String protocol, String name, String description, String function, String srs, Coordinates coordinates) {        
+	public Resource(String linkage, String protocol, String name,
+			String description, String function, String srs,
+			Coordinates coordinates) {
 		super();
 		this.linkage = linkage;
 		this.protocol = protocol;
@@ -171,147 +173,155 @@ public class Resource {
 		this.srs = srs;
 		this.coordinates = coordinates;
 		setResourceType();
-	} 
-	
+	}
+
 	/**
 	 * 
 	 * 
 	 * 
 	 * @return Returns the description.
 	 */
-	public String getDescription() {        
+	public String getDescription() {
 		return description;
-	} 
-	
+	}
+
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param description The description to set.
+	 * @param description
+	 *            The description to set.
 	 */
-	public void setDescription(String description) {        
+	public void setDescription(String description) {
 		this.description = description;
-	} 
-	
+	}
+
 	/**
 	 * 
 	 * 
 	 * 
 	 * @return Returns the function.
 	 */
-	public String getFunction() {        
+	public String getFunction() {
 		return function;
-	} 
-	
+	}
+
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param function The function to set.
+	 * @param function
+	 *            The function to set.
 	 */
-	public void setFunction(String function) {        
+	public void setFunction(String function) {
 		this.function = function;
-	} 
-	
+	}
+
 	/**
 	 * 
 	 * 
 	 * 
 	 * @return Returns the linkage.
 	 */
-	public String getLinkage() {        
+	public String getLinkage() {
 		return linkage;
-	} 
-	
+	}
+
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param linkage The linkage to set.
+	 * @param linkage
+	 *            The linkage to set.
 	 */
-	public void setLinkage(String linkage) {        
+	public void setLinkage(String linkage) {
 		this.linkage = linkage;
-	} 
-	
+	}
+
 	/**
 	 * 
 	 * 
 	 * 
 	 * @return Returns the name.
 	 */
-	public String getName() {        
+	public String getName() {
 		return name;
-	} 
-	
+	}
+
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param name The name to set.
+	 * @param name
+	 *            The name to set.
 	 */
-	public void setName(String name) {        
+	public void setName(String name) {
 		this.name = name;
-	} 
-	
+	}
+
 	/**
 	 * 
 	 * 
 	 * 
 	 * @return Returns the protocol.
 	 */
-	public String getProtocol() {        
+	public String getProtocol() {
 		return protocol;
-	} 
-	
+	}
+
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param protocol The protocol to set.
+	 * @param protocol
+	 *            The protocol to set.
 	 */
-	public void setProtocol(String protocol) {        
+	public void setProtocol(String protocol) {
 		this.protocol = protocol;
-	} 
-	
+	}
+
 	/**
 	 * 
 	 * 
 	 * 
 	 * @return Returns the srs.
 	 */
-	public String getSrs() {        
+	public String getSrs() {
 		return srs;
-	} 
-	
+	}
+
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param srs The srs to set.
+	 * @param srs
+	 *            The srs to set.
 	 */
-	public void setSrs(String srs) {        
+	public void setSrs(String srs) {
 		this.srs = srs;
-	} 
-	
+	}
+
 	/**
 	 * 
 	 * 
 	 * 
 	 * @return Returns the coordinates.
 	 */
-	public Coordinates getCoordinates() {        
+	public Coordinates getCoordinates() {
 		return coordinates;
-	} 
-	
+	}
+
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param coordinates The coordinates to set.
+	 * @param coordinates
+	 *            The coordinates to set.
 	 */
-	public void setCoordinates(Coordinates coordinates) {        
+	public void setCoordinates(Coordinates coordinates) {
 		this.coordinates = coordinates;
 	}
+
 	/**
 	 * 
 	 * 
@@ -321,6 +331,7 @@ public class Resource {
 	public String getType() {
 		return Type;
 	}
+
 	/**
 	 * 
 	 * 
@@ -329,30 +340,32 @@ public class Resource {
 	 */
 	public void setType(String type) {
 		Type = type;
-	} 
-	
-	public void setResourceType(){
-		try{
-			if (getProtocol().toUpperCase().indexOf(Resource.WCS) >= 0){
+	}
+
+	public void setResourceType() {
+		try {
+			if (getProtocol().toUpperCase().indexOf(Resource.WCS) >= 0) {
 				setType(Resource.WCS);
-			}else if (getProtocol().toUpperCase().indexOf(Resource.WMS) >= 0){
+			} else if (getProtocol().toUpperCase().indexOf(Resource.WMS) >= 0) {
 				setType(Resource.WMS);
-			}else if (getProtocol().toUpperCase().indexOf(Resource.WFS) >= 0){
+			} else if (getProtocol().toUpperCase().indexOf(Resource.WFS) >= 0) {
 				setType(Resource.WFS);
-			}else if (getProtocol().toUpperCase().indexOf(Resource.POSTGIS) >= 0){
+			} else if (getProtocol().toUpperCase().indexOf(Resource.POSTGIS) >= 0) {
 				setType(Resource.POSTGIS);
-			}else if (getProtocol().toUpperCase().indexOf(Resource.WEBSITE) >= 0){
+			} else if (getProtocol().toUpperCase().indexOf(Resource.WEBSITE) >= 0) {
 				setType(Resource.WEBSITE);
-			}else if (getProtocol().toUpperCase().indexOf(Resource.DOWNLOAD) >= 0){
+			} else if (getProtocol().toUpperCase().indexOf(Resource.DOWNLOAD) >= 0) {
 				setType(Resource.DOWNLOAD);
-			}else if (getProtocol().toUpperCase().indexOf(Resource.ARCIMS_IMAGE) >= 0){
+			} else if (getProtocol().toUpperCase().indexOf(
+					Resource.ARCIMS_IMAGE) >= 0) {
 				setType(Resource.ARCIMS_IMAGE);
-			}else if (getProtocol().toUpperCase().indexOf(Resource.ARCIMS_VECTORIAL) >= 0){
+			} else if (getProtocol().toUpperCase().indexOf(
+					Resource.ARCIMS_VECTORIAL) >= 0) {
 				setType(Resource.ARCIMS_VECTORIAL);
-			}else{
+			} else {
 				setType(Resource.UNKNOWN);
 			}
-		}catch(NullPointerException e){
+		} catch (NullPointerException e) {
 			setType(Resource.UNKNOWN);
 		}
 	}

@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.referencing;
 
 import java.util.ArrayList;
@@ -53,31 +53,33 @@ import java.util.List;
 
 import org.geotools.referencing.operation.builder.MappedPosition;
 import org.gvsig.referencing.DisactivableMappedPosition;
+
 /**
  * MappedPositionContainer which works with DisactivableMappedPosition
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class DisactivableMappedPositionContainerImpl extends
 		MappedPositionContainerImpl {
-	public DisactivableMappedPositionContainerImpl(){
+	public DisactivableMappedPositionContainerImpl() {
 		super();
 	}
-	
-	
+
 	public void addMappedPosition(MappedPosition mappedPosition) {
-		super.addMappedPosition(new DisactivableMappedPosition(mappedPosition.getSource(), mappedPosition.getTarget()));
+		super.addMappedPosition(new DisactivableMappedPosition(mappedPosition
+				.getSource(), mappedPosition.getTarget()));
 	}
-	
+
 	/**
 	 * Returns a List with all actives MappedPosition
 	 */
 	public List<MappedPosition> getAsList() {
 		List<MappedPosition> solution = new ArrayList<MappedPosition>();
 		List<MappedPosition> positions = super.getAsList();
-		for(MappedPosition p:positions){
-			DisactivableMappedPosition dp = (DisactivableMappedPosition)p;
-			if(dp.isActive())
+		for (MappedPosition p : positions) {
+			DisactivableMappedPosition dp = (DisactivableMappedPosition) p;
+			if (dp.isActive())
 				solution.add(dp);
 		}
 		return solution;

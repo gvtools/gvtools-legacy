@@ -42,29 +42,31 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: MonitorableDecoratorMainFirst.java 11634 2007-05-15 07:24:19Z cesar $
-* $Log$
-* Revision 1.2  2007-05-15 07:21:20  cesar
-* Add the finished method for execution from Event Dispatch Thread
-*
-* Revision 1.1  2006/05/08 15:52:30  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/04/18 15:17:20  azabala
-* añadidos comentarios a metodos
-*
-* Revision 1.1  2006/03/14 19:23:42  azabala
-* *** empty log message ***
-*
-*
-*/
-package com.iver.utiles.swing.threads;
-/**
- * Task that wraps a main task, executing it and doing some preprocess
- * stuff after main task, by executing a secondary task
- * @author azabala
  *
+ * $Id: MonitorableDecoratorMainFirst.java 11634 2007-05-15 07:24:19Z cesar $
+ * $Log$
+ * Revision 1.2  2007-05-15 07:21:20  cesar
+ * Add the finished method for execution from Event Dispatch Thread
+ *
+ * Revision 1.1  2006/05/08 15:52:30  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/04/18 15:17:20  azabala
+ * añadidos comentarios a metodos
+ *
+ * Revision 1.1  2006/03/14 19:23:42  azabala
+ * *** empty log message ***
+ *
+ *
+ */
+package com.iver.utiles.swing.threads;
+
+/**
+ * Task that wraps a main task, executing it and doing some preprocess stuff
+ * after main task, by executing a secondary task
+ * 
+ * @author azabala
+ * 
  */
 public class MonitorableDecoratorMainFirst implements IMonitorableTask {
 
@@ -73,7 +75,7 @@ public class MonitorableDecoratorMainFirst implements IMonitorableTask {
 	 */
 	private IMonitorableTask mainTask;
 	/**
-	 * preprocess task 
+	 * preprocess task
 	 */
 	private IMonitorableTask secondaryTask;
 	/**
@@ -88,45 +90,47 @@ public class MonitorableDecoratorMainFirst implements IMonitorableTask {
 	 * flag for finalization
 	 */
 	private boolean finished = false;
-	
+
 	/**
 	 * Constructor
+	 * 
 	 * @param mainTask
 	 * @param secondaryTask
 	 */
-	public MonitorableDecoratorMainFirst(IMonitorableTask mainTask, IMonitorableTask secondaryTask){
+	public MonitorableDecoratorMainFirst(IMonitorableTask mainTask,
+			IMonitorableTask secondaryTask) {
 		this.mainTask = mainTask;
 		this.secondaryTask = secondaryTask;
 		this.currentTask = mainTask;
 	}
-	
+
 	/**
-	 * Makes some preprocess steps, and return a boolean flag that
-	 * indicates if this task can be launched.
+	 * Makes some preprocess steps, and return a boolean flag that indicates if
+	 * this task can be launched.
+	 * 
 	 * @return
 	 */
-	public boolean preprocess(){
-		if(mainTask != null  && secondaryTask != null)
+	public boolean preprocess() {
+		if (mainTask != null && secondaryTask != null)
 			return true;
-		else 
+		else
 			return false;
 	}
-	
-	
+
 	public int getInitialStep() {
 		return mainTask.getInitialStep();
 	}
 
 	public int getFinishStep() {
-		//we add 1 because secondaryTask is consideered as
-		//a step
+		// we add 1 because secondaryTask is consideered as
+		// a step
 		return mainTask.getFinishStep() + 1;
 	}
 
 	public int getCurrentStep() {
-		if(currentTask == mainTask){
+		if (currentTask == mainTask) {
 			return mainTask.getCurrentStep();
-		}else{
+		} else {
 			return getFinishStep();
 		}
 	}
@@ -151,14 +155,13 @@ public class MonitorableDecoratorMainFirst implements IMonitorableTask {
 
 	public void run() throws Exception {
 		currentTask = mainTask;
-		if(! canceled)
+		if (!canceled)
 			mainTask.run();
-		if(! canceled){
+		if (!canceled) {
 			currentTask = secondaryTask;
 			secondaryTask.run();
 		}
-		finished  = true;
-		
+		finished = true;
 
 	}
 
@@ -167,15 +170,14 @@ public class MonitorableDecoratorMainFirst implements IMonitorableTask {
 	}
 
 	public boolean isFinished() {
-		if(currentTask == mainTask){
+		if (currentTask == mainTask) {
 			return currentTask.isFinished();
-		}else
+		} else
 			return finished == true;
 	}
-	
+
 	public void finished() {
-		
+
 	}
 
 }
-

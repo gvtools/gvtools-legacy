@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.referencing;
 
 import java.awt.Color;
@@ -67,91 +67,83 @@ import com.iver.cit.gvsig.fmap.layers.FLayerGenericVectorial;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.rendering.LegendFactory;
 import com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend;
+
 /**
  * MappedPositionContainer implementation for the spatial adjust tool
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class MappedPositionContainerImpl implements MappedPositionContainer {
 
-	
-	
 	/**
 	 * Digitized vector errors
 	 */
 	private List<MappedPosition> mappedPositions;
-	
+
 	/**
 	 * FLyrVect representation of the error vectors digitized by user
 	 */
 	private FLyrVect linksLyr;
-	
-	
-	public MappedPositionContainerImpl(){
+
+	public MappedPositionContainerImpl() {
 		this.mappedPositions = new ArrayList<MappedPosition>();
 	}
-	
-	
+
 	public void addMappedPosition(MappedPosition mappedPosition) {
 		mappedPositions.add(mappedPosition);
 	}
-
 
 	public int getCount() {
 		return mappedPositions.size();
 	}
 
-
 	public MappedPosition getMappedPosition(int idx) {
 		return mappedPositions.get(idx);
 	}
 
-
 	public List<MappedPosition> getAsList() {
 		return mappedPositions;
 	}
-	
-	//FIXME CUANDO AÑADO ESTA CAPA AL TOC, NO SE MUESTRA EL SIMBOLO
-	//HAY QUE AÑADIR ALGUNA EXTENSION AL TOC??
-	public FLyrVect getLinkLyr(CoordinateReferenceSystem crs){
-		if(linksLyr == null){
+
+	// FIXME CUANDO AÑADO ESTA CAPA AL TOC, NO SE MUESTRA EL SIMBOLO
+	// HAY QUE AÑADIR ALGUNA EXTENSION AL TOC??
+	public FLyrVect getLinkLyr(CoordinateReferenceSystem crs) {
+		if (linksLyr == null) {
 			ReferencingUtil ref = ReferencingUtil.getInstance();
 			int numberOfSessions = ref.getNumberOfSpatialAdjustSessions();
 			linksLyr = new FLayerGenericVectorial();
-			String name = PluginServices.getText(this, "LINKS_SPATIAL_ADJUST") +
-										" " +
-								numberOfSessions;
+			String name = PluginServices.getText(this, "LINKS_SPATIAL_ADJUST")
+					+ " " + numberOfSessions;
 			ref.incrementAdjustSessions();
 			linksLyr.setName(name);
 			linksLyr.setCrs(crs);
-			((FLayerGenericVectorial)linksLyr).setDriver(new VectorErrorMemoryDriver(name, this));
+			((FLayerGenericVectorial) linksLyr)
+					.setDriver(new VectorErrorMemoryDriver(name, this));
 			try {
 				linksLyr.load();
-		
-				
+
 				ILineSymbol defaultSymbol = new ArrowLineSymbol();
 				defaultSymbol.setLineColor(Color.RED);
-				
-				SingleSymbolLegend defaultLegend = 
-					(SingleSymbolLegend) LegendFactory.createSingleSymbolLegend(FShape.LINE);
+
+				SingleSymbolLegend defaultLegend = (SingleSymbolLegend) LegendFactory
+						.createSingleSymbolLegend(FShape.LINE);
 				defaultLegend.setDefaultSymbol(defaultSymbol);
 				defaultLegend.setDefaultSymbol(defaultSymbol);
 
 				linksLyr.setLegend(defaultLegend);
-				
+
 			} catch (LoadLayerException e) {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return linksLyr;
 	}
-
 
 	public boolean existsLinksLyr() {
 		return linksLyr != null;
 	}
-
 
 	public void delete(int linkIdx) {
 		this.mappedPositions.remove(linkIdx);

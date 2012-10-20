@@ -42,15 +42,12 @@ package org.gvsig.symbology.fmap.rendering.filter.operations;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Hashtable;
-
 
 /**
  * Utils for operators
- *
+ * 
  * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
- *
+ * 
  */
 public class OperatorsUtils {
 
@@ -67,7 +64,8 @@ public class OperatorsUtils {
 		Constructor[] cons = myFactory.myClass.getDeclaredConstructors();
 
 		try {
-			Expression exp = (Expression)cons[0].newInstance(cons[0].getParameterTypes()[0].newInstance());
+			Expression exp = (Expression) cons[0].newInstance(cons[0]
+					.getParameterTypes()[0].newInstance());
 			return exp.getPattern();
 		} catch (IllegalArgumentException e1) {
 			e1.printStackTrace();

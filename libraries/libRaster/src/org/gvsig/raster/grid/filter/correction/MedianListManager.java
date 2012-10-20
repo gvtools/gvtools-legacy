@@ -27,16 +27,18 @@ import org.gvsig.raster.grid.filter.RasterFilter;
 import org.gvsig.raster.grid.filter.RasterFilterList;
 import org.gvsig.raster.grid.filter.RasterFilterListManager;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
+
 /**
  * Gestor de la pila de filtros para el filtro de mediana.
- *
- * @author Diego Guerrero Sevilla  <diego.guerrero@uclm.es>
+ * 
+ * @author Diego Guerrero Sevilla <diego.guerrero@uclm.es>
  */
 public class MedianListManager implements IRasterFilterListManager {
-	protected RasterFilterList			filterList = null;
+	protected RasterFilterList filterList = null;
 
 	/**
 	 * Constructor. Asigna la lista de filtros y el manager.
+	 * 
 	 * @param filterListManager
 	 */
 	public MedianListManager(RasterFilterListManager filterListManager) {
@@ -53,13 +55,15 @@ public class MedianListManager implements IRasterFilterListManager {
 
 	/**
 	 * Añade un filtro de mediana a la pila de filtros.
+	 * 
 	 * @param ladoVentana
-	 * @throws FilterTypeException 
+	 * @throws FilterTypeException
 	 */
 	public void addMedianFilter(int ladoVentana) throws FilterTypeException {
 		RasterFilter filter = new MedianByteFilter();
 
-		//Cuando el filtro esta creado, tomamos los valores y lo aï¿½adimos a la pila
+		// Cuando el filtro esta creado, tomamos los valores y lo aï¿½adimos a
+		// la pila
 
 		if (filter != null) {
 			filter.addParam("ladoVentana", new Integer(ladoVentana));
@@ -69,25 +73,33 @@ public class MedianListManager implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#getStringsFromFilterList(java.util.ArrayList, org.gvsig.raster.grid.filter.RasterFilter)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#
+	 * getStringsFromFilterList(java.util.ArrayList,
+	 * org.gvsig.raster.grid.filter.RasterFilter)
 	 */
-	public ArrayList getStringsFromFilterList(ArrayList filterList, RasterFilter rf) {
+	public ArrayList getStringsFromFilterList(ArrayList filterList,
+			RasterFilter rf) {
 		if (rf instanceof MedianFilter) {
 			filterList.add("filter.median.active=true");
 			MedianFilter medianFilter = (MedianFilter) rf;
-			filterList.add("filter.median.ladoVentana=" + medianFilter.getSideWindow());
+			filterList.add("filter.median.ladoVentana="
+					+ medianFilter.getSideWindow());
 		}
 
 		return filterList;
 	}
 
-
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#createFilterListFromStrings(java.util.ArrayList, java.lang.String, int)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#
+	 * createFilterListFromStrings(java.util.ArrayList, java.lang.String, int)
 	 */
-	public int createFilterListFromStrings(ArrayList filters, String fil, int filteri) throws FilterTypeException {
-		if ((fil.startsWith("filter.median.active")) && (RasterFilterListManager.getValue(fil).equals("true"))) {
+	public int createFilterListFromStrings(ArrayList filters, String fil,
+			int filteri) throws FilterTypeException {
+		if ((fil.startsWith("filter.median.active"))
+				&& (RasterFilterListManager.getValue(fil).equals("true"))) {
 
 			int ladoVentana = 0;
 			filters.remove(0);
@@ -95,7 +107,8 @@ public class MedianListManager implements IRasterFilterListManager {
 			for (int prop = 0; prop < filters.size(); prop++) {
 				String elem = (String) filters.get(prop);
 				if (elem.startsWith("filter.median.ladoVentana")) {
-					ladoVentana = Integer.parseInt(RasterFilterListManager.getValue(elem));
+					ladoVentana = Integer.parseInt(RasterFilterListManager
+							.getValue(elem));
 					filters.remove(prop);
 					prop--;
 				}
@@ -107,7 +120,10 @@ public class MedianListManager implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList()
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList
+	 * ()
 	 */
 	public ArrayList getRasterFilterList() {
 		ArrayList filters = new ArrayList();
@@ -117,15 +133,20 @@ public class MedianListManager implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#addFilter(java.lang.Class, org.gvsig.raster.dataset.Params)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.IRasterFilterListManager#addFilter(java.
+	 * lang.Class, org.gvsig.raster.dataset.Params)
 	 */
-	public void addFilter(Class classFilter, Params params) throws FilterTypeException {
+	public void addFilter(Class classFilter, Params params)
+			throws FilterTypeException {
 		if (classFilter.equals(MedianFilter.class)) {
 			int ladoVentana = 0;
 			for (int i = 0; i < params.getNumParams(); i++) {
-				if (params.getParam(i).id.equals("ladoVentana") &&
-					params.getParam(i).defaultValue instanceof Integer)
-					ladoVentana = ((Integer) params.getParam(i).defaultValue).intValue();
+				if (params.getParam(i).id.equals("ladoVentana")
+						&& params.getParam(i).defaultValue instanceof Integer)
+					ladoVentana = ((Integer) params.getParam(i).defaultValue)
+							.intValue();
 			}
 			addMedianFilter(ladoVentana);
 		}

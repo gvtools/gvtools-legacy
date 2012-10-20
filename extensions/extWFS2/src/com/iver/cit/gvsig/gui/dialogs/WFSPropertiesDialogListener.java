@@ -71,7 +71,10 @@ import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
  */
 
 /**
- * <p>Listener used when user presses any of the buttons of the WFS properties dialog.</p>
+ * <p>
+ * Listener used when user presses any of the buttons of the WFS properties
+ * dialog.
+ * </p>
  * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
@@ -86,14 +89,18 @@ public class WFSPropertiesDialogListener implements ActionListener {
 	/**
 	 * Creates a new WFS properties dialog listener.
 	 * 
-	 * @param dialog reference to the WFS properties dialog
+	 * @param dialog
+	 *            reference to the WFS properties dialog
 	 */
 	public WFSPropertiesDialogListener(WFSPropertiesDialog dialog) {
 		this.dialog = dialog;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand() == CANCEL_BUTTON_ACTION_COMMAND) {
@@ -101,13 +108,15 @@ public class WFSPropertiesDialogListener implements ActionListener {
 			return;
 		}
 
-		// Accelerate the response: if there are not changes to apply it closes the dialog
-		if ((e.getActionCommand() == ACCEPT_BUTTON_ACTION_COMMAND) && (! dialog.isEnabledApplyButton())) {
+		// Accelerate the response: if there are not changes to apply it closes
+		// the dialog
+		if ((e.getActionCommand() == ACCEPT_BUTTON_ACTION_COMMAND)
+				&& (!dialog.isEnabledApplyButton())) {
 			dialog.close();
 			return;
 		}
 
-		//Accept or apply
+		// Accept or apply
 		try {
 			// We can't 'apply' if there is a filter query and it's incorrect
 			if (dialog.getFilterQuery() == null)
@@ -118,10 +127,10 @@ public class WFSPropertiesDialogListener implements ActionListener {
 			String oldLayerName = oldLayer.getName();
 
 			// Gets the layer with the current information:
-			FLyrWFS newLayer = dialog.getFLayer(); 
+			FLyrWFS newLayer = dialog.getFLayer();
 
 			// Gets the driver
-			FMapWFSDriver driver = newLayer.getWfsDriver(); //dialog.getDriver();		
+			FMapWFSDriver driver = newLayer.getWfsDriver(); // dialog.getDriver();
 
 			// Sets the online resource
 			URL host = new URL(dialog.getWizardData().getHost());
@@ -136,17 +145,18 @@ public class WFSPropertiesDialogListener implements ActionListener {
 					onlineResource, driver, true, false, mapCtrl.getViewPort()
 							.getBackColor());
 
-	    	// If can load the layer, update all data
+			// If can load the layer, update all data
 			if (newLayer != null) {
 				// Removes the last project table if exists
 				removeProjectTable((FLyrVect) oldLayer);
 
 				// Sets the new layer
 				dialog.updateReference(newLayer);
-				
+
 				// Replace the old layer entry at the TOC with the new one
-				mapCtrl.getMapContext().getLayers().replaceLayer(oldLayerName, newLayer);
-				//mapCtrl.getMapContext().zoomToExtent(newLayer.getFullExtent());
+				mapCtrl.getMapContext().getLayers()
+						.replaceLayer(oldLayerName, newLayer);
+				// mapCtrl.getMapContext().zoomToExtent(newLayer.getFullExtent());
 
 				// Refresh the active window where the new layer is located
 				refreshActiveWindow();
@@ -170,24 +180,28 @@ public class WFSPropertiesDialogListener implements ActionListener {
 			return;
 		} catch (Exception e1) {
 			NotificationManager.addError(e1);
-		} 		
+		}
 	}
 
 	/**
 	 * Removes the associated project table of the <code>flayer</code>.
 	 * 
-	 * @param flayer a vector layer
+	 * @param flayer
+	 *            a vector layer
 	 */
 	private void removeProjectTable(FLyrVect flayer) {
 		// Remove it
-		ProjectExtension ext = (ProjectExtension) PluginServices.getExtension(ProjectExtension.class);
-		ArrayList<ProjectDocument> tables = ext.getProject().getDocumentsByType(ProjectTableFactory.registerName);
+		ProjectExtension ext = (ProjectExtension) PluginServices
+				.getExtension(ProjectExtension.class);
+		ArrayList<ProjectDocument> tables = ext.getProject()
+				.getDocumentsByType(ProjectTableFactory.registerName);
 
-		for (int i=0 ; i < tables.size() ; i++){
-			ProjectTable projectTable = (ProjectTable)tables.get(i);
+		for (int i = 0; i < tables.size(); i++) {
+			ProjectTable projectTable = (ProjectTable) tables.get(i);
 
 			try {
-				if (flayer.getRecordset().equals(projectTable.getAssociatedTable().getRecordset())){
+				if (flayer.getRecordset().equals(
+						projectTable.getAssociatedTable().getRecordset())) {
 					ext.getProject().delDocument(projectTable);
 				}
 			} catch (ReadDriverException e) {
@@ -204,25 +218,31 @@ public class WFSPropertiesDialogListener implements ActionListener {
 	}
 
 	/**
-	 * <p>Refresh the active window.</p>
+	 * <p>
+	 * Refresh the active window.
+	 * </p>
 	 */
 	private void refreshActiveWindow() {
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
 
 		if (window instanceof BaseView)
-			((BaseView)window).invalidate();
+			((BaseView) window).invalidate();
 	}
 
 	/**
-	 * Updates the information of the panels {@linkplain WFSFilterPanel WFSFilterPanel} and {@linkplain WFSAreaPanel WFSAreaPanel}.
+	 * Updates the information of the panels {@linkplain WFSFilterPanel
+	 * WFSFilterPanel} and {@linkplain WFSAreaPanel WFSAreaPanel}.
 	 */
 	private void updateFilterAndAreaPanelsData() {
-		// Restores the private attribute of the area panel: hasUserDefinedAnArea
+		// Restores the private attribute of the area panel:
+		// hasUserDefinedAnArea
 		dialog.setUserHasntDefinedAnArea();
 
-		// If we load another layer, or the same but we've selected others fields -> notify it to the WFSFilter panel
+		// If we load another layer, or the same but we've selected others
+		// fields -> notify it to the WFSFilter panel
 		if (dialog.getFieldsSelectedOfSameLayerHasChanged()) {
-			dialog.resetFieldsSelectedOfSameLayerHasChanged(); // reset that field
+			dialog.resetFieldsSelectedOfSameLayerHasChanged(); // reset that
+																// field
 		}
 
 		// Update the data of the Filter and Area panels

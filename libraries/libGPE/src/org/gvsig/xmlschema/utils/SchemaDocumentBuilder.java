@@ -95,41 +95,43 @@ import org.w3c.dom.Element;
  */
 /**
  * Singleton to create schemas
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class SchemaDocumentBuilder {
 	private static SchemaDocumentBuilder instance = null;
 	private DocumentBuilder builder = null;
-	
+
 	/**
 	 * This method cretaes the singleton instance
-	 *
+	 * 
 	 */
 	private synchronized static void createInstance() {
-		if (instance == null) { 
+		if (instance == null) {
 			instance = new SchemaDocumentBuilder();
 		}
 	}
-	
+
 	/**
 	 * @return the schema builder instance
 	 */
 	public static SchemaDocumentBuilder getInstance() {
-		if (instance == null){
+		if (instance == null) {
 			createInstance();
 		}
 		return instance;
 	}
-	
+
 	/**
 	 * Creates a new schema from a namespace
+	 * 
 	 * @param namespaceURI
-	 * Schema namspace
-	 * @return
-	 * A new schema
+	 *            Schema namspace
+	 * @return A new schema
 	 * @throws SchemaCreationException
-	 */	
-	public IXSSchema createXSSchema(String namespaceURI, String namespacePrefix) throws SchemaCreationException {
+	 */
+	public IXSSchema createXSSchema(String namespaceURI, String namespacePrefix)
+			throws SchemaCreationException {
 		IXSSchema schema;
 		try {
 			Document document = getBuilder().newDocument();
@@ -138,8 +140,7 @@ public class SchemaDocumentBuilder {
 					SchemaTags.XS_NS_URI);
 			element.setAttribute(SchemaTags.XMLNS_NS + ":" + namespacePrefix,
 					namespaceURI);
-			element.setAttribute(SchemaTags.TARGET_NAMESPACE,
-					namespaceURI);
+			element.setAttribute(SchemaTags.TARGET_NAMESPACE, namespaceURI);
 			document.appendChild(element);
 			schema = new XSSchemaImpl(document);
 		} catch (ParserConfigurationException e) {
@@ -147,14 +148,14 @@ public class SchemaDocumentBuilder {
 		}
 		return schema;
 	}
-	
+
 	/**
 	 * Parse a schema file
+	 * 
 	 * @param is
-	 * XSD schema file
-	 * @return
-	 * A schema
-	 * @throws SchemaCreationException 
+	 *            XSD schema file
+	 * @return A schema
+	 * @throws SchemaCreationException
 	 */
 	public IXSSchema parse(InputStream is) throws SchemaCreationException {
 		try {
@@ -162,83 +163,92 @@ public class SchemaDocumentBuilder {
 			return new XSSchemaImpl(document);
 		} catch (Exception e) {
 			throw new SchemaCreationException(e);
-		}		
+		}
 	}
-	
+
 	/**
 	 * Parse a set of attributes (header of a XML file)
+	 * 
 	 * @param attributesIterator
-	 * The attribute iterator
+	 *            The attribute iterator
 	 * @throws IOException
-	 * @throws SchemaCreationException 
-	 * @throws SchemaLocationWarning 
+	 * @throws SchemaCreationException
+	 * @throws SchemaLocationWarning
 	 */
-	public ArrayList parse(IAttributesIterator attributesIterator) throws IOException, SchemaCreationException, SchemaLocationWarning{
+	public ArrayList parse(IAttributesIterator attributesIterator)
+			throws IOException, SchemaCreationException, SchemaLocationWarning {
 		ArrayList schemas = new ArrayList();
-		while(attributesIterator.hasNext()){
+		while (attributesIterator.hasNext()) {
 			QName attributeName = attributesIterator.nextAttributeName();
-			if (SchemaTags.SCHEMA_LOCATION_ATTR_NAME.equals(attributeName.getLocalPart())){
-				String schemaLocation = (String)attributesIterator.nextAttribute();
-				StringTokenizer tokenizer = new StringTokenizer(schemaLocation, " \b\n\t");
-		        while (tokenizer.hasMoreTokens()){
-		            String URI = tokenizer.nextToken();
-		            if (tokenizer.hasMoreTokens()){
-		               	schemaLocation = tokenizer.nextToken();
-		               	URI uri = getSchemaURI(schemaLocation);
-		               	schemas.add(parse(new FileInputStream(uri.getPath())));
-		           }
-		        }				
-			}			
+			if (SchemaTags.SCHEMA_LOCATION_ATTR_NAME.equals(attributeName
+					.getLocalPart())) {
+				String schemaLocation = (String) attributesIterator
+						.nextAttribute();
+				StringTokenizer tokenizer = new StringTokenizer(schemaLocation,
+						" \b\n\t");
+				while (tokenizer.hasMoreTokens()) {
+					String URI = tokenizer.nextToken();
+					if (tokenizer.hasMoreTokens()) {
+						schemaLocation = tokenizer.nextToken();
+						URI uri = getSchemaURI(schemaLocation);
+						schemas.add(parse(new FileInputStream(uri.getPath())));
+					}
+				}
+			}
 		}
 		return schemas;
 	}
-	
+
 	/****************************************************************************
-	 * <getSchemaFile>
-	 * It downloads the schema if it's a remote schema
-	 * else it tries to open a local file and return if it's succesfull
-	 * @param String schema location
+	 * <getSchemaFile> It downloads the schema if it's a remote schema else it
+	 * tries to open a local file and return if it's succesfull
+	 * 
+	 * @param String
+	 *            schema location
 	 * @return Uri
-	 * @throws SchemaLocationWarning 
+	 * @throws SchemaLocationWarning
 	 ****************************************************************************/
-	private URI getSchemaURI(String schemaLocation) throws SchemaLocationWarning{
+	private URI getSchemaURI(String schemaLocation)
+			throws SchemaLocationWarning {
 		File f = null;
-		//If it is a local file, it has to construct the absolute route
-		if (schemaLocation.indexOf("http://") != 0){
+		// If it is a local file, it has to construct the absolute route
+		if (schemaLocation.indexOf("http://") != 0) {
 			f = new File(schemaLocation);
-			if (!(f.isAbsolute())){
-				schemaLocation = new File(schemaLocation).getParentFile().getAbsolutePath() + File.separator +  schemaLocation;
+			if (!(f.isAbsolute())) {
+				schemaLocation = new File(schemaLocation).getParentFile()
+						.getAbsolutePath() + File.separator + schemaLocation;
 				f = new File(schemaLocation);
 			}
 			try {
 				return new URI(f.getAbsolutePath());
 			} catch (URISyntaxException e) {
-				throw new SchemaLocationWarning(schemaLocation,e);
-			}			
+				throw new SchemaLocationWarning(schemaLocation, e);
+			}
 		}
-		//Else it is an URL direction and it has to download it.
+		// Else it is an URL direction and it has to download it.
 		else {
-			URL url;		
+			URL url;
 			try {
 				url = new URL(schemaLocation);
-				//Download the schema without cancel option.
-				f = DownloadUtilities.downloadFile(url,"gml_schmema.xsd");	
+				// Download the schema without cancel option.
+				f = DownloadUtilities.downloadFile(url, "gml_schmema.xsd");
 				return new URI(f.getAbsolutePath());
 			} catch (Exception e) {
-				throw new SchemaLocationWarning(schemaLocation,e);
+				throw new SchemaLocationWarning(schemaLocation, e);
 			}
 		}
 	}
-	
+
 	/**
 	 * @return the builder
-	 * @throws ParserConfigurationException 
+	 * @throws ParserConfigurationException
 	 */
 	private DocumentBuilder getBuilder() throws ParserConfigurationException {
-		if (builder == null){
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance(); 
+		if (builder == null) {
+			DocumentBuilderFactory factory = DocumentBuilderFactory
+					.newInstance();
 			builder = factory.newDocumentBuilder();
 		}
 		return builder;
-	}	
+	}
 }

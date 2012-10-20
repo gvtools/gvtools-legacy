@@ -44,21 +44,19 @@ USA.
  */
 package com.iver.cit.gvsig.project.documents.layout.commands;
 
-
 import java.io.IOException;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.drivers.DriverIOException;
 import com.iver.cit.gvsig.fmap.edition.commands.AbstractCommand;
 
-
-
 public class RemoveFFrameCommand extends AbstractCommand {
 	private EditableFeatureSource efs;
 	private int index;
-	public RemoveFFrameCommand(EditableFeatureSource ef,int i) {
-		efs=ef;
-		index=i;
+
+	public RemoveFFrameCommand(EditableFeatureSource ef, int i) {
+		efs = ef;
+		index = i;
 	}
 
 	/**
@@ -66,20 +64,21 @@ public class RemoveFFrameCommand extends AbstractCommand {
 	 * @throws IOException
 	 * @see com.iver.cit.gvsig.fmap.edition.Command#undo()
 	 */
-	public void undo(){
+	public void undo() {
 		efs.undoRemoveFFrame(index);
 	}
+
 	/**
 	 * @throws IOException
 	 * @throws DriverIOException
 	 * @see com.iver.cit.gvsig.fmap.edition.Command#redo()
 	 */
-	public void redo(){
+	public void redo() {
 		efs.doRemoveFFrame(index);
 	}
 
 	public String getType() {
-		return PluginServices.getText(this,"borrar");
+		return PluginServices.getText(this, "borrar");
 	}
 
 }

@@ -21,6 +21,7 @@ package org.gvsig.gui.beans.listview;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+
 /**
  * @version 28/06/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
@@ -28,18 +29,21 @@ import java.awt.Rectangle;
 public interface IListViewPainter {
 	/**
 	 * Devuelve el nombre de la vista
+	 * 
 	 * @return
 	 */
 	public String getName();
 
 	/**
 	 * Devuelve la dimension minima del componente
+	 * 
 	 * @return
 	 */
 	public Dimension getPreferredSize();
 
 	/**
 	 * Pintar el componente
+	 * 
 	 * @param g
 	 */
 	public void paint(Graphics2D g, Rectangle visibleRect);

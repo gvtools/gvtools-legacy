@@ -42,26 +42,26 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: AdjacencyDissolveCriteria.java 13881 2007-09-19 16:22:04Z jaume $
-* $Log$
-* Revision 1.4  2007-09-19 16:06:59  jaume
-* removed unnecessary imports
-*
-* Revision 1.3  2007/03/06 16:47:58  caballero
-* Exceptions
-*
-* Revision 1.2  2006/08/11 16:27:46  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/06/20 18:20:45  azabala
-* first version in cvs
-*
-* Revision 1.1  2006/05/24 21:11:14  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-*
-*/
+ *
+ * $Id: AdjacencyDissolveCriteria.java 13881 2007-09-19 16:22:04Z jaume $
+ * $Log$
+ * Revision 1.4  2007-09-19 16:06:59  jaume
+ * removed unnecessary imports
+ *
+ * Revision 1.3  2007/03/06 16:47:58  caballero
+ * Exceptions
+ *
+ * Revision 1.2  2006/08/11 16:27:46  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/06/20 18:20:45  azabala
+ * first version in cvs
+ *
+ * Revision 1.1  2006/05/24 21:11:14  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.dissolve.fmap;
 
 import java.util.ArrayList;
@@ -86,19 +86,18 @@ import com.iver.cit.gvsig.geoprocess.core.fmap.XTypes;
 import com.vividsolutions.jts.geom.Geometry;
 
 /**
- * OJO!
- * Si las geometrias se crean externamente, asumimos que están
+ * OJO! Si las geometrias se crean externamente, asumimos que están
  * reproyectadas.
- *
+ * 
  * Las que se obtienen internamente sí se reproyectan al vuelo
- *
- *
- *
+ * 
+ * 
+ * 
  * @author azabala
- *
+ * 
  */
 public class AdjacencyDissolveCriteria implements IDissolveCriteria,
-											ISpatialDissolveCriteria{
+		ISpatialDissolveCriteria {
 
 	/**
 	 * Reads geometries of the processed features
@@ -117,8 +116,7 @@ public class AdjacencyDissolveCriteria implements IDissolveCriteria,
 
 	private AdjacencyFeatureBuilder builder;
 
-
-	public AdjacencyDissolveCriteria(ReadableVectorial source){
+	public AdjacencyDissolveCriteria(ReadableVectorial source) {
 		this.source = source;
 		this.builder = new AdjacencyFeatureBuilder();
 	}
@@ -127,31 +125,32 @@ public class AdjacencyDissolveCriteria implements IDissolveCriteria,
 		try {
 			fetchGeometry(featureIndex1);
 			secondGeometry = source.getShape(featureIndex2);
-			if(crsTrans != null)
+			if (crsTrans != null)
 				secondGeometry.reProject(crsTrans);
 			Geometry secondJts = secondGeometry.toJTSGeometry();
 			return cachedJts.intersects(secondJts);
 		} catch (ReadDriverException e) {
 			return false;
-		} 
+		}
 	}
 
 	/**
-	 * Verify if the geometry of the seed feature has been readed,
-	 * and reads it if not.
+	 * Verify if the geometry of the seed feature has been readed, and reads it
+	 * if not.
+	 * 
 	 * @param index
 	 */
-	private void fetchGeometry(int index){
-		if(cachedJts == null){
+	private void fetchGeometry(int index) {
+		if (cachedJts == null) {
 			try {
 				firstGeometry = this.source.getShape(index);
-				if(crsTrans != null)
+				if (crsTrans != null)
 					firstGeometry.reProject(crsTrans);
 				cachedJts = firstGeometry.toJTSGeometry();
 			} catch (ReadDriverException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} 
+			}
 		}
 	}
 
@@ -159,7 +158,7 @@ public class AdjacencyDissolveCriteria implements IDissolveCriteria,
 		cachedJts = null;
 	}
 
-	class AdjacencyFeatureBuilder implements IDissolvedFeatureBuilder{
+	class AdjacencyFeatureBuilder implements IDissolvedFeatureBuilder {
 
 		public IFeature createFeature(IGeometry g, int index, int fid) {
 			Value[] values = new Value[1];
@@ -168,20 +167,19 @@ public class AdjacencyDissolveCriteria implements IDissolveCriteria,
 		}
 
 		public IFeature createFeature(IGeometry newGeometry,
-										List sumarizedValues,
-										int newFid,
-										int index) {
+				List sumarizedValues, int newFid, int index) {
 			int numNumericFields = sumarizedValues.size();
 			Value[] values = new Value[numNumericFields + 1];
 			values[0] = ValueFactory.createValue(newFid);
 			int idx = 1;
 			Iterator valIt = sumarizedValues.iterator();
-			while(valIt.hasNext()){
+			while (valIt.hasNext()) {
 				Value val = (Value) valIt.next();
 				values[idx] = val;
 				idx++;
 			}
-			return new DefaultFeature(newGeometry, values, new Integer(newFid).toString());
+			return new DefaultFeature(newGeometry, values,
+					new Integer(newFid).toString());
 		}
 
 	}
@@ -199,16 +197,15 @@ public class AdjacencyDissolveCriteria implements IDissolveCriteria,
 	}
 
 	public void setFirstGeometry(IGeometry g) {
-		//we asumed that geometries are reprojected externally
+		// we asumed that geometries are reprojected externally
 		firstGeometry = g;
 		cachedJts = firstGeometry.toJTSGeometry();
 	}
 
 	public void setSecondGeometry(IGeometry g) {
-//		we asumed that geometries are reprojected externally
+		// we asumed that geometries are reprojected externally
 		secondGeometry = g;
 	}
-
 
 	public void setCrsTransform(MathTransform crsTrans) {
 		this.crsTrans = crsTrans;
@@ -218,7 +215,7 @@ public class AdjacencyDissolveCriteria implements IDissolveCriteria,
 		SHPLayerDefinition resultLayerDefinition = new SHPLayerDefinition();
 		resultLayerDefinition.setShapeType(XTypes.POLYGON);
 		ArrayList fields = new ArrayList();
-		//first of all: FID
+		// first of all: FID
 		FieldDescription fidFd = new FieldDescription();
 		fidFd.setFieldLength(10);
 		fidFd.setFieldName("fid");
@@ -226,36 +223,35 @@ public class AdjacencyDissolveCriteria implements IDissolveCriteria,
 		fidFd.setFieldDecimalCount(0);
 		fields.add(fidFd);
 
-		if(numFields_SumFunc != null){
-			//sumarization of numeric attributes
+		if (numFields_SumFunc != null) {
+			// sumarization of numeric attributes
 			Iterator fieldsIt = numFields_SumFunc.keySet().iterator();
-			while(fieldsIt.hasNext()){
+			while (fieldsIt.hasNext()) {
 				String field = (String) fieldsIt.next();
-				SummarizationFunction[] functions =
-					(SummarizationFunction[]) numFields_SumFunc.get(field);
-				for(int i = 0; i < functions.length; i++){
-					FieldDescription description =
-						new FieldDescription();
+				SummarizationFunction[] functions = (SummarizationFunction[]) numFields_SumFunc
+						.get(field);
+				for (int i = 0; i < functions.length; i++) {
+					FieldDescription description = new FieldDescription();
 					description.setFieldLength(10);
 					description.setFieldDecimalCount(4);
-					//to avoid truncation of field names (f.example shp)
-					//we only catch five first letters
+					// to avoid truncation of field names (f.example shp)
+					// we only catch five first letters
 					String shortName = null;
-					if(field.length() > 5)
-						shortName = field.substring(0,4);
+					if (field.length() > 5)
+						shortName = field.substring(0, 4);
 					else
 						shortName = field;
-					description.setFieldName(
-							shortName + "_" + functions[i].toString());
+					description.setFieldName(shortName + "_"
+							+ functions[i].toString());
 					description.setFieldType(XTypes.DOUBLE);
 					fields.add(description);
-				}//for
-			}//while
-		}//if
+				}// for
+			}// while
+		}// if
 		FieldDescription[] fieldsDesc = null;
-		if(fields.size() == 0){
+		if (fields.size() == 0) {
 			fieldsDesc = new FieldDescription[0];
-		}else{
+		} else {
 			fieldsDesc = new FieldDescription[fields.size()];
 			fields.toArray(fieldsDesc);
 		}
@@ -280,4 +276,3 @@ public class AdjacencyDissolveCriteria implements IDissolveCriteria,
 	}
 
 }
-

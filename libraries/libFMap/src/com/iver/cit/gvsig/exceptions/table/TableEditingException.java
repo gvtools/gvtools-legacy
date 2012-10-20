@@ -4,12 +4,14 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import org.gvsig.exceptions.BaseException;
+
 /**
  * @author Vicente Caballero Navarro
  */
-public class TableEditingException extends BaseException{
+public class TableEditingException extends BaseException {
 	private String table;
-	public TableEditingException(String table,Throwable exception) {
+
+	public TableEditingException(String table, Throwable exception) {
 		this.table = table;
 		init();
 		initCause(exception);
@@ -22,7 +24,7 @@ public class TableEditingException extends BaseException{
 
 	protected Map values() {
 		Hashtable params = new Hashtable();
-		params.put("table",table);
+		params.put("table", table);
 		return params;
 	}
 }

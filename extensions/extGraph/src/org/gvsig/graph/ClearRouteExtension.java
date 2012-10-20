@@ -62,63 +62,56 @@ public class ClearRouteExtension extends Extension {
 
 	public void initialize() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void execute(String actionCommand) {
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		if (window instanceof View)
-		{
+		if (window instanceof View) {
 			View v = (View) window;
-	        MapControl mapCtrl = v.getMapControl();
+			MapControl mapCtrl = v.getMapControl();
 			MapContext map = mapCtrl.getMapContext();
-			
+
 			SingleLayerIterator it = new SingleLayerIterator(map.getLayers());
-			while (it.hasNext())
-			{
+			while (it.hasNext()) {
 				FLayer aux = it.next();
 				if (!aux.isActive())
 					continue;
 				Network net = (Network) aux.getProperty("network");
-				
-				if ( net != null)
-				{
-					if (actionCommand.equalsIgnoreCase("CLEAR_ROUTES"))
-					{
+
+				if (net != null) {
+					if (actionCommand.equalsIgnoreCase("CLEAR_ROUTES")) {
 						NetworkUtils.clearRouteFromGraphics(mapCtrl);
 						GvSession.getInstance().delete(mapCtrl, "Route");
-						List reportPanels = (List) GvSession.
-												getInstance().
-												get(mapCtrl, "RouteReport");
-						if(reportPanels != null){
-							for(int i = 0; i < reportPanels.size(); i++){
-								PluginServices.getMDIManager().
-								closeWindow((RouteReportPanel)reportPanels.get(i));
+						List reportPanels = (List) GvSession.getInstance().get(
+								mapCtrl, "RouteReport");
+						if (reportPanels != null) {
+							for (int i = 0; i < reportPanels.size(); i++) {
+								PluginServices.getMDIManager().closeWindow(
+										(RouteReportPanel) reportPanels.get(i));
 							}
 						}
-				
+
 						GvSession.getInstance().delete(mapCtrl, "RouteReport");
 						mapCtrl.drawMap(false);
 					}
-					
+
 				}
 			}
 		}
-		
+
 	}
 
 	public boolean isEnabled() {
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		if (window instanceof View)
-		{
+		if (window instanceof View) {
 			View v = (View) window;
-	        MapControl mapCtrl = v.getMapControl();
-	        GraphicLayer grafLayer = mapCtrl.getMapContext().getGraphicsLayer(); 
-	        for (int i=0; i < grafLayer.getNumGraphics(); i++)
-	        {
-	        	FGraphic graf = grafLayer.getGraphic(i);
-	        	if (graf.getTag() != null)
-	        		if (graf.getTag().compareTo("ROUTE") == 0)
+			MapControl mapCtrl = v.getMapControl();
+			GraphicLayer grafLayer = mapCtrl.getMapContext().getGraphicsLayer();
+			for (int i = 0; i < grafLayer.getNumGraphics(); i++) {
+				FGraphic graf = grafLayer.getGraphic(i);
+				if (graf.getTag() != null)
+					if (graf.getTag().compareTo("ROUTE") == 0)
 						return true;
 			}
 		}
@@ -128,22 +121,19 @@ public class ClearRouteExtension extends Extension {
 
 	public boolean isVisible() {
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		if (window instanceof View)
-		{
+		if (window instanceof View) {
 			View v = (View) window;
-	        MapControl mapCtrl = v.getMapControl();
+			MapControl mapCtrl = v.getMapControl();
 			MapContext map = mapCtrl.getMapContext();
-			
+
 			SingleLayerIterator it = new SingleLayerIterator(map.getLayers());
-			while (it.hasNext())
-			{
+			while (it.hasNext()) {
 				FLayer aux = it.next();
 				if (!aux.isActive())
 					continue;
 				Network net = (Network) aux.getProperty("network");
-				
-				if ( net != null)
-				{
+
+				if (net != null) {
 					return true;
 				}
 			}
@@ -153,5 +143,3 @@ public class ClearRouteExtension extends Extension {
 	}
 
 }
-
-

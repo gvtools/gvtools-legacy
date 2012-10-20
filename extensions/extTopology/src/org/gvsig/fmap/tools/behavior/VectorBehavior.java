@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.fmap.tools.behavior;
 
 import java.awt.Color;
@@ -84,21 +84,21 @@ import com.iver.cit.gvsig.project.documents.view.snapping.snappers.NearestPointS
 
 /**
  * Behavior to digitize two points vectors in mapcontrol
+ * 
  * @author azabala
  */
 public class VectorBehavior extends Behavior {
 
 	NearestPointSnapper snapper = new NearestPointSnapper();
 	PointSnapper pointSnapper = new PointSnapper();
-	
+
 	FLyrVect snappingLyr = null;
-	
-	
+
 	private boolean isZooming = false;
 	private Point2D m_FirstPoint;
 	private Point2D m_LastPoint;
 	private VectorListener listener;
-	
+
 	protected int lenghtArrow = 15;
 	protected int widthArrow = 10;
 	protected Color arrowColor = java.awt.Color.RED;
@@ -108,42 +108,42 @@ public class VectorBehavior extends Behavior {
 			BufferedImage.TYPE_INT_ARGB);
 	protected static Rectangle rect = new Rectangle(0, 0, 1, 1);
 
-	
 	class PointSnapper extends NearestPointSnapper {
 
 		public Point2D getSnapPoint(Point2D queryPoint, IGeometry geomToSnap,
 				double tolerance, Point2D lastPointEntered) {
-			
+
 			Point2D solution = null;
 			double minDistance = tolerance;
-			
-			List<Point2D[]> pointsParts =
-				ShapePointExtractor.extractPoints(geomToSnap);
-			for(int i = 0; i < pointsParts.size(); i++){
+
+			List<Point2D[]> pointsParts = ShapePointExtractor
+					.extractPoints(geomToSnap);
+			for (int i = 0; i < pointsParts.size(); i++) {
 				Point2D[] points = pointsParts.get(i);
-				for(int j = 0; j < points.length; j++){
+				for (int j = 0; j < points.length; j++) {
 					Point2D point = points[j];
 					double dist = point.distance(queryPoint);
-					if(dist <= minDistance){
+					if (dist <= minDistance) {
 						solution = point;
 						minDistance = dist;
-					}//if
-				}//for j
-			}//for i
+					}// if
+				}// for j
+			}// for i
 			return solution;
 		}
 
 		public String getToolTipText() {
-			return PluginServices.getText(this, "nearest_point_for_point_layers");
+			return PluginServices.getText(this,
+					"nearest_point_for_point_layers");
 		}
-		
+
 	}
 
-	
 	/**
 	 * Crea un nuevo RectangleBehavior.
-	 *
-	 * @param zili listener.
+	 * 
+	 * @param zili
+	 *            listener.
 	 */
 	public VectorBehavior(VectorListener zili, FLyrVect snappingLyr) {
 		listener = zili;
@@ -162,19 +162,15 @@ public class VectorBehavior extends Behavior {
 
 		Rectangle rect = mT.createTransformedShape(r).getBounds();
 		GeneralPathX line = new GeneralPathX();
-		
-		
-		
+
 		line.moveTo(rect.x, rect.y + (rect.height / 2));
-		line.curveTo(rect.x + (rect.width / 3),
-			rect.y + (2 * rect.height),
-			rect.x + ((2 * rect.width) / 3), rect.y - rect.height,
-			rect.x + rect.width, rect.y + (rect.height / 2));
+		line.curveTo(rect.x + (rect.width / 3), rect.y + (2 * rect.height),
+				rect.x + ((2 * rect.width) / 3), rect.y - rect.height, rect.x
+						+ rect.width, rect.y + (rect.height / 2));
 
 		shp = new FPolyline2D(line);
 		drawLineWithArrow(g, mT, shp);
 
-		
 	}
 
 	/**
@@ -186,109 +182,105 @@ public class VectorBehavior extends Behavior {
 		g.setColor(Color.black);
 		g.setXORMode(Color.white);
 
-		
-
 		// Dibujamos el actual
 		if ((m_FirstPoint != null) && (m_LastPoint != null) && !isZooming) {
-			GeneralPathX line = new GeneralPathX();			
+			GeneralPathX line = new GeneralPathX();
 			line.moveTo(m_FirstPoint.getX(), m_FirstPoint.getY());
 			line.lineTo(m_LastPoint.getX(), m_LastPoint.getY());
 			FPolyline2D shp = new FPolyline2D(line);
-			drawLineWithArrow((Graphics2D)g, getMapControl().getViewPort().getAffineTransform(), shp);
+			drawLineWithArrow((Graphics2D) g, getMapControl().getViewPort()
+					.getAffineTransform(), shp);
 		}
 		g.setPaintMode();
 	}
 
 	/**
 	 * Reimplementación del método mousePressed de Behavior.
-	 *
-	 * @param e MouseEvent
+	 * 
+	 * @param e
+	 *            MouseEvent
 	 */
 	public void mousePressed(MouseEvent e) {
 
-			int modifiers = e.getModifiersEx();
-			int ctrlDownMask = modifiers & MouseEvent.CTRL_DOWN_MASK;
-			if(ctrlDownMask == MouseEvent.CTRL_DOWN_MASK ){
-				isZooming = true;
-			}
-			m_FirstPoint = e.getPoint();
-			getMapControl().repaint();
+		int modifiers = e.getModifiersEx();
+		int ctrlDownMask = modifiers & MouseEvent.CTRL_DOWN_MASK;
+		if (ctrlDownMask == MouseEvent.CTRL_DOWN_MASK) {
+			isZooming = true;
+		}
+		m_FirstPoint = e.getPoint();
+		getMapControl().repaint();
 
-			if (listener.cancelDrawing()) {
-				getMapControl().cancelDrawing();
-				getMapControl().repaint();
-			}
+		if (listener.cancelDrawing()) {
+			getMapControl().cancelDrawing();
+			getMapControl().repaint();
+		}
 	}
-	
-	
-	
-		
-	
 
 	/**
 	 * Reimplementación del método mouseReleased de Behavior.
-	 *
-	 * @param e MouseEvent
-	 *
-	 * @throws BehaviorException Excepción lanzada cuando el Behavior.
+	 * 
+	 * @param e
+	 *            MouseEvent
+	 * 
+	 * @throws BehaviorException
+	 *             Excepción lanzada cuando el Behavior.
 	 */
 	public void mouseReleased(MouseEvent e) throws BehaviorException {
-	    if (m_FirstPoint == null) {
-	    	isZooming = false;
-	    	return;
-	    }
+		if (m_FirstPoint == null) {
+			isZooming = false;
+			return;
+		}
 		Point2D p1;
 		Point2D p2;
 		Point pScreen = e.getPoint();
 
 		ViewPort vp = getMapControl().getMapContext().getViewPort();
 		p1 = vp.toMapPoint(m_FirstPoint);
-		
-		
-		//we snap to the nearest point of the adjusting layer
+
+		// we snap to the nearest point of the adjusting layer
 		int pixelTolerance = 8;
 		double mapTolerance = vp.toMapDistance(pixelTolerance);
-		
+
 		double minDist = mapTolerance;
 		Rectangle2D r = new Rectangle2D.Double(p1.getX() - mapTolerance / 2,
 				p1.getY() - mapTolerance / 2, mapTolerance, mapTolerance);
 
-		if (snappingLyr.isVisible()){
+		if (snappingLyr.isVisible()) {
 			try {
-				IFeatureIterator iterator = snappingLyr.getSource().getFeatureIterator(r, null, null, false);
-				SnappingVisitor snapVisitor = 
-					new SnappingVisitor(snapper, p1, mapTolerance, null);
-				SnappingVisitor snapVisitor2 = 
-					new SnappingVisitor(pointSnapper, p1, mapTolerance, null);
-				
-				while(iterator.hasNext()){
+				IFeatureIterator iterator = snappingLyr.getSource()
+						.getFeatureIterator(r, null, null, false);
+				SnappingVisitor snapVisitor = new SnappingVisitor(snapper, p1,
+						mapTolerance, null);
+				SnappingVisitor snapVisitor2 = new SnappingVisitor(
+						pointSnapper, p1, mapTolerance, null);
+
+				while (iterator.hasNext()) {
 					IFeature feature = iterator.next();
 					IGeometry geo = feature.getGeometry();
 					snapVisitor.visitItem(geo);
 					snapVisitor2.visitItem(geo);
 				}
 				Point2D theSnappedPoint = snapVisitor.getSnapPoint();
-				if(theSnappedPoint == null)
+				if (theSnappedPoint == null)
 					theSnappedPoint = snapVisitor2.getSnapPoint();
-				
+
 				if (theSnappedPoint != null) {
 					p1.setLocation(theSnappedPoint);
 				}
 			} catch (ReadDriverException e1) {
 				e1.printStackTrace();
-				throw new BehaviorException("Error de driver intentando aplicar snap", e1);
+				throw new BehaviorException(
+						"Error de driver intentando aplicar snap", e1);
 			}
-		}//isVisible
-				
-				
-		p2 = vp.toMapPoint(pScreen);
-//		Rectangle2D.Double rectangle = new Rectangle2D.Double();
-//		rectangle.setFrameFromDiagonal(p1, p2);
+		}// isVisible
 
-//		MoveEvent event = new MoveEvent(m_FirstPoint, e.getPoint(), e);
+		p2 = vp.toMapPoint(pScreen);
+		// Rectangle2D.Double rectangle = new Rectangle2D.Double();
+		// rectangle.setFrameFromDiagonal(p1, p2);
+
+		// MoveEvent event = new MoveEvent(m_FirstPoint, e.getPoint(), e);
 		MoveEvent event = new MoveEvent(p1, p2, e);
 		listener.vector(event);
-
 
 		m_FirstPoint = null;
 		m_LastPoint = null;
@@ -297,8 +289,9 @@ public class VectorBehavior extends Behavior {
 
 	/**
 	 * Reimplementación del método mouseDragged de Behavior.
-	 *
-	 * @param e MouseEvent
+	 * 
+	 * @param e
+	 *            MouseEvent
 	 */
 	public void mouseDragged(MouseEvent e) {
 		m_LastPoint = e.getPoint();
@@ -318,10 +311,11 @@ public class VectorBehavior extends Behavior {
 	public ToolListener getListener() {
 		return listener;
 	}
-	
-	
-	private void drawLineWithArrow(Graphics2D g, AffineTransform affineTransform, FShape shp){
-		FGeometryUtil.drawLineWithArrow(g, affineTransform, shp, arrowColor, stroke, lenghtArrow, widthArrow);
+
+	private void drawLineWithArrow(Graphics2D g,
+			AffineTransform affineTransform, FShape shp) {
+		FGeometryUtil.drawLineWithArrow(g, affineTransform, shp, arrowColor,
+				stroke, lenghtArrow, widthArrow);
 
 	}
 
@@ -334,4 +328,3 @@ public class VectorBehavior extends Behavior {
 	}
 
 }
-

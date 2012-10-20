@@ -77,6 +77,7 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
 /**
  * It writes a gml:BoundingShapeType object. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;gml:boundedBy&gt;
@@ -87,40 +88,46 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  * &lt;/gml:boundedBy&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class BoundedByWriter {
-	
+
 	/**
 	 * It writes a gml:BoundedBy init tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
-	 * Geometry ID
+	 *            The writer handler implementor Geometry ID
 	 * @param coords
-	 * A coordinates sequence
+	 *            A coordinates sequence
 	 * @param srs
-	 * Spatial reference system
+	 *            Spatial reference system
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor handler, String id,
-			ICoordinateSequence coords,	String srs) throws IOException{
+	public void start(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler, String id,
+			ICoordinateSequence coords, String srs) throws IOException {
 		writer.writeStartElement(GMLTags.GML_BOUNDEDBY);
-		handler.getProfile().getBoxWriter().start(writer, handler, id, coords, srs);
+		handler.getProfile().getBoxWriter()
+				.start(writer, handler, id, coords, srs);
 	}
-	
+
 	/**
 	 * It writes a gml:BoundedBy end tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @throws IOException
 	 */
-	public void end(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor handler) throws IOException{
-		handler.getProfile().getBoxWriter().end(writer,handler);
-		writer.writeEndElement();		
+	public void end(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler) throws IOException {
+		handler.getProfile().getBoxWriter().end(writer, handler);
+		writer.writeEndElement();
 	}
 }

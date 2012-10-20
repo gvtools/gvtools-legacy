@@ -5,10 +5,9 @@ package com.hardcode.gdbms.engine.instruction;
 
 import com.hardcode.gdbms.engine.values.Value;
 
-
 /**
  * Adaptador
- *
+ * 
  * @author Fernando González Cortés
  */
 public class LValueAdapter extends AbstractExpression {

@@ -22,6 +22,7 @@ import org.gvsig.raster.dataset.FileNotOpenException;
 import org.gvsig.raster.dataset.io.RasterDriverException;
 import org.gvsig.raster.dataset.properties.DatasetListStatistics;
 import org.gvsig.raster.hierarchy.IStatistics;
+
 /**
  * Parámetros necesarios para el filtro de realce por tramos. Contiene
  * información de cada tramo. Valores máximos y mínimos reales y correspondencia
@@ -34,51 +35,50 @@ import org.gvsig.raster.hierarchy.IStatistics;
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class LinearStretchParams {
-	
+
 	public class Stretch {
 		/**
-		 * Valores de los datos de entrada correspondientes al mínimo y al máximo de 
-		 * cada tramo. Estos tendrán un rango entre el mínimo y el máximo en cada banda
-		 * de la imagen. 
+		 * Valores de los datos de entrada correspondientes al mínimo y al
+		 * máximo de cada tramo. Estos tendrán un rango entre el mínimo y el
+		 * máximo en cada banda de la imagen.
 		 */
-		public double[]        stretchIn           = null;
+		public double[] stretchIn = null;
 		/**
-		 * Valores de los datos de salida correspondientes al mínimo y al máximo de 
-		 * cada tramo. Estos tendrán un rango entre 0 y 255.
+		 * Valores de los datos de salida correspondientes al mínimo y al máximo
+		 * de cada tramo. Estos tendrán un rango entre 0 y 255.
 		 */
-		public int[]           stretchOut          = null;
+		public int[] stretchOut = null;
 		/**
 		 * Porcentajes de recorte de colas (Valores de entrada)
 		 */
-		public double          tailTrimMin         = 0;
-		public double          tailTrimMax         = 0;
+		public double tailTrimMin = 0;
+		public double tailTrimMax = 0;
 		/**
-		 * Valores de recorte de colas (Valores de salida calculados por el filtro TailTrim)
+		 * Valores de recorte de colas (Valores de salida calculados por el
+		 * filtro TailTrim)
 		 */
-		public double          tailTrimValueMin    = 0;
-		public double          tailTrimValueMax    = 0;
+		public double tailTrimValueMin = 0;
+		public double tailTrimValueMax = 0;
 		/**
-		 * Valores de escala a calcular por el filtro lineal por tramos.
-		 * Cada elemento del array es un tramo.
+		 * Valores de escala a calcular por el filtro lineal por tramos. Cada
+		 * elemento del array es un tramo.
 		 */
-		public double[]        scale               = null;
+		public double[] scale = null;
 		/**
 		 * Valores de desplazamiento a calcular por el filtro lineal por tramos.
 		 * Cada elemento del array es un tramo.
 		 */
-		public double[]        offset              = null;
+		public double[] offset = null;
 		/**
 		 * Valores máximos y mínimos
 		 */
-		public double          maxValue            = 0;
-		public double          minValue            = 0;
-		
+		public double maxValue = 0;
+		public double minValue = 0;
+
 		/**
-		 * Funcion grafica que se ha usado para generar el LinearStretchParams
-		 * 0 - Lineal
-		 * 1 - Exponencial / Logaritmica
-		 * 2 - Raiz cuadrada / Cuadrada
-		 * 3 - Level slice
+		 * Funcion grafica que se ha usado para generar el LinearStretchParams 0
+		 * - Lineal 1 - Exponencial / Logaritmica 2 - Raiz cuadrada / Cuadrada 3
+		 * - Level slice
 		 */
 		public int functionType = 0;
 
@@ -86,50 +86,53 @@ public class LinearStretchParams {
 		 * Valor de la gráfica para la función. No se usa en una gráfica lineal.
 		 */
 		public double valueFunction = 0.0;
-		
+
 		/**
-		 * Aplica el recorte de colas sobre los extremos de los máximos y mínimos de entrada.
-		 * La aplicación de esta función considera que ya se han calculado los valores con 
-		 * loadTailTrimValues.
+		 * Aplica el recorte de colas sobre los extremos de los máximos y
+		 * mínimos de entrada. La aplicación de esta función considera que ya se
+		 * han calculado los valores con loadTailTrimValues.
 		 */
 		public void applyTrimToStretchs() {
-			if(stretchIn != null && stretchIn.length >= 2) {
+			if (stretchIn != null && stretchIn.length >= 2) {
 				minValue = stretchIn[0] = tailTrimValueMin;
 				maxValue = stretchIn[stretchIn.length - 1] = tailTrimValueMax;
 			}
 		}
-		
+
 		/**
-		 * Aplica el eliminado de extremos. Para ello utiliza el segundo máximo y mínimo de entrada.
+		 * Aplica el eliminado de extremos. Para ello utiliza el segundo máximo
+		 * y mínimo de entrada.
 		 */
-		/*public void applyRemoveEndsToStretchs(double secondMin, double secondMax) {
-			if(stretchIn != null && stretchIn.length >= 2) {
-				minValue = stretchIn[0] = secondMin;
-				maxValue = stretchIn[stretchIn.length - 1] = secondMax;
-			}
-		}*/
-		
+		/*
+		 * public void applyRemoveEndsToStretchs(double secondMin, double
+		 * secondMax) { if(stretchIn != null && stretchIn.length >= 2) {
+		 * minValue = stretchIn[0] = secondMin; maxValue =
+		 * stretchIn[stretchIn.length - 1] = secondMax; } }
+		 */
+
 		/**
 		 * Consulta si tiene algún valor el recorte de colas
-		 * @return true si tiene valor el recorte de colas y false si no lo tiene
+		 * 
+		 * @return true si tiene valor el recorte de colas y false si no lo
+		 *         tiene
 		 */
 		public boolean hasTailTrim() {
 			return (tailTrimMin != 0 || tailTrimMax != 0);
 		}
-		
+
 		/**
-		 * Calcula la escala y el desplazamiento teniendo en cuenta que
-		 * ya tenga todos los valores de entrada asignados.
-		 *
+		 * Calcula la escala y el desplazamiento teniendo en cuenta que ya tenga
+		 * todos los valores de entrada asignados.
+		 * 
 		 */
 		public void calcLinearScaleAndOffset() {
-			if(stretchIn != null && stretchOut != null) {
-				//simplifyStretch();
+			if (stretchIn != null && stretchOut != null) {
+				// simplifyStretch();
 				scale = new double[stretchIn.length - 1];
 				offset = new double[stretchIn.length - 1];
 				for (int i = 0; i < scale.length; i++) {
 					double rgbRange = (stretchOut[i + 1] - stretchOut[i]);
-					if((stretchIn[i + 1] - stretchIn[i]) == 0)
+					if ((stretchIn[i + 1] - stretchIn[i]) == 0)
 						scale[i] = 0;
 					else
 						scale[i] = rgbRange / (stretchIn[i + 1] - stretchIn[i]);
@@ -137,37 +140,38 @@ public class LinearStretchParams {
 				}
 			}
 		}
-		
+
 		/**
 		 * Elimina puntos redundantes en stretchIn y stretchOut
 		 */
-//		private void simplifyStretch() {
-//			boolean simplified = false;
-//			for (int i = 0; i < (stretchIn.length - 1); i++) {
-//				if(stretchIn[i] == stretchIn[i + 1]) {
-//					double[] auxIn = new double[stretchIn.length -1];
-//					int[] auxOut = new int[stretchIn.length -1];
-//					for (int j = 0; j < auxIn.length; j++) {
-//						if(j < i) {
-//							auxIn[j] = stretchIn[j];
-//							auxOut[j] = stretchOut[j];
-//						} else {
-//							auxIn[j] = stretchIn[j + 1];
-//							auxOut[j] = stretchOut[j + 1];
-//						}
-//							
-//					}
-//					stretchIn = auxIn;
-//					stretchOut = auxOut;
-//					simplified = true;
-//				}
-//			}
-//			if(simplified)
-//				simplifyStretch();
-//		}
-		
+		// private void simplifyStretch() {
+		// boolean simplified = false;
+		// for (int i = 0; i < (stretchIn.length - 1); i++) {
+		// if(stretchIn[i] == stretchIn[i + 1]) {
+		// double[] auxIn = new double[stretchIn.length -1];
+		// int[] auxOut = new int[stretchIn.length -1];
+		// for (int j = 0; j < auxIn.length; j++) {
+		// if(j < i) {
+		// auxIn[j] = stretchIn[j];
+		// auxOut[j] = stretchOut[j];
+		// } else {
+		// auxIn[j] = stretchIn[j + 1];
+		// auxOut[j] = stretchOut[j + 1];
+		// }
+		//
+		// }
+		// stretchIn = auxIn;
+		// stretchOut = auxOut;
+		// simplified = true;
+		// }
+		// }
+		// if(simplified)
+		// simplifyStretch();
+		// }
+
 		/**
 		 * Asigna el máximo y el mínimo
+		 * 
 		 * @param stats
 		 * @param type
 		 * @param band
@@ -197,60 +201,68 @@ public class LinearStretchParams {
 				// No se asigna el máximo o mínimo
 			}
 		}
-		
+
 		/**
-		 * Aplica el eliminado de extremos. Para ello utiliza el segundo máximo y mínimo de entrada.
+		 * Aplica el eliminado de extremos. Para ello utiliza el segundo máximo
+		 * y mínimo de entrada.
 		 */
-		public void applyRemoveEndsToStretchs(DatasetListStatistics stats, boolean rgb, int band) {
-			if(stretchIn == null)
+		public void applyRemoveEndsToStretchs(DatasetListStatistics stats,
+				boolean rgb, int band) {
+			if (stretchIn == null)
 				return;
 			try {
-				if(rgb) {
-					if(stats.getSecondMinByteUnsigned() != null)
-						stretchIn[0] = minValue = stats.getSecondMinByteUnsigned()[band];
-					if(stats.getSecondMaxByteUnsigned() != null)
-						stretchIn[stretchIn.length - 1] = maxValue = stats.getSecondMaxByteUnsigned()[band];
+				if (rgb) {
+					if (stats.getSecondMinByteUnsigned() != null)
+						stretchIn[0] = minValue = stats
+								.getSecondMinByteUnsigned()[band];
+					if (stats.getSecondMaxByteUnsigned() != null)
+						stretchIn[stretchIn.length - 1] = maxValue = stats
+								.getSecondMaxByteUnsigned()[band];
 				} else {
-					if(stats.getSecondMin() != null)
+					if (stats.getSecondMin() != null)
 						stretchIn[0] = minValue = stats.getSecondMin()[band];
-					if(stats.getMax() != null)
-						stretchIn[stretchIn.length - 1] = maxValue = stats.getSecondMax()[band];
+					if (stats.getMax() != null)
+						stretchIn[stretchIn.length - 1] = maxValue = stats
+								.getSecondMax()[band];
 				}
 			} catch (ArrayIndexOutOfBoundsException ex) {
-				//No se asigna el máximo o mínimo 
+				// No se asigna el máximo o mínimo
 			}
 		}
 	}
 
-	public Stretch             red               = new Stretch();
-	public Stretch             green             = new Stretch();
-	public Stretch             blue              = new Stretch();
-	public boolean             rgb               = false;
-			
+	public Stretch red = new Stretch();
+	public Stretch green = new Stretch();
+	public Stretch blue = new Stretch();
+	public boolean rgb = false;
+
 	/**
 	 * Consulta si tiene algún valor el recorte de colas
+	 * 
 	 * @return true si tiene valor el recorte de colas y false si no lo tiene
 	 */
 	public boolean hasTailTrim() {
-		return (red.hasTailTrim() ||
-				green.hasTailTrim() ||
-				blue.hasTailTrim());
+		return (red.hasTailTrim() || green.hasTailTrim() || blue.hasTailTrim());
 	}
-	
+
 	/**
-	 * Obtiene la lista de valores de recorte. Este formato es que el que necesita el
-	 * filtro TailTrim para calcular el valor del porcentaje recorte.
+	 * Obtiene la lista de valores de recorte. Este formato es que el que
+	 * necesita el filtro TailTrim para calcular el valor del porcentaje
+	 * recorte.
+	 * 
 	 * @return double
 	 */
 	public double[] getTailTrimList() {
-		return new double[]{
-				red.tailTrimMin, green.tailTrimMin, blue.tailTrimMin, 
-				red.tailTrimMax, green.tailTrimMax,	blue.tailTrimMax};
+		return new double[] { red.tailTrimMin, green.tailTrimMin,
+				blue.tailTrimMin, red.tailTrimMax, green.tailTrimMax,
+				blue.tailTrimMax };
 	}
-	
+
 	/**
-	 * Carga los valores de recorte calculados por el filtro TailTrim que ya debería haber
-	 * sido aplicado. Estos valores estarán salvados en DatasetListStatistics.
+	 * Carga los valores de recorte calculados por el filtro TailTrim que ya
+	 * debería haber sido aplicado. Estos valores estarán salvados en
+	 * DatasetListStatistics.
+	 * 
 	 * @param stats
 	 */
 	public void loadTailTrimValues(DatasetListStatistics stats) {
@@ -274,30 +286,31 @@ public class LinearStretchParams {
 		if (result != null && result.length >= 3)
 			blue.tailTrimValueMax = result[2][1];
 	}
-	
+
 	/**
-	 * Aplica el recorte de colas sobre los extremos de los máximos y mínimos de entrada.
-	 * La aplicación de esta función considera que ya se han calculado los valores con 
-	 * loadTailTrimValues.
+	 * Aplica el recorte de colas sobre los extremos de los máximos y mínimos de
+	 * entrada. La aplicación de esta función considera que ya se han calculado
+	 * los valores con loadTailTrimValues.
 	 */
 	public void applyTrimToStretchs() {
 		red.applyTrimToStretchs();
 		green.applyTrimToStretchs();
 		blue.applyTrimToStretchs();
 	}
-	
+
 	/**
-	 * Calcula la escala y el desplazamiento teniendo en cuenta que
-	 * ya tenga todos los valores de entrada asignados.
+	 * Calcula la escala y el desplazamiento teniendo en cuenta que ya tenga
+	 * todos los valores de entrada asignados.
 	 */
 	public void calcLinearScaleAndOffset() {
 		red.calcLinearScaleAndOffset();
 		green.calcLinearScaleAndOffset();
 		blue.calcLinearScaleAndOffset();
 	}
-	
+
 	/**
 	 * Asigna el máximo y el mínimo
+	 * 
 	 * @param stats
 	 * @param type
 	 * @param band
@@ -310,11 +323,13 @@ public class LinearStretchParams {
 		if (renderBands[2] > -1)
 			blue.setMaxMin(stats, renderBands[2], rgb);
 	}
-	
+
 	/**
-	 * Aplica el eliminado de extremos. Para ello utiliza el segundo máximo y mínimo de entrada.
+	 * Aplica el eliminado de extremos. Para ello utiliza el segundo máximo y
+	 * mínimo de entrada.
 	 */
-	public void applyRemoveEndsToStretchs(DatasetListStatistics stats, int[] renderBands) {
+	public void applyRemoveEndsToStretchs(DatasetListStatistics stats,
+			int[] renderBands) {
 		if (renderBands[0] > -1)
 			red.applyRemoveEndsToStretchs(stats, rgb, renderBands[0]);
 		if (renderBands[1] > -1)
@@ -322,18 +337,25 @@ public class LinearStretchParams {
 		if (renderBands[2] > -1)
 			blue.applyRemoveEndsToStretchs(stats, rgb, renderBands[2]);
 	}
-	
+
 	/**
-	 * Obtiene un objeto LinearStretchParams para una aplicación de realce lineal estandar, es decir, el rango
-	 * de datos de salida es 0-255 y con solo un tramo para los datos. 
-	 * @param nBands Número de bandas
-	 * @param tailTrim Recorte de colas
-	 * @param stats Estadísticas
+	 * Obtiene un objeto LinearStretchParams para una aplicación de realce
+	 * lineal estandar, es decir, el rango de datos de salida es 0-255 y con
+	 * solo un tramo para los datos.
+	 * 
+	 * @param nBands
+	 *            Número de bandas
+	 * @param tailTrim
+	 *            Recorte de colas
+	 * @param stats
+	 *            Estadísticas
 	 * @return LinearStretchParams
 	 * @throws FileNotOpenException
 	 * @throws RasterDriverException
 	 */
-	public static LinearStretchParams createStandardParam(int[] renderBands, double tailTrim, IStatistics stats, boolean rgb) throws FileNotOpenException, RasterDriverException {
+	public static LinearStretchParams createStandardParam(int[] renderBands,
+			double tailTrim, IStatistics stats, boolean rgb)
+			throws FileNotOpenException, RasterDriverException {
 		LinearStretchParams leParams = new LinearStretchParams();
 		leParams.rgb = rgb;
 		try {
@@ -343,27 +365,39 @@ public class LinearStretchParams {
 		}
 		if (renderBands[0] >= 0) {
 			if (rgb)
-				leParams.red.stretchIn = new double[] { stats.getMinByteUnsigned()[0], stats.getMaxByteUnsigned()[0] };
+				leParams.red.stretchIn = new double[] {
+						stats.getMinByteUnsigned()[0],
+						stats.getMaxByteUnsigned()[0] };
 			else
-				leParams.red.stretchIn = new double[] { stats.getMin()[renderBands[0]], stats.getMax()[renderBands[0]] };
+				leParams.red.stretchIn = new double[] {
+						stats.getMin()[renderBands[0]],
+						stats.getMax()[renderBands[0]] };
 		}
 		leParams.red.stretchOut = new int[] { 0, 255 };
 		leParams.red.tailTrimMin = tailTrim;
 		leParams.red.tailTrimMax = tailTrim;
 		if (renderBands[1] >= 0) {
 			if (rgb)
-				leParams.green.stretchIn = new double[] { stats.getMinByteUnsigned()[0], stats.getMaxByteUnsigned()[0] };
+				leParams.green.stretchIn = new double[] {
+						stats.getMinByteUnsigned()[0],
+						stats.getMaxByteUnsigned()[0] };
 			else
-				leParams.green.stretchIn = new double[] { stats.getMin()[renderBands[1]], stats.getMax()[renderBands[1]] };
+				leParams.green.stretchIn = new double[] {
+						stats.getMin()[renderBands[1]],
+						stats.getMax()[renderBands[1]] };
 		}
 		leParams.green.stretchOut = new int[] { 0, 255 };
 		leParams.green.tailTrimMin = tailTrim;
 		leParams.green.tailTrimMax = tailTrim;
 		if (renderBands[2] >= 0) {
 			if (rgb)
-				leParams.blue.stretchIn = new double[] { stats.getMinByteUnsigned()[0], stats.getMaxByteUnsigned()[0] };
+				leParams.blue.stretchIn = new double[] {
+						stats.getMinByteUnsigned()[0],
+						stats.getMaxByteUnsigned()[0] };
 			else
-				leParams.blue.stretchIn = new double[] { stats.getMin()[renderBands[2]], stats.getMax()[renderBands[2]] };
+				leParams.blue.stretchIn = new double[] {
+						stats.getMin()[renderBands[2]],
+						stats.getMax()[renderBands[2]] };
 		}
 		leParams.blue.stretchOut = new int[] { 0, 255 };
 		leParams.blue.tailTrimMin = tailTrim;

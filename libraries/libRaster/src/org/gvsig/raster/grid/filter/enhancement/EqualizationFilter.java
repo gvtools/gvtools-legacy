@@ -28,33 +28,34 @@ import org.gvsig.raster.dataset.properties.DatasetListStatistics;
 import org.gvsig.raster.datastruct.Histogram;
 import org.gvsig.raster.datastruct.HistogramException;
 import org.gvsig.raster.grid.filter.RasterFilter;
+
 /**
  * Clase base para los filtros de ecualización de histograma.
- *
+ * 
  * @version 31/05/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class EqualizationFilter extends RasterFilter {
-	protected DatasetListStatistics	   stats              = null;
-	protected double[]                 minBandValue	      = null;
-	protected double[]                 maxBandValue	      = null;
-	protected int                      nbands             = 3;
-	protected int[]                    renderBands        = null;
-	protected int[]                    k                  = null;                   
-	public static String[]             names              = new String[] {"equalization"};
-	protected Histogram                histogram          = null;
-	protected long                     nPixels            = 0;
-	protected int[][]                  resValues          = null;
-	protected int                      nElements          = 0;
-	protected int[]                    ecualizedBands     = null;
+	protected DatasetListStatistics stats = null;
+	protected double[] minBandValue = null;
+	protected double[] maxBandValue = null;
+	protected int nbands = 3;
+	protected int[] renderBands = null;
+	protected int[] k = null;
+	public static String[] names = new String[] { "equalization" };
+	protected Histogram histogram = null;
+	protected long nPixels = 0;
+	protected int[][] resValues = null;
+	protected int nElements = 0;
+	protected int[] ecualizedBands = null;
 
-	protected double[][]               aproximationNeg    = null;
-	
-	protected int                      nClasses           = RasterLibrary.defaultNumberOfClasses;
-	
-	protected long[][]                 lahe               = null;
-	protected long[][]                 laheNegative       = null;
-	
+	protected double[][] aproximationNeg = null;
+
+	protected int nClasses = RasterLibrary.defaultNumberOfClasses;
+
+	protected long[][] lahe = null;
+	protected long[][] laheNegative = null;
+
 	/**
 	 * Construye un LinearEnhancementFilter
 	 */
@@ -64,14 +65,15 @@ public class EqualizationFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#pre()
 	 */
 	public void pre() {
 		raster = (IBuffer) params.get("raster");
 		stats = (DatasetListStatistics) params.get("stats");
 		histogram = (Histogram) params.get("histogram");
-		
-		if(histogram == null) {
+
+		if (histogram == null) {
 			try {
 				histogram = raster.getHistogram();
 			} catch (HistogramException e) {
@@ -79,11 +81,11 @@ public class EqualizationFilter extends RasterFilter {
 			} catch (InterruptedException e) {
 				exec = false;
 			}
-			//return;
+			// return;
 		}
-		
+
 		renderBands = (int[]) params.get("renderBands");
-		if(renderBands != null && renderBands.length < raster.getBandCount()) {
+		if (renderBands != null && renderBands.length < raster.getBandCount()) {
 			int[] newRenderBands = new int[raster.getBandCount()];
 			for (int i = 0; i < renderBands.length; i++)
 				newRenderBands[i] = renderBands[i];
@@ -91,17 +93,17 @@ public class EqualizationFilter extends RasterFilter {
 				newRenderBands[i] = i;
 			renderBands = newRenderBands;
 		}
-		if(renderBands == null)
-			renderBands = new int[]{0, 1, 2};
-		
+		if (renderBands == null)
+			renderBands = new int[] { 0, 1, 2 };
+
 		ecualizedBands = (int[]) params.get("ecualizedBands");
-		if(ecualizedBands == null)
+		if (ecualizedBands == null)
 			ecualizedBands = renderBands;
-		
+
 		height = raster.getHeight();
 		width = raster.getWidth();
 		nPixels = height * width;
-		
+
 		try {
 			stats.calcFullStatistics();
 		} catch (FileNotOpenException e) {
@@ -112,14 +114,15 @@ public class EqualizationFilter extends RasterFilter {
 			exec = false;
 		}
 
-		if(raster.getDataType() == IBuffer.TYPE_BYTE) {
+		if (raster.getDataType() == IBuffer.TYPE_BYTE) {
 			minBandValue = stats.getMinByteUnsigned();
 			maxBandValue = stats.getMaxByteUnsigned();
-		} 
-		if((minBandValue == null || maxBandValue == null) || (minBandValue[0] == 0 && maxBandValue[0] == 0)) {
+		}
+		if ((minBandValue == null || maxBandValue == null)
+				|| (minBandValue[0] == 0 && maxBandValue[0] == 0)) {
 			minBandValue = new double[raster.getBandCount()];
 			maxBandValue = new double[raster.getBandCount()];
-			if(raster.getDataType() == IBuffer.TYPE_BYTE) {
+			if (raster.getDataType() == IBuffer.TYPE_BYTE) {
 				for (int i = 0; i < minBandValue.length; i++) {
 					minBandValue[i] = 0;
 					maxBandValue[i] = 255;
@@ -129,63 +132,75 @@ public class EqualizationFilter extends RasterFilter {
 				maxBandValue = stats.getMax();
 			}
 		}
-				
+
 		Histogram rgbHistogram = null;
 		try {
-			if(raster.getDataType() == IBuffer.TYPE_BYTE)
-				rgbHistogram = Histogram.convertHistogramToRGB(raster.getHistogram());
-			else 
+			if (raster.getDataType() == IBuffer.TYPE_BYTE)
+				rgbHistogram = Histogram.convertHistogramToRGB(raster
+						.getHistogram());
+			else
 				rgbHistogram = raster.getHistogram();
 		} catch (HistogramException e) {
 			return;
 		} catch (InterruptedException e) {
 			return;
 		}
-		double[][] accumNormalize = Histogram.convertTableToNormalizeAccumulate(rgbHistogram.getTable());
-		double[][] accumNormalizeNeg = Histogram.convertTableToNormalizeAccumulate(rgbHistogram.getNegativeTable());
-		
+		double[][] accumNormalize = Histogram
+				.convertTableToNormalizeAccumulate(rgbHistogram.getTable());
+		double[][] accumNormalizeNeg = Histogram
+				.convertTableToNormalizeAccumulate(rgbHistogram
+						.getNegativeTable());
+
 		int value = 255;
-		if(raster.getDataType() != RasterBuffer.TYPE_BYTE)
+		if (raster.getDataType() != RasterBuffer.TYPE_BYTE)
 			value = nClasses;
-		
+
 		lahe = lahe(accumNormalize, value);
 		laheNegative = lahe(accumNormalizeNeg, value);
 		nElements = (laheNegative[0].length - 1);
-		
+
 		nbands = stats.getBandCount();
-		rasterResult = RasterBuffer.getBuffer(raster.getDataType(), raster.getWidth(), raster.getHeight(), raster.getBandCount(), true);
+		rasterResult = RasterBuffer.getBuffer(raster.getDataType(),
+				raster.getWidth(), raster.getHeight(), raster.getBandCount(),
+				true);
 	}
 
 	/**
-	 * Método lahe para la ecualización. Cada posición del array resultante tendrá el valor de salida para
-	 * un valor de entrada dado.
-	 * @param accumNorm Histograma acumulado
-	 * @param value Valor máximo
+	 * Método lahe para la ecualización. Cada posición del array resultante
+	 * tendrá el valor de salida para un valor de entrada dado.
+	 * 
+	 * @param accumNorm
+	 *            Histograma acumulado
+	 * @param value
+	 *            Valor máximo
 	 * @return
 	 */
 	private long[][] lahe(double[][] accumNorm, int value) {
 		long[][] res = new long[accumNorm.length][accumNorm[0].length];
-		for (int i = 0; i < res.length; i++) 
-			  for (int j = 0; j < res[i].length; j++) 
-				  res[i][j] = Math.round(accumNorm[i][j] * value);
+		for (int i = 0; i < res.length; i++)
+			for (int j = 0; j < res[i].length; j++)
+				res[i][j] = Math.round(accumNorm[i][j] * value);
 		return res;
 	}
-	
+
 	/**
 	 * Consulta si la ecualización está activa para una banda o no
-	 * @param band Número de banda a consultar si se ha activado la ecualización
+	 * 
+	 * @param band
+	 *            Número de banda a consultar si se ha activado la ecualización
 	 * @return true si está activa para esa banda y false si no lo está.
 	 */
 	protected boolean equalizationActive(int band) {
 		for (int i = 0; i < ecualizedBands.length; i++) {
-			if(band == ecualizedBands[i])
+			if (band == ecualizedBands[i])
 				return true;
 		}
 		return false;
 	}
-		
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getOutRasterDataType()
 	 */
 	public int getOutRasterDataType() {
@@ -194,7 +209,9 @@ public class EqualizationFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.RasterFilter#getResult(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.RasterFilter#getResult(java.lang.String)
 	 */
 	public Object getResult(String name) {
 		if (name.equals("raster")) {
@@ -207,6 +224,7 @@ public class EqualizationFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getGroup()
 	 */
 	public String getGroup() {
@@ -215,6 +233,7 @@ public class EqualizationFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getUIParams()
 	 */
 	public Params getUIParams(String nameFilter) {
@@ -224,6 +243,7 @@ public class EqualizationFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#post()
 	 */
 	public void post() {
@@ -233,6 +253,7 @@ public class EqualizationFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getInRasterDataType()
 	 */
 	public int getInRasterDataType() {
@@ -241,6 +262,7 @@ public class EqualizationFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#process(int, int)
 	 */
 	public void process(int x, int y) throws InterruptedException {
@@ -248,14 +270,16 @@ public class EqualizationFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getNames()
 	 */
 	public String[] getNames() {
 		return names;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#isVisible()
 	 */
 	public boolean isVisible() {

@@ -53,54 +53,57 @@ import javax.xml.namespace.QName;
  */
 /**
  * This class contains methods to compare XML tags
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  * @author Carlos Sánchez Periñán (csanchez@prodevelop.es)
  */
 public class CompareUtils {
-	
+
 	/**
 	 * Compare two XML tags
+	 * 
 	 * @param value
-	 * Original XML value with namespace
+	 *            Original XML value with namespace
 	 * @param tagName
-	 * Tag name to compare without namespace
+	 *            Tag name to compare without namespace
 	 */
-	public static boolean compareWithOutNamespace(QName value, QName tagName){		
-		//THE TAG MUST BE DIFFERENT FROM NULL :P
-		if (value!=null){
-			return (value.getLocalPart().equals(tagName.getLocalPart()));			
+	public static boolean compareWithOutNamespace(QName value, QName tagName) {
+		// THE TAG MUST BE DIFFERENT FROM NULL :P
+		if (value != null) {
+			return (value.getLocalPart().equals(tagName.getLocalPart()));
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Compare two XML tags
+	 * 
 	 * @param value
-	 * Original XML value with namespace
+	 *            Original XML value with namespace
 	 * @param tagName
-	 * Tag name to compare namespace
+	 *            Tag name to compare namespace
 	 */
-	public static boolean compareWithNamespace(QName value, QName tagName){	
-		if (value != null){
-			if(value.equals(tagName)) {
+	public static boolean compareWithNamespace(QName value, QName tagName) {
+		if (value != null) {
+			if (value.equals(tagName)) {
 				return true;
 			}
 		}
 		return false;
-//			else{
-//				//if we want to compare two tags with match case. We need Collator PRIMARY  
-//				Collator comparador = Collator.getInstance();
-//				comparador.setStrength(Collator.PRIMARY);
-//				// To skip a type error but the tag is equal. 
-//				if(comparador.compare(value, tagName) == 0)
-//					//WARNING HERE WITH AN ADVICE THAT THERE ARE A MISSPRINT
-//					return true;
-//				else 
-//					return false;
-//			}
-//		}
-//		else
-//			return false;
+		// else{
+		// //if we want to compare two tags with match case. We need Collator
+		// PRIMARY
+		// Collator comparador = Collator.getInstance();
+		// comparador.setStrength(Collator.PRIMARY);
+		// // To skip a type error but the tag is equal.
+		// if(comparador.compare(value, tagName) == 0)
+		// //WARNING HERE WITH AN ADVICE THAT THERE ARE A MISSPRINT
+		// return true;
+		// else
+		// return false;
+		// }
+		// }
+		// else
+		// return false;
 	}
 }
-

@@ -26,15 +26,14 @@ import java.util.ArrayList;
 import org.gvsig.raster.beans.canvas.layers.InfoLayer;
 import org.gvsig.raster.util.MathUtils;
 import org.gvsig.raster.util.RasterToolsUtil;
+
 /**
- * Representa una funcion con posibilidad de arrastre para las funciones
- * raices cuadradas y cuadradas. Con el raton se puede pasar de una a otra
+ * Representa una funcion con posibilidad de arrastre para las funciones raices
+ * cuadradas y cuadradas. Con el raton se puede pasar de una a otra
  * directamente.
  * 
- * Las formas mas logicas de uso seria pasandole:
- * 1.0: Para una funcion raiz cuadrada
- * -1.0: Para una funcion cuadrada
- * 0.0: Para una funcion lineal
+ * Las formas mas logicas de uso seria pasandole: 1.0: Para una funcion raiz
+ * cuadrada -1.0: Para una funcion cuadrada 0.0: Para una funcion lineal
  * 
  * @version 02/04/2008
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
@@ -44,13 +43,14 @@ public class SquareRootPowLine extends StraightLine {
 	 * Numero de puntos que contiene esta función
 	 */
 	private double num = 40.0;
-	
+
 	private double valueFunction = 1.0;
-	
+
 	/**
-	 * Constructor. Asigna el color y establece la posicion de la funcion.
-	 * Los valores normales son 1.0 para raiz cuadrada y -1.0 para cuadrada.
-	 * El rango va desde -2.0 hasta 2.0. Siendo 0.0 una funcion lineal.
+	 * Constructor. Asigna el color y establece la posicion de la funcion. Los
+	 * valores normales son 1.0 para raiz cuadrada y -1.0 para cuadrada. El
+	 * rango va desde -2.0 hasta 2.0. Siendo 0.0 una funcion lineal.
+	 * 
 	 * @param c
 	 */
 	public SquareRootPowLine(Color c, double point) {
@@ -62,9 +62,9 @@ public class SquareRootPowLine extends StraightLine {
 
 	/**
 	 * Actualiza la barra informativa para saber en que estado se encuentra el
-	 * componente.
-	 * Cuando el porcentaje es mayor a 0 siempre estamos en la raiz cuadrada
-	 * Cuando el porcentaje es menor a 0 siempre estamos en la cuadrada
+	 * componente. Cuando el porcentaje es mayor a 0 siempre estamos en la raiz
+	 * cuadrada Cuando el porcentaje es menor a 0 siempre estamos en la cuadrada
+	 * 
 	 * @param perc
 	 */
 	private void setInfoPoint(Double perc) {
@@ -72,7 +72,7 @@ public class SquareRootPowLine extends StraightLine {
 			ArrayList list = canvas.getDrawableElements(InfoLayer.class);
 			if (list.size() > 0) {
 				InfoLayer infoLayer = (InfoLayer) list.get(0);
-				
+
 				if (perc == null) {
 					infoLayer.setStatusLeft(null);
 					infoLayer.setStatusRight(null);
@@ -81,22 +81,25 @@ public class SquareRootPowLine extends StraightLine {
 				}
 
 				if (perc.doubleValue() > 0.0)
-					infoLayer.setStatusLeft(RasterToolsUtil.getText(this, "square_root"));
+					infoLayer.setStatusLeft(RasterToolsUtil.getText(this,
+							"square_root"));
 				else
-					infoLayer.setStatusLeft(RasterToolsUtil.getText(this, "pow"));
+					infoLayer.setStatusLeft(RasterToolsUtil
+							.getText(this, "pow"));
 
-				infoLayer.setStatusRight(MathUtils.clipDecimals(Math.abs(perc.doubleValue() * 100.0), 2) + "%");
+				infoLayer.setStatusRight(MathUtils.clipDecimals(
+						Math.abs(perc.doubleValue() * 100.0), 2)
+						+ "%");
 			}
 		}
 	}
-	
+
 	/**
-	 * Recalcula todos los puntos de la funcion
-	 * Posibles rangos para perc:
-	 * ( 0.0 a  1.0) - Funcion raiz cuadrada con aproximacion al centro
-	 * ( 1.0 a  2.0) - Funcion raiz cuadrada con aproximacion al borde
-	 * ( 0.0 a -1.0) - Funcion cuadrada con aproximacion al centro
-	 * (-1.0 a -2.0) - Funcion cuadrada con aproximacion al borde
+	 * Recalcula todos los puntos de la funcion Posibles rangos para perc: ( 0.0
+	 * a 1.0) - Funcion raiz cuadrada con aproximacion al centro ( 1.0 a 2.0) -
+	 * Funcion raiz cuadrada con aproximacion al borde ( 0.0 a -1.0) - Funcion
+	 * cuadrada con aproximacion al centro (-1.0 a -2.0) - Funcion cuadrada con
+	 * aproximacion al borde
 	 * 
 	 * @param perc
 	 */
@@ -142,28 +145,33 @@ public class SquareRootPowLine extends StraightLine {
 			this.listSquare.add(new Square(x, y));
 		}
 	}
-	
+
 	/**
 	 * Formula para calcular el valor en y de una funcion raiz cuadrada en x
+	 * 
 	 * @param x
 	 * @return
 	 */
 	private double squareFunction(double x) {
 		return Math.sqrt(x);
 	}
-	
+
 	/**
 	 * Formula para calcular el valor en y de una funcion cuadrada en x
+	 * 
 	 * @param x
 	 * @return
 	 */
 	private double powFunction(double x) {
 		return Math.pow(x, 2);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.beans.canvas.layers.functions.StraightLine#mouseDragged(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * org.gvsig.raster.beans.canvas.layers.functions.StraightLine#mouseDragged
+	 * (java.awt.event.MouseEvent)
 	 */
 	public boolean mouseDragged(MouseEvent e) {
 		if (canvas.getCursor().getType() != Cursor.DEFAULT_CURSOR)
@@ -171,10 +179,11 @@ public class SquareRootPowLine extends StraightLine {
 
 		double x = pixelToValueX(e.getX());
 		double y = pixelToValueY(e.getY());
-		
+
 		double y2 = 0.0;
-		
-		// Localizamos el punto del raton para pasar un porcentaje correcto y que 
+
+		// Localizamos el punto del raton para pasar un porcentaje correcto y
+		// que
 		// asi coincida la funcion con el raton
 		if (y >= x) {
 			y2 = squareFunction(x);
@@ -184,13 +193,13 @@ public class SquareRootPowLine extends StraightLine {
 				valueFunction = ((y - y2) / (1.0 - y2)) + 1.0;
 		} else {
 			y2 = powFunction(x);
-			
+
 			if (y > y2)
 				valueFunction = -Math.abs((y - x) / (y2 - x));
 			else
-				valueFunction = -Math.abs((y2 - y) / y2)  - 1.0;
+				valueFunction = -Math.abs((y2 - y) / y2) - 1.0;
 		}
-		
+
 		if (valueFunction < -2.0)
 			valueFunction = -2.0;
 
@@ -205,7 +214,10 @@ public class SquareRootPowLine extends StraightLine {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.beans.canvas.layers.functions.StraightLine#mouseMoved(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * org.gvsig.raster.beans.canvas.layers.functions.StraightLine#mouseMoved
+	 * (java.awt.event.MouseEvent)
 	 */
 	public boolean mouseMoved(MouseEvent e) {
 		return true;
@@ -213,7 +225,10 @@ public class SquareRootPowLine extends StraightLine {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.beans.canvas.layers.functions.StraightLine#mousePressed(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * org.gvsig.raster.beans.canvas.layers.functions.StraightLine#mousePressed
+	 * (java.awt.event.MouseEvent)
 	 */
 	public boolean mousePressed(MouseEvent e) {
 		return mouseDragged(e);
@@ -221,24 +236,33 @@ public class SquareRootPowLine extends StraightLine {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.beans.canvas.layers.functions.StraightLine#mouseReleased(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * org.gvsig.raster.beans.canvas.layers.functions.StraightLine#mouseReleased
+	 * (java.awt.event.MouseEvent)
 	 */
 	public boolean mouseReleased(MouseEvent e) {
 		setInfoPoint(null);
 		return true;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.beans.canvas.layers.functions.StraightLine#getFunctionType()
+	 * 
+	 * @see
+	 * org.gvsig.raster.beans.canvas.layers.functions.StraightLine#getFunctionType
+	 * ()
 	 */
 	public int getFunctionType() {
 		return 2;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.beans.canvas.layers.functions.StraightLine#getValueFunction()
+	 * 
+	 * @see
+	 * org.gvsig.raster.beans.canvas.layers.functions.StraightLine#getValueFunction
+	 * ()
 	 */
 	public double getValueFunction() {
 		return valueFunction;

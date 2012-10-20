@@ -93,6 +93,7 @@ import org.gvsig.gpe.xml.utils.XMLAttributesIterator;
 /**
  * This class parses a Folder tag. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;Folder&gt;
@@ -106,7 +107,9 @@ import org.gvsig.gpe.xml.utils.XMLAttributesIterator;
  * &lt;/Folder&gt;
  * </code>
  * </pre>
+ * 
  * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#folder
  */
@@ -114,65 +117,81 @@ public class FolderBinding {
 
 	/**
 	 * It parses the Folder tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * A Layer
-	 * @throws IOException 
-	 * @throws XmlStreamException 
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return A Layer
+	 * @throws IOException
+	 * @throws XmlStreamException
 	 */
-	public Object parse(IXmlStreamReader parser,GPEDeafultKmlParser handler, Object parentLayer) throws XmlStreamException, IOException  {
+	public Object parse(IXmlStreamReader parser, GPEDeafultKmlParser handler,
+			Object parentLayer) throws XmlStreamException, IOException {
 		boolean endFeature = false;
-		int currentTag;			
+		int currentTag;
 
-		XMLAttributesIterator attributesIterator = new XMLAttributesIterator(parser);   
-		
-		String id = handler.getProfile().getFeatureBinding().getID(parser, handler);
-		Object layer = handler.getContentHandler().startLayer(id, parser.getName().getNamespaceURI(), null, null, null, attributesIterator, parentLayer, null);
+		XMLAttributesIterator attributesIterator = new XMLAttributesIterator(
+				parser);
+
+		String id = handler.getProfile().getFeatureBinding()
+				.getID(parser, handler);
+		Object layer = handler.getContentHandler().startLayer(id,
+				parser.getName().getNamespaceURI(), null, null, null,
+				attributesIterator, parentLayer, null);
 
 		parser.next();
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.NAME)){
+				if (CompareUtils.compareWithNamespace(tag, Kml2_1_Tags.NAME)) {
 					parser.next();
-					handler.getContentHandler().addNameToLayer(parser.getText(),layer);
-				}else if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.DESCRIPTION)){
+					handler.getContentHandler().addNameToLayer(
+							parser.getText(), layer);
+				} else if (CompareUtils.compareWithNamespace(tag,
+						Kml2_1_Tags.DESCRIPTION)) {
 					parser.next();
-					handler.getContentHandler().addDescriptionToLayer(parser.getText(),layer);
-				}else if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.LOOKAT)){
-					 handler.getProfile().getLookAtBinding().parse(parser, handler);
-				}else if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.PLACEMARK)){
+					handler.getContentHandler().addDescriptionToLayer(
+							parser.getText(), layer);
+				} else if (CompareUtils.compareWithNamespace(tag,
+						Kml2_1_Tags.LOOKAT)) {
+					handler.getProfile().getLookAtBinding()
+							.parse(parser, handler);
+				} else if (CompareUtils.compareWithNamespace(tag,
+						Kml2_1_Tags.PLACEMARK)) {
 					Object feature = PlaceMarketBinding.parse(parser, handler);
-					handler.getContentHandler().addFeatureToLayer(feature, layer);
-				}else if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.FOLDER)){
-					 handler.getProfile().getFolderBinding().parse(parser, handler, layer);
-				}else if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.REGION)){
-					Object bbox =  handler.getProfile().getRegionBinding().parse(parser, handler);
+					handler.getContentHandler().addFeatureToLayer(feature,
+							layer);
+				} else if (CompareUtils.compareWithNamespace(tag,
+						Kml2_1_Tags.FOLDER)) {
+					handler.getProfile().getFolderBinding()
+							.parse(parser, handler, layer);
+				} else if (CompareUtils.compareWithNamespace(tag,
+						Kml2_1_Tags.REGION)) {
+					Object bbox = handler.getProfile().getRegionBinding()
+							.parse(parser, handler);
 					handler.getContentHandler().addBboxToLayer(bbox, layer);
 				}
 				break;
 			case IXmlStreamReader.END_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.FOLDER)){
+				if (CompareUtils.compareWithNamespace(tag, Kml2_1_Tags.FOLDER)) {
 					endFeature = true;
 					handler.getContentHandler().endLayer(layer);
 				}
 				break;
-			case IXmlStreamReader.CHARACTERS:					
+			case IXmlStreamReader.CHARACTERS:
 
 				break;
 			}
-			if (!endFeature){					
+			if (!endFeature) {
 				currentTag = parser.next();
 				tag = parser.getName();
 			}
-		}			
+		}
 
 		return layer;
 	}

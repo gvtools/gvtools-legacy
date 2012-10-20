@@ -41,62 +41,62 @@
  *   +34 963163400
  *   dac@iver.es
 
-*
-* $Id: ClipGeoprocess.java 12948 2007-08-07 15:11:18Z azabala $
-* $Log$
-* Revision 1.4  2007-08-07 15:11:18  azabala
-* code cleaning (removing duplicate code)
-*
-* Revision 1.3  2007/05/15 07:24:19  cesar
-* Add the finished method for execution from Event Dispatch Thread
-*
-* Revision 1.2  2007/03/06 16:47:58  caballero
-* Exceptions
-*
-* Revision 1.1  2006/06/20 18:20:45  azabala
-* first version in cvs
-*
-* Revision 1.2  2006/06/08 18:20:23  azabala
-* optimizaciones: se usa consulta espacial para solo chequear los elementos de la primera capa que intersecten con la capa de recorte
-*
-* Revision 1.1  2006/05/24 21:14:07  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.11  2006/05/01 19:16:38  azabala
-* la cancelacion no solo para el ITask que ejecuta el geoproceso, además llama al metodo cancel() del mismo (que se supone que debería hacer un drop() con los resultados del geoproceso inconcluso)
-*
-* Revision 1.10  2006/03/21 19:26:30  azabala
-* *** empty log message ***
-*
-* Revision 1.9  2006/03/17 19:52:43  azabala
-* *** empty log message ***
-*
-* Revision 1.8  2006/03/15 18:30:39  azabala
-* *** empty log message ***
-*
-* Revision 1.7  2006/03/14 18:32:46  fjp
-* Cambio con LayerDefinition para que sea compatible con la definición de tablas también.
-*
-* Revision 1.6  2006/03/07 21:01:33  azabala
-* *** empty log message ***
-*
-* Revision 1.5  2006/03/06 19:48:39  azabala
-* *** empty log message ***
-*
-* Revision 1.4  2006/03/05 19:57:14  azabala
-* *** empty log message ***
-*
-* Revision 1.3  2006/02/19 20:56:32  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/02/17 19:25:28  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/02/17 16:31:58  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: ClipGeoprocess.java 12948 2007-08-07 15:11:18Z azabala $
+ * $Log$
+ * Revision 1.4  2007-08-07 15:11:18  azabala
+ * code cleaning (removing duplicate code)
+ *
+ * Revision 1.3  2007/05/15 07:24:19  cesar
+ * Add the finished method for execution from Event Dispatch Thread
+ *
+ * Revision 1.2  2007/03/06 16:47:58  caballero
+ * Exceptions
+ *
+ * Revision 1.1  2006/06/20 18:20:45  azabala
+ * first version in cvs
+ *
+ * Revision 1.2  2006/06/08 18:20:23  azabala
+ * optimizaciones: se usa consulta espacial para solo chequear los elementos de la primera capa que intersecten con la capa de recorte
+ *
+ * Revision 1.1  2006/05/24 21:14:07  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.11  2006/05/01 19:16:38  azabala
+ * la cancelacion no solo para el ITask que ejecuta el geoproceso, además llama al metodo cancel() del mismo (que se supone que debería hacer un drop() con los resultados del geoproceso inconcluso)
+ *
+ * Revision 1.10  2006/03/21 19:26:30  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.9  2006/03/17 19:52:43  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.8  2006/03/15 18:30:39  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.7  2006/03/14 18:32:46  fjp
+ * Cambio con LayerDefinition para que sea compatible con la definición de tablas también.
+ *
+ * Revision 1.6  2006/03/07 21:01:33  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.5  2006/03/06 19:48:39  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.4  2006/03/05 19:57:14  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.3  2006/02/19 20:56:32  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/02/17 19:25:28  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/02/17 16:31:58  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.clip.fmap;
 
 import java.awt.geom.Rectangle2D;
@@ -128,13 +128,13 @@ import com.vividsolutions.jts.geom.Geometry;
 /**
  * A clip between two layers is the intersection of the first layer with the
  * convex hull of the second layer.
- *
+ * 
  * It is an individual case of OverlayGeoprocess. When we would have piped
  * geoprocesses, we could model it like a pipe of a ConvexHull geoprocess and an
  * intersection geoprocess.
- *
+ * 
  * @author azabala
- *
+ * 
  */
 public class ClipGeoprocess extends AbstractGeoprocess implements
 		IOverlayGeoprocess {
@@ -168,7 +168,7 @@ public class ClipGeoprocess extends AbstractGeoprocess implements
 
 	/**
 	 * Constructor
-	 *
+	 * 
 	 */
 	public ClipGeoprocess(FLyrVect inputLayer) {
 		setFirstOperand(inputLayer);
@@ -206,14 +206,14 @@ public class ClipGeoprocess extends AbstractGeoprocess implements
 		}
 
 		try {
-			if (overlayLayer.getShapeType() != XTypes.POLYGON &&
-					(overlayLayer.getShapeType() != XTypes.MULTI)) {
+			if (overlayLayer.getShapeType() != XTypes.POLYGON
+					&& (overlayLayer.getShapeType() != XTypes.MULTI)) {
 				throw new GeoprocessException(
 						"La capa de recorte no es de polígonos");
 			}
 		} catch (ReadDriverException e) {
 			throw new GeoprocessException(
-			"Error al tratar de chequear si la capa de recorte es de polígonos");
+					"Error al tratar de chequear si la capa de recorte es de polígonos");
 		}
 	}
 
@@ -225,7 +225,6 @@ public class ClipGeoprocess extends AbstractGeoprocess implements
 		}
 	}
 
-
 	public void setResultLayerProperties(IWriter writer,
 			ISchemaManager schemaManager) {
 		this.writer = writer;
@@ -233,11 +232,10 @@ public class ClipGeoprocess extends AbstractGeoprocess implements
 
 	}
 
-
 	public ILayerDefinition createLayerDefinition() {
-		//result layer definition will be the same that
-		//input layer
-		if(resultLayerDefinition == null){
+		// result layer definition will be the same that
+		// input layer
+		if (resultLayerDefinition == null) {
 			try {
 				resultLayerDefinition = DefinitionUtils
 						.createLayerDefinition(firstLayer);
@@ -252,19 +250,20 @@ public class ClipGeoprocess extends AbstractGeoprocess implements
 
 	/**
 	 * Computes union of all geometries of the clipping layer
-	 *
+	 * 
 	 * @return
 	 * @throws com.iver.cit.gvsig.fmap.DriverException
 	 * @throws ReadDriverException
 	 * @throws VisitorException
 	 * @throws ExpansionFileReadException
 	 */
-	
-	//TODO Esto lo vamos a quitar, y lo vamos a hacer para cada
-	//feature individual
-	private Geometry computeJtsClippingPoly()
-			throws ReadDriverException, ExpansionFileReadException, VisitorException {
-		ScalableUnionVisitor visitor = new ScalableUnionVisitor(overlayLayer.getShapeType());
+
+	// TODO Esto lo vamos a quitar, y lo vamos a hacer para cada
+	// feature individual
+	private Geometry computeJtsClippingPoly() throws ReadDriverException,
+			ExpansionFileReadException, VisitorException {
+		ScalableUnionVisitor visitor = new ScalableUnionVisitor(
+				overlayLayer.getShapeType());
 
 		Strategy strategy = StrategyManager.getStrategy(overlayLayer);
 		if (onlyClipLayerSelection) {
@@ -277,18 +276,15 @@ public class ClipGeoprocess extends AbstractGeoprocess implements
 	}
 
 	public IMonitorableTask createTask() {
-		final CancellableMonitorable cancelMonitor =
-			createCancelMonitor();
+		final CancellableMonitorable cancelMonitor = createCancelMonitor();
 
 		return new IMonitorableTask() {
-			String CLIP_GEOP_MSG = PluginServices.getText(this,
-												"Mensaje_clip");
+			String CLIP_GEOP_MSG = PluginServices.getText(this, "Mensaje_clip");
 			String CLIP_MESSAGE = PluginServices.getText(this,
 					"Mensaje_procesando_clip_primero");
 			String INTERS_MESSAGE = PluginServices.getText(this,
-				"Mensaje_procesando_clip_segundo");
-			String of = PluginServices.getText(this,
-			"De");
+					"Mensaje_procesando_clip_segundo");
+			String of = PluginServices.getText(this, "De");
 			String currentMsg = CLIP_MESSAGE;
 			private boolean finished = false;
 
@@ -309,13 +305,8 @@ public class ClipGeoprocess extends AbstractGeoprocess implements
 			}
 
 			public String getNote() {
-				return currentMsg  +
-				" " +
-				getCurrentStep()+
-				" "+
-				of+
-				" "+
-				getFinishStep();
+				return currentMsg + " " + getCurrentStep() + " " + of + " "
+						+ getFinishStep();
 			}
 
 			public void cancel() {
@@ -326,30 +317,27 @@ public class ClipGeoprocess extends AbstractGeoprocess implements
 
 			public void run() {
 
-				//Esto lo vamos a quitar
+				// Esto lo vamos a quitar
 				Geometry clippingGeometry = null;
 				try {
 					clippingGeometry = computeJtsClippingPoly();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
-				
+
 				currentMsg = INTERS_MESSAGE;
-				visitor = new ClipVisitor(clippingGeometry, resultLayerDefinition,
-						schemaManager, writer);
+				visitor = new ClipVisitor(clippingGeometry,
+						resultLayerDefinition, schemaManager, writer);
 				Strategy strategy = StrategyManager.getStrategy(firstLayer);
-				Rectangle2D clippingRect = FConverter.
-					convertEnvelopeToRectangle2D(clippingGeometry.
-											getEnvelopeInternal());
+				Rectangle2D clippingRect = FConverter
+						.convertEnvelopeToRectangle2D(clippingGeometry
+								.getEnvelopeInternal());
 				try {
 					if (onlyFirstLayerSelection) {
-						visitor.setSelection(firstLayer.getRecordset().getSelection());
+						visitor.setSelection(firstLayer.getRecordset()
+								.getSelection());
 					}
-					strategy.process(visitor,
-							clippingRect,
-							cancelMonitor);
-
+					strategy.process(visitor, clippingRect, cancelMonitor);
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -371,7 +359,7 @@ public class ClipGeoprocess extends AbstractGeoprocess implements
 
 			public void finished() {
 				// TODO Auto-generated method stub
-				
+
 			}
 		};
 	}
@@ -382,20 +370,19 @@ public class ClipGeoprocess extends AbstractGeoprocess implements
 		monitor.setDeterminatedProcess(true);
 		int clipSteps = 0;
 		try {
-			if (onlyClipLayerSelection){
+			if (onlyClipLayerSelection) {
 				FBitSet selection = overlayLayer.getRecordset().getSelection();
 				clipSteps = selection.cardinality();
-			}else{
-					clipSteps = overlayLayer.getSource().getShapeCount();
+			} else {
+				clipSteps = overlayLayer.getSource().getShapeCount();
 
 			}
-			int  firstSteps = 0;
+			int firstSteps = 0;
 			if (onlyFirstLayerSelection) {
 				FBitSet selection = firstLayer.getRecordset().getSelection();
 				firstSteps = selection.cardinality();
 			} else {
-					firstSteps = firstLayer.getSource()
-									.getShapeCount();
+				firstSteps = firstLayer.getSource().getShapeCount();
 
 			}
 			int totalSteps = clipSteps + firstSteps;

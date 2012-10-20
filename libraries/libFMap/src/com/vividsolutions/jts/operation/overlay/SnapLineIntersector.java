@@ -82,7 +82,6 @@ public class SnapLineIntersector extends RobustLineIntersector {
 		this.snapTolerance = snapTolerance;
 	}
 
-	
 	public void computeIntersection(Coordinate p, Coordinate p1, Coordinate p2) {
 		isProper = false;
 
@@ -91,7 +90,6 @@ public class SnapLineIntersector extends RobustLineIntersector {
 		 * TODO SERIA MUY INTERESANTE QUE, ADEMAS DE VER SI EL PUNTO MAS PROXIMO
 		 * DEL SEGMENTO AL PUNTO DADO ENTRA EN SNAP, VER TAMBIÉN EL REGISTRO DE
 		 * NODOS (NODEMAP)????
-		 * 
 		 */
 		Coordinate intersectionCandidate = segment.closestPoint(p);
 		if (intersectionCandidate.distance(p) <= snapTolerance) {
@@ -236,8 +234,8 @@ public class SnapLineIntersector extends RobustLineIntersector {
 		 * TODO Estamos teniendo un problema: La clase SegmentIntersector hace
 		 * el siguiente uso de computeCollinearIntersection:
 		 * 
-		 * li.computeIntersection(p00, p01, p10, p11); if (li.hasIntersection()) {
-		 * numIntersections++; if (! isTrivialIntersection(e0, segIndex0, e1,
+		 * li.computeIntersection(p00, p01, p10, p11); if (li.hasIntersection())
+		 * { numIntersections++; if (! isTrivialIntersection(e0, segIndex0, e1,
 		 * segIndex1)) { hasIntersection = true; if (includeProper || !
 		 * li.isProper() ) { e0.addIntersections(li, segIndex0, 0);
 		 * e1.addIntersections(li, segIndex1, 1); } if (li.isProper()) {
@@ -251,7 +249,6 @@ public class SnapLineIntersector extends RobustLineIntersector {
 		 * En estas circunstancias no se está recuperando el segundo punto de la
 		 * intersección colineal, ni se verifica que es una intersección
 		 * colineal
-		 * 
 		 */
 
 		/*
@@ -263,7 +260,6 @@ public class SnapLineIntersector extends RobustLineIntersector {
 		 * 
 		 * ESTO NO ES TAN IMPORTANTE COMO SNAPEAR EdgeIntersection y Coordinate
 		 * de un Edge
-		 * 
 		 */
 
 		/*
@@ -328,9 +324,9 @@ public class SnapLineIntersector extends RobustLineIntersector {
 
 	/**
 	 * Test whether a point lies in the envelopes of both input segments. A
-	 * correctly computed intersection point should return <code>true</code>
-	 * for this test. Since this test is for debugging purposes only, no attempt
-	 * is made to optimize the envelope test.
+	 * correctly computed intersection point should return <code>true</code> for
+	 * this test. Since this test is for debugging purposes only, no attempt is
+	 * made to optimize the envelope test.
 	 * 
 	 * @return <code>true</code> if the input point lies within both input
 	 *         segment envelopes
@@ -355,8 +351,9 @@ public class SnapLineIntersector extends RobustLineIntersector {
 	/**
 	 * Test whether a point is a intersection point of two line segments. Note
 	 * that if the intersection is a line segment, this method only tests for
-	 * equality with the endpoints of the intersection segment. It does <b>not</b>
-	 * return true if the input point is internal to the intersection segment.
+	 * equality with the endpoints of the intersection segment. It does
+	 * <b>not</b> return true if the input point is internal to the intersection
+	 * segment.
 	 * 
 	 * @return true if the input point is one of the intersection points.
 	 */
@@ -373,8 +370,8 @@ public class SnapLineIntersector extends RobustLineIntersector {
 	 * Tests whether either intersection point is an interior point of the
 	 * specified input segment.
 	 * 
-	 * @return <code>true</code> if either intersection point is in the
-	 *         interior of the input segment
+	 * @return <code>true</code> if either intersection point is in the interior
+	 *         of the input segment
 	 */
 	public boolean isInteriorIntersection(int inputLineIndex) {
 		for (int i = 0; i < result; i++) {
@@ -391,8 +388,6 @@ public class SnapLineIntersector extends RobustLineIntersector {
 	 * se ha hecho sin tener en cuenta ningún tipo de snap o redondeo.
 	 * 
 	 * No se en que puede afectar (comprobar)
-	 * 
-	 * 
 	 */
 	protected void computeIntLineIndex(int segmentIndex) {
 		double dist0 = getEdgeDistance(segmentIndex, 0);

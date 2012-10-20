@@ -44,32 +44,36 @@ import java.io.File;
 
 import javax.swing.filechooser.FileFilter;
 
-
 /**
  * Filtro de fichero genérico para los JFileChooser
- *
+ * 
  * @author Fernando González Cortés
  */
 public class GenericFileFilter extends FileFilter {
-	private String[] extensiones=new String[1];
+	private String[] extensiones = new String[1];
 	private String description;
 	private boolean dirs = true;
 
 	/**
 	 * Crea un nuevo GenericFileFilter.
-	 *
-	 * @param ext DOCUMENT ME!
-	 * @param desc DOCUMENT ME!
+	 * 
+	 * @param ext
+	 *            DOCUMENT ME!
+	 * @param desc
+	 *            DOCUMENT ME!
 	 */
 	public GenericFileFilter(String[] ext, String desc) {
 		extensiones = ext;
 		description = desc;
 	}
+
 	/**
 	 * Crea un nuevo GenericFileFilter.
-	 *
-	 * @param ext DOCUMENT ME!
-	 * @param desc DOCUMENT ME!
+	 * 
+	 * @param ext
+	 *            DOCUMENT ME!
+	 * @param desc
+	 *            DOCUMENT ME!
 	 */
 	public GenericFileFilter(String ext, String desc) {
 		extensiones[0] = ext;
@@ -78,10 +82,13 @@ public class GenericFileFilter extends FileFilter {
 
 	/**
 	 * Crea un nuevo GenericFileFilter.
-	 *
-	 * @param ext DOCUMENT ME!
-	 * @param desc DOCUMENT ME!
-	 * @param dirs DOCUMENT ME!
+	 * 
+	 * @param ext
+	 *            DOCUMENT ME!
+	 * @param desc
+	 *            DOCUMENT ME!
+	 * @param dirs
+	 *            DOCUMENT ME!
 	 */
 	public GenericFileFilter(String ext, String desc, boolean dirs) {
 		extensiones[0] = ext;
@@ -100,13 +107,14 @@ public class GenericFileFilter extends FileFilter {
 				return false;
 			}
 		}
-		boolean endsWith=false;
-		for (int i=0;i<extensiones.length;i++){
-			if (f.getName().toUpperCase().endsWith(extensiones[i].toUpperCase())){
-				endsWith=true;
+		boolean endsWith = false;
+		for (int i = 0; i < extensiones.length; i++) {
+			if (f.getName().toUpperCase()
+					.endsWith(extensiones[i].toUpperCase())) {
+				endsWith = true;
 			}
 		}
-		
+
 		return endsWith;
 	}
 

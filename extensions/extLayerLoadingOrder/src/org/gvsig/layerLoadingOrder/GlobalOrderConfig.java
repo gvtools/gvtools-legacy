@@ -5,11 +5,11 @@ import com.iver.cit.gvsig.fmap.layers.order.DefaultOrderManager;
 import com.iver.utiles.XMLEntity;
 
 /**
- * Stores Stores the SmartOrderManager global settings in memory,
- * and keeps these settings synchronized with the plugin persistence.
- *
+ * Stores Stores the SmartOrderManager global settings in memory, and keeps
+ * these settings synchronized with the plugin persistence.
+ * 
  * @author Cesar Martinez Izquierdo <cesar.martinez@iver.es>
- *
+ * 
  */
 public class GlobalOrderConfig extends OrderConfig {
 	XMLEntity xmlConfig = null;
@@ -55,18 +55,19 @@ public class GlobalOrderConfig extends OrderConfig {
 		XMLEntity xml = ps.getPersistentXML();
 		XMLEntity child;
 		boolean found = false;
-		for (int i=0; i<xml.getChildrenCount(); i++) {
+		for (int i = 0; i < xml.getChildrenCount(); i++) {
 			child = xml.getChild(i);
 			if (child.contains("name")
-					&& child.getStringProperty("name").equals(DefaultOrderManager.getExtensionPointName())
+					&& child.getStringProperty("name").equals(
+							DefaultOrderManager.getExtensionPointName())
 					&& child.contains("configName")
-					&&  child.getStringProperty("configName").equals(configName)) {
+					&& child.getStringProperty("configName").equals(configName)) {
 				setXMLEntity(child);
 				found = true;
 				xmlConfig = child;
 			}
 		}
-		if (!found)  {
+		if (!found) {
 			child = getXMLEntity();
 			xml.addChild(child);
 			xmlConfig = child;
@@ -81,8 +82,8 @@ public class GlobalOrderConfig extends OrderConfig {
 	}
 
 	public void setXMLEntity(XMLEntity xml) {
-		if (xml.contains("configName") &&
-				xml.getStringProperty("configName").equals(configName)) {
+		if (xml.contains("configName")
+				&& xml.getStringProperty("configName").equals(configName)) {
 			// ok, right node
 			super.setXMLEntity(xml);
 		}

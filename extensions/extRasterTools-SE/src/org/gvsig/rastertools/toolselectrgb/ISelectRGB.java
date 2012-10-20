@@ -17,15 +17,18 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
  */
 package org.gvsig.rastertools.toolselectrgb;
+
 /**
  * Interfaz para la seleccion de un RGB
  * 
  * 22/02/2008
+ * 
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public interface ISelectRGB {
 	/**
 	 * Establece el RGB seleccionado con el puntero del raton sobre la vista
+	 * 
 	 * @param r
 	 * @param g
 	 * @param b

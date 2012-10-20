@@ -6,13 +6,13 @@ import com.iver.cit.gvsig.geoprocess.core.gui.IGeoprocessUserEntries;
 public interface IBuildGeoprocessUserEntries extends IGeoprocessUserEntries {
 
 	public boolean createLyrsWithErrorGeometries();
-	
+
 	public boolean buildOnlySelection();
-	
+
 	public boolean cleanBefore();
-	
+
 	public double getFuzzyTolerance() throws GeoprocessException;
-	
+
 	public double getDangleTolerance() throws GeoprocessException;
-	
+
 }

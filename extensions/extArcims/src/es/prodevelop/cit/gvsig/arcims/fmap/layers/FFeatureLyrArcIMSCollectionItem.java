@@ -43,38 +43,38 @@
 package es.prodevelop.cit.gvsig.arcims.fmap.layers;
 
 public class FFeatureLyrArcIMSCollectionItem {
-    private FFeatureLyrArcIMS layer;
-    private int id;
-    private String name;
+	private FFeatureLyrArcIMS layer;
+	private int id;
+	private String name;
 
-    public FFeatureLyrArcIMSCollectionItem(FFeatureLyrArcIMS lyr, int theId,
-        String theName) {
-        layer = lyr;
-        id = theId;
-        name = theName;
-    }
+	public FFeatureLyrArcIMSCollectionItem(FFeatureLyrArcIMS lyr, int theId,
+			String theName) {
+		layer = lyr;
+		id = theId;
+		name = theName;
+	}
 
-    public int getId() {
-        return id;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public FFeatureLyrArcIMS getLayer() {
-        return layer;
-    }
+	public FFeatureLyrArcIMS getLayer() {
+		return layer;
+	}
 
-    public void setLayer(FFeatureLyrArcIMS layer) {
-        this.layer = layer;
-    }
+	public void setLayer(FFeatureLyrArcIMS layer) {
+		this.layer = layer;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 }

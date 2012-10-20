@@ -67,11 +67,10 @@ import org.gvsig.xmlschema.som.IXSSequence;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class XSSequenceImpl extends XSGroupImpl implements IXSSequence{
-		
-	public XSSequenceImpl(IXSSchema schema) {
-		super(schema);		
-	}
+public class XSSequenceImpl extends XSGroupImpl implements IXSSequence {
 
+	public XSSequenceImpl(IXSSchema schema) {
+		super(schema);
+	}
 
 }

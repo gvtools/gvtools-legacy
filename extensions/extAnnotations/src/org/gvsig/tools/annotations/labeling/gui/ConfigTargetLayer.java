@@ -77,12 +77,12 @@ import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 
 /**
- *
+ * 
  * @author Cesar Martinez Izquierdo <cesar.martinez@iver.es> 12:00:04
- *
+ * 
  */
-public class ConfigTargetLayer extends DefaultButtonsPanel
-	implements IWindow, ActionListener, ButtonsPanelListener {
+public class ConfigTargetLayer extends DefaultButtonsPanel implements IWindow,
+		ActionListener, ButtonsPanelListener {
 	private WindowInfo wInfo = null;
 	private static final long serialVersionUID = 1L;
 	private BaseView sourceView;
@@ -102,7 +102,8 @@ public class ConfigTargetLayer extends DefaultButtonsPanel
 	private void initialize() {
 		this.addButtonPressedListener(this);
 		getContent().setLayout(new GridBagLayout());
-		JLabel lbl_header = new JLabel(PluginServices.getText(this, "Select_the_annotation_layer_to_store_the_labels_"));
+		JLabel lbl_header = new JLabel(PluginServices.getText(this,
+				"Select_the_annotation_layer_to_store_the_labels_"));
 		Font font = lbl_header.getFont();
 		lbl_header.setFont(font.deriveFont(Font.BOLD));
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -113,7 +114,7 @@ public class ConfigTargetLayer extends DefaultButtonsPanel
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.weightx = 1.0;
 		constraints.weighty = 0.0;
-		constraints.insets = new Insets(4,10,8,4);
+		constraints.insets = new Insets(4, 10, 8, 4);
 		getContent().add(lbl_header, constraints);
 
 		ButtonGroup group = new ButtonGroup();
@@ -128,7 +129,7 @@ public class ConfigTargetLayer extends DefaultButtonsPanel
 		constraints.fill = GridBagConstraints.NONE;
 		constraints.weightx = 0.0;
 		constraints.weighty = 0.0;
-		constraints.insets = new Insets(4,10,4,6);
+		constraints.insets = new Insets(4, 10, 4, 6);
 		getContent().add(getFileButton(), constraints);
 
 		constraints.gridx = 1;
@@ -149,7 +150,7 @@ public class ConfigTargetLayer extends DefaultButtonsPanel
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.weightx = 0.5;
 		constraints.weighty = 0.0;
-		constraints.insets = new Insets(3,20,10,6);
+		constraints.insets = new Insets(3, 20, 10, 6);
 		getContent().add(detailLine, constraints);
 
 		constraints.gridx = 0;
@@ -159,7 +160,7 @@ public class ConfigTargetLayer extends DefaultButtonsPanel
 		constraints.fill = GridBagConstraints.NONE;
 		constraints.weightx = 0.0;
 		constraints.weighty = 0.0;
-		constraints.insets = new Insets(4,10,4,6);
+		constraints.insets = new Insets(4, 10, 4, 6);
 		getContent().add(getLayerButton(), constraints);
 
 		constraints.gridx = 1;
@@ -169,7 +170,6 @@ public class ConfigTargetLayer extends DefaultButtonsPanel
 		constraints.weightx = 0.1;
 		constraints.weighty = 0.0;
 		getContent().add(getLayersCombo(), constraints);
-
 
 		constraints.gridx = 0;
 		constraints.gridy = 4;
@@ -181,12 +181,10 @@ public class ConfigTargetLayer extends DefaultButtonsPanel
 		getContent().add(new JPanel(), constraints); // empty panel
 
 		Annotation_Layer lyr = toolUI.getTargetLayer();
-		if (lyr!=null) {
-			getLayersCombo().setSelectedItem(
-					new ComboItem(lyr));
+		if (lyr != null) {
+			getLayersCombo().setSelectedItem(new ComboItem(lyr));
 			selectExistingLayerMode();
-		}
-		else {
+		} else {
 			selectFileMode();
 		}
 	}
@@ -205,23 +203,23 @@ public class ConfigTargetLayer extends DefaultButtonsPanel
 	}
 
 	private JRadioButton getFileButton() {
-		if (jrb_file==null) {
-			jrb_file = new JRadioButton(
-					PluginServices.getText(this, "Create_Open_layer"));
+		if (jrb_file == null) {
+			jrb_file = new JRadioButton(PluginServices.getText(this,
+					"Create_Open_layer"));
 		}
 		return jrb_file;
 	}
 
-	private JRadioButton getLayerButton(){
+	private JRadioButton getLayerButton() {
 		if (jrb_layer == null) {
-			jrb_layer = new JRadioButton(
-					PluginServices.getText(this, "Layer_from_active_view"));
+			jrb_layer = new JRadioButton(PluginServices.getText(this,
+					"Layer_from_active_view"));
 		}
 		return jrb_layer;
 	}
 
 	private FileTextField getFileNameField() {
-		if (ftf_fileName==null) {
+		if (ftf_fileName == null) {
 			ftf_fileName = new FileTextField(this.getClass().getName());
 			ftf_fileName.setAcceptAllFileFilterUsed(false);
 			ftf_fileName.addChoosableFileFilter(new FileFilter() {
@@ -230,8 +228,7 @@ public class ConfigTargetLayer extends DefaultButtonsPanel
 					if (f.isDirectory()
 							|| f.getName().toLowerCase().endsWith("gva")) {
 						return true;
-					}
-					else {
+					} else {
 						return false;
 					}
 				}
@@ -249,12 +246,14 @@ public class ConfigTargetLayer extends DefaultButtonsPanel
 	}
 
 	public JComboBox getLayersCombo() {
-		if (jcb_layers==null) {
+		if (jcb_layers == null) {
 			jcb_layers = new JComboBox();
-			FLayers layers = sourceView.getMapControl().getMapContext().getLayers();
-			for (int i=0; i<layers.getLayersCount(); i++) {
+			FLayers layers = sourceView.getMapControl().getMapContext()
+					.getLayers();
+			for (int i = 0; i < layers.getLayersCount(); i++) {
 				if (layers.getLayer(i) instanceof Annotation_Layer) {
-					jcb_layers.addItem(new ComboItem((Annotation_Layer)layers.getLayer(i)));
+					jcb_layers.addItem(new ComboItem((Annotation_Layer) layers
+							.getLayer(i)));
 				}
 			}
 		}
@@ -262,16 +261,16 @@ public class ConfigTargetLayer extends DefaultButtonsPanel
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource()==getLayerButton()) {
+		if (e.getSource() == getLayerButton()) {
 			selectExistingLayerMode();
-		}
-		else if (e.getSource()==getFileButton()) {
+		} else if (e.getSource() == getFileButton()) {
 			selectFileMode();
 		}
 	}
 
 	private class ComboItem {
 		private Annotation_Layer layer;
+
 		public ComboItem(Annotation_Layer layer) {
 			this.layer = layer;
 		}
@@ -287,15 +286,16 @@ public class ConfigTargetLayer extends DefaultButtonsPanel
 		@Override
 		public boolean equals(Object obj) {
 			if (obj instanceof ComboItem) {
-				return this.layer==((ComboItem)obj).getLayer();
+				return this.layer == ((ComboItem) obj).getLayer();
 			}
 			return super.equals(obj);
 		}
 	}
 
 	public WindowInfo getWindowInfo() {
-		if (wInfo==null) {
-			wInfo = new WindowInfo(WindowInfo.MODALDIALOG | WindowInfo.RESIZABLE);
+		if (wInfo == null) {
+			wInfo = new WindowInfo(WindowInfo.MODALDIALOG
+					| WindowInfo.RESIZABLE);
 			wInfo.setWidth(500);
 			wInfo.setHeight(155);
 			wInfo.setTitle(PluginServices.getText(this, "Set_target_layer"));
@@ -306,62 +306,66 @@ public class ConfigTargetLayer extends DefaultButtonsPanel
 	private boolean apply() {
 		if (getLayerButton().isSelected()) {
 			ComboItem item = (ComboItem) getLayersCombo().getSelectedItem();
-			if (item!=null) {
+			if (item != null) {
 				toolUI.setTargetLayer(item.getLayer());
 				return true;
+			} else {
+				NotificationManager.showMessageError(PluginServices.getText(
+						this, "Annotation_layer_not_valid"), null);
 			}
-			else {
-				NotificationManager.showMessageError(
-						PluginServices.getText(this, "Annotation_layer_not_valid"),
-						null);
-			}
-		}
-		else {
+		} else {
 			File file = getFileNameField().getSelectedFile();
-			if (file!=null) {
+			if (file != null) {
 				file = gvaToShpExtension(file);
 				if (!file.exists()) {
 					try {
 						// create new layer
-						Annotation_LayerFactory.createEmptyLayer(file, sourceView.getCrs());
+						Annotation_LayerFactory.createEmptyLayer(file,
+								sourceView.getCrs());
 					} catch (StartWriterVisitorException e) {
-						NotificationManager.showMessageError(
-								PluginServices.getText(this, "Error_creating_annotation_layer"),
-								e);
+						NotificationManager.showMessageError(PluginServices
+								.getText(this,
+										"Error_creating_annotation_layer"), e);
 						return false;
 					} catch (StopWriterVisitorException e) {
-						NotificationManager.showMessageError(
-								PluginServices.getText(this, "Error_creating_annotation_layer"),
-								e);
+						NotificationManager.showMessageError(PluginServices
+								.getText(this,
+										"Error_creating_annotation_layer"), e);
 						return false;
 					} catch (DriverLoadException e) {
 						NotificationManager.showMessageError(
-								PluginServices.getText(this, "Error_opening_annotation_layer"),
-								e);
+								PluginServices.getText(this,
+										"Error_opening_annotation_layer"), e);
 						return false;
 					} catch (InitializeWriterException e) {
-						NotificationManager.showMessageError(
-								PluginServices.getText(this, "Error_creating_annotation_layer"),
-								e);
+						NotificationManager.showMessageError(PluginServices
+								.getText(this,
+										"Error_creating_annotation_layer"), e);
 						return false;
 					} catch (LoadLayerException e) {
 						NotificationManager.showMessageError(
-								PluginServices.getText(this, "Error_opening_annotation_layer"),
-								e);
+								PluginServices.getText(this,
+										"Error_opening_annotation_layer"), e);
 						return false;
 					}
 				}
 				// open the layer
 				try {
-					Annotation_Layer layer = Annotation_LayerFactory.createLayer(file.getName(), file, sourceView.getCrs(), CartographicSupportToolkit.DefaultMeasureUnit);
-					if (layer!=null) {
-						sourceView.getMapControl().getMapContext().getLayers().addLayer(layer);
+					Annotation_Layer layer = Annotation_LayerFactory
+							.createLayer(
+									file.getName(),
+									file,
+									sourceView.getCrs(),
+									CartographicSupportToolkit.DefaultMeasureUnit);
+					if (layer != null) {
+						sourceView.getMapControl().getMapContext().getLayers()
+								.addLayer(layer);
 						toolUI.setTargetLayer(layer);
 						return true;
 					}
 				} catch (Exception ex) {
-					NotificationManager.showMessageError(
-							PluginServices.getText(this, "Error_opening_annotation_layer"),
+					NotificationManager.showMessageError(PluginServices
+							.getText(this, "Error_opening_annotation_layer"),
 							ex);
 					return false;
 				}
@@ -376,27 +380,28 @@ public class ConfigTargetLayer extends DefaultButtonsPanel
 	private File gvaToShpExtension(File file) {
 		String path = file.getPath();
 		int pos = path.toLowerCase().lastIndexOf(".gva");
-		if (pos!=-1) {
-			file = new File(path.substring(0, pos)+".shp");
+		if (pos != -1) {
+			file = new File(path.substring(0, pos) + ".shp");
 		}
 		return file;
 	}
 
 	public void actionButtonPressed(ButtonsPanelEvent e) {
 		switch (e.getButton()) {
-			case ButtonsPanel.BUTTON_ACCEPT:
-				if (apply()) {
-					PluginServices.getMDIManager().closeWindow(this);
-					getLayersCombo().removeAllItems(); // forget the available layers
-				}
-				break;
-			case ButtonsPanel.BUTTON_APPLY:
-				apply();
-				break;
-			case ButtonsPanel.BUTTON_CANCEL:
+		case ButtonsPanel.BUTTON_ACCEPT:
+			if (apply()) {
 				PluginServices.getMDIManager().closeWindow(this);
-				getLayersCombo().removeAllItems(); // forget the available layers
-				break;
+				getLayersCombo().removeAllItems(); // forget the available
+													// layers
+			}
+			break;
+		case ButtonsPanel.BUTTON_APPLY:
+			apply();
+			break;
+		case ButtonsPanel.BUTTON_CANCEL:
+			PluginServices.getMDIManager().closeWindow(this);
+			getLayersCombo().removeAllItems(); // forget the available layers
+			break;
 
 		}
 	}

@@ -54,6 +54,7 @@ import org.gvsig.gpe.containers.Layer;
 public class GMLIDEECosntruccionesReader extends GMLReaderBaseTest {
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.readers.GPEReaderBaseTest#getFile()
 	 */
 	public String getFile() {
@@ -62,6 +63,7 @@ public class GMLIDEECosntruccionesReader extends GMLReaderBaseTest {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.readers.GMLReaderBaseTest#hasSchema()
 	 */
 	public boolean hasSchema() {
@@ -70,12 +72,13 @@ public class GMLIDEECosntruccionesReader extends GMLReaderBaseTest {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.readers.GPEReaderBaseTest#makeAsserts()
 	 */
 	public void makeAsserts() {
 		Layer[] layers = getLayers();
 		assertEquals(layers.length, 1);
 		Layer layer = layers[0];
-		assertEquals(layer.getFeatures().size(),1);		
+		assertEquals(layer.getFeatures().size(), 1);
 	}
 }

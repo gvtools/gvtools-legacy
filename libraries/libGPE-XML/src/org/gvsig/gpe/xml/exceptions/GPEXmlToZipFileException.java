@@ -55,31 +55,33 @@ import org.gvsig.exceptions.BaseException;
  *
  */
 /**
- * This exception is throwed when has hasppend an error
- * compressing the XML file to zip
+ * This exception is throwed when has hasppend an error compressing the XML file
+ * to zip
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class GPEXmlToZipFileException extends BaseException{
+public class GPEXmlToZipFileException extends BaseException {
 	private static final long serialVersionUID = -3652496845777784603L;
 	private String fileName = null;
-	
-	public GPEXmlToZipFileException(String fileName, Throwable exception){
+
+	public GPEXmlToZipFileException(String fileName, Throwable exception) {
 		this.fileName = fileName;
 		initialize();
 		initCause(exception);
 	}
-	
+
 	/**
 	 * Initialize the properties
 	 */
 	private void initialize() {
 		messageKey = "gpe_xmlToZip_error";
-		formatString = "Error compressing the XML %(fileName) file";							
+		formatString = "Error compressing the XML %(fileName) file";
 		code = serialVersionUID;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map values() {
@@ -87,6 +89,5 @@ public class GPEXmlToZipFileException extends BaseException{
 		hash.put("fileName", fileName);
 		return hash;
 	}
-
 
 }

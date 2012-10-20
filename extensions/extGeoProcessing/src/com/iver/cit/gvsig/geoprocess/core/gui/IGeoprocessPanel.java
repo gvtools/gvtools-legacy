@@ -42,38 +42,40 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: IGeoprocessPanel.java 5412 2006-05-24 21:15:07Z azabala $
-* $Log$
-* Revision 1.1  2006-05-24 21:13:09  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.1  2006/04/11 17:55:51  azabala
-* primera version en cvs
-*
-*
-*/
+ *
+ * $Id: IGeoprocessPanel.java 5412 2006-05-24 21:15:07Z azabala $
+ * $Log$
+ * Revision 1.1  2006-05-24 21:13:09  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.1  2006/04/11 17:55:51  azabala
+ * primera version en cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core.gui;
 
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
 /**
- * Base interface for all GUI components associated
- * to a geoprocess.
+ * Base interface for all GUI components associated to a geoprocess.
+ * 
  * @author azabala
- *
+ * 
  */
 public interface IGeoprocessPanel {
 	/**
 	 * Sets layers loaded in view's TOC
+	 * 
 	 * @param layers
 	 */
 	public void setFLayers(FLayers layers);
+
 	/**
 	 * Returns input layer selected by user
+	 * 
 	 * @return
 	 */
 	public FLyrVect getInputLayer();
 }
-

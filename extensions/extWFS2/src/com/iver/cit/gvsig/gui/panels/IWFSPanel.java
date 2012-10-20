@@ -50,7 +50,9 @@ import com.iver.cit.gvsig.fmap.layers.WFSLayerNode;
  */
 
 /**
- * <p>Common methods for all WFS panels.</p>
+ * <p>
+ * Common methods for all WFS panels.
+ * </p>
  * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
@@ -58,8 +60,10 @@ public interface IWFSPanel {
 	/**
 	 * Refresh the panel
 	 * 
-	 * @param dataSource the datasource
-	 * @param layer the selected layer
+	 * @param dataSource
+	 *            the datasource
+	 * @param layer
+	 *            the selected layer
 	 */
 	public void refresh(WFSLayerNode layer);
 }

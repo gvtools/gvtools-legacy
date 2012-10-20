@@ -69,10 +69,8 @@ public abstract class AbstractFieldManager implements IFieldManager {
 		RemoveFieldCommand c = new RemoveFieldCommand(fieldName);
 		FieldDescription[] act = getFields();
 		FieldDescription found = null;
-		for (int i=0; i < act.length; i++)
-		{
-			if (act[i].getFieldAlias().compareToIgnoreCase(fieldName) == 0)
-			{
+		for (int i = 0; i < act.length; i++) {
+			if (act[i].getFieldAlias().compareToIgnoreCase(fieldName) == 0) {
 				found = act[i];
 				break;
 			}
@@ -86,24 +84,19 @@ public abstract class AbstractFieldManager implements IFieldManager {
 		fieldCommands.add(c);
 	}
 
-	public FieldDescription[] getFields()
-	{
+	public FieldDescription[] getFields() {
 		ArrayList aux = new ArrayList();
-		for (int i=0; i < aux.size(); i++)
-		{
+		for (int i = 0; i < aux.size(); i++) {
 			aux.add(getOriginalFields()[i]);
 		}
 		// procesamos comandos para devolver los campos reales.
-		for (int j=0; j < fieldCommands.size(); j++)
-		{
+		for (int j = 0; j < fieldCommands.size(); j++) {
 			FieldCommand fc = (FieldCommand) fieldCommands.get(j);
-			if (fc instanceof AddFieldCommand)
-			{
+			if (fc instanceof AddFieldCommand) {
 				AddFieldCommand ac = (AddFieldCommand) fc;
 				aux.add(ac.getFieldDesc());
 			}
-			if (fc instanceof RemoveFieldCommand)
-			{
+			if (fc instanceof RemoveFieldCommand) {
 				RemoveFieldCommand rc = (RemoveFieldCommand) fc;
 				for (int k = 0; k < aux.size(); k++) {
 					FieldDescription fAux = (FieldDescription) aux.get(k);
@@ -113,8 +106,7 @@ public abstract class AbstractFieldManager implements IFieldManager {
 					}
 				}
 			}
-			if (fc instanceof RenameFieldCommand)
-			{
+			if (fc instanceof RenameFieldCommand) {
 				RenameFieldCommand renc = (RenameFieldCommand) fc;
 				for (int k = 0; k < aux.size(); k++) {
 					FieldDescription fAux = (FieldDescription) aux.get(k);

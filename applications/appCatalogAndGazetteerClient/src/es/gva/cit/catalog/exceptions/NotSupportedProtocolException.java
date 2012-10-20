@@ -1,4 +1,5 @@
 package es.gva.cit.catalog.exceptions;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -54,14 +55,15 @@ package es.gva.cit.catalog.exceptions;
 public class NotSupportedProtocolException extends Exception {
 
 	public NotSupportedProtocolException(Throwable cause) {
-		super(cause);		
+		super(cause);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Throwable#toString()
 	 */
-	public String toString(){
+	public String toString() {
 		return "errorNotSupportedProtocol";
 	}
 }

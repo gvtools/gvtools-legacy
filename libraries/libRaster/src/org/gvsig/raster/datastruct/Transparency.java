@@ -26,6 +26,7 @@ import org.gvsig.raster.dataset.IBuffer;
 import org.gvsig.raster.dataset.properties.DatasetMetadata;
 import org.gvsig.raster.util.PropertyEvent;
 import org.gvsig.raster.util.PropertyListener;
+
 /**
  * <p>
  * Esta clase contiene información de transparencia de un objeto. Los objetos
@@ -47,58 +48,63 @@ import org.gvsig.raster.util.PropertyListener;
  * mismo pixel con la transparencia aplicada.
  * </p>
  * <p>
- * Una transparencia que se aplica a un buffer puede tener cuatro procedencias distintas:
+ * Una transparencia que se aplica a un buffer puede tener cuatro procedencias
+ * distintas:
  * <UL>
- * <LI>Mascara: Un buffer de NxN aplicado sobre la zona a renderizar como una máscara de 
- * transparencia. Las bandas alpha de las imagenes se comportan de esta forma.</LI>
- * <LI>Opacidad global: Un valor de opacidad se aplicado a cada pixel a renderizar. Este es
- * igual para todos los píxeles.</LI>
- * <LI>Rangos: Una lista de rangos de valores RGB. Cada pixel cuyo valor esté dentro de alguno
- * de los rangos se aplica como transparente.</LI>
- * <LI>Dato: Todos los valores del buffer que coincidan con ese dato son puestos como transparente.
- * Para que esto sea posible tenemos que disponer del buffer de datos originales sin ningún proceso.</LI>
+ * <LI>Mascara: Un buffer de NxN aplicado sobre la zona a renderizar como una
+ * máscara de transparencia. Las bandas alpha de las imagenes se comportan de
+ * esta forma.</LI>
+ * <LI>Opacidad global: Un valor de opacidad se aplicado a cada pixel a
+ * renderizar. Este es igual para todos los píxeles.</LI>
+ * <LI>Rangos: Una lista de rangos de valores RGB. Cada pixel cuyo valor esté
+ * dentro de alguno de los rangos se aplica como transparente.</LI>
+ * <LI>Dato: Todos los valores del buffer que coincidan con ese dato son puestos
+ * como transparente. Para que esto sea posible tenemos que disponer del buffer
+ * de datos originales sin ningún proceso.</LI>
  * </UL>
  * </p>
- *
+ * 
  * @version 07/06/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class Transparency {
-	public static int     MAX_OPACITY        = 255;
-	protected int         alphaBandNumber    = -1;
+	public static int MAX_OPACITY = 255;
+	protected int alphaBandNumber = -1;
 	/**
 	 * Buffer con la banda alpha correspondiente a la zona a renderizar
 	 */
-	private IBuffer       mask               = null;
+	private IBuffer mask = null;
 	/**
-	 * Buffer con los datos originales (sin filtrar) correspondiente a la zona a renderizar.
-	 * Esto es util para aplicar el valor NoData ya que hay que consultar el valor original del
-	 * dato. Después de hacer un process es recomendable hacer free para poner a null los buffers.
+	 * Buffer con los datos originales (sin filtrar) correspondiente a la zona a
+	 * renderizar. Esto es util para aplicar el valor NoData ya que hay que
+	 * consultar el valor original del dato. Después de hacer un process es
+	 * recomendable hacer free para poner a null los buffers.
 	 */
-	protected IBuffer     originalData       = null;
+	protected IBuffer originalData = null;
 	/**
-	 * Valor de dato transparente. Todos los píxeles de originalData que correspondan con este
-	 * valor se pondrán 100% transparentes. 
+	 * Valor de dato transparente. Todos los píxeles de originalData que
+	 * correspondan con este valor se pondrán 100% transparentes.
 	 */
-	protected double      noData             = RasterLibrary.defaultNoDataValue;
+	protected double noData = RasterLibrary.defaultNoDataValue;
 	/**
 	 * Flag que indica que el uso de noData para transparencia está activo
 	 */
-	protected boolean     noDataActive       = false;
+	protected boolean noDataActive = false;
 	/**
 	 * Rangos de transparencia aplicados. Lista de TransparencyRange
 	 */
-	protected ArrayList   transparencyRanges = new ArrayList();
+	protected ArrayList transparencyRanges = new ArrayList();
 	/**
 	 * Grado de opacidad de todo el raster
 	 */
-	protected int         opacity            = 0xff;
-	
+	protected int opacity = 0xff;
+
 	/**
-	 * Array de listeners que serán informados cuando cambia la propiedad de transparencia
+	 * Array de listeners que serán informados cuando cambia la propiedad de
+	 * transparencia
 	 */
-	private ArrayList     transparencyPropertyListener = new ArrayList();
-	
+	private ArrayList transparencyPropertyListener = new ArrayList();
+
 	/**
 	 * Constructor
 	 */
@@ -109,7 +115,8 @@ public class Transparency {
 	 * Constructor de copia
 	 */
 	public Transparency(Transparency t) {
-		//TODO: FUNCIONALIDAD: Falta asignar lo necesario para la transparencia por selección
+		// TODO: FUNCIONALIDAD: Falta asignar lo necesario para la transparencia
+		// por selección
 		this.transparencyRanges = (ArrayList) t.getTransparencyRange().clone();
 		this.mask = t.getAlphaBand();
 		this.opacity = t.getOpacity();
@@ -118,28 +125,33 @@ public class Transparency {
 		this.noDataActive = t.isNoDataActive();
 		this.originalData = t.originalData;
 	}
-	
+
 	/**
 	 * Asigna un listener a la lista que será informado cuando cambie una
-	 * propiedad visual en la renderización. 
-	 * @param listener VisualPropertyListener
+	 * propiedad visual en la renderización.
+	 * 
+	 * @param listener
+	 *            VisualPropertyListener
 	 */
 	public void addPropertyListener(PropertyListener listener) {
 		transparencyPropertyListener.add(listener);
 	}
-	
+
 	/**
 	 * Método llamado cuando hay un cambio en una propiedad de transparencia
 	 */
 	private void callPropertyChanged(Object obj) {
 		for (int i = 0; i < transparencyPropertyListener.size(); i++) {
-			PropertyEvent ev = new PropertyEvent(this, "transparency", null, null);
-			((PropertyListener)transparencyPropertyListener.get(i)).actionValueChanged(ev);
+			PropertyEvent ev = new PropertyEvent(this, "transparency", null,
+					null);
+			((PropertyListener) transparencyPropertyListener.get(i))
+					.actionValueChanged(ev);
 		}
 	}
 
 	/**
 	 * Obtiene la máscara asociada
+	 * 
 	 * @return Máscara de transparencia
 	 */
 	public IBuffer getAlphaBand() {
@@ -148,34 +160,36 @@ public class Transparency {
 
 	/**
 	 * Asigna el buffer con la máscara
+	 * 
 	 * @param b
 	 */
 	public void setAlphaBand(IBuffer b) {
-		if(b == null && mask != null) {
+		if (b == null && mask != null) {
 			mask = b;
 			callPropertyChanged(this);
 			return;
-		} else {		
+		} else {
 			mask = b;
-			if(b != null)
+			if (b != null)
 				callPropertyChanged(this);
 		}
 	}
-	
+
 	/**
-	 * Obtiene la información de si existe o no banda de transparencia cuando este
-	 * objeto va asociado a un dataset. Si tiene este tipo de banda en cada
+	 * Obtiene la información de si existe o no banda de transparencia cuando
+	 * este objeto va asociado a un dataset. Si tiene este tipo de banda en cada
 	 * dibujado se cargará la información de máscara de transparencia en el la
 	 * variable mask.
+	 * 
 	 * @return true si existe banda de transparencia y false si no lo es.
 	 */
 	public boolean existAlphaBand() {
 		return (mask != null);
 	}
 
-	
 	/**
 	 * Obtiene el área de datos
+	 * 
 	 * @return Máscara de transparencia
 	 */
 	public IBuffer getDataBuffer() {
@@ -184,6 +198,7 @@ public class Transparency {
 
 	/**
 	 * Asigna el área de datos
+	 * 
 	 * @param b
 	 */
 	public void setDataBuffer(IBuffer b) {
@@ -191,35 +206,40 @@ public class Transparency {
 	}
 
 	/**
-	 * Obtiene la información de si existe o no la posibilidad de aplicar valore no data
-	 * como transparentes. Para ello tiene que estar activo su uso y el buffer debe contener datos
+	 * Obtiene la información de si existe o no la posibilidad de aplicar valore
+	 * no data como transparentes. Para ello tiene que estar activo su uso y el
+	 * buffer debe contener datos
+	 * 
 	 * @return true si puede aplicarse noData y false si no se puede
 	 */
 	public boolean isNoDataActive() {
 		return noDataActive;
 	}
-	
+
 	/**
-	 * Obtiene el valor noData 
+	 * Obtiene el valor noData
+	 * 
 	 * @return
 	 */
 	public double getNoData() {
 		return noData;
 	}
-	
+
 	/**
 	 * Asigna el valor noData
+	 * 
 	 * @param noData
 	 */
 	public void setNoData(double noData) {
 		this.noDataActive = true;
-		if(this.noData != noData)
+		if (this.noData != noData)
 			callPropertyChanged(this);
 		this.noData = noData;
 	}
-	
+
 	/**
 	 * Activa o desactiva el uso de noData como transparencia
+	 * 
 	 * @param active
 	 */
 	public void activeNoData(boolean active) {
@@ -228,6 +248,7 @@ public class Transparency {
 
 	/**
 	 * Obtiene los rangos de pixels que son transparentes en el raster.
+	 * 
 	 * @return Rangos de transparencias a aplicar
 	 */
 	public ArrayList getTransparencyRange() {
@@ -236,6 +257,7 @@ public class Transparency {
 
 	/**
 	 * Asigna un rango de pixels que son transparentes en el raster.
+	 * 
 	 * @param range
 	 */
 	public void setTransparencyRange(TransparencyRange range) {
@@ -245,6 +267,7 @@ public class Transparency {
 
 	/**
 	 * Asigna la lista de rangos de transparencia
+	 * 
 	 * @param ranges
 	 */
 	public void setTransparencyRangeList(ArrayList ranges) {
@@ -262,6 +285,7 @@ public class Transparency {
 
 	/**
 	 * Obtiene el grado de opacidad de todo el raster
+	 * 
 	 * @return valor del grado de opacidad.
 	 */
 	public int getOpacity() {
@@ -270,19 +294,23 @@ public class Transparency {
 
 	/**
 	 * Asigna el grado de opacidad de todo el raster
-	 * @param opacity valor del grado de opacidad.
+	 * 
+	 * @param opacity
+	 *            valor del grado de opacidad.
 	 */
 	public void setOpacity(int opacity) {
-		if(opacity != this.opacity)
+		if (opacity != this.opacity)
 			callPropertyChanged(this);
 		this.opacity = opacity;
 	}
 
 	/**
-	 * Asigna la transparencia a partir de un objeto con los metadatos del raster.
+	 * Asigna la transparencia a partir de un objeto con los metadatos del
+	 * raster.
+	 * 
 	 * @param metadata
 	 */
-	public void setTransparencyByPixelFromMetadata(DatasetMetadata metadata){
+	public void setTransparencyByPixelFromMetadata(DatasetMetadata metadata) {
 		if (metadata != null) {
 			TransparencyRange[] noData = metadata.parserNodataInMetadata();
 			if (noData != null) {
@@ -298,52 +326,63 @@ public class Transparency {
 	/**
 	 * Mezcla el alpha actual con el que nos pasan por parametro y se asigna
 	 * directamente a destino
+	 * 
 	 * @param buffer
 	 * @param dst
-	 * @throws InterruptedException 
+	 * @throws InterruptedException
 	 */
-	public void mergeBuffer(IBuffer buffer, IBuffer dst) throws InterruptedException {
+	public void mergeBuffer(IBuffer buffer, IBuffer dst)
+			throws InterruptedException {
 		for (int y = 0; y < mask.getHeight(); y++) {
 			for (int x = 0; x < mask.getWidth(); x++) {
 				// ((a / 255) * (b / 255)) * 255
 				// Es lo mismo que:
 				// (a * b) / 255
 				dst.setElem(y, x, 0,
-					(byte) (((mask.getElemByte(y, x, 0) & 0xff) * (buffer.getElemByte(y, x, 0) & 0xff)) / 255D));
+						(byte) (((mask.getElemByte(y, x, 0) & 0xff) * (buffer
+								.getElemByte(y, x, 0) & 0xff)) / 255D));
 			}
 		}
 	}
 
 	/**
-	 * Mezcla dos buffers de transparencia en uno solo. 
-	 * @param dst Buffer destino de la mezcla
-	 * @param buf Buffer a mezclar sobre el destino
+	 * Mezcla dos buffers de transparencia en uno solo.
+	 * 
+	 * @param dst
+	 *            Buffer destino de la mezcla
+	 * @param buf
+	 *            Buffer a mezclar sobre el destino
 	 * @return Buffer destino
-	 * @throws InterruptedException 
+	 * @throws InterruptedException
 	 */
-	public static IBuffer merge(IBuffer dst, IBuffer buf) throws InterruptedException {
-		if(buf == null && dst != null)
+	public static IBuffer merge(IBuffer dst, IBuffer buf)
+			throws InterruptedException {
+		if (buf == null && dst != null)
 			return dst;
-		if(dst == null && buf != null)
+		if (dst == null && buf != null)
 			return buf;
-		if(buf != null && dst != null) {
-			if(dst.getWidth() != buf.getWidth() || dst.getHeight() != buf.getHeight())
+		if (buf != null && dst != null) {
+			if (dst.getWidth() != buf.getWidth()
+					|| dst.getHeight() != buf.getHeight())
 				return null;
 			for (int y = 0; y < buf.getHeight(); y++) {
 				for (int x = 0; x < buf.getWidth(); x++) {
 					dst.setElem(y, x, 0,
-							(byte) (((dst.getElemByte(y, x, 0) & 0xff) * (buf.getElemByte(y, x, 0) & 0xff)) / 255D));
+							(byte) (((dst.getElemByte(y, x, 0) & 0xff) * (buf
+									.getElemByte(y, x, 0) & 0xff)) / 255D));
 				}
 			}
 			return dst;
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Mezcla un objeto Transparency con el actual
-	 * @param ts objeto TransparencyStatus
-	 * @throws InterruptedException 
+	 * 
+	 * @param ts
+	 *            objeto TransparencyStatus
+	 * @throws InterruptedException
 	 */
 	public Transparency merge(Transparency transp) throws InterruptedException {
 		Transparency t = new Transparency();
@@ -359,8 +398,10 @@ public class Transparency {
 
 		// TODO: FUNCIONALIDAD Mezclamos la máscara
 		if (mask != null && transp.getAlphaBand() != null) {
-			IBuffer newMask = RasterBuffer.getBuffer(IBuffer.TYPE_BYTE, mask.getWidth(), mask.getHeight(), 1, true);
-			// Mezclamos alphaBand con el que nos pasan en transp y lo asignamos al nuevo buffer
+			IBuffer newMask = RasterBuffer.getBuffer(IBuffer.TYPE_BYTE,
+					mask.getWidth(), mask.getHeight(), 1, true);
+			// Mezclamos alphaBand con el que nos pasan en transp y lo asignamos
+			// al nuevo buffer
 			mergeBuffer(transp.getAlphaBand(), newMask);
 
 			t.setAlphaBand(newMask);
@@ -382,6 +423,7 @@ public class Transparency {
 
 	/**
 	 * Obtiene la banda de transpareci si existe o -1 si no existe.
+	 * 
 	 * @return número de banda de transparencia o -1 si no existe.
 	 */
 	public int getAlphaBandNumber() {
@@ -389,60 +431,64 @@ public class Transparency {
 	}
 
 	/**
-	 * Asigna la información de si existe o no banda de transparencia cuando este
-	 * objeto va asociado a un dataset. Si tiene este tipo de banda en cada
+	 * Asigna la información de si existe o no banda de transparencia cuando
+	 * este objeto va asociado a un dataset. Si tiene este tipo de banda en cada
 	 * dibujado se cargará la información de máscara de transparencia en el la
 	 * variable mask.
+	 * 
 	 * @param true si existe banda de transparencia y false si no lo es.
 	 */
 	public void setTransparencyBand(int alphaBandNumber) {
 		this.alphaBandNumber = alphaBandNumber;
 	}
-	
+
 	/**
 	 * Consulta si el valor de la posición (line, col) del buffer es considerado
 	 * NoData o no.
-	 * @param line Linea del buffer
-	 * @param col Columna del buffer
+	 * 
+	 * @param line
+	 *            Linea del buffer
+	 * @param col
+	 *            Columna del buffer
 	 * @return
-	 * @throws InterruptedException 
+	 * @throws InterruptedException
 	 */
 	protected boolean isNoData(int line, int col) throws InterruptedException {
 		switch (originalData.getDataType()) {
 		case IBuffer.TYPE_BYTE:
-			if(((double)originalData.getElemByte(line, col, 0)) == noData)
+			if (((double) originalData.getElemByte(line, col, 0)) == noData)
 				return true;
 			break;
 		case IBuffer.TYPE_SHORT:
-			if(((double)originalData.getElemShort(line, col, 0)) == noData)
+			if (((double) originalData.getElemShort(line, col, 0)) == noData)
 				return true;
 			break;
 		case IBuffer.TYPE_INT:
-			if(((double)originalData.getElemInt(line, col, 0)) == noData)
+			if (((double) originalData.getElemInt(line, col, 0)) == noData)
 				return true;
 			break;
 		case IBuffer.TYPE_FLOAT:
-			if(((double)originalData.getElemFloat(line, col, 0)) == noData)
+			if (((double) originalData.getElemFloat(line, col, 0)) == noData)
 				return true;
 			break;
 		case IBuffer.TYPE_DOUBLE:
-			if(((double)originalData.getElemDouble(line, col, 0)) == noData)
+			if (((double) originalData.getElemDouble(line, col, 0)) == noData)
 				return true;
 			break;
 		}
 		return false;
 	}
-	
+
 	/**
-	 * Pone a null los buffers de datos y pasa el garbage collector para liberar la memoria.
-	 * Después de renderizar es conveniente hacer esto porque el objeto Transparency asociado a
-	 * un dataset no se destruye hasta que no se cierra este. Esto hace que esta memoria este
-	 * siempre ocupada. 
+	 * Pone a null los buffers de datos y pasa el garbage collector para liberar
+	 * la memoria. Después de renderizar es conveniente hacer esto porque el
+	 * objeto Transparency asociado a un dataset no se destruye hasta que no se
+	 * cierra este. Esto hace que esta memoria este siempre ocupada.
 	 */
 	public void free() {
-		if(mask != null)
+		if (mask != null)
 			mask.free();
-		if(originalData != null)
+		if (originalData != null)
 			originalData.free();
 		mask = null;
 		originalData = null;

@@ -42,12 +42,14 @@ package com.iver.cit.gvsig.fmap.core;
 
 import java.awt.geom.Point2D;
 
-
 /**
- * <p>Expands {@link Handler Handler } adding support to select, and identify a handler of a geometry.</p>
+ * <p>
+ * Expands {@link Handler Handler } adding support to select, and identify a
+ * handler of a geometry.
+ * </p>
  * 
  * @see Handler
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public abstract class AbstractHandler implements Handler {
@@ -71,46 +73,55 @@ public abstract class AbstractHandler implements Handler {
 	 * @see #select
 	 * @see #isSelected()
 	 */
-	private boolean select=false;
+	private boolean select = false;
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.Handler#getPoint()
 	 */
 	public Point2D getPoint() {
 		return point;
 	}
-	
+
 	/**
-	 * <p>Sets the state of the handler.</p>
+	 * <p>
+	 * Sets the state of the handler.
+	 * </p>
 	 * 
-	 * @param b <code>true</code> if the handler is selected, otherwise <code>false</code>
+	 * @param b
+	 *            <code>true</code> if the handler is selected, otherwise
+	 *            <code>false</code>
 	 * 
 	 * @see #isSelected()
 	 */
 	public void select(boolean b) {
-		select=b;
+		select = b;
 	}
-	
+
 	/**
-	 * <p>Returns the state of the handler.</p>
+	 * <p>
+	 * Returns the state of the handler.
+	 * </p>
 	 * 
-	 * @return <code>true</code> if the handler is selected, otherwise <code>false</code>
+	 * @return <code>true</code> if the handler is selected, otherwise
+	 *         <code>false</code>
 	 * 
 	 * @see #select(boolean)
 	 */
-	public boolean isSelected(){
+	public boolean isSelected() {
 		return select;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.Handler#equalsPoint(java.lang.Object)
 	 */
 	public boolean equalsPoint(Object obj) {
-		Point2D p1=this.getPoint();
-		Point2D p2=((Handler)obj).getPoint();
-		if (p1.getX()==p2.getX() && p1.getY()==p2.getY()) {
+		Point2D p1 = this.getPoint();
+		Point2D p2 = ((Handler) obj).getPoint();
+		if (p1.getX() == p2.getX() && p1.getY() == p2.getY()) {
 			return true;
 		}
 		return false;

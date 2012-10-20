@@ -27,7 +27,9 @@
 package org.gvsig.i18n.extension.preferences.table;
 
 import java.awt.Component;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.JTable;
@@ -39,37 +41,37 @@ import javax.swing.table.TableCellEditor;
  * @author <a href="mailto:cordin@disid.com">Cèsar Ordiñana</a>
  */
 public class RadioButtonCellEditor extends AbstractCellEditor implements
-	TableCellEditor, ItemListener {
+		TableCellEditor, ItemListener {
 
-    private static final long serialVersionUID = 1000179477526963659L;
+	private static final long serialVersionUID = 1000179477526963659L;
 
-    private RadioButtonCell delegate = new RadioButtonCell();
+	private RadioButtonCell delegate = new RadioButtonCell();
 
-    /**
-     * Constructor.
-     */
-    public RadioButtonCellEditor() {
-	delegate.getRadioButton().addItemListener(this);
-    }
+	/**
+	 * Constructor.
+	 */
+	public RadioButtonCellEditor() {
+		delegate.getRadioButton().addItemListener(this);
+	}
 
-    public Object getCellEditorValue() {
-	return Boolean.valueOf(delegate.getRadioButton().isSelected());
-    }
+	public Object getCellEditorValue() {
+		return Boolean.valueOf(delegate.getRadioButton().isSelected());
+	}
 
-    public Component getTableCellEditorComponent(JTable table, Object value,
-	    boolean isSelected, int row, int column) {
-	return delegate.getTableCellComponent(table, value, isSelected,
-		isSelected, row, column);
-    }
+	public Component getTableCellEditorComponent(JTable table, Object value,
+			boolean isSelected, int row, int column) {
+		return delegate.getTableCellComponent(table, value, isSelected,
+				isSelected, row, column);
+	}
 
-    public void actionPerformed(ActionEvent e) {
-	// Stop editing when the user clicks into the radio button,
-	// so other cells get its rendering updated
-	fireEditingStopped();
-    }
+	public void actionPerformed(ActionEvent e) {
+		// Stop editing when the user clicks into the radio button,
+		// so other cells get its rendering updated
+		fireEditingStopped();
+	}
 
-    public void itemStateChanged(ItemEvent e) {
-	fireEditingStopped();
-    }
+	public void itemStateChanged(ItemEvent e) {
+		fireEditingStopped();
+	}
 
 }

@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.core.gui;
 
 import java.io.File;
@@ -59,37 +59,45 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
  * interface.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public interface IGeoprocessUserEntries {
 	/**
 	 * Provides de input layer for the geoprocess
+	 * 
 	 * @return
 	 */
 	public FLyrVect getInputLayer();
+
 	/**
 	 * Provides the FLayers where we're going to add the results.
+	 * 
 	 * @param layers
 	 */
 	public void setFLayers(FLayers layers);
+
 	public FLayers getFLayers();
-	
+
 	/**
 	 * Notify an error to the user
+	 * 
 	 * @param message
 	 * @param title
 	 */
 	public void error(String message, String title);
+
 	/**
-	 * Ask the user for overwrite the output file
-	 * TODO By now geoprocesses only store their results in SHP. Extend this.
+	 * Ask the user for overwrite the output file TODO By now geoprocesses only
+	 * store their results in SHP. Extend this.
+	 * 
 	 * @param outputFile
 	 * @return
 	 */
 	public boolean askForOverwriteOutputFile(File outputFile);
-	
+
 	/**
 	 * Provides the output shp file to the geoprocess
+	 * 
 	 * @return
 	 * @throws FileNotFoundException
 	 */

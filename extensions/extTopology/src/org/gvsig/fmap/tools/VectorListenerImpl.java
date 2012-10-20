@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.fmap.tools;
 
 import java.awt.Cursor;
@@ -68,100 +68,100 @@ import com.iver.cit.gvsig.fmap.tools.Events.MoveEvent;
  * Vector listener impl that creates vector errors to compute vectorial layers
  * transformations.
  * 
- * For each digitized vector error in screen, it creates a geotools MappedPosition
- * instance.
+ * For each digitized vector error in screen, it creates a geotools
+ * MappedPosition instance.
  * */
 public class VectorListenerImpl implements VectorListener {
 
-//	private final Image img = new ImageIcon(MapControl.class.
-//												getResource("images/PointSelectCursor.gif")).
-//												getImage();
-	
-//	private Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(img,
-//													new Point(16, 16), "");
-	
+	// private final Image img = new ImageIcon(MapControl.class.
+	// getResource("images/PointSelectCursor.gif")).
+	// getImage();
+
+	// private Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(img,
+	// new Point(16, 16), "");
+
 	private Cursor cur = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
-	
+
 	/**
 	 * MapControl creator of digitizing events.
 	 */
 	protected MapControl mapCtrl;
-	
+
 	/**
 	 * Collection of existing digitized links, to add new vector error.
 	 */
 	MappedPositionContainer linksList;
-	
+
 	protected boolean isZooming = false;
-	
-	
-	public VectorListenerImpl(MapControl mapCtrl, MappedPositionContainer linksList) {
+
+	public VectorListenerImpl(MapControl mapCtrl,
+			MappedPositionContainer linksList) {
 		super();
 		this.mapCtrl = mapCtrl;
 		this.linksList = linksList;
 	}
-	
+
 	public void vector(MoveEvent event) throws BehaviorException {
 		ViewPort vp = mapCtrl.getMapContext().getViewPort();
 		int modifiers = event.getEvent().getModifiers();
 		int modifiersEx = event.getEvent().getModifiersEx();
-		
+
 		int ctrlDownMask = modifiersEx & MouseEvent.CTRL_DOWN_MASK;
 		int button1Mask = modifiers & MouseEvent.BUTTON1_MASK;
 		int button2Mask = modifiers & MouseEvent.BUTTON3_MASK;
-	
-		if(ctrlDownMask == MouseEvent.CTRL_DOWN_MASK && vp.getExtent()!=null){
+
+		if (ctrlDownMask == MouseEvent.CTRL_DOWN_MASK && vp.getExtent() != null) {
 			isZooming = true;
 			Rectangle2D.Double r = new Rectangle2D.Double();
 			Rectangle2D rect = vp.getExtent();
 			double factor = 1;
-			if(button1Mask == MouseEvent.BUTTON1_MASK){
-				//zoom +
-				factor = 1/1.5d;
-			}else if(button2Mask == MouseEvent.BUTTON3_MASK){
-				//zoom -
-				factor = 1*1.5d;
-			}else{
-				System.err.println("Tecla ctrl pulsada, pero pulsacion de boton sin boton izquierdo o derecho");
+			if (button1Mask == MouseEvent.BUTTON1_MASK) {
+				// zoom +
+				factor = 1 / 1.5d;
+			} else if (button2Mask == MouseEvent.BUTTON3_MASK) {
+				// zoom -
+				factor = 1 * 1.5d;
+			} else {
+				System.err
+						.println("Tecla ctrl pulsada, pero pulsacion de boton sin boton izquierdo o derecho");
 				return;
 			}
-			
-			double nuevoX = rect.getMaxX() -
-				((vp.getExtent().getWidth() * factor) / 2.0);
-			double nuevoY = rect.getMaxY() -
-				((vp.getExtent().getHeight() * factor) / 2.0);
+
+			double nuevoX = rect.getMaxX()
+					- ((vp.getExtent().getWidth() * factor) / 2.0);
+			double nuevoY = rect.getMaxY()
+					- ((vp.getExtent().getHeight() * factor) / 2.0);
 			r.x = nuevoX;
 			r.y = nuevoY;
 			r.width = vp.getExtent().getWidth() * factor;
 			r.height = vp.getExtent().getHeight() * factor;
 			vp.setExtent(r);
-//			mapCtrl.getMapContext().clearAllCachingImageDrawnLayers();
-			
-		}else{
+			// mapCtrl.getMapContext().clearAllCachingImageDrawnLayers();
+
+		} else {
 			isZooming = false;
-//			Point2D from = vp.toMapPoint(event.getFrom());
-//			Point2D to = vp.toMapPoint(event.getTo());
-			
+			// Point2D from = vp.toMapPoint(event.getFrom());
+			// Point2D to = vp.toMapPoint(event.getTo());
+
 			Point2D from = event.getFrom();
 			Point2D to = event.getTo();
-			
+
 			ReferencingUtil referencing = ReferencingUtil.getInstance();
-			
-			//TODO Ver como pasar a GeoAPI la proyeccion del mapControl (libJCRS)	
-			//de momento estamos pasando null
-			DirectPosition source = 
-				referencing.create(new double[]{from.getX(), from.getY()}, null);
-			
-			DirectPosition destination = 
-				referencing.create(new double[]{to.getX(), to.getY()}, null);
-			
-			DisactivableMappedPosition mappedPosition
-				= new DisactivableMappedPosition(source, destination);
-			
+
+			// TODO Ver como pasar a GeoAPI la proyeccion del mapControl
+			// (libJCRS)
+			// de momento estamos pasando null
+			DirectPosition source = referencing.create(
+					new double[] { from.getX(), from.getY() }, null);
+
+			DirectPosition destination = referencing.create(
+					new double[] { to.getX(), to.getY() }, null);
+
+			DisactivableMappedPosition mappedPosition = new DisactivableMappedPosition(
+					source, destination);
+
 			this.linksList.addMappedPosition(mappedPosition);
 		}
-		
-		
 
 	}
 
@@ -172,5 +172,5 @@ public class VectorListenerImpl implements VectorListener {
 	public Cursor getCursor() {
 		return cur;
 	}
-	
+
 }

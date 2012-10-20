@@ -42,14 +42,14 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: GeoprocessingXYShiftPanel2.java 6752 2006-08-11 17:21:45Z azabala $
-* $Log$
-* Revision 1.1  2006-08-11 17:17:55  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: GeoprocessingXYShiftPanel2.java 6752 2006-08-11 17:21:45Z azabala $
+ * $Log$
+ * Revision 1.1  2006-08-11 17:17:55  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.xyshift.gui;
 
 import java.awt.GridBagConstraints;
@@ -65,8 +65,7 @@ import com.iver.cit.gvsig.geoprocess.core.fmap.GeoprocessException;
 import com.iver.cit.gvsig.geoprocess.core.gui.AbstractGeoprocessGridbagPanel;
 
 public class GeoprocessingXYShiftPanel2 extends AbstractGeoprocessGridbagPanel {
-	
-	
+
 	private JLabel offsetLabel;
 	private JTextField xoffsetTextField;
 	private JTextField yoffsetTextField;
@@ -76,42 +75,41 @@ public class GeoprocessingXYShiftPanel2 extends AbstractGeoprocessGridbagPanel {
 	 * 
 	 */
 	public GeoprocessingXYShiftPanel2(FLayers layers) {
-		super(layers, PluginServices.
-				getText(null, "XYShift._Introduccion_de_datos") + ":");
+		super(layers, PluginServices.getText(null,
+				"XYShift._Introduccion_de_datos") + ":");
 	}
 
 	protected void addSpecificDesign() {
 		Insets insets = new Insets(5, 5, 5, 5);
-	    
+
 		offsetLabel = new JLabel();
-        offsetLabel.setText(PluginServices.
-        		getText(this,"Introducir_valores_desplazamiento"));
-        addComponent(offsetLabel, insets);
-        
-        xoffsetTextField = new JTextField(20);
-		addComponent(PluginServices.getText(this,"xOffset")+":", 
+		offsetLabel.setText(PluginServices.getText(this,
+				"Introducir_valores_desplazamiento"));
+		addComponent(offsetLabel, insets);
+
+		xoffsetTextField = new JTextField(20);
+		addComponent(PluginServices.getText(this, "xOffset") + ":",
 				xoffsetTextField, GridBagConstraints.BOTH, insets);
-		
-		 yoffsetTextField = new JTextField(20);
-			addComponent(PluginServices.getText(this,"yOffset")+":", 
-					yoffsetTextField, GridBagConstraints.BOTH, insets);
-			
+
+		yoffsetTextField = new JTextField(20);
+		addComponent(PluginServices.getText(this, "yOffset") + ":",
+				yoffsetTextField, GridBagConstraints.BOTH, insets);
+
 		initSelectedItemsJCheckBox();
-		updateNumSelectedFeaturesLabel();		
-		
+		updateNumSelectedFeaturesLabel();
+
 	}
-	
-	public double getXOffset() throws GeoprocessException{
+
+	public double getXOffset() throws GeoprocessException {
 		try {
 			String strDist = xoffsetTextField.getText();
 			return Double.parseDouble(strDist);
 		} catch (NumberFormatException ex) {
-			throw new GeoprocessException(
-					"Offset en x introducido no numerico");
+			throw new GeoprocessException("Offset en x introducido no numerico");
 		}
 	}
-	
-	public double getYOffset() throws GeoprocessException{
+
+	public double getYOffset() throws GeoprocessException {
 		try {
 			String strDist = yoffsetTextField.getText();
 			return Double.parseDouble(strDist);
@@ -123,8 +121,5 @@ public class GeoprocessingXYShiftPanel2 extends AbstractGeoprocessGridbagPanel {
 
 	protected void processLayerComboBoxStateChange(ItemEvent e) {
 	}
-	
-	
 
 }
-

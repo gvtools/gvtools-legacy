@@ -24,13 +24,14 @@ import org.gvsig.raster.dataset.Params;
 import org.gvsig.raster.grid.filter.FilterTypeException;
 import org.gvsig.raster.grid.filter.IRasterFilterListManager;
 import org.gvsig.raster.grid.filter.RasterFilter;
+import org.gvsig.raster.grid.filter.RasterFilter.Kernel;
 import org.gvsig.raster.grid.filter.RasterFilterList;
 import org.gvsig.raster.grid.filter.RasterFilterListManager;
 import org.gvsig.raster.grid.filter.RegistrableFilterListener;
-import org.gvsig.raster.grid.filter.RasterFilter.Kernel;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
+
 /**
- * Gestion  de la lista de filtros
+ * Gestion de la lista de filtros
  */
 public class ConvolutionListManager implements IRasterFilterListManager {
 	protected RasterFilterList filterList = null;
@@ -40,22 +41,26 @@ public class ConvolutionListManager implements IRasterFilterListManager {
 	}
 
 	/**
-	 * Registra ConvolutionListManager en los puntos de extension de RasterFilter
+	 * Registra ConvolutionListManager en los puntos de extension de
+	 * RasterFilter
 	 */
 	public static void register() {
 		ExtensionPoint point = ExtensionPoint.getExtensionPoint("RasterFilter");
 		point.register("Convolucion", ConvolutionListManager.class);
 	}
-	
+
 	/**
-	 * Añade un filtro de convolucion  a la pila de filtros.
+	 * Añade un filtro de convolucion a la pila de filtros.
+	 * 
 	 * @param ladoVentana
-	 * @throws FilterTypeException 
+	 * @throws FilterTypeException
 	 */
-	public void addConvolutionFilter(String Name,int ladoVentana, double agudeza, Kernel kernel) throws FilterTypeException {
+	public void addConvolutionFilter(String Name, int ladoVentana,
+			double agudeza, Kernel kernel) throws FilterTypeException {
 		RasterFilter filter = new ConvolutionByteFilter();
 
-		// Cuando el filtro esta creado, tomamos los valores y lo añadimos a la pila
+		// Cuando el filtro esta creado, tomamos los valores y lo añadimos a la
+		// pila
 		if (filter != null) {
 			filter.addParam("ladoVentana", Integer.valueOf(ladoVentana));
 			filter.addParam("Agudeza", Double.valueOf(agudeza));
@@ -65,23 +70,25 @@ public class ConvolutionListManager implements IRasterFilterListManager {
 		}
 	}
 
-	public ArrayList getStringsFromFilterList(ArrayList filterList, RasterFilter rf) {
+	public ArrayList getStringsFromFilterList(ArrayList filterList,
+			RasterFilter rf) {
 		if (rf instanceof ConvolutionFilter) {
 			filterList.add("filter.convolution.active=true");
 			ConvolutionFilter convolutionFilter = (ConvolutionFilter) rf;
 			switch (convolutionFilter.ladoVentana) {
-				case 0:
-					filterList.add("filter.convolution.ladoVentana=3");
-					break;
-				case 1:
-					filterList.add("filter.convolution.ladoVentana=5");
-					break;
-				case 2:
-					filterList.add("filter.convolution.ladoVentana=7");
-					break;
+			case 0:
+				filterList.add("filter.convolution.ladoVentana=3");
+				break;
+			case 1:
+				filterList.add("filter.convolution.ladoVentana=5");
+				break;
+			case 2:
+				filterList.add("filter.convolution.ladoVentana=7");
+				break;
 			}
 
-			filterList.add("filter.convolution.filterName=" + convolutionFilter.getName());
+			filterList.add("filter.convolution.filterName="
+					+ convolutionFilter.getName());
 			if (convolutionFilter.getName().equals("personalizado")) {
 				double[][] listDouble = convolutionFilter.kernel.kernel;
 				String listString = "";
@@ -97,42 +104,48 @@ public class ConvolutionListManager implements IRasterFilterListManager {
 		return filterList;
 	}
 
-	public void addFilter(Class classFilter, Params params) throws FilterTypeException {
+	public void addFilter(Class classFilter, Params params)
+			throws FilterTypeException {
 		if (classFilter.equals(ConvolutionFilter.class)) {
 			int ladoVentana = 0;
 			double agudeza = 0;
 			Kernel kernel = null;
 			String name = "";
 			for (int i = 0; i < params.getNumParams(); i++) {
-				if (params.getParam(i).id.equals("Panel") &&
-					params.getParam(i).defaultValue instanceof RegistrableFilterListener) {
-					params = ((RegistrableFilterListener) params.getParam(i).defaultValue).getParams();
+				if (params.getParam(i).id.equals("Panel")
+						&& params.getParam(i).defaultValue instanceof RegistrableFilterListener) {
+					params = ((RegistrableFilterListener) params.getParam(i).defaultValue)
+							.getParams();
 					break;
 				}
 			}
 
 			for (int i = 0; i < params.getNumParams(); i++) {
-				if (params.getParam(i).id.equals("LadoVentana") &&
-					params.getParam(i).defaultValue instanceof Integer)
-					ladoVentana = ((Integer) params.getParam(i).defaultValue).intValue();
+				if (params.getParam(i).id.equals("LadoVentana")
+						&& params.getParam(i).defaultValue instanceof Integer)
+					ladoVentana = ((Integer) params.getParam(i).defaultValue)
+							.intValue();
 
 				if (params.getParam(i).id.equals("FilterName"))
 					name = new String((String) params.getParam(i).defaultValue);
 
-				if (params.getParam(i).id.equals("Kernel") &&
-						params.getParam(i).defaultValue instanceof Kernel)
+				if (params.getParam(i).id.equals("Kernel")
+						&& params.getParam(i).defaultValue instanceof Kernel)
 					kernel = (Kernel) params.getParam(i).defaultValue;
-				
-				if (params.getParam(i).id.equals("Agudeza") &&
-						params.getParam(i).defaultValue instanceof Double)
-					agudeza = ((Double) params.getParam(i).defaultValue).doubleValue();
+
+				if (params.getParam(i).id.equals("Agudeza")
+						&& params.getParam(i).defaultValue instanceof Double)
+					agudeza = ((Double) params.getParam(i).defaultValue)
+							.doubleValue();
 			}
 			addConvolutionFilter(name, ladoVentana, agudeza, kernel);
 		}
 	}
 
-	public int createFilterListFromStrings(ArrayList filters, String fil, int filteri) throws FilterTypeException {
-		if ((fil.startsWith("filter.convolution.active")) && (RasterFilterListManager.getValue(fil).equals("true"))) {
+	public int createFilterListFromStrings(ArrayList filters, String fil,
+			int filteri) throws FilterTypeException {
+		if ((fil.startsWith("filter.convolution.active"))
+				&& (RasterFilterListManager.getValue(fil).equals("true"))) {
 			int ladoVentana = 0;
 			double agudeza = 0;
 			String name = "";
@@ -141,8 +154,10 @@ public class ConvolutionListManager implements IRasterFilterListManager {
 			for (int prop = 0; prop < filters.size(); prop++) {
 				String elem = (String) filters.get(prop);
 				if (elem.startsWith("filter.convolution.ladoVentana")) {
-					ladoVentana = Integer.parseInt(RasterFilterListManager.getValue(elem));
-					ladoVentana = (ladoVentana == 7) ? 2 : (ladoVentana == 5) ? 1 : 0;
+					ladoVentana = Integer.parseInt(RasterFilterListManager
+							.getValue(elem));
+					ladoVentana = (ladoVentana == 7) ? 2
+							: (ladoVentana == 5) ? 1 : 0;
 					filters.remove(prop);
 					prop--;
 				}
@@ -155,13 +170,15 @@ public class ConvolutionListManager implements IRasterFilterListManager {
 					String k = RasterFilterListManager.getValue(elem);
 					String[] listString = k.split(" ");
 					if (listString != null) {
-						int lado = (ladoVentana == 0) ? 3 : (ladoVentana == 1) ? 5 : 7;
+						int lado = (ladoVentana == 0) ? 3
+								: (ladoVentana == 1) ? 5 : 7;
 						double[][] listDouble = new double[lado][lado];
 						int cont = 0;
 						for (int i = 0; i < lado; i++) {
 							for (int j = 0; j < lado; j++) {
 								try {
-									listDouble[i][j] = Double.parseDouble(listString[cont]);
+									listDouble[i][j] = Double
+											.parseDouble(listString[cont]);
 									cont++;
 								} catch (NumberFormatException e) {
 								}
@@ -173,7 +190,8 @@ public class ConvolutionListManager implements IRasterFilterListManager {
 					prop--;
 				}
 				if (elem.startsWith("filter.convolution.agudeza")) {
-					agudeza = Double.parseDouble(RasterFilterListManager.getValue(elem));
+					agudeza = Double.parseDouble(RasterFilterListManager
+							.getValue(elem));
 					filters.remove(prop);
 					prop--;
 				}

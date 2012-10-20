@@ -17,9 +17,9 @@ import com.iver.cit.gvsig.project.documents.view.gui.FontOptions;
 /**
  * 
  * @author Cesar Martinez Izquierdo <cesar.martinez@iver.es> 01/11/2008
- *
+ * 
  */
-public class TextPropertiesPanel extends JPanel{
+public class TextPropertiesPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JLabel jLabel1 = null;
 	private JComboBox cmbTypeFont = null;
@@ -42,29 +42,29 @@ public class TextPropertiesPanel extends JPanel{
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
 		this.setLayout(new GridBagLayout());
-		Insets rightInsets = new Insets(4,4,4,0);
-		Insets leftInsets = new Insets(4,0,4,4);
+		Insets rightInsets = new Insets(4, 4, 4, 0);
+		Insets leftInsets = new Insets(4, 0, 4, 4);
 		GridBagConstraints txtRotationConstraints = new GridBagConstraints();
 		txtRotationConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 		txtRotationConstraints.gridy = 5;
 		txtRotationConstraints.weightx = 1.0;
 		txtRotationConstraints.gridx = 1;
 		txtRotationConstraints.insets = rightInsets;
-		
+
 		GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
 		gridBagConstraints10.gridx = 0;
 		gridBagConstraints10.gridy = 5;
 		gridBagConstraints10.insets = leftInsets;
 		gridBagConstraints10.anchor = GridBagConstraints.WEST;
-		
+
 		jLabel5 = new JLabel();
-		jLabel5.setText(PluginServices.getText(this,"fontrotate"));
-		
+		jLabel5.setText(PluginServices.getText(this, "fontrotate"));
+
 		GridBagConstraints colorChooserConstraints = new GridBagConstraints();
 		colorChooserConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 		colorChooserConstraints.anchor = GridBagConstraints.WEST;
@@ -72,80 +72,79 @@ public class TextPropertiesPanel extends JPanel{
 		colorChooserConstraints.weightx = 1.0;
 		colorChooserConstraints.gridx = 1;
 		colorChooserConstraints.insets = rightInsets;
-		
+
 		GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 		gridBagConstraints8.gridx = 0;
 		gridBagConstraints8.gridy = 4;
 		gridBagConstraints8.anchor = GridBagConstraints.WEST;
 		gridBagConstraints8.insets = leftInsets;
-		
+
 		jLabel4 = new JLabel();
-		jLabel4.setText(PluginServices.getText(this,"fontcolor"));
-		
+		jLabel4.setText(PluginServices.getText(this, "fontcolor"));
+
 		GridBagConstraints txtHeightConstraints = new GridBagConstraints();
 		txtHeightConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 		txtHeightConstraints.gridy = 3;
 		txtHeightConstraints.weightx = 1.0;
 		txtHeightConstraints.gridx = 1;
 		txtHeightConstraints.insets = rightInsets;
-		
+
 		GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 		gridBagConstraints6.gridx = 0;
 		gridBagConstraints6.gridy = 3;
 		gridBagConstraints6.anchor = GridBagConstraints.WEST;
 		gridBagConstraints6.insets = leftInsets;
-		
+
 		jLabel3 = new JLabel();
-		jLabel3.setText(PluginServices.getText(this,"fontheight"));
-		
+		jLabel3.setText(PluginServices.getText(this, "fontheight"));
+
 		GridBagConstraints fontStyleConstraints = new GridBagConstraints();
 		fontStyleConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 		fontStyleConstraints.gridy = 2;
 		fontStyleConstraints.weightx = 1.0;
 		fontStyleConstraints.gridx = 1;
 		fontStyleConstraints.insets = rightInsets;
-		
+
 		GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 		gridBagConstraints4.gridx = 0;
 		gridBagConstraints4.gridy = 2;
 		gridBagConstraints4.anchor = GridBagConstraints.WEST;
 		gridBagConstraints4.insets = leftInsets;
-		
-		
+
 		jLabel2 = new JLabel();
-		jLabel2.setText(PluginServices.getText(this,"fontstyle"));
-		
+		jLabel2.setText(PluginServices.getText(this, "fontstyle"));
+
 		GridBagConstraints fontTypeConstraints = new GridBagConstraints();
 		fontTypeConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 		fontTypeConstraints.gridy = 1;
 		fontTypeConstraints.weightx = 1.0;
 		fontTypeConstraints.gridx = 1;
 		fontTypeConstraints.insets = rightInsets;
-		
+
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 		gridBagConstraints2.gridx = 0;
 		gridBagConstraints2.gridy = 1;
 		gridBagConstraints2.anchor = GridBagConstraints.WEST;
 		gridBagConstraints2.insets = leftInsets;
-		
+
 		jLabel1 = new JLabel();
-		jLabel1.setText(PluginServices.getText(this,"fonttype"));
+		jLabel1.setText(PluginServices.getText(this, "fonttype"));
 		jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.TRAILING);
 		jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
-		
+
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 		gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
 		gridBagConstraints1.gridy = 0;
 		gridBagConstraints1.weightx = 1.0;
 		gridBagConstraints1.gridx = 1;
 		gridBagConstraints1.insets = rightInsets;
-		
+
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 0;
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		gridBagConstraints.insets = leftInsets;
-		
+
 		this.add(jLabel1, gridBagConstraints2);
 		this.add(getCmbFontType(), fontTypeConstraints);
 		this.add(jLabel2, gridBagConstraints4);
@@ -155,19 +154,19 @@ public class TextPropertiesPanel extends JPanel{
 		this.add(jLabel4, gridBagConstraints8);
 		this.add(getColorChooser(), colorChooserConstraints);
 		this.add(jLabel5, gridBagConstraints10);
-		this.add(getTxtRotationField(), txtRotationConstraints);		
+		this.add(getTxtRotationField(), txtRotationConstraints);
 	}
 
 	/**
 	 * This method initializes txtTypeFont
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JComboBox getCmbFontType() {
 		if (cmbTypeFont == null) {
 			cmbTypeFont = new JComboBox();
-			String[] types= FontOptions.getFontTypes();
-			for (int i=0;i<types.length;i++){
+			String[] types = FontOptions.getFontTypes();
+			for (int i = 0; i < types.length; i++) {
 				cmbTypeFont.addItem(types[i]);
 			}
 			cmbTypeFont.setSelectedItem(FontOptions.ARIAL);
@@ -178,14 +177,14 @@ public class TextPropertiesPanel extends JPanel{
 
 	/**
 	 * This method initializes txtStyleFont
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JComboBox getCmbFontStyle() {
 		if (cmbStyleFont == null) {
 			cmbStyleFont = new JComboBox();
-			String [] styles=FontOptions.getFontStyles();
-			for (int i =0;i<styles.length;i++){
+			String[] styles = FontOptions.getFontStyles();
+			for (int i = 0; i < styles.length; i++) {
 				cmbStyleFont.addItem(styles[i]);
 			}
 			cmbStyleFont.setSelectedItem(FontOptions.PLAIN);
@@ -195,7 +194,7 @@ public class TextPropertiesPanel extends JPanel{
 
 	/**
 	 * This method initializes txtHeight
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getTxtHeightField() {
@@ -208,7 +207,7 @@ public class TextPropertiesPanel extends JPanel{
 
 	/**
 	 * This method initializes txtColor
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private ColorChooserPanel getColorChooser() {
@@ -221,7 +220,7 @@ public class TextPropertiesPanel extends JPanel{
 
 	/**
 	 * This method initializes txtRotate
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getTxtRotationField() {
@@ -241,16 +240,17 @@ public class TextPropertiesPanel extends JPanel{
 	}
 
 	/**
-	 * @return {@link java.awt.Font#PLAIN}, {@link java.awt.Font#BOLD}
-	 * or {@link java.awt.Font#ITALIC}
+	 * @return {@link java.awt.Font#PLAIN}, {@link java.awt.Font#BOLD} or
+	 *         {@link java.awt.Font#ITALIC}
 	 */
 	public int getFontStyle() {
 		return getCmbFontStyle().getSelectedIndex();
 	}
 
 	/**
-	 * One of {@link java.awt.Font#PLAIN}, {@link java.awt.Font#BOLD}
-	 * or {@link java.awt.Font#ITALIC}
+	 * One of {@link java.awt.Font#PLAIN}, {@link java.awt.Font#BOLD} or
+	 * {@link java.awt.Font#ITALIC}
+	 * 
 	 * @param style
 	 */
 	public void setFontStyle(int style) {
@@ -282,4 +282,4 @@ public class TextPropertiesPanel extends JPanel{
 		getTxtRotationField().setText(new Double(rotation).toString());
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

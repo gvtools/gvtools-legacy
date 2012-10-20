@@ -23,18 +23,21 @@ package org.gvsig.tools.backup;
  */
 
 /**
- * <p>Factory that gets a {@link DefaultBackupGenerator DefaultBackupGenerator} as a particular version of
- *  backup generator.</p>
- *
+ * <p>
+ * Factory that gets a {@link DefaultBackupGenerator DefaultBackupGenerator} as
+ * a particular version of backup generator.
+ * </p>
+ * 
  * @author Jose Ignacio Yarza (jiyarza@opensistemas.com)
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class DefaultBackupGeneratorFactory extends BackupGeneratorFactory {
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.utiles.backup.BackupGeneratorFactory#getBackupGenerator()
 	 */
-	public BackupGenerator getBackupGenerator() {		
+	public BackupGenerator getBackupGenerator() {
 		return new DefaultBackupGenerator();
 	}
 }

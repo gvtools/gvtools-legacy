@@ -42,14 +42,14 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: GeometryUtil.java 6487 2006-07-21 09:08:57Z azabala $
-* $Log$
-* Revision 1.1  2006-07-21 09:08:57  azabala
-* first version in cvs
-*
-*
-*/
+ *
+ * $Id: GeometryUtil.java 6487 2006-07-21 09:08:57Z azabala $
+ * $Log$
+ * Revision 1.1  2006-07-21 09:08:57  azabala
+ * first version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core.util;
 
 import java.util.ArrayList;
@@ -63,154 +63,146 @@ import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Polygon;
 
 public class GeometryUtil {
-	
+
 	private static GeometryFactory fact = new GeometryFactory();
-	
-	
-	public static Polygon removeDuplicates(Polygon polygon){
+
+	public static Polygon removeDuplicates(Polygon polygon) {
 		LineString shell = polygon.getExteriorRing();
 		LineString newShell = removeDuplicates(shell);
 		LinearRing[] holes = new LinearRing[polygon.getNumInteriorRing()];
-		for(int i = 0; i < holes.length; i++){
+		for (int i = 0; i < holes.length; i++) {
 			holes[i] = (LinearRing) polygon.getInteriorRingN(i);
 		}
 		Polygon newPolygon = fact.createPolygon((LinearRing) newShell, holes);
 		return newPolygon;
 	}
-	
-	
-	public static MultiPolygon removeDuplicates(MultiPolygon multiPolygon){
+
+	public static MultiPolygon removeDuplicates(MultiPolygon multiPolygon) {
 		Polygon[] pols = new Polygon[multiPolygon.getNumGeometries()];
-		for(int i = 0; i < pols.length; i++){
+		for (int i = 0; i < pols.length; i++) {
 			Polygon pol = (Polygon) multiPolygon.getGeometryN(i);
 			Polygon newPol = removeDuplicates(pol);
 			pols[i] = newPol;
 		}
 		return fact.createMultiPolygon(pols);
 	}
-	
-	public static Geometry removeDuplicatesFrom(Geometry geometry){
+
+	public static Geometry removeDuplicatesFrom(Geometry geometry) {
 		Geometry solution = null;
-		if(geometry instanceof LineString)
-			solution = removeDuplicates((LineString)geometry);
-		else if(geometry instanceof Polygon)
+		if (geometry instanceof LineString)
+			solution = removeDuplicates((LineString) geometry);
+		else if (geometry instanceof Polygon)
 			solution = removeDuplicates((Polygon) geometry);
-		else if(geometry instanceof MultiPolygon)
+		else if (geometry instanceof MultiPolygon)
 			solution = removeDuplicates((MultiPolygon) geometry);
 		else
 			solution = geometry;
 		return solution;
 	}
-	
-	
-	
-	
-	
-	
-	public static LineString removeDuplicates(LineString line){
+
+	public static LineString removeDuplicates(LineString line) {
 		ArrayList coordinates = new ArrayList();
 		Coordinate prevCoord = null;
 		Coordinate actualCoord = null;
 		int numPoints = line.getNumPoints();
-		for(int i = 0; i < numPoints; i++){
+		for (int i = 0; i < numPoints; i++) {
 			actualCoord = line.getCoordinateN(i);
-			if(prevCoord != null){
-				if(!prevCoord.equals2D(actualCoord)){
+			if (prevCoord != null) {
+				if (!prevCoord.equals2D(actualCoord)) {
 					coordinates.add(actualCoord);
 				}
-			}else{
+			} else {
 				coordinates.add(actualCoord);
 			}
 			prevCoord = actualCoord;
-		}//for
-		//llegados a este punto, construimos la nueva geometria
+		}// for
+			// llegados a este punto, construimos la nueva geometria
 		Coordinate[] newCoord = new Coordinate[coordinates.size()];
 		coordinates.toArray(newCoord);
-		if(line instanceof LineString){
+		if (line instanceof LineString) {
 			return fact.createLineString(newCoord);
-		}else{
+		} else {
 			return fact.createLinearRing(newCoord);
 		}
-		
-	}
-	
-	
-	
-	
-	
-	
-	/**
-	 *  Elimina los puntos colineales de una linea.
-	 *  Tiene en cuenta una tolerancia dada en radianes, de manera que si dos 
-	 *  segmentos contiguos de la linea forman un angulo menor o igual que esa
-	 *  tolerancia, se consideraran colineales sus puntos. Por tanto, cuanto 
-	 *  mayor sea la tolerancia, mas puntos se eliminaran.
-	 * 
-	 * @param linea				Linea original.
-	 * @param toleranciaAngulo	Tolerancia en radianes.
-	 * @return  Una nueva linea filtrada sin los puntos colineales.
-	 */	
-//	public static Linea eliminarColineales(Linea linea, double toleranciaAngulo)
-//	{
-//		// linea de dos puntos: no hay nada que filtrar
-//		if (linea.getNumPuntos() < 3) 
-//		{
-//			try {
-//				return (Linea) linea.clone();
-//			}
-//			catch (CloneNotSupportedException e) {
-//				e.printStackTrace();
-//				return null;
-//			}		
-//		}
-//		
-//		// linea de mas de dos puntos
-//		Linea lineaFiltrada = new Linea();
-//		cloneAndAddPunto(lineaFiltrada, linea.getPunto(0));
-//		
-//		// angulo del primer segmento de la linea
-//		Punto p1 = linea.getPunto(0);
-//		Punto p2 = linea.getPunto(1);			
-//		double anguloAnt = Math.atan2(p2.y - p1.y, p2.x - p1.x);
-//			
-//		// para cada par de segmentos se van comparando los angulos
-//		for (int i = 1, size = linea.getNumPuntos()-1; i < size; i++)
-//		{
-//			p1 = linea.getPunto(i);
-//			p2 = linea.getPunto(i+1);
-//			
-//			double angulo = Math.atan2(p2.y - p1.y, p2.x - p1.x);
-//			
-//			if ( !((anguloAnt - toleranciaAngulo) <= angulo) || !((anguloAnt + toleranciaAngulo) >= angulo) )			
-//			{
-//				cloneAndAddPunto(lineaFiltrada, p1);
-//			}
-//			anguloAnt = angulo;														
-//		}
-//		
-//		// ultimo punto
-//		cloneAndAddPunto(lineaFiltrada, linea.getPunto(linea.getNumPuntos()-1));		
-//		return lineaFiltrada;
-//	}
-	
-	
-	/**
-	 *  Dado un punto, lo clona y lo añade a una linea dada.
-	 *  Metodo para ahorrar lineas de codigo.
-	 *
-	 * @param linea Linea a la que se añade el punto.
-	 * @param p     Punto que se clona y se añade a la linea.
-	 */	
-//	private static void cloneAndAddPunto(Linea linea, Punto p)
-//	{
-//		try {
-//			Punto pc = (Punto) p.clone();
-//			linea.addPunto(pc);
-//		}
-//		catch (CloneNotSupportedException e) {
-//			e.printStackTrace();					
-//		}				
-//	}
-	
-}
 
+	}
+
+	/**
+	 * Elimina los puntos colineales de una linea. Tiene en cuenta una
+	 * tolerancia dada en radianes, de manera que si dos segmentos contiguos de
+	 * la linea forman un angulo menor o igual que esa tolerancia, se
+	 * consideraran colineales sus puntos. Por tanto, cuanto mayor sea la
+	 * tolerancia, mas puntos se eliminaran.
+	 * 
+	 * @param linea
+	 *            Linea original.
+	 * @param toleranciaAngulo
+	 *            Tolerancia en radianes.
+	 * @return Una nueva linea filtrada sin los puntos colineales.
+	 */
+	// public static Linea eliminarColineales(Linea linea, double
+	// toleranciaAngulo)
+	// {
+	// // linea de dos puntos: no hay nada que filtrar
+	// if (linea.getNumPuntos() < 3)
+	// {
+	// try {
+	// return (Linea) linea.clone();
+	// }
+	// catch (CloneNotSupportedException e) {
+	// e.printStackTrace();
+	// return null;
+	// }
+	// }
+	//
+	// // linea de mas de dos puntos
+	// Linea lineaFiltrada = new Linea();
+	// cloneAndAddPunto(lineaFiltrada, linea.getPunto(0));
+	//
+	// // angulo del primer segmento de la linea
+	// Punto p1 = linea.getPunto(0);
+	// Punto p2 = linea.getPunto(1);
+	// double anguloAnt = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+	//
+	// // para cada par de segmentos se van comparando los angulos
+	// for (int i = 1, size = linea.getNumPuntos()-1; i < size; i++)
+	// {
+	// p1 = linea.getPunto(i);
+	// p2 = linea.getPunto(i+1);
+	//
+	// double angulo = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+	//
+	// if ( !((anguloAnt - toleranciaAngulo) <= angulo) || !((anguloAnt +
+	// toleranciaAngulo) >= angulo) )
+	// {
+	// cloneAndAddPunto(lineaFiltrada, p1);
+	// }
+	// anguloAnt = angulo;
+	// }
+	//
+	// // ultimo punto
+	// cloneAndAddPunto(lineaFiltrada, linea.getPunto(linea.getNumPuntos()-1));
+	// return lineaFiltrada;
+	// }
+
+	/**
+	 * Dado un punto, lo clona y lo añade a una linea dada. Metodo para ahorrar
+	 * lineas de codigo.
+	 * 
+	 * @param linea
+	 *            Linea a la que se añade el punto.
+	 * @param p
+	 *            Punto que se clona y se añade a la linea.
+	 */
+	// private static void cloneAndAddPunto(Linea linea, Punto p)
+	// {
+	// try {
+	// Punto pc = (Punto) p.clone();
+	// linea.addPunto(pc);
+	// }
+	// catch (CloneNotSupportedException e) {
+	// e.printStackTrace();
+	// }
+	// }
+
+}

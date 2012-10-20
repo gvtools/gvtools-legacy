@@ -76,26 +76,28 @@ import org.gvsig.xmlschema.utils.SchemaTags;
 public class XSContentImpl extends XSComponentImpl implements IXSContentType {
 
 	public XSContentImpl(IXSSchema schema) {
-		super(schema);		
+		super(schema);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSComplexContent#getExtension()
 	 */
-	public IXSExtension getExtension(){
-		IXSNode node = new SchemaCollection(getSchema(),getElement(),getExtensionMapping()).getFirstNode();
-		if (node != null){
-			return (IXSExtension)node;
+	public IXSExtension getExtension() {
+		IXSNode node = new SchemaCollection(getSchema(), getElement(),
+				getExtensionMapping()).getFirstNode();
+		if (node != null) {
+			return (IXSExtension) node;
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @return The extension mapping
 	 * @throws TypeNotFoundException
 	 */
-	private SchemaObjectsMapping getExtensionMapping(){
+	private SchemaObjectsMapping getExtensionMapping() {
 		SchemaObjectsMapping elementTm = new SchemaObjectsMapping(getSchema());
 		elementTm.addType(SchemaTags.EXTENSION, XSExtensionImpl.class);
 		return elementTm;
@@ -103,24 +105,26 @@ public class XSContentImpl extends XSComponentImpl implements IXSContentType {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSContentType#getRestriction()
 	 */
-	public IXSRestriction getRestriction(){
-		IXSNode node = new SchemaCollection(getSchema(),getElement(),getRestrictionMapping()).getFirstNode();
-		if (node != null){
-			return (IXSRestriction)node;
+	public IXSRestriction getRestriction() {
+		IXSNode node = new SchemaCollection(getSchema(), getElement(),
+				getRestrictionMapping()).getFirstNode();
+		if (node != null) {
+			return (IXSRestriction) node;
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @return The restriction mapping
 	 * @throws TypeNotFoundException
 	 */
-	private SchemaObjectsMapping getRestrictionMapping(){
+	private SchemaObjectsMapping getRestrictionMapping() {
 		SchemaObjectsMapping elementTm = new SchemaObjectsMapping(getSchema());
 		elementTm.addType(SchemaTags.RESTRICTION, XSRestrictionImpl.class);
 		return elementTm;
 	}
-	
+
 }

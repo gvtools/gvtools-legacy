@@ -81,29 +81,29 @@ import org.gvsig.xmlschema.som.IXSElementDeclaration;
 public class ElementWithComplexTypesWrittingTest extends WriterBaseTest {
 	private String elementName1 = "people";
 	private String elementType1 = "people_type";
-    //People
+	// People
 	private String typeName1 = "people_type";
 	private String typeType1 = IXSComplexTypeDefinition.SEQUENCE;
 	private String contentType1 = IXSContentType.COMPLEX_CONTENT;
 	private String contentRestriction1 = IXSContentType.EXTENSION;
 	private String type11ElementName = "name";
-	private String type11ElementType =  null;
+	private String type11ElementType = null;
 	private String type12ElementName = "age";
 	private String type12ElementType = "xs:integer";
 	private String type13ElementName = "address";
 	private String type13ElementType = null;
-	//Name
+	// Name
 	private String typeType11 = IXSComplexTypeDefinition.SEQUENCE;
 	private String contentType11 = IXSContentType.WITOUT_CONTENT;
-	private String contentRestriction11 = IXSContentType.WITOUT_RESTRICTION;		
+	private String contentRestriction11 = IXSContentType.WITOUT_RESTRICTION;
 	private String type111ElementName = "first name";
 	private String type111ElementType = "xs:string";
 	private String type112ElementName = "second name";
 	private String type112ElementType = "xs:string";
-	//Address
+	// Address
 	private String typeType13 = IXSComplexTypeDefinition.SEQUENCE;
 	private String contentType13 = IXSContentType.WITOUT_CONTENT;
-	private String contentRestriction13 = IXSContentType.WITOUT_RESTRICTION;	
+	private String contentRestriction13 = IXSContentType.WITOUT_RESTRICTION;
 	private String type131ElementName = "street";
 	private String type131ElementType = "xs:string";
 	private String type132ElementName = "number";
@@ -112,55 +112,45 @@ public class ElementWithComplexTypesWrittingTest extends WriterBaseTest {
 	private String type133ElementType = "xs:string";
 	private String type134ElementName = "postal code";
 	private String type134ElementType = "xs:integer";
-	
-	public void readSchema()  {
-		IXSElementDeclaration element = getSchema().getElementDeclarationByName(getNamespaceURI(), elementName1);
+
+	public void readSchema() {
+		IXSElementDeclaration element = getSchema()
+				.getElementDeclarationByName(getNamespaceURI(), elementName1);
 		assertNotNull(element);
 		assertEquals(element.getQName().getLocalPart(), elementName1);
 		assertTrue(element.getTypeDefinition() instanceof IXSComplexTypeDefinition);
-		IXSComplexTypeDefinition type = (IXSComplexTypeDefinition)element.getTypeDefinition();		
+		IXSComplexTypeDefinition type = (IXSComplexTypeDefinition) element
+				.getTypeDefinition();
 		assertTrue(type.getContentType() instanceof IXSComplexContent);
-		IXSComplexContent content = (IXSComplexContent)type.getContentType();
+		IXSComplexContent content = (IXSComplexContent) type.getContentType();
 		assertTrue(content.getExtension() != null);
 	}
 
 	public void writeSchema() {
-		//Add the element
-		IXSElementDeclaration element1 = getSchema().addElement( 
-				elementName1,
-				elementType1);				
-		
+		// Add the element
+		IXSElementDeclaration element1 = getSchema().addElement(elementName1,
+				elementType1);
+
 		IXSComplexTypeDefinition complexType = element1.addComplexType(
 				typeType1, contentType1, contentRestriction1);
 		IXSElementDeclaration element11 = complexType.addElement(
-				type11ElementName,
-				type11ElementType);		
+				type11ElementName, type11ElementType);
 		IXSElementDeclaration element12 = complexType.addElement(
-				type12ElementName,
-				type12ElementType);	
+				type12ElementName, type12ElementType);
 		IXSElementDeclaration element13 = complexType.addElement(
-				type13ElementName,
-				type13ElementType);
-		
-		IXSComplexTypeDefinition eComplex11 = element11.addComplexType(typeType11,
-				contentType11,
-				contentRestriction11);
-		eComplex11.addElement(type111ElementName,
-				type111ElementType);
-		eComplex11.addElement(type112ElementName,
-				type112ElementType);
-		
-		IXSComplexTypeDefinition eComplex13 = element13.addComplexType(typeType13,
-				contentType13,
-				contentRestriction13);
-		eComplex13.addElement(type131ElementName,
-				type131ElementType);
-		eComplex13.addElement(type132ElementName,
-				type132ElementType);
-		eComplex13.addElement(type133ElementName,
-				type133ElementType);
-		eComplex13.addElement(type134ElementName,
-				type134ElementType);
+				type13ElementName, type13ElementType);
+
+		IXSComplexTypeDefinition eComplex11 = element11.addComplexType(
+				typeType11, contentType11, contentRestriction11);
+		eComplex11.addElement(type111ElementName, type111ElementType);
+		eComplex11.addElement(type112ElementName, type112ElementType);
+
+		IXSComplexTypeDefinition eComplex13 = element13.addComplexType(
+				typeType13, contentType13, contentRestriction13);
+		eComplex13.addElement(type131ElementName, type131ElementType);
+		eComplex13.addElement(type132ElementName, type132ElementType);
+		eComplex13.addElement(type133ElementName, type133ElementType);
+		eComplex13.addElement(type134ElementName, type134ElementType);
 	}
 
 }

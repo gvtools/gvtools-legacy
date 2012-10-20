@@ -86,6 +86,7 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * This class parses a LookAt tag. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;LookAt&gt;
@@ -97,25 +98,29 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  * &lt;/LookAt&gt;
  * </code>
  * </pre>
+ * 
  * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#lookat
  */
-public class LookAtBinding{
+public class LookAtBinding {
 
 	/**
 	 * It parses the LookAt tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @throws XmlStreamException 
-	 * @throws IOException 
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @throws XmlStreamException
+	 * @throws IOException
 	 */
-	public void parse(IXmlStreamReader parser,GPEDeafultKmlParser handler) throws XmlStreamException, IOException {
+	public void parse(IXmlStreamReader parser, GPEDeafultKmlParser handler)
+			throws XmlStreamException, IOException {
 		boolean endFeature = false;
-		int currentTag;		
+		int currentTag;
 		double longitude;
 		double latitude;
 		double altitude;
@@ -123,47 +128,52 @@ public class LookAtBinding{
 		float tilt;
 		float heading;
 
-
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-				if (CompareUtils.compareWithOutNamespace(tag,Kml2_1_Tags.LONGITUDE)){
+				if (CompareUtils.compareWithOutNamespace(tag,
+						Kml2_1_Tags.LONGITUDE)) {
 					parser.next();
 					longitude = new Double(parser.getText()).doubleValue();
-				}else if (CompareUtils.compareWithOutNamespace(tag,Kml2_1_Tags.LATITUDE)){
+				} else if (CompareUtils.compareWithOutNamespace(tag,
+						Kml2_1_Tags.LATITUDE)) {
 					parser.next();
-					latitude = new Double(parser.getText()).doubleValue();						
-				}else if (CompareUtils.compareWithOutNamespace(tag,Kml2_1_Tags.ALTITUDE)){
+					latitude = new Double(parser.getText()).doubleValue();
+				} else if (CompareUtils.compareWithOutNamespace(tag,
+						Kml2_1_Tags.ALTITUDE)) {
 					parser.next();
 					altitude = new Double(parser.getText()).doubleValue();
-				}else if (CompareUtils.compareWithOutNamespace(tag,Kml2_1_Tags.RANGE)){
+				} else if (CompareUtils.compareWithOutNamespace(tag,
+						Kml2_1_Tags.RANGE)) {
 					parser.next();
 					altitude = new Double(parser.getText()).doubleValue();
-				}else if (CompareUtils.compareWithOutNamespace(tag,Kml2_1_Tags.TILT)){
+				} else if (CompareUtils.compareWithOutNamespace(tag,
+						Kml2_1_Tags.TILT)) {
 					parser.next();
 					tilt = new Float(parser.getText()).floatValue();
-				}else if (CompareUtils.compareWithOutNamespace(tag,Kml2_1_Tags.HEADING)){
+				} else if (CompareUtils.compareWithOutNamespace(tag,
+						Kml2_1_Tags.HEADING)) {
 					parser.next();
 					longitude = new Float(parser.getText()).floatValue();
 				}
 				break;
 			case IXmlStreamReader.END_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.LOOKAT)){						
+				if (CompareUtils.compareWithNamespace(tag, Kml2_1_Tags.LOOKAT)) {
 					endFeature = true;
 				}
 				break;
-			case IXmlStreamReader.CHARACTERS:					
+			case IXmlStreamReader.CHARACTERS:
 
 				break;
 			}
-			if (!endFeature){					
+			if (!endFeature) {
 				currentTag = parser.next();
 				tag = parser.getName();
 			}
-		}			
+		}
 
 	}
 }

@@ -18,49 +18,57 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction;
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
 
-public class ProfileImageExtension  extends AbstractTocContextMenuAction implements IGenericToolBarMenuItem{
-	
-	static private ProfileImageExtension singleton  = null;
-	
+public class ProfileImageExtension extends AbstractTocContextMenuAction
+		implements IGenericToolBarMenuItem {
+
+	static private ProfileImageExtension singleton = null;
+
 	static public ProfileImageExtension getSingleton() {
 		if (singleton == null)
 			singleton = new ProfileImageExtension();
 		return singleton;
-	}	
-	
+	}
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
-		ExtensionPoint extensionPoint = ExtensionPoint.getExtensionPoint("GenericToolBarMenu");
+		ExtensionPoint extensionPoint = ExtensionPoint
+				.getExtensionPoint("GenericToolBarMenu");
 		extensionPoint.register("profile", this);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String actionCommand) {
-		/*if (actionCommand.equals("profile")){
-			com.iver.andami.ui.mdiManager.IWindow activeWindow = PluginServices.getMDIManager().getActiveWindow();
-			
-			//si la ventana activa es de tipo Vista 
-			if (activeWindow instanceof View) {
-				ProfileDialog pcPanel = new ProfileDialog (520,350,((View)activeWindow));
-				scatterPlotDialog.setLayer(selectedItems[0]);
-				PluginServices.getMDIManager().addWindow(pcPanel);
-				
-			}
-		}*/		
+		/*
+		 * if (actionCommand.equals("profile")){
+		 * com.iver.andami.ui.mdiManager.IWindow activeWindow =
+		 * PluginServices.getMDIManager().getActiveWindow();
+		 * 
+		 * //si la ventana activa es de tipo Vista if (activeWindow instanceof
+		 * View) { ProfileDialog pcPanel = new ProfileDialog
+		 * (520,350,((View)activeWindow));
+		 * scatterPlotDialog.setLayer(selectedItems[0]);
+		 * PluginServices.getMDIManager().addWindow(pcPanel);
+		 * 
+		 * } }
+		 */
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (f == null) {
 			return false;
 		}
@@ -79,10 +87,12 @@ public class ProfileImageExtension  extends AbstractTocContextMenuAction impleme
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (f == null) {
 			return false;
 		}
@@ -95,35 +105,41 @@ public class ProfileImageExtension  extends AbstractTocContextMenuAction impleme
 			return false;
 		}
 	}
-	
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#execute(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * org.gvsig.raster.gui.IGenericToolBarMenuItem#execute(com.iver.cit.gvsig
+	 * .project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public void execute(ITocItem item, FLayer[] selectedItems) {
 		FLayer fLayer = null;
-		com.iver.andami.ui.mdiManager.IWindow activeWindow = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow activeWindow = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (selectedItems.length != 1)
 			return;
 		fLayer = selectedItems[0];
 
 		if (!(fLayer instanceof FLyrRasterSE))
 			return;
-		
+
 		/* check if selected layer is multiband */
-		if ( ((FLyrRasterSE) fLayer).getBandCount() < 2) {
-			JOptionPane.showMessageDialog(null, 
-					PluginServices.getText (this, "ext_rs_is_not_a_multiband_layer") );
+		if (((FLyrRasterSE) fLayer).getBandCount() < 2) {
+			JOptionPane.showMessageDialog(null, PluginServices.getText(this,
+					"ext_rs_is_not_a_multiband_layer"));
 			return;
 		}
-		
-		ProfileDialog pcPanel = new ProfileDialog (520,350,((View)activeWindow),(FLyrRasterSE)fLayer);
+
+		ProfileDialog pcPanel = new ProfileDialog(520, 350,
+				((View) activeWindow), (FLyrRasterSE) fLayer);
 		PluginServices.getMDIManager().addWindow(pcPanel);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getGroup()
 	 */
 	public String getGroup() {
@@ -132,6 +148,7 @@ public class ProfileImageExtension  extends AbstractTocContextMenuAction impleme
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getIcon()
 	 */
 	public Icon getIcon() {
@@ -140,6 +157,7 @@ public class ProfileImageExtension  extends AbstractTocContextMenuAction impleme
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getOrder()
 	 */
 	public int getOrder() {
@@ -148,6 +166,7 @@ public class ProfileImageExtension  extends AbstractTocContextMenuAction impleme
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getText()
 	 */
 	public String getText() {
@@ -156,7 +175,11 @@ public class ProfileImageExtension  extends AbstractTocContextMenuAction impleme
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * org.gvsig.raster.gui.IGenericToolBarMenuItem#isEnabled(com.iver.cit.gvsig
+	 * .project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -173,7 +196,11 @@ public class ProfileImageExtension  extends AbstractTocContextMenuAction impleme
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * org.gvsig.raster.gui.IGenericToolBarMenuItem#isVisible(com.iver.cit.gvsig
+	 * .project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
 		if ((selectedItems == null) || (selectedItems.length != 1))
@@ -181,12 +208,13 @@ public class ProfileImageExtension  extends AbstractTocContextMenuAction impleme
 
 		if (!(selectedItems[0] instanceof FLyrRasterSE))
 			return false;
-		
+
 		return true;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.IGenericToolBarMenuItem#getGroupOrder()
 	 */
 	public int getGroupOrder() {

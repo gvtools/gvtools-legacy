@@ -65,6 +65,7 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * It parses a gml:multiPolygonProperty object. Example:
  * <p>
+ * 
  * <pre>
  * <code> 
  * &lt;multiPolygonProperty&gt;
@@ -91,59 +92,65 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  * &lt;/multiPolygonProperty&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class MultiPolygonPropertyTypeBinding extends GeometryBinding{
-	
+public class MultiPolygonPropertyTypeBinding extends GeometryBinding {
+
 	/**
 	 * It parses the gml:MultiPolygon tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * A multipolygon
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return A multipolygon
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public Object parse(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
+	public Object parse(IXmlStreamReader parser, GPEDefaultGmlParser handler)
+			throws XmlStreamException, IOException {
 		boolean endFeature = false;
 		int currentTag;
-		Object multiPolygon = null;		
-		
+		Object multiPolygon = null;
+
 		super.setAtributtes(parser, handler.getErrorHandler());
-		
+
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-					if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTIPOLYGON)){
-						multiPolygon = handler.getProfile().getMultiPolygonTypeBinding().
-						parse(parser, handler);
-					}
-					break;
-				case IXmlStreamReader.END_ELEMENT:
-					if ((CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTIPOLYGONPROPERTY))||
-					(CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTIEXTENTOF))||
-					(CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTICOVERAGE)))
-					{						
-						endFeature = true;							
-					}
-					break;
-				case IXmlStreamReader.CHARACTERS:					
-					
-					break;
+				if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_MULTIPOLYGON)) {
+					multiPolygon = handler.getProfile()
+							.getMultiPolygonTypeBinding()
+							.parse(parser, handler);
 				}
-				if (!endFeature){					
-					currentTag = parser.next();
-					tag = parser.getName();
+				break;
+			case IXmlStreamReader.END_ELEMENT:
+				if ((CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_MULTIPOLYGONPROPERTY))
+						|| (CompareUtils.compareWithNamespace(tag,
+								GMLTags.GML_MULTIEXTENTOF))
+						|| (CompareUtils.compareWithNamespace(tag,
+								GMLTags.GML_MULTICOVERAGE))) {
+					endFeature = true;
 				}
-			}			
-		return multiPolygon;	
+				break;
+			case IXmlStreamReader.CHARACTERS:
+
+				break;
+			}
+			if (!endFeature) {
+				currentTag = parser.next();
+				tag = parser.getName();
+			}
+		}
+		return multiPolygon;
 	}
 }
-

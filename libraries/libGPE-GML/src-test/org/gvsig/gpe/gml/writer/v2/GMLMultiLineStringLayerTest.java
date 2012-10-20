@@ -69,9 +69,10 @@ import org.gvsig.gpe.writer.GPEMultiLineStringLayerTest;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class GMLMultiLineStringLayerTest extends GPEMultiLineStringLayerTest{
+public class GMLMultiLineStringLayerTest extends GPEMultiLineStringLayerTest {
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEParserClass()
 	 */
 	public Class getGPEParserClass() {
@@ -80,6 +81,7 @@ public class GMLMultiLineStringLayerTest extends GPEMultiLineStringLayerTest{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEWriterHandlerClass()
 	 */
 	public Class getGPEWriterHandlerClass() {
@@ -87,4 +89,3 @@ public class GMLMultiLineStringLayerTest extends GPEMultiLineStringLayerTest{
 	}
 
 }
-

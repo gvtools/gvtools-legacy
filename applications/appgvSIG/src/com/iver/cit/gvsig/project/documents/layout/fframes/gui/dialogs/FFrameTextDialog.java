@@ -62,7 +62,6 @@ import org.gvsig.gui.beans.AcceptCancelPanel;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.WindowInfo;
-import com.iver.cit.gvsig.AddLayer;
 import com.iver.cit.gvsig.gui.panels.ColorChooserPanel;
 import com.iver.cit.gvsig.gui.utils.FontChooser;
 import com.iver.cit.gvsig.project.documents.layout.FLayoutUtilities;
@@ -73,18 +72,18 @@ import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
 /**
  * Dialogo para a�adir texto al Layout.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FFrameTextDialog extends JPanel implements IFFrameDialog {
-	public static final ImageIcon ileft = PluginServices.getIconTheme()
-		.get("text-left-icon");
+	public static final ImageIcon ileft = PluginServices.getIconTheme().get(
+			"text-left-icon");
 
-	public static final ImageIcon icenterV = PluginServices.getIconTheme()
-			.get("text-center-v-icon");
+	public static final ImageIcon icenterV = PluginServices.getIconTheme().get(
+			"text-center-v-icon");
 
-	public static final ImageIcon iright = PluginServices.getIconTheme()
-			.get("text-right-icon");
+	public static final ImageIcon iright = PluginServices.getIconTheme().get(
+			"text-right-icon");
 
 	private javax.swing.JPanel jContentPane = null; // @jve:visual-info
 													// decl-index=0
@@ -168,7 +167,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This is the default constructor
-	 *
+	 * 
 	 * @param layout
 	 *            Referencia al Layout.
 	 * @param fframe
@@ -196,7 +195,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * Inserta el rect�ngulo a ocupar por el fframe de texto.
-	 *
+	 * 
 	 * @param r
 	 *            Rect�ngulo.
 	 */
@@ -206,7 +205,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes jContentPane
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private javax.swing.JPanel getJContentPane() {
@@ -237,7 +236,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private javax.swing.JScrollPane getJScrollPane() {
@@ -255,7 +254,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes taTexto
-	 *
+	 * 
 	 * @return javax.swing.JTextArea
 	 */
 	private javax.swing.JTextArea getTaTexto() {
@@ -274,7 +273,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes bIzquierda
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JToggleButton getBIzquierda() {
@@ -283,7 +282,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 			bIzquierda.setPreferredSize(new java.awt.Dimension(28, 20));
 			if (fframetext.getPos() == FFrameText.LEFT) {
 				bIzquierda.setSelected(true);
-				pos=FFrameText.LEFT;
+				pos = FFrameText.LEFT;
 			}
 
 			bIzquierda.setIcon(ileft);
@@ -304,7 +303,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes bCentro
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JToggleButton getBCentro() {
@@ -313,7 +312,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 			bCentro.setPreferredSize(new java.awt.Dimension(28, 20));
 			if (fframetext.getPos() == FFrameText.CENTER) {
 				bCentro.setSelected(true);
-				pos=FFrameText.CENTER;
+				pos = FFrameText.CENTER;
 			}
 
 			bCentro.setIcon(icenterV);
@@ -333,7 +332,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes bDerecha
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JToggleButton getBDerecha() {
@@ -342,7 +341,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 			bDerecha.setPreferredSize(new java.awt.Dimension(28, 20));
 			if (fframetext.getPos() == FFrameText.RIGTH) {
 				bDerecha.setSelected(true);
-				pos=FFrameText.RIGTH;
+				pos = FFrameText.RIGTH;
 			}
 
 			bDerecha.setIcon(iright);
@@ -450,7 +449,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 			};
 			cancelAction = new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					newFFrameText=null;
+					newFFrameText = null;
 					PluginServices.getMDIManager().closeWindow(
 							FFrameTextDialog.this);
 				}
@@ -467,7 +466,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.iver.mdiApp.ui.MDIManager.View#getViewInfo()
 	 */
 	public WindowInfo getWindowInfo() {
@@ -488,7 +487,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes bFuente
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBFuente() {
@@ -496,15 +495,15 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 			bFuente = new javax.swing.JButton();
 			bFuente.setBounds(158, 98, 78, 24);
 			bFuente.setText(PluginServices.getText(this, "fuente")); //$NON-NLS-1$
-			m_font=fframetext.getFont();
+			m_font = fframetext.getFont();
 			bFuente.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Font font = FontChooser.showDialog(PluginServices.getText(
 							this, "__seleccion_de_fuente"), m_font);
 					if (font != null)
-						m_font=font; // fchoser=new
-													// FontChooser();
-													// //$NON-NLS-1$
+						m_font = font; // fchoser=new
+										// FontChooser();
+										// //$NON-NLS-1$
 				}
 			});
 		}
@@ -520,7 +519,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes chbSurroundingRectangle
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 * @author jaume
 	 */
@@ -546,9 +545,9 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes txtCellPadding
-	 *
+	 * 
 	 * @author jaume
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getTxtCellPadding() {
@@ -570,7 +569,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes chkFontSize
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getChkFontSize() {
@@ -590,7 +589,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes txtFontSize
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getTxtFontSize() {
@@ -611,7 +610,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes chkTitle2
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getChkTitle() {
@@ -633,7 +632,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes txtTitle
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getTxtTitle() {
@@ -649,7 +648,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel() {
@@ -681,7 +680,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes txtTitleSize
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getTxtTitleSize() {
@@ -706,9 +705,9 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 	 * Asegura cutremente que no se meten valores que no sean. El funcionamiento
 	 * consiste en si el �ltimo car�cter escrito no vale para formar un int
 	 * entonces se elimina.
-	 *
+	 * 
 	 * enteros.
-	 *
+	 * 
 	 * @param tf
 	 */
 	private void ensureInteger(JTextField tf) {
@@ -725,7 +724,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel1() {
@@ -767,7 +766,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes txtFrameSize
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getTxtFrameSize() {
@@ -788,7 +787,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes jButton1
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private ColorChooserPanel getColorFrame() {
@@ -808,7 +807,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes jButton1
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private ColorChooserPanel getColorFont() {
@@ -828,7 +827,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes jButton1
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private ColorChooserPanel getColorTitle() {
@@ -847,7 +846,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes pRotation
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPRotation getPRotation() {
@@ -860,7 +859,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes jPanel21
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel21() {

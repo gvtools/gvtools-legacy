@@ -44,13 +44,14 @@ import java.io.IOException;
 
 import org.gvsig.remoteClient.gml.schemas.XMLSchemaParser;
 import org.xmlpull.v1.XmlPullParserException;
+
 /**
- * Implements the main functionalities to parse an ProperyIsLike element
- * of a Filter Encoding expression<br>
- *
- * The PropertyIsLike element is intended to encode a character string comparison
- * operator with pattern matching.
- *	
+ * Implements the main functionalities to parse an ProperyIsLike element of a
+ * Filter Encoding expression<br>
+ * 
+ * The PropertyIsLike element is intended to encode a character string
+ * comparison operator with pattern matching.
+ * 
  * @see http://www.opengeospatial.org/standards/filter
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
@@ -59,32 +60,31 @@ public class FIsLikeOperator {
 	protected String propName;
 	protected String literal;
 
-
-
-
-	public void parse(XMLSchemaParser parser, int Tag2, String expressionType) throws XmlPullParserException, IOException {
+	public void parse(XMLSchemaParser parser, int Tag2, String expressionType)
+			throws XmlPullParserException, IOException {
 		int currentTag;
 		boolean end = false;
 		currentTag = Tag2;
 
-		parser.require(XMLSchemaParser.START_TAG, null, FilterTags.PROPERTYISLIKE);
+		parser.require(XMLSchemaParser.START_TAG, null,
+				FilterTags.PROPERTYISLIKE);
 
-		while (!end)
-		{
-			switch(currentTag)
-			{
+		while (!end) {
+			switch (currentTag) {
 			case XMLSchemaParser.START_TAG:
-				if (parser.getName().compareTo(FilterUtils.remNameSpace(FilterTags.PROPERTYNAME))==0) {
+				if (parser.getName().compareTo(
+						FilterUtils.remNameSpace(FilterTags.PROPERTYNAME)) == 0) {
 					this.propName = parser.nextText();
 
-				}
-				else if (parser.getName().compareTo(FilterUtils.remNameSpace(FilterTags.LITERAL))==0) {
+				} else if (parser.getName().compareTo(
+						FilterUtils.remNameSpace(FilterTags.LITERAL)) == 0) {
 					this.literal = parser.nextText();
 
 				}
-				break;	
+				break;
 			case XMLSchemaParser.END_TAG:
-				if (parser.getName().compareTo(FilterUtils.remNameSpace(FilterTags.PROPERTYISLIKE)) == 0)
+				if (parser.getName().compareTo(
+						FilterUtils.remNameSpace(FilterTags.PROPERTYISLIKE)) == 0)
 					end = true;
 				break;
 			case XMLSchemaParser.TEXT:
@@ -95,10 +95,12 @@ public class FIsLikeOperator {
 		}
 	}
 
-	public String getPropName() { return propName; }
-	public String getLiteral() {return literal;}
+	public String getPropName() {
+		return propName;
+	}
 
-
-
+	public String getLiteral() {
+		return literal;
+	}
 
 }

@@ -39,16 +39,18 @@ import com.iver.cit.gvsig.fmap.layers.LayerFactory;
  * Procesos necesarios para la funcionalidad de vectorización.
  * 
  * 11/07/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class VectorProcess implements IProcessActions {
-	private FLyrRasterSE                  sourceLayer       = null;
-	private IProcessActions               endActions        = null;
-	private String                        shapeName         = null;
+	private FLyrRasterSE sourceLayer = null;
+	private IProcessActions endActions = null;
+	private String shapeName = null;
 	private CoordinateReferenceSystem crs = null;
-	
+
 	/**
 	 * Constructor que asigna el nombre de capa
+	 * 
 	 * @param lyrPath
 	 */
 	public VectorProcess(FLyrRasterSE lyr, IProcessActions endActions,
@@ -60,16 +62,19 @@ public class VectorProcess implements IProcessActions {
 
 	/**
 	 * Aplica el proceso de recorte sobre el raster inicial
+	 * 
 	 * @throws FilterTypeException
-	 * @throws LoadLayerException 
+	 * @throws LoadLayerException
 	 */
-	public void contourLines(double distance) throws FilterTypeException, LoadLayerException {
-		if(sourceLayer == null)
+	public void contourLines(double distance) throws FilterTypeException,
+			LoadLayerException {
+		if (sourceLayer == null)
 			return;
 
 		RasterProcess contourLinesProcess = new ContourLinesProcess();
 		contourLinesProcess.setActions(this);
-		shapeName = RasterLibrary.tempCacheDirectoryPath + File.separator + RasterLibrary.usesOnlyLayerName() + ".shp";
+		shapeName = RasterLibrary.tempCacheDirectoryPath + File.separator
+				+ RasterLibrary.usesOnlyLayerName() + ".shp";
 		contourLinesProcess.addParam("filename", shapeName);
 		contourLinesProcess.addParam("layer", sourceLayer);
 		contourLinesProcess.addParam("min", new Double(0));
@@ -81,40 +86,50 @@ public class VectorProcess implements IProcessActions {
 	/**
 	 * Aplica el proceso para vectorizar con potrace
 	 */
-	public void potraceLines(int policy, int bezierPoints, int despeckle, double cornerThreshold, double optimizationTolerance, int outputQuantization, boolean curveOptimization) {
+	public void potraceLines(int policy, int bezierPoints, int despeckle,
+			double cornerThreshold, double optimizationTolerance,
+			int outputQuantization, boolean curveOptimization) {
 		PotraceProcess potraceProcess = new PotraceProcess();
 		potraceProcess.setActions(this);
-		shapeName = RasterLibrary.tempCacheDirectoryPath + File.separator + RasterLibrary.usesOnlyLayerName() + ".shp";
+		shapeName = RasterLibrary.tempCacheDirectoryPath + File.separator
+				+ RasterLibrary.usesOnlyLayerName() + ".shp";
 		potraceProcess.addParam("filename", shapeName);
 		potraceProcess.addParam("layer", sourceLayer);
 		potraceProcess.addParam("policy", new Integer(policy));
 		potraceProcess.addParam("points", new Integer(bezierPoints));
 		potraceProcess.addParam("despeckle", new Integer(despeckle));
 		potraceProcess.addParam("cornerThreshold", new Double(cornerThreshold));
-		potraceProcess.addParam("optimizationTolerance", new Double(optimizationTolerance));
-		potraceProcess.addParam("outputQuantization", new Integer(outputQuantization));
-		potraceProcess.addParam("curveoptimization", new Boolean(curveOptimization));
+		potraceProcess.addParam("optimizationTolerance", new Double(
+				optimizationTolerance));
+		potraceProcess.addParam("outputQuantization", new Integer(
+				outputQuantization));
+		potraceProcess.addParam("curveoptimization", new Boolean(
+				curveOptimization));
 		potraceProcess.start();
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.IProcessActions#end(java.lang.Object)
 	 */
 	public void end(Object param) {
 		FLayer shpLyr = null;
 		try {
-			String layerName = RasterUtilities.getFileNameFromCanonical(shapeName);
-			shpLyr = LayerFactory.createLayer(layerName, "gvSIG shp driver", new File(shapeName), crs);
+			String layerName = RasterUtilities
+					.getFileNameFromCanonical(shapeName);
+			shpLyr = LayerFactory.createLayer(layerName, "gvSIG shp driver",
+					new File(shapeName), crs);
 		} catch (LoadLayerException e) {
 			RasterToolsUtil.messageBoxError("error_generating_layer", null, e);
 		}
-		if(endActions != null)
-			endActions.end(new Object[]{this, shpLyr});
+		if (endActions != null)
+			endActions.end(new Object[] { this, shpLyr });
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.IProcessActions#interrupted(java.lang.Object)
 	 */
 	public void interrupted() {
@@ -122,15 +137,17 @@ public class VectorProcess implements IProcessActions {
 
 	/**
 	 * Asigna la capa raster a vectorizar
+	 * 
 	 * @param lyr
 	 */
 	public void setSourceLayer(FLyrRasterSE lyr) {
 		this.sourceLayer = lyr;
 	}
-	
+
 	/**
-	 * Asigna el interfaz para que el proceso ejectute las acciones de finalización
-	 * al acabar.
+	 * Asigna el interfaz para que el proceso ejectute las acciones de
+	 * finalización al acabar.
+	 * 
 	 * @param endActions
 	 */
 	public void setProcessActions(IProcessActions endActions) {

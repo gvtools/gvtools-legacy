@@ -48,5 +48,5 @@ import com.hardcode.driverManager.Driver;
 import com.hardcode.gdbms.engine.data.DataSourceFactory;
 
 public interface GDBMSDriver extends Driver {
-    public void setDataSourceFactory(DataSourceFactory dsf);
+	public void setDataSourceFactory(DataSourceFactory dsf);
 }

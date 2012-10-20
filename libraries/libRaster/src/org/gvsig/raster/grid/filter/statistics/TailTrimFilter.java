@@ -24,84 +24,90 @@ import org.gvsig.raster.dataset.IBuffer;
 import org.gvsig.raster.dataset.Params;
 import org.gvsig.raster.grid.filter.RasterFilter;
 import org.gvsig.raster.hierarchy.IStatistics;
+
 /**
  * Filtro de recorte de colas. Este filtro toma pixels de la imagen (todos o
  * algunas muestras dependiendo de la variable percentSample) y los ordena.
  * Recorta un porcentaje controlado por tailPercenten ambos extremos del vector
  * ordenado. El nuevo máximo y mínimo coinciden con el valor de la posición del
- * vector recortado. Por arriba para el máximo y por abajo para el mínimo.
- * El execute de este filtro no recorre toda la imagen sino que lo hace en
- * función del porcentaje de muestras que quieren tomarse y calculando a partir
- * de este porcentaje un incremento.
- *
+ * vector recortado. Por arriba para el máximo y por abajo para el mínimo. El
+ * execute de este filtro no recorre toda la imagen sino que lo hace en función
+ * del porcentaje de muestras que quieren tomarse y calculando a partir de este
+ * porcentaje un incremento.
+ * 
  * @version 31/05/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class TailTrimFilter extends RasterFilter {
-	public static String[] names             = new String[] {"tailTrim"};
+	public static String[] names = new String[] { "tailTrim" };
 
-	protected int 			count            = 0;
-	protected int 			tailSize         = 0;
-	protected int[]			tailSizeList     = null;
-	protected int 			nSamples         = 0;
-	protected boolean 		removeMaxValue   = false;
-	protected int 			incX , incY;
+	protected int count = 0;
+	protected int tailSize = 0;
+	protected int[] tailSizeList = null;
+	protected int nSamples = 0;
+	protected boolean removeMaxValue = false;
+	protected int incX, incY;
 
-	//Parámetros del filtro
-	protected double 		tailPercent      = 0D;
-	protected double[] 		tailPercentList  = null;
-	public double 			percentSamples   = 0D;
+	// Parámetros del filtro
+	protected double tailPercent = 0D;
+	protected double[] tailPercentList = null;
+	public double percentSamples = 0D;
 
-	protected int[][] 		sample           = null;
-	protected double[][] 	sampleDec        = null;
-	protected IStatistics	stats            = null;
+	protected int[][] sample = null;
+	protected double[][] sampleDec = null;
+	protected IStatistics stats = null;
 	/**
-	 * Array con el resultado. La primera dimensión es el número de bandas y la segunda son dos elementos
-	 * el máximo y el mínimo para esa banda.
+	 * Array con el resultado. La primera dimensión es el número de bandas y la
+	 * segunda son dos elementos el máximo y el mínimo para esa banda.
 	 */
-	protected double[][]	result = null;
-
+	protected double[][] result = null;
 
 	public TailTrimFilter() {
 		setName(names[0]);
 	}
 
 	/**
-	 * Calcula el incremento de X y de Y para la toma de muestras en el calculo de
-	 * valores para el recorte
+	 * Calcula el incremento de X y de Y para la toma de muestras en el calculo
+	 * de valores para el recorte
 	 */
 	public void pre() {
 		raster = (IBuffer) params.get("raster");
 		height = raster.getHeight();
 		width = raster.getWidth();
-		if(params.get("tail") != null)
+		if (params.get("tail") != null)
 			tailPercent = ((Double) params.get("tail")).doubleValue();
 		tailPercentList = ((double[]) params.get("tailList"));
-		if(params.get("samples") != null)
+		if (params.get("samples") != null)
 			percentSamples = ((Double) params.get("samples")).doubleValue();
-		if(params.get("remove") != null)
+		if (params.get("remove") != null)
 			removeMaxValue = ((Boolean) params.get("remove")).booleanValue();
 		stats = ((IStatistics) params.get("stats"));
 
-		if(tailPercentList != null)
+		if (tailPercentList != null)
 			tailSizeList = new int[tailPercentList.length];
-		
+
 		if (exec) {
 			count = 0;
 
-			if (this.percentSamples == 0) { // Se toman todos los pixeles de la imagen
+			if (this.percentSamples == 0) { // Se toman todos los pixeles de la
+											// imagen
 				nSamples = height * width;
 				tailSize = (int) Math.round(this.tailPercent * nSamples);
-				if(tailPercentList != null) {
+				if (tailPercentList != null) {
 					for (int i = 0; i < tailPercentList.length; i++)
-						tailSizeList[i] = (int) Math.round(this.tailPercentList[i] * nSamples);
-				}		
-			} else { // Se toma un porcentaje de pixeles de la imagen para el calculo
-				incX = (int) Math.round(width / (int) Math.round(this.percentSamples * width));
-				incY = (int) Math.round(height / (int) Math.round(this.percentSamples * height));
-				nSamples = (int) ((Math.round(width / incX) + 1) * (Math.round(height / incY) + 1));
+						tailSizeList[i] = (int) Math
+								.round(this.tailPercentList[i] * nSamples);
+				}
+			} else { // Se toma un porcentaje de pixeles de la imagen para el
+						// calculo
+				incX = (int) Math.round(width
+						/ (int) Math.round(this.percentSamples * width));
+				incY = (int) Math.round(height
+						/ (int) Math.round(this.percentSamples * height));
+				nSamples = (int) ((Math.round(width / incX) + 1) * (Math
+						.round(height / incY) + 1));
 				tailSize = (int) (nSamples * this.tailPercent);
-				if(tailPercentList != null) {
+				if (tailPercentList != null) {
 					for (int i = 0; i < tailPercentList.length; i++)
 						tailSizeList[i] = (int) (nSamples * this.tailPercentList[i]);
 				}
@@ -131,8 +137,10 @@ public class TailTrimFilter extends RasterFilter {
 					Arrays.sort(sampleDec[i]);
 			}
 
-			// Si está marcada la opción removeMaxValue se calcula la posición en la que el máximo valor
-			// y el mínimo ya no estan, teniendo así un subconjunto del vector que elimina estos valores
+			// Si está marcada la opción removeMaxValue se calcula la posición
+			// en la que el máximo valor
+			// y el mínimo ya no estan, teniendo así un subconjunto del vector
+			// que elimina estos valores
 			if (removeMaxValue) {
 				if (sample != null)
 					this.calcPosInitEnd();
@@ -141,12 +149,13 @@ public class TailTrimFilter extends RasterFilter {
 					this.calcPosInitEndDec();
 			}
 
-			// Calculamos de nuevo el número de muestras ya que hemos quitado los valores máximo y mínimo
+			// Calculamos de nuevo el número de muestras ya que hemos quitado
+			// los valores máximo y mínimo
 			nSamples = posFin - posInit;
 
 			// Como ha podido cambiar nSamples recalculamos tailsize
 			tailSize = (int) (nSamples * this.tailPercent);
-			if(tailPercentList != null) {
+			if (tailPercentList != null) {
 				for (int i = 0; i < tailPercentList.length; i++)
 					tailSizeList[i] = (int) (nSamples * this.tailPercentList[i]);
 			}
@@ -211,6 +220,7 @@ public class TailTrimFilter extends RasterFilter {
 
 	/**
 	 * Obtiene el porcentaje de recorte
+	 * 
 	 * @return porcentaje de recorte
 	 */
 	public double getTailPercent() {
@@ -218,16 +228,18 @@ public class TailTrimFilter extends RasterFilter {
 	}
 
 	/**
-	 * Obtiene la lista de porcentajes de recorte 
+	 * Obtiene la lista de porcentajes de recorte
+	 * 
 	 * @return porcentajes de recorte
 	 */
 	public double[] getTailPercentList() {
 		return tailPercentList;
 	}
-	
+
 	/**
-	 * Devuelve true si se eliminan los extremos de la serie antes del calculo del recorte de colas
-	 * o false si no se eliminan.
+	 * Devuelve true si se eliminan los extremos de la serie antes del calculo
+	 * del recorte de colas o false si no se eliminan.
+	 * 
 	 * @return
 	 */
 	public boolean removeMaxValue() {
@@ -236,6 +248,7 @@ public class TailTrimFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getGroup()
 	 */
 	public String getGroup() {
@@ -244,6 +257,7 @@ public class TailTrimFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getUIParams()
 	 */
 	public Params getUIParams(String nameFilter) {
@@ -253,6 +267,7 @@ public class TailTrimFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getInRasterDataType()
 	 */
 	public int getInRasterDataType() {
@@ -261,6 +276,7 @@ public class TailTrimFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getOutRasterDataType()
 	 */
 	public int getOutRasterDataType() {
@@ -269,7 +285,9 @@ public class TailTrimFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.RasterFilter#getResult(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.RasterFilter#getResult(java.lang.String)
 	 */
 	public Object getResult(String name) {
 		return null;
@@ -277,6 +295,7 @@ public class TailTrimFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#process(int, int)
 	 */
 	public void process(int x, int y) throws InterruptedException {
@@ -284,6 +303,7 @@ public class TailTrimFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getNames()
 	 */
 	public String[] getNames() {
@@ -292,6 +312,7 @@ public class TailTrimFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#isVisible()
 	 */
 	public boolean isVisible() {

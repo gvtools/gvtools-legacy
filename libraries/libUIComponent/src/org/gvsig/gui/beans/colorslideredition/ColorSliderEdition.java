@@ -32,28 +32,30 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.swing.JComponent;
+
 /**
  * <code>DoubleSlider</code> representa un componente que tiene dos
  * deslizadores. Se puede definir un máximo y un mínimo.
- *
+ * 
  * @version 04/05/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
-public class ColorSliderEdition extends JComponent implements MouseListener, MouseMotionListener {
+public class ColorSliderEdition extends JComponent implements MouseListener,
+		MouseMotionListener {
 	private static final long serialVersionUID = 663355422780987493L;
 
-	private ArrayList<ColorSliderListener> actionCommandListeners   = new ArrayList<ColorSliderListener>();
+	private ArrayList<ColorSliderListener> actionCommandListeners = new ArrayList<ColorSliderListener>();
 	private ArrayList<ColorSliderListener> actionSelectionListeners = new ArrayList<ColorSliderListener>();
-	private ArrayList<ItemColorSlider>     items                    = new ArrayList<ItemColorSlider>();
+	private ArrayList<ItemColorSlider> items = new ArrayList<ItemColorSlider>();
 
-	private final int LEFT_PAD       = 3;
-	private final int RIGHT_PAD      = 3;
+	private final int LEFT_PAD = 3;
+	private final int RIGHT_PAD = 3;
 
-	private Image     bufferImage    = null;
-	private int       width          = 0;
-	private int       height         = 0;
-	private Graphics  bufferGraphics = null;
-	private boolean   interpolated   = true;
+	private Image bufferImage = null;
+	private int width = 0;
+	private int height = 0;
+	private Graphics bufferGraphics = null;
+	private boolean interpolated = true;
 
 	/**
 	 * Crea un DoubleSlider con las opciones por defecto.
@@ -66,6 +68,7 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.JComponent#addNotify()
 	 */
 	public void addNotify() {
@@ -86,6 +89,7 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 
 	/**
 	 * Devuelve un color de interpolacion entre dos colores
+	 * 
 	 * @param value
 	 * @param pos
 	 * @return
@@ -103,7 +107,8 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 		ItemColorSlider item1 = (ItemColorSlider) newItems.get(pos);
 		ItemColorSlider item2 = (ItemColorSlider) newItems.get(pos + 1);
 
-		double percValue = ((value - item1.getValue()) * 100) / (item2.getValue() - item1.getValue());
+		double percValue = ((value - item1.getValue()) * 100)
+				/ (item2.getValue() - item1.getValue());
 
 		Color halfColor = new Color(
 				(item2.getColor().getRed() + item1.getColor().getRed()) >> 1,
@@ -130,10 +135,11 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 
 		Color newColor = new Color(
 				(int) (color1.getRed() + ((color2.getRed() - color1.getRed()) * percNew)) & 0xff,
-				(int) (color1.getGreen() + ((color2.getGreen() - color1.getGreen()) * percNew)) & 0xff,
+				(int) (color1.getGreen() + ((color2.getGreen() - color1
+						.getGreen()) * percNew)) & 0xff,
 				(int) (color1.getBlue() + ((color2.getBlue() - color1.getBlue()) * percNew)) & 0xff,
-				(int) (color1.getAlpha() + ((color2.getAlpha() - color1.getAlpha()) * percNew)) & 0xff);
-
+				(int) (color1.getAlpha() + ((color2.getAlpha() - color1
+						.getAlpha()) * percNew)) & 0xff);
 
 		return newColor;
 	}
@@ -141,6 +147,7 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 	/**
 	 * Crea un graphics con las dimensiones del componente si no estaba creado y
 	 * lo devuelve para poder usarlo para dibujar en él.
+	 * 
 	 * @return Graphics
 	 */
 	private Graphics getBufferGraphics() {
@@ -193,8 +200,8 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 	}
 
 	/**
-	 * Convierte a gris y aclara el color si esta inactivo el componente, en caso
-	 * contrario devuelve el color tal cual
+	 * Convierte a gris y aclara el color si esta inactivo el componente, en
+	 * caso contrario devuelve el color tal cual
 	 */
 	private Color convertColor(Color value) {
 		if (isEnabled())
@@ -221,17 +228,20 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 		getBufferGraphics().fillRect(0, 0, width, height);
 
 		getBufferGraphics().setColor(Color.black);
-		getBufferGraphics().drawRect(LEFT_PAD, 0, width - 1 - LEFT_PAD - RIGHT_PAD, height - 18);
+		getBufferGraphics().drawRect(LEFT_PAD, 0,
+				width - 1 - LEFT_PAD - RIGHT_PAD, height - 18);
 
 		Shape oldClip = getBufferGraphics().getClip();
-		getBufferGraphics().setClip(LEFT_PAD + 2, 2, width - 4 - LEFT_PAD - RIGHT_PAD, height - 21);
+		getBufferGraphics().setClip(LEFT_PAD + 2, 2,
+				width - 4 - LEFT_PAD - RIGHT_PAD, height - 21);
 		for (int i = 0; (i * 4 + 2) <= (width - 3 - LEFT_PAD - RIGHT_PAD); i++) {
 			for (int j = 0; (j * 4 + 2) <= (height - 20); j++) {
 				if ((i + j) % 2 == 0)
 					getBufferGraphics().setColor(Color.white);
 				else
 					getBufferGraphics().setColor(new Color(204, 204, 204));
-				getBufferGraphics().fillRect(i * 4 + 2 + LEFT_PAD, j * 4 + 2, 4, 4);
+				getBufferGraphics().fillRect(i * 4 + 2 + LEFT_PAD, j * 4 + 2,
+						4, 4);
 			}
 		}
 		Color newColor = Color.black;
@@ -247,7 +257,8 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 				if ((pos + 1) < newArray.size()) {
 					double min = newArray.get(pos).getValue();
 					double max = newArray.get(pos + 1).getValue();
-					if ((min + ((max - min) * newArray.get(pos + 1).getInterpolated() / 100)) < pixelToValue(i))
+					if ((min + ((max - min)
+							* newArray.get(pos + 1).getInterpolated() / 100)) < pixelToValue(i))
 						pos++;
 				}
 				if (pos < newArray.size())
@@ -271,9 +282,13 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 				paintNext = true;
 			if (paintNext && isEnabled()) {
 				if (i != 0) {
-					double value = items.get(i - 1).getValue() + ((items.get(i).getValue() - items.get(i - 1).getValue()) * items.get(i).getInterpolated() / 100);
+					double value = items.get(i - 1).getValue()
+							+ ((items.get(i).getValue() - items.get(i - 1)
+									.getValue())
+									* items.get(i).getInterpolated() / 100);
 
-					drawSliderInterpolation(valueToPixel(value), height - 17, aux.getColor(), (aux.getSelected() == 2));
+					drawSliderInterpolation(valueToPixel(value), height - 17,
+							aux.getColor(), (aux.getSelected() == 2));
 				}
 				paintNext = false;
 			}
@@ -285,12 +300,15 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 			ItemColorSlider aux = items.get(i);
 			if (!aux.isVisible())
 				continue;
-			drawSliderColor(valueToPixel(aux.getValue()), height - 17, convertColor(aux.getColor()), (aux.getSelected() == 1) && (isEnabled()));
+			drawSliderColor(valueToPixel(aux.getValue()), height - 17,
+					convertColor(aux.getColor()), (aux.getSelected() == 1)
+							&& (isEnabled()));
 		}
 	}
 
 	/**
 	 * Convierte un porcentaje al valor pixel en X
+	 * 
 	 * @param value
 	 * @return
 	 */
@@ -299,11 +317,13 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 			value = 0;
 		if (value > 100)
 			value = 100;
-		return (int) (((width - 5 - LEFT_PAD - RIGHT_PAD) * value) / 100) + 2 + LEFT_PAD;
+		return (int) (((width - 5 - LEFT_PAD - RIGHT_PAD) * value) / 100) + 2
+				+ LEFT_PAD;
 	}
 
 	/**
 	 * Convierte un valor en X en porcentaje
+	 * 
 	 * @param value
 	 * @return
 	 */
@@ -313,8 +333,9 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 	}
 
 	/**
-	 * Dibujar un triangulo, un triangulo es un deslizador del componente. Puedes
-	 * indicarle que color tendra y en que posición estará.
+	 * Dibujar un triangulo, un triangulo es un deslizador del componente.
+	 * Puedes indicarle que color tendra y en que posición estará.
+	 * 
 	 * @param x
 	 * @param color
 	 */
@@ -349,24 +370,30 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 		getBufferGraphics().drawLine(x - 4, y + 7, x - 4, y + 15);
 		getBufferGraphics().drawLine(x - 4, y + 7, x + 4, y + 7);
 
-		getBufferGraphics().setColor(new Color(color.getRed(), color.getGreen(), color.getBlue()));
+		getBufferGraphics().setColor(
+				new Color(color.getRed(), color.getGreen(), color.getBlue()));
 		getBufferGraphics().fillRect(x - 3, y + 8, 7, 7);
 	}
 
 	/**
-	 * Dibujar un triangulo, un triangulo es un deslizador del componente. Puedes
-	 * indicarle que color tendra y en que posición estará.
+	 * Dibujar un triangulo, un triangulo es un deslizador del componente.
+	 * Puedes indicarle que color tendra y en que posición estará.
+	 * 
 	 * @param x
 	 * @param color
 	 */
-	private void drawSliderInterpolation(int x, int y, Color color, boolean isSelected) {
+	private void drawSliderInterpolation(int x, int y, Color color,
+			boolean isSelected) {
 		Polygon p = new Polygon();
 		p.addPoint(x, y);
 		p.addPoint(x - 3, y + 3);
 		p.addPoint(x, y + 6);
 		p.addPoint(x + 3, y + 3);
 		if (isSelected)
-			getBufferGraphics().setColor(new Color(color.getRed(), color.getGreen(), color.getBlue()));
+			getBufferGraphics()
+					.setColor(
+							new Color(color.getRed(), color.getGreen(), color
+									.getBlue()));
 		else
 			getBufferGraphics().setColor(this.getBackground());
 
@@ -389,6 +416,7 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.JComponent#paint(java.awt.Graphics)
 	 */
 	public void paint(Graphics g) {
@@ -399,6 +427,7 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
 	 */
 	public void mousePressed(MouseEvent e) {
@@ -425,9 +454,11 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 			if ((itemSelected == null) || (newItem)) {
 				int pos = getPosForValue(pixelToValue(e.getX()), items);
 
-				Color newColor = interpolatedColor(items, pixelToValue(e.getX()), pos);
+				Color newColor = interpolatedColor(items,
+						pixelToValue(e.getX()), pos);
 
-				itemSelected = new ItemColorSlider(pixelToValue(e.getX()), newColor);
+				itemSelected = new ItemColorSlider(pixelToValue(e.getX()),
+						newColor);
 				items.add(itemSelected);
 			} else {
 				type = 2;
@@ -453,7 +484,9 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
 	 */
 	public void mouseReleased(MouseEvent e) {
 		if (!isEnabled())
@@ -480,7 +513,10 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent
+	 * )
 	 */
 	public void mouseDragged(MouseEvent e) {
 		if (!isEnabled())
@@ -491,7 +527,8 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 				aux.setValue(pixelToValue(e.getX()));
 				refreshImage();
 				setMouseCursor(e.getX(), e.getY());
-				aux.setVisible((e.getY() <= height) && (e.getY() >= 0) || items.size() <= 2);
+				aux.setVisible((e.getY() <= height) && (e.getY() >= 0)
+						|| items.size() <= 2);
 				callValueDraggedListeners();
 				return;
 			}
@@ -505,7 +542,8 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 					double min = items.get(pos - 1).getValue();
 					double max = items.get(pos).getValue();
 
-					double newValue = 100 * (pixelToValue(e.getX()) - min) / (max - min);
+					double newValue = 100 * (pixelToValue(e.getX()) - min)
+							/ (max - min);
 
 					aux.setInterpolated(newValue);
 					refreshImage();
@@ -519,10 +557,9 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 
 	private ItemColorSlider getItem(int x, int y) {
 		for (int i = 0; i < items.size(); i++) {
-			if ((x >= (valueToPixel(items.get(i).getValue()) - 5)) &&
-					(x <= (valueToPixel(items.get(i).getValue()) + 5)) &&
-					(y <= height) &&
-					(y >= (height - 18))) {
+			if ((x >= (valueToPixel(items.get(i).getValue()) - 5))
+					&& (x <= (valueToPixel(items.get(i).getValue()) + 5))
+					&& (y <= height) && (y >= (height - 18))) {
 				return items.get(i);
 			}
 		}
@@ -531,12 +568,12 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 
 	private ItemColorSlider getItemInterpolated(int x, int y) {
 		for (int i = 1; i < items.size(); i++) {
-			int value = valueToPixel(items.get(i - 1).getValue() + ((items.get(i).getValue() - items.get(i - 1).getValue()) * items.get(i).getInterpolated() / 100));
+			int value = valueToPixel(items.get(i - 1).getValue()
+					+ ((items.get(i).getValue() - items.get(i - 1).getValue())
+							* items.get(i).getInterpolated() / 100));
 
-			if ((x >= value - 3) &&
-					(x <= value + 3) &&
-					(y <= (height - 11)) &&
-					(y >= (height - 18))) {
+			if ((x >= value - 3) && (x <= value + 3) && (y <= (height - 11))
+					&& (y >= (height - 18))) {
 				if (items.get(i).getSelected() != -1)
 					return items.get(i);
 				if (items.get(i - 1).getSelected() == 1)
@@ -565,7 +602,9 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
 	 */
 	public void mouseMoved(MouseEvent e) {
 		if (!isEnabled())
@@ -581,7 +620,8 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 	}
 
 	/**
-	 * @param interpolated the interpolated to set
+	 * @param interpolated
+	 *            the interpolated to set
 	 */
 	public void setInterpolated(boolean interpolated) {
 		this.interpolated = interpolated;
@@ -590,6 +630,7 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 
 	/**
 	 * Añadir un listener a la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void addValueChangedListener(ColorSliderListener listener) {
@@ -599,6 +640,7 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 
 	/**
 	 * Borrar un listener de la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void removeValueChangedListener(ColorSliderListener listener) {
@@ -607,6 +649,7 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 
 	/**
 	 * Añadir un listener a la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void addSelectionChangedListener(ColorSliderListener listener) {
@@ -616,6 +659,7 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 
 	/**
 	 * Borrar un listener de la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void removeSelectionChangedListener(ColorSliderListener listener) {
@@ -626,7 +670,8 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 	 * Invocar a los eventos asociados al componente
 	 */
 	private void callSelectionChangedListeners() {
-		Iterator<ColorSliderListener> acIterator = actionSelectionListeners.iterator();
+		Iterator<ColorSliderListener> acIterator = actionSelectionListeners
+				.iterator();
 		while (acIterator.hasNext()) {
 			ColorSliderListener listener = acIterator.next();
 			listener.actionSelectionChanged(new ColorSliderEvent(this));
@@ -637,7 +682,8 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 	 * Invocar a los eventos asociados al componente
 	 */
 	private void callValueChangedListeners() {
-		Iterator<ColorSliderListener> acIterator = actionCommandListeners.iterator();
+		Iterator<ColorSliderListener> acIterator = actionCommandListeners
+				.iterator();
 		while (acIterator.hasNext()) {
 			ColorSliderListener listener = acIterator.next();
 			listener.actionValueChanged(new ColorSliderEvent(this));
@@ -648,7 +694,8 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 	 * Invocar a los eventos asociados al componente
 	 */
 	private void callValueDraggedListeners() {
-		Iterator<ColorSliderListener> acIterator = actionCommandListeners.iterator();
+		Iterator<ColorSliderListener> acIterator = actionCommandListeners
+				.iterator();
 		while (acIterator.hasNext()) {
 			ColorSliderListener listener = acIterator.next();
 			listener.actionValueDragged(new ColorSliderEvent(this));
@@ -668,6 +715,7 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 
 	/**
 	 * Devuelve los items que estan visibles en el componente
+	 * 
 	 * @return the items
 	 */
 	public ArrayList getItemsShowed() {
@@ -680,7 +728,9 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 		return newArray;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.JComponent#setEnabled(boolean)
 	 */
 	public void setEnabled(boolean enabled) {
@@ -688,7 +738,12 @@ public class ColorSliderEdition extends JComponent implements MouseListener, Mou
 		refreshImage();
 	}
 
-	public void mouseClicked(MouseEvent e) {}
-	public void mouseEntered(MouseEvent e) {}
-	public void mouseExited(MouseEvent e) {}
+	public void mouseClicked(MouseEvent e) {
+	}
+
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	public void mouseExited(MouseEvent e) {
+	}
 }

@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.errorfixes;
 
 import java.awt.geom.Rectangle2D;
@@ -76,30 +76,32 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.geom.util.LinearComponentExtracter;
 import com.vividsolutions.jts.geom.util.GeometryEditor.CoordinateOperation;
+import com.vividsolutions.jts.geom.util.LinearComponentExtracter;
 import com.vividsolutions.jts.operation.distance.DistanceOp;
 
 /**
- * From a given 'must not have dangles' topology error, extends
- * the dangling segment until it touchs another line in the specified distance
- * radius.
+ * From a given 'must not have dangles' topology error, extends the dangling
+ * segment until it touchs another line in the specified distance radius.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
-public class ExtendDangleToNearestVertexFix extends AbstractTopologyErrorFix  implements ITopologyErrorFixWithParameters{
+public class ExtendDangleToNearestVertexFix extends AbstractTopologyErrorFix
+		implements ITopologyErrorFixWithParameters {
 
 	public double searchRadius;
-	
-	public ExtendDangleToNearestVertexFix(double searchRadius){
+
+	public ExtendDangleToNearestVertexFix(double searchRadius) {
 		super();
 		this.searchRadius = searchRadius;
 	}
-	
+
 	public ExtendDangleToNearestVertexFix() {
 	}
 
-	public List<IFeature>[] fixAlgorithm(TopologyError error) throws BaseException {
+	public List<IFeature>[] fixAlgorithm(TopologyError error)
+			throws BaseException {
 		FLyrVect originLyr = error.getOriginLayer();
 		double clusterTolerance = error.getTopology().getClusterTolerance();
 		FGeometry errorGeometry = (FGeometry) error.getGeometry();
@@ -107,49 +109,58 @@ public class ExtendDangleToNearestVertexFix extends AbstractTopologyErrorFix  im
 		Coordinate jtsCoord = new Coordinate(dangle.getX(), dangle.getY());
 		Point jtsDangle = JtsUtil.GEOMETRY_FACTORY.createPoint(jtsCoord);
 		IFeature originFeature = error.getFeature1();
-		
-		IFeature nearestFeature = getNearestFeature(dangle, originLyr, originFeature);
-		
-		if(nearestFeature != null){
-			Geometry nearestJts = NewFConverter.toJtsGeometry(nearestFeature.getGeometry());
-			Geometry originalJts = NewFConverter.toJtsGeometry(originFeature.getGeometry());
-			
+
+		IFeature nearestFeature = getNearestFeature(dangle, originLyr,
+				originFeature);
+
+		if (nearestFeature != null) {
+			Geometry nearestJts = NewFConverter.toJtsGeometry(nearestFeature
+					.getGeometry());
+			Geometry originalJts = NewFConverter.toJtsGeometry(originFeature
+					.getGeometry());
+
 			Coordinate closestPoint = getClosestPoint(jtsDangle, nearestJts);
 			double distance = DistanceOp.distance(jtsDangle, nearestJts);
-			
-			if(distance <= searchRadius){
-				Geometry editedGeometry = extendGeometry(originalJts, jtsDangle.getCoordinate(), closestPoint, clusterTolerance);
-				if(editedGeometry != null){
+
+			if (distance <= searchRadius) {
+				Geometry editedGeometry = extendGeometry(originalJts,
+						jtsDangle.getCoordinate(), closestPoint,
+						clusterTolerance);
+				if (editedGeometry != null) {
 					IGeometry newGeom = NewFConverter.toFMap(editedGeometry);
-					
+
 					originFeature.setGeometry(newGeom);
 					List<IFeature> editedFeatures = new ArrayList<IFeature>();
 					editedFeatures.add(originFeature);
-					return (List<IFeature>[]) new List[]{editedFeatures};
-				}//if editedGeometry
-			}else{
-				BaseException exception = new BaseException(){
-					public String getFormatString(){
-						return Messages.getText("Geometry_not_found_in_radius_search");
+					return (List<IFeature>[]) new List[] { editedFeatures };
+				}// if editedGeometry
+			} else {
+				BaseException exception = new BaseException() {
+					public String getFormatString() {
+						return Messages
+								.getText("Geometry_not_found_in_radius_search");
 					}
+
 					@Override
 					protected Map values() {
 						// TODO Auto-generated method stub
 						return null;
-					}};
+					}
+				};
 				throw exception;
 			}
-		}//if nearest feature
+		}// if nearest feature
 		return null;
 	}
-	
-	
-	protected Coordinate getClosestPoint(Geometry original, Geometry nearestGeometry){
-		return DistanceOp.closestPoints(original, nearestGeometry)[1]; 
+
+	protected Coordinate getClosestPoint(Geometry original,
+			Geometry nearestGeometry) {
+		return DistanceOp.closestPoints(original, nearestGeometry)[1];
 	}
-	
-	private Geometry extendGeometry(Geometry g, Coordinate dangle, final Coordinate closestPoint, double clusterTolerance){
-		
+
+	private Geometry extendGeometry(Geometry g, Coordinate dangle,
+			final Coordinate closestPoint, double clusterTolerance) {
+
 		List<LineString> geometries2process = new ArrayList<LineString>();
 		if (g instanceof LineString)
 			geometries2process.add((LineString) g);
@@ -158,70 +169,90 @@ public class ExtendDangleToNearestVertexFix extends AbstractTopologyErrorFix  im
 			List lines = LinearComponentExtracter.getLines(geomCol);
 			geometries2process.addAll(lines);
 		}
-		
-		for(int i = 0; i < geometries2process.size(); i++){
+
+		for (int i = 0; i < geometries2process.size(); i++) {
 			LineString lineString = geometries2process.get(i);
-			if(JtsUtil.isEndPoint(lineString, dangle, clusterTolerance)){
+			if (JtsUtil.isEndPoint(lineString, dangle, clusterTolerance)) {
 				int numPoints = lineString.getNumPoints();
 				Coordinate start = lineString.getCoordinateN(0);
 				Coordinate end = lineString.getCoordinateN(numPoints - 1);
 				Geometry editedGeometry = null;
-				if(SnapCGAlgorithms.snapEquals2D(dangle, start, clusterTolerance)){
-					editedGeometry = JtsUtil.GEOMETRY_EDITOR.edit(lineString, new CoordinateOperation(){
-						public Coordinate[] edit(Coordinate[] coordinates, Geometry geometry) {
-							Coordinate[] newCoordinates = new Coordinate[coordinates.length + 1];
-							System.arraycopy(coordinates, 0, newCoordinates, 1, coordinates.length);
-							newCoordinates[0] = closestPoint;
-							return newCoordinates;
-						}});
-					
-				}else{
-					editedGeometry = JtsUtil.GEOMETRY_EDITOR.edit(lineString, new CoordinateOperation(){
-						public Coordinate[] edit(Coordinate[] coordinates, Geometry geometry) {
-							Coordinate[] newCoordinates = new Coordinate[coordinates.length + 1];
-							System.arraycopy(coordinates, 0, newCoordinates, 0, coordinates.length);
-							newCoordinates[coordinates.length] = closestPoint;
-							return newCoordinates;
-						}});
+				if (SnapCGAlgorithms.snapEquals2D(dangle, start,
+						clusterTolerance)) {
+					editedGeometry = JtsUtil.GEOMETRY_EDITOR.edit(lineString,
+							new CoordinateOperation() {
+								public Coordinate[] edit(
+										Coordinate[] coordinates,
+										Geometry geometry) {
+									Coordinate[] newCoordinates = new Coordinate[coordinates.length + 1];
+									System.arraycopy(coordinates, 0,
+											newCoordinates, 1,
+											coordinates.length);
+									newCoordinates[0] = closestPoint;
+									return newCoordinates;
+								}
+							});
+
+				} else {
+					editedGeometry = JtsUtil.GEOMETRY_EDITOR.edit(lineString,
+							new CoordinateOperation() {
+								public Coordinate[] edit(
+										Coordinate[] coordinates,
+										Geometry geometry) {
+									Coordinate[] newCoordinates = new Coordinate[coordinates.length + 1];
+									System.arraycopy(coordinates, 0,
+											newCoordinates, 0,
+											coordinates.length);
+									newCoordinates[coordinates.length] = closestPoint;
+									return newCoordinates;
+								}
+							});
 				}
 				return editedGeometry;
-			}//if isEndPoint
-		}//for
-		//at this point we havent found a linestring end point for the dangle error
-		//TODO launch inconsistent exception?
+			}// if isEndPoint
+		}// for
+			// at this point we havent found a linestring end point for the
+			// dangle error
+			// TODO launch inconsistent exception?
 		return null;
 	}
 
-	
-	
-	private IFeature getNearestFeature(FPoint2D dangle, FLyrVect originLyr, IFeature originFeature) throws ReadDriverException{
+	private IFeature getNearestFeature(FPoint2D dangle, FLyrVect originLyr,
+			IFeature originFeature) throws ReadDriverException {
 		IGeometry originalGeometry = originFeature.getGeometry();
 		Geometry originalJts = NewFConverter.toJtsGeometry(originalGeometry);
-		
-		INearestNeighbourFinder nnFinder =
-			FLyrUtil.getNearestNeighbourFinder(originLyr);
-		
+
+		INearestNeighbourFinder nnFinder = FLyrUtil
+				.getNearestNeighbourFinder(originLyr);
+
 		int numberOfNearest = 2;
-		Rectangle2D dangleRect = new Rectangle2D.Double(dangle.getX(), dangle.getY(), 1, 1);
-//		List nearestIndexes = nnFinder.
-//			findNNearest(numberOfNearest, new Point2D.Double(dangle.getX(), dangle.getY()));
-		List nearestIndexes = nnFinder.findNNearest(numberOfNearest, dangleRect);
-		
-		//we look for the nearest neighbour to the dangle, excepting the originFeature
-		//if the distance to the point is lesser than the search radius, we snap it
+		Rectangle2D dangleRect = new Rectangle2D.Double(dangle.getX(),
+				dangle.getY(), 1, 1);
+		// List nearestIndexes = nnFinder.
+		// findNNearest(numberOfNearest, new Point2D.Double(dangle.getX(),
+		// dangle.getY()));
+		List nearestIndexes = nnFinder
+				.findNNearest(numberOfNearest, dangleRect);
+
+		// we look for the nearest neighbour to the dangle, excepting the
+		// originFeature
+		// if the distance to the point is lesser than the search radius, we
+		// snap it
 		double nearestDistance = Double.MAX_VALUE;
-		
-		FeatureListIntIterator it = new FeatureListIntIterator(nearestIndexes, originLyr.getSource() );
+
+		FeatureListIntIterator it = new FeatureListIntIterator(nearestIndexes,
+				originLyr.getSource());
 		IFeature nearestFeature = null;
-		Point jtsDangle = JtsUtil.GEOMETRY_FACTORY.createPoint(new Coordinate(dangle.getX(), dangle.getY()));
-		while(it.hasNext()){
+		Point jtsDangle = JtsUtil.GEOMETRY_FACTORY.createPoint(new Coordinate(
+				dangle.getX(), dangle.getY()));
+		while (it.hasNext()) {
 			IFeature feature = it.next();
-			if(feature.getID().equalsIgnoreCase(originFeature.getID()))
+			if (feature.getID().equalsIgnoreCase(originFeature.getID()))
 				continue;
 			IGeometry igeometry = feature.getGeometry();
 			Geometry jtsGeo = igeometry.toJTSGeometry();
 			double dist = jtsGeo.distance(jtsDangle);
-//			double dist = originalJts.distance(jtsGeo);
+			// double dist = originalJts.distance(jtsGeo);
 			if (dist <= nearestDistance) {
 				// by adding <=, we follow the convention that
 				// if two features are at the same distance, take
@@ -229,10 +260,10 @@ public class ExtendDangleToNearestVertexFix extends AbstractTopologyErrorFix  im
 				nearestDistance = dist;
 				nearestFeature = feature;
 			}// if
-		}//while
+		}// while
 		return nearestFeature;
 	}
-	
+
 	public String getEditionDescription() {
 		return Messages.getText("EXTEND_DANGLE_FIX");
 	}
@@ -245,20 +276,19 @@ public class ExtendDangleToNearestVertexFix extends AbstractTopologyErrorFix  im
 		this.searchRadius = searchRadius;
 	}
 
-	
 	public GParameter[] getParameters() {
 		GParameter[] parameters = new GParameter[1];
-		parameters[0] = 
-			new GNumberParameter("searchRadius", new Double(0d), this, false);
+		parameters[0] = new GNumberParameter("searchRadius", new Double(0d),
+				this, false);
 		return parameters;
 	}
 
 	public void setParameterValue(String paramName, Object value) {
-		if(paramName.equals("searchRadius")){
-			if(value.getClass().isAssignableFrom(Number.class)){
-				this.searchRadius = ((Number)value).doubleValue();
+		if (paramName.equals("searchRadius")) {
+			if (value.getClass().isAssignableFrom(Number.class)) {
+				this.searchRadius = ((Number) value).doubleValue();
 			}
-		}	
+		}
 	}
 
 	public void initialize(TopologyError error) {

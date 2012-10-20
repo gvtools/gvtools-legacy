@@ -43,14 +43,14 @@
 
 package org.gvsig.remoteClient.arcims.utils;
 
-
 /**
- *
+ * 
  * Class containing a description for TAGS defined in the GET_IMAGE request
  * returned from a ArcIMS Server
+ * 
  * @author jsanz
  */
 public class GetImageTags {
-    public final static String OUTPUT = "OUTPUT";
-    public final static String URL = "url";
+	public final static String OUTPUT = "OUTPUT";
+	public final static String URL = "url";
 }

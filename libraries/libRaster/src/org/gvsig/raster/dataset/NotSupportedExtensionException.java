@@ -19,19 +19,20 @@
 package org.gvsig.raster.dataset;
 
 /**
- * Excepción cuando una extensión de fichero no está soportada
- * por la aplicación.
+ * Excepción cuando una extensión de fichero no está soportada por la
+ * aplicación.
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
 public class NotSupportedExtensionException extends Exception {
 	private static final long serialVersionUID = -3547608971095136520L;
 
-	public NotSupportedExtensionException(String msg, Exception e){
+	public NotSupportedExtensionException(String msg, Exception e) {
 		super(msg, e);
 	}
-	
-	public NotSupportedExtensionException(String msg){
+
+	public NotSupportedExtensionException(String msg) {
 		super(msg);
 	}
 }

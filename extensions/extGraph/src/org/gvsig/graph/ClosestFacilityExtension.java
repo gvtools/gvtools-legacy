@@ -25,84 +25,88 @@ import com.iver.cit.gvsig.fmap.layers.LayerPositionEvent;
 import com.iver.cit.gvsig.fmap.layers.SingleLayerIterator;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
-public class ClosestFacilityExtension extends Extension implements LayerCollectionListener{
-	
-	private ClosestFacilityController cfc=null;
-	private ClosestFacilityDialog cfd=null;
+public class ClosestFacilityExtension extends Extension implements
+		LayerCollectionListener {
+
+	private ClosestFacilityController cfc = null;
+	private ClosestFacilityDialog cfd = null;
 	private Network network;
 	private MapControl mpCtrl;
 	private PluginServices ps;
-	
+
 	public void execute(String actionCommand) {
 		ps.getPluginServices(this);
 		IWindow win = PluginServices.getMDIManager().getActiveWindow();
-		boolean flagNetworkLayer=false;
+		boolean flagNetworkLayer = false;
 		if (win instanceof View) {
 			View view = (View) win;
-			ArrayList layersTemp=new ArrayList();
-			this.mpCtrl=view.getMapControl();
-			FLayers fLayers=this.mpCtrl.getMapContext().getLayers();
+			ArrayList layersTemp = new ArrayList();
+			this.mpCtrl = view.getMapControl();
+			FLayers fLayers = this.mpCtrl.getMapContext().getLayers();
 			fLayers.addLayerCollectionListener(this);
 			FLayer[] layers = fLayers.getVisibles();
 			for (int i = 0; i < layers.length; i++) {
 				try {
-					if(layers[i] instanceof FLyrVect && ((FLyrVect)layers[i]).getShapeType()==FShape.POINT){
-						layersTemp.add((FLyrVect)layers[i]);
+					if (layers[i] instanceof FLyrVect
+							&& ((FLyrVect) layers[i]).getShapeType() == FShape.POINT) {
+						layersTemp.add((FLyrVect) layers[i]);
 					}
-					
-					if(!flagNetworkLayer && layers[i].isActive() && (this.network=(Network)layers[i].getProperty("network"))!=null){
-						flagNetworkLayer=true;
+
+					if (!flagNetworkLayer
+							&& layers[i].isActive()
+							&& (this.network = (Network) layers[i]
+									.getProperty("network")) != null) {
+						flagNetworkLayer = true;
 					}
 				} catch (ReadDriverException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-			
-			if(!flagNetworkLayer){
-				JOptionPane.showMessageDialog(null, ps.getText("no_network_layer"), "Error", JOptionPane.ERROR_MESSAGE);;
-			}
-			else{
-				this.cfc=new ClosestFacilityController(this.network, this.mpCtrl);
-				this.cfd=new ClosestFacilityDialog(this.cfc);
-				
-				Iterator it=layersTemp.iterator();
-				while(it.hasNext()){
-					this.cfd.addFacilitiesLayer((FLyrVect)it.next());
+
+			if (!flagNetworkLayer) {
+				JOptionPane.showMessageDialog(null,
+						ps.getText("no_network_layer"), "Error",
+						JOptionPane.ERROR_MESSAGE);
+				;
+			} else {
+				this.cfc = new ClosestFacilityController(this.network,
+						this.mpCtrl);
+				this.cfd = new ClosestFacilityDialog(this.cfc);
+
+				Iterator it = layersTemp.iterator();
+				while (it.hasNext()) {
+					this.cfd.addFacilitiesLayer((FLyrVect) it.next());
 				}
-								
+
 				PluginServices.getMDIManager().addWindow(cfd);
 			}
 		}
 	}
 
-	
 	public void initialize() {
 		PluginServices.getIconTheme().registerDefault(
 				"closest_facility",
-				this.getClass().getClassLoader().getResource("images/closest_facility.png")
-			);		
+				this.getClass().getClassLoader()
+						.getResource("images/closest_facility.png"));
 
 	}
 
 	public boolean isEnabled() {
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		if (window instanceof View)
-		{
+		if (window instanceof View) {
 			View v = (View) window;
-	        MapControl mapCtrl = v.getMapControl();
+			MapControl mapCtrl = v.getMapControl();
 			MapContext map = mapCtrl.getMapContext();
-			
+
 			SingleLayerIterator it = new SingleLayerIterator(map.getLayers());
-			while (it.hasNext())
-			{
+			while (it.hasNext()) {
 				FLayer aux = it.next();
 				if (!aux.isActive())
 					continue;
 				Network net = (Network) aux.getProperty("network");
-				
-				if ( net != null)
-				{
+
+				if (net != null) {
 					return true;
 				}
 			}
@@ -112,10 +116,9 @@ public class ClosestFacilityExtension extends Extension implements LayerCollecti
 
 	public boolean isVisible() {
 		// TODO Auto-generated method stub
-		IWindow f = PluginServices.getMDIManager()
-		 .getActiveWindow();
+		IWindow f = PluginServices.getMDIManager().getActiveWindow();
 		if (f == null) {
-		    return false;
+			return false;
 		}
 		if (f instanceof View) {
 			return true;
@@ -124,10 +127,11 @@ public class ClosestFacilityExtension extends Extension implements LayerCollecti
 	}
 
 	public void layerAdded(LayerCollectionEvent e) {
-		FLayer layer=e.getAffectedLayer();
+		FLayer layer = e.getAffectedLayer();
 		try {
-			if(layer instanceof FLyrVect && ((FLyrVect)layer).getShapeType()==FShape.POINT){
-				this.cfd.addFacilitiesLayer((FLyrVect)layer);
+			if (layer instanceof FLyrVect
+					&& ((FLyrVect) layer).getShapeType() == FShape.POINT) {
+				this.cfd.addFacilitiesLayer((FLyrVect) layer);
 				this.mpCtrl.drawGraphics();
 			}
 		} catch (ReadDriverException e1) {
@@ -146,10 +150,11 @@ public class ClosestFacilityExtension extends Extension implements LayerCollecti
 	}
 
 	public void layerRemoved(LayerCollectionEvent e) {
-		FLayer layer=e.getAffectedLayer();
+		FLayer layer = e.getAffectedLayer();
 		try {
-			if(layer instanceof FLyrVect && ((FLyrVect)layer).getShapeType()==FShape.POINT){
-				this.cfd.removeFacilitiesLayer((FLyrVect)layer);
+			if (layer instanceof FLyrVect
+					&& ((FLyrVect) layer).getShapeType() == FShape.POINT) {
+				this.cfd.removeFacilitiesLayer((FLyrVect) layer);
 			}
 		} catch (ReadDriverException e1) {
 			// TODO Auto-generated catch block
@@ -157,23 +162,24 @@ public class ClosestFacilityExtension extends Extension implements LayerCollecti
 		}
 	}
 
-	public void layerRemoving(LayerCollectionEvent e) throws CancelationException {
+	public void layerRemoving(LayerCollectionEvent e)
+			throws CancelationException {
 	}
 
-	public void visibilityChanged(LayerCollectionEvent e) throws CancelationException {
-		FLayer layer=e.getAffectedLayer();
-		try{
-			if(layer instanceof FLyrVect && ((FLyrVect)layer).getShapeType()==FShape.POINT){
-				FLyrVect layerVect=(FLyrVect)layer;
-				if(layerVect.isVisible()){
+	public void visibilityChanged(LayerCollectionEvent e)
+			throws CancelationException {
+		FLayer layer = e.getAffectedLayer();
+		try {
+			if (layer instanceof FLyrVect
+					&& ((FLyrVect) layer).getShapeType() == FShape.POINT) {
+				FLyrVect layerVect = (FLyrVect) layer;
+				if (layerVect.isVisible()) {
 					this.cfd.addFacilitiesLayer(layerVect);
-				}
-				else{
+				} else {
 					this.cfd.removeFacilitiesLayer(layerVect);
 				}
 			}
-		}
-		catch(ReadDriverException except){
+		} catch (ReadDriverException except) {
 			except.printStackTrace();
 		}
 	}

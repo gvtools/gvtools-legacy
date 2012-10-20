@@ -71,25 +71,24 @@ import com.iver.cit.gvsig.fmap.layers.LayersIterator;
 import com.iver.cit.gvsig.fmap.tools.Behavior.PointBehavior;
 import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
-import com.iver.cit.gvsig.project.documents.view.legend.gui.General;
 import com.iver.cit.gvsig.project.documents.view.legend.gui.ThemeManagerWindow;
 import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
-
 /**
  * Extensión para gestionar los hiperlinks.
- *
+ * 
  * @author Cesar Martinez Izquierdo
  * @author Vicente Caballero Navarro
  */
 public class LinkControls extends Extension {
-	private static Logger logger = Logger.getLogger(LinkControls.class.getName());
+	private static Logger logger = Logger.getLogger(LinkControls.class
+			.getName());
 	ManagerRegistry layerManager;
 	public static final String LAYERPROPERTYNAME = "org.gvsig.hyperlink.config";
 	public static final String TOOLNAME = "org.gvsig.hyperlink.tool";
 	public static final String ACTIONSEXTENSIONPOINT = "HyperLinkAction";
-	
+
 	private static final int LEGACY_IMAGE_TYPE = 0;
 	private static final int LEGACY_HTML_TYPE = 1;
 	private static final int LEGACY_PDF_TYPE = 2;
@@ -112,49 +111,78 @@ public class LinkControls extends Extension {
 
 	/**
 	 * Inits the tool for the provided view.
+	 * 
 	 * @param view
 	 */
 	public void initTool(View view) {
 		MapControl mapCtrl = view.getMapControl();
 		if (view.getMapControl().getNamesMapTools().get(TOOLNAME) == null) {
-			mapCtrl.addMapTool(TOOLNAME, new PointBehavior(new LinkListener(mapCtrl, layerManager)));
+			mapCtrl.addMapTool(TOOLNAME, new PointBehavior(new LinkListener(
+					mapCtrl, layerManager)));
 			loadLegacyConfig(view);
 		}
 	}
 
 	public void loadLegacyConfig(View view) {
-		LayersIterator iterator = new LayersIterator(view.getMapControl().getMapContext().getLayers());
+		LayersIterator iterator = new LayersIterator(view.getMapControl()
+				.getMapContext().getLayers());
 		while (iterator.hasNext()) {
 			FLayer layer = iterator.nextLayer();
 			loadLegacyConfig(layer);
-		}	
+		}
 	}
 
 	/**
-	 * Returns a LayerLinkConfig object if an old-style or new-style hyperlink was found and configured,
-	 * or null otherwise.
+	 * Returns a LayerLinkConfig object if an old-style or new-style hyperlink
+	 * was found and configured, or null otherwise.
+	 * 
 	 * @param layer
 	 */
 	public LayerLinkConfig loadLegacyConfig(FLayer layer) {
-		LayerLinkConfig layerConfig = (LayerLinkConfig) layer.getProperty(LinkControls.LAYERPROPERTYNAME);
-		if (layerConfig!=null) { // don't apply compatibility if the layer already has new 1.9.0 configuration
+		LayerLinkConfig layerConfig = (LayerLinkConfig) layer
+				.getProperty(LinkControls.LAYERPROPERTYNAME);
+		if (layerConfig != null) { // don't apply compatibility if the layer
+									// already has new 1.9.0 configuration
 			return layerConfig;
 		}
 		Object fName = layer.getProperty("legacy.hyperlink.selectedField");
-		if (fName!=null && fName instanceof String) {
+		if (fName != null && fName instanceof String) {
 			Map properties = layer.getExtendedProperties();
-			properties.remove("legacy.hyperlink.selectedField"); //remove it from layer to don't keep legacy properties for ever in the project
+			properties.remove("legacy.hyperlink.selectedField"); // remove it
+																	// from
+																	// layer to
+																	// don't
+																	// keep
+																	// legacy
+																	// properties
+																	// for ever
+																	// in the
+																	// project
 			String fieldName = (String) fName;
 			Object extObj = layer.getProperty("legacy.hyperlink.extension");
 			String extension = null;
-			if (extObj!=null && extObj instanceof String) {
-				properties.remove("legacy.hyperlink.extension"); //remove it from layer to don't keep legacy properties for ever in the project
+			if (extObj != null && extObj instanceof String) {
+				properties.remove("legacy.hyperlink.extension"); // remove it
+																	// from
+																	// layer to
+																	// don't
+																	// keep
+																	// legacy
+																	// properties
+																	// for ever
+																	// in the
+																	// project
 				extension = (String) extObj;
 			}
 			Object typeObj = layer.getProperty("legacy.hyperlink.type");
 			int type = -1;
-			if (typeObj!=null && typeObj instanceof Integer) {
-				properties.remove("legacy.hyperlink.type"); //remove it from layer to don't keep legacy properties for ever in the project
+			if (typeObj != null && typeObj instanceof Integer) {
+				properties.remove("legacy.hyperlink.type"); // remove it from
+															// layer to don't
+															// keep legacy
+															// properties for
+															// ever in the
+															// project
 				type = ((Integer) typeObj).intValue();
 			}
 			LayerLinkConfig config = new LayerLinkConfig();
@@ -186,8 +214,8 @@ public class LinkControls extends Extension {
 	 * @see com.iver.mdiApp.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-															 .getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (f == null) {
 			return false;
@@ -195,9 +223,9 @@ public class LinkControls extends Extension {
 
 		if (f instanceof View) {
 
-		  MapContext mapa = ((View) f).getModel().getMapContext();
+			MapContext mapa = ((View) f).getModel().getMapContext();
 
-		  return mapa.getLayers().getLayersCount() > 0;
+			return mapa.getLayers().getLayersCount() > 0;
 		} else {
 			return false;
 		}
@@ -217,9 +245,9 @@ public class LinkControls extends Extension {
 			com.iver.cit.gvsig.project.documents.view.gui.BaseView view = (com.iver.cit.gvsig.project.documents.view.gui.BaseView) f;
 			IProjectView model = view.getModel();
 
-			if (model != null &&
-					model.getMapContext()!=null &&
-					model.getMapContext().getLayers().getVisibles().length>0)
+			if (model != null
+					&& model.getMapContext() != null
+					&& model.getMapContext().getLayers().getVisibles().length > 0)
 				return true;
 			else
 				return false;
@@ -246,28 +274,37 @@ public class LinkControls extends Extension {
 		return layerManager;
 	}
 
-	private void registerActions(){
-		ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
+	private void registerActions() {
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
 		ILinkActionManager tmpAction = new TxtFormat();
-		extensionPoints.add(ACTIONSEXTENSIONPOINT, tmpAction.getActionCode(), tmpAction);
+		extensionPoints.add(ACTIONSEXTENSIONPOINT, tmpAction.getActionCode(),
+				tmpAction);
 		tmpAction = new ImgFormat();
-		extensionPoints.add(ACTIONSEXTENSIONPOINT, tmpAction.getActionCode(), tmpAction);
+		extensionPoints.add(ACTIONSEXTENSIONPOINT, tmpAction.getActionCode(),
+				tmpAction);
 		tmpAction = new PdfFormat();
-		extensionPoints.add(ACTIONSEXTENSIONPOINT, tmpAction.getActionCode(), tmpAction);
+		extensionPoints.add(ACTIONSEXTENSIONPOINT, tmpAction.getActionCode(),
+				tmpAction);
 		tmpAction = new LoadRasterLayer();
-		extensionPoints.add(ACTIONSEXTENSIONPOINT, tmpAction.getActionCode(), tmpAction);
+		extensionPoints.add(ACTIONSEXTENSIONPOINT, tmpAction.getActionCode(),
+				tmpAction);
 		tmpAction = new LoadVectorLayer();
-		extensionPoints.add(ACTIONSEXTENSIONPOINT, tmpAction.getActionCode(), tmpAction);
+		extensionPoints.add(ACTIONSEXTENSIONPOINT, tmpAction.getActionCode(),
+				tmpAction);
 		tmpAction = new SvgFormat();
-		extensionPoints.add(ACTIONSEXTENSIONPOINT, tmpAction.getActionCode(), tmpAction);
+		extensionPoints.add(ACTIONSEXTENSIONPOINT, tmpAction.getActionCode(),
+				tmpAction);
 		tmpAction = new FolderFormat();
-		extensionPoints.add(ACTIONSEXTENSIONPOINT, tmpAction.getActionCode(), tmpAction);
+		extensionPoints.add(ACTIONSEXTENSIONPOINT, tmpAction.getActionCode(),
+				tmpAction);
 	}
 
 	private void registerConfigPanel() {
 		// pages
 		ThemeManagerWindow.addPage(ConfigTab.class);
 
-		ThemeManagerWindow.setTabEnabledForLayer(ConfigTab.class, FLyrVect.class, true);
+		ThemeManagerWindow.setTabEnabledForLayer(ConfigTab.class,
+				FLyrVect.class, true);
 	}
 }

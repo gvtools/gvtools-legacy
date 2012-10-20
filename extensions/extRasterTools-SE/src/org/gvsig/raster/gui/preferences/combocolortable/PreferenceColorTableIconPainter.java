@@ -26,11 +26,12 @@ import java.util.ArrayList;
 import org.gvsig.gui.beans.listview.IIconPaint;
 import org.gvsig.raster.datastruct.ColorItem;
 import org.gvsig.raster.datastruct.ColorTable;
+
 /**
  * Clase para dibujar los iconos del ListViewComponent del panel de color. Se
  * puede indicar si la paleta esta seleccionada y si se dibuja con
  * interpolaciones.
- *
+ * 
  * @version 29/06/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
@@ -39,6 +40,7 @@ public class PreferenceColorTableIconPainter implements IIconPaint {
 
 	/**
 	 * Construye un ColorTablePaint con una tabla de color pasada por parametro
+	 * 
 	 * @param colorTable
 	 */
 	public PreferenceColorTableIconPainter(ColorTable colorTable) {
@@ -47,6 +49,7 @@ public class PreferenceColorTableIconPainter implements IIconPaint {
 
 	/**
 	 * Define si los valores estan interpolados o no entre si
+	 * 
 	 * @param value
 	 */
 	public void setInterpolated(boolean value) {
@@ -55,6 +58,7 @@ public class PreferenceColorTableIconPainter implements IIconPaint {
 
 	/**
 	 * Obtiene el array de los colores de la paleta de color
+	 * 
 	 * @return
 	 */
 	public ArrayList getColorItems() {
@@ -63,6 +67,7 @@ public class PreferenceColorTableIconPainter implements IIconPaint {
 
 	/**
 	 * Obtiene el ColorTable
+	 * 
 	 * @return
 	 */
 	public ColorTable getColorTable() {
@@ -72,17 +77,20 @@ public class PreferenceColorTableIconPainter implements IIconPaint {
 	/**
 	 * Especificar los colores de la tabla de color, definiendo si estan los
 	 * valores interpolados y si la paleta se comprimira o no.
+	 * 
 	 * @param value
 	 * @param interpolated
 	 * @param compress
 	 */
-	public void setColorItems(ArrayList value, boolean interpolated, boolean compress) {
+	public void setColorItems(ArrayList value, boolean interpolated,
+			boolean compress) {
 		colorTable.createPaletteFromColorItems(value, compress);
 		setInterpolated(interpolated);
 	}
 
 	/**
 	 * Metodo de pintado de la tabla de color
+	 * 
 	 * @param g
 	 * @param isSelected
 	 */
@@ -104,13 +112,17 @@ public class PreferenceColorTableIconPainter implements IIconPaint {
 		}
 
 		if (colorTable.getColorItems().size() >= 1) {
-			double min = ((ColorItem) colorTable.getColorItems().get(0)).getValue();
-			double max = ((ColorItem) colorTable.getColorItems().get(colorTable.getColorItems().size() - 1)).getValue();
+			double min = ((ColorItem) colorTable.getColorItems().get(0))
+					.getValue();
+			double max = ((ColorItem) colorTable.getColorItems().get(
+					colorTable.getColorItems().size() - 1)).getValue();
 			for (int i = area.x; i < (area.x + area.width); i++) {
-				double pos = min + (((max - min) * (i - area.x)) / (area.width - 2));
+				double pos = min
+						+ (((max - min) * (i - area.x)) / (area.width - 2));
 
 				byte[] col3 = colorTable.getRGBAByBand(pos);
-				g.setColor(new Color(col3[0] & 0xff, col3[1] & 0xff, col3[2] & 0xff, col3[3] & 0xff));
+				g.setColor(new Color(col3[0] & 0xff, col3[1] & 0xff,
+						col3[2] & 0xff, col3[3] & 0xff));
 				g.drawLine(i, area.y, i, area.y + area.height - 2);
 			}
 		} else {

@@ -56,112 +56,111 @@ import com.iver.cit.gvsig.fmap.edition.IWriteable;
 import com.iver.cit.gvsig.fmap.edition.IWriter;
 import com.iver.cit.gvsig.project.documents.table.gui.Table;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class TableEditStartExtension extends Extension {
-	 /**
-     * @see com.iver.andami.plugins.IExtension#initialize()
-     */
-    public void initialize() {
-    }
+	/**
+	 * @see com.iver.andami.plugins.IExtension#initialize()
+	 */
+	public void initialize() {
+	}
 
-    /**
-     * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
-     */
-    public void execute(String actionCommand) {
-        if ("STARTEDIT".equals(actionCommand)) {
-            IWindow v = PluginServices.getMDIManager().getActiveWindow();
+	/**
+	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
+	 */
+	public void execute(String actionCommand) {
+		if ("STARTEDIT".equals(actionCommand)) {
+			IWindow v = PluginServices.getMDIManager().getActiveWindow();
 
-                try {
-                	Table table = (Table) v;
-            		Driver drv = table.getModel().getModelo().getOriginalDriver();
-            		if (drv instanceof IWriteable)
-            		{
-            			IWriter writer = ((IWriteable) drv).getWriter();
-            			if (!writer.canSaveEdits())
-            			{
-            				JOptionPane.showMessageDialog(
-            						(Component) PluginServices.getMDIManager().getActiveWindow(),
-            						PluginServices.getText(this, "this_table_is_not_self_editable"),
-            						PluginServices.getText(this, "warning"),
-            						JOptionPane.WARNING_MESSAGE);
-            				return;
-            			}
-            		}
-            		else
-            		{
-        				JOptionPane.showMessageDialog(
-        						(Component) PluginServices.getMDIManager().getActiveWindow(),
-        						PluginServices.getText(this, "this_table_is_not_self_editable"),
-        						PluginServices.getText(this, "warning"),
-        						JOptionPane.WARNING_MESSAGE);
-        				return;
-            		}
-
-					table.startEditing();
-					/* IEditableSource edTable = (IEditableSource) table.getModel().getAssociatedTable();
-					edTable.getCommandRecord().addCommandListener(table); */
-
-				} catch (StartEditingTableException e) {
-					e.printStackTrace();
-				} catch (HeadlessException e) {
-					e.printStackTrace();
-				} catch (VisitorException e) {
-					e.printStackTrace();
+			try {
+				Table table = (Table) v;
+				Driver drv = table.getModel().getModelo().getOriginalDriver();
+				if (drv instanceof IWriteable) {
+					IWriter writer = ((IWriteable) drv).getWriter();
+					if (!writer.canSaveEdits()) {
+						JOptionPane.showMessageDialog(
+								(Component) PluginServices.getMDIManager()
+										.getActiveWindow(),
+								PluginServices.getText(this,
+										"this_table_is_not_self_editable"),
+								PluginServices.getText(this, "warning"),
+								JOptionPane.WARNING_MESSAGE);
+						return;
+					}
+				} else {
+					JOptionPane.showMessageDialog((Component) PluginServices
+							.getMDIManager().getActiveWindow(), PluginServices
+							.getText(this, "this_table_is_not_self_editable"),
+							PluginServices.getText(this, "warning"),
+							JOptionPane.WARNING_MESSAGE);
+					return;
 				}
 
-        }
-    }
+				table.startEditing();
+				/*
+				 * IEditableSource edTable = (IEditableSource)
+				 * table.getModel().getAssociatedTable();
+				 * edTable.getCommandRecord().addCommandListener(table);
+				 */
 
-    /**
-     * @see com.iver.andami.plugins.IExtension#isEnabled()
-     */
-    public boolean isEnabled() {
-        IWindow v = PluginServices.getMDIManager().getActiveWindow();
+			} catch (StartEditingTableException e) {
+				e.printStackTrace();
+			} catch (HeadlessException e) {
+				e.printStackTrace();
+			} catch (VisitorException e) {
+				e.printStackTrace();
+			}
 
-        if (v == null) {
-            return false;
-        }
-        if (v instanceof Table)
-        {
-	    	Table t = (Table) v;
-	    	IEditableSource ies = t.getModel().getModelo();
-	    	// FJP:
-	    	// Si está linkada, por ahora no dejamos editar
-	    	// TODO: Esto evita la edición en un sentido, pero no en el otro
-	    	// Hay que permitir la edición, pero evitar que toquen el/los
-	    	// campos de unión. Para eso tendremos que añadir alguna función
-	    	// que indique si un campo está involucrado en alguna unión, o
-	    	// quizás algo más genérico, algo que permita bloquear campos
-	    	// para que no se puedan editar.
-	    	if (t.getModel().getLinkTable() != null)
-	    		return false;
-	    	if (ies.getOriginalDriver() instanceof IWriteable)
-	    	{
-	    		return true;
-	    	}
-        }
-    	return false;
-    }
+		}
+	}
 
-    /**
-     * @see com.iver.andami.plugins.IExtension#isVisible()
-     */
-    public boolean isVisible() {
-        IWindow v = PluginServices.getMDIManager().getActiveWindow();
+	/**
+	 * @see com.iver.andami.plugins.IExtension#isEnabled()
+	 */
+	public boolean isEnabled() {
+		IWindow v = PluginServices.getMDIManager().getActiveWindow();
 
-        if (v == null) {
-            return false;
-        }
+		if (v == null) {
+			return false;
+		}
+		if (v instanceof Table) {
+			Table t = (Table) v;
+			IEditableSource ies = t.getModel().getModelo();
+			// FJP:
+			// Si está linkada, por ahora no dejamos editar
+			// TODO: Esto evita la edición en un sentido, pero no en el otro
+			// Hay que permitir la edición, pero evitar que toquen el/los
+			// campos de unión. Para eso tendremos que añadir alguna función
+			// que indique si un campo está involucrado en alguna unión, o
+			// quizás algo más genérico, algo que permita bloquear campos
+			// para que no se puedan editar.
+			if (t.getModel().getLinkTable() != null)
+				return false;
+			if (ies.getOriginalDriver() instanceof IWriteable) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-        if (v instanceof Table && !((Table) v).isEditing() && ((Table)v).getModel().getAssociatedTable()==null) {
-       		return true;
-        }
+	/**
+	 * @see com.iver.andami.plugins.IExtension#isVisible()
+	 */
+	public boolean isVisible() {
+		IWindow v = PluginServices.getMDIManager().getActiveWindow();
 
-        return false;
-    }
+		if (v == null) {
+			return false;
+		}
+
+		if (v instanceof Table && !((Table) v).isEditing()
+				&& ((Table) v).getModel().getAssociatedTable() == null) {
+			return true;
+		}
+
+		return false;
+	}
 }

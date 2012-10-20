@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.jts.voronoi;
 
 import java.awt.geom.Point2D;
@@ -61,26 +61,26 @@ import com.vividsolutions.jts.geom.Coordinate;
  * Subcase of polygon which forms a triangle.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class FTriangle extends FPolygon2D {
 
 	private static final long serialVersionUID = -8911275314078930227L;
 
 	private Point2D a, b, c;
-	
-	public FTriangle(Point2D a, Point2D b, Point2D c){
-		super(getGeneralPathX(new Point2D[]{a, b, c}));
+
+	public FTriangle(Point2D a, Point2D b, Point2D c) {
+		super(getGeneralPathX(new Point2D[] { a, b, c }));
 		this.a = a;
 		this.b = b;
 		this.c = c;
 	}
-	
-	public static GeneralPathX getGeneralPathX(Point2D[] trianglePoints){
+
+	public static GeneralPathX getGeneralPathX(Point2D[] trianglePoints) {
 		GeneralPathX solution = new GeneralPathX();
 		solution.moveTo(trianglePoints[0].getX(), trianglePoints[0].getY());
-		
-		for(int i = 1; i < trianglePoints.length; i++){
+
+		for (int i = 1; i < trianglePoints.length; i++) {
 			Point2D currentPoint = trianglePoints[i];
 			solution.lineTo(currentPoint.getX(), currentPoint.getY());
 		}
@@ -115,60 +115,55 @@ public class FTriangle extends FPolygon2D {
 	public static long getSerialVersionUID() {
 		return serialVersionUID;
 	}
-	
-	public boolean hasVertex(Point2D point){
-		if(a.equals(point) || b.equals(point) || c.equals(point))
+
+	public boolean hasVertex(Point2D point) {
+		if (a.equals(point) || b.equals(point) || c.equals(point))
 			return true;
 		else
 			return false;
 	}
-	
-	public boolean equals(Object o){
-		if(o == null || (! (o instanceof FTriangle)))
+
+	public boolean equals(Object o) {
+		if (o == null || (!(o instanceof FTriangle)))
 			return false;
 		FTriangle other = (FTriangle) o;
 		return other.hasVertex(a) && other.hasVertex(b) && other.hasVertex(c);
 	}
-	
-	public boolean isAdjacent(FTriangle other) throws TriangulationException{
+
+	public boolean isAdjacent(FTriangle other) throws TriangulationException {
 		int identicalVertices = 0;
 
-	    if (hasVertex(other.getA())) {
-	        identicalVertices++;
-	    }
-	
-	    if (hasVertex(other.getB())) {
-	        identicalVertices++;
-	    }
-	
-	    if (hasVertex(other.getC())) {
-	        identicalVertices++;
-	    }
-	
-	    if (identicalVertices == 3) {
-	        throw new TriangulationException("Same triangle");
-	    }
-	
-	    if (identicalVertices == 2) {
-	        return true;
-	    }
-	
-	    return false;
-	}
-	
-	
+		if (hasVertex(other.getA())) {
+			identicalVertices++;
+		}
 
-	
-	
+		if (hasVertex(other.getB())) {
+			identicalVertices++;
+		}
+
+		if (hasVertex(other.getC())) {
+			identicalVertices++;
+		}
+
+		if (identicalVertices == 3) {
+			throw new TriangulationException("Same triangle");
+		}
+
+		if (identicalVertices == 2) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public Point2D getCircumCenter() {
-        Coordinate jtsA = new Coordinate(a.getX(), a.getY());
-        Coordinate jtsB = new Coordinate(b.getX(), b.getY());
-        Coordinate jtsC = new Coordinate(c.getX(), c.getY());
-        
-        Coordinate circumcenter = JtsUtil.getCircumCenter(jtsA, jtsB, jtsC);
-        
-        return new Point2D.Double(circumcenter.x, circumcenter.y);
-    }
-	
-	
+		Coordinate jtsA = new Coordinate(a.getX(), a.getY());
+		Coordinate jtsB = new Coordinate(b.getX(), b.getY());
+		Coordinate jtsC = new Coordinate(c.getX(), c.getY());
+
+		Coordinate circumcenter = JtsUtil.getCircumCenter(jtsA, jtsB, jtsC);
+
+		return new Point2D.Double(circumcenter.x, circumcenter.y);
+	}
+
 }

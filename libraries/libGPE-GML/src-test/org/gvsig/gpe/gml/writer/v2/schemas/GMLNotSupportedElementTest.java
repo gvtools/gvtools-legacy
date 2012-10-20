@@ -60,11 +60,11 @@ import org.gvsig.gpe.writer.schemas.GPENotSupportedElementTest;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class GMLNotSupportedElementTest extends
-		GPENotSupportedElementTest {
+public class GMLNotSupportedElementTest extends GPENotSupportedElementTest {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEParserClass()
 	 */
 	public Class getGPEParserClass() {
@@ -73,6 +73,7 @@ public class GMLNotSupportedElementTest extends
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEWriterHandlerClass()
 	 */
 	public Class getGPEWriterHandlerClass() {

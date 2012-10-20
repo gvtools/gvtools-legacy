@@ -63,62 +63,73 @@ package com.iver.cit.gvsig.fmap.rendering.styling.labeling;
 import com.iver.utiles.IPersistence;
 
 /**
- * @author   jaume dominguez faus - jaume.dominguez@iver.es
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
-public interface IZoomConstraints extends IPersistence{
+public interface IZoomConstraints extends IPersistence {
 	/**
-	 * Uses the same constraints than the layer. Which is the same than no constraints.
+	 * Uses the same constraints than the layer. Which is the same than no
+	 * constraints.
 	 */
 	public static final int DEFINED_BY_THE_LAYER = 0;
 
 	/**
-	 * The user defines when the labes will be drawn.
-	 * Notice that if the layer is not drawn it does not take effect.
+	 * The user defines when the labes will be drawn. Notice that if the layer
+	 * is not drawn it does not take effect.
 	 */
 	public static final int DEFINED_BY_THE_USER = 1;
 
 	/**
 	 * Sets the mode of the zoom constraints.
-	 * @param mode, int one of DEFINED_BY_THE_LAYER or DEFINED_BY_THE_USER.
+	 * 
+	 * @param mode
+	 *            , int one of DEFINED_BY_THE_LAYER or DEFINED_BY_THE_USER.
 	 */
 	public abstract void setMode(int mode);
 
 	/**
 	 * Returns the max scale limit of the constraints.
-	 * @return   float, max limit
-	 * @uml.property  name="maxScale"
+	 * 
+	 * @return float, max limit
+	 * @uml.property name="maxScale"
 	 */
 	public abstract long getMaxScale();
 
 	/**
 	 * Sets the max scale limit of the constraints
-	 * @param   maxScale, float
-	 * @uml.property  name="maxScale"
+	 * 
+	 * @param maxScale
+	 *            , float
+	 * @uml.property name="maxScale"
 	 */
 	public abstract void setMaxScale(long maxScale);
 
 	/**
 	 * Returns the min scale limit of the constraints.
-	 * @return   float, min limit
-	 * @uml.property  name="minScale"
+	 * 
+	 * @return float, min limit
+	 * @uml.property name="minScale"
 	 */
 	public abstract long getMinScale();
 
 	/**
 	 * Sets the min scale limit of the constraints
-	 * @param   minScale, float
-	 * @uml.property  name="minScale"
+	 * 
+	 * @param minScale
+	 *            , float
+	 * @uml.property name="minScale"
 	 */
 	public abstract void setMinScale(long minScale);
 
 	/**
 	 * Returns <b>true</b> if the mode is DEFINED_BY_THE_USER.
+	 * 
 	 * @return
 	 */
 	public abstract boolean isUserDefined();
 
 	/**
 	 * Returns <b>true</b> if the mode is DEFINED_BY_THE_USER.
+	 * 
 	 * @return
 	 */
 	public abstract boolean isLayerDefined();

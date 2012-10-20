@@ -50,30 +50,30 @@ import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 
-
 /**
  * Interface para la creación de los diálogos que añaden elementos al Layout.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public interface IFFrameDialog extends IWindow {
 	/**
 	 * Rellena el Rectángulo que representa el tamaño y posición del fframe.
-	 *
-	 * @param r BoundingBox del fframe.
+	 * 
+	 * @param r
+	 *            BoundingBox del fframe.
 	 */
 	public void setRectangle(Rectangle2D r);
 
 	/**
 	 * Devuelve la información de la ventana.
-	 *
+	 * 
 	 * @return Información referente a la ventana.
 	 */
 	public WindowInfo getWindowInfo();
 
 	/**
 	 * Devuelve true si ha sido aceptado el diálogo.
-	 *
+	 * 
 	 * @return True si se ha aceptado.
 	 */
 	public boolean getIsAcepted();

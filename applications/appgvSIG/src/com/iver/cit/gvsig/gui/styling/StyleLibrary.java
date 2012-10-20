@@ -45,10 +45,11 @@ import java.io.File;
 import com.iver.andami.PluginServices;
 
 public class StyleLibrary extends SymbolLibrary {
-	
+
 	public StyleLibrary(File rootDir) {
 		super(rootDir);
-		rootDirString = PluginServices.getText(StyleLibrary.class, "style_library") ;
+		rootDirString = PluginServices.getText(StyleLibrary.class,
+				"style_library");
 	}
 
 }

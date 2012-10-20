@@ -57,36 +57,31 @@ public class ClearBarriersExtension extends Extension {
 
 	public void initialize() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void execute(String actionCommand) {
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		if (window instanceof View)
-		{
+		if (window instanceof View) {
 			View v = (View) window;
-	        MapControl mapCtrl = v.getMapControl();
+			MapControl mapCtrl = v.getMapControl();
 			MapContext map = mapCtrl.getMapContext();
-			
+
 			SingleLayerIterator it = new SingleLayerIterator(map.getLayers());
-			while (it.hasNext())
-			{
+			while (it.hasNext()) {
 				FLayer aux = it.next();
 				if (!aux.isActive())
 					continue;
 				Network net = (Network) aux.getProperty("network");
-				
-				if ( net != null)
-				{
-					if (actionCommand.equalsIgnoreCase("CLEAR_BARRIERS"))
-					{
-						if (net.getModifiedCosts().size() > 0)
-						{
-							for (int i=net.getModifiedCosts().size()-1; i >=0; i--)
-							{
-								GvModifiedCost barrier = (GvModifiedCost) net.getModifiedCosts().get(i);
+
+				if (net != null) {
+					if (actionCommand.equalsIgnoreCase("CLEAR_BARRIERS")) {
+						if (net.getModifiedCosts().size() > 0) {
+							for (int i = net.getModifiedCosts().size() - 1; i >= 0; i--) {
+								GvModifiedCost barrier = (GvModifiedCost) net
+										.getModifiedCosts().get(i);
 								net.removeModifiedCost(barrier);
-							}														
+							}
 						}
 						net.removeTurnCosts();
 						NetworkUtils.clearBarriersFromGraphics(mapCtrl);
@@ -95,27 +90,24 @@ public class ClearBarriersExtension extends Extension {
 				}
 			}
 		}
-		
+
 	}
 
 	public boolean isEnabled() {
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		if (window instanceof View)
-		{
+		if (window instanceof View) {
 			View v = (View) window;
-	        MapControl mapCtrl = v.getMapControl();
+			MapControl mapCtrl = v.getMapControl();
 			MapContext map = mapCtrl.getMapContext();
-			
+
 			SingleLayerIterator it = new SingleLayerIterator(map.getLayers());
-			while (it.hasNext())
-			{
+			while (it.hasNext()) {
 				FLayer aux = it.next();
 				if (!aux.isActive())
 					continue;
 				Network net = (Network) aux.getProperty("network");
-				
-				if ( net != null)
-				{
+
+				if (net != null) {
 					// TODO:
 					// if (net.getModifiedCosts().length > 0)
 					{
@@ -130,22 +122,19 @@ public class ClearBarriersExtension extends Extension {
 
 	public boolean isVisible() {
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		if (window instanceof View)
-		{
+		if (window instanceof View) {
 			View v = (View) window;
-	        MapControl mapCtrl = v.getMapControl();
+			MapControl mapCtrl = v.getMapControl();
 			MapContext map = mapCtrl.getMapContext();
-			
+
 			SingleLayerIterator it = new SingleLayerIterator(map.getLayers());
-			while (it.hasNext())
-			{
+			while (it.hasNext()) {
 				FLayer aux = it.next();
 				if (!aux.isActive())
 					continue;
 				Network net = (Network) aux.getProperty("network");
-				
-				if ( net != null)
-				{
+
+				if (net != null) {
 					return true;
 				}
 			}
@@ -155,5 +144,3 @@ public class ClearBarriersExtension extends Extension {
 	}
 
 }
-
-

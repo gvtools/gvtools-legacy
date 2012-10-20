@@ -41,16 +41,15 @@
 package org.gvsig.remoteClient.sld.filterEncoding;
 
 /**
- * Tags for Filter Encoding 
+ * Tags for Filter Encoding
  * 
  * @see http://www.opengeospatial.org/standards/filter
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
 public class FilterTags {
 
-
 	public final static String FILTER = "ogc:Filter";
-	public final static String NAME="Name";
+	public final static String NAME = "Name";
 
 	public final static String PROPERTYISEQUALTO = "ogc:PropertyIsEqualTo";
 	public final static String PROPERTYISNOTEQUALTO = "ogc:PropertyIsNotEqualTo";
@@ -65,7 +64,7 @@ public class FilterTags {
 	public static final String PROPERTYNAME = "ogc:PropertyName";
 
 	public final static String EQUALS = "Equals";
-	public final static String DISJOINT= "Disjoint";
+	public final static String DISJOINT = "Disjoint";
 	public final static String INTERSECTS = "Intersects";
 	public final static String TOUCHES = "Touches";
 	public final static String CROSSES = "Corsses";
@@ -97,7 +96,7 @@ public class FilterTags {
 
 	public static final String ENVELOPE = "Envelope";
 
-	//Geometries
+	// Geometries
 	public static final String GML_POINT = "Point";
 	public static final String GML_LINESTRING = "LineString";
 	public static final String GML_LINEARRING = "LinearRing";

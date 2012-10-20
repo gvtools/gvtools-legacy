@@ -68,6 +68,7 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
 /**
  * It writes a Point tag. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;Point gid="P6776"&gt;
@@ -75,39 +76,48 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  * &lt;/Point&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#point
  */
 public class PointWriter {
-	
+
 	/**
 	 * It writes the Point init tag and its value.
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param id
-	 * Point id
+	 *            Point id
 	 * @param coords
-	 * A coordinates iterator. 
+	 *            A coordinates iterator.
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler, String id, 
-			ICoordinateSequence coords) throws IOException{
-		handler.getProfile().getGeometryWriter().startGeometry(writer, handler, Kml2_1_Tags.POINT, id);
-		handler.getProfile().getCoordinatesWriter().write(writer, handler, coords);
+	public void start(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor handler, String id,
+			ICoordinateSequence coords) throws IOException {
+		handler.getProfile().getGeometryWriter()
+				.startGeometry(writer, handler, Kml2_1_Tags.POINT, id);
+		handler.getProfile().getCoordinatesWriter()
+				.write(writer, handler, coords);
 	}
-	
+
 	/**
 	 * It writes the Point end tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @throws IOException
 	 */
-	public void end(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler) throws IOException{
-		handler.getProfile().getGeometryWriter().endGeometry(writer, handler, Kml2_1_Tags.POINT);
+	public void end(IXmlStreamWriter writer,
+			GPEKmlWriterHandlerImplementor handler) throws IOException {
+		handler.getProfile().getGeometryWriter()
+				.endGeometry(writer, handler, Kml2_1_Tags.POINT);
 	}
 }

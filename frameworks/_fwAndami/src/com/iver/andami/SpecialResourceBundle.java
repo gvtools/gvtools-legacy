@@ -48,24 +48,26 @@ import java.util.ResourceBundle;
 
 /**
  * @author fjp
- *
- * Esta clase intenta crear un locale con lo que le pasas.
- * Si no puede, mira si le has pasado algo que conoce, por ejemplo
- * va para valenciano, y hace lo que puede poniendo un lenguaje
- * para esto (por ejemplo, usar un locale "ca_ES"), pero se guarda
- * que en realidad es "va".
+ * 
+ *         Esta clase intenta crear un locale con lo que le pasas. Si no puede,
+ *         mira si le has pasado algo que conoce, por ejemplo va para
+ *         valenciano, y hace lo que puede poniendo un lenguaje para esto (por
+ *         ejemplo, usar un locale "ca_ES"), pero se guarda que en realidad es
+ *         "va".
  */
 public class SpecialResourceBundle extends ResourceBundle {
-    private static final String BUNDLE_NAME = "com.iver.andami.text";
-    SpecialResourceBundle(String strLocale)
-    {
-    }
-    public Enumeration getKeys() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    protected Object handleGetObject(String key) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	private static final String BUNDLE_NAME = "com.iver.andami.text";
+
+	SpecialResourceBundle(String strLocale) {
+	}
+
+	public Enumeration getKeys() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	protected Object handleGetObject(String key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -44,13 +43,13 @@ package es.gva.cit.catalog.querys;
 import es.gva.cit.catalog.utils.CatalogConstants;
 
 /**
- * This class implements a general query. It contains an attribute
- * for each parameter that can be showed in the search form.
+ * This class implements a general query. It contains an attribute for each
+ * parameter that can be showed in the search form.
  * 
  * 
  * @author Jorge Piera Llodra (piera_jor@gva.es)
  */
-public class CatalogQuery extends DiscoveryServiceQuery{
+public class CatalogQuery extends DiscoveryServiceQuery {
 	private Search service = null;
 	private String title;
 	private String titleFilter;
@@ -66,25 +65,28 @@ public class CatalogQuery extends DiscoveryServiceQuery{
 	private boolean isMinimized;
 	private boolean isCoordinatesClicked;
 
-	public  CatalogQuery() {        
+	public CatalogQuery() {
 		super();
-	} 
+	}
 
 	/**
-	 * @param title 
-	 * @param titleFilter 
-	 * @param abstract_ 
-	 * @param themeKey 
-	 * @param topic 
-	 * @param scale 
-	 * @param provider 
-	 * @param dateFrom 
-	 * @param dateTo 
-	 * @param coordinates 
-	 * @param coordinatesFilter 
-	 * @param translator 
+	 * @param title
+	 * @param titleFilter
+	 * @param abstract_
+	 * @param themeKey
+	 * @param topic
+	 * @param scale
+	 * @param provider
+	 * @param dateFrom
+	 * @param dateTo
+	 * @param coordinates
+	 * @param coordinatesFilter
+	 * @param translator
 	 */
-	public  CatalogQuery(String title, String titleFilter, String abstract_, String themeKey, String topic, String scale, String provider, String dateFrom, String dateTo, Coordinates coordinates, String coordinatesFilter) {        
+	public CatalogQuery(String title, String titleFilter, String abstract_,
+			String themeKey, String topic, String scale, String provider,
+			String dateFrom, String dateTo, Coordinates coordinates,
+			String coordinatesFilter) {
 		super();
 		this.title = title;
 		this.titleFilter = titleFilter;
@@ -93,16 +95,16 @@ public class CatalogQuery extends DiscoveryServiceQuery{
 		this.topic = topic;
 		this.scale = scale;
 		this.provider = provider;
-		//Date
+		// Date
 		this.DateFrom = dateFrom;
 		this.DateTo = dateTo;
-		//Coordinates
+		// Coordinates
 		this.coordinates = coordinates;
 		if (this.coordinates != null) {
-			if (this.coordinates.getUlx().equals("") ||
-					this.coordinates.getUlx().equals("") ||
-					this.coordinates.getBrx().equals("") ||
-					this.coordinates.getBry().equals("")) {
+			if (this.coordinates.getUlx().equals("")
+					|| this.coordinates.getUlx().equals("")
+					|| this.coordinates.getBrx().equals("")
+					|| this.coordinates.getBry().equals("")) {
 				this.coordinates = null;
 			} else {
 				try {
@@ -120,23 +122,24 @@ public class CatalogQuery extends DiscoveryServiceQuery{
 		this.coordinatesFilter = coordinatesFilter;
 
 		setMinimized(false);
-	} 
+	}
 
 	/**
 	 * Return logic operators
 	 * 
-	 * @param titleKeys E,A o Y --> Exact, All, anY
+	 * @param titleKeys
+	 *            E,A o Y --> Exact, All, anY
 	 * 
 	 * @return String
-	 * @param concordancia 
+	 * @param concordancia
 	 */
-	public String getOperator(String concordancia) {        
+	public String getOperator(String concordancia) {
 		if (concordancia.equals(CatalogConstants.ANY_WORD)) {
 			return CatalogConstants.OR;
 		} else {
 			return CatalogConstants.OR;
 		}
-	} 
+	}
 
 	/**
 	 * 
@@ -144,19 +147,20 @@ public class CatalogQuery extends DiscoveryServiceQuery{
 	 * 
 	 * @return Returns the abstract_.
 	 */
-	public String getAbstract() {        
+	public String getAbstract() {
 		return abstract_;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param abstract_ The abstract_ to set.
+	 * @param abstract_
+	 *            The abstract_ to set.
 	 */
-	public void setAbstract(String abstract_) {        
+	public void setAbstract(String abstract_) {
 		this.abstract_ = abstract_;
-	} 
+	}
 
 	/**
 	 * 
@@ -164,19 +168,20 @@ public class CatalogQuery extends DiscoveryServiceQuery{
 	 * 
 	 * @return Returns the coordinates.
 	 */
-	public Coordinates getCoordenates() {        
+	public Coordinates getCoordenates() {
 		return coordinates;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param coordenates The coordinates to set.
+	 * @param coordenates
+	 *            The coordinates to set.
 	 */
-	public void setCoordenates(Coordinates coordenates) {        
+	public void setCoordenates(Coordinates coordenates) {
 		this.coordinates = coordenates;
-	} 
+	}
 
 	/**
 	 * 
@@ -184,19 +189,20 @@ public class CatalogQuery extends DiscoveryServiceQuery{
 	 * 
 	 * @return Returns the coordinatesFilter.
 	 */
-	public String getCoordenatesFilter() {        
+	public String getCoordenatesFilter() {
 		return coordinatesFilter;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param coordenatesFilter The coordenatesFilter to set.
+	 * @param coordenatesFilter
+	 *            The coordenatesFilter to set.
 	 */
-	public void setCoordenatesFilter(String coordenatesFilter) {        
+	public void setCoordenatesFilter(String coordenatesFilter) {
 		this.coordinatesFilter = coordenatesFilter;
-	} 
+	}
 
 	/**
 	 * 
@@ -204,19 +210,20 @@ public class CatalogQuery extends DiscoveryServiceQuery{
 	 * 
 	 * @return Returns the dateFrom.
 	 */
-	public String getDateFrom() {        
+	public String getDateFrom() {
 		return DateFrom;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param dateFrom The dateFrom to set.
+	 * @param dateFrom
+	 *            The dateFrom to set.
 	 */
-	public void setDateFrom(String dateFrom) {        
+	public void setDateFrom(String dateFrom) {
 		DateFrom = dateFrom;
-	} 
+	}
 
 	/**
 	 * 
@@ -224,19 +231,20 @@ public class CatalogQuery extends DiscoveryServiceQuery{
 	 * 
 	 * @return Returns the dateTo.
 	 */
-	public String getDateTo() {        
+	public String getDateTo() {
 		return DateTo;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param dateTo The dateTo to set.
+	 * @param dateTo
+	 *            The dateTo to set.
 	 */
-	public void setDateTo(String dateTo) {        
+	public void setDateTo(String dateTo) {
 		DateTo = dateTo;
-	} 
+	}
 
 	/**
 	 * 
@@ -244,19 +252,20 @@ public class CatalogQuery extends DiscoveryServiceQuery{
 	 * 
 	 * @return Returns the provider.
 	 */
-	public String getProvider() {        
+	public String getProvider() {
 		return provider;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param provider The provider to set.
+	 * @param provider
+	 *            The provider to set.
 	 */
-	public void setProvider(String provider) {        
+	public void setProvider(String provider) {
 		this.provider = provider;
-	} 
+	}
 
 	/**
 	 * 
@@ -264,19 +273,20 @@ public class CatalogQuery extends DiscoveryServiceQuery{
 	 * 
 	 * @return Returns the scale.
 	 */
-	public String getScale() {        
+	public String getScale() {
 		return scale;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param scale The scale to set.
+	 * @param scale
+	 *            The scale to set.
 	 */
-	public void setScale(String scale) {        
+	public void setScale(String scale) {
 		this.scale = scale;
-	} 
+	}
 
 	/**
 	 * 
@@ -284,19 +294,20 @@ public class CatalogQuery extends DiscoveryServiceQuery{
 	 * 
 	 * @return Returns the themeKey.
 	 */
-	public String getThemeKey() {        
+	public String getThemeKey() {
 		return themeKey;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param themeKey The themeKey to set.
+	 * @param themeKey
+	 *            The themeKey to set.
 	 */
-	public void setThemeKey(String themeKey) {        
+	public void setThemeKey(String themeKey) {
 		this.themeKey = themeKey;
-	} 
+	}
 
 	/**
 	 * 
@@ -304,19 +315,20 @@ public class CatalogQuery extends DiscoveryServiceQuery{
 	 * 
 	 * @return Returns the title.
 	 */
-	public String getTitle() {        
+	public String getTitle() {
 		return title;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param title The title to set.
+	 * @param title
+	 *            The title to set.
 	 */
-	public void setTitle(String title) {        
+	public void setTitle(String title) {
 		this.title = title;
-	} 
+	}
 
 	/**
 	 * 
@@ -324,19 +336,20 @@ public class CatalogQuery extends DiscoveryServiceQuery{
 	 * 
 	 * @return Returns the titleFilter.
 	 */
-	public String getTitleFilter() {        
+	public String getTitleFilter() {
 		return titleFilter;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param titleFilter The titleFilter to set.
+	 * @param titleFilter
+	 *            The titleFilter to set.
 	 */
-	public void setTitleFilter(String titleFilter) {        
+	public void setTitleFilter(String titleFilter) {
 		this.titleFilter = titleFilter;
-	} 
+	}
 
 	/**
 	 * 
@@ -344,19 +357,20 @@ public class CatalogQuery extends DiscoveryServiceQuery{
 	 * 
 	 * @return Returns the topic.
 	 */
-	public String getTopic() {        
+	public String getTopic() {
 		return topic;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param topic The topic to set.
+	 * @param topic
+	 *            The topic to set.
 	 */
-	public void setTopic(String topic) {        
+	public void setTopic(String topic) {
 		this.topic = topic;
-	} 
+	}
 
 	/**
 	 * 
@@ -364,22 +378,23 @@ public class CatalogQuery extends DiscoveryServiceQuery{
 	 * 
 	 * @return Returns the isMinimized.
 	 */
-	public boolean isMinimized() {        
+	public boolean isMinimized() {
 		return isMinimized;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param isMinimized The isMinimized to set.
+	 * @param isMinimized
+	 *            The isMinimized to set.
 	 */
-	public void setMinimized(boolean isMinimized) {        
+	public void setMinimized(boolean isMinimized) {
 		this.isMinimized = isMinimized;
-		if (isMinimized){
+		if (isMinimized) {
 			this.setAbstract(getTitle());
 		}
-	} 
+	}
 
 	/**
 	 * 
@@ -387,20 +402,20 @@ public class CatalogQuery extends DiscoveryServiceQuery{
 	 * 
 	 * @return Returns the isCoordinatesClicked.
 	 */
-	public boolean isCoordinatesClicked() {        
+	public boolean isCoordinatesClicked() {
 		return isCoordinatesClicked;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param isCoordinatesClicked The isCoordinatesClicked to set.
+	 * @param isCoordinatesClicked
+	 *            The isCoordinatesClicked to set.
 	 */
-	public void setCoordinatesClicked(boolean isCoordinatesClicked) {        
+	public void setCoordinatesClicked(boolean isCoordinatesClicked) {
 		this.isCoordinatesClicked = isCoordinatesClicked;
-	} 
-
+	}
 
 	/**
 	 * It returns the lower scale
@@ -408,29 +423,29 @@ public class CatalogQuery extends DiscoveryServiceQuery{
 	 * 
 	 * @return String or Null if ther is not a low value (0)
 	 */
-	public String getMinScale() {        
-		if (scale.equals(">1.000.000")){
+	public String getMinScale() {
+		if (scale.equals(">1.000.000")) {
 			return "1000000";
 		}
 
-		if (scale.equals("1.000.000 - 250.000")){
+		if (scale.equals("1.000.000 - 250.000")) {
 			return "250000";
 		}
 
-		if (scale.equals("250.000 - 50.000")){
+		if (scale.equals("250.000 - 50.000")) {
 			return "50000";
 		}
 
-		if (scale.equals("50.000 - 10.000")){
+		if (scale.equals("50.000 - 10.000")) {
 			return "10000";
 		}
 
-		if (scale.equals("10.000 - 5000")){
+		if (scale.equals("10.000 - 5000")) {
 			return "5000";
 		}
 
-		return null;        
-	} 
+		return null;
+	}
 
 	/**
 	 * It returns the upper scale
@@ -438,27 +453,27 @@ public class CatalogQuery extends DiscoveryServiceQuery{
 	 * 
 	 * @return String or Null if ther is not a value (infinity)
 	 */
-	public String getMaxScale() {        
-		if (scale.equals("1.000.000 - 250.000")){
+	public String getMaxScale() {
+		if (scale.equals("1.000.000 - 250.000")) {
 			return "1000000";
 		}
 
-		if (scale.equals("250.000 - 50.000")){
+		if (scale.equals("250.000 - 50.000")) {
 			return "250000";
-		}	
+		}
 
-		if (scale.equals("50.000 - 10.000")){
+		if (scale.equals("50.000 - 10.000")) {
 			return "50000";
 		}
 
-		if (scale.equals("10.000 - 5000")){
+		if (scale.equals("10.000 - 5000")) {
 			return "10000";
 		}
 
-		if (scale.equals("<5.000")){
+		if (scale.equals("<5.000")) {
 			return "5000";
-		}   
-		return null;        
+		}
+		return null;
 	}
 
 	/**
@@ -469,10 +484,11 @@ public class CatalogQuery extends DiscoveryServiceQuery{
 	}
 
 	/**
-	 * @param service the service to set
+	 * @param service
+	 *            the service to set
 	 */
 	public void setService(Search service) {
 		this.service = service;
-	} 
-	
+	}
+
 }

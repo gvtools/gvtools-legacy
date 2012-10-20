@@ -84,78 +84,83 @@ import org.gvsig.xmlschema.utils.SchemaDocumentBuilder;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class GPEWriterWithSchemaBaseTest extends GPEWriterBaseTest{
+public abstract class GPEWriterWithSchemaBaseTest extends GPEWriterBaseTest {
 	private IXSSchema schema = null;
 	private String schemafileName = "SCHEMAFILETEMP";
 	private SchemaDocumentBuilder documentBuilder = null;
 	private DOMObjectsFactory elementsFactory = null;
 	private File schemaFile = null;
-	
+
 	/**
 	 * Initialize the schemas factory
 	 */
-	public void setUp() throws Exception{
+	public void setUp() throws Exception {
 		documentBuilder = SchemaDocumentBuilder.getInstance();
-		schema = documentBuilder.createXSSchema(getNamespaceURI(),getNamespacePrefix());	
+		schema = documentBuilder.createXSSchema(getNamespaceURI(),
+				getNamespacePrefix());
 		elementsFactory = DOMObjectsFactory.getInstance();
 		super.setUp();
-	}	
-	
+	}
+
 	/**
 	 * Delete the schema file
 	 */
-	public void tearDown() throws Exception{
+	public void tearDown() throws Exception {
 		getSchemaFile().delete();
 		super.tearDown();
 	}
-	
+
 	/**
 	 * Writes the schema a parses the file
 	 */
-	public void testWriter() throws Exception{
+	public void testWriter() throws Exception {
 		writeSchema();
 		getSchema().write(new FileOutputStream(getSchemaFile()));
-		GPEDefaults.setProperty("schemaName", getSchemaFile().getAbsolutePath());
+		GPEDefaults
+				.setProperty("schemaName", getSchemaFile().getAbsolutePath());
 		getWriterHandler().getSchemaDocument().addSchema(
-				new URI(getSchemaFile().getPath()), 
-				getSchema());
-		getWriterHandler().getSchemaDocument().setTargetNamespace(getNamespaceURI());
+				new URI(getSchemaFile().getPath()), getSchema());
+		getWriterHandler().getSchemaDocument().setTargetNamespace(
+				getNamespaceURI());
 		super.testWriter();
 	}
-	
+
 	/**
 	 * Writes the schema
+	 * 
 	 * @throws TypeNotFoundException
 	 */
 	public abstract void writeSchema();
-	
+
 	/**
 	 * Gets the namespace URI
+	 * 
 	 * @return
 	 */
-	public String getNamespaceURI(){
+	public String getNamespaceURI() {
 		return "http://www.gvsig.org/cit";
 	}
-	
+
 	/**
 	 * Gets the namespace prefix
+	 * 
 	 * @return
 	 */
-	public String getNamespacePrefix(){
+	public String getNamespacePrefix() {
 		return "cit";
 	}
 
 	/**
 	 * @return the schemaFile
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public File getSchemaFile() throws IOException {
-		if (schemaFile == null){
-			schemaFile = new File(schemafileName);					
+		if (schemaFile == null) {
+			schemaFile = new File(schemafileName);
 		}
 		return schemaFile;
 	}
-	
+
 	/**
 	 * @return the elementsFactory
 	 */
@@ -169,6 +174,5 @@ public abstract class GPEWriterWithSchemaBaseTest extends GPEWriterBaseTest{
 	public IXSSchema getSchema() {
 		return schema;
 	}
-	
-	
+
 }

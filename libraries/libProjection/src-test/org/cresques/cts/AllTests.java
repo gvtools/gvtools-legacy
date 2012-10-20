@@ -7,9 +7,9 @@ public class AllTests {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.cresques.cts");
-		//$JUnit-BEGIN$
+		// $JUnit-BEGIN$
 
-		//$JUnit-END$
+		// $JUnit-END$
 		return suite;
 	}
 

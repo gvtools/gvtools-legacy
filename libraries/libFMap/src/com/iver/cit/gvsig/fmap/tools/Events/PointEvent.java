@@ -43,28 +43,38 @@ package com.iver.cit.gvsig.fmap.tools.Events;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 
-
 /**
- * <p><code>PointEvent</code> is used to notify a selection of a point with the mouse.</p>
- *
+ * <p>
+ * <code>PointEvent</code> is used to notify a selection of a point with the
+ * mouse.
+ * </p>
+ * 
  * @author Vicente Caballero Navarro
  */
 public class PointEvent {
 	/**
-	 * <p>The point 2D associated to this event.</p>
+	 * <p>
+	 * The point 2D associated to this event.
+	 * </p>
 	 */
 	private Point2D p;
 
 	/**
-	 * <p>The point 2D associated to this event.</p>
+	 * <p>
+	 * The point 2D associated to this event.
+	 * </p>
 	 */
 	private MouseEvent e;
 
 	/**
-	 * <p>Creates a new <code>PointEvent</code> with all necessary data.</p>
-	 *
-	 * @param p the point 2D associated to this event
-	 * @param e event that has been the cause of creating this one
+	 * <p>
+	 * Creates a new <code>PointEvent</code> with all necessary data.
+	 * </p>
+	 * 
+	 * @param p
+	 *            the point 2D associated to this event
+	 * @param e
+	 *            event that has been the cause of creating this one
 	 */
 	public PointEvent(Point2D p, MouseEvent e) {
 		this.p = p;
@@ -72,8 +82,10 @@ public class PointEvent {
 	}
 
 	/**
-	 * <p>Gets the point 2D where this event was produced.</p>
-	 *
+	 * <p>
+	 * Gets the point 2D where this event was produced.
+	 * </p>
+	 * 
 	 * @return the point 2D associated to this event
 	 */
 	public Point2D getPoint() {
@@ -81,19 +93,24 @@ public class PointEvent {
 	}
 
 	/**
-	 * <p>Sets the point 2D where this event was produced.</p>
-	 *
-	 * @param the point 2D associated to this event
+	 * <p>
+	 * Sets the point 2D where this event was produced.
+	 * </p>
+	 * 
+	 * @param the
+	 *            point 2D associated to this event
 	 */
 	public void setPoint(Point2D p) {
 		this.p = p;
 	}
 
-    /**
-	 * <p>Gets the event that has been the cause of creating this one.</p>
+	/**
+	 * <p>
+	 * Gets the event that has been the cause of creating this one.
+	 * </p>
 	 * 
 	 * @return mouse event that has been the cause of creating this one
-     */
+	 */
 	public MouseEvent getEvent() {
 		return e;
 	}

@@ -10,10 +10,16 @@ public interface IOperator {
 	int NUMBER = 0;
 	int STRING = 1;
 	int DATE = 2;
+
 	public String addText(String s);
+
 	public String toString();
-	public void eval(BSFManager interpreter) throws BSFException ;
+
+	public void eval(BSFManager interpreter) throws BSFException;
+
 	public boolean isEnable();
+
 	public void setType(int fieldType);
+
 	public String getTooltip();
 }

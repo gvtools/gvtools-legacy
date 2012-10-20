@@ -2,7 +2,6 @@ package org.gvsig.gpe.kml.parser.v21.kml;
 
 import org.gvsig.gpe.containers.Layer;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -64,10 +63,11 @@ import org.gvsig.gpe.containers.Layer;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class KMLDiscoveryNetworksTest extends KMLBaseTest{
-	
+public class KMLDiscoveryNetworksTest extends KMLBaseTest {
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.readers.GPEReaderBaseTest#getFile()
 	 */
 	public String getFile() {
@@ -76,6 +76,7 @@ public class KMLDiscoveryNetworksTest extends KMLBaseTest{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.readers.GPEReaderBaseTest#makeAsserts()
 	 */
 	public void makeAsserts() {
@@ -85,8 +86,6 @@ public class KMLDiscoveryNetworksTest extends KMLBaseTest{
 		assertEquals(layer.getName(), "Discovery Networks");
 		assertEquals(layer.getDescription(), "Zoom into real life.");
 		assertEquals(layer.getLayers().size(), 5);
-	}	
-
-
+	}
 
 }

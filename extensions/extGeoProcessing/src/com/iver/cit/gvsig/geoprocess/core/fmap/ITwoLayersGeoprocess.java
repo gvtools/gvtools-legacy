@@ -42,34 +42,35 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: ITwoLayersGeoprocess.java 5412 2006-05-24 21:15:07Z azabala $
-* $Log$
-* Revision 1.1  2006-05-24 21:12:16  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.1  2006/02/12 21:03:25  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/02/01 19:40:59  azabala
-* First version in CVS
-*
-*
-*/
+ *
+ * $Id: ITwoLayersGeoprocess.java 5412 2006-05-24 21:15:07Z azabala $
+ * $Log$
+ * Revision 1.1  2006-05-24 21:12:16  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.1  2006/02/12 21:03:25  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/02/01 19:40:59  azabala
+ * First version in CVS
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core.fmap;
 
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
 /**
  * Geoprocess wich operates with two layers
+ * 
  * @author azabala
- *
+ * 
  */
 public interface ITwoLayersGeoprocess extends IOneLayerGeoprocess {
 	/**
 	 * It sets second layer geoprocess operand.
+	 * 
 	 * @param secondLayer
 	 */
 	public void setSecondOperand(FLyrVect secondLayer);
 }
-

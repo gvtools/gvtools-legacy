@@ -40,14 +40,14 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: FMapWCSDriverFactory.java 6042 2006-06-26 16:11:05Z jaume $
-* $Log$
-* Revision 1.1  2006-06-26 16:11:05  jaume
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: FMapWCSDriverFactory.java 6042 2006-06-26 16:11:05Z jaume $
+ * $Log$
+ * Revision 1.1  2006-06-26 16:11:05  jaume
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.drivers.wcs;
 
 import java.io.IOException;
@@ -57,9 +57,12 @@ import java.util.Hashtable;
 
 public class FMapWCSDriverFactory {
 	private static Hashtable drivers = new Hashtable();
-	private FMapWCSDriverFactory() { }
 
-	static public final FMapWCSDriver getFMapDriverForURL(URL url) throws ConnectException, IOException {
+	private FMapWCSDriverFactory() {
+	}
+
+	static public final FMapWCSDriver getFMapDriverForURL(URL url)
+			throws ConnectException, IOException {
 		FMapWCSDriver drv = (FMapWCSDriver) drivers.get(url);
 		if (drv == null) {
 			drv = new FMapWCSDriver(url);
@@ -69,5 +72,3 @@ public class FMapWCSDriverFactory {
 	}
 
 }
-
-

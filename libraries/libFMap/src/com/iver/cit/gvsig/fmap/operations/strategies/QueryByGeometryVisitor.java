@@ -53,14 +53,13 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.IntersectionMatrix;
 
-
 public class QueryByGeometryVisitor implements FeatureVisitor {
 
 	private Geometry geom = null;
-    private IGeometry geom_gvSIG = null;
-    private Rectangle2D geomBounds;
+	private IGeometry geom_gvSIG = null;
+	private Rectangle2D geomBounds;
 	private int relation;
-    private FBitSet bitset = null;
+	private FBitSet bitset = null;
 	public static final int EQUALS = 0;
 	public static final int DISJOINT = 1;
 	public static final int INTERSECTS = 2;
@@ -70,125 +69,121 @@ public class QueryByGeometryVisitor implements FeatureVisitor {
 	public static final int CONTAINS = 6;
 	public static final int OVERLAPS = 7;
 
-    private Geometry getJTSgeom()
-    {
-        if (geom == null)
-            geom = geom_gvSIG.toJTSGeometry();
-        return geom;
-    }
+	private Geometry getJTSgeom() {
+		if (geom == null)
+			geom = geom_gvSIG.toJTSGeometry();
+		return geom;
+	}
 
 	/**
 	 *
 	 */
 	public QueryByGeometryVisitor(IGeometry geom, int relation) {
-        this.geomBounds = geom.getBounds2D();
+		this.geomBounds = geom.getBounds2D();
 		// this.geom = geom.toJTSGeometry();
-        this.geom_gvSIG = geom;
+		this.geom_gvSIG = geom;
 		this.relation = relation;
 	}
 
 	/**
-	 * @see com.iver.cit.gvsig.fmap.operations.strategies.FeatureVisitor#visit(com.iver.cit.gvsig.fmap.core.IGeometry, int)
+	 * @see com.iver.cit.gvsig.fmap.operations.strategies.FeatureVisitor#visit(com.iver.cit.gvsig.fmap.core.IGeometry,
+	 *      int)
 	 */
-	public void visit(IGeometry g, int index) throws VisitorException, ProcessVisitorException {
-        Geometry g1;
-        IntersectionMatrix m;
-        switch (relation) {
-        case CONTAINS:
-        	if (XRectangle2D.intersectInclusive(geomBounds, g.getBounds2D())) {
-        		g1 = g.toJTSGeometry();
-        		m = getJTSgeom().relate(g1);
+	public void visit(IGeometry g, int index) throws VisitorException,
+			ProcessVisitorException {
+		Geometry g1;
+		IntersectionMatrix m;
+		switch (relation) {
+		case CONTAINS:
+			if (XRectangle2D.intersectInclusive(geomBounds, g.getBounds2D())) {
+				g1 = g.toJTSGeometry();
+				m = getJTSgeom().relate(g1);
 
-        		if (m.isContains()) {
-        			bitset.set(index, true);
-        		}
-        	}
-        	break;
+				if (m.isContains()) {
+					bitset.set(index, true);
+				}
+			}
+			break;
 
-        case CROSSES:
-        	if (XRectangle2D.intersectInclusive(geomBounds, g.getBounds2D()))
-        	{
-        		g1 = g.toJTSGeometry();
-        		m = getJTSgeom().relate(g1);
+		case CROSSES:
+			if (XRectangle2D.intersectInclusive(geomBounds, g.getBounds2D())) {
+				g1 = g.toJTSGeometry();
+				m = getJTSgeom().relate(g1);
 
-        		if (m.isCrosses(g1.getDimension(), geom.getDimension())) {
-        			bitset.set(index, true);
-        		}
-        	}
-        	break;
+				if (m.isCrosses(g1.getDimension(), geom.getDimension())) {
+					bitset.set(index, true);
+				}
+			}
+			break;
 
-        case DISJOINT:
-        	// TODO: POR OPTIMIZAR
-        	g1 = g.toJTSGeometry();
-        	m = getJTSgeom().relate(g1);
-        	if (m.isDisjoint()) {
-        		bitset.set(index, true);
-        	}
-        	break;
+		case DISJOINT:
+			// TODO: POR OPTIMIZAR
+			g1 = g.toJTSGeometry();
+			m = getJTSgeom().relate(g1);
+			if (m.isDisjoint()) {
+				bitset.set(index, true);
+			}
+			break;
 
-        case EQUALS:
-        	// TODO: REVISAR ESTO PARA QUE COMPRUEBE SI SON IGUALES LOS RECTANGULOS
-        	// Y DE PASO, COMPROBAR SI HACE FALTA USAR ESTA FUNCIÓN DONDE
-        	// SE USE EL Rectangle2D.contains
-        	if (XRectangle2D.containsInclusive(geomBounds, g.getBounds2D()))
-        	{
-        		g1 = g.toJTSGeometry();
-        		m = getJTSgeom().relate(g1);
-        		if (m.isEquals(g1.getDimension(), getJTSgeom().getDimension())) {
-        			bitset.set(index, true);
-        		}
-        	}
-        	break;
+		case EQUALS:
+			// TODO: REVISAR ESTO PARA QUE COMPRUEBE SI SON IGUALES LOS
+			// RECTANGULOS
+			// Y DE PASO, COMPROBAR SI HACE FALTA USAR ESTA FUNCIÓN DONDE
+			// SE USE EL Rectangle2D.contains
+			if (XRectangle2D.containsInclusive(geomBounds, g.getBounds2D())) {
+				g1 = g.toJTSGeometry();
+				m = getJTSgeom().relate(g1);
+				if (m.isEquals(g1.getDimension(), getJTSgeom().getDimension())) {
+					bitset.set(index, true);
+				}
+			}
+			break;
 
-        case INTERSECTS:
-        	if (XRectangle2D.intersectInclusive(geomBounds, g.getBounds2D()))
-        	{
-        		g1 = g.toJTSGeometry();
-        		m = getJTSgeom().relate(g1);
+		case INTERSECTS:
+			if (XRectangle2D.intersectInclusive(geomBounds, g.getBounds2D())) {
+				g1 = g.toJTSGeometry();
+				m = getJTSgeom().relate(g1);
 
-        		if (m.isIntersects()) {
-        			bitset.set(index, true);
-        		}
-        	}
-        	break;
+				if (m.isIntersects()) {
+					bitset.set(index, true);
+				}
+			}
+			break;
 
-        case OVERLAPS:
-        	if (XRectangle2D.intersectInclusive(geomBounds, g.getBounds2D()))
-        	{
-        		g1 = g.toJTSGeometry();
-        		m = getJTSgeom().relate(g1);
-        		if (m.isOverlaps(g1.getDimension(),
-        				geom.getDimension())) {
-        			bitset.set(index, true);
-        		}
-        	}
+		case OVERLAPS:
+			if (XRectangle2D.intersectInclusive(geomBounds, g.getBounds2D())) {
+				g1 = g.toJTSGeometry();
+				m = getJTSgeom().relate(g1);
+				if (m.isOverlaps(g1.getDimension(), geom.getDimension())) {
+					bitset.set(index, true);
+				}
+			}
 
-        	break;
+			break;
 
-        case TOUCHES:
-        	if (XRectangle2D.intersectInclusive(geomBounds, g.getBounds2D()))
-        	{
-        		g1 = g.toJTSGeometry();
-        		m = getJTSgeom().relate(g1);
-        		if (m.isTouches(g1.getDimension(), geom.getDimension())) {
-        			bitset.set(index, true);
-        		}
-        	}
+		case TOUCHES:
+			if (XRectangle2D.intersectInclusive(geomBounds, g.getBounds2D())) {
+				g1 = g.toJTSGeometry();
+				m = getJTSgeom().relate(g1);
+				if (m.isTouches(g1.getDimension(), geom.getDimension())) {
+					bitset.set(index, true);
+				}
+			}
 
-        	break;
+			break;
 
-        case WITHIN:
-        	if (XRectangle2D.intersectInclusive(geomBounds, g.getBounds2D())) {
-        		g1 = g.toJTSGeometry();
-        		m = getJTSgeom().relate(g1);
+		case WITHIN:
+			if (XRectangle2D.intersectInclusive(geomBounds, g.getBounds2D())) {
+				g1 = g.toJTSGeometry();
+				m = getJTSgeom().relate(g1);
 
-        		if (m.isWithin()) {
-        			bitset.set(index, true);
-        		}
-        	}
+				if (m.isWithin()) {
+					bitset.set(index, true);
+				}
+			}
 
-        	break;
-        }
+			break;
+		}
 	}
 
 	/**
@@ -201,7 +196,7 @@ public class QueryByGeometryVisitor implements FeatureVisitor {
 	 * @see com.iver.cit.gvsig.fmap.operations.strategies.FeatureVisitor#start(com.iver.cit.gvsig.fmap.layers.FLayer)
 	 */
 	public boolean start(FLayer layer) throws StartVisitorException {
-        bitset = new FBitSet();
+		bitset = new FBitSet();
 		return true;
 	}
 

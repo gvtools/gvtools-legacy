@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.topologyrules;
 
 import java.awt.geom.Rectangle2D;
@@ -66,33 +66,30 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.vividsolutions.jts.geom.Geometry;
 
 /**
- * All features of origin layer must TOUCH 
- * (nor intersect or covers, touch) at least one element of destination layer.
+ * All features of origin layer must TOUCH (nor intersect or covers, touch) at
+ * least one element of destination layer.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class LyrMustTouch extends AbstractSpatialPredicateTwoLyrRule {
 
 	static final String RULE_NAME = Messages.getText("must_touch");
-	
+
 	static {
 		DEFAULT_ERROR_SYMBOL.setDescription(RULE_NAME);
 		automaticErrorFixes.add(new DeleteTopologyErrorFix());
 	}
-	
-	
-	public LyrMustTouch(Topology topology, 
-			 FLyrVect originLyr,
-			 FLyrVect destinationLyr){
+
+	public LyrMustTouch(Topology topology, FLyrVect originLyr,
+			FLyrVect destinationLyr) {
 		super(topology, originLyr, destinationLyr);
 	}
 
-
-	public LyrMustTouch(){
+	public LyrMustTouch() {
 		super();
 	}
-	
+
 	@Override
 	protected boolean acceptsDestinationGeometryType(int shapeType) {
 		return true;
@@ -102,28 +99,30 @@ public class LyrMustTouch extends AbstractSpatialPredicateTwoLyrRule {
 	protected boolean acceptsOriginGeometryType(int shapeType) {
 		return true;
 	}
-	
+
 	@Override
-	protected void checkWithNeighbourhood(IFeature feature, Rectangle2D extendedBounds, IFeatureIterator neighbourhood) throws BaseException{
-		Geometry firstGeometry = NewFConverter.toJtsGeometry(feature.getGeometry());
+	protected void checkWithNeighbourhood(IFeature feature,
+			Rectangle2D extendedBounds, IFeatureIterator neighbourhood)
+			throws BaseException {
+		Geometry firstGeometry = NewFConverter.toJtsGeometry(feature
+				.getGeometry());
 		while (neighbourhood.hasNext()) {
 			IFeature neighbourFeature = neighbourhood.next();
 			IGeometry geom2 = neighbourFeature.getGeometry();
-			if(acceptsDestinationGeometryType(geom2.getGeometryType())){
+			if (acceptsDestinationGeometryType(geom2.getGeometryType())) {
 				Rectangle2D rect2 = geom2.getBounds2D();
 				if (extendedBounds.intersects(rect2)) {
 					Geometry jtsGeom2 = NewFConverter.toJtsGeometry(geom2);
-					if(checkSpatialPredicate(feature, firstGeometry, 
-														neighbourFeature, jtsGeom2 )){
+					if (checkSpatialPredicate(feature, firstGeometry,
+							neighbourFeature, jtsGeom2)) {
 						return;
 					}
-				}//if
-			}//if
-		}//while
-		//at this point, feature doesnt touch any neighbour feature
+				}// if
+			}// if
+		}// while
+			// at this point, feature doesnt touch any neighbour feature
 		addTopologyError(createTopologyError(firstGeometry, feature, null));
 	}
-	
 
 	@Override
 	protected boolean checkSpatialPredicate(IFeature feature,
@@ -147,8 +146,8 @@ public class LyrMustTouch extends AbstractSpatialPredicateTwoLyrRule {
 	public boolean acceptsOriginLyr(FLyrVect originLyr) {
 		return true;
 	}
-	
-	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError){
+
+	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError) {
 		return automaticErrorFixes.get(0);
 	}
 }

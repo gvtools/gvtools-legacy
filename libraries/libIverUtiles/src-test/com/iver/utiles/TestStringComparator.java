@@ -58,11 +58,11 @@ public class TestStringComparator {
 	 * 
 	 * @param args
 	 */
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		StringComparator stringComparator = new StringComparator();
-		
-		// Initialize the vector of Strings (for test methods with the parameter Comparator)
+
+		// Initialize the vector of Strings (for test methods with the parameter
+		// Comparator)
 		Vector v = new Vector();
 		v.add("extWMS");
 		v.add("libUI");
@@ -101,7 +101,7 @@ public class TestStringComparator {
 		v.add("extRasterTools");
 		v.add("extWCS");
 		v.add("extWFS2");
-		v.add("extwfs2");		// If both are null -> true
+		v.add("extwfs2"); // If both are null -> true
 		v.add("extWMS");
 		v.add("extWMS");
 		v.add("extWCS");
@@ -128,51 +128,58 @@ public class TestStringComparator {
 		v.add("avión");
 		v.add("camión");
 		v.add("autobús");
-		
+
 		// Show the original vector
 		System.out.println("Vector original: " + v.toString() + "\n");
-		
+
 		// First kind of sort
 		stringComparator.setCaseSensitive(true);
 		List list = v.subList(0, v.size());
 		Collections.sort(list, stringComparator);
-		System.out.println("Ordenación normal con case-sensitive:" + list.toString() + "\n");
-		
+		System.out.println("Ordenación normal con case-sensitive:"
+				+ list.toString() + "\n");
+
 		// Second kind of sort
 		stringComparator.setCaseSensitive(false);
 		list = v.subList(0, v.size());
 		Collections.sort(list, stringComparator);
-		System.out.println("Ordenación normal sin case-sensitive:" + list.toString() + "\n");
-		
-		
+		System.out.println("Ordenación normal sin case-sensitive:"
+				+ list.toString() + "\n");
+
 		Collator collator = Collator.getInstance(new Locale("es_ES"));
-		stringComparator.setLocaleRules(stringComparator.new LocaleRules(true, collator));
-		
+		stringComparator.setLocaleRules(stringComparator.new LocaleRules(true,
+				collator));
+
 		// Third kind of sort
 		stringComparator.setCaseSensitive(true);
 		list = v.subList(0, v.size());
 		Collections.sort(list, stringComparator);
-		System.out.println("Ordenación con reglas locales y con case-sensitive:" + list.toString() + "\n");
+		System.out
+				.println("Ordenación con reglas locales y con case-sensitive:"
+						+ list.toString() + "\n");
 
 		// Fourth kind of sort
 		stringComparator.setCaseSensitive(false);
 		list = v.subList(0, v.size());
 		Collections.sort(list, stringComparator);
-		System.out.println("Ordenación con reglas locales y sin case-sensitive:" + list.toString() + "\n");
-		
-		
+		System.out
+				.println("Ordenación con reglas locales y sin case-sensitive:"
+						+ list.toString() + "\n");
+
 		stringComparator.getLocaleRules().setUseLocaleRules(false);
-		
+
 		// Fifth kind of sort
 		stringComparator.setCaseSensitive(true);
 		list = v.subList(0, v.size());
 		Collections.sort(list, stringComparator);
-		System.out.println("Ordenación normal con case-sensitive:" + list.toString() + "\n");
+		System.out.println("Ordenación normal con case-sensitive:"
+				+ list.toString() + "\n");
 
 		// Sixth kind of sort
 		stringComparator.setCaseSensitive(false);
 		list = v.subList(0, v.size());
 		Collections.sort(list, stringComparator);
-		System.out.println("Ordenación normal sin case-sensitive:" + list.toString() + "\n");
-	}	
+		System.out.println("Ordenación normal sin case-sensitive:"
+				+ list.toString() + "\n");
+	}
 }

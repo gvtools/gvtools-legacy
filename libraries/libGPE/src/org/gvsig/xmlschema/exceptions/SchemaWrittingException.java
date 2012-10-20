@@ -67,30 +67,31 @@ import org.gvsig.exceptions.BaseException;
  *
  */
 /**
- * Throwed if there is a problem writting the schema in
- * the outputstream
+ * Throwed if there is a problem writting the schema in the outputstream
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class SchemaWrittingException extends BaseException{
+public class SchemaWrittingException extends BaseException {
 	private static final long serialVersionUID = 2206394432213668150L;
 
 	public SchemaWrittingException(Throwable exception) {
 		init();
 		initCause(exception);
-	}	
-	
+	}
+
 	private void init() {
 		messageKey = "error_gpe_schema_writting";
 		formatString = "Error writting the schema";
-		code = serialVersionUID;		
+		code = serialVersionUID;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map values() {
 		Hashtable params = new Hashtable();
-		return params;		
+		return params;
 	}
 }

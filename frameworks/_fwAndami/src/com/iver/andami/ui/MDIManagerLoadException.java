@@ -43,7 +43,7 @@ package com.iver.andami.ui;
 /**
  * 
  */
-public class MDIManagerLoadException extends Exception{
+public class MDIManagerLoadException extends Exception {
 
 	/**
 	 * 
@@ -52,6 +52,7 @@ public class MDIManagerLoadException extends Exception{
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
 	/**
 	 * @param message
 	 */
@@ -59,6 +60,7 @@ public class MDIManagerLoadException extends Exception{
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
+
 	/**
 	 * @param message
 	 * @param cause
@@ -67,6 +69,7 @@ public class MDIManagerLoadException extends Exception{
 		super(message, cause);
 		// TODO Auto-generated constructor stub
 	}
+
 	/**
 	 * @param cause
 	 */

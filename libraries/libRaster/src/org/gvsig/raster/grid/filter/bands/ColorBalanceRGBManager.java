@@ -27,18 +27,20 @@ import org.gvsig.raster.grid.filter.RasterFilter;
 import org.gvsig.raster.grid.filter.RasterFilterList;
 import org.gvsig.raster.grid.filter.RasterFilterListManager;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
+
 /**
  * Gestor del filtro de balance de color RGB
- *
+ * 
  * @version 30/11/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
-public class ColorBalanceRGBManager  implements IRasterFilterListManager {
+public class ColorBalanceRGBManager implements IRasterFilterListManager {
 
-	protected RasterFilterList	filterList = null;
+	protected RasterFilterList filterList = null;
 
 	/**
-	 * Registra ColorBalanceRGBManager en los puntos de extension de RasterFilter
+	 * Registra ColorBalanceRGBManager en los puntos de extension de
+	 * RasterFilter
 	 */
 	public static void register() {
 		ExtensionPoint point = ExtensionPoint.getExtensionPoint("RasterFilter");
@@ -46,9 +48,8 @@ public class ColorBalanceRGBManager  implements IRasterFilterListManager {
 	}
 
 	/**
-	 * Constructor.
-	 * Asigna la lista de filtros y el managener global.
-	 *
+	 * Constructor. Asigna la lista de filtros y el managener global.
+	 * 
 	 * @param filterListManager
 	 */
 	public ColorBalanceRGBManager(RasterFilterListManager filterListManager) {
@@ -57,12 +58,15 @@ public class ColorBalanceRGBManager  implements IRasterFilterListManager {
 
 	/**
 	 * Añade un filtro de conversión de balance de color RGB.
- * @throws FilterTypeException 
+	 * 
+	 * @throws FilterTypeException
 	 */
-	public void addColorBalanceFilter(int red, int green, int blue, boolean luminosity, int[] renderBands) throws FilterTypeException {
+	public void addColorBalanceFilter(int red, int green, int blue,
+			boolean luminosity, int[] renderBands) throws FilterTypeException {
 		RasterFilter filter = new ColorBalanceRGBByteFilter();
 
-		//Cuando el filtro esta creado, tomamos los valores y lo añadimos a la pila
+		// Cuando el filtro esta creado, tomamos los valores y lo añadimos a la
+		// pila
 
 		if (filter != null) {
 			filter.addParam("red", new Integer(red));
@@ -77,7 +81,10 @@ public class ColorBalanceRGBManager  implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList()
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList
+	 * ()
 	 */
 	public ArrayList getRasterFilterList() {
 		ArrayList filters = new ArrayList();
@@ -87,31 +94,41 @@ public class ColorBalanceRGBManager  implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#addFilter(java.lang.Class, org.gvsig.raster.dataset.Params)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.IRasterFilterListManager#addFilter(java.
+	 * lang.Class, org.gvsig.raster.dataset.Params)
 	 */
-	public void addFilter(Class classFilter, Params params) throws FilterTypeException {
+	public void addFilter(Class classFilter, Params params)
+			throws FilterTypeException {
 		if (classFilter.equals(ColorBalanceRGBFilter.class)) {
 			int red = 0, green = 0, blue = 0;
 			boolean luminosity = false;
 			int[] renderBands = { 0, 1, 2 };
-			
+
 			for (int i = 0; i < params.getNumParams(); i++) {
-				if (params.getParam(i).id.equals("RenderBands") && 
-						params.getParam(i).defaultValue instanceof String) {
-					String[] bands = new String((String) params.getParam(i).defaultValue).split(" ");
+				if (params.getParam(i).id.equals("RenderBands")
+						&& params.getParam(i).defaultValue instanceof String) {
+					String[] bands = new String(
+							(String) params.getParam(i).defaultValue)
+							.split(" ");
 					renderBands[0] = new Integer(bands[0]).intValue();
 					renderBands[1] = new Integer(bands[1]).intValue();
 					renderBands[2] = new Integer(bands[2]).intValue();
 					continue;
 				}
-				if (params.getParam(i).id.equals("red")) 
-					red = ((Integer) params.getParam(i).defaultValue).intValue();
-				if (params.getParam(i).id.equals("green")) 
-					green = ((Integer) params.getParam(i).defaultValue).intValue();
-				if (params.getParam(i).id.equals("blue")) 
-					blue = ((Integer) params.getParam(i).defaultValue).intValue();
-				if (params.getParam(i).id.equals("luminosity")) 
-					luminosity = ((Boolean) params.getParam(i).defaultValue).booleanValue();
+				if (params.getParam(i).id.equals("red"))
+					red = ((Integer) params.getParam(i).defaultValue)
+							.intValue();
+				if (params.getParam(i).id.equals("green"))
+					green = ((Integer) params.getParam(i).defaultValue)
+							.intValue();
+				if (params.getParam(i).id.equals("blue"))
+					blue = ((Integer) params.getParam(i).defaultValue)
+							.intValue();
+				if (params.getParam(i).id.equals("luminosity"))
+					luminosity = ((Boolean) params.getParam(i).defaultValue)
+							.booleanValue();
 			}
 			addColorBalanceFilter(red, green, blue, luminosity, renderBands);
 		}
@@ -119,17 +136,24 @@ public class ColorBalanceRGBManager  implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#createFilterListFromStrings(java.util.ArrayList, java.lang.String, int)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#
+	 * createFilterListFromStrings(java.util.ArrayList, java.lang.String, int)
 	 */
-	public int createFilterListFromStrings(ArrayList filters, String fil, int filteri) {
+	public int createFilterListFromStrings(ArrayList filters, String fil,
+			int filteri) {
 		return filteri;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#getStringsFromFilterList(java.util.ArrayList, org.gvsig.raster.grid.filter.RasterFilter)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#
+	 * getStringsFromFilterList(java.util.ArrayList,
+	 * org.gvsig.raster.grid.filter.RasterFilter)
 	 */
-	public ArrayList getStringsFromFilterList(ArrayList filterList, RasterFilter rf) {
+	public ArrayList getStringsFromFilterList(ArrayList filterList,
+			RasterFilter rf) {
 		return filterList;
 	}
 }

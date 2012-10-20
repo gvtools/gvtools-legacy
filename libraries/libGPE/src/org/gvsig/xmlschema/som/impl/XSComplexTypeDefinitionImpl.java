@@ -82,19 +82,23 @@ import org.w3c.dom.Element;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class XSComplexTypeDefinitionImpl extends XSTypeDefinitionImpl implements IXSComplexTypeDefinition {
-			
+public class XSComplexTypeDefinitionImpl extends XSTypeDefinitionImpl implements
+		IXSComplexTypeDefinition {
+
 	public XSComplexTypeDefinitionImpl(IXSSchema schema) {
 		super(schema);
 	}
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSComplexTypeDefinition#getContentType()
 	 */
-	public IXSContentType getContentType(){
-		IXSNode node = new SchemaCollection(getSchema(),getElement(),getContentMapping()).getFirstNode();
-		if (node != null){
-			return (IXSContentType)node;
+	public IXSContentType getContentType() {
+		IXSNode node = new SchemaCollection(getSchema(), getElement(),
+				getContentMapping()).getFirstNode();
+		if (node != null) {
+			return (IXSContentType) node;
 		}
 		return null;
 	}
@@ -103,30 +107,34 @@ public class XSComplexTypeDefinitionImpl extends XSTypeDefinitionImpl implements
 	 * @return The extension mapping
 	 * @throws TypeNotFoundException
 	 */
-	private SchemaObjectsMapping getContentMapping(){
+	private SchemaObjectsMapping getContentMapping() {
 		SchemaObjectsMapping elementTm = new SchemaObjectsMapping(getSchema());
-		elementTm.addType(SchemaTags.COMPLEX_CONTENT, XSComplexContentImpl.class);
-		elementTm.addType(SchemaTags.SIMPLE_CONTENT, XSComplexContentImpl.class);
+		elementTm.addType(SchemaTags.COMPLEX_CONTENT,
+				XSComplexContentImpl.class);
+		elementTm
+				.addType(SchemaTags.SIMPLE_CONTENT, XSComplexContentImpl.class);
 		return elementTm;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSComplexTypeDefinition#getGroup()
 	 */
-	public IXSGroup getGroup(){
-		IXSNode node = new SchemaCollection(getSchema(),getElement(),getGroupMapping()).getFirstNode();
-		if (node != null){
-			return (IXSGroup)node;
+	public IXSGroup getGroup() {
+		IXSNode node = new SchemaCollection(getSchema(), getElement(),
+				getGroupMapping()).getFirstNode();
+		if (node != null) {
+			return (IXSGroup) node;
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @return The extension mapping
 	 * @throws TypeNotFoundException
 	 */
-	private SchemaObjectsMapping getGroupMapping(){
+	private SchemaObjectsMapping getGroupMapping() {
 		SchemaObjectsMapping elementTm = new SchemaObjectsMapping(getSchema());
 		elementTm.addType(SchemaTags.SEQUENCE, XSSequenceImpl.class);
 		elementTm.addType(SchemaTags.ALL, XSAllImpl.class);
@@ -134,41 +142,42 @@ public class XSComplexTypeDefinitionImpl extends XSTypeDefinitionImpl implements
 		elementTm.addType(SchemaTags.CHOICE, XSChoiceImpl.class);
 		return elementTm;
 	}
-	
+
 	/**
 	 * Adds a new element to the complex type
 	 */
-	public IXSElementDeclaration addElement(String name, String typeName, boolean nillable, int minOccurs, int maxOccurs){
+	public IXSElementDeclaration addElement(String name, String typeName,
+			boolean nillable, int minOccurs, int maxOccurs) {
 		Element eElement = getElementsFactory().createElement(getSchema(),
-				name,
-				typeName,
-				nillable,
-				minOccurs,
-				maxOccurs);
-		getElementsFactory().addElementToComplexType(
-				getSchema(),
-				eElement, 
-				getElement());	
-		XSElementDeclarationImpl elementDeclaration = new XSElementDeclarationImpl(getSchema());
+				name, typeName, nillable, minOccurs, maxOccurs);
+		getElementsFactory().addElementToComplexType(getSchema(), eElement,
+				getElement());
+		XSElementDeclarationImpl elementDeclaration = new XSElementDeclarationImpl(
+				getSchema());
 		elementDeclaration.setElement(eElement);
 		return elementDeclaration;
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.schema.som.IXSComplexTypeDefinition#addElement(java.lang.String, java.lang.String)
-	 */
-	public IXSElementDeclaration addElement(String name, String typeName) {
-		return addElement(name, typeName, SchemaDefaults.ELEMENT_NILLABLE,
-				SchemaDefaults.ELEMENT_MIN_OCCURS, SchemaDefaults.ELEMENT_MAX_OCCURS);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.schema.som.IXSComplexTypeDefinition#addElement(java.lang
+	 * .String, java.lang.String)
+	 */
+	public IXSElementDeclaration addElement(String name, String typeName) {
+		return addElement(name, typeName, SchemaDefaults.ELEMENT_NILLABLE,
+				SchemaDefaults.ELEMENT_MIN_OCCURS,
+				SchemaDefaults.ELEMENT_MAX_OCCURS);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSTypeDefinition#getTypeName()
 	 */
 	public String getTypeName() {
-		return getElement().getAttribute(SchemaTags.NAME);		
+		return getElement().getAttribute(SchemaTags.NAME);
 	}
 
 }

@@ -80,47 +80,43 @@ import java.awt.Insets;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 
-
 public class TransparencyPanel extends JPanel {
-    JPanel opaquePanel = new JPanel();
-    JPanel transparentPanel = new JPanel();
-    GridBagLayout gridBagLayout3 = new GridBagLayout();
-    JSlider transparencySlider = new JSlider();
+	JPanel opaquePanel = new JPanel();
+	JPanel transparentPanel = new JPanel();
+	GridBagLayout gridBagLayout3 = new GridBagLayout();
+	JSlider transparencySlider = new JSlider();
 
-    public TransparencyPanel() {
-    	transparencySlider.setSize(100,30);
-    	transparencySlider.setPreferredSize(new Dimension(100,30));
-        transparencySlider.setMaximum(255);
-        transparencySlider.setPreferredSize(new Dimension(100, 24));
-        setLayout(gridBagLayout3);
-        add(opaquePanel,
-            new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
-        add(transparencySlider,
-            new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
-        add(transparentPanel,
-            new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
-        opaquePanel.setBackground(Color.black);
-        opaquePanel.setMinimumSize(new Dimension(11, 11));
-        opaquePanel.setMaximumSize(new Dimension(11, 11));
-        opaquePanel.setPreferredSize(new Dimension(11, 11));
-        transparentPanel.setBackground(Color.white);
-        transparentPanel.setForeground(Color.white);
-        transparentPanel.setMaximumSize(new Dimension(11, 11));
-        transparentPanel.setMinimumSize(new Dimension(11, 11));
-        transparentPanel.setPreferredSize(new Dimension(11, 11));
-    }
+	public TransparencyPanel() {
+		transparencySlider.setSize(100, 30);
+		transparencySlider.setPreferredSize(new Dimension(100, 30));
+		transparencySlider.setMaximum(255);
+		transparencySlider.setPreferredSize(new Dimension(100, 24));
+		setLayout(gridBagLayout3);
+		add(opaquePanel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+				GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(
+						0, 0, 0, 0), 0, 0));
+		add(transparencySlider, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+				GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(
+						0, 0, 0, 0), 0, 0));
+		add(transparentPanel, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
+				GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(
+						0, 0, 0, 0), 0, 0));
+		opaquePanel.setBackground(Color.black);
+		opaquePanel.setMinimumSize(new Dimension(11, 11));
+		opaquePanel.setMaximumSize(new Dimension(11, 11));
+		opaquePanel.setPreferredSize(new Dimension(11, 11));
+		transparentPanel.setBackground(Color.white);
+		transparentPanel.setForeground(Color.white);
+		transparentPanel.setMaximumSize(new Dimension(11, 11));
+		transparentPanel.setMinimumSize(new Dimension(11, 11));
+		transparentPanel.setPreferredSize(new Dimension(11, 11));
+	}
 
-    public void setColor(Color color) {
-        opaquePanel.setBackground(color);
-    }
+	public void setColor(Color color) {
+		opaquePanel.setBackground(color);
+	}
 
-    public JSlider getSlider() {
-        return transparencySlider;
-    }
+	public JSlider getSlider() {
+		return transparencySlider;
+	}
 }

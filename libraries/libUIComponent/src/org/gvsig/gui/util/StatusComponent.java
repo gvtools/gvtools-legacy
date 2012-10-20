@@ -21,41 +21,42 @@ package org.gvsig.gui.util;
 import java.util.ArrayList;
 
 import javax.swing.JComponent;
+
 /**
  * Clase para poder cambiar el estado de un componente y sus componentes hijos.
- *
+ * 
  * Tiene dos formas de uso:
- *
+ * 
  * 1.- Desactivar un componente y todos sus hijos sin necesidad de guardar su
- *     estado. Para este caso solo es necesario usar el método estático
- *     setDisabled(componente). El hecho de que no exista un activar es que para
- *     desactivar esta claro que queremos desactivar un componente y sus hijos,
- *     pero a la hora de activar no todos los hijos deben estar activos, para
- *     estos casos es necesario ver la segunda opción.
- *
+ * estado. Para este caso solo es necesario usar el método estático
+ * setDisabled(componente). El hecho de que no exista un activar es que para
+ * desactivar esta claro que queremos desactivar un componente y sus hijos, pero
+ * a la hora de activar no todos los hijos deben estar activos, para estos casos
+ * es necesario ver la segunda opción.
+ * 
  * 2.- Desactivar un componente guardando todos sus estados y volver a recuperar
- *     sus estados como estaba inicialmente. Ejemplo:
- *
- *     // Creamos el StatusComponent asociándolo al componente en cuestión
- *     StatusComponent statusComponent = new StatusComponent(miControl);
- *
- *     // Desactivamos el componente y sus hijos guardando todos los estados.
- *     statusComponent.setEnabled(false);
- *
- *     ......
- *     // Activamos el componente recuperando su estado inicial
- *     statusComponent.setEnabled(true);
- *
+ * sus estados como estaba inicialmente. Ejemplo:
+ * 
+ * // Creamos el StatusComponent asociándolo al componente en cuestión
+ * StatusComponent statusComponent = new StatusComponent(miControl);
+ * 
+ * // Desactivamos el componente y sus hijos guardando todos los estados.
+ * statusComponent.setEnabled(false);
+ * 
+ * ...... // Activamos el componente recuperando su estado inicial
+ * statusComponent.setEnabled(true);
+ * 
  * @version 07/09/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class StatusComponent {
 	private ArrayList<StatusComponentStruct> statusList = new ArrayList<StatusComponentStruct>();
-	private boolean    enabled   = true;
+	private boolean enabled = true;
 	private JComponent component = null;
 
 	/**
 	 * Estructura de datos para poder tener el estado de un componente
+	 * 
 	 * @version 07/09/2007
 	 * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
 	 */
@@ -83,6 +84,7 @@ public class StatusComponent {
 	/**
 	 * Construye un StatusComponent. Es necesario pasarle el componente que
 	 * queremos tratar.
+	 * 
 	 * @param component
 	 */
 	public StatusComponent(JComponent component) {
@@ -90,9 +92,10 @@ public class StatusComponent {
 	}
 
 	/**
-	 * Recupera el estado de un componente y todos sus hijos, vaciando la pila de
-	 * estados. Eso quiere decir que no se podra volver a recuperar su estado sin
-	 * haberlo guardado previamente.
+	 * Recupera el estado de un componente y todos sus hijos, vaciando la pila
+	 * de estados. Eso quiere decir que no se podra volver a recuperar su estado
+	 * sin haberlo guardado previamente.
+	 * 
 	 * @param component
 	 */
 	private void restoreStatus(JComponent component) {
@@ -100,7 +103,8 @@ public class StatusComponent {
 		boolean finded = false;
 		// Buscar estado de dicho componente
 		for (int i = 0; i < statusList.size(); i++) {
-			StatusComponentStruct auxStatus = (StatusComponentStruct) statusList.get(i);
+			StatusComponentStruct auxStatus = (StatusComponentStruct) statusList
+					.get(i);
 			if (auxStatus.getObject() == component) {
 				auxEnabled = auxStatus.isEnabled();
 				statusList.remove(i);
@@ -119,9 +123,11 @@ public class StatusComponent {
 	}
 
 	/**
-	 * Desactivar el componente y todos sus hijos sin guardar los estados. Hay que
-	 * tener cuidado con no confundirlo con setEnabled(false). Este metodo nunca
-	 * guardara el estado, asi que no se podra recuperar despues dicho estado.
+	 * Desactivar el componente y todos sus hijos sin guardar los estados. Hay
+	 * que tener cuidado con no confundirlo con setEnabled(false). Este metodo
+	 * nunca guardara el estado, asi que no se podra recuperar despues dicho
+	 * estado.
+	 * 
 	 * @param component
 	 */
 	static public void setDisabled(JComponent component) {
@@ -134,8 +140,9 @@ public class StatusComponent {
 	/**
 	 * Guarda el estado de un componente. Este proceso es recursivo. El estado
 	 * se guarda en un array y este array no es vaciado inicialmente. La idea es
-	 * guardar en un disabled y recuperar en un enabled y asegurarse que no puede
-	 * ocurrir un disabled o un enabled dos veces.
+	 * guardar en un disabled y recuperar en un enabled y asegurarse que no
+	 * puede ocurrir un disabled o un enabled dos veces.
+	 * 
 	 * @param component
 	 */
 	private void saveComponentsStatus(JComponent component) {
@@ -151,9 +158,10 @@ public class StatusComponent {
 	}
 
 	/**
-	 * Activa o desactiva un componente y todos sus componentes hijos. No se puede
-	 * activar o desactivar dos veces seguidas. Siendo ignoradas las peticiones
-	 * repetitivas.
+	 * Activa o desactiva un componente y todos sus componentes hijos. No se
+	 * puede activar o desactivar dos veces seguidas. Siendo ignoradas las
+	 * peticiones repetitivas.
+	 * 
 	 * @param enabled
 	 */
 	public void setEnabled(boolean enabled) {

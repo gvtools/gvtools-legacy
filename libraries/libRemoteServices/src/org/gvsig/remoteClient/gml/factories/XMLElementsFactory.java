@@ -68,9 +68,9 @@ import org.xmlpull.v1.XmlPullParserException;
  *
  */
 /**
- * The XML "element" is an XML tag of a XSD schema and represent
- * a simple "element" or "object". One element has its name and 
- * the data type that contains (and the data)
+ * The XML "element" is an XML tag of a XSD schema and represent a simple
+ * "element" or "object". One element has its name and the data type that
+ * contains (and the data)
  * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
@@ -78,26 +78,27 @@ import org.xmlpull.v1.XmlPullParserException;
  */
 public class XMLElementsFactory {
 	private static Hashtable elements = new Hashtable();
-	
-	public static XMLElement getElement(String name){
-		if (name == null){
+
+	public static XMLElement getElement(String name) {
+		if (name == null) {
 			return null;
 		}
-		return (XMLElement)elements.get(name.toUpperCase());
+		return (XMLElement) elements.get(name.toUpperCase());
 	}
-	
+
 	/**
 	 * It parses the element and register it
+	 * 
 	 * @param schema
-	 * Schema parser that contains a "element"
+	 *            Schema parser that contains a "element"
 	 * @return
 	 */
-	public static XMLElement addType(XMLSchemaParser schema){
+	public static XMLElement addType(XMLSchemaParser schema) {
 		XMLElement element;
 		try {
 			element = new XMLElement(schema);
-			if (element.getName() != null){
-				elements.put(element.getName().toUpperCase(),element);
+			if (element.getName() != null) {
+				elements.put(element.getName().toUpperCase(), element);
 			}
 			return element;
 		} catch (XmlPullParserException e) {
@@ -109,43 +110,45 @@ public class XMLElementsFactory {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Just for degug. It prints all the registred components.
 	 */
-	public static void printEntities(){
+	public static void printEntities() {
 		System.out.println("******* ELEMENTOS :");
-		//metemos en un array los elementos de la tabla para mostrarlos
+		// metemos en un array los elementos de la tabla para mostrarlos
 		Object[] keys = elements.keySet().toArray();
-		for (int i=0 ; i<elements.size() ; i++){
-			XMLElement entity = (XMLElement)elements.get(keys[i]);
-			printEntity(entity,0);			
+		for (int i = 0; i < elements.size(); i++) {
+			XMLElement entity = (XMLElement) elements.get(keys[i]);
+			printEntity(entity, 0);
 		}
 	}
-	
-	public static void printEntity(XMLElement entity,int level){
+
+	public static void printEntity(XMLElement entity, int level) {
 		String tab = "";
-		for (int i=0 ; i<level ; i++){
+		for (int i = 0; i < level; i++) {
 			tab = tab + "\t";
 		}
 		System.out.print(tab + "NAME: " + entity.getName());
-		if (entity.getEntityType() != null){
-			System.out.print(" TYPE: " + entity.getEntityType().getName() + "\n");
-			if (entity.getEntityType().getType() == IXMLType.COMPLEX){
-				Map children = ((XMLComplexType)entity.getEntityType()).getSubtypes();
+		if (entity.getEntityType() != null) {
+			System.out.print(" TYPE: " + entity.getEntityType().getName()
+					+ "\n");
+			if (entity.getEntityType().getType() == IXMLType.COMPLEX) {
+				Map children = ((XMLComplexType) entity.getEntityType())
+						.getSubtypes();
 				Set childrenKeys = children.keySet();
 				Iterator it = childrenKeys.iterator();
 				level++;
-				while(it.hasNext()){
-					String child = (String)it.next();
-					XMLElement eChild = (XMLElement)children.get(child);
-					printEntity(eChild,level);	
+				while (it.hasNext()) {
+					String child = (String) it.next();
+					XMLElement eChild = (XMLElement) children.get(child);
+					printEntity(eChild, level);
 				}
 			}
-		}else{
+		} else {
 			System.out.print(" TYPE: ERROR \n");
 		}
-		
+
 	}
-	
+
 }

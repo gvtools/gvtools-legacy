@@ -71,202 +71,182 @@ import com.iver.cit.gvsig.fmap.layers.FLyrDefault;
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
 import com.iver.cit.gvsig.project.documents.view.toc.TocItemBranch;
 
-
-
 /**
  * Renderer que actua sobre el TOC.
- *
+ * 
  * @author vcn
  */
 public class TOCRenderer extends JPanel implements TreeCellRenderer {
-    public Border bordeSeleccionado = BorderFactory.createEtchedBorder();
+	public Border bordeSeleccionado = BorderFactory.createEtchedBorder();
 
-    /*public Border bordeSeleccionado = BorderFactory.createBevelBorder(BevelBorder.RAISED,
-            SystemColor.black, SystemColor.lightGray, SystemColor.gray,
-            SystemColor.lightGray);
-    */
-    private Border bordeNormal = BorderFactory.createEmptyBorder();
-    
+	/*
+	 * public Border bordeSeleccionado =
+	 * BorderFactory.createBevelBorder(BevelBorder.RAISED, SystemColor.black,
+	 * SystemColor.lightGray, SystemColor.gray, SystemColor.lightGray);
+	 */
+	private Border bordeNormal = BorderFactory.createEmptyBorder();
+
 	private JCheckBox check;
 	private JLabel label;
 
-	private static final Font BIGGER_FONT = 
-									  new Font("SansSerif", Font.BOLD, 12);
+	private static final Font BIGGER_FONT = new Font("SansSerif", Font.BOLD, 12);
 
 	GridBagLayout gridbag = new GridBagLayout();
 	GridBagConstraints c = new GridBagConstraints();
-    /**
-     * Creates a new TOCRenderer object.
-     */
-    public TOCRenderer() {
-        this.setBackground(Color.lightGray);
-        // this.setLayout(new BorderLayout());
-        this.setLayout(new FlowLayout(FlowLayout.LEADING, 0,0));
+
+	/**
+	 * Creates a new TOCRenderer object.
+	 */
+	public TOCRenderer() {
+		this.setBackground(Color.lightGray);
+		// this.setLayout(new BorderLayout());
+		this.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
 		check = new JCheckBox();
 		label = new JLabel();
-		
 
+		/*
+		 * this.setLayout(gridbag);
+		 * 
+		 * c.fill = GridBagConstraints.NONE; c.weightx = 1.0; c.anchor =
+		 * GridBagConstraints.WEST; // c.weightx = check.getWidth();
+		 * gridbag.setConstraints(check,c); this.add(check); c.anchor =
+		 * GridBagConstraints.WEST; gridbag.setConstraints(colorPanel,c); //
+		 * c.weightx = colorPanel.getWidth(); this.add(colorPanel); c.gridwidth
+		 * = GridBagConstraints.REMAINDER; //end row c.fill =
+		 * GridBagConstraints.HORIZONTAL; gridbag.setConstraints(label,c);
+		 * this.add(label);
+		 */
 
-		/* this.setLayout(gridbag);
+		/*
+		 * this.setLayout(new FlowLayout(FlowLayout.LEFT)); this.add(check);
+		 * this.add(colorPanel); this.add(label);
+		 */
 
-		c.fill = GridBagConstraints.NONE;
-		c.weightx = 1.0;
-		c.anchor = GridBagConstraints.WEST;
-		// c.weightx = check.getWidth();
-		gridbag.setConstraints(check,c);
-		this.add(check);
-		c.anchor = GridBagConstraints.WEST;
-		gridbag.setConstraints(colorPanel,c);
-		// c.weightx = colorPanel.getWidth();
-		this.add(colorPanel);
-		c.gridwidth = GridBagConstraints.REMAINDER; //end row
-		c.fill = GridBagConstraints.HORIZONTAL;		
-		gridbag.setConstraints(label,c);
-		this.add(label); */ 
+		/*
+		 * this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+		 * this.add(check); this.add(colorPanel); this.add(label);
+		 */
 
-
-
-		/* this.setLayout(new FlowLayout(FlowLayout.LEFT));
-		this.add(check);
-		this.add(colorPanel);
-		this.add(label); */
-		
-		/* this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		this.add(check);
-		this.add(colorPanel);
-		this.add(label); */  
-
-		SpringLayout theLayout = new SpringLayout();		 
+		SpringLayout theLayout = new SpringLayout();
 		this.setLayout(theLayout);
 
-		//int rows = 1;
-		//int cols = 2;
-				
-		/* this.setLayout(new BorderLayout());
-		
-		this.add(check, BorderLayout.WEST);
-		this.add(label, BorderLayout.CENTER);
-		*/ 
-		/*
-		GridBagLayout gridbag = new GridBagLayout();
-        GridBagConstraints c = new GridBagConstraints();
-        
-        this.setLayout(gridbag);
-        this.add(check);
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        this.add(label, c);
-        */
-		
-//		Adjust constraints for the text field so it's at
-//		(<label's right edge> + 5, 5).
-		this.add(check);
-		this.add(label);  
+		// int rows = 1;
+		// int cols = 2;
 
-		theLayout.putConstraint(SpringLayout.WEST, label,
-						   5,
-						   SpringLayout.EAST, check); 
+		/*
+		 * this.setLayout(new BorderLayout());
+		 * 
+		 * this.add(check, BorderLayout.WEST); this.add(label,
+		 * BorderLayout.CENTER);
+		 */
+		/*
+		 * GridBagLayout gridbag = new GridBagLayout(); GridBagConstraints c =
+		 * new GridBagConstraints();
+		 * 
+		 * this.setLayout(gridbag); this.add(check); c.gridwidth =
+		 * GridBagConstraints.REMAINDER; c.fill = GridBagConstraints.HORIZONTAL;
+		 * this.add(label, c);
+		 */
+
+		// Adjust constraints for the text field so it's at
+		// (<label's right edge> + 5, 5).
+		this.add(check);
+		this.add(label);
+
+		theLayout.putConstraint(SpringLayout.WEST, label, 5, SpringLayout.EAST,
+				check);
 
 		this.setBorder(bordeSeleccionado);
 
-        check.setBackground(UIManager.getColor("Button.background"));
-        label.setForeground(UIManager.getColor("Tree.textForeground"));
-        
-        
-    }
+		check.setBackground(UIManager.getColor("Button.background"));
+		label.setForeground(UIManager.getColor("Tree.textForeground"));
 
-    /**
-     * Método llamado una vez por cada nodo, y todas las veces que se redibuja
-     * en pantalla el TOC.
-     *
-     * @param tree
-     * @param value
-     * @param isSelected
-     * @param expanded
-     * @param leaf
-     * @param row
-     * @param hasFocus
-     *
-     * @return
-     */
-    public Component getTreeCellRendererComponent(JTree tree, Object value,
-        boolean isSelected, boolean expanded, boolean leaf, int row,
-        boolean hasFocus) {
-                
-        DefaultMutableTreeNode n = (DefaultMutableTreeNode) value;
+	}
+
+	/**
+	 * Método llamado una vez por cada nodo, y todas las veces que se redibuja
+	 * en pantalla el TOC.
+	 * 
+	 * @param tree
+	 * @param value
+	 * @param isSelected
+	 * @param expanded
+	 * @param leaf
+	 * @param row
+	 * @param hasFocus
+	 * 
+	 * @return
+	 */
+	public Component getTreeCellRendererComponent(JTree tree, Object value,
+			boolean isSelected, boolean expanded, boolean leaf, int row,
+			boolean hasFocus) {
+
+		DefaultMutableTreeNode n = (DefaultMutableTreeNode) value;
 		String stringValue = "";
 		this.setBackground(UIManager.getColor("Button.background"));
 		this.label.setFont(tree.getFont());
 		// System.out.println("ancho tree=" + tree.getWidth());
 
-		if (n.getUserObject() instanceof ITocItem)
-		{
-			
-	       	ITocItem item = (ITocItem) n.getUserObject();	       	
+		if (n.getUserObject() instanceof ITocItem) {
+
+			ITocItem item = (ITocItem) n.getUserObject();
 			stringValue = item.getLabel();
-			
-	        Dimension sizeNode = item.getSize(); // Se fija en el resize del TOC
-	        
+
+			Dimension sizeNode = item.getSize(); // Se fija en el resize del TOC
+
 			this.setPreferredSize(sizeNode);
-			
-			if (item instanceof TocItemBranch)
-			{
+
+			if (item instanceof TocItemBranch) {
 				TocItemBranch branch = (TocItemBranch) item;
-				FLyrDefault lyr = (FLyrDefault)branch.getLayer();
+				FLyrDefault lyr = (FLyrDefault) branch.getLayer();
 				check.setVisible(true);
 				check.setSelected(lyr.visibleRequired());
-				if (!lyr.isAvailable()) {										
+				if (!lyr.isAvailable()) {
 					check.setEnabled(false);
-				} else {					
+				} else {
 					check.setEnabled(true);
 					if (!lyr.isWithinScale(lyr.getMapContext().getScaleView()))
 						check.setEnabled(false);
-					
 
-					if (lyr.isEditing())
-					{
+					if (lyr.isEditing()) {
 						this.label.setForeground(Color.RED);
-					}
-					else this.label.setForeground(Color.BLACK);
+					} else
+						this.label.setForeground(Color.BLACK);
 				}
-				if (lyr.isActive())
-				{				
+				if (lyr.isActive()) {
 					this.setBorder(bordeSeleccionado);
 					this.label.setFont(BIGGER_FONT);
-				}
-				else
-				{				
+				} else {
 					this.setBorder(bordeNormal);
-				}				
-	        }
-			else
-			{
+				}
+			} else {
 				check.setVisible(false);
-				this.setBorder(bordeNormal);			
-				
+				this.setBorder(bordeNormal);
+
 			}
-	        label.setText(stringValue);
-	        Icon icono = item.getIcon();
-	        if (icono != null)
-	        {
-	        	label.setIcon(icono);
-	        	//System.out.println(">>>>>Pongo etiqueta " + stringValue + " con icono " + item.getIcon().toString());
-	        }
-	        this.setPreferredSize(sizeNode);
-		}		
-		// this.setPreferredSize(new Dimension(tree.getWidth()-60,24)); // sizeNode);
+			label.setText(stringValue);
+			Icon icono = item.getIcon();
+			if (icono != null) {
+				label.setIcon(icono);
+				// System.out.println(">>>>>Pongo etiqueta " + stringValue +
+				// " con icono " + item.getIcon().toString());
+			}
+			this.setPreferredSize(sizeNode);
+		}
+		// this.setPreferredSize(new Dimension(tree.getWidth()-60,24)); //
+		// sizeNode);
 
-        if (leaf) {
-            // label.setIcon(UIManager.getIcon("Tree.leafIcon"));
-            
-        } else if (expanded) {
-            //label.setIcon(UIManager.getIcon("Tree.openIcon"));
-        } else {
-            //label.setIcon(UIManager.getIcon("Tree.closedIcon"));
-        }
+		if (leaf) {
+			// label.setIcon(UIManager.getIcon("Tree.leafIcon"));
 
-        return this;
-    }
+		} else if (expanded) {
+			// label.setIcon(UIManager.getIcon("Tree.openIcon"));
+		} else {
+			// label.setIcon(UIManager.getIcon("Tree.closedIcon"));
+		}
+
+		return this;
+	}
 
 	public Rectangle getCheckBoxBounds() {
 		return check.getBounds();

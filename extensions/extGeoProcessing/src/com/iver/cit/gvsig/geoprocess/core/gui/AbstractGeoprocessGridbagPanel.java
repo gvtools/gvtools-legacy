@@ -97,33 +97,31 @@ import com.iver.utiles.GenericFileFilter;
 import com.iver.utiles.swing.threads.IMonitorableTask;
 
 /**
- * Abstract base panel to easily build GeoprocessPanels
- * (View GUI component with which user could launch a given
- * geoprocess).
- *
- * All panels that extends this class will have a header
- * (textual label that describes the geoprocess).
- *
- * In the next row, they will have a layer combo box, where users could
- * select the input layer of the geoprocess (all geoprocesses at least
- * will work with an input layer), and a check box to specify working only
- * with input layer selection.
- *
- * Nex, each descendant panels must implement addSpecificDesign()
- * abstract method, to add specific components with which users could
- * introduce the information needed by the geoprocess.
- *
- * Finally, the last row has a panel to allow users to select where
- * to save the results of the geoprocess.
- *
- *
- *
+ * Abstract base panel to easily build GeoprocessPanels (View GUI component with
+ * which user could launch a given geoprocess).
+ * 
+ * All panels that extends this class will have a header (textual label that
+ * describes the geoprocess).
+ * 
+ * In the next row, they will have a layer combo box, where users could select
+ * the input layer of the geoprocess (all geoprocesses at least will work with
+ * an input layer), and a check box to specify working only with input layer
+ * selection.
+ * 
+ * Nex, each descendant panels must implement addSpecificDesign() abstract
+ * method, to add specific components with which users could introduce the
+ * information needed by the geoprocess.
+ * 
+ * Finally, the last row has a panel to allow users to select where to save the
+ * results of the geoprocess.
+ * 
+ * 
+ * 
  * @author azabala
- *
+ * 
  */
-public abstract class AbstractGeoprocessGridbagPanel 
-	extends GridBagLayoutPanel 
-	implements IGeoprocessPanel, IGeoprocessUserEntries{
+public abstract class AbstractGeoprocessGridbagPanel extends GridBagLayoutPanel
+		implements IGeoprocessPanel, IGeoprocessUserEntries {
 
 	protected final int DEFAULT_FILL = GridBagConstraints.BOTH;
 
@@ -143,8 +141,8 @@ public abstract class AbstractGeoprocessGridbagPanel
 	protected JComboBox layersComboBox;
 
 	/**
-	 * Check box to specify that geoprocess will only process
-	 * input layer selection
+	 * Check box to specify that geoprocess will only process input layer
+	 * selection
 	 */
 	protected JCheckBox selectedOnlyCheckBox;
 
@@ -154,15 +152,15 @@ public abstract class AbstractGeoprocessGridbagPanel
 	protected JLabel numSelectedLabel;
 
 	/**
-	 * Text field to show user the full path (or a representative string)
-	 * of the result layer selection
+	 * Text field to show user the full path (or a representative string) of the
+	 * result layer selection
 	 */
 
 	protected JTextField resultTf;
 
 	/**
 	 * Default constructor
-	 *
+	 * 
 	 */
 
 	public AbstractGeoprocessGridbagPanel(FLayers layers, String titleText) {
@@ -172,34 +170,35 @@ public abstract class AbstractGeoprocessGridbagPanel
 		initialize();
 	}
 
-	protected void initialize(){
+	protected void initialize() {
 		Insets insets = new Insets(5, 5, 5, 5);
 		addComponent(new JLabel(titleText), insets);
-		JLabel firstLayerLab = new JLabel(PluginServices.
-				getText(this, "Cobertura_de_entrada")+":");
+		JLabel firstLayerLab = new JLabel(PluginServices.getText(this,
+				"Cobertura_de_entrada") + ":");
 		JComboBox layersComboBox = getLayersComboBox();
-		addComponent(firstLayerLab, layersComboBox, GridBagConstraints.BOTH, insets);
+		addComponent(firstLayerLab, layersComboBox, GridBagConstraints.BOTH,
+				insets);
 		addComponent(getSelectedOnlyCheckBox(), GridBagConstraints.BOTH, insets);
 
-		String numSelectedText = PluginServices.
-			getText(this, "Numero_de_elementos_seleccionados") + ":";
+		String numSelectedText = PluginServices.getText(this,
+				"Numero_de_elementos_seleccionados") + ":";
 		numSelectedLabel = new JLabel("00");
 		addComponent(numSelectedText, numSelectedLabel, insets);
 
 		addSpecificDesign();
 
 		JPanel aux = new JPanel(new BorderLayout());
-		String resultLayerText = PluginServices.
-				getText(this, "Cobertura_de_salida") + ":";
+		String resultLayerText = PluginServices.getText(this,
+				"Cobertura_de_salida") + ":";
 		resultTf = getFileNameResultTextField();
 		JButton openButton = getOpenResultButton();
-        aux.add(resultTf, BorderLayout.WEST);
-        aux.add(new JLabel(" "), BorderLayout.CENTER);
-        aux.add(openButton, BorderLayout.EAST);
-        addComponent(resultLayerText, aux, GridBagConstraints.HORIZONTAL, insets );
+		aux.add(resultTf, BorderLayout.WEST);
+		aux.add(new JLabel(" "), BorderLayout.CENTER);
+		aux.add(openButton, BorderLayout.EAST);
+		addComponent(resultLayerText, aux, GridBagConstraints.HORIZONTAL,
+				insets);
 		setBounds(0, 0, 520, 410);
 	}
-
 
 	protected void initSelectedItemsJCheckBox() {
 		String selectedLayer = (String) layersComboBox.getSelectedItem();
@@ -224,55 +223,53 @@ public abstract class AbstractGeoprocessGridbagPanel
 		updateNumSelectedFeaturesLabel();
 	}
 
-
-    protected void updateNumSelectedFeaturesLabel() {
-        if (selectedOnlyCheckBox.isSelected()) {
-            FLyrVect inputSelectable = (FLyrVect)(layers.getLayer((String)layersComboBox.getSelectedItem()));
-            FBitSet fBitSet = null;
+	protected void updateNumSelectedFeaturesLabel() {
+		if (selectedOnlyCheckBox.isSelected()) {
+			FLyrVect inputSelectable = (FLyrVect) (layers
+					.getLayer((String) layersComboBox.getSelectedItem()));
+			FBitSet fBitSet = null;
 			try {
 				fBitSet = inputSelectable.getRecordset().getSelection();
 			} catch (ReadDriverException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			numSelectedLabel.setText(new Integer(fBitSet.cardinality()).toString());
-        } else {
-        	ReadableVectorial va = ((FLyrVect)(layers.
-        			getLayer((String)layersComboBox.
-        					getSelectedItem()))).
-        							getSource();
-            	try {
-					numSelectedLabel.setText(new Integer(va.getShapeCount()).toString());
-				} catch (ReadDriverException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-        }
-    }
-
+			numSelectedLabel.setText(new Integer(fBitSet.cardinality())
+					.toString());
+		} else {
+			ReadableVectorial va = ((FLyrVect) (layers
+					.getLayer((String) layersComboBox.getSelectedItem())))
+					.getSource();
+			try {
+				numSelectedLabel.setText(new Integer(va.getShapeCount())
+						.toString());
+			} catch (ReadDriverException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 
 	private JButton getOpenResultButton() {
-		JButton	openResultButton = new JButton();
+		JButton openResultButton = new JButton();
 		openResultButton.setText(PluginServices.getText(this, "Abrir"));
 		openResultButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					openResultFile();
-				}
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+				openResultFile();
 			}
-		);
+		});
 		return openResultButton;
 	}
 
-
 	/**
-	 * This method must be overwrited by all descendant classes to
-	 * add specific desing of each Geoprocess Panel.
+	 * This method must be overwrited by all descendant classes to add specific
+	 * desing of each Geoprocess Panel.
 	 */
 	protected abstract void addSpecificDesign();
 
 	/**
 	 * Returns the layer selected in layer combo box
-	 *
+	 * 
 	 * @return
 	 */
 	public FLyrVect getInputLayer() {
@@ -284,7 +281,7 @@ public abstract class AbstractGeoprocessGridbagPanel
 
 	/**
 	 * Sets view's layers from the TOC
-	 *
+	 * 
 	 * @param layers
 	 */
 	public void setFLayers(FLayers layers) {
@@ -293,28 +290,25 @@ public abstract class AbstractGeoprocessGridbagPanel
 
 	/**
 	 * Returns layers.
-	 *
+	 * 
 	 * @return
 	 */
 	public FLayers getFLayers() {
 		return layers;
 	}
 
-	
-	
-
 	/**
 	 * Obtains layer names from FLayers and returns like an array of strings.
-	 *
+	 * 
 	 * @return
-	 *
-	 * TODO Llevar a una utility class
+	 * 
+	 *         TODO Llevar a una utility class
 	 */
-	
+
 	/**
 	 * Shows to the user a dialog error, whith the title and message body
 	 * specified as parameters.
-	 *
+	 * 
 	 * @param message
 	 *            body of the error message
 	 * @param title
@@ -328,16 +322,16 @@ public abstract class AbstractGeoprocessGridbagPanel
 	/**
 	 * Asks to the user for the creation of a spatial index for the specified
 	 * layer. It will be of help for certain geoprocesses.
-	 *
+	 * 
 	 * FLyrVect default spatial index is MapServer quadtree, that hasnt the
 	 * ability to do nearest neighbour searches.
-	 *
+	 * 
 	 * For those geoprocesses that needs it (NN searches) overwrite this method
 	 * and use JSI RTree, or SIL RTree.
-	 *
+	 * 
 	 * It returns an IMonitorableTask, a task to build the spatial index in
 	 * background.
-	 *
+	 * 
 	 * @param layer
 	 * @return an ITask
 	 */
@@ -361,7 +355,7 @@ public abstract class AbstractGeoprocessGridbagPanel
 				CreateSpatialIndexMonitorableTask task = new CreateSpatialIndexMonitorableTask(
 						layer);
 				return task;
-			}catch (ReadDriverException e) {
+			} catch (ReadDriverException e) {
 				e.printStackTrace();
 				return null;
 			}
@@ -372,8 +366,8 @@ public abstract class AbstractGeoprocessGridbagPanel
 
 	/**
 	 * Confirm overwrite the output file if it allready exist.
-	 *
-	 *
+	 * 
+	 * 
 	 * @param outputFile
 	 * @return answer
 	 */
@@ -395,17 +389,15 @@ public abstract class AbstractGeoprocessGridbagPanel
 		return false;
 	}
 
-
 	/**
-	 * Opens a dialog to select where (file, database, etc)
-	 * to save the result layer.
-	 *
+	 * Opens a dialog to select where (file, database, etc) to save the result
+	 * layer.
+	 * 
 	 */
 	public void openResultFile() {
 		JFileChooser jfc = new JFileChooser();
-		jfc
-				.addChoosableFileFilter(new GenericFileFilter("shp",
-						PluginServices.getText(this, "Ficheros_SHP")));
+		jfc.addChoosableFileFilter(new GenericFileFilter("shp", PluginServices
+				.getText(this, "Ficheros_SHP")));
 		if (jfc.showSaveDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
 			File file = jfc.getSelectedFile();
 			if (!(file.getPath().endsWith(".shp") || file.getPath().endsWith(
@@ -420,20 +412,20 @@ public abstract class AbstractGeoprocessGridbagPanel
 
 	}
 
-
 	protected JTextField getFileNameResultTextField() {
-		if(resultTf == null)
+		if (resultTf == null)
 			resultTf = new JTextField(25);
 		return resultTf;
 	}
 
-	public File getOutputFile() throws FileNotFoundException{
+	public File getOutputFile() throws FileNotFoundException {
 		String fileName = getFileNameResultTextField().getText();
-		if(fileName.length() == 0){
-			throw new FileNotFoundException("No se ha seleccionado ningun fichero de salida");
+		if (fileName.length() == 0) {
+			throw new FileNotFoundException(
+					"No se ha seleccionado ningun fichero de salida");
 		}
-		if(! fileName.endsWith(".shp")){
-			if(! fileName.endsWith("."))
+		if (!fileName.endsWith(".shp")) {
+			if (!fileName.endsWith("."))
 				fileName += ".";
 			fileName += "shp";
 		}
@@ -463,16 +455,18 @@ public abstract class AbstractGeoprocessGridbagPanel
 	protected JCheckBox getSelectedOnlyCheckBox() {
 		if (selectedOnlyCheckBox == null) {
 			selectedOnlyCheckBox = new JCheckBox();
-			selectedOnlyCheckBox.addItemListener(new ItemListener(){
+			selectedOnlyCheckBox.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent arg0) {
 					updateNumSelectedFeaturesLabel();
-				}});
-			selectedOnlyCheckBox.setText(PluginServices.getText(this, "Usar_solamente_los_elementos_seleccionados"));
+				}
+			});
+			selectedOnlyCheckBox.setText(PluginServices.getText(this,
+					"Usar_solamente_los_elementos_seleccionados"));
 		}
 		return selectedOnlyCheckBox;
 	}
 
-	public boolean isFirstOnlySelected(){
+	public boolean isFirstOnlySelected() {
 		return getSelectedOnlyCheckBox().isSelected();
 	}
 

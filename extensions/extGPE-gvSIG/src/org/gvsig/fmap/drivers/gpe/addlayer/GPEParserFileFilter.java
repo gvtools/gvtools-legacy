@@ -57,17 +57,18 @@ import org.gvsig.gpe.parser.GPEParser;
  */
 public class GPEParserFileFilter extends FileFilter {
 	private GPEParser parser = null;
-	
-	public GPEParserFileFilter(GPEParser parser){
+
+	public GPEParserFileFilter(GPEParser parser) {
 		this.parser = parser;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.filechooser.FileFilter#accept(java.io.File)
 	 */
 	public boolean accept(File f) {
-		if (f.isDirectory()){
+		if (f.isDirectory()) {
 			return true;
 		}
 		return parser.accept(f.toURI());
@@ -75,6 +76,7 @@ public class GPEParserFileFilter extends FileFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.filechooser.FileFilter#getDescription()
 	 */
 	public String getDescription() {

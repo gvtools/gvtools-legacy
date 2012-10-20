@@ -10,8 +10,6 @@ import es.gva.cit.catalog.metadataxml.XMLNode;
 import es.gva.cit.catalog.metadataxml.XMLTree;
 import es.gva.cit.catalog.utils.Strings;
 
-
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -64,11 +62,11 @@ import es.gva.cit.catalog.utils.Strings;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class CSWCapabilitiesParser{
+public class CSWCapabilitiesParser {
 	private URL url = null;
 	private CSWCatalogServiceDriver driver = null;
-	private CSWCapabilities capabilities = null; 
-	
+	private CSWCapabilities capabilities = null;
+
 	public CSWCapabilitiesParser(URL url, CSWCatalogServiceDriver driver) {
 		this.url = url;
 		this.driver = driver;
@@ -76,180 +74,209 @@ public class CSWCapabilitiesParser{
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.csw.parsers.CSWAbstractCapabilitiesParser#parse(es.gva.cit.catalogClient.metadataxml.XMLNode)
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.csw.parsers.CSWAbstractCapabilitiesParser#parse
+	 * (es.gva.cit.catalogClient.metadataxml.XMLNode)
 	 */
-	public CSWCapabilities parse(XMLNode node) {		
+	public CSWCapabilities parse(XMLNode node) {
 		capabilities = new CSWCapabilities(url);
-		if (node.getName().endsWith(CSWConstants.SERVICE_EXPECTION_REPORT)){
+		if (node.getName().endsWith(CSWConstants.SERVICE_EXPECTION_REPORT)) {
 			capabilities.setException(CSWExceptionParser.parse(node));
 			capabilities.setAvailable(false);
 			capabilities.setServerMessage(node.getXmlTree());
 		}
 		parseHeaderAttributes(node);
-		parseServiceIdentification(node.searchNode(CSWConstants.SERVICE_IDENTIFICATION));
+		parseServiceIdentification(node
+				.searchNode(CSWConstants.SERVICE_IDENTIFICATION));
 		parseServiceProvider(node.searchNode(CSWConstants.SERVICE_PROVIDER));
-		parseOperationsMetadata(node.searchNode(CSWConstants.OPERATIONS_METADATA));
+		parseOperationsMetadata(node
+				.searchNode(CSWConstants.OPERATIONS_METADATA));
 		return capabilities;
 	}
 
 	/**
 	 * Parse the header attributes
 	 */
-	private void parseHeaderAttributes(XMLNode node){
+	private void parseHeaderAttributes(XMLNode node) {
 		capabilities.setVersion(node.searchAtribute(CSWConstants.VERSION));
 	}
-	
+
 	/**
 	 * Parse the service identification tag
+	 * 
 	 * @param node
 	 */
-	private void parseServiceIdentification(XMLNode node){
-		if (node != null){		
+	private void parseServiceIdentification(XMLNode node) {
+		if (node != null) {
 			XMLNode title = node.searchNode(CSWConstants.TITLE);
 			XMLNode abstract_ = node.searchNode(CSWConstants.ABSTRACT);
 			String sTitle = "";
-			if (title != null){
+			if (title != null) {
 				sTitle = title.getText() + "\n";
 			}
-			if (abstract_ != null){
+			if (abstract_ != null) {
 				sTitle = sTitle + abstract_.getText();
 			}
 			driver.setServerAnswerReady(sTitle);
 			capabilities.setServerMessage(sTitle);
-			XMLNode version = node.searchNode(CSWConstants.SERVICE_TYPE_VERSION);
-			if (version != null){
+			XMLNode version = node
+					.searchNode(CSWConstants.SERVICE_TYPE_VERSION);
+			if (version != null) {
 				capabilities.setVersion(version.getText());
 			}
-			
+
 		}
 	}
 
 	/**
 	 * Parse the service provider tag
+	 * 
 	 * @param node
 	 */
-	private void parseServiceProvider(XMLNode node){
-		if (node != null){		
+	private void parseServiceProvider(XMLNode node) {
+		if (node != null) {
 
 		}
 	}
 
 	/**
 	 * Parse the operations metadata tag
+	 * 
 	 * @param node
 	 */
-	private void parseOperationsMetadata(XMLNode node){
-		if (node != null){		
-			XMLNode[] operations = XMLTree.searchMultipleNode(node, CSWConstants.OPERATION);
+	private void parseOperationsMetadata(XMLNode node) {
+		if (node != null) {
+			XMLNode[] operations = XMLTree.searchMultipleNode(node,
+					CSWConstants.OPERATION);
 			for (int i = 0; i < operations.length; i++) {
-				String sOperation = XMLTree.searchAtribute(operations[i], "name");
-				
-				if (sOperation.equals(CSWConstants.OPERATION_GETCAPABILITIES)){
+				String sOperation = XMLTree.searchAtribute(operations[i],
+						"name");
+
+				if (sOperation.equals(CSWConstants.OPERATION_GETCAPABILITIES)) {
 					parseCapabilities(operations[i]);
 				}
-				if (sOperation.equals(CSWConstants.OPERATION_DESCRIBERECORD)){
+				if (sOperation.equals(CSWConstants.OPERATION_DESCRIBERECORD)) {
 					parseDescribeRecord(operations[i]);
 				}
-				if (sOperation.equals(CSWConstants.OPERATION_GETDOMAIN)){
+				if (sOperation.equals(CSWConstants.OPERATION_GETDOMAIN)) {
 					parseGetDomain(operations[i]);
 				}
-				if (sOperation.equals(CSWConstants.OPERATION_GETRECORDS)){
+				if (sOperation.equals(CSWConstants.OPERATION_GETRECORDS)) {
 					parseGetRecords(operations[i]);
 				}
-				if (sOperation.equals(CSWConstants.OPERATION_GETRECORDSBYID)){
+				if (sOperation.equals(CSWConstants.OPERATION_GETRECORDSBYID)) {
 					parseGetRecordsByID(operations[i]);
 				}
-				if (sOperation.equals(CSWConstants.OPERATION_TRANSACTION)){
+				if (sOperation.equals(CSWConstants.OPERATION_TRANSACTION)) {
 					parseTransaction(operations[i]);
 				}
-				if (sOperation.equals(CSWConstants.OPERATION_HARVEST)){
+				if (sOperation.equals(CSWConstants.OPERATION_HARVEST)) {
 					parseHarvest(operations[i]);
 				}
-			} 
-			//Patch for the Galdos severs
-			if (capabilities.getVersion().equals(CSWConstants.VERSION_0_9_0)){
-				capabilities.getOperations().getGetExtrinsicContent().put(
-						CSWConstants.GET,url);
+			}
+			// Patch for the Galdos severs
+			if (capabilities.getVersion().equals(CSWConstants.VERSION_0_9_0)) {
+				capabilities.getOperations().getGetExtrinsicContent()
+						.put(CSWConstants.GET, url);
 			}
 		}
 	}
-	
+
 	/**
 	 * Parse the capabilitioes operation
+	 * 
 	 * @param node
 	 */
-	private void parseCapabilities(XMLNode node) {        
-		capabilities.getOperations().setGetCapabilities(getSupportedProtocols(node));
-		XMLNode[] parameters = XMLTree.searchMultipleNode(node, CSWConstants.PARAMETER);
+	private void parseCapabilities(XMLNode node) {
+		capabilities.getOperations().setGetCapabilities(
+				getSupportedProtocols(node));
+		XMLNode[] parameters = XMLTree.searchMultipleNode(node,
+				CSWConstants.PARAMETER);
 		for (int i = 0; i < parameters.length; i++) {
-			String sParameter = XMLTree.searchAtribute(parameters[i], CSWConstants.PARAMETER_NAME);
-			String[] values = XMLTree.searchMultipleNodeValue(parameters[i], CSWConstants.PARAMETER_VALUE);
-			if ((sParameter.toLowerCase().equals(CSWConstants.VERSION)) &&
-					(values != null) &&
-					values.length == 1){
+			String sParameter = XMLTree.searchAtribute(parameters[i],
+					CSWConstants.PARAMETER_NAME);
+			String[] values = XMLTree.searchMultipleNodeValue(parameters[i],
+					CSWConstants.PARAMETER_VALUE);
+			if ((sParameter.toLowerCase().equals(CSWConstants.VERSION))
+					&& (values != null) && values.length == 1) {
 				capabilities.setVersion(values[0]);
 			}
 		}
-	} 
+	}
 
 	/**
- 	 * It parses the describe record operation
-	 * @param node 
-	 * @param prefix 
+	 * It parses the describe record operation
+	 * 
+	 * @param node
+	 * @param prefix
 	 */
-	private void parseDescribeRecord(XMLNode node) {        
-		capabilities.getOperations().setDescribeRecords(getSupportedProtocols(node));
-		XMLNode[] parameters = XMLTree.searchMultipleNode(node, CSWConstants.PARAMETER);
+	private void parseDescribeRecord(XMLNode node) {
+		capabilities.getOperations().setDescribeRecords(
+				getSupportedProtocols(node));
+		XMLNode[] parameters = XMLTree.searchMultipleNode(node,
+				CSWConstants.PARAMETER);
 		for (int i = 0; i < parameters.length; i++) {
-			String sParameter = XMLTree.searchAtribute(parameters[i], CSWConstants.PARAMETER_NAME);
-			String[] values = XMLTree.searchMultipleNodeValue(parameters[i], CSWConstants.PARAMETER_VALUE);
-			if ((sParameter.equals(CSWConstants.TYPENAME)) &&
-					(values != null)){					
+			String sParameter = XMLTree.searchAtribute(parameters[i],
+					CSWConstants.PARAMETER_NAME);
+			String[] values = XMLTree.searchMultipleNodeValue(parameters[i],
+					CSWConstants.PARAMETER_VALUE);
+			if ((sParameter.equals(CSWConstants.TYPENAME)) && (values != null)) {
 				capabilities.setTypeNames(values);
 			}
 		}
-	} 
+	}
 
 	/**
 	 * It parses the getRecordsByID operation
-	 * @param node 
-	 * @param prefix 
+	 * 
+	 * @param node
+	 * @param prefix
 	 */
-	private void parseGetRecordsByID(XMLNode node) {        
-		capabilities.getOperations().setGetRecordsById(getSupportedProtocols(node));
-	} 
+	private void parseGetRecordsByID(XMLNode node) {
+		capabilities.getOperations().setGetRecordsById(
+				getSupportedProtocols(node));
+	}
 
 	/**
-     * It parses the getDomain operation
-	 * @param node 
-	 * @param prefix 
+	 * It parses the getDomain operation
+	 * 
+	 * @param node
+	 * @param prefix
 	 */
-	private void parseGetDomain(XMLNode node) {        
+	private void parseGetDomain(XMLNode node) {
 		capabilities.getOperations().setGetDomain(getSupportedProtocols(node));
-	} 
+	}
 
 	/**
 	 * It parses the getRecords operation
-	 * @param node 
-	 * @param prefix 
+	 * 
+	 * @param node
+	 * @param prefix
 	 */
-	private void parseGetRecords(XMLNode node){
+	private void parseGetRecords(XMLNode node) {
 		capabilities.getOperations().setGetRecords(getSupportedProtocols(node));
-		XMLNode[] parameters = XMLTree.searchMultipleNode(node, CSWConstants.PARAMETER);
+		XMLNode[] parameters = XMLTree.searchMultipleNode(node,
+				CSWConstants.PARAMETER);
 		for (int i = 0; i < parameters.length; i++) {
-			String sParameter = XMLTree.searchAtribute(parameters[i], CSWConstants.PARAMETER_NAME);
-			String[] values = XMLTree.searchMultipleNodeValue(parameters[i], CSWConstants.PARAMETER_VALUE);
-			String[] defaultValue = XMLTree.searchMultipleNodeValue(parameters[i], CSWConstants.DEFAULTVALUE);
+			String sParameter = XMLTree.searchAtribute(parameters[i],
+					CSWConstants.PARAMETER_NAME);
+			String[] values = XMLTree.searchMultipleNodeValue(parameters[i],
+					CSWConstants.PARAMETER_VALUE);
+			String[] defaultValue = XMLTree.searchMultipleNodeValue(
+					parameters[i], CSWConstants.DEFAULTVALUE);
 			if (sParameter.equals("TypeName")) {
 				capabilities.setTypeNames(Strings.join(defaultValue, values));
 			}
 			if (sParameter.equals(CSWConstants.OUTPUTFORMAT)) {
-				if (!(Strings.find(CSWConstants.TEXT_XML, defaultValue) ||
-						Strings.find(CSWConstants.TEXT_XML, values))) {
-					if (!(Strings.find(CSWConstants.APPLICATION_XML, defaultValue) ||
-							Strings.find(CSWConstants.APPLICATION_XML, values))) {
-						capabilities.setServerMessage("El servidor no devuelve " +
-						"texto en formato XML");
+				if (!(Strings.find(CSWConstants.TEXT_XML, defaultValue) || Strings
+						.find(CSWConstants.TEXT_XML, values))) {
+					if (!(Strings.find(CSWConstants.APPLICATION_XML,
+							defaultValue) || Strings.find(
+							CSWConstants.APPLICATION_XML, values))) {
+						capabilities
+								.setServerMessage("El servidor no devuelve "
+										+ "texto en formato XML");
 						return;
 					}
 				}
@@ -259,18 +286,19 @@ public class CSWCapabilitiesParser{
 				driver.setOutputSchema(Strings.join(defaultValue, values));
 			}
 
-
 			if (sParameter.equals(CSWConstants.RESULTTYPE)) {
 				capabilities.setResultType(Strings.join(defaultValue, values));
 			}
 			if (sParameter.equals(CSWConstants.ELEMENTSETNAME)) {
-				capabilities.setElementSetName(Strings.join(defaultValue, values));
+				capabilities.setElementSetName(Strings.join(defaultValue,
+						values));
 			}
 			if (sParameter.equals(CSWConstants.CONSTRAINTLANGUAGE)) {
-				capabilities.setCONSTRAINTLANGUAGE(Strings.join(defaultValue, values));
-				for (int j = 0; j < capabilities.getCONSTRAINTLANGUAGE().length;
-				j++) {
-					if (capabilities.getCONSTRAINTLANGUAGE()[j].toUpperCase().equals("FILTER")) {
+				capabilities.setCONSTRAINTLANGUAGE(Strings.join(defaultValue,
+						values));
+				for (int j = 0; j < capabilities.getCONSTRAINTLANGUAGE().length; j++) {
+					if (capabilities.getCONSTRAINTLANGUAGE()[j].toUpperCase()
+							.equals("FILTER")) {
 						break;
 					} else {
 						capabilities.setServerMessage("errorFENotSupported");
@@ -278,57 +306,62 @@ public class CSWCapabilitiesParser{
 					}
 				}
 			}
-		}		
-	} 
+		}
+	}
 
 	/**
-	 *  * It parses the Transaction operation
-	 * @param node 
-	 * @param prefix 
+	 * * It parses the Transaction operation
+	 * 
+	 * @param node
+	 * @param prefix
 	 */
-	private void parseTransaction(XMLNode node) {        
-		capabilities.getOperations().setTransaction(getSupportedProtocols(node));
-	} 
+	private void parseTransaction(XMLNode node) {
+		capabilities.getOperations()
+				.setTransaction(getSupportedProtocols(node));
+	}
 
 	/**
 	 * It parses the Harvest operation
-	 * @param node 
-	 * @param prefix 
+	 * 
+	 * @param node
+	 * @param prefix
 	 */
-	private void parseHarvest(XMLNode node) {        
+	private void parseHarvest(XMLNode node) {
 		capabilities.getOperations().setHarvest(getSupportedProtocols(node));
-	} 
-	
+	}
+
 	/**
-	 * This function returns the supported protocols of an operation
-	 * defined by node.
-	 * @return 
-	 * @param node Node that contains the operation information
+	 * This function returns the supported protocols of an operation defined by
+	 * node.
+	 * 
+	 * @return
+	 * @param node
+	 *            Node that contains the operation information
 	 */
-	private HashMap getSupportedProtocols(XMLNode node) {        
+	private HashMap getSupportedProtocols(XMLNode node) {
 		HashMap operations = new HashMap();
 
 		XMLNode protocols = XMLTree.searchNode(node, CSWConstants.DCP);
 
-		XMLNode HTTPoperations = XMLTree.searchNode(protocols,CSWConstants.HTTP);
+		XMLNode HTTPoperations = XMLTree.searchNode(protocols,
+				CSWConstants.HTTP);
 		XMLNode[] childNodes = HTTPoperations.getSubnodes();
-		for (int i=0 ; i<childNodes.length ; i++){			
-			String sUrl = XMLTree.searchAtribute(childNodes[i],CSWConstants.XLINK_HREF);
+		for (int i = 0; i < childNodes.length; i++) {
+			String sUrl = XMLTree.searchAtribute(childNodes[i],
+					CSWConstants.XLINK_HREF);
 			URL url = null;
 			try {
 				url = new URL(sUrl);
-				if ((childNodes[i].getName().endsWith(CSWConstants.GET))){
-					operations.put(CSWConstants.GET,
-							url);
+				if ((childNodes[i].getName().endsWith(CSWConstants.GET))) {
+					operations.put(CSWConstants.GET, url);
 				}
-				if ((childNodes[i].getName().endsWith(CSWConstants.POST))){
-					operations.put(CSWConstants.POST,
-							url);
+				if ((childNodes[i].getName().endsWith(CSWConstants.POST))) {
+					operations.put(CSWConstants.POST, url);
 				}
 
 			} catch (MalformedURLException e) {
-				//The URL can be added
-			}			
+				// The URL can be added
+			}
 		}
 		return operations;
 	}

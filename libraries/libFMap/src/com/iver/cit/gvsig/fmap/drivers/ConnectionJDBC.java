@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
@@ -48,16 +47,16 @@ import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class ConnectionJDBC implements IConnection {
-	
-	private static Logger logger = Logger.getLogger(ConnectionJDBC.class.getName());
-    private Connection connection;
+
+	private static Logger logger = Logger.getLogger(ConnectionJDBC.class
+			.getName());
+	private Connection connection;
 	private String connectionStr;
 	private String user;
 	private String _pw;
@@ -72,10 +71,10 @@ public class ConnectionJDBC implements IConnection {
 	public Connection getConnection() {
 		try {
 			// try to getConnection if is closed
-			if (connection != null && connection.isClosed()){
+			if (connection != null && connection.isClosed()) {
 				Connection tmpCon = null;
 				tmpCon = DriverManager.getConnection(connectionStr, user, _pw);
-				if (tmpCon != null && !tmpCon.isClosed()){
+				if (tmpCon != null && !tmpCon.isClosed()) {
 					connection = tmpCon;
 					connection.setAutoCommit(false);
 				}
@@ -128,7 +127,8 @@ public class ConnectionJDBC implements IConnection {
 		}
 	}
 
-	public void setDataConnection(String connectionStr, String user, String _pw) throws DBException {
+	public void setDataConnection(String connectionStr, String user, String _pw)
+			throws DBException {
 		try {
 			connection = DriverManager.getConnection(connectionStr, user, _pw);
 			connection.setAutoCommit(false);
@@ -140,15 +140,15 @@ public class ConnectionJDBC implements IConnection {
 		}
 
 	}
-	
-	
 
-	public void setDataConnection(Connection _conn, String user, String _pw) throws DBException {
+	public void setDataConnection(Connection _conn, String user, String _pw)
+			throws DBException {
 		connection = _conn;
 		try {
 			connection.setAutoCommit(false);
 		} catch (Exception ex) {
-			logger.error("Autocommit not allowed for this driver: " + ex.getMessage());
+			logger.error("Autocommit not allowed for this driver: "
+					+ ex.getMessage());
 		}
 		this.connectionStr = null;
 		this.user = user;
@@ -156,19 +156,22 @@ public class ConnectionJDBC implements IConnection {
 	}
 
 	/**
-	 *
-	 * @return the quote string for this gbdms. A empty string is returned if there are any error
-	 * or if quoting is not supported
+	 * 
+	 * @return the quote string for this gbdms. A empty string is returned if
+	 *         there are any error or if quoting is not supported
 	 */
 	public String getIdentifierQuoteString() {
-		/* if there is not an error the quote string is cached, if there is an error an empty string
-		 * is returned to avoid obligate the user to check this method.
+		/*
+		 * if there is not an error the quote string is cached, if there is an
+		 * error an empty string is returned to avoid obligate the user to check
+		 * this method.
 		 */
 
 		String quote = identifierQuoteString;
 		if (quote == null) {
 			try {
-				quote = connection.getMetaData().getIdentifierQuoteString().trim();
+				quote = connection.getMetaData().getIdentifierQuoteString()
+						.trim();
 				identifierQuoteString = quote;
 
 			} catch (SQLException e) {

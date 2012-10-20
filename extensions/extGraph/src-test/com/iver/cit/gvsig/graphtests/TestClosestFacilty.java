@@ -22,7 +22,7 @@ public class TestClosestFacilty extends TestCase {
 	FLyrVect lyr;
 	Network net;
 	IGraph g;
-	
+
 	protected void setUp() throws Exception {
 		super.setUp();
 		// Setup de los drivers
@@ -35,33 +35,31 @@ public class TestClosestFacilty extends TestCase {
 		File shpFile = new File("test_files/ejes.shp");
 		lyr = (FLyrVect) LayerFactory.createLayer("Ejes", "gvSIG shp driver",
 				shpFile, crs);
-		
+
 		NetworkRedLoader netLoader = new NetworkRedLoader();
 		netLoader.setNetFile(new File("test_files/ejes.net"));
 		g = netLoader.loadNetwork();
-		
+
 		net = new Network();
 	}
-	
+
 	public void testCalculate() throws BaseException {
 		OneToManySolver solver = new OneToManySolver();
 		net.setLayer(lyr);
 		net.setGraph(g);
 		solver.setNetwork(net);
-		
-		//		 Source flag
+
+		// Source flag
 		GvFlag sourceFlag = net.createFlag(442177.19, 4476236.12, 10);
 		net.addFlag(sourceFlag);
 		solver.setSourceFlag(sourceFlag);
-		
-		GvFlag[] facilitiesFlags={
-				net.createFlag(442211.67, 4476093.92, 10),
+
+		GvFlag[] facilitiesFlags = { net.createFlag(442211.67, 4476093.92, 10),
 				net.createFlag(441703.18, 4475266.55, 10),
 				net.createFlag(441022.33, 4476843.72, 10),
-				net.createFlag(442612.42, 4476744.61, 10)
-		};
-		
-		//		 Destination flags
+				net.createFlag(442612.42, 4476744.61, 10) };
+
+		// Destination flags
 		// NONE: We will use dijkstra algorithm to label network
 		// and extract (after) the visited arcs.
 		for (int i = 0; i < facilitiesFlags.length; i++) {
@@ -74,7 +72,7 @@ public class TestClosestFacilty extends TestCase {
 		solver.setMaxCost(4000.0);
 		solver.calculate();
 		solver.removeDestinationsFromNetwork(net.getFlags());
-		
+
 		// En este punto tenemos la red "etiquetada" con los pesos
 		// y distancias. Hay 2 opciones: recorrer toda la capa
 		// y copiar los registros que nos interesan (opción fácil)
@@ -84,62 +82,65 @@ public class TestClosestFacilty extends TestCase {
 		// Primero opción fácil
 		// Recorremos la capa, vemos en qué intervalo cae cada
 		// entidad y escribimos un shape.
-		
-		GvFlag[] flags=net.getFlags();
-		GvFlag closestFlag=null;
-		if(flags.length>1){
-			closestFlag=flags[1];
-			
-			for(int i=1;i<flags.length;i++){
-				if(flags[i].getCost()<closestFlag.getCost()) closestFlag=flags[i];
+
+		GvFlag[] flags = net.getFlags();
+		GvFlag closestFlag = null;
+		if (flags.length > 1) {
+			closestFlag = flags[1];
+
+			for (int i = 1; i < flags.length; i++) {
+				if (flags[i].getCost() < closestFlag.getCost())
+					closestFlag = flags[i];
 			}
-			
-			System.out.println("Hacia el Proveedor:\nProveedor más cercano: "+closestFlag.getIdFlag()+" ("+closestFlag.getCost()+")");
-		}
-		else {
+
+			System.out.println("Hacia el Proveedor:\nProveedor más cercano: "
+					+ closestFlag.getIdFlag() + " (" + closestFlag.getCost()
+					+ ")");
+		} else {
 			System.out.println("Sin proveedores");
 		}
-		
+
 		long t2 = System.currentTimeMillis();
-		System.out.println("tiempo:" + (t2-t1));
-		
-		
-		//Desde el proveedor
+		System.out.println("tiempo:" + (t2 - t1));
+
+		// Desde el proveedor
 		try {
 			this.setUp();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		ShortestPathSolverAStar solverFromFacility=new ShortestPathSolverAStar();
+
+		ShortestPathSolverAStar solverFromFacility = new ShortestPathSolverAStar();
 		net.setLayer(lyr);
 		net.setGraph(g);
 		solverFromFacility.setNetwork(net);
-		
-		GvFlag destinyFlag = sourceFlag; //Ahora el punto de origen pasa a ser el destino
-		
-		Route bestRoute=null;
-		GvFlag closestFacility=null;
-		long ini=System.currentTimeMillis();
+
+		GvFlag destinyFlag = sourceFlag; // Ahora el punto de origen pasa a ser
+											// el destino
+
+		Route bestRoute = null;
+		GvFlag closestFacility = null;
+		long ini = System.currentTimeMillis();
 		for (int i = 0; i < facilitiesFlags.length; i++) {
 			net.removeFlags();
 			net.addFlag(facilitiesFlags[i]);
 			net.addFlag(destinyFlag);
-			Route route=solverFromFacility.calculateRoute();
-			if(bestRoute==null || route.getCost()<bestRoute.getCost()){
-				bestRoute=route;
-				closestFacility=facilitiesFlags[i];
+			Route route = solverFromFacility.calculateRoute();
+			if (bestRoute == null || route.getCost() < bestRoute.getCost()) {
+				bestRoute = route;
+				closestFacility = facilitiesFlags[i];
 			}
 		}
-		long time=System.currentTimeMillis()-ini;
-		
+		long time = System.currentTimeMillis() - ini;
+
 		System.out.println("Desde el proveedor: ");
-		System.out.println("El mejor proveedor es: "+closestFacility.getIdFlag()+" ("+bestRoute.getCost()+")");
-		
-		System.out.println("Coste: "+time);
-		
-		
+		System.out.println("El mejor proveedor es: "
+				+ closestFacility.getIdFlag() + " (" + bestRoute.getCost()
+				+ ")");
+
+		System.out.println("Coste: " + time);
+
 		// assertEquals(dist.doubleValue(), 8887, 0);
 	}
 }

@@ -2,11 +2,10 @@ package com.hardcode.gdbms.engine.data.indexes;
 
 import java.io.IOException;
 
-
 /**
  * Implementación del conjunto de índices que guarda en memoria hasta un límite
- * y  a partir de ese límite pasa todos los índices a disco
- *
+ * y a partir de ese límite pasa todos los índices a disco
+ * 
  * @author Fernando González Cortés
  */
 public class IndexSetImpl implements VariableIndexSet {
@@ -29,9 +28,9 @@ public class IndexSetImpl implements VariableIndexSet {
 
 	/**
 	 * Creates a new IndexSetImpl object.
-	 *
-	 * @param limit límite a partir del cual se guardan todos los índices en
-	 * 		  disco
+	 * 
+	 * @param limit
+	 *            límite a partir del cual se guardan todos los índices en disco
 	 */
 	public IndexSetImpl(int limit) {
 		this.limit = limit;
@@ -40,20 +39,22 @@ public class IndexSetImpl implements VariableIndexSet {
 
 	/**
 	 * Añade un índice al conjunto
-	 *
-	 * @param index índice a añadir
-	 *
-	 * @throws IOException Si se produce un error al escribir en el disco
+	 * 
+	 * @param index
+	 *            índice a añadir
+	 * 
+	 * @throws IOException
+	 *             Si se produce un error al escribir en el disco
 	 * @throws RuntimeException
 	 */
 	public synchronized void addIndex(long index) throws IOException {
 		if (complete) {
 			throw new RuntimeException(
-				"Cannot add more indexes after indexSetComplete");
+					"Cannot add more indexes after indexSetComplete");
 		}
 
 		if (set.getIndexCount() == limit) {
-			//Se sustituye el índice de memoria por el índice de disco
+			// Se sustituye el índice de memoria por el índice de disco
 			VariableDiskIndexSet newSet = new VariableDiskIndexSet();
 			newSet.open();
 			newSet.addAll(set);
@@ -66,12 +67,14 @@ public class IndexSetImpl implements VariableIndexSet {
 	/**
 	 * Devuelve el índice nth-ésimo si se invocó previamente a indexSetComplete
 	 * y lanza una excepción en caso contrario
-	 *
-	 * @param nth índice de índice que se quiere obtener
-	 *
+	 * 
+	 * @param nth
+	 *            índice de índice que se quiere obtener
+	 * 
 	 * @return indice nth-ésimo
-	 *
-	 * @throws IOException Si se produce un error accediendo a disco
+	 * 
+	 * @throws IOException
+	 *             Si se produce un error accediendo a disco
 	 * @throws RuntimeException
 	 */
 	public long getIndex(long nth) throws IOException {
@@ -83,11 +86,11 @@ public class IndexSetImpl implements VariableIndexSet {
 	}
 
 	/**
-	 * Devuelve el número de índices si se invocó previamente a
-	 * indexSetComplete y lanza una excepción en caso contrario
-	 *
+	 * Devuelve el número de índices si se invocó previamente a indexSetComplete
+	 * y lanza una excepción en caso contrario
+	 * 
 	 * @return número de índices
-	 *
+	 * 
 	 * @throws RuntimeException
 	 */
 	public long getIndexCount() {
@@ -122,11 +125,11 @@ public class IndexSetImpl implements VariableIndexSet {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
-	 *
+	 * 
 	 * @throws IOException
-	 *
+	 * 
 	 * @see com.hardcode.gdbms.engine.data.indexes.VariableIndexSet#getIndexes()
 	 */
 	public long[] getIndexes() throws IOException {

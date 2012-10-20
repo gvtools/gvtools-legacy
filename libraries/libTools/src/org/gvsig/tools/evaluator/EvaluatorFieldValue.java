@@ -63,7 +63,7 @@ public class EvaluatorFieldValue {
 
 	/**
 	 * Get the fieldName over the operation is realiced.
-	 *
+	 * 
 	 * @return String name of field.
 	 */
 	public String getFieldName() {
@@ -72,7 +72,7 @@ public class EvaluatorFieldValue {
 
 	/**
 	 * Get the count used in the nearest operation.
-	 *
+	 * 
 	 * @return the count or -1 if not aplicable.
 	 */
 	public int getCount() {
@@ -81,7 +81,7 @@ public class EvaluatorFieldValue {
 
 	/**
 	 * Get the tolerance used in the nearest operation.
-	 *
+	 * 
 	 * @return the tolerance or -1 if not aplicable.
 	 */
 	public int getTolerance() {
@@ -90,7 +90,7 @@ public class EvaluatorFieldValue {
 
 	/**
 	 * Get the value used in the match or nearest operation.
-	 *
+	 * 
 	 * @return the match value or null if not aplicable.
 	 */
 	public Object getValue() {
@@ -99,7 +99,7 @@ public class EvaluatorFieldValue {
 
 	/**
 	 * Get the initial value used in the range operation.
-	 *
+	 * 
 	 * @return the first value or null if not aplicable.
 	 */
 	public Object getValue1() {
@@ -108,7 +108,7 @@ public class EvaluatorFieldValue {
 
 	/**
 	 * Get the final value used in the range operation.
-	 *
+	 * 
 	 * @return the final value or null if not aplicable.
 	 */
 	public Object getValue2() {

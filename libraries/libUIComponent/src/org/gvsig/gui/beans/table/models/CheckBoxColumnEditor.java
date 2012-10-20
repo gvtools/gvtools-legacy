@@ -32,36 +32,35 @@ import javax.swing.table.TableCellEditor;
  * Componente tabla
  * 
  * @author Nacho Brodin (brodin_ign@gva.es)
- *
+ * 
  */
-public class CheckBoxColumnEditor extends AbstractCellEditor
-implements TableCellEditor {
-    final private static long serialVersionUID = -3370601314380922368L;
-    public JCheckBox theCheckBox;
+public class CheckBoxColumnEditor extends AbstractCellEditor implements
+		TableCellEditor {
+	final private static long serialVersionUID = -3370601314380922368L;
+	public JCheckBox theCheckBox;
 
-    public CheckBoxColumnEditor() {
-        super();
-        theCheckBox = new JCheckBox();
-        theCheckBox.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent event) {
-                    fireEditingStopped() ;
-                    
-                }
-            });
-    }
+	public CheckBoxColumnEditor() {
+		super();
+		theCheckBox = new JCheckBox();
+		theCheckBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				fireEditingStopped();
 
-    public Component getTableCellEditorComponent(JTable table, Object obj,
-                                                 boolean isSelected,
-                                                 int row, int col) {
-    	theCheckBox.setHorizontalAlignment(SwingUtilities.CENTER);
+			}
+		});
+	}
 
-        Boolean lValueAsBoolean = (Boolean) obj;
-        theCheckBox.setSelected(lValueAsBoolean.booleanValue());
+	public Component getTableCellEditorComponent(JTable table, Object obj,
+			boolean isSelected, int row, int col) {
+		theCheckBox.setHorizontalAlignment(SwingUtilities.CENTER);
 
-        return theCheckBox;
-    }
+		Boolean lValueAsBoolean = (Boolean) obj;
+		theCheckBox.setSelected(lValueAsBoolean.booleanValue());
 
-    public Object getCellEditorValue() {
-        return new Boolean(theCheckBox.isSelected());
-    }
+		return theCheckBox;
+	}
+
+	public Object getCellEditorValue() {
+		return new Boolean(theCheckBox.isSelected());
+	}
 }

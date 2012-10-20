@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.util;
 
 import com.iver.cit.gvsig.fmap.core.IFeature;
@@ -53,23 +53,23 @@ import com.iver.cit.gvsig.fmap.core.IFeature;
 /**
  * It models a generic parameter for gvSIG application.
  * 
- * Initially its used for ITopologyErrorWithParameters error fixed, althought
- * it has been designed for many contexts.
+ * Initially its used for ITopologyErrorWithParameters error fixed, althought it
+ * has been designed for many contexts.
  * 
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public abstract class GParameter {
-	
+
 	public static final Class<IFeature> FEATURE_PARAM_TYPES = IFeature.class;
 	public static final Class<Number> NUMBER_PARAM_TYPE = Number.class;
-	
+
 	protected String paramName;
 	protected Class paramType;
 	protected Object defaultValue;
 	protected Object parentReference;
-	
+
 	public Object getParentReference() {
 		return parentReference;
 	}
@@ -77,9 +77,8 @@ public abstract class GParameter {
 	public void setParentReference(Object parentReference) {
 		this.parentReference = parentReference;
 	}
-	
+
 	public abstract void setValue(Object obj);
-	
 
 	/**
 	 * Constructor.
@@ -87,7 +86,8 @@ public abstract class GParameter {
 	 * @param paramName
 	 * @param paramType
 	 */
-	public GParameter(String paramName, Class paramType, Object defaultValue, Object parentReference) {
+	public GParameter(String paramName, Class paramType, Object defaultValue,
+			Object parentReference) {
 		this.paramName = paramName;
 		this.paramType = paramType;
 		this.defaultValue = defaultValue;
@@ -119,18 +119,13 @@ public abstract class GParameter {
 	}
 
 	public Object getValue() {
-			try {
-				return parentReference.getClass().getDeclaredField(paramName).get(parentReference);
-	//			return paramType.getField(paramName).get(parentReference);
-			} catch (Exception e) {
-				e.printStackTrace();
-				return defaultValue;
-			}
+		try {
+			return parentReference.getClass().getDeclaredField(paramName)
+					.get(parentReference);
+			// return paramType.getField(paramName).get(parentReference);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return defaultValue;
 		}
+	}
 }
-
- 
-
-
-
-

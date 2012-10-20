@@ -11,33 +11,32 @@ public class EditionEvent {
 	public static int CHANGE_TYPE_MODIFY = 11;
 	public static int CHANGE_TYPE_DELETE = 12;
 
-	public static int ALPHANUMERIC=13;
-    public static int GRAPHIC=14;
+	public static int ALPHANUMERIC = 13;
+	public static int GRAPHIC = 14;
 
-	IEditableSource source; // Será un EditableAdapter (o sus subclases: VectorialEditableAdapter
-					// o VectorialEditableDBAdapter
+	IEditableSource source; // Será un EditableAdapter (o sus subclases:
+							// VectorialEditableAdapter
+	// o VectorialEditableDBAdapter
 	int sourceType;
 	int changeType;
 
-	/*public EditionEvent(IEditableSource source, int type)
-	{
+	/*
+	 * public EditionEvent(IEditableSource source, int type) { this.source =
+	 * source; this.changeType = type; this.sourceType=GRAPHIC; }
+	 */
+	public EditionEvent(IEditableSource source, int type, int sourceType) {
 		this.source = source;
 		this.changeType = type;
-		this.sourceType=GRAPHIC;
+		this.sourceType = sourceType;
 	}
-	*/
-	public EditionEvent(IEditableSource source, int type,int sourceType)
-	{
-		this.source = source;
-		this.changeType = type;
-		this.sourceType=sourceType;
-	}
+
 	/**
 	 * @return Returns the source.
 	 */
 	public IEditableSource getSource() {
 		return source;
 	}
+
 	/**
 	 * @return Returns the type.
 	 */
@@ -45,9 +44,8 @@ public class EditionEvent {
 		return changeType;
 	}
 
-	public int getSourceType(){
+	public int getSourceType() {
 		return sourceType;
 	}
-
 
 }

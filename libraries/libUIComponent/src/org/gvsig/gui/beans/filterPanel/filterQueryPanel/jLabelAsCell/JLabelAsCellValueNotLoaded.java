@@ -45,11 +45,13 @@ import java.io.Serializable;
  */
 
 /**
- * Extension of JLabel that has some specific characteristics -> Version for values that aren't loaded in layer in view
+ * Extension of JLabel that has some specific characteristics -> Version for
+ * values that aren't loaded in layer in view
  * 
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
-public class JLabelAsCellValueNotLoaded extends AbstractJLabelAsCellLoaded implements Comparable, Serializable {
+public class JLabelAsCellValueNotLoaded extends AbstractJLabelAsCellLoaded
+		implements Comparable, Serializable {
 	private static final long serialVersionUID = -4191869383518983183L;
 
 	/**
@@ -63,16 +65,19 @@ public class JLabelAsCellValueNotLoaded extends AbstractJLabelAsCellLoaded imple
 	/**
 	 * Default constructor with one parameters
 	 * 
-	 * @param text Text value for this component
+	 * @param text
+	 *            Text value for this component
 	 */
 	public JLabelAsCellValueNotLoaded(String text) {
 		super(text);
 		this.configure();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.filterPanel.filterQueryPanel.jLabelCell.AbstractJLabelCellLoaded#configure()
+	 * 
+	 * @see org.gvsig.gui.beans.filterPanel.filterQueryPanel.jLabelCell.
+	 * AbstractJLabelCellLoaded#configure()
 	 */
 	protected void configure() {
 		this.setBackground(Color.white);

@@ -19,8 +19,10 @@
 package org.gvsig.raster.grid.filter.statistics;
 
 import org.gvsig.raster.dataset.IBuffer;
+
 /**
  * Proceso del filtro de recorte de colas aplicado a imágenes 16 bits
+ * 
  * @version 31/05/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
@@ -31,6 +33,7 @@ public class TailTrimShortFilter extends TailTrimFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.statistics.TailTrimFilter#pre()
 	 */
 	public void pre() {
@@ -41,7 +44,9 @@ public class TailTrimShortFilter extends TailTrimFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.statistics.TailTrimFilter#process(int, int)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.statistics.TailTrimFilter#process(int,
+	 * int)
 	 */
 	public void process(int col, int line) throws InterruptedException {
 		for (int iBand = 0; iBand < raster.getBandCount(); iBand++)
@@ -51,7 +56,10 @@ public class TailTrimShortFilter extends TailTrimFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.statistics.TailTrimFilter#getInRasterDataType()
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.statistics.TailTrimFilter#getInRasterDataType
+	 * ()
 	 */
 	public int getInRasterDataType() {
 		return IBuffer.TYPE_SHORT;
@@ -59,16 +67,22 @@ public class TailTrimShortFilter extends TailTrimFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.statistics.TailTrimFilter#getOutRasterDataType()
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.statistics.TailTrimFilter#getOutRasterDataType
+	 * ()
 	 */
 	public int getOutRasterDataType() {
 		return IBuffer.TYPE_SHORT;
 	}
 
- /*
-	* (non-Javadoc)
-	* @see org.gvsig.raster.grid.filter.statistics.TailTrimFilter#getResult(java.lang.String)
-	*/
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.statistics.TailTrimFilter#getResult(java
+	 * .lang.String)
+	 */
 	public Object getResult(String name) {
 		if (name.equals("raster"))
 			return raster;
@@ -77,29 +91,31 @@ public class TailTrimShortFilter extends TailTrimFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.statistics.TailTrimFilter#post()
 	 */
 	public void post() {
 		super.post();
 
-		//Cogemos el minimo y máximo para cada banda
-		if(tailPercentList == null) {
+		// Cogemos el minimo y máximo para cada banda
+		if (tailPercentList == null) {
 			for (int i = 0; i < raster.getBandCount(); i++) {
 				result[i][0] = sample[i][posInit + tailSize];
 				result[i][1] = sample[i][(posInit + nSamples) - tailSize];
 			}
 			stats.setTailTrimValue(tailPercent, result);
 		}
-		
-		if(tailPercentList == null)
+
+		if (tailPercentList == null)
 			return;
-		
-		//Cogemos el minimo y máximo para cada banda
+
+		// Cogemos el minimo y máximo para cada banda
 		for (int iValue = 0; iValue < tailSizeList.length; iValue++) {
-			double [][] res = new double[raster.getBandCount()][2];
+			double[][] res = new double[raster.getBandCount()][2];
 			for (int i = 0; i < raster.getBandCount(); i++) {
 				res[i][0] = sample[i][posInit + tailSizeList[iValue]];
-				res[i][1] = sample[i][(posInit + nSamples) - tailSizeList[iValue]];
+				res[i][1] = sample[i][(posInit + nSamples)
+						- tailSizeList[iValue]];
 			}
 			stats.setTailTrimValue(tailPercentList[iValue], res);
 		}

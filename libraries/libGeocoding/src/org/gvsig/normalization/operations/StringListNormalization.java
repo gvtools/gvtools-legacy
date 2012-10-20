@@ -67,8 +67,8 @@ public class StringListNormalization extends AbstractNormalization implements
 	 * @param chains
 	 * @param theFile
 	 */
-	public StringListNormalization(NormalizationPattern pat, List<String> chains,
-			File theFile) {
+	public StringListNormalization(NormalizationPattern pat,
+			List<String> chains, File theFile) {
 
 		super(pat);
 		this.ouputFile = theFile;
@@ -79,7 +79,7 @@ public class StringListNormalization extends AbstractNormalization implements
 		// New table
 		int posi = -1;
 
-		// Pattern fields		
+		// Pattern fields
 		for (int j = 0; j < this.pattern.getElements().size(); j++) {
 			if (((Element) this.pattern.getElements().get(j)).getImportfield()) {
 				posi++;
@@ -111,14 +111,15 @@ public class StringListNormalization extends AbstractNormalization implements
 		/* Values new table */
 		Value[] vals = new Value[this.nameNewFields.length];
 
-		/* CUTTING AND FILTERING */		
+		/* CUTTING AND FILTERING */
 		List<String> chains = null;
 		String cadena = "";
 		int tipoCampo = 0;
 
 		String splitableString = (String) this.fileChains.get(row);
 
-		List<String> splittedChains = this.nAlgorithm.splitChain(splitableString);
+		List<String> splittedChains = this.nAlgorithm
+				.splitChain(splitableString);
 		this.nAlgorithm.setRow(row);
 		chains = this.nAlgorithm.filterSplitChains(splittedChains);
 
@@ -136,8 +137,9 @@ public class StringListNormalization extends AbstractNormalization implements
 
 			tipoCampo = this.driver.getFieldType(posi);
 			// create values
-			//vals[posi] = createValue(row, tipoCampo, posi, cadena);
-			vals[posi] = createValue(row, tipoCampo, this.posNameNewFields[j], cadena);
+			// vals[posi] = createValue(row, tipoCampo, posi, cadena);
+			vals[posi] = createValue(row, tipoCampo, this.posNameNewFields[j],
+					cadena);
 		}
 		this.driver.addRow(vals);
 	}
@@ -197,7 +199,7 @@ public class StringListNormalization extends AbstractNormalization implements
 			log.error("ERROR initializing dbf", e);
 			update("ERROR.errorwrittingdbf");
 			return false;
-		}		
+		}
 
 		DefaultRowEdited dre;
 		for (int i = 0; i < getRowCount(); i++) {
@@ -217,7 +219,7 @@ public class StringListNormalization extends AbstractNormalization implements
 			update("ERROR.errorwrittingdbf");
 			return false;
 		}
-		
+
 		update("INFO.endnormalizing");
 		return true;
 	}

@@ -48,73 +48,77 @@ import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.gui.cad.tools.MultiPointCADTool;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
+
 /**
  * Extensión que gestiona la inserción de multipuntos en edición.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class InsertMultiPointExtension extends Extension {
-   private View view;
-   private MapControl mapControl;
-   private MultiPointCADTool multipoint;
+	private View view;
+	private MapControl mapControl;
+	private MultiPointCADTool multipoint;
 
-   /**
-     * @see com.iver.andami.plugins.IExtension#initialize()
-     */
-    public void initialize() {
-        multipoint = new MultiPointCADTool();
-        CADExtension.addCADTool("_multipoint", multipoint);
-        
-        registerIcons();
-    }
+	/**
+	 * @see com.iver.andami.plugins.IExtension#initialize()
+	 */
+	public void initialize() {
+		multipoint = new MultiPointCADTool();
+		CADExtension.addCADTool("_multipoint", multipoint);
 
-    private void registerIcons(){
-    	PluginServices.getIconTheme().registerDefault(
+		registerIcons();
+	}
+
+	private void registerIcons() {
+		PluginServices.getIconTheme().registerDefault(
 				"edition-insert-geometry-multipoint",
-				this.getClass().getClassLoader().getResource("images/MultiPoint.png")
-			);
-    	
-    }
-    /**
-     * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
-     */
-    public void execute(String s) {
-    	CADExtension.initFocus();
+				this.getClass().getClassLoader()
+						.getResource("images/MultiPoint.png"));
 
-        if (s.equals("_multipoint")) {
-        	CADExtension.setCADTool("_multipoint",true);
-        	CADExtension.getEditionManager().setMapControl(mapControl);
-        }
-        CADExtension.getCADToolAdapter().configureMenu();
-    }
-    /**
-     * @see com.iver.andami.plugins.IExtension#isEnabled()
-     */
-    public boolean isEnabled() {
+	}
 
-      	try {
-			if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE){
+	/**
+	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
+	 */
+	public void execute(String s) {
+		CADExtension.initFocus();
+
+		if (s.equals("_multipoint")) {
+			CADExtension.setCADTool("_multipoint", true);
+			CADExtension.getEditionManager().setMapControl(mapControl);
+		}
+		CADExtension.getCADToolAdapter().configureMenu();
+	}
+
+	/**
+	 * @see com.iver.andami.plugins.IExtension#isEnabled()
+	 */
+	public boolean isEnabled() {
+
+		try {
+			if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE) {
 				view = (View) PluginServices.getMDIManager().getActiveWindow();
-		        mapControl = view.getMapControl();
-		        if (CADExtension.getEditionManager().getActiveLayerEdited()==null)
+				mapControl = view.getMapControl();
+				if (CADExtension.getEditionManager().getActiveLayerEdited() == null)
 					return false;
-		        FLyrVect lv=(FLyrVect)CADExtension.getEditionManager().getActiveLayerEdited().getLayer();
-				if (multipoint.isApplicable(lv.getShapeType())){
+				FLyrVect lv = (FLyrVect) CADExtension.getEditionManager()
+						.getActiveLayerEdited().getLayer();
+				if (multipoint.isApplicable(lv.getShapeType())) {
 					return true;
 				}
 			}
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 		return false;
-    }
+	}
 
-    /**
-     * @see com.iver.andami.plugins.IExtension#isVisible()
-     */
-    public boolean isVisible() {
-    	if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE)
+	/**
+	 * @see com.iver.andami.plugins.IExtension#isVisible()
+	 */
+	public boolean isVisible() {
+		if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE)
 			return true;
 		return false;
-    }
 	}
+}

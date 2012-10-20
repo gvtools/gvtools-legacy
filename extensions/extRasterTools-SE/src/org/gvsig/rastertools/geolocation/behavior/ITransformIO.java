@@ -21,20 +21,21 @@ package org.gvsig.rastertools.geolocation.behavior;
 import java.awt.geom.AffineTransform;
 
 /**
- * Interfaz para entrada y salida de datos que tienen que ver con transformaciones
- * de georreferenciación. 
+ * Interfaz para entrada y salida de datos que tienen que ver con
+ * transformaciones de georreferenciación.
  * 
  * @version 30/07/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
 public interface ITransformIO {
 	/**
 	 * Carga los parámetros de una transformación afín
+	 * 
 	 * @param transform
 	 */
 	public void loadTransform(AffineTransform transform);
-	
+
 	/**
 	 * Método llamado cuando se realiza la acción de aplicar una transformación
 	 */

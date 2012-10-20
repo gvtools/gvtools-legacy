@@ -52,7 +52,7 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 /**
  * Extensión que gestiona la unión de geometrías en edición.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class JoinExtension extends Extension {
@@ -65,27 +65,29 @@ public class JoinExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
-		joinCADTool=new JoinCADTool();
-		CADExtension.addCADTool("_join",joinCADTool);
+		joinCADTool = new JoinCADTool();
+		CADExtension.addCADTool("_join", joinCADTool);
 
 		registerIcons();
 	}
 
-	protected void registerIcons(){
-		PluginServices.getIconTheme().registerDefault(
-				"edition-geometry-Join",
-				this.getClass().getClassLoader().getResource("images/Join.png")
-			);
+	protected void registerIcons() {
+		PluginServices.getIconTheme()
+				.registerDefault(
+						"edition-geometry-Join",
+						this.getClass().getClassLoader()
+								.getResource("images/Join.png"));
 
 	}
+
 	/**
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String s) {
 		CADExtension.initFocus();
 		if (s.equals("_join")) {
-        	CADExtension.setCADTool(s,true);
-        }
+			CADExtension.setCADTool(s, true);
+		}
 		CADExtension.getEditionManager().setMapControl(mapControl);
 		CADExtension.getCADToolAdapter().configureMenu();
 	}
@@ -99,16 +101,18 @@ public class JoinExtension extends Extension {
 			if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE) {
 				view = (View) PluginServices.getMDIManager().getActiveWindow();
 				mapControl = view.getMapControl();
-				if (CADExtension.getEditionManager().getActiveLayerEdited()==null)
+				if (CADExtension.getEditionManager().getActiveLayerEdited() == null)
 					return false;
-				VectorialLayerEdited editedLayer = (VectorialLayerEdited) CADExtension.getEditionManager().getActiveLayerEdited();
-				FLyrVect lv=(FLyrVect)editedLayer.getLayer();
-				if (joinCADTool.isApplicable(lv.getShapeType()) && editedLayer.getSelectedRow().size()>=2){
+				VectorialLayerEdited editedLayer = (VectorialLayerEdited) CADExtension
+						.getEditionManager().getActiveLayerEdited();
+				FLyrVect lv = (FLyrVect) editedLayer.getLayer();
+				if (joinCADTool.isApplicable(lv.getShapeType())
+						&& editedLayer.getSelectedRow().size() >= 2) {
 					return true;
 				}
 			}
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 		return false;
 	}

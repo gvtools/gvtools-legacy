@@ -50,29 +50,30 @@ public class JungGraph extends AbstractSparseGraph {
 	// y los edges en Jung se numeran incrementando una variable
 	// estática (ver nextGlobalEdgeId, en AbstractSparseEdge)
 	// TODO: NO heredar de AbstractSparseGraph, sino copiar y pegar código.
-	// de esta forma quizás obtengamos una clase de jung, pero mucho más rápida y
+	// de esta forma quizás obtengamos una clase de jung, pero mucho más rápida
+	// y
 	// eficiente en consumo de memoria. Y compatible por completo con IGraph
 	private ArrayList myVertexList;
 	private ArrayList myEdgeList;
+
 	public JungGraph(IGraph g) {
 		super();
 		long t1 = System.currentTimeMillis();
 		myVertexList = new ArrayList(g.numVertices());
 		myEdgeList = new ArrayList(g.numEdges());
-		for (int i=0; i < g.numVertices(); i++)
-		{
+		for (int i = 0; i < g.numVertices(); i++) {
 			GvNode n = g.getNodeByID(i);
 			FNode v = new FNode(i, n.getX(), n.getY());
 			addVertex(v);
 			myVertexList.add(v);
-			
+
 		}
-		for (int i=0; i < g.numEdges(); i++)
-		{
+		for (int i = 0; i < g.numEdges(); i++) {
 			GvEdge e = g.getEdgeByID(i);
-			Vertex vFrom = getVertexByID(e.getIdNodeOrig()); // (Vertex) indexer.getVertex(e.getIdNodeOrig());
-			Vertex vTo = getVertexByID(e.getIdNodeEnd()); //indexer.getVertex(e.getIdNodeEnd());
-			
+			Vertex vFrom = getVertexByID(e.getIdNodeOrig()); // (Vertex)
+																// indexer.getVertex(e.getIdNodeOrig());
+			Vertex vTo = getVertexByID(e.getIdNodeEnd()); // indexer.getVertex(e.getIdNodeEnd());
+
 			FEdge edge = new FEdge(vFrom, vTo);
 			edge.setArcID(e.getIdArc());
 			edge.setDirection(e.getDirec());
@@ -81,17 +82,19 @@ public class JungGraph extends AbstractSparseGraph {
 			edge.setType(e.getType());
 			edge.setWeight(e.getDistance());
 			edge.setCost2(e.getWeight());
-			
+
 			addEdge(edge);
 			myEdgeList.add(edge);
 		}
 		long t2 = System.currentTimeMillis();
-		System.out.println("Tiempo de carga copiando desde IGraph a JUNG network: " + (t2-t1) + " msecs");
-		
+		System.out
+				.println("Tiempo de carga copiando desde IGraph a JUNG network: "
+						+ (t2 - t1) + " msecs");
+
 	}
-	
+
 	public FNode getVertexByID(int idNode) {
-		
+
 		return (FNode) myVertexList.get(idNode);
 	}
 
@@ -99,12 +102,9 @@ public class JungGraph extends AbstractSparseGraph {
 		return (FEdge) myEdgeList.get(idEdge);
 	}
 
-//	public EdgePair getEdgesByIdArc(int idArc) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-	
+	// public EdgePair getEdgesByIdArc(int idArc) {
+	// // TODO Auto-generated method stub
+	// return null;
+	// }
 
 }
-
-

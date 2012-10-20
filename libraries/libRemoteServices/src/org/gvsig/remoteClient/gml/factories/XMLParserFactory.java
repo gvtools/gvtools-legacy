@@ -67,8 +67,7 @@ import org.xmlpull.v1.XmlPullParserException;
  *
  */
 /**
- * Factory to create parsers to parse xml documents with
- * different schemas.
+ * Factory to create parsers to parse xml documents with different schemas.
  * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
@@ -76,23 +75,23 @@ import org.xmlpull.v1.XmlPullParserException;
  */
 public class XMLParserFactory {
 	private String encoding = "UTF-8";
-	
+
 	/**
-	 * Creates a new XML parser
-	 * First find the correct encoding to read the file
+	 * Creates a new XML parser First find the correct encoding to read the file
+	 * 
 	 * @param m_File
-	 * File to parse
+	 *            File to parse
 	 * @return
 	 * @throws IOException
 	 * @throws XmlPullParserException
 	 */
-	public XMLSchemaParser createSchemaParser(File m_File) throws GMLException{
-		FileReader reader = null;       
+	public XMLSchemaParser createSchemaParser(File m_File) throws GMLException {
+		FileReader reader = null;
 		try {
 			reader = new FileReader(m_File);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
-			throw new GMLException(m_File.getName(),e);
+			throw new GMLException(m_File.getName(), e);
 		}
 		BufferedReader br = new BufferedReader(reader);
 		char[] buffer = new char[100];
@@ -100,33 +99,35 @@ public class XMLParserFactory {
 			br.read(buffer);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			throw new GMLException(m_File.getName(),e);
+			throw new GMLException(m_File.getName(), e);
 		}
 		StringBuffer st = new StringBuffer(new String(buffer));
-		
+
 		// We find the encoding at the begining of the file
-		
+
 		String searchText = "encoding=\"";
 		int index = st.indexOf(searchText);
 
-		// If it find the encoding, it takes the new encoding, else it takes the default encoding "UTF-8"
-		if (index>-1) { 
-			st.delete(0, index+searchText.length());
+		// If it find the encoding, it takes the new encoding, else it takes the
+		// default encoding "UTF-8"
+		if (index > -1) {
+			st.delete(0, index + searchText.length());
 			encoding = st.substring(0, st.indexOf("\""));
 		}
-		
+
 		// make GML parser with the good enconding
 		XMLSchemaParser parser = new XMLSchemaParser();
-		
-		// setImput(file,encoding): it sets the encoding to read with the KXML parser		
+
+		// setImput(file,encoding): it sets the encoding to read with the KXML
+		// parser
 		try {
 			parser.setInput(new FileInputStream(m_File), encoding);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
-			throw new GMLException(m_File.getName(),e);
+			throw new GMLException(m_File.getName(), e);
 		} catch (XmlPullParserException e) {
 			// TODO Auto-generated catch block
-			throw new GMLException(m_File.getName(),e);
+			throw new GMLException(m_File.getName(), e);
 		}
 		return parser;
 	}

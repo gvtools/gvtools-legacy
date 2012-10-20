@@ -26,10 +26,11 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+
 /**
- * Clase que se encarga de dibujar los elementos de una tabla de color dentro
- * de un JComboBox.
- *
+ * Clase que se encarga de dibujar los elementos de una tabla de color dentro de
+ * un JComboBox.
+ * 
  * @version 17/04/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
@@ -39,7 +40,8 @@ public class PaintItem extends Component {
 	private String name = "";
 	private PreferenceColorTableIconPainter colorTablePaint = null;
 
-	public PaintItem(String name, PreferenceColorTableIconPainter colorTablePaint, boolean isSelected) {
+	public PaintItem(String name,
+			PreferenceColorTableIconPainter colorTablePaint, boolean isSelected) {
 		this.name = name;
 		this.colorTablePaint = colorTablePaint;
 		this.isSelected = isSelected;
@@ -50,6 +52,7 @@ public class PaintItem extends Component {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.Component#paint(java.awt.Graphics)
 	 */
 	public void paint(Graphics g) {
@@ -57,7 +60,8 @@ public class PaintItem extends Component {
 		if (isSelected) {
 			Color color1 = new Color(89, 153, 229);
 			Color color2 = new Color(31, 92, 207);
-			g2.setPaint(new GradientPaint(0, 1, color1, 0, getHeight() - 1, color2, false));
+			g2.setPaint(new GradientPaint(0, 1, color1, 0, getHeight() - 1,
+					color2, false));
 			g2.fillRect(0, 1, getWidth(), getHeight() - 1);
 			g2.setColor(new Color(61, 123, 218));
 			g2.drawLine(0, 0, getWidth(), 0);
@@ -78,6 +82,6 @@ public class PaintItem extends Component {
 
 		g2.setClip(bounds.x, 0, bounds.width - 150, bounds.height);
 
-		colorTablePaint.paint((Graphics2D) g2, isSelected);		
+		colorTablePaint.paint((Graphics2D) g2, isSelected);
 	}
 }

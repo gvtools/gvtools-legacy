@@ -42,17 +42,17 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: ConnectionErrorExceptionType.java 7491 2006-09-22 08:09:01Z ldiaz $
-* $Log$
-* Revision 1.2  2006-09-22 08:09:01  ldiaz
-* set/get de layerName y driverName pasan a ExceptionDescription en iverUtiles
-*
-* Revision 1.1  2006/09/21 17:18:31  azabala
-* First version in cvs
-*
-*
-*/
+ *
+ * $Id: ConnectionErrorExceptionType.java 7491 2006-09-22 08:09:01Z ldiaz $
+ * $Log$
+ * Revision 1.2  2006-09-22 08:09:01  ldiaz
+ * set/get de layerName y driverName pasan a ExceptionDescription en iverUtiles
+ *
+ * Revision 1.1  2006/09/21 17:18:31  azabala
+ * First version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap;
 
 import java.net.URL;
@@ -60,53 +60,48 @@ import java.net.URL;
 import com.iver.utiles.ExceptionDescription;
 
 public class ConnectionErrorExceptionType extends ExceptionDescription {
-	
+
 	URL host;
-	//private String layerName;
-	//private String driverName;
-	
-	public ConnectionErrorExceptionType(){
+
+	// private String layerName;
+	// private String driverName;
+
+	public ConnectionErrorExceptionType() {
 		super(40, "Error de conexion a servidor remoto");
 	}
-	
-	
+
 	public String getHtmlErrorMessage() {
 		String message = "<p><b>Error de conexión a servidor remoto:</b><br>";
-		message += 
-			"Se ha producido un error al tratar de conectar al servicio "+ 
-			host.toString();
+		message += "Se ha producido un error al tratar de conectar al servicio "
+				+ host.toString();
 		message += "<br>Información adicional:";
-		message += "Capa:" + getLayerName() +"<br>";
-		message += "Driver:" + getDriverName()+"<br>";
-	    return message;
-		
+		message += "Capa:" + getLayerName() + "<br>";
+		message += "Driver:" + getDriverName() + "<br>";
+		return message;
+
 	}
 
-
-//	private String getDriverName() {
-//		return driverName;
-//	}
-//	
-//	public void setDriverName(String driverName){
-//		this.driverName = driverName;
-//	}
-//	private String getLayerName() {
-//		return layerName;
-//	}
-//	
-//	public void setLayerName(String layerName){
-//		this.layerName = layerName;
-//	}
-
+	// private String getDriverName() {
+	// return driverName;
+	// }
+	//
+	// public void setDriverName(String driverName){
+	// this.driverName = driverName;
+	// }
+	// private String getLayerName() {
+	// return layerName;
+	// }
+	//
+	// public void setLayerName(String layerName){
+	// this.layerName = layerName;
+	// }
 
 	public URL getHost() {
 		return host;
 	}
-
 
 	public void setHost(URL host) {
 		this.host = host;
 	}
 
 }
-

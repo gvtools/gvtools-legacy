@@ -66,6 +66,7 @@ public abstract class DefaultBindingProfile implements IBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getPosTypeBinding()
 	 */
 	public PosTypeIterator getPosTypeBinding() {
@@ -74,6 +75,7 @@ public abstract class DefaultBindingProfile implements IBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getEnvelopeTypeBinding()
 	 */
 	public EnvelopeTypeBinding getEnvelopeTypeBinding() {
@@ -82,6 +84,7 @@ public abstract class DefaultBindingProfile implements IBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getLowerCornerTypeBinding()
 	 */
 	public LowerCornerTypeBinding getLowerCornerTypeBinding() {
@@ -90,6 +93,7 @@ public abstract class DefaultBindingProfile implements IBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getLowerCornerTypeBinding()
 	 */
 	public UpperCornerTypeBinding getUpperCornerTypeBinding() {
@@ -98,6 +102,7 @@ public abstract class DefaultBindingProfile implements IBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getCurvePropertyTypeBinding()
 	 */
 	public CurvePropertyTypeBinding getCurvePropertyTypeBinding() {
@@ -106,6 +111,7 @@ public abstract class DefaultBindingProfile implements IBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getPosListTypeBinding()
 	 */
 	public PosListTypeIterator getPosListTypeBinding() {
@@ -114,6 +120,7 @@ public abstract class DefaultBindingProfile implements IBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getCurveTypeBinding()
 	 */
 	public CurveTypeBinding getCurveTypeBinding() {
@@ -122,37 +129,47 @@ public abstract class DefaultBindingProfile implements IBindingProfile {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getSegmentsTypeBinding()
 	 */
 	public SegmentsTypeBinding getSegmentsTypeBinding() {
 		return null;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.profiles.IProfile#getLinestringSegmentTypeBinding()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.profiles.IProfile#getLinestringSegmentTypeBinding()
 	 */
 	public LinestringSegmentTypeBinding getLinestringSegmentTypeBinding() {
 		return null;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getExteriorTypeBinding()
 	 */
 	public ExteriorTypeBinding getExteriorTypeBinding() {
 		return null;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.profiles.IProfile#getInteriorTypeBinding()
 	 */
 	public InteriorTypeBinding getInteriorTypeBinding() {
 		return null;
-	}	
-	
-	/* (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.parser.profiles.IBindingProfile#getMultiCurveTypeBinding()
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.parser.profiles.IBindingProfile#getMultiCurveTypeBinding
+	 * ()
 	 */
 	public MultiCurveTypeBinding getMultiCurveTypeBinding() {
 		return null;

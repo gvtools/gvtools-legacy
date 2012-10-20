@@ -49,73 +49,74 @@ package org.gvsig.remoteClient.arcims.styling.renderers;
 import org.gvsig.remoteClient.arcims.styling.symbols.SymbolUtils;
 import org.gvsig.remoteClient.arcims.utils.ServiceInfoTags;
 
-
 /**
  * @author jsanz
- *
+ * 
  */
 public class ExactValueMap extends TypeValueMap {
-    public static final String TAG = ServiceInfoTags.tEXACT;
-    public static final String IS_EXACT = "IsExact";
-    public static final String IS_CONTAINED = "isContained";
-    private String method;
-    private String value;
+	public static final String TAG = ServiceInfoTags.tEXACT;
+	public static final String IS_EXACT = "IsExact";
+	public static final String IS_CONTAINED = "isContained";
+	private String method;
+	private String value;
 
-    /**
-     * @param value
-     */
-    public ExactValueMap() {
-        super("");
-        method = ExactValueMap.IS_EXACT;
-    }
+	/**
+	 * @param value
+	 */
+	public ExactValueMap() {
+		super("");
+		method = ExactValueMap.IS_EXACT;
+	}
 
-    /**
-     * Generates an XML representation of the ValueMap type
-     */
-    public String toString() {
-        String param = "";
+	/**
+	 * Generates an XML representation of the ValueMap type
+	 */
+	public String toString() {
+		String param = "";
 
-        if (SymbolUtils.isVoid(value)) {
-            param += (" value=\"" + value + "\"");
-        }
+		if (SymbolUtils.isVoid(value)) {
+			param += (" value=\"" + value + "\"");
+		}
 
-        if (SymbolUtils.isVoid(method)) {
-            param += (" method=\"" + method + "\"");
-        }
+		if (SymbolUtils.isVoid(method)) {
+			param += (" method=\"" + method + "\"");
+		}
 
-        if (SymbolUtils.isVoid(label)) {
-            param += (" label=\"" + label + "\"");
-        }
+		if (SymbolUtils.isVoid(label)) {
+			param += (" label=\"" + label + "\"");
+		}
 
-        return "<" + ExactValueMap.TAG + param + "\">\r\n" + symbol.toString() +
-        "</" + ExactValueMap.TAG + ">\r\n";
-    }
+		return "<" + ExactValueMap.TAG + param + "\">\r\n" + symbol.toString()
+				+ "</" + ExactValueMap.TAG + ">\r\n";
+	}
 
-    /**
-     * @return Returns the method.
-     */
-    public String getMethod() {
-        return method;
-    }
+	/**
+	 * @return Returns the method.
+	 */
+	public String getMethod() {
+		return method;
+	}
 
-    /**
-     * @param method The method to set.
-     */
-    public void setMethod(String method) {
-        this.method = method;
-    }
+	/**
+	 * @param method
+	 *            The method to set.
+	 */
+	public void setMethod(String method) {
+		this.method = method;
+	}
 
-    /**
-     * @return Returns the value.
-     */
-    public String getValue() {
-        return value;
-    }
+	/**
+	 * @return Returns the value.
+	 */
+	public String getValue() {
+		return value;
+	}
 
-    /**
-     * @param value The value to set.
-     */
-    public void setValue(String value) {
-        this.value = value;
-    }
+	/**
+	 * @param value
+	 *            The value to set.
+	 */
+	public void setValue(String value) {
+		this.value = value;
+	}
 }

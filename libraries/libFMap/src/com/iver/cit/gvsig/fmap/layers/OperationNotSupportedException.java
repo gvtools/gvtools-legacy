@@ -41,10 +41,9 @@
 package com.iver.cit.gvsig.fmap.layers;
 
 /**
- * Lanzada cuando se intenta realizar una operación generalmente sobre una
- * clase abstracta o interfaz y la implementación de dicha clase abstracta o
- * interfaz no soporta dicha  operación. Ver la descripción del método que la
- * originó
+ * Lanzada cuando se intenta realizar una operación generalmente sobre una clase
+ * abstracta o interfaz y la implementación de dicha clase abstracta o interfaz
+ * no soporta dicha operación. Ver la descripción del método que la originó
  */
 public class OperationNotSupportedException extends Exception {
 	/**
@@ -56,7 +55,7 @@ public class OperationNotSupportedException extends Exception {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param message
 	 */
 	public OperationNotSupportedException(String message) {
@@ -65,7 +64,7 @@ public class OperationNotSupportedException extends Exception {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param message
 	 * @param cause
 	 */
@@ -75,7 +74,7 @@ public class OperationNotSupportedException extends Exception {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param cause
 	 */
 	public OperationNotSupportedException(Throwable cause) {

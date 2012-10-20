@@ -61,172 +61,173 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 /**
  * GeoProcessingExtension class
- *
+ * 
  * @author jmorell
  */
 public class GeoProcessingExtension extends Extension {
 
-    /* (non-Javadoc)
-     * @see com.iver.andami.plugins.Extension#inicializar()
-     */
-    public void initialize() {
-        // TODO Auto-generated method stub
-    	
-    	
-    	PluginServices.getIconTheme().registerDefault(
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.andami.plugins.Extension#inicializar()
+	 */
+	public void initialize() {
+		// TODO Auto-generated method stub
+
+		PluginServices.getIconTheme().registerDefault(
 				"geo-process",
-				this.getClass().getClassLoader().getResource("images/geoprocessicon.png")
-			);
-    	
-    	
-    	PluginServices.getIconTheme().registerDefault(
+				this.getClass().getClassLoader()
+						.getResource("images/geoprocessicon.png"));
+
+		PluginServices.getIconTheme().registerDefault(
 				"buffered-desc",
-				this.getClass().getClassLoader().getResource("images/bufferdesc.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/bufferdesc.png"));
 
-    	PluginServices.getIconTheme().registerDefault(
+		PluginServices.getIconTheme().registerDefault(
 				"dissolved-desc",
-				this.getClass().getClassLoader().getResource("images/dissolvedesc.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/dissolvedesc.png"));
 
-    	PluginServices.getIconTheme().registerDefault(
+		PluginServices.getIconTheme().registerDefault(
 				"merge-desc",
-				this.getClass().getClassLoader().getResource("images/mergedesc.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/mergedesc.png"));
 
-    	PluginServices.getIconTheme().registerDefault(
+		PluginServices.getIconTheme().registerDefault(
 				"intersect-desc",
-				this.getClass().getClassLoader().getResource("images/intersectdesc.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/intersectdesc.png"));
 
-    	PluginServices.getIconTheme().registerDefault(
+		PluginServices.getIconTheme().registerDefault(
 				"union-desc",
-				this.getClass().getClassLoader().getResource("images/uniondesc.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/uniondesc.png"));
 
-    	PluginServices.getIconTheme().registerDefault(
+		PluginServices.getIconTheme().registerDefault(
 				"spatialjoin-desc",
-				this.getClass().getClassLoader().getResource("images/spatialjoindesc.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/spatialjoindesc.png"));
 
-    	PluginServices.getIconTheme().registerDefault(
+		PluginServices.getIconTheme().registerDefault(
 				"clip-desc",
-				this.getClass().getClassLoader().getResource("images/clipdesc.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/clipdesc.png"));
 
-    	PluginServices.getIconTheme().registerDefault(
+		PluginServices.getIconTheme().registerDefault(
 				"convexhull-desc",
-				this.getClass().getClassLoader().getResource("images/convexhulldesc.png")
-			);
-    	
-    	PluginServices.getIconTheme().registerDefault(
+				this.getClass().getClassLoader()
+						.getResource("images/convexhulldesc.png"));
+
+		PluginServices.getIconTheme().registerDefault(
 				"difference-desc",
-				this.getClass().getClassLoader().getResource("images/differencedesc.png")
-			);
-    	PluginServices.getIconTheme().registerDefault(
+				this.getClass().getClassLoader()
+						.getResource("images/differencedesc.png"));
+		PluginServices.getIconTheme().registerDefault(
 				"bufferdesc-resource",
-				BufferGeoprocessPlugin.class.getResource("resources/bufferdesc.png")
-			);
+				BufferGeoprocessPlugin.class
+						.getResource("resources/bufferdesc.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"clipdesc-resource",
-				ClipGeoprocessPlugin.class.getResource("resources/clipdesc.png")
-			);
+				ClipGeoprocessPlugin.class
+						.getResource("resources/clipdesc.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"differencedesc-resource",
-				DifferenceGeoprocessPlugin.class.getResource("resources/differencedesc.png")
-			); 
+				DifferenceGeoprocessPlugin.class
+						.getResource("resources/differencedesc.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"dissolvedesc-resource",
-				DissolveGeoprocessPlugin.class.getResource("resources/dissolvedesc.png")
-			);
+				DissolveGeoprocessPlugin.class
+						.getResource("resources/dissolvedesc.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"intersectdesc-resource",
-				IntersectionGeoprocessPlugin.class.getResource("resources/intersectdesc.png")
-			);
+				IntersectionGeoprocessPlugin.class
+						.getResource("resources/intersectdesc.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"mergedesc-resource",
-				MergeGeoprocessPlugin.class.getResource("resources/mergedesc.png")
-			);
+				MergeGeoprocessPlugin.class
+						.getResource("resources/mergedesc.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"spatialjoindesc-resource",
-				SpatialJoinGeoprocessPlugin.class.getResource("resources/spatialjoindesc.png")
-			);
+				SpatialJoinGeoprocessPlugin.class
+						.getResource("resources/spatialjoindesc.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"uniondesc-resource",
-				UnionGeoprocessPlugin.class.getResource("resources/uniondesc.png")
-			);
-		
+				UnionGeoprocessPlugin.class
+						.getResource("resources/uniondesc.png"));
 
-    }
-    
-    /* (non-Javadoc)
-     * @see com.iver.andami.plugins.Extension#execute(java.lang.String)
-     */
-    public void execute(String actionCommand) {
-    	AndamiCmd cmd = null;
-    	if(actionCommand.equalsIgnoreCase("GEOPROCESSING")){
-    		cmd = new GeoProcessingWizardCmd();
-    	}else if(actionCommand.equalsIgnoreCase("BUFFER")){
-    		cmd = new BufferCmd();
-    	}else if(actionCommand.equalsIgnoreCase("CLIP")){
-    		cmd = new ClipCmd();
-    	}else if(actionCommand.equalsIgnoreCase("DISSOLVE")){
-    		cmd = new DissolveCmd();
-    	}else if(actionCommand.equalsIgnoreCase("INTERSECT")){
-    		cmd = new IntersectionCmd();
-    	}else if(actionCommand.equalsIgnoreCase("DIFFERENCE")){
-    		cmd = new DifferenceCmd();
-    	}else if(actionCommand.equalsIgnoreCase("UNION")){
-    		cmd = new UnionCmd();
-    	}else if(actionCommand.equalsIgnoreCase("CONVEXHULL")){
-    		cmd = new ConvexHullCmd();
-    	}else if(actionCommand.equalsIgnoreCase("MERGE")){
-    		cmd = new MergeCmd();
-    	}else if(actionCommand.equalsIgnoreCase("SPATIAL_JOIN")){
-    		cmd = new SpatialJoinCmd();
-    	}
-    	cmd.execute();
-    }
+	}
 
-    public boolean isEnabled() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-		 .getActiveWindow();
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.andami.plugins.Extension#execute(java.lang.String)
+	 */
+	public void execute(String actionCommand) {
+		AndamiCmd cmd = null;
+		if (actionCommand.equalsIgnoreCase("GEOPROCESSING")) {
+			cmd = new GeoProcessingWizardCmd();
+		} else if (actionCommand.equalsIgnoreCase("BUFFER")) {
+			cmd = new BufferCmd();
+		} else if (actionCommand.equalsIgnoreCase("CLIP")) {
+			cmd = new ClipCmd();
+		} else if (actionCommand.equalsIgnoreCase("DISSOLVE")) {
+			cmd = new DissolveCmd();
+		} else if (actionCommand.equalsIgnoreCase("INTERSECT")) {
+			cmd = new IntersectionCmd();
+		} else if (actionCommand.equalsIgnoreCase("DIFFERENCE")) {
+			cmd = new DifferenceCmd();
+		} else if (actionCommand.equalsIgnoreCase("UNION")) {
+			cmd = new UnionCmd();
+		} else if (actionCommand.equalsIgnoreCase("CONVEXHULL")) {
+			cmd = new ConvexHullCmd();
+		} else if (actionCommand.equalsIgnoreCase("MERGE")) {
+			cmd = new MergeCmd();
+		} else if (actionCommand.equalsIgnoreCase("SPATIAL_JOIN")) {
+			cmd = new SpatialJoinCmd();
+		}
+		cmd.execute();
+	}
+
+	public boolean isEnabled() {
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (f == null) {
-		    return false;
+			return false;
 		}
 		if (f instanceof View) {
-		    View vista = (View) f;
-		    IProjectView model = vista.getModel();
-		    FLayers layers =  model.getMapContext().getLayers();
-		    int numLayers = layers.getLayersCount();
-		    for(int i = 0; i < numLayers; i++){
-		    	FLayer layer = layers.getLayer(i);
-		    	if(layer instanceof FLyrVect && layer.isAvailable())
-		    		return true;
-		    }
+			View vista = (View) f;
+			IProjectView model = vista.getModel();
+			FLayers layers = model.getMapContext().getLayers();
+			int numLayers = layers.getLayersCount();
+			for (int i = 0; i < numLayers; i++) {
+				FLayer layer = layers.getLayer(i);
+				if (layer instanceof FLyrVect && layer.isAvailable())
+					return true;
+			}
 		}
 		return false;
-    }
+	}
 
-    public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-		 .getActiveWindow();
+	public boolean isVisible() {
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 		if (f == null) {
-		    return false;
+			return false;
 		}
 		if (f instanceof View) {
-		    View vista = (View) f;
-		    IProjectView model = vista.getModel();
-		    FLayers layers =  model.getMapContext().getLayers();
-		    int numLayers = layers.getLayersCount();
-		    for(int i = 0; i < numLayers; i++){
-		    	FLayer layer = layers.getLayer(i);
-		    	if(layer instanceof FLyrVect)
-		    		return true;
-		    }
-		    return false;
+			View vista = (View) f;
+			IProjectView model = vista.getModel();
+			FLayers layers = model.getMapContext().getLayers();
+			int numLayers = layers.getLayersCount();
+			for (int i = 0; i < numLayers; i++) {
+				FLayer layer = layers.getLayer(i);
+				if (layer instanceof FLyrVect)
+					return true;
+			}
+			return false;
 		}
 		return false;
-    }
+	}
 
 }

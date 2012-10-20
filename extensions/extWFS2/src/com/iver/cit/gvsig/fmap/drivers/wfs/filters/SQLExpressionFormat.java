@@ -74,14 +74,17 @@ import Zql.ZqlParser;
 /**
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class SQLExpressionFormat implements ISQLExpressionFormat{
+public class SQLExpressionFormat implements ISQLExpressionFormat {
 
 	/*
-	 *  (non-Javadoc)
-	 * @see org.gvsig.remoteClient.wfs.filters.ISQLExpressionFormat#format(java.lang.String)
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.wfs.filters.ISQLExpressionFormat#format(java.lang
+	 * .String)
 	 */
 	public String format(String query) {
-		if ((query == null) || (query.equals(""))){
+		if ((query == null) || (query.equals(""))) {
 			return null;
 		}
 		InputStream is = new ByteArrayInputStream(query.getBytes());
@@ -97,16 +100,15 @@ public class SQLExpressionFormat implements ISQLExpressionFormat{
 		}
 		return query;
 	}
-	
+
 	/**
-	 * Creates a Filter Encoding creator that uses this
-	 * formatter to parse the SQL
+	 * Creates a Filter Encoding creator that uses this formatter to parse the
+	 * SQL
+	 * 
 	 * @return
 	 */
-	public static FilterEncoding createFilter(){
-		return new FilterEncoding(new SQLExpressionFormat());				
+	public static FilterEncoding createFilter() {
+		return new FilterEncoding(new SQLExpressionFormat());
 	}
-
-	
 
 }

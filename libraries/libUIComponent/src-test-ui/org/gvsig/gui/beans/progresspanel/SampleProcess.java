@@ -27,8 +27,9 @@ import org.gvsig.gui.beans.incrementabletask.IncrementableProcess;
  */
 
 /**
- * Process that adds a layer with derivative geometries, according the configuration. 
- *
+ * Process that adds a layer with derivative geometries, according the
+ * configuration.
+ * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class SampleProcess extends IncrementableProcess {
@@ -40,12 +41,13 @@ public class SampleProcess extends IncrementableProcess {
 	}
 
 	/**
-	 * Sample process.
-	 * <br>
-	 * "cancelProcess" is a shared object that, if you want allow to cancel the process,
-	 *  you should read it once in a while and check if it's canceled, if true, throw an InterrupedException  
+	 * Sample process. <br>
+	 * "cancelProcess" is a shared object that, if you want allow to cancel the
+	 * process, you should read it once in a while and check if it's canceled,
+	 * if true, throw an InterrupedException
 	 * 
-	 * @throws InterruptedException if fails the process
+	 * @throws InterruptedException
+	 *             if fails the process
 	 */
 	public void process() throws InterruptedException {
 		try {
@@ -53,7 +55,7 @@ public class SampleProcess extends IncrementableProcess {
 
 			for (int i = 1; i <= 20; i++) {
 				percentage = i * 5;
-				
+
 				if (cancelProcess.isCanceled()) {
 					throw new InterruptedException();
 				}
@@ -65,27 +67,27 @@ public class SampleProcess extends IncrementableProcess {
 			percentage = 100;
 			log.addLine(Messages.getText("Process_finished_successfully"));
 			return;
-		}
-		catch (Exception ex) {
-			if (! cancelProcess.isCanceled()) {
+		} catch (Exception ex) {
+			if (!cancelProcess.isCanceled()) {
 				// Next line must be uncommented
-				//NotificationManager.showMessageError(Messages.getText("Failed_the_process"), ex);
+				// NotificationManager.showMessageError(Messages.getText("Failed_the_process"),
+				// ex);
 				log.addLine(Messages.getText("Failed_the_process"));
 			}
 
 			/* CANCELLATION PROCESS */
 
 			// Must restore the changes
-			//....
+			// ....
 
 			throw new InterruptedException();
-		}
-		finally {
+		} finally {
 			/* Summary of the process */
 			log.addLine("    Proceso de ejemplo con barra de progreso durante 20 segundos");
 
 			// Ends the progress panel
-			iTask.getButtonsPanel().getButton(ButtonsPanel.BUTTON_ACCEPT).doClick();
+			iTask.getButtonsPanel().getButton(ButtonsPanel.BUTTON_ACCEPT)
+					.doClick();
 		}
 	}
 }

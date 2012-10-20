@@ -1,4 +1,5 @@
 package org.gvsig.gpe.containers;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -50,25 +51,28 @@ package org.gvsig.gpe.containers;
  */
 /**
  * This class represetnts a MultiPolygon
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class MultiPolygon extends MultiGeometry{
-	
+public class MultiPolygon extends MultiGeometry {
+
 	/**
 	 * Adds a new Polygon
+	 * 
 	 * @param polygon
-	 * Polygon to add
+	 *            Polygon to add
 	 */
 	public void addPolygon(Polygon polygon) {
 		addGeometry(polygon);
 	}
-	
+
 	/**
 	 * Gets a Polygon at position i
+	 * 
 	 * @param i
-	 * position
+	 *            position
 	 */
 	public Polygon getMultiPolygonAt(int i) {
-		return (Polygon)getGeometryAt(i);
+		return (Polygon) getGeometryAt(i);
 	}
 }

@@ -42,23 +42,23 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: ConvexHullVisitor.java 5918 2006-06-20 18:20:45Z azabala $
-* $Log$
-* Revision 1.1  2006-06-20 18:20:45  azabala
-* first version in cvs
-*
-* Revision 1.1  2006/05/24 21:13:31  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.1  2006/03/06 19:48:39  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/02/17 16:32:50  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: ConvexHullVisitor.java 5918 2006-06-20 18:20:45Z azabala $
+ * $Log$
+ * Revision 1.1  2006-06-20 18:20:45  azabala
+ * first version in cvs
+ *
+ * Revision 1.1  2006/05/24 21:13:31  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.1  2006/03/06 19:48:39  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/02/17 16:32:50  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.convexhull.fmap;
 
 import com.iver.cit.gvsig.fmap.core.IGeometry;
@@ -67,6 +67,6 @@ import com.vividsolutions.jts.geom.Geometry;
 
 public interface ConvexHullVisitor extends FeatureVisitor {
 	public IGeometry getConvexHull();
+
 	public Geometry getJtsConvexHull();
 }
-

@@ -45,51 +45,49 @@ package es.prodevelop.cit.gvsig.fmap.drivers.jdbc.oracle;
 import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
-import org.gvsig.exceptions.BaseException;
-
-import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
-
-
 
 /**
  * Utility class to perform IDs load. in a different thread to prevent gvSIG's
  * GUI from blocking.
- *
+ * 
  * @author jldominguez
- *
+ * 
  */
 public class IdLoaderThread extends Thread {
-	
-	private static Logger logger = Logger.getLogger(IdLoaderThread.class.getName());
-    /**
-     * Pointer to the driver.
-     */
-    private OracleSpatialDriver drv;
-    // private ReadDriverException errorHappened = null;
 
-    public IdLoaderThread(OracleSpatialDriver _drv) {
-        drv = _drv;
-        
-    }
+	private static Logger logger = Logger.getLogger(IdLoaderThread.class
+			.getName());
+	/**
+	 * Pointer to the driver.
+	 */
+	private OracleSpatialDriver drv;
 
-    /**
-     * This method loads the IDs and then notifies the end of the load.
-     */
-    public void run() {
-        try {
+	// private ReadDriverException errorHappened = null;
+
+	public IdLoaderThread(OracleSpatialDriver _drv) {
+		drv = _drv;
+
+	}
+
+	/**
+	 * This method loads the IDs and then notifies the end of the load.
+	 */
+	public void run() {
+		try {
 			drv.getMetaDataInThisThread();
-	        drv.setNotAvailableYet(false);
-	        
-	        // errorHappened = null;
+			drv.setNotAvailableYet(false);
+
+			// errorHappened = null;
 		} catch (SQLException e) {
 			drv.setNotAvailableYet(true);
-			logger.error("Caught exception while executing IDs thread: " + e.getMessage());
+			logger.error("Caught exception while executing IDs thread: "
+					+ e.getMessage());
 			logger.warn("Layer will appear as empty.");
-			// errorHappened = new ReadDriverException(OracleSpatialDriver.NAME, e);
+			// errorHappened = new ReadDriverException(OracleSpatialDriver.NAME,
+			// e);
 			// throw new RuntimeException(e.getMessage());
 		}
-        drv.notifyDriverEndLoaded();
-    }
-
+		drv.notifyDriverEndLoaded();
+	}
 
 }

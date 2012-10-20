@@ -46,29 +46,35 @@ import java.util.ArrayList;
 
 import org.gvsig.remoteClient.gml.schemas.XMLSchemaParser;
 import org.xmlpull.v1.XmlPullParserException;
+
 /**
  * 
  * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
- *
+ * 
  */
 public class SLDProtocolHandlerFactory {
 
-    private static ArrayList supportedVersions = new ArrayList();
+	private static ArrayList supportedVersions = new ArrayList();
 
-    static {
-    	supportedVersions.add("1.0.0");
-     }
-	
-	
+	static {
+		supportedVersions.add("1.0.0");
+	}
+
 	/**
 	 * Creates a protocol handler according of an specific version.
+	 * 
 	 * @param f
 	 * @return
-	 * @throws XmlPullParserException, if file is corrupt or format could not be recognised
-	 * @throws IOException, if the file could not be accessed
-	 * @throws UnsupportedSLDVersionException, if there is no available handler for such SLD version. 
+	 * @throws XmlPullParserException
+	 *             , if file is corrupt or format could not be recognised
+	 * @throws IOException
+	 *             , if the file could not be accessed
+	 * @throws UnsupportedSLDVersionException
+	 *             , if there is no available handler for such SLD version.
 	 */
-	public static SLDProtocolHandler createVersionedProtocolHandler(File f) throws XmlPullParserException, IOException, UnsupportedSLDVersionException {
+	public static SLDProtocolHandler createVersionedProtocolHandler(File f)
+			throws XmlPullParserException, IOException,
+			UnsupportedSLDVersionException {
 
 		XMLSchemaParser xmlSchemaParser = null;
 		xmlSchemaParser = new XMLSchemaParser();
@@ -76,13 +82,16 @@ public class SLDProtocolHandlerFactory {
 		xmlSchemaParser.setInput(f);
 		xmlSchemaParser.nextTag();
 
-		String version = xmlSchemaParser.getAttributeValue("",SLDTags.VERSION_ATTR);
+		String version = xmlSchemaParser.getAttributeValue("",
+				SLDTags.VERSION_ATTR);
 		try {
-			SLDProtocolHandler handler = (SLDProtocolHandler) Class.
-					forName("org.gvsig.remoteClient.sld.sld"+version.replaceAll("\\.", "_")+".SLDProtocolHandler"+
-							version.replaceAll("\\.", "_")).newInstance();
+			SLDProtocolHandler handler = (SLDProtocolHandler) Class.forName(
+					"org.gvsig.remoteClient.sld.sld"
+							+ version.replaceAll("\\.", "_")
+							+ ".SLDProtocolHandler"
+							+ version.replaceAll("\\.", "_")).newInstance();
 			handler.setVersion(version);
-			
+
 			return handler;
 		} catch (Exception e) {
 			throw new UnsupportedSLDVersionException(version);
@@ -90,9 +99,9 @@ public class SLDProtocolHandlerFactory {
 	}
 
 	public static ArrayList<String> getSupportedVersions() {
-		
+
 		return supportedVersions;
-	
+
 	}
-	
+
 }

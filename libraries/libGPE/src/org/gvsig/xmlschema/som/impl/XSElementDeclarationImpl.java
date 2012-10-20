@@ -13,7 +13,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -87,36 +86,37 @@ import org.w3c.dom.NodeList;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class XSElementDeclarationImpl extends XSComponentImpl implements IXSElementDeclaration{
-		
+public class XSElementDeclarationImpl extends XSComponentImpl implements
+		IXSElementDeclaration {
+
 	public XSElementDeclarationImpl(IXSSchema schema) {
-		super(schema);		
+		super(schema);
 	}
 
 	/**
 	 * @return The element type
-	 * @throws TypeNotFoundException 
+	 * @throws TypeNotFoundException
 	 */
-	public IXSTypeDefinition getTypeDefinition(){
-		//If is defined in the same node
-		Iterator it = new SchemaCollection(getSchema(),getElement()).iterator();
+	public IXSTypeDefinition getTypeDefinition() {
+		// If is defined in the same node
+		Iterator it = new SchemaCollection(getSchema(), getElement())
+				.iterator();
 		it.hasNext();
 		Object type = it.next();
-		//If is defined in the same schema
-		if (type == null){
-			type = getSchema().getTypeByName(getQName().getNamespaceURI(), 
+		// If is defined in the same schema
+		if (type == null) {
+			type = getSchema().getTypeByName(getQName().getNamespaceURI(),
 					getElement().getAttribute(SchemaTags.TYPE));
 		}
-		if (type != null){
-			return (IXSTypeDefinition)type;
+		if (type != null) {
+			return (IXSTypeDefinition) type;
 		}
 		return null;
 	}
 
-
-	
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSElementDeclaration#getTypeName()
 	 */
 	public String getTypeName() {
@@ -125,25 +125,27 @@ public class XSElementDeclarationImpl extends XSComponentImpl implements IXSElem
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSElementDeclaration#isNillable()
 	 */
 	public boolean isNillable() {
 		String nillable = getElement().getAttribute(SchemaTags.NILLABLE);
-		if (nillable != null){
-			if (nillable.compareTo(SchemaTags.FALSE) == 0){
+		if (nillable != null) {
+			if (nillable.compareTo(SchemaTags.FALSE) == 0) {
 				return false;
 			}
 		}
 		return true;
-	}	
-	
+	}
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSElementDeclaration#getMaxOccurs()
 	 */
 	public int getMaxOccurs() {
 		String maxOccurs = getElement().getAttribute(SchemaTags.MAX_OCCURS);
-		if (maxOccurs != null){
+		if (maxOccurs != null) {
 			return Integer.parseInt(maxOccurs);
 		}
 		return 0;
@@ -151,55 +153,66 @@ public class XSElementDeclarationImpl extends XSComponentImpl implements IXSElem
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSElementDeclaration#getMinOccurs()
 	 */
 	public int getMinOccurs() {
 		String minOccurs = getElement().getAttribute(SchemaTags.MIN_OCCURS);
-		if (minOccurs != null){
+		if (minOccurs != null) {
 			return Integer.parseInt(minOccurs);
 		}
 		return 0;
 	}
 
 	public IXSElementDeclaration getSubElementByName(String nodeName) {
-		if (getTypeDefinition() == null){
+		if (getTypeDefinition() == null) {
 			return null;
 		}
 		Element element = getTypeDefinition().getElement();
-		nodeName = nodeName.substring(nodeName.indexOf(":")+1,nodeName.length());
+		nodeName = nodeName.substring(nodeName.indexOf(":") + 1,
+				nodeName.length());
 		Element newElement = searchNode(element, nodeName);
-		if (newElement != null){
-			XSElementDeclarationImpl childElement =  new XSElementDeclarationImpl(getSchema());
+		if (newElement != null) {
+			XSElementDeclarationImpl childElement = new XSElementDeclarationImpl(
+					getSchema());
 			childElement.setElement(newElement);
 			return childElement;
 		}
-		return null;	
+		return null;
 	}
-	
-	private Element searchNode(Element element, String nodeName){
+
+	private Element searchNode(Element element, String nodeName) {
 		NodeList nodeList = element.getChildNodes();
-		for (int i=0 ; i<nodeList.getLength() ; i++){
+		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node node = nodeList.item(i);
-				if(node.getNodeType() == Node.ELEMENT_NODE){
-				Element childElement = (Element)node;				
-				if (SchemaUtils.matches(node, SchemaTags.XS_NS, SchemaTags.COMPLEX_CONTENT)){
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				Element childElement = (Element) node;
+				if (SchemaUtils.matches(node, SchemaTags.XS_NS,
+						SchemaTags.COMPLEX_CONTENT)) {
 					return searchNode(childElement, nodeName);
-				}else if (SchemaUtils.matches(node, SchemaTags.XS_NS, SchemaTags.EXTENSION)){
+				} else if (SchemaUtils.matches(node, SchemaTags.XS_NS,
+						SchemaTags.EXTENSION)) {
 					return searchNode(childElement, nodeName);
-				}else if (SchemaUtils.matches(node, SchemaTags.XS_NS, SchemaTags.RESTRICTION)){
+				} else if (SchemaUtils.matches(node, SchemaTags.XS_NS,
+						SchemaTags.RESTRICTION)) {
 					return searchNode(childElement, nodeName);
-				}else if (SchemaUtils.matches(node, SchemaTags.XS_NS, SchemaTags.SEQUENCE)){
+				} else if (SchemaUtils.matches(node, SchemaTags.XS_NS,
+						SchemaTags.SEQUENCE)) {
 					return searchNode(childElement, nodeName);
-				}else if (SchemaUtils.matches(node, SchemaTags.XS_NS, SchemaTags.ALL)){
+				} else if (SchemaUtils.matches(node, SchemaTags.XS_NS,
+						SchemaTags.ALL)) {
 					return searchNode(childElement, nodeName);
-				}else if (SchemaUtils.matches(node, SchemaTags.XS_NS, SchemaTags.CHOICE)){
+				} else if (SchemaUtils.matches(node, SchemaTags.XS_NS,
+						SchemaTags.CHOICE)) {
 					return searchNode(childElement, nodeName);
-				}else if (SchemaUtils.matches(node, SchemaTags.XS_NS, SchemaTags.GROUP)){
+				} else if (SchemaUtils.matches(node, SchemaTags.XS_NS,
+						SchemaTags.GROUP)) {
 					return searchNode(childElement, nodeName);
-				}			
-				if (childElement.getAttribute(SchemaTags.NAME).compareTo(nodeName) == 0){
+				}
+				if (childElement.getAttribute(SchemaTags.NAME).compareTo(
+						nodeName) == 0) {
 					return childElement;
-				}	
+				}
 			}
 		}
 		return null;
@@ -207,21 +220,21 @@ public class XSElementDeclarationImpl extends XSComponentImpl implements IXSElem
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.schema.som.IXSElementDeclaration#addComplexType(java.lang.String, java.lang.String, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.schema.som.IXSElementDeclaration#addComplexType(java.lang
+	 * .String, java.lang.String, java.lang.String)
 	 */
 	public IXSComplexTypeDefinition addComplexType(String type,
 			String contentType, String contentTypeRestriction) {
 		getElement().removeAttribute(SchemaTags.TYPE);
 		Element eComplexType = getElementsFactory().createComplexType(
-				getSchema(), 
-				null,
-				type,
-				contentType,
-				contentTypeRestriction);
+				getSchema(), null, type, contentType, contentTypeRestriction);
 		addChildElement(eComplexType);
-		XSComplexTypeDefinitionImpl complexType = new XSComplexTypeDefinitionImpl(getSchema());
+		XSComplexTypeDefinitionImpl complexType = new XSComplexTypeDefinitionImpl(
+				getSchema());
 		complexType.setElement(eComplexType);
 		return complexType;
 	}
-	
+
 }

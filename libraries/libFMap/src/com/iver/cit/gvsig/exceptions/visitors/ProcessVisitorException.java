@@ -40,26 +40,29 @@
  */
 package com.iver.cit.gvsig.exceptions.visitors;
 
-
 /**
  * Excepción lanzada por los Visitors.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class ProcessVisitorException extends VisitorException {
-	private String description="";
-	public ProcessVisitorException(String layer,Throwable exception,String description) {
-		super(layer,exception);
-		this.description=description;
+	private String description = "";
+
+	public ProcessVisitorException(String layer, Throwable exception,
+			String description) {
+		super(layer, exception);
+		this.description = description;
 		init();
 	}
-	public ProcessVisitorException(String layer,Throwable exception) {
-		super(layer,exception);
+
+	public ProcessVisitorException(String layer, Throwable exception) {
+		super(layer, exception);
 		init();
 	}
 
 	private void init() {
 		messageKey = "error_process_visitor";
-		formatString = "Cannot process visitor for layer: %(layer). "+"\n"+description;
+		formatString = "Cannot process visitor for layer: %(layer). " + "\n"
+				+ description;
 	}
 }

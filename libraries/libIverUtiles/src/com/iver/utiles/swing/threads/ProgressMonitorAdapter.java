@@ -42,17 +42,17 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: ProgressMonitorAdapter.java 4856 2006-04-18 15:16:44Z azabala $
-* $Log$
-* Revision 1.2  2006-04-18 15:16:44  azabala
-* añadido comentario de cabecera de la clase
-*
-* Revision 1.1  2006/03/14 19:23:42  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: ProgressMonitorAdapter.java 4856 2006-04-18 15:16:44Z azabala $
+ * $Log$
+ * Revision 1.2  2006-04-18 15:16:44  azabala
+ * añadido comentario de cabecera de la clase
+ *
+ * Revision 1.1  2006/03/14 19:23:42  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.utiles.swing.threads;
 
 import java.awt.Component;
@@ -60,32 +60,27 @@ import java.awt.Component;
 import javax.swing.ProgressMonitor;
 
 /**
- * It is a try to launch tasks in background and to report its evolution
- * with javax.swing.ProgressMonitor.
- * It isnt satisfactory at all (because we cant control
- * when dialog is showed, etc)
+ * It is a try to launch tasks in background and to report its evolution with
+ * javax.swing.ProgressMonitor. It isnt satisfactory at all (because we cant
+ * control when dialog is showed, etc)
+ * 
  * @author azabala
- *
+ * 
  */
 public class ProgressMonitorAdapter implements IProgressMonitorIF {
-	
+
 	private ProgressMonitor progressMonitor;
-	
-	public ProgressMonitorAdapter(Component parent,
-			String statusMessage,
-			String note,
-			int minimum,
-			int maximum,
-			int currentValue){
-		progressMonitor = new ProgressMonitor(parent,statusMessage,
-				note, minimum, maximum);
+
+	public ProgressMonitorAdapter(Component parent, String statusMessage,
+			String note, int minimum, int maximum, int currentValue) {
+		progressMonitor = new ProgressMonitor(parent, statusMessage, note,
+				minimum, maximum);
 		progressMonitor.setProgress(currentValue);
 		progressMonitor.setMillisToDecideToPopup(0);
 		progressMonitor.setMillisToPopup(0);
-		
+
 	}
-	
-	
+
 	public void setInitialStep(int step) {
 		progressMonitor.setMinimum(step);
 
@@ -107,7 +102,7 @@ public class ProgressMonitorAdapter implements IProgressMonitorIF {
 		return progressMonitor.getMaximum();
 	}
 
-	//ProgressMonitor recibe el step, no lo devuelve
+	// ProgressMonitor recibe el step, no lo devuelve
 	public int getCurrentStep() {
 		return -1;
 	}
@@ -144,17 +139,13 @@ public class ProgressMonitorAdapter implements IProgressMonitorIF {
 
 	}
 
-
-
 	public void close() {
 		progressMonitor.close();
-		
-	}
 
+	}
 
 	public void open() {
 		progressMonitor.setMillisToPopup(0);
 	}
 
 }
-

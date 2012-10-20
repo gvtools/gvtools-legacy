@@ -65,6 +65,7 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * It parses a gml:LineStringMemberType object. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;lineStringMember&gt;
@@ -75,53 +76,58 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  * &lt;/lineStringMember&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class LineStringMemberTypeBinding {
-	
+
 	/**
 	 * It parses the gml:LineStringMember tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * A line
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return A line
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public Object parse(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
+	public Object parse(IXmlStreamReader parser, GPEDefaultGmlParser handler)
+			throws XmlStreamException, IOException {
 		boolean endFeature = false;
 		int currentTag;
-		Object lineString = null;		
-		
+		Object lineString = null;
+
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-					if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_LINESTRING)){
-						lineString = handler.getProfile().getLineStringTypeBinding().
-						parse(parser, handler);
-					}
-					break;
-				case IXmlStreamReader.END_ELEMENT:
-					if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_LINESTRINGMEMBER)){						
-						endFeature = true;						
-					}
-					break;
-				case IXmlStreamReader.CHARACTERS:			
-					
-					break;
+				if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_LINESTRING)) {
+					lineString = handler.getProfile()
+							.getLineStringTypeBinding().parse(parser, handler);
 				}
-				if (!endFeature){					
-					currentTag = parser.next();
-					tag = parser.getName();
+				break;
+			case IXmlStreamReader.END_ELEMENT:
+				if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_LINESTRINGMEMBER)) {
+					endFeature = true;
 				}
-			}			
-		return lineString;	
+				break;
+			case IXmlStreamReader.CHARACTERS:
+
+				break;
+			}
+			if (!endFeature) {
+				currentTag = parser.next();
+				tag = parser.getName();
+			}
+		}
+		return lineString;
 	}
 }

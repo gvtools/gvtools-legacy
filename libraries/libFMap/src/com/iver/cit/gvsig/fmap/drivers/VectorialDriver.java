@@ -48,56 +48,52 @@ import com.hardcode.gdbms.driver.exceptions.ReloadDriverException;
 import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 
-
 /**
  * Clase padre de los drivers vectoriales
  */
 public interface VectorialDriver extends Driver {
 	/**
-	 * Devuelve el tipo de los shapes que hay en el fichero. Pueden haber
-	 * varios tipos de shapes y para indicar esto se devuelve un bitoring de
-	 * los tipos que contiene el fichero. Por ejemplo un fichero que contenga
-	 * textos y lineas devolverá la expresión (FShape.LINE | FShape.TEXT)
-	 *
+	 * Devuelve el tipo de los shapes que hay en el fichero. Pueden haber varios
+	 * tipos de shapes y para indicar esto se devuelve un bitoring de los tipos
+	 * que contiene el fichero. Por ejemplo un fichero que contenga textos y
+	 * lineas devolverá la expresión (FShape.LINE | FShape.TEXT)
+	 * 
 	 * @return tipo de shape.
 	 */
 	int getShapeType();
 
+	/**
+	 * Obtiene el número de geometrías que contiene la capa
+	 * 
+	 * @return int
+	 * @throws ReadDriverException
+	 *             TODO
+	 */
+	int getShapeCount() throws ReadDriverException;
 
 	/**
-     * Obtiene el número de geometrías que contiene
-     * la capa
-     *
-     * @return int
-	 * @throws ReadDriverException TODO
-     */
-    int getShapeCount() throws ReadDriverException;
-
-	/**
-	 * Devuelve los atributos que necesitemos conocer de un driver.
-	 * Por ejemplo, si se carga en memoria, o cualquier otra cosa que
-	 * necesitemos. Pasa a través del adapter para que una FLayer pueda
-	 * conocer ciertos aspectos del driver que le está entregando las
-	 * features.
-	 *
+	 * Devuelve los atributos que necesitemos conocer de un driver. Por ejemplo,
+	 * si se carga en memoria, o cualquier otra cosa que necesitemos. Pasa a
+	 * través del adapter para que una FLayer pueda conocer ciertos aspectos del
+	 * driver que le está entregando las features.
+	 * 
 	 * @return
 	 */
 	DriverAttributes getDriverAttributes();
 
+	/**
+	 * Obtiene el bounding box de la capa
+	 * 
+	 * @return Rectangle2D
+	 * @throws ReadDriverException
+	 *             TODO
+	 */
+	Rectangle2D getFullExtent() throws ReadDriverException,
+			ExpansionFileReadException;
 
-    /**
-     * Obtiene el bounding box de la capa
-     *
-     * @return Rectangle2D
-     * @throws ReadDriverException TODO
-     */
-    Rectangle2D getFullExtent() throws ReadDriverException, ExpansionFileReadException;
-
-    public IGeometry getShape(int index) throws ReadDriverException;
-
+	public IGeometry getShape(int index) throws ReadDriverException;
 
 	void reload() throws ReloadDriverException;
-
 
 	boolean isWritable();
 }

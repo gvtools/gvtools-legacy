@@ -65,22 +65,25 @@ import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
  * Diálogo para el gestor de ROIs.
  * 
  * @author Diego Guerrero Sevilla (diego.guerrero@uclm.es)
- *
+ * 
  */
-public class ROIManagerDialog extends JPanel implements IWindow, IWindowListener, ButtonsPanelListener {
+public class ROIManagerDialog extends JPanel implements IWindow,
+		IWindowListener, ButtonsPanelListener {
 	private static final long serialVersionUID = 2847035927527203595L;
-	
-	
+
 	private ROIsManagerPanel roiManagerPanel = null;
-	
+
 	private MapControl mapControl = null;
-	
+
 	private String previousTool = null;
-	
+
 	/**
 	 * Constructor
-	 * @param width Ancho del panel
-	 * @param height Alto del panel
+	 * 
+	 * @param width
+	 *            Ancho del panel
+	 * @param height
+	 *            Alto del panel
 	 */
 	public ROIManagerDialog(int width, int height) {
 		this.setSize(width, height);
@@ -89,18 +92,18 @@ public class ROIManagerDialog extends JPanel implements IWindow, IWindowListener
 		IWindow[] list = PluginServices.getMDIManager().getAllWindows();
 		BaseView view = null;
 		for (int i = 0; i < list.length; i++) {
-			if(list[i] instanceof BaseView)
-				view = (BaseView)list[i];
+			if (list[i] instanceof BaseView)
+				view = (BaseView) list[i];
 		}
 		if (view == null)
 			return;
 		mapControl = view.getMapControl();
 		previousTool = mapControl.getCurrentTool();
-		
+
 	}
 
 	public ROIsManagerPanel getROIsManagerPanel() {
-		if (roiManagerPanel == null){
+		if (roiManagerPanel == null) {
 			roiManagerPanel = new ROIsManagerPanel(this);
 			roiManagerPanel.addButtonPressedListener(this);
 		}
@@ -108,23 +111,29 @@ public class ROIManagerDialog extends JPanel implements IWindow, IWindowListener
 	}
 
 	public WindowInfo getWindowInfo() {
-		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODELESSDIALOG | WindowInfo.RESIZABLE | WindowInfo.MAXIMIZABLE);
-		if(roiManagerPanel.getTablePanel().getFLayer() != null)
-			m_viewinfo.setAdditionalInfo(roiManagerPanel.getTablePanel().getFLayer().getName());
-		m_viewinfo.setTitle(PluginServices.getText(this, "regiones_interes")+" - "+m_viewinfo.getAdditionalInfo());
+		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODELESSDIALOG
+				| WindowInfo.RESIZABLE | WindowInfo.MAXIMIZABLE);
+		if (roiManagerPanel.getTablePanel().getFLayer() != null)
+			m_viewinfo.setAdditionalInfo(roiManagerPanel.getTablePanel()
+					.getFLayer().getName());
+		m_viewinfo.setTitle(PluginServices.getText(this, "regiones_interes")
+				+ " - " + m_viewinfo.getAdditionalInfo());
 		m_viewinfo.setHeight(this.getHeight());
 		m_viewinfo.setWidth(this.getWidth());
 		return m_viewinfo;
 	}
 
 	public void actionButtonPressed(ButtonsPanelEvent e) {
-//		 Al pulsar Aceptar o Aplicar se ejecuta el aceptar del panel
-		if (e.getButton() == ButtonsPanel.BUTTON_APPLY || e.getButton() == ButtonsPanel.BUTTON_ACCEPT) {
+		// Al pulsar Aceptar o Aplicar se ejecuta el aceptar del panel
+		if (e.getButton() == ButtonsPanel.BUTTON_APPLY
+				|| e.getButton() == ButtonsPanel.BUTTON_ACCEPT) {
 			ArrayList rois = roiManagerPanel.getTablePanel().getROIs();
-			if (rois.size() >0){
-				((FLyrRasterSE)roiManagerPanel.getTablePanel().getFLayer()).setRois(rois);
-			}else
-				((FLyrRasterSE)roiManagerPanel.getTablePanel().getFLayer()).setRois(null);
+			if (rois.size() > 0) {
+				((FLyrRasterSE) roiManagerPanel.getTablePanel().getFLayer())
+						.setRois(rois);
+			} else
+				((FLyrRasterSE) roiManagerPanel.getTablePanel().getFLayer())
+						.setRois(null);
 		}
 
 		// Al pulsar Cancelar la ventana se cierra y se refresca la vista
@@ -137,7 +146,7 @@ public class ROIManagerDialog extends JPanel implements IWindow, IWindowListener
 			close();
 		}
 	}
-	
+
 	/**
 	 * Acciones a ejecutar cuando se cancela
 	 */
@@ -145,27 +154,30 @@ public class ROIManagerDialog extends JPanel implements IWindow, IWindowListener
 		try {
 			PluginServices.getMDIManager().closeWindow(this);
 		} catch (ArrayIndexOutOfBoundsException e) {
-			//Si la ventana no se puede eliminar no hacemos nada
+			// Si la ventana no se puede eliminar no hacemos nada
 		}
 	}
-	
+
 	/**
 	 * Se asigna el layer sobre el que trabaja el gestor de ROIs
+	 * 
 	 * @param layer
-	 * @throws GridException 
+	 * @throws GridException
 	 */
 	public void setLayer(FLayer layer) throws GridException {
 		getROIsManagerPanel().getTablePanel().setFLayer(layer);
 	}
-	
-	public void setPreviousTool(){
-		if (previousTool!=null)
-			roiManagerPanel.getTablePanel().getMapControl().setTool(previousTool);
+
+	public void setPreviousTool() {
+		if (previousTool != null)
+			roiManagerPanel.getTablePanel().getMapControl()
+					.setTool(previousTool);
 	}
 
 	public void windowActivated() {
 		try {
-			if (getROIsManagerPanel().getTablePanel().getTable().getSelectedRows().length==1){
+			if (getROIsManagerPanel().getTablePanel().getTable()
+					.getSelectedRows().length == 1) {
 				getROIsManagerPanel().getTablePanel().setToolsEnabled(true);
 				getROIsManagerPanel().getTablePanel().selectDrawRoiTool();
 			}
@@ -179,7 +191,8 @@ public class ROIManagerDialog extends JPanel implements IWindow, IWindowListener
 		 * Limpiar los gráficos de la vista:
 		 */
 		getROIsManagerPanel().getTablePanel().clearRoiGraphics();
-		getROIsManagerPanel().getTablePanel().getMapControl().rePaintDirtyLayers();
+		getROIsManagerPanel().getTablePanel().getMapControl()
+				.rePaintDirtyLayers();
 		setPreviousTool();
 	}
 

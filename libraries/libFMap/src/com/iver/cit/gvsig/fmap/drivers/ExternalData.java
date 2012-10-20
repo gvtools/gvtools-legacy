@@ -42,29 +42,29 @@ package com.iver.cit.gvsig.fmap.drivers;
 
 import java.io.File;
 
-
 /**
  * Interfaz de acceso a datos de un fichero.
- *
+ * 
  * @author $author$
  */
 public interface ExternalData {
 	/**
 	 * Obtiene el nombre del fichero de datos asociado al fichero que se pasa
 	 * como parámetro
-	 *
-	 * @param f Fichero cuyo fichero con datos se quiere conocer. Sólo se
-	 * 		  invocará con ficheros que pasados como parámetro a accept, éste
-	 * 		  devuelve true
-	 *
+	 * 
+	 * @param f
+	 *            Fichero cuyo fichero con datos se quiere conocer. Sólo se
+	 *            invocará con ficheros que pasados como parámetro a accept,
+	 *            éste devuelve true
+	 * 
 	 * @return Fichero con los datos alfanuméricos del fichero que se pasa como
-	 * 		   parámetro
+	 *         parámetro
 	 */
 	File getDataFile(File f);
 
 	/**
 	 * Obtiene el nombre del driver que leerá la tabla de datos de la capa
-	 *
+	 * 
 	 * @return Nombre del driver
 	 */
 	String getDataDriverName();

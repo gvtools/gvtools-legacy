@@ -9,10 +9,9 @@ public class AnnotationsDrawer extends DefaultMapContextDrawer {
 
 	@Override
 	protected boolean isLayerCacheable(FLayer layer) {
-		if (targetLayer!=null && layer==targetLayer) {	
+		if (targetLayer != null && layer == targetLayer) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}

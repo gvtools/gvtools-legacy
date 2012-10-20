@@ -42,55 +42,73 @@ package com.iver.cit.gvsig.fmap.core;
 
 import com.iver.cit.gvsig.fmap.ViewPort;
 
-
 /**
- * <p>This interface enables Cartographic support for those graphical elements that require
- * additional runtime information rather than the feature itself geometric definitions.<br></p>
- *
- * <p>It allows to realworld's measure units dimensioning.<br></p>
- *
- * <p>It also supplies a toolkit to perform operations with centralized static methods.
- * @see CartographicSupportToolkit inner class' methods<br></p>
- *
+ * <p>
+ * This interface enables Cartographic support for those graphical elements that
+ * require additional runtime information rather than the feature itself
+ * geometric definitions.<br>
+ * </p>
+ * 
+ * <p>
+ * It allows to realworld's measure units dimensioning.<br>
+ * </p>
+ * 
+ * <p>
+ * It also supplies a toolkit to perform operations with centralized static
+ * methods.
+ * 
+ * @see CartographicSupportToolkit inner class' methods<br>
+ *      </p>
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public interface CartographicSupport {
 	public static final int WORLD = 0;
 	public static final int PAPER = 1;
-	
+
 	/**
-	 * Defines the unit used to express measures. It is the position of the unit in the <b>MapContext.NAMES</b> array.
-	 * @param unitIndex, the index of the unit in the MapContext.NAMES array
+	 * Defines the unit used to express measures. It is the position of the unit
+	 * in the <b>MapContext.NAMES</b> array.
+	 * 
+	 * @param unitIndex
+	 *            , the index of the unit in the MapContext.NAMES array
 	 */
 	public abstract void setUnit(int unitIndex);
+
 	/**
-	 * Returns the unit used to express measures. It is the position of the unit in the <b>MapContext.NAMES</b> array.
-	 * @returns an <b>int</b> with the index of the unit in the MapContext.NAMES array, or -1 if the size is specified in pixel
+	 * Returns the unit used to express measures. It is the position of the unit
+	 * in the <b>MapContext.NAMES</b> array.
+	 * 
+	 * @returns an <b>int</b> with the index of the unit in the MapContext.NAMES
+	 *          array, or -1 if the size is specified in pixel
 	 */
 	public abstract int getUnit();
 
 	/**
-	 * Returns the <b>Reference System</b> used to draw the elements of the image.<br>
+	 * Returns the <b>Reference System</b> used to draw the elements of the
+	 * image.<br>
 	 * <p>
-	 * The elements have to be scaled to <b>pixel</b> when the image is bein drawn in
-	 * order to compose the map. The elements of the map may define its size in
-	 * other units than pixel.<br>
+	 * The elements have to be scaled to <b>pixel</b> when the image is bein
+	 * drawn in order to compose the map. The elements of the map may define its
+	 * size in other units than pixel.<br>
 	 * </p>
-	 * <p><b>CartographicSupport</b> enables the elements to define the size in
-	 * measure units but these units may refer to different reference system. Two
-	 * kinds of Reference Systems are allowed in this context: <b>CartographicSupport.WORLD</b>,
-	 * and <b>CartographicSupport.PAPER</b>.
-	 * <br></p>
 	 * <p>
-	 * Depending on which <b>Reference System</b> is used the unit used by this element
-	 * refers to distances in the real world (then they are map's CRS-dependant)
-	 * or screen or printer output (then they are output DPI-dependant)<br>
+	 * <b>CartographicSupport</b> enables the elements to define the size in
+	 * measure units but these units may refer to different reference system.
+	 * Two kinds of Reference Systems are allowed in this context:
+	 * <b>CartographicSupport.WORLD</b>, and <b>CartographicSupport.PAPER</b>. <br>
+	 * </p>
+	 * <p>
+	 * Depending on which <b>Reference System</b> is used the unit used by this
+	 * element refers to distances in the real world (then they are map's
+	 * CRS-dependant) or screen or printer output (then they are output
+	 * DPI-dependant)<br>
 	 * </p>
 	 * <p>
 	 * In case the unit used is <b>pixel</b> then the reference system does not
-	 * have any effect since the source unit is the same than the target unit.
-	 * <br>
+	 * have any effect since the source unit is the same than the target unit. <br>
 	 * </p>
+	 * 
 	 * @return
 	 */
 	public abstract int getReferenceSystem();
@@ -99,51 +117,63 @@ public interface CartographicSupport {
 	 * Sets the <b>Reference System</b> that defines how this units have to be
 	 * handled. Possible values are:
 	 * <ol>
-	 *   <li><b>CartographySupport.WORLD</b>: Defines that the unit values refer
-	 *   to distances in the world. So, the size of the element displayed <b>depends
-	 *   directly on the scale and CRS</b> used by the map. The size of the elements
-	 *   defined to use CartographicSupport.WORLD will match exactly to their
-	 *   actual size in the real world.</li>
-	 *   <li><b>CartographySupport.PAPER</b>: Defines that the unit values refer
-	 *   to the length that the element will have regardless where it appears. If
-	 *   ReferenceSystem is <b>CartographySupport.PAPER</b>, and the length is (e.g.)
-	 *   millimeters the element will be displayed with the <b>same</b> amount of
-	 *   millimeters of length whether in the <b>screen</b> or the <b>printer</b>
-	 *   (screen DPI and printer DPI must be correctly configured).</li>
+	 * <li><b>CartographySupport.WORLD</b>: Defines that the unit values refer
+	 * to distances in the world. So, the size of the element displayed
+	 * <b>depends directly on the scale and CRS</b> used by the map. The size of
+	 * the elements defined to use CartographicSupport.WORLD will match exactly
+	 * to their actual size in the real world.</li>
+	 * <li><b>CartographySupport.PAPER</b>: Defines that the unit values refer
+	 * to the length that the element will have regardless where it appears. If
+	 * ReferenceSystem is <b>CartographySupport.PAPER</b>, and the length is
+	 * (e.g.) millimeters the element will be displayed with the <b>same</b>
+	 * amount of millimeters of length whether in the <b>screen</b> or the
+	 * <b>printer</b> (screen DPI and printer DPI must be correctly configured).
+	 * </li>
 	 * </ol>
 	 */
 	public abstract void setReferenceSystem(int referenceSystem);
 
 	/**
-	 * Computes and sets the size (in pixels) of the cartographic element according
-	 * to the current rendering context (output dpi, map scale, map units) and the
-	 * symbol cartgraphic settings (unit, size, and unit reference system).
-	 *
-	 * @param viewPort, the ViewPort containing the symbol.
-	 * @param dpi, current output dpi (screen or printer)
-	 * @param shp, used only for MultiShapeSymbols in order to discriminate the internal symbol to be applied
+	 * Computes and sets the size (in pixels) of the cartographic element
+	 * according to the current rendering context (output dpi, map scale, map
+	 * units) and the symbol cartgraphic settings (unit, size, and unit
+	 * reference system).
+	 * 
+	 * @param viewPort
+	 *            , the ViewPort containing the symbol.
+	 * @param dpi
+	 *            , current output dpi (screen or printer)
+	 * @param shp
+	 *            , used only for MultiShapeSymbols in order to discriminate the
+	 *            internal symbol to be applied
 	 * @return a double containing the previous defined size
 	 */
-	public abstract double toCartographicSize(ViewPort viewPort, double dpi, FShape shp);
+	public abstract double toCartographicSize(ViewPort viewPort, double dpi,
+			FShape shp);
 
 	/**
 	 * Sets the size of the cartographic element in pixels.
-	 *
-	 * @param cartographicSize, the size in pixels of the element
-	 * @param shp, used only for MultiShapeSymbols in order to discriminate the internal symbol to be applied
+	 * 
+	 * @param cartographicSize
+	 *            , the size in pixels of the element
+	 * @param shp
+	 *            , used only for MultiShapeSymbols in order to discriminate the
+	 *            internal symbol to be applied
 	 */
 	public abstract void setCartographicSize(double cartographicSize, FShape shp);
 
-	/** 
-	 * Gets the size (in pixels) of the cartographic element according
-	 * to the current rendering context (output dpi, map scale, map units) and the
+	/**
+	 * Gets the size (in pixels) of the cartographic element according to the
+	 * current rendering context (output dpi, map scale, map units) and the
 	 * symbol cartgraphic settings (unit, size, and unit reference system).
+	 * 
 	 * @param viewPort
 	 * @param dpi
 	 * @param shp
-	 * @return double containing the size in [screen/printer] pixels for the current symbol
+	 * @return double containing the size in [screen/printer] pixels for the
+	 *         current symbol
 	 */
-	public abstract double getCartographicSize(ViewPort viewPort, double dpi, FShape shp);
-
+	public abstract double getCartographicSize(ViewPort viewPort, double dpi,
+			FShape shp);
 
 }

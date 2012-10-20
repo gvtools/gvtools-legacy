@@ -69,12 +69,12 @@ import com.iver.cit.gvsig.project.documents.view.toc.TocItemBranch;
  */
 /**
  * Cambia la posición actual del layer a la primera posición.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FirstLayerTocMenuEntry extends AbstractTocContextMenuAction {
 	public String getGroup() {
-		return "group4"; //FIXME
+		return "group4"; // FIXME
 	}
 
 	public int getGroupOrder() {
@@ -94,39 +94,39 @@ public class FirstLayerTocMenuEntry extends AbstractTocContextMenuAction {
 	}
 
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
-		if (isTocItemBranch(item)){
+		if (isTocItemBranch(item)) {
 			return true;
 		}
 		return false;
 
 	}
 
-
 	public void execute(ITocItem item, FLayer[] selectedItems) {
-      	if (isTocItemBranch(item)){
-            if (getMapContext().getLayers().getActives().length == 1) {
-                FLayer layer=((TocItemBranch)item).getLayer();
-                FLayers layers=layer.getParentLayer();
-                for (int i=0;i<layers.getLayersCount();i++){
-                    if(layers.getLayer(i).equals(layer)){
-                    	layers.moveTo(layers.getLayersCount()-1-i, 0);
-                    }
-                }
-            } else if (selectedItems.length > 1) {
-                FLayer[] actives =selectedItems;
-                FLayers layers=actives[0].getParentLayer();
-                for (int i=0;i<actives.length;i++){
-                    for (int j=0;j<layers.getLayersCount();j++){
-                        if(layers.getLayer(j).equals(actives[i])){
-                        	layers.moveTo(layers.getLayersCount()-1-j, 0);
-                        }
-                    }
-                }
-            }
+		if (isTocItemBranch(item)) {
+			if (getMapContext().getLayers().getActives().length == 1) {
+				FLayer layer = ((TocItemBranch) item).getLayer();
+				FLayers layers = layer.getParentLayer();
+				for (int i = 0; i < layers.getLayersCount(); i++) {
+					if (layers.getLayer(i).equals(layer)) {
+						layers.moveTo(layers.getLayersCount() - 1 - i, 0);
+					}
+				}
+			} else if (selectedItems.length > 1) {
+				FLayer[] actives = selectedItems;
+				FLayers layers = actives[0].getParentLayer();
+				for (int i = 0; i < actives.length; i++) {
+					for (int j = 0; j < layers.getLayersCount(); j++) {
+						if (layers.getLayer(j).equals(actives[i])) {
+							layers.moveTo(layers.getLayersCount() - 1 - j, 0);
+						}
+					}
+				}
+			}
 		}
 		// TRUCO PARA REFRESCAR.
-        getMapContext().invalidate();
-        Project project=((ProjectExtension)PluginServices.getExtension(ProjectExtension.class)).getProject();
+		getMapContext().invalidate();
+		Project project = ((ProjectExtension) PluginServices
+				.getExtension(ProjectExtension.class)).getProject();
 		project.setModified(true);
 		PluginServices.getMainFrame().enableControls();
 	}

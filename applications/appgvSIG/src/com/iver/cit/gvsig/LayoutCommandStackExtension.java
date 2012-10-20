@@ -45,37 +45,39 @@ import com.iver.andami.plugins.Extension;
 import com.iver.cit.gvsig.gui.command.CommandStackDialog;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
-public class LayoutCommandStackExtension extends Extension{
-	private Layout layout=null;
+public class LayoutCommandStackExtension extends Extension {
+	private Layout layout = null;
+
 	public void initialize() {
 		registerIcons();
 	}
 
-	private void registerIcons(){
+	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"edition-command-stack",
-				this.getClass().getClassLoader().getResource("images/commandstack.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/commandstack.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"edition-modify-command",
-				this.getClass().getClassLoader().getResource("images/ModifyCommand.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/ModifyCommand.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"edition-add-command",
-				this.getClass().getClassLoader().getResource("images/AddCommand.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/AddCommand.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"edition-del-command",
-				this.getClass().getClassLoader().getResource("images/DelCommand.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/DelCommand.png"));
 	}
 
 	public void execute(String s) {
-		layout=(Layout)PluginServices.getMDIManager().getActiveWindow();
+		layout = (Layout) PluginServices.getMDIManager().getActiveWindow();
 		if (s.equals("COMMANDSTACK")) {
-			CommandStackDialog csd=new CommandStackDialog();
+			CommandStackDialog csd = new CommandStackDialog();
 			csd.setModel(layout.getLayoutContext().getEFS().getCommandRecord());
-			layout.getLayoutContext().getEFS().getCommandRecord().addCommandListener(layout);
+			layout.getLayoutContext().getEFS().getCommandRecord()
+					.addCommandListener(layout);
 			PluginServices.getMDIManager().addWindow(csd);
 			layout.getModel().setModified(true);
 		}
@@ -89,7 +91,7 @@ public class LayoutCommandStackExtension extends Extension{
 	}
 
 	public boolean isVisible() {
-		if (PluginServices.getMDIManager().getActiveWindow() instanceof Layout){
+		if (PluginServices.getMDIManager().getActiveWindow() instanceof Layout) {
 			return true;
 		}
 		return false;

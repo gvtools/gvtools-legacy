@@ -49,13 +49,13 @@ public class DbfWriter extends AbstractWriter {
 
 	public DbfWriter() {
 		super();
-		this.capabilities.setProperty("FieldNameMaxLength","10");
+		this.capabilities.setProperty("FieldNameMaxLength", "10");
 	}
 
 	public void setFile(File f) {
-		String absolutePath=f.getAbsolutePath();
-		if (absolutePath.toUpperCase().endsWith("DBF")){
-			dbfPath=absolutePath;
+		String absolutePath = f.getAbsolutePath();
+		if (absolutePath.toUpperCase().endsWith("DBF")) {
+			dbfPath = absolutePath;
 		} else {
 			dbfPath = SHP.getDbfFile(f).getAbsolutePath();
 		}
@@ -100,7 +100,7 @@ public class DbfWriter extends AbstractWriter {
 				dbfWrite.setCharset(charset);
 
 			} catch (IOException e) {
-				throw new StartWriterVisitorException(getName(),e);
+				throw new StartWriterVisitorException(getName(), e);
 			}
 		}
 
@@ -108,8 +108,8 @@ public class DbfWriter extends AbstractWriter {
 
 	public void process(IRowEdited row) throws ProcessWriterVisitorException {
 		IRow rowEdit = row.getLinkedRow();
-//		System.err.println("DBFWriter: " + row.getStatus() + " numRows = "
-//				+ numRows);
+		// System.err.println("DBFWriter: " + row.getStatus() + " numRows = "
+		// + numRows);
 		switch (row.getStatus()) {
 		case IRowEdited.STATUS_ADDED:
 		case IRowEdited.STATUS_ORIGINAL:
@@ -122,7 +122,7 @@ public class DbfWriter extends AbstractWriter {
 				numRows++;
 
 			} catch (IOException e) {
-				throw new ProcessWriterVisitorException(getName(),e);
+				throw new ProcessWriterVisitorException(getName(), e);
 			}
 
 		}
@@ -136,7 +136,7 @@ public class DbfWriter extends AbstractWriter {
 					(FileChannel) getWriteChannel(dbfPath));
 			dbfWrite.setCharset(charset);
 		} catch (IOException e) {
-			throw new StopWriterVisitorException(getName(),e);
+			throw new StopWriterVisitorException(getName(), e);
 		}
 
 	}
@@ -161,7 +161,7 @@ public class DbfWriter extends AbstractWriter {
 		case Types.CHAR:
 		case Types.LONGVARCHAR:
 			return true; // TODO: Revisar esto, porque no creo que admita
-		// campos muy grandes
+			// campos muy grandes
 
 		}
 
@@ -175,7 +175,7 @@ public class DbfWriter extends AbstractWriter {
 		myHeader = DbaseFileHeaderNIO.createDbaseHeader(tableDefinition
 				.getFieldsDesc());
 		if (dbfPath == null) {
-			throw new InitializeWriterException(getName(),null);
+			throw new InitializeWriterException(getName(), null);
 		}
 
 	}
@@ -185,23 +185,23 @@ public class DbfWriter extends AbstractWriter {
 	}
 
 	public boolean alterTable() throws StartWriterVisitorException {
-		FieldDescription[] fieldsDesc =getFields();
+		FieldDescription[] fieldsDesc = getFields();
 
 		myHeader = DbaseFileHeaderNIO.createDbaseHeader(fieldsDesc);
 		try {
 			dbfWrite = new DbaseFileWriterNIO(myHeader,
 					(FileChannel) getWriteChannel(dbfPath));
 			dbfWrite.setCharset(charset);
-//			if (bNeedRewrite) {
-//				int aux = (int) (Math.random() * 1000);
-//				File fTemp = new File(System.getProperty("java.io.tmpdir")
-//						+ "/tmpDbf" + aux + ".dbf");
-//
-//				// TODO: TERMINAR!!
-//
-//			}
+			// if (bNeedRewrite) {
+			// int aux = (int) (Math.random() * 1000);
+			// File fTemp = new File(System.getProperty("java.io.tmpdir")
+			// + "/tmpDbf" + aux + ".dbf");
+			//
+			// // TODO: TERMINAR!!
+			//
+			// }
 		} catch (IOException e) {
-			throw new StartWriterVisitorException(getName(),e);
+			throw new StartWriterVisitorException(getName(), e);
 		}
 		return true;
 	}
@@ -215,10 +215,8 @@ public class DbfWriter extends AbstractWriter {
 		RemoveFieldCommand c = new RemoveFieldCommand(fieldName);
 		FieldDescription[] act = getFields();
 		FieldDescription found = null;
-		for (int i=0; i < act.length; i++)
-		{
-			if (act[i].getFieldAlias().compareToIgnoreCase(fieldName) == 0)
-			{
+		for (int i = 0; i < act.length; i++) {
+			if (act[i].getFieldAlias().compareToIgnoreCase(fieldName) == 0) {
 				found = act[i];
 				break;
 			}
@@ -235,21 +233,17 @@ public class DbfWriter extends AbstractWriter {
 
 	public FieldDescription[] getFields() {
 		ArrayList aux = new ArrayList();
-		for (int i=0; i < getOriginalFields().length; i++)
-		{
+		for (int i = 0; i < getOriginalFields().length; i++) {
 			aux.add(getOriginalFields()[i]);
 		}
 		// procesamos comandos para devolver los campos reales.
-		for (int j=0; j < fieldCommands.size(); j++)
-		{
+		for (int j = 0; j < fieldCommands.size(); j++) {
 			FieldCommand fc = (FieldCommand) fieldCommands.get(j);
-			if (fc instanceof AddFieldCommand)
-			{
+			if (fc instanceof AddFieldCommand) {
 				AddFieldCommand ac = (AddFieldCommand) fc;
 				aux.add(ac.getFieldDesc());
 			}
-			if (fc instanceof RemoveFieldCommand)
-			{
+			if (fc instanceof RemoveFieldCommand) {
 				RemoveFieldCommand rc = (RemoveFieldCommand) fc;
 				for (int k = 0; k < aux.size(); k++) {
 					FieldDescription fAux = (FieldDescription) aux.get(k);
@@ -259,8 +253,7 @@ public class DbfWriter extends AbstractWriter {
 					}
 				}
 			}
-			if (fc instanceof RenameFieldCommand)
-			{
+			if (fc instanceof RenameFieldCommand) {
 				RenameFieldCommand renc = (RenameFieldCommand) fc;
 				for (int k = 0; k < aux.size(); k++) {
 					FieldDescription fAux = (FieldDescription) aux.get(k);
@@ -282,9 +275,11 @@ public class DbfWriter extends AbstractWriter {
 
 	public boolean canSaveEdits() {
 		File aux = new File(dbfPath);
-		if (aux.canWrite()) return true;
+		if (aux.canWrite())
+			return true;
 		return false;
 	}
+
 	public Charset getCharset() {
 		return charset;
 	}

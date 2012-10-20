@@ -34,29 +34,35 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
+
 /**
-* Extensión de la clase SelectImageListenerImple de FMap. Esta clase
-* permite capturar el evento de la selección de un punto sobre la vista
-* . Controlara que capa de la pila que esté visible cae dentro del punto
-* seleccionado poniendo esta capa como activa. En caso de que haya varias
-* capas visibles sobre ese punto, pondrá como activa la capa superior.
-*
-* @author Nacho Brodin (nachobrodin@gmail.com)
-*/
+ * Extensión de la clase SelectImageListenerImple de FMap. Esta clase permite
+ * capturar el evento de la selección de un punto sobre la vista . Controlara
+ * que capa de la pila que esté visible cae dentro del punto seleccionado
+ * poniendo esta capa como activa. En caso de que haya varias capas visibles
+ * sobre ese punto, pondrá como activa la capa superior.
+ * 
+ * @author Nacho Brodin (nachobrodin@gmail.com)
+ */
 public class SelectImageListener extends SelectImageListImpl {
 
-	Rectangle2D 		extentLayer = null;
+	Rectangle2D extentLayer = null;
+
 	/**
 	 * Contructor
+	 * 
 	 * @param mapCtrl
 	 */
 	public SelectImageListener(MapControl mapCtrl) {
 		super(mapCtrl);
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#point(com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#point(com.iver.
+	 * cit.gvsig.fmap.tools.Events.PointEvent)
 	 */
 	public void point(PointEvent event) {
 		super.point(event);
@@ -64,25 +70,26 @@ public class SelectImageListener extends SelectImageListImpl {
 		Point2D pointSelect = event.getPoint();
 
 		if (PluginServices.getMainFrame() != null)
-				PluginServices.getMainFrame().enableControls();
+			PluginServices.getMainFrame().enableControls();
 
 		ViewPort vp = mapCtrl.getMapContext().getViewPort();
 
-		wcPoint = vp.toMapPoint((int)pointSelect.getX(), (int)pointSelect.getY());
+		wcPoint = vp.toMapPoint((int) pointSelect.getX(),
+				(int) pointSelect.getY());
 
 		FLayers layers = mapCtrl.getMapContext().getLayers();
-		for(int i = 0; i < layers.getLayersCount(); i++)
+		for (int i = 0; i < layers.getLayersCount(); i++)
 			layers.getLayer(i).setActive(false);
 
-		for(int i = layers.getLayersCount() - 1; i >= 0; i--) {
+		for (int i = layers.getLayersCount() - 1; i >= 0; i--) {
 			if (select(layers.getLayer(i), i))
 				break;
 		}
 	}
-	
-	private boolean select(FLayer layer,int pos) {
+
+	private boolean select(FLayer layer, int pos) {
 		if (layer instanceof FLayers) {
-			FLayers laux = (FLayers)layer;
+			FLayers laux = (FLayers) layer;
 			for (int j = laux.getLayersCount() - 1; j >= 0; j--) {
 				if (select(laux.getLayer(j), j)) {
 					return true;
@@ -91,21 +98,25 @@ public class SelectImageListener extends SelectImageListImpl {
 		} else {
 			try {
 				extentLayer = layer.getFullExtent();
-			} catch(ReadDriverException exc) {
+			} catch (ReadDriverException exc) {
 				NotificationManager.addError("Error al obtener el extent", exc);
-			} 
-			
-			if(	extentLayer.getMaxX() >= wcPoint.getX() &&
-				extentLayer.getMinX() <= wcPoint.getX() &&
-				extentLayer.getMaxY() >= wcPoint.getY() &&
-				extentLayer.getMinY() <= wcPoint.getY() &&
-				layer.isVisible() &&
-				layer instanceof FLyrRasterSE) {
+			}
+
+			if (extentLayer.getMaxX() >= wcPoint.getX()
+					&& extentLayer.getMinX() <= wcPoint.getX()
+					&& extentLayer.getMaxY() >= wcPoint.getY()
+					&& extentLayer.getMinY() <= wcPoint.getY()
+					&& layer.isVisible() && layer instanceof FLyrRasterSE) {
 				layer.setActive(true);
-				BaseView view = (BaseView) PluginServices.getMDIManager().getActiveWindow();
-				JScrollBar verticalBar = view.getTOC().getJScrollPane().getVerticalScrollBar();
-				double widthPerEntry = verticalBar.getMaximum() / layer.getMapContext().getLayers().getLayersCount();
-				verticalBar.setValue((int)widthPerEntry * (layer.getMapContext().getLayers().getLayersCount() - pos - 1));
+				BaseView view = (BaseView) PluginServices.getMDIManager()
+						.getActiveWindow();
+				JScrollBar verticalBar = view.getTOC().getJScrollPane()
+						.getVerticalScrollBar();
+				double widthPerEntry = verticalBar.getMaximum()
+						/ layer.getMapContext().getLayers().getLayersCount();
+				verticalBar.setValue((int) widthPerEntry
+						* (layer.getMapContext().getLayers().getLayersCount()
+								- pos - 1));
 				return true;
 			}
 		}

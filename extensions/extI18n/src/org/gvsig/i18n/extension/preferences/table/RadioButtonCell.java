@@ -28,7 +28,9 @@ package org.gvsig.i18n.extension.preferences.table;
 
 import java.awt.Component;
 
-import javax.swing.*;
+import javax.swing.JRadioButton;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
 
 /**
  * Renders a radio button on a table cell.
@@ -37,33 +39,32 @@ import javax.swing.*;
  */
 public class RadioButtonCell {
 
-    private JRadioButton radio = new JRadioButton();
+	private JRadioButton radio = new JRadioButton();
 
-    /**
-     * Constructor.
-     */
-    public RadioButtonCell() {
-	radio.setHorizontalAlignment(SwingConstants.CENTER);
-    }
-
-    protected Component getTableCellComponent(JTable table, Object value,
-	    boolean isSelected, boolean hasFocus, int row, int column) {
-
-	if (isSelected) {
-	    radio.setForeground(table.getSelectionForeground());
-	    radio.setBackground(table.getSelectionBackground());
-	}
-	else {
-	    radio.setForeground(table.getForeground());
-	    radio.setBackground(table.getBackground());
+	/**
+	 * Constructor.
+	 */
+	public RadioButtonCell() {
+		radio.setHorizontalAlignment(SwingConstants.CENTER);
 	}
 
-	radio.setSelected(Boolean.TRUE.equals(value));
+	protected Component getTableCellComponent(JTable table, Object value,
+			boolean isSelected, boolean hasFocus, int row, int column) {
 
-	return radio;
-    }
+		if (isSelected) {
+			radio.setForeground(table.getSelectionForeground());
+			radio.setBackground(table.getSelectionBackground());
+		} else {
+			radio.setForeground(table.getForeground());
+			radio.setBackground(table.getBackground());
+		}
 
-    protected JRadioButton getRadioButton() {
-	return radio;
-    }
+		radio.setSelected(Boolean.TRUE.equals(value));
+
+		return radio;
+	}
+
+	protected JRadioButton getRadioButton() {
+		return radio;
+	}
 }

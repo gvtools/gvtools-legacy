@@ -77,7 +77,9 @@ import com.iver.utiles.swing.threads.Cancellable;
 
 /**
  * PictureFillSymbol allows to use an image file suported by gvSIG as a padding
- * for the polygons.This image can be modified using methods to scale or rotate it.
+ * for the polygons.This image can be modified using methods to scale or rotate
+ * it.
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class PictureFillSymbol extends AbstractFillSymbol {
@@ -93,49 +95,59 @@ public class PictureFillSymbol extends AbstractFillSymbol {
 	private BackgroundFileStyle bgSelImage;
 	private PrintRequestAttributeSet properties;
 
-	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp, Cancellable cancel) {
- 		Color fillColor = getFillColor();
+	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp,
+			Cancellable cancel) {
+		Color fillColor = getFillColor();
 		if (fillColor != null) {
 			g.setColor(fillColor);
 			g.fill(shp);
 		}
 
 		g.setClip(shp);
-		BackgroundFileStyle bg = (!selected) ? bgImage : bgSelImage ;
-		if (bg != null && bg.getBounds() != null){
-			int sizeW=(int) ((int)bg.getBounds().getWidth() * xScale);
-			int sizeH=(int) ((int)bg.getBounds().getHeight() * yScale);
+		BackgroundFileStyle bg = (!selected) ? bgImage : bgSelImage;
+		if (bg != null && bg.getBounds() != null) {
+			int sizeW = (int) ((int) bg.getBounds().getWidth() * xScale);
+			int sizeH = (int) ((int) bg.getBounds().getHeight() * yScale);
 			Rectangle rProv = new Rectangle();
-			rProv.setFrame(0,0,sizeW,sizeH);
+			rProv.setFrame(0, 0, sizeW, sizeH);
 			Paint resulPatternFill = null;
-			BufferedImage sample= null;
+			BufferedImage sample = null;
 
-			sample= new BufferedImage(sizeW,sizeH,BufferedImage.TYPE_INT_ARGB);
+			sample = new BufferedImage(sizeW, sizeH,
+					BufferedImage.TYPE_INT_ARGB);
 			Graphics2D gAux = sample.createGraphics();
 
-			double xSeparation = markerFillProperties.getXSeparation(); // TODO apply CartographicSupport
-			double ySeparation = markerFillProperties.getYSeparation(); // TODO apply CartographicSupport
+			double xSeparation = markerFillProperties.getXSeparation(); // TODO
+																		// apply
+																		// CartographicSupport
+			double ySeparation = markerFillProperties.getYSeparation(); // TODO
+																		// apply
+																		// CartographicSupport
 			double xOffset = markerFillProperties.getXOffset();
 			double yOffset = markerFillProperties.getYOffset();
 
 			try {
 				bg.drawInsideRectangle(gAux, rProv);
 			} catch (SymbolDrawingException e) {
-				Logger.getLogger(getClass()).warn(Messages.getString("label_style_could_not_be_painted"), e);
+				Logger.getLogger(getClass()).warn(
+						Messages.getString("label_style_could_not_be_painted"),
+						e);
 			}
 
 			Dimension sz = rProv.getSize();
-			sz = new Dimension((int) Math.round(sz.getWidth()+(xSeparation)),
+			sz = new Dimension((int) Math.round(sz.getWidth() + (xSeparation)),
 					(int) Math.round(sz.getHeight() + (ySeparation)));
 			rProv.setSize(sz);
 
-			BufferedImage bi = new BufferedImage(rProv.width, rProv.height, BufferedImage.TYPE_INT_ARGB);
+			BufferedImage bi = new BufferedImage(rProv.width, rProv.height,
+					BufferedImage.TYPE_INT_ARGB);
 			gAux = bi.createGraphics();
-			gAux.drawImage(sample, null, (int) (xSeparation*0.5), (int) (ySeparation*0.5));
+			gAux.drawImage(sample, null, (int) (xSeparation * 0.5),
+					(int) (ySeparation * 0.5));
 
-			rProv.x = rProv.x+(int)xOffset;
-			rProv.y = rProv.y+(int)yOffset;
-			resulPatternFill = new TexturePaint(bi,rProv);
+			rProv.x = rProv.x + (int) xOffset;
+			rProv.y = rProv.y + (int) yOffset;
+			resulPatternFill = new TexturePaint(bi, rProv);
 
 			g.setColor(null);
 			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -148,76 +160,84 @@ public class PictureFillSymbol extends AbstractFillSymbol {
 		at.rotate(angle);
 		shp.transform(at);
 		g.fill(shp);
-		at.rotate(-angle*2);
+		at.rotate(-angle * 2);
 		shp.transform(at);
 		g.rotate(angle);
 		g.setClip(null);
-		if (getOutline()!=null) {
+		if (getOutline() != null) {
 			getOutline().draw(g, affineTransform, shp, cancel);
 		}
 	}
 
 	/**
 	 * Constructor method
-	 *
+	 * 
 	 */
 	public PictureFillSymbol() {
 		super();
 	}
+
 	/**
 	 * Constructor method
-	 * @param imageURL, URL of the normal image
-	 * @param selImageURL, URL of the image when it is selected in the map
+	 * 
+	 * @param imageURL
+	 *            , URL of the normal image
+	 * @param selImageURL
+	 *            , URL of the image when it is selected in the map
 	 * @throws IOException
 	 */
 
 	public PictureFillSymbol(URL imageURL, URL selImageURL) throws IOException {
 		setImage(imageURL);
-		if (selImageURL!=null)
+		if (selImageURL != null)
 			setSelImage(selImageURL);
-		else setSelImage(imageURL);
+		else
+			setSelImage(imageURL);
 	}
 
-
 	/**
-	 * Sets the URL for the image to be used as a picture fill symbol (when it is selected in the map)
-	 * @param imageFile, File
+	 * Sets the URL for the image to be used as a picture fill symbol (when it
+	 * is selected in the map)
+	 * 
+	 * @param imageFile
+	 *            , File
 	 * @throws IOException
 	 */
-	public void setSelImage(URL selImageUrl) throws IOException{
+	public void setSelImage(URL selImageUrl) throws IOException {
 
-		bgSelImage= BackgroundFileStyle.createStyleByURL(selImageUrl);
+		bgSelImage = BackgroundFileStyle.createStyleByURL(selImageUrl);
 		selImagePath = selImageUrl.toString();
 	}
 
-
-
 	/**
 	 * Defines the URL from where the picture to fill the polygon is taken.
+	 * 
 	 * @param imageFile
 	 * @throws IOException
 	 */
-	public void setImage(URL imageUrl) throws IOException{
+	public void setImage(URL imageUrl) throws IOException {
 
 		bgImage = BackgroundFileStyle.createStyleByURL(imageUrl);
 		imagePath = imageUrl.toString();
 	}
 
-
-
 	public void drawInsideRectangle(Graphics2D g,
-			AffineTransform scaleInstance, Rectangle r, PrintRequestAttributeSet properties) throws SymbolDrawingException {
-		if (properties==null)
+			AffineTransform scaleInstance, Rectangle r,
+			PrintRequestAttributeSet properties) throws SymbolDrawingException {
+		if (properties == null)
 			draw(g, null, new FPolygon2D(new GeneralPathX(r)), null);
 		else
-			print(g, new AffineTransform(), new FPolygon2D(new GeneralPathX(r)), properties);
+			print(g, new AffineTransform(),
+					new FPolygon2D(new GeneralPathX(r)), properties);
 	}
 
 	public ISymbol getSymbolForSelection() {
 		if (selectionSym == null) {
-			selectionSym = (PictureFillSymbol) SymbologyFactory.createSymbolFromXML(getXMLEntity(), getDescription());
-			selectionSym.selected=true;
-			selectionSym.selectionSym = selectionSym; // avoid too much lazy creations
+			selectionSym = (PictureFillSymbol) SymbologyFactory
+					.createSymbolFromXML(getXMLEntity(), getDescription());
+			selectionSym.selected = true;
+			selectionSym.selectionSym = selectionSym; // avoid too much lazy
+														// creations
 		}
 		return selectionSym;
 
@@ -242,14 +262,15 @@ public class PictureFillSymbol extends AbstractFillSymbol {
 				PicturePathGeneratorUtils.getURLPath(imagePath));
 		xml.putProperty("selImagePath",
 				PicturePathGeneratorUtils.getURLPath(selImagePath));
-		if (getFillColor()!=null)
-			xml.putProperty("fillColor", StringUtilities.color2String(getFillColor()));
+		if (getFillColor() != null)
+			xml.putProperty("fillColor",
+					StringUtilities.color2String(getFillColor()));
 
 		xml.putProperty("hasFill", hasFill());
 		XMLEntity fillPropertiesXML = markerFillProperties.getXMLEntity();
 		fillPropertiesXML.putProperty("id", "fillProperties");
 		xml.addChild(fillPropertiesXML);
-		if (getOutline()!=null) {
+		if (getOutline() != null) {
 			XMLEntity outlineXML = getOutline().getXMLEntity();
 			outlineXML.putProperty("id", "outline symbol");
 			xml.addChild(outlineXML);
@@ -270,40 +291,44 @@ public class PictureFillSymbol extends AbstractFillSymbol {
 		setXScale(xml.getDoubleProperty("scaleX"));
 		setYScale(xml.getDoubleProperty("scaleY"));
 		if (xml.contains("fillColor"))
-			setFillColor(StringUtilities.string2Color(
-					xml.getStringProperty("fillColor")));
-		markerFillProperties = (IMarkerFillPropertiesStyle) SymbologyFactory.
-		createStyleFromXML(
-				xml.firstChild("id", "fillProperties"), "fill properties");
+			setFillColor(StringUtilities.string2Color(xml
+					.getStringProperty("fillColor")));
+		markerFillProperties = (IMarkerFillPropertiesStyle) SymbologyFactory
+				.createStyleFromXML(xml.firstChild("id", "fillProperties"),
+						"fill properties");
 
 		File rootDir = new File(SymbologyFactory.SymbolLibraryPath);
 		try {
-			try{
+			try {
 				setImage(new URL(imagePath));
 			} catch (MalformedURLException e) {
-				try{
+				try {
 					setImage(new URL(
 							PicturePathGeneratorUtils
 									.getAbsoluteURLPath(imagePath)));
 				} catch (MalformedURLException e1) {
-					setImage(new URL("file://"+ rootDir.getAbsolutePath() + File.separator +imagePath));
+					setImage(new URL("file://" + rootDir.getAbsolutePath()
+							+ File.separator + imagePath));
 				}
 			}
-			try{
+			try {
 				setSelImage(new URL(selImagePath));
 			} catch (MalformedURLException e) {
-				try{
+				try {
 					setSelImage(new URL(
 							PicturePathGeneratorUtils
 									.getAbsoluteURLPath(selImagePath)));
 				} catch (MalformedURLException e1) {
-					setSelImage(new URL("file://"+ rootDir.getAbsolutePath() + File.separator +selImagePath));
+					setSelImage(new URL("file://" + rootDir.getAbsolutePath()
+							+ File.separator + selImagePath));
 				}
 			}
 		} catch (MalformedURLException e) {
-			Logger.getLogger(getClass()).error(Messages.getString("invalid_url"));
+			Logger.getLogger(getClass()).error(
+					Messages.getString("invalid_url"));
 		} catch (IOException e) {
-			Logger.getLogger(getClass()).error(Messages.getString("invalid_url"));
+			Logger.getLogger(getClass()).error(
+					Messages.getString("invalid_url"));
 
 		}
 
@@ -312,7 +337,8 @@ public class PictureFillSymbol extends AbstractFillSymbol {
 
 		XMLEntity outlineXML = xml.firstChild("id", "outline symbol");
 		if (outlineXML != null) {
-			setOutline((ILineSymbol) SymbologyFactory.createSymbolFromXML(outlineXML, "outline"));
+			setOutline((ILineSymbol) SymbologyFactory.createSymbolFromXML(
+					outlineXML, "outline"));
 		}
 
 		if (xml.contains("unit")) { // remove this line when done
@@ -326,8 +352,6 @@ public class PictureFillSymbol extends AbstractFillSymbol {
 		if (xml.contains("hasOutline"))
 			setHasOutline(xml.getBooleanProperty("hasOutline"));
 
-
-
 	}
 
 	public String getClassName() {
@@ -336,13 +360,15 @@ public class PictureFillSymbol extends AbstractFillSymbol {
 
 	public void print(Graphics2D g, AffineTransform at, FShape shape,
 			PrintRequestAttributeSet properties) {
-		this.properties=properties;
-        draw(g, at, shape, null);
-        this.properties=null;
+		this.properties = properties;
+		draw(g, at, shape, null);
+		this.properties = null;
 	}
+
 	/**
-	 * Returns the IMarkerFillProperties that allows this class to treat the picture as
-	 * a marker in order to scale it, rotate it and so on.
+	 * Returns the IMarkerFillProperties that allows this class to treat the
+	 * picture as a marker in order to scale it, rotate it and so on.
+	 * 
 	 * @return markerFillProperties,IMarkerFillPropertiesStyle
 	 */
 	public IMarkerFillPropertiesStyle getMarkerFillProperties() {
@@ -350,24 +376,29 @@ public class PictureFillSymbol extends AbstractFillSymbol {
 	}
 
 	/**
-	 * Sets the MarkerFillProperties in order to allow the user to modify the picture as
-	 * a marker (it is possible to scale it, rotate it and so on)
+	 * Sets the MarkerFillProperties in order to allow the user to modify the
+	 * picture as a marker (it is possible to scale it, rotate it and so on)
+	 * 
 	 * @param prop
 	 */
 	public void setMarkerFillProperties(IMarkerFillPropertiesStyle prop) {
 		this.markerFillProperties = prop;
 	}
+
 	/**
-	 * Defines the angle for the rotation of the image when it is added to create the
-	 * padding
-	 *
+	 * Defines the angle for the rotation of the image when it is added to
+	 * create the padding
+	 * 
 	 * @return angle
 	 */
 	public double getAngle() {
 		return angle;
 	}
+
 	/**
-	 * Sets the angle for the rotation of the image when it is added to create the padding
+	 * Sets the angle for the rotation of the image when it is added to create
+	 * the padding
+	 * 
 	 * @param angle
 	 */
 	public void setAngle(double angle) {
@@ -375,40 +406,49 @@ public class PictureFillSymbol extends AbstractFillSymbol {
 	}
 
 	/**
-	 * Defines the scale for the x axis of the image when it is added to create the
-	 * padding
+	 * Defines the scale for the x axis of the image when it is added to create
+	 * the padding
+	 * 
 	 * @return xScale
 	 */
 	public double getXScale() {
 		return xScale;
 	}
+
 	/**
-	 * Returns the scale for the x axis of the image when it is added to create the
-	 * padding
+	 * Returns the scale for the x axis of the image when it is added to create
+	 * the padding
+	 * 
 	 * @param xScale
 	 */
 	public void setXScale(double xScale) {
 		this.xScale = xScale;
 	}
+
 	/**
-	 * Defines the scale for the y axis of the image when it is added to create the
-	 * padding
+	 * Defines the scale for the y axis of the image when it is added to create
+	 * the padding
+	 * 
 	 * @return yScale
 	 */
 	public double getYScale() {
 		return yScale;
 	}
+
 	/**
-	 * Returns the scale for the y axis of the image when it is added to create the
-	 * padding
+	 * Returns the scale for the y axis of the image when it is added to create
+	 * the padding
+	 * 
 	 * @param yScale
 	 */
 	public void setYScale(double yScale) {
 		this.yScale = yScale;
 	}
+
 	/**
-	 * Returns the path of the image that is used to create the padding to fill the
-	 * polygon
+	 * Returns the path of the image that is used to create the padding to fill
+	 * the polygon
+	 * 
 	 * @return imagePath
 	 */
 	public String getImagePath() {
@@ -417,18 +457,18 @@ public class PictureFillSymbol extends AbstractFillSymbol {
 
 	/**
 	 * Returns the path of the image used when the polygon is selected
+	 * 
 	 * @return
 	 */
-	public String getSelImagePath(){
+	public String getSelImagePath() {
 		return selImagePath;
 	}
-
 
 	@Override
 	public double toCartographicSize(ViewPort viewPort, double dpi, FShape shp) {
 		return super.toCartographicSize(viewPort, dpi, shp);
-		// this symbol cannot apply any cartographic transfomation to its filling
+		// this symbol cannot apply any cartographic transfomation to its
+		// filling
 	}
-
 
 }

@@ -42,17 +42,17 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: FLayerStatus.java 24160 2008-10-21 11:02:25Z jmvivo $
-* $Log$
-* Revision 1.2  2007-03-06 17:08:55  caballero
-* Exceptions
-*
-* Revision 1.1  2006/09/21 17:23:39  azabala
-* First version in cvs
-*
-*
-*/
+ *
+ * $Id: FLayerStatus.java 24160 2008-10-21 11:02:25Z jmvivo $
+ * $Log$
+ * Revision 1.2  2007-03-06 17:08:55  caballero
+ * Exceptions
+ *
+ * Revision 1.1  2006/09/21 17:23:39  azabala
+ * First version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.layers;
 
 import java.util.ArrayList;
@@ -61,27 +61,40 @@ import java.util.List;
 import org.gvsig.exceptions.BaseException;
 
 /**
- * <p>All layers in <i>libFMap</i> can be in a set of <i>states</i>, that their combination represent the <i>status</i> of a layer.</p>
+ * <p>
+ * All layers in <i>libFMap</i> can be in a set of <i>states</i>, that their
+ * combination represent the <i>status</i> of a layer.
+ * </p>
  * 
- * <p><code>FLayerStatus</code> class supports the common status for all kind of {@link FLyrDefault FLyrDefault} layers.</p>
+ * <p>
+ * <code>FLayerStatus</code> class supports the common status for all kind of
+ * {@link FLyrDefault FLyrDefault} layers.
+ * </p>
  * 
- * <p>This means that not necessarily all layers can stay in all possible status, it depends on its particular
- * nature.</p>
+ * <p>
+ * This means that not necessarily all layers can stay in all possible status,
+ * it depends on its particular nature.
+ * </p>
  * 
- * <p>Layer status states defined in <code>FLayerStatus</code> are:
- *  <ul>
- *  <li><i><b>Available</b></i>: the layer is available if the source of its data is on-line.</li>
- *  <li><i><b>Visible</b></i>: one layer is visible if it's selected its <i>check box</i> associated in TOC. This implies that 
- *  layer will be called to be painted unless the necessary data would be unavailable; this situation is more frequent with layers of
- *  remote services.</li>
- *  <li><i><b>Active</b></i>: is active if it's selected at the TOC.</li>
- *  <li><i><b>Dirty</b></i>: is dirty if needs to be refreshed.</li>
- *  <li><i><b>In TOC</b></i>: if it's being listed in a TOC GUI.</li>
- *  <li><i><b>Editing</b></i>: if the layer it's being edited now.</li>
- *  <li><i><b>Writable</b></i>: if can be modified and saved the changes.</li>
- *  <li><i><b>Cache drawn layers</b></i>: if stores previous draws. This is useful to accelerate the draw of the layer.</li>
- *  <li><i><b>Driver loaded</b></i>: if driver for managing the layer has been loaded successfully.</li>
- *  </ul>
+ * <p>
+ * Layer status states defined in <code>FLayerStatus</code> are:
+ * <ul>
+ * <li><i><b>Available</b></i>: the layer is available if the source of its data
+ * is on-line.</li>
+ * <li><i><b>Visible</b></i>: one layer is visible if it's selected its <i>check
+ * box</i> associated in TOC. This implies that layer will be called to be
+ * painted unless the necessary data would be unavailable; this situation is
+ * more frequent with layers of remote services.</li>
+ * <li><i><b>Active</b></i>: is active if it's selected at the TOC.</li>
+ * <li><i><b>Dirty</b></i>: is dirty if needs to be refreshed.</li>
+ * <li><i><b>In TOC</b></i>: if it's being listed in a TOC GUI.</li>
+ * <li><i><b>Editing</b></i>: if the layer it's being edited now.</li>
+ * <li><i><b>Writable</b></i>: if can be modified and saved the changes.</li>
+ * <li><i><b>Cache drawn layers</b></i>: if stores previous draws. This is
+ * useful to accelerate the draw of the layer.</li>
+ * <li><i><b>Driver loaded</b></i>: if driver for managing the layer has been
+ * loaded successfully.</li>
+ * </ul>
  * </p>
  * 
  * @see IFLayerStatus
@@ -90,76 +103,102 @@ import org.gvsig.exceptions.BaseException;
  */
 public class FLayerStatus implements IFLayerStatus {
 	/**
-	 * <p>Layer's availability: the layer is available if the source of its data is on-line.</p>
+	 * <p>
+	 * Layer's availability: the layer is available if the source of its data is
+	 * on-line.
+	 * </p>
 	 */
 	public boolean available;
-	
+
 	/**
-	 * <p>Layer's visibility: the layer is visible if it's selected its <i>check box</i> associated in TOC. This implies that 
-	 *  layer will tried to be painted unless the necessary data would be unavailable; this situation is more frequent with layers of
-	 *  remote services.</p>
+	 * <p>
+	 * Layer's visibility: the layer is visible if it's selected its <i>check
+	 * box</i> associated in TOC. This implies that layer will tried to be
+	 * painted unless the necessary data would be unavailable; this situation is
+	 * more frequent with layers of remote services.
+	 * </p>
 	 */
 	public boolean visible;
-	
+
 	/**
-	 * <p>The layer is active if it's selected at the TOC.</p>
+	 * <p>
+	 * The layer is active if it's selected at the TOC.
+	 * </p>
 	 */
 	public boolean active;
-	
+
 	/**
-	 * <p>One layer is dirty if needs to be refreshed.</p>
+	 * <p>
+	 * One layer is dirty if needs to be refreshed.
+	 * </p>
 	 */
 	public boolean dirty;
-	
+
 	/**
-	 * <p>The layer is in TOC if it's being listed in a TOC GUI.</p>
+	 * <p>
+	 * The layer is in TOC if it's being listed in a TOC GUI.
+	 * </p>
 	 */
 	public boolean inTOC;
-	
+
 	/**
-	 * <p>This parameter reports if the layer it's being edited now.</p>
+	 * <p>
+	 * This parameter reports if the layer it's being edited now.
+	 * </p>
 	 */
 	public boolean editing;
-	
+
 	/**
-	 * <p>This parameter reports if the layer can be modified and saved the changes.</p>
+	 * <p>
+	 * This parameter reports if the layer can be modified and saved the
+	 * changes.
+	 * </p>
 	 */
 	public boolean writable;
-	
+
 	/**
-	 * <p>This state reports if the layer stores previous draws. That's useful to accelerate the draw of the layer.</p>
+	 * <p>
+	 * This state reports if the layer stores previous draws. That's useful to
+	 * accelerate the draw of the layer.
+	 * </p>
 	 */
 	public boolean cacheDrawnLayers;
 
-	
 	/**
-	 * <p>List with the information of the driver errors produced working this layer.</p>
-	 */
-	private ArrayList layerErrors;
-		
-	/**
-	 * <p>This state reports if the driver for managing the layer has been loaded successfully.</p>
-	 */
-	private boolean driverLoaded=true;
-
-	/**
-	 * <p>Creates an instance with the default status of a <code>FLyrDefault</code> layer:
-	 * <br>
-	 *  <ul>
-	 *  <li><b><i>Visible</i></b>: <code>true</code> .</li>
-	 *  <li><b><i>Active</i></b>: <code>false</code> .</li>
-	 *  <li><b><i>In TOC</i></b>: <code>true</code> .</li>
-	 *  <li><b><i>Editing</i></b>: <code>false</code> .</li>
-	 *  <li><b><i>Cache drawn layers</i></b>: <code>false</code> .</li>
-	 *  <li><b><i>Dirty</i></b>: <code>false</code> .</li>
-	 *  <li><b><i>Available</i></b>: <code>true</code> .</li>
-	 *  <li><b><i>Driver loaded</i></b>: <code>true</code> .</li>
-	 *  <li><b><i>Writable</i></b>: <code>false</code> .</li>
-	 *  <li>Without driver errors.</li>
-	 *  </ul>
+	 * <p>
+	 * List with the information of the driver errors produced working this
+	 * layer.
 	 * </p>
 	 */
-	public FLayerStatus(){
+	private ArrayList layerErrors;
+
+	/**
+	 * <p>
+	 * This state reports if the driver for managing the layer has been loaded
+	 * successfully.
+	 * </p>
+	 */
+	private boolean driverLoaded = true;
+
+	/**
+	 * <p>
+	 * Creates an instance with the default status of a <code>FLyrDefault</code>
+	 * layer: <br>
+	 * <ul>
+	 * <li><b><i>Visible</i></b>: <code>true</code> .</li>
+	 * <li><b><i>Active</i></b>: <code>false</code> .</li>
+	 * <li><b><i>In TOC</i></b>: <code>true</code> .</li>
+	 * <li><b><i>Editing</i></b>: <code>false</code> .</li>
+	 * <li><b><i>Cache drawn layers</i></b>: <code>false</code> .</li>
+	 * <li><b><i>Dirty</i></b>: <code>false</code> .</li>
+	 * <li><b><i>Available</i></b>: <code>true</code> .</li>
+	 * <li><b><i>Driver loaded</i></b>: <code>true</code> .</li>
+	 * <li><b><i>Writable</i></b>: <code>false</code> .</li>
+	 * <li>Without driver errors.</li>
+	 * </ul>
+	 * </p>
+	 */
+	public FLayerStatus() {
 		this.layerErrors = new ArrayList();
 		visible = true;
 		active = false;
@@ -174,15 +213,19 @@ public class FLayerStatus implements IFLayerStatus {
 	}
 
 	/**
-	 * <p>Stores information of an exception produced working with a driver of the layer.</p>
+	 * <p>
+	 * Stores information of an exception produced working with a driver of the
+	 * layer.
+	 * </p>
 	 * 
-	 * @param error the driver exception
+	 * @param error
+	 *            the driver exception
 	 */
-	public void addLayerError(BaseException error){
+	public void addLayerError(BaseException error) {
 		layerErrors.add(error);
 	}
-	
-	public FLayerStatus cloneStatus(){
+
+	public FLayerStatus cloneStatus() {
 		FLayerStatus newStatus = new FLayerStatus();
 		newStatus.layerErrors.addAll(this.layerErrors);
 		newStatus.visible = this.visible;
@@ -192,24 +235,21 @@ public class FLayerStatus implements IFLayerStatus {
 		newStatus.cacheDrawnLayers = this.cacheDrawnLayers;
 		newStatus.dirty = this.dirty;
 		newStatus.available = this.available;
-		newStatus.driverLoaded = this.driverLoaded;	
+		newStatus.driverLoaded = this.driverLoaded;
 		newStatus.writable = this.writable;
-	
+
 		return newStatus;
 	}
-	
-	
 
 	public boolean equals(Object obj) {
 		FLayerStatus other;
 		if (obj instanceof FLayerStatus) {
 			other = (FLayerStatus) obj;
-		} else{
+		} else {
 			return false;
 		}
 
-		if (other.visible != this.visible 
-				|| other.active != this.active
+		if (other.visible != this.visible || other.active != this.active
 				|| other.inTOC != this.inTOC || other.editing != this.editing
 				|| other.cacheDrawnLayers != this.cacheDrawnLayers
 				|| other.dirty != this.dirty
@@ -218,46 +258,56 @@ public class FLayerStatus implements IFLayerStatus {
 				|| other.writable != this.writable) {
 			return false;
 		}
-		
 
-		
-		if ((!other.layerErrors.containsAll(this.layerErrors)) || other.layerErrors.size() != this.layerErrors.size()){
+		if ((!other.layerErrors.containsAll(this.layerErrors))
+				|| other.layerErrors.size() != this.layerErrors.size()) {
 			return false;
 		}
 		return super.equals(obj);
 	}
 
 	/**
-	 * <p>Gets the number of driver exceptions produced working with the layer.</p>
+	 * <p>
+	 * Gets the number of driver exceptions produced working with the layer.
+	 * </p>
 	 * 
 	 * @return number of driver exceptions produced
 	 */
-	public int getNumErrors(){
+	public int getNumErrors() {
 		return layerErrors.size();
 	}
 
 	/**
-	 * <p>Gets the information of the <i>nth</i> layer driver exception registered in the status.</p>
+	 * <p>
+	 * Gets the information of the <i>nth</i> layer driver exception registered
+	 * in the status.
+	 * </p>
 	 * 
-	 * @param i ith layer exception registered
+	 * @param i
+	 *            ith layer exception registered
 	 * 
 	 * @return the <i>nth</i> layer driver exception registered
 	 */
-	public BaseException getError(int i){
+	public BaseException getError(int i) {
 		return (BaseException) layerErrors.get(i);
 	}
 
 	/**
-	 * <p>Returns if there have been driver errors working with the layer.</p>
+	 * <p>
+	 * Returns if there have been driver errors working with the layer.
+	 * </p>
 	 * 
-	 * @return <code>true</code> if there have driver errors working with the layer; otherwise <code>false</code>
+	 * @return <code>true</code> if there have driver errors working with the
+	 *         layer; otherwise <code>false</code>
 	 */
-	public boolean isOk(){
+	public boolean isOk() {
 		return layerErrors.size() == 0;
 	}
 
 	/**
-	 * <p>Returns a list of errors produced in a layer working with its driver.</p>
+	 * <p>
+	 * Returns a list of errors produced in a layer working with its driver.
+	 * </p>
 	 * 
 	 * @return list errors produced in a layer working with its driver
 	 */
@@ -266,21 +316,28 @@ public class FLayerStatus implements IFLayerStatus {
 	}
 
 	/**
-	 * <p>Returns if has been loaded successfully the driver for managing the layer.</p>
+	 * <p>
+	 * Returns if has been loaded successfully the driver for managing the
+	 * layer.
+	 * </p>
 	 * 
-	 * @return <code>true</code> if has been loaded successfully the driver for managing the layer; otherwise <code>false</code>
+	 * @return <code>true</code> if has been loaded successfully the driver for
+	 *         managing the layer; otherwise <code>false</code>
 	 */
 	public boolean isDriverLoaded() {
 		return driverLoaded;
 	}
 
 	/**
-	 * <p>Sets if has been loaded successfully the driver for managing the layer.</p>
+	 * <p>
+	 * Sets if has been loaded successfully the driver for managing the layer.
+	 * </p>
 	 * 
-	 * @param driverLoaded <code>true</code> if has been loaded successfully the driver for managing the layer; otherwise <code>false</code>
+	 * @param driverLoaded
+	 *            <code>true</code> if has been loaded successfully the driver
+	 *            for managing the layer; otherwise <code>false</code>
 	 */
 	public void setDriverLoaded(boolean driverLoaded) {
 		this.driverLoaded = driverLoaded;
 	}
 }
-

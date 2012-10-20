@@ -20,18 +20,20 @@ package org.gvsig.raster.dataset.io.features;
 
 import org.gvsig.raster.dataset.io.GdalDriver;
 import org.gvsig.raster.dataset.io.GdalWriter;
+
 /**
- * Caracteristicas del formato RST de IDRISI para escritura.
- * Soporta tipos de datos enteros en 8, 16 y 32 bits y coma flotante en 32 bits
- * Genera un fichero RDC con la descripción de la imagen
+ * Caracteristicas del formato RST de IDRISI para escritura. Soporta tipos de
+ * datos enteros en 8, 16 y 32 bits y coma flotante en 32 bits Genera un fichero
+ * RDC con la descripción de la imagen
  * 
  * @version 04/06/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class IDRISIFeatures extends WriteFileFormatFeatures {
-	
+
 	public IDRISIFeatures() {
-		super(GdalDriver.FORMAT_RST, "rst", new int[] { -1 }, new int[] { 0, 1, 2, 3, 4 }, GdalWriter.class);
+		super(GdalDriver.FORMAT_RST, "rst", new int[] { -1 }, new int[] { 0, 1,
+				2, 3, 4 }, GdalWriter.class);
 	}
 
 	/**

@@ -4,7 +4,6 @@ import java.net.URL;
 
 import es.gva.cit.catalog.csw.drivers.CSWCapabilities;
 import es.gva.cit.catalog.csw.drivers.CSWCatalogServiceDriver;
-import es.gva.cit.catalog.drivers.CatalogCapabilities;
 import es.gva.cit.catalog.metadataxml.XMLNode;
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
@@ -59,8 +58,8 @@ import es.gva.cit.catalog.metadataxml.XMLNode;
 public class CSWDescribeRecordParser {
 	private URL url = null;
 	private CSWCatalogServiceDriver driver = null;
-	private CSWCapabilities capabilities = null; 
-	
+	private CSWCapabilities capabilities = null;
+
 	public CSWDescribeRecordParser(URL url, CSWCatalogServiceDriver driver) {
 		this.url = url;
 		this.driver = driver;
@@ -68,19 +67,23 @@ public class CSWDescribeRecordParser {
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.csw.parsers.CSWAbstractCapabilitiesParser#parse(es.gva.cit.catalogClient.metadataxml.XMLNode)
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.csw.parsers.CSWAbstractCapabilitiesParser#parse
+	 * (es.gva.cit.catalogClient.metadataxml.XMLNode)
 	 */
 	public void parse(XMLNode node) {
 		parseSchemaComponent(node.searchNode(CSWConstants.SCHEMA_COMPONENT));
-		
+
 	}
-	
+
 	/**
 	 * Parses the SchemaComponent tag
+	 * 
 	 * @param node
 	 */
-	private void parseSchemaComponent(XMLNode node){
-		if (node == null){
+	private void parseSchemaComponent(XMLNode node) {
+		if (node == null) {
 			return;
 		}
 		XMLNode schema = node.searchNode(CSWConstants.SCHEMA);

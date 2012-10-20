@@ -66,11 +66,12 @@ import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 import com.iver.cit.gvsig.project.documents.view.tool.gui.TextPropertiesPanel;
 
 /**
- *
+ * 
  * @author Cesar Martinez Izquierdo <cesar.martinez@iver.es> Oct 2008
- *
+ * 
  */
-public class SingleLabelingToolUI extends JPanel implements IWindow, IWindowListener, SingletonWindow {
+public class SingleLabelingToolUI extends JPanel implements IWindow,
+		IWindowListener, SingletonWindow {
 	private static final long serialVersionUID = 1L;
 	public static final String TOOL_CLOSED_PROP = "toolClosed";
 	public static final String TARGET_LAYER_CHANGED_PROP = "targetLayerChanged";
@@ -89,8 +90,8 @@ public class SingleLabelingToolUI extends JPanel implements IWindow, IWindowList
 
 	private void initialize() {
 		this.setLayout(new GridBagLayout());
-		JLabel label = new JLabel(
-				PluginServices.getText(this, "Target_annotation_layer"));
+		JLabel label = new JLabel(PluginServices.getText(this,
+				"Target_annotation_layer"));
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.gridy = 0;
 		constraints.gridx = 0;
@@ -101,14 +102,15 @@ public class SingleLabelingToolUI extends JPanel implements IWindow, IWindowList
 		targetLayerField.setEditable(false);
 		constraints.gridy = 0;
 		constraints.gridx = 1;
-		targetLayerField.setMinimumSize(new Dimension(20,6));
+		targetLayerField.setMinimumSize(new Dimension(20, 6));
 		this.add(targetLayerField, constraints);
 
 		JButton labExpressionBtn = new JButton("...");
 		labExpressionBtn.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				PluginServices.getMDIManager().addWindow(new ConfigTargetLayer(view, SingleLabelingToolUI.this));
+				PluginServices.getMDIManager().addWindow(
+						new ConfigTargetLayer(view, SingleLabelingToolUI.this));
 			}
 		});
 		constraints.gridy = 0;
@@ -119,7 +121,8 @@ public class SingleLabelingToolUI extends JPanel implements IWindow, IWindowList
 		constraints.gridx = 0;
 		constraints.gridwidth = 1;
 		constraints.anchor = GridBagConstraints.EAST;
-		JPanel panel = new JPanel(); // required to give some insets to the textProp panel
+		JPanel panel = new JPanel(); // required to give some insets to the
+										// textProp panel
 		panel.add(getTextPropertiesPanel(), constraints);
 
 		constraints.gridy = 1;
@@ -127,14 +130,17 @@ public class SingleLabelingToolUI extends JPanel implements IWindow, IWindowList
 		constraints.gridwidth = 3;
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.fill = GridBagConstraints.BOTH;
-		Border border = BorderFactory.createTitledBorder(PluginServices.getText(this, "Label_properties"));
+		Border border = BorderFactory.createTitledBorder(PluginServices
+				.getText(this, "Label_properties"));
 		panel.setBorder(border);
 		this.add(panel, constraints);
 
-		labExpressionBtn = new JButton(PluginServices.getText(this, "Set_labeling_expression"));
+		labExpressionBtn = new JButton(PluginServices.getText(this,
+				"Set_labeling_expression"));
 		labExpressionBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				PluginServices.getMDIManager().addCentredWindow(new ConfigLabelingExpression(view));
+				PluginServices.getMDIManager().addCentredWindow(
+						new ConfigLabelingExpression(view));
 
 			}
 		});
@@ -148,12 +154,14 @@ public class SingleLabelingToolUI extends JPanel implements IWindow, IWindowList
 	}
 
 	public WindowInfo getWindowInfo() {
-		if (wInfo==null) {
+		if (wInfo == null) {
 			wInfo = new WindowInfo(WindowInfo.PALETTE | WindowInfo.RESIZABLE);
 			wInfo.setWidth(330);
 			wInfo.setHeight(280);
-			wInfo.setTitle(PluginServices.getText(this, "SingleLabelingTool")+" -- "+
-					PluginServices.getMDIManager().getWindowInfo(view).getTitle());
+			wInfo.setTitle(PluginServices.getText(this, "SingleLabelingTool")
+					+ " -- "
+					+ PluginServices.getMDIManager().getWindowInfo(view)
+							.getTitle());
 			wInfo.setY(200);
 		}
 		return wInfo;
@@ -171,7 +179,7 @@ public class SingleLabelingToolUI extends JPanel implements IWindow, IWindowList
 	}
 
 	public TextPropertiesPanel getTextPropertiesPanel() {
-		if (textPropPanel==null) {
+		if (textPropPanel == null) {
 			textPropPanel = new TextPropertiesPanel();
 			applySystemWideSettings();
 		}
@@ -179,27 +187,34 @@ public class SingleLabelingToolUI extends JPanel implements IWindow, IWindowList
 	}
 
 	private void applySystemWideSettings() {
-		Annotation_Mapping mapping = new Annotation_Mapping(); // WEIRD, I KNOW!! Necessary because the defaults get initialized on object creation...
+		Annotation_Mapping mapping = new Annotation_Mapping(); // WEIRD, I
+																// KNOW!!
+																// Necessary
+																// because the
+																// defaults get
+																// initialized
+																// on object
+																// creation...
 
 		textPropPanel.setFontType(Annotation_Mapping.DEFAULTTYPEFONT);
 		textPropPanel.setFontStyle(Annotation_Mapping.DEFAULTSTYLEFONT);
 		textPropPanel.setTextHeight(Annotation_Mapping.DEFAULTHEIGHT);
-		Color color=new Color(Annotation_Mapping.DEFAULTCOLOR);
+		Color color = new Color(Annotation_Mapping.DEFAULTCOLOR);
 		textPropPanel.setColor(color);
 		textPropPanel.setRotation(Annotation_Mapping.DEFAULTROTATE);
 	}
 
 	public void setTargetLayer(Annotation_Layer newTargetLayer) {
-		if (this.targetLayer!=newTargetLayer) {
+		if (this.targetLayer != newTargetLayer) {
 			Annotation_Layer oldLayer = this.targetLayer;
 			this.targetLayer = newTargetLayer;
-			if (newTargetLayer!=null) {
+			if (newTargetLayer != null) {
 				targetLayerField.setText(newTargetLayer.getName());
-			}
-			else {
+			} else {
 				targetLayerField.setText("");
 			}
-			firePropertyChange(TARGET_LAYER_CHANGED_PROP, oldLayer, newTargetLayer);
+			firePropertyChange(TARGET_LAYER_CHANGED_PROP, oldLayer,
+					newTargetLayer);
 		}
 	}
 
@@ -212,7 +227,7 @@ public class SingleLabelingToolUI extends JPanel implements IWindow, IWindowList
 	}
 
 	public void activateWindow() {
-		if (PluginServices.getMDIManager().getActiveWindow() != this){
+		if (PluginServices.getMDIManager().getActiveWindow() != this) {
 			PluginServices.getMDIManager().addWindow(this);
 		}
 

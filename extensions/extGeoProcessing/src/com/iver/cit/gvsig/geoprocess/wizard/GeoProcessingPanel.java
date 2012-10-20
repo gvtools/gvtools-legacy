@@ -80,7 +80,7 @@ import com.iver.cit.gvsig.geoprocess.impl.union.UnionGeoprocessController;
  * Container component panel of the Geoprocessing Wizard. It contains all
  * spetialized panels to do geoprocessing. It is an Andami's View (it is added
  * to ANDAMI like a JInternalFrame)
- *
+ * 
  * @author jmorell, azabala
  */
 public class GeoProcessingPanel extends JPanel implements IWindow,
@@ -90,11 +90,11 @@ public class GeoProcessingPanel extends JPanel implements IWindow,
 	 * AZABALA Inicialmente queria usar el API Wizard de la libreria IVER
 	 * UTILES. No obstante, ese API es para construir Wizards estáticos, donde
 	 * todas las fases/pantallas son las mismas: 1->2->3->...->FIN.
-	 *
+	 * 
 	 * El componente de GeoprocessingWizard está pensado para que la pantalla 2
 	 * sea distinta, en función de la selección que haya hecho el usuario en la
 	 * pantalla 1.
-	 *
+	 * 
 	 * A falta de construir un API genérica de Wizards (que contemple
 	 * bifurcaciones) conservamos la concepción original.
 	 */
@@ -142,9 +142,8 @@ public class GeoProcessingPanel extends JPanel implements IWindow,
 	private JPanel mainPanel = null;
 
 	/**
-	 * These String constants are used to tells to CardLayout which
-	 * panel it must show, in response to user selection of radio button
-	 * panel.
+	 * These String constants are used to tells to CardLayout which panel it
+	 * must show, in response to user selection of radio button panel.
 	 */
 	private final static String CONVEX_HULL = "convex";
 	private final static String SPATIAL_JOIN = "spt_join";
@@ -178,13 +177,13 @@ public class GeoProcessingPanel extends JPanel implements IWindow,
 		if (PluginServices.getMainFrame() == null) {
 			Container container = getParent();
 			Container parentOfContainer = null;
-			//TODO This code is used in many classes
-			//Reuse it
-			while(! (container instanceof Window)){
+			// TODO This code is used in many classes
+			// Reuse it
+			while (!(container instanceof Window)) {
 				parentOfContainer = container.getParent();
 				container = parentOfContainer;
 			}
-			((Window)container).dispose();
+			((Window) container).dispose();
 		} else {
 			PluginServices.getMDIManager().closeWindow(GeoProcessingPanel.this);
 		}
@@ -201,39 +200,39 @@ public class GeoProcessingPanel extends JPanel implements IWindow,
 	}
 
 	private void showBufferPanel() {
-		((CardLayout)mainPanel.getLayout()).show(mainPanel, BUFFER);
+		((CardLayout) mainPanel.getLayout()).show(mainPanel, BUFFER);
 	}
 
 	private void showClipPanel() {
-		((CardLayout)mainPanel.getLayout()).show(mainPanel, CLIP);
+		((CardLayout) mainPanel.getLayout()).show(mainPanel, CLIP);
 	}
 
 	private void showDissolvePanel() {
-		((CardLayout)mainPanel.getLayout()).show(mainPanel, DISSOLVE);
+		((CardLayout) mainPanel.getLayout()).show(mainPanel, DISSOLVE);
 	}
 
 	private void showMergePanel() {
-		((CardLayout)mainPanel.getLayout()).show(mainPanel, MERGE);
+		((CardLayout) mainPanel.getLayout()).show(mainPanel, MERGE);
 	}
 
 	private void showIntersectPanel() {
-		((CardLayout)mainPanel.getLayout()).show(mainPanel, INTERSECT);
+		((CardLayout) mainPanel.getLayout()).show(mainPanel, INTERSECT);
 	}
 
 	private void showUnionPanel() {
-		((CardLayout)mainPanel.getLayout()).show(mainPanel, UNION);
+		((CardLayout) mainPanel.getLayout()).show(mainPanel, UNION);
 	}
 
 	private void showSpatialJoinPanel() {
-		((CardLayout)mainPanel.getLayout()).show(mainPanel, SPATIAL_JOIN);
+		((CardLayout) mainPanel.getLayout()).show(mainPanel, SPATIAL_JOIN);
 	}
 
 	private void showDifferencePanel() {
-		((CardLayout)mainPanel.getLayout()).show(mainPanel, DIFFERENCE);
+		((CardLayout) mainPanel.getLayout()).show(mainPanel, DIFFERENCE);
 	}
 
 	private void showOptionSelectionPanel() {
-		((CardLayout)mainPanel.getLayout()).show(mainPanel, OP_SELECT);
+		((CardLayout) mainPanel.getLayout()).show(mainPanel, OP_SELECT);
 	}
 
 	public void nextStep() {
@@ -299,13 +298,13 @@ public class GeoProcessingPanel extends JPanel implements IWindow,
 					.isDifferenceSelected()) {
 				closeDialog = doDifference();
 			}
-			if(closeDialog)
+			if (closeDialog)
 				closeDialog();
 		}
 	}
 
 	private void showConvexHullPanel() {
-		((CardLayout)mainPanel.getLayout()).show(mainPanel, CONVEX_HULL);
+		((CardLayout) mainPanel.getLayout()).show(mainPanel, CONVEX_HULL);
 	}
 
 	private Component getGeoProcessingConvexHullPanel() {
@@ -322,7 +321,7 @@ public class GeoProcessingPanel extends JPanel implements IWindow,
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
@@ -355,12 +354,13 @@ public class GeoProcessingPanel extends JPanel implements IWindow,
 		return viewInfo;
 	}
 
-	public Object getWindowProfile(){
+	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
+
 	/**
 	 * This method initializes geoProcessingOperationSelectorPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getGeoProcessingOperationSelectorPanel() {
@@ -374,7 +374,7 @@ public class GeoProcessingPanel extends JPanel implements IWindow,
 
 	/**
 	 * This method initializes geoProcessingBufferPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getGeoProcessingBufferPanel() {
@@ -387,14 +387,13 @@ public class GeoProcessingPanel extends JPanel implements IWindow,
 
 	/**
 	 * This method initializes geoProcessingClipPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getGeoProcessingClipPanel() {
 		if (geoProcessingClipPanel == null) {
 			String titleText = PluginServices.getText(this,
-					"Recortar._Introduccion_de_datos")
-					+ ":";
+					"Recortar._Introduccion_de_datos") + ":";
 			geoProcessingClipPanel = new GeoProcessingOverlayPanel(layers,
 					titleText);
 			geoProcessingClipPanel.setName("geoProcessingClipPanel");
@@ -408,7 +407,7 @@ public class GeoProcessingPanel extends JPanel implements IWindow,
 
 	/**
 	 * This method initializes geoProcessingDissolvePanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getGeoProcessingDissolvePanel() {
@@ -421,7 +420,7 @@ public class GeoProcessingPanel extends JPanel implements IWindow,
 
 	/**
 	 * This method initializes geoProcessingMergePanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getGeoProcessingMergePanel() {
@@ -434,7 +433,7 @@ public class GeoProcessingPanel extends JPanel implements IWindow,
 
 	/**
 	 * This method initializes geoProcessingIntersectPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getGeoProcessingIntersectPanel() {
@@ -450,7 +449,7 @@ public class GeoProcessingPanel extends JPanel implements IWindow,
 
 	/**
 	 * This method initializes geoProcessingUnionPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getGeoProcessingUnionPanel() {
@@ -466,7 +465,7 @@ public class GeoProcessingPanel extends JPanel implements IWindow,
 
 	/**
 	 * This method initializes geoProcessingSpatialjoinPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getGeoProcessingSpatialjoinPanel() {
@@ -485,7 +484,7 @@ public class GeoProcessingPanel extends JPanel implements IWindow,
 
 	/**
 	 * This method initializes buttonsPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getButtonsPanel() {
@@ -493,12 +492,11 @@ public class GeoProcessingPanel extends JPanel implements IWindow,
 			buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 			buttonsPanel.setName("buttonsPanel");
 
-
 			// esto también lo cambiaria...JButton, JButton1, JButton2 no
-			buttonsPanel.setBounds(new java.awt.Rectangle(14,353,466,40));
+			buttonsPanel.setBounds(new java.awt.Rectangle(14, 353, 466, 40));
 			// dan claridad al codigo
 			buttonsPanel.add(getCloseButton(), null);
-			buttonsPanel.add(new JPanel(),null); //just a separator;
+			buttonsPanel.add(new JPanel(), null); // just a separator;
 			buttonsPanel.add(getPreviousButton(), null);
 			buttonsPanel.add(getNextButton(), null);
 		}
@@ -507,7 +505,7 @@ public class GeoProcessingPanel extends JPanel implements IWindow,
 
 	/**
 	 * This method initializes closeButton
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getCloseButton() {
@@ -525,7 +523,7 @@ public class GeoProcessingPanel extends JPanel implements IWindow,
 
 	/**
 	 * This method initializes previousButton
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getPreviousButton() {
@@ -544,7 +542,7 @@ public class GeoProcessingPanel extends JPanel implements IWindow,
 
 	/**
 	 * This method initializes nextButton
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getNextButton() {
@@ -561,13 +559,13 @@ public class GeoProcessingPanel extends JPanel implements IWindow,
 	}
 
 	public boolean doBuffer() {
-		BufferGeoprocessController controller =
-			new BufferGeoprocessController();
+		BufferGeoprocessController controller = new BufferGeoprocessController();
 		controller.setView(geoProcessingBufferPanel);
 		return controller.launchGeoprocess();
 	}
 
-	private ShpWriter getShpWriter(SHPLayerDefinition definition) throws Exception {
+	private ShpWriter getShpWriter(SHPLayerDefinition definition)
+			throws Exception {
 		ShpWriter writer = new ShpWriter();
 		writer.setFile(definition.getFile());
 		writer.initialize(definition);
@@ -575,78 +573,68 @@ public class GeoProcessingPanel extends JPanel implements IWindow,
 	}
 
 	public boolean doMerge() {
-		MergeGeoprocessController controller =
-			new MergeGeoprocessController();
+		MergeGeoprocessController controller = new MergeGeoprocessController();
 		controller.setView(geoProcessingMergePanel);
 		return controller.launchGeoprocess();
 	}
 
 	public boolean doDissolve() {
-		DissolveGeoprocessController controller =
-			new DissolveGeoprocessController();
+		DissolveGeoprocessController controller = new DissolveGeoprocessController();
 		controller.setView(geoProcessingDissolvePanel);
 		return controller.launchGeoprocess();
 	}
 
 	public boolean doSpatialJoin() {
-		SpatialJoinGeoprocessController controller =
-			new SpatialJoinGeoprocessController();
+		SpatialJoinGeoprocessController controller = new SpatialJoinGeoprocessController();
 		controller.setView(geoProcessingSpatialjoinPanel);
 		return controller.launchGeoprocess();
 
 	}
 
 	public boolean doClip() {
-		ClipGeoprocessController controller =
-			new ClipGeoprocessController();
+		ClipGeoprocessController controller = new ClipGeoprocessController();
 		controller.setView(geoProcessingClipPanel);
 		return controller.launchGeoprocess();
 	}
 
 	// Spatial join con Intersect
 	public boolean doIntersect() {
-		IntersectionGeoprocessController controller =
-			new IntersectionGeoprocessController();
+		IntersectionGeoprocessController controller = new IntersectionGeoprocessController();
 		controller.setView(geoProcessingIntersectPanel);
 		return controller.launchGeoprocess();
 	}
 
 	public boolean doUnion() {
-		UnionGeoprocessController controller =
-			new UnionGeoprocessController();
+		UnionGeoprocessController controller = new UnionGeoprocessController();
 		controller.setView(geoProcessingUnionPanel);
 		return controller.launchGeoprocess();
 	}
 
-
 	public boolean doConvexHull() {
-		ConvexHullGeoprocessController controller =
-			new ConvexHullGeoprocessController();
+		ConvexHullGeoprocessController controller = new ConvexHullGeoprocessController();
 		controller.setView(geoProcessingConvexHullPanel);
 		return controller.launchGeoprocess();
 	}
 
 	public boolean doDifference() {
-		DifferenceGeoprocessController controller =
-			new DifferenceGeoprocessController();
+		DifferenceGeoprocessController controller = new DifferenceGeoprocessController();
 		controller.setView(geoProcessingDifferencePanel);
 		return controller.launchGeoprocess();
 	}
 
-
-
 	/**
 	 * This method initializes mainPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new CardLayout());
-			mainPanel.setBounds(new java.awt.Rectangle(12,8,469,339));
-			mainPanel.setBorder(javax.swing.BorderFactory
-					.createEtchedBorder(javax.swing.border.EtchedBorder.LOWERED));
+			mainPanel.setBounds(new java.awt.Rectangle(12, 8, 469, 339));
+			mainPanel
+					.setBorder(javax.swing.BorderFactory
+							.createEtchedBorder(javax.swing.border.EtchedBorder.LOWERED));
 			mainPanel.add(getGeoProcessingOperationSelectorPanel(), OP_SELECT);
 			mainPanel.add(getGeoProcessingConvexHullPanel(), CONVEX_HULL);
 			mainPanel.add(getGeoProcessingSpatialjoinPanel(), SPATIAL_JOIN);
@@ -661,4 +649,4 @@ public class GeoProcessingPanel extends JPanel implements IWindow,
 		return mainPanel;
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="70,7"
+} // @jve:decl-index=0:visual-constraint="70,7"

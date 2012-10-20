@@ -41,7 +41,6 @@
 package org.gvsig.graph;
 
 import java.awt.Component;
-import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.util.HashMap;
 
@@ -57,8 +56,6 @@ import org.gvsig.graph.gui.wizard.NetWizard;
 import org.gvsig.graph.preferences.RoutePage;
 import org.gvsig.graph.topology.LineSnapGeoprocess;
 
-import com.hardcode.gdbms.driver.exceptions.InitializeDriverException;
-import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.plugins.Extension;
@@ -68,7 +65,6 @@ import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.core.FShape;
-import com.iver.cit.gvsig.fmap.drivers.BoundedShapes;
 import com.iver.cit.gvsig.fmap.drivers.SHPLayerDefinition;
 import com.iver.cit.gvsig.fmap.edition.IWriter;
 import com.iver.cit.gvsig.fmap.edition.ShpSchemaManager;
@@ -78,16 +74,9 @@ import com.iver.cit.gvsig.fmap.edition.writers.shp.ShpWriter;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
-import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
 import com.iver.cit.gvsig.fmap.layers.SingleLayerIterator;
-import com.iver.cit.gvsig.fmap.layers.VectorialAdapter;
-import com.iver.cit.gvsig.fmap.spatialindex.IPersistentSpatialIndex;
-import com.iver.cit.gvsig.fmap.spatialindex.ISpatialIndex;
-import com.iver.cit.gvsig.fmap.spatialindex.QuadtreeJts;
 import com.iver.cit.gvsig.geoprocess.core.fmap.GeoprocessException;
 import com.iver.cit.gvsig.geoprocess.core.fmap.XTypes;
-import com.iver.cit.gvsig.geoprocess.impl.topology.lineclean.fmap.LineCleanGeoprocess;
-import com.iver.cit.gvsig.geoprocess.impl.topology.lineclean.fmap.LineCleanVisitor;
 import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.IView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
@@ -99,7 +88,7 @@ import com.iver.utiles.swing.threads.PipeTask;
 public class GenerateNetworkExtension extends Extension implements
 		IPreferenceExtension {
 	private static final IPreference[] thePreferencePages = new IPreference[] { new RoutePage() };
-	
+
 	public boolean onlySnapNodes = true;
 
 	private double snapTolerance;
@@ -107,8 +96,8 @@ public class GenerateNetworkExtension extends Extension implements
 	public void initialize() {
 		PluginServices.getIconTheme().registerDefault(
 				"build_graph",
-				this.getClass().getClassLoader().getResource(
-						"images/build_graph.png"));
+				this.getClass().getClassLoader()
+						.getResource("images/build_graph.png"));
 
 		// ExtensionPoints extensionPoints =
 		// ExtensionPointsSingleton.getInstance();
@@ -184,8 +173,8 @@ public class GenerateNetworkExtension extends Extension implements
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		JOptionPane.showMessageDialog(null, PluginServices
-				.getText(this, "done"));
+		JOptionPane.showMessageDialog(null,
+				PluginServices.getText(this, "done"));
 	}
 
 	class GenerateRedNetworkAfterCleanTask extends AbstractMonitorableTask
@@ -275,28 +264,29 @@ public class GenerateNetworkExtension extends Extension implements
 				inputLayer.createSpatialIndex();
 				this.redFile = NetworkUtils.getNetworkFile(inputLayer);
 				this.pseudonodes = (FLyrVect) layers.getLayer(1);
-			}
-			else if (object instanceof FLyrVect) // no había errores
+			} else if (object instanceof FLyrVect) // no había errores
 			{
 				this.inputLayer = (FLyrVect) object;
 				inputLayer.createSpatialIndex();
 				this.redFile = NetworkUtils.getNetworkFile(inputLayer);
-				this.pseudonodes = null;				
+				this.pseudonodes = null;
 			}
 		}
 	}
 
-	public void enableControls(final FLyrVect layer, final File netFile) throws BaseException {
-		int resp = JOptionPane.showConfirmDialog((Component) PluginServices.getMDIManager().getActiveWindow(),
-				PluginServices.getText(null, "load_generated_network"),
-				PluginServices.getText(null, "Network"),
-				JOptionPane.YES_NO_OPTION);
-		
+	public void enableControls(final FLyrVect layer, final File netFile)
+			throws BaseException {
+		int resp = JOptionPane.showConfirmDialog((Component) PluginServices
+				.getMDIManager().getActiveWindow(), PluginServices.getText(
+				null, "load_generated_network"), PluginServices.getText(null,
+				"Network"), JOptionPane.YES_NO_OPTION);
+
 		if (resp == JOptionPane.YES_OPTION) {
-			LoadDefaultNetworkExtension ext = (LoadDefaultNetworkExtension) PluginServices.getExtension(LoadDefaultNetworkExtension.class);
+			LoadDefaultNetworkExtension ext = (LoadDefaultNetworkExtension) PluginServices
+					.getExtension(LoadDefaultNetworkExtension.class);
 			ext.loadNetwork(layer, netFile);
 		}
-		
+
 		PluginServices.backgroundExecution(new Runnable() {
 			public void run() {
 				PluginServices.getMainFrame().enableControls();
@@ -317,16 +307,16 @@ public class GenerateNetworkExtension extends Extension implements
 		public GenerateRedNetworkTask(FLyrVect layer, File redFile,
 				NetworkFileRedWriter netBuilder) {
 			this.layer = layer;
-			try {			
-//				if (layer.isSpatiallyIndexed()) {
-					layer.setISpatialIndex(NetworkUtils.createJtsQuadtree(layer));
-//				}
-	
+			try {
+				// if (layer.isSpatiallyIndexed()) {
+				layer.setISpatialIndex(NetworkUtils.createJtsQuadtree(layer));
+				// }
+
 				this.redFile = redFile;
 				this.netBuilder = netBuilder;
 				setInitialStep(0);
 				int numShapes;
-			
+
 				numShapes = layer.getSource().getShapeCount();
 				// lo del 10 es porque escribimos los nodos después de
 				// los tramos.
@@ -381,8 +371,8 @@ public class GenerateNetworkExtension extends Extension implements
 				null, "Fichero_para_capa_corregida"),
 				JOptionPane.INFORMATION_MESSAGE);
 		JFileChooser jfc = new JFileChooser();
-		SimpleFileFilter filterShp = new SimpleFileFilter("shp", PluginServices
-				.getText(this, "shp_files"));
+		SimpleFileFilter filterShp = new SimpleFileFilter("shp",
+				PluginServices.getText(this, "shp_files"));
 		jfc.setFileFilter(filterShp);
 		if (jfc.showSaveDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
 			File newFile = jfc.getSelectedFile();
@@ -405,14 +395,14 @@ public class GenerateNetworkExtension extends Extension implements
 		} else {
 			return null;
 		}
-//		LineCleanGeoprocess geoprocess = new LineCleanGeoprocess(lineLyr);
+		// LineCleanGeoprocess geoprocess = new LineCleanGeoprocess(lineLyr);
 		LineSnapGeoprocess geoprocess = new LineSnapGeoprocess(lineLyr);
 		geoprocess.setTolerance(snapTolerance);
 		SHPLayerDefinition definition = (SHPLayerDefinition) geoprocess
 				.createLayerDefinition();
 		definition.setFile(outputFile);
-		ShpSchemaManager schemaManager = new ShpSchemaManager(outputFile
-				.getAbsolutePath());
+		ShpSchemaManager schemaManager = new ShpSchemaManager(
+				outputFile.getAbsolutePath());
 		IWriter writer = null;
 		try {
 			int shapeType = definition.getShapeType();
@@ -436,9 +426,10 @@ public class GenerateNetworkExtension extends Extension implements
 		HashMap params = new HashMap();
 		params.put("layer_selection", new Boolean(false));
 		params.put("onlysnapnodes", new Boolean(onlySnapNodes));
-//		boolean createLayerWithError = true;
-//		params.put("createlayerswitherrors", new Boolean(createLayerWithError));
-		
+		// boolean createLayerWithError = true;
+		// params.put("createlayerswitherrors", new
+		// Boolean(createLayerWithError));
+
 		try {
 			geoprocess.setParameters(params);
 			geoprocess.checkPreconditions();
@@ -497,8 +488,7 @@ public class GenerateNetworkExtension extends Extension implements
 			clean = createCleanGeoprocess(lyr);
 			if (clean == null)
 				return;
-			
-			
+
 		}
 		if (clean != null) {
 			// we wont start the process of network creation
@@ -542,7 +532,7 @@ public class GenerateNetworkExtension extends Extension implements
 					try {
 						if (!lyrVect.isAvailable())
 							return false;
-						
+
 						shapeType = lyrVect.getShapeType();
 						if ((shapeType & FShape.LINE) == FShape.LINE)
 							// if (shapeType == FShape.LINE)

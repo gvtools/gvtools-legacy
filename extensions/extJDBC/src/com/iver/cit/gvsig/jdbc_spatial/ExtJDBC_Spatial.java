@@ -49,27 +49,29 @@ import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
 public class ExtJDBC_Spatial extends Extension {
 
-    public void initialize() {
-        System.out.println("Añado WizardJDBC.");
-//        AddLayer.addWizard(WizardJDBC.class);
-        ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
-    	extensionPoints.add("CatalogLayers","POSTGIS",new JDBCLayerBuilder());
-//    	extensionPoints.add("Layers",FLayerVectorialDB.class.getName(), FLayerVectorialDB.class);
-    }
+	public void initialize() {
+		System.out.println("Añado WizardJDBC.");
+		// AddLayer.addWizard(WizardJDBC.class);
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+		extensionPoints.add("CatalogLayers", "POSTGIS", new JDBCLayerBuilder());
+		// extensionPoints.add("Layers",FLayerVectorialDB.class.getName(),
+		// FLayerVectorialDB.class);
+	}
 
-    public void execute(String actionCommand) {
-        // TODO Auto-generated method stub
+	public void execute(String actionCommand) {
+		// TODO Auto-generated method stub
 
-    }
+	}
 
-    public boolean isEnabled() {
-        // TODO Auto-generated method stub
-        return false;
-    }
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
-    public boolean isVisible() {
-        // TODO Auto-generated method stub
-        return false;
-    }
+	public boolean isVisible() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }

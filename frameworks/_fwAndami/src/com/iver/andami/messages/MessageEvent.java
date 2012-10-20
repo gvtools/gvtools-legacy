@@ -44,7 +44,7 @@ public class MessageEvent {
 	private String[] messages;
 	private Throwable[] exceptions;
 
-	public MessageEvent(String[] msgs, Throwable[] excps){
+	public MessageEvent(String[] msgs, Throwable[] excps) {
 		messages = msgs;
 		exceptions = excps;
 	}

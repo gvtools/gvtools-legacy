@@ -47,54 +47,55 @@ import java.util.Stack;
 import com.iver.cit.gvsig.exceptions.commands.EditionCommandException;
 import com.iver.cit.gvsig.fmap.drivers.DriverIOException;
 
-
 /**
  * Clase en memoria para registrar y gestionar los comandos que vamos
  * realizando. La forma en que ha sido implementada esta clase, en vez de una
  * única lista para albergar los comandos de deshacer(undos) y los de
  * rehacer(redos), se ha optado por dos pilas una para deshacer(undos) y otra
- * para rehacer(redos), de esta forma :  Cuando se añade un nuevo comando, se
- * inserta este a la pila de deshacer(undos) y se borra de la de
- * rehacer(redos). Si se realiza un deshacer se desapila este comando de la
- * pila deshacer(undos) y se apila en la de rehacer(redos). Y de la misma
- * forma cuando se realiza un rehacer se desapila este comando de la pila de
- * rehacer(redos) y pasa a la de deshacer(undos).
- *
+ * para rehacer(redos), de esta forma : Cuando se añade un nuevo comando, se
+ * inserta este a la pila de deshacer(undos) y se borra de la de rehacer(redos).
+ * Si se realiza un deshacer se desapila este comando de la pila deshacer(undos)
+ * y se apila en la de rehacer(redos). Y de la misma forma cuando se realiza un
+ * rehacer se desapila este comando de la pila de rehacer(redos) y pasa a la de
+ * deshacer(undos).
+ * 
  * @author Vicente Caballero Navarro
  */
 public class MemoryCommandRecord implements CommandRecord {
 	private Stack undos = new Stack();
 	private Stack redos = new Stack();
-	private ArrayList commandsListener=new ArrayList();
-	private boolean refresh=true;
-	private int undosCount=0;
+	private ArrayList commandsListener = new ArrayList();
+	private boolean refresh = true;
+	private int undosCount = 0;
 
 	/**
 	 * Añade el comando a la pila de deshacer y borra todo el contenido de la
 	 * pila rehacer.
-	 *
-	 * @param command Comando a añadir.
-	 *
+	 * 
+	 * @param command
+	 *            Comando a añadir.
+	 * 
 	 * @throws IOException
 	 * @throws DriverIOException
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.edition.CommandRecord#addCommand(com.iver.cit.gvsig.fmap.edition.Command)
 	 */
-	public void pushCommand(Command command){
+	public void pushCommand(Command command) {
 		undos.add(command);
 		redos.clear();
-		refresh=true;
+		refresh = true;
 		fireCommandRefresh();
 	}
 
 	/**
 	 * Realiza la operación del último comando de deshacer y lo apila en los de
 	 * rehacer.
+	 * 
 	 * @throws EditionCommandException
-	 *
+	 * 
 	 * @throws DriverIOException
 	 * @throws IOException
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.edition.CommandRecord#delCommand(com.iver.cit.gvsig.fmap.edition.Command)
 	 */
 	public void undoCommand() throws EditionCommandException {
@@ -105,12 +106,12 @@ public class MemoryCommandRecord implements CommandRecord {
 	}
 
 	/**
-	 * Realiza la operación de rehacer el último comando apilado y lo añade a
-	 * la pila deshacer.
-	 *
+	 * Realiza la operación de rehacer el último comando apilado y lo añade a la
+	 * pila deshacer.
+	 * 
 	 * @throws DriverIOException
 	 * @throws IOException
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.edition.CommandRecord#redoCommand()
 	 */
 	public void redoCommand() throws EditionCommandException {
@@ -133,42 +134,46 @@ public class MemoryCommandRecord implements CommandRecord {
 	public boolean moreRedoCommands() {
 		return (!redos.isEmpty());
 	}
-	public Command[] getUndoCommands(){
-		Stack clonedUndos=(Stack)undos.clone();
 
-		ArrayList commands=new ArrayList();
-		while (!clonedUndos.isEmpty()){
+	public Command[] getUndoCommands() {
+		Stack clonedUndos = (Stack) undos.clone();
+
+		ArrayList commands = new ArrayList();
+		while (!clonedUndos.isEmpty()) {
 			commands.add(clonedUndos.pop());
 		}
 
-		return (Command[])commands.toArray(new Command[0]);
+		return (Command[]) commands.toArray(new Command[0]);
 	}
-	public Command[] getRedoCommands(){
-		Stack clonedRedos=(Stack)redos.clone();
 
-		ArrayList commands=new ArrayList();
-		while (!clonedRedos.isEmpty()){
+	public Command[] getRedoCommands() {
+		Stack clonedRedos = (Stack) redos.clone();
+
+		ArrayList commands = new ArrayList();
+		while (!clonedRedos.isEmpty()) {
 			commands.add(clonedRedos.pop());
 		}
-		return (Command[])commands.toArray(new Command[0]);
+		return (Command[]) commands.toArray(new Command[0]);
 	}
-	public int getPos(){
-		if (refresh){
-			undosCount=undos.size()-1;
+
+	public int getPos() {
+		if (refresh) {
+			undosCount = undos.size() - 1;
 		}
 		return undosCount;
 	}
-	public void setPos(int newpos) throws EditionCommandException{
-		int pos=getPos();
-		if (newpos>pos){
-			for (int i=pos;i<newpos;i++){
+
+	public void setPos(int newpos) throws EditionCommandException {
+		int pos = getPos();
+		if (newpos > pos) {
+			for (int i = pos; i < newpos; i++) {
 				redoCommand();
-				System.out.println("redos = "+i);
+				System.out.println("redos = " + i);
 			}
-		}else if (pos>newpos){
-			for (int i=pos-1;i>=newpos;i--){
+		} else if (pos > newpos) {
+			for (int i = pos - 1; i >= newpos; i--) {
 				undoCommand();
-				System.out.println("undos = "+i);
+				System.out.println("undos = " + i);
 			}
 		}
 	}
@@ -179,18 +184,19 @@ public class MemoryCommandRecord implements CommandRecord {
 	}
 
 	public void fireCommandsRepaint(CommandEvent e) {
-		for (int i=0;i<commandsListener.size();i++){
-			((CommandListener)commandsListener.get(i)).commandRepaint();
+		for (int i = 0; i < commandsListener.size(); i++) {
+			((CommandListener) commandsListener.get(i)).commandRepaint();
 		}
 	}
-	public void fireCommandRefresh(){
-		for (int i=0;i<commandsListener.size();i++){
-			((CommandListener)commandsListener.get(i)).commandRefresh();
+
+	public void fireCommandRefresh() {
+		for (int i = 0; i < commandsListener.size(); i++) {
+			((CommandListener) commandsListener.get(i)).commandRefresh();
 		}
 	}
 
 	public int getCommandCount() {
-		return undos.size()+redos.size();
+		return undos.size() + redos.size();
 	}
 
 	public void removeCommandListener(CommandListener e) {

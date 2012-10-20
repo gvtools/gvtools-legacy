@@ -40,26 +40,26 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: ILabelingMethod.java 13913 2007-09-20 09:36:02Z jaume $
-* $Log$
-* Revision 1.4  2007-09-20 09:33:15  jaume
-* Refactored: fixed name of IPersistAnce to IPersistence
-*
-* Revision 1.3  2007/03/21 11:01:28  jaume
-* javadoc
-*
-* Revision 1.2  2007/03/09 08:33:43  jaume
-* *** empty log message ***
-*
-* Revision 1.1.2.2  2007/02/01 11:42:47  jaume
-* *** empty log message ***
-*
-* Revision 1.1.2.1  2007/01/30 18:10:45  jaume
-* start commiting labeling stuff
-*
-*
-*/
+ *
+ * $Id: ILabelingMethod.java 13913 2007-09-20 09:36:02Z jaume $
+ * $Log$
+ * Revision 1.4  2007-09-20 09:33:15  jaume
+ * Refactored: fixed name of IPersistAnce to IPersistence
+ *
+ * Revision 1.3  2007/03/21 11:01:28  jaume
+ * javadoc
+ *
+ * Revision 1.2  2007/03/09 08:33:43  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1.2.2  2007/02/01 11:42:47  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1.2.1  2007/01/30 18:10:45  jaume
+ * start commiting labeling stuff
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.rendering.styling.labeling;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -69,29 +69,33 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.utiles.IPersistence;
 
 /**
- * Interface that defines provides support to a ILabelingStrategy to supply
- * the set of <b>LabelClass</b>(es) that handle the label's style, content, etc..
- *
+ * Interface that defines provides support to a ILabelingStrategy to supply the
+ * set of <b>LabelClass</b>(es) that handle the label's style, content, etc..
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
-public interface ILabelingMethod extends IPersistence{
+public interface ILabelingMethod extends IPersistence {
 
 	/**
 	 * Returns all the labels defined by this Labeling Method
+	 * 
 	 * @return all the labels in this labeling method;
 	 */
 	public LabelClass[] getLabelClasses();
 
 	/**
-	 * Returns the LabelClass contained by this ILabelingMethod whose name matches
-	 * with the string passed in <b>labelName</b>.
+	 * Returns the LabelClass contained by this ILabelingMethod whose name
+	 * matches with the string passed in <b>labelName</b>.
+	 * 
 	 * @param labelName
 	 * @return
 	 */
 	public LabelClass getLabelClassByName(String labelName);
 
 	/**
-	 * Adds a LabelClass to the set of LabelClass contained by this ILabelingMethod.
+	 * Adds a LabelClass to the set of LabelClass contained by this
+	 * ILabelingMethod.
+	 * 
 	 * @param lbl
 	 */
 	public void addLabelClass(LabelClass lbl);
@@ -99,31 +103,38 @@ public interface ILabelingMethod extends IPersistence{
 	/**
 	 * Removes the LabelClass from the set of LabelClasses contained by this
 	 * ILabelingMethod.
-	 * @param lbl, the LabelClass to be removed
+	 * 
+	 * @param lbl
+	 *            , the LabelClass to be removed
 	 */
 	public void deleteLabelClass(LabelClass lbl);
 
 	/**
 	 * Returns <b>true</b> if this ILabelingMethod allos the definition of more
 	 * LabelClasses than just the default LabelClass.
+	 * 
 	 * @return boolean
 	 */
 	public boolean allowsMultipleClass();
 
 	/**
 	 * Changes the mane of a given LabelClass
-	 * @param lbl, the LabelClass
-	 * @param newName, the new name
+	 * 
+	 * @param lbl
+	 *            , the LabelClass
+	 * @param newName
+	 *            , the new name
 	 */
-	public void renameLabelClass(LabelClass lbl, String newName); 
+	public void renameLabelClass(LabelClass lbl, String newName);
 
-	public IFeatureIterator getFeatureIteratorByLabelClass(FLyrVect layer, LabelClass lc, ViewPort viewPort, String[] usedFields)
-	throws ReadDriverException;
-	
+	public IFeatureIterator getFeatureIteratorByLabelClass(FLyrVect layer,
+			LabelClass lc, ViewPort viewPort, String[] usedFields)
+			throws ReadDriverException;
+
 	public boolean definesPriorities();
-	
+
 	public void setDefinesPriorities(boolean flag);
-	
+
 	public void clearAllClasses();
 
 	public ILabelingMethod cloneMethod();

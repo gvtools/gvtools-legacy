@@ -53,12 +53,13 @@ import com.iver.cit.gvsig.fmap.core.styles.ILineStyle;
 import com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle;
 import com.iver.cit.gvsig.gui.styling.StylePreviewer;
 import com.iver.utiles.swing.JComboBox;
+
 /**
- * ComboBox that shows the different styles of line that can be selected by
- * the user in order to modify a symbol composed by lines .
- *
+ * ComboBox that shows the different styles of line that can be selected by the
+ * user in order to modify a symbol composed by lines .
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
 public class JComboBoxLineStyles extends JComboBox {
 	private static final long serialVersionUID = -4468684151503515142L;
@@ -70,25 +71,26 @@ public class JComboBoxLineStyles extends JComboBox {
 	private float miterlimit;
 	private int width;
 
-	public static  float[][] dash = new float[PREDEFINED_STYLE_COUNT][];
+	public static float[][] dash = new float[PREDEFINED_STYLE_COUNT][];
 	{
 
-		dash[0] = new float[] {	1 }; // no dash, line
+		dash[0] = new float[] { 1 }; // no dash, line
 
-		dash[1] = new float[] {	LINE_WIDTH	}; // lines
+		dash[1] = new float[] { LINE_WIDTH }; // lines
 
-		dash[2] = new float[] {	DOT_WIDTH	}; // dots
+		dash[2] = new float[] { DOT_WIDTH }; // dots
 
-		dash[3] = new float[] {	LINE_WIDTH,
-								DOT_WIDTH	}; // line + dot
+		dash[3] = new float[] { LINE_WIDTH, DOT_WIDTH }; // line + dot
 
-		dash[4] = new float[] {	LINE_WIDTH,
-								DOT_WIDTH,
-								DOT_WIDTH	}; // line + dot + dot
-		dash[5] = new float[] {	LINE_WIDTH,
-								LINE_WIDTH,
-								DOT_WIDTH,
-								DOT_WIDTH	}; // line + line + dot + dot
+		dash[4] = new float[] { LINE_WIDTH, DOT_WIDTH, DOT_WIDTH }; // line +
+																	// dot + dot
+		dash[5] = new float[] { LINE_WIDTH, LINE_WIDTH, DOT_WIDTH, DOT_WIDTH }; // line
+																				// +
+																				// line
+																				// +
+																				// dot
+																				// +
+																				// dot
 	}
 
 	{
@@ -101,11 +103,13 @@ public class JComboBoxLineStyles extends JComboBox {
 	ILineStyle[] styles = new ILineStyle[PREDEFINED_STYLE_COUNT];
 
 	private ListCellRenderer renderer = new ListCellRenderer() {
-		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+		public Component getListCellRendererComponent(JList list, Object value,
+				int index, boolean isSelected, boolean cellHasFocus) {
 			SimpleLineStyle style = null;
 			if (value instanceof float[]) {
-			float[] d = (float[]) value;
-			style = new SimpleLineStyle(width, endCap, lineJoin, miterlimit, d, 0);
+				float[] d = (float[]) value;
+				style = new SimpleLineStyle(width, endCap, lineJoin,
+						miterlimit, d, 0);
 			} else if (value instanceof SimpleLineStyle) {
 				style = (SimpleLineStyle) value;
 			}
@@ -114,18 +118,20 @@ public class JComboBoxLineStyles extends JComboBox {
 			sp.setSize(50, 25);
 			sp.setPreferredSize(sz);
 			sp.setStyle(style);
-			sp.setForeground(UIManager.getColor(isSelected
-					? "ComboBox.selectionForeground"
+			sp.setForeground(UIManager
+					.getColor(isSelected ? "ComboBox.selectionForeground"
 							: "ComboBox.foreground"));
-			sp.setBackground(UIManager.getColor(isSelected
-					? "ComboBox.selectionBackground"
+			sp.setBackground(UIManager
+					.getColor(isSelected ? "ComboBox.selectionBackground"
 							: "ComboBox.background"));
 			return sp;
 		};
 	};
+
 	private void refreshStyles() {
 		for (int i = 0; i < styles.length; i++) {
-			styles[i] = new SimpleLineStyle(width, endCap, lineJoin, miterlimit, dash[i], width*5);
+			styles[i] = new SimpleLineStyle(width, endCap, lineJoin,
+					miterlimit, dash[i], width * 5);
 		}
 
 		removeAllItems();
@@ -133,9 +139,10 @@ public class JComboBoxLineStyles extends JComboBox {
 			addItem(styles[i]);
 		}
 	}
+
 	/**
 	 * Constructor method
-	 *
+	 * 
 	 */
 	public JComboBoxLineStyles() {
 		super();
@@ -145,7 +152,7 @@ public class JComboBoxLineStyles extends JComboBox {
 
 	/**
 	 * Initializes this
-	 *
+	 * 
 	 */
 	private void initialize() {
 		removeAllItems();
@@ -156,8 +163,10 @@ public class JComboBoxLineStyles extends JComboBox {
 		setRenderer(renderer);
 		refreshStyles();
 	}
+
 	/**
 	 * Sets the width of the line
+	 * 
 	 * @param width
 	 */
 	public void setLineWidth(int width) {

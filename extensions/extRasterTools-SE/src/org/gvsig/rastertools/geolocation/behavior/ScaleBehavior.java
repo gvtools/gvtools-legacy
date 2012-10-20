@@ -38,68 +38,68 @@ import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Listeners.RectangleListener;
 import com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener;
 
-
 /**
- * Comportamiento que se aplica a la herramienta de scale. El cursor del ratón cambiará cuando
- * se encuentre en los bordes del raster, permitiendo el escalar la imagen al pinchar y 
- * arrastrar.
+ * Comportamiento que se aplica a la herramienta de scale. El cursor del ratón
+ * cambiará cuando se encuentre en los bordes del raster, permitiendo el escalar
+ * la imagen al pinchar y arrastrar.
  * 
  * Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
 public class ScaleBehavior extends TransformationBehavior {
-	//Número de pixeles de ancho del borde donde el cursor se activará. Son pixeles del canvas de la vista.
-	//De esta forma da igual la escala a la que esté la imagen siempre tiene la misma precisión
-	private int 							PX_SELEC_BASE = 6;
-	private int 							LONG_CORNER_BASE = 12;
-	private int 							PX_SELEC = PX_SELEC_BASE;
-	private int 							LONG_CORNER = LONG_CORNER_BASE;
-	
+	// Número de pixeles de ancho del borde donde el cursor se activará. Son
+	// pixeles del canvas de la vista.
+	// De esta forma da igual la escala a la que esté la imagen siempre tiene la
+	// misma precisión
+	private int PX_SELEC_BASE = 6;
+	private int LONG_CORNER_BASE = 12;
+	private int PX_SELEC = PX_SELEC_BASE;
+	private int LONG_CORNER = LONG_CORNER_BASE;
+
 	private RectangleListener listener;
-	
-	private final Image iconHoriz = new ImageIcon(getClass().getClassLoader().getResource(
-		"images/FlechaHorizCursor.gif")).getImage(); 
-	private final Image iconVert = new ImageIcon(getClass().getClassLoader().getResource(
-		"images/FlechaVertCursor.gif")).getImage();
-	private final Image iconInclDer = new ImageIcon(getClass().getClassLoader().getResource(
-		"images/FlechaInclDerCursor.gif")).getImage();
-	private final Image iconInclIzq = new ImageIcon(getClass().getClassLoader().getResource(
-		"images/FlechaInclIzqCursor.gif")).getImage();
-	
+
+	private final Image iconHoriz = new ImageIcon(getClass().getClassLoader()
+			.getResource("images/FlechaHorizCursor.gif")).getImage();
+	private final Image iconVert = new ImageIcon(getClass().getClassLoader()
+			.getResource("images/FlechaVertCursor.gif")).getImage();
+	private final Image iconInclDer = new ImageIcon(getClass().getClassLoader()
+			.getResource("images/FlechaInclDerCursor.gif")).getImage();
+	private final Image iconInclIzq = new ImageIcon(getClass().getClassLoader()
+			.getResource("images/FlechaInclIzqCursor.gif")).getImage();
+
 	/**
-	 * Variable que si está a true permite que se pinte el marco de la imagen. Se activa al
-	 * comenzar el redimensionado y se desactiva al terminar
+	 * Variable que si está a true permite que se pinte el marco de la imagen.
+	 * Se activa al comenzar el redimensionado y se desactiva al terminar
 	 */
-	private boolean 						isResizable = false;
+	private boolean isResizable = false;
 	/**
-	 * Escala entre la imagen inicial y la final. Esta es la que sea aplicará al raster visualizado al
-	 * terminar la operación de reescalado. Esta podemos conocerla cuando levantamos el botón
-	 * del ratón dividiendo el nuevo ancho por el inicial
+	 * Escala entre la imagen inicial y la final. Esta es la que sea aplicará al
+	 * raster visualizado al terminar la operación de reescalado. Esta podemos
+	 * conocerla cuando levantamos el botón del ratón dividiendo el nuevo ancho
+	 * por el inicial
 	 */
-	private double							escale = 1D;
-	
+	private double escale = 1D;
+
 	/**
-	 * Lista de flags de redimensionado para cada lado del raster
-	 * [0]-arriba
-	 * [1]-abajo
-	 * [2]-derecha
-	 * [3]-izquierda
-	 * [4]-esquina superior derecha
-	 * [5]-esquina superior izquierda
-	 * [6]-esquina inferior derecha
-	 * [7]-esquina inferior izquierda
+	 * Lista de flags de redimensionado para cada lado del raster [0]-arriba
+	 * [1]-abajo [2]-derecha [3]-izquierda [4]-esquina superior derecha
+	 * [5]-esquina superior izquierda [6]-esquina inferior derecha [7]-esquina
+	 * inferior izquierda
 	 */
-	private boolean[]						sideActive = {false, false, false, false, false, false, false, false};
-	private boolean 						init = false;
-	private Point2D                         tmpLr, tmpUl;
-	private double							initWidth, endWidth;
-		
+	private boolean[] sideActive = { false, false, false, false, false, false,
+			false, false };
+	private boolean init = false;
+	private Point2D tmpLr, tmpUl;
+	private double initWidth, endWidth;
+
 	/**
 	 * Crea un nuevo RectangleBehavior.
-	 *
-	 * @param zili listener.
+	 * 
+	 * @param zili
+	 *            listener.
 	 */
-	public ScaleBehavior(GeoRasterBehavior grb, Cursor cur, ITransformIO windowIO) {
+	public ScaleBehavior(GeoRasterBehavior grb, Cursor cur,
+			ITransformIO windowIO) {
 		grBehavior = grb;
 		defaultCursor = cur;
 		this.trIO = windowIO;
@@ -107,22 +107,24 @@ public class ScaleBehavior extends TransformationBehavior {
 
 	/**
 	 * Inicialización. Calcula la longitud de la esquina y el ancho en píxeles
-	 * de la zona de detección del puntero de ratón. Inicialmente esto está calculado en 
-	 * unidades pixel de la vista pero la detección de puntero, debido a la rotación posible
-	 * del raster ha de hacerse en unidades del raster en disco por ello ha de calcularse
-	 * una escala entre ambas unidades cuando se carga la aplicación.
-	 *
+	 * de la zona de detección del puntero de ratón. Inicialmente esto está
+	 * calculado en unidades pixel de la vista pero la detección de puntero,
+	 * debido a la rotación posible del raster ha de hacerse en unidades del
+	 * raster en disco por ello ha de calcularse una escala entre ambas unidades
+	 * cuando se carga la aplicación.
+	 * 
 	 */
 	private void init() {
-		ViewPort vp = grBehavior.getMapControl().getMapContext().getViewPort();		
+		ViewPort vp = grBehavior.getMapControl().getMapContext().getViewPort();
 		lyr = grBehavior.getLayer();
-		if(lyr == null) 
-			return ;
-		
+		if (lyr == null)
+			return;
+
 		Extent ext = lyr.getDataSource().getExtent();
 		AffineTransform atImg = lyr.getAffineTransform();
-				
-		//Establecer una escala entre las coordenadas de la vista y las coordenadas pixel
+
+		// Establecer una escala entre las coordenadas de la vista y las
+		// coordenadas pixel
 		Point2D ul = new Point2D.Double(ext.getULX(), ext.getULY());
 		Point2D lr = new Point2D.Double(ext.getLRX(), ext.getLRY());
 		Point2D ulPx = new Point2D.Double();
@@ -135,80 +137,91 @@ public class ScaleBehavior extends TransformationBehavior {
 			atImg.inverseTransform(lr, lrPx);
 			ulVp = vp.fromMapPoint(ul);
 			lrVp = vp.fromMapPoint(lr);
-			esc = Math.abs(lrPx.getX() - ulPx.getX()) / Math.abs(lrVp.getX() - ulVp.getX());
+			esc = Math.abs(lrPx.getX() - ulPx.getX())
+					/ Math.abs(lrVp.getX() - ulVp.getX());
 		} catch (NoninvertibleTransformException e1) {
 			return;
 		}
-		
-		//Escalar PX_SELEC y LONG_CORNER para tenerlo en coordenadas pixel
-		
-		PX_SELEC = (int)(PX_SELEC_BASE * esc);
-		LONG_CORNER = (int)(LONG_CORNER_BASE * esc);
+
+		// Escalar PX_SELEC y LONG_CORNER para tenerlo en coordenadas pixel
+
+		PX_SELEC = (int) (PX_SELEC_BASE * esc);
+		LONG_CORNER = (int) (LONG_CORNER_BASE * esc);
 		init = true;
 	}
 
 	/**
 	 * <P>
-	 * Cuando se produce un evento de pintado dibujamos el marco de la imagen para
-	 * que el usuario pueda seleccionar y redimensionar. Pintamos un marco a la imagen para saber 
-	 * donde la movemos. 
+	 * Cuando se produce un evento de pintado dibujamos el marco de la imagen
+	 * para que el usuario pueda seleccionar y redimensionar. Pintamos un marco
+	 * a la imagen para saber donde la movemos.
 	 * </P>
 	 * <P>
-	 * Para dibujar el marco alrededor del raster hacemos lo mismo que para pintar el raster
-	 * rotado. En realidad dibujamos un cuadrado y luego le aplicamos las transformaciones necesarias
-	 * para que se vea con la misma forma del raster al que representa.
-	 * </P> 
+	 * Para dibujar el marco alrededor del raster hacemos lo mismo que para
+	 * pintar el raster rotado. En realidad dibujamos un cuadrado y luego le
+	 * aplicamos las transformaciones necesarias para que se vea con la misma
+	 * forma del raster al que representa.
+	 * </P>
 	 */
 	public void paintComponent(Graphics g) {
-		if(isResizable && lyr != null) {			
+		if (isResizable && lyr != null) {
 			try {
-				ViewPort vp = grBehavior.getMapControl().getMapContext().getViewPort();
+				ViewPort vp = grBehavior.getMapControl().getMapContext()
+						.getViewPort();
 				Point2D ul = new Point2D.Double();
 				Point2D lr = new Point2D.Double();
 				AffineTransform tr = lyr.getAffineTransform();
 				tr.transform(tmpUl, ul);
 				tr.transform(tmpLr, lr);
-				
-				AffineTransform at = new AffineTransform(tr.getScaleX(), tr.getShearY(), 
-														 tr.getShearX(), tr.getScaleY(), 
-														 ul.getX(), ul.getY());
+
+				AffineTransform at = new AffineTransform(tr.getScaleX(),
+						tr.getShearY(), tr.getShearX(), tr.getScaleY(),
+						ul.getX(), ul.getY());
 				at.preConcatenate(vp.getAffineTransform());
-								
+
 				vp.getAffineTransform().transform(ul, ul);
 				at.inverseTransform(ul, ul);
-				
+
 				vp.getAffineTransform().transform(lr, lr);
 				at.inverseTransform(lr, lr);
-				
-				((Graphics2D)g).transform(at);
+
+				((Graphics2D) g).transform(at);
 				g.setColor(rectangleColor);
-				((Graphics2D)g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f));
-				g.fillRect((int)ul.getX(), (int)ul.getY(), (int)lr.getX(), (int)lr.getY());
-				((Graphics2D)g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-				g.drawRect((int)ul.getX(), (int)ul.getY(), (int)lr.getX(), (int)lr.getY());
-				((Graphics2D)g).transform(at.createInverse());
+				((Graphics2D) g).setComposite(AlphaComposite.getInstance(
+						AlphaComposite.SRC_OVER, 0.1f));
+				g.fillRect((int) ul.getX(), (int) ul.getY(), (int) lr.getX(),
+						(int) lr.getY());
+				((Graphics2D) g).setComposite(AlphaComposite.getInstance(
+						AlphaComposite.SRC_OVER, 1.0f));
+				g.drawRect((int) ul.getX(), (int) ul.getY(), (int) lr.getX(),
+						(int) lr.getY());
+				((Graphics2D) g).transform(at.createInverse());
 			} catch (NoninvertibleTransformException e1) {
-				RasterToolsUtil.messageBoxError("error_transformacion1", this, e1);
+				RasterToolsUtil.messageBoxError("error_transformacion1", this,
+						e1);
 			}
-		}		
+		}
 	}
 
 	/**
 	 * Reimplementación del método mousePressed de Behavior. Cuando se pulsa
 	 * estando sobre el marco de la imagen activamos la posibilidad de arrastrar
 	 * para redimensionar la imagen.
-	 *
-	 * @param e MouseEvent
+	 * 
+	 * @param e
+	 *            MouseEvent
 	 */
 	public void mousePressed(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON1) {
 			setActiveTool(true);
-			isResizable = true;;
-			ViewPort vp = grBehavior.getMapControl().getMapContext().getViewPort();
-			if(lyr == null)
+			isResizable = true;
+			;
+			ViewPort vp = grBehavior.getMapControl().getMapContext()
+					.getViewPort();
+			if (lyr == null)
 				lyr = grBehavior.getLayer();
 
-			if(vp != null && lyr != null) {
+			if (vp != null && lyr != null) {
 				Extent ext = lyr.getFullRasterExtent();
 				tmpUl = new Point2D.Double(ext.getULX(), ext.getULY());
 				tmpLr = new Point2D.Double(ext.getLRX(), ext.getLRY());
@@ -225,27 +238,31 @@ public class ScaleBehavior extends TransformationBehavior {
 
 	/**
 	 * Reimplementación del método mouseReleased de Behavior.
-	 *
-	 * @param e MouseEvent
-	 *
-	 * @throws BehaviorException Excepción lanzada cuando el Behavior.
+	 * 
+	 * @param e
+	 *            MouseEvent
+	 * 
+	 * @throws BehaviorException
+	 *             Excepción lanzada cuando el Behavior.
 	 */
 	public void mouseReleased(MouseEvent e) throws BehaviorException {
 		resetBorderSelected();
 		if (e.getButton() == MouseEvent.BUTTON1 && isResizable && lyr != null) {
 			endWidth = Math.abs(tmpUl.getX() - tmpLr.getX());
 			escale = endWidth / initWidth;
-			
-			AffineTransform tr = (AffineTransform)lyr.getAffineTransform().clone();
+
+			AffineTransform tr = (AffineTransform) lyr.getAffineTransform()
+					.clone();
 			Point2D ul = new Point2D.Double();
 			Point2D lr = new Point2D.Double();
 			tr.transform(tmpUl, ul);
 			tr.transform(tmpLr, lr);
-			
-			AffineTransform esc = new AffineTransform(escale, 0, 0, escale, 0, 0);
-			AffineTransform at = new AffineTransform(tr.getScaleX(), tr.getShearY(), 
-													tr.getShearX(), tr.getScaleY(), 
-													ul.getX(), ul.getY());
+
+			AffineTransform esc = new AffineTransform(escale, 0, 0, escale, 0,
+					0);
+			AffineTransform at = new AffineTransform(tr.getScaleX(),
+					tr.getShearY(), tr.getShearX(), tr.getScaleY(), ul.getX(),
+					ul.getY());
 			esc.preConcatenate(at);
 			lyr.setAffineTransform(esc);
 			grBehavior.getMapControl().getMapContext().invalidate();
@@ -253,23 +270,25 @@ public class ScaleBehavior extends TransformationBehavior {
 			super.mouseReleased(e);
 		}
 	}
-	
+
 	/**
-	 * Al arrastrar cuando se ha pulsado sobre el marco de la imagen recalculamos
-	 * el marco de la imagen 
-	 *
-	 * @param e MouseEvent
+	 * Al arrastrar cuando se ha pulsado sobre el marco de la imagen
+	 * recalculamos el marco de la imagen
+	 * 
+	 * @param e
+	 *            MouseEvent
 	 */
 	public void mouseDragged(MouseEvent ev) {
-		if(isResizable) {
-			if(tmpLr == null || tmpUl == null || lyr == null)
+		if (isResizable) {
+			if (tmpLr == null || tmpUl == null || lyr == null)
 				return;
-			
+
 			setActiveTool(true);
 
-			ViewPort vp = grBehavior.getMapControl().getMapContext().getViewPort();
-			
-			//Pasamos el punto obtenido a coordenadas del raster
+			ViewPort vp = grBehavior.getMapControl().getMapContext()
+					.getViewPort();
+
+			// Pasamos el punto obtenido a coordenadas del raster
 			Point2D e = new Point2D.Double(ev.getX(), ev.getY());
 			e = vp.toMapPoint(e);
 			try {
@@ -277,80 +296,92 @@ public class ScaleBehavior extends TransformationBehavior {
 			} catch (NoninvertibleTransformException e1) {
 				e1.printStackTrace();
 			}
-			
+
 			double longLadoX = Math.abs(tmpLr.getX() - tmpUl.getX());
 			double longLadoY = Math.abs(tmpLr.getY() - tmpUl.getY());
-			double coordCentroV = tmpUl.getY() + (Math.abs(tmpLr.getY() - tmpUl.getY()) / 2);
-			double coordCentroH = tmpUl.getX() + (Math.abs(tmpLr.getX() - tmpUl.getX()) / 2);
-			if(sideActive[2]) {//vertical derecha
+			double coordCentroV = tmpUl.getY()
+					+ (Math.abs(tmpLr.getY() - tmpUl.getY()) / 2);
+			double coordCentroH = tmpUl.getX()
+					+ (Math.abs(tmpLr.getX() - tmpUl.getX()) / 2);
+			if (sideActive[2]) {// vertical derecha
 				double newLadoX = (e.getX() - tmpUl.getX());
 				double newLadoY = (newLadoX * longLadoY) / longLadoX;
-				tmpUl = new Point2D.Double(tmpUl.getX(), coordCentroV - (newLadoY / 2));
-				tmpLr = new Point2D.Double(e.getX(), coordCentroV + (newLadoY / 2));
-			} else if(sideActive[3]) {//vertical izquierda
+				tmpUl = new Point2D.Double(tmpUl.getX(), coordCentroV
+						- (newLadoY / 2));
+				tmpLr = new Point2D.Double(e.getX(), coordCentroV
+						+ (newLadoY / 2));
+			} else if (sideActive[3]) {// vertical izquierda
 				double newLadoX = (e.getX() - tmpLr.getX());
 				double newLadoY = (newLadoX * longLadoY) / longLadoX;
-				tmpLr = new Point2D.Double(tmpLr.getX(), coordCentroV - (newLadoY / 2));
-				tmpUl = new Point2D.Double(e.getX(), coordCentroV + (newLadoY/2));
-			} else if(sideActive[1]) {//horizontal abajo
+				tmpLr = new Point2D.Double(tmpLr.getX(), coordCentroV
+						- (newLadoY / 2));
+				tmpUl = new Point2D.Double(e.getX(), coordCentroV
+						+ (newLadoY / 2));
+			} else if (sideActive[1]) {// horizontal abajo
 				double newLadoY = (e.getY() - tmpUl.getY());
 				double newLadoX = (newLadoY * longLadoX) / longLadoY;
-				tmpLr = new Point2D.Double(coordCentroH + (newLadoX / 2), e.getY());
-				tmpUl = new Point2D.Double(coordCentroH - (newLadoX / 2), tmpUl.getY());
-			} else if(sideActive[0]) {//horizontal arriba
+				tmpLr = new Point2D.Double(coordCentroH + (newLadoX / 2),
+						e.getY());
+				tmpUl = new Point2D.Double(coordCentroH - (newLadoX / 2),
+						tmpUl.getY());
+			} else if (sideActive[0]) {// horizontal arriba
 				double newLadoY = (tmpLr.getY() - e.getY());
 				double newLadoX = (newLadoY * longLadoX) / longLadoY;
-				tmpUl = new Point2D.Double(coordCentroH - (newLadoX / 2), e.getY());
-				tmpLr = new Point2D.Double(coordCentroH + (newLadoX / 2), tmpLr.getY());
-			} else if(sideActive[6]) {//Esquina inferior derecha
-				 double rel = longLadoX / longLadoY;
-				 double difY = (e.getY() - tmpLr.getY());
-							 double difX = (e.getX() - tmpLr.getX());
-							 if(difX > difY){
-								 difY = difX / rel;
-							 }else
-								 difX = difY * rel;
-							 tmpUl = new Point2D.Double(tmpUl.getX(), tmpUl.getY());
-							 tmpLr = new Point2D.Double(tmpLr.getX() + difX, tmpLr.getY() + difY);
-			} else if(sideActive[5]) {//Esquina superior izquierda
-				 double rel = longLadoX / longLadoY;
-				 double difY = (tmpUl.getY() - e.getY());
-							 double difX = (tmpUl.getX() - e.getX());
-							 if(difX > difY){
-								 difY = difX / rel;
-							 }else
-								 difX = difY * rel;
-							 tmpUl = new Point2D.Double(tmpUl.getX() - difX, tmpUl.getY() - difY);
-							 tmpLr = new Point2D.Double(tmpLr.getX(), tmpLr.getY());
-				} else if(sideActive[4]) {//Esquina superior derecha
-				 double rel = longLadoX / longLadoY;
-				 double difY = (tmpUl.getY() - e.getY());
-							 double difX = (e.getX() - tmpLr.getX());
-							 if(difX > difY){
-								 difY = difX / rel;
-							 }else
-								 difX = difY * rel;
-							 tmpUl = new Point2D.Double(tmpUl.getX(), tmpUl.getY() - difY);
-							 tmpLr = new Point2D.Double(tmpLr.getX() + difX, tmpLr.getY());
-				} else if(sideActive[7]) {//Esquina inferior izquierda
-					double rel = longLadoX / longLadoY;
+				tmpUl = new Point2D.Double(coordCentroH - (newLadoX / 2),
+						e.getY());
+				tmpLr = new Point2D.Double(coordCentroH + (newLadoX / 2),
+						tmpLr.getY());
+			} else if (sideActive[6]) {// Esquina inferior derecha
+				double rel = longLadoX / longLadoY;
 				double difY = (e.getY() - tmpLr.getY());
-							double difX = (tmpUl.getX() - e.getX());
-							if(difX > difY)
-								difY = difX / rel;
-							else
-								difX = difY * rel;
-							tmpUl = new Point2D.Double(tmpUl.getX() - difX, tmpUl.getY());
-							tmpLr = new Point2D.Double(tmpLr.getX(), tmpLr.getY() + difY);
-				}
-			
-			//Asignación de las coordenadas temporales al dialogo
+				double difX = (e.getX() - tmpLr.getX());
+				if (difX > difY) {
+					difY = difX / rel;
+				} else
+					difX = difY * rel;
+				tmpUl = new Point2D.Double(tmpUl.getX(), tmpUl.getY());
+				tmpLr = new Point2D.Double(tmpLr.getX() + difX, tmpLr.getY()
+						+ difY);
+			} else if (sideActive[5]) {// Esquina superior izquierda
+				double rel = longLadoX / longLadoY;
+				double difY = (tmpUl.getY() - e.getY());
+				double difX = (tmpUl.getX() - e.getX());
+				if (difX > difY) {
+					difY = difX / rel;
+				} else
+					difX = difY * rel;
+				tmpUl = new Point2D.Double(tmpUl.getX() - difX, tmpUl.getY()
+						- difY);
+				tmpLr = new Point2D.Double(tmpLr.getX(), tmpLr.getY());
+			} else if (sideActive[4]) {// Esquina superior derecha
+				double rel = longLadoX / longLadoY;
+				double difY = (tmpUl.getY() - e.getY());
+				double difX = (e.getX() - tmpLr.getX());
+				if (difX > difY) {
+					difY = difX / rel;
+				} else
+					difX = difY * rel;
+				tmpUl = new Point2D.Double(tmpUl.getX(), tmpUl.getY() - difY);
+				tmpLr = new Point2D.Double(tmpLr.getX() + difX, tmpLr.getY());
+			} else if (sideActive[7]) {// Esquina inferior izquierda
+				double rel = longLadoX / longLadoY;
+				double difY = (e.getY() - tmpLr.getY());
+				double difX = (tmpUl.getX() - e.getX());
+				if (difX > difY)
+					difY = difX / rel;
+				else
+					difX = difY * rel;
+				tmpUl = new Point2D.Double(tmpUl.getX() - difX, tmpUl.getY());
+				tmpLr = new Point2D.Double(tmpLr.getX(), tmpLr.getY() + difY);
+			}
+
+			// Asignación de las coordenadas temporales al dialogo
 			assignTransformToDialog();
-			
+
 			grBehavior.getMapControl().repaint();
 		}
 	}
-	
+
 	/**
 	 * Asigna las coordenadas temporales en el dialogo.
 	 */
@@ -363,13 +394,13 @@ public class ScaleBehavior extends TransformationBehavior {
 		endWidth = Math.abs(tmpUl.getX() - tmpLr.getX());
 		escale = endWidth / initWidth;
 		AffineTransform esc = new AffineTransform(escale, 0, 0, escale, 0, 0);
-		AffineTransform at = new AffineTransform(tr.getScaleX(), tr.getShearY(), 
-												tr.getShearX(), tr.getScaleY(), 
-												ul.getX(), ul.getY());
+		AffineTransform at = new AffineTransform(tr.getScaleX(),
+				tr.getShearY(), tr.getShearX(), tr.getScaleY(), ul.getX(),
+				ul.getY());
 		esc.preConcatenate(at);
-		trIO.loadTransform(esc);	
+		trIO.loadTransform(esc);
 	}
-	
+
 	/**
 	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#setListener(org.gvsig.georeferencing.fmap.tools.ToolListener)
 	 */
@@ -383,82 +414,95 @@ public class ScaleBehavior extends TransformationBehavior {
 	public ToolListener getListener() {
 		return listener;
 	}
-	
+
 	/**
-	 * Cuando movemos el ratón detecta si estamos en el marco de la 
-	 * imagen y pone el icono del cursor del ratón adecuado.
+	 * Cuando movemos el ratón detecta si estamos en el marco de la imagen y
+	 * pone el icono del cursor del ratón adecuado.
 	 */
 	public boolean mouseMoved(MouseEvent ev) throws BehaviorException {
-		if(!init)
+		if (!init)
 			init();
-		
+
 		ViewPort vp = grBehavior.getMapControl().getMapContext().getViewPort();
 		resetBorderSelected();
-		
+
 		lyr = grBehavior.getLayer();
-		if(lyr == null) {
+		if (lyr == null) {
 			setActiveTool(false);
 			return false;
 		}
-		
+
 		AffineTransform atImg = lyr.getAffineTransform();
-				
-		//Pasar coordenadas del punto a coordenadas reales y luego a coordenadas pixel
+
+		// Pasar coordenadas del punto a coordenadas reales y luego a
+		// coordenadas pixel
 		Point2D e = vp.toMapPoint(ev.getX(), ev.getY());
 		try {
 			atImg.inverseTransform(e, e);
 		} catch (NoninvertibleTransformException e1) {
 			return false;
 		}
-		
-		//Comprobar si está dentro del raster
+
+		// Comprobar si está dentro del raster
 		Point2D p1 = new Point2D.Double(0, 0);
-		Point2D p2 = new Point2D.Double(lyr.getDataSource().getWidth(), lyr.getDataSource().getHeight());
-					
-		//Fuera del raster
-		if(e.getX() < p1.getX() || e.getX() > p2.getX() || e.getY() < p1.getY() || e.getY() > p2.getY() ) {
+		Point2D p2 = new Point2D.Double(lyr.getDataSource().getWidth(), lyr
+				.getDataSource().getHeight());
+
+		// Fuera del raster
+		if (e.getX() < p1.getX() || e.getX() > p2.getX()
+				|| e.getY() < p1.getY() || e.getY() > p2.getY()) {
 			setActiveTool(false);
 			grBehavior.getMapControl().repaint();
 			grBehavior.getMapControl().setCursor(defaultCursor);
 			return false;
 		}
-		
-		//Borde izquierdo
-		if(e.getX() > p1.getX() && e.getX() <= (p1.getX() + PX_SELEC) && e.getY() > (p1.getY() + LONG_CORNER) && e.getY() < (p2.getY() - LONG_CORNER)) {
+
+		// Borde izquierdo
+		if (e.getX() > p1.getX() && e.getX() <= (p1.getX() + PX_SELEC)
+				&& e.getY() > (p1.getY() + LONG_CORNER)
+				&& e.getY() < (p2.getY() - LONG_CORNER)) {
 			setCursor(iconHoriz);
 			setActiveTool(true);
 			sideActive[3] = true;
 			return true;
 		}
 
-		//Borde derecho
-		if(e.getX() >= (p2.getX() - PX_SELEC) && e.getX() < p2.getX() && e.getY() > (p1.getY() + LONG_CORNER) && e.getY() < (p2.getY() - LONG_CORNER)) {
+		// Borde derecho
+		if (e.getX() >= (p2.getX() - PX_SELEC) && e.getX() < p2.getX()
+				&& e.getY() > (p1.getY() + LONG_CORNER)
+				&& e.getY() < (p2.getY() - LONG_CORNER)) {
 			setCursor(iconHoriz);
 			setActiveTool(true);
 			sideActive[2] = true;
 			return true;
 		}
-		
-		//Borde superior
-		if(e.getY() > p1.getY() && e.getY() <= (p1.getY() + PX_SELEC) && e.getX() > (p1.getX() + LONG_CORNER) && e.getX() < (p2.getX() - LONG_CORNER)) {
+
+		// Borde superior
+		if (e.getY() > p1.getY() && e.getY() <= (p1.getY() + PX_SELEC)
+				&& e.getX() > (p1.getX() + LONG_CORNER)
+				&& e.getX() < (p2.getX() - LONG_CORNER)) {
 			setCursor(iconVert);
 			setActiveTool(true);
 			sideActive[0] = true;
 			return true;
 		}
-		
-		//Borde inferior
-		if(e.getY() >= (p2.getY() - PX_SELEC) && e.getY() < p2.getY() && e.getX() > (p1.getX() + LONG_CORNER) && e.getX() < (p2.getX() - LONG_CORNER)) {
+
+		// Borde inferior
+		if (e.getY() >= (p2.getY() - PX_SELEC) && e.getY() < p2.getY()
+				&& e.getX() > (p1.getX() + LONG_CORNER)
+				&& e.getX() < (p2.getX() - LONG_CORNER)) {
 			setCursor(iconVert);
 			setActiveTool(true);
 			sideActive[1] = true;
 			return true;
 		}
-		
-		//esquina superior izquierda
-		if ((e.getX() > p1.getX() && e.getX() <= (p1.getX() + LONG_CORNER) && e.getY() > p1.getY() && e.getY() < (p1.getY() + PX_SELEC)) ||
-			(e.getX() > p1.getX() && e.getX() <= (p1.getX() + PX_SELEC) && e.getY() > p1.getY() && e.getY() <= (p1.getY() + LONG_CORNER))) {
-			if((atImg.getScaleX() * atImg.getScaleY()) < 0)
+
+		// esquina superior izquierda
+		if ((e.getX() > p1.getX() && e.getX() <= (p1.getX() + LONG_CORNER)
+				&& e.getY() > p1.getY() && e.getY() < (p1.getY() + PX_SELEC))
+				|| (e.getX() > p1.getX() && e.getX() <= (p1.getX() + PX_SELEC)
+						&& e.getY() > p1.getY() && e.getY() <= (p1.getY() + LONG_CORNER))) {
+			if ((atImg.getScaleX() * atImg.getScaleY()) < 0)
 				setCursor(iconInclIzq);
 			else
 				setCursor(iconInclDer);
@@ -466,11 +510,13 @@ public class ScaleBehavior extends TransformationBehavior {
 			sideActive[5] = true;
 			return true;
 		}
-		
-		//esquina superior derecha
-		if ((e.getX() >= (p2.getX() - LONG_CORNER) && e.getX() < p2.getX() && e.getY() > p1.getY() && e.getY() < (p1.getY() + PX_SELEC)) ||
-			(e.getX() >= (p2.getX() - PX_SELEC) && e.getX() < p2.getX() && e.getY() > p1.getY() && e.getY() <= (p1.getY() + LONG_CORNER))) {
-			if((atImg.getScaleX() * atImg.getScaleY()) < 0)
+
+		// esquina superior derecha
+		if ((e.getX() >= (p2.getX() - LONG_CORNER) && e.getX() < p2.getX()
+				&& e.getY() > p1.getY() && e.getY() < (p1.getY() + PX_SELEC))
+				|| (e.getX() >= (p2.getX() - PX_SELEC) && e.getX() < p2.getX()
+						&& e.getY() > p1.getY() && e.getY() <= (p1.getY() + LONG_CORNER))) {
+			if ((atImg.getScaleX() * atImg.getScaleY()) < 0)
 				setCursor(iconInclDer);
 			else
 				setCursor(iconInclIzq);
@@ -478,11 +524,13 @@ public class ScaleBehavior extends TransformationBehavior {
 			sideActive[4] = true;
 			return true;
 		}
-		
-		//esquina inferior izquierda
-		if ((e.getX() > p1.getX() && e.getX() <= (p1.getX() + LONG_CORNER) && e.getY() >= (p2.getY() - PX_SELEC) && e.getY() < p2.getY()) ||
-			(e.getX() > p1.getX() && e.getX() <= (p1.getX() + PX_SELEC) && e.getY() < p2.getY() && e.getY() >= (p2.getY() - LONG_CORNER))) {
-			if((atImg.getScaleX() * atImg.getScaleY()) < 0)
+
+		// esquina inferior izquierda
+		if ((e.getX() > p1.getX() && e.getX() <= (p1.getX() + LONG_CORNER)
+				&& e.getY() >= (p2.getY() - PX_SELEC) && e.getY() < p2.getY())
+				|| (e.getX() > p1.getX() && e.getX() <= (p1.getX() + PX_SELEC)
+						&& e.getY() < p2.getY() && e.getY() >= (p2.getY() - LONG_CORNER))) {
+			if ((atImg.getScaleX() * atImg.getScaleY()) < 0)
 				setCursor(iconInclDer);
 			else
 				setCursor(iconInclIzq);
@@ -490,11 +538,13 @@ public class ScaleBehavior extends TransformationBehavior {
 			sideActive[7] = true;
 			return true;
 		}
-		
-		//esquina inferior derecha
-		if ((e.getX() < p2.getX() && e.getX() >= (p2.getX() - LONG_CORNER) && e.getY() >= (p2.getY() - PX_SELEC) && e.getY() < p2.getY()) ||
-			(e.getX() < p2.getX() && e.getX() >= (p2.getX() - PX_SELEC) && e.getY() < p2.getY() && e.getY() >= (p2.getY() - LONG_CORNER))){
-			if((atImg.getScaleX() * atImg.getScaleY()) < 0)
+
+		// esquina inferior derecha
+		if ((e.getX() < p2.getX() && e.getX() >= (p2.getX() - LONG_CORNER)
+				&& e.getY() >= (p2.getY() - PX_SELEC) && e.getY() < p2.getY())
+				|| (e.getX() < p2.getX() && e.getX() >= (p2.getX() - PX_SELEC)
+						&& e.getY() < p2.getY() && e.getY() >= (p2.getY() - LONG_CORNER))) {
+			if ((atImg.getScaleX() * atImg.getScaleY()) < 0)
 				setCursor(iconInclIzq);
 			else
 				setCursor(iconInclDer);
@@ -502,15 +552,15 @@ public class ScaleBehavior extends TransformationBehavior {
 			sideActive[6] = true;
 			return true;
 		}
-		
+
 		grBehavior.getMapControl().repaint();
 		grBehavior.getMapControl().setCursor(defaultCursor);
 		return false;
 	}
-	
+
 	/**
-	 * Pone a false todos los elementos del array sideActive. Esto es equivalente 
-	 * a eliminar cualquier selección de borde.
+	 * Pone a false todos los elementos del array sideActive. Esto es
+	 * equivalente a eliminar cualquier selección de borde.
 	 */
 	private void resetBorderSelected() {
 		for (int i = 0; i < sideActive.length; i++)

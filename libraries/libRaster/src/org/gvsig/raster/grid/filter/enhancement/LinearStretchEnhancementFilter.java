@@ -27,6 +27,7 @@ import org.gvsig.raster.dataset.io.RasterDriverException;
 import org.gvsig.raster.dataset.properties.DatasetListStatistics;
 import org.gvsig.raster.grid.filter.RasterFilter;
 import org.gvsig.raster.grid.filter.enhancement.LinearStretchParams.Stretch;
+
 /**
  * Clase base para los filtros de realzado lineal. Lee el mínimo y máxmo de la
  * clase Statistic que serán calculados por PercentTailTrimFilter o
@@ -35,22 +36,22 @@ import org.gvsig.raster.grid.filter.enhancement.LinearStretchParams.Stretch;
  * que son los que se utilizan con la opción eliminar extremos activada. Estos
  * se usaran en vez del mínimo y máximo cuando la variable removeExtrema esté a
  * true.
- *
+ * 
  * @version 31/05/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class LinearStretchEnhancementFilter extends RasterFilter {
-	protected double[][]               scale             = null;
-	protected double[][]               offset            = null;
-	protected DatasetListStatistics	   stats             = null;
-	protected double[]                 minBandValue	     = null;
-	protected double[]                 maxBandValue	     = null;
-	protected int[]                    renderBands       = null;
-	public static String[]             names             = new String[] {"enhanced_stretch"};
-	private boolean                    removeEnds        = false;
-	
-	protected LinearStretchParams      stretchs          = null;
-	protected Stretch[]                scaleOffsetList   = null;
+	protected double[][] scale = null;
+	protected double[][] offset = null;
+	protected DatasetListStatistics stats = null;
+	protected double[] minBandValue = null;
+	protected double[] maxBandValue = null;
+	protected int[] renderBands = null;
+	public static String[] names = new String[] { "enhanced_stretch" };
+	private boolean removeEnds = false;
+
+	protected LinearStretchParams stretchs = null;
+	protected Stretch[] scaleOffsetList = null;
 
 	/**
 	 * Construye un LinearEnhancementFilter
@@ -61,6 +62,7 @@ public class LinearStretchEnhancementFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#pre()
 	 */
 	public void pre() {
@@ -115,19 +117,22 @@ public class LinearStretchEnhancementFilter extends RasterFilter {
 
 		loadStretchList();
 
-		if(raster instanceof RasterReadOnlyBuffer) 
+		if (raster instanceof RasterReadOnlyBuffer)
 			((RasterReadOnlyBuffer) raster).addDrawableBands(renderBands);
 
-		rasterResult = RasterBuffer.getBuffer(IBuffer.TYPE_BYTE, raster.getWidth(), raster.getHeight(), raster.getBandCount(), true);
+		rasterResult = RasterBuffer.getBuffer(IBuffer.TYPE_BYTE,
+				raster.getWidth(), raster.getHeight(), raster.getBandCount(),
+				true);
 	}
 
 	/**
-	 * La lista de escalas y desplazamientos es un array de 3 elementos en el que 
-	 * cada posición es un objeto Stretch con la escala y desplazamiento de la 
-	 * banda que se dibuja en esa posición. El objetivo es aplicar a cada banda
-	 * el máximo y mínimo que le corresponde. Por ejemplo, cuando tenemos una imagen de
-	 * 3 bandas de tipo short y queremos visualizar en RGB solo la primera banda entonces
-	 * escaleOffsetList tendrá stretchs.red en las 3 posiciones.
+	 * La lista de escalas y desplazamientos es un array de 3 elementos en el
+	 * que cada posición es un objeto Stretch con la escala y desplazamiento de
+	 * la banda que se dibuja en esa posición. El objetivo es aplicar a cada
+	 * banda el máximo y mínimo que le corresponde. Por ejemplo, cuando tenemos
+	 * una imagen de 3 bandas de tipo short y queremos visualizar en RGB solo la
+	 * primera banda entonces escaleOffsetList tendrá stretchs.red en las 3
+	 * posiciones.
 	 */
 	private void loadStretchList() {
 		scaleOffsetList = new Stretch[3];
@@ -138,6 +143,7 @@ public class LinearStretchEnhancementFilter extends RasterFilter {
 
 	/**
 	 * Obtiene el porcentaje de recorte de colas aplicado o 0 si no tiene.
+	 * 
 	 * @return
 	 */
 	public Double getTailTrim() {
@@ -148,13 +154,14 @@ public class LinearStretchEnhancementFilter extends RasterFilter {
 			tailTrimList = new double[0];
 		double median = 0;
 		double nValues = tailTrimList.length;
-		for (int i = 0; i < tailTrimList.length; i++) 
+		for (int i = 0; i < tailTrimList.length; i++)
 			median += tailTrimList[i];
 		return new Double(nValues > 0 ? median / nValues : median);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getOutRasterDataType()
 	 */
 	public int getOutRasterDataType() {
@@ -162,16 +169,18 @@ public class LinearStretchEnhancementFilter extends RasterFilter {
 	}
 
 	/**
-	 * Obtiene true si está activado el flag de eliminar extremos y false si no lo
-	 * está
+	 * Obtiene true si está activado el flag de eliminar extremos y false si no
+	 * lo está
 	 */
 	public Boolean getRemoveEnds() {
 		return new Boolean(removeEnds);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.RasterFilter#getResult(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.RasterFilter#getResult(java.lang.String)
 	 */
 	public Object getResult(String name) {
 		if (name.equals("raster")) {
@@ -184,6 +193,7 @@ public class LinearStretchEnhancementFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getGroup()
 	 */
 	public String getGroup() {
@@ -192,83 +202,59 @@ public class LinearStretchEnhancementFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getUIParams()
 	 */
 	public Params getUIParams(String nameFilter) {
-		if(stretchs == null)
+		if (stretchs == null)
 			stretchs = (LinearStretchParams) this.params.get("stretchs");
 		Params params = new Params();
 		params.setParam("TailTrim",
 				new Double(Math.round(getTailTrim().doubleValue() * 100.0)),
-				Params.SLIDER,
-				new String[]{ "0", "100", "0", "1", "25" }); //min, max, valor defecto, intervalo pequeño, intervalo grande;
-		params.setParam("StretchInRed",
-				stretchs.red.stretchIn,
-				Params.CHOICE,
+				Params.SLIDER, new String[] { "0", "100", "0", "1", "25" }); // min,
+																				// max,
+																				// valor
+																				// defecto,
+																				// intervalo
+																				// pequeño,
+																				// intervalo
+																				// grande;
+		params.setParam("StretchInRed", stretchs.red.stretchIn, Params.CHOICE,
 				null);
-		params.setParam("StretchInGreen",
-				stretchs.green.stretchIn,
-				Params.CHOICE,
-				null);
-		params.setParam("StretchInBlue",
-				stretchs.blue.stretchIn,
-				Params.CHOICE,
-				null);
-		params.setParam("StretchOutRed",
-				stretchs.red.stretchOut,
-				Params.CHOICE,
-				null);
-		params.setParam("StretchOutGreen",
-				stretchs.green.stretchOut,
-				Params.CHOICE,
-				null);
-		params.setParam("StretchOutBlue",
-				stretchs.blue.stretchOut,
-				Params.CHOICE,
-				null);
-		params.setParam("TailTrimRedMin",
-				new Double(stretchs.red.tailTrimMin),
-				Params.CHOICE,
-				null);
-		params.setParam("TailTrimRedMax",
-				new Double(stretchs.red.tailTrimMax),
-				Params.CHOICE,
-				null);
-		params.setParam("TailTrimGreenMin",
-				new Double(stretchs.green.tailTrimMin),
-				Params.CHOICE,
-				null);
-		params.setParam("TailTrimGreenMax",
-				new Double(stretchs.green.tailTrimMax),
-				Params.CHOICE,
-				null);
+		params.setParam("StretchInGreen", stretchs.green.stretchIn,
+				Params.CHOICE, null);
+		params.setParam("StretchInBlue", stretchs.blue.stretchIn,
+				Params.CHOICE, null);
+		params.setParam("StretchOutRed", stretchs.red.stretchOut,
+				Params.CHOICE, null);
+		params.setParam("StretchOutGreen", stretchs.green.stretchOut,
+				Params.CHOICE, null);
+		params.setParam("StretchOutBlue", stretchs.blue.stretchOut,
+				Params.CHOICE, null);
+		params.setParam("TailTrimRedMin", new Double(stretchs.red.tailTrimMin),
+				Params.CHOICE, null);
+		params.setParam("TailTrimRedMax", new Double(stretchs.red.tailTrimMax),
+				Params.CHOICE, null);
+		params.setParam("TailTrimGreenMin", new Double(
+				stretchs.green.tailTrimMin), Params.CHOICE, null);
+		params.setParam("TailTrimGreenMax", new Double(
+				stretchs.green.tailTrimMax), Params.CHOICE, null);
 		params.setParam("TailTrimBlueMin",
-				new Double(stretchs.blue.tailTrimMin),
-				Params.CHOICE,
-				null);
+				new Double(stretchs.blue.tailTrimMin), Params.CHOICE, null);
 		params.setParam("TailTrimBlueMax",
-				new Double(stretchs.blue.tailTrimMax),
-				Params.CHOICE,
-				null);
-		params.setParam("Remove",
-				new Boolean(removeEnds),
-				Params.CHOICE,
-				null);
-		if(renderBands == null)
+				new Double(stretchs.blue.tailTrimMax), Params.CHOICE, null);
+		params.setParam("Remove", new Boolean(removeEnds), Params.CHOICE, null);
+		if (renderBands == null)
 			renderBands = (int[]) this.params.get("renderBands");
-		params.setParam("RenderBands",
-				convertArrayToString(renderBands),
-				Params.NONE,
-				null);
-		params.setParam("RGB",
-				new Boolean(stretchs.rgb),
-				Params.NONE,
-				null);
+		params.setParam("RenderBands", convertArrayToString(renderBands),
+				Params.NONE, null);
+		params.setParam("RGB", new Boolean(stretchs.rgb), Params.NONE, null);
 		return params;
 	}
 
 	/**
 	 * Convierte un array de dobles a una cadena
+	 * 
 	 * @param values
 	 * @return
 	 */
@@ -281,9 +267,10 @@ public class LinearStretchEnhancementFilter extends RasterFilter {
 		}
 		return buffer.toString();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#post()
 	 */
 	public void post() {
@@ -293,6 +280,7 @@ public class LinearStretchEnhancementFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getInRasterDataType()
 	 */
 	public int getInRasterDataType() {
@@ -301,6 +289,7 @@ public class LinearStretchEnhancementFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#process(int, int)
 	 */
 	public void process(int x, int y) throws InterruptedException {
@@ -308,14 +297,16 @@ public class LinearStretchEnhancementFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getNames()
 	 */
 	public String[] getNames() {
 		return names;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#isVisible()
 	 */
 	public boolean isVisible() {

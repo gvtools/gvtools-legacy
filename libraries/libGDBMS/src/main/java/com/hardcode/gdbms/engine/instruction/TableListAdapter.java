@@ -11,10 +11,9 @@ import com.hardcode.gdbms.engine.data.DataSource;
 import com.hardcode.gdbms.engine.data.DataSourceFactory;
 import com.hardcode.gdbms.engine.data.NoSuchTableException;
 
-
 /**
  * Adaptador
- *
+ * 
  * @author Fernando González Cortés
  */
 public class TableListAdapter extends Adapter {
@@ -22,10 +21,11 @@ public class TableListAdapter extends Adapter {
 
 	/**
 	 * Obtiene los DataSources de la cláusula from
-	 *
+	 * 
 	 * @return array de datasources
-	 *
-	 * @throws TableNotFoundException Si no se encontró alguna tabla
+	 * 
+	 * @throws TableNotFoundException
+	 *             Si no se encontró alguna tabla
 	 * @throws RuntimeException
 	 */
 	public DataSource[] getTables() throws TableNotFoundException {
@@ -39,11 +39,13 @@ public class TableListAdapter extends Adapter {
 
 					if (tRef.getAlias() == null) {
 						ret.add(getInstructionContext().getDSFactory()
-									.createRandomDataSource(tRef.getName(), DataSourceFactory.MANUAL_OPENING));
+								.createRandomDataSource(tRef.getName(),
+										DataSourceFactory.MANUAL_OPENING));
 					} else {
 						ret.add(getInstructionContext().getDSFactory()
-									.createRandomDataSource(tRef.getName(),
-								tRef.getAlias(), DataSourceFactory.MANUAL_OPENING));
+								.createRandomDataSource(tRef.getName(),
+										tRef.getAlias(),
+										DataSourceFactory.MANUAL_OPENING));
 					}
 				}
 

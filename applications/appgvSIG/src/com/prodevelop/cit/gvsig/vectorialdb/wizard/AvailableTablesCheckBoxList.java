@@ -47,7 +47,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
@@ -56,95 +55,84 @@ import javax.swing.border.EmptyBorder;
 
 import org.apache.log4j.Logger;
 
-import com.iver.andami.PluginServices;
-
-
 /**
  * Utility class to keep the list of available tables.
- *
+ * 
  * @author jldominguez
- *
+ * 
  */
 public class AvailableTablesCheckBoxList extends JList {
-    protected static Border noFocusBorder = new EmptyBorder(1, 1, 1, 1);
-    private static Logger logger = Logger.getLogger(AvailableTablesCheckBoxList.class.getName());
-    private WizardVectorialDB parent = null;
-    private TablesListItem actingTable = null;
+	protected static Border noFocusBorder = new EmptyBorder(1, 1, 1, 1);
+	private static Logger logger = Logger
+			.getLogger(AvailableTablesCheckBoxList.class.getName());
+	private WizardVectorialDB parent = null;
+	private TablesListItem actingTable = null;
 
-    public AvailableTablesCheckBoxList(WizardVectorialDB p) {
-        parent = p;
+	public AvailableTablesCheckBoxList(WizardVectorialDB p) {
+		parent = p;
 
-        setCellRenderer(new CellRenderer());
+		setCellRenderer(new CellRenderer());
 
-        addMouseListener(new MouseAdapter() {
-                public void mousePressed(MouseEvent e) {
-                    int index = locationToIndex(e.getPoint());
+		addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				int index = locationToIndex(e.getPoint());
 
-                    if (index == -1) {
-                        return;
-                    }
+				if (index == -1) {
+					return;
+				}
 
-                    actingTable = (TablesListItem) getModel().getElementAt(index);
+				actingTable = (TablesListItem) getModel().getElementAt(index);
 
-                    try {
-                	parent.setSettingsPanels(actingTable);
-                	if ((e.getClickCount() == 2) || (e.getX() < 15)) {
-                	    if (!actingTable.isActivated()) {
-                		actingTable.activate();
-                	    }
-                	actingTable.setSelected(!actingTable.isSelected());
-                	enableFieldsAndSettingsPanels();
-                	}
-                        parent.checkFinishable();
-                        repaint();
-                    }
-                    catch (Exception e1) {
-                        logger.error("While setting selected table: " +
-                            e1.getMessage(), e1);
-                        // showConnectionErrorMessage(e1.getMessage());
-                    }
-                }
+				try {
+					parent.setSettingsPanels(actingTable);
+					if ((e.getClickCount() == 2) || (e.getX() < 15)) {
+						if (!actingTable.isActivated()) {
+							actingTable.activate();
+						}
+						actingTable.setSelected(!actingTable.isSelected());
+						enableFieldsAndSettingsPanels();
+					}
+					parent.checkFinishable();
+					repaint();
+				} catch (Exception e1) {
+					logger.error(
+							"While setting selected table: " + e1.getMessage(),
+							e1);
+					// showConnectionErrorMessage(e1.getMessage());
+				}
+			}
 
-            });
+		});
 
-        setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    }
-
-    private void enableFieldsAndSettingsPanels() {
-	if (actingTable.isSelected()) {
-	    actingTable.setEnabledPanels(true);
+		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	}
-	else {
-	    actingTable.setEnabledPanels(false);
+
+	private void enableFieldsAndSettingsPanels() {
+		if (actingTable.isSelected()) {
+			actingTable.setEnabledPanels(true);
+		} else {
+			actingTable.setEnabledPanels(false);
+		}
 	}
-    }
 
-    private void showConnectionErrorMessage(String _msg) {
-        String msg = (_msg.length() > 300) ? "" : (": " + _msg);
-        String title = PluginServices.getText(this, "connection_error");
-        JOptionPane.showMessageDialog(this, title + msg, title,
-            JOptionPane.ERROR_MESSAGE);
-    }
+	protected class CellRenderer implements ListCellRenderer {
+		public Component getListCellRendererComponent(JList list, Object value,
+				int index, boolean isSelected, boolean cellHasFocus) {
+			TablesListItem checkbox = (TablesListItem) value;
+			checkbox.setBackground(isSelected ? getSelectionBackground()
+					: getBackground());
+			checkbox.setForeground(isSelected ? getSelectionForeground()
+					: getForeground());
+			checkbox.setEnabled(isEnabled());
+			checkbox.setFont(getFont());
+			checkbox.setFocusPainted(false);
+			checkbox.setBorderPainted(true);
+			checkbox.setBorder(isSelected ? UIManager
+					.getBorder("List.focusCellHighlightBorder") : noFocusBorder);
 
-    protected class CellRenderer implements ListCellRenderer {
-        public Component getListCellRendererComponent(JList list, Object value,
-            int index, boolean isSelected, boolean cellHasFocus) {
-            TablesListItem checkbox = (TablesListItem) value;
-            checkbox.setBackground(isSelected ? getSelectionBackground()
-                                              : getBackground());
-            checkbox.setForeground(isSelected ? getSelectionForeground()
-                                              : getForeground());
-            checkbox.setEnabled(isEnabled());
-            checkbox.setFont(getFont());
-            checkbox.setFocusPainted(false);
-            checkbox.setBorderPainted(true);
-            checkbox.setBorder(isSelected
-                ? UIManager.getBorder("List.focusCellHighlightBorder")
-                : noFocusBorder);
-
-            return checkbox;
-        }
-    }
+			return checkbox;
+		}
+	}
 }
 
 // [eiel-gestion-conexiones]

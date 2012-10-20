@@ -1,7 +1,5 @@
 package org.gvsig.remoteClient.gml.types;
 
-
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -69,38 +67,39 @@ package org.gvsig.remoteClient.gml.types;
  */
 public class GMLGeometryType implements IXMLType {
 	private String type = null;
-	
+
 	public static final String POINT = "gml:PointPropertyType";
 	public static final String MULTIPOINT = "gml:MultiPointPropertyType";
 	public static final String LINE = "gml:LineStringPropertyType";
-	public static final String MULTILINE = "gml:MultiLineStringPropertyType";	
+	public static final String MULTILINE = "gml:MultiLineStringPropertyType";
 	public static final String POLYGON = "gml:PolygonPropertyType";
 	public static final String MULTIPOLYGON = "gml:MultiPolygonPropertyType";
 	public static final String GEOMETRY = "gml:GeometryPropertyType";
 	public static final String MULTIGEOMETRY = "gml:MultiGeometryPropertyType";
 	public static final String SURFACE = "gml:SurfacePropertyType";
 	public static final String MULTISURFACE = "gml:MultiSurfacePropertyType";
-  
+
 	public GMLGeometryType(String type) {
-		super();		
+		super();
 		this.type = type;
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.remoteClient.gml.model.IXMLType#getType()
 	 */
 	public int getType() {
 		return IXMLType.GML_GEOMETRY;
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.remoteClient.gml.model.IXMLType#getName()
 	 */
 	public String getName() {
 		return type;
 	}
-
 
 }

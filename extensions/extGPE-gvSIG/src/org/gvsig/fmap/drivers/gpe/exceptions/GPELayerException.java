@@ -54,37 +54,37 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
  *
  */
 /**
- * Thrown when there is an unknown problem loading 
- * a GPE layer
+ * Thrown when there is an unknown problem loading a GPE layer
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class GPELayerException extends BaseException {
 	private static final long serialVersionUID = -5810461892751191682L;
 	private FLayer layer = null;
-	
+
 	public GPELayerException(FLayer layer, Throwable exception) {
 		this.layer = layer;
 		initialize();
 		initCause(exception);
 	}
-	
+
 	/**
 	 * Initialize the properties
 	 */
 	private void initialize() {
 		messageKey = "gpe_gvsig_load_layer_error";
-		formatString = "Error loading the layer " +
-				"%(layerName).";
+		formatString = "Error loading the layer " + "%(layerName).";
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map values() {
 		HashMap params = new HashMap();
 		params.put("layerName", layer.getName());
-		return params;	
+		return params;
 	}
-	
+
 }

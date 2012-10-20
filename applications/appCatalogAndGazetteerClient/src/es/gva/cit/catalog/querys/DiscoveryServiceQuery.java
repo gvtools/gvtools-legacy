@@ -53,8 +53,8 @@ import java.util.Properties;
  */
 public class DiscoveryServiceQuery {
 	private Properties properties = null;
-	
-	public DiscoveryServiceQuery(){
+
+	public DiscoveryServiceQuery() {
 		this.properties = new Properties();
 	}
 
@@ -67,12 +67,12 @@ public class DiscoveryServiceQuery {
 
 	/**
 	 * Set the properties
+	 * 
 	 * @param properties
-	 * The properties to set
+	 *            The properties to set
 	 */
 	public void setProperties(Properties properties) {
 		this.properties = properties;
 	}
-
 
 }

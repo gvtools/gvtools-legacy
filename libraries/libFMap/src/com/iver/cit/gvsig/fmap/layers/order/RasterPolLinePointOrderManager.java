@@ -11,29 +11,28 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
 public class RasterPolLinePointOrderManager extends DefaultOrderManager {
 
-	private static Logger logger =
-		Logger.getLogger(RasterPolLinePointOrderManager.class.getName());
-	
+	private static Logger logger = Logger
+			.getLogger(RasterPolLinePointOrderManager.class.getName());
+
 	private final String name = "Raster-Polygon-Line-Point order manager";
-	private final String description =
-		"Raster_to_bottom_then_polygons_lines_points";
-	public static final String CODE =
-		RasterPolLinePointOrderManager.class.getName();
+	private final String description = "Raster_to_bottom_then_polygons_lines_points";
+	public static final String CODE = RasterPolLinePointOrderManager.class
+			.getName();
 
 	public int getPosition(FLayers target, FLayer newLayer) {
-		
+
 		int new_weight = 3;
 		new_weight = getLayerWeight(newLayer);
-		
+
 		int len = target.getLayersCount();
 		int item_w = 0;
 		// from top to bottom,
 		// look for a layer at
 		// least as "heavy" as this one
-		for (int i=(len-1); i>=0; i--) {
+		for (int i = (len - 1); i >= 0; i--) {
 			item_w = getLayerWeight(target.getLayer(i));
 			if (item_w >= new_weight) {
-				return (i+1);
+				return (i + 1);
 			}
 		}
 		// layer "falls" to bottom
@@ -51,7 +50,7 @@ public class RasterPolLinePointOrderManager extends DefaultOrderManager {
 	public String getClassName() {
 		return CODE;
 	}
-	
+
 	public String getCode() {
 		return CODE;
 	}
@@ -62,7 +61,7 @@ public class RasterPolLinePointOrderManager extends DefaultOrderManager {
 	 * @return weight: point=0, line=1, polygon=2, other=3, raster=4
 	 */
 	private int getLayerWeight(FLayer lyr) {
-		
+
 		if (lyr.getClass().getName().indexOf("FLyrRasterSE") != -1) {
 			return 4;
 		} else {
@@ -72,7 +71,8 @@ public class RasterPolLinePointOrderManager extends DefaultOrderManager {
 				try {
 					type2d = simplifyType(lyrv.getShapeType());
 				} catch (ReadDriverException e) {
-					logger.error("While getting shape type from layer: " + lyrv.getName() + " (assumed polygon)");
+					logger.error("While getting shape type from layer: "
+							+ lyrv.getName() + " (assumed polygon)");
 				}
 				switch (type2d) {
 				case FShape.POLYGON:
@@ -90,7 +90,7 @@ public class RasterPolLinePointOrderManager extends DefaultOrderManager {
 				return 3;
 			}
 		}
-		
+
 	}
 
 	/**
@@ -114,9 +114,7 @@ public class RasterPolLinePointOrderManager extends DefaultOrderManager {
 		default:
 			return FShape.POLYGON;
 		}
-		
-	}
-	
 
+	}
 
 }

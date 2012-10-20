@@ -2,21 +2,22 @@ package com.hardcode.gdbms.engine.data.indexes;
 
 /**
  * Implementación de un conjunto de índices en memoria, aunque puede haber un
- * conjunto de Long.MAXVALUE índices, en memoria, el tamaño  máximo es de
+ * conjunto de Long.MAXVALUE índices, en memoria, el tamaño máximo es de
  * Integer.MAXVALUE. Otras implementaciones de VariableIndexSet en memoria
  * pueden no tener esta restricción
- *
+ * 
  * @author Fernando González Cortés
  */
-public class VariableMemoryIndexSet extends MemoryIndexSet
-	implements VariableIndexSet {
+public class VariableMemoryIndexSet extends MemoryIndexSet implements
+		VariableIndexSet {
 	private int count = 0;
 
 	/**
 	 * Creates a new MemoryIndexSet object.
-	 *
-	 * @param initialCapacity Capacidad inicial del conjunto de índices. Deberá
-	 * 		  de ser la capacidad máxima que pueda llegar a tener el conjunto
+	 * 
+	 * @param initialCapacity
+	 *            Capacidad inicial del conjunto de índices. Deberá de ser la
+	 *            capacidad máxima que pueda llegar a tener el conjunto
 	 */
 	public VariableMemoryIndexSet(int initialCapacity) {
 		indexes = new long[initialCapacity];

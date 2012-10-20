@@ -99,21 +99,23 @@ import com.iver.cit.gvsig.gui.panels.WFSSelectFieldsPanel;
 /**
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class FieldsTreeTable extends org.gvsig.gui.beans.swing.treeTable.TreeTable {
+public class FieldsTreeTable extends
+		org.gvsig.gui.beans.swing.treeTable.TreeTable {
 	WFSSelectFieldsPanel parent = null;
-	
+
 	public FieldsTreeTable(FieldsTreeTableModel treeTableModel) {
 		super(treeTableModel);
-		JTree tree = (JTree)getTree();
+		JTree tree = (JTree) getTree();
 		tree.setCellRenderer(new CheckBoxTreeCellRenderer(this));
 		tree.setCellEditor(new CheckBoxTreeCellEditor(this));
-		tree.setEditable(true);		
+		tree.setEditable(true);
 	}
 
-	public FieldsTreeTable(FieldsTreeTableModel treeTableModel,WFSSelectFieldsPanel parent) {
+	public FieldsTreeTable(FieldsTreeTableModel treeTableModel,
+			WFSSelectFieldsPanel parent) {
 		super(treeTableModel);
 		this.parent = parent;
-		JTree tree = (JTree)getTree();
+		JTree tree = (JTree) getTree();
 		tree.setCellRenderer(new CheckBoxTreeCellRenderer(this));
 		tree.setCellEditor(new CheckBoxTreeCellEditor(this));
 		tree.setEditable(true);
@@ -121,11 +123,12 @@ public class FieldsTreeTable extends org.gvsig.gui.beans.swing.treeTable.TreeTab
 
 	/**
 	 * Sets the fields
+	 * 
 	 * @param fields
 	 */
-	public void setFields(Vector vFields){
+	public void setFields(Vector vFields) {
 		Object[] fields = new Object[vFields.size()];
-		for (int i=0 ; i<vFields.size() ; i++){
+		for (int i = 0; i < vFields.size(); i++) {
 			fields[i] = vFields.get(i);
 		}
 		setModel(new FieldsTreeTableModel(fields));
@@ -135,13 +138,14 @@ public class FieldsTreeTable extends org.gvsig.gui.beans.swing.treeTable.TreeTab
 
 	/**
 	 * Gets the selected layer
+	 * 
 	 * @return
 	 */
-	public Object[] getSelectedValues(){
+	public Object[] getSelectedValues() {
 		int[] selectedRows = getSelectedRows();
-		TreeTableModelAdapter obj = (TreeTableModelAdapter)getModel();
+		TreeTableModelAdapter obj = (TreeTableModelAdapter) getModel();
 		Object[] objects = new Object[selectedRows.length];
-		for (int i=0 ; i<selectedRows.length ; i++){
+		for (int i = 0; i < selectedRows.length; i++) {
 			objects[i] = obj.nodeForRow(selectedRows[i]);
 		}
 		return objects;
@@ -149,54 +153,55 @@ public class FieldsTreeTable extends org.gvsig.gui.beans.swing.treeTable.TreeTab
 
 	/**
 	 * return the selected elements
+	 * 
 	 * @return
 	 */
-	public XMLElement[] getSelectedElements(){
-		TreeTableModelAdapter obj = (TreeTableModelAdapter)getModel();
+	public XMLElement[] getSelectedElements() {
+		TreeTableModelAdapter obj = (TreeTableModelAdapter) getModel();
 		ArrayList elements = new ArrayList();
-		for (int i=0 ; i< obj.getRowCount() ; i++){
-			if (obj.nodeForRow(i) instanceof CheckBoxNode){
-				CheckBoxNode node = (CheckBoxNode)obj.nodeForRow(i);
-				if (node.isSelected()){
+		for (int i = 0; i < obj.getRowCount(); i++) {
+			if (obj.nodeForRow(i) instanceof CheckBoxNode) {
+				CheckBoxNode node = (CheckBoxNode) obj.nodeForRow(i);
+				if (node.isSelected()) {
 					XMLElement element = node.getElement();
 					CheckBoxNode parentNode = node.getParentNode();
-					if (parentNode != null){
+					if (parentNode != null) {
 						element.setParentElement(parentNode.getElement());
 					}
 					elements.add(element);
-				}					
+				}
 			}
 		}
-	
+
 		XMLElement[] selected = new XMLElement[elements.size()];
-		for (int i=0 ; i<elements.size() ; i++){
-			selected[i] = (XMLElement)elements.get(i);
+		for (int i = 0; i < elements.size(); i++) {
+			selected[i] = (XMLElement) elements.get(i);
 		}
 		return selected;
 	}
-	
-	
-	public void setModel(FieldsTreeTableModel treeTableModel){
+
+	public void setModel(FieldsTreeTableModel treeTableModel) {
 		super.setModel(treeTableModel);
-		JTree tree = (JTree)getTree();
+		JTree tree = (JTree) getTree();
 		tree.setCellRenderer(new CheckBoxTreeCellRenderer(this));
 		tree.setCellEditor(new CheckBoxTreeCellEditor(this));
-		tree.setEditable(true);		
+		tree.setEditable(true);
 	}
-	
+
 	/**
 	 * Gets the geometry field
+	 * 
 	 * @return
 	 */
-	public String getGeometryField(){
-		TreeTableModelAdapter obj = (TreeTableModelAdapter)getModel();
+	public String getGeometryField() {
+		TreeTableModelAdapter obj = (TreeTableModelAdapter) getModel();
 		ArrayList elements = new ArrayList();
-		for (int i=0 ; i< obj.getRowCount() ; i++){
-			if (obj.nodeForRow(i) instanceof CheckBoxNode){
-				CheckBoxNode node = (CheckBoxNode)obj.nodeForRow(i);
+		for (int i = 0; i < obj.getRowCount(); i++) {
+			if (obj.nodeForRow(i) instanceof CheckBoxNode) {
+				CheckBoxNode node = (CheckBoxNode) obj.nodeForRow(i);
 				XMLElement element = node.getElement();
 				if (element.getEntityType() != null) {
-					if (element.getEntityType().getType() == IXMLType.GML_GEOMETRY){
+					if (element.getEntityType().getType() == IXMLType.GML_GEOMETRY) {
 						return element.getName();
 					}
 				}
@@ -204,54 +209,68 @@ public class FieldsTreeTable extends org.gvsig.gui.beans.swing.treeTable.TreeTab
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Set the selected fields
+	 * 
 	 * @param selectedFields
 	 */
 	public void setSelectedFields(Vector selectedFields) {
-		TreeTableModelAdapter obj = (TreeTableModelAdapter)getModel();
-		JTree tree = (JTree)getTree();
-	
+		TreeTableModelAdapter obj = (TreeTableModelAdapter) getModel();
+		JTree tree = (JTree) getTree();
+
 		for (int i = 0; i < tree.getRowCount(); i++) {
 			tree.expandRow(i);
-		}	
-		for (int i=0 ; i<obj.getRowCount() ; i++){
-			if (obj.nodeForRow(i) instanceof CheckBoxNode){
-				XMLElement element = ((CheckBoxNode)obj.nodeForRow(i)).getElement();
-				for (int j=0 ; j<selectedFields.size() ; j++){
-					//If the name is equals
-					if (((XMLElement)selectedFields.get(j)).getName().equals(element.getName())){
-						//If the type is equals					
-						if ( (element.getEntityType() != null) && (((XMLElement)selectedFields.get(j)).getEntityType() != null) && (((XMLElement)selectedFields.get(j)).getEntityType().getName().equals(element.getEntityType().getName())) ){
-							((CheckBoxNode)obj.nodeForRow(i)).setSelected(true);
+		}
+		for (int i = 0; i < obj.getRowCount(); i++) {
+			if (obj.nodeForRow(i) instanceof CheckBoxNode) {
+				XMLElement element = ((CheckBoxNode) obj.nodeForRow(i))
+						.getElement();
+				for (int j = 0; j < selectedFields.size(); j++) {
+					// If the name is equals
+					if (((XMLElement) selectedFields.get(j)).getName().equals(
+							element.getName())) {
+						// If the type is equals
+						if ((element.getEntityType() != null)
+								&& (((XMLElement) selectedFields.get(j))
+										.getEntityType() != null)
+								&& (((XMLElement) selectedFields.get(j))
+										.getEntityType().getName()
+										.equals(element.getEntityType()
+												.getName()))) {
+							((CheckBoxNode) obj.nodeForRow(i))
+									.setSelected(true);
 						}
 					}
 				}
-			}			
+			}
 		}
-		
+
 	}
-	
+
 	/**
-	 * <p>Changes the status to applied.</p>
+	 * <p>
+	 * Changes the status to applied.
+	 * </p>
 	 * 
-	 * @param applicable a boolean value
+	 * @param applicable
+	 *            a boolean value
 	 */
 	public void setApplicable(boolean applicable) {
-		if (parent != null){
+		if (parent != null) {
 			parent.setApplicable(applicable);
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.JComponent#createToolTip()
 	 */
-    public JToolTip createToolTip() {
-    	// Multiline support
-    	MultiLineToolTip tip = new MultiLineToolTip();
-    	tip.setComponent(this);
-    	return tip;
-    }
+	public JToolTip createToolTip() {
+		// Multiline support
+		MultiLineToolTip tip = new MultiLineToolTip();
+		tip.setComponent(this);
+		return tip;
+	}
 }

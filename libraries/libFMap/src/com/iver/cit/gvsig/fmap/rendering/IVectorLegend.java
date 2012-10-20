@@ -48,51 +48,56 @@ import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.utiles.XMLEntity;
 
-
 /**
  * Interface of a vectorial legend.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public interface IVectorLegend extends ILegend {
 	/**
 	 * Inserts the DataSource.
-	 *
-	 * @param ds DataSource.
-	 *
-	 * @throws FieldNotFoundException when the field is not found.
-	 * @throws DriverException When the driver fails.
+	 * 
+	 * @param ds
+	 *            DataSource.
+	 * 
+	 * @throws FieldNotFoundException
+	 *             when the field is not found.
+	 * @throws DriverException
+	 *             When the driver fails.
 	 */
-	void setDataSource(DataSource ds)
-		throws FieldNotFoundException, ReadDriverException;
+	void setDataSource(DataSource ds) throws FieldNotFoundException,
+			ReadDriverException;
 
 	/**
-	 * Returns the symbol to be used to represent the feature in the i-th
-	 * record in the DataSource
-	 * @param i, the record index
-	 *
+	 * Returns the symbol to be used to represent the feature in the i-th record
+	 * in the DataSource
+	 * 
+	 * @param i
+	 *            , the record index
+	 * 
 	 * @return ISymbol.
-	 *
+	 * 
 	 * @throws DriverException
 	 */
 	ISymbol getSymbol(int i) throws ReadDriverException;
-	
+
 	/**
-     * Returns a symbol starting from an IFeature.
+	 * Returns a symbol starting from an IFeature.
 	 * 
-	 * TAKE CARE!! When we are using a feature iterator as a database
-	 * the only field that will be filled is the fieldID.
-	 * The rest of fields will be null to reduce the time of creation
-	 *
-	 * @param feat IFeature.
-	 *
+	 * TAKE CARE!! When we are using a feature iterator as a database the only
+	 * field that will be filled is the fieldID. The rest of fields will be null
+	 * to reduce the time of creation
+	 * 
+	 * @param feat
+	 *            IFeature.
+	 * 
 	 * @return Símbolo.
 	 */
-    ISymbol getSymbolByFeature(IFeature feat);
+	ISymbol getSymbolByFeature(IFeature feat);
 
 	/**
 	 * Returns the type of the shape.
-	 *
+	 * 
 	 * @return Returns the type of the shapes that the legend is ready to use.
 	 * 
 	 */
@@ -100,54 +105,58 @@ public interface IVectorLegend extends ILegend {
 
 	/**
 	 * Defines the type of the shape.
-	 *
-	 * @param shapeType type of the shape.
+	 * 
+	 * @param shapeType
+	 *            type of the shape.
 	 */
 	void setShapeType(int shapeType);
 
 	/**
-	 * Establishes the default symbol of a legend. In a SingleSymbolLegend the symbol
-	 * is established by calling this method.
-	 *
-	 * @param s default symbol.
-	 * @throws IllegalArgumentException, if the symbol isn't suitable for the
-	 * layer's data type.
+	 * Establishes the default symbol of a legend. In a SingleSymbolLegend the
+	 * symbol is established by calling this method.
+	 * 
+	 * @param s
+	 *            default symbol.
+	 * @throws IllegalArgumentException
+	 *             , if the symbol isn't suitable for the layer's data type.
 	 */
 	void setDefaultSymbol(ISymbol s) throws IllegalArgumentException;
 
 	/**
 	 * Returns the XMLEntity.
-	 *
+	 * 
 	 * @return XMLEntity.
 	 */
 	XMLEntity getXMLEntity();
 
 	/**
 	 * Inserts the XMLEntity.
-	 *
-	 * @param xml XMLEntity.
+	 * 
+	 * @param xml
+	 *            XMLEntity.
 	 */
 	void setXMLEntity(XMLEntity xml);
 
-    /**
-     * Inserts the XMLEntity.
-     *
-     * @param xml XMLEntity.
-     */
-    void setXMLEntity03(XMLEntity xml);
-
-    /**
-     * Returns true or false depending on if the rest of values are used.
+	/**
+	 * Inserts the XMLEntity.
 	 * 
-	 * @return  True if the rest of values are used.
+	 * @param xml
+	 *            XMLEntity.
 	 */
-    public boolean isUseDefaultSymbol();
+	void setXMLEntity03(XMLEntity xml);
 
-    void useDefaultSymbol(boolean b);
+	/**
+	 * Returns true or false depending on if the rest of values are used.
+	 * 
+	 * @return True if the rest of values are used.
+	 */
+	public boolean isUseDefaultSymbol();
 
-    public ZSort getZSort();
+	void useDefaultSymbol(boolean b);
+
+	public ZSort getZSort();
 
 	public void setZSort(ZSort zSort);
-	
+
 	public boolean isSuitableForShapeType(int shapeType);
 }

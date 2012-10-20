@@ -51,40 +51,39 @@ import com.vividsolutions.jump.feature.Feature;
 import com.vividsolutions.jump.feature.FeatureCollection;
 import com.vividsolutions.jump.feature.FeatureSchema;
 
-
 /**
  * Adapter to work with OpenJUMP's FeatureCollection as a gvSIG driver.
  * 
- * It allows to work with all those OpenJUMP's functions which return FeatureCollection
- * as a result in gvSIG.
+ * It allows to work with all those OpenJUMP's functions which return
+ * FeatureCollection as a result in gvSIG.
  * 
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
-public class FeatureCollectionDataSourceAdapter extends FeatureCollectionMemoryDriver{
+public class FeatureCollectionDataSourceAdapter extends
+		FeatureCollectionMemoryDriver {
 
-    
-    private FeatureCollection fc;
-    private List features;
-    private FeatureSchemaLayerDefinitionAdapter schema;
-    
+	private FeatureCollection fc;
+	private List features;
+	private FeatureSchemaLayerDefinitionAdapter schema;
+
 	/**
-	 * Constructor 
+	 * Constructor
 	 * 
-	 * @param name descriptive name of the data source
-	 * @param fc OpenJUMP's feature collection
+	 * @param name
+	 *            descriptive name of the data source
+	 * @param fc
+	 *            OpenJUMP's feature collection
 	 */
 	public FeatureCollectionDataSourceAdapter(String name,
-										FeatureCollection fc,
-										FeatureSchemaLayerDefinitionAdapter schema){
-		
+			FeatureCollection fc, FeatureSchemaLayerDefinitionAdapter schema) {
+
 		super(name, new ArrayList<IFeature>(), null);
 		this.fc = fc;
 		this.features = fc.getFeatures();
 		this.schema = schema;
 	}
-	
 
 	public int getShapeType() {
 		return schema.getShapeType();
@@ -94,113 +93,103 @@ public class FeatureCollectionDataSourceAdapter extends FeatureCollectionMemoryD
 		return super.getName();
 	}
 
-
 	public int getShapeCount() throws ReadDriverException {
 		return fc.size();
 	}
-
 
 	public DriverAttributes getDriverAttributes() {
 		return super.getDriverAttributes();
 	}
 
-
-	public Rectangle2D getFullExtent() throws ReadDriverException, ExpansionFileReadException {
+	public Rectangle2D getFullExtent() throws ReadDriverException,
+			ExpansionFileReadException {
 		return FGeometryUtil.envelopeToRectangle2D(fc.getEnvelope());
 	}
 
-
 	public IGeometry getShape(int index) throws ReadDriverException {
-		if(index <  fc.size()){
+		if (index < fc.size()) {
 			Feature feature = (Feature) features.get(index);
 			Geometry geometry = feature.getGeometry();
 			return NewFConverter.toFMap(geometry);
-		}else
+		} else
 			return null;
 	}
 
-
 	public void reload() throws ReloadDriverException {
 	}
-
 
 	public boolean isWritable() {
 		return false;
 	}
 
-
 	public int[] getPrimaryKeys() throws ReadDriverException {
 		return null;
 	}
 
-
-	public void write(DataWare dataWare) throws WriteDriverException, ReadDriverException {
+	public void write(DataWare dataWare) throws WriteDriverException,
+			ReadDriverException {
 	}
-
 
 	public void setDataSourceFactory(DataSourceFactory dsf) {
 	}
 
-
-	public Value getFieldValue(long index, int fieldId) throws ReadDriverException {
-		if(index <  fc.size()){
+	public Value getFieldValue(long index, int fieldId)
+			throws ReadDriverException {
+		if (index < fc.size()) {
 			Feature feature = (Feature) features.get((int) index);
 			Object attr = feature.getAttribute(fieldId);
-			AttributeType type = fc.getFeatureSchema().getAttributeType(fieldId);
+			AttributeType type = fc.getFeatureSchema()
+					.getAttributeType(fieldId);
 			Value solution = ValueFactory.createNullValue();
-			if(type == AttributeType.STRING){
+			if (type == AttributeType.STRING) {
 				solution = ValueFactory.createValue((String) attr);
-			}else if(type == AttributeType.DOUBLE){
-				solution = ValueFactory.createValue(((Double)attr).doubleValue());
-			}else if(type == AttributeType.INTEGER){
-				solution = ValueFactory.createValue(((Integer)attr).intValue());
-			}else if(type == AttributeType.DATE){
-				solution = ValueFactory.createValue(((Date)attr));
+			} else if (type == AttributeType.DOUBLE) {
+				solution = ValueFactory.createValue(((Double) attr)
+						.doubleValue());
+			} else if (type == AttributeType.INTEGER) {
+				solution = ValueFactory
+						.createValue(((Integer) attr).intValue());
+			} else if (type == AttributeType.DATE) {
+				solution = ValueFactory.createValue(((Date) attr));
 			}
 			return solution;
-		}else
+		} else
 			return null;
-		
+
 	}
-
-
-	
 
 	public int getFieldCount() throws ReadDriverException {
-		//la geometria no cuenta
+		// la geometria no cuenta
 		return fc.getFeatureSchema().getAttributeCount() - 1;
 	}
-
 
 	public String getFieldName(int fieldId) throws ReadDriverException {
 		return fc.getFeatureSchema().getAttributeName(fieldId);
 	}
 
-
 	public long getRowCount() throws ReadDriverException {
 		return fc.size();
 	}
 
-
 	public int getFieldType(int i) throws ReadDriverException {
-		 FeatureSchema fSchema = fc.getFeatureSchema();
-		 if (fSchema instanceof FeatureSchemaAdapter) {
-           return ((FeatureSchemaAdapter) fSchema).getDs().getRecordset().getFieldType(i);
-       } else {
-           AttributeType at = fSchema.getAttributeType(i);
-           if (at == AttributeType.DATE) {
-               return Types.DATE;
-           } else if (at == AttributeType.DOUBLE) {
-               return Types.DOUBLE;
-           } else if (at == AttributeType.INTEGER) {
-               return Types.INTEGER;
-           } else if (at == AttributeType.STRING) {
-               return Types.VARCHAR;
-           } 
-           return -1;
-       }
+		FeatureSchema fSchema = fc.getFeatureSchema();
+		if (fSchema instanceof FeatureSchemaAdapter) {
+			return ((FeatureSchemaAdapter) fSchema).getDs().getRecordset()
+					.getFieldType(i);
+		} else {
+			AttributeType at = fSchema.getAttributeType(i);
+			if (at == AttributeType.DATE) {
+				return Types.DATE;
+			} else if (at == AttributeType.DOUBLE) {
+				return Types.DOUBLE;
+			} else if (at == AttributeType.INTEGER) {
+				return Types.INTEGER;
+			} else if (at == AttributeType.STRING) {
+				return Types.VARCHAR;
+			}
+			return -1;
+		}
 	}
-
 
 	public int getFieldWidth(int i) throws ReadDriverException {
 		AttributeType attrType = fc.getFeatureSchema().getAttributeType(i);
@@ -209,11 +198,10 @@ public class FeatureCollectionDataSourceAdapter extends FeatureCollectionMemoryD
 		return desc.getFieldLength();
 	}
 
-
-	public Rectangle2D getShapeBounds(int index) throws ReadDriverException, ExpansionFileReadException {
+	public Rectangle2D getShapeBounds(int index) throws ReadDriverException,
+			ExpansionFileReadException {
 		return getShape(index).getBounds2D();
 	}
-
 
 	public int getShapeType(int index) throws ReadDriverException {
 		return getShape(index).getGeometryType();

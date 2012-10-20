@@ -173,13 +173,14 @@ import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
  *
  */
 /**
- *  FMap's WFS Layer class.
- *
+ * FMap's WFS Layer class.
+ * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class FLyrWFS extends FLyrVect{
+public class FLyrWFS extends FLyrVect {
 	/**
-	 * @param visualFilterQuery the visualFilterQuery to set
+	 * @param visualFilterQuery
+	 *            the visualFilterQuery to set
 	 */
 	public void setVisualFilterQuery(String visualFilterQuery) {
 		this.visualFilterQuery = visualFilterQuery;
@@ -193,7 +194,8 @@ public class FLyrWFS extends FLyrVect{
 	}
 
 	/**
-	 * @param bbox the bbox to set
+	 * @param bbox
+	 *            the bbox to set
 	 */
 	public void setBbox(Rectangle2D bbox) {
 		this.bbox = bbox;
@@ -207,7 +209,8 @@ public class FLyrWFS extends FLyrVect{
 	}
 
 	/**
-	 * @param bboxPropertyName the bboxPropertyName to set
+	 * @param bboxPropertyName
+	 *            the bboxPropertyName to set
 	 */
 	public void setBboxPropertyName(String bboxPropertyName) {
 		this.bboxPropertyName = bboxPropertyName;
@@ -237,66 +240,71 @@ public class FLyrWFS extends FLyrVect{
 	/**
 	 * Constructor
 	 */
-	public FLyrWFS(){
+	public FLyrWFS() {
 		super();
-		ExtensionPoint extensionPoint = (ExtensionPoint)ExtensionPointsSingleton.getInstance().get("WFSExtension");
-		if (extensionPoint != null){
+		ExtensionPoint extensionPoint = (ExtensionPoint) ExtensionPointsSingleton
+				.getInstance().get("WFSExtension");
+		if (extensionPoint != null) {
 			try {
-				WFSLayerListener listener = (WFSLayerListener)extensionPoint.create("WFSLayerListener");
+				WFSLayerListener listener = (WFSLayerListener) extensionPoint
+						.create("WFSLayerListener");
 				listener.setWfsLayer(this);
 				addLayerListener(listener);
 			} catch (Exception e) {
-				//Impossible to Use the WFST lockoperation
+				// Impossible to Use the WFST lockoperation
 			}
 		}
 	}
 
 	/**
-	 * Constructor to load a new layer from a catalog
-	 * search
+	 * Constructor to load a new layer from a catalog search
+	 * 
 	 * @param args
-	 * Params to load a new layer
-	 * @throws WFSDriverException 
-	 * @throws IOException 
-	 * @throws MalformedURLException 
-	 * @throws ConnectException 
-	 * @throws DriverIOException 
+	 *            Params to load a new layer
+	 * @throws WFSDriverException
+	 * @throws IOException
+	 * @throws MalformedURLException
+	 * @throws ConnectException
+	 * @throws DriverIOException
 	 */
-	public FLyrWFS(Map args) throws WFSDriverException, ConnectException, MalformedURLException, IOException, DriverIOException{
+	public FLyrWFS(Map args) throws WFSDriverException, ConnectException,
+			MalformedURLException, IOException, DriverIOException {
 		this();
-		String[] sLayer = (String[])args.get("layer");
-		String user = (String)args.get("user");
-		String pwd = (String)args.get("pwd");
-		String host = (String)args.get("host");	
-		String projection = (String)args.get("projection");
+		String[] sLayer = (String[]) args.get("layer");
+		String user = (String) args.get("user");
+		String pwd = (String) args.get("pwd");
+		String host = (String) args.get("host");
+		String projection = (String) args.get("projection");
 
-		FMapWFSDriver driver = FMapWFSDriverFactory.getFMapDriverForURL(new URL(host));
+		FMapWFSDriver driver = FMapWFSDriverFactory
+				.getFMapDriverForURL(new URL(host));
 		WFSLayerNode[] layers = driver.getLayerList();
 		WFSLayerNode layer = driver.getLayerInfo(sLayer[0]);
 
 		layer.setSelectedFields(layer.getFields());
 
 		Vector vAtts = new Vector();
-		if (layer.getFields().size() == 1){
-			XMLElement element = (XMLElement)layer.getFields().get(0);
-			if (element.getEntityType().getType() != IXMLType.COMPLEX){
+		if (layer.getFields().size() == 1) {
+			XMLElement element = (XMLElement) layer.getFields().get(0);
+			if (element.getEntityType().getType() != IXMLType.COMPLEX) {
 				vAtts.add(element);
-			}else{
-				vAtts = ((XMLComplexType)element.getEntityType()).getAttributes();
+			} else {
+				vAtts = ((XMLComplexType) element.getEntityType())
+						.getAttributes();
 			}
 		}
-		for (int i=0 ; i<layer.getFields().size() ; i++){
-			XMLElement element = (XMLElement)layer.getFields().get(i);
-			if (element.getEntityType().getType() != IXMLType.COMPLEX){
-				vAtts.add((XMLElement)layer.getFields().get(i));
-			}else{
+		for (int i = 0; i < layer.getFields().size(); i++) {
+			XMLElement element = (XMLElement) layer.getFields().get(i);
+			if (element.getEntityType().getType() != IXMLType.COMPLEX) {
+				vAtts.add((XMLElement) layer.getFields().get(i));
+			} else {
 
 			}
 		}
 
 		XMLElement[] atts = new XMLElement[vAtts.size()];
-		for (int i=0 ; i<vAtts.size() ; i++){
-			atts[i] = (XMLElement)vAtts.get(i);
+		for (int i = 0; i < vAtts.size(); i++) {
+			atts[i] = (XMLElement) vAtts.get(i);
 		}
 
 		setHost(host);
@@ -308,17 +316,16 @@ public class FLyrWFS extends FLyrVect{
 		setPassword(pwd);
 		setNumfeatures(10000);
 		setTimeout(10000);
-		setWfsDriver(driver);			
+		setWfsDriver(driver);
 		setCrs(ProjectionUtils.getCRS(projection));
 
-		load();    	
+		load();
 	}
-
 
 	/**
 	 * Loads the features from the server
 	 */
-	public void load(){
+	public void load() {
 		WFSAdapter adapter = new WFSAdapter();
 		try {
 			wfsDriver.getFeature(getWFSStatus());
@@ -326,23 +333,24 @@ public class FLyrWFS extends FLyrVect{
 			adapter.setDriver((VectorialDriver) wfsDriver);
 			setSource(adapter);
 
-			if (getLegend() == null){
-				setLegend(LegendFactory.createSingleSymbolLegend(
-						getShapeType()));
+			if (getLegend() == null) {
+				setLegend(LegendFactory
+						.createSingleSymbolLegend(getShapeType()));
 			}
-		} catch (Exception e){
-			e.printStackTrace();			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
 	/**
 	 * Gets the WFS Status
+	 * 
 	 * @return
 	 */
-	private WFSStatus getWFSStatus(){
-		if (status == null){
+	private WFSStatus getWFSStatus() {
+		if (status == null) {
 			status = wfsDriver.getStatus();
-		}else{
+		} else {
 			status.setFeatureName(getLayerName());
 		}
 		status.setUserName(getUserName());
@@ -353,8 +361,8 @@ public class FLyrWFS extends FLyrVect{
 		status.setOnlineResource(getOnlineResource());
 		status.setSrs(getSrs());
 		status.setBBox(getBbox());
-		//Filter Encoding transformation
-		FilterEncoding fe = SQLExpressionFormat.createFilter();				
+		// Filter Encoding transformation
+		FilterEncoding fe = SQLExpressionFormat.createFilter();
 		fe.setQuery(getFieldsQuery());
 		status.setFilterQuery(fe.toString());
 		status.setFilterVisualText(getVisualFilterQuery());
@@ -367,20 +375,25 @@ public class FLyrWFS extends FLyrVect{
 	public String getLayerName() {
 		return layerName;
 	}
+
 	/**
-	 * @param layerName The layerName to set.
+	 * @param layerName
+	 *            The layerName to set.
 	 */
 	public void setLayerName(String layerName) {
 		this.layerName = layerName;
 	}
+
 	/**
 	 * @return Returns the numfeatures.
 	 */
 	public int getNumfeatures() {
 		return numfeatures;
 	}
+
 	/**
-	 * @param numfeatures The numfeatures to set.
+	 * @param numfeatures
+	 *            The numfeatures to set.
 	 */
 	public void setNumfeatures(int numfeatures) {
 		this.numfeatures = numfeatures;
@@ -392,53 +405,65 @@ public class FLyrWFS extends FLyrVect{
 	public String getPassword() {
 		return password;
 	}
+
 	/**
-	 * @param pwd The pwd to set.
+	 * @param pwd
+	 *            The pwd to set.
 	 */
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
 	/**
 	 * @return Returns the timeout.
 	 */
 	public int getTimeout() {
 		return timeout;
 	}
+
 	/**
-	 * @param timeout The timeout to set.
+	 * @param timeout
+	 *            The timeout to set.
 	 */
 	public void setTimeout(int timeout) {
 		this.timeout = timeout;
 	}
+
 	/**
 	 * @return Returns the user.
 	 */
 	public String getUserName() {
 		return userName;
 	}
+
 	/**
-	 * @param user The user to set.
+	 * @param user
+	 *            The user to set.
 	 */
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
+
 	/**
 	 * @return The visual filtering text from "Where"
 	 */
 	public String getVisualFilterQuery() {
 		return visualFilterQuery;
 	}
+
 	/**
-	 * @param visualFilterQuery The visual filtering text from "Where"
+	 * @param visualFilterQuery
+	 *            The visual filtering text from "Where"
 	 */
 	public void setVisualFilterQueyr(String visualFilterQuery) {
 		this.visualFilterQuery = visualFilterQuery;
 	}
+
 	/**
 	 * @return Returns the fields.
 	 */
 	public XMLElement[] getFields() {
-		if (fields == null){
+		if (fields == null) {
 			return new XMLElement[0];
 		}
 		return fields;
@@ -446,49 +471,57 @@ public class FLyrWFS extends FLyrVect{
 
 	/**
 	 * Return the fields name
+	 * 
 	 * @return
 	 */
-	public String[] getFieldNames(){
+	public String[] getFieldNames() {
 		Vector vFields = new Vector();
-		for (int i=0 ; i<getFields().length ; i++){
-			if ((getFields()[i].getEntityType() == null) || 
-					(getFields()[i].getEntityType().getType() != IXMLType.COMPLEX)){
+		for (int i = 0; i < getFields().length; i++) {
+			if ((getFields()[i].getEntityType() == null)
+					|| (getFields()[i].getEntityType().getType() != IXMLType.COMPLEX)) {
 				vFields.add(getFields()[i].getName());
 			}
 		}
 		String[] fields = new String[vFields.size()];
-		for (int i=0 ; i<vFields.size() ; i++){
-			fields[i] = (String)vFields.get(i);
+		for (int i = 0; i < vFields.size(); i++) {
+			fields[i] = (String) vFields.get(i);
 		}
 		return fields;
 	}
 
 	/**
-	 * @param fields The fields to set.
+	 * @param fields
+	 *            The fields to set.
 	 */
 	public void setFields(XMLElement[] fields) {
 		this.fields = fields;
 	}
+
 	/**
 	 * @return Returns the name.
 	 */
 	public String getName() {
 		return name;
 	}
+
 	/**
-	 * @param name The name to set.
+	 * @param name
+	 *            The name to set.
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	/**
 	 * @return Returns the host.
 	 */
 	public URL getHost() {
 		return host;
 	}
+
 	/**
-	 * @param host The host to set.
+	 * @param host
+	 *            The host to set.
 	 */
 	public void setHost(URL host) {
 		this.host = host;
@@ -502,31 +535,33 @@ public class FLyrWFS extends FLyrVect{
 	}
 
 	/**
-	 * @param wfs The wfs to set.
+	 * @param wfs
+	 *            The wfs to set.
 	 */
 	public void setWfsDriver(FMapWFSDriver wfs) {
 		this.wfsDriver = wfs;
 	}
 
-
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.FLyrDefault#getStrategy()
 	 */
-	//	public Strategy getStrategy() {
-	//	if (wfsStrategy == null){
-	//	wfsStrategy = new WFSStrategy(this);
-	//	}
-	//	return wfsStrategy;
-	//	}
+	// public Strategy getStrategy() {
+	// if (wfsStrategy == null){
+	// wfsStrategy = new WFSStrategy(this);
+	// }
+	// return wfsStrategy;
+	// }
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.FLayer#getFullExtent()
 	 */
 	public Rectangle2D getFullExtent() {
 		Rectangle2D extent = wfsDriver.getFullExtent();
-		if (extent == null){
+		if (extent == null) {
 			return null;
 		}
 		return extent;
@@ -540,7 +575,8 @@ public class FLyrWFS extends FLyrVect{
 	}
 
 	/**
-	 * @param onlineResource The onlineResource to set.
+	 * @param onlineResource
+	 *            The onlineResource to set.
 	 */
 	public void setOnlineResource(String onlineResource) {
 		this.onlineResource = onlineResource;
@@ -551,18 +587,18 @@ public class FLyrWFS extends FLyrVect{
 		info.put("name", getName());
 		info.put("layerName", getLayerName());
 		// layer text is no longer available
-		//info.put("layerText", getLayerText());
+		// info.put("layerText", getLayerText());
 		info.put("attributes", getFields());
 		info.put("host", getHost());
 		info.put("wfsLayerNode", getWfsLayerNode());
-		WFSStatus status = new WFSStatus(getLayerName(),getNameSpace());
+		WFSStatus status = new WFSStatus(getLayerName(), getNameSpace());
 		status.setBuffer(getNumfeatures());
 		status.setTimeout(getTimeout());
 		status.setUserName(getUserName());
 		status.setPassword(getPassword());
 		status.setFilterQuery(getFieldsQuery());
 		status.setFilterVisualText(getVisualFilterQuery());
-		info.put("status",status);
+		info.put("status", status);
 		return info;
 	}
 
@@ -574,7 +610,8 @@ public class FLyrWFS extends FLyrVect{
 	}
 
 	/**
-	 * @param wfsLayerNode The wfsLayerNode to set.
+	 * @param wfsLayerNode
+	 *            The wfsLayerNode to set.
 	 */
 	public void setWfsLayerNode(WFSLayerNode wfsLayerNode) {
 		this.wfsLayerNode = wfsLayerNode;
@@ -586,18 +623,21 @@ public class FLyrWFS extends FLyrVect{
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}		
+		}
 	}
 
-	public ImageIcon getTocImageIcon() {			
-		return new ImageIcon(PluginServices.getPluginServices("com.iver.cit.gvsig.wfs2").getClassLoader().getResource("images/icoLayer.png"));
+	public ImageIcon getTocImageIcon() {
+		return new ImageIcon(PluginServices
+				.getPluginServices("com.iver.cit.gvsig.wfs2").getClassLoader()
+				.getResource("images/icoLayer.png"));
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.FLyrVect#isPropertiesMenuVisible()
 	 */
-	public boolean isPropertiesMenuVisible(){
+	public boolean isPropertiesMenuVisible() {
 		return false;
 	}
 
@@ -613,29 +653,30 @@ public class FLyrWFS extends FLyrVect{
 	 * @return XMLEntity.
 	 * @throws XMLException
 	 */
-	public XMLEntity getXMLEntity() throws XMLException {	
-		XMLEntity xml = super.getXMLEntity();		
+	public XMLEntity getXMLEntity() throws XMLException {
+		XMLEntity xml = super.getXMLEntity();
 
-		xml.putProperty("fullExtent", StringUtilities.rect2String(getFullExtent()));
+		xml.putProperty("fullExtent",
+				StringUtilities.rect2String(getFullExtent()));
 
 		// Host
 		xml.putProperty("host", host.toExternalForm());
 
 		// Layer name
-		xml.putProperty("layerName", getLayerName());		
+		xml.putProperty("layerName", getLayerName());
 		xml.putProperty("name", getName());
 
-		//Layer fields
+		// Layer fields
 		XMLElement[] fields = getFields();
 		String strFields = "";
-		for (int i=0 ; i<fields.length ; i++){
-			//If is not the root node
-			if (fields[i].getParentElement() != null){
+		for (int i = 0; i < fields.length; i++) {
+			// If is not the root node
+			if (fields[i].getParentElement() != null) {
 				strFields = strFields + fields[i].getFullName();
-				if (i < fields.length - 1){
+				if (i < fields.length - 1) {
 					strFields = strFields + "~##SEP1##~";
 				}
-			}else{
+			} else {
 				xml.putProperty("rootNode", true);
 			}
 		}
@@ -645,34 +686,36 @@ public class FLyrWFS extends FLyrVect{
 		xml.putProperty("user", getUserName());
 
 		// SRS
-		xml.putProperty("srs", getSrs());		
+		xml.putProperty("srs", getSrs());
 
 		// OnlineResources
 		xml.putProperty("onlineResource", getOnlineResource());
 
 		// TimeOut
-		xml.putProperty("timeout", getTimeout());		
+		xml.putProperty("timeout", getTimeout());
 
 		// Buffer
 		xml.putProperty("buffer", getNumfeatures());
 
-		//Projection
+		// Projection
 		xml.putProperty("projection", ProjectionUtils.getAbrev(getCrs()));
 
-		//Filter
-		xml.putProperty("filterEncoding",getFieldsQuery());
+		// Filter
+		xml.putProperty("filterEncoding", getFieldsQuery());
 
 		return xml;
 	}
 
 	/**
-	 * @param xml XMLEntity
-	 *
+	 * @param xml
+	 *            XMLEntity
+	 * 
 	 * @throws XMLException
 	 * @throws DriverException
-	 * @throws DriverI OException
+	 * @throws DriverI
+	 *             OException
 	 */
-	public void setXMLEntity(XMLEntity xml)throws XMLException {
+	public void setXMLEntity(XMLEntity xml) throws XMLException {
 
 		// Host
 		try {
@@ -682,96 +725,98 @@ public class FLyrWFS extends FLyrVect{
 		}
 
 		// Layer name
-		setLayerName(xml.getStringProperty("layerName"));			
-		setName(xml.getStringProperty("name"));		
+		setLayerName(xml.getStringProperty("layerName"));
+		setName(xml.getStringProperty("name"));
 
 		// User name
-		if (xml.contains("user")){
+		if (xml.contains("user")) {
 			setUserName(xml.getStringProperty("user"));
 		}
 
 		// SRS
-		if (xml.contains("srs")){
+		if (xml.contains("srs")) {
 			setSrs(xml.getStringProperty("srs"));
 		}
 
 		// OnlineResources
-		if (xml.contains("onlineResource")){
+		if (xml.contains("onlineResource")) {
 			setOnlineResource(xml.getStringProperty("onlineResource"));
 		}
 
 		// TimeOut
-		if (xml.contains("timeout")){
+		if (xml.contains("timeout")) {
 			setTimeout(xml.getIntProperty("timeout"));
 		}
 
 		// Buffer
-		if (xml.contains("buffer")){
+		if (xml.contains("buffer")) {
 			setNumfeatures(xml.getIntProperty("buffer"));
 		}
 
-		//Projection
-		if (xml.contains("projection")){
+		// Projection
+		if (xml.contains("projection")) {
 			setCrs(ProjectionUtils.getCRS(xml.getStringProperty("projection")));
-		}       
+		}
 
-		//Filter
-		if (xml.contains("filterEncoding")){
+		// Filter
+		if (xml.contains("filterEncoding")) {
 			setFieldsQuery(xml.getStringProperty("filterEncoding"));
-		}   
+		}
 
 		// Layer fields
 		FMapWFSDriver driver;
 		try {
 			driver = FMapWFSDriverFactory.getFMapDriverForURL(host);
-			setWfsDriver(driver);	
+			setWfsDriver(driver);
 			WFSAdapter adapter = new WFSAdapter();
 			adapter.setDriver((VectorialDriver) wfsDriver);
-			setSource(adapter);			
+			setSource(adapter);
 		} catch (Exception e) {
-			throw new XMLException(e);	
+			throw new XMLException(e);
 		}
 		driver.getLayerList();
-		WFSLayerNode layer = driver.getLayerInfo(getLayerName());			
-		XMLElement[] atts = null;		
+		WFSLayerNode layer = driver.getLayerInfo(getLayerName());
+		XMLElement[] atts = null;
 
-		//		The root element always exists
-		XMLElement rootElement = (XMLElement)layer.getFields().get(0);
+		// The root element always exists
+		XMLElement rootElement = (XMLElement) layer.getFields().get(0);
 
 		if (xml.contains("fields")) {
-			String[] fields = xml.getStringProperty("fields").split("~##SEP1##~");	
-			if ((fields.length == 1) && (fields[0].equals(""))){
+			String[] fields = xml.getStringProperty("fields").split(
+					"~##SEP1##~");
+			if ((fields.length == 1) && (fields[0].equals(""))) {
 				fields = new String[0];
 			}
-			//The root element always is a complex type
-			Vector allFields = ((XMLComplexType)rootElement.getEntityType()).getAttributes();
-			//If the root node has been selected
-			if (xml.contains("rootNode")){
-				if (xml.getBooleanProperty("rootNode")==true){
+			// The root element always is a complex type
+			Vector allFields = ((XMLComplexType) rootElement.getEntityType())
+					.getAttributes();
+			// If the root node has been selected
+			if (xml.contains("rootNode")) {
+				if (xml.getBooleanProperty("rootNode") == true) {
 					atts = new XMLElement[fields.length + 1];
 					atts[fields.length] = rootElement;
-				}else{
+				} else {
 					atts = new XMLElement[fields.length];
 				}
-			}else{
+			} else {
 				atts = new XMLElement[fields.length];
 			}
-			//Adding the other fields
-			for (int i=0 ; i<fields.length ; i++){
-				for (int j=0 ; j<allFields.size() ; j++){
-					XMLElement field = (XMLElement)allFields.get(j);
-					if (field != null){
+			// Adding the other fields
+			for (int i = 0; i < fields.length; i++) {
+				for (int j = 0; j < allFields.size(); j++) {
+					XMLElement field = (XMLElement) allFields.get(j);
+					if (field != null) {
 						XMLElement found = field.searchAttribute(fields[i]);
-						if (found != null){
+						if (found != null) {
 							atts[i] = found;
 							break;
 						}
 					}
-				}					
-			}			
-		}else{
-			if (xml.contains("rootNode")){
-				if (xml.getBooleanProperty("rootNode")==true){
+				}
+			}
+		} else {
+			if (xml.contains("rootNode")) {
+				if (xml.getBooleanProperty("rootNode") == true) {
 					atts = new XMLElement[1];
 					atts[0] = rootElement;
 				}
@@ -779,16 +824,16 @@ public class FLyrWFS extends FLyrVect{
 		}
 		layer.setSelectedFields(atts);
 		setWfsLayerNode(layer);
-		setFields(atts);	
+		setFields(atts);
 		setAvailable(true);
 
-		try{
-			//Set the legend
+		try {
+			// Set the legend
 			driver.getFeature(getWFSStatus());
 			super.setXMLEntity(xml);
 			setLegend(LegendFactory.createFromXML(xml.getChild(0)));
 		} catch (Exception e) {
-			throw new XMLException(e);	
+			throw new XMLException(e);
 		}
 	}
 
@@ -800,7 +845,8 @@ public class FLyrWFS extends FLyrVect{
 	}
 
 	/**
-	 * @param fieldsQuery The fieldsQuery to set.
+	 * @param fieldsQuery
+	 *            The fieldsQuery to set.
 	 */
 	public void setFieldsQuery(String fieldsQuery) {
 		FieldsQuery = fieldsQuery;
@@ -809,7 +855,8 @@ public class FLyrWFS extends FLyrVect{
 	/**
 	 * Sets all fields and values known about this layer
 	 * 
-	 * @param _allFieldsAndValuesKnown A Map
+	 * @param _allFieldsAndValuesKnown
+	 *            A Map
 	 */
 	public void setAllFieldsAndValuesKnown(Map _allFieldsAndValuesKnown) {
 		if (this.allFieldsAndValuesKnown == null)
@@ -835,7 +882,8 @@ public class FLyrWFS extends FLyrVect{
 	}
 
 	/**
-	 * @param isWfstEditing the isWfstEditing to set
+	 * @param isWfstEditing
+	 *            the isWfstEditing to set
 	 */
 	public void setWfstEditing(boolean isWfstEditing) {
 		wfsDriver.setWfstEditing(isWfstEditing);
@@ -843,11 +891,13 @@ public class FLyrWFS extends FLyrVect{
 
 	/**
 	 * It locks all the features
+	 * 
 	 * @param expiryTime
-	 * The maximum time to edit
-	 * @throws WFSTLockFeaturesException 
+	 *            The maximum time to edit
+	 * @throws WFSTLockFeaturesException
 	 */
-	public void lockCurrentFeatures(int expiryTime) throws WFSTLockFeaturesException{
+	public void lockCurrentFeatures(int expiryTime)
+			throws WFSTLockFeaturesException {
 		wfstExpiryTime = expiryTime;
 		wfsDriver.lockCurrentFeatures(expiryTime);
 	}
@@ -862,16 +912,17 @@ public class FLyrWFS extends FLyrVect{
 	/**
 	 * @return true if the layer can be edit using WFST
 	 */
-	public boolean isTransactional(){
+	public boolean isTransactional() {
 		return wfsDriver.isTransactional();
 	}
 
 	/**
-	 * @param wfstExpiryTime the wfstExpiryTime to set
+	 * @param wfstExpiryTime
+	 *            the wfstExpiryTime to set
 	 */
 	public void setWfstExpiryTime(int wfstExpiryTime) {
 		this.wfstExpiryTime = wfstExpiryTime;
-	}	
+	}
 
 	/**
 	 * @return the isWfstGeometriesUpdated
@@ -881,7 +932,8 @@ public class FLyrWFS extends FLyrVect{
 	}
 
 	/**
-	 * @param isWfstGeometriesUpdated the isWfstGeometriesUpdated to set
+	 * @param isWfstGeometriesUpdated
+	 *            the isWfstGeometriesUpdated to set
 	 */
 	public void setWfstSrsBasedOnXML(boolean isSrsBasedOnXML) {
 		getWFSStatus().setSRSBasedOnXML(isSrsBasedOnXML);
@@ -895,11 +947,12 @@ public class FLyrWFS extends FLyrVect{
 	}
 
 	/**
-	 * @param isLockFeaturesEnabled the isLockFeaturesEnabled to set
+	 * @param isLockFeaturesEnabled
+	 *            the isLockFeaturesEnabled to set
 	 */
 	public void setWfstLockFeaturesEnabled(boolean isLockFeaturesEnabled) {
 		getWFSStatus().setLockFeaturesEnabled(isLockFeaturesEnabled);
-	}	
+	}
 
 	/**
 	 * @return the nameSpace
@@ -909,7 +962,8 @@ public class FLyrWFS extends FLyrVect{
 	}
 
 	/**
-	 * @param nameSpace the nameSpace to set
+	 * @param nameSpace
+	 *            the nameSpace to set
 	 */
 	public void setNameSpace(String nameSpace) {
 		this.nameSpace = nameSpace;
@@ -918,5 +972,5 @@ public class FLyrWFS extends FLyrVect{
 	@Override
 	public boolean isWritable() {
 		return false;
-	}	
+	}
 }

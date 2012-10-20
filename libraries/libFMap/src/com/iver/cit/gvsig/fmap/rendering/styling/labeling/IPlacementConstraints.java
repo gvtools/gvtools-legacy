@@ -90,56 +90,62 @@ package com.iver.cit.gvsig.fmap.rendering.styling.labeling;
 import com.iver.utiles.IPersistence;
 
 /**
- * @author   jaume dominguez faus - jaume.dominguez@iver.es
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public interface IPlacementConstraints extends IPersistence, Cloneable {
 	public static int DefaultDuplicateLabelsMode = IPlacementConstraints.ONE_LABEL_PER_FEATURE_PART;
 
 	// constants regarding label duplication
-	public static final int REMOVE_DUPLICATE_LABELS             =       2;
-	public static final int ONE_LABEL_PER_FEATURE               =       3;
-	public static final int ONE_LABEL_PER_FEATURE_PART          =       4;
+	public static final int REMOVE_DUPLICATE_LABELS = 2;
+	public static final int ONE_LABEL_PER_FEATURE = 3;
+	public static final int ONE_LABEL_PER_FEATURE_PART = 4;
 
 	// constants regarding point settings
-	public static final int OFFSET_HORIZONTALY_AROUND_THE_POINT =       5;
-	public static final int ON_TOP_OF_THE_POINT                 =       6;
-	public static final int AT_SPECIFIED_ANGLE                  =       7;
-	public static final int AT_ANGLE_SPECIFIED_BY_A_FIELD       =       8;
+	public static final int OFFSET_HORIZONTALY_AROUND_THE_POINT = 5;
+	public static final int ON_TOP_OF_THE_POINT = 6;
+	public static final int AT_SPECIFIED_ANGLE = 7;
+	public static final int AT_ANGLE_SPECIFIED_BY_A_FIELD = 8;
 
 	// constants regarding polygon settings (also apply for lines)
-	public static final int HORIZONTAL                          =       9;
-	public static final int PARALLEL                            =      10;
+	public static final int HORIZONTAL = 9;
+	public static final int PARALLEL = 10;
 
 	// constants regarding line settings
-	public static final int FOLLOWING_LINE                      =      11;
-	public static final int PERPENDICULAR                 	    =      12;
+	public static final int FOLLOWING_LINE = 11;
+	public static final int PERPENDICULAR = 12;
 
 	// constants regarding the location along the line
-	public static final int AT_THE_END_OF_THE_LINE              =      13;
-	public static final int AT_THE_MIDDLE_OF_THE_LINE           =      14;
-	public static final int AT_THE_BEGINING_OF_THE_LINE         =      15;
-	public static final int AT_BEST_OF_LINE 					=	   16;
+	public static final int AT_THE_END_OF_THE_LINE = 13;
+	public static final int AT_THE_MIDDLE_OF_THE_LINE = 14;
+	public static final int AT_THE_BEGINING_OF_THE_LINE = 15;
+	public static final int AT_BEST_OF_LINE = 16;
 
 	public abstract void setPlacementMode(int mode);
 
 	// regarding label position along the line
 	public abstract boolean isBelowTheLine();
-	public abstract void setBelowTheLine(boolean b);
-	public abstract boolean isAboveTheLine();
-	public abstract void setAboveTheLine(boolean b);
-	public abstract boolean isOnTheLine();
-	public abstract void setOnTheLine(boolean b);
-	public abstract void setLocationAlongTheLine(int location);
 
+	public abstract void setBelowTheLine(boolean b);
+
+	public abstract boolean isAboveTheLine();
+
+	public abstract void setAboveTheLine(boolean b);
+
+	public abstract boolean isOnTheLine();
+
+	public abstract void setOnTheLine(boolean b);
+
+	public abstract void setLocationAlongTheLine(int location);
 
 	// regarding the orientation system
 	public abstract boolean isPageOriented();
+
 	public abstract void setPageOriented(boolean b);
 
 	// regarding the label duplication
 	public abstract void setDuplicateLabelsMode(int mode);
-	public abstract int getDuplicateLabelsMode();
 
+	public abstract int getDuplicateLabelsMode();
 
 	public abstract boolean isParallel();
 
@@ -164,6 +170,5 @@ public interface IPlacementConstraints extends IPersistence, Cloneable {
 	public boolean isFitInsidePolygon();
 
 	public void setFitInsidePolygon(boolean b);
-
 
 }

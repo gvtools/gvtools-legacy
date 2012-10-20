@@ -47,10 +47,11 @@ import java.util.ArrayList;
 
 import org.gvsig.gpe.containers.Layer;
 
-public class GMLSFP0Reader extends GMLReaderBaseTest{
+public class GMLSFP0Reader extends GMLReaderBaseTest {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.GPEReaderBaseTest#getFile()
 	 */
 	public String getFile() {
@@ -59,6 +60,7 @@ public class GMLSFP0Reader extends GMLReaderBaseTest{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.gml.parser.GMLReaderBaseTest#hasSchema()
 	 */
 	public boolean hasSchema() {
@@ -68,6 +70,7 @@ public class GMLSFP0Reader extends GMLReaderBaseTest{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.GPEReaderBaseTest#makeAsserts()
 	 */
 	public void makeAsserts() {

@@ -1,4 +1,5 @@
 package org.gvsig.xmlschema.som;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -55,9 +56,9 @@ package org.gvsig.xmlschema.som;
  *
  */
 /**
- * This interface represents a XML schema restriction element. 
- * Example:
+ * This interface represents a XML schema restriction element. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;restriction
@@ -68,10 +69,12 @@ package org.gvsig.xmlschema.som;
  * &lt;/restriction&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @see http://www.w3.org/TR/xmlschema-1/#Complex_Type_Definition_details
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public interface IXSRestriction extends IXSComponent{
+public interface IXSRestriction extends IXSComponent {
 
 }

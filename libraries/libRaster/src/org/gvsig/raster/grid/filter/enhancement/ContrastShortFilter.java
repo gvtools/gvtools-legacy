@@ -19,6 +19,7 @@
 package org.gvsig.raster.grid.filter.enhancement;
 
 import org.gvsig.raster.buffer.RasterBuffer;
+
 /**
  * Filtro de contraste para imágenes de 16 bits. En el método de proceso procesa
  * un solo pixel short. Varia su contraste en relación a los parámetros
@@ -29,16 +30,23 @@ import org.gvsig.raster.buffer.RasterBuffer;
 public class ContrastShortFilter extends ContrastFilter {
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.enhancement.ContrastFilter#process(int, int)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.enhancement.ContrastFilter#process(int,
+	 * int)
 	 */
 	public void process(int col, int line) throws InterruptedException {
 		for (int i = 0; i < raster.getBandCount(); i++)
-			rasterResult.setElem(line, col, i, (byte) calcContrast((int) raster.getElemShort(line, col, i) & 0xff));
+			rasterResult
+					.setElem(line, col, i, (byte) calcContrast((int) raster
+							.getElemShort(line, col, i) & 0xff));
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.enhancement.ContrastFilter#getInRasterDataType()
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.enhancement.ContrastFilter#getInRasterDataType
+	 * ()
 	 */
 	public int getInRasterDataType() {
 		return RasterBuffer.TYPE_SHORT;

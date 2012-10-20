@@ -56,24 +56,28 @@ import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelLocationMetrics;
 import com.iver.utiles.swing.threads.Cancellable;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
+
 /**
- *
+ * 
  * PolygonPlacementOnCentroid.java
- *
- *
+ * 
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Apr 1, 2008
- *
+ * 
  */
-//public class PolygonPlacementOnCentroid extends MarkerCenteredAtPoint implements ILabelPlacement {
-public class PolygonPlacementOnCentroid extends MarkerPlacementOnPoint implements ILabelPlacement {
+// public class PolygonPlacementOnCentroid extends MarkerCenteredAtPoint
+// implements ILabelPlacement {
+public class PolygonPlacementOnCentroid extends MarkerPlacementOnPoint
+		implements ILabelPlacement {
 
 	public ArrayList<LabelLocationMetrics> guess(LabelClass lc, IGeometry geom,
 			IPlacementConstraints placementConstraints,
 			double cartographicSymbolSize, Cancellable cancel, ViewPort vp) {
 
-		if (cancel.isCanceled()) return CannotPlaceLabel.NO_PLACES;
+		if (cancel.isCanceled())
+			return CannotPlaceLabel.NO_PLACES;
 
-		FShape shp = (FShape)geom.getInternalShape();
+		FShape shp = (FShape) geom.getInternalShape();
 
 		Geometry geo = FConverter.java2d_to_jts(shp);
 
@@ -82,16 +86,20 @@ public class PolygonPlacementOnCentroid extends MarkerPlacementOnPoint implement
 		}
 
 		Point pJTS = geo.getCentroid();
-		FPoint2D fp2d=new FPoint2D(pJTS.getX(), pJTS.getY());
-//		fp2d=(FPoint2D)FConverter.transformToInts(ShapeFactory.createPoint2D(fp2d), vp.getAffineTransform());
+		FPoint2D fp2d = new FPoint2D(pJTS.getX(), pJTS.getY());
+		// fp2d=(FPoint2D)FConverter.transformToInts(ShapeFactory.createPoint2D(fp2d),
+		// vp.getAffineTransform());
 
-		return super.guess(lc,ShapeFactory.createPoint2D(fp2d) , placementConstraints, cartographicSymbolSize, cancel,vp);
+		return super.guess(lc, ShapeFactory.createPoint2D(fp2d),
+				placementConstraints, cartographicSymbolSize, cancel, vp);
 	}
 
 	public ArrayList<LabelLocationMetrics> guess(LabelClass lc, FShape shp,
-			IPlacementConstraints placementConstraints, double cartographicSymbolSize, Cancellable cancel) {
+			IPlacementConstraints placementConstraints,
+			double cartographicSymbolSize, Cancellable cancel) {
 
-		if (cancel.isCanceled()) return CannotPlaceLabel.NO_PLACES;
+		if (cancel.isCanceled())
+			return CannotPlaceLabel.NO_PLACES;
 
 		ArrayList<LabelLocationMetrics> guessed = new ArrayList<LabelLocationMetrics>();
 		Geometry geo = FConverter.java2d_to_jts(shp);
@@ -101,16 +109,17 @@ public class PolygonPlacementOnCentroid extends MarkerPlacementOnPoint implement
 		Point pJTS = geo.getCentroid();
 		Point2D p = new Point2D.Double(pJTS.getX(), pJTS.getY());
 		Rectangle2D bounds = lc.getBounds();
-		p.setLocation(p.getX() - (bounds.getWidth()*0.5), p.getY() - (bounds.getHeight()*0.5));// - 2);
-		guessed.add(new LabelLocationMetrics(
-				p, 0, true));
+		p.setLocation(p.getX() - (bounds.getWidth() * 0.5),
+				p.getY() - (bounds.getHeight() * 0.5));// - 2);
+		guessed.add(new LabelLocationMetrics(p, 0, true));
 		return guessed;
 	}
 
 	public boolean isSuitableFor(IPlacementConstraints placementConstraints,
 			int shapeType) {
 		if ((shapeType % FShape.Z) == FShape.POLYGON) {
-			return (placementConstraints.isHorizontal()&&!placementConstraints.isFitInsidePolygon());
+			return (placementConstraints.isHorizontal() && !placementConstraints
+					.isFitInsidePolygon());
 		}
 		return false;
 	}

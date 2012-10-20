@@ -59,14 +59,16 @@ public class StringTableCellEditor implements TableCellEditor {
 	private StringTableCellRenderer renderer;
 	private ArrayList listeners = new ArrayList();
 
-
 	public StringTableCellEditor(final JTable ownerTable) {
 		renderer = new StringTableCellRenderer();
 	}
 
-	public Component getTableCellEditorComponent(final JTable table, Object value, boolean isSelected, int row, int column) {
-		if (value == null) return null;
-		JComponent aux = (JComponent) renderer.getTableCellRendererComponent(table, value, isSelected, false, row, column);
+	public Component getTableCellEditorComponent(final JTable table,
+			Object value, boolean isSelected, int row, int column) {
+		if (value == null)
+			return null;
+		JComponent aux = (JComponent) renderer.getTableCellRendererComponent(
+				table, value, isSelected, false, row, column);
 		((JTextField) aux).addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Store the value to avoid the need of pressing ENTER
@@ -77,27 +79,25 @@ public class StringTableCellEditor implements TableCellEditor {
 		return aux;
 	}
 
-
 	public void cancelCellEditing() {
 		for (int i = 0; i < listeners.size(); i++) {
-	        CellEditorListener l = (CellEditorListener) listeners.get(i);
-	        ChangeEvent evt = new ChangeEvent(this);
-	        l.editingCanceled(evt);
-	    }
+			CellEditorListener l = (CellEditorListener) listeners.get(i);
+			ChangeEvent evt = new ChangeEvent(this);
+			l.editingCanceled(evt);
+		}
 	}
 
 	public boolean stopCellEditing() {
 		for (int i = 0; i < listeners.size(); i++) {
-            CellEditorListener l = (CellEditorListener) listeners.get(i);
-            ChangeEvent evt = new ChangeEvent(this);
-            l.editingStopped(evt);
-        }
-        return true;
+			CellEditorListener l = (CellEditorListener) listeners.get(i);
+			ChangeEvent evt = new ChangeEvent(this);
+			l.editingStopped(evt);
+		}
+		return true;
 	}
 
-
 	public Object getCellEditorValue() {
-		if (renderer!=null && renderer.getText()!=null)
+		if (renderer != null && renderer.getText() != null)
 			return new Boolean(renderer.getText());
 		return null;
 	}

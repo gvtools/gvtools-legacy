@@ -104,9 +104,11 @@ public class PolyToLinesGeoprocess extends AbstractMonitorableGeoprocess {
 
 	private LayerDefinition resultLayerDefinition;
 
-	//removed for problems with equals - hashCode use of HashMap. TODO: REVIEW IT
-//	private Map<PairOfFeatures, PairOfFeatures> processedPairs = new HashMap<PairOfFeatures, PairOfFeatures>();
-	
+	// removed for problems with equals - hashCode use of HashMap. TODO: REVIEW
+	// IT
+	// private Map<PairOfFeatures, PairOfFeatures> processedPairs = new
+	// HashMap<PairOfFeatures, PairOfFeatures>();
+
 	private FBitSet processedFeatures = new FBitSet();
 
 	public PolyToLinesGeoprocess(FLyrVect inputLayer) {
@@ -187,7 +189,6 @@ public class PolyToLinesGeoprocess extends AbstractMonitorableGeoprocess {
 				featureIterator = firstLayer.getSource().getFeatureIterator();
 			}
 
-			
 			while (featureIterator.hasNext()) {
 				IFeature feature = featureIterator.next();
 				IGeometry fmapGeo = feature.getGeometry();
@@ -200,7 +201,7 @@ public class PolyToLinesGeoprocess extends AbstractMonitorableGeoprocess {
 							+ " tiene un ID que no refleja el orden", e);
 					continue;
 				}
-				
+
 				processedFeatures.set(idFirstFeature);
 				Geometry geometry = NewFConverter.toJtsGeometry(fmapGeo);
 				Polygon[] polygons = JtsUtil.extractPolygons(geometry);
@@ -226,31 +227,30 @@ public class PolyToLinesGeoprocess extends AbstractMonitorableGeoprocess {
 					try {
 						neighbour = neighbourhood.next();
 						idStr = neighbour.getID();
-						
-						if(idStr.equals(fid))
+
+						if (idStr.equals(fid))
 							continue;
 						id = Integer.parseInt(idStr);
-//						PairOfFeatures pairOfFeatures = new PairOfFeatures(
-//								firstLayer, idFirstFeature, firstLayer, id);
-//						
-//						if(processedPairs.containsValue(pairOfFeatures))
-//							continue;
-//						
-//						if (processedPairs.get(pairOfFeatures) != null) {
-//							continue;
-//						}
-						
-					
+						// PairOfFeatures pairOfFeatures = new PairOfFeatures(
+						// firstLayer, idFirstFeature, firstLayer, id);
+						//
+						// if(processedPairs.containsValue(pairOfFeatures))
+						// continue;
+						//
+						// if (processedPairs.get(pairOfFeatures) != null) {
+						// continue;
+						// }
 
-						Geometry geometry2 = NewFConverter.toJtsGeometry(neighbour
-								.getGeometry());
-						Polygon[] polygons2 = JtsUtil.extractPolygons(geometry2);
+						Geometry geometry2 = NewFConverter
+								.toJtsGeometry(neighbour.getGeometry());
+						Polygon[] polygons2 = JtsUtil
+								.extractPolygons(geometry2);
 						List<LineString> rings2 = new ArrayList<LineString>();
 						for (int i = 0; i < polygons2.length; i++) {
 							rings2.addAll(Arrays.asList(JtsUtil
 									.extractRings(polygons2[i])));
 						}
-						
+
 						for (int i = 0; i < rings.size(); i++) {
 
 							LineString line = rings.get(i);
@@ -263,29 +263,39 @@ public class PolyToLinesGeoprocess extends AbstractMonitorableGeoprocess {
 									Geometry intersection = JTSFacade
 											.intersection(line, line2);
 									if (!JTSFacade.checkNull(geometry)) {
-										
-										if(intersection instanceof GeometryCollection){
-											intersection = JtsUtil.convertToMultiLineString((GeometryCollection) intersection);
+
+										if (intersection instanceof GeometryCollection) {
+											intersection = JtsUtil
+													.convertToMultiLineString((GeometryCollection) intersection);
 										}
-										
-										if(! processedFeatures.get(id)){
-											//If id feature was processed yet, these intersections (shared geometry) were already generated.
-											IGeometry fmapInters = NewFConverter.toFMap(intersection);
-											Value fid1 = ValueFactory.createValue(idFirstFeature);
-											Value fid2 = ValueFactory.createValue(id);
-											Value[] newValues = new Value[] { fid1, fid2 };
-											DefaultFeature newFeature = new DefaultFeature(fmapInters, newValues,
-																							new UID().toString());
-											featureProcessor.processFeature(newFeature);
+
+										if (!processedFeatures.get(id)) {
+											// If id feature was processed yet,
+											// these intersections (shared
+											// geometry) were already generated.
+											IGeometry fmapInters = NewFConverter
+													.toFMap(intersection);
+											Value fid1 = ValueFactory
+													.createValue(idFirstFeature);
+											Value fid2 = ValueFactory
+													.createValue(id);
+											Value[] newValues = new Value[] {
+													fid1, fid2 };
+											DefaultFeature newFeature = new DefaultFeature(
+													fmapInters, newValues,
+													new UID().toString());
+											featureProcessor
+													.processFeature(newFeature);
 										}
-										
+
 										if (overlappedGeometries[i] == null) {
 											overlappedGeometries[i] = intersection;
 										} else {
-											try{
-											overlappedGeometries[i] = JTSFacade.union(overlappedGeometries[i],
-															intersection);
-											}catch(IllegalArgumentException e){
+											try {
+												overlappedGeometries[i] = JTSFacade
+														.union(overlappedGeometries[i],
+																intersection);
+											} catch (IllegalArgumentException e) {
 												e.printStackTrace();
 											}
 										}
@@ -295,47 +305,44 @@ public class PolyToLinesGeoprocess extends AbstractMonitorableGeoprocess {
 							}// for j
 						}// for i
 
-//						processedPairs.put(pairOfFeatures, pairOfFeatures);
+						// processedPairs.put(pairOfFeatures, pairOfFeatures);
 					} catch (NumberFormatException e) {
 						logger.error("Feature " + idStr
 								+ " tiene un ID que no refleja el orden", e);
 						continue;
 					}
-				}//while neighbours features
-				
+				}// while neighbours features
 
-				//at the end, we save all those linear fragment from first feature that
-				//werent covered by neighbours feature 
-				for(int i = 0; i < rings.size(); i++){
+				// at the end, we save all those linear fragment from first
+				// feature that
+				// werent covered by neighbours feature
+				for (int i = 0; i < rings.size(); i++) {
 					LineString ringN = rings.get(i);
 					Geometry overlapN = overlappedGeometries[i];
 					Geometry nonOverlapped = null;
-					if(overlapN != null)
+					if (overlapN != null)
 						nonOverlapped = JTSFacade.difference(ringN, overlapN);
 					else
 						nonOverlapped = ringN;
-					
+
 					if (!JTSFacade.checkNull(nonOverlapped)) {
 						Value id1 = ValueFactory.createValue(idFirstFeature);
 						Value id2 = ValueFactory.createValue(0);
-						Value[] newValues = new Value[]{id1, id2};
-						
-						DefaultFeature newFeature = new DefaultFeature(NewFConverter.toFMap(nonOverlapped), 
-																		newValues,
-																	new UID().toString());
+						Value[] newValues = new Value[] { id1, id2 };
+
+						DefaultFeature newFeature = new DefaultFeature(
+								NewFConverter.toFMap(nonOverlapped), newValues,
+								new UID().toString());
 						featureProcessor.processFeature(newFeature);
 					}
-					
-					
-				}//for i
-				
+
+				}// for i
+
 				if (progressMonitor != null)
 					progressMonitor.reportStep();
-				
-			
-			}//while featureIterator.hasNext
-			
-			
+
+			}// while featureIterator.hasNext
+
 			featureProcessor.finish();
 			if (progressMonitor != null) {
 				progressMonitor.finished();

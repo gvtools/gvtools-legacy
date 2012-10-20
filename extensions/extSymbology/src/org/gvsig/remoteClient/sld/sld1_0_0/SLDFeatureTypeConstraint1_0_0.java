@@ -51,45 +51,43 @@ import org.xmlpull.v1.XmlPullParserException;
 import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
 
 /**
- * Implements the FeatureTypeConstraint element of an SLD implementation 
- * specification (version 1.0.0).<p>
- * A FeatureTypeConstraint element is used to identify a feature type by a 
+ * Implements the FeatureTypeConstraint element of an SLD implementation
+ * specification (version 1.0.0).
+ * <p>
+ * A FeatureTypeConstraint element is used to identify a feature type by a
  * well-known name, using the FeatureTypeName element. Any positive number of
- * FeatureTypeConstraints may be used to define the features of a layer, though 
+ * FeatureTypeConstraints may be used to define the features of a layer, though
  * all FeatureTypeConstraints in a UserLayer must come from the same WFS source.
  * 
  * @see SLDExtent1_0_0
  * @see http://portal.opengeospatial.org/files/?artifact_id=1188
- *
+ * 
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
-public class SLDFeatureTypeConstraint1_0_0 extends SLDFeatureTypeConstraint{
+public class SLDFeatureTypeConstraint1_0_0 extends SLDFeatureTypeConstraint {
 
-
-	public void parse(XMLSchemaParser parser, int cuTag, String expressionType) throws IOException, XmlPullParserException, LegendDriverException {
+	public void parse(XMLSchemaParser parser, int cuTag, String expressionType)
+			throws IOException, XmlPullParserException, LegendDriverException {
 		int currentTag;
 		boolean end = false;
 
-		parser.require(XMLSchemaParser.START_TAG, null, SLDTags.FEATURETYPECONSTRAINT);
+		parser.require(XMLSchemaParser.START_TAG, null,
+				SLDTags.FEATURETYPECONSTRAINT);
 		currentTag = parser.next();
 
-		while (!end)
-		{
-			switch(currentTag)
-			{
+		while (!end) {
+			switch (currentTag) {
 			case XMLSchemaParser.START_TAG:
-				if (parser.getName().compareTo(SLDTags.FEATURETYPENAME)==0) {
+				if (parser.getName().compareTo(SLDTags.FEATURETYPENAME) == 0) {
 					setFeatureTypeName(parser.nextText());
-				}
-				else if (parser.getName().compareTo(SLDTags.FILTER)==0) {
+				} else if (parser.getName().compareTo(SLDTags.FILTER) == 0) {
 					Filter filter = new Filter();
 					filter.parse(parser);
 					setFilter(filter);
-				}
-				else if (parser.getName().compareTo(SLDTags.EXTENT)==0) {
+				} else if (parser.getName().compareTo(SLDTags.EXTENT) == 0) {
 					SLDExtent1_0_0 extent = new SLDExtent1_0_0();
-					extent.parse(parser,currentTag,null);
-					addSldExtent(extent);	
+					extent.parse(parser, currentTag, null);
+					addSldExtent(extent);
 				}
 				break;
 			case XMLSchemaParser.END_TAG:
@@ -103,14 +101,13 @@ public class SLDFeatureTypeConstraint1_0_0 extends SLDFeatureTypeConstraint{
 				currentTag = parser.next();
 		}
 
-		parser.require(XMLSchemaParser.END_TAG, null, SLDTags.FEATURETYPECONSTRAINT);
-
+		parser.require(XMLSchemaParser.END_TAG, null,
+				SLDTags.FEATURETYPECONSTRAINT);
 
 	}
 
-
 	public String toXML() {
 		// TODO Auto-generated method stub
-		throw new Error ("Not yet implemented");
+		throw new Error("Not yet implemented");
 	}
 }

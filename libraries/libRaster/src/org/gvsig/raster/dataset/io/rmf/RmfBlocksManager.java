@@ -28,12 +28,14 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import org.gvsig.raster.util.RasterUtilities;
+
 /**
- * Gestor para la escritura de bloques XML en el fichero RMF. Cada cliente que quiere
- * escribir en el se registrará a traves de ClientRegister y esta clase será la encargada
- * de gestionar la lectura y escritura de bloques.
- *
+ * Gestor para la escritura de bloques XML en el fichero RMF. Cada cliente que
+ * quiere escribir en el se registrará a traves de ClientRegister y esta clase
+ * será la encargada de gestionar la lectura y escritura de bloques.
+ * 
  * 21-abr-2007
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class RmfBlocksManager extends ClientRegister implements IRmfBlock {
@@ -42,6 +44,7 @@ public class RmfBlocksManager extends ClientRegister implements IRmfBlock {
 
 	/**
 	 * Constructor. Asigna la ruta del fichero.
+	 * 
 	 * @param path
 	 */
 	public RmfBlocksManager(String path) {
@@ -50,6 +53,7 @@ public class RmfBlocksManager extends ClientRegister implements IRmfBlock {
 
 	/**
 	 * Asigna la ruta del fichero
+	 * 
 	 * @param path
 	 */
 	public void setPath(String path) {
@@ -58,14 +62,16 @@ public class RmfBlocksManager extends ClientRegister implements IRmfBlock {
 
 	/**
 	 * Obtiene la ruta del fichero
+	 * 
 	 * @return path
 	 */
 	public String getPath() {
 		return path;
 	}
-	
+
 	/**
 	 * Genera una copia de seguridad del fichero del rmf
+	 * 
 	 * @throws IOException
 	 */
 	public void fileBackup() throws IOException {
@@ -73,7 +79,8 @@ public class RmfBlocksManager extends ClientRegister implements IRmfBlock {
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.io.rmf.IRmfBlock#read(java.lang.String)
 	 */
 	public void read(String xml) throws ParsingException {
@@ -82,7 +89,8 @@ public class RmfBlocksManager extends ClientRegister implements IRmfBlock {
 
 		BufferedReader inGrf = null;
 		try {
-			inGrf = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+			inGrf = new BufferedReader(new InputStreamReader(
+					new FileInputStream(file)));
 			String str = inGrf.readLine();
 			while (str != null) {
 				for (int i = 0; i < clients.size(); i++) {
@@ -107,7 +115,8 @@ public class RmfBlocksManager extends ClientRegister implements IRmfBlock {
 			}
 			inGrf.close();
 		} catch (FileNotFoundException e) {
-			throw new ParsingException("File Input error: creating BufferedReader");
+			throw new ParsingException(
+					"File Input error: creating BufferedReader");
 		} catch (IOException ex) {
 			throw new ParsingException("File Input error: reading lines");
 		}
@@ -116,7 +125,9 @@ public class RmfBlocksManager extends ClientRegister implements IRmfBlock {
 	/**
 	 * Creación de nuevo fichero RMF. Añade la cabecera y vuelca el contenido de
 	 * todos los IRmfBlock.
-	 * @param file Fichero
+	 * 
+	 * @param file
+	 *            Fichero
 	 * @return true si el fichero no existia y se ha creado nuevo
 	 * @throws IOException
 	 */
@@ -139,30 +150,35 @@ public class RmfBlocksManager extends ClientRegister implements IRmfBlock {
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.io.rmf.IRmfBlock#write()
 	 */
 	public String write() throws IOException {
 		File file = new File(getPath());
 		ArrayList lines = new ArrayList();
 
-		// Si no existe aún el rmf se crea, se añade las cabeceras y se vuelca el
+		// Si no existe aún el rmf se crea, se añade las cabeceras y se vuelca
+		// el
 		// contenido de los bloques
 		if (!file.exists())
 			if (!create(file))
 				return null;
 
 		// Añadir bloques al fichero.
-		BufferedReader inGrf = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+		BufferedReader inGrf = new BufferedReader(new InputStreamReader(
+				new FileInputStream(file)));
 		String str = inGrf.readLine();
 		while (str != null) {
 			lines.add(str);
 			str = inGrf.readLine();
 		}
 
-		// Obtenemos el primer tag de un bloque. Para cada uno recorremos todo el
+		// Obtenemos el primer tag de un bloque. Para cada uno recorremos todo
+		// el
 		// rmf actual buscando ese tag. Si existe se añade el nuevo bloque y se
-		// borra el viejo. Si no existe lo añade al final antes de la etiqueta de
+		// borra el viejo. Si no existe lo añade al final antes de la etiqueta
+		// de
 		// cierre </RasterMetaFile>
 		for (int i = 0; i < clients.size(); i++) {
 			IRmfBlock block = ((IRmfBlock) clients.get(i));
@@ -170,12 +186,14 @@ public class RmfBlocksManager extends ClientRegister implements IRmfBlock {
 
 			for (int line = 0; line < lines.size(); line++) {
 				str = (String) lines.get(line);
-				if (str.compareTo("</" + getMainTag() + ">") == 0 || str.startsWith("<" + tag)) {
+				if (str.compareTo("</" + getMainTag() + ">") == 0
+						|| str.startsWith("<" + tag)) {
 					String xmlBlock = block.write();
 					if (line != 0)
 						lines.add(line, xmlBlock);
 					if (str.startsWith("<" + tag)) {
-						while (((String) lines.get(line + 1)).compareTo("</" + tag + ">") != 0)
+						while (((String) lines.get(line + 1)).compareTo("</"
+								+ tag + ">") != 0)
 							lines.remove(line + 1);
 						lines.remove(line + 1);
 					}
@@ -207,10 +225,13 @@ public class RmfBlocksManager extends ClientRegister implements IRmfBlock {
 	 * Obtiene un bloque XML que representa a las propiedades del objeto a
 	 * serializar. Antes de la operación hace una copia de seguridad del fichero
 	 * RMF.
-	 * @param rmfBackup Especifica si debe hacer la copia de seguridad.
+	 * 
+	 * @param rmfBackup
+	 *            Especifica si debe hacer la copia de seguridad.
 	 * @return Texto XML que representa el objeto.
 	 */
-	public String write(boolean rmfBackup) throws IOException, FileNotFoundException {
+	public String write(boolean rmfBackup) throws IOException,
+			FileNotFoundException {
 		if (rmfBackup)
 			RasterUtilities.copyFile(getPath(), getPath() + "~");
 
@@ -220,9 +241,10 @@ public class RmfBlocksManager extends ClientRegister implements IRmfBlock {
 	/**
 	 * Método que checkea si el fichero pasado es valido para ser rmf. Si existe
 	 * el fichero será valido si se puede escribir en el y no está vacio y no es
-	 * un directorio y contiene los caracteres de cabecera de comienzo de XML (<?xml
-	 * .... >). En caso de que el fichero no exista también es valido ya que se
-	 * creará de cero.
+	 * un directorio y contiene los caracteres de cabecera de comienzo de XML
+	 * (<?xml .... >). En caso de que el fichero no exista también es valido ya
+	 * que se creará de cero.
+	 * 
 	 * @return true si es un rmf valido y false si no lo es
 	 */
 	public boolean checkRmf() {
@@ -232,7 +254,8 @@ public class RmfBlocksManager extends ClientRegister implements IRmfBlock {
 				return false;
 			BufferedReader inGrf;
 			try {
-				inGrf = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
+				inGrf = new BufferedReader(new InputStreamReader(
+						new FileInputStream(f)));
 				String str = inGrf.readLine();
 				if (!str.startsWith("<?xml"))
 					return false;
@@ -247,6 +270,7 @@ public class RmfBlocksManager extends ClientRegister implements IRmfBlock {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.io.rmf.IRmfBlock#getMainTag()
 	 */
 	public String getMainTag() {
@@ -255,6 +279,7 @@ public class RmfBlocksManager extends ClientRegister implements IRmfBlock {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.io.rmf.IRmfBlock#getResult()
 	 */
 	public Object getResult() {

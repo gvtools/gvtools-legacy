@@ -58,6 +58,7 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
 /**
  * It writes a gml:geometryMember object. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;geometryMember&gt;
@@ -67,38 +68,42 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  * &lt;/geometryMember&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class GeometryMemberWriter {
 	/**
 	 * It writes a gml:geometryMember init tag t
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param id
-	 * Geometry ID
+	 *            Geometry ID
 	 * @param srs
-	 * Spatial reference system
+	 *            Spatial reference system
 	 * @throws IOException
 	 */
-	public void startPoint(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor handler, String id,
-			String srs) throws IOException{
-		writer.writeStartElement(GMLTags.GML_GEOMETRYMEMBER);	
+	public void startPoint(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler, String id, String srs)
+			throws IOException {
+		writer.writeStartElement(GMLTags.GML_GEOMETRYMEMBER);
 	}
-	
+
 	/**
-	 * It writes a gml:geometryMember end tag that contains
-	 * a pointMember
+	 * It writes a gml:geometryMember end tag that contains a pointMember
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 */
-	public void end(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor handler) throws IOException{
-		writer.writeEndElement();				
+	public void end(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler) throws IOException {
+		writer.writeEndElement();
 	}
-	
-	
+
 }

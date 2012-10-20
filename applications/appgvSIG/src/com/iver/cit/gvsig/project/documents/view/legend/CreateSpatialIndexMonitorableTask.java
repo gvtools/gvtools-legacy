@@ -42,29 +42,29 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: CreateSpatialIndexMonitorableTask.java 12826 2007-07-30 12:56:04Z jaume $
-* $Log$
-* Revision 1.4  2007-07-30 12:56:04  jaume
-* organize imports, java 5 code downgraded to 1.4 and added PictureFillSymbol
-*
-* Revision 1.3  2007/05/15 07:22:56  cesar
-* Add the finished method for execution from Event Dispatch Thread
-*
-* Revision 1.2  2007/03/06 16:37:08  caballero
-* Exceptions
-*
-* Revision 1.1  2006/09/15 10:41:30  caballero
-* extensibilidad de documentos
-*
-* Revision 1.2  2006/05/22 10:35:41  fjp
-* Monitorable tasks easy
-*
-* Revision 1.1  2006/05/08 15:41:06  azabala
-* added rtree spatial indexing capabilities
-*
-*
-*/
+ *
+ * $Id: CreateSpatialIndexMonitorableTask.java 12826 2007-07-30 12:56:04Z jaume $
+ * $Log$
+ * Revision 1.4  2007-07-30 12:56:04  jaume
+ * organize imports, java 5 code downgraded to 1.4 and added PictureFillSymbol
+ *
+ * Revision 1.3  2007/05/15 07:22:56  cesar
+ * Add the finished method for execution from Event Dispatch Thread
+ *
+ * Revision 1.2  2007/03/06 16:37:08  caballero
+ * Exceptions
+ *
+ * Revision 1.1  2006/09/15 10:41:30  caballero
+ * extensibilidad de documentos
+ *
+ * Revision 1.2  2006/05/22 10:35:41  fjp
+ * Monitorable tasks easy
+ *
+ * Revision 1.1  2006/05/08 15:41:06  azabala
+ * added rtree spatial indexing capabilities
+ *
+ *
+ */
 package com.iver.cit.gvsig.project.documents.view.legend;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -76,7 +76,7 @@ import com.iver.utiles.swing.threads.CancellableMonitorable;
 import com.iver.utiles.swing.threads.DefaultCancellableMonitorable;
 import com.iver.utiles.swing.threads.IMonitorableTask;
 
-public class CreateSpatialIndexMonitorableTask implements IMonitorableTask{
+public class CreateSpatialIndexMonitorableTask implements IMonitorableTask {
 
 	String MAIN_MESSAGE;
 	String HULL_MESSAGE = PluginServices.getText(this, "Indexando");
@@ -94,36 +94,38 @@ public class CreateSpatialIndexMonitorableTask implements IMonitorableTask{
 
 	/**
 	 * Default constructor
+	 * 
 	 * @throws DriverIOException
 	 * @throws DriverException
 	 */
-	public CreateSpatialIndexMonitorableTask(FLyrVect layer) throws ReadDriverException{
+	public CreateSpatialIndexMonitorableTask(FLyrVect layer)
+			throws ReadDriverException {
 		this.layer = layer;
-		MAIN_MESSAGE = PluginServices.getText(this, "Indexando_espacialmente") +
-								layer.getName();
+		MAIN_MESSAGE = PluginServices.getText(this, "Indexando_espacialmente")
+				+ layer.getName();
 		cancelMonitor = createCancelMonitor();
 	}
 
 	/**
-	 * Creates a CancellableMonitorable instance to monitor
-	 * progress and to cancel the process.
+	 * Creates a CancellableMonitorable instance to monitor progress and to
+	 * cancel the process.
+	 * 
 	 * @return
 	 * @throws DriverIOException
 	 * @throws DriverException
 	 */
 	private CancellableMonitorable createCancelMonitor()
-				throws ReadDriverException {
-		DefaultCancellableMonitorable monitor =
-			new DefaultCancellableMonitorable();
+			throws ReadDriverException {
+		DefaultCancellableMonitorable monitor = new DefaultCancellableMonitorable();
 		monitor.setInitialStep(0);
 		monitor.setDeterminatedProcess(true);
-		int numSteps = ((FLyrVect)layer).getSource().getShapeCount();
+		int numSteps = ((FLyrVect) layer).getSource().getShapeCount();
 		monitor.setFinalStep(numSteps);
 		return monitor;
 	}
 
 	public void run() throws Exception {
-		((FLyrVect)layer).createSpatialIndex(cancelMonitor);
+		((FLyrVect) layer).createSpatialIndex(cancelMonitor);
 		finished = true;
 	}
 
@@ -144,21 +146,22 @@ public class CreateSpatialIndexMonitorableTask implements IMonitorableTask{
 	}
 
 	public String getNote() {
-		return HULL_MESSAGE + " " +
-		getCurrentStep()+ " " +
-		OF  + " "+
-		getFinishStep();
+		return HULL_MESSAGE + " " + getCurrentStep() + " " + OF + " "
+				+ getFinishStep();
 	}
-	//FIXME Borrar los ficheros de indice en caso de cancelacion
+
+	// FIXME Borrar los ficheros de indice en caso de cancelacion
 	public void cancel() {
 		((DefaultCancellableMonitorable) cancelMonitor).setCanceled(true);
 	}
+
 	/**
 	 * Tells if it is a defined process (we know its number of steps)
 	 */
 	public boolean isDefined() {
 		return true;
 	}
+
 	public boolean isCanceled() {
 		return cancelMonitor.isCanceled();
 	}
@@ -167,13 +170,14 @@ public class CreateSpatialIndexMonitorableTask implements IMonitorableTask{
 		return finished;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.utiles.swing.threads.IMonitorableTask#finished()
 	 */
 	public void finished() {
 		// TODO Auto-generated method stub
-		
-	}
-}//CreateSpatialIndexMonitorableTask
 
+	}
+}// CreateSpatialIndexMonitorableTask
 

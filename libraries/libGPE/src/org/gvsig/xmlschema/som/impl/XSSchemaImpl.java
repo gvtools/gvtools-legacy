@@ -121,25 +121,26 @@ import org.w3c.dom.Node;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class XSSchemaImpl implements IXSSchema{
-	//XML DOM objects
+public class XSSchemaImpl implements IXSSchema {
+	// XML DOM objects
 	private Document document = null;
 	private Element element = null;
-	//The target namespace
+	// The target namespace
 	private String targetNamespace = null;
-	//Mappings to save objects
+	// Mappings to save objects
 	private Map elements = null;
 	private Map types = null;
-	//XML DOM objects factory
+	// XML DOM objects factory
 	private DOMObjectsFactory objectsFactory = null;
-	//All the XML schema object mapping
-	private SchemaObjectsMapping objectsMapping = null;	
+	// All the XML schema object mapping
+	private SchemaObjectsMapping objectsMapping = null;
 
-	public XSSchemaImpl(Document document){
+	public XSSchemaImpl(Document document) {
 		super();
 		this.document = document;
 		this.element = document.getDocumentElement();
-		targetNamespace = element.getAttribute(SchemaTags.TARGET_NAMESPACE).trim();
+		targetNamespace = element.getAttribute(SchemaTags.TARGET_NAMESPACE)
+				.trim();
 		elements = new Hashtable();
 		types = new Hashtable();
 		initializeMapping();
@@ -147,25 +148,32 @@ public class XSSchemaImpl implements IXSSchema{
 
 	/**
 	 * It initializes the mapping with the supported mappings
-	 * @throws TypeNotFoundException 
+	 * 
+	 * @throws TypeNotFoundException
 	 */
-	private void initializeMapping(){
+	private void initializeMapping() {
 		objectsMapping = new SchemaObjectsMapping(this);
-		objectsMapping.addType(SchemaTags.SIMPLE_TYPE, XSSimpleTypeDefinitionImpl.class);
-		objectsMapping.addType(SchemaTags.COMPLEX_TYPE, XSComplexTypeDefinitionImpl.class);
-		objectsMapping.addType(SchemaTags.ELEMENT, XSElementDeclarationImpl.class);
+		objectsMapping.addType(SchemaTags.SIMPLE_TYPE,
+				XSSimpleTypeDefinitionImpl.class);
+		objectsMapping.addType(SchemaTags.COMPLEX_TYPE,
+				XSComplexTypeDefinitionImpl.class);
+		objectsMapping.addType(SchemaTags.ELEMENT,
+				XSElementDeclarationImpl.class);
 		objectsMapping.addType(SchemaTags.CHOICE, XSChoiceImpl.class);
 		objectsMapping.addType(SchemaTags.SEQUENCE, XSSequenceImpl.class);
 		objectsMapping.addType(SchemaTags.GROUP, XSGroupImpl.class);
 		objectsMapping.addType(SchemaTags.ALL, XSAllImpl.class);
 		objectsMapping.addType(SchemaTags.EXTENSION, XSExtensionImpl.class);
-		objectsMapping.addType(SchemaTags.RESTRICTION, XSRestrictionImpl.class);		
-		objectsMapping.addType(SchemaTags.SIMPLE_CONTENT, XSRestrictionImpl.class);		
-		objectsMapping.addType(SchemaTags.COMPLEX_CONTENT, XSComplexContentImpl.class);		
+		objectsMapping.addType(SchemaTags.RESTRICTION, XSRestrictionImpl.class);
+		objectsMapping.addType(SchemaTags.SIMPLE_CONTENT,
+				XSRestrictionImpl.class);
+		objectsMapping.addType(SchemaTags.COMPLEX_CONTENT,
+				XSComplexContentImpl.class);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSSchema#getDocument()
 	 */
 	public Document getDocument() {
@@ -174,57 +182,65 @@ public class XSSchemaImpl implements IXSSchema{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSSchema#getElementDeclarations()
 	 */
-	public Collection getElementDeclarations(){
-		return new SchemaCollection(this,element,getElementMapping());
-	}		
+	public Collection getElementDeclarations() {
+		return new SchemaCollection(this, element, getElementMapping());
+	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.schema.som.IXSSchema#getElementDeclarationByName(java.lang.String, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.schema.som.IXSSchema#getElementDeclarationByName(java.lang
+	 * .String, java.lang.String)
 	 */
-	public IXSElementDeclaration getElementDeclarationByName(String elementURI, String elementName){
+	public IXSElementDeclaration getElementDeclarationByName(String elementURI,
+			String elementName) {
 		elementName = SchemaUtils.getLocalName(elementName);
 		Object obj = elements.get(elementName);
-		if (obj != null){
-			return (IXSElementDeclaration)obj;
+		if (obj != null) {
+			return (IXSElementDeclaration) obj;
 		}
-		IXSNode element = getObjectByName(elementURI, elementName,getElementMapping());
-		if (element != null){
+		IXSNode element = getObjectByName(elementURI, elementName,
+				getElementMapping());
+		if (element != null) {
 			elements.put(elementName, element);
-			return (IXSElementDeclaration)element;
-		}		
+			return (IXSElementDeclaration) element;
+		}
 		return null;
 	}
 
-
 	/**
-	 * Search a Element by name in the Dom tree and returns the
-	 * IXSNode that contains it
+	 * Search a Element by name in the Dom tree and returns the IXSNode that
+	 * contains it
+	 * 
 	 * @param targetNamespace
-	 * Element targetNamespace
+	 *            Element targetNamespace
 	 * @param elementName
-	 * Element local name
+	 *            Element local name
 	 * @param typesMapping
-	 * Mapping to create the IXSNode
-	 * @return
-	 * the IXSNode
+	 *            Mapping to create the IXSNode
+	 * @return the IXSNode
 	 */
-	private IXSNode getObjectByName(String targetNamespace, String elementName, SchemaObjectsMapping typesMapping){
-		QName qname = new QName(targetNamespace,elementName);
+	private IXSNode getObjectByName(String targetNamespace, String elementName,
+			SchemaObjectsMapping typesMapping) {
+		QName qname = new QName(targetNamespace, elementName);
 		Iterator it = typesMapping.getTypes().iterator();
-		while (it.hasNext()){
-			String type = (String)it.next();
-			Element childElement = SchemaUtils.searchChildByAttributeName(element, type, targetNamespace, elementName);
-			if (childElement != null){
-				QName newQname = new QName(getTargetNamespace(),childElement.getAttribute(SchemaTags.NAME));
-				if (SchemaUtils.matches(qname,newQname)){
-					return typesMapping.getNode(type,childElement);
+		while (it.hasNext()) {
+			String type = (String) it.next();
+			Element childElement = SchemaUtils.searchChildByAttributeName(
+					element, type, targetNamespace, elementName);
+			if (childElement != null) {
+				QName newQname = new QName(getTargetNamespace(),
+						childElement.getAttribute(SchemaTags.NAME));
+				if (SchemaUtils.matches(qname, newQname)) {
+					return typesMapping.getNode(type, childElement);
 				}
-			}				
+			}
 
-		}	
+		}
 		return null;
 	}
 
@@ -232,35 +248,39 @@ public class XSSchemaImpl implements IXSSchema{
 	 * @return The elements mapping
 	 * @throws TypeNotFoundException
 	 */
-	private SchemaObjectsMapping getElementMapping(){
+	private SchemaObjectsMapping getElementMapping() {
 		SchemaObjectsMapping objectsTypeMapping = new SchemaObjectsMapping(this);
-		objectsTypeMapping.addType(SchemaTags.ELEMENT, XSElementDeclarationImpl.class);
+		objectsTypeMapping.addType(SchemaTags.ELEMENT,
+				XSElementDeclarationImpl.class);
 		return objectsTypeMapping;
-	}	
+	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSSchema#getTypeDefinitions()
 	 */
-	public Collection getTypeDefinitions(){
-		return new SchemaCollection(this,element,getTypeMapping());
-	}	
+	public Collection getTypeDefinitions() {
+		return new SchemaCollection(this, element, getTypeMapping());
+	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.schema.som.IXSSchema#getTypeByName(java.lang.String, java.lang.String)
+	 * 
+	 * @see org.gvsig.gpe.schema.som.IXSSchema#getTypeByName(java.lang.String,
+	 * java.lang.String)
 	 */
-	public IXSTypeDefinition getTypeByName(String typeURI, String typeName){
+	public IXSTypeDefinition getTypeByName(String typeURI, String typeName) {
 		typeName = SchemaUtils.getLocalName(typeName);
 		Object obj = types.get(typeName);
-		if (obj != null){
-			return (IXSTypeDefinition)obj;
+		if (obj != null) {
+			return (IXSTypeDefinition) obj;
 		}
 		IXSNode type = getObjectByName(typeURI, typeName, getTypeMapping());
-		if (type != null){
+		if (type != null) {
 			types.put(typeName, type);
-			return (IXSTypeDefinition)type;
-		}		
+			return (IXSTypeDefinition) type;
+		}
 		return null;
 	}
 
@@ -268,16 +288,18 @@ public class XSSchemaImpl implements IXSSchema{
 	 * @return The complex type mapping
 	 * @throws TypeNotFoundException
 	 */
-	private SchemaObjectsMapping getTypeMapping(){
+	private SchemaObjectsMapping getTypeMapping() {
 		SchemaObjectsMapping objectsTypeMapping = new SchemaObjectsMapping(this);
-		objectsTypeMapping.addType(SchemaTags.COMPLEX_TYPE, XSComplexTypeDefinitionImpl.class);
-		objectsTypeMapping.addType(SchemaTags.SIMPLE_TYPE, XSSimpleTypeDefinitionImpl.class);
+		objectsTypeMapping.addType(SchemaTags.COMPLEX_TYPE,
+				XSComplexTypeDefinitionImpl.class);
+		objectsTypeMapping.addType(SchemaTags.SIMPLE_TYPE,
+				XSSimpleTypeDefinitionImpl.class);
 		return objectsTypeMapping;
 	}
 
-
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSSchema#write(java.io.OutputStream)
 	 */
 	public void write(OutputStream os) throws SchemaWrittingException {
@@ -293,10 +315,11 @@ public class XSSchemaImpl implements IXSSchema{
 		} catch (TransformerException e) {
 			throw new SchemaWrittingException(e);
 		}
-	}	
+	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSSchema#getNamespaceURI()
 	 */
 	public String getTargetNamespace() {
@@ -305,6 +328,7 @@ public class XSSchemaImpl implements IXSSchema{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.xmlschema.som.IXSSchema#getTargetNamespacePrefix()
 	 */
 	public String getTargetNamespacePrefix() {
@@ -313,27 +337,31 @@ public class XSSchemaImpl implements IXSSchema{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.xmlschema.som.IXSSchema#getNamespacePrefix(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.xmlschema.som.IXSSchema#getNamespacePrefix(java.lang.String)
 	 */
 	public String getNamespacePrefix(String namespaceURI) {
-		if (namespaceURI != null){
+		if (namespaceURI != null) {
 			NamedNodeMap attributes = element.getAttributes();
-			for (int i=0 ; i<attributes.getLength() ; i++){
+			for (int i = 0; i < attributes.getLength(); i++) {
 				Node node = attributes.item(i);
-				//String[] name = node.getNodeName().split(":");
-				String[] name = org.gvsig.gpe.utils.StringUtils.splitString(node.getNodeName(),":");		
-				if ((name.length == 2) && (name[0].equals(SchemaTags.XMLNS_NS))){
-					if (node.getNodeValue().equals(namespaceURI)){
+				// String[] name = node.getNodeName().split(":");
+				String[] name = org.gvsig.gpe.utils.StringUtils.splitString(
+						node.getNodeName(), ":");
+				if ((name.length == 2) && (name[0].equals(SchemaTags.XMLNS_NS))) {
+					if (node.getNodeValue().equals(namespaceURI)) {
 						return name[1];
 					}
 				}
-			}			
+			}
 		}
 		return null;
 	}
 
 	/**
 	 * Add a new child element
+	 * 
 	 * @param childElement
 	 */
 	private void addChildElement(Element childElement) {
@@ -342,27 +370,29 @@ public class XSSchemaImpl implements IXSSchema{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.schema.som.IXSSchema#addElement(java.lang.String, java.lang.String, java.lang.String)
+	 * 
+	 * @see org.gvsig.gpe.schema.som.IXSSchema#addElement(java.lang.String,
+	 * java.lang.String, java.lang.String)
 	 */
-	public IXSElementDeclaration addElement(String name, String type, String substitutionGroup) {
+	public IXSElementDeclaration addElement(String name, String type,
+			String substitutionGroup) {
 		String typeName = getTargetNamespacePrefix();
-		if (typeName != null){
+		if (typeName != null) {
 			type = typeName + ":" + type;
 		}
-		Element element = getObjectsFactory().createElement(
-				this, 
-				name,
-				type,
+		Element element = getObjectsFactory().createElement(this, name, type,
 				substitutionGroup);
 		addChildElement(element);
 		XSElementDeclarationImpl xsElement = new XSElementDeclarationImpl(this);
 		xsElement.setElement(element);
 		return xsElement;
-	}	
+	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.schema.som.IXSSchema#addElement(java.lang.String, java.lang.String)
+	 * 
+	 * @see org.gvsig.gpe.schema.som.IXSSchema#addElement(java.lang.String,
+	 * java.lang.String)
 	 */
 	public IXSElementDeclaration addElement(String name, String type) {
 		return addElement(name, type, null);
@@ -370,18 +400,16 @@ public class XSSchemaImpl implements IXSSchema{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSSchema#addComplexType(java.lang.String)
 	 */
-	public IXSComplexTypeDefinition addComplexType(String name, String type, 
+	public IXSComplexTypeDefinition addComplexType(String name, String type,
 			String contentType, String conteTypeRestriction) {
-		Element eComplexType = getObjectsFactory().createComplexType(
-				this, 
-				name,
-				type,
-				contentType,
-				conteTypeRestriction);
+		Element eComplexType = getObjectsFactory().createComplexType(this,
+				name, type, contentType, conteTypeRestriction);
 		addChildElement(eComplexType);
-		XSComplexTypeDefinitionImpl complexType = new XSComplexTypeDefinitionImpl(this);
+		XSComplexTypeDefinitionImpl complexType = new XSComplexTypeDefinitionImpl(
+				this);
 		complexType.setElement(eComplexType);
 		return complexType;
 	}
@@ -390,19 +418,18 @@ public class XSSchemaImpl implements IXSSchema{
 	 * @return the DOM objects factory
 	 */
 	private DOMObjectsFactory getObjectsFactory() {
-		if (objectsFactory == null){
+		if (objectsFactory == null) {
 			objectsFactory = DOMObjectsFactory.getInstance();
 		}
 		return objectsFactory;
-	}	
+	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.schema.som.IXSSchema#getTypesMapping()
 	 */
 	public SchemaObjectsMapping getObjectsMapping() {
 		return objectsMapping;
 	}
 }
-
-

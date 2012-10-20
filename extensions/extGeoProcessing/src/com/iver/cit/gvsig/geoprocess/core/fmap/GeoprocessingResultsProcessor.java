@@ -42,26 +42,26 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: GeoprocessingResultsProcessor.java 10626 2007-03-06 16:55:54Z caballero $
-* $Log$
-* Revision 1.2  2007-03-06 16:47:58  caballero
-* Exceptions
-*
-* Revision 1.1  2006/05/24 21:12:16  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.1  2006/02/17 16:33:46  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/02/12 21:02:44  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/02/09 16:00:36  azabala
-* First version in CVS
-*
-*
-*/
+ *
+ * $Id: GeoprocessingResultsProcessor.java 10626 2007-03-06 16:55:54Z caballero $
+ * $Log$
+ * Revision 1.2  2007-03-06 16:47:58  caballero
+ * Exceptions
+ *
+ * Revision 1.1  2006/05/24 21:12:16  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.1  2006/02/17 16:33:46  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/02/12 21:02:44  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/02/09 16:00:36  azabala
+ * First version in CVS
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core.fmap;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -70,8 +70,10 @@ import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.vividsolutions.jts.geom.Geometry;
 
 public interface GeoprocessingResultsProcessor {
-	public void processJtsGeometry(Geometry g, int index) throws VisitorException, ReadDriverException;
+	public void processJtsGeometry(Geometry g, int index)
+			throws VisitorException, ReadDriverException;
+
 	public void finish() throws VisitorException;
+
 	public void processFeature(IFeature feature) throws VisitorException;
 }
-

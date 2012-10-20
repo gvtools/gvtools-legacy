@@ -1,4 +1,5 @@
 package org.gvsig.remoteClient.wfs.filters;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -47,13 +48,17 @@ package org.gvsig.remoteClient.wfs.filters;
  */
 /**
  * Default SQL formatter
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class DefaultSQLExpressionFormat implements ISQLExpressionFormat{
+public class DefaultSQLExpressionFormat implements ISQLExpressionFormat {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.remoteClient.wfs.filters.ISQLExpressionFormat#format(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.wfs.filters.ISQLExpressionFormat#format(java.lang
+	 * .String)
 	 */
 	public String format(String expression) {
 		return expression;

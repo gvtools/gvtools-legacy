@@ -42,17 +42,17 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: BufferTest.java 12955 2007-08-07 16:21:00Z azabala $
-* $Log$
-* Revision 1.1  2007-08-07 16:21:00  azabala
-* new version in cvs.
-*
-* Revision 1.1  2007/07/12 11:33:24  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: BufferTest.java 12955 2007-08-07 16:21:00Z azabala $
+ * $Log$
+ * Revision 1.1  2007-08-07 16:21:00  azabala
+ * new version in cvs.
+ *
+ * Revision 1.1  2007/07/12 11:33:24  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.buffer;
 
 import java.io.File;
@@ -79,7 +79,6 @@ import com.iver.cit.gvsig.geoprocess.core.fmap.XTypes;
 import com.iver.cit.gvsig.geoprocess.impl.buffer.fmap.BufferGeoprocess;
 import com.iver.cit.gvsig.geoprocess.impl.buffer.fmap.BufferVisitor;
 
-
 //TODO All geoprocessing test classes must hava a common abstract base class
 //(a lot of code is repeated)
 //
@@ -93,80 +92,81 @@ public class BufferTest extends TestCase {
 
 	static CoordinateReferenceSystem DEFAULT_CRS = ProjectionUtils
 			.getCRS("EPSG:23030");
-	
-	
+
 	protected void setUp() throws Exception {
 		URL url = BufferTest.class.getResource("testdata");
 		if (url == null)
-			throw new Exception("No se encuentra el directorio con datos de prueba");
+			throw new Exception(
+					"No se encuentra el directorio con datos de prueba");
 
 		baseDataPath = new File(url.getFile());
 		if (!baseDataPath.exists())
-			throw new Exception("No se encuentra el directorio con datos de prueba");
+			throw new Exception(
+					"No se encuentra el directorio con datos de prueba");
 
 		baseDriversPath = new File(fwAndamiDriverPath);
 		if (!baseDriversPath.exists())
-			throw new Exception("Can't find drivers path: " + fwAndamiDriverPath);
+			throw new Exception("Can't find drivers path: "
+					+ fwAndamiDriverPath);
 
 		LayerFactory.setDriversPath(baseDriversPath.getAbsolutePath());
 		LayerFactory.setWritersPath(baseDriversPath.getAbsolutePath());
-		
+
 	}
 
-
-	public static  FLayer newLayer(String fileName,
-									   String driverName)
-								throws LoadLayerException {
+	public static FLayer newLayer(String fileName, String driverName)
+			throws LoadLayerException {
 		File file = new File(baseDataPath, fileName);
-		return LayerFactory.createLayer(fileName,
-										driverName,
-										file, DEFAULT_CRS);
+		return LayerFactory
+				.createLayer(fileName, driverName, file, DEFAULT_CRS);
 	}
-	
-	
-	
-	public void test1() throws LoadLayerException, InitializeWriterException, GeoprocessException {
-		FLyrVect inputLayer = (FLyrVect) newLayer("parcelas.shp", SHP_DRIVER_NAME);
-		File outputFile = new File(baseDataPath+"/test1result.shp");
+
+	public void test1() throws LoadLayerException, InitializeWriterException,
+			GeoprocessException {
+		FLyrVect inputLayer = (FLyrVect) newLayer("parcelas.shp",
+				SHP_DRIVER_NAME);
+		File outputFile = new File(baseDataPath + "/test1result.shp");
 		BufferGeoprocess geoprocess = new BufferGeoprocess(inputLayer);
-		
+
 		HashMap params = new HashMap();
-		//buffer all features (onlySelection = false)
-		//buffer distance = 10m, buffer type = outside, number of radial polygons = 1
+		// buffer all features (onlySelection = false)
+		// buffer distance = 10m, buffer type = outside, number of radial
+		// polygons = 1
 		params.put("layer_selection", new Boolean(false));
 		params.put("dissolve_buffers", new Boolean(true));
 		params.put("buffer_distance", new Double(10d));
-		params.put("strategy_flag", new Byte(BufferGeoprocess.CONSTANT_DISTANCE_STRATEGY));
+		params.put("strategy_flag", new Byte(
+				BufferGeoprocess.CONSTANT_DISTANCE_STRATEGY));
 		params.put("numRings", new Integer(1));
 		params.put("typePolBuffer", new Byte(BufferVisitor.BUFFER_OUTSIDE_POLY));
 		params.put("cap", new Byte(BufferVisitor.CAP_ROUND));
 		params.put("projection", DEFAULT_CRS);
 		params.put("distanceunits", new Integer(1));
 		params.put("mapunits", new Integer(1));
-		
+
 		geoprocess.setParameters(params);
-		
-		
-		SHPLayerDefinition definition = (SHPLayerDefinition) geoprocess.createLayerDefinition();
+
+		SHPLayerDefinition definition = (SHPLayerDefinition) geoprocess
+				.createLayerDefinition();
 		definition.setFile(outputFile);
-		ShpSchemaManager schemaManager = new ShpSchemaManager(outputFile.getAbsolutePath());
+		ShpSchemaManager schemaManager = new ShpSchemaManager(
+				outputFile.getAbsolutePath());
 		IWriter writer = null;
 		int shapeType = definition.getShapeType();
-		if(shapeType != XTypes.MULTI){
+		if (shapeType != XTypes.MULTI) {
 			writer = new ShpWriter();
 			((ShpWriter) writer).setFile(definition.getFile());
 			writer.initialize(definition);
-		}else{
+		} else {
 			writer = new MultiShpWriter();
 			((MultiShpWriter) writer).setFile(definition.getFile());
 			writer.initialize(definition);
 		}
 		geoprocess.setResultLayerProperties(writer, schemaManager);
-		
+
 		geoprocess.checkPreconditions();
 		geoprocess.process();
-			
-	}	
-	
-}
 
+	}
+
+}

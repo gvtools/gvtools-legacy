@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.referencing;
 
 import java.util.List;
@@ -60,14 +60,20 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
  * for spatial adjustment process.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public interface MappedPositionContainer {
 	public void addMappedPosition(MappedPosition mappedPosition);
+
 	public MappedPosition getMappedPosition(int idx);
+
 	public void delete(int idx);
+
 	public int getCount();
+
 	public List<MappedPosition> getAsList();
+
 	public boolean existsLinksLyr();
+
 	public FLyrVect getLinkLyr(CoordinateReferenceSystem crs);
 }

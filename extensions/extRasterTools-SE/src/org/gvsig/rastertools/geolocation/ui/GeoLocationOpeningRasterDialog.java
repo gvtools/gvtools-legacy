@@ -35,19 +35,21 @@ import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.MapControl;
 
 /**
- * Dialogo de geolocalización de raster. Este es el que se usa para georreferenciar cuando 
- * se abre una imagen que no tiene georreferenciación asociada, si el usuario así lo solicita.
+ * Dialogo de geolocalización de raster. Este es el que se usa para
+ * georreferenciar cuando se abre una imagen que no tiene georreferenciación
+ * asociada, si el usuario así lo solicita.
  * 
  * @version 12/12/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public class GeoLocationOpeningRasterDialog extends JPanel implements IWindow, IWindowListener, ITransformIO {
-	private static final long              serialVersionUID = 7362459094802955247L;
-	private GeoLocationOpeningRasterPanel  geolocationPanel = null;
+public class GeoLocationOpeningRasterDialog extends JPanel implements IWindow,
+		IWindowListener, ITransformIO {
+	private static final long serialVersionUID = 7362459094802955247L;
+	private GeoLocationOpeningRasterPanel geolocationPanel = null;
 
-	private int                            widthWindow      = 260;
-	private int                            heightWindow     = 165;
+	private int widthWindow = 260;
+	private int heightWindow = 165;
 
 	/**
 	 * Constructor
@@ -55,13 +57,13 @@ public class GeoLocationOpeningRasterDialog extends JPanel implements IWindow, I
 	public GeoLocationOpeningRasterDialog() {
 		BorderLayout bl = new BorderLayout(5, 5);
 		this.setLayout(bl);
-		
+
 		this.add(getGeoLocationPanel());
 	}
-	
+
 	/**
 	 * Constructor. Asigna la capa raster.
-	 *
+	 * 
 	 */
 	public GeoLocationOpeningRasterDialog(FLyrRasterSE lyr) {
 		BorderLayout bl = new BorderLayout(5, 5);
@@ -70,74 +72,83 @@ public class GeoLocationOpeningRasterDialog extends JPanel implements IWindow, I
 		this.add(getGeoLocationPanel());
 		getGeoLocationPanel().setParams(lyr);
 	}
-		
+
 	/**
 	 * Acciones de inicialización
-	 *
+	 * 
 	 */
 	public void init(MapControl mapCtrl) {
 		geolocationPanel.setMapCtrl(mapCtrl);
 		FLyrRasterSE lyr = getGeoLocationPanel().getLayer();
-		if(lyr != null) {
+		if (lyr != null) {
 			lyr.getAffineTransformHistorical().clear();
 			lyr.getAffineTransformHistorical().add(lyr.getAffineTransform());
 			loadTransform(lyr.getAffineTransform());
 		}
 		activeButtons();
 	}
-	
+
 	/**
 	 * Carga los parámetros en el dialogo a partir de la capa
-	 * @param lyr Capa raster
+	 * 
+	 * @param lyr
+	 *            Capa raster
 	 */
 	public void loadTransform(AffineTransform at) {
 		geolocationPanel.loadTransform(at);
 	}
-	
+
 	/**
-	 * Activa o desactiva los botones de transformación anterior y siguiente dependiendo
-	 * del estado de la lista de transformaciones.
+	 * Activa o desactiva los botones de transformación anterior y siguiente
+	 * dependiendo del estado de la lista de transformaciones.
+	 * 
 	 * @return
 	 */
 	public void applyTransformation() {
 		geolocationPanel.setModify(true);
-		geolocationPanel.activeButtons();	
+		geolocationPanel.activeButtons();
 	}
+
 	/**
 	 * Obtiene el panel con el histograma
+	 * 
 	 * @return HistogramPanel
 	 */
-	public GeoLocationOpeningRasterPanel getGeoLocationPanel(){
-		if (geolocationPanel == null) 
+	public GeoLocationOpeningRasterPanel getGeoLocationPanel() {
+		if (geolocationPanel == null)
 			geolocationPanel = new GeoLocationOpeningRasterPanel(this);
-		
+
 		return geolocationPanel;
 	}
 
 	/**
-	 * Activa o desactiva los botones de transformación anterior y siguiente dependiendo
-	 * del estado de la lista de transformaciones.
+	 * Activa o desactiva los botones de transformación anterior y siguiente
+	 * dependiendo del estado de la lista de transformaciones.
+	 * 
 	 * @return
 	 */
 	public void activeButtons() {
 		getGeoLocationPanel().activeButtons();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindow#getWindowInfo()
 	 */
 	public WindowInfo getWindowInfo() {
-		WindowInfo m_viewinfo=new WindowInfo(WindowInfo.MODALDIALOG);
+		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODALDIALOG);
 		m_viewinfo.setHeight(heightWindow);
 		m_viewinfo.setWidth(widthWindow);
-		/*m_viewinfo.setX(posWindowX);
-		m_viewinfo.setY(posWindowY);*/
+		/*
+		 * m_viewinfo.setX(posWindowX); m_viewinfo.setY(posWindowY);
+		 */
 		return m_viewinfo;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindowListener#windowActivated()
 	 */
 	public void windowActivated() {
@@ -145,16 +156,21 @@ public class GeoLocationOpeningRasterDialog extends JPanel implements IWindow, I
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindowListener#windowClosed()
 	 */
 	public void windowClosed() {
-		//Se consulta si se desean salvar los cambios
-		if(geolocationPanel.getModify()) {
-			if(RasterToolsUtil.messageBoxYesOrNot(PluginServices.getText(this,"aviso_salir_salvando"), geolocationPanel)) {
+		// Se consulta si se desean salvar los cambios
+		if (geolocationPanel.getModify()) {
+			if (RasterToolsUtil.messageBoxYesOrNot(
+					PluginServices.getText(this, "aviso_salir_salvando"),
+					geolocationPanel)) {
 				try {
 					geolocationPanel.getLayer().saveGeoToRmf();
 				} catch (RmfSerializerException e1) {
-					RasterToolsUtil.messageBoxError(PluginServices.getText(this,"error_salvando_rmf"), geolocationPanel, e1);
+					RasterToolsUtil.messageBoxError(
+							PluginServices.getText(this, "error_salvando_rmf"),
+							geolocationPanel, e1);
 				}
 			}
 			geolocationPanel.setModify(false);

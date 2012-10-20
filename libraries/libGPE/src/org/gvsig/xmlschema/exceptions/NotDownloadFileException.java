@@ -63,27 +63,27 @@ import org.gvsig.exceptions.BaseException;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class NotDownloadFileException extends BaseException{
+public class NotDownloadFileException extends BaseException {
 	private static final long serialVersionUID = 4924434630213400792L;
 
 	public NotDownloadFileException(Throwable exception) {
 		init();
 		initCause(exception);
-	}	
-	
+	}
+
 	private void init() {
 		messageKey = "error_gpe_download";
 		formatString = "Error downloading the xml schema";
-		code = serialVersionUID;		
+		code = serialVersionUID;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map values() {
 		Hashtable params = new Hashtable();
-		return params;		
+		return params;
 	}
 }
-

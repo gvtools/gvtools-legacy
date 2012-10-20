@@ -54,30 +54,36 @@ import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelClass;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelLocationMetrics;
 import com.iver.utiles.swing.threads.Cancellable;
 
-public class MarkerPlacementOnPoint implements ILabelPlacement{
+public class MarkerPlacementOnPoint implements ILabelPlacement {
 
 	public ArrayList<LabelLocationMetrics> guess(LabelClass lc, FShape shp,
-			IPlacementConstraints placementConstraints, double cartographicSymbolSize, Cancellable cancel) {
+			IPlacementConstraints placementConstraints,
+			double cartographicSymbolSize, Cancellable cancel) {
 
-		if (cancel.isCanceled()) return CannotPlaceLabel.NO_PLACES;
+		if (cancel.isCanceled())
+			return CannotPlaceLabel.NO_PLACES;
 
 		ArrayList<LabelLocationMetrics> guessed = new ArrayList<LabelLocationMetrics>();
 		FPoint2D fp = (FPoint2D) shp;
 		Point2D p = new Point2D.Double(fp.getX(), fp.getY());
 		Rectangle2D bounds = lc.getBounds();
-		//FIXME: Con este posicionamiento, es identico al MarkerCenteredAtPoint
-		//pero es así como lo hacen otros programas
-		//(tal vez, hubo una confusión por el nombre de la constante ON_TOP_OF_THE_POINT).
-		//Entonces sobraría el posicionamiento MarkerCenteredAtPoint debiendose utilizar siempre éste.
-		p.setLocation(p.getX() - (bounds.getWidth()*0.5), p.getY() - (bounds.getHeight()*0.5));// - 2);
-		guessed.add(new LabelLocationMetrics(
-				p, 0, true));
+		// FIXME: Con este posicionamiento, es identico al MarkerCenteredAtPoint
+		// pero es así como lo hacen otros programas
+		// (tal vez, hubo una confusión por el nombre de la constante
+		// ON_TOP_OF_THE_POINT).
+		// Entonces sobraría el posicionamiento MarkerCenteredAtPoint debiendose
+		// utilizar siempre éste.
+		p.setLocation(p.getX() - (bounds.getWidth() * 0.5),
+				p.getY() - (bounds.getHeight() * 0.5));// - 2);
+		guessed.add(new LabelLocationMetrics(p, 0, true));
 		return guessed;
 	}
 
-
-	public ArrayList<LabelLocationMetrics> guess(LabelClass lc, IGeometry geom, IPlacementConstraints placementConstraints, double cartographicSymbolSize, Cancellable cancel, ViewPort vp) {
-		if (cancel.isCanceled()) return CannotPlaceLabel.NO_PLACES;
+	public ArrayList<LabelLocationMetrics> guess(LabelClass lc, IGeometry geom,
+			IPlacementConstraints placementConstraints,
+			double cartographicSymbolSize, Cancellable cancel, ViewPort vp) {
+		if (cancel.isCanceled())
+			return CannotPlaceLabel.NO_PLACES;
 
 		FShape shp = FConverter.transformToInts(geom, vp.getAffineTransform());
 
@@ -85,24 +91,24 @@ public class MarkerPlacementOnPoint implements ILabelPlacement{
 		FPoint2D fp = (FPoint2D) shp;
 		Point2D p = new Point2D.Double(fp.getX(), fp.getY());
 		Rectangle2D bounds = lc.getBounds();
-		//FIXME: Con este posicionamiento, es identico al MarkerCenteredAtPoint
-		//pero es así como lo hacen otros programas
-		//(tal vez, hubo una confusión por el nombre de la constante ON_TOP_OF_THE_POINT).
-		//Entonces sobraría el posicionamiento MarkerCenteredAtPoint debiendose utilizar siempre éste.
-		p.setLocation(p.getX() - (bounds.getWidth()*0.5), p.getY() - bounds.getHeight()*0.5);// - 2);
-		guessed.add(new LabelLocationMetrics(
-				p, 0, true));
+		// FIXME: Con este posicionamiento, es identico al MarkerCenteredAtPoint
+		// pero es así como lo hacen otros programas
+		// (tal vez, hubo una confusión por el nombre de la constante
+		// ON_TOP_OF_THE_POINT).
+		// Entonces sobraría el posicionamiento MarkerCenteredAtPoint debiendose
+		// utilizar siempre éste.
+		p.setLocation(p.getX() - (bounds.getWidth() * 0.5),
+				p.getY() - bounds.getHeight() * 0.5);// - 2);
+		guessed.add(new LabelLocationMetrics(p, 0, true));
 		return guessed;
 	}
 
 	public boolean isSuitableFor(IPlacementConstraints placementConstraints,
 			int shapeType) {
-		if ((shapeType%FShape.Z) == FShape.POINT) {
+		if ((shapeType % FShape.Z) == FShape.POINT) {
 			return placementConstraints.isOnTopOfThePoint();
 		}
 		return false;
 	}
-
-
 
 }

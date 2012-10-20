@@ -43,68 +43,74 @@ package com.iver.cit.gvsig.gui.filter;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.Value;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author $author$
  * @version $Revision: 31226 $
  */
 public interface ExpressionDataSource {
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param row DOCUMENT ME!
-	 * @param idField DOCUMENT ME!
-	 *
+	 * 
+	 * @param row
+	 *            DOCUMENT ME!
+	 * @param idField
+	 *            DOCUMENT ME!
+	 * 
 	 * @return DOCUMENT ME!
-	 *
-	 * @throws FilterException DOCUMENT ME!
+	 * 
+	 * @throws FilterException
+	 *             DOCUMENT ME!
 	 */
 	public Value getFieldValue(int row, int idField) throws FilterException;
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
-	 *
-	 * @throws FilterException DOCUMENT ME!
+	 * 
+	 * @throws FilterException
+	 *             DOCUMENT ME!
 	 */
 	public int getFieldCount() throws FilterException;
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param idField DOCUMENT ME!
-	 *
+	 * 
+	 * @param idField
+	 *            DOCUMENT ME!
+	 * 
 	 * @return DOCUMENT ME!
-	 *
-	 * @throws FilterException DOCUMENT ME!
+	 * 
+	 * @throws FilterException
+	 *             DOCUMENT ME!
 	 */
 	public String getFieldName(int idField) throws FilterException;
-	
-	
+
 	// FJP: Mantengo esta clase por si acaso, pero lo correcto seria
 	// no usarla y trabajar directamente con SelectableDataSource
 	public String getFieldAlias(int idField) throws FilterException;
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
-	 *
-	 * @throws FilterException DOCUMENT ME!
+	 * 
+	 * @throws FilterException
+	 *             DOCUMENT ME!
 	 */
 	public int getRowCount() throws FilterException;
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public String getDataSourceName();
-	
-    public void start() throws ReadDriverException;
-    public void stop() throws ReadDriverException;
+
+	public void start() throws ReadDriverException;
+
+	public void stop() throws ReadDriverException;
 
 }

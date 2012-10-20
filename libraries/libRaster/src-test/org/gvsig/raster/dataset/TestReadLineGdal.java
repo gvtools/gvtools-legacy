@@ -21,28 +21,29 @@ package org.gvsig.raster.dataset;
 import junit.framework.TestCase;
 
 import org.gvsig.raster.RasterLibrary;
+
 /**
  * Test para validar la lectura por líneas de un fichero tratado con gdal.
  * Muestrea valores sobre toda la extensión leida y comprueba que el resultado
  * sea correcto
  * 
- * @author Nacho Brodin (nachobrodin@gmail.com)
- * TODO: Falta por hacer TestReadLineGdal
+ * @author Nacho Brodin (nachobrodin@gmail.com) TODO: Falta por hacer
+ *         TestReadLineGdal
  */
-public class TestReadLineGdal extends TestCase{
+public class TestReadLineGdal extends TestCase {
 	static {
 		RasterLibrary.wakeUp();
 	}
-	
+
 	public void start() {
 		this.setUp();
 		this.testStack();
 	}
-	
+
 	public void setUp() {
 		System.err.println("TestReadLineGdal running...");
 	}
-	
-	public void testStack(){
+
+	public void testStack() {
 	}
 }

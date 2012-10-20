@@ -51,7 +51,7 @@ import com.iver.cit.gvsig.layers.VectorialLayerEdited;
 
 /**
  * Extensión que gestiona el poder cambiar la selección a una anterior.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class PreviousSelectionExtension extends Extension {
@@ -62,22 +62,24 @@ public class PreviousSelectionExtension extends Extension {
 	public void initialize() {
 		PluginServices.getIconTheme().registerDefault(
 				"previous-selection",
-				this.getClass().getClassLoader().getResource("images/previousSel.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/previousSel.png"));
 	}
 
 	/**
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String s) {
-		ILayerEdited layerEdited= CADExtension.getEditionManager().getActiveLayerEdited();
+		ILayerEdited layerEdited = CADExtension.getEditionManager()
+				.getActiveLayerEdited();
 		if (layerEdited instanceof VectorialLayerEdited) {
 			try {
-				((VectorialLayerEdited)layerEdited).restorePreviousSelection();
+				((VectorialLayerEdited) layerEdited).restorePreviousSelection();
 			} catch (ReadDriverException e) {
-				NotificationManager.addError(e.getMessage(),e);
+				NotificationManager.addError(e.getMessage(), e);
 			}
-			VectorialEditableAdapter vea=(VectorialEditableAdapter)((FLyrVect)((VectorialLayerEdited)layerEdited).getLayer()).getSource();
+			VectorialEditableAdapter vea = (VectorialEditableAdapter) ((FLyrVect) ((VectorialLayerEdited) layerEdited)
+					.getLayer()).getSource();
 			vea.getCommandRecord().fireCommandsRepaint(null);
 		}
 	}
@@ -86,11 +88,12 @@ public class PreviousSelectionExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
-		ILayerEdited layerEdited= CADExtension.getEditionManager().getActiveLayerEdited();
+		ILayerEdited layerEdited = CADExtension.getEditionManager()
+				.getActiveLayerEdited();
 		if (layerEdited == null)
 			return false;
 		if (layerEdited instanceof VectorialLayerEdited) {
-			return ((VectorialLayerEdited)layerEdited).getPreviousSelection();
+			return ((VectorialLayerEdited) layerEdited).getPreviousSelection();
 		}
 		return false;
 	}

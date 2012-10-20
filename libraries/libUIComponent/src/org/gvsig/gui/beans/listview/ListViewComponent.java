@@ -57,13 +57,16 @@ import javax.swing.event.AncestorListener;
 import org.gvsig.gui.beans.listview.painters.LargeIcon;
 import org.gvsig.gui.beans.listview.painters.PaintList;
 import org.gvsig.gui.beans.listview.painters.SmallIcon;
+
 /**
  * Componente grafico para representar una lista de valores
- *
+ * 
  * @version 28/06/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
-public class ListViewComponent extends JComponent implements MouseListener, MouseMotionListener, ActionListener, KeyListener, FocusListener, AncestorListener {
+public class ListViewComponent extends JComponent implements MouseListener,
+		MouseMotionListener, ActionListener, KeyListener, FocusListener,
+		AncestorListener {
 	private static final long serialVersionUID = 6177600314634665863L;
 
 	/**
@@ -80,38 +83,36 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 	/**
 	 * Selecciona el tipo de vista
 	 */
-	private int         view           = 0;
+	private int view = 0;
 
 	/**
 	 * Booleano para saber si se permite la multiselección
 	 */
-	private boolean     multiSelect    = false;
+	private boolean multiSelect = false;
 
-	private Image       image          = null;
-	private int         width          = 0;
-	private int         height         = 0;
-	private Graphics2D  widgetGraphics = null;
-	private JMenu       jMenu          = null;
-	private ButtonGroup buttonGroup    = null;
-	private JPopupMenu  jPopupMenu     = null;
+	private Image image = null;
+	private int width = 0;
+	private int height = 0;
+	private Graphics2D widgetGraphics = null;
+	private JMenu jMenu = null;
+	private ButtonGroup buttonGroup = null;
+	private JPopupMenu jPopupMenu = null;
 
-	private JTextField  jRenameEdit    = null;
+	private JTextField jRenameEdit = null;
 
+	private int itemEdited = -1;
+	private int lastSelected = -1;
+	private int cursorPos = -1;
 
-	private int         itemEdited     = -1;
-	private int         lastSelected   = -1;
-	private int         cursorPos      = -1;
-
-
-	private boolean     editable       = false;
+	private boolean editable = false;
 
 	private ArrayList<ListViewListener> actionCommandListeners = new ArrayList<ListViewListener>();
 
-	private ListViewItem  lastSelectedItem = null;
+	private ListViewItem lastSelectedItem = null;
 
 	/**
 	 * Construye un <code>ListViewComponent</code>
-	 *
+	 * 
 	 */
 	public ListViewComponent() {
 		setFocusable(true);
@@ -136,6 +137,7 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 
 	/**
 	 * Obtiene que vista se esta usando en el componente
+	 * 
 	 * @return
 	 */
 	public int getView() {
@@ -144,6 +146,7 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 
 	/**
 	 * Define que vista es la que se va a usar
+	 * 
 	 * @param view
 	 */
 	public void setView(int view) {
@@ -152,6 +155,7 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 
 	/**
 	 * Agrega una vista al componente
+	 * 
 	 * @param item
 	 */
 	public void addListViewPainter(IListViewPainter item) {
@@ -172,6 +176,7 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 
 	/**
 	 * Agrega un item al componente
+	 * 
 	 * @param item
 	 */
 	public void addItem(ListViewItem item) {
@@ -179,8 +184,9 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 	}
 
 	/**
-	 * Agrega un item al componente, si acceptRepeatNames es false no se aceptaran
-	 * nombres repetidos
+	 * Agrega un item al componente, si acceptRepeatNames es false no se
+	 * aceptaran nombres repetidos
+	 * 
 	 * @param item
 	 * @param acceptRepeatNames
 	 */
@@ -194,6 +200,7 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 
 	/**
 	 * Agrega el item en la posicion especificada de la lista.
+	 * 
 	 * @param pos
 	 * @param item
 	 */
@@ -206,6 +213,7 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 
 	/**
 	 * Agrega un item al componente
+	 * 
 	 * @param item
 	 */
 	public void removeItem(int index) {
@@ -217,7 +225,7 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 	 * Borra todos los items seleccionados
 	 */
 	public void removeSelecteds() {
-		for (int i = (items.size()-1); i>=0; i--)
+		for (int i = (items.size() - 1); i >= 0; i--)
 			if (((ListViewItem) items.get(i)).isSelected())
 				items.remove(i);
 
@@ -226,6 +234,7 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 
 	/**
 	 * Devuelve un ArrayList con todos los items
+	 * 
 	 * @return
 	 */
 	public ArrayList getItems() {
@@ -243,7 +252,7 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 		if (width2 <= 0)
 			width2 = 1;
 		if (height2 <= 0)
-			height2=1;
+			height2 = 1;
 
 		if ((width != width2) || (height != height2)) {
 			image = createImage(width2, height2);
@@ -265,20 +274,31 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 			return;
 
 		/** desactivación del anti-aliasing */
-		getWidgetGraphics().setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-		getWidgetGraphics().setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+		getWidgetGraphics().setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_OFF);
+		getWidgetGraphics().setRenderingHint(
+				RenderingHints.KEY_TEXT_ANTIALIASING,
+				RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
 
 		/** demanda de rendimiento rápido */
-		getWidgetGraphics().setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
-		getWidgetGraphics().setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_SPEED);
-		getWidgetGraphics().setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
-		getWidgetGraphics().setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_DISABLE);
+		getWidgetGraphics().setRenderingHint(RenderingHints.KEY_RENDERING,
+				RenderingHints.VALUE_RENDER_SPEED);
+		getWidgetGraphics().setRenderingHint(
+				RenderingHints.KEY_COLOR_RENDERING,
+				RenderingHints.VALUE_COLOR_RENDER_SPEED);
+		getWidgetGraphics().setRenderingHint(
+				RenderingHints.KEY_FRACTIONALMETRICS,
+				RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
+		getWidgetGraphics().setRenderingHint(RenderingHints.KEY_DITHERING,
+				RenderingHints.VALUE_DITHER_DISABLE);
 
 		getWidgetGraphics().translate(-getVisibleRect().x, -getVisibleRect().y);
 		getWidgetGraphics().setColor(Color.white);
-		getWidgetGraphics().fillRect(getVisibleRect().x, getVisibleRect().y, getVisibleRect().width, getVisibleRect().height);
+		getWidgetGraphics().fillRect(getVisibleRect().x, getVisibleRect().y,
+				getVisibleRect().width, getVisibleRect().height);
 
-		((IListViewPainter) painters.get(view)).paint((Graphics2D) getWidgetGraphics(), getVisibleRect());
+		((IListViewPainter) painters.get(view)).paint(
+				(Graphics2D) getWidgetGraphics(), getVisibleRect());
 		getWidgetGraphics().translate(getVisibleRect().x, getVisibleRect().y);
 	}
 
@@ -289,13 +309,16 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 			if (isEnabled()) {
 				g.drawImage(image, getVisibleRect().x, getVisibleRect().y, this);
 			} else {
-				// Dibujar en escala de grises y aclarado para cuando esta inactivo
-				BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+				// Dibujar en escala de grises y aclarado para cuando esta
+				// inactivo
+				BufferedImage bi = new BufferedImage(width, height,
+						BufferedImage.TYPE_INT_RGB);
 
 				Graphics big = bi.createGraphics();
 				big.drawImage(image, 0, 0, this);
 
-				ColorConvertOp colorConvert = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
+				ColorConvertOp colorConvert = new ColorConvertOp(
+						ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
 				colorConvert.filter(bi, bi);
 
 				big.setColor(new Color(255, 255, 255, 164));
@@ -305,9 +328,9 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 			}
 		}
 
-
 		Dimension size = getPreferredSize();
-		Dimension aux = ((IListViewPainter) painters.get(view)).getPreferredSize();
+		Dimension aux = ((IListViewPainter) painters.get(view))
+				.getPreferredSize();
 		if (!size.equals(aux)) {
 			setPreferredSize(aux);
 			setSize(aux);
@@ -317,7 +340,10 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 			JViewport jViewport = (JViewport) getParent();
 			if (jViewport.getParent() instanceof JScrollPane) {
 				if (items.size() > 0)
-					((JScrollPane) jViewport.getParent()).getVerticalScrollBar().setUnitIncrement(((ListViewItem) items.get(0)).getItemRectangle().height);
+					((JScrollPane) jViewport.getParent())
+							.getVerticalScrollBar().setUnitIncrement(
+									((ListViewItem) items.get(0))
+											.getItemRectangle().height);
 			}
 		}
 	}
@@ -328,7 +354,7 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 
 	public void setMultiSelect(boolean multiSelect) {
 		if (multiSelect == false) {
-			for (int i = 0; i<items.size(); i++)
+			for (int i = 0; i < items.size(); i++)
 				((ListViewItem) items.get(i)).setSelected(false);
 			if ((lastSelected != -1) && (lastSelected < items.size()))
 				((ListViewItem) items.get(lastSelected)).setSelected(true);
@@ -352,6 +378,7 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
 	 */
 	public void mousePressed(MouseEvent e) {
@@ -389,7 +416,9 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 				lastSelected = cursorPos;
 
 				if ((e.getModifiers() & InputEvent.CTRL_MASK) == InputEvent.CTRL_MASK) {
-					((ListViewItem) items.get(cursorPos)).setSelected(!((ListViewItem) items.get(cursorPos)).isSelected());
+					((ListViewItem) items.get(cursorPos))
+							.setSelected(!((ListViewItem) items.get(cursorPos))
+									.isSelected());
 					return;
 				}
 
@@ -403,7 +432,8 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 				lastSelected = cursorPos;
 
 				if ((e.getModifiers() & InputEvent.CTRL_MASK) == InputEvent.CTRL_MASK)
-					selected = !((ListViewItem) items.get(cursorPos)).isSelected();
+					selected = !((ListViewItem) items.get(cursorPos))
+							.isSelected();
 
 				for (int i = 0; i < items.size(); i++)
 					((ListViewItem) items.get(i)).setSelected(false);
@@ -417,13 +447,15 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 
 	/**
 	 * Establece que un item debe estar visible en la vista
+	 * 
 	 * @param pos
 	 */
 	private void viewItem(int pos) {
-		if ((pos == -1) || (items.size()==0))
+		if ((pos == -1) || (items.size() == 0))
 			return;
 		redrawBuffer();
-		Dimension aux = ((IListViewPainter) painters.get(view)).getPreferredSize();
+		Dimension aux = ((IListViewPainter) painters.get(view))
+				.getPreferredSize();
 		setPreferredSize(aux);
 		setSize(aux);
 
@@ -438,12 +470,19 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 
 			if (jViewport.getParent() instanceof JScrollPane) {
 				ListViewItem lvi = ((ListViewItem) items.get(pos));
-				Rectangle rectangle = (Rectangle) lvi.getItemRectangle().clone();
+				Rectangle rectangle = (Rectangle) lvi.getItemRectangle()
+						.clone();
 				if (rectangle == null)
 					return;
-				rectangle.setLocation((int) rectangle.getX() - getVisibleRect().x, (int) rectangle.getY() - getVisibleRect().y);
+				rectangle.setLocation((int) rectangle.getX()
+						- getVisibleRect().x, (int) rectangle.getY()
+						- getVisibleRect().y);
 				jViewport.scrollRectToVisible(rectangle);
-				((JScrollPane)jViewport.getParent()).getVerticalScrollBar().paintImmediately(((JScrollPane)jViewport.getParent()).getVerticalScrollBar().getVisibleRect());
+				((JScrollPane) jViewport.getParent()).getVerticalScrollBar()
+						.paintImmediately(
+								((JScrollPane) jViewport.getParent())
+										.getVerticalScrollBar()
+										.getVisibleRect());
 			}
 		}
 	}
@@ -469,7 +508,7 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 		lastSelected = itemSelected;
 		cursorPos = itemSelected;
 
-		for (int i = 0; i<items.size(); i++)
+		for (int i = 0; i < items.size(); i++)
 			((ListViewItem) items.get(i)).setSelected(false);
 
 		((ListViewItem) items.get(itemSelected)).setSelected(true);
@@ -493,7 +532,7 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 		if (!isEnabled())
 			return;
 		if ((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK)
-			getPopupMenu().show(this, e.getX (), e.getY () );
+			getPopupMenu().show(this, e.getX(), e.getY());
 
 		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK) {
 			fireSelectionValueChanged();
@@ -529,7 +568,9 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
 		int pos = paintersMenu.indexOf(e.getSource());
@@ -538,9 +579,9 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 	}
 
 	/**
-	 * Returns an array of the values for the selected cells. The returned values
-	 * are sorted in increasing index order.
-	 *
+	 * Returns an array of the values for the selected cells. The returned
+	 * values are sorted in increasing index order.
+	 * 
 	 * @return the selected values or an empty list if nothing is selected
 	 */
 	public ListViewItem[] getSelectedValues() {
@@ -562,8 +603,9 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 	}
 
 	/**
-	 * Returns the first selected index; returns -1 if there is no selected item.
-	 *
+	 * Returns the first selected index; returns -1 if there is no selected
+	 * item.
+	 * 
 	 * @return the value of <code>getMinSelectionIndex</code>
 	 */
 	public int getSelectedIndex() {
@@ -574,10 +616,9 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 		return -1;
 	}
 
-
 	/**
 	 * Select the index value
-	 *
+	 * 
 	 * @return the value of <code>getMinSelectionIndex</code>
 	 */
 	public void setSelectedIndex(int value) {
@@ -596,7 +637,7 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 	/**
 	 * Returns the first selected value, or <code>null</code> if the selection
 	 * is empty.
-	 *
+	 * 
 	 * @return the first selected value
 	 */
 	public ListViewItem getSelectedValue() {
@@ -609,7 +650,7 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 
 	/**
 	 * Returns an array of all of the selected indices in increasing order.
-	 *
+	 * 
 	 * @return all of the selected indices, in increasing order
 	 */
 	public int[] getSelectedIndices() {
@@ -632,6 +673,7 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 
 	/**
 	 * Añadir un listener a la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void addListSelectionListener(ListViewListener listener) {
@@ -641,6 +683,7 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 
 	/**
 	 * Borrar un listener de la lista de eventos
+	 * 
 	 * @param listener
 	 */
 	public void removeListSelectionListener(ListViewListener listener) {
@@ -652,7 +695,8 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 	 */
 	private void fireSelectionValueChanged() {
 		lastSelectedItem = getSelectedValue();
-		Iterator<ListViewListener> acIterator = actionCommandListeners.iterator();
+		Iterator<ListViewListener> acIterator = actionCommandListeners
+				.iterator();
 		EventObject e = null;
 		while (acIterator.hasNext()) {
 			ListViewListener listener = acIterator.next();
@@ -666,7 +710,8 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 	 * Invocar a los eventos asociados al componente
 	 */
 	private void fireItemNameChanged(String oldName, ListViewItem item) {
-		Iterator<ListViewListener> acIterator = actionCommandListeners.iterator();
+		Iterator<ListViewListener> acIterator = actionCommandListeners
+				.iterator();
 		EventObject e = null;
 		while (acIterator.hasNext()) {
 			ListViewListener listener = acIterator.next();
@@ -675,27 +720,31 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 			listener.actionItemNameChanged(e, oldName, item);
 		}
 	}
+
 	public void renameItem(int item) {
 		if (!isEditable())
 			return;
 
 		if ((item >= 0) && (item < items.size())) {
 			if (((ListViewItem) items.get(item)).isSelected()) {
-				Rectangle rectangle = ((ListViewItem) items.get(item)).getNameRectangle();
+				Rectangle rectangle = ((ListViewItem) items.get(item))
+						.getNameRectangle();
 
 				if (rectangle != null) {
 					itemEdited = item;
 					((ListViewItem) items.get(itemEdited)).setSelected(false);
 					repaint();
 					this.setLayout(null);
-					getJRenameEdit().setText(((ListViewItem) items.get(item)).getName());
+					getJRenameEdit().setText(
+							((ListViewItem) items.get(item)).getName());
 					this.add(getJRenameEdit());
 					getJRenameEdit().setBounds(rectangle);
 					getJRenameEdit().addFocusListener(this);
 					getJRenameEdit().addKeyListener(this);
 					getJRenameEdit().requestFocus();
 					getJRenameEdit().setSelectionStart(0);
-					getJRenameEdit().setSelectionEnd(getJRenameEdit().getText().length());
+					getJRenameEdit().setSelectionEnd(
+							getJRenameEdit().getText().length());
 				}
 			}
 		}
@@ -706,7 +755,7 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 			jRenameEdit = new JTextField();
 		}
 		return jRenameEdit;
- 	}
+	}
 
 	public void changeName(String newName, int pos) {
 		newName = newName.trim();
@@ -718,7 +767,9 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 		do {
 			isItem = false;
 			for (int i = 0; i < items.size(); i++) {
-				if ((i != pos) && (((ListViewItem) items.get(i)).getName().equals(newNameAux))) {
+				if ((i != pos)
+						&& (((ListViewItem) items.get(i)).getName()
+								.equals(newNameAux))) {
 					isItem = true;
 					newNumber++;
 					newNameAux = newName + "_" + newNumber;
@@ -758,8 +809,11 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 		for (int i = 0; i < items.size(); i++) {
 			if (cursorPos == i)
 				continue;
-			if (((ListViewItem) items.get(i)).getItemRectangle().y >= (((ListViewItem) items.get(cursorPos)).getItemRectangle().y + ((ListViewItem) items.get(cursorPos)).getItemRectangle().height)) {
-				if (((ListViewItem) items.get(i)).getItemRectangle().x == ((ListViewItem) items.get(cursorPos)).getItemRectangle().x) {
+			if (((ListViewItem) items.get(i)).getItemRectangle().y >= (((ListViewItem) items
+					.get(cursorPos)).getItemRectangle().y + ((ListViewItem) items
+					.get(cursorPos)).getItemRectangle().height)) {
+				if (((ListViewItem) items.get(i)).getItemRectangle().x == ((ListViewItem) items
+						.get(cursorPos)).getItemRectangle().x) {
 					selItem = i;
 					break;
 				}
@@ -780,8 +834,11 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 		for (int i = items.size() - 1; i >= 0; i--) {
 			if (cursorPos == i)
 				continue;
-			if ((((ListViewItem) items.get(i)).getItemRectangle().x + ((ListViewItem) items.get(i)).getItemRectangle().width) <= ((ListViewItem) items.get(cursorPos)).getItemRectangle().x) {
-				if (((ListViewItem) items.get(i)).getItemRectangle().y == ((ListViewItem) items.get(cursorPos)).getItemRectangle().y) {
+			if ((((ListViewItem) items.get(i)).getItemRectangle().x + ((ListViewItem) items
+					.get(i)).getItemRectangle().width) <= ((ListViewItem) items
+					.get(cursorPos)).getItemRectangle().x) {
+				if (((ListViewItem) items.get(i)).getItemRectangle().y == ((ListViewItem) items
+						.get(cursorPos)).getItemRectangle().y) {
 					selItem = i;
 					break;
 				}
@@ -802,8 +859,11 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 		for (int i = 0; i < items.size(); i++) {
 			if (cursorPos == i)
 				continue;
-			if (((ListViewItem) items.get(i)).getItemRectangle().x >= (((ListViewItem) items.get(cursorPos)).getItemRectangle().x + ((ListViewItem) items.get(cursorPos)).getItemRectangle().width)) {
-				if (((ListViewItem) items.get(i)).getItemRectangle().y == ((ListViewItem) items.get(cursorPos)).getItemRectangle().y) {
+			if (((ListViewItem) items.get(i)).getItemRectangle().x >= (((ListViewItem) items
+					.get(cursorPos)).getItemRectangle().x + ((ListViewItem) items
+					.get(cursorPos)).getItemRectangle().width)) {
+				if (((ListViewItem) items.get(i)).getItemRectangle().y == ((ListViewItem) items
+						.get(cursorPos)).getItemRectangle().y) {
 					selItem = i;
 					break;
 				}
@@ -824,8 +884,11 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 		for (int i = items.size() - 1; i >= 0; i--) {
 			if (cursorPos == i)
 				continue;
-			if ((((ListViewItem) items.get(i)).getItemRectangle().y + ((ListViewItem) items.get(i)).getItemRectangle().height) <= ((ListViewItem) items.get(cursorPos)).getItemRectangle().y) {
-				if (((ListViewItem) items.get(i)).getItemRectangle().x == ((ListViewItem) items.get(cursorPos)).getItemRectangle().x) {
+			if ((((ListViewItem) items.get(i)).getItemRectangle().y + ((ListViewItem) items
+					.get(i)).getItemRectangle().height) <= ((ListViewItem) items
+					.get(cursorPos)).getItemRectangle().y) {
+				if (((ListViewItem) items.get(i)).getItemRectangle().x == ((ListViewItem) items
+						.get(cursorPos)).getItemRectangle().x) {
 					selItem = i;
 					break;
 				}
@@ -841,55 +904,62 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 	public void keyPressed(KeyEvent e) {
 		if (e.getSource() == this) {
 			switch (e.getKeyCode()) {
-				case KeyEvent.VK_F2:
-					renameItem(cursorPos);
-					break;
-				case KeyEvent.VK_DOWN:
-					moveDown();
-					break;
-				case KeyEvent.VK_LEFT:
-					moveLeft();
-					break;
-				case KeyEvent.VK_RIGHT:
-					moveRight();
-					break;
-				case KeyEvent.VK_UP:
-					moveUp();
-					break;
-				case KeyEvent.VK_HOME:
-					cursorPos = 0;
-					setSelectedIndex(cursorPos);
-					break;
-				case KeyEvent.VK_END:
-					cursorPos = items.size() - 1;
-					setSelectedIndex(cursorPos);
-					break;
-				case KeyEvent.VK_PAGE_UP:
-					if (items.size() > 0) {
-						int cont = (int) Math.floor(this.getVisibleRect().getHeight() / ((ListViewItem) items.get(0)).getItemRectangle().height);
-						for (int i = 0; i < cont; i++)
-							moveUp();
-					}
-					break;
-				case KeyEvent.VK_PAGE_DOWN:
-					if (items.size() > 0) {
-						int cont = (int) Math.floor(this.getVisibleRect().getHeight() / ((ListViewItem) items.get(0)).getItemRectangle().height);
-						for (int i = 0; i < cont; i++)
-							moveDown();
-					}
-					break;
+			case KeyEvent.VK_F2:
+				renameItem(cursorPos);
+				break;
+			case KeyEvent.VK_DOWN:
+				moveDown();
+				break;
+			case KeyEvent.VK_LEFT:
+				moveLeft();
+				break;
+			case KeyEvent.VK_RIGHT:
+				moveRight();
+				break;
+			case KeyEvent.VK_UP:
+				moveUp();
+				break;
+			case KeyEvent.VK_HOME:
+				cursorPos = 0;
+				setSelectedIndex(cursorPos);
+				break;
+			case KeyEvent.VK_END:
+				cursorPos = items.size() - 1;
+				setSelectedIndex(cursorPos);
+				break;
+			case KeyEvent.VK_PAGE_UP:
+				if (items.size() > 0) {
+					int cont = (int) Math
+							.floor(this.getVisibleRect().getHeight()
+									/ ((ListViewItem) items.get(0))
+											.getItemRectangle().height);
+					for (int i = 0; i < cont; i++)
+						moveUp();
+				}
+				break;
+			case KeyEvent.VK_PAGE_DOWN:
+				if (items.size() > 0) {
+					int cont = (int) Math
+							.floor(this.getVisibleRect().getHeight()
+									/ ((ListViewItem) items.get(0))
+											.getItemRectangle().height);
+					for (int i = 0; i < cont; i++)
+						moveDown();
+				}
+				break;
 			}
 			return;
 		}
 		if (e.getSource() == getJRenameEdit()) {
 			switch (e.getKeyCode()) {
-				case KeyEvent.VK_ESCAPE:
-					getJRenameEdit().setText(((ListViewItem) items.get(itemEdited)).getName());
-					closeRenameEdit();
-					break;
-				case KeyEvent.VK_ENTER:
-					closeRenameEdit();
-					break;
+			case KeyEvent.VK_ESCAPE:
+				getJRenameEdit().setText(
+						((ListViewItem) items.get(itemEdited)).getName());
+				closeRenameEdit();
+				break;
+			case KeyEvent.VK_ENTER:
+				closeRenameEdit();
+				break;
 			}
 		}
 	}
@@ -897,16 +967,16 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 	public void keyReleased(KeyEvent e) {
 		if (e.getSource() == this) {
 			switch (e.getKeyCode()) {
-				case KeyEvent.VK_DOWN:
-				case KeyEvent.VK_UP:
-				case KeyEvent.VK_LEFT:
-				case KeyEvent.VK_RIGHT:
-				case KeyEvent.VK_HOME:
-				case KeyEvent.VK_END:
-				case KeyEvent.VK_PAGE_UP:
-				case KeyEvent.VK_PAGE_DOWN:
-					fireSelectionValueChanged();
-					break;
+			case KeyEvent.VK_DOWN:
+			case KeyEvent.VK_UP:
+			case KeyEvent.VK_LEFT:
+			case KeyEvent.VK_RIGHT:
+			case KeyEvent.VK_HOME:
+			case KeyEvent.VK_END:
+			case KeyEvent.VK_PAGE_UP:
+			case KeyEvent.VK_PAGE_DOWN:
+				fireSelectionValueChanged();
+				break;
 			}
 		}
 	}
@@ -919,7 +989,8 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 		if (!isEnabled())
 			return;
 		if (e.getSource() == this)
-			// Si es doble click y hay algún elemento seleccionado en la lista lo eliminamos
+			// Si es doble click y hay algún elemento seleccionado en la lista
+			// lo eliminamos
 			if (e.getClickCount() == 2) {
 				renameItem(cursorPos);
 			}
@@ -927,6 +998,7 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 
 	/**
 	 * Devuelve si se puede cambiar el nombre de los items
+	 * 
 	 * @return
 	 */
 	public boolean isEditable() {
@@ -935,6 +1007,7 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 
 	/**
 	 * Define si se puede cambiar el nombre de los items
+	 * 
 	 * @param editable
 	 */
 	public void setEditable(boolean editable) {
@@ -955,13 +1028,16 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 
 	/**
 	 * Devuelve el último item seleccionado. Solo el que provoco el evento.
+	 * 
 	 * @return
 	 */
 	public ListViewItem getLastSelectedItem() {
 		return lastSelectedItem;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.JComponent#setEnabled(boolean)
 	 */
 	public void setEnabled(boolean enabled) {
@@ -969,12 +1045,23 @@ public class ListViewComponent extends JComponent implements MouseListener, Mous
 		update(getGraphics());
 	}
 
-	//[start] Codigo no usado
-	public void mouseEntered(MouseEvent e) {}
-	public void mouseExited(MouseEvent e) {}
-	public void keyTyped(KeyEvent e) {}
-	public void focusGained(FocusEvent e) {}
-	public void ancestorMoved(AncestorEvent event) {}
-	public void ancestorRemoved(AncestorEvent event) {}
-	//[end]
+	// [start] Codigo no usado
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	public void mouseExited(MouseEvent e) {
+	}
+
+	public void keyTyped(KeyEvent e) {
+	}
+
+	public void focusGained(FocusEvent e) {
+	}
+
+	public void ancestorMoved(AncestorEvent event) {
+	}
+
+	public void ancestorRemoved(AncestorEvent event) {
+	}
+	// [end]
 }

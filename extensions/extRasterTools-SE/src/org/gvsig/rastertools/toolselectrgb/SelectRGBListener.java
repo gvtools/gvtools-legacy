@@ -26,11 +26,13 @@ import org.gvsig.rastertools.selectrasterlayer.SelectImageListImpl;
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
+
 /**
  * Extensión de la clase SelectImageListenerImple de FMap. Esta clase permite
  * capturar el evento de la selección de un punto RGB sobre la vista
  * 
  * 22/02/2008
+ * 
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class SelectRGBListener extends SelectImageListImpl {
@@ -38,6 +40,7 @@ public class SelectRGBListener extends SelectImageListImpl {
 
 	/**
 	 * Contructor
+	 * 
 	 * @param mapCtrl
 	 */
 	public SelectRGBListener(MapControl mapCtrl, ISelectRGB selectRGB) {
@@ -45,8 +48,12 @@ public class SelectRGBListener extends SelectImageListImpl {
 		this.selectRGB = selectRGB;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#point(com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#point(com.iver.
+	 * cit.gvsig.fmap.tools.Events.PointEvent)
 	 */
 	public void point(PointEvent event) {
 		super.point(event);
@@ -61,7 +68,7 @@ public class SelectRGBListener extends SelectImageListImpl {
 		int r = (value >> 16) & 0xff;
 		int g = (value >> 8) & 0xff;
 		int b = value & 0xff;
-		
+
 		selectRGB.actionRGBSelected(r, g, b);
 	}
 }

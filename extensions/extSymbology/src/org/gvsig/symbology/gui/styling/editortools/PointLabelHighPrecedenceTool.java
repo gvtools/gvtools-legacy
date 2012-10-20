@@ -55,18 +55,20 @@ import org.gvsig.symbology.fmap.styles.PointLabelPositioneer;
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.gui.styling.EditorTool;
 import com.iver.cit.gvsig.gui.styling.StyleEditor;
+
 /**
  * Implements an editor tool which can be used to select the position for the
- * label when the user is performing a layer of points. There will be 4 different
- * precedence levels for the 8 different places where the text for the specified point
- * will be placed (see PointLabelPositioneer.java). This class implements the highest one,
- * but the user can select a normal, a low or a forbidden one.
- *
- *
+ * label when the user is performing a layer of points. There will be 4
+ * different precedence levels for the 8 different places where the text for the
+ * specified point will be placed (see PointLabelPositioneer.java). This class
+ * implements the highest one, but the user can select a normal, a low or a
+ * forbidden one.
+ * 
+ * 
  * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
- *
+ * 
  */
-public class PointLabelHighPrecedenceTool extends EditorTool{
+public class PointLabelHighPrecedenceTool extends EditorTool {
 	protected String buttonIcon = "set-high-precedence-point-label-icon";
 	protected byte precedenceValue = PointLabelPositioneer.PREFERENCE_HIGH;
 	private final Cursor cursor = Cursor.getDefaultCursor();
@@ -77,15 +79,16 @@ public class PointLabelHighPrecedenceTool extends EditorTool{
 
 	/**
 	 * Constructor
-	 *
+	 * 
 	 * @param targetEditor
 	 */
 	public PointLabelHighPrecedenceTool(JComponent targetEditor) {
 		super(targetEditor);
 	}
+
 	/**
 	 * Implements the button for the tool
-	 *
+	 * 
 	 * @return
 	 */
 	private JToggleButton getBtnNewPrecedence() {
@@ -93,19 +96,22 @@ public class PointLabelHighPrecedenceTool extends EditorTool{
 			btnNewPrecedence = new JToggleButton();
 			btnNewPrecedence.setSize(EditorTool.SMALL_BTN_SIZE);
 			btnNewPrecedence.setIcon(getIconButton());
-			btnNewPrecedence.setToolTipText(PluginServices.getText(this, "set_high_precedence"));
+			btnNewPrecedence.setToolTipText(PluginServices.getText(this,
+					"set_high_precedence"));
 
 		}
 		return btnNewPrecedence;
 	}
+
 	/**
 	 * Obtains the image for the button of the tool
-	 *
+	 * 
 	 * @return
 	 */
 	protected ImageIcon getIconButton() {
 		return PluginServices.getIconTheme().get(buttonIcon);
 	}
+
 	@Override
 	public AbstractButton getButton() {
 		return getBtnNewPrecedence();
@@ -130,29 +136,34 @@ public class PointLabelHighPrecedenceTool extends EditorTool{
 	public void setModel(Object objectToBeEdited) {
 		positioneer = (PointLabelPositioneer) objectToBeEdited;
 	}
+
 	/**
 	 * Obtains the position
+	 * 
 	 * @param p
 	 * @return
 	 */
 	private int getPositionerCellIndex(Point p) {
 		Dimension dim = ((StyleEditor) owner).getStylePreviewer().getSize();
 		int size = Math.min(dim.width, dim.height);
-		if(p.getX() > size || p.getY()>size)
+		if (p.getX() > size || p.getY() > size)
 			return -1;
-		int cellSize = size/3;
+		int cellSize = size / 3;
 		int row = (int) p.getY() / cellSize;
 		int col = (int) p.getX() / cellSize;
 		int arrayPosition = (3 * row) + col;
-		if (arrayPosition==4) return -1;
-		if (arrayPosition>4) return arrayPosition-1;
+		if (arrayPosition == 4)
+			return -1;
+		if (arrayPosition > 4)
+			return arrayPosition - 1;
 		return arrayPosition;
 
 	}
+
 	public void mousePressed(MouseEvent e) {
 		byte[] pv = positioneer.getPreferenceVector();
 		int cellIndex = getPositionerCellIndex(e.getPoint());
-		if (cellIndex!=-1) {
+		if (cellIndex != -1) {
 			pv[cellIndex] = precedenceValue;
 		}
 		owner.repaint();

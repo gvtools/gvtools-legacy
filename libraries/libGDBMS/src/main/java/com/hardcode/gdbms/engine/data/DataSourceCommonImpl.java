@@ -6,7 +6,7 @@ import com.hardcode.gdbms.engine.values.Value;
 /**
  * @author Fernando González Cortés
  */
-public abstract class DataSourceCommonImpl implements DataSource{
+public abstract class DataSourceCommonImpl implements DataSource {
 
 	/**
 	 * @see com.hardcode.gdbms.engine.data.DataSource#getRow(long)
@@ -34,28 +34,28 @@ public abstract class DataSourceCommonImpl implements DataSource{
 		return ret;
 	}
 
-    /**
-     * gets a string representation of this datasource
-     *
-     * @return String
-     */
-    public String getAsString() throws ReadDriverException {
-    
-        StringBuffer aux = new StringBuffer();
-        int fc = getFieldCount();
-        int rc = (int) getRowCount();
-    
-        for (int i = 0; i < fc; i++) {
-            aux.append(getFieldName(i).toUpperCase()).append("\t");
-        }
-    
-        for (int row = 0; row < rc; row++) {
-            for (int j = 0; j < fc; j++) {
-                aux.append(getFieldValue(row, j)).append("\t");
-            }
-        }
-    
-        return aux.toString();
-    }
+	/**
+	 * gets a string representation of this datasource
+	 * 
+	 * @return String
+	 */
+	public String getAsString() throws ReadDriverException {
+
+		StringBuffer aux = new StringBuffer();
+		int fc = getFieldCount();
+		int rc = (int) getRowCount();
+
+		for (int i = 0; i < fc; i++) {
+			aux.append(getFieldName(i).toUpperCase()).append("\t");
+		}
+
+		for (int row = 0; row < rc; row++) {
+			for (int j = 0; j < fc; j++) {
+				aux.append(getFieldValue(row, j)).append("\t");
+			}
+		}
+
+		return aux.toString();
+	}
 
 }

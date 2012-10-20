@@ -167,9 +167,9 @@ public class WKBParser3 {
 			result = new FPoint3D(X, Y, Z);
 			double M = data.getDouble();
 			// TODO: create future FPoint3DM
-			
+
 			return result;
-			
+
 		}
 		if (haveM) {
 			double m = data.getDouble();
@@ -298,7 +298,7 @@ public class WKBParser3 {
 							d3.add(((FPoint2DM) points[0]).getM());
 						else
 							d3.add(0.0); // child does not have 3 dimensions
-					}					
+					}
 				} else {
 					// parent has 3 dimensions
 					if (nDims == 3) {
@@ -421,7 +421,7 @@ public class WKBParser3 {
 								d3.add(((FPoint2DM) points[0]).getM());
 							else
 								d3.add(0.0); // child does not have 3 dimensions
-						}											
+						}
 					} else {
 						// parent has 3 dimensions
 						if (nDims == 3) {

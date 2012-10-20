@@ -42,43 +42,50 @@ package org.gvsig.graph.core;
 
 /**
  * @author Francisco José Peñarrubia (fjp@scolab.es)
- *
- * If cost == -1 => prohibited turn
+ * 
+ *         If cost == -1 => prohibited turn
  */
 public class GvTurn {
 	private int idArcFrom;
 	private int idArcTo;
 	private double cost;
 	private GvNode node;
+
 	public GvTurn(int idArcOrigin, int idArcDestination, double newCost) {
 		idArcFrom = idArcOrigin;
 		idArcTo = idArcDestination;
 		cost = newCost;
 	}
+
 	public double getCost() {
 		return cost;
 	}
+
 	public void setCost(double cost) {
 		this.cost = cost;
 	}
+
 	public int getIdArcFrom() {
 		return idArcFrom;
 	}
+
 	public void setIdArcFrom(int idArcFrom) {
 		this.idArcFrom = idArcFrom;
 	}
+
 	public int getIdArcTo() {
 		return idArcTo;
 	}
+
 	public void setIdArcTo(int idArcTo) {
 		this.idArcTo = idArcTo;
 	}
+
 	public GvNode getNode() {
 		return node;
 	}
+
 	public void setNode(GvNode node) {
 		this.node = node;
 	}
 }
-
-

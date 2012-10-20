@@ -56,62 +56,75 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.gvsig.addeventtheme.gui.AddEventThemePanel;
 
 /**
- * The AddEventThemeExtension class allows to create a new point Layer
- * in gvSIG from an existing gvSIG Table.
- *
+ * The AddEventThemeExtension class allows to create a new point Layer in gvSIG
+ * from an existing gvSIG Table.
+ * 
  * @author jmorell
  */
 public class AddEventThemeExtension extends Extension {
 
-    /* (non-Javadoc)
-     * @see com.iver.andami.plugins.Extension#inicializar()
-     */
-    public void initialize() {
-        // TODO Auto-generated method stub
-    	registerIcons();
-    }
-
-    private void registerIcons(){
-		PluginServices.getIconTheme().registerDefault(
-				"view-addevent-layer",
-				AddLayer.class.getClassLoader().getResource("images/addeventtheme.png")
-			);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.andami.plugins.Extension#inicializar()
+	 */
+	public void initialize() {
+		// TODO Auto-generated method stub
+		registerIcons();
 	}
 
-    /* (non-Javadoc)
-     * @see com.iver.andami.plugins.Extension#execute(java.lang.String)
-     */
-    public void execute(String actionCommand) {
+	private void registerIcons() {
+		PluginServices.getIconTheme().registerDefault(
+				"view-addevent-layer",
+				AddLayer.class.getClassLoader().getResource(
+						"images/addeventtheme.png"));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.andami.plugins.Extension#execute(java.lang.String)
+	 */
+	public void execute(String actionCommand) {
 		// De la vista
-        View vista = (View)PluginServices.getMDIManager().getActiveWindow();
+		View vista = (View) PluginServices.getMDIManager().getActiveWindow();
 		MapContext mapContext = vista.getModel().getMapContext();
-        // Del proyecto (las tablas)
-        Project project = ((ProjectExtension)PluginServices.getExtension(ProjectExtension.class)).getProject();
-        ArrayList tableList = project.getDocumentsByType(ProjectTableFactory.registerName);
-		AddEventThemePanel addEventThemePanel = new AddEventThemePanel(mapContext, tableList);
+		// Del proyecto (las tablas)
+		Project project = ((ProjectExtension) PluginServices
+				.getExtension(ProjectExtension.class)).getProject();
+		ArrayList tableList = project
+				.getDocumentsByType(ProjectTableFactory.registerName);
+		AddEventThemePanel addEventThemePanel = new AddEventThemePanel(
+				mapContext, tableList);
 		PluginServices.getMDIManager().addWindow(addEventThemePanel);
-    }
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.andami.plugins.Extension#isEnabled()
-     */
-    public boolean isEnabled() {
-        return true;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.andami.plugins.Extension#isEnabled()
+	 */
+	public boolean isEnabled() {
+		return true;
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.andami.plugins.Extension#isVisible()
-     */
-    public boolean isVisible() {
-        Project project = ((ProjectExtension)PluginServices.getExtension(ProjectExtension.class)).getProject();
-        if ( project!=null ) {
-	        ArrayList tableList = project.getDocumentsByType(ProjectTableFactory.registerName);
-	        com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-	         .getActiveWindow();
-	        if (!tableList.isEmpty() && f!=null && f instanceof View)
-	        	return true;
-        }
-        return false;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.andami.plugins.Extension#isVisible()
+	 */
+	public boolean isVisible() {
+		Project project = ((ProjectExtension) PluginServices
+				.getExtension(ProjectExtension.class)).getProject();
+		if (project != null) {
+			ArrayList tableList = project
+					.getDocumentsByType(ProjectTableFactory.registerName);
+			com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+					.getMDIManager().getActiveWindow();
+			if (!tableList.isEmpty() && f != null && f instanceof View)
+				return true;
+		}
+		return false;
+	}
 
 }

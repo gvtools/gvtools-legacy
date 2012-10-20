@@ -22,24 +22,31 @@ package org.gvsig.gui.beans.editabletextcomponent.event;
 import java.util.EventListener;
 
 /**
- * <p>The listener interface for receiving events from undo or redo operations on a text edition.</p>
+ * <p>
+ * The listener interface for receiving events from undo or redo operations on a
+ * text edition.
+ * </p>
  * 
- * <p>The listener object created from that class is then registered with a
- * component using the component's <code>addUndoRedoEditListener</code> 
- * method. An event of this kind of operations is generated when an <code>EditableTextDecorator</code>
- * executes an <code>undo</code> or <code>redo</code> operation. The relevant method in the listener 
- * object is then invoked, and the <code>UndoRedoEditEvent</code> is passed to it.</p>
+ * <p>
+ * The listener object created from that class is then registered with a
+ * component using the component's <code>addUndoRedoEditListener</code> method.
+ * An event of this kind of operations is generated when an
+ * <code>EditableTextDecorator</code> executes an <code>undo</code> or
+ * <code>redo</code> operation. The relevant method in the listener object is
+ * then invoked, and the <code>UndoRedoEditEvent</code> is passed to it.
+ * </p>
  * 
  * @see UndoRedoEditEvent
  * 
  * @version 12/02/2008
- * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es) 
+ * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public interface UndoRedoEditListener extends EventListener {
-    /**
-     * Invoked when an <i>undo</i> or <i>redo</i> operation has been executed.
-     * See the class description for {@link UndoRedoEditEvent UndoRedoEditEvent} for a notification of 
-     * an <i>undo</i> or <i>redo</i> operation executed on an editable text component.
-     */
-    public void operationExecuted(UndoRedoEditEvent e);
+	/**
+	 * Invoked when an <i>undo</i> or <i>redo</i> operation has been executed.
+	 * See the class description for {@link UndoRedoEditEvent UndoRedoEditEvent}
+	 * for a notification of an <i>undo</i> or <i>redo</i> operation executed on
+	 * an editable text component.
+	 */
+	public void operationExecuted(UndoRedoEditEvent e);
 }

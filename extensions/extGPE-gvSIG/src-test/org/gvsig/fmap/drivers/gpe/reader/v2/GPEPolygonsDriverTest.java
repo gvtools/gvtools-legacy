@@ -58,18 +58,20 @@ public class GPEPolygonsDriverTest extends GPEParserTest {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.gpe.GPEDriverTest#getFile()
 	 */
 	public String getFile() {
-		return "../extGPE-gvSIG" + File.separatorChar +
-			"testdata" + File.separatorChar + "GML-polygons.gml";
+		return "../extGPE-gvSIG" + File.separatorChar + "testdata"
+				+ File.separatorChar + "GML-polygons.gml";
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.gpe.GPEDriverTest#makeAsserts()
 	 */
 	public void makeAsserts() throws DriverIOException, ReadDriverException {
-		assertEquals(getLayer().getSource().getShapeCount(),3);		
+		assertEquals(getLayer().getSource().getShapeCount(), 3);
 	}
 }

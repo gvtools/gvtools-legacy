@@ -40,6 +40,7 @@
  */
 
 package com.iver.cit.gvsig.fmap.drivers.dbf;
+
 import java.io.File;
 
 import junit.framework.TestCase;
@@ -59,12 +60,13 @@ public class TestDbf extends TestCase {
 	}
 
 	/*
-	 * Test method for 'com.iver.cit.gvsig.fmap.drivers.dbf.DBFDriver.initialize()'
+	 * Test method for
+	 * 'com.iver.cit.gvsig.fmap.drivers.dbf.DBFDriver.initialize()'
 	 */
 	public void testInitialize() {
 		try {
 			driver.open(file);
-			System.out.println(driver.getFields());//FieldValue(1,0));
+			System.out.println(driver.getFields());// FieldValue(1,0));
 		} catch (OpenDriverException e) {
 			e.printStackTrace();
 		}
@@ -72,5 +74,3 @@ public class TestDbf extends TestCase {
 	}
 
 }
-
-

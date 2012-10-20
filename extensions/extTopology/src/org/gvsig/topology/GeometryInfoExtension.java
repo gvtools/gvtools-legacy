@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology;
 
 import java.util.List;
@@ -68,63 +68,65 @@ import com.iver.cit.gvsig.project.documents.view.toolListeners.StatusBarListener
 
 /**
  * Shows information about the geometry of the selected feature.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
-public class GeometryInfoExtension extends Extension{
+public class GeometryInfoExtension extends Extension {
 
 	public void execute(String actionCommand) {
 		IWindow f = PluginServices.getMDIManager().getActiveWindow();
 		if (f == null) {
-		    return;
+			return;
 		}
 		if (f instanceof View) {
-		    View vista = (View) f;
-		    MapControl mapControl = vista.getMapControl();
-		    if(!mapControl.hasTool("geometryinfo")){
-		    		GeometryInfoListener il = new GeometryInfoListener(mapControl);
-		    	 	mapControl.addMapTool("geometryinfo", 
-		    	 						new Behavior[]{new PointBehavior(il), 
-		    	 						new MouseMovementBehavior(new StatusBarListener(mapControl))}); 	
-		    }//if
-		    mapControl.setTool("geometryinfo");
-		}//if
+			View vista = (View) f;
+			MapControl mapControl = vista.getMapControl();
+			if (!mapControl.hasTool("geometryinfo")) {
+				GeometryInfoListener il = new GeometryInfoListener(mapControl);
+				mapControl.addMapTool("geometryinfo", new Behavior[] {
+						new PointBehavior(il),
+						new MouseMovementBehavior(new StatusBarListener(
+								mapControl)) });
+			}// if
+			mapControl.setTool("geometryinfo");
+		}// if
 	}
 
-	
 	public void initialize() {
 		registerIcons();
 	}
-	
-	protected void registerIcons(){
-		PluginServices.getIconTheme().registerDefault("geometry-info",
-													   this.getClass().
-													   getClassLoader().
-													   getResource("images/geometry.gif")
-		);
+
+	protected void registerIcons() {
+		PluginServices.getIconTheme().registerDefault(
+				"geometry-info",
+				this.getClass().getClassLoader()
+						.getResource("images/geometry.gif"));
 	}
-	
-	protected String getName(){
+
+	protected String getName() {
 		return PluginServices.getText(this, "GEOMETRY_INFO");
 	}
 
 	/**
-	 * Returns if this Edit CAD tool is visible. 
-	 * For this, there must be an active vectorial editing lyr in the TOC, which geometries'
-	 * dimension would must be linear or polygonal, and with at least one selected geometry.
-	 *  
+	 * Returns if this Edit CAD tool is visible. For this, there must be an
+	 * active vectorial editing lyr in the TOC, which geometries' dimension
+	 * would must be linear or polygonal, and with at least one selected
+	 * geometry.
+	 * 
 	 */
 	public boolean isEnabled() {
 		IWindow f = PluginServices.getMDIManager().getActiveWindow();
 		if (f == null) {
-		    return false;
+			return false;
 		}
 		if (f instanceof View) {
-		    View vista = (View) f;
-		    IProjectView model = vista.getModel();
-		    MapContext mapContext =  model.getMapContext();
-			List<FLyrVect> activeLyrs = FLyrUtil.getActiveVectorialLyrs(mapContext);
-			if(activeLyrs.size() == 0)
+			View vista = (View) f;
+			IProjectView model = vista.getModel();
+			MapContext mapContext = model.getMapContext();
+			List<FLyrVect> activeLyrs = FLyrUtil
+					.getActiveVectorialLyrs(mapContext);
+			if (activeLyrs.size() == 0)
 				return false;
 			return true;
 		}
@@ -134,14 +136,15 @@ public class GeometryInfoExtension extends Extension{
 	public boolean isVisible() {
 		IWindow f = PluginServices.getMDIManager().getActiveWindow();
 		if (f == null) {
-		    return false;
+			return false;
 		}
 		if (f instanceof View) {
-		    View vista = (View) f;
-		    IProjectView model = vista.getModel();
-		    MapContext mapContext =  model.getMapContext();
-		    List<FLyrVect> vectorialLyrs = FLyrUtil.getVectorialLayers(mapContext);
-		    return vectorialLyrs.size() > 0;
+			View vista = (View) f;
+			IProjectView model = vista.getModel();
+			MapContext mapContext = model.getMapContext();
+			List<FLyrVect> vectorialLyrs = FLyrUtil
+					.getVectorialLayers(mapContext);
+			return vectorialLyrs.size() > 0;
 		}
 		return false;
 	}

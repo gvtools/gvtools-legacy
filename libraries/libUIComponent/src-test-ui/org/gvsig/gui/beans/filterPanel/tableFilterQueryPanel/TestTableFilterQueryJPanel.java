@@ -4,7 +4,6 @@ import javax.swing.JFrame;
 
 import org.gvsig.gui.beans.Messages;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -55,7 +54,7 @@ public class TestTableFilterQueryJPanel {
 	public static void main(String[] args) {
 		JFrame frame = new JFrame();
 		TableFilterQueryJPanel tFQ = new TableFilterQueryJPanel();
-	    frame.setSize(tFQ.getPreferredSize());
+		frame.setSize(tFQ.getPreferredSize());
 		frame.getContentPane().add(tFQ);
 
 		frame.setTitle(Messages.getText("test_TableFilterQueryJPanel_title"));

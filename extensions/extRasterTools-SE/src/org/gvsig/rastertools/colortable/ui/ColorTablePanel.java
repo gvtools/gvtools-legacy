@@ -50,33 +50,36 @@ import org.gvsig.rastertools.colortable.ui.tabs.TabTable;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
+
 /**
- * ColorTablePanel es el panel padre que contendra todos los paneles del interfaz
- * de tablas de color.
- *
+ * ColorTablePanel es el panel padre que contendra todos los paneles del
+ * interfaz de tablas de color.
+ * 
  * @version 26/06/2007
  * @author BorSanZa - Borja S�nchez Zamorano (borja.sanchez@iver.es)
  */
-public class ColorTablePanel extends JPanel implements ChangeListener, ButtonsPanelListener, ColorTableLibraryListener {
+public class ColorTablePanel extends JPanel implements ChangeListener,
+		ButtonsPanelListener, ColorTableLibraryListener {
 	private static final long serialVersionUID = 6028780107787443656L;
 
-	private ColorTableListener      colorTableListener = null;
-	private FLayer                  fLayer             = null;
-	private ArrayList               filterStatus       = null;
-	private ColorTableData          colorTableData     = null;
+	private ColorTableListener colorTableListener = null;
+	private FLayer fLayer = null;
+	private ArrayList filterStatus = null;
+	private ColorTableData colorTableData = null;
 
-	private IColorTableUI           tabTable           = null;
-	private IColorTableUI           tabInterpolated    = null;
-	
-	private ColorTableLibraryPanel  colorTableLibraryPanel = null;
+	private IColorTableUI tabTable = null;
+	private IColorTableUI tabInterpolated = null;
 
-	private JPanel                  jPanelListView     = null;
-	private ColorTableGlobalPanel   panelGeneral       = null;
-	private ColorTableDialog        colorTableDialog   = null;
-	private PreviewBasePanel        previewBasePanel   = null;
+	private ColorTableLibraryPanel colorTableLibraryPanel = null;
+
+	private JPanel jPanelListView = null;
+	private ColorTableGlobalPanel panelGeneral = null;
+	private ColorTableDialog colorTableDialog = null;
+	private PreviewBasePanel previewBasePanel = null;
 
 	/**
-	 * Controla si se ha presionado el boton aceptar para el cerrado de la ventana
+	 * Controla si se ha presionado el boton aceptar para el cerrado de la
+	 * ventana
 	 */
 	boolean accepted = false;
 
@@ -89,18 +92,24 @@ public class ColorTablePanel extends JPanel implements ChangeListener, ButtonsPa
 		initialize();
 		setLayer(layer);
 	}
-	
+
 	public PreviewBasePanel getPreviewBasePanel() {
 		if (previewBasePanel == null) {
 			ArrayList list = new ArrayList();
 			list.add(getTabTable());
 			list.add(getTabInterpolated());
 			getColorTableListener().setLastColorTableUI(getTabTable());
-			
-			previewBasePanel = new PreviewBasePanel(ButtonsPanel.BUTTONS_NONE, list, (JPanel) getGeneralPanel(), getPanelListView(), getColorTableListener(), (FLyrRasterSE) fLayer);
+
+			previewBasePanel = new PreviewBasePanel(ButtonsPanel.BUTTONS_NONE,
+					list, (JPanel) getGeneralPanel(), getPanelListView(),
+					getColorTableListener(), (FLyrRasterSE) fLayer);
 			previewBasePanel.getTabbedPane().addChangeListener(this);
-			previewBasePanel.getButtonsPanel().addButton(RasterToolsUtil.getText(this, "equidistar"), ButtonsPanel.BUTTON_LAST + 3);
-			previewBasePanel.getButtonsPanel().addButton(RasterToolsUtil.getText(this, "guardar_predeterminado"), ButtonsPanel.BUTTON_LAST + 2);
+			previewBasePanel.getButtonsPanel().addButton(
+					RasterToolsUtil.getText(this, "equidistar"),
+					ButtonsPanel.BUTTON_LAST + 3);
+			previewBasePanel.getButtonsPanel().addButton(
+					RasterToolsUtil.getText(this, "guardar_predeterminado"),
+					ButtonsPanel.BUTTON_LAST + 2);
 			previewBasePanel.getButtonsPanel().addApply();
 			previewBasePanel.getButtonsPanel().addAccept();
 			previewBasePanel.getButtonsPanel().addCancel();
@@ -108,7 +117,6 @@ public class ColorTablePanel extends JPanel implements ChangeListener, ButtonsPa
 		}
 		return previewBasePanel;
 	}
-	
 
 	private void initialize() {
 		setLayout(new BorderLayout());
@@ -123,11 +131,11 @@ public class ColorTablePanel extends JPanel implements ChangeListener, ButtonsPa
 		return tabTable;
 	}
 
-
 	private IColorTableUI getTabInterpolated() {
 		if (tabInterpolated == null) {
 			tabInterpolated = new TabInterpolated();
-			tabInterpolated.addColorTableUIChangedListener(getColorTableListener());
+			tabInterpolated
+					.addColorTableUIChangedListener(getColorTableListener());
 		}
 		return tabInterpolated;
 	}
@@ -135,17 +143,24 @@ public class ColorTablePanel extends JPanel implements ChangeListener, ButtonsPa
 	public JPanel getPanelListView() {
 		if (jPanelListView == null) {
 			jPanelListView = new JPanel();
-			jPanelListView.setBorder(javax.swing.BorderFactory.createTitledBorder(null, RasterToolsUtil.getText(this, "libreria"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			jPanelListView
+					.setBorder(javax.swing.BorderFactory.createTitledBorder(
+							null,
+							RasterToolsUtil.getText(this, "libreria"),
+							javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+							javax.swing.border.TitledBorder.DEFAULT_POSITION,
+							null, null));
 			jPanelListView.setLayout(new BorderLayout());
-			
+
 			jPanelListView.add(getColorTableLibraryPanel());
 		}
 		return jPanelListView;
 	}
-	
+
 	public ColorTableLibraryPanel getColorTableLibraryPanel() {
 		if (colorTableLibraryPanel == null) {
-			colorTableLibraryPanel = new ColorTableLibraryPanel(getColorTableData());
+			colorTableLibraryPanel = new ColorTableLibraryPanel(
+					getColorTableData());
 			colorTableLibraryPanel.addColorTableLibraryListener(this);
 			colorTableLibraryPanel.selectDefault();
 		}
@@ -154,11 +169,13 @@ public class ColorTablePanel extends JPanel implements ChangeListener, ButtonsPa
 
 	/**
 	 * Obtener el componente que hara la carga pesada de los listeners
+	 * 
 	 * @return
 	 */
 	private ColorTableListener getColorTableListener() {
 		if (colorTableListener == null) {
-			colorTableListener = new ColorTableListener(this, getColorTableData());
+			colorTableListener = new ColorTableListener(this,
+					getColorTableData());
 		}
 		return colorTableListener;
 	}
@@ -176,16 +193,18 @@ public class ColorTablePanel extends JPanel implements ChangeListener, ButtonsPa
 	private boolean restoreFilters() {
 		if (getLayer() != null) {
 			Rendering rendering = ((FLyrRasterSE) getLayer()).getRender();
-			if(rendering.getFilterList() == null)
+			if (rendering.getFilterList() == null)
 				return false;
 			rendering.getFilterList().setStatus(getFilterStatus());
-			((FLyrRasterSE) getLayer()).setRenderFilterList(rendering.getFilterList());
+			((FLyrRasterSE) getLayer()).setRenderFilterList(rendering
+					.getFilterList());
 		}
 		return true;
 	}
 
 	/**
 	 * Devuelve el arrayList de filtros inicial
+	 * 
 	 * @return
 	 */
 	private ArrayList getFilterStatus() {
@@ -197,13 +216,15 @@ public class ColorTablePanel extends JPanel implements ChangeListener, ButtonsPa
 	 * ListViewComponent
 	 */
 	public void reloadPanelsFromLibraryPanel() {
-		ColorTable colorTable = getColorTableLibraryPanel().getColorTableSelected();
-		
+		ColorTable colorTable = getColorTableLibraryPanel()
+				.getColorTableSelected();
+
 		getColorTableData().setColorTable((ColorTable) colorTable.clone());
 		if (colorTableData.isLimitsEnabled()) {
 			double min = getColorTableData().getMinim();
 			double max = getColorTableData().getMaxim();
-			getColorTableData().getColorTable().createColorTableInRange(min, max, false);
+			getColorTableData().getColorTable().createColorTableInRange(min,
+					max, false);
 		}
 		getColorTableListener().refreshItems(true);
 		getColorTableData().refreshPreview();
@@ -211,14 +232,17 @@ public class ColorTablePanel extends JPanel implements ChangeListener, ButtonsPa
 
 	/**
 	 * Salva la tabla de color al fichero rmf.
+	 * 
 	 * @param fName
 	 * @throws IOException
 	 */
 	private void saveColorTable() {
-		RasterDataset dataset = ((FLyrRasterSE) getLayer()).getDataSource().getDataset(0)[0];
+		RasterDataset dataset = ((FLyrRasterSE) getLayer()).getDataSource()
+				.getDataset(0)[0];
 		try {
 			if (getColorTableData().isEnabled())
-				dataset.saveObjectToRmf(ColorTable.class, getColorTableData().getColorTable());
+				dataset.saveObjectToRmf(ColorTable.class, getColorTableData()
+						.getColorTable());
 			else
 				dataset.saveObjectToRmf(ColorTable.class, null);
 		} catch (RmfSerializerException e) {
@@ -227,40 +251,47 @@ public class ColorTablePanel extends JPanel implements ChangeListener, ButtonsPa
 	}
 
 	/**
-	 * Restaura el estado de los filtros como estaban al abrir la ventana y quita
-	 * la leyenda del TOC
+	 * Restaura el estado de los filtros como estaban al abrir la ventana y
+	 * quita la leyenda del TOC
 	 */
 	private void restoreSettings() {
 		if (getLayer() == null)
 			return;
 
-		// Restauramos la vista con los filtros originales antes de cualquier acci�n
-		if(!restoreFilters())
+		// Restauramos la vista con los filtros originales antes de cualquier
+		// acci�n
+		if (!restoreFilters())
 			return;
 
 		((FLyrRasterSE) getLayer()).setLastLegend(null);
 
-		RasterFilterList rasterFilterList = ((FLyrRasterSE) getLayer()).getRenderFilterList();
+		RasterFilterList rasterFilterList = ((FLyrRasterSE) getLayer())
+				.getRenderFilterList();
 
-		ColorTableFilter colorTableFilter = (ColorTableFilter) rasterFilterList.getByName(ColorTableFilter.names[0]);
+		ColorTableFilter colorTableFilter = (ColorTableFilter) rasterFilterList
+				.getByName(ColorTableFilter.names[0]);
 		if (colorTableFilter != null) {
-			GridPalette gridPalette = new GridPalette((ColorTable) colorTableFilter.getColorTable().clone());
+			GridPalette gridPalette = new GridPalette(
+					(ColorTable) colorTableFilter.getColorTable().clone());
 			((FLyrRasterSE) getLayer()).setLastLegend(gridPalette);
 		}
 
-		// Quitamos la banda de transparencia por si el filtro de color la ha activado
+		// Quitamos la banda de transparencia por si el filtro de color la ha
+		// activado
 		try {
-			GridTransparency transparency = ((FLyrRasterSE) getLayer()).getRender().getLastTransparency();
+			GridTransparency transparency = ((FLyrRasterSE) getLayer())
+					.getRender().getLastTransparency();
 			transparency.setTransparencyBand(-1);
 			transparency.activeTransparency();
 			transparency.setAlphaBand(null);
 		} catch (NullPointerException ex) {
-			//No quitamos la banda de transparencia
+			// No quitamos la banda de transparencia
 		}
 	}
 
 	/**
 	 * Devuelve el componente que trata los datos
+	 * 
 	 * @return
 	 */
 	private ColorTableData getColorTableData() {
@@ -272,24 +303,29 @@ public class ColorTablePanel extends JPanel implements ChangeListener, ButtonsPa
 
 	/**
 	 * Especificar el layer para la tabla de color
+	 * 
 	 * @param layer
 	 */
 	private void setLayer(FLayer fLayer) {
 		this.fLayer = fLayer;
-		
+
 		getGeneralPanel().setLayer(fLayer);
-		
+
 		getColorTableListener().setLayer(fLayer);
 
-		RasterFilterList rasterFilterList = ((FLyrRasterSE) getLayer()).getRenderFilterList();
+		RasterFilterList rasterFilterList = ((FLyrRasterSE) getLayer())
+				.getRenderFilterList();
 
 		filterStatus = rasterFilterList.getStatusCloned();
 
-		ColorTableFilter colorTableFilter = (ColorTableFilter) rasterFilterList.getByName(ColorTableFilter.names[0]);
+		ColorTableFilter colorTableFilter = (ColorTableFilter) rasterFilterList
+				.getByName(ColorTableFilter.names[0]);
 		if (colorTableFilter != null) {
-			GridPalette gridPalette = new GridPalette((ColorTable) colorTableFilter.getColorTable().clone());
+			GridPalette gridPalette = new GridPalette(
+					(ColorTable) colorTableFilter.getColorTable().clone());
 			if (gridPalette.isCompressible()) {
-				if (RasterToolsUtil.messageBoxYesOrNot("comprimir_paleta", this)) {
+				if (RasterToolsUtil
+						.messageBoxYesOrNot("comprimir_paleta", this)) {
 					gridPalette.compressPalette();
 					gridPalette.setInterpolated(true);
 				}
@@ -297,9 +333,11 @@ public class ColorTablePanel extends JPanel implements ChangeListener, ButtonsPa
 
 			ColorTable colorTable = new ColorTable();
 			colorTable.setName(RasterToolsUtil.getText(this, "tabla_actual"));
-			colorTable.createPaletteFromColorItems(gridPalette.getColorItems(), false);
+			colorTable.createPaletteFromColorItems(gridPalette.getColorItems(),
+					false);
 			colorTable.setInterpolated(gridPalette.isInterpolated());
-			getGeneralPanel().setCheckBoxInterpolated(gridPalette.isInterpolated());
+			getGeneralPanel().setCheckBoxInterpolated(
+					gridPalette.isInterpolated());
 
 			getColorTableLibraryPanel().addColorTable(0, colorTable);
 
@@ -316,6 +354,7 @@ public class ColorTablePanel extends JPanel implements ChangeListener, ButtonsPa
 
 	/**
 	 * Especificar el layer para el recorte
+	 * 
 	 * @param layer
 	 */
 	public FLayer getLayer() {
@@ -343,12 +382,12 @@ public class ColorTablePanel extends JPanel implements ChangeListener, ButtonsPa
 	 */
 	public void stateChanged(ChangeEvent e) {
 		switch (getPreviewBasePanel().getTabbedPane().getSelectedIndex()) {
-			case 1:
-				getColorTableListener().setLastColorTableUI(getTabInterpolated());
-				break;
-			default:
-				getColorTableListener().setLastColorTableUI(getTabTable());
-				break;
+		case 1:
+			getColorTableListener().setLastColorTableUI(getTabInterpolated());
+			break;
+		default:
+			getColorTableListener().setLastColorTableUI(getTabTable());
+			break;
 		}
 
 		getColorTableListener().refreshItems(true);
@@ -356,13 +395,17 @@ public class ColorTablePanel extends JPanel implements ChangeListener, ButtonsPa
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener#actionButtonPressed(org.gvsig.gui.beans.buttonspanel.ButtonsPanelEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.buttonspanel.ButtonsPanelListener#actionButtonPressed
+	 * (org.gvsig.gui.beans.buttonspanel.ButtonsPanelEvent)
 	 */
 	public void actionButtonPressed(ButtonsPanelEvent e) {
 		restoreSettings();
 
 		// Al pulsar Aceptar o Aplicar se ejecuta el aceptar del panel
-		if (e.getButton() == ButtonsPanel.BUTTON_APPLY || e.getButton() == ButtonsPanel.BUTTON_ACCEPT) {
+		if (e.getButton() == ButtonsPanel.BUTTON_APPLY
+				|| e.getButton() == ButtonsPanel.BUTTON_ACCEPT) {
 			accept();
 		}
 
@@ -379,7 +422,8 @@ public class ColorTablePanel extends JPanel implements ChangeListener, ButtonsPa
 		}
 
 		if (e.getButton() == (ButtonsPanel.BUTTON_LAST + 2)) {
-			if (RasterToolsUtil.messageBoxYesOrNot("guardar_como_predeterminado", this)) {
+			if (RasterToolsUtil.messageBoxYesOrNot(
+					"guardar_como_predeterminado", this)) {
 				saveColorTable();
 				accept();
 			}
@@ -412,7 +456,10 @@ public class ColorTablePanel extends JPanel implements ChangeListener, ButtonsPa
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.colortable.library.ColorTableLibraryListener#actionColorTableChanged(org.gvsig.rastertools.colortable.library.ColorTableLibraryEvent)
+	 * 
+	 * @see org.gvsig.rastertools.colortable.library.ColorTableLibraryListener#
+	 * actionColorTableChanged
+	 * (org.gvsig.rastertools.colortable.library.ColorTableLibraryEvent)
 	 */
 	public void actionColorTableChanged(ColorTableLibraryEvent e) {
 		reloadPanelsFromLibraryPanel();

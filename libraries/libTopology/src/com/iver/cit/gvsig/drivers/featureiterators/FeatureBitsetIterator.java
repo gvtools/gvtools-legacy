@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.drivers.featureiterators;
 
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -65,11 +65,10 @@ import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
  * Iterates over the selected features of a layer.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class FeatureBitsetIterator extends DefaultFeatureIterator {
 
-	
 	FBitSet selection;
 
 	public FeatureBitsetIterator(ReadableVectorial source,
@@ -80,16 +79,15 @@ public class FeatureBitsetIterator extends DefaultFeatureIterator {
 		selection = this.source.getRecordset().getSelection();
 		this.currentFeature = selection.nextSetBit(0);
 	}
-	
-	
-	public FeatureBitsetIterator(FBitSet selection, 
-								ReadableVectorial source) throws ReadDriverException{
+
+	public FeatureBitsetIterator(FBitSet selection, ReadableVectorial source)
+			throws ReadDriverException {
 		super(source, null, null, null);
 		this.selection = selection;
 		this.currentFeature = selection.nextSetBit(0);
 	}
-	
-	public void setSelection(FBitSet bitSet){
+
+	public void setSelection(FBitSet bitSet) {
 		this.selection = bitSet;
 		this.currentFeature = selection.nextSetBit(0);
 	}
@@ -98,7 +96,7 @@ public class FeatureBitsetIterator extends DefaultFeatureIterator {
 			throws ReadDriverException {
 		super(source);
 	}
-	
+
 	public boolean hasNext() throws ReadDriverException {
 		return currentFeature != -1;
 	}
@@ -108,12 +106,13 @@ public class FeatureBitsetIterator extends DefaultFeatureIterator {
 			IGeometry geom = chekIfCloned(source.getShape(currentFeature));
 			reprojectIfNecessary(geom);
 			Value[] regAtt = getValues(currentFeature);
-			IFeature feat  = new DefaultFeature(geom, regAtt, currentFeature + "");
+			IFeature feat = new DefaultFeature(geom, regAtt, currentFeature
+					+ "");
 			currentFeature = selection.nextSetBit(currentFeature + 1);
 			return feat;
 		} catch (ExpansionFileReadException e) {
-			throw new ReadDriverException("",e);
-		} 
+			throw new ReadDriverException("", e);
+		}
 	}
-	
+
 }

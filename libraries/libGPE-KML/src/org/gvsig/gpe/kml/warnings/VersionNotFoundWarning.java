@@ -70,23 +70,23 @@ import org.gvsig.exceptions.BaseException;
 /**
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class VersionNotFoundWarning extends BaseException{
+public class VersionNotFoundWarning extends BaseException {
 	private static final long serialVersionUID = -7929656757664427123L;
 	private File m_File = null;
-	
-	public VersionNotFoundWarning() {		
-		init();		
+
+	public VersionNotFoundWarning() {
+		init();
 	}
-	
+
 	public VersionNotFoundWarning(Throwable exception) {
 		init();
 		initCause(exception);
 	}
-	
+
 	private void init() {
 		messageKey = "warning_kml_versionNotFound";
 		formatString = "The lmñ version number is not specified";
-		code = serialVersionUID;		
+		code = serialVersionUID;
 	}
 
 	protected Map values() {

@@ -107,8 +107,8 @@ public class SnapPointLocator extends
 	 *            the coordinate to test
 	 * @param geom
 	 *            the Geometry to test
-	 * @return <code>true</code> if the point is in the interior or boundary
-	 *         of the Geometry
+	 * @return <code>true</code> if the point is in the interior or boundary of
+	 *         the Geometry
 	 */
 	public boolean intersects(Coordinate p, Geometry geom, double snapTolerance) {
 		return locate(p, geom, snapTolerance) != Location.EXTERIOR;
@@ -138,9 +138,9 @@ public class SnapPointLocator extends
 		numBoundaries = 0;
 		computeLocation(p, geom, snapTolerance);
 
-//		if (SnappingGeometryGraph.isInBoundary(numBoundaries))
-//			return Location.BOUNDARY;
-		
+		// if (SnappingGeometryGraph.isInBoundary(numBoundaries))
+		// return Location.BOUNDARY;
+
 		if (boundaryRule.isInBoundary(numBoundaries))
 			return Location.BOUNDARY;
 
@@ -149,7 +149,6 @@ public class SnapPointLocator extends
 		return Location.EXTERIOR;
 	}
 
-	
 	private void computeLocation(Coordinate p, Geometry geom,
 			double snapTolerance) {
 		if (geom instanceof LinearRing) {

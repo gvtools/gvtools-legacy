@@ -44,45 +44,41 @@ import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.fmap.rendering.FInterval;
 import com.iver.cit.gvsig.fmap.rendering.ILegend;
 import com.iver.cit.gvsig.fmap.rendering.VectorialIntervalLegend;
+
 /**
  * 
- * this is an initializer for the VectorialIntervalLegend legend
- * for the integration tests.
+ * this is an initializer for the VectorialIntervalLegend legend for the
+ * integration tests.
  * 
  * VectorialIntervalLegendTest.java
- *
+ * 
  * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Jun 12, 2008
- *
+ * 
  */
-public class VectorialIntervalLegendTest extends AbstractClassifiedLegendTestCase {
+public class VectorialIntervalLegendTest extends
+		AbstractClassifiedLegendTestCase {
 
 	public VectorialIntervalLegendTest() {
-		super(VectorialIntervalLegend.class, 
-				(Object[]) new FInterval[] {
-					TestIntervalLegend.interval0,
-					TestIntervalLegend.interval1,
-					TestIntervalLegend.interval2,
-					TestIntervalLegend.interval3,
-		});
+		super(VectorialIntervalLegend.class, (Object[]) new FInterval[] {
+				TestIntervalLegend.interval0, TestIntervalLegend.interval1,
+				TestIntervalLegend.interval2, TestIntervalLegend.interval3, });
 	}
-	
+
 	@Override
 	public void initLegend(ILegend leg) {
 		VectorialIntervalLegend vil = (VectorialIntervalLegend) leg;
-		int classificationFieldIndex = 0; // any within mockdatasource field count range should be ok
+		int classificationFieldIndex = 0; // any within mockdatasource field
+											// count range should be ok
 		try {
-			vil.setClassifyingFieldTypes(new int[] {
-					TestClassifiedVectorLegend.mockDataSource.
-					getFieldType(classificationFieldIndex)});
+			vil.setClassifyingFieldTypes(new int[] { TestClassifiedVectorLegend.mockDataSource
+					.getFieldType(classificationFieldIndex) });
 		} catch (ReadDriverException e) {
-			fail("this shouldn't happen. This does not necessary mean that the legend does not pass the test" +
-					"but rather theres is a bug in the test itself. Please have a look to the data source used in" +
-			"the test");
+			fail("this shouldn't happen. This does not necessary mean that the legend does not pass the test"
+					+ "but rather theres is a bug in the test itself. Please have a look to the data source used in"
+					+ "the test");
 		}
-		vil.setClassifyingFieldNames(new String[] {
-				TestClassifiedVectorLegend.mockDataSource.
-				fieldNames[classificationFieldIndex]});
+		vil.setClassifyingFieldNames(new String[] { TestClassifiedVectorLegend.mockDataSource.fieldNames[classificationFieldIndex] });
 	}
-	
+
 }

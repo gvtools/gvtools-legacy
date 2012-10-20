@@ -62,45 +62,46 @@ public class BooleanTableCellEditor implements TableCellEditor {
 	private BooleanTableCellRenderer renderer;
 	private ArrayList listeners = new ArrayList();
 
-
 	public BooleanTableCellEditor(final JTable ownerTable) {
 		renderer = new BooleanTableCellRenderer(true);
 	}
 
-	public Component getTableCellEditorComponent(final JTable table, Object value, boolean isSelected, int row, int column) {
-		if (value == null) return null;
-		JComponent aux = (JComponent) renderer.getTableCellRendererComponent(table, value, isSelected, false, row, column);
-		((JCheckBox) aux.getComponent(0)).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Store the value to avoid the need of pressing ENTER
-				// http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4139078
-				table.editingStopped(new ChangeEvent(table));
-			}
-		});
+	public Component getTableCellEditorComponent(final JTable table,
+			Object value, boolean isSelected, int row, int column) {
+		if (value == null)
+			return null;
+		JComponent aux = (JComponent) renderer.getTableCellRendererComponent(
+				table, value, isSelected, false, row, column);
+		((JCheckBox) aux.getComponent(0))
+				.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						// Store the value to avoid the need of pressing ENTER
+						// http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4139078
+						table.editingStopped(new ChangeEvent(table));
+					}
+				});
 		return aux;
 	}
 
-
 	public void cancelCellEditing() {
 		for (int i = 0; i < listeners.size(); i++) {
-	        CellEditorListener l = (CellEditorListener) listeners.get(i);
-	        ChangeEvent evt = new ChangeEvent(this);
-	        l.editingCanceled(evt);
-	    }
+			CellEditorListener l = (CellEditorListener) listeners.get(i);
+			ChangeEvent evt = new ChangeEvent(this);
+			l.editingCanceled(evt);
+		}
 	}
 
 	public boolean stopCellEditing() {
 		for (int i = 0; i < listeners.size(); i++) {
-            CellEditorListener l = (CellEditorListener) listeners.get(i);
-            ChangeEvent evt = new ChangeEvent(this);
-            l.editingStopped(evt);
-        }
-        return true;
+			CellEditorListener l = (CellEditorListener) listeners.get(i);
+			ChangeEvent evt = new ChangeEvent(this);
+			l.editingStopped(evt);
+		}
+		return true;
 	}
 
-
 	public Object getCellEditorValue() {
-		if (renderer!=null && renderer.getCheck()!=null)
+		if (renderer != null && renderer.getCheck() != null)
 			return new Boolean(renderer.getCheck().isSelected());
 		return null;
 	}

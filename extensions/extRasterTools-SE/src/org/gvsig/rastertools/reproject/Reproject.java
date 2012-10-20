@@ -28,6 +28,7 @@ import org.gvsig.raster.dataset.io.RasterDriverException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import es.gva.cit.jgdal.GdalWarp;
+
 /**
  * Clase encargada de la reproyección. Se le asigna una capa raster y la ruta de
  * destino
@@ -36,23 +37,27 @@ import es.gva.cit.jgdal.GdalWarp;
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class Reproject {
-	private FLyrRasterSE lyr      = null;
-	private String       pathDest = null;
-	private GdalWarp     warper   = null;
+	private FLyrRasterSE lyr = null;
+	private String pathDest = null;
+	private GdalWarp warper = null;
 
 	/**
 	 * Constructor de la clase.
+	 * 
 	 * @param lyr
-	 * @param pathDest Ruta de destino
+	 * @param pathDest
+	 *            Ruta de destino
 	 */
 	public Reproject(FLyrRasterSE lyr, String pathDest) {
 		this.lyr = lyr;
 		this.pathDest = pathDest;
 	}
-	
+
 	/**
 	 * Método para la transformación del raster.
-	 * @param crs Proyección destino
+	 * 
+	 * @param crs
+	 *            Proyección destino
 	 */
 	public int warp(CoordinateReferenceSystem crs,
 			CoordinateReferenceSystem sourceCrs) throws ReprojectException {
@@ -72,7 +77,8 @@ public class Reproject {
 			if (lyr.getCrs() != null) {
 				s_srs = ProjectionUtils.getAbrev(lyr.getCrs());
 			} else {
-				throw new ReprojectException("No se encuentra la proyeccion de origen.");
+				throw new ReprojectException(
+						"No se encuentra la proyeccion de origen.");
 			}
 		}
 		String source = null;
@@ -81,7 +87,7 @@ public class Reproject {
 
 		if (source == null)
 			throw new ReprojectException("Fichero fuente no valido.");
-		
+
 		if (source.endsWith(".hdr"))
 			source = source.substring(0, source.lastIndexOf(".hdr"));
 
@@ -93,66 +99,67 @@ public class Reproject {
 
 		try {
 			warper.setSsrs(s_srs);
-			
-//			GTiff: GeoTIFF
-//			GTiff_FORMAT = 1;     // Reproyecta .tif
-//			VRT: Virtual Raster
-//			VRT_FORMAT = 2;       // No reproyecta
-//			NITF: National Imagery Transmission Format
-//			NITF_FORMAT = 3;      // Reproyecta .nitf
-//			HFA: Erdas Imagine Images (.img)
-//			HFA_FORMAT = 4;       // Reproyecta .img
-//			ELAS: ELAS
-//			ELAS_FORMAT = 5;      // No reproyecta
-//			MEM: In Memory Raster
-//			MEM_FORMAT = 6;       // No usarlo, aunque reproyecta
-//			BMP: MS Windows Device Independent Bitmap
-//			BMP_FORMAT = 7;       // No reproyecta
-//			PCIDSK: PCIDSK Database File
-//			PCIDSK_FORMAT = 8;    // Reproyecta
-//			ILWIS: ILWIS Raster Map
-//			ILWIS_FORMAT = 9;     // No reproyecta
 
-//			HDF4_FORMAT = 10;     // No reproyecta y se cierra gvSIG
+			// GTiff: GeoTIFF
+			// GTiff_FORMAT = 1; // Reproyecta .tif
+			// VRT: Virtual Raster
+			// VRT_FORMAT = 2; // No reproyecta
+			// NITF: National Imagery Transmission Format
+			// NITF_FORMAT = 3; // Reproyecta .nitf
+			// HFA: Erdas Imagine Images (.img)
+			// HFA_FORMAT = 4; // Reproyecta .img
+			// ELAS: ELAS
+			// ELAS_FORMAT = 5; // No reproyecta
+			// MEM: In Memory Raster
+			// MEM_FORMAT = 6; // No usarlo, aunque reproyecta
+			// BMP: MS Windows Device Independent Bitmap
+			// BMP_FORMAT = 7; // No reproyecta
+			// PCIDSK: PCIDSK Database File
+			// PCIDSK_FORMAT = 8; // Reproyecta
+			// ILWIS: ILWIS Raster Map
+			// ILWIS_FORMAT = 9; // No reproyecta
 
-//			PNM: Portable Pixmap Format (netpbm)
-//			PNM_FORMAT = 11;      // No reproyecta
-//			ENVI: ENVI .hdr Labelled
-//			ENVI_FORMAT = 12;     // Reproyecta
-//			EHdr: ESRI .hdr Labelled
-//			EHDR_FORMAT = 13;     // Reproyecta
-//			PAux: PCI .aux Labelled
-//			PAUX_FORMAT = 14;     // Reproyecta
-//			MFF: Vexcel MFF Raster
-//			MFF_FORMAT = 15;      // No reproyecta
-//			MFF2: Vexcel MFF2 (HKV) Raster
-//			MFF2_FORMAT = 16;     // No reproyecta
-//			BT: VTP .bt (Binary Terrain) 1.3 Format
-//			BT_FORMAT = 17;       // No reproyecta
-//			IDA: Image Data and Analysis
-//			IDA_FORMAT = 18;      // No reproyecta
-//			RMF: Raster Matrix Format
-//			RMF_FORMAT = 19;      // No reproyecta
-//			RST: Idrisi Raster A.1
-//			RST_FORMAT = 20;      // No reproyecta
+			// HDF4_FORMAT = 10; // No reproyecta y se cierra gvSIG
 
-//			Leveller: Leveller heightfield
-//			LEVELLER_FORMAT = 21; // No reproyecta
-//			Terragen: Terragen heightfield
-//			TERRAGEN_FORMAT = 22; // No reproyecta
-//			ERS: ERMapper .ers Labelled
-//			ERS_FORMAT = 23;      // No reproyecta
-//			INGR: Intergraph Raster
-//			INGR_FORMAT = 24;     // No reproyecta
-//			GSAG: Golden Software ASCII Grid (.grd)
-//			GSAG_FORMAT = 25;     // No reproyecta
-//			GSBG: Golden Software Binary Grid (.grd)
-//			GSBG_FORMAT = 26;     // No reproyecta
-//			ADRG: ARC Digitized Raster Graphics
-//			ADRG_FORMAT = 27;     // No reproyecta
-			
-//			warper.setFormat(27);
-			return warper.warp(epsg, source, pathDest, GeoRasterWriter.getWriter(pathDest).getDriverName());
+			// PNM: Portable Pixmap Format (netpbm)
+			// PNM_FORMAT = 11; // No reproyecta
+			// ENVI: ENVI .hdr Labelled
+			// ENVI_FORMAT = 12; // Reproyecta
+			// EHdr: ESRI .hdr Labelled
+			// EHDR_FORMAT = 13; // Reproyecta
+			// PAux: PCI .aux Labelled
+			// PAUX_FORMAT = 14; // Reproyecta
+			// MFF: Vexcel MFF Raster
+			// MFF_FORMAT = 15; // No reproyecta
+			// MFF2: Vexcel MFF2 (HKV) Raster
+			// MFF2_FORMAT = 16; // No reproyecta
+			// BT: VTP .bt (Binary Terrain) 1.3 Format
+			// BT_FORMAT = 17; // No reproyecta
+			// IDA: Image Data and Analysis
+			// IDA_FORMAT = 18; // No reproyecta
+			// RMF: Raster Matrix Format
+			// RMF_FORMAT = 19; // No reproyecta
+			// RST: Idrisi Raster A.1
+			// RST_FORMAT = 20; // No reproyecta
+
+			// Leveller: Leveller heightfield
+			// LEVELLER_FORMAT = 21; // No reproyecta
+			// Terragen: Terragen heightfield
+			// TERRAGEN_FORMAT = 22; // No reproyecta
+			// ERS: ERMapper .ers Labelled
+			// ERS_FORMAT = 23; // No reproyecta
+			// INGR: Intergraph Raster
+			// INGR_FORMAT = 24; // No reproyecta
+			// GSAG: Golden Software ASCII Grid (.grd)
+			// GSAG_FORMAT = 25; // No reproyecta
+			// GSBG: Golden Software Binary Grid (.grd)
+			// GSBG_FORMAT = 26; // No reproyecta
+			// ADRG: ARC Digitized Raster Graphics
+			// ADRG_FORMAT = 27; // No reproyecta
+
+			// warper.setFormat(27);
+			return warper.warp(epsg, source, pathDest, GeoRasterWriter
+					.getWriter(pathDest).getDriverName());
 		} catch (NotSupportedExtensionException e) {
 			throw new ReprojectException("error_reprojecting");
 		} catch (RasterDriverException e) {
@@ -165,6 +172,7 @@ public class Reproject {
 	/**
 	 * Obtiene el porcentaje de progreso de la tarea de reproyección para
 	 * mostrarlo por pantalla.
+	 * 
 	 * @return
 	 */
 	public int getPercent() {

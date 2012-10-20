@@ -58,12 +58,13 @@ import org.gvsig.exceptions.BaseException;
  *
  */
 /**
- * It is thrown when there is an feture that can not
- * be validated using the XML Schema
+ * It is thrown when there is an feture that can not be validated using the XML
+ * Schema
+ * 
  * @author Jorge Piera Llodrá (jorge.piera@iver.es)
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  */
-public class NotSupportedFeatureWarning extends BaseException{
+public class NotSupportedFeatureWarning extends BaseException {
 	private static final long serialVersionUID = -907568605199930636L;
 	private String featureName = null;
 	private String xsFeatureType = null;
@@ -71,7 +72,8 @@ public class NotSupportedFeatureWarning extends BaseException{
 	private String xsLayerType = null;
 	private boolean hasParentSchema = false;
 
-	public NotSupportedFeatureWarning(String featureName, String xsFeatureType, String layerName, String xsLayerType) {
+	public NotSupportedFeatureWarning(String featureName, String xsFeatureType,
+			String layerName, String xsLayerType) {
 		super();
 		this.featureName = featureName;
 		this.xsFeatureType = xsFeatureType;
@@ -80,7 +82,7 @@ public class NotSupportedFeatureWarning extends BaseException{
 		hasParentSchema = true;
 		initialize();
 	}
-	
+
 	public NotSupportedFeatureWarning(String featureName, String xsFeatureType) {
 		super();
 		this.featureName = featureName;
@@ -94,26 +96,27 @@ public class NotSupportedFeatureWarning extends BaseException{
 	 */
 	private void initialize() {
 		messageKey = "gpe_not_supported_feature_warning";
-		if (hasParentSchema){
-			formatString = "The feature '%(featureName)' with a XML schema " + 
-			"type '%(xsFeatureType)' is not contained in the parent layer " +
-			"'%(layerName)' with a XML Schema type '%(xsLayerType)'";
-		}else{
-			formatString = "The feature '%(featureName)' with a XML schema " + 
-			"type '%(xsFeatureType)' is not found on the XML schema ";			
+		if (hasParentSchema) {
+			formatString = "The feature '%(featureName)' with a XML schema "
+					+ "type '%(xsFeatureType)' is not contained in the parent layer "
+					+ "'%(layerName)' with a XML Schema type '%(xsLayerType)'";
+		} else {
+			formatString = "The feature '%(featureName)' with a XML schema "
+					+ "type '%(xsFeatureType)' is not found on the XML schema ";
 		}
 		code = serialVersionUID;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map values() {
 		Hashtable hash = new Hashtable();
 		hash.put("featureName", featureName);
 		hash.put("xsFeatureType", xsFeatureType);
-		if (hasParentSchema){
+		if (hasParentSchema) {
 			hash.put("layerName", layerName);
 			hash.put("xsLayerType", xsLayerType);
 		}

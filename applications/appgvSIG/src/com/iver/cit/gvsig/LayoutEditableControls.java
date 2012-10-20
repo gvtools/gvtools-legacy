@@ -56,36 +56,49 @@ import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.cit.gvsig.project.documents.layout.LayoutKeyEvent;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
-
 /**
  * Extensión para controlar las operaciones basicas de edición sobre el Layout.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LayoutEditableControls extends Extension {
-	private static LayoutKeyEvent lke=new LayoutKeyEvent();
-	private static KeyStroke copyLayout = KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_MASK);
-	private static KeyStroke cutLayout = KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_MASK);
-	private static KeyStroke pasteLayout = KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.CTRL_MASK);
-	private static KeyStroke leftLayout = KeyStroke.getKeyStroke(KeyEvent.VK_LEFT,0);
-	private static KeyStroke rightLayout = KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT,0);
-	private static KeyStroke upLayout = KeyStroke.getKeyStroke(KeyEvent.VK_UP,0);
-	private static KeyStroke downLayout = KeyStroke.getKeyStroke(KeyEvent.VK_DOWN,0);
-	private static KeyStroke undoLayout = KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_MASK);
-	private static KeyStroke redoLayout = KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_MASK);
-	private static KeyStroke del1Layout = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
-	private static KeyStroke del2Layout = KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0);
+	private static LayoutKeyEvent lke = new LayoutKeyEvent();
+	private static KeyStroke copyLayout = KeyStroke.getKeyStroke(KeyEvent.VK_C,
+			KeyEvent.CTRL_MASK);
+	private static KeyStroke cutLayout = KeyStroke.getKeyStroke(KeyEvent.VK_X,
+			KeyEvent.CTRL_MASK);
+	private static KeyStroke pasteLayout = KeyStroke.getKeyStroke(
+			KeyEvent.VK_V, KeyEvent.CTRL_MASK);
+	private static KeyStroke leftLayout = KeyStroke.getKeyStroke(
+			KeyEvent.VK_LEFT, 0);
+	private static KeyStroke rightLayout = KeyStroke.getKeyStroke(
+			KeyEvent.VK_RIGHT, 0);
+	private static KeyStroke upLayout = KeyStroke.getKeyStroke(KeyEvent.VK_UP,
+			0);
+	private static KeyStroke downLayout = KeyStroke.getKeyStroke(
+			KeyEvent.VK_DOWN, 0);
+	private static KeyStroke undoLayout = KeyStroke.getKeyStroke(KeyEvent.VK_Z,
+			KeyEvent.CTRL_MASK);
+	private static KeyStroke redoLayout = KeyStroke.getKeyStroke(KeyEvent.VK_Y,
+			KeyEvent.CTRL_MASK);
+	private static KeyStroke del1Layout = KeyStroke.getKeyStroke(
+			KeyEvent.VK_DELETE, 0);
+	private static KeyStroke del2Layout = KeyStroke.getKeyStroke(
+			KeyEvent.VK_BACK_SPACE, 0);
+
 	/**
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String s) {
-		Layout layout = (Layout) PluginServices.getMDIManager().getActiveWindow();
+		Layout layout = (Layout) PluginServices.getMDIManager()
+				.getActiveWindow();
 		if (s.equals("PROPERTIES")) {
 			if (layout.showFProperties()) {
 				layout.getModel().setModified(true);
 			}
 		}
 	}
+
 	/**
 	 * @see com.iver.mdiApp.plugins.IExtension#isVisible()
 	 */
@@ -108,6 +121,7 @@ public class LayoutEditableControls extends Extension {
 	public void initialize() {
 		registerKeys();
 	}
+
 	private static void registerKeys() {
 		PluginServices.registerKeyStroke(copyLayout, lke);
 		PluginServices.registerKeyStroke(cutLayout, lke);
@@ -121,6 +135,7 @@ public class LayoutEditableControls extends Extension {
 		PluginServices.registerKeyStroke(del1Layout, lke);
 		PluginServices.registerKeyStroke(del2Layout, lke);
 	}
+
 	private static void unregisterKeys() {
 		PluginServices.unRegisterKeyStroke(copyLayout);
 		PluginServices.unRegisterKeyStroke(cutLayout);
@@ -134,6 +149,7 @@ public class LayoutEditableControls extends Extension {
 		PluginServices.unRegisterKeyStroke(del1Layout);
 		PluginServices.unRegisterKeyStroke(del2Layout);
 	}
+
 	/**
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */

@@ -66,9 +66,9 @@ import com.iver.utiles.swing.JComboBox;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class SelectVersionPanel extends JPanel{
-	private static final String defaultDir = System.getProperty("user.home") +
-		File.separatorChar;
+public class SelectVersionPanel extends JPanel {
+	private static final String defaultDir = System.getProperty("user.home")
+			+ File.separatorChar;
 	private static final String defaultFile = "output";
 	private JPanel buttonsPanel;
 	private JButton cancelButton;
@@ -86,7 +86,7 @@ public class SelectVersionPanel extends JPanel{
 	private JComboBox writerCombo;
 	private JLabel writerLabel;
 
-	public SelectVersionPanel(){
+	public SelectVersionPanel() {
 		initComponents();
 		initLabels();
 		initCombos();
@@ -99,31 +99,38 @@ public class SelectVersionPanel extends JPanel{
 		setLayout(new java.awt.BorderLayout());
 		add(getComponentsPanel(), java.awt.BorderLayout.CENTER);
 		add(getButtonsPanel(), java.awt.BorderLayout.SOUTH);
-	}             
+	}
 
 	/**
 	 * Initializes all the labels
 	 */
-	private void initLabels(){
-		//Labels
-		fileLabel.setText(PluginServices.getText(this, "gpe_select_file") + ":");
-		formatLabel.setText(PluginServices.getText(this, "gpe_select_format") + ":");
-		writerLabel.setText(PluginServices.getText(this, "gpe_select_writer") + ":");
-		schemaLabel.setText(PluginServices.getText(this, "gpe_select_schema") + ":");
-		schemaCheck.setText(PluginServices.getText(this, "gpe_create_default_schema"));
-		//Combo colors
+	private void initLabels() {
+		// Labels
+		fileLabel
+				.setText(PluginServices.getText(this, "gpe_select_file") + ":");
+		formatLabel.setText(PluginServices.getText(this, "gpe_select_format")
+				+ ":");
+		writerLabel.setText(PluginServices.getText(this, "gpe_select_writer")
+				+ ":");
+		schemaLabel.setText(PluginServices.getText(this, "gpe_select_schema")
+				+ ":");
+		schemaCheck.setText(PluginServices.getText(this,
+				"gpe_create_default_schema"));
+		// Combo colors
 		formatCombo.setBackground(Color.WHITE);
 		writerCombo.setBackground(Color.WHITE);
-		//Buttons
+		// Buttons
 		cancelButton.setText(PluginServices.getText(this, "cancel"));
 		exportButton.setText(PluginServices.getText(this, "export"));
-		//images
+		// images
 		fileButton.setText(null);
 		schemaButton.setText(null);
-		try{
-			fileButton.setIcon(new ImageIcon(View.class.getClassLoader().getResource("images/open.png")));
-			schemaButton.setIcon(new ImageIcon(View.class.getClassLoader().getResource("images/open.png")));
-		}catch(NullPointerException exception){
+		try {
+			fileButton.setIcon(new ImageIcon(View.class.getClassLoader()
+					.getResource("images/open.png")));
+			schemaButton.setIcon(new ImageIcon(View.class.getClassLoader()
+					.getResource("images/open.png")));
+		} catch (NullPointerException exception) {
 			fileButton.setText("...");
 			schemaButton.setText("...");
 		}
@@ -133,7 +140,7 @@ public class SelectVersionPanel extends JPanel{
 	/**
 	 * removes all the items
 	 */
-	private void initCombos(){
+	private void initCombos() {
 		formatCombo.removeAllItems();
 		writerCombo.removeAllItems();
 	}
@@ -141,16 +148,17 @@ public class SelectVersionPanel extends JPanel{
 	/**
 	 * removes all the items
 	 */
-	public void initializeSelection(){
+	public void initializeSelection() {
 		formatCombo.removeAllItems();
 	}
 
 	/**
 	 * Sets the listener for the buttons
+	 * 
 	 * @param listener
-	 * The listener to set
+	 *            The listener to set
 	 */
-	public void addListener(SelectVersionListener listener){
+	public void addListener(SelectVersionListener listener) {
 		cancelButton.setActionCommand(listener.CANCEL_BUTTON);
 		cancelButton.addActionListener(listener);
 		exportButton.setActionCommand(listener.EXPORT_BUTTON);
@@ -160,16 +168,16 @@ public class SelectVersionPanel extends JPanel{
 		fileButton.setActionCommand(listener.FILE_BUTTON);
 		fileButton.addActionListener(listener);
 		schemaButton.setActionCommand(listener.SCHEMA_BUTTON);
-		schemaButton.addActionListener(listener);	
+		schemaButton.addActionListener(listener);
 		schemaCheck.addItemListener(listener);
-	}	
+	}
 
 	/**
 	 * @return the selected writer
 	 */
-	public GPEWriterHandler getSelectedWriter(){
-		if (writerCombo.getItemCount() > 0){
-			return (GPEWriterHandler)writerCombo.getSelectedItem();
+	public GPEWriterHandler getSelectedWriter() {
+		if (writerCombo.getItemCount() > 0) {
+			return (GPEWriterHandler) writerCombo.getSelectedItem();
 		}
 		return null;
 	}
@@ -177,84 +185,87 @@ public class SelectVersionPanel extends JPanel{
 	/**
 	 * @return the selected writer
 	 */
-	public String getSelectedFile(){
+	public String getSelectedFile() {
 		return fileText.getText();
 	}
-	
+
 	/**
 	 * @return the selected XML schema
 	 */
-	public String getSelectedXMLSchema(){
+	public String getSelectedXMLSchema() {
 		return schemaText.getText();
 	}
 
 	/**
 	 * @return the selected format
 	 */
-	public String getSelectedFormat(){
-		if (getFormatCombo().getItemCount() > 0){
-			return (String)formatCombo.getSelectedItem();
+	public String getSelectedFormat() {
+		if (getFormatCombo().getItemCount() > 0) {
+			return (String) formatCombo.getSelectedItem();
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Set a XML schema
 	 */
-	public void setXMLSchema(String schema){
+	public void setXMLSchema(String schema) {
 		schemaText.setText(schema);
 	}
-	
+
 	/**
 	 * Select a format
 	 */
-	public void setSelectedFormat(String format){
+	public void setSelectedFormat(String format) {
 		formatCombo.setSelectedItem(format);
 	}
 
 	/**
 	 * Sets a file
 	 */
-	public void setFile(String file){
+	public void setFile(String file) {
 		fileText.setText(file);
 	}
 
 	/**
 	 * Adds a new writer
+	 * 
 	 * @param writer
-	 * The writer to add
+	 *            The writer to add
 	 */
-	public void addWriter(GPEWriterHandler writer){
+	public void addWriter(GPEWriterHandler writer) {
 		writerCombo.addItem(writer);
 	}
 
 	/**
 	 * Adds a new format
+	 * 
 	 * @param format
-	 * The format to add
+	 *            The format to add
 	 */
-	public void addFormat(String format){
+	public void addFormat(String format) {
 		formatCombo.addItem(format);
 	}
-	
+
 	/**
 	 * @return If the XML schema has to be created
 	 */
-	public boolean isXMLSchemaCreated(){
+	public boolean isXMLSchemaCreated() {
 		return schemaCheck.isSelected();
 	}
-	
+
 	/**
 	 * Enable or disable the XML schema generation
+	 * 
 	 * @param isEnabled
-	 * If is or not is enabled
+	 *            If is or not is enabled
 	 */
-	public void setSchemaEnabled(boolean isEnabled){
+	public void setSchemaEnabled(boolean isEnabled) {
 		getSchemaCheck().setEnabled(isEnabled);
 		getSchemaCheck().setSelected(isEnabled);
 		getSchemaButton().setEnabled(isEnabled);
 		getSchemaText().setEnabled(isEnabled);
-		if (isEnabled){
+		if (isEnabled) {
 			getSchemaText().setText(getDefaultSchema());
 		}
 	}
@@ -263,9 +274,10 @@ public class SelectVersionPanel extends JPanel{
 	 * @return the buttonsPanel
 	 */
 	private JPanel getButtonsPanel() {
-		if (buttonsPanel == null){
+		if (buttonsPanel == null) {
 			buttonsPanel = new JPanel();
-			buttonsPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+			buttonsPanel.setLayout(new java.awt.FlowLayout(
+					java.awt.FlowLayout.RIGHT));
 			buttonsPanel.add(getCancelButton());
 			buttonsPanel.add(getExportButton());
 		}
@@ -276,7 +288,7 @@ public class SelectVersionPanel extends JPanel{
 	 * @return the cancelButton
 	 */
 	private JButton getCancelButton() {
-		if (cancelButton == null){
+		if (cancelButton == null) {
 			cancelButton = new JButton();
 		}
 		return cancelButton;
@@ -286,7 +298,7 @@ public class SelectVersionPanel extends JPanel{
 	 * @return the componentsPanel
 	 */
 	private JPanel getComponentsPanel() {
-		if (componentsPanel == null){
+		if (componentsPanel == null) {
 			componentsPanel = new JPanel();
 			componentsPanel.setLayout(new java.awt.GridBagLayout());
 			java.awt.GridBagConstraints gridBagConstraints;
@@ -297,7 +309,7 @@ public class SelectVersionPanel extends JPanel{
 			gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints.weightx = 1.0;
 			gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-			
+
 			gridBagConstraints = new java.awt.GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.gridy = 7;
@@ -305,7 +317,7 @@ public class SelectVersionPanel extends JPanel{
 			gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
 			componentsPanel.add(getFormatLabel(), gridBagConstraints);
-		
+
 			gridBagConstraints = new java.awt.GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.gridy = 8;
@@ -321,7 +333,7 @@ public class SelectVersionPanel extends JPanel{
 			gridBagConstraints.gridwidth = 2;
 			gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints.insets = new java.awt.Insets(5, 2, 2, 2);
-			
+
 			gridBagConstraints = new java.awt.GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.gridy = 5;
@@ -329,7 +341,7 @@ public class SelectVersionPanel extends JPanel{
 			gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
 			componentsPanel.add(getWriterLabel(), gridBagConstraints);
-			
+
 			gridBagConstraints = new java.awt.GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.gridy = 6;
@@ -354,7 +366,7 @@ public class SelectVersionPanel extends JPanel{
 			gridBagConstraints.weightx = 1.0;
 			gridBagConstraints.insets = new java.awt.Insets(2, 2, 5, 2);
 			componentsPanel.add(getFileText(), gridBagConstraints);
-	
+
 			gridBagConstraints = new java.awt.GridBagConstraints();
 			gridBagConstraints.gridx = 1;
 			gridBagConstraints.gridy = 1;
@@ -376,13 +388,13 @@ public class SelectVersionPanel extends JPanel{
 			gridBagConstraints.weightx = 1.0;
 			gridBagConstraints.insets = new java.awt.Insets(2, 2, 5, 2);
 			componentsPanel.add(getSchemaText(), gridBagConstraints);
-			
+
 			gridBagConstraints = new java.awt.GridBagConstraints();
 			gridBagConstraints.gridx = 1;
 			gridBagConstraints.gridy = 4;
 			gridBagConstraints.insets = new java.awt.Insets(2, 2, 5, 2);
-			componentsPanel.add(getSchemaButton(), gridBagConstraints);		
-			
+			componentsPanel.add(getSchemaButton(), gridBagConstraints);
+
 			gridBagConstraints = new java.awt.GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.gridy = 3;
@@ -399,7 +411,7 @@ public class SelectVersionPanel extends JPanel{
 	 * @return the exportButton
 	 */
 	private JButton getExportButton() {
-		if (exportButton == null){
+		if (exportButton == null) {
 			exportButton = new JButton();
 		}
 		return exportButton;
@@ -409,7 +421,7 @@ public class SelectVersionPanel extends JPanel{
 	 * @return the fileButton
 	 */
 	private javax.swing.JButton getFileButton() {
-		if (fileButton == null){
+		if (fileButton == null) {
 			fileButton = new javax.swing.JButton();
 			fileButton.setMaximumSize(new java.awt.Dimension(25, 25));
 			fileButton.setMinimumSize(new java.awt.Dimension(25, 25));
@@ -422,7 +434,7 @@ public class SelectVersionPanel extends JPanel{
 	 * @return the fileLabel
 	 */
 	private JLabel getFileLabel() {
-		if (fileLabel == null){
+		if (fileLabel == null) {
 			fileLabel = new JLabel();
 		}
 		return fileLabel;
@@ -432,7 +444,7 @@ public class SelectVersionPanel extends JPanel{
 	 * @return the fileText
 	 */
 	private JTextField getFileText() {
-		if (fileText == null){
+		if (fileText == null) {
 			fileText = new JTextField();
 			fileText.setText(getDefaultFileName());
 		}
@@ -443,7 +455,7 @@ public class SelectVersionPanel extends JPanel{
 	 * @return the formatCombo
 	 */
 	private JComboBox getFormatCombo() {
-		if (formatCombo == null){
+		if (formatCombo == null) {
 			formatCombo = new JComboBox();
 		}
 		return formatCombo;
@@ -453,7 +465,7 @@ public class SelectVersionPanel extends JPanel{
 	 * @return the formatLabel
 	 */
 	private JLabel getFormatLabel() {
-		if (formatLabel == null){
+		if (formatLabel == null) {
 			formatLabel = new JLabel();
 		}
 		return formatLabel;
@@ -463,7 +475,7 @@ public class SelectVersionPanel extends JPanel{
 	 * @return the schemaButton
 	 */
 	private javax.swing.JButton getSchemaButton() {
-		if (schemaButton == null){
+		if (schemaButton == null) {
 			schemaButton = new javax.swing.JButton();
 			schemaButton.setPreferredSize(new java.awt.Dimension(25, 25));
 		}
@@ -474,9 +486,10 @@ public class SelectVersionPanel extends JPanel{
 	 * @return the schemaCheck
 	 */
 	private JCheckBox getSchemaCheck() {
-		if (schemaCheck == null){
+		if (schemaCheck == null) {
 			schemaCheck = new JCheckBox();
-			schemaCheck.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+			schemaCheck.setBorder(javax.swing.BorderFactory.createEmptyBorder(
+					0, 0, 0, 0));
 			schemaCheck.setMargin(new java.awt.Insets(0, 0, 0, 0));
 		}
 		return schemaCheck;
@@ -486,7 +499,7 @@ public class SelectVersionPanel extends JPanel{
 	 * @return the schemaLabel
 	 */
 	private JLabel getSchemaLabel() {
-		if (schemaLabel == null){
+		if (schemaLabel == null) {
 			schemaLabel = new JLabel();
 		}
 		return schemaLabel;
@@ -496,17 +509,17 @@ public class SelectVersionPanel extends JPanel{
 	 * @return the schemaText
 	 */
 	private JTextField getSchemaText() {
-		if (schemaText == null){
+		if (schemaText == null) {
 			schemaText = new JTextField();
 		}
 		return schemaText;
 	}
-		
+
 	/**
 	 * @return the writerCombo
 	 */
 	private JComboBox getWriterCombo() {
-		if (writerCombo == null){
+		if (writerCombo == null) {
 			writerCombo = new JComboBox();
 		}
 		return writerCombo;
@@ -516,7 +529,7 @@ public class SelectVersionPanel extends JPanel{
 	 * @return the writerLabel
 	 */
 	private JLabel getWriterLabel() {
-		if (writerLabel == null){
+		if (writerLabel == null) {
 			writerLabel = new JLabel();
 		}
 		return writerLabel;
@@ -526,25 +539,26 @@ public class SelectVersionPanel extends JPanel{
 	 * @return the defaultFile
 	 */
 	public String getDefaultFileName() {
-		if (getSelectedFormat() != null){
-			return defaultDir + defaultFile + "." + getSelectedWriter().getFileExtension().toLowerCase();
-		}else{
+		if (getSelectedFormat() != null) {
+			return defaultDir + defaultFile + "."
+					+ getSelectedWriter().getFileExtension().toLowerCase();
+		} else {
 			return defaultDir + defaultFile;
 		}
 	}
-	
+
 	/**
 	 * @return the defaultSchema
 	 */
 	private String getDefaultSchema() {
 		String sFile = getSelectedFile();
-		if (sFile.length() > 0){
+		if (sFile.length() > 0) {
 			File file = new File(sFile);
 			String extension = FileUtils.getFileExtension(file);
 			sFile = sFile.substring(0, sFile.length() - extension.length());
 			sFile = sFile + ".xsd";
 			return sFile;
-		}else{
+		} else {
 			return defaultDir + defaultFile + ".xsd";
 		}
 	}

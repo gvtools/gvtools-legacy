@@ -43,6 +43,5 @@ package org.gvsig.symbology.fmap.symbols;
 import com.iver.cit.gvsig.fmap.core.symbols.IMarkerSymbol;
 
 public interface IChartSymbol extends IMarkerSymbol {
-	
 
 }

@@ -2,7 +2,7 @@ package com.hardcode.gdbms.engine.internalExceptions;
 
 /**
  * timer executable task
- *
+ * 
  * @author Fernando González Cortés
  */
 public interface Task {

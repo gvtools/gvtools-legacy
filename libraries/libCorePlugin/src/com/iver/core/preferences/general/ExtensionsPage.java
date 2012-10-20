@@ -19,19 +19,21 @@ public class ExtensionsPage extends AbstractPreferencePage {
 	 */
 	public ExtensionsPage() {
 		super();
-		icon = PluginServices.getIconTheme().get("aplication-preferences-extensions");
+		icon = PluginServices.getIconTheme().get(
+				"aplication-preferences-extensions");
 		setParentID(GeneralPage.class.getName());
 		initialize();
 	}
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
 		jLabel = new JLabel();
-		jLabel.setText(PluginServices.getText(this,"configurar_todas_las_extensiones"));
+		jLabel.setText(PluginServices.getText(this,
+				"configurar_todas_las_extensiones"));
 		this.setLayout(new BorderLayout());
 		this.setSize(300, 200);
 		this.add(jLabel, java.awt.BorderLayout.CENTER);
@@ -42,14 +44,12 @@ public class ExtensionsPage extends AbstractPreferencePage {
 	}
 
 	public String getTitle() {
-		return PluginServices.getText(this,"extensiones");
+		return PluginServices.getText(this, "extensiones");
 	}
 
 	public JPanel getPanel() {
 		return this;
 	}
-
-
 
 	public void initializeValues() {
 	}

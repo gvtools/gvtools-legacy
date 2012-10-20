@@ -55,51 +55,46 @@ import org.gvsig.xmlschema.som.IXSElementDeclaration;
  *
  */
 /**
- * Abstract class that creates a default schema that
- * can be used by other classes to do tests
+ * Abstract class that creates a default schema that can be used by other
+ * classes to do tests
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class GPENotSupportedSchema extends GPEWriterWithSchemaBaseTest{
+public abstract class GPENotSupportedSchema extends GPEWriterWithSchemaBaseTest {
 	private String xsLayerName = "cities";
 	private String xsLayerType = "citiesType";
-	private String xsLayerType_ = IXSComplexTypeDefinition.SEQUENCE;	
+	private String xsLayerType_ = IXSComplexTypeDefinition.SEQUENCE;
 	private String xsFeature1Name = "city";
-	private String xsFeature1Type = "cityType";	
-	private String xsFeature1Type_ = IXSComplexTypeDefinition.SEQUENCE;	
+	private String xsFeature1Type = "cityType";
+	private String xsFeature1Type_ = IXSComplexTypeDefinition.SEQUENCE;
 	private String xsFeature1ContentType = IXSContentType.WITOUT_CONTENT;
-	private String xsFeature1ContentRestriction = IXSContentType.WITOUT_RESTRICTION;	
+	private String xsFeature1ContentRestriction = IXSContentType.WITOUT_RESTRICTION;
 	private String xsFeature1Element1Name = "Population";
 	private String xsFeature1Element1Type = "xs:integer";
 	private String xsFeature1Element2Name = "Country";
 	private String xsFeature1Element2Type = "xs:string";
 	private String xsFeature1Element3Name = "Capital";
 	private String xsFeature1Element3Type = "xs:boolean";
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.schemas.GPEWriterWithSchemaBaseTest#writeSchema()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writers.schemas.GPEWriterWithSchemaBaseTest#writeSchema()
 	 */
-	public void writeSchema(){
+	public void writeSchema() {
 		getSchema().addElement(xsLayerName, xsLayerType);
 		IXSComplexTypeDefinition citiesType = getSchema().addComplexType(
-				xsLayerType,
-				xsLayerType_, 
-				IXSComplexContent.WITOUT_CONTENT ,
+				xsLayerType, xsLayerType_, IXSComplexContent.WITOUT_CONTENT,
 				IXSComplexContent.WITOUT_RESTRICTION);
 		IXSElementDeclaration city = citiesType.addElement(xsFeature1Name,
-				xsFeature1Type,
-				true,
-				0,
-				IXSElementDeclaration.MAX_OCCURS_UNBOUNDED);		
-		IXSComplexTypeDefinition cityType = city.addComplexType(xsFeature1Type_, xsFeature1ContentType, xsFeature1ContentRestriction);		
-		cityType.addElement(
-				xsFeature1Element1Name,
-				xsFeature1Element1Type);		
-		cityType.addElement(
-				xsFeature1Element2Name,
-				xsFeature1Element2Type);	
-		cityType.addElement(
-				xsFeature1Element3Name,
-				xsFeature1Element3Type);
-	}	
+				xsFeature1Type, true, 0,
+				IXSElementDeclaration.MAX_OCCURS_UNBOUNDED);
+		IXSComplexTypeDefinition cityType = city.addComplexType(
+				xsFeature1Type_, xsFeature1ContentType,
+				xsFeature1ContentRestriction);
+		cityType.addElement(xsFeature1Element1Name, xsFeature1Element1Type);
+		cityType.addElement(xsFeature1Element2Name, xsFeature1Element2Type);
+		cityType.addElement(xsFeature1Element3Name, xsFeature1Element3Type);
+	}
 }

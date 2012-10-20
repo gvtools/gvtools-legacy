@@ -58,20 +58,21 @@ import org.gvsig.exceptions.BaseException;
  *
  */
 /**
- * This warning is throwed when the parser doesn't
- * know the SRS
+ * This warning is throwed when the parser doesn't know the SRS
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class SrsUnknownWarning extends BaseException{
+public class SrsUnknownWarning extends BaseException {
 	private static final long serialVersionUID = 5269899884175171849L;
 	private String srs = null;
-	
+
 	/**
 	 * Cosntructor
+	 * 
 	 * @param srs
-	 * Unknown SRS
+	 *            Unknown SRS
 	 */
-	public SrsUnknownWarning(String srs){
+	public SrsUnknownWarning(String srs) {
 		this.srs = srs;
 		initialize();
 	}
@@ -81,12 +82,13 @@ public class SrsUnknownWarning extends BaseException{
 	 */
 	private void initialize() {
 		messageKey = "gpe_srs_unknown_warning";
-		formatString = "The SRS %(srs) is unknokn.";				
+		formatString = "The SRS %(srs) is unknokn.";
 		code = serialVersionUID;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map values() {

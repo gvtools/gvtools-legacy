@@ -21,17 +21,18 @@ package org.gvsig.gui.beans.buttonspanel;
 import java.awt.FlowLayout;
 
 import org.gvsig.gui.beans.TestUI;
+
 /**
  * <code>TestButtonsPanel</code> es un test para comprobar el funcionamiento de
  * la clase <code>ButtonsPanel</code>.
- *
+ * 
  * @version 15/03/2007
  * @author BorSanZa - Borja Sanchez Zamorano (borja.sanchez@iver.es)
  */
 public class TestButtonsPanel implements ButtonsPanelListener {
 	private TestUI frame = new TestUI("TestButtonsPanel");
 
-	public TestButtonsPanel(){
+	public TestButtonsPanel() {
 		frame.getContentPane().setLayout(new java.awt.GridLayout(0, 1));
 
 		frame.setSize(320, 320);
@@ -60,13 +61,13 @@ public class TestButtonsPanel implements ButtonsPanelListener {
 		bp.addButton("1", 55);
 		bp.addButton("bp.addButtonPressedListener(this);", 56);
 
-//		bp.getButton(ButtonsPanel.BUTTON_ACCEPT).isEnabled();
+		// bp.getButton(ButtonsPanel.BUTTON_ACCEPT).isEnabled();
 
 		frame.getContentPane().add(bp);
 		frame.setVisible(true);
 	}
 
-	public static void main(String[] args){
+	public static void main(String[] args) {
 		new TestButtonsPanel();
 	}
 

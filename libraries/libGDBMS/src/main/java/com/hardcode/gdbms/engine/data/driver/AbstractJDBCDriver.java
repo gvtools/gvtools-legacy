@@ -84,7 +84,8 @@ public abstract class AbstractJDBCDriver implements AlphanumericDBDriver,
 	 * @see com.hardcode.gdbms.engine.data.driver.DBDriver#executeSQL(java.sql.Connection,
 	 *      java.lang.String)
 	 */
-	public void open(Connection con, String sql) throws SQLException, OpenDriverException {
+	public void open(Connection con, String sql) throws SQLException,
+			OpenDriverException {
 		jdbcSupport = JDBCSupport.newJDBCSupport(con, sql);
 		Statement st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
 				ResultSet.CONCUR_UPDATABLE);
@@ -92,8 +93,7 @@ public abstract class AbstractJDBCDriver implements AlphanumericDBDriver,
 		if (res.getConcurrency() != ResultSet.CONCUR_UPDATABLE) {
 			System.err.println("Error: No se puede editar la tabla " + sql);
 			jdbcWriter = null;
-		} else
-		{
+		} else {
 			jdbcWriter.initialize(con, res);
 			jdbcWriter.setCreateTable(false);
 			jdbcWriter.setWriteAll(false);
@@ -102,7 +102,7 @@ public abstract class AbstractJDBCDriver implements AlphanumericDBDriver,
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public int getFieldCount() throws ReadDriverException {
@@ -111,10 +111,10 @@ public abstract class AbstractJDBCDriver implements AlphanumericDBDriver,
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param fieldId
 	 *            DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public String getFieldName(int fieldId) throws ReadDriverException {
@@ -123,10 +123,10 @@ public abstract class AbstractJDBCDriver implements AlphanumericDBDriver,
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param i
 	 *            DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public int getFieldType(int i) throws ReadDriverException {
@@ -135,12 +135,12 @@ public abstract class AbstractJDBCDriver implements AlphanumericDBDriver,
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param rowIndex
 	 *            DOCUMENT ME!
 	 * @param fieldId
 	 *            DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public Value getFieldValue(long rowIndex, int fieldId)
@@ -150,7 +150,7 @@ public abstract class AbstractJDBCDriver implements AlphanumericDBDriver,
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public long getRowCount() throws ReadDriverException {
@@ -275,26 +275,22 @@ public abstract class AbstractJDBCDriver implements AlphanumericDBDriver,
 	}
 
 	/**
-	 * Return the default tabledefinition (only
-	 * has field description values).
-	 * Each driver that inheret this class must overwrite
-	 * this.
-	 *
+	 * Return the default tabledefinition (only has field description values).
+	 * Each driver that inheret this class must overwrite this.
+	 * 
 	 * */
-	public ITableDefinition getTableDefinition() throws ReadDriverException{
-		TableDefinition tableDef = new TableDefinition();				
+	public ITableDefinition getTableDefinition() throws ReadDriverException {
+		TableDefinition tableDef = new TableDefinition();
 		tableDef.setFieldsDesc(getFieldsDescription());
 		return tableDef;
 	}
 
-
-	/*azabala
-	TODO Copypasteado de SelectableDataSource.
-	¿No estaría mejor aquí?
-	*
-	*/
-	private FieldDescription[] getFieldsDescription() throws ReadDriverException
-	{
+	/*
+	 * azabala TODO Copypasteado de SelectableDataSource. ¿No estaría mejor
+	 * aquí?
+	 */
+	private FieldDescription[] getFieldsDescription()
+			throws ReadDriverException {
 		int numFields = getFieldCount();
 		FieldDescription[] fieldsDescrip = new FieldDescription[numFields];
 		for (int i = 0; i < numFields; i++) {
@@ -303,13 +299,12 @@ public abstract class AbstractJDBCDriver implements AlphanumericDBDriver,
 			fieldsDescrip[i].setFieldType(type);
 			fieldsDescrip[i].setFieldName(getFieldName(i));
 			fieldsDescrip[i].setFieldLength(getFieldWidth(i));
-			if (NumberUtilities.isNumeric(type))
-			{
+			if (NumberUtilities.isNumeric(type)) {
 				if (!NumberUtilities.isNumericInteger(type))
-					// TODO: If there is a lost in precision, this should be changed.
+					// TODO: If there is a lost in precision, this should be
+					// changed.
 					fieldsDescrip[i].setFieldDecimalCount(6);
-			}
-			else
+			} else
 				fieldsDescrip[i].setFieldDecimalCount(0);
 			// TODO: ¿DEFAULTVALUE?
 			// fieldsDescrip[i].setDefaultValue(get)

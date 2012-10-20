@@ -56,78 +56,80 @@ import org.gvsig.remoteClient.gml.exceptions.GMLExceptionList;
  *
  */
 /************************************************************************
- * Class < GMLFileParseInfo >											*
- * 																		*
- * This Class gets all the warnings from the GML Parser, the GML parser	*
- * always tries parse the GML file even though it isn't a standard but	*
- * it has to info the user. 											*
- * 																		*
- * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)				*
- ************************************************************************/	
+ * Class < GMLFileParseInfo > * * This Class gets all the warnings from the GML
+ * Parser, the GML parser * always tries parse the GML file even though it isn't
+ * a standard but * it has to info the user. * *
+ * 
+ * @author Carlos Sánchez Periñán (sanchez_carper@gva.es) *
+ ************************************************************************/
 public class GMLWarningInfo {
-	
+
 	private GMLExceptionList warning;
-		
-	public GMLWarningInfo(){
-		warning=new GMLExceptionList();
+
+	public GMLWarningInfo() {
+		warning = new GMLExceptionList();
 	}
-	
+
 	/**
-	 * This method return true if there aren't warnings else returns false 
+	 * This method return true if there aren't warnings else returns false
+	 * 
 	 * @return boolean
 	 */
-	public boolean areWarnings(){
-		if (warning.isEmpty()){
-			return false;						
+	public boolean areWarnings() {
+		if (warning.isEmpty()) {
+			return false;
 		}
 		return true;
 	}
+
 	/**
-	 * This method return the list of warnings parsing the GML 
+	 * This method return the list of warnings parsing the GML
+	 * 
 	 * @return ArrayList of warnings
 	 */
-	public GMLExceptionList getGMLWarningList(){
+	public GMLExceptionList getGMLWarningList() {
 		return warning;
 	}
-	
+
 	/**
-	 * This method inserts a new warning into the list 
+	 * This method inserts a new warning into the list
+	 * 
 	 * @args int new warning
 	 */
-	public void setElement(GMLException war){
-		//Only we add a warning when it is new
-		if (warning.contains(war)==false)
-		{
+	public void setElement(GMLException war) {
+		// Only we add a warning when it is new
+		if (warning.contains(war) == false) {
 			warning.add((war));
 		}
 	}
+
 	/**
-	 * This method returns a warning from the list 
+	 * This method returns a warning from the list
+	 * 
 	 * @args int index
 	 * @return int warning
 	 */
-	public GMLException getElement(int index, GMLExceptionList war){
-		//it returns the int value of a warning or 0 if it doesn't exists
-		if (war.isEmpty()==false)
-		{
-			if (index < war.size()){
-				return (GMLException)war.get(index);
+	public GMLException getElement(int index, GMLExceptionList war) {
+		// it returns the int value of a warning or 0 if it doesn't exists
+		if (war.isEmpty() == false) {
+			if (index < war.size()) {
+				return (GMLException) war.get(index);
 			}
 		}
 		return null;
 	}
-	
+
 	/**
-	 * This method inserts a new warning list 
+	 * This method inserts a new warning list
+	 * 
 	 * @args int new warning
 	 */
-	public void setGMLWarningList(GMLExceptionList war){
-		int i=0;
+	public void setGMLWarningList(GMLExceptionList war) {
+		int i = 0;
 		GMLException info;
-		while(i < war.size()){
-			info = this.getElement(i,war);
-			if (info != null)
-			{
+		while (i < war.size()) {
+			info = this.getElement(i, war);
+			if (info != null) {
 				this.setElement(info);
 			}
 			i++;

@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.cad;
 
 import java.awt.geom.Rectangle2D;
@@ -67,39 +67,45 @@ import com.iver.cit.gvsig.fmap.layers.FBitSet;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.SpatialCache;
 import com.iver.cit.gvsig.layers.VectorialLayerEdited;
+
 /**
  * Utility methods to work with CAD extension
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class CADUtil {
-	
+
 	/**
 	 * Adds a new feature to a vectorial layer edited
 	 * 
-	 * @param vle vectorial layer to add the new feature
-	 * @param geometry new feature's geometry
-	 * @param transactionDesc description of the transaction
-	 * @param values new feature's attributes
+	 * @param vle
+	 *            vectorial layer to add the new feature
+	 * @param geometry
+	 *            new feature's geometry
+	 * @param transactionDesc
+	 *            description of the transaction
+	 * @param values
+	 *            new feature's attributes
 	 * 
 	 * @return index of the new feature in the layer
 	 */
-	public static int addFeature(VectorialLayerEdited vle,
-						   		  IFeature newFeature,
-						   		  String transactionDesc) {
+	public static int addFeature(VectorialLayerEdited vle, IFeature newFeature,
+			String transactionDesc) {
 		int index = 0;
 		VectorialEditableAdapter vea = vle.getVEA();
 		try {
-			
-			index = vea.addRow(newFeature, transactionDesc, EditionEvent.GRAPHIC);
-			SpatialCache spatialCache=((FLyrVect)vle.getLayer()).getSpatialCache();
+
+			index = vea.addRow(newFeature, transactionDesc,
+					EditionEvent.GRAPHIC);
+			SpatialCache spatialCache = ((FLyrVect) vle.getLayer())
+					.getSpatialCache();
 			IGeometry geometry = newFeature.getGeometry();
 			Rectangle2D r = geometry.getBounds2D();
 			if (geometry.getGeometryType() == FShape.POINT) {
-				r = new Rectangle2D.Double(r.getX(),r.getY(),1,1);
+				r = new Rectangle2D.Double(r.getX(), r.getY(), 1, 1);
 			}
-			spatialCache.insert(r,geometry);
+			spatialCache.insert(r, geometry);
 		} catch (ValidateRowException e) {
 			NotificationManager.addError(e);
 		} catch (ReadDriverException e) {
@@ -107,38 +113,37 @@ public class CADUtil {
 		}
 		return vea.getInversedIndex(index);
 	}
-	
-	public static void modifyFeature(VectorialLayerEdited vle, 
-							  				 int index, 
-							    String descTransaction, 
-							    		IFeature row) {
+
+	public static void modifyFeature(VectorialLayerEdited vle, int index,
+			String descTransaction, IFeature row) {
 		try {
 			vle.getVEA().modifyRow(index, row, descTransaction,
 					EditionEvent.GRAPHIC);
 		} catch (ValidateRowException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		} catch (ExpansionFileWriteException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
-//		draw(row.getGeometry().cloneGeometry());
+		// draw(row.getGeometry().cloneGeometry());
 	}
-	
+
 	/**
-	 * Returns the selected features in a VectorialLayerEdited.
-	 * If the selection is previous to the edition beginning, it fills
-	 * selected row's list
+	 * Returns the selected features in a VectorialLayerEdited. If the selection
+	 * is previous to the edition beginning, it fills selected row's list
+	 * 
 	 * @param vle
 	 * @return
 	 */
-	public static List getSelectedFeatures(VectorialLayerEdited vle){
+	public static List getSelectedFeatures(VectorialLayerEdited vle) {
 		ArrayList selection = vle.getSelectedRow();
-		if( selection.size() == 0){
+		if (selection.size() == 0) {
 			VectorialEditableAdapter vea = vle.getVEA();
 			try {
 				FBitSet bitset = vea.getSelection();
-				for (int j = bitset.nextSetBit(0);j >= 0;j = bitset.nextSetBit(j + 1)){
+				for (int j = bitset.nextSetBit(0); j >= 0; j = bitset
+						.nextSetBit(j + 1)) {
 					IRowEdited rowEd = vea.getRow(j);
 					selection.add(rowEd);
 				}
@@ -147,7 +152,7 @@ public class CADUtil {
 			} catch (ReadDriverException e) {
 				e.printStackTrace();
 			}
-		}//selection size
+		}// selection size
 		return selection;
 	}
 }

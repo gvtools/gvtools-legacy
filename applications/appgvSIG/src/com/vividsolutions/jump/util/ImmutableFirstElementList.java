@@ -44,116 +44,118 @@ import java.util.ListIterator;
 public class ImmutableFirstElementList implements List {
 
 	private List list = new ArrayList();
-	
+
 	public ImmutableFirstElementList(Object firstElement) {
 		list.add(firstElement);
 	}
 
-    public int size() {
-        return list.size();
-    }
+	public int size() {
+		return list.size();
+	}
 
-    public boolean isEmpty() {
-        return list.isEmpty();
-    }
+	public boolean isEmpty() {
+		return list.isEmpty();
+	}
 
-    public boolean contains(Object o) {
-        return list.contains(o);
-    }
+	public boolean contains(Object o) {
+		return list.contains(o);
+	}
 
-    public Iterator iterator() {
-    	//Prevent Iterator#remove. [Jon Aquino]
-        return Collections.unmodifiableList(list).iterator();
-    }
+	public Iterator iterator() {
+		// Prevent Iterator#remove. [Jon Aquino]
+		return Collections.unmodifiableList(list).iterator();
+	}
 
-    public Object[] toArray() {
-        return list.toArray();
-    }
+	public Object[] toArray() {
+		return list.toArray();
+	}
 
-    public Object[] toArray(Object[] a) {
-        return list.toArray(a);
-    }
+	public Object[] toArray(Object[] a) {
+		return list.toArray(a);
+	}
 
-    public boolean add(Object o) {
-        return list.add(o);
-    }
+	public boolean add(Object o) {
+		return list.add(o);
+	}
 
-    public boolean remove(Object o) {
-    	//An element equal to the first element may exist later in the list. [Jon Aquino] 
+	public boolean remove(Object o) {
+		// An element equal to the first element may exist later in the list.
+		// [Jon Aquino]
 		return list.subList(1, list.size()).remove(o);
-    }
+	}
 
-    public boolean containsAll(Collection c) {
-        return list.containsAll(c);
-    }
+	public boolean containsAll(Collection c) {
+		return list.containsAll(c);
+	}
 
-    public boolean addAll(Collection c) {
-        return list.addAll(c);
-    }
+	public boolean addAll(Collection c) {
+		return list.addAll(c);
+	}
 
-    public boolean addAll(int index, Collection c) {
+	public boolean addAll(int index, Collection c) {
 		return list.addAll(index == 0 ? 1 : index, c);
-    }
+	}
 
-    public boolean removeAll(Collection c) {
+	public boolean removeAll(Collection c) {
 		return list.subList(1, list.size()).remove(c);
-    }
+	}
 
-    public boolean retainAll(Collection c) {
+	public boolean retainAll(Collection c) {
 		return list.subList(1, list.size()).retainAll(c);
-    }
+	}
 
-    public void clear() {
+	public void clear() {
 		list.subList(1, list.size()).clear();
-    }
+	}
 
-    public Object get(int index) {
-        return list.get(index);
-    }
+	public Object get(int index) {
+		return list.get(index);
+	}
 
-    public Object set(int index, Object element) {
-        if (index == 0) {
-        	return get(0);
-        }
-        return list.set(index, element);
-    }
+	public Object set(int index, Object element) {
+		if (index == 0) {
+			return get(0);
+		}
+		return list.set(index, element);
+	}
 
-    public void add(int index, Object element) {
+	public void add(int index, Object element) {
 		list.add(index == 0 ? 1 : index, element);
-    }
+	}
 
-    public Object remove(int index) {
-        if (index == 0) { return get(0);
-        }
-        return list.remove(index);
-    }
+	public Object remove(int index) {
+		if (index == 0) {
+			return get(0);
+		}
+		return list.remove(index);
+	}
 
-    public int indexOf(Object o) {
-        return list.indexOf(o);
-    }
+	public int indexOf(Object o) {
+		return list.indexOf(o);
+	}
 
-    public int lastIndexOf(Object o) {
-        return list.lastIndexOf(o);
-    }
+	public int lastIndexOf(Object o) {
+		return list.lastIndexOf(o);
+	}
 
-    public ListIterator listIterator() {
-		//Prevent Iterator#remove. [Jon Aquino]
-		return Collections.unmodifiableList(list).listIterator();    	
-    }
+	public ListIterator listIterator() {
+		// Prevent Iterator#remove. [Jon Aquino]
+		return Collections.unmodifiableList(list).listIterator();
+	}
 
-    public ListIterator listIterator(int index) {
-		//Prevent Iterator#remove. [Jon Aquino]
-		return Collections.unmodifiableList(list).listIterator(index);    	
-    }
+	public ListIterator listIterator(int index) {
+		// Prevent Iterator#remove. [Jon Aquino]
+		return Collections.unmodifiableList(list).listIterator(index);
+	}
 
-    public List subList(int fromIndex, int toIndex) {
-    	if (fromIndex > 0) {
-    		return list.subList(fromIndex, toIndex);
-    	}
-    	//A bit heavy-handed, but we don't want the first element to be
-    	//modified, moved, or removed. Future: allow the other elements
-    	//to be modified, moved, or removed. [Jon Aquino]
-		return Collections.unmodifiableList(list).subList(fromIndex, toIndex);    	    	
-    }
+	public List subList(int fromIndex, int toIndex) {
+		if (fromIndex > 0) {
+			return list.subList(fromIndex, toIndex);
+		}
+		// A bit heavy-handed, but we don't want the first element to be
+		// modified, moved, or removed. Future: allow the other elements
+		// to be modified, moved, or removed. [Jon Aquino]
+		return Collections.unmodifiableList(list).subList(fromIndex, toIndex);
+	}
 
 }

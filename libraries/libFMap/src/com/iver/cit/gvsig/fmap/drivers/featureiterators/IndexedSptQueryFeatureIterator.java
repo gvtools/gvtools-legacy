@@ -77,9 +77,9 @@ import com.iver.cit.gvsig.fmap.spatialindex.ISpatialIndex;
 
 /**
  * Feature iterator for a spatial query resolved with an spatial index.
- *
+ * 
  * @author azabala
- *
+ * 
  */
 public class IndexedSptQueryFeatureIterator extends SpatialQueryFeatureIterator {
 
@@ -89,8 +89,8 @@ public class IndexedSptQueryFeatureIterator extends SpatialQueryFeatureIterator 
 	private ISpatialIndex spatialIndex;
 
 	/**
-	 * List of indexes returned by te spatial index as result
-	 * of the query, over iterator is going to iterate
+	 * List of indexes returned by te spatial index as result of the query, over
+	 * iterator is going to iterate
 	 */
 	List<Integer> resultIdx;
 
@@ -101,7 +101,7 @@ public class IndexedSptQueryFeatureIterator extends SpatialQueryFeatureIterator 
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param source
 	 * @param sourceCrs
 	 * @param targetCrs
@@ -115,53 +115,54 @@ public class IndexedSptQueryFeatureIterator extends SpatialQueryFeatureIterator 
 			CoordinateReferenceSystem sourceCrs,
 			CoordinateReferenceSystem targetCrs, String[] fieldNames,
 			Rectangle2D spatialQuery, ISpatialIndex spatialIndex,
-			boolean fastIteration)throws ReadDriverException {
+			boolean fastIteration) throws ReadDriverException {
 		super(source, sourceCrs, targetCrs, fieldNames, spatialQuery,
 				fastIteration);
 		this.spatialIndex = spatialIndex;
 		this.fastIteration = fastIteration;
-		//the query is in the source projection, not in the targetProj
-		//(in super() spatialQuery is reprojected)
+		// the query is in the source projection, not in the targetProj
+		// (in super() spatialQuery is reprojected)
 		this.resultIdx = this.spatialIndex.query(this.rect);
 	}
 
-//	public boolean hasNext() {
-//		if (fastIteration) {
-//			if (resultIdx != null && currentFeature < resultIdx.size())
-//				return true;
-//			else
-//				return false;
-//		} else {
-//			try {
-//				while (true) {
-//					if (currentFeature >= resultIdx.size())
-//						return false;
-//					if (spatialChecker.intersects(rect,
-//							((Integer) resultIdx.get(currentFeature)).intValue()))
-//						return true;
-//					currentFeature++;
-//				}// while
-//			} catch (ExpansionFileReadException e) {
-//				e.printStackTrace();
-//				return false;
-//			} catch (ReadDriverException e) {
-//				e.printStackTrace();
-//				return false;
-//			}
-//
-//		}
-//	}
+	// public boolean hasNext() {
+	// if (fastIteration) {
+	// if (resultIdx != null && currentFeature < resultIdx.size())
+	// return true;
+	// else
+	// return false;
+	// } else {
+	// try {
+	// while (true) {
+	// if (currentFeature >= resultIdx.size())
+	// return false;
+	// if (spatialChecker.intersects(rect,
+	// ((Integer) resultIdx.get(currentFeature)).intValue()))
+	// return true;
+	// currentFeature++;
+	// }// while
+	// } catch (ExpansionFileReadException e) {
+	// e.printStackTrace();
+	// return false;
+	// } catch (ReadDriverException e) {
+	// e.printStackTrace();
+	// return false;
+	// }
+	//
+	// }
+	// }
 
-	public boolean hasNext(){
+	public boolean hasNext() {
 		try {
 			while (true) {
 				if (currentFeature >= resultIdx.size())
 					return false;
 				Integer indexObj = resultIdx.get(currentFeature);
-				if(indexObj != null){
-					if (spatialChecker.intersects(rect,indexObj.intValue()))//((Integer) resultIdx.get(currentFeature)).intValue()))
+				if (indexObj != null) {
+					if (spatialChecker.intersects(rect, indexObj.intValue()))// ((Integer)
+																				// resultIdx.get(currentFeature)).intValue()))
 						return true;
-				}else{
+				} else {
 					return false;
 				}
 				currentFeature++;
@@ -179,18 +180,21 @@ public class IndexedSptQueryFeatureIterator extends SpatialQueryFeatureIterator 
 		IGeometry geom;
 		if (fastIteration) {
 			try {
-				geom = chekIfCloned(source.getShape(spatialChecker.getIndexOfLast()));
+				geom = chekIfCloned(source.getShape(spatialChecker
+						.getIndexOfLast()));
 				reprojectIfNecessary(geom);
 			} catch (ExpansionFileReadException e) {
 				throw new ReadDriverException("Error accediendo al driver", e);
 			}
 		} else {
-			//we dont check if spatialChecker.returnShapes because when fastIteration = false,
-			//spatialChecker is PrecisseSpatialChecker (always return shapes)
+			// we dont check if spatialChecker.returnShapes because when
+			// fastIteration = false,
+			// spatialChecker is PrecisseSpatialChecker (always return shapes)
 			geom = spatialChecker.getLastGeometry();
 		}
 		Value[] regAtt = getValues(spatialChecker.getIndexOfLast());
-		DefaultFeature feat = new DefaultFeature(geom, regAtt, spatialChecker.getIndexOfLast() + "");
+		DefaultFeature feat = new DefaultFeature(geom, regAtt,
+				spatialChecker.getIndexOfLast() + "");
 		currentFeature++;
 		return feat;
 	}

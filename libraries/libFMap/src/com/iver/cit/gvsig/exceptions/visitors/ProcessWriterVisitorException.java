@@ -1,12 +1,11 @@
 package com.iver.cit.gvsig.exceptions.visitors;
 
-
 /**
  * @author Vicente Caballero Navarro
  */
 public class ProcessWriterVisitorException extends ProcessVisitorException {
-	public ProcessWriterVisitorException(String layer,Throwable exception) {
-		super(layer,exception);
+	public ProcessWriterVisitorException(String layer, Throwable exception) {
+		super(layer, exception);
 		init();
 		// initCause(exception);
 	}

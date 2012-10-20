@@ -46,29 +46,35 @@ import org.apache.log4j.Logger;
  */
 
 /**
- * This class has an static method that is an utility to load an image icon 
+ * This class has an static method that is an utility to load an image icon
  * 
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
 public class ImageIconItemInfoUtils {
 	// TRACE - DEBUG
-	private static Logger logger = Logger.getLogger(ImageIconItemInfoUtils.class.getClass());
+	private static Logger logger = Logger
+			.getLogger(ImageIconItemInfoUtils.class.getClass());
+
 	// END TRACE - DEBUG
-	
-    /**
-     * Returns an ImageIcon, or null if the path from class reference was invalid.
-     * 
-     * @param class_Reference A reference to a class which path will be the base to find the resource of the 'path' param
-     * @param path Path to the image to load
-     * @return javax.swing.ImageIcon
-     */
-    public static ImageIcon createImageIcon(Class class_Reference, String path) {
-    	java.net.URL imgURL = class_Reference.getResource(path);
-        if (imgURL != null) {
-            return new ImageIcon(imgURL);
-        } else {
-        	logger.debug("Couldn't find file: " + path);
-            return null;
-        }
-    }
+
+	/**
+	 * Returns an ImageIcon, or null if the path from class reference was
+	 * invalid.
+	 * 
+	 * @param class_Reference
+	 *            A reference to a class which path will be the base to find the
+	 *            resource of the 'path' param
+	 * @param path
+	 *            Path to the image to load
+	 * @return javax.swing.ImageIcon
+	 */
+	public static ImageIcon createImageIcon(Class class_Reference, String path) {
+		java.net.URL imgURL = class_Reference.getResource(path);
+		if (imgURL != null) {
+			return new ImageIcon(imgURL);
+		} else {
+			logger.debug("Couldn't find file: " + path);
+			return null;
+		}
+	}
 }

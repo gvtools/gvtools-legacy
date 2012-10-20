@@ -65,10 +65,10 @@ import com.iver.cit.gvsig.project.documents.view.legend.gui.ILegendPanel;
 /**
  * 
  * PieChart3D.java
- *
+ * 
  * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Jul 18, 2008
- *
+ * 
  */
 public class PieChart3D extends JPanel implements ILegendPanel {
 	private static String[] sampleKeys = new String[] { "", " ", "  " };
@@ -81,121 +81,110 @@ public class PieChart3D extends JPanel implements ILegendPanel {
 	private JIncrementalNumberField incrDepthFactor;
 	private JSlider alphaSlider;
 	private ArrayList<JPanel> tabs;
-	
+
 	public PieChart3D(SymbolEditor owner) {
 		initialize();
 	}
-	
+
 	private void initialize() {
 		tabs = new ArrayList<JPanel>();
 		{
 			GridBagLayoutPanel p = new GridBagLayoutPanel();
-			p.setBorder(BorderFactory.createTitledBorder(PluginServices.getText(this, "pie_properties")));
-			p.addComponent(
-					PluginServices.getText(this, "size"),
-					incrSize = new JIncrementalNumberField(
-							"25",
-							7,
-							0.001,
-							Double.POSITIVE_INFINITY,
-							1)
-					);
-			
-			p.addComponent(
-					PluginServices.getText(this, "minimum_angle_to_draw"),
-					incrMinAngle = new JIncrementalNumberField(
-							"1",
-							7,
-							0.001,
-							Double.POSITIVE_INFINITY,
-							1)
-					);
-			p.addComponent(
-					PluginServices.getText(this, "depth_factor"),
-					incrDepthFactor = new JIncrementalNumberField(
-							"0.3",
-							7,
-							0,
-							1,
-							0.1)
-					);
-			p.addComponent(chkClockwise = new JCheckBox(PluginServices.getText(this, "anticlockwise")));
-			p.addComponent(chkCircular = new JCheckBox(PluginServices.getText(this, "always_circular")));
-			p.addComponent(chkIgnoreZeroValues = new JCheckBox(PluginServices.getText(this, "ignore_zero_values")));
-			p.addComponent(PluginServices.getText(this, "foreground_alpha")+":", alphaSlider = new JSlider(0, 100));
-			
+			p.setBorder(BorderFactory.createTitledBorder(PluginServices
+					.getText(this, "pie_properties")));
+			p.addComponent(PluginServices.getText(this, "size"),
+					incrSize = new JIncrementalNumberField("25", 7, 0.001,
+							Double.POSITIVE_INFINITY, 1));
+
+			p.addComponent(PluginServices
+					.getText(this, "minimum_angle_to_draw"),
+					incrMinAngle = new JIncrementalNumberField("1", 7, 0.001,
+							Double.POSITIVE_INFINITY, 1));
+			p.addComponent(PluginServices.getText(this, "depth_factor"),
+					incrDepthFactor = new JIncrementalNumberField("0.3", 7, 0,
+							1, 0.1));
+			p.addComponent(chkClockwise = new JCheckBox(PluginServices.getText(
+					this, "anticlockwise")));
+			p.addComponent(chkCircular = new JCheckBox(PluginServices.getText(
+					this, "always_circular")));
+			p.addComponent(chkIgnoreZeroValues = new JCheckBox(PluginServices
+					.getText(this, "ignore_zero_values")));
+			p.addComponent(PluginServices.getText(this, "foreground_alpha")
+					+ ":", alphaSlider = new JSlider(0, 100));
+
 			p.setName(getName());
 			tabs.add(p);
 		}
-		
+
 	}
 
-//
-//	@Override
-//	public ISymbol getLayer() {
-//		PieChart3DSymbol layer = new PieChart3DSymbol();
-//		layer.setClockwise(!chkClockwise.isSelected());
-//		layer.setCircular(chkCircular.isSelected());
-//		layer.setMinimumAngleToDraw(incrMinAngle.getDouble());
-//		layer.setDepthFactor(incrDepthFactor.getDouble());
-//		layer.setSize(incrSize.getDouble());
-//		layer.setKeys(sampleKeys);
-//		layer.setValues(sampleValues);
-//		layer.setForegroundAlpha((float) (alphaSlider.getValue()*1.0/100));
-//		layer.setIgnoreZeroValues(chkIgnoreZeroValues.isSelected());
-//		return layer;
-//	}
+	//
+	// @Override
+	// public ISymbol getLayer() {
+	// PieChart3DSymbol layer = new PieChart3DSymbol();
+	// layer.setClockwise(!chkClockwise.isSelected());
+	// layer.setCircular(chkCircular.isSelected());
+	// layer.setMinimumAngleToDraw(incrMinAngle.getDouble());
+	// layer.setDepthFactor(incrDepthFactor.getDouble());
+	// layer.setSize(incrSize.getDouble());
+	// layer.setKeys(sampleKeys);
+	// layer.setValues(sampleValues);
+	// layer.setForegroundAlpha((float) (alphaSlider.getValue()*1.0/100));
+	// layer.setIgnoreZeroValues(chkIgnoreZeroValues.isSelected());
+	// return layer;
+	// }
 
 	public String getTitle() {
 		return PluginServices.getText(this, "piechart_3D");
 	}
 
-//	@Override
-//	public void refreshControls(ISymbol layer) {
-//		if (layer == null) {
-//			layer = new PieChart3DSymbol();
-//		}
-//		
-//		PieChart3DSymbol pie = (PieChart3DSymbol) layer;
-//		chkClockwise.setSelected(!pie.isClockwise());
-//		chkCircular.setSelected(pie.isCircular());
-//		incrMinAngle.setDouble(pie.getMinimumAngleToDraw());
-//		incrDepthFactor.setDouble(pie.getDepthFactor());
-//		incrSize.setDouble(pie.getSize());
-//		alphaSlider.setValue(Math.round(pie.getForegroundAlpha()*100));
-//	}
+	// @Override
+	// public void refreshControls(ISymbol layer) {
+	// if (layer == null) {
+	// layer = new PieChart3DSymbol();
+	// }
+	//
+	// PieChart3DSymbol pie = (PieChart3DSymbol) layer;
+	// chkClockwise.setSelected(!pie.isClockwise());
+	// chkCircular.setSelected(pie.isCircular());
+	// incrMinAngle.setDouble(pie.getMinimumAngleToDraw());
+	// incrDepthFactor.setDouble(pie.getDepthFactor());
+	// incrSize.setDouble(pie.getSize());
+	// alphaSlider.setValue(Math.round(pie.getForegroundAlpha()*100));
+	// }
 
 	public String getDescription() {
 		return PluginServices.getText(this, "piechart_3D_legend_desc");
 	}
-	
+
 	public ImageIcon getIcon() {
 		return null;
 	}
-	
+
 	public ILegend getLegend() {
 		return null;
 	}
-	
+
 	public Class getLegendClass() {
 		return PieChart3DLegend.class;
 	}
-	
+
 	public JPanel getPanel() {
 		return this;
 	}
-	
+
 	public Class getParentClass() {
 		return Statistics.class;
 	}
-	
-	
+
 	/**
 	 * Checks if an specific field contains numerical data
 	 * 
-	 * @param fieldType	index of the field
+	 * @param fieldType
+	 *            index of the field
 	 * 
-	 * @return boolean	true or false depending on the type of data (numerical or not)
+	 * @return boolean true or false depending on the type of data (numerical or
+	 *         not)
 	 */
 	private boolean isNumericField(int fieldType) {
 		switch (fieldType) {
@@ -234,11 +223,10 @@ public class PieChart3D extends JPanel implements ILegendPanel {
 		}
 		return false;
 	}
-	
+
 	public void setData(FLayer lyr, ILegend legend) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
+
 }

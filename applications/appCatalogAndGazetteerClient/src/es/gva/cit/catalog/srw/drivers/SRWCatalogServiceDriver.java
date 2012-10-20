@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.catalog.srw.drivers;
+
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -73,57 +73,65 @@ public class SRWCatalogServiceDriver extends AbstractCatalogServiceDriver {
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#getCapabilities(java.net.URI)
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#getCapabilities
+	 * (java.net.URI)
 	 */
-	public DiscoveryServiceCapabilities getCapabilities(URI uri) {        
+	public DiscoveryServiceCapabilities getCapabilities(URI uri) {
 		URL url = null;
 		try {
 			url = uri.toURL();
 		} catch (MalformedURLException e) {
 			setServerAnswerReady("errorServerNotFound");
 			return null;
-		}        
+		}
 		SRWMessages messages = new SRWMessages(this);
 		Collection nodes = new HTTPGetProtocol().doQuery(url,
 				messages.getHTTPGETCapabilities(true), 0);
 
-		nodes = new SOAPProtocol().doQuery(url, messages.getSOAPCapabilities(), 0);
-		new SrwCapabilitiesParser(this).parse((XMLNode)nodes.toArray()[0]);
+		nodes = new SOAPProtocol().doQuery(url, messages.getSOAPCapabilities(),
+				0);
+		new SrwCapabilitiesParser(this).parse((XMLNode) nodes.toArray()[0]);
 		CatalogCapabilities capabilities = new CatalogCapabilities();
 		capabilities.setVersion(version);
 		capabilities.setServerMessage(getServerAnswerReady());
 		return capabilities;
-	} 
+	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#getRecords(java.net.URI, es.gva.cit.catalogClient.querys.Query, int)
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#getRecords(java
+	 * .net.URI, es.gva.cit.catalogClient.querys.Query, int)
 	 */
-	public GetRecordsReply getRecords(URI uri, CatalogQuery query, int firstRecord) {        
+	public GetRecordsReply getRecords(URI uri, CatalogQuery query,
+			int firstRecord) {
 		URL url = null;
 		try {
 			url = uri.toURL();
 		} catch (MalformedURLException e) {
 			setServerAnswerReady("errorServerNotFound");
 			return null;
-		}        
+		}
 		setQuery(query);
 		SRWMessages messages = new SRWMessages(this);
 		Collection nodes = new java.util.ArrayList();
 
-		//TODO remove this comparation
-		if (url.getHost().equals("idee.unizar.es")){
+		// TODO remove this comparation
+		if (url.getHost().equals("idee.unizar.es")) {
 			try {
 				url = new URL("http://idee.unizar.es/SRW/servlet/search/SRW");
 			} catch (MalformedURLException e) {
 				// It will never throws
 			}
 		}
-	      
+
 		XMLNode root = null;
 		nodes = new SOAPProtocol().doQuery(url,
 				messages.getSOAPRecords(getQuery(), firstRecord), firstRecord);
-		root = (XMLNode)nodes.toArray()[0];
+		root = (XMLNode) nodes.toArray()[0];
 		root = root.getSubNode(0).getSubNode(0);
 
 		String prefix = new StringTokenizer(root.getName(), ":").nextToken();
@@ -131,22 +139,23 @@ public class SRWCatalogServiceDriver extends AbstractCatalogServiceDriver {
 			prefix = "";
 		} else {
 			prefix = prefix + ":";
-		}        
-		int numberOfRecords = getNumberOfRecords(root,
-				prefix + "numberOfRecords",
-				null);
+		}
+		int numberOfRecords = getNumberOfRecords(root, prefix
+				+ "numberOfRecords", null);
 
 		if (numberOfRecords == -1) {
 			return null;
-		}   
+		}
 		GetRecordsReply recordsReply = new GetRecordsReply(numberOfRecords);
 
-		parseRecords(root,recordsReply,uri,prefix,numberOfRecords,firstRecord);		
+		parseRecords(root, recordsReply, uri, prefix, numberOfRecords,
+				firstRecord);
 		return recordsReply;
-	} 
+	}
 
 	/**
 	 * Parser the XML
+	 * 
 	 * @param node
 	 * @param recordsReply
 	 * @param uri
@@ -154,15 +163,17 @@ public class SRWCatalogServiceDriver extends AbstractCatalogServiceDriver {
 	 * @param numberOfRecords
 	 * @param firstRecord
 	 */
-	private void parseRecords(XMLNode node, GetRecordsReply recordsReply, URI uri, String prefix, int numberOfRecords, int firstRecord) {        
+	private void parseRecords(XMLNode node, GetRecordsReply recordsReply,
+			URI uri, String prefix, int numberOfRecords, int firstRecord) {
 
-		XMLNode[] auxNodes = XMLTree.searchMultipleNode(node,
-				prefix + "records->" + prefix + "record");
-		for (int i = 1;	(i <= numberOfRecords) && (i <= 10) &&	(i <= (numberOfRecords - firstRecord + 1)); i++){
+		XMLNode[] auxNodes = XMLTree.searchMultipleNode(node, prefix
+				+ "records->" + prefix + "record");
+		for (int i = 1; (i <= numberOfRecords) && (i <= 10)
+				&& (i <= (numberOfRecords - firstRecord + 1)); i++) {
 			recordsReply.addRecord(uri, auxNodes[i - 1]);
 		}
 
-	} 
+	}
 
 	/**
 	 * 
@@ -170,19 +181,20 @@ public class SRWCatalogServiceDriver extends AbstractCatalogServiceDriver {
 	 * 
 	 * @return Returns the recordXPath.
 	 */
-	public String getRecordXPath() {        
+	public String getRecordXPath() {
 		return recordXPath;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param recordXPath The recordXPath to set.
+	 * @param recordXPath
+	 *            The recordXPath to set.
 	 */
-	public void setRecordXPath(String recordXPath) {        
+	public void setRecordXPath(String recordXPath) {
 		this.recordXPath = recordXPath;
-	} 
+	}
 
 	/**
 	 * 
@@ -190,19 +202,20 @@ public class SRWCatalogServiceDriver extends AbstractCatalogServiceDriver {
 	 * 
 	 * @return Returns the resultSetTTL.
 	 */
-	public String getResultSetTTL() {        
+	public String getResultSetTTL() {
 		return resultSetTTL;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param resultSetTTL The resultSetTTL to set.
+	 * @param resultSetTTL
+	 *            The resultSetTTL to set.
 	 */
-	public void setResultSetTTL(String resultSetTTL) {        
+	public void setResultSetTTL(String resultSetTTL) {
 		this.resultSetTTL = resultSetTTL;
-	} 
+	}
 
 	/**
 	 * 
@@ -210,31 +223,37 @@ public class SRWCatalogServiceDriver extends AbstractCatalogServiceDriver {
 	 * 
 	 * @return Returns the version.
 	 */
-	public String getVersion() {        
+	public String getVersion() {
 		return version;
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @param version The version to set.
+	 * @param version
+	 *            The version to set.
 	 */
-	public void setVersion(String version) {        
+	public void setVersion(String version) {
 		this.version = version;
-	} 
+	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#isProtocolSupported(java.net.URI)
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#isProtocolSupported
+	 * (java.net.URI)
 	 */
-	public boolean isProtocolSupported(URI uri) {        
+	public boolean isProtocolSupported(URI uri) {
 		return SOAPProtocol.isProtocolSupported(null);
-	} 
+	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#getServiceName()
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#getServiceName()
 	 */
 	public String getServiceName() {
 		return ServerData.SERVER_SUBTYPE_CATALOG_SRW;
@@ -242,17 +261,21 @@ public class SRWCatalogServiceDriver extends AbstractCatalogServiceDriver {
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#getDefaultPort()
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#getDefaultPort()
 	 */
-	public int getDefaultPort() {		
+	public int getDefaultPort() {
 		return 80;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#getDefaultSchema()
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.drivers.ICatalogServiceDriver#getDefaultSchema()
 	 */
 	public String getDefaultSchema() {
 		return "http";
-	} 
+	}
 }

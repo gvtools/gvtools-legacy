@@ -42,29 +42,31 @@ package com.iver.utiles.connections;
 
 /**
  * Class that extends of Exception and keeps a description.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class ConnectionException extends Exception {
-    private String message;
+	private String message;
 
-    /**
-     * Creates a new ConnectionException.
-     *
-     * @param s Description.
-     * @param e Exception.
-     */
-    public ConnectionException(String s, Exception e) {
-        super(e);
-        message = s + " : " + e.getMessage();
-    }
+	/**
+	 * Creates a new ConnectionException.
+	 * 
+	 * @param s
+	 *            Description.
+	 * @param e
+	 *            Exception.
+	 */
+	public ConnectionException(String s, Exception e) {
+		super(e);
+		message = s + " : " + e.getMessage();
+	}
 
-    /**
-     * Returns a description of the exception.
-     *
-     * @return description.
-     */
-    public String toString() {
-        return message;
-    }
+	/**
+	 * Returns a description of the exception.
+	 * 
+	 * @return description.
+	 */
+	public String toString() {
+		return message;
+	}
 }

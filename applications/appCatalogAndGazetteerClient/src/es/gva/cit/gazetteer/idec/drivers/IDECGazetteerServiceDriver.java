@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.gazetteer.idec.drivers;
+
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -55,7 +55,6 @@ import es.gva.cit.catalog.protocols.HTTPGetProtocol;
 import es.gva.cit.catalog.protocols.HTTPPostProtocol;
 import es.gva.cit.catalog.utils.Strings;
 import es.gva.cit.gazetteer.drivers.AbstractGazetteerServiceDriver;
-import es.gva.cit.gazetteer.drivers.GazetteerCapabilities;
 import es.gva.cit.gazetteer.idec.parsers.IdecCapabilitiesParser;
 import es.gva.cit.gazetteer.idec.parsers.IdecFeatureParser;
 import es.gva.cit.gazetteer.querys.Feature;
@@ -71,9 +70,12 @@ public class IDECGazetteerServiceDriver extends AbstractGazetteerServiceDriver {
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.drivers.IDiscoveryServiceDriver#getCapabilities(java.net.URI)
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.drivers.IDiscoveryServiceDriver#getCapabilities
+	 * (java.net.URI)
 	 */
-	public DiscoveryServiceCapabilities getCapabilities(URI uri) {        
+	public DiscoveryServiceCapabilities getCapabilities(URI uri) {
 		Collection nodes = new java.util.ArrayList();
 		URL url = null;
 		try {
@@ -81,77 +83,87 @@ public class IDECGazetteerServiceDriver extends AbstractGazetteerServiceDriver {
 		} catch (MalformedURLException e) {
 			setServerAnswerReady("errorServerNotFound");
 			return null;
-		}       
+		}
 		nodes = new HTTPGetProtocol().doQuery(url, getMessageCapabilities(), 0);
-		IdecCapabilitiesParser parser  = new IdecCapabilitiesParser(this);
+		IdecCapabilitiesParser parser = new IdecCapabilitiesParser(this);
 		parser.parse(nodes);
-		return parser.getCapabilities();	
-	} 
+		return parser.getCapabilities();
+	}
 
 	/**
 	 * It creates the name-value pairs for the getCapabilities request
+	 * 
 	 * @return Name-Value pair array
 	 */
-	private NameValuePair[] getMessageCapabilities() {        
+	private NameValuePair[] getMessageCapabilities() {
 		NameValuePair nvp1 = new NameValuePair("wsdl", "");
 		return new NameValuePair[] { nvp1 };
-	} 	
-	
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getFeature(java.net.URI, es.gva.cit.gazetteer.querys.Query)
+	 * 
+	 * @see
+	 * es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getFeature(java.
+	 * net.URI, es.gva.cit.gazetteer.querys.Query)
 	 */
-	public Feature[] getFeature(URI uri, GazetteerQuery query) {        
+	public Feature[] getFeature(URI uri, GazetteerQuery query) {
 		Collection nodes = new java.util.ArrayList();
-		  URL url = null;
-			try {
-				url = uri.toURL();
-			} catch (MalformedURLException e) {
-				setServerAnswerReady("errorServerNotFound");
-				return null;
-			}       
-		setQuery(query);
-		System.out.println(getPOSTGetFeature(query));
-		nodes = new HTTPPostProtocol().doQuery(url,getPOSTGetFeature(query),0);
-		if ((nodes != null) && (nodes.size() == 1)){
-			return IdecFeatureParser.parse((XMLNode)nodes.toArray()[0]);
-		}else{
+		URL url = null;
+		try {
+			url = uri.toURL();
+		} catch (MalformedURLException e) {
+			setServerAnswerReady("errorServerNotFound");
 			return null;
 		}
-	} 
+		setQuery(query);
+		System.out.println(getPOSTGetFeature(query));
+		nodes = new HTTPPostProtocol()
+				.doQuery(url, getPOSTGetFeature(query), 0);
+		if ((nodes != null) && (nodes.size() == 1)) {
+			return IdecFeatureParser.parse((XMLNode) nodes.toArray()[0]);
+		} else {
+			return null;
+		}
+	}
 
 	/**
 	 * It creates the XML for the getFeature request
+	 * 
 	 * @return Name-value pair with a XML request
-	 * @param query 
+	 * @param query
 	 */
-	private String getPOSTGetFeature(GazetteerQuery query) {        
+	private String getPOSTGetFeature(GazetteerQuery query) {
 		String name = query.getName();
-		if (query.getOptions().getSearch().isWithAccents()){
+		if (query.getOptions().getSearch().isWithAccents()) {
 			name = Strings.removeAccents(name);
-		}    	
-		return "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
-		"<SOAP-ENV:Envelope SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:si=\"http://soapinterop.org/xsd\" xmlns:tns=\"urn:idecwsdl\">" +
-		"<SOAP-ENV:Body><tns:getCoordenadesUTM xmlns:tns=\"urn:idecwsdl\">" +
-		"<key xsi:type=\"xsd:string\">CV81HP6</key>" +
-		"<toponim xsi:type=\"xsd:string\">" + name + "</toponim>" +
-		"</tns:getCoordenadesUTM>" +
-		"</SOAP-ENV:Body>" +
-		"</SOAP-ENV:Envelope>";
-	} 
-	
+		}
+		return "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>"
+				+ "<SOAP-ENV:Envelope SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:si=\"http://soapinterop.org/xsd\" xmlns:tns=\"urn:idecwsdl\">"
+				+ "<SOAP-ENV:Body><tns:getCoordenadesUTM xmlns:tns=\"urn:idecwsdl\">"
+				+ "<key xsi:type=\"xsd:string\">CV81HP6</key>"
+				+ "<toponim xsi:type=\"xsd:string\">" + name + "</toponim>"
+				+ "</tns:getCoordenadesUTM>" + "</SOAP-ENV:Body>"
+				+ "</SOAP-ENV:Envelope>";
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#isProtocolSupported(java.net.URI)
+	 * 
+	 * @see
+	 * es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#isProtocolSupported
+	 * (java.net.URI)
 	 */
-	public boolean isProtocolSupported(URI uri) {        
+	public boolean isProtocolSupported(URI uri) {
 		// TODO Auto-generated method stub
 		return true;
-	} 
-	
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getDefaultPort()
+	 * 
+	 * @see
+	 * es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getDefaultPort()
 	 */
 	public int getDefaultPort() {
 		return 80;
@@ -159,7 +171,9 @@ public class IDECGazetteerServiceDriver extends AbstractGazetteerServiceDriver {
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getDefaultSchema()
+	 * 
+	 * @see
+	 * es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getDefaultSchema()
 	 */
 	public String getDefaultSchema() {
 		return "http";
@@ -167,9 +181,11 @@ public class IDECGazetteerServiceDriver extends AbstractGazetteerServiceDriver {
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getServiceName()
+	 * 
+	 * @see
+	 * es.gva.cit.gazetteer.drivers.IGazetteerServiceDriver#getServiceName()
 	 */
 	public String getServiceName() {
 		return ServerData.SERVER_SUBTYPE_GAZETTEER_IDEC;
-	} 
+	}
 }

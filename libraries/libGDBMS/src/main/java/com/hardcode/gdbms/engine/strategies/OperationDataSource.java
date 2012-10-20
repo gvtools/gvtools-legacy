@@ -14,13 +14,13 @@ import com.hardcode.gdbms.engine.data.SourceInfo;
 import com.hardcode.gdbms.engine.data.edition.DataWare;
 import com.hardcode.gdbms.engine.values.ValueCollection;
 
-
 /**
  * operation layer DataSource base class
- *
+ * 
  * @author Fernando González Cortés
  */
-public abstract class OperationDataSource extends DataSourceCommonImpl implements DataSource {
+public abstract class OperationDataSource extends DataSourceCommonImpl
+		implements DataSource {
 	private DataSourceFactory dsf;
 	private String sql;
 	private String name;
@@ -71,8 +71,9 @@ public abstract class OperationDataSource extends DataSourceCommonImpl implement
 	/**
 	 * sets the sql query of this operation DataSource. It's needed by the
 	 * getMemento method which contains basically the sql
-	 *
-	 * @param sql query
+	 * 
+	 * @param sql
+	 *            query
 	 */
 	public void setSQL(String sql) {
 		this.sql = sql;
@@ -80,7 +81,7 @@ public abstract class OperationDataSource extends DataSourceCommonImpl implement
 
 	/**
 	 * Gets the SQL string that created this DataSource
-	 *
+	 * 
 	 * @return String with the query
 	 */
 	public String getSQL() {
@@ -98,7 +99,7 @@ public abstract class OperationDataSource extends DataSourceCommonImpl implement
 	 * @see com.hardcode.gdbms.engine.data.DataSource#getSourceInfo()
 	 */
 	public SourceInfo getSourceInfo() {
-		if (sourceInfo ==null) {
+		if (sourceInfo == null) {
 			sourceInfo = new SourceInfo();
 			sourceInfo.name = this.name;
 			sourceInfo.driverName = "GDBMS Operation Driver";
@@ -108,7 +109,7 @@ public abstract class OperationDataSource extends DataSourceCommonImpl implement
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param tableAlias
 	 */
 	public void setName(String tableAlias) {
@@ -122,70 +123,78 @@ public abstract class OperationDataSource extends DataSourceCommonImpl implement
 		dsf.remove(this);
 	}
 
-    /**
+	/**
 	 * @see com.hardcode.gdbms.engine.data.DataSource#getPrimaryKeys()
 	 */
-    public int[] getPrimaryKeys() throws ReadDriverException {
-        return null;
-    }
+	public int[] getPrimaryKeys() throws ReadDriverException {
+		return null;
+	}
 
-    /**
-     * @see com.hardcode.gdbms.engine.data.DataSource#getPKValue(long)
-     */
-    public ValueCollection getPKValue(long rowIndex) throws ReadDriverException {
-	    throw new UnsupportedOperationException("OperationDataSources do not have primary keys");
-    }
+	/**
+	 * @see com.hardcode.gdbms.engine.data.DataSource#getPKValue(long)
+	 */
+	public ValueCollection getPKValue(long rowIndex) throws ReadDriverException {
+		throw new UnsupportedOperationException(
+				"OperationDataSources do not have primary keys");
+	}
 
-    /**
-     * @see com.hardcode.gdbms.engine.data.DataSource#getPKName(int)
-     */
-    public String getPKName(int fieldId) throws ReadDriverException {
-	    throw new UnsupportedOperationException("OperationDataSources do not have primary keys");
-    }
+	/**
+	 * @see com.hardcode.gdbms.engine.data.DataSource#getPKName(int)
+	 */
+	public String getPKName(int fieldId) throws ReadDriverException {
+		throw new UnsupportedOperationException(
+				"OperationDataSources do not have primary keys");
+	}
 
-    /**
-     * @see com.hardcode.gdbms.engine.data.DataSource#getPKType(int)
-     */
-    public int getPKType(int i) throws ReadDriverException {
-	    throw new UnsupportedOperationException("OperationDataSources do not have primary keys");
-    }
+	/**
+	 * @see com.hardcode.gdbms.engine.data.DataSource#getPKType(int)
+	 */
+	public int getPKType(int i) throws ReadDriverException {
+		throw new UnsupportedOperationException(
+				"OperationDataSources do not have primary keys");
+	}
 
-    /**
-     * @see com.hardcode.gdbms.engine.data.DataSource#getPKCardinality()
-     */
-    public int getPKCardinality() throws ReadDriverException {
-	    throw new UnsupportedOperationException("OperationDataSources do not have primary keys");
-    }
-    /**
-     * @see com.hardcode.gdbms.engine.data.DataSource#getPKNames()
-     */
-    public String[] getPKNames() throws ReadDriverException {
-	    throw new UnsupportedOperationException("OperationDataSources do not have primary keys");
-    }
-    /**
-     * @see com.hardcode.gdbms.engine.data.DataSource#getPKNames()
-     */
-    public DataWare getDataWare(int mode) throws ReadDriverException{
-	    throw new UnsupportedOperationException("OperationDataSources do not have primary keys");
-    }
-    
-    public boolean isVirtualField(int fieldId) throws ReadDriverException  {
-    	return false;
-    }
-    
-    public Driver getDriver() {
-    	return null;
-    }
-    
-	public void reload() throws ReloadDriverException {		
-		
+	/**
+	 * @see com.hardcode.gdbms.engine.data.DataSource#getPKCardinality()
+	 */
+	public int getPKCardinality() throws ReadDriverException {
+		throw new UnsupportedOperationException(
+				"OperationDataSources do not have primary keys");
+	}
+
+	/**
+	 * @see com.hardcode.gdbms.engine.data.DataSource#getPKNames()
+	 */
+	public String[] getPKNames() throws ReadDriverException {
+		throw new UnsupportedOperationException(
+				"OperationDataSources do not have primary keys");
+	}
+
+	/**
+	 * @see com.hardcode.gdbms.engine.data.DataSource#getPKNames()
+	 */
+	public DataWare getDataWare(int mode) throws ReadDriverException {
+		throw new UnsupportedOperationException(
+				"OperationDataSources do not have primary keys");
+	}
+
+	public boolean isVirtualField(int fieldId) throws ReadDriverException {
+		return false;
+	}
+
+	public Driver getDriver() {
+		return null;
+	}
+
+	public void reload() throws ReloadDriverException {
+
 	}
 
 	public void addDataSourceListener(IDataSourceListener listener) {
-		
+
 	}
 
 	public void removeDataSourceListener(IDataSourceListener listener) {
-		
-	}    
+
+	}
 }

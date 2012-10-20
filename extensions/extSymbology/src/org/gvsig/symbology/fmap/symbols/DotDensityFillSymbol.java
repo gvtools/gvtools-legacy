@@ -40,56 +40,56 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: DotDensityFillSymbol.java 13953 2007-09-21 12:26:04Z jaume $
-* $Log$
-* Revision 1.8  2007-09-21 12:25:32  jaume
-* cancellation support extended down to the IGeometry and ISymbol level
-*
-* Revision 1.7  2007/09/18 14:50:31  caballero
-* Leyendas sobre el Layout
-*
-* Revision 1.6  2007/03/26 14:24:24  jaume
-* IPrintable refactored
-*
-* Revision 1.5  2007/03/09 11:20:56  jaume
-* Advanced symbology (start committing)
-*
-* Revision 1.3.2.4  2007/02/21 16:09:02  jaume
-* *** empty log message ***
-*
-* Revision 1.3.2.3  2007/02/16 10:54:12  jaume
-* multilayer splitted to multilayerline, multilayermarker,and  multilayerfill
-*
-* Revision 1.3.2.2  2007/02/15 16:23:44  jaume
-* *** empty log message ***
-*
-* Revision 1.3.2.1  2007/02/09 07:47:04  jaume
-* Isymbol moved
-*
-* Revision 1.3  2007/01/12 10:08:26  jaume
-* *** empty log message ***
-*
-* Revision 1.2  2007/01/10 16:39:41  jaume
-* ISymbol now belongs to com.iver.cit.gvsig.fmap.core.symbols package
-*
-* Revision 1.1  2007/01/10 16:31:36  jaume
-* *** empty log message ***
-*
-* Revision 1.4  2006/11/14 11:10:27  jaume
-* *** empty log message ***
-*
-* Revision 1.3  2006/11/13 09:15:23  jaume
-* javadoc and some clean-up
-*
-* Revision 1.2  2006/11/09 18:39:05  jaume
-* *** empty log message ***
-*
-* Revision 1.1  2006/11/09 10:22:50  jaume
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: DotDensityFillSymbol.java 13953 2007-09-21 12:26:04Z jaume $
+ * $Log$
+ * Revision 1.8  2007-09-21 12:25:32  jaume
+ * cancellation support extended down to the IGeometry and ISymbol level
+ *
+ * Revision 1.7  2007/09/18 14:50:31  caballero
+ * Leyendas sobre el Layout
+ *
+ * Revision 1.6  2007/03/26 14:24:24  jaume
+ * IPrintable refactored
+ *
+ * Revision 1.5  2007/03/09 11:20:56  jaume
+ * Advanced symbology (start committing)
+ *
+ * Revision 1.3.2.4  2007/02/21 16:09:02  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.3.2.3  2007/02/16 10:54:12  jaume
+ * multilayer splitted to multilayerline, multilayermarker,and  multilayerfill
+ *
+ * Revision 1.3.2.2  2007/02/15 16:23:44  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.3.2.1  2007/02/09 07:47:04  jaume
+ * Isymbol moved
+ *
+ * Revision 1.3  2007/01/12 10:08:26  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.2  2007/01/10 16:39:41  jaume
+ * ISymbol now belongs to com.iver.cit.gvsig.fmap.core.symbols package
+ *
+ * Revision 1.1  2007/01/10 16:31:36  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.4  2006/11/14 11:10:27  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.3  2006/11/13 09:15:23  jaume
+ * javadoc and some clean-up
+ *
+ * Revision 1.2  2006/11/09 18:39:05  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/11/09 10:22:50  jaume
+ * *** empty log message ***
+ *
+ *
+ */
 package org.gvsig.symbology.fmap.symbols;
 
 import java.awt.Color;
@@ -118,11 +118,12 @@ import com.iver.utiles.swing.threads.Cancellable;
  * handled by a SimpleFillSymboll where a DotDensityFillSymbol should be
  * embedded.<br>
  * </p>
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
 public class DotDensityFillSymbol extends AbstractFillSymbol {
-	private int  dotCount;
+	private int dotCount;
 	private double dotSize;
 	private double dotSpacing;
 	private Color dotColor;
@@ -137,7 +138,8 @@ public class DotDensityFillSymbol extends AbstractFillSymbol {
 		return this; // the selection color is applied in the SimpleFillSymbol
 	}
 
-	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp, Cancellable cancel) {
+	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp,
+			Cancellable cancel) {
 		int maxIntentos = 35;
 		int width = shp.getBounds().width;
 		int height = shp.getBounds().height;
@@ -148,26 +150,27 @@ public class DotDensityFillSymbol extends AbstractFillSymbol {
 		g.setColor(getDotColor());
 		g.setBackground(null);
 		int size = (int) dotSize;
-		for (int i = 0; (cancel==null || !cancel.isCanceled()) && i < dotCount; i++) {
-			int x,y;
+		for (int i = 0; (cancel == null || !cancel.isCanceled())
+				&& i < dotCount; i++) {
+			int x, y;
 			int intentos = 0;
-			/* Introducimos este bucle para procurar que los puntos
-			 * queden dentro del shape. Le ponemos además un
-			 * numero máximo de intentos para evitar las posibilidad de
-			 * un bucle infinito o excesivamente reiterativo.
-			*/
-			do{
+			/*
+			 * Introducimos este bucle para procurar que los puntos queden
+			 * dentro del shape. Le ponemos además un numero máximo de intentos
+			 * para evitar las posibilidad de un bucle infinito o excesivamente
+			 * reiterativo.
+			 */
+			do {
 				x = (int) Math.abs(random.nextDouble() * width);
 				y = (int) Math.abs(random.nextDouble() * height);
 				x = x + minx;
 				y = y + miny;
 				intentos++;
-			} while (intentos<maxIntentos && !shp.contains(x, y));
+			} while (intentos < maxIntentos && !shp.contains(x, y));
 			g.fillRect(x, y, size, size);
 		}
 		g.setClip(null);
 	}
-
 
 	public XMLEntity getXMLEntity() {
 		XMLEntity xml = new XMLEntity();
@@ -175,8 +178,9 @@ public class DotDensityFillSymbol extends AbstractFillSymbol {
 
 		// color
 		Color c = getDotColor();
-		if (c!= null)
-			xml.putProperty("color", StringUtilities.color2String(getDotColor()));
+		if (c != null)
+			xml.putProperty("color",
+					StringUtilities.color2String(getDotColor()));
 
 		// description
 		xml.putProperty("desc", getDescription());
@@ -204,21 +208,29 @@ public class DotDensityFillSymbol extends AbstractFillSymbol {
 	}
 
 	public void drawInsideRectangle(Graphics2D g,
-			AffineTransform scaleInstance, Rectangle r, PrintRequestAttributeSet properties) throws SymbolDrawingException {
+			AffineTransform scaleInstance, Rectangle r,
+			PrintRequestAttributeSet properties) throws SymbolDrawingException {
 		int x = r.x;
 		int y = r.y;
 		int width = r.width;
-		int height= r.height;
+		int height = r.height;
 		int size = height / 5;
 		g.setColor(getDotColor());
 		g.setBackground(null);
-		g.fillRect((int) (x+width*0.2), (int) (y+height*0.2), size, size);
-		g.fillRect((int) (x+width*0.25), (int) (y+height*0.7), size, size);
-		g.fillRect((int) (x+width*0.35), (int) (y+height*0.5), size, size);
-		g.fillRect((int) (x+width*0.6), (int) (y+height*0.1), size, size);
-		g.fillRect((int) (x+width*0.7), (int) (y+height*0.8), size, size);
-		g.fillRect((int) (x+width*0.8), (int) (y+height*0.3), size, size);
-		g.fillRect((int) (x+width*0.9), (int) (y+height*0.6), size, size);
+		g.fillRect((int) (x + width * 0.2), (int) (y + height * 0.2), size,
+				size);
+		g.fillRect((int) (x + width * 0.25), (int) (y + height * 0.7), size,
+				size);
+		g.fillRect((int) (x + width * 0.35), (int) (y + height * 0.5), size,
+				size);
+		g.fillRect((int) (x + width * 0.6), (int) (y + height * 0.1), size,
+				size);
+		g.fillRect((int) (x + width * 0.7), (int) (y + height * 0.8), size,
+				size);
+		g.fillRect((int) (x + width * 0.8), (int) (y + height * 0.3), size,
+				size);
+		g.fillRect((int) (x + width * 0.9), (int) (y + height * 0.6), size,
+				size);
 	}
 
 	public String getClassName() {
@@ -228,7 +240,8 @@ public class DotDensityFillSymbol extends AbstractFillSymbol {
 	public void setXMLEntity(XMLEntity xml) {
 		// color
 		if (xml.contains("color"))
-			setDotColor(StringUtilities.string2Color(xml.getStringProperty("color")));
+			setDotColor(StringUtilities.string2Color(xml
+					.getStringProperty("color")));
 
 		// description
 		setDescription(xml.getStringProperty("desc"));
@@ -248,7 +261,7 @@ public class DotDensityFillSymbol extends AbstractFillSymbol {
 
 	/**
 	 * @return
-	 * @uml.property  name="dotCount"
+	 * @uml.property name="dotCount"
 	 */
 	public int getDotCount() {
 		return dotCount;
@@ -256,7 +269,7 @@ public class DotDensityFillSymbol extends AbstractFillSymbol {
 
 	/**
 	 * @param dotCount
-	 * @uml.property  name="dotCount"
+	 * @uml.property name="dotCount"
 	 */
 	public void setDotCount(int dotCount) {
 		this.dotCount = dotCount;
@@ -264,7 +277,7 @@ public class DotDensityFillSymbol extends AbstractFillSymbol {
 
 	/**
 	 * @return
-	 * @uml.property  name="dotSize"
+	 * @uml.property name="dotSize"
 	 */
 	public double getDotSize() {
 		return dotSize;
@@ -272,7 +285,7 @@ public class DotDensityFillSymbol extends AbstractFillSymbol {
 
 	/**
 	 * @param dotSize
-	 * @uml.property  name="dotSize"
+	 * @uml.property name="dotSize"
 	 */
 	public void setDotSize(double dotSize) {
 		this.dotSize = dotSize;
@@ -280,7 +293,7 @@ public class DotDensityFillSymbol extends AbstractFillSymbol {
 
 	/**
 	 * @return
-	 * @uml.property  name="dotSpacing"
+	 * @uml.property name="dotSpacing"
 	 */
 	public double getDotSpacing() {
 		return dotSpacing;
@@ -288,7 +301,7 @@ public class DotDensityFillSymbol extends AbstractFillSymbol {
 
 	/**
 	 * @param dotSpacing
-	 * @uml.property  name="dotSpacing"
+	 * @uml.property name="dotSpacing"
 	 */
 	public void setDotSpacing(double dotSpacing) {
 		this.dotSpacing = dotSpacing;
@@ -302,10 +315,11 @@ public class DotDensityFillSymbol extends AbstractFillSymbol {
 		this.dotColor = dotColor;
 	}
 
-	public void print(Graphics2D g, AffineTransform at, FShape shape, PrintRequestAttributeSet properties) {
-		this.properties=properties;
-        draw(g, at, shape, null);
-        this.properties=null;
+	public void print(Graphics2D g, AffineTransform at, FShape shape,
+			PrintRequestAttributeSet properties) {
+		this.properties = properties;
+		draw(g, at, shape, null);
+		this.properties = null;
 
 	}
 

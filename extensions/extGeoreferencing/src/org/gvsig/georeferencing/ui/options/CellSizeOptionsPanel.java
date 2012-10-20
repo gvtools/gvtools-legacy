@@ -31,107 +31,117 @@ import org.gvsig.raster.util.RasterToolsUtil;
  * Panel de selección del tamaño de pixel en X e Y
  * 
  * 10/01/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class CellSizeOptionsPanel extends JPanel {
-	private static final long     serialVersionUID    = 1L;
-	
-	private DataInputContainer    xCellSize           = null;
-	private DataInputContainer    yCellSize           = null;
-		
+	private static final long serialVersionUID = 1L;
+
+	private DataInputContainer xCellSize = null;
+	private DataInputContainer yCellSize = null;
+
 	/**
-	 * Constructor. Asigna la lista de nombres de vistas para el selector. 
+	 * Constructor. Asigna la lista de nombres de vistas para el selector.
+	 * 
 	 * @param viewList
 	 */
 	public CellSizeOptionsPanel() {
 		init();
 	}
-	
+
 	/**
 	 * Acciones de inicialización del panel
 	 */
-	public void init() {	    
+	public void init() {
 		GridBagLayout gl = new GridBagLayout();
 		setLayout(gl);
-		setBorder(javax.swing.BorderFactory.createTitledBorder(null, RasterToolsUtil.getText(this, "cellsize"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
-		
+		setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+				RasterToolsUtil.getText(this, "cellsize"),
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.WEST;
 		gbc.insets = new Insets(0, 5, 5, 0);
 		gbc.weightx = 1.0;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		
+
 		add(getXCellSizeTextField(), gbc);
 
 		gbc.gridy = 1;
 		add(getYCellSizeTextField(), gbc);
 	}
-	
+
 	/**
 	 * Obtiene el control para selección de tamaño de pixel en X
+	 * 
 	 * @return DataInputContainer
 	 */
 	public DataInputContainer getXCellSizeTextField() {
-		if(xCellSize == null) {
+		if (xCellSize == null) {
 			xCellSize = new DataInputContainer();
 			xCellSize.setLabelText("X ");
 		}
 		return xCellSize;
 	}
-	
+
 	/**
 	 * Obtiene el control para selección de tamaño de pixel en Y
+	 * 
 	 * @return DataInputContainer
 	 */
 	public DataInputContainer getYCellSizeTextField() {
-		if(yCellSize == null) {
+		if (yCellSize == null) {
 			yCellSize = new DataInputContainer();
 			yCellSize.setLabelText("Y ");
 		}
 		return yCellSize;
 	}
-	
+
 	/**
 	 * Obtiene el control para selección de tamaño de pixel en X
+	 * 
 	 * @return DataInputContainer
 	 */
 	public double getXCellSizeValue() {
 		try {
 			return Double.valueOf(xCellSize.getValue()).doubleValue();
-		} catch(NumberFormatException ex) {
+		} catch (NumberFormatException ex) {
 			return -1;
 		}
 	}
-	
+
 	/**
 	 * Obtiene el control para selección de tamaño de pixel en Y
+	 * 
 	 * @return DataInputContainer
 	 */
 	public double getYCellSizeValue() {
 		try {
 			return Double.valueOf(yCellSize.getValue()).doubleValue();
-		} catch(NumberFormatException ex) {
+		} catch (NumberFormatException ex) {
 			return -1;
 		}
 	}
-	
+
 	/**
 	 * Asigna el tamaño de pixel en X
+	 * 
 	 * @param dataCellSize
 	 */
 	public void setXCellSize(double dataCellSize) {
-		if(xCellSize != null) 
+		if (xCellSize != null)
 			xCellSize.setValue(dataCellSize + "");
 	}
-	
+
 	/**
 	 * Asigna el tamaño de pixel en Y
+	 * 
 	 * @param dataCellSize
 	 */
 	public void setYCellSize(double dataCellSize) {
-		if(yCellSize != null) 
+		if (yCellSize != null)
 			yCellSize.setValue(dataCellSize + "");
 	}
-		
-}
 
+}

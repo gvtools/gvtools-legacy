@@ -40,6 +40,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 
 import es.gva.cit.jmrsid.MrSIDException;
+
 /**
  * Clase encargada del acceso a los datos y repintado de imagenes MrSID. Estos
  * son registrados con la extensión sid
@@ -48,24 +49,27 @@ import es.gva.cit.jmrsid.MrSIDException;
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class MrSidDriver extends RasterDataset {
-	protected MrSidNative              file             = null;
-	private Extent                     viewRequest      = null;
-	private DatasetColorInterpretation colorInterpr     = null;
+	protected MrSidNative file = null;
+	private Extent viewRequest = null;
+	private DatasetColorInterpretation colorInterpr = null;
 
 	/**
 	 * Estado de transparencia del raster.
 	 */
-	protected Transparency             fileTransparency = null;
+	protected Transparency fileTransparency = null;
 
 	public static void register() {
 		ExtensionPoint point = ExtensionPoint.getExtensionPoint("RasterReader");
 		point.register("sid", MrSidDriver.class);
 	}
-		
+
 	/**
 	 * Contructor. Abre el fichero mrsid
-	 * @param crs Proyección
-	 * @param fName Nombre del fichero mrsid
+	 * 
+	 * @param crs
+	 *            Proyección
+	 * @param fName
+	 *            Nombre del fichero mrsid
 	 */
 	public MrSidDriver(CoordinateReferenceSystem crs, Object param) {
 		super(crs, ((String) param));
@@ -143,27 +147,39 @@ public class MrSidDriver extends RasterDataset {
 	}
 
 	/**
-	 * Asigna al objeto Image los valores con los dato de la imagen contenidos en
-	 * el vector de enteros.
-	 * @param image imagen con los datos actuales
-	 * @param startX inicio de la posición en X dentro de la imagen
-	 * @param startY inicio de la posición en X dentro de la imagen
-	 * @param w Ancho de la imagen
-	 * @param h Alto de la imagen
-	 * @param rgbArray vector que contiene la banda que se va a sustituir
-	 * @param offset desplazamiento
-	 * @param scansize tamaño de imagen recorrida por cada p
+	 * Asigna al objeto Image los valores con los dato de la imagen contenidos
+	 * en el vector de enteros.
+	 * 
+	 * @param image
+	 *            imagen con los datos actuales
+	 * @param startX
+	 *            inicio de la posición en X dentro de la imagen
+	 * @param startY
+	 *            inicio de la posición en X dentro de la imagen
+	 * @param w
+	 *            Ancho de la imagen
+	 * @param h
+	 *            Alto de la imagen
+	 * @param rgbArray
+	 *            vector que contiene la banda que se va a sustituir
+	 * @param offset
+	 *            desplazamiento
+	 * @param scansize
+	 *            tamaño de imagen recorrida por cada p
 	 */
-	protected void setRGBLine(BufferedImage image, int startX, int startY, int w, int h,
-														int[] rgbArray, int offset, int scansize) {
+	protected void setRGBLine(BufferedImage image, int startX, int startY,
+			int w, int h, int[] rgbArray, int offset, int scansize) {
 		image.setRGB(startX, startY, w, h, rgbArray, offset, scansize);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.RasterDataset#getData(int, int, int)
 	 */
-	public Object getData(int x, int y, int band) throws InvalidSetViewException, FileNotOpenException, RasterDriverException {
+	public Object getData(int x, int y, int band)
+			throws InvalidSetViewException, FileNotOpenException,
+			RasterDriverException {
 		if (file != null) {
 			if (x < 0 || y < 0 || x >= file.width || y >= file.height)
 				throw new InvalidSetViewException("Request out of grid");
@@ -172,9 +188,10 @@ public class MrSidDriver extends RasterDataset {
 		}
 		throw new FileNotOpenException("MrSIDNative not exist");
 	}
-	 
+
 	/**
 	 * Devuelve el tamaño de bloque
+	 * 
 	 * @return Tamaño de bloque
 	 */
 	public int getBlockSize() {
@@ -184,22 +201,25 @@ public class MrSidDriver extends RasterDataset {
 	/**
 	 * Informa de si el driver ha supersampleado en el último dibujado. Es el
 	 * driver el que colocará el valor de esta variable cada vez que dibuja.
+	 * 
 	 * @return true si se ha supersampleado y false si no se ha hecho.
 	 */
 	public boolean isSupersampling() {
 		return file.isSupersampling;
 	}
 
-	public IBuffer getWindowRaster(double ulx, double uly, double lrx, double lry,
-																	BandList bandList, IBuffer rasterBuf)
-																	throws InterruptedException, RasterDriverException {
-		RasterTask task = RasterTaskQueue.get(Thread.currentThread().toString());
+	public IBuffer getWindowRaster(double ulx, double uly, double lrx,
+			double lry, BandList bandList, IBuffer rasterBuf)
+			throws InterruptedException, RasterDriverException {
+		RasterTask task = RasterTaskQueue
+				.get(Thread.currentThread().toString());
 
 		// TODO: FUNCIONALIDAD: Hacer caso del bandList
 		int width = rasterBuf.getWidth();
 		int height = rasterBuf.getHeight();
 
-		// Impedimos que los valores de ancho y alto de la imágen sean menores que 1
+		// Impedimos que los valores de ancho y alto de la imágen sean menores
+		// que 1
 		if (width <= 0)
 			width = 1;
 
@@ -207,7 +227,8 @@ public class MrSidDriver extends RasterDataset {
 			height = 1;
 
 		setView(new Extent(ulx, uly, lrx, lry));
-		file.setView(viewRequest.getULX(), viewRequest.getULY(), viewRequest.getLRX(), viewRequest.getLRY(), width, height);
+		file.setView(viewRequest.getULX(), viewRequest.getULY(),
+				viewRequest.getLRX(), viewRequest.getLRY(), width, height);
 
 		int[] pRGBArray = new int[width * height];
 
@@ -216,9 +237,24 @@ public class MrSidDriver extends RasterDataset {
 			int wBuf = rasterBuf.getWidth();
 			for (int row = 0; row < rasterBuf.getHeight(); row++) {
 				for (int col = 0; col < wBuf; col++) {
-					rasterBuf.setElem(row, col, 0, (byte) ((pRGBArray[(row * wBuf) + col] & 0x00ff0000) >> 16));
-					rasterBuf.setElem(row, col, 1, (byte) ((pRGBArray[(row * wBuf) + col] & 0x0000ff00) >> 8));
-					rasterBuf.setElem(row, col, 2, (byte) (pRGBArray[(row * wBuf) + col] & 0x000000ff));
+					rasterBuf
+							.setElem(
+									row,
+									col,
+									0,
+									(byte) ((pRGBArray[(row * wBuf) + col] & 0x00ff0000) >> 16));
+					rasterBuf
+							.setElem(
+									row,
+									col,
+									1,
+									(byte) ((pRGBArray[(row * wBuf) + col] & 0x0000ff00) >> 8));
+					rasterBuf
+							.setElem(
+									row,
+									col,
+									2,
+									(byte) (pRGBArray[(row * wBuf) + col] & 0x000000ff));
 				}
 				if (task.getEvent() != null)
 					task.manageEvent(task.getEvent());
@@ -228,31 +264,42 @@ public class MrSidDriver extends RasterDataset {
 		}
 		return rasterBuf;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.dataset.RasterDataset#getWindowRaster(double, double, double, double, org.gvsig.raster.dataset.BandList, org.gvsig.raster.dataset.IBuffer, boolean)
+	 * 
+	 * @see org.gvsig.raster.dataset.RasterDataset#getWindowRaster(double,
+	 * double, double, double, org.gvsig.raster.dataset.BandList,
+	 * org.gvsig.raster.dataset.IBuffer, boolean)
 	 */
-	public IBuffer getWindowRaster(double ulx, double uly, double w, double h, BandList bandList, IBuffer rasterBuf, boolean adjustToExtent) throws InterruptedException, RasterDriverException {
-		RasterTask task = RasterTaskQueue.get(Thread.currentThread().toString());
+	public IBuffer getWindowRaster(double ulx, double uly, double w, double h,
+			BandList bandList, IBuffer rasterBuf, boolean adjustToExtent)
+			throws InterruptedException, RasterDriverException {
+		RasterTask task = RasterTaskQueue
+				.get(Thread.currentThread().toString());
 
-		// El incremento o decremento de las X e Y depende de los signos de rotación
+		// El incremento o decremento de las X e Y depende de los signos de
+		// rotación
 		// y escala en la matriz de transformación. Por esto
-		// tenemos que averiguar si lrx es x + w o x -w, asi como si lry es y + h o
+		// tenemos que averiguar si lrx es x + w o x -w, asi como si lry es y +
+		// h o
 		// y - h
 		Extent ext = getExtent();
 		Point2D pInit = rasterToWorld(new Point2D.Double(0, 0));
 		Point2D pEnd = rasterToWorld(new Point2D.Double(getWidth(), getHeight()));
 		double wRaster = Math.abs(pEnd.getX() - pInit.getX());
 		double hRaster = Math.abs(pEnd.getY() - pInit.getY());
-		double lrx = (((ext.getULX() - wRaster) > ext.maxX()) || ((ext.getULX() - wRaster) < ext.minX())) ? (ulx + w) : (ulx - w);
-		double lry = (((ext.getULY() - hRaster) > ext.maxY()) || ((ext.getULY() - hRaster) < ext.minY())) ? (uly + h) : (uly - h);
+		double lrx = (((ext.getULX() - wRaster) > ext.maxX()) || ((ext.getULX() - wRaster) < ext
+				.minX())) ? (ulx + w) : (ulx - w);
+		double lry = (((ext.getULY() - hRaster) > ext.maxY()) || ((ext.getULY() - hRaster) < ext
+				.minY())) ? (uly + h) : (uly - h);
 
 		// TODO: FUNCIONALIDAD: Hacer caso del bandList
 		int width = rasterBuf.getWidth();
 		int height = rasterBuf.getHeight();
 
-		// Impedimos que los valores de ancho y alto de la imágen sean menores que 1
+		// Impedimos que los valores de ancho y alto de la imágen sean menores
+		// que 1
 		if (width <= 0)
 			width = 1;
 
@@ -260,7 +307,8 @@ public class MrSidDriver extends RasterDataset {
 			height = 1;
 
 		setView(new Extent(ulx, uly, lrx, lry));
-		file.setView(viewRequest.minX(), viewRequest.maxY(), viewRequest.maxX(), viewRequest.minY(), width, height);
+		file.setView(viewRequest.minX(), viewRequest.maxY(),
+				viewRequest.maxX(), viewRequest.minY(), width, height);
 
 		int[] pRGBArray = new int[width * height];
 
@@ -269,9 +317,24 @@ public class MrSidDriver extends RasterDataset {
 			int wBuf = rasterBuf.getWidth();
 			for (int row = 0; row < rasterBuf.getHeight(); row++) {
 				for (int col = 0; col < wBuf; col++) {
-					rasterBuf.setElem(row, col, 0, (byte) ((pRGBArray[(row * wBuf) + col] & 0x00ff0000) >> 16));
-					rasterBuf.setElem(row, col, 1, (byte) ((pRGBArray[(row * wBuf) + col] & 0x0000ff00) >> 8));
-					rasterBuf.setElem(row, col, 2, (byte) (pRGBArray[(row * wBuf) + col] & 0x000000ff));
+					rasterBuf
+							.setElem(
+									row,
+									col,
+									0,
+									(byte) ((pRGBArray[(row * wBuf) + col] & 0x00ff0000) >> 16));
+					rasterBuf
+							.setElem(
+									row,
+									col,
+									1,
+									(byte) ((pRGBArray[(row * wBuf) + col] & 0x0000ff00) >> 8));
+					rasterBuf
+							.setElem(
+									row,
+									col,
+									2,
+									(byte) (pRGBArray[(row * wBuf) + col] & 0x000000ff));
 				}
 				if (task.getEvent() != null)
 					task.manageEvent(task.getEvent());
@@ -284,12 +347,20 @@ public class MrSidDriver extends RasterDataset {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.dataset.RasterDataset#getWindowRaster(double, double, double, double, int, int, org.gvsig.raster.dataset.BandList, org.gvsig.raster.dataset.IBuffer, boolean)
+	 * 
+	 * @see org.gvsig.raster.dataset.RasterDataset#getWindowRaster(double,
+	 * double, double, double, int, int, org.gvsig.raster.dataset.BandList,
+	 * org.gvsig.raster.dataset.IBuffer, boolean)
 	 */
-	public IBuffer getWindowRaster(double ulx, double uly, double lrx, double lry, int bufWidth, int bufHeight, BandList bandList, IBuffer rasterBuf, boolean adjustToExtent) throws InterruptedException, RasterDriverException {
-		RasterTask task = RasterTaskQueue.get(Thread.currentThread().toString());
+	public IBuffer getWindowRaster(double ulx, double uly, double lrx,
+			double lry, int bufWidth, int bufHeight, BandList bandList,
+			IBuffer rasterBuf, boolean adjustToExtent)
+			throws InterruptedException, RasterDriverException {
+		RasterTask task = RasterTaskQueue
+				.get(Thread.currentThread().toString());
 
-		// Impedimos que los valores de ancho y alto de la imágen sean menores que 1
+		// Impedimos que los valores de ancho y alto de la imágen sean menores
+		// que 1
 		if (bufWidth <= 0)
 			bufWidth = 1;
 
@@ -297,28 +368,49 @@ public class MrSidDriver extends RasterDataset {
 			bufHeight = 1;
 
 		setView(new Extent(ulx, uly, lrx, lry));
-		file.setView(viewRequest.getULX(), viewRequest.getULY(), viewRequest.getLRX(), viewRequest.getLRY(), bufWidth, bufHeight);
+		file.setView(viewRequest.getULX(), viewRequest.getULY(),
+				viewRequest.getLRX(), viewRequest.getLRY(), bufWidth, bufHeight);
 
 		int[] pRGBArray = new int[bufWidth * bufHeight];
 
 		try {
 			file.readScene(pRGBArray, task);
 			int w = rasterBuf.getWidth();
-			if(getBandCount() >= 3) {
+			if (getBandCount() >= 3) {
 				for (int row = 0; row < rasterBuf.getHeight(); row++) {
 					for (int col = 0; col < w; col++) {
-						rasterBuf.setElem(row, col, 0, (byte) ((pRGBArray[(row * w) + col] & 0x00ff0000) >> 16));
-						rasterBuf.setElem(row, col, 1, (byte) ((pRGBArray[(row * w) + col] & 0x0000ff00) >> 8));
-						rasterBuf.setElem(row, col, 2, (byte) (pRGBArray[(row * w) + col] & 0x000000ff));
+						rasterBuf
+								.setElem(
+										row,
+										col,
+										0,
+										(byte) ((pRGBArray[(row * w) + col] & 0x00ff0000) >> 16));
+						rasterBuf
+								.setElem(
+										row,
+										col,
+										1,
+										(byte) ((pRGBArray[(row * w) + col] & 0x0000ff00) >> 8));
+						rasterBuf
+								.setElem(
+										row,
+										col,
+										2,
+										(byte) (pRGBArray[(row * w) + col] & 0x000000ff));
 					}
 					if (task.getEvent() != null)
 						task.manageEvent(task.getEvent());
 				}
 			}
-			if(getBandCount() == 1) {
+			if (getBandCount() == 1) {
 				for (int row = 0; row < rasterBuf.getHeight(); row++) {
-					for (int col = 0; col < w; col++) 
-						rasterBuf.setElem(row, col, 0, (byte) (pRGBArray[(row * w) + col] & 0x000000ff));
+					for (int col = 0; col < w; col++)
+						rasterBuf
+								.setElem(
+										row,
+										col,
+										0,
+										(byte) (pRGBArray[(row * w) + col] & 0x000000ff));
 					if (task.getEvent() != null)
 						task.manageEvent(task.getEvent());
 				}
@@ -331,13 +423,20 @@ public class MrSidDriver extends RasterDataset {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.dataset.RasterDataset#getWindowRaster(int, int, int, int, int, int, org.gvsig.raster.dataset.BandList, org.gvsig.raster.dataset.IBuffer)
+	 * 
+	 * @see org.gvsig.raster.dataset.RasterDataset#getWindowRaster(int, int,
+	 * int, int, int, int, org.gvsig.raster.dataset.BandList,
+	 * org.gvsig.raster.dataset.IBuffer)
 	 */
-	public IBuffer getWindowRaster(int x, int y, int w, int h, int bufWidth, int bufHeight, BandList bandList, IBuffer rasterBuf) throws InterruptedException, RasterDriverException {
-		RasterTask task = RasterTaskQueue.get(Thread.currentThread().toString());
+	public IBuffer getWindowRaster(int x, int y, int w, int h, int bufWidth,
+			int bufHeight, BandList bandList, IBuffer rasterBuf)
+			throws InterruptedException, RasterDriverException {
+		RasterTask task = RasterTaskQueue
+				.get(Thread.currentThread().toString());
 
 		// TODO: FUNCIONALIDAD: Hacer caso del bandList
-		// Impedimos que los valores de ancho y alto de la imágen sean menores que 1
+		// Impedimos que los valores de ancho y alto de la imágen sean menores
+		// que 1
 		if (bufWidth <= 0)
 			bufWidth = 1;
 
@@ -347,16 +446,32 @@ public class MrSidDriver extends RasterDataset {
 		Point2D begin = rasterToWorld(new Point2D.Double(x, y));
 		Point2D end = rasterToWorld(new Point2D.Double(x + w, y + h));
 
-		file.setView(begin.getX(), begin.getY(), end.getX(), end.getY(), bufWidth, bufHeight);
+		file.setView(begin.getX(), begin.getY(), end.getX(), end.getY(),
+				bufWidth, bufHeight);
 
 		int[] pRGBArray = new int[bufWidth * bufHeight];
 		try {
 			file.readScene(pRGBArray, task);
 			for (int row = 0; row < bufHeight; row++) {
 				for (int col = 0; col < bufWidth; col++) {
-					rasterBuf.setElem(row, col, 0, (byte) ((pRGBArray[(row * bufWidth) + col] & 0x00ff0000) >> 16));
-					rasterBuf.setElem(row, col, 1, (byte) ((pRGBArray[(row * bufWidth) + col] & 0x0000ff00) >> 8));
-					rasterBuf.setElem(row, col, 2, (byte) (pRGBArray[(row * bufWidth) + col] & 0x000000ff));
+					rasterBuf
+							.setElem(
+									row,
+									col,
+									0,
+									(byte) ((pRGBArray[(row * bufWidth) + col] & 0x00ff0000) >> 16));
+					rasterBuf
+							.setElem(
+									row,
+									col,
+									1,
+									(byte) ((pRGBArray[(row * bufWidth) + col] & 0x0000ff00) >> 8));
+					rasterBuf
+							.setElem(
+									row,
+									col,
+									2,
+									(byte) (pRGBArray[(row * bufWidth) + col] & 0x000000ff));
 				}
 				if (task.getEvent() != null)
 					task.manageEvent(task.getEvent());
@@ -369,10 +484,14 @@ public class MrSidDriver extends RasterDataset {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.RasterDataset#readBlock(int, int)
 	 */
-	public Object readBlock(int pos, int blockHeight) throws InvalidSetViewException, FileNotOpenException, RasterDriverException, InterruptedException {
-		RasterTask task = RasterTaskQueue.get(Thread.currentThread().toString());
+	public Object readBlock(int pos, int blockHeight)
+			throws InvalidSetViewException, FileNotOpenException,
+			RasterDriverException, InterruptedException {
+		RasterTask task = RasterTaskQueue
+				.get(Thread.currentThread().toString());
 
 		if (pos < 0)
 			throw new InvalidSetViewException("Request out of grid");
@@ -381,11 +500,13 @@ public class MrSidDriver extends RasterDataset {
 			blockHeight = Math.abs(file.height - pos);
 
 		Point2D begin = rasterToWorld(new Point2D.Double(0, pos));
-		Point2D end = rasterToWorld(new Point2D.Double(file.width, pos + blockHeight));
+		Point2D end = rasterToWorld(new Point2D.Double(file.width, pos
+				+ blockHeight));
 
 		int w = file.width;
 
-		file.setView(begin.getX(), begin.getY(), end.getX(), end.getY(), w, blockHeight);
+		file.setView(begin.getX(), begin.getY(), end.getX(), end.getY(), w,
+				blockHeight);
 
 		int[] pRGBArray = new int[file.width * blockHeight];
 		try {
@@ -408,11 +529,14 @@ public class MrSidDriver extends RasterDataset {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.RasterDataset#readCompleteLine(int, int)
 	 */
 	public Object readCompleteLine(int line, int band)
-					throws InvalidSetViewException, FileNotOpenException, RasterDriverException {
-		RasterTask task = RasterTaskQueue.get(Thread.currentThread().toString());
+			throws InvalidSetViewException, FileNotOpenException,
+			RasterDriverException {
+		RasterTask task = RasterTaskQueue
+				.get(Thread.currentThread().toString());
 
 		if (line > this.getHeight() || band > this.getBandCount())
 			throw new InvalidSetViewException("Request out of grid");
@@ -420,12 +544,14 @@ public class MrSidDriver extends RasterDataset {
 		try {
 			Extent extent = getExtent();
 			Point2D pt = rasterToWorld(new Point2D.Double(extent.minX(), line));
-			file.setView(extent.minX(), pt.getY(), extent.maxX(), pt.getY(), getWidth(), 1);
+			file.setView(extent.minX(), pt.getY(), extent.maxX(), pt.getY(),
+					getWidth(), 1);
 			int[] pRGBArray = new int[getWidth()];
 			file.readScene(pRGBArray, task);
 			return pRGBArray;
 		} catch (MrSIDException e) {
-			throw new RasterDriverException("Error reading data from MrSID library");
+			throw new RasterDriverException(
+					"Error reading data from MrSID library");
 		} catch (InterruptedException e) {
 			// El proceso que debe ser interrumpido es el que llama a readLine.
 		}
@@ -434,9 +560,14 @@ public class MrSidDriver extends RasterDataset {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.dataset.RasterDataset#getWindowRaster(int, int, int, int, org.gvsig.raster.dataset.BandList, org.gvsig.raster.dataset.IBuffer)
+	 * 
+	 * @see org.gvsig.raster.dataset.RasterDataset#getWindowRaster(int, int,
+	 * int, int, org.gvsig.raster.dataset.BandList,
+	 * org.gvsig.raster.dataset.IBuffer)
 	 */
-	public IBuffer getWindowRaster(int x, int y, int w, int h, BandList bandList, IBuffer rasterBuf) throws InterruptedException, RasterDriverException {
+	public IBuffer getWindowRaster(int x, int y, int w, int h,
+			BandList bandList, IBuffer rasterBuf) throws InterruptedException,
+			RasterDriverException {
 		try {
 			file.readWindow(rasterBuf, bandList, x, y, w, h);
 		} catch (MrSIDException e) {
@@ -444,7 +575,7 @@ public class MrSidDriver extends RasterDataset {
 		}
 		return rasterBuf;
 	}
-	
+
 	/**
 	 * Obtiene el objeto que contiene el estado de la transparencia
 	 */
@@ -455,7 +586,9 @@ public class MrSidDriver extends RasterDataset {
 	}
 
 	/**
-	 * Obtiene el objeto que contiene que contiene la interpretación de color por banda
+	 * Obtiene el objeto que contiene que contiene la interpretación de color
+	 * por banda
+	 * 
 	 * @return
 	 */
 	public DatasetColorInterpretation getColorInterpretation() {
@@ -463,47 +596,59 @@ public class MrSidDriver extends RasterDataset {
 			colorInterpr = new DatasetColorInterpretation();
 			colorInterpr.initColorInterpretation(getBandCount());
 			if (getBandCount() == 1)
-				colorInterpr.setColorInterpValue(0, DatasetColorInterpretation.GRAY_BAND);
+				colorInterpr.setColorInterpValue(0,
+						DatasetColorInterpretation.GRAY_BAND);
 			if (getBandCount() >= 3) {
-				colorInterpr.setColorInterpValue(0, DatasetColorInterpretation.RED_BAND);
-				colorInterpr.setColorInterpValue(1, DatasetColorInterpretation.GREEN_BAND);
-				colorInterpr.setColorInterpValue(2, DatasetColorInterpretation.BLUE_BAND);
+				colorInterpr.setColorInterpValue(0,
+						DatasetColorInterpretation.RED_BAND);
+				colorInterpr.setColorInterpValue(1,
+						DatasetColorInterpretation.GREEN_BAND);
+				colorInterpr.setColorInterpValue(2,
+						DatasetColorInterpretation.BLUE_BAND);
 			}
 		}
 		return colorInterpr;
 	}
 
 	/**
-	 * Asigna el objeto que contiene que contiene la interpretación de color por banda
+	 * Asigna el objeto que contiene que contiene la interpretación de color por
+	 * banda
+	 * 
 	 * @param DatasetColorInterpretation
 	 */
-	public void setColorInterpretation(DatasetColorInterpretation colorInterpretation) {
+	public void setColorInterpretation(
+			DatasetColorInterpretation colorInterpretation) {
 		this.colorInterpretation = colorInterpretation;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.GeoInfo#getWktProjection()
 	 */
 	public String getWktProjection() {
 		// System.err.println("======>" + file);
 		return null;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.dataset.GeoInfo#setAffineTransform(java.awt.geom.AffineTransform)
+	 * 
+	 * @see org.gvsig.raster.dataset.GeoInfo#setAffineTransform(java.awt.geom.
+	 * AffineTransform)
 	 */
 	public void setAffineTransform(AffineTransform t) {
 		super.setAffineTransform(t);
 		file.setExternalTransform(t);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.RasterDataset#getOverviewCount(int)
 	 */
-	public int getOverviewCount(int band) throws BandAccessException, RasterDriverException {
+	public int getOverviewCount(int band) throws BandAccessException,
+			RasterDriverException {
 		if (band >= getBandCount())
 			throw new BandAccessException("Wrong band");
 		try {
@@ -512,12 +657,14 @@ public class MrSidDriver extends RasterDataset {
 			throw new RasterDriverException("");
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.RasterDataset#getOverviewWidth(int, int)
 	 */
-	public int getOverviewWidth(int band, int overview) throws BandAccessException, RasterDriverException {
+	public int getOverviewWidth(int band, int overview)
+			throws BandAccessException, RasterDriverException {
 		if (band >= getBandCount())
 			throw new BandAccessException("Wrong band");
 		return 0;
@@ -525,20 +672,24 @@ public class MrSidDriver extends RasterDataset {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.RasterDataset#getOverviewHeight(int, int)
 	 */
-	public int getOverviewHeight(int band, int overview) throws BandAccessException, RasterDriverException {
+	public int getOverviewHeight(int band, int overview)
+			throws BandAccessException, RasterDriverException {
 		if (band >= getBandCount())
 			throw new BandAccessException("Wrong band");
 		return 0;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.dataset.RasterDataset#overviewsSupport()
 	 */
 	public boolean overviewsSupport() {
-		// No podemos escribir por lo que no podemos informar de que soporta overviews aunque el formato si lo haga.
+		// No podemos escribir por lo que no podemos informar de que soporta
+		// overviews aunque el formato si lo haga.
 		return false;
 	}
 }

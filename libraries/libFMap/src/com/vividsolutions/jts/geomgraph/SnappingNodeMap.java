@@ -36,7 +36,7 @@ public class SnappingNodeMap extends NodeMap {
 	public SnappingNodeMap(NodeFactory arg0) {
 		super(arg0);
 	}
-	
+
 	public SnappingNodeMap(NodeFactory nodeFactory, double snapTolerance) {
 		super(nodeFactory);
 		this.snapTolerance = snapTolerance;
@@ -196,14 +196,13 @@ public class SnappingNodeMap extends NodeMap {
 			return label;
 		}
 
-		void computeEdgeEndLabels(BoundaryNodeRule boundaryNodeRule)
-		  {
-		    // Compute edge label for each EdgeEnd
-		    for (Iterator it = iterator(); it.hasNext(); ) {
-		      EdgeEnd ee = (EdgeEnd) it.next();
-		      ee.computeLabel(boundaryNodeRule);
-		    }
-		  }
+		void computeEdgeEndLabels(BoundaryNodeRule boundaryNodeRule) {
+			// Compute edge label for each EdgeEnd
+			for (Iterator it = iterator(); it.hasNext();) {
+				EdgeEnd ee = (EdgeEnd) it.next();
+				ee.computeLabel(boundaryNodeRule);
+			}
+		}
 
 		void propagateSideLabels(int geomIndex) {
 			// Since edges are stored in CCW order around the node,
@@ -243,9 +242,8 @@ public class SnappingNodeMap extends NodeMap {
 							throw new TopologyException(
 									"side location conflict", e.getCoordinate());
 						if (leftLoc == Location.NONE) {
-							Assert
-									.shouldNeverReachHere("found single null side (at "
-											+ e.getCoordinate() + ")");
+							Assert.shouldNeverReachHere("found single null side (at "
+									+ e.getCoordinate() + ")");
 						}
 						currLoc = leftLoc;
 					} else {
@@ -257,8 +255,8 @@ public class SnappingNodeMap extends NodeMap {
 						 * determined by the current location). Assign both
 						 * sides to be the current location.
 						 */
-						Assert.isTrue(label.getLocation(geomIndex,
-								Position.LEFT) == Location.NONE,
+						Assert.isTrue(
+								label.getLocation(geomIndex, Position.LEFT) == Location.NONE,
 								"found single null side");
 						label.setLocation(geomIndex, Position.RIGHT, currLoc);
 						label.setLocation(geomIndex, Position.LEFT, currLoc);
@@ -296,60 +294,59 @@ public class SnappingNodeMap extends NodeMap {
 				label.setAllLocationsIfNull(1, nodeLabel.getLocation(1));
 			}
 		}
-		
-		 public void computeLabelling(GeometryGraph[] geom)
-		  {
-			 computeEdgeEndLabels(geom[0].getBoundaryNodeRule());
-			 propagateSideLabels(0);
-			 propagateSideLabels(1); 
-			 boolean[] hasDimensionalCollapseEdge = { false, false };
-			    for (Iterator it = iterator(); it.hasNext(); ) {
-			      EdgeEnd e = (EdgeEnd) it.next();
-			      Label label = e.getLabel();
-			      for (int geomi = 0; geomi < 2; geomi++) {
-			        if (label.isLine(geomi) && label.getLocation(geomi) == Location.BOUNDARY)
-			          hasDimensionalCollapseEdge[geomi] = true;
-			      }
-			    }
-			    for (Iterator it = iterator(); it.hasNext(); ) {
-			      EdgeEnd e = (EdgeEnd) it.next();
-			      Label label = e.getLabel();
-			      for (int geomi = 0; geomi < 2; geomi++) {
-			        if (label.isAnyNull(geomi)) {
-			          int loc = Location.NONE;
-			          if (hasDimensionalCollapseEdge[geomi]) {
-			            loc = Location.EXTERIOR;
-			          }
-			          else {
-			            Coordinate p = e.getCoordinate();
-			            loc = getLocation(geomi, p, geom);
-			          }
-			          label.setAllLocationsIfNull(geomi, loc);
-			        }
-			      }
-			    }
-		    
-		    // determine the overall labelling for this DirectedEdgeStar
-		    // (i.e. for the node it is based at)
-		    label = new Label(Location.NONE);
-		    for (Iterator it = iterator(); it.hasNext(); ) {
-		      EdgeEnd ee = (EdgeEnd) it.next();
-		      Edge e = ee.getEdge();
-		      Label eLabel = e.getLabel();
-		      for (int i = 0; i < 2; i++) {
-		        int eLoc = eLabel.getLocation(i);
-		        if (eLoc == Location.INTERIOR || eLoc == Location.BOUNDARY)
-		          label.setLocation(i, Location.INTERIOR);
-		      }
-		    }
-// Debug.print(this);
-		  }
+
+		public void computeLabelling(GeometryGraph[] geom) {
+			computeEdgeEndLabels(geom[0].getBoundaryNodeRule());
+			propagateSideLabels(0);
+			propagateSideLabels(1);
+			boolean[] hasDimensionalCollapseEdge = { false, false };
+			for (Iterator it = iterator(); it.hasNext();) {
+				EdgeEnd e = (EdgeEnd) it.next();
+				Label label = e.getLabel();
+				for (int geomi = 0; geomi < 2; geomi++) {
+					if (label.isLine(geomi)
+							&& label.getLocation(geomi) == Location.BOUNDARY)
+						hasDimensionalCollapseEdge[geomi] = true;
+				}
+			}
+			for (Iterator it = iterator(); it.hasNext();) {
+				EdgeEnd e = (EdgeEnd) it.next();
+				Label label = e.getLabel();
+				for (int geomi = 0; geomi < 2; geomi++) {
+					if (label.isAnyNull(geomi)) {
+						int loc = Location.NONE;
+						if (hasDimensionalCollapseEdge[geomi]) {
+							loc = Location.EXTERIOR;
+						} else {
+							Coordinate p = e.getCoordinate();
+							loc = getLocation(geomi, p, geom);
+						}
+						label.setAllLocationsIfNull(geomi, loc);
+					}
+				}
+			}
+
+			// determine the overall labelling for this DirectedEdgeStar
+			// (i.e. for the node it is based at)
+			label = new Label(Location.NONE);
+			for (Iterator it = iterator(); it.hasNext();) {
+				EdgeEnd ee = (EdgeEnd) it.next();
+				Edge e = ee.getEdge();
+				Label eLabel = e.getLabel();
+				for (int i = 0; i < 2; i++) {
+					int eLoc = eLabel.getLocation(i);
+					if (eLoc == Location.INTERIOR || eLoc == Location.BOUNDARY)
+						label.setLocation(i, Location.INTERIOR);
+				}
+			}
+			// Debug.print(this);
+		}
 	}
 
 	/**
-	 * A geometry graph node that consideer equals those nodes which are at a distance
-	 * lower than the snap tolerance.
-	 *
+	 * A geometry graph node that consideer equals those nodes which are at a
+	 * distance lower than the snap tolerance.
+	 * 
 	 */
 	class SnapNode extends Node {
 
@@ -367,12 +364,10 @@ public class SnappingNodeMap extends NodeMap {
 		}
 	}
 
-	
-
 	/**
-	 * Comparator that allows to sort Coordinates  from lower to higher distance
+	 * Comparator that allows to sort Coordinates from lower to higher distance
 	 * to a given coordinate.
-	 *
+	 * 
 	 */
 
 	class MinDistCoordComparator implements Comparator {
@@ -404,11 +399,7 @@ public class SnappingNodeMap extends NodeMap {
 		candidate = new SnapNode(coord, edgeStar);
 
 		/*
-		 * FIXME
-		 * PRUEBA PARA VER POR QUÉ DA ERRORES CON POLIGONOS
-		 * 
-		 * 
-		 * 
+		 * FIXME PRUEBA PARA VER POR QUÉ DA ERRORES CON POLIGONOS
 		 */
 
 		Node stored = (Node) nodeMap.get(candidate);

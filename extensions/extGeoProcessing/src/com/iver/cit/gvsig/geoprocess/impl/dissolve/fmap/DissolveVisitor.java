@@ -133,9 +133,9 @@ import com.vividsolutions.jts.geom.Geometry;
  * coincident, it creates a new polygon by unioning original polygons. Also
  * applies a sumarization function to numeric fields of original features.
  * </p>
- *
+ * 
  * @author azabala
- *
+ * 
  */
 public class DissolveVisitor implements FeatureVisitor {
 
@@ -149,7 +149,7 @@ public class DissolveVisitor implements FeatureVisitor {
 	 * feature geometry
 	 */
 	protected FLyrVect dissolvedLayer;
-	
+
 	protected int geometryType;
 
 	/**
@@ -160,7 +160,7 @@ public class DissolveVisitor implements FeatureVisitor {
 	/**
 	 * It marks all features that have already been dissolved (to avoid process
 	 * them in subsecuent steps)
-	 *
+	 * 
 	 */
 	protected FBitSet dissolvedGeometries;
 
@@ -186,6 +186,7 @@ public class DissolveVisitor implements FeatureVisitor {
 
 	/**
 	 * Constructor
+	 * 
 	 * @param dissolveField
 	 * @param processor
 	 */
@@ -198,7 +199,8 @@ public class DissolveVisitor implements FeatureVisitor {
 	public int getNumProcessedGeometries() {
 		return dissolvedGeometries.cardinality();
 	}
-	public FBitSet getDissolvedGeometries(){
+
+	public FBitSet getDissolvedGeometries() {
 		return dissolvedGeometries;
 	}
 
@@ -209,7 +211,7 @@ public class DissolveVisitor implements FeatureVisitor {
 	/*
 	 * Algorithm to compute dissolve is strongly based in depth first algorithm
 	 * to traverse graphs.
-	 *
+	 * 
 	 * It puts features to dissolve in a stack. While stack is not empty, get
 	 * Features and looks for adjacent to it. For each adjacent feature, verify
 	 * its dissolve field value, and if it is similar to feature to dissolve
@@ -217,18 +219,16 @@ public class DissolveVisitor implements FeatureVisitor {
 	 * sumarization functions to its numeric attributes. For each adjacent
 	 * feature, put it in the Stack
 	 */
-	public void visit(IGeometry g, int index) throws VisitorException, ProcessVisitorException {
-		if(g == null)
+	public void visit(IGeometry g, int index) throws VisitorException,
+			ProcessVisitorException {
+		if (g == null)
 			return;
-		
+
 		/*
-		if(g.getGeometryType() != XTypes.POLYGON &&
-				g.getGeometryType() != XTypes.MULTI)
-			return;
-			*/
-		
-		
-		
+		 * if(g.getGeometryType() != XTypes.POLYGON && g.getGeometryType() !=
+		 * XTypes.MULTI) return;
+		 */
+
 		if (!dissolvedGeometries.get(index)) {
 			// if we havent dissolved this feature
 			Stack toDissol = new Stack();// stack for adjacent features
@@ -242,42 +242,44 @@ public class DissolveVisitor implements FeatureVisitor {
 				Value[] valuesWithFID = new Value[values.length + 1];
 				System.arraycopy(values, 0, valuesWithFID, 1, values.length);
 				valuesWithFID[0] = ValueFactory.createValue(fid);
-				DissolvedFeature dissolved = new DissolvedFeature(null,valuesWithFID, fid/*index*/);
+				DissolvedFeature dissolved = new DissolvedFeature(null,
+						valuesWithFID, fid/* index */);
 				dissolved.setJtsGeometry(geometry);
 				this.featureProcessor.processFeature(dissolved);
 				fid++;
 				resetFunctions();
 			} catch (ReadDriverException e) {
-				throw new ProcessVisitorException(recordset.getName(),e,
-					"Error al procesar las geometrias a fusionar durante dissolve");
+				throw new ProcessVisitorException(recordset.getName(), e,
+						"Error al procesar las geometrias a fusionar durante dissolve");
 			} catch (VisitorException e) {
-				throw new ProcessVisitorException(recordset.getName(),e,
-				"Error al procesar las geometrias a fusionar durante dissolve");
+				throw new ProcessVisitorException(recordset.getName(), e,
+						"Error al procesar las geometrias a fusionar durante dissolve");
 			}
 		}// if
 	}
 
 	/**
 	 * Returns the union of all geometries of the list
+	 * 
 	 * @param geometries
 	 * @return
 	 */
-	protected Geometry union(List geometries){
+	protected Geometry union(List geometries) {
 		Geometry[] geom = new Geometry[geometries.size()];
 		geometries.toArray(geom);
-//		GeometryFactory fact = geom[0].getFactory();
-//	    Geometry geomColl = fact.createGeometryCollection(geom);
-//	    union = geomColl.buffer(0);
-//	    return union;
+		// GeometryFactory fact = geom[0].getFactory();
+		// Geometry geomColl = fact.createGeometryCollection(geom);
+		// union = geomColl.buffer(0);
+		// return union;
 		return JTSFacade.union(geom, geometryType);
 	}
 
 	/**
 	 * FIXME Rediseñar esto, pues el codigo es similar al de Spatial Join
-	 *
+	 * 
 	 */
 	protected void resetFunctions() {
-		if(numericField_sumarizeFunction == null)
+		if (numericField_sumarizeFunction == null)
 			return;
 		Iterator fieldsIt = numericField_sumarizeFunction.keySet().iterator();
 		while (fieldsIt.hasNext()) {
@@ -293,9 +295,9 @@ public class DissolveVisitor implements FeatureVisitor {
 	/**
 	 * Inner class to manage dissolve geoprocess. It mantains feature info
 	 * interesting for dissolve (int index, JTS Geometry, etc)
-	 *
+	 * 
 	 * @author azabala
-	 *
+	 * 
 	 */
 	protected class DissolvedFeature extends DefaultFeature {
 		int index;
@@ -331,24 +333,26 @@ public class DissolveVisitor implements FeatureVisitor {
 	/**
 	 * Creates a new IFeature with util info for dissolve geoprocess (it ignore
 	 * non numerical values, etc)
-	 *
+	 * 
 	 * @param g
 	 * @param index
 	 * @return
 	 * @throws ReadDriverException
 	 * @throws DriverException
 	 */
-	protected DissolvedFeature createFeature(IGeometry g, int index) throws ReadDriverException {
+	protected DissolvedFeature createFeature(IGeometry g, int index)
+			throws ReadDriverException {
 		DissolvedFeature solution = null;
 		int numNumericFields = 0;
-		if(numericField_sumarizeFunction != null)
+		if (numericField_sumarizeFunction != null)
 			numNumericFields = numericField_sumarizeFunction.keySet().size();
 		// attributes will be dissolve field and sumarized function for
 		// numerical
 		// values
 		Value[] values = new Value[numNumericFields + 1];
-		if (numericField_sumarizeFunction != null){
-			Iterator fieldIt = numericField_sumarizeFunction.keySet().iterator();
+		if (numericField_sumarizeFunction != null) {
+			Iterator fieldIt = numericField_sumarizeFunction.keySet()
+					.iterator();
 			int valueIndex = 0;
 			while (fieldIt.hasNext()) {
 				String fieldName = (String) fieldIt.next();
@@ -370,25 +374,24 @@ public class DissolveVisitor implements FeatureVisitor {
 		return solution;
 	}
 
-
-//	// FIXME Mover esto a una utility class
-//	protected Geometry fastUnion(Geometry g1, Geometry g2) {
-//		Geometry[] geoms = new Geometry[2];
-//		geoms[0] = g1;
-//		geoms[1] = g2;
-//		GeometryCollection gc = g1.getFactory().createGeometryCollection(geoms);
-//		return gc.buffer(0d);
-//	}
+	// // FIXME Mover esto a una utility class
+	// protected Geometry fastUnion(Geometry g1, Geometry g2) {
+	// Geometry[] geoms = new Geometry[2];
+	// geoms[0] = g1;
+	// geoms[1] = g2;
+	// GeometryCollection gc = g1.getFactory().createGeometryCollection(geoms);
+	// return gc.buffer(0d);
+	// }
 
 	protected boolean verifyIfDissolve(DissolvedFeature fet1,
 			DissolvedFeature fet2) {
 		Geometry jtsGeo = fet1.getJtsGeometry();
 		Geometry featureJtsGeo = fet2.getJtsGeometry();
-		
-		//FIXME Revisar si intersects considera dos arcos adjacentes
-		//que no comparten nodo
+
+		// FIXME Revisar si intersects considera dos arcos adjacentes
+		// que no comparten nodo
 		if (jtsGeo.intersects(featureJtsGeo)) {// They have at least
-			//a common point
+			// a common point
 
 			// dissolveField is the last
 			int fieldIndex = 0;
@@ -407,9 +410,9 @@ public class DissolveVisitor implements FeatureVisitor {
 	 * For each individual geometry processed in DissolveVisitor's visit method,
 	 * this Visitor visits its adjacent polygons geometries to check dissolve
 	 * conditions.
-	 *
+	 * 
 	 * @author azabala
-	 *
+	 * 
 	 */
 	protected class IndividualGeometryDissolveVisitor implements FeatureVisitor {
 		/**
@@ -427,7 +430,7 @@ public class DissolveVisitor implements FeatureVisitor {
 
 		/**
 		 * Field use to dissolve adjacent geometries with the same value for it
-		 *
+		 * 
 		 * FIXME Change it for an evaluator of logical expresions
 		 */
 		String dissolveField;
@@ -454,17 +457,17 @@ public class DissolveVisitor implements FeatureVisitor {
 
 		/**
 		 * Constructor
-		 *
+		 * 
 		 * @param feature
 		 *            Feature we are analizing to found its adjacents
-		 *
+		 * 
 		 * @param dissolvedFeatures
 		 *            bitset that marks all analyzed features (to not to analyze
 		 *            later)
-		 *
+		 * 
 		 * @param featuresToDissolve
 		 *            stack where we put adjacent features to analyze later
-		 *
+		 * 
 		 * @param fields_sumarize
 		 *            maps a numeric field of the solution layer with its
 		 *            sumarization functions
@@ -488,13 +491,16 @@ public class DissolveVisitor implements FeatureVisitor {
 
 		/**
 		 * Applies to sumarization functions feature values.
+		 * 
 		 * @throws ReadDriverException
-		 *
+		 * 
 		 * @throws DriverException
-		 *
-		 * FIXME Rediseñar, pues el codigo es similar al de Spatial Join
+		 * 
+		 *             FIXME Rediseñar, pues el codigo es similar al de Spatial
+		 *             Join
 		 */
-		protected void applySumarizeFunction(int recordIndex) throws ReadDriverException {
+		protected void applySumarizeFunction(int recordIndex)
+				throws ReadDriverException {
 			// TODO Redesing this with extensible dissolve
 			if (fields_sumarizeFunc == null)
 				return;
@@ -518,11 +524,12 @@ public class DissolveVisitor implements FeatureVisitor {
 		 * Analizes a feature (defined by g and its index) to see if it is an
 		 * adjacent feature to the given feature, and to check its dissolve
 		 * condition.
-		 *
+		 * 
 		 * @param g
 		 * @param index
 		 */
-		public void visit(IGeometry g, int index) throws VisitorException, ProcessVisitorException {
+		public void visit(IGeometry g, int index) throws VisitorException,
+				ProcessVisitorException {
 			// Is it the feature whose adjacents we are looking for?
 			if (index == feature.getIndex())
 				return;
@@ -542,7 +549,7 @@ public class DissolveVisitor implements FeatureVisitor {
 					applySumarizeFunction(index);
 				}
 			} catch (ReadDriverException e) {
-				throw new ProcessVisitorException(recordset.getName(),e,
+				throw new ProcessVisitorException(recordset.getName(), e,
 						"Error al cargar los polígonos adyacentes durante un dissolve");
 			}
 		}// visit
@@ -582,7 +589,7 @@ public class DissolveVisitor implements FeatureVisitor {
 		public Value[] getSumarizedValues2() {
 			Value[] solution = null;
 			ArrayList values = new ArrayList();
-			if (fields_sumarizeFunc != null){
+			if (fields_sumarizeFunc != null) {
 				Iterator fieldsIt = fields_sumarizeFunc.keySet().iterator();
 				while (fieldsIt.hasNext()) {
 					String field = (String) fieldsIt.next();
@@ -592,13 +599,13 @@ public class DissolveVisitor implements FeatureVisitor {
 						values.add(functions[i].getSumarizeValue());
 					}// for
 				}// while
-			}//if
+			}// if
 			if (dissolveField != null) {
 				try {
 					int dissolveFieldIndex = recordset
 							.getFieldIndexByName(dissolveField);
-					Value dissolveField = recordset.getFieldValue(feature
-							.getIndex(), dissolveFieldIndex);
+					Value dissolveField = recordset.getFieldValue(
+							feature.getIndex(), dissolveFieldIndex);
 					values.add(dissolveField);
 				} catch (ReadDriverException e) {
 					// TODO Auto-generated catch block
@@ -621,10 +628,9 @@ public class DissolveVisitor implements FeatureVisitor {
 		}
 	}// IndividualDissolve
 
-
-
-	protected Value[] dissolveGeometries(Stack toDissol,
-			List geometries) throws ProcessVisitorException, ReadDriverException, ExpansionFileReadException, VisitorException {
+	protected Value[] dissolveGeometries(Stack toDissol, List geometries)
+			throws ProcessVisitorException, ReadDriverException,
+			ExpansionFileReadException, VisitorException {
 
 		IndividualGeometryDissolveVisitor visitor = null;
 		DissolvedFeature feature = null;
@@ -650,8 +656,8 @@ public class DissolveVisitor implements FeatureVisitor {
 					- magnify, (xmax - xmin) + magnify, (ymax - ymin) + magnify);
 
 			strategy.process(visitor, query);
-			//al final de toda la pila de llamadas recursivas,
-			//geometries tendrá todas las geometrias que debemos dissolver
+			// al final de toda la pila de llamadas recursivas,
+			// geometries tendrá todas las geometrias que debemos dissolver
 			geometries.add(feature.getJtsGeometry());
 		}// while
 		Value[] values = visitor.getSumarizedValues2();
@@ -659,7 +665,8 @@ public class DissolveVisitor implements FeatureVisitor {
 	}
 
 	protected DissolvedFeature dissolve(Stack toDissol)
-			throws ReadDriverException, ExpansionFileReadException, VisitorException {
+			throws ReadDriverException, ExpansionFileReadException,
+			VisitorException {
 
 		DissolvedFeature feature = null;
 		Geometry jtsGeometry = null;

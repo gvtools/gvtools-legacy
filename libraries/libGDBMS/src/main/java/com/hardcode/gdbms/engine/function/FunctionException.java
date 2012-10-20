@@ -2,7 +2,7 @@ package com.hardcode.gdbms.engine.function;
 
 /**
  * Excepción producida en el código de las funciones
- *
+ * 
  * @author Fernando González Cortés
  */
 public class FunctionException extends Exception {
@@ -15,7 +15,7 @@ public class FunctionException extends Exception {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param message
 	 */
 	public FunctionException(String message) {
@@ -24,7 +24,7 @@ public class FunctionException extends Exception {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param message
 	 * @param cause
 	 */
@@ -34,7 +34,7 @@ public class FunctionException extends Exception {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @param cause
 	 */
 	public FunctionException(Throwable cause) {

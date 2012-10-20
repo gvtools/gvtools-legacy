@@ -2,11 +2,9 @@ package com.hardcode.gdbms.engine.values;
 
 import java.sql.Types;
 
-
-
 /**
  * Wrapper sobre el tipo int
- *
+ * 
  * @author Fernando González Cortés
  */
 public class IntValue extends NumericValue {
@@ -14,8 +12,9 @@ public class IntValue extends NumericValue {
 
 	/**
 	 * Creates a new IntValue object.
-	 *
-	 * @param value DOCUMENT ME!
+	 * 
+	 * @param value
+	 *            DOCUMENT ME!
 	 */
 	IntValue(int value) {
 		this.value = value;
@@ -29,7 +28,7 @@ public class IntValue extends NumericValue {
 
 	/**
 	 * Establece el valor de este objeto
-	 *
+	 * 
 	 * @param value
 	 */
 	public void setValue(int value) {
@@ -38,7 +37,7 @@ public class IntValue extends NumericValue {
 
 	/**
 	 * Obtiene el valor de este objeto
-	 *
+	 * 
 	 * @return
 	 */
 	public int getValue() {
@@ -101,19 +100,19 @@ public class IntValue extends NumericValue {
 		return (short) value;
 	}
 
-    /**
-     * @see com.hardcode.gdbms.engine.values.Value#getStringValue(com.hardcode.gdbms.engine.data.driver.ValueWriter)
-     */
-    public String getStringValue(ValueWriter writer) {
-        return writer.getStatementString(value, Types.INTEGER);
-    }
+	/**
+	 * @see com.hardcode.gdbms.engine.values.Value#getStringValue(com.hardcode.gdbms.engine.data.driver.ValueWriter)
+	 */
+	public String getStringValue(ValueWriter writer) {
+		return writer.getStatementString(value, Types.INTEGER);
+	}
 
-    /**
-     * @see com.hardcode.gdbms.engine.values.Value#getSQLType()
-     */
-    public int getSQLType() {
-        return Types.INTEGER;
-    }
+	/**
+	 * @see com.hardcode.gdbms.engine.values.Value#getSQLType()
+	 */
+	public int getSQLType() {
+		return Types.INTEGER;
+	}
 
 	public int getWidth() {
 		return 4;

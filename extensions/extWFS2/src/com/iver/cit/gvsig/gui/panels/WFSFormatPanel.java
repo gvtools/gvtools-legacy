@@ -71,7 +71,7 @@ public class WFSFormatPanel extends JPanel {
 	private JList lstSRSs = null;
 
 	/**
-	 * This method initializes 
+	 * This method initializes
 	 * 
 	 */
 	public WFSFormatPanel() {
@@ -87,31 +87,32 @@ public class WFSFormatPanel extends JPanel {
 		this.setLayout(null);
 		this.setBounds(10, 5, 481, 427);
 		this.add(getSrsPanel(), null);
-			
+
 	}
 
 	/**
-	 * This method initializes srsPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes srsPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getSrsPanel() {
 		if (srsPanel == null) {
 			srsPanel = new JPanel();
 			srsPanel.setLayout(null);
 			srsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                    null, PluginServices.getText(this, "seleccionar_srs"),
-                    javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                    javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+					null, PluginServices.getText(this, "seleccionar_srs"),
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					null));
 			srsPanel.setBounds(7, 10, 453, 168);
 			srsPanel.add(getJScrollPane2(), null);
 		}
 		return srsPanel;
 	}
-	
+
 	/**
 	 * This method initializes jScrollPane2
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private javax.swing.JScrollPane getJScrollPane2() {
@@ -124,10 +125,10 @@ public class WFSFormatPanel extends JPanel {
 
 		return jScrollPane2;
 	}
-	
+
 	/**
 	 * This method initializes lstSRSs
-	 *
+	 * 
 	 * @return javax.swing.JList
 	 */
 	public javax.swing.JList getLstSRSs() {
@@ -136,9 +137,8 @@ public class WFSFormatPanel extends JPanel {
 			lstSRSs.setModel(new SRSListModel());
 			lstSRSs.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 			lstSRSs.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-				public void valueChanged(
-						javax.swing.event.ListSelectionEvent e) {
-					int i = lstSRSs.getSelectedIndex();					
+				public void valueChanged(javax.swing.event.ListSelectionEvent e) {
+					int i = lstSRSs.getSelectedIndex();
 				}
 			});
 		}
@@ -148,26 +148,28 @@ public class WFSFormatPanel extends JPanel {
 
 	/**
 	 * Refresh the panel
+	 * 
 	 * @param feature
 	 */
 	public void refresh(WFSLayerNode feature) {
-		setFormats(feature);	
+		setFormats(feature);
 	}
-	
+
 	/**
 	 * Sets a SRS list
+	 * 
 	 * @param feature
 	 */
-	private void setFormats(WFSLayerNode feature){
+	private void setFormats(WFSLayerNode feature) {
 		getLstSRSs().setListData(new Object[0]);
 		Vector srs = feature.getSrs();
 		getLstSRSs().setListData(srs.toArray());
 	}
-	
+
 	public class SRSListModel extends AbstractListModel {
 		private static final long serialVersionUID = -6134561791965083588L;
 		ArrayList srs = new ArrayList();
-		
+
 		public int getSize() {
 			return srs.size();
 		}
@@ -175,20 +177,20 @@ public class WFSFormatPanel extends JPanel {
 		public Object getElementAt(int index) {
 			return srs.get(index);
 		}
-		
+
 		public void setAll(Collection c) {
-			
+
 			srs.clear();
 			srs.addAll(c);
 		}
-		
+
 		public Collection intersect(Collection c) {
 			TreeSet resul = new TreeSet();
-	    	for (int i = 0; i < srs.size(); i++) {
+			for (int i = 0; i < srs.size(); i++) {
 				if (c.contains(srs.get(i)))
 					resul.add(srs.get(i));
 			}
-	    	return resul;	
+			return resul;
 		}
 	}
 }

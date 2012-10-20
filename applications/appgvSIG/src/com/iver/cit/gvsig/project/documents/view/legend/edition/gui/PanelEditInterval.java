@@ -46,7 +46,6 @@
  */
 package com.iver.cit.gvsig.project.documents.view.legend.edition.gui;
 
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -59,17 +58,15 @@ import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.rendering.FInterval;
 import com.iver.cit.gvsig.fmap.rendering.IInterval;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author fjp To change the template for this generated type comment go to
- *         Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and
- *         Comments
-*/
-public class PanelEditInterval extends JPanel implements IWindow  {
+ *         Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ */
+public class PanelEditInterval extends JPanel implements IWindow {
 	private JButton jButton = null;
-	//private FIntervalCellEditor intervaleditor;
+	// private FIntervalCellEditor intervaleditor;
 	private JPanel jPanel = null;
 	private JPanel jPanel1 = null;
 	private JLabel jLabel = null;
@@ -77,60 +74,63 @@ public class PanelEditInterval extends JPanel implements IWindow  {
 	private JPanel jPanel2 = null;
 	private JLabel jLabel1 = null;
 	private JTextField m_txtMax1 = null;
-	private boolean ok=false;
-	/**
-     * This is the default constructor
-     */
-    public PanelEditInterval() {
-        super();
-        initialize();
-		//intervaleditor=ice;
-    }
+	private boolean ok = false;
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param i DOCUMENT ME!
-     */
-    public void setFInterval(IInterval i) {
-    	ok=false;
-		if (i instanceof FInterval){
-			
-			m_txtMin1.setText(String.valueOf(((FInterval)i).getMin()));
-			m_txtMax1.setText(String.valueOf(((FInterval)i).getMax()));
+	/**
+	 * This is the default constructor
+	 */
+	public PanelEditInterval() {
+		super();
+		initialize();
+		// intervaleditor=ice;
+	}
+
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param i
+	 *            DOCUMENT ME!
+	 */
+	public void setFInterval(IInterval i) {
+		ok = false;
+		if (i instanceof FInterval) {
+
+			m_txtMin1.setText(String.valueOf(((FInterval) i).getMin()));
+			m_txtMax1.setText(String.valueOf(((FInterval) i).getMax()));
 		}
 	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public FInterval getFInterval() {
-		double from=0;
-		double to=0;
-		try{
-        from = Double.parseDouble(m_txtMin1.getText());
-        to =Double.parseDouble(m_txtMax1.getText());
-       
-		}catch (NumberFormatException e) {
-			JOptionPane.showMessageDialog(null, PluginServices.getText(this,"Formato_de_numero_erroneo")+".");
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public FInterval getFInterval() {
+		double from = 0;
+		double to = 0;
+		try {
+			from = Double.parseDouble(m_txtMin1.getText());
+			to = Double.parseDouble(m_txtMax1.getText());
+
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(null,
+					PluginServices.getText(this, "Formato_de_numero_erroneo")
+							+ ".");
 		}
 		FInterval i = new FInterval(from, to);
-        return i;
-    }
+		return i;
+	}
 
-    /**
-     * This method initializes this
-     */
-    private void initialize() {
-        this.setSize(316, 124);
+	/**
+	 * This method initializes this
+	 */
+	private void initialize() {
+		this.setSize(316, 124);
 		this.add(getJPanel1(), null);
 		this.add(getJPanel2(), null);
 		this.add(getJPanel(), null);
-		
-        
-    }
+
+	}
 
 	public WindowInfo getWindowInfo() {
 		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODALDIALOG);
@@ -141,47 +141,50 @@ public class PanelEditInterval extends JPanel implements IWindow  {
 	}
 
 	/**
-	 * This method initializes jButton	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */    
+	 * This method initializes jButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
 	private JButton getJButton() {
 		if (jButton == null) {
 			jButton = new JButton();
 			jButton.setText(PluginServices.getText(this, "aceptar"));
-			jButton.setPreferredSize(new java.awt.Dimension(90,26));
-			jButton.addActionListener(new java.awt.event.ActionListener() { 
-				public void actionPerformed(java.awt.event.ActionEvent e) {    
-					//intervaleditor.setCurrentInterval(getFInterval());
-					ok=true;
-					PluginServices.getMDIManager().closeWindow(PanelEditInterval.this);
+			jButton.setPreferredSize(new java.awt.Dimension(90, 26));
+			jButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					// intervaleditor.setCurrentInterval(getFInterval());
+					ok = true;
+					PluginServices.getMDIManager().closeWindow(
+							PanelEditInterval.this);
 				}
 			});
 		}
 		return jButton;
 	}
-	public boolean isOK(){
+
+	public boolean isOK() {
 		return ok;
 	}
+
 	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getJPanel() {
 		if (jPanel == null) {
 			jPanel = new JPanel();
-			jPanel.setPreferredSize(new java.awt.Dimension(140,36));
+			jPanel.setPreferredSize(new java.awt.Dimension(140, 36));
 			jPanel.add(getJButton(), null);
 		}
 		return jPanel;
 	}
 
 	/**
-	 * This method initializes jPanel1	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes jPanel1
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getJPanel1() {
 		if (jPanel1 == null) {
 			jLabel = new JLabel();
@@ -189,29 +192,29 @@ public class PanelEditInterval extends JPanel implements IWindow  {
 			jPanel1 = new JPanel();
 			jPanel1.add(jLabel, null);
 			jPanel1.add(getM_txtMin1(), null);
-			
+
 		}
 		return jPanel1;
 	}
 
 	/**
-	 * This method initializes jTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes jTextField
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getM_txtMin1() {
 		if (m_txtMin1 == null) {
 			m_txtMin1 = new JTextField();
-			m_txtMin1.setPreferredSize(new java.awt.Dimension(100,20));
+			m_txtMin1.setPreferredSize(new java.awt.Dimension(100, 20));
 		}
 		return m_txtMin1;
 	}
 
 	/**
-	 * This method initializes jPanel2	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes jPanel2
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getJPanel2() {
 		if (jPanel2 == null) {
 			jLabel1 = new JLabel();
@@ -219,20 +222,20 @@ public class PanelEditInterval extends JPanel implements IWindow  {
 			jPanel2 = new JPanel();
 			jPanel2.add(jLabel1, null);
 			jPanel2.add(getM_txtMax1(), null);
-			
+
 		}
 		return jPanel2;
 	}
 
 	/**
-	 * This method initializes jTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes jTextField
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getM_txtMax1() {
 		if (m_txtMax1 == null) {
 			m_txtMax1 = new JTextField();
-			m_txtMax1.setPreferredSize(new java.awt.Dimension(100,20));
+			m_txtMax1.setPreferredSize(new java.awt.Dimension(100, 20));
 		}
 		return m_txtMax1;
 	}

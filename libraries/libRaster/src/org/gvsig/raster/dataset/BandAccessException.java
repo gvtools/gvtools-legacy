@@ -21,13 +21,14 @@ package org.gvsig.raster.dataset;
 /**
  * Excepción que se lanza cuando se intenta acceder a una banda que no existe o
  * tiene problemas en acceder a sus datos.
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public class BandAccessException extends Exception{
+public class BandAccessException extends Exception {
 	private static final long serialVersionUID = 337663732071639106L;
 
-	public BandAccessException(String msg){
+	public BandAccessException(String msg) {
 		super(msg);
 	}
 }

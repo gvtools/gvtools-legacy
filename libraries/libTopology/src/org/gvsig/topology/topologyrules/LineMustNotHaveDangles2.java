@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.topologyrules;
 
 import java.awt.Color;
@@ -79,31 +79,25 @@ import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.MultiLineString;
 
-
 public class LineMustNotHaveDangles2 extends LineMustNotHavePseudonodes {
 	final static String RULE_NAME = Messages.getText("must_not_have_dangles");
-	
+
 	/**
 	 * Symbol for topology errors caused by a violation of this rule.
 	 */
 	private MultiShapeSymbol errorSymbol = DEFAULT_ERROR_SYMBOL;
-	
-	
-	private static List<ITopologyErrorFix> automaticErrorFixes =
-		new ArrayList<ITopologyErrorFix>();
-	static{
+
+	private static List<ITopologyErrorFix> automaticErrorFixes = new ArrayList<ITopologyErrorFix>();
+	static {
 		automaticErrorFixes.add(new ExtendDangleToNearestBoundaryPointFix());
 		automaticErrorFixes.add(new ExtendDangleToNearestVertexFix());
 	}
-	
-	
+
 	private static final Color DEFAULT_ERROR_COLOR = Color.RED;
-	
-	
-	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = 
-		(MultiShapeSymbol) SymbologyFactory.createDefaultSymbolByShapeType(FShape.MULTI, 
-											DEFAULT_ERROR_COLOR);
-	static{
+
+	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = (MultiShapeSymbol) SymbologyFactory
+			.createDefaultSymbolByShapeType(FShape.MULTI, DEFAULT_ERROR_COLOR);
+	static {
 		DEFAULT_ERROR_SYMBOL.setDescription(RULE_NAME);
 		DEFAULT_ERROR_SYMBOL.setSize(4);
 	}
@@ -122,9 +116,9 @@ public class LineMustNotHaveDangles2 extends LineMustNotHavePseudonodes {
 	}
 
 	/*
-	 * The only difference of this class method (LineMustNotHaveDangles2)
-	 * and superclass method (LineMustNotHavePseudonodes) is 
-	 * cardinality check (node degree = 2 for pseudonodes, == 1 for dangles)
+	 * The only difference of this class method (LineMustNotHaveDangles2) and
+	 * superclass method (LineMustNotHavePseudonodes) is cardinality check (node
+	 * degree = 2 for pseudonodes, == 1 for dangles)
 	 */
 	protected void process(Geometry geometry, IFeature feature) {
 		if (geometry instanceof GeometryCollection) {
@@ -136,16 +130,17 @@ public class LineMustNotHaveDangles2 extends LineMustNotHavePseudonodes {
 		} else if (geometry instanceof LineString) {
 			LineString lineString = (LineString) geometry;
 			Envelope lnEnv = lineString.getEnvelopeInternal();
-			 
-			//We try to extend a bit the original envelope to ensure
-			//recovering geometries in the limit
+
+			// We try to extend a bit the original envelope to ensure
+			// recovering geometries in the limit
 			double minX = lnEnv.getMinX() - 10;
 			double minY = lnEnv.getMinY() - 10;
 			double maxX = lnEnv.getMaxX() + 10;
 			double maxY = lnEnv.getMaxY() + 10;
 
-			Rectangle2D rect = new Rectangle2D.Double(minX, minY, maxX - minX, maxY - minY);
-			
+			Rectangle2D rect = new Rectangle2D.Double(minX, minY, maxX - minX,
+					maxY - minY);
+
 			SnappingCoordinateMapWithCounter coordinateMap = new SnappingCoordinateMapWithCounter(
 					getClusterTolerance());
 
@@ -166,7 +161,8 @@ public class LineMustNotHaveDangles2 extends LineMustNotHavePseudonodes {
 					if (neighbourFeature.getID().equalsIgnoreCase(
 							feature.getID()))
 						continue;
-					Geometry geom2 = NewFConverter.toJtsGeometry(neighbourFeature.getGeometry());
+					Geometry geom2 = NewFConverter
+							.toJtsGeometry(neighbourFeature.getGeometry());
 					ArrayList<LineString> geometriesToProcess = new ArrayList<LineString>();
 					if (geom2 instanceof LineString) {
 						geometriesToProcess.add((LineString) geom2);
@@ -196,52 +192,47 @@ public class LineMustNotHaveDangles2 extends LineMustNotHavePseudonodes {
 					for (int i = 0; i < numGeometries; i++) {
 						LineString lineString2 = geometriesToProcess.get(i);
 						Coordinate firstPoint2 = lineString2.getCoordinateN(0);
-						Coordinate lastPoint2 = lineString2.getCoordinateN(lineString2
-								.getNumPoints() - 1);
-						
+						Coordinate lastPoint2 = lineString2
+								.getCoordinateN(lineString2.getNumPoints() - 1);
+
 						coordinateMap.put(lastPoint2, lastPoint);
 						coordinateMap.put(firstPoint2, firstPoint);
 
-					}//for
+					}// for
 
-				}//while
-				
+				}// while
+
 				int firstPointDegree = coordinateMap.getCount(firstPoint);
 				int lastPointDegree = coordinateMap.getCount(lastPoint);
-				
-				if(firstPointDegree == 1){//A dangle is a node with degree 1, it only connects two lines
-					
-					//we dont add two times the same error
-					Coordinate existingNode = (Coordinate) pseudoNodesCoordMap.get(firstPoint);
-					if(existingNode == null){
-						IGeometry errorGeom = 
-							ShapeFactory.createPoint2D(firstPoint.x,
-													   firstPoint.y);
-					    TopologyError topologyError = 
-							new TopologyError(errorGeom, 
-												this, 
-											 feature,
-											topology);
-					    topologyError.setID(errorContainer.getErrorFid());
-					    addTopologyError(topologyError);
-					    
-					    pseudoNodesCoordMap.put(firstPoint, firstPoint);
+
+				if (firstPointDegree == 1) {// A dangle is a node with degree 1,
+											// it only connects two lines
+
+					// we dont add two times the same error
+					Coordinate existingNode = (Coordinate) pseudoNodesCoordMap
+							.get(firstPoint);
+					if (existingNode == null) {
+						IGeometry errorGeom = ShapeFactory.createPoint2D(
+								firstPoint.x, firstPoint.y);
+						TopologyError topologyError = new TopologyError(
+								errorGeom, this, feature, topology);
+						topologyError.setID(errorContainer.getErrorFid());
+						addTopologyError(topologyError);
+
+						pseudoNodesCoordMap.put(firstPoint, firstPoint);
 					}
 				}
-				
-				if(lastPointDegree == 1){
-					Coordinate existingNode = (Coordinate) pseudoNodesCoordMap.get(lastPoint);
-					if(existingNode == null){
-						IGeometry errorGeom = 
-							ShapeFactory.createPoint2D(lastPoint.x,
-									lastPoint.y);
-					    TopologyError topologyError = 
-							new TopologyError(errorGeom, 
-												this, 
-											 feature,
-											topology);
-					    topologyError.setID(errorContainer.getErrorFid());
-					    addTopologyError(topologyError);
+
+				if (lastPointDegree == 1) {
+					Coordinate existingNode = (Coordinate) pseudoNodesCoordMap
+							.get(lastPoint);
+					if (existingNode == null) {
+						IGeometry errorGeom = ShapeFactory.createPoint2D(
+								lastPoint.x, lastPoint.y);
+						TopologyError topologyError = new TopologyError(
+								errorGeom, this, feature, topology);
+						topologyError.setID(errorContainer.getErrorFid());
+						addTopologyError(topologyError);
 					}
 				}
 
@@ -254,7 +245,7 @@ public class LineMustNotHaveDangles2 extends LineMustNotHavePseudonodes {
 					+ " en regla de dangles");
 		}
 	}
-	
+
 	public List<ITopologyErrorFix> getAutomaticErrorFixes() {
 		return automaticErrorFixes;
 	}
@@ -266,12 +257,12 @@ public class LineMustNotHaveDangles2 extends LineMustNotHavePseudonodes {
 	public MultiShapeSymbol getErrorSymbol() {
 		return errorSymbol;
 	}
-	
+
 	public void setErrorSymbol(MultiShapeSymbol errorSymbol) {
 		this.errorSymbol = errorSymbol;
 	}
-	
-	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError){
+
+	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError) {
 		return automaticErrorFixes.get(1);
 	}
 }

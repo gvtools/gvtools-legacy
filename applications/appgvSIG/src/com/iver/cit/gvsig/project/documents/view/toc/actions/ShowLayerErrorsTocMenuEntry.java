@@ -42,23 +42,23 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: ShowLayerErrorsTocMenuEntry.java 10626 2007-03-06 16:55:54Z caballero $
-* $Log$
-* Revision 1.4  2007-03-06 16:37:08  caballero
-* Exceptions
-*
-* Revision 1.3  2007/02/20 15:52:17  caballero
-* no modified
-*
-* Revision 1.2  2007/01/04 07:24:31  caballero
-* isModified
-*
-* Revision 1.1  2006/09/21 18:26:13  azabala
-* first version in cvs
-*
-*
-*/
+ *
+ * $Id: ShowLayerErrorsTocMenuEntry.java 10626 2007-03-06 16:55:54Z caballero $
+ * $Log$
+ * Revision 1.4  2007-03-06 16:37:08  caballero
+ * Exceptions
+ *
+ * Revision 1.3  2007/02/20 15:52:17  caballero
+ * no modified
+ *
+ * Revision 1.2  2007/01/04 07:24:31  caballero
+ * isModified
+ *
+ * Revision 1.1  2006/09/21 18:26:13  azabala
+ * first version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.project.documents.view.toc.actions;
 
 import com.iver.andami.PluginServices;
@@ -67,19 +67,18 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction;
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
 
-public class ShowLayerErrorsTocMenuEntry extends AbstractTocContextMenuAction{
+public class ShowLayerErrorsTocMenuEntry extends AbstractTocContextMenuAction {
 
 	public void execute(ITocItem item, FLayer[] selectedItems) {
 		FLayer layer = getNodeLayer(item);
-		String introductoryText = "<h2 text=\"#000080\">La capa "+
-								layer.getName()+
-								" presenta los siguientes errores</h2>";
-		((View)PluginServices.getMDIManager().getActiveWindow()).
-			getMapControl().
-			getMapContext().
-			reportDriverExceptions(introductoryText, layer.getErrors());
-//		Project project=((ProjectExtension)PluginServices.getExtension(ProjectExtension.class)).getProject();
-//		project.setModified(true);
+		String introductoryText = "<h2 text=\"#000080\">La capa "
+				+ layer.getName() + " presenta los siguientes errores</h2>";
+		((View) PluginServices.getMDIManager().getActiveWindow())
+				.getMapControl().getMapContext()
+				.reportDriverExceptions(introductoryText, layer.getErrors());
+		// Project
+		// project=((ProjectExtension)PluginServices.getExtension(ProjectExtension.class)).getProject();
+		// project.setModified(true);
 	}
 
 	public String getText() {
@@ -87,7 +86,7 @@ public class ShowLayerErrorsTocMenuEntry extends AbstractTocContextMenuAction{
 	}
 
 	public String getGroup() {
-		return "group3"; //FIXME
+		return "group3"; // FIXME
 	}
 
 	public int getGroupOrder() {
@@ -111,4 +110,3 @@ public class ShowLayerErrorsTocMenuEntry extends AbstractTocContextMenuAction{
 	}
 
 }
-

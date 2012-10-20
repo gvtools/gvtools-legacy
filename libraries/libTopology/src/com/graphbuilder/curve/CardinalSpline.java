@@ -1,18 +1,22 @@
 package com.graphbuilder.curve;
 
 /**
-<p>The Cardinal-spline passes through the points in the control-path specified by the group-iterator.
-However, the curve does not pass through the first or the last control-point, it begins at the
-second control-point and ends at the second last control-point.
-
-<p>There is a single parameter, alpha, that gives some control over the shape of the curve.  When
-the value of alpha is 0.5 the curve becomes the CatmullRomSpline.  Figure 1 shows an example of a
-CardinalSpline.
-
-<p><center><img align="center" src="doc-files/cardinal1.gif"/></center>
-
-@see com.graphbuilder.curve.CatmullRomSpline
-*/
+ * <p>
+ * The Cardinal-spline passes through the points in the control-path specified
+ * by the group-iterator. However, the curve does not pass through the first or
+ * the last control-point, it begins at the second control-point and ends at the
+ * second last control-point.
+ * 
+ * <p>
+ * There is a single parameter, alpha, that gives some control over the shape of
+ * the curve. When the value of alpha is 0.5 the curve becomes the
+ * CatmullRomSpline. Figure 1 shows an example of a CardinalSpline.
+ * 
+ * <p>
+ * <center><img align="center" src="doc-files/cardinal1.gif"/></center>
+ * 
+ * @see com.graphbuilder.curve.CatmullRomSpline
+ */
 public class CardinalSpline extends ParametricCurve {
 
 	private static double[][] pt = new double[4][];
@@ -34,41 +38,45 @@ public class CardinalSpline extends ParametricCurve {
 		double d = alpha * (t3 - t2);
 
 		for (int i = 0; i < p.length - 1; i++)
-			p[i] = a * pt[1][i] + b * pt[2][i] + c * (pt[2][i] - pt[0][i]) + d * (pt[3][i] - pt[1][i]);
+			p[i] = a * pt[1][i] + b * pt[2][i] + c * (pt[2][i] - pt[0][i]) + d
+					* (pt[3][i] - pt[1][i]);
 	}
 
 	/**
-	Returns the value of alpha.  The default value is 0.5.
-
-	@see #setAlpha(double)
-	*/
+	 * Returns the value of alpha. The default value is 0.5.
+	 * 
+	 * @see #setAlpha(double)
+	 */
 	public double getAlpha() {
 		return alpha;
 	}
 
 	/**
-	Sets the value of alpha.
-
-	@see #getAlpha()
-	*/
+	 * Sets the value of alpha.
+	 * 
+	 * @see #getAlpha()
+	 */
 	public void setAlpha(double a) {
 		alpha = a;
 	}
 
 	/**
-	Returns a value of 1.
-	*/
+	 * Returns a value of 1.
+	 */
 	public int getSampleLimit() {
 		return 1;
 	}
 
 	/**
-	The requirements for this curve are the group-iterator must be in-range and have a group size of at least 4.
-	If these requirements are not met then this method returns quietly.
-	*/
+	 * The requirements for this curve are the group-iterator must be in-range
+	 * and have a group size of at least 4. If these requirements are not met
+	 * then this method returns quietly.
+	 */
 	public void appendTo(MultiPath mp) {
-		if (!gi.isInRange(0, cp.numPoints())) return;
-		if (gi.getGroupSize() < 4) return;
+		if (!gi.isInRange(0, cp.numPoints()))
+			return;
+		if (gi.getGroupSize() < 4)
+			return;
 
 		gi.set(0, 0);
 
@@ -90,7 +98,8 @@ public class CardinalSpline extends ParametricCurve {
 			int count_j = gi.count_j();
 
 			for (int i = 0; i < 4; i++) {
-				if (!gi.hasNext()) return;
+				if (!gi.hasNext())
+					return;
 				pt[i] = cp.getPoint(gi.next()).getLocation();
 			}
 

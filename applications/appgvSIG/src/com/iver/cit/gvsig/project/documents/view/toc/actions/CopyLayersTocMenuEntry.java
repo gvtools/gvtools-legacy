@@ -32,9 +32,9 @@ public class CopyLayersTocMenuEntry extends AbstractTocContextMenuAction {
 	}
 
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
-		if ( selectedItems.length >= 1 && isTocItemBranch(item)){
-			for (int i=0;i< selectedItems.length;i++) {
-				if (selectedItems[i].isEditing()){
+		if (selectedItems.length >= 1 && isTocItemBranch(item)) {
+			for (int i = 0; i < selectedItems.length; i++) {
+				if (selectedItems[i].isEditing()) {
 					return false;
 				}
 			}
@@ -44,34 +44,37 @@ public class CopyLayersTocMenuEntry extends AbstractTocContextMenuAction {
 
 	}
 
-
 	public void execute(ITocItem item, FLayer[] selectedItems) {
 		XMLEntity xml = this.utiles.generateXMLCopyLayers(selectedItems);
 		if (xml == null) {
 			JOptionPane.showMessageDialog(
-					(Component)PluginServices.getMainFrame(),
-					"<html>"+PluginServices.getText(this,"No_ha_sido_posible_realizar_la_operacion")+"</html>",//Mensaje
-					PluginServices.getText(this,"copiar"),//titulo
-					JOptionPane.ERROR_MESSAGE
-					);
+					(Component) PluginServices.getMainFrame(),
+					"<html>"
+							+ PluginServices.getText(this,
+									"No_ha_sido_posible_realizar_la_operacion")
+							+ "</html>",// Mensaje
+					PluginServices.getText(this, "copiar"),// titulo
+					JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
 		String data = xml.toString();
 		if (data == null) {
 			JOptionPane.showMessageDialog(
-					(Component)PluginServices.getMainFrame(),
-					"<html>"+PluginServices.getText(this,"No_ha_sido_posible_realizar_la_operacion")+"</html>",//Mensaje
-					PluginServices.getText(this,"copiar"),//titulo
-					JOptionPane.ERROR_MESSAGE
-					);
+					(Component) PluginServices.getMainFrame(),
+					"<html>"
+							+ PluginServices.getText(this,
+									"No_ha_sido_posible_realizar_la_operacion")
+							+ "</html>",// Mensaje
+					PluginServices.getText(this, "copiar"),// titulo
+					JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
 		PluginServices.putInClipboard(data);
-		Project project=((ProjectExtension)PluginServices.getExtension(ProjectExtension.class)).getProject();
+		Project project = ((ProjectExtension) PluginServices
+				.getExtension(ProjectExtension.class)).getProject();
 		project.setModified(true);
 	}
-
 
 }

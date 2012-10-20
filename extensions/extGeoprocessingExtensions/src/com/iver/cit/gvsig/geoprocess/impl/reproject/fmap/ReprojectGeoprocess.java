@@ -131,7 +131,7 @@ public class ReprojectGeoprocess extends AbstractGeoprocess {
 		super();
 	}
 
-	public void setFirstLayer(FLyrVect inputLayer){
+	public void setFirstLayer(FLyrVect inputLayer) {
 		this.firstLayer = inputLayer;
 	}
 
@@ -200,7 +200,8 @@ public class ReprojectGeoprocess extends AbstractGeoprocess {
 			this.transform = transform;
 		}
 
-		public void visit(IGeometry g, int index) throws VisitorException, StopWriterVisitorException, ProcessVisitorException {
+		public void visit(IGeometry g, int index) throws VisitorException,
+				StopWriterVisitorException, ProcessVisitorException {
 			if (g == null)
 				return;
 			if (selection != null) {
@@ -212,7 +213,8 @@ public class ReprojectGeoprocess extends AbstractGeoprocess {
 			try {
 				feature = createFeature(g, index);
 			} catch (ReadDriverException e) {
-				throw new ProcessVisitorException(recordset.getName(),e,"Error al crear al reproyectar "+index);
+				throw new ProcessVisitorException(recordset.getName(), e,
+						"Error al crear al reproyectar " + index);
 			}
 			processor.processFeature(feature);
 		}
@@ -221,7 +223,8 @@ public class ReprojectGeoprocess extends AbstractGeoprocess {
 			return "";
 		}
 
-		public void stop(FLayer layer) throws StopWriterVisitorException, VisitorException {
+		public void stop(FLayer layer) throws StopWriterVisitorException,
+				VisitorException {
 			processor.finish();
 		}
 
@@ -256,7 +259,7 @@ public class ReprojectGeoprocess extends AbstractGeoprocess {
 					}// if
 				}// for
 			}// for
-			// now we put null values
+				// now we put null values
 			for (int i = 0; i < featureAttr.length; i++) {
 				if (featureAttr[i] == null)
 					featureAttr[i] = ValueFactory.createNullValue();
@@ -290,17 +293,16 @@ public class ReprojectGeoprocess extends AbstractGeoprocess {
 		}
 
 		public void run() throws Exception {
-			processor =
-				new FeaturePersisterProcessor2(writer);
+			processor = new FeaturePersisterProcessor2(writer);
 			FBitSet selection = null;
-			if(onlyInputLayerSelection)
+			if (onlyInputLayerSelection)
 				selection = firstLayer.getRecordset().getSelection();
 			CoordinateReferenceSystem from = firstLayer.getCrs();
 			CoordinateReferenceSystem to = targetCrs;
 
 			MathTransform trans = ProjectionUtils.getCrsTransform(from, to);
-			ReprojectVisitor visitor = new ReprojectVisitor(resultLayerDefinition,
-					processor, selection, trans);
+			ReprojectVisitor visitor = new ReprojectVisitor(
+					resultLayerDefinition, processor, selection, trans);
 			Strategy strategy = StrategyManager.getStrategy(firstLayer);
 			try {
 				strategy.process(visitor, this);
@@ -320,17 +322,19 @@ public class ReprojectGeoprocess extends AbstractGeoprocess {
 			ReprojectGeoprocess.this.cancel();
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see com.iver.utiles.swing.threads.IMonitorableTask#finished()
 		 */
 		public void finished() {
 			// TODO Auto-generated method stub
-			
+
 		}
 	}
 
 	public IMonitorableTask createTask() {
-		if(task == null)
+		if (task == null)
 			task = new ReprojectTask();
 		return task;
 	}

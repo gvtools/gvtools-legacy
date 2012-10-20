@@ -5,10 +5,11 @@ package com.iver.cit.gvsig.exceptions.layers;
  */
 public class NameLayerException extends LoadLayerException {
 
-	public NameLayerException(String l,Throwable exception) {
-		super(l,exception);
+	public NameLayerException(String l, Throwable exception) {
+		super(l, exception);
 		init();
 	}
+
 	/**
 	 *
 	 */

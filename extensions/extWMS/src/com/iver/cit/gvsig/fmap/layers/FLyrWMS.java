@@ -1,43 +1,43 @@
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
-*
-* Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License
-* as published by the Free Software Foundation; either version 2
-* of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
-*
-* For more information, contact:
-*
-*  Generalitat Valenciana
-*   Conselleria d'Infraestructures i Transport
-*   Av. Blasco Ibáñez, 50
-*   46010 VALENCIA
-*   SPAIN
-*
-*      +34 963862235
-*   gvsig@gva.es
-*      www.gvsig.gva.es
-*
-*    or
-*
-*   IVER T.I. S.A
-*   Salamanca 50
-*   46005 Valencia
-*   Spain
-*
-*   +34 963163400
-*   dac@iver.es
-*/
+ *
+ * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
+ *
+ * For more information, contact:
+ *
+ *  Generalitat Valenciana
+ *   Conselleria d'Infraestructures i Transport
+ *   Av. Blasco Ibáñez, 50
+ *   46010 VALENCIA
+ *   SPAIN
+ *
+ *      +34 963862235
+ *   gvsig@gva.es
+ *      www.gvsig.gva.es
+ *
+ *    or
+ *
+ *   IVER T.I. S.A
+ *   Salamanca 50
+ *   46005 Valencia
+ *   Spain
+ *
+ *   +34 963163400
+ *   dac@iver.es
+ */
 package com.iver.cit.gvsig.fmap.layers;
 
 import java.awt.Component;
@@ -125,172 +125,176 @@ import com.iver.utiles.StringUtilities;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.threads.Cancellable;
 
-
-
 /**
-* FMap's WMS Layer class.
-*
-* Las capas WMS son tileadas para descargarlas del servidor. Esto quiere decir que
-* están formadas por multiples ficheros raster. Por esto la fuente de datos raster (IRasterDatasource)
-* de la capa FLyrWMS es un objeto de tipo CompositeDataset. Este objeto está compuesto por un array
-* bidimensional de MultiRasterDataset. Cada uno de los MultiRasterDataset corresponde con un tile
-* salvado en disco. Estos MultiRasterDataset se crean cada vez que se repinta ya que en WMS a cada
-* zoom varian los ficheros fuente. La secuencia de creación de un CompositeDataset sería la siguiente:
-* <UL>
-* <LI>Se hace una petición de dibujado por parte del usuario llamando al método draw de FLyrWMS</LI>
-* <LI>Se tilea la petición</LI>
-* <LI>Cada tile se dibuja abriendo una FLyerRaster para ese tile</LI>
-* <LI>Si es el primer dibujado se guarda una referencia en la capa WMS a las propiedades de renderizado, orden de bandas,
-* transparencia, filtros aplicados, ...</LI>
-* <LI>Si no es el primer dibujado se asignan las propiedades de renderizado cuya referencia se guarda en la capa WMS</LI>
-* <LI>Se guarda el MultiRasterDataset de cada tile</LI>
-* <LI>Al acabar todos los tiles creamos un CompositeDataset con los MultiRasterDataset de todos los tiles</LI>
-* <LI>Asignamos a la capa la referencia de las propiedades de renderizado que tenemos almacenadas. De esta forma si hay
-* alguna modificación desde el cuadro de propiedades será efectiva sobre los tiles que se dibujan.</LI>
-* </UL>
-*
-*
-* @author Jaume Dominguez Faus
-*
-*/
-public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
-	private boolean 					isPrinting = false;
-	private boolean 					mustTileDraw = true;
-	private boolean 					mustTilePrint = true;
-	private final int 					maxTileDrawWidth = 1023;
-	private final int 					maxTileDrawHeight = 1023;
-	private final int 					maxTilePrintWidth = 1023;
-	private final int 					maxTilePrintHeight = 1023;
-	private final int					minTilePrintWidth = 12;
-	private final int					minTilePrintHeight = 12;
+ * FMap's WMS Layer class.
+ * 
+ * Las capas WMS son tileadas para descargarlas del servidor. Esto quiere decir
+ * que están formadas por multiples ficheros raster. Por esto la fuente de datos
+ * raster (IRasterDatasource) de la capa FLyrWMS es un objeto de tipo
+ * CompositeDataset. Este objeto está compuesto por un array bidimensional de
+ * MultiRasterDataset. Cada uno de los MultiRasterDataset corresponde con un
+ * tile salvado en disco. Estos MultiRasterDataset se crean cada vez que se
+ * repinta ya que en WMS a cada zoom varian los ficheros fuente. La secuencia de
+ * creación de un CompositeDataset sería la siguiente:
+ * <UL>
+ * <LI>Se hace una petición de dibujado por parte del usuario llamando al método
+ * draw de FLyrWMS</LI>
+ * <LI>Se tilea la petición</LI>
+ * <LI>Cada tile se dibuja abriendo una FLyerRaster para ese tile</LI>
+ * <LI>Si es el primer dibujado se guarda una referencia en la capa WMS a las
+ * propiedades de renderizado, orden de bandas, transparencia, filtros
+ * aplicados, ...</LI>
+ * <LI>Si no es el primer dibujado se asignan las propiedades de renderizado
+ * cuya referencia se guarda en la capa WMS</LI>
+ * <LI>Se guarda el MultiRasterDataset de cada tile</LI>
+ * <LI>Al acabar todos los tiles creamos un CompositeDataset con los
+ * MultiRasterDataset de todos los tiles</LI>
+ * <LI>Asignamos a la capa la referencia de las propiedades de renderizado que
+ * tenemos almacenadas. De esta forma si hay alguna modificación desde el cuadro
+ * de propiedades será efectiva sobre los tiles que se dibujan.</LI>
+ * </UL>
+ * 
+ * 
+ * @author Jaume Dominguez Faus
+ * 
+ */
+public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend {
+	private boolean isPrinting = false;
+	private boolean mustTileDraw = true;
+	private boolean mustTilePrint = true;
+	private final int maxTileDrawWidth = 1023;
+	private final int maxTileDrawHeight = 1023;
+	private final int maxTilePrintWidth = 1023;
+	private final int maxTilePrintHeight = 1023;
+	private final int minTilePrintWidth = 12;
+	private final int minTilePrintHeight = 12;
 
-	public URL 							host;
-	public String 						m_Format;
+	public URL host;
+	public String m_Format;
 
-	private String 						m_SRS;
-	private String 						layerQuery;
-	private String 						infoLayerQuery;
-	private FMapWMSDriver 				wms;
-	private WMSStatus 					wmsStatus = new WMSStatus();
-	private Rectangle2D 				fullExtent;
-	private boolean						wmsTransparency;
-	private Vector 						styles;
-	private Vector 						dimensions;
-	private boolean						firstLoad = false;
-	private Hashtable 					onlineResources = new Hashtable();
-	private Dimension 					fixedSize;
-	private boolean 					queryable = true;
-	private VisualStatus				visualStatus = new VisualStatus();
+	private String m_SRS;
+	private String layerQuery;
+	private String infoLayerQuery;
+	private FMapWMSDriver wms;
+	private WMSStatus wmsStatus = new WMSStatus();
+	private Rectangle2D fullExtent;
+	private boolean wmsTransparency;
+	private Vector styles;
+	private Vector dimensions;
+	private boolean firstLoad = false;
+	private Hashtable onlineResources = new Hashtable();
+	private Dimension fixedSize;
+	private boolean queryable = true;
+	private VisualStatus visualStatus = new VisualStatus();
 	/**
 	 * Lista de filtros aplicada en la renderización
 	 */
-	private RasterFilterList            filterList = null;
-	private GridTransparency			transparency = null;
-	private int[]                       renderBands = null;
-	private FLyrRasterSE[]				layerRaster = null;
-	private ArrayList                   filterArguments = null;
+	private RasterFilterList filterList = null;
+	private GridTransparency transparency = null;
+	private int[] renderBands = null;
+	private FLyrRasterSE[] layerRaster = null;
+	private ArrayList filterArguments = null;
 
-	private List						disableUpdateDrawVersion;
-	private int                         lastNColumns = 0;
-	private int                         lastNRows = 0;
-	private boolean 					hasImageLegend = false;
+	private List disableUpdateDrawVersion;
+	private int lastNColumns = 0;
+	private int lastNRows = 0;
+	private boolean hasImageLegend = false;
 
 	/***
-	 * WMS 1.3 standard defines a fixed pixel size of 0.28 mm for the server.
-	 * As
-	 *   1 inch = 25.4 mm
-	 * then the server is supposed to have the following DPI:
-	 *   25.4 / 0.28 = 90.714285714 dpi
+	 * WMS 1.3 standard defines a fixed pixel size of 0.28 mm for the server. As
+	 * 1 inch = 25.4 mm then the server is supposed to have the following DPI:
+	 * 25.4 / 0.28 = 90.714285714 dpi
 	 */
 
 	private final double WMS_DPI = 90.714285714;
-   
 
-	private class MyCancellable implements ICancellable
-	{
+	private class MyCancellable implements ICancellable {
 		private Cancellable original;
-		public MyCancellable(Cancellable cancelOriginal)
-		{
+
+		public MyCancellable(Cancellable cancelOriginal) {
 			this.original = cancelOriginal;
 		}
+
 		public boolean isCanceled() {
-			if (original == null) return false;
+			if (original == null)
+				return false;
 			return original.isCanceled();
 		}
+
 		public Object getID() {
 			return this;
 		}
 
 	}
 
-	public FLyrWMS(){
+	public FLyrWMS() {
 		super();
 		this.updateDrawVersion();
 	}
 
-	public FLyrWMS(Map args) throws LoadLayerException{
+	public FLyrWMS(Map args) throws LoadLayerException {
 		this.updateDrawVersion();
 		FMapWMSDriver drv = null;
-		String host = (String)args.get("host");
-		String sLayer = (String)args.get("layer");
-		Rectangle2D fullExtent = (Rectangle2D)args.get("FullExtent");
-		String sSRS = (String)args.get("SRS");
-		String sFormat = (String)args.get("Format");
+		String host = (String) args.get("host");
+		String sLayer = (String) args.get("layer");
+		Rectangle2D fullExtent = (Rectangle2D) args.get("FullExtent");
+		String sSRS = (String) args.get("SRS");
+		String sFormat = (String) args.get("Format");
 		String[] sLayers = sLayer.split(",");
 
 		try {
 			this.setHost(new URL(host));
 		} catch (MalformedURLException e) {
-			//e.printStackTrace();
-			throw new URLLayerException(getName(),e);
+			// e.printStackTrace();
+			throw new URLLayerException(getName(), e);
 		}
-			try {
-				drv = this.getDriver();
-			} catch (IllegalStateException e) {
-				throw new LoadLayerException(getName(),e);
-			} catch (ValidationException e) {
-				throw new LoadLayerException(getName(),e);
-			} catch (IOException e) {
-				throw new ConnectionErrorLayerException(getName(),e);
-			}
-		if( sFormat == null || sSRS == null || fullExtent == null ) {
+		try {
+			drv = this.getDriver();
+		} catch (IllegalStateException e) {
+			throw new LoadLayerException(getName(), e);
+		} catch (ValidationException e) {
+			throw new LoadLayerException(getName(), e);
+		} catch (IOException e) {
+			throw new ConnectionErrorLayerException(getName(), e);
+		}
+		if (sFormat == null || sSRS == null || fullExtent == null) {
 			if (!drv.connect(null))
-				throw new ConnectionErrorLayerException(getName(),null);
+				throw new ConnectionErrorLayerException(getName(), null);
 
 			WMSLayerNode wmsNode = drv.getLayer(sLayer);
 
-			if (wmsNode == null){
-				throw new LoadLayerException(getName(),null);
+			if (wmsNode == null) {
+				throw new LoadLayerException(getName(), null);
 			}
-			if( sFormat == null ) {
+			if (sFormat == null) {
 				sFormat = this.getGreatFormat(drv.getFormats());
 			}
 			// SRS
 			Vector allSrs = wmsNode.getAllSrs();
 			boolean isSRSSupported = false;
-			if( sSRS != null ) {
-				for (int i=0; i<allSrs.size() ; i++){
-						 if (((String)allSrs.get(i)).compareTo(sSRS) == 0){
-							 isSRSSupported = true;
-						 }
-					 }
+			if (sSRS != null) {
+				for (int i = 0; i < allSrs.size(); i++) {
+					if (((String) allSrs.get(i)).compareTo(sSRS) == 0) {
+						isSRSSupported = true;
+					}
+				}
 			}
 
-				 if(!isSRSSupported) {
-					 for (int i=0; i<allSrs.size() ; i++){
-						 if (((String)wmsNode.getAllSrs().get(i)).compareTo("EPSG:4326") == 0){
-							 sSRS = (String)wmsNode.getAllSrs().get(i);
-						 }
-					 }
-					 if (sSRS==null){
-						 sSRS = (String)wmsNode.getAllSrs().get(0);
-					 }
-				 }
-			if( fullExtent == null ) {
-				fullExtent = drv.getLayersExtent(sLayers,sSRS);
+			if (!isSRSSupported) {
+				for (int i = 0; i < allSrs.size(); i++) {
+					if (((String) wmsNode.getAllSrs().get(i))
+							.compareTo("EPSG:4326") == 0) {
+						sSRS = (String) wmsNode.getAllSrs().get(i);
+					}
+				}
+				if (sSRS == null) {
+					sSRS = (String) wmsNode.getAllSrs().get(0);
+				}
+			}
+			if (fullExtent == null) {
+				fullExtent = drv.getLayersExtent(sLayers, sSRS);
 			}
 		}
-
 
 		this.setFullExtent(fullExtent);
 		this.setFormat(sFormat);
@@ -304,44 +308,45 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 	}
 
 	/**
-	 * It choose the best format to load different maps if the server
-	 * supports it. This format could be png, because it supports
-	 * transparency.
+	 * It choose the best format to load different maps if the server supports
+	 * it. This format could be png, because it supports transparency.
+	 * 
 	 * @param formats
-	 * Arraywith all the formats supported by the server
+	 *            Arraywith all the formats supported by the server
 	 * @return
 	 */
-	private String getGreatFormat(Vector formats){
-			for (int i=0 ; i<formats.size() ; i++){
-					String format = (String) formats.get(i);
-				if (format.equals("image/jpg")){
-							return format;
-				}
-				if (format.equals("image/jpeg")){
-							return format;
-				}
+	private String getGreatFormat(Vector formats) {
+		for (int i = 0; i < formats.size(); i++) {
+			String format = (String) formats.get(i);
+			if (format.equals("image/jpg")) {
+				return format;
 			}
+			if (format.equals("image/jpeg")) {
+				return format;
+			}
+		}
 
-			return (String)formats.get(0);
+		return (String) formats.get(0);
 	}
 
 	/**
 	 * Clase que contiene los datos de visualización de WMS.
+	 * 
 	 * @author Nacho Brodin (brodin_ign@gva.es)
 	 */
-	private class VisualStatus{
+	private class VisualStatus {
 		/**
-		 * Ancho y alto de la imagen o del conjunto de tiles si los tiene. Coincide con
-		 * el ancho y alto del viewPort
+		 * Ancho y alto de la imagen o del conjunto de tiles si los tiene.
+		 * Coincide con el ancho y alto del viewPort
 		 */
-		private double						minX = 0D;
-		private double						minY = 0D;
-		private double						maxX = 0D;
-		private double						maxY = 0D;
+		private double minX = 0D;
+		private double minY = 0D;
+		private double maxX = 0D;
+		private double maxY = 0D;
 		/**
 		 * Lista de nombre de fichero que componen toda la visualización.
 		 */
-		private String[]					fileNames = null;
+		private String[] fileNames = null;
 
 		public Object clone() {
 			VisualStatus s = new VisualStatus();
@@ -356,20 +361,20 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 		}
 	}
 
-
 	/**
 	 * Devuelve el XMLEntity con la información necesaria para reproducir la
 	 * capa.
-	 *
+	 * 
 	 * @return XMLEntity.
 	 * @throws XMLException
 	 */
 	public XMLEntity getXMLEntity() throws XMLException {
 		XMLEntity xml = super.getXMLEntityWithoutChecks();
-		if (xml != null){
+		if (xml != null) {
 
 			// Full extent
-			xml.putProperty("fullExtent", StringUtilities.rect2String(fullExtent));
+			xml.putProperty("fullExtent",
+					StringUtilities.rect2String(fullExtent));
 
 			// Host
 			xml.putProperty("host", host.toExternalForm());
@@ -386,9 +391,9 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 			// SRS
 			xml.putProperty("srs", m_SRS);
-			if (status!=null)
+			if (status != null)
 				status.getXMLEntity(xml, true, this);
-			else{
+			else {
 				status = new StatusLayerRaster();
 				status.getXMLEntity(xml, true, this);
 			}
@@ -397,11 +402,11 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 			xml.putProperty("wms_transparency", wmsTransparency);
 
 			// Styles
-			if (styles!=null){
+			if (styles != null) {
 				String stylePr = "";
 				for (int i = 0; i < styles.size(); i++) {
 					stylePr += styles.get(i).toString();
-					if (i<styles.size()-1)
+					if (i < styles.size() - 1)
 						stylePr += ",";
 				}
 				if (stylePr.endsWith(","))
@@ -410,11 +415,11 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 			}
 
 			// Dimensions
-			if (dimensions!=null){
+			if (dimensions != null) {
 				String dim = "";
 				for (int i = 0; i < dimensions.size(); i++) {
 					dim += (String) dimensions.get(i);
-					if (i<dimensions.size()-1)
+					if (i < dimensions.size() - 1)
 						dim += ",";
 				}
 				if (dim.endsWith(","))
@@ -428,7 +433,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 			while (it.hasNext()) {
 				String key = (String) it.next();
 				String value = (String) onlineResources.get(key);
-				strOnlines += key+"~##SEP2##~"+value;
+				strOnlines += key + "~##SEP2##~" + value;
 				if (it.hasNext())
 					strOnlines += "~##SEP1##~";
 			}
@@ -436,7 +441,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 			// Queryable
 			xml.putProperty("queryable", queryable);
-			if(wms != null)
+			if (wms != null)
 				xml.putProperty("hasImageLegend", wms.hasLegendGraphic());
 
 			// fixedSize
@@ -451,18 +456,18 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 	/**
 	 * A partir del XMLEntity reproduce la capa.
-	 *
-	 * @param xml XMLEntity
-	 *
+	 * 
+	 * @param xml
+	 *            XMLEntity
+	 * 
 	 * @throws XMLException
 	 * @throws DriverException
 	 * @throws DriverIOException
 	 */
-	public void setXMLEntity03(XMLEntity xml)
-		throws XMLException {
+	public void setXMLEntity03(XMLEntity xml) throws XMLException {
 		super.setXMLEntity(xml);
-		fullExtent = StringUtilities.string2Rect(xml.getStringProperty(
-					"fullExtent"));
+		fullExtent = StringUtilities.string2Rect(xml
+				.getStringProperty("fullExtent"));
 
 		try {
 			host = new URL(xml.getStringProperty("host"));
@@ -478,26 +483,25 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 	/**
 	 * A partir del XMLEntity reproduce la capa.
-	 *
-	 * @param xml XMLEntity
-	 *
+	 * 
+	 * @param xml
+	 *            XMLEntity
+	 * 
 	 * @throws XMLException
 	 * @throws DriverException
 	 * @throws DriverIOException
 	 */
-	public void setXMLEntity(XMLEntity xml)
-		throws XMLException {
+	public void setXMLEntity(XMLEntity xml) throws XMLException {
 		for (int i = 0; i < xml.getPropertyCount(); i++) {
 			String key = xml.getPropertyName(i);
-			if(key.startsWith("raster.file")) {
+			if (key.startsWith("raster.file")) {
 				xml.putProperty(key, "");
 			}
 		}
 
-
 		super.setXMLEntity(xml);
-		fullExtent = StringUtilities.string2Rect(xml.getStringProperty(
-					"fullExtent"));
+		fullExtent = StringUtilities.string2Rect(xml
+				.getStringProperty("fullExtent"));
 
 		// Host
 		try {
@@ -525,83 +529,85 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 		}
 
 		// Transparency
-				if (xml.contains("wms_transparency"))
-						wmsTransparency = xml.getBooleanProperty("wms_transparency");
+		if (xml.contains("wms_transparency"))
+			wmsTransparency = xml.getBooleanProperty("wms_transparency");
 
-				// Styles
-				if (xml.contains("styles")){
-						styles = new Vector();
-						String[] stl = xml.getStringProperty("styles").split(",");
+		// Styles
+		if (xml.contains("styles")) {
+			styles = new Vector();
+			String[] stl = xml.getStringProperty("styles").split(",");
 
-						for (int i = 0; i < stl.length; i++) {
-							if (stl[i].equals(" "))
-								stl[i]="";
-								styles.add(stl[i]);
-						}
-				}
+			for (int i = 0; i < stl.length; i++) {
+				if (stl[i].equals(" "))
+					stl[i] = "";
+				styles.add(stl[i]);
+			}
+		}
 
-				// Dimensions
-				if (xml.contains("dimensions")){
-						dimensions = new Vector();
-						String[] dims = xml.getStringProperty("dimensions").split(",");
-						for (int i = 0; i < dims.length; i++){
-							if (dims[i].equals(" "))
-								dims[i]="";
+		// Dimensions
+		if (xml.contains("dimensions")) {
+			dimensions = new Vector();
+			String[] dims = xml.getStringProperty("dimensions").split(",");
+			for (int i = 0; i < dims.length; i++) {
+				if (dims[i].equals(" "))
+					dims[i] = "";
 
-								dimensions.add(dims[i]);
-						}
-				}
+				dimensions.add(dims[i]);
+			}
+		}
 
-				// OnlineResources
-				if (xml.contains("onlineResources")) {
-					String[] operations = xml.getStringProperty("onlineResources").split("~##SEP1##~");
-					for (int i = 0; i < operations.length; i++) {
+		// OnlineResources
+		if (xml.contains("onlineResources")) {
+			String[] operations = xml.getStringProperty("onlineResources")
+					.split("~##SEP1##~");
+			for (int i = 0; i < operations.length; i++) {
 				String[] resources = operations[i].split("~##SEP2##~");
-				if (resources.length==2 && resources[1]!="")
+				if (resources.length == 2 && resources[1] != "")
 					onlineResources.put(resources[0], resources[1]);
 			}
-				}
+		}
 
-				// Queryable
-				queryable = true; // let's assume that the layer is queryable by default
-				if (xml.contains("queryable"))
-					queryable = xml.getBooleanProperty("queryable");
+		// Queryable
+		queryable = true; // let's assume that the layer is queryable by default
+		if (xml.contains("queryable"))
+			queryable = xml.getBooleanProperty("queryable");
 
-				hasImageLegend=false;
-				if (xml.contains("hasImageLegend")){
-					hasImageLegend=xml.getBooleanProperty("hasImageLegend");
-				}
+		hasImageLegend = false;
+		if (xml.contains("hasImageLegend")) {
+			hasImageLegend = xml.getBooleanProperty("hasImageLegend");
+		}
 
-				// fixedSize
-				if (xml.contains("fixedSize")) {
-					fixedSize = new Dimension(xml.getIntProperty("fixedWidth"),
-																xml.getIntProperty("fixedHeight"));
-				}
+		// fixedSize
+		if (xml.contains("fixedSize")) {
+			fixedSize = new Dimension(xml.getIntProperty("fixedWidth"),
+					xml.getIntProperty("fixedHeight"));
+		}
 
-		if(status!=null)
+		if (status != null)
 			status.setXMLEntity(xml, this);
-		else{
-			if(claseStr != null && !claseStr.equals("")){
-				try{
-					Class clase = LayerFactory.getLayerClassForLayerClassName(claseStr);
+		else {
+			if (claseStr != null && !claseStr.equals("")) {
+				try {
+					Class clase = LayerFactory
+							.getLayerClassForLayerClassName(claseStr);
 					Constructor constr = clase.getConstructor(null);
-					status = (IStatusRaster)constr.newInstance(null);
-					if(status != null) {
-						((StatusLayerRaster)status).setNameClass(claseStr);
+					status = (IStatusRaster) constr.newInstance(null);
+					if (status != null) {
+						((StatusLayerRaster) status).setNameClass(claseStr);
 						status.setXMLEntity(xml, this);
 						filterArguments = status.getFilterArguments();
 						transparency = status.getTransparency();
 						renderBands = status.getRenderBands();
 					}
-				}catch(ClassNotFoundException exc){
+				} catch (ClassNotFoundException exc) {
 					exc.printStackTrace();
-				}catch(InstantiationException exc){
+				} catch (InstantiationException exc) {
 					exc.printStackTrace();
-				}catch(IllegalAccessException exc){
+				} catch (IllegalAccessException exc) {
 					exc.printStackTrace();
-				}catch(NoSuchMethodException exc){
+				} catch (NoSuchMethodException exc) {
 					exc.printStackTrace();
-				}catch(InvocationTargetException exc){
+				} catch (InvocationTargetException exc) {
 					exc.printStackTrace();
 				}
 			}
@@ -614,33 +620,41 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 	 * @throws LoadLayerException
 	 * @see com.iver.cit.gvsig.fmap.layers.layerOperations.InfoByPoint#queryByPoint(com.iver.cit.gvsig.fmap.operations.QueriedPoint)
 	 */
-	public XMLItem[] getInfo(Point p, double tolerance, Cancellable cancellable) throws ReadDriverException {
+	public XMLItem[] getInfo(Point p, double tolerance, Cancellable cancellable)
+			throws ReadDriverException {
 		XMLItem[] item = new XMLItem[1];
 		try {
-			if (queryable) 	{
-				//TODO
+			if (queryable) {
+				// TODO
 				// check if there are layers which are not queryable
 				ViewPort viewPort = getMapContext().getViewPort();
 
-				Point tiledPoint = new Point((int) p.getX() % maxTilePrintWidth, (int) p.getY() % maxTilePrintHeight);
-				Rectangle rect = new Rectangle(0, 0, viewPort.getImageWidth() - 1, viewPort.getImageHeight() - 1);
-				Tiling tiles = new Tiling(maxTilePrintWidth, maxTilePrintHeight, rect);
-				tiles.setAffineTransform((AffineTransform) viewPort.getAffineTransform().clone());
+				Point tiledPoint = new Point(
+						(int) p.getX() % maxTilePrintWidth, (int) p.getY()
+								% maxTilePrintHeight);
+				Rectangle rect = new Rectangle(0, 0,
+						viewPort.getImageWidth() - 1,
+						viewPort.getImageHeight() - 1);
+				Tiling tiles = new Tiling(maxTilePrintWidth,
+						maxTilePrintHeight, rect);
+				tiles.setAffineTransform((AffineTransform) viewPort
+						.getAffineTransform().clone());
 				int nCols = tiles.getNumCols();
 
 				int col = (int) p.getX() / maxTilePrintWidth;
 				int row = (int) p.getY() / maxTilePrintHeight;
-				int tileIndex = (row*nCols) + col;
+				int tileIndex = (row * nCols) + col;
 
 				ViewPort vp = tiles.getTileViewPort(viewPort, tileIndex);
 				wmsStatus.setExtent(vp.getAdjustedExtent());
 				wmsStatus.setHeight(vp.getImageHeight());
 				wmsStatus.setWidth(vp.getImageWidth());
-				wmsStatus.setOnlineResource((String) onlineResources.get("GetFeatureInfo"));
+				wmsStatus.setOnlineResource((String) onlineResources
+						.get("GetFeatureInfo"));
 
-
-				wmsStatus.setFormat( m_Format );
-				wmsStatus.setLayerNames(Utilities.createVector(layerQuery,","));
+				wmsStatus.setFormat(m_Format);
+				wmsStatus
+						.setLayerNames(Utilities.createVector(layerQuery, ","));
 				wmsStatus.setSrs(m_SRS);
 				wmsStatus.setStyles(styles);
 				wmsStatus.setDimensions(dimensions);
@@ -649,30 +663,42 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 				MyCancellable c = new MyCancellable(cancellable);
 				try {
 					item[0] = new StringXMLItem(new String(getDriver()
-							.getFeatureInfo(wmsStatus, (int) tiledPoint.getX(), (int) tiledPoint.getY(), Integer.MAX_VALUE, c)),this);
+							.getFeatureInfo(wmsStatus, (int) tiledPoint.getX(),
+									(int) tiledPoint.getY(), Integer.MAX_VALUE,
+									c)), this);
 				} catch (UnsupportedVersionLayerException e) {
-					throw new ReadDriverException(FMapWMSDriver.class.getName()+"::"+getName()+" - UnsupportedVersionLayerException", e);
+					throw new ReadDriverException(FMapWMSDriver.class.getName()
+							+ "::" + getName()
+							+ " - UnsupportedVersionLayerException", e);
 				} catch (IllegalStateException e) {
-					throw new ReadDriverException(FMapWMSDriver.class.getName()+"::"+getName()+" - IllegalStateException", e);
+					throw new ReadDriverException(FMapWMSDriver.class.getName()
+							+ "::" + getName() + " - IllegalStateException", e);
 				}
 				return item;
-			}
-			else
-			{
-				JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),this.getName() + " " +
-						PluginServices.getText(this,"layer_not_queryable"));
-				item[0] =  new StringXMLItem("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><info></info>",this);
+			} else {
+				JOptionPane.showMessageDialog(
+						(Component) PluginServices.getMainFrame(),
+						this.getName()
+								+ " "
+								+ PluginServices.getText(this,
+										"layer_not_queryable"));
+				item[0] = new StringXMLItem(
+						"<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><info></info>",
+						this);
 				return item;
-				//return null;
+				// return null;
 			}
-		} catch (WMSException  e) {
-			item[0] = new StringXMLItem("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><exception>" +
-			e.getMessage() + "</exception>", this);
+		} catch (WMSException e) {
+			item[0] = new StringXMLItem(
+					"<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><exception>"
+							+ e.getMessage() + "</exception>", this);
 			return item;
 		} catch (ValidationException e) {
-			throw new ReadDriverException(FMapWMSDriver.class.getName()+"::"+getName()+" - ValidationException", e);
+			throw new ReadDriverException(FMapWMSDriver.class.getName() + "::"
+					+ getName() + " - ValidationException", e);
 		} catch (IOException e) {
-			throw new ReadDriverException(FMapWMSDriver.class.getName()+"::"+getName()+" - IOException", e);
+			throw new ReadDriverException(FMapWMSDriver.class.getName() + "::"
+					+ getName() + " - IOException", e);
 		} catch (NoninvertibleTransformException e) {
 			NotificationManager.addError("NotinvertibleTransform", e);
 		}
@@ -687,15 +713,21 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 	}
 
 	/*
-	 *
-	 * @see com.iver.cit.gvsig.fmap.layers.FLayer#draw(java.awt.image.BufferedImage,
-	 * 		java.awt.Graphics2D, com.iver.cit.gvsig.fmap.ViewPort,
-	 * 		com.iver.cit.gvsig.fmap.operations.Cancellable)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.FLayer#draw(java.awt.image.BufferedImage,
+	 * java.awt.Graphics2D, com.iver.cit.gvsig.fmap.ViewPort,
+	 * com.iver.cit.gvsig.fmap.operations.Cancellable)
 	 */
-	private int callCount; // mess code, represents the amount of times the methods drawFixedSize or drawTile where tried for an extent
-	private static final int MAX_RETRY_TIMES = 5; // mess code, represents the max amount of retries allowed.
+	private int callCount; // mess code, represents the amount of times the
+							// methods drawFixedSize or drawTile where tried for
+							// an extent
+	private static final int MAX_RETRY_TIMES = 5; // mess code, represents the
+													// max amount of retries
+													// allowed.
+
 	public void draw(BufferedImage image, Graphics2D g, ViewPort viewPort,
-			Cancellable cancel,double scale) throws ReadDriverException {
+			Cancellable cancel, double scale) throws ReadDriverException {
 		callCount = 0; // mess code
 		lastNColumns = lastNRows = 0;
 
@@ -703,7 +735,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 		closeAndFree();
 
-		if (isWithinScale(scale)){
+		if (isWithinScale(scale)) {
 			Point2D p = viewPort.getOffset();
 			// p will be (0, 0) when drawing a view or other when painting onto
 			// the Layout.
@@ -712,19 +744,23 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 			visualStatus.maxX = viewPort.getAdjustedExtent().getMaxX();
 			visualStatus.maxY = viewPort.getAdjustedExtent().getMaxY();
 
-
 			if (isSizeFixed()) {
-				// This condition handles those situations in which the server can
+				// This condition handles those situations in which the server
+				// can
 				// only give static extent and resolution maps despite we need
 				// a specific BBOX and pixel WIDTH and HEIGHT
 				try {
 					visualStatus.fileNames = new String[1];
 					layerRaster = new FLyrRasterSE[1];
 					drawFixedSize(g, viewPort, cancel, scale);
-					if(layerRaster != null && layerRaster[0] != null) {
+					if (layerRaster != null && layerRaster[0] != null) {
 						dataset = layerRaster[0].getDataSource();
-						initializeRasterLayer(null, new IBuffer[][]{{layerRaster[0].getRender().getLastRenderBuffer()}});
-						getRender().setLastRenderBuffer(layerRaster[0].getRender().getLastRenderBuffer());
+						initializeRasterLayer(null,
+								new IBuffer[][] { { layerRaster[0].getRender()
+										.getLastRenderBuffer() } });
+						getRender().setLastRenderBuffer(
+								layerRaster[0].getRender()
+										.getLastRenderBuffer());
 					}
 				} catch (LoadLayerException e) {
 					// TODO Auto-generated catch block
@@ -733,27 +769,37 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 				}
 
 			} else {
-				if(mustTileDraw){
-					Rectangle r = new Rectangle((int) p.getX(), (int) p.getY(), viewPort.getImageWidth(), viewPort.getImageHeight());
-					Tiling tiles = new Tiling(maxTileDrawWidth, maxTileDrawHeight, r);
-					tiles.setAffineTransform((AffineTransform) viewPort.getAffineTransform().clone());
+				if (mustTileDraw) {
+					Rectangle r = new Rectangle((int) p.getX(), (int) p.getY(),
+							viewPort.getImageWidth(), viewPort.getImageHeight());
+					Tiling tiles = new Tiling(maxTileDrawWidth,
+							maxTileDrawHeight, r);
+					tiles.setAffineTransform((AffineTransform) viewPort
+							.getAffineTransform().clone());
 					visualStatus.fileNames = new String[tiles.getNumTiles()];
-					MultiRasterDataset[][] datasets = new MultiRasterDataset[tiles.getNumRows()][tiles.getNumCols()];
-					IBuffer[][] buf = new IBuffer[tiles.getNumRows()][tiles.getNumCols()];
+					MultiRasterDataset[][] datasets = new MultiRasterDataset[tiles
+							.getNumRows()][tiles.getNumCols()];
+					IBuffer[][] buf = new IBuffer[tiles.getNumRows()][tiles
+							.getNumCols()];
 					layerRaster = new FLyrRasterSE[tiles.getNumTiles()];
 					lastNColumns = tiles.getNumCols();
 					lastNRows = tiles.getNumRows();
 					for (int tileNr = 0; tileNr < tiles.getNumTiles(); tileNr++) {
 						// drawing part
 						try {
-							ViewPort vp = tiles.getTileViewPort(viewPort, tileNr);
-							boolean painted = drawTile(g, vp, cancel, tileNr, scale, tileNr);
-							if(	layerRaster != null &&
-									layerRaster[tileNr] != null &&
-									painted) {
-									datasets[(int)(tileNr / tiles.getNumCols())][tileNr % tiles.getNumCols()] = (MultiRasterDataset)layerRaster[tileNr].getDataSource().newDataset();
-									buf[(int)(tileNr / tiles.getNumCols())][tileNr % tiles.getNumCols()] = layerRaster[tileNr].getRender().getLastRenderBuffer();
-								}
+							ViewPort vp = tiles.getTileViewPort(viewPort,
+									tileNr);
+							boolean painted = drawTile(g, vp, cancel, tileNr,
+									scale, tileNr);
+							if (layerRaster != null
+									&& layerRaster[tileNr] != null && painted) {
+								datasets[(int) (tileNr / tiles.getNumCols())][tileNr
+										% tiles.getNumCols()] = (MultiRasterDataset) layerRaster[tileNr]
+										.getDataSource().newDataset();
+								buf[(int) (tileNr / tiles.getNumCols())][tileNr
+										% tiles.getNumCols()] = layerRaster[tileNr]
+										.getRender().getLastRenderBuffer();
+							}
 						} catch (NoninvertibleTransformException e) {
 							e.printStackTrace();
 						} catch (LoadLayerException e) {
@@ -762,15 +808,17 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 						}
 					}
 					try {
-						if(datasets != null && datasets[0][0] != null) {
+						if (datasets != null && datasets[0][0] != null) {
 							dataset = new CompositeDataset(datasets);
 							initializeRasterLayer(datasets, buf);
 							buf = null;
 						}
 					} catch (MosaicNotValidException e) {
-						throw new ReadDriverException("No hay continuidad en el mosaico.", e);
+						throw new ReadDriverException(
+								"No hay continuidad en el mosaico.", e);
 					} catch (LoadLayerException e) {
-						throw new ReadDriverException("Error inicializando la capa.", e);
+						throw new ReadDriverException(
+								"Error inicializando la capa.", e);
 					} catch (InterruptedException e) {
 					}
 				} else
@@ -778,10 +826,15 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 						layerRaster = new FLyrRasterSE[1];
 						visualStatus.fileNames = new String[1];
 						drawTile(g, viewPort, cancel, 0, scale, 0);
-						if(layerRaster != null && layerRaster[0] != null) {
+						if (layerRaster != null && layerRaster[0] != null) {
 							dataset = layerRaster[0].getDataSource();
-							getRender().setLastRenderBuffer(layerRaster[0].getRender().getLastRenderBuffer());
-							initializeRasterLayer(null, new IBuffer[][]{{layerRaster[0].getRender().getLastRenderBuffer()}});
+							getRender().setLastRenderBuffer(
+									layerRaster[0].getRender()
+											.getLastRenderBuffer());
+							initializeRasterLayer(
+									null,
+									new IBuffer[][] { { layerRaster[0]
+											.getRender().getLastRenderBuffer() } });
 						}
 					} catch (LoadLayerException e) {
 						// TODO Auto-generated catch block
@@ -792,34 +845,39 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 		}
 		disableStopped();
 
-		/*Runtime r = Runtime.getRuntime();
-		System.err.println("********************WMS**********************");
-		System.err.println("Memoria Total: " + (r.totalMemory() / 1024) +"KB");
-		System.err.println("Memoria Usada: " + ((r.totalMemory() - r.freeMemory()) / 1024) +"KB");
-		System.err.println("Memoria Libre: " + (r.freeMemory() / 1024) +"KB");
-		System.err.println("Memoria MaxMemory: " + (r.maxMemory() / 1024) +"KB");
-		System.err.println("*********************************************");*/
+		/*
+		 * Runtime r = Runtime.getRuntime();
+		 * System.err.println("********************WMS**********************");
+		 * System.err.println("Memoria Total: " + (r.totalMemory() / 1024)
+		 * +"KB"); System.err.println("Memoria Usada: " + ((r.totalMemory() -
+		 * r.freeMemory()) / 1024) +"KB"); System.err.println("Memoria Libre: "
+		 * + (r.freeMemory() / 1024) +"KB");
+		 * System.err.println("Memoria MaxMemory: " + (r.maxMemory() / 1024)
+		 * +"KB");
+		 * System.err.println("*********************************************");
+		 */
 	}
 
 	/**
 	 * Closes files and releases memory (pointers to null)
 	 */
 	private void closeAndFree() {
-		while(readingData != null && readingData.compareTo(Thread.currentThread().toString()) != 0)
+		while (readingData != null
+				&& readingData.compareTo(Thread.currentThread().toString()) != 0)
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
 			}
 
-		if(dataset != null) {
+		if (dataset != null) {
 			dataset.close();
 			dataset = null;
 		}
 
-		//Cerramos el dataset asociado a la capa si está abierto.
-		if(layerRaster != null) {
+		// Cerramos el dataset asociado a la capa si está abierto.
+		if (layerRaster != null) {
 			for (int i = 0; i < layerRaster.length; i++) {
-				if(layerRaster[i] != null) {
+				if (layerRaster[i] != null) {
 					layerRaster[i].setRemoveRasterFlag(true);
 					layerRaster[i].getDataSource().close();
 					layerRaster[i].getRender().free();
@@ -833,60 +891,66 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 	}
 
 	/**
-	 * Acciones que se realizan después de asignar la fuente de datos a
-	 * la capa raster.
-	 *
+	 * Acciones que se realizan después de asignar la fuente de datos a la capa
+	 * raster.
+	 * 
 	 * @throws LoadLayerException
 	 * @throws InterruptedException
 	 */
-	private void initializeRasterLayer(MultiRasterDataset[][] datasets, IBuffer[][] buf) throws LoadLayerException, InterruptedException {
-		if(this.filterList != null)
+	private void initializeRasterLayer(MultiRasterDataset[][] datasets,
+			IBuffer[][] buf) throws LoadLayerException, InterruptedException {
+		if (this.filterList != null)
 			getRender().setFilterList(filterList);
-		if(this.transparency != null)
+		if (this.transparency != null)
 			getRender().setLastTransparency(transparency);
-		if(this.renderBands != null)
+		if (this.renderBands != null)
 			getRender().setRenderBands(renderBands);
-		if(datasets != null) {
+		if (datasets != null) {
 			String[][] names = new String[datasets.length][datasets[0].length];
 			for (int i = 0; i < datasets.length; i++) {
 				for (int j = 0; j < datasets[i].length; j++) {
-					if(datasets[i][j] != null)
-						names[i][j] = datasets[i][j].getDataset(0)[0].getFName();
+					if (datasets[i][j] != null)
+						names[i][j] = datasets[i][j].getDataset(0)[0]
+								.getFName();
 				}
 			}
 			super.setLoadParams(names);
 		}
 		super.init();
-		if(buf != null && buf[0][0] != null) {
-			int drawablesBandCount = layerRaster[0].getDataSource().getBands().getDrawableBandsCount();
+		if (buf != null && buf[0][0] != null) {
+			int drawablesBandCount = layerRaster[0].getDataSource().getBands()
+					.getDrawableBandsCount();
 			IBuffer buff = null;
-			if(dataset instanceof CompositeDataset)
-				buff = ((CompositeDataset)dataset).generateBuffer(buf, drawablesBandCount);
+			if (dataset instanceof CompositeDataset)
+				buff = ((CompositeDataset) dataset).generateBuffer(buf,
+						drawablesBandCount);
 			else
 				buff = buf[0][0];
 
-			if(getRender().getLastRenderBuffer() != null)
+			if (getRender().getLastRenderBuffer() != null)
 				getRender().getLastRenderBuffer().free();
 			getRender().setLastRenderBuffer(buff);
 		}
 	}
 
-	private void drawFixedSize(Graphics2D g, ViewPort vp, Cancellable cancel, double scale) throws ReadDriverException, LoadLayerException {
-		callCount++; // mess code, it is not unusual a wms server to response an error which is completely
-					 // temporal and the response is available if we retry requesting.
-					 //
-
+	private void drawFixedSize(Graphics2D g, ViewPort vp, Cancellable cancel,
+			double scale) throws ReadDriverException, LoadLayerException {
+		callCount++; // mess code, it is not unusual a wms server to response an
+						// error which is completely
+						// temporal and the response is available if we retry
+						// requesting.
+						//
 
 		// This is the extent that will be requested
 		Rectangle2D bBox = getFullExtent();
 		MyCancellable c = new MyCancellable(cancel);
 
 		try {
-			wmsStatus.setExtent( bBox );
-			wmsStatus.setFormat( m_Format );
-			wmsStatus.setHeight( fixedSize.height );
-			wmsStatus.setWidth( fixedSize.width );
-			wmsStatus.setLayerNames(Utilities.createVector(layerQuery,","));
+			wmsStatus.setExtent(bBox);
+			wmsStatus.setFormat(m_Format);
+			wmsStatus.setHeight(fixedSize.height);
+			wmsStatus.setWidth(fixedSize.width);
+			wmsStatus.setLayerNames(Utilities.createVector(layerQuery, ","));
 			wmsStatus.setSrs(m_SRS);
 			wmsStatus.setStyles(styles);
 			wmsStatus.setDimensions(dimensions);
@@ -896,10 +960,11 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 			if (f == null)
 				return;
 			String nameWorldFile = f.getPath() + getExtensionWorldFile();
-			com.iver.andami.Utilities.createTemp(nameWorldFile, this.getDataWorldFile(bBox, fixedSize));
+			com.iver.andami.Utilities.createTemp(nameWorldFile,
+					this.getDataWorldFile(bBox, fixedSize));
 
 			IStatusRaster status = getStatus();
-			if(status!=null && firstLoad){
+			if (status != null && firstLoad) {
 				try {
 					status.applyStatus(this);
 				} catch (NotSupportedExtensionException e) {
@@ -917,8 +982,8 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 			Rectangle2D extent = new Rectangle2D.Double();
 			Rectangle2D.intersect(vp.getAdjustedExtent(), bBox, extent);
 
-			ViewPortData vpData = new ViewPortData(
-				vp.getCrs(), new Extent(extent), fixedSize );
+			ViewPortData vpData = new ViewPortData(vp.getCrs(), new Extent(
+					extent), fixedSize);
 			vpData.setMat(vp.getAffineTransform());
 
 			String filePath = f.getAbsolutePath();
@@ -930,48 +995,61 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 			} catch (FilterTypeException e) {
 			}
 		} catch (ValidationException e) {
-			if (!c.isCanceled())
-			{
-				LoadLayerException exception = new LoadLayerException(getName(),e);
+			if (!c.isCanceled()) {
+				LoadLayerException exception = new LoadLayerException(
+						getName(), e);
 				throw exception;
 			}
 		} catch (IOException e) {
 			if (!c.isCanceled())
-				if (callCount<MAX_RETRY_TIMES) { // mess code
-					NotificationManager.addWarning("\n[ FLyrWMS.drawFixedSize() ]  Failed in trying " + callCount + "/" + MAX_RETRY_TIMES + ")\n", null); // mess code
-					// I'll try again requesting up to MAX_RETRY_TIMES times before throw an error // mess code
-					// (this is mess code, should be replaced by a layer status handler which is scheduled for version > 1.0) // mess code
+				if (callCount < MAX_RETRY_TIMES) { // mess code
+					NotificationManager
+							.addWarning(
+									"\n[ FLyrWMS.drawFixedSize() ]  Failed in trying "
+											+ callCount + "/" + MAX_RETRY_TIMES
+											+ ")\n", null); // mess code
+					// I'll try again requesting up to MAX_RETRY_TIMES times
+					// before throw an error // mess code
+					// (this is mess code, should be replaced by a layer status
+					// handler which is scheduled for version > 1.0) // mess
+					// code
 					drawFixedSize(g, vp, cancel, scale); // mess code
 				} // mess code
 
-				if (callCount == 1) { // mess code
-					ConnectionErrorExceptionType type = new ConnectionErrorExceptionType();
-					type.setLayerName(getName());
-					try {
-						type.setDriverName("WMS Driver");
-					} catch (Exception e1) {
-					}
-					type.setHost(host);
-					throw new ConnectionErrorLayerException(getName(),e);
-				} // mess code
+			if (callCount == 1) { // mess code
+				ConnectionErrorExceptionType type = new ConnectionErrorExceptionType();
+				type.setLayerName(getName());
+				try {
+					type.setDriverName("WMS Driver");
+				} catch (Exception e1) {
+				}
+				type.setHost(host);
+				throw new ConnectionErrorLayerException(getName(), e);
+			} // mess code
 
 		} catch (WMSException e) {
 			if (!c.isCanceled()) {
-				if (callCount<MAX_RETRY_TIMES) { // mess code
-					NotificationManager.addWarning("\n[ FLyrWMS.drawFixedSize() ]  Failed in trying " + callCount + "/" + MAX_RETRY_TIMES + ")\n", null); // mess code
-					// I'll try again requesting up to MAX_RETRY_TIMES times before throw an error // mess code
-					// (this is mess code, should be replaced by a layer status handler which is scheduled for version > 1.0) // mess code
+				if (callCount < MAX_RETRY_TIMES) { // mess code
+					NotificationManager
+							.addWarning(
+									"\n[ FLyrWMS.drawFixedSize() ]  Failed in trying "
+											+ callCount + "/" + MAX_RETRY_TIMES
+											+ ")\n", null); // mess code
+					// I'll try again requesting up to MAX_RETRY_TIMES times
+					// before throw an error // mess code
+					// (this is mess code, should be replaced by a layer status
+					// handler which is scheduled for version > 1.0) // mess
+					// code
 					drawFixedSize(g, vp, cancel, scale); // mess code
 				} // mess code
 				if (callCount == 1) { // mess code
 					if (!isPrinting)
 						this.setVisible(false);
-					throw new LoadLayerException(getName(),e);
-
+					throw new LoadLayerException(getName(), e);
 
 				} // mess code
 			}
-		}catch (NullPointerException e) {
+		} catch (NullPointerException e) {
 			this.setVisible(false);
 		}
 		callCount--; // mess code
@@ -979,70 +1057,89 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 	/**
 	 * Carga y dibuja el raster usando la librería
-	 * @param filePath Ruta al fichero en disco
-	 * @param g Graphics2D
-	 * @param vp ViewPort
-	 * @param scale Escala para el draw
-	 * @param cancel Cancelación para el draw
+	 * 
+	 * @param filePath
+	 *            Ruta al fichero en disco
+	 * @param g
+	 *            Graphics2D
+	 * @param vp
+	 *            ViewPort
+	 * @param scale
+	 *            Escala para el draw
+	 * @param cancel
+	 *            Cancelación para el draw
 	 * @throws ReadDriverException
 	 * @throws LoadLayerException
 	 */
-	private void rasterProcess(String filePath, Graphics2D g, ViewPort vp, double scale, Cancellable cancel, int nLyr) throws ReadDriverException, LoadLayerException, FilterTypeException {
-		//Cargamos el dataset con el raster de disco.
+	private void rasterProcess(String filePath, Graphics2D g, ViewPort vp,
+			double scale, Cancellable cancel, int nLyr)
+			throws ReadDriverException, LoadLayerException, FilterTypeException {
+		// Cargamos el dataset con el raster de disco.
 		layerRaster[nLyr] = FLyrRasterSE.createLayer("", filePath, vp.getCrs());
-		//layerRaster[nLyr].getRender().setBufferFactory(layerRaster[nLyr].getBufferFactory());
+		// layerRaster[nLyr].getRender().setBufferFactory(layerRaster[nLyr].getBufferFactory());
 		layerRaster[nLyr].setNoDataValue(getNoDataValue());
 		layerRaster[nLyr].setNoDataType(getNoDataType());
 
-		//Obtenemos la tabla de color del raster abierto ya que se le va a sustituir la lista
-		//de filtros y el de tabla de color no queremos sustituirlo.
-		RasterFilterList rasterFilterList = layerRaster[nLyr].getRender().getFilterList();
-		ColorTableFilter ct = (ColorTableFilter)rasterFilterList.getFilterByBaseClass(ColorTableFilter.class);
+		// Obtenemos la tabla de color del raster abierto ya que se le va a
+		// sustituir la lista
+		// de filtros y el de tabla de color no queremos sustituirlo.
+		RasterFilterList rasterFilterList = layerRaster[nLyr].getRender()
+				.getFilterList();
+		ColorTableFilter ct = (ColorTableFilter) rasterFilterList
+				.getFilterByBaseClass(ColorTableFilter.class);
 		Object param = null;
-		if(ct != null)
+		if (ct != null)
 			param = ct.getParam("colorTable");
 
-		//En caso de cargar un proyecto con XMLEntity se crean los filtros
-		if(filterArguments != null) {
+		// En caso de cargar un proyecto con XMLEntity se crean los filtros
+		if (filterArguments != null) {
 			RasterFilterList fl = new RasterFilterList();
-			fl.addEnvParam("IStatistics", layerRaster[nLyr].getDataSource().getStatistics());
-			fl.addEnvParam("MultiRasterDataset", layerRaster[nLyr].getDataSource());
+			fl.addEnvParam("IStatistics", layerRaster[nLyr].getDataSource()
+					.getStatistics());
+			fl.addEnvParam("MultiRasterDataset",
+					layerRaster[nLyr].getDataSource());
 			fl.setInitDataType(layerRaster[nLyr].getDataType()[0]);
-			RasterFilterListManager filterListManager = new RasterFilterListManager(fl);
+			RasterFilterListManager filterListManager = new RasterFilterListManager(
+					fl);
 			filterListManager.createFilterListFromStrings(filterArguments);
 			filterArguments = null;
 			filterList = fl;
 		}
 
-		//Como el raster se carga a cada zoom el render se crea nuevamente y la lista de
-		//filtros siempre estará vacia a cada visualización. Para evitarlo tenemos que
-		//guardar la lista de filtro aplicada en la visualización anterior.
-		if(this.filterList != null) {
+		// Como el raster se carga a cada zoom el render se crea nuevamente y la
+		// lista de
+		// filtros siempre estará vacia a cada visualización. Para evitarlo
+		// tenemos que
+		// guardar la lista de filtro aplicada en la visualización anterior.
+		if (this.filterList != null) {
 			this.disableUpdateDrawVersion();
-			//Si tenía tabla de color le asignamos la original
-			if(param != null && param instanceof GridPalette) {
+			// Si tenía tabla de color le asignamos la original
+			if (param != null && param instanceof GridPalette) {
 				this.filterList.remove(ColorTableFilter.class);
-				RasterFilterListManager filterManager = new RasterFilterListManager(filterList);
-				ColorTableListManager ctm = new ColorTableListManager(filterManager);
-				ctm.addColorTableFilter((GridPalette)param);
+				RasterFilterListManager filterManager = new RasterFilterListManager(
+						filterList);
+				ColorTableListManager ctm = new ColorTableListManager(
+						filterManager);
+				ctm.addColorTableFilter((GridPalette) param);
 				filterList.move(ColorTableFilter.class, 0);
 				filterList.controlTypes();
 			}
 			layerRaster[nLyr].getRender().setFilterList(filterList);
 			this.enableUpdateDrawVersion();
 		}
-		if(this.transparency != null)
+		if (this.transparency != null)
 			layerRaster[nLyr].getRender().setLastTransparency(transparency);
-		if(this.renderBands != null)
+		if (this.renderBands != null)
 			layerRaster[nLyr].getRender().setRenderBands(renderBands);
 
-		//Dibujamos
+		// Dibujamos
 		disableUpdateDrawVersion();
 		layerRaster[nLyr].draw(null, g, vp, cancel, scale);
 		enableUpdateDrawVersion();
 
-		//La primera vez asignamos la lista de filtros asociada al renderizador. Guardamos una referencia
-		//en esta clase para que a cada zoom no se pierda.
+		// La primera vez asignamos la lista de filtros asociada al
+		// renderizador. Guardamos una referencia
+		// en esta clase para que a cada zoom no se pierda.
 		if (this.filterList == null)
 			filterList = layerRaster[nLyr].getRender().getFilterList();
 		if (this.transparency == null)
@@ -1054,18 +1151,22 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.fmap.raster.IRasterRendering#getRenderFilterList()
 	 */
-	public RasterFilterList getRenderFilterList(){
+	public RasterFilterList getRenderFilterList() {
 		return (filterList != null) ? filterList : getRender().getFilterList();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.hierarchy.IRasterRendering#setRenderFilterList(org.gvsig.raster.grid.filter.RasterFilterList)
+	 * 
+	 * @see
+	 * org.gvsig.raster.hierarchy.IRasterRendering#setRenderFilterList(org.gvsig
+	 * .raster.grid.filter.RasterFilterList)
 	 */
 	public void setRenderFilterList(RasterFilterList filterList) {
-		if (filterList == this.filterList){
+		if (filterList == this.filterList) {
 			return;
 		}
 		this.filterList = filterList;
@@ -1075,26 +1176,31 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.fmap.raster.IRasterRendering#getRenderTransparency()
 	 */
 	public GridTransparency getRenderTransparency() {
-		return (transparency != null) ? transparency : getRender().getLastTransparency();
+		return (transparency != null) ? transparency : getRender()
+				.getLastTransparency();
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.hierarchy.IRasterRendering#getRenderBands()
 	 */
 	public int[] getRenderBands() {
-		return (renderBands != null) ? renderBands : getRender().getRenderBands();
+		return (renderBands != null) ? renderBands : getRender()
+				.getRenderBands();
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.hierarchy.IRasterRendering#setRenderBands(int[])
 	 */
 	public void setRenderBands(int[] renderBands) {
-		//TODO: Comprobar si hay cambios
+		// TODO: Comprobar si hay cambios
 		this.renderBands = renderBands;
 		this.updateDrawVersion();
 		getRender().setRenderBands(renderBands);
@@ -1102,49 +1208,51 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 	/**
 	 * This is the method used to draw a tile in a WMS mosaic layer.
+	 * 
 	 * @throws LoadLayerException
 	 * @throws ReadDriverException
 	 * @return true when a tile has been painted
 	 */
-	private boolean drawTile(Graphics2D g, ViewPort vp, Cancellable cancel, int tile, double scale, int nLyr) throws LoadLayerException, ReadDriverException {
+	private boolean drawTile(Graphics2D g, ViewPort vp, Cancellable cancel,
+			int tile, double scale, int nLyr) throws LoadLayerException,
+			ReadDriverException {
 		callCount++;
 		// Compute the query geometry
 		// 1. Check if it is within borders
 		Rectangle2D extent = getFullExtent();
-				if ((vp.getAdjustedExtent().getMinX() > extent.getMaxX()) ||
-								(vp.getAdjustedExtent().getMinY() > extent.getMaxY()) ||
-								(vp.getAdjustedExtent().getMaxX() < extent.getMinX()) ||
-								(vp.getAdjustedExtent().getMaxY() < extent.getMinY())) {
-						return false;
-				}
+		if ((vp.getAdjustedExtent().getMinX() > extent.getMaxX())
+				|| (vp.getAdjustedExtent().getMinY() > extent.getMaxY())
+				|| (vp.getAdjustedExtent().getMaxX() < extent.getMinX())
+				|| (vp.getAdjustedExtent().getMaxY() < extent.getMinY())) {
+			return false;
+		}
 
-				// 2. Compute extent to be requested.
-				Rectangle2D bBox = new Rectangle2D.Double();
-				Rectangle2D.intersect(vp.getAdjustedExtent(), extent, bBox);
+		// 2. Compute extent to be requested.
+		Rectangle2D bBox = new Rectangle2D.Double();
+		Rectangle2D.intersect(vp.getAdjustedExtent(), extent, bBox);
 
-				// 3. Compute size in pixels
-				double scalex = vp.getAffineTransform().getScaleX();
-				double scaley = vp.getAffineTransform().getScaleY();
-				int wImg = (int) Math.ceil(Math.abs(bBox.getWidth() * scalex) + 1);
-				int hImg = (int) Math.ceil(Math.abs(bBox.getHeight() * scaley) + 1);
+		// 3. Compute size in pixels
+		double scalex = vp.getAffineTransform().getScaleX();
+		double scaley = vp.getAffineTransform().getScaleY();
+		int wImg = (int) Math.ceil(Math.abs(bBox.getWidth() * scalex) + 1);
+		int hImg = (int) Math.ceil(Math.abs(bBox.getHeight() * scaley) + 1);
 
-				Dimension sz = new Dimension(wImg, hImg);
+		Dimension sz = new Dimension(wImg, hImg);
 
-				if ((wImg <= 0) || (hImg <= 0)) {
-						return false;
-				}
-				MyCancellable c = new MyCancellable(cancel);
+		if ((wImg <= 0) || (hImg <= 0)) {
+			return false;
+		}
+		MyCancellable c = new MyCancellable(cancel);
 
 		try {
 			sz = new Dimension(wImg, hImg);
 			Rectangle2D.intersect(vp.getAdjustedExtent(), extent, bBox);
 
-
-			wmsStatus.setExtent( bBox );
+			wmsStatus.setExtent(bBox);
 			wmsStatus.setFormat(m_Format);
-			wmsStatus.setHeight( hImg );
-			wmsStatus.setWidth( wImg );
-			wmsStatus.setLayerNames(Utilities.createVector(layerQuery,","));
+			wmsStatus.setHeight(hImg);
+			wmsStatus.setWidth(wImg);
+			wmsStatus.setLayerNames(Utilities.createVector(layerQuery, ","));
 			wmsStatus.setSrs(m_SRS);
 			wmsStatus.setStyles(styles);
 			wmsStatus.setDimensions(dimensions);
@@ -1158,10 +1266,14 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 				double wScale = (double) minTilePrintWidth / wImg;
 				wmsStatus.setWidth(minTilePrintWidth);
 				Rectangle2D sExtent = wmsStatus.getExtent();
-				Point2D initialPoint = new Point2D.Double(sExtent.getX(), sExtent.getY());
-				sExtent.setRect(sExtent.getX()*wScale, sExtent.getY(), sExtent.getWidth()*wScale, sExtent.getHeight());
+				Point2D initialPoint = new Point2D.Double(sExtent.getX(),
+						sExtent.getY());
+				sExtent.setRect(sExtent.getX() * wScale, sExtent.getY(),
+						sExtent.getWidth() * wScale, sExtent.getHeight());
 				if (!bBox.contains(initialPoint)) {
-					sExtent.setRect(sExtent.getX() - initialPoint.getX(), sExtent.getY(), sExtent.getWidth(), sExtent.getHeight());
+					sExtent.setRect(sExtent.getX() - initialPoint.getX(),
+							sExtent.getY(), sExtent.getWidth(),
+							sExtent.getHeight());
 				}
 			}
 
@@ -1169,10 +1281,14 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 				double hScale = (double) minTilePrintHeight / hImg;
 				wmsStatus.setHeight(minTilePrintHeight);
 				Rectangle2D sExtent = wmsStatus.getExtent();
-				Point2D initialPoint = new Point2D.Double(sExtent.getX(), sExtent.getY());
-				sExtent.setRect(sExtent.getX(), sExtent.getY()*hScale, sExtent.getWidth(), sExtent.getHeight()*hScale);
+				Point2D initialPoint = new Point2D.Double(sExtent.getX(),
+						sExtent.getY());
+				sExtent.setRect(sExtent.getX(), sExtent.getY() * hScale,
+						sExtent.getWidth(), sExtent.getHeight() * hScale);
 				if (!bBox.contains(initialPoint)) {
-					sExtent.setRect(sExtent.getX(), sExtent.getY() - initialPoint.getY(), sExtent.getWidth(), sExtent.getHeight());
+					sExtent.setRect(sExtent.getX(), sExtent.getY()
+							- initialPoint.getY(), sExtent.getWidth(),
+							sExtent.getHeight());
 				}
 			}
 
@@ -1181,49 +1297,66 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 			if (f == null)
 				return false;
 			String nameWordFile = f.getPath() + getExtensionWorldFile();
-			com.iver.andami.Utilities.createTemp(nameWordFile, this.getDataWorldFile(bBox, sz));
+			com.iver.andami.Utilities.createTemp(nameWordFile,
+					this.getDataWorldFile(bBox, sz));
 
-			ViewPortData vpData = new ViewPortData(
-				vp.getCrs(), new Extent(bBox), sz );
+			ViewPortData vpData = new ViewPortData(vp.getCrs(),
+					new Extent(bBox), sz);
 			vpData.setMat(vp.getAffineTransform());
 
 			String filePath = f.getAbsolutePath();
 			visualStatus.fileNames[tile] = filePath;
 			try {
 				rasterProcess(filePath, g, vp, scale, cancel, nLyr);
-//				this.updateDrawVersion();
+				// this.updateDrawVersion();
 			} catch (FilterTypeException e) {
 			}
 
 		} catch (ValidationException e) {
-			if (!c.isCanceled())
-			{
-				LoadLayerException exception = new LoadLayerException(getName(),e);
+			if (!c.isCanceled()) {
+				LoadLayerException exception = new LoadLayerException(
+						getName(), e);
 				throw exception;
 			}
 		} catch (IOException e) {
-			if (!c.isCanceled()){
-				if (callCount<MAX_RETRY_TIMES) { // mess code
-					NotificationManager.addWarning("\n[ FLyrWMS.drawFixedSize() ]  Failed in trying " + callCount + "/" + MAX_RETRY_TIMES + ")\n", null); // mess code
-					// I'll try again requesting up to MAX_RETRY_TIMES times before throw an error // mess code
-					// (this is mess code, should be replaced by a layer status handler which is scheduled for version > 1.0) // mess code
+			if (!c.isCanceled()) {
+				if (callCount < MAX_RETRY_TIMES) { // mess code
+					NotificationManager
+							.addWarning(
+									"\n[ FLyrWMS.drawFixedSize() ]  Failed in trying "
+											+ callCount + "/" + MAX_RETRY_TIMES
+											+ ")\n", null); // mess code
+					// I'll try again requesting up to MAX_RETRY_TIMES times
+					// before throw an error // mess code
+					// (this is mess code, should be replaced by a layer status
+					// handler which is scheduled for version > 1.0) // mess
+					// code
 
 					drawFixedSize(g, vp, cancel, scale); // mess code
 				} // mess code
 			}
 			if (callCount == 1) { // mess code
-				throw new ConnectionErrorLayerException(getName(),e);
-			}//if
+				throw new ConnectionErrorLayerException(getName(), e);
+			}// if
 		} catch (WMSException e) {
 			if (!c.isCanceled()) {
-				if (callCount<MAX_RETRY_TIMES) { // mess code
-					Logger.getAnonymousLogger().warning("\n[ FLyrWMS.drawFixedSize() ]  Failed in trying " + callCount + "/" + MAX_RETRY_TIMES + ")\n"); // mess code
-					// I'll try again requesting up to MAX_RETRY_TIMES times before throw an error // mess code
-					// (this is mess code, should be replaced by a layer status handler which is scheduled for version > 1.0) // mess code
+				if (callCount < MAX_RETRY_TIMES) { // mess code
+					Logger.getAnonymousLogger()
+							.warning(
+									"\n[ FLyrWMS.drawFixedSize() ]  Failed in trying "
+											+ callCount + "/" + MAX_RETRY_TIMES
+											+ ")\n"); // mess code
+					// I'll try again requesting up to MAX_RETRY_TIMES times
+					// before throw an error // mess code
+					// (this is mess code, should be replaced by a layer status
+					// handler which is scheduled for version > 1.0) // mess
+					// code
 					drawTile(g, vp, cancel, tile, scale, nLyr);
 				} // mess code
 				if (callCount == 1) { // mess code
-//		azabala			JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(), e.getMessage());
+				// azabala
+				// JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),
+				// e.getMessage());
 					WMSDriverExceptionType type = new WMSDriverExceptionType();
 					type.setLayerName(getName());
 					try {
@@ -1233,171 +1366,176 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 					type.setWcsStatus(this.wmsStatus);
 					if (!isPrinting)
 						this.setVisible(false);
-					throw new LoadLayerException(getName(),e);
+					throw new LoadLayerException(getName(), e);
 
-
-				} //if
-			}//if
-		}//catch
+				} // if
+			}// if
+		}// catch
 		callCount--;
 		return true;
 	}
 
-   /**
-    * Applies server min/max scale as layer min/max scale.
-    * The purpose is to update the TOC icon according with
-    * the WMS layer visibilitiy. 
-    */
-   private void initServerScale() {
-       /**
-        * We have to calculate the equivalent scale for our system, taking into account the
-        * server DPI and our real DPI.
-        */
-       double minScale = getCorrectedServerMinScale();
-       double maxScale = getCorrectedServerMaxScale();
-       if (minScale>0) {
-           setMinScale(minScale);
-       }
-       if (maxScale>0 &&
-               maxScale>=minScale) {
-           setMaxScale(maxScale);
-       }
-   }
-	
 	/**
-    * Calculates the equivalent MinScaleDenominator for our system, taking into account the
-    * server DPI and our real DPI.
-    * 
-    * WMS 1.3 standard defines a fixed pixel size of 0.28 mm for the server,
-    * which may not match our real settings, so this conversion is required
-    * to properly use MinScaleDenominator and MaxScaleDenominator values.
-    *
-    * @return
-    */
-   public double getCorrectedServerMinScale() {
-       return (getServerMinScale()*MapContext.getScreenDPI())/WMS_DPI;
-   }
-   
-   /**
-    * Calculates the equivalent MaxScaleDenominator for our system, taking into account the
-    * server DPI and our real DPI.
-    * 
-    * WMS 1.3 standard defines a fixed pixel size of 0.28 mm for the server,
-    * which may not match our real settings, so this conversion is required
-    * to properly use MinScaleDenominator and MaxScaleDenominator values.
-    *
-    * @return
-    */
-   public double getCorrectedServerMaxScale() {
-       return (getServerMaxScale()*MapContext.getScreenDPI())/WMS_DPI;
-   }
-   
-   /**
-    * Returns the value of MinScaleDenominator tag, if available,
-    * or -1 otherwise.
-    *  
-    * @return
-    */
-   public double getServerMinScale() {
-       String[] layers = getLayerNames();
-       double minScale=Double.MAX_VALUE;
-       for (int i=0; i<layers.length; i++) {
-           WMSLayerNode layer = wms.getLayer(layers[i]);
-           double lyrMinScale = layer.getScaleMin(); 
-           if (lyrMinScale!=-1 &&
-                   lyrMinScale<minScale) {
-               minScale = lyrMinScale;
-           }
-       }
-       if (minScale==Double.MAX_VALUE) {
-           return -1;
-       }
-       else {
-           return minScale;
-       }
-   }
-
-   /**
-    * Returns the value of MaxScaleDenominator tag, if available,
-    * or -1 otherwise.
-    *  
-    * @return
-    */
-   public double getServerMaxScale() {
-       String[] layers = getLayerNames();
-       double maxScale=-1, lyrMaxScale;
-       for (int i=0; i<layers.length; i++) {
-           WMSLayerNode layer = wms.getLayer(layers[i]);
-           lyrMaxScale = layer.getScaleMax();
-           if (lyrMaxScale!=-1
-                   && lyrMaxScale>maxScale) {
-               maxScale = lyrMaxScale;
-           }
-           
-       }
-       return maxScale;
-   }
-   
-   
-   /**
-	 * Obtiene la extensión del fichero de georreferenciación
-	 * @return String con la extensión del fichero de georreferenciación dependiendo
-	 * del valor del formato obtenido del servidor. Por defecto asignaremos un .wld
+	 * Applies server min/max scale as layer min/max scale. The purpose is to
+	 * update the TOC icon according with the WMS layer visibilitiy.
 	 */
-	private String getExtensionWorldFile(){
+	private void initServerScale() {
+		/**
+		 * We have to calculate the equivalent scale for our system, taking into
+		 * account the server DPI and our real DPI.
+		 */
+		double minScale = getCorrectedServerMinScale();
+		double maxScale = getCorrectedServerMaxScale();
+		if (minScale > 0) {
+			setMinScale(minScale);
+		}
+		if (maxScale > 0 && maxScale >= minScale) {
+			setMaxScale(maxScale);
+		}
+	}
+
+	/**
+	 * Calculates the equivalent MinScaleDenominator for our system, taking into
+	 * account the server DPI and our real DPI.
+	 * 
+	 * WMS 1.3 standard defines a fixed pixel size of 0.28 mm for the server,
+	 * which may not match our real settings, so this conversion is required to
+	 * properly use MinScaleDenominator and MaxScaleDenominator values.
+	 * 
+	 * @return
+	 */
+	public double getCorrectedServerMinScale() {
+		return (getServerMinScale() * MapContext.getScreenDPI()) / WMS_DPI;
+	}
+
+	/**
+	 * Calculates the equivalent MaxScaleDenominator for our system, taking into
+	 * account the server DPI and our real DPI.
+	 * 
+	 * WMS 1.3 standard defines a fixed pixel size of 0.28 mm for the server,
+	 * which may not match our real settings, so this conversion is required to
+	 * properly use MinScaleDenominator and MaxScaleDenominator values.
+	 * 
+	 * @return
+	 */
+	public double getCorrectedServerMaxScale() {
+		return (getServerMaxScale() * MapContext.getScreenDPI()) / WMS_DPI;
+	}
+
+	/**
+	 * Returns the value of MinScaleDenominator tag, if available, or -1
+	 * otherwise.
+	 * 
+	 * @return
+	 */
+	public double getServerMinScale() {
+		String[] layers = getLayerNames();
+		double minScale = Double.MAX_VALUE;
+		for (int i = 0; i < layers.length; i++) {
+			WMSLayerNode layer = wms.getLayer(layers[i]);
+			double lyrMinScale = layer.getScaleMin();
+			if (lyrMinScale != -1 && lyrMinScale < minScale) {
+				minScale = lyrMinScale;
+			}
+		}
+		if (minScale == Double.MAX_VALUE) {
+			return -1;
+		} else {
+			return minScale;
+		}
+	}
+
+	/**
+	 * Returns the value of MaxScaleDenominator tag, if available, or -1
+	 * otherwise.
+	 * 
+	 * @return
+	 */
+	public double getServerMaxScale() {
+		String[] layers = getLayerNames();
+		double maxScale = -1, lyrMaxScale;
+		for (int i = 0; i < layers.length; i++) {
+			WMSLayerNode layer = wms.getLayer(layers[i]);
+			lyrMaxScale = layer.getScaleMax();
+			if (lyrMaxScale != -1 && lyrMaxScale > maxScale) {
+				maxScale = lyrMaxScale;
+			}
+
+		}
+		return maxScale;
+	}
+
+	/**
+	 * Obtiene la extensión del fichero de georreferenciación
+	 * 
+	 * @return String con la extensión del fichero de georreferenciación
+	 *         dependiendo del valor del formato obtenido del servidor. Por
+	 *         defecto asignaremos un .wld
+	 */
+	private String getExtensionWorldFile() {
 		String extWorldFile = ".wld";
-			if(m_Format.equals("image/tif") || m_Format.equals("image/tiff"))
-				extWorldFile = ".tfw";
-			//En la versión 1.6 de gdal no soporta jpgw si el fichero de imagen no 
-			//tiene extensión. Solo lo lee si es wld
-			/*if(m_Format.equals("image/jpeg"))
-				extWorldFile = ".jpgw";*/
-			return extWorldFile;
+		if (m_Format.equals("image/tif") || m_Format.equals("image/tiff"))
+			extWorldFile = ".tfw";
+		// En la versión 1.6 de gdal no soporta jpgw si el fichero de imagen no
+		// tiene extensión. Solo lo lee si es wld
+		/*
+		 * if(m_Format.equals("image/jpeg")) extWorldFile = ".jpgw";
+		 */
+		return extWorldFile;
 	}
 
 	/**
 	 * Calcula el contenido del fichero de georreferenciación de una imagen.
-	 * @param bBox Tamaño y posición de la imagen (en coordenadas de usuario)
-	 * @param sz Tamaño de la imagen en pixeles.
+	 * 
+	 * @param bBox
+	 *            Tamaño y posición de la imagen (en coordenadas de usuario)
+	 * @param sz
+	 *            Tamaño de la imagen en pixeles.
 	 * @return el 'WorldFile', como String.
 	 * @throws IOException
 	 */
-	public String getDataWorldFile(Rectangle2D bBox, Dimension sz) throws IOException {
+	public String getDataWorldFile(Rectangle2D bBox, Dimension sz)
+			throws IOException {
 		StringBuffer data = new StringBuffer();
-			data.append((bBox.getMaxX() - bBox.getMinX())/(sz.getWidth() - 1)+"\n");
-			data.append("0.0\n");
-			data.append("0.0\n");
-			data.append("-"+(bBox.getMaxY() - bBox.getMinY())/(sz.getHeight() - 1)+"\n");
-			data.append(""+bBox.getMinX()+"\n");
-			data.append(""+bBox.getMaxY()+"\n");
-			return data.toString();
+		data.append((bBox.getMaxX() - bBox.getMinX()) / (sz.getWidth() - 1)
+				+ "\n");
+		data.append("0.0\n");
+		data.append("0.0\n");
+		data.append("-" + (bBox.getMaxY() - bBox.getMinY())
+				/ (sz.getHeight() - 1) + "\n");
+		data.append("" + bBox.getMinX() + "\n");
+		data.append("" + bBox.getMaxY() + "\n");
+		return data.toString();
 	}
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.layers.FLayer#print(java.awt.Graphics2D,
-	 * 		com.iver.cit.gvsig.fmap.ViewPort,
-	 * 		com.iver.cit.gvsig.fmap.operations.Cancellable)
+	 *      com.iver.cit.gvsig.fmap.ViewPort,
+	 *      com.iver.cit.gvsig.fmap.operations.Cancellable)
 	 */
-	public void print(Graphics2D g, ViewPort viewPort, Cancellable cancel, double scale, PrintRequestAttributeSet properties)
-		throws ReadDriverException {
+	public void print(Graphics2D g, ViewPort viewPort, Cancellable cancel,
+			double scale, PrintRequestAttributeSet properties)
+			throws ReadDriverException {
 
 		closeAndFree();
 
 		if (isVisible() && isWithinScale(scale)) {
 			isPrinting = true;
 			if (!mustTilePrint) {
-				draw(null, g, viewPort, cancel,scale);
+				draw(null, g, viewPort, cancel, scale);
 			} else {
 				// Para no pedir imagenes demasiado grandes, vamos
 				// a hacer lo mismo que hace EcwFile: chunkear.
 				// Llamamos a drawView con cuadraditos mï¿½s pequeï¿½os
 				// del BufferedImage ni caso, cuando se imprime viene con null
 
-				Tiling tiles = new Tiling(maxTilePrintWidth, maxTilePrintHeight, g.getClipBounds());
-				tiles.setAffineTransform((AffineTransform) viewPort.getAffineTransform().clone());
+				Tiling tiles = new Tiling(maxTilePrintWidth,
+						maxTilePrintHeight, g.getClipBounds());
+				tiles.setAffineTransform((AffineTransform) viewPort
+						.getAffineTransform().clone());
 				visualStatus.fileNames = new String[tiles.getNumTiles()];
 				layerRaster = new FLyrRasterSE[tiles.getNumTiles()];
-				for (int tileNr=0; tileNr < tiles.getNumTiles(); tileNr++) {
+				for (int tileNr = 0; tileNr < tiles.getNumTiles(); tileNr++) {
 					// Parte que dibuja
 					try {
 						ViewPort vp = tiles.getTileViewPort(viewPort, tileNr);
@@ -1414,39 +1552,38 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 		}
 	}
 
-	public void _print(Graphics2D g, ViewPort viewPort, Cancellable cancel,double scale)
-		throws ReadDriverException {
-		draw(null, g, viewPort, cancel,scale);
+	public void _print(Graphics2D g, ViewPort viewPort, Cancellable cancel,
+			double scale) throws ReadDriverException {
+		draw(null, g, viewPort, cancel, scale);
 	}
 
 	/**
 	 * Devuelve el FMapWMSDriver.
-	 *
+	 * 
 	 * @return FMapWMSDriver
-	 *
+	 * 
 	 * @throws IllegalStateException
 	 * @throws ValidationException
 	 * @throws UnsupportedVersionLayerException
 	 * @throws IOException
 	 */
-	public FMapWMSDriver getDriver()
-		throws IllegalStateException, ValidationException,
-			UnsupportedVersionLayerException, IOException {
+	public FMapWMSDriver getDriver() throws IllegalStateException,
+			ValidationException, UnsupportedVersionLayerException, IOException {
 		return FMapWMSDriverFactory.getFMapDriverForURL(host);
 	}
 
 	/**
 	 * Devuelve el FMapWMSDriver.
-	 *
+	 * 
 	 * @return FMapWMSDriver
-	 *
+	 * 
 	 * @throws IllegalStateException
 	 * @throws ValidationException
 	 * @throws UnsupportedVersionLayerException
 	 * @throws IOException
 	 */
 	public void setDriver(FMapWMSDriver drv) {
-		//TODO: Comprobar cambio
+		// TODO: Comprobar cambio
 		wms = drv;
 		initServerScale();
 		this.updateDrawVersion();
@@ -1454,7 +1591,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 	/**
 	 * Devuelve el URL.
-	 *
+	 * 
 	 * @return URL.
 	 */
 	public URL getHost() {
@@ -1463,14 +1600,15 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 	/**
 	 * Inserta el URL.
-	 *
-	 * @param host URL.
+	 * 
+	 * @param host
+	 *            URL.
 	 */
 	public void setHost(URL host) {
-		if (this.host == host){
+		if (this.host == host) {
 			return;
 		}
-		if (this.host != null && this.fullExtent.equals(host)){
+		if (this.host != null && this.fullExtent.equals(host)) {
 			return;
 		}
 
@@ -1480,7 +1618,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 	/**
 	 * Devuelve la información de la consulta.
-	 *
+	 * 
 	 * @return String.
 	 */
 	public String getInfoLayerQuery() {
@@ -1489,8 +1627,9 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 	/**
 	 * Inserta la informaciï¿½n de la consulta.
-	 *
-	 * @param infoLayerQuery String.
+	 * 
+	 * @param infoLayerQuery
+	 *            String.
 	 */
 	public void setInfoLayerQuery(String infoLayerQuery) {
 		this.infoLayerQuery = infoLayerQuery;
@@ -1498,7 +1637,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 	/**
 	 * Devuelve la consulta.
-	 *
+	 * 
 	 * @return String.
 	 */
 	public String getLayerQuery() {
@@ -1507,25 +1646,26 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 	/**
 	 * Inserta la consulta.
-	 *
-	 * @param layerQuery consulta.
+	 * 
+	 * @param layerQuery
+	 *            consulta.
 	 */
 	public void setLayerQuery(String layerQuery) {
-		if (this.layerQuery == layerQuery){
+		if (this.layerQuery == layerQuery) {
 			return;
 		}
-		if (this.layerQuery != null && this.layerQuery.equals(layerQuery)){
+		if (this.layerQuery != null && this.layerQuery.equals(layerQuery)) {
 			return;
 		}
 
 		this.layerQuery = layerQuery;
-       wmsStatus.setLayerNames(Utilities.createVector(layerQuery,","));
+		wmsStatus.setLayerNames(Utilities.createVector(layerQuery, ","));
 		this.updateDrawVersion();
 	}
 
 	/**
 	 * Devuelve el formato.
-	 *
+	 * 
 	 * @return Formato.
 	 */
 	public String getFormat() {
@@ -1534,14 +1674,15 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 	/**
 	 * Inserta el formato.
-	 *
-	 * @param format Formato.
+	 * 
+	 * @param format
+	 *            Formato.
 	 */
 	public void setFormat(String format) {
-		if (this.m_Format == format){
+		if (this.m_Format == format) {
 			return;
 		}
-		if (this.m_Format != null && this.m_Format.equals(format)){
+		if (this.m_Format != null && this.m_Format.equals(format)) {
 			return;
 		}
 		m_Format = format;
@@ -1550,7 +1691,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 	/**
 	 * Devuelve el SRS.
-	 *
+	 * 
 	 * @return SRS.
 	 */
 	public String getSRS() {
@@ -1559,14 +1700,15 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 	/**
 	 * Inserta el SRS.
-	 *
-	 * @param m_srs SRS.
+	 * 
+	 * @param m_srs
+	 *            SRS.
 	 */
 	public void setSRS(String m_srs) {
-		if (m_SRS == m_srs){
+		if (m_SRS == m_srs) {
 			return;
 		}
-		if (m_SRS != null && m_SRS.equals(m_srs)){
+		if (m_SRS != null && m_SRS.equals(m_srs)) {
 			return;
 		}
 		m_SRS = m_srs;
@@ -1576,14 +1718,15 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 	/**
 	 * Inserta la extensiï¿½n total de la capa.
-	 *
-	 * @param fullExtent Rectï¿½ngulo.
+	 * 
+	 * @param fullExtent
+	 *            Rectï¿½ngulo.
 	 */
 	public void setFullExtent(Rectangle2D fullExtent) {
-		if (this.fullExtent == fullExtent){
+		if (this.fullExtent == fullExtent) {
 			return;
 		}
-		if (this.fullExtent != null && this.fullExtent.equals(fullExtent)){
+		if (this.fullExtent != null && this.fullExtent.equals(fullExtent)) {
 			return;
 		}
 
@@ -1593,28 +1736,28 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 	public HashMap getProperties() {
 		HashMap info = new HashMap();
-				String[] layerNames = getLayerQuery().split(",");
-				Vector layers = new Vector(layerNames.length);
-				try {
-						if(getDriver().connect(null)){
-								for (int i = 0; i < layerNames.length; i++) {
-										layers.add(i, getDriver().getLayer(layerNames[i]));
-								}
-								info.put("name", getName());
-								info.put("selectedLayers", layers);
-								info.put("host", getHost());
-								info.put("srs", getSRS());
-								info.put("format", getFormat());
-								info.put("wmsTransparency", new Boolean(wmsTransparency));
-								info.put("styles", styles);
-								info.put("dimensions", dimensions);
-								info.put("fixedSize", fixedSize);
-								return info;
-						}
-				} catch (Exception e) {
-						e.printStackTrace();
+		String[] layerNames = getLayerQuery().split(",");
+		Vector layers = new Vector(layerNames.length);
+		try {
+			if (getDriver().connect(null)) {
+				for (int i = 0; i < layerNames.length; i++) {
+					layers.add(i, getDriver().getLayer(layerNames[i]));
 				}
-				return null;
+				info.put("name", getName());
+				info.put("selectedLayers", layers);
+				info.put("host", getHost());
+				info.put("srs", getSRS());
+				info.put("format", getFormat());
+				info.put("wmsTransparency", new Boolean(wmsTransparency));
+				info.put("styles", styles);
+				info.put("dimensions", dimensions);
+				info.put("fixedSize", fixedSize);
+				return info;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public double getMaxX() {
@@ -1633,27 +1776,24 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 		return visualStatus.minY;
 	}
 
-  
-   /**
-    * Returns the names of the WMS layers that are loaded in this
-    * gvSIG layer.
-    * 
-    * @return An array containing the names of the WMS layers
-    */
-   public String[] getLayerNames() {
-       Vector namesList = wmsStatus.getLayerNames();
-       String[] names = new String[namesList.size()];
-       for (int i=0; i<names.length; i++) {
-           Object o = namesList.get(i);
-           if (o instanceof String) {
-               names[i] = (String) o;
-           }
-           else { // this should not happen
-               names[i] = o.toString();
-           }
-       }
-       return names;
-   }
+	/**
+	 * Returns the names of the WMS layers that are loaded in this gvSIG layer.
+	 * 
+	 * @return An array containing the names of the WMS layers
+	 */
+	public String[] getLayerNames() {
+		Vector namesList = wmsStatus.getLayerNames();
+		String[] names = new String[namesList.size()];
+		for (int i = 0; i < names.length; i++) {
+			Object o = namesList.get(i);
+			if (o instanceof String) {
+				names[i] = (String) o;
+			} else { // this should not happen
+				names[i] = o.toString();
+			}
+		}
+		return names;
+	}
 
 	/**
 	 * @return Returns the wmsTransparency.
@@ -1663,10 +1803,11 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 	}
 
 	/**
-	 * @param wmsTransparency The wmsTransparency to set.
+	 * @param wmsTransparency
+	 *            The wmsTransparency to set.
 	 */
 	public void setWmsTransparency(boolean wmsTransparency) {
-		if (this.wmsTransparency == wmsTransparency){
+		if (this.wmsTransparency == wmsTransparency) {
 			return;
 		}
 		this.wmsTransparency = wmsTransparency;
@@ -1677,11 +1818,12 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 	 * @param styles
 	 */
 	public void setStyles(Vector styles) {
-		if (this.styles == styles){
+		if (this.styles == styles) {
 			return;
 		}
-		if (this.styles != null && styles != null ){
-			if (this.styles.containsAll(styles) && this.styles.size() ==styles.size()){
+		if (this.styles != null && styles != null) {
+			if (this.styles.containsAll(styles)
+					&& this.styles.size() == styles.size()) {
 				return;
 			}
 		}
@@ -1692,14 +1834,16 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 	/**
 	 * Sets the dimension vector that is a list of key-value pairs containing
 	 * the name of the dimension and the value for it
+	 * 
 	 * @param dimensions
 	 */
 	public void setDimensions(Vector dimensions) {
-		if (this.dimensions == dimensions){
+		if (this.dimensions == dimensions) {
 			return;
 		}
-		if (this.dimensions != null && dimensions != null ){
-			if (this.dimensions.containsAll(dimensions) && this.dimensions.size() ==dimensions.size()){
+		if (this.dimensions != null && dimensions != null) {
+			if (this.dimensions.containsAll(dimensions)
+					&& this.dimensions.size() == dimensions.size()) {
 				return;
 			}
 		}
@@ -1710,14 +1854,15 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 	/**
 	 * Sets the set of URLs that should be accessed for each operation performed
 	 * to the server.
-	 *
+	 * 
 	 * @param onlineResources
 	 */
 	public void setOnlineResources(Hashtable onlineResources) {
-		if (this.onlineResources == onlineResources){
+		if (this.onlineResources == onlineResources) {
 			return;
 		}
-		if (this.onlineResources != null && this.onlineResources.equals(onlineResources)){
+		if (this.onlineResources != null
+				&& this.onlineResources.equals(onlineResources)) {
 			return;
 		}
 
@@ -1726,9 +1871,9 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 	}
 
 	/**
-	 * Gets the URL that should be accessed for an operation performed
-	 * to the server.
-	 *
+	 * Gets the URL that should be accessed for an operation performed to the
+	 * server.
+	 * 
 	 * @param onlineResources
 	 */
 	public String getOnlineResource(String operation) {
@@ -1737,15 +1882,17 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 	/**
 	 * When a server is not fully featured and it only can serve constant map
-	 * sizes this value must be set. It expresses the size in pixels (width, height)
-	 * that the map will be requested.
-	 * @param Dimension sz
+	 * sizes this value must be set. It expresses the size in pixels (width,
+	 * height) that the map will be requested.
+	 * 
+	 * @param Dimension
+	 *            sz
 	 */
 	public void setFixedSize(Dimension sz) {
-		if (this.fixedSize == sz){
+		if (this.fixedSize == sz) {
 			return;
 		}
-		if (this.fixedSize != null && this.fixedSize.equals(sz)){
+		if (this.fixedSize != null && this.fixedSize.equals(sz)) {
 			return;
 		}
 		fixedSize = sz;
@@ -1753,17 +1900,20 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 	}
 
 	/**
-	 * Tells whether if this layer must deal with the server with the constant-size
-	 * limitations or not.
+	 * Tells whether if this layer must deal with the server with the
+	 * constant-size limitations or not.
+	 * 
 	 * @return boolean.
 	 */
 	private boolean isSizeFixed() {
-		return fixedSize != null && fixedSize.getWidth() > 0 && fixedSize.getHeight() > 0;
+		return fixedSize != null && fixedSize.getWidth() > 0
+				&& fixedSize.getHeight() > 0;
 	}
 
 	/**
-	 * If it is true, this layer accepts GetFeatureInfo operations. This WMS operations
-	 * maps to FMap's infoByPoint(p) operation.
+	 * If it is true, this layer accepts GetFeatureInfo operations. This WMS
+	 * operations maps to FMap's infoByPoint(p) operation.
+	 * 
 	 * @param b
 	 */
 	public void setQueryable(boolean b) {
@@ -1773,7 +1923,9 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 	/**
 	 * Creates the part of a OGC's MapContext document that would describe this
 	 * layer(s).
-	 * @param version, The desired version of the resulting document. (1.1.0)
+	 * 
+	 * @param version
+	 *            , The desired version of the resulting document. (1.1.0)
 	 * @return String containing the xml.
 	 * @throws UnsupportedVersionLayerException
 	 */
@@ -1792,24 +1944,26 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 			HashMap xmlAttrs = new HashMap();
 
 			// <Layer>
-			xmlAttrs.put(WebMapContextTags.HIDDEN, !isVisible()+"");
-			xmlAttrs.put(WebMapContextTags.QUERYABLE, queryable+"");
+			xmlAttrs.put(WebMapContextTags.HIDDEN, !isVisible() + "");
+			xmlAttrs.put(WebMapContextTags.QUERYABLE, queryable + "");
 			xml.openTag(WebMapContextTags.LAYER, xmlAttrs);
 			xmlAttrs.clear();
-			if (mapContextVersion.equals("1.1.0") || mapContextVersion.equals("1.0.0")) {
+			if (mapContextVersion.equals("1.1.0")
+					|| mapContextVersion.equals("1.0.0")) {
 				// <Server>
 				xmlAttrs.put(WebMapContextTags.SERVICE, WebMapContextTags.WMS);
 				xmlAttrs.put(WebMapContextTags.VERSION, drv.getVersion());
-				xmlAttrs.put(WebMapContextTags.SERVER_TITLE, drv.getServiceTitle());
+				xmlAttrs.put(WebMapContextTags.SERVER_TITLE,
+						drv.getServiceTitle());
 				xml.openTag(WebMapContextTags.SERVER, xmlAttrs);
 				xmlAttrs.clear();
 
-					// <OnlineResource>
-					xmlAttrs.put(WebMapContextTags.XLINK_TYPE, "simple");
-					xmlAttrs.put(WebMapContextTags.XLINK_HREF, getHost().toString());
-					xml.writeTag(WebMapContextTags.ONLINE_RESOURCE, xmlAttrs);
-					xmlAttrs.clear();
-					// </OnlineResource>
+				// <OnlineResource>
+				xmlAttrs.put(WebMapContextTags.XLINK_TYPE, "simple");
+				xmlAttrs.put(WebMapContextTags.XLINK_HREF, getHost().toString());
+				xml.writeTag(WebMapContextTags.ONLINE_RESOURCE, xmlAttrs);
+				xmlAttrs.clear();
+				// </OnlineResource>
 
 				xml.closeTag();
 				// </Server>
@@ -1820,109 +1974,120 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 				// <Title>
 				xml.writeTag(WebMapContextTags.TITLE, layer.getTitle().trim());
-				//?xml.writeTag(WebMapContextTags.TITLE, getName().trim());
+				// ?xml.writeTag(WebMapContextTags.TITLE, getName().trim());
 				// </Title>
 
 				// <Abstract>
 				if (layer.getAbstract() != null)
-					xml.writeTag(WebMapContextTags.ABSTRACT, layer.getAbstract());
+					xml.writeTag(WebMapContextTags.ABSTRACT,
+							layer.getAbstract());
 				// </Abstract>
 
 				// <SRS> (a list of available SRS for the enclosing layer)
-				String[] strings = (String[]) layer.getAllSrs().toArray(new String[0]);
+				String[] strings = (String[]) layer.getAllSrs().toArray(
+						new String[0]);
 				String mySRS = strings[0];
 				for (int j = 1; j < strings.length; j++) {
-					mySRS += ","+strings[j];
+					mySRS += "," + strings[j];
 				}
 				xml.writeTag(WebMapContextTags.SRS, mySRS);
 				// </SRS>
 
 				// <FormatList>
 				xml.openTag(WebMapContextTags.FORMAT_LIST);
-					strings = (String[]) drv.getFormats().toArray(new String[0]);
-					for (int j = 0; j < strings.length; j++) {
-										// <Format>
-						String str = strings[j].trim();
-						if (str.equals(getFormat()))
-							xml.writeTag(WebMapContextTags.FORMAT, str, WebMapContextTags.CURRENT, "1");
-						else
-							xml.writeTag(WebMapContextTags.FORMAT, str);
-										// </Format>
-					}
+				strings = (String[]) drv.getFormats().toArray(new String[0]);
+				for (int j = 0; j < strings.length; j++) {
+					// <Format>
+					String str = strings[j].trim();
+					if (str.equals(getFormat()))
+						xml.writeTag(WebMapContextTags.FORMAT, str,
+								WebMapContextTags.CURRENT, "1");
+					else
+						xml.writeTag(WebMapContextTags.FORMAT, str);
+					// </Format>
+				}
 				xml.closeTag();
 				// </FormatList>
 
 				// <StyleList>
 				xml.openTag(WebMapContextTags.STYLE_LIST);
 
-					if (layer.getStyles().size()>0) {
-						for (int j = 0; j < layer.getStyles().size(); j++) {
-							// <Style>
-							FMapWMSStyle st = (FMapWMSStyle) layer.getStyles().get(j);
-							if (st.name.equals(styleNames[i]))
-								xmlAttrs.put(WebMapContextTags.CURRENT, "1");
-							xml.openTag(WebMapContextTags.STYLE, xmlAttrs);
-							xmlAttrs.clear();
-
-								// <Name>
-								xml.writeTag(WebMapContextTags.NAME, st.name);
-								// </Name>
-
-								// <Title>
-								xml.writeTag(WebMapContextTags.TITLE, st.title);
-								// </Title>
-
-								// <LegendURL width="180" format="image/gif" height="50">
-									// <OnlineResource xlink:type="simple" xlink:href="http://globe.digitalearth.gov/globe/en/icons/colorbars/NATIONAL.gif"/>
-									// </OnlineResource>
-								// </LegendURL>
-							xml.closeTag();
-							// </Style>
-
-						}
-
-					} else {
-						// Create fake style (for compatibility issues)
-						xmlAttrs.put(WebMapContextTags.CURRENT, "1");
+				if (layer.getStyles().size() > 0) {
+					for (int j = 0; j < layer.getStyles().size(); j++) {
 						// <Style>
+						FMapWMSStyle st = (FMapWMSStyle) layer.getStyles().get(
+								j);
+						if (st.name.equals(styleNames[i]))
+							xmlAttrs.put(WebMapContextTags.CURRENT, "1");
 						xml.openTag(WebMapContextTags.STYLE, xmlAttrs);
-							xmlAttrs.clear();
-							// <Name>
-							xml.writeTag(WebMapContextTags.NAME, "default");
-							// </Name>
+						xmlAttrs.clear();
 
-							// <Title>
-							xml.writeTag(WebMapContextTags.TITLE, "default");
-							// </Title>
+						// <Name>
+						xml.writeTag(WebMapContextTags.NAME, st.name);
+						// </Name>
 
-//							// <LegendURL width="180" format="image/gif" height="50">
-//							xmlAttrs.put(WebMapContextTags.WIDTH, "0");
-//							xmlAttrs.put(WebMapContextTags.HEIGHT, "0");
-//							xmlAttrs.put(WebMapContextTags.FORMAT.toLowerCase(), "image/gif");
-//							xml.openTag(WebMapContextTags.LEGEND_URL, xmlAttrs);
-//							xmlAttrs.clear();
-//								// <OnlineResource xlink:type="simple" xlink:href="http://globe.digitalearth.gov/globe/en/icons/colorbars/NATIONAL.gif"/>
-//								xmlAttrs.put(WebMapContextTags.XLINK_TYPE, "simple");
-//								xmlAttrs.put(WebMapContextTags.XLINK_HREF, "http://globe.digitalearth.gov/globe/en/icons/colorbars/NATIONAL.gif");
-//								xml.writeTag(WebMapContextTags.ONLINE_RESOURCE, xmlAttrs);
-//								// </OnlineResource>
-//						    // </LegendURL>
-//							xml.closeTag();
-						// </Style>
+						// <Title>
+						xml.writeTag(WebMapContextTags.TITLE, st.title);
+						// </Title>
+
+						// <LegendURL width="180" format="image/gif"
+						// height="50">
+						// <OnlineResource xlink:type="simple"
+						// xlink:href="http://globe.digitalearth.gov/globe/en/icons/colorbars/NATIONAL.gif"/>
+						// </OnlineResource>
+						// </LegendURL>
 						xml.closeTag();
+						// </Style>
+
 					}
+
+				} else {
+					// Create fake style (for compatibility issues)
+					xmlAttrs.put(WebMapContextTags.CURRENT, "1");
+					// <Style>
+					xml.openTag(WebMapContextTags.STYLE, xmlAttrs);
+					xmlAttrs.clear();
+					// <Name>
+					xml.writeTag(WebMapContextTags.NAME, "default");
+					// </Name>
+
+					// <Title>
+					xml.writeTag(WebMapContextTags.TITLE, "default");
+					// </Title>
+
+					// // <LegendURL width="180" format="image/gif" height="50">
+					// xmlAttrs.put(WebMapContextTags.WIDTH, "0");
+					// xmlAttrs.put(WebMapContextTags.HEIGHT, "0");
+					// xmlAttrs.put(WebMapContextTags.FORMAT.toLowerCase(),
+					// "image/gif");
+					// xml.openTag(WebMapContextTags.LEGEND_URL, xmlAttrs);
+					// xmlAttrs.clear();
+					// // <OnlineResource xlink:type="simple"
+					// xlink:href="http://globe.digitalearth.gov/globe/en/icons/colorbars/NATIONAL.gif"/>
+					// xmlAttrs.put(WebMapContextTags.XLINK_TYPE, "simple");
+					// xmlAttrs.put(WebMapContextTags.XLINK_HREF,
+					// "http://globe.digitalearth.gov/globe/en/icons/colorbars/NATIONAL.gif");
+					// xml.writeTag(WebMapContextTags.ONLINE_RESOURCE,
+					// xmlAttrs);
+					// // </OnlineResource>
+					// // </LegendURL>
+					// xml.closeTag();
+					// </Style>
+					xml.closeTag();
+				}
 				// </StyleList>
 				xml.closeTag();
 				if (mapContextVersion.compareTo("1.0.0") > 0) {
-				// <DimensionList>
+					// <DimensionList>
 					xml.openTag(WebMapContextTags.DIMENSION_LIST);
 					// <Dimension>
 					// </Dimension>
 					xml.closeTag();
-				// </DimensionList>
+					// </DimensionList>
 				}
 			} else {
-				xml.writeTag("ERROR", PluginServices.getText(this, "unsupported_map_context_version"));
+				xml.writeTag("ERROR", PluginServices.getText(this,
+						"unsupported_map_context_version"));
 			}
 			// </Layer>
 			xml.closeTag();
@@ -1935,16 +2100,18 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.RasterOperations#getTileSize()
 	 */
 	public int[] getTileSize() {
-		int[] size = {maxTileDrawWidth, maxTileDrawHeight};
+		int[] size = { maxTileDrawWidth, maxTileDrawHeight };
 		return size;
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.RasterOperations#isTiled()
 	 */
 	public boolean isTiled() {
@@ -1955,7 +2122,8 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 		try {
 			if (wms == null)
 				wms = getDriver();
-			if (wms.hasLegendUrl(wmsStatus,layerQuery) ||wms.hasLegendGraphic() || hasImageLegend) {
+			if (wms.hasLegendUrl(wmsStatus, layerQuery)
+					|| wms.hasLegendGraphic() || hasImageLegend) {
 				wmsStatus.setOnlineResource((String) onlineResources
 						.get("GetLegendGraphic"));
 				String path = getPathImage();// File legend =
@@ -1973,27 +2141,30 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 	public String getPathImage() {
 		try {
-			File legend = getDriver().getLegendGraphic(wmsStatus, layerQuery, null);
+			File legend = getDriver().getLegendGraphic(wmsStatus, layerQuery,
+					null);
 			return legend.getAbsolutePath();
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.FLayer#newComposedLayer()
 	 */
 	public ComposedLayer newComposedLayer() {
 		Preferences prefs = Preferences.userRoot().node("gvsig.wms");
 
 		/*
-		 * from java.util.prefs import Preferences
-		 * prefs = Preferences.userRoot().node("gvsig.wms")
+		 * from java.util.prefs import Preferences prefs =
+		 * Preferences.userRoot().node("gvsig.wms")
 		 * prefs.put("useComposedLayer","true")
 		 */
 
-		String str = prefs.get("useComposedLayer","false");
+		String str = prefs.get("useComposedLayer", "false");
 		Boolean useComposedLayer = Boolean.TRUE; // por defecto ya se usan
 		try {
 			useComposedLayer = Boolean.valueOf(str);
@@ -2014,10 +2185,12 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 		return this.styles;
 	}
 
-
 	/*
 	 * Checks if can make a single petition for the two layers to the server
-	 * @see com.iver.cit.gvsig.fmap.layers.ComposedLayerWMS#canAdd(com.iver.cit.gvsig.fmap.layers.FLayer)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.ComposedLayerWMS#canAdd(com.iver.cit.gvsig
+	 * .fmap.layers.FLayer)
 	 */
 	boolean isComposedLayerCompatible(FLayer layer) {
 		FLyrWMS aLayer;
@@ -2025,7 +2198,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 		if (!(layer instanceof FLyrWMS)) {
 			return false;
 		}
-		aLayer = (FLyrWMS)layer;
+		aLayer = (FLyrWMS) layer;
 		if (!this.getHost().equals(aLayer.getHost())) {
 			return false;
 		}
@@ -2039,14 +2212,12 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 			if (!this.getInfoLayerQuery().equals(aLayer.getInfoLayerQuery())) {
 				return false;
 			}
-		}else if (aLayer.getInfoLayerQuery() != null) {
+		} else if (aLayer.getInfoLayerQuery() != null) {
 			return false;
 		}
 
-
 		// isFixedSize es privado
-		if ((this.fixedSize != null) &&
-				(aLayer.fixedSize!= null)) {
+		if ((this.fixedSize != null) && (aLayer.fixedSize != null)) {
 			if (this.fixedSize.equals(aLayer.fixedSize)) {
 				return false;
 			}
@@ -2055,8 +2226,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 		}
 
 		// time elevation (dimensions)
-		if ((this.dimensions != null) &&
-				(aLayer.dimensions != null)) {
+		if ((this.dimensions != null) && (aLayer.dimensions != null)) {
 			if (this.dimensions.size() != aLayer.dimensions.size()) {
 				return false;
 			} else {
@@ -2077,20 +2247,21 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.fmap.raster.layers.FLyrRasterSE#isActionEnabled(int)
 	 */
 	public boolean isActionEnabled(int action) {
 		switch (action) {
-			case IRasterLayerActions.ZOOM_PIXEL_RESOLUTION:
-			case IRasterLayerActions.FLYRASTER_BAR_TOOLS:
-			case IRasterLayerActions.BANDS_FILE_LIST:
-			case IRasterLayerActions.COLOR_TABLE:
-			case IRasterLayerActions.GEOLOCATION:
-			case IRasterLayerActions.PANSHARPENING:
-			case IRasterLayerActions.SAVE_COLORINTERP:
-				return false;
-			case IRasterLayerActions.REMOTE_ACTIONS:
-				return true;
+		case IRasterLayerActions.ZOOM_PIXEL_RESOLUTION:
+		case IRasterLayerActions.FLYRASTER_BAR_TOOLS:
+		case IRasterLayerActions.BANDS_FILE_LIST:
+		case IRasterLayerActions.COLOR_TABLE:
+		case IRasterLayerActions.GEOLOCATION:
+		case IRasterLayerActions.PANSHARPENING:
+		case IRasterLayerActions.SAVE_COLORINTERP:
+			return false;
+		case IRasterLayerActions.REMOTE_ACTIONS:
+			return true;
 		}
 
 		return super.isActionEnabled(action);
@@ -2098,6 +2269,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.fmap.raster.layers.FLyrRasterSE#getLegend()
 	 */
 	public ILegend getLegend() {
@@ -2106,21 +2278,23 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.fmap.raster.IRasterOperations#getDatatype()
 	 */
-	public int[] getDataType(){
+	public int[] getDataType() {
 		try {
 			return dataset.getDataType();
 		} catch (NullPointerException e) {
-			if(layerRaster != null && layerRaster[0] != null)
+			if (layerRaster != null && layerRaster[0] != null)
 				return layerRaster[0].getDataType();
 			else
-				return new int[]{IBuffer.TYPE_UNDEFINED};
+				return new int[] { IBuffer.TYPE_UNDEFINED };
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.fmap.raster.layers.FLyrRasterSE#overviewsSupport()
 	 */
 	public boolean overviewsSupport() {
@@ -2128,36 +2302,37 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 	}
 
 	protected void updateDrawVersion() {
-		if (this.disableUpdateDrawVersion != null){
+		if (this.disableUpdateDrawVersion != null) {
 
 			Thread curThread = Thread.currentThread();
 
 			Thread aThread;
 
 			Iterator iter = this.disableUpdateDrawVersion.iterator();
-			while (iter.hasNext()){
-				aThread = (Thread) ((WeakReference)iter.next()).get();
-				if (aThread == null){
+			while (iter.hasNext()) {
+				aThread = (Thread) ((WeakReference) iter.next()).get();
+				if (aThread == null) {
 					iter.remove();
-				} else if(aThread.equals(curThread)){
+				} else if (aThread.equals(curThread)) {
 					return;
 				}
 			}
 		}
-//		Exception ex = new Exception();
-//		ex.printStackTrace();
+		// Exception ex = new Exception();
+		// ex.printStackTrace();
 		super.updateDrawVersion();
 	}
 
-	protected void disableUpdateDrawVersion(){
-		if (this.disableUpdateDrawVersion == null){
+	protected void disableUpdateDrawVersion() {
+		if (this.disableUpdateDrawVersion == null) {
 			this.disableUpdateDrawVersion = new ArrayList();
 		}
-		this.disableUpdateDrawVersion.add(new WeakReference(Thread.currentThread()));
+		this.disableUpdateDrawVersion.add(new WeakReference(Thread
+				.currentThread()));
 	}
 
-	protected void enableUpdateDrawVersion(){
-		if (this.disableUpdateDrawVersion == null){
+	protected void enableUpdateDrawVersion() {
+		if (this.disableUpdateDrawVersion == null) {
 			return;
 		}
 
@@ -2165,22 +2340,22 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 		Thread aThread;
 
-
 		Iterator iter = this.disableUpdateDrawVersion.iterator();
-		while (iter.hasNext()){
-			aThread = (Thread) ((WeakReference)iter.next()).get();
-			if (aThread == null){
+		while (iter.hasNext()) {
+			aThread = (Thread) ((WeakReference) iter.next()).get();
+			if (aThread == null) {
 				iter.remove();
-			} else if(aThread.equals(curThread)){
+			} else if (aThread.equals(curThread)) {
 				iter.remove();
 				break;
 			}
 		}
 
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.FLyrDefault#cloneLayer()
 	 */
 	public FLayer cloneLayer() throws Exception {
@@ -2191,33 +2366,36 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 		layer.setFormat(this.getFormat());
 		layer.setFullExtent(this.fullExtent);
 		layer.setDriver(this.getDriver());
-        layer.setStyles(getStyles());
-        layer.setOnlineResources(this.onlineResources);
-        layer.setFixedSize(this.fixedSize);
-        layer.setQueryable(this.queryable);
-        layer.setWmsTransparency(this.wmsTransparency);
-        layer.setDimensions(this.dimensions);
-        layer.setLayerQuery(this.layerQuery);
-        layer.setInfoLayerQuery(this.infoLayerQuery);
-        
+		layer.setStyles(getStyles());
+		layer.setOnlineResources(this.onlineResources);
+		layer.setFixedSize(this.fixedSize);
+		layer.setQueryable(this.queryable);
+		layer.setWmsTransparency(this.wmsTransparency);
+		layer.setDimensions(this.dimensions);
+		layer.setLayerQuery(this.layerQuery);
+		layer.setInfoLayerQuery(this.infoLayerQuery);
+
 		ArrayList filters = getRender().getFilterList().getStatusCloned();
-		if(layer.getRender().getFilterList() == null)
+		if (layer.getRender().getFilterList() == null)
 			layer.getRender().setFilterList(new RasterFilterList());
 		layer.getRender().getFilterList().setStatus(filters);
-		
+
 		return layer;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.fmap.raster.layers.FLyrRasterSE#getFileLayer()
 	 */
 	public FLayer getFileLayer() {
-		if(layerRaster != null && layerRaster[0] != null) {
+		if (layerRaster != null && layerRaster[0] != null) {
 			FLyrRasterSE ly = null;
-			if(lastNColumns == 0 && lastNRows == 0) {
+			if (lastNColumns == 0 && lastNRows == 0) {
 				try {
-					ly = createLayer(layerRaster[0].getName(), layerRaster[0].getLoadParams(), layerRaster[0].getCrs());
+					ly = createLayer(layerRaster[0].getName(),
+							layerRaster[0].getLoadParams(),
+							layerRaster[0].getCrs());
 				} catch (LoadLayerException e) {
 					return null;
 				}
@@ -2227,7 +2405,8 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 				for (int i = 0; i < s.length; i++) {
 					for (int j = 0; j < s[0].length; j++) {
-						s[i][j] = ((FLyrRasterSE)layerRaster[i]).getDataSource().getNameDatasetStringList(i, j)[0];
+						s[i][j] = ((FLyrRasterSE) layerRaster[i])
+								.getDataSource().getNameDatasetStringList(i, j)[0];
 					}
 				}
 				try {

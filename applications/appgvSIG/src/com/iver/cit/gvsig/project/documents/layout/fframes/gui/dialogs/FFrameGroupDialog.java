@@ -12,10 +12,9 @@ import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 import com.iver.cit.gvsig.project.documents.layout.fframes.gui.JPRotation;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
-
 /**
  * Diálogo de un grupo de fframe del Layout.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FFrameGroupDialog extends JPanel implements IFFrameDialog {
@@ -29,12 +28,13 @@ public class FFrameGroupDialog extends JPanel implements IFFrameDialog {
 	private JPRotation pRotation = null;
 	private FFrameGroup newFFrameGroup;
 
-
 	/**
 	 * This is the default constructor
-	 *
-	 * @param layout Referencia al Layout.
-	 * @param fframe Referencia al fframe de imagen.
+	 * 
+	 * @param layout
+	 *            Referencia al Layout.
+	 * @param fframe
+	 *            Referencia al fframe de imagen.
 	 */
 	public FFrameGroupDialog(Layout layout, FFrameGroup fframe) {
 		super();
@@ -45,8 +45,9 @@ public class FFrameGroupDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * Inserta el rectángulo que ocupará el fframe de imagen.
-	 *
-	 * @param r Rectángulo.
+	 * 
+	 * @param r
+	 *            Rectángulo.
 	 */
 	public void setRectangle(Rectangle2D r) {
 		rect.setRect(r);
@@ -64,7 +65,7 @@ public class FFrameGroupDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes jContentPane
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private javax.swing.JPanel getJContentPane() {
@@ -83,7 +84,7 @@ public class FFrameGroupDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes bAceptar
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBAceptar() {
@@ -94,16 +95,18 @@ public class FFrameGroupDialog extends JPanel implements IFFrameDialog {
 			bAceptar.setLocation(7, 147);
 			bAceptar.addActionListener(new java.awt.event.ActionListener() {
 
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-					  	newFFrameGroup=(FFrameGroup)fframegroup.cloneFFrame(m_layout);
-					  	newFFrameGroup.setBoundBox(FLayoutUtilities.toSheetRect(
-								rect, m_layout.getLayoutControl().getAT()));
-					  	newFFrameGroup.setRotation(getPRotation().getRotation());
-						PluginServices.getMDIManager().closeWindow(FFrameGroupDialog.this);
-						//m_layout.refresh();
-						isAcepted = true;
-					}
-				});
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					newFFrameGroup = (FFrameGroup) fframegroup
+							.cloneFFrame(m_layout);
+					newFFrameGroup.setBoundBox(FLayoutUtilities.toSheetRect(
+							rect, m_layout.getLayoutControl().getAT()));
+					newFFrameGroup.setRotation(getPRotation().getRotation());
+					PluginServices.getMDIManager().closeWindow(
+							FFrameGroupDialog.this);
+					// m_layout.refresh();
+					isAcepted = true;
+				}
+			});
 		}
 
 		return bAceptar;
@@ -111,7 +114,7 @@ public class FFrameGroupDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes bCancelar
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBCancelar() {
@@ -121,16 +124,19 @@ public class FFrameGroupDialog extends JPanel implements IFFrameDialog {
 			bCancelar.setText(PluginServices.getText(this, "Cancelar"));
 			bCancelar.setLocation(99, 147);
 			bCancelar.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						PluginServices.getMDIManager().closeWindow(FFrameGroupDialog.this);
-					}
-				});
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					PluginServices.getMDIManager().closeWindow(
+							FFrameGroupDialog.this);
+				}
+			});
 		}
 
 		return bCancelar;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.mdiApp.ui.MDIManager.View#getViewInfo()
 	 */
 	public WindowInfo getWindowInfo() {
@@ -156,7 +162,7 @@ public class FFrameGroupDialog extends JPanel implements IFFrameDialog {
 
 	/**
 	 * This method initializes pRotation
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPRotation getPRotation() {
@@ -174,5 +180,5 @@ public class FFrameGroupDialog extends JPanel implements IFFrameDialog {
 	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"
 

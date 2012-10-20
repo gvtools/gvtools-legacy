@@ -54,27 +54,26 @@ import es.gva.cit.jgdal.GdalException;
 import es.gva.cit.jgdal.GdalRasterBand;
 import es.gva.cit.jgdal.GeoTransform;
 
-
 /**
- * Driver para la escritura a través de Gdal.
- * Puede exportar un fichero de un formato a otro desde un GeoRasterFile
- * en cualquier formato soportado por la lectura a un formato que este incluido
- * en la lista supportedDrv.
- *
+ * Driver para la escritura a través de Gdal. Puede exportar un fichero de un
+ * formato a otro desde un GeoRasterFile en cualquier formato soportado por la
+ * lectura a un formato que este incluido en la lista supportedDrv.
+ * 
  * Puede salvar a disco en un formato que este incluido en la lista supportedDrv
  * obteniendo los datos que van siendo servidos desde el cliente. Este cliente
- * debe implementar un IDataWriter o tener un objeto que lo implemente. Inicialmente
- * le pasará los parámetros de la imagen de salida y cuando el driver comience a
- * escribir le irá solicitando más a través del método readData de IDataWriter.
- * El cliente será el que lleve el control de lo que va sirviendo y lo que le queda
- * por servir.
+ * debe implementar un IDataWriter o tener un objeto que lo implemente.
+ * Inicialmente le pasará los parámetros de la imagen de salida y cuando el
+ * driver comience a escribir le irá solicitando más a través del método
+ * readData de IDataWriter. El cliente será el que lleve el control de lo que va
+ * sirviendo y lo que le queda por servir.
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class GdalWriter extends GeoRasterWriter {
 
 	public static void register() {
 		ExtensionPoint point = ExtensionPoint.getExtensionPoint("RasterWriter");
-		
+
 		point.register("tif", GdalWriter.class);
 		fileFeature.put("tif", new GTiffFeatures());
 
@@ -96,56 +95,72 @@ public class GdalWriter extends GeoRasterWriter {
 		point.register("rst", GdalWriter.class);
 		fileFeature.put("rst", new IDRISIFeatures());
 
-		//La exportación no es correcta del todo
-		//point.register("rmf", GdalWriter.class);
-		//fileFeature.put("rmf", new RMFFeatures());
+		// La exportación no es correcta del todo
+		// point.register("rmf", GdalWriter.class);
+		// fileFeature.put("rmf", new RMFFeatures());
 
-		//No salva datos. Siempre sale negra la imagen
-		//point.register("aux", GdalWriter.class);
-		//fileFeature.put("aux", new PAuxFeatures());
+		// No salva datos. Siempre sale negra la imagen
+		// point.register("aux", GdalWriter.class);
+		// fileFeature.put("aux", new PAuxFeatures());
 	}
 
-	private es.gva.cit.jgdal.GdalDriver		drv;
-	private Gdal 							dstDataset = null;
-	private GdalRasterBand 					rband = null;
-	private GeoTransform 					geot = null; //Datos de georeferenciación
-	//private OGRSpatialReference 			oSRS; //Datos de proyección
-	private GdalBuffer[]					bufBands = null;
-	private int 							nBlocks = 0; //Número de bloques en Y en el que se divide la imagen para escribir
-	private int 							anchoResto = 0; //Tamaño del último bloque de la imagen.
-	private boolean							write = true; //Cuando está a true se puede escribir en la imagen de salida. Si está a false el proceso es interrumpido
-	private int 							dataType = RasterBuffer.TYPE_UNDEFINED;
+	private es.gva.cit.jgdal.GdalDriver drv;
+	private Gdal dstDataset = null;
+	private GdalRasterBand rband = null;
+	private GeoTransform geot = null; // Datos de georeferenciación
+	// private OGRSpatialReference oSRS; //Datos de proyección
+	private GdalBuffer[] bufBands = null;
+	private int nBlocks = 0; // Número de bloques en Y en el que se divide la
+								// imagen para escribir
+	private int anchoResto = 0; // Tamaño del último bloque de la imagen.
+	private boolean write = true; // Cuando está a true se puede escribir en la
+									// imagen de salida. Si está a false el
+									// proceso es interrumpido
+	private int dataType = RasterBuffer.TYPE_UNDEFINED;
 
 	/**
 	 * Carga los parámetros de este driver.
 	 */
 	public void loadParams(String ident) {
-		WriteFileFormatFeatures wfff = (WriteFileFormatFeatures)fileFeature.get(ident);
+		WriteFileFormatFeatures wfff = (WriteFileFormatFeatures) fileFeature
+				.get(ident);
 		wfff.loadParams();
 		driverParams = wfff.getParams();
 	}
 
 	/**
 	 * Constructor para la obtención de parámetros del driver
-	 * @param drvType        Tipo de driver
+	 * 
+	 * @param drvType
+	 *            Tipo de driver
 	 */
 	public GdalWriter(String fileName) {
 		ident = RasterUtilities.getExtensionFromFileName(fileName);
-		driver = ((WriteFileFormatFeatures)fileFeature.get(ident)).getDriverName();
+		driver = ((WriteFileFormatFeatures) fileFeature.get(ident))
+				.getDriverName();
 
 		loadParams(ident);
 	}
 
 	/**
 	 * Constructor para salvar datos servidos por el cliente
-	 * @param dataWriter       	Objeto servidor de datos para el driver de escritura
-	 * @param outFilename      	Fichero de salida
-	 * @param blockSize        	Tamaño de bloque
-	 * @param Extent           	extent
-	 * @param compresion	   	Compresión si la tiene
-	 * @param outSizeX		  	Tamaño de salida en X
-	 * @param outSizeY			Tamaño de salida en Y
-	 * @param dataType			Tipo de dato
+	 * 
+	 * @param dataWriter
+	 *            Objeto servidor de datos para el driver de escritura
+	 * @param outFilename
+	 *            Fichero de salida
+	 * @param blockSize
+	 *            Tamaño de bloque
+	 * @param Extent
+	 *            extent
+	 * @param compresion
+	 *            Compresión si la tiene
+	 * @param outSizeX
+	 *            Tamaño de salida en X
+	 * @param outSizeY
+	 *            Tamaño de salida en Y
+	 * @param dataType
+	 *            Tipo de dato
 	 * @throws GdalException
 	 * @throws IOException
 	 */
@@ -153,30 +168,44 @@ public class GdalWriter extends GeoRasterWriter {
 			Integer nBands, AffineTransform at, Integer outSizeX,
 			Integer outSizeY, Integer dataType, Params params,
 			CoordinateReferenceSystem crs) throws GdalException, IOException {
-		this(dataWriter, outFileName, nBands, at, outSizeX, outSizeY, dataType, params, crs, new Boolean(true));
+		this(dataWriter, outFileName, nBands, at, outSizeX, outSizeY, dataType,
+				params, crs, new Boolean(true));
 	}
-	
+
 	/**
 	 * Constructor para salvar datos servidos por el cliente
-	 * @param dataWriter       	Objeto servidor de datos para el driver de escritura
-	 * @param outFilename      	Fichero de salida
-	 * @param blockSize        	Tamaño de bloque
-	 * @param Extent           	extent
-	 * @param compresion	   	Compresión si la tiene
-	 * @param outSizeX		  	Tamaño de salida en X
-	 * @param outSizeY			Tamaño de salida en Y
-	 * @param dataType			Tipo de dato
-	 * @param geo				Flag que dice si se salva con georreferenciación o sin ella
+	 * 
+	 * @param dataWriter
+	 *            Objeto servidor de datos para el driver de escritura
+	 * @param outFilename
+	 *            Fichero de salida
+	 * @param blockSize
+	 *            Tamaño de bloque
+	 * @param Extent
+	 *            extent
+	 * @param compresion
+	 *            Compresión si la tiene
+	 * @param outSizeX
+	 *            Tamaño de salida en X
+	 * @param outSizeY
+	 *            Tamaño de salida en Y
+	 * @param dataType
+	 *            Tipo de dato
+	 * @param geo
+	 *            Flag que dice si se salva con georreferenciación o sin ella
 	 * @throws GdalException
 	 * @throws IOException
 	 */
 	public GdalWriter(IDataWriter dataWriter, String outFileName,
 			Integer nBands, AffineTransform at, Integer outSizeX,
 			Integer outSizeY, Integer dataType, Params params,
-			CoordinateReferenceSystem crs, Boolean geo) throws GdalException, IOException {
+			CoordinateReferenceSystem crs, Boolean geo) throws GdalException,
+			IOException {
 		this.crs = crs;
-		ident = outFileName.toLowerCase().substring(outFileName.lastIndexOf(".") + 1);
-		driver = ((WriteFileFormatFeatures)fileFeature.get(ident)).getDriverName();
+		ident = outFileName.toLowerCase().substring(
+				outFileName.lastIndexOf(".") + 1);
+		driver = ((WriteFileFormatFeatures) fileFeature.get(ident))
+				.getDriverName();
 		this.dataType = dataType.intValue();
 		this.at = at;
 		percent = 0;
@@ -192,21 +221,23 @@ public class GdalWriter extends GeoRasterWriter {
 
 		this.nBands = nBands.intValue();
 
-		//Calculamos la georeferenciación a partir del extend pasado por el cliente.
+		// Calculamos la georeferenciación a partir del extend pasado por el
+		// cliente.
 
 		geot = new GeoTransform();
 		geot.adfgeotransform[0] = at.getTranslateX();
-		geot.adfgeotransform[3] = at.getTranslateY(); 
+		geot.adfgeotransform[3] = at.getTranslateY();
 		geot.adfgeotransform[1] = at.getScaleX();
 		geot.adfgeotransform[5] = at.getScaleY();
 		geot.adfgeotransform[2] = at.getShearX();
 		geot.adfgeotransform[4] = at.getShearY();
-		
-		String outRmf = outFileName.substring(0, outFileName.lastIndexOf("."));
-		if(geo.booleanValue())
-			RasterUtilities.saveGeoInfo(outRmf, at, new Point2D.Double(sizeWindowX, sizeWindowY));
 
-		if(params == null)
+		String outRmf = outFileName.substring(0, outFileName.lastIndexOf("."));
+		if (geo.booleanValue())
+			RasterUtilities.saveGeoInfo(outRmf, at, new Point2D.Double(
+					sizeWindowX, sizeWindowY));
+
+		if (params == null)
 			loadParams(ident);
 		else
 			this.driverParams = params;
@@ -216,11 +247,12 @@ public class GdalWriter extends GeoRasterWriter {
 
 	/**
 	 * Añade la proyección Wkt con la que salvar.
+	 * 
 	 * @param wkt
 	 * @throws GdalException
 	 */
 	public void setWkt(String wkt) {
-		if(dstDataset != null && wkt != null && wkt.compareTo("unknown") != 0) {
+		if (dstDataset != null && wkt != null && wkt.compareTo("unknown") != 0) {
 			try {
 				dstDataset.setProjection(wkt);
 			} catch (GdalException e) {
@@ -229,10 +261,12 @@ public class GdalWriter extends GeoRasterWriter {
 			}
 		}
 	}
-	
+
 	/**
 	 * Asigna el tipo de driver con el que se salvará la imagen
-	 * @param drvType        Tipo de driver
+	 * 
+	 * @param drvType
+	 *            Tipo de driver
 	 */
 	public void setDriverType(String drvType) {
 		this.driver = drvType;
@@ -240,10 +274,11 @@ public class GdalWriter extends GeoRasterWriter {
 
 	/**
 	 * Creación del dataset de destino.
+	 * 
 	 * @throws EcwException
 	 */
 	private void init() throws GdalException {
-		//Controlamos que el tipo de driver sea correcto
+		// Controlamos que el tipo de driver sea correcto
 		if (driver == null) {
 			throw new GdalException("Tipo de driver sin especificar.");
 		}
@@ -256,9 +291,10 @@ public class GdalWriter extends GeoRasterWriter {
 				okdrvtype = true;
 
 		if (okdrvtype == false)
-			throw new GdalException("El tipo de driver " + driver + " no está soportado por GdalWriter.");
+			throw new GdalException("El tipo de driver " + driver
+					+ " no está soportado por GdalWriter.");
 
-		//Obtenemos el driver y creamos el dataset del destino
+		// Obtenemos el driver y creamos el dataset del destino
 		drv = Gdal.getDriverByName(driver);
 
 		if (dstDataset != null) {
@@ -266,26 +302,30 @@ public class GdalWriter extends GeoRasterWriter {
 			dstDataset = null;
 		}
 
-		dstDataset = drv.create(outFileName, sizeWindowX, sizeWindowY,
-				nBands, RasterUtilities.getGdalTypeFromRasterBufType(dataType), gdalParamsFromRasterParams(driverParams));
+		dstDataset = drv.create(outFileName, sizeWindowX, sizeWindowY, nBands,
+				RasterUtilities.getGdalTypeFromRasterBufType(dataType),
+				gdalParamsFromRasterParams(driverParams));
 
 		dstDataset.setGeoTransform(geot);
 
 		int blockSize = RasterLibrary.blockHeight;
-		
+
 		nBlocks = (int) (sizeWindowY / blockSize);
 		anchoResto = sizeWindowY - (nBlocks * blockSize);
 	}
 
-	public void anotherFile(String fileName)throws GdalException {
-		dstDataset = drv.create(fileName, sizeWindowX, sizeWindowY,
-				nBands, RasterUtilities.getGdalTypeFromRasterBufType(dataType), gdalParamsFromRasterParams(driverParams));
+	public void anotherFile(String fileName) throws GdalException {
+		dstDataset = drv.create(fileName, sizeWindowX, sizeWindowY, nBands,
+				RasterUtilities.getGdalTypeFromRasterBufType(dataType),
+				gdalParamsFromRasterParams(driverParams));
 	}
 
 	/**
 	 * Convierte los parámetros obtenidos desde el objeto params a parametros
 	 * comprensibles por la librería gdal
-	 * @param p Params
+	 * 
+	 * @param p
+	 *            Params
 	 * @return Array de parámetros
 	 */
 	public String[] gdalParamsFromRasterParams(Params p) {
@@ -294,35 +334,43 @@ public class GdalWriter extends GeoRasterWriter {
 		ArrayList paramList = new ArrayList();
 		Param phot = (Param) p.getParamById("photometric");
 		if (phot != null)
-			paramList.add("PHOTOMETRIC=" + phot.list[((Integer) phot.defaultValue).intValue()]);
+			paramList.add("PHOTOMETRIC="
+					+ phot.list[((Integer) phot.defaultValue).intValue()]);
 		Param inter = (Param) p.getParamById("interleave");
 		if (inter != null)
-			paramList.add("INTERLEAVE=" + inter.list[((Integer) inter.defaultValue).intValue()]);
+			paramList.add("INTERLEAVE="
+					+ inter.list[((Integer) inter.defaultValue).intValue()]);
 		Param comp = (Param) p.getParamById("compression");// GIF LZW, ...
 		if (comp != null)
-			paramList.add("COMPRESS=" + comp.list[((Integer) comp.defaultValue).intValue()]);
+			paramList.add("COMPRESS="
+					+ comp.list[((Integer) comp.defaultValue).intValue()]);
 		Param comp1 = (Param) p.getParamById("compress"); // HFA (YES, NO)
 		if (comp1 != null)
-			paramList.add("COMPRESS=" + comp1.list[((Integer) comp1.defaultValue).intValue()]);
+			paramList.add("COMPRESS="
+					+ comp1.list[((Integer) comp1.defaultValue).intValue()]);
 		Param rrd = (Param) p.getParamById("rrd");
 		if (rrd != null)
-			paramList.add("HFA_USE_RRD=" + rrd.list[((Integer) rrd.defaultValue).intValue()]);
+			paramList.add("HFA_USE_RRD="
+					+ rrd.list[((Integer) rrd.defaultValue).intValue()]);
 		Param mtw = (Param) p.getParamById("Mtw");
 		if (mtw != null)
-			paramList.add("MTW=" + mtw.list[((Integer) mtw.defaultValue).intValue()]);
+			paramList.add("MTW="
+					+ mtw.list[((Integer) mtw.defaultValue).intValue()]);
 		Param tw = (Param) p.getParamById("Tile Width");
 		if (tw != null)
-			paramList.add("BLOCKXSIZE=" + tw.list[((Integer) tw.defaultValue).intValue()]);
+			paramList.add("BLOCKXSIZE="
+					+ tw.list[((Integer) tw.defaultValue).intValue()]);
 		Param th = (Param) p.getParamById("Tile Height");
 		if (th != null)
-			paramList.add("BLOCKYSIZE=" + th.list[((Integer) th.defaultValue).intValue()]);
+			paramList.add("BLOCKYSIZE="
+					+ th.list[((Integer) th.defaultValue).intValue()]);
 		Param qt = (Param) p.getParamById("quality");
 		if (qt != null)
 			paramList.add("QUALITY=" + qt.defaultValue);
 		Param prog = (Param) p.getParamById("progressive");
 		if (prog != null)
 			paramList.add("PROGRESSIVE=" + prog.defaultValue);
-		
+
 		if (paramList.size() == 0)
 			return null;
 
@@ -334,148 +382,177 @@ public class GdalWriter extends GeoRasterWriter {
 
 	/**
 	 * Escritura de datos tipo Byte.
-	 * @param sizeY Alto del bloque que se escribe.
-	 * @param posicionY Posicióny a partir desde donde se comienza.
-	 * @throws InterruptedException 
+	 * 
+	 * @param sizeY
+	 *            Alto del bloque que se escribe.
+	 * @param posicionY
+	 *            Posicióny a partir desde donde se comienza.
+	 * @throws InterruptedException
 	 */
-	public void writeByteBand(int sizeY, int posicionY) throws InterruptedException {
+	public void writeByteBand(int sizeY, int posicionY)
+			throws InterruptedException {
 		byte[][] buftmp = dataWriter.readByteData(sizeWindowX, sizeY);
-		for(int iBand = 0; iBand < nBands; iBand ++)
+		for (int iBand = 0; iBand < nBands; iBand++)
 			bufBands[iBand].buffByte = new byte[buftmp[iBand].length];
 
-		//Escribimos el bloque destino
+		// Escribimos el bloque destino
 		for (int iBand = 0; iBand < buftmp.length; iBand++)
 			for (int i = 0; i < buftmp[iBand].length; i++)
 				bufBands[iBand].buffByte[i] = buftmp[iBand][i];
 
-		for (int iBand = 0; iBand < buftmp.length; iBand++){
+		for (int iBand = 0; iBand < buftmp.length; iBand++) {
 			try {
 				rband = dstDataset.getRasterBand(iBand + 1);
-				rband.writeRaster(0, posicionY, sizeWindowX, sizeY, bufBands[iBand], Gdal.GDT_Byte);
+				rband.writeRaster(0, posicionY, sizeWindowX, sizeY,
+						bufBands[iBand], Gdal.GDT_Byte);
 			} catch (GdalException e) {
-				//No se está escribiendo ...
+				// No se está escribiendo ...
 			}
 		}
 	}
 
 	/**
 	 * Escritura de datos tipo Short.
-	 * @param sizeY Alto del bloque que se escribe.
-	 * @param posicionY Posicióny a partir desde donde se comienza.
-	 * @throws InterruptedException 
+	 * 
+	 * @param sizeY
+	 *            Alto del bloque que se escribe.
+	 * @param posicionY
+	 *            Posicióny a partir desde donde se comienza.
+	 * @throws InterruptedException
 	 */
-	public void writeShortBand(int sizeY, int posicionY) throws InterruptedException {
+	public void writeShortBand(int sizeY, int posicionY)
+			throws InterruptedException {
 		short[][] buftmp = dataWriter.readShortData(sizeWindowX, sizeY);
-		for(int iBand = 0; iBand < nBands; iBand ++)
+		for (int iBand = 0; iBand < nBands; iBand++)
 			bufBands[iBand].buffShort = new short[buftmp[iBand].length];
 
-		//Escribimos el bloque destino
+		// Escribimos el bloque destino
 		for (int iBand = 0; iBand < nBands; iBand++)
 			for (int i = 0; i < buftmp[iBand].length; i++)
 				bufBands[iBand].buffShort[i] = buftmp[iBand][i];
 
-		for (int iBand = 0; iBand < nBands; iBand++){
+		for (int iBand = 0; iBand < nBands; iBand++) {
 			try {
 				rband = dstDataset.getRasterBand(iBand + 1);
-				rband.writeRaster(0, posicionY, sizeWindowX, sizeY, bufBands[iBand], Gdal.GDT_Int16);
+				rband.writeRaster(0, posicionY, sizeWindowX, sizeY,
+						bufBands[iBand], Gdal.GDT_Int16);
 			} catch (GdalException e) {
-				//No se está escribiendo ...
+				// No se está escribiendo ...
 			}
 		}
 	}
 
 	/**
 	 * Escritura de datos tipo Int.
-	 * @param sizeY Alto del bloque que se escribe.
-	 * @param posicionY Posicióny a partir desde donde se comienza.
-	 * @throws InterruptedException 
+	 * 
+	 * @param sizeY
+	 *            Alto del bloque que se escribe.
+	 * @param posicionY
+	 *            Posicióny a partir desde donde se comienza.
+	 * @throws InterruptedException
 	 */
-	public void writeIntBand(int sizeY, int posicionY) throws InterruptedException {
+	public void writeIntBand(int sizeY, int posicionY)
+			throws InterruptedException {
 		int[][] buftmp = dataWriter.readIntData(sizeWindowX, sizeY);
-		for(int iBand = 0; iBand < nBands; iBand ++)
+		for (int iBand = 0; iBand < nBands; iBand++)
 			bufBands[iBand].buffInt = new int[buftmp[iBand].length];
 
-		//Escribimos el bloque destino
+		// Escribimos el bloque destino
 		for (int iBand = 0; iBand < buftmp.length; iBand++)
 			for (int i = 0; i < buftmp[iBand].length; i++)
 				bufBands[iBand].buffInt[i] = buftmp[iBand][i];
 
-		for (int iBand = 0; iBand < buftmp.length; iBand++){
+		for (int iBand = 0; iBand < buftmp.length; iBand++) {
 			try {
 				rband = dstDataset.getRasterBand(iBand + 1);
-				rband.writeRaster(0, posicionY, sizeWindowX, sizeY, bufBands[iBand], Gdal.GDT_Int32);
+				rband.writeRaster(0, posicionY, sizeWindowX, sizeY,
+						bufBands[iBand], Gdal.GDT_Int32);
 			} catch (GdalException e) {
-				//No se está escribiendo ...
+				// No se está escribiendo ...
 			}
 		}
 	}
 
 	/**
 	 * Escritura de datos tipo Float.
-	 * @param sizeY Alto del bloque que se escribe.
-	 * @param posicionY Posicióny a partir desde donde se comienza.
-	 * @throws InterruptedException 
+	 * 
+	 * @param sizeY
+	 *            Alto del bloque que se escribe.
+	 * @param posicionY
+	 *            Posicióny a partir desde donde se comienza.
+	 * @throws InterruptedException
 	 */
-	public void writeFloatBand(int sizeY, int posicionY) throws InterruptedException {
+	public void writeFloatBand(int sizeY, int posicionY)
+			throws InterruptedException {
 		float[][] buftmp = dataWriter.readFloatData(sizeWindowX, sizeY);
-		for(int iBand = 0; iBand < nBands; iBand ++)
+		for (int iBand = 0; iBand < nBands; iBand++)
 			bufBands[iBand].buffFloat = new float[buftmp[iBand].length];
 
-		//Escribimos el bloque destino
+		// Escribimos el bloque destino
 		for (int iBand = 0; iBand < buftmp.length; iBand++)
 			for (int i = 0; i < buftmp[iBand].length; i++)
 				bufBands[iBand].buffFloat[i] = buftmp[iBand][i];
 
-		for (int iBand = 0; iBand < buftmp.length; iBand++){
+		for (int iBand = 0; iBand < buftmp.length; iBand++) {
 			try {
 				rband = dstDataset.getRasterBand(iBand + 1);
-				rband.writeRaster(0, posicionY, sizeWindowX, sizeY, bufBands[iBand], Gdal.GDT_Float32);
+				rband.writeRaster(0, posicionY, sizeWindowX, sizeY,
+						bufBands[iBand], Gdal.GDT_Float32);
 			} catch (GdalException e) {
-				//No se está escribiendo ...
+				// No se está escribiendo ...
 			}
 		}
 	}
 
 	/**
 	 * Escritura de datos tipo Double.
-	 * @param sizeY Alto del bloque que se escribe.
-	 * @param posicionY Posicióny a partir desde donde se comienza.
-	 * @throws InterruptedException 
+	 * 
+	 * @param sizeY
+	 *            Alto del bloque que se escribe.
+	 * @param posicionY
+	 *            Posicióny a partir desde donde se comienza.
+	 * @throws InterruptedException
 	 */
-	public void writeDoubleBand(int sizeY, int posicionY) throws InterruptedException {
+	public void writeDoubleBand(int sizeY, int posicionY)
+			throws InterruptedException {
 		double[][] buftmp = dataWriter.readDoubleData(sizeWindowX, sizeY);
-		for(int iBand = 0; iBand < nBands; iBand ++)
+		for (int iBand = 0; iBand < nBands; iBand++)
 			bufBands[iBand].buffDouble = new double[buftmp[iBand].length];
 
-		//Escribimos el bloque destino
+		// Escribimos el bloque destino
 		for (int iBand = 0; iBand < buftmp.length; iBand++)
 			for (int i = 0; i < buftmp[iBand].length; i++)
 				bufBands[iBand].buffDouble[i] = buftmp[iBand][i];
 
-		for (int iBand = 0; iBand < buftmp.length; iBand++){
+		for (int iBand = 0; iBand < buftmp.length; iBand++) {
 			try {
 				rband = dstDataset.getRasterBand(iBand + 1);
-				rband.writeRaster(0, posicionY, sizeWindowX, sizeY, bufBands[iBand], Gdal.GDT_Float64);
+				rband.writeRaster(0, posicionY, sizeWindowX, sizeY,
+						bufBands[iBand], Gdal.GDT_Float64);
 			} catch (GdalException e) {
-				//No se está escribiendo ...
+				// No se está escribiendo ...
 			}
 		}
 	}
+
 	/**
 	 * Escritura para tipo de dato ARGB.
-	 * @param sizeY Alto del bloque que se escribe.
-	 * @param posicionY Posicióny a partir desde donde se comienza.
-	 * @throws InterruptedException 
+	 * 
+	 * @param sizeY
+	 *            Alto del bloque que se escribe.
+	 * @param posicionY
+	 *            Posicióny a partir desde donde se comienza.
+	 * @throws InterruptedException
 	 */
-	public void writeARGBBand(int sizeY, int posicionY) throws InterruptedException, OutOfMemoryError {
+	public void writeARGBBand(int sizeY, int posicionY)
+			throws InterruptedException, OutOfMemoryError {
 		int[] buftmp = dataWriter.readARGBData(sizeWindowX, sizeY, 0);
-		for(int iBand = 0; iBand < nBands; iBand ++)
+		for (int iBand = 0; iBand < nBands; iBand++)
 			bufBands[iBand].buffByte = new byte[buftmp.length];
 
-		//Escribimos el bloque destino
+		// Escribimos el bloque destino
 		for (int i = 0; i < buftmp.length; i++) {
-			bufBands[0].buffByte[i] = (byte) (((buftmp[i] & 0xff0000) >> 16) &
-					0xff);
+			bufBands[0].buffByte[i] = (byte) (((buftmp[i] & 0xff0000) >> 16) & 0xff);
 			bufBands[1].buffByte[i] = (byte) (((buftmp[i] & 0xff00) >> 8) & 0xff);
 			bufBands[2].buffByte[i] = (byte) ((buftmp[i] & 0xff) & 0xff);
 		}
@@ -498,15 +575,21 @@ public class GdalWriter extends GeoRasterWriter {
 	/**
 	 * Escribe tres bandas en el GDALRasterBand desde el IDataWriter con una
 	 * altura definida por sizeY.
-	 * @param buftmp        Buffer
-	 * @param sizeY        Altura en pixels del bloque leido
-	 * @param posicionY        Posición y a partir de la cual se escribe en el GDALRasterBand destino
-	 * @throws InterruptedException 
+	 * 
+	 * @param buftmp
+	 *            Buffer
+	 * @param sizeY
+	 *            Altura en pixels del bloque leido
+	 * @param posicionY
+	 *            Posición y a partir de la cual se escribe en el GDALRasterBand
+	 *            destino
+	 * @throws InterruptedException
 	 */
-	private void writeBands(int sizeY, int posicionY) throws InterruptedException, OutOfMemoryError {
-		//leemos el bloque origen
+	private void writeBands(int sizeY, int posicionY)
+			throws InterruptedException, OutOfMemoryError {
+		// leemos el bloque origen
 
-		switch(dataType){
+		switch (dataType) {
 		case RasterBuffer.TYPE_IMAGE:
 			writeARGBBand(sizeY, posicionY);
 			break;
@@ -529,41 +612,45 @@ public class GdalWriter extends GeoRasterWriter {
 	}
 
 	/**
-	 * Función que gestiona la lectura desde el origen y la escritura
-	 * de Gdal sobre el fichero destino.
-	 * @param mode        Modo de escritura
+	 * Función que gestiona la lectura desde el origen y la escritura de Gdal
+	 * sobre el fichero destino.
+	 * 
+	 * @param mode
+	 *            Modo de escritura
 	 * @throws IOException
 	 */
-	private void write(int mode) throws IOException, InterruptedException, OutOfMemoryError {
-		RasterTask task = RasterTaskQueue.get(Thread.currentThread().toString());
-		
+	private void write(int mode) throws IOException, InterruptedException,
+			OutOfMemoryError {
+		RasterTask task = RasterTaskQueue
+				.get(Thread.currentThread().toString());
+
 		bufBands = new GdalBuffer[nBands];
-		for(int iBand = 0; iBand < nBands; iBand ++)
+		for (int iBand = 0; iBand < nBands; iBand++)
 			bufBands[iBand] = new GdalBuffer();
 
 		int blockSize = RasterLibrary.blockHeight;
-		
+
 		percent = 0;
 		nBlocks = (int) (sizeWindowY / blockSize);
 		int increment = (blockSize * 100) / sizeWindowY;
-		
+
 		if (mode == GeoRasterWriter.MODE_DATAWRITE) {
 			for (int iBlock = 0; iBlock < nBlocks; iBlock++) {
-				if(task.getEvent() != null)
+				if (task.getEvent() != null)
 					task.manageEvent(task.getEvent());
 				int posicionY = iBlock * blockSize;
-				if(write)
-					writeBands( blockSize, posicionY);
+				if (write)
+					writeBands(blockSize, posicionY);
 				percent = (iBlock + 1) * increment;
 			}
 		}
 
 		if (anchoResto != 0) {
 			if (mode == GeoRasterWriter.MODE_DATAWRITE) {
-				if(task.getEvent() != null)
+				if (task.getEvent() != null)
 					task.manageEvent(task.getEvent());
 				int posicionY = nBlocks * blockSize;
-				if(write)
+				if (write)
 					writeBands(anchoResto, posicionY);
 				percent = nBlocks * increment;
 			}
@@ -573,6 +660,7 @@ public class GdalWriter extends GeoRasterWriter {
 
 	/**
 	 * Realiza la función de compresión a partir de un GeoRasterFile.
+	 * 
 	 * @throws IOException
 	 */
 	public void fileWrite() throws IOException, InterruptedException {
@@ -581,63 +669,73 @@ public class GdalWriter extends GeoRasterWriter {
 
 	/**
 	 * Realiza una copia en el formato especificado.
+	 * 
 	 * @throws IOException
 	 */
 	public static void createCopy(es.gva.cit.jgdal.GdalDriver driverDst,
 			String dst, String src, boolean bstrict, String[] params,
 			CoordinateReferenceSystem crs) throws IOException, GdalException {
-		if (dst == null || src == null) 
+		if (dst == null || src == null)
 			throw new IOException("No se ha asignado un fichero de entrada.");
-		
+
 		GdalDriver gdalFile;
 		try {
 			gdalFile = new GdalDriver(crs, src);
-			Gdal dstDataset = driverDst.createCopy(dst, gdalFile.getNative(), bstrict, params);
-			if(	dst.endsWith(".jpg") || 
-				dst.endsWith(".jpeg") ||
-				dst.endsWith(".png"))
-				RasterUtilities.createWorldFile(dst, gdalFile.getExtent(), gdalFile.getWidth(), gdalFile.getHeight());
+			Gdal dstDataset = driverDst.createCopy(dst, gdalFile.getNative(),
+					bstrict, params);
+			if (dst.endsWith(".jpg") || dst.endsWith(".jpeg")
+					|| dst.endsWith(".png"))
+				RasterUtilities.createWorldFile(dst, gdalFile.getExtent(),
+						gdalFile.getWidth(), gdalFile.getHeight());
 			gdalFile.close();
 			dstDataset.close();
 		} catch (NotSupportedExtensionException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Realiza la escritura de datos con los datos que le pasa el cliente.
+	 * 
 	 * @throws IOException
-	 * @throws RmfSerializerException 
+	 * @throws RmfSerializerException
 	 */
-	public void dataWrite() throws IOException, InterruptedException, OutOfMemoryError {
+	public void dataWrite() throws IOException, InterruptedException,
+			OutOfMemoryError {
 		if (dataWriter == null)
-			throw new IOException("No se ha obtenido un objeto de entrada para la escritura valido.");
+			throw new IOException(
+					"No se ha obtenido un objeto de entrada para la escritura valido.");
 
 		write(GeoRasterWriter.MODE_DATAWRITE);
 
-		if (driverParams.getParamById("tfw") != null &&
-				driverParams.getParamById("tfw").defaultValue instanceof Boolean && 
-				((Boolean) driverParams.getParamById("tfw").defaultValue).booleanValue() == true) {
+		if (driverParams.getParamById("tfw") != null
+				&& driverParams.getParamById("tfw").defaultValue instanceof Boolean
+				&& ((Boolean) driverParams.getParamById("tfw").defaultValue)
+						.booleanValue() == true) {
 			if (at != null)
-				RasterUtilities.createWorldFile(this.outFileName, at, sizeWindowX, sizeWindowY);
+				RasterUtilities.createWorldFile(this.outFileName, at,
+						sizeWindowX, sizeWindowY);
 		}
-		
-		if (colorInterp != null) { 
+
+		if (colorInterp != null) {
 			try {
-				RasterDataset.saveObjectToRmfFile(outFileName, DatasetColorInterpretation.class, colorInterp);
+				RasterDataset.saveObjectToRmfFile(outFileName,
+						DatasetColorInterpretation.class, colorInterp);
 			} catch (RmfSerializerException e) {
-				throw new IOException("No se ha podido guardar la interpretacion de color");
+				throw new IOException(
+						"No se ha podido guardar la interpretacion de color");
 			}
 		}
 	}
 
 	/**
 	 * Cancela el salvado de datos.
+	 * 
 	 * @throws GdalException
 	 */
 	public void writeClose() {
 		try {
-			if(dstDataset != null)
+			if (dstDataset != null)
 				dstDataset.close();
 		} catch (GdalException e) {
 			e.printStackTrace();
@@ -652,10 +750,11 @@ public class GdalWriter extends GeoRasterWriter {
 	}
 
 	/**
-	 * Obtiene el valor a la variable write que estará a true cuando se está escribiendo
-	 *  o puede escribirse la imagen de salida. El cancelar la operación de escritura
-	 * pondrá esta variable a false deteniendose la escritura y cerrandose el dataset
-	 * de salida.
+	 * Obtiene el valor a la variable write que estará a true cuando se está
+	 * escribiendo o puede escribirse la imagen de salida. El cancelar la
+	 * operación de escritura pondrá esta variable a false deteniendose la
+	 * escritura y cerrandose el dataset de salida.
+	 * 
 	 * @return True si puede escribirse y false si no puede
 	 */
 	public boolean isWrite() {
@@ -663,11 +762,14 @@ public class GdalWriter extends GeoRasterWriter {
 	}
 
 	/**
-	 * Asigna el valor a la variable write que estará a true cuando se está escribiendo
-	 *  o puede escribirse la imagen de salida. El cancelar la operación de escritura
-	 * pondrá esta variable a false deteniendose la escritura y cerrandose el dataset
-	 * de salida.
-	 * @param write Variable booleana. True si puede escribirse y false si no puede
+	 * Asigna el valor a la variable write que estará a true cuando se está
+	 * escribiendo o puede escribirse la imagen de salida. El cancelar la
+	 * operación de escritura pondrá esta variable a false deteniendose la
+	 * escritura y cerrandose el dataset de salida.
+	 * 
+	 * @param write
+	 *            Variable booleana. True si puede escribirse y false si no
+	 *            puede
 	 */
 	public void setWrite(boolean write) {
 		this.write = write;
@@ -675,6 +777,7 @@ public class GdalWriter extends GeoRasterWriter {
 
 	/**
 	 * Asigna los parámetros del driver modificados por el cliente.
+	 * 
 	 * @param Params
 	 */
 	public void setParams(Params params) {
@@ -683,11 +786,13 @@ public class GdalWriter extends GeoRasterWriter {
 		int blockSize = 256;
 		try {
 			Param param = driverParams.getParamById("blocksize");
-			blockSize = Integer.parseInt(param.list[((Integer)param.defaultValue).intValue()]);
+			blockSize = Integer
+					.parseInt(param.list[((Integer) param.defaultValue)
+							.intValue()]);
 			nBlocks = (int) (sizeWindowY / blockSize);
 			anchoResto = sizeWindowY - (nBlocks * blockSize);
-		}catch(NumberFormatException e) {
-			//Se queda con el valor de inicialización
+		} catch (NumberFormatException e) {
+			// Se queda con el valor de inicialización
 		}
 	}
 }

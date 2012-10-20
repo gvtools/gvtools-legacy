@@ -22,26 +22,28 @@ import java.util.Observable;
 
 import org.gvsig.raster.vectorization.VectorizationBinding;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
+
 /**
  * Modelo de datos correspondiente a la interfaz de vectorización
  * 
  * 15/07/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class VectorData extends Observable {
-	public static int       NONE                  = -1;
-	public final static int CONTOUR_LINES         = 1;
-	public final static int POTRACE_LINES         = 2;
-	private int             algorithm             = CONTOUR_LINES;
-	private double          distance              = 255;
+	public static int NONE = -1;
+	public final static int CONTOUR_LINES = 1;
+	public final static int POTRACE_LINES = 2;
+	private int algorithm = CONTOUR_LINES;
+	private double distance = 255;
 	private CoordinateReferenceSystem layerCrs = null;
-	private int             policy                = VectorizationBinding.POLICY_MINORITY;
-	private int             despeckle             = 0;
-	private double          cornerThreshold       = 1.0;
-	private double          optimizationTolerance = 0.2;
-	private int             outputQuantization    = 10;
-	private boolean         curveOptimization     = true;
-	private int             bezierPoints          = 7;
+	private int policy = VectorizationBinding.POLICY_MINORITY;
+	private int despeckle = 0;
+	private double cornerThreshold = 1.0;
+	private double optimizationTolerance = 0.2;
+	private int outputQuantization = 10;
+	private boolean curveOptimization = true;
+	private int bezierPoints = 7;
 
 	/**
 	 * @return the policy
@@ -51,7 +53,8 @@ public class VectorData extends Observable {
 	}
 
 	/**
-	 * @param policy the policy to set
+	 * @param policy
+	 *            the policy to set
 	 */
 	public void setPolicy(int policy) {
 		this.policy = policy;
@@ -66,7 +69,8 @@ public class VectorData extends Observable {
 	}
 
 	/**
-	 * @param despeckle the despeckle to set
+	 * @param despeckle
+	 *            the despeckle to set
 	 */
 	public void setDespeckle(int despeckle) {
 		this.despeckle = despeckle;
@@ -76,7 +80,7 @@ public class VectorData extends Observable {
 
 		updateObservers();
 	}
-	
+
 	/**
 	 * @return the bezierPoints
 	 */
@@ -85,7 +89,8 @@ public class VectorData extends Observable {
 	}
 
 	/**
-	 * @param bezierPoints the bezierPoints to set
+	 * @param bezierPoints
+	 *            the bezierPoints to set
 	 */
 	public void setBezierPoints(int bezierPoints) {
 		this.bezierPoints = bezierPoints;
@@ -100,11 +105,12 @@ public class VectorData extends Observable {
 	}
 
 	/**
-	 * @param cornerThreshold the cornerThreshold to set
+	 * @param cornerThreshold
+	 *            the cornerThreshold to set
 	 */
 	public void setCornerThreshold(double cornerThreshold) {
 		this.cornerThreshold = cornerThreshold;
-		
+
 		if (this.cornerThreshold < -1.00)
 			this.cornerThreshold = -1.00;
 
@@ -122,17 +128,18 @@ public class VectorData extends Observable {
 	}
 
 	/**
-	 * @param optimizationTolerance the optimizationTolerance to set
+	 * @param optimizationTolerance
+	 *            the optimizationTolerance to set
 	 */
 	public void setOptimizationTolerance(double optimizationTolerance) {
 		this.optimizationTolerance = optimizationTolerance;
-		
+
 		if (this.optimizationTolerance < 0)
 			this.optimizationTolerance = 0;
 
 		if (this.optimizationTolerance > 9999)
 			this.optimizationTolerance = 9999;
-		
+
 		updateObservers();
 	}
 
@@ -144,11 +151,12 @@ public class VectorData extends Observable {
 	}
 
 	/**
-	 * @param outputQuantization the outputQuantizqtion to set
+	 * @param outputQuantization
+	 *            the outputQuantizqtion to set
 	 */
 	public void setOutputQuantization(int outputQuantization) {
 		this.outputQuantization = outputQuantization;
-		
+
 		if (this.outputQuantization < 0)
 			this.outputQuantization = 0;
 
@@ -163,7 +171,8 @@ public class VectorData extends Observable {
 	}
 
 	/**
-	 * @param curveOptimization the curveOptimization to set
+	 * @param curveOptimization
+	 *            the curveOptimization to set
 	 */
 	public void setCurveOptimization(boolean curveOptimization) {
 		this.curveOptimization = curveOptimization;
@@ -171,8 +180,8 @@ public class VectorData extends Observable {
 	}
 
 	/**
-	 * Obtiene la proyeccion que se le asignará a la capa 
-	 * vectorial.
+	 * Obtiene la proyeccion que se le asignará a la capa vectorial.
+	 * 
 	 * @return IProjection
 	 */
 	public CoordinateReferenceSystem getLayerCrs() {
@@ -180,8 +189,8 @@ public class VectorData extends Observable {
 	}
 
 	/**
-	 * Asigna la proyeccion que se le asignará a la capa 
-	 * vectorial.
+	 * Asigna la proyeccion que se le asignará a la capa vectorial.
+	 * 
 	 * @param IProjection
 	 */
 	public void setProjLayer(CoordinateReferenceSystem layerCrs) {
@@ -191,14 +200,16 @@ public class VectorData extends Observable {
 
 	/**
 	 * Obtiene el algoritmo de vectorización
+	 * 
 	 * @return
 	 */
 	public int getAlgorithm() {
 		return algorithm;
 	}
-	
+
 	/**
 	 * Asigna el algoritmo de vectorización
+	 * 
 	 * @param algorithm
 	 */
 	public void setAlgorithm(int algorithm) {
@@ -207,8 +218,9 @@ public class VectorData extends Observable {
 	}
 
 	/**
-	 * Obtiene el valor de distancia para el algoritmo de vectorización de 
+	 * Obtiene el valor de distancia para el algoritmo de vectorización de
 	 * líneas de contorno.
+	 * 
 	 * @return
 	 */
 	public double getDistance() {
@@ -216,15 +228,16 @@ public class VectorData extends Observable {
 	}
 
 	/**
-	 * Asigna el valor de distancia para el algoritmo de vectorización de 
-	 * líneas de contorno.
+	 * Asigna el valor de distancia para el algoritmo de vectorización de líneas
+	 * de contorno.
+	 * 
 	 * @return
 	 */
 	public void setDistance(double distance) {
 		this.distance = distance;
 		updateObservers();
 	}
-	
+
 	/**
 	 * Actualiza datos y llama al update de los observadores
 	 */

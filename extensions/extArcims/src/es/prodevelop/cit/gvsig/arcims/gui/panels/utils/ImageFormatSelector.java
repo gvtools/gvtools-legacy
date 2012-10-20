@@ -53,129 +53,128 @@ import javax.swing.event.ChangeListener;
 
 import es.prodevelop.cit.gvsig.arcims.gui.panels.ImageServicePanel;
 
-
 public class ImageFormatSelector extends JPanel implements ChangeListener {
-    private JRadioButton jpgRB;
-    private JRadioButton gifRB;
-    private JRadioButton png8RB;
-    private JRadioButton png24RB;
-    private ButtonGroup formatBG;
-    private ActionListener listener;
+	private JRadioButton jpgRB;
+	private JRadioButton gifRB;
+	private JRadioButton png8RB;
+	private JRadioButton png24RB;
+	private ButtonGroup formatBG;
+	private ActionListener listener;
 
-    public ImageFormatSelector() {
-        jpgRB = new JRadioButton("JPG", true);
-        jpgRB.addChangeListener(this);
-        jpgRB.setBounds(10, 0, 60, 20);
+	public ImageFormatSelector() {
+		jpgRB = new JRadioButton("JPG", true);
+		jpgRB.addChangeListener(this);
+		jpgRB.setBounds(10, 0, 60, 20);
 
-        gifRB = new JRadioButton("GIF", false);
-        gifRB.addChangeListener(this);
-        gifRB.setBounds(70, 0, 60, 20);
+		gifRB = new JRadioButton("GIF", false);
+		gifRB.addChangeListener(this);
+		gifRB.setBounds(70, 0, 60, 20);
 
-        png8RB = new JRadioButton("PNG8", false);
-        png8RB.addChangeListener(this);
-        png8RB.setBounds(130, 0, 60, 20);
+		png8RB = new JRadioButton("PNG8", false);
+		png8RB.addChangeListener(this);
+		png8RB.setBounds(130, 0, 60, 20);
 
-        png24RB = new JRadioButton("PNG24", false);
-        png24RB.addChangeListener(this);
-        png24RB.setBounds(190, 0, 60, 20); // llega hasta 10 + 4 * 60 = 250
+		png24RB = new JRadioButton("PNG24", false);
+		png24RB.addChangeListener(this);
+		png24RB.setBounds(190, 0, 60, 20); // llega hasta 10 + 4 * 60 = 250
 
-        formatBG = new ButtonGroup();
+		formatBG = new ButtonGroup();
 
-        formatBG.add(jpgRB);
-        formatBG.add(gifRB);
-        formatBG.add(png8RB);
-        formatBG.add(png24RB);
+		formatBG.add(jpgRB);
+		formatBG.add(gifRB);
+		formatBG.add(png8RB);
+		formatBG.add(png24RB);
 
-        setLayout(null);
-        setBounds(15, 23, 260, 20);
+		setLayout(null);
+		setBounds(15, 23, 260, 20);
 
-        add(jpgRB);
-        add(gifRB);
-        add(png8RB);
-        add(png24RB);
-    }
+		add(jpgRB);
+		add(gifRB);
+		add(png8RB);
+		add(png24RB);
+	}
 
-    public void setSelected(String format) {
-        setAll(false);
+	public void setSelected(String format) {
+		setAll(false);
 
-        if (format.compareToIgnoreCase(jpgRB.getText()) == 0) {
-            jpgRB.setSelected(true);
-        }
+		if (format.compareToIgnoreCase(jpgRB.getText()) == 0) {
+			jpgRB.setSelected(true);
+		}
 
-        if (format.compareToIgnoreCase(gifRB.getText()) == 0) {
-            gifRB.setSelected(true);
-        }
+		if (format.compareToIgnoreCase(gifRB.getText()) == 0) {
+			gifRB.setSelected(true);
+		}
 
-        if (format.compareToIgnoreCase(png8RB.getText()) == 0) {
-            png8RB.setSelected(true);
-        }
+		if (format.compareToIgnoreCase(png8RB.getText()) == 0) {
+			png8RB.setSelected(true);
+		}
 
-        if (format.compareToIgnoreCase(png24RB.getText()) == 0) {
-            png24RB.setSelected(true);
-        }
-    }
+		if (format.compareToIgnoreCase(png24RB.getText()) == 0) {
+			png24RB.setSelected(true);
+		}
+	}
 
-    public String getSelected() {
-        if (jpgRB.isSelected()) {
-            return jpgRB.getText();
-        }
+	public String getSelected() {
+		if (jpgRB.isSelected()) {
+			return jpgRB.getText();
+		}
 
-        if (gifRB.isSelected()) {
-            return gifRB.getText();
-        }
+		if (gifRB.isSelected()) {
+			return gifRB.getText();
+		}
 
-        if (png8RB.isSelected()) {
-            return png8RB.getText();
-        }
+		if (png8RB.isSelected()) {
+			return png8RB.getText();
+		}
 
-        if (png24RB.isSelected()) {
-            return png24RB.getText();
-        }
+		if (png24RB.isSelected()) {
+			return png24RB.getText();
+		}
 
-        return "";
-    }
+		return "";
+	}
 
-    private void setAll(boolean selected) {
-        jpgRB.setSelected(selected);
-        gifRB.setSelected(selected);
-        png8RB.setSelected(selected);
-        png24RB.setSelected(selected);
-    }
+	private void setAll(boolean selected) {
+		jpgRB.setSelected(selected);
+		gifRB.setSelected(selected);
+		png8RB.setSelected(selected);
+		png24RB.setSelected(selected);
+	}
 
-    public void setAllEnabled(boolean enabled) {
-        jpgRB.setEnabled(enabled);
-        gifRB.setEnabled(enabled);
-        png8RB.setEnabled(enabled);
-        png24RB.setEnabled(enabled);
-    }
+	public void setAllEnabled(boolean enabled) {
+		jpgRB.setEnabled(enabled);
+		gifRB.setEnabled(enabled);
+		png8RB.setEnabled(enabled);
+		png24RB.setEnabled(enabled);
+	}
 
-    public void setThisEnabled(String format) {
-        if (format.compareToIgnoreCase(jpgRB.getText()) == 0) {
-            jpgRB.setEnabled(true);
-        }
+	public void setThisEnabled(String format) {
+		if (format.compareToIgnoreCase(jpgRB.getText()) == 0) {
+			jpgRB.setEnabled(true);
+		}
 
-        if (format.compareToIgnoreCase(gifRB.getText()) == 0) {
-            gifRB.setEnabled(true);
-        }
+		if (format.compareToIgnoreCase(gifRB.getText()) == 0) {
+			gifRB.setEnabled(true);
+		}
 
-        if (format.compareToIgnoreCase(png8RB.getText()) == 0) {
-            png8RB.setEnabled(true);
-        }
+		if (format.compareToIgnoreCase(png8RB.getText()) == 0) {
+			png8RB.setEnabled(true);
+		}
 
-        if (format.compareToIgnoreCase(png24RB.getText()) == 0) {
-            png24RB.setEnabled(true);
-        }
-    }
+		if (format.compareToIgnoreCase(png24RB.getText()) == 0) {
+			png24RB.setEnabled(true);
+		}
+	}
 
-    public void addListener(ImageServicePanel panel) {
-        listener = panel;
-    }
+	public void addListener(ImageServicePanel panel) {
+		listener = panel;
+	}
 
-    public void stateChanged(ChangeEvent arg0) {
-        if (listener != null) {
-            ActionEvent ae = new ActionEvent(this,
-                    ActionEvent.ACTION_PERFORMED, "");
-            listener.actionPerformed(ae);
-        }
-    }
+	public void stateChanged(ChangeEvent arg0) {
+		if (listener != null) {
+			ActionEvent ae = new ActionEvent(this,
+					ActionEvent.ACTION_PERFORMED, "");
+			listener.actionPerformed(ae);
+		}
+	}
 }

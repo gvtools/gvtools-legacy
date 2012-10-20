@@ -104,211 +104,214 @@ import org.gvsig.gpe.parser.GPEParser;
  *
  */
 /**
- * This class must be implementend by all the classes that
- * implements a GPE writer Parser. It creates a writer, write some
- * features and then uses a reader to compare the writting 
- * process
+ * This class must be implementend by all the classes that implements a GPE
+ * writer Parser. It creates a writer, write some features and then uses a
+ * reader to compare the writting process
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class GPEWriterBaseTest extends TestCase{
+public abstract class GPEWriterBaseTest extends TestCase {
 	private GPEWriterHandler writerHandler = null;
 	private GPEContentHandler contenHandler = null;
 	private GPEErrorHandler errorHandler = null;
 	private GPEParser parser = null;
 	private File outputFile = null;
-	
+
 	/**
 	 * Register the driver and gets the handler
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 */
-	public void setUp() throws Exception{
+	public void setUp() throws Exception {
 		outputFile = new File(this.getClass().getName() + Math.random());
 	}
-	
+
 	/**
 	 * Delete the file
 	 */
-	public void tearDown() throws Exception{
+	public void tearDown() throws Exception {
 		System.out.println("******** WARNINGS ********");
-		for (int i=0 ; i<getErrorHandler().getWarningsSize(); i++){
+		for (int i = 0; i < getErrorHandler().getWarningsSize(); i++) {
 			System.out.println(getErrorHandler().getWarningAt(i));
-		}	
+		}
 	}
-	
+
 	/**
-	 * This test writes some objects into the file and then
-	 * try to read the created file. It compare that the written
-	 * objects are the same that the read them
-	 * @throws Exception 
+	 * This test writes some objects into the file and then try to read the
+	 * created file. It compare that the written objects are the same that the
+	 * read them
+	 * 
+	 * @throws Exception
 	 */
-	public void testWriter() throws Exception{
+	public void testWriter() throws Exception {
 		OutputStream os = createOutputStream(outputFile);
 		getWriterHandler().setOutputStream(os);
-		writeObjects();		
-		
+		writeObjects();
+
 		parser = GPEFactory.createParserByClass(getGPEParserClass().getName());
 		InputStream is = createInputStream(outputFile);
-		parser.parse(getContenHandler(),getErrorHandler() ,is);
+		parser.parse(getContenHandler(), getErrorHandler(), is);
 		readObjects();
-		
-		outputFile.delete();		
+
+		outputFile.delete();
 	}
-	
-	protected OutputStream createOutputStream(File file) throws FileNotFoundException{
+
+	protected OutputStream createOutputStream(File file)
+			throws FileNotFoundException {
 		return new FileOutputStream(file);
 	}
-	
-	protected InputStream createInputStream(File file) throws FileNotFoundException{
+
+	protected InputStream createInputStream(File file)
+			throws FileNotFoundException {
 		return new FileInputStream(file);
-	}	
-	
+	}
+
 	/**
 	 * This method write somo objects into the writer handler
 	 */
 	public abstract void writeObjects();
-	
+
 	/**
 	 * It read the objects and make all the comparations
-	 *
+	 * 
 	 */
 	public abstract void readObjects();
-			
+
 	/**
-	 * Each test must to return its parser name
-	 * to register it before to start the parsing
-	 * process
+	 * Each test must to return its parser name to register it before to start
+	 * the parsing process
 	 */
-	public String getGPEWriterHandlerName(){
+	public String getGPEWriterHandlerName() {
 		return "FORMAT VERSION";
 	}
-	
+
 	/**
-	 * Each test must to return its parser description
-	 * to register it before to start the parsing
-	 * process
+	 * Each test must to return its parser description to register it before to
+	 * start the parsing process
 	 */
-	public String getGPEWriterHandlerDescription(){
+	public String getGPEWriterHandlerDescription() {
 		return "default writer handler description";
 	}
-	
+
 	/**
-	 * Each test must to return its parser class
-	 * that will be used to create new parsers.
+	 * Each test must to return its parser class that will be used to create new
+	 * parsers.
 	 */
 	public abstract Class getGPEWriterHandlerClass();
-	
-	
+
 	/**
-	 * Each test must to return its parser name
-	 * to register it before to start the parsing
-	 * process
+	 * Each test must to return its parser name to register it before to start
+	 * the parsing process
 	 */
-	public String getGPEParserName(){
+	public String getGPEParserName() {
 		return "FORMAT VERSION";
 	}
-	
+
 	/**
-	 * Each test must to return its parser description
-	 * to register it before to start the parsing
-	 * process
+	 * Each test must to return its parser description to register it before to
+	 * start the parsing process
 	 */
-	public String getGPEParserDescription(){
+	public String getGPEParserDescription() {
 		return "default parser description";
 	}
-	
+
 	/**
-	 * Each test must to return its parser class
-	 * that will be used to create new parsers.
+	 * Each test must to return its parser class that will be used to create new
+	 * parsers.
 	 */
 	public abstract Class getGPEParserClass();
-	
+
 	/**
-	 * Gets the file format. The deafult writer
-	 * format will be used by default
+	 * Gets the file format. The deafult writer format will be used by default
+	 * 
 	 * @return
 	 */
-	public String getFormat(){
+	public String getFormat() {
 		return null;
 	}
-	
+
 	/**
 	 * It creates a random point
+	 * 
 	 * @param length
 	 * @return
 	 */
-	protected double generateRandomPoint(){
-		return Math.random();		
+	protected double generateRandomPoint() {
+		return Math.random();
 	}
-	
+
 	/**
-	 * It creates a Random bbox coordinates. It return 
-	 * 10 coordinates 
+	 * It creates a Random bbox coordinates. It return 10 coordinates
+	 * 
 	 * @return
 	 */
-	protected double[] generateRandomCoordinates(){
+	protected double[] generateRandomCoordinates() {
 		return generateRandomCoordinates(10);
 	}
-	
+
 	/**
 	 * It creates a Random bbox coordinates
+	 * 
 	 * @param length
-	 * The number of coordinates
+	 *            The number of coordinates
 	 * @return
 	 */
-	protected double[] generateRandomCoordinates(int length){
+	protected double[] generateRandomCoordinates(int length) {
 		double[] coord = new double[length];
-		for (int i=0 ; i<coord.length ; i++){
+		for (int i = 0; i < coord.length; i++) {
 			coord[i] = generateRandomPoint();
 		}
 		return coord;
 	}
-	
+
 	/**
-	 * It creates a Random linear ring. It return 
-	 * 10 coordinates 
+	 * It creates a Random linear ring. It return 10 coordinates
+	 * 
 	 * @return
 	 */
-	protected double[] generateRandomLinearRing(){
+	protected double[] generateRandomLinearRing() {
 		return generateRandomLinearRing(10);
 	}
-	
+
 	/**
 	 * It creates a random linear ring
+	 * 
 	 * @param length
 	 * @return
 	 */
-	protected double[] generateRandomLinearRing(int length){
+	protected double[] generateRandomLinearRing(int length) {
 		double[] coord = new double[length];
-		for (int i=0 ; i<coord.length-1 ; i++){
+		for (int i = 0; i < coord.length - 1; i++) {
 			coord[i] = generateRandomPoint();
 		}
-		coord[length-1] = coord[0];
+		coord[length - 1] = coord[0];
 		return coord;
 	}
-	
+
 	/**
 	 * It creates a Random bbox coordinates
+	 * 
 	 * @return
 	 */
-	protected double[] generateRandomBBox(){
+	protected double[] generateRandomBBox() {
 		double[] coord = new double[2];
-		for (int i=0 ; i<coord.length ; i++){
+		for (int i = 0; i < coord.length; i++) {
 			coord[i] = generateRandomPoint();
 		}
 		return coord;
 	}
-	
+
 	/**
 	 * Closes a polygon
+	 * 
 	 * @param x
-	 * Polygon coordinates
-	 * @return
-	 * A closed polygon
+	 *            Polygon coordinates
+	 * @return A closed polygon
 	 */
-	protected double[] closePolygon(double[] x){
+	protected double[] closePolygon(double[] x) {
 		double[] xClosed = new double[x.length + 1];
 		System.arraycopy(x, 0, xClosed, 0, x.length);
-		xClosed[xClosed.length -1] = x[0];
+		xClosed[xClosed.length - 1] = x[0];
 		return xClosed;
 	}
 
@@ -316,14 +319,16 @@ public abstract class GPEWriterBaseTest extends TestCase{
 	 * @return the handler
 	 */
 	public GPEWriterHandler getWriterHandler() {
-		if (writerHandler == null){
+		if (writerHandler == null) {
 			try {
-				writerHandler = GPEFactory.createWriterByClass(getGPEWriterHandlerClass().getName());
+				writerHandler = GPEFactory
+						.createWriterByClass(getGPEWriterHandlerClass()
+								.getName());
 				writerHandler.setErrorHandler(getErrorHandler());
 			} catch (Exception e) {
-				//never throwed
+				// never throwed
 				e.printStackTrace();
-			}			
+			}
 		}
 		return writerHandler;
 	}
@@ -332,7 +337,7 @@ public abstract class GPEWriterBaseTest extends TestCase{
 	 * @return the contenHandler
 	 */
 	public GPEContentHandler getContenHandler() {
-		if (contenHandler == null){
+		if (contenHandler == null) {
 			contenHandler = new GPEContentHandlerTest();
 		}
 		return contenHandler;
@@ -342,21 +347,23 @@ public abstract class GPEWriterBaseTest extends TestCase{
 	 * @return the errorHandler
 	 */
 	public GPEErrorHandler getErrorHandler() {
-		if (errorHandler == null){
+		if (errorHandler == null) {
 			errorHandler = new GPEErrorHandlerTest();
 		}
 		return errorHandler;
 	}
-	
+
 	/**
 	 * Gets a list of parsed layers
+	 * 
 	 * @return
 	 */
-	public Layer[] getLayers(){
-		ArrayList layers = ((GPEContentHandlerTest)parser.getContentHandler()).getLayers();
+	public Layer[] getLayers() {
+		ArrayList layers = ((GPEContentHandlerTest) parser.getContentHandler())
+				.getLayers();
 		Layer[] aLayers = new Layer[layers.size()];
-		for (int i=0 ; i<layers.size() ; i++){
-			aLayers[i] = (Layer)layers.get(i);
+		for (int i = 0; i < layers.size(); i++) {
+			aLayers[i] = (Layer) layers.get(i);
 		}
 		return aLayers;
 	}

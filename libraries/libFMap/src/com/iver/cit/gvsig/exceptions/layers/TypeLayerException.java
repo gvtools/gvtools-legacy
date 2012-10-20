@@ -5,10 +5,11 @@ package com.iver.cit.gvsig.exceptions.layers;
  */
 public class TypeLayerException extends LoadLayerException {
 
-	public TypeLayerException(String l,Throwable exception) {
-		super(l,exception);
+	public TypeLayerException(String l, Throwable exception) {
+		super(l, exception);
 		init();
 	}
+
 	/**
 	 *
 	 */

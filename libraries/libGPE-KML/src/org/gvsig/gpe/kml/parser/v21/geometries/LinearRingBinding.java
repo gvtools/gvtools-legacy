@@ -79,6 +79,7 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * It parses the linearRing KML tag. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;LinearRing&gt;
@@ -86,59 +87,67 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  * &lt;/LinearRing&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
- * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#linearring
+ * @see http
+ *      ://code.google.com/apis/kml/documentation/kml_tags_21.html#linearring
  */
 public class LinearRingBinding {
 
 	/**
 	 * It parses the linearRing tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * It retuns a matrix of doubles with 3 columns (x,y,z) and
-	 * one row for each coordinate.
-	 * @throws IOException 
-	 * @throws XmlStreamException 
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return It retuns a matrix of doubles with 3 columns (x,y,z) and one row
+	 *         for each coordinate.
+	 * @throws IOException
+	 * @throws XmlStreamException
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public ICoordinateIterator parse(IXmlStreamReader parser,GPEDeafultKmlParser handler) throws XmlStreamException, IOException {
+	public ICoordinateIterator parse(IXmlStreamReader parser,
+			GPEDeafultKmlParser handler) throws XmlStreamException, IOException {
 		boolean endFeature = false;
 		int currentTag;
-		
+
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.COORDINATES)){
-					CoordinatesTypeIterator coordinatesIteartor = handler.getProfile().getCoordinatesTypeBinding();
-					coordinatesIteartor.initialize(parser, handler, Kml2_1_Tags.LINEARRING);
-					if (coordinatesIteartor != null){
+				if (CompareUtils.compareWithNamespace(tag,
+						Kml2_1_Tags.COORDINATES)) {
+					CoordinatesTypeIterator coordinatesIteartor = handler
+							.getProfile().getCoordinatesTypeBinding();
+					coordinatesIteartor.initialize(parser, handler,
+							Kml2_1_Tags.LINEARRING);
+					if (coordinatesIteartor != null) {
 						return coordinatesIteartor;
 					}
 				}
 				break;
 			case IXmlStreamReader.END_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,Kml2_1_Tags.LINEARRING)){						
+				if (CompareUtils.compareWithNamespace(tag,
+						Kml2_1_Tags.LINEARRING)) {
 					endFeature = true;
 				}
 				break;
-			case IXmlStreamReader.CHARACTERS:					
+			case IXmlStreamReader.CHARACTERS:
 
 				break;
 			}
-			if (!endFeature){					
+			if (!endFeature) {
 				currentTag = parser.next();
 				tag = parser.getName();
 			}
-		}			
+		}
 		return null;
 	}
 }

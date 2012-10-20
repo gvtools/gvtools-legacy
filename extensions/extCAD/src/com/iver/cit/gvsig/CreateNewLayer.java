@@ -20,7 +20,7 @@ import com.prodevelop.cit.gvsig.vectorialdb.wizard.NewVectorDBConnectionPanel;
 
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class CreateNewLayer extends Extension {
@@ -35,87 +35,81 @@ public class CreateNewLayer extends Extension {
 	/**
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
-public void execute(String actionCommand) {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-				.getActiveWindow();
+	public void execute(String actionCommand) {
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (f instanceof View) {
-				View vista = (View) f;
+			View vista = (View) f;
 
-				LOGO = new javax.swing.ImageIcon(this.getClass()
-						.getClassLoader().getResource(
-								"images/package_graphics.png"));
-				CADToolAdapter cta = CADExtension.getCADToolAdapter();
-				MapControl mapControl = vista.getMapControl();
-				cta.setMapControl(mapControl);
-				/*
-				 * SimpleLogoJWizardFrame wizardFrame = new
-				 * SimpleLogoJWizardFrame( LOGO);
-				 * wizardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				 *
-				 * SwingUtilities.updateComponentTreeUI(wizardFrame);
-				 *
-				 * wizardFrame.setTitle("Creación de un nuevo Tema");
-				 */
-				WizardAndami wizard = new WizardAndami(LOGO);
+			LOGO = new javax.swing.ImageIcon(this.getClass().getClassLoader()
+					.getResource("images/package_graphics.png"));
+			CADToolAdapter cta = CADExtension.getCADToolAdapter();
+			MapControl mapControl = vista.getMapControl();
+			cta.setMapControl(mapControl);
+			/*
+			 * SimpleLogoJWizardFrame wizardFrame = new SimpleLogoJWizardFrame(
+			 * LOGO);
+			 * wizardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			 * 
+			 * SwingUtilities.updateComponentTreeUI(wizardFrame);
+			 * 
+			 * wizardFrame.setTitle("Creación de un nuevo Tema");
+			 */
+			WizardAndami wizard = new WizardAndami(LOGO);
 
-				ChooseGeometryType panelChoose = new ChooseGeometryType(wizard
-						.getWizardComponents());
-				JPanelFieldDefinition panelFields = new JPanelFieldDefinition(
+			ChooseGeometryType panelChoose = new ChooseGeometryType(
+					wizard.getWizardComponents());
+			JPanelFieldDefinition panelFields = new JPanelFieldDefinition(
+					wizard.getWizardComponents());
+
+			if (actionCommand.equals("SHP")) {
+				wizard.getWizardComponents().addWizardPanel(panelChoose);
+				wizard.getWizardComponents().addWizardPanel(panelFields);
+
+				Driver driver = new IndexedShpDriver();
+				panelFields.setWriter(((IWriteable) driver).getWriter());
+				panelChoose.setDriver(driver);
+				FileBasedPanel filePanel = new FileBasedPanel(
 						wizard.getWizardComponents());
+				filePanel.setFileExtension("shp");
+				wizard.getWizardComponents().addWizardPanel(filePanel);
 
-				if (actionCommand.equals("SHP")) {
-					wizard.getWizardComponents().addWizardPanel(panelChoose);
-					wizard.getWizardComponents().addWizardPanel(panelFields);
+				wizard.getWizardComponents().setFinishAction(
+						new MyFinishAction(wizard.getWizardComponents(), vista,
+								actionCommand));
+			}
+			if (actionCommand.equals("POSTGIS")) {
+				wizard.getWizardComponents().addWizardPanel(panelChoose);
+				wizard.getWizardComponents().addWizardPanel(panelFields);
+				Driver driver = new PostGisDriver();
+				panelChoose.setDriver(driver);
+				panelFields.setWriter(((IWriteable) driver).getWriter());
 
-					Driver driver = new IndexedShpDriver();
-					panelFields.setWriter(((IWriteable) driver).getWriter());
-					panelChoose.setDriver(driver);
-					FileBasedPanel filePanel = new FileBasedPanel(wizard
-							.getWizardComponents());
-					filePanel.setFileExtension("shp");
-					wizard.getWizardComponents().addWizardPanel(filePanel);
+				// wizard.getWizardComponents().addWizardPanel(
+				// new PostGISpanel(wizard.getWizardComponents()));
 
-					wizard.getWizardComponents().setFinishAction(
-							new MyFinishAction(wizard.getWizardComponents(),
-									vista, actionCommand));
-				}
-				if (actionCommand.equals("POSTGIS")) {
-					wizard.getWizardComponents().addWizardPanel(panelChoose);
-					wizard.getWizardComponents().addWizardPanel(panelFields);
-					Driver driver = new PostGisDriver();
-					panelChoose.setDriver(driver);
-					panelFields.setWriter(((IWriteable) driver).getWriter());
-					
-					// wizard.getWizardComponents().addWizardPanel(
-					// 		new PostGISpanel(wizard.getWizardComponents()));
-					
-					
-	       			 NewVectorDBConnectionPanel connPanel = 
-	       				 new NewVectorDBConnectionPanel(
-	       						 wizard.getWizardComponents(),
-	       						 PostGisDriver.NAME,
-	       						 20);
-	       			wizard.getWizardComponents().addWizardPanel(connPanel);
-	       			 
+				NewVectorDBConnectionPanel connPanel = new NewVectorDBConnectionPanel(
+						wizard.getWizardComponents(), PostGisDriver.NAME, 20);
+				wizard.getWizardComponents().addWizardPanel(connPanel);
 
-					wizard.getWizardComponents().setFinishAction(
-							new MyFinishAction(wizard.getWizardComponents(),
-									vista, actionCommand));
-				}
+				wizard.getWizardComponents().setFinishAction(
+						new MyFinishAction(wizard.getWizardComponents(), vista,
+								actionCommand));
+			}
 
-				wizard.getWizardComponents().getFinishButton()
-						.setEnabled(false);
-				wizard.getWindowInfo().setWidth(640);
-				wizard.getWindowInfo().setHeight(350);
-				wizard.getWindowInfo().setTitle(
-						PluginServices.getText(this, "new_layer"));
-				// Utilities.centerComponentOnScreen(wizard);
-				// wizardFrame.show();
-				PluginServices.getMDIManager().addWindow(wizard);
-				// System.out.println("Salgo con " + panelChoose.getLayerName());
+			wizard.getWizardComponents().getFinishButton().setEnabled(false);
+			wizard.getWindowInfo().setWidth(640);
+			wizard.getWindowInfo().setHeight(350);
+			wizard.getWindowInfo().setTitle(
+					PluginServices.getText(this, "new_layer"));
+			// Utilities.centerComponentOnScreen(wizard);
+			// wizardFrame.show();
+			PluginServices.getMDIManager().addWindow(wizard);
+			// System.out.println("Salgo con " + panelChoose.getLayerName());
 		}
 	}
+
 	/**
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
@@ -131,8 +125,8 @@ public void execute(String actionCommand) {
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-				.getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (f == null) {
 			return false;

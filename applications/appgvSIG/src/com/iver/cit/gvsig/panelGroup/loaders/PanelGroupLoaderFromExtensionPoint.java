@@ -37,26 +37,32 @@ import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
 /**
- * <p>Panel loader version that loads {@link AbstractPanel AbstractPanel} classes registered
- *  as a extension point.</p>
+ * <p>
+ * Panel loader version that loads {@link AbstractPanel AbstractPanel} classes
+ * registered as a extension point.
+ * </p>
  * 
  * @see IPanelGroupLoader
  * 
  * @version 15/10/2007
- * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es) 
+ * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
-public class PanelGroupLoaderFromExtensionPoint implements IPanelGroupLoader, Serializable {
+public class PanelGroupLoaderFromExtensionPoint implements IPanelGroupLoader,
+		Serializable {
 	private static final long serialVersionUID = 6810333457209196344L;
 
 	/**
 	 * Extension point id
 	 */
 	private String id;
-	
+
 	/**
-	 * <p>Initializes this loader.</p>
+	 * <p>
+	 * Initializes this loader.
+	 * </p>
 	 * 
-	 * @param id extension point identifier
+	 * @param id
+	 *            extension point identifier
 	 */
 	public PanelGroupLoaderFromExtensionPoint(String id) {
 		this.id = id;
@@ -64,13 +70,17 @@ public class PanelGroupLoaderFromExtensionPoint implements IPanelGroupLoader, Se
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.panelGroup.loaders.IPanelGroupLoader#loadPanels(java.util.ArrayList)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.panelGroup.loaders.IPanelGroupLoader#loadPanels(java
+	 * .util.ArrayList)
 	 */
-	public void loadPanels(ArrayList<IPanel> panels) throws ListCouldntLoadPanelException {
+	public void loadPanels(ArrayList<IPanel> panels)
+			throws ListCouldntLoadPanelException {
 		if (id == null)
 			return;
 
-		ExtensionPoints extensionPoints = null;		
+		ExtensionPoints extensionPoints = null;
 		ExtensionPoint extensionPoint = null;
 		ListCouldntLoadPanelException lCLPException = null;
 		Iterator iterator = null;
@@ -78,18 +88,18 @@ public class PanelGroupLoaderFromExtensionPoint implements IPanelGroupLoader, Se
 		Class class_type;
 
 		try {
-			extensionPoints = ExtensionPointsSingleton.getInstance();		
+			extensionPoints = ExtensionPointsSingleton.getInstance();
 			extensionPoint = (ExtensionPoint) extensionPoints.get(id);
-		
+
 			if (extensionPoint == null)
 				return;
 
 			iterator = extensionPoint.keySet().iterator();
-		}
-		catch (Exception e) {
-			Logger.getLogger(getClass().getName()).debug(PluginServices.getText(this, "panel_loading_exception"), e);
+		} catch (Exception e) {
+			Logger.getLogger(getClass().getName()).debug(
+					PluginServices.getText(this, "panel_loading_exception"), e);
 
-			if ( lCLPException == null ) {
+			if (lCLPException == null) {
 				lCLPException = new ListCouldntLoadPanelFromExtensionPointException();
 			}
 
@@ -97,27 +107,30 @@ public class PanelGroupLoaderFromExtensionPoint implements IPanelGroupLoader, Se
 		}
 
 		AbstractPanel panel = null;
-		
+
 		while (iterator.hasNext()) {
 			try {
 				key = (String) iterator.next();
-				
+
 				class_type = ((Class) extensionPoint.get(key));
 
-				if ((class_type != null) && (AbstractPanel.class.isAssignableFrom(class_type))) {
+				if ((class_type != null)
+						&& (AbstractPanel.class.isAssignableFrom(class_type))) {
 					panel = null;
 					panel = (AbstractPanel) class_type.newInstance();
 					panels.add(panel);
 				}
 			} catch (Exception e) {
-				Logger.getLogger(getClass().getName()).debug(PluginServices.getText(this, "panel_loading_exception"), e);
+				Logger.getLogger(getClass().getName())
+						.debug(PluginServices.getText(this,
+								"panel_loading_exception"), e);
 
-				if ( lCLPException == null ) {
+				if (lCLPException == null) {
 					lCLPException = new ListCouldntLoadPanelFromExtensionPointException();
 				}
 
 				PanelBaseException bew = null;
-				
+
 				if (panel == null)
 					bew = new PanelBaseException(e, "");
 				else
@@ -127,34 +140,42 @@ public class PanelGroupLoaderFromExtensionPoint implements IPanelGroupLoader, Se
 			}
 		}
 
-		if ( lCLPException != null ) {
+		if (lCLPException != null) {
 			throw lCLPException;
 		}
 
 	}
-	
+
 	/**
-	 * <p>Exception produced when fails the load of a panel by a loader of type <code>PanelGroupLoaderFromExtensionPoint</code>.</p>
+	 * <p>
+	 * Exception produced when fails the load of a panel by a loader of type
+	 * <code>PanelGroupLoaderFromExtensionPoint</code>.
+	 * </p>
 	 * 
 	 * @version 27/11/2007
-	 * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es) 
+	 * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
 	 */
-	public class ListCouldntLoadPanelFromExtensionPointException extends ListCouldntLoadPanelException {
+	public class ListCouldntLoadPanelFromExtensionPointException extends
+			ListCouldntLoadPanelException {
 		private static final long serialVersionUID = -1513294728326593385L;
 
 		/**
-		 * <p>Creates an initializes a new instance of <code>ListCouldntLoadPanelFromExtensionPointException</code>.</p> 
+		 * <p>
+		 * Creates an initializes a new instance of
+		 * <code>ListCouldntLoadPanelFromExtensionPointException</code>.
+		 * </p>
 		 */
 		public ListCouldntLoadPanelFromExtensionPointException() {
 			super();
-			
+
 			this.code = serialVersionUID;
 			this.formatString = "Couldn't load some panels from an extension point of classes:";
 			this.messageKey = "couldnt_load_panels_from_extension_point_exception";
 		}
-		
+
 		/*
 		 * (non-Javadoc)
+		 * 
 		 * @see org.gvsig.exceptions.BaseException#values()
 		 */
 		protected Map<String, String> values() {

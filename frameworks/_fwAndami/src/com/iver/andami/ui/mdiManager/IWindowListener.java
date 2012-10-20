@@ -40,19 +40,18 @@
  */
 package com.iver.andami.ui.mdiManager;
 
-
 /**
- * Interface which should be implemented by those windows which want to
- * be listeners of events produced on themselves.
+ * Interface which should be implemented by those windows which want to be
+ * listeners of events produced on themselves.
  */
 public interface IWindowListener {
 	/**
-     * This method it is invoked when the window is activated.
-     */
-    public void windowActivated();
+	 * This method it is invoked when the window is activated.
+	 */
+	public void windowActivated();
 
-    /**
-     * This method it is invoked when the window is closed
-     */
-    public void windowClosed();
+	/**
+	 * This method it is invoked when the window is closed
+	 */
+	public void windowClosed();
 }

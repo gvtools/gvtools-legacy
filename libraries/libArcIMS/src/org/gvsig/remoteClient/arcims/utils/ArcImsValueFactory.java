@@ -43,89 +43,89 @@
 
 package org.gvsig.remoteClient.arcims.utils;
 
+import java.text.ParseException;
+import java.util.Date;
+
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
 
-import java.text.ParseException;
-
-import java.util.Date;
-
-
 /**
- * Class that will generate convenient Value objects using ArcIMS
- * types.
+ * Class that will generate convenient Value objects using ArcIMS types.
+ * 
  * @author jsanz
  */
 public class ArcImsValueFactory extends ValueFactory {
-    public static Value createValueByType(String text, int type, char delDec)
-        throws ParseException {
-        Value value;
+	public static Value createValueByType(String text, int type, char delDec)
+			throws ParseException {
+		Value value;
 
-        switch (type) {
-        case FieldInformation.BOOLEAN:
-            value = ValueFactory.createValue(Boolean.valueOf(text).booleanValue());
+		switch (type) {
+		case FieldInformation.BOOLEAN:
+			value = ValueFactory.createValue(Boolean.valueOf(text)
+					.booleanValue());
 
-            break;
+			break;
 
-        case FieldInformation.SHAPE:
-        case FieldInformation.STRING:
-            value = ValueFactory.createValue(text);
+		case FieldInformation.SHAPE:
+		case FieldInformation.STRING:
+			value = ValueFactory.createValue(text);
 
-            break;
+			break;
 
-        case FieldInformation.DATE:
+		case FieldInformation.DATE:
 
-            //This tipe is changed to use miliseconds as source of the value
-            if (text != null) {
-                value = ValueFactory.createValue(new Date(Long.parseLong(text)));
-            } else {
-                value = ValueFactory.createNullValue();
-            }
+			// This tipe is changed to use miliseconds as source of the value
+			if (text != null) {
+				value = ValueFactory
+						.createValue(new Date(Long.parseLong(text)));
+			} else {
+				value = ValueFactory.createNullValue();
+			}
 
-            break;
+			break;
 
-        case FieldInformation.FLOAT:
+		case FieldInformation.FLOAT:
 
-            if (text != null) {
-                value = ValueFactory.createValue(Float.parseFloat(text.replace(
-                                delDec, '.')));
-            } else {
-                value = ValueFactory.createNullValue();
-            }
+			if (text != null) {
+				value = ValueFactory.createValue(Float.parseFloat(text.replace(
+						delDec, '.')));
+			} else {
+				value = ValueFactory.createNullValue();
+			}
 
-            break;
+			break;
 
-        case FieldInformation.DOUBLE:
+		case FieldInformation.DOUBLE:
 
-            if (text != null) {
-                value = ValueFactory.createValue(Double.parseDouble(
-                            text.replace(delDec, '.')));
-            } else {
-                value = ValueFactory.createNullValue();
-            }
+			if (text != null) {
+				value = ValueFactory.createValue(Double.parseDouble(text
+						.replace(delDec, '.')));
+			} else {
+				value = ValueFactory.createNullValue();
+			}
 
-            break;
+			break;
 
-        case FieldInformation.SMALLINT:
-            value = ValueFactory.createValue(Short.parseShort(text));
+		case FieldInformation.SMALLINT:
+			value = ValueFactory.createValue(Short.parseShort(text));
 
-            break;
+			break;
 
-        case FieldInformation.BIGINT:
-            value = ValueFactory.createValue(Long.parseLong(text));
+		case FieldInformation.BIGINT:
+			value = ValueFactory.createValue(Long.parseLong(text));
 
-            break;
+			break;
 
-        case FieldInformation.ID:
-        case FieldInformation.INTEGER:
-            value = ValueFactory.createValue(Integer.parseInt(text));
+		case FieldInformation.ID:
+		case FieldInformation.INTEGER:
+			value = ValueFactory.createValue(Integer.parseInt(text));
 
-            break;
+			break;
 
-        default:
-            value = ValueFactory.createValue(text);
-        }
+		default:
+			value = ValueFactory.createValue(text);
+		}
 
-        return value;
-    }
+		return value;
+	}
 }

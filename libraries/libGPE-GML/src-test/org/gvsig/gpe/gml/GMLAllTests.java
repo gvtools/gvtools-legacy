@@ -59,13 +59,13 @@ import org.gvsig.gpe.gml.writer.GMLWritersTestSuite;
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class GMLAllTests {
-	
+
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.gvsig.gpe.gml");
-		//$JUnit-BEGIN$
+		// $JUnit-BEGIN$
 		suite.addTest(GMLReadersTestSuite.suite());
 		suite.addTest(GMLWritersTestSuite.suite());
-		//$JUnit-END$
+		// $JUnit-END$
 		return suite;
 	}
 }

@@ -45,20 +45,21 @@ import javax.swing.tree.TreeModel;
 /**
  * 
  * ILibrary.java
- *
+ * 
  * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Dec 7, 2007
- *
+ * 
  */
 public interface ILibraryModel extends TreeModel {
-	
+
 	public void addFolder(Object parentFolder, String folderName);
-	
+
 	public void removeFolder(Object folderToRemove);
-	
-	public void addElement(Object element, String elementName, Object containerFolder);
-	
+
+	public void addElement(Object element, String elementName,
+			Object containerFolder);
+
 	public void removeElement(Object element, Object containerFolder);
-	
+
 	public Object getElement(Object containerFolder, String elementName);
 }

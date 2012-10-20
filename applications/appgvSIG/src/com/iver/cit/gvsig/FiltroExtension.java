@@ -69,10 +69,9 @@ import com.iver.cit.gvsig.project.documents.table.gui.Table;
 import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.utiles.exceptionHandling.ExceptionListener;
 
-
 /**
  * Extensión que abre un diálogo para poder hacer un filtro de una capa o tabla.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FiltroExtension extends Extension implements ExpressionListener {
@@ -87,17 +86,18 @@ public class FiltroExtension extends Extension implements ExpressionListener {
 		registerIcons();
 	}
 
-	private void registerIcons(){
+	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"table-filter",
-				this.getClass().getClassLoader().getResource("images/Filtro.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/Filtro.png"));
 	}
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param actionCommand DOCUMENT ME!
+	 * 
+	 * @param actionCommand
+	 *            DOCUMENT ME!
 	 */
 	public void execute(String actionCommand) {
 		if ("FILTRO".equals(actionCommand)) {
@@ -110,47 +110,52 @@ public class FiltroExtension extends Extension implements ExpressionListener {
 					filterTitle = vista.getModel().getName();
 					vista.getModel().setModified(true);
 				} else if (v instanceof com.iver.cit.gvsig.project.documents.view.gui.View) {
-					IProjectView pv = ((com.iver.cit.gvsig.project.documents.view.gui.View) v).getModel();					
+					IProjectView pv = ((com.iver.cit.gvsig.project.documents.view.gui.View) v)
+							.getModel();
 					FLayer layer = pv.getMapContext().getLayers().getActives()[0];
-					//filterTitle = ((com.iver.cit.gvsig.project.documents.view.gui.View) v).getModel().getName();
+					// filterTitle =
+					// ((com.iver.cit.gvsig.project.documents.view.gui.View)
+					// v).getModel().getName();
 					filterTitle = layer.getName();
 					dataSource = pv.getProject().getDataSourceByLayer(layer);
-					((ProjectDocument)pv).setModified(true);
+					((ProjectDocument) pv).setModified(true);
 				}
-			}  catch (ReadDriverException e) {
+			} catch (ReadDriverException e) {
 				NotificationManager.addError("Error filtrando", e);
 			}
 
 			doExecute();
 		}
 		if ("FILTER_DATASOURCE".equals(actionCommand)) {
-			// It should be set before using setDatasource(SelectableDataSource ds) method. 
-			if (dataSource != null){
+			// It should be set before using setDatasource(SelectableDataSource
+			// ds) method.
+			if (dataSource != null) {
 				doExecute();
 			}
 		}
-		
+
 	}
-	
-	/** 	
-	 * Set a SelectableDataSource to apply the filter. If this method are not used, the filter extension 
-	 * will get one from the ActiveWindow.
+
+	/**
+	 * Set a SelectableDataSource to apply the filter. If this method are not
+	 * used, the filter extension will get one from the ActiveWindow.
 	 * 
-	 * @param ds SelectableDataSource to filter
+	 * @param ds
+	 *            SelectableDataSource to filter
 	 */
-	public void setDatasource(SelectableDataSource ds, String dsName){		
+	public void setDatasource(SelectableDataSource ds, String dsName) {
 		dataSource = ds;
-		if (dsName == null){
+		if (dsName == null) {
 			dsName = "";
 		}
 		filterTitle = dsName;
-	}	
-	
+	}
+
 	/**
 	 * "execute" method action.
-	 *
+	 * 
 	 */
-	protected void doExecute(){
+	protected void doExecute() {
 		DefaultExpressionDataSource ds = new DefaultExpressionDataSource();
 		ds.setTable(dataSource);
 		FilterDialog dlg = new FilterDialog(filterTitle);
@@ -166,7 +171,7 @@ public class FiltroExtension extends Extension implements ExpressionListener {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public boolean isEnabled() {
@@ -183,10 +188,11 @@ public class FiltroExtension extends Extension implements ExpressionListener {
 				com.iver.cit.gvsig.project.documents.view.gui.View view = (com.iver.cit.gvsig.project.documents.view.gui.View) v;
 				IProjectView pv = view.getModel();
 				FLayer[] seleccionadas = pv.getMapContext().getLayers()
-				.getActives();
+						.getActives();
 
 				if (seleccionadas.length == 1) {
-					if (seleccionadas[0].isAvailable() && seleccionadas[0] instanceof AlphanumericData) {
+					if (seleccionadas[0].isAvailable()
+							&& seleccionadas[0] instanceof AlphanumericData) {
 						return true;
 					}
 				}
@@ -199,7 +205,7 @@ public class FiltroExtension extends Extension implements ExpressionListener {
 
 	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public boolean isVisible() {
@@ -216,7 +222,7 @@ public class FiltroExtension extends Extension implements ExpressionListener {
 				com.iver.cit.gvsig.project.documents.view.gui.View view = (com.iver.cit.gvsig.project.documents.view.gui.View) v;
 				IProjectView pv = view.getModel();
 				FLayer[] seleccionadas = pv.getMapContext().getLayers()
-				.getActives();
+						.getActives();
 
 				if (seleccionadas.length == 1) {
 					if (seleccionadas[0] instanceof AlphanumericData) {
@@ -231,17 +237,18 @@ public class FiltroExtension extends Extension implements ExpressionListener {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param expression DOCUMENT ME!
+	 * 
+	 * @param expression
+	 *            DOCUMENT ME!
 	 */
 	public void newSet(String expression) {
 		// By Pablo: if no filter expression -> no element selected
-		if (! this.filterExpressionFromWhereIsEmpty(expression)) {
+		if (!this.filterExpressionFromWhereIsEmpty(expression)) {
 			try {
 				long[] sel = doSet(expression);
 
 				if (sel == null) {
-					//throw new RuntimeException("Not a 'where' clause?");
+					// throw new RuntimeException("Not a 'where' clause?");
 					return;
 				}
 
@@ -253,11 +260,12 @@ public class FiltroExtension extends Extension implements ExpressionListener {
 
 				dataSource.clearSelection();
 				dataSource.setSelection(selection);
-			}catch(Exception e){
-				JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(), "Asegurate de que la consulta es correcta.");
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(
+						(Component) PluginServices.getMainFrame(),
+						"Asegurate de que la consulta es correcta.");
 			}
-		}
-		else {
+		} else {
 			// By Pablo: if no expression -> no element selected
 			dataSource.clearSelection();
 		}
@@ -268,44 +276,72 @@ public class FiltroExtension extends Extension implements ExpressionListener {
 	 */
 	private long[] doSet(String expression) {
 		try {
-			DataSource ds = LayerFactory.getDataSourceFactory().executeSQL(expression,
-					DataSourceFactory.MANUAL_OPENING);
+			DataSource ds = LayerFactory.getDataSourceFactory().executeSQL(
+					expression, DataSourceFactory.MANUAL_OPENING);
 
 			return ds.getWhereFilter();
 		} catch (DriverLoadException e) {
-			JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),PluginServices.getText(this,"driver_error")+"\n"+e.getMessage());
+			JOptionPane.showMessageDialog(
+					(Component) PluginServices.getMainFrame(),
+					PluginServices.getText(this, "driver_error") + "\n"
+							+ e.getMessage());
 		} catch (ReadDriverException e) {
-			JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),PluginServices.getText(this,"driver_error")+"\n"+e.getMessage());
+			JOptionPane.showMessageDialog(
+					(Component) PluginServices.getMainFrame(),
+					PluginServices.getText(this, "driver_error") + "\n"
+							+ e.getMessage());
 		} catch (ParseException e) {
-			JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),PluginServices.getText(this,"parse_expresion_error")+"\n"+e.getMessage());
+			JOptionPane.showMessageDialog(
+					(Component) PluginServices.getMainFrame(),
+					PluginServices.getText(this, "parse_expresion_error")
+							+ "\n" + e.getMessage());
 		} catch (SemanticException e) {
-			JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),PluginServices.getText(this,"semantic_expresion_error")+"\n"+e.getMessage());
+			JOptionPane.showMessageDialog(
+					(Component) PluginServices.getMainFrame(),
+					PluginServices.getText(this, "semantic_expresion_error")
+							+ "\n" + e.getMessage());
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),PluginServices.getText(this,"input_output_error")+"\n"+e.getMessage());
+			JOptionPane.showMessageDialog(
+					(Component) PluginServices.getMainFrame(),
+					PluginServices.getText(this, "input_output_error") + "\n"
+							+ e.getMessage());
 		} catch (EvaluationException e) {
-			JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),PluginServices.getText(this,"parse_expresion_error")+"\n"+e.getMessage());
+			JOptionPane.showMessageDialog(
+					(Component) PluginServices.getMainFrame(),
+					PluginServices.getText(this, "parse_expresion_error")
+							+ "\n" + e.getMessage());
 		} catch (com.hardcode.gdbms.parser.TokenMgrError e) {
-			JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),PluginServices.getText(this,"expresion_error")+"\n"+e.getMessage());
+			JOptionPane.showMessageDialog(
+					(Component) PluginServices.getMainFrame(),
+					PluginServices.getText(this, "expresion_error") + "\n"
+							+ e.getMessage());
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),PluginServices.getText(this,"expresion_error")+"\n"+e.getMessage());
-		}catch (Error e) {
-			JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),PluginServices.getText(this,"expresion_error")+"\n"+e.getMessage());
+			JOptionPane.showMessageDialog(
+					(Component) PluginServices.getMainFrame(),
+					PluginServices.getText(this, "expresion_error") + "\n"
+							+ e.getMessage());
+		} catch (Error e) {
+			JOptionPane.showMessageDialog(
+					(Component) PluginServices.getMainFrame(),
+					PluginServices.getText(this, "expresion_error") + "\n"
+							+ e.getMessage());
 		}
 		return null;
 	}
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param expression DOCUMENT ME!
+	 * 
+	 * @param expression
+	 *            DOCUMENT ME!
 	 */
 	public void addToSet(String expression) {
 		// By Pablo: if no filter expression -> don't add more elements to set
-		if (! this.filterExpressionFromWhereIsEmpty(expression)) {
+		if (!this.filterExpressionFromWhereIsEmpty(expression)) {
 			long[] sel = doSet(expression);
 
 			if (sel == null) {
-				//throw new RuntimeException("Not a 'where' clause?");
+				// throw new RuntimeException("Not a 'where' clause?");
 				return;
 			}
 
@@ -323,12 +359,13 @@ public class FiltroExtension extends Extension implements ExpressionListener {
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param expression DOCUMENT ME!
+	 * 
+	 * @param expression
+	 *            DOCUMENT ME!
 	 */
 	public void fromSet(String expression) {
 		// By Pablo: if no filter expression -> no element selected
-		if (! this.filterExpressionFromWhereIsEmpty(expression)) {
+		if (!this.filterExpressionFromWhereIsEmpty(expression)) {
 			long[] sel = doSet(expression);
 
 			if (sel == null) {
@@ -344,18 +381,19 @@ public class FiltroExtension extends Extension implements ExpressionListener {
 			FBitSet fbs = dataSource.getSelection();
 			fbs.and(selection);
 			dataSource.setSelection(fbs);
-		}
-		else {
+		} else {
 			// By Pablo: if no expression -> no element selected
 			dataSource.clearSelection();
 		}
 	}
 
 	/**
-	 * Returns true if the WHERE subconsultation of the filterExpression is empty ("")
-	 *
+	 * Returns true if the WHERE subconsultation of the filterExpression is
+	 * empty ("")
+	 * 
 	 * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
-	 * @param expression An string
+	 * @param expression
+	 *            An string
 	 * @return A boolean value
 	 */
 	private boolean filterExpressionFromWhereIsEmpty(String expression) {
@@ -363,16 +401,21 @@ public class FiltroExtension extends Extension implements ExpressionListener {
 		int pos;
 
 		// Remove last ';' if exists
-		if (subExpression.charAt(subExpression.length() -1) == ';')
-			subExpression = subExpression.substring(0, subExpression.length() -1).trim();
+		if (subExpression.charAt(subExpression.length() - 1) == ';')
+			subExpression = subExpression.substring(0,
+					subExpression.length() - 1).trim();
 
 		// If there is no 'where' clause
 		if ((pos = subExpression.indexOf("where")) == -1)
 			return false;
 
 		// If there is no subexpression in the WHERE clause -> true
-		subExpression = subExpression.substring(pos + 5, subExpression.length()).trim(); // + 5 is the length of 'where'
-		if ( subExpression.length() == 0 )
+		subExpression = subExpression
+				.substring(pos + 5, subExpression.length()).trim(); // + 5 is
+																	// the
+																	// length of
+																	// 'where'
+		if (subExpression.length() == 0)
 			return true;
 		else
 			return false;

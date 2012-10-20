@@ -17,10 +17,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
  */
 package org.gvsig.jpotrace;
+
 /**
  * La clase <code>PotraceException</code> es una forma de expresar que un
  * parametro ha sido mal usado en la libreria de jpotrace
-
+ * 
  * @version 31/07/2008
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */

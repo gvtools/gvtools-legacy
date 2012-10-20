@@ -42,20 +42,21 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.errorfixes;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import org.gvsig.exceptions.BaseException;
 import org.gvsig.topology.SimpleTopologyErrorContainer;
 import org.gvsig.topology.Topology;
 import org.gvsig.topology.TopologyError;
-import org.gvsig.topology.topologyrules.LineMustNotSelfIntersect;
 import org.gvsig.topology.topologyrules.MustNotHaveRepeatedPoints;
 import org.gvsig.topology.util.LayerFactory;
 
@@ -65,38 +66,33 @@ import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.ShapeFactory;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
-import junit.framework.TestCase;
-
 public class RemoveRepeatedCoordsFixTest extends TestCase {
-	public void testRemoveRepeatedCoordsFix() throws BaseException{
+	public void testRemoveRepeatedCoordsFix() throws BaseException {
 		GeneralPathX gpx = new GeneralPathX();
 		gpx.moveTo(240, 220);
 		gpx.lineTo(240, 220);
 		gpx.lineTo(320, 320);
 		gpx.lineTo(320, 320);
-		
+
 		IGeometry geometry = ShapeFactory.createPolyline2D(gpx);
-	
+
 		List<IGeometry> geoms = new ArrayList<IGeometry>();
 		geoms.add(geometry);
-		
+
 		FLyrVect lyr = LayerFactory.createLayerFor(geoms, FShape.LINE);
-		
-		
-		Topology topo = new Topology(null, null, 0.2d, 0, new SimpleTopologyErrorContainer());
-		MustNotHaveRepeatedPoints violatedRule = new MustNotHaveRepeatedPoints(topo, lyr);
+
+		Topology topo = new Topology(null, null, 0.2d, 0,
+				new SimpleTopologyErrorContainer());
+		MustNotHaveRepeatedPoints violatedRule = new MustNotHaveRepeatedPoints(
+				topo, lyr);
 		violatedRule.setTopologyErrorContainer(topo);
 		violatedRule.checkRule();
-		
+
 		TopologyError error = topo.getTopologyError(0);
-		
-		
+
 		new RemoveRepeatedCoordsFix().fix(error);
-		
+
 		assertTrue(topo.getNumberOfErrors() == 0);
-		
-		
-		
-		
+
 	}
 }

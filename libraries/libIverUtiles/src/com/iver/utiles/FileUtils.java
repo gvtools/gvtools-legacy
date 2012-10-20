@@ -47,70 +47,71 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-
 /**
- * Utility class that contains some useful function related
- * to file management
- *
+ * Utility class that contains some useful function related to file management
+ * 
  * @author wolf
  */
 public class FileUtils {
 	private static String appHomeDir = null;
-	
-    private FileUtils() {
-    }
-    
+
+	private FileUtils() {
+	}
+
 	/**
 	 * Gets Home Directory location of the application.
+	 * 
 	 * @return
 	 */
 	public static String getAppHomeDir() {
-		if(appHomeDir == null) 
-			appHomeDir = System.getProperty("user.home") + File.separator + "gvSIG" + File.separator;
+		if (appHomeDir == null)
+			appHomeDir = System.getProperty("user.home") + File.separator
+					+ "gvSIG" + File.separator;
 		return appHomeDir;
 	}
 
 	/**
 	 * Sets Home Directory location of the application.
+	 * 
 	 * @param appHomeDir
 	 */
 	public static void setAppHomeDir(String appHomeDir) {
 		FileUtils.appHomeDir = appHomeDir;
 	}
 
-    public static String getFileExtension(File f) {
-        String fileName = f.getName();
-        int extensionStart = fileName.lastIndexOf('.');
-        String extension = "";
+	public static String getFileExtension(File f) {
+		String fileName = f.getName();
+		int extensionStart = fileName.lastIndexOf('.');
+		String extension = "";
 
-        if (extensionStart >= 0) {
-            extension = fileName.substring(extensionStart + 1);
-        }
+		if (extensionStart >= 0) {
+			extension = fileName.substring(extensionStart + 1);
+		}
 
-        return extension;
-    }
-    
-    public static String getFileWithoutExtension(File f){
-    	String fileName = f.getAbsolutePath();
-    	int extensionStart = fileName.lastIndexOf('.');
-    	if(extensionStart != -1)
-    		return fileName.substring(0, extensionStart);
-    	else
-    		return fileName;
-    }
-    
-    public static void copy(File src, File dst) throws IOException {
-        InputStream in = new FileInputStream(src);
-        OutputStream out = new FileOutputStream(dst);
-    
-        // Transfer bytes from in to out
-        byte[] buf = new byte[10240];
-        int len;
-        while ((len = in.read(buf)) > 0) {
-            out.write(buf, 0, len);
-        }
-        in.close();
-        out.close();
-    }
-   
+		return extension;
+	}
+
+	public static String getFileWithoutExtension(File f) {
+		String fileName = f.getAbsolutePath();
+		int extensionStart = fileName.lastIndexOf('.');
+		if (extensionStart != -1)
+			return fileName.substring(0, extensionStart);
+		else
+			return fileName;
+	}
+
+	public static void copy(File src, File dst) throws IOException {
+		InputStream in = new FileInputStream(src);
+		OutputStream out = new FileOutputStream(dst);
+
+		// Transfer bytes from in to out
+		byte[] buf = new byte[10240];
+		int len;
+		while ((len = in.read(buf)) > 0) {
+			out.write(buf, 0, len);
+		}
+		in.close();
+		out.close();
+	}
+
 }

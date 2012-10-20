@@ -57,7 +57,7 @@ import org.gvsig.gpe.containers.Layer;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class GPELayerWithChildrenTest extends GPEWriterBaseTest{
+public abstract class GPELayerWithChildrenTest extends GPEWriterBaseTest {
 	private String layer1Id = "l1";
 	private String layer1Name = "Layer 1";
 	private String layer1Description = "Layer with bbox Test";
@@ -74,36 +74,41 @@ public abstract class GPELayerWithChildrenTest extends GPEWriterBaseTest{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#readObjects()
 	 */
 	public void readObjects() {
 		Layer[] layers = getLayers();
-		assertEquals(layers.length, 1);		
+		assertEquals(layers.length, 1);
 		Layer layer = layers[0];
 		assertEquals(layer.getName(), layer1Name);
-		
-		assertEquals(layer.getLayers().size(),2);
+
+		assertEquals(layer.getLayers().size(), 2);
 		assertEquals(layer.getLayerAt(0).getName(), layer11Name);
-		assertEquals(layer.getLayerAt(0).getLayers().size(),1);
-		assertEquals(layer.getLayerAt(0).getLayerAt(0).getName(),layer111Name);
+		assertEquals(layer.getLayerAt(0).getLayers().size(), 1);
+		assertEquals(layer.getLayerAt(0).getLayerAt(0).getName(), layer111Name);
 		assertEquals(layer.getLayerAt(1).getName(), layer12Name);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#writeObjects()
 	 */
 	public void writeObjects() {
 		getWriterHandler().initialize();
-		getWriterHandler().startLayer(layer1Id, null, layer1Name, layer1Description, srs);
-		getWriterHandler().startLayer(layer11Id, null, layer11Name, layer11Description, srs);
-		getWriterHandler().startLayer(layer111Id, null, layer111Name, layer111Description, srs);
+		getWriterHandler().startLayer(layer1Id, null, layer1Name,
+				layer1Description, srs);
+		getWriterHandler().startLayer(layer11Id, null, layer11Name,
+				layer11Description, srs);
+		getWriterHandler().startLayer(layer111Id, null, layer111Name,
+				layer111Description, srs);
 		getWriterHandler().endLayer();
 		getWriterHandler().endLayer();
-		getWriterHandler().startLayer(layer12Id, null, layer12Name, layer12Description, srs);
+		getWriterHandler().startLayer(layer12Id, null, layer12Name,
+				layer12Description, srs);
 		getWriterHandler().endLayer();
 		getWriterHandler().endLayer();
-		getWriterHandler().close();		
+		getWriterHandler().close();
 	}
 }
-

@@ -53,15 +53,14 @@ import java.util.ArrayList;
  */
 /**
  * This class represetnts a Multigeometry
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class MultiGeometry extends Geometry {
-	
-
 
 	private ArrayList geometries = null;
-	
-	public MultiGeometry(){
+
+	public MultiGeometry() {
 		geometries = new ArrayList();
 	}
 
@@ -71,20 +70,22 @@ public class MultiGeometry extends Geometry {
 	public ArrayList getGeometries() {
 		return geometries;
 	}
-	
+
 	/**
 	 * Adds a new Geometry
+	 * 
 	 * @param geometry
-	 * Geometry to add
+	 *            Geometry to add
 	 */
 	public void addGeometry(Geometry geometry) {
 		geometries.add(geometry);
 	}
-	
+
 	/**
 	 * Gets a Geometry at position i
+	 * 
 	 * @param i
-	 * position
+	 *            position
 	 */
 	public Object getGeometryAt(int i) {
 		return geometries.get(i);

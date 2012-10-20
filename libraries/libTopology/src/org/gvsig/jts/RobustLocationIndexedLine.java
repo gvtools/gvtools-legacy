@@ -42,14 +42,14 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: RobustLocationIndexedLine.java 14154 2007-09-27 19:14:16Z azabala $
-* $Log: RobustLocationIndexedLine.java,v $
-* Revision 1.1  2007/09/09 11:44:09  azabala
-* Improvements to JTS (robustness problems)
-*
-*
-*/
+ *
+ * $Id: RobustLocationIndexedLine.java 14154 2007-09-27 19:14:16Z azabala $
+ * $Log: RobustLocationIndexedLine.java,v $
+ * Revision 1.1  2007/09/09 11:44:09  azabala
+ * Improvements to JTS (robustness problems)
+ *
+ *
+ */
 package org.gvsig.jts;
 
 import com.vividsolutions.jts.geom.Coordinate;
@@ -62,106 +62,95 @@ import com.vividsolutions.jts.linearref.LocationIndexedLine;
 
 public class RobustLocationIndexedLine extends LocationIndexedLine {
 
-	
 	private Geometry linearGeom;
-	
-	
+
 	public RobustLocationIndexedLine(Geometry arg0) {
 		super(arg0);
 		this.linearGeom = arg0;
 	}
-	
-	 public LinearLocation indexOf(Coordinate pt)
-	  {
-	    return indexOfFromStart(pt, null);
-	  }
-	 
-//	 These methods are needed because JTS LocationIndexedLine doesnt have an
-		// indexOfAlter
-		// method and LocationIndexPoint, which makes all these computations is not
-		// a public class
-		// report it to JTS project
 
-		/*
-		 * M.Davids has said to me that he has added these methods to JTS (1.9
-		 * version).
-		 * 
-		 * TODO REMOVE THESE METHODS WITH JTS 1.9
-		 */
+	public LinearLocation indexOf(Coordinate pt) {
+		return indexOfFromStart(pt, null);
+	}
 
-		public  LinearLocation indexOfAfter(LocationIndexedLine indexedLine, 
-										Coordinate inputPt, 
-										LinearLocation minIndex) {
-			if (minIndex == null)
-				return indexedLine.indexOf(inputPt);
-			LinearLocation endLoc = LinearLocation.getEndLocation(linearGeom);
-			if (endLoc.compareTo(minIndex) <= 0)
-				return endLoc;
+	// These methods are needed because JTS LocationIndexedLine doesnt have an
+	// indexOfAlter
+	// method and LocationIndexPoint, which makes all these computations is not
+	// a public class
+	// report it to JTS project
 
-			LinearLocation closestAfter = indexOfFromStart(inputPt, minIndex);
-			return closestAfter;
+	/*
+	 * M.Davids has said to me that he has added these methods to JTS (1.9
+	 * version).
+	 * 
+	 * TODO REMOVE THESE METHODS WITH JTS 1.9
+	 */
+
+	public LinearLocation indexOfAfter(LocationIndexedLine indexedLine,
+			Coordinate inputPt, LinearLocation minIndex) {
+		if (minIndex == null)
+			return indexedLine.indexOf(inputPt);
+		LinearLocation endLoc = LinearLocation.getEndLocation(linearGeom);
+		if (endLoc.compareTo(minIndex) <= 0)
+			return endLoc;
+
+		LinearLocation closestAfter = indexOfFromStart(inputPt, minIndex);
+		return closestAfter;
+	}
+
+	private LinearLocation indexOfFromStart(Coordinate inputPt,
+			LinearLocation minIndex) {
+		double minDistance = Double.MAX_VALUE;
+		int minComponentIndex = 0;
+		int minSegmentIndex = 0;
+		double minFrac = -1.0;
+
+		LineSegment seg = new LineSegment();
+		for (LinearIterator it = new LinearIterator(linearGeom); it.hasNext(); it
+				.next()) {
+			if (!it.isEndOfLine()) {
+				seg.p0 = it.getSegmentStart();
+				seg.p1 = it.getSegmentEnd();
+				double segDistance = seg.distance(inputPt);
+
+				/*
+				 * Changes to LocationIndexedLine to avoid robustness problems
+				 */
+				PrecisionModel pm = linearGeom.getPrecisionModel();
+				segDistance = pm.makePrecise(segDistance);
+
+				double segFrac = segmentFraction(seg, inputPt);
+
+				int candidateComponentIndex = it.getComponentIndex();
+				int candidateSegmentIndex = it.getVertexIndex();
+
+				if (segDistance < minDistance) {
+					// ensure after minLocation, if any
+					if (minIndex == null
+							|| minIndex.compareLocationValues(
+									candidateComponentIndex,
+									candidateSegmentIndex, segFrac) < 0) {
+						// otherwise, save this as new minimum
+						minComponentIndex = candidateComponentIndex;
+						minSegmentIndex = candidateSegmentIndex;
+						minFrac = segFrac;
+						minDistance = segDistance;
+					}
+				}
+			}
 		}
+		LinearLocation loc = new LinearLocation(minComponentIndex,
+				minSegmentIndex, minFrac);
+		return loc;
+	}
 
-	
-	
-	private LinearLocation indexOfFromStart(Coordinate inputPt, LinearLocation minIndex)
-	  {
-	    double minDistance = Double.MAX_VALUE;
-	    int minComponentIndex = 0;
-	    int minSegmentIndex = 0;
-	    double minFrac = -1.0;
-
-	    LineSegment seg = new LineSegment();
-	    for (LinearIterator it = new LinearIterator(linearGeom);
-	         it.hasNext(); it.next()) {
-	      if (! it.isEndOfLine()) {
-	        seg.p0 = it.getSegmentStart();
-	        seg.p1 = it.getSegmentEnd();
-	        double segDistance = seg.distance(inputPt);
-	        
-	        /*
-	         * Changes to LocationIndexedLine to avoid robustness problems
-	         * */
-	        PrecisionModel pm = linearGeom.getPrecisionModel();
-	        segDistance = pm.makePrecise(segDistance);
-	        
-	        double segFrac = segmentFraction(seg, inputPt);
-
-	        int candidateComponentIndex = it.getComponentIndex();
-	        int candidateSegmentIndex = it.getVertexIndex();
-	        
-	        
-	        if (segDistance < minDistance) {
-	          // ensure after minLocation, if any
-	          if (minIndex == null ||
-	              minIndex.compareLocationValues(
-	              candidateComponentIndex, candidateSegmentIndex, segFrac)
-	              < 0
-	              ) {
-	            // otherwise, save this as new minimum
-	            minComponentIndex = candidateComponentIndex;
-	            minSegmentIndex = candidateSegmentIndex;
-	            minFrac = segFrac;
-	            minDistance = segDistance;
-	          }
-	        }
-	      }
-	    }
-	    LinearLocation loc = new LinearLocation(minComponentIndex, minSegmentIndex, minFrac);
-	    return loc;
-	  }
-	
-	public static double segmentFraction(
-		      LineSegment seg,
-		      Coordinate inputPt)
-		  {
-		    double segFrac = seg.projectionFactor(inputPt);
-		    if (segFrac < 0.0)
-		      segFrac = 0.0;
-		    else if (segFrac > 1.0)
-		      segFrac = 1.0;
-		    return segFrac;
-		  }
+	public static double segmentFraction(LineSegment seg, Coordinate inputPt) {
+		double segFrac = seg.projectionFactor(inputPt);
+		if (segFrac < 0.0)
+			segFrac = 0.0;
+		else if (segFrac > 1.0)
+			segFrac = 1.0;
+		return segFrac;
+	}
 
 }
-

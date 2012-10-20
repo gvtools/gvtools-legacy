@@ -26,13 +26,14 @@ import org.gvsig.gui.beans.TestUI;
 import org.gvsig.gui.beans.table.exceptions.NotInitializeException;
 
 public class TestTableButtonModelTable implements ActionListener {
-	private int            w     = 460;
-	private int            h     = 200;
-	private TestUI         frame = new TestUI("TestTableButtonModelTable");
+	private int w = 460;
+	private int h = 200;
+	private TestUI frame = new TestUI("TestTableButtonModelTable");
 	private TableContainer table = null;
 
 	public TestTableButtonModelTable() throws NotInitializeException {
-		String[] columnNames = { "Botón", "columna2", "columna3", "columna 4", "col5" };
+		String[] columnNames = { "Botón", "columna2", "columna3", "columna 4",
+				"col5" };
 		int[] columnWidths = { 54, 114, 94, 114, 60 };
 		table = new TableContainer(columnNames, columnWidths);
 		table.setModel("TableButtonModel");
@@ -43,10 +44,11 @@ public class TestTableButtonModelTable implements ActionListener {
 		Object[] row2 = { Color.RED, "texto 2", "texto 2", "texto 2", "80" };
 		table.addRow(row);
 
-		/*JButton b7 = new JButton();
-		b7.setBackground(Color.RED);
-		b7.addActionListener(this);
-		((TableButtonModel)table.getModel()).setValueAt(b7, 0, 0);*/
+		/*
+		 * JButton b7 = new JButton(); b7.setBackground(Color.RED);
+		 * b7.addActionListener(this);
+		 * ((TableButtonModel)table.getModel()).setValueAt(b7, 0, 0);
+		 */
 		table.addRow(row1);
 		table.addRow(row2);
 
@@ -58,7 +60,7 @@ public class TestTableButtonModelTable implements ActionListener {
 	public static void main(String[] args) {
 		try {
 			new TestTableButtonModelTable();
-		} catch(NotInitializeException ex){
+		} catch (NotInitializeException ex) {
 			System.out.println("Tabla no inicializada");
 		}
 	}

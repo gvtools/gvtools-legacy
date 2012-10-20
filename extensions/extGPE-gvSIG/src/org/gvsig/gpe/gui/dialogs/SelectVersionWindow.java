@@ -53,21 +53,25 @@ import com.iver.andami.ui.mdiManager.WindowInfo;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class SelectVersionWindow extends SelectVersionPanel implements IWindow{
+public class SelectVersionWindow extends SelectVersionPanel implements IWindow {
 	private WindowInfo info = null;
 
-	public SelectVersionWindow(){
+	public SelectVersionWindow() {
 		super();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindow#getWindowInfo()
 	 */
 	public WindowInfo getWindowInfo() {
-		if (info == null){
-			info = new WindowInfo(WindowInfo.MODELESSDIALOG|WindowInfo.RESIZABLE|WindowInfo.MAXIMIZABLE|WindowInfo.ICONIFIABLE);
-			info.setTitle(PluginServices.getText(this, "gpe_select_writer_window"));
+		if (info == null) {
+			info = new WindowInfo(WindowInfo.MODELESSDIALOG
+					| WindowInfo.RESIZABLE | WindowInfo.MAXIMIZABLE
+					| WindowInfo.ICONIFIABLE);
+			info.setTitle(PluginServices.getText(this,
+					"gpe_select_writer_window"));
 			info.setWidth(475);
 			info.setHeight(250);
 		}
@@ -76,6 +80,7 @@ public class SelectVersionWindow extends SelectVersionPanel implements IWindow{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindow#getWindowProfile()
 	 */
 	public Object getWindowProfile() {

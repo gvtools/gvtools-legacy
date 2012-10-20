@@ -42,21 +42,20 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: DissolveTest.java 13706 2007-09-14 15:10:34Z azabala $
-* $Log$
-* Revision 1.1  2007-09-14 15:10:34  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: DissolveTest.java 13706 2007-09-14 15:10:34Z azabala $
+ * $Log$
+ * Revision 1.1  2007-09-14 15:10:34  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.dissolve;
 
 import junit.framework.TestCase;
 
 public class DissolveTest extends TestCase {
-	public void testSpureusLines(){
-		
+	public void testSpureusLines() {
+
 	}
 }
-

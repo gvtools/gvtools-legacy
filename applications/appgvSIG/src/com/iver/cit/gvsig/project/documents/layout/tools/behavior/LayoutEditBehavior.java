@@ -43,7 +43,6 @@ package com.iver.cit.gvsig.project.documents.layout.tools.behavior;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.image.VolatileImage;
 
@@ -54,20 +53,20 @@ import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrameEditableVertex
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.LayoutMoveListener;
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.LayoutToolListener;
 
-
 /**
  * Behaviour que espera un listener de tipo MoveListener.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
-public class LayoutEditBehavior extends LayoutBehavior{
+public class LayoutEditBehavior extends LayoutBehavior {
 	private LayoutMoveListener listener;
-	private boolean dragged=false;
+	private boolean dragged = false;
 
 	/**
 	 * Crea un nuevo MoveBehavior.
-	 *
-	 * @param pli listener.
+	 * 
+	 * @param pli
+	 *            listener.
 	 */
 	public LayoutEditBehavior(LayoutMoveListener lpl) {
 		listener = lpl;
@@ -77,31 +76,33 @@ public class LayoutEditBehavior extends LayoutBehavior{
 	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#paintComponent(java.awt.Graphics)
 	 */
 	public void paintComponent(Graphics g) {
-//		long t1 = System.currentTimeMillis();
+		// long t1 = System.currentTimeMillis();
 		VolatileImage image = createVolatileImage();
 		Graphics gh = image.createGraphics();
 		gh.setColor(getLayoutControl().getBackground());
 		gh.fillRect(0, 0, image.getWidth(), image.getHeight());
 
 		getLayoutControl().getLayoutDraw().drawRectangle((Graphics2D) gh);
-		gh.drawImage(getLayoutControl().getImage(), 0,0, null);
+		gh.drawImage(getLayoutControl().getImage(), 0, 0, null);
 
-		getLayoutControl().getLayoutDraw().drawHandlers((Graphics2D) gh, Color.black);
+		getLayoutControl().getLayoutDraw().drawHandlers((Graphics2D) gh,
+				Color.black);
 		gh.setColor(Color.black);
 		gh.setXORMode(Color.white);
-        IFFrame[] fframeSelect = getLayoutControl().getLayoutContext().getFFrameSelected();
-        for (int i = 0; i < fframeSelect.length; i++) {
-            if (fframeSelect[i] instanceof IFFrameEditableVertex && dragged) {
-                ((IFFrameEditableVertex) fframeSelect[i]).paint(
-                        (Graphics2D) gh, getLayoutControl().getAT());
-            }
-        }
-		gh.drawImage(getLayoutControl().getImgRuler(), 0,0, null);
-//		long t2 = System.currentTimeMillis();
+		IFFrame[] fframeSelect = getLayoutControl().getLayoutContext()
+				.getFFrameSelected();
+		for (int i = 0; i < fframeSelect.length; i++) {
+			if (fframeSelect[i] instanceof IFFrameEditableVertex && dragged) {
+				((IFFrameEditableVertex) fframeSelect[i]).paint(
+						(Graphics2D) gh, getLayoutControl().getAT());
+			}
+		}
+		gh.drawImage(getLayoutControl().getImgRuler(), 0, 0, null);
+		// long t2 = System.currentTimeMillis();
 		gh.setPaintMode();
 		g.drawImage(image, 0, 0, null);
-//		long t3 = System.currentTimeMillis();
-//		System.out.println("t1 = " + (t2-t1) + " t2=" + (t3-t2));
+		// long t3 = System.currentTimeMillis();
+		// System.out.println("t1 = " + (t2-t1) + " t2=" + (t3-t2));
 	}
 
 	/**
@@ -116,29 +117,32 @@ public class LayoutEditBehavior extends LayoutBehavior{
 
 	/**
 	 * Reimplementación del método mouseReleased de Behavior.
-	 *
-	 * @param e MouseEvent
-	 *
-	 * @throws BehaviorException Excepción lanzada cuando el Behavior.
+	 * 
+	 * @param e
+	 *            MouseEvent
+	 * 
+	 * @throws BehaviorException
+	 *             Excepción lanzada cuando el Behavior.
 	 */
 	public void mouseReleased(MouseEvent e) throws BehaviorException {
 		super.mouseReleased(e);
 		PointEvent event = new PointEvent(e.getPoint(), e);
 		listener.release(event);
-		dragged=false;
+		dragged = false;
 	}
 
 	/**
 	 * Reimplementación del método mouseDragged de Behavior.
-	 *
-	 * @param e MouseEvent
+	 * 
+	 * @param e
+	 *            MouseEvent
 	 * @throws BehaviorException
 	 */
 	public void mouseDragged(MouseEvent e) throws BehaviorException {
 		super.mouseDragged(e);
 		PointEvent event = new PointEvent(e.getPoint(), e);
 		listener.drag(event);
-		dragged=true;
+		dragged = true;
 	}
 
 	/**

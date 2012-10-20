@@ -25,6 +25,7 @@ import org.gvsig.raster.dataset.Params;
 import org.gvsig.raster.dataset.io.RasterDriverException;
 import org.gvsig.raster.dataset.properties.DatasetListStatistics;
 import org.gvsig.raster.grid.filter.RasterFilter;
+
 /**
  * Clase base para los filtros de realzado lineal. Lee el mínimo y máxmo de la
  * clase Statistic que serán calculados por PercentTailTrimFilter o
@@ -33,21 +34,21 @@ import org.gvsig.raster.grid.filter.RasterFilter;
  * que son los que se utilizan con la opción eliminar extremos activada. Estos
  * se usaran en vez del mínimo y máximo cuando la variable removeExtrema esté a
  * true.
- *
+ * 
  * @version 31/05/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class LinearEnhancementFilter extends RasterFilter {
-	protected double[]                 scale = new double[3];
-	protected double[]                 offset = new double[3];
-	protected DatasetListStatistics	   stats = null;
-	protected double[]                 minBandValue	= null;
-	protected double[]                 maxBandValue	= null;
-	protected boolean                  removeEnds = false;
-	protected double                   tailTrim	= 0D;
-	protected int                      nbands = 3;
-	protected int[]                    renderBands = null;
-	public static String[]             names = new String[] {"enhanced"};
+	protected double[] scale = new double[3];
+	protected double[] offset = new double[3];
+	protected DatasetListStatistics stats = null;
+	protected double[] minBandValue = null;
+	protected double[] maxBandValue = null;
+	protected boolean removeEnds = false;
+	protected double tailTrim = 0D;
+	protected int nbands = 3;
+	protected int[] renderBands = null;
+	public static String[] names = new String[] { "enhanced" };
 
 	/**
 	 * Construye un LinearEnhancementFilter
@@ -58,6 +59,7 @@ public class LinearEnhancementFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#pre()
 	 */
 	public void pre() {
@@ -65,15 +67,17 @@ public class LinearEnhancementFilter extends RasterFilter {
 		stats = (DatasetListStatistics) params.get("stats");
 		removeEnds = ((Boolean) params.get("remove")).booleanValue();
 		tailTrim = ((Double) params.get("tailTrim")).doubleValue();
-		// En realidad esto no se deberia hacer, pero por logica, un valor del 50%
-		// devolveria una capa en blanco, asi que evitamos un resultado supuestamente
+		// En realidad esto no se deberia hacer, pero por logica, un valor del
+		// 50%
+		// devolveria una capa en blanco, asi que evitamos un resultado
+		// supuestamente
 		// no esperado
 		if ((tailTrim >= 0.5) && (tailTrim < 0.51))
 			tailTrim = 0.51;
 		if ((tailTrim > 0.49) && (tailTrim < 0.50))
 			tailTrim = 0.49;
 		renderBands = (int[]) params.get("renderBands");
-		if(renderBands != null && renderBands.length < raster.getBandCount()) {
+		if (renderBands != null && renderBands.length < raster.getBandCount()) {
 			int[] newRenderBands = new int[raster.getBandCount()];
 			for (int i = 0; i < renderBands.length; i++)
 				newRenderBands[i] = renderBands[i];
@@ -93,8 +97,10 @@ public class LinearEnhancementFilter extends RasterFilter {
 		} catch (InterruptedException e) {
 			exec = false;
 		}
-		double[][] tailTrimByBand = (double[][]) stats.getTailTrimValue(tailTrim);
-		if ((tailTrim != 0) && (tailTrimByBand != null)) { // Max y Min con recorte de colas
+		double[][] tailTrimByBand = (double[][]) stats
+				.getTailTrimValue(tailTrim);
+		if ((tailTrim != 0) && (tailTrimByBand != null)) { // Max y Min con
+															// recorte de colas
 			scale = new double[tailTrimByBand.length];
 			offset = new double[tailTrimByBand.length];
 			minBandValue = new double[tailTrimByBand.length];
@@ -106,8 +112,9 @@ public class LinearEnhancementFilter extends RasterFilter {
 		} else {
 			scale = new double[stats.getMin().length];
 			offset = new double[stats.getMin().length];
-			if (removeEnds) { // Si está activado eliminar extremos gastamos el 2º máximo/mínimo
-				if(raster.getDataType() == IBuffer.TYPE_BYTE) {
+			if (removeEnds) { // Si está activado eliminar extremos gastamos el
+								// 2º máximo/mínimo
+				if (raster.getDataType() == IBuffer.TYPE_BYTE) {
 					minBandValue = stats.getSecondMinByteUnsigned();
 					maxBandValue = stats.getSecondMaxByteUnsigned();
 				} else {
@@ -115,7 +122,7 @@ public class LinearEnhancementFilter extends RasterFilter {
 					maxBandValue = stats.getSecondMax();
 				}
 			} else { // Si no está activado eliminar extremos
-				if(raster.getDataType() == IBuffer.TYPE_BYTE) {
+				if (raster.getDataType() == IBuffer.TYPE_BYTE) {
 					minBandValue = stats.getMinByteUnsigned();
 					maxBandValue = stats.getMaxByteUnsigned();
 				} else {
@@ -127,16 +134,19 @@ public class LinearEnhancementFilter extends RasterFilter {
 
 		for (int i = 0; i < minBandValue.length; i++) {
 			scale[i] = 255D / (maxBandValue[i] - minBandValue[i]);
-			offset[i] = (255D * minBandValue[i]) / (minBandValue[i] - maxBandValue[i]);
+			offset[i] = (255D * minBandValue[i])
+					/ (minBandValue[i] - maxBandValue[i]);
 		}
 
 		nbands = stats.getBandCount();
-		rasterResult = RasterBuffer.getBuffer(IBuffer.TYPE_BYTE, raster.getWidth(), raster.getHeight(), raster.getBandCount(), true);
+		rasterResult = RasterBuffer.getBuffer(IBuffer.TYPE_BYTE,
+				raster.getWidth(), raster.getHeight(), raster.getBandCount(),
+				true);
 	}
 
 	/**
-	 * Obtiene true si está activado el flag de eliminar extremos y false si no lo
-	 * está
+	 * Obtiene true si está activado el flag de eliminar extremos y false si no
+	 * lo está
 	 */
 	public Boolean getRemoveEnds() {
 		return new Boolean(removeEnds);
@@ -144,14 +154,16 @@ public class LinearEnhancementFilter extends RasterFilter {
 
 	/**
 	 * Obtiene el porcentaje de recorte de colas aplicado o 0 si no tiene.
+	 * 
 	 * @return
 	 */
-	public Double getTailTrim(){
+	public Double getTailTrim() {
 		return new Double(tailTrim);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getOutRasterDataType()
 	 */
 	public int getOutRasterDataType() {
@@ -160,7 +172,9 @@ public class LinearEnhancementFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.RasterFilter#getResult(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.RasterFilter#getResult(java.lang.String)
 	 */
 	public Object getResult(String name) {
 		if (name.equals("raster")) {
@@ -173,6 +187,7 @@ public class LinearEnhancementFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getGroup()
 	 */
 	public String getGroup() {
@@ -181,23 +196,28 @@ public class LinearEnhancementFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getUIParams()
 	 */
 	public Params getUIParams(String nameFilter) {
 		Params params = new Params();
-		params.setParam("RemoveEnds",
-				new Boolean(removeEnds),
-				Params.CHECK,
+		params.setParam("RemoveEnds", new Boolean(removeEnds), Params.CHECK,
 				null);
-		params.setParam("TailTrim",
-				new Double(Math.round(tailTrim * 100.0)),
-				Params.SLIDER,
-				new String[]{ "0", "100", "0", "1", "25" }); //min, max, valor defecto, intervalo pequeño, intervalo grande;
+		params.setParam("TailTrim", new Double(Math.round(tailTrim * 100.0)),
+				Params.SLIDER, new String[] { "0", "100", "0", "1", "25" }); // min,
+																				// max,
+																				// valor
+																				// defecto,
+																				// intervalo
+																				// pequeño,
+																				// intervalo
+																				// grande;
 		return params;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#post()
 	 */
 	public void post() {
@@ -207,6 +227,7 @@ public class LinearEnhancementFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getInRasterDataType()
 	 */
 	public int getInRasterDataType() {
@@ -215,6 +236,7 @@ public class LinearEnhancementFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#process(int, int)
 	 */
 	public void process(int x, int y) throws InterruptedException {
@@ -222,14 +244,16 @@ public class LinearEnhancementFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getNames()
 	 */
 	public String[] getNames() {
 		return names;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#isVisible()
 	 */
 	public boolean isVisible() {

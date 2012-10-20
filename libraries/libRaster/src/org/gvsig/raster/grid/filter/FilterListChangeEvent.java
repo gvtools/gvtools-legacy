@@ -24,6 +24,7 @@ import java.util.EventObject;
  * Evento de la pila de filtros cambia
  * 
  * 07/01/2008
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class FilterListChangeEvent extends EventObject {
@@ -32,7 +33,9 @@ public class FilterListChangeEvent extends EventObject {
 
 	/**
 	 * Constructor. Se asigna la pila de filtros que dispara el evento.
-	 * @param source Objeto fuente
+	 * 
+	 * @param source
+	 *            Objeto fuente
 	 */
 	public FilterListChangeEvent(Object source) {
 		super(source);
@@ -40,6 +43,7 @@ public class FilterListChangeEvent extends EventObject {
 
 	/**
 	 * Obtiene el valor de la propiedad antes de que se modificara.
+	 * 
 	 * @return Object con el valor de la propiedad que disparó el evento
 	 */
 	public Object getValue() {

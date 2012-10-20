@@ -51,118 +51,117 @@ import org.xml.sax.SAXException;
 
 import com.iver.utiles.XMLEntity;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Fernando González Cortés
  */
 public class XMLEntityXMLHandler implements ContentHandler {
-    private static Logger logger = Logger.getLogger(XMLEntityXMLHandler.class.getName());
+	private static Logger logger = Logger.getLogger(XMLEntityXMLHandler.class
+			.getName());
 	private XMLEntity lastEntity;
-    private Stack entities = new Stack();
+	private Stack entities = new Stack();
 
-    /**
-     * @see org.xml.sax.ContentHandler#setDocumentLocator(org.xml.sax.Locator)
-     */
-    public void setDocumentLocator(Locator arg0) {
-    }
+	/**
+	 * @see org.xml.sax.ContentHandler#setDocumentLocator(org.xml.sax.Locator)
+	 */
+	public void setDocumentLocator(Locator arg0) {
+	}
 
-    /**
-     * @see org.xml.sax.ContentHandler#startDocument()
-     */
-    public void startDocument() throws SAXException {
-    }
+	/**
+	 * @see org.xml.sax.ContentHandler#startDocument()
+	 */
+	public void startDocument() throws SAXException {
+	}
 
-    /**
-     * @see org.xml.sax.ContentHandler#endDocument()
-     */
-    public void endDocument() throws SAXException {
-    }
+	/**
+	 * @see org.xml.sax.ContentHandler#endDocument()
+	 */
+	public void endDocument() throws SAXException {
+	}
 
-    /**
-     * @see org.xml.sax.ContentHandler#startPrefixMapping(java.lang.String,
-     *      java.lang.String)
-     */
-    public void startPrefixMapping(String arg0, String arg1)
-        throws SAXException {
-    }
+	/**
+	 * @see org.xml.sax.ContentHandler#startPrefixMapping(java.lang.String,
+	 *      java.lang.String)
+	 */
+	public void startPrefixMapping(String arg0, String arg1)
+			throws SAXException {
+	}
 
-    /**
-     * @see org.xml.sax.ContentHandler#endPrefixMapping(java.lang.String)
-     */
-    public void endPrefixMapping(String arg0) throws SAXException {
-    }
+	/**
+	 * @see org.xml.sax.ContentHandler#endPrefixMapping(java.lang.String)
+	 */
+	public void endPrefixMapping(String arg0) throws SAXException {
+	}
 
-    /**
-     * @see org.xml.sax.ContentHandler#startElement(java.lang.String,
-     *      java.lang.String, java.lang.String, org.xml.sax.Attributes)
-     */
-    public void startElement(String namespaceURI, String localName,
-        String qName, Attributes atts) throws SAXException {
-        
-        XMLEntity aux = new XMLEntity();
-        entities.push(aux);
+	/**
+	 * @see org.xml.sax.ContentHandler#startElement(java.lang.String,
+	 *      java.lang.String, java.lang.String, org.xml.sax.Attributes)
+	 */
+	public void startElement(String namespaceURI, String localName,
+			String qName, Attributes atts) throws SAXException {
 
-        for (int i = 0; i < atts.getLength(); i++) {
-            String name = atts.getLocalName(i);
-            String value = atts.getValue(i);
+		XMLEntity aux = new XMLEntity();
+		entities.push(aux);
+
+		for (int i = 0; i < atts.getLength(); i++) {
+			String name = atts.getLocalName(i);
+			String value = atts.getValue(i);
 
 			aux.putProperty(name, value);
-        }
-    }
+		}
+	}
 
-    /**
-     * @see org.xml.sax.ContentHandler#endElement(java.lang.String,
-     *      java.lang.String, java.lang.String)
-     */
-    public void endElement(String namespaceURI, String localName, String qName)
-        throws SAXException {
-        if (localName.equals("entity")){
+	/**
+	 * @see org.xml.sax.ContentHandler#endElement(java.lang.String,
+	 *      java.lang.String, java.lang.String)
+	 */
+	public void endElement(String namespaceURI, String localName, String qName)
+			throws SAXException {
+		if (localName.equals("entity")) {
 			XMLEntity aux = (XMLEntity) entities.pop();
-			try{
+			try {
 				XMLEntity last = (XMLEntity) entities.peek();
 				last.addChild(aux);
-			}catch (EmptyStackException e) {
+			} catch (EmptyStackException e) {
 			}
 			lastEntity = aux;
-        }
-    }
+		}
+	}
 
-    /**
-     * @see org.xml.sax.ContentHandler#characters(char[], int, int)
-     */
-    public void characters(char[] arg0, int arg1, int arg2)
-        throws SAXException {
-    }
+	/**
+	 * @see org.xml.sax.ContentHandler#characters(char[], int, int)
+	 */
+	public void characters(char[] arg0, int arg1, int arg2) throws SAXException {
+	}
 
-    /**
-     * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
-     */
-    public void ignorableWhitespace(char[] arg0, int arg1, int arg2)
-        throws SAXException {
-    }
+	/**
+	 * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
+	 */
+	public void ignorableWhitespace(char[] arg0, int arg1, int arg2)
+			throws SAXException {
+	}
 
-    /**
-     * @see org.xml.sax.ContentHandler#processingInstruction(java.lang.String,
-     *      java.lang.String)
-     */
-    public void processingInstruction(String arg0, String arg1)
-        throws SAXException {
-    }
+	/**
+	 * @see org.xml.sax.ContentHandler#processingInstruction(java.lang.String,
+	 *      java.lang.String)
+	 */
+	public void processingInstruction(String arg0, String arg1)
+			throws SAXException {
+	}
 
-    /**
-     * @see org.xml.sax.ContentHandler#skippedEntity(java.lang.String)
-     */
-    public void skippedEntity(String arg0) throws SAXException {
-    }
+	/**
+	 * @see org.xml.sax.ContentHandler#skippedEntity(java.lang.String)
+	 */
+	public void skippedEntity(String arg0) throws SAXException {
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return
-     */
-    public XMLEntity getXMLEntity() {
-        return lastEntity;
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return
+	 */
+	public XMLEntity getXMLEntity() {
+		return lastEntity;
+	}
 }

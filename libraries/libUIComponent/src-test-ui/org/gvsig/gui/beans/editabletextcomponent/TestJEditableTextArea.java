@@ -4,7 +4,6 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -53,29 +52,28 @@ import javax.swing.JFrame;
  */
 public class TestJEditableTextArea {
 	private static JEditableTextArea jTCA;
-	
+
 	/**
 	 * Test method for the TestJEditableTextArea class
 	 * 
 	 * @param args
 	 */
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		final int height = 40;
 		final int width = 300;
-		
+
 		// Objects creation
-		JFrame jF = new JFrame();		
+		JFrame jF = new JFrame();
 
 		jTCA = new JEditableTextArea();
 		jTCA.setPreferredSize(new Dimension(width, height));
 
-	    // Set properties
+		// Set properties
 		jF.setTitle("Test JEditableTextArea");
-	    jF.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    jF.setSize(jTCA.getPreferredSize());
-	    jF.getContentPane().add(jTCA);	
-	    
+		jF.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		jF.setSize(jTCA.getPreferredSize());
+		jF.getContentPane().add(jTCA);
+
 		jF.setVisible(true);
 	}
 }

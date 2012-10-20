@@ -48,7 +48,6 @@ import com.iver.cit.gvsig.project.Project;
 import com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction;
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
 
-
 /* CVS MESSAGES:
  *
  * $Id: LayersUngroupTocMenuEntry.java 24624 2008-11-03 08:20:00Z vcaballero $
@@ -77,13 +76,14 @@ import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
  *
  */
 /**
- * Realiza una desagrupación de capas, a partir de las capas que se encuentren activas.
- *
+ * Realiza una desagrupación de capas, a partir de las capas que se encuentren
+ * activas.
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LayersUngroupTocMenuEntry extends AbstractTocContextMenuAction {
 	public String getGroup() {
-		return "group4"; //FIXME
+		return "group4"; // FIXME
 	}
 
 	public int getGroupOrder() {
@@ -104,22 +104,22 @@ public class LayersUngroupTocMenuEntry extends AbstractTocContextMenuAction {
 
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
 		FLayer lyr = getNodeLayer(item);
-		if (!(lyr instanceof FLayers) || (lyr instanceof FLayers && lyr.getParentLayer() == null)){
+		if (!(lyr instanceof FLayers)
+				|| (lyr instanceof FLayers && lyr.getParentLayer() == null)) {
 			return false;
 		}
 		return true;
 
 	}
 
-
 	public void execute(ITocItem item, FLayer[] selectedItems) {
-		if (isTocItemBranch(item)){
-			FLayers agrupa = (FLayers)getNodeLayer(item);
-			FLayers parent=agrupa.getParentLayer();
+		if (isTocItemBranch(item)) {
+			FLayers agrupa = (FLayers) getNodeLayer(item);
+			FLayers parent = agrupa.getParentLayer();
 
-			if (parent!=null){
+			if (parent != null) {
 				getMapContext().beginAtomicEvent();
-				while (agrupa.getLayersCount() > 0){
+				while (agrupa.getLayersCount() > 0) {
 					FLayer layer = agrupa.getLayer(0);
 					agrupa.removeLayer(layer);
 					parent.addLayer(layer);
@@ -129,7 +129,8 @@ public class LayersUngroupTocMenuEntry extends AbstractTocContextMenuAction {
 
 				// TRUCO PARA REFRESCAR.
 				getMapContext().invalidate();
-				Project project=((ProjectExtension)PluginServices.getExtension(ProjectExtension.class)).getProject();
+				Project project = ((ProjectExtension) PluginServices
+						.getExtension(ProjectExtension.class)).getProject();
 				project.setModified(true);
 				PluginServices.getMainFrame().enableControls();
 			}

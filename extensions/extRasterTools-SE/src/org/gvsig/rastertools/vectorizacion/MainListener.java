@@ -43,34 +43,37 @@ import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 
 /**
- * Clase para la gestión de eventos de los componentes gráficos del panel de preproceso
- * de vectorización.
+ * Clase para la gestión de eventos de los componentes gráficos del panel de
+ * preproceso de vectorización.
  * 
  * 12/06/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
-public class MainListener implements ActionListener, IProcessActions  {
-	private MainPanel                        panel                    = null;
-	private FLyrRasterSE                     lyr                      = null;
-	
-	private GrayConversionListener           grayConvList             = null;
-	private ClipListener                     clipList                 = null;
-	private VectorListener                   vectList                 = null;
-	private StretchListener                  stretchList              = null;
-	
-	private int                              tabIndexSelected         = 0;
-	private IPreviewRenderProcess            prevRender               = null;
-	
-	private FLyrRasterSE                     clip                     = null;
-	private FLyrRasterSE                     gray                     = null;
-	private MainDialog                       dialog                   = null;
-	
+public class MainListener implements ActionListener, IProcessActions {
+	private MainPanel panel = null;
+	private FLyrRasterSE lyr = null;
+
+	private GrayConversionListener grayConvList = null;
+	private ClipListener clipList = null;
+	private VectorListener vectList = null;
+	private StretchListener stretchList = null;
+
+	private int tabIndexSelected = 0;
+	private IPreviewRenderProcess prevRender = null;
+
+	private FLyrRasterSE clip = null;
+	private FLyrRasterSE gray = null;
+	private MainDialog dialog = null;
+
 	/**
 	 * Constructor. Asigna los listeners a los componentes
+	 * 
 	 * @param prepPanel
 	 */
-	public MainListener(FLyrRasterSE lyr, MainPanel prepPanel, GrayConversionListener grayConvList, 
-			ClipListener clipList, VectorListener vectList, StretchListener stretchList) {
+	public MainListener(FLyrRasterSE lyr, MainPanel prepPanel,
+			GrayConversionListener grayConvList, ClipListener clipList,
+			VectorListener vectList, StretchListener stretchList) {
 		this.lyr = lyr;
 		setDataView(prepPanel);
 		this.grayConvList = grayConvList;
@@ -83,72 +86,90 @@ public class MainListener implements ActionListener, IProcessActions  {
 		this.stretchList.setProcessActions(this);
 		tabIndexSelected = 0;
 	}
-	
+
 	/**
-	 * Asigna la vista de datos. En este caso es el panel de preprocesado de la vectorización
+	 * Asigna la vista de datos. En este caso es el panel de preprocesado de la
+	 * vectorización
+	 * 
 	 * @param prepPanel
 	 */
 	private void setDataView(MainPanel prepPanel) {
 		this.panel = prepPanel;
-		panel.getPreviewBasePanel().getButtonsPanel().getButton(13).addActionListener(this);
-		panel.getPreviewBasePanel().getButtonsPanel().getButton(14).addActionListener(this);
-		panel.getPreviewBasePanel().getButtonsPanel().getButton(ButtonsPanel.BUTTON_CANCEL).addActionListener(this);
+		panel.getPreviewBasePanel().getButtonsPanel().getButton(13)
+				.addActionListener(this);
+		panel.getPreviewBasePanel().getButtonsPanel().getButton(14)
+				.addActionListener(this);
+		panel.getPreviewBasePanel().getButtonsPanel()
+				.getButton(ButtonsPanel.BUTTON_CANCEL).addActionListener(this);
 	}
-		
+
 	/**
 	 * Asigna el render de la preview
+	 * 
 	 * @param prevRender
 	 */
 	public void setPreviewRender(IPreviewRenderProcess prevRender) {
 		this.prevRender = prevRender;
 	}
-	
+
 	/**
 	 * Asigna el dialogo
+	 * 
 	 * @param dialog
 	 */
 	public void setDialog(MainDialog dialog) {
 		this.dialog = dialog;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
-		if(!panel.isEnableValueChangedEvent())
+		if (!panel.isEnableValueChangedEvent())
 			return;
-		
-		//Botón de pantalla siguiente
-		if(e.getSource() == panel.getPreviewBasePanel().getButtonsPanel().getButton(13)) {
-			if(tabIndexSelected < (panel.getPanelCount() - 1)) {
-				panel.getPreviewBasePanel().setUniquePanel(panel.getPanel(++tabIndexSelected));
-				panel.getPreviewBasePanel().getButtonsPanel().getButton(14).setEnabled(true);
-				if(tabIndexSelected == (panel.getPanelCount() - 1)) 
-					panel.getPreviewBasePanel().getButtonsPanel().getButton(13).setText(PluginServices.getText(this, "finalizar"));
-			} else { //Finalizar
+
+		// Botón de pantalla siguiente
+		if (e.getSource() == panel.getPreviewBasePanel().getButtonsPanel()
+				.getButton(13)) {
+			if (tabIndexSelected < (panel.getPanelCount() - 1)) {
+				panel.getPreviewBasePanel().setUniquePanel(
+						panel.getPanel(++tabIndexSelected));
+				panel.getPreviewBasePanel().getButtonsPanel().getButton(14)
+						.setEnabled(true);
+				if (tabIndexSelected == (panel.getPanelCount() - 1))
+					panel.getPreviewBasePanel().getButtonsPanel().getButton(13)
+							.setText(PluginServices.getText(this, "finalizar"));
+			} else { // Finalizar
 				vectList.setProcessSource(gray);
 				vectList.apply();
-				if(dialog != null) {
+				if (dialog != null) {
 					dialog.close();
 					return;
 				}
 			}
 		}
-		
-		//Botón de pantalla anterior		
-		if(e.getSource() == panel.getPreviewBasePanel().getButtonsPanel().getButton(14)) {
-			if(tabIndexSelected > 0) {
-				panel.getPreviewBasePanel().setUniquePanel(panel.getPanel(--tabIndexSelected));
-				panel.getPreviewBasePanel().getButtonsPanel().getButton(13).setText(PluginServices.getText(this,"siguiente"));
-				if(tabIndexSelected == 0) 
-					panel.getPreviewBasePanel().getButtonsPanel().getButton(14).setEnabled(false);
+
+		// Botón de pantalla anterior
+		if (e.getSource() == panel.getPreviewBasePanel().getButtonsPanel()
+				.getButton(14)) {
+			if (tabIndexSelected > 0) {
+				panel.getPreviewBasePanel().setUniquePanel(
+						panel.getPanel(--tabIndexSelected));
+				panel.getPreviewBasePanel().getButtonsPanel().getButton(13)
+						.setText(PluginServices.getText(this, "siguiente"));
+				if (tabIndexSelected == 0)
+					panel.getPreviewBasePanel().getButtonsPanel().getButton(14)
+							.setEnabled(false);
 			}
 		}
-				
-		//Cancelar
-		if(e.getSource() == panel.getPreviewBasePanel().getButtonsPanel().getButton(ButtonsPanel.BUTTON_CANCEL)) {
-			if(dialog != null)
+
+		// Cancelar
+		if (e.getSource() == panel.getPreviewBasePanel().getButtonsPanel()
+				.getButton(ButtonsPanel.BUTTON_CANCEL)) {
+			if (dialog != null)
 				dialog.close();
 			return;
 		}
@@ -156,25 +177,26 @@ public class MainListener implements ActionListener, IProcessActions  {
 		clipProcess();
 		grayScaleProcess();
 		stretchProcess();
-		
-		//Mostrar u ocultar preview
-		if(tabIndexSelected == 0) {
+
+		// Mostrar u ocultar preview
+		if (tabIndexSelected == 0) {
 			prevRender.setShowPreview(false);
 			panel.getPreviewBasePanel().refreshPreview();
 		} else
 			prevRender.setShowPreview(true);
-		
-		//panel.getPreviewBasePanel().refreshPreview();
+
+		// panel.getPreviewBasePanel().refreshPreview();
 	}
-	
+
 	/**
 	 * Lanza el proceso de recorte
 	 */
 	private void clipProcess() {
-		//Generación de recorte
-		if(tabIndexSelected == 1) {
-			if(clip != null) 
-				if(!RasterToolsUtil.messageBoxYesOrNot("clip_raster_again", this)) {
+		// Generación de recorte
+		if (tabIndexSelected == 1) {
+			if (clip != null)
+				if (!RasterToolsUtil.messageBoxYesOrNot("clip_raster_again",
+						this)) {
 					prevRender.setShowPreview(true);
 					panel.getPreviewBasePanel().refreshPreview();
 					return;
@@ -184,15 +206,18 @@ public class MainListener implements ActionListener, IProcessActions  {
 			clipList.apply();
 		}
 	}
-	
+
 	/**
 	 * Lanza el proceso de conversión a escala de grises
 	 */
 	private void grayScaleProcess() {
-		//Generación de raster preprocesado con escala de grises y posterización
-		if(tabIndexSelected == 2 && panel.getPanel(1) instanceof GrayConversionPanel) {
-			if(gray != null) 
-				if(!RasterToolsUtil.messageBoxYesOrNot("filter_raster_again", this)) {
+		// Generación de raster preprocesado con escala de grises y
+		// posterización
+		if (tabIndexSelected == 2
+				&& panel.getPanel(1) instanceof GrayConversionPanel) {
+			if (gray != null)
+				if (!RasterToolsUtil.messageBoxYesOrNot("filter_raster_again",
+						this)) {
 					prevRender.setShowPreview(true);
 					panel.getPreviewBasePanel().refreshPreview();
 					return;
@@ -201,15 +226,16 @@ public class MainListener implements ActionListener, IProcessActions  {
 			grayConvList.apply();
 		}
 	}
-	
+
 	/**
 	 * Lanza el proceso de generación de tramos
 	 */
 	private void stretchProcess() {
-		//Generación de tramos
-		if(tabIndexSelected == 2 && panel.getPanel(1) instanceof StretchPanel) {
-			if(gray != null) 
-				if(!RasterToolsUtil.messageBoxYesOrNot("filter_raster_again", this)) {
+		// Generación de tramos
+		if (tabIndexSelected == 2 && panel.getPanel(1) instanceof StretchPanel) {
+			if (gray != null)
+				if (!RasterToolsUtil.messageBoxYesOrNot("filter_raster_again",
+						this)) {
 					prevRender.setShowPreview(true);
 					panel.getPreviewBasePanel().refreshPreview();
 					return;
@@ -218,16 +244,20 @@ public class MainListener implements ActionListener, IProcessActions  {
 			stretchList.apply();
 		}
 	}
-			
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.slidertext.listeners.SliderListener#actionValueDragged(org.gvsig.gui.beans.slidertext.listeners.SliderEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.slidertext.listeners.SliderListener#actionValueDragged
+	 * (org.gvsig.gui.beans.slidertext.listeners.SliderEvent)
 	 */
 	public void actionValueDragged(SliderEvent e) {
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.IProcessActions#interrupted()
 	 */
 	public void interrupted() {
@@ -235,27 +265,30 @@ public class MainListener implements ActionListener, IProcessActions  {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.IProcessActions#end(java.lang.Object)
 	 */
 	public void end(Object param) {
-		if(param instanceof Object[] && ((Object[])param).length == 2) {
-			if(((Object[])param)[0] instanceof ClipProcess) {
-				clip = (FLyrRasterSE)((Object[])param)[1]; 
-				if(grayConvList != null)
+		if (param instanceof Object[] && ((Object[]) param).length == 2) {
+			if (((Object[]) param)[0] instanceof ClipProcess) {
+				clip = (FLyrRasterSE) ((Object[]) param)[1];
+				if (grayConvList != null)
 					grayConvList.refreshPreview();
-				if(stretchList != null)
+				if (stretchList != null)
 					stretchList.refreshPreview();
 			}
-			if(((Object[])param)[0] instanceof GrayConversionProcess ||
-			   ((Object[])param)[0] instanceof StretchProcess) {
-				gray = (FLyrRasterSE)((Object[])param)[1]; 
+			if (((Object[]) param)[0] instanceof GrayConversionProcess
+					|| ((Object[]) param)[0] instanceof StretchProcess) {
+				gray = (FLyrRasterSE) ((Object[]) param)[1];
 			}
-			if(((Object[])param)[0] instanceof VectorProcess) {
+			if (((Object[]) param)[0] instanceof VectorProcess) {
 				if (RasterToolsUtil.messageBoxYesOrNot("cargar_toc", this)) {
 					try {
-						RasterToolsUtil.loadLayer(null, (FLayer)((Object[])param)[1]);
+						RasterToolsUtil.loadLayer(null,
+								(FLayer) ((Object[]) param)[1]);
 					} catch (RasterNotLoadException e) {
-						RasterToolsUtil.messageBoxError("error_loading_layer", null, e);
+						RasterToolsUtil.messageBoxError("error_loading_layer",
+								null, e);
 					}
 				}
 			}

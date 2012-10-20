@@ -46,127 +46,132 @@
  */
 package org.gvsig.remoteClient.arcims.styling.symbols;
 
-
-
 import org.gvsig.remoteClient.arcims.utils.ServiceInfoTags;
 
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 
-
 /**
  * @author jsanz
- *
+ * 
  */
-public class ArcImsGradientFillSymbol extends AbstractSymbol implements IArcIMSSymbol {
-    public static final String TAG = ServiceInfoTags.tSIMPLEPOLYGONSYMBOL;
-    private String finishcolor;
-    private String startcolor;
-    private String transparency;
-    private String type;
+public class ArcImsGradientFillSymbol extends AbstractSymbol implements
+		IArcIMSSymbol {
+	public static final String TAG = ServiceInfoTags.tSIMPLEPOLYGONSYMBOL;
+	private String finishcolor;
+	private String startcolor;
+	private String transparency;
+	private String type;
 
-    /**
+	/**
      *
      */
-    public ArcImsGradientFillSymbol() {
-        finishcolor = "0,0,0";
-        startcolor = "255,255,255";
-        transparency = "1.0";
-        type = "bdiagonal";
-    }
+	public ArcImsGradientFillSymbol() {
+		finishcolor = "0,0,0";
+		startcolor = "255,255,255";
+		transparency = "1.0";
+		type = "bdiagonal";
+	}
 
-    /**
-     * Generates an XML representation of the Symbol
-     */
-    public String toString() {
-        String start = "<" + ArcImsGradientFillSymbol.TAG;
-        String end = "/>\r\n";
+	/**
+	 * Generates an XML representation of the Symbol
+	 */
+	public String toString() {
+		String start = "<" + ArcImsGradientFillSymbol.TAG;
+		String end = "/>\r\n";
 
-        return start + getParam() + end;
-    }
+		return start + getParam() + end;
+	}
 
-    protected String getParam() {
-        String param = new String();
+	protected String getParam() {
+		String param = new String();
 
-        //Checks for every parameter
-        if (SymbolUtils.isVoid(finishcolor)) {
-            param += (" finishcolor=\"" + finishcolor + "\"");
-        }
+		// Checks for every parameter
+		if (SymbolUtils.isVoid(finishcolor)) {
+			param += (" finishcolor=\"" + finishcolor + "\"");
+		}
 
-        if (SymbolUtils.isVoid(startcolor)) {
-            param += (" startcolor=\"" + startcolor + "\"");
-        }
+		if (SymbolUtils.isVoid(startcolor)) {
+			param += (" startcolor=\"" + startcolor + "\"");
+		}
 
-        if (SymbolUtils.isVoid(transparency)) {
-            param += (" transparency=\"" + transparency + "\"");
-        }
+		if (SymbolUtils.isVoid(transparency)) {
+			param += (" transparency=\"" + transparency + "\"");
+		}
 
-        if (SymbolUtils.isVoid(type)) {
-            param += (" type=\"" + type + "\"");
-        }
+		if (SymbolUtils.isVoid(type)) {
+			param += (" type=\"" + type + "\"");
+		}
 
-        return param;
-    }
+		return param;
+	}
 
-    /**
-     * @return Returns the finishcolor.
-     */
-    public String getFinishcolor() {
-        return finishcolor;
-    }
+	/**
+	 * @return Returns the finishcolor.
+	 */
+	public String getFinishcolor() {
+		return finishcolor;
+	}
 
-    /**
-     * @param finishcolor The finishcolor to set.
-     */
-    public void setFinishcolor(String finishcolor) {
-        this.finishcolor = finishcolor;
-    }
+	/**
+	 * @param finishcolor
+	 *            The finishcolor to set.
+	 */
+	public void setFinishcolor(String finishcolor) {
+		this.finishcolor = finishcolor;
+	}
 
-    /**
-     * @return Returns the startcolor.
-     */
-    public String getStartcolor() {
-        return startcolor;
-    }
+	/**
+	 * @return Returns the startcolor.
+	 */
+	public String getStartcolor() {
+		return startcolor;
+	}
 
-    /**
-     * @param startcolor The startcolor to set.
-     */
-    public void setStartcolor(String startcolor) {
-        this.startcolor = startcolor;
-    }
+	/**
+	 * @param startcolor
+	 *            The startcolor to set.
+	 */
+	public void setStartcolor(String startcolor) {
+		this.startcolor = startcolor;
+	}
 
-    /**
-     * @return Returns the transparency.
-     */
-    public String getTransparency() {
-        return transparency;
-    }
+	/**
+	 * @return Returns the transparency.
+	 */
+	public String getTransparency() {
+		return transparency;
+	}
 
-    /**
-     * @param transparency The transparency to set.
-     */
-    public void setTransparency(String transparency) {
-        this.transparency = transparency;
-    }
+	/**
+	 * @param transparency
+	 *            The transparency to set.
+	 */
+	public void setTransparency(String transparency) {
+		this.transparency = transparency;
+	}
 
-    /**
-     * @return Returns the type.
-     */
-    public String getType() {
-        return type;
-    }
+	/**
+	 * @return Returns the type.
+	 */
+	public String getType() {
+		return type;
+	}
 
-    /**
-     * @param type The type to set.
-     */
-    public void setType(String type) {
-        this.type = type;
-    }
+	/**
+	 * @param type
+	 *            The type to set.
+	 */
+	public void setType(String type) {
+		this.type = type;
+	}
 
-    /* (non-Javadoc)
-     * @see org.gvsig.remoteClient.arcims.styling.symbols.IArcIMSSymbol#getFSymbol()
-     */
-    public ISymbol getFSymbol() {
-        return ArcImsFSymbolFactory.getFSymbol(this);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.arcims.styling.symbols.IArcIMSSymbol#getFSymbol()
+	 */
+	public ISymbol getFSymbol() {
+		return ArcImsFSymbolFactory.getFSymbol(this);
+	}
 }

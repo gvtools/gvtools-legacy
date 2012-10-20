@@ -25,9 +25,10 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.cit.gvsig.addlayer.fileopen.AbstractFileOpen;
 import com.iver.cit.gvsig.fmap.MapControl;
+
 /**
  * Clase que indicará que ficheros puede tratar al panel de apertura de ficheros
- *
+ * 
  * @version 04/09/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
@@ -41,13 +42,14 @@ public class TableFileOpen extends AbstractFileOpen {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.gui.wizards.IFileOpen#execute(java.io.File[])
 	 */
 	public Rectangle2D createLayer(File file, MapControl mapControl,
 			CoordinateReferenceSystem crs) {
 		return null;
 	}
-	
+
 	@Override
 	public boolean accepts(File file) {
 		return false;

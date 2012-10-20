@@ -9,11 +9,10 @@ import com.hardcode.gdbms.engine.instruction.EvaluationException;
 import com.hardcode.gdbms.engine.instruction.Expression;
 import com.hardcode.gdbms.engine.values.Value;
 
-
 /**
- * DataSource que añade características de proyección sobre campos al
- * DataSource subyacente.
- *
+ * DataSource que añade características de proyección sobre campos al DataSource
+ * subyacente.
+ * 
  * @author Fernando González Cortés
  */
 public class ProjectionDataSource extends OperationDataSource {
@@ -23,13 +22,16 @@ public class ProjectionDataSource extends OperationDataSource {
 
 	/**
 	 * Creates a new ProjectionDataSource object.
-	 *
-	 * @param source DataSource origen de la información
-	 * @param fields Con los índices de los campos proyectados
-	 * @param aliases Nombres asignados en la instrucción a los campos
+	 * 
+	 * @param source
+	 *            DataSource origen de la información
+	 * @param fields
+	 *            Con los índices de los campos proyectados
+	 * @param aliases
+	 *            Nombres asignados en la instrucción a los campos
 	 */
 	public ProjectionDataSource(DataSource source, Expression[] fields,
-		String[] aliases) {
+			String[] aliases) {
 		this.source = source;
 		this.fields = fields;
 		this.aliases = aliases;
@@ -38,10 +40,11 @@ public class ProjectionDataSource extends OperationDataSource {
 	/**
 	 * Dado el índice de un campo en la tabla proyección, se devuelve el índice
 	 * real en el DataSource subyacente
-	 *
-	 * @param index índice del campo cuyo índice en el DataSource subyacente se
-	 * 		  quiere obtener
-	 *
+	 * 
+	 * @param index
+	 *            índice del campo cuyo índice en el DataSource subyacente se
+	 *            quiere obtener
+	 * 
 	 * @return índice del campo en el DataSource subyacente
 	 */
 	private Expression getFieldByIndex(int index) {
@@ -100,11 +103,11 @@ public class ProjectionDataSource extends OperationDataSource {
 	 * @see com.hardcode.gdbms.data.DataSource#
 	 */
 	public Value getFieldValue(long rowIndex, int fieldId)
-		throws ReadDriverException {
+			throws ReadDriverException {
 		try {
 			return getFieldByIndex(fieldId).evaluate(rowIndex);
 		} catch (EvaluationException e) {
-			throw new ReadDriverException(getName(),e);
+			throw new ReadDriverException(getName(), e);
 		}
 	}
 
@@ -127,7 +130,7 @@ public class ProjectionDataSource extends OperationDataSource {
 	 */
 	public int getFieldType(int i) throws ReadDriverException {
 		throw new UnsupportedOperationException(
-			"cannot get the field type of an expression");
+				"cannot get the field type of an expression");
 	}
 
 	/**
@@ -135,11 +138,11 @@ public class ProjectionDataSource extends OperationDataSource {
 	 */
 	public Memento getMemento() throws MementoException {
 		return new OperationLayerMemento(getName(),
-			new Memento[] { source.getMemento() }, getSQL());
+				new Memento[] { source.getMemento() }, getSQL());
 	}
 
 	public int getFieldWidth(int i) throws ReadDriverException {
 		throw new UnsupportedOperationException(
-		"cannot get the field width of an expression");
+				"cannot get the field width of an expression");
 	}
 }

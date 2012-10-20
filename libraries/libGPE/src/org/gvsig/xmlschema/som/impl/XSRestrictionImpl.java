@@ -64,10 +64,11 @@ import org.gvsig.xmlschema.som.IXSSchema;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class XSRestrictionImpl extends XSComponentImpl implements IXSRestriction{
+public class XSRestrictionImpl extends XSComponentImpl implements
+		IXSRestriction {
 
 	public XSRestrictionImpl(IXSSchema schema) {
-		super(schema);		
+		super(schema);
 	}
 
 }

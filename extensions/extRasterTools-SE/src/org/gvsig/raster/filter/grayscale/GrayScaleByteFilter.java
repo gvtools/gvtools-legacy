@@ -19,33 +19,39 @@
 package org.gvsig.raster.filter.grayscale;
 
 /**
- * Filtro para la conversión a escala de grises de tipo byte
- * 26/06/2008
+ * Filtro para la conversión a escala de grises de tipo byte 26/06/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class GrayScaleByteFilter extends GrayScaleFilter {
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.bands.ColorTableFilter#process(int, int)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.bands.ColorTableFilter#process(int,
+	 * int)
 	 */
 	public void process(int col, int line) throws InterruptedException {
 		byte value = 0;
 		switch (type) {
 		case 0:
-		case 4:	value = raster.getElemByte(line, col, 0);
-				break;
-		case 1:	value = raster.getElemByte(line, col, 1);
-				break;
-		case 2:	value = raster.getElemByte(line, col, 2);
-				break;
-		case 3:	int r = (raster.getElemByte(line, col, 0) & 0xff);
-				int g = (raster.getElemByte(line, col, 1) & 0xff);
-				int b = (raster.getElemByte(line, col, 2) & 0xff);
-				value = (byte)((r + g + b) / 3);
-				break;
+		case 4:
+			value = raster.getElemByte(line, col, 0);
+			break;
+		case 1:
+			value = raster.getElemByte(line, col, 1);
+			break;
+		case 2:
+			value = raster.getElemByte(line, col, 2);
+			break;
+		case 3:
+			int r = (raster.getElemByte(line, col, 0) & 0xff);
+			int g = (raster.getElemByte(line, col, 1) & 0xff);
+			int b = (raster.getElemByte(line, col, 2) & 0xff);
+			value = (byte) ((r + g + b) / 3);
+			break;
 		}
-		
-		for (int i = 0; i < rasterResult.getBandCount(); i++) 
+
+		for (int i = 0; i < rasterResult.getBandCount(); i++)
 			rasterResult.setElem(line, col, i, value);
 	}
 }

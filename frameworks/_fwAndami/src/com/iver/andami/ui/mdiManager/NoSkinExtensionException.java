@@ -52,6 +52,7 @@ public class NoSkinExtensionException extends RuntimeException {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
 	/**
 	 * @param message
 	 */
@@ -59,6 +60,7 @@ public class NoSkinExtensionException extends RuntimeException {
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
+
 	/**
 	 * @param message
 	 * @param cause
@@ -67,6 +69,7 @@ public class NoSkinExtensionException extends RuntimeException {
 		super(message, cause);
 		// TODO Auto-generated constructor stub
 	}
+
 	/**
 	 * @param cause
 	 */

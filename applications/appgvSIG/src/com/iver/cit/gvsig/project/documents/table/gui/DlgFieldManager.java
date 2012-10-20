@@ -108,31 +108,10 @@ public class DlgFieldManager extends JPanel implements IWindow {
 
 	private FPanelCreateField panelNewField = new FPanelCreateField();
 
-
 	// private IFieldManager fieldManager;;
 	private EditableAdapter edAdapter = null;
 
 	private JPanel jPanelButtons = null;
-
-	private class MyFieldDescription {
-		boolean isOriginal;
-
-		FieldDescription fieldDesc;
-
-		MyFieldDescription(FieldDescription fieldDesc, boolean isOriginal) {
-			this.fieldDesc = fieldDesc;
-			this.isOriginal = isOriginal;
-		}
-
-		FieldDescription getFieldDescription() {
-			return fieldDesc;
-		}
-
-		boolean isOriginal() {
-			return isOriginal;
-		}
-
-	}
 
 	private class MyTableModel extends AbstractTableModel {
 		IEditableSource myIes;
@@ -159,31 +138,31 @@ public class DlgFieldManager extends JPanel implements IWindow {
 			myFields = myIes.getFieldsDescription();
 			FieldDescription aux = myFields[rowIndex];
 			switch (columnIndex) {
-				case 0:
-					return aux.getFieldAlias();
-				case 1:
-					String strType = null;
-					int type = aux.getFieldType();
-					if (type == Types.VARCHAR)
-						strType = "String";
-					if (type == Types.DOUBLE)
-						strType = "Double";
-					if (type == Types.INTEGER)
-						strType = "Integer";
-					if (type == Types.BOOLEAN)
-						strType = "Boolean";
-					if (type == Types.DATE)
-						strType = "Date";
+			case 0:
+				return aux.getFieldAlias();
+			case 1:
+				String strType = null;
+				int type = aux.getFieldType();
+				if (type == Types.VARCHAR)
+					strType = "String";
+				if (type == Types.DOUBLE)
+					strType = "Double";
+				if (type == Types.INTEGER)
+					strType = "Integer";
+				if (type == Types.BOOLEAN)
+					strType = "Boolean";
+				if (type == Types.DATE)
+					strType = "Date";
 
-					return strType;
-				case 2:
-					return new Integer(aux.getFieldLength());
-				case 3:
-					return new Integer(aux.getFieldDecimalCount());
-				case 4:
-					return aux.getDefaultValue();
+				return strType;
+			case 2:
+				return new Integer(aux.getFieldLength());
+			case 3:
+				return new Integer(aux.getFieldDecimalCount());
+			case 4:
+				return aux.getDefaultValue();
 
-				}
+			}
 			return null;
 		}
 
@@ -257,7 +236,7 @@ public class DlgFieldManager extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes
-	 *
+	 * 
 	 */
 	public DlgFieldManager(IEditableSource ies) {
 		super();
@@ -283,7 +262,7 @@ public class DlgFieldManager extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 */
 	private void initialize() {
 		FlowLayout flowLayout = new FlowLayout();
@@ -293,9 +272,10 @@ public class DlgFieldManager extends JPanel implements IWindow {
 		borderLayout.setHgap(15);
 		borderLayout.setVgap(15);
 		jLabel = new JLabel();
-		jLabel.setText(PluginServices.getText(this, "add_delete_edit_fields")+": ");
+		jLabel.setText(PluginServices.getText(this, "add_delete_edit_fields")
+				+ ": ");
 		this.setLayout(borderLayout);
-		this.setSize(new java.awt.Dimension(663,404));
+		this.setSize(new java.awt.Dimension(663, 404));
 		this.setPreferredSize(new java.awt.Dimension(getWidth(), getHeight()));
 		JPanel jPanelNorth = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		jPanelNorth.add(jLabel);
@@ -315,8 +295,8 @@ public class DlgFieldManager extends JPanel implements IWindow {
 
 	public WindowInfo getWindowInfo() {
 		if (windowInfo == null) {
-			windowInfo = new WindowInfo(WindowInfo.MODALDIALOG | WindowInfo.PALETTE
-					| WindowInfo.RESIZABLE);
+			windowInfo = new WindowInfo(WindowInfo.MODALDIALOG
+					| WindowInfo.PALETTE | WindowInfo.RESIZABLE);
 			windowInfo.setTitle(PluginServices.getText(this, "field_manager"));
 			windowInfo.setHeight(this.getHeight());
 			windowInfo.setWidth(this.getWidth());
@@ -327,7 +307,7 @@ public class DlgFieldManager extends JPanel implements IWindow {
 	/**
 	 * Convierte lo que hay en la tabla en una definición de campos adecuada
 	 * para crear un LayerDefinition
-	 *
+	 * 
 	 * @return
 	 */
 	public FieldDescription[] getFieldsDescription() {
@@ -362,13 +342,13 @@ public class DlgFieldManager extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
-			jScrollPane.setPreferredSize(new java.awt.Dimension(482,350));
+			jScrollPane.setPreferredSize(new java.awt.Dimension(482, 350));
 			jScrollPane.setViewportView(getJTableFields());
 		}
 		return jScrollPane;
@@ -376,7 +356,7 @@ public class DlgFieldManager extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jTableFields
-	 *
+	 * 
 	 * @return javax.swing.JTable
 	 */
 	private JTable getJTableFields() {
@@ -401,12 +381,9 @@ public class DlgFieldManager extends JPanel implements IWindow {
 					} else {
 						jBtnDeleteField.setEnabled(true);
 					}
-					if (jTableFields.getSelectedRows().length != 1)
-					{
+					if (jTableFields.getSelectedRows().length != 1) {
 						getJBtnRenameField().setEnabled(false);
-					}
-					else
-					{
+					} else {
 						getJBtnRenameField().setEnabled(true);
 					}
 
@@ -419,7 +396,7 @@ public class DlgFieldManager extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jBtnNewField
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getJBtnNewField() {
@@ -430,66 +407,93 @@ public class DlgFieldManager extends JPanel implements IWindow {
 				private ArrayList tempFieldNames = new ArrayList();
 
 				{
-					try{
+					try {
 						String[] f = edAdapter.getRecordset().getFieldNames();
 						for (int i = 0; i < f.length; i++) {
 							tempFieldNames.add(f[i]);
 						}
-					} catch (Exception ex) {}
+					} catch (Exception ex) {
+					}
 				}
 
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					ActionListener okAction;
 					okAction = new java.awt.event.ActionListener() {
 
-						public void actionPerformed(java.awt.event.ActionEvent e){
+						public void actionPerformed(java.awt.event.ActionEvent e) {
 							try {
-								FieldDescription fld = panelNewField.getFieldDescription();
-								if (fld.getFieldType() == Types.VARCHAR && fld.getFieldLength()>MAX_FIELD_LENGTH) {
-									JOptionPane.showMessageDialog(DlgFieldManager.this, PluginServices.getText(this, "max_length_is") + ": " + MAX_FIELD_LENGTH + ".");
+								FieldDescription fld = panelNewField
+										.getFieldDescription();
+								if (fld.getFieldType() == Types.VARCHAR
+										&& fld.getFieldLength() > MAX_FIELD_LENGTH) {
+									JOptionPane.showMessageDialog(
+											DlgFieldManager.this,
+											PluginServices.getText(this,
+													"max_length_is")
+													+ ": "
+													+ MAX_FIELD_LENGTH + ".");
 									fld.setFieldLength(MAX_FIELD_LENGTH);
 								}
-								if (fld.getFieldType() == Types.INTEGER && fld.getFieldLength()>MAX_INT_LENGTH) {
-									JOptionPane.showMessageDialog(DlgFieldManager.this,
-											PluginServices.getText(this, "DBF_files") + ": " +
-											PluginServices.getText(this, "max_length_is") + ": " + MAX_INT_LENGTH + ".");
-								}								
-								if (NumberUtilities.isNumeric(fld.getFieldType())){
-									try{
-										Double.parseDouble(fld.getDefaultValue().toString().trim());
-									} catch (NumberFormatException e1){
-										if (fld.getDefaultValue().toString().trim().equals("")){
-											fld.setDefaultValue(ValueFactory.createNullValue());
+								if (fld.getFieldType() == Types.INTEGER
+										&& fld.getFieldLength() > MAX_INT_LENGTH) {
+									JOptionPane.showMessageDialog(
+											DlgFieldManager.this,
+											PluginServices.getText(this,
+													"DBF_files")
+													+ ": "
+													+ PluginServices.getText(
+															this,
+															"max_length_is")
+													+ ": "
+													+ MAX_INT_LENGTH
+													+ ".");
+								}
+								if (NumberUtilities.isNumeric(fld
+										.getFieldType())) {
+									try {
+										Double.parseDouble(fld
+												.getDefaultValue().toString()
+												.trim());
+									} catch (NumberFormatException e1) {
+										if (fld.getDefaultValue().toString()
+												.trim().equals("")) {
+											fld.setDefaultValue(ValueFactory
+													.createNullValue());
 										} else {
-											fld.setDefaultValue(ValueFactory.createValueByType("0",fld.getFieldType()));
+											fld.setDefaultValue(ValueFactory
+													.createValueByType("0",
+															fld.getFieldType()));
 										}
 									}
 								}
 
-								if (edAdapter.getRecordset().getFieldIndexByName(fld.getFieldAlias()) != -1)
-								{
-									JOptionPane.showMessageDialog(
-											null,
-											PluginServices.getText(this, "field_already_exists"));
+								if (edAdapter.getRecordset()
+										.getFieldIndexByName(
+												fld.getFieldAlias()) != -1) {
+									JOptionPane.showMessageDialog(null,
+											PluginServices.getText(this,
+													"field_already_exists"));
 									return;
 								}
 								tempFieldNames.add(fld.getFieldAlias());
 								edAdapter.addField(fld);
 								jTableFields.revalidate();
-								PluginServices.getMDIManager().closeWindow(panelNewField);
+								PluginServices.getMDIManager().closeWindow(
+										panelNewField);
 							} catch (ParseException e2) {
 								NotificationManager.addError(e2);
 							} catch (ReadDriverException e3) {
 								NotificationManager.addError(e3);
 							}
 
-
 						}
 					};
 					panelNewField.setOkAction(okAction);
-					String[] names = (String[]) tempFieldNames.toArray(new String[0]);
+					String[] names = (String[]) tempFieldNames
+							.toArray(new String[0]);
 					panelNewField.setCurrentFieldNames(names);
-					panelNewField = (FPanelCreateField) PluginServices.getMDIManager().addWindow(panelNewField);
+					panelNewField = (FPanelCreateField) PluginServices
+							.getMDIManager().addWindow(panelNewField);
 				}
 			});
 		}
@@ -498,23 +502,24 @@ public class DlgFieldManager extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jButton
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getJBtnDelete() {
 		if (jBtnDeleteField == null) {
 			jBtnDeleteField = new JButton();
-			jBtnDeleteField.setText(PluginServices.getText(this, "delete_field"));
+			jBtnDeleteField.setText(PluginServices
+					.getText(this, "delete_field"));
 			jBtnDeleteField
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
 							int[] selecteds = jTableFields.getSelectedRows();
 							TableModel tm = jTableFields.getModel();
 
-							if(jTableFields.getRowCount() > 0)
-								for (int i = selecteds.length - 1; i >= 0; i--)
-								{
-									String fieldName = (String) tm.getValueAt(selecteds[i],0);
+							if (jTableFields.getRowCount() > 0)
+								for (int i = selecteds.length - 1; i >= 0; i--) {
+									String fieldName = (String) tm.getValueAt(
+											selecteds[i], 0);
 									try {
 										edAdapter.removeField(fieldName);
 
@@ -535,55 +540,63 @@ public class DlgFieldManager extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jBtnRenameField
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getJBtnRenameField() {
 		if (jBtnRenameField == null) {
 			jBtnRenameField = new JButton();
-			jBtnRenameField.setText(PluginServices.getText(this, "rename_field"));
-			jBtnRenameField.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					int[] selecteds = jTableFields.getSelectedRows();
-					TableModel tm = jTableFields.getModel();
+			jBtnRenameField.setText(PluginServices
+					.getText(this, "rename_field"));
+			jBtnRenameField
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							int[] selecteds = jTableFields.getSelectedRows();
+							TableModel tm = jTableFields.getModel();
 
+							for (int i = selecteds.length - 1; i >= 0; i--) {
+								String fieldName = (String) tm.getValueAt(
+										selecteds[i], 0);
+								try {
+									String newName = JOptionPane
+											.showInputDialog(
+													(Component) PluginServices
+															.getMDIManager()
+															.getActiveWindow(),
+													PluginServices
+															.getText(this,
+																	"please_insert_new_field_name"),
+													fieldName);
+									if (newName == null)
+										return;
+									if (edAdapter.getRecordset()
+											.getFieldIndexByName(newName) != -1) {
+										JOptionPane
+												.showMessageDialog(
+														null,
+														PluginServices
+																.getText(this,
+																		"field_already_exists"));
+										return;
+									}
 
-					for (int i = selecteds.length - 1; i >= 0; i--)
-					{
-						String fieldName = (String) tm.getValueAt(selecteds[i],0);
-						try {
-							String newName = JOptionPane.showInputDialog(
-									(Component) PluginServices.getMDIManager().getActiveWindow(),
-									PluginServices.getText(this, "please_insert_new_field_name"),
-									fieldName
-									);
-							if (newName == null) return;
-							if (edAdapter.getRecordset().getFieldIndexByName(newName) != -1)
-							{
-								JOptionPane.showMessageDialog(
-										null,
-										PluginServices.getText(this, "field_already_exists"));
-								return;
+									edAdapter.renameField(fieldName, newName);
+								} catch (ReadDriverException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
 							}
+							jTableFields.repaint();
 
-
-							edAdapter.renameField(fieldName, newName);
-						} catch (ReadDriverException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
 						}
-					}
-					jTableFields.repaint();
-
-				}
-			});
+					});
 		}
 		return jBtnRenameField;
 	}
 
 	/**
 	 * This method initializes jBtnOK
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getJBtnOK() {
@@ -592,7 +605,8 @@ public class DlgFieldManager extends JPanel implements IWindow {
 			jBtnOK.setText(PluginServices.getText(this, "aceptar"));
 			jBtnOK.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					PluginServices.getMDIManager().closeWindow(DlgFieldManager.this);
+					PluginServices.getMDIManager().closeWindow(
+							DlgFieldManager.this);
 				}
 			});
 		}
@@ -601,7 +615,7 @@ public class DlgFieldManager extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jButton
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getJBtnCancel() {
@@ -610,7 +624,8 @@ public class DlgFieldManager extends JPanel implements IWindow {
 			jBtnCancel.setText(PluginServices.getText(this, "cancelar"));
 			jBtnCancel.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					PluginServices.getMDIManager().closeWindow(DlgFieldManager.this);
+					PluginServices.getMDIManager().closeWindow(
+							DlgFieldManager.this);
 				}
 			});
 			jBtnCancel.setVisible(false);
@@ -620,7 +635,7 @@ public class DlgFieldManager extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jPanelButtons
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanelButtons() {

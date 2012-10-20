@@ -50,12 +50,10 @@ public class AddFieldCommand extends AbstractCommand {
 	EditableAdapter edAdapter;
 	InternalField field;
 
-	public AddFieldCommand(EditableAdapter edAdapter, InternalField field)
-	{
+	public AddFieldCommand(EditableAdapter edAdapter, InternalField field) {
 		this.edAdapter = edAdapter;
 		this.field = field;
 	}
-
 
 	public void undo() throws EditionCommandException {
 		edAdapter.undoAddField(field);
@@ -65,7 +63,8 @@ public class AddFieldCommand extends AbstractCommand {
 		try {
 			edAdapter.doAddField(field);
 		} catch (ReadDriverException e) {
-			throw new EditionCommandException(edAdapter.getWriter().getName(),e);
+			throw new EditionCommandException(edAdapter.getWriter().getName(),
+					e);
 		}
 	}
 
@@ -74,5 +73,3 @@ public class AddFieldCommand extends AbstractCommand {
 	}
 
 }
-
-

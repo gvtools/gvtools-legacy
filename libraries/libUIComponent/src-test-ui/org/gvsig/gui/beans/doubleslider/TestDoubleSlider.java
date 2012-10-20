@@ -38,9 +38,9 @@ public class TestDoubleSlider implements DoubleSliderListener {
 	}
 
 	/**
-	 * This method initializes multiSlider	
-	 * 	
-	 * @return borsanza.src.multislider.MultiSlider	
+	 * This method initializes multiSlider
+	 * 
+	 * @return borsanza.src.multislider.MultiSlider
 	 */
 	private DoubleSlider getMultiSlider() {
 		if (doubleSlider == null) {
@@ -53,9 +53,9 @@ public class TestDoubleSlider implements DoubleSliderListener {
 	}
 
 	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel() {
 		if (jPanel == null) {

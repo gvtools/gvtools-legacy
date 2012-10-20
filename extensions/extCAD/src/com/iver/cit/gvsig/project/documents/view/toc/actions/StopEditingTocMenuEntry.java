@@ -9,7 +9,7 @@ import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
 
 /**
  * Termina la edición de la capa seleccionada.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class StopEditingTocMenuEntry extends AbstractTocContextMenuAction {
@@ -34,12 +34,15 @@ public class StopEditingTocMenuEntry extends AbstractTocContextMenuAction {
 	}
 
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
-		return (isTocItemBranch(item)) && (selectedItems.length == 1 && selectedItems[0].isAvailable() && selectedItems[0] instanceof FLyrVect) && ((FLyrVect)selectedItems[0]).isEditing();
+		return (isTocItemBranch(item))
+				&& (selectedItems.length == 1 && selectedItems[0].isAvailable() && selectedItems[0] instanceof FLyrVect)
+				&& ((FLyrVect) selectedItems[0]).isEditing();
 	}
 
 	public void execute(ITocItem item, FLayer[] selectedItems) {
-		StopEditing stopEditind=(StopEditing)PluginServices.getExtension(StopEditing.class);
+		StopEditing stopEditind = (StopEditing) PluginServices
+				.getExtension(StopEditing.class);
 		stopEditind.execute("STOPEDITING");
 		PluginServices.getMainFrame().enableControls();
-   }
+	}
 }

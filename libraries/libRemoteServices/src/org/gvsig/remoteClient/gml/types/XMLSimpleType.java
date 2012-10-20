@@ -83,7 +83,7 @@ import org.gvsig.remoteClient.gml.exceptions.GMLInvalidFormatException;
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  * 
  */
-public class XMLSimpleType implements IXMLType{
+public class XMLSimpleType implements IXMLType {
 	public static final String STRING = "xs:string";
 	public static final String INTEGER = "xs:integer";
 	public static final String DOUBLE = "xs:double";
@@ -94,16 +94,16 @@ public class XMLSimpleType implements IXMLType{
 	public static final String DECIMAL = "xs:decimal";
 	public static final String SHORT = "xs:short";
 	public static final String DATETIME = "xs:dateTime";
-	
+
 	private String type = null;
 	private String name = null;
-	
+
 	public XMLSimpleType(String type) {
 		super();
 		this.name = type;
 		this.type = type;
 	}
-	
+
 	public XMLSimpleType(String name, String type) {
 		super();
 		this.name = name;
@@ -111,56 +111,58 @@ public class XMLSimpleType implements IXMLType{
 	}
 
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.remoteClient.gml.IXMLType#getName()
 	 */
 	public String getName() {
 		return name;
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.remoteClient.gml.IXMLType#getType()
 	 */
 	public int getType() {
 		return IXMLType.SIMPLE;
-	}	
-	
+	}
+
 	/**
-	 * @param type The type to set.
+	 * @param type
+	 *            The type to set.
 	 */
 	public void setType(String type) {
-		this.type = type;	
-	}	
+		this.type = type;
+	}
 
-	public Object getJavaType(String value)throws GMLException{
-		if (value == null){
-			return null;			
+	public Object getJavaType(String value) throws GMLException {
+		if (value == null) {
+			return null;
 		}
-		try{
-			if (type.equals(STRING)){
+		try {
+			if (type.equals(STRING)) {
 				return value;
-			}else if (type.equals(INTEGER)){
+			} else if (type.equals(INTEGER)) {
 				return new Integer(value);
-			}else if (type.equals(DOUBLE)){
+			} else if (type.equals(DOUBLE)) {
 				return new Double(value);
-			}else if (type.equals(FLOAT)){
+			} else if (type.equals(FLOAT)) {
 				return new Float(value);
-			}else if (type.equals(BOOLEAN)){
+			} else if (type.equals(BOOLEAN)) {
 				return new Boolean(value);
-			}else if (type.equals(DECIMAL)){
+			} else if (type.equals(DECIMAL)) {
 				return new Double(value);
 			}
-		}catch (Exception e){
+		} catch (Exception e) {
 			/*********************************************************
-			 * TIO CAPTURA AQUI "e" que te dirá que typo ha fallado
-			 * y metelo en el constructor de Invalid Fromat exception
+			 * TIO CAPTURA AQUI "e" que te dirá que typo ha fallado y metelo en
+			 * el constructor de Invalid Fromat exception
 			 * 
 			 *********************************************************/
 			throw new GMLInvalidFormatException();
 		}
 		return value;
 	}
-	
-	
+
 }

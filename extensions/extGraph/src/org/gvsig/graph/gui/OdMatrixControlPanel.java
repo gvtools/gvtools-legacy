@@ -8,14 +8,19 @@ package org.gvsig.graph.gui;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Rectangle;
 import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -33,11 +38,6 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.LayersIterator;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.JTextField;
-import javax.swing.JTextArea;
-import java.awt.Font;
 
 /**
  * 
@@ -55,7 +55,7 @@ public class OdMatrixControlPanel extends JPanel implements IWindow {
 	public static int FILE_FORMAT_MANY_COLS = 1;
 
 	private MapContext mapContext;
-	
+
 	private DefaultComboBoxModel cboLayerOriginsModel;
 	private DefaultComboBoxModel cboLayerDestinationsModel;
 
@@ -63,9 +63,9 @@ public class OdMatrixControlPanel extends JPanel implements IWindow {
 	private boolean okPressed = false;
 
 	/**
-	 * This method initializes txtTolerance	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes txtTolerance
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getTxtTolerance() {
 		if (txtTolerance == null) {
@@ -77,9 +77,9 @@ public class OdMatrixControlPanel extends JPanel implements IWindow {
 	}
 
 	/**
-	 * This method initializes txtFormatAreaDescription	
-	 * 	
-	 * @return javax.swing.JTextArea	
+	 * This method initializes txtFormatAreaDescription
+	 * 
+	 * @return javax.swing.JTextArea
 	 */
 	private JTextArea getTxtFormatAreaDescription() {
 		if (txtFormatAreaDescription == null) {
@@ -169,7 +169,7 @@ public class OdMatrixControlPanel extends JPanel implements IWindow {
 		cboFileFormat.addItemListener(new java.awt.event.ItemListener() {
 			public void itemStateChanged(java.awt.event.ItemEvent e) {
 				System.out.println(e.getItem());
-				
+
 				txtFormatAreaDescription.setText(e.getItem().toString());
 			}
 		});
@@ -210,8 +210,8 @@ public class OdMatrixControlPanel extends JPanel implements IWindow {
 		btnSelectFile.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				JFileChooser dlg = new JFileChooser();
-				if (dlg.showSaveDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION)
-				{
+				if (dlg.showSaveDialog((Component) PluginServices
+						.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
 					txtGeneratedFile.setText(dlg.getSelectedFile().getPath());
 				}
 			}
@@ -255,20 +255,21 @@ public class OdMatrixControlPanel extends JPanel implements IWindow {
 	}
 
 	private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {
-		if (getGeneratedFile().equalsIgnoreCase(""))
-		{
-			JOptionPane.showMessageDialog((Component) PluginServices.getMDIManager().getActiveWindow(),
-					PluginServices.getText(null, "Please_select_a_valid_file"));
+		if (getGeneratedFile().equalsIgnoreCase("")) {
+			JOptionPane.showMessageDialog((Component) PluginServices
+					.getMDIManager().getActiveWindow(), PluginServices.getText(
+					null, "Please_select_a_valid_file"));
 			return;
 		}
 		try {
 			double tol = getTolerance();
 		} catch (NumberFormatException e) {
-			JOptionPane.showMessageDialog((Component) PluginServices.getMDIManager().getActiveWindow(),
-					PluginServices.getText(null, "Please_enter_a_valid_number"));
+			JOptionPane.showMessageDialog((Component) PluginServices
+					.getMDIManager().getActiveWindow(), PluginServices.getText(
+					null, "Please_enter_a_valid_number"));
 			return;
 		}
-		
+
 		okPressed = true;
 		closeWindow();
 	}
@@ -276,7 +277,7 @@ public class OdMatrixControlPanel extends JPanel implements IWindow {
 	private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {
 		closeWindow();
 	}
-	
+
 	/**
 	 * @return Returns the okPressed.
 	 */
@@ -319,7 +320,7 @@ public class OdMatrixControlPanel extends JPanel implements IWindow {
 				if ((lyrVect.getShapeType() == FShape.POINT)
 						|| (lyrVect.getShapeType() == FShape.MULTIPOINT))
 					arrayLayers.add(lyrVect);
-					
+
 			}
 		}
 		cboLayerOriginsModel = new DefaultComboBoxModel(arrayLayers);
@@ -328,17 +329,17 @@ public class OdMatrixControlPanel extends JPanel implements IWindow {
 		cboLayerDestinations.setModel(cboLayerDestinationsModel);
 		cboLayerOrigins.setRenderer(new LayerListCellRenderer());
 		cboLayerDestinations.setRenderer(new LayerListCellRenderer());
-		
+
 	}
 
 	public int getFileFormat() {
 		return cboFileFormat.getSelectedIndex();
 	}
-	
+
 	public String getGeneratedFile() {
 		return txtGeneratedFile.getText();
 	}
-	
+
 	public FLyrVect getOriginsLayer() {
 		return (FLyrVect) cboLayerOrigins.getSelectedItem();
 	}
@@ -356,15 +357,15 @@ public class OdMatrixControlPanel extends JPanel implements IWindow {
 		}
 		return wi;
 	}
-	
-	public Object getWindowProfile(){
+
+	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
 
 	public double getTolerance() {
 		return Double.parseDouble(txtTolerance.getText());
 	}
-	
+
 	private String _T(String str) {
 		return PluginServices.getText(this, str);
 	}

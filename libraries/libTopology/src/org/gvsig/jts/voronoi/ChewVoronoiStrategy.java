@@ -95,7 +95,8 @@ public class ChewVoronoiStrategy extends AbstractVoronoiStrategy {
 	}
 
 	public String getName() {
-		return Messages.getText("Chew_Incremental_TIN_based_in_a_bounding_triangle");
+		return Messages
+				.getText("Chew_Incremental_TIN_based_in_a_bounding_triangle");
 	}
 
 }

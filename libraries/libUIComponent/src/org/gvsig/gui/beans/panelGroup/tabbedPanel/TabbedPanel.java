@@ -36,21 +36,25 @@ import org.gvsig.gui.beans.panelGroup.PanelGroupManager;
 import org.gvsig.gui.beans.panelGroup.panels.AbstractPanel;
 import org.gvsig.gui.beans.panelGroup.panels.IPanel;
 
-
 /**
- * <p>Graphical interface that's a {@link JPanel JPanel} with an inner {@link JTabbedPane JTabbedPane} that
- * contains the {@link IPanel IPanel}'s of this group, and supports work with them.</p>
+ * <p>
+ * Graphical interface that's a {@link JPanel JPanel} with an inner
+ * {@link JTabbedPane JTabbedPane} that contains the {@link IPanel IPanel}'s of
+ * this group, and supports work with them.
+ * </p>
  * 
  * @see AbstractPanelGroup
  * 
  * @version 15/10/2007
- * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es) 
+ * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class TabbedPanel extends AbstractPanelGroup implements Serializable {
 	private static final long serialVersionUID = -7979646227156641693L;
 
 	/**
-	 * <p>Graphical interface where the panels will be drawn.</p>
+	 * <p>
+	 * Graphical interface where the panels will be drawn.
+	 * </p>
 	 * 
 	 * @see #getJTabbedPane()
 	 */
@@ -59,15 +63,19 @@ public class TabbedPanel extends AbstractPanelGroup implements Serializable {
 	static {
 		// Registers this class as a "PanelGroup" type
 		PanelGroupManager.getManager().registerPanelGroup(TabbedPanel.class);
-		
+
 		// Sets this class as the default "PanelGroup" type
 		PanelGroupManager.getManager().setDefaultType(TabbedPanel.class);
 	}
 
 	/**
-	 * <p>Default constructor.</p>
+	 * <p>
+	 * Default constructor.
+	 * </p>
 	 * 
-	 * @param reference object that is ''semantically' or 'contextually' related to the group of panels
+	 * @param reference
+	 *            object that is ''semantically' or 'contextually' related to
+	 *            the group of panels
 	 */
 	public TabbedPanel(Object reference) {
 		super(reference);
@@ -75,6 +83,7 @@ public class TabbedPanel extends AbstractPanelGroup implements Serializable {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.AbstractPanelGroup#initialize()
 	 */
 	protected void initialize() {
@@ -85,7 +94,7 @@ public class TabbedPanel extends AbstractPanelGroup implements Serializable {
 
 	/**
 	 * This method initializes jTabbedPane
-	 *
+	 * 
 	 * @return JTabbedPane
 	 */
 	protected JTabbedPane getJTabbedPane() {
@@ -96,19 +105,27 @@ public class TabbedPanel extends AbstractPanelGroup implements Serializable {
 			jTabbedPane.addContainerListener(new ContainerListener() {
 				/*
 				 * (non-Javadoc)
-				 * @see java.awt.event.ContainerListener#componentAdded(java.awt.event.ContainerEvent)
+				 * 
+				 * @see
+				 * java.awt.event.ContainerListener#componentAdded(java.awt.
+				 * event.ContainerEvent)
 				 */
 				public void componentAdded(ContainerEvent e) {
-					// Propagates the event -> this allows notify that a component has been added into this TabbedPanel
+					// Propagates the event -> this allows notify that a
+					// component has been added into this TabbedPanel
 					dispatchEvent(e);
 				}
 
 				/*
 				 * (non-Javadoc)
-				 * @see java.awt.event.ContainerListener#componentRemoved(java.awt.event.ContainerEvent)
+				 * 
+				 * @see
+				 * java.awt.event.ContainerListener#componentRemoved(java.awt
+				 * .event.ContainerEvent)
 				 */
 				public void componentRemoved(ContainerEvent e) {
-					// Propagates the event -> this allows notify that a component has been removed from this TabbedPanel
+					// Propagates the event -> this allows notify that a
+					// component has been removed from this TabbedPanel
 					dispatchEvent(e);
 				}
 			});
@@ -116,24 +133,29 @@ public class TabbedPanel extends AbstractPanelGroup implements Serializable {
 			jTabbedPane.addChangeListener(new ChangeListener() {
 				/*
 				 * (non-Javadoc)
-				 * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
+				 * 
+				 * @see
+				 * javax.swing.event.ChangeListener#stateChanged(javax.swing
+				 * .event.ChangeEvent)
 				 */
 				public void stateChanged(ChangeEvent e) {
 					Object source = e.getSource();
-					
+
 					if (!((source != null) && (source instanceof JTabbedPane)))
 						return;
 
-					Object parent = ((JTabbedPane)source).getParent();
-					
+					Object parent = ((JTabbedPane) source).getParent();
+
 					if (!(parent instanceof TabbedPanel))
 						return;
-					
-					Object object = ((JTabbedPane)source).getSelectedComponent();
+
+					Object object = ((JTabbedPane) source)
+							.getSelectedComponent();
 
 					if ((object != null) && (object instanceof AbstractPanel)) {
-		        		// Notifies the new panel selected
-						((TabbedPanel)parent).stateChanged(new ChangeEvent(object));
+						// Notifies the new panel selected
+						((TabbedPanel) parent).stateChanged(new ChangeEvent(
+								object));
 					}
 				}
 			});
@@ -158,68 +180,80 @@ public class TabbedPanel extends AbstractPanelGroup implements Serializable {
 		getJTabbedPane().setSelectedIndex(position);
 	}
 
-//	/*
-//	 * (non-Javadoc)
-//	 * @see org.gvsig.gui.beans.panelGroup.AbstractPanelGroup#addPanel(org.gvsig.gui.beans.panelGroup.panels.IPanel)
-//	 */
-//	public void addPanel(IPanel panel) throws EmptyPanelGroupException, EmptyPanelGroupGUIException, PanelWithNoPreferredSizeDefinedException {
-//		if ((belongsThisGroup(panel)) && (panel.getLabel() != null)) {
-//			super.loadPanel(panel);
-//			
-//			if (((AbstractPanel)panel).isVisible())
-//				getJTabbedPane().add(panel.getLabel(), (JPanel)panel);
-//		}
-//	}
-
+	// /*
+	// * (non-Javadoc)
+	// * @see
+	// org.gvsig.gui.beans.panelGroup.AbstractPanelGroup#addPanel(org.gvsig.gui.beans.panelGroup.panels.IPanel)
+	// */
+	// public void addPanel(IPanel panel) throws EmptyPanelGroupException,
+	// EmptyPanelGroupGUIException, PanelWithNoPreferredSizeDefinedException {
+	// if ((belongsThisGroup(panel)) && (panel.getLabel() != null)) {
+	// super.loadPanel(panel);
+	//
+	// if (((AbstractPanel)panel).isVisible())
+	// getJTabbedPane().add(panel.getLabel(), (JPanel)panel);
+	// }
+	// }
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.panelGroup.AbstractPanelGroup#loadPanel(org.gvsig.gui.beans.panelGroup.panels.IPanel)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.panelGroup.AbstractPanelGroup#loadPanel(org.gvsig
+	 * .gui.beans.panelGroup.panels.IPanel)
 	 */
 	protected void loadPanel(IPanel panel) {
 		super.loadPanel(panel);
-		
-		if (((AbstractPanel)panel).isVisible()) {
-			getJTabbedPane().add(panel.getLabel(), (JPanel)panel);
+
+		if (((AbstractPanel) panel).isVisible()) {
+			getJTabbedPane().add(panel.getLabel(), (JPanel) panel);
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.panelGroup.AbstractPanelGroup#unLoadPanel(org.gvsig.gui.beans.panelGroup.panels.IPanel)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.panelGroup.AbstractPanelGroup#unLoadPanel(org.gvsig
+	 * .gui.beans.panelGroup.panels.IPanel)
 	 */
 	protected void unLoadPanel(IPanel panel) {
 		super.unLoadPanel(panel);
 
 		getJTabbedPane().remove((Component) panel);
 	}
-	
-//	/*
-//	 * (non-Javadoc)
-//	 * @see org.gvsig.gui.beans.panelGroup.IPanelGroup#removePanel(org.gvsig.gui.beans.panelGroup.panels.AbstractPanel)
-//	 */
-//	public void removePanel(IPanel panel) {
-//		
-//		if ((belongsThisGroup(panel)) && (panel.getLabel() != null)) {
-//			super.removePanel(panel);
-//			getJTabbedPane().remove((Component) panel);
-//		}
-//	}
+
+	// /*
+	// * (non-Javadoc)
+	// * @see
+	// org.gvsig.gui.beans.panelGroup.IPanelGroup#removePanel(org.gvsig.gui.beans.panelGroup.panels.AbstractPanel)
+	// */
+	// public void removePanel(IPanel panel) {
+	//
+	// if ((belongsThisGroup(panel)) && (panel.getLabel() != null)) {
+	// super.removePanel(panel);
+	// getJTabbedPane().remove((Component) panel);
+	// }
+	// }
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.IPanelGroup#getActivePanel()
 	 */
 	public IPanel getActivePanel() {
 		if (getJTabbedPane().getSelectedComponent() instanceof IPanel)
-			return (IPanel)getJTabbedPane().getSelectedComponent(); 		
+			return (IPanel) getJTabbedPane().getSelectedComponent();
 		else
 			return null;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.panelGroup.AbstractPanelGroup#stateChanged(javax.swing.event.ChangeEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.panelGroup.AbstractPanelGroup#stateChanged(javax.
+	 * swing.event.ChangeEvent)
 	 */
 	public void stateChanged(ChangeEvent e) {
 		if (registeredPanels.size() == 0)
@@ -228,12 +262,15 @@ public class TabbedPanel extends AbstractPanelGroup implements Serializable {
 		Object object = e.getSource();
 
 		if (object != null)
-			((IPanel)object).selected();
+			((IPanel) object).selected();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.panelGroup.IPanelGroup#setPanelInGUI(org.gvsig.gui.beans.panelGroup.panels.IPanel, boolean)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.panelGroup.IPanelGroup#setPanelInGUI(org.gvsig.gui
+	 * .beans.panelGroup.panels.IPanel, boolean)
 	 */
 	public synchronized void setPanelInGUI(IPanel panel, boolean b) {
 		if (registeredPanels.size() == 0)
@@ -241,11 +278,12 @@ public class TabbedPanel extends AbstractPanelGroup implements Serializable {
 
 		if (registeredPanels.indexOf(panel) == -1)
 			return;
-		
-		// Remove all tabs and re-insert the necessary
-		Vector<Component> tabPanels = new Vector<Component>(0, getJTabbedPane().getTabCount());
 
-		for (int i = getJTabbedPane().getTabCount() -1; i >= 0; i--){
+		// Remove all tabs and re-insert the necessary
+		Vector<Component> tabPanels = new Vector<Component>(0, getJTabbedPane()
+				.getTabCount());
+
+		for (int i = getJTabbedPane().getTabCount() - 1; i >= 0; i--) {
 			if (getJTabbedPane().getComponentAt(i) instanceof AbstractPanel) {
 				tabPanels.add(getJTabbedPane().getComponentAt(i));
 				getJTabbedPane().removeTabAt(i);
@@ -253,21 +291,21 @@ public class TabbedPanel extends AbstractPanelGroup implements Serializable {
 		}
 
 		if (b == true) {
-			for (IPanel regPanel: registeredPanels) {
+			for (IPanel regPanel : registeredPanels) {
 				if (regPanel.equals(panel)) {
-					getJTabbedPane().add(panel.getLabel(), (JPanel)panel);
-				}
-				else {
-					if (tabPanels.indexOf((Component)regPanel) != -1) 
-						getJTabbedPane().add(regPanel.getLabel(), (JPanel)regPanel);
+					getJTabbedPane().add(panel.getLabel(), (JPanel) panel);
+				} else {
+					if (tabPanels.indexOf((Component) regPanel) != -1)
+						getJTabbedPane().add(regPanel.getLabel(),
+								(JPanel) regPanel);
 				}
 			}
-		}
-		else {
-			for (IPanel regPanel: registeredPanels) {
-				if (tabPanels.indexOf((Component)regPanel) != -1) {
+		} else {
+			for (IPanel regPanel : registeredPanels) {
+				if (tabPanels.indexOf((Component) regPanel) != -1) {
 					if (!(regPanel.equals(panel))) {
-						getJTabbedPane().add(regPanel.getLabel(), (JPanel)regPanel);
+						getJTabbedPane().add(regPanel.getLabel(),
+								(JPanel) regPanel);
 					}
 				}
 			}
@@ -278,20 +316,23 @@ public class TabbedPanel extends AbstractPanelGroup implements Serializable {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.panelGroup.IPanelGroup#isPanelInGUI(org.gvsig.gui.beans.panelGroup.panels.IPanel)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.panelGroup.IPanelGroup#isPanelInGUI(org.gvsig.gui
+	 * .beans.panelGroup.panels.IPanel)
 	 */
 	public synchronized boolean isPanelInGUI(IPanel panel) {
 		if (!registeredPanels.contains(panel))
 			return false;
 
-		for (int i = getJTabbedPane().getTabCount() -1; i >= 0; i--){
+		for (int i = getJTabbedPane().getTabCount() - 1; i >= 0; i--) {
 			Object object = getJTabbedPane().getComponentAt(i);
 			if (object instanceof AbstractPanel) {
 				if (object.equals(panel))
 					return true;
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -311,6 +352,7 @@ public class TabbedPanel extends AbstractPanelGroup implements Serializable {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.IPanelGroup#getPanelInGUICount()
 	 */
 	public int getPanelInGUICount() {
@@ -318,23 +360,24 @@ public class TabbedPanel extends AbstractPanelGroup implements Serializable {
 	}
 
 	/**
-     * @see JTabbedPane#addChangeListener(ChangeListener)
-     */
-    public void addChangeListener(ChangeListener l) {
+	 * @see JTabbedPane#addChangeListener(ChangeListener)
+	 */
+	public void addChangeListener(ChangeListener l) {
 		getJTabbedPane().addChangeListener(l);
 	}
 
-    /**
-     * @see JTabbedPane#removeChangeListener(ChangeListener)
-     */
-    public void removeChangeListener(ChangeListener l) {
-        listenerList.remove(ChangeListener.class, l);
-    }
+	/**
+	 * @see JTabbedPane#removeChangeListener(ChangeListener)
+	 */
+	public void removeChangeListener(ChangeListener l) {
+		listenerList.remove(ChangeListener.class, l);
+	}
 
-    /**
-     * @see JTabbedPane#getChangeListeners()
-     */
-    public ChangeListener[] getChangeListeners() {
-        return (ChangeListener[])listenerList.getListeners(ChangeListener.class);
-    }
+	/**
+	 * @see JTabbedPane#getChangeListeners()
+	 */
+	public ChangeListener[] getChangeListeners() {
+		return (ChangeListener[]) listenerList
+				.getListeners(ChangeListener.class);
+	}
 }

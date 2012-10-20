@@ -60,20 +60,21 @@ import com.iver.andami.messages.NotificationManager;
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class SelectVersionPanelTest {
-	private static String writersFile = "config" + File.separatorChar + "writer.properties";
-	
+	private static String writersFile = "config" + File.separatorChar
+			+ "writer.properties";
+
 	public static void main(String[] args) {
 		loadWriters();
 		SelectVersionWindow panel = new SelectVersionWindow();
 		createFrame(panel);
-	}	
+	}
 
 	/**
 	 * Load the GPE writers from a file
 	 */
-	private static  void loadWriters(){
+	private static void loadWriters() {
 		File file = new File(writersFile);
-		if (!file.exists()){
+		if (!file.exists()) {
 			NotificationManager.addWarning("File not found",
 					new FileNotFoundException());
 			return;
@@ -86,16 +87,15 @@ public class SelectVersionPanelTest {
 		}
 	}
 
-	private static void createFrame(Component component){
+	private static void createFrame(Component component) {
 		JFrame f = new JFrame();
 		f.addWindowListener(new java.awt.event.WindowAdapter() {
 			public void windowClosing(java.awt.event.WindowEvent evt) {
 				System.exit(0);
 			}
 		});
-		f.getContentPane().add(component);	    
-		f.setBounds(0,0,300,400);
+		f.getContentPane().add(component);
+		f.setBounds(0, 0, 300, 400);
 		f.setVisible(true);
 	}
 }
-

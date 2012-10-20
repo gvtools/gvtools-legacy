@@ -76,67 +76,73 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  *
  */
 /**
- * A geographic feature is essentially a named list of properties. 
- * Some or all of these properties may be geospatial, describing 
- * the position and shape of the feature. Each feature has a type, 
- * which is equivalent to a class in object modeling terminology, 
- * such that the class-definition prescribes the named properties
- * that a particular feature of that type is required to have.
- * <br>
+ * A geographic feature is essentially a named list of properties. Some or all
+ * of these properties may be geospatial, describing the position and shape of
+ * the feature. Each feature has a type, which is equivalent to a class in
+ * object modeling terminology, such that the class-definition prescribes the
+ * named properties that a particular feature of that type is required to have. <br>
  * This class is used to write a feature
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class FeatureMemberWriter {	
-	
+public class FeatureMemberWriter {
+
 	/**
 	 * It writes a Feature init tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param id
-	 * Feature id
+	 *            Feature id
 	 * @param namespace
-	 * Feature namespace
+	 *            Feature namespace
 	 * @param name
-	 * Feature name
+	 *            Feature name
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor handler, String id, String namespace, String name) throws IOException{
+	public void start(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler, String id,
+			String namespace, String name) throws IOException {
 		writer.writeStartElement(GMLTags.GML_FEATUREMEMBER);
 		String myName = name;
 		String myNamespace = namespace;
-		if (name == null){
+		if (name == null) {
 			QName qname = GMLUtilsParser.createDefaultFeature();
 			myName = qname.getLocalPart();
 			myNamespace = qname.getNamespaceURI();
-		}else if (namespace == null){
-			myNamespace = GPEDefaults.getStringProperty(XmlProperties.DEFAULT_NAMESPACE_URI);
-		}				
-		writer.writeStartElement(myNamespace, GMLUtilsParser.addBlancSymbol(myName));
-		if (id != null){
+		} else if (namespace == null) {
+			myNamespace = GPEDefaults
+					.getStringProperty(XmlProperties.DEFAULT_NAMESPACE_URI);
+		}
+		writer.writeStartElement(myNamespace,
+				GMLUtilsParser.addBlancSymbol(myName));
+		if (id != null) {
 			writer.writeStartAttribute(GMLTags.GML_FID);
 			writer.writeValue(id);
 			writer.writeEndAttributes();
-		}		
+		}
 	}
-	
+
 	/**
 	 * It writes a Feature end tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param namespace
-	 * Feature namespace
+	 *            Feature namespace
 	 * @param name
-	 * Feature name
+	 *            Feature name
 	 * @throws IOException
 	 */
-	public void end(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor handler, String namespace, String name) throws IOException{
+	public void end(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler, String namespace,
+			String name) throws IOException {
 		writer.writeEndElement();
-		writer.writeEndElement();			
+		writer.writeEndElement();
 	}
-	
-	
+
 }

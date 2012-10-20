@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.errorfixes;
 
 import java.util.ArrayList;
@@ -69,61 +69,61 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.vividsolutions.jts.io.ParseException;
 
 public class PolygonsMustNotOverlapsFixesTest extends TestCase {
-	
-	public void testPolygon() throws ParseException, BaseException{
-		
-//POLYGON ((260 330, 210 180, 440 70, 650 210, 560 360, 380 330, 350 390, 260 330))
-//POLYGON ((580 50, 450 180, 500 290, 710 360, 930 260, 930 130, 810 240, 610 140, 580 50))		
+
+	public void testPolygon() throws ParseException, BaseException {
+
+		// POLYGON ((260 330, 210 180, 440 70, 650 210, 560 360, 380 330, 350
+		// 390, 260 330))
+		// POLYGON ((580 50, 450 180, 500 290, 710 360, 930 260, 930 130, 810
+		// 240, 610 140, 580 50))
 		GeneralPathX gpx = new GeneralPathX();
 		gpx.moveTo(260, 330);
-		gpx.lineTo(210,180);
+		gpx.lineTo(210, 180);
 		gpx.lineTo(440, 70);
 		gpx.lineTo(650, 210);
 		gpx.lineTo(560, 360);
-		gpx.lineTo(380,330);
+		gpx.lineTo(380, 330);
 		gpx.lineTo(350, 390);
 		gpx.closePath();
 		FGeometry geometry = (FGeometry) ShapeFactory.createPolygon2D(gpx);
-		
-		
-	    GeneralPathX gpx2 = new GeneralPathX();
-	    gpx2.moveTo(580, 50);
-	    gpx2.lineTo(450, 180);
-	    gpx2.lineTo(500, 290); 
-	    gpx2.lineTo(710, 360); 
-	    gpx2.lineTo(930, 260); 
-	    gpx2.lineTo(930, 130);  
-	    gpx2.lineTo(810, 240); 
-	    gpx2.lineTo(610, 140); 
-	    gpx2.closePath();
-	    FGeometry geometry2 = (FGeometry) ShapeFactory.createPolygon2D(gpx2);
-	    
-	    List<IGeometry> geoms = new ArrayList<IGeometry>();
+
+		GeneralPathX gpx2 = new GeneralPathX();
+		gpx2.moveTo(580, 50);
+		gpx2.lineTo(450, 180);
+		gpx2.lineTo(500, 290);
+		gpx2.lineTo(710, 360);
+		gpx2.lineTo(930, 260);
+		gpx2.lineTo(930, 130);
+		gpx2.lineTo(810, 240);
+		gpx2.lineTo(610, 140);
+		gpx2.closePath();
+		FGeometry geometry2 = (FGeometry) ShapeFactory.createPolygon2D(gpx2);
+
+		List<IGeometry> geoms = new ArrayList<IGeometry>();
 		geoms.add(geometry);
 		geoms.add(geometry2);
-		
+
 		FLyrVect lyr = LayerFactory.createLayerFor(geoms, FShape.POLYGON);
-		
-		
-		Topology topo = new Topology(null, null, 0.2d, 0, new SimpleTopologyErrorContainer());
-		PolygonMustNotOverlap violatedRule = new PolygonMustNotOverlap(topo, lyr, 0.1d);
+
+		Topology topo = new Topology(null, null, 0.2d, 0,
+				new SimpleTopologyErrorContainer());
+		PolygonMustNotOverlap violatedRule = new PolygonMustNotOverlap(topo,
+				lyr, 0.1d);
 		violatedRule.setTopologyErrorContainer(topo);
 		violatedRule.checkRule();
-		
+
 		TopologyError error = topo.getTopologyError(0);
-		
-		
+
 		new SubstractOverlapPolygonFix().fix(error);
 		topo.getErrorContainer().addTopologyError(error);
 		MergeOverlapPolygonFix fix = new MergeOverlapPolygonFix();
 		fix.initialize(error);
-		fix.setParameterValue("featureToPreserve",lyr.getSource().getFeature(0));
+		fix.setParameterValue("featureToPreserve", lyr.getSource()
+				.getFeature(0));
 		topo.getErrorContainer().addTopologyError(error);
 		new CreateFeatureOverlapPolygonFix().fix(error);
-		
+
 		assertTrue(topo.getNumberOfErrors() == 0);
-		
-		
-				
+
 	}
 }

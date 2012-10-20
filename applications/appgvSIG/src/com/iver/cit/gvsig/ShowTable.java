@@ -63,10 +63,9 @@ import com.iver.cit.gvsig.project.documents.table.ProjectTableFactory;
 import com.iver.cit.gvsig.project.documents.table.gui.Table;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 
-
 /**
  * Extensión que abre las tablas asociadas a las vistas.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class ShowTable extends Extension {
@@ -74,18 +73,21 @@ public class ShowTable extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
-		BaseView f = (BaseView) PluginServices.getMDIManager().getActiveWindow();
+		BaseView f = (BaseView) PluginServices.getMDIManager()
+				.getActiveWindow();
 
 		if (f == null) {
 			return false;
 		}
 
-		FLayer[] selected = f.getModel().getMapContext().getLayers().getActives();
+		FLayer[] selected = f.getModel().getMapContext().getLayers()
+				.getActives();
 
 		boolean algunaTabla = false;
 
 		for (int i = 0; i < selected.length; i++) {
-			if (selected[i].isAvailable() && selected[i] instanceof AlphanumericData) {
+			if (selected[i].isAvailable()
+					&& selected[i] instanceof AlphanumericData) {
 				AlphanumericData co = (AlphanumericData) selected[i];
 
 				try {
@@ -94,7 +96,7 @@ public class ShowTable extends Extension {
 					}
 				} catch (ReadDriverException e) {
 					return false;
-				}catch(NullPointerException e){
+				} catch (NullPointerException e) {
 					return false;
 				}
 			}
@@ -107,8 +109,8 @@ public class ShowTable extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-															 .getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (f == null) {
 			return false;
@@ -121,35 +123,43 @@ public class ShowTable extends Extension {
 	 * @see com.iver.mdiApp.plugins.IExtension#updateUI(java.lang.String)
 	 */
 	public void execute(String s) {
-		BaseView vista = (BaseView) PluginServices.getMDIManager().getActiveWindow();
+		BaseView vista = (BaseView) PluginServices.getMDIManager()
+				.getActiveWindow();
 		FLayer[] actives = vista.getModel().getMapContext().getLayers()
-							.getActives();
+				.getActives();
 
 		try {
 			for (int i = 0; i < actives.length; i++) {
 				if (actives[i] instanceof AlphanumericData) {
 					AlphanumericData co = (AlphanumericData) actives[i];
 
-					//SelectableDataSource dataSource;
-					//dataSource = co.getRecordset();
+					// SelectableDataSource dataSource;
+					// dataSource = co.getRecordset();
 
-					ProjectExtension ext = (ProjectExtension) PluginServices.getExtension(ProjectExtension.class);
+					ProjectExtension ext = (ProjectExtension) PluginServices
+							.getExtension(ProjectExtension.class);
 
 					ProjectTable projectTable = ext.getProject().getTable(co);
-					EditableAdapter ea=null;
-					ReadableVectorial rv=((FLyrVect)actives[i]).getSource();
-					if (rv instanceof VectorialEditableAdapter){
-						ea=(EditableAdapter)((FLyrVect)actives[i]).getSource();
-					}else{
-						ea=new EditableAdapter();
-						SelectableDataSource sds=((FLyrVect)actives[i]).getRecordset();
+					EditableAdapter ea = null;
+					ReadableVectorial rv = ((FLyrVect) actives[i]).getSource();
+					if (rv instanceof VectorialEditableAdapter) {
+						ea = (EditableAdapter) ((FLyrVect) actives[i])
+								.getSource();
+					} else {
+						ea = new EditableAdapter();
+						SelectableDataSource sds = ((FLyrVect) actives[i])
+								.getRecordset();
 						ea.setOriginalDataSource(sds);
 					}
 
 					if (projectTable == null) {
-						projectTable = ProjectFactory.createTable(PluginServices.getText(this, "Tabla_de_Atributos") + ": " + actives[i].getName(),
-								ea);
-						projectTable.setProjectDocumentFactory(new ProjectTableFactory());
+						projectTable = ProjectFactory.createTable(
+								PluginServices.getText(this,
+										"Tabla_de_Atributos")
+										+ ": "
+										+ actives[i].getName(), ea);
+						projectTable
+								.setProjectDocumentFactory(new ProjectTableFactory());
 						projectTable.setAssociatedTable(co);
 						ext.getProject().addDocument(projectTable);
 						projectTable.setModel(ea);
@@ -163,8 +173,9 @@ public class ShowTable extends Extension {
 				}
 			}
 		} catch (ReadDriverException e) {
-            NotificationManager.addError(PluginServices.getText(this,"No_se_pudo_obtener_la_tabla_de_la_capa"), e);
-        }
+			NotificationManager.addError(PluginServices.getText(this,
+					"No_se_pudo_obtener_la_tabla_de_la_capa"), e);
+		}
 	}
 
 	/**
@@ -174,10 +185,10 @@ public class ShowTable extends Extension {
 		registerIcons();
 	}
 
-	private void registerIcons(){
+	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"layer-show-attribute-table",
-				this.getClass().getClassLoader().getResource("images/ResultConsulta.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/ResultConsulta.png"));
 	}
 }

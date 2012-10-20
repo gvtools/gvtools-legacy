@@ -69,7 +69,8 @@ import org.gvsig.gui.beans.swing.textBoxWithCalendar.JCalendarDateDialog;
  */
 
 /**
- * This class is a panel with buttons for filter operations: AND, OR, NOT, >, <, ...
+ * This class is a panel with buttons for filter operations: AND, OR, NOT, >, <,
+ * ...
  * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
@@ -95,17 +96,17 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 	private JButtonML btnDate = null;
 	private JButtonML btnParenthesis = null;
 	private JButtonML btnDeleteText = null;
-	private JPanelML buttonsJPanel = null;	
+	private JPanelML buttonsJPanel = null;
 
 	// Last selected date
 	private DateFormat dateFormat = DateFormat.getDateInstance();
 	private Date lastSelectedDate = null;
 
 	private JCalendarDateDialog jCalendarDateDialog = null;
-	
+
 	// Listener for property change support
 	private PropertyChangeSupport changes = new PropertyChangeSupport(this);
-	
+
 	// Values of the events fired when has been clicked a button
 	public static final int DEFAULT = 0;
 	public static final int EQUAL = 1;
@@ -120,15 +121,16 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 	public static final int DATE = 10;
 	public static final int PARENTHESIS = 11;
 	public static final int DELETE_TEXT = 12;
-	
+
 	// Values of the type of event fired
 	public static final int BUTTON_CLICKED_ACTION_ID = 13;
 	public static final String BUTTON_CLICKED_ACTION_COMMAND = "Button Clicked";
-	
+
 	// Hash map for the items
 	private HashMap<String, String> map;
-	
-	// Action listener for notify (fire) some events that had happened to this component
+
+	// Action listener for notify (fire) some events that had happened to this
+	// component
 	private ActionListener actionListener = null;
 
 	/**
@@ -162,16 +164,17 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 		super(layout);
 		initialize();
 	}
-	
+
 	/**
 	 * This method initializes this
 	 */
 	private void initialize() {
 		map = new HashMap<String, String>();
-		
-		this.setPreferredSize(new Dimension(default_FilterButtonsJPanelWidth, default_FilterButtonsJPanelHeight));
+
+		this.setPreferredSize(new Dimension(default_FilterButtonsJPanelWidth,
+				default_FilterButtonsJPanelHeight));
 		this.setLayout(new GridBagLayout());
-		
+
 		// Vertical center
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -179,17 +182,18 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 
 		this.add(getButtonsJPanel(), gridBagConstraints);
 	}
-	
+
 	/**
 	 * This method initializes buttonsJPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
-	 */	
+	 */
 	private javax.swing.JPanel getButtonsJPanel() {
 		if (buttonsJPanel == null) {
 			buttonsJPanel = new JPanelML();
-			
-			buttonsJPanel.setPreferredSize(new Dimension(buttonsGroupJPanelWidth, buttonsGroupJPanelHeight));
+
+			buttonsJPanel.setPreferredSize(new Dimension(
+					buttonsGroupJPanelWidth, buttonsGroupJPanelHeight));
 			buttonsJPanel.add(getBtnEqual());
 			buttonsJPanel.add(getBtnDistinct());
 			buttonsJPanel.add(getBtnDate());
@@ -200,16 +204,16 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 			buttonsJPanel.add(getBtnAnd());
 			buttonsJPanel.add(getBtnOr());
 			buttonsJPanel.add(getBtnNot());
-			buttonsJPanel.add(getBtnParenthesis());			
+			buttonsJPanel.add(getBtnParenthesis());
 			buttonsJPanel.add(getBtnDeleteText());
 		}
-		
+
 		return buttonsJPanel;
 	}
 
 	/**
 	 * This method initializes btnDistinct
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBtnDistinct() {
@@ -217,20 +221,21 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 			btnDistinct = new JButtonML();
 			btnDistinct.setText("!=");
 			btnDistinct.setMargin(new java.awt.Insets(2, 2, 2, 2));
-			btnDistinct.setPreferredSize(new java.awt.Dimension(buttonWidthUnit, buttonHeight));
-			btnDistinct.setToolTipText(Messages.getText("operator_distinct_explanation"));
+			btnDistinct.setPreferredSize(new java.awt.Dimension(
+					buttonWidthUnit, buttonHeight));
+			btnDistinct.setToolTipText(Messages
+					.getText("operator_distinct_explanation"));
 			map.put("!=", Integer.toString(FilterButtonsJPanel.DISTINCT));
-			
+
 			btnDistinct.addActionListener(this.getActionListener());
 		}
-		
+
 		return btnDistinct;
 	}
-	
-	
+
 	/**
 	 * This method initializes btnEqua
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBtnEqual() {
@@ -238,8 +243,10 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 			btnEqual = new JButtonML();
 			btnEqual.setText("=");
 			btnEqual.setMargin(new java.awt.Insets(2, 2, 2, 2));
-			btnEqual.setPreferredSize(new java.awt.Dimension(buttonWidthUnit, buttonHeight));
-			btnEqual.setToolTipText(Messages.getText("operator_equal_explanation"));
+			btnEqual.setPreferredSize(new java.awt.Dimension(buttonWidthUnit,
+					buttonHeight));
+			btnEqual.setToolTipText(Messages
+					.getText("operator_equal_explanation"));
 			map.put("=", Integer.toString(FilterButtonsJPanel.EQUAL));
 
 			btnEqual.addActionListener(this.getActionListener());
@@ -250,7 +257,7 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 
 	/**
 	 * This method initializes btnGreater
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBtnGreater() {
@@ -258,10 +265,12 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 			btnGreater = new JButtonML();
 			btnGreater.setText(">");
 			btnGreater.setMargin(new java.awt.Insets(2, 2, 2, 2));
-			btnGreater.setPreferredSize(new java.awt.Dimension(buttonWidthUnit, buttonHeight));
-			btnGreater.setToolTipText(Messages.getText("operator_greater_explanation"));
+			btnGreater.setPreferredSize(new java.awt.Dimension(buttonWidthUnit,
+					buttonHeight));
+			btnGreater.setToolTipText(Messages
+					.getText("operator_greater_explanation"));
 			map.put(">", Integer.toString(FilterButtonsJPanel.GREATER));
-			
+
 			btnGreater.addActionListener(this.getActionListener());
 		}
 
@@ -270,7 +279,7 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 
 	/**
 	 * This method initializes btnEqualGreater
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBtnEqualGreater() {
@@ -278,10 +287,12 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 			btnEqualGreater = new JButtonML();
 			btnEqualGreater.setText(">=");
 			btnEqualGreater.setMargin(new java.awt.Insets(2, 2, 2, 2));
-			btnEqualGreater.setPreferredSize(new java.awt.Dimension(buttonWidthUnit, buttonHeight));
-			btnEqualGreater.setToolTipText(Messages.getText("operator_equal_greater_explanation"));
+			btnEqualGreater.setPreferredSize(new java.awt.Dimension(
+					buttonWidthUnit, buttonHeight));
+			btnEqualGreater.setToolTipText(Messages
+					.getText("operator_equal_greater_explanation"));
 			map.put(">=", Integer.toString(FilterButtonsJPanel.EQUALGREATER));
-			
+
 			btnEqualGreater.addActionListener(this.getActionListener());
 		}
 
@@ -290,7 +301,7 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 
 	/**
 	 * This method initializes btnSmaller
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBtnSmaller() {
@@ -298,10 +309,12 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 			btnSmaller = new JButtonML();
 			btnSmaller.setText("<");
 			btnSmaller.setMargin(new java.awt.Insets(2, 2, 2, 2));
-			btnSmaller.setPreferredSize(new java.awt.Dimension(buttonWidthUnit, buttonHeight));
-			btnSmaller.setToolTipText(Messages.getText("operator_smaller_explanation"));
+			btnSmaller.setPreferredSize(new java.awt.Dimension(buttonWidthUnit,
+					buttonHeight));
+			btnSmaller.setToolTipText(Messages
+					.getText("operator_smaller_explanation"));
 			map.put("<", Integer.toString(FilterButtonsJPanel.SMALLER));
-			
+
 			btnSmaller.addActionListener(this.getActionListener());
 		}
 
@@ -310,7 +323,7 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 
 	/**
 	 * This method initializes btnEqualSmaller
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBtnEqualSmaller() {
@@ -318,10 +331,12 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 			btnEqualSmaller = new JButtonML();
 			btnEqualSmaller.setText("<=");
 			btnEqualSmaller.setMargin(new java.awt.Insets(2, 2, 2, 2));
-			btnEqualSmaller.setPreferredSize(new java.awt.Dimension(buttonWidthUnit, buttonHeight));
-			btnEqualSmaller.setToolTipText(Messages.getText("operator_equal_smaller_explanation"));
+			btnEqualSmaller.setPreferredSize(new java.awt.Dimension(
+					buttonWidthUnit, buttonHeight));
+			btnEqualSmaller.setToolTipText(Messages
+					.getText("operator_equal_smaller_explanation"));
 			map.put("<=", Integer.toString(FilterButtonsJPanel.EQUALSMALLER));
-			
+
 			btnEqualSmaller.addActionListener(this.getActionListener());
 		}
 
@@ -330,7 +345,7 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 
 	/**
 	 * This method initializes btnDate
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBtnDate() {
@@ -341,24 +356,27 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 			btnDate.setPreferredSize(new java.awt.Dimension(86, buttonHeight));
 			btnDate.setToolTipText(Messages.getText("date_button_explanation"));
 			map.put("Date", Integer.toString(FilterButtonsJPanel.DATE));
-			
+
 			btnDate.addMouseListener(new MouseAdapter() {
 				/*
-				 *  (non-Javadoc)
-				 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
+				 * (non-Javadoc)
+				 * 
+				 * @see
+				 * java.awt.event.MouseListener#mouseClicked(java.awt.event.
+				 * MouseEvent)
 				 */
 				public void mouseClicked(MouseEvent e) {
 					getCDD().setVisible(true);
-				}				
-			});			
+				}
+			});
 		}
 
 		return btnDate;
 	}
 
 	/**
-	 * This method initializes a JCalendarDateDialog	
-	 * 	
+	 * This method initializes a JCalendarDateDialog
+	 * 
 	 * @return A JCalendarDateDialog
 	 */
 	protected JCalendarDateDialog getCDD() {
@@ -370,40 +388,46 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 			jCalendarDateDialog.setMinimumHeight(170);
 			jCalendarDateDialog.setMaximumWidth(500);
 			jCalendarDateDialog.setMaximumHeight(400);
-	
-			// Adds a listener for get the date when the 
+
+			// Adds a listener for get the date when the
 			jCalendarDateDialog.addComponentListener(new ComponentAdapter() {
 				/*
-				 *  (non-Javadoc)
-				 * @see java.awt.event.ComponentListener#componentHidden(java.awt.event.ComponentEvent)
+				 * (non-Javadoc)
+				 * 
+				 * @see
+				 * java.awt.event.ComponentListener#componentHidden(java.awt
+				 * .event.ComponentEvent)
 				 */
 				public void componentHidden(ComponentEvent e) {
 					lastSelectedDate = jCalendarDateDialog.getDate();
-					
-					actionListener.actionPerformed(new ActionEvent(btnDate, FilterButtonsJPanel.BUTTON_CLICKED_ACTION_ID, FilterButtonsJPanel.BUTTON_CLICKED_ACTION_COMMAND));
 
-				}			
+					actionListener.actionPerformed(new ActionEvent(btnDate,
+							FilterButtonsJPanel.BUTTON_CLICKED_ACTION_ID,
+							FilterButtonsJPanel.BUTTON_CLICKED_ACTION_COMMAND));
+
+				}
 			});
-		
+
 		}
-		
+
 		return jCalendarDateDialog;
 	}
 
 	/**
 	 * This method initializes btnAnd
-	 *
+	 * 
 	 * @return javax.swing.JButton
-	 */	
+	 */
 	private javax.swing.JButton getBtnAnd() {
 		if (btnAnd == null) {
 			btnAnd = new JButtonML();
 			btnAnd.setText("And");
 			btnAnd.setMargin(new java.awt.Insets(2, 2, 2, 2));
-			btnAnd.setPreferredSize(new java.awt.Dimension(buttonWidthUnit, buttonHeight));
+			btnAnd.setPreferredSize(new java.awt.Dimension(buttonWidthUnit,
+					buttonHeight));
 			btnAnd.setToolTipText(Messages.getText("operator_and_explanation"));
 			map.put("And", Integer.toString(FilterButtonsJPanel.AND));
-			
+
 			btnAnd.addActionListener(this.getActionListener());
 		}
 
@@ -412,7 +436,7 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 
 	/**
 	 * This method initializes btnNot
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBtnNot() {
@@ -420,20 +444,26 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 			btnNot = new JButtonML();
 			btnNot.setText("Not");
 			btnNot.setMargin(new java.awt.Insets(2, 2, 2, 2));
-			btnNot.setPreferredSize(new java.awt.Dimension(buttonWidthUnit, buttonHeight));
+			btnNot.setPreferredSize(new java.awt.Dimension(buttonWidthUnit,
+					buttonHeight));
 			btnNot.setToolTipText(Messages.getText("operator_not_explanation"));
 			map.put("Not", Integer.toString(FilterButtonsJPanel.NOT));
-			
+
 			btnNot.addMouseListener(new MouseAdapter() {
 				/*
-				 *  (non-Javadoc)
-				 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
+				 * (non-Javadoc)
+				 * 
+				 * @see
+				 * java.awt.event.MouseListener#mouseClicked(java.awt.event.
+				 * MouseEvent)
 				 */
 				public void mouseClicked(MouseEvent e) {
-					new ActionEvent(this, FilterButtonsJPanel.BUTTON_CLICKED_ACTION_ID, FilterButtonsJPanel.BUTTON_CLICKED_ACTION_COMMAND);
-				}				
+					new ActionEvent(this,
+							FilterButtonsJPanel.BUTTON_CLICKED_ACTION_ID,
+							FilterButtonsJPanel.BUTTON_CLICKED_ACTION_COMMAND);
+				}
 			});
-			
+
 			btnNot.addActionListener(this.getActionListener());
 
 		}
@@ -443,7 +473,7 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 
 	/**
 	 * This method initializes btnOr
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBtnOr() {
@@ -451,20 +481,26 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 			btnOr = new JButtonML();
 			btnOr.setText("Or");
 			btnOr.setMargin(new java.awt.Insets(2, 2, 2, 2));
-			btnOr.setPreferredSize(new java.awt.Dimension(buttonWidthUnit, buttonHeight));
+			btnOr.setPreferredSize(new java.awt.Dimension(buttonWidthUnit,
+					buttonHeight));
 			btnOr.setToolTipText(Messages.getText("operator_or_explanation"));
 			map.put("Or", Integer.toString(FilterButtonsJPanel.OR));
-			
+
 			btnOr.addMouseListener(new MouseAdapter() {
 				/*
-				 *  (non-Javadoc)
-				 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
+				 * (non-Javadoc)
+				 * 
+				 * @see
+				 * java.awt.event.MouseListener#mouseClicked(java.awt.event.
+				 * MouseEvent)
 				 */
 				public void mouseClicked(MouseEvent e) {
-					new ActionEvent(this, FilterButtonsJPanel.BUTTON_CLICKED_ACTION_ID, FilterButtonsJPanel.BUTTON_CLICKED_ACTION_COMMAND);
-				}				
+					new ActionEvent(this,
+							FilterButtonsJPanel.BUTTON_CLICKED_ACTION_ID,
+							FilterButtonsJPanel.BUTTON_CLICKED_ACTION_COMMAND);
+				}
 			});
-			
+
 			btnOr.addActionListener(this.getActionListener());
 		}
 
@@ -473,7 +509,7 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 
 	/**
 	 * This method initializes btnParenthesis
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBtnParenthesis() {
@@ -481,26 +517,33 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 			btnParenthesis = new JButtonML();
 			btnParenthesis.setText("()");
 			btnParenthesis.setMargin(new java.awt.Insets(2, 2, 2, 2));
-			btnParenthesis.setPreferredSize(new java.awt.Dimension(buttonWidthUnit, buttonHeight));
-			btnParenthesis.setToolTipText(Messages.getText("parenthesis_explanation"));
+			btnParenthesis.setPreferredSize(new java.awt.Dimension(
+					buttonWidthUnit, buttonHeight));
+			btnParenthesis.setToolTipText(Messages
+					.getText("parenthesis_explanation"));
 			map.put("()", Integer.toString(FilterButtonsJPanel.PARENTHESIS));
-			
+
 			btnParenthesis.addMouseListener(new MouseAdapter() {
 				/*
-				 *  (non-Javadoc)
-				 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
+				 * (non-Javadoc)
+				 * 
+				 * @see
+				 * java.awt.event.MouseListener#mouseClicked(java.awt.event.
+				 * MouseEvent)
 				 */
 				public void mouseClicked(MouseEvent e) {
-					new ActionEvent(this, FilterButtonsJPanel.BUTTON_CLICKED_ACTION_ID, FilterButtonsJPanel.BUTTON_CLICKED_ACTION_COMMAND);
-				}				
+					new ActionEvent(this,
+							FilterButtonsJPanel.BUTTON_CLICKED_ACTION_ID,
+							FilterButtonsJPanel.BUTTON_CLICKED_ACTION_COMMAND);
+				}
 			});
-			
+
 			btnParenthesis.addActionListener(this.getActionListener());
 		}
 
 		return btnParenthesis;
 	}
-	
+
 	/**
 	 * This method initializes btnDeleteText
 	 * 
@@ -511,26 +554,34 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 			btnDeleteText = new JButtonML();
 			btnDeleteText.setText(Messages.getText("deleteText"));
 			btnDeleteText.setMargin(new java.awt.Insets(2, 2, 2, 2));
-			btnDeleteText.setPreferredSize(new java.awt.Dimension(176, buttonHeight));
-			btnDeleteText.setToolTipText(Messages.getText("deleteText_on_filter_use_explanation"));
-			map.put(Messages.getText("deleteText"), Integer.toString(FilterButtonsJPanel.DELETE_TEXT));
-			
+			btnDeleteText.setPreferredSize(new java.awt.Dimension(176,
+					buttonHeight));
+			btnDeleteText.setToolTipText(Messages
+					.getText("deleteText_on_filter_use_explanation"));
+			map.put(Messages.getText("deleteText"),
+					Integer.toString(FilterButtonsJPanel.DELETE_TEXT));
+
 			btnDeleteText.addMouseListener(new MouseAdapter() {
 				/*
-				 *  (non-Javadoc)
-				 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
+				 * (non-Javadoc)
+				 * 
+				 * @see
+				 * java.awt.event.MouseListener#mouseClicked(java.awt.event.
+				 * MouseEvent)
 				 */
 				public void mouseClicked(MouseEvent e) {
-					new ActionEvent(this, FilterButtonsJPanel.BUTTON_CLICKED_ACTION_ID, FilterButtonsJPanel.BUTTON_CLICKED_ACTION_COMMAND);
-				}				
+					new ActionEvent(this,
+							FilterButtonsJPanel.BUTTON_CLICKED_ACTION_ID,
+							FilterButtonsJPanel.BUTTON_CLICKED_ACTION_COMMAND);
+				}
 			});
-			
+
 			btnDeleteText.addActionListener(this.getActionListener());
 		}
-			
-		return btnDeleteText;	
+
+		return btnDeleteText;
 	}
-	
+
 	/**
 	 * This method initializes the "actionListener" ActionListener
 	 * 
@@ -540,18 +591,25 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 		if (actionListener == null) {
 			actionListener = new ActionListener() {
 				/*
-				 *  (non-Javadoc)
-				 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+				 * (non-Javadoc)
+				 * 
+				 * @see
+				 * java.awt.event.ActionListener#actionPerformed(java.awt.event
+				 * .ActionEvent)
 				 */
 				public void actionPerformed(ActionEvent event) {
-				   	// Notifies that has been clicked a button
-		       		changes.firePropertyChange(FilterButtonsJPanel.BUTTON_CLICKED_ACTION_COMMAND, FilterButtonsJPanel.DEFAULT, map.get( ((javax.swing.JButton)event.getSource()).getText()));
-		        }
-		    };
+					// Notifies that has been clicked a button
+					changes.firePropertyChange(
+							FilterButtonsJPanel.BUTTON_CLICKED_ACTION_COMMAND,
+							FilterButtonsJPanel.DEFAULT, map
+									.get(((javax.swing.JButton) event
+											.getSource()).getText()));
+				}
+			};
 		}
 		return actionListener;
 	}
-	
+
 	/**
 	 * Returns the las selected date, formatted
 	 * 
@@ -561,9 +619,9 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 		if (lastSelectedDate == null)
 			return "";
 		else
-			return "Date(" + dateFormat.format(lastSelectedDate) + ")"; 
+			return "Date(" + dateFormat.format(lastSelectedDate) + ")";
 	}
-	
+
 	/**
 	 * Returns the 'DateFormat' private attribute
 	 * 
@@ -573,19 +631,19 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 		return dateFormat;
 	}
 
-    /**
-     * Adds a "Property Change Listener"
-     */
-    public void addPropertyChangeListener(PropertyChangeListener l) {
-    	changes.addPropertyChangeListener(l);
-    }
+	/**
+	 * Adds a "Property Change Listener"
+	 */
+	public void addPropertyChangeListener(PropertyChangeListener l) {
+		changes.addPropertyChangeListener(l);
+	}
 
-    /**
-     * Removes a "Property Change Listener"
-     */
-    public void removePropertyChangeListener(PropertyChangeListener l) {
-    	changes.removePropertyChangeListener(l);
-    }
+	/**
+	 * Removes a "Property Change Listener"
+	 */
+	public void removePropertyChangeListener(PropertyChangeListener l) {
+		changes.removePropertyChangeListener(l);
+	}
 
 	/**
 	 * JButton with multi line tool tip text.
@@ -594,7 +652,7 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 	 * 
 	 * @author Pablo Piqueras Bartolome (pablo.piqueras@iver.es)
 	 */
-    protected class JButtonML extends JButton {
+	protected class JButtonML extends JButton {
 		private static final long serialVersionUID = -6052122756677251026L;
 
 		/**
@@ -633,16 +691,17 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 		}
 
 		/*
-    	 * (non-Javadoc)
-    	 * @see javax.swing.JComponent#createToolTip()
-    	 */
-        public JToolTip createToolTip() {
-        	// Multiline support
-        	MultiLineToolTip tip = new MultiLineToolTip();
-        	tip.setComponent(this);
-        	return tip;
-        }		
-    }
+		 * (non-Javadoc)
+		 * 
+		 * @see javax.swing.JComponent#createToolTip()
+		 */
+		public JToolTip createToolTip() {
+			// Multiline support
+			MultiLineToolTip tip = new MultiLineToolTip();
+			tip.setComponent(this);
+			return tip;
+		}
+	}
 
 	/**
 	 * JPanel with multi line tool tip text.
@@ -651,7 +710,7 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 	 * 
 	 * @author Pablo Piqueras Bartolome (pablo.piqueras@iver.es)
 	 */
-    protected class JPanelML extends JPanel {
+	protected class JPanelML extends JPanel {
 		private static final long serialVersionUID = -5282313934096892711L;
 
 		/**
@@ -683,14 +742,15 @@ public class FilterButtonsJPanel extends JPanel implements Serializable {
 		}
 
 		/*
-    	 * (non-Javadoc)
-    	 * @see javax.swing.JComponent#createToolTip()
-    	 */
-        public JToolTip createToolTip() {
-        	// Multiline support
-        	MultiLineToolTip tip = new MultiLineToolTip();
-        	tip.setComponent(this);
-        	return tip;
-        }	
-    }
+		 * (non-Javadoc)
+		 * 
+		 * @see javax.swing.JComponent#createToolTip()
+		 */
+		public JToolTip createToolTip() {
+			// Multiline support
+			MultiLineToolTip tip = new MultiLineToolTip();
+			tip.setComponent(this);
+			return tip;
+		}
+	}
 }

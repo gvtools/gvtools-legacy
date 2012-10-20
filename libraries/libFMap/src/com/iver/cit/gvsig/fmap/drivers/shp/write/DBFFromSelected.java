@@ -53,10 +53,9 @@ import com.iver.cit.gvsig.fmap.drivers.shp.DbaseFileWriterNIO;
 import com.iver.cit.gvsig.fmap.layers.FBitSet;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 
-
 /**
  * Visitor de zoom a lo seleccionado.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class DBFFromSelected {
@@ -69,12 +68,13 @@ public class DBFFromSelected {
 	private SelectableDataSource sds;
 	private Object[] record;
 
-	//private DbaseFileNIO m_FichDbf = new DbaseFileNIO();
+	// private DbaseFileNIO m_FichDbf = new DbaseFileNIO();
 
 	/**
 	 * Inserta el fichero.
-	 *
-	 * @param f Fichero.
+	 * 
+	 * @param f
+	 *            Fichero.
 	 */
 	public void setFile(File f) {
 		String strFichDbf = f.getAbsolutePath().replaceAll("\\.shp", ".dbf");
@@ -83,9 +83,11 @@ public class DBFFromSelected {
 	}
 
 	/**
-	 * Inserta true si se quiere crear el dbf vacio y no copiar el contenido de otro dbf.
-	 *
-	 * @param b True si se quiere crear vacio el dbf.
+	 * Inserta true si se quiere crear el dbf vacio y no copiar el contenido de
+	 * otro dbf.
+	 * 
+	 * @param b
+	 *            True si se quiere crear vacio el dbf.
 	 */
 	public void setIsNewDBF(boolean b) {
 		hasdbf = b;
@@ -93,8 +95,9 @@ public class DBFFromSelected {
 
 	/**
 	 * Inserta las geometrías.
-	 *
-	 * @param g Geometrías.
+	 * 
+	 * @param g
+	 *            Geometrías.
 	 */
 	public void setGeometries(IGeometry[] g) {
 		fgs = g;
@@ -102,22 +105,25 @@ public class DBFFromSelected {
 
 	/**
 	 * Inicializa.
-	 *
-	 * @param sds Capa.
+	 * 
+	 * @param sds
+	 *            Capa.
 	 */
 	public void start(SelectableDataSource sds) {
-		//if (layer instanceof AlphanumericData) {
+		// if (layer instanceof AlphanumericData) {
 		try {
 			this.sds = sds;
 
 			if (!hasdbf) {
-				DbaseFileHeaderNIO myHeader = DbaseFileHeaderNIO.createNewDbaseHeader();
+				DbaseFileHeaderNIO myHeader = DbaseFileHeaderNIO
+						.createNewDbaseHeader();
 				myHeader.setNumRecords(fgs.length);
 				dbfWrite = new DbaseFileWriterNIO(myHeader,
 						(FileChannel) getWriteChannel(dbfPath));
 				enteros = new Integer[1];
 			} else {
-				//VectorialFileAdapter vfa=(VectorialFileAdapter)((SingleLayer)lv).getSource();
+				// VectorialFileAdapter
+				// vfa=(VectorialFileAdapter)((SingleLayer)lv).getSource();
 				DbaseFileHeaderNIO myHeader;
 
 				myHeader = DbaseFileHeaderNIO.createDbaseHeader(sds);
@@ -130,15 +136,15 @@ public class DBFFromSelected {
 		} catch (IOException e) {
 			e.printStackTrace();
 
-			///} catch (DriverException e1) {
-			//	e1.printStackTrace();
+			// /} catch (DriverException e1) {
+			// e1.printStackTrace();
 		} catch (ReadDriverException e) {
 			e.printStackTrace();
 		}
 
-		//return true;
-		//}
-		//return false;
+		// return true;
+		// }
+		// return false;
 	}
 
 	/**
@@ -152,11 +158,9 @@ public class DBFFromSelected {
 	 * Rellena los registros del dbf.
 	 */
 	public void createdbf(FBitSet bitset) {
-		int i=0;
-		for (int j = bitset.nextSetBit(0);
-		j >= 0;
-		j = bitset.nextSetBit(j + 1)){
-		//for (int i = 0; i < fgs.length; i++) {
+		int i = 0;
+		for (int j = bitset.nextSetBit(0); j >= 0; j = bitset.nextSetBit(j + 1)) {
+			// for (int i = 0; i < fgs.length; i++) {
 			try {
 				if (!hasdbf) {
 					enteros[0] = Integer.valueOf(String.valueOf(i));
@@ -177,20 +181,17 @@ public class DBFFromSelected {
 		}
 	}
 
-
-
-	private WritableByteChannel getWriteChannel(String path)
-		throws IOException {
+	private WritableByteChannel getWriteChannel(String path) throws IOException {
 		WritableByteChannel channel;
 
-			File f = new File(path);
+		File f = new File(path);
 
-			if (!f.exists() && !f.createNewFile()) {
-				throw new IOException("Cannot create file " + f);
-			}
+		if (!f.exists() && !f.createNewFile()) {
+			throw new IOException("Cannot create file " + f);
+		}
 
-			RandomAccessFile raf = new RandomAccessFile(f, "rw");
-			channel = raf.getChannel();
+		RandomAccessFile raf = new RandomAccessFile(f, "rw");
+		channel = raf.getChannel();
 
 		return channel;
 	}

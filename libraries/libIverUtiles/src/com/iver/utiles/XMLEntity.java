@@ -57,7 +57,7 @@ import com.iver.utiles.xmlEntity.generate.XmlTag;
 /**
  * Adaptador de las llamadas a sus métodos sobre los generados por castor para
  * generar después los XML.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class XMLEntity {
@@ -66,7 +66,7 @@ public class XMLEntity {
 
 	/**
 	 * Crea un nuevo XMLEntity.
-	 *
+	 * 
 	 * @param tag
 	 *            DOCUMENT ME!
 	 */
@@ -83,13 +83,14 @@ public class XMLEntity {
 
 	/**
 	 * Añade una propiedad con un String como clave y un String como valor.
-	 *
+	 * 
 	 * @param key
 	 *            clave.
 	 * @param value
 	 *            valor.
-	 * @param matters, if false this property will not take effect to the
-	 * result of toHashCode() method
+	 * @param matters
+	 *            , if false this property will not take effect to the result of
+	 *            toHashCode() method
 	 * @see toHashCode()
 	 */
 	public void putProperty(String key, String value, boolean matters) {
@@ -106,15 +107,17 @@ public class XMLEntity {
 	public void putProperty(String key, String value) {
 		putProperty(key, value, true);
 	}
+
 	/**
 	 * Añade una propiedad con un String como clave y un Object como valor.
-	 *
+	 * 
 	 * @param key
 	 *            clave.
 	 * @param value
 	 *            valor.
-	 * @param matters, if false this property will not take effect to the
-	 * result of toHashCode() method
+	 * @param matters
+	 *            , if false this property will not take effect to the result of
+	 *            toHashCode() method
 	 * @see toHashCode()
 	 */
 	public void putProperty(String key, Object value, boolean matters) {
@@ -248,9 +251,9 @@ public class XMLEntity {
 	}
 
 	/**
-	 * Añade una propiedad con un String como clave y un double como valor.
-	 * La propiedad añadida afecta al valor calculado por toHashCode()
-	 *
+	 * Añade una propiedad con un String como clave y un double como valor. La
+	 * propiedad añadida afecta al valor calculado por toHashCode()
+	 * 
 	 * @param key
 	 *            clave.
 	 * @param value
@@ -263,13 +266,14 @@ public class XMLEntity {
 
 	/**
 	 * Añade una propiedad con un String como clave y un entero como valor.
-	 *
+	 * 
 	 * @param key
 	 *            clave.
 	 * @param value
 	 *            valor.
-	 * @param matters, if false this property will not take effect to the
-	 * result of toHashCode() method
+	 * @param matters
+	 *            , if false this property will not take effect to the result of
+	 *            toHashCode() method
 	 * @see toHashCode()
 	 */
 	public void putProperty(String key, int value, boolean matters) {
@@ -284,9 +288,9 @@ public class XMLEntity {
 	}
 
 	/**
-	 * Añade una propiedad con un String como clave y un double como valor.
-	 * La propiedad añadida afecta al valor calculado por toHashCode()
-	 *
+	 * Añade una propiedad con un String como clave y un double como valor. La
+	 * propiedad añadida afecta al valor calculado por toHashCode()
+	 * 
 	 * @param key
 	 *            clave.
 	 * @param value
@@ -299,13 +303,14 @@ public class XMLEntity {
 
 	/**
 	 * Añade una propiedad con un String como clave y un long como valor.
-	 *
+	 * 
 	 * @param key
 	 *            clave.
 	 * @param value
 	 *            valor.
-	 * @param matters, if false this property will not take effect to the
-	 * result of toHashCode() method
+	 * @param matters
+	 *            , if false this property will not take effect to the result of
+	 *            toHashCode() method
 	 * @see toHashCode()
 	 */
 	public void putProperty(String key, long value, boolean matters) {
@@ -320,9 +325,9 @@ public class XMLEntity {
 	}
 
 	/**
-	 * Añade una propiedad con un String como clave y un double como valor.
-	 * La propiedad añadida afecta al valor calculado por toHashCode()
-	 *
+	 * Añade una propiedad con un String como clave y un double como valor. La
+	 * propiedad añadida afecta al valor calculado por toHashCode()
+	 * 
 	 * @param key
 	 *            clave.
 	 * @param value
@@ -336,13 +341,14 @@ public class XMLEntity {
 
 	/**
 	 * Añade una propiedad con un String como clave y un boolean como valor.
-	 *
+	 * 
 	 * @param key
 	 *            clave.
 	 * @param value
 	 *            valor.
-	 * @param matters, if false this property will not take effect to the
-	 * result of toHashCode() method
+	 * @param matters
+	 *            , if false this property will not take effect to the result of
+	 *            toHashCode() method
 	 * @see toHashCode()
 	 */
 	public void putProperty(String key, boolean value, boolean matters) {
@@ -357,9 +363,9 @@ public class XMLEntity {
 	}
 
 	/**
-	 * Añade una propiedad con un String como clave y un double como valor.
-	 * La propiedad añadida afecta al valor calculado por toHashCode()
-	 *
+	 * Añade una propiedad con un String como clave y un double como valor. La
+	 * propiedad añadida afecta al valor calculado por toHashCode()
+	 * 
 	 * @param key
 	 *            clave.
 	 * @param value
@@ -370,16 +376,16 @@ public class XMLEntity {
 		putProperty(key, value, true);
 	}
 
-
 	/**
 	 * Añade una propiedad con un String como clave y un float como valor.
-	 *
+	 * 
 	 * @param key
 	 *            clave.
 	 * @param value
 	 *            valor.
-	 * @param matters, if false this property will not take effect to the
-	 * result of toHashCode() method
+	 * @param matters
+	 *            , if false this property will not take effect to the result of
+	 *            toHashCode() method
 	 * @see toHashCode()
 	 */
 	public void putProperty(String key, float value, boolean matters) {
@@ -394,9 +400,9 @@ public class XMLEntity {
 	}
 
 	/**
-	 * Añade una propiedad con un String como clave y un double como valor.
-	 * La propiedad añadida afecta al valor calculado por toHashCode()
-	 *
+	 * Añade una propiedad con un String como clave y un double como valor. La
+	 * propiedad añadida afecta al valor calculado por toHashCode()
+	 * 
 	 * @param key
 	 *            clave.
 	 * @param value
@@ -409,13 +415,14 @@ public class XMLEntity {
 
 	/**
 	 * Añade una propiedad con un String como clave y un double como valor.
-	 *
+	 * 
 	 * @param key
 	 *            clave.
 	 * @param value
 	 *            valor.
-	 * @param matters, if false this property will not take effect to the
-	 * result of toHashCode() method
+	 * @param matters
+	 *            , if false this property will not take effect to the result of
+	 *            toHashCode() method
 	 * @see toHashCode()
 	 */
 	public void putProperty(String key, double value, boolean matters) {
@@ -430,9 +437,9 @@ public class XMLEntity {
 	}
 
 	/**
-	 * Añade una propiedad con un String como clave y un double como valor.
-	 * La propiedad añadida afecta al valor calculado por toHashCode()
-	 *
+	 * Añade una propiedad con un String como clave y un double como valor. La
+	 * propiedad añadida afecta al valor calculado por toHashCode()
+	 * 
 	 * @param key
 	 *            clave.
 	 * @param value
@@ -442,14 +449,15 @@ public class XMLEntity {
 	public void putProperty(String key, double value) {
 		putProperty(key, value, true);
 	}
+
 	/**
 	 * Devuelve el String que corresponda a la clave que se pasa como parámetro.
-	 *
+	 * 
 	 * @param key
 	 *            clave
-	 *
+	 * 
 	 * @return valor.
-	 *
+	 * 
 	 * @throws NotExistInXMLEntity
 	 *             Lanza esta excepción si no se encuentra ningún elemento con
 	 *             esa clave.
@@ -475,12 +483,12 @@ public class XMLEntity {
 
 	/**
 	 * Devuelve el double que corresponda a la clave que se pasa como parámetro.
-	 *
+	 * 
 	 * @param key
 	 *            clave
-	 *
+	 * 
 	 * @return valor.
-	 *
+	 * 
 	 * @throws NotExistInXMLEntity
 	 *             Lanza esta excepción si no se encuentra ningún elemento con
 	 *             esa clave.
@@ -507,12 +515,12 @@ public class XMLEntity {
 	/**
 	 * Devuelve el array de doubles que corresponda a la clave que se pasa como
 	 * parámetro.
-	 *
+	 * 
 	 * @param key
 	 *            clave
-	 *
+	 * 
 	 * @return valor.
-	 *
+	 * 
 	 * @throws NotExistInXMLEntity
 	 *             Lanza esta excepción si no se encuentra ningún elemento con
 	 *             esa clave.
@@ -549,12 +557,12 @@ public class XMLEntity {
 
 	/**
 	 * Devuelve el Object que corresponda a la clave que se pasa como parámetro.
-	 *
+	 * 
 	 * @param key
 	 *            clave
-	 *
+	 * 
 	 * @return valor.
-	 *
+	 * 
 	 * @throws NotExistInXMLEntity
 	 *             Lanza esta excepción si no se encuentra ningún elemento con
 	 *             esa clave.
@@ -581,12 +589,12 @@ public class XMLEntity {
 	/**
 	 * Devuelve el array de float que corresponda a la clave que se pasa como
 	 * parámetro.
-	 *
+	 * 
 	 * @param key
 	 *            clave
-	 *
+	 * 
 	 * @return valor.
-	 *
+	 * 
 	 * @throws NotExistInXMLEntity
 	 *             Lanza esta excepción si no se encuentra ningún elemento con
 	 *             esa clave.
@@ -624,12 +632,12 @@ public class XMLEntity {
 	/**
 	 * Devuelve el array de long que corresponda a la clave que se pasa como
 	 * parámetro.
-	 *
+	 * 
 	 * @param key
 	 *            clave
-	 *
+	 * 
 	 * @return valor.
-	 *
+	 * 
 	 * @throws NotExistInXMLEntity
 	 *             Lanza esta excepción si no se encuentra ningún elemento con
 	 *             esa clave.
@@ -667,12 +675,12 @@ public class XMLEntity {
 	/**
 	 * Devuelve el array de bytes que corresponda a la clave que se pasa como
 	 * parámetro.
-	 *
+	 * 
 	 * @param key
 	 *            clave
-	 *
+	 * 
 	 * @return valor.
-	 *
+	 * 
 	 * @throws NotExistInXMLEntity
 	 *             Lanza esta excepción si no se encuentra ningún elemento con
 	 *             esa clave.
@@ -710,12 +718,12 @@ public class XMLEntity {
 	/**
 	 * Devuelve el array de enteros que corresponda a la clave que se pasa como
 	 * parámetro.
-	 *
+	 * 
 	 * @param key
 	 *            clave
-	 *
+	 * 
 	 * @return valor.
-	 *
+	 * 
 	 * @throws NotExistInXMLEntity
 	 *             Lanza esta excepción si no se encuentra ningún elemento con
 	 *             esa clave.
@@ -753,12 +761,12 @@ public class XMLEntity {
 	/**
 	 * Devuelve el array de boolean que corresponda a la clave que se pasa como
 	 * parámetro.
-	 *
+	 * 
 	 * @param key
 	 *            clave
-	 *
+	 * 
 	 * @return valor.
-	 *
+	 * 
 	 * @throws NotExistInXMLEntity
 	 *             Lanza esta excepción si no se encuentra ningún elemento con
 	 *             esa clave.
@@ -797,12 +805,12 @@ public class XMLEntity {
 	/**
 	 * Devuelve el array de String que corresponda a la clave que se pasa como
 	 * parámetro.
-	 *
+	 * 
 	 * @param key
 	 *            clave
-	 *
+	 * 
 	 * @return valor.
-	 *
+	 * 
 	 * @throws NotExistInXMLEntity
 	 *             Lanza esta excepción si no se encuentra ningún elemento con
 	 *             esa clave.
@@ -840,12 +848,12 @@ public class XMLEntity {
 	/**
 	 * Devuelve el boolean que corresponda a la clave que se pasa como
 	 * parámetro.
-	 *
+	 * 
 	 * @param key
 	 *            clave
-	 *
+	 * 
 	 * @return valor.
-	 *
+	 * 
 	 * @throws NotExistInXMLEntity
 	 *             Lanza esta excepción si no se encuentra ningún elemento con
 	 *             esa clave.
@@ -872,12 +880,12 @@ public class XMLEntity {
 
 	/**
 	 * Devuelve el entero que corresponda a la clave que se pasa como parámetro.
-	 *
+	 * 
 	 * @param key
 	 *            clave
-	 *
+	 * 
 	 * @return valor.
-	 *
+	 * 
 	 * @throws NotExistInXMLEntity
 	 *             Lanza esta excepción si no se encuentra ningún elemento con
 	 *             esa clave.
@@ -903,12 +911,12 @@ public class XMLEntity {
 
 	/**
 	 * Devuelve el long que corresponda a la clave que se pasa como parámetro.
-	 *
+	 * 
 	 * @param key
 	 *            clave
-	 *
+	 * 
 	 * @return valor.
-	 *
+	 * 
 	 * @throws NotExistInXMLEntity
 	 *             Lanza esta excepción si no se encuentra ningún elemento con
 	 *             esa clave.
@@ -934,12 +942,12 @@ public class XMLEntity {
 
 	/**
 	 * Devuelve el float que corresponda a la clave que se pasa como parámetro.
-	 *
+	 * 
 	 * @param key
 	 *            clave
-	 *
+	 * 
 	 * @return valor.
-	 *
+	 * 
 	 * @throws NotExistInXMLEntity
 	 *             Lanza esta excepción si no se encuentra ningún elemento con
 	 *             esa clave.
@@ -966,7 +974,7 @@ public class XMLEntity {
 	/**
 	 * Añade el nombre con clave name y valor el String que se pasa como
 	 * parámetro.
-	 *
+	 * 
 	 * @param name
 	 *            nombre.
 	 */
@@ -979,7 +987,7 @@ public class XMLEntity {
 
 	/**
 	 * Devuelve el nombre.
-	 *
+	 * 
 	 * @return nombre.
 	 */
 	public String getName() {
@@ -990,7 +998,7 @@ public class XMLEntity {
 
 	/**
 	 * Devuelve la clase que implementa.
-	 *
+	 * 
 	 * @return clase.
 	 */
 	public Class getImplementingClass() {
@@ -1002,7 +1010,7 @@ public class XMLEntity {
 
 	/**
 	 * Añade la clase que implementa
-	 *
+	 * 
 	 * @param c
 	 */
 	/*
@@ -1012,7 +1020,7 @@ public class XMLEntity {
 
 	/**
 	 * Añade un hijo al XMLEntity.
-	 *
+	 * 
 	 * @param entity
 	 *            xml para añadir.
 	 */
@@ -1022,10 +1030,10 @@ public class XMLEntity {
 
 	/**
 	 * Devuelve un hijo a partir de un indice.
-	 *
+	 * 
 	 * @param i
 	 *            indice.
-	 *
+	 * 
 	 * @return hijo.
 	 */
 	public XMLEntity getChild(int i) {
@@ -1034,7 +1042,7 @@ public class XMLEntity {
 
 	/**
 	 * Devuelve el número de hijos que contiene el XMLEntity.
-	 *
+	 * 
 	 * @return número de hijos.
 	 */
 	public int getChildrenCount() {
@@ -1043,10 +1051,10 @@ public class XMLEntity {
 
 	/**
 	 * Devuelve el Property a partir de la clave.
-	 *
+	 * 
 	 * @param key
 	 *            clave.
-	 *
+	 * 
 	 * @return Property.
 	 */
 	private Property getProperty(String key) {
@@ -1063,7 +1071,7 @@ public class XMLEntity {
 
 	/**
 	 * Devuelve el xmltag.
-	 *
+	 * 
 	 * @return xmltag.
 	 */
 	public XmlTag getXmlTag() {
@@ -1072,7 +1080,7 @@ public class XMLEntity {
 
 	/**
 	 * Añade el property que se pasa como parámetro.
-	 *
+	 * 
 	 * @param p
 	 *            property.
 	 */
@@ -1126,7 +1134,7 @@ public class XMLEntity {
 
 	/**
 	 * Removes a property of this XML-Entity.
-	 *
+	 * 
 	 * @param p
 	 *            property.
 	 */
@@ -1150,7 +1158,7 @@ public class XMLEntity {
 
 	/**
 	 * Elimina el hijo n del XMLEntity.
-	 *
+	 * 
 	 * @param indice
 	 *            del hijo a eliminar.
 	 */
@@ -1160,7 +1168,7 @@ public class XMLEntity {
 
 	/**
 	 * Elimina todos los hijos de XMLEntity.
-	 *
+	 * 
 	 */
 	public void removeAllChildren() {
 		xmltag.removeAllXmlTag();
@@ -1206,32 +1214,32 @@ public class XMLEntity {
 	// jaume (en proves)
 	/**
 	 * <p>
-	 * <code>hash()</code> method is used to know if this <b>XMLEntity</b>
-	 * can be considered as changed. At the loading of the <b>XMLEntity</b> tree
-	 * you can invoke this method. The result of it is a <code>int</code> hash
-	 * value calculated from the contents of this and its children. Then, if you
-	 * store this value you can recognize if the <b>XMLEntity</b> has changed
-	 * since the last time you called <code>hash()</code> just by comparing
-	 * the previous calculated value to the new calculated one.<br>
+	 * <code>hash()</code> method is used to know if this <b>XMLEntity</b> can
+	 * be considered as changed. At the loading of the <b>XMLEntity</b> tree you
+	 * can invoke this method. The result of it is a <code>int</code> hash value
+	 * calculated from the contents of this and its children. Then, if you store
+	 * this value you can recognize if the <b>XMLEntity</b> has changed since
+	 * the last time you called <code>hash()</code> just by comparing the
+	 * previous calculated value to the new calculated one.<br>
 	 * </p>
 	 * <p>
-	 * Doing so, you can automatically detect if your persistent data has changed
-	 * and you are required to save it.<br>
+	 * Doing so, you can automatically detect if your persistent data has
+	 * changed and you are required to save it.<br>
 	 * </p>
 	 * <p>
 	 * <b>Notice</b> that you can mark the properties that you are using during
 	 * the session but you don't care about the values between sessions as
 	 * properties which don't matter to detect if your XMLEntity has changed.<br>
 	 * </p>
-	 *
+	 * 
 	 */
 	public long hash() {
 		long result = 17;
 
-		if (xmltag.getName()!=null) {
+		if (xmltag.getName() != null) {
 			char[] name = xmltag.getName().toCharArray();
 
-			for (int i = 0; i<name.length; i++) {
+			for (int i = 0; i < name.length; i++) {
 				result = 37 + result + (int) name[i];
 			}
 		}
@@ -1241,7 +1249,7 @@ public class XMLEntity {
 			String strKey = properties[i].getKey();
 			// if this key was put with the matter value set to false
 			// then it will not take effect in the hash calculation
-			if (whiteAttrList!=null && whiteAttrList.contains(strKey))
+			if (whiteAttrList != null && whiteAttrList.contains(strKey))
 				continue;
 
 			char[] key = strKey.toCharArray();
@@ -1249,9 +1257,10 @@ public class XMLEntity {
 				result = 37 + result + (int) key[j];
 			}
 
-			if (properties[i]!=null) {
+			if (properties[i] != null) {
 				String value = properties[i].getValue();
-				char[] chars = (value!=null)? value.toCharArray() : new char[0];
+				char[] chars = (value != null) ? value.toCharArray()
+						: new char[0];
 				for (int j = 0; j < chars.length; j++) {
 					result = 37 + result + (int) chars[j];
 				}
@@ -1267,17 +1276,19 @@ public class XMLEntity {
 	}
 
 	/**
-	 * Devuelve el primer hijo que el valor de su propieda 'key'
-	 * es igual a 'value'
-	 *
-	 * @param key propiedad a comparar
-	 * @param value valor a comparar
+	 * Devuelve el primer hijo que el valor de su propieda 'key' es igual a
+	 * 'value'
+	 * 
+	 * @param key
+	 *            propiedad a comparar
+	 * @param value
+	 *            valor a comparar
 	 * @return XMLEntity hijo o null si no se encuentra
 	 */
 	public XMLEntity firstChild(String key, String value) {
 		int num = this.getChildrenCount();
 		XMLEntity child;
-		for (int i=0;i < num; i++) {
+		for (int i = 0; i < num; i++) {
 			child = this.getChild(i);
 			try {
 				if (child.getStringProperty(key).equals(value)) {
@@ -1291,17 +1302,19 @@ public class XMLEntity {
 	}
 
 	/**
-	 * Devuelve el indice del primer hijo que el valor de su propieda 'key'
-	 * es igual a 'value'
-	 *
-	 * @param key propiedad a comparar
-	 * @param value valor a comparar
+	 * Devuelve el indice del primer hijo que el valor de su propieda 'key' es
+	 * igual a 'value'
+	 * 
+	 * @param key
+	 *            propiedad a comparar
+	 * @param value
+	 *            valor a comparar
 	 * @return int indice del hijo o -1 si no se encuentra
 	 */
 	public int firstIndexOfChild(String key, String value) {
 		int num = this.getChildrenCount();
 		XMLEntity child;
-		for (int i=0;i < num; i++) {
+		for (int i = 0; i < num; i++) {
 			try {
 				child = this.getChild(i);
 				if (child.getStringProperty(key).equals(value)) {
@@ -1315,17 +1328,19 @@ public class XMLEntity {
 	}
 
 	/**
-	 * Devuelve un iterador sobre los hijos que cumplen la condicion
-	 * que el valor de su propiedad 'key' es igual a 'value'
-	 *
+	 * Devuelve un iterador sobre los hijos que cumplen la condicion que el
+	 * valor de su propiedad 'key' es igual a 'value'
+	 * 
 	 * El iterador no permite eliminacion
-	 *
-	 * @param key nombre de la propidedad
-	 * @param value valor de la propiedad
+	 * 
+	 * @param key
+	 *            nombre de la propidedad
+	 * @param value
+	 *            valor de la propiedad
 	 * @return
 	 */
 	public Iterator findChildren(String key, String value) {
-		return new XMLEntityIterator(this,key,value);
+		return new XMLEntityIterator(this, key, value);
 	}
 
 	public String toString() {
@@ -1356,7 +1371,8 @@ public class XMLEntity {
 		return buffer.toString();
 	}
 
-	public static XMLEntity parse(String data) throws MarshalException, ValidationException {
+	public static XMLEntity parse(String data) throws MarshalException,
+			ValidationException {
 		StringReader reader = new StringReader(data);
 
 		XmlTag tag;
@@ -1373,24 +1389,26 @@ class XMLEntityIterator implements Iterator {
 	private String key;
 	private String value;
 
-	public XMLEntityIterator(XMLEntity entity,String key,String value) {
+	public XMLEntityIterator(XMLEntity entity, String key, String value) {
 		this.entity = entity;
 		this.key = key;
 		this.value = value;
 		this.lastIndex = -1;
 		this.lastHasNextIndex = -1;
 	}
+
 	public void remove() {
 		throw new UnsupportedOperationException();
 	}
 
 	public boolean hasNext() {
-		if (entity.getChildrenCount() == 0 || entity.getChildrenCount() <= this.lastIndex){
+		if (entity.getChildrenCount() == 0
+				|| entity.getChildrenCount() <= this.lastIndex) {
 			return false;
 		}
 		int num = this.entity.getChildrenCount();
 		XMLEntity child;
-		for (int i=this.lastIndex+1;i < num; i++) {
+		for (int i = this.lastIndex + 1; i < num; i++) {
 			child = this.entity.getChild(i);
 			try {
 				if (child.getStringProperty(key).equals(value)) {
@@ -1405,7 +1423,8 @@ class XMLEntityIterator implements Iterator {
 	}
 
 	public Object next() {
-		if (entity.getChildrenCount() == 0 || entity.getChildrenCount() <= this.lastIndex){
+		if (entity.getChildrenCount() == 0
+				|| entity.getChildrenCount() <= this.lastIndex) {
 			throw new NoSuchElementException();
 		}
 
@@ -1426,10 +1445,9 @@ class XMLEntityIterator implements Iterator {
 			}
 		}
 
-
 		int num = this.entity.getChildrenCount();
 
-		for (int i=this.lastIndex+1;i < num; i++) {
+		for (int i = this.lastIndex + 1; i < num; i++) {
 			child = this.entity.getChild(i);
 			try {
 				if (child.getStringProperty(key).equals(value)) {

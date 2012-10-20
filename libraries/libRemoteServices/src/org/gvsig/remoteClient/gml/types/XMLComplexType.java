@@ -94,56 +94,59 @@ import org.gvsig.remoteClient.gml.schemas.XMLElement;
 public class XMLComplexType implements IXMLType {
 	public static int SEQUENCE_TYPE = 0;
 	public static int CHOICE_TYPE = 1;
-	
+
 	private String type = null;
 	private LinkedHashMap attributes = null;
-	private int attributesType = 0; 
-			
+	private int attributesType = 0;
+
 	public XMLComplexType(String type) {
 		super();
 		this.type = type;
 		attributes = new LinkedHashMap();
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.remoteClient.gml.schemas.IXMLType#getType()
 	 */
 	public int getType() {
 		return IXMLType.COMPLEX;
 	}
-	
+
 	/*
-	 *  (non-Javadoc)
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.remoteClient.gml.schemas.IXMLType#getName()
 	 */
 	public String getName() {
 		return type;
 	}
-	
+
 	/**
 	 * @return Returns the subtypes.
 	 */
 	public Map getSubtypes() {
 		return attributes;
 	}
-	
+
 	/**
-	 * @param subtypes The subtypes to set.
+	 * @param subtypes
+	 *            The subtypes to set.
 	 */
 	public void addSubtypes(XMLElement element) {
-		if (element.getName() != null){
-			this.attributes.put(element.getName(),element);
+		if (element.getName() != null) {
+			this.attributes.put(element.getName(), element);
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param name
 	 * @return
 	 */
-	public XMLElement getAttribute(String name){
-		return (XMLElement)attributes.get(name);
+	public XMLElement getAttribute(String name) {
+		return (XMLElement) attributes.get(name);
 	}
 
 	/**
@@ -153,8 +156,8 @@ public class XMLComplexType implements IXMLType {
 		Set keys = attributes.keySet();
 		Iterator it = keys.iterator();
 		Vector vector = new Vector();
-		while(it.hasNext()){
-			vector.add(attributes.get((String)it.next()));
+		while (it.hasNext()) {
+			vector.add(attributes.get((String) it.next()));
 		}
 		return vector;
 	}
@@ -166,7 +169,5 @@ public class XMLComplexType implements IXMLType {
 	public void setAttributesType(int attributesType) {
 		this.attributesType = attributesType;
 	}
-	
-	
-	
+
 }

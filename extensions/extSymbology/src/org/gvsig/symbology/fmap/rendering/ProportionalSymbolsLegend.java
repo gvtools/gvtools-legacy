@@ -69,15 +69,15 @@ import com.iver.cit.gvsig.fmap.rendering.VectorialUniqueValueLegend;
 import com.iver.cit.gvsig.fmap.rendering.ZSort;
 import com.iver.utiles.XMLEntity;
 
-
 /**
- * Implements a legend which represents the quantitative information (numeric values). This
- * representation is possible thanks to a symbol whose size is different each time (depending on
- * the numeric values and if we want to use normalization or not).
- *
+ * Implements a legend which represents the quantitative information (numeric
+ * values). This representation is possible thanks to a symbol whose size is
+ * different each time (depending on the numeric values and if we want to use
+ * normalization or not).
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
-public class ProportionalSymbolsLegend extends VectorialUniqueValueLegend  {
+public class ProportionalSymbolsLegend extends VectorialUniqueValueLegend {
 
 	@Override
 	public void setClassifyingFieldNames(String[] fNames) {
@@ -96,7 +96,6 @@ public class ProportionalSymbolsLegend extends VectorialUniqueValueLegend  {
 	private double maxFeature, minFeature;
 	private ZSort zSort = null;
 
-
 	public ISymbol getSymbolByValue(Value key) {
 		MultiLayerFillSymbol sym = (MultiLayerFillSymbol) getDefaultSymbol();
 		return sym;
@@ -109,35 +108,41 @@ public class ProportionalSymbolsLegend extends VectorialUniqueValueLegend  {
 		Value normValue = ValueFactory.createValue(0);
 		double size;
 
-		double separation = maxSize-minSize;
-		if(separation == 0)
+		double separation = maxSize - minSize;
+		if (separation == 0)
 			separation = 1;
 
 		try {
 
-			value= feat.getAttribute(0);
-			if(useNormalization) {
+			value = feat.getAttribute(0);
+			if (useNormalization) {
 				normValue = feat.getAttribute(1);
-				value= feat.getAttribute(0).producto(normValue.inversa());
-				size = minSize + ((Double.valueOf(value.toString()) * separation)) ;
-			}
-			else {
+				value = feat.getAttribute(0).producto(normValue.inversa());
+				size = minSize
+						+ ((Double.valueOf(value.toString()) * separation));
+			} else {
 				double difFeat = maxFeature - minFeature;
-				double step = difFeat/separation;
-				size = minSize + ((Double.valueOf(feat.getAttribute(0).toString()) - minFeature)/step);
+				double step = difFeat / separation;
+				size = minSize
+						+ ((Double.valueOf(feat.getAttribute(0).toString()) - minFeature) / step);
 			}
 
 		} catch (IncompatibleTypesException e) {
-			Logger.getLogger(getClass()).error(Messages.getString("incompatible_types_to_calculate_the_normalization"));
+			Logger.getLogger(getClass())
+					.error(Messages
+							.getString("incompatible_types_to_calculate_the_normalization"));
 			return null;
 		}
 
-		if(size == Double.NaN) {
-			Logger.getLogger(getClass()).error(Messages.getString("the size for the symbol is equal to NaN "));
+		if (size == Double.NaN) {
+			Logger.getLogger(getClass())
+					.error(Messages
+							.getString("the size for the symbol is equal to NaN "));
 			return null;
 		}
 
-		if ((feat.getGeometry().getGeometryType()% FShape.Z) == FShape.POLYGON && theSymbol instanceof IMarkerSymbol) {
+		if ((feat.getGeometry().getGeometryType() % FShape.Z) == FShape.POLYGON
+				&& theSymbol instanceof IMarkerSymbol) {
 			MarkerFillSymbol aux = new MarkerFillSymbol();
 			((IMarkerSymbol) theSymbol).setSize(size);
 			aux.setMarker((IMarkerSymbol) theSymbol);
@@ -145,19 +150,17 @@ public class ProportionalSymbolsLegend extends VectorialUniqueValueLegend  {
 			p.setFillStyle(SimpleMarkerFillPropertiesStyle.SINGLE_CENTERED_SYMBOL);
 			aux.setMarkerFillProperties(p);
 			theSymbol = aux;
-		}
-		else if ((feat.getGeometry().getGeometryType()%FShape.Z) == FShape.LINE) {
-			ILineSymbol line = (ILineSymbol)theSymbol;
+		} else if ((feat.getGeometry().getGeometryType() % FShape.Z) == FShape.LINE) {
+			ILineSymbol line = (ILineSymbol) theSymbol;
 			line.setLineWidth(size);
 			theSymbol = line;
-		}
-		else if ((feat.getGeometry().getGeometryType()%FShape.Z) == FShape.POINT) {
+		} else if ((feat.getGeometry().getGeometryType() % FShape.Z) == FShape.POINT) {
 			IMarkerSymbol marker = (IMarkerSymbol) theSymbol;
 			marker.setSize(size);
 			theSymbol = marker;
 		}
 		if (backgroundSymbol != null) {
-			MultiLayerFillSymbol multi = new MultiLayerFillSymbol() ;
+			MultiLayerFillSymbol multi = new MultiLayerFillSymbol();
 			multi.addLayer(backgroundSymbol);
 			multi.addLayer(theSymbol);
 			return multi;
@@ -169,7 +172,7 @@ public class ProportionalSymbolsLegend extends VectorialUniqueValueLegend  {
 	}
 
 	public XMLEntity getXMLEntity() {
-//		XMLEntity xml = super.getXMLEntity();
+		// XMLEntity xml = super.getXMLEntity();
 		XMLEntity xml = new XMLEntity();
 
 		xml.putProperty("className", this.getClass().getName());
@@ -180,8 +183,8 @@ public class ProportionalSymbolsLegend extends VectorialUniqueValueLegend  {
 		xml.putProperty("maxSize", getMaxSize());
 		xml.putProperty("useNormalization", getUseNormalization());
 
-		xml.putProperty("maxFeature", getMaxFeature() );
-		xml.putProperty("minFeature", getMinFeature() );
+		xml.putProperty("maxFeature", getMaxFeature());
+		xml.putProperty("minFeature", getMinFeature());
 
 		xml.putProperty("useNormalization", getUseNormalization());
 
@@ -201,7 +204,7 @@ public class ProportionalSymbolsLegend extends VectorialUniqueValueLegend  {
 
 	public void setXMLEntity(XMLEntity xml) {
 
-//		super.setXMLEntity(xml);
+		// super.setXMLEntity(xml);
 
 		valueField = xml.getStringProperty("valueField");
 		normalizationField = xml.getStringProperty("normalizationField");
@@ -214,196 +217,254 @@ public class ProportionalSymbolsLegend extends VectorialUniqueValueLegend  {
 
 		if (xml.firstChild("id", "defaultSymbol") != null) {
 			XMLEntity defaultXML = xml.firstChild("id", "defaultSymbol");
-			setDefaultSymbol(SymbologyFactory.createSymbolFromXML(defaultXML, "defaultSymbol"));
+			setDefaultSymbol(SymbologyFactory.createSymbolFromXML(defaultXML,
+					"defaultSymbol"));
 		}
 
 		if (xml.firstChild("idB", "backgroundSymbol") != null) {
 			XMLEntity backgroundXML = xml.firstChild("idB", "backgroundSymbol");
-			backgroundSymbol = SymbologyFactory.createSymbolFromXML(backgroundXML, "backgroundSymbol");
+			backgroundSymbol = SymbologyFactory.createSymbolFromXML(
+					backgroundXML, "backgroundSymbol");
 		}
 
 		String[] fieldNames = new String[2];
-		fieldNames[0]= valueField;
-		if(normalizationField.compareTo(PluginServices.getText(this, "none")) == 0)
-			fieldNames[1]= fieldNames[0];
-		else fieldNames[1] = normalizationField;
+		fieldNames[0] = valueField;
+		if (normalizationField.compareTo(PluginServices.getText(this, "none")) == 0)
+			fieldNames[1] = fieldNames[0];
+		else
+			fieldNames[1] = normalizationField;
 
 		setClassifyingFieldNames(fieldNames);
 
 	}
+
 	/**
-	 * Gets the background symbol which only can appear when the shapetype of the layer
-	 * is polygonal
-	 *
+	 * Gets the background symbol which only can appear when the shapetype of
+	 * the layer is polygonal
+	 * 
 	 * @return ISymbol the symbol for the background
 	 */
-	public ISymbol getBackgroundSymbol() {return backgroundSymbol;}
+	public ISymbol getBackgroundSymbol() {
+		return backgroundSymbol;
+	}
+
 	/**
-	 * Sets the background symbol which is used only when the shapetype of the layer is polygonal
-	 *
-	 * @param backgroundSymbol the symbol for the background
+	 * Sets the background symbol which is used only when the shapetype of the
+	 * layer is polygonal
+	 * 
+	 * @param backgroundSymbol
+	 *            the symbol for the background
 	 */
-	public void setBackgroundSymbol(ISymbol backgroundSymbol) {this.backgroundSymbol = backgroundSymbol;}
+	public void setBackgroundSymbol(ISymbol backgroundSymbol) {
+		this.backgroundSymbol = backgroundSymbol;
+	}
+
 	/**
-	 * Obtains the classifying field name to be used to calculate the size of the symbol
-	 *
-	 * @return String  the name of the field
-	 * @throws ReadDriverException 
+	 * Obtains the classifying field name to be used to calculate the size of
+	 * the symbol
+	 * 
+	 * @return String the name of the field
+	 * @throws ReadDriverException
 	 */
 	public String getValueField() {
-//		try {
-//			// TODO:
-//			// Por los alias, al guardar un proyecto no podemos
-//			// permitir que se guarde con campos que luego
-//			// no van a existir.
-////			int id = dataSource.getFieldIndexByName(valueField);
-////			valueField = dataSource.getFieldName(id);
-//		} catch (ReadDriverException e) {
-//			e.printStackTrace();
-//			throw new RuntimeException(e);
-//		}
+		// try {
+		// // TODO:
+		// // Por los alias, al guardar un proyecto no podemos
+		// // permitir que se guarde con campos que luego
+		// // no van a existir.
+		// // int id = dataSource.getFieldIndexByName(valueField);
+		// // valueField = dataSource.getFieldName(id);
+		// } catch (ReadDriverException e) {
+		// e.printStackTrace();
+		// throw new RuntimeException(e);
+		// }
 		return valueField;
 	}
+
 	/**
-	 * Sets the classifying field name to be used to calculate the size of the symbol
-	 *
-	 * @param String  the name of the field
+	 * Sets the classifying field name to be used to calculate the size of the
+	 * symbol
+	 * 
+	 * @param String
+	 *            the name of the field
 	 */
-	public void setValueField(String valueField) {this.valueField = valueField;}
+	public void setValueField(String valueField) {
+		this.valueField = valueField;
+	}
+
 	/**
-	 * Obtains the classifying field name to be used to calculate the size of the symbol when the
-	 * user is doing it with a normalization value.
-	 *
-	 * @return String  the name of the field
+	 * Obtains the classifying field name to be used to calculate the size of
+	 * the symbol when the user is doing it with a normalization value.
+	 * 
+	 * @return String the name of the field
 	 */
 	public String getNormalizationField() {
 		return normalizationField;
 	}
+
 	/**
-	 * Sets the classifying field name to be used to calculate the size of the symbol when the
-	 * user is doing it with a normalization value.
-	 *
-	 * @param String  the name of the field
+	 * Sets the classifying field name to be used to calculate the size of the
+	 * symbol when the user is doing it with a normalization value.
+	 * 
+	 * @param String
+	 *            the name of the field
 	 */
-	public void setNormalizationField(String normalizationField) {this.normalizationField = normalizationField;}
+	public void setNormalizationField(String normalizationField) {
+		this.normalizationField = normalizationField;
+	}
+
 	/**
 	 * Obtains the minimum size for the symbol
-	 *
-	 * @return double  the minimum size for the symbol
+	 * 
+	 * @return double the minimum size for the symbol
 	 */
-	public double getMinSize() {return minSize;}
+	public double getMinSize() {
+		return minSize;
+	}
+
 	/**
 	 * Sets the minimum size for the symbol
-	 *
-	 * @param minSize  the minimum size for the symbol
+	 * 
+	 * @param minSize
+	 *            the minimum size for the symbol
 	 */
-	public void setMinSize(double minSize) {this.minSize = minSize;}
+	public void setMinSize(double minSize) {
+		this.minSize = minSize;
+	}
+
 	/**
 	 * Obtains the maximum size for the symbol
-	 *
-	 * @return double  the minimum size for the symbol
+	 * 
+	 * @return double the minimum size for the symbol
 	 */
-	public double getMaxSize() {return maxSize;}
+	public double getMaxSize() {
+		return maxSize;
+	}
+
 	/**
 	 * Sets the maximum size for the symbol
-	 *
-	 * @param maxSize  the minimum size for the symbol
+	 * 
+	 * @param maxSize
+	 *            the minimum size for the symbol
 	 */
-	public void setMaxSize(double maxSize) {this.maxSize = maxSize;}
+	public void setMaxSize(double maxSize) {
+		this.maxSize = maxSize;
+	}
+
 	/**
 	 * Obtains the shapetype of the template symbol
-	 *
+	 * 
 	 * @return int shape type for the template symbol
 	 */
-	public int getTemplateShapeType() {return templateShapeType;}
+	public int getTemplateShapeType() {
+		return templateShapeType;
+	}
+
 	/**
 	 * Sets the shapetype of the template symbol
-	 *
-	 * @param templateShapeType shape type for the template symbol
+	 * 
+	 * @param templateShapeType
+	 *            shape type for the template symbol
 	 */
 	public void setTemplateShapeType(int templateShapeType) {
-		if((getShapeType()%FShape.Z) == FShape.POLYGON ) {
-			if((templateShapeType % FShape.Z) == FShape.POINT)
+		if ((getShapeType() % FShape.Z) == FShape.POLYGON) {
+			if ((templateShapeType % FShape.Z) == FShape.POINT)
 				this.templateShapeType = templateShapeType;
-		}
-		else if((templateShapeType % FShape.Z) == (getShapeType()%FShape.Z) || getShapeType() == FShape.NULL) {
+		} else if ((templateShapeType % FShape.Z) == (getShapeType() % FShape.Z)
+				|| getShapeType() == FShape.NULL) {
 			this.templateShapeType = templateShapeType;
 		}
 	}
+
 	/**
-	 * Obtains the boolean which is true if the user wants to calculate the size of the
-	 * symbol using a normalization field.
-	 *
+	 * Obtains the boolean which is true if the user wants to calculate the size
+	 * of the symbol using a normalization field.
+	 * 
 	 * @return boolean true if the user wants normalization.Otherwise, false.
 	 */
-	public boolean getUseNormalization() {return useNormalization;}
+	public boolean getUseNormalization() {
+		return useNormalization;
+	}
+
 	/**
-	 * Sets the boolean which is true if the user wants to calculate the size of the
-	 * symbol using a normalization field.
-	 *
-	 * @param useNormalization true if the user wants normalization.Otherwise, false.
+	 * Sets the boolean which is true if the user wants to calculate the size of
+	 * the symbol using a normalization field.
+	 * 
+	 * @param useNormalization
+	 *            true if the user wants normalization.Otherwise, false.
 	 */
-	public void setUseNormalization(boolean useNormalization) {this.useNormalization = useNormalization;}
+	public void setUseNormalization(boolean useNormalization) {
+		this.useNormalization = useNormalization;
+	}
+
 	/**
-	 * Obtains the variable which represents the maximum value of the classifying field that is used
-	 * to calculate the size of the symbol
-	 *
-	 * @return double  the maximum value of the classifying field
+	 * Obtains the variable which represents the maximum value of the
+	 * classifying field that is used to calculate the size of the symbol
+	 * 
+	 * @return double the maximum value of the classifying field
 	 */
-	public double getMaxFeature() {return maxFeature;}
+	public double getMaxFeature() {
+		return maxFeature;
+	}
+
 	/**
-	 * Sets the variable which represents the maximum value of the classifying field that is used
-	 * to calculate the size of the symbol
-	 *
+	 * Sets the variable which represents the maximum value of the classifying
+	 * field that is used to calculate the size of the symbol
+	 * 
 	 * @param maxFeature
 	 */
-	public void setMaxFeature(double maxFeature) {this.maxFeature = maxFeature;}
+	public void setMaxFeature(double maxFeature) {
+		this.maxFeature = maxFeature;
+	}
+
 	/**
-	 * Obtains the variable which represents the minimum value of the classifying field that is used
-	 * to calculate the size of the symbol
-	 *
-	 * @return double  the minimum value of the classifying field
+	 * Obtains the variable which represents the minimum value of the
+	 * classifying field that is used to calculate the size of the symbol
+	 * 
+	 * @return double the minimum value of the classifying field
 	 */
-	public double getMinFeature() {return minFeature;}
+	public double getMinFeature() {
+		return minFeature;
+	}
+
 	/**
-	 * Sets the variable which represents the minimum value of the classifying field that is used
-	 * to calculate the size of the symbol
-	 *
+	 * Sets the variable which represents the minimum value of the classifying
+	 * field that is used to calculate the size of the symbol
+	 * 
 	 * @param minFeature
 	 */
-	public void setMinFeature(double minFeature) {this.minFeature = minFeature;}
-
+	public void setMinFeature(double minFeature) {
+		this.minFeature = minFeature;
+	}
 
 	@Override
 	public boolean isSuitableForShapeType(int shapeType) {
-		return (getShapeType()%FShape.Z) == (shapeType%FShape.Z) || ((getTemplateShapeType()%FShape.Z) == FShape.POINT && (shapeType%FShape.Z) == FShape.POLYGON);
+		return (getShapeType() % FShape.Z) == (shapeType % FShape.Z)
+				|| ((getTemplateShapeType() % FShape.Z) == FShape.POINT && (shapeType % FShape.Z) == FShape.POLYGON);
 	}
 
-
 	public ISymbol[] getSymbols() {
-		ISymbol[] auxSymbols=super.getSymbols();
-		if(backgroundSymbol != null){
-			ISymbol[] symbols=new ISymbol[auxSymbols.length+1];
+		ISymbol[] auxSymbols = super.getSymbols();
+		if (backgroundSymbol != null) {
+			ISymbol[] symbols = new ISymbol[auxSymbols.length + 1];
 			for (int i = 0; i < auxSymbols.length; i++) {
-				symbols[i]=auxSymbols[i];
+				symbols[i] = auxSymbols[i];
 			}
-			symbols[symbols.length-1]=backgroundSymbol;
+			symbols[symbols.length - 1] = backgroundSymbol;
 			return symbols;
 		} else {
 			return auxSymbols;
 		}
 	}
 
-
-
 	public ZSort getZSort() {
-		if (zSort == null){
+		if (zSort == null) {
 			zSort = new MyZSort(this);
 		}
 		return zSort;
 	}
 
-	public void setZSort(ZSort zSort){
+	public void setZSort(ZSort zSort) {
 		return;
 	}
 
@@ -422,29 +483,28 @@ public class ProportionalSymbolsLegend extends VectorialUniqueValueLegend  {
 
 		public int getLevelCount() {
 			int levels = 0;
-			if (backgroundSymbol!=null){
-				if(backgroundSymbol instanceof IMultiLayerSymbol){
-					levels += ((IMultiLayerSymbol)backgroundSymbol).getLayerCount();
+			if (backgroundSymbol != null) {
+				if (backgroundSymbol instanceof IMultiLayerSymbol) {
+					levels += ((IMultiLayerSymbol) backgroundSymbol)
+							.getLayerCount();
 				} else {
 					levels += 1;
 				}
 			}
 			ISymbol sym = getDefaultSymbol();
-			if(getDefaultSymbol() instanceof IMultiLayerSymbol){
-				levels += ((IMultiLayerSymbol)sym).getLayerCount();
+			if (getDefaultSymbol() instanceof IMultiLayerSymbol) {
+				levels += ((IMultiLayerSymbol) sym).getLayerCount();
 			} else {
 				levels += 1;
 			}
-			return levels+1;
+			return levels + 1;
 		}
-
 
 		public void setUsingZSort(boolean usingZSort) {
 		}
 
 		public void setLevels(ISymbol sym, int[] values) {
 		}
-
 
 		public void setLevels(int row, int[] values) {
 		}
@@ -457,32 +517,31 @@ public class ProportionalSymbolsLegend extends VectorialUniqueValueLegend  {
 			int levelsCount = getLevelCount();
 			int[] levels = new int[levelsCount];
 			int bgLevels = 1;
-			if (backgroundSymbol!=null){
-				if(backgroundSymbol instanceof IMultiLayerSymbol){
-					bgLevels = ((IMultiLayerSymbol)backgroundSymbol).getLayerCount();
+			if (backgroundSymbol != null) {
+				if (backgroundSymbol instanceof IMultiLayerSymbol) {
+					bgLevels = ((IMultiLayerSymbol) backgroundSymbol)
+							.getLayerCount();
 				}
-				for (int i=0; i<bgLevels; i++) {
-					levels[i]=i;
+				for (int i = 0; i < bgLevels; i++) {
+					levels[i] = i;
 				}
 			}
 
 			ISymbol sym = getDefaultSymbol();
 			int frLevels = 1;
-			if(getDefaultSymbol() instanceof IMultiLayerSymbol){
-				frLevels = ((IMultiLayerSymbol)sym).getLayerCount();
+			if (getDefaultSymbol() instanceof IMultiLayerSymbol) {
+				frLevels = ((IMultiLayerSymbol) sym).getLayerCount();
 			}
-			for (int i=0; i<frLevels; i++) {
-				levels[i+bgLevels]=i+bgLevels;
+			for (int i = 0; i < frLevels; i++) {
+				levels[i + bgLevels] = i + bgLevels;
 			}
-			levels[frLevels+bgLevels]=frLevels+bgLevels;
+			levels[frLevels + bgLevels] = frLevels + bgLevels;
 			return levels;
 		}
 
-
 		public boolean isUsingZSort() {
-			return backgroundSymbol!=null;
+			return backgroundSymbol != null;
 		}
-
 
 		public ISymbol[] getSymbols() {
 			return getSymbols();
@@ -526,28 +585,24 @@ public class ProportionalSymbolsLegend extends VectorialUniqueValueLegend  {
 		public void legendCleared(LegendClearEvent event) {
 		}
 
-//		public void setXMLEntity(XMLEntity xml) {
-//		}
-//
-//		public XMLEntity getXMLEntity() {
-//			XMLEntity xml = new XMLEntity();
-//			xml.putProperty("className", getClassName());
-//
-//			/*
-//			 * ADVICE:
-//			 * don't try to persist symbols!!
-//			 * they are already persisted by the legend!!!
-//			 */
-//
-//			xml.putProperty("usingZSort", isUsingZSort());
-//			return xml;
-//
-//		}
-
+		// public void setXMLEntity(XMLEntity xml) {
+		// }
+		//
+		// public XMLEntity getXMLEntity() {
+		// XMLEntity xml = new XMLEntity();
+		// xml.putProperty("className", getClassName());
+		//
+		// /*
+		// * ADVICE:
+		// * don't try to persist symbols!!
+		// * they are already persisted by the legend!!!
+		// */
+		//
+		// xml.putProperty("usingZSort", isUsingZSort());
+		// return xml;
+		//
+		// }
 
 	}
-
-
-
 
 }

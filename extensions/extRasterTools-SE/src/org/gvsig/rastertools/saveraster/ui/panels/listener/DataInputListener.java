@@ -1,21 +1,21 @@
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
-*
-* Copyright (C) 2007 IVER T.I. and Generalitat Valenciana.
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License
-* as published by the Free Software Foundation; either version 2
-* of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
-*/
+ *
+ * Copyright (C) 2007 IVER T.I. and Generalitat Valenciana.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
+ */
 package org.gvsig.rastertools.saveraster.ui.panels.listener;
 
 import java.awt.event.ActionEvent;
@@ -44,26 +44,28 @@ import org.opengis.referencing.crs.ProjectedCRS;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.addlayer.fileopen.FileOpenWizard;
+
 /**
  * Panel encargado de manejar los eventos del los controles de Salvar a Raster
- *
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
-public class DataInputListener implements ActionListener, MouseListener, FocusListener, KeyListener, DataInputContainerListener {
-	final private static long        serialVersionUID         = -3370601314380922368L;
-	private SaveRasterPanel          controlPanel             = null;
-	private SaveRasterDialog         dialog                   = null;
-	private String                   fName                    = null;
-	private double                   widthInPixels            = 0;
-	private double                   heightInPixels           = 0;
-	private double                   mtsPerPixel              = 0D;
-	private Object                   obj                      = null;
-	private double                   widthMts                 = 0D, heightMts = 0D;
-	private boolean                  enableEventValueChanged  = true;
+public class DataInputListener implements ActionListener, MouseListener,
+		FocusListener, KeyListener, DataInputContainerListener {
+	final private static long serialVersionUID = -3370601314380922368L;
+	private SaveRasterPanel controlPanel = null;
+	private SaveRasterDialog dialog = null;
+	private String fName = null;
+	private double widthInPixels = 0;
+	private double heightInPixels = 0;
+	private double mtsPerPixel = 0D;
+	private Object obj = null;
+	private double widthMts = 0D, heightMts = 0D;
+	private boolean enableEventValueChanged = true;
 
 	/**
 	 * This method initializes
-	 *
+	 * 
 	 */
 	public DataInputListener(SaveRasterPanel controlPanel) {
 		super();
@@ -73,12 +75,12 @@ public class DataInputListener implements ActionListener, MouseListener, FocusLi
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	void initialize() {
 
-		//Añadimos gestión de eventos
+		// Añadimos gestión de eventos
 		controlPanel.getTScale().addValueChangedListener(this);
 		controlPanel.getTMtsPixel().addValueChangedListener(this);
 		controlPanel.getTWidth().addValueChangedListener(this);
@@ -100,6 +102,7 @@ public class DataInputListener implements ActionListener, MouseListener, FocusLi
 
 	/**
 	 * Asigna un valor al panel padre
+	 * 
 	 * @param dialogPanel
 	 */
 	public void setDialogPanel(SaveRasterDialog dialog) {
@@ -108,6 +111,7 @@ public class DataInputListener implements ActionListener, MouseListener, FocusLi
 
 	/**
 	 * Obtiene el Panel de Controles interior
+	 * 
 	 * @return
 	 */
 	public SaveRasterPanel getSaveParameters() {
@@ -119,319 +123,388 @@ public class DataInputListener implements ActionListener, MouseListener, FocusLi
 
 	/**
 	 * A partir del valor de tamaño de imagen de salida, comprueba el tipo de
-	 * dato seleccionado por el usuario (Pixels, mms, cms, mts, pulgadas) y devuelve
-	 * el valor en pixeles.
-	 * @param value Cadena introducida por el usuario
+	 * dato seleccionado por el usuario (Pixels, mms, cms, mts, pulgadas) y
+	 * devuelve el valor en pixeles.
+	 * 
+	 * @param value
+	 *            Cadena introducida por el usuario
 	 */
-	private int getCorrectMeasure(String value){
-		if(controlPanel.getCbMeasureType().getSelectedItem().equals(PluginServices.getText(this, "pixels")))
-			return (int)Double.parseDouble(value);
+	private int getCorrectMeasure(String value) {
+		if (controlPanel.getCbMeasureType().getSelectedItem()
+				.equals(PluginServices.getText(this, "pixels")))
+			return (int) Double.parseDouble(value);
 
-		int ppp = Integer.parseInt((String)controlPanel.getCbResolution().getSelectedItem());
-		if(controlPanel.getCbMeasureType().getSelectedItem().equals(PluginServices.getText(this, "meters")))
+		int ppp = Integer.parseInt((String) controlPanel.getCbResolution()
+				.getSelectedItem());
+		if (controlPanel.getCbMeasureType().getSelectedItem()
+				.equals(PluginServices.getText(this, "meters")))
 			return MathUtils.convertMtsToPixels(Double.parseDouble(value), ppp);
-		if(controlPanel.getCbMeasureType().getSelectedItem().equals(PluginServices.getText(this, "centimeters")))
+		if (controlPanel.getCbMeasureType().getSelectedItem()
+				.equals(PluginServices.getText(this, "centimeters")))
 			return MathUtils.convertCmsToPixels(Double.parseDouble(value), ppp);
-		if(controlPanel.getCbMeasureType().getSelectedItem().equals(PluginServices.getText(this, "millimeters")))
+		if (controlPanel.getCbMeasureType().getSelectedItem()
+				.equals(PluginServices.getText(this, "millimeters")))
 			return MathUtils.convertMmsToPixels(Double.parseDouble(value), ppp);
-		if(controlPanel.getCbMeasureType().getSelectedItem().equals(PluginServices.getText(this, "inches")))
-			return MathUtils.convertInchesToPixels(Double.parseDouble(value), ppp);
+		if (controlPanel.getCbMeasureType().getSelectedItem()
+				.equals(PluginServices.getText(this, "inches")))
+			return MathUtils.convertInchesToPixels(Double.parseDouble(value),
+					ppp);
 
 		return 0;
 	}
 
 	/**
-	 * Asigna al JTextField pasado como parámetro el valor en pixels, cms, mms ,mtrs, pulgadas dependiendo
-	 * de la selección del combo
-	 * @param pixel	Valor en pixels
-	 * @param field Campo donde se escribe el valor
+	 * Asigna al JTextField pasado como parámetro el valor en pixels, cms, mms
+	 * ,mtrs, pulgadas dependiendo de la selección del combo
+	 * 
+	 * @param pixel
+	 *            Valor en pixels
+	 * @param field
+	 *            Campo donde se escribe el valor
 	 */
-	private void setCorrectMeasure(double pixel, DataInputContainer field){
-		if(controlPanel.getCbMeasureType().getSelectedItem().equals(PluginServices.getText(this, "pixels"))) {
+	private void setCorrectMeasure(double pixel, DataInputContainer field) {
+		if (controlPanel.getCbMeasureType().getSelectedItem()
+				.equals(PluginServices.getText(this, "pixels"))) {
 			field.setValue(String.valueOf(pixel));
 			return;
 		}
 
 		enableEventValueChanged = false;
-		int ppp = Integer.parseInt((String)controlPanel.getCbResolution().getSelectedItem());
-		if(controlPanel.getCbMeasureType().getSelectedItem().equals(PluginServices.getText(this, "meters")))
-			field.setValue(String.valueOf(MathUtils.clipDecimals(MathUtils.convertPixelsToMts(pixel, ppp),5)));
+		int ppp = Integer.parseInt((String) controlPanel.getCbResolution()
+				.getSelectedItem());
+		if (controlPanel.getCbMeasureType().getSelectedItem()
+				.equals(PluginServices.getText(this, "meters")))
+			field.setValue(String.valueOf(MathUtils.clipDecimals(
+					MathUtils.convertPixelsToMts(pixel, ppp), 5)));
 
-		if(controlPanel.getCbMeasureType().getSelectedItem().equals(PluginServices.getText(this, "centimeters")))
-			field.setValue(String.valueOf(MathUtils.clipDecimals(MathUtils.convertPixelsToCms(pixel, ppp),5)));
+		if (controlPanel.getCbMeasureType().getSelectedItem()
+				.equals(PluginServices.getText(this, "centimeters")))
+			field.setValue(String.valueOf(MathUtils.clipDecimals(
+					MathUtils.convertPixelsToCms(pixel, ppp), 5)));
 
-		if(controlPanel.getCbMeasureType().getSelectedItem().equals(PluginServices.getText(this, "millimeters")))
-			field.setValue(String.valueOf(MathUtils.clipDecimals(MathUtils.convertPixelsToMms(pixel, ppp),5)));
+		if (controlPanel.getCbMeasureType().getSelectedItem()
+				.equals(PluginServices.getText(this, "millimeters")))
+			field.setValue(String.valueOf(MathUtils.clipDecimals(
+					MathUtils.convertPixelsToMms(pixel, ppp), 5)));
 
-		if(controlPanel.getCbMeasureType().getSelectedItem().equals(PluginServices.getText(this, "inches")))
-			field.setValue(String.valueOf(MathUtils.clipDecimals(MathUtils.convertPixelsToInches(pixel, ppp),5)));
+		if (controlPanel.getCbMeasureType().getSelectedItem()
+				.equals(PluginServices.getText(this, "inches")))
+			field.setValue(String.valueOf(MathUtils.clipDecimals(
+					MathUtils.convertPixelsToInches(pixel, ppp), 5)));
 		enableEventValueChanged = true;
 
 	}
 
-		/**
-		 * Calculo del tamaño en pixels de la imagen a partir de las coordenadas del
-		 * mundo real, la escala y los puntos por pulgada
-		 */
-		private void recalcParams() {
-			validateFields();
-			double[] size = null;
-			try{
-				size = calcSizeInMts();
-			} catch (NumberFormatException e) {
-				return;
-			}
-			widthMts = size[0];
-			heightMts = size[1];
-
-			int resolution = Integer.parseInt((String)controlPanel.getCbResolution().getSelectedItem());
-
-			//Al variar la resolución independientemente del método seleccionado recalculamos el ancho y el alto
-			if (obj.equals(controlPanel.getCbResolution())) {
-				String escala = controlPanel.getTScale().getValue();
-				try{
-					if(controlPanel.getCrs() instanceof ProjectedCRS)
-						calcSizeMtsPixel(Double.parseDouble(escala), resolution);
-				}
-				catch(NumberFormatException exc){
-					calcSizeMtsPixel(0, resolution);
-				}
-				return;
-			}
-
-			//Método por escala seleccionado
-			if(	controlPanel.getRbScale().isSelected() &&
-				!controlPanel.getTScale().getValue().equals("")) {
-				double scale = Double.parseDouble(controlPanel.getTScale().getValue());
-				if(controlPanel.getCrs() instanceof ProjectedCRS)
-					calcSizeMtsPixel(scale, resolution);
-				else
-					calcSizeMtsPixelGeodesicas(scale, resolution);
-			}
-
-			//Método por tamaño seleccionado
-			if(controlPanel.getRbSize().isSelected()) {
-				double rel = (widthMts / heightMts);
-
-				if(	obj != null && obj.equals(controlPanel.getTWidth().getDataInputField()) &&
-					!controlPanel.getTWidth().getValue().equals("")) {
-					this.widthInPixels = this.getCorrectMeasure(controlPanel.getTWidth().getValue());
-					this.heightInPixels = (int)Math.floor(this.widthInPixels / rel);
-					if(controlPanel.getCrs() instanceof ProjectedCRS)
-						calcScaleMtsPixel(this.widthInPixels, this.heightInPixels, resolution);
-				}
-				if(	obj != null && obj.equals(controlPanel.getTHeight().getDataInputField()) &&
-							!controlPanel.getTHeight().getValue().equals("")) {
-					this.heightInPixels = this.getCorrectMeasure(controlPanel.getTHeight().getValue());
-					this.widthInPixels = (int)Math.ceil(this.heightInPixels * rel);
-					if(controlPanel.getCrs() instanceof ProjectedCRS)
-						calcScaleMtsPixel(this.widthInPixels, this.heightInPixels, resolution);
-				}
-				if(	obj != null &&
-					obj.equals(controlPanel.getCbMeasureType())) {
-						if(controlPanel.getCrs()  instanceof ProjectedCRS)
-							calcScaleMtsPixel(this.widthInPixels, this.heightInPixels, resolution);
-				}
-			}
-
-			//Método metros por pixel seleccionado
-			if(	controlPanel.getRbMtsPixel().isSelected() &&
-				!controlPanel.getTMtsPixel().getValue().equals("")) {
-				double mtsPixel = Double.parseDouble(controlPanel.getTMtsPixel().getValue());
-				if(controlPanel.getCrs() instanceof ProjectedCRS)
-					calcSizeScale(mtsPixel, resolution);
-			}
+	/**
+	 * Calculo del tamaño en pixels de la imagen a partir de las coordenadas del
+	 * mundo real, la escala y los puntos por pulgada
+	 */
+	private void recalcParams() {
+		validateFields();
+		double[] size = null;
+		try {
+			size = calcSizeInMts();
+		} catch (NumberFormatException e) {
+			return;
 		}
+		widthMts = size[0];
+		heightMts = size[1];
 
-		/**
-		 * Comprueba si un campo de texto tiene el tipo de dato entero o double y si no lo
-		 * tiene lo borra ya que su contenido es invalido para operar con el
-		 * @param field	Campo de texto a validar
-		 * @param isInt true si el valor a validar es entero y false si es double
-		 */
-		private void validateTextField(DataInputContainer field){
+		int resolution = Integer.parseInt((String) controlPanel
+				.getCbResolution().getSelectedItem());
+
+		// Al variar la resolución independientemente del método seleccionado
+		// recalculamos el ancho y el alto
+		if (obj.equals(controlPanel.getCbResolution())) {
+			String escala = controlPanel.getTScale().getValue();
 			try {
-					Double.parseDouble(field.getValue());
-			} catch (NumberFormatException e) {
-					 field.setValue("0");
+				if (controlPanel.getCrs() instanceof ProjectedCRS)
+					calcSizeMtsPixel(Double.parseDouble(escala), resolution);
+			} catch (NumberFormatException exc) {
+				calcSizeMtsPixel(0, resolution);
+			}
+			return;
+		}
+
+		// Método por escala seleccionado
+		if (controlPanel.getRbScale().isSelected()
+				&& !controlPanel.getTScale().getValue().equals("")) {
+			double scale = Double.parseDouble(controlPanel.getTScale()
+					.getValue());
+			if (controlPanel.getCrs() instanceof ProjectedCRS)
+				calcSizeMtsPixel(scale, resolution);
+			else
+				calcSizeMtsPixelGeodesicas(scale, resolution);
+		}
+
+		// Método por tamaño seleccionado
+		if (controlPanel.getRbSize().isSelected()) {
+			double rel = (widthMts / heightMts);
+
+			if (obj != null
+					&& obj.equals(controlPanel.getTWidth().getDataInputField())
+					&& !controlPanel.getTWidth().getValue().equals("")) {
+				this.widthInPixels = this.getCorrectMeasure(controlPanel
+						.getTWidth().getValue());
+				this.heightInPixels = (int) Math
+						.floor(this.widthInPixels / rel);
+				if (controlPanel.getCrs() instanceof ProjectedCRS)
+					calcScaleMtsPixel(this.widthInPixels, this.heightInPixels,
+							resolution);
+			}
+			if (obj != null
+					&& obj.equals(controlPanel.getTHeight().getDataInputField())
+					&& !controlPanel.getTHeight().getValue().equals("")) {
+				this.heightInPixels = this.getCorrectMeasure(controlPanel
+						.getTHeight().getValue());
+				this.widthInPixels = (int) Math.ceil(this.heightInPixels * rel);
+				if (controlPanel.getCrs() instanceof ProjectedCRS)
+					calcScaleMtsPixel(this.widthInPixels, this.heightInPixels,
+							resolution);
+			}
+			if (obj != null && obj.equals(controlPanel.getCbMeasureType())) {
+				if (controlPanel.getCrs() instanceof ProjectedCRS)
+					calcScaleMtsPixel(this.widthInPixels, this.heightInPixels,
+							resolution);
 			}
 		}
 
-		/**
-		 * Valida los campos de texto
+		// Método metros por pixel seleccionado
+		if (controlPanel.getRbMtsPixel().isSelected()
+				&& !controlPanel.getTMtsPixel().getValue().equals("")) {
+			double mtsPixel = Double.parseDouble(controlPanel.getTMtsPixel()
+					.getValue());
+			if (controlPanel.getCrs() instanceof ProjectedCRS)
+				calcSizeScale(mtsPixel, resolution);
+		}
+	}
+
+	/**
+	 * Comprueba si un campo de texto tiene el tipo de dato entero o double y si
+	 * no lo tiene lo borra ya que su contenido es invalido para operar con el
+	 * 
+	 * @param field
+	 *            Campo de texto a validar
+	 * @param isInt
+	 *            true si el valor a validar es entero y false si es double
+	 */
+	private void validateTextField(DataInputContainer field) {
+		try {
+			Double.parseDouble(field.getValue());
+		} catch (NumberFormatException e) {
+			field.setValue("0");
+		}
+	}
+
+	/**
+	 * Valida los campos de texto
+	 */
+	private void validateFields() {
+
+		// Validamos la escala si se ha introducido algo
+		if (!controlPanel.getTScale().getValue().equals(""))
+			validateTextField(controlPanel.getTScale());
+
+		// Validamos los mts por pixel si se ha introducido algo
+		if (!controlPanel.getTMtsPixel().getValue().equals(""))
+			validateTextField(controlPanel.getTMtsPixel());
+
+		// Validamos el ancho si se ha introducido algo
+		if (!controlPanel.getTWidth().getValue().equals(""))
+			validateTextField(controlPanel.getTWidth());
+
+		// Validamos el alto si se ha introducido algo
+		if (!controlPanel.getTHeight().getValue().equals(""))
+			validateTextField(controlPanel.getTHeight());
+	}
+
+	/**
+	 * Calcula el tamaño en mtrs a partir de las coordenadas. TODO: Esto solo es
+	 * valido para UTM. El ancho y alto debe obtenerse desde la vista
+	 * 
+	 * @return
+	 * @throws NumberFormatException
+	 */
+	private double[] calcSizeInMts() throws NumberFormatException {
+		double[] size = new double[2];
+
+		double lrX = Double.parseDouble(controlPanel.getTInfDerX().getValue());
+		double lrY = Double.parseDouble(controlPanel.getTInfDerY().getValue());
+		double ulX = Double.parseDouble(controlPanel.getTSupIzqX().getValue());
+		double ulY = Double.parseDouble(controlPanel.getTSupIzqY().getValue());
+
+		if (ulX > lrX)
+			size[0] = ulX - lrX;
+		else
+			size[0] = lrX - ulX;
+
+		if (ulY > lrY)
+			size[1] = ulY - lrY;
+		else
+			size[1] = lrY - ulY;
+
+		return size;
+	}
+
+	/**
+	 * A partir de la escala y la resolución calcula el tamaño en pixels y los
+	 * metros por pixel si la imagen está en coordenadas geograficas.
+	 * 
+	 * @param scale
+	 *            Escala
+	 * @param resolution
+	 *            Resolución
+	 */
+	private void calcSizeMtsPixelGeodesicas(double scaleIntro, int resolution) {
+		// TODO: Calculos para imagenes en coordenadas geograficas
+
+		/*
+		 * double lrX =
+		 * Double.parseDouble(controlPanel.getTInfDerX().getText()); double ulX
+		 * = Double.parseDouble(controlPanel.getTSupIzqX().getText());
+		 * 
+		 * //Nos aseguramos de que la escala sea un entero. Si no lo es ponemos
+		 * un 0 try { Integer.parseInt(controlPanel.getTScale().getText()); }
+		 * catch (NumberFormatException e) {
+		 * controlPanel.getTScale().setText("0"); }
+		 * 
+		 * double scale = controlPanel.getProjection().getScale(ulX, lrX,
+		 * controlPanel.getWidthInPixelsGeodesicas(),
+		 * Integer.parseInt((String)controlPanel
+		 * .getCbResolution().getSelectedItem()));
+		 * 
+		 * this.widthInPixels = (int)((scaleIntro *
+		 * controlPanel.getWidthInPixelsGeodesicas()) / scale);
+		 * this.heightInPixels = (int)((scaleIntro *
+		 * controlPanel.getHeightInPixelsGeodesicas()) / scale);
+		 * 
+		 * mtsPerPixel = MathUtils.tailDecimals(((double)(widthMts /
+		 * this.widthInPixels)), 5);
+		 * 
+		 * controlPanel.getTMtsPixel().setText(String.valueOf(mtsPerPixel));
+		 * this.setCorrectMeasure(this.widthInPixels, controlPanel.getTWidth());
+		 * this.setCorrectMeasure(this.heightInPixels,
+		 * controlPanel.getTHeight());
 		 */
-		private void validateFields(){
+	}
 
-			//Validamos la escala si se ha introducido algo
-			if(!controlPanel.getTScale().getValue().equals(""))
-				validateTextField(controlPanel.getTScale());
-
-			//Validamos los mts por pixel si se ha introducido algo
-			if(!controlPanel.getTMtsPixel().getValue().equals(""))
-				validateTextField(controlPanel.getTMtsPixel());
-
-			//Validamos el ancho si se ha introducido algo
-			if(!controlPanel.getTWidth().getValue().equals(""))
-				validateTextField(controlPanel.getTWidth());
-
-			//Validamos el alto si se ha introducido algo
-			if(!controlPanel.getTHeight().getValue().equals(""))
-				validateTextField(controlPanel.getTHeight());
+	/**
+	 * A partir de la escala y la resolución calcula el tamaño en pixels y los
+	 * metros por pixel
+	 * 
+	 * @param scale
+	 *            Escala
+	 * @param resolution
+	 *            Resolución
+	 */
+	private void calcSizeMtsPixel(double scale, int resolution) {
+		if ((widthMts <= 0) || (heightMts <= 0) || (scale == 0)) {
+			controlPanel.getTWidth().setValue("0");
+			controlPanel.getTHeight().setValue("0");
+			return;
 		}
 
-		/**
-		 * Calcula el tamaño en mtrs a partir de las coordenadas.
-		 * TODO: Esto solo es valido para UTM. El ancho y alto debe obtenerse desde la vista
-		 * @return
-		 * @throws NumberFormatException
-		 */
-		private double[] calcSizeInMts()throws NumberFormatException{
-			double[] size = new double[2];
+		// Calculo del tamaño de la imagen definitiva en pulgadas
+		double widthInches = (widthMts / scale) * MathUtils.INCHESMTR;
+		double heightInches = (heightMts / scale) * MathUtils.INCHESMTR;
 
-			double lrX = Double.parseDouble(controlPanel.getTInfDerX().getValue());
-			double lrY = Double.parseDouble(controlPanel.getTInfDerY().getValue());
-			double ulX = Double.parseDouble(controlPanel.getTSupIzqX().getValue());
-			double ulY = Double.parseDouble(controlPanel.getTSupIzqY().getValue());
+		// Ancho en pixeles = ppp * widthpulgadas
+		this.widthInPixels = (int) (resolution * widthInches);
+		this.heightInPixels = (int) (resolution * heightInches);
 
-			if (ulX > lrX)
-				size[0] = ulX - lrX;
-			else
-				size[0] = lrX - ulX;
+		mtsPerPixel = (double) (widthMts / this.widthInPixels);
+		// double mtsPixelH = wc_altomts/altoPixels;
 
-			if (ulY > lrY)
-				size[1] = ulY - lrY;
-			else
-				size[1] = lrY - ulY;
+		// recortamos a 5 decimales
+		mtsPerPixel = MathUtils.clipDecimals(mtsPerPixel, 5);
 
-			return size;
-		}
+		enableEventValueChanged = false;
+		controlPanel.getTMtsPixel().setValue(String.valueOf(mtsPerPixel));
+		enableEventValueChanged = true;
+		setCorrectMeasure(this.widthInPixels, controlPanel.getTWidth());
+		setCorrectMeasure(this.heightInPixels, controlPanel.getTHeight());
 
-		/**
-		 * A partir de la escala y la resolución calcula el tamaño en pixels y los metros por pixel
-		 * si la imagen está en coordenadas geograficas.
-		 * @param scale Escala
-		 * @param resolution Resolución
-		 */
-		private void calcSizeMtsPixelGeodesicas(double scaleIntro, int resolution){
-			//TODO: Calculos para imagenes en coordenadas geograficas
+		// int anchopixels =(int)
+		// (Toolkit.getDefaultToolkit().getScreenResolution() * anchopulgadas);
+		// int altopixels = (int)
+		// (Toolkit.getDefaultToolkit().getScreenResolution() * altopulgadas);
+	}
 
-			/*double lrX = Double.parseDouble(controlPanel.getTInfDerX().getText());
-			double ulX = Double.parseDouble(controlPanel.getTSupIzqX().getText());
+	/**
+	 * A partir de los metros por pixel y la resolución calcula el tamaño en
+	 * pixels y la escala
+	 * 
+	 * @param mtsPixel
+	 *            Metros por pixel
+	 * @param resolution
+	 *            Resolución
+	 */
+	private void calcSizeScale(double mtsPixel, int resolution) {
+		// Número de pìxeles de ancho y alto
+		this.widthInPixels = (int) (widthMts / mtsPixel);
+		this.heightInPixels = (int) (heightMts / mtsPixel);
 
-			//Nos aseguramos de que la escala sea un entero. Si no lo es ponemos un 0
-				try {
-						Integer.parseInt(controlPanel.getTScale().getText());
-				} catch (NumberFormatException e) {
-					controlPanel.getTScale().setText("0");
-				}
+		// Obtenemos los mts/pixel reales ya que el número de pixeles es entero
+		// deben redondearse
+		mtsPerPixel = (double) (widthMts / widthInPixels);
 
-			double scale = controlPanel.getProjection().getScale(ulX, lrX,
-					controlPanel.getWidthInPixelsGeodesicas(),
-					Integer.parseInt((String)controlPanel.getCbResolution().getSelectedItem()));
+		// recortamos a 5 decimales
+		mtsPerPixel = MathUtils.clipDecimals(mtsPerPixel, 5);
 
-			this.widthInPixels = (int)((scaleIntro * controlPanel.getWidthInPixelsGeodesicas()) / scale);
-			this.heightInPixels = (int)((scaleIntro * controlPanel.getHeightInPixelsGeodesicas()) / scale);
+		// Obtenemos el ancho y alto en pulgadas
+		double widthInches = (double) (widthInPixels / Integer
+				.parseInt(controlPanel.getCbResolution().getSelectedItem()
+						.toString()));
+		// double heightInches = (double)(heightInPixels /
+		// Integer.parseInt(controlPanel.getCbResolution().getSelectedItem().toString()));
 
-				mtsPerPixel = MathUtils.tailDecimals(((double)(widthMts / this.widthInPixels)), 5);
+		// Calculo de la escala
+		int scale = (int) ((widthMts * MathUtils.INCHESMTR) / widthInches);
 
-				controlPanel.getTMtsPixel().setText(String.valueOf(mtsPerPixel));
-				this.setCorrectMeasure(this.widthInPixels, controlPanel.getTWidth());
-				this.setCorrectMeasure(this.heightInPixels, controlPanel.getTHeight());*/
-		}
+		controlPanel.getTScale().setValue(String.valueOf(scale));
+		controlPanel.getTMtsPixel().setValue(String.valueOf(mtsPerPixel));
+		setCorrectMeasure(widthInPixels, controlPanel.getTWidth());
+		setCorrectMeasure(heightInPixels, controlPanel.getTHeight());
+	}
 
-		/**
-		 * A partir de la escala y la resolución calcula el tamaño en pixels y los metros por pixel
-		 * @param scale Escala
-		 * @param resolution Resolución
-		 */
-		private void calcSizeMtsPixel(double scale, int resolution){
-			if ((widthMts <= 0) || (heightMts <= 0) || (scale == 0)){
-				controlPanel.getTWidth().setValue("0");
-				controlPanel.getTHeight().setValue("0");
-				return;
-			}
+	/**
+	 * A partir del tamaño en pixels de la imagen y la resolución calcula los
+	 * metros por pixel y la escala
+	 * 
+	 * @param widthPixels
+	 *            Ancho de la imagen en pixels
+	 * @param heightPixels
+	 *            Alto de la imagen en pixels
+	 * @param resolution
+	 *            Resolución
+	 */
+	private void calcScaleMtsPixel(double widthPixels, double heightPixels,
+			int resolution) {
+		this.widthInPixels = widthPixels;
+		this.heightInPixels = heightPixels;
 
-			//Calculo del tamaño de la imagen definitiva en pulgadas
-			double widthInches = (widthMts / scale) * MathUtils.INCHESMTR;
-			double heightInches = (heightMts / scale) * MathUtils.INCHESMTR;
+		// Obtenemos los mts/pixel reales ya que el número de pixeles es entero
+		// deben redondearse
+		mtsPerPixel = (double) (widthMts / widthPixels);
 
-			//Ancho en pixeles = ppp * widthpulgadas
-			this.widthInPixels = (int) (resolution * widthInches);
-			this.heightInPixels = (int) (resolution * heightInches);
+		// recortamos a 5 decimales
+		mtsPerPixel = MathUtils.clipDecimals(mtsPerPixel, 5);
 
-			mtsPerPixel = (double)(widthMts / this.widthInPixels);
-			//double mtsPixelH = wc_altomts/altoPixels;
+		// Obtenemos el ancho y alto en pulgadas
+		double widthInches = (double) (widthPixels / Integer
+				.parseInt(controlPanel.getCbResolution().getSelectedItem()
+						.toString()));
+		// double heightInches = (double)(heightPixels /
+		// Integer.parseInt(controlPanel.getCbResolution().getSelectedItem().toString()));
 
-			//recortamos a 5 decimales
-			mtsPerPixel = MathUtils.clipDecimals(mtsPerPixel, 5);
+		// Calculo de la escala
+		int scale = (int) ((widthMts * MathUtils.INCHESMTR) / widthInches);
 
-			enableEventValueChanged = false;
-			controlPanel.getTMtsPixel().setValue(String.valueOf(mtsPerPixel));
-			enableEventValueChanged = true;
-			setCorrectMeasure(this.widthInPixels, controlPanel.getTWidth());
-			setCorrectMeasure(this.heightInPixels, controlPanel.getTHeight());
-
-			//int anchopixels =(int) (Toolkit.getDefaultToolkit().getScreenResolution() * anchopulgadas);
-			//int altopixels = (int) (Toolkit.getDefaultToolkit().getScreenResolution() * altopulgadas);
-		}
-
-		/**
-		 * A partir de los metros por pixel y la resolución calcula el tamaño en pixels y la escala
-		 * @param mtsPixel Metros por pixel
-		 * @param resolution Resolución
-		 */
-		private void calcSizeScale(double mtsPixel, int resolution){
-				//Número de pìxeles de ancho y alto
-			this.widthInPixels = (int)(widthMts / mtsPixel);
-			this.heightInPixels = (int)(heightMts / mtsPixel);
-
-			//Obtenemos los mts/pixel reales ya que el número de pixeles es entero deben redondearse
-			mtsPerPixel = (double)(widthMts / widthInPixels);
-
-			//recortamos a 5 decimales
-			mtsPerPixel = MathUtils.clipDecimals(mtsPerPixel, 5);
-
-			//Obtenemos el ancho y alto en pulgadas
-			double widthInches = (double)(widthInPixels / Integer.parseInt(controlPanel.getCbResolution().getSelectedItem().toString()));
-//			double heightInches = (double)(heightInPixels / Integer.parseInt(controlPanel.getCbResolution().getSelectedItem().toString()));
-
-			//Calculo de la escala
-			int scale = (int)((widthMts * MathUtils.INCHESMTR) / widthInches);
-
-			controlPanel.getTScale().setValue(String.valueOf(scale));
-			controlPanel.getTMtsPixel().setValue(String.valueOf(mtsPerPixel));
-			setCorrectMeasure(widthInPixels, controlPanel.getTWidth());
-			setCorrectMeasure(heightInPixels, controlPanel.getTHeight());
-		}
-
-		/**
-		 * A partir del tamaño en pixels de la imagen y la resolución calcula los metros por pixel y la escala
-		 * @param widthPixels	Ancho de la imagen en pixels
-		 * @param heightPixels	Alto de la imagen en pixels
-		 * @param resolution Resolución
-		 */
-		private void calcScaleMtsPixel(double widthPixels, double heightPixels, int resolution){
-			this.widthInPixels = widthPixels;
-			this.heightInPixels = heightPixels;
-
-			//Obtenemos los mts/pixel reales ya que el número de pixeles es entero deben redondearse
-			mtsPerPixel = (double)(widthMts / widthPixels);
-
-			//recortamos a 5 decimales
-			mtsPerPixel = MathUtils.clipDecimals(mtsPerPixel, 5);
-
-			//Obtenemos el ancho y alto en pulgadas
-			double widthInches = (double)(widthPixels / Integer.parseInt(controlPanel.getCbResolution().getSelectedItem().toString()));
-//			double heightInches = (double)(heightPixels / Integer.parseInt(controlPanel.getCbResolution().getSelectedItem().toString()));
-
-			//Calculo de la escala
-			int scale = (int)((widthMts * MathUtils.INCHESMTR) / widthInches);
-
-			controlPanel.getTScale().setValue(String.valueOf(scale));
-			controlPanel.getTMtsPixel().setValue(String.valueOf(mtsPerPixel));
-			setCorrectMeasure(widthPixels, controlPanel.getTWidth());
-			setCorrectMeasure(heightPixels, controlPanel.getTHeight());
-		}
+		controlPanel.getTScale().setValue(String.valueOf(scale));
+		controlPanel.getTMtsPixel().setValue(String.valueOf(mtsPerPixel));
+		setCorrectMeasure(widthPixels, controlPanel.getTWidth());
+		setCorrectMeasure(heightPixels, controlPanel.getTHeight());
+	}
 
 	/**
 	 * Controla cuando se cumplen todos los requisitos en el formulario para
@@ -439,22 +512,26 @@ public class DataInputListener implements ActionListener, MouseListener, FocusLi
 	 */
 	public void enableButtons() {
 		try {
-			if (Double.parseDouble(controlPanel.getTWidth().getValue()) == 0 ||
-				Double.parseDouble(controlPanel.getTHeight().getValue()) == 0 ||
-				controlPanel.getTWidth().getValue().equals("") ||
-				controlPanel.getTHeight().getValue().equals("") ||
-				this.fName == null || this.fName.equals("")) {
+			if (Double.parseDouble(controlPanel.getTWidth().getValue()) == 0
+					|| Double.parseDouble(controlPanel.getTHeight().getValue()) == 0
+					|| controlPanel.getTWidth().getValue().equals("")
+					|| controlPanel.getTHeight().getValue().equals("")
+					|| this.fName == null || this.fName.equals("")) {
 				if (dialog != null)
-					dialog.getButtonsPanel().getButton(ButtonsPanel.BUTTON_APPLY).setEnabled(false);
+					dialog.getButtonsPanel()
+							.getButton(ButtonsPanel.BUTTON_APPLY)
+							.setEnabled(false);
 				return;
 			}
 		} catch (NumberFormatException e) {
-			dialog.getButtonsPanel().getButton(ButtonsPanel.BUTTON_APPLY).setEnabled(false);
+			dialog.getButtonsPanel().getButton(ButtonsPanel.BUTTON_APPLY)
+					.setEnabled(false);
 			return;
 		}
 
 		if (dialog != null)
-			dialog.getButtonsPanel().getButton(ButtonsPanel.BUTTON_APPLY).setEnabled(true);
+			dialog.getButtonsPanel().getButton(ButtonsPanel.BUTTON_APPLY)
+					.setEnabled(true);
 	}
 
 	/**
@@ -466,8 +543,10 @@ public class DataInputListener implements ActionListener, MouseListener, FocusLi
 
 		// Selector de Fichero sobre el cual se va a salvar a raster
 		if (obj.equals(controlPanel.getBSelect())) {
-			JFileChooser chooser = new JFileChooser(FileOpenWizard.getLastPath());
-			chooser.setDialogTitle(PluginServices.getText(this, "seleccionar_fichero"));
+			JFileChooser chooser = new JFileChooser(
+					FileOpenWizard.getLastPath());
+			chooser.setDialogTitle(PluginServices.getText(this,
+					"seleccionar_fichero"));
 			chooser.setAcceptAllFileFilterUsed(false);
 			chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 
@@ -475,7 +554,8 @@ public class DataInputListener implements ActionListener, MouseListener, FocusLi
 			String[] extList = GeoRasterWriter.getDriversExtensions();
 			ExtendedFileFilter selectedFilter = null;
 			for (int i = 0; i < extList.length; i++) {
-				ExtendedFileFilter fileFilter = new ExtendedFileFilter(extList[i]);
+				ExtendedFileFilter fileFilter = new ExtendedFileFilter(
+						extList[i]);
 				chooser.addChoosableFileFilter(fileFilter);
 				if (extList[i].toLowerCase().equals("tif")) {
 					selectedFilter = fileFilter;
@@ -489,7 +569,7 @@ public class DataInputListener implements ActionListener, MouseListener, FocusLi
 				}
 				if (extList[i].toLowerCase().equals("lan")) {
 					fileFilter.addExtension((String) "gis");
-				}				
+				}
 			}
 			if (selectedFilter != null)
 				chooser.setFileFilter(selectedFilter);
@@ -497,21 +577,30 @@ public class DataInputListener implements ActionListener, MouseListener, FocusLi
 			int returnVal = chooser.showOpenDialog(controlPanel);
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				ExtendedFileFilter fileFilter = ((ExtendedFileFilter) chooser.getFileFilter());
-				
+				ExtendedFileFilter fileFilter = ((ExtendedFileFilter) chooser
+						.getFileFilter());
+
 				fName = chooser.getSelectedFile().toString();
-				fName = fileFilter.getNormalizedFilename(chooser.getSelectedFile());
+				fName = fileFilter.getNormalizedFilename(chooser
+						.getSelectedFile());
 				String ext = RasterUtilities.getExtensionFromFileName(fName);
 
 				controlPanel.getBProperties().setText(
-						PluginServices.getText(this, "props") );
+						PluginServices.getText(this, "props"));
 
 				controlPanel.getBProperties().setEnabled(true);
 				controlPanel.getLFileName().setText(
-						fName.substring(fName.lastIndexOf(File.separator) + 1, fName.length()));
+						fName.substring(fName.lastIndexOf(File.separator) + 1,
+								fName.length()));
 
 				enableButtons();
-				FileOpenWizard.setLastPath(chooser.getSelectedFile().getPath().substring(0, chooser.getSelectedFile().getPath().lastIndexOf(File.separator)));
+				FileOpenWizard.setLastPath(chooser
+						.getSelectedFile()
+						.getPath()
+						.substring(
+								0,
+								chooser.getSelectedFile().getPath()
+										.lastIndexOf(File.separator)));
 			}
 		}
 
@@ -530,7 +619,7 @@ public class DataInputListener implements ActionListener, MouseListener, FocusLi
 
 	/**
 	 * Devuelve el nombre del fichero seleccionado
-	 *
+	 * 
 	 * @return Nombre del fichero seleccionado
 	 */
 	public String getFileName() {
@@ -592,7 +681,7 @@ public class DataInputListener implements ActionListener, MouseListener, FocusLi
 
 	/**
 	 * Obtiene la altura en pixels de la imagen de salida
-	 *
+	 * 
 	 * @return entero con la altura en pixels
 	 */
 	public double getHeightInPixels() {
@@ -601,7 +690,7 @@ public class DataInputListener implements ActionListener, MouseListener, FocusLi
 
 	/**
 	 * Obtiene la anchura en pixels de la imagen de salida
-	 *
+	 * 
 	 * @return entero con la anchura en pixels
 	 */
 	public double getWidthInPixels() {
@@ -610,7 +699,9 @@ public class DataInputListener implements ActionListener, MouseListener, FocusLi
 
 	/**
 	 * Asigna el valor de ancho en pixels
-	 * @param value double
+	 * 
+	 * @param value
+	 *            double
 	 */
 	public void setWidthInPixels(double value) {
 		this.widthInPixels = value;
@@ -618,23 +709,34 @@ public class DataInputListener implements ActionListener, MouseListener, FocusLi
 
 	/**
 	 * Asigna el valor de alto en pixels
-	 * @param value double
+	 * 
+	 * @param value
+	 *            double
 	 */
 	public void setHeightInPixels(double value) {
 		this.heightInPixels = value;
 	}
 
 	public void actionValueChanged(EventObject e) {
-		if(enableEventValueChanged) {
+		if (enableEventValueChanged) {
 			obj = e.getSource();
 			this.recalcParams();
 			enableButtons();
 		}
 	}
 
-	public void mouseExited(MouseEvent e) {}
-	public void mouseReleased(MouseEvent e) {}
-	public void mouseEntered(MouseEvent e) {}
-	public void mousePressed(MouseEvent e) {}
-	public void focusGained(FocusEvent e) {}
+	public void mouseExited(MouseEvent e) {
+	}
+
+	public void mouseReleased(MouseEvent e) {
+	}
+
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	public void mousePressed(MouseEvent e) {
+	}
+
+	public void focusGained(FocusEvent e) {
+	}
 }

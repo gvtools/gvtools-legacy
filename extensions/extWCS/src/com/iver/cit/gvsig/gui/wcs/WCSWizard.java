@@ -65,14 +65,14 @@ import com.iver.cit.gvsig.gui.wizards.WizardListener;
 import com.iver.cit.gvsig.gui.wizards.WizardListenerSupport;
 import com.iver.utiles.NotExistInXMLEntity;
 import com.iver.utiles.XMLEntity;
-import com.iver.utiles.swing.JComboBox;
 import com.iver.utiles.swing.jcomboServer.JComboServer;
 import com.iver.utiles.swing.jcomboServer.ServerData;
 
 /**
  * Class implementing the WCSWizard.
- *
+ * 
  * Clase que implementa el Wizard para coberturas WCS
+ * 
  * @author Jaume Domínguez Faus
  */
 public class WCSWizard extends WizardPanel {
@@ -93,10 +93,11 @@ public class WCSWizard extends WizardPanel {
 	private WCSParamsPanel wcsParamsPanel = null;
 	private WCSWizardData dataSource = null;
 	private JPanel pnlName;
-	private static Preferences fPrefs = Preferences.userRoot().node( "gvsig.wcs-wizard" );
-	private boolean refreshing = fPrefs.getBoolean("refresh_capabilities", false);
+	private static Preferences fPrefs = Preferences.userRoot().node(
+			"gvsig.wcs-wizard");
+	private boolean refreshing = fPrefs.getBoolean("refresh_capabilities",
+			false);
 	private JCheckBox chkCaching;
-
 
 	/**
 	 * This is the default constructor
@@ -124,51 +125,53 @@ public class WCSWizard extends WizardPanel {
 
 	/**
 	 * Adds the host addres to a persistent data storage.
-	 *
+	 * 
 	 * con addHost guardamos la información del combo de servidores en un
 	 * almacén persistente
-	 *
+	 * 
 	 * @param host
 	 */
 	private void addHost(String host) {
 		host = host.trim();
 
-		ServerDataPersistence persistence = new ServerDataPersistence(this,ServerData.SERVER_TYPE_WCS);
-		persistence.addServerData(new ServerData(host, ServerData.SERVER_TYPE_WCS));
+		ServerDataPersistence persistence = new ServerDataPersistence(this,
+				ServerData.SERVER_TYPE_WCS);
+		persistence.addServerData(new ServerData(host,
+				ServerData.SERVER_TYPE_WCS));
 		persistence.setPersistent();
 	}
 
-//	private void addHost(String host) {
-//		host = host.trim();
-//
-//		DefaultComboBoxModel model = (DefaultComboBoxModel) getTxtHost()
-//				.getModel();
-//
-//		if (model.getIndexOf(host) < 0) {
-//			model.addElement(host);
-//
-//			PluginServices ps = PluginServices.getPluginServices(this);
-//			XMLEntity xml = ps.getPersistentXML();
-//
-//			try {
-//				String[] servers = xml.getStringArrayProperty("wcs-servers");
-//				String[] newServers = new String[servers.length + 1];
-//				System.arraycopy(servers, 0, newServers, 0, servers.length);
-//				newServers[servers.length] = host;
-//				xml.putProperty("wcs-servers", newServers);
-//			} catch (NotExistInXMLEntity e) {
-//				xml.putProperty("wcs-servers", new String[] { host });
-//			}
-//
-//			ps.setPersistentXML(xml);
-//		}
-//	}
+	// private void addHost(String host) {
+	// host = host.trim();
+	//
+	// DefaultComboBoxModel model = (DefaultComboBoxModel) getTxtHost()
+	// .getModel();
+	//
+	// if (model.getIndexOf(host) < 0) {
+	// model.addElement(host);
+	//
+	// PluginServices ps = PluginServices.getPluginServices(this);
+	// XMLEntity xml = ps.getPersistentXML();
+	//
+	// try {
+	// String[] servers = xml.getStringArrayProperty("wcs-servers");
+	// String[] newServers = new String[servers.length + 1];
+	// System.arraycopy(servers, 0, newServers, 0, servers.length);
+	// newServers[servers.length] = host;
+	// xml.putProperty("wcs-servers", newServers);
+	// } catch (NotExistInXMLEntity e) {
+	// xml.putProperty("wcs-servers", new String[] { host });
+	// }
+	//
+	// ps.setPersistentXML(xml);
+	// }
+	// }
 
 	/**
 	 * Fills up the initial WCSWizard controls.
-	 *
+	 * 
 	 * Rellena los primeros controles del WCS Wizard
-	 *
+	 * 
 	 * jaume
 	 */
 	private void fillupComponents() {
@@ -180,8 +183,8 @@ public class WCSWizard extends WizardPanel {
 			addHost(host);
 			getLblTitle().setText(dataSource.getTitle());
 			getTxtAbstract().setText(dataSource.getDescription());
-//			wcsParamsPanel.getLstCoverages().setListData(
-//					dataSource.getCoverageList());
+			// wcsParamsPanel.getLstCoverages().setListData(
+			// dataSource.getCoverageList());
 			wcsParamsPanel.setWizardData(dataSource);
 
 			connected = true;
@@ -193,8 +196,8 @@ public class WCSWizard extends WizardPanel {
 	}
 
 	/**
-	 * Enables or disables the Next and Previous buttons according with the current
-	 * page and the enabled pages.
+	 * Enables or disables the Next and Previous buttons according with the
+	 * current page and the enabled pages.
 	 */
 	private void activarVisualizarBotones() {
 		if (page == 0) {
@@ -210,10 +213,11 @@ public class WCSWizard extends WizardPanel {
 			getBtnSiguiente().setVisible(true);
 			getBtnAnterior().setEnabled(true);
 			getBtnAnterior().setVisible(true);
-			if (wcsParamsPanel.nextPageEnabled()==-1){
-			    getBtnSiguiente().setEnabled(false);
+			if (wcsParamsPanel.nextPageEnabled() == -1) {
+				getBtnSiguiente().setEnabled(false);
 			}
-			listenerSupport.callStateChanged(wcsParamsPanel.isCorretlyConfigured());
+			listenerSupport.callStateChanged(wcsParamsPanel
+					.isCorretlyConfigured());
 		} else if (page == wcsParamsPanel.getNumTabs()) {
 			getBtnSiguiente().setVisible(false);
 			getBtnSiguiente().setEnabled(false);
@@ -223,57 +227,61 @@ public class WCSWizard extends WizardPanel {
 
 	}
 
-
-
 	/**
 	 * This method initializes txtHost from the persistent data storage
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private javax.swing.JComboBox getTxtHost() {
-			if (cmbHost == null) {
-				cmbHost = new JComboServer();
-				cmbHost.setModel(new DefaultComboBoxModel());
-				cmbHost.setPreferredSize(new java.awt.Dimension(350, 20));
-				cmbHost.setBounds(11, 26, 454, 20);
-				cmbHost.setEditable(true);
+		if (cmbHost == null) {
+			cmbHost = new JComboServer();
+			cmbHost.setModel(new DefaultComboBoxModel());
+			cmbHost.setPreferredSize(new java.awt.Dimension(350, 20));
+			cmbHost.setBounds(11, 26, 454, 20);
+			cmbHost.setEditable(true);
 
-				ServerDataPersistence persistence = new ServerDataPersistence(this,ServerData.SERVER_TYPE_WCS);
-				ServerData[] servers = persistence.getArrayOfServerData();
+			ServerDataPersistence persistence = new ServerDataPersistence(this,
+					ServerData.SERVER_TYPE_WCS);
+			ServerData[] servers = persistence.getArrayOfServerData();
 
-				if (servers.length == 0){
-					PluginServices ps = PluginServices.getPluginServices(this);
-					XMLEntity xml = ps.getPersistentXML();
-					try {
-						String[] oldServers = xml.getStringArrayProperty("wcs-servers");
-						servers = new ServerData[oldServers.length];
-						for (int i=0; i<oldServers.length; i++) {
-							servers[i] = new ServerData(oldServers[i],ServerData.SERVER_TYPE_WCS);
-						}
-						xml.remove("wcs-servers");
-						ps.setPersistentXML(xml);
-					} catch (NotExistInXMLEntity e) {
-						// Old servers doesn't exist
-						servers = new ServerData[2];
-						servers[0] = new ServerData("http://maps.gdal.org/cgi-bin/mapserv_dem",ServerData.SERVER_TYPE_WCS);
-						servers[1] = new ServerData("http://inspire.cop.gva.es/mapserver/wcs",ServerData.SERVER_TYPE_WCS);
+			if (servers.length == 0) {
+				PluginServices ps = PluginServices.getPluginServices(this);
+				XMLEntity xml = ps.getPersistentXML();
+				try {
+					String[] oldServers = xml
+							.getStringArrayProperty("wcs-servers");
+					servers = new ServerData[oldServers.length];
+					for (int i = 0; i < oldServers.length; i++) {
+						servers[i] = new ServerData(oldServers[i],
+								ServerData.SERVER_TYPE_WCS);
 					}
-
-					for (int i=0 ; i<servers.length ; i++){
-						persistence.addServerData(servers[i]);
-					}
-					persistence.setPersistent();
+					xml.remove("wcs-servers");
+					ps.setPersistentXML(xml);
+				} catch (NotExistInXMLEntity e) {
+					// Old servers doesn't exist
+					servers = new ServerData[2];
+					servers[0] = new ServerData(
+							"http://maps.gdal.org/cgi-bin/mapserv_dem",
+							ServerData.SERVER_TYPE_WCS);
+					servers[1] = new ServerData(
+							"http://inspire.cop.gva.es/mapserver/wcs",
+							ServerData.SERVER_TYPE_WCS);
 				}
 
-				cmbHost.setServerList(servers);
+				for (int i = 0; i < servers.length; i++) {
+					persistence.addServerData(servers[i]);
+				}
+				persistence.setPersistent();
 			}
-			return cmbHost;
-	}
 
+			cmbHost.setServerList(servers);
+		}
+		return cmbHost;
+	}
 
 	/**
 	 * This method initializes btnDetalles
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getBtnConnect() {
@@ -296,7 +304,7 @@ public class WCSWizard extends WizardPanel {
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return JPanel
 	 */
 	private JPanel getJPanel() {
@@ -319,7 +327,7 @@ public class WCSWizard extends WizardPanel {
 
 	/**
 	 * This method initializes jLabel1
-	 *
+	 * 
 	 * @return JLabel
 	 */
 	private JLabel getJLabel1() {
@@ -334,7 +342,7 @@ public class WCSWizard extends WizardPanel {
 
 	/**
 	 * This method initializes lblTitle
-	 *
+	 * 
 	 * @return JLabel
 	 */
 	private JLabel getLblTitle() {
@@ -350,7 +358,7 @@ public class WCSWizard extends WizardPanel {
 
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return JScrollPane
 	 */
 	private JScrollPane getJScrollPane() {
@@ -366,7 +374,7 @@ public class WCSWizard extends WizardPanel {
 
 	/**
 	 * This method initializes txtAbstract
-	 *
+	 * 
 	 * @return JTextArea
 	 */
 	private JTextArea getTxtAbstract() {
@@ -379,17 +387,20 @@ public class WCSWizard extends WizardPanel {
 
 		return txtAbstract;
 	}
+
 	/**
 	 * This method initializes chkCaching
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getChkCaching() {
 		if (chkCaching == null) {
 			chkCaching = new JCheckBox();
 			chkCaching.setBounds(7, 51, 349, 20);
-			chkCaching.setText(PluginServices.getText(this, "refresh_capabilities"));
-			chkCaching.setToolTipText(PluginServices.getText(this, "refresh_capabilities_tooltip"));
+			chkCaching.setText(PluginServices.getText(this,
+					"refresh_capabilities"));
+			chkCaching.setToolTipText(PluginServices.getText(this,
+					"refresh_capabilities_tooltip"));
 			chkCaching.setSelected(refreshing);
 			chkCaching.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -398,7 +409,8 @@ public class WCSWizard extends WizardPanel {
 			});
 			chkCaching.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					fPrefs.putBoolean("refresh_capabilities", chkCaching.isSelected());
+					fPrefs.putBoolean("refresh_capabilities",
+							chkCaching.isSelected());
 				}
 			});
 
@@ -408,7 +420,7 @@ public class WCSWizard extends WizardPanel {
 
 	/**
 	 * This method initializes panelPage1
-	 *
+	 * 
 	 * @return JPanel
 	 */
 	private JPanel getPanelPage1() {
@@ -427,7 +439,7 @@ public class WCSWizard extends WizardPanel {
 
 	/**
 	 * This method initializes panelPage2
-	 *
+	 * 
 	 * @return JPanel
 	 */
 	private JPanel getPanelPage2() {
@@ -442,24 +454,22 @@ public class WCSWizard extends WizardPanel {
 
 	/**
 	 * This method initializes pnlName
-	 *
+	 * 
 	 * @return JPanel
 	 */
 	private JPanel getPnlName() {
 		if (pnlName == null) {
 			pnlName = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-			pnlName.setBounds(new java.awt.Rectangle(9,19,452,24));
+			pnlName.setBounds(new java.awt.Rectangle(9, 19, 452, 24));
 			pnlName.add(getJLabel1(), null);
 			pnlName.add(getLblTitle(), null);
 		}
 		return pnlName;
 	}
 
-
-
 	/**
 	 * This method initializes btnSiguiente
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getBtnSiguiente() {
@@ -489,7 +499,7 @@ public class WCSWizard extends WizardPanel {
 
 	/**
 	 * This method initializes btnAnterior
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getBtnAnterior() {
@@ -499,13 +509,13 @@ public class WCSWizard extends WizardPanel {
 			btnAnterior.setText(PluginServices.getText(this, "anterior"));
 			btnAnterior.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					page --;
+					page--;
 					if (page > 0) {
 						// Tenemos que retroceder en el wcsParamsPanel
 						wcsParamsPanel.retrocedeTab();
 						page = wcsParamsPanel.getIndiceSolapaActual() + 1;
 						activarVisualizarBotones();
-					} else if (page==0){
+					} else if (page == 0) {
 						activarVisualizarBotones();
 						page = 1;
 						wcsParamsPanel.cleanupWizard();
@@ -517,7 +527,8 @@ public class WCSWizard extends WizardPanel {
 						getBtnSiguiente().setEnabled(false);
 						connected = false;
 					}
-					listenerSupport.callStateChanged(wcsParamsPanel.isCorretlyConfigured());
+					listenerSupport.callStateChanged(wcsParamsPanel
+							.isCorretlyConfigured());
 				}
 			});
 		}
@@ -526,7 +537,7 @@ public class WCSWizard extends WizardPanel {
 
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel1() {
@@ -536,7 +547,8 @@ public class WCSWizard extends WizardPanel {
 			jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(
 					null, PluginServices.getText(this, "server"),
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					null));
 			jPanel1.setBounds(2, 5, 477, 85);
 			jPanel1.add(getTxtHost(), null);
 			jPanel1.add(getBtnConnect(), null);
@@ -548,7 +560,7 @@ public class WCSWizard extends WizardPanel {
 
 	/**
 	 * Adds the gvSIG's wizard listener
-	 *
+	 * 
 	 * @param listener
 	 */
 	public void addWizardListener(WizardListener listener) {
@@ -557,7 +569,7 @@ public class WCSWizard extends WizardPanel {
 
 	/**
 	 * Removes the gvSIG's wizard listener
-	 *
+	 * 
 	 * @param listener
 	 */
 	public void removeWizardListener(WizardListener listener) {
@@ -566,7 +578,7 @@ public class WCSWizard extends WizardPanel {
 
 	/**
 	 * Returns the Wizard's data source
-	 *
+	 * 
 	 * @return
 	 */
 	public WCSWizardData getDataSource() {
@@ -575,7 +587,7 @@ public class WCSWizard extends WizardPanel {
 
 	/**
 	 * sets the wizard's data source
-	 *
+	 * 
 	 * @param source
 	 */
 	public void setDataSource(WCSWizardData source) {
@@ -584,11 +596,12 @@ public class WCSWizard extends WizardPanel {
 
 	/**
 	 * Returns the rectangle that contains all the others
-	 *
+	 * 
 	 * Obtiene el rectángulo que contiene a todos los otros
-	 *
-	 * @param rects[]  rectangulos
-	 *
+	 * 
+	 * @param rects
+	 *            [] rectangulos
+	 * 
 	 * @return Rectangle2D
 	 */
 	public static Rectangle2D getRectangle(Rectangle2D[] rects) {
@@ -604,10 +617,10 @@ public class WCSWizard extends WizardPanel {
 	/**
 	 * Returns the host typed in the host text field or null if nothing is typed
 	 * or it is not a valid URL.
-	 *
+	 * 
 	 * Devuelve el host que está escrito en el cuadro de texto del host o null
 	 * en caso de que no haya nada escrito o esté mal escrito
-	 *
+	 * 
 	 * @return URL del host
 	 */
 	public URL getHost() {
@@ -620,7 +633,7 @@ public class WCSWizard extends WizardPanel {
 
 	/**
 	 * Returns the name of the coverage that appears in the TOC
-	 *
+	 * 
 	 * @return String
 	 */
 	public String getLayerName() {
@@ -635,9 +648,9 @@ public class WCSWizard extends WizardPanel {
 	}
 
 	/**
-	 * Creates a new layer to be passed to gvSIG. This method is automatically called
-	 * by gvSIG and it must ensure that a layer is fully and correctly created or then
-	 * return null.
+	 * Creates a new layer to be passed to gvSIG. This method is automatically
+	 * called by gvSIG and it must ensure that a layer is fully and correctly
+	 * created or then return null.
 	 */
 	public FLayer getLayer() {
 		FLyrWCS layer = new FLyrWCS();
@@ -656,4 +669,3 @@ public class WCSWizard extends WizardPanel {
 	}
 
 }
-

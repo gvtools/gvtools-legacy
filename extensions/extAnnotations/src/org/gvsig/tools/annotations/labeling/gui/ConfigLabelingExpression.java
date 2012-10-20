@@ -66,12 +66,12 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 
 /**
- *
+ * 
  * @author Cesar Martinez Izquierdo <cesar.martinez@iver.es>
- *
+ * 
  */
-public class ConfigLabelingExpression extends DefaultButtonsPanel
- implements IWindow, ButtonsPanelListener {
+public class ConfigLabelingExpression extends DefaultButtonsPanel implements
+		IWindow, ButtonsPanelListener {
 	private WindowInfo wInfo = null;
 	private static final long serialVersionUID = 1L;
 	private BaseView view;
@@ -79,7 +79,6 @@ public class ConfigLabelingExpression extends DefaultButtonsPanel
 	public static String PROPERTYNAME = "SingleLabeling.LabelingExpression";
 	private JScrollPane scrollPane;
 	private JPanel scrollContent;
-
 
 	public ConfigLabelingExpression(BaseView view) {
 		super();
@@ -90,16 +89,16 @@ public class ConfigLabelingExpression extends DefaultButtonsPanel
 
 	private void initialize() {
 		getContent().setLayout(new GridBagLayout());
-		JLabel label = new JLabel("<html><b>"+
-				PluginServices.getText(this, "Define_the_labeling_expression_")
-				+"</b></html>");
+		JLabel label = new JLabel("<html><b>"
+				+ PluginServices.getText(this,
+						"Define_the_labeling_expression_") + "</b></html>");
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.gridy = 0;
 		constraints.gridx = 0;
 		constraints.gridwidth = 1;
 		constraints.anchor = GridBagConstraints.WEST;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.insets = new Insets(8,4,4,8);
+		constraints.insets = new Insets(8, 4, 4, 8);
 		this.getContent().add(label, constraints);
 
 		scrollContent = new JPanel(new GridBagLayout());
@@ -108,7 +107,7 @@ public class ConfigLabelingExpression extends DefaultButtonsPanel
 		FLayers layers = view.getMapControl().getMapContext().getLayers();
 		addLayers(layers);
 
-		constraints.gridy = layerMap.size()+1;
+		constraints.gridy = layerMap.size() + 1;
 		constraints.gridx = 0;
 		constraints.gridwidth = 2;
 		constraints.anchor = GridBagConstraints.SOUTH;
@@ -124,7 +123,7 @@ public class ConfigLabelingExpression extends DefaultButtonsPanel
 		constraints.fill = GridBagConstraints.BOTH;
 		constraints.weightx = 1.0;
 		constraints.weighty = 1.0;
-		constraints.insets = new Insets(8,4,4,8);
+		constraints.insets = new Insets(8, 4, 4, 8);
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(scrollPane, BorderLayout.CENTER);
 		this.getContent().add(panel, constraints);
@@ -132,13 +131,12 @@ public class ConfigLabelingExpression extends DefaultButtonsPanel
 	}
 
 	private void addLayers(FLayers layers) {
-		for (int i=layers.getLayersCount()-1; i>=0; i--) {
+		for (int i = layers.getLayersCount() - 1; i >= 0; i--) {
 			FLayer layer = layers.getLayer(i);
 			if (layer instanceof FLyrVect) {
 				addRow((FLyrVect) layer);
-			}
-			else if (layer instanceof FLayers) {
-				addLayers((FLayers)layer);
+			} else if (layer instanceof FLayers) {
+				addLayers((FLayers) layer);
 			}
 		}
 	}
@@ -147,35 +145,36 @@ public class ConfigLabelingExpression extends DefaultButtonsPanel
 		JTextField tf = new JTextField(20);
 		layerMap.put(layer, tf);
 
-		JLabel label = new JLabel("<html><b>"+
-				PluginServices.getText(this, "Layer_")+"</b>"+
-				" "+layer.getName()+"</html>");
+		JLabel label = new JLabel("<html><b>"
+				+ PluginServices.getText(this, "Layer_") + "</b>" + " "
+				+ layer.getName() + "</html>");
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.gridy = layerMap.size();
 		constraints.gridx = 0;
 		constraints.anchor = GridBagConstraints.WEST;
-		constraints.insets = new Insets(8,4,4,8);
+		constraints.insets = new Insets(8, 4, 4, 8);
 		scrollContent.add(label, constraints);
 
 		constraints.gridy = layerMap.size();
 		constraints.gridx = 1;
 		constraints.anchor = GridBagConstraints.WEST;
 		Object prop = layer.getProperty(PROPERTYNAME);
-		if (prop!=null && prop instanceof String) {
-			tf.setText((String)prop);
-		}
-		else {
+		if (prop != null && prop instanceof String) {
+			tf.setText((String) prop);
+		} else {
 			tf.setText("");
 		}
 		scrollContent.add(tf, constraints);
 	}
 
 	public WindowInfo getWindowInfo() {
-		if (wInfo==null) {
-			wInfo = new WindowInfo(WindowInfo.MODALDIALOG | WindowInfo.RESIZABLE);
+		if (wInfo == null) {
+			wInfo = new WindowInfo(WindowInfo.MODALDIALOG
+					| WindowInfo.RESIZABLE);
 			wInfo.setWidth(500);
 			wInfo.setHeight(155);
-			wInfo.setTitle(PluginServices.getText(this, "Set_labeling_expression"));
+			wInfo.setTitle(PluginServices.getText(this,
+					"Set_labeling_expression"));
 		}
 		return wInfo;
 	}
@@ -185,7 +184,7 @@ public class ConfigLabelingExpression extends DefaultButtonsPanel
 		while (iterator.hasNext()) {
 			FLyrVect layer = iterator.next();
 			JTextField tf = layerMap.get(layer);
-			if (tf!=null) {
+			if (tf != null) {
 				layer.setProperty(PROPERTYNAME, tf.getText());
 			}
 		}

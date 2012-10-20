@@ -55,10 +55,11 @@ import es.gva.cit.gazetteer.querys.Feature;
  */
 /**
  * ContentHandler for the WFS
+ * 
  * @author Jorge Piera Llodrá (jorge.piera@iver.es)
  */
-public class WFSGPEContentHandler extends GPEContentHandler{
-	private ArrayList features  = null;	
+public class WFSGPEContentHandler extends GPEContentHandler {
+	private ArrayList features = null;
 	private String searchField = null;
 
 	public WFSGPEContentHandler(String searchField) {
@@ -69,25 +70,35 @@ public class WFSGPEContentHandler extends GPEContentHandler{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.GPEContentHandler#addElementToFeature(java.lang.Object, java.lang.Object)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.GPEContentHandler#addElementToFeature(java.lang.Object,
+	 * java.lang.Object)
 	 */
 	public void addElementToFeature(Object element, Object feature) {
-		if ((element != null) && (((Element)element).getName().equals(searchField))){
-			((Feature)feature).setName(String.valueOf(((Element)element).getValue()));
-			((Feature)feature).setDescription(String.valueOf(((Element)element).getValue()));
+		if ((element != null)
+				&& (((Element) element).getName().equals(searchField))) {
+			((Feature) feature).setName(String.valueOf(((Element) element)
+					.getValue()));
+			((Feature) feature).setDescription(String
+					.valueOf(((Element) element).getValue()));
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.GPEContentHandler#addGeometryToFeature(java.lang.Object, java.lang.Object)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.GPEContentHandler#addGeometryToFeature(java.lang.Object,
+	 * java.lang.Object)
 	 */
 	public void addGeometryToFeature(Object geometry, Object feature) {
-		((Feature)feature).setCoordinates((Point2D)geometry);
+		((Feature) feature).setCoordinates((Point2D) geometry);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.GPEContentHandler#endFeature(java.lang.Object)
 	 */
 	public void endFeature(Object feature) {
@@ -96,7 +107,9 @@ public class WFSGPEContentHandler extends GPEContentHandler{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.GPEContentHandler#startElement(java.lang.String, java.lang.Object, java.lang.String, java.lang.Object)
+	 * 
+	 * @see org.gvsig.gpe.GPEContentHandler#startElement(java.lang.String,
+	 * java.lang.Object, java.lang.String, java.lang.Object)
 	 */
 	public Object startElement(String name, Object value, String xsElementName,
 			Object parentElement) {
@@ -105,91 +118,87 @@ public class WFSGPEContentHandler extends GPEContentHandler{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.GPEContentHandler#startFeature(java.lang.String, java.lang.String, java.lang.String, java.lang.Object)
+	 * 
+	 * @see org.gvsig.gpe.GPEContentHandler#startFeature(java.lang.String,
+	 * java.lang.String, java.lang.String, java.lang.Object)
 	 */
 	public Object startFeature(String id, String name, String xsElementName,
 			Object layer) {
-		return new Feature(id, name, name, null);		
+		return new Feature(id, name, name, null);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.GPEContentHandler#startPoint(java.lang.String, double, double, double, java.lang.String)
+	 * 
+	 * @see org.gvsig.gpe.GPEContentHandler#startPoint(java.lang.String, double,
+	 * double, double, java.lang.String)
 	 */
 	public Object startPoint(String id, double x, double y, double z, String srs) {
 		return new Point2D.Double(x, y);
-	}	
+	}
 
-	/* (non-Javadoc)
-	 * @see org.gvsig.gpe.GPEContentHandler#startLineString(java.lang.String, double[], double[], double[], java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.gpe.GPEContentHandler#startLineString(java.lang.String,
+	 * double[], double[], double[], java.lang.String)
 	 */
 	public Object startLineString(String id, double[] x, double[] y,
 			double[] z, String srs) {
 		return getPoint(x, y);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.gvsig.gpe.GPEContentHandler#startPolygon(java.lang.String, double[], double[], double[], java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.gpe.GPEContentHandler#startPolygon(java.lang.String,
+	 * double[], double[], double[], java.lang.String)
 	 */
 	public Object startPolygon(String id, double[] x, double[] y, double[] z,
 			String srs) {
 		return getPoint(x, y);
 	}
-	
-	private Point2D getPoint(double[] x, double y[]) {        
+
+	private Point2D getPoint(double[] x, double y[]) {
 		double xs = 0.0;
 		double ys = 0.0;
-		for (int i=0 ; i<x.length ; i++){
+		for (int i = 0; i < x.length; i++) {
 			xs = xs + x[i];
 			ys = ys + y[i];
 		}
-		if (x.length == 0){
-			return new Point2D.Double(xs,ys);
-		}else{
-			return new Point2D.Double(xs/x.length,ys/x.length);
+		if (x.length == 0) {
+			return new Point2D.Double(xs, ys);
+		} else {
+			return new Point2D.Double(xs / x.length, ys / x.length);
 		}
-	} 
-	
+	}
+
 	/**
 	 * @author Jorge Piera Llodrá (jorge.piera@iver.es)
 	 */
-	private class Element{
+	private class Element {
 		private String name = null;
 		private Object value = null;
-				
+
 		public Element(String name, Object value) {
 			super();
 			this.name = name;
 			this.value = value;
 		}
-		
+
 		/**
 		 * @return the name
 		 */
 		public String getName() {
 			return name;
 		}
-		
-		/**
-		 * @param name the name to set
-		 */
-		public void setName(String name) {
-			this.name = name;
-		}
-		
+
 		/**
 		 * @return the value
 		 */
 		public Object getValue() {
 			return value;
 		}
-		
-		/**
-		 * @param value the value to set
-		 */
-		public void setValue(Object value) {
-			this.value = value;
-		}		
 	}
 
 	/**

@@ -74,7 +74,7 @@ import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
 /**
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class WFSVectorialPropsTocMenuEntry extends AbstractTocContextMenuAction{
+public class WFSVectorialPropsTocMenuEntry extends AbstractTocContextMenuAction {
 	private FLayer lyr = null;
 
 	@Override
@@ -87,7 +87,7 @@ public class WFSVectorialPropsTocMenuEntry extends AbstractTocContextMenuAction{
 
 		ThemeManagerWindow fThemeManagerWindow;
 		fThemeManagerWindow = new ThemeManagerWindow(lyr);
-		//PluginServices.getMDIManager().addView(fThemeManagerWindow);
+		// PluginServices.getMDIManager().addView(fThemeManagerWindow);
 		if (PluginServices.getMainFrame() == null) {
 			JDialog dlg = new JDialog();
 			fThemeManagerWindow.setPreferredSize(fThemeManagerWindow.getSize());
@@ -102,16 +102,19 @@ public class WFSVectorialPropsTocMenuEntry extends AbstractTocContextMenuAction{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.project.documents.IContextMenuAction#getText()
 	 */
 	public String getText() {
 		return PluginServices.getText(this, "propiedades");
 	}
 
-
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getGroupOrder()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getGroupOrder()
 	 */
 	public int getGroupOrder() {
 		return 100;
@@ -119,7 +122,10 @@ public class WFSVectorialPropsTocMenuEntry extends AbstractTocContextMenuAction{
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction#getOrder()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.contextMenu.AbstractContextMenuAction
+	 * #getOrder()
 	 */
 	public int getOrder() {
 		return 11;
@@ -127,7 +133,11 @@ public class WFSVectorialPropsTocMenuEntry extends AbstractTocContextMenuAction{
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isEnabled(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
 		return true;
@@ -135,7 +145,11 @@ public class WFSVectorialPropsTocMenuEntry extends AbstractTocContextMenuAction{
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction#isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem, com.iver.cit.gvsig.fmap.layers.FLayer[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction
+	 * #isVisible(com.iver.cit.gvsig.project.documents.view.toc.ITocItem,
+	 * com.iver.cit.gvsig.fmap.layers.FLayer[])
 	 */
 	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
 		if (isTocItemBranch(item))

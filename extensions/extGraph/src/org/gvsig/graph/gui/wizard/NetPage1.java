@@ -40,26 +40,26 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: NetPage1.java 31189 2009-10-07 07:19:44Z fpenarrubia $
-* $Log$
-* Revision 1.5  2006-12-04 17:13:39  fjp
-* *** empty log message ***
-*
-* Revision 1.4  2006/11/20 08:44:55  fjp
-* borrar tramos amarillos, seleccionar solo campos numéricos y situar las barreras encima del tramo invalidado
-*
-* Revision 1.3  2006/11/09 10:12:24  fjp
-* Traducciones
-*
-* Revision 1.2  2006/10/24 08:04:41  jaume
-* *** empty log message ***
-*
-* Revision 1.1  2006/10/19 15:12:10  jaume
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: NetPage1.java 31189 2009-10-07 07:19:44Z fpenarrubia $
+ * $Log$
+ * Revision 1.5  2006-12-04 17:13:39  fjp
+ * *** empty log message ***
+ *
+ * Revision 1.4  2006/11/20 08:44:55  fjp
+ * borrar tramos amarillos, seleccionar solo campos numéricos y situar las barreras encima del tramo invalidado
+ *
+ * Revision 1.3  2006/11/09 10:12:24  fjp
+ * Traducciones
+ *
+ * Revision 1.2  2006/10/24 08:04:41  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/10/19 15:12:10  jaume
+ * *** empty log message ***
+ *
+ *
+ */
 package org.gvsig.graph.gui.wizard;
 
 import java.awt.BorderLayout;
@@ -93,24 +93,27 @@ import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
+
 /**
  * Configures the length
- *
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 class NetPage1 extends JWizardPanel implements ActionListener {
 	private NetWizard owner;
 	private JComboBox cmbLengthField;
-	// TODO comprobar si  es necesario
+	// TODO comprobar si es necesario
 	private Hashtable exceptions;
 	private JComboBox cmbTypeField;
 	private JComboBox cmbSenseField;
 	private JIncrementalNumberField txtUnitFactor;
 	private JComboBox cmbCostField;
 
-	private Object useLineLengthItem = "< "+PluginServices.getText(this, "use_line_length")+" >";
+	private Object useLineLengthItem = "< "
+			+ PluginServices.getText(this, "use_line_length") + " >";
 
-	private Object nullValue = "- "+PluginServices.getText(this, "none")+" -";
+	private Object nullValue = "- " + PluginServices.getText(this, "none")
+			+ " -";
 	private JCheckBox chkTypeField;
 	private JCheckBox chkLengthField;
 	private JCheckBox chkCostUnits;
@@ -128,8 +131,8 @@ class NetPage1 extends JWizardPanel implements ActionListener {
 
 	private void initialize() {
 		GridBagLayoutPanel contentPane = new GridBagLayoutPanel();
-		contentPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
-				PluginServices.getText(this, "field_configuration"),
+		contentPane.setBorder(javax.swing.BorderFactory.createTitledBorder(
+				null, PluginServices.getText(this, "field_configuration"),
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
 
@@ -137,38 +140,44 @@ class NetPage1 extends JWizardPanel implements ActionListener {
 		// Way type
 		cmbTypeField = new JComboBox();
 		cmbTypeField.addItem(nullValue);
-		
-		cmbTypeField.setToolTipText(PluginServices.getText(this, "type_field_text"));
+
+		cmbTypeField.setToolTipText(PluginServices.getText(this,
+				"type_field_text"));
 		String[] ss = owner.getNumericLayerFieldNames();
 		for (int i = 0; i < ss.length; i++) {
 			cmbTypeField.addItem(ss[i]);
 		}
 		cmbTypeField.addActionListener(this);
-		
-		chkTypeField = new JCheckBox(PluginServices.getText(this, "select_type_field")+":");
+
+		chkTypeField = new JCheckBox(PluginServices.getText(this,
+				"select_type_field") + ":");
 		chkTypeField.addActionListener(this);
 		contentPane.addComponent(chkTypeField, cmbTypeField);
 
 		// Length
 		cmbLengthField = new JComboBox();
 		cmbLengthField.addItem(nullValue);
-		cmbLengthField.setToolTipText(PluginServices.getText(this, "length_field_text"));
+		cmbLengthField.setToolTipText(PluginServices.getText(this,
+				"length_field_text"));
 		ss = owner.getNumericLayerFieldNames();
 		for (int i = 0; i < ss.length; i++) {
 			cmbLengthField.addItem(ss[i]);
 		}
 		cmbLengthField.addActionListener(this);
-		chkLengthField = new JCheckBox(PluginServices.getText(this, "select_length_field")+":");
+		chkLengthField = new JCheckBox(PluginServices.getText(this,
+				"select_length_field") + ":");
 		chkLengthField.addActionListener(this);
 		contentPane.addComponent(chkLengthField, cmbLengthField);
 
 		// Cost
-		chkCostField = new JCheckBox(PluginServices.getText(this, "cost_field")+":");
+		chkCostField = new JCheckBox(PluginServices.getText(this, "cost_field")
+				+ ":");
 		chkCostField.addActionListener(this);
 		contentPane.addComponent(chkCostField, cmbCostField = new JComboBox());
 
-		cmbCostField.addItem(useLineLengthItem );
-		cmbCostField.setToolTipText(PluginServices.getText(this, "cost_field_text"));
+		cmbCostField.addItem(useLineLengthItem);
+		cmbCostField.setToolTipText(PluginServices.getText(this,
+				"cost_field_text"));
 		cmbCostField.addActionListener(this);
 		String[] numericFields = owner.getNumericLayerFieldNames();
 
@@ -176,11 +185,13 @@ class NetPage1 extends JWizardPanel implements ActionListener {
 			cmbCostField.addItem(numericFields[i]);
 
 		// Costs units
-		txtUnitFactor = new  JIncrementalNumberField("1");
-		chkCostUnits = new JCheckBox(PluginServices.getText(this, "unit_factor")+":");
+		txtUnitFactor = new JIncrementalNumberField("1");
+		chkCostUnits = new JCheckBox(
+				PluginServices.getText(this, "unit_factor") + ":");
 		chkCostUnits.addActionListener(this);
 		contentPane.addComponent(chkCostUnits, txtUnitFactor);
-		txtUnitFactor.setToolTipText(PluginServices.getText(this, "unit_factor_text"));
+		txtUnitFactor.setToolTipText(PluginServices.getText(this,
+				"unit_factor_text"));
 
 		// Sense
 		cmbSenseField = new JComboBox();
@@ -190,21 +201,26 @@ class NetPage1 extends JWizardPanel implements ActionListener {
 			cmbSenseField.addItem(fieldNames[i]);
 		}
 		cmbSenseField.addActionListener(this);
-		cmbSenseField.setToolTipText(PluginServices.getText(this, "sense_field_text"));
-		chkSenseField = new JCheckBox(PluginServices.getText(this, "select_sense_field")+":");
+		cmbSenseField.setToolTipText(PluginServices.getText(this,
+				"sense_field_text"));
+		chkSenseField = new JCheckBox(PluginServices.getText(this,
+				"select_sense_field") + ":");
 		chkSenseField.addActionListener(this);
 		txtDigitizedDir = new JTextField(12);
 		txtReverseDigitizedDir = new JTextField(12);
 		contentPane.addComponent(chkSenseField, cmbSenseField);
-		contentPane.addComponent(new JLabel(PluginServices.getText(this,
-				"digitizedDirection") + ":"), txtDigitizedDir);
-		contentPane.addComponent(new JLabel(PluginServices.getText(this,
-		"reverseDigitizedDirection")), txtReverseDigitizedDir);
-		
+		contentPane.addComponent(
+				new JLabel(PluginServices.getText(this, "digitizedDirection")
+						+ ":"), txtDigitizedDir);
+		contentPane.addComponent(
+				new JLabel(PluginServices.getText(this,
+						"reverseDigitizedDirection")), txtReverseDigitizedDir);
+
 		// separator
 		contentPane.addComponent(new JLabel(" "));
 
-		// Choose a .net file to write network. By default, saved in a temp directory, but
+		// Choose a .net file to write network. By default, saved in a temp
+		// directory, but
 		// the user may decide to change the place to save it.
 		JPanel panelFile = new JPanel();
 		txtFile = new JTextField();
@@ -230,36 +246,37 @@ class NetPage1 extends JWizardPanel implements ActionListener {
 					public String getDescription() {
 						return (PluginServices.getText(this, "Ficheros_NET"));
 					}
-					
+
 				});
-				
+
 				int res = fileChooser.showSaveDialog(getParent());
-				if (res==JFileChooser.APPROVE_OPTION) {
+				if (res == JFileChooser.APPROVE_OPTION) {
 					String path = fileChooser.getSelectedFile().getPath();
 					if (!path.toLowerCase().endsWith(".net"))
 						path = path + ".net";
 					txtFile.setText(path);
 				}
 			}
-			
+
 		});
 		panelFile.setLayout(new BorderLayout());
 		panelFile.add(txtFile, BorderLayout.CENTER);
 		panelFile.add(btnJFC, BorderLayout.EAST);
-		contentPane.addComponent(new JLabel(PluginServices.getText(this,
-		"save_net_file_in")), panelFile);
-		
+		contentPane.addComponent(
+				new JLabel(PluginServices.getText(this, "save_net_file_in")),
+				panelFile);
+
 		actionPerformed(null);
 		this.add(contentPane);
 	}
 
 	public void actionPerformed(ActionEvent e) {
 
-		txtUnitFactor.setEnabled(
-				!cmbCostField.getSelectedItem().equals(useLineLengthItem));
+		txtUnitFactor.setEnabled(!cmbCostField.getSelectedItem().equals(
+				useLineLengthItem));
 		if (chkTypeField.isSelected()) {
-			owner.setTypeField(cmbTypeField.getSelectedItem().equals(nullValue)?
-					null : (String) cmbTypeField.getSelectedItem());
+			owner.setTypeField(cmbTypeField.getSelectedItem().equals(nullValue) ? null
+					: (String) cmbTypeField.getSelectedItem());
 			cmbTypeField.setEnabled(true);
 		} else {
 			owner.setTypeField(null);
@@ -267,8 +284,9 @@ class NetPage1 extends JWizardPanel implements ActionListener {
 		}
 
 		if (chkLengthField.isSelected()) {
-			owner.setLengthField(cmbLengthField.getSelectedItem().equals(nullValue)?
-				null : (String) cmbLengthField.getSelectedItem());
+			owner.setLengthField(cmbLengthField.getSelectedItem().equals(
+					nullValue) ? null : (String) cmbLengthField
+					.getSelectedItem());
 			cmbLengthField.setEnabled(true);
 		} else {
 			owner.setLengthField(null);
@@ -276,8 +294,9 @@ class NetPage1 extends JWizardPanel implements ActionListener {
 		}
 
 		if (chkSenseField.isSelected()) {
-			owner.setSenseField(cmbSenseField.getSelectedItem().equals(nullValue)?
-					null : (String) cmbSenseField.getSelectedItem());
+			owner.setSenseField(cmbSenseField.getSelectedItem().equals(
+					nullValue) ? null : (String) cmbSenseField
+					.getSelectedItem());
 			cmbSenseField.setEnabled(true);
 			txtDigitizedDir.setEnabled(true);
 			txtReverseDigitizedDir.setEnabled(true);
@@ -288,12 +307,13 @@ class NetPage1 extends JWizardPanel implements ActionListener {
 			owner.setSenseField(null);
 			cmbSenseField.setEnabled(false);
 			txtDigitizedDir.setEnabled(false);
-			txtReverseDigitizedDir.setEnabled(false);			
+			txtReverseDigitizedDir.setEnabled(false);
 		}
 
 		if (chkCostField.isSelected()) {
-			owner.setCostField(cmbCostField.getSelectedItem().equals(useLineLengthItem)?
-				null : (String) cmbCostField.getSelectedItem());
+			owner.setCostField(cmbCostField.getSelectedItem().equals(
+					useLineLengthItem) ? null : (String) cmbCostField
+					.getSelectedItem());
 			cmbCostField.setEnabled(true);
 		} else {
 			owner.setCostField(null);
@@ -301,7 +321,7 @@ class NetPage1 extends JWizardPanel implements ActionListener {
 		}
 
 		if (chkCostUnits.isSelected()) {
-			owner.setUnitFactor( txtUnitFactor.getDouble());
+			owner.setUnitFactor(txtUnitFactor.getDouble());
 			txtUnitFactor.setEnabled(true);
 		} else {
 			owner.setUnitFactor(1); // TODO use unknown?
@@ -310,10 +330,11 @@ class NetPage1 extends JWizardPanel implements ActionListener {
 	}
 
 	/**
-	 * We collect values from sense field for let say 1000 recs.
-	 * The idea is to show the user some of the possible values he may use.
-	 * For example, teleatlas: FT, TF
-	 * @throws BaseException 
+	 * We collect values from sense field for let say 1000 recs. The idea is to
+	 * show the user some of the possible values he may use. For example,
+	 * teleatlas: FT, TF
+	 * 
+	 * @throws BaseException
 	 */
 	private void updateDirectionValues() {
 		String senseField = (String) cmbSenseField.getSelectedItem();
@@ -325,22 +346,24 @@ class NetPage1 extends JWizardPanel implements ActionListener {
 			Value second = null;
 			sds.start();
 			long hasta = Math.min(sds.getRowCount(), 1000);
-			for (int i=0; i < hasta; i++) {
+			for (int i = 0; i < hasta; i++) {
 				Value aux = sds.getFieldValue(i, fieldIndex);
 				if (aux.toString().equalsIgnoreCase(""))
 					continue;
 				if ((first == null) && (!(aux instanceof NullValue)))
 					first = aux;
 				if (first != null) {
-					if (!((BooleanValue)first.equals(aux)).getValue()) {
+					if (!((BooleanValue) first.equals(aux)).getValue()) {
 						second = aux;
 						break;
 					}
 				}
 			}
 			sds.stop();
-			if (first == null) first = ValueFactory.createValue("");
-			if (second == null) second= ValueFactory.createValue("");
+			if (first == null)
+				first = ValueFactory.createValue("");
+			if (second == null)
+				second = ValueFactory.createValue("");
 			String aux1 = first.toString();
 			String aux2 = second.toString();
 			if (aux1.equalsIgnoreCase("TF"))
@@ -355,8 +378,7 @@ class NetPage1 extends JWizardPanel implements ActionListener {
 			e.printStackTrace();
 		} catch (IncompatibleTypesException e) {
 			e.printStackTrace();
-		}
-		finally {
+		} finally {
 			try {
 				sds.stop();
 			} catch (ReadDriverException e1) {
@@ -365,7 +387,7 @@ class NetPage1 extends JWizardPanel implements ActionListener {
 			}
 
 		}
-		
+
 	}
 
 	public String getTxtFile() {

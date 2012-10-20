@@ -42,25 +42,29 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: IFLayerStatus.java 20098 2008-04-14 08:42:53Z jmvivo $
-* $Log$
-* Revision 1.1  2006-09-21 17:23:39  azabala
-* First version in cvs
-*
-*
-*/
+ *
+ * $Id: IFLayerStatus.java 20098 2008-04-14 08:42:53Z jmvivo $
+ * $Log$
+ * Revision 1.1  2006-09-21 17:23:39  azabala
+ * First version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.layers;
 
 /**
- * <p>According to the particular constitution of a layer, it can be in a set of states,
- *  some of them simultaneously, that altogether represent its <i>status</i>.</p>
- *   
- * <p><code>IFLayerStatus</code> is a "marked" interface (we don't define any methods), that represents
- *  the common status of all kind of layers.</p>
+ * <p>
+ * According to the particular constitution of a layer, it can be in a set of
+ * states, some of them simultaneously, that altogether represent its
+ * <i>status</i>.
+ * </p>
+ * 
+ * <p>
+ * <code>IFLayerStatus</code> is a "marked" interface (we don't define any
+ * methods), that represents the common status of all kind of layers.
+ * </p>
  * 
  * @author azabala
  */
 public interface IFLayerStatus {
 }
-

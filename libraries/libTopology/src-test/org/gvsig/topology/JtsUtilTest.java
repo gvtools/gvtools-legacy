@@ -42,11 +42,13 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology;
+
+import junit.framework.TestCase;
 
 import org.gvsig.jts.JtsUtil;
 
@@ -59,10 +61,8 @@ import com.vividsolutions.jts.geom.PrecisionModel;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
 
-import junit.framework.TestCase;
-
 public class JtsUtilTest extends TestCase {
-	
+
 	private PrecisionModel pm;
 	private GeometryFactory factory;
 	private WKTReader wktReader;
@@ -80,53 +80,50 @@ public class JtsUtilTest extends TestCase {
 		factory = null;
 		wktReader = null;
 	}
-	
-	public void testCreatePolygon() throws ParseException{
-		String wktPoly = "POLYGON ((460 340, 160 240, 480 20, 860 160, 720 360, 560 380, 460 340),"+ 
-				  		 "(420 300, 340 160, 520 100, 580 300, 420 300),"+ 
-				  		 "(640 240, 620 160, 680 300, 640 240))";
-		
+
+	public void testCreatePolygon() throws ParseException {
+		String wktPoly = "POLYGON ((460 340, 160 240, 480 20, 860 160, 720 360, 560 380, 460 340),"
+				+ "(420 300, 340 160, 520 100, 580 300, 420 300),"
+				+ "(640 240, 620 160, 680 300, 640 240))";
+
 		Polygon polygon = (Polygon) wktReader.read(wktPoly);
 		int numParts = polygon.getNumInteriorRing() + 1;
 		int[] indexOfParts = new int[numParts];
 		indexOfParts[0] = 0;
-		if(numParts > 1){
+		if (numParts > 1) {
 			indexOfParts[1] = polygon.getExteriorRing().getNumPoints();
 		}
-		if(numParts > 2){
-			for(int i = 1; i < polygon.getNumInteriorRing(); i++){
-				indexOfParts[i + 1] = indexOfParts[i] + polygon.getInteriorRingN(i).getNumPoints() + 1;
+		if (numParts > 2) {
+			for (int i = 1; i < polygon.getNumInteriorRing(); i++) {
+				indexOfParts[i + 1] = indexOfParts[i]
+						+ polygon.getInteriorRingN(i).getNumPoints() + 1;
 			}
 		}
 		Coordinate[] coordinates = polygon.getCoordinates();
-		
+
 		Polygon polygon2 = JtsUtil.createPolygon(coordinates, indexOfParts);
-		
+
 		assertTrue(polygon.equalsExact(polygon2));
 	}
-	
-	
-	public void testSimplifyGeometry() throws ParseException{
-		String wktPoly = "POLYGON ((460 340, 160 240, 480 20, 860 160, 720 360, 560 380, 460 340),"+ 
- 		 "(420 300, 340 160, 520 100, 580 300, 420 300),"+ 
- 		 "(640 240, 620 160, 680 300, 640 240))";
+
+	public void testSimplifyGeometry() throws ParseException {
+		String wktPoly = "POLYGON ((460 340, 160 240, 480 20, 860 160, 720 360, 560 380, 460 340),"
+				+ "(420 300, 340 160, 520 100, 580 300, 420 300),"
+				+ "(640 240, 620 160, 680 300, 640 240))";
 
 		Polygon polygon = (Polygon) wktReader.read(wktPoly);
-		
+
 		String wkt = "LINESTRING (-23.90282 93.41693, -14.96865 81.97492, 1.64577 95.14107, 5.721 50.62696, 22.02194 52.66458, 26.09718 84.48276, 57.44514 52.03762, 61.05016 76.17555, 87.22571 82.75862)";
 		LineString lineString = (LineString) wktReader.read(wkt);
-		
-		Geometry generalizedLine = JtsUtil.
-			douglasPeuckerSimplify(lineString, 10d);
-		
-		Geometry generalizedPolygon = JtsUtil.
-			douglasPeuckerSimplify(polygon, 10d);
-		
-		assertTrue(! lineString.equals(generalizedLine));
-		assertTrue(! polygon.equals(generalizedPolygon));
-		
-		
-		
-		
+
+		Geometry generalizedLine = JtsUtil.douglasPeuckerSimplify(lineString,
+				10d);
+
+		Geometry generalizedPolygon = JtsUtil.douglasPeuckerSimplify(polygon,
+				10d);
+
+		assertTrue(!lineString.equals(generalizedLine));
+		assertTrue(!polygon.equals(generalizedPolygon));
+
 	}
 }

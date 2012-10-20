@@ -23,21 +23,22 @@ import java.awt.Rectangle;
 /**
  * <code>ListViewItem</code> representa un item para ser usado desde
  * ListViewComponent
- *
+ * 
  * @version 28/06/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class ListViewItem {
-	IIconPaint icon          = null;
-	String     name          = null;
-	Rectangle  nameRectangle = null;
-	Rectangle  itemRectangle = new Rectangle();
-	boolean    selected      = false;
-	boolean    showTooltip   = true;
-	Object     tag           = null;
+	IIconPaint icon = null;
+	String name = null;
+	Rectangle nameRectangle = null;
+	Rectangle itemRectangle = new Rectangle();
+	boolean selected = false;
+	boolean showTooltip = true;
+	Object tag = null;
 
 	/**
 	 * Construye un ListViewItem con un icono y su nombre.
+	 * 
 	 * @param icon
 	 * @param name
 	 */
@@ -48,6 +49,7 @@ public class ListViewItem {
 
 	/**
 	 * Obtener el nombre del item
+	 * 
 	 * @return
 	 */
 	public String getName() {
@@ -56,6 +58,7 @@ public class ListViewItem {
 
 	/**
 	 * Definir el nombre del item
+	 * 
 	 * @param name
 	 */
 	public void setName(String name) {
@@ -64,6 +67,7 @@ public class ListViewItem {
 
 	/**
 	 * Obtener el icono del item
+	 * 
 	 * @return
 	 */
 	public IIconPaint getIcon() {
@@ -72,6 +76,7 @@ public class ListViewItem {
 
 	/**
 	 * Especificar el icono del item
+	 * 
 	 * @param icon
 	 */
 	public void setIcon(IIconPaint icon) {
@@ -80,6 +85,7 @@ public class ListViewItem {
 
 	/**
 	 * Comprobar si el item esta seleccionado
+	 * 
 	 * @return
 	 */
 	public boolean isSelected() {
@@ -88,6 +94,7 @@ public class ListViewItem {
 
 	/**
 	 * Definir si el item esta seleccionado
+	 * 
 	 * @param selected
 	 */
 	public void setSelected(boolean selected) {
@@ -96,6 +103,7 @@ public class ListViewItem {
 
 	/**
 	 * Definir algun campo extra necesario por el programador
+	 * 
 	 * @return
 	 */
 	public Object getTag() {
@@ -104,6 +112,7 @@ public class ListViewItem {
 
 	/**
 	 * Obtiene el campo extra
+	 * 
 	 * @return
 	 */
 	public void setTag(Object tag) {

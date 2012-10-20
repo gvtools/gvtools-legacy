@@ -1,6 +1,5 @@
 package org.gvsig.gpe.xml.utils;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -57,13 +56,13 @@ public class XMLTags {
 	public static final String XML_NAMESPACE = "xmlns";
 	public static final String XML_SCHEMA_LOCATION = "schemaLocation";
 	public static final String XML_ANNOTATION = "annotation";
-	
+
 	public static final String XML_SCHEMA_INSTANCE_NAMESPACE_URI = "http://www.w3.org/2001/XMLSchema-instance";
 	public static final String XML_SCHEMA_INSTANCE_NAMESPACE_PREFIX = "xsi";
-	
+
 	public static final String XML_NAMESPACE_URI = "http://www.w3.org/2000/xmlns/";
 	public static final String XML_NAMESPACE_PREFIX = "xmlns";
-	
+
 	public static final String XML_XLINK_NAMESPACE_URI = "http://www.w3.org/1999/xlink";
-	public static final String XML_XLINK_NAMESPACE_PREFIX = "xlink";	
+	public static final String XML_XLINK_NAMESPACE_PREFIX = "xlink";
 }

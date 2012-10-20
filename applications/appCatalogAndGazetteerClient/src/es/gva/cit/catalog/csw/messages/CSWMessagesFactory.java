@@ -1,13 +1,11 @@
 package es.gva.cit.catalog.csw.messages;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-
-import org.gvsig.i18n.Messages;
 
 import es.gva.cit.catalog.csw.drivers.profiles.CSWAbstractProfile;
 import es.gva.cit.catalog.csw.parsers.CSWConstants;
 import es.gva.cit.catalog.exceptions.NotSupportedVersionException;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -59,34 +57,36 @@ import es.gva.cit.catalog.exceptions.NotSupportedVersionException;
  */
 public class CSWMessagesFactory {
 	private static HashMap messages = null;
-	
-	static{
+
+	static {
 		messages = new HashMap();
 		messages.put(CSWConstants.VERSION_0_9_0, CSWMessages0_9_0.class);
 		messages.put(CSWConstants.VERSION_2_0_0, CSWMessages2_0_0.class);
 		messages.put(CSWConstants.VERSION_2_0_1, CSWMessages2_0_1.class);
 	}
-	
+
 	/**
 	 * Gets a messages class
+	 * 
 	 * @param version
-	 * The CSW version
+	 *            The CSW version
 	 * @param profile
-	 * The CSW profile
-	 * @return
-	 * A CSWAbstractMessages class
-	 * @throws NotSupportedVersionException 
+	 *            The CSW profile
+	 * @return A CSWAbstractMessages class
+	 * @throws NotSupportedVersionException
 	 */
-	public static CSWAbstractMessages getMessages(String version, CSWAbstractProfile profile) throws NotSupportedVersionException{
-		if ((version != null) && (messages.containsKey(version))){
-			Class clazz = (Class)messages.get(version);
-			Class[] parameters = {CSWAbstractProfile.class};
-			Object[] args = {profile};
+	public static CSWAbstractMessages getMessages(String version,
+			CSWAbstractProfile profile) throws NotSupportedVersionException {
+		if ((version != null) && (messages.containsKey(version))) {
+			Class clazz = (Class) messages.get(version);
+			Class[] parameters = { CSWAbstractProfile.class };
+			Object[] args = { profile };
 			try {
-				return (CSWAbstractMessages)clazz.getConstructor(parameters).newInstance(args);
+				return (CSWAbstractMessages) clazz.getConstructor(parameters)
+						.newInstance(args);
 			} catch (Exception e) {
 				throw new NotSupportedVersionException(e);
-			} 
+			}
 		}
 		throw new NotSupportedVersionException();
 	}

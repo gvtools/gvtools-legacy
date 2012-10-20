@@ -49,29 +49,35 @@ import java.awt.Rectangle;
 import javax.swing.JPanel;
 
 public class JPRotationView extends JPanel {
-	private double rotation=0;
-	public void setRotation(double rot){
-		rotation=rot;
+	private double rotation = 0;
+
+	public void setRotation(double rot) {
+		rotation = rot;
 	}
-	public double getRotation(){
+
+	public double getRotation() {
 		return rotation;
 	}
+
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		Rectangle r=new Rectangle(35,15,30,25);
-		((Graphics2D)g).rotate(Math.toRadians(getRotation()), r.x + (r.width / 2),
-				r.y + (r.height / 2));
+		Rectangle r = new Rectangle(35, 15, 30, 25);
+		((Graphics2D) g).rotate(Math.toRadians(getRotation()), r.x
+				+ (r.width / 2), r.y + (r.height / 2));
 
-		g.setColor(new Color(230,150,50));
-		((Graphics2D)g).setStroke(new BasicStroke(4));
-		g.drawRect((int)r.getX(),(int)r.getY(),(int)r.getWidth(),(int)r.getHeight());
-		((Graphics2D)g).setStroke(new BasicStroke(1));
+		g.setColor(new Color(230, 150, 50));
+		((Graphics2D) g).setStroke(new BasicStroke(4));
+		g.drawRect((int) r.getX(), (int) r.getY(), (int) r.getWidth(),
+				(int) r.getHeight());
+		((Graphics2D) g).setStroke(new BasicStroke(1));
 		g.setColor(Color.RED);
-		g.fillRect((int)r.getX(),(int)r.getY(),(int)r.getWidth(),(int)r.getHeight());
+		g.fillRect((int) r.getX(), (int) r.getY(), (int) r.getWidth(),
+				(int) r.getHeight());
 		g.setColor(Color.black);
-		g.drawRect((int)r.getX(),(int)r.getY(),(int)r.getWidth(),(int)r.getHeight());
-		((Graphics2D)g).rotate(Math.toRadians(-getRotation()),
-				r.x + (r.width / 2), r.y + (r.height / 2));
+		g.drawRect((int) r.getX(), (int) r.getY(), (int) r.getWidth(),
+				(int) r.getHeight());
+		((Graphics2D) g).rotate(Math.toRadians(-getRotation()), r.x
+				+ (r.width / 2), r.y + (r.height / 2));
 	}
 
 	/**
@@ -84,7 +90,7 @@ public class JPRotationView extends JPanel {
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
@@ -93,4 +99,4 @@ public class JPRotationView extends JPanel {
 		this.setBackground(java.awt.Color.white);
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

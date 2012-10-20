@@ -60,23 +60,31 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class LineStringTypeBinding extends org.gvsig.gpe.gml.parser.v2.geometries.LineStringTypeBinding{
+public class LineStringTypeBinding extends
+		org.gvsig.gpe.gml.parser.v2.geometries.LineStringTypeBinding {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.bindings.v2.geometries.LineStringTypeBinding#parseTag(org.xmlpull.v1.XmlPullParser, org.gvsig.gpe.gml.GPEDefaultGmlParser, java.lang.String, java.lang.String, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.bindings.v2.geometries.LineStringTypeBinding#parseTag
+	 * (org.xmlpull.v1.XmlPullParser, org.gvsig.gpe.gml.GPEDefaultGmlParser,
+	 * java.lang.String, java.lang.String, java.lang.String)
 	 */
-	protected Object parseTag(IXmlStreamReader parser,GPEDefaultGmlParser handler, QName tag, String id, String srsName) throws XmlStreamException, IOException{
+	protected Object parseTag(IXmlStreamReader parser,
+			GPEDefaultGmlParser handler, QName tag, String id, String srsName)
+			throws XmlStreamException, IOException {
 		Object lineString = super.parseTag(parser, handler, tag, id, srsName);
-		if (lineString != null){
+		if (lineString != null) {
 			return lineString;
 		}
-		if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_POSLIST)){
-			PosListTypeIterator coordinatesIterator = handler.getProfile().getPosListTypeBinding();
-			coordinatesIterator.initialize(parser, handler,GMLTags.GML_LINESTRING);
+		if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_POSLIST)) {
+			PosListTypeIterator coordinatesIterator = handler.getProfile()
+					.getPosListTypeBinding();
+			coordinatesIterator.initialize(parser, handler,
+					GMLTags.GML_LINESTRING);
 			lineString = handler.getContentHandler().startLineString(id,
-					coordinatesIterator,								
-					srsName);			
+					coordinatesIterator, srsName);
 		}
 		return lineString;
 	}

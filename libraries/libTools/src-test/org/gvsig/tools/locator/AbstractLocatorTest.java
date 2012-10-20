@@ -32,9 +32,6 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
-import org.gvsig.tools.locator.AbstractLocator;
-import org.gvsig.tools.locator.LocatorObjectFactory;
-
 /**
  * Unit tests for the AbstractLocator class.
  * 
@@ -42,94 +39,95 @@ import org.gvsig.tools.locator.LocatorObjectFactory;
  */
 public class AbstractLocatorTest extends TestCase {
 
-    private TestLocator locator;
+	private TestLocator locator;
 
-    protected void setUp() throws Exception {
-        super.setUp();
-        locator = new TestLocator();
-    }
+	protected void setUp() throws Exception {
+		super.setUp();
+		locator = new TestLocator();
+	}
 
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
+	protected void tearDown() throws Exception {
+		super.tearDown();
+	}
 
-    /**
-     * Test method for {@link org.gvsig.tools.locator.AbstractLocator#getNames()}.
-     */
-    public void testGetNames() {
-        assertNull("Empty locator must not return any names", locator
-                .getNames());
+	/**
+	 * Test method for
+	 * {@link org.gvsig.tools.locator.AbstractLocator#getNames()}.
+	 */
+	public void testGetNames() {
+		assertNull("Empty locator must not return any names",
+				locator.getNames());
 
-        String name1 = "test1";
-        String name2 = "test2";
+		String name1 = "test1";
+		String name2 = "test2";
 
-        locator.register(name1, String.class);
-        locator.register(name2, String.class);
+		locator.register(name1, String.class);
+		locator.register(name2, String.class);
 
-        String[] names = locator.getNames();
+		String[] names = locator.getNames();
 
-        assertEquals("Number of registered names incorrect, must be 2", 2,
-                names.length);
+		assertEquals("Number of registered names incorrect, must be 2", 2,
+				names.length);
 
-        Collection namesColl = Arrays.asList(names);
-        assertTrue("The list of names does not contain the registered name: "
-                + name1, namesColl.contains(name1));
-        assertTrue("The list of names does not contain the registered name: "
-                + name2, namesColl.contains(name2));
-    }
+		Collection namesColl = Arrays.asList(names);
+		assertTrue("The list of names does not contain the registered name: "
+				+ name1, namesColl.contains(name1));
+		assertTrue("The list of names does not contain the registered name: "
+				+ name2, namesColl.contains(name2));
+	}
 
-    /**
-     * Test method for
-     * {@link org.gvsig.tools.locator.AbstractLocator#get(java.lang.String)} and
-     * {@link org.gvsig.tools.locator.AbstractLocator#register(java.lang.String, java.lang.Class)}
-     */
-    public void testGetAndRegisterClass() {
-        Class clazz = String.class;
-        String name = "test";
+	/**
+	 * Test method for
+	 * {@link org.gvsig.tools.locator.AbstractLocator#get(java.lang.String)} and
+	 * {@link org.gvsig.tools.locator.AbstractLocator#register(java.lang.String, java.lang.Class)}
+	 */
+	public void testGetAndRegisterClass() {
+		Class clazz = String.class;
+		String name = "test";
 
-        locator.register(name, clazz);
+		locator.register(name, clazz);
 
-        Object ref = locator.get(name);
+		Object ref = locator.get(name);
 
-        assertEquals(clazz, ref.getClass());
-    }
+		assertEquals(clazz, ref.getClass());
+	}
 
-    /**
-     * Test method for
-     * {@link org.gvsig.tools.locator.AbstractLocator#get(java.lang.String)} and
-     * {@link org.gvsig.tools.locator.AbstractLocator#register(String, LocatorObjectFactory)
+	/**
+	 * Test method for
+	 * {@link org.gvsig.tools.locator.AbstractLocator#get(java.lang.String)} and
+	 * {@link org.gvsig.tools.locator.AbstractLocator#register(String, LocatorObjectFactory)
 
-     */
-    public void testGetAndRegisterFactory() {
-        final Object ref = new Object();
-        LocatorObjectFactory factory = new LocatorObjectFactory() {
+	 */
+	public void testGetAndRegisterFactory() {
+		final Object ref = new Object();
+		LocatorObjectFactory factory = new LocatorObjectFactory() {
 
-            public Object create() {
-                return ref;
-            }
+			public Object create() {
+				return ref;
+			}
 
-            public Object create(Object[] args) {
-                return ref;
-            }
+			public Object create(Object[] args) {
+				return ref;
+			}
 
-            public Object create(Map args) {
-                return ref;
-            }
-        };
+			public Object create(Map args) {
+				return ref;
+			}
+		};
 
-        String name = "test";
+		String name = "test";
 
-        locator.register(name, factory);
+		locator.register(name, factory);
 
-        Object locatorRef = locator.get(name);
+		Object locatorRef = locator.get(name);
 
-        assertEquals(ref, locatorRef);
-    }
+		assertEquals(ref, locatorRef);
+	}
 
-    public class TestLocator extends AbstractLocator {
-        public String getLocatorName() {
-            return "TestLocator";
-        }
-    }
+	public class TestLocator extends AbstractLocator {
+		public String getLocatorName() {
+			return "TestLocator";
+		}
+	}
 
 }

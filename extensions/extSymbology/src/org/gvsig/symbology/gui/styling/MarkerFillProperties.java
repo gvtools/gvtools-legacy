@@ -57,16 +57,17 @@ import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.core.styles.IMarkerFillPropertiesStyle;
 
 /**
- * Implements a tab to modify attributes to fill the padding of a polygon
- * such offset and separation (between pictures or markers).<p>
+ * Implements a tab to modify attributes to fill the padding of a polygon such
+ * offset and separation (between pictures or markers).
  * <p>
- * This tab is used several times in different places in our applicattion becuase the
- * behaviour is the same if the user is filling the padding of a polygon using pictures
- * or makers .For this reason, in order to avoid the repetition of code, this class has been
- * created (instead of treat it like a simple tab). With this solution, the user
- * only has to refer it to use it (and do not need to create a tab and fill it again
- * and so on).
- *
+ * <p>
+ * This tab is used several times in different places in our applicattion
+ * becuase the behaviour is the same if the user is filling the padding of a
+ * polygon using pictures or makers .For this reason, in order to avoid the
+ * repetition of code, this class has been created (instead of treat it like a
+ * simple tab). With this solution, the user only has to refer it to use it (and
+ * do not need to create a tab and fill it again and so on).
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class MarkerFillProperties extends JPanel {
@@ -85,9 +86,10 @@ public class MarkerFillProperties extends JPanel {
 			}
 		}
 	};
+
 	/**
 	 * Constructor method
-	 *
+	 * 
 	 */
 	public MarkerFillProperties() {
 		super();
@@ -95,9 +97,10 @@ public class MarkerFillProperties extends JPanel {
 	}
 
 	/**
-	 * Initializes the parameters to create a tab to modify attributes to fill the
-	 * padding of a polygon such offset and separation (between pictures or markers)
-	 *
+	 * Initializes the parameters to create a tab to modify attributes to fill
+	 * the padding of a polygon such offset and separation (between pictures or
+	 * markers)
+	 * 
 	 */
 	private void initialize() {
 		GridLayout layout = new GridLayout();
@@ -105,23 +108,20 @@ public class MarkerFillProperties extends JPanel {
 		layout.setVgap(5);
 		setName(PluginServices.getText(this, "fill_properties"));
 		JPanel offsetPnl = new JPanel();
-		offsetPnl.setBorder(BorderFactory.
-				createTitledBorder(null,
-						PluginServices.getText(this, "offset")));
+		offsetPnl.setBorder(BorderFactory.createTitledBorder(null,
+				PluginServices.getText(this, "offset")));
 
 		// add components to the offset panel here
 		{
-			JPanel aux = new JPanel(new FlowLayout(FlowLayout.LEADING, 5,5));
+			JPanel aux = new JPanel(new FlowLayout(FlowLayout.LEADING, 5, 5));
 			aux.add(new JLabel("X:"));
-			aux.add(txtOffsetX = new JIncrementalNumberField("0", 10, 0, 150,1));
+			aux.add(txtOffsetX = new JIncrementalNumberField("0", 10, 0, 150, 1));
 			offsetPnl.add(aux);
 
-			aux = new JPanel(new FlowLayout(FlowLayout.LEADING, 5,5));
+			aux = new JPanel(new FlowLayout(FlowLayout.LEADING, 5, 5));
 			aux.add(new JLabel("Y:"));
-			aux.add(txtOffsetY = new JIncrementalNumberField("0", 10, 0, 150,1));
+			aux.add(txtOffsetY = new JIncrementalNumberField("0", 10, 0, 150, 1));
 			offsetPnl.add(aux);
-
-
 
 		}
 		layout.setRows(offsetPnl.getComponentCount());
@@ -133,20 +133,21 @@ public class MarkerFillProperties extends JPanel {
 		layout = new GridLayout();
 		layout.setColumns(1);
 		layout.setVgap(5);
-		separationPnl.setBorder(BorderFactory.
-				createTitledBorder(null,
-						PluginServices.getText(this, "separation")));
+		separationPnl.setBorder(BorderFactory.createTitledBorder(null,
+				PluginServices.getText(this, "separation")));
 
 		// add components to the separation panel here
 		{
-			JPanel aux = new JPanel(new FlowLayout(FlowLayout.LEADING, 5,5));
+			JPanel aux = new JPanel(new FlowLayout(FlowLayout.LEADING, 5, 5));
 			aux.add(new JLabel("X:"));
-			aux.add(txtSeparationX = new JIncrementalNumberField("0", 10,0, 150,1));
+			aux.add(txtSeparationX = new JIncrementalNumberField("0", 10, 0,
+					150, 1));
 			separationPnl.add(aux);
 
-			aux = new JPanel(new FlowLayout(FlowLayout.LEADING, 5,5));
+			aux = new JPanel(new FlowLayout(FlowLayout.LEADING, 5, 5));
 			aux.add(new JLabel("Y:"));
-			aux.add(txtSeparationY = new JIncrementalNumberField("0", 10, 0, 150,1));
+			aux.add(txtSeparationY = new JIncrementalNumberField("0", 10, 0,
+					150, 1));
 			separationPnl.add(aux);
 		}
 		layout.setRows(separationPnl.getComponentCount());
@@ -168,9 +169,12 @@ public class MarkerFillProperties extends JPanel {
 
 		setLayout(layout);
 	}
+
 	/**
 	 * Sets the graphical component that shows the properties of the model.
-	 * @param fillProps,IMarkerFillPropertiesStyle
+	 * 
+	 * @param fillProps
+	 *            ,IMarkerFillPropertiesStyle
 	 */
 	public void setModel(IMarkerFillPropertiesStyle fillProps) {
 		if (fillProps != null) {
@@ -183,7 +187,7 @@ public class MarkerFillProperties extends JPanel {
 
 	/**
 	 * Obtains the MarkerFillProperties
-	 *
+	 * 
 	 * @return mfProps,IMarkerFillPropertiesStyle
 	 */
 	public IMarkerFillPropertiesStyle getMarkerFillProperties() {
@@ -194,17 +198,20 @@ public class MarkerFillProperties extends JPanel {
 		mfProps.setYSeparation(txtSeparationY.getDouble());
 		return mfProps;
 	}
+
 	/**
-	 * Permits the good operation of the JIncrementalNumberFields that are included
-	 * in the panel
-	 * @param l,ActionListener
+	 * Permits the good operation of the JIncrementalNumberFields that are
+	 * included in the panel
+	 * 
+	 * @param l
+	 *            ,ActionListener
 	 */
 
 	public void addActionListener(ActionListener l) {
 		listeners.add(l);
 	}
 
-	public void setEnabled(boolean enabled){
+	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
 		txtOffsetX.setEnabled(enabled);
 		txtOffsetY.setEnabled(enabled);

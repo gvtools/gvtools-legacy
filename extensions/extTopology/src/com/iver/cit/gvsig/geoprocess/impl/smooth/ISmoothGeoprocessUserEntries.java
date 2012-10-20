@@ -42,20 +42,19 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.impl.smooth;
 
 import com.iver.cit.gvsig.geoprocess.core.gui.IGeoprocessUserEntries;
 
 public interface ISmoothGeoprocessUserEntries extends IGeoprocessUserEntries {
-	
+
 	public int getCurveOption();
-	
-	
-	/*TODO Mover a clase padre*/
+
+	/* TODO Mover a clase padre */
 	public boolean onlyFirstLayerSelected();
 
 }

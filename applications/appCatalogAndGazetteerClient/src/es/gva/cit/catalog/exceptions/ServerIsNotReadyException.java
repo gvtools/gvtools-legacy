@@ -1,4 +1,5 @@
 package es.gva.cit.catalog.exceptions;
+
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -50,20 +51,22 @@ package es.gva.cit.catalog.exceptions;
  */
 /**
  * This exception indicates that the server is not ready
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class ServerIsNotReadyException extends Exception {
 	private static final long serialVersionUID = 397526568003318327L;
 
 	public ServerIsNotReadyException(Throwable cause) {
-		super(cause);		
+		super(cause);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Throwable#toString()
 	 */
-	public String toString(){
+	public String toString() {
 		return "errorServerNotFound";
 	}
 }

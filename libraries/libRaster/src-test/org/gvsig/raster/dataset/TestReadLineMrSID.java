@@ -21,28 +21,28 @@ package org.gvsig.raster.dataset;
 import junit.framework.TestCase;
 
 import org.gvsig.raster.RasterLibrary;
+
 /**
- * Test para validar la lectura por líneas de un fichero MrSID.
- * Muestrea valores sobre toda la extensión leida y comprueba que el resultado
- * sea correcto
+ * Test para validar la lectura por líneas de un fichero MrSID. Muestrea valores
+ * sobre toda la extensión leida y comprueba que el resultado sea correcto
  * 
- * @author Nacho Brodin (nachobrodin@gmail.com)
- * TODO: Falta por hacer TestReadLineMrSID
+ * @author Nacho Brodin (nachobrodin@gmail.com) TODO: Falta por hacer
+ *         TestReadLineMrSID
  */
 public class TestReadLineMrSID extends TestCase {
 	static {
 		RasterLibrary.wakeUp();
 	}
-	
+
 	public void start() {
 		this.setUp();
 		this.testStack();
 	}
-	
+
 	public void setUp() {
 		System.err.println("TestReadLineMrSID running...");
 	}
-	
-	public void testStack(){
+
+	public void testStack() {
 	}
 }

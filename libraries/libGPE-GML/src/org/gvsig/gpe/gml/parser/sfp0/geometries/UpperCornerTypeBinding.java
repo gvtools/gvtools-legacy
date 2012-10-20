@@ -53,39 +53,42 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  */
 
 public class UpperCornerTypeBinding {
-		
-	public double[] parse(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException  {
+
+	public double[] parse(IXmlStreamReader parser, GPEDefaultGmlParser handler)
+			throws XmlStreamException, IOException {
 		boolean endFeature = false;
 		int currentTag;
-		
+
 		String TUPLES_SEPARATOR = GMLTags.GML_DEFAULT_TUPLES_SEPARATOR;
-			
+
 		double[] aCoordinates = null;
 		String[] coordinate = null;
-		
+
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_UPPERCORNER)){
-					parser.next();						
-					String[] coordinates = org.gvsig.gpe.utils.StringUtils.splitString(parser.getText().trim(),TUPLES_SEPARATOR);
-					//String[] coordinates = parser.getText().trim().split(TUPLES_SEPARATOR);
+				if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_UPPERCORNER)) {
+					parser.next();
+					String[] coordinates = org.gvsig.gpe.utils.StringUtils
+							.splitString(parser.getText().trim(),
+									TUPLES_SEPARATOR);
+					// String[] coordinates =
+					// parser.getText().trim().split(TUPLES_SEPARATOR);
 					aCoordinates = new double[3];
-					for (int i=0 ; i < coordinates.length; i++){					
-							aCoordinates[i] = DoubleTypeBinding.parse(coordinates[i],".");
+					for (int i = 0; i < coordinates.length; i++) {
+						aCoordinates[i] = DoubleTypeBinding.parse(
+								coordinates[i], ".");
 					}
-					if (coordinates.length == 2){
+					if (coordinates.length == 2) {
 						aCoordinates[2] = 0.0;
-					}
-					else if (coordinates.length == 1){
+					} else if (coordinates.length == 1) {
 						aCoordinates[1] = 0.0;
-						aCoordinates[2] = 0.0;	
-					}
-					else
-					{
+						aCoordinates[2] = 0.0;
+					} else {
 						aCoordinates[0] = 0.0;
 						aCoordinates[1] = 0.0;
 						aCoordinates[2] = 0.0;
@@ -93,19 +96,19 @@ public class UpperCornerTypeBinding {
 				}
 				break;
 			case IXmlStreamReader.END_ELEMENT:
-				if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_UPPERCORNER)){						
+				if (CompareUtils.compareWithNamespace(tag,
+						GMLTags.GML_UPPERCORNER)) {
 					endFeature = true;
 				}
 				break;
-			case IXmlStreamReader.CHARACTERS:					
+			case IXmlStreamReader.CHARACTERS:
 				break;
 			}
-			if (!endFeature){					
+			if (!endFeature) {
 				currentTag = parser.next();
 				tag = parser.getName();
 			}
-		}			
-		return aCoordinates;	
+		}
+		return aCoordinates;
 	}
 }
-

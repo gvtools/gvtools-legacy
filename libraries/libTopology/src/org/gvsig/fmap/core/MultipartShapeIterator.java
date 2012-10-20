@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.fmap.core;
 
 import java.awt.Shape;
@@ -57,63 +57,64 @@ import com.iver.cit.gvsig.fmap.core.v02.FConverter;
 
 /**
  * 
- * This class is a try to give a more usable interface to
- * FMap geometries.
+ * This class is a try to give a more usable interface to FMap geometries.
  * 
  * 
  * 
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class MultipartShapeIterator {
-	
+
 	Shape shape;
-	
-	public MultipartShapeIterator(Shape shape){
+
+	public MultipartShapeIterator(Shape shape) {
 		this.shape = shape;
 	}
-	
-	public Iterator<Shape> getShapeIterator(){
-		return new Iterator<Shape>(){
-			PathIterator theIterator = shape.getPathIterator(null, FConverter.FLATNESS);
+
+	public Iterator<Shape> getShapeIterator() {
+		return new Iterator<Shape>() {
+			PathIterator theIterator = shape.getPathIterator(null,
+					FConverter.FLATNESS);
 			GeneralPathX currentShape = null;
 			GeneralPathX nextShape = null;
-			
-			
+
 			public boolean hasNext() {
 				double[] coords = new double[6];
 				while (!theIterator.isDone()) {
 					int theType = theIterator.currentSegment(coords);
-					
+
 					switch (theType) {
-						case PathIterator.SEG_MOVETO://REVISAR, PASA SIEMPRE POR MOVE TO (SE ME PASA ALGUNA LLAMADA)
-							if(nextShape != null){
-								currentShape = nextShape;
-								nextShape = new GeneralPathX();
-								nextShape.moveTo(coords[0], coords[1]);
-								theIterator.next();
-								return true;
-							}
+					case PathIterator.SEG_MOVETO:// REVISAR, PASA SIEMPRE POR
+													// MOVE TO (SE ME PASA
+													// ALGUNA LLAMADA)
+						if (nextShape != null) {
+							currentShape = nextShape;
 							nextShape = new GeneralPathX();
 							nextShape.moveTo(coords[0], coords[1]);
+							theIterator.next();
+							return true;
+						}
+						nextShape = new GeneralPathX();
+						nextShape.moveTo(coords[0], coords[1]);
 						break;
 
-						case PathIterator.SEG_LINETO:
-							nextShape.lineTo(coords[0], coords[1]);
-							break;
+					case PathIterator.SEG_LINETO:
+						nextShape.lineTo(coords[0], coords[1]);
+						break;
 
-						case PathIterator.SEG_CLOSE:
-							nextShape.closePath();
-							break;
-					} //end switch
-					
+					case PathIterator.SEG_CLOSE:
+						nextShape.closePath();
+						break;
+					} // end switch
+
 					theIterator.next();
-				} //end while loop
-				if(currentShape != nextShape){
+				} // end while loop
+				if (currentShape != nextShape) {
 					currentShape = nextShape;
 					return true;
-				}else{
+				} else {
 					return false;
 				}
 			}

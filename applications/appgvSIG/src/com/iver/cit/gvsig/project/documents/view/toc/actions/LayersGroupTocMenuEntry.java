@@ -81,13 +81,14 @@ import com.iver.cit.gvsig.project.documents.view.toc.gui.ChangeName;
  *
  */
 /**
- * Realiza una agrupación de capas, a partir de las capas que se encuentren activas.
- *
+ * Realiza una agrupación de capas, a partir de las capas que se encuentren
+ * activas.
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LayersGroupTocMenuEntry extends AbstractTocContextMenuAction {
 	public String getGroup() {
-		return "group4"; //FIXME
+		return "group4"; // FIXME
 	}
 
 	public int getGroupOrder() {
@@ -111,8 +112,8 @@ public class LayersGroupTocMenuEntry extends AbstractTocContextMenuAction {
 			return false;
 		}
 		FLayers parent = selectedItems[0].getParentLayer();
-		for (int i = 1; i < selectedItems.length;i++){
-			if (parent != selectedItems[i].getParentLayer()){
+		for (int i = 1; i < selectedItems.length; i++) {
+			if (parent != selectedItems[i].getParentLayer()) {
 				return false;
 			}
 		}
@@ -120,40 +121,40 @@ public class LayersGroupTocMenuEntry extends AbstractTocContextMenuAction {
 
 	}
 
-
 	public void execute(ITocItem item, FLayer[] selectedItems) {
-		//ITocItem tocItem = (ITocItem) getNodeUserObject();
-		ChangeName changename=new ChangeName(null);
+		// ITocItem tocItem = (ITocItem) getNodeUserObject();
+		ChangeName changename = new ChangeName(null);
 		PluginServices.getMDIManager().addWindow(changename);
 		if (!changename.isAccepted())
 			return;
-		String nombre=changename.getName();
+		String nombre = changename.getName();
 
-		if (nombre != null){
+		if (nombre != null) {
 
 			getMapContext().beginAtomicEvent();
 			FLayers parent = selectedItems[0].getParentLayer();
-//			FLayers newGroup = new FLayers(getMapContext(),parent);
+			// FLayers newGroup = new FLayers(getMapContext(),parent);
 			FLayers newGroup = getMapContext().getNewGroupLayer(parent);
 			newGroup.setName(nombre);
-			int pos=0;
-			for (int i=0;i<parent.getLayersCount();i++){
-				if (parent.getLayer(i).equals(selectedItems[0])){
-					pos=i;
+			int pos = 0;
+			for (int i = 0; i < parent.getLayersCount(); i++) {
+				if (parent.getLayer(i).equals(selectedItems[0])) {
+					pos = i;
 					continue;
 				}
 			}
-			for (int j=0;j < selectedItems.length;j++){
+			for (int j = 0; j < selectedItems.length; j++) {
 				FLayer layer = selectedItems[j];
 				parent.removeLayer(layer);
 				newGroup.addLayer(layer);
 			}
-			parent.addLayer(pos,newGroup);
+			parent.addLayer(pos, newGroup);
 
 			getMapContext().endAtomicEvent();
 			// TRUCO PARA REFRESCAR.
 			getMapContext().invalidate();
-			Project project=((ProjectExtension)PluginServices.getExtension(ProjectExtension.class)).getProject();
+			Project project = ((ProjectExtension) PluginServices
+					.getExtension(ProjectExtension.class)).getProject();
 			project.setModified(true);
 			PluginServices.getMainFrame().enableControls();
 		}

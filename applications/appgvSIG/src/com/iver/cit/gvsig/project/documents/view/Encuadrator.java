@@ -46,14 +46,13 @@ import com.iver.cit.gvsig.project.ProjectExtent;
 import com.iver.cit.gvsig.project.ProjectFactory;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
-
 public class Encuadrator implements ListSelectorListener {
 
 	private Project project;
 	private View vista;
 	private MapContext mapa;
 
-	public Encuadrator(Project project, MapContext map, View vista){
+	public Encuadrator(Project project, MapContext map, View vista) {
 		this.project = project;
 		this.vista = vista;
 		mapa = map;
@@ -63,19 +62,22 @@ public class Encuadrator implements ListSelectorListener {
 	 * @see com.iver.utiles.ListSelectorListener#indexesSelected(int[])
 	 */
 	public void indexesSelected(int[] indices) {
-		mapa.getViewPort().setExtent(project.getExtents()[indices[0]].getExtent());
+		mapa.getViewPort().setExtent(
+				project.getExtents()[indices[0]].getExtent());
 	}
 
 	/**
 	 * @see com.iver.utiles.ListSelectorListener#indexesRemoved(int[])
 	 */
 	public void indexesRemoved(int[] indices) {
-		for (int i = 0; i < indices.length; i++){
-			project.removeExtent(indices[i]);		
+		for (int i = 0; i < indices.length; i++) {
+			project.removeExtent(indices[i]);
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.utiles.ListSelectorListener#newElement(java.lang.String)
 	 */
 	public void newElement(String name) {

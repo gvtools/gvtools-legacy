@@ -25,6 +25,7 @@ import java.io.FileInputStream;
  * Carga de objetos dinámica.
  * 
  * 27/09/2007
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class RasterClassLoader extends ClassLoader {
@@ -34,28 +35,29 @@ public class RasterClassLoader extends ClassLoader {
 	public RasterClassLoader(String base) {
 		this.base = base;
 	}
-	 
+
 	public RasterClassLoader() {
 	}
-	
+
 	/**
 	 * 
 	 */
 	public Class findClass(String className) throws ClassNotFoundException {
-	    String path = base + File.separator + className.replace((char)46, File.separatorChar) + ".class";
-	    Class ret = null;
-	    
-	    try {
-	      FileInputStream fClass = new FileInputStream(path);
-	      byte[] bClass = new byte[fClass.available()];
-	      fClass.read(bClass);
-	      fClass.close();
-	      
-	      ret = defineClass(className, bClass, 0, bClass.length);
-	    }catch(Exception e){
-	      throw new ClassNotFoundException();
-	    }
-	    
-	    return ret;
-	  }
+		String path = base + File.separator
+				+ className.replace((char) 46, File.separatorChar) + ".class";
+		Class ret = null;
+
+		try {
+			FileInputStream fClass = new FileInputStream(path);
+			byte[] bClass = new byte[fClass.available()];
+			fClass.read(bClass);
+			fClass.close();
+
+			ret = defineClass(className, bClass, 0, bClass.length);
+		} catch (Exception e) {
+			throw new ClassNotFoundException();
+		}
+
+		return ret;
+	}
 }

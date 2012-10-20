@@ -160,10 +160,8 @@ public abstract class XTypes {
 	 * @return
 	 */
 	public abstract String fieldTypeToString(int fieldType);
-	
-	
-	
-	public static Object getObject(Value value, int fieldType){
+
+	public static Object getObject(Value value, int fieldType) {
 		Object solution = null;
 		switch (fieldType) {
 		case Types.VARCHAR:
@@ -175,11 +173,11 @@ public abstract class XTypes {
 			solution = new Float(fval.floatValue());
 			break;
 		case Types.DOUBLE:
-			DoubleValue dval = (DoubleValue)value;
+			DoubleValue dval = (DoubleValue) value;
 			solution = new Double(dval.doubleValue());
 			break;
 		case Types.INTEGER:
-			IntValue intval = (IntValue)value;
+			IntValue intval = (IntValue) value;
 			solution = new Integer(intval.intValue());
 			break;
 		case Types.BIGINT:
@@ -209,7 +207,7 @@ public abstract class XTypes {
 	 * @return
 	 */
 	public static Value getValue(Object object, int fieldType) {
-		if(object == null)
+		if (object == null)
 			return ValueFactory.createNullValue();
 		Value solution = null;
 		switch (fieldType) {
@@ -249,7 +247,7 @@ public abstract class XTypes {
 
 	public static String[] getNumericFieldsNames(FLyrVect layer) {
 		String[] solution = null;
-		if(layer == null)
+		if (layer == null)
 			return null;
 		ArrayList list = new ArrayList();
 		try {

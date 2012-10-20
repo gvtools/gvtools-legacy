@@ -26,18 +26,18 @@ import org.gvsig.raster.grid.filter.RasterFilter;
  * Clase base para los filtros de moda.
  * 
  * 23/07/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class ModeFilter extends RasterFilter {
-	public static String[]          names           = new String[] {"moda"};
+	public static String[] names = new String[] { "moda" };
 	/**
 	 * Variable para guardar el lado de la ventana de filtrado
 	 */
-	protected int                   sideWindow		= 0;
-	protected int                   sizeWindow      = 0;
-	protected int                   halfSide        = 0;
-	protected int                   count           = 0;
-
+	protected int sideWindow = 0;
+	protected int sizeWindow = 0;
+	protected int halfSide = 0;
+	protected int count = 0;
 
 	public ModeFilter() {
 		super();
@@ -46,6 +46,7 @@ public class ModeFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#pre()
 	 */
 	public void pre() {
@@ -54,19 +55,22 @@ public class ModeFilter extends RasterFilter {
 		height = raster.getHeight();
 		width = raster.getWidth();
 		sideWindow = ((Integer) params.get("sideLong")).intValue();
-		
-		//El lado de la ventana debe ser positivo e impar.
+
+		// El lado de la ventana debe ser positivo e impar.
 		sideWindow = Math.abs(sideWindow);
 		if (sideWindow % 2 == 0)
 			sideWindow++;
 		sizeWindow = sideWindow * sideWindow;
 		halfSide = (sideWindow - 1) >> 1;
-		
-		rasterResult = RasterBuffer.getBuffer(raster.getDataType(), raster.getWidth(), raster.getHeight(), raster.getBandCount(), true);
+
+		rasterResult = RasterBuffer.getBuffer(raster.getDataType(),
+				raster.getWidth(), raster.getHeight(), raster.getBandCount(),
+				true);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#post()
 	 */
 	public void post() {
@@ -76,6 +80,7 @@ public class ModeFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getGroup()
 	 */
 	public String getGroup() {
@@ -84,6 +89,7 @@ public class ModeFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getInRasterDataType()
 	 */
 	public int getInRasterDataType() {
@@ -92,6 +98,7 @@ public class ModeFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getNames()
 	 */
 	public String[] getNames() {
@@ -100,6 +107,7 @@ public class ModeFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getOutRasterDataType()
 	 */
 	public int getOutRasterDataType() {
@@ -108,7 +116,9 @@ public class ModeFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.RasterFilter#getResult(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.RasterFilter#getResult(java.lang.String)
 	 */
 	public Object getResult(String name) {
 		if (name.equals("raster")) {
@@ -121,35 +131,39 @@ public class ModeFilter extends RasterFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#getUIParams()
 	 */
 	public Params getUIParams(String nameFilter) {
-		if(params != null) {
+		if (params != null) {
 			Object obj = params.get("sideLong");
-			if(obj != null && obj instanceof Integer) {
-				sideWindow = ((Integer)obj).intValue();
+			if (obj != null && obj instanceof Integer) {
+				sideWindow = ((Integer) obj).intValue();
 				sideWindow = Math.abs(sideWindow);
 			}
 		}
 		Params params = new Params();
-		params.setParam("sideLong",
-				new Integer(sideWindow),
-				Params.SLIDER,
-				new String[] {"1", "10", "0", "1", "5" }); //min, max, valor defecto, intervalo pequeño, intervalo grande;
+		params.setParam("sideLong", new Integer(sideWindow), Params.SLIDER,
+				new String[] { "1", "10", "0", "1", "5" }); // min, max, valor
+															// defecto,
+															// intervalo
+															// pequeño,
+															// intervalo grande;
 		return params;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.grid.filter.RasterFilter#process(int, int)
 	 */
 	public void process(int x, int y) throws InterruptedException {
 	}
-	
+
 	/**
 	 * Obtiene el tamaño del lado de la ventana
-	 * @return entero que representa el tamaño del lado de la 
-	 * ventana en píxeles
+	 * 
+	 * @return entero que representa el tamaño del lado de la ventana en píxeles
 	 */
 	public int getSideWindow() {
 		return sideWindow;

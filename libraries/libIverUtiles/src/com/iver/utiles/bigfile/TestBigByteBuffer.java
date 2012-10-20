@@ -68,23 +68,23 @@ import java.util.Random;
 
 /**
  * @author fjp
- *
+ * 
  */
 public class TestBigByteBuffer {
-    File f = new File("D:/Fjp/chiara/plano/vias.shp");
-    FileInputStream fin;
-    FileInputStream fin2;
-    FileChannel channel2;
+	File f = new File("D:/Fjp/chiara/plano/vias.shp");
+	FileInputStream fin;
+	FileInputStream fin2;
+	FileChannel channel2;
 
-    BigByteBuffer2 bb;
-    // Hacemos varias pruebas para ver si funciona
-    // exactamente igual que el original
-    static int numPruebas = 50000;
-	
-	public class MyThread extends Thread
-	{
+	BigByteBuffer2 bb;
+	// Hacemos varias pruebas para ver si funciona
+	// exactamente igual que el original
+	static int numPruebas = 50000;
+
+	public class MyThread extends Thread {
 
 		String name;
+
 		public MyThread(String string) {
 			name = string;
 
@@ -103,165 +103,165 @@ public class TestBigByteBuffer {
 				e.printStackTrace();
 			}
 		}
-		
+
 	}
 
-    /**
-     * @param args
-     * @throws IOException 
-     */
-    public static void main(String[] args) throws IOException {
-        // TODO Auto-generated method stub
-        
-            // prueba1(f, numPruebas);
-    	    TestBigByteBuffer test = new TestBigByteBuffer();
-    	    test.test();
+	/**
+	 * @param args
+	 * @throws IOException
+	 */
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
 
-    }
-    
-    public void test() throws IOException
-    {
-        fin2 = new FileInputStream(f);
-        channel2 = fin2.getChannel();
-        bb = new BigByteBuffer2(channel2, 
-                   FileChannel.MapMode.READ_ONLY, 1024*8);
-    	MyThread th = new MyThread("T1:");
-    	th.start();
-    	MyThread th2 = new MyThread("T2: ");
-    	th2.start();
+		// prueba1(f, numPruebas);
+		TestBigByteBuffer test = new TestBigByteBuffer();
+		test.test();
 
-       
-    System.out.println("Fin de la prueba. " + numPruebas + " iteraciones.");
+	}
 
-    }
+	public void test() throws IOException {
+		fin2 = new FileInputStream(f);
+		channel2 = fin2.getChannel();
+		bb = new BigByteBuffer2(channel2, FileChannel.MapMode.READ_ONLY,
+				1024 * 8);
+		MyThread th = new MyThread("T1:");
+		th.start();
+		MyThread th2 = new MyThread("T2: ");
+		th2.start();
 
-    /**
-     * @param name 
-     * @param f
-     * @param numPruebas
-     * @throws Exception 
-     */
-    private void prueba2(String name, File f, int numPruebas) throws Exception {
-        FileInputStream fin;
-        fin = new FileInputStream(f);
-        // Open the file and then get a channel from the stream
-        FileChannel channel = fin.getChannel();
-        int size = (int) channel.size();
-        // Get the file's size and then map it into memory
-        ByteBuffer bbCorrect = channel.map(FileChannel.MapMode.READ_ONLY, 0, size);
-           // Chunkeo a 1KB
-        Random rnd = new Random();
-        long t1 = System.currentTimeMillis();
+		System.out.println("Fin de la prueba. " + numPruebas + " iteraciones.");
 
-        for (int i=0; i < numPruebas; i++)
-           {
-               int pos = rnd.nextInt(size-10);
-               // pos = 0;
-               bbCorrect.position(pos);
-               int bCorrect = bbCorrect.getInt();
-//            	   bb.position(pos);               
-            	   int bPrueba = bb.getInt(pos);
-               if (bCorrect != bPrueba)
-               {
-                   System.err.println(name + "Error de lectura. " + bCorrect + " " + bPrueba);
-                   throw new Exception("Error con pos=" + pos);
-               }
-               else
-               {
-                   System.out.println(name + "Correcto: pos=" + pos + " byte= " + bPrueba);
-               } 
-               
-           }
-        close(channel2, fin2, bb);
-        long t2 = System.currentTimeMillis();
-        System.out.println("T=" + (t2-t1) + "mseconds");
-    }
+	}
 
-    /**
-     * @param f
-     * @param numPruebas
-     * @throws FileNotFoundException
-     * @throws IOException
-     */
-    private static void prueba1(File f, int numPruebas) throws FileNotFoundException, IOException {
-        FileInputStream fin;
-        fin = new FileInputStream(f);
-        // Open the file and then get a channel from the stream
-        FileChannel channel = fin.getChannel();
-        int size = (int) channel.size();
-        // Get the file's size and then map it into memory
-           ByteBuffer bbCorrect = channel.map(FileChannel.MapMode.READ_ONLY, 0, size);
-           // Chunkeo a 1KB
-        Random rnd = new Random();
-        long t1 = System.currentTimeMillis();
-        FileInputStream fin2 = new FileInputStream(f);
-        FileChannel channel2 = fin2.getChannel();
-        BigByteBuffer bb = new BigByteBuffer(channel2, 
-                   FileChannel.MapMode.READ_ONLY, 1024*1024);
-        for (int i=0; i < numPruebas; i++)
-           {
-               int pos = rnd.nextInt(size-10);
-               // pos = 2;
-               
-               byte bCorrect = bbCorrect.get(pos);
-               byte bPrueba = bb.get(pos);
-               if (bCorrect != bPrueba)
-               {
-                   System.err.println("Error de lectura. " + bCorrect + " " + bPrueba);
-               }
-               else
-               {
-                   // System.out.println("Correcto: pos=" + pos + " byte= " + bPrueba);
-               }
-               
-           }
-        close(channel2, fin2, bb);
-        System.gc();
-        long t2 = System.currentTimeMillis();
-        System.out.println("T=" + (t2-t1) + "mseconds");
-    }
-    
-    static public synchronized void close(FileChannel channel, FileInputStream fin, BigByteBuffer2 bb) throws IOException {
-        IOException ret = null;
-        
-        try {
-            channel.close();
-        } catch (IOException e) {
-            ret = e;
-        } finally {
-            try {
-                fin.close();
-            } catch (IOException e1) {
-                ret = e1;
-            }
-        }
+	/**
+	 * @param name
+	 * @param f
+	 * @param numPruebas
+	 * @throws Exception
+	 */
+	private void prueba2(String name, File f, int numPruebas) throws Exception {
+		FileInputStream fin;
+		fin = new FileInputStream(f);
+		// Open the file and then get a channel from the stream
+		FileChannel channel = fin.getChannel();
+		int size = (int) channel.size();
+		// Get the file's size and then map it into memory
+		ByteBuffer bbCorrect = channel.map(FileChannel.MapMode.READ_ONLY, 0,
+				size);
+		// Chunkeo a 1KB
+		Random rnd = new Random();
+		long t1 = System.currentTimeMillis();
 
-        if (ret != null) {
-            throw ret;
-        }
-        // else // Si todo ha ido bien, preparamos para liberar memoria.
-        //     bb = null;
-    }
-    static public synchronized void close(FileChannel channel, FileInputStream fin, BigByteBuffer bb) throws IOException {
-        IOException ret = null;
-        
-        try {
-            channel.close();
-        } catch (IOException e) {
-            ret = e;
-        } finally {
-            try {
-                fin.close();
-            } catch (IOException e1) {
-                ret = e1;
-            }
-        }
+		for (int i = 0; i < numPruebas; i++) {
+			int pos = rnd.nextInt(size - 10);
+			// pos = 0;
+			bbCorrect.position(pos);
+			int bCorrect = bbCorrect.getInt();
+			// bb.position(pos);
+			int bPrueba = bb.getInt(pos);
+			if (bCorrect != bPrueba) {
+				System.err.println(name + "Error de lectura. " + bCorrect + " "
+						+ bPrueba);
+				throw new Exception("Error con pos=" + pos);
+			} else {
+				System.out.println(name + "Correcto: pos=" + pos + " byte= "
+						+ bPrueba);
+			}
 
-        if (ret != null) {
-            throw ret;
-        }
-        else // Si todo ha ido bien, preparamos para liberar memoria.
-            bb = null;
-    }
+		}
+		close(channel2, fin2, bb);
+		long t2 = System.currentTimeMillis();
+		System.out.println("T=" + (t2 - t1) + "mseconds");
+	}
+
+	/**
+	 * @param f
+	 * @param numPruebas
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	private static void prueba1(File f, int numPruebas)
+			throws FileNotFoundException, IOException {
+		FileInputStream fin;
+		fin = new FileInputStream(f);
+		// Open the file and then get a channel from the stream
+		FileChannel channel = fin.getChannel();
+		int size = (int) channel.size();
+		// Get the file's size and then map it into memory
+		ByteBuffer bbCorrect = channel.map(FileChannel.MapMode.READ_ONLY, 0,
+				size);
+		// Chunkeo a 1KB
+		Random rnd = new Random();
+		long t1 = System.currentTimeMillis();
+		FileInputStream fin2 = new FileInputStream(f);
+		FileChannel channel2 = fin2.getChannel();
+		BigByteBuffer bb = new BigByteBuffer(channel2,
+				FileChannel.MapMode.READ_ONLY, 1024 * 1024);
+		for (int i = 0; i < numPruebas; i++) {
+			int pos = rnd.nextInt(size - 10);
+			// pos = 2;
+
+			byte bCorrect = bbCorrect.get(pos);
+			byte bPrueba = bb.get(pos);
+			if (bCorrect != bPrueba) {
+				System.err.println("Error de lectura. " + bCorrect + " "
+						+ bPrueba);
+			} else {
+				// System.out.println("Correcto: pos=" + pos + " byte= " +
+				// bPrueba);
+			}
+
+		}
+		close(channel2, fin2, bb);
+		System.gc();
+		long t2 = System.currentTimeMillis();
+		System.out.println("T=" + (t2 - t1) + "mseconds");
+	}
+
+	static public synchronized void close(FileChannel channel,
+			FileInputStream fin, BigByteBuffer2 bb) throws IOException {
+		IOException ret = null;
+
+		try {
+			channel.close();
+		} catch (IOException e) {
+			ret = e;
+		} finally {
+			try {
+				fin.close();
+			} catch (IOException e1) {
+				ret = e1;
+			}
+		}
+
+		if (ret != null) {
+			throw ret;
+		}
+		// else // Si todo ha ido bien, preparamos para liberar memoria.
+		// bb = null;
+	}
+
+	static public synchronized void close(FileChannel channel,
+			FileInputStream fin, BigByteBuffer bb) throws IOException {
+		IOException ret = null;
+
+		try {
+			channel.close();
+		} catch (IOException e) {
+			ret = e;
+		} finally {
+			try {
+				fin.close();
+			} catch (IOException e1) {
+				ret = e1;
+			}
+		}
+
+		if (ret != null) {
+			throw ret;
+		} else
+			// Si todo ha ido bien, preparamos para liberar memoria.
+			bb = null;
+	}
 
 }

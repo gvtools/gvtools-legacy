@@ -24,21 +24,32 @@ import java.util.ArrayList;
 import org.gvsig.gui.beans.panelGroup.exceptions.ListCouldntLoadPanelException;
 import org.gvsig.gui.beans.panelGroup.panels.AbstractPanel;
 import org.gvsig.gui.beans.panelGroup.panels.IPanel;
+import org.gvsig.tools.extensionPoint.ExtensionPoint;
 
 /**
- * <p>Interface for all loaders which return an array of {@link AbstractPanel AbstractPanel}
- *  registered as an {@link ExtensionPoint ExtensionPoint}.</p>
+ * <p>
+ * Interface for all loaders which return an array of {@link AbstractPanel
+ * AbstractPanel} registered as an {@link ExtensionPoint ExtensionPoint}.
+ * </p>
  * 
  * @version 15/10/2007
- * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es) 
+ * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public interface IPanelGroupLoader {
 	/**
-	 * <p>Loads and returns all <code>AbstractPanel</code> registered as an {@link ExtensionPoint ExtensionPoint}</p>
+	 * <p>
+	 * Loads and returns all <code>AbstractPanel</code> registered as an
+	 * {@link ExtensionPoint ExtensionPoint}
+	 * </p>
 	 * 
-	 * @param panels array with the panels or <code>null</code> if hasn't been registered any in that extension point, or that extension point didn't exit
+	 * @param panels
+	 *            array with the panels or <code>null</code> if hasn't been
+	 *            registered any in that extension point, or that extension
+	 *            point didn't exit
 	 * 
-	 * @throws Exception last exception produced loading the panels
+	 * @throws Exception
+	 *             last exception produced loading the panels
 	 */
-	public abstract void loadPanels(ArrayList<IPanel> panels) throws ListCouldntLoadPanelException;
+	public abstract void loadPanels(ArrayList<IPanel> panels)
+			throws ListCouldntLoadPanelException;
 }

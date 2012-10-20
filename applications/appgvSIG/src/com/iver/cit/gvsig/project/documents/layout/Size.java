@@ -46,10 +46,9 @@ package com.iver.cit.gvsig.project.documents.layout;
 
 import com.iver.utiles.XMLEntity;
 
-
 /**
  * Clase que almacena la altura y anchura de un folio.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class Size {
@@ -58,9 +57,11 @@ public class Size {
 
 	/**
 	 * Creates a new Size object.
-	 *
-	 * @param al Altura
-	 * @param an Anchura
+	 * 
+	 * @param al
+	 *            Altura
+	 * @param an
+	 *            Anchura
 	 */
 	public Size(double al, double an) {
 		alto = al;
@@ -69,7 +70,7 @@ public class Size {
 
 	/**
 	 * Devuelve el alto del folio.
-	 *
+	 * 
 	 * @return altura.
 	 */
 	public double getAlto() {
@@ -78,7 +79,7 @@ public class Size {
 
 	/**
 	 * Devuelve la anchura del folio.
-	 *
+	 * 
 	 * @return Anchura.
 	 */
 	public double getAncho() {
@@ -88,12 +89,12 @@ public class Size {
 	/**
 	 * Devuelve un Objeto XMLEntity con la información los atributos necesarios
 	 * para poder después volver a crear el objeto original.
-	 *
+	 * 
 	 * @return XMLEntity.
 	 */
 	public XMLEntity getXMLEntity() {
 		XMLEntity xml = new XMLEntity();
-		xml.putProperty("className",this.getClass().getName());
+		xml.putProperty("className", this.getClass().getName());
 		xml.putProperty("ancho", ancho);
 		xml.putProperty("alto", alto);
 
@@ -102,9 +103,10 @@ public class Size {
 
 	/**
 	 * Crea un Objeto de esta clase a partir de la información del XMLEntity.
-	 *
-	 * @param xml XMLEntity
-	 *
+	 * 
+	 * @param xml
+	 *            XMLEntity
+	 * 
 	 * @return Objeto de esta clase.
 	 */
 	public static Size createSize(XMLEntity xml) {

@@ -5,10 +5,9 @@ package com.hardcode.gdbms.engine.instruction;
 
 import com.hardcode.gdbms.parser.Node;
 
-
 /**
  * Adaptador
- *
+ * 
  * @author Fernando González Cortés
  */
 public class LikeClauseAdapter extends Adapter {
@@ -17,7 +16,7 @@ public class LikeClauseAdapter extends Adapter {
 
 	/**
 	 * Obtiene el patron del like
-	 *
+	 * 
 	 * @return String
 	 */
 	public String getPattern() {
@@ -26,7 +25,7 @@ public class LikeClauseAdapter extends Adapter {
 
 	/**
 	 * Obtiene si es LIKE o NOT LIKE
-	 *
+	 * 
 	 * @return si se usa NOT devuelve true, false en caso contrario
 	 */
 	public boolean isNegated() {

@@ -44,54 +44,57 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.ILabelingStrategy;
 
 /**
- * Interface to be implemented for those panels whose purpose is to
- * set up labeling strategies.
+ * Interface to be implemented for those panels whose purpose is to set up
+ * labeling strategies.
  * 
  * ILabelingStrategyPanel.java
- *
+ * 
  * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Jun 13, 2008
- *
+ * 
  */
 public interface ILabelingStrategyPanel {
 	/**
-	 * Invoked when de user accepts the settings, the returned value
-	 * is a always ready-to-work labeling strategy.
+	 * Invoked when de user accepts the settings, the returned value is a always
+	 * ready-to-work labeling strategy.
 	 * 
 	 * @return ILabelingStrategy, a labeling strategy completely set up.
 	 */
 	public ILabelingStrategy getLabelingStrategy();
-	
+
 	/**
-	 * Sets the model of the panel. As a general contract, after invoke
-	 * this method, the panel should be filled with all the values
-	 * needed and be able to be repainted successfully.
+	 * Sets the model of the panel. As a general contract, after invoke this
+	 * method, the panel should be filled with all the values needed and be able
+	 * to be repainted successfully.
 	 * 
-	 * @param layer, the layer to whom the labeling strategy is associated.
-	 * @param str, the current labeling strategy.
+	 * @param layer
+	 *            , the layer to whom the labeling strategy is associated.
+	 * @param str
+	 *            , the current labeling strategy.
 	 */
 	public void setModel(FLayer layer, ILabelingStrategy str);
-	
+
 	/**
-	 * A human-readable localized text to make this strategy easily
-	 * recognizable among all the available strategies.
+	 * A human-readable localized text to make this strategy easily recognizable
+	 * among all the available strategies.
+	 * 
 	 * @return
 	 */
 	public String getLabelingStrategyName();
-	
+
 	/**
 	 * <p>
-	 * The panel shown in the layer properties dialog is selected through
-	 * the class of the labeling strategy. This method returns such class.
-	 * <br>
+	 * The panel shown in the layer properties dialog is selected through the
+	 * class of the labeling strategy. This method returns such class. <br>
 	 * </p>
 	 * <p>
-	 * <b>Note</b> that, as a collateral effect, the panel that sets up a labeling strategy
-	 * can be substituted programatically by other of your wish if
-	 * you return the same labeling strategy class than the one to
-	 * be replaced with your new one. The last panel installed, will
-	 * be the one to be shown.
+	 * <b>Note</b> that, as a collateral effect, the panel that sets up a
+	 * labeling strategy can be substituted programatically by other of your
+	 * wish if you return the same labeling strategy class than the one to be
+	 * replaced with your new one. The last panel installed, will be the one to
+	 * be shown.
 	 * </p>
+	 * 
 	 * @return Class, the labeling strategy's Class
 	 */
 	public Class<? extends ILabelingStrategy> getLabelingStrategyClass();

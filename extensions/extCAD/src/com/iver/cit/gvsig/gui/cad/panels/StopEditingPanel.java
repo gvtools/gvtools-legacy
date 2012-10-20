@@ -42,7 +42,6 @@ import org.gvsig.gui.beans.swing.JButton;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
-import com.iver.andami.plugins.Extension;
 import com.iver.andami.plugins.IExtension;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
@@ -55,14 +54,14 @@ import com.iver.cit.gvsig.fmap.drivers.shp.IndexedShpDriver;
 import com.iver.cit.gvsig.fmap.edition.VectorialEditableAdapter;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.rendering.IVectorLegend;
-import com.iver.cit.gvsig.gui.cad.CADToolAdapter;
 import com.iver.cit.gvsig.layers.VectorialLayerEdited;
 import com.iver.utiles.swing.JComboBox;
 
 /**
  * @author <a href="mailto:jpiera@gvsig.org">Jorge Piera</a>
  */
-public class StopEditingPanel extends JPanel implements ActionListener, IWindow, ExportTo.EndExportToCommand{
+public class StopEditingPanel extends JPanel implements ActionListener,
+		IWindow, ExportTo.EndExportToCommand {
 	private JPanel buttonsPanel;
 	private JButton acceptButton;
 	private JButton closeButton;
@@ -101,15 +100,17 @@ public class StopEditingPanel extends JPanel implements ActionListener, IWindow,
 	private void initLabels() {
 		closeButton.setText(PluginServices.getText(this, "close"));
 		acceptButton.setText(PluginServices.getText(this, "accept"));
-		massageTextArea.setText(PluginServices.getText(this, "stop_editing_message"));
+		massageTextArea.setText(PluginServices.getText(this,
+				"stop_editing_message"));
 		exportRButton.setText(PluginServices.getText(this, "export_to"));
-		closeRButton.setText(PluginServices.getText(this, "stop_editing_close"));
+		closeRButton
+				.setText(PluginServices.getText(this, "stop_editing_close"));
 	}
 
-	private void initCombos(){
+	private void initCombos() {
 		HashMap<String, Class> formats = StopEditing.getSupportedFormats();
 		Iterator<String> it = formats.keySet().iterator();
-		while (it.hasNext()){
+		while (it.hasNext()) {
 			formatCombo.addItem(it.next());
 		}
 	}
@@ -138,7 +139,7 @@ public class StopEditingPanel extends JPanel implements ActionListener, IWindow,
 		buttonsPanel.add(closeButton, gridBagConstraints);
 
 		gridBagConstraints = new java.awt.GridBagConstraints();
-	    gridBagConstraints.insets = new java.awt.Insets(2, 2, 5, 2);
+		gridBagConstraints.insets = new java.awt.Insets(2, 2, 5, 2);
 		buttonsPanel.add(acceptButton, gridBagConstraints);
 
 		buttonGroup.add(closeRButton);
@@ -155,10 +156,11 @@ public class StopEditingPanel extends JPanel implements ActionListener, IWindow,
 		massageTextArea.setEditable(false);
 		massageTextArea.setLineWrap(true);
 		massageTextArea.setRows(4);
-		massageTextArea.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-		messageScrollPanel.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+		massageTextArea.setBorder(javax.swing.BorderFactory.createEmptyBorder(
+				1, 1, 1, 1));
+		messageScrollPanel
+				.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		messageScrollPanel.setViewportView(massageTextArea);
-
 
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -197,13 +199,13 @@ public class StopEditingPanel extends JPanel implements ActionListener, IWindow,
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("a")){
+		if (e.getActionCommand().equals("a")) {
 			try {
 				acceptButtonActionPerformed();
 			} catch (Exception e1) {
 				NotificationManager.addError(e1);
 			}
-		}else if (e.getActionCommand().equals("c")){
+		} else if (e.getActionCommand().equals("c")) {
 			closeButtonActionPerformed();
 		}
 	}
@@ -213,26 +215,29 @@ public class StopEditingPanel extends JPanel implements ActionListener, IWindow,
 	}
 
 	private void acceptButtonActionPerformed() throws Exception {
-		if (closeRButton.isSelected()){
+		if (closeRButton.isSelected()) {
 			stopEditing();
 			closeButtonActionPerformed();
-		}else if (exportRButton.isSelected()){
+		} else if (exportRButton.isSelected()) {
 			Object obj = formatCombo.getSelectedItem();
-			if (obj != null){
-				Class extensionClass = StopEditing.getSupportedFormats().get(obj);
-				IExtension extension = PluginServices.getExtension(extensionClass);
-					if (extension != null){
+			if (obj != null) {
+				Class extensionClass = StopEditing.getSupportedFormats().get(
+						obj);
+				IExtension extension = PluginServices
+						.getExtension(extensionClass);
+				if (extension != null) {
 					closeButtonActionPerformed();
-					IExtension clearExtension = PluginServices.getExtension(ClearSelectionExtension.class);
+					IExtension clearExtension = PluginServices
+							.getExtension(ClearSelectionExtension.class);
 					clearExtension.execute("DEL_SELECTION");
 
 					ExportTo.addLayerToStopEdition(layer, this);
 
 					mapControl.setTool("pointSelection");
 
-					extension.execute((String)obj);
+					extension.execute((String) obj);
 
-//					layer.setEditing(false);
+					// layer.setEditing(false);
 				}
 			}
 		}
@@ -241,17 +246,18 @@ public class StopEditingPanel extends JPanel implements ActionListener, IWindow,
 	public void stopEditing() throws Exception {
 		stopEditing.cancelEdition(layer);
 		VectorialEditableAdapter vea = (VectorialEditableAdapter) layer
-		.getSource();
+				.getSource();
 		vea.getCommandRecord().removeCommandListener(mapControl);
-		if (!(layer.getSource().getDriver() instanceof IndexedShpDriver)){
-			VectorialLayerEdited vle=(VectorialLayerEdited)CADExtension.getEditionManager().getLayerEdited(layer);
-			layer.setLegend((IVectorLegend)vle.getLegend());
+		if (!(layer.getSource().getDriver() instanceof IndexedShpDriver)) {
+			VectorialLayerEdited vle = (VectorialLayerEdited) CADExtension
+					.getEditionManager().getLayerEdited(layer);
+			layer.setLegend((IVectorLegend) vle.getLegend());
 		}
 		layer.setEditing(false);
 	}
 
 	public WindowInfo getWindowInfo() {
-		if (windowInfo == null){
+		if (windowInfo == null) {
 			windowInfo = new WindowInfo(WindowInfo.MODALDIALOG);
 			windowInfo.setWidth(400);
 			windowInfo.setHeight(150);
@@ -265,10 +271,10 @@ public class StopEditingPanel extends JPanel implements ActionListener, IWindow,
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.ExportTo.EndExportToCommand#execute()
 	 */
 	public void execute() throws Exception {
 		stopEditing();
 	}
 }
-

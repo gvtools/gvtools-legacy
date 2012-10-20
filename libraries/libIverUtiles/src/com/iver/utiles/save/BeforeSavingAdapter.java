@@ -23,32 +23,34 @@ package com.iver.utiles.save;
  */
 
 /**
- * An abstract adapter class for receiving save file events.
- * The methods in this class are empty. This class exists as
- * convenience for creating listener objects.
+ * An abstract adapter class for receiving save file events. The methods in this
+ * class are empty. This class exists as convenience for creating listener
+ * objects.
  * <P>
- * Extend this class to create a <code>SaveEvent</code> listener 
- * and override the methods for the events of interest. (If you implement the 
- * <code>BeforeSavingListener</code> interface, you have to define all of
- * the methods in it. This abstract class defines null methods for them
- * all, so you can only have to define methods for events you care about.)
+ * Extend this class to create a <code>SaveEvent</code> listener and override
+ * the methods for the events of interest. (If you implement the
+ * <code>BeforeSavingListener</code> interface, you have to define all of the
+ * methods in it. This abstract class defines null methods for them all, so you
+ * can only have to define methods for events you care about.)
  * <P>
- * Create a listener object using the extended class and then register it with 
- * a component using the component's <code>addBeforeSavingListener</code> 
- * method. When an object that provides support of notification
- * about saving files, is going to save a file,
- * the relevant method in the listener object is invoked,
+ * Create a listener object using the extended class and then register it with a
+ * component using the component's <code>addBeforeSavingListener</code> method.
+ * When an object that provides support of notification about saving files, is
+ * going to save a file, the relevant method in the listener object is invoked,
  * and the <code>SaveEvent</code> is passed to it.
- *
+ * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
- *
+ * 
  * @see SaveEvent
  * @see BeforeSavingListener
  */
 public abstract class BeforeSavingAdapter implements BeforeSavingListener {
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.utiles.save.BeforeSavingListener#beforeSaving(com.iver.utiles.save.SaveEvent)
+	 * 
+	 * @see
+	 * com.iver.utiles.save.BeforeSavingListener#beforeSaving(com.iver.utiles
+	 * .save.SaveEvent)
 	 */
-    public abstract void beforeSaving(SaveEvent e);
+	public abstract void beforeSaving(SaveEvent e);
 }

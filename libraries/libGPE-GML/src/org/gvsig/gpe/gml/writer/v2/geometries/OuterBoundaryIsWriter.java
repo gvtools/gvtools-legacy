@@ -80,6 +80,7 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
 /**
  * It writes a gml:outerBoundaryType object. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;outerBoundaryIs&gt;
@@ -89,36 +90,43 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  * &lt;/outerBoundaryIs&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class OuterBoundaryIsWriter {
-	
+
 	/**
 	 * It writes a gml:outerBoundaryIs init tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param coords
-	 * A coordinates sequence
+	 *            A coordinates sequence
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor handler,
-			ICoordinateSequence coords) throws IOException{
+	public void start(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler, ICoordinateSequence coords)
+			throws IOException {
 		writer.writeStartElement(GMLTags.GML_OUTERBOUNDARYIS);
-		handler.getProfile().getLinearRingWriter().start(writer, handler, null, coords, null);
+		handler.getProfile().getLinearRingWriter()
+				.start(writer, handler, null, coords, null);
 	}
-	
+
 	/**
 	 * It writes a gml:outerBoundaryIs end tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @throws IOException
 	 */
-	public void end(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor handler) throws IOException{
+	public void end(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler) throws IOException {
 		handler.getProfile().getLinearRingWriter().end(writer, handler);
 		writer.writeEndElement();
 	}

@@ -65,10 +65,10 @@ public class AllReadingTests {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.gvsig.gpe.schema.reader");
-		//$JUnit-BEGIN$
+		// $JUnit-BEGIN$
 		suite.addTestSuite(CityGMLSchemaReaderTest.class);
 		suite.addTestSuite(EuroRoadsSchemaReaderTest.class);
-		//$JUnit-END$
+		// $JUnit-END$
 		return suite;
 	}
 

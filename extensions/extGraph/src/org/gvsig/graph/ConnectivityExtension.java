@@ -56,26 +56,25 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 /**
  * @author fjp
  * 
- * Extension to perform Connectivity calculations. 
- * The user can put a flag and select a point associated layer, and set
- * if he wants to use a max cost and/or max distance.
- * The algorithm will explore the network in reverse order or in normal order and
- * the arcs reached will be selected. If the user selects an associated layer, the
- * points reached will be selected also.
- * This may be useful in the following situations:
- * 1.- Searching for connectivity. The unconnected parts of the network will be unselected.
- * 2.- Selecting points connected to the network and affected by a cut in the graph
- * 3.- Using reverse order, you may find the closest valve to close and avoid leaks.
+ *         Extension to perform Connectivity calculations. The user can put a
+ *         flag and select a point associated layer, and set if he wants to use
+ *         a max cost and/or max distance. The algorithm will explore the
+ *         network in reverse order or in normal order and the arcs reached will
+ *         be selected. If the user selects an associated layer, the points
+ *         reached will be selected also. This may be useful in the following
+ *         situations: 1.- Searching for connectivity. The unconnected parts of
+ *         the network will be unselected. 2.- Selecting points connected to the
+ *         network and affected by a cut in the graph 3.- Using reverse order,
+ *         you may find the closest valve to close and avoid leaks.
  */
 public class ConnectivityExtension extends Extension {
-
 
 	public void initialize() {
 		PluginServices.getIconTheme().registerDefault(
 				"connectivity",
-				this.getClass().getClassLoader().getResource("images/connectivity.gif")
-			);
-		
+				this.getClass().getClassLoader()
+						.getResource("images/connectivity.gif"));
+
 	}
 
 	public void execute(String actionCommand) {
@@ -83,7 +82,7 @@ public class ConnectivityExtension extends Extension {
 		View v = (View) PluginServices.getMDIManager().getActiveWindow();
 		MapControl mapCtrl = v.getMapControl();
 		MapContext map = mapCtrl.getMapContext();
-		SingleLayerIterator it = new SingleLayerIterator(map.getLayers());		
+		SingleLayerIterator it = new SingleLayerIterator(map.getLayers());
 		while (it.hasNext()) {
 			FLayer aux = it.next();
 			if (!aux.isActive())
@@ -91,41 +90,38 @@ public class ConnectivityExtension extends Extension {
 			Network net = (Network) aux.getProperty("network");
 
 			if (net != null) {
-				if(actionCommand.equals("CONNECTIVITY")){
-					ConnectivityControlPanel w =new ConnectivityControlPanel();
+				if (actionCommand.equals("CONNECTIVITY")) {
+					ConnectivityControlPanel w = new ConnectivityControlPanel();
 					try {
 						w.setMapControl(mapCtrl);
-						PluginServices.getMDIManager().addWindow(w);						
+						PluginServices.getMDIManager().addWindow(w);
 					} catch (ReadDriverException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
+
 				}
 				return;
 			}
 		}
 
 	}
-	
+
 	public boolean isEnabled() {
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		if (window instanceof View)
-		{
+		if (window instanceof View) {
 			View v = (View) window;
-	        MapControl mapCtrl = v.getMapControl();
+			MapControl mapCtrl = v.getMapControl();
 			MapContext map = mapCtrl.getMapContext();
-			
+
 			SingleLayerIterator it = new SingleLayerIterator(map.getLayers());
-			while (it.hasNext())
-			{
+			while (it.hasNext()) {
 				FLayer aux = it.next();
 				if (!aux.isActive())
 					continue;
 				Network net = (Network) aux.getProperty("network");
-				
-				if ( net != null)
-				{
+
+				if (net != null) {
 					return true;
 				}
 			}
@@ -134,10 +130,9 @@ public class ConnectivityExtension extends Extension {
 	}
 
 	public boolean isVisible() {
-		IWindow f = PluginServices.getMDIManager()
-		 .getActiveWindow();
+		IWindow f = PluginServices.getMDIManager().getActiveWindow();
 		if (f == null) {
-		    return false;
+			return false;
 		}
 		if (f instanceof View) {
 			return true;

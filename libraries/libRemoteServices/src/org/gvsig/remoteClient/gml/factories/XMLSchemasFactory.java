@@ -2,6 +2,7 @@ package org.gvsig.remoteClient.gml.factories;
 
 import java.util.Hashtable;
 
+import org.gvsig.exceptions.BaseException;
 import org.gvsig.remoteClient.gml.exceptions.GMLException;
 import org.gvsig.remoteClient.gml.schemas.XMLNameSpace;
 import org.gvsig.remoteClient.gml.warnings.GMLWarningMalformed;
@@ -62,9 +63,8 @@ import org.gvsig.remoteClient.gml.warnings.GMLWarningMalformed;
  *
  */
 /**
- * Factory to create Schemas. The XML schema parser
- * adds a new schema every time it find one when is
- * parsing a xml (gml) file
+ * Factory to create Schemas. The XML schema parser adds a new schema every time
+ * it find one when is parsing a xml (gml) file
  * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
@@ -72,82 +72,85 @@ import org.gvsig.remoteClient.gml.warnings.GMLWarningMalformed;
  */
 public class XMLSchemasFactory {
 	private static Hashtable schemas = new Hashtable();
-	
+
 	/**
-	 *	It gets the schema type by the key "name"
+	 * It gets the schema type by the key "name"
 	 **/
-	public static XMLNameSpace getType(String name)
-	{
-		return (XMLNameSpace)schemas.get(name);
+	public static XMLNameSpace getType(String name) {
+		return (XMLNameSpace) schemas.get(name);
 	}
 
 	/**
 	 * Adds a new Schema
+	 * 
 	 * @param xmlnsName
-	 * XML nameSpace name
+	 *            XML nameSpace name
 	 * @param xmlnsValue
-	 * XML nameSpace value or URI
+	 *            XML nameSpace value or URI
 	 */
-	public static void addType(String xmlnsName,String xmlnsValue){
-		//Add a new namespace instance named "schema"...
-		XMLNameSpace schema = new XMLNameSpace(xmlnsName,xmlnsValue);
-		//Now adds a new hash map for import new schemas
-		schemas.put(xmlnsName,schema);
-	}	
-	
+	public static void addType(String xmlnsName, String xmlnsValue) {
+		// Add a new namespace instance named "schema"...
+		XMLNameSpace schema = new XMLNameSpace(xmlnsName, xmlnsValue);
+		// Now adds a new hash map for import new schemas
+		schemas.put(xmlnsName, schema);
+	}
+
 	/**
-	 * It find a nameSpace by location. 
+	 * It find a nameSpace by location.
+	 * 
 	 * @param namespace
-	 * Parent nameSpace
+	 *            Parent nameSpace
 	 * @param location
-	 * URL or file where the nameSpace is located
+	 *            URL or file where the nameSpace is located
 	 * @param schema
-	 * Schema
+	 *            Schema
 	 * @return String
-	 * @throws BaseException 
+	 * @throws BaseException
 	 */
-	public static String addSchemaLocation(String namespace,String location,String schema) throws GMLException {
+	public static String addSchemaLocation(String namespace, String location,
+			String schema) throws GMLException {
 		XMLNameSpace GMLSchema;
-		//it gets the schema "default namespace" by the URI, but the W3C Schemas URI must be declared previously
-		if((GMLSchema = getSchemaByLocation(location))==null){
-			//GML is badly shaped
+		// it gets the schema "default namespace" by the URI, but the W3C
+		// Schemas URI must be declared previously
+		if ((GMLSchema = getSchemaByLocation(location)) == null) {
+			// GML is badly shaped
 			// correct form:
-			//              xmlns:namespace="http://www.w3.org/2001/XMLSchema-instance" 
-			//				namespace:schemaLocation="www.URI.com file.xsd"
+			// xmlns:namespace="http://www.w3.org/2001/XMLSchema-instance"
+			// namespace:schemaLocation="www.URI.com file.xsd"
 			throw new GMLWarningMalformed();
-		}
-		else{
-			//set the correct location (URI) to the new main namespace
+		} else {
+			// set the correct location (URI) to the new main namespace
 			GMLSchema.setLocation(schema);
-			return GMLSchema.getName();	
+			return GMLSchema.getName();
 		}
 	}
 
 	/**
-	 * It find a nameSpace by location. 
+	 * It find a nameSpace by location.
+	 * 
 	 * @param location
-	 * URL or file where the nameSpace is located
+	 *            URL or file where the nameSpace is located
 	 * @return
 	 */
-	public static XMLNameSpace getSchemaByLocation(String location){
+	public static XMLNameSpace getSchemaByLocation(String location) {
 		Object[] keys = schemas.keySet().toArray();
-		for (int i=0 ; i<schemas.size() ; i++){
-			XMLNameSpace schema = (XMLNameSpace)schemas.get(keys[i]);
-			if (schema.getLocation().equals(location)){
+		for (int i = 0; i < schemas.size(); i++) {
+			XMLNameSpace schema = (XMLNameSpace) schemas.get(keys[i]);
+			if (schema.getLocation().equals(location)) {
 				return schema;
 			}
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Just for degug. It prints all the registred components.
 	 */
-	public static void printSchemas(){
+	public static void printSchemas() {
 		System.out.println("*** SCHEMAS ***");
 		Object[] keys = schemas.keySet().toArray();
-		for (int i=0 ; i<schemas.size() ; i++){
-			XMLNameSpace schema = (XMLNameSpace)schemas.get(keys[i]);
+		for (int i = 0; i < schemas.size(); i++) {
+			XMLNameSpace schema = (XMLNameSpace) schemas.get(keys[i]);
 			System.out.print("NAME: " + schema.getName());
 			System.out.print("LOCATION: " + schema.getLocation());
 			System.out.print("\n");

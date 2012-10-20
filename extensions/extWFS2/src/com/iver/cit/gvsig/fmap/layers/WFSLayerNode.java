@@ -94,8 +94,8 @@ import org.gvsig.remoteClient.utils.BoundaryBox;
  *
  */
 /**
- * This class represents one node of the layer tree of a
- * common WFS service.
+ * This class represents one node of the layer tree of a common WFS service.
+ * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
 public class WFSLayerNode {
@@ -105,16 +105,19 @@ public class WFSLayerNode {
 	public String getNameSpace() {
 		return nameSpace;
 	}
+
 	/**
-	 * @param nameSpace the nameSpace to set
+	 * @param nameSpace
+	 *            the nameSpace to set
 	 */
 	public void setNameSpace(String nameSpace) {
 		this.nameSpace = nameSpace;
 	}
-	private String	name = null;
+
+	private String name = null;
 	private String nameSpace = null;
-	private String	title = null;
-	private String	_abstract = null;
+	private String title = null;
+	private String _abstract = null;
 	private Vector fields = new Vector();
 	private Vector selectedFields = new Vector();
 	private String filter = null;
@@ -123,187 +126,221 @@ public class WFSLayerNode {
 	private BoundaryBox latLonBbox = null;
 	private String userName = "";
 
-	
 	/**
 	 * @return Returns the fields.
 	 */
 	public Vector getFields() {
 		return fields;
 	}
+
 	/**
-	 * @param fields The fields to set.
+	 * @param fields
+	 *            The fields to set.
 	 */
 	public void setFields(Vector fields) {
 		this.fields = fields;
 	}
-	
+
 	/**
-	 * @param fields The fields to set.
+	 * @param fields
+	 *            The fields to set.
 	 */
 	public void setFields(Object[] fields) {
 		this.fields.clear();
-		for (int i=0 ; i<fields.length ; i++){
+		for (int i = 0; i < fields.length; i++) {
 			this.fields.add(fields[i]);
 		}
 	}
-	
-	
+
 	/**
 	 * 
 	 */
-	public String toString(){
+	public String toString() {
 		String str;
-		if (getName()==null)
+		if (getName() == null)
 			str = getTitle();
 		else
-			str = "["+getName()+"] "+getTitle();
+			str = "[" + getName() + "] " + getTitle();
 		return str;
 	}
+
 	/**
 	 * @return Returns the _abstract.
 	 */
 	public String getAbstract() {
 		return _abstract;
 	}
+
 	/**
-	 * @param _abstract The _abstract to set.
+	 * @param _abstract
+	 *            The _abstract to set.
 	 */
 	public void setAbstract(String _abstract) {
 		this._abstract = _abstract;
 	}
+
 	/**
 	 * @return Returns the name.
 	 */
 	public String getName() {
 		return name;
 	}
+
 	/**
-	 * @param name The name to set.
+	 * @param name
+	 *            The name to set.
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	/**
 	 * @return Returns the title.
 	 */
 	public String getTitle() {
 		return title;
 	}
+
 	/**
-	 * @param title The title to set.
+	 * @param title
+	 *            The title to set.
 	 */
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
 	/**
 	 * @return Returns the _abstract.
 	 */
 	public String get_abstract() {
 		return _abstract;
 	}
+
 	/**
-	 * @param _abstract The _abstract to set.
+	 * @param _abstract
+	 *            The _abstract to set.
 	 */
 	public void set_abstract(String _abstract) {
 		this._abstract = _abstract;
-	}	
+	}
+
 	/**
 	 * @return Returns the userName.
 	 */
 	public String getUserName() {
 		return userName;
 	}
+
 	/**
-	 * @param userName The userName to set.
+	 * @param userName
+	 *            The userName to set.
 	 */
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
+
 	/**
 	 * @return Returns the selectedFields.
 	 */
 	public Vector getSelectedFields() {
 		return selectedFields;
 	}
+
 	/**
-	 * @param selectedFields The selectedFields to set.
+	 * @param selectedFields
+	 *            The selectedFields to set.
 	 */
 	public void setSelectedFields(Vector selectedFields) {
 		this.selectedFields = selectedFields;
 	}
-	
+
 	/**
-	 * @param fields The fields to set.
+	 * @param fields
+	 *            The fields to set.
 	 */
 	public void setSelectedFields(Object[] selectedFields) {
 		this.selectedFields.clear();
-		for (int i=0 ; i<selectedFields.length ; i++){
+		for (int i = 0; i < selectedFields.length; i++) {
 			this.selectedFields.add(selectedFields[i]);
 		}
 	}
+
 	/**
 	 * @return Returns the srs.
 	 */
 	public Vector getSrs() {
 		return srs;
 	}
+
 	/**
-	 * @param srs The srs to set.
+	 * @param srs
+	 *            The srs to set.
 	 */
 	public void setSrs(Vector srs) {
 		this.srs = srs;
 	}
+
 	/**
 	 * @return Returns the latLonBbox.
 	 */
 	public BoundaryBox getLatLonBbox() {
 		return latLonBbox;
 	}
+
 	/**
-	 * @param latLonBbox The latLonBbox to set.
+	 * @param latLonBbox
+	 *            The latLonBbox to set.
 	 */
 	public void setLatLonBbox(BoundaryBox latLonBbox) {
 		this.latLonBbox = latLonBbox;
 	}
+
 	/**
 	 * @return Returns the geometry.
 	 */
 	public GMLGeometryType getGeometry() {
-		if (geometry == null){
-			if ((getFields() != null) && (getFields().size()>0)){
-				XMLElement element = (XMLElement)getFields().get(0);
-				//If it doesn't has type
-				if (element.getEntityType() != null){
-					if (element.getEntityType().getType() == IXMLType.COMPLEX){
-						Vector attributes = ((XMLComplexType)element.getEntityType()).getAttributes();
-						for (int i=0 ; i<attributes.size() ; i++){
-							XMLElement child = (XMLElement)attributes.get(i);
-							if (child.getEntityType() != null){
-								if (child.getEntityType().getType() == IXMLType.GML_GEOMETRY){
-									geometry = (GMLGeometryType)child.getEntityType();
+		if (geometry == null) {
+			if ((getFields() != null) && (getFields().size() > 0)) {
+				XMLElement element = (XMLElement) getFields().get(0);
+				// If it doesn't has type
+				if (element.getEntityType() != null) {
+					if (element.getEntityType().getType() == IXMLType.COMPLEX) {
+						Vector attributes = ((XMLComplexType) element
+								.getEntityType()).getAttributes();
+						for (int i = 0; i < attributes.size(); i++) {
+							XMLElement child = (XMLElement) attributes.get(i);
+							if (child.getEntityType() != null) {
+								if (child.getEntityType().getType() == IXMLType.GML_GEOMETRY) {
+									geometry = (GMLGeometryType) child
+											.getEntityType();
 								}
 							}
 						}
 					}
 				}
-			}			
+			}
 		}
 		return geometry;
 	}
+
 	/**
-	 * @param geometry The geometry to set.
+	 * @param geometry
+	 *            The geometry to set.
 	 */
 	public void setGeometry(GMLGeometryType geometry) {
 		this.geometry = geometry;
 	}
+
 	/**
 	 * @return Returns the filter.
 	 */
 	public String getFilter() {
 		return filter;
 	}
+
 	/**
-	 * @param filter The filter to set.
+	 * @param filter
+	 *            The filter to set.
 	 */
 	public void setFilter(String filter) {
 		this.filter = filter;

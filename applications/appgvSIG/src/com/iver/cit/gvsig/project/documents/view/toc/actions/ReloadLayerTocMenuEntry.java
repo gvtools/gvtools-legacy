@@ -1,6 +1,5 @@
 package com.iver.cit.gvsig.project.documents.view.toc.actions;
 
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
@@ -10,7 +9,6 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction;
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
-import com.sun.corba.se.impl.protocol.giopmsgheaders.Message;
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
@@ -68,17 +66,18 @@ import com.sun.corba.se.impl.protocol.giopmsgheaders.Message;
  *
  */
 /**
-*
-* @author Jose Manuel Vivó (Chema)
-*
-* Entrada de menú para recargar una capa.
-*/
-public class ReloadLayerTocMenuEntry extends AbstractTocContextMenuAction{
+ * 
+ * @author Jose Manuel Vivó (Chema)
+ * 
+ *         Entrada de menú para recargar una capa.
+ */
+public class ReloadLayerTocMenuEntry extends AbstractTocContextMenuAction {
 
-    private static Logger logger = Logger.getLogger(ReloadLayerTocMenuEntry.class.getName());
+	private static Logger logger = Logger
+			.getLogger(ReloadLayerTocMenuEntry.class.getName());
 
-    public String getGroup() {
-		return "group3"; //FIXME
+	public String getGroup() {
+		return "group3"; // FIXME
 	}
 
 	public int getGroupOrder() {
@@ -95,8 +94,8 @@ public class ReloadLayerTocMenuEntry extends AbstractTocContextMenuAction{
 
 	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
 		FLayer layer = getNodeLayer(item);
-		if(layer instanceof FLyrVect){
-			if(((FLyrVect)layer).isEditing()){
+		if (layer instanceof FLyrVect) {
+			if (((FLyrVect) layer).isEditing()) {
 				return false;
 			}
 		}
@@ -111,19 +110,20 @@ public class ReloadLayerTocMenuEntry extends AbstractTocContextMenuAction{
 
 	}
 
-
 	public void execute(ITocItem item, FLayer[] selectedItems) {
 		try {
 			FLayer layer = getNodeLayer(item);
-			if(layer instanceof FLyrVect){
-				if(((FLyrVect)layer).isEditing()){
-					JOptionPane.showMessageDialog(null, PluginServices.getText(this, "_cant_reload_an_editing_layer"));
+			if (layer instanceof FLyrVect) {
+				if (((FLyrVect) layer).isEditing()) {
+					JOptionPane.showMessageDialog(null, PluginServices.getText(
+							this, "_cant_reload_an_editing_layer"));
 				}
 			}
 			layer.reload();
 		} catch (Exception ex) {
 			logger.warn("_cant_reload_layer", ex);
-			JOptionPane.showMessageDialog(null, PluginServices.getText(this, "_cant_reload_layer"));
+			JOptionPane.showMessageDialog(null,
+					PluginServices.getText(this, "_cant_reload_layer"));
 		}
 	}
 }

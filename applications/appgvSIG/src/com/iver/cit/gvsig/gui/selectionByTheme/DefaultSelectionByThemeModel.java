@@ -44,10 +44,7 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 
-
-
-public class DefaultSelectionByThemeModel
-	implements SelectionByThemeModel {
+public class DefaultSelectionByThemeModel implements SelectionByThemeModel {
 
 	private FLayers layers;
 
@@ -56,12 +53,12 @@ public class DefaultSelectionByThemeModel
 	 */
 	public FLayers getLayers() {
 		IWindow v = PluginServices.getMDIManager().getActiveWindow();
-		if (v instanceof com.iver.cit.gvsig.project.documents.view.gui.View){
+		if (v instanceof com.iver.cit.gvsig.project.documents.view.gui.View) {
 			com.iver.cit.gvsig.project.documents.view.gui.View vista = (com.iver.cit.gvsig.project.documents.view.gui.View) v;
-			
+
 			return vista.getModel().getMapContext().getLayers();
 		}
-		
+
 		return null;
 	}
 

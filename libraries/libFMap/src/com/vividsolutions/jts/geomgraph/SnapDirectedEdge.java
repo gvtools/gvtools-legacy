@@ -42,29 +42,29 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: SnapDirectedEdge.java 10627 2007-03-06 17:10:21Z caballero $
-* $Log$
-* Revision 1.2  2007-03-06 17:08:55  caballero
-* Exceptions
-*
-* Revision 1.1  2006/12/04 19:30:23  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/10/17 18:25:53  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/10/09 19:10:56  azabala
-* First version in CVS
-*
-* Revision 1.1  2006/10/05 19:20:57  azabala
-* first version in cvs
-*
-* Revision 1.1  2006/10/02 19:06:39  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: SnapDirectedEdge.java 10627 2007-03-06 17:10:21Z caballero $
+ * $Log$
+ * Revision 1.2  2007-03-06 17:08:55  caballero
+ * Exceptions
+ *
+ * Revision 1.1  2006/12/04 19:30:23  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/10/17 18:25:53  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/10/09 19:10:56  azabala
+ * First version in CVS
+ *
+ * Revision 1.1  2006/10/05 19:20:57  azabala
+ * first version in cvs
+ *
+ * Revision 1.1  2006/10/02 19:06:39  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.vividsolutions.jts.geomgraph;
 
 import com.vividsolutions.jts.algorithm.RobustCGAlgorithms;
@@ -78,65 +78,79 @@ public class SnapDirectedEdge extends DirectedEdge {
 	private Coordinate p1;
 	private double dx, dy;
 	int quadrant;
-	
+
 	public SnapDirectedEdge(Edge arg0, boolean arg1) {
 		super(arg0, arg1);
 	}
-	 
-	public Coordinate getCoordinate() { return p0; }
-	  public Coordinate getDirectedCoordinate() { return p1; }
-	  public int getQuadrant() { return quadrant; }
-	  public double getDx() { return dx; }
-	  public double getDy() { return dy; }
 
- protected void init(Coordinate p0, Coordinate p1)
-  {
-    this.p0 = p0;
-    this.p1 = p1;
-    dx = p1.x - p0.x;
-    dy = p1.y - p0.y;
-    if(dx == 0 && dy == 0)
-    	System.out.println(p0.toString()+";"+p1.toString());
-    quadrant = Quadrant.quadrant(dx, dy);
-   
-    Assert.isTrue(! (dx == 0 && dy == 0), "EdgeEnd with identical endpoints found");
-  }
- 
- public String toString(){
-	 return this.p0.toString() + "," + p1.toString();
- }
- 
- public int compareTo(Object obj)
- {
-     SnapDirectedEdge de = (SnapDirectedEdge) obj;
-     return compareDirection(de);
- }
+	public Coordinate getCoordinate() {
+		return p0;
+	}
 
- /**
-  * Returns 1 if this DirectedEdge has a greater angle with the
-  * positive x-axis than b", 0 if the DirectedEdges are collinear, and -1 otherwise.
-  * <p>
-  * Using the obvious algorithm of simply computing the angle is not robust,
-  * since the angle calculation is susceptible to roundoff. A robust algorithm
-  * is:
-  * <ul>
-  * <li>first compare the quadrants. If the quadrants are different, it it
-  * trivial to determine which vector is "greater".
-  * <li>if the vectors lie in the same quadrant, the robust
-  * {@link RobustCGAlgorithms#computeOrientation(Coordinate, Coordinate, Coordinate)}
-  * function can be used to decide the relative orientation of the vectors.
-  * </ul>
-  */
- public int compareDirection(SnapDirectedEdge e)
- {
-   // if the rays are in different quadrants, determining the ordering is trivial
-   if (quadrant > e.quadrant) return 1;
-   if (quadrant < e.quadrant) return -1;
-   // vectors are in the same quadrant - check relative orientation of direction vectors
-   // this is > e if it is CCW of e
-   return SnapCGAlgorithms.computeOrientation(e.p0, e.p1, p1);
- }
- 
-   
+	public Coordinate getDirectedCoordinate() {
+		return p1;
+	}
+
+	public int getQuadrant() {
+		return quadrant;
+	}
+
+	public double getDx() {
+		return dx;
+	}
+
+	public double getDy() {
+		return dy;
+	}
+
+	protected void init(Coordinate p0, Coordinate p1) {
+		this.p0 = p0;
+		this.p1 = p1;
+		dx = p1.x - p0.x;
+		dy = p1.y - p0.y;
+		if (dx == 0 && dy == 0)
+			System.out.println(p0.toString() + ";" + p1.toString());
+		quadrant = Quadrant.quadrant(dx, dy);
+
+		Assert.isTrue(!(dx == 0 && dy == 0),
+				"EdgeEnd with identical endpoints found");
+	}
+
+	public String toString() {
+		return this.p0.toString() + "," + p1.toString();
+	}
+
+	public int compareTo(Object obj) {
+		SnapDirectedEdge de = (SnapDirectedEdge) obj;
+		return compareDirection(de);
+	}
+
+	/**
+	 * Returns 1 if this DirectedEdge has a greater angle with the positive
+	 * x-axis than b", 0 if the DirectedEdges are collinear, and -1 otherwise.
+	 * <p>
+	 * Using the obvious algorithm of simply computing the angle is not robust,
+	 * since the angle calculation is susceptible to roundoff. A robust
+	 * algorithm is:
+	 * <ul>
+	 * <li>first compare the quadrants. If the quadrants are different, it it
+	 * trivial to determine which vector is "greater".
+	 * <li>if the vectors lie in the same quadrant, the robust
+	 * {@link RobustCGAlgorithms#computeOrientation(Coordinate, Coordinate, Coordinate)}
+	 * function can be used to decide the relative orientation of the vectors.
+	 * </ul>
+	 */
+	public int compareDirection(SnapDirectedEdge e) {
+		// if the rays are in different quadrants, determining the ordering is
+		// trivial
+		if (quadrant > e.quadrant)
+			return 1;
+		if (quadrant < e.quadrant)
+			return -1;
+		// vectors are in the same quadrant - check relative orientation of
+		// direction vectors
+		// this is > e if it is CCW of e
+		return SnapCGAlgorithms.computeOrientation(e.p0, e.p1, p1);
+	}
+
 }
-

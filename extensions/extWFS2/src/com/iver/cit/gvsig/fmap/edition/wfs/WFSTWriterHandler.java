@@ -62,16 +62,19 @@ public class WFSTWriterHandler extends GPEWriterHandler {
 	private OutputStream os = null;
 	private String currentFeature = null;
 	private String currentElement = null;
-		
-	public WFSTWriterHandler(IGPEWriterHandlerImplementor writerImplementor, OutputStream os) {
-		super(writerImplementor);	
-		implementor = (GPEGmlWriterHandlerImplementor)writerImplementor;
+
+	public WFSTWriterHandler(IGPEWriterHandlerImplementor writerImplementor,
+			OutputStream os) {
+		super(writerImplementor);
+		implementor = (GPEGmlWriterHandlerImplementor) writerImplementor;
 		implementor.setProfile(new Gml2WriterProfile());
 		this.os = os;
-		
+
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterHandler#endElement()
 	 */
 	public void endElement() {
@@ -82,7 +85,9 @@ public class WFSTWriterHandler extends GPEWriterHandler {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterHandler#endFeature()
 	 */
 	public void endFeature() {
@@ -93,14 +98,18 @@ public class WFSTWriterHandler extends GPEWriterHandler {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.GPEWriterHandler#startElement(java.lang.String, java.lang.Object, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writers.GPEWriterHandler#startElement(java.lang.String,
+	 * java.lang.Object, java.lang.String)
 	 */
 	public void startElement(String name, Object value, String xsElementName) {
 		currentElement = name;
 		try {
 			os.write(new String("<" + name + ">").getBytes());
-			if (value != null){
+			if (value != null) {
 				os.write(new String(value.toString()).getBytes());
 			}
 		} catch (IOException e) {
@@ -108,8 +117,12 @@ public class WFSTWriterHandler extends GPEWriterHandler {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.GPEWriterHandler#startFeature(java.lang.String, java.lang.String, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writers.GPEWriterHandler#startFeature(java.lang.String,
+	 * java.lang.String, java.lang.String)
 	 */
 	public void startFeature(String id, String name, String xsElementName) {
 		currentFeature = name;

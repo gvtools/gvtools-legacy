@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -43,23 +42,23 @@ package com.iver.cit.gvsig.project.documents.layout.fframes;
 
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
-
 /**
  * Modelo de la Lista de vistas a seleccionar sin incluir los localizadores.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class ListWithoutOverViewModel extends ListViewModel {
 
 	/**
 	 * Add all fframeviews into a list.
-	 *
-	 * @param l Layout.
+	 * 
+	 * @param l
+	 *            Layout.
 	 */
 	public void addViews(Layout l) {
 		int num = 0;
 		l.getLayoutContext().updateFFrames();
-		IFFrame[] fframes=l.getLayoutContext().getFFrames();
+		IFFrame[] fframes = l.getLayoutContext().getFFrames();
 		for (int i = 0; i < fframes.length; i++) {
 			IFFrame f = fframes[i];
 

@@ -52,19 +52,15 @@ import javax.swing.filechooser.FileFilter;
 import org.gvsig.graph.core.GvTurn;
 import org.gvsig.graph.core.Network;
 import org.gvsig.graph.gui.RouteControlPanel;
-import org.gvsig.graph.gui.TurnCostsTableChooser;
 import org.gvsig.gui.beans.swing.JFileChooser;
 
 import com.hardcode.gdbms.driver.exceptions.InitializeWriterException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
-import com.hardcode.gdbms.engine.values.IntValue;
-import com.hardcode.gdbms.engine.values.NumericValue;
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
 import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
 import com.iver.andami.ui.mdiManager.IWindow;
-import com.iver.cit.gvsig.ProjectExtension;
 import com.iver.cit.gvsig.exceptions.visitors.ProcessWriterVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.StartWriterVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.StopWriterVisitorException;
@@ -80,11 +76,7 @@ import com.iver.cit.gvsig.fmap.edition.IRowEdited;
 import com.iver.cit.gvsig.fmap.edition.writers.dbf.DbfWriter;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
-import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.fmap.layers.SingleLayerIterator;
-import com.iver.cit.gvsig.project.Project;
-import com.iver.cit.gvsig.project.documents.table.ProjectTable;
-import com.iver.cit.gvsig.project.documents.table.ProjectTableFactory;
 import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.IView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
@@ -94,10 +86,10 @@ public class SaveTurnCostsExtension extends Extension {
 	 * Component to control flags and routes
 	 * */
 	private RouteControlPanel controlPanel;
-	
-//	private String fieldType;
-//	private String fieldDist;
-//	private String fieldSense;
+
+	// private String fieldType;
+	// private String fieldDist;
+	// private String fieldSense;
 
 	public void initialize() {
 
@@ -107,17 +99,15 @@ public class SaveTurnCostsExtension extends Extension {
 		IView view = (View) PluginServices.getMDIManager().getActiveWindow();
 		MapControl mapControl = view.getMapControl();
 		MapContext map = mapControl.getMapContext();
-		SingleLayerIterator lyrIterator = new SingleLayerIterator(map
-				.getLayers());
+		SingleLayerIterator lyrIterator = new SingleLayerIterator(
+				map.getLayers());
 		while (lyrIterator.hasNext()) {
 			FLayer lyr = lyrIterator.next();
-			if ((lyr.isActive()) && (lyr instanceof FLyrVect))
-			{
+			if ((lyr.isActive()) && (lyr instanceof FLyrVect)) {
 				FLyrVect lyrVect = (FLyrVect) lyr;
 				Network net = (Network) lyr.getProperty("network");
 
-				if ( net != null)
-				{
+				if (net != null) {
 					try {
 						save_turncosts(lyrVect, mapControl);
 					} catch (ReadDriverException e) {
@@ -128,17 +118,17 @@ public class SaveTurnCostsExtension extends Extension {
 			}
 		}
 
-
 	}
 
-	private void save_turncosts(FLyrVect lyrVect, MapControl mapControl) throws ReadDriverException {
+	private void save_turncosts(FLyrVect lyrVect, MapControl mapControl)
+			throws ReadDriverException {
 		Network net = (Network) lyrVect.getProperty("network");
 
-		if ( net != null)
-		{
+		if (net != null) {
 			String curDir = System.getProperty("user.dir");
 
-			JFileChooser fileChooser = new JFileChooser("dbf files", new File(curDir));
+			JFileChooser fileChooser = new JFileChooser("dbf files", new File(
+					curDir));
 			fileChooser.setFileFilter(new FileFilter() {
 
 				@Override
@@ -155,11 +145,12 @@ public class SaveTurnCostsExtension extends Extension {
 				public String getDescription() {
 					return (PluginServices.getText(this, "Ficheros_dbf"));
 				}
-				
+
 			});
-			int res = fileChooser.showSaveDialog((Component) PluginServices.getMainFrame());
-			if (res==JFileChooser.APPROVE_OPTION) {
-				File dbfFile =fileChooser.getSelectedFile();
+			int res = fileChooser.showSaveDialog((Component) PluginServices
+					.getMainFrame());
+			if (res == JFileChooser.APPROVE_OPTION) {
+				File dbfFile = fileChooser.getSelectedFile();
 				if (!dbfFile.getPath().toLowerCase().endsWith(".dbf"))
 					dbfFile = new File(dbfFile.getPath() + ".dbf");
 
@@ -176,39 +167,39 @@ public class SaveTurnCostsExtension extends Extension {
 				fieldTurnCost.setFieldName("turncost");
 				fieldTurnCost.setFieldType(Types.DOUBLE);
 				fieldTurnCost.setFieldDecimalCount(2);
-				
+
 				fields[0] = fieldFromId;
 				fields[1] = fieldToId;
 				fields[2] = fieldTurnCost;
-								
+
 				DbfWriter dbfWriter = new DbfWriter();
 				dbfWriter.setFile(dbfFile);
-				
+
 				// We create a table definition for turncosts table.
 				ITableDefinition tableDef = new TableDefinition();
 				tableDef.setFieldsDesc(fields);
 				tableDef.setName("turcosts");
 
-
 				try {
 					dbfWriter.initialize(tableDef);
 					dbfWriter.setCharset(Charset.defaultCharset());
-					
+
 					dbfWriter.preProcess();
-					
-					for (int i=0; i < net.getTurnCosts().size(); i++) {
-						GvTurn turn =  net.getTurnCosts().get(i);
-						
+
+					for (int i = 0; i < net.getTurnCosts().size(); i++) {
+						GvTurn turn = net.getTurnCosts().get(i);
+
 						Value[] values = new Value[fields.length];
-						values[0] = ValueFactory.createValue(turn.getIdArcFrom());
+						values[0] = ValueFactory.createValue(turn
+								.getIdArcFrom());
 						values[1] = ValueFactory.createValue(turn.getIdArcTo());
 						values[2] = ValueFactory.createValue(turn.getCost());
 						DefaultRow myRow = new DefaultRow(values, i + "");
 						IRowEdited editedRow = new DefaultRowEdited(myRow,
 								DefaultRowEdited.STATUS_ADDED, i);
-	
+
 						dbfWriter.process(editedRow);
-	
+
 					}
 					dbfWriter.postProcess();
 				} catch (InitializeWriterException e) {
@@ -224,28 +215,25 @@ public class SaveTurnCostsExtension extends Extension {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
 			}
-		}
-		else
-		{
-			JOptionPane.showMessageDialog((JComponent) PluginServices.getMDIManager().getActiveWindow(),
-						PluginServices.getText(this, "la_capa_no_tiene_red_asociada"));
+		} else {
+			JOptionPane.showMessageDialog((JComponent) PluginServices
+					.getMDIManager().getActiveWindow(), PluginServices.getText(
+					this, "la_capa_no_tiene_red_asociada"));
 		}
 	}
 
 	public boolean isEnabled() {
-		IWindow f = PluginServices.getMDIManager()
-		 .getActiveWindow();
+		IWindow f = PluginServices.getMDIManager().getActiveWindow();
 		if (f == null) {
-		    return false;
+			return false;
 		}
 		if (f instanceof View) {
-		    View v = (View) f;
+			View v = (View) f;
 			MapContext map = v.getMapControl().getMapContext();
 			SingleLayerIterator it = new SingleLayerIterator(map.getLayers());
-			while (it.hasNext())
-			{
+			while (it.hasNext()) {
 				FLayer aux = it.next();
 				if (!aux.isAvailable())
 					continue;
@@ -254,8 +242,7 @@ public class SaveTurnCostsExtension extends Extension {
 					continue;
 				Network net = (Network) aux.getProperty("network");
 
-				if ( net != null)
-				{
+				if (net != null) {
 					if (net.getTurnCosts().size() > 0)
 						return true;
 				}
@@ -280,21 +267,21 @@ public class SaveTurnCostsExtension extends Extension {
 			MapContext mapa = model.getMapContext();
 			FLayer[] activeLayers = mapa.getLayers().getActives();
 			if (activeLayers.length > 0)
-				if (activeLayers[0] instanceof FLyrVect){
+				if (activeLayers[0] instanceof FLyrVect) {
 					FLyrVect lyrVect = (FLyrVect) activeLayers[0];
 					if (!lyrVect.isAvailable())
 						return false;
-					int shapeType ;
+					int shapeType;
 					try {
 						shapeType = lyrVect.getShapeType();
-//						if (shapeType == FShape.LINE)
+						// if (shapeType == FShape.LINE)
 						if ((shapeType & FShape.LINE) == FShape.LINE)
 							return true;
 					} catch (ReadDriverException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				}	
+				}
 		}
 		return false;
 

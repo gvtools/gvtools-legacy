@@ -47,55 +47,73 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.gui.wizards.WizardListener;
 import com.iver.cit.gvsig.gui.wizards.WizardListenerSupport;
 
-public abstract class WizardPanel extends JPanel implements ILayerPanel{
+public abstract class WizardPanel extends JPanel implements ILayerPanel {
 	private String tabName = "TabName";
-    private MapControl mapCtrl = null;
+	private MapControl mapCtrl = null;
 	private WizardListenerSupport listenerSupport = new WizardListenerSupport();
 
 	public void addWizardListener(WizardListener listener) {
 		listenerSupport.addWizardListener(listener);
 	}
+
 	public void callError(Exception descripcion) {
 		listenerSupport.callError(descripcion);
 	}
+
 	public void removeWizardListener(WizardListener listener) {
 		listenerSupport.removeWizardListener(listener);
 	}
+
 	public void callStateChanged(boolean finishable) {
 		listenerSupport.callStateChanged(finishable);
 	}
-	protected void setTabName(String name) { tabName = name; }
-	public String getTabName() { return tabName; }
+
+	protected void setTabName(String name) {
+		tabName = name;
+	}
+
+	public String getTabName() {
+		return tabName;
+	}
+
 	abstract public void initWizard();
+
 	abstract public void execute();
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.gui.ILayerPanel#getLayer()
 	 */
 	abstract public FLayer getLayer();
-    /**
-     * You can use it to extract information from
-     * the mapControl that will receive the new layer.
-     * For example, projection to use, or visible extent.
-     * @return Returns the mapCtrl.
-     */
-    public MapControl getMapCtrl() {
-        return mapCtrl;
-    }
-    /**
-     * @param mapCtrl The mapCtrl to set.
-     */
-    public void setMapCtrl(MapControl mapCtrl) {
-        this.mapCtrl = mapCtrl;
-    }
-    
-    /**
-     * 
-     * @return Messages describing why layers don't have good settings or null if layers are ok. Returns
-     * null by default since it is a new method not used until now. GeoDB wizard is the first to use this. 
-     *  
-     */
+
+	/**
+	 * You can use it to extract information from the mapControl that will
+	 * receive the new layer. For example, projection to use, or visible extent.
+	 * 
+	 * @return Returns the mapCtrl.
+	 */
+	public MapControl getMapCtrl() {
+		return mapCtrl;
+	}
+
+	/**
+	 * @param mapCtrl
+	 *            The mapCtrl to set.
+	 */
+	public void setMapCtrl(MapControl mapCtrl) {
+		this.mapCtrl = mapCtrl;
+	}
+
+	/**
+	 * 
+	 * @return Messages describing why layers don't have good settings or null
+	 *         if layers are ok. Returns null by default since it is a new
+	 *         method not used until now. GeoDB wizard is the first to use this.
+	 * 
+	 */
 	public String[] validateLayerSettings() {
-		return null; 
+		return null;
 	}
 }
 

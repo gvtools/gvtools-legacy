@@ -145,9 +145,10 @@ import com.iver.utiles.StringComparator;
  *
  */
 
-
 /**
- * <p>Panel where user can select a feature type to load as a WFS layer.</p>
+ * <p>
+ * Panel where user can select a feature type to load as a WFS layer.
+ * </p>
  * 
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
@@ -173,20 +174,23 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 
 	/**
 	 * This method initializes coveragesListPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getFeaturesListPanel() {
 		if (coveragesListPanel == null) {
 			coveragesListPanel = new JPanel();
 			coveragesListPanel.setLayout(null);
-			coveragesListPanel.setLocation(new java.awt.Point(7,57));
-			coveragesListPanel.setSize(new java.awt.Dimension(484,313));
+			coveragesListPanel.setLocation(new java.awt.Point(7, 57));
+			coveragesListPanel.setSize(new java.awt.Dimension(484, 313));
 			coveragesListPanel.add(getJScrollPane(), null);
-			coveragesListPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, PluginServices.getText(this, "select_features"),
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			coveragesListPanel
+					.setBorder(javax.swing.BorderFactory.createTitledBorder(
+							null,
+							PluginServices.getText(this, "select_features"),
+							javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+							javax.swing.border.TitledBorder.DEFAULT_POSITION,
+							null, null));
 		}
 
 		return coveragesListPanel;
@@ -194,7 +198,7 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 
 	/**
 	 * This method initializes jScrollPane
-	 *
+	 * 
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getJScrollPane() {
@@ -202,7 +206,8 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 			jScrollPane = new JScrollPane();
 			jScrollPane.setBounds(6, 17, 472, 290);
 			jScrollPane.setViewportView(getLstFeatures());
-			jScrollPane.setToolTipText(PluginServices.getText(jScrollPane, "feature_Selection_Info"));
+			jScrollPane.setToolTipText(PluginServices.getText(jScrollPane,
+					"feature_Selection_Info"));
 		}
 
 		return jScrollPane;
@@ -210,30 +215,36 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 
 	/**
 	 * This method initializes lstFeatures
-	 *
+	 * 
 	 * @return javax.swing.LayerTable
 	 */
 	public LayerTable getLstFeatures() {
 		if (lstFeatures == null) {
 			lstFeatures = new LayerTable();
-			lstFeatures.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-			lstFeatures.getSelectionModel().addListSelectionListener(getListSelectionListener());
-			lstFeatures.setToolTipText(PluginServices.getText(lstFeatures, "feature_Selection_Info"));
+			lstFeatures
+					.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+			lstFeatures.getSelectionModel().addListSelectionListener(
+					getListSelectionListener());
+			lstFeatures.setToolTipText(PluginServices.getText(lstFeatures,
+					"feature_Selection_Info"));
 
 			// Double-click -> click the 'Next' button
 			lstFeatures.addMouseListener(new MouseAdapter() {
 				/*
-				 *  (non-Javadoc)
-				 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
+				 * (non-Javadoc)
+				 * 
+				 * @see
+				 * java.awt.event.MouseListener#mouseClicked(java.awt.event.
+				 * MouseEvent)
 				 */
 				public void mouseClicked(MouseEvent e) {
 					if (e.getClickCount() == 2) {
 						Object obj = getPanelGroup();
 
 						if ((obj != null) && (obj instanceof WFSParamsPanel))
-							((WFSParamsPanel)obj).doClickOnNextButton();
+							((WFSParamsPanel) obj).doClickOnNextButton();
 					}
-				}			
+				}
 			});
 		}
 
@@ -245,32 +256,37 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 	 * 
 	 * @return the listener
 	 */
-	private ListSelectionListener getListSelectionListener(){
-		if (listSelectionListener == null){
-			listSelectionListener = new ListSelectionListener(){
+	private ListSelectionListener getListSelectionListener() {
+		if (listSelectionListener == null) {
+			listSelectionListener = new ListSelectionListener() {
 				public void valueChanged(javax.swing.event.ListSelectionEvent e) {
-					DefaultListSelectionModel model = (DefaultListSelectionModel) e.getSource();
-					LayerTableModel t_model = ((LayerTableModel)lstFeatures.getModel());
+					DefaultListSelectionModel model = (DefaultListSelectionModel) e
+							.getSource();
+					LayerTableModel t_model = ((LayerTableModel) lstFeatures
+							.getModel());
 					if (t_model.isUpdatingSelection())
 						return;
-					
-					// With this condition we force to execute the updating only when a row has been selected by the user
-					if ((model.getMinSelectionIndex() > -1) && (e.getValueIsAdjusting() == false)) {
+
+					// With this condition we force to execute the updating only
+					// when a row has been selected by the user
+					if ((model.getMinSelectionIndex() > -1)
+							&& (e.getValueIsAdjusting() == false)) {
 						// Indicate that now we are loading a new layer
 						IPanelGroup panelGroup = getPanelGroup();
-						
+
 						if (panelGroup == null)
 							return;
 
-						if (((WFSParamsPanel)panelGroup).getFilterPanel() == null)
+						if (((WFSParamsPanel) panelGroup).getFilterPanel() == null)
 							return;
 
-						((WFSParamsPanel)panelGroup).getFilterPanel().setWFSFilterPanelIsAsTabForWFSLayersLoad(true);
-						
+						((WFSParamsPanel) panelGroup).getFilterPanel()
+								.setWFSFilterPanelIsAsTabForWFSLayersLoad(true);
+
 						refreshData();
 					}
 				}
-			};	
+			};
 		}
 
 		return listSelectionListener;
@@ -278,7 +294,7 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 
 	/**
 	 * This method initializes jTextField
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	public JTextField getTxtName() {
@@ -288,19 +304,26 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 			txtName.setText(PluginServices.getText(this, "WFSLayer"));
 			txtName.setEditable(false);
 			txtName.setBackground(Color.WHITE);
-			txtName.setToolTipText(PluginServices.getText(txtName, "feature_to_load"));
+			txtName.setToolTipText(PluginServices.getText(txtName,
+					"feature_to_load"));
 
 			txtName.getDocument().addDocumentListener(new DocumentListener() {
 				/*
 				 * (non-Javadoc)
-				 * @see javax.swing.event.DocumentListener#changedUpdate(javax.swing.event.DocumentEvent)
+				 * 
+				 * @see
+				 * javax.swing.event.DocumentListener#changedUpdate(javax.swing
+				 * .event.DocumentEvent)
 				 */
 				public void changedUpdate(DocumentEvent e) {
 				}
 
 				/*
 				 * (non-Javadoc)
-				 * @see javax.swing.event.DocumentListener#insertUpdate(javax.swing.event.DocumentEvent)
+				 * 
+				 * @see
+				 * javax.swing.event.DocumentListener#insertUpdate(javax.swing
+				 * .event.DocumentEvent)
 				 */
 				public void insertUpdate(DocumentEvent e) {
 					IPanelGroup panelGroup = getPanelGroup();
@@ -308,12 +331,15 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 					if (panelGroup == null)
 						return;
 
-					((WFSParamsPanel)panelGroup).setApplicable(true);
+					((WFSParamsPanel) panelGroup).setApplicable(true);
 				}
 
 				/*
 				 * (non-Javadoc)
-				 * @see javax.swing.event.DocumentListener#removeUpdate(javax.swing.event.DocumentEvent)
+				 * 
+				 * @see
+				 * javax.swing.event.DocumentListener#removeUpdate(javax.swing
+				 * .event.DocumentEvent)
 				 */
 				public void removeUpdate(DocumentEvent e) {
 				}
@@ -325,18 +351,22 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 
 	/**
 	 * This method initializes chkExtendedNames
-	 *
+	 * 
 	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getChkExtendedNames() {
 		if (chkExtendedNames == null) {
 			chkExtendedNames = new JCheckBox();
-			chkExtendedNames.setText(PluginServices.getText(this, "show_layer_names"));
+			chkExtendedNames.setText(PluginServices.getText(this,
+					"show_layer_names"));
 			chkExtendedNames.setBounds(10, 372, 382, 20);
 			chkExtendedNames.addItemListener(new java.awt.event.ItemListener() {
 				/*
 				 * (non-Javadoc)
-				 * @see java.awt.event.ItemListener#itemStateChanged(java.awt.event.ItemEvent)
+				 * 
+				 * @see
+				 * java.awt.event.ItemListener#itemStateChanged(java.awt.event
+				 * .ItemEvent)
 				 */
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					boolean b = chkExtendedNames.isSelected();
@@ -352,27 +382,28 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 	/**
 	 * @see LayerTable#getSelectedValue()
 	 */
-	public WFSLayerNode getSelectedFeature(){
-		return (WFSLayerNode)getLstFeatures().getSelectedValue();
+	public WFSLayerNode getSelectedFeature() {
+		return (WFSLayerNode) getLstFeatures().getSelectedValue();
 	}
 
 	/**
 	 * Set the selected layer node
 	 * 
-	 * @param layerNode the layer to select
+	 * @param layerNode
+	 *            the layer to select
 	 */
-	public void setSelectedFeature(WFSLayerNode layerNode){
+	public void setSelectedFeature(WFSLayerNode layerNode) {
 		int index = -1;
 
-		for (int i=0; i<getLstFeatures().getRowCount(); i++){
-			WFSLayerNode node = (WFSLayerNode)getLstFeatures().getValueAt(i);
+		for (int i = 0; i < getLstFeatures().getRowCount(); i++) {
+			WFSLayerNode node = (WFSLayerNode) getLstFeatures().getValueAt(i);
 
-			if (node != null && layerNode.getName().equals(node.getName())){
+			if (node != null && layerNode.getName().equals(node.getName())) {
 				index = i;
 			}
 		}
 
-		if (index != -1){
+		if (index != -1) {
 			getLstFeatures().changeSelection(index, 0, false, false);
 		}
 	}
@@ -390,22 +421,23 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 		if (layer != null) {
 			layerNode = layer;
 			setLayerName(layer.getName());
-			setSelectedFeature(layer);			
-		}		
+			setSelectedFeature(layer);
+		}
 	}
 
 	/**
-	 * Refreshes the wizard components data each time a feature
-	 * is selected. The <i>describeFeatureType</i> operation must be sent.
+	 * Refreshes the wizard components data each time a feature is selected. The
+	 * <i>describeFeatureType</i> operation must be sent.
 	 */
 	public void refreshData() {
-		WFSLayerNode lyr = (WFSLayerNode)getLstFeatures().getSelectedValue();
+		WFSLayerNode lyr = (WFSLayerNode) getLstFeatures().getSelectedValue();
 
 		try {
 			getTxtName().setText(lyr.getTitle());
-		} catch (NullPointerException e){
-			getTxtName().setText(PluginServices.getText(this,"default_name"));
-			NotificationManager.addError(PluginServices.getText(this,"default_name"), e);
+		} catch (NullPointerException e) {
+			getTxtName().setText(PluginServices.getText(this, "default_name"));
+			NotificationManager.addError(
+					PluginServices.getText(this, "default_name"), e);
 		}
 
 		IPanelGroup panelGroup = getPanelGroup();
@@ -413,24 +445,27 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 		if (panelGroup == null)
 			return;
 
-		((WFSParamsPanel)panelGroup).refresh(lyr);
+		((WFSParamsPanel) panelGroup).refresh(lyr);
 
 		repaint();
 	}
 
 	/**
 	 * This method initializes layerNamePanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getLayerNamePanel() {
 		if (layerNamePanel == null) {
 			layerNamePanel = new JPanel();
 			layerNamePanel.setLayout(null);
-			layerNamePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, PluginServices.getText(this, "layer_name"),
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			layerNamePanel
+					.setBorder(javax.swing.BorderFactory.createTitledBorder(
+							null,
+							PluginServices.getText(this, "layer_name"),
+							javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+							javax.swing.border.TitledBorder.DEFAULT_POSITION,
+							null, null));
 			layerNamePanel.setBounds(new java.awt.Rectangle(7, 4, 484, 49));
 			layerNamePanel.add(getTxtName(), null);
 
@@ -441,20 +476,21 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 
 	/**
 	 * Gets the name of the layer (feature) selected.
-	 *
+	 * 
 	 * @return the layer name
 	 */
 	public String getLayerName() {
-		return ((WFSLayerNode)getLstFeatures().getSelectedValue()).getName();
+		return ((WFSLayerNode) getLstFeatures().getSelectedValue()).getName();
 	}
 
 	/**
 	 * Gets the name space of the layer (feature) selected.
-	 *
+	 * 
 	 * @return the name space
 	 */
-	public String getLayerNameSpace(){
-		return ((WFSLayerNode)getLstFeatures().getSelectedValue()).getNameSpace();
+	public String getLayerNameSpace() {
+		return ((WFSLayerNode) getLstFeatures().getSelectedValue())
+				.getNameSpace();
 	}
 
 	/**
@@ -463,7 +499,8 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 	 * @return the selected feature
 	 */
 	public WFSLayerNode getWFSLayerNode() {
-		WFSLayerNode selectedLayerNode = (WFSLayerNode)getLstFeatures().getSelectedValue();
+		WFSLayerNode selectedLayerNode = (WFSLayerNode) getLstFeatures()
+				.getSelectedValue();
 
 		if (selectedLayerNode != null) {
 			layerNode = selectedLayerNode;
@@ -475,7 +512,8 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 	/**
 	 * Sets the name of the feature selected.
 	 * 
-	 * @param name the name of the feature selected
+	 * @param name
+	 *            the name of the feature selected
 	 */
 	public void setLayerName(String name) {
 		getTxtName().setText(name);
@@ -483,6 +521,7 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.gui.panels.AbstractWFSPanel#initialize()
 	 */
 	protected void initialize() {
@@ -493,18 +532,21 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 		this.add(getChkExtendedNames(), null);
 		this.add(getLayerNamePanel(), null);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.gui.panels.AbstractWFSPanel#setReference(java.lang.Object)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.gui.panels.AbstractWFSPanel#setReference(java.lang
+	 * .Object)
 	 */
 	public void setReference(Object ref) {
 		super.setReference(ref);
-		if (ref instanceof FLyrWFS){			
+		if (ref instanceof FLyrWFS) {
 			getPanelGroup().setEnabledApplyButton(false);
-		}		
-	}	
-	
+		}
+	}
+
 	/**
 	 * Updates the list with no feature selected.
 	 */
@@ -512,22 +554,25 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 		// Reset the last row selection of the features table
 		int numberOfFeatures = getLstFeatures().getRowCount();
 
-		if (numberOfFeatures > 0) {			
+		if (numberOfFeatures > 0) {
 			ListSelectionModel model = getLstFeatures().getSelectionModel();
-			model.removeSelectionInterval(0, numberOfFeatures - 1); // whatever row selection
+			model.removeSelectionInterval(0, numberOfFeatures - 1); // whatever
+																	// row
+																	// selection
 		}
 	}
 
 	/**
-	 * Table with the information of all layers which could be selected from the server connected.
+	 * Table with the information of all layers which could be selected from the
+	 * server connected.
 	 * 
 	 * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
 	 * @author Jorge Piera Llodrá (piera_jor@gva.es)
 	 */
 	public class LayerTable extends JTable {
 		private static final long serialVersionUID = 4700375945858283696L;
-		private int headerSelected = -1; 
-	
+		private int headerSelected = -1;
+
 		/**
 		 * Creates a new instance of <code>LayerTable</code>
 		 */
@@ -537,60 +582,74 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 			setModel(new LayerTableModel());
 
 			getTableHeader().setUI(new BasicTableHeaderSelectableUI());
-			
+
 			getTableHeader().addMouseListener(new MouseAdapter() {
 				/*
 				 * (non-Javadoc)
-				 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
+				 * 
+				 * @see
+				 * java.awt.event.MouseListener#mouseClicked(java.awt.event.
+				 * MouseEvent)
 				 */
 				public void mouseClicked(MouseEvent e) {
 					// Sorts according the selected column
-					((LayerTableModel)getModel()).sort(getTableHeader().getColumnModel().getColumnIndexAtX(e.getX()));
+					((LayerTableModel) getModel()).sort(getTableHeader()
+							.getColumnModel().getColumnIndexAtX(e.getX()));
 				}
 
 				/*
 				 * (non-Javadoc)
-				 * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
+				 * 
+				 * @see
+				 * java.awt.event.MouseListener#mousePressed(java.awt.event.
+				 * MouseEvent)
 				 */
 				public void mousePressed(MouseEvent e) {
-					headerSelected = getTableHeader().getColumnModel().getColumnIndexAtX(e.getX());
+					headerSelected = getTableHeader().getColumnModel()
+							.getColumnIndexAtX(e.getX());
 					getTableHeader().repaint();
 				}
 
 				/*
 				 * (non-Javadoc)
-				 * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
+				 * 
+				 * @see
+				 * java.awt.event.MouseListener#mouseReleased(java.awt.event
+				 * .MouseEvent)
 				 */
 				public void mouseReleased(MouseEvent e) {
 					headerSelected = -1;
 				}
 			});
 		}
-		
-	    /*
-	     * (non-Javadoc)
-	     * @see javax.swing.JTable#createDefaultColumnsFromModel()
-	     */
-	    public void createDefaultColumnsFromModel() {
-	        TableModel m = getModel();
-	        if (m != null) {
-	            // Remove any current columns
-	            TableColumnModel cm = getColumnModel();
-	            while (cm.getColumnCount() > 0) {
-	                cm.removeColumn(cm.getColumn(0));
-		    }
 
-	            // Create new columns from the data model info
-	            for (int i = 0; i < m.getColumnCount(); i++) {
-	                TableColumn newColumn = new TableColumn(i);
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see javax.swing.JTable#createDefaultColumnsFromModel()
+		 */
+		public void createDefaultColumnsFromModel() {
+			TableModel m = getModel();
+			if (m != null) {
+				// Remove any current columns
+				TableColumnModel cm = getColumnModel();
+				while (cm.getColumnCount() > 0) {
+					cm.removeColumn(cm.getColumn(0));
+				}
 
-	                // Special renderer for supporting selection of a particular column header
-	                newColumn.setHeaderRenderer(new DefaultTableSelectableCellRenderer());
-	                addColumn(newColumn);
-	            }
-	        }
-	    }
-		
+				// Create new columns from the data model info
+				for (int i = 0; i < m.getColumnCount(); i++) {
+					TableColumn newColumn = new TableColumn(i);
+
+					// Special renderer for supporting selection of a particular
+					// column header
+					newColumn
+							.setHeaderRenderer(new DefaultTableSelectableCellRenderer());
+					addColumn(newColumn);
+				}
+			}
+		}
+
 		/**
 		 * Gets the selected <i>WFS</i> layer.
 		 * 
@@ -598,7 +657,7 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 		 */
 		public WFSLayerNode getSelectedValue() {
 			int selectedRow = getSelectedRow();
-			LayerTableModel model = (LayerTableModel)getModel();
+			LayerTableModel model = (LayerTableModel) getModel();
 
 			return model.getLayerAt(selectedRow);
 		}
@@ -610,9 +669,9 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 		 */
 		public WFSLayerNode getValueAt(int position) {
 			if (position < this.getRowCount()) {
-				LayerTableModel model = (LayerTableModel)getModel();
+				LayerTableModel model = (LayerTableModel) getModel();
 
-				return model.getLayerAt(position);			
+				return model.getLayerAt(position);
 			}
 
 			return null;
@@ -621,34 +680,37 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 		/**
 		 * Adds the available features to load as a <i>WFS</i> layer.
 		 * 
-		 * @param features available features
+		 * @param features
+		 *            available features
 		 */
 		public void addFeatures(WFSLayerNode[] features) {
-			LayerTableModel model = (LayerTableModel)getModel();
+			LayerTableModel model = (LayerTableModel) getModel();
 			model.deleteAllRows();
 
-			for (int i=0 ; i < features.length ; i++){
-				model.addRow(features[i]);			
-			}	
-		}	
+			for (int i = 0; i < features.length; i++) {
+				model.addRow(features[i]);
+			}
+		}
 
 		/**
 		 * Shows the names of the features.
 		 * 
-		 * @param showFeatureNameType The showLayerNames to set.
+		 * @param showFeatureNameType
+		 *            The showLayerNames to set.
 		 */
 		public void setShowLayerNames(boolean showFeatureNameType) {
-			LayerTableModel model = (LayerTableModel)getModel();
+			LayerTableModel model = (LayerTableModel) getModel();
 			model.setShowedFeatureNameType(showFeatureNameType);
 		}
-		
+
 		/**
-		 * Model of the <code>LayerTable</code> that stores the features available to load as a WFS layer.
+		 * Model of the <code>LayerTable</code> that stores the features
+		 * available to load as a WFS layer.
 		 * 
 		 * @author Jorge Piera Llodrá (piera_jor@gva.es)
 		 * @author Pablo Piqueras Bartolome (pablo.piqueras@iver.es)
 		 */
-		public class LayerTableModel extends AbstractTableModel {  
+		public class LayerTableModel extends AbstractTableModel {
 			private static final long serialVersionUID = 2722138264867593508L;
 			private Vector<WFSLayerNode> layers = new Vector<WFSLayerNode>();
 			private boolean showFeatureNameType = false;
@@ -656,67 +718,73 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 			private boolean updatingSelection;
 			private short previousColumnSorted;
 
-
 			/**
 			 * Constructs an investment table model.
 			 */
-			public LayerTableModel(){  
+			public LayerTableModel() {
 				super();
 
 				// Alphabetical sort ordering support
 				updatingSelection = false;
 				previousColumnSorted = -1;
-				Collator collator = Collator.getInstance(new Locale("en_EN"));		
+				Collator collator = Collator.getInstance(new Locale("en_EN"));
 				stringComparator = new WFSLayerStringComparator();
-				stringComparator.setLocaleRules(stringComparator.new LocaleRules(true, collator));
+				stringComparator
+						.setLocaleRules(stringComparator.new LocaleRules(true,
+								collator));
 				stringComparator.setCaseSensitive(false);
 				stringComparator.setAscendingOrdering(true);
 			}
-				
-	
+
 			/*
-			 *  (non-Javadoc)
+			 * (non-Javadoc)
+			 * 
 			 * @see javax.swing.table.TableModel#getRowCount()
 			 */
-			public int getRowCount(){  
-				return layers.size();		
+			public int getRowCount() {
+				return layers.size();
 			}
 
 			/*
-			 *  (non-Javadoc)
+			 * (non-Javadoc)
+			 * 
 			 * @see javax.swing.table.TableModel#getColumnCount()
 			 */
-			public int getColumnCount(){  
+			public int getColumnCount() {
 				return 2;
 			}
 
 			/*
-			 *  (non-Javadoc)
+			 * (non-Javadoc)
+			 * 
 			 * @see javax.swing.table.TableModel#getValueAt(int, int)
 			 */
-			public Object getValueAt(int rowNumber, int columnNumber){  
+			public Object getValueAt(int rowNumber, int columnNumber) {
 				if (rowNumber < layers.size()) {
-					WFSLayerNode layer = (WFSLayerNode)layers.get(rowNumber);
+					WFSLayerNode layer = (WFSLayerNode) layers.get(rowNumber);
 
 					if (columnNumber == 0) {
 						return getLayerName(layer);
 					} else {
-						return PluginServices.getText(this, WFSUtils.getGeometry(layer));
+						return PluginServices.getText(this,
+								WFSUtils.getGeometry(layer));
 					}
 				} else {
 					return "";
 				}
-			}	
+			}
 
 			/**
-			 * Gets the layer name displaying the type name of the feature collection associated if it's needed.
+			 * Gets the layer name displaying the type name of the feature
+			 * collection associated if it's needed.
 			 * 
-			 * @param layer a <i>WFS</i> layer 
+			 * @param layer
+			 *            a <i>WFS</i> layer
 			 * @return the layer name
 			 */
-			private String getLayerName(WFSLayerNode layer){
-				if (showFeatureNameType){
-					return "[" + layer.getName() + "] " + layer.getTitle(); 
+			private String getLayerName(WFSLayerNode layer) {
+				if (showFeatureNameType) {
+					return "[" + layer.getName() + "] " + layer.getTitle();
 				} else {
 					return layer.getTitle();
 				}
@@ -725,61 +793,65 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 			/**
 			 * Gets the layer at the specified position.
 			 * 
-			 * @param rowNumber row position
+			 * @param rowNumber
+			 *            row position
 			 * @return <i>WFS</i> layer node
 			 */
-			public WFSLayerNode getLayerAt(int rowNumber){
+			public WFSLayerNode getLayerAt(int rowNumber) {
 				try {
 					if (rowNumber == -1)
 						return null;
 
-					return (WFSLayerNode)layers.get(rowNumber);
+					return (WFSLayerNode) layers.get(rowNumber);
 				} catch (ArrayIndexOutOfBoundsException e) {
 					NotificationManager.addError(e);
 					return null;
 				}
-			}	
+			}
 
 			/**
-			 * Adds a new layer to the table model, each table will be represented as a row.
-			 *  
-			 * @param layer a new <i>WFS</i> layer
+			 * Adds a new layer to the table model, each table will be
+			 * represented as a row.
+			 * 
+			 * @param layer
+			 *            a new <i>WFS</i> layer
 			 */
-			public void addRow(WFSLayerNode layer){
+			public void addRow(WFSLayerNode layer) {
 				layers.add(layer);
 				fireTableRowsInserted(getRowCount(), getRowCount());
-				fireTableRowsUpdated(0,getRowCount());
+				fireTableRowsUpdated(0, getRowCount());
 			}
 
 			/**
 			 * Deletes all the table rows.
 			 */
-			public void deleteAllRows(){
+			public void deleteAllRows() {
 				layers.clear();
 				int rows = getRowCount();
 
-				if (rows >= 1){
+				if (rows >= 1) {
 					fireTableRowsDeleted(0, rows - 1);
-				}		
-			}	
+				}
+			}
 
 			/**
 			 * Delete all the table rows
 			 */
-			public void deleteRow(int rowPosition){
+			public void deleteRow(int rowPosition) {
 				layers.remove(rowPosition);
 				fireTableRowsDeleted(rowPosition, rowPosition);
-				fireTableRowsUpdated(0,getRowCount());
-			}	
+				fireTableRowsUpdated(0, getRowCount());
+			}
 
 			/*
-			 *  (non-Javadoc)
+			 * (non-Javadoc)
+			 * 
 			 * @see javax.swing.table.TableModel#getColumnName(int)
 			 */
-			public String getColumnName(int columnIndex){
-				if (columnIndex == 0){
+			public String getColumnName(int columnIndex) {
+				if (columnIndex == 0) {
 					return PluginServices.getText(this, "layerName");
-				}else{
+				} else {
 					return PluginServices.getText(this, "layerType");
 				}
 			}
@@ -787,7 +859,8 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 			/**
 			 * Gets if shows the feature name type.
 			 * 
-			 * @return <code>true</code> if shows the feature name type; <code>false</code> otherwise
+			 * @return <code>true</code> if shows the feature name type;
+			 *         <code>false</code> otherwise
 			 */
 			public boolean isShowedFeatureNameType() {
 				return showFeatureNameType;
@@ -796,58 +869,70 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 			/**
 			 * Gets if shows the feature name type.
 			 * 
-			 * @param showFeatureNameType <code>true</code> if shows the feature name type; <code>false</code> otherwise
+			 * @param showFeatureNameType
+			 *            <code>true</code> if shows the feature name type;
+			 *            <code>false</code> otherwise
 			 */
 			public void setShowedFeatureNameType(boolean showFeatureNameType) {
 				this.showFeatureNameType = showFeatureNameType;
-				
-				this.stringComparator.setShowFeatureNameType(showFeatureNameType);
+
+				this.stringComparator
+						.setShowFeatureNameType(showFeatureNameType);
 			}
 
 			/**
 			 * Sorts the rows of the table alphabetically.
 			 * 
-			 * @param column index of the column to sort. In this table there are only 2 columns.
+			 * @param column
+			 *            index of the column to sort. In this table there are
+			 *            only 2 columns.
 			 */
 			public void sort(int column) {
-			    // Orders the layer alphabetically according the Spanish alphabetically rules 
-				switch(column) {
-					case 0:
-						stringComparator.setColumn(WFSLayerStringComparator.LAYER_NAME);
-						break;
-					case 1:
-						stringComparator.setColumn(WFSLayerStringComparator.GEOMETRY_TYPE);
-						break;
+				// Orders the layer alphabetically according the Spanish
+				// alphabetically rules
+				switch (column) {
+				case 0:
+					stringComparator
+							.setColumn(WFSLayerStringComparator.LAYER_NAME);
+					break;
+				case 1:
+					stringComparator
+							.setColumn(WFSLayerStringComparator.GEOMETRY_TYPE);
+					break;
 				}
-				
+
 				if (previousColumnSorted != column)
 					stringComparator.setAscendingOrdering(true);
-				
+
 				previousColumnSorted = (short) column;
 
 				WFSLayerNode layer = getSelectedValue();
-				
+
 				Collections.sort(layers, stringComparator);
 
 				if (layer != null) {
 					updatingSelection = true;
 					unselectAllFeatures();
-					int row = Collections.binarySearch(layers, layer, stringComparator);
-					
+					int row = Collections.binarySearch(layers, layer,
+							stringComparator);
+
 					if (row != -1) {
 						ListSelectionModel model = getSelectionModel();
 						model.setLeadSelectionIndex(row);
 					}
-					
+
 					updatingSelection = false;
 				}
-				stringComparator.setAscendingOrdering(!stringComparator.isAscendingOrdering());
+				stringComparator.setAscendingOrdering(!stringComparator
+						.isAscendingOrdering());
 			}
-			
+
 			/**
-			 * Determines if now is updating the selection of the previous selected item.
+			 * Determines if now is updating the selection of the previous
+			 * selected item.
 			 * 
-			 * @return <code>true</code> if now is updating the selection of the previous selected item; otherwise <code>false</code>
+			 * @return <code>true</code> if now is updating the selection of the
+			 *         previous selected item; otherwise <code>false</code>
 			 */
 			public boolean isUpdatingSelection() {
 				return updatingSelection;
@@ -855,284 +940,311 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 		}
 
 		/**
-		 * <p>Enhances {@link BasicTableHeaderUI BasicTableHeaderUI} adding support for column head selection.</p>
+		 * <p>
+		 * Enhances {@link BasicTableHeaderUI BasicTableHeaderUI} adding support
+		 * for column head selection.
+		 * </p>
 		 * 
 		 * @see BasicTableHeaderUI
-		 *
+		 * 
 		 * @version 29/01/2008
-		 * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es) 
+		 * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
 		 */
-	    private class BasicTableHeaderSelectableUI extends BasicTableHeaderUI {
+		private class BasicTableHeaderSelectableUI extends BasicTableHeaderUI {
 			/**
 			 * Creates a new BasicTableHeaderSelectableUI object
 			 */
 			public BasicTableHeaderSelectableUI() {
 				super();
 			}
-			
+
 			//
 			// Some Paint Methods and support re-implemented
 			//
-			
+
 			/*
 			 * (non-Javadoc)
-			 * @see javax.swing.plaf.basic.BasicTableHeaderUI#paint(java.awt.Graphics, javax.swing.JComponent)
+			 * 
+			 * @see
+			 * javax.swing.plaf.basic.BasicTableHeaderUI#paint(java.awt.Graphics
+			 * , javax.swing.JComponent)
 			 */
-		    public void paint(Graphics g, JComponent c) {
-				if (header.getColumnModel().getColumnCount() <= 0) { 
-				    return; 
+			public void paint(Graphics g, JComponent c) {
+				if (header.getColumnModel().getColumnCount() <= 0) {
+					return;
 				}
-			    
-				boolean ltr = header.getComponentOrientation().isLeftToRight();
-			        
-				Rectangle clip = g.getClipBounds(); 
-			        Point left = clip.getLocation();
-			        Point right = new Point( clip.x + clip.width - 1, clip.y );
-				TableColumnModel cm = header.getColumnModel(); 
-			        int cMin = header.columnAtPoint( ltr ? left : right );
-			        int cMax = header.columnAtPoint( ltr ? right : left );
-			        // This should never happen. 
-			        if (cMin == -1) {
-				    cMin =  0;
-			        }
-			        // If the table does not have enough columns to fill the view we'll get -1.
-			        // Replace this with the index of the last column.
-			        if (cMax == -1) {
-				    cMax = cm.getColumnCount()-1;  
-			        }
 
-				TableColumn draggedColumn = header.getDraggedColumn(); 
+				boolean ltr = header.getComponentOrientation().isLeftToRight();
+
+				Rectangle clip = g.getClipBounds();
+				Point left = clip.getLocation();
+				Point right = new Point(clip.x + clip.width - 1, clip.y);
+				TableColumnModel cm = header.getColumnModel();
+				int cMin = header.columnAtPoint(ltr ? left : right);
+				int cMax = header.columnAtPoint(ltr ? right : left);
+				// This should never happen.
+				if (cMin == -1) {
+					cMin = 0;
+				}
+				// If the table does not have enough columns to fill the view
+				// we'll get -1.
+				// Replace this with the index of the last column.
+				if (cMax == -1) {
+					cMax = cm.getColumnCount() - 1;
+				}
+
+				TableColumn draggedColumn = header.getDraggedColumn();
 				int columnWidth;
-			        Rectangle cellRect = header.getHeaderRect(ltr ? cMin : cMax); 
+				Rectangle cellRect = header.getHeaderRect(ltr ? cMin : cMax);
 				TableColumn aColumn;
 				if (ltr) {
-				    for(int column = cMin; column <= cMax ; column++) { 
-					aColumn = cm.getColumn(column); 
-					columnWidth = aColumn.getWidth();
-					cellRect.width = columnWidth;
-					if (aColumn != draggedColumn) {
-					    paintCell(g, cellRect, column);
-					} 
-					cellRect.x += columnWidth;
-				    }
-				} else {
-				    for(int column = cMax; column >= cMin; column--) {
-					aColumn = cm.getColumn(column);
-					columnWidth = aColumn.getWidth();
-					cellRect.width = columnWidth;
-					if (aColumn != draggedColumn) {
-					    paintCell(g, cellRect, column);
+					for (int column = cMin; column <= cMax; column++) {
+						aColumn = cm.getColumn(column);
+						columnWidth = aColumn.getWidth();
+						cellRect.width = columnWidth;
+						if (aColumn != draggedColumn) {
+							paintCell(g, cellRect, column);
+						}
+						cellRect.x += columnWidth;
 					}
-			                cellRect.x += columnWidth;
-				    }
-				} 
+				} else {
+					for (int column = cMax; column >= cMin; column--) {
+						aColumn = cm.getColumn(column);
+						columnWidth = aColumn.getWidth();
+						cellRect.width = columnWidth;
+						if (aColumn != draggedColumn) {
+							paintCell(g, cellRect, column);
+						}
+						cellRect.x += columnWidth;
+					}
+				}
 
-		        // Paint the dragged column if we are dragging. 
-		        if (draggedColumn != null) { 
-		            int draggedColumnIndex = viewIndexForColumn(draggedColumn); 
-		            Rectangle draggedCellRect = header.getHeaderRect(draggedColumnIndex); 
-			            
-			           // Draw a gray well in place of the moving column. 
-			            g.setColor(header.getParent().getBackground());
-			            g.fillRect(draggedCellRect.x, draggedCellRect.y,
-			                               draggedCellRect.width, draggedCellRect.height);
+				// Paint the dragged column if we are dragging.
+				if (draggedColumn != null) {
+					int draggedColumnIndex = viewIndexForColumn(draggedColumn);
+					Rectangle draggedCellRect = header
+							.getHeaderRect(draggedColumnIndex);
 
-			            draggedCellRect.x += header.getDraggedDistance();
+					// Draw a gray well in place of the moving column.
+					g.setColor(header.getParent().getBackground());
+					g.fillRect(draggedCellRect.x, draggedCellRect.y,
+							draggedCellRect.width, draggedCellRect.height);
 
-				    // Fill the background. 
-				    g.setColor(header.getBackground());
-				    g.fillRect(draggedCellRect.x, draggedCellRect.y,
-					       draggedCellRect.width, draggedCellRect.height);
-			 
-			            paintCell(g, draggedCellRect, draggedColumnIndex);
-			        }
+					draggedCellRect.x += header.getDraggedDistance();
 
-				// Remove all components in the rendererPane. 
-				rendererPane.removeAll(); 
+					// Fill the background.
+					g.setColor(header.getBackground());
+					g.fillRect(draggedCellRect.x, draggedCellRect.y,
+							draggedCellRect.width, draggedCellRect.height);
+
+					paintCell(g, draggedCellRect, draggedColumnIndex);
+				}
+
+				// Remove all components in the rendererPane.
+				rendererPane.removeAll();
 			}
-			    
-		    private void paintCell(Graphics g, Rectangle cellRect, int columnIndex) {
-		        Component component = getHeaderRenderer(columnIndex); 
-		        rendererPane.paintComponent(g, component, header, cellRect.x, cellRect.y,
-		                            cellRect.width, cellRect.height, true);
-		    }
-		    
-		    private Component getHeaderRenderer(int columnIndex) { 
-		        TableColumn aColumn = header.getColumnModel().getColumn(columnIndex); 
-		        TableCellRenderer renderer = aColumn.getHeaderRenderer();
 
-		        if (renderer == null) { 
-		        	renderer = header.getDefaultRenderer(); 
-		        }
-			        
-			    if (headerSelected == columnIndex) {
-			    	headerSelected = -1;
-			    	return renderer.getTableCellRendererComponent(header.getTable(), aColumn.getHeaderValue(), true, false, -1, columnIndex);
-			    }
-			    else {
-			    	return renderer.getTableCellRendererComponent(header.getTable(), aColumn.getHeaderValue(), false, false, -1, columnIndex);
-			    }
-		    }
-			
-		    private int viewIndexForColumn(TableColumn aColumn) {
-		    	TableColumnModel cm = header.getColumnModel();
-		    	
-		    	for (int column = 0; column < cm.getColumnCount(); column++) {
-		    		if (cm.getColumn(column) == aColumn) {
-		    			return column;
-		    		}
-		    	}
+			private void paintCell(Graphics g, Rectangle cellRect,
+					int columnIndex) {
+				Component component = getHeaderRenderer(columnIndex);
+				rendererPane.paintComponent(g, component, header, cellRect.x,
+						cellRect.y, cellRect.width, cellRect.height, true);
+			}
 
-		    	return -1;
-		    }
-	    }
-	    
-	    /**
-	     * <p>Simulates the selection / unselection of the head of the column clicked.</p>
-	     * 
+			private Component getHeaderRenderer(int columnIndex) {
+				TableColumn aColumn = header.getColumnModel().getColumn(
+						columnIndex);
+				TableCellRenderer renderer = aColumn.getHeaderRenderer();
+
+				if (renderer == null) {
+					renderer = header.getDefaultRenderer();
+				}
+
+				if (headerSelected == columnIndex) {
+					headerSelected = -1;
+					return renderer.getTableCellRendererComponent(
+							header.getTable(), aColumn.getHeaderValue(), true,
+							false, -1, columnIndex);
+				} else {
+					return renderer.getTableCellRendererComponent(
+							header.getTable(), aColumn.getHeaderValue(), false,
+							false, -1, columnIndex);
+				}
+			}
+
+			private int viewIndexForColumn(TableColumn aColumn) {
+				TableColumnModel cm = header.getColumnModel();
+
+				for (int column = 0; column < cm.getColumnCount(); column++) {
+					if (cm.getColumn(column) == aColumn) {
+						return column;
+					}
+				}
+
+				return -1;
+			}
+		}
+
+		/**
+		 * <p>
+		 * Simulates the selection / unselection of the head of the column
+		 * clicked.
+		 * </p>
+		 * 
 		 * @version 29/01/2008
-		 * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es) 
-	     */
-		private class DefaultTableSelectableCellRenderer extends DefaultTableCellRenderer {
+		 * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
+		 */
+		private class DefaultTableSelectableCellRenderer extends
+				DefaultTableCellRenderer {
 			private static final long serialVersionUID = -3896516869747447668L;
 
 			/*
 			 * (non-Javadoc)
-			 * @see javax.swing.table.DefaultTableCellRenderer#getTableCellRendererComponent(javax.swing.JTable, java.lang.Object, boolean, boolean, int, int)
+			 * 
+			 * @see javax.swing.table.DefaultTableCellRenderer#
+			 * getTableCellRendererComponent(javax.swing.JTable,
+			 * java.lang.Object, boolean, boolean, int, int)
 			 */
-			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-				Component comp = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-		        
+			public Component getTableCellRendererComponent(JTable table,
+					Object value, boolean isSelected, boolean hasFocus,
+					int row, int column) {
+				Component comp = super.getTableCellRendererComponent(table,
+						value, isSelected, hasFocus, row, column);
+
 				Color bgColor = getTableHeader().getBackground();
-				
+
 				if (isSelected)
-		           	comp.setBackground(new Color(bgColor.getRed() - 10 , bgColor.getGreen() - 10, bgColor.getBlue() - 10));
+					comp.setBackground(new Color(bgColor.getRed() - 10, bgColor
+							.getGreen() - 10, bgColor.getBlue() - 10));
 				else
 					comp.setBackground(bgColor);
 
-                ((JLabel)comp).setText((value == null) ? "" : value.toString());
-                ((JLabel)comp).setBorder(UIManager.getBorder("TableHeader.cellBorder"));
-        		
+				((JLabel) comp)
+						.setText((value == null) ? "" : value.toString());
+				((JLabel) comp).setBorder(UIManager
+						.getBorder("TableHeader.cellBorder"));
+
 				return comp;
 			}
 		}
-		
+
 		/**
-		 * Compares two chain of characters alphabetically, bearing in mind the information of a WFS layer.
+		 * Compares two chain of characters alphabetically, bearing in mind the
+		 * information of a WFS layer.
 		 * 
 		 * @version 24/01/2008
-		 * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es) 
+		 * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
 		 */
 		private class WFSLayerStringComparator extends StringComparator {
 			public static final short LAYER_NAME = 0;
 			public static final short GEOMETRY_TYPE = 1;
-			
+
 			protected short column = LAYER_NAME; // by default the first column
-			protected boolean showFeatureNameType = false; // by default doesn't shows the feature name type
-			protected boolean ascendingOrdering = true; // by default: ascending ordering
-			
-		    /*
-		     * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-		     */
-		    public int compare(Object o1, Object o2) {
-		        String s1 = null, s2 = null;
+			protected boolean showFeatureNameType = false; // by default doesn't
+															// shows the feature
+															// name type
+			protected boolean ascendingOrdering = true; // by default: ascending
+														// ordering
 
-		    	switch(column) {
-		    		case LAYER_NAME:
-		    			if (ascendingOrdering) {
-		    				s1 = o1.toString();
-		    				s2 = o2.toString();
-		    			}
-		    			else {
-		    				s1 = o2.toString();
-		    				s2 = o1.toString();
-		    			}
-		    		        
-				    	if (showFeatureNameType) {
-				    		if (ascendingOrdering) {
-				    			return super.compare(o1, o2);
-				    		}
-				    		else {
-				    			return super.compare(o2, o1);
-				    		}
-				    	}
-				    	
-				    	// Only if "showFeatureNameType == true" :
-				        int index = s1.indexOf(']');
-				
-				        if (index > 0)
-				        	s1 = s1.substring(index, s1.length()).trim();
-				        else
-				        	s1 = s1.trim();
-				        
-				        index = s2.indexOf(']');
+			/*
+			 * @see java.util.Comparator#compare(java.lang.Object,
+			 * java.lang.Object)
+			 */
+			public int compare(Object o1, Object o2) {
+				String s1 = null, s2 = null;
 
-		    			if (index > 0)
-				        	s2 = s2.substring(index, s2.length()).trim();
-				        else
-				        	s2 = s2.trim();
+				switch (column) {
+				case LAYER_NAME:
+					if (ascendingOrdering) {
+						s1 = o1.toString();
+						s2 = o2.toString();
+					} else {
+						s1 = o2.toString();
+						s2 = o1.toString();
+					}
 
-				        break;
-		    		case GEOMETRY_TYPE:
-		    			GMLGeometryType gType = ((WFSLayerNode)o1).getGeometry();
-		    			
-		    			if (gType == null)
-		    				s1 = "";
-		    			else
-		    				s1 = gType.getName();
-		    			
-		    			gType = ((WFSLayerNode)o2).getGeometry();
-		    			
-		    			if (gType == null)
-		    				s2 = "";
-		    			else
-		    				s2 = gType.getName();
-		    			
-		    			if (ascendingOrdering)
-		    				return super.compare(s1, s2);
-		    			else
-		    				return super.compare(s2, s1);
-		    		default:
-		    			return 0;
-		    	}
+					if (showFeatureNameType) {
+						if (ascendingOrdering) {
+							return super.compare(o1, o2);
+						} else {
+							return super.compare(o2, o1);
+						}
+					}
 
-		        // If localeRules is null -> use the default rules
-		        if (getLocaleRules() == null) {
-		        	if (isCaseSensitive()) {
-		        		return s1.compareTo(s2);
-		        	}
-		        	else {
-		        		return s1.compareToIgnoreCase(s2);
-		        	}
-		        }
-		        else {
-		        	if (getLocaleRules().isUseLocaleRules()) {
-		        		Collator collator = getLocaleRules().getCollator();
-		        		
-		        		if (isCaseSensitive()) {
-		        			return collator.compare(s1, s2);
-		        		}
-		        		else {
-		        			//return collator.compare(s1.toLowerCase(), s2.toLowerCase());
-		        			return collator.compare(s1.toUpperCase(), s2.toUpperCase());
-		        		}
-		        	}
-		        	else {
-		            	if (isCaseSensitive()) {
-		            		return s1.compareTo(s2);
-		            	}
-		            	else {
-		            		return s1.compareToIgnoreCase(s2);
-		            	}
-		        	}
-		        }
-		    }
+					// Only if "showFeatureNameType == true" :
+					int index = s1.indexOf(']');
 
-		    /**
-		     * Determines if the name of each element includes the type name.
-		     * 
-		     * @return <code>true</code> if the name of each element includes the type name; otherwise <code>false</code>
-		     */
+					if (index > 0)
+						s1 = s1.substring(index, s1.length()).trim();
+					else
+						s1 = s1.trim();
+
+					index = s2.indexOf(']');
+
+					if (index > 0)
+						s2 = s2.substring(index, s2.length()).trim();
+					else
+						s2 = s2.trim();
+
+					break;
+				case GEOMETRY_TYPE:
+					GMLGeometryType gType = ((WFSLayerNode) o1).getGeometry();
+
+					if (gType == null)
+						s1 = "";
+					else
+						s1 = gType.getName();
+
+					gType = ((WFSLayerNode) o2).getGeometry();
+
+					if (gType == null)
+						s2 = "";
+					else
+						s2 = gType.getName();
+
+					if (ascendingOrdering)
+						return super.compare(s1, s2);
+					else
+						return super.compare(s2, s1);
+				default:
+					return 0;
+				}
+
+				// If localeRules is null -> use the default rules
+				if (getLocaleRules() == null) {
+					if (isCaseSensitive()) {
+						return s1.compareTo(s2);
+					} else {
+						return s1.compareToIgnoreCase(s2);
+					}
+				} else {
+					if (getLocaleRules().isUseLocaleRules()) {
+						Collator collator = getLocaleRules().getCollator();
+
+						if (isCaseSensitive()) {
+							return collator.compare(s1, s2);
+						} else {
+							// return collator.compare(s1.toLowerCase(),
+							// s2.toLowerCase());
+							return collator.compare(s1.toUpperCase(),
+									s2.toUpperCase());
+						}
+					} else {
+						if (isCaseSensitive()) {
+							return s1.compareTo(s2);
+						} else {
+							return s1.compareToIgnoreCase(s2);
+						}
+					}
+				}
+			}
+
+			/**
+			 * Determines if the name of each element includes the type name.
+			 * 
+			 * @return <code>true</code> if the name of each element includes
+			 *         the type name; otherwise <code>false</code>
+			 */
 			public boolean isShowFeatureNameType() {
 				return showFeatureNameType;
 			}
@@ -1140,20 +1252,25 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 			/**
 			 * Sets if the name of each element includes the type name.
 			 * 
-			 * @param showFeatureNameType <code>true</code> if the name of each element includes the type name; otherwise <code>false</code>
+			 * @param showFeatureNameType
+			 *            <code>true</code> if the name of each element includes
+			 *            the type name; otherwise <code>false</code>
 			 */
 			public void setShowFeatureNameType(boolean showFeatureNameType) {
 				this.showFeatureNameType = showFeatureNameType;
 			}
-			
+
 			/**
-			 * <p>Sets which column well be alphabetically sort ordered.</p>
+			 * <p>
+			 * Sets which column well be alphabetically sort ordered.
+			 * </p>
 			 * 
-			 * <p>There are two columns:
-			 *  <ul>
-			 *   <li><i>LAYER_NAME</i>: name of the layer.</li>
-			 *   <li><i>GEOMETRY_TYPE</i>: geometry type that layer is.</li>
-			 *  </ul>
+			 * <p>
+			 * There are two columns:
+			 * <ul>
+			 * <li><i>LAYER_NAME</i>: name of the layer.</li>
+			 * <li><i>GEOMETRY_TYPE</i>: geometry type that layer is.</li>
+			 * </ul>
 			 * </p>
 			 * 
 			 * @param column
@@ -1161,20 +1278,29 @@ public class WFSSelectFeaturePanel extends AbstractWFSPanel {
 			public void setColumn(short column) {
 				this.column = column;
 			}
-			
+
 			/**
-			 * <p>Sets if the alphabetical sort will be ascending or descending.</p>
+			 * <p>
+			 * Sets if the alphabetical sort will be ascending or descending.
+			 * </p>
 			 * 
-			 * @param b <code>true</code> if the alphabetical sort will be ascending, <code>false</code> if descending
+			 * @param b
+			 *            <code>true</code> if the alphabetical sort will be
+			 *            ascending, <code>false</code> if descending
 			 */
 			public void setAscendingOrdering(boolean b) {
 				ascendingOrdering = b;
 			}
-			
+
 			/**
-			 * <p>Determines if the alphabetical sort will be ascending or descending.</p>
+			 * <p>
+			 * Determines if the alphabetical sort will be ascending or
+			 * descending.
+			 * </p>
 			 * 
-			 * @param b <code>true</code> if the alphabetical sort will be ascending, <code>false</code> if descending
+			 * @param b
+			 *            <code>true</code> if the alphabetical sort will be
+			 *            ascending, <code>false</code> if descending
 			 */
 			public boolean isAscendingOrdering() {
 				return ascendingOrdering;

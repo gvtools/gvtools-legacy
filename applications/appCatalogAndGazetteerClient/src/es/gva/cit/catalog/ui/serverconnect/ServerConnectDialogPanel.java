@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,6 +39,7 @@
  *   dac@iver.es
  */
 package es.gva.cit.catalog.ui.serverconnect;
+
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
@@ -82,67 +82,73 @@ public class ServerConnectDialogPanel extends JPanel implements ActionListener {
 	protected String serversFile = "servers/CatalogServers.txt";
 	protected String currentServer = "";
 	private ConnectThread connectThread = null;
-	
+
 	/**
 	 * Constructor
-	 * @param parent 
+	 * 
+	 * @param parent
 	 */
-	public  ServerConnectDialogPanel(JFrame parent) {
+	public ServerConnectDialogPanel(JFrame parent) {
 		this.parent = parent;
 		this.setLayout(new BorderLayout());
-		add(getControlsPanel(),BorderLayout.CENTER);
-		//Loads the servers
+		add(getControlsPanel(), BorderLayout.CENTER);
+		// Loads the servers
 		loadServerList(serversFile);
-		//Load the protocols
-		controlsPanel.loadDrivers(
-				CatalogDriverRegister.getInstance().getDrivers());
-		//Load the first protocol
-		controlsPanel.setProtocol(controlsPanel.getServer().getServiceSubType());
+		// Load the protocols
+		controlsPanel.loadDrivers(CatalogDriverRegister.getInstance()
+				.getDrivers());
+		// Load the first protocol
+		controlsPanel
+				.setProtocol(controlsPanel.getServer().getServiceSubType());
 		enableServerPropertiesButton();
-	} 
+	}
 
 	/**
 	 * @return the main panel
 	 */
-	public ServerConnectPanel getControlsPanel() {        
+	public ServerConnectPanel getControlsPanel() {
 		if (controlsPanel == null) {
 			controlsPanel = new ServerConnectPanel();
 			controlsPanel.addActionListener(this);
 			controlsPanel.enableSearchButton(false);
 		}
 		return controlsPanel;
-	} 
+	}
 
 	/**
 	 * It adds a server in the TreeMap Object
-	 * @param server 
+	 * 
+	 * @param server
 	 */
-	protected static void addTreeMapServer(ServerData server) {        
+	protected static void addTreeMapServer(ServerData server) {
 		if (ServerConnectDialogPanel.serverList == null) {
 			ServerConnectDialogPanel.serverList = new TreeMap();
 		}
 		serverList.put(server.getServerAddress(), server);
-	} 
+	}
 
 	/**
 	 * This method loads a server list in the combo
-	 * @param sfile 
+	 * 
+	 * @param sfile
 	 */
-	private void loadServerList(String sfile) {        
+	private void loadServerList(String sfile) {
 		loadServersFromFile(sfile);
 		Iterator iter = serverList.keySet().iterator();
 		while (iter.hasNext()) {
-			ServerData server = (ServerData) serverList.get((String) iter.next());
+			ServerData server = (ServerData) serverList.get((String) iter
+					.next());
 			controlsPanel.addServer(server);
-		}            
-	} 
+		}
+	}
 
 	/**
 	 * It loads a server list from a text file
-	 * @param sfile 
-	 * File that contains the rervers
+	 * 
+	 * @param sfile
+	 *            File that contains the rervers
 	 */
-	private void loadServersFromFile(String sfile) {        
+	private void loadServersFromFile(String sfile) {
 		File file = null;
 		try {
 			file = new File(sfile);
@@ -150,38 +156,47 @@ public class ServerConnectDialogPanel extends JPanel implements ActionListener {
 				BufferedReader fr = new BufferedReader(new FileReader(file));
 				String s;
 				while ((s = fr.readLine()) != null) {
-					addTreeMapServer(new ServerData(s,"",""));
+					addTreeMapServer(new ServerData(s, "", ""));
 				}
 			} else {
-				System.out.println("No se encuentra el fichero '" +
-						file.getPath() + "'");
+				System.out.println("No se encuentra el fichero '"
+						+ file.getPath() + "'");
 			}
 		} catch (FileNotFoundException e) {
-			System.out.println("No se encuentra el fichero '" + file.getPath() +
-			"'");
-			//e.printStackTrace();
+			System.out.println("No se encuentra el fichero '" + file.getPath()
+					+ "'");
+			// e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println("Error de entrada salida en la lectura del fichero");
-			//e.printStackTrace();
+			System.out
+					.println("Error de entrada salida en la lectura del fichero");
+			// e.printStackTrace();
 		}
-	} 
+	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
-	public void actionPerformed(ActionEvent e) {        
-		if (e.getActionCommand().compareTo(CatalogConstants.CONNECT_BUTTON_ACTION_COMMAND)==0) {
+	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand().compareTo(
+				CatalogConstants.CONNECT_BUTTON_ACTION_COMMAND) == 0) {
 			connectButtonActionPerformed();
-		}else if (e.getActionCommand().compareTo(CatalogConstants.SEARCH_BUTTON_ACTION_COMMAND)==0) {
+		} else if (e.getActionCommand().compareTo(
+				CatalogConstants.SEARCH_BUTTON_ACTION_COMMAND) == 0) {
 			searchButtonActionPerformed();
-		}else if (e.getActionCommand().compareTo(CatalogConstants.CLOSE_BUTTON_ACTION_COMMAND)==0) {
+		} else if (e.getActionCommand().compareTo(
+				CatalogConstants.CLOSE_BUTTON_ACTION_COMMAND) == 0) {
 			closeButtonActionPerformed();
-		}else if (e.getActionCommand().compareTo(CatalogConstants.PROTOCOL_COMBO_ACTION_COMMAND)==0){
+		} else if (e.getActionCommand().compareTo(
+				CatalogConstants.PROTOCOL_COMBO_ACTION_COMMAND) == 0) {
 			enableServerPropertiesButton();
-		}else if (e.getActionCommand().compareTo(CatalogConstants.SERVERPROPERTIES_BUTTON_ACTION_COMMAND)==0) {
+		} else if (e.getActionCommand().compareTo(
+				CatalogConstants.SERVERPROPERTIES_BUTTON_ACTION_COMMAND) == 0) {
 			serverPropertiesButtonActionPerformed();
-		}else if (e.getActionCommand().compareTo(CatalogConstants.SERVER_COMBO_ACTION_COMMAND)==0) {
+		} else if (e.getActionCommand().compareTo(
+				CatalogConstants.SERVER_COMBO_ACTION_COMMAND) == 0) {
 			controlsPanel.updateProtocol();
 		}
 	}
@@ -189,101 +204,100 @@ public class ServerConnectDialogPanel extends JPanel implements ActionListener {
 	/**
 	 * Enable the server properties button
 	 */
-	private void enableServerPropertiesButton(){
-		if(((ICatalogServiceDriver)controlsPanel.getDriver()).getProfile() == null){
+	private void enableServerPropertiesButton() {
+		if (((ICatalogServiceDriver) controlsPanel.getDriver()).getProfile() == null) {
 			controlsPanel.enableServerPropertiesButton(false);
-		}else{
+		} else {
 			controlsPanel.enableServerPropertiesButton(true);
 		}
 	}
-	
+
 	/**
 	 * Action when the search button is clicked
 	 */
-	protected void searchButtonActionPerformed() {        
+	protected void searchButtonActionPerformed() {
 		setEnabled(false);
-		new SearchDialog(client,parent);
-	} 
+		new SearchDialog(client, parent);
+	}
 
 	/**
 	 * It is thrown the the server properties button is clicked
 	 */
-	protected void serverPropertiesButtonActionPerformed(){
+	protected void serverPropertiesButtonActionPerformed() {
 		createClient();
-		new ServerPropertiesDialog(
-				controlsPanel.getServer(),
-				client,
-				((ICatalogServiceDriver)controlsPanel.getDriver()).getProfile());
+		new ServerPropertiesDialog(controlsPanel.getServer(), client,
+				((ICatalogServiceDriver) controlsPanel.getDriver())
+						.getProfile());
 	}
 
 	/**
 	 * It is thrown the the connect button is clicked
 	 */
-	protected void connectButtonActionPerformed() {        
-		controlsPanel.enableSearchButton(false);		
-		createClient();		
-		if (connectThread != null){
+	protected void connectButtonActionPerformed() {
+		controlsPanel.enableSearchButton(false);
+		createClient();
+		if (connectThread != null) {
 			connectThread.stop();
 		}
 		connectThread = new ConnectThread();
 		setCursor(new Cursor(Cursor.WAIT_CURSOR));
-	} 
+	}
 
 	/**
 	 * Create the catalog client
 	 */
-	protected void createClient(){
+	protected void createClient() {
 		ServerData serverData = null;
-		if (client != null){
+		if (client != null) {
 			serverData = client.getServerData();
 		}
 		client = new CatalogClient(controlsPanel.getServerAddress(),
 				controlsPanel.getDatabase(),
-				(ICatalogServiceDriver)controlsPanel.getDriver());
+				(ICatalogServiceDriver) controlsPanel.getDriver());
 		client.setServerData(serverData);
 	}
-	
+
 	/**
-	 *  * It is thrown the the close button is clicked
+	 * * It is thrown the the close button is clicked
 	 */
-	protected void closeButtonActionPerformed() {        
+	protected void closeButtonActionPerformed() {
 		parent.setVisible(false);
 		System.exit(0);
-	} 
+	}
 
 	/**
 	 * @return Returns the serversFile.
 	 */
-	public String getServersFile() {        
+	public String getServersFile() {
 		return serversFile;
-	} 
+	}
 
 	/**
-	 * @param serversFile The serversFile to set.
+	 * @param serversFile
+	 *            The serversFile to set.
 	 */
-	public void setServersFile(String serversFile) {        
+	public void setServersFile(String serversFile) {
 		this.serversFile = serversFile;
-	} 
+	}
 
 	/**
 	 * @return Returns the currentServer.
 	 */
-	public String getCurrentServer() {        
+	public String getCurrentServer() {
 		return currentServer;
-	} 
+	}
 
 	/**
 	 * @return Returns the client.
 	 */
-	public CatalogClient getClient() {        
+	public CatalogClient getClient() {
 		return client;
-	} 
+	}
 
 	/**
-	 * This class is used to manage the searches.
-	 * It contains method to start and to stop a thread. It is
-	 * necessary to create because "stop" method (for the Thread class)
-	 * is deprecated.
+	 * This class is used to manage the searches. It contains method to start
+	 * and to stop a thread. It is necessary to create because "stop" method
+	 * (for the Thread class) is deprecated.
 	 * 
 	 * 
 	 * @author Jorge Piera Llodra (piera_jor@gva.es)
@@ -291,33 +305,36 @@ public class ServerConnectDialogPanel extends JPanel implements ActionListener {
 	private class ConnectThread implements Runnable {
 		volatile Thread myThread = null;
 
-		public  ConnectThread() {        
+		public ConnectThread() {
 			myThread = new Thread(this);
 			myThread.start();
-		} 
+		}
 
-		public void stop(){
+		public void stop() {
 			myThread.stop();
 		}
+
 		/*
 		 * (non-Javadoc)
+		 * 
 		 * @see java.lang.Runnable#run()
 		 */
-		public void run() {        
+		public void run() {
 			try {
-				DiscoveryServiceCapabilities capabilities = client.getCapabilities();
-				if (capabilities.isAvailable()){
+				DiscoveryServiceCapabilities capabilities = client
+						.getCapabilities();
+				if (capabilities.isAvailable()) {
 					controlsPanel.enableSearchButton(true);
 					currentServer = controlsPanel.getServerAddress();
-					searchButtonActionPerformed();				
-				} 
-				setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); 
+					searchButtonActionPerformed();
+				}
+				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 				controlsPanel.setServerReply(capabilities.getServerMessage());
 
 			} catch (Exception e) {
 				controlsPanel.setServerReply(Messages.getText(e.toString()));
 				e.printStackTrace();
-			}	
+			}
 		}
-	}	
+	}
 }

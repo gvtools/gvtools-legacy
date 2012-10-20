@@ -21,17 +21,18 @@ import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.layers.Annotation_Mapping;
 
-public class Annotation_ModifyWindow extends JPanel implements IWindow{
+public class Annotation_ModifyWindow extends JPanel implements IWindow {
 
 	private JPanel jPanel = null;
 	private JLabel jLabel = null;
 	private JTextField jTextField = null;
 	private AcceptCancelPanel accept;
-	private boolean isAccepted=false;
-	private JPanel jPanel1 = null;  //  @jve:decl-index=0:visual-constraint="10,10"
+	private boolean isAccepted = false;
+	private JPanel jPanel1 = null; // @jve:decl-index=0:visual-constraint="10,10"
 	private JPanel jPanel2 = null;
 	private TextPropertiesPanel textPropPanel = null;
 	private Annotation_Mapping mapping;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -42,18 +43,19 @@ public class Annotation_ModifyWindow extends JPanel implements IWindow{
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 * @return void
 	 */
 	private void initialize() {
 		this.setLayout(new BorderLayout());
-//		this.setSize(292, 197);
+		// this.setSize(292, 197);
 		this.add(getJPanel1(), java.awt.BorderLayout.CENTER);
 	}
 
 	public WindowInfo getWindowInfo() {
-		WindowInfo wi=new WindowInfo(WindowInfo.MODALDIALOG | WindowInfo.RESIZABLE);
-		wi.setTitle(PluginServices.getText(this,"modify_annotation"));
+		WindowInfo wi = new WindowInfo(WindowInfo.MODALDIALOG
+				| WindowInfo.RESIZABLE);
+		wi.setTitle(PluginServices.getText(this, "modify_annotation"));
 		wi.setWidth(350);
 		wi.setHeight(250);
 		return wi;
@@ -61,26 +63,30 @@ public class Annotation_ModifyWindow extends JPanel implements IWindow{
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel() {
 		if (jPanel == null) {
 			jLabel = new JLabel();
-			jLabel.setText(PluginServices.getText(this,"fonttext"));
+			jLabel.setText(PluginServices.getText(this, "fonttext"));
 			jLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
 			jLabel.setHorizontalTextPosition(javax.swing.SwingConstants.TRAILING);
-			jLabel.setPreferredSize(new java.awt.Dimension(100,16));
+			jLabel.setPreferredSize(new java.awt.Dimension(100, 16));
 			jLabel.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
 
 			jPanel = new JPanel();
 			jPanel.setLayout(new GridBagLayout());
-			jPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, PluginServices.getText(this,"options"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			jPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+					PluginServices.getText(this, "options"),
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					null));
 
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.gridy = 0;
-			gridBagConstraints.insets = new Insets(8,4,4,4);
+			gridBagConstraints.insets = new Insets(8, 4, 4, 4);
 			jPanel.add(jLabel, gridBagConstraints);
 
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
@@ -88,7 +94,7 @@ public class Annotation_ModifyWindow extends JPanel implements IWindow{
 			gridBagConstraints1.gridy = 0;
 			gridBagConstraints1.weightx = 1.0;
 			gridBagConstraints1.gridx = 1;
-			gridBagConstraints1.insets = new Insets(4,4,4,8);
+			gridBagConstraints1.insets = new Insets(4, 4, 4, 8);
 			jPanel.add(getTxtText(), gridBagConstraints1);
 
 			gridBagConstraints.gridx = 0;
@@ -96,7 +102,7 @@ public class Annotation_ModifyWindow extends JPanel implements IWindow{
 			gridBagConstraints.gridwidth = 2;
 			gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints1.weightx = 1.0;
-			gridBagConstraints.insets = new Insets(8,4,4,8);
+			gridBagConstraints.insets = new Insets(8, 4, 4, 8);
 			jPanel.add(getTextPropPanel(), gridBagConstraints);
 		}
 		return jPanel;
@@ -104,7 +110,7 @@ public class Annotation_ModifyWindow extends JPanel implements IWindow{
 
 	/**
 	 * This method initializes jTextField
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getTxtText() {
@@ -115,7 +121,7 @@ public class Annotation_ModifyWindow extends JPanel implements IWindow{
 	}
 
 	private TextPropertiesPanel getTextPropPanel() {
-		if (textPropPanel==null) {
+		if (textPropPanel == null) {
 			textPropPanel = new TextPropertiesPanel();
 		}
 		return textPropPanel;
@@ -149,14 +155,14 @@ public class Annotation_ModifyWindow extends JPanel implements IWindow{
 
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel1() {
 		if (jPanel1 == null) {
 			jPanel1 = new JPanel();
 			jPanel1.setLayout(new BorderLayout());
-			jPanel1.setSize(new java.awt.Dimension(244,142));
+			jPanel1.setSize(new java.awt.Dimension(244, 142));
 			jPanel1.add(getJPanel(), java.awt.BorderLayout.NORTH);
 			jPanel1.add(getJPanel2(), java.awt.BorderLayout.SOUTH);
 		}
@@ -165,7 +171,7 @@ public class Annotation_ModifyWindow extends JPanel implements IWindow{
 
 	/**
 	 * This method initializes jPanel2
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanel2() {
@@ -177,15 +183,19 @@ public class Annotation_ModifyWindow extends JPanel implements IWindow{
 	}
 
 	public void setValues(Value[] values, Annotation_Mapping am) {
-		this.mapping=am;
+		this.mapping = am;
 		getTxtText().setText(values[am.getColumnText()].toString());
-		getTextPropPanel().setFontType(values[am.getColumnTypeFont()].toString());
-		getTextPropPanel().setFontStyle(((NumericValue)values[am.getColumnStyleFont()]).intValue());
-		getTextPropPanel().setTextHeight(Double.parseDouble(values[am.getColumnHeight()].toString()));
-		int intColor=((NumericValue)values[am.getColumnColor()]).intValue();
-		Color color=new Color(intColor);
+		getTextPropPanel().setFontType(
+				values[am.getColumnTypeFont()].toString());
+		getTextPropPanel().setFontStyle(
+				((NumericValue) values[am.getColumnStyleFont()]).intValue());
+		getTextPropPanel().setTextHeight(
+				Double.parseDouble(values[am.getColumnHeight()].toString()));
+		int intColor = ((NumericValue) values[am.getColumnColor()]).intValue();
+		Color color = new Color(intColor);
 		getTextPropPanel().setColor(color);
-		getTextPropPanel().setRotation(Double.parseDouble(values[am.getColumnRotate()].toString()));
+		getTextPropPanel().setRotation(
+				Double.parseDouble(values[am.getColumnRotate()].toString()));
 	}
 
 	public boolean isAccepted() {
@@ -193,13 +203,19 @@ public class Annotation_ModifyWindow extends JPanel implements IWindow{
 	}
 
 	public Value[] getValues() {
-		Value[] values=new Value[6];
-		values[mapping.getColumnText()]=ValueFactory.createValue(getTxtText().getText());
-		values[mapping.getColumnTypeFont()]=ValueFactory.createValue(getTextPropPanel().getFontType());
-		values[mapping.getColumnStyleFont()]=ValueFactory.createValue(getTextPropPanel().getFontStyle());
-		values[mapping.getColumnHeight()]=ValueFactory.createValue(getTextPropPanel().getTextHeight());
-		values[mapping.getColumnColor()]=ValueFactory.createValue(getTextPropPanel().getColor().getRGB());
-		values[mapping.getColumnRotate()]=ValueFactory.createValue(getTextPropPanel().getRotation());
+		Value[] values = new Value[6];
+		values[mapping.getColumnText()] = ValueFactory.createValue(getTxtText()
+				.getText());
+		values[mapping.getColumnTypeFont()] = ValueFactory
+				.createValue(getTextPropPanel().getFontType());
+		values[mapping.getColumnStyleFont()] = ValueFactory
+				.createValue(getTextPropPanel().getFontStyle());
+		values[mapping.getColumnHeight()] = ValueFactory
+				.createValue(getTextPropPanel().getTextHeight());
+		values[mapping.getColumnColor()] = ValueFactory
+				.createValue(getTextPropPanel().getColor().getRGB());
+		values[mapping.getColumnRotate()] = ValueFactory
+				.createValue(getTextPropPanel().getRotation());
 		return values;
 	}
 
@@ -207,4 +223,4 @@ public class Annotation_ModifyWindow extends JPanel implements IWindow{
 		return WindowInfo.DIALOG_PROFILE;
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

@@ -19,6 +19,7 @@
 package org.gvsig.raster.grid.filter.enhancement;
 
 import org.gvsig.raster.buffer.RasterBuffer;
+
 /**
  * Filtro de brillo para buffer de datos tipo float. En el método de proceso
  * procesa un solo pixel float e incrementa su brillo en la cantidad indicada en
@@ -29,16 +30,24 @@ import org.gvsig.raster.buffer.RasterBuffer;
 public class BrightnessFloatFilter extends BrightnessFilter {
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.enhancement.BrightnessFilter#process(int, int)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.enhancement.BrightnessFilter#process(int,
+	 * int)
 	 */
 	public void process(int col, int line) throws InterruptedException {
 		for (int i = 0; i < raster.getBandCount(); i++)
-			rasterResult.setElem(line, col, i, (byte) calcBrightness((int) raster.getElemFloat(line, col, i) & 0xff));
+			rasterResult.setElem(line, col, i,
+					(byte) calcBrightness((int) raster.getElemFloat(line, col,
+							i) & 0xff));
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.enhancement.BrightnessFilter#getInRasterDataType()
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.enhancement.BrightnessFilter#getInRasterDataType
+	 * ()
 	 */
 	public int getInRasterDataType() {
 		return RasterBuffer.TYPE_FLOAT;

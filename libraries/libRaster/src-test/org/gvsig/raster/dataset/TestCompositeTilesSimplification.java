@@ -31,19 +31,19 @@ import org.gvsig.raster.RasterLibrary;
 /**
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
 public class TestCompositeTilesSimplification extends TestCase {
-	
+
 	static {
 		RasterLibrary.wakeUp();
 	}
-	
+
 	public void start() {
 		this.setUp();
 		this.testStack();
 	}
-	
+
 	public void setUp() {
 		System.err.println("TestCompositeTilesSimplification running...");
 		Integer[][] result = null;
@@ -52,87 +52,86 @@ public class TestCompositeTilesSimplification extends TestCase {
 		for (int row = 3; row < 5; row++)
 			for (int col = 3; col < 5; col++)
 				values[row][col] = new Integer(new String(row + "" + col));
-			
+
 		result = compress(values);
 		show(result);
-		
+
 		values = new Integer[10][10];
 		for (int row = 0; row < 5; row++)
 			for (int col = 0; col < 5; col++)
 				values[row][col] = new Integer(new String(row + "" + col));
-		
+
 		result = compress(values);
 		show(result);
-		
+
 		values = new Integer[10][10];
 		for (int row = 5; row < 10; row++)
 			for (int col = 5; col < 10; col++)
 				values[row][col] = new Integer(new String(row + "" + col));
-		
+
 		result = compress(values);
 		show(result);
 	}
-	
-	public void testStack(){
-		
+
+	public void testStack() {
+
 	}
-	
-	
+
 	private Integer[][] compress(Integer[][] values) {
 		int n = values.length;
 		int m = values[0].length;
 		int posInitX = 0;
 		int posInitY = 0;
-		
+
 		int nRows = n, nCols = m;
-		//Contador de filas
+		// Contador de filas
 		boolean first = true;
 		for (int row = 0; row < n; row++) {
 			boolean isNull = true;
 			for (int col = 0; col < m; col++) {
-				if(values[row][col] != null) {
+				if (values[row][col] != null) {
 					isNull = false;
-					if(first) {
+					if (first) {
 						posInitX = col;
 						first = false;
 					}
 				}
-			}			
-			if(isNull)
-				nRows --;
+			}
+			if (isNull)
+				nRows--;
 		}
-		
-		//Contador de columnas
+
+		// Contador de columnas
 		first = true;
 		for (int col = 0; col < m; col++) {
 			boolean isNull = true;
 			for (int row = 0; row < n; row++) {
-				if(values[row][col] != null) {
+				if (values[row][col] != null) {
 					isNull = false;
-					if(first) {
+					if (first) {
 						posInitY = row;
 						first = false;
 					}
 				}
-			}			
-			if(isNull)
-				nCols --;
+			}
+			if (isNull)
+				nCols--;
 		}
-		System.out.println("Rows:" + nRows + " Cols:" + nCols );
-		//Copia de datos
+		System.out.println("Rows:" + nRows + " Cols:" + nCols);
+		// Copia de datos
 		Integer[][] result = new Integer[nRows][nCols];
-		
-		System.out.println("posInitX:" + posInitX + " posInitY:" + posInitY );
-		
-		for (int row = 0; row < result.length; row++) 
-			for (int col = 0; col < result[row].length; col++) 
+
+		System.out.println("posInitX:" + posInitX + " posInitY:" + posInitY);
+
+		for (int row = 0; row < result.length; row++)
+			for (int col = 0; col < result[row].length; col++)
 				result[row][col] = values[row + posInitY][col + posInitX];
 		return result;
 	}
-	
+
 	private void show(Integer[][] result) {
-		for (int row = 0; row < result.length; row++) { 
-			for (int col = 0; col < result[row].length; col++) { 
+		for (int row = 0; row < result.length; row++) {
+			for (int col = 0; col < result[row].length; col++) {
 				System.out.print(result[row][col].intValue() + " ");
 			}
 			System.out.println();

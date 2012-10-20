@@ -55,23 +55,24 @@ import com.iver.utiles.Utils;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class XMLSchemaFileFilter  extends FileFilter {
-		
-	public XMLSchemaFileFilter(){
-		
+public class XMLSchemaFileFilter extends FileFilter {
+
+	public XMLSchemaFileFilter() {
+
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.filechooser.FileFilter#accept(java.io.File)
 	 */
 	public boolean accept(File f) {
-		if (f.isDirectory()){
+		if (f.isDirectory()) {
 			return true;
 		}
 		String extension = Utils.getExtension(f);
-		if (extension != null){
-			if (extension.toLowerCase().compareTo("xsd") == 0){
+		if (extension != null) {
+			if (extension.toLowerCase().compareTo("xsd") == 0) {
 				return true;
 			}
 		}
@@ -80,6 +81,7 @@ public class XMLSchemaFileFilter  extends FileFilter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.filechooser.FileFilter#getDescription()
 	 */
 	public String getDescription() {

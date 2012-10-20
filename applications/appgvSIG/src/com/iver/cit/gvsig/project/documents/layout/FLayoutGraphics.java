@@ -59,10 +59,9 @@ import com.iver.cit.gvsig.project.documents.layout.gui.dialogs.FAlignDialog;
 import com.iver.cit.gvsig.project.documents.layout.gui.dialogs.FBorderDialog;
 import com.iver.cit.gvsig.project.documents.layout.gui.dialogs.FPositionDialog;
 
-
 /**
  * Operaciones realizadas sobre el conjunto de FFrames.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FLayoutGraphics {
@@ -73,8 +72,9 @@ public class FLayoutGraphics {
 
 	/**
 	 * Crea un nuevo FLayoutGraphics.
-	 *
-	 * @param l Referencia al Layout.
+	 * 
+	 * @param l
+	 *            Referencia al Layout.
 	 */
 	public FLayoutGraphics(Layout l) {
 		layout = l;
@@ -85,17 +85,19 @@ public class FLayoutGraphics {
 	 */
 	public void simplify() {
 		layout.getLayoutContext().getEFS().startComplexCommand();
-		IFFrame[] fframes=layout.getLayoutContext().getFFrames();
+		IFFrame[] fframes = layout.getLayoutContext().getFFrames();
 		for (int i = fframes.length - 1; i >= 0; i--) {
 			IFFrame fframe = fframes[i];
 
 			if (fframe instanceof FFrameLegend) {
 				if (fframe.getSelected() != IFFrame.NOSELECT) {
-					((FFrameLegend) fframe).toFFrames(layout.getLayoutContext());
+					((FFrameLegend) fframe)
+							.toFFrames(layout.getLayoutContext());
 				}
 			}
 		}
-		layout.getLayoutContext().getEFS().endComplexCommand(PluginServices.getText(this,"simplify"));
+		layout.getLayoutContext().getEFS()
+				.endComplexCommand(PluginServices.getText(this, "simplify"));
 		layout.getLayoutControl().refresh();
 	}
 
@@ -103,11 +105,12 @@ public class FLayoutGraphics {
 	 * Agrupar en un FFrameGroup todos los FFrames seleccionados.
 	 */
 	public void grouping() {
-		//		Se debe controlar de alguna forma si hay varios seleccionados.
-		FFrameGroup fframegroup =(FFrameGroup)FrameFactory.createFrameFromName(FFrameGroupFactory.registerName);
+		// Se debe controlar de alguna forma si hay varios seleccionados.
+		FFrameGroup fframegroup = (FFrameGroup) FrameFactory
+				.createFrameFromName(FFrameGroupFactory.registerName);
 
 		fframegroup.setLayout(layout);
-		IFFrame[] fframes=layout.getLayoutContext().getFFrames();
+		IFFrame[] fframes = layout.getLayoutContext().getFFrames();
 		if (fframes.length > 1) {
 			ArrayList selecList = new ArrayList();
 
@@ -126,14 +129,15 @@ public class FLayoutGraphics {
 
 			fframegroup.setAt(layout.getLayoutControl().getAT());
 
-			Rectangle2D.Double rd = fframegroup.getRectangle(layout.getLayoutControl().getAT());
+			Rectangle2D.Double rd = fframegroup.getRectangle(layout
+					.getLayoutControl().getAT());
 
-			Rectangle2D.Double rd1 = FLayoutUtilities.toSheetRect(rd,
-					layout.getLayoutControl().getAT());
+			Rectangle2D.Double rd1 = FLayoutUtilities.toSheetRect(rd, layout
+					.getLayoutControl().getAT());
 
 			fframegroup.setBoundBox(rd1);
 			fframegroup.setSelected(true);
-			layout.getLayoutContext().addFFrame(fframegroup, true,true);
+			layout.getLayoutContext().addFFrame(fframegroup, true, true);
 			layout.getLayoutControl().refresh();
 		}
 	}
@@ -144,7 +148,7 @@ public class FLayoutGraphics {
 	 */
 	public void ungrouping() {
 		layout.getLayoutContext().getEFS().startComplexCommand();
-		IFFrame[] fframes=layout.getLayoutContext().getFFrames();
+		IFFrame[] fframes = layout.getLayoutContext().getFFrames();
 		for (int i = fframes.length - 1; i >= 0; i--) {
 			IFFrame fframe = fframes[i];
 
@@ -153,21 +157,23 @@ public class FLayoutGraphics {
 					FFrameGroup fframegroup = (FFrameGroup) fframe;
 					ArrayList selecList = new ArrayList();
 
-					for (int j = fframegroup.getFFrames().length - 1; j >= 0;
-							j--) {
+					for (int j = fframegroup.getFFrames().length - 1; j >= 0; j--) {
 						selecList.add(fframegroup.getFFrames()[j]);
 					}
 
 					for (int j = selecList.size() - 1; j >= 0; j--) {
-						IFFrame frame=(IFFrame) selecList.get(j);
-						frame.setRotation(frame.getRotation()+fframe.getRotation());
-						layout.getLayoutContext().addFFrameSameProperties(frame);
+						IFFrame frame = (IFFrame) selecList.get(j);
+						frame.setRotation(frame.getRotation()
+								+ fframe.getRotation());
+						layout.getLayoutContext()
+								.addFFrameSameProperties(frame);
 					}
 					layout.getLayoutContext().delFFrame(fframegroup);
 				}
 			}
 		}
-		layout.getLayoutContext().getEFS().endComplexCommand(PluginServices.getText(this,"ungroup"));
+		layout.getLayoutContext().getEFS()
+				.endComplexCommand(PluginServices.getText(this, "ungroup"));
 		layout.getLayoutControl().refresh();
 	}
 
@@ -178,26 +184,32 @@ public class FLayoutGraphics {
 		m_alignLayout = new FAlignDialog(layout);
 		PluginServices.getMDIManager().addWindow(m_alignLayout);
 	}
+
 	/**
 	 * Posiciona los FFrames seleccionados delante de los no seleccionados.
 	 */
 	public void before() {
 		layout.getLayoutContext().getEFS().startComplexCommand();
-		IFFrame[] fframes=layout.getLayoutContext().getFFrames();
+		IFFrame[] fframes = layout.getLayoutContext().getFFrames();
 		for (int i = fframes.length - 1; i >= 0; i--) {
 			IFFrame fframe = fframes[i];
 			if (fframe.getSelected() != IFFrame.NOSELECT) {
 				if (fframe instanceof FFrameGroup) {
-					((FFrameGroup) fframe).setAt(layout.getLayoutControl().getAT());
+					((FFrameGroup) fframe).setAt(layout.getLayoutControl()
+							.getAT());
 				}
 
-				IFFrame fframeAux=fframe.cloneFFrame(layout);
+				IFFrame fframeAux = fframe.cloneFFrame(layout);
 				fframeAux.setLevel(layout.getLayoutContext().getNumBefore());
-				layout.getLayoutContext().getEFS().modifyFFrame(fframe,fframeAux);
+				layout.getLayoutContext().getEFS()
+						.modifyFFrame(fframe, fframeAux);
 				fframeAux.getBoundingBox(layout.getLayoutControl().getAT());
 			}
 		}
-		layout.getLayoutContext().getEFS().endComplexCommand(PluginServices.getText(this,"change_before"));
+		layout.getLayoutContext()
+				.getEFS()
+				.endComplexCommand(
+						PluginServices.getText(this, "change_before"));
 		layout.getLayoutContext().updateFFrames();
 		layout.getLayoutControl().refresh();
 	}
@@ -208,21 +220,26 @@ public class FLayoutGraphics {
 	 */
 	public void behind() {
 		layout.getLayoutContext().getEFS().startComplexCommand();
-		IFFrame[] fframes=layout.getLayoutContext().getFFrames();
+		IFFrame[] fframes = layout.getLayoutContext().getFFrames();
 		for (int i = fframes.length - 1; i >= 0; i--) {
 			IFFrame fframe = fframes[i];
 			if (fframe.getSelected() != IFFrame.NOSELECT) {
 				if (fframe instanceof FFrameGroup) {
-					((FFrameGroup) fframe).setAt(layout.getLayoutControl().getAT());
+					((FFrameGroup) fframe).setAt(layout.getLayoutControl()
+							.getAT());
 				}
 
-				IFFrame fframeAux=fframe.cloneFFrame(layout);
+				IFFrame fframeAux = fframe.cloneFFrame(layout);
 				fframeAux.setLevel(layout.getLayoutContext().getNumBehind());
-				layout.getLayoutContext().getEFS().modifyFFrame(fframe,fframeAux);
+				layout.getLayoutContext().getEFS()
+						.modifyFFrame(fframe, fframeAux);
 				fframeAux.getBoundingBox(layout.getLayoutControl().getAT());
 			}
 		}
-		layout.getLayoutContext().getEFS().endComplexCommand(PluginServices.getText(this,"change_behind"));
+		layout.getLayoutContext()
+				.getEFS()
+				.endComplexCommand(
+						PluginServices.getText(this, "change_behind"));
 		layout.getLayoutContext().updateFFrames();
 		layout.getLayoutControl().refresh();
 	}
@@ -235,22 +252,23 @@ public class FLayoutGraphics {
 		IFFrame[] selecList = layout.getLayoutContext().getFFrameSelected();
 
 		if (selecList.length == 1) {
-			IFFrame frame=selecList[0];
-//			int toolaux = layout.getTool();
-//			layout.setTool(getType(frame));
-//			IFFrame fframeAux=frame.cloneFFrame(layout);
-			IFFrame fframeAux=layout.openFFrameDialog(frame);
-			if (fframeAux!=null) {
+			IFFrame frame = selecList[0];
+			// int toolaux = layout.getTool();
+			// layout.setTool(getType(frame));
+			// IFFrame fframeAux=frame.cloneFFrame(layout);
+			IFFrame fframeAux = layout.openFFrameDialog(frame);
+			if (fframeAux != null) {
 				if (fframeAux instanceof IFFrameUseFMap)
-					((IFFrameUseFMap)fframeAux).refresh();
-				layout.getLayoutContext().getEFS().modifyFFrame(frame,fframeAux);
+					((IFFrameUseFMap) fframeAux).refresh();
+				layout.getLayoutContext().getEFS()
+						.modifyFFrame(frame, fframeAux);
 				fframeAux.getBoundingBox(layout.getLayoutControl().getAT());
 				layout.getLayoutContext().updateFFrames();
 				layout.getLayoutControl().setIsReSel(true);
 				layout.getLayoutControl().refresh();
 			}
-//			layout.setTool(toolaux);
-			if (fframeAux!=null)
+			// layout.setTool(toolaux);
+			if (fframeAux != null)
 				return true;
 		}
 		return false;
@@ -260,9 +278,9 @@ public class FLayoutGraphics {
 	 * Selección de todos los FFrames del Layout.
 	 */
 	public void selecAll() {
-		IFFrame[] fframes=layout.getLayoutContext().getFFrames();
+		IFFrame[] fframes = layout.getLayoutContext().getFFrames();
 		for (int i = fframes.length - 1; i >= 0; i--) {
-			IFFrame fframe =fframes[i];
+			IFFrame fframe = fframes[i];
 			fframe.setSelected(true);
 		}
 		layout.getLayoutControl().refresh();
@@ -282,10 +300,10 @@ public class FLayoutGraphics {
 	 */
 	public void position() {
 
-		IFFrame[] fframes=layout.getLayoutContext().getFFrameSelected();
-		if (fframes.length!=0){
-			for (int i=0;i<fframes.length;i++){
-				positiondialog = new FPositionDialog(layout,fframes[i]);
+		IFFrame[] fframes = layout.getLayoutContext().getFFrameSelected();
+		if (fframes.length != 0) {
+			for (int i = 0; i < fframes.length; i++) {
+				positiondialog = new FPositionDialog(layout, fframes[i]);
 				PluginServices.getMDIManager().addWindow(positiondialog);
 			}
 		}

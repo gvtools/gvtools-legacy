@@ -45,53 +45,57 @@ import java.nio.MappedByteBuffer;
 
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 
-
 /**
  * Interfaz de todos los tipos de formato shape.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public interface SHPShape {
 	/**
 	 * Devuelve el tipo de shape de que se trata.
-	 *
+	 * 
 	 * @return Tipo de shape.
 	 */
 	public int getShapeType();
 
 	/**
 	 * Lee del buffer el shape y crea una nueva geometría.
-	 *
-	 * @param buffer Buffer de donde se lee.
-	 * @param type Tipo de shape en concreto.
-	 *
+	 * 
+	 * @param buffer
+	 *            Buffer de donde se lee.
+	 * @param type
+	 *            Tipo de shape en concreto.
+	 * 
 	 * @return Nueva geometría.
 	 */
 	public IGeometry read(MappedByteBuffer buffer, int type);
 
 	/**
 	 * Escribe en el buffer la geometría que se pasa como parámetro.
-	 *
-	 * @param buffer Buffer donde escribir.
-	 * @param geometry Geometría a escribir.
+	 * 
+	 * @param buffer
+	 *            Buffer donde escribir.
+	 * @param geometry
+	 *            Geometría a escribir.
 	 */
 	public void write(ByteBuffer buffer, IGeometry geometry);
 
 	/**
 	 * Devuelve el tamaño de la geometría.
-	 *
-	 * @param fgeometry Geometría a medir.
-	 *
+	 * 
+	 * @param fgeometry
+	 *            Geometría a medir.
+	 * 
 	 * @return Tamaño de la geometría.
 	 */
 	public int getLength(IGeometry fgeometry);
 
 	/**
 	 * Obtiene los puntos y partes del GeneralPathXIterator del shape.
-	 *
+	 * 
 	 * @param iter
 	 */
 	public void obtainsPoints(IGeometry g);
 
-//	public void setFlatness(double flatness);
+	// public void setFlatness(double flatness);
 }

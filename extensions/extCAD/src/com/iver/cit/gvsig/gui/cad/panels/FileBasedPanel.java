@@ -27,18 +27,17 @@ public class FileBasedPanel extends JWizardPanel {
 	private CRSSelectPanel crsSelectPanel = null;
 	private String fileExt;
 
-//	private class MyInputEventListener implements CaretListener
-//	{
-//		public void caretUpdate(CaretEvent arg0) {
-//			if (jTextFieldPath.getText().length() > 0)
-//				setFinishButtonEnabled(true);
-//			else
-//				setFinishButtonEnabled(false);
-//
-//		}
-//
-//	}
-
+	// private class MyInputEventListener implements CaretListener
+	// {
+	// public void caretUpdate(CaretEvent arg0) {
+	// if (jTextFieldPath.getText().length() > 0)
+	// setFinishButtonEnabled(true);
+	// else
+	// setFinishButtonEnabled(false);
+	//
+	// }
+	//
+	// }
 
 	public FileBasedPanel(JWizardComponents wizardComponents) {
 		super(wizardComponents);
@@ -47,32 +46,32 @@ public class FileBasedPanel extends JWizardPanel {
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 */
 	private void initialize() {
-        jLabel = new JLabel();
-        jLabel.setText(PluginServices.getText(this,"enter_path_to_file"));
-        jLabel.setBounds(new java.awt.Rectangle(12,17,319,15));
-        this.setLayout(null);
-        this.setSize(new java.awt.Dimension(380,214));
-        this.add(jLabel, null);
-        this.add(getJTextFieldPath(), null);
-        this.add(getJButtonSelectPath(), null);
+		jLabel = new JLabel();
+		jLabel.setText(PluginServices.getText(this, "enter_path_to_file"));
+		jLabel.setBounds(new java.awt.Rectangle(12, 17, 319, 15));
+		this.setLayout(null);
+		this.setSize(new java.awt.Dimension(380, 214));
+		this.add(jLabel, null);
+		this.add(getJTextFieldPath(), null);
+		this.add(getJButtonSelectPath(), null);
 
-        this.add(getChooserPanel(), null);
-        setFinishButtonEnabled(false);
+		this.add(getChooserPanel(), null);
+		setFinishButtonEnabled(false);
 	}
 
 	/**
 	 * This method initializes jTextFieldPath
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getJTextFieldPath() {
 		if (jTextFieldPath == null) {
 			jTextFieldPath = new JTextField();
-			jTextFieldPath.setPreferredSize(new java.awt.Dimension(210,20));
-			jTextFieldPath.setBounds(new java.awt.Rectangle(12,38,319,23));
+			jTextFieldPath.setPreferredSize(new java.awt.Dimension(210, 20));
+			jTextFieldPath.setBounds(new java.awt.Rectangle(12, 38, 319, 23));
 			jTextFieldPath.addKeyListener(new java.awt.event.KeyAdapter() {
 				public void keyReleased(KeyEvent arg0) {
 					if (!jTextFieldPath.getText().equals(""))
@@ -88,42 +87,49 @@ public class FileBasedPanel extends JWizardPanel {
 
 	/**
 	 * This method initializes jButtonSelectPath
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getJButtonSelectPath() {
 		if (jButtonSelectPath == null) {
 			jButtonSelectPath = new JButton();
 			jButtonSelectPath.setText("...");
-			jButtonSelectPath.setBounds(new java.awt.Rectangle(332,38,32,22));
-			jButtonSelectPath.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					
-		            JFileChooser jfc = new JFileChooser();
-		            jfc.setAcceptAllFileFilterUsed(false);
-		            if ( fileExt.equals("shp") ) {
-		            	SimpleFileFilter filterShp = new SimpleFileFilter(fileExt, PluginServices.getText(this,"shp_files"));
-		            	jfc.setFileFilter(filterShp);
-		            } else {
-		            	SimpleFileFilter filterShp = new SimpleFileFilter(fileExt, PluginServices.getText(this,"file")+" "+fileExt);
-		            	jfc.setFileFilter(filterShp);
-		            }
-		            
-		            if (jfc.showSaveDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
-		        		    File newFile = jfc.getSelectedFile();
-		        		    String path = newFile.getAbsolutePath();
-		        		    if (!(path.toLowerCase().endsWith("." + fileExt)))
-		        		    {
-		        		    	path = path + "." + fileExt;
-		        		    }
-		        		    jTextFieldPath.setText(path);
-		        		    setFinishButtonEnabled(true);
-		            }else{
-		            	setFinishButtonEnabled(false);
-		            }
+			jButtonSelectPath
+					.setBounds(new java.awt.Rectangle(332, 38, 32, 22));
+			jButtonSelectPath
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
 
-				}
-			});
+							JFileChooser jfc = new JFileChooser();
+							jfc.setAcceptAllFileFilterUsed(false);
+							if (fileExt.equals("shp")) {
+								SimpleFileFilter filterShp = new SimpleFileFilter(
+										fileExt, PluginServices.getText(this,
+												"shp_files"));
+								jfc.setFileFilter(filterShp);
+							} else {
+								SimpleFileFilter filterShp = new SimpleFileFilter(
+										fileExt, PluginServices.getText(this,
+												"file") + " " + fileExt);
+								jfc.setFileFilter(filterShp);
+							}
+
+							if (jfc.showSaveDialog((Component) PluginServices
+									.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
+								File newFile = jfc.getSelectedFile();
+								String path = newFile.getAbsolutePath();
+								if (!(path.toLowerCase()
+										.endsWith("." + fileExt))) {
+									path = path + "." + fileExt;
+								}
+								jTextFieldPath.setText(path);
+								setFinishButtonEnabled(true);
+							} else {
+								setFinishButtonEnabled(false);
+							}
+
+						}
+					});
 		}
 		return jButtonSelectPath;
 	}
@@ -133,39 +139,44 @@ public class FileBasedPanel extends JWizardPanel {
 	}
 
 	/**
-	 * Use it to set the extension of the file you want to receive.
-	 * (Without . : Example: for shps: shp)
+	 * Use it to set the extension of the file you want to receive. (Without . :
+	 * Example: for shps: shp)
+	 * 
 	 * @param extension
 	 */
-	public void setFileExtension(String extension)
-	{
+	public void setFileExtension(String extension) {
 		this.fileExt = extension;
 	}
 
 	/**
 	 * This method initializes chooserPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private CRSSelectPanel getChooserPanel() {
 		if (crsSelectPanel == null) {
-			crsSelectPanel = CRSSelectPanel.getPanel(AddLayerDialog.getLastCrs());
-			crsSelectPanel.setBounds(new java.awt.Rectangle(16,98,348,44));
-			IWindow view= PluginServices.getMDIManager().getActiveWindow();
-			if (view instanceof com.iver.cit.gvsig.project.documents.view.gui.View){
-				if (((com.iver.cit.gvsig.project.documents.view.gui.View)view).getMapControl().getMapContext().getLayers().getLayersCount()!=0){
+			crsSelectPanel = CRSSelectPanel.getPanel(AddLayerDialog
+					.getLastCrs());
+			crsSelectPanel.setBounds(new java.awt.Rectangle(16, 98, 348, 44));
+			IWindow view = PluginServices.getMDIManager().getActiveWindow();
+			if (view instanceof com.iver.cit.gvsig.project.documents.view.gui.View) {
+				if (((com.iver.cit.gvsig.project.documents.view.gui.View) view)
+						.getMapControl().getMapContext().getLayers()
+						.getLayersCount() != 0) {
 					crsSelectPanel.getJBtnChangeProj().setEnabled(false);
 				}
 			}
-			crsSelectPanel.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-			        if (crsSelectPanel.isOkPressed()) {
-			        	AddLayerDialog.setLastCrs(crsSelectPanel.getCurrentCrs());
-			        }
-				}
-			});
+			crsSelectPanel
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							if (crsSelectPanel.isOkPressed()) {
+								AddLayerDialog.setLastCrs(crsSelectPanel
+										.getCurrentCrs());
+							}
+						}
+					});
 		}
 		return crsSelectPanel;
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

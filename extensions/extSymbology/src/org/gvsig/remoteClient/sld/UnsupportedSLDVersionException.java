@@ -39,21 +39,20 @@
  *   dac@iver.es
  */
 package org.gvsig.remoteClient.sld;
+
 /**
- * Implements an exception that occurs wheen a version of 
- * a SLD specification is not supported and the user is trying to 
- * use it.
+ * Implements an exception that occurs wheen a version of a SLD specification is
+ * not supported and the user is trying to use it.
  * 
  * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
- *
+ * 
  */
 public class UnsupportedSLDVersionException extends Exception {
 
-	
 	private static final long serialVersionUID = 1L;
 
 	public UnsupportedSLDVersionException(String version) {
-		super("SLD version "+version+" is not yet supported.");
+		super("SLD version " + version + " is not yet supported.");
 	}
 
 }

@@ -64,31 +64,37 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
 /**
  * This class writes the gml:description tag. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;gml:description&gt;GML tag desciption&lt;/gml:description&gt;
  * </code>
  * </pre>
+ * 
  * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class DescriptionWriter {
-	
+
 	/**
 	 * It writes a gml:description tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param description
-	 * Description to write
+	 *            Description to write
 	 * @throws IOException
 	 */
-	public void write(IXmlStreamWriter writer,GPEGmlWriterHandlerImplementor handler, String description) throws IOException{
-		if (description != null){
+	public void write(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler, String description)
+			throws IOException {
+		if (description != null) {
 			writer.writeStartElement(GMLTags.GML_DESCRIPTION);
-			writer.writeValue(description);		
-			writer.writeEndElement();			
+			writer.writeValue(description);
+			writer.writeEndElement();
 		}
 	}
 }

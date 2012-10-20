@@ -57,9 +57,9 @@ import org.gvsig.gpe.writer.schemas.GPENotSupportedChildLayerTest;
 public class GMLNotSupportedChildLayerTest extends
 		GPENotSupportedChildLayerTest {
 
-
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEParserClass()
 	 */
 	public Class getGPEParserClass() {
@@ -68,6 +68,7 @@ public class GMLNotSupportedChildLayerTest extends
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEWriterHandlerClass()
 	 */
 	public Class getGPEWriterHandlerClass() {

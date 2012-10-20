@@ -49,36 +49,40 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.cit.gvsig.addlayer.fileopen.FileOpenWizard;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
+
 /**
  * Clase que maneja los eventos del panel BandSetupPanel. Gestiona el añadir o
  * eliminar ficheros de la lista y contiene las acciones a realizar cuando en
  * panel registrable se pulsa aceptar, aplicar o cancelar.
- *
+ * 
  * @author Nacho Brodin (brodin_ign@gva.es)
  */
 public class BandSelectorListener implements ActionListener {
-	private BandSelectorPanel     bandSetupPanel = null;
-	private JFileChooser          fileChooser    = null;
-	private FLayer                fLayer         = null;
-	private IRasterDataset        dataset        = null;
-	private IRasterProperties     prop           = null;
-	private IRasterRendering      render         = null;
-	private boolean               enabled        = true;
+	private BandSelectorPanel bandSetupPanel = null;
+	private JFileChooser fileChooser = null;
+	private FLayer fLayer = null;
+	private IRasterDataset dataset = null;
+	private IRasterProperties prop = null;
+	private IRasterRendering render = null;
+	private boolean enabled = true;
 
 	/**
 	 * Número de bandas.
 	 */
-	protected int                 nbands         = 0;
+	protected int nbands = 0;
 
 	/**
 	 * Lista de geoRasterDataset correspondiente a los ficheros de bandas
 	 */
-	protected RasterDataset[]     grd            = null;
+	protected RasterDataset[] grd = null;
 
 	/**
 	 * Constructor
-	 * @param bs Panel del selector de bandas
-	 * @param lyr Capa raster
+	 * 
+	 * @param bs
+	 *            Panel del selector de bandas
+	 * @param lyr
+	 *            Capa raster
 	 */
 	public BandSelectorListener(BandSelectorPanel bs) {
 		this.bandSetupPanel = bs;
@@ -88,9 +92,10 @@ public class BandSelectorListener implements ActionListener {
 	}
 
 	/**
-	 * Comprobar si la asignacion de color es correcta para las 4 bandas. No puede
-	 * existir una banda con distintas interpretaciones de color. Se comprueban dos
-	 * casos, asignaciones en escala de grises o en RGB.
+	 * Comprobar si la asignacion de color es correcta para las 4 bandas. No
+	 * puede existir una banda con distintas interpretaciones de color. Se
+	 * comprueban dos casos, asignaciones en escala de grises o en RGB.
+	 * 
 	 * @param r
 	 * @param g
 	 * @param b
@@ -98,7 +103,7 @@ public class BandSelectorListener implements ActionListener {
 	 * @return
 	 */
 	private boolean isCorrectAssignedBand(int r, int g, int b, int a) {
-		// Si es gris es correcta la asignacion 
+		// Si es gris es correcta la asignacion
 		if ((r == g) && (r == b) && (r >= 0)) {
 			// Si el alpha esta asignado a la misma banda es incorrecto
 			if (r == a)
@@ -116,35 +121,40 @@ public class BandSelectorListener implements ActionListener {
 
 		return true;
 	}
-	
+
 	/**
 	 * Constructor
-	 * @param bs Panel del selector de bandas
-	 * @param lyr Capa raster
+	 * 
+	 * @param bs
+	 *            Panel del selector de bandas
+	 * @param lyr
+	 *            Capa raster
 	 */
 	public void init(IRasterDataset dset, IRasterProperties prop, FLayer lyr) {
-		//TODO: FUNCIONALIDAD: Cancelación para la selección de bandas
+		// TODO: FUNCIONALIDAD: Cancelación para la selección de bandas
 		this.dataset = dset;
 		this.prop = prop;
 		fLayer = lyr;
-		if(fLayer instanceof IRasterRendering)
-			render = (IRasterRendering)fLayer;
+		if (fLayer instanceof IRasterRendering)
+			render = (IRasterRendering) fLayer;
 	}
 
 	/**
-	 * Listener para la gestión de los botones de añadir, eliminar fichero y
-	 * el combo de selección de bandas.
+	 * Listener para la gestión de los botones de añadir, eliminar fichero y el
+	 * combo de selección de bandas.
 	 */
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource().equals(bandSetupPanel.getFileList().getJButtonAdd()))
 			addFileBand();
 
-		if (e.getSource().equals(bandSetupPanel.getFileList().getJButtonRemove()))
+		if (e.getSource().equals(
+				bandSetupPanel.getFileList().getJButtonRemove()))
 			delFileBand();
-		
+
 		if (e.getSource().equals(bandSetupPanel.getNumBandSelectorCombo())) {
-			String vBands = (String) bandSetupPanel.getNumBandSelectorCombo().getSelectedItem();
+			String vBands = (String) bandSetupPanel.getNumBandSelectorCombo()
+					.getSelectedItem();
 			if (vBands != null) {
 				if (vBands.compareTo("3") == 0)
 					bandSetupPanel.resetMode(3);
@@ -156,47 +166,62 @@ public class BandSelectorListener implements ActionListener {
 					bandSetupPanel.resetMode(1);
 			}
 		}
-				
+
 		if (e.getSource().equals(bandSetupPanel.getSaveButton())) {
 			int rBand = bandSetupPanel.getAssignedBand(RasterDataset.RED_BAND);
-			int gBand = bandSetupPanel.getAssignedBand(RasterDataset.GREEN_BAND);
+			int gBand = bandSetupPanel
+					.getAssignedBand(RasterDataset.GREEN_BAND);
 			int bBand = bandSetupPanel.getAssignedBand(RasterDataset.BLUE_BAND);
-			int aBand = bandSetupPanel.getAssignedBand(RasterDataset.ALPHA_BAND);
-			
+			int aBand = bandSetupPanel
+					.getAssignedBand(RasterDataset.ALPHA_BAND);
+
 			if (!isCorrectAssignedBand(rBand, gBand, bBand, aBand)) {
-				RasterToolsUtil.messageBoxError("combinacion_no_asignable", bandSetupPanel);
+				RasterToolsUtil.messageBoxError("combinacion_no_asignable",
+						bandSetupPanel);
 				return;
 			}
-			
-			RasterToolsUtil.messageBoxYesOrNot("color_interpretation_continue", this);
-			IRasterDataSource dataSource = ((FLyrRasterSE)fLayer).getDataSource();
-			if(dataSource == null) {
-				RasterToolsUtil.messageBoxError("error_carga_capa", bandSetupPanel);
+
+			RasterToolsUtil.messageBoxYesOrNot("color_interpretation_continue",
+					this);
+			IRasterDataSource dataSource = ((FLyrRasterSE) fLayer)
+					.getDataSource();
+			if (dataSource == null) {
+				RasterToolsUtil.messageBoxError("error_carga_capa",
+						bandSetupPanel);
 				return;
 			}
-			
+
 			DatasetColorInterpretation ci = dataSource.getColorInterpretation();
 			try {
 				// Combinación GRAY
 				if ((rBand == gBand) && (rBand == bBand) && (rBand >= 0)) {
-					for (int iBand = 0; iBand < bandSetupPanel.getARGBTable().getRowCount(); iBand++) {
-						ci.setColorInterpValue(iBand, DatasetColorInterpretation.UNDEF_BAND);
+					for (int iBand = 0; iBand < bandSetupPanel.getARGBTable()
+							.getRowCount(); iBand++) {
+						ci.setColorInterpValue(iBand,
+								DatasetColorInterpretation.UNDEF_BAND);
 					}
-					ci.setColorInterpValue(rBand, DatasetColorInterpretation.GRAY_BAND);
-					ci.setColorInterpValue(aBand, DatasetColorInterpretation.ALPHA_BAND);
+					ci.setColorInterpValue(rBand,
+							DatasetColorInterpretation.GRAY_BAND);
+					ci.setColorInterpValue(aBand,
+							DatasetColorInterpretation.ALPHA_BAND);
 				} else {
 					// Combinación RGB
-					for (int iBand = 0; iBand < bandSetupPanel.getARGBTable().getRowCount(); iBand++)
-						ci.setColorInterpValue(iBand, bandSetupPanel.getColorInterpretationByBand(iBand));
+					for (int iBand = 0; iBand < bandSetupPanel.getARGBTable()
+							.getRowCount(); iBand++)
+						ci.setColorInterpValue(iBand, bandSetupPanel
+								.getColorInterpretationByBand(iBand));
 				}
-				((FLyrRasterSE) fLayer).getDataSource().getDataset(0)[0].saveObjectToRmf(DatasetColorInterpretation.class, ci);
+				((FLyrRasterSE) fLayer).getDataSource().getDataset(0)[0]
+						.saveObjectToRmf(DatasetColorInterpretation.class, ci);
 			} catch (RmfSerializerException exc) {
-				RasterToolsUtil.messageBoxError("error_salvando_rmf", bandSetupPanel, exc);
+				RasterToolsUtil.messageBoxError("error_salvando_rmf",
+						bandSetupPanel, exc);
 			} catch (NotInitializeException exc) {
-				RasterToolsUtil.messageBoxError("table_not_initialize", bandSetupPanel, exc);
+				RasterToolsUtil.messageBoxError("table_not_initialize",
+						bandSetupPanel, exc);
 			}
 		}
-		
+
 		if (!RasterModule.autoRefreshView)
 			return;
 
@@ -205,6 +230,7 @@ public class BandSelectorListener implements ActionListener {
 
 	/**
 	 * Añade una banda al raster
+	 * 
 	 * @param e
 	 */
 	private void addFileBand() {
@@ -233,51 +259,73 @@ public class BandSelectorListener implements ActionListener {
 				// Comprobamos que el fichero no está
 				boolean exist = false;
 				for (int j = 0; j < ds.getDatasetCount(); j++) {
-					if (dataset.getDataSource().getDataset(j)[0].getFName().endsWith(files[i].getName()))
+					if (dataset.getDataSource().getDataset(j)[0].getFName()
+							.endsWith(files[i].getName()))
 						exist = true;
 				}
 				if (!exist) {
 					try {
-						Rectangle2D extentOrigin = prop.getFullRasterExtent().toRectangle2D();
+						Rectangle2D extentOrigin = prop.getFullRasterExtent()
+								.toRectangle2D();
 
-						RasterDataset geoRasterDataset = RasterDataset.open(prop.getCrs(), files[i].getAbsolutePath());
+						RasterDataset geoRasterDataset = RasterDataset.open(
+								prop.getCrs(), files[i].getAbsolutePath());
 						Extent extentNewFile = geoRasterDataset.getExtent();
 						nbands += geoRasterDataset.getBandCount();
 
-						// Comprobamos que el extent y tamaño del fichero añadido sea igual al
-						// fichero original. Si no es así no abrimos la capa y mostramos un aviso
+						// Comprobamos que el extent y tamaño del fichero
+						// añadido sea igual al
+						// fichero original. Si no es así no abrimos la capa y
+						// mostramos un aviso
 
-						double widthNewFile = (extentNewFile.getMax().getX() - extentNewFile.getMin().getX());
-						double heightNewFile = (extentNewFile.getMax().getY() - extentNewFile.getMin().getY());
+						double widthNewFile = (extentNewFile.getMax().getX() - extentNewFile
+								.getMin().getX());
+						double heightNewFile = (extentNewFile.getMax().getY() - extentNewFile
+								.getMin().getY());
 
-						if ((widthNewFile - extentOrigin.getWidth()) > 1.0 || (widthNewFile - extentOrigin.getWidth()) < -1.0 || (heightNewFile - extentOrigin.getHeight()) > 1.0
+						if ((widthNewFile - extentOrigin.getWidth()) > 1.0
+								|| (widthNewFile - extentOrigin.getWidth()) < -1.0
+								|| (heightNewFile - extentOrigin.getHeight()) > 1.0
 								|| (heightNewFile - extentOrigin.getHeight()) < -1.0) {
-							JOptionPane.showMessageDialog(null, PluginServices.getText(this, "extents_no_coincidentes"), "", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(null, PluginServices
+									.getText(this, "extents_no_coincidentes"),
+									"", JOptionPane.ERROR_MESSAGE);
 							continue;
 						}
 
-						if ((extentNewFile.getMax().getX() - extentNewFile.getMin().getX()) != extentOrigin.getWidth()
-								|| (extentNewFile.getMax().getY() - extentNewFile.getMin().getY()) != extentOrigin.getHeight()) {
-							JOptionPane.showMessageDialog(null, PluginServices.getText(this, "extents_no_coincidentes"), "", JOptionPane.ERROR_MESSAGE);
+						if ((extentNewFile.getMax().getX() - extentNewFile
+								.getMin().getX()) != extentOrigin.getWidth()
+								|| (extentNewFile.getMax().getY() - extentNewFile
+										.getMin().getY()) != extentOrigin
+										.getHeight()) {
+							JOptionPane.showMessageDialog(null, PluginServices
+									.getText(this, "extents_no_coincidentes"),
+									"", JOptionPane.ERROR_MESSAGE);
 							continue;
 						}
 
 						geoRasterDataset.close();
 
 					} catch (Exception exc) {
-						RasterToolsUtil.messageBoxError("addband_error", bandSetupPanel, exc);
+						RasterToolsUtil.messageBoxError("addband_error",
+								bandSetupPanel, exc);
 					}
 
 					// Lo añadimos a la capa
 					try {
 						dataset.addFile(files[i].getAbsolutePath());
 					} catch (NotSupportedExtensionException e) {
-						RasterToolsUtil.messageBoxError("addband_error", bandSetupPanel, e);
+						RasterToolsUtil.messageBoxError("addband_error",
+								bandSetupPanel, e);
 					} catch (RasterDriverException e) {
-						RasterToolsUtil.messageBoxError("addband_error", bandSetupPanel, e);
+						RasterToolsUtil.messageBoxError("addband_error",
+								bandSetupPanel, e);
 					}
 				} else {
-					RasterToolsUtil.messageBoxError( PluginServices.getText( this, "fichero_existe") + ": " + files[i].getAbsolutePath(), bandSetupPanel);
+					RasterToolsUtil.messageBoxError(
+							PluginServices.getText(this, "fichero_existe")
+									+ ": " + files[i].getAbsolutePath(),
+							bandSetupPanel);
 					return;
 				}
 			}
@@ -286,7 +334,8 @@ public class BandSelectorListener implements ActionListener {
 			try {
 				bandSetupPanel.addFiles(ds);
 			} catch (NotInitializeException e) {
-				RasterToolsUtil.messageBoxError("table_not_initialize", this, e);
+				RasterToolsUtil
+						.messageBoxError("table_not_initialize", this, e);
 			}
 		}
 	}
@@ -294,13 +343,14 @@ public class BandSelectorListener implements ActionListener {
 	/**
 	 * Elimina una banda del raster. Si queda solo un fichero o no se ha
 	 * seleccionado ninguna banda no hace nada.
-	 *
+	 * 
 	 * @param e
 	 */
 	private void delFileBand() {
-		Object[] objects = bandSetupPanel.getFileList().getJList().getSelectedValues();
+		Object[] objects = bandSetupPanel.getFileList().getJList()
+				.getSelectedValues();
 
-		for (int i = objects.length - 1; i >=0; i--) {
+		for (int i = objects.length - 1; i >= 0; i--) {
 			if (bandSetupPanel.getFileList().getNFiles() > 1) {
 				String pathName = objects[i].toString();
 				RasterDataset geoRasterFile = null;
@@ -329,25 +379,29 @@ public class BandSelectorListener implements ActionListener {
 	}
 
 	/**
-	 * Asigna la posición de las bandas en el rederizado basandose en la selección
-	 * hecho en la tabla de bandas.
+	 * Asigna la posición de las bandas en el rederizado basandose en la
+	 * selección hecho en la tabla de bandas.
 	 */
 	public void setNewBandsPositionInRendering() {
 		if (prop != null && prop.getRender() != null) {
-			if(render != null) {
-				render.setRenderBands(new int[]{bandSetupPanel.getAssignedBand(RasterDataset.RED_BAND), 
-												bandSetupPanel.getAssignedBand(RasterDataset.GREEN_BAND), 
-												bandSetupPanel.getAssignedBand(RasterDataset.BLUE_BAND)});
-				int alphaBand = bandSetupPanel.getAssignedBand(RasterDataset.ALPHA_BAND);
+			if (render != null) {
+				render.setRenderBands(new int[] {
+						bandSetupPanel.getAssignedBand(RasterDataset.RED_BAND),
+						bandSetupPanel
+								.getAssignedBand(RasterDataset.GREEN_BAND),
+						bandSetupPanel.getAssignedBand(RasterDataset.BLUE_BAND) });
+				int alphaBand = bandSetupPanel
+						.getAssignedBand(RasterDataset.ALPHA_BAND);
 				// Ultima transparencia aplicada en el renderizador
 				GridTransparency gt = render.getRenderTransparency();
-				if(gt != null) 
+				if (gt != null)
 					gt.setTransparencyBand(alphaBand);
 
 				// Transparencia del dataset
-				if(((FLyrRasterSE) fLayer).getDataSource() != null) {
-					Transparency t = ((FLyrRasterSE) fLayer).getDataSource().getTransparencyFilesStatus();
-					if(t != null)
+				if (((FLyrRasterSE) fLayer).getDataSource() != null) {
+					Transparency t = ((FLyrRasterSE) fLayer).getDataSource()
+							.getTransparencyFilesStatus();
+					if (t != null)
 						t.setTransparencyBand(alphaBand);
 				}
 			}
@@ -357,7 +411,9 @@ public class BandSelectorListener implements ActionListener {
 
 	/**
 	 * Activa o desactiva la acción del panel
-	 * @param enabled true para activa y false para desactivar.
+	 * 
+	 * @param enabled
+	 *            true para activa y false para desactivar.
 	 */
 	public void setEnabledPanelAction(boolean enabled) {
 		this.enabled = enabled;

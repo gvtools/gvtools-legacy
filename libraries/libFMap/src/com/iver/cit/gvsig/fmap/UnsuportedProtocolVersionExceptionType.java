@@ -42,71 +42,65 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: UnsuportedProtocolVersionExceptionType.java 7454 2006-09-21 17:18:31Z azabala $
-* $Log$
-* Revision 1.1  2006-09-21 17:18:31  azabala
-* First version in cvs
-*
-*
-*/
+ *
+ * $Id: UnsuportedProtocolVersionExceptionType.java 7454 2006-09-21 17:18:31Z azabala $
+ * $Log$
+ * Revision 1.1  2006-09-21 17:18:31  azabala
+ * First version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap;
 
 import java.net.URL;
 
 import com.iver.utiles.ExceptionDescription;
 
-public class UnsuportedProtocolVersionExceptionType extends ExceptionDescription {
+public class UnsuportedProtocolVersionExceptionType extends
+		ExceptionDescription {
 
 	URL url;
 	private String layerName;
 	private String driverName;
-	
-	
-	public UnsuportedProtocolVersionExceptionType(){
+
+	public UnsuportedProtocolVersionExceptionType() {
 		super(20, "Version de protocolo OGC no soportada");
 	}
-	
-	
+
 	public String getHtmlErrorMessage() {
 		String message = "<p><b>Version de protocolo no soportada</b></p><br>";
-		message += "No se puede acceder al servicio "+
-				url.toString()+
-				" debido a que la versión del protocolo no está soportada";
+		message += "No se puede acceder al servicio " + url.toString()
+				+ " debido a que la versión del protocolo no está soportada";
 		message += "<b>Información adicional:</b><br>";
 		message += "<ul>";
-		message += "<li>Capa: "+getLayerName()+"</li>";
-		message += "<li>Driver: "+getDriverName()+"</li>";
+		message += "<li>Capa: " + getLayerName() + "</li>";
+		message += "<li>Driver: " + getDriverName() + "</li>";
 		message += "</ul>";
 		return message;
 	}
-	
+
 	public String getDriverName() {
 		return driverName;
 	}
-	
-	public void setDriverName(String driverName){
+
+	public void setDriverName(String driverName) {
 		this.driverName = driverName;
 	}
-
 
 	public String getLayerName() {
 		return layerName;
 	}
-	
-	public void setLayerName(String layerName){
+
+	public void setLayerName(String layerName) {
 		this.layerName = layerName;
 	}
-
 
 	public URL getUrl() {
 		return url;
 	}
-
 
 	public void setUrl(URL url) {
 		this.url = url;
 	}
 
 }
-

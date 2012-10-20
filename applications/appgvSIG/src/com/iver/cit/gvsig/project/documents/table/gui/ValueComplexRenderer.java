@@ -14,38 +14,45 @@ import com.iver.andami.PluginServices;
 
 /**
  * ComplexValue Renderer.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 class ValueComplexRenderer extends JButton implements TableCellRenderer {
-    private final Border grayBorder = BorderFactory.createLineBorder(Color.darkGray);
+	private final Border grayBorder = BorderFactory
+			.createLineBorder(Color.darkGray);
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param table DOCUMENT ME!
-     * @param value DOCUMENT ME!
-     * @param isSelected DOCUMENT ME!
-     * @param hasFocus DOCUMENT ME!
-     * @param row DOCUMENT ME!
-     * @param col DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public Component getTableCellRendererComponent(javax.swing.JTable table,
-        Object value, boolean isSelected, boolean hasFocus, int row, int col) {
-        setText(PluginServices.getText(this, "compleja"));
-        setForeground(Color.darkGray);
-        setOpaque(true);
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param table
+	 *            DOCUMENT ME!
+	 * @param value
+	 *            DOCUMENT ME!
+	 * @param isSelected
+	 *            DOCUMENT ME!
+	 * @param hasFocus
+	 *            DOCUMENT ME!
+	 * @param row
+	 *            DOCUMENT ME!
+	 * @param col
+	 *            DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public Component getTableCellRendererComponent(javax.swing.JTable table,
+			Object value, boolean isSelected, boolean hasFocus, int row, int col) {
+		setText(PluginServices.getText(this, "compleja"));
+		setForeground(Color.darkGray);
+		setOpaque(true);
 
-        if (isSelected) {
-            setBackground(Color.yellow);
-        } else {
-            setBackground(UIManager.getColor("Button.background"));
-        }
+		if (isSelected) {
+			setBackground(Color.yellow);
+		} else {
+			setBackground(UIManager.getColor("Button.background"));
+		}
 
-        setBorder(grayBorder);
+		setBorder(grayBorder);
 
-        return this;
-    }
+		return this;
+	}
 }

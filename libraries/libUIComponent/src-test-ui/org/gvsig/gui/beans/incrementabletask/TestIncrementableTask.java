@@ -26,20 +26,22 @@ import org.gvsig.gui.beans.progresspanel.LogControl;
 
 /**
  * Test del IncrementableTask
- *
+ * 
  * @version 27/05/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class TestIncrementableTask {
-	class ClassProcess implements Runnable, IIncrementable, IncrementableListener {
+	class ClassProcess implements Runnable, IIncrementable,
+			IncrementableListener {
 		int i = 0;
 		long j = 0;
 		LogControl log = new LogControl();
 		IncrementableTask incrementableTask = null;
 
 		private volatile Thread blinker;
-//		private boolean ended = false;
-//		private boolean threadSuspended = false;
+
+		// private boolean ended = false;
+		// private boolean threadSuspended = false;
 
 		public ClassProcess() {
 		}
@@ -50,7 +52,7 @@ public class TestIncrementableTask {
 		}
 
 		public synchronized void stop() {
-//			ended = true;
+			// ended = true;
 			blinker = null;
 			notify();
 		}
@@ -63,7 +65,8 @@ public class TestIncrementableTask {
 			try {
 				for (long k = 0; k <= 8000; k++)
 					for (long n = 0; n <= 5000; n++) {
-						for (long l = 0; l <= 100; l++);
+						for (long l = 0; l <= 100; l++)
+							;
 						if (Thread.currentThread().isInterrupted())
 							throw new InterruptedException();
 					}
@@ -79,27 +82,17 @@ public class TestIncrementableTask {
 			} catch (InterruptedException e1) {
 				System.out.println("Se ha salido");
 			}
-/*
-			for (long k=0; k<=65535; k++)
-				for (long n=0; n<=5000; n++);
-			for (j=0; j<=65535; j++) {
-				if (Thread.currentThread().isInterrupted())
-					break;
-				for (long i=0; i<=65535; i++);
-				log.replaceLastLine(j + "");
-				System.out.println(Thread.currentThread().isInterrupted());
-				if ((j%1000)==0) {
-					log.addLine(j + "");
-				}
-				synchronized(this) {
-					while (threadSuspended && !Thread.currentThread().isInterrupted())
-						try {
-							wait(500);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-				}
-			}*/
+			/*
+			 * for (long k=0; k<=65535; k++) for (long n=0; n<=5000; n++); for
+			 * (j=0; j<=65535; j++) { if
+			 * (Thread.currentThread().isInterrupted()) break; for (long i=0;
+			 * i<=65535; i++); log.replaceLastLine(j + "");
+			 * System.out.println(Thread.currentThread().isInterrupted()); if
+			 * ((j%1000)==0) { log.addLine(j + ""); } synchronized(this) { while
+			 * (threadSuspended && !Thread.currentThread().isInterrupted()) try
+			 * { wait(500); } catch (InterruptedException e) {
+			 * e.printStackTrace(); } } }
+			 */
 			incrementableTask.processFinalize();
 		}
 
@@ -112,7 +105,7 @@ public class TestIncrementableTask {
 		}
 
 		public int getPercent() {
-			return (int) ((j*100)/65535);
+			return (int) ((j * 100) / 65535);
 		}
 
 		public String getTitle() {
@@ -124,22 +117,21 @@ public class TestIncrementableTask {
 		}
 
 		public void actionCanceled(IncrementableEvent e) {
-//			ended = true;
+			// ended = true;
 			blinker.interrupt();
 		}
 
 		public void actionResumed(IncrementableEvent e) {
-//			threadSuspended = false;
+			// threadSuspended = false;
 		}
 
 		public void actionSuspended(IncrementableEvent e) {
-//			threadSuspended = true;
+			// threadSuspended = true;
 		}
-
 
 		public void setLabel(String label) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		public boolean isSuspended() {
@@ -149,12 +141,12 @@ public class TestIncrementableTask {
 
 		public void resume() {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		public void suspend() {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		public boolean isCancelable() {
@@ -164,12 +156,12 @@ public class TestIncrementableTask {
 
 		public void process() throws InterruptedException, Exception {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		public void setCancelable(boolean b) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		public boolean isPausable() {
@@ -179,7 +171,7 @@ public class TestIncrementableTask {
 
 		public void setPausable(boolean b) {
 			// TODO Auto-generated method stub
-			
+
 		}
 	}
 
@@ -192,7 +184,8 @@ public class TestIncrementableTask {
 
 	private void initialize() {
 		classProcess = new ClassProcess();
-		IncrementableTask incrementableTask = new IncrementableTask(classProcess);
+		IncrementableTask incrementableTask = new IncrementableTask(
+				classProcess);
 		classProcess.setIncrementableTask(incrementableTask);
 		incrementableTask.showWindow();
 		incrementableTask.addIncrementableListener(classProcess);

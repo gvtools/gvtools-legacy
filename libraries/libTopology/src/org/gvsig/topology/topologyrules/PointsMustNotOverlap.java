@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.topologyrules;
 
 import java.awt.Color;
@@ -75,15 +75,15 @@ import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
-
 /**
  * These rule checks that in a point layer there won't be points at a distance
  * lower than the cluster tolerance.
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
-public class PointsMustNotOverlap extends PolygonMustNotOverlap{
-	
+public class PointsMustNotOverlap extends PolygonMustNotOverlap {
+
 	static final String RULE_NAME = Messages.getText("points_must_not_overlap");
 
 	private static List<ITopologyErrorFix> automaticErrorFixes = new ArrayList<ITopologyErrorFix>();
@@ -93,8 +93,8 @@ public class PointsMustNotOverlap extends PolygonMustNotOverlap{
 
 	private static final Color DEFAULT_ERROR_COLOR = Color.CYAN;
 
-	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = 
-		(MultiShapeSymbol) SymbologyFactory.createDefaultSymbolByShapeType(FShape.MULTI, DEFAULT_ERROR_COLOR);
+	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = (MultiShapeSymbol) SymbologyFactory
+			.createDefaultSymbolByShapeType(FShape.MULTI, DEFAULT_ERROR_COLOR);
 	static {
 		DEFAULT_ERROR_SYMBOL.setDescription(RULE_NAME);
 		DEFAULT_ERROR_SYMBOL.setSize(5);
@@ -111,7 +111,8 @@ public class PointsMustNotOverlap extends PolygonMustNotOverlap{
 	 * @param destinationLyr
 	 * @param clusterTolerance
 	 */
-	public PointsMustNotOverlap(Topology topology, FLyrVect originLyr, double clusterTolerance) {
+	public PointsMustNotOverlap(Topology topology, FLyrVect originLyr,
+			double clusterTolerance) {
 		super(topology, originLyr, clusterTolerance);
 	}
 
@@ -126,7 +127,8 @@ public class PointsMustNotOverlap extends PolygonMustNotOverlap{
 	public void checkPreconditions() throws TopologyRuleDefinitionException {
 		try {
 			int shapeType = this.originLyr.getShapeType();
-			if (FGeometryUtil.getDimensions(shapeType) != 0 && shapeType != FShape.MULTI)
+			if (FGeometryUtil.getDimensions(shapeType) != 0
+					&& shapeType != FShape.MULTI)
 				throw new TopologyRuleDefinitionException(
 						"PointsMustNotOverlap requires a point geometry type");
 		} catch (ReadDriverException e) {
@@ -140,14 +142,11 @@ public class PointsMustNotOverlap extends PolygonMustNotOverlap{
 		IGeometry geom = feature.getGeometry();
 		int shapeType = geom.getGeometryType();
 		int numDimensions = FGeometryUtil.getDimensions(shapeType);
-		if(numDimensions != 0)
+		if (numDimensions != 0)
 			return;
 		process(geom, feature);
 	}
 
-	
-	
-	
 	protected void process(IGeometry geometry, IFeature feature) {
 		Geometry jtsGeom = NewFConverter.toJtsGeometry(geometry);
 		Point[] points = JtsUtil.extractPoints(jtsGeom);
@@ -165,40 +164,41 @@ public class PointsMustNotOverlap extends PolygonMustNotOverlap{
 			double maxX = env1.getMaxX() + delta;
 			double maxY = env1.getMaxY() + delta;
 
-			Rectangle2D rect = new Rectangle2D.Double(minX, 
-													  minY, 
-													  maxX - minX,
-													  maxY - minY);
+			Rectangle2D rect = new Rectangle2D.Double(minX, minY, maxX - minX,
+					maxY - minY);
 
 			try {
-				IFeatureIterator neighbours = 
-					originLyr.getSource().getFeatureIterator(rect, null, null, false);
+				IFeatureIterator neighbours = originLyr.getSource()
+						.getFeatureIterator(rect, null, null, false);
 				while (neighbours.hasNext()) {
 					IFeature neighbourFeature = neighbours.next();
-					if (neighbourFeature.getID().equalsIgnoreCase(feature.getID()))
+					if (neighbourFeature.getID().equalsIgnoreCase(
+							feature.getID()))
 						continue;
 
 					IGeometry geom2 = neighbourFeature.getGeometry();
 					Rectangle2D rect2 = geom2.getBounds2D();
 					if (rect.intersects(rect2)) {
 						Geometry jts2 = NewFConverter.toJtsGeometry(geom2);
-						Point[] geometriesToProcess = JtsUtil.extractPoints(jts2);
+						Point[] geometriesToProcess = JtsUtil
+								.extractPoints(jts2);
 
 						for (int j = 0; j < geometriesToProcess.length; j++) {
 							Point point2 = geometriesToProcess[j];
-							if (point2.getCoordinate().distance(point.getCoordinate()) <= getClusterTolerance() ) {
+							if (point2.getCoordinate().distance(
+									point.getCoordinate()) <= getClusterTolerance()) {
 								ComputedTopologyError errorEntry = new ComputedTopologyError();
 								errorEntry.firstFeature = feature.getID();
-								errorEntry.secondFeature = neighbourFeature.getID();
+								errorEntry.secondFeature = neighbourFeature
+										.getID();
 
 								if (this.errorEntries.get(errorEntry) == null) {
-									IGeometry errorGeom = NewFConverter.toFMap(point);
-									TopologyError topologyError = new TopologyError(errorGeom, 
-																errorContainer.getErrorFid(), 
-																this,
-																feature, 
-																neighbourFeature, 
-																topology);
+									IGeometry errorGeom = NewFConverter
+											.toFMap(point);
+									TopologyError topologyError = new TopologyError(
+											errorGeom,
+											errorContainer.getErrorFid(), this,
+											feature, neighbourFeature, topology);
 									addTopologyError(topologyError);
 									errorEntries.put(errorEntry, errorEntry);
 								}// if
@@ -214,7 +214,6 @@ public class PointsMustNotOverlap extends PolygonMustNotOverlap{
 
 		}
 	}
-
 
 	public boolean acceptsOriginLyr(FLyrVect lyr) {
 		try {
@@ -241,7 +240,8 @@ public class PointsMustNotOverlap extends PolygonMustNotOverlap{
 	public void setErrorSymbol(MultiShapeSymbol errorSymbol) {
 		this.errorSymbol = errorSymbol;
 	}
-	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError){
+
+	public ITopologyErrorFix getDefaultFixFor(TopologyError topologyError) {
 		return automaticErrorFixes.get(0);
 	}
 

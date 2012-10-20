@@ -28,30 +28,31 @@ import org.gvsig.raster.datastruct.Histogram;
 import org.gvsig.raster.datastruct.serializer.HistogramRmfSerializer;
 
 /**
- * Test para comprobar la construcción de un histograma desde un XML. Este test calcula el histograma
- * de un raster y lo convierte a XML. Después creará un objeto Histogram a partir del XML. Finalmente
- * se comparará el Histograma original con el final.
+ * Test para comprobar la construcción de un histograma desde un XML. Este test
+ * calcula el histograma de un raster y lo convierte a XML. Después creará un
+ * objeto Histogram a partir del XML. Finalmente se comparará el Histograma
+ * original con el final.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class TestHistogramSerializer extends TestCase {
-	
+
 	private String baseDir = "./test-images/";
 	private String path = baseDir + "miniraster30x30.jp2";
-	private RasterDataset f = null;	
-	
+	private RasterDataset f = null;
+
 	static {
 		RasterLibrary.wakeUp();
 	}
-	
+
 	public void start() {
 		this.setUp();
 		this.testStack();
 	}
-	
+
 	public void setUp() {
 		System.err.println("TestHistogramSerializer running...");
-		//int[] drawableBands = {0, 1, 2};
+		// int[] drawableBands = {0, 1, 2};
 		try {
 			f = RasterDataset.open(null, path);
 		} catch (NotSupportedExtensionException e) {
@@ -61,9 +62,9 @@ public class TestHistogramSerializer extends TestCase {
 			e.printStackTrace();
 			return;
 		}
-		
+
 	}
-	
+
 	public void testStack() {
 		DatasetHistogram dsh = f.getHistogram();
 		Histogram hist1 = null;
@@ -78,22 +79,23 @@ public class TestHistogramSerializer extends TestCase {
 		}
 		HistogramRmfSerializer serial1 = new HistogramRmfSerializer(hist1);
 		String s = serial1.write();
-		//System.out.println(s);
-		
+		// System.out.println(s);
+
 		HistogramRmfSerializer serial2 = new HistogramRmfSerializer();
 		try {
 			serial2.read(s);
 		} catch (ParsingException e) {
 			e.printStackTrace();
 		}
-		Histogram hist2 = (Histogram)serial2.getResult();
-		
+		Histogram hist2 = (Histogram) serial2.getResult();
+
 		assertEquals(hist1.getNumBands(), hist2.getNumBands());
 		for (int iBand = 0; iBand < hist1.getNumBands(); iBand++) {
-			for(int i = 0; i < hist1.getNumValues(); i++) 
-				assertEquals((long)hist1.getHistogramValue(iBand, i), (long)hist2.getHistogramValue(iBand, i));	
+			for (int i = 0; i < hist1.getNumValues(); i++)
+				assertEquals((long) hist1.getHistogramValue(iBand, i),
+						(long) hist2.getHistogramValue(iBand, i));
 		}
-		
+
 	}
-	
+
 }

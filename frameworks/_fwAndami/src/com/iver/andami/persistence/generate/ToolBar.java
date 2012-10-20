@@ -47,8 +47,8 @@
  */
 package com.iver.andami.persistence.generate;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
 import org.exolab.castor.xml.Marshaller;
@@ -57,161 +57,154 @@ import org.exolab.castor.xml.Unmarshaller;
 /**
  * Class ToolBar.
  * 
- * @version $Revision: 5275 $ $Date: 2006-05-19 08:41:50 +0200 (Fri, 19 May 2006) $
+ * @version $Revision: 5275 $ $Date: 2006-05-19 08:41:50 +0200 (Fri, 19 May
+ *          2006) $
  */
 public class ToolBar implements java.io.Serializable {
 
+	// --------------------------/
+	// - Class/Member Variables -/
+	// --------------------------/
 
-      //--------------------------/
-     //- Class/Member Variables -/
-    //--------------------------/
+	/**
+	 * Field _xPosition
+	 */
+	private java.lang.String _xPosition;
 
-    /**
-     * Field _xPosition
-     */
-    private java.lang.String _xPosition;
+	/**
+	 * Field _yPosition
+	 */
+	private java.lang.String _yPosition;
 
-    /**
-     * Field _yPosition
-     */
-    private java.lang.String _yPosition;
+	/**
+	 * Field _name
+	 */
+	private java.lang.String _name;
 
-    /**
-     * Field _name
-     */
-    private java.lang.String _name;
+	// ----------------/
+	// - Constructors -/
+	// ----------------/
 
+	public ToolBar() {
+		super();
+	} // -- com.iver.andami.persistence.generate.ToolBar()
 
-      //----------------/
-     //- Constructors -/
-    //----------------/
+	// -----------/
+	// - Methods -/
+	// -----------/
 
-    public ToolBar() {
-        super();
-    } //-- com.iver.andami.persistence.generate.ToolBar()
+	/**
+	 * Returns the value of field 'name'.
+	 * 
+	 * @return the value of field 'name'.
+	 */
+	public java.lang.String getName() {
+		return this._name;
+	} // -- java.lang.String getName()
 
+	/**
+	 * Returns the value of field 'xPosition'.
+	 * 
+	 * @return the value of field 'xPosition'.
+	 */
+	public java.lang.String getXPosition() {
+		return this._xPosition;
+	} // -- java.lang.String getXPosition()
 
-      //-----------/
-     //- Methods -/
-    //-----------/
+	/**
+	 * Returns the value of field 'yPosition'.
+	 * 
+	 * @return the value of field 'yPosition'.
+	 */
+	public java.lang.String getYPosition() {
+		return this._yPosition;
+	} // -- java.lang.String getYPosition()
 
-    /**
-     * Returns the value of field 'name'.
-     * 
-     * @return the value of field 'name'.
-     */
-    public java.lang.String getName()
-    {
-        return this._name;
-    } //-- java.lang.String getName() 
+	/**
+	 * Method isValid
+	 */
+	public boolean isValid() {
+		try {
+			validate();
+		} catch (org.exolab.castor.xml.ValidationException vex) {
+			return false;
+		}
+		return true;
+	} // -- boolean isValid()
 
-    /**
-     * Returns the value of field 'xPosition'.
-     * 
-     * @return the value of field 'xPosition'.
-     */
-    public java.lang.String getXPosition()
-    {
-        return this._xPosition;
-    } //-- java.lang.String getXPosition() 
+	/**
+	 * Method marshal
+	 * 
+	 * @param out
+	 */
+	public void marshal(java.io.Writer out)
+			throws org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
 
-    /**
-     * Returns the value of field 'yPosition'.
-     * 
-     * @return the value of field 'yPosition'.
-     */
-    public java.lang.String getYPosition()
-    {
-        return this._yPosition;
-    } //-- java.lang.String getYPosition() 
+		Marshaller.marshal(this, out);
+	} // -- void marshal(java.io.Writer)
 
-    /**
-     * Method isValid
-     */
-    public boolean isValid()
-    {
-        try {
-            validate();
-        }
-        catch (org.exolab.castor.xml.ValidationException vex) {
-            return false;
-        }
-        return true;
-    } //-- boolean isValid() 
+	/**
+	 * Method marshal
+	 * 
+	 * @param handler
+	 */
+	public void marshal(org.xml.sax.ContentHandler handler)
+			throws java.io.IOException, org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
 
-    /**
-     * Method marshal
-     * 
-     * @param out
-     */
-    public void marshal(java.io.Writer out)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        
-        Marshaller.marshal(this, out);
-    } //-- void marshal(java.io.Writer) 
+		Marshaller.marshal(this, handler);
+	} // -- void marshal(org.xml.sax.ContentHandler)
 
-    /**
-     * Method marshal
-     * 
-     * @param handler
-     */
-    public void marshal(org.xml.sax.ContentHandler handler)
-        throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        
-        Marshaller.marshal(this, handler);
-    } //-- void marshal(org.xml.sax.ContentHandler) 
+	/**
+	 * Sets the value of field 'name'.
+	 * 
+	 * @param name
+	 *            the value of field 'name'.
+	 */
+	public void setName(java.lang.String name) {
+		this._name = name;
+	} // -- void setName(java.lang.String)
 
-    /**
-     * Sets the value of field 'name'.
-     * 
-     * @param name the value of field 'name'.
-     */
-    public void setName(java.lang.String name)
-    {
-        this._name = name;
-    } //-- void setName(java.lang.String) 
+	/**
+	 * Sets the value of field 'xPosition'.
+	 * 
+	 * @param xPosition
+	 *            the value of field 'xPosition'.
+	 */
+	public void setXPosition(java.lang.String xPosition) {
+		this._xPosition = xPosition;
+	} // -- void setXPosition(java.lang.String)
 
-    /**
-     * Sets the value of field 'xPosition'.
-     * 
-     * @param xPosition the value of field 'xPosition'.
-     */
-    public void setXPosition(java.lang.String xPosition)
-    {
-        this._xPosition = xPosition;
-    } //-- void setXPosition(java.lang.String) 
+	/**
+	 * Sets the value of field 'yPosition'.
+	 * 
+	 * @param yPosition
+	 *            the value of field 'yPosition'.
+	 */
+	public void setYPosition(java.lang.String yPosition) {
+		this._yPosition = yPosition;
+	} // -- void setYPosition(java.lang.String)
 
-    /**
-     * Sets the value of field 'yPosition'.
-     * 
-     * @param yPosition the value of field 'yPosition'.
-     */
-    public void setYPosition(java.lang.String yPosition)
-    {
-        this._yPosition = yPosition;
-    } //-- void setYPosition(java.lang.String) 
+	/**
+	 * Method unmarshal
+	 * 
+	 * @param reader
+	 */
+	public static java.lang.Object unmarshal(java.io.Reader reader)
+			throws org.exolab.castor.xml.MarshalException,
+			org.exolab.castor.xml.ValidationException {
+		return (com.iver.andami.persistence.generate.ToolBar) Unmarshaller
+				.unmarshal(com.iver.andami.persistence.generate.ToolBar.class,
+						reader);
+	} // -- java.lang.Object unmarshal(java.io.Reader)
 
-    /**
-     * Method unmarshal
-     * 
-     * @param reader
-     */
-    public static java.lang.Object unmarshal(java.io.Reader reader)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        return (com.iver.andami.persistence.generate.ToolBar) Unmarshaller.unmarshal(com.iver.andami.persistence.generate.ToolBar.class, reader);
-    } //-- java.lang.Object unmarshal(java.io.Reader) 
-
-    /**
-     * Method validate
-     */
-    public void validate()
-        throws org.exolab.castor.xml.ValidationException
-    {
-        org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
-        validator.validate(this);
-    } //-- void validate() 
+	/**
+	 * Method validate
+	 */
+	public void validate() throws org.exolab.castor.xml.ValidationException {
+		org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
+		validator.validate(this);
+	} // -- void validate()
 
 }

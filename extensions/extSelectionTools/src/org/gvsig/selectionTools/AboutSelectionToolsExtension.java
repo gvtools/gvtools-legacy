@@ -28,9 +28,12 @@ import com.iver.cit.gvsig.About;
 import com.iver.cit.gvsig.gui.panels.FPanelAbout;
 
 /**
- * <p>Some selection tools for gvSIG of the <i>Consejería de Medio Ambiente de
- *  la Junta de Castilla y León.</i></p> project.
- *
+ * <p>
+ * Some selection tools for gvSIG of the <i>Consejería de Medio Ambiente de la
+ * Junta de Castilla y León.</i>
+ * </p>
+ * project.
+ * 
  * @author Vicente Caballero Navarro (vicente.caballero@iver.es)
  * @author Jaume Domínguez Faus (jaume.dominguez@iver.es)
  * @author César Martínez Izquierdo (cesar.martinez@iver.es)
@@ -40,31 +43,36 @@ import com.iver.cit.gvsig.gui.panels.FPanelAbout;
 public class AboutSelectionToolsExtension extends Extension {
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#initialize()
 	 */
-    public void initialize() {
-     }
+	public void initialize() {
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see com.iver.andami.plugins.Extension#postInitialize()
-     */
-    public void postInitialize() {
-		About about=(About)PluginServices.getExtension(About.class);
-		FPanelAbout panelAbout=about.getAboutPanel();
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.andami.plugins.Extension#postInitialize()
+	 */
+	public void postInitialize() {
+		About about = (About) PluginServices.getExtension(About.class);
+		FPanelAbout panelAbout = about.getAboutPanel();
 		java.net.URL aboutURL = this.getClass().getResource("/about.htm");
-		panelAbout.addAboutUrl(PluginServices.getText(this, "extSelectionTools"),aboutURL);
-    }
+		panelAbout.addAboutUrl(
+				PluginServices.getText(this, "extSelectionTools"), aboutURL);
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
-     */
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
+	 */
 	public void execute(String actionCommand) {
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isEnabled()
 	 */
 	public boolean isEnabled() {
@@ -73,6 +81,7 @@ public class AboutSelectionToolsExtension extends Extension {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {

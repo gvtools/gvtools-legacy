@@ -33,22 +33,21 @@ import java.util.Map;
 import org.gvsig.exceptions.BaseException;
 
 /**
- * This exception is thrown it has been an error in the
- * parser creation. The reason for this error can be other
- * exception or a detailed error.  
+ * This exception is thrown it has been an error in the parser creation. The
+ * reason for this error can be other exception or a detailed error.
  */
 public class ParserCreationException extends BaseException {
 	private static final long serialVersionUID = 5482517192827506712L;
 
 	public ParserCreationException() {
 		super();
-		initialize();	
+		initialize();
 	}
 
 	public ParserCreationException(Throwable e) {
 		super();
 		initCause(e);
-		initialize();	
+		initialize();
 	}
 
 	/**
@@ -58,15 +57,14 @@ public class ParserCreationException extends BaseException {
 		messageKey = "gpe_parser_creation_exception";
 		formatString = "Impossible to create a parser";
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map values() {
 		return new HashMap();
 	}
 
-
 }
-

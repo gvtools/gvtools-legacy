@@ -50,13 +50,13 @@ import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
 /**
  * Implements an utility class for SLD functionality
  * 
- * @author Pepe Vidal Salvador  jose.vidal.salvador@iver.es
- *
+ * @author Pepe Vidal Salvador jose.vidal.salvador@iver.es
+ * 
  */
 public class SLDUtils {
 
-
-	public static Color convertHexStringToColor(String str) throws NumberFormatException, LegendDriverException{
+	public static Color convertHexStringToColor(String str)
+			throws NumberFormatException, LegendDriverException {
 		int multiplier = 1;
 		StringTokenizer tokenizer = new StringTokenizer(str, " \t\r\n\b:;[]()+");
 		while (tokenizer.hasMoreTokens()) {
@@ -83,7 +83,8 @@ public class SLDUtils {
 					return new Color(multiplier
 							* Integer.parseInt(token.substring(1), 16));
 				} else if (token.startsWith("0") && !token.equals("0")) {
-					return new Color(multiplier * Integer.parseInt(token.substring(1), 8));
+					return new Color(multiplier
+							* Integer.parseInt(token.substring(1), 8));
 				} else {
 					return new Color(multiplier * Integer.parseInt(token));
 				}
@@ -91,13 +92,13 @@ public class SLDUtils {
 				continue;
 			}
 		}
-		throw new LegendDriverException (LegendDriverException.PARSE_LEGEND_FILE_ERROR);
+		throw new LegendDriverException(
+				LegendDriverException.PARSE_LEGEND_FILE_ERROR);
 
 	}
 
-	
 	public static String convertOpacityToString(float alpha) {
-		return String.valueOf((float)(alpha/255));
+		return String.valueOf((float) (alpha / 255));
 	}
 
 	public static String convertLineJoinToString(int lineJoin) {
@@ -118,12 +119,11 @@ public class SLDUtils {
 		else if (endCap == BasicStroke.CAP_SQUARE)
 			return "square";
 
-		return null;	
+		return null;
 	}
 
-	
 	public static int setMarkerStyle(String name) {
-		if (name == null )
+		if (name == null)
 			return SimpleMarkerSymbol.SQUARE_STYLE;
 		else if (name.compareTo(SLDTags.CIRCLE) == 0)
 			return SimpleMarkerSymbol.CIRCLE_STYLE;
@@ -131,18 +131,16 @@ public class SLDUtils {
 			return SimpleMarkerSymbol.TRIANGLE_STYLE;
 		else if (name.compareTo(SLDTags.STAR) == 0)
 			return SimpleMarkerSymbol.STAR_STYLE;
-		else if (name.compareTo(SLDTags.CROSS) == 0)	
+		else if (name.compareTo(SLDTags.CROSS) == 0)
 			return SimpleMarkerSymbol.CROSS_STYLE;
 
 		return SimpleMarkerSymbol.SQUARE_STYLE;
 	}
 
-	public static String convertColorToHexString(java.awt.Color c)
-	{
-		String str = Integer.toHexString( c.getRGB() & 0xFFFFFF );
-		return ( "#" + "000000".substring( str.length() ) + str.toUpperCase() );
+	public static String convertColorToHexString(java.awt.Color c) {
+		String str = Integer.toHexString(c.getRGB() & 0xFFFFFF);
+		return ("#" + "000000".substring(str.length()) + str.toUpperCase());
 	}
-
 
 	public static boolean isANumber(String s) {
 		final String digit = "([0-9])+" + ".?" + "([0-9])*";
@@ -150,17 +148,17 @@ public class SLDUtils {
 			return true;
 		return false;
 	}
+
 	public static boolean isColor(String s) {
 		final String alpha = "[0-9a-fA-F]";
-		final String color = "#"+alpha+"{6}";
-		if (s.matches(color)) 
+		final String color = "#" + alpha + "{6}";
+		if (s.matches(color))
 			return true;
 		return false;
 	}
 
-
 	public static String getMarkWellKnownName(int style) {
-		
+
 		if (style == SimpleMarkerSymbol.CIRCLE_STYLE)
 			return "circle";
 		else if (style == SimpleMarkerSymbol.CROSS_STYLE)
@@ -171,19 +169,20 @@ public class SLDUtils {
 			return "triangle";
 		else if (style == SimpleMarkerSymbol.STAR_STYLE)
 			return "star";
-		
-		return "square";	
+
+		return "square";
 	}
 
-
 	public static boolean isLineJoin(String literal) {
-		if (literal.compareTo("bevel")== 0 || literal.compareTo("miter")== 0 || literal.compareTo("round")== 0)
+		if (literal.compareTo("bevel") == 0 || literal.compareTo("miter") == 0
+				|| literal.compareTo("round") == 0)
 			return true;
 		return false;
 	}
-	
+
 	public static boolean isLineCap(String literal) {
-		if (literal.compareTo("butt")== 0 || literal.compareTo("round")== 0 || literal.compareTo("square")== 0)
+		if (literal.compareTo("butt") == 0 || literal.compareTo("round") == 0
+				|| literal.compareTo("square") == 0)
 			return true;
 		return false;
 	}

@@ -28,14 +28,15 @@ import javax.swing.JComboBox;
 
 import org.gvsig.gui.beans.TestUI;
 import org.gvsig.gui.beans.swing.JFileChooser;
+
 /**
  * Test para el componente JFileChooser. Como se puede apreciar, recuerda el
  * último directorio elegido para cada caso.
- *
+ * 
  * @version 05/12/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
-public class TestJFileChooser implements ActionListener  {
+public class TestJFileChooser implements ActionListener {
 
 	private TestUI frame = new TestUI("TestJFileChooser");
 	JComboBox comboBox = null;
@@ -63,7 +64,8 @@ public class TestJFileChooser implements ActionListener  {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		JFileChooser chooser = new JFileChooser(comboBox.getSelectedItem().toString(), (File) null);
+		JFileChooser chooser = new JFileChooser(comboBox.getSelectedItem()
+				.toString(), (File) null);
 		chooser.showOpenDialog(frame);
 	}
 }

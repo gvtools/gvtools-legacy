@@ -17,6 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
  */
 package org.gvsig.gui.beans.imagenavigator;
+
 /**
  * Excepcion para cuando no se puede visualizar una imagen en ImageNavigator
  * 
@@ -25,14 +26,15 @@ package org.gvsig.gui.beans.imagenavigator;
  */
 public class ImageUnavailableException extends Exception {
 	private static final long serialVersionUID = -4801264886991752651L;
-	
+
 	/**
-	 * Constructs a new exception with the specified detail message.  The
-	 * cause is not initialized, and may subsequently be initialized by
-	 * a call to {@link #initCause}.
-	 *
-	 * @param   message   the detail message. The detail message is saved for 
-	 *          later retrieval by the {@link #getMessage()} method.
+	 * Constructs a new exception with the specified detail message. The cause
+	 * is not initialized, and may subsequently be initialized by a call to
+	 * {@link #initCause}.
+	 * 
+	 * @param message
+	 *            the detail message. The detail message is saved for later
+	 *            retrieval by the {@link #getMessage()} method.
 	 */
 	public ImageUnavailableException(String message) {
 		super(message);

@@ -40,7 +40,6 @@
  */
 package org.gvsig.graph.solvers;
 
-import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 import org.gvsig.exceptions.BaseException;
@@ -50,9 +49,7 @@ import org.gvsig.graph.core.GvConnector;
 import org.gvsig.graph.core.GvEdge;
 import org.gvsig.graph.core.GvFlag;
 import org.gvsig.graph.core.GvNode;
-import org.gvsig.graph.core.GvTurn;
 import org.gvsig.graph.core.IGraph;
-import org.gvsig.graph.solvers.pqueue.FibHeap;
 
 /**
  * @author fjp Este es útil solo cuando podemos calcular la distancia estimada
@@ -83,11 +80,11 @@ public class ShortestPathSolverAStar extends AbstractShortestPathSolver {
 				int idStart = net.creaArcosVirtuales(fFrom);
 				int idStop = net.creaArcosVirtuales(fTo);
 
-				long tA1= System.currentTimeMillis();
+				long tA1 = System.currentTimeMillis();
 				double newCost = AStar(idStart, idStop);
-				long tA2= System.currentTimeMillis();
-				System.out.println("T Astar = " + (tA2-tA1));
-				
+				long tA2 = System.currentTimeMillis();
+				System.out.println("T Astar = " + (tA2 - tA1));
+
 				elCoste1 += newCost;
 				fTo.setCost(elCoste1);
 
@@ -96,7 +93,7 @@ public class ShortestPathSolverAStar extends AbstractShortestPathSolver {
 						long t1 = System.currentTimeMillis();
 						populateRoute(fFrom, fTo, idStart, idStop);
 						long t2 = System.currentTimeMillis();
-						System.out.println("T populateRoute=" + (t2-t1));
+						System.out.println("T populateRoute=" + (t2 - t1));
 					} catch (BaseException e) {
 						e.printStackTrace();
 						net.reconstruyeTramo(fFrom.getIdArc());
@@ -127,7 +124,7 @@ public class ShortestPathSolverAStar extends AbstractShortestPathSolver {
 		boolean bExit = false;
 
 		boolean bGiroProhibido;
-//		ArrayList candidatos = new ArrayList();
+		// ArrayList candidatos = new ArrayList();
 
 		// char Mensaje[200];
 
@@ -140,15 +137,14 @@ public class ShortestPathSolverAStar extends AbstractShortestPathSolver {
 		// Para evitar coincidencias cuando de la vuelta el contador, cada
 		// 65000 peticiones (por ejemplo), repasamos toda
 		// la red y ponemos numSolucGlobal a -1
-		if (GlobalCounter.increment())
-		{
+		if (GlobalCounter.increment()) {
 			for (nodeNum = 0; nodeNum < graph.numVertices(); nodeNum++) {
 				node = graph.getNodeByID(nodeNum);
 				node.initialize();
 			} // for nodeNum */
 		}
 
-//		candidatos.clear();
+		// candidatos.clear();
 		// Añadimos el Start Node a la lista de candidatosSTL
 		// Nodo final
 		finalNode = graph.getNodeByID(idStop);
@@ -156,17 +152,16 @@ public class ShortestPathSolverAStar extends AbstractShortestPathSolver {
 
 		node = graph.getNodeByID(idStart);
 		node.initialize();
-//		bestNode = node;
+		// bestNode = node;
 
-//		candidatos.add(node);
+		// candidatos.add(node);
 		node.setCostZero();
 		node.setStatus(GvNode.statNowInList);
 		node.calculateStimation(finalNode, 0);
-		
-        // Priority Queue
-        PriorityQueue<GvNode> pq = new PriorityQueue<GvNode>();
-        pq.add(node);
 
+		// Priority Queue
+		PriorityQueue<GvNode> pq = new PriorityQueue<GvNode>();
+		pq.add(node);
 
 		// Mientras que la lista de candidatosSTL no esté vacía, procesamos
 		// Nodos
@@ -174,24 +169,24 @@ public class ShortestPathSolverAStar extends AbstractShortestPathSolver {
 
 		while ((!bExit) && (!pq.isEmpty())) {
 			// Buscamos el nodo con mínimo coste
-//			node = (GvNode) candidatos.get(0);
-//			bestNode = node;
-//			bestStimation = node.getStimation();
-//			int bestIndex = 0;
-//			for (nodeNum = 1; nodeNum < candidatos.size(); nodeNum++) {
-//				node = (GvNode) candidatos.get(nodeNum);
-//				if (node.getStimation() < bestStimation) {
-//					bestStimation = node.getStimation();
-//					bestNode = node;
-//					bestIndex = nodeNum;
-//				}
-//			} // for nodeNum candidatosSTL
+			// node = (GvNode) candidatos.get(0);
+			// bestNode = node;
+			// bestStimation = node.getStimation();
+			// int bestIndex = 0;
+			// for (nodeNum = 1; nodeNum < candidatos.size(); nodeNum++) {
+			// node = (GvNode) candidatos.get(nodeNum);
+			// if (node.getStimation() < bestStimation) {
+			// bestStimation = node.getStimation();
+			// bestNode = node;
+			// bestIndex = nodeNum;
+			// }
+			// } // for nodeNum candidatosSTL
 
-            node = pq.poll(); // get the lowest-weightSum Vertex 'u',
-//			node = bestNode;
+			node = pq.poll(); // get the lowest-weightSum Vertex 'u',
+			// node = bestNode;
 			// Borramos el mejor nodo de la lista de candidatosSTL
 			node.setStatus(GvNode.statWasInList);
-//			candidatos.remove(bestIndex);
+			// candidatos.remove(bestIndex);
 			// System.out.println("LINK " + link.getIdArc() + " from ");
 			// System.out.println("from " + idStart + " to " +
 			// finalNode.getIdNode() + ". node=" + node.getIdNode());
@@ -209,73 +204,78 @@ public class ShortestPathSolverAStar extends AbstractShortestPathSolver {
 			// acabamos de borrar
 			// HAY Arcos QUE SALEN Y Arcos QUE LLEGAN. SOLO MIRAMOS LOS QUE
 			// SALEN.
-//			for (linkNum = 0; linkNum < node.getOutputLinks().size(); linkNum++) {
-			for (int iConec=0; iConec< node.getConnectors().size();  iConec++) {
+			// for (linkNum = 0; linkNum < node.getOutputLinks().size();
+			// linkNum++) {
+			for (int iConec = 0; iConec < node.getConnectors().size(); iConec++) {
 				// Pillamos el nodo vecino
 				GvConnector c = node.getConnectors().get(iConec);
-				if (c.getEdgeOut() == null) continue;
-				
+				if (c.getEdgeOut() == null)
+					continue;
+
 				link = (GvEdge) c.getEdgeOut();
 				// Pillamos el nodo vecino
-//				link = (GvEdge) node.getOutputLinks().get(linkNum);
+				// link = (GvEdge) node.getOutputLinks().get(linkNum);
 				idSiguienteNodo = link.getIdNodeEnd();
-				
+
 				// To avoid U-turn
 				if (c.getEdgeIn() != null)
 					if (c.getFrom_link_c() == c.getEdgeIn().getIdEdge())
 						continue;
 
 				toNode = graph.getNodeByID(idSiguienteNodo);
-				
+
 				// 27_5_2004
 				// Si un arco tiene coste negativo, lo ignoramos
 				if (link.getWeight() < 0)
 					continue;
 
 				// Fin arco con coste negativo
-//				int from_link = c.getFrom_link_c();
-//
-//				if (from_link != -1) {
-//					if (c.getEdgeIn().getIdEdge() == from_link) continue; // No queremos entrar y salir
-																// por el mismo conector
+				// int from_link = c.getFrom_link_c();
+				//
+				// if (from_link != -1) {
+				// if (c.getEdgeIn().getIdEdge() == from_link) continue; // No
+				// queremos entrar y salir
+				// por el mismo conector
 				// NUEVO: 26-7-2003: Comprobamos si está inicializado
-				if (toNode.getNumSoluc() != GlobalCounter.getGlobalSolutionNumber()) {
+				if (toNode.getNumSoluc() != GlobalCounter
+						.getGlobalSolutionNumber()) {
 					toNode.initialize();
 				} else {
 					// System.out.println("Nodo ya inicializado");
 				}
 				// Miramos a ver si podemos mejorar su best_cost
-//				double costeGiro = 0;
-//
-//				// Miramos la lista de Giros de ese nodo
-//				bGiroProhibido = false;
-//				if (from_link != -1) {
-//					GvEdge edgeFrom = graph.getEdgeByID(from_link);
-//					for (int idGiro=0; idGiro < node.getTurnCosts().size(); idGiro++)
-//					{
-//						// Si está prohibido, a por otro
-//						GvTurn elGiro = node.getTurnCosts().get(idGiro);
-//						if ((elGiro.getIdArcFrom() == edgeFrom.getIdArc()) && 
-//							(elGiro.getIdArcTo() == link.getIdArc()))
-//						{
-//							if (elGiro.getCost() < 0)
-//							{
-//								bGiroProhibido = true;
-//							}
-//							else
-//								costeGiro = elGiro.getCost();
-//	
-//							// Para que pueda volver a entrar en los cálculos
-//							node.setStatus(GvNode.statNotInList);
-//							break; // Salimos del for porque ya hemos encontrado el giro
-//						}
-//					}
-//				}
-//				// Si está prohibido, vamos a por otro enlace
-//				if (bGiroProhibido)
-//				{
-//					continue;					
-//				}
+				// double costeGiro = 0;
+				//
+				// // Miramos la lista de Giros de ese nodo
+				// bGiroProhibido = false;
+				// if (from_link != -1) {
+				// GvEdge edgeFrom = graph.getEdgeByID(from_link);
+				// for (int idGiro=0; idGiro < node.getTurnCosts().size();
+				// idGiro++)
+				// {
+				// // Si está prohibido, a por otro
+				// GvTurn elGiro = node.getTurnCosts().get(idGiro);
+				// if ((elGiro.getIdArcFrom() == edgeFrom.getIdArc()) &&
+				// (elGiro.getIdArcTo() == link.getIdArc()))
+				// {
+				// if (elGiro.getCost() < 0)
+				// {
+				// bGiroProhibido = true;
+				// }
+				// else
+				// costeGiro = elGiro.getCost();
+				//
+				// // Para que pueda volver a entrar en los cálculos
+				// node.setStatus(GvNode.statNotInList);
+				// break; // Salimos del for porque ya hemos encontrado el giro
+				// }
+				// }
+				// }
+				// // Si está prohibido, vamos a por otro enlace
+				// if (bGiroProhibido)
+				// {
+				// continue;
+				// }
 				// TODO: REVISAR SI HAY QUE SUMAR EL COSTE DEL GIRO A NEWCOST
 				// Y SI LO DE TURNCOSTS NO DEBE IR EN EXISTEMEJORA
 
@@ -283,21 +283,23 @@ public class ShortestPathSolverAStar extends AbstractShortestPathSolver {
 				newCost = c.getBestCostOut() + link.getWeight();
 
 				// Change to take care of turn costs
-				if (toNode.existeMejora(link, newCost)) {  // Es una mejora, así que actualizamos el vecino y
-//					// lo añadimos a los candidatosSTL
-//					toNode.setBestCost(newCost);
-//					 
-//					toNode.setFromLink(link.getIdEdge());
-					double newLength = node.getAccumulatedLength() + link.getDistance();
+				if (toNode.existeMejora(link, newCost)) { // Es una mejora, así
+															// que actualizamos
+															// el vecino y
+				// // lo añadimos a los candidatosSTL
+				// toNode.setBestCost(newCost);
+				//
+				// toNode.setFromLink(link.getIdEdge());
+					double newLength = node.getAccumulatedLength()
+							+ link.getDistance();
 					toNode.setAccumulatedLength(newLength);
-
 
 					toNode.calculateStimation(finalNode, newCost);
 
 					if (toNode.getStatus() != GvNode.statNowInList) {
 						toNode.setStatus(GvNode.statNowInList);
 						pq.add(toNode);
-//						candidatos.add(toNode);
+						// candidatos.add(toNode);
 					}
 				} // Si hay mejora
 

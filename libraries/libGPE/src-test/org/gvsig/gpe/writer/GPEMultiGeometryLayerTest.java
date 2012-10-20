@@ -70,7 +70,7 @@ import org.gvsig.gpe.containers.Polygon;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class GPEMultiGeometryLayerTest extends GPEWriterBaseTest{
+public abstract class GPEMultiGeometryLayerTest extends GPEWriterBaseTest {
 	private String layerId = "l1";
 	private String srs = "EPSG:23030";
 	private String feature1Id = "f1";
@@ -82,58 +82,59 @@ public abstract class GPEMultiGeometryLayerTest extends GPEWriterBaseTest{
 	private String lineString1Id = "ls1";
 	private double[] lineString1X = generateRandomCoordinates();
 	private double[] lineString1Y = generateRandomCoordinates();
-	private double[] lineString1Z = generateRandomCoordinates();	
+	private double[] lineString1Z = generateRandomCoordinates();
 	private String polygon1Id = "pol1";
 	private double[] polygon1X = generateRandomLinearRing();
 	private double[] polygon1Y = generateRandomLinearRing();
-	private double[] polygon1Z = generateRandomLinearRing();	
-	
-	
+	private double[] polygon1Z = generateRandomLinearRing();
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#readObjects()
 	 */
 	public void readObjects() {
 		Layer[] layers = getLayers();
-		assertEquals(layers.length, 1);		
+		assertEquals(layers.length, 1);
 		Layer layer = layers[0];
-	
+
 		assertEquals(layer.getFeatures().size(), 1);
-		//FEATURE 1
-		Feature feature1 = (Feature)layer.getFeatures().get(0);
-		MultiGeometry multiGeometry = (MultiGeometry)feature1.getGeometry();
+		// FEATURE 1
+		Feature feature1 = (Feature) layer.getFeatures().get(0);
+		MultiGeometry multiGeometry = (MultiGeometry) feature1.getGeometry();
 		assertEquals(multiGeometry.getGeometries().size(), 3);
-		GeometryAsserts.point((Point)multiGeometry.getGeometryAt(0), point1X, point1Y, point1Z);
-		GeometryAsserts.lineString((LineString)multiGeometry.getGeometryAt(1), lineString1X, lineString1Y, lineString1Z);
-		GeometryAsserts.polygon((Polygon)multiGeometry.getGeometryAt(2), polygon1X, polygon1Y, polygon1Z);
+		GeometryAsserts.point((Point) multiGeometry.getGeometryAt(0), point1X,
+				point1Y, point1Z);
+		GeometryAsserts.lineString((LineString) multiGeometry.getGeometryAt(1),
+				lineString1X, lineString1Y, lineString1Z);
+		GeometryAsserts.polygon((Polygon) multiGeometry.getGeometryAt(2),
+				polygon1X, polygon1Y, polygon1Z);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#writeObjects()
 	 */
 	public void writeObjects() {
 		getWriterHandler().initialize();
-		getWriterHandler().startLayer(layerId, null , null , srs, null);
+		getWriterHandler().startLayer(layerId, null, null, srs, null);
 		getWriterHandler().startFeature(feature1Id, null, null);
 		getWriterHandler().startMultiGeometry(multiGeometryId, srs);
-		getWriterHandler().startPoint(point1Id, new CoordinatesSequence(point1X, point1Y, point1Z), srs);
-		getWriterHandler().endPoint();	
-		getWriterHandler().startLineString(lineString1Id, new CoordinatesSequence(
-				lineString1X,
-				lineString1Y,
-				lineString1Z), 
-				srs);
-		getWriterHandler().endLineString();		
-		getWriterHandler().startPolygon(polygon1Id, new CoordinatesSequence(
-				polygon1X,
-				polygon1Y,
-				polygon1Z),
-				srs);		
-		getWriterHandler().endPolygon();		
-		getWriterHandler().endMultiGeometry();		
+		getWriterHandler().startPoint(point1Id,
+				new CoordinatesSequence(point1X, point1Y, point1Z), srs);
+		getWriterHandler().endPoint();
+		getWriterHandler().startLineString(
+				lineString1Id,
+				new CoordinatesSequence(lineString1X, lineString1Y,
+						lineString1Z), srs);
+		getWriterHandler().endLineString();
+		getWriterHandler().startPolygon(polygon1Id,
+				new CoordinatesSequence(polygon1X, polygon1Y, polygon1Z), srs);
+		getWriterHandler().endPolygon();
+		getWriterHandler().endMultiGeometry();
 		getWriterHandler().endFeature();
 		getWriterHandler().endLayer();
-		getWriterHandler().close();	
+		getWriterHandler().close();
 	}
 }

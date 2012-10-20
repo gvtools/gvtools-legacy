@@ -82,23 +82,20 @@ import com.iver.cit.gvsig.geoprocess.core.gui.IGeoprocessUserEntries;
 import com.iver.cit.gvsig.geoprocess.impl.reproject.gui.GeoprocessingReprojectPanel;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
-public class ReprojectGeoprocessPlugin extends GeoprocessPluginAbstract  implements IGeoprocessPlugin {
+public class ReprojectGeoprocessPlugin extends GeoprocessPluginAbstract
+		implements IGeoprocessPlugin {
 
 	private static String dataConvertPkg;
 	private static String geoprocessName;
-	
-	static{
-		dataConvertPkg = 
-			PluginServices.getText(null, "Conversion_de_datos");
-		geoprocessName =
-			PluginServices.getText(null, "Reproyectar");
+
+	static {
+		dataConvertPkg = PluginServices.getText(null, "Conversion_de_datos");
+		geoprocessName = PluginServices.getText(null, "Reproyectar");
 	}
-	
-	
-	
-	
+
 	public IGeoprocessUserEntries getGeoprocessPanel() {
-		com.iver.andami.ui.mdiManager.IWindow view = PluginServices.getMDIManager().getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow view = PluginServices
+				.getMDIManager().getActiveWindow();
 		View vista = (View) view;
 		FLayers layers = vista.getModel().getMapContext().getLayers();
 		return (IGeoprocessUserEntries) new GeoprocessingReprojectPanel(layers);
@@ -113,12 +110,11 @@ public class ReprojectGeoprocessPlugin extends GeoprocessPluginAbstract  impleme
 		return new ReprojectGeoprocessController();
 	}
 
-	
 	public String getNamespace() {
 		return dataConvertPkg + "/" + geoprocessName;
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		return geoprocessName;
 	}
 

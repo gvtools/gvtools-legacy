@@ -30,210 +30,217 @@ import org.cresques.Messages;
 import org.cresques.ui.LoadableComboBox;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-
 //import es.gva.cit.geoexplorer.ui.LoadableComboBox;
 
 /**
  * Panel de edición de Sistemas de referencia
+ * 
  * @author "Luis W. Sevilla" <sevilla_lui@gva.es>
  */
 public class CSSelectionPanel extends JPanel {
-    final private static long serialVersionUID = -3370601314380922368L;
-    private LoadableComboBox datumComboBox = null;
-    private LoadableComboBox projComboBox = null;
-    private LoadableComboBox huseComboBox = null;
-    private JLabel jLabel = null;
-    private JLabel jLabel1 = null;
-    private JLabel jLabel2 = null;
-    private String tit;
-    private CSSelectionModel model;
+	final private static long serialVersionUID = -3370601314380922368L;
+	private LoadableComboBox datumComboBox = null;
+	private LoadableComboBox projComboBox = null;
+	private LoadableComboBox huseComboBox = null;
+	private JLabel jLabel = null;
+	private JLabel jLabel1 = null;
+	private JLabel jLabel2 = null;
+	private String tit;
+	private CSSelectionModel model;
 
-    /**
-     * Constructor de la clase.
-     */
-    public CSSelectionPanel(String tit) {
-        super();
+	/**
+	 * Constructor de la clase.
+	 */
+	public CSSelectionPanel(String tit) {
+		super();
 
-        if (tit == null) {
-            //tit = "Sistema de referencia";
-            //TODO: add com.iver.andami.PluginServices to this project
-            //change all the labels from fix text got from the internationalitation
-            tit = Messages.getText("reference_system");
-            if (tit == null) tit="Reference System";
-        }
+		if (tit == null) {
+			// tit = "Sistema de referencia";
+			// TODO: add com.iver.andami.PluginServices to this project
+			// change all the labels from fix text got from the
+			// internationalitation
+			tit = Messages.getText("reference_system");
+			if (tit == null)
+				tit = "Reference System";
+		}
 
-        this.tit = tit;
-        setModel(new CSSelectionModel());
-        initialize();
-    }
+		this.tit = tit;
+		setModel(new CSSelectionModel());
+		initialize();
+	}
 
-    /**
-     * Inicializa el panel.
-     * @return javax.swing.JPanel
-     */
-    private void initialize() {
-        setPreferredSize(new java.awt.Dimension(295, 170));
-        setLayout(null);
+	/**
+	 * Inicializa el panel.
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private void initialize() {
+		setPreferredSize(new java.awt.Dimension(295, 170));
+		setLayout(null);
 
-        /*javax.swing.border.Border border = javax.swing.BorderFactory.createCompoundBorder(
-        javax.swing. BorderFactory.createTitledBorder("Sistema de coordenadas"),
-        javax.swing.BorderFactory.createEmptyBorder(5,5,5,5)); */
-        setBorder(javax.swing.BorderFactory.createCompoundBorder(null,
-                                                                 javax.swing.BorderFactory.createTitledBorder(null,
-                                                                		 										Messages.getText("reference_system"),
-                                                                                                              javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                                                                                                              javax.swing.border.TitledBorder.DEFAULT_POSITION,
-                                                                                                              null,
-                                                                                                              null)));
+		/*
+		 * javax.swing.border.Border border =
+		 * javax.swing.BorderFactory.createCompoundBorder( javax.swing.
+		 * BorderFactory.createTitledBorder("Sistema de coordenadas"),
+		 * javax.swing.BorderFactory.createEmptyBorder(5,5,5,5));
+		 */
+		setBorder(javax.swing.BorderFactory.createCompoundBorder(null,
+				javax.swing.BorderFactory.createTitledBorder(null,
+						Messages.getText("reference_system"),
+						javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+						javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+						null)));
 
-        jLabel = new JLabel();
-        jLabel.setBounds(15, 15, 77, 23);
-        jLabel.setText(Messages.getText("datum") + ":");
-        add(jLabel, null);
-        add(getDatumComboBox(), null);
+		jLabel = new JLabel();
+		jLabel.setBounds(15, 15, 77, 23);
+		jLabel.setText(Messages.getText("datum") + ":");
+		add(jLabel, null);
+		add(getDatumComboBox(), null);
 
-        jLabel1 = new JLabel();
-        jLabel1.setBounds(15, 60, 77, 23);
-        jLabel1.setText(Messages.getText("projection") + ":");
-        add(jLabel1, null);
-        add(getProjComboBox(), null);
+		jLabel1 = new JLabel();
+		jLabel1.setBounds(15, 60, 77, 23);
+		jLabel1.setText(Messages.getText("projection") + ":");
+		add(jLabel1, null);
+		add(getProjComboBox(), null);
 
-        jLabel2 = new JLabel();
-        jLabel2.setBounds(15, 105, 77, 23);
-        jLabel2.setText(Messages.getText("zone") + ":");
-        add(jLabel2, null);
-        add(getHuseComboBox(), null);
+		jLabel2 = new JLabel();
+		jLabel2.setBounds(15, 105, 77, 23);
+		jLabel2.setText(Messages.getText("zone") + ":");
+		add(jLabel2, null);
+		add(getHuseComboBox(), null);
 
-        setHuseComboBoxEnabled(false);
-    }
+		setHuseComboBoxEnabled(false);
+	}
 
-    public void setModel(CSSelectionModel model) {
-        this.model = model;
+	public void setModel(CSSelectionModel model) {
+		this.model = model;
 
-        getHuseComboBox().loadData(model.getZoneList());
-        getDatumComboBox().loadData(model.getDatumList());
-        getProjComboBox().loadData(model.getProjectionList());
-    }
+		getHuseComboBox().loadData(model.getZoneList());
+		getDatumComboBox().loadData(model.getDatumList());
+		getProjComboBox().loadData(model.getProjectionList());
+	}
 
-    private void setHuseComboBoxEnabled(boolean enabled) {
-        if (jLabel2 != null) {
-            jLabel2.setEnabled(enabled);
-        }
+	private void setHuseComboBoxEnabled(boolean enabled) {
+		if (jLabel2 != null) {
+			jLabel2.setEnabled(enabled);
+		}
 
-        getHuseComboBox().setEnabled(enabled);
-    }
+		getHuseComboBox().setEnabled(enabled);
+	}
 
-    private void setDatumComboBoxEnabled(boolean enabled) {
-        if (jLabel != null) {
-            jLabel.setEnabled(enabled);
-        }
+	private void setDatumComboBoxEnabled(boolean enabled) {
+		if (jLabel != null) {
+			jLabel.setEnabled(enabled);
+		}
 
-        getDatumComboBox().setEnabled(enabled);
-    }
+		getDatumComboBox().setEnabled(enabled);
+	}
 
-    public void setCrs(CoordinateReferenceSystem crs) {
-        model.setCrs(crs);
+	public void setCrs(CoordinateReferenceSystem crs) {
+		model.setCrs(crs);
 
-        setDatumComboBoxEnabled(true);
-        getDatumComboBox().setSelectedIndex(model.getSelectedDatum());
- 
-        getProjComboBox().removeAllItems();
-        getProjComboBox().loadData(model.getProjectionList());
+		setDatumComboBoxEnabled(true);
+		getDatumComboBox().setSelectedIndex(model.getSelectedDatum());
 
-        model.setCrs(crs);
-        getProjComboBox().setSelectedIndex(model.getSelectedProj());
-        model.setCrs(crs);
-        
-        if (model.getSelectedZone() >= 0) {
-            setHuseComboBoxEnabled(true);
-            getHuseComboBox().removeAllItems();
-            getHuseComboBox().loadData(model.getZoneList());
+		getProjComboBox().removeAllItems();
+		getProjComboBox().loadData(model.getProjectionList());
 
-            model.setCrs(crs);
-            getHuseComboBox().setSelectedIndex(model.getSelectedZone());
-        } else {
-            setHuseComboBoxEnabled(false);
-            getHuseComboBox().setSelectedIndex(0);
-        }
-    }
+		model.setCrs(crs);
+		getProjComboBox().setSelectedIndex(model.getSelectedProj());
+		model.setCrs(crs);
 
-    /**
-     * Inicializa datumComboBox
-     *
-     * @return javax.swing.JComboBox
-     */
-    private LoadableComboBox getDatumComboBox() {
-        if (datumComboBox == null) {
-            datumComboBox = new LoadableComboBox();
-            datumComboBox.setBounds(14, 35, 250, 23);
+		if (model.getSelectedZone() >= 0) {
+			setHuseComboBoxEnabled(true);
+			getHuseComboBox().removeAllItems();
+			getHuseComboBox().loadData(model.getZoneList());
 
-            //			((LoadableComboBox) datumComboBox).loadData(model.getDatumList());
-            datumComboBox.addItemListener(new java.awt.event.ItemListener() {
-                    public void itemStateChanged(java.awt.event.ItemEvent e) {
-                        model.setSelectedDatum(e.getItem());
-                        getProjComboBox().removeAllItems();
-                        getProjComboBox().loadData(model.getProjectionList());
-                    }
-                });
-        }
+			model.setCrs(crs);
+			getHuseComboBox().setSelectedIndex(model.getSelectedZone());
+		} else {
+			setHuseComboBoxEnabled(false);
+			getHuseComboBox().setSelectedIndex(0);
+		}
+	}
 
-        return datumComboBox;
-    }
+	/**
+	 * Inicializa datumComboBox
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
+	private LoadableComboBox getDatumComboBox() {
+		if (datumComboBox == null) {
+			datumComboBox = new LoadableComboBox();
+			datumComboBox.setBounds(14, 35, 250, 23);
 
-    /**
-     * Inicializa projComboBox
-     *
-     * @return javax.swing.JComboBox
-     */
-    private LoadableComboBox getProjComboBox() {
-        if (projComboBox == null) {
-            projComboBox = new LoadableComboBox();
-            projComboBox.setBounds(14, 80, 250, 23);
-            projComboBox.addItemListener(new java.awt.event.ItemListener() {
-                    public void itemStateChanged(java.awt.event.ItemEvent e) {
-                        model.setSelectedProj(e.getItem());
+			// ((LoadableComboBox)
+			// datumComboBox).loadData(model.getDatumList());
+			datumComboBox.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					model.setSelectedDatum(e.getItem());
+					getProjComboBox().removeAllItems();
+					getProjComboBox().loadData(model.getProjectionList());
+				}
+			});
+		}
 
-                        if (model.getSelectedProjType() == CSSelectionModel.TRANSVERSAL) {
-                            setHuseComboBoxEnabled(true);
-                            getHuseComboBox().removeAllItems();
-                            getHuseComboBox().loadData(model.getZoneList());
+		return datumComboBox;
+	}
 
-                        } else {
-                            setHuseComboBoxEnabled(false);
-                        }
+	/**
+	 * Inicializa projComboBox
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
+	private LoadableComboBox getProjComboBox() {
+		if (projComboBox == null) {
+			projComboBox = new LoadableComboBox();
+			projComboBox.setBounds(14, 80, 250, 23);
+			projComboBox.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					model.setSelectedProj(e.getItem());
 
-                       // if (model.getSelectedProjType() == CSSelectionModel.NONE) {
-                       //     setDatumComboBoxEnabled(false);
-                       // } else {
-                       //     setDatumComboBoxEnabled(true);
-                       // }
-                    }
-                });
-        }
+					if (model.getSelectedProjType() == CSSelectionModel.TRANSVERSAL) {
+						setHuseComboBoxEnabled(true);
+						getHuseComboBox().removeAllItems();
+						getHuseComboBox().loadData(model.getZoneList());
 
-        return projComboBox;
-    }
+					} else {
+						setHuseComboBoxEnabled(false);
+					}
 
-    /**
-     * Inicializa usoComboBox
-     *
-     * @return javax.swing.JComboBox
-     */
-    private LoadableComboBox getHuseComboBox() {
-        if (huseComboBox == null) {
-            huseComboBox = new LoadableComboBox();
-            huseComboBox.setBounds(14, 125, 250, 23);
-            huseComboBox.addItemListener(new java.awt.event.ItemListener() {
-                    public void itemStateChanged(java.awt.event.ItemEvent e) {
-                        model.setSelectedZone(e.getItem());
-                    }
-                });
-        }
+					// if (model.getSelectedProjType() == CSSelectionModel.NONE)
+					// {
+					// setDatumComboBoxEnabled(false);
+					// } else {
+					// setDatumComboBoxEnabled(true);
+					// }
+				}
+			});
+		}
 
-        return huseComboBox;
-    }
+		return projComboBox;
+	}
 
-    public CoordinateReferenceSystem getCrs() {
-        return model.getCrs();
-    }
+	/**
+	 * Inicializa usoComboBox
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
+	private LoadableComboBox getHuseComboBox() {
+		if (huseComboBox == null) {
+			huseComboBox = new LoadableComboBox();
+			huseComboBox.setBounds(14, 125, 250, 23);
+			huseComboBox.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					model.setSelectedZone(e.getItem());
+				}
+			});
+		}
+
+		return huseComboBox;
+	}
+
+	public CoordinateReferenceSystem getCrs() {
+		return model.getCrs();
+	}
 }

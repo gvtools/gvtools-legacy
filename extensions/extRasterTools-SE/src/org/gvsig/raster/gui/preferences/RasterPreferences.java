@@ -37,24 +37,25 @@ import org.gvsig.raster.gui.preferences.panels.PreferenceTemporal;
 import com.iver.andami.PluginServices;
 import com.iver.andami.preferences.AbstractPreferencePage;
 import com.iver.andami.preferences.StoreException;
+
 /**
  * RasterPreferences es un panel de preferencias situado a nivel de las
  * preferencias de gvSIG que engloba todas las opciones configurables de Raster
- *
+ * 
  * @version 11/12/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class RasterPreferences extends AbstractPreferencePage {
 	private static final long serialVersionUID = -1689657253810393874L;
 
-	protected static String     id        = RasterPreferences.class.getName();
-	private ImageIcon           icon;
+	protected static String id = RasterPreferences.class.getName();
+	private ImageIcon icon;
 
-	private PreferenceNoData    noData    = null;
+	private PreferenceNoData noData = null;
 	private PreferenceOverviews overviews = null;
-	private PreferenceCache     cache     = null;
-	private PreferenceTemporal  temporal  = null;
-	private PreferenceGeneral   general   = null;
+	private PreferenceCache cache = null;
+	private PreferenceTemporal temporal = null;
+	private PreferenceGeneral general = null;
 	private PreferenceLoadLayer loadLayer = null;
 
 	/**
@@ -135,6 +136,7 @@ public class RasterPreferences extends AbstractPreferencePage {
 
 	/**
 	 * Devuelve el panel de configuracion para los valores NoData
+	 * 
 	 * @return
 	 */
 	private PreferenceNoData getPreferenceNoData() {
@@ -148,6 +150,7 @@ public class RasterPreferences extends AbstractPreferencePage {
 	 * Devuelve el panel de configuracion general de Raster. Aqui es donde se
 	 * define si se visualiza automaticamente Raster, el numero de clases, si se
 	 * pregunta la reproyeccion, etc...
+	 * 
 	 * @return
 	 */
 	private PreferenceGeneral getPreferenceGeneral() {
@@ -159,6 +162,7 @@ public class RasterPreferences extends AbstractPreferencePage {
 
 	/**
 	 * Devuelve un panel de configuracion para las overviews de Raster.
+	 * 
 	 * @return
 	 */
 	private PreferenceOverviews getPreferenceOverviews() {
@@ -172,6 +176,7 @@ public class RasterPreferences extends AbstractPreferencePage {
 	 * Devuelve el panel de preferencias para las opciones de cache de Raster.
 	 * Aquí se podrán definir todos los parametros configurables respecto a la
 	 * cache.
+	 * 
 	 * @return
 	 */
 	private PreferenceCache getPreferenceCache() {
@@ -180,7 +185,6 @@ public class RasterPreferences extends AbstractPreferencePage {
 		}
 		return cache;
 	}
-
 
 	private PreferenceTemporal getPreferenceTemporal() {
 		if (temporal == null) {
@@ -198,6 +202,7 @@ public class RasterPreferences extends AbstractPreferencePage {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.preferences.IPreference#initializeValues()
 	 */
 	public void initializeValues() {
@@ -211,6 +216,7 @@ public class RasterPreferences extends AbstractPreferencePage {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.preferences.AbstractPreferencePage#storeValues()
 	 */
 	public void storeValues() throws StoreException {
@@ -224,6 +230,7 @@ public class RasterPreferences extends AbstractPreferencePage {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.preferences.IPreference#initializeDefaults()
 	 */
 	public void initializeDefaults() {
@@ -237,6 +244,7 @@ public class RasterPreferences extends AbstractPreferencePage {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.preferences.AbstractPreferencePage#isResizeable()
 	 */
 	public boolean isResizeable() {
@@ -245,6 +253,7 @@ public class RasterPreferences extends AbstractPreferencePage {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.preferences.IPreference#getID()
 	 */
 	public String getID() {
@@ -253,6 +262,7 @@ public class RasterPreferences extends AbstractPreferencePage {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.preferences.IPreference#getIcon()
 	 */
 	public ImageIcon getIcon() {
@@ -261,6 +271,7 @@ public class RasterPreferences extends AbstractPreferencePage {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.preferences.IPreference#getPanel()
 	 */
 	public JPanel getPanel() {
@@ -269,6 +280,7 @@ public class RasterPreferences extends AbstractPreferencePage {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.preferences.IPreference#getTitle()
 	 */
 	public String getTitle() {
@@ -277,11 +289,13 @@ public class RasterPreferences extends AbstractPreferencePage {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.preferences.IPreference#isValueChanged()
 	 */
 	public boolean isValueChanged() {
 		return true;
 	}
 
-	public void setChangesApplied() {}
+	public void setChangesApplied() {
+	}
 }

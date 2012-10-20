@@ -43,29 +43,29 @@ import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
  */
 public class I18nExtension extends Extension {
 
-    public void execute(String actionCommand) {
-	// Nothing to do
-    }
+	public void execute(String actionCommand) {
+		// Nothing to do
+	}
 
-    public void initialize() {
-	// Replace the default locale Preferences page for the new one
-	 ExtensionPointsSingleton.getInstance().add("AplicationPreferences",
-		"LanguagePage", new I18nPreferencePage());	
-    }
+	public void initialize() {
+		// Replace the default locale Preferences page for the new one
+		ExtensionPointsSingleton.getInstance().add("AplicationPreferences",
+				"LanguagePage", new I18nPreferencePage());
+	}
 
-    public void postInitialize() {
-	// Register the about panel
-	About about = (About) PluginServices.getExtension(About.class);
-	FPanelAbout panelAbout = about.getAboutPanel();
-	URL aboutURL = getClass().getResource("/about.htm");
-	panelAbout.addAboutUrl("I18nExtension", aboutURL);
-    }
+	public void postInitialize() {
+		// Register the about panel
+		About about = (About) PluginServices.getExtension(About.class);
+		FPanelAbout panelAbout = about.getAboutPanel();
+		URL aboutURL = getClass().getResource("/about.htm");
+		panelAbout.addAboutUrl("I18nExtension", aboutURL);
+	}
 
-    public boolean isEnabled() {
-	return true;
-    }
+	public boolean isEnabled() {
+		return true;
+	}
 
-    public boolean isVisible() {
-	return true;
-    }
+	public boolean isVisible() {
+		return true;
+	}
 }

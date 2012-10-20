@@ -57,12 +57,15 @@ import com.iver.cit.gvsig.gui.wizards.WFSWizardData;
  */
 
 /**
- * <p>Default panel used to create a WFS group's panel.</p>
+ * <p>
+ * Default panel used to create a WFS group's panel.
+ * </p>
  * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
-public abstract class AbstractWFSPanel extends AbstractPanel implements IWFSPanel {
+public abstract class AbstractWFSPanel extends AbstractPanel implements
+		IWFSPanel {
 	// Default dimensions of all WFS panels
 	static final int PANEL_WIDTH = 475;
 	static final int PANEL_HEIGHT = 365;
@@ -77,6 +80,7 @@ public abstract class AbstractWFSPanel extends AbstractPanel implements IWFSPane
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.panels.AbstractPanel#initialize()
 	 */
 	protected void initialize() {
@@ -85,35 +89,45 @@ public abstract class AbstractWFSPanel extends AbstractPanel implements IWFSPane
 	}
 
 	/**
-	 * <p>Gets the information of the wizard used to add or load panels.</p>
+	 * <p>
+	 * Gets the information of the wizard used to add or load panels.
+	 * </p>
 	 * 
 	 * @return the wizard data
 	 */
-	public WFSWizardData getWizardData(){
-		return (getPanelGroup() == null)? null: ((WFSParamsPanel)getPanelGroup()).getWizardData();  
+	public WFSWizardData getWizardData() {
+		return (getPanelGroup() == null) ? null
+				: ((WFSParamsPanel) getPanelGroup()).getWizardData();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.panelGroup.panels.AbstractPanel#setReference(java.lang.Object)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.panelGroup.panels.AbstractPanel#setReference(java
+	 * .lang.Object)
 	 */
 	public void setReference(Object ref) {
 		super.setReference(ref);
 
 		if (ref instanceof FLyrWFS) {
-			refresh(((FLyrWFS)ref).getWfsLayerNode());
-		}		
-	}	
- 
+			refresh(((FLyrWFS) ref).getWfsLayerNode());
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.gui.panels.IWFSPanel#refresh(com.iver.cit.gvsig.fmap.layers.WFSLayerNode)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.gui.panels.IWFSPanel#refresh(com.iver.cit.gvsig.fmap
+	 * .layers.WFSLayerNode)
 	 */
 	public void refresh(WFSLayerNode layer) {
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.panels.IPanel#accept()
 	 */
 	public void accept() {
@@ -121,6 +135,7 @@ public abstract class AbstractWFSPanel extends AbstractPanel implements IWFSPane
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.panels.IPanel#apply()
 	 */
 	public void apply() {
@@ -128,6 +143,7 @@ public abstract class AbstractWFSPanel extends AbstractPanel implements IWFSPane
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.panels.IPanel#cancel()
 	 */
 	public void cancel() {
@@ -135,6 +151,7 @@ public abstract class AbstractWFSPanel extends AbstractPanel implements IWFSPane
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.panelGroup.panels.IPanel#selected()
 	 */
 	public void selected() {

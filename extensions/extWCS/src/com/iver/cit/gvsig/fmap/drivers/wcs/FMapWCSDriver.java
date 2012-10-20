@@ -1,43 +1,43 @@
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
-*
-* Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License
-* as published by the Free Software Foundation; either version 2
-* of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
-*
-* For more information, contact:
-*
-*  Generalitat Valenciana
-*   Conselleria d'Infraestructures i Transport
-*   Av. Blasco Ibáñez, 50
-*   46010 VALENCIA
-*   SPAIN
-*
-*      +34 963862235
-*   gvsig@gva.es
-*      www.gvsig.gva.es
-*
-*    or
-*
-*   IVER T.I. S.A
-*   Salamanca 50
-*   46005 Valencia
-*   Spain
-*
-*   +34 963163400
-*   dac@iver.es
-*/
+ *
+ * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
+ *
+ * For more information, contact:
+ *
+ *  Generalitat Valenciana
+ *   Conselleria d'Infraestructures i Transport
+ *   Av. Blasco Ibáñez, 50
+ *   46010 VALENCIA
+ *   SPAIN
+ *
+ *      +34 963862235
+ *   gvsig@gva.es
+ *      www.gvsig.gva.es
+ *
+ *    or
+ *
+ *   IVER T.I. S.A
+ *   Salamanca 50
+ *   46005 Valencia
+ *   Spain
+ *
+ *   +34 963163400
+ *   dac@iver.es
+ */
 package com.iver.cit.gvsig.fmap.drivers.wcs;
 
 import java.awt.geom.Point2D;
@@ -56,8 +56,8 @@ import org.gvsig.remoteClient.exceptions.WCSException;
 import org.gvsig.remoteClient.utils.BoundaryBox;
 import org.gvsig.remoteClient.wcs.WCSClient;
 import org.gvsig.remoteClient.wcs.WCSCoverage;
-import org.gvsig.remoteClient.wcs.WCSStatus;
 import org.gvsig.remoteClient.wcs.WCSCoverage.AxisDescription;
+import org.gvsig.remoteClient.wcs.WCSStatus;
 import org.gvsig.remoteClient.wms.ICancellable;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -65,33 +65,27 @@ import com.hardcode.gdbms.engine.data.driver.DriverException;
 import com.iver.cit.gvsig.fmap.layers.FMapWCSParameter;
 import com.iver.cit.gvsig.fmap.layers.WCSLayer;
 
-
-
 /**
  * Driver between the FMap and WCSClient
- *
+ * 
  * Controlador entre FMap y WCSClient
- *
+ * 
  * @author jaume
- *
+ * 
  */
 public class FMapWCSDriver {
 	private WCSClient client = null;
 	private Hashtable coverages;
 	private WCSLayer[] layerList;
 
-
-
 	/**
 	 * Obtains the host name.
-	 *
+	 * 
 	 * Devuelve el nombre del host.
 	 */
 	public String getHost() {
 		return client.getHost();
 	}
-
-	private FMapWCSDriver() {}
 
 	protected FMapWCSDriver(URL url) throws ConnectException, IOException {
 		client = new WCSClient(url.toString());
@@ -99,30 +93,32 @@ public class FMapWCSDriver {
 
 	/**
 	 * Returns the string "WCSDriver", which is the driver's name.
-	 *
+	 * 
 	 * Devuelve "WCSDriver", el nombre del driver.
+	 * 
 	 * @return String
 	 */
-	public String getName() { return "WCSDriver"; }
+	public String getName() {
+		return "WCSDriver";
+	}
 
 	/**
 	 * Sets the server that we want to connect to.
-	 *
+	 * 
 	 * Establece el servidor al que se quiere conectar.
-	 *
+	 * 
 	 * @param host
 	 * @throws IOException
 	 */
-	public void setHost(String host) throws IOException{
+	public void setHost(String host) throws IOException {
 		client = new WCSClient(host);
 	}
 
-
 	/**
 	 * Returns a human-readable string containing the server's name.
-	 *
+	 * 
 	 * Devuelve el nombre legible del servidor devuelto por éste.
-	 *
+	 * 
 	 * @return String
 	 */
 	public String getLabel() {
@@ -131,31 +127,33 @@ public class FMapWCSDriver {
 
 	/**
 	 * Returns a string containing the server's WCS version number.
-	 *
+	 * 
 	 * Devuelve el número de versión WCS del servidor
-	 *
+	 * 
 	 * @return String
 	 */
-	public String getVersion(){
+	public String getVersion() {
 		return client.getVersion();
 	}
 
 	/**
 	 * <p>
-	 * Returns name and description of the server. It is supposed to be used
-	 * as the source of the abstract field in your application's interface.
+	 * Returns name and description of the server. It is supposed to be used as
+	 * the source of the abstract field in your application's interface.
 	 * </p>
 	 * <p>
 	 * Devuelve nombre y descripción (abstract) del servidor.
 	 * </p>
+	 * 
 	 * @return String
 	 */
-	public String getDescription(){
+	public String getDescription() {
 		return client.getDescription();
 	}
 
 	/**
 	 * Returns the layer descriptor for a given coverage name.
+	 * 
 	 * @param layerName
 	 * @return WCSLayer
 	 */
@@ -166,13 +164,14 @@ public class FMapWCSDriver {
 
 	/**
 	 * Returns an array of WCSLayer's with the descriptors of all coverages
+	 * 
 	 * @return WCSLayer[]
 	 */
-	public WCSLayer[] getLayerList(){
+	public WCSLayer[] getLayerList() {
 		if (coverages == null || coverages.isEmpty()) {
 			// the WCSLayer collection will be built
 			coverages = new Hashtable();
-			Hashtable wcsCoverages  = client.getCoverageList();
+			Hashtable wcsCoverages = client.getCoverageList();
 			int sz = wcsCoverages.size();
 
 			// Create an array with the WCSCoverages
@@ -211,14 +210,12 @@ public class FMapWCSDriver {
 					while (it.hasNext()) {
 						String srs = (String) it.next();
 						BoundaryBox bBox = cov.getBbox(srs);
-						Rectangle2D r = new Rectangle2D.Double(
-												bBox.getXmin(),
-												bBox.getYmin(),
-												bBox.getXmax()-bBox.getXmin(),
-												bBox.getYmax()-bBox.getYmin()
-												);
+						Rectangle2D r = new Rectangle2D.Double(bBox.getXmin(),
+								bBox.getYmin(),
+								bBox.getXmax() - bBox.getXmin(), bBox.getYmax()
+										- bBox.getYmin());
 						lyr.addExtent(srs, r);
-						}
+					}
 				}
 
 				// formats
@@ -238,12 +235,14 @@ public class FMapWCSDriver {
 				if (!k.isEmpty()) {
 					it = k.iterator();
 					while (it.hasNext()) {
-						AxisDescription ad = (AxisDescription) cov.axisPool.get(it.next());
+						AxisDescription ad = (AxisDescription) cov.axisPool
+								.get(it.next());
 						FMapWCSParameter p = new FMapWCSParameter();
 						p.setName(ad.getName());
 						p.setLabel(ad.getLabel());
-						p.setType(ad.getInterval()==null? FMapWCSParameter.VALUE_LIST : FMapWCSParameter.INTERVAL);
-						if (p.getType()==FMapWCSParameter.VALUE_LIST)
+						p.setType(ad.getInterval() == null ? FMapWCSParameter.VALUE_LIST
+								: FMapWCSParameter.INTERVAL);
+						if (p.getType() == FMapWCSParameter.VALUE_LIST)
 							p.setValueList(ad.getSingleValues());
 						else
 							p.setInterval(ad.getInterval());
@@ -258,17 +257,20 @@ public class FMapWCSDriver {
 	}
 
 	/**
-	 * Establishes the connection to the WCS server. Connecting to a WCS is
-	 * an abstraction.<br>
+	 * Establishes the connection to the WCS server. Connecting to a WCS is an
+	 * abstraction.<br>
 	 * <p>
 	 * Actually, it sends a GetCapabilities and a general DescribeCoverage
 	 * request (not a coverage-specific DescribeCoverage request) to read the
 	 * necessary data for building further GetCoverage requests.
 	 * </p>
+	 * 
 	 * @param override
-	 * @throws IOException, DriverException.
+	 * @throws IOException
+	 *             , DriverException.
 	 */
-	public boolean connect(boolean override, ICancellable cancel) throws IOException, ReadDriverException {
+	public boolean connect(boolean override, ICancellable cancel)
+			throws IOException, ReadDriverException {
 		coverages = null;
 		setHost(client.getHost());
 		return client.connect(override, cancel);
@@ -279,12 +281,14 @@ public class FMapWCSDriver {
 	 * protocol. So, this does nothing and you can omit it.<br>
 	 */
 	public void close() {
-//		connected = false;
+		// connected = false;
 	}
 
 	/**
 	 * Returns the label of an specific coverage given by the coverage name
-	 * @param coverage name (string)
+	 * 
+	 * @param coverage
+	 *            name (string)
 	 * @return string
 	 */
 	public String getLabel(String coverageName) {
@@ -293,17 +297,22 @@ public class FMapWCSDriver {
 
 	/**
 	 * Returns the coverage's MAX extent from the server.
+	 * 
 	 * @return Rectangle2D
 	 * @throws DriverException
 	 * @throws IOException
 	 */
-	public Rectangle2D getFullExtent(String coverageName, String srs) throws IOException, ReadDriverException {
+	public Rectangle2D getFullExtent(String coverageName, String srs)
+			throws IOException, ReadDriverException {
 		return client.getExtent(coverageName, srs);
 	}
 
 	/**
-	 * Returns the max resolution of a specific coverage given by the coverage's name.
-	 * @param coverage name (string)
+	 * Returns the max resolution of a specific coverage given by the coverage's
+	 * name.
+	 * 
+	 * @param coverage
+	 *            name (string)
 	 * @return double
 	 */
 	public Point2D getMaxResolution(String coverageName) {
@@ -313,10 +322,12 @@ public class FMapWCSDriver {
 		return null;
 	}
 
-
 	/**
-	 * Returns an ArrayList containing a set of Strings with the coverage's SRSs.
-	 * @param coverage name (string)
+	 * Returns an ArrayList containing a set of Strings with the coverage's
+	 * SRSs.
+	 * 
+	 * @param coverage
+	 *            name (string)
 	 * @return ArrayList
 	 */
 	public ArrayList getSRSs(String coverageName) {
@@ -328,7 +339,9 @@ public class FMapWCSDriver {
 
 	/**
 	 * Returns a String containing a description of an specific coverage.
-	 * @param coverage name (string)
+	 * 
+	 * @param coverage
+	 *            name (string)
 	 * @return string
 	 */
 	public String getCoverageDescription(String coverageName) {
@@ -341,7 +354,9 @@ public class FMapWCSDriver {
 	/**
 	 * Returns an ArrayList containing strings for the time positions of an
 	 * specific coverage given by the coverage's name.
-	 * @param coverage name (string)
+	 * 
+	 * @param coverage
+	 *            name (string)
 	 * @return ArrayList
 	 */
 	public ArrayList getTimes(String coverageName) {
@@ -353,17 +368,19 @@ public class FMapWCSDriver {
 
 	/**
 	 * Sends a GetCoverage request to the client.
+	 * 
 	 * @param status
 	 * @return
 	 * @throws WCSException
 	 */
-	public File getCoverage(WCSStatus status, ICancellable cancel) throws WCSDriverException {
+	public File getCoverage(WCSStatus status, ICancellable cancel)
+			throws WCSDriverException {
 		try {
 			return client.getCoverage(status, cancel);
 		} catch (ServerErrorException e) {
-			throw new WCSDriverException(getName(),e);
+			throw new WCSDriverException(getName(), e);
 		} catch (org.gvsig.remoteClient.exceptions.WCSException e) {
-			throw new WCSDriverException(getName(),e);
+			throw new WCSDriverException(getName(), e);
 		}
 	}
 

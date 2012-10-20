@@ -1,15 +1,16 @@
 package com.graphbuilder.math.func;
 
 /**
-The average function.
-*/
+ * The average function.
+ */
 public class AvgFunction implements Function {
 
-	public AvgFunction() {}
+	public AvgFunction() {
+	}
 
 	/**
-	Returns the average of the values in the array from [0, numParam).
-	*/
+	 * Returns the average of the values in the array from [0, numParam).
+	 */
 	public double of(double[] d, int numParam) {
 		double sum = 0;
 
@@ -20,8 +21,8 @@ public class AvgFunction implements Function {
 	}
 
 	/**
-	Returns true for 1 or more parameters, false otherwise.
-	*/
+	 * Returns true for 1 or more parameters, false otherwise.
+	 */
 	public boolean acceptNumParam(int numParam) {
 		return numParam > 0;
 	}

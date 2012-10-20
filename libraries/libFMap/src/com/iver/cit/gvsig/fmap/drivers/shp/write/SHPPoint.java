@@ -51,10 +51,9 @@ import com.iver.cit.gvsig.fmap.core.IGeometry3D;
 import com.iver.cit.gvsig.fmap.core.IGeometryM;
 import com.iver.cit.gvsig.fmap.core.v02.FConstant;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class SHPPoint implements SHPShape {
@@ -64,15 +63,17 @@ public class SHPPoint implements SHPShape {
 
 	/**
 	 * Crea un nuevo SHPPoint.
-	 *
-	 * @param type DOCUMENT ME!
-	 *
-	 * @throws ShapefileException DOCUMENT ME!
+	 * 
+	 * @param type
+	 *            DOCUMENT ME!
+	 * 
+	 * @throws ShapefileException
+	 *             DOCUMENT ME!
 	 */
 	public SHPPoint(int type) throws ShapefileException {
-		if ((type != FConstant.SHAPE_TYPE_POINT) &&
-				(type != FConstant.SHAPE_TYPE_POINTM) &&
-				(type != FConstant.SHAPE_TYPE_POINTZ)) { // 2d, 2d+m, 3d+m
+		if ((type != FConstant.SHAPE_TYPE_POINT)
+				&& (type != FConstant.SHAPE_TYPE_POINTM)
+				&& (type != FConstant.SHAPE_TYPE_POINTZ)) { // 2d, 2d+m, 3d+m
 			throw new ShapefileException("No es un punto 1,11 ni 21");
 		}
 
@@ -83,7 +84,7 @@ public class SHPPoint implements SHPShape {
 	 * Crea un nuevo SHPPoint.
 	 */
 	public SHPPoint() {
-		m_type = FConstant.SHAPE_TYPE_POINT; //2d
+		m_type = FConstant.SHAPE_TYPE_POINT; // 2d
 	}
 
 	/**
@@ -116,8 +117,8 @@ public class SHPPoint implements SHPShape {
 	 * @see com.iver.cit.gvsig.fmap.shp.SHPShape#write(ByteBuffer, IGeometry)
 	 */
 	public void write(ByteBuffer buffer, IGeometry geometry) {
-		//FPoint2D p2d = ((FPoint2D) geometry.getShape());
-		///obtainsPoints(geometry.getGeneralPathXIterator());
+		// FPoint2D p2d = ((FPoint2D) geometry.getShape());
+		// /obtainsPoints(geometry.getGeneralPathXIterator());
 		buffer.putDouble(point.getX());
 		buffer.putDouble(point.getY());
 
@@ -129,7 +130,7 @@ public class SHPPoint implements SHPShape {
 			}
 		}
 		if (m_type == FConstant.SHAPE_TYPE_POINTM) {
-			buffer.putDouble(((FPoint2DM)point).getM());
+			buffer.putDouble(((FPoint2DM) point).getM());
 		}
 	}
 
@@ -141,12 +142,12 @@ public class SHPPoint implements SHPShape {
 
 		if (m_type == FConstant.SHAPE_TYPE_POINT) {
 			length = 20;
-		} else if (m_type == FConstant.SHAPE_TYPE_POINTM ||
-				m_type == FConstant.SHAPE_TYPE_POINTZ) {
+		} else if (m_type == FConstant.SHAPE_TYPE_POINTM
+				|| m_type == FConstant.SHAPE_TYPE_POINTZ) {
 			length = 28;
 		} else {
-			throw new IllegalStateException("Expected ShapeType of Point, got" +
-					m_type);
+			throw new IllegalStateException("Expected ShapeType of Point, got"
+					+ m_type);
 		}
 
 		return length;
@@ -156,24 +157,25 @@ public class SHPPoint implements SHPShape {
 	 * @see com.iver.cit.gvsig.fmap.drivers.shp.write.SHPShape#obtainsPoints(com.iver.cit.gvsig.fmap.core.GeneralPathXIterator)
 	 */
 	public void obtainsPoints(IGeometry g) {
-		if (FConstant.SHAPE_TYPE_POINTZ == m_type){
-			z=((IGeometry3D)g).getZs()[0];
-		}else if (FConstant.SHAPE_TYPE_POINTM == m_type){
-			z=((IGeometryM)g).getMs()[0];
+		if (FConstant.SHAPE_TYPE_POINTZ == m_type) {
+			z = ((IGeometry3D) g).getZs()[0];
+		} else if (FConstant.SHAPE_TYPE_POINTM == m_type) {
+			z = ((IGeometryM) g).getMs()[0];
 		}
-		PathIterator theIterator = g.getPathIterator(null); //polyLine.getPathIterator(null, flatness);
+		PathIterator theIterator = g.getPathIterator(null); // polyLine.getPathIterator(null,
+															// flatness);
 		double[] theData = new double[6];
 
 		while (!theIterator.isDone()) {
-			//while not done
+			// while not done
 			int theType = theIterator.currentSegment(theData);
 
 			point = new FPoint2D(theData[0], theData[1]);
 
 			theIterator.next();
-		} //end while loop
+		} // end while loop
 	}
-	//	public void setFlatness(double flatness) {
-	//	//	this.flatness=flatness;
-	//	}
+	// public void setFlatness(double flatness) {
+	// // this.flatness=flatness;
+	// }
 }

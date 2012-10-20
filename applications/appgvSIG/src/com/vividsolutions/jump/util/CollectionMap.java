@@ -1,4 +1,3 @@
-
 /*
  * The Unified Mapping Platform (JUMP) is an extensible, interactive GUI 
  * for visualizing and manipulating spatial features with geometry and attributes.
@@ -43,166 +42,177 @@ import java.util.Set;
 
 import com.vividsolutions.jts.util.Assert;
 
-
 /**
- *  A Map whose values are Collections.
+ * A Map whose values are Collections.
  */
 public class CollectionMap implements Map {
-    private Map map;
-    private Class collectionClass = ArrayList.class;
+	private Map map;
+	private Class collectionClass = ArrayList.class;
 
-    /**
-     * Creates a CollectionMap backed by the given Map class.
-     * @param mapClass a Class that implements Map
-     */
-    public CollectionMap(Class mapClass) {
-        try {
-            map = (Map) mapClass.newInstance();
-        } catch (InstantiationException e) {
-            Assert.shouldNeverReachHere();
-        } catch (IllegalAccessException e) {
-            Assert.shouldNeverReachHere();
-        }
-    }
-    
-    public CollectionMap(Class mapClass, Class collectionClass) {
-        this.collectionClass = collectionClass;
-        try {
-            map = (Map) mapClass.newInstance();
-        } catch (InstantiationException e) {
-            Assert.shouldNeverReachHere();
-        } catch (IllegalAccessException e) {
-            Assert.shouldNeverReachHere();
-        }
-    }    
+	/**
+	 * Creates a CollectionMap backed by the given Map class.
+	 * 
+	 * @param mapClass
+	 *            a Class that implements Map
+	 */
+	public CollectionMap(Class mapClass) {
+		try {
+			map = (Map) mapClass.newInstance();
+		} catch (InstantiationException e) {
+			Assert.shouldNeverReachHere();
+		} catch (IllegalAccessException e) {
+			Assert.shouldNeverReachHere();
+		}
+	}
 
-    /**
-     * Creates a CollectionMap.
-     */
-    public CollectionMap() {
-        this(HashMap.class);
-    }
-    
-    private Collection getItemsInternal(Object key) {
-        Collection collection = (Collection) map.get(key);
-        if (collection == null) {
-            try {
-                collection = (Collection) collectionClass.newInstance();
-            } catch (InstantiationException e) {
-                Assert.shouldNeverReachHere();
-            } catch (IllegalAccessException e) {
-                Assert.shouldNeverReachHere();
-            }
-            map.put(key, collection);
-        }
-        return collection;
-    }
+	public CollectionMap(Class mapClass, Class collectionClass) {
+		this.collectionClass = collectionClass;
+		try {
+			map = (Map) mapClass.newInstance();
+		} catch (InstantiationException e) {
+			Assert.shouldNeverReachHere();
+		} catch (IllegalAccessException e) {
+			Assert.shouldNeverReachHere();
+		}
+	}
 
-    /**
-     * Adds the item to the Collection at the given key, creating a new Collection if
-     * necessary.
-     * @param key the key to the Collection to which the item should be added
-     * @param item the item to add
-     */
-    public void addItem(Object key, Object item) {
-        getItemsInternal(key).add(item);
-    }
-    
-    public void removeItem(Object key, Object item) {
-        getItemsInternal(key).remove(item);
-    }
+	/**
+	 * Creates a CollectionMap.
+	 */
+	public CollectionMap() {
+		this(HashMap.class);
+	}
 
-    public void clear() {
-        map.clear();
-    }
+	private Collection getItemsInternal(Object key) {
+		Collection collection = (Collection) map.get(key);
+		if (collection == null) {
+			try {
+				collection = (Collection) collectionClass.newInstance();
+			} catch (InstantiationException e) {
+				Assert.shouldNeverReachHere();
+			} catch (IllegalAccessException e) {
+				Assert.shouldNeverReachHere();
+			}
+			map.put(key, collection);
+		}
+		return collection;
+	}
 
-    /**
-     * Adds the items to the Collection at the given key, creating a new Collection if
-     * necessary.
-     * @param key the key to the Collection to which the items should be added
-     * @param items the items to add
-     */
-    public void addItems(Object key, Collection items) {
-        for (Iterator i = items.iterator(); i.hasNext();) {
-            addItem(key, i.next());
-        }
-    }
-    
-    public void addItems(CollectionMap other) {
-        for (Iterator i = other.keySet().iterator(); i.hasNext(); ) {
-            Object key = i.next();
-            addItems(key, other.getItems(key));
-        }
-    }
+	/**
+	 * Adds the item to the Collection at the given key, creating a new
+	 * Collection if necessary.
+	 * 
+	 * @param key
+	 *            the key to the Collection to which the item should be added
+	 * @param item
+	 *            the item to add
+	 */
+	public void addItem(Object key, Object item) {
+		getItemsInternal(key).add(item);
+	}
 
-    /**
-     * Returns the values.
-     * @return a view of the values, backed by this CollectionMap
-     */
-    public Collection values() {
-        return map.values();
-    }
+	public void removeItem(Object key, Object item) {
+		getItemsInternal(key).remove(item);
+	}
 
-    /**
-     * Returns the keys.
-     * @return a view of the keys, backed by this CollectionMap
-     */
-    public Set keySet() {
-        return map.keySet();
-    }
+	public void clear() {
+		map.clear();
+	}
 
-    /**
-     * Returns the number of mappings.
-     * @return the number of key-value pairs
-     */
-    public int size() {
-        return map.size();
-    }
+	/**
+	 * Adds the items to the Collection at the given key, creating a new
+	 * Collection if necessary.
+	 * 
+	 * @param key
+	 *            the key to the Collection to which the items should be added
+	 * @param items
+	 *            the items to add
+	 */
+	public void addItems(Object key, Collection items) {
+		for (Iterator i = items.iterator(); i.hasNext();) {
+			addItem(key, i.next());
+		}
+	}
 
-    public Object get(Object key) {
-        return getItems(key);
-    }
+	public void addItems(CollectionMap other) {
+		for (Iterator i = other.keySet().iterator(); i.hasNext();) {
+			Object key = i.next();
+			addItems(key, other.getItems(key));
+		}
+	}
 
-    public Collection getItems(Object key) {
-        return Collections.unmodifiableCollection(getItemsInternal(key));
-    }
+	/**
+	 * Returns the values.
+	 * 
+	 * @return a view of the values, backed by this CollectionMap
+	 */
+	public Collection values() {
+		return map.values();
+	}
 
-    public Object remove(Object key) {
-        return map.remove(key);
-    }
+	/**
+	 * Returns the keys.
+	 * 
+	 * @return a view of the keys, backed by this CollectionMap
+	 */
+	public Set keySet() {
+		return map.keySet();
+	}
 
-    public boolean containsKey(Object key) {
-        return map.containsKey(key);
-    }
+	/**
+	 * Returns the number of mappings.
+	 * 
+	 * @return the number of key-value pairs
+	 */
+	public int size() {
+		return map.size();
+	}
 
-    public boolean containsValue(Object value) {
-        return map.containsValue(value);
-    }
+	public Object get(Object key) {
+		return getItems(key);
+	}
 
-    public Set entrySet() {
-        return map.entrySet();
-    }
+	public Collection getItems(Object key) {
+		return Collections.unmodifiableCollection(getItemsInternal(key));
+	}
 
-    public boolean isEmpty() {
-        return map.isEmpty();
-    }
+	public Object remove(Object key) {
+		return map.remove(key);
+	}
 
-    public Object put(Object key, Object value) {
-        Assert.isTrue(value instanceof Collection);
+	public boolean containsKey(Object key) {
+		return map.containsKey(key);
+	}
 
-        return map.put(key, value);
-    }
+	public boolean containsValue(Object value) {
+		return map.containsValue(value);
+	}
 
-    public void putAll(Map map) {
-        for (Iterator i = map.keySet().iterator(); i.hasNext();) {
-            Object key = i.next();
-            //Delegate to #put so that the assertion is made. [Jon Aquino]
-            put(key, map.get(key));
-        }
-    }
-    public void removeItems(Object key, Collection items) {
-        getItemsInternal(key).removeAll(items);
-    }
+	public Set entrySet() {
+		return map.entrySet();
+	}
+
+	public boolean isEmpty() {
+		return map.isEmpty();
+	}
+
+	public Object put(Object key, Object value) {
+		Assert.isTrue(value instanceof Collection);
+
+		return map.put(key, value);
+	}
+
+	public void putAll(Map map) {
+		for (Iterator i = map.keySet().iterator(); i.hasNext();) {
+			Object key = i.next();
+			// Delegate to #put so that the assertion is made. [Jon Aquino]
+			put(key, map.get(key));
+		}
+	}
+
+	public void removeItems(Object key, Collection items) {
+		getItemsInternal(key).removeAll(items);
+	}
 
 	public Map getMap() {
 		return map;

@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.topologyrules;
 
 import java.awt.Color;
@@ -72,44 +72,40 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.utiles.XMLEntity;
 import com.vividsolutions.jts.geom.Geometry;
 
-public abstract class AbstractSpatialPredicateTwoLyrRule extends AbstractTopologyRule implements ITwoLyrRule {
+public abstract class AbstractSpatialPredicateTwoLyrRule extends
+		AbstractTopologyRule implements ITwoLyrRule {
 
 	protected FLyrVect destinationLyr;
-	
+
 	protected static List<ITopologyErrorFix> automaticErrorFixes = new ArrayList<ITopologyErrorFix>();
-	
+
 	protected static final Color DEFAULT_ERROR_COLOR = Color.LIGHT_GRAY;
 
 	protected static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = (MultiShapeSymbol) SymbologyFactory
 			.createDefaultSymbolByShapeType(FShape.MULTI, DEFAULT_ERROR_COLOR);
-	
-	protected MultiShapeSymbol errorSymbol = DEFAULT_ERROR_SYMBOL;	
-	
-	
-	public AbstractSpatialPredicateTwoLyrRule(Topology topology, 
-											 FLyrVect originLyr,
-											 FLyrVect destinationLyr){
+
+	protected MultiShapeSymbol errorSymbol = DEFAULT_ERROR_SYMBOL;
+
+	public AbstractSpatialPredicateTwoLyrRule(Topology topology,
+			FLyrVect originLyr, FLyrVect destinationLyr) {
 		super(topology, originLyr);
 		this.destinationLyr = destinationLyr;
 	}
-	
-	
-	
+
 	/**
 	 * Constructor without topology param
 	 * 
 	 * @param originLyr
 	 */
-	public AbstractSpatialPredicateTwoLyrRule(FLyrVect originLyr, FLyrVect destinationLyr){
+	public AbstractSpatialPredicateTwoLyrRule(FLyrVect originLyr,
+			FLyrVect destinationLyr) {
 		this(null, originLyr, destinationLyr);
 	}
-	
-	
-	
-	public AbstractSpatialPredicateTwoLyrRule(){
+
+	public AbstractSpatialPredicateTwoLyrRule() {
 		super();
 	}
-	
+
 	public FLyrVect getDestinationLyr() {
 		return destinationLyr;
 	}
@@ -117,33 +113,30 @@ public abstract class AbstractSpatialPredicateTwoLyrRule extends AbstractTopolog
 	public void setDestinationLyr(FLyrVect destinationLyr) {
 		this.destinationLyr = destinationLyr;
 	}
-	
-	public XMLEntity getXMLEntity(){
+
+	public XMLEntity getXMLEntity() {
 		XMLEntity xml = super.getXMLEntity();
 		xml.putProperty("destinationLayerName", this.destinationLyr.getName());
 		return xml;
 	}
-	    
-	public void setXMLEntity(XMLEntity xml){
+
+	public void setXMLEntity(XMLEntity xml) {
 		super.setXMLEntity(xml);
 		String destinationLayerName = "";
 		if (xml.contains("destinationLayerName")) {
-			destinationLayerName = xml.getStringProperty("destinationLayerName");
-			this.destinationLyr = (FLyrVect) topology.getLayer(destinationLayerName);
-		}//if
+			destinationLayerName = xml
+					.getStringProperty("destinationLayerName");
+			this.destinationLyr = (FLyrVect) topology
+					.getLayer(destinationLayerName);
+		}// if
 	}
-	
-	protected TopologyError createTopologyError(Geometry errorGeometry, 
-												IFeature feature, 
-												IFeature neighbour){
+
+	protected TopologyError createTopologyError(Geometry errorGeometry,
+			IFeature feature, IFeature neighbour) {
 		IGeometry errorGeom = NewFConverter.toFMap(errorGeometry);
-		TopologyError topologyError = 
-			new TopologyError(errorGeom, 
-						errorContainer.getErrorFid(), 
-						this,  
-						feature, 
-						neighbour, 
-						topology );
+		TopologyError topologyError = new TopologyError(errorGeom,
+				errorContainer.getErrorFid(), this, feature, neighbour,
+				topology);
 		return topologyError;
 	}
 
@@ -151,43 +144,47 @@ public abstract class AbstractSpatialPredicateTwoLyrRule extends AbstractTopolog
 	public void validateFeature(IFeature feature) {
 		IGeometry geom = feature.getGeometry();
 		int shapeType = geom.getGeometryType();
-		if(acceptsOriginGeometryType(shapeType))
-		{
+		if (acceptsOriginGeometryType(shapeType)) {
 			Rectangle2D bounds = geom.getBounds2D();
-			Point2D extendedLL = new Point2D.Double(bounds.getMinX(), bounds.getMinY());
-			Point2D extendedUL = new Point2D.Double(bounds.getMaxX(), bounds.getMaxY());
-			
+			Point2D extendedLL = new Point2D.Double(bounds.getMinX(),
+					bounds.getMinY());
+			Point2D extendedUL = new Point2D.Double(bounds.getMaxX(),
+					bounds.getMaxY());
+
 			bounds.add(extendedLL);
 			bounds.add(extendedUL);
-			
+
 			try {
-				IFeatureIterator neighbours = getDestinationLyr().
-											  getSource().getFeatureIterator(bounds, null, 
-													    						null, false);
-				checkWithNeighbourhood(feature, bounds, neighbours);	
-				
+				IFeatureIterator neighbours = getDestinationLyr().getSource()
+						.getFeatureIterator(bounds, null, null, false);
+				checkWithNeighbourhood(feature, bounds, neighbours);
+
 			} catch (BaseException e) {
 				e.printStackTrace();
 			}
-		}//accepts
+		}// accepts
 	}
-	
-	protected void checkWithNeighbourhood(IFeature feature, Rectangle2D extendedBounds, IFeatureIterator neighbourhood) throws BaseException{
-		Geometry firstGeometry = NewFConverter.toJtsGeometry(feature.getGeometry());
+
+	protected void checkWithNeighbourhood(IFeature feature,
+			Rectangle2D extendedBounds, IFeatureIterator neighbourhood)
+			throws BaseException {
+		Geometry firstGeometry = NewFConverter.toJtsGeometry(feature
+				.getGeometry());
 		while (neighbourhood.hasNext()) {
 			IFeature neighbourFeature = neighbourhood.next();
 			IGeometry geom2 = neighbourFeature.getGeometry();
-			if(acceptsDestinationGeometryType(geom2.getGeometryType())){
+			if (acceptsDestinationGeometryType(geom2.getGeometryType())) {
 				Rectangle2D rect2 = geom2.getBounds2D();
 				if (extendedBounds.intersects(rect2)) {
 					Geometry jtsGeom2 = NewFConverter.toJtsGeometry(geom2);
-					checkSpatialPredicate(feature, firstGeometry, neighbourFeature, jtsGeom2 );
+					checkSpatialPredicate(feature, firstGeometry,
+							neighbourFeature, jtsGeom2);
 				}
 			}
-			
-		}//while
+
+		}// while
 	}
-	
+
 	public List<ITopologyErrorFix> getAutomaticErrorFixes() {
 		return automaticErrorFixes;
 	}
@@ -200,20 +197,22 @@ public abstract class AbstractSpatialPredicateTwoLyrRule extends AbstractTopolog
 		return errorSymbol;
 	}
 
-	
-	protected abstract boolean checkSpatialPredicate(IFeature feature,Geometry firstGeometry, 
-								IFeature neighbourFeature, Geometry jtsGeom2);
+	protected abstract boolean checkSpatialPredicate(IFeature feature,
+			Geometry firstGeometry, IFeature neighbourFeature, Geometry jtsGeom2);
 
 	/**
-	 * Tells if this rule applies to the specified  geometry type
-	 * for the first feature.
+	 * Tells if this rule applies to the specified geometry type for the first
+	 * feature.
+	 * 
 	 * @param shapeType
 	 * @return
 	 */
 	protected abstract boolean acceptsOriginGeometryType(int shapeType);
+
 	/**
-	 * Tells if this rule applies to the specified  geometry type
-	 * for the destination feature.
+	 * Tells if this rule applies to the specified geometry type for the
+	 * destination feature.
+	 * 
 	 * @param shapeType
 	 * @return
 	 */

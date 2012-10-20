@@ -1,4 +1,4 @@
- /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -49,27 +49,24 @@ import com.iver.cit.gvsig.fmap.rendering.ILegend;
 
 /**
  * <p>
- * This is the integration test for all the legends implementing
- * the interface IClassifiedVectorLegend.<br>
+ * This is the integration test for all the legends implementing the interface
+ * IClassifiedVectorLegend.<br>
  * </p>
  * <p>
- * It ensures that the legend tested will behave as it is expected
- * within the app in all the places where symbol classification 
- * <br>
+ * It ensures that the legend tested will behave as it is expected within the
+ * app in all the places where symbol classification <br>
  * </p>
  * <p>
- * Notice that the classification tested here is not linked to 
- * vector datasources so it can be used to test raster datasources
- * as well.
+ * Notice that the classification tested here is not linked to vector
+ * datasources so it can be used to test raster datasources as well.
  * </p>
- *
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
 public class TestIClassifiedLegend extends TestCase {
-	
-	private IClassifiedLegend[] legends;
 
+	private IClassifiedLegend[] legends;
 
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -83,21 +80,21 @@ public class TestIClassifiedLegend extends TestCase {
 
 			}
 		}
-		this.legends = (IClassifiedLegend[]) legends.toArray(new IClassifiedLegend[legends.size()]);
+		this.legends = (IClassifiedLegend[]) legends
+				.toArray(new IClassifiedLegend[legends.size()]);
 	}
 
-	
 	/**
-	 * ensures that the getSymbols method is returning al the symbols added
-	 * to the legend.
-	 *
+	 * ensures that the getSymbols method is returning al the symbols added to
+	 * the legend.
+	 * 
 	 * @return DOCUMENT ME!
 	 */
 	public void testGetSymbols() {
 		System.out.println("TestIClassifiedLegend.testGetSymbols()");
 		System.out.println("\t not yet implemented");
 	}
-	
+
 	/**
 	 * ensures that all the descriptions returned in the getDescriptions() are
 	 * the same and in the same order than the descriptions of the symbols
@@ -108,18 +105,15 @@ public class TestIClassifiedLegend extends TestCase {
 		System.out.println("\t not yet implemented");
 	}
 
-	
-
 	/**
-	 * ensures that all the descriptions returned in the testGetValues() are
-	 * the same and in the same order than the values associated to each
-	 * of the symbols. This is a must when you are serializing/persisting the
-	 * legend and you serialize/persist each of the fields independently.
+	 * ensures that all the descriptions returned in the testGetValues() are the
+	 * same and in the same order than the values associated to each of the
+	 * symbols. This is a must when you are serializing/persisting the legend
+	 * and you serialize/persist each of the fields independently.
 	 */
 	public void testGetValues() {
 		System.out.println("TestIClassifiedLegend.testGetValues()");
 		System.out.println("\t not yet implemented");
 	}
 
-	
 }

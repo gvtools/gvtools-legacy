@@ -42,25 +42,30 @@ package com.iver.cit.gvsig.fmap.drivers;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 
+public interface IVectorialJDBCDriver extends IVectorialDatabaseDriver {
 
-public interface IVectorialJDBCDriver extends  IVectorialDatabaseDriver {
-	
-    public IFeatureIterator getFeatureIterator(String sql) throws ReadDriverException;
+	public IFeatureIterator getFeatureIterator(String sql)
+			throws ReadDriverException;
+
 	public void open();
-	
+
 	/**
-	 * Validate the parameters of Driver with the connection and the DBLayerDefinition.
-	 * Calling this method is optional. It's not necessary to use it when you create
-	 * a driver to create a layer, but if you use it, you have to use setData(...) afterwards
-	 * if you are going to use that instance of the driver.
-	 *
-	 * @param conn Connection`s driver
-	 * @param lyrDef DBLayerDefinition
-	 *
-	 * @throws DBException! If some kind of issue was detected
+	 * Validate the parameters of Driver with the connection and the
+	 * DBLayerDefinition. Calling this method is optional. It's not necessary to
+	 * use it when you create a driver to create a layer, but if you use it, you
+	 * have to use setData(...) afterwards if you are going to use that instance
+	 * of the driver.
+	 * 
+	 * @param conn
+	 *            Connection`s driver
+	 * @param lyrDef
+	 *            DBLayerDefinition
+	 * 
+	 * @throws DBException
+	 *             ! If some kind of issue was detected
 	 */
 	public void validateData(IConnection conn, DBLayerDefinition lyrDef)
-	throws DBException;
+			throws DBException;
 }
 
 // [eiel-gestion-conexiones]

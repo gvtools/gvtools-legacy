@@ -42,27 +42,28 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: SumarizeFuntDialogIF.java 5412 2006-05-24 21:15:07Z azabala $
-* $Log$
-* Revision 1.1  2006-05-24 21:13:09  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.2  2006/03/05 19:53:25  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/02/26 20:52:13  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: SumarizeFuntDialogIF.java 5412 2006-05-24 21:15:07Z azabala $
+ * $Log$
+ * Revision 1.1  2006-05-24 21:13:09  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.2  2006/03/05 19:53:25  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/02/26 20:52:13  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core.gui;
 
 import com.iver.cit.gvsig.geoprocess.core.fmap.SummarizationFunction;
 
 public interface SumarizeFuntDialogIF {
 	public void ok();
+
 	public SummarizationFunction[] getFunctions();
+
 	public void resetCheckbox();
 }
-

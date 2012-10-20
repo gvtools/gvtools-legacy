@@ -46,16 +46,13 @@ import java.util.Hashtable;
 import com.hardcode.gdbms.engine.values.Value;
 import com.iver.cit.gvsig.fmap.Messages;
 
-
 /**
  * Implements the funcionality of the Or operator
- *
+ * 
  * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
- *
+ * 
  */
 public class OrOperator extends Operator {
-
-
 
 	private ArrayList<Expression> arguments = new ArrayList<Expression>();
 
@@ -67,13 +64,15 @@ public class OrOperator extends Operator {
 		super(symbol_table);
 	}
 
-	public Object evaluate() throws ExpressionException{
+	public Object evaluate() throws ExpressionException {
 
 		boolean result = false;
 
-		for (int i = 0; i < arguments.size(); i++){
-			Expression function = (Expression)arguments.get(i);
-			result = result || ((Boolean)((Expression)function).evaluate()).booleanValue();
+		for (int i = 0; i < arguments.size(); i++) {
+			Expression function = (Expression) arguments.get(i);
+			result = result
+					|| ((Boolean) ((Expression) function).evaluate())
+							.booleanValue();
 		}
 		return result;
 	}
@@ -82,17 +81,18 @@ public class OrOperator extends Operator {
 		arguments.add(i, arg);
 	}
 
-	public Class getResultType()
-	{
+	public Class getResultType() {
 		return Boolean.class;
 	}
 
 	public String getPattern() {
-		return "("+Messages.getString(OperationTags.OPERAND)
-		+ OperationTags.OR_OP +Messages.getString(OperationTags.OPERAND)+ ")\n"+
-		Messages.getString(OperationTags.OPERAND) +" = "+
-		Messages.getString(OperationTags.BOOLEAN_VALUE);
-		}
+		return "(" + Messages.getString(OperationTags.OPERAND)
+				+ OperationTags.OR_OP
+				+ Messages.getString(OperationTags.OPERAND) + ")\n"
+				+ Messages.getString(OperationTags.OPERAND) + " = "
+				+ Messages.getString(OperationTags.BOOLEAN_VALUE);
+	}
+
 	public ArrayList<Expression> getArguments() {
 		return arguments;
 	}
@@ -104,8 +104,9 @@ public class OrOperator extends Operator {
 	public void check() throws ExpressionException {
 
 		for (int i = 0; i < arguments.size(); i++) {
-			if(!(arguments.get(i).evaluate()instanceof Boolean))
-				throw new ExpressionException(ExpressionException.CLASS_CASTING_EXCEPTION);
+			if (!(arguments.get(i).evaluate() instanceof Boolean))
+				throw new ExpressionException(
+						ExpressionException.CLASS_CASTING_EXCEPTION);
 		}
 	}
 

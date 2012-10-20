@@ -191,13 +191,12 @@ import com.iver.cit.gvsig.fmap.core.v02.FSymbol;
 import com.iver.cit.gvsig.gui.JComboBoxUnits;
 import com.iver.utiles.XMLEntity;
 
-
 /**
- * Creates the panel that is used to control the properties of a symbol in
- * order to modify or check them and to create a new one.
- *
+ * Creates the panel that is used to control the properties of a symbol in order
+ * to modify or check them and to create a new one.
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
 public class SymbolEditor extends JPanel implements IWindow {
 
@@ -222,23 +221,27 @@ public class SymbolEditor extends JPanel implements IWindow {
 	private SymbolLayerManager layerManager;
 	private boolean replacing = false;
 	private JComboBoxUnitsReferenceSystem cmbUnitsReferenceSystem;
+
 	/**
 	 * Constructor method
-	 *
-	 * @param symbol ISymbol
-	 * @param shapeType int
+	 * 
+	 * @param symbol
+	 *            ISymbol
+	 * @param shapeType
+	 *            int
 	 */
 	public SymbolEditor(ISymbol symbol, int shapeType) {
-//////////	/-------------------------------------
+		// //////// /-------------------------------------
 		if (shapeType == FShape.TEXT) {
-			this.symbol = symbol == null ? new SimpleTextSymbol(): symbol;
+			this.symbol = symbol == null ? new SimpleTextSymbol() : symbol;
 		} else {
-//////////	/-------------------------------------
+			// //////// /-------------------------------------
 
 			if (!(symbol instanceof IMultiLayerSymbol)) {
 				// this is a simple symbol (or null one); it will be
 				// converted to a multilayer one to accept layer addition
-				IMultiLayerSymbol nSym = SymbologyFactory.createEmptyMultiLayerSymbol(shapeType);
+				IMultiLayerSymbol nSym = SymbologyFactory
+						.createEmptyMultiLayerSymbol(shapeType);
 
 				if (!(symbol instanceof FSymbol))
 					nSym.addLayer(symbol);
@@ -259,8 +262,8 @@ public class SymbolEditor extends JPanel implements IWindow {
 			if (this.symbol instanceof CartographicSupport) {
 				CartographicSupport cs = (CartographicSupport) this.symbol;
 				getCmbUnits().setSelectedUnitIndex(cs.getUnit());
-				getCmbUnitsReferenceSystem().
-					setSelectedIndex(cs.getReferenceSystem());
+				getCmbUnitsReferenceSystem().setSelectedIndex(
+						cs.getReferenceSystem());
 
 			}
 
@@ -272,7 +275,7 @@ public class SymbolEditor extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 */
 	private void initialize() {
 
@@ -288,29 +291,33 @@ public class SymbolEditor extends JPanel implements IWindow {
 					AbstractTypeSymbolEditor options = (AbstractTypeSymbolEditor) getCmbType()
 							.getSelectedItem();
 
-//////////			/-------------------------------------
-					if (layerManager!=null) {
-//////////			/-------------------------------------
-							ISymbol l = layerManager.getSelectedLayer();
+					// //////// /-------------------------------------
+					if (layerManager != null) {
+						// //////// /-------------------------------------
+						ISymbol l = layerManager.getSelectedLayer();
 
-						// if the symbol is not null and is it managed by the "options" class
+						// if the symbol is not null and is it managed by the
+						// "options" class
 						// refresh the controls
 						if (l != null
-								&& l.getClass().equals(options.getSymbolClass())) {
+								&& l.getClass()
+										.equals(options.getSymbolClass())) {
 							if (l instanceof CartographicSupport) {
 								CartographicSupport cs = (CartographicSupport) l;
-								getCmbUnits().setSelectedUnitIndex(cs.getUnit());
-								getCmbUnitsReferenceSystem().setSelectedIndex(cs.getReferenceSystem());
+								getCmbUnits()
+										.setSelectedUnitIndex(cs.getUnit());
+								getCmbUnitsReferenceSystem().setSelectedIndex(
+										cs.getReferenceSystem());
 							}
 							options.refreshControls(l);
 						}
 
 						replaceOptions(options);
-//////////			/-------------------------------------
+						// //////// /-------------------------------------
 					} else {
 						replaceOptions(options);
 					}
-//////////			/-------------------------------------
+					// //////// /-------------------------------------
 
 				}
 			}
@@ -321,8 +328,7 @@ public class SymbolEditor extends JPanel implements IWindow {
 				if (!(o1 instanceof AbstractTypeSymbolEditor || o1 instanceof AbstractTypeSymbolEditor))
 					throw new IllegalArgumentException(PluginServices.getText(
 							this, "trying_to_add_a_non_TypeSymbolEditor_panel"));
-				AbstractTypeSymbolEditor pnl1 = (
-						AbstractTypeSymbolEditor) o1, pnl2 = (AbstractTypeSymbolEditor) o2;
+				AbstractTypeSymbolEditor pnl1 = (AbstractTypeSymbolEditor) o1, pnl2 = (AbstractTypeSymbolEditor) o2;
 				int result = pnl1.getName().compareTo(pnl2.getName());
 				if (result == 0)
 					throw new IllegalArgumentException(PluginServices.getText(
@@ -331,10 +337,10 @@ public class SymbolEditor extends JPanel implements IWindow {
 			}
 		};
 
-
 		TreeSet set = new TreeSet(tabComparator);
-		ArrayList editors = (ArrayList) editorsByType.get(new Integer(shapeType));
-		Class[] constrLocator = new Class[] {SymbolEditor.class};
+		ArrayList editors = (ArrayList) editorsByType
+				.get(new Integer(shapeType));
+		Class[] constrLocator = new Class[] { SymbolEditor.class };
 		Object[] constrInitargs = new Object[] { this };
 		for (int i = 0; i < editors.size(); i++) {
 			Class editorClass = (Class) editors.get(i);
@@ -342,11 +348,15 @@ public class SymbolEditor extends JPanel implements IWindow {
 				Constructor c = editorClass.getConstructor(constrLocator);
 				set.add(c.newInstance(constrInitargs));
 			} catch (Exception e) {
-				NotificationManager.addError(PluginServices.getText(this, "failed_installing_symbol_editor")+" "
-						+editorClass.getName(), e);
+				NotificationManager.addError(
+						PluginServices.getText(this,
+								"failed_installing_symbol_editor")
+								+ " "
+								+ editorClass.getName(), e);
 			}
-		};
- 		tabs = (AbstractTypeSymbolEditor[]) set
+		}
+		;
+		tabs = (AbstractTypeSymbolEditor[]) set
 				.toArray(new AbstractTypeSymbolEditor[0]);
 
 		this.setLayout(new BorderLayout());
@@ -357,11 +367,13 @@ public class SymbolEditor extends JPanel implements IWindow {
 		cmbTypeActionListener.actionPerformed(null);
 		refresh();
 	}
+
 	/**
 	 * Returns an array of tabs. The value of this array will depend on the
 	 * symbol selected. For example, if the symbol is composed by lines this
 	 * method will return tha tabs that allow the user to modify a simple line
 	 * symbol(in this case simple line and arrow decorator tabs)
+	 * 
 	 * @param sym
 	 * @return tabs[] AbstractTypeSymbolEditor[]
 	 */
@@ -373,9 +385,11 @@ public class SymbolEditor extends JPanel implements IWindow {
 				return tabs[i];
 		return null;
 	}
+
 	/**
-	 * Initializes the OkCancel panel where the accept and cancel buttons
-	 * will be placed
+	 * Initializes the OkCancel panel where the accept and cancel buttons will
+	 * be placed
+	 * 
 	 * @return okCancelPanel AcceptCancelPanel
 	 */
 	private AcceptCancelPanel getOkCancelPanel() {
@@ -411,21 +425,24 @@ public class SymbolEditor extends JPanel implements IWindow {
 			cs.setUnit(getUnit());
 			cs.setReferenceSystem(getReferenceSystem());
 		}
-//
-//		if (symbol instanceof MultiLayerLineSymbol) {
-//			MultiLayerLineSymbol mLineSym = (MultiLayerLineSymbol) symbol;
-//			double lineWidth = 0;
-//			for (int i = 0; i < mLineSym.getLayerCount(); i++) {
-//				lineWidth = Math.max(lineWidth, ((ILineSymbol) mLineSym.getLayer(i)).getLineWidth());
-//			}
-//
-//			if (mLineSym.getLineWidth() != lineWidth)
-//				mLineSym.setLineWidth(lineWidth);
-//		}
+		//
+		// if (symbol instanceof MultiLayerLineSymbol) {
+		// MultiLayerLineSymbol mLineSym = (MultiLayerLineSymbol) symbol;
+		// double lineWidth = 0;
+		// for (int i = 0; i < mLineSym.getLayerCount(); i++) {
+		// lineWidth = Math.max(lineWidth, ((ILineSymbol)
+		// mLineSym.getLayer(i)).getLineWidth());
+		// }
+		//
+		// if (mLineSym.getLineWidth() != lineWidth)
+		// mLineSym.setLineWidth(lineWidth);
+		// }
 		return symbol;
 	}
+
 	/**
 	 * Initializes the west panel
+	 * 
 	 * @return
 	 */
 	private JPanel getPnlWest() {
@@ -433,22 +450,22 @@ public class SymbolEditor extends JPanel implements IWindow {
 			pnlWest = new JPanel();
 			pnlWest.setLayout(new BorderLayout());
 			pnlWest.add(getPnlPreview(), java.awt.BorderLayout.NORTH);
-//////////	/-------------------------------------
+			// //////// /-------------------------------------
 			if (symbol instanceof IMultiLayerSymbol) {
-//////////		/-------------------------------------
-
+				// //////// /-------------------------------------
 
 				pnlWest.add(getPnlLayers(), java.awt.BorderLayout.SOUTH);
 
-//////////		/-------------------------------------
+				// //////// /-------------------------------------
 			} // otherwise, no layer manager needed
-//////////	/-------------------------------------
+			// //////// /-------------------------------------
 		}
 		return pnlWest;
 	}
+
 	/**
 	 * Initializes the center panel that shows the properties of a symbol.
-	 *
+	 * 
 	 * @return pnlCenter JPanel
 	 */
 	private JPanel getPnlCenter() {
@@ -460,10 +477,11 @@ public class SymbolEditor extends JPanel implements IWindow {
 		}
 		return pnlCenter;
 	}
+
 	/**
-	 * Initializes the preview panel that allows the user to see a previsualization
-	 * of the final symbol
-	 *
+	 * Initializes the preview panel that allows the user to see a
+	 * previsualization of the final symbol
+	 * 
 	 * @return pnlPreview JPanel
 	 */
 	private JPanel getPnlPreview() {
@@ -475,9 +493,11 @@ public class SymbolEditor extends JPanel implements IWindow {
 		}
 		return pnlPreview;
 	}
+
 	/**
 	 * Initializes the Layers panel that shows the different layers created that
 	 * compose a symbol.
+	 * 
 	 * @return pnlLayers JPanel
 	 */
 	private JPanel getPnlLayers() {
@@ -489,10 +509,11 @@ public class SymbolEditor extends JPanel implements IWindow {
 		}
 		return pnlLayers;
 	}
+
 	/**
-	 * Obtains the layer manager used in the panel that shows the different layers
-	 * that compose the symbol.
-	 *
+	 * Obtains the layer manager used in the panel that shows the different
+	 * layers that compose the symbol.
+	 * 
 	 * @return layerManager SymbolLayerManager
 	 */
 	private SymbolLayerManager getLayerManager() {
@@ -501,10 +522,11 @@ public class SymbolEditor extends JPanel implements IWindow {
 		}
 		return layerManager;
 	}
+
 	/**
-	 * Obtains the symbol previewer used in the panel that shows the previsualization
-	 * of the final symbol.
-	 *
+	 * Obtains the symbol previewer used in the panel that shows the
+	 * previsualization of the final symbol.
+	 * 
 	 * @return symbolPreview getSymbolPreviewer
 	 */
 	private SymbolPreviewer getSymbolPreviewer() {
@@ -515,10 +537,11 @@ public class SymbolEditor extends JPanel implements IWindow {
 		}
 		return symbolPreview;
 	}
+
 	/**
 	 * Initializes the type and units panel where two Jcomboboxes will be placed
 	 * in order to change the type and the units used in the map.
-	 *
+	 * 
 	 * @return pnlTypeAndUnits JPanel
 	 */
 	private JPanel getPnlTypeAndUnits() {
@@ -539,10 +562,12 @@ public class SymbolEditor extends JPanel implements IWindow {
 		}
 		return pnlTypeAndUnits;
 	}
+
 	/**
 	 * Obtains the JCombobox to select the reference unit to be used in the
 	 * final representation of the map in this case there are two options (in
 	 * the paper and in the map).
+	 * 
 	 * @return
 	 */
 	private JComboBoxUnitsReferenceSystem getCmbUnitsReferenceSystem() {
@@ -553,10 +578,11 @@ public class SymbolEditor extends JPanel implements IWindow {
 
 		return cmbUnitsReferenceSystem;
 	}
+
 	/**
 	 * Returns the Jcombobox used to select the reference unit (centimeters,
 	 * milimeters and so on) to be used in the final representation of the map.
-	 *
+	 * 
 	 * @return cmbUnits JUnitsComboBox
 	 */
 	private JComboBoxUnits getCmbUnits() {
@@ -565,9 +591,10 @@ public class SymbolEditor extends JPanel implements IWindow {
 		}
 		return cmbUnits;
 	}
+
 	/**
 	 * Returns the option selected in the reference unit Jcombobox
-	 *
+	 * 
 	 */
 	public int getUnit() {
 		return getCmbUnits().getSelectedUnitIndex();
@@ -576,9 +603,10 @@ public class SymbolEditor extends JPanel implements IWindow {
 	public int getReferenceSystem() {
 		return getCmbUnitsReferenceSystem().getSelectedIndex();
 	}
+
 	/**
 	 * Returns the Jcombobox used in the panel to select the type of symbol.
-	 *
+	 * 
 	 * @return cmbType JComboBox
 	 */
 	private JComboBox getCmbType() {
@@ -588,10 +616,11 @@ public class SymbolEditor extends JPanel implements IWindow {
 		}
 		return cmbType;
 	}
+
 	/**
-	 * Sets a layer to a symbol in order to create a final symbol composed
-	 * by different layers.
-	 *
+	 * Sets a layer to a symbol in order to create a final symbol composed by
+	 * different layers.
+	 * 
 	 * @param layer
 	 */
 	protected void setLayerToSymbol(ISymbol layer) {
@@ -617,27 +646,28 @@ public class SymbolEditor extends JPanel implements IWindow {
 	 * <p>
 	 * Possible values returned by this method are
 	 * <ol>
-	 * <li> <b> FShape.POINT </b>, for maker symbols </li>
-	 * <li> <b> FShape.POLYGON </b>, for fill symbols </li>
-	 * <li> <b> FShape.LINE </b>, for line symbols (not yet implemented) </li>
-	 * <li> <b> FShape.TEXT </b>, for text symbols (not yet implemented) </li>
-	 * <li> maybe some other in the future </li>
+	 * <li><b> FShape.POINT </b>, for maker symbols</li>
+	 * <li><b> FShape.POLYGON </b>, for fill symbols</li>
+	 * <li><b> FShape.LINE </b>, for line symbols (not yet implemented)</li>
+	 * <li><b> FShape.TEXT </b>, for text symbols (not yet implemented)</li>
+	 * <li>maybe some other in the future</li>
 	 * </ol>
 	 * </p>
-	 *
+	 * 
 	 * @return
 	 */
 	public int getShapeType() {
 		return shapeType;
 	}
+
 	/**
 	 * Obtains a new layer
-	 *
+	 * 
 	 * @return sym ISymbol
 	 */
 	public ISymbol getNewLayer() {
-		ISymbol sym = ((AbstractTypeSymbolEditor) getCmbType().getSelectedItem())
-				.getLayer();
+		ISymbol sym = ((AbstractTypeSymbolEditor) getCmbType()
+				.getSelectedItem()).getLayer();
 
 		return sym;
 	}
@@ -659,23 +689,24 @@ public class SymbolEditor extends JPanel implements IWindow {
 		}
 	}
 
-
 	public void setOptionsPageFor(ISymbol symbol) {
 		AbstractTypeSymbolEditor options = getOptionsForSymbol(symbol);
-		if (options==null)
+		if (options == null)
 			return;
 		options.refreshControls(symbol);
 		getCmbType().setSelectedItem(options);
 	}
+
 	/**
 	 * Obtains the units to be used for the reference system.
-	 *
+	 * 
 	 */
 	public int getUnitsReferenceSystem() {
 		return cmbUnitsReferenceSystem.getSelectedIndex();
 	}
 
-	public static void addSymbolEditorPanel(Class abstractTypeSymbolEditorPanelClass, int shapeType) {
+	public static void addSymbolEditorPanel(
+			Class abstractTypeSymbolEditorPanelClass, int shapeType) {
 		if (editorsByType == null) {
 			editorsByType = new Hashtable();
 		}

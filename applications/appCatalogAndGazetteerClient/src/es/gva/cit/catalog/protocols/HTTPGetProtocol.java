@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -40,17 +39,12 @@
  *   dac@iver.es
  */
 package es.gva.cit.catalog.protocols;
-import java.io.ByteArrayInputStream;
+
 import java.io.File;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.Collection;
 
-import org.apache.commons.httpclient.DefaultMethodRetryHandler;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.gvsig.remoteClient.utils.Utilities;
 
 import es.gva.cit.catalog.metadataxml.XMLTree;
@@ -67,22 +61,21 @@ public class HTTPGetProtocol implements IProtocols {
 	 * 
 	 * 
 	 * 
-	 * @return 
-	 * @param url 
-	 * @param object 
-	 * @param firstRecord 
+	 * @return
+	 * @param url
+	 * @param object
+	 * @param firstRecord
 	 */
-	public Collection doQuery(URL url, Object object, int firstRecord) {        
+	public Collection doQuery(URL url, Object object, int firstRecord) {
 		NameValuePair[] parameters = (NameValuePair[]) object;
 		File file = null;
 
-		String sUrl = "http://" + url.getHost() + ":" +
-		url.getPort() + url.getPath();
+		String sUrl = "http://" + url.getHost() + ":" + url.getPort()
+				+ url.getPath();
 		sUrl = sUrl + createURLParams(parameters);
-		
-		try {	
-			file = Utilities.downloadFile(new URL(sUrl),
-					"catalog-", null);
+
+		try {
+			file = Utilities.downloadFile(new URL(sUrl), "catalog-", null);
 
 		} catch (Exception e) {
 			return null;
@@ -91,19 +84,20 @@ public class HTTPGetProtocol implements IProtocols {
 		Collection col = new java.util.ArrayList();
 		col.add(XMLTree.xmlToTree(file));
 		return col;
-	} 
+	}
 
 	/**
 	 * Create and string for a list of params
+	 * 
 	 * @param params
 	 * @return
 	 */
-	private String createURLParams(NameValuePair[] params){
+	private String createURLParams(NameValuePair[] params) {
 		StringBuffer buffer = new StringBuffer();
-		for (int i=0 ; i<params.length ; i++){
-			if (i==0){
+		for (int i = 0; i < params.length; i++) {
+			if (i == 0) {
 				buffer.append("?");
-			}else{
+			} else {
 				buffer.append("&");
 			}
 			buffer.append(params[i].getName());

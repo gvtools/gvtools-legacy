@@ -41,81 +41,113 @@
 package com.iver.cit.gvsig.fmap.layers;
 
 /**
- * <p><code>LayerCollectionListener</code> defines listeners for events that can be produced in a
- *  collection of layers.</p>
+ * <p>
+ * <code>LayerCollectionListener</code> defines listeners for events that can be
+ * produced in a collection of layers.
+ * </p>
  */
 public interface LayerCollectionListener {
-    /**
- 	 * <p>Called when a layer has been added or replaced in the internal list of layers.</p>
-     *
-     * @param e a layer collection event object
-     */
-    void layerAdded(LayerCollectionEvent e);
+	/**
+	 * <p>
+	 * Called when a layer has been added or replaced in the internal list of
+	 * layers.
+	 * </p>
+	 * 
+	 * @param e
+	 *            a layer collection event object
+	 */
+	void layerAdded(LayerCollectionEvent e);
 
-    /**
- 	 * <p>Called when a layer has been moved in the internal list of layers.</p>
-     *
-     * @param e a layer collection event object
-     */
-    void layerMoved(LayerPositionEvent e);
+	/**
+	 * <p>
+	 * Called when a layer has been moved in the internal list of layers.
+	 * </p>
+	 * 
+	 * @param e
+	 *            a layer collection event object
+	 */
+	void layerMoved(LayerPositionEvent e);
 
-    /**
-  	 * <p>Called when a layer has been removed from the internal list of layers.</p>
-     *
-     * @param e a layer collection event object
-     */
-    void layerRemoved(LayerCollectionEvent e);
+	/**
+	 * <p>
+	 * Called when a layer has been removed from the internal list of layers.
+	 * </p>
+	 * 
+	 * @param e
+	 *            a layer collection event object
+	 */
+	void layerRemoved(LayerCollectionEvent e);
 
-    /**
- 	 * <p>Called when a layer is just going to be added or replaced in the internal list of layers.</p>
-     *
-     * @param e a layer collection event object
-     *
-     * @throws CancelationException if cancels the adding operation, this exception will have the message
-     *  that user will see.
-     */
-    void layerAdding(LayerCollectionEvent e) throws CancelationException;
+	/**
+	 * <p>
+	 * Called when a layer is just going to be added or replaced in the internal
+	 * list of layers.
+	 * </p>
+	 * 
+	 * @param e
+	 *            a layer collection event object
+	 * 
+	 * @throws CancelationException
+	 *             if cancels the adding operation, this exception will have the
+	 *             message that user will see.
+	 */
+	void layerAdding(LayerCollectionEvent e) throws CancelationException;
 
-    /**
- 	 * <p>Called when a layer is just going to be moved in the internal list of layers.</p>
-     *
-     * @param e a layer collection event object
-     *
-     * @throws CancelationException if cancels the moving operation, this exception will have the message
-     *  that user will see.
-     */
-    void layerMoving(LayerPositionEvent e) throws CancelationException;
+	/**
+	 * <p>
+	 * Called when a layer is just going to be moved in the internal list of
+	 * layers.
+	 * </p>
+	 * 
+	 * @param e
+	 *            a layer collection event object
+	 * 
+	 * @throws CancelationException
+	 *             if cancels the moving operation, this exception will have the
+	 *             message that user will see.
+	 */
+	void layerMoving(LayerPositionEvent e) throws CancelationException;
 
-    /**
- 	 * <p>Called when a layer is just going to be removed from the internal list of layers.</p>
-     *
-     * @param e a layer collection event object
-     *
-     * @throws CancelationException if cancels the removing operation, this exception will have the message
-     *  that user will see.
-     */
-    void layerRemoving(LayerCollectionEvent e) throws CancelationException;
+	/**
+	 * <p>
+	 * Called when a layer is just going to be removed from the internal list of
+	 * layers.
+	 * </p>
+	 * 
+	 * @param e
+	 *            a layer collection event object
+	 * 
+	 * @throws CancelationException
+	 *             if cancels the removing operation, this exception will have
+	 *             the message that user will see.
+	 */
+	void layerRemoving(LayerCollectionEvent e) throws CancelationException;
 
+	// /**
+	// * <p>Called when the activation state of the collection of layers has
+	// changed.</p>
+	// *
+	// * @param e a layer collection event object
+	// *
+	// * @throws CancelationException Si se quiere cancelar la operación. El
+	// * mensaje de la excepción es el que se mostrará al usuario en su
+	// * caso
+	// */
+	// useless. Please, use LayerListener interface instead
+	// void activationChanged(LayerCollectionEvent e) throws
+	// CancelationException;
 
-    ///**
-    // * <p>Called when the activation state of the collection of layers has changed.</p>
-    // *
-    // * @param e a layer collection event object
-    // *
-    // * @throws CancelationException Si se quiere cancelar la operación. El
-    // *         mensaje de la excepción es el que se mostrará al usuario en su
-    // *         caso
-    // */
-    //  useless. Please, use LayerListener interface instead
-    // void activationChanged(LayerCollectionEvent e) throws CancelationException;
-
-    /**
- 	 * <p>Called when the visibility of the collection of layers has changed.</p>
-     *
-     * @param e a layer collection event object
-     *
-     * @throws CancelationException if cancels the operation of change visibility, this exception will have the
-     *  message that user will see.
-     */
-    void visibilityChanged(LayerCollectionEvent e) throws CancelationException;
+	/**
+	 * <p>
+	 * Called when the visibility of the collection of layers has changed.
+	 * </p>
+	 * 
+	 * @param e
+	 *            a layer collection event object
+	 * 
+	 * @throws CancelationException
+	 *             if cancels the operation of change visibility, this exception
+	 *             will have the message that user will see.
+	 */
+	void visibilityChanged(LayerCollectionEvent e) throws CancelationException;
 }

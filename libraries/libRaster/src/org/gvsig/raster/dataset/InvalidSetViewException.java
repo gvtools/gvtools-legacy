@@ -19,15 +19,16 @@
 package org.gvsig.raster.dataset;
 
 /**
- * Excepción se asigna una extensión a un fichero que no es correcta. Normalmente
- * es porque nos hemos salido de la extensión.
+ * Excepción se asigna una extensión a un fichero que no es correcta.
+ * Normalmente es porque nos hemos salido de la extensión.
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public class InvalidSetViewException extends Exception{
+public class InvalidSetViewException extends Exception {
 	private static final long serialVersionUID = 337663732071639106L;
 
-	public InvalidSetViewException(String msg){
+	public InvalidSetViewException(String msg) {
 		super(msg);
 	}
 }

@@ -25,9 +25,9 @@ package org.gvsig.gui.beans.buttonspanel;
 import java.util.EventObject;
 
 /**
- *
+ * 
  * @version 09/05/2008
- *
+ * 
  * @author BorSanZa - Borja Sanchez Zamorano (borja.sanchez@iver.es)
  */
 public class ButtonsPanelEvent extends EventObject {
@@ -39,7 +39,7 @@ public class ButtonsPanelEvent extends EventObject {
 		super(source);
 		this.button = button;
 	}
-	
+
 	public int getButton() {
 		return button;
 	}

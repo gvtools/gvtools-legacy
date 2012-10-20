@@ -72,6 +72,7 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * It parses the innerBoundaryIs tag. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;innerBoundaryIs&gt;
@@ -81,56 +82,62 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  * &lt;/innerBoundaryIs&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
- * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#innerboundaryis
+ * @see http
+ *      ://code.google.com/apis/kml/documentation/kml_tags_21.html#innerboundaryis
  */
 public class InnerBoundaryIsBinding {
 
 	/**
 	 * It parses the innerBoundary tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * It retuns a matrix of doubles with 3 columns (x,y,z) and
-	 * one row for each coordinate.
-	 * @throws IOException 
-	 * @throws XmlStreamException 
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return It retuns a matrix of doubles with 3 columns (x,y,z) and one row
+	 *         for each coordinate.
+	 * @throws IOException
+	 * @throws XmlStreamException
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public ICoordinateIterator parse(IXmlStreamReader parser,GPEDeafultKmlParser handler) throws XmlStreamException, IOException  {
+	public ICoordinateIterator parse(IXmlStreamReader parser,
+			GPEDeafultKmlParser handler) throws XmlStreamException, IOException {
 		boolean endFeature = false;
 		int currentTag;
 
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-				if (CompareUtils.compareWithOutNamespace(tag,Kml2_1_Tags.LINEARRING)){
-					return handler.getProfile().getLinearRingBinding().
-					parse(parser, handler);
+				if (CompareUtils.compareWithOutNamespace(tag,
+						Kml2_1_Tags.LINEARRING)) {
+					return handler.getProfile().getLinearRingBinding()
+							.parse(parser, handler);
 				}
 				break;
 			case IXmlStreamReader.END_ELEMENT:
-				if (CompareUtils.compareWithOutNamespace(tag,Kml2_1_Tags.INNERBOUNDARYIS)){						
+				if (CompareUtils.compareWithOutNamespace(tag,
+						Kml2_1_Tags.INNERBOUNDARYIS)) {
 					endFeature = true;
 				}
 				break;
-			case IXmlStreamReader.CHARACTERS:					
+			case IXmlStreamReader.CHARACTERS:
 
 				break;
 			}
-			if (!endFeature){					
+			if (!endFeature) {
 				currentTag = parser.next();
 				tag = parser.getName();
 			}
-		}			
+		}
 		return null;
 	}
 }

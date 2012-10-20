@@ -32,13 +32,15 @@ import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
  * Gestor de la pila de filtros para el filtro de moda.
  * 
  * 23/07/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class ModeManager implements IRasterFilterListManager {
-	protected RasterFilterList			filterList = null;
+	protected RasterFilterList filterList = null;
 
 	/**
 	 * Constructor. Asigna la lista de filtros y el manager.
+	 * 
 	 * @param filterListManager
 	 */
 	public ModeManager(RasterFilterListManager filterListManager) {
@@ -55,13 +57,15 @@ public class ModeManager implements IRasterFilterListManager {
 
 	/**
 	 * Añade un filtro de moda a la pila de filtros.
+	 * 
 	 * @param sideLong
-	 * @throws FilterTypeException 
+	 * @throws FilterTypeException
 	 */
 	public void addModeFilter(int sideLong) throws FilterTypeException {
 		RasterFilter filter = new ModeByteFilter();
 
-		//Cuando el filtro esta creado, tomamos los valores y lo añadimos a la pila
+		// Cuando el filtro esta creado, tomamos los valores y lo añadimos a la
+		// pila
 
 		if (filter != null) {
 			filter.addParam("sideLong", new Integer(sideLong));
@@ -71,25 +75,33 @@ public class ModeManager implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#getStringsFromFilterList(java.util.ArrayList, org.gvsig.raster.grid.filter.RasterFilter)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#
+	 * getStringsFromFilterList(java.util.ArrayList,
+	 * org.gvsig.raster.grid.filter.RasterFilter)
 	 */
-	public ArrayList getStringsFromFilterList(ArrayList filterList, RasterFilter rf) {
+	public ArrayList getStringsFromFilterList(ArrayList filterList,
+			RasterFilter rf) {
 		if (rf instanceof ModeFilter) {
 			filterList.add("filter.moda.active=true");
 			ModeFilter modaFilter = (ModeFilter) rf;
-			filterList.add("filter.moda.sideLong=" + modaFilter.getSideWindow());
+			filterList
+					.add("filter.moda.sideLong=" + modaFilter.getSideWindow());
 		}
 
 		return filterList;
 	}
 
-
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#createFilterListFromStrings(java.util.ArrayList, java.lang.String, int)
+	 * 
+	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#
+	 * createFilterListFromStrings(java.util.ArrayList, java.lang.String, int)
 	 */
-	public int createFilterListFromStrings(ArrayList filters, String fil, int filteri) throws FilterTypeException {
-		if ((fil.startsWith("filter.moda.active")) && (RasterFilterListManager.getValue(fil).equals("true"))) {
+	public int createFilterListFromStrings(ArrayList filters, String fil,
+			int filteri) throws FilterTypeException {
+		if ((fil.startsWith("filter.moda.active"))
+				&& (RasterFilterListManager.getValue(fil).equals("true"))) {
 
 			int sideLong = 0;
 			filters.remove(0);
@@ -97,7 +109,8 @@ public class ModeManager implements IRasterFilterListManager {
 			for (int prop = 0; prop < filters.size(); prop++) {
 				String elem = (String) filters.get(prop);
 				if (elem.startsWith("filter.moda.sideLong")) {
-					sideLong = Integer.parseInt(RasterFilterListManager.getValue(elem));
+					sideLong = Integer.parseInt(RasterFilterListManager
+							.getValue(elem));
 					filters.remove(prop);
 					prop--;
 				}
@@ -109,7 +122,10 @@ public class ModeManager implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList()
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.IRasterFilterListManager#getRasterFilterList
+	 * ()
 	 */
 	public ArrayList getRasterFilterList() {
 		ArrayList filters = new ArrayList();
@@ -119,15 +135,20 @@ public class ModeManager implements IRasterFilterListManager {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.raster.grid.filter.IRasterFilterListManager#addFilter(java.lang.Class, org.gvsig.raster.dataset.Params)
+	 * 
+	 * @see
+	 * org.gvsig.raster.grid.filter.IRasterFilterListManager#addFilter(java.
+	 * lang.Class, org.gvsig.raster.dataset.Params)
 	 */
-	public void addFilter(Class classFilter, Params params) throws FilterTypeException {
+	public void addFilter(Class classFilter, Params params)
+			throws FilterTypeException {
 		if (classFilter.equals(ModeFilter.class)) {
 			int sideLong = 0;
 			for (int i = 0; i < params.getNumParams(); i++) {
-				if (params.getParam(i).id.equals("sideLong") &&
-					params.getParam(i).defaultValue instanceof Integer)
-					sideLong = ((Integer) params.getParam(i).defaultValue).intValue();
+				if (params.getParam(i).id.equals("sideLong")
+						&& params.getParam(i).defaultValue instanceof Integer)
+					sideLong = ((Integer) params.getParam(i).defaultValue)
+							.intValue();
 			}
 			addModeFilter(sideLong);
 		}

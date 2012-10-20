@@ -58,7 +58,7 @@ import es.gva.cit.catalog.utils.Frames;
 
 /**
  * Inicia la consulta de catálogo de metadatos
- *
+ * 
  * @author luisw
  */
 public class ConnectDialog extends ServerConnectDialogPanel implements IWindow {
@@ -82,7 +82,7 @@ public class ConnectDialog extends ServerConnectDialogPanel implements IWindow {
 
 	/**
 	 * Add a server
-	 *
+	 * 
 	 * @param server
 	 */
 	public static void addServer(ServerData server) {
@@ -96,14 +96,15 @@ public class ConnectDialog extends ServerConnectDialogPanel implements IWindow {
 		addCurrentHost();
 		closeJDialog();
 
-		JDialog panel = new JDialog((Frame) PluginServices.getMainFrame(), false);
-		Frames.centerFrame(panel,525,165);
-		panel.setTitle(Messages.getText( "catalog_search")); 
-		SearchDialog dialog = new SearchDialog(getClient(),this);
+		JDialog panel = new JDialog((Frame) PluginServices.getMainFrame(),
+				false);
+		Frames.centerFrame(panel, 525, 165);
+		panel.setTitle(Messages.getText("catalog_search"));
+		SearchDialog dialog = new SearchDialog(getClient(), this);
 		dialog.setCurrentServer(getCurrentServer());
 		dialog.setFrame(panel);
 		panel.getContentPane().add(dialog);
-		panel.setVisible(true);   
+		panel.setVisible(true);
 	}
 
 	/**
@@ -112,12 +113,18 @@ public class ConnectDialog extends ServerConnectDialogPanel implements IWindow {
 	 */
 	private void addCurrentHost() {
 		String host = getClient().getSUri();
-		ServerDataPersistence persistence = new ServerDataPersistence(this,ServerData.SERVER_TYPE_CATALOG);
-		ServerData newServerData = new ServerData(host, ServerData.SERVER_TYPE_CATALOG, getClient().getProtocol(),getControlsPanel().getDatabase());
-		if (client.getServerData() != null){
-			if ((client.getServerData() .getServerAddress().compareTo(newServerData.getServerAddress()) == 0) &&
-					(client.getServerData() .getServiceSubType().compareTo(newServerData.getServiceSubType()) == 0)){
-				newServerData.setProperies(client.getServerData().getProperies());
+		ServerDataPersistence persistence = new ServerDataPersistence(this,
+				ServerData.SERVER_TYPE_CATALOG);
+		ServerData newServerData = new ServerData(host,
+				ServerData.SERVER_TYPE_CATALOG, getClient().getProtocol(),
+				getControlsPanel().getDatabase());
+		if (client.getServerData() != null) {
+			if ((client.getServerData().getServerAddress()
+					.compareTo(newServerData.getServerAddress()) == 0)
+					&& (client.getServerData().getServiceSubType()
+							.compareTo(newServerData.getServiceSubType()) == 0)) {
+				newServerData.setProperies(client.getServerData()
+						.getProperies());
 			}
 		}
 		persistence.addServerData(newServerData);
@@ -126,23 +133,26 @@ public class ConnectDialog extends ServerConnectDialogPanel implements IWindow {
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalog.ui.serverconnect.ServerConnectDialogPanel#closeButtonActionPerformed()
+	 * 
+	 * @see es.gva.cit.catalog.ui.serverconnect.ServerConnectDialogPanel#
+	 * closeButtonActionPerformed()
 	 */
-	protected void closeButtonActionPerformed() {   
+	protected void closeButtonActionPerformed() {
 		closeJDialog();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalog.ui.serverconnect.ServerConnectDialogPanel#serverPropertiesButtonActionPerformed()
+	 * 
+	 * @see es.gva.cit.catalog.ui.serverconnect.ServerConnectDialogPanel#
+	 * serverPropertiesButtonActionPerformed()
 	 */
-	protected void serverPropertiesButtonActionPerformed(){
+	protected void serverPropertiesButtonActionPerformed() {
 		createClient();
-		PluginServices.getMDIManager().addWindow(new ServerPropertiesDialog(
-				getControlsPanel().getServer(),
-				client,
-				((ICatalogServiceDriver)getControlsPanel().getDriver()).getProfile(),
-				null));
+		PluginServices.getMDIManager().addWindow(
+				new ServerPropertiesDialog(getControlsPanel().getServer(),
+						client, ((ICatalogServiceDriver) getControlsPanel()
+								.getDriver()).getProfile(), null));
 	}
 
 	/**
@@ -152,11 +162,13 @@ public class ConnectDialog extends ServerConnectDialogPanel implements IWindow {
 		PluginServices.getMDIManager().closeWindow(ConnectDialog.this);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.View#getViewInfo()
 	 */
 	public WindowInfo getWindowInfo() {
-		if (m_windowInfo == null){
+		if (m_windowInfo == null) {
 			m_windowInfo = new WindowInfo(WindowInfo.MODALDIALOG);
 			m_windowInfo.setTitle(Messages.getText("metadata_catalog"));
 			m_windowInfo.setHeight(200);
@@ -164,7 +176,8 @@ public class ConnectDialog extends ServerConnectDialogPanel implements IWindow {
 		}
 		return m_windowInfo;
 	}
-	public Object getWindowProfile(){
+
+	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
 }

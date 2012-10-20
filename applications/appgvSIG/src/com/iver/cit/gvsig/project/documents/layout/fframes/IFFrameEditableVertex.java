@@ -49,11 +49,18 @@ import com.iver.cit.gvsig.fmap.core.adapter.GeometryAdapter;
 public interface IFFrameEditableVertex {
 
 	void startEditing();
+
 	void stopEditing();
+
 	boolean isEditing();
+
 	void pointPressed(Point2D point);
-	void pointReleased(Point2D point,GeometryAdapter geom);
+
+	void pointReleased(Point2D point, GeometryAdapter geom);
+
 	void pointDragged(Point2D point);
+
 	void paint(Graphics2D g, AffineTransform at);
+
 	GeometryAdapter getGeometry();
 }

@@ -61,33 +61,32 @@ import java.nio.channels.FileChannel;
  * Utility method for the drivers
  */
 public class DriverUtilities {
-    /**
-     * Copies the contents of the fcin FileChannel to the fcout FileChannel
-     * 
-     * @param fcin
-     * @param fcout
-     * 
-     * @throws IOException
-     */
-    public static void copy(FileChannel fcin, FileChannel fcout)
-            throws IOException {
-        
-        // Esto antes tenía un problema de que solo copiaba
-        // los primeros 100 KBytes. Ahora le hemos puesto
-        // un while y hemos comprobado que copia todo el fichero.
-        // Ole tus huevos Luis, que tenga que comentar esto
-        // y ver cómo está el resto del código.
-        ByteBuffer buffer = ByteBuffer.allocate(102400);
-        buffer.clear();
-        int r = 0;
-        int position = 0;
-        while ((r = fcin.read(buffer, position)) != -1)
-        {
-            buffer.flip();
-            int bytesWritten = fcout.write(buffer, position);
-            position += bytesWritten;
-            buffer.clear();
-        }
-    }
-    
+	/**
+	 * Copies the contents of the fcin FileChannel to the fcout FileChannel
+	 * 
+	 * @param fcin
+	 * @param fcout
+	 * 
+	 * @throws IOException
+	 */
+	public static void copy(FileChannel fcin, FileChannel fcout)
+			throws IOException {
+
+		// Esto antes tenía un problema de que solo copiaba
+		// los primeros 100 KBytes. Ahora le hemos puesto
+		// un while y hemos comprobado que copia todo el fichero.
+		// Ole tus huevos Luis, que tenga que comentar esto
+		// y ver cómo está el resto del código.
+		ByteBuffer buffer = ByteBuffer.allocate(102400);
+		buffer.clear();
+		int r = 0;
+		int position = 0;
+		while ((r = fcin.read(buffer, position)) != -1) {
+			buffer.flip();
+			int bytesWritten = fcout.write(buffer, position);
+			position += bytesWritten;
+			buffer.clear();
+		}
+	}
+
 }

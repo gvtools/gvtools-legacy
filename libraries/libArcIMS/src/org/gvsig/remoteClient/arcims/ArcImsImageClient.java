@@ -43,40 +43,43 @@
 
 package org.gvsig.remoteClient.arcims;
 
+import java.io.File;
+
 import org.gvsig.remoteClient.arcims.exceptions.ArcImsException;
 import org.gvsig.remoteClient.exceptions.ServerErrorException;
 
-import java.io.File;
-
-
 /**
  * Concrete class to deal with an ArcIMS ImageServer
+ * 
  * @author jsanz
- *
+ * 
  */
 public class ArcImsImageClient extends ArcImsClientP {
-    //private ArcImsProtImageHandler handler;
-    public ArcImsImageClient(String host, String service, String serviceType) {
-        super(host, service, serviceType);
-    }
+	// private ArcImsProtImageHandler handler;
+	public ArcImsImageClient(String host, String service, String serviceType) {
+		super(host, service, serviceType);
+	}
 
-    /**
-    * <p>One of the three interfaces that  ArcIms defines. Request a map.</p>
-    * @throws ServerErrorException
-    */
-    public File getMap(ArcImsStatus status)
-        throws ArcImsException, ServerErrorException {
-        File f = ((ArcImsProtImageHandler) handler).getMap(status);
+	/**
+	 * <p>
+	 * One of the three interfaces that ArcIms defines. Request a map.
+	 * </p>
+	 * 
+	 * @throws ServerErrorException
+	 */
+	public File getMap(ArcImsStatus status) throws ArcImsException,
+			ServerErrorException {
+		File f = ((ArcImsProtImageHandler) handler).getMap(status);
 
-        if (f != null) {
-            return f;
-        } else {
-            throw new ArcImsException("arcims_remote_not_found");
-        }
-    }
+		if (f != null) {
+			return f;
+		} else {
+			throw new ArcImsException("arcims_remote_not_found");
+		}
+	}
 
-    public boolean testFromat(ArcImsStatus status, String format)
-        throws ArcImsException {
-        return ((ArcImsProtImageHandler) handler).testFormat(status, format);
-    }
+	public boolean testFromat(ArcImsStatus status, String format)
+			throws ArcImsException {
+		return ((ArcImsProtImageHandler) handler).testFormat(status, format);
+	}
 }

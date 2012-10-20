@@ -40,27 +40,30 @@
  */
 package com.iver.cit.gvsig.project.documents.view.toolListeners;
 
-
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.PointSelectionListener;
 import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
 
-
 /**
- * <p>Inherits {@link PointSelectListener PointSelectListener} enabling/disabling special
- *  controls for managing the data selected.</p>
- *
+ * <p>
+ * Inherits {@link PointSelectListener PointSelectListener} enabling/disabling
+ * special controls for managing the data selected.
+ * </p>
+ * 
  * @see PointSelectionListener
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class PointSelectListener extends PointSelectionListener {
 	/**
-	 * <p>Creates a new <code>PointSelectListener</code> object.</p>
+	 * <p>
+	 * Creates a new <code>PointSelectListener</code> object.
+	 * </p>
 	 * 
-	 * @param mapCtrl the <code>MapControl</code> where will be applied the changes
+	 * @param mapCtrl
+	 *            the <code>MapControl</code> where will be applied the changes
 	 */
 	public PointSelectListener(MapControl mapCtrl) {
 		super(mapCtrl);
@@ -68,7 +71,10 @@ public class PointSelectListener extends PointSelectionListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.PointSelectionListener#point(com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.PointSelectionListener#point(com.iver.cit
+	 * .gvsig.fmap.tools.Events.PointEvent)
 	 */
 	public void point(PointEvent event) throws BehaviorException {
 		super.point(event);
@@ -77,38 +83,37 @@ public class PointSelectListener extends PointSelectionListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.PointSelectionListener#pointDoubleClick(com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.PointSelectionListener#pointDoubleClick
+	 * (com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
 	 */
 	public void pointDoubleClick(PointEvent event) throws BehaviorException {
-	/*	try {
-			FLayer[] actives = mapCtrl.getMapContext()
-            .getLayers().getActives();
-            for (int i=0; i < actives.length; i++){
-                if (actives[i] instanceof FLyrAnnotation && actives[i].isEditing()) {
-                    FLyrAnnotation lyrAnnotation = (FLyrAnnotation) actives[i];
-
-                    	lyrAnnotation.setSelectedEditing();
-                    	lyrAnnotation.setInEdition(lyrAnnotation.getRecordset().getSelection().nextSetBit(0));
-                    	FLabel fl=lyrAnnotation.getLabel(lyrAnnotation.getInEdition());
-        				if (fl!=null){
-
-        					View vista=(View)PluginServices.getMDIManager().getActiveView();
-        					TextFieldEdit tfe=new TextFieldEdit(lyrAnnotation);
-
-        					tfe.show(vista.getMapControl().getViewPort().fromMapPoint(fl.getOrig()),vista.getMapControl());
-        				}
-
-
-                }
-            }
-
-		} catch (DriverLoadException e) {
-			e.printStackTrace();
-			throw new BehaviorException("Fallo con el recordset");
-		} catch (com.iver.cit.gvsig.fmap.DriverException e) {
-			e.printStackTrace();
-			throw new BehaviorException("Fallo con el recordset");
-		}
-*/
+		/*
+		 * try { FLayer[] actives = mapCtrl.getMapContext()
+		 * .getLayers().getActives(); for (int i=0; i < actives.length; i++){ if
+		 * (actives[i] instanceof FLyrAnnotation && actives[i].isEditing()) {
+		 * FLyrAnnotation lyrAnnotation = (FLyrAnnotation) actives[i];
+		 * 
+		 * lyrAnnotation.setSelectedEditing();
+		 * lyrAnnotation.setInEdition(lyrAnnotation
+		 * .getRecordset().getSelection().nextSetBit(0)); FLabel
+		 * fl=lyrAnnotation.getLabel(lyrAnnotation.getInEdition()); if
+		 * (fl!=null){
+		 * 
+		 * View vista=(View)PluginServices.getMDIManager().getActiveView();
+		 * TextFieldEdit tfe=new TextFieldEdit(lyrAnnotation);
+		 * 
+		 * tfe.show(vista.getMapControl().getViewPort().fromMapPoint(fl.getOrig()
+		 * ),vista.getMapControl()); }
+		 * 
+		 * 
+		 * } }
+		 * 
+		 * } catch (DriverLoadException e) { e.printStackTrace(); throw new
+		 * BehaviorException("Fallo con el recordset"); } catch
+		 * (com.iver.cit.gvsig.fmap.DriverException e) { e.printStackTrace();
+		 * throw new BehaviorException("Fallo con el recordset"); }
+		 */
 	}
 }

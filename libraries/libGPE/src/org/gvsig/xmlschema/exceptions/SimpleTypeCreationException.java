@@ -63,26 +63,27 @@ import org.gvsig.exceptions.BaseException;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class SimpleTypeCreationException extends BaseException{
+public class SimpleTypeCreationException extends BaseException {
 	private static final long serialVersionUID = 4408820045280755887L;
 
 	public SimpleTypeCreationException(Throwable exception) {
 		init();
 		initCause(exception);
-	}	
-	
+	}
+
 	private void init() {
 		messageKey = "error_gpe_schema_simpleType_creation";
 		formatString = "Error creating the xs simple type";
-		code = serialVersionUID;		
+		code = serialVersionUID;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map values() {
 		Hashtable params = new Hashtable();
-		return params;		
+		return params;
 	}
 }

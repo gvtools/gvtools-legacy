@@ -5,7 +5,6 @@ import java.io.Serializable;
 
 import javax.swing.JFrame;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -48,7 +47,8 @@ import javax.swing.JFrame;
  */
 
 /**
- * Tests the JCalendarCDatePanel -> creates a JFrame that allows use a JCalendarCDatePanel object
+ * Tests the JCalendarCDatePanel -> creates a JFrame that allows use a
+ * JCalendarCDatePanel object
  * 
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
@@ -57,54 +57,55 @@ public class TestJCalendarDatePanel extends JFrame implements Serializable {
 
 	/**
 	 * Test method for the TestJCalendarCDatePanel class
+	 * 
 	 * @param args
 	 */
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		int old_width = 200;
 		int old_height = 50;
 		int new_width = 445;
 		int new_height = 370;
-		
+
 		// Objects creation
-		JFrame jF = new JFrame();		
+		JFrame jF = new JFrame();
 		JCalendarDatePanel t = new JCalendarDatePanel();
-		
+
 		// Set properties
 		jF.setTitle("Test JCalendarDatePanel");
-		jF.setSize(new Dimension(old_width, old_height));	    
-	    jF.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    jF.getContentPane().add(t);	    
-		
+		jF.setSize(new Dimension(old_width, old_height));
+		jF.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		jF.getContentPane().add(t);
+
 		jF.setVisible(true);
-		
+
 		// Test Modal
 		t.setModal(true);
-		
+
 		// Test resize the panel (and its button)
-		jF.setSize(new Dimension(new_width, new_height)); // For see all panel with the new size
-		t.setPreferredSize(new Dimension (355, 325));
-		t.setSize(new Dimension (360, 320));
+		jF.setSize(new Dimension(new_width, new_height)); // For see all panel
+															// with the new size
+		t.setPreferredSize(new Dimension(355, 325));
+		t.setSize(new Dimension(360, 320));
 		t.setSize(365, 325);
 		t.revalidate();
-		
+
 		// Test Disable Calendar Selection
-		//t.disableCalendar();
-		
+		// t.disableCalendar();
+
 		// Tests resizing the Calendar dialog
 		// Test set minimum dimension
 		t.getJCalendarDateDialog().setMinimumWidth(350);
 		t.getJCalendarDateDialog().setMinimumHeight(170);
-//		t.getJCalendarDateDialog().setMinimumWidthScreenResolutionPercentage(0.30);
-//		t.getJCalendarDateDialog().setMinimumHeightScreenResolutionPercentage(0.20);
-		
+		// t.getJCalendarDateDialog().setMinimumWidthScreenResolutionPercentage(0.30);
+		// t.getJCalendarDateDialog().setMinimumHeightScreenResolutionPercentage(0.20);
+
 		// Test set maximum dimension
 		t.getJCalendarDateDialog().setMaximumWidth(500);
-		t.getJCalendarDateDialog().setMaximumHeight(400);		
-//		t.getJCalendarDateDialog().setMaximumWidthScreenResolutionPercentage(0.60);
-//		t.getJCalendarDateDialog().setMaximumHeightScreenResolutionPercentage(0.40);		
+		t.getJCalendarDateDialog().setMaximumHeight(400);
+		// t.getJCalendarDateDialog().setMaximumWidthScreenResolutionPercentage(0.60);
+		// t.getJCalendarDateDialog().setMaximumHeightScreenResolutionPercentage(0.40);
 
 		// Test Resize the component:
-//		t.getJCalendarDateDialog().setSizeResize(350, 300);
+		// t.getJCalendarDateDialog().setSizeResize(350, 300);
 	}
 }

@@ -45,38 +45,41 @@ import org.gvsig.rastertools.colortable.data.ColorTableData;
 import org.gvsig.rastertools.statistics.StatisticsProcess;
 
 import com.iver.cit.gvsig.fmap.layers.FLayer;
+
 /**
- * Panel que contiene las opciones sobre los maximos y minimos de la tabla de color,
- * checkbox de limites, si esta interpolado o si esta activa la tabla de color 
+ * Panel que contiene las opciones sobre los maximos y minimos de la tabla de
+ * color, checkbox de limites, si esta interpolado o si esta activa la tabla de
+ * color
  * 
  * @version 07/01/2008
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
-public class ColorTableGlobalPanel extends BasePanel implements ActionListener, PropertyChangeListener, IProcessActions {
-	private static final long   serialVersionUID     = 1L;
-	private JCheckBox           checkBoxInterpolated = null;
-	private JCheckBox           checkBoxEnabled      = null;
-	private ColorTableData      colorTableData       = null;
+public class ColorTableGlobalPanel extends BasePanel implements ActionListener,
+		PropertyChangeListener, IProcessActions {
+	private static final long serialVersionUID = 1L;
+	private JCheckBox checkBoxInterpolated = null;
+	private JCheckBox checkBoxEnabled = null;
+	private ColorTableData colorTableData = null;
 
-	private JCheckBox           checkBoxLimits       = null;
-	private JFormattedTextField textFieldMinim       = null;
-	private JFormattedTextField textFieldMaxim       = null;
-	private JLabel              labelMinim           = null;
-	private JLabel              labelMaxim           = null;
-	private JButton             buttonStatistics     = null;
+	private JCheckBox checkBoxLimits = null;
+	private JFormattedTextField textFieldMinim = null;
+	private JFormattedTextField textFieldMaxim = null;
+	private JLabel labelMinim = null;
+	private JLabel labelMaxim = null;
+	private JButton buttonStatistics = null;
 
-	private NumberFormat        doubleDisplayFormat  = null;
-	private NumberFormat        doubleEditFormat     = null;
-	private FLayer              fLayer               = null;
-	
+	private NumberFormat doubleDisplayFormat = null;
+	private NumberFormat doubleEditFormat = null;
+	private FLayer fLayer = null;
+
 	/**
-	 *Inicializa componentes gráficos y traduce
+	 * Inicializa componentes gráficos y traduce
 	 */
 	public ColorTableGlobalPanel() {
 		init();
 		translate();
 	}
-	
+
 	public ColorTableGlobalPanel(ColorTableData colorTableData) {
 		doubleDisplayFormat = NumberFormat.getNumberInstance();
 		doubleDisplayFormat.setMinimumFractionDigits(0);
@@ -85,9 +88,10 @@ public class ColorTableGlobalPanel extends BasePanel implements ActionListener, 
 		this.colorTableData = colorTableData;
 		init();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#init()
 	 */
 	protected void init() {
@@ -131,28 +135,28 @@ public class ColorTableGlobalPanel extends BasePanel implements ActionListener, 
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
-		
+
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 0;
 		gridBagConstraints.weightx = 1.0;
 		gridBagConstraints.insets = new Insets(2, 5, 5, 2);
 		panel.add(getCheckBoxEnabled(), gridBagConstraints);
-		
+
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 0;
 		gridBagConstraints.weightx = 1.0;
 		gridBagConstraints.insets = new Insets(2, 2, 5, 5);
 		panel.add(getCheckBoxInterpolated(), gridBagConstraints);
-		
+
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 2;
 		gridBagConstraints.gridy = 0;
 		gridBagConstraints.weightx = 1.0;
 		gridBagConstraints.insets = new Insets(2, 2, 5, 5);
 		panel.add(getCheckBoxLimits(), gridBagConstraints);
-		
+
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 1;
@@ -161,9 +165,10 @@ public class ColorTableGlobalPanel extends BasePanel implements ActionListener, 
 		gridBagConstraints.insets = new java.awt.Insets(2, 5, 5, 5);
 		add(panel, gridBagConstraints);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#translate()
 	 */
 	protected void translate() {
@@ -171,6 +176,7 @@ public class ColorTableGlobalPanel extends BasePanel implements ActionListener, 
 
 	/**
 	 * Obtiene el jCBInterpolated
+	 * 
 	 * @return
 	 */
 	private JCheckBox getCheckBoxInterpolated() {
@@ -184,6 +190,7 @@ public class ColorTableGlobalPanel extends BasePanel implements ActionListener, 
 
 	/**
 	 * Obtiene el jCBInterpolated
+	 * 
 	 * @return
 	 */
 	private JButton getButtonStatistics() {
@@ -196,45 +203,51 @@ public class ColorTableGlobalPanel extends BasePanel implements ActionListener, 
 
 	/**
 	 * Obtiene el jCBInterpolated
+	 * 
 	 * @return
 	 */
 	private JCheckBox getCheckBoxEnabled() {
 		if (checkBoxEnabled == null) {
-			checkBoxEnabled = new JCheckBox(getText(this, "activar_tablas_color"));
+			checkBoxEnabled = new JCheckBox(getText(this,
+					"activar_tablas_color"));
 			checkBoxEnabled.setSelected(true);
 			checkBoxEnabled.addActionListener(this);
 		}
 		return checkBoxEnabled;
 	}
-	
+
 	/**
 	 * Activa el control de interpolacion
+	 * 
 	 * @param b
 	 */
 	public void setCheckBoxInterpolated(boolean b) {
 		getCheckBoxInterpolated().setSelected(b);
 		colorTableData.setInterpolated(b);
 	}
-	
+
 	/**
 	 * Activa el uso de tablas de color para el panel
+	 * 
 	 * @param b
 	 */
 	public void setCheckBoxEnabled(boolean b) {
 		getCheckBoxEnabled().setSelected(b);
 		colorTableData.setEnabled(b);
 	}
-	
+
 	private boolean isInterpolated() {
 		return getCheckBoxInterpolated().isSelected();
 	}
-	
+
 	private boolean isCheckEnabled() {
 		return getCheckBoxEnabled().isSelected();
 	}
-	
+
 	/**
-	 * Activa/Desactiva los componentes de las pestañas segun la pestaña selecionada
+	 * Activa/Desactiva los componentes de las pestañas segun la pestaña
+	 * selecionada
+	 * 
 	 * @param enabled
 	 */
 	public void setEnabledPanel(boolean enabled) {
@@ -251,7 +264,9 @@ public class ColorTableGlobalPanel extends BasePanel implements ActionListener, 
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == getCheckBoxInterpolated()) {
@@ -268,9 +283,8 @@ public class ColorTableGlobalPanel extends BasePanel implements ActionListener, 
 			setLimitsEnabled(getCheckBoxLimits().isSelected());
 			return;
 		}
-		
-		if ((e.getSource() == getButtonStatistics()) &&
-				(fLayer != null)) {
+
+		if ((e.getSource() == getButtonStatistics()) && (fLayer != null)) {
 			RasterProcess process = new StatisticsProcess();
 			process.setActions(this);
 			process.addParam("layer", fLayer);
@@ -279,9 +293,10 @@ public class ColorTableGlobalPanel extends BasePanel implements ActionListener, 
 			return;
 		}
 	}
-	
+
 	/**
 	 * Indica si los limites estaran activos para la tabla de color activa
+	 * 
 	 * @param enabled
 	 */
 	public void setLimitsEnabled(boolean enabled) {
@@ -311,10 +326,11 @@ public class ColorTableGlobalPanel extends BasePanel implements ActionListener, 
 	 */
 	private JFormattedTextField getTextFieldMinim() {
 		if (textFieldMinim == null) {
-			textFieldMinim = new JFormattedTextField(new DefaultFormatterFactory(
-					new NumberFormatter(doubleDisplayFormat),
-					new NumberFormatter(doubleDisplayFormat),
-					new NumberFormatter(doubleEditFormat)));
+			textFieldMinim = new JFormattedTextField(
+					new DefaultFormatterFactory(new NumberFormatter(
+							doubleDisplayFormat), new NumberFormatter(
+							doubleDisplayFormat), new NumberFormatter(
+							doubleEditFormat)));
 			textFieldMinim.setText("0");
 			textFieldMinim.setEnabled(false);
 			textFieldMinim.addPropertyChangeListener("value", this);
@@ -327,10 +343,11 @@ public class ColorTableGlobalPanel extends BasePanel implements ActionListener, 
 	 */
 	private JFormattedTextField getTextFieldMaxim() {
 		if (textFieldMaxim == null) {
-			textFieldMaxim = new JFormattedTextField(new DefaultFormatterFactory(
-					new NumberFormatter(doubleDisplayFormat),
-					new NumberFormatter(doubleDisplayFormat),
-					new NumberFormatter(doubleEditFormat)));
+			textFieldMaxim = new JFormattedTextField(
+					new DefaultFormatterFactory(new NumberFormatter(
+							doubleDisplayFormat), new NumberFormatter(
+							doubleDisplayFormat), new NumberFormatter(
+							doubleEditFormat)));
 			textFieldMaxim.setText("255");
 			textFieldMaxim.setEnabled(false);
 			textFieldMaxim.addPropertyChangeListener("value", this);
@@ -361,12 +378,12 @@ public class ColorTableGlobalPanel extends BasePanel implements ActionListener, 
 		}
 		return labelMaxim;
 	}
-	
+
 	private void setLimitMaxim(double limit) {
 		getTextFieldMaxim().setValue(Double.valueOf(limit));
 		colorTableData.setMaxim(limit);
 	}
-	
+
 	private void setLimitMinim(double limit) {
 		getTextFieldMinim().setValue(Double.valueOf(limit));
 		colorTableData.setMinim(limit);
@@ -374,36 +391,46 @@ public class ColorTableGlobalPanel extends BasePanel implements ActionListener, 
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
+	 * 
+	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.
+	 * PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getSource() == getTextFieldMaxim()) {
-			double max = ((Number) getTextFieldMaxim().getValue()).doubleValue();
+			double max = ((Number) getTextFieldMaxim().getValue())
+					.doubleValue();
 			colorTableData.setMaxim(max);
 			return;
 		}
-		
+
 		if (evt.getSource() == getTextFieldMinim()) {
-			double min = ((Number) getTextFieldMinim().getValue()).doubleValue();
+			double min = ((Number) getTextFieldMinim().getValue())
+					.doubleValue();
 			colorTableData.setMinim(min);
 			return;
 		}
 	}
-	
+
 	/**
-	 * Establece los rangos de minimo y maximo obtenidos de las estadisticas
-	 * de la capa.
+	 * Establece los rangos de minimo y maximo obtenidos de las estadisticas de
+	 * la capa.
 	 */
 	private void putStatistics() {
-		DatasetListStatistics statistics = ((FLyrRasterSE) fLayer).getDataSource().getStatistics();
+		DatasetListStatistics statistics = ((FLyrRasterSE) fLayer)
+				.getDataSource().getStatistics();
 		if (statistics.isCalculated()) {
-			// En caso de que al hacer la conversion a byte sea igual al valor double
-			// podremos pensar que estamos en un rango RGB y por lo tanto definir
-			// el limite segun los valores RGB, en caso contrario, no deberiamos usar
+			// En caso de que al hacer la conversion a byte sea igual al valor
+			// double
+			// podremos pensar que estamos en un rango RGB y por lo tanto
+			// definir
+			// el limite segun los valores RGB, en caso contrario, no deberiamos
+			// usar
 			// el valor RGB para mayor fiabilidad
-			if (	((FLyrRasterSE) fLayer).getDataType()[0] == IBuffer.TYPE_BYTE &&
-					((byte) statistics.getMinimun() == (double) statistics.getMinimun()) &&
-					((byte) statistics.getMaximun() == (double) statistics.getMaximun())) {
+			if (((FLyrRasterSE) fLayer).getDataType()[0] == IBuffer.TYPE_BYTE
+					&& ((byte) statistics.getMinimun() == (double) statistics
+							.getMinimun())
+					&& ((byte) statistics.getMaximun() == (double) statistics
+							.getMaximun())) {
 				setLimitMaxim(statistics.getMaximunByteUnsigned());
 				setLimitMinim(statistics.getMinimunByteUnsigned());
 			} else {
@@ -416,6 +443,7 @@ public class ColorTableGlobalPanel extends BasePanel implements ActionListener, 
 	/**
 	 * Establece que capa se va a usar en el panel para aplicarle la tabla de
 	 * color
+	 * 
 	 * @param fLayer
 	 */
 	public void setLayer(FLayer fLayer) {
@@ -425,12 +453,14 @@ public class ColorTableGlobalPanel extends BasePanel implements ActionListener, 
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.rastertools.IProcessActions#end(java.lang.Object)
 	 */
 	public void end(Object param) {
 		putStatistics();
 	}
 
-	public void interrupted() {}
+	public void interrupted() {
+	}
 
 }

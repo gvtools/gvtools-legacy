@@ -39,9 +39,11 @@
  *   dac@iver.es
  */
 package org.gvsig.remoteClient.sld.styles;
+
 /**
- * Implements an abstract class for the different kinds of styles that 
- * supports SLD implementation specification .<p>
+ * Implements an abstract class for the different kinds of styles that supports
+ * SLD implementation specification .
+ * <p>
  * 
  * @see http://portal.opengeospatial.org/files/?artifact_id=1188
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es

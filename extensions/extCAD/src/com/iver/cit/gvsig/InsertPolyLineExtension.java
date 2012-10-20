@@ -52,7 +52,7 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 /**
  * Extensión que gestiona la inserción de polilíneas en edición.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class InsertPolyLineExtension extends Extension {
@@ -70,30 +70,32 @@ public class InsertPolyLineExtension extends Extension {
 		spline = new SplineCADTool();
 		CADExtension.addCADTool("_polyline", polyline);
 		CADExtension.addCADTool("_spline", spline);
-		
+
 		registerIcons();
 	}
 
-	private void registerIcons(){
-		PluginServices.getIconTheme().registerDefault(
-				"edition-insert-geometry-polyline",
-				this.getClass().getClassLoader().getResource("images/Line.png")
-			);
-		
+	private void registerIcons() {
+		PluginServices.getIconTheme()
+				.registerDefault(
+						"edition-insert-geometry-polyline",
+						this.getClass().getClassLoader()
+								.getResource("images/Line.png"));
+
 		PluginServices.getIconTheme().registerDefault(
 				"edition-insert-geometry-spline",
-				this.getClass().getClassLoader().getResource("images/Spline.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/Spline.png"));
 	}
+
 	/**
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String s) {
 		CADExtension.initFocus();
 		if (s.equals("_polyline")) {
-			CADExtension.setCADTool("_polyline",true);
-		}else if (s.equals("_spline")) {
-			CADExtension.setCADTool("_spline",true);
+			CADExtension.setCADTool("_polyline", true);
+		} else if (s.equals("_spline")) {
+			CADExtension.setCADTool("_spline", true);
 		}
 		CADExtension.getEditionManager().setMapControl(mapControl);
 		CADExtension.getCADToolAdapter().configureMenu();
@@ -108,15 +110,16 @@ public class InsertPolyLineExtension extends Extension {
 			if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE) {
 				view = (View) PluginServices.getMDIManager().getActiveWindow();
 				mapControl = view.getMapControl();
-				if (CADExtension.getEditionManager().getActiveLayerEdited()==null)
+				if (CADExtension.getEditionManager().getActiveLayerEdited() == null)
 					return false;
-				FLyrVect lv=(FLyrVect)CADExtension.getEditionManager().getActiveLayerEdited().getLayer();
-				if (polyline.isApplicable(lv.getShapeType())){
+				FLyrVect lv = (FLyrVect) CADExtension.getEditionManager()
+						.getActiveLayerEdited().getLayer();
+				if (polyline.isApplicable(lv.getShapeType())) {
 					return true;
 				}
 			}
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 		return false;
 	}

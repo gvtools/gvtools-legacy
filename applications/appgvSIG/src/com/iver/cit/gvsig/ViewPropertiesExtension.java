@@ -90,52 +90,53 @@ import com.iver.cit.gvsig.project.documents.view.ProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.cit.gvsig.project.documents.view.gui.ViewProperties;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
-public class ViewPropertiesExtension extends Extension implements IPreferenceExtension {
+public class ViewPropertiesExtension extends Extension implements
+		IPreferenceExtension {
 	private ViewBehaviorPage vb = new ViewBehaviorPage();
-    public void initialize() {
-    }
 
-    public void execute(String s) {
-        View vista = (View) PluginServices.getMDIManager().getActiveWindow();
-        IProjectView model = vista.getModel();
+	public void initialize() {
+	}
 
-        if (s.compareTo("PROPERTIES") == 0) {
-        	ProjectView viewModel = (ProjectView)model;
-        	if (viewModel != null) {
-              ViewProperties viewProperties = new ViewProperties(viewModel);
-              PluginServices.getMDIManager().addWindow(viewProperties);
-              if (viewProperties.isAcceppted()) {
-            	  viewModel.setModified(true);
-              }
-        	}
-        }
-    }
+	public void execute(String s) {
+		View vista = (View) PluginServices.getMDIManager().getActiveWindow();
+		IProjectView model = vista.getModel();
 
-     public boolean isEnabled() {
-        return true;
-    }
+		if (s.compareTo("PROPERTIES") == 0) {
+			ProjectView viewModel = (ProjectView) model;
+			if (viewModel != null) {
+				ViewProperties viewProperties = new ViewProperties(viewModel);
+				PluginServices.getMDIManager().addWindow(viewProperties);
+				if (viewProperties.isAcceppted()) {
+					viewModel.setModified(true);
+				}
+			}
+		}
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public boolean isVisible() {
-        com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-                                                             .getActiveWindow();
-        if (f == null) {
-            return false;
-        }
-        return (f instanceof View);
-    }
-    
-    public IPreference[] getPreferencesPages() {
-    	return new IPreference[] {vb};
-    }
+	public boolean isEnabled() {
+		return true;
+	}
+
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public boolean isVisible() {
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
+		if (f == null) {
+			return false;
+		}
+		return (f instanceof View);
+	}
+
+	public IPreference[] getPreferencesPages() {
+		return new IPreference[] { vb };
+	}
 }

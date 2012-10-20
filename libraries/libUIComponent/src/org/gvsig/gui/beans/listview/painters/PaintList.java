@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import org.gvsig.gui.beans.listview.IListViewPainter;
 import org.gvsig.gui.beans.listview.ListViewItem;
+
 /**
  * @version 28/06/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
@@ -45,6 +46,7 @@ public class PaintList implements IListViewPainter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.graphic.listview.IListViewPainter#getName()
 	 */
 	public String getName() {
@@ -53,7 +55,9 @@ public class PaintList implements IListViewPainter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.graphic.listview.IListViewPainter#getPreferredSize()
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.graphic.listview.IListViewPainter#getPreferredSize()
 	 */
 	public Dimension getPreferredSize() {
 		return lastDimension;
@@ -61,14 +65,18 @@ public class PaintList implements IListViewPainter {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.graphic.listview.IListViewPainter#paint(java.awt.Graphics2D, int, int)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.graphic.listview.IListViewPainter#paint(java.awt.
+	 * Graphics2D, int, int)
 	 */
 	public void paint(Graphics2D g, Rectangle visibleRect) {
 		FontMetrics fm = g.getFontMetrics();
 
 		int minAux = 0;
 		for (int i = 0; i < items.size(); i++) {
-			int auxWidth = g.getFontMetrics().stringWidth(((ListViewItem) items.get(i)).getName()) + 8;
+			int auxWidth = g.getFontMetrics().stringWidth(
+					((ListViewItem) items.get(i)).getName()) + 8;
 			if (minAux < auxWidth)
 				minAux = auxWidth;
 		}
@@ -82,7 +90,8 @@ public class PaintList implements IListViewPainter {
 		for (int i = 0; i < items.size(); i++) {
 			((ListViewItem) items.get(i)).setNameRectangle(null);
 
-			int auxWidth = g.getFontMetrics().stringWidth(((ListViewItem) items.get(i)).getName());
+			int auxWidth = g.getFontMetrics().stringWidth(
+					((ListViewItem) items.get(i)).getName());
 			if ((minIconsWidth + 3 + auxWidth - visibleRect.x) > visibleRect.width) {
 				((ListViewItem) items.get(i)).setShowTooltip(true);
 			} else {
@@ -91,34 +100,43 @@ public class PaintList implements IListViewPainter {
 			if (width2 < auxWidth)
 				width2 = auxWidth;
 
-			((ListViewItem) items.get(i)).getItemRectangle().setBounds(visibleRect.x, i * 17, visibleRect.width, 17);
+			((ListViewItem) items.get(i)).getItemRectangle().setBounds(
+					visibleRect.x, i * 17, visibleRect.width, 17);
 
-			if (!((ListViewItem) items.get(i)).getItemRectangle().intersects(visibleRect))
+			if (!((ListViewItem) items.get(i)).getItemRectangle().intersects(
+					visibleRect))
 				continue;
 
-			int upper = fm.getLeading() + fm.getAscent() + ((17 - fm.getHeight()) / 2);
+			int upper = fm.getLeading() + fm.getAscent()
+					+ ((17 - fm.getHeight()) / 2);
 
 			if (((ListViewItem) items.get(i)).isSelected()) {
 				Color color1 = new Color(89, 153, 229);
 				Color color2 = new Color(31, 92, 207);
-				g.setPaint(new GradientPaint(0, i * 17 + 1, color1, 0, i * 17 + 16, color2, false));
+				g.setPaint(new GradientPaint(0, i * 17 + 1, color1, 0,
+						i * 17 + 16, color2, false));
 				g.fillRect(visibleRect.x, i * 17 + 1, visibleRect.width, 16);
 				g.setColor(new Color(61, 123, 218));
-				g.drawLine(visibleRect.x, i * 17, visibleRect.x + visibleRect.width, i * 17);
+				g.drawLine(visibleRect.x, i * 17, visibleRect.x
+						+ visibleRect.width, i * 17);
 				g.setColor(Color.white);
 			} else {
 				g.setColor(Color.black);
 			}
-			g.drawString(((ListViewItem) items.get(i)).getName(), iconsWidth + 3, (i * 17) + upper);
+			g.drawString(((ListViewItem) items.get(i)).getName(),
+					iconsWidth + 3, (i * 17) + upper);
 			// Guardar el estado de donde se visualiza el nombre y cuanto ocupa
-			((ListViewItem) items.get(i)).setNameRectangle(new Rectangle(iconsWidth + 2, i * 17 - 1, visibleRect.width - (iconsWidth + 2), 20));
+			((ListViewItem) items.get(i)).setNameRectangle(new Rectangle(
+					iconsWidth + 2, i * 17 - 1, visibleRect.width
+							- (iconsWidth + 2), 20));
 
 			Shape clip = g.getClip();
 			g.translate(1, i * 17 + 1);
 			g.setClip(0, 0, iconsWidth, 15);
 
 			if (((ListViewItem) items.get(i)).getIcon() != null)
-				((ListViewItem) items.get(i)).getIcon().paint(g, ((ListViewItem) items.get(i)).isSelected());
+				((ListViewItem) items.get(i)).getIcon().paint(g,
+						((ListViewItem) items.get(i)).isSelected());
 
 			g.setClip(clip);
 			g.translate(-1, -(i * 17 + 1));
@@ -126,6 +144,6 @@ public class PaintList implements IListViewPainter {
 		height2 = items.size() * 17;
 
 		lastDimension = new Dimension(minIconsWidth + 3 + width2, height2);
-	//lastDimension = new Dimension(0, height2);
+		// lastDimension = new Dimension(0, height2);
 	}
 }

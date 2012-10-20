@@ -50,10 +50,9 @@ import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 
-
 /**
  * Diálogo para insertar o modificar el Tag asociado a un FFrame.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class Tag extends JPanel implements IWindow {
@@ -62,12 +61,13 @@ public class Tag extends JPanel implements IWindow {
 	private JButton jButton = null;
 	private JButton jButton1 = null;
 	private IFFrame fframe = null;
-    WindowInfo m_viewinfo = new WindowInfo(WindowInfo.PALETTE);
+	WindowInfo m_viewinfo = new WindowInfo(WindowInfo.PALETTE);
 
 	/**
 	 * This is the default constructor
-	 *
-	 * @param f FFrame al que asociar el Tag.
+	 * 
+	 * @param f
+	 *            FFrame al que asociar el Tag.
 	 */
 	public Tag(IFFrame f) {
 		super();
@@ -77,7 +77,7 @@ public class Tag extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jTextField
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getJTextField() {
@@ -96,24 +96,24 @@ public class Tag extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jButton
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getJButton() {
 		if (jButton == null) {
 			jButton = new JButton();
-			jButton.setText(PluginServices.getText(this,"Aceptar"));
+			jButton.setText(PluginServices.getText(this, "Aceptar"));
 			jButton.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						if (getJTextField().getText().compareTo("") == 0) {
-							fframe.setTag(null);
-						} else {
-							fframe.setTag(getJTextField().getText());
-						}
-
-						PluginServices.getMDIManager().closeWindow(Tag.this);
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if (getJTextField().getText().compareTo("") == 0) {
+						fframe.setTag(null);
+					} else {
+						fframe.setTag(getJTextField().getText());
 					}
-				});
+
+					PluginServices.getMDIManager().closeWindow(Tag.this);
+				}
+			});
 		}
 
 		return jButton;
@@ -121,18 +121,18 @@ public class Tag extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes jButton1
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getJButton1() {
 		if (jButton1 == null) {
 			jButton1 = new JButton();
-			jButton1.setText(PluginServices.getText(this,"Cancelar"));
+			jButton1.setText(PluginServices.getText(this, "Cancelar"));
 			jButton1.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						PluginServices.getMDIManager().closeWindow(Tag.this);
-					}
-				});
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					PluginServices.getMDIManager().closeWindow(Tag.this);
+				}
+			});
 		}
 
 		return jButton1;
@@ -154,7 +154,7 @@ public class Tag extends JPanel implements IWindow {
 	/**
 	 * @see com.iver.mdiApp.ui.MDIManager.IWindow#getWindowInfo()
 	 */
-	public WindowInfo getWindowInfo() {		
+	public WindowInfo getWindowInfo() {
 		m_viewinfo.setTitle(PluginServices.getText(this, "tag"));
 
 		return m_viewinfo;
@@ -169,4 +169,4 @@ public class Tag extends JPanel implements IWindow {
 	public Object getWindowProfile() {
 		return WindowInfo.TOOL_PROFILE;
 	}
-}  
+}

@@ -40,24 +40,27 @@
  */
 package org.gvsig.remoteClient.sld.symbolizers;
 
-
-
 import org.gvsig.remoteClient.sld.AbstractSLDSymbolizer;
 import org.gvsig.remoteClient.sld.SLDStroke;
 
 import com.iver.cit.gvsig.fmap.core.FShape;
+
 /**
- * Implements the LineSymbolizer element of an SLD implementation specification .<p>
- * A LineSymbolizer is used to style a �stroke� along a linear geometry type, such as
- * string of line segments.<p>
+ * Implements the LineSymbolizer element of an SLD implementation specification
+ * .
+ * <p>
+ * A LineSymbolizer is used to style a �stroke� along a linear geometry
+ * type, such as string of line segments.
+ * <p>
  * 
  * @see SLDStroke
  * @see http://portal.opengeospatial.org/files/?artifact_id=1188
  * 
  * @author pepe vidal salvador - jose.vidal.salvador@iver.es
  */
-public abstract class SLDLineSymbolizer extends AbstractSLDSymbolizer implements ISLDSymbolizer {
-	
+public abstract class SLDLineSymbolizer extends AbstractSLDSymbolizer implements
+		ISLDSymbolizer {
+
 	protected SLDStroke stroke;
 
 	public SLDStroke getStroke() {
@@ -67,7 +70,9 @@ public abstract class SLDLineSymbolizer extends AbstractSLDSymbolizer implements
 	public void setStroke(SLDStroke stroke) {
 		this.stroke = stroke;
 	}
-	
-	public int getShapeType() { return FShape.LINE; }
+
+	public int getShapeType() {
+		return FShape.LINE;
+	}
 
 }

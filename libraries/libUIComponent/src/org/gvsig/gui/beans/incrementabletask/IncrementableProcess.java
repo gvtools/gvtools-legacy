@@ -40,26 +40,28 @@ import org.gvsig.gui.beans.progresspanel.LogControl;
  * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
-public abstract class IncrementableProcess implements IIncrementable, IncrementableListener, Runnable {
-	protected IncrementableTask 	iTask	 		= null;
-	protected LogControl 			log		 		= new LogControl();
-	protected int 					percentage		= 0;
-	protected boolean 				ended			= false;
-	protected volatile boolean		threadSuspended = false;
-	protected volatile Thread 		blinker			= null;
-	protected long 					t0 				= 0;
-	protected static Cancellable 	cancelProcess 	= null;
-	protected boolean 				isCancellable 	= true;
-	protected boolean 				isPausable	 	= false;
-	
+public abstract class IncrementableProcess implements IIncrementable,
+		IncrementableListener, Runnable {
+	protected IncrementableTask iTask = null;
+	protected LogControl log = new LogControl();
+	protected int percentage = 0;
+	protected boolean ended = false;
+	protected volatile boolean threadSuspended = false;
+	protected volatile Thread blinker = null;
+	protected long t0 = 0;
+	protected static Cancellable cancelProcess = null;
+	protected boolean isCancellable = true;
+	protected boolean isPausable = false;
 
-	protected String 				title 			= "";
-	protected String 				label 			= "";
+	protected String title = "";
+	protected String label = "";
 
 	/**
 	 * Creates a new process.
 	 * 
-	 * @param title title for the dialog that displays the evolution of the process
+	 * @param title
+	 *            title for the dialog that displays the evolution of the
+	 *            process
 	 */
 	public IncrementableProcess(String title) {
 		super();
@@ -70,8 +72,11 @@ public abstract class IncrementableProcess implements IIncrementable, Incrementa
 	/**
 	 * Creates a new process.
 	 * 
-	 * @param title title for the dialog that displays the evolution of the process
-	 * @param label brief of this process, that will be displayed in the dialog
+	 * @param title
+	 *            title for the dialog that displays the evolution of the
+	 *            process
+	 * @param label
+	 *            brief of this process, that will be displayed in the dialog
 	 */
 	public IncrementableProcess(String title, String label) {
 		super();
@@ -83,12 +88,18 @@ public abstract class IncrementableProcess implements IIncrementable, Incrementa
 	/**
 	 * Creates a new process.
 	 * 
-	 * @param title title for the dialog that displays the evolution of the process
-	 * @param label brief of this process, that will be displayed in the dialog
- 	 * @param cancellable determines if this process can be canceled
- 	 * @param pausable determines if this process can be paused
+	 * @param title
+	 *            title for the dialog that displays the evolution of the
+	 *            process
+	 * @param label
+	 *            brief of this process, that will be displayed in the dialog
+	 * @param cancellable
+	 *            determines if this process can be canceled
+	 * @param pausable
+	 *            determines if this process can be paused
 	 */
-	public IncrementableProcess(String title, String label, boolean cancellable, boolean pausable) {
+	public IncrementableProcess(String title, String label,
+			boolean cancellable, boolean pausable) {
 		super();
 		this.title = title;
 		this.label = label;
@@ -96,6 +107,7 @@ public abstract class IncrementableProcess implements IIncrementable, Incrementa
 		this.isCancellable = cancellable;
 		this.isPausable = pausable;
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -125,9 +137,12 @@ public abstract class IncrementableProcess implements IIncrementable, Incrementa
 	}
 
 	/**
-	 * <p>Sets a brief of the current subprocess.</p>
+	 * <p>
+	 * Sets a brief of the current subprocess.
+	 * </p>
 	 * 
-	 * @param label brief of the current subprocess
+	 * @param label
+	 *            brief of the current subprocess
 	 */
 	public void setLabel(String label) {
 		this.label = label;
@@ -216,7 +231,9 @@ public abstract class IncrementableProcess implements IIncrementable, Incrementa
 			/*
 			 * (non-Javadoc)
 			 * 
-			 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
+			 * @see
+			 * java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent
+			 * )
 			 */
 			public void mouseClicked(MouseEvent e) {
 				processFinalize();
@@ -227,7 +244,8 @@ public abstract class IncrementableProcess implements IIncrementable, Incrementa
 	/**
 	 * Determines if this thread has been suspended.
 	 * 
-	 * @return <code>true</code> if this thread has been suspended; otherwise <code>false</code>
+	 * @return <code>true</code> if this thread has been suspended; otherwise
+	 *         <code>false</code>
 	 */
 	public boolean isSuspended() {
 		return threadSuspended;
@@ -235,6 +253,7 @@ public abstract class IncrementableProcess implements IIncrementable, Incrementa
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Runnable#run()
 	 */
 	public void run() {
@@ -242,47 +261,52 @@ public abstract class IncrementableProcess implements IIncrementable, Incrementa
 
 		try {
 			process();
-			while (! ended) {
+			while (!ended) {
 				t0 += 500;
-                Thread.currentThread().sleep(150);
+				Thread.currentThread().sleep(150);
 			}
 		} catch (Exception ie) {
-			if (! cancelProcess.isCanceled()) {
+			if (!cancelProcess.isCanceled()) {
 				Logger.getLogger(IncrementableProcess.class).error(ie);
 				label = Messages.getText("Process_failed");
 				iTask.getProgressPanel().setLabel(label);
 				text = Messages.getText("Failed_the_process");
-			}
-			else {
+			} else {
 				label = Messages.getText("Process_canceled");
 				iTask.getProgressPanel().setLabel(label);
 				text = Messages.getText("Process_canceled");
 			}
-		}
-		finally {
+		} finally {
 			iTask.setAskCancel(false);
-			iTask.getButtonsPanel().setEnabled(ButtonsPanel.BUTTON_ACCEPT, true);
-			iTask.getButtonsPanel().setEnabled(ButtonsPanel.BUTTON_CANCEL, false);
+			iTask.getButtonsPanel()
+					.setEnabled(ButtonsPanel.BUTTON_ACCEPT, true);
+			iTask.getButtonsPanel().setEnabled(ButtonsPanel.BUTTON_CANCEL,
+					false);
 
 			if (text != null) {
 				log.addLine(Messages.getText("Percent") + ": " + getPercent());
 				log.addLine(text);
-				
+
 				if (cancelProcess.isCanceled())
-					JOptionPane.showMessageDialog(iTask.getButtonsPanel(), text, Messages.getText("Information"), JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(iTask.getButtonsPanel(),
+							text, Messages.getText("Information"),
+							JOptionPane.INFORMATION_MESSAGE);
 				else
-					JOptionPane.showMessageDialog(iTask.getButtonsPanel(), text, Messages.getText("Error"), JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(iTask.getButtonsPanel(),
+							text, Messages.getText("Error"),
+							JOptionPane.ERROR_MESSAGE);
 			}
-			
+
 			if (percentage == 100) {
 				label = Messages.getText("Process_finished");
 				iTask.getProgressPanel().setLabel(label);
-//				iTask.getProgressPanel().setPercent(100); // Forces setting the progress bar at 100 %
+				// iTask.getProgressPanel().setPercent(100); // Forces setting
+				// the progress bar at 100 %
 			}
 
 			// Ends this process
 			ended = true;
-			
+
 			// Ends the progress panel
 			iTask.stop();
 		}
@@ -291,7 +315,9 @@ public abstract class IncrementableProcess implements IIncrementable, Incrementa
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.gvsig.gui.beans.incrementabletask.IncrementableListener#actionCanceled(org.gvsig.gui.beans.incrementabletask.IncrementableEvent)
+	 * @see
+	 * org.gvsig.gui.beans.incrementabletask.IncrementableListener#actionCanceled
+	 * (org.gvsig.gui.beans.incrementabletask.IncrementableEvent)
 	 */
 	public void actionCanceled(IncrementableEvent e) {
 		if (percentage < 100) {
@@ -302,10 +328,13 @@ public abstract class IncrementableProcess implements IIncrementable, Incrementa
 			if (isCancellable)
 				cancelProcess.setCanceled(true);
 			else
-				JOptionPane.showMessageDialog(null, Messages.getText("The_process_cant_be_cancelled"), Messages.getText("Warning"), JOptionPane.WARNING_MESSAGE);
-		}
-		else {
-			Logger.getLogger(IncrementableProcess.class).warn(Messages.getText("Process_finished_wont_be_cancelled"));
+				JOptionPane.showMessageDialog(null,
+						Messages.getText("The_process_cant_be_cancelled"),
+						Messages.getText("Warning"),
+						JOptionPane.WARNING_MESSAGE);
+		} else {
+			Logger.getLogger(IncrementableProcess.class).warn(
+					Messages.getText("Process_finished_wont_be_cancelled"));
 
 			processFinalize();
 		}
@@ -313,46 +342,56 @@ public abstract class IncrementableProcess implements IIncrementable, Incrementa
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.incrementabletask.IncrementableListener#actionResumed(org.gvsig.gui.beans.incrementabletask.IncrementableEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.incrementabletask.IncrementableListener#actionResumed
+	 * (org.gvsig.gui.beans.incrementabletask.IncrementableEvent)
 	 */
 	public void actionResumed(IncrementableEvent e) {
-//		if (isPausable)
-//			resume();
+		// if (isPausable)
+		// resume();
 		if ((isPausable) && (threadSuspended)) {
 			threadSuspended = false;
-	
+
 			blinker.resume();
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gui.beans.incrementabletask.IncrementableListener#actionSuspended(org.gvsig.gui.beans.incrementabletask.IncrementableEvent)
+	 * 
+	 * @see
+	 * org.gvsig.gui.beans.incrementabletask.IncrementableListener#actionSuspended
+	 * (org.gvsig.gui.beans.incrementabletask.IncrementableEvent)
 	 */
 	public void actionSuspended(IncrementableEvent e) {
 		try {
 			if (isPausable) {
-				if ( ! threadSuspended) {
+				if (!threadSuspended) {
 					threadSuspended = true;
-			
+
 					blinker.suspend();
 				}
 			}
-			
-			
-//			if (isPausable)
-//				suspend();
+
+			// if (isPausable)
+			// suspend();
 			else
-				JOptionPane.showMessageDialog(null, Messages.getText("The_process_cant_be_paused"), Messages.getText("Warning"), JOptionPane.WARNING_MESSAGE);
-		}
-		catch (Exception iex) {
+				JOptionPane.showMessageDialog(null,
+						Messages.getText("The_process_cant_be_paused"),
+						Messages.getText("Warning"),
+						JOptionPane.WARNING_MESSAGE);
+		} catch (Exception iex) {
 			Logger.getLogger(IncrementableTask.class).error(iex);
-			JOptionPane.showMessageDialog(null, Messages.getText("Failed_pausing_the_process"), Messages.getText("Error"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null,
+					Messages.getText("Failed_pausing_the_process"),
+					Messages.getText("Error"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.incrementabletask.IIncrementable#isCancelable()
 	 */
 	public boolean isCancelable() {
@@ -360,9 +399,13 @@ public abstract class IncrementableProcess implements IIncrementable, Incrementa
 	}
 
 	/**
-	 * <p>Sets if this process can be canceled.</p>
+	 * <p>
+	 * Sets if this process can be canceled.
+	 * </p>
 	 * 
-	 * @param b <code>true</code> if this process can be canceled, otherwise <code>false</code>
+	 * @param b
+	 *            <code>true</code> if this process can be canceled, otherwise
+	 *            <code>false</code>
 	 */
 	public void setCancelable(boolean b) {
 		isCancellable = b;
@@ -370,6 +413,7 @@ public abstract class IncrementableProcess implements IIncrementable, Incrementa
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.incrementabletask.IIncrementable#isPausable()
 	 */
 	public boolean isPausable() {
@@ -377,15 +421,21 @@ public abstract class IncrementableProcess implements IIncrementable, Incrementa
 	}
 
 	/**
-	 * <p>Sets if this process can be paused.</p>
+	 * <p>
+	 * Sets if this process can be paused.
+	 * </p>
 	 * 
-	 * @param b <code>true</code> if this process can be paused, otherwise <code>false</code>
+	 * @param b
+	 *            <code>true</code> if this process can be paused, otherwise
+	 *            <code>false</code>
 	 */
 	public void setPausable(boolean b) {
 		isPausable = b;
 	}
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.incrementabletask.IIncrementable#process()
 	 */
 	public abstract void process() throws InterruptedException, Exception;

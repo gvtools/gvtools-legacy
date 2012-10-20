@@ -73,9 +73,9 @@ import es.gva.cit.catalog.querys.Coordinates;
 /**
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class LaitsGmuISO19115Record extends Record {	
+public class LaitsGmuISO19115Record extends Record {
 
-	public  LaitsGmuISO19115Record() {        
+	public LaitsGmuISO19115Record() {
 
 	}
 
@@ -83,30 +83,32 @@ public class LaitsGmuISO19115Record extends Record {
 	 * Constructor
 	 * 
 	 * 
-	 * @param node Node with the answer
-	 * @param serverURL Server URL. Necessary to load the image (just Geonetwork)
+	 * @param node
+	 *            Node with the answer
+	 * @param serverURL
+	 *            Server URL. Necessary to load the image (just Geonetwork)
 	 */
-	public  LaitsGmuISO19115Record(URI uri, XMLNode node) {        
-		super(uri,node);
-		setTitle(XMLTree.searchNodeValue(node,"granuleShortName"));
+	public LaitsGmuISO19115Record(URI uri, XMLNode node) {
+		super(uri, node);
+		setTitle(XMLTree.searchNodeValue(node, "granuleShortName"));
 		setAbstract_(XMLTree.searchNodeValue(node, "description"));
 		setPurpose(null);
 		setKeyWords(null);
 		setResources(getResources("OnlineAccessURLs->OnlineAccessURL"));
-		setFileID(null);	       
-		//Caution: getImageUrl uses serverURL and FileID!!!
+		setFileID(null);
+		// Caution: getImageUrl uses serverURL and FileID!!!
 		setImage(null);
 
-	} 
+	}
 
 	/**
 	 * 
 	 * 
 	 * 
-	 * @return 
-	 * @param label 
+	 * @return
+	 * @param label
 	 */
-	private Resource[] getResources(String label) {        
+	private Resource[] getResources(String label) {
 		XMLNode[] nodes = XMLTree.searchMultipleNode(getNode(), label);
 		Coordinates coordinates = null;
 		String srs = null;
@@ -115,26 +117,28 @@ public class LaitsGmuISO19115Record extends Record {
 			return null;
 		}
 		Resource[] resources = new Resource[nodes.length];
-		if (nodes.length > 0){
-			srs = XMLTree.searchNodeValue(getNode(),"ogc:BBOX->referenceSystemNameCode");
-			coordinates = new Coordinates(XMLTree.searchNodeValue(getNode(),"ogc:BBOX->westBoundingCoordinate"),
-					XMLTree.searchNodeValue(getNode(),"ogc:BBOX->northBoundingCoordinate"),
-					XMLTree.searchNodeValue(getNode(),"ogc:BBOX->eastBoundingCoordinate"),
-					XMLTree.searchNodeValue(getNode(),"ogc:BBOX->southBoundingCoordinate"));
+		if (nodes.length > 0) {
+			srs = XMLTree.searchNodeValue(getNode(),
+					"ogc:BBOX->referenceSystemNameCode");
+			coordinates = new Coordinates(XMLTree.searchNodeValue(getNode(),
+					"ogc:BBOX->westBoundingCoordinate"),
+					XMLTree.searchNodeValue(getNode(),
+							"ogc:BBOX->northBoundingCoordinate"),
+					XMLTree.searchNodeValue(getNode(),
+							"ogc:BBOX->eastBoundingCoordinate"),
+					XMLTree.searchNodeValue(getNode(),
+							"ogc:BBOX->southBoundingCoordinate"));
 		}
 
-
-		for (int i = 0; i < resources.length; i++){
-			resources[i] = new Resource(XMLTree.searchNodeValue(nodes[i],
-					"URL"),
-					Resource.DOWNLOAD,
-					XMLTree.searchNodeValue(nodes[i], "orName"),
-					XMLTree.searchNodeValue(nodes[i], "URLDescription"),
-					XMLTree.searchNodeAtribute(nodes[i], "orFunct->OnFunctCd",
-					"value"),
-					srs,	
+		for (int i = 0; i < resources.length; i++) {
+			resources[i] = new Resource(
+					XMLTree.searchNodeValue(nodes[i], "URL"),
+					Resource.DOWNLOAD, XMLTree.searchNodeValue(nodes[i],
+							"orName"), XMLTree.searchNodeValue(nodes[i],
+							"URLDescription"), XMLTree.searchNodeAtribute(
+							nodes[i], "orFunct->OnFunctCd", "value"), srs,
 					coordinates);
-			if (resources[i].getLinkage() == null){
+			if (resources[i].getLinkage() == null) {
 				resources[i].setLinkage("");
 			}
 
@@ -144,11 +148,13 @@ public class LaitsGmuISO19115Record extends Record {
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalogClient.schemas.discoverer.Record#accept(java.net.URI, es.gva.cit.catalogClient.metadataxml.XMLNode)
+	 * 
+	 * @see
+	 * es.gva.cit.catalogClient.schemas.discoverer.Record#accept(java.net.URI,
+	 * es.gva.cit.catalogClient.metadataxml.XMLNode)
 	 */
 	public boolean accept(URI uri, XMLNode node) {
 		return false;
-	}     
-
+	}
 
 }

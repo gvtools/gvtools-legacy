@@ -45,12 +45,11 @@ import com.iver.cit.gvsig.project.documents.layout.LayoutContext;
 import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.ILayoutGraphicListener;
 
-
 /**
-* Termina los graficos que se esten insertando sobre el Layout.
-*
-* @author Vicente Caballero Navarro
-*/
+ * Termina los graficos que se esten insertando sobre el Layout.
+ * 
+ * @author Vicente Caballero Navarro
+ */
 public class TerminateLayoutMenuEntry extends AbstractLayoutContextMenuAction {
 	public String getGroup() {
 		return "geometries";
@@ -68,22 +67,27 @@ public class TerminateLayoutMenuEntry extends AbstractLayoutContextMenuAction {
 		return PluginServices.getText(this, "terminar");
 	}
 
-	public boolean isEnabled(LayoutContext layoutContext, IFFrame[] selectedFrames) {
+	public boolean isEnabled(LayoutContext layoutContext,
+			IFFrame[] selectedFrames) {
 		return true;
 	}
 
-	public boolean isVisible(LayoutContext layoutContext, IFFrame[] selectedFrames) {
-		String currentLayout=getLayout().getLayoutControl().getCurrentTool();
-		if ((currentLayout.equals("layoutaddpolyline") ||
-				currentLayout.equals("layoutaddpolygon")) &&
-				getLayout().getLayoutControl().getGeometryAdapter().getPoints().length>0){
+	public boolean isVisible(LayoutContext layoutContext,
+			IFFrame[] selectedFrames) {
+		String currentLayout = getLayout().getLayoutControl().getCurrentTool();
+		if ((currentLayout.equals("layoutaddpolyline") || currentLayout
+				.equals("layoutaddpolygon"))
+				&& getLayout().getLayoutControl().getGeometryAdapter()
+						.getPoints().length > 0) {
 			return true;
 		}
 		return false;
 	}
+
 	public void execute(LayoutContext layoutContext, IFFrame[] selectedFrames) {
 		if (getLayout().getLayoutControl().getCurrentLayoutTool().getListener() instanceof ILayoutGraphicListener) {
-    		((ILayoutGraphicListener)getLayout().getLayoutControl().getCurrentLayoutTool().getListener()).endGraphic();
-    	}
+			((ILayoutGraphicListener) getLayout().getLayoutControl()
+					.getCurrentLayoutTool().getListener()).endGraphic();
+		}
 	}
 }

@@ -23,6 +23,7 @@ import java.util.EventListener;
 public interface ConfigurationListener extends EventListener {
 	/**
 	 * Evento que se dispara cuando cambia un valor de configuracion.
+	 * 
 	 * @param e
 	 */
 	public void actionConfigurationChanged(ConfigurationEvent e);

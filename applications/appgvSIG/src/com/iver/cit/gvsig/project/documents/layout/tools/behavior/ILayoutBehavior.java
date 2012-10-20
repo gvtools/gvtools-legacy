@@ -1,6 +1,5 @@
 package com.iver.cit.gvsig.project.documents.layout.tools.behavior;
 
-
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -10,16 +9,17 @@ import java.awt.event.MouseWheelEvent;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.project.documents.layout.LayoutControl;
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.LayoutToolListener;
+
 /**
  * Layout behavior.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public interface ILayoutBehavior {
 
 	/**
 	 * Devuelve el ToolListener que está seleccionado.
-	 *
+	 * 
 	 * @return ToolListener seleccionado.
 	 */
 	public LayoutToolListener getListener();
@@ -31,22 +31,24 @@ public interface ILayoutBehavior {
 
 	/**
 	 * Inserta el Layout.
-	 *
-	 * @param lc Layout a insertar.
+	 * 
+	 * @param lc
+	 *            Layout a insertar.
 	 */
 	public void setLayoutControl(LayoutControl lc);
 
 	/**
 	 * Devuelve la imagen del cursor de la herrameinta.
-	 *
+	 * 
 	 * @return Image cursor de la herramienta.
 	 */
 	public Image getImageCursor();
+
 	public Cursor getCursor();
 
 	/**
 	 * Devuelve el Layout.
-	 *
+	 * 
 	 * @return Layout.
 	 */
 	public LayoutControl getLayoutControl();

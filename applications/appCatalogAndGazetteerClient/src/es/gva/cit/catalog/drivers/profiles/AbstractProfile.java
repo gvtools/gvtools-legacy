@@ -51,7 +51,7 @@ import com.iver.utiles.swing.jcomboServer.ServerData;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class AbstractProfile implements IProfile{
+public abstract class AbstractProfile implements IProfile {
 	private ServerData serverData = null;
 
 	/**
@@ -60,23 +60,23 @@ public abstract class AbstractProfile implements IProfile{
 	public AbstractProfile(ServerData serverData) {
 		super();
 		this.serverData = serverData;
-	}	
+	}
 
 	/**
 	 * @param serverData
 	 */
 	public AbstractProfile() {
-		super();		
+		super();
 	}
 
 	/**
 	 * @return the abstract property name
-	 */	
+	 */
 	public String getAbstract() {
 		String property = getProperty(IProfile.ABSTRACT);
-		if (property != null){
+		if (property != null) {
 			return property;
-		}	
+		}
 		return getAbstractProperty();
 	}
 
@@ -85,9 +85,9 @@ public abstract class AbstractProfile implements IProfile{
 	 */
 	public String getCoordinates() {
 		String property = getProperty(IProfile.COORDINATES);
-		if (property != null){
+		if (property != null) {
 			return property;
-		}	
+		}
 		return getCoordinatesProperty();
 	}
 
@@ -96,9 +96,9 @@ public abstract class AbstractProfile implements IProfile{
 	 */
 	public String getDateFrom() {
 		String property = getProperty(IProfile.DATEFROM);
-		if (property != null){
+		if (property != null) {
 			return property;
-		}	
+		}
 		return getDateFromProperty();
 	}
 
@@ -107,9 +107,9 @@ public abstract class AbstractProfile implements IProfile{
 	 */
 	public String getDateTo() {
 		String property = getProperty(IProfile.DATETO);
-		if (property != null){
+		if (property != null) {
 			return property;
-		}	
+		}
 		return getDateToProperty();
 	}
 
@@ -118,9 +118,9 @@ public abstract class AbstractProfile implements IProfile{
 	 */
 	public String getKeywords() {
 		String property = getProperty(IProfile.KEYWORDS);
-		if (property != null){
+		if (property != null) {
 			return property;
-		}	
+		}
 		return getKeywordsProperty();
 	}
 
@@ -129,9 +129,9 @@ public abstract class AbstractProfile implements IProfile{
 	 */
 	public String getProvider() {
 		String property = getProperty(IProfile.PROVIDER);
-		if (property != null){
+		if (property != null) {
 			return property;
-		}	
+		}
 		return getProviderProperty();
 	}
 
@@ -140,9 +140,9 @@ public abstract class AbstractProfile implements IProfile{
 	 */
 	public String getScale() {
 		String property = getProperty(IProfile.SCALE);
-		if (property != null){
+		if (property != null) {
 			return property;
-		}	
+		}
 		return getScaleProperty();
 	}
 
@@ -151,34 +151,35 @@ public abstract class AbstractProfile implements IProfile{
 	 */
 	public String getTitle() {
 		String property = getProperty(IProfile.TITLE);
-		if (property != null){
+		if (property != null) {
 			return property;
-		}	
+		}
 		return getTitleProperty();
 	}
-	
+
 	/**
 	 * @return the element name property
 	 */
-	public String getElementName(){
+	public String getElementName() {
 		String property = getProperty(IProfile.ELEMENT_NAME);
-		if (property != null){
+		if (property != null) {
 			return property;
 		}
 		return getElementNameProperty();
 	}
-	
+
 	/**
 	 * Return a property with a concrete name
+	 * 
 	 * @param propertyName
-	 * The property name
+	 *            The property name
 	 * @return
 	 */
-	private String getProperty(String propertyName){
-		if ((serverData != null) && (serverData.getProperies() != null)){
+	private String getProperty(String propertyName) {
+		if ((serverData != null) && (serverData.getProperies() != null)) {
 			Object obj = serverData.getProperies().getProperty(propertyName);
-			if (!((obj == null) || (((String)obj).compareTo("") == 0))){
-				return (String)obj;
+			if (!((obj == null) || (((String) obj).compareTo("") == 0))) {
+				return (String) obj;
 			}
 		}
 		return null;
@@ -189,9 +190,9 @@ public abstract class AbstractProfile implements IProfile{
 	 */
 	public String getTopic() {
 		String property = getProperty(IProfile.CATHEGORY);
-		if (property != null){
+		if (property != null) {
 			return property;
-		}	
+		}
 		return getTopicProperty();
 	}
 
@@ -203,10 +204,11 @@ public abstract class AbstractProfile implements IProfile{
 	}
 
 	/**
-	 * @param serverData the serverData to set
+	 * @param serverData
+	 *            the serverData to set
 	 */
 	public void setServerData(ServerData serverData) {
 		this.serverData = serverData;
 	}
-	
+
 }

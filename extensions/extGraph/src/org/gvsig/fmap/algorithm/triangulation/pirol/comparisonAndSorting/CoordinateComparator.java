@@ -13,52 +13,51 @@ import java.util.Comparator;
 
 /**
  * 
- * Comparator class for Sortable objects, sets comparision criteria
- * on the fly -> no need to set them manually before sorting
- *
+ * Comparator class for Sortable objects, sets comparision criteria on the fly
+ * -> no need to set them manually before sorting
+ * 
  * @author orahn
- *
- * FH Osnabrück - University of Applied Sciences Osnabrück
- * Project PIROL 2005
- * Daten- und Wissensmanagement
- *  
+ * 
+ *         FH Osnabrück - University of Applied Sciences Osnabrück Project PIROL
+ *         2005 Daten- und Wissensmanagement
+ * 
  * @see Sortable
  * 
  */
 
 public class CoordinateComparator implements Comparator {
-    public static int SORTFOR_X = 0;
+	public static int SORTFOR_X = 0;
 	public static int SORTFOR_Y = 1;
 	public static int SORTFOR_Z = 2;
-	/* added by oster
-	 * this is useful to sort a point field for booth x and y
+	/*
+	 * added by oster this is useful to sort a point field for booth x and y
 	 */
 	public static int SORTFOR_XY = 3;
-	
-	protected int sortFor = CoordinateComparator.SORTFOR_X;
-    
-    public CoordinateComparator(int sortFor) {
-        this.sortFor = sortFor;
-    }
-    
-    public int getSortFor() {
-        return sortFor;
-    }
-    public void setSortFor(int sortFor) {
-        this.sortFor = sortFor;
-    }
-    
-    public int compare(Object arg0, Object arg1) {
-        return this.compare((Sortable)arg0, (Sortable)arg1);
-    }
-    
-    public int compare(Sortable one, Sortable two) {
-        
-        one.setSortFor(this.sortFor);
-        two.setSortFor(this.sortFor);
-        
-        return one.compareTo(two);
-    }
 
+	protected int sortFor = CoordinateComparator.SORTFOR_X;
+
+	public CoordinateComparator(int sortFor) {
+		this.sortFor = sortFor;
+	}
+
+	public int getSortFor() {
+		return sortFor;
+	}
+
+	public void setSortFor(int sortFor) {
+		this.sortFor = sortFor;
+	}
+
+	public int compare(Object arg0, Object arg1) {
+		return this.compare((Sortable) arg0, (Sortable) arg1);
+	}
+
+	public int compare(Sortable one, Sortable two) {
+
+		one.setSortFor(this.sortFor);
+		two.setSortFor(this.sortFor);
+
+		return one.compareTo(two);
+	}
 
 }

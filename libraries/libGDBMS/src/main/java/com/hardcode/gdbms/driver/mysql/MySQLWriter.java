@@ -32,14 +32,15 @@ import com.iver.cit.gvsig.fmap.edition.fieldmanagers.JdbcFieldManager;
 import com.iver.cit.gvsig.fmap.edition.writers.AbstractWriter;
 
 /**
- *
- * MySQL alphanumeric writer.
- * It is needed because MySQL JDBC driver doesnt allow updatables recordsets.
+ * 
+ * MySQL alphanumeric writer. It is needed because MySQL JDBC driver doesnt
+ * allow updatables recordsets.
+ * 
  * @author alzabord
- *
+ * 
  * @see MySQLSpatialWriter from extJDBC project
  */
-public class MySQLWriter extends AbstractWriter{
+public class MySQLWriter extends AbstractWriter {
 
 	private int numRows;
 	private Connection conn;
@@ -50,44 +51,47 @@ public class MySQLWriter extends AbstractWriter{
 	private JdbcFieldManager fieldManager;
 	private DBDataWare directDataWare;
 
-	public void initialize(Connection conn){
+	public void initialize(Connection conn) {
 		this.conn = conn;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.edition.IWriter#initialize(com.iver.cit.gvsig.fmap.drivers.ITableDefinition)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.edition.IWriter#initialize(com.iver.cit.gvsig
+	 * .fmap.drivers.ITableDefinition)
 	 */
-	public void initialize(ITableDefinition tableDefinition) throws InitializeWriterException{
+	public void initialize(ITableDefinition tableDefinition)
+			throws InitializeWriterException {
 		super.initialize(tableDefinition);
 		try {
 			createTableIfNeeded();
 		} catch (SQLException e) {
-			throw new InitializeWriterException(getName(),e);
+			throw new InitializeWriterException(getName(), e);
 		}
 	}
 
-
-	private void createTableIfNeeded() throws SQLException{
+	private void createTableIfNeeded() throws SQLException {
 		st = conn.createStatement();
 		if (bCreateTable) {
 			try {
-				st.execute("DROP TABLE " +
-						((DBLayerDefinition)tableDef).getTableName() + ";");
+				st.execute("DROP TABLE "
+						+ ((DBLayerDefinition) tableDef).getTableName() + ";");
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
-			//In MySQL you can add geometry column in CREATE TABLE statement
-			String sqlCreate = mySql.getSqlCreateSpatialTable((DBLayerDefinition) tableDef,
-											tableDef.getFieldsDesc(),
-											true);
+			// In MySQL you can add geometry column in CREATE TABLE statement
+			String sqlCreate = mySql.getSqlCreateSpatialTable(
+					(DBLayerDefinition) tableDef, tableDef.getFieldsDesc(),
+					true);
 			st.execute(sqlCreate);
 			conn.commit();
-		}//if
+		}// if
 		conn.setAutoCommit(false);
 		fieldManager = new JdbcFieldManager(conn,
 				((DBLayerDefinition) tableDef).getTableName());
-}
-
+	}
 
 	public boolean canWriteAttribute(int sqlType) {
 		switch (sqlType) {
@@ -109,7 +113,6 @@ public class MySQLWriter extends AbstractWriter{
 		return false;
 	}
 
-
 	public void preProcess() throws StartWriterVisitorException {
 		numRows = 0;
 		try {
@@ -117,9 +120,9 @@ public class MySQLWriter extends AbstractWriter{
 			conn.rollback();
 			alterTable();
 		} catch (SQLException e) {
-			throw new StartWriterVisitorException(getName(),e);
+			throw new StartWriterVisitorException(getName(), e);
 		} catch (WriteDriverException e) {
-			throw new StartWriterVisitorException(getName(),e);
+			throw new StartWriterVisitorException(getName(), e);
 		}
 	}
 
@@ -127,45 +130,54 @@ public class MySQLWriter extends AbstractWriter{
 		return fieldManager.alterTable();
 	}
 
-    private ValueCollection getPKValue(Value[] rec) throws ReadDriverException {
-        int[] fieldsId = directDataWare.getPrimaryKeys();
-        Value[] pks = new Value[fieldsId.length];
+	private ValueCollection getPKValue(Value[] rec) throws ReadDriverException {
+		int[] fieldsId = directDataWare.getPrimaryKeys();
+		Value[] pks = new Value[fieldsId.length];
 
-        for (int i = 0; i < pks.length; i++) {
-            pks[i] = rec[fieldsId[i]];
-        }
+		for (int i = 0; i < pks.length; i++) {
+			pks[i] = rec[fieldsId[i]];
+		}
 
-        return ValueFactory.createValue(pks);
-    }
-
+		return ValueFactory.createValue(pks);
+	}
 
 	public void process(IRowEdited row) throws ProcessWriterVisitorException {
-//		String sqlInsert;
+		// String sqlInsert;
 		try {
 			switch (row.getStatus()) {
 			case IRowEdited.STATUS_ADDED:
-				IRow record =  row.getLinkedRow();
+				IRow record = row.getLinkedRow();
 				directDataWare.insertFilledRow(record.getAttributes());
-//				sqlInsert = mySql.getSqlInsertFeature((DBLayerDefinition) tableDef, record);
-//				st.execute(sqlInsert);
+				// sqlInsert = mySql.getSqlInsertFeature((DBLayerDefinition)
+				// tableDef, record);
+				// st.execute(sqlInsert);
 				break;
 
 			case IRowEdited.STATUS_MODIFIED:
-				IRow featM =  row.getLinkedRow();
+				IRow featM = row.getLinkedRow();
 				if (bWriteAll) {
 					directDataWare.insertFilledRow(featM.getAttributes());
-//					sqlInsert = mySql.getSqlInsertFeature((DBLayerDefinition) tableDef, featM);
-//					System.out.println("sql = " + sqlInsert);
-//					st.execute(sqlInsert);
+					// sqlInsert = mySql.getSqlInsertFeature((DBLayerDefinition)
+					// tableDef, featM);
+					// System.out.println("sql = " + sqlInsert);
+					// st.execute(sqlInsert);
 				} else {
-	    			Value[] rec =row.getAttributes();
-    				String sql = InnerDBUtils.createUpdateStatement(((DBTableSourceInfo) directDataWare.getSourceInfo()).tableName,
-	    						getPKValue(rec).getValues(), directDataWare.getPKNames(),
-				                directDataWare.getFieldNames(), featM.getAttributes(), ((ValueWriter)directDataWare.getDriver()));
+					Value[] rec = row.getAttributes();
+					String sql = InnerDBUtils
+							.createUpdateStatement(
+									((DBTableSourceInfo) directDataWare
+											.getSourceInfo()).tableName,
+									getPKValue(rec).getValues(), directDataWare
+											.getPKNames(), directDataWare
+											.getFieldNames(), featM
+											.getAttributes(),
+									((ValueWriter) directDataWare.getDriver()));
 
-    				st.execute(sql);
-//					String sqlModify = mySql.getSqlModifyFeature((DBLayerDefinition) tableDef, featM);
-//					st.execute(sqlModify);
+					st.execute(sql);
+					// String sqlModify =
+					// mySql.getSqlModifyFeature((DBLayerDefinition) tableDef,
+					// featM);
+					// st.execute(sqlModify);
 				}
 				break;
 
@@ -173,50 +185,50 @@ public class MySQLWriter extends AbstractWriter{
 				IRow featO = row.getLinkedRow();
 				if (bWriteAll) {
 					directDataWare.insertFilledRow(featO.getAttributes());
-//					sqlInsert = mySql.getSqlInsertFeature((DBLayerDefinition) tableDef, featO);
-//					st.execute(sqlInsert);
+					// sqlInsert = mySql.getSqlInsertFeature((DBLayerDefinition)
+					// tableDef, featO);
+					// st.execute(sqlInsert);
 				}
 				break;
 
 			case IRowEdited.STATUS_DELETED:
-    			Value[] rec =row.getAttributes();
-				String sqlDelete = InnerDBUtils.createDeleteStatement(
-						getPKValue(rec).getValues(),
-    					directDataWare.getPKNames(),
-    					((DBTableSourceInfo) directDataWare.getSourceInfo()).tableName,
-    					((ValueWriter)directDataWare.getDriver()));
+				Value[] rec = row.getAttributes();
+				String sqlDelete = InnerDBUtils
+						.createDeleteStatement(getPKValue(rec).getValues(),
+								directDataWare.getPKNames(),
+								((DBTableSourceInfo) directDataWare
+										.getSourceInfo()).tableName,
+								((ValueWriter) directDataWare.getDriver()));
 
 				st.execute(sqlDelete);
 
-//				String sqlDelete = mySql.getSqlDeleteFeature((DBLayerDefinition) tableDef, row);
+				// String sqlDelete =
+				// mySql.getSqlDeleteFeature((DBLayerDefinition) tableDef, row);
 				System.out.println("sql = " + sqlDelete);
 				st.execute(sqlDelete);
 				break;
 			}
 			numRows++;
 		} catch (SQLException e) {
-			throw new ProcessWriterVisitorException(getName(),e);
+			throw new ProcessWriterVisitorException(getName(), e);
 		} catch (WriteDriverException e) {
-			throw new ProcessWriterVisitorException(getName(),e);
+			throw new ProcessWriterVisitorException(getName(), e);
 		} catch (ReadDriverException e) {
-			throw new ProcessWriterVisitorException(getName(),e);
+			throw new ProcessWriterVisitorException(getName(), e);
 		}
 	}
-
 
 	public void postProcess() throws StopWriterVisitorException {
 		try {
 			conn.setAutoCommit(true);
 		} catch (SQLException e) {
-			throw new StopWriterVisitorException(getName(),e);
+			throw new StopWriterVisitorException(getName(), e);
 		}
 	}
-
 
 	public boolean canAlterTable() {
 		return true;
 	}
-
 
 	public boolean canSaveEdits() {
 		try {
@@ -247,11 +259,9 @@ public class MySQLWriter extends AbstractWriter{
 		bWriteAll = writeAll;
 	}
 
-/*
- * TODO
- * Esta parte no se si es necesaria, o si se usa (revisar)
- *
- * */
+	/*
+	 * TODO Esta parte no se si es necesaria, o si se usa (revisar)
+	 */
 	public FieldDescription[] getFields() {
 		return fieldManager.getFields();
 	}

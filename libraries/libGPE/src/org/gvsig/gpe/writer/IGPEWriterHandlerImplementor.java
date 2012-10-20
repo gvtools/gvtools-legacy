@@ -82,300 +82,306 @@ import org.gvsig.xmlschema.som.IXSSchemaDocument;
  *
  */
 /**
- * This interface defines the writing process methods. To write
- * a new concrete format it is necessary to create a class that
- * implements this methods and creates the output file whereas
- * the consumer application is invoking these methods.
+ * This interface defines the writing process methods. To write a new concrete
+ * format it is necessary to create a class that implements this methods and
+ * creates the output file whereas the consumer application is invoking these
+ * methods.
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  */
 public interface IGPEWriterHandlerImplementor {
-	
+
 	/**
 	 * @return the writer name
 	 */
 	public String getName();
-	
+
 	/**
 	 * @return the writer description
 	 */
 	public String getDescription();
-	
+
 	/**
 	 * Sets the outputstream
 	 */
 	public void setOutputStream(OutputStream os);
-			
+
 	/**
 	 * @return the supported format
 	 */
 	public String getFormat();
-	
+
 	/**
 	 * @return the default file extension
 	 */
 	public String getFileExtension();
-	
+
 	/**
 	 * @return the schema document
 	 */
 	public IXSSchemaDocument getSchemaDocument();
 
 	/**
-	 * @param schemaDocument the schemaDocument to set
+	 * @param schemaDocument
+	 *            the schemaDocument to set
 	 */
 	public void setSchemaDocument(IXSSchemaDocument schemaDocument);
-	
+
 	/**
 	 * @return the error handler
 	 */
 	public GPEErrorHandler getErrorHandler();
-		
+
 	/**
-	 * @param errorHandler the errorHandler to set
+	 * @param errorHandler
+	 *            the errorHandler to set
 	 */
 	public void setErrorHandler(GPEErrorHandler errorHandler);
-	
+
 	/**
-	 * It must be invoked before to start the reading process.
-	 * It is used just to indicate to the writer that the
-	 * writing process is going to start.
+	 * It must be invoked before to start the reading process. It is used just
+	 * to indicate to the writer that the writing process is going to start.
 	 */
 	public void initialize();
-	
+
 	/**
-	 * It indicates that the writing process has finished. 
-	 * The writer can close the file.
+	 * It indicates that the writing process has finished. The writer can close
+	 * the file.
 	 */
 	public void close();
-	
+
 	/**
-	 * It is thrown by the consumer application to indicate 
-	 * that it has to write a layer.
+	 * It is thrown by the consumer application to indicate that it has to write
+	 * a layer.
+	 * 
 	 * @param id
-	 * Layer identifier
+	 *            Layer identifier
 	 * @param namespace
-	 * Layer namespace
+	 *            Layer namespace
 	 * @param name
-	 * Layer name
+	 *            Layer name
 	 * @param description
-	 * Layer description
+	 *            Layer description
 	 * @param srs
-	 * Layer spatial reference system
+	 *            Layer spatial reference system
 	 */
-	public void startLayer(String id, String namespace, String name, String description, String srs);
-	
+	public void startLayer(String id, String namespace, String name,
+			String description, String srs);
+
 	/**
-	 * It means that the current layer has finished 
-	 * to be written.
+	 * It means that the current layer has finished to be written.
 	 */
 	public void endLayer();
-	
+
 	/**
-	 * It is thrown by the consumer application to indicate
-	 * that it has to write a bounding box.
+	 * It is thrown by the consumer application to indicate that it has to write
+	 * a bounding box.
+	 * 
 	 * @param id
-	 * Bounding box identifier
+	 *            Bounding box identifier
 	 * @param coords
-	 * A coordinates iterator
+	 *            A coordinates iterator
 	 * @param srs
-	 * Spatial reference system
+	 *            Spatial reference system
 	 */
 	public void startBbox(String id, ICoordinateSequence coords, String srs);
-	
+
 	/**
-	 * It means that the current bounding box has finished to 
-	 * be written.
+	 * It means that the current bounding box has finished to be written.
 	 */
 	public void endBbox();
-	
+
 	/**
-	 * It is thrown by the consumer application to indicate 
-	 * that it has to write a feature.
+	 * It is thrown by the consumer application to indicate that it has to write
+	 * a feature.
+	 * 
 	 * @param id
-	 * Feature identifier
+	 *            Feature identifier
 	 * @param namespace
-	 * Feature namespace
+	 *            Feature namespace
 	 * @param name
-	 * Feature name
+	 *            Feature name
 	 */
 	public void startFeature(String id, String namespace, String name);
-	
+
 	/**
-	 * It means that the current feature has finished 
-	 * to be written.
+	 * It means that the current feature has finished to be written.
 	 */
 	public void endFeature();
-	
+
 	/**
-	 * It is thrown by the consumer application to indicate that
-	 * it has to write a element.
+	 * It is thrown by the consumer application to indicate that it has to write
+	 * a element.
+	 * 
 	 * @param namespace
-	 * Element namespace
+	 *            Element namespace
 	 * @param name
-	 * Element name
+	 *            Element name
 	 * @param value
-	 * Element value
-	  */
+	 *            Element value
+	 */
 	public void startElement(String namespace, String name, Object value);
-	
+
 	/**
-	 * It means that the current element has finished 
-	 * to be written.
+	 * It means that the current element has finished to be written.
 	 */
 	public void endElement();
-	
+
 	/**
-	 * It is thrown by the consumer application to 
-	 * indicate that it has to write a point.
+	 * It is thrown by the consumer application to indicate that it has to write
+	 * a point.
+	 * 
 	 * @param id
-	 * Point identifier
+	 *            Point identifier
 	 * @param coords
-	 * A coordinates iterator
+	 *            A coordinates iterator
 	 * @param srs
-	 * Spatial reference system
+	 *            Spatial reference system
 	 */
 	public void startPoint(String id, ICoordinateSequence coords, String srs);
-	
+
 	/**
-	 * It means that the current point has finished 
-	 * to be written.
+	 * It means that the current point has finished to be written.
 	 */
 	public void endPoint();
-	
+
 	/**
-	 * It is thrown by the consumer application to
-	 * indicate that it has to write a multiPoint. 
+	 * It is thrown by the consumer application to indicate that it has to write
+	 * a multiPoint.
+	 * 
 	 * @param id
-	 * Geometry identifier
+	 *            Geometry identifier
 	 * @param srs
-	 * Spatial reference system
+	 *            Spatial reference system
 	 */
 	public void startMultiPoint(String id, String srs);
-	
+
 	/**
-	 * It means that the current multiPoint has finished 
-	 * to be written.
+	 * It means that the current multiPoint has finished to be written.
 	 */
 	public void endMultiPoint();
-	
+
 	/**
-	 * It is thrown by the consumer application to 
-	 * indicate that it has to write a lineString.
+	 * It is thrown by the consumer application to indicate that it has to write
+	 * a lineString.
+	 * 
 	 * @param id
-	 * LineString identifier
+	 *            LineString identifier
 	 * @param coords
-	 * A coordinates iterator
+	 *            A coordinates iterator
 	 * @param srs
-	 * Spatial reference system
+	 *            Spatial reference system
 	 */
-	public void startLineString(String id, ICoordinateSequence coords, String srs);
-	
+	public void startLineString(String id, ICoordinateSequence coords,
+			String srs);
+
 	/**
-	 * It means that the current lineString has finished 
-	 * to be written.
+	 * It means that the current lineString has finished to be written.
 	 */
 	public void endLineString();
-	
+
 	/**
-	 * It is thrown by the consumer application to
-	 * indicate that it has to write a multiLineString. 
+	 * It is thrown by the consumer application to indicate that it has to write
+	 * a multiLineString.
+	 * 
 	 * @param id
-	 * Geometry identifier
+	 *            Geometry identifier
 	 * @param srs
-	 * Spatial reference system
+	 *            Spatial reference system
 	 */
 	public void startMultiLineString(String id, String srs);
-	
+
 	/**
-	 * It means that the current multiLineString has finished 
-	 * to be written.
+	 * It means that the current multiLineString has finished to be written.
 	 */
 	public void endMultiLineString();
-	
+
 	/**
-	 * It is thrown by the consumer application to 
-	 * indicate that it has to write a linearRing.
+	 * It is thrown by the consumer application to indicate that it has to write
+	 * a linearRing.
+	 * 
 	 * @param id
-	 * LineString identifier
+	 *            LineString identifier
 	 * @param coords
-	 * A coordinates iterator
+	 *            A coordinates iterator
 	 * @param srs
-	 * Spatial reference system
+	 *            Spatial reference system
 	 */
-	public void startLinearRing(String id, ICoordinateSequence coords, String srs);
-	
+	public void startLinearRing(String id, ICoordinateSequence coords,
+			String srs);
+
 	/**
-	 * It means that the current linearRing has finished
-	 *  to be written.
+	 * It means that the current linearRing has finished to be written.
 	 */
 	public void endLinearRing();
-	
+
 	/**
-	 * It is thrown by the consumer application to 
-	 * indicate that it has to write a polygon.
+	 * It is thrown by the consumer application to indicate that it has to write
+	 * a polygon.
+	 * 
 	 * @param id
-	 * LineString identifier
+	 *            LineString identifier
 	 * @param coords
-	 * A coordinates iterator
+	 *            A coordinates iterator
 	 * @param srs
-	 * Spatial reference system
+	 *            Spatial reference system
 	 */
 	public void startPolygon(String id, ICoordinateSequence coords, String srs);
-	
+
 	/**
-	 * It means that the current polygon has finished 
-	 * to be written.
+	 * It means that the current polygon has finished to be written.
 	 */
 	public void endPolygon();
-	
+
 	/**
-	 * It is thrown by the consumer application to
-	 * indicate that it has to write a multiPolygon. 
+	 * It is thrown by the consumer application to indicate that it has to write
+	 * a multiPolygon.
+	 * 
 	 * @param id
-	 * Geometry identifier
+	 *            Geometry identifier
 	 * @param srs
-	 * Spatial reference system
+	 *            Spatial reference system
 	 */
 	public void startMultiPolygon(String id, String srs);
-	
+
 	/**
-	 * It means that the current multiPolygon has finished
-	 *  to be written.
+	 * It means that the current multiPolygon has finished to be written.
 	 */
 	public void endMultiPolygon();
-	
+
 	/**
-	 * It is thrown by the consumer application to
-	 * indicate that it has to write a multiGeometry. 
+	 * It is thrown by the consumer application to indicate that it has to write
+	 * a multiGeometry.
+	 * 
 	 * @param id
-	 * Geometry identifier
+	 *            Geometry identifier
 	 * @param srs
-	 * Spatial reference system
+	 *            Spatial reference system
 	 */
 	public void startMultiGeometry(String id, String srs);
-	
+
 	/**
-	 * It means that the current multiGeometry has finished 
-	 * to be written.
+	 * It means that the current multiGeometry has finished to be written.
 	 */
 	public void endMultiGeometry();
-	
+
 	/**
-	 * It is thrown by the consumer application to 
-	 * indicate that it has to write a innerPolygon.
+	 * It is thrown by the consumer application to indicate that it has to write
+	 * a innerPolygon.
+	 * 
 	 * @param id
-	 * LineString identifier
+	 *            LineString identifier
 	 * @param coords
-	 * A coordinates iterator
+	 *            A coordinates iterator
 	 * @param srs
-	 * Spatial reference system
+	 *            Spatial reference system
 	 */
-	public void startInnerBoundary(String id, ICoordinateSequence coords, String srs);
-	
+	public void startInnerBoundary(String id, ICoordinateSequence coords,
+			String srs);
+
 	/**
-	 * It means that the current innerPolygon has finished to 
-	 * be written.
+	 * It means that the current innerPolygon has finished to be written.
 	 */
 	public void endInnerBoundary();
 }

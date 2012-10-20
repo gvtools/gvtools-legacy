@@ -55,46 +55,55 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  */
 /**
  * It writes a gml:innerBoundaryType object. Example:
-* <p>
-* <pre>
-* <code>
-* &lt;interior&gt;
-* &lt;LinearRing&gt;
-* &lt;coordinates&gt;10.0,10.0 10.0,40.0 40.0,40.0 40.0,10.0 10.0,10.0&lt;/coordinates&gt;
-* &lt;/LinearRing&gt;
-* &lt;/interior&gt;
-* </code>
-* </pre>
-* </p> 
-* @author Jorge Piera LLodrá (jorge.piera@iver.es)
-*/
-public class InnerBoundaryIsWriter extends org.gvsig.gpe.gml.writer.v2.geometries.InnerBoundaryIsWriter {
+ * <p>
+ * 
+ * <pre>
+ * <code>
+ * &lt;interior&gt;
+ * &lt;LinearRing&gt;
+ * &lt;coordinates&gt;10.0,10.0 10.0,40.0 40.0,40.0 40.0,10.0 10.0,10.0&lt;/coordinates&gt;
+ * &lt;/LinearRing&gt;
+ * &lt;/interior&gt;
+ * </code>
+ * </pre>
+ * 
+ * </p>
+ * 
+ * @author Jorge Piera LLodrá (jorge.piera@iver.es)
+ */
+public class InnerBoundaryIsWriter extends
+		org.gvsig.gpe.gml.writer.v2.geometries.InnerBoundaryIsWriter {
 	/**
 	 * It writes a gml:interior init tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @param coords
-	 * A coordinates sequence
+	 *            A coordinates sequence
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor handler, 
-			ICoordinateSequence coords) throws IOException{
-		writer.writeStartElement(GMLTags.GML_INTERIOR);	
-		handler.getProfile().getLinearRingWriter().start(writer, handler, null, coords, null);	
+	public void start(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler, ICoordinateSequence coords)
+			throws IOException {
+		writer.writeStartElement(GMLTags.GML_INTERIOR);
+		handler.getProfile().getLinearRingWriter()
+				.start(writer, handler, null, coords, null);
 	}
-	
+
 	/**
 	 * It writes a gml:interior end tag
+	 * 
 	 * @param writer
-	 * Writer to write the labels
+	 *            Writer to write the labels
 	 * @param handler
-	 * The writer handler implementor
+	 *            The writer handler implementor
 	 * @throws IOException
 	 */
-	public void end(IXmlStreamWriter writer, GPEGmlWriterHandlerImplementor handler) throws IOException{
+	public void end(IXmlStreamWriter writer,
+			GPEGmlWriterHandlerImplementor handler) throws IOException {
 		handler.getProfile().getLinearRingWriter().end(writer, handler);
-		writer.writeEndElement();	
+		writer.writeEndElement();
 	}
 }

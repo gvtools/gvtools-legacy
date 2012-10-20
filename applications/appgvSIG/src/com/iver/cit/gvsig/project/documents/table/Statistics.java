@@ -12,21 +12,27 @@ import com.hardcode.gdbms.engine.values.Value;
 import com.iver.cit.gvsig.fmap.selection.ResettableIterator;
 
 /**
- * <p>Computes statistics for an iterator of Values.</p>
- *
- * <p>In order to get an optimal precision, BigDecimals are used to perform
+ * <p>
+ * Computes statistics for an iterator of Values.
+ * </p>
+ * 
+ * <p>
+ * In order to get an optimal precision, BigDecimals are used to perform
  * calculations. Anyway, calculations are reasonably fast, because statistics
- * are cached. For example,
- * if we first call variance() and then stdDeviation(), the second call
- * just needs to perform the square root of the cached variance value.</p>
- *
- * <p>Warning: This object is not thread-safe!!! Use external synchronization
- * if you plan to use it from different threads, otherwise it is warranted
- * to fail!!</p>
- *
+ * are cached. For example, if we first call variance() and then stdDeviation(),
+ * the second call just needs to perform the square root of the cached variance
+ * value.
+ * </p>
+ * 
+ * <p>
+ * Warning: This object is not thread-safe!!! Use external synchronization if
+ * you plan to use it from different threads, otherwise it is warranted to
+ * fail!!
+ * </p>
+ * 
  * @author Cesar Martinez Izquierdo <cesar.martinez@iver.es> 18/02/2009
  * @author IVER T.I. <http://www.iver.es> 18/02/2009
- *
+ * 
  */
 public class Statistics {
 	protected ResettableIterator<Value> iterator;
@@ -39,29 +45,29 @@ public class Statistics {
 	protected BigDecimal variance = null;
 	protected BigDecimal stdDeviation = null;
 
-
 	/**
-	 * <p>Creates a new statistic calculator. Calculations will be performed
-	 * for values contained in the iterator.</p>
-	 *
+	 * <p>
+	 * Creates a new statistic calculator. Calculations will be performed for
+	 * values contained in the iterator.
+	 * </p>
+	 * 
 	 */
 	public Statistics(ResettableIterator<Value> iterator) {
 		this.iterator = iterator;
 	}
 
 	public BigDecimal sum() throws NonNumericFieldException {
-		if (sum!=null) {
+		if (sum != null) {
 			return sum;
-		}
-		else {
+		} else {
 			iterator.reset();
 			Value value;
 			sum = new BigDecimal(0);
 			boolean computeMin, computeMax;
 
 			// cache min, max and count values for future use
-			computeMin = (min==null);
-			computeMax = (max==null);
+			computeMin = (min == null);
+			computeMax = (max == null);
 			count = 0;
 
 			while (iterator.hasNext()) {
@@ -76,7 +82,7 @@ public class Statistics {
 						computeMax(d);
 					}
 					count++;
-				} else if (!(value instanceof NullValue)){
+				} else if (!(value instanceof NullValue)) {
 					throw new NonNumericFieldException();
 				}
 			}
@@ -85,10 +91,9 @@ public class Statistics {
 	}
 
 	protected void computeMin(double value) {
-		if (min==null) {
+		if (min == null) {
 			min = new BigDecimal(value);
-		}
-		else {
+		} else {
 			if (value < min.doubleValue()) {
 				min = new BigDecimal(value);
 			}
@@ -96,10 +101,9 @@ public class Statistics {
 	}
 
 	protected void computeMax(double value) {
-		if (max==null) {
+		if (max == null) {
 			max = new BigDecimal(value);
-		}
-		else {
+		} else {
 			if (value > max.doubleValue()) {
 				max = new BigDecimal(value);
 			}
@@ -109,13 +113,12 @@ public class Statistics {
 	public BigDecimal min() throws NonNumericFieldException {
 		if (min != null) {
 			return min;
-		}
-		else {
+		} else {
 			iterator.reset();
 			Value value;
 
 			// cache also Max and count
-			boolean computeMax = (max==null);
+			boolean computeMax = (max == null);
 			count = 0;
 
 			while (iterator.hasNext()) {
@@ -127,11 +130,11 @@ public class Statistics {
 						computeMax(d);
 					}
 					count++;
-				} else if (!(value instanceof NullValue)){
+				} else if (!(value instanceof NullValue)) {
 					throw new NonNumericFieldException();
 				}
 			}
-			if (min==null) {
+			if (min == null) {
 				min = new BigDecimal(0);
 			}
 			return min;
@@ -141,13 +144,12 @@ public class Statistics {
 	public BigDecimal max() throws NonNumericFieldException {
 		if (max != null) {
 			return max;
-		}
-		else {
+		} else {
 			iterator.reset();
 			Value value;
 
 			// cache also Min and count
-			boolean computeMin = (min==null);
+			boolean computeMin = (min == null);
 			count = 0;
 
 			while (iterator.hasNext()) {
@@ -159,21 +161,20 @@ public class Statistics {
 						computeMin(d);
 					}
 					count++;
-				} else if (!(value instanceof NullValue)){
+				} else if (!(value instanceof NullValue)) {
 					throw new NonNumericFieldException();
 				}
 			}
-			if (max==null) {
+			if (max == null) {
 				max = new BigDecimal(0);
 			}
 			return max;
-
 
 		}
 	}
 
 	public long count() {
-		if (count==-1) {
+		if (count == -1) {
 			Value value;
 			count = 0;
 			iterator.reset();
@@ -186,20 +187,20 @@ public class Statistics {
 	}
 
 	public BigDecimal mean() throws NonNumericFieldException {
-		if (mean==null) {
+		if (mean == null) {
 			long count = count();
-			if (count==0) {
+			if (count == 0) {
 				mean = new BigDecimal(0);
-			}
-			else {
-				mean = sum().divide(new BigDecimal(count), BigDecimal.ROUND_HALF_DOWN);
+			} else {
+				mean = sum().divide(new BigDecimal(count),
+						BigDecimal.ROUND_HALF_DOWN);
 			}
 		}
 		return mean;
 	}
 
 	public BigDecimal variance() throws NonNumericFieldException {
-		if (variance==null) {
+		if (variance == null) {
 			variance = new BigDecimal(0);
 			BigDecimal mean = mean();
 			Value value;
@@ -212,15 +213,16 @@ public class Statistics {
 					variance = dif.multiply(dif).add(variance);
 				}
 			}
-			if (count() != 0){
-				variance = variance.divide(new BigDecimal(count()), BigDecimal.ROUND_HALF_DOWN);
+			if (count() != 0) {
+				variance = variance.divide(new BigDecimal(count()),
+						BigDecimal.ROUND_HALF_DOWN);
 			}
 		}
 		return variance;
 	}
 
 	public BigDecimal stdDeviation() throws NonNumericFieldException {
-		if (stdDeviation==null) {
+		if (stdDeviation == null) {
 			stdDeviation = new BigDecimal(Math.sqrt(variance().doubleValue()));
 		}
 		return stdDeviation;

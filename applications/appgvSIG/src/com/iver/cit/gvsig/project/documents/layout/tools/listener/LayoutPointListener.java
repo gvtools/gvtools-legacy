@@ -43,19 +43,20 @@ package com.iver.cit.gvsig.project.documents.layout.tools.listener;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
 
-
 /**
  * Interfaz listener de punto.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public interface LayoutPointListener extends LayoutToolListener {
 	/**
 	 * Invocado cuando se hace un pressed sobre la vista.
-	 *
-	 * @param event PointEvent.
-	 *
-	 * @throws BehaviorException se lanza cuando falla la herramienta.
+	 * 
+	 * @param event
+	 *            PointEvent.
+	 * 
+	 * @throws BehaviorException
+	 *             se lanza cuando falla la herramienta.
 	 */
 	public void point(PointEvent event) throws BehaviorException;
 

@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.geoprocess.impl.snapandcrack.fmap;
 
 import java.awt.geom.Rectangle2D;
@@ -77,55 +77,54 @@ import com.iver.cit.gvsig.geoprocess.core.fmap.GeoprocessException;
 import com.iver.utiles.swing.threads.CancellableProgressTask;
 import com.vividsolutions.jts.geom.Geometry;
 
-
 /**
  * This geoprocess snaps and cracks all the features of a vectorial layers with
- * the rest of features of the same layers and different layers.
- * <br>
- * By 'snap' we mean move a vertex to make coincident with other vertices.
- * <br>
- * By 'crack' we mean insert new vertices in a geometry if these vertices are in other
- * geometries and the distance with the geometry is less than snap tolerance.
+ * the rest of features of the same layers and different layers. <br>
+ * By 'snap' we mean move a vertex to make coincident with other vertices. <br>
+ * By 'crack' we mean insert new vertices in a geometry if these vertices are in
+ * other geometries and the distance with the geometry is less than snap
+ * tolerance.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class SnapAndCrackGeoprocess extends AbstractMonitorableGeoprocess {
-	
+
 	private List<FLyrVect> crackingLayers;
-	
+
 	private double snapTolerance;
 	/**
 	 * Snaps points of a same geometry and between geometries
 	 */
 	private GeometrySnapper snapper;
-	
+
 	private GeometryCracker cracker;
-	
-	private static Logger logger = Logger.getLogger(SnapAndCrackGeoprocess.class
-			.getName());
-	
+
+	private static Logger logger = Logger
+			.getLogger(SnapAndCrackGeoprocess.class.getName());
+
 	public SnapAndCrackGeoprocess(FLyrVect inputLayer, List<FLayer> layers) {
 		super();
 		this.firstLayer = inputLayer;
-		
+
 		this.crackingLayers = new ArrayList<FLyrVect>();
-		for(int i = 0; i < layers.size(); i++){
+		for (int i = 0; i < layers.size(); i++) {
 			FLayer layer = (FLayer) layers.get(i);
-			if(layer instanceof FLyrVect){
+			if (layer instanceof FLyrVect) {
 				crackingLayers.add((FLyrVect) layer);
 			}
-		}//for
-		
-		//we add the input layer to the cracking layers collection to snap and crack a geometry
-		//with the neighbours geometries of its same layer.
+		}// for
+
+		// we add the input layer to the cracking layers collection to snap and
+		// crack a geometry
+		// with the neighbours geometries of its same layer.
 		crackingLayers.add(this.firstLayer);
-		
-	}	
-	
+
+	}
+
 	public void checkPreconditions() throws GeoprocessException {
-		if(crackingLayers.size() == 0)
-		throw new GeoprocessException("Crack y snap sin capas de entrada");
+		if (crackingLayers.size() == 0)
+			throw new GeoprocessException("Crack y snap sin capas de entrada");
 
 	}
 
@@ -139,7 +138,6 @@ public class SnapAndCrackGeoprocess extends AbstractMonitorableGeoprocess {
 		}
 	}
 
-
 	public void setParameters(Map params) throws GeoprocessException {
 		Double snapTol = (Double) params.get("snap_tolerance");
 		if (snapTol != null) {
@@ -152,130 +150,128 @@ public class SnapAndCrackGeoprocess extends AbstractMonitorableGeoprocess {
 		}
 	}
 
-
-	public void process(CancellableProgressTask progressMonitor) throws GeoprocessException {
+	public void process(CancellableProgressTask progressMonitor)
+			throws GeoprocessException {
 		if (progressMonitor != null) {
 			initialize(progressMonitor);
 		}
-	
-			//Prepare the result
-//			schemaManager.createSchema(createLayerDefinition());
-			try {
-				writer.preProcess();
-			} catch (StartWriterVisitorException e) {
-				throw new GeoprocessException(e);
-			}
-			FeaturePersisterProcessor2 featureProcessor =
-				new FeaturePersisterProcessor2(writer);
-			try {
-				featureProcessor.start();
-			} catch (StartVisitorException e1) {
-				throw new GeoprocessException(e1);
-			}
-			
-			
-			IFeatureIterator iterator;
-			try {
-				iterator = firstLayer.getSource().getFeatureIterator();
-			} catch (ReadDriverException e) {
-				throw new GeoprocessException(e);
-			}
-			
-			
-			try {
-				while(iterator.hasNext()){
-					if (progressMonitor != null) {
-						if (progressMonitor.isCanceled()){
-							this.cancel();
-							break;
-						}
-						progressMonitor.reportStep();
-					}//if
-					
-					IFeature feature = iterator.next();
-					IGeometry geomA = feature.getGeometry();
-					if(geomA == null)//ignore features without geometry
-						continue;
-					Rectangle2D envA = geomA.getBounds2D();
-					Geometry jtsGeom = NewFConverter.toJtsGeometry(geomA);
-					
-					
-					
-int nPointsA = jtsGeom.getNumPoints();					
-					
-					
-					//first of all: we snap the geometry with itself
-					try {
-						jtsGeom = snapper.snap(jtsGeom);
-					} catch (GeometryCollapsedException e) {
-						logger.error(e);
-						/*
-						 *  GeometrySnapper launchs this exception when the geometry is collapsed
-						 * by applying snap tolerance.
-						 * 
-						 * Crack and snap geoprocess doesnt solve this
-						 * 
-						 * */
-//						featureProcessor.processFeature(feature);
-//						continue;
+
+		// Prepare the result
+		// schemaManager.createSchema(createLayerDefinition());
+		try {
+			writer.preProcess();
+		} catch (StartWriterVisitorException e) {
+			throw new GeoprocessException(e);
+		}
+		FeaturePersisterProcessor2 featureProcessor = new FeaturePersisterProcessor2(
+				writer);
+		try {
+			featureProcessor.start();
+		} catch (StartVisitorException e1) {
+			throw new GeoprocessException(e1);
+		}
+
+		IFeatureIterator iterator;
+		try {
+			iterator = firstLayer.getSource().getFeatureIterator();
+		} catch (ReadDriverException e) {
+			throw new GeoprocessException(e);
+		}
+
+		try {
+			while (iterator.hasNext()) {
+				if (progressMonitor != null) {
+					if (progressMonitor.isCanceled()) {
+						this.cancel();
+						break;
 					}
-					ArrayList<Geometry> crackingGeometries = new ArrayList<Geometry>();
-					for(int i = 0; i < crackingLayers.size(); i++){
-						FLyrVect crackLyr = crackingLayers.get(i);
-						IFeatureIterator iterator2 = crackLyr.getSource().
-									getFeatureIterator(envA, null, null, false);
-						while(iterator2.hasNext()){
-							IFeature feature2 = iterator2.next();
-							IGeometry geom2 = feature2.getGeometry();
-							if(geom2 == null)//ignore features without geometry
-								continue;
-							Geometry jts2 = geom2.toJTSGeometry();
-							crackingGeometries.add(jts2);
-						}//while iterator2
-					}//for cracking layers
-					
-					
-					Geometry[] crackingGeoms = new Geometry[crackingGeometries.size()];
-					crackingGeometries.toArray(crackingGeoms);
-					
-					//then, we snap the geometry with the rest of geometries
-					//FIXME Usar los weights (ultimos dos parametros)
-					jtsGeom = snapper.snapWith(jtsGeom, crackingGeoms);
-								
-					//after that, we apply a crack process
-					for(int i = 0; i < crackingGeoms.length; i++){
-						jtsGeom = cracker.crackGeometries(jtsGeom, crackingGeoms[i]);
-					}
-					
-					if(jtsGeom == null)
-						throw new GeoprocessException("Error!!!!");
-					
-					feature.setGeometry(NewFConverter.toFMap(jtsGeom));
-					
-					featureProcessor.processFeature(feature);
-					
-					
-				}//while
-				
-				featureProcessor.finish();
-			} catch (ReadDriverException e) {
-				throw new GeoprocessException(e);
-			} catch (VisitorException e) {
-				throw new GeoprocessException(e);
-			} 
-		
+					progressMonitor.reportStep();
+				}// if
+
+				IFeature feature = iterator.next();
+				IGeometry geomA = feature.getGeometry();
+				if (geomA == null)// ignore features without geometry
+					continue;
+				Rectangle2D envA = geomA.getBounds2D();
+				Geometry jtsGeom = NewFConverter.toJtsGeometry(geomA);
+
+				int nPointsA = jtsGeom.getNumPoints();
+
+				// first of all: we snap the geometry with itself
+				try {
+					jtsGeom = snapper.snap(jtsGeom);
+				} catch (GeometryCollapsedException e) {
+					logger.error(e);
+					/*
+					 * GeometrySnapper launchs this exception when the geometry
+					 * is collapsed by applying snap tolerance.
+					 * 
+					 * Crack and snap geoprocess doesnt solve this
+					 */
+					// featureProcessor.processFeature(feature);
+					// continue;
+				}
+				ArrayList<Geometry> crackingGeometries = new ArrayList<Geometry>();
+				for (int i = 0; i < crackingLayers.size(); i++) {
+					FLyrVect crackLyr = crackingLayers.get(i);
+					IFeatureIterator iterator2 = crackLyr.getSource()
+							.getFeatureIterator(envA, null, null, false);
+					while (iterator2.hasNext()) {
+						IFeature feature2 = iterator2.next();
+						IGeometry geom2 = feature2.getGeometry();
+						if (geom2 == null)// ignore features without geometry
+							continue;
+						Geometry jts2 = geom2.toJTSGeometry();
+						crackingGeometries.add(jts2);
+					}// while iterator2
+				}// for cracking layers
+
+				Geometry[] crackingGeoms = new Geometry[crackingGeometries
+						.size()];
+				crackingGeometries.toArray(crackingGeoms);
+
+				// then, we snap the geometry with the rest of geometries
+				// FIXME Usar los weights (ultimos dos parametros)
+				jtsGeom = snapper.snapWith(jtsGeom, crackingGeoms);
+
+				// after that, we apply a crack process
+				for (int i = 0; i < crackingGeoms.length; i++) {
+					jtsGeom = cracker
+							.crackGeometries(jtsGeom, crackingGeoms[i]);
+				}
+
+				if (jtsGeom == null)
+					throw new GeoprocessException("Error!!!!");
+
+				feature.setGeometry(NewFConverter.toFMap(jtsGeom));
+
+				featureProcessor.processFeature(feature);
+
+			}// while
+
+			featureProcessor.finish();
+		} catch (ReadDriverException e) {
+			throw new GeoprocessException(e);
+		} catch (VisitorException e) {
+			throw new GeoprocessException(e);
+		}
+
 	}
 
-	public void initialize(CancellableProgressTask progressMonitor) throws GeoprocessException {
+	public void initialize(CancellableProgressTask progressMonitor)
+			throws GeoprocessException {
 		try {
 			progressMonitor.setInitialStep(0);
 			int numOfSteps = firstLayer.getSource().getShapeCount();
 			progressMonitor.setFinalStep(numOfSteps);
 			progressMonitor.setDeterminatedProcess(true);
-			progressMonitor.setNote(Messages.getText("snap_and_crack_layer_note"));
-			progressMonitor.setStatusMessage(Messages.getText("snap_and_crack_layer_message"));
+			progressMonitor.setNote(Messages
+					.getText("snap_and_crack_layer_note"));
+			progressMonitor.setStatusMessage(Messages
+					.getText("snap_and_crack_layer_message"));
 		} catch (ReadDriverException e) {
-			throw new GeoprocessException("error accediendo al numero de features de una layer", e);
+			throw new GeoprocessException(
+					"error accediendo al numero de features de una layer", e);
 		}
 	}
 

@@ -43,20 +43,17 @@ package com.iver.cit.gvsig.topology;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.planargraph.Node;
 
-public class NodeError  extends Node
-{
+public class NodeError extends Node {
 	public static int DANGLE = 1;
 	public static int FUZZY = 2;
-	
+
 	int occurrences;
 	int errorType;
-	
+
 	public NodeError(Coordinate pt) {
 		super(pt);
 		occurrences = 1;
 	}
-
-	
 
 	public int getOccurrences() {
 		return occurrences;
@@ -70,12 +67,8 @@ public class NodeError  extends Node
 		return errorType;
 	}
 
-
-
 	public void setErrorType(int errorType) {
 		this.errorType = errorType;
 	}
 
 }
-
-

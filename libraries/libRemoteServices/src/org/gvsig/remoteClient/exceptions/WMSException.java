@@ -42,13 +42,12 @@ package org.gvsig.remoteClient.exceptions;
 
 /**
  * Excepción provocada por el WMS.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
-public class WMSException extends Exception 
-{	
+public class WMSException extends Exception {
 	private String wms_message = null;
-	
+
 	/**
 	 *
 	 */
@@ -58,7 +57,7 @@ public class WMSException extends Exception
 
 	/**
 	 * Crea WMSException.
-	 *
+	 * 
 	 * @param message
 	 */
 	public WMSException(String message) {
@@ -67,7 +66,7 @@ public class WMSException extends Exception
 
 	/**
 	 * Crea WMSException.
-	 *
+	 * 
 	 * @param message
 	 * @param cause
 	 */
@@ -76,24 +75,22 @@ public class WMSException extends Exception
 	}
 
 	/**
-	  * Crea WMSException.
-	 *
+	 * Crea WMSException.
+	 * 
 	 * @param cause
 	 */
 	public WMSException(Throwable cause) {
 		super(cause);
 	}
-	
-	public String getWMSMessage()
-	{
+
+	public String getWMSMessage() {
 		if (wms_message == null)
 			return "";
 		else
 			return wms_message;
 	}
-	
-	public void setWMSMessage(String mes)
-	{
+
+	public void setWMSMessage(String mes) {
 		wms_message = mes;
 	}
 }

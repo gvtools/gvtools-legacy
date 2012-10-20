@@ -65,7 +65,7 @@ public class DocumentRenderer implements Printable {
 	 */
 
 	private static boolean useDefaultJavaPrinting = true;
-	
+
 	protected int currentPage = -1; // Used to keep track of when
 	// the page to print changes.
 
@@ -201,9 +201,9 @@ public class DocumentRenderer implements Printable {
 		}
 		// V
 		graphics2D.setClip((int) (pageFormat.getImageableX() / scale),
-				(int) (pageFormat.getImageableY() / scale), (int) (pageFormat
-						.getImageableWidth() / scale), (int) (pageFormat
-						.getImageableHeight() / scale));
+				(int) (pageFormat.getImageableY() / scale),
+				(int) (pageFormat.getImageableWidth() / scale),
+				(int) (pageFormat.getImageableHeight() / scale));
 		// VI
 		if (pageIndex > currentPage) {
 			currentPage = pageIndex;
@@ -264,10 +264,11 @@ public class DocumentRenderer implements Printable {
 		double w = pf.getImageableWidth();
 		double h = pf.getImageableHeight();
 		Paper paper = pf.getPaper();
-		paper.setImageableArea(pf.getImageableX() + 110, pf.getImageableY(), w -110, h-50);
+		paper.setImageableArea(pf.getImageableX() + 110, pf.getImageableY(),
+				w - 110, h - 50);
 		pf.setPaper(paper);
 		PrintRequestAttributeSet att = m_attributes.toPrintAttributes();
-//		att = new HashPrintRequestAttributeSet();
+		// att = new HashPrintRequestAttributeSet();
 		DocFlavor flavor = DocFlavor.SERVICE_FORMATTED.PRINTABLE;
 		try {
 			if (m_cachePrintServices == null) {
@@ -281,37 +282,41 @@ public class DocumentRenderer implements Printable {
 				defaultService = PrintServiceLookup.lookupDefaultPrintService();
 			}
 
-			if(m_cachePrintService == null && defaultService == null && m_cachePrintServices.length > 0)
-            	defaultService = m_cachePrintServices[0];
-			
-            if ((defaultService == null) && (m_cachePrintService == null)) {
-                JOptionPane.showMessageDialog((Component) PluginServices
-                        .getMainFrame(),PluginServices.getText(this,"ninguna_impresora_configurada"));
+			if (m_cachePrintService == null && defaultService == null
+					&& m_cachePrintServices.length > 0)
+				defaultService = m_cachePrintServices[0];
 
-                return;
-            }
-            if (useDefaultJavaPrinting) {
-            	try {
-            		m_cachePrintService = ServiceUI.printDialog(null, 200, 200,
-            				m_cachePrintServices, defaultService, flavor, att);
-            	}
-            	catch (RuntimeException ex) {
-            		useDefaultJavaPrinting=false;
-            		Logger logger = PluginServices.getLogger();
-            		logger.error("Error showing print dialog", ex); 
-            		
-            		// workaround a problem with Java 1.5 with moder CUPS versions
-            		// this try-catch block may be safely removed when we move to Java 1.6
-            		logger.debug("Opening gvSIG's internal Java 1.7 CUPS printing dialog");
-            		m_cachePrintService = ServiceUI.printDialog(null, 200, 200,
-            				m_cachePrintServices, defaultService, flavor, att);
-            	}
-            }
-            else {
-            	PluginServices.getLogger().debug("Opening gvSIG's internal Java 1.7 CUPS printing dialog");
-            	m_cachePrintService = ServiceUI.printDialog(null, 200, 200,
-            			m_cachePrintServices, defaultService, flavor, att);
-            }
+			if ((defaultService == null) && (m_cachePrintService == null)) {
+				JOptionPane.showMessageDialog((Component) PluginServices
+						.getMainFrame(), PluginServices.getText(this,
+						"ninguna_impresora_configurada"));
+
+				return;
+			}
+			if (useDefaultJavaPrinting) {
+				try {
+					m_cachePrintService = ServiceUI.printDialog(null, 200, 200,
+							m_cachePrintServices, defaultService, flavor, att);
+				} catch (RuntimeException ex) {
+					useDefaultJavaPrinting = false;
+					Logger logger = PluginServices.getLogger();
+					logger.error("Error showing print dialog", ex);
+
+					// workaround a problem with Java 1.5 with moder CUPS
+					// versions
+					// this try-catch block may be safely removed when we move
+					// to Java 1.6
+					logger.debug("Opening gvSIG's internal Java 1.7 CUPS printing dialog");
+					m_cachePrintService = ServiceUI.printDialog(null, 200, 200,
+							m_cachePrintServices, defaultService, flavor, att);
+				}
+			} else {
+				PluginServices
+						.getLogger()
+						.debug("Opening gvSIG's internal Java 1.7 CUPS printing dialog");
+				m_cachePrintService = ServiceUI.printDialog(null, 200, 200,
+						m_cachePrintServices, defaultService, flavor, att);
+			}
 
 			if (m_cachePrintService != null) {
 				DocPrintJob jobNuevo = m_cachePrintService.createPrintJob();
@@ -326,14 +331,12 @@ public class DocumentRenderer implements Printable {
 				Doc doc = new SimpleDoc(this, flavor, null);
 				jobNuevo.print(doc, att);
 			}
-		}
-		catch (PrintException printerException) {
+		} catch (PrintException printerException) {
 			pageStartY = 0;
 			pageEndY = 0;
 			currentPage = -1;
 			System.out.println("Error Printing Document");
 		}
-
 
 		// if (pJob.printDialog(att)) {
 		// pJob.setPrintable(this,pFormat);
@@ -386,8 +389,7 @@ public class DocumentRenderer implements Printable {
 				pageExists = true;
 				// II
 				if ((allocation.getBounds().getHeight() > clipRectangle
-						.getHeight())
-						&& (allocation.intersects(clipRectangle))) {
+						.getHeight()) && (allocation.intersects(clipRectangle))) {
 					view.paint(graphics2D, allocation);
 				} else {
 					// III

@@ -119,9 +119,9 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 /**
  * Extension that handles the selection tools, selection tools have sense on
  * vectorial layers only.
- *
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
 public class ViewSelectionControls extends Extension {
 	private static Logger logger = Logger.getLogger(ViewControls.class
@@ -132,27 +132,27 @@ public class ViewSelectionControls extends Extension {
 		registerIcons();
 	}
 
-	private void registerIcons(){
+	private void registerIcons() {
 
 		PluginServices.getIconTheme().registerDefault(
 				"view-select-geometry",
-				this.getClass().getClassLoader().getResource("images/Select.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/Select.png"));
 
 		PluginServices.getIconTheme().registerDefault(
 				"view-select-by-rectangle",
-				this.getClass().getClassLoader().getResource("images/SelEspacial2b.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/SelEspacial2b.png"));
 
 		PluginServices.getIconTheme().registerDefault(
 				"view-select-by-polygon",
-				this.getClass().getClassLoader().getResource("images/SelectByPolygon.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/SelectByPolygon.png"));
 
 		PluginServices.getIconTheme().registerDefault(
 				"view-select-invert",
-				this.getClass().getClassLoader().getResource("images/invertSelection.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/invertSelection.png"));
 	}
 
 	public void execute(String actionCommand) {
@@ -163,13 +163,13 @@ public class ViewSelectionControls extends Extension {
 		logger.debug("Comand : " + actionCommand);
 		if (actionCommand.equals("SELRECT")) {
 			mapCtrl.setTool("rectSelection");
-			((ProjectDocument)vista.getModel()).setModified(true);
+			((ProjectDocument) vista.getModel()).setModified(true);
 		} else if (actionCommand.equals("SELPOINT")) {
 			mapCtrl.setTool("pointSelection");
-			((ProjectDocument)vista.getModel()).setModified(true);
+			((ProjectDocument) vista.getModel()).setModified(true);
 		} else if (actionCommand.equals("SELPOL")) {
 			mapCtrl.setTool("polSelection");
-			((ProjectDocument)vista.getModel()).setModified(true);
+			((ProjectDocument) vista.getModel()).setModified(true);
 		} else if (actionCommand.equals("SELECTIONBYSHAPE")) {
 			SelectionByTheme dlg = new SelectionByTheme();
 			// FLayer[] layers = mapa.getLayers().getActives();
@@ -177,7 +177,7 @@ public class ViewSelectionControls extends Extension {
 			dlg.setModel(new DefaultSelectionByThemeModel());
 			dlg.addSelectionListener(new MySelectionByThemeListener());
 			PluginServices.getMDIManager().addWindow(dlg);
-			((ProjectDocument)vista.getModel()).setModified(true);
+			((ProjectDocument) vista.getModel()).setModified(true);
 		} else if (actionCommand.equals("INVERT_SELECTION")) {
 			for (int i = 0; i < mapa.getLayers().getActives().length; i++) {
 				FLayer lyr = mapa.getLayers().getActives()[i];
@@ -187,7 +187,7 @@ public class ViewSelectionControls extends Extension {
 					try {
 						sds = lyrVect.getRecordset();
 						FBitSet selectedRows = sds.getSelection();
-						selectedRows.flip(0, (int)sds.getRowCount());
+						selectedRows.flip(0, (int) sds.getRowCount());
 						sds.setSelection(selectedRows);
 					} catch (ReadDriverException e) {
 						e.printStackTrace();
@@ -196,7 +196,7 @@ public class ViewSelectionControls extends Extension {
 
 				}
 			}
-			((ProjectDocument)vista.getModel()).setModified(true);
+			((ProjectDocument) vista.getModel()).setModified(true);
 		}
 	}
 
@@ -235,9 +235,9 @@ public class ViewSelectionControls extends Extension {
 
 	private boolean hasVectorLayers(FLayers layers) {
 		for (int i = 0; i < layers.getLayersCount(); i++) {
-			FLayer lyr =layers.getLayer(i);
-			if (lyr instanceof FLayers){
-				if (hasVectorLayers((FLayers) lyr)){
+			FLayer lyr = layers.getLayer(i);
+			if (lyr instanceof FLayers) {
+				if (hasVectorLayers((FLayers) lyr)) {
 					return true;
 				}
 			} else if (lyr instanceof FLyrVect) {

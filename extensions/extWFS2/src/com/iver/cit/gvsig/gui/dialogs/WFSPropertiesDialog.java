@@ -35,14 +35,17 @@ import com.iver.cit.gvsig.fmap.layers.FLyrWFS;
 import com.iver.cit.gvsig.gui.panels.WFSAreaPanel;
 import com.iver.cit.gvsig.gui.panels.WFSFilterPanel;
 import com.iver.cit.gvsig.gui.panels.WFSParamsPanel;
+import com.iver.cit.gvsig.gui.panels.WFSSelectFieldsPanel;
 import com.iver.cit.gvsig.gui.wizards.WFSWizardData;
 import com.iver.cit.gvsig.panelGroup.PanelGroupDialog;
 
 /**
- * <p>Dialog with the properties of a WFS layer.</p>
+ * <p>
+ * Dialog with the properties of a WFS layer.
+ * </p>
  * 
  * @version 19/12/2007
- * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es) 
+ * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class WFSPropertiesDialog extends PanelGroupDialog {
 	private static final long serialVersionUID = 3879484158536237827L;
@@ -50,40 +53,54 @@ public class WFSPropertiesDialog extends PanelGroupDialog {
 	private WFSPropertiesDialogListener listener;
 
 	/**
-	 * <p>Creates a <code>WFSPropertiesDialog</code> using two parameters.</p>
+	 * <p>
+	 * Creates a <code>WFSPropertiesDialog</code> using two parameters.
+	 * </p>
 	 * 
 	 * @see PanelGroupDialog#PanelGroupDialog(String, AbstractPanelGroup)
 	 */
 	public WFSPropertiesDialog(String windowTitle, IPanelGroup panelGroup) {
-		super("", windowTitle, defaultWidth, defaultHeight, (byte)WindowInfo.MODALDIALOG, panelGroup);
-		
+		super("", windowTitle, defaultWidth, defaultHeight,
+				(byte) WindowInfo.MODALDIALOG, panelGroup);
+
 		listener = new WFSPropertiesDialogListener(this);
 	}
 
 	/**
-	 * <p>Creates a <code>WFSPropertiesDialog</code> using five parameters.</p>
+	 * <p>
+	 * Creates a <code>WFSPropertiesDialog</code> using five parameters.
+	 * </p>
 	 * 
-	 * @see PanelGroupDialog#PanelGroupDialog(String, String, int, int, byte, AbstractPanelGroup)
+	 * @see PanelGroupDialog#PanelGroupDialog(String, String, int, int, byte,
+	 *      AbstractPanelGroup)
 	 */
-	public WFSPropertiesDialog(String additionalInfo, String windowTitle, int width, int height, byte windowInfoProperties,	IPanelGroup panelGroup) {
-		super(additionalInfo, windowTitle, width, height, windowInfoProperties,	panelGroup);
-		
+	public WFSPropertiesDialog(String additionalInfo, String windowTitle,
+			int width, int height, byte windowInfoProperties,
+			IPanelGroup panelGroup) {
+		super(additionalInfo, windowTitle, width, height, windowInfoProperties,
+				panelGroup);
+
 		listener = new WFSPropertiesDialogListener(this);
 	}
 
 	/**
-	 * <p>Gets the layer which this dialog represent its properties.</p>
+	 * <p>
+	 * Gets the layer which this dialog represent its properties.
+	 * </p>
 	 * 
 	 * @return the fLayer
 	 */
 	public FLyrWFS getFLayer() {
-		return (FLyrWFS) ((WFSParamsPanel)panelGroup).getLayer();
+		return (FLyrWFS) ((WFSParamsPanel) panelGroup).getLayer();
 	}
 
 	/**
-	 * <p>Sets the layer which this dialog represent its properties.</p>
+	 * <p>
+	 * Sets the layer which this dialog represent its properties.
+	 * </p>
 	 * 
-	 * @param layer the layer to set
+	 * @param layer
+	 *            the layer to set
 	 */
 	public void setFLayer(FLyrWFS layer) {
 		updateReference(layer);
@@ -91,118 +108,137 @@ public class WFSPropertiesDialog extends PanelGroupDialog {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.panelGroup.PanelGroupDialog#accept()
 	 */
 	public void accept() {
 		super.accept();
 
-		listener.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, WFSPropertiesDialogListener.ACCEPT_BUTTON_ACTION_COMMAND));
+		listener.actionPerformed(new ActionEvent(this,
+				ActionEvent.ACTION_PERFORMED,
+				WFSPropertiesDialogListener.ACCEPT_BUTTON_ACTION_COMMAND));
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.panelGroup.PanelGroupDialog#apply()
 	 */
 	public void apply() {
 		super.apply();
 
-		listener.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, WFSPropertiesDialogListener.APPLY_BUTTON_ACTION_COMMAND));
+		listener.actionPerformed(new ActionEvent(this,
+				ActionEvent.ACTION_PERFORMED,
+				WFSPropertiesDialogListener.APPLY_BUTTON_ACTION_COMMAND));
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.panelGroup.PanelGroupDialog#cancel()
 	 */
 	public void cancel() {
 		super.cancel();
 
-		listener.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, WFSPropertiesDialogListener.CANCEL_BUTTON_ACTION_COMMAND));
+		listener.actionPerformed(new ActionEvent(this,
+				ActionEvent.ACTION_PERFORMED,
+				WFSPropertiesDialogListener.CANCEL_BUTTON_ACTION_COMMAND));
 	}
 
 	/**
 	 * @see WFSParamsPanel#getDriver()
 	 */
 	public FMapWFSDriver getDriver() {
-		return ((WFSParamsPanel)panelGroup).getDriver();
+		return ((WFSParamsPanel) panelGroup).getDriver();
 	}
 
 	/**
 	 * @see WFSParamsPanel#getWizardData()
 	 */
 	public WFSWizardData getWizardData() {
-		return ((WFSParamsPanel)panelGroup).getWizardData();
+		return ((WFSParamsPanel) panelGroup).getWizardData();
 	}
 
 	/**
 	 * @see WFSFilterPanel#getQuery()
 	 */
 	public String getFilterQuery() {
-		return ((WFSParamsPanel)panelGroup).getFilterPanel().getQuery();
+		return ((WFSParamsPanel) panelGroup).getFilterPanel().getQuery();
 	}
 
 	/**
 	 * @see WFSAreaPanel#setUserHasntDefineAnArea()
 	 */
 	public void setUserHasntDefinedAnArea() {
-		((WFSParamsPanel)panelGroup).getAreaPanel().setUserHasntDefineAnArea();
+		((WFSParamsPanel) panelGroup).getAreaPanel().setUserHasntDefineAnArea();
 	}
 
 	/**
 	 * @see WFSSelectFieldsPanel#getFieldsSelectedOfSameLayerHasChanged()
 	 */
 	public boolean getFieldsSelectedOfSameLayerHasChanged() {
-		return ((WFSParamsPanel)panelGroup).getFieldsPanel().getFieldsSelectedOfSameLayerHasChanged();
+		return ((WFSParamsPanel) panelGroup).getFieldsPanel()
+				.getFieldsSelectedOfSameLayerHasChanged();
 	}
 
 	/**
 	 * @see WFSSelectFieldsPanel#resetFieldsSelectedOfSameLayerHasChanged()
 	 */
 	public void resetFieldsSelectedOfSameLayerHasChanged() {
-		((WFSParamsPanel)panelGroup).getFieldsPanel().resetFieldsSelectedOfSameLayerHasChanged();
+		((WFSParamsPanel) panelGroup).getFieldsPanel()
+				.resetFieldsSelectedOfSameLayerHasChanged();
 	}
 
 	/**
 	 * @see WFSFilterPanel#updateFieldValues()
 	 */
-	public void updateWFSFilterFieldValues()  {
-		((WFSParamsPanel)panelGroup).getFilterPanel().updateFieldValues();
+	public void updateWFSFilterFieldValues() {
+		((WFSParamsPanel) panelGroup).getFilterPanel().updateFieldValues();
 	}
 
 	/**
 	 * @see WFSAreaPanel#updateWFSArea()
 	 */
 	public void updateWFSArea() {
-		((WFSParamsPanel)panelGroup).getAreaPanel().updateWFSArea();
+		((WFSParamsPanel) panelGroup).getAreaPanel().updateWFSArea();
 	}
 
 	/**
 	 * @see WFSFilterPanel#getAllFieldsAndValuesKnownOfCurrentLayer(Map)
 	 */
 	public Map getAllFieldsAndValuesKnownOfCurrentLayer() {
-		return ((WFSParamsPanel)panelGroup).getFilterPanel().getAllFieldsAndValuesKnownOfCurrentLayer();
+		return ((WFSParamsPanel) panelGroup).getFilterPanel()
+				.getAllFieldsAndValuesKnownOfCurrentLayer();
 	}
 
 	/**
 	 * @see WFSFilterPanel#setWFSFilterPanelIsAsTabForWFSLayersLoad(boolean)
 	 */
 	public void setWFSFilterPanelIsAsTabForWFSLayersLoad(boolean b) {
-		((WFSParamsPanel)panelGroup).getFilterPanel().setWFSFilterPanelIsAsTabForWFSLayersLoad(b);
+		((WFSParamsPanel) panelGroup).getFilterPanel()
+				.setWFSFilterPanelIsAsTabForWFSLayersLoad(b);
 	}
 
 	/**
 	 * @see WFSFilterPanel#getWFSFilterPanelIsAsTabForWFSLayersLoad()
 	 */
 	public boolean getWFSFilterPanelIsAsTabForWFSLayersLoad() {
-		return ((WFSParamsPanel)panelGroup).getFilterPanel().getWFSFilterPanelIsAsTabForWFSLayersLoad();
+		return ((WFSParamsPanel) panelGroup).getFilterPanel()
+				.getWFSFilterPanelIsAsTabForWFSLayersLoad();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.panelGroup.PanelGroupDialog#loadPanels(org.gvsig.gui.beans.panelGroup.loaders.IPanelGroupLoader)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.panelGroup.PanelGroupDialog#loadPanels(org.gvsig.gui
+	 * .beans.panelGroup.loaders.IPanelGroupLoader)
 	 */
-	public void loadPanels(IPanelGroupLoader loader) throws ListCouldntAddPanelException, EmptyPanelGroupException,	EmptyPanelGroupGUIException {
+	public void loadPanels(IPanelGroupLoader loader)
+			throws ListCouldntAddPanelException, EmptyPanelGroupException,
+			EmptyPanelGroupGUIException {
 		super.loadPanels(loader);
-		
+
 		setWFSFilterPanelIsAsTabForWFSLayersLoad(false);
 		setEnabledApplyButton(false);
 	}

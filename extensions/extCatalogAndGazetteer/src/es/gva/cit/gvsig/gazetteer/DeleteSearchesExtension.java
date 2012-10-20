@@ -4,10 +4,8 @@ import java.util.Hashtable;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
-import com.iver.cit.gvsig.exceptions.layers.ReloadLayerException;
 import com.iver.cit.gvsig.fmap.layers.GraphicLayer;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
-
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
@@ -97,35 +95,38 @@ import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 /**
  * @autor Jorge Piera Llodrá (piera_jor@gva.es)
  */
-public class DeleteSearchesExtension extends Extension{
+public class DeleteSearchesExtension extends Extension {
 	private static Hashtable views = new Hashtable();
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.Extension#inicializar()
 	 */
 	public void initialize() {
 		// TODO Auto-generated method stub
 		registerIcons();
 	}
-	
-	private void registerIcons(){
+
+	private void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
 				"catalog-clear-point",
-				this.getClass().getClassLoader().getResource("images/delone.png")
-			);
+				this.getClass().getClassLoader()
+						.getResource("images/delone.png"));
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.Extension#execute(java.lang.String)
 	 */
 	public void execute(String actionCommand) {
-		deteleAllFeatures();		
+		deteleAllFeatures();
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.Extension#isEnabled()
 	 */
 	public boolean isEnabled() {
@@ -134,51 +135,52 @@ public class DeleteSearchesExtension extends Extension{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.plugins.Extension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow activeView = PluginServices.getMDIManager()
-		.getActiveWindow();
-		
+		com.iver.andami.ui.mdiManager.IWindow activeView = PluginServices
+				.getMDIManager().getActiveWindow();
+
 		if (activeView == null) {
 			return false;
 		}
-		
-		if (activeView instanceof BaseView){
-			Boolean bool = (Boolean)views.get(activeView);
-			if (bool == null){
+
+		if (activeView instanceof BaseView) {
+			Boolean bool = (Boolean) views.get(activeView);
+			if (bool == null) {
 				return false;
-			}else{
+			} else {
 				return bool.booleanValue();
 			}
-		}else{
+		} else {
 			return false;
 		}
-	
-	
+
 	}
 
 	/**
 	 * Delete all the current view searches
-	 *
+	 * 
 	 */
-	public static void deteleAllFeatures(){
-		BaseView activeView = 
-			(BaseView) PluginServices.getMDIManager().getActiveWindow();
-		GraphicLayer lyr = activeView.getMapControl().getMapContext().getGraphicsLayer();
+	public static void deteleAllFeatures() {
+		BaseView activeView = (BaseView) PluginServices.getMDIManager()
+				.getActiveWindow();
+		GraphicLayer lyr = activeView.getMapControl().getMapContext()
+				.getGraphicsLayer();
 		lyr.clearAllGraphics();
 		activeView.getMapControl().drawMap(false);
-		views.put(activeView,new Boolean(false));		
+		views.put(activeView, new Boolean(false));
 	}
-	
+
 	/**
 	 * Sets the extension enabled
-	 *
+	 * 
 	 */
-	public static void setVisible(){
-		BaseView activeView = 
-			(BaseView) PluginServices.getMDIManager().getActiveWindow();
-		views.put(activeView,new Boolean(true));
+	public static void setVisible() {
+		BaseView activeView = (BaseView) PluginServices.getMDIManager()
+				.getActiveWindow();
+		views.put(activeView, new Boolean(true));
 	}
 
 }

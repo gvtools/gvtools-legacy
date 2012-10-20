@@ -49,34 +49,34 @@ import com.iver.utiles.swing.threads.IMonitorableTask;
 
 /**
  * @author Francisco José
- *
- * Cuando un tema se pone en edición, puede que su driver implemente
- * ISpatialWriter. En ese caso, es capaz de guardarse sobre sí mismo. Si no lo
- * implementa, esta opción estará deshabilitada y la única posibilidad de
- * guardar este tema será "Guardando como..."
+ * 
+ *         Cuando un tema se pone en edición, puede que su driver implemente
+ *         ISpatialWriter. En ese caso, es capaz de guardarse sobre sí mismo. Si
+ *         no lo implementa, esta opción estará deshabilitada y la única
+ *         posibilidad de guardar este tema será "Guardando como..."
  */
 public class StopEditing extends Extension {
 	private View vista;
-	private static HashMap<String, Class> supportedFormats = new HashMap<String,  Class>();
+	private static HashMap<String, Class> supportedFormats = new HashMap<String, Class>();
 
 	/**
 	 * Add a format to export the edited layer.
+	 * 
 	 * @param name
-	 * The name of the format
+	 *            The name of the format
 	 * @param extension
-	 * The extension that can export this format.
+	 *            The extension that can export this format.
 	 */
-	public static void addExportFormat(String name, Class extension){
+	public static void addExportFormat(String name, Class extension) {
 		supportedFormats.put(name, extension);
 	}
 
 	/**
-	 * Returns all the formats that can be used to export
-	 * an edited layer.
-	 * @return
-	 * A map of formats and extensions.
+	 * Returns all the formats that can be used to export an edited layer.
+	 * 
+	 * @return A map of formats and extensions.
 	 */
-	public static HashMap<String, Class> getSupportedFormats(){
+	public static HashMap<String, Class> getSupportedFormats() {
 		return supportedFormats;
 	}
 
@@ -92,11 +92,11 @@ public class StopEditing extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
 	 */
 	public void execute(String s) {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-				.getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		vista = (View) f;
-		boolean isStop=false;
+		boolean isStop = false;
 		IProjectView model = vista.getModel();
 		MapContext mapa = model.getMapContext();
 		FLayers layers = mapa.getLayers();
@@ -110,18 +110,20 @@ public class StopEditing extends Extension {
 				if (actives[i] instanceof FLyrVect && actives[i].isEditing()) {
 					FLyrVect lv = (FLyrVect) actives[i];
 					MapControl mapControl = vista.getMapControl();
-					VectorialLayerEdited lyrEd = (VectorialLayerEdited)	edMan.getActiveLayerEdited();
+					VectorialLayerEdited lyrEd = (VectorialLayerEdited) edMan
+							.getActiveLayerEdited();
 					try {
 						lv.getRecordset().removeSelectionListener(lyrEd);
 					} catch (ReadDriverException e) {
-						NotificationManager.addError("Remove Selection Listener",e);
+						NotificationManager.addError(
+								"Remove Selection Listener", e);
 					}
-					isStop=stopEditing(lv, mapControl);
-					if (isStop){
+					isStop = stopEditing(lv, mapControl);
+					if (isStop) {
 						lv.removeLayerListener(edMan);
-						if (lv instanceof FLyrAnnotation){
-							FLyrAnnotation lva=(FLyrAnnotation)lv;
-				            lva.setMapping(lva.getMapping());
+						if (lv instanceof FLyrAnnotation) {
+							FLyrAnnotation lva = (FLyrAnnotation) lv;
+							lva.setMapping(lva.getMapping());
 						}
 					}
 				}
@@ -150,6 +152,7 @@ public class StopEditing extends Extension {
 		}
 		return false;
 	}
+
 	/**
 	 * DOCUMENT ME!
 	 */
@@ -160,15 +163,18 @@ public class StopEditing extends Extension {
 
 		try {
 			if (layer.isWritable()) {
-				resp = JOptionPane.showConfirmDialog((Component) PluginServices
-						.getMainFrame(), PluginServices.getText(this,
-						"realmente_desea_guardar_la_capa")
-						+ " : " + layer.getName()+"?", PluginServices.getText(this,
-						"guardar"), JOptionPane.YES_NO_OPTION);
+				resp = JOptionPane.showConfirmDialog(
+						(Component) PluginServices.getMainFrame(),
+						PluginServices.getText(this,
+								"realmente_desea_guardar_la_capa")
+								+ " : "
+								+ layer.getName() + "?", PluginServices
+								.getText(this, "guardar"),
+						JOptionPane.YES_NO_OPTION);
 				if (resp == JOptionPane.YES_OPTION) { // GUARDAMOS EL TEMA
 					saveLayer(layer);
 
-				} else if (resp == JOptionPane.NO_OPTION){ // CANCEL EDITING
+				} else if (resp == JOptionPane.NO_OPTION) { // CANCEL EDITING
 					cancelEdition(layer);
 				} else {
 					return false;
@@ -176,23 +182,24 @@ public class StopEditing extends Extension {
 
 				vea.getCommandRecord().removeCommandListener(mapControl);
 				layer.setEditing(false);
-				if (layer.isSpatiallyIndexed())
-	            {
-	            	if(vea.getSpatialIndex() != null)
-	                {
-	            		layer.setISpatialIndex(vea.getSpatialIndex());
-	            		if(layer.getISpatialIndex() instanceof IPersistentSpatialIndex)
-	                        ((IPersistentSpatialIndex) layer.getISpatialIndex()).flush();
-	            		PluginServices.
-								cancelableBackgroundExecution(new CreateSpatialIndexMonitorableTask(layer));
+				if (layer.isSpatiallyIndexed()) {
+					if (vea.getSpatialIndex() != null) {
+						layer.setISpatialIndex(vea.getSpatialIndex());
+						if (layer.getISpatialIndex() instanceof IPersistentSpatialIndex)
+							((IPersistentSpatialIndex) layer.getISpatialIndex())
+									.flush();
+						PluginServices
+								.cancelableBackgroundExecution(new CreateSpatialIndexMonitorableTask(
+										layer));
 
-	                }
-	            }
+					}
+				}
 
 				return true;
 			}
 			// Si no existe writer para la capa que tenemos en edición
-			PluginServices.getMDIManager().addCentredWindow(new StopEditingPanel(this, layer, mapControl));
+			PluginServices.getMDIManager().addCentredWindow(
+					new StopEditingPanel(this, layer, mapControl));
 			return false;
 		} catch (StartEditionLayerException e) {
 			NotificationManager.addError(e);
@@ -211,14 +218,14 @@ public class StopEditing extends Extension {
 
 	}
 
+	private void saveLayer(FLyrVect layer) throws ReadDriverException,
+			InitializeWriterException, StopWriterVisitorException {
 
-	private void saveLayer(FLyrVect layer) throws ReadDriverException, InitializeWriterException, StopWriterVisitorException{
-		
 		layer.setWaitTodraw(true);
-		
+
 		try {
 			vista.getMapControl().cancelDrawing();
-			layer.setProperty("stoppingEditing",new Boolean(true));
+			layer.setProperty("stoppingEditing", new Boolean(true));
 			VectorialEditableAdapter vea = (VectorialEditableAdapter) layer
 					.getSource();
 
@@ -229,48 +236,51 @@ public class StopEditing extends Extension {
 				if (views[j] instanceof Table) {
 					Table table = (Table) views[j];
 					if (table.getModel().getAssociatedTable() != null
-							&& table.getModel().getAssociatedTable().equals(layer)) {
+							&& table.getModel().getAssociatedTable()
+									.equals(layer)) {
 						table.stopEditingCell();
 					}
 				}
 			}
 			vea.cleanSelectableDatasource();
-			layer.setRecordset(vea.getRecordset()); // Queremos que el recordset del layer
+			layer.setRecordset(vea.getRecordset()); // Queremos que el recordset
+													// del layer
 			// refleje los cambios en los campos.
-			ILayerDefinition lyrDef = EditionUtilities.createLayerDefinition(layer);
-			String aux="FIELDS:";
+			ILayerDefinition lyrDef = EditionUtilities
+					.createLayerDefinition(layer);
+			String aux = "FIELDS:";
 			FieldDescription[] flds = lyrDef.getFieldsDesc();
-			for (int i=0; i < flds.length; i++)
-			{
+			for (int i = 0; i < flds.length; i++) {
 				aux = aux + ", " + flds[i].getFieldAlias();
 			}
-			System.err.println("Escribiendo la capa " + lyrDef.getName() +
-					" con los campos " + aux);
+			System.err.println("Escribiendo la capa " + lyrDef.getName()
+					+ " con los campos " + aux);
 			lyrDef.setShapeType(layer.getShapeType());
 			writer.initialize(lyrDef);
 			vea.stopEdition(writer, EditionEvent.GRAPHIC);
-			
+
 		} catch (ReadDriverException any_ex) {
 			layer.setWaitTodraw(false);
-			layer.setProperty("stoppingEditing",new Boolean(false));
+			layer.setProperty("stoppingEditing", new Boolean(false));
 			throw any_ex;
 		} catch (InitializeWriterException any_ex) {
 			layer.setWaitTodraw(false);
-			layer.setProperty("stoppingEditing",new Boolean(false));
+			layer.setProperty("stoppingEditing", new Boolean(false));
 			throw any_ex;
 		} catch (StopWriterVisitorException any_ex) {
 			layer.setWaitTodraw(false);
-			layer.setProperty("stoppingEditing",new Boolean(false));
+			layer.setProperty("stoppingEditing", new Boolean(false));
 			throw any_ex;
 		}
-		
+
 		layer.setWaitTodraw(false);
-		layer.setProperty("stoppingEditing",new Boolean(false));
+		layer.setProperty("stoppingEditing", new Boolean(false));
 		vista.getMapControl().drawMap(false);
 	}
 
-	public void cancelEdition(FLyrVect layer) throws CancelEditingTableException, CancelEditingLayerException {
-		layer.setProperty("stoppingEditing",new Boolean(true));
+	public void cancelEdition(FLyrVect layer)
+			throws CancelEditingTableException, CancelEditingLayerException {
+		layer.setProperty("stoppingEditing", new Boolean(true));
 		com.iver.andami.ui.mdiManager.IWindow[] views = PluginServices
 				.getMDIManager().getAllWindows();
 		VectorialEditableAdapter vea = (VectorialEditableAdapter) layer
@@ -285,8 +295,9 @@ public class StopEditing extends Extension {
 				}
 			}
 		}
-		layer.setProperty("stoppingEditing",new Boolean(false));
+		layer.setProperty("stoppingEditing", new Boolean(false));
 	}
+
 	/**
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
@@ -296,110 +307,116 @@ public class StopEditing extends Extension {
 		return false;
 
 	}
+
 	public IExtensionStatus getStatus() {
 		return new StopEditingStatus();
 	}
+
 	/**
 	 * Show the dialogs to save the layer without ask if don't like to save.
-	 * @param layer Layer to save.
+	 * 
+	 * @param layer
+	 *            Layer to save.
 	 */
-	public boolean executeSaveLayer(FLyrVect layer ) {
-//		EditionManager edMan = CADExtension.getEditionManager();
-		CADToolAdapter cadtoolAdapter=CADExtension.getCADToolAdapter(layer);
-		EditionManager edMan =cadtoolAdapter.getEditionManager();
-		VectorialLayerEdited lyrEd = (VectorialLayerEdited)	edMan.getLayerEdited(layer);
-		boolean isStop=false;
+	public boolean executeSaveLayer(FLyrVect layer) {
+		// EditionManager edMan = CADExtension.getEditionManager();
+		CADToolAdapter cadtoolAdapter = CADExtension.getCADToolAdapter(layer);
+		EditionManager edMan = cadtoolAdapter.getEditionManager();
+		VectorialLayerEdited lyrEd = (VectorialLayerEdited) edMan
+				.getLayerEdited(layer);
+		boolean isStop = false;
 		try {
 			lyrEd.clearSelection(false);
 
-
-		if (layer.isWritable()) {
+			if (layer.isWritable()) {
 				saveLayer(layer);
 				layer.setEditing(false);
-				if (layer.isSpatiallyIndexed())
-		            {
-		            	if(layer.getISpatialIndex() != null)
-		                {
-		                	PluginServices.
-									cancelableBackgroundExecution(new CreateSpatialIndexMonitorableTask((FLyrVect)layer));
+				if (layer.isSpatiallyIndexed()) {
+					if (layer.getISpatialIndex() != null) {
+						PluginServices
+								.cancelableBackgroundExecution(new CreateSpatialIndexMonitorableTask(
+										(FLyrVect) layer));
+					}
+				}
+
+				isStop = true;
+			} else {
+				// Si no existe writer para la capa que tenemos en edición
+				int resp = JOptionPane
+						.showConfirmDialog(
+								(Component) PluginServices.getMainFrame(),
+								PluginServices
+										.getText(
+												this,
+												"no_existe_writer_para_este_formato_de_capa_o_no_tiene_permisos_de_escritura_los_datos_no_se_guardaran_desea_continuar")
+										+ " : " + layer.getName(),
+								PluginServices
+										.getText(this, "cancelar_edicion"),
+								JOptionPane.YES_NO_OPTION);
+				if (resp == JOptionPane.YES_OPTION) { // CANCEL EDITING
+					try {
+						cancelEdition(layer);
+						layer.setEditing(false);
+						if (!(layer.getSource().getDriver() instanceof IndexedShpDriver)) {
+							VectorialLayerEdited vle = (VectorialLayerEdited) CADExtension
+									.getEditionManager().getLayerEdited(layer);
+							layer.setLegend((IVectorLegend) vle.getLegend());
 						}
-		            }
+					} catch (CancelEditingTableException e) {
+						PluginServices.getLogger().error(e.getMessage(), e);
+						// NotificationManager.addError(e.getMessage(),e);
+						return isStop;
+					} catch (CancelEditingLayerException e) {
+						PluginServices.getLogger().error(e.getMessage(), e);
+						// NotificationManager.addError(e.getMessage(),e);
+						return isStop;
+					} catch (LegendLayerException e) {
+						PluginServices.getLogger().error(e.getMessage(), e);
+						// NotificationManager.addError(e.getMessage(),e);
+						return isStop;
+					}
+					isStop = true;
+				}
 
-			isStop=true;
-		}else {
-//			 Si no existe writer para la capa que tenemos en edición
-			int resp = JOptionPane
-					.showConfirmDialog(
-							(Component) PluginServices.getMainFrame(),
-							PluginServices
-									.getText(
-											this,
-											"no_existe_writer_para_este_formato_de_capa_o_no_tiene_permisos_de_escritura_los_datos_no_se_guardaran_desea_continuar")
-									+ " : " + layer.getName(),
-							PluginServices.getText(this, "cancelar_edicion"),
-							JOptionPane.YES_NO_OPTION);
-			if (resp == JOptionPane.YES_OPTION) { // CANCEL EDITING
-				try {
-					cancelEdition(layer);
-					layer.setEditing(false);
-				if (!(layer.getSource().getDriver() instanceof IndexedShpDriver)){
-					VectorialLayerEdited vle=(VectorialLayerEdited)CADExtension.getEditionManager().getLayerEdited(layer);
-					layer.setLegend((IVectorLegend)vle.getLegend());
-				}
-				} catch (CancelEditingTableException e) {
-					PluginServices.getLogger().error(e.getMessage(),e);
-//					NotificationManager.addError(e.getMessage(),e);
-					return isStop;
-				} catch (CancelEditingLayerException e) {
-					PluginServices.getLogger().error(e.getMessage(),e);
-//					NotificationManager.addError(e.getMessage(),e);
-					return isStop;
-				} catch (LegendLayerException e) {
-					PluginServices.getLogger().error(e.getMessage(),e);
-//					NotificationManager.addError(e.getMessage(),e);
-					return isStop;
-				}
-				isStop=true;
 			}
-
-		}
-//		boolean isStop=stopEditing((FLyrVect)layer, null);
-		if (isStop){
-			layer.removeLayerListener(edMan);
-			if (layer instanceof FLyrAnnotation){
-				FLyrAnnotation lva=(FLyrAnnotation)layer;
-	            lva.setMapping(lva.getMapping());
-			}
-			com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-			.getActiveWindow();
-			if (f instanceof View) {
-				vista = (View) f;
-				FLayer auxLayer=vista.getMapControl().getMapContext().getLayers().getLayer(layer.getName());
-				if (auxLayer!=null && auxLayer.equals(layer)) {
-					vista.getMapControl().setTool("zoomIn");
-					vista.hideConsole();
-					vista.repaintMap();
-					CADExtension.clearView();
+			// boolean isStop=stopEditing((FLyrVect)layer, null);
+			if (isStop) {
+				layer.removeLayerListener(edMan);
+				if (layer instanceof FLyrAnnotation) {
+					FLyrAnnotation lva = (FLyrAnnotation) layer;
+					lva.setMapping(lva.getMapping());
+				}
+				com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+						.getMDIManager().getActiveWindow();
+				if (f instanceof View) {
+					vista = (View) f;
+					FLayer auxLayer = vista.getMapControl().getMapContext()
+							.getLayers().getLayer(layer.getName());
+					if (auxLayer != null && auxLayer.equals(layer)) {
+						vista.getMapControl().setTool("zoomIn");
+						vista.hideConsole();
+						vista.repaintMap();
+						CADExtension.clearView();
+					}
 				}
 			}
-		}
 		} catch (ReadDriverException e1) {
-			PluginServices.getLogger().error(e1.getMessage(),e1);
-//			NotificationManager.addError(e.getMessage(),e);
+			PluginServices.getLogger().error(e1.getMessage(), e1);
+			// NotificationManager.addError(e.getMessage(),e);
 		} catch (StartEditionLayerException e) {
-			PluginServices.getLogger().error(e.getMessage(),e);
-//			NotificationManager.addError(e.getMessage(),e);
+			PluginServices.getLogger().error(e.getMessage(), e);
+			// NotificationManager.addError(e.getMessage(),e);
 		} catch (StopWriterVisitorException e) {
-			PluginServices.getLogger().error(e.getMessage(),e);
-//			NotificationManager.addError(e.getMessage(),e);
+			PluginServices.getLogger().error(e.getMessage(), e);
+			// NotificationManager.addError(e.getMessage(),e);
 		} catch (InitializeWriterException e) {
-			PluginServices.getLogger().error(e.getMessage(),e);
-//			NotificationManager.addError(e.getMessage(),e);
+			PluginServices.getLogger().error(e.getMessage(), e);
+			// NotificationManager.addError(e.getMessage(),e);
 		}
 		return isStop;
 	}
 
-	private class UnsavedLayer extends UnsavedData{
+	private class UnsavedLayer extends UnsavedData {
 
 		private FLayer layer;
 
@@ -408,21 +425,19 @@ public class StopEditing extends Extension {
 		}
 
 		public String getDescription() {
-			return PluginServices.getText(this,"editing_layer_unsaved");
+			return PluginServices.getText(this, "editing_layer_unsaved");
 		}
 
 		public String getResourceName() {
 			return layer.getName();
 		}
 
-
-
 		public boolean saveData() {
-			return executeSaveLayer((FLyrVect)layer);
+			return executeSaveLayer((FLyrVect) layer);
 		}
 
 		public void setLayer(FLayer layer) {
-			this.layer=layer;
+			this.layer = layer;
 
 		}
 
@@ -433,24 +448,30 @@ public class StopEditing extends Extension {
 	}
 
 	/**
-	 * <p>This class provides the status of extensions.
-	 * If this extension has some unsaved editing layer (and save them), and methods
-	 * to check if the extension has some associated background tasks.
-	 *
+	 * <p>
+	 * This class provides the status of extensions. If this extension has some
+	 * unsaved editing layer (and save them), and methods to check if the
+	 * extension has some associated background tasks.
+	 * 
 	 * @author Vicente Caballero Navarro
-	 *
+	 * 
 	 */
 	private class StopEditingStatus implements IExtensionStatus {
 		/**
-	     * This method is used to check if this extension has some unsaved editing layer.
-	     *
-	     * @return true if the extension has some unsaved editing layer, false otherwise.
-	     */
+		 * This method is used to check if this extension has some unsaved
+		 * editing layer.
+		 * 
+		 * @return true if the extension has some unsaved editing layer, false
+		 *         otherwise.
+		 */
 		public boolean hasUnsavedData() {
-			ProjectExtension pe=(ProjectExtension)PluginServices.getExtension(ProjectExtension.class);
-			ProjectView[] views=(ProjectView[])pe.getProject().getDocumentsByType(ProjectViewFactory.registerName).toArray(new ProjectView[0]);
-			for (int i=0;i<views.length;i++) {
-				FLayers layers=views[i].getMapContext().getLayers();
+			ProjectExtension pe = (ProjectExtension) PluginServices
+					.getExtension(ProjectExtension.class);
+			ProjectView[] views = (ProjectView[]) pe.getProject()
+					.getDocumentsByType(ProjectViewFactory.registerName)
+					.toArray(new ProjectView[0]);
+			for (int i = 0; i < views.length; i++) {
+				FLayers layers = views[i].getMapContext().getLayers();
 				LayersIterator iter = getEditingLayer(layers);
 				if (iter.hasNext()) {
 					return true;
@@ -458,51 +479,62 @@ public class StopEditing extends Extension {
 			}
 			return false;
 		}
+
 		/**
-	     * This method is used to check if the extension has some associated
-	     * background process which is currently running.
-	     *
-	     * @return true if the extension has some associated background process,
-	     * false otherwise.
-	     */
+		 * This method is used to check if the extension has some associated
+		 * background process which is currently running.
+		 * 
+		 * @return true if the extension has some associated background process,
+		 *         false otherwise.
+		 */
 		public boolean hasRunningProcesses() {
 			return false;
 		}
-		 /**
-	     * <p>Gets an array of the traceable background tasks associated with this
-	     * extension. These tasks may be tracked, canceled, etc.</p>
-	     *
-	     * @return An array of the associated background tasks, or null in case there is
-	     * no associated background tasks.
-	     */
+
+		/**
+		 * <p>
+		 * Gets an array of the traceable background tasks associated with this
+		 * extension. These tasks may be tracked, canceled, etc.
+		 * </p>
+		 * 
+		 * @return An array of the associated background tasks, or null in case
+		 *         there is no associated background tasks.
+		 */
 		public IMonitorableTask[] getRunningProcesses() {
 			return null;
 		}
+
 		/**
-	     * <p>Gets an array of the UnsavedData objects, which contain information about
-	     * the unsaved editing layers and allows to save it.</p>
-	     *
-	     * @return An array of the associated unsaved editing layers, or null in case the extension
-	     * has not unsaved editing layers.
-	     */
+		 * <p>
+		 * Gets an array of the UnsavedData objects, which contain information
+		 * about the unsaved editing layers and allows to save it.
+		 * </p>
+		 * 
+		 * @return An array of the associated unsaved editing layers, or null in
+		 *         case the extension has not unsaved editing layers.
+		 */
 		public IUnsavedData[] getUnsavedData() {
-			ProjectExtension pe=(ProjectExtension)PluginServices.getExtension(ProjectExtension.class);
-			ProjectView[] views=(ProjectView[])pe.getProject().getDocumentsByType(ProjectViewFactory.registerName).toArray(new ProjectView[0]);
-			ArrayList unsavedLayers=new ArrayList();
-			for (int i=0;i<views.length;i++) {
+			ProjectExtension pe = (ProjectExtension) PluginServices
+					.getExtension(ProjectExtension.class);
+			ProjectView[] views = (ProjectView[]) pe.getProject()
+					.getDocumentsByType(ProjectViewFactory.registerName)
+					.toArray(new ProjectView[0]);
+			ArrayList unsavedLayers = new ArrayList();
+			for (int i = 0; i < views.length; i++) {
 				FLayers layers = views[i].getMapContext().getLayers();
 				LayersIterator iter = getEditingLayer(layers);
-				while (iter.hasNext()){
-					UnsavedLayer ul=new UnsavedLayer(StopEditing.this);
+				while (iter.hasNext()) {
+					UnsavedLayer ul = new UnsavedLayer(StopEditing.this);
 					ul.setLayer(iter.nextLayer());
 					unsavedLayers.add(ul);
 				}
 			}
-			return (IUnsavedData[])unsavedLayers.toArray(new IUnsavedData[0]);
+			return (IUnsavedData[]) unsavedLayers.toArray(new IUnsavedData[0]);
 		}
 	}
-	private LayersIterator getEditingLayer(FLayers layers){
-		return new LayersIterator(layers){
+
+	private LayersIterator getEditingLayer(FLayers layers) {
+		return new LayersIterator(layers) {
 			public boolean evaluate(FLayer layer) {
 				return layer.isEditing();
 			}

@@ -61,19 +61,21 @@ import org.gvsig.exceptions.BaseException;
  *
  */
 /**
- * It is thrown when there is an element that can not
- * be validated using the XML Schema
+ * It is thrown when there is an element that can not be validated using the XML
+ * Schema
+ * 
  * @author Jorge Piera Llodrá (jorge.piera@iver.es)
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  */
-public class NotSupportedElementWarning extends BaseException{
+public class NotSupportedElementWarning extends BaseException {
 	private static final long serialVersionUID = -8478703373223856720L;
 	private String elementName = null;
 	private String xsElementName = null;
 	private String parentName = null;
 	private String xsParentElementName = null;
 
-	public NotSupportedElementWarning(String elementName, String xsElementName, String parentName, String xsParentElementName) {
+	public NotSupportedElementWarning(String elementName, String xsElementName,
+			String parentName, String xsParentElementName) {
 		this.elementName = elementName;
 		this.xsElementName = xsElementName;
 		this.parentName = parentName;
@@ -86,14 +88,15 @@ public class NotSupportedElementWarning extends BaseException{
 	 */
 	private void initialize() {
 		messageKey = "gpe_not_supported_element_warning";
-		formatString = "The element '%(elementName)' with a XML schema " + 
-			"type '%(xsElementName)' is not contained in the parent element " +
-			"'%(parentName)' with a XML Schema type '%(xsParentElementName)'";
+		formatString = "The element '%(elementName)' with a XML schema "
+				+ "type '%(xsElementName)' is not contained in the parent element "
+				+ "'%(parentName)' with a XML Schema type '%(xsParentElementName)'";
 		code = serialVersionUID;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map values() {
@@ -104,5 +107,5 @@ public class NotSupportedElementWarning extends BaseException{
 		hash.put("xsParentElementName", xsParentElementName);
 		return hash;
 	}
-	
+
 }

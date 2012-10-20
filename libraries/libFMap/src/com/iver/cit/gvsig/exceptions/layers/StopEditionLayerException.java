@@ -4,17 +4,20 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import org.gvsig.exceptions.BaseException;
+
 /**
  * @author Vicente Caballero Navarro
  */
-public class StopEditionLayerException extends BaseException{
+public class StopEditionLayerException extends BaseException {
 
 	private String layer;
-	public StopEditionLayerException(String l,Throwable exception) {
-		this.layer=l;
+
+	public StopEditionLayerException(String l, Throwable exception) {
+		this.layer = l;
 		init();
 		initCause(exception);
 	}
+
 	/**
 	 *
 	 */
@@ -23,10 +26,9 @@ public class StopEditionLayerException extends BaseException{
 		formatString = "Cannot stop editing layer: %(tag). ";
 	}
 
-
 	protected Map values() {
 		Hashtable params = new Hashtable();
-		params.put("layer",layer);
+		params.put("layer", layer);
 		return params;
 	}
 

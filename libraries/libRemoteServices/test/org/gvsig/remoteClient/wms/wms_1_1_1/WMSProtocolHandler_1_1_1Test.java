@@ -55,13 +55,11 @@ public class WMSProtocolHandler_1_1_1Test extends TestCase {
 		handler1 = new WMSProtocolHandler1_1_1();
 	}
 
-
-
 	public void testParsing() {
 		long t1 = System.currentTimeMillis();
 		handler1.parse(new File("testdata/wms/wms.xml"));
 		long t2 = System.currentTimeMillis();
-		System.out.println("Test parsing done with apparently no errors in "+ (t2-(float)t1)/1000+" seconds");
+		System.out.println("Test parsing done with apparently no errors in "
+				+ (t2 - (float) t1) / 1000 + " seconds");
 	}
 }
-

@@ -61,16 +61,16 @@ import org.w3c.dom.Element;
  *
  */
 /**
- * This interface must to be implemented by all the
- * schema elements. It has methods to manage the 
- * DOM tree.
+ * This interface must to be implemented by all the schema elements. It has
+ * methods to manage the DOM tree.
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public interface IXSNode {
-	
+
 	public Element getElement();
-	
+
 	public void setElement(Element element);
-	
+
 	public void addChildElement(Element element);
 }

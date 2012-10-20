@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.fmap.core;
 
 import java.awt.Shape;
@@ -63,11 +63,11 @@ import com.iver.cit.gvsig.fmap.core.v02.FConverter;
  * @author Alvaro Zabala
  * 
  * @see java.awt.Shape
- *
+ * 
  */
 public class ShapePointExtractor {
-	
-	public static List<Point2D[]> extractPoints(PathIterator theIterator){
+
+	public static List<Point2D[]> extractPoints(PathIterator theIterator) {
 		List<Point2D[]> solution = new ArrayList<Point2D[]>();
 		double[] coords = new double[6];
 		List<Point2D> previousPartPoints = null;
@@ -75,55 +75,56 @@ public class ShapePointExtractor {
 		while (!theIterator.isDone()) {
 			int theType = theIterator.currentSegment(coords);
 			switch (theType) {
-				case PathIterator.SEG_MOVETO://REVISAR, PASA SIEMPRE POR MOVE TO (SE ME PASA ALGUNA LLAMADA)
-					if(partPoints != null){
-						int numPoints = partPoints.size();
-						Point2D[] points = new Point2D[numPoints];
-						partPoints.toArray(points);
-						solution.add(points);
-						
-						previousPartPoints = partPoints;
-						
-						partPoints = new ArrayList<Point2D>();
-						Point2D pt = new Point2D.Double(coords[0], coords[1]);
-						partPoints.add(pt);
-						
-					}else{
-						partPoints = new ArrayList<Point2D>();
-						Point2D pt = new Point2D.Double(coords[0], coords[1]);
-						partPoints.add(pt);
-					}
-				break;
+			case PathIterator.SEG_MOVETO:// REVISAR, PASA SIEMPRE POR MOVE TO
+											// (SE ME PASA ALGUNA LLAMADA)
+				if (partPoints != null) {
+					int numPoints = partPoints.size();
+					Point2D[] points = new Point2D[numPoints];
+					partPoints.toArray(points);
+					solution.add(points);
 
-				case PathIterator.SEG_LINETO:
+					previousPartPoints = partPoints;
+
+					partPoints = new ArrayList<Point2D>();
 					Point2D pt = new Point2D.Double(coords[0], coords[1]);
 					partPoints.add(pt);
-					break;
 
-				case PathIterator.SEG_CLOSE:
-					partPoints.add(partPoints.get(0));
-					break;
-				default:
-					//QUAD_TO y CUBIC_TO would appear? I suposse Flattening
-					//computes curves
-					break;
-			} //end switch
-			
+				} else {
+					partPoints = new ArrayList<Point2D>();
+					Point2D pt = new Point2D.Double(coords[0], coords[1]);
+					partPoints.add(pt);
+				}
+				break;
+
+			case PathIterator.SEG_LINETO:
+				Point2D pt = new Point2D.Double(coords[0], coords[1]);
+				partPoints.add(pt);
+				break;
+
+			case PathIterator.SEG_CLOSE:
+				partPoints.add(partPoints.get(0));
+				break;
+			default:
+				// QUAD_TO y CUBIC_TO would appear? I suposse Flattening
+				// computes curves
+				break;
+			} // end switch
+
 			theIterator.next();
-		} //end while loop
-		
-		if(previousPartPoints != partPoints){
+		} // end while loop
+
+		if (previousPartPoints != partPoints) {
 			int numPoints = partPoints.size();
 			Point2D[] points = new Point2D[numPoints];
 			partPoints.toArray(points);
 			solution.add(points);
 		}
-		
+
 		return solution;
 	}
-	
-	public static List<Point2D[]> extractPoints(Shape shape){
+
+	public static List<Point2D[]> extractPoints(Shape shape) {
 		return extractPoints(shape.getPathIterator(null, FConverter.FLATNESS));
 	}
-	
+
 }

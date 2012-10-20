@@ -42,62 +42,62 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: AbstractGeoprocess.java 29876 2009-07-10 10:38:41Z vcaballero $
-* $Log$
-* Revision 1.10  2007-03-06 16:47:58  caballero
-* Exceptions
-*
-* Revision 1.9  2006/10/20 14:28:30  azabala
-* changed visibility of createLayerFrom method to protected
-*
-* Revision 1.8  2006/09/15 10:42:54  caballero
-* extensibilidad de documentos
-*
-* Revision 1.7  2006/08/29 07:56:30  cesar
-* Rename the *View* family of classes to *Window* (ie: SingletonView to SingletonWindow, ViewInfo to WindowInfo, etc)
-*
-* Revision 1.6  2006/08/29 07:21:09  cesar
-* Rename com.iver.cit.gvsig.fmap.Fmap class to com.iver.cit.gvsig.fmap.MapContext
-*
-* Revision 1.5  2006/06/29 07:33:57  fjp
-* Cambios ISchemaManager y IFieldManager por terminar
-*
-* Revision 1.4  2006/06/20 18:19:43  azabala
-* refactorización para que todos los nuevos geoprocesos cuelguen del paquete impl
-*
-* Revision 1.3  2006/06/12 19:15:38  azabala
-* cambios para poder trabajar en geoprocessing con capas MULTI (jdbc, etc)
-*
-* Revision 1.2  2006/05/31 09:10:12  fjp
-* Ubicación de IWriter
-*
-* Revision 1.1  2006/05/24 21:12:16  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.7  2006/05/01 19:19:10  azabala
-* la capa resultado tiene como nombre ahora solo el nombre del fichero (no la ruta completa)
-*
-* Revision 1.6  2006/03/17 19:52:19  azabala
-* *** empty log message ***
-*
-* Revision 1.5  2006/03/14 19:34:18  azabala
-* *** empty log message ***
-*
-* Revision 1.4  2006/03/14 18:32:46  fjp
-* Cambio con LayerDefinition para que sea compatible con la definición de tablas también.
-*
-* Revision 1.3  2006/03/07 21:01:33  azabala
-* *** empty log message ***
-*
-* Revision 1.2  2006/03/06 19:48:39  azabala
-* *** empty log message ***
-*
-* Revision 1.1  2006/02/17 16:04:28  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: AbstractGeoprocess.java 29876 2009-07-10 10:38:41Z vcaballero $
+ * $Log$
+ * Revision 1.10  2007-03-06 16:47:58  caballero
+ * Exceptions
+ *
+ * Revision 1.9  2006/10/20 14:28:30  azabala
+ * changed visibility of createLayerFrom method to protected
+ *
+ * Revision 1.8  2006/09/15 10:42:54  caballero
+ * extensibilidad de documentos
+ *
+ * Revision 1.7  2006/08/29 07:56:30  cesar
+ * Rename the *View* family of classes to *Window* (ie: SingletonView to SingletonWindow, ViewInfo to WindowInfo, etc)
+ *
+ * Revision 1.6  2006/08/29 07:21:09  cesar
+ * Rename com.iver.cit.gvsig.fmap.Fmap class to com.iver.cit.gvsig.fmap.MapContext
+ *
+ * Revision 1.5  2006/06/29 07:33:57  fjp
+ * Cambios ISchemaManager y IFieldManager por terminar
+ *
+ * Revision 1.4  2006/06/20 18:19:43  azabala
+ * refactorización para que todos los nuevos geoprocesos cuelguen del paquete impl
+ *
+ * Revision 1.3  2006/06/12 19:15:38  azabala
+ * cambios para poder trabajar en geoprocessing con capas MULTI (jdbc, etc)
+ *
+ * Revision 1.2  2006/05/31 09:10:12  fjp
+ * Ubicación de IWriter
+ *
+ * Revision 1.1  2006/05/24 21:12:16  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.7  2006/05/01 19:19:10  azabala
+ * la capa resultado tiene como nombre ahora solo el nombre del fichero (no la ruta completa)
+ *
+ * Revision 1.6  2006/03/17 19:52:19  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.5  2006/03/14 19:34:18  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.4  2006/03/14 18:32:46  fjp
+ * Cambio con LayerDefinition para que sea compatible con la definición de tablas también.
+ *
+ * Revision 1.3  2006/03/07 21:01:33  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.2  2006/03/06 19:48:39  azabala
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/02/17 16:04:28  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core.fmap;
 
 import java.io.File;
@@ -117,15 +117,16 @@ import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
+
 /**
  * Base class with all commong logic to geoprocesses
+ * 
  * @author azabala
- *
+ * 
  */
 public abstract class AbstractGeoprocess implements IGeoprocess {
 	/**
-	 * Writes result features in a persistent
-	 * data format.
+	 * Writes result features in a persistent data format.
 	 */
 	protected IWriter writer;
 	/**
@@ -133,8 +134,7 @@ public abstract class AbstractGeoprocess implements IGeoprocess {
 	 */
 	protected ISchemaManager schemaManager;
 	/**
-	 * All geoprocesses at least work with one
-	 * vectorial layer
+	 * All geoprocesses at least work with one vectorial layer
 	 */
 	protected FLyrVect firstLayer;
 
@@ -144,7 +144,7 @@ public abstract class AbstractGeoprocess implements IGeoprocess {
 
 	public abstract void process() throws GeoprocessException;
 
-	public  void cancel(){
+	public void cancel() {
 		try {
 			schemaManager.removeSchema("");
 		} catch (SchemaEditionException e) {
@@ -153,67 +153,61 @@ public abstract class AbstractGeoprocess implements IGeoprocess {
 		}
 	}
 
-
-	protected FLayer createLayerFrom(IWriter writer) throws GeoprocessException{
+	protected FLayer createLayerFrom(IWriter writer) throws GeoprocessException {
 		FLyrVect solution = null;
-		//Para evitar todos estos casts, hay que meter la
-		//interfaz FileWriter
-		String fileName = ((ShpWriter)writer).getShpPath();
+		// Para evitar todos estos casts, hay que meter la
+		// interfaz FileWriter
+		String fileName = ((ShpWriter) writer).getShpPath();
 		String layerName = null;
 		int fileNameStart = fileName.lastIndexOf(File.separator) + 1;
-		if(fileNameStart == -1)
+		if (fileNameStart == -1)
 			fileNameStart = 0;
-		layerName = fileName.substring(fileNameStart, fileName.length() /*-1*/);
+		layerName = fileName
+				.substring(fileNameStart, fileName.length() /*-1*/);
 		File file = new File(fileName);
-		//TODO La proyeccion se deberia leer del WRITER
+		// TODO La proyeccion se deberia leer del WRITER
 		try {
 			IndexedShpDriver driver = new IndexedShpDriver();
 			driver.open(file);
 			driver.initialize();
-			solution = (FLyrVect) LayerFactory.createLayer(layerName,
-									driver,
-									file,
-									firstLayer.getCrs());
+			solution = (FLyrVect) LayerFactory.createLayer(layerName, driver,
+					file, firstLayer.getCrs());
 			return solution;
 		} catch (Exception e) {
-			throw new GeoprocessException("Problemas al cargar la capa resultado", e);
+			throw new GeoprocessException(
+					"Problemas al cargar la capa resultado", e);
 		}
 	}
 
 	/**
-	 * Creates a new Layer with:
-	 * a) the same projection than input layer.
-	 * b) an adapter created to work with writer's persistent store
-	 *
+	 * Creates a new Layer with: a) the same projection than input layer. b) an
+	 * adapter created to work with writer's persistent store
+	 * 
 	 * @return FLyrVect with geoprocess result
 	 */
 	public FLayer getResult() throws GeoprocessException {
-		if(! (writer instanceof MultiShpWriter)){
+		if (!(writer instanceof MultiShpWriter)) {
 			return createLayerFrom(writer);
-		}else{
-			IWriter[] writers = ((MultiShpWriter)writer).getWriters();
-			if(writers.length > 1){
-				MapContext map = ((View)PluginServices.
-							getMDIManager().
-							getActiveWindow()).
-							getModel().
-							getMapContext();
-				FLayers solution = new FLayers();//(map,null);
+		} else {
+			IWriter[] writers = ((MultiShpWriter) writer).getWriters();
+			if (writers.length > 1) {
+				MapContext map = ((View) PluginServices.getMDIManager()
+						.getActiveWindow()).getModel().getMapContext();
+				FLayers solution = new FLayers();// (map,null);
 				solution.setMapContext(map);
-				String name = ((MultiShpWriter)writer).getFileName();
+				String name = ((MultiShpWriter) writer).getFileName();
 				int fileNameStart = name.lastIndexOf(File.separator) + 1;
-				if(fileNameStart == -1)
+				if (fileNameStart == -1)
 					fileNameStart = 0;
 				name = name.substring(fileNameStart, name.length());
 				solution.setName(name);
-				for(int i = 0; i < writers.length; i++){
+				for (int i = 0; i < writers.length; i++) {
 					solution.addLayer(createLayerFrom(writers[i]));
 				}
 				return solution;
-			}else if(writers.length ==0){
+			} else if (writers.length == 0) {
 				return null;
-			}
-			else {
+			} else {
 				return createLayerFrom(writers[0]);
 			}
 		}
@@ -228,4 +222,3 @@ public abstract class AbstractGeoprocess implements IGeoprocess {
 	public abstract ILayerDefinition createLayerDefinition();
 
 }
-

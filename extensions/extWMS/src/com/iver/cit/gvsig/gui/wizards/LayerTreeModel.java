@@ -49,12 +49,11 @@ import javax.swing.tree.TreePath;
 
 import com.iver.cit.gvsig.fmap.layers.WMSLayerNode;
 
-
 public class LayerTreeModel implements TreeModel {
 
 	WMSLayerNode root;
 
-	public LayerTreeModel(WMSLayerNode root){
+	public LayerTreeModel(WMSLayerNode root) {
 		this.root = root;
 	}
 
@@ -63,11 +62,11 @@ public class LayerTreeModel implements TreeModel {
 	}
 
 	public int getChildCount(Object parent) {
-		return ((WMSLayerNode)parent).getChildren().size();
+		return ((WMSLayerNode) parent).getChildren().size();
 	}
 
-    public boolean isLeaf(Object node) {
-		return ((WMSLayerNode)node).getChildren().size() == 0;
+	public boolean isLeaf(Object node) {
+		return ((WMSLayerNode) node).getChildren().size() == 0;
 	}
 
 	public void addTreeModelListener(TreeModelListener l) {
@@ -77,96 +76,108 @@ public class LayerTreeModel implements TreeModel {
 	}
 
 	public Object getChild(Object parent, int index) {
-		return (WMSLayerNode)((WMSLayerNode)parent).getChildren().get(index);
+		return (WMSLayerNode) ((WMSLayerNode) parent).getChildren().get(index);
 	}
 
 	public int getIndexOfChild(Object parent, Object child) {
-        WMSLayerNode pare = (WMSLayerNode) parent;
+		WMSLayerNode pare = (WMSLayerNode) parent;
 		for (int i = 0; i < pare.getChildren().size(); i++)
-			if (child == pare.getChildren().get(i)) return i;
+			if (child == pare.getChildren().get(i))
+				return i;
 		return -1;
 	}
 
 	public void valueForPathChanged(TreePath path, Object newValue) {
 	}
 
-    /**
-     * @param node, the tree's desired node.
-     * @return Returns the name of the node.
-     */
-    public String getName(Object node) {
-        return ((WMSLayerNode) node).getName();
-    }
-    
-    /**
-     * @param node, the tree's desired node.
-     * @return Returns the namedStyles.
-     */
-    public ArrayList getStyles(Object node) {
-        return ((WMSLayerNode) node).getStyles();
-    }
-    /**
-     * @param node, the tree's desired node.
-     * @return Returns the queryable.
-     */
-    public boolean isQueryable(Object node) {
-        return ((WMSLayerNode) node).isQueryable();
-    }
-    
-    /**
-     * @param node, the tree's desired node.
-     * @return Returns the srs.
-     */
-    public Vector getSrs(Object node) {
-        return ((WMSLayerNode) node).getAllSrs();
-    }
-    /**
-     * @param node, the tree's desired node.
-     * @return Returns the title.
-     */
-    public String getTitle(Object node) {
-        return ((WMSLayerNode) node).getTitle();
-    }
-    /**
-     * @param node, the tree's desired node.
-     * @return Returns the transparency.
-     */
-    public boolean hasTransparency(Object node) {
-        return ((WMSLayerNode) node).isTransparent();
-    }
-    
-    public String toString(){
-        return getTitle(this);
-    }
-    
-    /**
-     * Searches in the tree for the first (and must be the unique) WMSLayerNode with
-     * the name specified by name.
-     * @param name
-     * @return
-     */
-    public Object getNodeByName(String name) {
-    	return getNodeByName(root, name);
-    }
-    
-    /**
-     * Service method.
-     * @param node
-     * @param name
-     * @return
-     */
-    private Object getNodeByName(WMSLayerNode node, String name) {
-    	WMSLayerNode n = node;
-    	if (n.getName()!= null && n.getName().equals(name)) {
-    		return n;
-    	} else {
-    		for (int i = 0; i < getChildCount(n); i++) {
-    			WMSLayerNode n1 = (WMSLayerNode) n.getChildren().get(i);
-    			Object obj = getNodeByName(n1, name);
-    			if (obj!= null)
-    				return obj;
+	/**
+	 * @param node
+	 *            , the tree's desired node.
+	 * @return Returns the name of the node.
+	 */
+	public String getName(Object node) {
+		return ((WMSLayerNode) node).getName();
+	}
+
+	/**
+	 * @param node
+	 *            , the tree's desired node.
+	 * @return Returns the namedStyles.
+	 */
+	public ArrayList getStyles(Object node) {
+		return ((WMSLayerNode) node).getStyles();
+	}
+
+	/**
+	 * @param node
+	 *            , the tree's desired node.
+	 * @return Returns the queryable.
+	 */
+	public boolean isQueryable(Object node) {
+		return ((WMSLayerNode) node).isQueryable();
+	}
+
+	/**
+	 * @param node
+	 *            , the tree's desired node.
+	 * @return Returns the srs.
+	 */
+	public Vector getSrs(Object node) {
+		return ((WMSLayerNode) node).getAllSrs();
+	}
+
+	/**
+	 * @param node
+	 *            , the tree's desired node.
+	 * @return Returns the title.
+	 */
+	public String getTitle(Object node) {
+		return ((WMSLayerNode) node).getTitle();
+	}
+
+	/**
+	 * @param node
+	 *            , the tree's desired node.
+	 * @return Returns the transparency.
+	 */
+	public boolean hasTransparency(Object node) {
+		return ((WMSLayerNode) node).isTransparent();
+	}
+
+	public String toString() {
+		return getTitle(this);
+	}
+
+	/**
+	 * Searches in the tree for the first (and must be the unique) WMSLayerNode
+	 * with the name specified by name.
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public Object getNodeByName(String name) {
+		return getNodeByName(root, name);
+	}
+
+	/**
+	 * Service method.
+	 * 
+	 * @param node
+	 * @param name
+	 * @return
+	 */
+	private Object getNodeByName(WMSLayerNode node, String name) {
+		WMSLayerNode n = node;
+		if (n.getName() != null && n.getName().equals(name)) {
+			return n;
+		} else {
+			for (int i = 0; i < getChildCount(n); i++) {
+				WMSLayerNode n1 = (WMSLayerNode) n.getChildren().get(i);
+				Object obj = getNodeByName(n1, name);
+				if (obj != null)
+					return obj;
 			}
-    	}
-    	return null;
-    }
+		}
+		return null;
+	}
 }

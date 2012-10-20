@@ -57,152 +57,152 @@ import com.iver.andami.PluginServices;
 import es.prodevelop.cit.gvsig.arcims.gui.panels.utils.ImageFormatSelector;
 import es.prodevelop.cit.gvsig.arcims.gui.wizards.ArcImsWizard;
 
-
 public class ImageServicePanel extends FeatureServicePanel {
-    private static final long serialVersionUID = 0;
-    private ImageFormatSelector formatSelector;
+	private static final long serialVersionUID = 0;
+	private ImageFormatSelector formatSelector;
 
-    // protected ImageFormatSelector imageFormatCombo;
-    protected BasicArrowButton emergencyArrowButton;
-    protected JPanel imageFormatPanel;
-    private String imageFormat;
+	// protected ImageFormatSelector imageFormatCombo;
+	protected BasicArrowButton emergencyArrowButton;
+	protected JPanel imageFormatPanel;
+	private String imageFormat;
 
-    public ImageServicePanel(ArcImsWizard parent, boolean prop) {
-        super(parent, true, prop);
-        imageFormat = ServiceInfoTags.vPNG8;
-    }
+	public ImageServicePanel(ArcImsWizard parent, boolean prop) {
+		super(parent, true, prop);
+		imageFormat = ServiceInfoTags.vPNG8;
+	}
 
-    protected void addImageFormatPanel() {
-        imageFormatPanel = new JPanel();
-        imageFormatPanel.setBounds(180 - 6, 210 - 8, 287, 54); // hasta y = 264 
-        imageFormatPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                null, PluginServices.getText(this, "choose_image_format"),
-                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+	protected void addImageFormatPanel() {
+		imageFormatPanel = new JPanel();
+		imageFormatPanel.setBounds(180 - 6, 210 - 8, 287, 54); // hasta y = 264
+		imageFormatPanel.setBorder(javax.swing.BorderFactory
+				.createTitledBorder(null,
+						PluginServices.getText(this, "choose_image_format"),
+						javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+						javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+						null));
 
-        formatSelector = new ImageFormatSelector();
-        formatSelector.addListener(this);
+		formatSelector = new ImageFormatSelector();
+		formatSelector.addListener(this);
 
-        imageFormatPanel.setLayout(null);
+		imageFormatPanel.setLayout(null);
 
-        imgServiceTab_2.add(imageFormatPanel);
-        imageFormatPanel.add(formatSelector); // setBounds(5, 15, 260, 20);
-    }
+		imgServiceTab_2.add(imageFormatPanel);
+		imageFormatPanel.add(formatSelector); // setBounds(5, 15, 260, 20);
+	}
 
-    public void actionPerformed(ActionEvent e) {
-        super.actionPerformed(e);
+	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
 
-        if (e.getSource() == formatSelector) {
-            imageFormat = formatSelector.getSelected();
+		if (e.getSource() == formatSelector) {
+			imageFormat = formatSelector.getSelected();
 
-            if (imageFormat.length() == 0) {
-                return;
-            }
+			if (imageFormat.length() == 0) {
+				return;
+			}
 
-            parentWizard.setImageFormat(captionToFormatInImageFormatCombo(
-                    imageFormat));
-        }
-    }
+			parentWizard
+					.setImageFormat(captionToFormatInImageFormatCombo(imageFormat));
+		}
+	}
 
-    protected void updateWizardLayerQuery() {
-        super.updateWizardLayerQuery();
-        parentWizard.setImageFormat(getArcIMSImageFormat());
-    }
+	protected void updateWizardLayerQuery() {
+		super.updateWizardLayerQuery();
+		parentWizard.setImageFormat(getArcIMSImageFormat());
+	}
 
-    public String getComboImageFormat() {
-        return imageFormat;
-    }
+	public String getComboImageFormat() {
+		return imageFormat;
+	}
 
-    public String getArcIMSImageFormat() {
-        return captionToFormatInImageFormatCombo(imageFormat);
-    }
+	public String getArcIMSImageFormat() {
+		return captionToFormatInImageFormatCombo(imageFormat);
+	}
 
-    public void loadImageFormatCombo(ArcImsImageClient client,
-        ArcImsStatus tmpStatus) {
-        try {
-            formatSelector.setAllEnabled(false);
+	public void loadImageFormatCombo(ArcImsImageClient client,
+			ArcImsStatus tmpStatus) {
+		try {
+			formatSelector.setAllEnabled(false);
 
-            if (client.testFromat(tmpStatus, ServiceInfoTags.vPNG8)) {
-                formatSelector.setThisEnabled("PNG8");
-                formatSelector.setSelected("PNG8");
-            }
+			if (client.testFromat(tmpStatus, ServiceInfoTags.vPNG8)) {
+				formatSelector.setThisEnabled("PNG8");
+				formatSelector.setSelected("PNG8");
+			}
 
-            if (client.testFromat(tmpStatus, ServiceInfoTags.vPNG24)) {
-                formatSelector.setThisEnabled("PNG24");
-                formatSelector.setSelected("PNG24");
-            }
+			if (client.testFromat(tmpStatus, ServiceInfoTags.vPNG24)) {
+				formatSelector.setThisEnabled("PNG24");
+				formatSelector.setSelected("PNG24");
+			}
 
-            if (client.testFromat(tmpStatus, ServiceInfoTags.vJPEG)) {
-                formatSelector.setThisEnabled("JPG");
-                formatSelector.setSelected("JPG");
-            }
+			if (client.testFromat(tmpStatus, ServiceInfoTags.vJPEG)) {
+				formatSelector.setThisEnabled("JPG");
+				formatSelector.setSelected("JPG");
+			}
 
-            if (client.testFromat(tmpStatus, ServiceInfoTags.vGIF)) {
-                formatSelector.setThisEnabled("GIF");
-                formatSelector.setSelected("GIF");
-            }
+			if (client.testFromat(tmpStatus, ServiceInfoTags.vGIF)) {
+				formatSelector.setThisEnabled("GIF");
+				formatSelector.setSelected("GIF");
+			}
 
-            parentWizard.setImageFormat(ServiceInfoTags.vPNG8);
-        }
-        catch (ArcImsException e) {
-            logger.error("While loading image formats combo ", e);
-        }
-    }
+			parentWizard.setImageFormat(ServiceInfoTags.vPNG8);
+		} catch (ArcImsException e) {
+			logger.error("While loading image formats combo ", e);
+		}
+	}
 
-    public void setInImageFormatCombo(String imgFormat) {
-        String caption = formatToCaptionInImageFormatCombo(imgFormat);
-        formatSelector.setSelected(caption);
-    }
+	public void setInImageFormatCombo(String imgFormat) {
+		String caption = formatToCaptionInImageFormatCombo(imgFormat);
+		formatSelector.setSelected(caption);
+	}
 
-    public void emptyFormatsCombo() {
-        formatSelector.setAllEnabled(false);
-    }
+	public void emptyFormatsCombo() {
+		formatSelector.setAllEnabled(false);
+	}
 
-    public ImageFormatSelector getImageFormatCombo() {
-        return formatSelector;
-    }
+	public ImageFormatSelector getImageFormatCombo() {
+		return formatSelector;
+	}
 
-    private String captionToFormatInImageFormatCombo(String caption) {
-        String resp = "Unknown";
+	private String captionToFormatInImageFormatCombo(String caption) {
+		String resp = "Unknown";
 
-        if (caption.compareToIgnoreCase("JPG") == 0) {
-            return ServiceInfoTags.vJPEG;
-        }
+		if (caption.compareToIgnoreCase("JPG") == 0) {
+			return ServiceInfoTags.vJPEG;
+		}
 
-        if (caption.compareToIgnoreCase("PNG8") == 0) {
-            return ServiceInfoTags.vPNG8;
-        }
+		if (caption.compareToIgnoreCase("PNG8") == 0) {
+			return ServiceInfoTags.vPNG8;
+		}
 
-        if (caption.compareToIgnoreCase("PNG24") == 0) {
-            return ServiceInfoTags.vPNG24;
-        }
+		if (caption.compareToIgnoreCase("PNG24") == 0) {
+			return ServiceInfoTags.vPNG24;
+		}
 
-        if (caption.compareToIgnoreCase("GIF") == 0) {
-            return ServiceInfoTags.vGIF;
-        }
+		if (caption.compareToIgnoreCase("GIF") == 0) {
+			return ServiceInfoTags.vGIF;
+		}
 
-        return resp;
-    }
+		return resp;
+	}
 
-    private String formatToCaptionInImageFormatCombo(String format) {
-        String resp = "Unknown";
+	private String formatToCaptionInImageFormatCombo(String format) {
+		String resp = "Unknown";
 
-        if (format.compareToIgnoreCase(ServiceInfoTags.vJPEG) == 0) {
-            return "JPG";
-        }
+		if (format.compareToIgnoreCase(ServiceInfoTags.vJPEG) == 0) {
+			return "JPG";
+		}
 
-        if (format.compareToIgnoreCase(ServiceInfoTags.vPNG8) == 0) {
-            return "PNG8";
-        }
+		if (format.compareToIgnoreCase(ServiceInfoTags.vPNG8) == 0) {
+			return "PNG8";
+		}
 
-        if (format.compareToIgnoreCase(ServiceInfoTags.vPNG24) == 0) {
-            return "PNG24";
-        }
+		if (format.compareToIgnoreCase(ServiceInfoTags.vPNG24) == 0) {
+			return "PNG24";
+		}
 
-        if (format.compareToIgnoreCase(ServiceInfoTags.vGIF) == 0) {
-            return "GIF";
-        }
+		if (format.compareToIgnoreCase(ServiceInfoTags.vGIF) == 0) {
+			return "GIF";
+		}
 
-        return resp;
-    }
+		return resp;
+	}
 }

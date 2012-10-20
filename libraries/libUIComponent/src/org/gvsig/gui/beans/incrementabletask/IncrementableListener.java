@@ -27,25 +27,28 @@ import java.util.EventListener;
 /**
  * Interfaz para la ventana IncrementableTask, aqui se define los
  * comportamientos de los botones de la ventana.
- *
+ * 
  * @version 23/04/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public interface IncrementableListener extends EventListener {
 	/**
 	 * Invocado cuando se aprieta el boton Resumir de la ventana
+	 * 
 	 * @param e
 	 */
 	public void actionResumed(IncrementableEvent e);
 
 	/**
 	 * Invocado cuando se aprieta el boton Suspender de la ventana
+	 * 
 	 * @param e
 	 */
 	public void actionSuspended(IncrementableEvent e);
 
 	/**
 	 * Invocado cuando se aprieta el boton Cancelar de la ventana
+	 * 
 	 * @param e
 	 */
 	public void actionCanceled(IncrementableEvent e);

@@ -46,28 +46,24 @@ import java.io.IOException;
 import com.hardcode.gdbms.driver.exceptions.SchemaEditionException;
 import com.iver.cit.gvsig.fmap.drivers.ITableDefinition;
 
-
 public class FileSchemaManager implements ISchemaManager {
 	protected String path;
 
-	FileSchemaManager(String path)
-	{
+	FileSchemaManager(String path) {
 		this.path = path;
 	}
 
-
-	public void createSchema(ITableDefinition layerDefinition) throws SchemaEditionException {
+	public void createSchema(ITableDefinition layerDefinition)
+			throws SchemaEditionException {
 		File f = new File(path);
-		if (f.exists())
-		{
+		if (f.exists()) {
 			f.delete();
 			try {
 				f.createNewFile();
 			} catch (IOException e) {
-				throw new SchemaEditionException(f.getName(),e);
+				throw new SchemaEditionException(f.getName(), e);
 			}
 		}
-
 
 	}
 
@@ -75,9 +71,7 @@ public class FileSchemaManager implements ISchemaManager {
 		File f = new File(path);
 		f.delete();
 
-
 	}
-
 
 	public void renameSchema(String antName, String newName) {
 		File f = new File(path);
@@ -85,5 +79,3 @@ public class FileSchemaManager implements ISchemaManager {
 	}
 
 }
-
-

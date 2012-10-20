@@ -43,57 +43,59 @@
 
 package org.gvsig.remoteClient.arcims;
 
-import org.gvsig.remoteClient.arcims.utils.ServiceInfoTags;
-
 import java.io.IOException;
-
 import java.net.ConnectException;
 
+import org.gvsig.remoteClient.arcims.utils.ServiceInfoTags;
 
 /**
- * Factory to create a proper handler based on the service type (ImageServer of FeatureServer)
- *
+ * Factory to create a proper handler based on the service type (ImageServer of
+ * FeatureServer)
+ * 
  */
 public class ArcImsProtocolHandlerFactory {
-    /**
-     * Stablishes the type of Handler according with the service type
-     * that will communicate with the server and
-     * returns a convenient ProtocolHandler
-     *
-     * @param servicetype
-     * @return instance of a client that is able to communicate with the host
-     */
-    public static ArcImsProtocolHandler negotiate(String servicetype)
-        throws ConnectException, IOException {
-        return createVersionDriver(servicetype);
-    }
+	/**
+	 * Stablishes the type of Handler according with the service type that will
+	 * communicate with the server and returns a convenient ProtocolHandler
+	 * 
+	 * @param servicetype
+	 * @return instance of a client that is able to communicate with the host
+	 */
+	public static ArcImsProtocolHandler negotiate(String servicetype)
+			throws ConnectException, IOException {
+		return createVersionDriver(servicetype);
+	}
 
-    /**
-     * It creates an instance of a ArcImsProtocolHandler class.
-     *
-     * @param type of the driver to be created
-     * @return ArcImsDriver
-     */
-    private static ArcImsProtocolHandler createVersionDriver(String type) {
-        try {
-            Class driver;
+	/**
+	 * It creates an instance of a ArcImsProtocolHandler class.
+	 * 
+	 * @param type
+	 *            of the driver to be created
+	 * @return ArcImsDriver
+	 */
+	private static ArcImsProtocolHandler createVersionDriver(String type) {
+		try {
+			Class driver;
 
-            //           version = version.replace('.', '_');
-            //           driver = Class.forName("org.gvsig.remoteClient.arcims.arcims_"+version+".ArcImsProtocolHandler" + version);
-            if (type.equals(ServiceInfoTags.vIMAGESERVICE)) {
-                driver = Class.forName(
-                        "org.gvsig.remoteClient.arcims.ArcImsProtImageHandler");
-            } else {
-                driver = Class.forName(
-                        "org.gvsig.remoteClient.arcims.ArcImsProtFeatureHandler");
-            }
+			// version = version.replace('.', '_');
+			// driver =
+			// Class.forName("org.gvsig.remoteClient.arcims.arcims_"+version+".ArcImsProtocolHandler"
+			// + version);
+			if (type.equals(ServiceInfoTags.vIMAGESERVICE)) {
+				driver = Class
+						.forName("org.gvsig.remoteClient.arcims.ArcImsProtImageHandler");
+			} else {
+				driver = Class
+						.forName("org.gvsig.remoteClient.arcims.ArcImsProtFeatureHandler");
+			}
 
-            return (ArcImsProtocolHandler) driver.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
+			return (ArcImsProtocolHandler) driver.newInstance();
+		} catch (Exception e) {
+			e.printStackTrace();
 
-            //throw new Exception("ArcImsDriverFactory. Unknown driver version " + e);
-            return null;
-        }
-    }
+			// throw new
+			// Exception("ArcImsDriverFactory. Unknown driver version " + e);
+			return null;
+		}
+	}
 }

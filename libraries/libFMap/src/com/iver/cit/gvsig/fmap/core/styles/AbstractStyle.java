@@ -40,43 +40,41 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: AbstractStyle.java 13881 2007-09-19 16:22:04Z jaume $
-* $Log$
-* Revision 1.6  2007-09-19 16:19:27  jaume
-* removed unnecessary imports
-*
-* Revision 1.5  2007/08/16 06:55:30  jvidal
-* javadoc updated
-*
-* Revision 1.4  2007/08/13 11:36:30  jvidal
-* javadoc
-*
-* Revision 1.3  2007/05/08 08:47:39  jaume
-* *** empty log message ***
-*
-* Revision 1.2  2007/03/09 11:20:56  jaume
-* Advanced symbology (start committing)
-*
-* Revision 1.1.2.1  2007/02/09 07:47:04  jaume
-* Isymbol moved
-*
-*
-*/
+ *
+ * $Id: AbstractStyle.java 13881 2007-09-19 16:22:04Z jaume $
+ * $Log$
+ * Revision 1.6  2007-09-19 16:19:27  jaume
+ * removed unnecessary imports
+ *
+ * Revision 1.5  2007/08/16 06:55:30  jvidal
+ * javadoc updated
+ *
+ * Revision 1.4  2007/08/13 11:36:30  jvidal
+ * javadoc
+ *
+ * Revision 1.3  2007/05/08 08:47:39  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.2  2007/03/09 11:20:56  jaume
+ * Advanced symbology (start committing)
+ *
+ * Revision 1.1.2.1  2007/02/09 07:47:04  jaume
+ * Isymbol moved
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.core.styles;
 
-
 /**
- * Implements the IStyle interface in order to complete the methods
- * ot the IStyle interface that allow the users to add the description of an
- * object or obtain it.
- *
+ * Implements the IStyle interface in order to complete the methods ot the
+ * IStyle interface that allow the users to add the description of an object or
+ * obtain it.
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 
 public abstract class AbstractStyle implements IStyle {
 	private String desc;
-
 
 	public final void setDescription(String desc) {
 		this.desc = desc;

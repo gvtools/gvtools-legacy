@@ -13,7 +13,6 @@ import org.gvsig.remoteClient.gml.GMLTags;
 import org.gvsig.remoteClient.utils.Utilities;
 import org.gvsig.remoteClient.wfs.edition.WFSTTransaction;
 import org.gvsig.remoteClient.wfs.exceptions.WFSException;
-import org.gvsig.remoteClient.wfs.filters.GMLBBox;
 import org.gvsig.remoteClient.wfs.requests.WFSTLockFeatureRequest;
 import org.gvsig.remoteClient.wms.ICancellable;
 import org.kxml2.io.KXmlParser;
@@ -118,26 +117,29 @@ public abstract class WFSProtocolHandler extends OGCProtocolHandler {
 	}
 
 	/**
-	 * <p>Builds a GetCapabilities request that is sent to the WFS
-	 * the response will be parse to extract the data needed by the
-	 * WFS client</p>
+	 * <p>
+	 * Builds a GetCapabilities request that is sent to the WFS the response
+	 * will be parse to extract the data needed by the WFS client
+	 * </p>
 	 */
-	public void getCapabilities(WFSStatus status,boolean override, ICancellable cancel) throws WFSException {
+	public void getCapabilities(WFSStatus status, boolean override,
+			ICancellable cancel) throws WFSException {
 		URL request = null;
 		try {
 			request = new URL(buildCapabilitiesRequest(status));
-			if (override){
+			if (override) {
 				Utilities.removeURL(request);
 			}
-			File f = Utilities.downloadFile(request,"wfs_capabilities.xml", cancel);
+			File f = Utilities.downloadFile(request, "wfs_capabilities.xml",
+					cancel);
 			if (f == null)
 				return;
 			clear();
 			parseCapabilities(f);
-		} catch (Exception e){
+		} catch (Exception e) {
 			throw new WFSException(e);
 		}
-	}    
+	}
 
 	/**
 	 * @return
@@ -149,31 +151,33 @@ public abstract class WFSProtocolHandler extends OGCProtocolHandler {
 		String onlineResource;
 		if (status == null || status.getOnlineResource() == null)
 			onlineResource = getHost();
-		else 
+		else
 			onlineResource = status.getOnlineResource();
 		symbol = getSymbol(onlineResource);
 
-		req.append(onlineResource).append(symbol).append("REQUEST=GetCapabilities&SERVICE=WFS&");
+		req.append(onlineResource).append(symbol)
+				.append("REQUEST=GetCapabilities&SERVICE=WFS&");
 		req.append("VERSION=").append(getVersion()).append("&EXCEPTIONS=XML");
 		return req.toString();
-	}   
+	}
 
 	/**
 	 * Builds the GetCapabilitiesRequest according to the OGC WFS Specifications
 	 * without a VERSION, to get the highest version than a WFS supports.
 	 */
-	public static String buildCapabilitiesSuitableVersionRequest(String _host, String _version)
-	{
-int index = _host.indexOf('?');
-		
+	public static String buildCapabilitiesSuitableVersionRequest(String _host,
+			String _version) {
+		int index = _host.indexOf('?');
+
 		if (index > -1) {
 			String host = _host.substring(0, index + 1);
 			String query = _host.substring(index + 1, _host.length());
-			
+
 			StringTokenizer tokens = new StringTokenizer(query, "&");
 			String newQuery = "", token;
 
-			// If there is a field or a value with spaces, (and then it's on different tokens) -> unify them
+			// If there is a field or a value with spaces, (and then it's on
+			// different tokens) -> unify them
 			while (tokens.hasMoreTokens()) {
 				token = tokens.nextToken().trim();
 
@@ -184,8 +188,8 @@ int index = _host.indexOf('?');
 					continue;
 
 				if ((_version != null) && (_version.length() > 0)) {
-    				if (token.toUpperCase().compareTo("VERSION=" + _version) == 0)
-    					continue;
+					if (token.toUpperCase().compareTo("VERSION=" + _version) == 0)
+						continue;
 				}
 
 				if (token.toUpperCase().compareTo("EXCEPTIONS=XML") == 0)
@@ -194,71 +198,77 @@ int index = _host.indexOf('?');
 				newQuery += token + "&";
 			}
 
-        	_host = host + newQuery;
-		}
-		else {
+			_host = host + newQuery;
+		} else {
 			_host += "?";
 		}
 
-    	if ((_version != null) && (_version.compareTo("") != 0))
-    		_host += "REQUEST=GetCapabilities&SERVICE=WFS&VERSION=" + _version + "&EXCEPTIONS=XML";
-    	else
-    		_host += "REQUEST=GetCapabilities&SERVICE=WFS&EXCEPTIONS=XML";
+		if ((_version != null) && (_version.compareTo("") != 0))
+			_host += "REQUEST=GetCapabilities&SERVICE=WFS&VERSION=" + _version
+					+ "&EXCEPTIONS=XML";
+		else
+			_host += "REQUEST=GetCapabilities&SERVICE=WFS&EXCEPTIONS=XML";
 
-    	return _host;    
+		return _host;
 	}
 
 	/**
-	 * <p>Builds a describeFeatureType request that is sent to the WFS
-	 * the response will be parse to extract the data needed by the
-	 * WFS client</p>
+	 * <p>
+	 * Builds a describeFeatureType request that is sent to the WFS the response
+	 * will be parse to extract the data needed by the WFS client
+	 * </p>
+	 * 
 	 * @param status
-	 * WFS client status. Contains all the information to create
-	 * the query. In this case, the only the feature name is needed.
+	 *            WFS client status. Contains all the information to create the
+	 *            query. In this case, the only the feature name is needed.
 	 */
-	public void describeFeatureType(WFSStatus status,boolean override, ICancellable cancel)throws WFSException {
+	public void describeFeatureType(WFSStatus status, boolean override,
+			ICancellable cancel) throws WFSException {
 		URL request = null;
 		this.currentFeature = status.getFeatureName();
-		//sets the namespace URI and the namespace prefix
+		// sets the namespace URI and the namespace prefix
 		int index = currentFeature.indexOf(":");
-		if (index > 0){
+		if (index > 0) {
 			String namespacePrefix = currentFeature.substring(0, index);
 			String namespaceURI = serviceInfo.getNamespace(namespacePrefix);
-			if (namespaceURI != null){
+			if (namespaceURI != null) {
 				status.setNamespace(namespaceURI);
 				status.setNamespacePrefix(namespacePrefix);
 			}
 		}
 		try {
 			request = new URL(buildDescribeFeatureTypeRequest(status));
-			File f = Utilities.downloadFile(request, "wfs_describeFeatureType.xml", null);
-			parseDescribeFeatureType(f,status.getNamespacePrefix());
-		} catch (Exception e){
+			File f = Utilities.downloadFile(request,
+					"wfs_describeFeatureType.xml", null);
+			parseDescribeFeatureType(f, status.getNamespacePrefix());
+		} catch (Exception e) {
 			throw new WFSException(e);
 		}
-	}     
+	}
 
 	private String buildDescribeFeatureTypeRequest(WFSStatus status) {
 		StringBuffer req = new StringBuffer();
 		String symbol = null;
 
 		String onlineResource;
-		if(serviceInfo.getOnlineResource(WFSOperation.DESCRIBEFEATURETYPE) != null){
-			onlineResource = serviceInfo.getOnlineResource(WFSOperation.DESCRIBEFEATURETYPE);
-		}else {
+		if (serviceInfo.getOnlineResource(WFSOperation.DESCRIBEFEATURETYPE) != null) {
+			onlineResource = serviceInfo
+					.getOnlineResource(WFSOperation.DESCRIBEFEATURETYPE);
+		} else {
 			onlineResource = getHost();
 		}
 		symbol = getSymbol(onlineResource);
 
-		req.append(onlineResource).append(symbol).append("REQUEST=DescribeFeatureType&SERVICE=WFS&");
-		//Typename
+		req.append(onlineResource).append(symbol)
+				.append("REQUEST=DescribeFeatureType&SERVICE=WFS&");
+		// Typename
 		String typeName = status.getFeatureName();
-		if ((status.getNamespace() != null) && 
-				(status.getNamespacePrefix() != null)){
+		if ((status.getNamespace() != null)
+				&& (status.getNamespacePrefix() != null)) {
 			req.append("NAMESPACE=");
 			req.append("xmlns(" + status.getNamespacePrefix() + "=");
 			req.append(status.getNamespace() + ")");
-			req.append("&");				
+			req.append("&");
 		}
 		req.append("TYPENAME=").append(typeName).append("&");
 		req.append("VERSION=").append(getVersion()).append("&EXCEPTIONS=XML");
@@ -268,140 +278,154 @@ int index = _host.indexOf('?');
 	/**
 	 * parses the data retrieved by the DescribeCoverage XML document
 	 */
-	protected abstract boolean parseDescribeFeatureType(File f,String nameSpace);
+	protected abstract boolean parseDescribeFeatureType(File f, String nameSpace);
 
 	/**
-	 * <p>Builds a getFeature request that is sent to the WFS
-	 * the response will be parse to extract the data needed by the
-	 * WFS client</p>
+	 * <p>
+	 * Builds a getFeature request that is sent to the WFS the response will be
+	 * parse to extract the data needed by the WFS client
+	 * </p>
+	 * 
 	 * @param status
-	 * WFS client status. Contains all the information to create
-	 * the query. 
-	 * @return File
-	 * GML file
-	 */    
-	public File getFeature(WFSStatus status,boolean override, ICancellable cancel) throws WFSException{
+	 *            WFS client status. Contains all the information to create the
+	 *            query.
+	 * @return File GML file
+	 */
+	public File getFeature(WFSStatus status, boolean override,
+			ICancellable cancel) throws WFSException {
 		URL request = null;
-		try{		
+		try {
 			request = new URL(buildGetFeatureRequest(status));
-			File f = Utilities.downloadFile(request, "wfs_getFeature.xml", null);
-			parseGetFeature(f,status.getNamespacePrefix());
+			File f = Utilities
+					.downloadFile(request, "wfs_getFeature.xml", null);
+			parseGetFeature(f, status.getNamespacePrefix());
 			return f;
-		} catch (Exception e){
+		} catch (Exception e) {
 			throw new WFSException(e);
-		}		
+		}
 	}
 
 	/**
-	 * parses the data retrieved by the GetFeature XML document. It is
-	 * used just to find errors
+	 * parses the data retrieved by the GetFeature XML document. It is used just
+	 * to find errors
 	 */
-	protected abstract boolean parseGetFeature(File f,String nameSpace) throws WFSException;
+	protected abstract boolean parseGetFeature(File f, String nameSpace)
+			throws WFSException;
 
 	/**
-	 * <p>Builds a getFeature request that is sent to the WFS
-	 * the response will be parse to extract the data needed by the
-	 * WFS client</p>
+	 * <p>
+	 * Builds a getFeature request that is sent to the WFS the response will be
+	 * parse to extract the data needed by the WFS client
+	 * </p>
+	 * 
 	 * @param status
-	 * WFS client status. Contains all the information to create
-	 * the query. 
+	 *            WFS client status. Contains all the information to create the
+	 *            query.
 	 */
-	private String buildGetFeatureRequest(WFSStatus status){
+	private String buildGetFeatureRequest(WFSStatus status) {
 		StringBuffer req = new StringBuffer();
 		String symbol = null;
 
 		String onlineResource;
-		if(serviceInfo.getOnlineResource(WFSOperation.GETFEATURE) != null){
-			onlineResource = serviceInfo.getOnlineResource(WFSOperation.GETFEATURE);
-		}else {
+		if (serviceInfo.getOnlineResource(WFSOperation.GETFEATURE) != null) {
+			onlineResource = serviceInfo
+					.getOnlineResource(WFSOperation.GETFEATURE);
+		} else {
 			onlineResource = getHost();
 		}
 		symbol = getSymbol(onlineResource);
 
-		req.append(onlineResource).append(symbol).append("REQUEST=GetFeature&SERVICE=WFS&");
+		req.append(onlineResource).append(symbol)
+				.append("REQUEST=GetFeature&SERVICE=WFS&");
 		req.append("TYPENAME=").append(status.getFeatureName()).append("&");
-		//Typename
-		if ((status.getNamespace() != null) && 
-				(status.getNamespacePrefix() != null)){
+		// Typename
+		if ((status.getNamespace() != null)
+				&& (status.getNamespacePrefix() != null)) {
 			req.append("NAMESPACE=");
 			req.append("xmlns(" + status.getNamespacePrefix() + "=");
 			req.append(status.getNamespace() + ")");
-			req.append("&");				
+			req.append("&");
 		}
 		String[] fields = status.getFields();
-//		if (fields.length > 0){
-//			req.append("PROPERTYNAME=");
-//			req.append(fields[0]);
-//			for (int i=1 ; i<fields.length ; i++){
-//				req.append("," + fields[i]);
-//			}	
-//			req.append("&");
-//		}		
+		// if (fields.length > 0){
+		// req.append("PROPERTYNAME=");
+		// req.append(fields[0]);
+		// for (int i=1 ; i<fields.length ; i++){
+		// req.append("," + fields[i]);
+		// }
+		// req.append("&");
+		// }
 
-		if (status.getFilterQuery() != null){
+		if (status.getFilterQuery() != null) {
 			req.append("FILTER=" + status.getFilterQuery() + "&");
-		}	
-		if (status.getBBox() != null){
+		}
+		if (status.getBBox() != null) {
 			Rectangle2D bbox = status.getBBox();
-			req.append("BBOX=" + bbox.getMinX() + "," +
-					bbox.getMinY() + "," + 
-					bbox.getMaxX() + "," + 
-					bbox.getMaxY()+ "&");
+			req.append("BBOX=" + bbox.getMinX() + "," + bbox.getMinY() + ","
+					+ bbox.getMaxX() + "," + bbox.getMaxY() + "&");
 		}
 		req.append("VERSION=").append(getVersion()).append("&EXCEPTIONS=XML");
 		req.append("&MAXFEATURES=").append(status.getBuffer());
 		return req.toString();
-	}  
+	}
 
 	/**
-	 * <p>Builds a transaction request that is sent to the WFS
-	 * the response will be parse to extract the data needed by the
-	 * WFS client</p>
+	 * <p>
+	 * Builds a transaction request that is sent to the WFS the response will be
+	 * parse to extract the data needed by the WFS client
+	 * </p>
+	 * 
 	 * @param status
-	 * WFS client status. Contains all the information to create
-	 * the query. 
-	 */   
-	public void transaction(WFSStatus status,boolean override, ICancellable cancel) throws WFSException {
+	 *            WFS client status. Contains all the information to create the
+	 *            query.
+	 */
+	public void transaction(WFSStatus status, boolean override,
+			ICancellable cancel) throws WFSException {
 		URL request = null;
 		try {
 			request = new URL(buildTransactionRequest(status));
-			for (int i=0 ; i<status.getTransactionsSize() ; i++){
+			for (int i = 0; i < status.getTransactionsSize(); i++) {
 				WFSTTransaction transaction = status.getTransactionAt(i);
-				if (transaction.getStatus() == WFSTTransaction.STATUS_NO_EXECUTED){
+				if (transaction.getStatus() == WFSTTransaction.STATUS_NO_EXECUTED) {
 					System.out.println(transaction.getWFSTRequest());
-					File f = Utilities.downloadFile(request, 
+					File f = Utilities.downloadFile(request,
 							transaction.getWFSTRequest(),
 							"wfs_transaction.xml", null);
-					parseTransaction(f,status.getNamespacePrefix(),transaction);	
-					//If the transaction has been executed with success,
-					//it is necessary to remove the getFeature file from the
-					//downloader manager. 
-					if (transaction.getStatus() == WFSTTransaction.STATUS_SUCCESS){
-						Utilities.removeURL(new URL(buildGetFeatureRequest(status)));
+					parseTransaction(f, status.getNamespacePrefix(),
+							transaction);
+					// If the transaction has been executed with success,
+					// it is necessary to remove the getFeature file from the
+					// downloader manager.
+					if (transaction.getStatus() == WFSTTransaction.STATUS_SUCCESS) {
+						Utilities.removeURL(new URL(
+								buildGetFeatureRequest(status)));
 					}
 				}
-			}			
-		} catch (Exception e){
+			}
+		} catch (Exception e) {
 			throw new WFSException(e);
 		}
 	}
 
 	/**
-	 * <p>Builds a transaction request that is sent to the WFS
-	 * the response will be parse to extract the data needed by the
-	 * WFS client</p>
+	 * <p>
+	 * Builds a transaction request that is sent to the WFS the response will be
+	 * parse to extract the data needed by the WFS client
+	 * </p>
+	 * 
 	 * @param status
-	 * WFS client status. Contains all the information to create
-	 * the query. 
+	 *            WFS client status. Contains all the information to create the
+	 *            query.
 	 */
-	private String buildTransactionRequest(WFSStatus status){
+	private String buildTransactionRequest(WFSStatus status) {
 		StringBuffer req = new StringBuffer();
 		String symbol = null;
 
 		String onlineResource;
-		if(serviceInfo.getOnlineResource(WFSOperation.TRANSACTION) != null){
-			onlineResource = serviceInfo.getOnlineResource(WFSOperation.TRANSACTION);
-		}else {
+		if (serviceInfo.getOnlineResource(WFSOperation.TRANSACTION) != null) {
+			onlineResource = serviceInfo
+					.getOnlineResource(WFSOperation.TRANSACTION);
+		} else {
 			onlineResource = getHost();
 		}
 		symbol = getSymbol(onlineResource);
@@ -412,62 +436,71 @@ int index = _host.indexOf('?');
 
 	/**
 	 * parses the data retrieved by the transaction operation
+	 * 
 	 * @param f
-	 * The retrieved file
+	 *            The retrieved file
 	 * @param nameSpace
-	 * The namespace
+	 *            The namespace
 	 * @param transaction
-	 * The current WFSTransaction
+	 *            The current WFSTransaction
 	 */
-	protected abstract boolean parseTransaction(File f,String nameSpace, WFSTTransaction transaction) throws WFSException;
+	protected abstract boolean parseTransaction(File f, String nameSpace,
+			WFSTTransaction transaction) throws WFSException;
 
 	/**
-	 * <p>Builds a lockFeature request that is sent to the WFS
-	 * the response will be parse to extract the data needed by the
-	 * WFS client</p>
+	 * <p>
+	 * Builds a lockFeature request that is sent to the WFS the response will be
+	 * parse to extract the data needed by the WFS client
+	 * </p>
+	 * 
 	 * @param status
-	 * WFS client status. Contains all the information to create
-	 * the query. 
-	 */  
-	public void lockFeature(WFSStatus status,boolean override, ICancellable cancel) throws WFSException {
+	 *            WFS client status. Contains all the information to create the
+	 *            query.
+	 */
+	public void lockFeature(WFSStatus status, boolean override,
+			ICancellable cancel) throws WFSException {
 		try {
-			WFSTLockFeatureRequest request = new WFSTLockFeatureRequest(status, this);
+			WFSTLockFeatureRequest request = new WFSTLockFeatureRequest(status,
+					this);
 			File f = request.sendRequest();
-			parseLockFeature(f,status.getNamespacePrefix(),status);
-		} catch(WFSException e) {
+			parseLockFeature(f, status.getNamespacePrefix(), status);
+		} catch (WFSException e) {
 			throw e;
-		} catch (Exception e){
+		} catch (Exception e) {
 			throw new WFSException(e);
-		}		
-	}	
+		}
+	}
 
 	/**
 	 * parses the data retrieved by the LockFeature operation
 	 */
-	protected abstract boolean parseLockFeature(File f,String nameSpace, WFSStatus status) throws WFSException;
+	protected abstract boolean parseLockFeature(File f, String nameSpace,
+			WFSStatus status) throws WFSException;
 
 	/**
-	 * Just for not repeat code. Gets the correct separator according 
-	 * to the server URL
+	 * Just for not repeat code. Gets the correct separator according to the
+	 * server URL
+	 * 
 	 * @param h
 	 * @return
 	 */
 	private static String getSymbol(String h) {
 		String symbol;
-		if (h.indexOf("?")==-1) 
+		if (h.indexOf("?") == -1)
 			symbol = "?";
-		else if (h.indexOf("?")!=h.length()-1)
+		else if (h.indexOf("?") != h.length() - 1)
 			symbol = "&";
 		else
 			symbol = "";
 		return symbol;
-	}  
+	}
 
 	/**
 	 * Returns the service Information
+	 * 
 	 * @return
 	 */
-	public WFSServiceInformation getServiceInformation(){
+	public WFSServiceInformation getServiceInformation() {
 		return serviceInfo;
 	}
 
@@ -487,53 +520,57 @@ int index = _host.indexOf('?');
 
 	/**
 	 * Sets the fields of the current feature
+	 * 
 	 * @param fields
 	 */
-	public void setFields(Vector fields){
+	public void setFields(Vector fields) {
 		WFSFeature feature = (WFSFeature) features.get(currentFeature);
 		feature.setFields(fields);
-		features.put(feature.getName(),feature);		
+		features.put(feature.getName(), feature);
 	}
 
 	/**
 	 * Sets the fields of the current feature
+	 * 
 	 * @param fields
 	 */
-	public void setFields(Hashtable fields){
+	public void setFields(Hashtable fields) {
 		WFSFeature feature = (WFSFeature) features.get(currentFeature);
 		Vector vFields = new Vector();
 		Set keys = fields.keySet();
-		for (int i=0 ; i<keys.size() ; i++){
+		for (int i = 0; i < keys.size(); i++) {
 			vFields.add(fields.get(keys.toArray()[i]));
 		}
 		feature.setFields(vFields);
-		features.put(feature.getName(),feature);		
+		features.put(feature.getName(), feature);
 	}
 
-
 	/**
-	 * @param currentFeature The currentFeature to set.
+	 * @param currentFeature
+	 *            The currentFeature to set.
 	 */
 	public void setCurrentFeature(String currentFeature) {
 		this.currentFeature = currentFeature;
-	}    
-	
+	}
+
 	/**
-	 * It parses the attributes of the current KXMLParser 
-	 * and add the new namespaces to the service information
+	 * It parses the attributes of the current KXMLParser and add the new
+	 * namespaces to the service information
+	 * 
 	 * @param parser
-	 * The KXML parser
+	 *            The KXML parser
 	 */
-	protected void parseNamespaces(KXmlParser parser){
-		for (int i=0 ; i<parser.getAttributeCount() ; i++){
+	protected void parseNamespaces(KXmlParser parser) {
+		for (int i = 0; i < parser.getAttributeCount(); i++) {
 			String attName = parser.getAttributeName(i);
-			if (attName.startsWith(GMLTags.XML_NAMESPACE)){
+			if (attName.startsWith(GMLTags.XML_NAMESPACE)) {
 				int index = attName.indexOf(":");
-				if (index > 0){
-					serviceInfo.addNamespace(attName.substring(index+1, attName.length()), 
+				if (index > 0) {
+					serviceInfo.addNamespace(
+							attName.substring(index + 1, attName.length()),
 							parser.getAttributeValue(i));
 				}
 			}
-		}			
+		}
 	}
 }

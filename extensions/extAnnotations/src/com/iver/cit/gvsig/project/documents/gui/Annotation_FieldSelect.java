@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
@@ -61,87 +60,86 @@ import com.iver.andami.messages.NotificationManager;
 import com.iver.cit.gvsig.fmap.layers.Annotation_Layer;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 
-
 /**
  * Panel to select the text field.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class Annotation_FieldSelect extends JWizardPanel {
-    private static final Rectangle lblDescriptionPosition = new Rectangle(4, 14,
-            355, 100);
+	private static final Rectangle lblDescriptionPosition = new Rectangle(4,
+			14, 355, 100);
 
-    private static final Rectangle lblDuplicatePosition = new Rectangle(30, 115,
-            355, 30);
-    private static final Rectangle cmbDuplicatePosition = new Rectangle(30,
-            150, 170, 18);
-    private static final Rectangle lblStep2Position = new Rectangle(4, 170, 15,
-            12);
-    private static final Rectangle lblFieldPosition = new Rectangle(30, 170,
-            355, 30);
-    private static final Rectangle cmbFieldPosition = new Rectangle(30, 204,
-            170, 18);
-    private Annotation_Layer layer;
-    private JLabel lblDescription = null;
+	private static final Rectangle lblDuplicatePosition = new Rectangle(30,
+			115, 355, 30);
+	private static final Rectangle cmbDuplicatePosition = new Rectangle(30,
+			150, 170, 18);
+	private static final Rectangle lblStep2Position = new Rectangle(4, 170, 15,
+			12);
+	private static final Rectangle lblFieldPosition = new Rectangle(30, 170,
+			355, 30);
+	private static final Rectangle cmbFieldPosition = new Rectangle(30, 204,
+			170, 18);
+	private Annotation_Layer layer;
+	private JLabel lblDescription = null;
 
-    private JLabel lblStep2 = null;
-    private JLabel lblField = null;
+	private JLabel lblStep2 = null;
+	private JLabel lblField = null;
 
-    private JComboBox cmbField = null;
-    private EventsListener eventsListener = new EventsListener();
-    private JComboBox cmbDuplicate;
-    private JLabel lblDuplicate = null;
+	private JComboBox cmbField = null;
+	private EventsListener eventsListener = new EventsListener();
+	private JComboBox cmbDuplicate;
+	private JLabel lblDuplicate = null;
 
-    public Annotation_FieldSelect(JWizardComponents arg0, Annotation_Layer layer) {
-        super(arg0);
-        this.layer = layer;
-        this.initialize();
-    }
+	public Annotation_FieldSelect(JWizardComponents arg0, Annotation_Layer layer) {
+		super(arg0);
+		this.layer = layer;
+		this.initialize();
+	}
 
-    /**
-     * DOCUMENT ME!
-     */
-    private void updateButtonsState() {
-        try {
-            if (getWizardComponents().getCurrentIndex() == 0) {
-                setBackButtonEnabled(false);
+	/**
+	 * DOCUMENT ME!
+	 */
+	private void updateButtonsState() {
+		try {
+			if (getWizardComponents().getCurrentIndex() == 0) {
+				setBackButtonEnabled(false);
 
-                boolean enabled = checkIsOkPanelData();
-                setNextButtonEnabled(enabled);
-                setFinishButtonEnabled(enabled);
-            }
-        } catch (Exception e) {
-            NotificationManager.addError(e);
-        }
-    }
+				boolean enabled = checkIsOkPanelData();
+				setNextButtonEnabled(enabled);
+				setFinishButtonEnabled(enabled);
+			}
+		} catch (Exception e) {
+			NotificationManager.addError(e);
+		}
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    protected boolean checkIsOkPanelData() {
-        if (((String) cmbField.getSelectedItem()).trim().length() < 1) {
-            return false;
-        }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	protected boolean checkIsOkPanelData() {
+		if (((String) cmbField.getSelectedItem()).trim().length() < 1) {
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    /**
-     * DOCUMENT ME!
-     */
-    protected void initialize() {
-        this.setLayout(null);
-        this.setSize(new Dimension(358, 263));
-        this.addLabels();
+	/**
+	 * DOCUMENT ME!
+	 */
+	protected void initialize() {
+		this.setLayout(null);
+		this.setSize(new Dimension(358, 263));
+		this.addLabels();
 
-        this.add(getCmbField(), null);
-        this.add(getCmbDuplicate(), null);
-        checkIsOkPanelData();
-    }
+		this.add(getCmbField(), null);
+		this.add(getCmbDuplicate(), null);
+		checkIsOkPanelData();
+	}
 
-    private JComboBox getCmbField() {
+	private JComboBox getCmbField() {
 		if (this.cmbField == null) {
 			this.cmbField = new JComboBox();
 			this.cmbField.setEditable(false);
@@ -171,76 +169,81 @@ public class Annotation_FieldSelect extends JWizardPanel {
 		return this.cmbField;
 	}
 
-    /**
+	/**
 	 * DOCUMENT ME!
-	 *
+	 * 
 	 * @return DOCUMENT ME!
 	 */
-    private JComboBox getCmbDuplicate() {
-        if (cmbDuplicate == null) {
-            cmbDuplicate = new JComboBox();
-            cmbDuplicate.setBounds(cmbDuplicatePosition);
-            cmbDuplicate.addItem(PluginServices.getText(this, "duplicate.none"));
-            cmbDuplicate.addItem(PluginServices.getText(this, "centered"));
-            cmbDuplicate.setSelectedItem(PluginServices.getText(this, "centered"));
-        }
+	private JComboBox getCmbDuplicate() {
+		if (cmbDuplicate == null) {
+			cmbDuplicate = new JComboBox();
+			cmbDuplicate.setBounds(cmbDuplicatePosition);
+			cmbDuplicate
+					.addItem(PluginServices.getText(this, "duplicate.none"));
+			cmbDuplicate.addItem(PluginServices.getText(this, "centered"));
+			cmbDuplicate.setSelectedItem(PluginServices.getText(this,
+					"centered"));
+		}
 
-        return cmbDuplicate;
-    }
+		return cmbDuplicate;
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public String getField() {
-        return (String) this.getCmbField().getSelectedItem();
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public String getField() {
+		return (String) this.getCmbField().getSelectedItem();
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public String getDuplicate() {
-        return (String) this.getCmbDuplicate().getSelectedItem();
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public String getDuplicate() {
+		return (String) this.getCmbDuplicate().getSelectedItem();
+	}
 
-    /**
-     * DOCUMENT ME!
-     */
-    protected void addLabels() {
-        this.lblDescription = new JLabel();
+	/**
+	 * DOCUMENT ME!
+	 */
+	protected void addLabels() {
+		this.lblDescription = new JLabel();
 
-        this.lblStep2 = new JLabel();
-        this.lblField = new JLabel();
-        this.lblDuplicate = new JLabel();
+		this.lblStep2 = new JLabel();
+		this.lblField = new JLabel();
+		this.lblDuplicate = new JLabel();
 
-        this.lblDuplicate.setText(PluginServices.getText(this, "duplicate"));
-        this.lblDuplicate.setBounds(lblDuplicatePosition);
-        this.lblDescription.setText(PluginServices.getText(this,
-                "descripcion_de_crear_capa_de_anotaciones_nueva"));
+		this.lblDuplicate.setText(PluginServices.getText(this, "duplicate"));
+		this.lblDuplicate.setBounds(lblDuplicatePosition);
+		this.lblDescription.setText(PluginServices.getText(this,
+				"descripcion_de_crear_capa_de_anotaciones_nueva"));
 
-        this.lblField.setText(PluginServices.getText(this,
-                "seleccione_el_campo_de_texto_que_desea_que_se_utilize_para_mostrar_la_nueva_capa"));
+		this.lblField
+				.setText(PluginServices
+						.getText(
+								this,
+								"seleccione_el_campo_de_texto_que_desea_que_se_utilize_para_mostrar_la_nueva_capa"));
 
-        this.lblDescription.setBounds(lblDescriptionPosition);
-        this.lblStep2.setBounds(lblStep2Position);
-        this.lblField.setBounds(lblFieldPosition);
+		this.lblDescription.setBounds(lblDescriptionPosition);
+		this.lblStep2.setBounds(lblStep2Position);
+		this.lblField.setBounds(lblFieldPosition);
 
-        this.add(lblDescription, null);
-        this.add(lblStep2, null);
-        this.add(lblField, null);
-        this.add(lblDuplicate, null);
-    }
+		this.add(lblDescription, null);
+		this.add(lblStep2, null);
+		this.add(lblField, null);
+		this.add(lblDuplicate, null);
+	}
 
-    private class EventsListener implements CaretListener, ItemListener {
-        public void caretUpdate(CaretEvent arg0) {
-            updateButtonsState();
-        }
+	private class EventsListener implements CaretListener, ItemListener {
+		public void caretUpdate(CaretEvent arg0) {
+			updateButtonsState();
+		}
 
-        public void itemStateChanged(ItemEvent e) {
-            updateButtonsState();
-        }
-    }
+		public void itemStateChanged(ItemEvent e) {
+			updateButtonsState();
+		}
+	}
 }

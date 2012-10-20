@@ -73,19 +73,15 @@ public class MultiShapeSymbolSelector extends JPanel implements ISymbolSelector 
 
 	MultiShapeSymbolSelector(Object currSymbol) {
 		sym = (MultiShapeSymbol) currSymbol;
-		markerSelector = (SymbolSelector) SymbolSelector.
-							createSymbolSelector(
-									sym.getMarkerSymbol(), FShape.POINT, false);
+		markerSelector = (SymbolSelector) SymbolSelector.createSymbolSelector(
+				sym.getMarkerSymbol(), FShape.POINT, false);
 
-		lineSelector = (SymbolSelector) SymbolSelector.
-							createSymbolSelector(
-									sym.getLineSymbol(), FShape.LINE, false);
-		fillSelector = (SymbolSelector) SymbolSelector.
-							createSymbolSelector(
-									sym.getFillSymbol(), FShape.POLYGON, false);
+		lineSelector = (SymbolSelector) SymbolSelector.createSymbolSelector(
+				sym.getLineSymbol(), FShape.LINE, false);
+		fillSelector = (SymbolSelector) SymbolSelector.createSymbolSelector(
+				sym.getFillSymbol(), FShape.POLYGON, false);
 		initialize();
 	}
-
 
 	private void initialize() {
 		setLayout(new BorderLayout());
@@ -94,13 +90,15 @@ public class MultiShapeSymbolSelector extends JPanel implements ISymbolSelector 
 		ActionListener okAction = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				accepted = true;
-				PluginServices.getMDIManager().closeWindow(MultiShapeSymbolSelector.this);
+				PluginServices.getMDIManager().closeWindow(
+						MultiShapeSymbolSelector.this);
 			}
 		}, cancelAction = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				accepted = false;
-//				((SymbolPreviewer) jPanelPreview).setSymbol(null);
-				PluginServices.getMDIManager().closeWindow(MultiShapeSymbolSelector.this);
+				// ((SymbolPreviewer) jPanelPreview).setSymbol(null);
+				PluginServices.getMDIManager().closeWindow(
+						MultiShapeSymbolSelector.this);
 
 			}
 		};
@@ -111,27 +109,29 @@ public class MultiShapeSymbolSelector extends JPanel implements ISymbolSelector 
 		this.add(okCancelPanel, BorderLayout.SOUTH);
 	}
 
-
 	private JTabbedPane getJTabbedPane() {
 		if (tabbedPane == null) {
 			tabbedPane = new JTabbedPane();
-			tabbedPane.addTab(PluginServices.getText(this, "marker"), markerSelector);
-			tabbedPane.addTab(PluginServices.getText(this, "line"), lineSelector);
-			tabbedPane.addTab(PluginServices.getText(this, "fill"), fillSelector);
+			tabbedPane.addTab(PluginServices.getText(this, "marker"),
+					markerSelector);
+			tabbedPane.addTab(PluginServices.getText(this, "line"),
+					lineSelector);
+			tabbedPane.addTab(PluginServices.getText(this, "fill"),
+					fillSelector);
 			tabbedPane.setPreferredSize(getWindowInfo().getMinimumSize());
 		}
 
 		return tabbedPane;
 	}
 
-
 	public Object getSelectedObject() {
-		MultiShapeSymbol symSel= new MultiShapeSymbol();
-		if(accepted){
-			symSel.setMarkerSymbol((IMarkerSymbol) markerSelector.getSelectedObject());
+		MultiShapeSymbol symSel = new MultiShapeSymbol();
+		if (accepted) {
+			symSel.setMarkerSymbol((IMarkerSymbol) markerSelector
+					.getSelectedObject());
 			symSel.setLineSymbol((ILineSymbol) lineSelector.getSelectedObject());
 			symSel.setFillSymbol((IFillSymbol) fillSelector.getSelectedObject());
-		}else{
+		} else {
 			symSel.setMarkerSymbol(sym.getMarkerSymbol());
 			symSel.setLineSymbol(sym.getLineSymbol());
 			symSel.setFillSymbol(sym.getFillSymbol());
@@ -156,10 +156,8 @@ public class MultiShapeSymbolSelector extends JPanel implements ISymbolSelector 
 		return wi;
 	}
 
-
 	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
-
 
 }

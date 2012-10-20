@@ -56,24 +56,26 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.cit.gvsig.fmap.ViewPort;
 
-
 /**
  * Clase que recoge métodos estáticos sobre el Layout.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FLayoutUtilities {
-	private static double scale=0;
+	private static double scale = 0;
 	private static Point2D.Double auxp;
-	private static double distX=0;
-	private static double distY=0;
+	private static double distX = 0;
+	private static double distY = 0;
+
 	/**
 	 * Devuelve true si las dos ArrayList que se le pasan como parametro son
 	 * iguales.
-	 *
-	 * @param n lista anterior
-	 * @param l lista actual
-	 *
+	 * 
+	 * @param n
+	 *            lista anterior
+	 * @param l
+	 *            lista actual
+	 * 
 	 * @return true si los ArrayList son iguales.
 	 */
 	public static boolean isEqualList(ArrayList n, ArrayList l) {
@@ -92,10 +94,12 @@ public class FLayoutUtilities {
 
 	/**
 	 * Pasa una distancia en pixels a unidades del folio.
-	 *
-	 * @param d distancia en pixels.
-	 * @param at Matriz de transformación.
-	 *
+	 * 
+	 * @param d
+	 *            distancia en pixels.
+	 * @param at
+	 *            Matriz de transformación.
+	 * 
 	 * @return distancia en unidades de folio.
 	 */
 	public static double toSheetDistance(double d, AffineTransform at) {
@@ -106,10 +110,12 @@ public class FLayoutUtilities {
 
 	/**
 	 * Pasa una distancia de coordenadas del folio a pixels.
-	 *
-	 * @param d distancia en coordenadas de folio.
-	 * @param at Matriz de transformación.
-	 *
+	 * 
+	 * @param d
+	 *            distancia en coordenadas de folio.
+	 * @param at
+	 *            Matriz de transformación.
+	 * 
 	 * @return double en pixels.
 	 */
 	public static double fromSheetDistance(double d, AffineTransform at) {
@@ -130,14 +136,16 @@ public class FLayoutUtilities {
 
 	/**
 	 * Pasa un punto en pixels a coordenadas del folio.
-	 *
-	 * @param pScreen pixels.
-	 * @param at Matriz de transformación.
-	 *
+	 * 
+	 * @param pScreen
+	 *            pixels.
+	 * @param at
+	 *            Matriz de transformación.
+	 * 
 	 * @return Point2D en coordenadas de folio.
 	 */
 	public static Point2D.Double toSheetPoint(Point2D pScreen,
-		AffineTransform at) {
+			AffineTransform at) {
 		Point2D.Double pWorld = new Point2D.Double();
 		AffineTransform at1;
 
@@ -152,37 +160,41 @@ public class FLayoutUtilities {
 
 	/**
 	 * Pasa un retángulo de pixels a coordenadas del folio.
-	 *
-	 * @param r rectángulo en coordenadas de pixels a coordenadas de folio.
-	 * @param at Matriz de transformación.
-	 *
+	 * 
+	 * @param r
+	 *            rectángulo en coordenadas de pixels a coordenadas de folio.
+	 * @param at
+	 *            Matriz de transformación.
+	 * 
 	 * @return Rectangle2D en coordenadas de folio.
 	 */
 	public static Rectangle2D.Double toSheetRect(Rectangle2D r,
-		AffineTransform at) {
-		Point2D.Double pSheet = toSheetPoint(new Point2D.Double(r.getX(),
-					r.getY()), at);
-		Point2D.Double pSheetX = toSheetPoint(new Point2D.Double(r.getMaxX(),
-					r.getMinY()), at);
-		Point2D.Double pSheetY = toSheetPoint(new Point2D.Double(r.getMinX(),
-					r.getMaxY()), at);
+			AffineTransform at) {
+		Point2D.Double pSheet = toSheetPoint(
+				new Point2D.Double(r.getX(), r.getY()), at);
+		Point2D.Double pSheetX = toSheetPoint(
+				new Point2D.Double(r.getMaxX(), r.getMinY()), at);
+		Point2D.Double pSheetY = toSheetPoint(
+				new Point2D.Double(r.getMinX(), r.getMaxY()), at);
 		Rectangle2D.Double res = new Rectangle2D.Double();
 		res.setRect(pSheet.getX(), pSheet.getY(), pSheet.distance(pSheetX),
-			pSheet.distance(pSheetY));
+				pSheet.distance(pSheetY));
 
 		return res;
 	}
 
 	/**
 	 * Pasa de un punto en coordenadas del folio a pixels.
-	 *
-	 * @param pSheet punto en coordenadas de folio.
-	 * @param at Matriz de transformación.
-	 *
+	 * 
+	 * @param pSheet
+	 *            punto en coordenadas de folio.
+	 * @param at
+	 *            Matriz de transformación.
+	 * 
 	 * @return Point2D en pixels.
 	 */
 	public static Point2D.Double fromSheetPoint(Point2D pSheet,
-		AffineTransform at) {
+			AffineTransform at) {
 		Point2D.Double pScreen = new Point2D.Double();
 
 		try {
@@ -196,14 +208,16 @@ public class FLayoutUtilities {
 
 	/**
 	 * Pasa un rectángulo en coordenadas del folio a pixels.
-	 *
-	 * @param r rectángulo en coordenadas de folio.
-	 * @param at Matriz de transformación.
-	 *
+	 * 
+	 * @param r
+	 *            rectángulo en coordenadas de folio.
+	 * @param at
+	 *            Matriz de transformación.
+	 * 
 	 * @return Rectangle2D en pixels.
 	 */
 	public static Rectangle2D.Double fromSheetRect(Rectangle2D r,
-		AffineTransform at) {
+			AffineTransform at) {
 		Point2D.Double pSheet = new Point2D.Double(r.getX(), r.getY());
 		Point2D.Double pSX = new Point2D.Double(r.getMaxX(), r.getMinY());
 		Point2D.Double pSY = new Point2D.Double(r.getMinX(), r.getMaxY());
@@ -221,41 +235,45 @@ public class FLayoutUtilities {
 
 		Rectangle2D.Double res = new Rectangle2D.Double();
 		res.setRect(pScreen.getX(), pScreen.getY(), pScreen.distance(pScreenX),
-			pScreen.distance(pScreenY));
+				pScreen.distance(pScreenY));
 
 		return res;
 	}
 
 	/**
 	 * Obtiene el punto ajustado al grid del layout.
-	 *
-	 * @param p Punto a ajustar.
-	 * @param distX Distancia mínima en pixels de X.
-	 * @param distY Distancia mínima en pixels de Y.
-	 * @param at Matriz de transformación.
+	 * 
+	 * @param p
+	 *            Punto a ajustar.
+	 * @param distX
+	 *            Distancia mínima en pixels de X.
+	 * @param distY
+	 *            Distancia mínima en pixels de Y.
+	 * @param at
+	 *            Matriz de transformación.
 	 */
 	public static Point getPointGrid(Point p, double dX, double dY,
 			AffineTransform at) {
-		if (scale!=at.getScaleX()){
+		if (scale != at.getScaleX()) {
 			scale = at.getScaleX();
-			auxp = FLayoutUtilities.fromSheetPoint(new Point2D.Double(
-						0, 0), at);
-			distX=FLayoutUtilities.fromSheetDistance(dX, at);
-			distY=FLayoutUtilities.fromSheetDistance(dY, at);
+			auxp = FLayoutUtilities
+					.fromSheetPoint(new Point2D.Double(0, 0), at);
+			distX = FLayoutUtilities.fromSheetDistance(dX, at);
+			distY = FLayoutUtilities.fromSheetDistance(dY, at);
 		}
-		int x = (int)(((p.getX()) % distX) - ((auxp.x) % distX));
-		int y = (int)(((p.getY()) % distY) - ((auxp.y) % distY));
-		if (x<distX/2){
-			x=-x;
-		}else{
-			x=(int)(distX-x);
+		int x = (int) (((p.getX()) % distX) - ((auxp.x) % distX));
+		int y = (int) (((p.getY()) % distY) - ((auxp.y) % distY));
+		if (x < distX / 2) {
+			x = -x;
+		} else {
+			x = (int) (distX - x);
 		}
-		if (y<distY/2){
-			y=-y;
-		}else{
-			y=(int)(distY-y);
+		if (y < distY / 2) {
+			y = -y;
+		} else {
+			y = (int) (distY - y);
 		}
-		return new Point((int)(p.getX()+x),(int)(p.getY()+y));
+		return new Point((int) (p.getX() + x), (int) (p.getY() + y));
 	}
 
 	/**
@@ -263,19 +281,20 @@ public class FLayoutUtilities {
 	 * aquí lo que se comprueba es que si los valores que contiene el
 	 * Rectangle2D, que toma como parámetro, supera los valores soportados por
 	 * un entero.
-	 *
-	 * @param r Rectangle2D a comprobar si los valores que contiene no superan
-	 * 		  a los que puede tener un entero.
-	 *
+	 * 
+	 * @param r
+	 *            Rectangle2D a comprobar si los valores que contiene no superan
+	 *            a los que puede tener un entero.
+	 * 
 	 * @return true si no se han superado los límites.
 	 */
 	public static boolean isPosible(Rectangle2D.Double r) {
-		if ((r.getMaxX() > Integer.MAX_VALUE) ||
-				(r.getMaxY() > Integer.MAX_VALUE) ||
-				(r.getMinX() < Integer.MIN_VALUE) ||
-				(r.getMinY() < Integer.MIN_VALUE) ||
-				(r.getWidth() > Integer.MAX_VALUE) ||
-				(r.getHeight() > Integer.MAX_VALUE)) {
+		if ((r.getMaxX() > Integer.MAX_VALUE)
+				|| (r.getMaxY() > Integer.MAX_VALUE)
+				|| (r.getMinX() < Integer.MIN_VALUE)
+				|| (r.getMinY() < Integer.MIN_VALUE)
+				|| (r.getWidth() > Integer.MAX_VALUE)
+				|| (r.getHeight() > Integer.MAX_VALUE)) {
 			return false;
 		}
 
@@ -283,40 +302,41 @@ public class FLayoutUtilities {
 	}
 
 	/**
-	 * Devuelve un long representando a la escala en función  de que unidad de
+	 * Devuelve un long representando a la escala en función de que unidad de
 	 * medida se pase como parámetro.
-	 *
-	 * @param map FMap
-	 * @param h Rectángulo.
-	 *
+	 * 
+	 * @param map
+	 *            FMap
+	 * @param h
+	 *            Rectángulo.
+	 * 
 	 * @return escala.
 	 */
-/*	public static long getScaleView(FMap map, double h) {
-		if (map == null) {
-			return 0;
-		}
-
-		long scaleView = 1;
-		double hextent = map.getViewPort().getExtent().getHeight();
-		double hview = h;
-		scaleView = (long) (Attributes.CHANGE[map.getViewPort().getMapUnits()] * (hextent / hview));
-
-		return scaleView;
-	}
-	*/
-	public static long getScaleView(ViewPort viewPort,double wcm,double wpixels) {
-		double dpi = wpixels/wcm*2.54;
+	/*
+	 * public static long getScaleView(FMap map, double h) { if (map == null) {
+	 * return 0; }
+	 * 
+	 * long scaleView = 1; double hextent =
+	 * map.getViewPort().getExtent().getHeight(); double hview = h; scaleView =
+	 * (long) (Attributes.CHANGE[map.getViewPort().getMapUnits()] * (hextent /
+	 * hview));
+	 * 
+	 * return scaleView; }
+	 */
+	public static long getScaleView(ViewPort viewPort, double wcm,
+			double wpixels) {
+		double dpi = wpixels / wcm * 2.54;
 		CoordinateReferenceSystem crs = viewPort.getCrs();
 
-		//if (viewPort.getImageSize() == null)
-		//    return -1;
+		// if (viewPort.getImageSize() == null)
+		// return -1;
 		if (viewPort.getAdjustedExtent() == null) {
 			return 0;
 		}
 
 		if (crs == null || viewPort.getImageSize() == null) {
 			return (long) (viewPort.getAdjustedExtent().getHeight() / wcm * Attributes.CHANGE[viewPort
-																					.getMapUnits()]);
+					.getMapUnits()]);
 		}
 
 		return (long) ProjectionUtils.getScale(crs, viewPort

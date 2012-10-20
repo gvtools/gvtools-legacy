@@ -56,11 +56,10 @@ import com.iver.cit.gvsig.project.documents.layout.LayoutControl;
 import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
-
 /**
  * Diálogo que ofrece la posibilidad de posicionar el fframe en un punto en
  * concreto del Layout.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class FPositionDialog extends JPanel implements IWindow {
@@ -78,7 +77,7 @@ public class FPositionDialog extends JPanel implements IWindow {
 	private javax.swing.JLabel lUnidades = null;
 	private Layout layout = null;
 	private String m_NameUnit = null;
-	//private ArrayList selecList = new ArrayList();
+	// private ArrayList selecList = new ArrayList();
 	NumberFormat nf = NumberFormat.getInstance();
 	private javax.swing.JLabel lAnchoUnidades = null;
 	private javax.swing.JLabel lAlto = null;
@@ -87,24 +86,25 @@ public class FPositionDialog extends JPanel implements IWindow {
 	private javax.swing.JPanel pFolio = null;
 	private javax.swing.JLabel lSeparador = null;
 	private IFFrame fframe;
+
 	/**
 	 * This is the default constructor
-	 *
-	 * @param l Referencia al Layout.
+	 * 
+	 * @param l
+	 *            Referencia al Layout.
 	 */
-	public FPositionDialog(Layout l,IFFrame fframe) {
+	public FPositionDialog(Layout l, IFFrame fframe) {
 		super();
 		layout = l;
-		this.fframe=fframe;
+		this.fframe = fframe;
 
-		/*for (int i = layout.getFFrames().size() - 1; i >= 0; i--) {
-			IFFrame fframe = (IFFrame) layout.getFFrames().get(i);
-
-			if (fframe.getSelected() != FFrame.NOSELECT) {
-				selecList.add(fframe);
-			}
-		}
-		*/
+		/*
+		 * for (int i = layout.getFFrames().size() - 1; i >= 0; i--) { IFFrame
+		 * fframe = (IFFrame) layout.getFFrames().get(i);
+		 * 
+		 * if (fframe.getSelected() != FFrame.NOSELECT) { selecList.add(fframe);
+		 * } }
+		 */
 		initialize();
 	}
 
@@ -139,7 +139,7 @@ public class FPositionDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lDesdeIzquierda
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLDesdeIzquierda() {
@@ -155,7 +155,7 @@ public class FPositionDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lDesdeArriba
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLDesdeArriba() {
@@ -170,7 +170,7 @@ public class FPositionDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lAnchura
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLAnchura() {
@@ -185,7 +185,7 @@ public class FPositionDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lAltura
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLAltura() {
@@ -200,7 +200,7 @@ public class FPositionDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes bAceptar
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBAceptar() {
@@ -209,47 +209,48 @@ public class FPositionDialog extends JPanel implements IWindow {
 			bAceptar.setBounds(12, 185, 85, 23);
 			bAceptar.setText(PluginServices.getText(this, "Aceptar"));
 			bAceptar.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						//if (selecList.size() == 1) {
-							Rectangle2D.Double r = new Rectangle2D.Double();
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					// if (selecList.size() == 1) {
+					Rectangle2D.Double r = new Rectangle2D.Double();
 
-							if (getTDesdeIzquierda().getText().equals("")) {
-								getTDesdeIzquierda().setText("0");
-							}
-
-							if (getTDesdeDerecha().getText().equals("")) {
-								getTDesdeDerecha().setText("0");
-							}
-
-							if (getTAnchura().getText().equals("")) {
-								getTAnchura().setText("0");
-							}
-
-							if (getTAltura().getText().equals("")) {
-								getTAltura().setText("0");
-							}
-
-							r.x = stringToDouble(getTDesdeIzquierda().getText()
-													 .toString());
-							r.y = stringToDouble(getTDesdeDerecha().getText()
-													 .toString());
-							r.width = stringToDouble(getTAnchura().getText()
-														 .toString());
-							r.height = stringToDouble(getTAltura().getText()
-														  .toString());
-
-							//((IFFrame) selecList.get(0)).setBoundBox(r);
-							IFFrame fframeAux=fframe.cloneFFrame(layout);
-							fframeAux.setBoundBox(r);
-							layout.getLayoutContext().getEFS().modifyFFrame(fframe,fframeAux);
-							layout.getLayoutContext().updateFFrames();
-						//}
-
-						PluginServices.getMDIManager().closeWindow(FPositionDialog.this);
-						layout.getLayoutControl().setStatus(LayoutControl.DESACTUALIZADO);
-						layout.repaint();
+					if (getTDesdeIzquierda().getText().equals("")) {
+						getTDesdeIzquierda().setText("0");
 					}
-				});
+
+					if (getTDesdeDerecha().getText().equals("")) {
+						getTDesdeDerecha().setText("0");
+					}
+
+					if (getTAnchura().getText().equals("")) {
+						getTAnchura().setText("0");
+					}
+
+					if (getTAltura().getText().equals("")) {
+						getTAltura().setText("0");
+					}
+
+					r.x = stringToDouble(getTDesdeIzquierda().getText()
+							.toString());
+					r.y = stringToDouble(getTDesdeDerecha().getText()
+							.toString());
+					r.width = stringToDouble(getTAnchura().getText().toString());
+					r.height = stringToDouble(getTAltura().getText().toString());
+
+					// ((IFFrame) selecList.get(0)).setBoundBox(r);
+					IFFrame fframeAux = fframe.cloneFFrame(layout);
+					fframeAux.setBoundBox(r);
+					layout.getLayoutContext().getEFS()
+							.modifyFFrame(fframe, fframeAux);
+					layout.getLayoutContext().updateFFrames();
+					// }
+
+					PluginServices.getMDIManager().closeWindow(
+							FPositionDialog.this);
+					layout.getLayoutControl().setStatus(
+							LayoutControl.DESACTUALIZADO);
+					layout.repaint();
+				}
+			});
 		}
 
 		return bAceptar;
@@ -257,20 +258,22 @@ public class FPositionDialog extends JPanel implements IWindow {
 
 	/**
 	 * Paso de String a double.
-	 *
-	 * @param s String.
-	 *
+	 * 
+	 * @param s
+	 *            String.
+	 * 
 	 * @return double obtenido.
 	 */
 	private double stringToDouble(String s) {
 		String snew = s.replace(',', '.');
 
-		return layout.getLayoutContext().getAtributes().fromUnits(Double.parseDouble(snew));
+		return layout.getLayoutContext().getAtributes()
+				.fromUnits(Double.parseDouble(snew));
 	}
 
 	/**
 	 * This method initializes bCancelar
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private javax.swing.JButton getBCancelar() {
@@ -279,10 +282,11 @@ public class FPositionDialog extends JPanel implements IWindow {
 			bCancelar.setBounds(107, 185, 87, 23);
 			bCancelar.setText(PluginServices.getText(this, "Cancelar"));
 			bCancelar.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						PluginServices.getMDIManager().closeWindow(FPositionDialog.this);
-					}
-				});
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					PluginServices.getMDIManager().closeWindow(
+							FPositionDialog.this);
+				}
+			});
 		}
 
 		return bCancelar;
@@ -290,15 +294,16 @@ public class FPositionDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes tDesdeIzquierda
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private javax.swing.JTextField getTDesdeIzquierda() {
 		if (tDesdeIzquierda == null) {
 			tDesdeIzquierda = new javax.swing.JTextField();
 			tDesdeIzquierda.setBounds(132, 85, 53, 20);
-			tDesdeIzquierda.setText(String.valueOf(nf.format(
-						layout.getLayoutContext().getAtributes().toUnits(fframe.getBoundBox().x))));
+			tDesdeIzquierda.setText(String.valueOf(nf.format(layout
+					.getLayoutContext().getAtributes()
+					.toUnits(fframe.getBoundBox().x))));
 		}
 
 		return tDesdeIzquierda;
@@ -306,15 +311,16 @@ public class FPositionDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes tDesdeDerecha
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private javax.swing.JTextField getTDesdeDerecha() {
 		if (tDesdeDerecha == null) {
 			tDesdeDerecha = new javax.swing.JTextField();
 			tDesdeDerecha.setBounds(132, 110, 53, 20);
-			tDesdeDerecha.setText(String.valueOf(nf.format(
-						layout.getLayoutContext().getAtributes().toUnits(fframe.getBoundBox().y))));
+			tDesdeDerecha.setText(String.valueOf(nf.format(layout
+					.getLayoutContext().getAtributes()
+					.toUnits(fframe.getBoundBox().y))));
 		}
 
 		return tDesdeDerecha;
@@ -322,15 +328,15 @@ public class FPositionDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes tAnchura
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private javax.swing.JTextField getTAnchura() {
 		if (tAnchura == null) {
 			tAnchura = new javax.swing.JTextField();
 			tAnchura.setBounds(132, 135, 53, 20);
-			tAnchura.setText(String.valueOf(nf.format(
-						layout.getLayoutContext().getAtributes().toUnits(fframe.getBoundBox().width))));
+			tAnchura.setText(String.valueOf(nf.format(layout.getLayoutContext()
+					.getAtributes().toUnits(fframe.getBoundBox().width))));
 		}
 
 		return tAnchura;
@@ -338,15 +344,15 @@ public class FPositionDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes tAltura
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private javax.swing.JTextField getTAltura() {
 		if (tAltura == null) {
 			tAltura = new javax.swing.JTextField();
 			tAltura.setBounds(132, 160, 53, 20);
-			tAltura.setText(String.valueOf(nf.format(layout.getLayoutContext().getAtributes()
-														   .toUnits(fframe.getBoundBox().height))));
+			tAltura.setText(String.valueOf(nf.format(layout.getLayoutContext()
+					.getAtributes().toUnits(fframe.getBoundBox().height))));
 		}
 
 		return tAltura;
@@ -354,14 +360,14 @@ public class FPositionDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lNomUnidades
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLNomUnidades() {
 		if (lNomUnidades == null) {
 			lNomUnidades = new javax.swing.JLabel();
 			lNomUnidades.setBounds(91, 7, 91, 20);
-			lNomUnidades.setText(PluginServices.getText(this,m_NameUnit));
+			lNomUnidades.setText(PluginServices.getText(this, m_NameUnit));
 		}
 
 		return lNomUnidades;
@@ -369,7 +375,7 @@ public class FPositionDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lUnidades
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLUnidades() {
@@ -388,7 +394,7 @@ public class FPositionDialog extends JPanel implements IWindow {
 	public WindowInfo getWindowInfo() {
 		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODALDIALOG);
 
-		//vi.setResizable(false);
+		// vi.setResizable(false);
 		m_viewinfo.setTitle(PluginServices.getText(this, "tamano_posicion"));
 
 		return m_viewinfo;
@@ -402,7 +408,7 @@ public class FPositionDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lAnchoUnidades
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLAnchoUnidades() {
@@ -410,11 +416,13 @@ public class FPositionDialog extends JPanel implements IWindow {
 			lAnchoUnidades = new javax.swing.JLabel();
 
 			if (layout.getLayoutContext().getAtributes().isLandSpace()) {
-				lAnchoUnidades.setText(String.valueOf(nf.format(
-							layout.getLayoutContext().getAtributes().getSizeInUnits().getAlto())));
+				lAnchoUnidades.setText(String.valueOf(nf.format(layout
+						.getLayoutContext().getAtributes().getSizeInUnits()
+						.getAlto())));
 			} else {
-				lAnchoUnidades.setText(String.valueOf(nf.format(
-							layout.getLayoutContext().getAtributes().getSizeInUnits().getAncho())));
+				lAnchoUnidades.setText(String.valueOf(nf.format(layout
+						.getLayoutContext().getAtributes().getSizeInUnits()
+						.getAncho())));
 			}
 		}
 
@@ -423,7 +431,7 @@ public class FPositionDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lAlto
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLAlto() {
@@ -437,7 +445,7 @@ public class FPositionDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lAltoUnidades
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLAltoUnidades() {
@@ -445,11 +453,13 @@ public class FPositionDialog extends JPanel implements IWindow {
 			lAltoUnidades = new javax.swing.JLabel();
 
 			if (layout.getLayoutContext().getAtributes().isLandSpace()) {
-				lAltoUnidades.setText(String.valueOf(nf.format(
-							layout.getLayoutContext().getAtributes().getSizeInUnits().getAncho())));
+				lAltoUnidades.setText(String.valueOf(nf.format(layout
+						.getLayoutContext().getAtributes().getSizeInUnits()
+						.getAncho())));
 			} else {
-				lAltoUnidades.setText(String.valueOf(nf.format(
-							layout.getLayoutContext().getAtributes().getSizeInUnits().getAlto())));
+				lAltoUnidades.setText(String.valueOf(nf.format(layout
+						.getLayoutContext().getAtributes().getSizeInUnits()
+						.getAlto())));
 			}
 		}
 
@@ -458,7 +468,7 @@ public class FPositionDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lAncho
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLAncho() {
@@ -472,7 +482,7 @@ public class FPositionDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes pFolio
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private javax.swing.JPanel getPFolio() {
@@ -484,10 +494,11 @@ public class FPositionDialog extends JPanel implements IWindow {
 			pFolio.add(getLAnchoUnidades(), null);
 			pFolio.add(getLAncho(), null);
 			pFolio.setBounds(9, 31, 180, 43);
-			pFolio.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, PluginServices.getText(this, "tamanyo_pagina"),
+			pFolio.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+					PluginServices.getText(this, "tamanyo_pagina"),
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					null));
 		}
 
 		return pFolio;
@@ -495,7 +506,7 @@ public class FPositionDialog extends JPanel implements IWindow {
 
 	/**
 	 * This method initializes lSeparador
-	 *
+	 * 
 	 * @return javax.swing.JLabel
 	 */
 	private javax.swing.JLabel getLSeparador() {

@@ -30,19 +30,20 @@ import javax.swing.JPanel;
 import org.gvsig.gui.beans.slidertext.SliderTextContainer;
 
 import com.iver.andami.PluginServices;
+
 /**
  * Panel para los controles de brillo y contraste.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class EnhancedWithTrimPanel extends JPanel implements ActionListener {
-	private static final long   serialVersionUID = 9023137365069951866L;
+	private static final long serialVersionUID = 9023137365069951866L;
 
-	private JCheckBox           active           = null;
-	private SliderTextContainer trimSlider       = null;
-	private JCheckBox           removeCheck      = null;
-	private JCheckBox           trimCheck        = null;
-	
+	private JCheckBox active = null;
+	private SliderTextContainer trimSlider = null;
+	private JCheckBox removeCheck = null;
+	private JCheckBox trimCheck = null;
+
 	/**
 	 * Contructor
 	 */
@@ -52,7 +53,10 @@ public class EnhancedWithTrimPanel extends JPanel implements ActionListener {
 	}
 
 	private void init() {
-		setBorder(javax.swing.BorderFactory.createTitledBorder(null, PluginServices.getText(this, "realce"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+		setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+				PluginServices.getText(this, "realce"),
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
 		setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.NORTH;
@@ -61,17 +65,18 @@ public class EnhancedWithTrimPanel extends JPanel implements ActionListener {
 		gbc.insets = new Insets(0, 0, 10, 0);
 		add(getActive(), gbc);
 		gbc.gridy = 1;
-		add(getRemoveCheck(), gbc);		
+		add(getRemoveCheck(), gbc);
 		gbc.gridy = 2;
-		add(getTrimCheck(), gbc);		
+		add(getTrimCheck(), gbc);
 		gbc.gridy = 3;
-		add(getTrimSlider(), gbc);		
+		add(getTrimSlider(), gbc);
 		getActive().addActionListener(this);
 		getTrimCheck().addActionListener(this);
 	}
-	
+
 	/**
 	 * Obtiene el check de activar
+	 * 
 	 * @return
 	 */
 	public JCheckBox getActive() {
@@ -82,31 +87,36 @@ public class EnhancedWithTrimPanel extends JPanel implements ActionListener {
 		}
 		return active;
 	}
-	
+
 	/**
 	 * Obtiene el check de eliminar extremos
+	 * 
 	 * @return
 	 */
 	public JCheckBox getRemoveCheck() {
 		if (removeCheck == null) {
-			removeCheck = new JCheckBox(PluginServices.getText(this, "eliminar_extremos"));
+			removeCheck = new JCheckBox(PluginServices.getText(this,
+					"eliminar_extremos"));
 		}
 		return removeCheck;
 	}
-	
+
 	/**
 	 * Obtiene el check de recorte de colas
+	 * 
 	 * @return
 	 */
 	public JCheckBox getTrimCheck() {
 		if (trimCheck == null) {
-			trimCheck = new JCheckBox(PluginServices.getText(this, "recorte_de_colas"));
+			trimCheck = new JCheckBox(PluginServices.getText(this,
+					"recorte_de_colas"));
 		}
 		return trimCheck;
 	}
-	
+
 	/**
 	 * Obtiene el control con el slider de recorte de colas
+	 * 
 	 * @return SliderTextContainer
 	 */
 	public SliderTextContainer getTrimSlider() {
@@ -117,10 +127,12 @@ public class EnhancedWithTrimPanel extends JPanel implements ActionListener {
 		}
 		return trimSlider;
 	}
-	
+
 	/**
 	 * Activa o desactiva el control
-	 * @param enable true activa y false desactiva los controles del panel
+	 * 
+	 * @param enable
+	 *            true activa y false desactiva los controles del panel
 	 */
 	public void setControlEnabled(boolean enabled) {
 		if (enabled && getTrimCheck().isSelected())
@@ -129,10 +141,10 @@ public class EnhancedWithTrimPanel extends JPanel implements ActionListener {
 			getTrimSlider().setControlEnabled(false);
 		getRemoveCheck().setEnabled(enabled);
 		getTrimCheck().setEnabled(enabled);
-		
+
 		getActive().setSelected(enabled);
 	}
-	
+
 	/**
 	 * Maneja eventos de activar y desactivar el panel
 	 */
@@ -149,7 +161,8 @@ public class EnhancedWithTrimPanel extends JPanel implements ActionListener {
 
 	/**
 	 * Obtiene el valor de selección del check de eliminar extremos
-	 * @return boolean, true si está seleccionado y false si no lo está. 
+	 * 
+	 * @return boolean, true si está seleccionado y false si no lo está.
 	 */
 	public boolean isRemoveEndsSelected() {
 		return getRemoveCheck().isSelected();
@@ -157,6 +170,7 @@ public class EnhancedWithTrimPanel extends JPanel implements ActionListener {
 
 	/**
 	 * Obtiene el valor de selección del check de recorte de colas.
+	 * 
 	 * @return boolean, true si está seleccionado y false si no lo está.
 	 */
 	public boolean isTailTrimCheckSelected() {
@@ -165,6 +179,7 @@ public class EnhancedWithTrimPanel extends JPanel implements ActionListener {
 
 	/**
 	 * Obtiene el valor de recorte de colas seleccionado en el slider
+	 * 
 	 * @return double
 	 */
 	public double getTrimValue() {
@@ -173,7 +188,9 @@ public class EnhancedWithTrimPanel extends JPanel implements ActionListener {
 
 	/**
 	 * Activa o desactiva el checkbox de recorte de colas
-	 * @param active true si deseamos activarlo y false para desactivarlo
+	 * 
+	 * @param active
+	 *            true si deseamos activarlo y false para desactivarlo
 	 */
 	public void setTailTrimCheckActive(boolean active) {
 		getTrimCheck().setSelected(active);
@@ -182,7 +199,9 @@ public class EnhancedWithTrimPanel extends JPanel implements ActionListener {
 
 	/**
 	 * Activa o desactiva el checkbox de eliminar extremos
-	 * @param active true si deseamos activarlo y false para desactivarlo
+	 * 
+	 * @param active
+	 *            true si deseamos activarlo y false para desactivarlo
 	 */
 	public void setRemoveEndsActive(boolean active) {
 		getRemoveCheck().setSelected(active);
@@ -190,7 +209,9 @@ public class EnhancedWithTrimPanel extends JPanel implements ActionListener {
 
 	/**
 	 * Asigna un valor al slider de porcentaje de recorte
-	 * @param active true si deseamos activarlo y false para desactivarlo
+	 * 
+	 * @param active
+	 *            true si deseamos activarlo y false para desactivarlo
 	 */
 	public void setTailTrimValue(double value) {
 		getTrimSlider().setValue(value);

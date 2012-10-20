@@ -54,15 +54,15 @@ public class DuplicateLayersMode extends GridBagLayoutPanel {
 	private JRadioButton rdBtnRemoveDuplicates;
 	private JRadioButton rdBtnOnePerFeature;
 	private JRadioButton rdBtnOnePerFeaturePart;
-	
+
 	public DuplicateLayersMode() {
 		super();
 		initialize();
 	}
+
 	private void initialize() {
-		setBorder(BorderFactory.
-				createTitledBorder(null,
-						PluginServices.getText(this, "duplicate_labels")));
+		setBorder(BorderFactory.createTitledBorder(null,
+				PluginServices.getText(this, "duplicate_labels")));
 		addComponent(getRdBtnRemoveDuplicates());
 		addComponent(getRdBtnOnePerFeature());
 		addComponent(getRdBtnOnePerFeaturePart());
@@ -72,39 +72,41 @@ public class DuplicateLayersMode extends GridBagLayoutPanel {
 		group.add(getRdBtnOnePerFeaturePart());
 		group.add(getRdBtnRemoveDuplicates());
 	}
-	
 
 	private JRadioButton getRdBtnOnePerFeaturePart() {
 		if (rdBtnOnePerFeaturePart == null) {
-			rdBtnOnePerFeaturePart = new JRadioButton(
-				PluginServices.getText(this, "place_one_label_per_feature_part"));
+			rdBtnOnePerFeaturePart = new JRadioButton(PluginServices.getText(
+					this, "place_one_label_per_feature_part"));
 		}
 		return rdBtnOnePerFeaturePart;
 	}
 
 	private JRadioButton getRdBtnOnePerFeature() {
 		if (rdBtnOnePerFeature == null) {
-			rdBtnOnePerFeature = new JRadioButton(
-				PluginServices.getText(this, "place_one_label_per_feature"));
+			rdBtnOnePerFeature = new JRadioButton(PluginServices.getText(this,
+					"place_one_label_per_feature"));
 		}
 		return rdBtnOnePerFeature;
 	}
 
 	private JRadioButton getRdBtnRemoveDuplicates() {
 		if (rdBtnRemoveDuplicates == null) {
-			rdBtnRemoveDuplicates = new JRadioButton(
-				PluginServices.getText(this, "remove_duplicate_labels"));
+			rdBtnRemoveDuplicates = new JRadioButton(PluginServices.getText(
+					this, "remove_duplicate_labels"));
 
 		}
 		return rdBtnRemoveDuplicates;
 	}
-	
+
 	public void setMode(int dupMode) {
-		rdBtnRemoveDuplicates.setSelected(dupMode == IPlacementConstraints.REMOVE_DUPLICATE_LABELS);
-		rdBtnOnePerFeature.setSelected(dupMode == IPlacementConstraints.ONE_LABEL_PER_FEATURE);
-		rdBtnOnePerFeaturePart.setSelected(dupMode == IPlacementConstraints.ONE_LABEL_PER_FEATURE_PART);
+		rdBtnRemoveDuplicates
+				.setSelected(dupMode == IPlacementConstraints.REMOVE_DUPLICATE_LABELS);
+		rdBtnOnePerFeature
+				.setSelected(dupMode == IPlacementConstraints.ONE_LABEL_PER_FEATURE);
+		rdBtnOnePerFeaturePart
+				.setSelected(dupMode == IPlacementConstraints.ONE_LABEL_PER_FEATURE_PART);
 	}
-	
+
 	public int getMode() {
 		if (rdBtnRemoveDuplicates.isSelected()) {
 			return IPlacementConstraints.REMOVE_DUPLICATE_LABELS;
@@ -115,7 +117,7 @@ public class DuplicateLayersMode extends GridBagLayoutPanel {
 		if (rdBtnOnePerFeaturePart.isSelected()) {
 			return IPlacementConstraints.ONE_LABEL_PER_FEATURE_PART;
 		}
-		
+
 		throw new Error("Unsupported layer duplicates mode");
 	}
 }

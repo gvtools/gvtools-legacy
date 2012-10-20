@@ -48,11 +48,10 @@ import com.iver.cit.gvsig.exceptions.commands.EditionCommandException;
 import com.iver.cit.gvsig.fmap.edition.IEditableSource;
 import com.iver.cit.gvsig.project.documents.table.gui.Table;
 
-
 /**
  * Extensión encargada de gestionar el rehacer un comando anteriormente
  * deshecho.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class RedoTableExtension extends Extension {
@@ -63,12 +62,13 @@ public class RedoTableExtension extends Extension {
 		registerIcons();
 	}
 
-	private void registerIcons(){
+	private void registerIcons() {
 
-		PluginServices.getIconTheme().registerDefault(
-				"table-redo",
-				this.getClass().getClassLoader().getResource("images/Redo.png")
-			);
+		PluginServices.getIconTheme()
+				.registerDefault(
+						"table-redo",
+						this.getClass().getClassLoader()
+								.getResource("images/Redo.png"));
 	}
 
 	/**
@@ -78,20 +78,22 @@ public class RedoTableExtension extends Extension {
 		Table tabla = (Table) PluginServices.getMDIManager().getActiveWindow();
 
 		if (s.compareTo("REDO") == 0) {
-			if (tabla.isEditing()){
-				IEditableSource vea=tabla.getModel().getModelo();
+			if (tabla.isEditing()) {
+				IEditableSource vea = tabla.getModel().getModelo();
 				try {
 					vea.redo();
 				} catch (EditionCommandException e) {
-					NotificationManager.addError("Error accediendo a los Drivers para rehacer un comando",
-							e);
+					NotificationManager
+							.addError(
+									"Error accediendo a los Drivers para rehacer un comando",
+									e);
 				}
 				try {
 					vea.getSelection().clear();
 				} catch (ReadDriverException e) {
 					e.printStackTrace();
 				}
-				//tabla.refresh();
+				// tabla.refresh();
 			}
 			tabla.getModel().setModified(true);
 		}
@@ -102,16 +104,18 @@ public class RedoTableExtension extends Extension {
 	 */
 	public boolean isEnabled() {
 		Table tabla = (Table) PluginServices.getMDIManager().getActiveWindow();
-		//MapControl mapControl = (MapControl) vista.getMapControl();
-		//FLayers layers=mapControl.getMapContext().getLayers();
-		//for (int i=0;i<layers.getLayersCount();i++){
-			if (tabla.getModel().getModelo() instanceof IEditableSource && tabla.isEditing()){
-				IEditableSource vea=tabla.getModel().getModelo();
-				if (vea==null)return false;
-				return vea.getCommandRecord().moreRedoCommands();
-			}
+		// MapControl mapControl = (MapControl) vista.getMapControl();
+		// FLayers layers=mapControl.getMapContext().getLayers();
+		// for (int i=0;i<layers.getLayersCount();i++){
+		if (tabla.getModel().getModelo() instanceof IEditableSource
+				&& tabla.isEditing()) {
+			IEditableSource vea = tabla.getModel().getModelo();
+			if (vea == null)
+				return false;
+			return vea.getCommandRecord().moreRedoCommands();
+		}
 
-		//}
+		// }
 		return false;
 	}
 
@@ -119,8 +123,8 @@ public class RedoTableExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-															 .getActiveWindow();
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices
+				.getMDIManager().getActiveWindow();
 
 		if (f == null) {
 			return false;

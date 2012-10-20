@@ -54,44 +54,43 @@ import com.iver.cit.gvsig.fmap.tools.Behavior.Behavior;
 import com.iver.cit.gvsig.fmap.tools.Behavior.PointBehavior;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
+
 /**
  * 
  * SingleLabelingExtension.java
- *
- * Extension that allows the user to see a custom label over the feature
- * that she/he selects
+ * 
+ * Extension that allows the user to see a custom label over the feature that
+ * she/he selects
  * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Feb 28, 2008
  * @author Cesar Martinez Izquierdo - cesar.martinez@iver.es Oct 2008
- *
+ * 
  */
 public class SingleLabelingExtension extends Extension {
 	private WeakHashMap<BaseView, SingleLabelingToolUI> toolUIs = new WeakHashMap<BaseView, SingleLabelingToolUI>();
+
 	public void execute(String actionCommand) {
 		if ("SINGLE_LABELING_TOOL".equals(actionCommand)) {
-			BaseView v = (BaseView) PluginServices.getMDIManager().getActiveWindow();
+			BaseView v = (BaseView) PluginServices.getMDIManager()
+					.getActiveWindow();
 			SingleLabelingToolUI toolUI;
 			if (toolUIs.containsKey(v)) {
 				toolUI = toolUIs.get(v);
-			}
-			else {
+			} else {
 				toolUI = new SingleLabelingToolUI(v);
 				toolUIs.put(v, toolUI);
 			}
-			Behavior behavior = v.getMapControl().getMapTool(SingleLabelingTool.TOOLNAME);
-			if (behavior==null) {
-				v.getMapControl().addMapTool(SingleLabelingTool.TOOLNAME, 
-						new PointBehavior(
-								new SingleLabelingTool(
-										v.getMapControl(),
-										toolUI)
-						)
-				);
-			}
-			else {
+			Behavior behavior = v.getMapControl().getMapTool(
+					SingleLabelingTool.TOOLNAME);
+			if (behavior == null) {
+				v.getMapControl().addMapTool(
+						SingleLabelingTool.TOOLNAME,
+						new PointBehavior(new SingleLabelingTool(v
+								.getMapControl(), toolUI)));
+			} else {
 				if (behavior.getListener() instanceof SingleLabelingToolUI) {
 					toolUI.setTargetLayer(toolUI.getTargetLayer());
-				}				
+				}
 			}
 			v.getMapControl().setTool(SingleLabelingTool.TOOLNAME);
 			PluginServices.getMDIManager().addWindow(toolUI);
@@ -101,12 +100,12 @@ public class SingleLabelingExtension extends Extension {
 	public void initialize() {
 		PluginServices.getIconTheme().registerDefault(
 				"single-labeling-tool",
-				getClass().getClassLoader().getResource("images/single-labeling-tool.gif")
-		);
+				getClass().getClassLoader().getResource(
+						"images/single-labeling-tool.gif"));
 		PluginServices.getIconTheme().registerDefault(
 				"single-labeling-tool-config",
-				getClass().getClassLoader().getResource("images/single-labeling-tool-config.gif")
-		);
+				getClass().getClassLoader().getResource(
+						"images/single-labeling-tool-config.gif"));
 
 	}
 
@@ -122,9 +121,8 @@ public class SingleLabelingExtension extends Extension {
 				return false;
 			for (int i = 0; i < layers.getLayersCount(); i++) {
 				FLayer layer = layers.getLayer(i);
-				if (layer.isAvailable() && 
-					layer.isActive() && 
-					!(layer instanceof ILabelable))
+				if (layer.isAvailable() && layer.isActive()
+						&& !(layer instanceof ILabelable))
 					return false;
 			}
 			return true;

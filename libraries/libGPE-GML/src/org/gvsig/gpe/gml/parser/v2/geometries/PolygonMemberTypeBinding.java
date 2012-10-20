@@ -65,6 +65,7 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * It parses a gml:polygonMemberType object. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;polygonMember&gt;
@@ -78,53 +79,57 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  * &lt;/polygonMember&gt;
  * </code>
  * </pre>
- * </p> 
+ * 
+ * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class PolygonMemberTypeBinding {
-	
+
 	/**
 	 * It parses the gml:PolygonMember tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * A polygon
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return A polygon
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public Object parse(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
+	public Object parse(IXmlStreamReader parser, GPEDefaultGmlParser handler)
+			throws XmlStreamException, IOException {
 		boolean endFeature = false;
 		int currentTag;
-		Object polygon = null;		
-		
+		Object polygon = null;
+
 		QName tag = parser.getName();
 		currentTag = parser.getEventType();
 
-		while (!endFeature){
-			switch(currentTag){
+		while (!endFeature) {
+			switch (currentTag) {
 			case IXmlStreamReader.START_ELEMENT:
-					polygon = parseTag(parser, handler, tag);
-					break;
-				case IXmlStreamReader.END_ELEMENT:
-					endFeature = parseLastTag(parser, handler, tag);				
-					break;
-				case IXmlStreamReader.CHARACTERS:			
-					
-					break;
-				}
-				if (!endFeature){					
-					currentTag = parser.next();
-					tag = parser.getName();
-				}
-			}			
-		return polygon;	
+				polygon = parseTag(parser, handler, tag);
+				break;
+			case IXmlStreamReader.END_ELEMENT:
+				endFeature = parseLastTag(parser, handler, tag);
+				break;
+			case IXmlStreamReader.CHARACTERS:
+
+				break;
+			}
+			if (!endFeature) {
+				currentTag = parser.next();
+				tag = parser.getName();
+			}
+		}
+		return polygon;
 	}
-	
+
 	/**
 	 * It parses the XML tag
+	 * 
 	 * @param parser
 	 * @param handler
 	 * @param tag
@@ -134,23 +139,28 @@ public class PolygonMemberTypeBinding {
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	protected Object parseTag(IXmlStreamReader parser,GPEDefaultGmlParser handler, QName tag) throws XmlStreamException, IOException{
+	protected Object parseTag(IXmlStreamReader parser,
+			GPEDefaultGmlParser handler, QName tag) throws XmlStreamException,
+			IOException {
 		Object polygon = null;
-		if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_POLYGON)){
-			polygon = handler.getProfile().getPolygonTypeBinding().parse(parser, handler);
+		if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_POLYGON)) {
+			polygon = handler.getProfile().getPolygonTypeBinding()
+					.parse(parser, handler);
 		}
 		return polygon;
 	}
-	
+
 	/**
 	 * Parses the last tag
+	 * 
 	 * @param parser
 	 * @param handler
 	 * @param tag
 	 * @return
 	 */
-	protected boolean parseLastTag(IXmlStreamReader parser,GPEDefaultGmlParser handler, QName tag){
-		if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_POLYGONMEMBER)){												
+	protected boolean parseLastTag(IXmlStreamReader parser,
+			GPEDefaultGmlParser handler, QName tag) {
+		if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_POLYGONMEMBER)) {
 			return true;
 		}
 		return false;

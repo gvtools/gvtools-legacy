@@ -60,24 +60,25 @@ import org.gvsig.exceptions.BaseException;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class SchemaLocationWarning extends BaseException{
+public class SchemaLocationWarning extends BaseException {
 	private static final long serialVersionUID = -7232629060306401806L;
 	private String schemaLocation = null;
-	
-	public SchemaLocationWarning(String schemaLocation, Throwable exception){
+
+	public SchemaLocationWarning(String schemaLocation, Throwable exception) {
 		this.schemaLocation = schemaLocation;
 		init();
 		initCause(exception);
 	}
-	
+
 	private void init() {
 		messageKey = "warning_gpe_schema_location";
 		formatString = "Schema Location %(schemaLocation) is not found";
-		code = serialVersionUID;		
+		code = serialVersionUID;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map values() {

@@ -61,12 +61,13 @@ import org.gvsig.gpe.writer.GPEWriterBaseTest;
  *
  */
 /**
- * This class creates a polygon without close it. When
- * the polygon is readed, it has had to be closed and
- * a warning has had to be throwed
+ * This class creates a polygon without close it. When the polygon is readed, it
+ * has had to be closed and a warning has had to be throwed
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public abstract class GPEPolygonAutomaticallyClosedTest extends GPEWriterBaseTest{
+public abstract class GPEPolygonAutomaticallyClosedTest extends
+		GPEWriterBaseTest {
 	private String layerId = "l1";
 	private String layerName = "Municipallity";
 	private String layerDescription = "Polygons test layer";
@@ -77,29 +78,31 @@ public abstract class GPEPolygonAutomaticallyClosedTest extends GPEWriterBaseTes
 	private double[] polygon1X = generateRandomCoordinates();
 	private double[] polygon1Y = generateRandomCoordinates();
 	private double[] polygon1Z = generateRandomCoordinates();
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#readObjects()
 	 */
 	public void readObjects() {
 		Layer[] layers = getLayers();
-		assertEquals(layers.length, 1);		
+		assertEquals(layers.length, 1);
 		Layer layer = layers[0];
-		
+
 		assertEquals(layer.getFeatures().size(), 1);
-		//FEATURE 1
-		Feature feature1 = (Feature)layer.getFeatures().get(0);
+		// FEATURE 1
+		Feature feature1 = (Feature) layer.getFeatures().get(0);
 		polygon1X = closePolygon(polygon1X);
 		polygon1Y = closePolygon(polygon1Y);
 		polygon1Z = closePolygon(polygon1Z);
-		GeometryAsserts.polygon((Polygon)feature1.getGeometry(), polygon1X, polygon1Y, polygon1Z);
-	
-		//Two warinings
+		GeometryAsserts.polygon((Polygon) feature1.getGeometry(), polygon1X,
+				polygon1Y, polygon1Z);
+
+		// Two warinings
 		boolean isClosed = false;
-		for (int i=0 ; i<getErrorHandler().getWarningsSize() ; i++){
+		for (int i = 0; i < getErrorHandler().getWarningsSize(); i++) {
 			Object obj = getErrorHandler().getWarningAt(i);
-			if (obj instanceof PolygonAutomaticallyClosedWarning){
+			if (obj instanceof PolygonAutomaticallyClosedWarning) {
 				isClosed = true;
 			}
 			System.out.println(getErrorHandler().getWarningAt(i));
@@ -109,26 +112,24 @@ public abstract class GPEPolygonAutomaticallyClosedTest extends GPEWriterBaseTes
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#writeObjects()
 	 */
 	public void writeObjects() {
 		polygon1X[polygon1X.length - 1] = 0.0;
 		polygon1Y[polygon1Y.length - 1] = 0.0;
-		polygon1Z[polygon1Z.length - 1]= 0.0;
-		
+		polygon1Z[polygon1Z.length - 1] = 0.0;
+
 		getWriterHandler().initialize();
-		getWriterHandler().startLayer(layerId, null, layerName, layerDescription, srs);
+		getWriterHandler().startLayer(layerId, null, layerName,
+				layerDescription, srs);
 		getWriterHandler().startFeature(feature1Id, null, feature1Name);
-		getWriterHandler().startPolygon(polygon1Id, new CoordinatesSequence(
-				polygon1X,
-				polygon1Y,
-				polygon1Z),
-				srs);		
-		getWriterHandler().endPolygon();		
+		getWriterHandler().startPolygon(polygon1Id,
+				new CoordinatesSequence(polygon1X, polygon1Y, polygon1Z), srs);
+		getWriterHandler().endPolygon();
 		getWriterHandler().endFeature();
 		getWriterHandler().endLayer();
-		getWriterHandler().close();		
+		getWriterHandler().close();
 	}
 
 }
-

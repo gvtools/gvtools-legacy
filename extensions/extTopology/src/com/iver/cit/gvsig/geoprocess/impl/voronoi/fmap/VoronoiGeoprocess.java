@@ -90,7 +90,7 @@ public class VoronoiGeoprocess extends AbstractMonitorableGeoprocess {
 		if (!(firstLayer instanceof VoronoiAndTinInputLyr))
 			throw new GeoprocessException(
 					"Geoproceso Voronoi cuya capa de entrada es incorrecta: VoronoiAndTinInputLyr");
-		if(algorithm == null)
+		if (algorithm == null)
 			throw new GeoprocessException("Algoritmo a emplear no especificado");
 
 	}
@@ -114,24 +114,21 @@ public class VoronoiGeoprocess extends AbstractMonitorableGeoprocess {
 		return resultLayerDefinition;
 	}
 
-	
-
 	public void setParameters(Map params) throws GeoprocessException {
 		Boolean onlySelection = (Boolean) params.get("layer_selection");
 		if (onlySelection != null)
 			this.operateOnlyWithSelection = onlySelection.booleanValue();
 
 		Boolean useTinB = (Boolean) params.get("tin");
-		if(useTinB != null)
+		if (useTinB != null)
 			useTin = useTinB.booleanValue();
-		
+
 		Boolean useThiessenB = (Boolean) params.get("thiessen");
-		if(useThiessenB != null)
-		useThiessen = useThiessenB.booleanValue(); 
-		
+		if (useThiessenB != null)
+			useThiessen = useThiessenB.booleanValue();
+
 		this.algorithm = (VoronoiStrategy) params.get("algorithm");
 	}
-
 
 	public void process(CancellableProgressTask progressMonitor)
 			throws GeoprocessException {
@@ -153,31 +150,38 @@ public class VoronoiGeoprocess extends AbstractMonitorableGeoprocess {
 			throw new GeoprocessException(e1);
 		}
 
-		try {//todo quitar esto y hacer que devuelva un FLyrVect
+		try {// todo quitar esto y hacer que devuelva un FLyrVect
 			List<? extends IFeature> voronoiFeatures = null;
-			//FIXME El algoritmo a usar debe poderse especificar a traves del IGeoprocessUserEntries
-			if(useTin){
-				voronoiFeatures = Voronoier.createTIN((VoronoiAndTinInputLyr) firstLayer, operateOnlyWithSelection, algorithm.getName(), progressMonitor);
-			}else if(useThiessen){
-				voronoiFeatures = Voronoier.createThiessen((VoronoiAndTinInputLyr) firstLayer, operateOnlyWithSelection,algorithm.getName(), progressMonitor);
+			// FIXME El algoritmo a usar debe poderse especificar a traves del
+			// IGeoprocessUserEntries
+			if (useTin) {
+				voronoiFeatures = Voronoier.createTIN(
+						(VoronoiAndTinInputLyr) firstLayer,
+						operateOnlyWithSelection, algorithm.getName(),
+						progressMonitor);
+			} else if (useThiessen) {
+				voronoiFeatures = Voronoier.createThiessen(
+						(VoronoiAndTinInputLyr) firstLayer,
+						operateOnlyWithSelection, algorithm.getName(),
+						progressMonitor);
 			}
-			
-			if(progressMonitor != null){
+
+			if (progressMonitor != null) {
 				progressMonitor.setInitialStep(0);
 				int numOfSteps = voronoiFeatures.size();
 				progressMonitor.setFinalStep(numOfSteps);
 				progressMonitor.setDeterminatedProcess(true);
 				progressMonitor.setNote(Messages.getText("saving_results"));
-				progressMonitor.
-					setStatusMessage(Messages.getText("voronoi_diagram_layer_message"));
+				progressMonitor.setStatusMessage(Messages
+						.getText("voronoi_diagram_layer_message"));
 			}
-			
+
 			for (int i = 0; i < voronoiFeatures.size(); i++) {
 				featureProcessor.processFeature(voronoiFeatures.get(i));
 				if (progressMonitor != null) {
 					progressMonitor.reportStep();
 				}
-				
+
 			}
 			featureProcessor.finish();
 			if (progressMonitor != null) {
@@ -191,7 +195,7 @@ public class VoronoiGeoprocess extends AbstractMonitorableGeoprocess {
 			throw new GeoprocessException(
 					"Error al acceder a la informacion del driver dentro del geoproceso",
 					e);
-		} 
+		}
 	}
 
 	public void initialize(CancellableProgressTask progressMonitor)

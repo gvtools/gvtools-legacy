@@ -61,15 +61,16 @@ public class LabelClassPreview extends JPanel {
 
 	@Override
 	public Dimension getPreferredSize() {
-		Dimension sz = labelClass == null ? this.sz : labelClass.getBounds().getSize();
+		Dimension sz = labelClass == null ? this.sz : labelClass.getBounds()
+				.getSize();
 		int w = sz.width;
 		int h = sz.height;
 
-		if (w>300) {
+		if (w > 300) {
 			w = 300;
 		}
 
-		if (h>200) {
+		if (h > 200) {
 			h = 200;
 		}
 		sz.setSize(w, h);
@@ -93,26 +94,30 @@ public class LabelClassPreview extends JPanel {
 			int fc = sty.getFieldCount();
 			String[] texts = new String[fc];
 			for (int i = 0; i < texts.length; i++) {
-				texts[i] = PluginServices.getText(this, "text_field") + " "+(i+1);
+				texts[i] = PluginServices.getText(this, "text_field") + " "
+						+ (i + 1);
 			}
 			labelClass.setTexts(texts);
 		} else {
-			labelClass.setTexts(new String[] {PluginServices.getText(this, "text_field")});
+			labelClass.setTexts(new String[] { PluginServices.getText(this,
+					"text_field") });
 		}
 
-//		try {
-//			labelClass.drawInsideRectangle((Graphics2D) g, r);
-			Font myFont = new Font(labelClass.getTextSymbol().getFont().getName(),labelClass.getTextSymbol().getFont().getStyle(),35);
-			g.setFont(myFont);
-			g.drawString(PluginServices.getText(this, "text_field"), 0, (int)r.getCenterY());
-//		} catch (SymbolDrawingException e) {
-//			SymbologyFactory
-//					.getWarningSymbol(
-//							PluginServices.getText(this,
-//									"cant_draw_preview"),
-//							SymbolDrawingException.STR_UNSUPPORTED_SET_OF_SETTINGS,
-//							SymbolDrawingException.UNSUPPORTED_SET_OF_SETTINGS);
-//		}
+		// try {
+		// labelClass.drawInsideRectangle((Graphics2D) g, r);
+		Font myFont = new Font(labelClass.getTextSymbol().getFont().getName(),
+				labelClass.getTextSymbol().getFont().getStyle(), 35);
+		g.setFont(myFont);
+		g.drawString(PluginServices.getText(this, "text_field"), 0,
+				(int) r.getCenterY());
+		// } catch (SymbolDrawingException e) {
+		// SymbologyFactory
+		// .getWarningSymbol(
+		// PluginServices.getText(this,
+		// "cant_draw_preview"),
+		// SymbolDrawingException.STR_UNSUPPORTED_SET_OF_SETTINGS,
+		// SymbolDrawingException.UNSUPPORTED_SET_OF_SETTINGS);
+		// }
 	}
 
 	public void setLabelClass(LabelClass labelClass) {

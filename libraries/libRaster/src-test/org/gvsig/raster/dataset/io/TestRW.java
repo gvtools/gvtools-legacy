@@ -19,10 +19,7 @@
 package org.gvsig.raster.dataset.io;
 
 import java.awt.geom.AffineTransform;
-import java.io.File;
 import java.io.IOException;
-
-import junit.framework.TestCase;
 
 import org.gvsig.raster.RasterLibrary;
 import org.gvsig.raster.buffer.BufferFactory;
@@ -39,23 +36,23 @@ import org.gvsig.raster.dataset.RasterDataset;
  * Test para salvar un raster a tif variando sus parámetros.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
 public class TestRW {
-	
+
 	public static void main(String[] args) {
 		TestRW t = new TestRW();
 		t.save();
 
 	}
-	
+
 	public void save() {
 		long t1 = System.currentTimeMillis();
 		RasterLibrary.wakeUp();
 		String baseDir = "./test-images/";
 		String path1 = baseDir + "001m09_1_0.tif";
 		IBuffer buf = null;
-		
+
 		RasterDataset d = null;
 		try {
 			d = RasterDataset.open(null, path1);
@@ -65,7 +62,7 @@ public class TestRW {
 			e.printStackTrace();
 		}
 		BufferFactory bf = new BufferFactory(d);
-		bf.setDrawableBands(new int[]{0, 1, 2}); 
+		bf.setDrawableBands(new int[] { 0, 1, 2 });
 		try {
 			bf.setAreaOfInterest(0, 0, d.getWidth(), d.getHeight());
 		} catch (InvalidSetViewException e) {
@@ -76,10 +73,11 @@ public class TestRW {
 			e.printStackTrace();
 		}
 		buf = bf.getRasterBuf();
-		
+
 		try {
-			
-			convertBufferToTif("/tmp/out-TestRW.tif", d.getAffineTransform(), buf);
+
+			convertBufferToTif("/tmp/out-TestRW.tif", d.getAffineTransform(),
+					buf);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
@@ -88,34 +86,32 @@ public class TestRW {
 		long t2 = System.currentTimeMillis();
 		System.out.println("Tiempo: " + (t2 - t1) + " milisegundos");
 	}
-	
+
 	/**
-	 * Función para pruebas.
-	 * Convierte los ficheros generados por la función cachear en ficheros tif para comprobar que están
-	 * bien generados.
+	 * Función para pruebas. Convierte los ficheros generados por la función
+	 * cachear en ficheros tif para comprobar que están bien generados.
+	 * 
 	 * @param grf
 	 * @param pageBuffer
 	 * @param pageLines
 	 * @throws IOException
 	 */
-	private void convertBufferToTif(String fileName, AffineTransform at, IBuffer buffer)throws IOException, InterruptedException {
+	private void convertBufferToTif(String fileName, AffineTransform at,
+			IBuffer buffer) throws IOException, InterruptedException {
 		IDataWriter dataWriter1 = new WriterBufferServer(buffer);
 		GeoRasterWriter grw = null;
 		try {
 			Params params = GeoRasterWriter.getWriter(fileName).getParams();
-			params.changeParamValue("blocksize", "7");//posición 7 del array -> 512
+			params.changeParamValue("blocksize", "7");// posición 7 del array ->
+														// 512
 			params.changeParamValue("tfw", "true");
-			params.changeParamValue("interleave", new Integer(1));//posición 1 del array -> PIXEL
-			grw = GeoRasterWriter.getWriter(dataWriter1, 
-											fileName,
-											buffer.getBandCount(),
-											at,
-											buffer.getWidth(), 
-											buffer.getHeight(), 
-											buffer.getDataType(),
-											params,
-											null);
-			
+			params.changeParamValue("interleave", new Integer(1));// posición 1
+																	// del array
+																	// -> PIXEL
+			grw = GeoRasterWriter.getWriter(dataWriter1, fileName,
+					buffer.getBandCount(), at, buffer.getWidth(),
+					buffer.getHeight(), buffer.getDataType(), params, null);
+
 		} catch (NotSupportedExtensionException e) {
 			e.printStackTrace();
 		} catch (RasterDriverException e) {

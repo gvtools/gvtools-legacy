@@ -103,15 +103,15 @@ public class SHPLayerDefinition extends LayerDefinition {
 	private int[] fieldLenght;
 
 	private int[] decimalCount;
-	
+
 	private File shpFile;
 
 	public SHPLayerDefinition(File file) {
 		setFile(file);
 	}
-	
-	public SHPLayerDefinition(){
-		
+
+	public SHPLayerDefinition() {
+
 	}
 
 	public void setFile(File f) {
@@ -125,9 +125,8 @@ public class SHPLayerDefinition extends LayerDefinition {
 		dbfPath = strFichDbf.replaceAll("\\.SHP", ".DBF");
 
 	}
-	
-	public File getFile()
-	{
+
+	public File getFile() {
 		return shpFile;
 	}
 
@@ -135,7 +134,6 @@ public class SHPLayerDefinition extends LayerDefinition {
 		return dbfPath;
 	}
 
-	
 	public int[] getDecimalCount() {
 		return decimalCount;
 	}

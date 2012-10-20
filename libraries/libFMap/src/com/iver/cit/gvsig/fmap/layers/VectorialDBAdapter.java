@@ -62,80 +62,88 @@ import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
 import com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver;
 import com.iver.cit.gvsig.fmap.drivers.featureiterators.ReprojectWrapperFeatureIterator;
 
-
-
 /**
  * Adapta un driver de base de datos vectorial a la interfaz vectorial,
  * manteniendo además el estado necesario por una capa vectorial de base de
  * datos (parámetros de la conexión)
  */
 public class VectorialDBAdapter extends VectorialAdapter implements ISpatialDB {
-    private int numReg=-1;
-    private SelectableDataSource ds = null;
+	private int numReg = -1;
+	private SelectableDataSource ds = null;
+
 	/**
 	 * incrementa el contador de las veces que se ha abierto el fichero.
 	 * Solamente cuando el contador está a cero pide al driver que conecte con
 	 * la base de datos
 	 */
 	public void start() throws ReadDriverException {
-        ((IVectorialDatabaseDriver)driver).open();
-    }
+		((IVectorialDatabaseDriver) driver).open();
+	}
 
 	/**
 	 * decrementa el contador de número de aperturas y cuando llega a cero pide
 	 * al driver que cierre la conexion con el servidor de base de datos
 	 */
 	public void stop() throws ReadDriverException {
-	    ((IVectorialDatabaseDriver)driver).close();
+		((IVectorialDatabaseDriver) driver).close();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.layers.ISpatialDB#getFeatureIterator(java.awt.geom.Rectangle2D, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.ISpatialDB#getFeatureIterator(java.awt
+	 * .geom.Rectangle2D, java.lang.String)
 	 */
-	/* public Connection getConnection()
-	{
-	    return ((VectorialDatabaseDriver)driver).getConnection();
-	}*/
-	/* public IFeatureIterator getFeatureIterator(String sql) throws DriverException
-	{
-	    return ((VectorialDatabaseDriver)driver).getFeatureIterator(sql);
-	}*/
-	public IFeatureIterator getFeatureIterator(Rectangle2D r, String strEPSG) throws ReadDriverException
-	{
+	/*
+	 * public Connection getConnection() { return
+	 * ((VectorialDatabaseDriver)driver).getConnection(); }
+	 */
+	/*
+	 * public IFeatureIterator getFeatureIterator(String sql) throws
+	 * DriverException { return
+	 * ((VectorialDatabaseDriver)driver).getFeatureIterator(sql); }
+	 */
+	public IFeatureIterator getFeatureIterator(Rectangle2D r, String strEPSG)
+			throws ReadDriverException {
 
 		CoordinateReferenceSystem newCrs = ProjectionUtils.getCRS(strEPSG);
 		IFeatureIterator featureIterator = getFeatureIterator(r, strEPSG, null);
-		if(driver instanceof ICanReproject){
-			ICanReproject reprojectDriver = (ICanReproject)driver;
-			if(reprojectDriver.canReproject(strEPSG)){
+		if (driver instanceof ICanReproject) {
+			ICanReproject reprojectDriver = (ICanReproject) driver;
+			if (reprojectDriver.canReproject(strEPSG)) {
 				return featureIterator;
 			}
 		}
 
-		return new ReprojectWrapperFeatureIterator(featureIterator,
-									getCrs(), newCrs);
+		return new ReprojectWrapperFeatureIterator(featureIterator, getCrs(),
+				newCrs);
 	}
 
-    /* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.layers.ISpatialDB#getFeatureIterator(java.awt.geom.Rectangle2D, java.lang.String, java.lang.String[])
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.ISpatialDB#getFeatureIterator(java.awt
+	 * .geom.Rectangle2D, java.lang.String, java.lang.String[])
 	 */
-    public IFeatureIterator getFeatureIterator(Rectangle2D r, String strEPSG, String[] alphaNumericFieldsNeeded) throws ReadDriverException
-    {
-    	CoordinateReferenceSystem newCrs = ProjectionUtils.getCRS(strEPSG);
+	public IFeatureIterator getFeatureIterator(Rectangle2D r, String strEPSG,
+			String[] alphaNumericFieldsNeeded) throws ReadDriverException {
+		CoordinateReferenceSystem newCrs = ProjectionUtils.getCRS(strEPSG);
 		Rectangle2D newRect = reprojectRectIfNecessary(r, newCrs);
-    	return ((IVectorialDatabaseDriver)driver).getFeatureIterator(newRect, strEPSG, alphaNumericFieldsNeeded);
-    }
+		return ((IVectorialDatabaseDriver) driver).getFeatureIterator(newRect,
+				strEPSG, alphaNumericFieldsNeeded);
+	}
 
-
-    /*
-     * Overwrites the policy of VectorialAdapter because databases dont have external
-     * spatial indices (spatial index is internal to the database) and because some databases
-     * can reproject, and some not
-     * */
+	/*
+	 * Overwrites the policy of VectorialAdapter because databases dont have
+	 * external spatial indices (spatial index is internal to the database) and
+	 * because some databases can reproject, and some not
+	 */
 	public IFeatureIterator getFeatureIterator(Rectangle2D rect,
 			String[] fields, CoordinateReferenceSystem newCrs,
-			boolean fastIterator) throws ReadDriverException{
-		//TODO ver como incluir el concepto de fastIteration en bbdd
+			boolean fastIterator) throws ReadDriverException {
+		// TODO ver como incluir el concepto de fastIteration en bbdd
 		CoordinateReferenceSystem newProj = null;
 		if (newCrs != null) {
 			newProj = newCrs;
@@ -145,56 +153,58 @@ public class VectorialDBAdapter extends VectorialAdapter implements ISpatialDB {
 
 		String srs = ProjectionUtils.getAbrev(newProj);
 		IFeatureIterator featureIterator = getFeatureIterator(rect, srs, fields);
-		if(driver instanceof ICanReproject){
-			ICanReproject reprojectDriver = (ICanReproject)driver;
-			if(reprojectDriver.canReproject(srs)){
+		if (driver instanceof ICanReproject) {
+			ICanReproject reprojectDriver = (ICanReproject) driver;
+			if (reprojectDriver.canReproject(srs)) {
 				return featureIterator;
 			}
 		}
-		return new ReprojectWrapperFeatureIterator(featureIterator,
-									getCrs(), newProj);
-
-
+		return new ReprojectWrapperFeatureIterator(featureIterator, getCrs(),
+				newProj);
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.ISpatialDB#getFields()
 	 */
-	public String[] getFields()
-	{
-	    return ((IVectorialDatabaseDriver)driver).getFields();
-	}
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.layers.ISpatialDB#getWhereClause()
-	 */
-	public String getWhereClause()
-	{
-	    return ((IVectorialDatabaseDriver)driver).getWhereClause();
-	}
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.layers.ISpatialDB#getTableName()
-	 */
-	public String getTableName()
-	{
-	    return ((IVectorialDatabaseDriver)driver).getTableName();
+	public String[] getFields() {
+		return ((IVectorialDatabaseDriver) driver).getFields();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.layers.ISpatialDB#getWhereClause()
+	 */
+	public String getWhereClause() {
+		return ((IVectorialDatabaseDriver) driver).getWhereClause();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.layers.ISpatialDB#getTableName()
+	 */
+	public String getTableName() {
+		return ((IVectorialDatabaseDriver) driver).getTableName();
+	}
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.layers.ReadableVectorial#getShape(int)
 	 */
 	public IGeometry getShape(int index) throws ReadDriverException {
-	    IGeometry geom = null;
-	    geom = ((IVectorialDatabaseDriver)driver).getShape(index);
-        return geom;
+		IGeometry geom = null;
+		geom = ((IVectorialDatabaseDriver) driver).getShape(index);
+		return geom;
 	}
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.layers.ReadableVectorial#getShapeType()
 	 */
 	public int getShapeType() throws ReadDriverException {
-		return ((IVectorialDatabaseDriver)driver).getShapeType();
+		return ((IVectorialDatabaseDriver) driver).getShapeType();
 	}
 
 	/**
@@ -202,61 +212,67 @@ public class VectorialDBAdapter extends VectorialAdapter implements ISpatialDB {
 	 * @see com.iver.cit.gvsig.fmap.layers.VectorialAdapter#getRecordset()
 	 */
 	public SelectableDataSource getRecordset() throws ReadDriverException {
-	    if (driver instanceof ObjectDriver)
-	    {
-            if (ds == null)
-            {
-    			String name = LayerFactory.getDataSourceFactory().addDataSource((ObjectDriver)driver);
-    			try {
-                    ds = new SelectableDataSource(LayerFactory.getDataSourceFactory().createRandomDataSource(name, DataSourceFactory.AUTOMATIC_OPENING));
-                } catch (NoSuchTableException e) {
-                    throw new RuntimeException(e);
-    			} catch (DriverLoadException e) {
-					throw new ReadDriverException(name,e);
+		if (driver instanceof ObjectDriver) {
+			if (ds == null) {
+				String name = LayerFactory.getDataSourceFactory()
+						.addDataSource((ObjectDriver) driver);
+				try {
+					ds = new SelectableDataSource(LayerFactory
+							.getDataSourceFactory().createRandomDataSource(
+									name, DataSourceFactory.AUTOMATIC_OPENING));
+				} catch (NoSuchTableException e) {
+					throw new RuntimeException(e);
+				} catch (DriverLoadException e) {
+					throw new ReadDriverException(name, e);
 				}
-            }
-	    }
+			}
+		}
 		return ds;
 	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.layers.VectorialAdapter#getFeature(int)
-     */
-    public IFeature getFeature(int numReg) throws ReadDriverException {
-        IGeometry geom;
-        IFeature feat = null;
-        geom = getShape(numReg);
-        DataSource rs = getRecordset();
-        int idFieldID = getLyrDef().getIdFieldID();
-        Value[] regAtt = new Value[rs.getFieldCount()];
-        String theID = null;
-        for (int fieldId=0; fieldId < rs.getFieldCount(); fieldId++ )
-        {
-            regAtt[fieldId] =  rs.getFieldValue(numReg, fieldId);
-            if (fieldId == idFieldID)
-               theID = regAtt[fieldId].toString();
-        }
-        feat = new DefaultFeature(geom, regAtt, theID);
-        return feat;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.iver.cit.gvsig.fmap.layers.VectorialAdapter#getFeature(int)
+	 */
+	public IFeature getFeature(int numReg) throws ReadDriverException {
+		IGeometry geom;
+		IFeature feat = null;
+		geom = getShape(numReg);
+		DataSource rs = getRecordset();
+		int idFieldID = getLyrDef().getIdFieldID();
+		Value[] regAtt = new Value[rs.getFieldCount()];
+		String theID = null;
+		for (int fieldId = 0; fieldId < rs.getFieldCount(); fieldId++) {
+			regAtt[fieldId] = rs.getFieldValue(numReg, fieldId);
+			if (fieldId == idFieldID)
+				theID = regAtt[fieldId].toString();
+		}
+		feat = new DefaultFeature(geom, regAtt, theID);
+		return feat;
+	}
 
-    /* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.layers.ISpatialDB#getLyrDef()
 	 */
-    public DBLayerDefinition getLyrDef()
-    {
-        return ((IVectorialDatabaseDriver)driver).getLyrDef();
-    }
+	public DBLayerDefinition getLyrDef() {
+		return ((IVectorialDatabaseDriver) driver).getLyrDef();
+	}
 
 	public int getRowIndexByFID(IFeature feat) {
 		return ((IVectorialDatabaseDriver) driver).getRowIndexByFID(feat);
 	}
+
 	private Rectangle2D reprojectRectIfNecessary(Rectangle2D rect,
 			CoordinateReferenceSystem targetCrs) {
-		//by design, rect Rectangle2D must be in the target reprojection
-		//if targetReprojection != sourceReprojection, we are going to reproject
-		//rect to the source reprojection (is faster).
-		//once spatial check is made, result features will be reprojected in the inverse direction
+		// by design, rect Rectangle2D must be in the target reprojection
+		// if targetReprojection != sourceReprojection, we are going to
+		// reproject
+		// rect to the source reprojection (is faster).
+		// once spatial check is made, result features will be reprojected in
+		// the inverse direction
 		if (targetCrs != null && getCrs() != null
 				&& !targetCrs.getName().equals(getCrs().getName())) {
 			MathTransform trans = ProjectionUtils.getCrsTransform(targetCrs,

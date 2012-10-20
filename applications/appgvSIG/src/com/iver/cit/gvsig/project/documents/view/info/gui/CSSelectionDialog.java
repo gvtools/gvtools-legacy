@@ -14,8 +14,8 @@ import com.iver.cit.gvsig.gui.panels.crs.ISelectCrsPanel;
 /**
  * @author Luis W. Sevilla (sevilla_lui@gva.es)
  */
-public class CSSelectionDialog
-	extends CSSelectionDialogPanel implements IWindow, ISelectCrsPanel {
+public class CSSelectionDialog extends CSSelectionDialogPanel implements
+		IWindow, ISelectCrsPanel {
 	private boolean okPressed = false;
 	private CoordinateReferenceSystem lastCrs = null;
 
@@ -26,44 +26,57 @@ public class CSSelectionDialog
 		super();
 		this.init();
 	}
+
 	/**
 	 * This method initializes this
 	 * 
 	 * @return void
 	 */
 	private void init() {
-        this.setBounds(0, 0, 350, 260);
-        getAcceptButton().addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                PluginServices.getMDIManager().closeWindow(CSSelectionDialog.this);
-                okPressed = true;
-            }
-        });
-        getCancelButton().addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                setCrs(lastCrs);
-                PluginServices.getMDIManager().closeWindow(CSSelectionDialog.this);
-                okPressed = false;
-            }
-        });
+		this.setBounds(0, 0, 350, 260);
+		getAcceptButton().addActionListener(
+				new java.awt.event.ActionListener() {
+					public void actionPerformed(java.awt.event.ActionEvent e) {
+						PluginServices.getMDIManager().closeWindow(
+								CSSelectionDialog.this);
+						okPressed = true;
+					}
+				});
+		getCancelButton().addActionListener(
+				new java.awt.event.ActionListener() {
+					public void actionPerformed(java.awt.event.ActionEvent e) {
+						setCrs(lastCrs);
+						PluginServices.getMDIManager().closeWindow(
+								CSSelectionDialog.this);
+						okPressed = false;
+					}
+				});
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.View#getViewInfo()
 	 */
 	public WindowInfo getWindowInfo() {
-		WindowInfo m_viewinfo=new WindowInfo(WindowInfo.MODALDIALOG | WindowInfo.RESIZABLE);
-   		m_viewinfo.setTitle(PluginServices.getText(this, "selecciona_sistema_de_referencia"));
+		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODALDIALOG
+				| WindowInfo.RESIZABLE);
+		m_viewinfo.setTitle(PluginServices.getText(this,
+				"selecciona_sistema_de_referencia"));
 		return m_viewinfo;
 	}
 
-	public boolean isOkPressed() { return okPressed; }
-	
+	public boolean isOkPressed() {
+		return okPressed;
+	}
+
 	/**
 	 * @return
 	 */
 	public CoordinateReferenceSystem getCrs() {
 		return getProjPanel().getCrs();
 	}
+
 	/**
 	 * @param crs
 	 */
@@ -71,6 +84,7 @@ public class CSSelectionDialog
 		lastCrs = crs;
 		getProjPanel().setCrs(crs);
 	}
+
 	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}

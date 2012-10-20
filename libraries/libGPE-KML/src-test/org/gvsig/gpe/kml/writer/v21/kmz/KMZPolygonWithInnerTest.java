@@ -60,6 +60,7 @@ import org.gvsig.gpe.writer.GPEPolygonWithInnerTest;
 public class KMZPolygonWithInnerTest extends GPEPolygonWithInnerTest {
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEParserClass()
 	 */
 	public Class getGPEParserClass() {
@@ -68,17 +69,19 @@ public class KMZPolygonWithInnerTest extends GPEPolygonWithInnerTest {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEWriterHandlerClass()
 	 */
 	public Class getGPEWriterHandlerClass() {
 		return org.gvsig.gpe.kml.writer.GPEKml21WriterHandlerImplementor.class;
-	}	
-	
+	}
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getFormat()
 	 */
-	public String getFormat(){
+	public String getFormat() {
 		return "KMZ";
 	}
 }

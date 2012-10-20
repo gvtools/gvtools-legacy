@@ -50,32 +50,40 @@ import javax.swing.filechooser.FileSystemView;
 /**
  * 
  * JFileChooser.java
- * <p>JFileChooser that tracks the last visited directory for a given ID. It allows you to
- * open the JFileChooser in the same directory where you were the last time you open a file
- * in the file system.<br>
+ * <p>
+ * JFileChooser that tracks the last visited directory for a given ID. It allows
+ * you to open the JFileChooser in the same directory where you were the last
+ * time you open a file in the file system.<br>
  * </p>
  * <p>
- * It needs to specify a string defining the JFileChooser ID in order to know what kind of 
- * files you are going to open. For example after creating a JFileChooser by doing this:<br>
- * <b><code>new JFileChooser("TEMPLATES_FILECHOOSER", defaultDirectory);</code></b><br> each time
- * you create another JFileChooser anywhere giving the same ID, it will point directly to
- * the last directory where you opened a file using this JFileChooser with an equal ID.
+ * It needs to specify a string defining the JFileChooser ID in order to know
+ * what kind of files you are going to open. For example after creating a
+ * JFileChooser by doing this:<br>
+ * <b><code>new JFileChooser("TEMPLATES_FILECHOOSER", defaultDirectory);</code>
+ * </b><br>
+ * each time you create another JFileChooser anywhere giving the same ID, it
+ * will point directly to the last directory where you opened a file using this
+ * JFileChooser with an equal ID.
  * </p>
  * 
  * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Dec 5, 2007
- *
+ * 
  */
 public class JFileChooser extends javax.swing.JFileChooser {
 	private static final long serialVersionUID = -2419775752576400974L;
 	private static Hashtable<String, File> jfcLastPaths = new Hashtable<String, File>();
 	private String fileChooserID;
-	
+
 	/**
-	 * Creates a new JFileChooser with the remind last path feature. 
-	 * @param fileChooserID, the id that distinguishes the wanted files (i.e. "TEMPLATES_FILECHOOSER")
-	 * @param defaultDirectory, the default directory to go for the first time. It allows null, which
-	 *        means the user's home directory. 
+	 * Creates a new JFileChooser with the remind last path feature.
+	 * 
+	 * @param fileChooserID
+	 *            , the id that distinguishes the wanted files (i.e.
+	 *            "TEMPLATES_FILECHOOSER")
+	 * @param defaultDirectory
+	 *            , the default directory to go for the first time. It allows
+	 *            null, which means the user's home directory.
 	 */
 	public JFileChooser(String fileChooserID, File defaultDirectory) {
 		this(fileChooserID, defaultDirectory, null);
@@ -83,9 +91,13 @@ public class JFileChooser extends javax.swing.JFileChooser {
 
 	/**
 	 * Returns the Last Path for this fileChooserID
-	 * @param fileChooserID, the id that distinguishes the wanted files (i.e. "TEMPLATES_FILECHOOSER")
-	 * @param defaultDirectory, the default directory to go for the first time. It allows null, which
-	 *        means the user's home directory.
+	 * 
+	 * @param fileChooserID
+	 *            , the id that distinguishes the wanted files (i.e.
+	 *            "TEMPLATES_FILECHOOSER")
+	 * @param defaultDirectory
+	 *            , the default directory to go for the first time. It allows
+	 *            null, which means the user's home directory.
 	 * @return
 	 */
 	static public File getLastPath(String fileChooserID, File defaultDirectory) {
@@ -112,8 +124,10 @@ public class JFileChooser extends javax.swing.JFileChooser {
 
 	/**
 	 * Returns the Last Path for this JFileChooser
-	 * @param defaultDirectory, the default directory to go for the first time. It allows null, which
-	 *        means the user's home directory.
+	 * 
+	 * @param defaultDirectory
+	 *            , the default directory to go for the first time. It allows
+	 *            null, which means the user's home directory.
 	 * @return
 	 */
 	public File getLastPath(File defaultDirectory) {
@@ -122,6 +136,7 @@ public class JFileChooser extends javax.swing.JFileChooser {
 
 	/**
 	 * Returns the Last Path for this JFileChooser
+	 * 
 	 * @return
 	 */
 	public File getLastPath() {
@@ -130,6 +145,7 @@ public class JFileChooser extends javax.swing.JFileChooser {
 
 	/**
 	 * Save the Last Path for this fileChooserID
+	 * 
 	 * @param fileChooserID
 	 * @param path
 	 */
@@ -139,6 +155,7 @@ public class JFileChooser extends javax.swing.JFileChooser {
 
 	/**
 	 * Save the Last Path for this JFileChooser
+	 * 
 	 * @param path
 	 */
 	public void setLastPath(File path) {
@@ -146,29 +163,34 @@ public class JFileChooser extends javax.swing.JFileChooser {
 	}
 
 	/**
-	 * Creates a new JFileChooser with the remind last path feature. 
-	 * @param fileChooserID, the id that distinguishes the wanted files (i.e. "TEMPLATES_FILECHOOSER")
-	 * @param defaultDirectory, the default directory to go for the first time. It allows null, which
-	 *        means the user's home directory. 
+	 * Creates a new JFileChooser with the remind last path feature.
+	 * 
+	 * @param fileChooserID
+	 *            , the id that distinguishes the wanted files (i.e.
+	 *            "TEMPLATES_FILECHOOSER")
+	 * @param defaultDirectory
+	 *            , the default directory to go for the first time. It allows
+	 *            null, which means the user's home directory.
 	 */
 	public JFileChooser(String fileChooserID, String defaultDirectory) {
-		this(fileChooserID, defaultDirectory!=null ? new File(defaultDirectory) : null);
+		this(fileChooserID, defaultDirectory != null ? new File(
+				defaultDirectory) : null);
 	}
 
-    /**
-     * Constructs a <code>JFileChooser</code> using the given
-     * <code>FileSystemView</code>.
-     */
-    public JFileChooser(String fileChooserID, FileSystemView fsv) {
-	this(fileChooserID, (File) null, fsv);
-    }
+	/**
+	 * Constructs a <code>JFileChooser</code> using the given
+	 * <code>FileSystemView</code>.
+	 */
+	public JFileChooser(String fileChooserID, FileSystemView fsv) {
+		this(fileChooserID, (File) null, fsv);
+	}
 
-
-    /**
-     * Constructs a <code>JFileChooser</code> using the given current directory
-     * and <code>FileSystemView</code>.
-     */
-    public JFileChooser(String fileChooserID, File defaultDirectory, FileSystemView fsv) {
+	/**
+	 * Constructs a <code>JFileChooser</code> using the given current directory
+	 * and <code>FileSystemView</code>.
+	 */
+	public JFileChooser(String fileChooserID, File defaultDirectory,
+			FileSystemView fsv) {
 		super(fsv);
 		setDragEnabled(true);
 		if (fileChooserID == null)
@@ -178,46 +200,47 @@ public class JFileChooser extends javax.swing.JFileChooser {
 		this.fileChooserID = fileChooserID;
 
 		setCurrentDirectory(getLastPath(fileChooserID, defaultDirectory, fsv));
-    }
+	}
 
-    /**
-     * Constructs a <code>JFileChooser</code> using the given current directory
-     * path and <code>FileSystemView</code>.
-     */
-    public JFileChooser(String fileChooserID, String defaultDirectoryPath, FileSystemView fsv) {
+	/**
+	 * Constructs a <code>JFileChooser</code> using the given current directory
+	 * path and <code>FileSystemView</code>.
+	 */
+	public JFileChooser(String fileChooserID, String defaultDirectoryPath,
+			FileSystemView fsv) {
 		this(fileChooserID, defaultDirectoryPath == null ? null : new File(
 				defaultDirectoryPath), fsv);
 	}
 
 	@Override
-	public int showDialog(Component parent, String approveButtonText) throws HeadlessException {
+	public int showDialog(Component parent, String approveButtonText)
+			throws HeadlessException {
 		int response = super.showDialog(parent, approveButtonText);
 		if ((getSelectedFile() != null) && (getSelectedFile().isDirectory()))
 			setLastPath(fileChooserID, getSelectedFile());
 		else
 			setLastPath(fileChooserID, getCurrentDirectory());
 
-			return response;
-		}
+		return response;
+	}
 
-/* with this version it only reminds when a file was choosen and accepted (ok button clicked)
-     @Override
-    public int showDialog(Component parent, String approveButtonText)
-    		throws HeadlessException {
-    	int response = super.showDialog(parent, approveButtonText);
-    	if (response == javax.swing.JFileChooser.APPROVE_OPTION) {
-    		File[] ff = super.getSelectedFiles();
-    		if (ff.length>0) {
-    			String theFilePath = ff[0].getAbsolutePath().
-    				substring(0, ff[0].getAbsolutePath().lastIndexOf(File.pathSeparator));
-    			jfcLastPaths.put(fileChooserID, theFilePath);
-    		} else if (super.getSelectedFile() != null) {
-    			File f = super.getSelectedFile() ;
-    			String theFilePath = f.getAbsolutePath().
-						substring(0, f.getAbsolutePath().lastIndexOf(File.separator));
-    			jfcLastPaths.put(fileChooserID, theFilePath);
-
-    		}
-    	}
-*/
+	/*
+	 * with this version it only reminds when a file was choosen and accepted
+	 * (ok button clicked)
+	 * 
+	 * @Override public int showDialog(Component parent, String
+	 * approveButtonText) throws HeadlessException { int response =
+	 * super.showDialog(parent, approveButtonText); if (response ==
+	 * javax.swing.JFileChooser.APPROVE_OPTION) { File[] ff =
+	 * super.getSelectedFiles(); if (ff.length>0) { String theFilePath =
+	 * ff[0].getAbsolutePath(). substring(0,
+	 * ff[0].getAbsolutePath().lastIndexOf(File.pathSeparator));
+	 * jfcLastPaths.put(fileChooserID, theFilePath); } else if
+	 * (super.getSelectedFile() != null) { File f = super.getSelectedFile() ;
+	 * String theFilePath = f.getAbsolutePath(). substring(0,
+	 * f.getAbsolutePath().lastIndexOf(File.separator));
+	 * jfcLastPaths.put(fileChooserID, theFilePath);
+	 * 
+	 * } }
+	 */
 }

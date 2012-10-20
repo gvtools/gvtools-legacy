@@ -50,69 +50,71 @@ import javax.swing.JComboBox;
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class JComboBoxFontSizes extends JComboBox {
-  private static final long serialVersionUID = 3256519971028107511L;
-		private static ArrayList sizes;
-    private static float DEFAULT_FONT_SIZE = 10;
-    public JComboBoxFontSizes() {
-        super();
-        if (sizes == null) {
-            sizes = new ArrayList();
-            sizes.add(new Integer(5));
-            sizes.add(new Integer(6));
-            sizes.add(new Integer(7));
-            sizes.add(new Integer(8));
-            sizes.add(new Integer(9));
-            sizes.add(new Integer(10));
-            sizes.add(new Integer(11));
-            sizes.add(new Integer(12));
-            sizes.add(new Integer(13));
-            sizes.add(new Integer(14));
-            sizes.add(new Integer(16));
-            sizes.add(new Integer(18));
-            sizes.add(new Integer(20));
-            sizes.add(new Integer(22));
-            sizes.add(new Integer(24));
-            sizes.add(new Integer(28));
-            sizes.add(new Integer(36));
-            sizes.add(new Integer(48));
-            sizes.add(new Integer(72));
-        }
+	private static final long serialVersionUID = 3256519971028107511L;
+	private static ArrayList sizes;
+	private static float DEFAULT_FONT_SIZE = 10;
 
-        setModel(new DefaultComboBoxModel((Integer[]) sizes.toArray(new Integer[sizes.size()])));
-        setSelectedIndex(7);
-        setEditable(true);
-        setPreferredSize(new Dimension(50, 20));
-    }
+	public JComboBoxFontSizes() {
+		super();
+		if (sizes == null) {
+			sizes = new ArrayList();
+			sizes.add(new Integer(5));
+			sizes.add(new Integer(6));
+			sizes.add(new Integer(7));
+			sizes.add(new Integer(8));
+			sizes.add(new Integer(9));
+			sizes.add(new Integer(10));
+			sizes.add(new Integer(11));
+			sizes.add(new Integer(12));
+			sizes.add(new Integer(13));
+			sizes.add(new Integer(14));
+			sizes.add(new Integer(16));
+			sizes.add(new Integer(18));
+			sizes.add(new Integer(20));
+			sizes.add(new Integer(22));
+			sizes.add(new Integer(24));
+			sizes.add(new Integer(28));
+			sizes.add(new Integer(36));
+			sizes.add(new Integer(48));
+			sizes.add(new Integer(72));
+		}
 
-    public float getSelectedValue() {
-        Object v = getSelectedItem();
-        if (v instanceof Integer) {
-            return ((Integer) v).floatValue();
-        }
-        if (v instanceof String) {
-            try{
-                return Float.parseFloat((String) v);
-            } catch (Exception e) {
-                return DEFAULT_FONT_SIZE;
-            }
-        }
-        if (v instanceof Double || v instanceof Float) {
-            return ((Double) v).floatValue();
-        }
-        return DEFAULT_FONT_SIZE;
-    }
+		setModel(new DefaultComboBoxModel(
+				(Integer[]) sizes.toArray(new Integer[sizes.size()])));
+		setSelectedIndex(7);
+		setEditable(true);
+		setPreferredSize(new Dimension(50, 20));
+	}
 
-    public void setSelectedItem(Object anObject) {
-    	 if (anObject instanceof Double || anObject instanceof Float) {
-              if (((Double) anObject).doubleValue() == 10) {
-            	  super.setSelectedItem(new Integer(10));
-            	  return;
-              }
-              super.setSelectedItem(anObject);
-         } else if (anObject instanceof String) {
-        	 setSelectedItem( new Double((String)anObject));
-         } else {
-        	 super.setSelectedItem(anObject);
-         }
-    }
+	public float getSelectedValue() {
+		Object v = getSelectedItem();
+		if (v instanceof Integer) {
+			return ((Integer) v).floatValue();
+		}
+		if (v instanceof String) {
+			try {
+				return Float.parseFloat((String) v);
+			} catch (Exception e) {
+				return DEFAULT_FONT_SIZE;
+			}
+		}
+		if (v instanceof Double || v instanceof Float) {
+			return ((Double) v).floatValue();
+		}
+		return DEFAULT_FONT_SIZE;
+	}
+
+	public void setSelectedItem(Object anObject) {
+		if (anObject instanceof Double || anObject instanceof Float) {
+			if (((Double) anObject).doubleValue() == 10) {
+				super.setSelectedItem(new Integer(10));
+				return;
+			}
+			super.setSelectedItem(anObject);
+		} else if (anObject instanceof String) {
+			setSelectedItem(new Double((String) anObject));
+		} else {
+			super.setSelectedItem(anObject);
+		}
+	}
 }

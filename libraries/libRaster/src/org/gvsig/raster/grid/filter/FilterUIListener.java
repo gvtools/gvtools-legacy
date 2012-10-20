@@ -22,15 +22,16 @@ import java.util.EventListener;
 import java.util.EventObject;
 
 /**
- * Listener para acciones lanzadas por los interfaces personalizados 
- * para filtros hechos por los usuarios.
- * 28/09/2007
+ * Listener para acciones lanzadas por los interfaces personalizados para
+ * filtros hechos por los usuarios. 28/09/2007
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public interface FilterUIListener extends EventListener {
 	/**
-	 * Este evento es lanzado al terminar de rellenar todos los campos
-	 * del interfaz. Informa de que ya pueden ser recuperados.
+	 * Este evento es lanzado al terminar de rellenar todos los campos del
+	 * interfaz. Informa de que ya pueden ser recuperados.
+	 * 
 	 * @param e
 	 */
 	public void actionValuesCompleted(EventObject e);

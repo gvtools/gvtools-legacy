@@ -27,12 +27,12 @@ import org.gvsig.raster.dataset.Params;
 import org.gvsig.raster.dataset.Params.Param;
 
 /**
- * Prueba para la inserción y extracción de parámetros de los driver de escritura.
- * Lee primero los valores asignados en la inicialización y luego hace algunas
- * variaciones comprobando que los resultados sean correctos.
- *
+ * Prueba para la inserción y extracción de parámetros de los driver de
+ * escritura. Lee primero los valores asignados en la inicialización y luego
+ * hace algunas variaciones comprobando que los resultados sean correctos.
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
 public class TestWriterParams extends TestCase {
 	private GeoRasterWriter grw = null;
@@ -49,7 +49,7 @@ public class TestWriterParams extends TestCase {
 
 	public void setUp() {
 		System.err.println("TestWriterParams running...");
-		//Extensión gestionada por gdal
+		// Extensión gestionada por gdal
 		try {
 			grw = GeoRasterWriter.getWriter("prueba.tif");
 		} catch (NotSupportedExtensionException e) {
@@ -60,11 +60,11 @@ public class TestWriterParams extends TestCase {
 		wp = grw.getParams();
 	}
 
-	public void testStack(){
+	public void testStack() {
 		Param param;
-//		String blockSize = "512";
-//		Param param = wp.getParamById("blocksize");
-//		blockSize = param.list[((Integer) param.defaultValue).intValue()];
+		// String blockSize = "512";
+		// Param param = wp.getParamById("blocksize");
+		// blockSize = param.list[((Integer) param.defaultValue).intValue()];
 
 		String photometric = "RGB";
 		param = wp.getParamById("photometric");
@@ -80,22 +80,22 @@ public class TestWriterParams extends TestCase {
 
 		String tfw = (String) wp.getParamById("tfw").defaultValue.toString();
 
-//		assertEquals(blockSize, "512");
-//		assertEquals(georef, "true");
+		// assertEquals(blockSize, "512");
+		// assertEquals(georef, "true");
 		assertEquals(photometric, "RGB");
 		assertEquals(interleave, "BAND");
 		assertEquals(compression, "NONE");
 		assertEquals(tfw, "false");
 
-		wp.changeParamValue("blocksize", "6"/*"256"*/);
-		//wp.changeParamValue("georef", "false");
-		wp.changeParamValue("photometric", "1"/*"MINISBLACK"*/);
-		wp.changeParamValue("interleave", "1"/*"PIXEL"*/);
-		wp.changeParamValue("compression", "0"/*LZW*/);
+		wp.changeParamValue("blocksize", "6"/* "256" */);
+		// wp.changeParamValue("georef", "false");
+		wp.changeParamValue("photometric", "1"/* "MINISBLACK" */);
+		wp.changeParamValue("interleave", "1"/* "PIXEL" */);
+		wp.changeParamValue("compression", "0"/* LZW */);
 		wp.changeParamValue("tfw", "true");
 
-//		param = wp.getParamById("blocksize");
-//		blockSize = param.list[((Integer)param.defaultValue).intValue()];
+		// param = wp.getParamById("blocksize");
+		// blockSize = param.list[((Integer)param.defaultValue).intValue()];
 		param = wp.getParamById("photometric");
 		photometric = param.list[Integer.parseInt((String) param.defaultValue)];
 		param = wp.getParamById("interleave");
@@ -104,8 +104,8 @@ public class TestWriterParams extends TestCase {
 		compression = param.list[Integer.parseInt((String) param.defaultValue)];
 		tfw = (String) wp.getParamById("tfw").defaultValue.toString();
 
-//		assertEquals(blockSize, "256");
-//		assertEquals(georef, "false");
+		// assertEquals(blockSize, "256");
+		// assertEquals(georef, "false");
 		assertEquals(photometric, "MINISBLACK");
 		assertEquals(interleave, "PIXEL");
 		assertEquals(compression, "LZW");

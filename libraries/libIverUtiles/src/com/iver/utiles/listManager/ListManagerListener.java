@@ -42,27 +42,28 @@ package com.iver.utiles.listManager;
 
 /**
  * Interfaz listener de los eventos que lanza el control listManager
- *
+ * 
  * @author Fernando González Cortés
  */
 public interface ListManagerListener {
-    /**
-     * Invocado cuando se pulsa el botón de añadir, deberá retornar el objeto
-     * que se añade y se mostrará en la lista el resultado de su método
-     * toString(). Si implementa la interfaz Propertiable se habilitará el
-     * control Properties cuando se seleccione dicho elemento
-     *
-     * @return Objetos que se añade.
-     */
-    public Object[] addObjects();
+	/**
+	 * Invocado cuando se pulsa el botón de añadir, deberá retornar el objeto
+	 * que se añade y se mostrará en la lista el resultado de su método
+	 * toString(). Si implementa la interfaz Propertiable se habilitará el
+	 * control Properties cuando se seleccione dicho elemento
+	 * 
+	 * @return Objetos que se añade.
+	 */
+	public Object[] addObjects();
 
-    /**
-     * Invocado cuando se selecciona un elemento Propertiable de la lista y
-     * luego se pincha en el boton de propiedades
-     *
-     * @param selected Objeto seleccionado
-     *
-     * @return retornará las propiedades de dicho objeto
-     */
-    public Object getProperties(Object selected);
+	/**
+	 * Invocado cuando se selecciona un elemento Propertiable de la lista y
+	 * luego se pincha en el boton de propiedades
+	 * 
+	 * @param selected
+	 *            Objeto seleccionado
+	 * 
+	 * @return retornará las propiedades de dicho objeto
+	 */
+	public Object getProperties(Object selected);
 }

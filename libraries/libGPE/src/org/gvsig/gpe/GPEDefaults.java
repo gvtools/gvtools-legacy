@@ -80,34 +80,33 @@ import java.util.Properties;
  *
  */
 /**
- * This class is used to add properties that can be used
- * by the GPE parsers and writers.
+ * This class is used to add properties that can be used by the GPE parsers and
+ * writers.
  * <p>
- * It is not possible for the consumer application to have any
- * dependence with a concrete parser or writer. But sometimes it
- * is necessary to establish some configuration parameters
- * (principally to write). This class provides a mechanism to
- * set all these parameters using the SPI (Service Provider Interface) 
- * mechanism  
+ * It is not possible for the consumer application to have any dependence with a
+ * concrete parser or writer. But sometimes it is necessary to establish some
+ * configuration parameters (principally to write). This class provides a
+ * mechanism to set all these parameters using the SPI (Service Provider
+ * Interface) mechanism
  * </p>
  * <h2>Implementation Lookup</h2>
  * <p>
- * The SPI provides a mechanism to register a set of properties that
- * both the parsers and the writers need to work. Every parser (or writer)
- * is the responsible to create a set of parameters and register them
- * in this class
- * </p>
- * <p> 
- * To register a set of properties a file named <code>org.gvsig.gpe.IGPEProperties</code>
- * shall exist in the class path in the implementation's <code>META-INF/services</code> folder.
+ * The SPI provides a mechanism to register a set of properties that both the
+ * parsers and the writers need to work. Every parser (or writer) is the
+ * responsible to create a set of parameters and register them in this class
  * </p>
  * <p>
- * The content of the files for a given implementation consists of full qualified 
- * class names, one per line. For example, an hypotetical <code>MyParserProperties</code> 
- * in the package <code>org.gvsi.gpe.format</code> and bundled in a jar file 
- * called <code>org.gvsig.gpe.format.jar</code> shall provide the following 
- * resources:
- *  
+ * To register a set of properties a file named
+ * <code>org.gvsig.gpe.IGPEProperties</code> shall exist in the class path in
+ * the implementation's <code>META-INF/services</code> folder.
+ * </p>
+ * <p>
+ * The content of the files for a given implementation consists of full
+ * qualified class names, one per line. For example, an hypotetical
+ * <code>MyParserProperties</code> in the package
+ * <code>org.gvsi.gpe.format</code> and bundled in a jar file called
+ * <code>org.gvsig.gpe.format.jar</code> shall provide the following resources:
+ * 
  * <pre>
  * <code>
  * $jar tvf org.gvsi.gpe.format.jar
@@ -116,112 +115,117 @@ import java.util.Properties;
  * </code>
  * </pre>
  * 
- * And the content of the file <code>META-INF/services/org.gvsig.gpe.IGPEProperties</code> 
- * shall be a single line of text with the <code>org.gpe.gpe.format</code> class name.
+ * And the content of the file
+ * <code>META-INF/services/org.gvsig.gpe.IGPEProperties</code> shall be a single
+ * line of text with the <code>org.gpe.gpe.format</code> class name.
  * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  */
 public class GPEDefaults {
 	private static Properties properties = new Properties();
-				
-	static{				
+
+	static {
 		Iterator providers = availableProperties();
 		while (providers.hasNext()) {
 			IGPEProperties next = (IGPEProperties) providers.next();
 			Properties parserProperties = next.getProperties();
 			Iterator it = parserProperties.keySet().iterator();
-			while (it.hasNext()){
-				String key = (String)it.next();				
+			while (it.hasNext()) {
+				String key = (String) it.next();
 				properties.put(key, parserProperties.get(key));
-			}			
+			}
 		}
 	}
-	
+
 	/**
 	 * Returns an iterator over instances of the registered GPE properties.
+	 * 
 	 * @return all the registered GPE properties
 	 */
 	private static Iterator availableProperties() {
 		Iterator providers = sun.misc.Service.providers(IGPEProperties.class);
 		return providers;
 	}
-	
+
 	/**
-	 * Returns an iterator with the name of all the properties that 
-	 * has been established.
+	 * Returns an iterator with the name of all the properties that has been
+	 * established.
 	 */
-	public static Iterator getKeys(){
+	public static Iterator getKeys() {
 		return properties.keySet().iterator();
 	}
-	
+
 	/**
 	 * Gets a String property
+	 * 
 	 * @param key
-	 * Property name
+	 *            Property name
 	 * @return
 	 */
-	public static String getStringProperty(String key){
+	public static String getStringProperty(String key) {
 		Object obj = getProperty(key);
-		if (obj == null){
+		if (obj == null) {
 			return null;
 		}
-		return (String)obj;
+		return (String) obj;
 	}
-	
+
 	/**
 	 * Gets a int property
+	 * 
 	 * @param key
-	 * Property name
-	 * @return
-	 * The int property or -1
+	 *            Property name
+	 * @return The int property or -1
 	 */
-	public static int getIntPropertyProperty(String key){
+	public static int getIntPropertyProperty(String key) {
 		Object obj = getProperty(key);
-		if (obj == null){
+		if (obj == null) {
 			return -1;
 		}
-		if (obj instanceof Integer){
-			return ((Integer)obj).intValue();
-		}return -1;
+		if (obj instanceof Integer) {
+			return ((Integer) obj).intValue();
+		}
+		return -1;
 	}
-	
+
 	/**
-	 * Gets a boolean property. If the property doesn't exist
-	 * it returns false.
+	 * Gets a boolean property. If the property doesn't exist it returns false.
+	 * 
 	 * @param key
-	 * Property name
-	 * @return
-	 * The boolean property or false
+	 *            Property name
+	 * @return The boolean property or false
 	 */
-	public static boolean getBooleanProperty(String key){
+	public static boolean getBooleanProperty(String key) {
 		Object obj = getProperty(key);
-		if (obj == null){
+		if (obj == null) {
 			return false;
 		}
-		if (obj instanceof Boolean){
-			return ((Boolean)obj).booleanValue();
-		}return false;
+		if (obj instanceof Boolean) {
+			return ((Boolean) obj).booleanValue();
+		}
+		return false;
 	}
-	
+
 	/**
 	 * Gets a property
+	 * 
 	 * @param key
-	 * Property name
+	 *            Property name
 	 * @return
 	 */
-	public static Object getProperty(String key){
+	public static Object getProperty(String key) {
 		return properties.get(key);
 	}
-	
+
 	/**
 	 * Sets a property
+	 * 
 	 * @param key
 	 * @param value
 	 */
-	public static void setProperty(String key, Object value){
+	public static void setProperty(String key, Object value) {
 		properties.put(key, value);
 	}
-	
-	
+
 }

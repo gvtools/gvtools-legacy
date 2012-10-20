@@ -30,13 +30,16 @@ import org.gvsig.georeferencing.ui.zoom.CanvasZone;
  * Herramienta de selección de puntos de control sobre la vista
  * 
  * 17/01/2008
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
-public class SelectPointTool extends BaseViewTool implements MouseListener, MouseMotionListener {	
-    private Point2D[]                 pointSelected = null;
+public class SelectPointTool extends BaseViewTool implements MouseListener,
+		MouseMotionListener {
+	private Point2D[] pointSelected = null;
 
 	/**
 	 * Constructor. Asigna el canvas e inicializa los listeners.
+	 * 
 	 * @param canvas
 	 */
 	public SelectPointTool(CanvasZone canvas, ToolListener listener) {
@@ -45,28 +48,34 @@ public class SelectPointTool extends BaseViewTool implements MouseListener, Mous
 		canvas.addMouseMotionListener(this);
 		pointSelected = new Point2D[2];
 	}
-	
+
 	/**
-	 * Asigna el flag que activa y desactiva la herramienta 
-	 * @param active true para activarla y false para desactivarla
+	 * Asigna el flag que activa y desactiva la herramienta
+	 * 
+	 * @param active
+	 *            true para activarla y false para desactivarla
 	 */
 	public void setActive(boolean active) {
 		this.active = active;
-		if(active)
+		if (active)
 			onTool(new ToolEvent(this));
 		else
 			offTool(new ToolEvent(this));
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.rastertools.georeferencing.ui.zoom.IViewTool#draw(java.awt.image.BufferedImage, java.awt.geom.Rectangle2D)
+	 * 
+	 * @see
+	 * org.gvsig.rastertools.georeferencing.ui.zoom.IViewTool#draw(java.awt.
+	 * image.BufferedImage, java.awt.geom.Rectangle2D)
 	 */
 	public void draw(Graphics g) {
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.rastertools.georeferencing.ui.zoom.IViewTool#getResult()
 	 */
 	public Object getResult() {
@@ -77,12 +86,12 @@ public class SelectPointTool extends BaseViewTool implements MouseListener, Mous
 	 * Selecciona el punto inicial del cuadro del que se quiere el zoom
 	 */
 	public void mousePressed(MouseEvent e) {
-		if(!isActive())
+		if (!isActive())
 			return;
 		pointSelected[0] = e.getPoint();
 		pointSelected[1] = canvas.viewCoordsToWorld(pointSelected[0]);
-		for (int i = 0; i < listeners.size(); i++) 
-			((ToolListener)listeners.get(i)).endAction(new ToolEvent(this));	
+		for (int i = 0; i < listeners.size(); i++)
+			((ToolListener) listeners.get(i)).endAction(new ToolEvent(this));
 	}
 
 	public void mouseDragged(MouseEvent e) {
@@ -100,6 +109,6 @@ public class SelectPointTool extends BaseViewTool implements MouseListener, Mous
 	public void mouseExited(MouseEvent e) {
 	}
 
-	public void mouseMoved(MouseEvent e) {			
+	public void mouseMoved(MouseEvent e) {
 	}
 }

@@ -61,34 +61,38 @@ import org.gvsig.gpe.xml.stream.XmlStreamException;
 /**
  * This class parses the gml:name tag. Example:
  * <p>
+ * 
  * <pre>
  * <code>
  * &lt;gml:name&gt;GML tag name&lt;/gml:name&gt;
  * </code>
  * </pre>
+ * 
  * </p>
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class NameBinding {
-	
+
 	/**
 	 * It parses the gml:name tag
+	 * 
 	 * @param parser
-	 * The XML parser
+	 *            The XML parser
 	 * @param handler
-	 * The GPE parser that contains the content handler and
-	 * the error handler
-	 * @return
-	 * The name
+	 *            The GPE parser that contains the content handler and the error
+	 *            handler
+	 * @return The name
 	 * @throws XmlStreamException
 	 * @throws IOException
 	 */
-	public static String parse(IXmlStreamReader parser,GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
-		//Put the pointer into the value tag
+	public static String parse(IXmlStreamReader parser,
+			GPEDefaultGmlParser handler) throws XmlStreamException, IOException {
+		// Put the pointer into the value tag
 		parser.next();
-		//Retrieve the value
+		// Retrieve the value
 		String name = parser.getText();
-		//Put the value into the end tag
+		// Put the value into the end tag
 		parser.next();
 		return name;
 	}

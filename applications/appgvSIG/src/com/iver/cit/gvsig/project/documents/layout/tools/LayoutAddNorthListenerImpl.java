@@ -43,10 +43,7 @@ package com.iver.cit.gvsig.project.documents.layout.tools;
 import java.awt.Image;
 import java.awt.geom.Rectangle2D;
 
-import javax.swing.ImageIcon;
-
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Events.RectangleEvent;
 import com.iver.cit.gvsig.project.documents.layout.FLayoutUtilities;
@@ -58,20 +55,21 @@ import com.iver.cit.gvsig.project.documents.layout.fframes.gui.dialogs.FFrameNor
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.LayoutAddRectangleListener;
 
-
 /**
  * Implementaci�n de la interfaz LayoutRectangleListener como herramienta para
  * realizar una inserci�n por rect�ngulo.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LayoutAddNorthListenerImpl extends LayoutAddRectangleListener {
 	private final Image img = PluginServices.getIconTheme()
-		.get("rect-select-cursor").getImage();
+			.get("rect-select-cursor").getImage();
+
 	/**
 	 * Crea un nuevo LayoutAddRectangleListener.
-	 *
-	 * @param l Layout.
+	 * 
+	 * @param l
+	 *            Layout.
 	 */
 	public LayoutAddNorthListenerImpl(Layout l) {
 		super(l);
@@ -81,25 +79,28 @@ public class LayoutAddNorthListenerImpl extends LayoutAddRectangleListener {
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.RectangleListener#rectangle(com.iver.cit.gvsig.fmap.tools.Events.RectangleEvent)
 	 */
 	public void rectangle(RectangleEvent event) throws BehaviorException {
-		FFrameNorth fframe =(FFrameNorth)FrameFactory.createFrameFromName(FFrameNorthFactory.registerName);
+		FFrameNorth fframe = (FFrameNorth) FrameFactory
+				.createFrameFromName(FFrameNorthFactory.registerName);
 
 		fframe.setLayout(layout);
-		Rectangle2D r = new Rectangle2D.Double(); //rectOrigin.x+m_PointAnt.x,rectOrigin.y+m_PointAnt.y,m_LastPoint.x-m_PointAnt.x,m_LastPoint.y-m_PointAnt.y);
+		Rectangle2D r = new Rectangle2D.Double(); // rectOrigin.x+m_PointAnt.x,rectOrigin.y+m_PointAnt.y,m_LastPoint.x-m_PointAnt.x,m_LastPoint.y-m_PointAnt.y);
 
-		r=getRectangle(TOLERANCE);
-		fframe.setBoundBox(FLayoutUtilities.toSheetRect(r, layout.getLayoutControl().getAT()));
+		r = getRectangle(TOLERANCE);
+		fframe.setBoundBox(FLayoutUtilities.toSheetRect(r, layout
+				.getLayoutControl().getAT()));
 		FFrameNorthDialog fframedialog = new FFrameNorthDialog(layout, fframe);
-		 if (fframedialog != null) {
-	            fframedialog.setRectangle(fframe.getBoundingBox(layout.getLayoutControl().getAT()));
-	            PluginServices.getMDIManager().addWindow(fframedialog);
-	        }
-
-	    IFFrame newFrame= fframedialog.getFFrame();
-		if (newFrame!=null) {
-			layout.getLayoutContext().addFFrame(newFrame, true,true);
+		if (fframedialog != null) {
+			fframedialog.setRectangle(fframe.getBoundingBox(layout
+					.getLayoutControl().getAT()));
+			PluginServices.getMDIManager().addWindow(fframedialog);
 		}
-        PluginServices.getMainFrame().enableControls();
-        layout.getLayoutControl().refresh();
+
+		IFFrame newFrame = fframedialog.getFFrame();
+		if (newFrame != null) {
+			layout.getLayoutContext().addFFrame(newFrame, true, true);
+		}
+		PluginServices.getMainFrame().enableControls();
+		layout.getLayoutControl().refresh();
 	}
 
 	/**

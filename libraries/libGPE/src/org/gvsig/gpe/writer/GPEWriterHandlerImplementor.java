@@ -59,36 +59,38 @@ import org.gvsig.xmlschema.som.impl.XSSchemaDocumentImpl;
  */
 /**
  * This class is a common implementation for all the
- * IGPEWriterHandlerImplementor. It creates a warning 
- * message in all its methods to report to the application
- * that the writer handler doesn't support one operation.
- * If the concrete writer supports it, it has to rewrite
- * the method overriding the parent implementation.
+ * IGPEWriterHandlerImplementor. It creates a warning message in all its methods
+ * to report to the application that the writer handler doesn't support one
+ * operation. If the concrete writer supports it, it has to rewrite the method
+ * overriding the parent implementation.
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  * @author Carlos Sánchez Periñán (sanchez_carper@gva.es)
  */
-public abstract class GPEWriterHandlerImplementor implements IGPEWriterHandlerImplementor {
+public abstract class GPEWriterHandlerImplementor implements
+		IGPEWriterHandlerImplementor {
 	private String format = null;
 	private OutputStream os = null;
-	private GPEErrorHandler errorHandler = null;	
+	private GPEErrorHandler errorHandler = null;
 	private IXSSchemaDocument schemaDocument = null;
 
-	/** 
-	 * All the GPE writer handlers must implement a constructor 
-	 * with this two arguments.
+	/**
+	 * All the GPE writer handlers must implement a constructor with this two
+	 * arguments.
 	 **/
-	public GPEWriterHandlerImplementor(){
+	public GPEWriterHandlerImplementor() {
 		super();
-	}	
+	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
-	public String toString(){
+	public String toString() {
 		return getName();
 	}
-	
+
 	/**
 	 * @return the errorHandler
 	 */
@@ -97,34 +99,43 @@ public abstract class GPEWriterHandlerImplementor implements IGPEWriterHandlerIm
 	}
 
 	/**
-	 * @param errorHandler the errorHandler to set
+	 * @param errorHandler
+	 *            the errorHandler to set
 	 */
 	public void setErrorHandler(GPEErrorHandler errorHandler) {
 		this.errorHandler = errorHandler;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.IGPEWriterHandlerImplementor#setOutputStream(java.io.OutputStream)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writers.IGPEWriterHandlerImplementor#setOutputStream(java
+	 * .io.OutputStream)
 	 */
-	public void setOutputStream(OutputStream os){
+	public void setOutputStream(OutputStream os) {
 		this.os = os;
-	}	
-	
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.IGPEWriterHandlerImplementor#setFormat(java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writers.IGPEWriterHandlerImplementor#setFormat(java.lang
+	 * .String)
 	 */
 	public void setFormat(String format) {
 		this.format = format;
-	}	
-	
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.IGPEWriterHandlerImplementor#getSchemaDocument()
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writers.IGPEWriterHandlerImplementor#getSchemaDocument()
 	 */
 	public IXSSchemaDocument getSchemaDocument() {
-		if (schemaDocument == null){
+		if (schemaDocument == null) {
 			schemaDocument = new XSSchemaDocumentImpl();
 		}
 		return schemaDocument;
@@ -132,23 +143,31 @@ public abstract class GPEWriterHandlerImplementor implements IGPEWriterHandlerIm
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.IGPEWriterHandlerImplementor#setSchemaDocument(org.gvsig.xmlschema.som.IXSSchemaDocument)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writers.IGPEWriterHandlerImplementor#setSchemaDocument(
+	 * org.gvsig.xmlschema.som.IXSSchemaDocument)
 	 */
 	public void setSchemaDocument(IXSSchemaDocument schemaDocument) {
 		this.schemaDocument = schemaDocument;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writer.IGPEWriterHandlerImplementor#startPoint(java.lang.String, org.gvsig.gpe.parser.ICoordinateIterator, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writer.IGPEWriterHandlerImplementor#startPoint(java.lang
+	 * .String, org.gvsig.gpe.parser.ICoordinateIterator, java.lang.String)
 	 */
 	public void startPoint(String id, ICoordinateIterator coords, String srs) {
 		getErrorHandler().addWarning(
-				new FeatureNotSupportedWarning(FeatureNotSupportedWarning.POINTCREATION,getName()));
+				new FeatureNotSupportedWarning(
+						FeatureNotSupportedWarning.POINTCREATION, getName()));
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#endPoint()
 	 */
 	public void endPoint() {
@@ -157,68 +176,95 @@ public abstract class GPEWriterHandlerImplementor implements IGPEWriterHandlerIm
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writer.IGPEWriterHandlerImplementor#startLineString(java.lang.String, org.gvsig.gpe.parser.ICoordinateIterator, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writer.IGPEWriterHandlerImplementor#startLineString(java
+	 * .lang.String, org.gvsig.gpe.parser.ICoordinateIterator, java.lang.String)
 	 */
-	public void startLineString(String id, ICoordinateIterator coords, String srs) {
+	public void startLineString(String id, ICoordinateIterator coords,
+			String srs) {
 		getErrorHandler().addWarning(
-				new FeatureNotSupportedWarning(FeatureNotSupportedWarning.LINESTRINGCREATION,getName()));
+				new FeatureNotSupportedWarning(
+						FeatureNotSupportedWarning.LINESTRINGCREATION,
+						getName()));
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#endLineString()
-	 */	
+	 */
 	public void endLineString() {
 
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writer.IGPEWriterHandlerImplementor#startLinearRing(java.lang.String, org.gvsig.gpe.parser.ICoordinateIterator, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writer.IGPEWriterHandlerImplementor#startLinearRing(java
+	 * .lang.String, org.gvsig.gpe.parser.ICoordinateIterator, java.lang.String)
 	 */
-	public void startLinearRing(String id, ICoordinateIterator coords, String srs) {
+	public void startLinearRing(String id, ICoordinateIterator coords,
+			String srs) {
 		getErrorHandler().addWarning(
-				new FeatureNotSupportedWarning(FeatureNotSupportedWarning.LINEARRINGCREATION,getName()));
-	}	
+				new FeatureNotSupportedWarning(
+						FeatureNotSupportedWarning.LINEARRINGCREATION,
+						getName()));
+	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#endLinearRing()
 	 */
 	public void endLinearRing() {
-		
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writer.IGPEWriterHandlerImplementor#startPolygon(java.lang.String, org.gvsig.gpe.parser.ICoordinateIterator, java.lang.String)
-	 */
-	public void startPolygon(String id, ICoordinateIterator coords, String srs) {
-		getErrorHandler().addWarning(
-				new FeatureNotSupportedWarning(FeatureNotSupportedWarning.POLYGONCREATION,getName()));
+
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writer.IGPEWriterHandlerImplementor#startPolygon(java.lang
+	 * .String, org.gvsig.gpe.parser.ICoordinateIterator, java.lang.String)
+	 */
+	public void startPolygon(String id, ICoordinateIterator coords, String srs) {
+		getErrorHandler().addWarning(
+				new FeatureNotSupportedWarning(
+						FeatureNotSupportedWarning.POLYGONCREATION, getName()));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#endPolygon()
 	 */
 	public void endPolygon() {
 
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writer.IGPEWriterHandlerImplementor#startInnerBoundary(java.lang.String, org.gvsig.gpe.parser.ICoordinateIterator, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writer.IGPEWriterHandlerImplementor#startInnerBoundary(
+	 * java.lang.String, org.gvsig.gpe.parser.ICoordinateIterator,
+	 * java.lang.String)
 	 */
-	public void startInnerBoundary(String id, ICoordinateIterator coords, String srs) {
+	public void startInnerBoundary(String id, ICoordinateIterator coords,
+			String srs) {
 		getErrorHandler().addWarning(
-				new FeatureNotSupportedWarning(FeatureNotSupportedWarning.INNERBOUNDARYCREATION,getName()));
+				new FeatureNotSupportedWarning(
+						FeatureNotSupportedWarning.INNERBOUNDARYCREATION,
+						getName()));
 	}
-	
-/*
- * (non-Javadoc)
- * @see org.gvsig.gpe.writers.IGPEWriterHandler#endInnerBoundary()
- */
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#endInnerBoundary()
+	 */
 	public void endInnerBoundary() {
 		// TODO Auto-generated method stub
 
@@ -226,15 +272,16 @@ public abstract class GPEWriterHandlerImplementor implements IGPEWriterHandlerIm
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#initialize()
 	 */
 	public void initialize() {
-		
 
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#close()
 	 */
 	public void close() {
@@ -244,34 +291,44 @@ public abstract class GPEWriterHandlerImplementor implements IGPEWriterHandlerIm
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writer.IGPEWriterHandlerImplementor#startBbox(java.lang.String, org.gvsig.gpe.parser.ICoordinateIterator, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writer.IGPEWriterHandlerImplementor#startBbox(java.lang
+	 * .String, org.gvsig.gpe.parser.ICoordinateIterator, java.lang.String)
 	 */
-	public void startBbox(String id, ICoordinateIterator  coords, String srs) {
+	public void startBbox(String id, ICoordinateIterator coords, String srs) {
 		getErrorHandler().addWarning(
-				new FeatureNotSupportedWarning(FeatureNotSupportedWarning.BBOXCREATION,getName()));
-	}
-	
-/*
- * (non-Javadoc)
- * @see org.gvsig.gpe.writers.IGPEWriterHandler#endBbox()
- */
-	public void endBbox() {
-		
+				new FeatureNotSupportedWarning(
+						FeatureNotSupportedWarning.BBOXCREATION, getName()));
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#startElement(java.lang.String, java.lang.Object, java.lang.Object)
+	 * 
+	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#endBbox()
+	 */
+	public void endBbox() {
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writers.IGPEWriterHandler#startElement(java.lang.String,
+	 * java.lang.Object, java.lang.Object)
 	 */
 	public void startElement(String name, Object value, String xsElementName) {
 		getErrorHandler().addWarning(
-				new FeatureNotSupportedWarning(FeatureNotSupportedWarning.ELEMENTCREATION,getName()));
+				new FeatureNotSupportedWarning(
+						FeatureNotSupportedWarning.ELEMENTCREATION, getName()));
 	}
 
-/*+
- * (non-Javadoc)
- * @see org.gvsig.gpe.writers.IGPEWriterHandler#endElement()
- */
+	/*
+	 * + (non-Javadoc)
+	 * 
+	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#endElement()
+	 */
 	public void endElement() {
 		// TODO Auto-generated method stub
 
@@ -279,17 +336,21 @@ public abstract class GPEWriterHandlerImplementor implements IGPEWriterHandlerIm
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#startLayer(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * 
+	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#startLayer(java.lang.String,
+	 * java.lang.String, java.lang.String, java.lang.String)
 	 */
-	public void startLayer(String id, String name, String description, String srs, String xsElementName) {
+	public void startLayer(String id, String name, String description,
+			String srs, String xsElementName) {
 		// TODO Auto-generated method stub
 
 	}
-	
-/*
- * (non-Javadoc)
- * @see org.gvsig.gpe.writers.IGPEWriterHandler#endLayer()
- */
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#endLayer()
+	 */
 	public void endLayer() {
 		// TODO Auto-generated method stub
 
@@ -297,15 +358,20 @@ public abstract class GPEWriterHandlerImplementor implements IGPEWriterHandlerIm
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#startFeature(java.lang.String, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writers.IGPEWriterHandler#startFeature(java.lang.String,
+	 * java.lang.String)
 	 */
 	public void startFeature(String id, String name, String xsElementName) {
 		getErrorHandler().addWarning(
-				new FeatureNotSupportedWarning(FeatureNotSupportedWarning.FEATURECREATION,getName()));	
+				new FeatureNotSupportedWarning(
+						FeatureNotSupportedWarning.FEATURECREATION, getName()));
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#endFeature()
 	 */
 	public void endFeature() {
@@ -315,15 +381,21 @@ public abstract class GPEWriterHandlerImplementor implements IGPEWriterHandlerIm
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#startMultiPoint(java.lang.String, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writers.IGPEWriterHandler#startMultiPoint(java.lang.String,
+	 * java.lang.String)
 	 */
 	public void startMultiPoint(String id, String srs) {
 		getErrorHandler().addWarning(
-				new FeatureNotSupportedWarning(FeatureNotSupportedWarning.MULTIPOINTCREATION,getName()));		
+				new FeatureNotSupportedWarning(
+						FeatureNotSupportedWarning.MULTIPOINTCREATION,
+						getName()));
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#endMuliPoint()
 	 */
 	public void endMultiPoint() {
@@ -332,15 +404,21 @@ public abstract class GPEWriterHandlerImplementor implements IGPEWriterHandlerIm
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#startMultiLineString(java.lang.String, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writers.IGPEWriterHandler#startMultiLineString(java.lang
+	 * .String, java.lang.String)
 	 */
 	public void startMultiLineString(String id, String srs) {
 		getErrorHandler().addWarning(
-				new FeatureNotSupportedWarning(FeatureNotSupportedWarning.MULTILINESTRINGCREATION,getName()));
+				new FeatureNotSupportedWarning(
+						FeatureNotSupportedWarning.MULTILINESTRINGCREATION,
+						getName()));
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#endMultiLineString()
 	 */
 	public void endMultiLineString() {
@@ -349,15 +427,21 @@ public abstract class GPEWriterHandlerImplementor implements IGPEWriterHandlerIm
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#startMultiPolygon(java.lang.String, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writers.IGPEWriterHandler#startMultiPolygon(java.lang.String
+	 * , java.lang.String)
 	 */
 	public void startMultiPolygon(String id, String srs) {
 		getErrorHandler().addWarning(
-				new FeatureNotSupportedWarning(FeatureNotSupportedWarning.MULTIPOLYGONCREATION,getName()));
+				new FeatureNotSupportedWarning(
+						FeatureNotSupportedWarning.MULTIPOLYGONCREATION,
+						getName()));
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#endMultiPolygon()
 	 */
 	public void endMultiPolygon() {
@@ -366,15 +450,21 @@ public abstract class GPEWriterHandlerImplementor implements IGPEWriterHandlerIm
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#startMultiGeometry(java.lang.String, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.writers.IGPEWriterHandler#startMultiGeometry(java.lang.
+	 * String, java.lang.String)
 	 */
 	public void startMultiGeometry(String id, String srs) {
 		getErrorHandler().addWarning(
-				new FeatureNotSupportedWarning(FeatureNotSupportedWarning.MULTIGEOMETRYCREATION,getName()));
+				new FeatureNotSupportedWarning(
+						FeatureNotSupportedWarning.MULTIGEOMETRYCREATION,
+						getName()));
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.IGPEWriterHandler#endMultiGeometry()
 	 */
 	public void endMultiGeometry() {

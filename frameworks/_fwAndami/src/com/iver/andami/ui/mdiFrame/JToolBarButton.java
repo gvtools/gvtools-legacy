@@ -43,7 +43,8 @@ package com.iver.andami.ui.mdiFrame;
 import javax.swing.Action;
 import javax.swing.Icon;
 
-public class JToolBarButton extends javax.swing.JButton implements EnableTextSupport{
+public class JToolBarButton extends javax.swing.JButton implements
+		EnableTextSupport {
 	/**
 	 * 
 	 */
@@ -51,6 +52,7 @@ public class JToolBarButton extends javax.swing.JButton implements EnableTextSup
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
 	/**
 	 * @param text
 	 */
@@ -58,6 +60,7 @@ public class JToolBarButton extends javax.swing.JButton implements EnableTextSup
 		super(text);
 		// TODO Auto-generated constructor stub
 	}
+
 	/**
 	 * @param text
 	 * @param icon
@@ -66,6 +69,7 @@ public class JToolBarButton extends javax.swing.JButton implements EnableTextSup
 		super(text, icon);
 		// TODO Auto-generated constructor stub
 	}
+
 	/**
 	 * @param a
 	 */
@@ -73,6 +77,7 @@ public class JToolBarButton extends javax.swing.JButton implements EnableTextSup
 		super(a);
 		// TODO Auto-generated constructor stub
 	}
+
 	/**
 	 * @param icon
 	 */
@@ -80,35 +85,37 @@ public class JToolBarButton extends javax.swing.JButton implements EnableTextSup
 		super(icon);
 		// TODO Auto-generated constructor stub
 	}
+
 	private String enableText;
 	private String toolTip;
-	
-	
+
 	/**
 	 * @return Returns the enableText.
 	 */
 	public String getEnableText() {
 		return enableText;
 	}
+
 	/**
-	 * @param enableText The enableText to set.
+	 * @param enableText
+	 *            The enableText to set.
 	 */
 	public void setEnableText(String enableText) {
 		this.enableText = enableText;
 	}
-	
-	
+
 	/**
 	 * @see java.awt.Component#setVisible(boolean)
 	 */
 	public void setEnabled(boolean aFlag) {
 		super.setEnabled(aFlag);
-		if (aFlag){
+		if (aFlag) {
 			setToolTipText(toolTip);
-		}else{
+		} else {
 			setToolTipText(enableText);
 		}
 	}
+
 	/**
 	 * @see javax.swing.JComponent#setToolTipText(java.lang.String)
 	 */

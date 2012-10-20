@@ -27,15 +27,16 @@ import com.iver.utiles.IPersistence;
 import com.iver.utiles.XMLEntity;
 
 /**
- * Stores the backup configuration in memory, and offers a simple
- * interface to change them.
- *
+ * Stores the backup configuration in memory, and offers a simple interface to
+ * change them.
+ * 
  * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
  */
 public class BackupConfig implements IPersistence {
 	public static final String BACKUP_PROJECT_TO_BE_OVERWRITTEN_ID = "backup_project_to_be_overwritten";
 
-	protected boolean backupProjectToBeOverwritten = false; // By default -> false
+	protected boolean backupProjectToBeOverwritten = false; // By default ->
+															// false
 	protected XMLEntity xmlConfig = null;
 
 	/**
@@ -46,51 +47,60 @@ public class BackupConfig implements IPersistence {
 
 		initConfig();
 	}
-	
+
 	/*
 	 * @see com.iver.utiles.IPersistance#getClassName()
-	 */	
+	 */
 	public String getClassName() {
 		return this.getClass().getName();
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.utiles.IPersistance#getXMLEntity()
 	 */
 	public XMLEntity getXMLEntity() {
 		XMLEntity xml = new XMLEntity();
-		xml.putProperty(BACKUP_PROJECT_TO_BE_OVERWRITTEN_ID, backupProjectToBeOverwritten);
-		
+		xml.putProperty(BACKUP_PROJECT_TO_BE_OVERWRITTEN_ID,
+				backupProjectToBeOverwritten);
+
 		return xml;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.utiles.IPersistance#setXMLEntity(com.iver.utiles.XMLEntity)
 	 */
 	public void setXMLEntity(XMLEntity xml) {
 		if (xml.contains(BACKUP_PROJECT_TO_BE_OVERWRITTEN_ID)) {
-			backupProjectToBeOverwritten = xml.getBooleanProperty(BACKUP_PROJECT_TO_BE_OVERWRITTEN_ID);
-		}
-		else {
+			backupProjectToBeOverwritten = xml
+					.getBooleanProperty(BACKUP_PROJECT_TO_BE_OVERWRITTEN_ID);
+		} else {
 			backupProjectToBeOverwritten = false; // By default -> false
 		}
 	}
 
 	/**
-	 * Sets the XML property {@link BackupConfig#BACKUP_PROJECT_TO_BE_OVERWRITTEN_ID BackupConfig#BACKUP_PROJECT_TO_BE_OVERWRITTEN_ID}
-	 *
-	 * @param b the value to persist
+	 * Sets the XML property
+	 * {@link BackupConfig#BACKUP_PROJECT_TO_BE_OVERWRITTEN_ID
+	 * BackupConfig#BACKUP_PROJECT_TO_BE_OVERWRITTEN_ID}
+	 * 
+	 * @param b
+	 *            the value to persist
 	 */
 	public void setBackupProjectToBeOverwritten(boolean b) {
 		backupProjectToBeOverwritten = b;
-		xmlConfig.putProperty(BACKUP_PROJECT_TO_BE_OVERWRITTEN_ID, backupProjectToBeOverwritten);
+		xmlConfig.putProperty(BACKUP_PROJECT_TO_BE_OVERWRITTEN_ID,
+				backupProjectToBeOverwritten);
 	}
-	
+
 	/**
-	 * Gets the XML property {@link BackupConfig#BACKUP_PROJECT_TO_BE_OVERWRITTEN_ID BackupConfig#BACKUP_PROJECT_TO_BE_OVERWRITTEN_ID}
-	 *
+	 * Gets the XML property
+	 * {@link BackupConfig#BACKUP_PROJECT_TO_BE_OVERWRITTEN_ID
+	 * BackupConfig#BACKUP_PROJECT_TO_BE_OVERWRITTEN_ID}
+	 * 
 	 * @return the value to persist
 	 */
 	public boolean isBackupProjectToBeOverwritten() {
@@ -106,16 +116,17 @@ public class BackupConfig implements IPersistence {
 		XMLEntity child;
 		boolean found = false;
 
-		for (int i=0; i<xml.getChildrenCount(); i++) {
-			child = xml.getChild(i); 
+		for (int i = 0; i < xml.getChildrenCount(); i++) {
+			child = xml.getChild(i);
 			if (child.contains(BACKUP_PROJECT_TO_BE_OVERWRITTEN_ID)) {
 				setXMLEntity(child);
 				found = true;
 				xmlConfig = child;
-				backupProjectToBeOverwritten = child.getBooleanProperty(BACKUP_PROJECT_TO_BE_OVERWRITTEN_ID);
+				backupProjectToBeOverwritten = child
+						.getBooleanProperty(BACKUP_PROJECT_TO_BE_OVERWRITTEN_ID);
 			}
 		}
-		if (!found)  {
+		if (!found) {
 			child = getXMLEntity();
 			xml.addChild(child);
 			xmlConfig = child;

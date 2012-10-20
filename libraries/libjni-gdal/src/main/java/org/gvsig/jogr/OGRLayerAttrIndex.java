@@ -26,22 +26,25 @@
 
 package org.gvsig.jogr;
 
-
-/** 
+/**
  * 
- * @author Nacho Brodin <brodin_ign@gva.es>.<BR> Equipo de desarrollo gvSIG.<BR> http://www.gvsig.gva.es
+ * @author Nacho Brodin <brodin_ign@gva.es>.<BR>
+ *         Equipo de desarrollo gvSIG.<BR>
+ *         http://www.gvsig.gva.es
  * @version 0.0
  * @link http://www.gvsig.gva.es
  */
 
-public class OGRLayerAttrIndex extends JNIBase{
-	
+public class OGRLayerAttrIndex extends JNIBase {
+
 	/**
 	 * Constructor
-	 * @param cPtr	dirección de memoria al objeto OGRLayerAttrIndex de C. 
+	 * 
+	 * @param cPtr
+	 *            dirección de memoria al objeto OGRLayerAttrIndex de C.
 	 */
-	
-	public OGRLayerAttrIndex(long cPtr){
-		this.cPtr=cPtr;
+
+	public OGRLayerAttrIndex(long cPtr) {
+		this.cPtr = cPtr;
 	}
 }

@@ -1,21 +1,21 @@
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
-*
-* Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License
-* as published by the Free Software Foundation; either version 2
-* of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
-*/
+ *
+ * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
+ */
 package org.gvsig.rastertools.overviews;
 
 import org.gvsig.addo.BuildingOverviewsException;
@@ -31,18 +31,21 @@ import com.iver.andami.PluginServices;
 
 /**
  * Proceso para la generación de overviews.
- *
+ * 
  * 10/12/2007
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
-public class OverviewsProcess extends RasterProcess implements IOverviewIncrement {
-	private FLyrRasterSE rasterSE      = null;
-	private int          value         = 0;
-	private int          resamplingAlg = Jaddo.AVERAGE;
-	private int[]        overviews     = new int[] { 2, 4, 8, 16 };
+public class OverviewsProcess extends RasterProcess implements
+		IOverviewIncrement {
+	private FLyrRasterSE rasterSE = null;
+	private int value = 0;
+	private int resamplingAlg = Jaddo.AVERAGE;
+	private int[] overviews = new int[] { 2, 4, 8, 16 };
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.rastertools.RasterProcess#init()
 	 */
 	public void init() {
@@ -50,9 +53,13 @@ public class OverviewsProcess extends RasterProcess implements IOverviewIncremen
 
 		int overviewsRate = 2;
 		int nOverviews = 4;
-		overviewsRate = Configuration.getValue("overviews_rate", new Integer(overviewsRate)).intValue();
-		nOverviews = Configuration.getValue("overviews_number", new Integer(nOverviews)).intValue();
-		resamplingAlg = Configuration.getValue("overviews_resampling_algorithm", new Integer(resamplingAlg)).intValue();
+		overviewsRate = Configuration.getValue("overviews_rate",
+				new Integer(overviewsRate)).intValue();
+		nOverviews = Configuration.getValue("overviews_number",
+				new Integer(nOverviews)).intValue();
+		resamplingAlg = Configuration.getValue(
+				"overviews_resampling_algorithm", new Integer(resamplingAlg))
+				.intValue();
 
 		// Leemos de la configuración los valores de algoritmo a usar,
 		// número de overviews a generar y proporción de la primera overview
@@ -64,8 +71,7 @@ public class OverviewsProcess extends RasterProcess implements IOverviewIncremen
 	}
 
 	/**
-	 * Método donde se ejecutará el Thread, aquí se generaran las
-	 * overviews
+	 * Método donde se ejecutará el Thread, aquí se generaran las overviews
 	 */
 	public void process() {
 		insertLineLog(PluginServices.getText(this, "overviews_generating"));
@@ -75,7 +81,8 @@ public class OverviewsProcess extends RasterProcess implements IOverviewIncremen
 		try {
 			for (int i = 0; i < rasterSE.getFileCount(); i++) {
 				insertLineLog(" Dataset: " + i);
-				build.buildOverviews(resamplingAlg, rasterSE.getFileName()[i], overviews);
+				build.buildOverviews(resamplingAlg, rasterSE.getFileName()[i],
+						overviews);
 			}
 			if (externalActions != null)
 				externalActions.end(rasterSE);
@@ -92,6 +99,7 @@ public class OverviewsProcess extends RasterProcess implements IOverviewIncremen
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.incrementabletask.IIncrementable#getPercent()
 	 */
 	public int getPercent() {
@@ -100,6 +108,7 @@ public class OverviewsProcess extends RasterProcess implements IOverviewIncremen
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.addo.IOverviewIncrement#setPercent(int)
 	 */
 	public void setPercent(int value) {
@@ -108,6 +117,7 @@ public class OverviewsProcess extends RasterProcess implements IOverviewIncremen
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gui.beans.incrementabletask.IIncrementable#getTitle()
 	 */
 	public String getTitle() {

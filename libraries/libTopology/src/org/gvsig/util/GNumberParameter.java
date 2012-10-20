@@ -42,56 +42,60 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.util;
 
 import java.lang.reflect.Field;
 
-public final class GNumberParameter extends GParameter{
+public final class GNumberParameter extends GParameter {
 
 	private boolean integer = false;
-	
-	
-	public GNumberParameter(String paramName, Number defaultValue, 
-							Object paramReference, boolean integer) {
+
+	public GNumberParameter(String paramName, Number defaultValue,
+			Object paramReference, boolean integer) {
 		super(paramName, NUMBER_PARAM_TYPE, defaultValue, paramReference);
 		this.integer = integer;
 	}
-	
-	public boolean isInteger(){
+
+	public boolean isInteger() {
 		return integer;
 	}
-	
-	public void setInteger(boolean integer){
+
+	public void setInteger(boolean integer) {
 		this.integer = integer;
 	}
-	
+
 	public void setValue(Object obj) {
 		try {
 			Field field;
-			if(! (obj instanceof Number)){
-//				paramType.getField(paramName).set(parentReference, defaultValue);
+			if (!(obj instanceof Number)) {
+				// paramType.getField(paramName).set(parentReference,
+				// defaultValue);
 				field = parentReference.getClass().getDeclaredField(paramName);
 				field.setAccessible(true);
 				field.set(parentReference, defaultValue);
 			}
-			if(isInteger()){
+			if (isInteger()) {
 				field = parentReference.getClass().getDeclaredField(paramName);
-			    field.setAccessible(true);
-			    field.set(parentReference, new Integer(((Number)obj).intValue()));
+				field.setAccessible(true);
+				field.set(parentReference,
+						new Integer(((Number) obj).intValue()));
 			}
-//				paramType.getField(paramName).set(parentReference, new Integer(((Number)obj).intValue()));
-			else{
+			// paramType.getField(paramName).set(parentReference, new
+			// Integer(((Number)obj).intValue()));
+			else {
 				field = parentReference.getClass().getDeclaredField(paramName);
-			    field.setAccessible(true);
-			    field.set(parentReference, new Double(((Number)obj).doubleValue()));
+				field.setAccessible(true);
+				field.set(parentReference,
+						new Double(((Number) obj).doubleValue()));
 			}
-//				paramType.getField(paramName).set(parentReference, new Double(((Number)obj).doubleValue()));
+			// paramType.getField(paramName).set(parentReference, new
+			// Double(((Number)obj).doubleValue()));
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		}
 	}
 }

@@ -47,10 +47,7 @@ import java.awt.Toolkit;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import javax.swing.ImageIcon;
-
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Events.RectangleEvent;
 import com.iver.cit.gvsig.project.documents.layout.fframes.FFrameGraphics;
@@ -58,26 +55,27 @@ import com.iver.cit.gvsig.project.documents.layout.fframes.FFrameGraphicsFactory
 import com.iver.cit.gvsig.project.documents.layout.fframes.FrameFactory;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
-
 /**
  * Implementación de la interfaz LayoutRectangleListener como herramienta para
  * realizar una inserción por rectángulo.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LayoutAddRectangleListener implements LayoutRectangleListener {
-//	private final Image img = new ImageIcon(MapControl.class.getResource(
-//				"images/RectSelectCursor.gif")).getImage();
-	private final Image img = PluginServices.getIconTheme().get("rect-select-cursor").getImage();
-	private final Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(img,
-			new Point(16, 16), "");
+	// private final Image img = new ImageIcon(MapControl.class.getResource(
+	// "images/RectSelectCursor.gif")).getImage();
+	private final Image img = PluginServices.getIconTheme()
+			.get("rect-select-cursor").getImage();
+	private final Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(
+			img, new Point(16, 16), "");
 	protected Layout layout;
-	protected static int TOLERANCE=15;
+	protected static int TOLERANCE = 15;
 
 	/**
 	 * Crea un nuevo LayoutAddRectangleListener.
-	 *
-	 * @param l Layout.
+	 * 
+	 * @param l
+	 *            Layout.
 	 */
 	public LayoutAddRectangleListener(Layout l) {
 		this.layout = l;
@@ -87,15 +85,19 @@ public class LayoutAddRectangleListener implements LayoutRectangleListener {
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.RectangleListener#rectangle(com.iver.cit.gvsig.fmap.tools.Events.RectangleEvent)
 	 */
 	public void rectangle(RectangleEvent event) throws BehaviorException {
-		FFrameGraphics fframe =(FFrameGraphics)FrameFactory.createFrameFromName(FFrameGraphicsFactory.registerName);
+		FFrameGraphics fframe = (FFrameGraphics) FrameFactory
+				.createFrameFromName(FFrameGraphicsFactory.registerName);
 
 		fframe.setLayout(layout);
-		fframe.setGeometryAdapter(layout.getLayoutControl().getGeometryAdapter());
-		fframe.update(FFrameGraphics.RECTANGLE, layout.getLayoutControl().getAT());
-		fframe.setBoundBox(layout.getLayoutControl().getGeometryAdapter().getBounds2D());
-		layout.getLayoutContext().addFFrame(fframe, true,true);
+		fframe.setGeometryAdapter(layout.getLayoutControl()
+				.getGeometryAdapter());
+		fframe.update(FFrameGraphics.RECTANGLE, layout.getLayoutControl()
+				.getAT());
+		fframe.setBoundBox(layout.getLayoutControl().getGeometryAdapter()
+				.getBounds2D());
+		layout.getLayoutContext().addFFrame(fframe, true, true);
 		PluginServices.getMainFrame().enableControls();
-        layout.getLayoutControl().refresh();
+		layout.getLayoutControl().refresh();
 	}
 
 	/**
@@ -104,7 +106,8 @@ public class LayoutAddRectangleListener implements LayoutRectangleListener {
 	public Image getImageCursor() {
 		return img;
 	}
-	public Cursor getCursor(){
+
+	public Cursor getCursor() {
 		return cur;
 	}
 
@@ -114,45 +117,57 @@ public class LayoutAddRectangleListener implements LayoutRectangleListener {
 	public boolean cancelDrawing() {
 		return false;
 	}
+
 	protected Rectangle2D getRectangle(int tolerance) {
-		Rectangle2D r=new Rectangle2D.Double();
-		if (isCorrectSize(tolerance,layout.getLayoutControl().getFirstPoint(),layout.getLayoutControl().getLastPoint())){
-			Point2D fp=layout.getLayoutControl().getFirstPoint();
-			Point2D lp=layout.getLayoutControl().getLastPoint();
-			if (fp.getX()<lp.getX()){
-				if (fp.getY()<lp.getY()){
-					r.setRect(fp.getX(),fp.getY(),lp.getX()-fp.getX(),lp.getY()-fp.getY());
-				}else{
-					r.setRect(fp.getX(),lp.getY(),lp.getX()-fp.getX(),fp.getY()-lp.getY());
+		Rectangle2D r = new Rectangle2D.Double();
+		if (isCorrectSize(tolerance, layout.getLayoutControl().getFirstPoint(),
+				layout.getLayoutControl().getLastPoint())) {
+			Point2D fp = layout.getLayoutControl().getFirstPoint();
+			Point2D lp = layout.getLayoutControl().getLastPoint();
+			if (fp.getX() < lp.getX()) {
+				if (fp.getY() < lp.getY()) {
+					r.setRect(fp.getX(), fp.getY(), lp.getX() - fp.getX(),
+							lp.getY() - fp.getY());
+				} else {
+					r.setRect(fp.getX(), lp.getY(), lp.getX() - fp.getX(),
+							fp.getY() - lp.getY());
 				}
-			}else{
-				if (fp.getY()>lp.getY()){
-					r.setRect(lp.getX(),lp.getY(),fp.getX()-lp.getX(),fp.getY()-lp.getY());
-				}else{
-					r.setRect(lp.getX(),fp.getY(),lp.getX()-fp.getX(),lp.getY()-fp.getY());
+			} else {
+				if (fp.getY() > lp.getY()) {
+					r.setRect(lp.getX(), lp.getY(), fp.getX() - lp.getX(),
+							fp.getY() - lp.getY());
+				} else {
+					r.setRect(lp.getX(), fp.getY(), lp.getX() - fp.getX(),
+							lp.getY() - fp.getY());
 				}
 			}
-		}else{
-			Point2D p1=layout.getLayoutControl().getFirstPoint();
-			p1=new Point2D.Double(p1.getX()+tolerance,p1.getY()+tolerance);
-			r.setFrameFromDiagonal(layout.getLayoutControl().getFirstPoint(),p1);
+		} else {
+			Point2D p1 = layout.getLayoutControl().getFirstPoint();
+			p1 = new Point2D.Double(p1.getX() + tolerance, p1.getY()
+					+ tolerance);
+			r.setFrameFromDiagonal(layout.getLayoutControl().getFirstPoint(),
+					p1);
 		}
 		return r;
 	}
+
 	/**
 	 * Devuelve true si el rectangulo formado por los dos puntos que se pasan
 	 * como parámetro es superior a la tolerancia.
-	 *
-	 * @param tolerance Tolerancia
-	 * @param p1 Punto inicial del rectángulo.
-	 * @param p2 Punto final del rectángulo.
-	 *
+	 * 
+	 * @param tolerance
+	 *            Tolerancia
+	 * @param p1
+	 *            Punto inicial del rectángulo.
+	 * @param p2
+	 *            Punto final del rectángulo.
+	 * 
 	 * @return True si el tamaño es correcto.
 	 */
 	private boolean isCorrectSize(int tolerance, Point2D p1, Point2D p2) {
-		if (Math.abs(p2.getX()-p1.getX())<tolerance) {
+		if (Math.abs(p2.getX() - p1.getX()) < tolerance) {
 			return false;
-		} else if (Math.abs(p2.getY()-p1.getY())<tolerance) {
+		} else if (Math.abs(p2.getY() - p1.getY()) < tolerance) {
 			return false;
 		}
 		return true;

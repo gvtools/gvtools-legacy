@@ -75,7 +75,7 @@ public class KMLWriterv21TestSuite {
 	public static Test suite() {
 		TestSuite suite = new TestSuite(
 				"Test for org.gvsig.gpe.kml.writers.kml");
-		//$JUnit-BEGIN$
+		// $JUnit-BEGIN$
 		suite.addTestSuite(KMLPolygonWithInnerTest.class);
 		suite.addTestSuite(KMLLayerWithChildrenTest.class);
 		suite.addTestSuite(KMLFeatureWithNameTest.class);
@@ -94,7 +94,7 @@ public class KMLWriterv21TestSuite {
 		suite.addTestSuite(KMLNotMultiPointSupported.class);
 		suite.addTestSuite(KMLFeatureWithElementsTest.class);
 		suite.addTestSuite(KMLFeatureWithComplexElementTest.class);
-		//$JUnit-END$
+		// $JUnit-END$
 		return suite;
 	}
 

@@ -3,12 +3,11 @@ package org.gvsig.remoteClient.arcims.exceptions;
 /**
  * ArcIms specific exception, @see Exception
  */
-public class ArcImsException extends Exception 
-{	
+public class ArcImsException extends Exception {
 	static final long serialVersionUID = 0;
-	
+
 	private String arcims_message = null;
-	
+
 	/**
 	 *
 	 */
@@ -18,7 +17,7 @@ public class ArcImsException extends Exception
 
 	/**
 	 * Creates an ArcimsException
-	 *
+	 * 
 	 * @param message
 	 */
 	public ArcImsException(String message) {
@@ -27,7 +26,7 @@ public class ArcImsException extends Exception
 
 	/**
 	 * Creates an ArcimsException
-	 *
+	 * 
 	 * @param message
 	 * @param cause
 	 */
@@ -36,24 +35,22 @@ public class ArcImsException extends Exception
 	}
 
 	/**
-	  * Creates an ArcimsException
-	 *
+	 * Creates an ArcimsException
+	 * 
 	 * @param cause
 	 */
 	public ArcImsException(Throwable cause) {
 		super(cause);
 	}
-	
-	public String getArcImsMessage()
-	{
+
+	public String getArcImsMessage() {
 		if (arcims_message == null)
 			return "";
 		else
 			return arcims_message;
 	}
-	
-	public void setArcImsMessage(String mes)
-	{
+
+	public void setArcImsMessage(String mes) {
 		arcims_message = mes;
 	}
 }

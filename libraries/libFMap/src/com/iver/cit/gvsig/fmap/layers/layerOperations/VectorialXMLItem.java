@@ -11,7 +11,6 @@ import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 
-
 public class VectorialXMLItem implements XMLItem {
 
 	private BitSet bitset;
@@ -22,9 +21,10 @@ public class VectorialXMLItem implements XMLItem {
 		this.layer = layer;
 	}
 
-	public FLayer getLayer(){
+	public FLayer getLayer() {
 		return layer;
 	}
+
 	/**
 	 * @see com.iver.cit.gvsig.gui.toolListeners.InfoListener.XMLItem#parse(org.xml.sax.ContentHandler)
 	 */
@@ -33,9 +33,9 @@ public class VectorialXMLItem implements XMLItem {
 		handler.startElement("", "", ((FLayer) layer).getName(), aii);
 		try {
 
-			SelectableDataSource ds = ((AlphanumericData) layer).getRecordset();		
+			SelectableDataSource ds = ((AlphanumericData) layer).getRecordset();
 			ds.start();
-			
+
 			FieldDescription[] fields = ds.getFieldsDescription();
 
 			for (int j = bitset.nextSetBit(0); j >= 0; j = bitset
@@ -43,9 +43,11 @@ public class VectorialXMLItem implements XMLItem {
 				AttributesImpl ai = new AttributesImpl();
 
 				for (int k = 0; k < ds.getFieldCount(); k++) {
-					System.out.println("fieldName:" + ds.getFieldName(k) + " fieldAlias:" + fields[k].getFieldAlias());
-					ai.addAttribute("", ds.getFieldAlias(k), ds.getFieldAlias(k),
-							"xs:string", ds.getFieldValue(j, k).toString());
+					System.out.println("fieldName:" + ds.getFieldName(k)
+							+ " fieldAlias:" + fields[k].getFieldAlias());
+					ai.addAttribute("", ds.getFieldAlias(k),
+							ds.getFieldAlias(k), "xs:string",
+							ds.getFieldValue(j, k).toString());
 				}
 				handler.startElement("", "", String.valueOf(j), ai);
 				handler.endElement("", "", String.valueOf(j));
@@ -59,4 +61,3 @@ public class VectorialXMLItem implements XMLItem {
 		handler.endElement("", "", ((FLayer) layer).getName());
 	}
 }
-

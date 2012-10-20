@@ -49,63 +49,66 @@ import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.GeneralPathX;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class PolygonAdapter extends PolyLineAdapter {
-    /**
-     * DOCUMENT ME!
-     *
-     * @param p DOCUMENT ME!
-     */
-    public void obtainShape(Point2D p) {
-        Point2D[] points = getPoints();
-        GeneralPathX elShape = new GeneralPathX(GeneralPathX.WIND_EVEN_ODD,
-                points.length);
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param p
+	 *            DOCUMENT ME!
+	 */
+	public void obtainShape(Point2D p) {
+		Point2D[] points = getPoints();
+		GeneralPathX elShape = new GeneralPathX(GeneralPathX.WIND_EVEN_ODD,
+				points.length);
 
-        if (points.length > 0) {
-            elShape.moveTo(((Point2D) points[0]).getX(),
-                ((Point2D) points[0]).getY());
-        }
+		if (points.length > 0) {
+			elShape.moveTo(((Point2D) points[0]).getX(),
+					((Point2D) points[0]).getY());
+		}
 
-        for (int i = 1; i < points.length; i++) {
-            elShape.lineTo(((Point2D) points[i]).getX(),
-                ((Point2D) points[i]).getY());
-        }
+		for (int i = 1; i < points.length; i++) {
+			elShape.lineTo(((Point2D) points[i]).getX(),
+					((Point2D) points[i]).getY());
+		}
 
-        if (points.length > 0) {
-            elShape.lineTo(p.getX(), p.getY());
-            elShape.lineTo(((Point2D) points[0]).getX(),
-                ((Point2D) points[0]).getY());
-        }
+		if (points.length > 0) {
+			elShape.lineTo(p.getX(), p.getY());
+			elShape.lineTo(((Point2D) points[0]).getX(),
+					((Point2D) points[0]).getY());
+		}
 
-        setGPX(elShape);
-    }
+		setGPX(elShape);
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public FShape getShape() {
-        return new FPolygon2D(getGPX());
-    }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public FShape getShape() {
+		return new FPolygon2D(getGPX());
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param g DOCUMENT ME!
-     * @param at DOCUMENT ME!
-     * @param symbol DOCUMENT ME!
-     */
-    public void draw(Graphics2D g, AffineTransform at, ISymbol symbol) {
-        GeneralPathX rectangle = new GeneralPathX(getShape());
-        rectangle.transform(at);
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param g
+	 *            DOCUMENT ME!
+	 * @param at
+	 *            DOCUMENT ME!
+	 * @param symbol
+	 *            DOCUMENT ME!
+	 */
+	public void draw(Graphics2D g, AffineTransform at, ISymbol symbol) {
+		GeneralPathX rectangle = new GeneralPathX(getShape());
+		rectangle.transform(at);
 
-        FShape shapeAux = new FPolygon2D(rectangle);
-        symbol.draw(g,at,shapeAux, null);
-    }
+		FShape shapeAux = new FPolygon2D(rectangle);
+		symbol.draw(g, at, shapeAux, null);
+	}
 }

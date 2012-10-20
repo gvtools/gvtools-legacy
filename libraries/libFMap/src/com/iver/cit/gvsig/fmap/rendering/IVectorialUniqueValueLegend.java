@@ -43,38 +43,41 @@ package com.iver.cit.gvsig.fmap.rendering;
 import com.hardcode.gdbms.engine.values.Value;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 
-
 /**
  * Interface for the legend with unique values.
  * 
  */
 public interface IVectorialUniqueValueLegend extends IClassifiedVectorLegend {
-    /**
-     * Establishes the symbol for the value which is the argument of the function. 
-     *
-     * @param id index.
-     * @param symbol symbol.
-     */
-    void setValueSymbolByID(int id, ISymbol symbol);
+	/**
+	 * Establishes the symbol for the value which is the argument of the
+	 * function.
+	 * 
+	 * @param id
+	 *            index.
+	 * @param symbol
+	 *            symbol.
+	 */
+	void setValueSymbolByID(int id, ISymbol symbol);
 
+	/**
+	 * Returns the symbols starting from an ID. It looks in m_ArrayKeys for the
+	 * element ID and with this key obtains the FSymbol.
+	 * 
+	 * @param key
+	 *            ID.
+	 * 
+	 * @return symbol associated with the ID
+	 */
 
-    /**
-     * Returns the symbols starting from an ID. It looks in m_ArrayKeys for the
-     * element ID and with this key obtains the FSymbol. 
-     
-     * @param key ID.
-     *
-     * @return symbol associated with the ID
-     */
+	// public FSymbol getSymbolByID(int ID);
 
-    // public FSymbol getSymbolByID(int ID);
-
-    /**
-     * Returns the symbols starting from its key.
-     *
-     * @param key ID.
-     *
-     * @return symbol associated with the key.
-     */
-    public ISymbol getSymbolByValue(Value key);
+	/**
+	 * Returns the symbols starting from its key.
+	 * 
+	 * @param key
+	 *            ID.
+	 * 
+	 * @return symbol associated with the key.
+	 */
+	public ISymbol getSymbolByValue(Value key);
 }

@@ -55,153 +55,161 @@ import com.iver.cit.gvsig.fmap.drivers.wcs.FMapWCSDriverFactory;
 import com.iver.cit.gvsig.fmap.layers.WCSLayer;
 import com.iver.cit.gvsig.gui.wizards.WizardData;
 
-
-
 /**
  * This class holds the WCSWizard's info
- *
+ * 
  * Contiene la información del asistente WCS
- *
+ * 
  * @author jaume - jaume.dominguez@iver.es
- *
+ * 
  */
 
-public class WCSWizardData extends WizardData{
-    private String title;
-    private FMapWCSDriver wcs;
+public class WCSWizardData extends WizardData {
+	private String title;
+	private FMapWCSDriver wcs;
 	private String theAbstract;
 	private WCSLayer[] coverageList;
 
+	public void setHost(URL host, boolean override) throws ReadDriverException {
+		try {
+			wcs = FMapWCSDriverFactory.getFMapDriverForURL(host);
 
-    public void setHost(URL host, boolean override) throws ReadDriverException{
-        try {
-        	wcs = FMapWCSDriverFactory.getFMapDriverForURL(host);
+			// wcs.createClient(host);
 
-			//wcs.createClient(host);
-
-        // Send getCapabilities and describe coverage request;
-		if (!wcs.connect(override, null))
-            throw new ReadDriverException(host.getPath(),null);
-        } catch (ConnectException e) {
-        	JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(), PluginServices.getText(this,"wcs_server_timeout"));
+			// Send getCapabilities and describe coverage request;
+			if (!wcs.connect(override, null))
+				throw new ReadDriverException(host.getPath(), null);
+		} catch (ConnectException e) {
+			JOptionPane.showMessageDialog(
+					(Component) PluginServices.getMainFrame(),
+					PluginServices.getText(this, "wcs_server_timeout"));
 			return;
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(), PluginServices.getText(this, "wcs_cant_connect"));
+			JOptionPane.showMessageDialog(
+					(Component) PluginServices.getMainFrame(),
+					PluginServices.getText(this, "wcs_cant_connect"));
 			return;
 		}
 
-		if (wcs.getLabel()!=null)
+		if (wcs.getLabel() != null)
 			title = wcs.getLabel();
 
-        if (wcs.getDescription()  != null)
-            theAbstract = wcs.getDescription();
+		if (wcs.getDescription() != null)
+			theAbstract = wcs.getDescription();
 
-        coverageList = wcs.getLayerList();
-    }
+		coverageList = wcs.getLayerList();
+	}
 
-    /**
-     * The server description.
-     *
-     * La descripción del servidor
-     * @return String
-     */
-    public String getAbstract() {
-    	if (theAbstract == null) return "None";
-        return theAbstract;
-    }
+	/**
+	 * The server description.
+	 * 
+	 * La descripción del servidor
+	 * 
+	 * @return String
+	 */
+	public String getAbstract() {
+		if (theAbstract == null)
+			return "None";
+		return theAbstract;
+	}
 
-    /**
-     * An ArrayList with the coverage formats.
-     *
-     * Los formatos de la cobertura
-     *
-     * @return
-     */
-    public ArrayList getCoverageFormatos(String nomCobertura) {
-        return getLayer(nomCobertura).getFormats();
-    }
+	/**
+	 * An ArrayList with the coverage formats.
+	 * 
+	 * Los formatos de la cobertura
+	 * 
+	 * @return
+	 */
+	public ArrayList getCoverageFormatos(String nomCobertura) {
+		return getLayer(nomCobertura).getFormats();
+	}
 
-    /**
-     * Finds the coverage within the coverage list
-     *
-     * Busca la cobertura en la lista de coberturas
-     *
-     * @return CoverageInfo
-     */
-    public WCSLayer getLayer(String name) {
-    	for (int i = 0; i < coverageList.length; i++) {
+	/**
+	 * Finds the coverage within the coverage list
+	 * 
+	 * Busca la cobertura en la lista de coberturas
+	 * 
+	 * @return CoverageInfo
+	 */
+	public WCSLayer getLayer(String name) {
+		for (int i = 0; i < coverageList.length; i++) {
 			if (coverageList[i].getName().equals(name))
 				return coverageList[i];
 		}
-    	return null;
-    }
+		return null;
+	}
 
-    /**
-     * Returns an ArrayList containing the supported SRS of the coverage specified
-     * by name.
-     *
-     * Devuelve una lista de SRSs soportados por la cobertura "name".
-     *
-     * @param name
-     * @return ArrayList
-     */
-    public ArrayList getCoverageSRSs(String name){
-    	return getLayer(name).getSRSs();
-    }
-    /**
-     * Server's title (not used in gvSIG)
-     *
-     * Título del servidor (no se usa en gvSIG)
-     *
-     * @return
-     */
-    public String getTitle() {
-    	if (title == null) return "None";
-        return title;
-    }
+	/**
+	 * Returns an ArrayList containing the supported SRS of the coverage
+	 * specified by name.
+	 * 
+	 * Devuelve una lista de SRSs soportados por la cobertura "name".
+	 * 
+	 * @param name
+	 * @return ArrayList
+	 */
+	public ArrayList getCoverageSRSs(String name) {
+		return getLayer(name).getSRSs();
+	}
 
-    /**
-     * Equivalent to the setDescription method
-     *
-     * Equivalente a setDescription
-     *
-     * @param string
-     */
-    public void setAbstract(String string) {
-        theAbstract = string;
-    }
+	/**
+	 * Server's title (not used in gvSIG)
+	 * 
+	 * Título del servidor (no se usa en gvSIG)
+	 * 
+	 * @return
+	 */
+	public String getTitle() {
+		if (title == null)
+			return "None";
+		return title;
+	}
 
-    /**
-     * Sets the server's title (not used in gvSIG)
-     *
-     * Establece el título del servidor (no se usa en gvSIG)
-     *
-     * @param string
-     */
-    public void setTitle(String string) {
-        title = string;
-    }
+	/**
+	 * Equivalent to the setDescription method
+	 * 
+	 * Equivalente a setDescription
+	 * 
+	 * @param string
+	 */
+	public void setAbstract(String string) {
+		theAbstract = string;
+	}
 
-    /**
-     * Sets the server's description.
-     *
-     * Establece la descripción del servidor.
-     * @param String
-     */
-    public void setDescription(String s) {
-    	setAbstract(s);
-    }
+	/**
+	 * Sets the server's title (not used in gvSIG)
+	 * 
+	 * Establece el título del servidor (no se usa en gvSIG)
+	 * 
+	 * @param string
+	 */
+	public void setTitle(String string) {
+		title = string;
+	}
 
-    /**
-     * Returns the server's descrition
-     *
-     * Recupera la descripción del servidor
-     * @return "None" if the server doesn't specify any description
-     */
-    public String getDescription(){
-    	if (getAbstract() == null) return "None";
-    	return getAbstract();
-    }
+	/**
+	 * Sets the server's description.
+	 * 
+	 * Establece la descripción del servidor.
+	 * 
+	 * @param String
+	 */
+	public void setDescription(String s) {
+		setAbstract(s);
+	}
+
+	/**
+	 * Returns the server's descrition
+	 * 
+	 * Recupera la descripción del servidor
+	 * 
+	 * @return "None" if the server doesn't specify any description
+	 */
+	public String getDescription() {
+		if (getAbstract() == null)
+			return "None";
+		return getAbstract();
+	}
 
 	public WCSLayer[] getCoverageList() {
 		if (coverageList == null)
@@ -218,9 +226,9 @@ public class WCSWizardData extends WizardData{
 	}
 
 	public String getServerType() {
-		if (wcs.getVersion()==null) return "WCS";
-		return "WCS "+wcs.getVersion();
+		if (wcs.getVersion() == null)
+			return "WCS";
+		return "WCS " + wcs.getVersion();
 	}
-
 
 }

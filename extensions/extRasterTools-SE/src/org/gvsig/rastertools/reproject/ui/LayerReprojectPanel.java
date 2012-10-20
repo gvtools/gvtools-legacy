@@ -48,21 +48,22 @@ import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
  * Panel para la reproyecci�n de capas cargadas.
  * 
  * 28/04/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class LayerReprojectPanel extends DefaultButtonsPanel implements IWindow {
 	private static final long serialVersionUID = -1011688195806336071L;
-	private NewLayerPanel          newLayerPanel         = null;
-	private JPanel                 nameFile              = null;
-	private CRSSelectPanel         projectionSrcSelector = null;
-	private CRSSelectPanel         projectionDstSelector = null;
+	private NewLayerPanel newLayerPanel = null;
+	private JPanel nameFile = null;
+	private CRSSelectPanel projectionSrcSelector = null;
+	private CRSSelectPanel projectionDstSelector = null;
 	private CoordinateReferenceSystem sourceCrs = null;
 	private CoordinateReferenceSystem targetCrs = null;
-	private JPanel                 filePanel             = null;
-	private LayerReprojectListener reprojectListener     = null;
-	private FLyrRasterSE           lyr                   = null;
-	private String                 viewName              = null;
-	private Boolean                isInTOC               = Boolean.TRUE;
+	private JPanel filePanel = null;
+	private LayerReprojectListener reprojectListener = null;
+	private FLyrRasterSE lyr = null;
+	private String viewName = null;
+	private Boolean isInTOC = Boolean.TRUE;
 
 	/**
 	 * Constructor
@@ -75,29 +76,32 @@ public class LayerReprojectPanel extends DefaultButtonsPanel implements IWindow 
 		sourceCrs = getProjectionSrcSelector().getCurrentCrs();
 		targetCrs = getProjectionDstSelector().getCurrentCrs();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.andami.ui.mdiManager.IWindow#getWindowInfo()
 	 */
 	public WindowInfo getWindowInfo() {
-		WindowInfo windowInfo = new WindowInfo(WindowInfo.MODALDIALOG | WindowInfo.RESIZABLE);
+		WindowInfo windowInfo = new WindowInfo(WindowInfo.MODALDIALOG
+				| WindowInfo.RESIZABLE);
 		windowInfo.setTitle(PluginServices.getText(this, "capa_a_reproyectar"));
 		windowInfo.setWidth(330);
 		windowInfo.setHeight(320);
 		return windowInfo;
 	}
-	
+
 	private void setLayer(FLyrRasterSE lyr) {
 		this.lyr = lyr;
 
 		if (this.lyr == null)
 			return;
 
-		
-		BaseView view = (BaseView) PluginServices.getMDIManager().getActiveWindow();
-		viewName = PluginServices.getMDIManager().getWindowInfo(view).getTitle();
-		
+		BaseView view = (BaseView) PluginServices.getMDIManager()
+				.getActiveWindow();
+		viewName = PluginServices.getMDIManager().getWindowInfo(view)
+				.getTitle();
+
 		sourceCrs = this.lyr.readProjection();
 		if (sourceCrs == null)
 			sourceCrs = ProjectionUtils.getCRS("EPSG:23030");
@@ -107,7 +111,7 @@ public class LayerReprojectPanel extends DefaultButtonsPanel implements IWindow 
 		getLayerReprojectListener().setIsInTOC(isInTOC);
 		getLayerReprojectListener().setLayer(this.lyr);
 	}
-	
+
 	private LayerReprojectListener getLayerReprojectListener() {
 		if (reprojectListener == null) {
 			reprojectListener = new LayerReprojectListener(this);
@@ -115,7 +119,7 @@ public class LayerReprojectPanel extends DefaultButtonsPanel implements IWindow 
 		}
 		return reprojectListener;
 	}
-	
+
 	/**
 	 * Inicializaci�n de los componentes gr�ficos.
 	 */
@@ -123,9 +127,9 @@ public class LayerReprojectPanel extends DefaultButtonsPanel implements IWindow 
 		GridBagConstraints gridBagConstraints;
 
 		setLayout(new GridBagLayout());
-		
+
 		int posy = 0;
-		
+
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.fill = GridBagConstraints.BOTH;
 		gridBagConstraints.gridx = 0;
@@ -134,11 +138,12 @@ public class LayerReprojectPanel extends DefaultButtonsPanel implements IWindow 
 		gridBagConstraints.insets = new Insets(5, 0, 2, 0);
 		JPanel panelFile = new JPanel();
 		panelFile.setLayout(new BorderLayout());
-		panelFile.setBorder(BorderFactory.createTitledBorder(RasterToolsUtil.getText(this, "origen")));
+		panelFile.setBorder(BorderFactory.createTitledBorder(RasterToolsUtil
+				.getText(this, "origen")));
 		JLabel label = new JLabel("<html><b>" + lyr.getName() + "</b></html>");
 		panelFile.add(label, BorderLayout.CENTER);
 		add(panelFile, gridBagConstraints);
-		
+
 		posy++;
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -156,7 +161,7 @@ public class LayerReprojectPanel extends DefaultButtonsPanel implements IWindow 
 		gridBagConstraints.weightx = 1.0;
 		gridBagConstraints.insets = new Insets(2, 0, 2, 0);
 		add(getProjectionDstSelector(), gridBagConstraints);
-		
+
 		posy++;
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
@@ -164,7 +169,7 @@ public class LayerReprojectPanel extends DefaultButtonsPanel implements IWindow 
 		gridBagConstraints.fill = GridBagConstraints.BOTH;
 		gridBagConstraints.insets = new Insets(2, 0, 2, 0);
 		add(getNewLayerPanel().getJPanel(), gridBagConstraints);
-		
+
 		posy++;
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
@@ -183,15 +188,18 @@ public class LayerReprojectPanel extends DefaultButtonsPanel implements IWindow 
 		JPanel emptyPanel = new JPanel();
 		add(emptyPanel, gridBagConstraints);
 	}
-	
+
 	/**
 	 * Obtiene el panel de destino de fichero y nombre de capa
+	 * 
 	 * @return JPanel
 	 */
 	private JPanel getFilePanel() {
 		if (filePanel == null) {
 			filePanel = new JPanel();
-			filePanel.setBorder(BorderFactory.createTitledBorder(RasterToolsUtil.getText(this, "dest_file")));
+			filePanel.setBorder(BorderFactory
+					.createTitledBorder(RasterToolsUtil.getText(this,
+							"dest_file")));
 			filePanel.setLayout(new GridBagLayout());
 
 			GridBagConstraints gbc = new GridBagConstraints();
@@ -208,34 +216,40 @@ public class LayerReprojectPanel extends DefaultButtonsPanel implements IWindow 
 
 	/**
 	 * Obtiene el desplegable con la lista de capas
+	 * 
 	 * @return JComboBox
 	 */
 	protected NewLayerPanel getNewLayerPanel() {
 		if (newLayerPanel == null) {
 			newLayerPanel = new NewLayerPanel(lyr);
 			newLayerPanel.setOnlyReprojectables(true);
-			newLayerPanel.getJPanel().setBorder(BorderFactory.createTitledBorder(RasterToolsUtil.getText(this, "capa")));
-			newLayerPanel.getRadioOpenMemory().setEnabled(!isInTOC.booleanValue());
+			newLayerPanel.getJPanel().setBorder(
+					BorderFactory.createTitledBorder(RasterToolsUtil.getText(
+							this, "capa")));
+			newLayerPanel.getRadioOpenMemory().setEnabled(
+					!isInTOC.booleanValue());
 			if (isInTOC.booleanValue())
 				newLayerPanel.getRadioFileGenerate().setSelected(true);
 		}
 		return newLayerPanel;
 	}
-	
+
 	/**
 	 * Obtiene el nombre de la vista
+	 * 
 	 * @return
 	 */
 	public String getViewName() {
 		return viewName;
 	}
-	
+
 	/**
 	 * Obtiene el desplegable con la lista de capas
+	 * 
 	 * @return JComboBox
 	 */
 	private JPanel getNameFilePanel() {
-		if(nameFile == null) {
+		if (nameFile == null) {
 			nameFile = getNewLayerPanel().getFileNamePanel();
 		}
 		return nameFile;
@@ -243,27 +257,29 @@ public class LayerReprojectPanel extends DefaultButtonsPanel implements IWindow 
 
 	/**
 	 * Obtiene el bot�n que lanza el panel de selecci�n de proyecciones.
+	 * 
 	 * @return
 	 */
 	private CRSSelectPanel getProjectionSrcSelector() {
 		if (projectionSrcSelector == null) {
-			
+
 			CoordinateReferenceSystem auxCrs = null;
-			IWindow activeWindow = PluginServices.getMDIManager().getActiveWindow();
-			if (activeWindow instanceof BaseView) {		
+			IWindow activeWindow = PluginServices.getMDIManager()
+					.getActiveWindow();
+			if (activeWindow instanceof BaseView) {
 				BaseView activeView = (BaseView) activeWindow;
 				auxCrs = activeView.getCrs();
 				activeView.setCrs(sourceCrs);
 			}
-			
+
 			projectionSrcSelector = CRSSelectPanel.getPanel(sourceCrs);
-			
-			if (activeWindow instanceof BaseView) {		
+
+			if (activeWindow instanceof BaseView) {
 				BaseView activeView = (BaseView) activeWindow;
 				activeView.setCrs(auxCrs);
 			}
-			
-			//projectionSrcSelector.setTransPanelActive(true);
+
+			// projectionSrcSelector.setTransPanelActive(true);
 			projectionSrcSelector.setPreferredSize(null);
 			projectionSrcSelector.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -272,22 +288,25 @@ public class LayerReprojectPanel extends DefaultButtonsPanel implements IWindow 
 					}
 				}
 			});
-			projectionSrcSelector.setBorder(BorderFactory.createTitledBorder(RasterToolsUtil.getText(this, "src_proj")));
-			
+			projectionSrcSelector.setBorder(BorderFactory
+					.createTitledBorder(RasterToolsUtil.getText(this,
+							"src_proj")));
+
 			if (isInTOC.booleanValue() && this.lyr.readProjection() != null)
 				StatusComponent.setDisabled(projectionSrcSelector);
 		}
 		return projectionSrcSelector;
 	}
-	
+
 	/**
 	 * Obtiene el bot�n que lanza el panel de selecci�n de proyecciones.
+	 * 
 	 * @return
 	 */
 	private CRSSelectPanel getProjectionDstSelector() {
 		if (projectionDstSelector == null) {
 			projectionDstSelector = CRSSelectPanel.getPanel(targetCrs);
-			//projectionDstSelector.setTransPanelActive(true);
+			// projectionDstSelector.setTransPanelActive(true);
 			projectionDstSelector.setPreferredSize(null);
 			projectionDstSelector.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -296,8 +315,10 @@ public class LayerReprojectPanel extends DefaultButtonsPanel implements IWindow 
 					}
 				}
 			});
-			projectionDstSelector.setBorder(BorderFactory.createTitledBorder(RasterToolsUtil.getText(this, "dest_proj")));
-			
+			projectionDstSelector.setBorder(BorderFactory
+					.createTitledBorder(RasterToolsUtil.getText(this,
+							"dest_proj")));
+
 			if (!isInTOC.booleanValue())
 				StatusComponent.setDisabled(projectionDstSelector);
 		}

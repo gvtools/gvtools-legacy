@@ -146,28 +146,30 @@ import com.iver.cit.gvsig.fmap.core.symbols.ILineSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol;
 import com.iver.cit.gvsig.gui.panels.ColorChooserPanel;
-import com.iver.cit.gvsig.gui.styling.AbstractTypeSymbolEditor;
-import com.iver.cit.gvsig.gui.styling.EditorTool;
-import com.iver.cit.gvsig.gui.styling.SymbolEditor;
 import com.iver.cit.gvsig.project.documents.view.legend.gui.JSymbolPreviewButton;
+
 /**
  * <b>SimpleFill</b> allows to store and modify the properties that fills a
- * polygon with a padding and an outline<p>
+ * polygon with a padding and an outline
  * <p>
- * This functionality is carried out thanks to a tab (simple fill)which is included
- * in the panel to edit the properities of a symbol (SymbolEditor)how is explained
- * in AbstractTypeSymbolEditor.<p>
+ * <p>
+ * This functionality is carried out thanks to a tab (simple fill)which is
+ * included in the panel to edit the properities of a symbol (SymbolEditor)how
+ * is explained in AbstractTypeSymbolEditor.
+ * <p>
  * <p>
  * This tab permits the user to change the color of the padding
- * (<b>jccFillColor</b>)and its outline (<b>btnOutline</b>).Also the user has the
- * options to modify the opacity (<b>sldFillTransparency,sldOutlineTransparency</b>)
- * for both attributes and the width <b>txtOutlineWidth</b> (only for the outline).
- *
- *
- *@see AbstractTypeSymbolEditor
- *@author jaume dominguez faus - jaume.dominguez@iver.es
+ * (<b>jccFillColor</b>)and its outline (<b>btnOutline</b>).Also the user has
+ * the options to modify the opacity
+ * (<b>sldFillTransparency,sldOutlineTransparency</b>) for both attributes and
+ * the width <b>txtOutlineWidth</b> (only for the outline).
+ * 
+ * 
+ * @see AbstractTypeSymbolEditor
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
-public class SimpleFill extends AbstractTypeSymbolEditor implements ActionListener, ChangeListener {
+public class SimpleFill extends AbstractTypeSymbolEditor implements
+		ActionListener, ChangeListener {
 	private ColorChooserPanel jccFillColor;
 	private JIncrementalNumberField txtOutlineWidth;
 	private ArrayList tabs = new ArrayList();
@@ -191,18 +193,20 @@ public class SimpleFill extends AbstractTypeSymbolEditor implements ActionListen
 	}
 
 	/**
-	 * Initializes the parameters that allows the user to fill the padding of
-	 * a polygon with a simplefill style.To do it, a tab (simple fill) is created inside the
-	 * SymbolEditor panel with default values for the different attributes.
+	 * Initializes the parameters that allows the user to fill the padding of a
+	 * polygon with a simplefill style.To do it, a tab (simple fill) is created
+	 * inside the SymbolEditor panel with default values for the different
+	 * attributes.
 	 */
 	private void initialize() {
-		JPanel myTab = new JPanel(new FlowLayout(FlowLayout.LEADING, 5,5));
+		JPanel myTab = new JPanel(new FlowLayout(FlowLayout.LEADING, 5, 5));
 		myTab.setName(PluginServices.getText(this, "simple_fill"));
 		GridBagLayoutPanel aux = new GridBagLayoutPanel();
 
-		jccFillColor = new ColorChooserPanel(true,true);
+		jccFillColor = new ColorChooserPanel(true, true);
 		jccFillColor.setAlpha(255);
-		aux.addComponent(PluginServices.getText(this, "fill_color")+":", jccFillColor);
+		aux.addComponent(PluginServices.getText(this, "fill_color") + ":",
+				jccFillColor);
 
 		JPanel aux2 = new JPanel();
 		btnOutline = new JSymbolPreviewButton(FShape.LINE);
@@ -216,11 +220,13 @@ public class SimpleFill extends AbstractTypeSymbolEditor implements ActionListen
 
 		sldOutlineTransparency = new JSlider();
 		sldOutlineTransparency.setValue(100);
-		aux.addComponent(PluginServices.getText(this, "outline")+":",
-				aux2);
-		aux.addComponent(PluginServices.getText(this, "outline_opacity")+":", sldOutlineTransparency);
-		txtOutlineWidth = new JIncrementalNumberField("", 25, 0, Double.MAX_VALUE, 1);
-		aux.addComponent(PluginServices.getText(this, "outline_width")+":", txtOutlineWidth);
+		aux.addComponent(PluginServices.getText(this, "outline") + ":", aux2);
+		aux.addComponent(PluginServices.getText(this, "outline_opacity") + ":",
+				sldOutlineTransparency);
+		txtOutlineWidth = new JIncrementalNumberField("", 25, 0,
+				Double.MAX_VALUE, 1);
+		aux.addComponent(PluginServices.getText(this, "outline_width") + ":",
+				txtOutlineWidth);
 		myTab.add(aux);
 
 		useBorder.addActionListener(this);
@@ -239,9 +245,8 @@ public class SimpleFill extends AbstractTypeSymbolEditor implements ActionListen
 
 		layer.setHasOutline(useBorder.isSelected());
 
-
 		outline = (ILineSymbol) btnOutline.getSymbol();
-		if (outline!=null) {
+		if (outline != null) {
 			outline.setLineWidth(txtOutlineWidth.getDouble());
 			outline.setAlpha(outlineAlpha);
 		}
@@ -253,7 +258,6 @@ public class SimpleFill extends AbstractTypeSymbolEditor implements ActionListen
 			c = new Color(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
 		layer.setFillColor(c);
 
-
 		return layer;
 	}
 
@@ -262,30 +266,30 @@ public class SimpleFill extends AbstractTypeSymbolEditor implements ActionListen
 		try {
 			if (layer == null) {
 				// initialize defaults
-				NotificationManager.addWarning(getClass().getName()+":: should be unreachable code", new Exception());
+				NotificationManager.addWarning(getClass().getName()
+						+ ":: should be unreachable code", new Exception());
 			} else {
 
-
-				//fill
+				// fill
 
 				sym = (SimpleFillSymbol) layer;
 				jccFillColor.setUseColorIsSelected(sym.hasFill());
 				jccFillColor.setColor(sym.getFillColor());
-				//outline
+				// outline
 
 				sldOutlineTransparency.removeChangeListener(this);
 
 				useBorder.setSelected(sym.hasOutline());
 
-				if(sym.getOutline() != null){
-					outline=sym.getOutline();
+				if (sym.getOutline() != null) {
+					outline = sym.getOutline();
 					btnOutline.setSymbol(outline);
 				}
 
-
 				if (outline != null) {
 					outlineAlpha = outline.getAlpha();
-					sldOutlineTransparency.setValue((int)((outlineAlpha/255D)*100));
+					sldOutlineTransparency
+							.setValue((int) ((outlineAlpha / 255D) * 100));
 					txtOutlineWidth.setDouble(outline.getLineWidth());
 				} else {
 					sldOutlineTransparency.setValue(100);
@@ -295,11 +299,12 @@ public class SimpleFill extends AbstractTypeSymbolEditor implements ActionListen
 
 			}
 		} catch (IndexOutOfBoundsException ioEx) {
-			NotificationManager.addWarning("Symbol layer index out of bounds", ioEx);
+			NotificationManager.addWarning("Symbol layer index out of bounds",
+					ioEx);
 		} catch (ClassCastException ccEx) {
-			NotificationManager.addWarning("Illegal casting from " +
-					layer.getClassName() + " to " + getSymbolClass().
-					getName() + ".", ccEx);
+			NotificationManager.addWarning(
+					"Illegal casting from " + layer.getClassName() + " to "
+							+ getSymbolClass().getName() + ".", ccEx);
 
 		}
 	}
@@ -321,19 +326,17 @@ public class SimpleFill extends AbstractTypeSymbolEditor implements ActionListen
 
 		}
 
-
 		fireSymbolChangedEvent();
 	}
 
 	public void stateChanged(ChangeEvent e) {
 		Object s = e.getSource();
 
-
 		if (s.equals(sldOutlineTransparency)) {
-			outlineAlpha = (int) (255*(sldOutlineTransparency.getValue()/100.0));
+			outlineAlpha = (int) (255 * (sldOutlineTransparency.getValue() / 100.0));
 		}
 
-		if(useBorder.isSelected())
+		if (useBorder.isSelected())
 			outline = (ILineSymbol) btnOutline.getSymbol();
 		fireSymbolChangedEvent();
 	}
@@ -341,8 +344,5 @@ public class SimpleFill extends AbstractTypeSymbolEditor implements ActionListen
 	public EditorTool[] getEditorTools() {
 		return null;
 	}
-
-
-
 
 }

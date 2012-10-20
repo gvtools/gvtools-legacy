@@ -63,25 +63,24 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 /**
  * Diálogo para la calculadora de bandas.
  * 
- * @author Alejandro Muñoz Sanchez	(alejandro.munoz@uclm.es)
+ * @author Alejandro Muñoz Sanchez (alejandro.munoz@uclm.es)
  * @author Diego Guerrero Sevilla (diego.guerrero@uclm.es)
- * @version 19/10/2007 
+ * @version 19/10/2007
  */
 
-public class GridMathPanel extends DefaultButtonsPanel{
+public class GridMathPanel extends DefaultButtonsPanel {
 
 	private static final long serialVersionUID = 1L;
-	
-	
-	//-------PANEL---------//
+
+	// -------PANEL---------//
 
 	CalculatorPanel calculatorPanel = null;
 	OutputOptionsPanel optionsPanel = null;
-	
-	//-------JTEXTAREA---------//
+
+	// -------JTEXTAREA---------//
 	private JTextArea jTextExpresion;
-	
-	//----------------------------------------//
+
+	// ----------------------------------------//
 	private GridMathDialog calculatorDialog = null;
 	private TableFormat jTableVariables;
 	private MapContext m_MapContext = null;
@@ -89,15 +88,16 @@ public class GridMathPanel extends DefaultButtonsPanel{
 	private HashMap qWindowsHash = null;
 	private GridExtent outputExtent;
 	GridMathProcess gridMath = null;
-	
+
 	private JEP parser = null;
 	private GridMathPanelListener listener = null;
 
 	private boolean optionsTabVisible = true;
-		 
+
 	/**
 	 * @param calculatorDialog
-	 * @param view	vista de la aplicacion 
+	 * @param view
+	 *            vista de la aplicacion
 	 */
 	public GridMathPanel(GridMathDialog calculatorDialog, View view) {
 		super(ButtonsPanel.BUTTONS_APPLYCLOSE);
@@ -105,77 +105,75 @@ public class GridMathPanel extends DefaultButtonsPanel{
 		this.calculatorDialog = calculatorDialog;
 		if (view != null)
 			m_MapContext = view.getModel().getMapContext();
-		
+
 		listener = new GridMathPanelListener(this);
 		Inicializar();
 	}
-	
-	
+
 	/**
 	 * Inicializar los elementos del Panel CalculatorPanel
 	 */
-	private void Inicializar(){
-	 	
-	 	JTabbedPane tabbedPane = new JTabbedPane();
-	 	tabbedPane.addTab(PluginServices.getText(this, "operacion"), getCalculatorPanel());
-	 	if (optionsTabVisible)
-	 		tabbedPane.addTab(PluginServices.getText(this, "opciones"), getOptionsPanel());
+	private void Inicializar() {
+
+		JTabbedPane tabbedPane = new JTabbedPane();
+		tabbedPane.addTab(PluginServices.getText(this, "operacion"),
+				getCalculatorPanel());
+		if (optionsTabVisible)
+			tabbedPane.addTab(PluginServices.getText(this, "opciones"),
+					getOptionsPanel());
 		this.setLayout(new BorderLayout());
 		this.add(tabbedPane, BorderLayout.CENTER);
-	 
-	 	this.addButtonPressedListener(listener);
-	 	this.getCalculatorPanel().getJTableVariables().getTableFormat().getModel().addTableModelListener(listener);
+
+		this.addButtonPressedListener(listener);
+		this.getCalculatorPanel().getJTableVariables().getTableFormat()
+				.getModel().addTableModelListener(listener);
 	}
-	 
-	
+
 	/**
 	 * @return extent de salida
 	 */
 	public GridExtent getOutputExtent() {
-		if (outputExtent==null)
-			outputExtent= new GridExtent();
+		if (outputExtent == null)
+			outputExtent = new GridExtent();
 		return outputExtent;
 	}
-	
-	
+
 	/**
 	 * @return proceso de calculo
 	 */
 	public GridMathProcess getGridMath() {
-		if (gridMath==null)
+		if (gridMath == null)
 			gridMath = new GridMathProcess();
 		return gridMath;
 	}
-	
+
 	/**
 	 * @return calculatorDialog
 	 */
 	public IWindow getCalculatorDialog() {
 		return calculatorDialog;
 	}
-	
+
 	/**
 	 * @return vista actual de la aplicacion
 	 */
 	public View getView() {
 		return view;
 	}
-	
+
 	/**
 	 * @return panel de configuracion de salida
 	 */
 	public OutputOptionsPanel getOptionsPanel() {
-		if (optionsPanel==null)
-			optionsPanel = new OutputOptionsPanel(getView(),this);
+		if (optionsPanel == null)
+			optionsPanel = new OutputOptionsPanel(getView(), this);
 		return optionsPanel;
 	}
 
 	public CalculatorPanel getCalculatorPanel() {
-		if (calculatorPanel == null){
-			calculatorPanel = new  CalculatorPanel(view);
+		if (calculatorPanel == null) {
+			calculatorPanel = new CalculatorPanel(view);
 		}
 		return calculatorPanel;
-	}	
+	}
 }
-
-

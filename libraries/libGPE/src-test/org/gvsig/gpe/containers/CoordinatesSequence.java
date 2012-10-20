@@ -54,26 +54,28 @@ import org.gvsig.gpe.writer.ICoordinateSequence;
 /**
  * @author Jorge Piera Llodrá (jorge.piera@iver.es)
  */
-public class CoordinatesSequence implements ICoordinateSequence, ICoordinateIterator{
+public class CoordinatesSequence implements ICoordinateSequence,
+		ICoordinateIterator {
 	private double[][] coordinates;
 	private int next = 0;
-	
-	public CoordinatesSequence(double x, double y, double z){
+
+	public CoordinatesSequence(double x, double y, double z) {
 		coordinates = new double[3][1];
 		coordinates[0][0] = x;
 		coordinates[1][0] = y;
-		coordinates[2][0] = z;		
+		coordinates[2][0] = z;
 	}
-	
-	public CoordinatesSequence(double[] x, double[] y, double[] z){
+
+	public CoordinatesSequence(double[] x, double[] y, double[] z) {
 		coordinates = new double[3][1];
 		coordinates[0] = x;
 		coordinates[1] = y;
-		coordinates[2] = z;		
-	}	
-	
+		coordinates[2] = z;
+	}
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.ICoordinateIterator#getDimension()
 	 */
 	public int getDimension() {
@@ -82,6 +84,7 @@ public class CoordinatesSequence implements ICoordinateSequence, ICoordinateIter
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.ICoordinateIterator#hasNext()
 	 */
 	public boolean hasNext() throws IOException {
@@ -90,11 +93,12 @@ public class CoordinatesSequence implements ICoordinateSequence, ICoordinateIter
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.ICoordinateIterator#next(double[])
 	 */
 	public void next(double[] buffer) throws IOException {
-		for (int i=0 ; i<buffer.length ; i++){
-			buffer[i] = coordinates[i][next];			
+		for (int i = 0; i < buffer.length; i++) {
+			buffer[i] = coordinates[i][next];
 		}
 		next++;
 	}

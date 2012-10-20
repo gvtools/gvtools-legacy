@@ -11,12 +11,12 @@ import com.iver.cit.gvsig.fmap.drivers.legend.IFMapLegendDriver;
 /**
  * 
  * JLegendFileChooser.java
- *
+ * 
  * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Jul 22, 2008
- *
+ * 
  */
-public class JLegendFileChooser extends JFileChooser  {
+public class JLegendFileChooser extends JFileChooser {
 	private static final long serialVersionUID = 8855060580358068594L;
 	private static String lastPath;
 	private IFMapLegendDriver[] drivers;
@@ -31,14 +31,15 @@ public class JLegendFileChooser extends JFileChooser  {
 		this(legendDrivers, false);
 	}
 
-	public JLegendFileChooser(final IFMapLegendDriver[] legendDrivers, boolean write_mode) {
+	public JLegendFileChooser(final IFMapLegendDriver[] legendDrivers,
+			boolean write_mode) {
 		super(lastPath);
 		this.write_mode = write_mode;
 		this.drivers = legendDrivers;
 
 		setMultiSelectionEnabled(false);
 
-		if (!this.write_mode){//load method->"all the drivers in one"
+		if (!this.write_mode) {// load method->"all the drivers in one"
 
 			this.setFileFilter(new FileFilter() {
 				@Override
@@ -55,16 +56,19 @@ public class JLegendFileChooser extends JFileChooser  {
 					String strLegendFormats = "";
 					for (int i = 0; i < legendDrivers.length; i++) {
 
-						strLegendFormats += "*."+legendDrivers[i].getFileExtension();
-						if (i<legendDrivers.length-1) strLegendFormats += ", ";
+						strLegendFormats += "*."
+								+ legendDrivers[i].getFileExtension();
+						if (i < legendDrivers.length - 1)
+							strLegendFormats += ", ";
 					}
 
-					return PluginServices.getText(this, "all_supported_legend_formats") + 
-					" ("+strLegendFormats+")";
+					return PluginServices.getText(this,
+							"all_supported_legend_formats")
+							+ " ("
+							+ strLegendFormats + ")";
 				}
 			});
-		}
-		else {//write method->all drivers are separated
+		} else {// write method->all drivers are separated
 			for (int i = 0; i < legendDrivers.length; i++) {
 				final IFMapLegendDriver driver = legendDrivers[i];
 
@@ -72,7 +76,8 @@ public class JLegendFileChooser extends JFileChooser  {
 
 					for (int j = 0; j < driver.getSupportedVersions().size(); j++) {
 
-						final String version = driver.getSupportedVersions().get(j);
+						final String version = driver.getSupportedVersions()
+								.get(j);
 
 						FileFilter aFilter = new FileFilter() {
 
@@ -83,14 +88,18 @@ public class JLegendFileChooser extends JFileChooser  {
 
 							@Override
 							public String getDescription() {
-								return PluginServices.getText(this, driver.getDescription()+" "+version+" (*."+driver.getFileExtension()+")");
+								return PluginServices.getText(
+										this,
+										driver.getDescription() + " " + version
+												+ " (*."
+												+ driver.getFileExtension()
+												+ ")");
 							}
 
 						};
 						this.addChoosableFileFilter(aFilter);
 					}
-				}
-				else {	
+				} else {
 
 					FileFilter aFilter = new FileFilter() {
 
@@ -101,7 +110,10 @@ public class JLegendFileChooser extends JFileChooser  {
 
 						@Override
 						public String getDescription() {
-							return PluginServices.getText(this, driver.getDescription()+" (*."+driver.getFileExtension()+")");
+							return PluginServices.getText(
+									this,
+									driver.getDescription() + " (*."
+											+ driver.getFileExtension() + ")");
 						}
 
 					};
@@ -111,8 +123,6 @@ public class JLegendFileChooser extends JFileChooser  {
 			}
 		}
 	}
-
-
 
 	public IFMapLegendDriver getSuitableDriver() {
 		File f = getSelectedFile();
@@ -124,10 +134,8 @@ public class JLegendFileChooser extends JFileChooser  {
 		return null;
 	}
 
-
-
 	public IFMapLegendDriver getDriverFromDescription(File file) {
-		if (getFileFilter() != null){
+		if (getFileFilter() != null) {
 			String descripFile = getFileFilter().getDescription();
 			IFMapLegendDriver myDriver = null;
 
@@ -136,19 +144,22 @@ public class JLegendFileChooser extends JFileChooser  {
 				myDriver = drivers[i];
 				String driverDesc;
 
-				if(myDriver.getSupportedVersions() != null) {
+				if (myDriver.getSupportedVersions() != null) {
 					for (int j = 0; j < myDriver.getSupportedVersions().size(); j++) {
-						driverDesc = myDriver.getDescription()+" "+myDriver.getSupportedVersions().get(j)+" (*."+myDriver.getFileExtension()+")";
-						if (driverDesc.equals(descripFile)){
-							driverVersion = myDriver.getSupportedVersions().get(j);
+						driverDesc = myDriver.getDescription() + " "
+								+ myDriver.getSupportedVersions().get(j)
+								+ " (*." + myDriver.getFileExtension() + ")";
+						if (driverDesc.equals(descripFile)) {
+							driverVersion = myDriver.getSupportedVersions()
+									.get(j);
 							return myDriver;
 						}
 					}
-				}
-				else { 
-					driverDesc = myDriver.getDescription()+" (*."+myDriver.getFileExtension()+")";
-					if (driverDesc.equals(descripFile)){
-						driverVersion ="";
+				} else {
+					driverDesc = myDriver.getDescription() + " (*."
+							+ myDriver.getFileExtension() + ")";
+					if (driverDesc.equals(descripFile)) {
+						driverVersion = "";
 						return myDriver;
 					}
 				}
@@ -161,11 +172,14 @@ public class JLegendFileChooser extends JFileChooser  {
 		File f = super.getSelectedFile();
 
 		IFMapLegendDriver myDriver = getDriverFromDescription(f);
-		if (f!=null){
-			if(myDriver != null && !(f.getPath().toLowerCase().endsWith("."+myDriver.getFileExtension()))){
-				f = new File(f.getPath()+ "."+myDriver.getFileExtension());
+		if (f != null) {
+			if (myDriver != null
+					&& !(f.getPath().toLowerCase().endsWith("."
+							+ myDriver.getFileExtension()))) {
+				f = new File(f.getPath() + "." + myDriver.getFileExtension());
 			}
-			lastPath = f.getAbsolutePath().substring(0, f.getAbsolutePath().lastIndexOf(File.separator));
+			lastPath = f.getAbsolutePath().substring(0,
+					f.getAbsolutePath().lastIndexOf(File.separator));
 		}
 		return f;
 	}
@@ -173,6 +187,5 @@ public class JLegendFileChooser extends JFileChooser  {
 	public static String getDriverVersion() {
 		return driverVersion;
 	}
-
 
 }

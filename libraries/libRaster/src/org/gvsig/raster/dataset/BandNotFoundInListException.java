@@ -19,15 +19,16 @@
 package org.gvsig.raster.dataset;
 
 /**
- * Excepción cuando una banda no se encuentra en una lista en la
- * que se está buscando y dicha falta constituye una situación de
- * error.
+ * Excepción cuando una banda no se encuentra en una lista en la que se está
+ * buscando y dicha falta constituye una situación de error.
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public class BandNotFoundInListException extends Exception{
+public class BandNotFoundInListException extends Exception {
 	final private static long serialVersionUID = 0;
-	public BandNotFoundInListException(String msg){
+
+	public BandNotFoundInListException(String msg) {
 		super(msg);
 	}
 }

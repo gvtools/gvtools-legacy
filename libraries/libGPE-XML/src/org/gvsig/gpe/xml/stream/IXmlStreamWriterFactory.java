@@ -48,8 +48,8 @@ import java.io.OutputStream;
  */
 public interface IXmlStreamWriterFactory {
 
-    boolean canWrite(final String mimeType);
+	boolean canWrite(final String mimeType);
 
-    IXmlStreamWriter createWriter(final String mimeType, final OutputStream out)
-            throws XmlStreamException, IllegalArgumentException;
+	IXmlStreamWriter createWriter(final String mimeType, final OutputStream out)
+			throws XmlStreamException, IllegalArgumentException;
 }

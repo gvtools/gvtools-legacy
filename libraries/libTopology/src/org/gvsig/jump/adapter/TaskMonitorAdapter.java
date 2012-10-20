@@ -25,29 +25,28 @@ package org.gvsig.jump.adapter;
 
 import com.vividsolutions.jump.task.TaskMonitor;
 
-
 //TODO IMPLEMENTAR QUE SEA UN ADAPTADOR DE CANCELABLEMONITORABLETASK
 
 public class TaskMonitorAdapter implements TaskMonitor {
 
-    public void report(String description) {
-        
-    }
+	public void report(String description) {
 
-    public void report(int itemsDone, int totalItems, String itemDescription) {
-        
-    }
+	}
 
-    public void report(Exception exception) {
-        
-    }
+	public void report(int itemsDone, int totalItems, String itemDescription) {
 
-    public void allowCancellationRequests() {
-        
-    }
+	}
 
-    public boolean isCancelRequested() {
-        return false;
-    }
+	public void report(Exception exception) {
+
+	}
+
+	public void allowCancellationRequests() {
+
+	}
+
+	public boolean isCancelRequested() {
+		return false;
+	}
 
 }

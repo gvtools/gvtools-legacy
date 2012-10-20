@@ -47,210 +47,232 @@ import com.iver.cit.gvsig.fmap.layers.XMLException;
 import com.iver.utiles.StringUtilities;
 import com.iver.utiles.XMLEntity;
 
-
 /**
- * <p>VectorialIntervalLegend (which should be better called GraduatedColorLegend) is
- * a legend that allows to classify ranges of values using a color gradient based
- * on a value.<b>
+ * <p>
+ * VectorialIntervalLegend (which should be better called GraduatedColorLegend)
+ * is a legend that allows to classify ranges of values using a color gradient
+ * based on a value.<b>
  * </p>
  * <p>
  * The color gradient will be calculated according the starting color, the
  * ending color and the amount of intervals.
  * </p>
- * @author  Vicente Caballero Navarro
+ * 
+ * @author Vicente Caballero Navarro
  */
 public class VectorialIntervalLegend extends AbstractIntervalLegend {
-    private Color startColor = Color.red;
-    private Color endColor = Color.blue;
-    /**
-     * Constructor method
-     */
-    public VectorialIntervalLegend() {
-        //defaultSymbol = LegendFactory.DEFAULT_POLYGON_SYMBOL;
-    }
+	private Color startColor = Color.red;
+	private Color endColor = Color.blue;
 
-    /**
-     * Constructor method
-     *
-     * @param type type of the shape.
-     */
-    public VectorialIntervalLegend(int type) {
-        setShapeType(type);
-    }
+	/**
+	 * Constructor method
+	 */
+	public VectorialIntervalLegend() {
+		// defaultSymbol = LegendFactory.DEFAULT_POLYGON_SYMBOL;
+	}
 
-    public XMLEntity getXMLEntity() {
-        XMLEntity xml = new XMLEntity();
-        xml.putProperty("className", this.getClass().getName());
-        xml.putProperty("useDefaultSymbolB", useDefaultSymbol);
-        if (getDefaultSymbol() == null) {
-            xml.putProperty("useDefaultSymbol", 0);
-        } else {
-            xml.putProperty("useDefaultSymbol", 1);
-            xml.addChild(getDefaultSymbol().getXMLEntity());
-        }
+	/**
+	 * Constructor method
+	 * 
+	 * @param type
+	 *            type of the shape.
+	 */
+	public VectorialIntervalLegend(int type) {
+		setShapeType(type);
+	}
 
-        xml.putProperty("fieldName", fieldNames[0]);
-        xml.putProperty("index", index);
+	public XMLEntity getXMLEntity() {
+		XMLEntity xml = new XMLEntity();
+		xml.putProperty("className", this.getClass().getName());
+		xml.putProperty("useDefaultSymbolB", useDefaultSymbol);
+		if (getDefaultSymbol() == null) {
+			xml.putProperty("useDefaultSymbol", 0);
+		} else {
+			xml.putProperty("useDefaultSymbol", 1);
+			xml.addChild(getDefaultSymbol().getXMLEntity());
+		}
 
-        xml.putProperty("intervalType", intervalType);
-        xml.putProperty("numKeys", keys.size());
+		xml.putProperty("fieldName", fieldNames[0]);
+		xml.putProperty("index", index);
 
-        if (keys.size() > 0) {
-            xml.putProperty("tipoValueKeys", keys.get(0).getClass().getName());
+		xml.putProperty("intervalType", intervalType);
+		xml.putProperty("numKeys", keys.size());
 
-            String[] sk = new String[keys.size()];
+		if (keys.size() > 0) {
+			xml.putProperty("tipoValueKeys", keys.get(0).getClass().getName());
 
-            for (int i = 0; i < keys.size(); i++) {
-                sk[i] = ((IInterval) keys.get(i)).toString();
-            }
+			String[] sk = new String[keys.size()];
 
-            xml.putProperty("keys", getValues());
+			for (int i = 0; i < keys.size(); i++) {
+				sk[i] = ((IInterval) keys.get(i)).toString();
+			}
 
-            for (int i = 0; i < keys.size(); i++) {
-                xml.addChild(getSymbols()[i].getXMLEntity());
-            }
-        }
+			xml.putProperty("keys", getValues());
 
-        xml.putProperty("shapeType", shapeType);
+			for (int i = 0; i < keys.size(); i++) {
+				xml.addChild(getSymbols()[i].getXMLEntity());
+			}
+		}
 
-        xml.putProperty("startColor", StringUtilities.color2String(startColor));
-        xml.putProperty("endColor", StringUtilities.color2String(endColor));
+		xml.putProperty("shapeType", shapeType);
 
-        ///xml.putProperty("numSymbols", symbols.size());
-        ///xml.putProperty("indexs", getIndexs());
-        ///xml.putProperty("values", getValues());
-        return xml;
-    }
+		xml.putProperty("startColor", StringUtilities.color2String(startColor));
+		xml.putProperty("endColor", StringUtilities.color2String(endColor));
 
+		// /xml.putProperty("numSymbols", symbols.size());
+		// /xml.putProperty("indexs", getIndexs());
+		// /xml.putProperty("values", getValues());
+		return xml;
+	}
 
-    public void setXMLEntity03(XMLEntity xml) {
-        fieldNames = new String[] {xml.getStringProperty("fieldName")};
-        index = xml.getIntProperty("index");
+	public void setXMLEntity03(XMLEntity xml) {
+		fieldNames = new String[] { xml.getStringProperty("fieldName") };
+		index = xml.getIntProperty("index");
 
-        if (xml.contains("intervalType")) { /* TODO Esta condici�n es para
-        									   poder cargar la versi�n 0.3,
-        									   se puede eliminar cuando ya
-        									   no queramos soportar esta
-        									   versi�n. */
-            intervalType = xml.getIntProperty("intervalType");
-        }
+		if (xml.contains("intervalType")) { /*
+											 * TODO Esta condici�n es para
+											 * poder cargar la versi�n 0.3, se
+											 * puede eliminar cuando ya no
+											 * queramos soportar esta versi�n.
+											 */
+			intervalType = xml.getIntProperty("intervalType");
+		}
 
-        int useDefaultSymbol = xml.getIntProperty("useDefaultSymbol");
+		int useDefaultSymbol = xml.getIntProperty("useDefaultSymbol");
 
-        if (useDefaultSymbol == 1) {
-            setDefaultSymbol( SymbologyFactory.createSymbolFromXML(xml.getChild(0), null));
-        } else {
-            setDefaultSymbol(null);
-        }
+		if (useDefaultSymbol == 1) {
+			setDefaultSymbol(SymbologyFactory.createSymbolFromXML(
+					xml.getChild(0), null));
+		} else {
+			setDefaultSymbol(null);
+		}
 
-        int numKeys = xml.getIntProperty("numKeys");
+		int numKeys = xml.getIntProperty("numKeys");
 
-        if (numKeys > 0) {
-            String className = xml.getStringProperty("tipoValueKeys");
-            String[] sk = xml.getStringArrayProperty("keys");
-            IInterval auxInterval;
+		if (numKeys > 0) {
+			String className = xml.getStringProperty("tipoValueKeys");
+			String[] sk = xml.getStringArrayProperty("keys");
+			IInterval auxInterval;
 
-            for (int i = 0; i < numKeys; i++) {
-                auxInterval = FInterval.create(sk[i]);
-                symbols.put(auxInterval,
-                    SymbologyFactory.createSymbolFromXML(xml.getChild(i + useDefaultSymbol), null));
-                keys.add(auxInterval);
-                System.out.println("auxInterval =" + auxInterval + "Symbol =" +
-                		 SymbologyFactory.createSymbolFromXML(xml.getChild(i + useDefaultSymbol), null)
-                           .getDescription());
-            }
-        }
+			for (int i = 0; i < numKeys; i++) {
+				auxInterval = FInterval.create(sk[i]);
+				symbols.put(
+						auxInterval,
+						SymbologyFactory.createSymbolFromXML(
+								xml.getChild(i + useDefaultSymbol), null));
+				keys.add(auxInterval);
+				System.out.println("auxInterval ="
+						+ auxInterval
+						+ "Symbol ="
+						+ SymbologyFactory.createSymbolFromXML(
+								xml.getChild(i + useDefaultSymbol), null)
+								.getDescription());
+			}
+		}
 
-        shapeType = xml.getIntProperty("shapeType");
+		shapeType = xml.getIntProperty("shapeType");
 
-        startColor = StringUtilities.string2Color(xml.getStringProperty(
-                    "startColor"));
-        endColor = StringUtilities.string2Color(xml.getStringProperty(
-                    "endColor"));
-    }
+		startColor = StringUtilities.string2Color(xml
+				.getStringProperty("startColor"));
+		endColor = StringUtilities.string2Color(xml
+				.getStringProperty("endColor"));
+	}
 
+	public void setXMLEntity(XMLEntity xml) {
+		fieldNames = new String[] { xml.getStringProperty("fieldName") };
+		index = xml.getIntProperty("index");
 
-    public void setXMLEntity(XMLEntity xml) {
-        fieldNames = new String[] {xml.getStringProperty("fieldName")};
-        index = xml.getIntProperty("index");
+		if (xml.contains("intervalType")) { // TODO Esta condici�n es para
+											// poder cargar la versi�n 0.3, se
+											// puede eliminar cuando ya no
+											// queramos soportar esta versi�n.
+			intervalType = xml.getIntProperty("intervalType");
+		}
+		useDefaultSymbol = xml.getBooleanProperty("useDefaultSymbolB");
+		int hasDefaultSymbol = xml.getIntProperty("useDefaultSymbol");
 
-        if (xml.contains("intervalType")) { //TODO Esta condici�n es para poder cargar la versi�n 0.3, se puede eliminar cuando ya no queramos soportar esta versi�n.
-            intervalType = xml.getIntProperty("intervalType");
-        }
-        useDefaultSymbol = xml.getBooleanProperty("useDefaultSymbolB");
-        int hasDefaultSymbol = xml.getIntProperty("useDefaultSymbol");
+		if (hasDefaultSymbol == 1) {
+			setDefaultSymbol(SymbologyFactory.createSymbolFromXML(
+					xml.getChild(0), null));
+		} else {
+			setDefaultSymbol(null);
+		}
 
-        if (hasDefaultSymbol == 1) {
-            setDefaultSymbol(SymbologyFactory.createSymbolFromXML(xml.getChild(0), null));
-        } else {
-            setDefaultSymbol(null);
-        }
+		int numKeys = xml.getIntProperty("numKeys");
 
-        int numKeys = xml.getIntProperty("numKeys");
+		if (numKeys > 0) {
+			String[] sk = xml.getStringArrayProperty("keys");
+			IInterval auxInterval;
 
-        if (numKeys > 0) {
-            String[] sk = xml.getStringArrayProperty("keys");
-            IInterval auxInterval;
-
-            for (int i = 0; i < numKeys; i++) {
-                auxInterval = FInterval.create(sk[i]);
-                symbols.put(auxInterval,
-                		SymbologyFactory.createSymbolFromXML(xml.getChild(i + hasDefaultSymbol), null));
-                keys.add(auxInterval);
-                System.out.println("auxInterval =" + auxInterval + "Symbol =" +
-                		SymbologyFactory.createSymbolFromXML(xml.getChild(i + hasDefaultSymbol), null)
-                           .getDescription());
-            }
-        }
-		if (xml.contains("shapeType")){
+			for (int i = 0; i < numKeys; i++) {
+				auxInterval = FInterval.create(sk[i]);
+				symbols.put(
+						auxInterval,
+						SymbologyFactory.createSymbolFromXML(
+								xml.getChild(i + hasDefaultSymbol), null));
+				keys.add(auxInterval);
+				System.out.println("auxInterval ="
+						+ auxInterval
+						+ "Symbol ="
+						+ SymbologyFactory.createSymbolFromXML(
+								xml.getChild(i + hasDefaultSymbol), null)
+								.getDescription());
+			}
+		}
+		if (xml.contains("shapeType")) {
 			shapeType = xml.getIntProperty("shapeType");
 		}
-        startColor = StringUtilities.string2Color(xml.getStringProperty(
-                    "startColor"));
-        endColor = StringUtilities.string2Color(xml.getStringProperty(
-                    "endColor"));
-    }
+		startColor = StringUtilities.string2Color(xml
+				.getStringProperty("startColor"));
+		endColor = StringUtilities.string2Color(xml
+				.getStringProperty("endColor"));
+	}
 
+	public ILegend cloneLegend() throws XMLException {
+		return LegendFactory.createFromXML(getXMLEntity());
+	}
 
-    public ILegend cloneLegend() throws XMLException {
-        return LegendFactory.createFromXML(getXMLEntity());
-    }
-
-    /**
+	/**
 	 * Returns the final color
-	 * @return Color  final color.
-	 * @uml.property  name="endColor"
+	 * 
+	 * @return Color final color.
+	 * @uml.property name="endColor"
 	 */
-    public Color getEndColor() {
-        return endColor;
-    }
+	public Color getEndColor() {
+		return endColor;
+	}
 
-    /**
+	/**
 	 * Inserts the final color.
-	 * @param endColor final color.
-	 * @uml.property  name="endColor"
+	 * 
+	 * @param endColor
+	 *            final color.
+	 * @uml.property name="endColor"
 	 */
-    public void setEndColor(Color endColor) {
-        this.endColor = endColor;
-    }
+	public void setEndColor(Color endColor) {
+		this.endColor = endColor;
+	}
 
-    /**
+	/**
 	 * Returns the initial color.
-	 * @return  Color initial color.
-	 * @uml.property  name="startColor"
+	 * 
+	 * @return Color initial color.
+	 * @uml.property name="startColor"
 	 */
-    public Color getStartColor() {
-        return startColor;
-    }
+	public Color getStartColor() {
+		return startColor;
+	}
 
-    /**
+	/**
 	 * Inserts the initial color
-	 * @param startColor initial color.
-	 * @uml.property  name="startColor"
+	 * 
+	 * @param startColor
+	 *            initial color.
+	 * @uml.property name="startColor"
 	 */
-    public void setStartColor(Color startColor) {
-        this.startColor = startColor;
-    }
+	public void setStartColor(Color startColor) {
+		this.startColor = startColor;
+	}
 
 	public int getShapeType() {
 		return shapeType;
@@ -258,12 +280,11 @@ public class VectorialIntervalLegend extends AbstractIntervalLegend {
 
 	public void setShapeType(int shapeType) {
 		if (this.shapeType != shapeType) {
-			setDefaultSymbol(SymbologyFactory.
-					createDefaultSymbolByShapeType(shapeType));
+			setDefaultSymbol(SymbologyFactory
+					.createDefaultSymbolByShapeType(shapeType));
 			this.shapeType = shapeType;
 		}
 	}
-
 
 	public String getClassName() {
 		return getClass().getName();
@@ -271,7 +292,8 @@ public class VectorialIntervalLegend extends AbstractIntervalLegend {
 
 	//
 	/**
-	 * <p>This method does not exist officially. But what it does is just apply the
+	 * <p>
+	 * This method does not exist officially. But what it does is just apply the
 	 * values of a VectorialIntervalLegend to other so, It is not needed to
 	 * replicate the code of populating the legend in every panel that produces
 	 * a legend by intervals.<br>
@@ -283,16 +305,18 @@ public class VectorialIntervalLegend extends AbstractIntervalLegend {
 	public static void initializeVectorialIntervalLegend(
 			AbstractIntervalLegend srcLegend,
 			AbstractIntervalLegend targetLegend) {
-		targetLegend.shapeType        = srcLegend.shapeType;
-		targetLegend.symbols          = srcLegend.symbols;
-		targetLegend.keys             = srcLegend.keys;
-		targetLegend.index            = srcLegend.index;
-		targetLegend.setClassifyingFieldNames(srcLegend.getClassifyingFieldNames());
-		targetLegend.setClassifyingFieldTypes(srcLegend.getClassifyingFieldTypes());
-		targetLegend.fieldId          = srcLegend.fieldId;
-		targetLegend.defaultSymbol    = srcLegend.defaultSymbol;
-		targetLegend.dataSource       = srcLegend.dataSource;
-		targetLegend.intervalType     = srcLegend.intervalType;
+		targetLegend.shapeType = srcLegend.shapeType;
+		targetLegend.symbols = srcLegend.symbols;
+		targetLegend.keys = srcLegend.keys;
+		targetLegend.index = srcLegend.index;
+		targetLegend.setClassifyingFieldNames(srcLegend
+				.getClassifyingFieldNames());
+		targetLegend.setClassifyingFieldTypes(srcLegend
+				.getClassifyingFieldTypes());
+		targetLegend.fieldId = srcLegend.fieldId;
+		targetLegend.defaultSymbol = srcLegend.defaultSymbol;
+		targetLegend.dataSource = srcLegend.dataSource;
+		targetLegend.intervalType = srcLegend.intervalType;
 		targetLegend.useDefaultSymbol = srcLegend.useDefaultSymbol;
 	}
 

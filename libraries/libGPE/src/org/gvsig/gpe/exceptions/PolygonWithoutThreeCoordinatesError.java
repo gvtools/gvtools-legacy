@@ -55,29 +55,31 @@ import org.gvsig.exceptions.BaseException;
  *
  */
 /**
- * This error is throwed when the application try
- * to add a polygon with less than tree points (to create
- * a polygon is necessary three points at least)
+ * This error is throwed when the application try to add a polygon with less
+ * than tree points (to create a polygon is necessary three points at least)
+ * 
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class PolygonWithoutThreeCoordinatesError extends BaseException {
 	private static final long serialVersionUID = -2769635981750046340L;
-	private double[] x  = null;
-	private double[] y  = null;
-	private double[] z  = null;
-	
+	private double[] x = null;
+	private double[] y = null;
+	private double[] z = null;
+
 	/**
 	 * Costructor
+	 * 
 	 * @param x
-	 * Coordinate X
+	 *            Coordinate X
 	 * @param y
-	 * Coordinate Y
+	 *            Coordinate Y
 	 * @param z
-	 * Coordinate Z
+	 *            Coordinate Z
 	 */
-	public PolygonWithoutThreeCoordinatesError(double[] x, double[] y, double[] z){
+	public PolygonWithoutThreeCoordinatesError(double[] x, double[] y,
+			double[] z) {
 		this.x = x;
-		this.y = y ;
+		this.y = y;
 		this.z = z;
 		initialize();
 	}
@@ -87,13 +89,14 @@ public class PolygonWithoutThreeCoordinatesError extends BaseException {
 	 */
 	private void initialize() {
 		messageKey = "gpe_polygon_without_three_coordinates_error";
-		formatString = "The polygon has not three coordinates at least (it has" +
-				" %(size)). Its coordinates are %(coordinates)";				
+		formatString = "The polygon has not three coordinates at least (it has"
+				+ " %(size)). Its coordinates are %(coordinates)";
 		code = serialVersionUID;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.exceptions.BaseException#values()
 	 */
 	protected Map values() {
@@ -102,10 +105,10 @@ public class PolygonWithoutThreeCoordinatesError extends BaseException {
 		hash.put("size", String.valueOf(x.length));
 		return hash;
 	}
-	
-	private String getCoordinates(){
+
+	private String getCoordinates() {
 		String coordinates = "";
-		for (int i=0 ; i<x.length ; i++){
+		for (int i = 0; i < x.length; i++) {
 			coordinates = String.valueOf(x[i]);
 			coordinates = String.valueOf(",");
 			coordinates = String.valueOf(y[i]);

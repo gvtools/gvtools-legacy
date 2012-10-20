@@ -45,10 +45,9 @@ import com.iver.cit.gvsig.project.documents.layout.LayoutContext;
 import com.iver.cit.gvsig.project.documents.layout.fframes.FFrameGroup;
 import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 
-
 /**
  * Coloca delante de todos los fframes el fframe seleccionado.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class BeforeLayoutMenuEntry extends AbstractLayoutContextMenuAction {
@@ -68,32 +67,36 @@ public class BeforeLayoutMenuEntry extends AbstractLayoutContextMenuAction {
 		return PluginServices.getText(this, "colocar_delante");
 	}
 
-	public boolean isEnabled(LayoutContext layoutContext, IFFrame[] selectedFrames) {
+	public boolean isEnabled(LayoutContext layoutContext,
+			IFFrame[] selectedFrames) {
 		return true;
 	}
 
-	public boolean isVisible(LayoutContext layoutContext, IFFrame[] selectedFrames) {
-		if (selectedFrames.length==1 && !(getLayout().getLayoutControl().getGeometryAdapter().getPoints().length>0)) {
+	public boolean isVisible(LayoutContext layoutContext,
+			IFFrame[] selectedFrames) {
+		if (selectedFrames.length == 1
+				&& !(getLayout().getLayoutControl().getGeometryAdapter()
+						.getPoints().length > 0)) {
 			return true;
 		}
 		return false;
 	}
 
-
 	public void execute(LayoutContext layoutContext, IFFrame[] selectedFrames) {
 		layoutContext.getEFS().startComplexCommand();
 		for (int i = selectedFrames.length - 1; i >= 0; i--) {
 			IFFrame fframe = selectedFrames[i];
-				if (fframe instanceof FFrameGroup) {
-					((FFrameGroup) fframe).setAt(layoutContext.getAT());
-				}
+			if (fframe instanceof FFrameGroup) {
+				((FFrameGroup) fframe).setAt(layoutContext.getAT());
+			}
 
-				IFFrame fframeAux=fframe.cloneFFrame(getLayout());
-				fframeAux.setLevel(layoutContext.getNumBefore());
-				layoutContext.getEFS().modifyFFrame(fframe,fframeAux);
-				fframeAux.getBoundingBox(layoutContext.getAT());
+			IFFrame fframeAux = fframe.cloneFFrame(getLayout());
+			fframeAux.setLevel(layoutContext.getNumBefore());
+			layoutContext.getEFS().modifyFFrame(fframe, fframeAux);
+			fframeAux.getBoundingBox(layoutContext.getAT());
 		}
-		layoutContext.getEFS().endComplexCommand(PluginServices.getText(this,"change_before"));
+		layoutContext.getEFS().endComplexCommand(
+				PluginServices.getText(this, "change_before"));
 		layoutContext.updateFFrames();
 		layoutContext.callLayoutDrawListeners();
 	}

@@ -57,16 +57,16 @@ import java.util.Map;
  */
 public class InvalidFormatException extends WFSException {
 	private static final long serialVersionUID = 8833249742771533911L;
-	private String msg = null;		
-	
+	private String msg = null;
+
 	public InvalidFormatException(String msg) {
 		this.msg = msg;
-		init();			
-	}	
-	
-	protected Map values() {		
+		init();
+	}
+
+	protected Map values() {
 		Hashtable params;
-		params = new Hashtable();		
+		params = new Hashtable();
 		return params;
 	}
 

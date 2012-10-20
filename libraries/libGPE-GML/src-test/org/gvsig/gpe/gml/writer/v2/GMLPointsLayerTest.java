@@ -72,10 +72,11 @@ import org.gvsig.gpe.writer.GPEPointsLayerTest;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class GMLPointsLayerTest extends GPEPointsLayerTest{
-	
+public class GMLPointsLayerTest extends GPEPointsLayerTest {
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEParserClass()
 	 */
 	public Class getGPEParserClass() {
@@ -84,6 +85,7 @@ public class GMLPointsLayerTest extends GPEPointsLayerTest{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.writers.GPEWriterBaseTest#getGPEWriterHandlerClass()
 	 */
 	public Class getGPEWriterHandlerClass() {
@@ -91,4 +93,3 @@ public class GMLPointsLayerTest extends GPEPointsLayerTest{
 	}
 
 }
-

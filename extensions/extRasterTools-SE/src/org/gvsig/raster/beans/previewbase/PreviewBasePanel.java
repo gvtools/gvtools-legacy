@@ -41,64 +41,72 @@ import org.gvsig.raster.datastruct.Extent;
 import org.gvsig.raster.util.RasterToolsUtil;
 
 import com.iver.cit.gvsig.fmap.layers.FLayer;
+
 /**
  * Panel base para componentes con previsualización.
  * 
  * 19/02/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class PreviewBasePanel extends DefaultButtonsPanel {
 	private static final long serialVersionUID = 6028780107787443656L;
 
-	private ImageNavigator        imageNavigator        = null;
-	private FLyrRasterSE          fLayer                = null;
+	private ImageNavigator imageNavigator = null;
+	private FLyrRasterSE fLayer = null;
 
 	/**
 	 * Lista de paneles de usuario que son añadidos a los tabs
 	 */
-	private ArrayList             userPanel             = new ArrayList();
+	private ArrayList userPanel = new ArrayList();
 	/**
 	 * Panel de la base del cuadro con opciones comunes para todos los tabs
 	 */
-	private JPanel                generalPanel          = null;
+	private JPanel generalPanel = null;
 	/**
 	 * Panel de debajo de la vista previa
 	 */
-	private JPanel                downPreviewPanel      = null;
-	private IPreviewRenderProcess renderProcess         = null;
+	private JPanel downPreviewPanel = null;
+	private IPreviewRenderProcess renderProcess = null;
 
 	/**
 	 * Panel central para el caso de que sea más de uno (con pestañas)
 	 */
-	private JTabbedPane           tabbedPane            = null;
+	private JTabbedPane tabbedPane = null;
 	/**
 	 * Panel central para el caso de que sea solo uno (sin pestañas)
 	 */
-	private JPanel                mainPanel             = null;
+	private JPanel mainPanel = null;
 
-	private JSplitPane            jPanelRight           = null;
-	private JPanel                jPanelPreview         = null;
+	private JSplitPane jPanelRight = null;
+	private JPanel jPanelPreview = null;
 
-	private PreviewRequestManager previewRequestManager =  null;
-	
+	private PreviewRequestManager previewRequestManager = null;
+
 	/**
 	 * Construir un nuevo PreviewBasePanel
-	 * @param userPanel. Lista de paneles de usuario para los tabs
-	 * @param generalPanel. Panel inferior global para todos los tabs
-	 * @param downPreviewPanel. Panel inferior al de la previsualización
-	 * @param renderProcess. Clase para procesar el raster antes del dibujado
-	 * @param lyr. Capa raster a mostrar en la previsualización
+	 * 
+	 * @param userPanel
+	 *            . Lista de paneles de usuario para los tabs
+	 * @param generalPanel
+	 *            . Panel inferior global para todos los tabs
+	 * @param downPreviewPanel
+	 *            . Panel inferior al de la previsualización
+	 * @param renderProcess
+	 *            . Clase para procesar el raster antes del dibujado
+	 * @param lyr
+	 *            . Capa raster a mostrar en la previsualización
 	 */
-	public PreviewBasePanel(ArrayList userPanel, 
-							JPanel generalPanel, 
-							JPanel downPreviewPanel, 
-							IPreviewRenderProcess renderProcess,
-							FLyrRasterSE lyr) {
-		this(ButtonsPanel.BUTTONS_ACCEPTCANCELAPPLY, userPanel, generalPanel, downPreviewPanel, renderProcess, lyr);
+	public PreviewBasePanel(ArrayList userPanel, JPanel generalPanel,
+			JPanel downPreviewPanel, IPreviewRenderProcess renderProcess,
+			FLyrRasterSE lyr) {
+		this(ButtonsPanel.BUTTONS_ACCEPTCANCELAPPLY, userPanel, generalPanel,
+				downPreviewPanel, renderProcess, lyr);
 	}
 
 	/**
 	 * Construir un nuevo PreviewBasePanel
+	 * 
 	 * @param buttons
 	 * @param userPanel
 	 * @param generalPanel
@@ -106,12 +114,9 @@ public class PreviewBasePanel extends DefaultButtonsPanel {
 	 * @param renderProcess
 	 * @param lyr
 	 */
-	public PreviewBasePanel(int buttons,
-			ArrayList userPanel, 
-			JPanel generalPanel, 
-			JPanel downPreviewPanel, 
-			IPreviewRenderProcess renderProcess,
-			FLyrRasterSE lyr) {
+	public PreviewBasePanel(int buttons, ArrayList userPanel,
+			JPanel generalPanel, JPanel downPreviewPanel,
+			IPreviewRenderProcess renderProcess, FLyrRasterSE lyr) {
 		super(buttons);
 		this.userPanel = userPanel;
 		this.generalPanel = generalPanel;
@@ -130,13 +135,13 @@ public class PreviewBasePanel extends DefaultButtonsPanel {
 		JPanel panelLeft = new JPanel();
 		panelLeft.setPreferredSize(new Dimension(390, 0));
 		panelLeft.setLayout(new BorderLayout(8, 8));
-		if(userPanel != null) {
-			if(userPanel.size() == 1)
+		if (userPanel != null) {
+			if (userPanel.size() == 1)
 				panelLeft.add(getPanelWithoutTabs(), BorderLayout.CENTER);
-			else if(userPanel.size() > 1)
+			else if (userPanel.size() > 1)
 				panelLeft.add(getTabbedPane(), BorderLayout.CENTER);
 		}
-		if(generalPanel != null)
+		if (generalPanel != null)
 			panelLeft.add(getGeneralPanel(), BorderLayout.SOUTH);
 
 		JSplitPane jSplitPane1 = new JSplitPane();
@@ -158,58 +163,67 @@ public class PreviewBasePanel extends DefaultButtonsPanel {
 
 		add(jSplitPane1, BorderLayout.CENTER);
 	}
-	
+
 	/**
-	 * Asigna el panel de la posición 0 del array. Este panel es el que se utiliza
-	 * cuando no hay un JTabbedPane
+	 * Asigna el panel de la posición 0 del array. Este panel es el que se
+	 * utiliza cuando no hay un JTabbedPane
+	 * 
 	 * @param panel
 	 */
 	public void setUniquePanel(JPanel panel) {
 		userPanel.clear();
 		userPanel.add(panel);
 		mainPanel = panel;
-		((JSplitPane)getContent().getComponent(0)).setLeftComponent(mainPanel);
+		((JSplitPane) getContent().getComponent(0)).setLeftComponent(mainPanel);
 		getContent().updateUI();
 	}
 
 	/**
-	 * Obtiene el componente con los tabs donde se añaden las pestañas del usuario.
+	 * Obtiene el componente con los tabs donde se añaden las pestañas del
+	 * usuario.
+	 * 
 	 * @return JTabbedPane
 	 */
 	public JTabbedPane getTabbedPane() {
 		if (tabbedPane == null) {
 			tabbedPane = new JTabbedPane();
-			for (int i = 0; i < userPanel.size(); i++) 
-				tabbedPane.addTab(((IUserPanelInterface)userPanel.get(i)).getTitle(), ((IUserPanelInterface)userPanel.get(i)).getPanel());
+			for (int i = 0; i < userPanel.size(); i++)
+				tabbedPane.addTab(
+						((IUserPanelInterface) userPanel.get(i)).getTitle(),
+						((IUserPanelInterface) userPanel.get(i)).getPanel());
 		}
 		return tabbedPane;
 	}
-	
+
 	/**
-	 * Obtiene el panel central sin tabs. Esto ocurre cuando el usuario solo quiere un
-	 * panel. En este caso no hacen falta pestañas por lo que se incorpora solo un JPanel
+	 * Obtiene el panel central sin tabs. Esto ocurre cuando el usuario solo
+	 * quiere un panel. En este caso no hacen falta pestañas por lo que se
+	 * incorpora solo un JPanel
+	 * 
 	 * @return JTabbedPane
 	 */
 	public JPanel getPanelWithoutTabs() {
 		if (mainPanel == null) {
-			if(((IUserPanelInterface)userPanel.get(0)) instanceof JPanel) {
-				mainPanel = ((IUserPanelInterface)userPanel.get(0)).getPanel();
+			if (((IUserPanelInterface) userPanel.get(0)) instanceof JPanel) {
+				mainPanel = ((IUserPanelInterface) userPanel.get(0)).getPanel();
 			} else
 				mainPanel = new JPanel();
 		}
 		return mainPanel;
 	}
-	
+
 	/**
 	 * Obtiene el panel con opciones comunes a todas las pestañas.
+	 * 
 	 * @return JPanel
 	 */
 	public JPanel getGeneralPanel() {
 		return generalPanel;
 	}
-	
+
 	/**
 	 * Obtiene el panel de debajo de la vista previa
+	 * 
 	 * @return JPanel
 	 */
 	public JPanel getDownPreviewPanel() {
@@ -218,14 +232,16 @@ public class PreviewBasePanel extends DefaultButtonsPanel {
 
 	/**
 	 * Obtiene la lista de paneles de usuario
+	 * 
 	 * @return ArrayList de IUserPanelInterface
 	 */
 	public ArrayList getUserPanels() {
 		return userPanel;
 	}
-	
+
 	/**
 	 * Obtiene el objeto IClientImageNavigator
+	 * 
 	 * @return
 	 */
 	public IClientImageNavigator getPreviewManager() {
@@ -234,26 +250,32 @@ public class PreviewBasePanel extends DefaultButtonsPanel {
 
 	/**
 	 * Devuelve el componente para la vista previa
+	 * 
 	 * @return
 	 */
 	public ImageNavigator getImageNavigator() {
 		if (imageNavigator == null) {
 			imageNavigator = new ImageNavigator(getPreviewManager());
 			imageNavigator.setFocusable(true);
-			imageNavigator.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+			imageNavigator.setBorder(BorderFactory.createLineBorder(Color.gray,
+					1));
 		}
 		return imageNavigator;
 	}
 
 	/**
 	 * Obtiene el panel con el componente con la vista previa
+	 * 
 	 * @return JPanel
 	 */
 	public JPanel getPanelPreview() {
 		if (jPanelPreview == null) {
 			jPanelPreview = new JPanel();
 			JPanel jsubpanel2 = new JPanel();
-			jPanelPreview.setBorder(BorderFactory.createTitledBorder(null, RasterToolsUtil.getText(this, "vista_previa"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+			jPanelPreview.setBorder(BorderFactory.createTitledBorder(null,
+					RasterToolsUtil.getText(this, "vista_previa"),
+					TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, null));
 			jPanelPreview.setLayout(new BorderLayout());
 			jsubpanel2.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
 			jsubpanel2.setLayout(new BorderLayout());
@@ -270,6 +292,7 @@ public class PreviewBasePanel extends DefaultButtonsPanel {
 
 	/**
 	 * Devuelve el panel donde estará el widget de preview
+	 * 
 	 * @return
 	 */
 	private JSplitPane getPanelRight() {
@@ -281,11 +304,11 @@ public class PreviewBasePanel extends DefaultButtonsPanel {
 			jPanelRight.setPreferredSize(new Dimension(220, 0));
 			jPanelRight.setMinimumSize(new Dimension(220, 0));
 
-			if(getPanelPreview() != null)
+			if (getPanelPreview() != null)
 				jPanelRight.setTopComponent(getPanelPreview());
 			else
 				jPanelRight.setTopComponent(new JPanel());
-			if(getDownPreviewPanel() != null)
+			if (getDownPreviewPanel() != null)
 				jPanelRight.setBottomComponent(getDownPreviewPanel());
 			else
 				jPanelRight.setBottomComponent(new JPanel());
@@ -306,33 +329,41 @@ public class PreviewBasePanel extends DefaultButtonsPanel {
 
 	/**
 	 * Especificar la capa para la previsualización
+	 * 
 	 * @param layer
 	 */
 	public void setLayer(FLyrRasterSE fLayer) {
 		this.fLayer = fLayer;
-		previewRequestManager = new PreviewRequestManager(this, renderProcess, fLayer);
+		previewRequestManager = new PreviewRequestManager(this, renderProcess,
+				fLayer);
 
 		// Util para ejecutar el test sin una capa de prueba
 		if (fLayer == null)
 			return;
 
 		// Especificar las dimensiones de la capa en la vista previa
-		Extent extent2 = ((FLyrRasterSE) fLayer).getFullRasterExtent();//.getBufferFactory().getDataSource().getExtent();
-		getImageNavigator().setViewDimensions(extent2.getMin().getX(), extent2.getMax().getY(), extent2.getMax().getX(), extent2.getMin().getY());
-		getImageNavigator().setZoom(1.0/((FLyrRasterSE) fLayer).getBufferFactory().getDataSource().getCellSize());
+		Extent extent2 = ((FLyrRasterSE) fLayer).getFullRasterExtent();// .getBufferFactory().getDataSource().getExtent();
+		getImageNavigator().setViewDimensions(extent2.getMin().getX(),
+				extent2.getMax().getY(), extent2.getMax().getX(),
+				extent2.getMin().getY());
+		getImageNavigator().setZoom(
+				1.0 / ((FLyrRasterSE) fLayer).getBufferFactory()
+						.getDataSource().getCellSize());
 		getImageNavigator().setAutoAdjusted();
 	}
 
 	/**
 	 * Especificar el layer para el recorte
+	 * 
 	 * @param layer
 	 */
 	public FLayer getLayer() {
 		return fLayer;
 	}
-	
+
 	/**
 	 * Especifica el tamaño de la vista previa
+	 * 
 	 * @param dimension
 	 */
 	public void setPreviewSize(Dimension dimension) {
@@ -340,7 +371,7 @@ public class PreviewBasePanel extends DefaultButtonsPanel {
 		getPanelPreview().setMinimumSize(dimension);
 		getPanelPreview().setMaximumSize(dimension);
 	}
-	
+
 	/**
 	 * Actualizamos la vista previa
 	 */

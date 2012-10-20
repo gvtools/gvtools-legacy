@@ -42,14 +42,14 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: FeatureCollectionMemoryDriver.java 14143 2007-09-27 16:58:37Z azabala $
-* $Log: FeatureCollectionMemoryDriver.java,v $
-* Revision 1.1  2007/09/19 15:27:41  azabala
-* first version in cvs
-*
-*
-*/
+ *
+ * $Id: FeatureCollectionMemoryDriver.java 14143 2007-09-27 16:58:37Z azabala $
+ * $Log: FeatureCollectionMemoryDriver.java,v $
+ * Revision 1.1  2007/09/19 15:27:41  azabala
+ * first version in cvs
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.drivers;
 
 import java.awt.geom.Rectangle2D;
@@ -71,48 +71,50 @@ import com.iver.cit.gvsig.fmap.core.IGeometry;
 /**
  * Driver to work with a collection of IFeature.
  * 
- * If offers a layer to work with a collection of a features as a vectorial driver.
- * It doesnt allow to write or edit existing features.
+ * If offers a layer to work with a collection of a features as a vectorial
+ * driver. It doesnt allow to write or edit existing features.
  * 
  * @author azabala
- *
+ * 
  */
-public class FeatureCollectionMemoryDriver implements VectorialDriver, 
-														ObjectDriver,
-														BoundedShapes {
-    
+public class FeatureCollectionMemoryDriver implements VectorialDriver,
+		ObjectDriver, BoundedShapes {
+
 	public static final Rectangle2D EMPTY_FULL_EXTENT = new Rectangle2D.Double();
 	/**
-     * Name of the data source of this driver
-     */
+	 * Name of the data source of this driver
+	 */
 	String name;
 	/**
-	 * contains all features this driver allows to access. 
+	 * contains all features this driver allows to access.
 	 */
 	List<IFeature> features;
-	
+
 	/**
 	 * Definition of the features.
 	 */
 	LayerDefinition layerDefinition;
-	
+
 	/**
 	 * Full extent of all features
 	 */
 	Rectangle2D fullExtent;
-	
-	//TODO Remove this class
+
+	// TODO Remove this class
 	DriverAttributes attributes = null;
-	
+
 	/**
-	 * Constructor 
-	 * @param name descriptive name of the data source
-	 * @param features collection of features in memory
-	 * @param definition definition of the layer of these features
+	 * Constructor
+	 * 
+	 * @param name
+	 *            descriptive name of the data source
+	 * @param features
+	 *            collection of features in memory
+	 * @param definition
+	 *            definition of the layer of these features
 	 */
-	public FeatureCollectionMemoryDriver(String name,
-										List<IFeature> features, 
-									LayerDefinition definition){
+	public FeatureCollectionMemoryDriver(String name, List<IFeature> features,
+			LayerDefinition definition) {
 		this.name = name;
 		this.features = features;
 		this.layerDefinition = definition;
@@ -120,7 +122,6 @@ public class FeatureCollectionMemoryDriver implements VectorialDriver,
 		attributes.setLoadedInMemory(true);
 		computeFullExtent();
 	}
-	
 
 	public int getShapeType() {
 		return layerDefinition.getShapeType();
@@ -130,33 +131,29 @@ public class FeatureCollectionMemoryDriver implements VectorialDriver,
 		return name;
 	}
 
-
 	public int getShapeCount() throws ReadDriverException {
 		return features.size();
 	}
-
 
 	public DriverAttributes getDriverAttributes() {
 		return attributes;
 	}
 
-
-	public Rectangle2D getFullExtent() throws ReadDriverException, ExpansionFileReadException {
-		if(fullExtent == null){
-			//collection is empty
+	public Rectangle2D getFullExtent() throws ReadDriverException,
+			ExpansionFileReadException {
+		if (fullExtent == null) {
+			// collection is empty
 			return EMPTY_FULL_EXTENT;
 		}
 		return fullExtent;
 	}
 
-
 	public IGeometry getShape(int index) throws ReadDriverException {
-		if(index <  features.size())
+		if (index < features.size())
 			return ((IFeature) features.get(index)).getGeometry();
 		else
 			return null;
 	}
-
 
 	public void reload() throws ReloadDriverException {
 		this.name = "";
@@ -165,83 +162,71 @@ public class FeatureCollectionMemoryDriver implements VectorialDriver,
 		this.layerDefinition = null;
 	}
 
-
 	public boolean isWritable() {
 		return false;
 	}
-
 
 	public int[] getPrimaryKeys() throws ReadDriverException {
 		return null;
 	}
 
-
-	public void write(DataWare dataWare) throws WriteDriverException, ReadDriverException {
+	public void write(DataWare dataWare) throws WriteDriverException,
+			ReadDriverException {
 	}
-
 
 	public void setDataSourceFactory(DataSourceFactory dsf) {
 	}
 
-
-	public Value getFieldValue(long rowIndex, int fieldId) throws ReadDriverException {
+	public Value getFieldValue(long rowIndex, int fieldId)
+			throws ReadDriverException {
 		IFeature feature = (IFeature) features.get((int) rowIndex);
 		return feature.getAttributes()[fieldId];
 	}
 
-
 	public int getFieldCount() throws ReadDriverException {
 		return layerDefinition.getFieldsDesc().length;
 	}
-
 
 	public String getFieldName(int fieldId) throws ReadDriverException {
 		FieldDescription[] fields = layerDefinition.getFieldsDesc();
 		return fields[fieldId].getFieldName();
 	}
 
-
 	public long getRowCount() throws ReadDriverException {
 		return features.size();
 	}
-
 
 	public int getFieldType(int i) throws ReadDriverException {
 		FieldDescription[] fields = layerDefinition.getFieldsDesc();
 		return fields[i].getFieldType();
 	}
 
-
 	public int getFieldWidth(int i) throws ReadDriverException {
 		FieldDescription[] fields = layerDefinition.getFieldsDesc();
 		return fields[i].getFieldLength();
 	}
 
-
-	public Rectangle2D getShapeBounds(int index) throws ReadDriverException, ExpansionFileReadException {
+	public Rectangle2D getShapeBounds(int index) throws ReadDriverException,
+			ExpansionFileReadException {
 		IGeometry geometry = getShape(index);
 		return geometry.getBounds2D();
 	}
-
 
 	public int getShapeType(int index) throws ReadDriverException {
 		IGeometry geometry = getShape(index);
 		return geometry.getGeometryType();
 	}
-	
+
 	private void computeFullExtent() {
 		Iterator featuresIt = features.iterator();
-		while(featuresIt.hasNext()){
+		while (featuresIt.hasNext()) {
 			IFeature feature = (IFeature) featuresIt.next();
 			Rectangle2D rAux = feature.getGeometry().getBounds2D();
-			if(fullExtent == null)
+			if (fullExtent == null)
 				fullExtent = rAux;
 			else
 				fullExtent.add(rAux);
 		}
 	}
 
-	
-
 }
-

@@ -42,20 +42,20 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: FunctionSummarizer.java 10626 2007-03-06 16:55:54Z caballero $
-* $Log$
-* Revision 1.2  2007-03-06 16:47:58  caballero
-* Exceptions
-*
-* Revision 1.1  2006/06/20 18:20:45  azabala
-* first version in cvs
-*
-* Revision 1.1  2006/05/24 21:11:14  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-*
-*/
+ *
+ * $Id: FunctionSummarizer.java 10626 2007-03-06 16:55:54Z caballero $
+ * $Log$
+ * Revision 1.2  2007-03-06 16:47:58  caballero
+ * Exceptions
+ *
+ * Revision 1.1  2006/06/20 18:20:45  azabala
+ * first version in cvs
+ *
+ * Revision 1.1  2006/05/24 21:11:14  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.impl.dissolve.fmap;
 
 import java.util.ArrayList;
@@ -73,10 +73,10 @@ import com.iver.cit.gvsig.geoprocess.core.fmap.SummarizationFunction;
 /**
  * For a given key set of numeric fields to summarize, and the summarization
  * functions selected by user, it computes this summarization values.
- *
- *
+ * 
+ * 
  * @author azabala
- *
+ * 
  */
 public class FunctionSummarizer {
 	/**
@@ -94,11 +94,12 @@ public class FunctionSummarizer {
 
 	/**
 	 * Constructor
+	 * 
 	 * @param numericField_functions
 	 * @param recordset
 	 */
 	public FunctionSummarizer(Map numericField_functions,
-			SelectableDataSource recordset){
+			SelectableDataSource recordset) {
 		this.numericField_functions = numericField_functions;
 		this.recordset = recordset;
 		sumarizedValues = new ArrayList();
@@ -106,7 +107,7 @@ public class FunctionSummarizer {
 
 	/**
 	 * Resets sumarization functions state, and clear list of results
-	 *
+	 * 
 	 */
 	public void resetFunctions() {
 		if (numericField_functions == null)
@@ -114,8 +115,7 @@ public class FunctionSummarizer {
 		Iterator fieldsIt = numericField_functions.keySet().iterator();
 		while (fieldsIt.hasNext()) {
 			String field = (String) fieldsIt.next();
-			SummarizationFunction[] functions =
-				(SummarizationFunction[]) numericField_functions
+			SummarizationFunction[] functions = (SummarizationFunction[]) numericField_functions
 					.get(field);
 			for (int i = 0; i < functions.length; i++) {
 				functions[i].reset();
@@ -128,6 +128,7 @@ public class FunctionSummarizer {
 	/**
 	 * Reads field values of the feature of index "recordIndex", and applies
 	 * sumarization functions for them
+	 * 
 	 * @param recordIndex
 	 * @throws DriverException
 	 */
@@ -141,29 +142,25 @@ public class FunctionSummarizer {
 			int fieldIndex = recordset.getFieldIndexByName(field);
 			Value valToSumarize = recordset.getFieldValue(recordIndex,
 					fieldIndex);
-			SummarizationFunction[] functions =
-				(SummarizationFunction[]) numericField_functions
-													.get(field);
+			SummarizationFunction[] functions = (SummarizationFunction[]) numericField_functions
+					.get(field);
 			for (int i = 0; i < functions.length; i++) {
 				functions[i].process((NumericValue) valToSumarize);
 			}// for
 		}// while
 	}
 
-	public List getValues(){
+	public List getValues() {
 		Iterator fieldsIt = numericField_functions.keySet().iterator();
-		while(fieldsIt.hasNext()){
+		while (fieldsIt.hasNext()) {
 			String field = (String) fieldsIt.next();
-			SummarizationFunction[] functions =
-				(SummarizationFunction[]) numericField_functions
-													.get(field);
+			SummarizationFunction[] functions = (SummarizationFunction[]) numericField_functions
+					.get(field);
 			for (int i = 0; i < functions.length; i++) {
 				sumarizedValues.add(functions[i].getSumarizeValue());
 			}// for
-		}//while
+		}// while
 		return sumarizedValues;
 	}
 
-
 }
-

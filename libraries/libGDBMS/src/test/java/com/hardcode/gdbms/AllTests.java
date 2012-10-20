@@ -25,7 +25,7 @@ public class AllTests {
 	public static Test suite() {
 		TestSuite suite = new TestSuite(
 				"Test for com.hardcode.gdbms.engine.test");
-		//$JUnit-BEGIN$
+		// $JUnit-BEGIN$
 		suite.addTestSuite(Tests.class);
 		suite.addTestSuite(EditionTests.class);
 		suite.addTestSuite(ValuesTest.class);
@@ -35,18 +35,18 @@ public class AllTests {
 		suite.addTestSuite(OperationTest.class);
 		suite.addTestSuite(SQLTest.class);
 		suite.addTestSuite(AutomaticDataSourceTest.class);
-		
+
 		/**
-		 * (cesar) added the rest of the TestCases available in gdbms.
-		 * If some of them is obsolete, please remove the test from the
-		 * project, and remove its entry here.
+		 * (cesar) added the rest of the TestCases available in gdbms. If some
+		 * of them is obsolete, please remove the test from the project, and
+		 * remove its entry here.
 		 */
 		suite.addTestSuite(ComplexValueTest.class);
 		suite.addTestSuite(DataSourceTestCase.class);
 		suite.addTestSuite(PostGISTest.class);
 		suite.addTestSuite(SHPTest.class);
 		suite.addTestSuite(ViewportTests.class);
-		//$JUnit-END$
+		// $JUnit-END$
 		return suite;
 	}
 }

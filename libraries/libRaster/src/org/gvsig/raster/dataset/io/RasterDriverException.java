@@ -19,30 +19,32 @@
 package org.gvsig.raster.dataset.io;
 
 /**
- * Excepción lanzada por un driver de raster. Cada driver concreto tiene su propio
- * tipo de excepciones GdalException, MrsSIDException, JNCSFileException ... 
- * Estas son lanzadas hacia el nivel superior como una sola si no pueden ser gestionadas 
- * en el nivel dataset.io.
+ * Excepción lanzada por un driver de raster. Cada driver concreto tiene su
+ * propio tipo de excepciones GdalException, MrsSIDException, JNCSFileException
+ * ... Estas son lanzadas hacia el nivel superior como una sola si no pueden ser
+ * gestionadas en el nivel dataset.io.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
-public class RasterDriverException extends Exception{
+public class RasterDriverException extends Exception {
 	private static final long serialVersionUID = 7412405741078802490L;
 
 	/**
 	 * Constructor. Asigna el texto de la excepción
+	 * 
 	 * @param msg
 	 */
-	public RasterDriverException(String msg){
+	public RasterDriverException(String msg) {
 		super(msg);
 	}
-	
+
 	/**
 	 * Constructor. Asigna el texto de la excepción y la excepción generica.
+	 * 
 	 * @param msg
 	 */
-	public RasterDriverException(String msg, Exception e){
+	public RasterDriverException(String msg, Exception e) {
 		super(msg, e);
 	}
 }

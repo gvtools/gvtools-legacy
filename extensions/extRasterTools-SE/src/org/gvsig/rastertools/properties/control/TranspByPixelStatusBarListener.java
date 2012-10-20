@@ -50,10 +50,12 @@ import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
 import com.iver.cit.gvsig.fmap.tools.Listeners.PointListener;
+
 /**
  * Clase para poner la informacion de pixel RGB en la barra de estado
  * 
  * 22/02/2008
+ * 
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class TranspByPixelStatusBarListener implements PointListener {
@@ -68,7 +70,10 @@ public class TranspByPixelStatusBarListener implements PointListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#point(com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#point(com.iver.
+	 * cit.gvsig.fmap.tools.Events.PointEvent)
 	 */
 	public void point(PointEvent event) throws BehaviorException {
 		if (PluginServices.getMainFrame() == null)
@@ -85,13 +90,20 @@ public class TranspByPixelStatusBarListener implements PointListener {
 
 		NewStatusBar statusBar = PluginServices.getMainFrame().getStatusBar();
 		statusBar.setMessage("x", r + ", " + g + ", " + b);
-		statusBar.setMessage("y", "Hex: " +
-				(r < 16 ? "0" : "")	+ Integer.toHexString(r) +
-				(g < 16 ? "0" : "")	+ Integer.toHexString(g) +
-				(b < 16 ? "0" : "")	+ Integer.toHexString(b));
+		statusBar.setMessage("y",
+				"Hex: " + (r < 16 ? "0" : "") + Integer.toHexString(r)
+						+ (g < 16 ? "0" : "") + Integer.toHexString(g)
+						+ (b < 16 ? "0" : "") + Integer.toHexString(b));
 	}
 
-	public Cursor getCursor() {return null;}
-	public boolean cancelDrawing() {return false;}
-	public void pointDoubleClick(PointEvent event) throws BehaviorException {}
+	public Cursor getCursor() {
+		return null;
+	}
+
+	public boolean cancelDrawing() {
+		return false;
+	}
+
+	public void pointDoubleClick(PointEvent event) throws BehaviorException {
+	}
 }

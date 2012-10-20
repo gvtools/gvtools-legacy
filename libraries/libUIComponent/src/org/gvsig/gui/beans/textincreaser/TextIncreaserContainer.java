@@ -33,40 +33,50 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
 /**
  * Nacho Brodin (brodin_ign@gva.es)
  */
-public class TextIncreaserContainer extends JPanel implements ActionListener, KeyListener{
+public class TextIncreaserContainer extends JPanel implements ActionListener,
+		KeyListener {
 	private static final long serialVersionUID = 7570162018139822874L;
 	private ArrayList actionCommandListeners = new ArrayList();
-	private JTextField tText            = null;
-	private JPanel     pButtons         = null;
-	private JButton    bmas             = null;
-	private JButton    bmenos           = null;
-	private JPanel     pGeneral         = null;
-	private double     minValue         = 0;
-	private double     maxValue         = 100;
-	private double     value            = 0.0;
-	private String     pathToImages     = "images/"; // "/com/iver/cit/gvsig/gui/panels/images/";
+	private JTextField tText = null;
+	private JPanel pButtons = null;
+	private JButton bmas = null;
+	private JButton bmenos = null;
+	private JPanel pGeneral = null;
+	private double minValue = 0;
+	private double maxValue = 100;
+	private double value = 0.0;
+	private String pathToImages = "images/"; // "/com/iver/cit/gvsig/gui/panels/images/";
 	/**
 	 * Variable que está a true si los controles están a la derecha
 	 */
-	private boolean    isRight          = true;
+	private boolean isRight = true;
 
-	private boolean    bDoCallListeners = true;
-	static private int eventId          = Integer.MIN_VALUE;
+	private boolean bDoCallListeners = true;
+	static private int eventId = Integer.MIN_VALUE;
 
 	/**
 	 * Creación de un componente TextIncrearserContainer
-	 * @param width Ancho del componente
-	 * @param minValue Mínimo valor que puede tomar el texto del control
-	 * @param maxValue Máximo valor que puede tomar el texto del control
-	 * @param right	a true si queremos que los controles se muestren a la derecha del TextBox
-	 * y false si los queremos a la izquierda
+	 * 
+	 * @param width
+	 *            Ancho del componente
+	 * @param minValue
+	 *            Mínimo valor que puede tomar el texto del control
+	 * @param maxValue
+	 *            Máximo valor que puede tomar el texto del control
+	 * @param right
+	 *            a true si queremos que los controles se muestren a la derecha
+	 *            del TextBox y false si los queremos a la izquierda
 	 */
-	public TextIncreaserContainer(int width, double minValue, double maxValue, double init, boolean right) {
+	public TextIncreaserContainer(int width, double minValue, double maxValue,
+			double init, boolean right) {
 		super();
-		getTText().setPreferredSize(new Dimension(width - 25, (int) getTText().getPreferredSize().getHeight()));
+		getTText().setPreferredSize(
+				new Dimension(width - 25, (int) getTText().getPreferredSize()
+						.getHeight()));
 		this.minValue = minValue;
 		this.maxValue = maxValue;
 		this.isRight = right;
@@ -90,31 +100,34 @@ public class TextIncreaserContainer extends JPanel implements ActionListener, Ke
 
 	/**
 	 * Asigna un valor al textBox
+	 * 
 	 * @param value
 	 */
-	public void setValue(double value){
+	public void setValue(double value) {
 		this.value = value;
 		getTText().setText(Double.toString(value));
 	}
 
 	/**
 	 * Obtiene el valor del textBox
+	 * 
 	 * @return value
 	 */
-	public double getValue(){
+	public double getValue() {
 		return value;
 	}
 
 	/**
 	 * This method initializes jTextField
-	 *
+	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getTText() {
 		if (tText == null) {
 			tText = new JTextField();
 			tText.setText(Double.toString(value));
-			tText.setPreferredSize(new java.awt.Dimension(45, (int) tText.getPreferredSize().getHeight()));
+			tText.setPreferredSize(new java.awt.Dimension(45, (int) tText
+					.getPreferredSize().getHeight()));
 			tText.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
 			tText.addKeyListener(this);
 		}
@@ -123,17 +136,17 @@ public class TextIncreaserContainer extends JPanel implements ActionListener, Ke
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPButtons() {
 		if (pButtons == null) {
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.insets = new java.awt.Insets(0,0,0,0);
+			gridBagConstraints3.insets = new java.awt.Insets(0, 0, 0, 0);
 			gridBagConstraints3.gridy = 1;
 			gridBagConstraints3.gridx = 0;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			gridBagConstraints2.insets = new java.awt.Insets(0,0,0,0);
+			gridBagConstraints2.insets = new java.awt.Insets(0, 0, 0, 0);
 			gridBagConstraints2.gridy = 0;
 			gridBagConstraints2.gridx = 0;
 			pButtons = new JPanel();
@@ -146,37 +159,41 @@ public class TextIncreaserContainer extends JPanel implements ActionListener, Ke
 
 	/**
 	 * This method initializes jButton
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getBmas() {
 		if (bmas == null) {
 			bmas = new JButton();
-			bmas.setPreferredSize(new java.awt.Dimension(16, (int) getTText().getPreferredSize().getHeight()/2));
+			bmas.setPreferredSize(new java.awt.Dimension(16, (int) getTText()
+					.getPreferredSize().getHeight() / 2));
 			bmas.addActionListener(this);
-			bmas.setIcon(new ImageIcon(getClass().getResource(pathToImages + "mas.png")));
+			bmas.setIcon(new ImageIcon(getClass().getResource(
+					pathToImages + "mas.png")));
 		}
 		return bmas;
 	}
 
 	/**
 	 * This method initializes jButton1
-	 *
+	 * 
 	 * @return javax.swing.JButton
 	 */
 	private JButton getBmenos() {
 		if (bmenos == null) {
 			bmenos = new JButton();
-			bmenos.setPreferredSize(new java.awt.Dimension(16, (int) getTText().getPreferredSize().getHeight()/2));
+			bmenos.setPreferredSize(new java.awt.Dimension(16, (int) getTText()
+					.getPreferredSize().getHeight() / 2));
 			bmenos.addActionListener(this);
-			bmenos.setIcon(new ImageIcon(getClass().getResource(pathToImages + "menos.png")));
+			bmenos.setIcon(new ImageIcon(getClass().getResource(
+					pathToImages + "menos.png")));
 		}
 		return bmenos;
 	}
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPGeneral() {
@@ -185,10 +202,10 @@ public class TextIncreaserContainer extends JPanel implements ActionListener, Ke
 
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			if(isRight){
+			if (isRight) {
 				gridBagConstraints1.gridx = 1;
 				gridBagConstraints.gridx = 0;
-			}else{
+			} else {
 				gridBagConstraints1.gridx = 0;
 				gridBagConstraints.gridx = 1;
 			}
@@ -205,12 +222,12 @@ public class TextIncreaserContainer extends JPanel implements ActionListener, Ke
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == bmas) {
-			value ++;
+			value++;
 			checkValues();
 		}
 
 		if (e.getSource() == bmenos) {
-			value --;
+			value--;
 			checkValues();
 		}
 		callValueChangedListeners();
@@ -230,15 +247,18 @@ public class TextIncreaserContainer extends JPanel implements ActionListener, Ke
 			return;
 		Iterator acIterator = actionCommandListeners.iterator();
 		while (acIterator.hasNext()) {
-			TextIncreaserListener listener = (TextIncreaserListener) acIterator.next();
+			TextIncreaserListener listener = (TextIncreaserListener) acIterator
+					.next();
 			listener.actionValueChanged(new TextIncreaserEvent(this));
 		}
 		eventId++;
 	}
 
 	private void checkValues() {
-		if (value >= maxValue) value = maxValue;
-		if (value <= minValue) value = minValue;
+		if (value >= maxValue)
+			value = maxValue;
+		if (value <= minValue)
+			value = minValue;
 		getTText().setText(Double.toString(value));
 	}
 
@@ -254,6 +274,9 @@ public class TextIncreaserContainer extends JPanel implements ActionListener, Ke
 		}
 	}
 
-	public void keyReleased(KeyEvent e) {}
-	public void keyTyped(KeyEvent e) {}
+	public void keyReleased(KeyEvent e) {
+	}
+
+	public void keyTyped(KeyEvent e) {
+	}
 }

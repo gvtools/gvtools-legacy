@@ -20,9 +20,10 @@ package org.gvsig.rastertools.saveas;
 
 import org.gvsig.raster.IProcessActions;
 import org.gvsig.rastertools.saveraster.ui.info.EndInfoDialog;
+
 /**
  * Acciones que ejecuta el proceso de salvado.
- *
+ * 
  * @version 26/09/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
@@ -30,13 +31,13 @@ public class SaveAsActions implements IProcessActions {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.IProcessActions#end(java.lang.Object)
 	 */
 	public void end(Object params) {
-		if (params instanceof Object[] &&
-				((Object[]) params).length == 2 &&
-				((Object[]) params)[0] instanceof String &&
-				((Object[]) params)[1] instanceof Long) {
+		if (params instanceof Object[] && ((Object[]) params).length == 2
+				&& ((Object[]) params)[0] instanceof String
+				&& ((Object[]) params)[1] instanceof Long) {
 
 			String fName = (String) ((Object[]) params)[0];
 			long milis = ((Long) ((Object[]) params)[1]).longValue();
@@ -45,5 +46,6 @@ public class SaveAsActions implements IProcessActions {
 		}
 	}
 
-	public void interrupted() {}
+	public void interrupted() {
+	}
 }

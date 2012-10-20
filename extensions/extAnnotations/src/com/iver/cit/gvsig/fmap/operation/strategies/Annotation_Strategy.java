@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
@@ -74,277 +73,289 @@ import com.iver.cit.gvsig.fmap.rendering.Annotation_Legend;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.IntersectionMatrix;
 
-
 /**
  * Esta clase se encargará de dibujar de la forma más eficiente los temas de
  * anotaciones.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class Annotation_Strategy extends DefaultStrategy {
-    private IMarkerSymbol symbolPoint = SymbologyFactory.createDefaultMarkerSymbol();
-    private Annotation_Layer capa;
-    private static AffineTransform ati=new AffineTransform();
-    /**
-     * Crea un nuevo AnotationStrategy.
-     *
-     * @param layer
-     */
-    public Annotation_Strategy(FLayer layer) {
-        super(layer);
-        capa = (Annotation_Layer) getCapa();
-        symbolPoint.setSize(5);
-    }
+	private IMarkerSymbol symbolPoint = SymbologyFactory
+			.createDefaultMarkerSymbol();
+	private Annotation_Layer capa;
+	private static AffineTransform ati = new AffineTransform();
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.iver.cit.gvsig.fmap.operations.strategies.Strategy#queryByShape(com.iver.cit.gvsig.fmap.core.IGeometry,
-     *      int)
-     */
-    public FBitSet queryByShape(IGeometry g, int relationship) throws ReadDriverException, VisitorException{
-        // Si hay un índice espacial, lo usamos para hacer el query.
-        FLyrVect lyr = capa;
+	/**
+	 * Crea un nuevo AnotationStrategy.
+	 * 
+	 * @param layer
+	 */
+	public Annotation_Strategy(FLayer layer) {
+		super(layer);
+		capa = (Annotation_Layer) getCapa();
+		symbolPoint.setSize(5);
+	}
 
-        // if (lyr.getSpatialIndex() == null)
-        if (lyr.getISpatialIndex() == null) {
-            return super.queryByShape(g, relationship);
-        }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.operations.strategies.Strategy#queryByShape(com
+	 * .iver.cit.gvsig.fmap.core.IGeometry, int)
+	 */
+	public FBitSet queryByShape(IGeometry g, int relationship)
+			throws ReadDriverException, VisitorException {
+		// Si hay un índice espacial, lo usamos para hacer el query.
+		FLyrVect lyr = capa;
 
-        long t1 = System.currentTimeMillis();
-        ReadableVectorial va = lyr.getSource();
-        MathTransform trans = lyr.getCrsTransform();
-        Rectangle2D bounds = g.getBounds2D();
-
-        // Coordinate c1 = new Coordinate(bounds.getMinX(), bounds.getMinY());
-        // Coordinate c2 = new Coordinate(bounds.getMaxX(), bounds.getMaxY());
-        // Envelope env = new Envelope(c1, c2);
-        // List lstRecs = lyr.getSpatialIndex().query(env);
-        List lstRecs = lyr.getISpatialIndex().query(bounds);
-        Integer idRec;
-        FBitSet bitset = new FBitSet();
-        Geometry jtsShape = g.toJTSGeometry();
-        IntersectionMatrix m;
-        int index;
-
-        try {
-            va.start();
-
-            // Annotation_Legend aLegend=(Annotation_Legend)capa.getLegend();
-            for (int i = 0; i < lstRecs.size(); i++) {
-                idRec = (Integer) lstRecs.get(i);
-                index = idRec.intValue();
-
-                IGeometry geom = va.getShape(index);
-
-                // FSymbol symbol=(FSymbol)aLegend.getSymbol(index);
-                // IGeometry geom=aLegend.getTextWrappingGeometry(symbol,index);
-                // IGeometry
-                // geom=getGeometry(((Annotation_Layer)capa).getLabel(index).getBoundBox());
-                if (trans != null) {
-                    geom.reProject(trans);
-                }
-
-                Geometry jtsGeom = geom.toJTSGeometry();
-
-                switch (relationship) {
-                case CONTAINS:
-                    m = jtsShape.relate(jtsGeom);
-
-                    if (m.isContains()) {
-                        bitset.set(index, true);
-                    }
-
-                    break;
-
-                case CROSSES:
-                    m = jtsShape.relate(jtsGeom);
-
-                    if (m.isCrosses(jtsGeom.getDimension(),
-                                jtsShape.getDimension())) {
-                        bitset.set(index, true);
-                    }
-
-                    break;
-
-                case DISJOINT:
-
-                    // TODO: CREO QUE EL DISJOINT NO SE PUEDE METER AQUI
-                    m = jtsShape.relate(jtsGeom);
-
-                    if (m.isDisjoint()) {
-                        bitset.set(index, true);
-                    }
-
-                    break;
-
-                case EQUALS:
-                    m = jtsShape.relate(jtsGeom);
-
-                    if (m.isEquals(jtsGeom.getDimension(),
-                                jtsShape.getDimension())) {
-                        bitset.set(index, true);
-                    }
-
-                    break;
-
-                case INTERSECTS:
-                    m = jtsShape.relate(jtsGeom);
-
-                    if (m.isIntersects()) {
-                        bitset.set(index, true);
-                    }
-
-                    break;
-
-                case OVERLAPS:
-                    m = jtsShape.relate(jtsGeom);
-
-                    if (m.isOverlaps(jtsGeom.getDimension(),
-                                jtsShape.getDimension())) {
-                        bitset.set(index, true);
-                    }
-
-                    break;
-
-                case TOUCHES:
-                    m = jtsShape.relate(jtsGeom);
-
-                    if (m.isTouches(jtsGeom.getDimension(),
-                                jtsShape.getDimension())) {
-                        bitset.set(index, true);
-                    }
-
-                    break;
-
-                case WITHIN:
-                    m = jtsShape.relate(jtsGeom);
-
-                    if (m.isWithin()) {
-                        bitset.set(index, true);
-                    }
-
-                    break;
-                }
-            }
-
-            va.stop();
-        } catch (ExpansionFileReadException e) {
-			throw new ReadDriverException(capa.getName(),e);
+		// if (lyr.getSpatialIndex() == null)
+		if (lyr.getISpatialIndex() == null) {
+			return super.queryByShape(g, relationship);
 		}
 
-        long t2 = System.currentTimeMillis();
+		long t1 = System.currentTimeMillis();
+		ReadableVectorial va = lyr.getSource();
+		MathTransform trans = lyr.getCrsTransform();
+		Rectangle2D bounds = g.getBounds2D();
 
-        // logger.debug("queryByShape optimizado sobre la capa " + lyr.getName()
-        // + ". " + (t2-t1) + " mseg.");
-        return bitset;
-    }
+		// Coordinate c1 = new Coordinate(bounds.getMinX(), bounds.getMinY());
+		// Coordinate c2 = new Coordinate(bounds.getMaxX(), bounds.getMaxY());
+		// Envelope env = new Envelope(c1, c2);
+		// List lstRecs = lyr.getSpatialIndex().query(env);
+		List lstRecs = lyr.getISpatialIndex().query(bounds);
+		Integer idRec;
+		FBitSet bitset = new FBitSet();
+		Geometry jtsShape = g.toJTSGeometry();
+		IntersectionMatrix m;
+		int index;
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param rect DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     * @throws VisitorException
-     * @throws ReadDriverException
-     *
-     * @throws DriverException DOCUMENT ME!
-     */
-    public FBitSet queryByRect(Rectangle2D rect) throws ReadDriverException, VisitorException {
-        // Si hay un índice espacial, lo usamos para hacer el query.
-        Annotation_Layer lyr = capa;
-        ReadableVectorial va = lyr.getSource();
-        MathTransform trans = lyr.getCrsTransform();
-        Rectangle2D bounds = rect;
-        // if (lyr.getSpatialIndex() == null)
-        if (lyr.getISpatialIndex() == null) {
-            return super.queryByRect(rect);
-        }
-        // Coordinate c1 = new Coordinate(bounds.getMinX(), bounds.getMinY());
-        // Coordinate c2 = new Coordinate(bounds.getMaxX(), bounds.getMaxY());
-        // Envelope env = new Envelope(c1, c2);
-        //
-        // List lstRecs = lyr.getSpatialIndex().query(env);
-        // azabala
-        List lstRecs = lyr.getISpatialIndex().query(bounds);
-        Integer idRec;
-        FBitSet bitset = new FBitSet();
-        int index;
+		try {
+			va.start();
 
-        try {
-            va.start();
+			// Annotation_Legend aLegend=(Annotation_Legend)capa.getLegend();
+			for (int i = 0; i < lstRecs.size(); i++) {
+				idRec = (Integer) lstRecs.get(i);
+				index = idRec.intValue();
 
-            DriverAttributes attr = va.getDriverAttributes();
-            boolean bMustClone = false;
+				IGeometry geom = va.getShape(index);
 
-            if (attr != null) {
-                if (attr.isLoadedInMemory()) {
-                    bMustClone = attr.isLoadedInMemory();
-                }
-            }
-            ViewPort vp=getCapa().getMapContext().getViewPort();
-            SelectableDataSource sds=va.getRecordset();
-            // Annotation_Legend aLegend=(Annotation_Legend)capa.getLegend();
-            for (int i = 0; i < lstRecs.size(); i++) {
-                idRec = (Integer) lstRecs.get(i);
-                index = idRec.intValue();
+				// FSymbol symbol=(FSymbol)aLegend.getSymbol(index);
+				// IGeometry geom=aLegend.getTextWrappingGeometry(symbol,index);
+				// IGeometry
+				// geom=getGeometry(((Annotation_Layer)capa).getLabel(index).getBoundBox());
+				if (trans != null) {
+					geom.reProject(trans);
+				}
 
-                Annotation_Mapping mapping = capa.getAnnotatonMapping();
-                NumericValue vRotation = (NumericValue) sds.getFieldValue(index,
-                        mapping.getColumnRotate());
-                NumericValue vHeight = (NumericValue) sds.getFieldValue(index,
-                        mapping.getColumnHeight());
-                NumericValue vStyle = (NumericValue) sds.getFieldValue(index,mapping.getColumnStyleFont());
-                StringValue vType = (StringValue) sds.getFieldValue(index,mapping.getColumnTypeFont());
-                Value vText = sds.getFieldValue(index,
-                        mapping.getColumnText());
-                va.start();
-                IGeometry geom = va.getShape(i);
-                va.stop();
+				Geometry jtsGeom = geom.toJTSGeometry();
 
-                if (trans != null) {
-                    if (bMustClone) {
-                        geom = geom.cloneGeometry();
-                    }
+				switch (relationship) {
+				case CONTAINS:
+					m = jtsShape.relate(jtsGeom);
 
-                    geom.reProject(trans);
-                }
-                geom.transform(vp.getAffineTransform());
-                 Annotation_Legend aLegend=(Annotation_Legend)capa.getLegend();
-                int unit=aLegend.getUnits();
-                IGeometry geom1 = capa.getTextWrappingGeometryInPixels(unit,vHeight.floatValue(),
-                        vText.toString(), vRotation.doubleValue(),vType.getValue(),vStyle.intValue(), index, vp,geom);
-                geom1.transform(vp.getAffineTransform().createInverse());
-                if (geom1.intersects(rect)) {
-                    bitset.set(index, true);
-                }
-            }
+					if (m.isContains()) {
+						bitset.set(index, true);
+					}
 
-            va.stop();
-        } catch (ExpansionFileReadException e) {
-			throw new ReadDriverException(capa.getName(),e);
+					break;
+
+				case CROSSES:
+					m = jtsShape.relate(jtsGeom);
+
+					if (m.isCrosses(jtsGeom.getDimension(),
+							jtsShape.getDimension())) {
+						bitset.set(index, true);
+					}
+
+					break;
+
+				case DISJOINT:
+
+					// TODO: CREO QUE EL DISJOINT NO SE PUEDE METER AQUI
+					m = jtsShape.relate(jtsGeom);
+
+					if (m.isDisjoint()) {
+						bitset.set(index, true);
+					}
+
+					break;
+
+				case EQUALS:
+					m = jtsShape.relate(jtsGeom);
+
+					if (m.isEquals(jtsGeom.getDimension(),
+							jtsShape.getDimension())) {
+						bitset.set(index, true);
+					}
+
+					break;
+
+				case INTERSECTS:
+					m = jtsShape.relate(jtsGeom);
+
+					if (m.isIntersects()) {
+						bitset.set(index, true);
+					}
+
+					break;
+
+				case OVERLAPS:
+					m = jtsShape.relate(jtsGeom);
+
+					if (m.isOverlaps(jtsGeom.getDimension(),
+							jtsShape.getDimension())) {
+						bitset.set(index, true);
+					}
+
+					break;
+
+				case TOUCHES:
+					m = jtsShape.relate(jtsGeom);
+
+					if (m.isTouches(jtsGeom.getDimension(),
+							jtsShape.getDimension())) {
+						bitset.set(index, true);
+					}
+
+					break;
+
+				case WITHIN:
+					m = jtsShape.relate(jtsGeom);
+
+					if (m.isWithin()) {
+						bitset.set(index, true);
+					}
+
+					break;
+				}
+			}
+
+			va.stop();
+		} catch (ExpansionFileReadException e) {
+			throw new ReadDriverException(capa.getName(), e);
+		}
+
+		long t2 = System.currentTimeMillis();
+
+		// logger.debug("queryByShape optimizado sobre la capa " + lyr.getName()
+		// + ". " + (t2-t1) + " mseg.");
+		return bitset;
+	}
+
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param rect
+	 *            DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 * @throws VisitorException
+	 * @throws ReadDriverException
+	 * 
+	 * @throws DriverException
+	 *             DOCUMENT ME!
+	 */
+	public FBitSet queryByRect(Rectangle2D rect) throws ReadDriverException,
+			VisitorException {
+		// Si hay un índice espacial, lo usamos para hacer el query.
+		Annotation_Layer lyr = capa;
+		ReadableVectorial va = lyr.getSource();
+		MathTransform trans = lyr.getCrsTransform();
+		Rectangle2D bounds = rect;
+		// if (lyr.getSpatialIndex() == null)
+		if (lyr.getISpatialIndex() == null) {
+			return super.queryByRect(rect);
+		}
+		// Coordinate c1 = new Coordinate(bounds.getMinX(), bounds.getMinY());
+		// Coordinate c2 = new Coordinate(bounds.getMaxX(), bounds.getMaxY());
+		// Envelope env = new Envelope(c1, c2);
+		//
+		// List lstRecs = lyr.getSpatialIndex().query(env);
+		// azabala
+		List lstRecs = lyr.getISpatialIndex().query(bounds);
+		Integer idRec;
+		FBitSet bitset = new FBitSet();
+		int index;
+
+		try {
+			va.start();
+
+			DriverAttributes attr = va.getDriverAttributes();
+			boolean bMustClone = false;
+
+			if (attr != null) {
+				if (attr.isLoadedInMemory()) {
+					bMustClone = attr.isLoadedInMemory();
+				}
+			}
+			ViewPort vp = getCapa().getMapContext().getViewPort();
+			SelectableDataSource sds = va.getRecordset();
+			// Annotation_Legend aLegend=(Annotation_Legend)capa.getLegend();
+			for (int i = 0; i < lstRecs.size(); i++) {
+				idRec = (Integer) lstRecs.get(i);
+				index = idRec.intValue();
+
+				Annotation_Mapping mapping = capa.getAnnotatonMapping();
+				NumericValue vRotation = (NumericValue) sds.getFieldValue(
+						index, mapping.getColumnRotate());
+				NumericValue vHeight = (NumericValue) sds.getFieldValue(index,
+						mapping.getColumnHeight());
+				NumericValue vStyle = (NumericValue) sds.getFieldValue(index,
+						mapping.getColumnStyleFont());
+				StringValue vType = (StringValue) sds.getFieldValue(index,
+						mapping.getColumnTypeFont());
+				Value vText = sds.getFieldValue(index, mapping.getColumnText());
+				va.start();
+				IGeometry geom = va.getShape(i);
+				va.stop();
+
+				if (trans != null) {
+					if (bMustClone) {
+						geom = geom.cloneGeometry();
+					}
+
+					geom.reProject(trans);
+				}
+				geom.transform(vp.getAffineTransform());
+				Annotation_Legend aLegend = (Annotation_Legend) capa
+						.getLegend();
+				int unit = aLegend.getUnits();
+				IGeometry geom1 = capa.getTextWrappingGeometryInPixels(unit,
+						vHeight.floatValue(), vText.toString(),
+						vRotation.doubleValue(), vType.getValue(),
+						vStyle.intValue(), index, vp, geom);
+				geom1.transform(vp.getAffineTransform().createInverse());
+				if (geom1.intersects(rect)) {
+					bitset.set(index, true);
+				}
+			}
+
+			va.stop();
+		} catch (ExpansionFileReadException e) {
+			throw new ReadDriverException(capa.getName(), e);
 		} catch (NoninvertibleTransformException e) {
-			throw new ReadDriverException(capa.getName(),e);
+			throw new ReadDriverException(capa.getName(), e);
 		}
 
-        return bitset;
-    }
+		return bitset;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.iver.cit.gvsig.fmap.operations.strategies.Strategy#queryByPoint(java.awt.geom.Point2D,
-     *      double)
-     */
-    public FBitSet queryByPoint(Point2D p, double tolerance) throws ReadDriverException, VisitorException {
-        // TODO: OJO!!!!. Está implementado como un rectangulo.
-        // Lo correcto debería ser calculando las distancias reales
-        // es decir, con un círculo.
-        Rectangle2D recPoint = new Rectangle2D.Double(p.getX() -
-                (tolerance / 2), p.getY() - (tolerance / 2), tolerance,
-                tolerance);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.operations.strategies.Strategy#queryByPoint(java
+	 * .awt.geom.Point2D, double)
+	 */
+	public FBitSet queryByPoint(Point2D p, double tolerance)
+			throws ReadDriverException, VisitorException {
+		// TODO: OJO!!!!. Está implementado como un rectangulo.
+		// Lo correcto debería ser calculando las distancias reales
+		// es decir, con un círculo.
+		Rectangle2D recPoint = new Rectangle2D.Double(p.getX()
+				- (tolerance / 2), p.getY() - (tolerance / 2), tolerance,
+				tolerance);
 
-        return queryByRect(recPoint);
-    }
+		return queryByRect(recPoint);
+	}
 }

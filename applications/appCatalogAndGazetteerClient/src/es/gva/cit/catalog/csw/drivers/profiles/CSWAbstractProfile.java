@@ -1,8 +1,6 @@
 package es.gva.cit.catalog.csw.drivers.profiles;
 
 import es.gva.cit.catalog.drivers.profiles.AbstractProfile;
-import es.gva.cit.catalog.drivers.profiles.IProfile;
-
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
@@ -54,8 +52,8 @@ import es.gva.cit.catalog.drivers.profiles.IProfile;
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public abstract class CSWAbstractProfile extends AbstractProfile {
-	
+
 	public CSWAbstractProfile() {
-		super();		
+		super();
 	}
 }

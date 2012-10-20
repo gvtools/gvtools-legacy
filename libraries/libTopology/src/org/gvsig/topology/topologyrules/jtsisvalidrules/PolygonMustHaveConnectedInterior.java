@@ -83,48 +83,45 @@ import com.vividsolutions.jts.operation.valid.ConnectedInteriorTester;
 /**
  * 
  * Esta regla chequea que los holes de un polígono, que por definicion pueden
- * tocarse entre sí en un punto así como con el borde exterior hagan que el interior
- * del poligono esté inconexo.
+ * tocarse entre sí en un punto así como con el borde exterior hagan que el
+ * interior del poligono esté inconexo.
  * 
  * 
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public class PolygonMustHaveConnectedInterior extends AbstractTopologyRule {
-	
-	private static String RULE_NAME = Messages.getText("POLYGON_MUST_NOT_HAVE_INTERSECTED_RINGS");
-	
+
+	private static String RULE_NAME = Messages
+			.getText("POLYGON_MUST_NOT_HAVE_INTERSECTED_RINGS");
+
 	private static List<ITopologyErrorFix> automaticErrorFixes = new ArrayList<ITopologyErrorFix>();
-	
 
 	private static final Color DEFAULT_ERROR_COLOR = Color.BLACK;
 
-	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = 
-		(MultiShapeSymbol) SymbologyFactory.createDefaultSymbolByShapeType(FShape.MULTI, 
-											DEFAULT_ERROR_COLOR);
-	static{
+	private static final MultiShapeSymbol DEFAULT_ERROR_SYMBOL = (MultiShapeSymbol) SymbologyFactory
+			.createDefaultSymbolByShapeType(FShape.MULTI, DEFAULT_ERROR_COLOR);
+	static {
 		DEFAULT_ERROR_SYMBOL.setDescription(RULE_NAME);
 		DEFAULT_ERROR_SYMBOL.setSize(2);
 	}
 
-
 	private MultiShapeSymbol errorSymbol;
-	
-	
+
 	JtsValidRule parentRule;
-	
+
 	public PolygonMustHaveConnectedInterior(Topology topology,
 			FLyrVect originLyr) {
 		super(topology, originLyr);
 	}
-	
+
 	public PolygonMustHaveConnectedInterior(FLyrVect originLyr) {
 		super(originLyr);
 	}
-	
-	public PolygonMustHaveConnectedInterior(){}
-	
+
+	public PolygonMustHaveConnectedInterior() {
+	}
 
 	public String getName() {
 		return RULE_NAME;
@@ -135,8 +132,9 @@ public class PolygonMustHaveConnectedInterior extends AbstractTopologyRule {
 		try {
 			shapeType = this.originLyr.getShapeType();
 			int numDimensions = FGeometryUtil.getDimensions(shapeType);
-			if(numDimensions != 2)
-				throw new WrongLyrForTopologyException("MustNotHaveHoles solo aplica sobre capas de dimension 2");
+			if (numDimensions != 2)
+				throw new WrongLyrForTopologyException(
+						"MustNotHaveHoles solo aplica sobre capas de dimension 2");
 		} catch (ReadDriverException e) {
 			throw new TopologyRuleDefinitionException(
 					"Error al tratar de verificar el tipo de geometria");
@@ -162,39 +160,41 @@ public class PolygonMustHaveConnectedInterior extends AbstractTopologyRule {
 				Polygon polygon = (Polygon) multiPoly.getGeometryN(i);
 				GeometryGraph graph = new GeometryGraph(0, polygon);
 				checkConnectedInteriors(graph, feature);
-			}//for
+			}// for
 		}
 
 	}
 
 	private void checkConnectedInteriors(GeometryGraph graph, IFeature feature) {
 		ConnectedInteriorTester cit = new ConnectedInteriorTester(graph);
-		try{
-			if (!cit.isInteriorsConnected()){
+		try {
+			if (!cit.isInteriorsConnected()) {
 				Coordinate coord = cit.getCoordinate();
 				FPoint2D pt = new FPoint2D(coord.x, coord.y);
 				IGeometry geometry = ShapeFactory.createGeometry(pt);
 				AbstractTopologyRule violatedRule = null;
-				if(this.parentRule != null)
+				if (this.parentRule != null)
 					violatedRule = parentRule;
 				else
 					violatedRule = this;
-				JtsValidTopologyError error = 
-					new JtsValidTopologyError(geometry, violatedRule, feature, topology);
+				JtsValidTopologyError error = new JtsValidTopologyError(
+						geometry, violatedRule, feature, topology);
 				addTopologyError(error);
 			}
-		}catch(TopologyException e){
-			//In unit tests JTS has throwed this exception POLYGON ((440 260, 500 300, 660 300, 600 200, 440 260, 440 260), (440 260, 600 200, 660 300, 500 300, 440 260))
+		} catch (TopologyException e) {
+			// In unit tests JTS has throwed this exception POLYGON ((440 260,
+			// 500 300, 660 300, 600 200, 440 260, 440 260), (440 260, 600 200,
+			// 660 300, 500 300, 440 260))
 			e.printStackTrace();
 			AbstractTopologyRule violatedRule = null;
-			if(this.parentRule != null)
+			if (this.parentRule != null)
 				violatedRule = parentRule;
 			else
 				violatedRule = this;
-			JtsValidTopologyError error = 
-				new JtsValidTopologyError(feature.getGeometry(), violatedRule, feature, topology);
+			JtsValidTopologyError error = new JtsValidTopologyError(
+					feature.getGeometry(), violatedRule, feature, topology);
 			addTopologyError(error);
-			
+
 		}
 	}
 
@@ -205,7 +205,7 @@ public class PolygonMustHaveConnectedInterior extends AbstractTopologyRule {
 	public void setParentRule(JtsValidRule parentRule) {
 		this.parentRule = parentRule;
 	}
-	
+
 	public boolean acceptsOriginLyr(FLyrVect lyr) {
 		try {
 			return FGeometryUtil.getDimensions(lyr.getShapeType()) == 2;

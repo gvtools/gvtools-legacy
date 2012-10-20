@@ -31,6 +31,7 @@ import javax.swing.JComponent;
 import javax.swing.JToolTip;
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.metal.MetalToolTipUI;
+
 /**
  * <p>
  * Allows using more than one line length tooltips. It also automatically
@@ -42,6 +43,7 @@ import javax.swing.plaf.metal.MetalToolTipUI;
  * It means that new line characters must be placed in the string as well as it
  * was a System.out.println statement.
  * </p>
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class MultiLineToolTip extends JToolTip {
@@ -79,7 +81,8 @@ public class MultiLineToolTip extends JToolTip {
 			Vector v = new Vector();
 			try {
 				while ((line = br.readLine()) != null) {
-					int width = SwingUtilities.computeStringWidth(metrics, line);
+					int width = SwingUtilities
+							.computeStringWidth(metrics, line);
 					_maxWidth = (_maxWidth < width) ? width : _maxWidth;
 					v.addElement(line);
 				}

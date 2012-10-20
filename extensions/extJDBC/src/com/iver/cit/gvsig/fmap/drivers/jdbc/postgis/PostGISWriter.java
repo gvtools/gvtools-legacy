@@ -6,8 +6,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 
-import javax.swing.JOptionPane;
-
 import org.apache.log4j.Logger;
 
 import com.hardcode.gdbms.driver.exceptions.InitializeWriterException;
@@ -31,7 +29,7 @@ import com.iver.cit.gvsig.fmap.edition.fieldmanagers.JdbcFieldManager;
 import com.iver.cit.gvsig.fmap.edition.writers.AbstractWriter;
 
 public class PostGISWriter extends AbstractWriter implements ISpatialWriter,
-IFieldManager {
+		IFieldManager {
 
 	private int numRows;
 
@@ -60,7 +58,7 @@ IFieldManager {
 	 * @throws DriverException
 	 */
 	public void initialize(ITableDefinition lyrD)
-	throws InitializeWriterException {
+			throws InitializeWriterException {
 		super.initialize(lyrD);
 		this.lyrDef = (DBLayerDefinition) lyrD;
 		conex = lyrDef.getConnection();
@@ -94,8 +92,8 @@ IFieldManager {
 				/*
 				 * BEGIN; INSERT INTO ROADS_GEOM (ID,GEOM,NAME ) VALUES
 				 * (1,GeometryFromText('LINESTRING(191232 243118,191108
-				 * 243242)',-1),'Jeff Rd'); INSERT INTO ROADS_GEOM (ID,GEOM,NAME )
-				 * VALUES (2,GeometryFromText('LINESTRING(189141 244158,189265
+				 * 243242)',-1),'Jeff Rd'); INSERT INTO ROADS_GEOM (ID,GEOM,NAME
+				 * ) VALUES (2,GeometryFromText('LINESTRING(189141 244158,189265
 				 * 244817)',-1),'Geordie Rd'); COMMIT;
 				 */
 				((ConnectionJDBC) conex).getConnection().commit();
@@ -103,9 +101,8 @@ IFieldManager {
 			((ConnectionJDBC) conex).getConnection().setAutoCommit(false);
 
 			String schema_tablename = lyrDef.getComposedTableName();
-			fieldManager = new JdbcFieldManager(((ConnectionJDBC)conex).getConnection(), schema_tablename);
-
-
+			fieldManager = new JdbcFieldManager(
+					((ConnectionJDBC) conex).getConnection(), schema_tablename);
 
 		} catch (SQLException e) {
 			throw new InitializeWriterException(getName(), e);
@@ -297,10 +294,10 @@ IFieldManager {
 			boolean can_alter = false;
 			st = ((ConnectionJDBC) conex).getConnection().createStatement();
 			String sql = "SELECT current_user=(SELECT tableowner from pg_tables WHERE schemaname = '"
-				+ lyrDef.getSchema()
-				+ "' and tablename='"
-				+ lyrDef.getTableName()
-				+ "') OR (SELECT usesuper FROM pg_user WHERE usename=current_user) AS can_alter;";
+					+ lyrDef.getSchema()
+					+ "' and tablename='"
+					+ lyrDef.getTableName()
+					+ "') OR (SELECT usesuper FROM pg_user WHERE usename=current_user) AS can_alter;";
 			ResultSet rs = st.executeQuery(sql);
 			if (rs.next()) {
 				can_alter = rs.getBoolean("can_alter");
@@ -318,28 +315,27 @@ IFieldManager {
 		try {
 			// return !((ConnectionJDBC) conex).getConnection().isReadOnly();
 			boolean can_edit = false;
-	
-			
+
 			st = ((ConnectionJDBC) conex).getConnection().createStatement();
 			String sql2;
 			sql2 = "select * from GEOMETRY_COLUMNS WHERE F_TABLE_SCHEMA = '"
-						+ lyrDef.getSchema() + "' AND F_TABLE_NAME = '" + lyrDef.getTableName()
-						+ "'";
+					+ lyrDef.getSchema() + "' AND F_TABLE_NAME = '"
+					+ lyrDef.getTableName() + "'";
 
 			ResultSet rs2 = st.executeQuery(sql2);
-			int dim =0;
+			int dim = 0;
 			while (rs2.next()) {
 				dim = rs2.getInt("coord_dimension");
 			}
 			rs2.close();
-			
+
 			String sql = "SELECT has_table_privilege('"
-				+ lyrDef.getComposedTableName() + "', 'insert') "
-				+ "AND has_table_privilege('"
-				+ lyrDef.getComposedTableName() + "', 'update') "
-				+ "AND has_table_privilege('"
-				+ lyrDef.getComposedTableName()
-				+ "', 'delete') as can_edit;";
+					+ lyrDef.getComposedTableName() + "', 'insert') "
+					+ "AND has_table_privilege('"
+					+ lyrDef.getComposedTableName() + "', 'update') "
+					+ "AND has_table_privilege('"
+					+ lyrDef.getComposedTableName()
+					+ "', 'delete') as can_edit;";
 			ResultSet rs = st.executeQuery(sql);
 			if (rs.next()) {
 				can_edit = rs.getBoolean("can_edit");
@@ -348,10 +344,9 @@ IFieldManager {
 			st.close();
 			if (dim > 2)
 				return false;
-			
-			
+
 			return can_edit
-			&& !((ConnectionJDBC) conex).getConnection().isReadOnly();
+					&& !((ConnectionJDBC) conex).getConnection().isReadOnly();
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -371,7 +366,7 @@ IFieldManager {
 	}
 
 	private boolean existTable(String schema, String tableName)
-	throws SQLException {
+			throws SQLException {
 		boolean exists = false;
 		if (schema == null || schema.equals("")) {
 			schema = " current_schema()::Varchar ";
@@ -380,10 +375,10 @@ IFieldManager {
 		}
 
 		String sql = "select relname,nspname "
-			+ "from pg_class inner join pg_namespace "
-			+ "on relnamespace = pg_namespace.oid where "
-			+ " relkind = 'r' and relname = '" + tableName
-			+ "' and nspname = " + schema;
+				+ "from pg_class inner join pg_namespace "
+				+ "on relnamespace = pg_namespace.oid where "
+				+ " relkind = 'r' and relname = '" + tableName
+				+ "' and nspname = " + schema;
 
 		st = ((ConnectionJDBC) conex).getConnection().createStatement();
 		ResultSet rs = st.executeQuery(sql);

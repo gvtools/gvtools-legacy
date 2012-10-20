@@ -20,10 +20,11 @@ package org.gvsig.raster.dataset.io.features;
 
 import org.gvsig.raster.dataset.io.GdalDriver;
 import org.gvsig.raster.dataset.io.GdalWriter;
+
 /**
- * Caracteristicas del formato PAux para escritura.
- * Soporta tipo de datos enteros de 8 y 16 bits y reales de 32 bits.
- * La georreferenciación y la proyección son ignoradas.
+ * Caracteristicas del formato PAux para escritura. Soporta tipo de datos
+ * enteros de 8 y 16 bits y reales de 32 bits. La georreferenciación y la
+ * proyección son ignoradas.
  * 
  * @version 04/06/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
@@ -31,7 +32,8 @@ import org.gvsig.raster.dataset.io.GdalWriter;
 public class PAuxFeatures extends WriteFileFormatFeatures {
 
 	public PAuxFeatures() {
-		super(GdalDriver.FORMAT_PAUX, "aux", new int[] { 3 }, null, GdalWriter.class);
+		super(GdalDriver.FORMAT_PAUX, "aux", new int[] { 3 }, null,
+				GdalWriter.class);
 	}
 
 	/**

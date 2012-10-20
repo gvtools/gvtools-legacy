@@ -19,17 +19,19 @@
 package org.gvsig.raster.dataset.io;
 
 /**
- * Interfaz que deben implementar las clases que contiene los parámetros de un driver. 
- * Cuando se registra un driver se hace por la extesión si es un fichero o por el nombre
- * del formato si es de otro tipo. Este interfaz permite a los objetos que se usan como parámetro
- * para un driver obtener el nombre de formato con el que se ha registrado.
+ * Interfaz que deben implementar las clases que contiene los parámetros de un
+ * driver. Cuando se registra un driver se hace por la extesión si es un fichero
+ * o por el nombre del formato si es de otro tipo. Este interfaz permite a los
+ * objetos que se usan como parámetro para un driver obtener el nombre de
+ * formato con el que se ha registrado.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
 public interface IRegistrableRasterFormat {
 	/**
 	 * Obtiene el identificador del formato con el que se ha registrado.
+	 * 
 	 * @return ID del formato.
 	 */
 	public String getFormatID();

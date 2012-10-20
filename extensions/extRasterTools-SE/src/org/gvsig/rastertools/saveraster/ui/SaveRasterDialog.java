@@ -1,21 +1,21 @@
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
-*
-* Copyright (C) 2007 IVER T.I. and Generalitat Valenciana.
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License
-* as published by the Free Software Foundation; either version 2
-* of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
-*/
+ *
+ * Copyright (C) 2007 IVER T.I. and Generalitat Valenciana.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
+ */
 package org.gvsig.rastertools.saveraster.ui;
 
 import java.awt.BorderLayout;
@@ -32,6 +32,7 @@ import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
+
 /**
  * Panel que contiene los botones de Aceptar, Cancelar y Aplicar heredando de
  * DefaultDialogPanel. Dentro de este estará el panel con los controles de
@@ -40,11 +41,11 @@ import com.iver.cit.gvsig.fmap.layers.FLayers;
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class SaveRasterDialog extends DefaultButtonsPanel implements IWindow {
-	final private static long 			serialVersionUID = -3370601314380922368L;
-	private DataInputListener			listener =  null;
-	public DriverProperties				driverProps = null;
-	private SaveRasterPanel				controlsPanel = null;
-	private FLayers				 		layers = null;
+	final private static long serialVersionUID = -3370601314380922368L;
+	private DataInputListener listener = null;
+	public DriverProperties driverProps = null;
+	private SaveRasterPanel controlsPanel = null;
+	private FLayers layers = null;
 
 	/**
 	 * Constructor de la ventana de dialogo para gvSIG.
@@ -57,17 +58,17 @@ public class SaveRasterDialog extends DefaultButtonsPanel implements IWindow {
 	}
 
 	/**
-	 * Constructor generico para poder visualizar la ventana desde
-	 * una función main.
+	 * Constructor generico para poder visualizar la ventana desde una función
+	 * main.
 	 */
 	public SaveRasterDialog() {
 		super(ButtonsPanel.BUTTONS_NONE);
-			init(null);
+		init(null);
 	}
-
 
 	/**
 	 * Inicialización del panel.
+	 * 
 	 * @return void
 	 */
 	public void init(MapControl mapCtrl) {
@@ -81,7 +82,8 @@ public class SaveRasterDialog extends DefaultButtonsPanel implements IWindow {
 		getDataInputListener();
 
 		// Ocultamos el botón de aplicar
-		getButtonsPanel().getButton(ButtonsPanel.BUTTON_APPLY).setEnabled(false);
+		getButtonsPanel().getButton(ButtonsPanel.BUTTON_APPLY)
+				.setEnabled(false);
 
 		setName("saveRaster");
 	}
@@ -91,7 +93,7 @@ public class SaveRasterDialog extends DefaultButtonsPanel implements IWindow {
 	 */
 	public void closeJDialog() {
 		this.setVisible(false);
-		for(int i = 0; i < layers.getLayersCount(); i++){
+		for (int i = 0; i < layers.getLayersCount(); i++) {
 			layers.getLayer(i).getMapContext().invalidate();
 		}
 		PluginServices.getMDIManager().closeWindow(SaveRasterDialog.this);
@@ -99,6 +101,7 @@ public class SaveRasterDialog extends DefaultButtonsPanel implements IWindow {
 
 	/**
 	 * Obtiene el panel con los controles de Salvar a Raster.
+	 * 
 	 * @return
 	 */
 	public SaveRasterPanel getControlsPanel() {
@@ -118,19 +121,20 @@ public class SaveRasterDialog extends DefaultButtonsPanel implements IWindow {
 	}
 
 	/**
-	 * This method initializes jContentPane	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes jContentPane
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	public Container getContentPane() {
 		return this;
 	}
 
 	/**
 	 * Asigna la lista de capas
+	 * 
 	 * @param layers
 	 */
-	public void setLayerList(FLayers layers){
+	public void setLayerList(FLayers layers) {
 		this.layers = layers;
 	}
 
@@ -138,7 +142,8 @@ public class SaveRasterDialog extends DefaultButtonsPanel implements IWindow {
 	 * @see com.iver.mdiApp.ui.MDIManager.IWindow#getWindowInfo()
 	 */
 	public WindowInfo getWindowInfo() {
-		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODELESSDIALOG | WindowInfo.RESIZABLE);
+		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODELESSDIALOG
+				| WindowInfo.RESIZABLE);
 		m_viewinfo.setTitle(PluginServices.getText(this, "salvar_raster_geo"));
 		return m_viewinfo;
 	}

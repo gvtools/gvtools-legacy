@@ -20,9 +20,14 @@ package org.gvsig.fmap.raster.layers;
 
 public interface IConfiguration {
 	public Boolean getValueBoolean(String name, Boolean defaultValue);
+
 	public Double getValueDouble(String name, Double defaultValue);
+
 	public Float getValueFloat(String name, Float defaultValue);
+
 	public Integer getValueInteger(String name, Integer defaultValue);
+
 	public Long getValueLong(String name, Long defaultValue);
+
 	public String getValueString(String name, String defaultValue);
 }

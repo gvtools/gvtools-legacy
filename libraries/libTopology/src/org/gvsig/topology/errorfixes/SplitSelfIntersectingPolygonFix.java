@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.errorfixes;
 
 import java.util.ArrayList;
@@ -70,75 +70,79 @@ import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.MultiPoint;
 import com.vividsolutions.jts.geom.Polygon;
 
-public class SplitSelfIntersectingPolygonFix extends SplitSelfIntersectingLineFix {
+public class SplitSelfIntersectingPolygonFix extends
+		SplitSelfIntersectingLineFix {
 
-	
-	public List<IFeature>[] fixAlgorithm(TopologyError error) throws BaseException {
+	public List<IFeature>[] fixAlgorithm(TopologyError error)
+			throws BaseException {
 		double clusterTolerance = error.getTopology().getClusterTolerance();
-		
+
 		IGeometry selfIntersectingPoints = error.getGeometry();
-		FMultiPoint2D shape = (FMultiPoint2D) selfIntersectingPoints.
-													getInternalShape();
-		
-		MultiPoint selfIntersections = (MultiPoint)NewFConverter.toJtsGeometry(shape);
-		
+		FMultiPoint2D shape = (FMultiPoint2D) selfIntersectingPoints
+				.getInternalShape();
+
+		MultiPoint selfIntersections = (MultiPoint) NewFConverter
+				.toJtsGeometry(shape);
+
 		IFeature originFeature = error.getFeature1();
 		Value[] attributes = originFeature.getAttributes();
 		IGeometry originGeometry = originFeature.getGeometry();
 		Geometry jtsGeo = originGeometry.toJTSGeometry();
-		
+
 		Polygon[] polygons = JtsUtil.extractPolygons(jtsGeo);
-		for(int i = 0; i < polygons.length; i++){
+		for (int i = 0; i < polygons.length; i++) {
 			Polygon polygon = polygons[i];
-			
-			if(!polygon.disjoint(selfIntersections)){
-				
+
+			if (!polygon.disjoint(selfIntersections)) {
+
 				List<LinearRing> shells = new ArrayList<LinearRing>();
 				List<LinearRing> holes = new ArrayList<LinearRing>();
-				
+
 				LinearRing shell = (LinearRing) polygon.getExteriorRing();
-				SnapLineStringSelfIntersectionChecker checker =
-					new SnapLineStringSelfIntersectionChecker(shell, clusterTolerance);
+				SnapLineStringSelfIntersectionChecker checker = new SnapLineStringSelfIntersectionChecker(
+						shell, clusterTolerance);
 				Geometry[] splittedGeometries = checker.clean();
-				
-//				shells.addAll((Collection<? extends LinearRing>) Arrays.asList(splittedGeometries));
-				for(int k = 0; k < splittedGeometries.length; k++){ 
-					shells.add(JtsUtil.toLinearRing((LineString) splittedGeometries[k]));
-                }
-				
-				
-				for(int j = 0; j < polygon.getNumInteriorRing(); j++){
-					LinearRing hole = (LinearRing) polygon.getInteriorRingN(j);
-					checker = new SnapLineStringSelfIntersectionChecker(hole, 
-															clusterTolerance);
-					splittedGeometries = checker.clean();
-					
-//					shells.addAll((Collection<? extends LinearRing>) Arrays.asList(splittedGeometries));
-					for(int k = 0; k < splittedGeometries.length; k++){ 
-						shells.add(JtsUtil.toLinearRing((LineString) splittedGeometries[k]));
-	                }
+
+				// shells.addAll((Collection<? extends LinearRing>)
+				// Arrays.asList(splittedGeometries));
+				for (int k = 0; k < splittedGeometries.length; k++) {
+					shells.add(JtsUtil
+							.toLinearRing((LineString) splittedGeometries[k]));
 				}
-				
+
+				for (int j = 0; j < polygon.getNumInteriorRing(); j++) {
+					LinearRing hole = (LinearRing) polygon.getInteriorRingN(j);
+					checker = new SnapLineStringSelfIntersectionChecker(hole,
+							clusterTolerance);
+					splittedGeometries = checker.clean();
+
+					// shells.addAll((Collection<? extends LinearRing>)
+					// Arrays.asList(splittedGeometries));
+					for (int k = 0; k < splittedGeometries.length; k++) {
+						shells.add(JtsUtil
+								.toLinearRing((LineString) splittedGeometries[k]));
+					}
+				}
+
 				Geometry editedGeometry = JtsUtil.buildPolygons(shells, holes);
-				Polygon[] correctedPolygons = JtsUtil.extractPolygons(editedGeometry);
+				Polygon[] correctedPolygons = JtsUtil
+						.extractPolygons(editedGeometry);
 				IFeature[] newFeatures = new IFeature[correctedPolygons.length];
-				
-				for(int j = 0; j < correctedPolygons.length; j++){
+
+				for (int j = 0; j < correctedPolygons.length; j++) {
 					Polygon pol = correctedPolygons[j];
 					IGeometry igeom = NewFConverter.toFMap(pol);
-					newFeatures[j] =  new DefaultFeature(igeom, 
-													attributes, 
-													originFeature.getID()+j);
+					newFeatures[j] = new DefaultFeature(igeom, attributes,
+							originFeature.getID() + j);
 				}
 				List<IFeature> editedFeatures = new ArrayList<IFeature>();
 				editedFeatures.addAll(Arrays.asList(newFeatures));
-				return (List<IFeature>[]) new List[]{editedFeatures};
-			}//if ! disjoints
+				return (List<IFeature>[]) new List[] { editedFeatures };
+			}// if ! disjoints
 		}
 		return null;
 	}
 
-	
 	public String getEditionDescription() {
 		return Messages.getText("SPLIT_SELFINTERSECTING_POLYGON_FIX");
 	}

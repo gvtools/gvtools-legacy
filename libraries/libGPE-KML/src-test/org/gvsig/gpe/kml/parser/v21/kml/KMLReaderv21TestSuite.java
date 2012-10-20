@@ -1,6 +1,5 @@
 package org.gvsig.gpe.kml.parser.v21.kml;
 
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -62,13 +61,14 @@ import junit.framework.TestSuite;
 public class KMLReaderv21TestSuite {
 
 	public static Test suite() {
-		TestSuite suite = new TestSuite("Test for org.gvsig.gpe.kml.readers.kml");
-		//$JUnit-BEGIN$
+		TestSuite suite = new TestSuite(
+				"Test for org.gvsig.gpe.kml.readers.kml");
+		// $JUnit-BEGIN$
 		suite.addTestSuite(KMLSampleTest.class);
 		suite.addTestSuite(KMLDiscoveryNetworksTest.class);
 		suite.addTestSuite(KMLSpainMorocooTest.class);
-		//$JUnit-END$
+		// $JUnit-END$
 		return suite;
-	}	
+	}
 
 }

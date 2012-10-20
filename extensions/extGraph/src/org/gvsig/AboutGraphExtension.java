@@ -7,7 +7,7 @@ import com.iver.cit.gvsig.gui.panels.FPanelAbout;
 
 /**
  * About extension.
- *
+ * 
  * Add the about coments to the gvSIG About panel
  */
 
@@ -19,11 +19,10 @@ public class AboutGraphExtension extends Extension {
 	}
 
 	public void postInitialize() {
-		About about=(About)PluginServices.getExtension(About.class);
-		FPanelAbout panelAbout=about.getAboutPanel();
-		java.net.URL aboutURL = this.getClass().getResource(
-	        "/about.htm");
-	        panelAbout.addAboutUrl(PluginServices.getText(this,"redes"),aboutURL);
+		About about = (About) PluginServices.getExtension(About.class);
+		FPanelAbout panelAbout = about.getAboutPanel();
+		java.net.URL aboutURL = this.getClass().getResource("/about.htm");
+		panelAbout.addAboutUrl(PluginServices.getText(this, "redes"), aboutURL);
 	}
 
 	public void execute(String actionCommand) {

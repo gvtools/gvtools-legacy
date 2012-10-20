@@ -18,83 +18,117 @@
  */
 package org.gvsig.raster.dataset;
 
-
 /**
- * Este interfaz debe ser implementado por las clases que vayan a
- * servir datos a los drivers de escritura.
+ * Este interfaz debe ser implementado por las clases que vayan a servir datos a
+ * los drivers de escritura.
+ * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public interface IDataWriter {
 	/**
-	 * Para el tipo de datos ARGB (32 bits en un solo entero) obtiene un array que representa 
-	 * los datos leídos. Este array se obtendrá de la fuente de datos
-	 * asociada al renderizador y sera de ancho sizeX y alto sizeY. Es el propio renderizador
-	 * el encargado de llevar la posición de la última línea leída para la siguiente petición
-	 * ofrecer datos a partir de donde se quedo.
-	 * @param sizeX Ancho del bloque de datos
-	 * @param sizeY Alto del bloque de datos
+	 * Para el tipo de datos ARGB (32 bits en un solo entero) obtiene un array
+	 * que representa los datos leídos. Este array se obtendrá de la fuente de
+	 * datos asociada al renderizador y sera de ancho sizeX y alto sizeY. Es el
+	 * propio renderizador el encargado de llevar la posición de la última línea
+	 * leída para la siguiente petición ofrecer datos a partir de donde se
+	 * quedo.
+	 * 
+	 * @param sizeX
+	 *            Ancho del bloque de datos
+	 * @param sizeY
+	 *            Alto del bloque de datos
 	 * @return Array con los datos leidos
 	 */
-	public int[] readARGBData(int sizeX, int sizeY, int nBand) throws InterruptedException, OutOfMemoryError;
-	
+	public int[] readARGBData(int sizeX, int sizeY, int nBand)
+			throws InterruptedException, OutOfMemoryError;
+
 	/**
-	 * Para el tipo de datos byte obtiene un array bidimensional donde la primera dimensión
-	 * son las bandas y la segunda los datos. Este array se obtendra de la fuente de datos
-	 * asociada al renderizador y sera de ancho sizeX y alto sizeY. Es el propio renderizador
-	 * el encargado de llevar la posición de la última línea leída para la siguiente petición
-	 * ofrecer datos a partir de donde se quedo.
-	 * @param sizeX Ancho del bloque de datos
-	 * @param sizeY Alto del bloque de datos
+	 * Para el tipo de datos byte obtiene un array bidimensional donde la
+	 * primera dimensión son las bandas y la segunda los datos. Este array se
+	 * obtendra de la fuente de datos asociada al renderizador y sera de ancho
+	 * sizeX y alto sizeY. Es el propio renderizador el encargado de llevar la
+	 * posición de la última línea leída para la siguiente petición ofrecer
+	 * datos a partir de donde se quedo.
+	 * 
+	 * @param sizeX
+	 *            Ancho del bloque de datos
+	 * @param sizeY
+	 *            Alto del bloque de datos
 	 * @return Array bidimensionar de numero de bandas por datos leidos
-	 * @throws InterruptedException 
+	 * @throws InterruptedException
 	 */
-    public byte[][] readByteData(int sizeX, int sizeY) throws InterruptedException;
+	public byte[][] readByteData(int sizeX, int sizeY)
+			throws InterruptedException;
+
 	/**
-	 * Para el tipo de datos short obtiene un array bidimensional donde la primera dimensión
-	 * son las bandas y la segunda los datos. Este array se obtendra de la fuente de datos
-	 * asociada al renderizador y sera de ancho sizeX y alto sizeY. Es el propio renderizador
-	 * el encargado de llevar la posición de la última línea leída para la siguiente petición
-	 * ofrecer datos a partir de donde se quedo.
-	 * @param sizeX Ancho del bloque de datos
-	 * @param sizeY Alto del bloque de datos
+	 * Para el tipo de datos short obtiene un array bidimensional donde la
+	 * primera dimensión son las bandas y la segunda los datos. Este array se
+	 * obtendra de la fuente de datos asociada al renderizador y sera de ancho
+	 * sizeX y alto sizeY. Es el propio renderizador el encargado de llevar la
+	 * posición de la última línea leída para la siguiente petición ofrecer
+	 * datos a partir de donde se quedo.
+	 * 
+	 * @param sizeX
+	 *            Ancho del bloque de datos
+	 * @param sizeY
+	 *            Alto del bloque de datos
 	 * @return Array bidimensionar de numero de bandas por datos leidos
-	 * @throws InterruptedException 
+	 * @throws InterruptedException
 	 */
-    public short[][] readShortData(int sizeX, int sizeY) throws InterruptedException;
+	public short[][] readShortData(int sizeX, int sizeY)
+			throws InterruptedException;
+
 	/**
-	 * Para el tipo de datos int obtiene un array bidimensional donde la primera dimensión
-	 * son las bandas y la segunda los datos. Este array se obtendra de la fuente de datos
-	 * asociada al renderizador y sera de ancho sizeX y alto sizeY. Es el propio renderizador
-	 * el encargado de llevar la posición de la última línea leída para la siguiente petición
-	 * ofrecer datos a partir de donde se quedo.
-	 * @param sizeX Ancho del bloque de datos
-	 * @param sizeY Alto del bloque de datos
+	 * Para el tipo de datos int obtiene un array bidimensional donde la primera
+	 * dimensión son las bandas y la segunda los datos. Este array se obtendra
+	 * de la fuente de datos asociada al renderizador y sera de ancho sizeX y
+	 * alto sizeY. Es el propio renderizador el encargado de llevar la posición
+	 * de la última línea leída para la siguiente petición ofrecer datos a
+	 * partir de donde se quedo.
+	 * 
+	 * @param sizeX
+	 *            Ancho del bloque de datos
+	 * @param sizeY
+	 *            Alto del bloque de datos
 	 * @return Array bidimensionar de numero de bandas por datos leidos
-	 * @throws InterruptedException 
+	 * @throws InterruptedException
 	 */
-    public int[][] readIntData(int sizeX, int sizeY) throws InterruptedException;
+	public int[][] readIntData(int sizeX, int sizeY)
+			throws InterruptedException;
+
 	/**
-	 * Para el tipo de datos float obtiene un array bidimensional donde la primera dimensión
-	 * son las bandas y la segunda los datos. Este array se obtendra de la fuente de datos
-	 * asociada al renderizador y sera de ancho sizeX y alto sizeY. Es el propio renderizador
-	 * el encargado de llevar la posición de la última línea leída para la siguiente petición
-	 * ofrecer datos a partir de donde se quedo.
-	 * @param sizeX Ancho del bloque de datos
-	 * @param sizeY Alto del bloque de datos
+	 * Para el tipo de datos float obtiene un array bidimensional donde la
+	 * primera dimensión son las bandas y la segunda los datos. Este array se
+	 * obtendra de la fuente de datos asociada al renderizador y sera de ancho
+	 * sizeX y alto sizeY. Es el propio renderizador el encargado de llevar la
+	 * posición de la última línea leída para la siguiente petición ofrecer
+	 * datos a partir de donde se quedo.
+	 * 
+	 * @param sizeX
+	 *            Ancho del bloque de datos
+	 * @param sizeY
+	 *            Alto del bloque de datos
 	 * @return Array bidimensionar de numero de bandas por datos leidos
-	 * @throws InterruptedException 
+	 * @throws InterruptedException
 	 */
-    public float[][] readFloatData(int sizeX, int sizeY) throws InterruptedException;
+	public float[][] readFloatData(int sizeX, int sizeY)
+			throws InterruptedException;
+
 	/**
-	 * Para el tipo de datos double obtiene un array bidimensional donde la primera dimensión
-	 * son las bandas y la segunda los datos. Este array se obtendra de la fuente de datos
-	 * asociada al renderizador y sera de ancho sizeX y alto sizeY. Es el propio renderizador
-	 * el encargado de llevar la posición de la última línea leída para la siguiente petición
-	 * ofrecer datos a partir de donde se quedo.
-	 * @param sizeX Ancho del bloque de datos
-	 * @param sizeY Alto del bloque de datos
+	 * Para el tipo de datos double obtiene un array bidimensional donde la
+	 * primera dimensión son las bandas y la segunda los datos. Este array se
+	 * obtendra de la fuente de datos asociada al renderizador y sera de ancho
+	 * sizeX y alto sizeY. Es el propio renderizador el encargado de llevar la
+	 * posición de la última línea leída para la siguiente petición ofrecer
+	 * datos a partir de donde se quedo.
+	 * 
+	 * @param sizeX
+	 *            Ancho del bloque de datos
+	 * @param sizeY
+	 *            Alto del bloque de datos
 	 * @return Array bidimensionar de numero de bandas por datos leidos
-	 * @throws InterruptedException 
+	 * @throws InterruptedException
 	 */
-    public double[][] readDoubleData(int sizeX, int sizeY) throws InterruptedException;
+	public double[][] readDoubleData(int sizeX, int sizeY)
+			throws InterruptedException;
 }

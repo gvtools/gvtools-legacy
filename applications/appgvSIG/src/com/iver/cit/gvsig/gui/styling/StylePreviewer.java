@@ -40,41 +40,41 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: StylePreviewer.java 28368 2009-05-04 15:30:35Z vcaballero $
-* $Log$
-* Revision 1.6  2007-08-16 06:54:35  jvidal
-* javadoc updated
-*
-* Revision 1.5  2007/08/13 11:33:03  jvidal
-* javadoc
-*
-* Revision 1.4  2007/07/30 12:56:04  jaume
-* organize imports, java 5 code downgraded to 1.4 and added PictureFillSymbol
-*
-* Revision 1.3  2007/05/08 15:44:07  jaume
-* *** empty log message ***
-*
-* Revision 1.2  2007/04/04 16:01:14  jaume
-* *** empty log message ***
-*
-* Revision 1.2  2007/03/09 11:25:00  jaume
-* Advanced symbology (start committing)
-*
-* Revision 1.1.2.4  2007/02/21 07:35:14  jaume
-* *** empty log message ***
-*
-* Revision 1.1.2.3  2007/02/08 15:43:04  jaume
-* some bug fixes in the editor and removed unnecessary imports
-*
-* Revision 1.1.2.2  2007/01/30 18:10:10  jaume
-* start commiting labeling stuff
-*
-* Revision 1.1.2.1  2007/01/26 13:49:03  jaume
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: StylePreviewer.java 28368 2009-05-04 15:30:35Z vcaballero $
+ * $Log$
+ * Revision 1.6  2007-08-16 06:54:35  jvidal
+ * javadoc updated
+ *
+ * Revision 1.5  2007/08/13 11:33:03  jvidal
+ * javadoc
+ *
+ * Revision 1.4  2007/07/30 12:56:04  jaume
+ * organize imports, java 5 code downgraded to 1.4 and added PictureFillSymbol
+ *
+ * Revision 1.3  2007/05/08 15:44:07  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.2  2007/04/04 16:01:14  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.2  2007/03/09 11:25:00  jaume
+ * Advanced symbology (start committing)
+ *
+ * Revision 1.1.2.4  2007/02/21 07:35:14  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1.2.3  2007/02/08 15:43:04  jaume
+ * some bug fixes in the editor and removed unnecessary imports
+ *
+ * Revision 1.1.2.2  2007/01/30 18:10:10  jaume
+ * start commiting labeling stuff
+ *
+ * Revision 1.1.2.1  2007/01/26 13:49:03  jaume
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.gui.styling;
 
 import java.awt.Color;
@@ -91,27 +91,29 @@ import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.SymbolDrawingException;
 
 /**
-* Defines the properties of the symbols that are showed in the
-* SymbolPreviewer panel.Also the user has methods to set this attributes.
-*
-* @author jaume dominguez faus - jaume.dominguez@iver.es
-*
-*/
-public class StylePreviewer extends SymbolPreviewer{
+ * Defines the properties of the symbols that are showed in the SymbolPreviewer
+ * panel.Also the user has methods to set this attributes.
+ * 
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
+ * 
+ */
+public class StylePreviewer extends SymbolPreviewer {
 	private int hGap = 10, vGap = 10;
 	private IStyle style;
 	private boolean showOutline;
 
 	/**
 	 * Constructor method
-	 *
+	 * 
 	 */
 	public StylePreviewer() {
 		super();
 		setBackground(Color.WHITE);
 	}
+
 	/**
 	 * Obtains the style of the symbol showed in the SymbolPreviewer panel
+	 * 
 	 * @return style,IStyle
 	 */
 	public IStyle getStyle() {
@@ -119,34 +121,40 @@ public class StylePreviewer extends SymbolPreviewer{
 	}
 
 	public ISymbol getSymbol() {
-		throw new Error(PluginServices.getText(this, "undefined_for_StylePreviewer_use")
-				+" getStyle() "+
-				PluginServices.getText(this, "instead") );
+		throw new Error(PluginServices.getText(this,
+				"undefined_for_StylePreviewer_use")
+				+ " getStyle() "
+				+ PluginServices.getText(this, "instead"));
 
 	}
 
 	public void setSymbol(ISymbol symbol) {
-		throw new Error(PluginServices.getText(this, "undefined_for_StylePreviewer_use")
-				+" setStyle(IStyle) "+
-				PluginServices.getText(this, "instead") );
+		throw new Error(PluginServices.getText(this,
+				"undefined_for_StylePreviewer_use")
+				+ " setStyle(IStyle) "
+				+ PluginServices.getText(this, "instead"));
 
 	}
+
 	/**
 	 * Defines the style of the symbol showed in the SymbolPreviewer panel
-	 * @param style,IStyle
+	 * 
+	 * @param style
+	 *            ,IStyle
 	 */
 
 	public void setStyle(IStyle style) {
 		this.style = style;
-//		repaint();
+		// repaint();
 
 	}
 
 	public void paint(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 		Rectangle r = getBounds();
-		g2.translate(hGap/2, vGap/2);
-		r = new Rectangle(0, 0, (int) (r.getWidth()-(hGap)), (int) (r.getHeight()-(vGap)));
+		g2.translate(hGap / 2, vGap / 2);
+		r = new Rectangle(0, 0, (int) (r.getWidth() - (hGap)),
+				(int) (r.getHeight() - (vGap)));
 
 		if (style != null) {
 			try {
@@ -160,49 +168,59 @@ public class StylePreviewer extends SymbolPreviewer{
 			} catch (SymbolDrawingException e) {
 				if (e.getType() == SymbolDrawingException.UNSUPPORTED_SET_OF_SETTINGS) {
 					try {
-						SymbologyFactory.getWarningSymbol(
-								SymbolDrawingException.STR_UNSUPPORTED_SET_OF_SETTINGS,
-								"",
-								SymbolDrawingException.UNSUPPORTED_SET_OF_SETTINGS).
-								drawInsideRectangle(g2, null, r, null);
+						SymbologyFactory
+								.getWarningSymbol(
+										SymbolDrawingException.STR_UNSUPPORTED_SET_OF_SETTINGS,
+										"",
+										SymbolDrawingException.UNSUPPORTED_SET_OF_SETTINGS)
+								.drawInsideRectangle(g2, null, r, null);
 					} catch (SymbolDrawingException e1) {
 						// IMPOSSIBLE TO REACH THIS
 					}
 				} else {
 					// should be unreachable code
-					throw new Error(PluginServices.getText(this, "symbol_shapetype_mismatch"));
+					throw new Error(PluginServices.getText(this,
+							"symbol_shapetype_mismatch"));
 				}
 			}
 		} else {
-			String noneSelected = "["+PluginServices.getText(this, "preview_not_available")+"]";
+			String noneSelected = "["
+					+ PluginServices.getText(this, "preview_not_available")
+					+ "]";
 			FontMetrics fm = g2.getFontMetrics();
 			int lineWidth = fm.stringWidth(noneSelected);
 			float scale = (float) r.getWidth() / lineWidth;
 			Font f = g2.getFont();
-			float fontSize = f.getSize()*scale;
-			g2.setFont(	f.deriveFont( fontSize ) );
+			float fontSize = f.getSize() * scale;
+			g2.setFont(f.deriveFont(fontSize));
 
-			g2.drawString(noneSelected,	 (r.x*scale) - (hGap/4), r.height/2+(vGap/2)*scale);
+			g2.drawString(noneSelected, (r.x * scale) - (hGap / 4), r.height
+					/ 2 + (vGap / 2) * scale);
 		}
 
 	}
 
 	/**
 	 * Allows to choose between paint styles Outline or the style itself.
+	 * 
 	 * @param b
 	 */
 	public void setShowOutline(boolean b) {
 		this.showOutline = b;
 	}
+
 	public int getHGap() {
 		return hGap;
 	}
+
 	public void setHGap(int gap) {
 		hGap = gap;
 	}
+
 	public int getVGap() {
 		return vGap;
 	}
+
 	public void setVGap(int gap) {
 		vGap = gap;
 	}

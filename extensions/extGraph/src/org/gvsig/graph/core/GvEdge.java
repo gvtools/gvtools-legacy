@@ -45,7 +45,8 @@ public class GvEdge {
 	private int idArc;
 	private int idEdge;
 	/**
-	 * Sentido de digitalización.Un 1 indica que va en ese sentido, un cero al contrario.
+	 * Sentido de digitalización.Un 1 indica que va en ese sentido, un cero al
+	 * contrario.
 	 */
 	private int direc;
 	private int idNodeOrig;
@@ -53,69 +54,85 @@ public class GvEdge {
 	private int type;
 	private double distance;
 	private double weight;
-	
+
 	private int numSoluc;
-	
+
 	/**
-	 * Sentido de digitalización.Un 1 indica que va en ese sentido, un cero al contrario.
+	 * Sentido de digitalización.Un 1 indica que va en ese sentido, un cero al
+	 * contrario.
+	 * 
 	 * @return digitalization direction. 0=>inversed 1=> Same as geometry
 	 */
 	public int getDirec() {
 		return direc;
 	}
+
 	public void setDirec(int direc) {
 		this.direc = direc;
 	}
+
 	public double getDistance() {
 		return distance;
 	}
+
 	public void setDistance(double distance) {
 		this.distance = distance;
 	}
+
 	public int getIdArc() {
 		return idArc;
 	}
+
 	public void setIdArc(int idArc) {
 		this.idArc = idArc;
 	}
+
 	public int getIdNodeEnd() {
 		return idNodeEnd;
 	}
+
 	public void setIdNodeEnd(int idNodeEnd) {
 		this.idNodeEnd = idNodeEnd;
 	}
+
 	public int getIdNodeOrig() {
 		return idNodeOrig;
 	}
+
 	public void setIdNodeOrig(int idNodeOrig) {
 		this.idNodeOrig = idNodeOrig;
 	}
+
 	public int getType() {
 		return type;
 	}
+
 	public void setType(int type) {
 		this.type = type;
 	}
+
 	public double getWeight() {
 		return weight;
 	}
+
 	public void setWeight(double weight) {
 		this.weight = weight;
 	}
+
 	public int getNumSoluc() {
 		return numSoluc;
 	}
+
 	public void setNumSoluc(int numSoluc) {
 		this.numSoluc = numSoluc;
 	}
+
 	public int getIdEdge() {
 		return idEdge;
 	}
+
 	public void setIdEdge(int idEdge) {
 		this.idEdge = idEdge;
 	}
 
-
 }
-
-

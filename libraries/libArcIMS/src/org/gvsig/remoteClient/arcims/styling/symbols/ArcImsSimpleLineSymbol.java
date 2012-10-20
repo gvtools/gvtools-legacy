@@ -46,190 +46,200 @@
  */
 package org.gvsig.remoteClient.arcims.styling.symbols;
 
-
-
 import java.util.StringTokenizer;
 
 import org.gvsig.remoteClient.arcims.utils.ServiceInfoTags;
 
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 
-
 /**
  * @author jsanz
- *
+ * 
  */
-public class ArcImsSimpleLineSymbol extends AbstractSymbol implements IArcIMSSymbol {
-    public static final String TAG = ServiceInfoTags.tSIMPLELINESYMBOL;
-    private String color;
-    private String width;
-    private String type;
-    private String captype;
-    private String jointype;
-    private String transparency;
+public class ArcImsSimpleLineSymbol extends AbstractSymbol implements
+		IArcIMSSymbol {
+	public static final String TAG = ServiceInfoTags.tSIMPLELINESYMBOL;
+	private String color;
+	private String width;
+	private String type;
+	private String captype;
+	private String jointype;
+	private String transparency;
 
-    /**
-     * The constructor sets default values
-     */
-    public ArcImsSimpleLineSymbol() {
-        color = "0,0,0";
-        width = "0";
-        type = SymbolUtils.LINE_TYPE_SOLID;
-        captype = SymbolUtils.CAP_TYPE_ROUND;
-        jointype = SymbolUtils.JOIN_TYPE_BEVEL;
-        transparency = "1";
-    }
+	/**
+	 * The constructor sets default values
+	 */
+	public ArcImsSimpleLineSymbol() {
+		color = "0,0,0";
+		width = "0";
+		type = SymbolUtils.LINE_TYPE_SOLID;
+		captype = SymbolUtils.CAP_TYPE_ROUND;
+		jointype = SymbolUtils.JOIN_TYPE_BEVEL;
+		transparency = "1";
+	}
 
-    public String toString() {
-        return "<" + TAG + getParam() + "/>\r\n";
-    }
+	public String toString() {
+		return "<" + TAG + getParam() + "/>\r\n";
+	}
 
-    protected String getParam() {
-        String param = "";
+	protected String getParam() {
+		String param = "";
 
-        if (SymbolUtils.isVoid(color)) {
-            param += (" color=\"" + color + "\"");
-        }
+		if (SymbolUtils.isVoid(color)) {
+			param += (" color=\"" + color + "\"");
+		}
 
-        if (SymbolUtils.isVoid(width)) {
-            param += (" width=\"" + width + "\"");
-        }
+		if (SymbolUtils.isVoid(width)) {
+			param += (" width=\"" + width + "\"");
+		}
 
-        if (SymbolUtils.isVoid(type)) {
-            param += (" type=\"" + type + "\"");
-        }
+		if (SymbolUtils.isVoid(type)) {
+			param += (" type=\"" + type + "\"");
+		}
 
-        if (SymbolUtils.isVoid(captype)) {
-            param += (" captype=\"" + captype + "\"");
-        }
+		if (SymbolUtils.isVoid(captype)) {
+			param += (" captype=\"" + captype + "\"");
+		}
 
-        if (SymbolUtils.isVoid(jointype)) {
-            param += (" jointype=\"" + jointype + "\"");
-        }
+		if (SymbolUtils.isVoid(jointype)) {
+			param += (" jointype=\"" + jointype + "\"");
+		}
 
-        if (SymbolUtils.isVoid(transparency)) {
-            param += (" transparency=\"" + transparency + "\"");
-        }
+		if (SymbolUtils.isVoid(transparency)) {
+			param += (" transparency=\"" + transparency + "\"");
+		}
 
-        return param;
-    }
+		return param;
+	}
 
-    /**
-     * @return Returns the color.
-     */
-    public String getColor() {
-        return color;
-    }
+	/**
+	 * @return Returns the color.
+	 */
+	public String getColor() {
+		return color;
+	}
 
-    /**
-     * @param color The color to set.
-     */
-    public void setColor(String color) {
-        this.color = color;
-    }
+	/**
+	 * @param color
+	 *            The color to set.
+	 */
+	public void setColor(String color) {
+		this.color = color;
+	}
 
-    /**
-     * @return Returns the type.
-     */
-    public String getType() {
-        return type;
-    }
+	/**
+	 * @return Returns the type.
+	 */
+	public String getType() {
+		return type;
+	}
 
-    /**
-     * @param type The type to set.
-     */
-    public void setType(String type) {
-        this.type = type;
-    }
+	/**
+	 * @param type
+	 *            The type to set.
+	 */
+	public void setType(String type) {
+		this.type = type;
+	}
 
-    /**
-     * @return Returns the width.
-     */
-    public String getWidth() {
-        return width;
-    }
+	/**
+	 * @return Returns the width.
+	 */
+	public String getWidth() {
+		return width;
+	}
 
-    /**
-     * @param width The width to set.
-     */
-    public void setWidth(String width) {
-        this.width = width;
-    }
+	/**
+	 * @param width
+	 *            The width to set.
+	 */
+	public void setWidth(String width) {
+		this.width = width;
+	}
 
-    /**
-     * @return Returns the captype.
-     */
-    public String getCaptype() {
-        return captype;
-    }
+	/**
+	 * @return Returns the captype.
+	 */
+	public String getCaptype() {
+		return captype;
+	}
 
-    /**
-     * @param captype The captype to set.
-     */
-    public void setCaptype(String captype) {
-        this.captype = captype;
-    }
+	/**
+	 * @param captype
+	 *            The captype to set.
+	 */
+	public void setCaptype(String captype) {
+		this.captype = captype;
+	}
 
-    /**
-     * @return Returns the jointype.
-     */
-    public String getJointype() {
-        return jointype;
-    }
+	/**
+	 * @return Returns the jointype.
+	 */
+	public String getJointype() {
+		return jointype;
+	}
 
-    /**
-     * @param jointype The jointype to set.
-     */
-    public void setJointype(String jointype) {
-        this.jointype = jointype;
-    }
+	/**
+	 * @param jointype
+	 *            The jointype to set.
+	 */
+	public void setJointype(String jointype) {
+		this.jointype = jointype;
+	}
 
-    /**
-     * @return Returns the transparency.
-     */
-    public String getTransparency() {
-        return transparency;
-    }
+	/**
+	 * @return Returns the transparency.
+	 */
+	public String getTransparency() {
+		return transparency;
+	}
 
-    /**
-     * @param transparency The transparency to set.
-     */
-    public void setTransparency(String transparency) {
-        this.transparency = transparency;
-    }
+	/**
+	 * @param transparency
+	 *            The transparency to set.
+	 */
+	public void setTransparency(String transparency) {
+		this.transparency = transparency;
+	}
 
-    /* (non-Javadoc)
-     * @see org.gvsig.remoteClient.arcims.styling.symbols.IArcIMSSymbol#getFSymbol()
-     */
-    public ISymbol getFSymbol() {
-        return ArcImsFSymbolFactory.getFSymbol(this);
-    }
-    
-    /**
-     * Converts the comma-delimited string into a List of trimmed strings.
-     *
-     * @param linePattern a String with comma-delimited values
-     * @param lineWidth DOCUMENT ME!
-     *
-     * @return a List of the Strings that were delimited by commas
-     *
-     * @throws IllegalArgumentException DOCUMENT ME!
-     */
-    public static float[] toArray(String linePattern, float lineWidth) {
-        StringTokenizer st = new StringTokenizer(linePattern, ",");
-        int numTokens = st.countTokens();
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.remoteClient.arcims.styling.symbols.IArcIMSSymbol#getFSymbol()
+	 */
+	public ISymbol getFSymbol() {
+		return ArcImsFSymbolFactory.getFSymbol(this);
+	}
 
-        float[] array = new float[numTokens];
+	/**
+	 * Converts the comma-delimited string into a List of trimmed strings.
+	 * 
+	 * @param linePattern
+	 *            a String with comma-delimited values
+	 * @param lineWidth
+	 *            DOCUMENT ME!
+	 * 
+	 * @return a List of the Strings that were delimited by commas
+	 * 
+	 * @throws IllegalArgumentException
+	 *             DOCUMENT ME!
+	 */
+	public static float[] toArray(String linePattern, float lineWidth) {
+		StringTokenizer st = new StringTokenizer(linePattern, ",");
+		int numTokens = st.countTokens();
 
-        for (int i = 0; i < numTokens; i++) {
-            String string = st.nextToken();
-            array[i] = Float.parseFloat(string) * lineWidth;
+		float[] array = new float[numTokens];
 
-            if (array[i] <= 0) {
-                return null;
-            }
-        }
+		for (int i = 0; i < numTokens; i++) {
+			String string = st.nextToken();
+			array[i] = Float.parseFloat(string) * lineWidth;
 
-        return array;
-    }
+			if (array[i] <= 0) {
+				return null;
+			}
+		}
+
+		return array;
+	}
 }

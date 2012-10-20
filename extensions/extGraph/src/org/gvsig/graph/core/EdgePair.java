@@ -43,24 +43,26 @@ package org.gvsig.graph.core;
 public class EdgePair {
 	int idEdge = -1;
 	int idInverseEdge = -1;
-//	int idArc;
-//	
-//	public EdgePair(int idArc) {
-//		this.idArc = idArc;
-//	}
+
+	// int idArc;
+	//
+	// public EdgePair(int idArc) {
+	// this.idArc = idArc;
+	// }
 	public int getIdEdge() {
 		return idEdge;
 	}
+
 	public void setIdEdge(int idEdge) {
 		this.idEdge = idEdge;
 	}
+
 	public int getIdInverseEdge() {
 		return idInverseEdge;
 	}
+
 	public void setIdInverseEdge(int idInverseEdge) {
 		this.idInverseEdge = idInverseEdge;
 	}
-	
+
 }
-
-

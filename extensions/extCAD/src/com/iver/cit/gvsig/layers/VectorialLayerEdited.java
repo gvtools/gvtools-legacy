@@ -47,33 +47,32 @@ import com.iver.cit.gvsig.gui.cad.tools.selection.SelectRowPanel;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.vividsolutions.jts.geom.Geometry;
 
-public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDrawingListener, SelectionListener{
+public class VectorialLayerEdited extends DefaultLayerEdited implements
+		LayerDrawingListener, SelectionListener {
 	private ArrayList selectedHandler = new ArrayList();
 	private ArrayList selectedRow = new ArrayList();
 	private Point2D lastPoint;
 	private Point2D firstPoint;
-	private CADTool cadtool=null;
+	private CADTool cadtool = null;
 
 	private ArrayList snappers = new ArrayList();
 	private ArrayList layersToSnap = new ArrayList();
 	private ILegend legend;
-	/** Selección previa**/
-	private ArrayList previousRowSelection=new ArrayList();
-	private ArrayList previousHandlerSelection=new ArrayList();
-	public static final boolean SAVEPREVIOUS=true;
-	public static final boolean NOTSAVEPREVIOUS=false;
+	/** Selección previa **/
+	private ArrayList previousRowSelection = new ArrayList();
+	private ArrayList previousHandlerSelection = new ArrayList();
+	public static final boolean SAVEPREVIOUS = true;
+	public static final boolean NOTSAVEPREVIOUS = false;
 
-
-	public VectorialLayerEdited(FLayer lyr)
-	{
+	public VectorialLayerEdited(FLayer lyr) {
 		super(lyr);
 		lyr.getMapContext().addLayerDrawingListener(this);
 		// Por defecto, siempre hacemos snapping sobre la capa en edición.
 		layersToSnap.add(lyr);
 		try {
-			((FLyrVect)lyr).getRecordset().addSelectionListener(this);
+			((FLyrVect) lyr).getRecordset().addSelectionListener(this);
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 	}
 
@@ -96,15 +95,15 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 		}
 		selectedHandler.clear();
 		selectedRow.clear();
-		if (getVEA() != null)
-		{
-			FBitSet selection=getVEA().getSelection();
+		if (getVEA() != null) {
+			FBitSet selection = getVEA().getSelection();
 			selection.clear();
 		}
 	}
+
 	public void restorePreviousSelection() throws ReadDriverException {
-		VectorialEditableAdapter vea=getVEA();
-		FBitSet selection=vea.getSelection();
+		VectorialEditableAdapter vea = getVEA();
+		FBitSet selection = vea.getSelection();
 
 		selection.clear();
 		selectedRow.clear();
@@ -112,37 +111,39 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 
 		selectedRow.addAll(previousRowSelection);
 		selectedHandler.addAll(previousHandlerSelection);
-		for (int i = 0;i < selectedRow.size(); i++) {
-			  IRowEdited edRow = (IRowEdited) selectedRow.get(i);
-			  selection.set(edRow.getIndex());
+		for (int i = 0; i < selectedRow.size(); i++) {
+			IRowEdited edRow = (IRowEdited) selectedRow.get(i);
+			selection.set(edRow.getIndex());
 		}
 
 		previousRowSelection.clear();
 		previousHandlerSelection.clear();
 	}
+
 	/**
 	 * @return Returns the selectedRow.
 	 */
 	public IFeature[] getSelectedRowsCache() {
 		return (IFeature[]) selectedRow.toArray(new IFeature[0]);
 	}
-	public void selectWithPoint(double x, double y,boolean multipleSelection){
+
+	public void selectWithPoint(double x, double y, boolean multipleSelection) {
 		firstPoint = new Point2D.Double(x, y);
 		VectorialEditableAdapter vea = getVEA();
-		FBitSet selection=null;
+		FBitSet selection = null;
 		try {
 			selection = vea.getSelection();
 
-		if (!multipleSelection) {
-			clearSelection(SAVEPREVIOUS);
-			selection.clear();
-		}
+			if (!multipleSelection) {
+				clearSelection(SAVEPREVIOUS);
+				selection.clear();
+			}
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 		// Se comprueba si se pincha en una gemometría
-		ViewPort vp=getLayer().getMapContext().getViewPort();
-		double tam =vp.toMapDistance(SelectionCADTool.tolerance);
+		ViewPort vp = getLayer().getMapContext().getViewPort();
+		double tam = vp.toMapDistance(SelectionCADTool.tolerance);
 		Rectangle2D rect = new Rectangle2D.Double(firstPoint.getX() - tam,
 				firstPoint.getY() - tam, tam * 2, tam * 2);
 
@@ -154,12 +155,15 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 
 			BufferedImage selectionImage = null;
 			BufferedImage handlersImage = null;
-			if (multipleSelection && vea.getSelectionImage()!=null && vea.getHandlersImage()!=null) {
-				selectionImage=(BufferedImage)vea.getSelectionImage();
-				handlersImage = (BufferedImage)vea.getHandlersImage();
-			}else{
-				selectionImage = new BufferedImage(vp.getImageWidth(), vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
-				handlersImage = new BufferedImage(vp.getImageWidth(), vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
+			if (multipleSelection && vea.getSelectionImage() != null
+					&& vea.getHandlersImage() != null) {
+				selectionImage = (BufferedImage) vea.getSelectionImage();
+				handlersImage = (BufferedImage) vea.getHandlersImage();
+			} else {
+				selectionImage = new BufferedImage(vp.getImageWidth(),
+						vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
+				handlersImage = new BufferedImage(vp.getImageWidth(),
+						vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
 			}
 			Graphics2D gs = selectionImage.createGraphics();
 
@@ -171,40 +175,43 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 				if (geom == null) {
 					continue;
 				}
-				IGeometry geomReproject=geom.cloneGeometry();
-				if (trans!=null)
+				IGeometry geomReproject = geom.cloneGeometry();
+				if (trans != null)
 					geomReproject.reProject(trans);
 				if (geomReproject.intersects(rect)) { // , 0.1)){
 					selection.set(feats[i].getIndex(), true);
 					selectedRow.add(feats[i]);
-					geomReproject.cloneGeometry().draw(gs, vp, DefaultCADTool.selectionSymbol);
-					drawHandlers(geomReproject.cloneGeometry(),gh,vp);
+					geomReproject.cloneGeometry().draw(gs, vp,
+							DefaultCADTool.selectionSymbol);
+					drawHandlers(geomReproject.cloneGeometry(), gh, vp);
 				}
 			}
-			if (!multipleSelection && selectedRow.size()>1){
+			if (!multipleSelection && selectedRow.size() > 1) {
 
-				SelectRowPanel selectionPanel=new SelectRowPanel(selectedRow, this);
+				SelectRowPanel selectionPanel = new SelectRowPanel(selectedRow,
+						this);
 				PluginServices.getMDIManager().addCentredWindow(selectionPanel);
 			}
 			vea.setSelectionImage(selectionImage);
 			vea.setHandlersImage(handlersImage);
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 	}
+
 	public void selectWithSecondPoint(double x, double y) {
 		VectorialEditableAdapter vea = getVEA();
-		FBitSet selection=null;
+		FBitSet selection = null;
 		try {
 			selection = vea.getSelection();
 
-		lastPoint = new Point2D.Double(x, y);
-		selection.clear();
-		clearSelection(SAVEPREVIOUS);
+			lastPoint = new Point2D.Double(x, y);
+			selection.clear();
+			clearSelection(SAVEPREVIOUS);
 		} catch (ReadDriverException e1) {
-			NotificationManager.addError(e1.getMessage(),e1);
+			NotificationManager.addError(e1.getMessage(), e1);
 		}
-		ViewPort vp=getLayer().getMapContext().getViewPort();
+		ViewPort vp = getLayer().getMapContext().getViewPort();
 		double x1;
 		double y1;
 		double w1;
@@ -232,9 +239,12 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 		IRowEdited[] feats;
 		try {
 			feats = vea.getFeatures(rect, strEPSG);
-			BufferedImage selectionImage = new BufferedImage(vp.getImageWidth(), vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
+			BufferedImage selectionImage = new BufferedImage(
+					vp.getImageWidth(), vp.getImageHeight(),
+					BufferedImage.TYPE_INT_ARGB);
 			Graphics2D gs = selectionImage.createGraphics();
-			BufferedImage handlersImage = new BufferedImage(vp.getImageWidth(), vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
+			BufferedImage handlersImage = new BufferedImage(vp.getImageWidth(),
+					vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
 			Graphics2D gh = handlersImage.createGraphics();
 			MathTransform trans = getLayer().getCrsTransform();
 			for (int i = 0; i < feats.length; i++) {
@@ -244,43 +254,46 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 				if (geom == null) {
 					continue;
 				}
-				IGeometry geomReproject=geom.cloneGeometry();
-				if (trans!=null)
+				IGeometry geomReproject = geom.cloneGeometry();
+				if (trans != null)
 					geomReproject.reProject(trans);
 				if (firstPoint.getX() < lastPoint.getX()) {
 					if (rect.contains(geomReproject.getBounds2D())) {
 						selectedRow.add(feats[i]);
 						selection.set(feats[i].getIndex(), true);
-						geom.cloneGeometry().draw(gs, vp, DefaultCADTool.selectionSymbol);
-						drawHandlers(geom.cloneGeometry(),gh,vp);
+						geom.cloneGeometry().draw(gs, vp,
+								DefaultCADTool.selectionSymbol);
+						drawHandlers(geom.cloneGeometry(), gh, vp);
 					}
 				} else {
 					if (geomReproject.intersects(rect)) { // , 0.1)){
 						selectedRow.add(feats[i]);
 						selection.set(feats[i].getIndex(), true);
-						geom.cloneGeometry().draw(gs, vp, DefaultCADTool.selectionSymbol);
-						drawHandlers(geom.cloneGeometry(),gh,vp);
+						geom.cloneGeometry().draw(gs, vp,
+								DefaultCADTool.selectionSymbol);
+						drawHandlers(geom.cloneGeometry(), gh, vp);
 					}
 				}
 			}
 			vea.setSelectionImage(selectionImage);
 			vea.setHandlersImage(handlersImage);
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 	}
+
 	public void selectInsidePolygon(IGeometry polygon) {
 		VectorialEditableAdapter vea = getVEA();
-		FBitSet selection=null;
+		FBitSet selection = null;
 		try {
 			selection = vea.getSelection();
 
-		selection.clear();
-		clearSelection(SAVEPREVIOUS);
+			selection.clear();
+			clearSelection(SAVEPREVIOUS);
 		} catch (ReadDriverException e1) {
-			NotificationManager.addError(e1.getMessage(),e1);
+			NotificationManager.addError(e1.getMessage(), e1);
 		}
-		ViewPort vp=getLayer().getMapContext().getViewPort();
+		ViewPort vp = getLayer().getMapContext().getViewPort();
 
 		Rectangle2D rect = polygon.getBounds2D();
 
@@ -288,45 +301,49 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 		IRowEdited[] feats;
 		try {
 			feats = vea.getFeatures(rect, strEPSG);
-			BufferedImage selectionImage = new BufferedImage(vp.getImageWidth(), vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
+			BufferedImage selectionImage = new BufferedImage(
+					vp.getImageWidth(), vp.getImageHeight(),
+					BufferedImage.TYPE_INT_ARGB);
 			Graphics2D gs = selectionImage.createGraphics();
-			BufferedImage handlersImage = new BufferedImage(vp.getImageWidth(), vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
+			BufferedImage handlersImage = new BufferedImage(vp.getImageWidth(),
+					vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
 			Graphics2D gh = handlersImage.createGraphics();
 			MathTransform trans = getLayer().getCrsTransform();
 			for (int i = 0; i < feats.length; i++) {
 				IGeometry geom = ((IFeature) feats[i].getLinkedRow())
-					.getGeometry();
+						.getGeometry();
 				if (geom == null) {
 					continue;
 				}
-				IGeometry geomReproject=geom.cloneGeometry();
-				if (trans!=null)
+				IGeometry geomReproject = geom.cloneGeometry();
+				if (trans != null)
 					geomReproject.reProject(trans);
-				if (contains(polygon,geomReproject)) {
+				if (contains(polygon, geomReproject)) {
 					selectedRow.add(feats[i]);
 					selection.set(feats[i].getIndex(), true);
-					geom.cloneGeometry().draw(gs, vp, DefaultCADTool.selectionSymbol);
-					drawHandlers(geom.cloneGeometry(),gh,vp);
+					geom.cloneGeometry().draw(gs, vp,
+							DefaultCADTool.selectionSymbol);
+					drawHandlers(geom.cloneGeometry(), gh, vp);
 				}
 			}
 			vea.setSelectionImage(selectionImage);
 			vea.setHandlersImage(handlersImage);
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 	}
 
 	public void selectCrossPolygon(IGeometry polygon) {
 		VectorialEditableAdapter vea = getVEA();
-		FBitSet selection=null;
+		FBitSet selection = null;
 		try {
 			selection = vea.getSelection();
 			selection.clear();
-		clearSelection(SAVEPREVIOUS);
+			clearSelection(SAVEPREVIOUS);
 		} catch (ReadDriverException e1) {
-			NotificationManager.addError(e1.getMessage(),e1);
+			NotificationManager.addError(e1.getMessage(), e1);
 		}
-		ViewPort vp=getLayer().getMapContext().getViewPort();
+		ViewPort vp = getLayer().getMapContext().getViewPort();
 
 		Rectangle2D rect = polygon.getBounds2D();
 
@@ -334,126 +351,143 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 		IRowEdited[] feats;
 		try {
 			feats = vea.getFeatures(rect, strEPSG);
-			BufferedImage selectionImage = new BufferedImage(vp.getImageWidth(), vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
+			BufferedImage selectionImage = new BufferedImage(
+					vp.getImageWidth(), vp.getImageHeight(),
+					BufferedImage.TYPE_INT_ARGB);
 			Graphics2D gs = selectionImage.createGraphics();
-			BufferedImage handlersImage = new BufferedImage(vp.getImageWidth(), vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
+			BufferedImage handlersImage = new BufferedImage(vp.getImageWidth(),
+					vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
 			Graphics2D gh = handlersImage.createGraphics();
 			MathTransform trans = getLayer().getCrsTransform();
 			for (int i = 0; i < feats.length; i++) {
 				IGeometry geom = ((IFeature) feats[i].getLinkedRow())
-					.getGeometry();
+						.getGeometry();
 				if (geom == null) {
 					continue;
 				}
-				IGeometry geomReproject=geom.cloneGeometry();
-				if (trans!=null)
+				IGeometry geomReproject = geom.cloneGeometry();
+				if (trans != null)
 					geomReproject.reProject(trans);
-				if (contains(polygon,geomReproject) || intersects(polygon,geomReproject)) {
+				if (contains(polygon, geomReproject)
+						|| intersects(polygon, geomReproject)) {
 					selectedRow.add(feats[i]);
 					selection.set(feats[i].getIndex(), true);
-					geom.cloneGeometry().draw(gs, vp, DefaultCADTool.selectionSymbol);
-					drawHandlers(geom.cloneGeometry(),gh,vp);
+					geom.cloneGeometry().draw(gs, vp,
+							DefaultCADTool.selectionSymbol);
+					drawHandlers(geom.cloneGeometry(), gh, vp);
 				}
 			}
 			vea.setSelectionImage(selectionImage);
 			vea.setHandlersImage(handlersImage);
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 	}
 
 	public void selectOutPolygon(IGeometry polygon) {
 		VectorialEditableAdapter vea = getVEA();
-		FBitSet selection=null;
+		FBitSet selection = null;
 		try {
 			selection = vea.getSelection();
 			selection.clear();
 			clearSelection(SAVEPREVIOUS);
 		} catch (ReadDriverException e1) {
-			NotificationManager.addError(e1.getMessage(),e1);
+			NotificationManager.addError(e1.getMessage(), e1);
 		}
-		ViewPort vp=getLayer().getMapContext().getViewPort();
+		ViewPort vp = getLayer().getMapContext().getViewPort();
 
 		try {
-			BufferedImage selectionImage = new BufferedImage(vp.getImageWidth(), vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
+			BufferedImage selectionImage = new BufferedImage(
+					vp.getImageWidth(), vp.getImageHeight(),
+					BufferedImage.TYPE_INT_ARGB);
 			Graphics2D gs = selectionImage.createGraphics();
-			BufferedImage handlersImage = new BufferedImage(vp.getImageWidth(), vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
+			BufferedImage handlersImage = new BufferedImage(vp.getImageWidth(),
+					vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
 			Graphics2D gh = handlersImage.createGraphics();
 			MathTransform trans = getLayer().getCrsTransform();
 			for (int i = 0; i < vea.getRowCount(); i++) {
-				IRowEdited rowEd=vea.getRow(i);
-				IGeometry geom = ((IFeature)rowEd.getLinkedRow())
+				IRowEdited rowEd = vea.getRow(i);
+				IGeometry geom = ((IFeature) rowEd.getLinkedRow())
 						.getGeometry();
 				if (geom == null) {
 					continue;
 				}
-				IGeometry geomReproject=geom.cloneGeometry();
-				if (trans!=null)
+				IGeometry geomReproject = geom.cloneGeometry();
+				if (trans != null)
 					geomReproject.reProject(trans);
-				if (!contains(polygon,geomReproject) && !intersects(polygon,geomReproject)) {
+				if (!contains(polygon, geomReproject)
+						&& !intersects(polygon, geomReproject)) {
 					selectedRow.add(rowEd);
 					selection.set(rowEd.getIndex(), true);
-					geom.cloneGeometry().draw(gs, vp, DefaultCADTool.selectionSymbol);
-					drawHandlers(geom.cloneGeometry(),gh,vp);
+					geom.cloneGeometry().draw(gs, vp,
+							DefaultCADTool.selectionSymbol);
+					drawHandlers(geom.cloneGeometry(), gh, vp);
 				}
 			}
 			vea.setSelectionImage(selectionImage);
 			vea.setHandlersImage(handlersImage);
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 	}
+
 	public void selectAll() {
 		VectorialEditableAdapter vea = getVEA();
-		FBitSet selection=null;
+		FBitSet selection = null;
 		try {
 			selection = vea.getSelection();
 			selection.clear();
 			clearSelection(SAVEPREVIOUS);
 		} catch (ReadDriverException e1) {
-			NotificationManager.addError(e1.getMessage(),e1);
+			NotificationManager.addError(e1.getMessage(), e1);
 		}
-		ViewPort vp=getLayer().getMapContext().getViewPort();
+		ViewPort vp = getLayer().getMapContext().getViewPort();
 
 		try {
-			BufferedImage selectionImage = new BufferedImage(vp.getImageWidth(), vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
+			BufferedImage selectionImage = new BufferedImage(
+					vp.getImageWidth(), vp.getImageHeight(),
+					BufferedImage.TYPE_INT_ARGB);
 			Graphics2D gs = selectionImage.createGraphics();
-			BufferedImage handlersImage = new BufferedImage(vp.getImageWidth(), vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
+			BufferedImage handlersImage = new BufferedImage(vp.getImageWidth(),
+					vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
 			Graphics2D gh = handlersImage.createGraphics();
 			MathTransform trans = getLayer().getCrsTransform();
 			for (int i = 0; i < vea.getRowCount(); i++) {
-				IRowEdited rowEd=vea.getRow(i);
-				IGeometry geom = ((IFeature)rowEd.getLinkedRow())
+				IRowEdited rowEd = vea.getRow(i);
+				IGeometry geom = ((IFeature) rowEd.getLinkedRow())
 						.getGeometry();
-				if (trans!=null)
+				if (trans != null)
 					geom.reProject(trans);
-				addSelectionCache((DefaultRowEdited)rowEd);
+				addSelectionCache((DefaultRowEdited) rowEd);
 				selection.set(rowEd.getIndex(), true);
-				geom.cloneGeometry().draw(gs, vp, DefaultCADTool.selectionSymbol);
-				drawHandlers(geom.cloneGeometry(),gh,vp);
+				geom.cloneGeometry().draw(gs, vp,
+						DefaultCADTool.selectionSymbol);
+				drawHandlers(geom.cloneGeometry(), gh, vp);
 			}
 			vea.setSelectionImage(selectionImage);
 			vea.setHandlersImage(handlersImage);
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
 	}
 
-	public void refreshSelectionCache(Point2D firstPoint,CADToolAdapter cta){
+	public void refreshSelectionCache(Point2D firstPoint, CADToolAdapter cta) {
 		VectorialEditableAdapter vea = getVEA();
-		FBitSet selection=null;
+		FBitSet selection = null;
 		try {
 			selection = vea.getSelection();
-			//		 Cogemos las entidades seleccionadas
+			// Cogemos las entidades seleccionadas
 			clearSelection(SAVEPREVIOUS);
 		} catch (ReadDriverException e1) {
-			NotificationManager.addError(e1.getMessage(),e1);
+			NotificationManager.addError(e1.getMessage(), e1);
 		}
 		double min = java.lang.Double.MAX_VALUE;
-		ViewPort vp=getLayer().getMapContext().getViewPort();
-		BufferedImage selectionImage = new BufferedImage(vp.getImageWidth(), vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
+		ViewPort vp = getLayer().getMapContext().getViewPort();
+		BufferedImage selectionImage = new BufferedImage(vp.getImageWidth(),
+				vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D gs = selectionImage.createGraphics();
-		BufferedImage handlersImage = new BufferedImage(vp.getImageWidth(), vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage handlersImage = new BufferedImage(vp.getImageWidth(),
+				vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D gh = handlersImage.createGraphics();
 		for (int i = selection.nextSetBit(0); i >= 0; i = selection
 				.nextSetBit(i + 1)) {
@@ -461,13 +495,14 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 
 			DefaultRowEdited dre = null;
 			try {
-				dre = (DefaultRowEdited)(vea.getRow(i));
-				IFeature feat=(DefaultFeature)dre.getLinkedRow();
-				IGeometry geom=feat.getGeometry();
+				dre = (DefaultRowEdited) (vea.getRow(i));
+				IFeature feat = (DefaultFeature) dre.getLinkedRow();
+				IGeometry geom = feat.getGeometry();
 				handlers = geom.getHandlers(IGeometry.SELECTHANDLER);
 				addSelectionCache(dre);
-				geom.cloneGeometry().draw(gs, vp, DefaultCADTool.selectionSymbol);
-				drawHandlers(geom.cloneGeometry(),gh,vp);
+				geom.cloneGeometry().draw(gs, vp,
+						DefaultCADTool.selectionSymbol);
+				drawHandlers(geom.cloneGeometry(), gh, vp);
 				// y miramos los handlers de cada entidad seleccionada
 				min = cta.getMapControl().getViewPort()
 						.toMapDistance(SelectionCADTool.tolerance);
@@ -480,7 +515,7 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 					}
 				}
 			} catch (ReadDriverException e) {
-				NotificationManager.addError(e.getMessage(),e);
+				NotificationManager.addError(e.getMessage(), e);
 			}
 		}
 		vea.setSelectionImage(selectionImage);
@@ -488,20 +523,25 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 	}
 
 	public void drawHandlers(IGeometry geom, Graphics2D gs, ViewPort vp) {
-		if (!(getLayer() instanceof FLyrAnnotation)){
+		if (!(getLayer() instanceof FLyrAnnotation)) {
 			Handler[] handlers = geom.getHandlers(IGeometry.SELECTHANDLER);
-			FGraphicUtilities.DrawHandlers(gs, vp.getAffineTransform(), handlers,DefaultCADTool.handlerSymbol);
+			FGraphicUtilities.DrawHandlers(gs, vp.getAffineTransform(),
+					handlers, DefaultCADTool.handlerSymbol);
 		}
 	}
-	public Image getSelectionImage(){
+
+	public Image getSelectionImage() {
 		return getVEA().getSelectionImage();
 	}
+
 	public Image getHandlersImage() {
 		return getVEA().getHandlersImage();
 	}
-	public VectorialEditableAdapter getVEA(){
-		if (((FLyrVect)getLayer()).getSource() instanceof VectorialEditableAdapter)
-			return (VectorialEditableAdapter)((FLyrVect)getLayer()).getSource();
+
+	public VectorialEditableAdapter getVEA() {
+		if (((FLyrVect) getLayer()).getSource() instanceof VectorialEditableAdapter)
+			return (VectorialEditableAdapter) ((FLyrVect) getLayer())
+					.getSource();
 		return null;
 	}
 
@@ -521,7 +561,8 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 				IFeature feat = (IFeature) ((IRowEdited) selectedRow.get(i))
 						.getLinkedRow();
 				IGeometry geom = feat.getGeometry();
-				geom.cloneGeometry().draw(gs, vp, DefaultCADTool.selectionSymbol);
+				geom.cloneGeometry().draw(gs, vp,
+						DefaultCADTool.selectionSymbol);
 				drawHandlers(geom.cloneGeometry(), gh, vp);
 			}
 			vea.setSelectionImage(selectionImage);
@@ -532,55 +573,62 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 	public void afterLayerDraw(LayerDrawEvent e) throws CancelationException {
 	}
 
-	public void beforeGraphicLayerDraw(LayerDrawEvent e) throws CancelationException {
+	public void beforeGraphicLayerDraw(LayerDrawEvent e)
+			throws CancelationException {
 	}
 
-	public void afterLayerGraphicDraw(LayerDrawEvent e) throws CancelationException {
+	public void afterLayerGraphicDraw(LayerDrawEvent e)
+			throws CancelationException {
 	}
-	private static boolean contains(IGeometry g1,IGeometry g2) {
-		Geometry geometry1=g1.toJTSGeometry();
-		Geometry geometry2=g2.toJTSGeometry();
-		if (geometry1==null || geometry2==null)return false;
+
+	private static boolean contains(IGeometry g1, IGeometry g2) {
+		Geometry geometry1 = g1.toJTSGeometry();
+		Geometry geometry2 = g2.toJTSGeometry();
+		if (geometry1 == null || geometry2 == null)
+			return false;
 		return geometry1.contains(geometry2);
 	}
-	private static boolean intersects(IGeometry g1,IGeometry g2) {
-		Geometry geometry1=g1.toJTSGeometry();
-		Geometry geometry2=g2.toJTSGeometry();
-		if (geometry1==null || geometry2==null)return false;
+
+	private static boolean intersects(IGeometry g1, IGeometry g2) {
+		Geometry geometry1 = g1.toJTSGeometry();
+		Geometry geometry2 = g2.toJTSGeometry();
+		if (geometry1 == null || geometry2 == null)
+			return false;
 		return geometry1.intersects(geometry2);
 	}
 
 	public void activationGained(LayerEvent e) {
-		if (ViewCommandStackExtension.csd!=null){
-			ViewCommandStackExtension.csd.setModel(((IEditableSource) ((FLyrVect)getLayer()).getSource())
-							.getCommandRecord());
+		if (ViewCommandStackExtension.csd != null) {
+			ViewCommandStackExtension.csd
+					.setModel(((IEditableSource) ((FLyrVect) getLayer())
+							.getSource()).getCommandRecord());
 		}
-		IWindow window=PluginServices.getMDIManager().getActiveWindow();
-		if (window instanceof View){
-			View view=(View)window;
-			if (e.getSource().isEditing()){
+		IWindow window = PluginServices.getMDIManager().getActiveWindow();
+		if (window instanceof View) {
+			View view = (View) window;
+			if (e.getSource().isEditing()) {
 				view.showConsole();
 			}
 		}
-		if (cadtool!=null){
+		if (cadtool != null) {
 			CADExtension.getCADToolAdapter().setCadTool(cadtool);
 			PluginServices.getMainFrame().setSelectedTool(cadtool.toString());
-			StartEditing.startCommandsApplicable(null,(FLyrVect)getLayer());
+			StartEditing.startCommandsApplicable(null, (FLyrVect) getLayer());
 			CADExtension.initFocus();
 		}
 
 	}
 
 	public void activationLost(LayerEvent e) {
-		try{
-			cadtool=CADExtension.getCADTool();
-			IWindow window=PluginServices.getMDIManager().getActiveWindow();
-			if (window instanceof View){
-				View view=(View)window;
+		try {
+			cadtool = CADExtension.getCADTool();
+			IWindow window = PluginServices.getMDIManager().getActiveWindow();
+			if (window instanceof View) {
+				View view = (View) window;
 				view.hideConsole();
 			}
-		}catch (EmptyStackException e1) {
-			cadtool=new SelectionCADTool();
+		} catch (EmptyStackException e1) {
+			cadtool = new SelectionCADTool();
 			cadtool.init();
 		}
 
@@ -599,26 +647,27 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 
 	}
 
-	public void setSelectionCache(boolean savePrevious,ArrayList selectedRowAux) {
+	public void setSelectionCache(boolean savePrevious, ArrayList selectedRowAux) {
 		try {
 			clearSelection(savePrevious);
-			VectorialEditableAdapter vea=getVEA();
-			FBitSet selection=vea.getSelection();
+			VectorialEditableAdapter vea = getVEA();
+			FBitSet selection = vea.getSelection();
 			selectedRow.addAll(selectedRowAux);
-			for (int i = 0;i < selectedRow.size(); i++) {
+			for (int i = 0; i < selectedRow.size(); i++) {
 				IRowEdited edRow = (IRowEdited) selectedRow.get(i);
 				selection.set(edRow.getIndex());
 			}
-			FLyrVect active = (FLyrVect)getLayer();
+			FLyrVect active = (FLyrVect) getLayer();
 			active.getRecordset().getSelectionSupport().fireSelectionEvents();
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
+			NotificationManager.addError(e.getMessage(), e);
 		}
-    }
+	}
 
 	public void setLegend(ILegend legend) {
-		this.legend=legend;
+		this.legend = legend;
 	}
+
 	public ILegend getLegend() {
 		return legend;
 	}
@@ -633,10 +682,10 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 
 	public void selectionChanged(SelectionEvent e) {
 		try {
-			if (getVEA()!=null && getVEA().getSelection().isEmpty())
+			if (getVEA() != null && getVEA().getSelection().isEmpty())
 				clearSelection(NOTSAVEPREVIOUS);
 		} catch (ReadDriverException e1) {
-			NotificationManager.addError(e1.getMessage(),e1);
+			NotificationManager.addError(e1.getMessage(), e1);
 		}
 	}
 }

@@ -47,11 +47,13 @@ import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
 import com.iver.cit.gvsig.fmap.tools.Listeners.PointListener;
 import com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener;
 
-
 /**
- * <p>Behavior that permits user to select a point with a double click mouse action, on the associated
- *  <code>MapControl</code> using a {@link PointListener PointListener}.</p>
- *
+ * <p>
+ * Behavior that permits user to select a point with a double click mouse
+ * action, on the associated <code>MapControl</code> using a
+ * {@link PointListener PointListener}.
+ * </p>
+ * 
  * @author Vicente Caballero Navarro
  */
 public class PointBehavior extends Behavior {
@@ -66,12 +68,16 @@ public class PointBehavior extends Behavior {
 	/**
 	 * Flag that determines a double click user action.
 	 */
-	private boolean doubleClick=false;
+	private boolean doubleClick = false;
 
 	/**
- 	 * <p>Creates a new behavior for selecting a point.</p>
- 	 *
-	 * @param l listener used to permit this object to work with the associated <code>MapControl</code>
+	 * <p>
+	 * Creates a new behavior for selecting a point.
+	 * </p>
+	 * 
+	 * @param l
+	 *            listener used to permit this object to work with the
+	 *            associated <code>MapControl</code>
 	 */
 	public PointBehavior(PointListener l) {
 		listener = l;
@@ -79,34 +85,44 @@ public class PointBehavior extends Behavior {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mousePressed(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mousePressed(java.awt
+	 * .event.MouseEvent)
 	 */
 	public void mousePressed(MouseEvent e) {
 		if (listener.cancelDrawing()) {
 			getMapControl().cancelDrawing();
 		}
-		if (e.getClickCount()==2){
-			doubleClick=true;
+		if (e.getClickCount() == 2) {
+			doubleClick = true;
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseReleased(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseReleased(java.awt
+	 * .event.MouseEvent)
 	 */
 	public void mouseReleased(MouseEvent e) throws BehaviorException {
 		PointEvent event = new PointEvent(e.getPoint(), e);
 		listener.point(event);
-		if (doubleClick){
+		if (doubleClick) {
 			listener.pointDoubleClick(event);
-			doubleClick=false;
+			doubleClick = false;
 		}
 	}
 
 	/**
-	 * <p>Sets a tool listener to work with the <code>MapControl</code> using this behavior.</p>
+	 * <p>
+	 * Sets a tool listener to work with the <code>MapControl</code> using this
+	 * behavior.
+	 * </p>
 	 * 
-	 * @param listener a <code>PointListener</code> object for this behavior
+	 * @param listener
+	 *            a <code>PointListener</code> object for this behavior
 	 */
 	public void setListener(ToolListener listener) {
 		this.listener = (PointListener) listener;
@@ -114,6 +130,7 @@ public class PointBehavior extends Behavior {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#getListener()
 	 */
 	public ToolListener getListener() {

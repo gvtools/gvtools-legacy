@@ -1,6 +1,5 @@
 package es.gva.cit.catalog.csw.drivers.profiles;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -50,14 +49,15 @@ package es.gva.cit.catalog.csw.drivers.profiles;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class CSWISO19115Profile extends CSWAbstractProfile{
+public class CSWISO19115Profile extends CSWAbstractProfile {
 
 	public CSWISO19115Profile() {
-		super();		
+		super();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see es.gva.cit.catalog.csw.drivers.profiles.ICSWProfile#getTitle()
 	 */
 	public String getTitleProperty() {
@@ -66,30 +66,34 @@ public class CSWISO19115Profile extends CSWAbstractProfile{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see es.gva.cit.catalog.csw.drivers.profiles.ICSWProfile#getAbstract()
 	 */
 	public String getAbstractProperty() {
-		 return "abstract";
+		return "abstract";
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see es.gva.cit.catalog.csw.drivers.profiles.ICSWProfile#getCoordinates()
 	 */
 	public String getCoordinatesProperty() {
-		 return "geom";
+		return "geom";
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see es.gva.cit.catalog.csw.drivers.profiles.ICSWProfile#getDateFrom()
 	 */
 	public String getDateFromProperty() {
-		 return "modified";
+		return "modified";
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see es.gva.cit.catalog.csw.drivers.profiles.ICSWProfile#getDateTo()
 	 */
 	public String getDateToProperty() {
@@ -98,6 +102,7 @@ public class CSWISO19115Profile extends CSWAbstractProfile{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see es.gva.cit.catalog.csw.drivers.profiles.ICSWProfile#getProvider()
 	 */
 	public String getProviderProperty() {
@@ -106,31 +111,37 @@ public class CSWISO19115Profile extends CSWAbstractProfile{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see es.gva.cit.catalog.csw.drivers.profiles.ICSWProfile#getScale()
 	 */
 	public String getScaleProperty() {
-		  return "scale";
+		return "scale";
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see es.gva.cit.catalog.csw.drivers.profiles.ICSWProfile#getThemeKey()
 	 */
 	public String getKeywordsProperty() {
-		 return "keyword";
+		return "keyword";
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see es.gva.cit.catalog.csw.drivers.profiles.ICSWProfile#getTopic()
 	 */
 	public String getTopicProperty() {
-		 return "topic";
+		return "topic";
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalog.csw.drivers.profiles.ICSWProfile#getTopicValue(java.lang.String)
+	 * 
+	 * @see
+	 * es.gva.cit.catalog.csw.drivers.profiles.ICSWProfile#getTopicValue(java
+	 * .lang.String)
 	 */
 	public String getTopicValue(String topic) {
 		return topic;
@@ -138,11 +149,12 @@ public class CSWISO19115Profile extends CSWAbstractProfile{
 
 	/*
 	 * (non-Javadoc)
-	 * @see es.gva.cit.catalog.drivers.profiles.IProfile#getElementNameProperty()
+	 * 
+	 * @see
+	 * es.gva.cit.catalog.drivers.profiles.IProfile#getElementNameProperty()
 	 */
 	public String getElementNameProperty() {
 		return null;
-	}	
-	
+	}
 
 }

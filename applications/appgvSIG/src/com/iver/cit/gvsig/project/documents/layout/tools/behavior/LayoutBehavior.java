@@ -50,36 +50,36 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.image.VolatileImage;
 
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.project.documents.layout.LayoutControl;
-import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 import com.iver.cit.gvsig.project.documents.layout.tools.listener.LayoutToolListener;
 
-
 /**
- * Ejecuta acciones respondiendo a eventos, por
- * delegación desde el Layout.
- *
+ * Ejecuta acciones respondiendo a eventos, por delegación desde el Layout.
+ * 
  * @author Vicente Caballero Navarro
  */
 public abstract class LayoutBehavior implements ILayoutBehavior {
 	private LayoutControl layout;
+
 	public abstract LayoutToolListener getListener();
 
 	public void paintComponent(Graphics g) {
-//		g.drawImage(getLayoutControl().getImage(),0,
-//                0, layout);
+		// g.drawImage(getLayoutControl().getImage(),0,
+		// 0, layout);
 
-//		getLayoutControl().getLayoutDraw().drawGrid((Graphics2D) g);
-//        getLayoutControl().getLayoutDraw().drawRuler((Graphics2D) g, Color.black);
-//		getLayoutControl().getGeometryAdapter().paint((Graphics2D) g, layout.getAT(), true);
-//		getLayoutControl().getLayoutDraw().drawHandlers((Graphics2D) g, Color.black);
-//		long t1 = System.currentTimeMillis();
+		// getLayoutControl().getLayoutDraw().drawGrid((Graphics2D) g);
+		// getLayoutControl().getLayoutDraw().drawRuler((Graphics2D) g,
+		// Color.black);
+		// getLayoutControl().getGeometryAdapter().paint((Graphics2D) g,
+		// layout.getAT(), true);
+		// getLayoutControl().getLayoutDraw().drawHandlers((Graphics2D) g,
+		// Color.black);
+		// long t1 = System.currentTimeMillis();
 
 		VolatileImage image = createVolatileImage();
 		Graphics gh = image.createGraphics();
@@ -87,16 +87,18 @@ public abstract class LayoutBehavior implements ILayoutBehavior {
 		gh.fillRect(0, 0, image.getWidth(), image.getHeight());
 
 		getLayoutControl().getLayoutDraw().drawRectangle((Graphics2D) gh);
-		gh.drawImage(getLayoutControl().getImage(), 0,0, null);
-		gh.drawImage(getLayoutControl().getImgRuler(), 0,0, null);
-//		long t2 = System.currentTimeMillis();
+		gh.drawImage(getLayoutControl().getImage(), 0, 0, null);
+		gh.drawImage(getLayoutControl().getImgRuler(), 0, 0, null);
+		// long t2 = System.currentTimeMillis();
 
-		getLayoutControl().getGeometryAdapter().paint((Graphics2D) gh, layout.getAT(), true);
-		getLayoutControl().getLayoutDraw().drawHandlers((Graphics2D) gh, Color.black);
-//		getLayoutControl().drawCursor(gh);
+		getLayoutControl().getGeometryAdapter().paint((Graphics2D) gh,
+				layout.getAT(), true);
+		getLayoutControl().getLayoutDraw().drawHandlers((Graphics2D) gh,
+				Color.black);
+		// getLayoutControl().drawCursor(gh);
 		g.drawImage(image, 0, 0, null);
-//		long t3 = System.currentTimeMillis();
-//		System.out.println("t1 = " + (t2-t1) + " t2=" + (t3-t2));
+		// long t3 = System.currentTimeMillis();
+		// System.out.println("t1 = " + (t2-t1) + " t2=" + (t3-t2));
 
 	}
 
@@ -107,6 +109,7 @@ public abstract class LayoutBehavior implements ILayoutBehavior {
 	public Image getImageCursor() {
 		return getListener().getImageCursor();
 	}
+
 	public Cursor getCursor() {
 		return getListener().getCursor();
 	}
@@ -125,10 +128,10 @@ public abstract class LayoutBehavior implements ILayoutBehavior {
 	}
 
 	public void mousePressed(MouseEvent e) throws BehaviorException {
-		 if (e.getButton() == MouseEvent.BUTTON1) {
-			    layout.setPointAnt();
-	            layout.setFirstPoint();
-		 }
+		if (e.getButton() == MouseEvent.BUTTON1) {
+			layout.setPointAnt();
+			layout.setFirstPoint();
+		}
 	}
 
 	public void mouseReleased(MouseEvent e) throws BehaviorException {
@@ -155,8 +158,10 @@ public abstract class LayoutBehavior implements ILayoutBehavior {
 	}
 
 	protected VolatileImage createVolatileImage() {
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		GraphicsConfiguration gc = ge.getDefaultScreenDevice().getDefaultConfiguration();
+		GraphicsEnvironment ge = GraphicsEnvironment
+				.getLocalGraphicsEnvironment();
+		GraphicsConfiguration gc = ge.getDefaultScreenDevice()
+				.getDefaultConfiguration();
 		VolatileImage image = null;
 		int transparency = getLayoutControl().getImage().getTransparency();
 		int width = getLayoutControl().getWidth();

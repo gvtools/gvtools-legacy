@@ -11,7 +11,6 @@ import org.gvsig.gpe.xml.stream.IXmlStreamReader;
 import org.gvsig.gpe.xml.stream.XmlStreamException;
 import org.gvsig.gpe.xml.utils.CompareUtils;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -61,42 +60,57 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class PolygonTypeBinding extends org.gvsig.gpe.gml.parser.v2.geometries.PolygonTypeBinding {
+public class PolygonTypeBinding extends
+		org.gvsig.gpe.gml.parser.v2.geometries.PolygonTypeBinding {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.bindings.v2.geometries.PolygonTypeBinding#parseTag(org.xmlpull.v1.XmlPullParser, org.gvsig.gpe.gml.GPEDefaultGmlParser, java.lang.String, java.lang.String, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.bindings.v2.geometries.PolygonTypeBinding#parseTag(
+	 * org.xmlpull.v1.XmlPullParser, org.gvsig.gpe.gml.GPEDefaultGmlParser,
+	 * java.lang.String, java.lang.String, java.lang.String)
 	 */
-	protected Object parseTag(IXmlStreamReader parser,GPEDefaultGmlParser handler, QName tag, String id, String srsName) throws XmlStreamException, IOException{
+	protected Object parseTag(IXmlStreamReader parser,
+			GPEDefaultGmlParser handler, QName tag, String id, String srsName)
+			throws XmlStreamException, IOException {
 		this.polygon = super.parseTag(parser, handler, tag, id, srsName);
-		if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_EXTERIOR)){
-			ExteriorTypeBinding exterionBinding = handler.getProfile().getExteriorTypeBinding();
-			ICoordinateIterator coordinatesIterator = exterionBinding.parse(parser, handler);
+		if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_EXTERIOR)) {
+			ExteriorTypeBinding exterionBinding = handler.getProfile()
+					.getExteriorTypeBinding();
+			ICoordinateIterator coordinatesIterator = exterionBinding.parse(
+					parser, handler);
 			this.polygon = handler.getContentHandler().startPolygon(id,
-					coordinatesIterator,
-					srsName);
-		}else if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_INTERIOR)){
-			InteriorTypeBinding exterionBinding = handler.getProfile().getInteriorTypeBinding();
-			ICoordinateIterator coordinatesIterator = exterionBinding.parse(parser, handler);
-			Object innerPolygon = handler.getContentHandler().startInnerPolygon(null,
-					coordinatesIterator,
-					srsName);
+					coordinatesIterator, srsName);
+		} else if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_INTERIOR)) {
+			InteriorTypeBinding exterionBinding = handler.getProfile()
+					.getInteriorTypeBinding();
+			ICoordinateIterator coordinatesIterator = exterionBinding.parse(
+					parser, handler);
+			Object innerPolygon = handler.getContentHandler()
+					.startInnerPolygon(null, coordinatesIterator, srsName);
 			handler.getContentHandler().endInnerPolygon(innerPolygon);
-			handler.getContentHandler().addInnerPolygonToPolygon(innerPolygon,this.polygon);
+			handler.getContentHandler().addInnerPolygonToPolygon(innerPolygon,
+					this.polygon);
 		}
-		return this.polygon;		
+		return this.polygon;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.bindings.v2.geometries.PolygonTypeBinding#parseLastTag(org.xmlpull.v1.XmlPullParser, org.gvsig.gpe.gml.GPEDefaultGmlParser, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.bindings.v2.geometries.PolygonTypeBinding#parseLastTag
+	 * (org.xmlpull.v1.XmlPullParser, org.gvsig.gpe.gml.GPEDefaultGmlParser,
+	 * java.lang.String)
 	 */
-	protected boolean parseLastTag(IXmlStreamReader parser,GPEDefaultGmlParser handler, QName tag){
+	protected boolean parseLastTag(IXmlStreamReader parser,
+			GPEDefaultGmlParser handler, QName tag) {
 		boolean endFeature = super.parseLastTag(parser, handler, tag);
-		if (endFeature){
+		if (endFeature) {
 			return true;
 		}
-		if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_SURFACE)){						
+		if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_SURFACE)) {
 			return true;
 		}
 		return false;

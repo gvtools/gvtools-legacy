@@ -1,4 +1,3 @@
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
@@ -47,25 +46,29 @@ import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
 
-
 /**
- * Class that extends of the tool Annotation_ModifyToolListenerImpl and
- * override the methods that interests us to change its behavior.
- *
+ * Class that extends of the tool Annotation_ModifyToolListenerImpl and override
+ * the methods that interests us to change its behavior.
+ * 
  * @author Vicente Caballero Navarro
  */
-public class Annotation_ModifyListener extends Annotation_ModifyToolListenerImpl {
+public class Annotation_ModifyListener extends
+		Annotation_ModifyToolListenerImpl {
 
 	public Annotation_ModifyListener(MapControl mapCtrl) {
-        super(mapCtrl);
+		super(mapCtrl);
 
-    }
+	}
 
-    /* (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#point(com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
-     */
-    public void point(PointEvent event) throws BehaviorException {
-    	super.point(event);
-        PluginServices.getMainFrame().enableControls();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#point(com.iver.
+	 * cit.gvsig.fmap.tools.Events.PointEvent)
+	 */
+	public void point(PointEvent event) throws BehaviorException {
+		super.point(event);
+		PluginServices.getMainFrame().enableControls();
+	}
 }

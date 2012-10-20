@@ -19,8 +19,8 @@
 package org.gvsig.raster.util;
 
 /**
- * Clase no abstracta para instanciar un BasePanel generico
- * 18/08/2008
+ * Clase no abstracta para instanciar un BasePanel generico 18/08/2008
+ * 
  * @author Nacho Brodin nachobrodin@gmail.com
  */
 public class GenericBasePanel extends BasePanel {
@@ -28,6 +28,7 @@ public class GenericBasePanel extends BasePanel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#init()
 	 */
 	protected void init() {
@@ -35,8 +36,9 @@ public class GenericBasePanel extends BasePanel {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.raster.util.BasePanel#translate()
 	 */
 	protected void translate() {
-	}	
+	}
 }

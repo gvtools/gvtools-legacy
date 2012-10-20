@@ -42,30 +42,31 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: SumFunction.java 5412 2006-05-24 21:15:07Z azabala $
-* $Log$
-* Revision 1.1  2006-05-24 21:12:16  azabala
-* primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
-*
-* Revision 1.1  2006/02/26 20:55:28  azabala
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: SumFunction.java 5412 2006-05-24 21:15:07Z azabala $
+ * $Log$
+ * Revision 1.1  2006-05-24 21:12:16  azabala
+ * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing
+ *
+ * Revision 1.1  2006/02/26 20:55:28  azabala
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.cit.gvsig.geoprocess.core.fmap;
 
 import com.hardcode.gdbms.engine.values.NumericValue;
 import com.hardcode.gdbms.engine.values.ValueFactory;
+
 /**
- * Sumarization function that returns the sum total of
- * all field values.
+ * Sumarization function that returns the sum total of all field values.
+ * 
  * @author azabala
- *
+ * 
  */
 public class SumFunction implements SummarizationFunction {
 	double sum = 0d;
-	
+
 	public void process(NumericValue value) {
 		sum += value.doubleValue();
 	}
@@ -73,8 +74,8 @@ public class SumFunction implements SummarizationFunction {
 	public NumericValue getSumarizeValue() {
 		return ValueFactory.createValue(sum);
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		return "sum";
 	}
 
@@ -82,4 +83,3 @@ public class SumFunction implements SummarizationFunction {
 		sum = 0d;
 	}
 }
-

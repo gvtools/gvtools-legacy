@@ -23,74 +23,88 @@ import java.util.EventObject;
 import java.util.TreeMap;
 
 /**
- * Clase donde se registran todos los procesos raster para poder ser accedidos por distintos
- * objetos y puedan mandarles señales.
+ * Clase donde se registran todos los procesos raster para poder ser accedidos
+ * por distintos objetos y puedan mandarles señales.
  * 
  * @version 30/08/2007
  * @author Nacho Brodin (nachobrodin@gmail.com)
- *
+ * 
  */
 public class RasterTaskQueue {
-	
-	private static TreeMap         processPool = new TreeMap();
-	private static ArrayList       processID = new ArrayList();
-	
+
+	private static TreeMap processPool = new TreeMap();
+	private static ArrayList processID = new ArrayList();
+
 	/**
 	 * Registra procesos para que puedan ser accedidos
-	 * @param id Identificador del proceso
-	 * @param process Proceso
+	 * 
+	 * @param id
+	 *            Identificador del proceso
+	 * @param process
+	 *            Proceso
 	 */
 	public static void register(RasterTask process) {
 		processPool.put(process.getID(), process);
 		processID.add(process.getID());
-	}	
-	
+	}
+
 	/**
 	 * Saca un proceso del repositorio
-	 * @param id Identificador del proceso.
+	 * 
+	 * @param id
+	 *            Identificador del proceso.
 	 */
 	public static void remove(RasterTask process) {
 		processPool.remove(process.getID());
 		for (int i = 0; i < processID.size(); i++) {
-			if(((String)processID.get(i)).compareTo(process.getID()) == 0) {
+			if (((String) processID.get(i)).compareTo(process.getID()) == 0) {
 				processID.remove(i);
 				break;
 			}
 		}
 	}
-	
+
 	/**
 	 * Obtiene un proceso a partir de su identificador
-	 * @param id Identificador del proceso
+	 * 
+	 * @param id
+	 *            Identificador del proceso
 	 * @return Proceso
 	 */
 	public static RasterTask get(String id) {
-		if(id == null)
+		if (id == null)
 			return new RasterTask(null);
-		return ((RasterTask)processPool.get(id) == null) ? new RasterTask(null) : (RasterTask)processPool.get(id);
+		return ((RasterTask) processPool.get(id) == null) ? new RasterTask(null)
+				: (RasterTask) processPool.get(id);
 	}
-	
+
 	/**
 	 * Envia un evento al proceso cuyo id coincide con el parámetro
-	 * @param id Identificador del proceso
-	 * @param ev Evento
+	 * 
+	 * @param id
+	 *            Identificador del proceso
+	 * @param ev
+	 *            Evento
 	 */
 	public static void sendSignal(String id, EventObject ev) {
 		Object obj = processPool.get(id);
-		if(obj != null && obj instanceof RasterTask) 
-			((RasterTask)obj).setEvent(ev);
+		if (obj != null && obj instanceof RasterTask)
+			((RasterTask) obj).setEvent(ev);
 	}
-	
+
 	/**
 	 * Envia un evento a todos los procesos
-	 * @param id Identificador del proceso
-	 * @param ev Evento
+	 * 
+	 * @param id
+	 *            Identificador del proceso
+	 * @param ev
+	 *            Evento
 	 */
 	public static void sendSignal(EventObject ev) {
 		for (int i = 0; i < processID.size(); i++) {
-			String id = (String)processID.get(i);
+			String id = (String) processID.get(i);
 			sendSignal(id, ev);
 		}
 	}
-	
+
 }

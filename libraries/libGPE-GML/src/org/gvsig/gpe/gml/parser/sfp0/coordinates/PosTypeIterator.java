@@ -54,26 +54,32 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
  *   dac@iver.es
  */
 
-public class PosTypeIterator extends GmlCoodinatesIterator{
+public class PosTypeIterator extends GmlCoodinatesIterator {
 
-	/* (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.parser.v2.coordinates.GmlCoodinatesIterator#initialize(org.gvsig.gpe.xml.stream.IXmlStreamReader, org.gvsig.gpe.gml.parser.GPEDefaultGmlParser, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.parser.v2.coordinates.GmlCoodinatesIterator#initialize
+	 * (org.gvsig.gpe.xml.stream.IXmlStreamReader,
+	 * org.gvsig.gpe.gml.parser.GPEDefaultGmlParser, java.lang.String)
 	 */
 	public void initialize(IXmlStreamReader parser,
 			GPEDefaultGmlParser handler, QName lastTag)
-	throws XmlStreamException, IOException {
+			throws XmlStreamException, IOException {
 		// TODO Auto-generated method stub
-		super.initialize(parser, handler, lastTag);			
+		super.initialize(parser, handler, lastTag);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.ICoordinateIterator#hasNext()
 	 */
 	public boolean hasNext() throws IOException {
 		QName tag = parser.getName();
 
-		if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_POS)){		
+		if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_POS)) {
 			return true;
 		}
 		parseAll();
@@ -82,46 +88,53 @@ public class PosTypeIterator extends GmlCoodinatesIterator{
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.gvsig.gpe.parser.ICoordinateIterator#next(double[])
 	 */
 	public void next(double[] buffer) throws IOException {
 		parser.next();
 
-		StringTokenizer coordinatesString = new StringTokenizer(parser.getText().trim(),TUPLES_SEPARATOR);
-		int i=0;
+		StringTokenizer coordinatesString = new StringTokenizer(parser
+				.getText().trim(), TUPLES_SEPARATOR);
+		int i = 0;
 
-		while(coordinatesString.hasMoreTokens() && i<buffer.length){
-			buffer[i] = DoubleTypeBinding.parse(coordinatesString.nextToken(),COORDINATES_DECIMAL);
+		while (coordinatesString.hasMoreTokens() && i < buffer.length) {
+			buffer[i] = DoubleTypeBinding.parse(coordinatesString.nextToken(),
+					COORDINATES_DECIMAL);
 			i++;
-		}	
-		//Advance until the end pos label
+		}
+		// Advance until the end pos label
 		boolean endPos = false;
-		while (!endPos){
+		while (!endPos) {
 			parser.next();
-			if (CompareUtils.compareWithNamespace(GMLTags.GML_POS,parser.getName())){
-				if (parser.getEventType() == IXmlStreamReader.END_ELEMENT){
+			if (CompareUtils.compareWithNamespace(GMLTags.GML_POS,
+					parser.getName())) {
+				if (parser.getEventType() == IXmlStreamReader.END_ELEMENT) {
 					continue;
-				}else if (parser.getEventType() == IXmlStreamReader.START_ELEMENT){
+				} else if (parser.getEventType() == IXmlStreamReader.START_ELEMENT) {
 					endPos = true;
-				}					
-			}else{
-				if (parser.getEventType() == IXmlStreamReader.END_ELEMENT){
+				}
+			} else {
+				if (parser.getEventType() == IXmlStreamReader.END_ELEMENT) {
 					endPos = true;
 				}
 			}
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.parser.v2.coordinates.GmlCoodinatesIterator#getDimension()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.parser.v2.coordinates.GmlCoodinatesIterator#getDimension
+	 * ()
 	 */
 	public int getDimension() {
-		//TODO Calculate the dimension
-		if (dimension == -1){
+		// TODO Calculate the dimension
+		if (dimension == -1) {
 			dimension = 3;
 		}
 		return dimension;
-	}	
-	
-	
+	}
+
 }

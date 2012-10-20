@@ -94,70 +94,77 @@ public class FLyrWFSFactory {
 	 * @param onlineResource
 	 * @param driver
 	 * @param loadLayer
-	 * If the layer has to be loaded
+	 *            If the layer has to be loaded
 	 * @param firstLoad
-	 * If is the first time that the layer is loaded
+	 *            If is the first time that the layer is loaded
 	 * @return
 	 */
 	public FLyrWFS getFLyrWFS(FLayer layer, URL host, String onlineResource,
 			FMapWFSDriver driver, boolean loadLayer, boolean firstLoad,
 			Color background) {
-		FLyrWFS wfsLayer = (FLyrWFS)layer;
+		FLyrWFS wfsLayer = (FLyrWFS) layer;
 		wfsLayer.setHost(host);
 		wfsLayer.setWfsDriver(driver);
-//		Sets the WFS adapter
+		// Sets the WFS adapter
 		WFSAdapter adapter = new WFSAdapter();
-    	adapter.setDriver((VectorialDriver) driver);
-    	wfsLayer.setSource(adapter);
+		adapter.setDriver((VectorialDriver) driver);
+		wfsLayer.setSource(adapter);
 		wfsLayer.setOnlineResource(onlineResource);
-		//The SRS original
+		// The SRS original
 		CoordinateReferenceSystem crs = ProjectionUtils.getCRS(getSRS(wfsLayer
 				.getSrs()));
 		wfsLayer.setCrs(crs);
-		if (loadLayer){
+		if (loadLayer) {
 			try {
-				if ((crs == null) && (firstLoad)){
-					JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),
-							PluginServices.getText(this,"wfs_srs_unknown"));	
+				if ((crs == null) && (firstLoad)) {
+					JOptionPane.showMessageDialog(
+							(Component) PluginServices.getMainFrame(),
+							PluginServices.getText(this, "wfs_srs_unknown"));
 				}
 				wfsLayer.load();
 				wfsLayer.setLegend(LegendFactory.createSingleSymbolLegend(
 						wfsLayer.getShapeType(), background));
-				if (wfsLayer.getNumfeatures() == wfsLayer.getWfsDriver().getRowCount()) {
-					JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),
-							PluginServices.getText(this,"maxFeatures_aviso"));	
+				if (wfsLayer.getNumfeatures() == wfsLayer.getWfsDriver()
+						.getRowCount()) {
+					JOptionPane.showMessageDialog(
+							(Component) PluginServices.getMainFrame(),
+							PluginServices.getText(this, "maxFeatures_aviso"));
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				Logger.getLogger(getClass().getName()).error(e.getMessage());
-				JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),
-						PluginServices.getText(this,"cantLoad"));
+				JOptionPane.showMessageDialog(
+						(Component) PluginServices.getMainFrame(),
+						PluginServices.getText(this, "cantLoad"));
 				return null;
 			}
 		}
 		wfsLayer.setActive(true);
 		return wfsLayer;
 	}
-	
+
 	/**
 	 * Removing the URN prefix
+	 * 
 	 * @param srs
 	 * @return
 	 */
-	private String getSRS(String srs){
-		if (srs == null){
+	private String getSRS(String srs) {
+		if (srs == null) {
 			return null;
 		}
-		if ((srs.startsWith("urn:x-ogc:def:crs:")) || srs.startsWith("urn:ogc:def:crs:")){
-			String newString = srs.substring(srs.lastIndexOf(":") + 1, srs.length());
-			if (srs.indexOf("EPSG") > 0){
-				if (newString.indexOf("EPSG") < 0){
+		if ((srs.startsWith("urn:x-ogc:def:crs:"))
+				|| srs.startsWith("urn:ogc:def:crs:")) {
+			String newString = srs.substring(srs.lastIndexOf(":") + 1,
+					srs.length());
+			if (srs.indexOf("EPSG") > 0) {
+				if (newString.indexOf("EPSG") < 0) {
 					newString = "EPSG:" + newString;
 				}
 			}
-			return newString;			
+			return newString;
 		}
-		if (srs.toLowerCase().startsWith("crs:")){
+		if (srs.toLowerCase().startsWith("crs:")) {
 			return srs.substring(4, srs.length());
 		}
 		return srs;

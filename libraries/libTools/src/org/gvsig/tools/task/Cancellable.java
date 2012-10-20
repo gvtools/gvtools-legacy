@@ -26,29 +26,44 @@
 package org.gvsig.tools.task;
 
 /**
- * <p><code>Cancellable</code> interface is designed for adding support to notify that a task must be cancelled.</p>
+ * <p>
+ * <code>Cancellable</code> interface is designed for adding support to notify
+ * that a task must be cancelled.
+ * </p>
  * 
- * <p>This is useful if a process is hung up, blocking, or simply if user wants cancel it, for instance, a
- *  drawing process of a heavy layer.</p>
+ * <p>
+ * This is useful if a process is hung up, blocking, or simply if user wants
+ * cancel it, for instance, a drawing process of a heavy layer.
+ * </p>
  * 
- * <p>The classes which implement this interface are force to share the canceling information, in order to be
- *  notified about the current status of it. This implies a synchronous canceling process, that could be implemented by
- *  another object.</p>
+ * <p>
+ * The classes which implement this interface are force to share the canceling
+ * information, in order to be notified about the current status of it. This
+ * implies a synchronous canceling process, that could be implemented by another
+ * object.
+ * </p>
  */
 public interface Cancellable {
 	/**
-	 * <p>Determines if the related task must be canceled.</p>
+	 * <p>
+	 * Determines if the related task must be canceled.
+	 * </p>
 	 * 
-	 * @return <code>true</code> if task must been canceled; otherwise <code>false</code>
+	 * @return <code>true</code> if task must been canceled; otherwise
+	 *         <code>false</code>
 	 * 
 	 * @see #setCanceled(boolean)
 	 */
 	boolean isCanceled();
 
 	/**
-	 * <p>Sets if the related task must be canceled.</p>
+	 * <p>
+	 * Sets if the related task must be canceled.
+	 * </p>
 	 * 
-	 * @param canceled <code>true</code> if the task must be canceled; otherwise <code>false</code>
+	 * @param canceled
+	 *            <code>true</code> if the task must be canceled; otherwise
+	 *            <code>false</code>
 	 * 
 	 * @see #isCanceled()
 	 */

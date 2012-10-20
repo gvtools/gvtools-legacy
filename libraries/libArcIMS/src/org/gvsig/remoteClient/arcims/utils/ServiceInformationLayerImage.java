@@ -43,22 +43,21 @@
 
 package org.gvsig.remoteClient.arcims.utils;
 
-
 /**
  * Class that stores a layer information of a raster image
- *
+ * 
  * @author jsanz
- *
+ * 
  */
 public class ServiceInformationLayerImage extends ServiceInformationLayer {
-    public ServiceInformationLayerImage() {
-        this.type = ServiceInfoTags.vLAYERTYPE_I;
-    }
+	public ServiceInformationLayerImage() {
+		this.type = ServiceInfoTags.vLAYERTYPE_I;
+	}
 
-    public String toString() {
-        String out;
-        out = "Layer: " + this.name + "\t(" + this.type + ")";
+	public String toString() {
+		String out;
+		out = "Layer: " + this.name + "\t(" + this.type + ")";
 
-        return out;
-    }
+		return out;
+	}
 }

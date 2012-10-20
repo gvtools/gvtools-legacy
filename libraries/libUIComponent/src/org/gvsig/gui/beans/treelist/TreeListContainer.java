@@ -50,35 +50,37 @@ import org.gvsig.gui.beans.treelist.event.TreeListChangeEvent;
 import org.gvsig.gui.beans.treelist.listeners.TreeListChangeListener;
 import org.gvsig.gui.beans.treelist.listeners.TreeListComponentListener;
 import org.gvsig.gui.beans.treelist.listeners.TreeListListener;
+
 /**
  * Componente consistente en un menú de arbol al que se le pueden añadir
  * entradas y una lista de elementos debajo de este. Haciendo doble click o
  * arrastrando un elemento del menú a la lista este queda añadido en esta.
  * Haciendo doble click en un elemento de la lista se elimina de esta y
  * arrastrando elementos dentro de la lista se varia su posición en ella.
- *
+ * 
  * @version 31/05/2007
  * @author Nacho Brodin (brodin_ign@gva.es)
  */
-public class TreeListContainer extends JPanel implements ActionListener, TreeSelectionListener, ListSelectionListener {
+public class TreeListContainer extends JPanel implements ActionListener,
+		TreeSelectionListener, ListSelectionListener {
 	private static final long serialVersionUID = 6665259638830401366L;
 	private ArrayList<TreeListChangeListener> actionChangeListeners = new ArrayList<TreeListChangeListener>();
 	private ArrayList<TreeListComponentListener> listListeners = new ArrayList<TreeListComponentListener>();
 	private Hashtable<String, String> map = null;
 
 	// Componentes visuales
-	private JScrollPane            pTree         = null;
-	private JScrollPane            pList         = null;
-	private JTree                  tree          = null;
-	private JList                  list          = null;
-	private JButton                bAdd          = null;
-	private JButton                bDel          = null;
-	private JSplitPane             jSplitPane1   = null;
-	private JPanel                 jPanelButtons = null;
+	private JScrollPane pTree = null;
+	private JScrollPane pList = null;
+	private JTree tree = null;
+	private JList list = null;
+	private JButton bAdd = null;
+	private JButton bDel = null;
+	private JSplitPane jSplitPane1 = null;
+	private JPanel jPanelButtons = null;
 
-	private DefaultMutableTreeNode raiz          = null;
-	private TreeListListener       listener      = null;
-	private String                 pathToImages  = "images/";
+	private DefaultMutableTreeNode raiz = null;
+	private TreeListListener listener = null;
+	private String pathToImages = "images/";
 
 	/**
 	 * This method initializes
@@ -99,7 +101,7 @@ public class TreeListContainer extends JPanel implements ActionListener, TreeSel
 	 */
 	private void initialize() {
 		map = new Hashtable<String, String>();
-		raiz =  new DefaultMutableTreeNode(Messages.getText("filtros"));
+		raiz = new DefaultMutableTreeNode(Messages.getText("filtros"));
 		setLayout(new BorderLayout());
 
 		getPList().setMinimumSize(new Dimension(0, 60));
@@ -115,6 +117,7 @@ public class TreeListContainer extends JPanel implements ActionListener, TreeSel
 
 	/**
 	 * Establece el ToolTip del boton de añadir
+	 * 
 	 * @param text
 	 */
 	public void setAddToolTipText(String text) {
@@ -123,6 +126,7 @@ public class TreeListContainer extends JPanel implements ActionListener, TreeSel
 
 	/**
 	 * Establece el ToolTip del boton de borrar
+	 * 
 	 * @param text
 	 */
 	public void setDelToolTipText(String text) {
@@ -131,12 +135,14 @@ public class TreeListContainer extends JPanel implements ActionListener, TreeSel
 
 	/**
 	 * Devuelve el boton de Añadir
+	 * 
 	 * @return
 	 */
 	private JButton getAddButton() {
 		if (bAdd == null) {
 			bAdd = new JButton();
-			bAdd.setIcon(new ImageIcon(getClass().getResource(pathToImages + "addlayer.png")));
+			bAdd.setIcon(new ImageIcon(getClass().getResource(
+					pathToImages + "addlayer.png")));
 			bAdd.setPreferredSize(new Dimension(22, 19));
 			bAdd.addActionListener(this);
 		}
@@ -145,25 +151,24 @@ public class TreeListContainer extends JPanel implements ActionListener, TreeSel
 
 	/**
 	 * Devuelve el boton de Borrar
+	 * 
 	 * @return
 	 */
 	private JButton getDelButton() {
 		if (bDel == null) {
 			bDel = new JButton();
-			bDel.setIcon(new ImageIcon(getClass().getResource(pathToImages + "delall.png")));
+			bDel.setIcon(new ImageIcon(getClass().getResource(
+					pathToImages + "delall.png")));
 			bDel.setPreferredSize(new Dimension(22, 19));
 			bDel.addActionListener(this);
 		}
 		return bDel;
 	}
-	
+
 	private JPanel getJPanelButtons() {
 		if (jPanelButtons == null) {
 			jPanelButtons = new JPanel();
 			jPanelButtons.setPreferredSize(new Dimension(0, 21));
-
-
-
 
 			FlowLayout flowLayout5 = new FlowLayout();
 			flowLayout5.setHgap(5);
@@ -179,13 +184,14 @@ public class TreeListContainer extends JPanel implements ActionListener, TreeSel
 
 	/**
 	 * This method initializes jPanel
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JScrollPane getPTree() {
 		if (pTree == null) {
 			pTree = new JScrollPane();
-			pTree.setViewportBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+			pTree.setViewportBorder(javax.swing.BorderFactory
+					.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 			pTree.setVerticalScrollBarPolicy(javax.swing.JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 			pTree.setViewportView(getTree());
 		}
@@ -194,13 +200,14 @@ public class TreeListContainer extends JPanel implements ActionListener, TreeSel
 
 	/**
 	 * This method initializes jPanel1
-	 *
+	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JScrollPane getPList() {
 		if (pList == null) {
 			pList = new JScrollPane();
-			pList.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
+			pList.setBorder(javax.swing.BorderFactory
+					.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
 			pList.setBackground(java.awt.Color.white);
 			pList.setVerticalScrollBarPolicy(javax.swing.JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 			pList.setViewportView(getList());
@@ -210,7 +217,7 @@ public class TreeListContainer extends JPanel implements ActionListener, TreeSel
 
 	/**
 	 * This method initializes jTree
-	 *
+	 * 
 	 * @return javax.swing.JTree
 	 */
 	public JTree getTree() {
@@ -224,7 +231,7 @@ public class TreeListContainer extends JPanel implements ActionListener, TreeSel
 
 	/**
 	 * This method initializes jList
-	 *
+	 * 
 	 * @return javax.swing.JList
 	 */
 	public JList getList() {
@@ -242,13 +249,16 @@ public class TreeListContainer extends JPanel implements ActionListener, TreeSel
 		return list.getModel();
 	}
 
-	//-------------------------------------------
-	//MÉTODOS DE ARBOL
+	// -------------------------------------------
+	// MÉTODOS DE ARBOL
 
 	/**
 	 * Añade una nueva categoria al arbol
-	 * @param name	Etiqueta que aparece en el arbol.
-	 * @param pos	Posición en el arbol de la nueva categoria
+	 * 
+	 * @param name
+	 *            Etiqueta que aparece en el arbol.
+	 * @param pos
+	 *            Posición en el arbol de la nueva categoria
 	 */
 	public void addClass(String name, int pos) {
 		DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
@@ -258,15 +268,20 @@ public class TreeListContainer extends JPanel implements ActionListener, TreeSel
 
 	/**
 	 * Añade una entrada a una categoria
-	 * @param name Nombre de la entrada a añadir
-	 * @param parentName Categoria a la que añadimos
-	 * @param value Valor asociado a la entrada
+	 * 
+	 * @param name
+	 *            Nombre de la entrada a añadir
+	 * @param parentName
+	 *            Categoria a la que añadimos
+	 * @param value
+	 *            Valor asociado a la entrada
 	 */
-	public void addEntry(String name, String parentName, String value){
+	public void addEntry(String name, String parentName, String value) {
 		DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
 		for (int i = 0; i < model.getChildCount(raiz); i++) {
 			if (model.getChild(raiz, i).toString().equals(parentName)) {
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) model.getChild(raiz, i);
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) model
+						.getChild(raiz, i);
 				node.add(new DefaultMutableTreeNode(name));
 				if (value != null)
 					map.put(name, value);
@@ -276,7 +291,9 @@ public class TreeListContainer extends JPanel implements ActionListener, TreeSel
 
 	/**
 	 * Método que comprueba si una entrada existe en la lista de seleccion.
-	 * @param value Valor que se quiere comprobar si está en la lista
+	 * 
+	 * @param value
+	 *            Valor que se quiere comprobar si está en la lista
 	 * @return true si el valor está en la lista y false si no lo está
 	 */
 	public boolean isInList(String value) {
@@ -289,41 +306,47 @@ public class TreeListContainer extends JPanel implements ActionListener, TreeSel
 
 	/**
 	 * Añade un listener TreeListComponent
+	 * 
 	 * @param e
 	 */
-	public void addTreeListListener(TreeListComponentListener e){
+	public void addTreeListListener(TreeListComponentListener e) {
 		listListeners.add(e);
 		listener.setListeners(listListeners);
 	}
 
 	/**
 	 * Añade un elemento a la lista
-	 * @param element Elemento a añadir
+	 * 
+	 * @param element
+	 *            Elemento a añadir
 	 */
-	public void addElementInList(String element){
-		DefaultListModel model = (DefaultListModel)getList().getModel();
+	public void addElementInList(String element) {
+		DefaultListModel model = (DefaultListModel) getList().getModel();
 		model.addElement(element);
 	}
 
 	/**
 	 * Elimina un elemento a la lista
-	 * @param element Elemento a eliminar
+	 * 
+	 * @param element
+	 *            Elemento a eliminar
 	 */
-	public void removeElementInList(String element){
-		DefaultListModel model = (DefaultListModel)getList().getModel();
+	public void removeElementInList(String element) {
+		DefaultListModel model = (DefaultListModel) getList().getModel();
 		model.removeElement(element);
 	}
 
 	/**
 	 * Elimina un elemento a la lista por indice
-	 * @param element Indice del elemento a eliminar
+	 * 
+	 * @param element
+	 *            Indice del elemento a eliminar
 	 */
-	public void removeElementInList(int element){
+	public void removeElementInList(int element) {
 		DefaultListModel model = (DefaultListModel) getList().getModel();
 		model.remove(element);
 	}
 
-	@SuppressWarnings("unchecked")
 	public Hashtable getMap() {
 		return map;
 	}
@@ -344,6 +367,7 @@ public class TreeListContainer extends JPanel implements ActionListener, TreeSel
 
 	/**
 	 * Añadir el disparador de cuando se pulsa un botón.
+	 * 
 	 * @param listener
 	 */
 	public void addChangeSelectionListener(TreeListChangeListener listener) {
@@ -353,6 +377,7 @@ public class TreeListContainer extends JPanel implements ActionListener, TreeSel
 
 	/**
 	 * Borrar el disparador de eventos de los botones.
+	 * 
 	 * @param listener
 	 */
 	public void removeChangeSelectionListener(TreeListChangeListener listener) {
@@ -360,14 +385,17 @@ public class TreeListContainer extends JPanel implements ActionListener, TreeSel
 	}
 
 	private void callActionChangeListeners(String item) {
-		Iterator<TreeListChangeListener> acIterator = actionChangeListeners.iterator();
+		Iterator<TreeListChangeListener> acIterator = actionChangeListeners
+				.iterator();
 		while (acIterator.hasNext()) {
 			TreeListChangeListener listener = acIterator.next();
 			String name = map.get(item);
 			if (name != null)
-				listener.actionChangeSelection(new TreeListChangeEvent(this, name));
+				listener.actionChangeSelection(new TreeListChangeEvent(this,
+						name));
 			else
-				listener.actionChangeSelection(new TreeListChangeEvent(this, item));
+				listener.actionChangeSelection(new TreeListChangeEvent(this,
+						item));
 		}
 	}
 
@@ -380,7 +408,8 @@ public class TreeListContainer extends JPanel implements ActionListener, TreeSel
 				// Comprobamos que se haya pinchado sobre una rama
 				String[] pathTree = val.split(", ");
 				if (pathTree.length > 2) {
-					draggLabel = val.substring(val.lastIndexOf(", ") + 2, val.lastIndexOf("]"));
+					draggLabel = val.substring(val.lastIndexOf(", ") + 2,
+							val.lastIndexOf("]"));
 					callActionChangeListeners(draggLabel);
 				}
 			}
@@ -390,7 +419,8 @@ public class TreeListContainer extends JPanel implements ActionListener, TreeSel
 	public void valueChanged(ListSelectionEvent e) {
 		if (!e.getValueIsAdjusting()) {
 			if (getList().getSelectedValue() != null)
-				callActionChangeListeners(getList().getSelectedValue().toString());
+				callActionChangeListeners(getList().getSelectedValue()
+						.toString());
 		}
 	}
 }

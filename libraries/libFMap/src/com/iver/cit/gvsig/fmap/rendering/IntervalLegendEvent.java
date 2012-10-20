@@ -44,7 +44,9 @@ import com.iver.cit.gvsig.fmap.FMapEvent;
 import com.iver.cit.gvsig.fmap.layers.LegendEvent;
 
 /**
- * <p>Event produced when changes the interval value of a classification legend.</p>
+ * <p>
+ * Event produced when changes the interval value of a classification legend.
+ * </p>
  * 
  * @see FMapEvent
  * 
@@ -52,19 +54,27 @@ import com.iver.cit.gvsig.fmap.layers.LegendEvent;
  */
 public class IntervalLegendEvent extends ClassificationLegendEvent {
 	/**
-	 * <p>Previous legend interval.</p> 
+	 * <p>
+	 * Previous legend interval.
+	 * </p>
 	 */
 	private IInterval oldInterval;
 	/**
-	 * <p>Previous legend interval.</p> 
+	 * <p>
+	 * Previous legend interval.
+	 * </p>
 	 */
 	private IInterval newInterval;
 
 	/**
-	 * <p>Creates a new legend interval event.</p>
-	 *
-	 * @param oldInterval previous legend interval
-	 * @param newInterval new legend interval
+	 * <p>
+	 * Creates a new legend interval event.
+	 * </p>
+	 * 
+	 * @param oldInterval
+	 *            previous legend interval
+	 * @param newInterval
+	 *            new legend interval
 	 */
 	public IntervalLegendEvent(IInterval oldInterval, IInterval newInterval) {
 		this.oldInterval = oldInterval;
@@ -72,8 +82,10 @@ public class IntervalLegendEvent extends ClassificationLegendEvent {
 	}
 
 	/**
-	 * <p>Gets the previous legend interval.</p>
-	 *
+	 * <p>
+	 * Gets the previous legend interval.
+	 * </p>
+	 * 
 	 * @return the previous legend interval
 	 */
 	public IInterval getOldInterval() {
@@ -81,8 +93,10 @@ public class IntervalLegendEvent extends ClassificationLegendEvent {
 	}
 
 	/**
-	 * <p>Gets the new legend interval.</p>
-	 *
+	 * <p>
+	 * Gets the new legend interval.
+	 * </p>
+	 * 
 	 * @return the new legend interval
 	 */
 	public IInterval getNewInterval() {
@@ -90,7 +104,9 @@ public class IntervalLegendEvent extends ClassificationLegendEvent {
 	}
 
 	/**
-	 * <p>Returns the type of this legend event.</p>
+	 * <p>
+	 * Returns the type of this legend event.
+	 * </p>
 	 * 
 	 * @return the type of this legend event
 	 * 

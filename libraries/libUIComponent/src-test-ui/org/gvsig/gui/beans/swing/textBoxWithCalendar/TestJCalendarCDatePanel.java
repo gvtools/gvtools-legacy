@@ -5,7 +5,6 @@ import java.io.Serializable;
 
 import javax.swing.JFrame;
 
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -48,7 +47,8 @@ import javax.swing.JFrame;
  */
 
 /**
- * Tests the JCalendarCDatePanel -> creates a JFrame that allows use a JCalendarCDatePanel object
+ * Tests the JCalendarCDatePanel -> creates a JFrame that allows use a
+ * JCalendarCDatePanel object
  * 
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
@@ -57,29 +57,29 @@ public class TestJCalendarCDatePanel extends JFrame implements Serializable {
 
 	/**
 	 * Test method for the CalendarPanelTest
+	 * 
 	 * @param args
 	 */
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		int width = 500;
 		int height = 30;
-		
+
 		// Objects creation
-		JFrame jF = new JFrame();		
+		JFrame jF = new JFrame();
 		JCalendarCDatePanel t = new JCalendarCDatePanel();
-		
+
 		// Set properties
 		jF.setTitle("Test JCalendarCDatePanel");
-		jF.setSize(new Dimension(width, height));	    
-	    jF.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    jF.getContentPane().add(t);	    
-		
+		jF.setSize(new Dimension(width, height));
+		jF.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		jF.getContentPane().add(t);
+
 		jF.setVisible(true);
-		
+
 		// Test Resize the component:
 		t.setPreferredSizeResize(500, 24);
-		
+
 		// Test Disable Calendar Selection
-		//t.disableCalendar();
+		// t.disableCalendar();
 	}
 }

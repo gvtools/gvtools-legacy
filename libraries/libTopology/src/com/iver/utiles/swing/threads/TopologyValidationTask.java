@@ -69,26 +69,27 @@ public class TopologyValidationTask extends CancellableProgressTask {
 
 	public void run() throws Exception {
 		topology.validate(this);
-		if(topology.getNumberOfErrors() > 0 && ! isCanceled()){
-//			//first of all, we check for a topology error layer for the same geometry
-//			FLayers mapContextLyrs = mapContext.getLayers();
-//			for(int i = 0; i < mapContextLyrs.getLayersCount(); i++){
-//				FLayer layer = mapContextLyrs.getLayer(i);
-//				if(layer.getName().equalsIgnoreCase(topology.getName()+"_error")){
-//					mapContextLyrs.removeLayer(layer);
-//				}
-//			}
+		if (topology.getNumberOfErrors() > 0 && !isCanceled()) {
+			// //first of all, we check for a topology error layer for the same
+			// geometry
+			// FLayers mapContextLyrs = mapContext.getLayers();
+			// for(int i = 0; i < mapContextLyrs.getLayersCount(); i++){
+			// FLayer layer = mapContextLyrs.getLayer(i);
+			// if(layer.getName().equalsIgnoreCase(topology.getName()+"_error")){
+			// mapContextLyrs.removeLayer(layer);
+			// }
+			// }
 			topology.updateErrorLyr();
-			
-			
-//			mapContext.beginAtomicEvent();
-//			mapContextLyrs.replaceLayer(topology.getName(),topology);
-//			mapContext.endAtomicEvent();
-		}//if
+
+			// mapContext.beginAtomicEvent();
+			// mapContextLyrs.replaceLayer(topology.getName(),topology);
+			// mapContext.endAtomicEvent();
+		}// if
 		finished = true;
 	}
-	
 
-	public void finished() {super.finished = true;}
+	public void finished() {
+		super.finished = true;
+	}
 
 }

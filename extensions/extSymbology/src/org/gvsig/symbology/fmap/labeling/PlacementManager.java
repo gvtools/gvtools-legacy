@@ -61,33 +61,38 @@ import com.iver.utiles.NotExistInXMLEntity;
 import com.iver.utiles.XMLEntity;
 
 /**
- *
+ * 
  * PlacementManager.java
- *
- *
+ * 
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es Jan 3, 2008
- *
+ * 
  */
 public class PlacementManager {
-	private static Logger logger = Logger.getLogger(PlacementManager.class.getName());
+	private static Logger logger = Logger.getLogger(PlacementManager.class
+			.getName());
 	private static ArrayList<Class<?>> installedLabelPlacements = new ArrayList<Class<?>>();
 	private static ArrayList<ILabelPlacement> availableLabelPlacements;
 	private static final CannotPlaceLabel cantPlaceLabel = new CannotPlaceLabel();
-	private PlacementManager() {}
 
-	public static ILabelPlacement getPlacement(IPlacementConstraints placementConstraints, int shapeType) {
+	private PlacementManager() {
+	}
+
+	public static ILabelPlacement getPlacement(
+			IPlacementConstraints placementConstraints, int shapeType) {
 
 		ArrayList<ILabelPlacement> suitablePlacements = new ArrayList<ILabelPlacement>();
-		if (placementConstraints.getClass().equals(MultiShapePlacementConstraints.class)) {
+		if (placementConstraints.getClass().equals(
+				MultiShapePlacementConstraints.class)) {
 			MultiShapePlacementConstraints msp = (MultiShapePlacementConstraints) placementConstraints;
 
-			return new MultiShapePlacement(
-					getPlacement(msp.getPointConstraints(),   FShape.POINT),
-					getPlacement(msp.getLineConstraints(),    FShape.LINE),
-					getPlacement(msp.getPolygonConstraints(), FShape.POLYGON)
-					);
+			return new MultiShapePlacement(getPlacement(
+					msp.getPointConstraints(), FShape.POINT), getPlacement(
+					msp.getLineConstraints(), FShape.LINE), getPlacement(
+					msp.getPolygonConstraints(), FShape.POLYGON));
 		} else {
-			for (Iterator<ILabelPlacement> iterator = getAvailablePlacements().iterator(); iterator.hasNext();) {
+			for (Iterator<ILabelPlacement> iterator = getAvailablePlacements()
+					.iterator(); iterator.hasNext();) {
 				ILabelPlacement placement = iterator.next();
 				if (placement.isSuitableFor(placementConstraints, shapeType)) {
 					suitablePlacements.add(placement);
@@ -100,17 +105,18 @@ public class PlacementManager {
 				return suitablePlacements.get(0);
 			else
 				return new CompoundLabelPlacement(
-						(ILabelPlacement[]) suitablePlacements.
-						toArray(new ILabelPlacement[suitablePlacements.size()]));
+						(ILabelPlacement[]) suitablePlacements
+								.toArray(new ILabelPlacement[suitablePlacements
+										.size()]));
 
 		}
 
 	}
 
 	public static void addLabelPlacement(Class<?> labelPlacementClass) {
-//		if (!labelPlacementClass.isInstance(ILabelPlacement.class))
-//		throw new IllegalArgumentException(
-//			labelPlacementClass.getName()+" is not an valid label placement algorithm.");
+		// if (!labelPlacementClass.isInstance(ILabelPlacement.class))
+		// throw new IllegalArgumentException(
+		// labelPlacementClass.getName()+" is not an valid label placement algorithm.");
 		installedLabelPlacements.add(labelPlacementClass);
 
 		// invalidate current list of available placements
@@ -121,14 +127,19 @@ public class PlacementManager {
 
 	private static ArrayList<ILabelPlacement> getAvailablePlacements() {
 		if (availableLabelPlacements == null) {
-			availableLabelPlacements = new ArrayList<ILabelPlacement>(installedLabelPlacements.size());
-			for (Iterator<Class<?>> iterator = installedLabelPlacements.iterator(); iterator.hasNext();) {
+			availableLabelPlacements = new ArrayList<ILabelPlacement>(
+					installedLabelPlacements.size());
+			for (Iterator<Class<?>> iterator = installedLabelPlacements
+					.iterator(); iterator.hasNext();) {
 				Class<?> clazz = null;
 				try {
 					clazz = iterator.next();
-					availableLabelPlacements.add((ILabelPlacement) clazz.newInstance());
+					availableLabelPlacements.add((ILabelPlacement) clazz
+							.newInstance());
 				} catch (Exception e) {
-					Logger.getLogger(PlacementManager.class).error("couldn't install label placement '"+clazz.getName(), e);
+					Logger.getLogger(PlacementManager.class).error(
+							"couldn't install label placement '"
+									+ clazz.getName(), e);
 				}
 			}
 		}
@@ -136,10 +147,10 @@ public class PlacementManager {
 		return availableLabelPlacements;
 	}
 
-
 	/**
 	 * Creates a new instance of placement constraints from a vector layer. The
 	 * placement constraints are created according the layer shape type.
+	 * 
 	 * @param layerDest
 	 * @return
 	 * @throws DriverException
@@ -151,7 +162,9 @@ public class PlacementManager {
 		case FShape.POLYGON:
 			return new PolygonPlacementConstraints();
 		case FShape.POINT:
-		case FShape.MULTIPOINT: // TODO (09/01/08) is this correct??? if not fix it also in PlacementProperties (twice), , MarkerPlacementAroundPoint
+		case FShape.MULTIPOINT: // TODO (09/01/08) is this correct??? if not fix
+								// it also in PlacementProperties (twice), ,
+								// MarkerPlacementAroundPoint
 			return new PointPlacementConstraints();
 		case FShape.MULTI:
 			return new MultiShapePlacementConstraints(
@@ -160,20 +173,20 @@ public class PlacementManager {
 					createPlacementConstraints(FShape.POLYGON));
 		}
 		throw new Error("Shape type not yet supported");
-//		return null;
+		// return null;
 	}
 
-	public static IPlacementConstraints createPlacementConstraints(XMLEntity entity) {
+	public static IPlacementConstraints createPlacementConstraints(
+			XMLEntity entity) {
 		String className = null;
 		try {
 			className = entity.getStringProperty("className");
 		} catch (NotExistInXMLEntity e) {
-			logger.error("Symbol class name not set.\n" +
-					" Maybe you forgot to add the" +
-					" putProperty(\"className\", yourClassName)" +
-					" call in the getXMLEntity method of your symbol", e);
+			logger.error("Symbol class name not set.\n"
+					+ " Maybe you forgot to add the"
+					+ " putProperty(\"className\", yourClassName)"
+					+ " call in the getXMLEntity method of your symbol", e);
 		}
-
 
 		Class clazz = null;
 		Object obj = null;
@@ -183,18 +196,20 @@ public class PlacementManager {
 			((IPersistence) obj).setXMLEntity(entity);
 
 		} catch (InstantiationException e) {
-			logger.error("Trying to instantiate an interface" +
-					" or abstract class + "+className+"\n"+e.getMessage(), e);
+			logger.error(
+					"Trying to instantiate an interface"
+							+ " or abstract class + " + className + "\n"
+							+ e.getMessage(), e);
 		} catch (IllegalAccessException e) {
 			logger.error(null, e);
 		} catch (ClassNotFoundException e) {
-			logger.error("No class called " + className +
-					" was found.\nCheck the following.\n<br>" +
-					"\t- The fullname of the class you're looking " +
-					"for matches the value in the className " +
-					"property of the XMLEntity ("+className+").\n<br>" +
-					"\t- The jar file containing your symbol class is in" +
-					"the application classpath<br>", e);
+			logger.error("No class called " + className
+					+ " was found.\nCheck the following.\n<br>"
+					+ "\t- The fullname of the class you're looking "
+					+ "for matches the value in the className "
+					+ "property of the XMLEntity (" + className + ").\n<br>"
+					+ "\t- The jar file containing your symbol class is in"
+					+ "the application classpath<br>", e);
 		}
 		return (IPlacementConstraints) obj;
 	}

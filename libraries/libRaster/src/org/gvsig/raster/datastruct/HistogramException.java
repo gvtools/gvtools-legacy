@@ -17,15 +17,16 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
  */
 package org.gvsig.raster.datastruct;
+
 /**
  * Excepción lanzada por errores en el calculo de histogramas.
  * 
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
-public class HistogramException extends Exception{
+public class HistogramException extends Exception {
 	private static final long serialVersionUID = 666908550965442025L;
 
-	public HistogramException(String msg){
+	public HistogramException(String msg) {
 		super(msg);
 	}
 }

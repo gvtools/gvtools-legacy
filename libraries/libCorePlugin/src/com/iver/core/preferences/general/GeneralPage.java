@@ -46,29 +46,25 @@ import javax.swing.JPanel;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.preferences.AbstractPreferencePage;
+
 /**
- * First default page in the Preferences Dialog. It is supposed to be
- * used to hold simple user interaction settings such as:
+ * First default page in the Preferences Dialog. It is supposed to be used to
+ * hold simple user interaction settings such as:
  * <ol>
- * 	<li>
- * 		Window positions.
- *  </li>
- * 	<li>
- * 		Mouse behaviors (double click vs. simple click).
- *  </li>
- * 	<li>
- * 		Users' language preferences.
- *  </li>
- * 	<li>
- * 		Confirm overwriting files.
- *  </li>
- *  <li>
- *  	Toolbars config
- *  </li>
+ * <li>
+ * Window positions.</li>
+ * <li>
+ * Mouse behaviors (double click vs. simple click).</li>
+ * <li>
+ * Users' language preferences.</li>
+ * <li>
+ * Confirm overwriting files.</li>
+ * <li>
+ * Toolbars config</li>
  * </ol>
- *
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
 public class GeneralPage extends AbstractPreferencePage {
 	private ImageIcon icon;
@@ -85,12 +81,14 @@ public class GeneralPage extends AbstractPreferencePage {
 	private void initialize() {
 		icon = PluginServices.getIconTheme().get("emblem-work");
 		// remember windows position check box
-		addComponent(rememberWindowPosition = new JCheckBox(PluginServices.getText(this, "options.general.remember_windows_pos")));
+		addComponent(rememberWindowPosition = new JCheckBox(
+				PluginServices.getText(this,
+						"options.general.remember_windows_pos")));
 		// remember windows sizes check box
-		addComponent(rememberWindowSize = new JCheckBox(PluginServices.getText(this, "options.general.remember_windows_size")));
-		
-	}
+		addComponent(rememberWindowSize = new JCheckBox(PluginServices.getText(
+				this, "options.general.remember_windows_size")));
 
+	}
 
 	public String getID() {
 		return id;
@@ -129,6 +127,4 @@ public class GeneralPage extends AbstractPreferencePage {
 		setChanged(false);
 	}
 
-	
-    
 }

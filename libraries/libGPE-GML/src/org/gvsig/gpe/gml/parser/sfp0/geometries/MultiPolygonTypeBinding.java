@@ -10,9 +10,6 @@ import org.gvsig.gpe.xml.stream.IXmlStreamReader;
 import org.gvsig.gpe.xml.stream.XmlStreamException;
 import org.gvsig.gpe.xml.utils.CompareUtils;
 
-
-
-
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -62,30 +59,45 @@ import org.gvsig.gpe.xml.utils.CompareUtils;
 /**
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
-public class MultiPolygonTypeBinding extends org.gvsig.gpe.gml.parser.v2.geometries.MultiPolygonTypeBinding{
-	
+public class MultiPolygonTypeBinding extends
+		org.gvsig.gpe.gml.parser.v2.geometries.MultiPolygonTypeBinding {
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.bindings.v2.geometries.MultiPolygonTypeBinding#parseTag(org.xmlpull.v1.XmlPullParser, org.gvsig.gpe.gml.GPEDefaultGmlParser, java.lang.String, java.lang.String, java.lang.Object, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.bindings.v2.geometries.MultiPolygonTypeBinding#parseTag
+	 * (org.xmlpull.v1.XmlPullParser, org.gvsig.gpe.gml.GPEDefaultGmlParser,
+	 * java.lang.String, java.lang.String, java.lang.Object, java.lang.String)
 	 */
-	protected void parseTag(IXmlStreamReader parser,GPEDefaultGmlParser handler, QName tag, String id, Object multiPolygon, String srsName) throws XmlStreamException, IOException{
+	protected void parseTag(IXmlStreamReader parser,
+			GPEDefaultGmlParser handler, QName tag, String id,
+			Object multiPolygon, String srsName) throws XmlStreamException,
+			IOException {
 		super.parseTag(parser, handler, tag, id, multiPolygon, srsName);
-		if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_SURFACEMEMBER)){
-			Object polygon = handler.getProfile().getPolygonMemberTypeBinding().parse(parser, handler);
-			handler.getContentHandler().addPolygonToMultiPolygon(polygon, multiPolygon);
+		if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_SURFACEMEMBER)) {
+			Object polygon = handler.getProfile().getPolygonMemberTypeBinding()
+					.parse(parser, handler);
+			handler.getContentHandler().addPolygonToMultiPolygon(polygon,
+					multiPolygon);
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.gvsig.gpe.gml.bindings.v2.geometries.MultiPolygonTypeBinding#parseLastTag(org.xmlpull.v1.XmlPullParser, org.gvsig.gpe.gml.GPEDefaultGmlParser, java.lang.String)
+	 * 
+	 * @see
+	 * org.gvsig.gpe.gml.bindings.v2.geometries.MultiPolygonTypeBinding#parseLastTag
+	 * (org.xmlpull.v1.XmlPullParser, org.gvsig.gpe.gml.GPEDefaultGmlParser,
+	 * java.lang.String)
 	 */
-	protected boolean parseLastTag(IXmlStreamReader parser,GPEDefaultGmlParser handler, QName tag){
+	protected boolean parseLastTag(IXmlStreamReader parser,
+			GPEDefaultGmlParser handler, QName tag) {
 		boolean endFeature = super.parseLastTag(parser, handler, tag);
-		if (endFeature){
+		if (endFeature) {
 			return true;
 		}
-		if (CompareUtils.compareWithNamespace(tag,GMLTags.GML_MULTISURFACE)){						
+		if (CompareUtils.compareWithNamespace(tag, GMLTags.GML_MULTISURFACE)) {
 			return true;
 		}
 		return false;

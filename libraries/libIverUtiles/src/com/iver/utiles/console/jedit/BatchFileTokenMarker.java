@@ -1,4 +1,5 @@
 package com.iver.utiles.console.jedit;
+
 /*
  * BatchFileTokenMarker.java - Batch file token marker
  * Copyright (C) 1998, 1999 Slava Pestov
@@ -12,80 +13,68 @@ import javax.swing.text.Segment;
 
 /**
  * Batch file token marker.
- *
+ * 
  * @author Slava Pestov
  * @version $Id$
  */
-public class BatchFileTokenMarker extends TokenMarker
-{
-	public byte markTokensImpl(byte token, Segment line, int lineIndex)
-	{
+public class BatchFileTokenMarker extends TokenMarker {
+	public byte markTokensImpl(byte token, Segment line, int lineIndex) {
 		char[] array = line.array;
 		int offset = line.offset;
 		int lastOffset = offset;
 		int length = line.count + offset;
 
-		if(SyntaxUtilities.regionMatches(true,line,offset,"rem"))
-		{
-			addToken(line.count,Token.COMMENT1);
+		if (SyntaxUtilities.regionMatches(true, line, offset, "rem")) {
+			addToken(line.count, Token.COMMENT1);
 			return Token.NULL;
 		}
 
-loop:		for(int i = offset; i < length; i++)
-		{
-			int i1 = (i+1);
+		loop: for (int i = offset; i < length; i++) {
+			int i1 = (i + 1);
 
-			switch(token)
-			{
+			switch (token) {
 			case Token.NULL:
-				switch(array[i])
-				{
+				switch (array[i]) {
 				case '%':
-					addToken(i - lastOffset,token);
+					addToken(i - lastOffset, token);
 					lastOffset = i;
-					if(length - i <= 3 || array[i+2] == ' ')
-					{
-						addToken(2,Token.KEYWORD2);
+					if (length - i <= 3 || array[i + 2] == ' ') {
+						addToken(2, Token.KEYWORD2);
 						i += 2;
 						lastOffset = i;
-					}
-					else
+					} else
 						token = Token.KEYWORD2;
 					break;
 				case '"':
-					addToken(i - lastOffset,token);
+					addToken(i - lastOffset, token);
 					token = Token.LITERAL1;
 					lastOffset = i;
 					break;
 				case ':':
-					if(i == offset)
-					{
-						addToken(line.count,Token.LABEL);
+					if (i == offset) {
+						addToken(line.count, Token.LABEL);
 						lastOffset = length;
 						break loop;
 					}
 					break;
 				case ' ':
-					if(lastOffset == offset)
-					{
-						addToken(i - lastOffset,Token.KEYWORD1);
+					if (lastOffset == offset) {
+						addToken(i - lastOffset, Token.KEYWORD1);
 						lastOffset = i;
 					}
 					break;
 				}
 				break;
 			case Token.KEYWORD2:
-				if(array[i] == '%')
-				{
-					addToken(i1 - lastOffset,token);
+				if (array[i] == '%') {
+					addToken(i1 - lastOffset, token);
 					token = Token.NULL;
 					lastOffset = i1;
 				}
 				break;
 			case Token.LITERAL1:
-				if(array[i] == '"')
-				{
-					addToken(i1 - lastOffset,token);
+				if (array[i] == '"') {
+					addToken(i1 - lastOffset, token);
 					token = Token.NULL;
 					lastOffset = i1;
 				}
@@ -95,19 +84,17 @@ loop:		for(int i = offset; i < length; i++)
 			}
 		}
 
-		if(lastOffset != length)
-		{
-			if(token != Token.NULL)
+		if (lastOffset != length) {
+			if (token != Token.NULL)
 				token = Token.INVALID;
-			else if(lastOffset == offset)
+			else if (lastOffset == offset)
 				token = Token.KEYWORD1;
-			addToken(length - lastOffset,token);
+			addToken(length - lastOffset, token);
 		}
 		return Token.NULL;
 	}
 
-	public boolean supportsMultilineTokens()
-	{
+	public boolean supportsMultilineTokens() {
 		return false;
 	}
 }

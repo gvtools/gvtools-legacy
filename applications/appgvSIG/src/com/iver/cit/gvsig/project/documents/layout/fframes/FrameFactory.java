@@ -12,23 +12,26 @@ import com.iver.utiles.extensionPoints.IExtensionBuilder;
 
 /**
  * Factory of FFrame.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public abstract class FrameFactory implements IExtensionBuilder {
 
 	public static IFFrame createFrameFromName(String s) {
-		ExtensionPoints extensionPoints =
-			ExtensionPointsSingleton.getInstance();
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
 
-		ExtensionPoint extensionPoint =(ExtensionPoint)extensionPoints.get("FFrames");
+		ExtensionPoint extensionPoint = (ExtensionPoint) extensionPoints
+				.get("FFrames");
 		Iterator iterator = extensionPoint.keySet().iterator();
 		while (iterator.hasNext()) {
 			try {
-				FrameFactory frameFactory = (FrameFactory)extensionPoint.create((String)iterator.next());
+				FrameFactory frameFactory = (FrameFactory) extensionPoint
+						.create((String) iterator.next());
 				if (frameFactory.getRegisterName().equals(s)) {
-					IFFrame frame=frameFactory.createFrame();
-					if (frame == null) return null;
+					IFFrame frame = frameFactory.createFrame();
+					if (frame == null)
+						return null;
 					frame.setFrameLayoutFactory(frameFactory);
 					return frame;
 				}
@@ -43,89 +46,96 @@ public abstract class FrameFactory implements IExtensionBuilder {
 		return null;
 	}
 
+	/**
+	 * Returns the name of FFrame.
+	 * 
+	 * @return Name of fframe.
+	 */
+	public String getNameType() {
+		return PluginServices.getText(this, "frame");
+	}
 
-    /**
-     * Returns the name of FFrame.
-     *
-     * @return Name of fframe.
-     */
-    public String getNameType() {
-        return PluginServices.getText(this, "frame");
-    }
+	/**
+	 * Create a new IFFrame.
+	 * 
+	 * @return IFFrame.
+	 */
+	public abstract IFFrame createFrame();
 
-    /**
-     * Create a new IFFrame.
-     *
-     * @return IFFrame.
-     */
-    public abstract IFFrame createFrame();
+	/**
+	 * Returns the name of registration in the point of extension.
+	 * 
+	 * @return Name of registration
+	 */
+	public abstract String getRegisterName();
 
-    /**
-     * Returns the name of registration in the point of extension.
-     *
-     * @return Name of registration
-     */
-    public abstract String getRegisterName();
+	/**
+	 * Create a FrameLayoutFactory.
+	 * 
+	 * @return FrameLayoutFactory.
+	 */
+	public Object create() {
+		return this;
+	}
 
-    /**
-     * Create a FrameLayoutFactory.
-     *
-     * @return FrameLayoutFactory.
-     */
-    public Object create() {
-        return this;
-    }
+	/**
+	 * Create a FrameLayoutFactory.
+	 * 
+	 * @param args
+	 * 
+	 * @return FrameLayoutFactory.
+	 */
+	public Object create(Object[] args) {
+		return this;
+	}
 
-    /**
-     * Create a FrameLayoutFactory.
-     *
-     * @param args
-     *
-     * @return FrameLayoutFactory.
-     */
-    public Object create(Object[] args) {
-        return this;
-    }
+	/**
+	 * Create a FrameLayoutFactory.
+	 * 
+	 * @param args
+	 * 
+	 * @return FrameLayoutFactory.
+	 */
+	public Object create(Map args) {
+		return this;
+	}
 
-    /**
-     * Create a FrameLayoutFactory.
-     *
-     * @param args
-     *
-     * @return FrameLayoutFactory.
-     */
-    public Object create(Map args) {
-        return this;
-    }
+	/**
+	 * Registers in the points of extension the Factory with alias.
+	 * 
+	 * @param registerName
+	 *            Register name.
+	 * @param obj
+	 *            Class of register.
+	 * @param alias
+	 *            Alias.
+	 */
+	public static void register(String registerName, Object obj, String alias) {
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+		extensionPoints.add("FFrames", registerName, obj);
 
-    /**
-     * Registers in the points of extension the Factory with alias.
-     *
-     * @param registerName Register name.
-     * @param obj Class of register.
-     * @param alias Alias.
-     */
-    public static void register(String registerName, Object obj, String alias) {
-        ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
-        extensionPoints.add("FFrames", registerName, obj);
+		ExtensionPoint extPoint = ((ExtensionPoint) extensionPoints
+				.get("FFrames"));
 
-        ExtensionPoint extPoint = ((ExtensionPoint) extensionPoints.get(
-                "FFrames"));
+		try {
+			extPoint.addAlias(registerName, alias);
+		} catch (KeyException e) {
+			e.printStackTrace();
+		}
+	}
 
-        try {
-            extPoint.addAlias(registerName, alias);
-        } catch (KeyException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**Registers in the points of extension the Factory
-     *
-     * @param registerName Register name.
-     * @param obj Class of register.
-     */
-    public static void register(String registerName, Object obj) {
-        ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
-        extensionPoints.add("FFrames", registerName, obj);
-    }
+	/**
+	 * Registers in the points of extension the Factory
+	 * 
+	 * @param registerName
+	 *            Register name.
+	 * @param obj
+	 *            Class of register.
+	 */
+	public static void register(String registerName, Object obj) {
+		ExtensionPoints extensionPoints = ExtensionPointsSingleton
+				.getInstance();
+		extensionPoints.add("FFrames", registerName, obj);
+	}
 }

@@ -20,7 +20,8 @@ import com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.SymbolDrawingException;
 import com.iver.utiles.XMLEntity;
 
-public class SimpleMarkerFillPropertiesStyle extends AbstractStyle implements IMarkerFillPropertiesStyle {
+public class SimpleMarkerFillPropertiesStyle extends AbstractStyle implements
+		IMarkerFillPropertiesStyle {
 	private IMarkerSymbol sampleSymbol = new SimpleMarkerSymbol();
 	private double rotation;
 	private double xOffset = 0;
@@ -35,17 +36,21 @@ public class SimpleMarkerFillPropertiesStyle extends AbstractStyle implements IM
 		rProv.setFrame(0, 0, s, s);
 		Paint resulPatternFill = null;
 		BufferedImage bi = null;
-		bi= new BufferedImage(s, s, BufferedImage.TYPE_INT_ARGB);
+		bi = new BufferedImage(s, s, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D gAux = bi.createGraphics();
 		try {
-			sampleSymbol.drawInsideRectangle(gAux, gAux.getTransform(), rProv, null);
+			sampleSymbol.drawInsideRectangle(gAux, gAux.getTransform(), rProv,
+					null);
 		} catch (SymbolDrawingException e) {
 			if (e.getType() == SymbolDrawingException.UNSUPPORTED_SET_OF_SETTINGS) {
 				try {
-					SymbologyFactory.getWarningSymbol(
-							SymbolDrawingException.STR_UNSUPPORTED_SET_OF_SETTINGS,
-							"",
-							SymbolDrawingException.UNSUPPORTED_SET_OF_SETTINGS).drawInsideRectangle(gAux, gAux.getTransform(), rProv, null);
+					SymbologyFactory
+							.getWarningSymbol(
+									SymbolDrawingException.STR_UNSUPPORTED_SET_OF_SETTINGS,
+									"",
+									SymbolDrawingException.UNSUPPORTED_SET_OF_SETTINGS)
+							.drawInsideRectangle(gAux, gAux.getTransform(),
+									rProv, null);
 				} catch (SymbolDrawingException e1) {
 					// IMPOSSIBLE TO REACH THIS
 				}
@@ -54,17 +59,17 @@ public class SimpleMarkerFillPropertiesStyle extends AbstractStyle implements IM
 				throw new Error(Messages.getString("symbol_shapetype_mismatch"));
 			}
 		}
-		resulPatternFill = new TexturePaint(bi,rProv);
+		resulPatternFill = new TexturePaint(bi, rProv);
 		g.setColor(null);
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-			RenderingHints.VALUE_ANTIALIAS_ON);
+				RenderingHints.VALUE_ANTIALIAS_ON);
 		g.setPaint(resulPatternFill);
 		g.fill(r);
 
 	}
 
 	public boolean isSuitableFor(ISymbol symbol) {
-		return (symbol.getSymbolType()%FShape.Z) == FShape.POLYGON;
+		return (symbol.getSymbolType() % FShape.Z) == FShape.POLYGON;
 	}
 
 	public String getClassName() {
@@ -103,10 +108,9 @@ public class SimpleMarkerFillPropertiesStyle extends AbstractStyle implements IM
 
 	/**
 	 * <p>
-	 * Define an utility symbol to show up a thumbnail
-	 * by default, this symbol is a SimpleMarkerSymbol.
-	 * Thus, the drawInsideRectangle will always work. But
-	 * it can be changed with setSampleSymbol(IMakerSymbol).<br>
+	 * Define an utility symbol to show up a thumbnail by default, this symbol
+	 * is a SimpleMarkerSymbol. Thus, the drawInsideRectangle will always work.
+	 * But it can be changed with setSampleSymbol(IMakerSymbol).<br>
 	 * </p>
 	 * <p>
 	 * If <b>marker</b> is null, it does nothing
@@ -116,7 +120,6 @@ public class SimpleMarkerFillPropertiesStyle extends AbstractStyle implements IM
 		if (marker != null)
 			this.sampleSymbol = marker;
 	}
-
 
 	public double getRotation() {
 		return rotation;
@@ -165,6 +168,5 @@ public class SimpleMarkerFillPropertiesStyle extends AbstractStyle implements IM
 	public int getFillStyle() {
 		return fillStyle;
 	}
-
 
 }

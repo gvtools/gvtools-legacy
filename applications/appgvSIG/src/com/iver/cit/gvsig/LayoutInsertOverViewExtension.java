@@ -45,46 +45,41 @@ import com.iver.andami.plugins.Extension;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
-
 /**
  * Extensión para insertar un localizador sobre el Layout.
- *
+ * 
  * @author Vicente Caballero Navarro
  */
 public class LayoutInsertOverViewExtension extends Extension {
-    private Layout layout = null;
+	private Layout layout = null;
 
-
-    public void initialize() {
+	public void initialize() {
 		// TODO Auto-generated method stub
 	}
 
+	public void execute(String s) {
+		layout = (Layout) PluginServices.getMDIManager().getActiveWindow();
 
-    public void execute(String s) {
-    	 layout = (Layout) PluginServices.getMDIManager().getActiveWindow();
-
-        if (s.equals("RECTANGLEOVERVIEW")) {
-     		layout.getLayoutControl().setTool("layoutaddoverview");
-     	}
-    }
-
-
-    public boolean isEnabled() {
-    	IWindow f = PluginServices.getMDIManager().getActiveWindow();
-
-        if (f == null) {
-            return false;
-        }
-
-        if (f instanceof Layout) {
-            return ((Layout) f).getLayoutContext().isEditable();
-        }
-
-        return false;
+		if (s.equals("RECTANGLEOVERVIEW")) {
+			layout.getLayoutControl().setTool("layoutaddoverview");
+		}
 	}
 
+	public boolean isEnabled() {
+		IWindow f = PluginServices.getMDIManager().getActiveWindow();
 
-    public boolean isVisible() {
+		if (f == null) {
+			return false;
+		}
+
+		if (f instanceof Layout) {
+			return ((Layout) f).getLayoutContext().isEditable();
+		}
+
+		return false;
+	}
+
+	public boolean isVisible() {
 		IWindow f = PluginServices.getMDIManager().getActiveWindow();
 
 		if (f == null) {

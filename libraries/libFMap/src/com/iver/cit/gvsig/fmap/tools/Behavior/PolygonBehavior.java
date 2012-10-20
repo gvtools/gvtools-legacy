@@ -48,19 +48,25 @@ import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Events.MeasureEvent;
 import com.iver.cit.gvsig.fmap.tools.Listeners.PolylineListener;
 
-
 /**
- * <p>Behavior that permits user to draw a polygon by its vertexes on the image of the associated
- *  <code>MapControl</code> using a {@link PolylineListener PolylineListener}.</p>
- *
+ * <p>
+ * Behavior that permits user to draw a polygon by its vertexes on the image of
+ * the associated <code>MapControl</code> using a {@link PolylineListener
+ * PolylineListener}.
+ * </p>
+ * 
  * @author Vicente Caballero Navarro
  * @author Pablo Piqueras Bartolomé
  */
 public class PolygonBehavior extends PolylineBehavior {
 	/**
-	 * <p>Creates a new behavior for drawing a polygon by its vertexes.</p>
-	 *
-	 * @param ali tool listener used to permit this object to work with the associated <code>MapControl</code>
+	 * <p>
+	 * Creates a new behavior for drawing a polygon by its vertexes.
+	 * </p>
+	 * 
+	 * @param ali
+	 *            tool listener used to permit this object to work with the
+	 *            associated <code>MapControl</code>
 	 */
 	public PolygonBehavior(PolylineListener ali) {
 		super(ali);
@@ -68,7 +74,10 @@ public class PolygonBehavior extends PolylineBehavior {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.PolylineBehavior#paintComponent(java.awt.Graphics)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.PolylineBehavior#paintComponent
+	 * (java.awt.Graphics)
 	 */
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -76,11 +85,16 @@ public class PolygonBehavior extends PolylineBehavior {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.PolylineBehavior#mousePressed(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.PolylineBehavior#mousePressed(
+	 * java.awt.event.MouseEvent)
 	 */
 	public void mousePressed(MouseEvent e) throws BehaviorException {
 		if (e.getClickCount() == 2) {
-			listener.polylineFinished(new MeasureEvent((Double[]) arrayX.toArray(new Double[arrayX.size()]), (Double[]) arrayY.toArray(new Double[arrayY.size()]), e));
+			listener.polylineFinished(new MeasureEvent((Double[]) arrayX
+					.toArray(new Double[arrayX.size()]), (Double[]) arrayY
+					.toArray(new Double[arrayY.size()]), e));
 
 			arrayX.clear();
 			arrayY.clear();
@@ -94,17 +108,23 @@ public class PolygonBehavior extends PolylineBehavior {
 				addPoint(getMapControl().getViewPort().toMapPoint(e.getPoint()));
 				addPoint(getMapControl().getViewPort().toMapPoint(e.getPoint()));
 			} else {
-				addAntPoint(getMapControl().getViewPort().toMapPoint(e.getPoint()));
+				addAntPoint(getMapControl().getViewPort().toMapPoint(
+						e.getPoint()));
 			}
 
-			listener.pointFixed(new MeasureEvent((Double[]) arrayX.toArray(new Double[arrayX.size()]), (Double[]) arrayY.toArray(new Double[arrayY.size()]), e));
+			listener.pointFixed(new MeasureEvent((Double[]) arrayX
+					.toArray(new Double[arrayX.size()]), (Double[]) arrayY
+					.toArray(new Double[arrayY.size()]), e));
 		}
 	}
 
 	/**
-	 * <p>Adds a new vertex to the polygon.</p>
-	 *
-	 * @param p a new vertex to the polygon
+	 * <p>
+	 * Adds a new vertex to the polygon.
+	 * </p>
+	 * 
+	 * @param p
+	 *            a new vertex to the polygon
 	 */
 	private void addAntPoint(Point2D p) {
 		arrayX.add(arrayX.size() - 1, new Double(p.getX()));
@@ -112,9 +132,12 @@ public class PolygonBehavior extends PolylineBehavior {
 	}
 
 	/**
-	 * <p>Changes the last vertex added to the polygon.</p>
-	 *
-	 * @param p a new vertex to the polygon
+	 * <p>
+	 * Changes the last vertex added to the polygon.
+	 * </p>
+	 * 
+	 * @param p
+	 *            a new vertex to the polygon
 	 */
 	private void changeAntPoint(Point2D p) {
 		if (arrayX.size() > 2) {
@@ -125,13 +148,19 @@ public class PolygonBehavior extends PolylineBehavior {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.PolylineBehavior#mouseMoved(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.PolylineBehavior#mouseMoved(java
+	 * .awt.event.MouseEvent)
 	 */
 	public void mouseMoved(MouseEvent e) throws BehaviorException {
 		if (isClicked) {
-			changeAntPoint(getMapControl().getViewPort().toMapPoint(e.getPoint()));
+			changeAntPoint(getMapControl().getViewPort().toMapPoint(
+					e.getPoint()));
 
-			MeasureEvent event = new MeasureEvent((Double[]) arrayX.toArray(new Double[arrayX.size()]), (Double[]) arrayY.toArray(new Double[arrayY.size()]), e);
+			MeasureEvent event = new MeasureEvent(
+					(Double[]) arrayX.toArray(new Double[arrayX.size()]),
+					(Double[]) arrayY.toArray(new Double[arrayY.size()]), e);
 
 			listener.points(event);
 
@@ -141,7 +170,10 @@ public class PolygonBehavior extends PolylineBehavior {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.PolylineBehavior#mouseDragged(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.PolylineBehavior#mouseDragged(
+	 * java.awt.event.MouseEvent)
 	 */
 	public void mouseDragged(MouseEvent e) throws BehaviorException {
 		mouseMoved(e);

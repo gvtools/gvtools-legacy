@@ -79,18 +79,17 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 
-/** 
- * It is aimed to have an easy way to show a progres bar dialog. 
- * Unfortunatelly, it is not finished. Next step would be to
- * let ProgressDialog implement ProgressListener, to completely
- * encapsulate the component. Until then, the user has to call
- * setProgress(int) to make the bar grow up.
+/**
+ * It is aimed to have an easy way to show a progres bar dialog. Unfortunatelly,
+ * it is not finished. Next step would be to let ProgressDialog implement
+ * ProgressListener, to completely encapsulate the component. Until then, the
+ * user has to call setProgress(int) to make the bar grow up.
  * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
+ * 
  */
-public class ProgressDialog extends JDialog {  
-  private static final long serialVersionUID = 2325230864829072756L;
+public class ProgressDialog extends JDialog {
+	private static final long serialVersionUID = 2325230864829072756L;
 	private JProgressBar jProgressBar = null;
 	private JButton btnCancel = null;
 	private JLabel lblStatus = null;
@@ -99,11 +98,13 @@ public class ProgressDialog extends JDialog {
 	private CancellableComponent cc;
 	private String textMessage;
 
-	public ProgressDialog(CancellableComponent owner, String jobName, int stepAmount) {
+	public ProgressDialog(CancellableComponent owner, String jobName,
+			int stepAmount) {
 		this(owner, jobName, jobName, stepAmount);
 	}
-	
-	public ProgressDialog(CancellableComponent owner, String jobName, String textMessage, int stepAmount) {
+
+	public ProgressDialog(CancellableComponent owner, String jobName,
+			String textMessage, int stepAmount) {
 		super();
 		setTitle(jobName);
 		this.textMessage = textMessage;
@@ -121,7 +122,8 @@ public class ProgressDialog extends JDialog {
 	private void initialize() {
 		lblTask = new JLabel();
 		lblTask.setBounds(10, 12, 280, 20);
-		lblTask.setFont(new java.awt.Font("MS Sans Serif", java.awt.Font.BOLD, 11));
+		lblTask.setFont(new java.awt.Font("MS Sans Serif", java.awt.Font.BOLD,
+				11));
 		lblTask.setText(textMessage);
 		lblStatus = new JLabel();
 		lblStatus.setBounds(10, 63, 280, 20);
@@ -134,10 +136,10 @@ public class ProgressDialog extends JDialog {
 	}
 
 	/**
-	 * This method initializes jProgressBar	
-	 * 	
-	 * @return javax.swing.JProgressBar	
-	 */    
+	 * This method initializes jProgressBar
+	 * 
+	 * @return javax.swing.JProgressBar
+	 */
 	private JProgressBar getJProgressBar() {
 		if (jProgressBar == null) {
 			jProgressBar = new JProgressBar();
@@ -147,18 +149,19 @@ public class ProgressDialog extends JDialog {
 	}
 
 	/**
-	 * This method initializes btnCancel	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */    
+	 * This method initializes btnCancel
+	 * 
+	 * @return javax.swing.JButton
+	 */
 	private JButton getBtnCancel() {
 		if (btnCancel == null) {
 			btnCancel = new JButton();
 			btnCancel.setBounds(210, 96, 80, 20);
-			btnCancel.addActionListener(new java.awt.event.ActionListener() { 
+			btnCancel.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					//NotificationManager.addInfo("The job was cancelled", null);
-					if (cc!=null)
+					// NotificationManager.addInfo("The job was cancelled",
+					// null);
+					if (cc != null)
 						cc.cancel();
 				}
 			});
@@ -166,13 +169,13 @@ public class ProgressDialog extends JDialog {
 		}
 		return btnCancel;
 	}
-	
+
 	public void setProgress(int step) {
 		jProgressBar.setValue(step);
 	}
-	
+
 	public void setStatusMessage(String message) {
 		lblStatus.setText(message);
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

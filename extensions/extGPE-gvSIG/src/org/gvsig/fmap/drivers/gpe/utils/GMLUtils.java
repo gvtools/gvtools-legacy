@@ -64,79 +64,86 @@ import com.vividsolutions.jts.geom.Geometry;
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
 public class GMLUtils {
-	
-	public static Value[] getValues(Object[] attr) {	
+
+	public static Value[] getValues(Object[] attr) {
 		Value[] values = null;
-		if (attr.length - 1 > 0){
+		if (attr.length - 1 > 0) {
 			values = new Value[attr.length - 1];
-		}else{
+		} else {
 			values = new Value[0];
 		}
-		for (int i=1;i<attr.length;i++){
-			if (attr[i]!=null){
-				if (attr[i] instanceof Double){
-					values[i-1]=ValueFactory.createValue(((Double)attr[i]).doubleValue());
-				}else if (attr[i] instanceof String){
-					values[i-1]=ValueFactory.createValue(String.valueOf(attr[i]));
-				}else if (attr[i] instanceof Long){
-					values[i-1]=ValueFactory.createValue(((Long)attr[i]).longValue());
-				}else if (attr[i] instanceof Integer){
-					values[i-1]=ValueFactory.createValue(((Integer)attr[i]).intValue());
-				}else if (attr[i] instanceof Float){
-					values[i-1]=ValueFactory.createValue(((Float)attr[i]).floatValue());
-				}else if (attr[i] instanceof Short){
-					values[i-1]=ValueFactory.createValue(((Short)attr[i]).shortValue());
-				}else if (attr[i] instanceof Boolean){
-					values[i-1]=ValueFactory.createValue(((Boolean)attr[i]).booleanValue());
-				}else if (attr[i] instanceof Date){
-					values[i-1]=ValueFactory.createValue(((Date)attr[i]));
-				}					
-			}else{
-				values[i-1]=ValueFactory.createValue("");
+		for (int i = 1; i < attr.length; i++) {
+			if (attr[i] != null) {
+				if (attr[i] instanceof Double) {
+					values[i - 1] = ValueFactory.createValue(((Double) attr[i])
+							.doubleValue());
+				} else if (attr[i] instanceof String) {
+					values[i - 1] = ValueFactory.createValue(String
+							.valueOf(attr[i]));
+				} else if (attr[i] instanceof Long) {
+					values[i - 1] = ValueFactory.createValue(((Long) attr[i])
+							.longValue());
+				} else if (attr[i] instanceof Integer) {
+					values[i - 1] = ValueFactory
+							.createValue(((Integer) attr[i]).intValue());
+				} else if (attr[i] instanceof Float) {
+					values[i - 1] = ValueFactory.createValue(((Float) attr[i])
+							.floatValue());
+				} else if (attr[i] instanceof Short) {
+					values[i - 1] = ValueFactory.createValue(((Short) attr[i])
+							.shortValue());
+				} else if (attr[i] instanceof Boolean) {
+					values[i - 1] = ValueFactory
+							.createValue(((Boolean) attr[i]).booleanValue());
+				} else if (attr[i] instanceof Date) {
+					values[i - 1] = ValueFactory.createValue(((Date) attr[i]));
+				}
+			} else {
+				values[i - 1] = ValueFactory.createValue("");
 			}
 		}
 		return values;
 	}
+
 	/**
 	 * It return true is the attributeType is a geometry
+	 * 
 	 * @param attributeType
-	 * Type to compare
+	 *            Type to compare
 	 * @return
 	 */
-	public static boolean isGeometry(String attributeType){
-		if (attributeType == null){
+	public static boolean isGeometry(String attributeType) {
+		if (attributeType == null) {
 			return false;
 		}
-		
-		if (attributeType.compareTo("gml:GeometryPropertyType") == 0){
+
+		if (attributeType.compareTo("gml:GeometryPropertyType") == 0) {
 			return true;
 		}
-		if (attributeType.compareTo("gml:MultiLineStringPropertyType") == 0){
+		if (attributeType.compareTo("gml:MultiLineStringPropertyType") == 0) {
 			return true;
 		}
-		if (attributeType.compareTo("gml:PointPropertyType") == 0){
+		if (attributeType.compareTo("gml:PointPropertyType") == 0) {
 			return true;
 		}
-		if (attributeType.compareTo("gml:MultiPointPropertyType") == 0){
+		if (attributeType.compareTo("gml:MultiPointPropertyType") == 0) {
 			return true;
 		}
-		if (attributeType.compareTo("gml:MultiPolygonPropertyType") == 0){
+		if (attributeType.compareTo("gml:MultiPolygonPropertyType") == 0) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	/**
 	 * It return true is the attributeType is a geometry
+	 * 
 	 * @param attributeType
-	 * Type to compare
+	 *            Type to compare
 	 * @return
 	 */
-	public static boolean isGeometry(Class attributeType){
-		return Geometry.class.isAssignableFrom(attributeType);		
+	public static boolean isGeometry(Class attributeType) {
+		return Geometry.class.isAssignableFrom(attributeType);
 	}
-
-	
-	
 
 }

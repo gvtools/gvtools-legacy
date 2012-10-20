@@ -44,75 +44,85 @@ import org.gvsig.raster.dataset.IBuffer;
 
 /**
  * Filtro de convolucion para Buffer de tipo Float
- * @author Alejandro Muñoz        <alejandro.munoz@uclm.es> 
- * @author Diego Guerrero Sevilla  <diego.guerrero@uclm.es> 
+ * 
+ * @author Alejandro Muñoz <alejandro.munoz@uclm.es>
+ * @author Diego Guerrero Sevilla <diego.guerrero@uclm.es>
  * */
 public class ConvolutionFloatFilter extends ConvolutionFilter {
 
-	public ConvolutionFloatFilter(){
-		super();	
-	}
-	
-	/** 
-	 * @param Kernel a aplicar. En caso de que no se trate de un kernel definido en ConvolutionFilter, se puede pasar como 
-	 * parametro el kernel se pretende aplicar.
-	 * **/
-	public ConvolutionFloatFilter(Kernel k){
+	public ConvolutionFloatFilter() {
 		super();
-		super.kernel=k;
 	}
-	
-	public void pre(){
+
+	/**
+	 * @param Kernel
+	 *            a aplicar. En caso de que no se trate de un kernel definido en
+	 *            ConvolutionFilter, se puede pasar como parametro el kernel se
+	 *            pretende aplicar.
+	 * **/
+	public ConvolutionFloatFilter(Kernel k) {
+		super();
+		super.kernel = k;
+	}
+
+	public void pre() {
 		super.pre();
-		rasterResult = RasterBuffer.getBuffer(IBuffer.TYPE_FLOAT, raster.getWidth(), raster.getHeight(), raster.getBandCount(), true);
+		rasterResult = RasterBuffer.getBuffer(IBuffer.TYPE_FLOAT,
+				raster.getWidth(), raster.getHeight(), raster.getBandCount(),
+				true);
 	}
 
 	/** Aplicacion del filtro para el pixel de la posicion line, col */
 	public void process(int col, int line) throws InterruptedException {
-		
-		int lado= kernel.getLado();
+
+		int lado = kernel.getLado();
 		int semiLado = (lado - 1) >> 1;
-		double ventana[][]= new double[lado][lado];
-		double resultConvolution=0;
-		for (int band = 0; band < raster.getBandCount(); band++) {	
-			if ((col - semiLado >= 0) && (line - semiLado >= 0) && (col + semiLado < width) && (line + semiLado < height)){
+		double ventana[][] = new double[lado][lado];
+		double resultConvolution = 0;
+		for (int band = 0; band < raster.getBandCount(); band++) {
+			if ((col - semiLado >= 0) && (line - semiLado >= 0)
+					&& (col + semiLado < width) && (line + semiLado < height)) {
 				for (int j = -semiLado; j <= semiLado; j++)
 					for (int i = -semiLado; i <= semiLado; i++)
-						ventana[i + semiLado][j + semiLado] = raster.getElemFloat(line + j, col + i, band);;
-				Kernel Kventana= new Kernel(ventana);
-				resultConvolution=kernel.convolution(Kventana);
-				if(resultConvolution>Float.MAX_VALUE)
-					resultConvolution=Float.MAX_VALUE;
-				else if (resultConvolution<0)
+						ventana[i + semiLado][j + semiLado] = raster
+								.getElemFloat(line + j, col + i, band);
+				;
+				Kernel Kventana = new Kernel(ventana);
+				resultConvolution = kernel.convolution(Kventana);
+				if (resultConvolution > Float.MAX_VALUE)
+					resultConvolution = Float.MAX_VALUE;
+				else if (resultConvolution < 0)
 					resultConvolution = 0;
-				rasterResult.setElem(line, col, band,(float)resultConvolution);	
-			}
-			else rasterResult.setElem(line, col,band,raster.getElemFloat(line,col,band));
-		}	
-		
+				rasterResult
+						.setElem(line, col, band, (float) resultConvolution);
+			} else
+				rasterResult.setElem(line, col, band,
+						raster.getElemFloat(line, col, band));
+		}
+
 	}
-	
+
 	/**
-	 * @return  tipo de dato del buffer de entrada
-	 * */		
+	 * @return tipo de dato del buffer de entrada
+	 * */
 	public int getInRasterDataType() {
 		return RasterBuffer.TYPE_FLOAT;
 	}
 
 	/**
-	 * @return  tipo de dato del buffer de salida
-	 * */		
+	 * @return tipo de dato del buffer de salida
+	 * */
 	public int getOutRasterDataType() {
 		return RasterBuffer.TYPE_FLOAT;
 	}
 
 	/**
-	 * @return  buffer resultante tras aplicar el filtro
+	 * @return buffer resultante tras aplicar el filtro
 	 * */
 	public Object getResult(String name) {
 		if (name.equals("raster"))
 			return this.rasterResult;
 		return null;
 	}
-	
+
 }

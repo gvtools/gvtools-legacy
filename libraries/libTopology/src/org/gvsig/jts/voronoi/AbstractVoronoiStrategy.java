@@ -69,10 +69,11 @@ import com.vividsolutions.jts.geom.Polygon;
  * Abstract base class for VoronoiStrategy implementations.
  * 
  * If offers common functionality to VoronoiStrategy subclasses, as for example
- * Voronoi polygons creation from TIN triangles
- * (tin and voronoi polygons are a dual)
+ * Voronoi polygons creation from TIN triangles (tin and voronoi polygons are a
+ * dual)
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public abstract class AbstractVoronoiStrategy implements VoronoiStrategy {
 
@@ -80,9 +81,9 @@ public abstract class AbstractVoronoiStrategy implements VoronoiStrategy {
 			boolean onlySelection) throws BaseException {
 		return createTin(inputLyr, onlySelection, null);
 	}
-	
-	public List<IFeature> createThiessenPolygons(VoronoiAndTinInputLyr inputLyr,
-			boolean onlySelection)
+
+	public List<IFeature> createThiessenPolygons(
+			VoronoiAndTinInputLyr inputLyr, boolean onlySelection)
 			throws BaseException {
 		return createThiessenPolygons(inputLyr, onlySelection, null);
 	}
@@ -115,8 +116,8 @@ public abstract class AbstractVoronoiStrategy implements VoronoiStrategy {
 
 		return solution;
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		return getName();
 	}
 

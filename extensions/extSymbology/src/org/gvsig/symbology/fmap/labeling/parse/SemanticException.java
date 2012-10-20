@@ -43,16 +43,16 @@ package org.gvsig.symbology.fmap.labeling.parse;
 public class SemanticException extends ParseException {
 	public static final int TYPE_MISMATCH = -1;
 	public static final int UNDEFINED_SYMBOL = -2;
-	
+
 	private int type = 0;
-	
+
 	public SemanticException(int exceptionType) {
 		this(exceptionType, "Unknown.");
 	}
-	
+
 	public SemanticException(int exceptionType, String message) {
 		super(message);
 		type = exceptionType;
 	}
-	
+
 }

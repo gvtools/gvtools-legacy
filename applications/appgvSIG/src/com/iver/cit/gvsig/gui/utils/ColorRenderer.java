@@ -55,69 +55,76 @@ import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.table.TableCellRenderer;
 
-
 /**
  * DOCUMENT ME!
- *
+ * 
  * @author vcn
  */
 public class ColorRenderer extends JLabel implements TableCellRenderer {
-    Border unselectedBorder = null;
-    Border selectedBorder = null;
-    boolean isBordered = true;
+	Border unselectedBorder = null;
+	Border selectedBorder = null;
+	boolean isBordered = true;
 
-    /**
-     * Creates a new ColorRenderer object.
-     *
-     * @param isBordered DOCUMENT ME!
-     */
-    public ColorRenderer(boolean isBordered) {
-        this.isBordered = isBordered;
-        setOpaque(true); //MUST do this for background to show up.
-    }
+	/**
+	 * Creates a new ColorRenderer object.
+	 * 
+	 * @param isBordered
+	 *            DOCUMENT ME!
+	 */
+	public ColorRenderer(boolean isBordered) {
+		this.isBordered = isBordered;
+		setOpaque(true); // MUST do this for background to show up.
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param table DOCUMENT ME!
-     * @param color DOCUMENT ME!
-     * @param isSelected DOCUMENT ME!
-     * @param hasFocus DOCUMENT ME!
-     * @param row DOCUMENT ME!
-     * @param column DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public Component getTableCellRendererComponent(JTable table, Object color,
-        boolean isSelected, boolean hasFocus, int row, int column) {
-        Color newColor = (Color) color;
-        setBackground(newColor);
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param table
+	 *            DOCUMENT ME!
+	 * @param color
+	 *            DOCUMENT ME!
+	 * @param isSelected
+	 *            DOCUMENT ME!
+	 * @param hasFocus
+	 *            DOCUMENT ME!
+	 * @param row
+	 *            DOCUMENT ME!
+	 * @param column
+	 *            DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public Component getTableCellRendererComponent(JTable table, Object color,
+			boolean isSelected, boolean hasFocus, int row, int column) {
+		Color newColor = (Color) color;
+		setBackground(newColor);
 
-        //JLabel boton=new JLabel("si");
-        //boton.setBackground(new Color(10,10,100));
-        //add(boton);
-        //System.out.println("dentro de Color Renderer");
-        if (isBordered) {
-            if (isSelected) {
-                if (selectedBorder == null) {
-                    selectedBorder = BorderFactory.createMatteBorder(2, 5, 2,
-                            5, table.getSelectionBackground());
-                }
+		// JLabel boton=new JLabel("si");
+		// boton.setBackground(new Color(10,10,100));
+		// add(boton);
+		// System.out.println("dentro de Color Renderer");
+		if (isBordered) {
+			if (isSelected) {
+				if (selectedBorder == null) {
+					selectedBorder = BorderFactory.createMatteBorder(2, 5, 2,
+							5, table.getSelectionBackground());
+				}
 
-                setBorder(selectedBorder);
-            } else {
-                if (unselectedBorder == null) {
-                    unselectedBorder = BorderFactory.createMatteBorder(2, 5, 2,
-                            5, table.getBackground());
-                }
+				setBorder(selectedBorder);
+			} else {
+				if (unselectedBorder == null) {
+					unselectedBorder = BorderFactory.createMatteBorder(2, 5, 2,
+							5, table.getBackground());
+				}
 
-                setBorder(unselectedBorder);
-            }
-        }
+				setBorder(unselectedBorder);
+			}
+		}
 
-      /*  setToolTipText("RGB value: " + newColor.getRed() + ", " +
-            newColor.getGreen() + ", " + newColor.getBlue());
-*/
-        return this;
-    }
+		/*
+		 * setToolTipText("RGB value: " + newColor.getRed() + ", " +
+		 * newColor.getGreen() + ", " + newColor.getBlue());
+		 */
+		return this;
+	}
 }

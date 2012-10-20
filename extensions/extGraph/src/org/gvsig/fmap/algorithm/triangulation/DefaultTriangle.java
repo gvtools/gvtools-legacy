@@ -45,6 +45,7 @@ public class DefaultTriangle implements Triangle {
 	protected boolean visited = false;
 
 	static GeometryFactory geomFactory = new GeometryFactory();
+
 	/*
 	 * determinant
 	 * 
@@ -80,7 +81,7 @@ public class DefaultTriangle implements Triangle {
 			this.V3 = v3;
 			this.V2 = v2;
 		}
-		
+
 	}
 
 	public Vertex getV1() {
@@ -109,7 +110,7 @@ public class DefaultTriangle implements Triangle {
 		min = Math.min(min, V3.getZ());
 		max = Math.max(V1.getZ(), V2.getZ());
 		max = Math.max(max, V3.getZ());
-		
+
 		if ((min <= z) && (z <= max))
 			return true;
 
@@ -125,13 +126,13 @@ public class DefaultTriangle implements Triangle {
 			return new TriEdge(V2, V3);
 		if ((V2.getZ() >= z) && (V3.getZ() <= z))
 			return new TriEdge(V3, V2);
-				
+
 		return null;
 	}
 
 	public Coordinate[] getSegmentZ(double z) {
 		Coordinate[] resul = new Coordinate[2];
-		int i=0;
+		int i = 0;
 		TriEdge e1 = new TriEdge(V1, V2);
 		if (e1.containsZ(z))
 			resul[i++] = e1.getPointOnZ(z);
@@ -141,26 +142,28 @@ public class DefaultTriangle implements Triangle {
 			resul[i++] = e2.getPointOnZ(z);
 
 		// Si el triángulo es plano, fallará
-		if (i==2)
+		if (i == 2)
 			return resul;
 		TriEdge e3 = new TriEdge(V3, V1);
 		if (e3.containsZ(z))
 			resul[i++] = e3.getPointOnZ(z);
-				
+
 		return resul;
 	}
 
-	
-	/* (non-Javadoc)
-	 * @see org.gvsig.fmap.algorithm.triangulation.Triangle#getNextPoint(com.vividsolutions.jts.geom.Coordinate, double)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gvsig.fmap.algorithm.triangulation.Triangle#getNextPoint(com.
+	 * vividsolutions.jts.geom.Coordinate, double)
 	 */
 	public Coordinate getNextPoint(Coordinate lastPoint, double z) {
 		// Options:
-		// 	1.- lastPoint on edge, and we exit by other edge.
-		// 	2.- lastPoint on vertex, and we exit by other edge.
-		// 	3.- lastPoint on vertex, and we exit by other vertex.
-		// 	4.- lastPoint on edge, and we exit by a vertex.
-		
+		// 1.- lastPoint on edge, and we exit by other edge.
+		// 2.- lastPoint on vertex, and we exit by other edge.
+		// 3.- lastPoint on vertex, and we exit by other vertex.
+		// 4.- lastPoint on edge, and we exit by a vertex.
+
 		// FIXME: ONLY WHEN WE ARE DEBUGGING
 		try {
 			if (!containsZ(z))
@@ -169,13 +172,14 @@ public class DefaultTriangle implements Triangle {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		TriEdge s1 = new TriEdge(V1, V2);
 		TriEdge s2 = new TriEdge(V2, V3);
 		TriEdge s3 = new TriEdge(V3, V1);
 
 		// First, we check vertex
-		if (lastPoint.equals3D(V1) || lastPoint.equals3D(V2) || lastPoint.equals3D(V3)) {
+		if (lastPoint.equals3D(V1) || lastPoint.equals3D(V2)
+				|| lastPoint.equals3D(V3)) {
 			// options 2 or 3
 			// ¿Wich vertex are we entering?
 			if (lastPoint.equals3D(V1)) {
@@ -183,7 +187,7 @@ public class DefaultTriangle implements Triangle {
 					return V2;
 				if (V3.getZ() == z)
 					return V3;
-				if (s2.containsZ(z)) { 
+				if (s2.containsZ(z)) {
 					return s2.getPointOnZ(z);
 				}
 			}
@@ -192,7 +196,7 @@ public class DefaultTriangle implements Triangle {
 					return V1;
 				if (V3.getZ() == z)
 					return V3;
-				if (s3.containsZ(z)) { 
+				if (s3.containsZ(z)) {
 					return s3.getPointOnZ(z);
 				}
 
@@ -202,74 +206,72 @@ public class DefaultTriangle implements Triangle {
 					return V2;
 				if (V1.getZ() == z)
 					return V1;
-				if (s1.containsZ(z)) { 
+				if (s1.containsZ(z)) {
 					return s1.getPointOnZ(z);
 				}
 
 			}
 		}
 
-		//  Now, options 1 and 3.
+		// Now, options 1 and 3.
 		double d1, d2, d3;
 		d1 = s1.distance(lastPoint);
 		d2 = s2.distance(lastPoint);
 		d3 = s3.distance(lastPoint);
-		
+
 		if (d1 <= 1E-8) // lastPoint ON s1
 		{
-			if (s2.containsZ(z)) { 
+			if (s2.containsZ(z)) {
 				return s2.getPointOnZ(z);
-			}
-			else if (s3.containsZ(z)) {
+			} else if (s3.containsZ(z)) {
 				return s3.getPointOnZ(z);
-			}
-			else
+			} else
 				throw new RuntimeException("d1=d2=d3=0");
 		}
 
 		if (d2 <= 1E-8) // lastPoint ON s2
 		{
-			if (s1.containsZ(z)) { 
+			if (s1.containsZ(z)) {
 				return s1.getPointOnZ(z);
-			}
-			else if (s3.containsZ(z)) {
+			} else if (s3.containsZ(z)) {
 				return s3.getPointOnZ(z);
-			}
-			else
+			} else
 				throw new RuntimeException("d1=d2=d3=0");
 		}
 		if (d3 <= 1E-8) // lastPoint ON s3
 		{
-			if (s2.containsZ(z)) { 
+			if (s2.containsZ(z)) {
 				return s2.getPointOnZ(z);
-			}
-			else if (s1.containsZ(z)) {
+			} else if (s1.containsZ(z)) {
 				return s1.getPointOnZ(z);
-			}
-			else
+			} else
 				throw new RuntimeException("d1=d2=d3=0");
 		}
-		
-		
-//		// First, we check vertex
-//		if (lastPoint.equals3D(V1) || lastPoint.equals3D(V2) || lastPoint.equals3D(V3)) {
-//			// options 2 or 3
-//		}
-//		else
-//		{
-//			// We search for origin edge, and then for exit edge.
-//			TriEdge edge = getEdgeContainingZ(z);
-//		}
-//		double x1;
-//		double y1;
-//		double pctAlong = (z - edgeIn.getV1().getZ()) / (edgeIn.getV2().getZ() - edgeIn.getV1().getZ());
-//
-//		x1 = edgeIn.getV1().getX() + (edgeIn.getV2().getX() - edgeIn.getV1().getX()) * pctAlong;
-//		y1 = edgeIn.getV1().getY() + (edgeIn.getV2().getY() - edgeIn.getV1().getY()) * pctAlong;
-//
-//		if (V1.getZ() )
-		throw new RuntimeException("Bad point reached in DefaultTriangle.getNextPoint");
-//		return null;
+
+		// // First, we check vertex
+		// if (lastPoint.equals3D(V1) || lastPoint.equals3D(V2) ||
+		// lastPoint.equals3D(V3)) {
+		// // options 2 or 3
+		// }
+		// else
+		// {
+		// // We search for origin edge, and then for exit edge.
+		// TriEdge edge = getEdgeContainingZ(z);
+		// }
+		// double x1;
+		// double y1;
+		// double pctAlong = (z - edgeIn.getV1().getZ()) /
+		// (edgeIn.getV2().getZ() - edgeIn.getV1().getZ());
+		//
+		// x1 = edgeIn.getV1().getX() + (edgeIn.getV2().getX() -
+		// edgeIn.getV1().getX()) * pctAlong;
+		// y1 = edgeIn.getV1().getY() + (edgeIn.getV2().getY() -
+		// edgeIn.getV1().getY()) * pctAlong;
+		//
+		// if (V1.getZ() )
+		throw new RuntimeException(
+				"Bad point reached in DefaultTriangle.getNextPoint");
+		// return null;
 	}
 
 	public boolean contains(Coordinate pointOut) {
@@ -279,8 +281,10 @@ public class DefaultTriangle implements Triangle {
 		coords.add(getV3(), false);
 		coords.add(getV1(), false);
 		Point pOut = geomFactory.createPoint(pointOut);
-		LinearRing linRing = geomFactory.createLinearRing(coords.toCoordinateArray());
-		System.out.println("[" + getV1() + " - " + getV2() + " - " + getV3() + "] -> " + pointOut);
+		LinearRing linRing = geomFactory.createLinearRing(coords
+				.toCoordinateArray());
+		System.out.println("[" + getV1() + " - " + getV2() + " - " + getV3()
+				+ "] -> " + pointOut);
 		return linRing.covers(pOut);
 	}
 

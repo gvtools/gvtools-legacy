@@ -48,63 +48,63 @@ import org.slf4j.LoggerFactory;
  */
 public class OptionPanelContainer extends JWizardPanel {
 
-    private static final long serialVersionUID = 3947658150325230122L;
-    private OptionPanel optionPanel = null;
-    private static final Logger log =
-        LoggerFactory.getLogger(OptionPanelContainer.class);
+	private static final long serialVersionUID = 3947658150325230122L;
+	private OptionPanel optionPanel = null;
+	private static final Logger log = LoggerFactory
+			.getLogger(OptionPanelContainer.class);
 
-    public OptionPanelContainer(JWizardComponents wizardComponents,
-        OptionPanel optionPanel) {
-        super(wizardComponents);
-        this.optionPanel = optionPanel;
-        setLayout(new BorderLayout());
-        setBorder(javax.swing.BorderFactory.createCompoundBorder(
-            javax.swing.BorderFactory.createTitledBorder(optionPanel
-                .getPanelTitle()), javax.swing.BorderFactory.createEmptyBorder(
-                5, 5, 5, 5)));
-        add(optionPanel.getJPanel(), BorderLayout.CENTER);
-    }
+	public OptionPanelContainer(JWizardComponents wizardComponents,
+			OptionPanel optionPanel) {
+		super(wizardComponents);
+		this.optionPanel = optionPanel;
+		setLayout(new BorderLayout());
+		setBorder(javax.swing.BorderFactory.createCompoundBorder(
+				javax.swing.BorderFactory.createTitledBorder(optionPanel
+						.getPanelTitle()), javax.swing.BorderFactory
+						.createEmptyBorder(5, 5, 5, 5)));
+		add(optionPanel.getJPanel(), BorderLayout.CENTER);
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see jwizardcomponent.JWizardPanel#back()
-     */
-    @Override
-    public void back() {
-        optionPanel.lastPanel();
-        super.back();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see jwizardcomponent.JWizardPanel#back()
+	 */
+	@Override
+	public void back() {
+		optionPanel.lastPanel();
+		super.back();
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see jwizardcomponent.JWizardPanel#next()
-     */
-    @Override
-    public void next() {
-        try {
-            optionPanel.nextPanel();
-            super.next();
-        } catch (NotContinueWizardException e) {
-            // this is not an error and not need to raise a error or
-            // warning in the log.
-            log.info("It is not possible to continue with the wizard", e);
-            if (e.displayMessage()) {
-                JOptionPane.showMessageDialog(e.getComponent(), e
-                    .getLocalizedMessageStack());
-            }
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see jwizardcomponent.JWizardPanel#next()
+	 */
+	@Override
+	public void next() {
+		try {
+			optionPanel.nextPanel();
+			super.next();
+		} catch (NotContinueWizardException e) {
+			// this is not an error and not need to raise a error or
+			// warning in the log.
+			log.info("It is not possible to continue with the wizard", e);
+			if (e.displayMessage()) {
+				JOptionPane.showMessageDialog(e.getComponent(),
+						e.getLocalizedMessageStack());
+			}
+		}
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see jwizardcomponent.JWizardPanel#update()
-     */
-    @Override
-    public void update() {
-        optionPanel.updatePanel();
-        super.update();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see jwizardcomponent.JWizardPanel#update()
+	 */
+	@Override
+	public void update() {
+		optionPanel.updatePanel();
+		super.update();
+	}
 }

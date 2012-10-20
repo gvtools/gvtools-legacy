@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.topologyrules;
 
 import java.awt.Color;
@@ -75,18 +75,19 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.utiles.swing.threads.CancellableProgressTask;
 
 /**
- * All polygons of a vectorial layer must form a continuous surface, 
- * without voids or gaps.
+ * All polygons of a vectorial layer must form a continuous surface, without
+ * voids or gaps.
  * 
  * @author Alvaro Zabala
- *
+ * 
  */
-public class PolygonMustNotHaveGapsWithJCS extends AbstractTopologyRule 
-									implements IRuleWithClusterTolerance {
-	
+public class PolygonMustNotHaveGapsWithJCS extends AbstractTopologyRule
+		implements IRuleWithClusterTolerance {
+
 	private double clusterTolerance;
 
-	static final String RULE_NAME = Messages.getText("POLYGONS_MUST_NOT_HAVE_GAPS");
+	static final String RULE_NAME = Messages
+			.getText("POLYGONS_MUST_NOT_HAVE_GAPS");
 
 	private static final Color DEFAULT_ERROR_COLOR = Color.RED;
 
@@ -97,8 +98,7 @@ public class PolygonMustNotHaveGapsWithJCS extends AbstractTopologyRule
 	}
 
 	private MultiShapeSymbol errorSymbol = DEFAULT_ERROR_SYMBOL;
-	
-	
+
 	public PolygonMustNotHaveGapsWithJCS(Topology topology, FLyrVect originLyr,
 			double clusterTolerance) {
 		super(topology, originLyr);
@@ -107,48 +107,47 @@ public class PolygonMustNotHaveGapsWithJCS extends AbstractTopologyRule
 
 	@Override
 	public void checkPreconditions() throws TopologyRuleDefinitionException {
-		if(!acceptsOriginLyr(originLyr))
+		if (!acceptsOriginLyr(originLyr))
 			throw new TopologyRuleDefinitionException(
 					"PolygonMustNotOverlap requires a polygonal geometry type");
 	}
-	
+
 	@Override
 	public String getName() {
 		return RULE_NAME;
 	}
-	
-	
-	public void checkRule(CancellableProgressTask progressMonitor){
+
+	public void checkRule(CancellableProgressTask progressMonitor) {
 		FLyrVect gapsLyr = JCSUtil.getGaps(originLyr, clusterTolerance);
 		IFeatureIterator iterator;
 		try {
 			iterator = gapsLyr.getSource().getFeatureIterator();
-			while(iterator.hasNext()){
+			while (iterator.hasNext()) {
 				IFeature feature = iterator.next();
-				TopologyError topologyError = new TopologyError(feature.getGeometry(),
-						this, null, getTopology());
+				TopologyError topologyError = new TopologyError(
+						feature.getGeometry(), this, null, getTopology());
 				addTopologyError(topologyError);
 			}
 		} catch (ReadDriverException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
-	 
-	public  void checkRule(CancellableProgressTask progressMonitor, Rectangle2D rect){
+
+	public void checkRule(CancellableProgressTask progressMonitor,
+			Rectangle2D rect) {
 		checkRule(progressMonitor);
 	}
-	
+
 	public double getClusterTolerance() {
 		return clusterTolerance;
 	}
-	
+
 	public void setClusterTolerance(double clusterTolerance) {
 		this.clusterTolerance = clusterTolerance;
 	}
-	
-	
+
 	public boolean acceptsOriginLyr(FLyrVect originLyr) {
 		try {
 			int shapeType = originLyr.getShapeType();
@@ -158,21 +157,20 @@ public class PolygonMustNotHaveGapsWithJCS extends AbstractTopologyRule
 			return false;
 		}
 	}
-	
+
 	public List<ITopologyErrorFix> getAutomaticErrorFixes() {
-		//TODO IMPLEMENTAR
+		// TODO IMPLEMENTAR
 		return new ArrayList<ITopologyErrorFix>();
 	}
-	
+
 	public MultiShapeSymbol getDefaultErrorSymbol() {
 		return DEFAULT_ERROR_SYMBOL;
 	}
-	
+
 	public MultiShapeSymbol getErrorSymbol() {
 		return errorSymbol;
 	}
 
-	
 	public void validateFeature(IFeature feature) {
 		throw new NotImplementedException();
 	}

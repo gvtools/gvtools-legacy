@@ -44,44 +44,56 @@ import java.awt.event.MouseEvent;
 
 import com.iver.cit.gvsig.fmap.core.GeneralPathX;
 
-
 /**
- * <p><code>MeasureEvent</code> is used to notify the selection of a polyline.</p>
- *  
- * <p>Stores the information about the 2D vertexes and the {@link GeneralPathX GeneralPathX}
- *  between them.</p>
- *
+ * <p>
+ * <code>MeasureEvent</code> is used to notify the selection of a polyline.
+ * </p>
+ * 
+ * <p>
+ * Stores the information about the 2D vertexes and the {@link GeneralPathX
+ * GeneralPathX} between them.
+ * </p>
+ * 
  * @author Vicente Caballero Navarro
  */
 public class MeasureEvent {
 	/**
-	 * The polyline, broken down in straight lines, and quadratic and cubic (Bézier) curves.
+	 * The polyline, broken down in straight lines, and quadratic and cubic
+	 * (Bézier) curves.
 	 */
 	private GeneralPathX gp;
-	
+
 	/**
 	 * Vector with the X coordinates.
 	 */
 	private Double[] x;
-	
+
 	/**
 	 * Vector with the Y coordinates.
 	 */
 	private Double[] y;
-	
+
 	/**
 	 * Mouse event that has been the cause of creating this event.
 	 */
 	private MouseEvent event;
 
 	/**
-	 * <p>Creates a new <code>MeasureEvent</code> with all necessary data.</p>
-	 * <p>The general path is calculated according the enclosed regions of the path alternate between interior
-	 *  and exterior areas are traversed from the outside of the path towards a point inside the region.</p>
-	 *
-	 * @param x vector with the X coordinates
-	 * @param y vector with the Y coordinates
-	 * @param e event that has been the cause of creating this one
+	 * <p>
+	 * Creates a new <code>MeasureEvent</code> with all necessary data.
+	 * </p>
+	 * <p>
+	 * The general path is calculated according the enclosed regions of the path
+	 * alternate between interior and exterior areas are traversed from the
+	 * outside of the path towards a point inside the region.
+	 * </p>
+	 * 
+	 * @param x
+	 *            vector with the X coordinates
+	 * @param y
+	 *            vector with the Y coordinates
+	 * @param e
+	 *            event that has been the cause of creating this one
 	 */
 	public MeasureEvent(Double[] x, Double[] y, MouseEvent e) {
 		this.x = x;
@@ -96,30 +108,39 @@ public class MeasureEvent {
 	}
 
 	/**
-	 * <p>Gets the {@link GeneralPathX GeneralPathX} of the measurement.</p>
-	 *
+	 * <p>
+	 * Gets the {@link GeneralPathX GeneralPathX} of the measurement.
+	 * </p>
+	 * 
 	 * @see GeneralPathX
-	 *
-	 * @return geometric path constructed from straight lines, and quadratic and cubic (Bézier) curves
+	 * 
+	 * @return geometric path constructed from straight lines, and quadratic and
+	 *         cubic (Bézier) curves
 	 */
 	public GeneralPathX getGP() {
 		return gp;
 	}
 
 	/**
-	 * <p>Sets the {@link GeneralPathX GeneralPathX} of the measurement.</p>
-	 *
+	 * <p>
+	 * Sets the {@link GeneralPathX GeneralPathX} of the measurement.
+	 * </p>
+	 * 
 	 * @see GeneralPathX
-	 *
-	 * @param gP geometric path constructed from straight lines, and quadratic and cubic (Bézier) curves
+	 * 
+	 * @param gP
+	 *            geometric path constructed from straight lines, and quadratic
+	 *            and cubic (Bézier) curves
 	 */
 	public void setGP(GeneralPathX gp) {
 		this.gp = gp;
 	}
 
 	/**
-	 * <p>Gets a vector with the X coordinates.</p>
-	 *
+	 * <p>
+	 * Gets a vector with the X coordinates.
+	 * </p>
+	 * 
 	 * @return vector with the X coordinates
 	 */
 	public Double[] getXs() {
@@ -127,8 +148,10 @@ public class MeasureEvent {
 	}
 
 	/**
-	 * <p>Gets a vector with the Y coordinates.</p>
-	 *
+	 * <p>
+	 * Gets a vector with the Y coordinates.
+	 * </p>
+	 * 
 	 * @return vector with the Y coordinates
 	 */
 	public Double[] getYs() {
@@ -136,7 +159,9 @@ public class MeasureEvent {
 	}
 
 	/**
-	 * <p>Gets the event that has been the cause of creating this one.</p>
+	 * <p>
+	 * Gets the event that has been the cause of creating this one.
+	 * </p>
 	 * 
 	 * @return mouse event that has been the cause of creating this one
 	 */

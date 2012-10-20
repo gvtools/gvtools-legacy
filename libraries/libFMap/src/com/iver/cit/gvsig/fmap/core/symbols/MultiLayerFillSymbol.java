@@ -40,53 +40,53 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: MultiLayerFillSymbol.java 29810 2009-07-08 09:17:35Z vcaballero $
-* $Log$
-* Revision 1.12  2007-09-21 12:25:32  jaume
-* cancellation support extended down to the IGeometry and ISymbol level
-*
-* Revision 1.11  2007/09/19 16:20:45  jaume
-* removed unnecessary imports
-*
-* Revision 1.10  2007/08/13 11:36:50  jvidal
-* javadoc
-*
-* Revision 1.9  2007/08/08 12:04:15  jvidal
-* javadoc
-*
-* Revision 1.8  2007/07/23 06:52:25  jaume
-* default selection color refactored, moved to MapContext
-*
-* Revision 1.7  2007/07/03 10:58:29  jaume
-* first refactor on CartographicSupport
-*
-* Revision 1.6  2007/06/29 13:07:01  jaume
-* +PictureLineSymbol
-*
-* Revision 1.5  2007/03/29 16:02:01  jaume
-* *** empty log message ***
-*
-* Revision 1.4  2007/03/26 14:25:29  jaume
-* implemented Print
-*
-* Revision 1.3  2007/03/13 16:58:36  jaume
-* Added QuantityByCategory (Multivariable legend) and some bugfixes in symbols
-*
-* Revision 1.2  2007/03/09 11:20:57  jaume
-* Advanced symbology (start committing)
-*
-* Revision 1.1.2.3  2007/02/21 16:09:02  jaume
-* *** empty log message ***
-*
-* Revision 1.1.2.2  2007/02/21 07:34:09  jaume
-* labeling starts working
-*
-* Revision 1.1.2.1  2007/02/16 10:54:12  jaume
-* multilayer splitted to multilayerline, multilayermarker,and  multilayerfill
-*
-*
-*/
+ *
+ * $Id: MultiLayerFillSymbol.java 29810 2009-07-08 09:17:35Z vcaballero $
+ * $Log$
+ * Revision 1.12  2007-09-21 12:25:32  jaume
+ * cancellation support extended down to the IGeometry and ISymbol level
+ *
+ * Revision 1.11  2007/09/19 16:20:45  jaume
+ * removed unnecessary imports
+ *
+ * Revision 1.10  2007/08/13 11:36:50  jvidal
+ * javadoc
+ *
+ * Revision 1.9  2007/08/08 12:04:15  jvidal
+ * javadoc
+ *
+ * Revision 1.8  2007/07/23 06:52:25  jaume
+ * default selection color refactored, moved to MapContext
+ *
+ * Revision 1.7  2007/07/03 10:58:29  jaume
+ * first refactor on CartographicSupport
+ *
+ * Revision 1.6  2007/06/29 13:07:01  jaume
+ * +PictureLineSymbol
+ *
+ * Revision 1.5  2007/03/29 16:02:01  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.4  2007/03/26 14:25:29  jaume
+ * implemented Print
+ *
+ * Revision 1.3  2007/03/13 16:58:36  jaume
+ * Added QuantityByCategory (Multivariable legend) and some bugfixes in symbols
+ *
+ * Revision 1.2  2007/03/09 11:20:57  jaume
+ * Advanced symbology (start committing)
+ *
+ * Revision 1.1.2.3  2007/02/21 16:09:02  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1.2.2  2007/02/21 07:34:09  jaume
+ * labeling starts working
+ *
+ * Revision 1.1.2.1  2007/02/16 10:54:12  jaume
+ * multilayer splitted to multilayerline, multilayermarker,and  multilayerfill
+ *
+ *
+ */
 package com.iver.cit.gvsig.fmap.core.symbols;
 
 import java.awt.Color;
@@ -106,33 +106,36 @@ import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.threads.Cancellable;
 
 /**
- * MultiLayerFillSymbol is a symbol which allows to group several kind of fill symbols
- * (xxxFillSymbol implementing IFillSymbol)in one and treats it like single symbol.
+ * MultiLayerFillSymbol is a symbol which allows to group several kind of fill
+ * symbols (xxxFillSymbol implementing IFillSymbol)in one and treats it like
+ * single symbol.
  */
 
-public class MultiLayerFillSymbol extends AbstractFillSymbol implements IFillSymbol, IMultiLayerSymbol{
+public class MultiLayerFillSymbol extends AbstractFillSymbol implements
+		IFillSymbol, IMultiLayerSymbol {
 	private static final double OPACITY_SELECTION_FACTOR = .8;
 	private IFillSymbol[] layers = new IFillSymbol[0];
 	private MultiLayerFillSymbol selectionSymbol;
 	private Object symbolType;
-	private double[] sizes=null;
+	private double[] sizes = null;
+
 	public Color getFillColor() {
 		/*
-		 * a multilayer symbol does not define any color, the color
-		 * of each layer is defined by the layer itself
+		 * a multilayer symbol does not define any color, the color of each
+		 * layer is defined by the layer itself
 		 */
 		return null;
 	}
 
 	public int getOnePointRgb() {
 		// will paint only the last layer pixel
-		return layers[layers.length-1].getOnePointRgb();
+		return layers[layers.length - 1].getOnePointRgb();
 	}
 
 	public ILineSymbol getOutline() {
 		/*
-		 * a multilayer symbol does not define any outline, the outline
-		 * of each layer is defined by the layer it self
+		 * a multilayer symbol does not define any outline, the outline of each
+		 * layer is defined by the layer it self
 		 */
 		return null;
 	}
@@ -154,17 +157,20 @@ public class MultiLayerFillSymbol extends AbstractFillSymbol implements IFillSym
 		for (int i = 0; i < layers.length; i++) {
 			layers[i].setOutline(null);
 		}
-		layers[layers.length-1].setOutline(outline);
+		layers[layers.length - 1].setOutline(outline);
 	}
 
-	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp, Cancellable cancel) {
-		for (int i = 0; (cancel==null || !cancel.isCanceled()) && i < layers.length; i++) {
+	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp,
+			Cancellable cancel) {
+		for (int i = 0; (cancel == null || !cancel.isCanceled())
+				&& i < layers.length; i++) {
 			layers[i].draw(g, affineTransform, shp, cancel);
 		}
 	}
 
 	public void drawInsideRectangle(Graphics2D g,
-			AffineTransform scaleInstance, Rectangle r, PrintRequestAttributeSet properties) throws SymbolDrawingException {
+			AffineTransform scaleInstance, Rectangle r,
+			PrintRequestAttributeSet properties) throws SymbolDrawingException {
 		for (int i = 0; i < layers.length; i++) {
 			layers[i].drawInsideRectangle(g, scaleInstance, r, properties);
 		}
@@ -172,7 +178,7 @@ public class MultiLayerFillSymbol extends AbstractFillSymbol implements IFillSym
 
 	public void getPixExtentPlus(FShape shp, float[] distances,
 			ViewPort viewPort, int dpi) {
-		float[] myDistances = new float[] {0,0};
+		float[] myDistances = new float[] { 0, 0 };
 		distances[0] = 0;
 		distances[1] = 0;
 		for (int i = 0; i < layers.length; i++) {
@@ -192,11 +198,8 @@ public class MultiLayerFillSymbol extends AbstractFillSymbol implements IFillSym
 			}
 			SimpleFillSymbol selLayer = new SimpleFillSymbol();
 			Color c = MapContext.getSelectionColor();
-			c = new Color(
-					c.getRed(),
-					c.getGreen(),
-					c.getBlue(),
-					(int) (255*OPACITY_SELECTION_FACTOR));
+			c = new Color(c.getRed(), c.getGreen(), c.getBlue(),
+					(int) (255 * OPACITY_SELECTION_FACTOR));
 			selLayer.setFillColor(c);
 			selLayer.setOutline(getOutline());
 			selectionSymbol.addLayer(selLayer);
@@ -204,7 +207,6 @@ public class MultiLayerFillSymbol extends AbstractFillSymbol implements IFillSym
 		return selectionSymbol;
 
 	}
-
 
 	public int getSymbolType() {
 		return FShape.POLYGON;
@@ -238,25 +240,28 @@ public class MultiLayerFillSymbol extends AbstractFillSymbol implements IFillSym
 		setIsShapeVisible(xml.getBooleanProperty("isShapeVisible"));
 		setDescription(xml.getStringProperty("desc"));
 		for (int i = 0; i < xml.getChildrenCount(); i++) {
-			addLayer((IFillSymbol) SymbologyFactory.createSymbolFromXML(xml.getChild(i), "layer" + i));
+			addLayer((IFillSymbol) SymbologyFactory.createSymbolFromXML(
+					xml.getChild(i), "layer" + i));
 		}
 
 		if (xml.contains("unit")) { // remove this line when done
-		// measure unit (for outline)
-		setUnit(xml.getIntProperty("unit"));
+			// measure unit (for outline)
+			setUnit(xml.getIntProperty("unit"));
 
-		// reference system (for outline)
-		setReferenceSystem(xml.getIntProperty("referenceSystem"));
+			// reference system (for outline)
+			setReferenceSystem(xml.getIntProperty("referenceSystem"));
 		}
 	}
 
-	public void print(Graphics2D g, AffineTransform at, FShape shape, PrintRequestAttributeSet properties) {
+	public void print(Graphics2D g, AffineTransform at, FShape shape,
+			PrintRequestAttributeSet properties) {
 		for (int i = 0; i < layers.length; i++) {
 			layers[i].print(g, at, shape, properties);
 		}
 	}
 
-	public void setLayer(int index, ISymbol layer) throws IndexOutOfBoundsException {
+	public void setLayer(int index, ISymbol layer)
+			throws IndexOutOfBoundsException {
 		layers[index] = (IFillSymbol) layer;
 	}
 
@@ -267,11 +272,11 @@ public class MultiLayerFillSymbol extends AbstractFillSymbol implements IFillSym
 	}
 
 	public ISymbol getLayer(int layerIndex) {
-//		try{
-			return layers[layerIndex];
-//		} catch (Exception e) {
-//			return null;
-//		}
+		// try{
+		return layers[layerIndex];
+		// } catch (Exception e) {
+		// return null;
+		// }
 	}
 
 	public int getLayerCount() {
@@ -282,14 +287,18 @@ public class MultiLayerFillSymbol extends AbstractFillSymbol implements IFillSym
 		addLayer(newLayer, layers.length);
 	}
 
-	public void addLayer(ISymbol newLayer, int layerIndex) throws IndexOutOfBoundsException {
-		if (newLayer == null )/*|| newLayer instanceof ILabelStyle)*/ return; // null or symbols that are styles are not allowed
+	public void addLayer(ISymbol newLayer, int layerIndex)
+			throws IndexOutOfBoundsException {
+		if (newLayer == null)/* || newLayer instanceof ILabelStyle) */
+			return; // null or symbols that are styles are not allowed
 
-		selectionSymbol = null; /* forces the selection symbol to be re-created
-		 						 * next time it is required
-		 						 */
+		selectionSymbol = null; /*
+								 * forces the selection symbol to be re-created
+								 * next time it is required
+								 */
 		if (layerIndex < 0 || layers.length < layerIndex)
-			throw new IndexOutOfBoundsException(layerIndex+" < 0 or "+layerIndex+" > "+layers.length);
+			throw new IndexOutOfBoundsException(layerIndex + " < 0 or "
+					+ layerIndex + " > " + layers.length);
 		ArrayList<ISymbol> newLayers = new ArrayList<ISymbol>();
 		for (int i = 0; i < layers.length; i++) {
 			newLayers.add(layers[i]);
@@ -298,7 +307,8 @@ public class MultiLayerFillSymbol extends AbstractFillSymbol implements IFillSym
 			newLayers.add(layerIndex, newLayer);
 			layers = (IFillSymbol[]) newLayers.toArray(new IFillSymbol[0]);
 		} catch (ArrayStoreException asEx) {
-			throw new ClassCastException(newLayer.getClassName()+" is not an IFillSymbol");
+			throw new ClassCastException(newLayer.getClassName()
+					+ " is not an IFillSymbol");
 		}
 	}
 
@@ -311,7 +321,7 @@ public class MultiLayerFillSymbol extends AbstractFillSymbol implements IFillSym
 			lst.add(layers[i]);
 		}
 		boolean contains = lst.remove(layer);
-		layers = (IFillSymbol[])lst.toArray(new IFillSymbol[0]);
+		layers = (IFillSymbol[]) lst.toArray(new IFillSymbol[0]);
 		return contains;
 	}
 
@@ -332,20 +342,20 @@ public class MultiLayerFillSymbol extends AbstractFillSymbol implements IFillSym
 	}
 
 	/**
-	 *Returns the transparency of the multi layer fill symbol created
+	 * Returns the transparency of the multi layer fill symbol created
 	 */
 	public int getFillAlpha() {
 		// will compute the acumulated opacity
 		double myAlpha = 0;
 		for (int i = 0; i < layers.length; i++) {
-			double layerAlpha = layers[i].getFillAlpha()/255D;
-			myAlpha += (1-myAlpha)*layerAlpha;
+			double layerAlpha = layers[i].getFillAlpha() / 255D;
+			myAlpha += (1 - myAlpha) * layerAlpha;
 		}
 		int result = (int) Math.round(myAlpha * 255);
-		return (result>255) ? 255 : result;
+		return (result > 255) ? 255 : result;
 	}
 
-	public void setCartographicSize(double previousSize,FShape shp){
+	public void setCartographicSize(double previousSize, FShape shp) {
 		for (int i = 0; i < layers.length; i++) {
 			layers[i].setCartographicSize(sizes[i], shp);
 		}
@@ -353,12 +363,13 @@ public class MultiLayerFillSymbol extends AbstractFillSymbol implements IFillSym
 
 	public double toCartographicSize(ViewPort viewPort, double dpi, FShape shp) {
 		double size = 0;
-		sizes=new double[layers.length];
+		sizes = new double[layers.length];
 		for (int i = 0; i < layers.length; i++) {
-			double previousSize=layers[i].toCartographicSize(viewPort, dpi, shp);
-			sizes[i]=previousSize;
+			double previousSize = layers[i].toCartographicSize(viewPort, dpi,
+					shp);
+			sizes[i] = previousSize;
 			size = Math.max(size, previousSize);
-//			layers[i].setCartographicSize(previousSize, shp);
+			// layers[i].setCartographicSize(previousSize, shp);
 		}
 		return size;
 	}

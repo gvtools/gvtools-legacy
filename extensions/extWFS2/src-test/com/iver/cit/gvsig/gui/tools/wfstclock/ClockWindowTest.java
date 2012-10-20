@@ -56,23 +56,23 @@ import com.iver.cit.gvsig.gui.panels.wfstclock.ClockWindow;
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class ClockWindowTest {
-	
+
 	public static void main(String[] args) {
 		ClockWindow panel = new ClockWindow(null);
 		panel.setExpiryTime(1);
 		panel.startTime();
 		createFrame(panel);
-	}	
-	
-	private static void createFrame(Component component){
+	}
+
+	private static void createFrame(Component component) {
 		JFrame f = new JFrame();
 		f.addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-            	System.exit(0);
-            }
-        });
-		f.getContentPane().add(component);	    
-		f.setBounds(0,0,200,40);
+			public void windowClosing(java.awt.event.WindowEvent evt) {
+				System.exit(0);
+			}
+		});
+		f.getContentPane().add(component);
+		f.setBounds(0, 0, 200, 40);
 		f.setVisible(true);
 	}
 }

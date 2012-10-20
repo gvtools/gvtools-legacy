@@ -88,16 +88,17 @@ import com.iver.cit.gvsig.project.documents.view.legend.gui.JSymbolPreviewButton
 import com.iver.cit.gvsig.project.documents.view.legend.gui.Quantities;
 
 /**
- * Implements the panel for the legend of proportional symbols.In the interface will be
- * options to select the value field, the normalization field (if the user wants to use it) and
- * options to select the symbol an its minimum and maximum size.
- *
- * Also there will be possible to select a background symbol (only when the shapetype of the layer is
- * polygonal).
- *
+ * Implements the panel for the legend of proportional symbols.In the interface
+ * will be options to select the value field, the normalization field (if the
+ * user wants to use it) and options to select the symbol an its minimum and
+ * maximum size.
+ * 
+ * Also there will be possible to select a background symbol (only when the
+ * shapetype of the layer is polygonal).
+ * 
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
-public class ProportionalSymbols extends JPanel implements ILegendPanel{
+public class ProportionalSymbols extends JPanel implements ILegendPanel {
 	private static final long serialVersionUID = 7394720230276170902L;
 	private JPanel symbolPanel;
 	private JPanel backgroundPanel;
@@ -107,12 +108,13 @@ public class ProportionalSymbols extends JPanel implements ILegendPanel{
 	private JComboBox cmbNormalization;
 	private JIncrementalNumberField txtMinSize;
 	private JIncrementalNumberField txtMaxSize;
-	private static Logger logger = Logger.getLogger(ProportionalSymbols.class.getName());
+	private static Logger logger = Logger.getLogger(ProportionalSymbols.class
+			.getName());
 	private ClassifiableVectorial myLayer;
 	private ProportionalSymbolsLegend auxLegend;
-//	private ProportionalSymbolsLegend theLegend;
+	// private ProportionalSymbolsLegend theLegend;
 	private String[] fieldNames;
-	private int templateShapeType = 0 ;
+	private int templateShapeType = 0;
 	private String noNormalization = PluginServices.getText(this, "none");
 	private boolean useNormalization = true;
 
@@ -132,10 +134,9 @@ public class ProportionalSymbols extends JPanel implements ILegendPanel{
 		JPanel aux = new JPanel(new BorderLayout());
 
 		JPanel fieldsPanel = new JPanel(new FlowLayout());
-		fieldsPanel.setBorder(BorderFactory.
-				createTitledBorder(null,
-						PluginServices.getText(this, "fields")));
-		fieldsPanel.setPreferredSize(new Dimension(300,60));
+		fieldsPanel.setBorder(BorderFactory.createTitledBorder(null,
+				PluginServices.getText(this, "fields")));
+		fieldsPanel.setPreferredSize(new Dimension(300, 60));
 
 		cmbValue = new JComboBox();
 		cmbValue.setActionCommand("VALUE_SELECTED");
@@ -143,33 +144,33 @@ public class ProportionalSymbols extends JPanel implements ILegendPanel{
 		cmbNormalization = new JComboBox();
 		cmbNormalization.setActionCommand("NORMALIZATION_SELECTED");
 
-		fieldsPanel.add(new JLabel(PluginServices.getText(this, "value")+":" ));
+		fieldsPanel
+				.add(new JLabel(PluginServices.getText(this, "value") + ":"));
 		fieldsPanel.add(cmbValue);
 
-		fieldsPanel.add(new JLabel(PluginServices.getText(this, "normalization")+":" ));
+		fieldsPanel.add(new JLabel(PluginServices
+				.getText(this, "normalization") + ":"));
 		fieldsPanel.add(cmbNormalization);
 
-
-		symbolPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 3,2));
-		symbolPanel.setBorder(BorderFactory.
-				createTitledBorder(null,
-						PluginServices.getText(this, "symbol")));
+		symbolPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 3, 2));
+		symbolPanel.setBorder(BorderFactory.createTitledBorder(null,
+				PluginServices.getText(this, "symbol")));
 
 		GridBagLayoutPanel aux2 = new GridBagLayoutPanel();
 		aux2.addComponent(new JLabel(PluginServices.getText(this, "size")));
-		aux2.addComponent(new JBlank(10,10));
-		aux2.addComponent(PluginServices.getText(this, "from")+":",
+		aux2.addComponent(new JBlank(10, 10));
+		aux2.addComponent(PluginServices.getText(this, "from") + ":",
 				getTxtMinSize());
-		aux2.addComponent(PluginServices.getText(this, "to")+":",
+		aux2.addComponent(PluginServices.getText(this, "to") + ":",
 				getTxtMaxSize());
 
 		JPanel templatePanel = new JPanel();
 		templatePanel.setBorder(BorderFactory.createTitledBorder(null,
 				PluginServices.getText(this, "template")));
 		templatePanel.add(getTemplSymbol());
-		symbolPanel.add(new JBlank(10,10));
+		symbolPanel.add(new JBlank(10, 10));
 		symbolPanel.add(aux2);
-		symbolPanel.add(new JBlank(10,10));
+		symbolPanel.add(new JBlank(10, 10));
 		symbolPanel.add(templatePanel);
 
 		aux.add(fieldsPanel, BorderLayout.NORTH);
@@ -181,9 +182,11 @@ public class ProportionalSymbols extends JPanel implements ILegendPanel{
 		cmbNormalization.addActionListener(action);
 		tmplateSymbol.addActionListener(action);
 	}
+
 	/**
-	 * Creates the panel where the button for the background symbol will be placed
-	 *
+	 * Creates the panel where the button for the background symbol will be
+	 * placed
+	 * 
 	 * @return JPanel panel
 	 */
 
@@ -194,47 +197,58 @@ public class ProportionalSymbols extends JPanel implements ILegendPanel{
 		backgroundPanel.add(getBtnBackground());
 		return backgroundPanel;
 	}
+
 	/**
-	 * Creates a JIncrementalNumberField which is used to select the maximum size for the symbol
-	 *
+	 * Creates a JIncrementalNumberField which is used to select the maximum
+	 * size for the symbol
+	 * 
 	 * @return JIncrementalNumberField
 	 */
 	private JIncrementalNumberField getTxtMaxSize() {
 		if (txtMaxSize == null) {
-			txtMaxSize = new JIncrementalNumberField(String.valueOf(25), 7,0,100,1);
+			txtMaxSize = new JIncrementalNumberField(String.valueOf(25), 7, 0,
+					100, 1);
 			txtMaxSize.addActionListener(action);
 		}
 		return txtMaxSize;
 	}
+
 	/**
-	 * Creates a JIncrementalNumberField which is used to select the minimum size for the symbol
-	 *
+	 * Creates a JIncrementalNumberField which is used to select the minimum
+	 * size for the symbol
+	 * 
 	 * @return JIncrementalNumberField
 	 */
 	private JIncrementalNumberField getTxtMinSize() {
 		if (txtMinSize == null) {
-			txtMinSize = new JIncrementalNumberField(String.valueOf(3), 7,0,100,1);
+			txtMinSize = new JIncrementalNumberField(String.valueOf(3), 7, 0,
+					100, 1);
 			txtMinSize.addActionListener(action);
 		}
 		return txtMinSize;
 	}
+
 	/**
-	 * Creates a JSymbolPreviewButton which is used to select the template symbol
-	 *
+	 * Creates a JSymbolPreviewButton which is used to select the template
+	 * symbol
+	 * 
 	 * @return JSymbolPreviewButton
 	 */
 	private JSymbolPreviewButton getTemplSymbol() {
 
 		if (tmplateSymbol == null) {
-			int templateShapeType = ((this.templateShapeType%FShape.Z) == FShape.POLYGON) ? FShape.POINT : this.templateShapeType;
+			int templateShapeType = ((this.templateShapeType % FShape.Z) == FShape.POLYGON) ? FShape.POINT
+					: this.templateShapeType;
 			tmplateSymbol = new JSymbolPreviewButton(templateShapeType);
 		}
 		tmplateSymbol.setPreferredSize(new Dimension(100, 45));
 		return tmplateSymbol;
 	}
+
 	/**
-	 * Creates a JSymbolPreviewButton which is used to select the background symbol
-	 *
+	 * Creates a JSymbolPreviewButton which is used to select the background
+	 * symbol
+	 * 
 	 * @return JSymbolPreviewButton
 	 */
 	private JSymbolPreviewButton getBtnBackground() {
@@ -244,12 +258,13 @@ public class ProportionalSymbols extends JPanel implements ILegendPanel{
 		}
 		return backSymbol;
 	}
+
 	/**
 	 * Creates a new symbol of an specific shapetype with a concrete size
-	 *
+	 * 
 	 * @param shapeType
 	 * @param size
-	 *
+	 * 
 	 * @return ISymbol symbol created
 	 */
 	private ISymbol newSymbol(int shapeType, double size) {
@@ -272,7 +287,8 @@ public class ProportionalSymbols extends JPanel implements ILegendPanel{
 			case FShape.LINE | FShape.M:
 				templateSymbol = new SimpleLineSymbol();
 				((SimpleLineSymbol) templateSymbol).setLineWidth(size);
-				((SimpleLineSymbol) templateSymbol).setLineColor(Color.DARK_GRAY);
+				((SimpleLineSymbol) templateSymbol)
+						.setLineColor(Color.DARK_GRAY);
 				break;
 			default:
 				throw new Error("Unknown symbol type");
@@ -297,8 +313,8 @@ public class ProportionalSymbols extends JPanel implements ILegendPanel{
 					MarkerFillSymbol fillSymbol = new MarkerFillSymbol();
 					fillSymbol.setOutline(null);
 					fillSymbol.setFillColor(null);
-					fillSymbol.getMarkerFillProperties().
-					setFillStyle(IMarkerFillPropertiesStyle.SINGLE_CENTERED_SYMBOL);
+					fillSymbol.getMarkerFillProperties().setFillStyle(
+							IMarkerFillPropertiesStyle.SINGLE_CENTERED_SYMBOL);
 					fillSymbol.setMarker(mSym);
 				}
 			}
@@ -307,9 +323,9 @@ public class ProportionalSymbols extends JPanel implements ILegendPanel{
 	}
 
 	/**
-	 * Fills the comboboxes that are placed in the panel with the classifying field names of the layer
-	 * which contain numerical information
-	 *
+	 * Fills the comboboxes that are placed in the panel with the classifying
+	 * field names of the layer which contain numerical information
+	 * 
 	 */
 	private void fillFieldNames() {
 		SelectableDataSource rs;
@@ -321,7 +337,7 @@ public class ProportionalSymbols extends JPanel implements ILegendPanel{
 
 			int cont = 0;
 			for (int i = 0; i < rs.getFieldCount(); i++) {
-				if(isNumericField(rs.getFieldType(i)))
+				if (isNumericField(rs.getFieldType(i)))
 					cont++;
 			}
 			String[] nomFields = new String[cont];
@@ -337,17 +353,19 @@ public class ProportionalSymbols extends JPanel implements ILegendPanel{
 			rs.stop();
 			this.fieldNames = nomFields;
 
-			DefaultComboBoxModel cMValue = new DefaultComboBoxModel(this.fieldNames);
-			DefaultComboBoxModel cMNormalization = new DefaultComboBoxModel(this.fieldNames);
+			DefaultComboBoxModel cMValue = new DefaultComboBoxModel(
+					this.fieldNames);
+			DefaultComboBoxModel cMNormalization = new DefaultComboBoxModel(
+					this.fieldNames);
 			cmbValue.setModel(cMValue);
 			cmbNormalization.setModel(cMNormalization);
 			cmbNormalization.addItem(noNormalization);
 
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(PluginServices.getText(this, "recovering_recordset"), e);
+			NotificationManager.addError(
+					PluginServices.getText(this, "recovering_recordset"), e);
 		}
 	}
-
 
 	public void setData(FLayer lyr, ILegend legend) {
 
@@ -356,14 +374,17 @@ public class ProportionalSymbols extends JPanel implements ILegendPanel{
 		fillFieldNames();
 
 		try {
-			templateShapeType = ((this.myLayer.getShapeType()%FShape.Z) == FShape.POLYGON) ? FShape.POINT : this.myLayer.getShapeType();
+			templateShapeType = ((this.myLayer.getShapeType() % FShape.Z) == FShape.POLYGON) ? FShape.POINT
+					: this.myLayer.getShapeType();
 			getTemplSymbol().setShapeType(templateShapeType);
 
-			if((myLayer.getShapeType()%FShape.Z) == FShape.POLYGON && backgroundPanel == null)
+			if ((myLayer.getShapeType() % FShape.Z) == FShape.POLYGON
+					&& backgroundPanel == null)
 				symbolPanel.add(getBackgroundPanel());
 
 		} catch (ReadDriverException e) {
-			NotificationManager.addError(PluginServices.getText(this, "error accessing to the layer"), e);
+			NotificationManager.addError(PluginServices.getText(this,
+					"error accessing to the layer"), e);
 		}
 
 		if (ProportionalSymbolsLegend.class.equals(legend.getClass())) {
@@ -377,38 +398,39 @@ public class ProportionalSymbols extends JPanel implements ILegendPanel{
 			cmbValue.setSelectedItem(auxLegend.getClassifyingFieldNames()[0]);
 			ISymbol defSymbol = auxLegend.getDefaultSymbol();
 
-			if(((ProportionalSymbolsLegend) auxLegend).getUseNormalization())
-				cmbNormalization.setSelectedItem(auxLegend.getClassifyingFieldNames()[1]);
-			else cmbNormalization.setSelectedItem(noNormalization);
+			if (((ProportionalSymbolsLegend) auxLegend).getUseNormalization())
+				cmbNormalization.setSelectedItem(auxLegend
+						.getClassifyingFieldNames()[1]);
+			else
+				cmbNormalization.setSelectedItem(noNormalization);
 
 			txtMaxSize.setDouble(auxLegend.getMaxSize());
 			txtMinSize.setDouble(auxLegend.getMinSize());
 
-
-
-			if(templateShapeType == FShape.LINE) {
-				((ILineSymbol)defSymbol).setLineWidth(2);
-			}
-			else {
-				((IMarkerSymbol)defSymbol).setSize(15);
+			if (templateShapeType == FShape.LINE) {
+				((ILineSymbol) defSymbol).setLineWidth(2);
+			} else {
+				((IMarkerSymbol) defSymbol).setSize(15);
 			}
 
 			getTemplSymbol().setSymbol(defSymbol);
 
-			if(((ProportionalSymbolsLegend) auxLegend).getBackgroundSymbol() != null)
-				getBtnBackground().setSymbol(((ProportionalSymbolsLegend) auxLegend).getBackgroundSymbol());
+			if (((ProportionalSymbolsLegend) auxLegend).getBackgroundSymbol() != null)
+				getBtnBackground().setSymbol(
+						((ProportionalSymbolsLegend) auxLegend)
+								.getBackgroundSymbol());
 
 		} else {
 
 			auxLegend = new ProportionalSymbolsLegend();
 			auxLegend.setTemplateShapeType(templateShapeType);
-			auxLegend.setDefaultSymbol(newSymbol(templateShapeType, templateShapeType == FShape.LINE ? 2 : 15));
+			auxLegend.setDefaultSymbol(newSymbol(templateShapeType,
+					templateShapeType == FShape.LINE ? 2 : 15));
 			getTemplSymbol().setSymbol(auxLegend.getDefaultSymbol());
-			if(templateShapeType == FShape.LINE) {
+			if (templateShapeType == FShape.LINE) {
 				txtMinSize.setDouble(3);
 				txtMaxSize.setDouble(3);
-			}
-			else {
+			} else {
 				txtMinSize.setDouble(10);
 				txtMaxSize.setDouble(10);
 			}
@@ -416,20 +438,21 @@ public class ProportionalSymbols extends JPanel implements ILegendPanel{
 
 	}
 
-
 	public ILegend getLegend() {
 		ProportionalSymbolsLegend theLegend = new ProportionalSymbolsLegend();
 
 		String[] fieldNames = new String[2];
-		fieldNames[0]= cmbValue.getSelectedItem().toString();
+		fieldNames[0] = cmbValue.getSelectedItem().toString();
 
-		if(!useNormalization)
-			fieldNames[1]= fieldNames[0];
-		else fieldNames[1]= cmbNormalization.getSelectedItem().toString();
+		if (!useNormalization)
+			fieldNames[1] = fieldNames[0];
+		else
+			fieldNames[1] = cmbNormalization.getSelectedItem().toString();
 
 		auxLegend.setTemplateShapeType(templateShapeType);
 		auxLegend.setValueField(cmbValue.getSelectedItem().toString());
-		auxLegend.setNormalizationField(cmbNormalization.getSelectedItem().toString());
+		auxLegend.setNormalizationField(cmbNormalization.getSelectedItem()
+				.toString());
 		auxLegend.setUseNormalization(useNormalization);
 
 		auxLegend.setMinSize(txtMinSize.getDouble());
@@ -445,7 +468,6 @@ public class ProportionalSymbols extends JPanel implements ILegendPanel{
 
 		DataSource recordSet = null;
 
-
 		try {
 			recordSet = ((AlphanumericData) myLayer).getRecordset();
 
@@ -453,39 +475,44 @@ public class ProportionalSymbols extends JPanel implements ILegendPanel{
 				double min = 0, max = 0;
 
 				for (int j = 0; j < recordSet.getRowCount(); j++) {
-					Value val = recordSet.getFieldValue(j, recordSet.getFieldIndexByName(fieldNames[i]));
+					Value val = recordSet.getFieldValue(j,
+							recordSet.getFieldIndexByName(fieldNames[i]));
 					double dob = Double.valueOf(val.toString());
-					if (dob < min) min = dob;
-					if (dob > max) max = dob;
+					if (dob < min)
+						min = dob;
+					if (dob > max)
+						max = dob;
 				}
-				if(i == 0) {
+				if (i == 0) {
 					auxLegend.setMinFeature(min);
 					auxLegend.setMaxFeature(max);
 				}
 			}
 
 		} catch (ReadDriverException e) {
-			NotificationManager.addError("error_accessing_to_the_layer",e);
+			NotificationManager.addError("error_accessing_to_the_layer", e);
 		}
-
 
 		try {
 			theLegend = (ProportionalSymbolsLegend) auxLegend.cloneLegend();
-			theLegend.addSymbol(ValueFactory.createValue("defaultSymbol"), symbol);
+			theLegend.addSymbol(ValueFactory.createValue("defaultSymbol"),
+					symbol);
 		} catch (XMLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-
 		return theLegend;
 	}
+
 	/**
-	 * Creates the String which will be the description of the symbol. If the selected normalization field
-	 * is not "None", then the String created will have this structure ValueField/NormalizationField. Else,
-	 * if the user select "None" for the normalization field,the string will show the ValueField only.
-	 *
-	 * @return String	description for the symbol
+	 * Creates the String which will be the description of the symbol. If the
+	 * selected normalization field is not "None", then the String created will
+	 * have this structure ValueField/NormalizationField. Else, if the user
+	 * select "None" for the normalization field,the string will show the
+	 * ValueField only.
+	 * 
+	 * @return String description for the symbol
 	 */
 
 	private String getSymbolDescription() {
@@ -493,19 +520,22 @@ public class ProportionalSymbols extends JPanel implements ILegendPanel{
 
 		if (cmbValue.getSelectedItem() != null)
 			description += cmbValue.getSelectedItem().toString();
-		if (cmbNormalization.getSelectedItem().toString().compareTo(noNormalization) != 0 )
-			description += " / "+cmbNormalization.getSelectedItem().toString();
+		if (cmbNormalization.getSelectedItem().toString()
+				.compareTo(noNormalization) != 0)
+			description += " / "
+					+ cmbNormalization.getSelectedItem().toString();
 
 		return description;
 	}
 
 	public String getDescription() {
-		return PluginServices.getText(this, "draw_quantities_using_symbol_size_to_show_exact_values");
+		return PluginServices.getText(this,
+				"draw_quantities_using_symbol_size_to_show_exact_values");
 	}
 
 	public ImageIcon getIcon() {
-		return new ImageIcon(this.getClass().getClassLoader().
-				getResource("images/ProportionalSymbols.PNG"));
+		return new ImageIcon(this.getClass().getClassLoader()
+				.getResource("images/ProportionalSymbols.PNG"));
 	}
 
 	public Class getParentClass() {
@@ -519,12 +549,15 @@ public class ProportionalSymbols extends JPanel implements ILegendPanel{
 	public Class getLegendClass() {
 		return ProportionalSymbolsLegend.class;
 	}
+
 	/**
 	 * Checks if an specific field contains numerical data
-	 *
-	 * @param fieldType	index of the field
-	 *
-	 * @return boolean	true or false depending on the type of data (numerical or not)
+	 * 
+	 * @param fieldType
+	 *            index of the field
+	 * 
+	 * @return boolean true or false depending on the type of data (numerical or
+	 *         not)
 	 */
 	private boolean isNumericField(int fieldType) {
 		switch (fieldType) {
@@ -543,11 +576,10 @@ public class ProportionalSymbols extends JPanel implements ILegendPanel{
 		}
 
 	}
-	
+
 	public boolean isSuitableFor(FLayer layer) {
 		if (layer instanceof FLyrVect) {
-			
-			
+
 			FLyrVect lyr = (FLyrVect) layer;
 			try {
 				if (lyr.getShapeType() == FShape.MULTI)
@@ -568,11 +600,9 @@ public class ProportionalSymbols extends JPanel implements ILegendPanel{
 		return false;
 	}
 
-
 	public JPanel getPanel() {
 		return this;
 	}
-
 
 	private ActionListener action = new ActionListener() {
 
@@ -584,57 +614,58 @@ public class ProportionalSymbols extends JPanel implements ILegendPanel{
 			}
 			if (e.getSource().equals(cmbNormalization)) {
 				JComboBox cb = (JComboBox) e.getSource();
-				if(cb.getSelectedItem().toString().compareTo(noNormalization) == 0) {
+				if (cb.getSelectedItem().toString().compareTo(noNormalization) == 0) {
 					useNormalization = false;
-					auxLegend.setNormalizationField(cmbValue.getSelectedItem().toString());
-				}
-				else {
+					auxLegend.setNormalizationField(cmbValue.getSelectedItem()
+							.toString());
+				} else {
 					useNormalization = true;
-					auxLegend.setNormalizationField(cb.getSelectedItem().toString());
+					auxLegend.setNormalizationField(cb.getSelectedItem()
+							.toString());
 				}
 				auxLegend.setUseNormalization(useNormalization);
 			}
 			if (e.getSource().equals(txtMinSize)) {
-//				ISymbol sym = tmplateSymbol.getSymbol();
-//				if(sym != null) {
-//					if(sym instanceof ILineSymbol) {
-//						ILineSymbol line = (ILineSymbol)sym;
-//						line.setLineWidth(txtMinSize.getDouble());
-//						tmplateSymbol.setSymbol(line);
-//					}
-//
-//					if(sym instanceof IMarkerSymbol) {
-//						IMarkerSymbol point = (IMarkerSymbol)sym;
-//						point.setSize(txtMinSize.getDouble());
-//						tmplateSymbol.setSymbol(point);
-//					}
-//					tmplateSymbol.repaint();
-//				}
+				// ISymbol sym = tmplateSymbol.getSymbol();
+				// if(sym != null) {
+				// if(sym instanceof ILineSymbol) {
+				// ILineSymbol line = (ILineSymbol)sym;
+				// line.setLineWidth(txtMinSize.getDouble());
+				// tmplateSymbol.setSymbol(line);
+				// }
+				//
+				// if(sym instanceof IMarkerSymbol) {
+				// IMarkerSymbol point = (IMarkerSymbol)sym;
+				// point.setSize(txtMinSize.getDouble());
+				// tmplateSymbol.setSymbol(point);
+				// }
+				// tmplateSymbol.repaint();
+				// }
 
-				if(txtMaxSize.getDouble() < txtMinSize.getDouble())
+				if (txtMaxSize.getDouble() < txtMinSize.getDouble())
 					txtMaxSize.setDouble(txtMinSize.getDouble());
 			}
-			if(e.getSource().equals(txtMaxSize)) {
-				if(txtMaxSize.getDouble() < txtMinSize.getDouble())
+			if (e.getSource().equals(txtMaxSize)) {
+				if (txtMaxSize.getDouble() < txtMinSize.getDouble())
 					txtMinSize.setDouble(txtMaxSize.getDouble());
 			}
-//			if(e.getSource().equals(tmplateSymbol)) {
-//				ISymbol sym = tmplateSymbol.getSymbol();
-//				if(sym != null) {
-//					if(sym instanceof ILineSymbol) {
-//						ILineSymbol line = (ILineSymbol)sym;
-//						txtMinSize.setDouble(((int)line.getLineWidth()));
-//						txtMaxSize.setDouble(((int)line.getLineWidth()));
-//					}
-//
-//					if(sym instanceof IMarkerSymbol) {
-//						IMarkerSymbol point = (IMarkerSymbol)sym;
-//						txtMinSize.setDouble(((int)point.getSize()));
-//						txtMaxSize.setDouble(((int)point.getSize()));
-//
-//					}
-//				}
-//			}
+			// if(e.getSource().equals(tmplateSymbol)) {
+			// ISymbol sym = tmplateSymbol.getSymbol();
+			// if(sym != null) {
+			// if(sym instanceof ILineSymbol) {
+			// ILineSymbol line = (ILineSymbol)sym;
+			// txtMinSize.setDouble(((int)line.getLineWidth()));
+			// txtMaxSize.setDouble(((int)line.getLineWidth()));
+			// }
+			//
+			// if(sym instanceof IMarkerSymbol) {
+			// IMarkerSymbol point = (IMarkerSymbol)sym;
+			// txtMinSize.setDouble(((int)point.getSize()));
+			// txtMaxSize.setDouble(((int)point.getSize()));
+			//
+			// }
+			// }
+			// }
 		}
 	};
 

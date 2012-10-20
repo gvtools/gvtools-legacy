@@ -23,8 +23,9 @@ import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
+
 /**
- *
+ * 
  * @version 29/06/2007
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
@@ -42,7 +43,8 @@ public class RampPainter implements IIconPaint {
 
 		Color color1 = Color.green;
 		Color color2 = Color.red;
-		g.setPaint(new GradientPaint(area.x, 0, color1, area.x + area.width, 0, color2, false));
+		g.setPaint(new GradientPaint(area.x, 0, color1, area.x + area.width, 0,
+				color2, false));
 		g.fillRect(area.x, area.y, area.width, area.height);
 
 		if (isSelected)

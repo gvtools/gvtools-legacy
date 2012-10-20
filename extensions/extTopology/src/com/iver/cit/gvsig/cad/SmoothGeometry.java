@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package com.iver.cit.gvsig.cad;
 
 import java.awt.event.ActionEvent;
@@ -67,125 +67,116 @@ import com.iver.cit.gvsig.fmap.core.FCurve;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 
 /**
- * Smooths selected geometries (with dimension 1 or 2) applying the
- * specified curve.
+ * Smooths selected geometries (with dimension 1 or 2) applying the specified
+ * curve.
  * 
  * Supported curves are:
  * <ol>
- * 	<li>BEZIER</li>
- *  <li>B_SPLINE</li>
- *  <li>CARDINAL SPLINE</li>
- *  <li>CATMULLROM SPLINE</li>
- *  <li>CUBIC B_SPLINE</li>
- *  <li>LAGRANGE</li>
- *  <li>NATURAL CUBIC SPLINE</li>
- *  <li>NURBS</li
+ * <li>BEZIER</li>
+ * <li>B_SPLINE</li>
+ * <li>CARDINAL SPLINE</li>
+ * <li>CATMULLROM SPLINE</li>
+ * <li>CUBIC B_SPLINE</li>
+ * <li>LAGRANGE</li>
+ * <li>NATURAL CUBIC SPLINE</li>
+ * <li>NURBS</li
  * </ol>
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
-public class SmoothGeometry extends SimplifyGeometry{
-	
-	
+public class SmoothGeometry extends SimplifyGeometry {
+
 	int selectedCurveOption = FCurve.B_SPLINE;
-	
+
 	public void execute(String actionCommand) {
-		
-		
+
 		CurveOptionPanel optionPanel = new CurveOptionPanel();
 		PluginServices.getMDIManager().addWindow(optionPanel);
 		selectedCurveOption = optionPanel.selectedOption();
-		if(optionPanel.isAccepted())
+		if (optionPanel.isAccepted())
 			super.execute(actionCommand);
 	}
-	
-	protected IGeometry process(IGeometry originalGeometry, int lyrShapeType){
-		return FGeometryUtil.smoothGeometry(originalGeometry, selectedCurveOption);
-	}
-	
-	
 
-	protected String getName(){
+	protected IGeometry process(IGeometry originalGeometry, int lyrShapeType) {
+		return FGeometryUtil.smoothGeometry(originalGeometry,
+				selectedCurveOption);
+	}
+
+	protected String getName() {
 		return "SMOOTH_CURVE";
 	}
 
-	
-	protected void registerIcons(){
-		PluginServices.getIconTheme().registerDefault("curve-geometry",
-													   this.getClass().
-													   getClassLoader().
-													   getResource("images/smooth-curve.png")
-		);
+	protected void registerIcons() {
+		PluginServices.getIconTheme().registerDefault(
+				"curve-geometry",
+				this.getClass().getClassLoader()
+						.getResource("images/smooth-curve.png"));
 	}
-	
-	
-	class CurveOptionPanel extends BoxLayoutPanel implements IWindow{
+
+	class CurveOptionPanel extends BoxLayoutPanel implements IWindow {
 		private static final long serialVersionUID = -5996796998659896140L;
 
 		private JComboBox curveTypes;
-		
-		String[] curveTypesNames = {
-				PluginServices.getText(this, "BEZIER"),
+
+		String[] curveTypesNames = { PluginServices.getText(this, "BEZIER"),
 				PluginServices.getText(this, "B_SPLINE"),
 				PluginServices.getText(this, "CARDINAL_SPLINE"),
 				PluginServices.getText(this, "CATMULLROM_SPLINE"),
 				PluginServices.getText(this, "CUBIC_BSPLINE"),
 				PluginServices.getText(this, "LAGRANGE_CURVE"),
 				PluginServices.getText(this, "NATURAL_CUBIC_SPLINE"),
-				PluginServices.getText(this, "NURB_SPLINE")
-		};
-		
-		String title = PluginServices.getText(this,"SELECCIONAR_CURVA");
-		
+				PluginServices.getText(this, "NURB_SPLINE") };
+
+		String title = PluginServices.getText(this, "SELECCIONAR_CURVA");
+
 		private boolean accepted = false;
 
 		private WindowInfo viewInfo;
-		
-		
-		CurveOptionPanel(){
-			
-			this.addRow(new JComponent[] { 
-					new JLabel(title) });
+
+		CurveOptionPanel() {
+
+			this.addRow(new JComponent[] { new JLabel(title) });
 
 			this.addComponent(PluginServices.getText(this, "CURVE_TYPE"),
-										getCurveTypesCb());
-			
-			ActionListener cancelAction = new ActionListener(){
+					getCurveTypesCb());
+
+			ActionListener cancelAction = new ActionListener() {
 
 				public void actionPerformed(ActionEvent arg0) {
 					accepted = false;
-					PluginServices.getMDIManager().
-						closeWindow(CurveOptionPanel.this);
-				}};
-				
-			ActionListener okAction = new ActionListener(){
+					PluginServices.getMDIManager().closeWindow(
+							CurveOptionPanel.this);
+				}
+			};
+
+			ActionListener okAction = new ActionListener() {
 
 				public void actionPerformed(ActionEvent arg0) {
 					accepted = true;
-					PluginServices.getMDIManager().
-						closeWindow(CurveOptionPanel.this);
-				}};
-			
-			AcceptCancelPanel acceptCancelPnl = new AcceptCancelPanel(okAction, cancelAction);
-			this.addRow(new JComponent[] { acceptCancelPnl }, 600,
-					50);
+					PluginServices.getMDIManager().closeWindow(
+							CurveOptionPanel.this);
+				}
+			};
+
+			AcceptCancelPanel acceptCancelPnl = new AcceptCancelPanel(okAction,
+					cancelAction);
+			this.addRow(new JComponent[] { acceptCancelPnl }, 600, 50);
 		}
-		
-		public boolean isAccepted(){
+
+		public boolean isAccepted() {
 			return accepted;
 		}
-		
-		
-		public int selectedOption(){
+
+		public int selectedOption() {
 			return getCurveTypesCb().getSelectedIndex();
 		}
-		
-		
+
 		JComboBox getCurveTypesCb() {
 			if (curveTypes == null) {
 				curveTypes = new JComboBox();
-				DefaultComboBoxModel defaultModel = 
-					new DefaultComboBoxModel( curveTypesNames);
+				DefaultComboBoxModel defaultModel = new DefaultComboBoxModel(
+						curveTypesNames);
 				curveTypes.setModel(defaultModel);
 			}
 			return curveTypes;
@@ -194,18 +185,18 @@ public class SmoothGeometry extends SimplifyGeometry{
 		public WindowInfo getWindowInfo() {
 			if (viewInfo == null) {
 				viewInfo = new WindowInfo(WindowInfo.MODALDIALOG
-						 					| WindowInfo.PALETTE);
+						| WindowInfo.PALETTE);
 				viewInfo.setTitle(title);
 				viewInfo.setWidth(550);
 				viewInfo.setHeight(145);
 			}
 			return viewInfo;
 		}
+
 		public Object getWindowProfile() {
 			return WindowInfo.DIALOG_PROFILE;
 		}
-		
-		
+
 	}
 
 }

@@ -27,10 +27,10 @@ public class TestButtonBar {
 		ButtonBarContainer cont = new ButtonBarContainer();
 		frame.setSize(410, 45);
 		cont.setButtonAlignment("right");
-		cont.addButton("down.png", "hola",0);
-		cont.addButton(null, "que",1);
-		cont.addButton(null, "tal",2);
-		cont.addButton(null, "estas?",3);
+		cont.addButton("down.png", "hola", 0);
+		cont.addButton(null, "que", 1);
+		cont.addButton(null, "tal", 2);
+		cont.addButton(null, "estas?", 3);
 		cont.addButton(null, "adios", 4);
 		cont.getButton(2).setEnabled(false);
 		cont.disableAllControls();
@@ -41,7 +41,7 @@ public class TestButtonBar {
 		frame.setVisible(true);
 	}
 
-	public static void main(String[] args){
+	public static void main(String[] args) {
 		new TestButtonBar();
 	}
 }

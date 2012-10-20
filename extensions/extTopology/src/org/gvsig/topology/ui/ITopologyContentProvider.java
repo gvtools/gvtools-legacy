@@ -42,10 +42,10 @@
  *   dac@iver.es
  */
 /* CVS MESSAGES:
-*
-* $Id: 
-* $Log: 
-*/
+ *
+ * $Id: 
+ * $Log: 
+ */
 package org.gvsig.topology.ui;
 
 import java.util.List;
@@ -56,22 +56,25 @@ import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
 /**
- * All classes that implements this interface could provide the
- * needed content to create a topology:
+ * All classes that implements this interface could provide the needed content
+ * to create a topology:
  * <ul>
  * <li>vectorial layers</li>
  * <li>a view's map context.</li>
  * <li>topology rules.</li>
  * </ul>
  * 
- * A panel where the user is entering its options, or even a topology
- * could provides this info. Implementation classes are useful to connect
- * the GUI with the model (Topology, user entries, etc.)
+ * A panel where the user is entering its options, or even a topology could
+ * provides this info. Implementation classes are useful to connect the GUI with
+ * the model (Topology, user entries, etc.)
+ * 
  * @author Alvaro Zabala
- *
+ * 
  */
 public interface ITopologyContentProvider {
-		public List<FLyrVect> getLayers();
-		public MapContext getMapContext();
-		public List<ITopologyRule> getRules();
+	public List<FLyrVect> getLayers();
+
+	public MapContext getMapContext();
+
+	public List<ITopologyRule> getRules();
 }
